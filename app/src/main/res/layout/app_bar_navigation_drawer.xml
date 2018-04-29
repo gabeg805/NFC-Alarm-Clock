@@ -20,14 +20,8 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_navigation_drawer" />
+    <include layout="@layout/content_alarm_list" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+    <include layout="@layout/button_new_alarm" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -28,8 +28,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         /* Add a new alarm */
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener()
+        FloatingActionButton newalarm = (FloatingActionButton) findViewById(R.id.button_new_alarm);
+        newalarm.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View view)
