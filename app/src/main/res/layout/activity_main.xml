@@ -26,6 +26,13 @@
             android:layout_height="match_parent">
 
             <!-- <include layout="@layout/content_alarm_list" /> -->
+            <fragment
+                android:name="com.nfcalarmclock.AlarmListFragment"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                android:id="@+id/fg1"
+                />
 
             <include layout="@layout/button_new_alarm" />
 

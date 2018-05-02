@@ -7,7 +7,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/button_new_alarm_margin"
-        app:srcCompat="@android:drawable/ic_input_add"
-        android:tint="@android:color/white" />
+        app:srcCompat="@mipmap/ic_alarm_add_white_24dp"
+        android:tint="@color/white" />
 
 </merge>
