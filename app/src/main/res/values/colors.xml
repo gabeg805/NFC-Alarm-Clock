@@ -6,7 +6,7 @@
     <color name="colorAccent">#551f5a</color>
     <color name="white">#ffffff</color>
 
-    <color name="viewBg">#008080</color>
+    <color name="black">#000000</color>
     <color name="album_title">#4c4c4c</color>
 
 </resources>
