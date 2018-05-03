@@ -16,9 +16,26 @@ import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.content.res.Resources;
+import android.graphics.Rect;
+// import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
+import android.widget.ImageView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class MainActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener
 {
+    private RecyclerView recyclerView;
+    private AlarmAdapter adapter;
+    private List<Alarm> alarmList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -32,6 +49,74 @@ public class MainActivity extends AppCompatActivity
         setupNavigationDrawer(drawer, toolbar);
         setupNewAlarmButton(newalarm);
         getNavigationDrawerView().setNavigationItemSelectedListener(this);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        alarmList = new ArrayList<>();
+        adapter = new AlarmAdapter(this, alarmList);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(mLayoutManager);
+        // recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+
+        prepareAlarms();
+    }
+
+    /**
+     * Adding few alarm for testing
+     */
+    private void prepareAlarms()
+    {
+        // int[] covers = new int[]
+        //     {
+        //         R.drawable.album1,
+        //         R.drawable.album2,
+        //         R.drawable.album3,
+        //         R.drawable.album4,
+        //         R.drawable.album5,
+        //         R.drawable.album6,
+        //         R.drawable.album7,
+        //         R.drawable.album8,
+        //         R.drawable.album9,
+        //         R.drawable.album10,
+        //         R.drawable.album11
+        //     };
+
+        int[] covers = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+
+        Alarm a = new Alarm("True Romance", 13, covers[0]);
+        alarmList.add(a);
+
+        a = new Alarm("Xscpae", 8, covers[1]);
+        alarmList.add(a);
+
+        a = new Alarm("Maroon 5", 11, covers[2]);
+        alarmList.add(a);
+
+        a = new Alarm("Born to Die", 12, covers[3]);
+        alarmList.add(a);
+
+        a = new Alarm("Honeymoon", 14, covers[4]);
+        alarmList.add(a);
+
+        a = new Alarm("I Need a Doctor", 1, covers[5]);
+        alarmList.add(a);
+
+        a = new Alarm("Loud", 11, covers[6]);
+        alarmList.add(a);
+
+        a = new Alarm("Legend", 14, covers[7]);
+        alarmList.add(a);
+
+        a = new Alarm("Hello", 11, covers[8]);
+        alarmList.add(a);
+
+        a = new Alarm("Greatest Hits", 17, covers[9]);
+        alarmList.add(a);
+
+        adapter.notifyDataSetChanged();
     }
 
     @Override
