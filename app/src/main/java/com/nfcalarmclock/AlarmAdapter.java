@@ -59,13 +59,11 @@ public class AlarmAdapter
         Alarm alarm = alarmList.get(position);
         holder.title.setText(alarm.getName());
         holder.count.setText(alarm.getType() + " songs");
-
-        // loading album cover using Glide library
-        // Glide.with(mContext).load(album.getThumbnail()).into(holder.thumbnail);
- 
-        holder.overflow.setOnClickListener(new View.OnClickListener() {
+        holder.overflow.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View view)
+                {
                     showPopupMenu(holder.overflow);
                 }
             });
@@ -76,7 +74,6 @@ public class AlarmAdapter
      */
     private void showPopupMenu(View view)
     {
-        // inflate menu
         PopupMenu popup = new PopupMenu(mContext, view);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu_card_alarm, popup.getMenu());
