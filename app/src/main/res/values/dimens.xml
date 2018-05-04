@@ -7,6 +7,8 @@
 
     <dimen name="fab_new_alarm_margin">15dp</dimen>
 
+    <dimen name="card_alarm_margin">5dp</dimen>
+    <dimen name="card_alarm_elevation">5dp</dimen>
     <dimen name="card_alarm_radius">10dp</dimen>
     <dimen name="card_alarm_top_padding">15dp</dimen>
     <dimen name="card_alarm_bottom_padding">15dp</dimen>
@@ -23,7 +25,7 @@
     <dimen name="detail_backdrop_height">250dp</dimen>
     <dimen name="backdrop_title">30dp</dimen>
     <dimen name="backdrop_subtitle">18dp</dimen>
-    <dimen name="card_margin">5dp</dimen>
+
 
     <dimen name="ic_album_overflow_width">20dp</dimen>
     <dimen name="ic_album_overflow_height">30dp</dimen>
