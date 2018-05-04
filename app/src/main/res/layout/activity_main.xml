@@ -12,11 +12,7 @@
         android:orientation="vertical">
 
         <!-- The ActionBar displayed at the top -->
-        <include
-            layout="@layout/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+        <include layout="@layout/toolbar" />
 
         <!-- The main content view where fragments are loaded -->
         <FrameLayout
