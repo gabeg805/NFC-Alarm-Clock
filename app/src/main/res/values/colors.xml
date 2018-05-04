@@ -13,9 +13,10 @@
     <color name="darkGray">#535353</color>
     <color name="darkestGray">#191919</color>
 
-    <color name="blue">#192048</color>
-    <color name="darkerBlue">#192048</color>
-    <color name="darkestBlue">#121836</color>
+    <color name="blue">#182048</color>
+    <color name="darkBlue">#121836</color>
+    <color name="darkerBlue">#0c1024</color>
+    <color name="darkestBlue">#060812</color>
 
 <!-- #1f285a -->
 <!-- #1b2451 -->
