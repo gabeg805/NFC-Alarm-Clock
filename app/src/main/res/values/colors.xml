@@ -4,11 +4,11 @@
     <color name="colorPrimary">#1f285a</color>
     <color name="colorPrimaryDark">#192048</color>
     <color name="colorAccent">#551f5a</color>
+
     <color name="white">#ffffff</color>
-
-    <color name="maroon">#5a1f28</color>
-
     <color name="black">#000000</color>
+    <color name="darkBlue">#1f285a</color>
+    <color name="maroon">#5a1f28</color>
     <color name="offWhite">#f1f5f8</color>
 
     <color name="album_title">#4c4c4c</color>
