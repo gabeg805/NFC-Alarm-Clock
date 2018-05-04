@@ -39,7 +39,7 @@
                 android:paddingBottom="@dimen/card_alarm_time_spacing"
                 android:paddingLeft="@dimen/card_alarm_toggle_spacing"
                 android:textColor="@color/album_title"
-                android:textSize="@dimen/album_title"
+                android:textSize="@dimen/card_alarm_time_size"
                 />
 
             <TextView
@@ -49,7 +49,7 @@
                 android:layout_toRightOf="@id/toggleAlarm"
                 android:layout_below="@id/alarmTime"
                 android:paddingLeft="@dimen/card_alarm_toggle_spacing"
-                android:textSize="@dimen/songs_count"
+                android:textSize="@dimen/card_alarm_info_size"
                 />
 
             <ImageView
