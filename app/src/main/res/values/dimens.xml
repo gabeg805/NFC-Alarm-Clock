@@ -11,6 +11,7 @@
     <dimen name="alarm_top_padding">30dp</dimen>
     <dimen name="alarm_bottom_padding">30dp</dimen>
     <dimen name="alarm_toggle_spacing">30dp</dimen>
+    <dimen name="alarm_time_spacing">10dp</dimen>
 
 
     <dimen name="fab_margin">16dp</dimen>
