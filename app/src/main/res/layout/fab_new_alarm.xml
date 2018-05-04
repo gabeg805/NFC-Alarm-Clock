@@ -7,8 +7,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_new_alarm_margin"
-        android:tint="@color/white"
         app:srcCompat="@mipmap/ic_alarm_add_white_24dp"
         />
+        <!-- android:tint="@color/white" -->
 
 </merge>
