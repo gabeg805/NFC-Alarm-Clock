@@ -7,7 +7,7 @@
 
     <dimen name="fab_new_alarm_margin">15dp</dimen>
 
-    <dimen name="card_alarm_radius">5dp</dimen>
+    <dimen name="card_alarm_radius">7dp</dimen>
     <dimen name="card_alarm_top_padding">15dp</dimen>
     <dimen name="card_alarm_bottom_padding">15dp</dimen>
     <dimen name="card_alarm_left_padding">20dp</dimen>
