@@ -34,9 +34,9 @@ public class AlarmAdapter
             super(view);
             title = (TextView) view.findViewById(R.id.title);
             count = (TextView) view.findViewById(R.id.count);
-            // thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             overflow = (ImageView) view.findViewById(R.id.overflow);
-        }
+x        }
     }
 
     public AlarmAdapter(Context mContext, List<Alarm> alarmList)
