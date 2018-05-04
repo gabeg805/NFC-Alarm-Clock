@@ -38,7 +38,7 @@
                 android:layout_toRightOf="@id/toggleAlarm"
                 android:paddingBottom="@dimen/card_alarm_time_spacing"
                 android:paddingLeft="@dimen/card_alarm_toggle_spacing"
-                android:textColor="@color/album_title"
+                android:textColor="@color/white"
                 android:textSize="@dimen/card_alarm_time_size"
                 />
 
@@ -49,6 +49,7 @@
                 android:layout_toRightOf="@id/toggleAlarm"
                 android:layout_below="@id/alarmTime"
                 android:paddingLeft="@dimen/card_alarm_toggle_spacing"
+                android:textColor="@color/white"
                 android:textSize="@dimen/card_alarm_info_size"
                 />
 
