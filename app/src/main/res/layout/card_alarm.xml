@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/card_alarm_margin"
+        android:layout_marginTop="@dimen/card_alarm_margin"
         android:elevation="@dimen/card_alarm_elevation"
         card_view:cardBackgroundColor="@color/blue"
         card_view:cardCornerRadius="@dimen/card_alarm_radius">
