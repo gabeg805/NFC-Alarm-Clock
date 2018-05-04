@@ -16,7 +16,11 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/card_alarm_top_padding"
+            android:paddingBottom="@dimen/card_alarm_bottom_padding"
+            android:paddingLeft="@dimen/card_alarm_left_padding"
+            android:paddingRight="@dimen/card_alarm_right_padding">
 
             <ImageView
                 android:id="@+id/toggleAlarm"
@@ -32,9 +36,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/toggleAlarm"
-                android:paddingTop="@dimen/alarm_top_padding"
-                android:paddingBottom="@dimen/alarm_time_spacing"
-                android:paddingLeft="@dimen/alarm_toggle_spacing"
+                android:paddingBottom="@dimen/card_alarm_time_spacing"
+                android:paddingLeft="@dimen/card_alarm_toggle_spacing"
                 android:textColor="@color/album_title"
                 android:textSize="@dimen/album_title"
                 />
@@ -45,8 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/toggleAlarm"
                 android:layout_below="@id/alarmTime"
-                android:paddingBottom="@dimen/alarm_bottom_padding"
-                android:paddingLeft="@dimen/alarm_toggle_spacing"
+                android:paddingLeft="@dimen/card_alarm_toggle_spacing"
                 android:textSize="@dimen/songs_count"
                 />
 
