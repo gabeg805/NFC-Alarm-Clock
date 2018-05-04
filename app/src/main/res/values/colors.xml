@@ -11,7 +11,7 @@
     <color name="lightGray">#b2b2b2</color>
     <color name="gray">#808080</color>
     <color name="darkGray">#535353</color>
-    <color name="darkestGray">#262626</color>
+    <color name="darkestGray">#0c0c0c</color>
 
     <color name="blue">#192048</color>
     <color name="darkerBlue">#192048</color>
@@ -22,8 +22,24 @@
 <!-- #182048 -->
 <!-- #151c3e -->
 <!-- #121836 -->
-
 <!-- #0f142d -->
+<!-- #0c1024 -->
+<!-- #090c1b -->
+<!-- #060812 -->
+<!-- #030409 -->
+<!-- #000000 -->
+
+<!-- #808080 -->
+<!-- #737373 -->
+<!-- #666666 -->
+<!-- #595959 -->
+<!-- #4c4c4c -->
+<!-- #404040 -->
+<!-- #333333 -->
+<!-- #262626 -->
+<!-- #191919 -->
+<!-- #0c0c0c -->
+<!-- #000000 -->
 
     <color name="offWhite">#f1f5f8</color>
 
