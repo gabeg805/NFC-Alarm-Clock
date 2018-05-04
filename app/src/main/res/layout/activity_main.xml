@@ -23,7 +23,7 @@
             android:id="@+id/flContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/darkestBlue"
+            android:background="@color/darkestGray"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <include layout="@layout/content_alarm_list" />

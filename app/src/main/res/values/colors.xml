@@ -10,8 +10,9 @@
 
     <color name="lightGray">#b2b2b2</color>
     <color name="gray">#808080</color>
-    <color name="darkGray">#535353</color>
-    <color name="darkestGray">#191919</color>
+    <color name="darkGray">#364852</color>
+    <color name="darkerGray">#333333</color>
+    <color name="darkestGray">#242424</color>
 
     <color name="blue">#182048</color>
     <color name="darkBlue">#121836</color>
