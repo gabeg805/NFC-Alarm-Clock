@@ -18,20 +18,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/thumbnail"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/album_cover_height"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                />
+            <!-- <ImageView -->
+            <!--     android:id="@+id/thumbnail" -->
+            <!--     android:layout_width="match_parent" -->
+            <!--     android:layout_height="@dimen/album_cover_height" -->
+            <!--     android:background="?attr/selectableItemBackgroundBorderless" -->
+            <!--     android:clickable="true" -->
+            <!--     android:scaleType="fitXY" -->
+            <!--     /> -->
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/thumbnail"
                 android:paddingLeft="@dimen/album_title_padding"
                 android:paddingRight="@dimen/album_title_padding"
                 android:paddingTop="@dimen/album_title_padding"
@@ -54,7 +53,7 @@
                 android:id="@+id/overflow"
                 android:layout_width="@dimen/ic_album_overflow_width"
                 android:layout_height="@dimen/ic_album_overflow_height"
-                android:layout_below="@id/thumbnail"
+                android:layout_alignParentRight="truex"
                 android:layout_marginTop="@dimen/ic_album_overflow_margin_top"
                 android:scaleType="centerCrop"
                 android:src="@mipmap/ic_more_vert_white_24dp"
