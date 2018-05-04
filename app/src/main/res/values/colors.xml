@@ -9,7 +9,7 @@
     <color name="black">#000000</color>
     <color name="gray">#808080</color>
     <color name="lightGray">#b2b2b2</color>
-    <color name="darkerBlue">#192048</color>
+    <!-- <color name="darkerBlue">#192048</color> -->
     <color name="darkerBlue">#192048</color>
     <color name="otherDarkerBlue">#151c3e</color>
     <color name="darkestBlue">#121836</color>
