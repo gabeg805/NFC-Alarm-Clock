@@ -7,13 +7,24 @@
 
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
-    <color name="gray">#808080</color>
+
     <color name="lightGray">#b2b2b2</color>
-    <!-- <color name="darkerBlue">#192048</color> -->
+    <color name="gray">#808080</color>
+    <color name="darkGray">#535353</color>
+    <color name="darkestGray">#262626</color>
+
+    <color name="blue">#192048</color>
     <color name="darkerBlue">#192048</color>
-    <color name="otherDarkerBlue">#151c3e</color>
     <color name="darkestBlue">#121836</color>
-    <color name="maroon">#5a1f28</color>
+
+<!-- #1f285a -->
+<!-- #1b2451 -->
+<!-- #182048 -->
+<!-- #151c3e -->
+<!-- #121836 -->
+
+<!-- #0f142d -->
+
     <color name="offWhite">#f1f5f8</color>
 
 </resources>
