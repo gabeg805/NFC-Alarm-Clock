@@ -7,7 +7,10 @@
 
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
-    <color name="darkBlue">#1f285a</color>
+    <color name="gray">#808080</color>
+    <color name="lightGray">#b2b2b2</color>
+    <color name="darkerBlue">#192048</color>
+    <color name="darkestBlue">#121836</color>
     <color name="maroon">#5a1f28</color>
     <color name="offWhite">#f1f5f8</color>
 

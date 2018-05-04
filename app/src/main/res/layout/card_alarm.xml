@@ -11,8 +11,8 @@
         android:layout_gravity="center"
         android:layout_margin="@dimen/card_margin"
         android:elevation="3dp"
-        card_view:cardBackgroundColor="@color/maroon"
-        card_view:cardCornerRadius="@dimen/card_album_radius">
+        card_view:cardBackgroundColor="@color/darkerBlue"
+        card_view:cardCornerRadius="@dimen/card_alarm_radius">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -24,8 +24,8 @@
 
             <ImageView
                 android:id="@+id/toggleAlarm"
-                android:layout_width="@dimen/toggle_alarm_size"
-                android:layout_height="@dimen/toggle_alarm_size"
+                android:layout_width="@dimen/card_alarm_toggle_size"
+                android:layout_height="@dimen/card_alarm_toggle_size"
                 android:layout_alignParentLeft="true"
                 android:layout_centerInParent="true"
                 android:src="@mipmap/ic_alarm_white_24dp"
@@ -49,7 +49,7 @@
                 android:layout_toRightOf="@id/toggleAlarm"
                 android:layout_below="@id/alarmTime"
                 android:paddingLeft="@dimen/card_alarm_toggle_spacing"
-                android:textColor="@color/white"
+                android:textColor="@color/gray"
                 android:textSize="@dimen/card_alarm_info_size"
                 />
 

@@ -4,17 +4,17 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
-    <dimen name="button_new_alarm_margin">16dp</dimen>
 
-    <dimen name="toggle_alarm_size">30dp</dimen>
+    <dimen name="fab_new_alarm_margin">15dp</dimen>
 
+    <dimen name="card_alarm_radius">10dp</dimen>
     <dimen name="card_alarm_top_padding">15dp</dimen>
     <dimen name="card_alarm_bottom_padding">15dp</dimen>
-    <dimen name="card_alarm_left_padding">15dp</dimen>
+    <dimen name="card_alarm_left_padding">20dp</dimen>
     <dimen name="card_alarm_right_padding">15dp</dimen>
-    <dimen name="card_alarm_toggle_spacing">15dp</dimen>
-    <dimen name="card_alarm_time_spacing">5dp</dimen>
-
+    <dimen name="card_alarm_toggle_spacing">25dp</dimen>
+    <dimen name="card_alarm_time_spacing">2dp</dimen>
+    <dimen name="card_alarm_toggle_size">30dp</dimen>
     <dimen name="card_alarm_time_size">20dp</dimen>
     <dimen name="card_alarm_info_size">15dp</dimen>
 
@@ -24,7 +24,6 @@
     <dimen name="backdrop_title">30dp</dimen>
     <dimen name="backdrop_subtitle">18dp</dimen>
     <dimen name="card_margin">5dp</dimen>
-    <dimen name="card_album_radius">0dp</dimen>
 
     <dimen name="ic_album_overflow_width">20dp</dimen>
     <dimen name="ic_album_overflow_height">30dp</dimen>

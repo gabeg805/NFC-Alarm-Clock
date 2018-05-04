@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity
         setupNewAlarmButton(newalarm);
         getNavigationDrawerView().setNavigationItemSelectedListener(this);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = (RecyclerView) findViewById(R.id.alarm_list);
 
         alarmList = new ArrayList<>();
         adapter = new AlarmAdapter(this, alarmList);
@@ -270,6 +270,6 @@ public class MainActivity extends AppCompatActivity
      */
     private FloatingActionButton getNewAlarmButton()
     {
-        return (FloatingActionButton) findViewById(R.id.button_new_alarm);
+        return (FloatingActionButton) findViewById(R.id.fab_new_alarm);
     }
 }

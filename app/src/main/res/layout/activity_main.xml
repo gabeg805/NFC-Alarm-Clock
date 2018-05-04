@@ -21,21 +21,13 @@
         <!-- The main content view where fragments are loaded -->
         <FrameLayout
             android:id="@+id/flContent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <!-- <fragment -->
-            <!--     android:name="com.nfcalarmclock.AlarmListFragment" -->
-            <!--     android:layout_width="match_parent" -->
-            <!--     android:layout_height="80dp" -->
-            <!--     android:layout_margin="10dp" -->
-            <!--     android:id="@+id/fg1" -->
-            <!--     /> -->
+            android:layout_height="match_parent"
+            android:background="@color/darkestBlue"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <include layout="@layout/content_alarm_list" />
-
-            <include layout="@layout/button_new_alarm" />
+            <include layout="@layout/fab_new_alarm" />
 
         </FrameLayout>
 
