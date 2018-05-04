@@ -17,14 +17,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/thumbnail"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/album_cover_height"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                />
+            <!-- <ImageView -->
+            <!--     android:id="@+id/thumbnail" -->
+            <!--     android:layout_width="match_parent" -->
+            <!--     android:layout_height="@dimen/album_cover_height" -->
+            <!--     android:background="?attr/selectableItemBackgroundBorderless" -->
+            <!--     android:clickable="true" -->
+            <!--     android:scaleType="fitXY" -->
+            <!--     /> -->
 
             <TextView
                 android:id="@+id/title"
