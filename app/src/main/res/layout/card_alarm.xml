@@ -18,34 +18,34 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <!-- <ImageView -->
-            <!--     android:id="@+id/thumbnail" -->
-            <!--     android:layout_width="match_parent" -->
-            <!--     android:layout_height="@dimen/album_cover_height" -->
-            <!--     android:background="?attr/selectableItemBackgroundBorderless" -->
-            <!--     android:clickable="true" -->
-            <!--     android:scaleType="fitXY" -->
-            <!--     /> -->
+            <ImageView
+                android:id="@+id/toggleAlarm"
+                android:layout_width="@dimen/toggle_alarm_size"
+                android:layout_height="@dimen/toggle_alarm_size"
+                android:layout_alignParentLeft="true"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_alarm_white_24dp"
+                />
 
             <TextView
-                android:id="@+id/title"
+                android:id="@+id/alarmTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/album_title_padding"
-                android:paddingRight="@dimen/album_title_padding"
-                android:paddingTop="@dimen/album_title_padding"
+                android:layout_toRightOf="@id/toggleAlarm"
+                android:paddingTop="@dimen/alarm_top_padding"
+                android:paddingBottom="@dimen/alarm_bottom_padding"
+                android:paddingLeft="@dimen/alarm_toggle_spacing"
                 android:textColor="@color/album_title"
                 android:textSize="@dimen/album_title"
                 />
 
             <TextView
-                android:id="@+id/count"
+                android:id="@+id/alarmInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/title"
-                android:paddingBottom="@dimen/songs_count_padding_bottom"
-                android:paddingLeft="@dimen/album_title_padding"
-                android:paddingRight="@dimen/album_title_padding"
+                android:layout_below="@id/alarmTime"
+                android:paddingBottom="@dimen/alarm_bottom_padding"
+                android:paddingLeft="@dimen/alarm_toggle_spacing"
                 android:textSize="@dimen/songs_count"
                 />
 

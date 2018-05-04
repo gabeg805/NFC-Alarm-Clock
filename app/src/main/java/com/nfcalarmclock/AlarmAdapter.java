@@ -26,15 +26,17 @@ public class AlarmAdapter
     public class MyViewHolder
         extends RecyclerView.ViewHolder
     {
-        public TextView title, count;
-        public ImageView thumbnail, overflow;
+        public ImageView toggleAlarm;
+        public ImageView overflow;
+        public TextView alarmTime;
+        public TextView alarmInfo;
 
         public MyViewHolder(View view)
         {
             super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            count = (TextView) view.findViewById(R.id.count);
-            // thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+            toggleAlarm = (ImageView) view.findViewById(R.id.toggleAlarm);
+            alarmTime = (TextView) view.findViewById(R.id.alarmTime);
+            alarmInfo = (TextView) view.findViewById(R.id.alarmInfo);
             overflow = (ImageView) view.findViewById(R.id.overflow);
         }
     }
@@ -57,8 +59,8 @@ public class AlarmAdapter
     public void onBindViewHolder(final MyViewHolder holder, int position)
     {
         Alarm alarm = alarmList.get(position);
-        holder.title.setText(alarm.getName());
-        holder.count.setText(alarm.getType() + " songs");
+        holder.alarmTime.setText(alarm.getName());
+        holder.alarmInfo.setText(alarm.getType() + " songs");
         holder.overflow.setOnClickListener(new View.OnClickListener()
             {
                 @Override

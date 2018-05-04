@@ -6,6 +6,13 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="button_new_alarm_margin">16dp</dimen>
 
+    <dimen name="toggle_alarm_size">30dp</dimen>
+
+    <dimen name="alarm_top_padding">30dp</dimen>
+    <dimen name="alarm_bottom_padding">30dp</dimen>
+    <dimen name="alarm_toggle_spacing">30dp</dimen>
+
+
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="item_offset">10dp</dimen>
     <dimen name="detail_backdrop_height">250dp</dimen>
