@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 
 import android.support.v7.app.AppCompatActivity;
 
+import android.support.v7.app.ActionBar;
 
 public class AddAlarmActivity
     extends AppCompatActivity
