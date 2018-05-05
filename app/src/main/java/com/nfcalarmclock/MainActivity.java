@@ -29,6 +29,10 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+
 
 public class MainActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener
@@ -226,11 +230,16 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onClick(View view)
                 {
-                    // FragmentManager fragment = getSupportFragmentManager();
-                    // fragment.beginTransaction().replace(R.id.flContent, fragment).commit();
-                    Snackbar.make(view, "Replace with your own action",
-                                  Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                    AddAlarmFragment addalarm = new AddAlarmFragment();
+                    FragmentManager manager = getSupportFragmentManager();
+                    FragmentTransaction transaction = manager.beginTransaction();
+                    transaction.replace(R.id.fragment_main, addalarm);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+
+                    // Snackbar.make(view, "Replace with your own action",
+                    //               Snackbar.LENGTH_LONG)
+                    //     .setAction("Action", null).show();
                 }
             });
     }
