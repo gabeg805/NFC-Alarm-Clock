@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity
 
         prepareAlarms();
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        // getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     /**
