@@ -1,7 +1,7 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/fragment_new_alarm"
+    android:id="@+id/activity_add_alarm"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darkestBlue"

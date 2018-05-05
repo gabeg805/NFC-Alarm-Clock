@@ -33,6 +33,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import android.content.Intent;
+
 
 public class MainActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener
@@ -120,16 +122,17 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item)
     {
         // Create a new fragment and specify the fragment to show based on nav item clicked
-        Fragment fragment;
-        FragmentManager manager;
-        FragmentTransaction transaction;
+        // Fragment fragment;
+        // FragmentManager manager;
+        // FragmentTransaction transaction;
+        Intent intent;
         int id = item.getItemId();
         View view = getWindow().getDecorView().getRootView();
 
         switch(id)
         {
         case R.id.drawer_alarm_all:
-            fragment = new AddAlarmFragment();
+            intent = new Intent(this, AddAlarmActivity.class);
             break;
         case R.id.drawer_about:
             getNavigationDrawer().closeDrawer(GravityCompat.START);
@@ -151,15 +154,18 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
 
-        manager = getSupportFragmentManager();
-        transaction = manager.beginTransaction();
-        transaction.replace(R.id.fragment_new_alarm, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        // manager = getSupportFragmentManager();
+        // transaction = manager.beginTransaction();
+        // transaction.replace(R.id.fragment_new_alarm, fragment);
+        // transaction.addToBackStack(null);
+        // transaction.commit();
 
         // item.setChecked(true);
         // setTitle(item.getTitle());
         getNavigationDrawer().closeDrawer(GravityCompat.START);
+
+        startActivity(intent);
+
         return true;
     }
 
@@ -242,12 +248,15 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onClick(View view)
                 {
-                    AddAlarmFragment addalarm = new AddAlarmFragment();
-                    FragmentManager manager = getSupportFragmentManager();
-                    FragmentTransaction transaction = manager.beginTransaction();
-                    transaction.replace(R.id.fragment_main, addalarm);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
+                    Intent intent = new Intent(view.getContext(), AddAlarmActivity.class);
+                    startActivity(intent);
+
+                    // AddAlarmFragment addalarm = new AddAlarmFragment();
+                    // FragmentManager manager = getSupportFragmentManager();
+                    // FragmentTransaction transaction = manager.beginTransaction();
+                    // transaction.replace(R.id.fragment_main, addalarm);
+                    // transaction.addToBackStack(null);
+                    // transaction.commit();
 
                     // Snackbar.make(view, "Replace with your own action",
                     //               Snackbar.LENGTH_LONG)
