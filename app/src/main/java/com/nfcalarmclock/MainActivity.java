@@ -68,62 +68,14 @@ public class MainActivity extends AppCompatActivity
         prepareAlarms();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        // getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
-    /**
-     * Adding few alarm for testing
-     */
-    private void prepareAlarms()
-    {
-        // int[] covers = new int[]
-        //     {
-        //         R.drawable.album1,
-        //         R.drawable.album2,
-        //         R.drawable.album3,
-        //         R.drawable.album4,
-        //         R.drawable.album5,
-        //         R.drawable.album6,
-        //         R.drawable.album7,
-        //         R.drawable.album8,
-        //         R.drawable.album9,
-        //         R.drawable.album10,
-        //         R.drawable.album11
-        //     };
-
-        int[] covers = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-
-        Alarm a = new Alarm("True Romance", 13, covers[0]);
-        alarmList.add(a);
-
-        a = new Alarm("Xscpae", 8, covers[1]);
-        alarmList.add(a);
-
-        a = new Alarm("Maroon 5", 11, covers[2]);
-        alarmList.add(a);
-
-        a = new Alarm("Born to Die", 12, covers[3]);
-        alarmList.add(a);
-
-        a = new Alarm("Honeymoon", 14, covers[4]);
-        alarmList.add(a);
-
-        a = new Alarm("I Need a Doctor", 1, covers[5]);
-        alarmList.add(a);
-
-        a = new Alarm("Loud", 11, covers[6]);
-        alarmList.add(a);
-
-        a = new Alarm("Legend", 14, covers[7]);
-        alarmList.add(a);
-
-        a = new Alarm("Hello", 11, covers[8]);
-        alarmList.add(a);
-
-        a = new Alarm("Greatest Hits", 17, covers[9]);
-        alarmList.add(a);
-
-        adapter.notifyDataSetChanged();
+    @Override
+    public boolean onSupportNavigateUp()
+    {  
+        finish();  
+        return true;  
     }
 
     @Override
@@ -209,6 +161,61 @@ public class MainActivity extends AppCompatActivity
         // setTitle(item.getTitle());
         getNavigationDrawer().closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /**
+     * Adding few alarm for testing
+     */
+    private void prepareAlarms()
+    {
+        // int[] covers = new int[]
+        //     {
+        //         R.drawable.album1,
+        //         R.drawable.album2,
+        //         R.drawable.album3,
+        //         R.drawable.album4,
+        //         R.drawable.album5,
+        //         R.drawable.album6,
+        //         R.drawable.album7,
+        //         R.drawable.album8,
+        //         R.drawable.album9,
+        //         R.drawable.album10,
+        //         R.drawable.album11
+        //     };
+
+        int[] covers = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+
+        Alarm a = new Alarm("True Romance", 13, covers[0]);
+        alarmList.add(a);
+
+        a = new Alarm("Xscpae", 8, covers[1]);
+        alarmList.add(a);
+
+        a = new Alarm("Maroon 5", 11, covers[2]);
+        alarmList.add(a);
+
+        a = new Alarm("Born to Die", 12, covers[3]);
+        alarmList.add(a);
+
+        a = new Alarm("Honeymoon", 14, covers[4]);
+        alarmList.add(a);
+
+        a = new Alarm("I Need a Doctor", 1, covers[5]);
+        alarmList.add(a);
+
+        a = new Alarm("Loud", 11, covers[6]);
+        alarmList.add(a);
+
+        a = new Alarm("Legend", 14, covers[7]);
+        alarmList.add(a);
+
+        a = new Alarm("Hello", 11, covers[8]);
+        alarmList.add(a);
+
+        a = new Alarm("Greatest Hits", 17, covers[9]);
+        alarmList.add(a);
+
+        adapter.notifyDataSetChanged();
     }
 
     /**
