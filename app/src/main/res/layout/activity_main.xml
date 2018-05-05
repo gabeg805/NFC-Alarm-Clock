@@ -11,37 +11,10 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- The ActionBar displayed at the top -->
-        <include layout="@layout/toolbar" />
-
-        <!-- The main content view where fragments are loaded -->
-        <include layout="@layout/content_main" />
-
-        <!-- <FrameLayout -->
-        <!--     android:id="@+id/flContent" -->
-        <!--     android:layout_width="match_parent" -->
-        <!--     android:layout_height="match_parent" -->
-        <!--     android:background="@color/darkestBlue" -->
-        <!--     app:layout_behavior="@string/appbar_scrolling_view_behavior"> -->
-
-        <!--     <include layout="@layout/content_alarm_list" /> -->
-        <!--     <include layout="@layout/fab_new_alarm" /> -->
-
-        <!-- </FrameLayout> -->
-
+        <include layout="@layout/ab_toolbar" />
+        <include layout="@layout/fragment_main" />
     </LinearLayout>
 
-
-    <!-- The navigation drawer that comes from the left -->
-    <!-- Note that `android:layout_gravity` needs to be set to 'start' -->
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nvView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/black"
-        app:headerLayout="@layout/header_navigation_drawer"
-        app:menu="@menu/menu_navigation_drawer"
-        />
+    <include layout="@layout/view_navigation_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

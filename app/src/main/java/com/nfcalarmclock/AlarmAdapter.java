@@ -48,7 +48,7 @@ public class AlarmAdapter
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         View itemView = LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.card_alarm, parent, false);
+            .inflate(R.layout.view_card_alarm, parent, false);
         return new MyViewHolder(itemView);
     }
 

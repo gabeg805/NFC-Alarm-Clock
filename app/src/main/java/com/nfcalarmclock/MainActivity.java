@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity
      */
     private Toolbar getToolbar()
     {
-        return (Toolbar) findViewById(R.id.toolbar);
+        return (Toolbar) findViewById(R.id.ab_toolbar);
     }
 
     /**
