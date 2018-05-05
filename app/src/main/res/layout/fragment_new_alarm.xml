@@ -1,0 +1,23 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_new_alarm"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darkestBlue"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:text="@string/nav_header_title"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    <!-- <include layout="@layout/content_alarm_list" /> -->
+
+    <!-- <include layout="@layout/fab_new_alarm" /> -->
+
+</FrameLayout>
