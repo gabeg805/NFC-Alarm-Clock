@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity
 
         prepareAlarms();
 
-        // getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     /**
@@ -139,10 +139,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * @brief Create the options menu in the action bar.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_settings, menu);
         return true;
     }
@@ -198,11 +200,11 @@ public class MainActivity extends AppCompatActivity
 
         manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
-        transaction.replace(R.id.fragment_main, fragment);
+        transaction.replace(R.id.fragment_new_alarm, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
 
-        item.setChecked(true);
+        // item.setChecked(true);
         // setTitle(item.getTitle());
         getNavigationDrawer().closeDrawer(GravityCompat.START);
         return true;
