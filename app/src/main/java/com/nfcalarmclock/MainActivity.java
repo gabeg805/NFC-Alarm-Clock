@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setAdapter(adapter);
 
         prepareAlarms();
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     /**
@@ -163,46 +165,46 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item)
     {
         // Create a new fragment and specify the fragment to show based on nav item clicked
-        Fragment fragment = null;
-        Class fragmentClass;
+        Fragment fragment;
+        FragmentManager manager;
+        FragmentTransaction transaction;
         int id = item.getItemId();
+        View view = getWindow().getDecorView().getRootView();
 
-        // switch(id)
-        // {
-        // case R.id.nav_first_fragment:
-        //     fragmentClass = FirstFragment.class;
-        //     break;
-        // case R.id.nav_second_fragment:
-        //     fragmentClass = SecondFragment.class;
-        //     break;
-        // case R.id.nav_third_fragment:
-        //     fragmentClass = ThirdFragment.class;
-        //     break;
-        // default:
-        //     fragmentClass = FirstFragment.class;
-        // }
+        switch(id)
+        {
+        case R.id.drawer_alarm_all:
+            fragment = new AddAlarmFragment();
+            break;
+        case R.id.drawer_about:
+            getNavigationDrawer().closeDrawer(GravityCompat.START);
+            Snackbar.make(view, "Display About",
+                          Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+            return true;
+        case R.id.drawer_settings:
+            getNavigationDrawer().closeDrawer(GravityCompat.START);
+            Snackbar.make(view, "Display Settings",
+                          Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+            return true;
+        default:
+            getNavigationDrawer().closeDrawer(GravityCompat.START);
+            Snackbar.make(view, "Default ID",
+                          Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+            return true;
+        }
 
-        // try {
-        //     fragment = (Fragment) fragmentClass.newInstance();
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        // }
+        manager = getSupportFragmentManager();
+        transaction = manager.beginTransaction();
+        transaction.replace(R.id.fragment_main, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
 
-        // // Insert the fragment by replacing any existing fragment
-        // FragmentManager fragmentManager = getSupportFragmentManager();
-        // fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-
-        // Highlight the selected item has been done by NavigationView
         item.setChecked(true);
-        // Set action bar title
-        setTitle(item.getTitle());
-        // Close the navigation drawer
-        // mDrawer.closeDrawers();
+        // setTitle(item.getTitle());
         getNavigationDrawer().closeDrawer(GravityCompat.START);
-
-
-        // DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        // drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

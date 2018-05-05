@@ -10,6 +10,11 @@ public class AddAlarmFragment
     extends Fragment
 {
 
+    public static AddAlarmFragment newInstance()
+    {
+        return new AddAlarmFragment();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
