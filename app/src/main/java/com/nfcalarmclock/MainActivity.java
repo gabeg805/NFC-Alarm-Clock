@@ -52,16 +52,16 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = getToolbar();
         // setSupportActionBar(toolbar);
 
-        // if (getSupportActionBar() == null)
-        // {
-        //     Toast.makeText(this, "Fuck the first action bar is null :(", 
-        //                    Toast.LENGTH_LONG).show();
-        // }
-        // else
-        // {
-        //     Toast.makeText(this, "It works! :)", 
-        //                    Toast.LENGTH_LONG).show();
-        // }
+        if (getSupportActionBar() == null)
+        {
+            Toast.makeText(this, "Fuck the first action bar is null :(", 
+                           Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            Toast.makeText(this, "It works! :)", 
+                           Toast.LENGTH_LONG).show();
+        }
 
         // DrawerLayout drawer = getNavigationDrawer();
         FloatingActionButton newalarm = getNewAlarmButton();
