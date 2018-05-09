@@ -7,8 +7,9 @@ import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
 
 import android.support.v7.app.AppCompatActivity;
-
 import android.support.v7.app.ActionBar;
+import android.support.design.widget.Snackbar;
+import android.widget.Toast;
 
 public class AddAlarmActivity
     extends AppCompatActivity
@@ -19,20 +20,37 @@ public class AddAlarmActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_alarm);
-        // ActionBar actionbar = getSupportActionBar();
-        // if (actionbar != null)
-        // {
-        //     actionbar.setDisplayHomeAsUpEnabled(true);
-        // }
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     @Override
-    public boolean onSupportNavigateUp()
-    {  
-        finish();  
-        return true;  
+    protected void onStart()
+    {
+        super.onStart();
+        ActionBar actionbar = getSupportActionBar();
+        if (actionbar != null)
+        {
+            actionbar.setDisplayHomeAsUpEnabled(true);
+        }
+        else
+        {
+            Toast.makeText(this, "Fuck the action bar is null :(", 
+                           Toast.LENGTH_LONG).show();
+            // View view = getWindow().getDecorView().getRootView();
+            // Snackbar.make(view, "Replace with your own action",
+            //               Snackbar.LENGTH_LONG)
+            //     .setAction("Action", null).show();
+        }
+
+        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
+
+
+    // @Override
+    // public boolean onSupportNavigateUp()
+    // {  
+    //     finish();  
+    //     return true;  
+    // }
 
 }

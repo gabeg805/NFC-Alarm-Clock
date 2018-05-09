@@ -34,6 +34,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity
@@ -48,13 +49,25 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = getToolbar();
-        setSupportActionBar(toolbar);
-        DrawerLayout drawer = getNavigationDrawer();
+        // Toolbar toolbar = getToolbar();
+        // setSupportActionBar(toolbar);
+
+        // if (getSupportActionBar() == null)
+        // {
+        //     Toast.makeText(this, "Fuck the first action bar is null :(", 
+        //                    Toast.LENGTH_LONG).show();
+        // }
+        // else
+        // {
+        //     Toast.makeText(this, "It works! :)", 
+        //                    Toast.LENGTH_LONG).show();
+        // }
+
+        // DrawerLayout drawer = getNavigationDrawer();
         FloatingActionButton newalarm = getNewAlarmButton();
-        setupNavigationDrawer(drawer, toolbar);
+        // setupNavigationDrawer(drawer, toolbar);
         setupNewAlarmButton(newalarm);
-        getNavigationDrawerView().setNavigationItemSelectedListener(this);
+        // getNavigationDrawerView().setNavigationItemSelectedListener(this);
 
         recyclerView = (RecyclerView) findViewById(R.id.alarm_list);
 
@@ -69,8 +82,19 @@ public class MainActivity extends AppCompatActivity
 
         prepareAlarms();
 
-        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // getSupportActionBar().setDisplayShowHomeEnabled(true);
+        // if (getSupportActionBar() == null)
+        // {
+        //     Toast.makeText(this, "Fuck the action bar is definitely null :(", 
+        //                    Toast.LENGTH_LONG).show();
+        // }
+        // else
+        // {
+        //     Toast.makeText(this, "It definitely works! :)", 
+        //                    Toast.LENGTH_LONG).show();
+        // }
+
+        // // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // // getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     // @Override
@@ -132,7 +156,7 @@ public class MainActivity extends AppCompatActivity
         switch(id)
         {
         case R.id.drawer_alarm_all:
-            intent = new Intent(this, AddAlarmActivity.class);
+            intent = new Intent(getApplicationContext(), AddAlarmActivity.class);
             break;
         case R.id.drawer_about:
             getNavigationDrawer().closeDrawer(GravityCompat.START);
@@ -248,7 +272,7 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onClick(View view)
                 {
-                    Intent intent = new Intent(view.getContext(), AddAlarmActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), AddAlarmActivity.class);
                     startActivity(intent);
 
                     // AddAlarmFragment addalarm = new AddAlarmFragment();
