@@ -5,7 +5,7 @@ import android.content.res.Configuration;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
-import android.support.design.widget.NavigationView;
+// import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -36,7 +36,7 @@ import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity
-    implements NavigationView.OnNavigationItemSelectedListener
+    // implements NavigationView.OnNavigationItemSelectedListener
 {
     private RecyclerView recyclerView;
     private AlarmAdapter adapter;
@@ -84,7 +84,6 @@ public class MainActivity extends AppCompatActivity
         //                    Toast.LENGTH_LONG).show();
         // }
 
-        // // getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     // @Override
@@ -130,26 +129,26 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item)
-    {
-        // Create a new fragment and specify the fragment to show based on nav item clicked
-        // Fragment fragment;
-        // FragmentManager manager;
-        // FragmentTransaction transaction;
+    // @SuppressWarnings("StatementWithEmptyBody")
+    // @Override
+    // public boolean onNavigationItemSelected(MenuItem item)
+    // {
+    //     // Create a new fragment and specify the fragment to show based on nav item clicked
+    //     // Fragment fragment;
+    //     // FragmentManager manager;
+    //     // FragmentTransaction transaction;
 
-        // manager = getSupportFragmentManager();
-        // transaction = manager.beginTransaction();
-        // transaction.replace(R.id.fragment_new_alarm, fragment);
-        // transaction.addToBackStack(null);
-        // transaction.commit();
+    //     // manager = getSupportFragmentManager();
+    //     // transaction = manager.beginTransaction();
+    //     // transaction.replace(R.id.fragment_new_alarm, fragment);
+    //     // transaction.addToBackStack(null);
+    //     // transaction.commit();
 
-        // item.setChecked(true);
-        // getNavigationDrawer().closeDrawer(GravityCompat.START);
+    //     // item.setChecked(true);
+    //     // getNavigationDrawer().closeDrawer(GravityCompat.START);
 
-        return true;
-    }
+    //     return true;
+    // }
 
 
     /**

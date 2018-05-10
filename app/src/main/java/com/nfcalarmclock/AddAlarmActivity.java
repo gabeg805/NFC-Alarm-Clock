@@ -31,6 +31,7 @@ public class AddAlarmActivity
             Toast.makeText(this, "It works! :)", 
                            Toast.LENGTH_LONG).show();
             actionbar.setDisplayHomeAsUpEnabled(true);
+            // getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
     }
 
