@@ -12,7 +12,17 @@
         android:orientation="vertical">
 
         <include layout="@layout/content_alarm_list" />
-        <include layout="@layout/fab_new_alarm" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_add_alarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_new_alarm_margin"
+            app:srcCompat="@mipmap/ic_alarm_add_white_24dp"
+            />
+
+        <!-- <include layout="@layout/fab_new_alarm" /> -->
         <!-- <include layout="@layout/fragment_main" /> -->
     </LinearLayout>
 

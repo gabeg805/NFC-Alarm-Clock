@@ -166,7 +166,7 @@ public class MainActivity
      */
     private FloatingActionButton getAddAlarmButton()
     {
-        return (FloatingActionButton) findViewById(R.id.fab_new_alarm);
+        return (FloatingActionButton) findViewById(R.id.fab_add_alarm);
     }
 
     /**
