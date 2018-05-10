@@ -9,7 +9,7 @@ import android.view.View;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+// import android.support.v7.widget.Toolbar;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +17,7 @@ import android.view.MenuItem;
 import android.content.res.Resources;
 import android.graphics.Rect;
 // import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
+// import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,55 +35,30 @@ import android.content.Intent;
 import android.widget.Toast;
 
 
-public class MainActivity extends AppCompatActivity
-    // implements NavigationView.OnNavigationItemSelectedListener
+public class MainActivity
+    extends AppCompatActivity
 {
-    private RecyclerView recyclerView;
-    private AlarmAdapter adapter;
-    private List<Alarm> alarmList;
+    // private AlarmAdapter adapter;
+    // private List<Alarm> alarmList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = getToolbar();
-        // setSupportActionBar(toolbar);
-
-        if (getSupportActionBar() == null)
-        {
-            Toast.makeText(this, "Fuck the first action bar is null :(", 
-                           Toast.LENGTH_LONG).show();
-        }
-        else
-        {
-            Toast.makeText(this, "It works! :)", 
-                           Toast.LENGTH_LONG).show();
-        }
 
         FloatingActionButton newalarm = getNewAlarmButton();
         setupNewAlarmButton(newalarm);
-        recyclerView = (RecyclerView) findViewById(R.id.alarm_list);
-        alarmList = new ArrayList<>();
-        adapter = new AlarmAdapter(this, alarmList);
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.alarm_list);
+        // alarmList = new ArrayList<>();
+        AlarmAdapter adapter = new AlarmAdapter(this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        prepareAlarms();
-
-        // if (getSupportActionBar() == null)
-        // {
-        //     Toast.makeText(this, "Fuck the action bar is definitely null :(", 
-        //                    Toast.LENGTH_LONG).show();
-        // }
-        // else
-        // {
-        //     Toast.makeText(this, "It definitely works! :)", 
-        //                    Toast.LENGTH_LONG).show();
-        // }
-
+        prepareAlarms(adapter);
     }
 
     // @Override
@@ -129,32 +104,12 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    // @SuppressWarnings("StatementWithEmptyBody")
-    // @Override
-    // public boolean onNavigationItemSelected(MenuItem item)
-    // {
-    //     // Create a new fragment and specify the fragment to show based on nav item clicked
-    //     // Fragment fragment;
-    //     // FragmentManager manager;
-    //     // FragmentTransaction transaction;
-
-    //     // manager = getSupportFragmentManager();
-    //     // transaction = manager.beginTransaction();
-    //     // transaction.replace(R.id.fragment_new_alarm, fragment);
-    //     // transaction.addToBackStack(null);
-    //     // transaction.commit();
-
-    //     // item.setChecked(true);
-    //     // getNavigationDrawer().closeDrawer(GravityCompat.START);
-
-    //     return true;
-    // }
-
+    // private List<Alarm> alarmList;
 
     /**
      * Adding few alarm for testing
      */
-    private void prepareAlarms()
+    private void prepareAlarms(AlarmAdapter adapter)
     {
         // int[] covers = new int[]
         //     {
@@ -170,6 +125,8 @@ public class MainActivity extends AppCompatActivity
         //         R.drawable.album10,
         //         R.drawable.album11
         //     };
+
+        List<Alarm> alarmList = adapter.getAlarms();
 
         int[] covers = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
 
@@ -231,16 +188,6 @@ public class MainActivity extends AppCompatActivity
                     //     .setAction("Action", null).show();
                 }
             });
-    }
-
-    /**
-     * @brief Return the Toolbar.
-     * 
-     * @return Toolbar.
-     */
-    private Toolbar getToolbar()
-    {
-        return (Toolbar) findViewById(R.id.ab_toolbar);
     }
 
     /**

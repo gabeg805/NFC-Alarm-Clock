@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AlarmAdapter
@@ -38,10 +39,10 @@ public class AlarmAdapter
         }
     }
 
-    public AlarmAdapter(Context mContext, List<Alarm> alarmList)
+    public AlarmAdapter(Context mContext)
     {
         this.mContext = mContext;
-        this.alarmList = alarmList;
+        this.alarmList = new ArrayList<>();
     }
 
     @Override
@@ -112,6 +113,11 @@ public class AlarmAdapter
     public int getItemCount()
     {
         return alarmList.size();
+    }
+
+    public List<Alarm> getAlarms()
+    {
+        return alarmList;
     }
 
 }
