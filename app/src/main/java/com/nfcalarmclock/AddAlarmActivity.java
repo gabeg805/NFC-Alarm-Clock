@@ -20,6 +20,18 @@ public class AddAlarmActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_alarm);
+        ActionBar actionbar = getSupportActionBar();
+        if (actionbar == null)
+        {
+            Toast.makeText(this, "Fuck the first action bar is null :(", 
+                           Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            Toast.makeText(this, "It works! :)", 
+                           Toast.LENGTH_LONG).show();
+            actionbar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
