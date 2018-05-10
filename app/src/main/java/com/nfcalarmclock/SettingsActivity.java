@@ -11,7 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.design.widget.Snackbar;
 import android.widget.Toast;
 
-public class AddAlarmActivity
+public class SettingsActivity
     extends AppCompatActivity
 {
 
@@ -19,7 +19,7 @@ public class AddAlarmActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_alarm);
+        setContentView(R.layout.activity_settings);
     }
 
     // @Override

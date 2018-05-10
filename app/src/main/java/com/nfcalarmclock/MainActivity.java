@@ -79,7 +79,13 @@ public class MainActivity
         switch (id)
         {
         case android.R.id.home:
+            Toast.makeText(this, "Yo this is the home", 
+                           Toast.LENGTH_LONG).show();
             return true;
+        default:
+            Toast.makeText(this, "Yo this is the default thing", 
+                           Toast.LENGTH_LONG).show();
+            break;
         }
         return super.onOptionsItemSelected(item);
     }
