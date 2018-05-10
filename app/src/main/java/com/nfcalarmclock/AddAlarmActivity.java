@@ -30,7 +30,7 @@ public class AddAlarmActivity
         {
             Toast.makeText(this, "It works! :)", 
                            Toast.LENGTH_LONG).show();
-            actionbar.setDisplayHomeAsUpEnabled(true);
+            // actionbar.setDisplayHomeAsUpEnabled(true);
             // getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
     }
@@ -49,7 +49,7 @@ public class AddAlarmActivity
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null)
         {
-            actionbar.setDisplayHomeAsUpEnabled(true);
+            // actionbar.setDisplayHomeAsUpEnabled(true);
         }
         else
         {
@@ -60,17 +60,6 @@ public class AddAlarmActivity
             //               Snackbar.LENGTH_LONG)
             //     .setAction("Action", null).show();
         }
-
-        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
-
-
-    // @Override
-    // public boolean onSupportNavigateUp()
-    // {  
-    //     finish();  
-    //     return true;  
-    // }
 
 }
