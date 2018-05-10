@@ -1,34 +1,31 @@
 package com.nfcalarmclock;
 
 import android.os.Bundle;
-import android.content.res.Configuration;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
+import android.content.Intent;
+import android.widget.Toast;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import android.content.res.Resources;
-import android.graphics.Rect;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
-import android.widget.ImageView;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
-import java.util.ArrayList;
+// import android.content.res.Configuration;
+// import android.content.res.Resources;
+// import android.support.v4.view.GravityCompat;
+// import android.support.v7.app.ActionBar;
+
+// import android.graphics.Rect;
+// import android.util.TypedValue;
+
+// import android.widget.ImageView;
+
+// import java.util.ArrayList;
 import java.util.List;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-
-import android.content.Intent;
-import android.widget.Toast;
 
 
 public class MainActivity
@@ -72,10 +69,6 @@ public class MainActivity
         // Snackbar.make(view, "Display About",
         //               Snackbar.LENGTH_LONG)
         //     .setAction("Action", null).show();
-        // Intent intent;
-        // intent = new Intent(getApplicationContext(), AddAlarmActivity.class);
-        // startActivity(intent);
-        // setTitle(item.getTitle());
         switch (id)
         {
         case android.R.id.home:
