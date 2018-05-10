@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity
         //                    Toast.LENGTH_LONG).show();
         // }
 
-        // // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // // getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
