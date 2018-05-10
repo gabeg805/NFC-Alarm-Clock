@@ -12,22 +12,11 @@ import android.support.design.widget.Snackbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
-// import android.content.res.Configuration;
-// import android.content.res.Resources;
-// import android.support.v4.view.GravityCompat;
-// import android.support.v7.app.ActionBar;
-
-// import android.graphics.Rect;
-// import android.util.TypedValue;
-
-// import android.widget.ImageView;
-
-// import java.util.ArrayList;
 import java.util.List;
 
-
-
+/**
+ * @brief The application's main activity.
+ */
 public class MainActivity
     extends AppCompatActivity
 {
