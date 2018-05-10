@@ -83,9 +83,10 @@ public class MainActivity
                            Toast.LENGTH_LONG).show();
             return true;
         case R.id.menu_settings:
-            Toast.makeText(this, "This is the menu setting", 
-                           Toast.LENGTH_LONG).show();
-            break;
+            Intent intent = new Intent(getApplicationContext(),
+                                       SettingsActivity.class);
+            startActivity(intent);
+            return true;
         default:
             Toast.makeText(this, "Yo this is the default thing", 
                            Toast.LENGTH_LONG).show();
@@ -146,14 +147,9 @@ public class MainActivity
                 @Override
                 public void onClick(View view)
                 {
-                    Intent intent = new Intent(getApplicationContext(), AddAlarmActivity.class);
+                    Intent intent = new Intent(getApplicationContext(),
+                                               AddAlarmActivity.class);
                     startActivity(intent);
-                    // AddAlarmFragment addalarm = new AddAlarmFragment();
-                    // FragmentManager manager = getSupportFragmentManager();
-                    // FragmentTransaction transaction = manager.beginTransaction();
-                    // transaction.replace(R.id.fragment_main, addalarm);
-                    // transaction.addToBackStack(null);
-                    // transaction.commit();
                 }
             });
     }
@@ -191,3 +187,10 @@ public class MainActivity
 
 
 }
+
+// AddAlarmFragment addalarm = new AddAlarmFragment();
+// FragmentManager manager = getSupportFragmentManager();
+// FragmentTransaction transaction = manager.beginTransaction();
+// transaction.replace(R.id.fragment_main, addalarm);
+// transaction.addToBackStack(null);
+// transaction.commit();
