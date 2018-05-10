@@ -15,6 +15,6 @@
         <include layout="@layout/fragment_main" />
     </LinearLayout>
 
-    <include layout="@layout/view_navigation_drawer" />
+    <!-- <include layout="@layout/view_navigation_drawer" /> -->
 
 </android.support.v4.widget.DrawerLayout>

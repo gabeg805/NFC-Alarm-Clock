@@ -8,8 +8,6 @@ import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.ActionBar;
@@ -63,20 +61,13 @@ public class MainActivity extends AppCompatActivity
                            Toast.LENGTH_LONG).show();
         }
 
-        // DrawerLayout drawer = getNavigationDrawer();
         FloatingActionButton newalarm = getNewAlarmButton();
-        // setupNavigationDrawer(drawer, toolbar);
         setupNewAlarmButton(newalarm);
-        // getNavigationDrawerView().setNavigationItemSelectedListener(this);
-
         recyclerView = (RecyclerView) findViewById(R.id.alarm_list);
-
         alarmList = new ArrayList<>();
         adapter = new AlarmAdapter(this, alarmList);
-
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
-        // recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
@@ -107,15 +98,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
-        DrawerLayout drawer = getNavigationDrawer();
-        if (drawer.isDrawerOpen(GravityCompat.START))
-        {
-            drawer.closeDrawer(GravityCompat.START);
-        }
-        else
-        {
-            super.onBackPressed();
-        }
+        super.onBackPressed();
     }
 
     /**
@@ -131,11 +114,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+        // Snackbar.make(view, "Display About",
+        //               Snackbar.LENGTH_LONG)
+        //     .setAction("Action", null).show();
         int id = item.getItemId();
+
+        // Intent intent;
+        // intent = new Intent(getApplicationContext(), AddAlarmActivity.class);
+        // startActivity(intent);
+        // setTitle(item.getTitle());
         switch (id)
         {
         case android.R.id.home:
-            getNavigationDrawer().openDrawer(GravityCompat.START);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -149,34 +139,6 @@ public class MainActivity extends AppCompatActivity
         // Fragment fragment;
         // FragmentManager manager;
         // FragmentTransaction transaction;
-        Intent intent;
-        int id = item.getItemId();
-        View view = getWindow().getDecorView().getRootView();
-
-        switch(id)
-        {
-        case R.id.drawer_alarm_all:
-            intent = new Intent(getApplicationContext(), AddAlarmActivity.class);
-            break;
-        case R.id.drawer_about:
-            getNavigationDrawer().closeDrawer(GravityCompat.START);
-            Snackbar.make(view, "Display About",
-                          Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-            return true;
-        case R.id.drawer_settings:
-            getNavigationDrawer().closeDrawer(GravityCompat.START);
-            Snackbar.make(view, "Display Settings",
-                          Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-            return true;
-        default:
-            getNavigationDrawer().closeDrawer(GravityCompat.START);
-            Snackbar.make(view, "Default ID",
-                          Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-            return true;
-        }
 
         // manager = getSupportFragmentManager();
         // transaction = manager.beginTransaction();
@@ -185,13 +147,11 @@ public class MainActivity extends AppCompatActivity
         // transaction.commit();
 
         // item.setChecked(true);
-        // setTitle(item.getTitle());
-        getNavigationDrawer().closeDrawer(GravityCompat.START);
-
-        startActivity(intent);
+        // getNavigationDrawer().closeDrawer(GravityCompat.START);
 
         return true;
     }
+
 
     /**
      * Adding few alarm for testing
@@ -249,20 +209,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * @brief Setup the Navigation Drawer.
-     */
-    private void setupNavigationDrawer(DrawerLayout drawer, Toolbar toolbar)
-    {
-        // ActionBar actionbar = getSupportActionBar();
-        // actionbar.setDisplayHomeAsUpEnabled(true);
-        // actionbar.setHomeAsUpIndicator(R.mipmap.ic_menu_white_24dp);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-    }
-
-    /**
      * @brief Setup the New Alarm button.
      */
     private void setupNewAlarmButton(FloatingActionButton button)
@@ -297,26 +243,6 @@ public class MainActivity extends AppCompatActivity
     private Toolbar getToolbar()
     {
         return (Toolbar) findViewById(R.id.ab_toolbar);
-    }
-
-    /**
-     * @brief Return the Navigation Drawer layout.
-     * 
-     * @return DrawerLayout.
-     */
-    private DrawerLayout getNavigationDrawer()
-    {
-        return (DrawerLayout) findViewById(R.id.drawer_layout);
-    }
-
-    /**
-     * @brief Return the Navigation View of the Navigation Drawer.
-     * 
-     * @return NavigationView.
-     */
-    private NavigationView getNavigationDrawerView()
-    {
-        return (NavigationView) findViewById(R.id.nvView);
     }
 
     /**
