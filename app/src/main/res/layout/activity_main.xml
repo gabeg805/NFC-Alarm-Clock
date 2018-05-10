@@ -11,8 +11,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- <include layout="@layout/ab_toolbar" /> -->
-        <include layout="@layout/fragment_main" />
+        <include layout="@layout/content_alarm_list" />
+        <include layout="@layout/fab_new_alarm" />
+        <!-- <include layout="@layout/fragment_main" /> -->
     </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

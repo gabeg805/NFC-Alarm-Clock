@@ -5,19 +5,15 @@ import android.content.res.Configuration;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
-// import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
-// import android.support.v7.widget.Toolbar;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import android.content.res.Resources;
 import android.graphics.Rect;
-// import android.support.design.widget.AppBarLayout;
-// import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,8 +34,6 @@ import android.widget.Toast;
 public class MainActivity
     extends AppCompatActivity
 {
-    // private AlarmAdapter adapter;
-    // private List<Alarm> alarmList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -47,26 +41,13 @@ public class MainActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FloatingActionButton newalarm = getNewAlarmButton();
-        setupNewAlarmButton(newalarm);
-
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.alarm_list);
-        // alarmList = new ArrayList<>();
+        FloatingActionButton addalarm = this.getAddAlarmButton();
+        RecyclerView alarmlist = this.getAlarmList();
         AlarmAdapter adapter = new AlarmAdapter(this);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
-
-        prepareAlarms(adapter);
+        setupAddAlarmButton(addalarm);
+        setupAlarmList(alarmlist, adapter);
+        buildAlarmList(adapter);
     }
-
-    // @Override
-    // public boolean onSupportNavigateUp()
-    // {  
-    //     finish();  
-    //     return true;  
-    // }
 
     @Override
     public void onBackPressed()
@@ -87,11 +68,10 @@ public class MainActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+        int id = item.getItemId();
         // Snackbar.make(view, "Display About",
         //               Snackbar.LENGTH_LONG)
         //     .setAction("Action", null).show();
-        int id = item.getItemId();
-
         // Intent intent;
         // intent = new Intent(getApplicationContext(), AddAlarmActivity.class);
         // startActivity(intent);
@@ -104,33 +84,16 @@ public class MainActivity
         return super.onOptionsItemSelected(item);
     }
 
-    // private List<Alarm> alarmList;
-
     /**
      * Adding few alarm for testing
      */
-    private void prepareAlarms(AlarmAdapter adapter)
+    private void buildAlarmList(AlarmAdapter adapter)
     {
-        // int[] covers = new int[]
-        //     {
-        //         R.drawable.album1,
-        //         R.drawable.album2,
-        //         R.drawable.album3,
-        //         R.drawable.album4,
-        //         R.drawable.album5,
-        //         R.drawable.album6,
-        //         R.drawable.album7,
-        //         R.drawable.album8,
-        //         R.drawable.album9,
-        //         R.drawable.album10,
-        //         R.drawable.album11
-        //     };
-
         List<Alarm> alarmList = adapter.getAlarms();
-
         int[] covers = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+        Alarm a;
 
-        Alarm a = new Alarm("True Romance", 13, covers[0]);
+        a = new Alarm("True Romance", 13, covers[0]);
         alarmList.add(a);
 
         a = new Alarm("Xscpae", 8, covers[1]);
@@ -164,9 +127,9 @@ public class MainActivity
     }
 
     /**
-     * @brief Setup the New Alarm button.
+     * @brief Setup the Add Alarm button.
      */
-    private void setupNewAlarmButton(FloatingActionButton button)
+    private void setupAddAlarmButton(FloatingActionButton button)
     {
         button.setOnClickListener(new View.OnClickListener()
             {
@@ -175,28 +138,46 @@ public class MainActivity
                 {
                     Intent intent = new Intent(getApplicationContext(), AddAlarmActivity.class);
                     startActivity(intent);
-
                     // AddAlarmFragment addalarm = new AddAlarmFragment();
                     // FragmentManager manager = getSupportFragmentManager();
                     // FragmentTransaction transaction = manager.beginTransaction();
                     // transaction.replace(R.id.fragment_main, addalarm);
                     // transaction.addToBackStack(null);
                     // transaction.commit();
-
-                    // Snackbar.make(view, "Replace with your own action",
-                    //               Snackbar.LENGTH_LONG)
-                    //     .setAction("Action", null).show();
                 }
             });
     }
 
     /**
-     * @brief Return the New Alarm button.
+     * @brief Setup the alarm list content layout.
+     */
+    private void setupAlarmList(RecyclerView alarmlist, AlarmAdapter adapter)
+    {
+        RecyclerView.LayoutManager layoutmanager = new LinearLayoutManager(this);
+        alarmlist.setLayoutManager(layoutmanager);
+        alarmlist.setItemAnimator(new DefaultItemAnimator());
+        alarmlist.setAdapter(adapter);
+    }
+
+    /**
+     * @brief Return the Add Alarm button.
      * 
      * @return Floating action button.
      */
-    private FloatingActionButton getNewAlarmButton()
+    private FloatingActionButton getAddAlarmButton()
     {
         return (FloatingActionButton) findViewById(R.id.fab_new_alarm);
     }
+
+    /**
+     * @brief Return the layout containing the list of alarms.
+     * 
+     * @return RecyclerView.
+     */
+    private RecyclerView getAlarmList()
+    {
+        return (RecyclerView) findViewById(R.id.content_alarm_list);
+    }
+
+
 }

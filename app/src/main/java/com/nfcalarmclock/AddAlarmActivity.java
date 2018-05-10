@@ -35,6 +35,13 @@ public class AddAlarmActivity
         }
     }
 
+    // @Override
+    // public boolean onSupportNavigateUp()
+    // {  
+    //     finish();  
+    //     return true;  
+    // }
+
     @Override
     protected void onStart()
     {
