@@ -82,6 +82,10 @@ public class MainActivity
             Toast.makeText(this, "Yo this is the home", 
                            Toast.LENGTH_LONG).show();
             return true;
+        case R.id.menu_settings:
+            Toast.makeText(this, "This is the menu setting", 
+                           Toast.LENGTH_LONG).show();
+            break;
         default:
             Toast.makeText(this, "Yo this is the default thing", 
                            Toast.LENGTH_LONG).show();
