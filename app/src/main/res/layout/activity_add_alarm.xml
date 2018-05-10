@@ -16,10 +16,5 @@
         android:text="@string/nav_header_title"
         android:textColor="@color/white"
         />
-    <!-- android:textAppearance="@style/TextAppearance.AppCompat.Body1" -->
-
-    <!-- <include layout="@layout/content_alarm_list" /> -->
-
-    <!-- <include layout="@layout/fab_new_alarm" /> -->
 
 </LinearLayout>

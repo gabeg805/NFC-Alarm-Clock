@@ -11,10 +11,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/ab_toolbar" />
+        <!-- <include layout="@layout/ab_toolbar" /> -->
         <include layout="@layout/fragment_main" />
     </LinearLayout>
-
-    <!-- <include layout="@layout/view_navigation_drawer" /> -->
 
 </android.support.v4.widget.DrawerLayout>
