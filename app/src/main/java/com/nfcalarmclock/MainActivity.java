@@ -12,7 +12,14 @@ import android.support.design.widget.Snackbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.util.Log;
 import java.util.List;
+
+import android.support.v4.app.DialogFragment;
+import android.app.TimePickerDialog;
+import android.app.Dialog;
+import android.widget.TimePicker;
+
 
 /**
  * @brief The application's main activity.
@@ -26,7 +33,6 @@ public class MainActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         FloatingActionButton addalarm = this.getAddAlarmButton();
         RecyclerView alarmlist = this.getAlarmList();
         AlarmAdapter adapter = new AlarmAdapter(this);
@@ -55,13 +61,10 @@ public class MainActivity
     public boolean onOptionsItemSelected(MenuItem item)
     {
         int id = item.getItemId();
-        // Snackbar.make(view, "Display About",
-        //               Snackbar.LENGTH_LONG)
-        //     .setAction("Action", null).show();
         switch (id)
         {
         case android.R.id.home:
-            Toast.makeText(this, "Yo this is the home", 
+            Toast.makeText(this, "Yo this is the home",
                            Toast.LENGTH_LONG).show();
             return true;
         case R.id.menu_settings:
@@ -84,37 +87,17 @@ public class MainActivity
     {
         List<Alarm> alarmList = adapter.getAlarms();
         int[] covers = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-        Alarm a;
 
-        a = new Alarm("True Romance", 13, covers[0]);
-        alarmList.add(a);
-
-        a = new Alarm("Xscpae", 8, covers[1]);
-        alarmList.add(a);
-
-        a = new Alarm("Maroon 5", 11, covers[2]);
-        alarmList.add(a);
-
-        a = new Alarm("Born to Die", 12, covers[3]);
-        alarmList.add(a);
-
-        a = new Alarm("Honeymoon", 14, covers[4]);
-        alarmList.add(a);
-
-        a = new Alarm("I Need a Doctor", 1, covers[5]);
-        alarmList.add(a);
-
-        a = new Alarm("Loud", 11, covers[6]);
-        alarmList.add(a);
-
-        a = new Alarm("Legend", 14, covers[7]);
-        alarmList.add(a);
-
-        a = new Alarm("Hello", 11, covers[8]);
-        alarmList.add(a);
-
-        a = new Alarm("Greatest Hits", 17, covers[9]);
-        alarmList.add(a);
+        alarmList.add(new Alarm("True Romance", 13, covers[0]));
+        alarmList.add(new Alarm("Xscpae", 8, covers[1]));
+        alarmList.add(new Alarm("Maroon 5", 11, covers[2]));
+        alarmList.add(new Alarm("Born to Die", 12, covers[3]));
+        alarmList.add(new Alarm("Honeymoon", 14, covers[4]));
+        alarmList.add(new Alarm("I Need a Doctor", 1, covers[5]));
+        alarmList.add(new Alarm("Loud", 11, covers[6]));
+        alarmList.add(new Alarm("Legend", 14, covers[7]));
+        alarmList.add(new Alarm("Hello", 11, covers[8]));
+        alarmList.add(new Alarm("Greatest Hits", 17, covers[9]));
 
         adapter.notifyDataSetChanged();
     }
@@ -129,9 +112,11 @@ public class MainActivity
                 @Override
                 public void onClick(View view)
                 {
-                    Intent intent = new Intent(getApplicationContext(),
-                                               AddAlarmActivity.class);
-                    startActivity(intent);
+                    DialogFragment timePicker = new AddAlarmActivity();
+                    timePicker.show(getSupportFragmentManager(), "time picker");
+                    // Intent intent = new Intent(getApplicationContext(),
+                    //                            AddAlarmActivity.class);
+                    // startActivity(intent);
                 }
             });
     }
@@ -176,3 +161,7 @@ public class MainActivity
 // transaction.replace(R.id.fragment_main, addalarm);
 // transaction.addToBackStack(null);
 // transaction.commit();
+
+// Snackbar.make(view, "Display About",
+//               Snackbar.LENGTH_LONG)
+//     .setAction("Action", null).show();

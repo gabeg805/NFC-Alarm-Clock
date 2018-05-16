@@ -32,10 +32,10 @@ public class AlarmAdapter
         public MyViewHolder(View view)
         {
             super(view);
-            toggleAlarm = (ImageView) view.findViewById(R.id.toggleAlarm);
+            // toggleAlarm = (ImageView) view.findViewById(R.id.toggleAlarm);
             alarmTime = (TextView) view.findViewById(R.id.alarmTime);
             alarmInfo = (TextView) view.findViewById(R.id.alarmInfo);
-            overflow = (ImageView) view.findViewById(R.id.overflow);
+            // overflow = (ImageView) view.findViewById(R.id.overflow);
         }
     }
 
@@ -59,14 +59,14 @@ public class AlarmAdapter
         Alarm alarm = alarmList.get(position);
         holder.alarmTime.setText(alarm.getName());
         holder.alarmInfo.setText(alarm.getType() + " songs");
-        holder.overflow.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View view)
-                {
-                    showPopupMenu(holder.overflow);
-                }
-            });
+        // holder.overflow.setOnClickListener(new View.OnClickListener()
+        //     {
+        //         @Override
+        //         public void onClick(View view)
+        //         {
+        //             showPopupMenu(holder.overflow);
+        //         }
+        //     });
     }
 
     /**

@@ -10,15 +10,17 @@
     <dimen name="card_alarm_margin">10dp</dimen>
     <dimen name="card_alarm_elevation">5dp</dimen>
     <dimen name="card_alarm_radius">10dp</dimen>
-    <dimen name="card_alarm_top_padding">15dp</dimen>
-    <dimen name="card_alarm_bottom_padding">15dp</dimen>
-    <dimen name="card_alarm_left_padding">20dp</dimen>
-    <dimen name="card_alarm_right_padding">15dp</dimen>
-    <dimen name="card_alarm_toggle_spacing">25dp</dimen>
-    <dimen name="card_alarm_time_spacing">2dp</dimen>
     <dimen name="card_alarm_toggle_size">30dp</dimen>
     <dimen name="card_alarm_time_size">20dp</dimen>
     <dimen name="card_alarm_info_size">15dp</dimen>
+
+    <dimen name="card_alarm_inner_padding_top">10dp</dimen>
+    <dimen name="card_alarm_inner_padding_bottom">10dp</dimen>
+    <dimen name="card_alarm_inner_padding_left">20dp</dimen>
+    <dimen name="card_alarm_inner_padding_right">20dp</dimen>
+
+
+    <dimen name="card_alarm_body_left_padding">0dp</dimen>
 
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="item_offset">10dp</dimen>

@@ -17,50 +17,51 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="@dimen/card_alarm_top_padding"
-            android:paddingBottom="@dimen/card_alarm_bottom_padding"
-            android:paddingLeft="@dimen/card_alarm_left_padding"
-            android:paddingRight="@dimen/card_alarm_right_padding">
+            android:paddingTop="@dimen/card_alarm_inner_padding_top"
+            android:paddingBottom="@dimen/card_alarm_inner_padding_bottom"
+            android:paddingLeft="@dimen/card_alarm_inner_padding_left"
+            android:paddingRight="@dimen/card_alarm_inner_padding_right">
 
-            <ImageView
-                android:id="@+id/toggleAlarm"
-                android:layout_width="@dimen/card_alarm_toggle_size"
-                android:layout_height="@dimen/card_alarm_toggle_size"
-                android:layout_alignParentLeft="true"
-                android:layout_centerInParent="true"
-                android:src="@mipmap/ic_alarm_white_24dp"
-                />
+            <!-- <ImageView -->
+            <!--     android:id="@+id/toggleAlarm" -->
+            <!--     android:layout_width="@dimen/card_alarm_toggle_size" -->
+            <!--     android:layout_height="@dimen/card_alarm_toggle_size" -->
+            <!--     android:layout_alignParentLeft="true" -->
+            <!--     android:layout_centerInParent="true" -->
+            <!--     android:src="@mipmap/ic_alarm_white_24dp" -->
+            <!--     /> -->
 
             <TextView
                 android:id="@+id/alarmTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/toggleAlarm"
-                android:paddingBottom="@dimen/card_alarm_time_spacing"
-                android:paddingLeft="@dimen/card_alarm_toggle_spacing"
+                android:layout_alignParentLeft="true"
                 android:textColor="@color/white"
                 android:textSize="@dimen/card_alarm_time_size"
                 />
+                <!-- android:layout_toRightOf="@id/toggleAlarm" -->
+                <!-- android:paddingLeft="@dimen/card_alarm_toggle_spacing" -->
 
             <TextView
                 android:id="@+id/alarmInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/toggleAlarm"
                 android:layout_below="@id/alarmTime"
-                android:paddingLeft="@dimen/card_alarm_toggle_spacing"
                 android:textColor="@color/gray"
                 android:textSize="@dimen/card_alarm_info_size"
                 />
+                <!-- android:layout_toRightOf="@id/toggleAlarm" -->
+                <!-- android:paddingLeft="@dimen/card_alarm_toggle_spacing" -->
 
-            <ImageView
-                android:id="@+id/overflow"
-                android:layout_width="@dimen/ic_album_overflow_width"
-                android:layout_height="@dimen/ic_album_overflow_height"
-                android:layout_alignParentRight="true"
-                android:layout_centerInParent="true"
-                android:src="@mipmap/ic_more_vert_white_24dp"
-                />
+            <!-- <ImageView -->
+            <!--     android:id="@+id/overflow" -->
+            <!--     android:layout_width="@dimen/ic_album_overflow_width" -->
+            <!--     android:layout_height="@dimen/ic_album_overflow_height" -->
+            <!--     android:layout_alignParentRight="true" -->
+            <!--     android:layout_centerInParent="true" -->
+            <!--     android:src="@mipmap/ic_more_vert_white_24dp" -->
+            <!--     /> -->
+
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
