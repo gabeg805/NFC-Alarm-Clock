@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
@@ -24,17 +25,21 @@ public class AlarmAdapter
     public class MyViewHolder
         extends RecyclerView.ViewHolder
     {
-        public ImageView toggleAlarm;
-        public ImageView overflow;
         public TextView alarmTime;
-        public TextView alarmInfo;
+        public ImageView nfcTagIcon;
+        public ImageView musicIcon;
+        public TextView alarmName;
+        public Switch alarmSwitch;
 
         public MyViewHolder(View view)
         {
             super(view);
             // toggleAlarm = (ImageView) view.findViewById(R.id.toggleAlarm);
             alarmTime = (TextView) view.findViewById(R.id.alarmTime);
-            alarmInfo = (TextView) view.findViewById(R.id.alarmInfo);
+            nfcTagIcon = (ImageView) view.findViewById(R.id.nfcTagIcon);
+            musicIcon = (ImageView) view.findViewById(R.id.musicIcon);
+            alarmName = (TextView) view.findViewById(R.id.alarmName);
+            alarmSwitch = (Switch) view.findViewById(R.id.alarmSwitch);
             // overflow = (ImageView) view.findViewById(R.id.overflow);
         }
     }
@@ -57,8 +62,23 @@ public class AlarmAdapter
     public void onBindViewHolder(final MyViewHolder holder, int position)
     {
         Alarm alarm = alarmList.get(position);
-        holder.alarmTime.setText(alarm.getName());
-        holder.alarmInfo.setText(alarm.getType() + " songs");
+        String hour = String.valueOf(alarm.getHour());
+        String minute = String.format("%02d", alarm.getMinute());
+        String meridian = "AM";
+        if (alarm.getHour() >= 12)
+        {
+            if (alarm.getHour() > 12)
+            {
+                hour = String.valueOf(alarm.getHour() % 12);
+            }
+            meridian = "PM";
+        }
+        if (hour.equals("0"))
+        {
+            hour = "12";
+        }
+        holder.alarmTime.setText(hour+":"+minute+" "+meridian);
+        holder.alarmName.setText(alarm.getName());
         // holder.overflow.setOnClickListener(new View.OnClickListener()
         //     {
         //         @Override

@@ -86,19 +86,16 @@ public class MainActivity
     private void buildAlarmList(AlarmAdapter adapter)
     {
         List<Alarm> alarmList = adapter.getAlarms();
-        int[] covers = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-
-        alarmList.add(new Alarm("True Romance", 13, covers[0]));
-        alarmList.add(new Alarm("Xscpae", 8, covers[1]));
-        alarmList.add(new Alarm("Maroon 5", 11, covers[2]));
-        alarmList.add(new Alarm("Born to Die", 12, covers[3]));
-        alarmList.add(new Alarm("Honeymoon", 14, covers[4]));
-        alarmList.add(new Alarm("I Need a Doctor", 1, covers[5]));
-        alarmList.add(new Alarm("Loud", 11, covers[6]));
-        alarmList.add(new Alarm("Legend", 14, covers[7]));
-        alarmList.add(new Alarm("Hello", 11, covers[8]));
-        alarmList.add(new Alarm("Greatest Hits", 17, covers[9]));
-
+        alarmList.add(new Alarm("True Romance", 13, 0));
+        alarmList.add(new Alarm("Xscpae", 8, 1));
+        alarmList.add(new Alarm("Maroon 5", 11, 2));
+        alarmList.add(new Alarm("Born to Die", 12, 3));
+        alarmList.add(new Alarm("Honeymoon", 14, 4));
+        alarmList.add(new Alarm("I Need a Doctor", 1, 5));
+        alarmList.add(new Alarm("Loud", 11, 6));
+        alarmList.add(new Alarm("Legend", 14, 7));
+        alarmList.add(new Alarm("Hello", 11, 8));
+        alarmList.add(new Alarm("Greatest Hits", 17, 9));
         adapter.notifyDataSetChanged();
     }
 

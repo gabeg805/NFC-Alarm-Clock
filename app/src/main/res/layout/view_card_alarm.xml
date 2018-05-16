@@ -22,45 +22,51 @@
             android:paddingLeft="@dimen/card_alarm_inner_padding_left"
             android:paddingRight="@dimen/card_alarm_inner_padding_right">
 
-            <!-- <ImageView -->
-            <!--     android:id="@+id/toggleAlarm" -->
-            <!--     android:layout_width="@dimen/card_alarm_toggle_size" -->
-            <!--     android:layout_height="@dimen/card_alarm_toggle_size" -->
-            <!--     android:layout_alignParentLeft="true" -->
-            <!--     android:layout_centerInParent="true" -->
-            <!--     android:src="@mipmap/ic_alarm_white_24dp" -->
-            <!--     /> -->
-
             <TextView
                 android:id="@+id/alarmTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
+                android:paddingBottom="@dimen/card_alarm_time_padding"
                 android:textColor="@color/white"
                 android:textSize="@dimen/card_alarm_time_size"
                 />
-                <!-- android:layout_toRightOf="@id/toggleAlarm" -->
-                <!-- android:paddingLeft="@dimen/card_alarm_toggle_spacing" -->
+
+            <ImageView
+                android:id="@+id/nfcTagIcon"
+                android:layout_width="@dimen/card_alarm_icon_size"
+                android:layout_height="@dimen/card_alarm_icon_size"
+                android:layout_below="@id/alarmTime"
+                android:src="@mipmap/baseline_nfc_white_18dp"
+                />
+
+            <ImageView
+                android:id="@+id/musicIcon"
+                android:layout_width="@dimen/card_alarm_icon_size"
+                android:layout_height="@dimen/card_alarm_icon_size"
+                android:layout_below="@id/alarmTime"
+                android:layout_toRightOf="@id/nfcTagIcon"
+                android:layout_marginLeft="@dimen/card_alarm_icon_margin"
+                android:src="@mipmap/baseline_music_note_white_18dp"
+                />
+
+            <Switch
+                android:id="@+id/alarmSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                />
 
             <TextView
-                android:id="@+id/alarmInfo"
+                android:id="@+id/alarmName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/alarmTime"
+                android:layout_toRightOf="@id/musicIcon"
+                android:gravity="right"
                 android:textColor="@color/gray"
-                android:textSize="@dimen/card_alarm_info_size"
+                android:textSize="@dimen/card_alarm_name_size"
                 />
-                <!-- android:layout_toRightOf="@id/toggleAlarm" -->
-                <!-- android:paddingLeft="@dimen/card_alarm_toggle_spacing" -->
-
-            <!-- <ImageView -->
-            <!--     android:id="@+id/overflow" -->
-            <!--     android:layout_width="@dimen/ic_album_overflow_width" -->
-            <!--     android:layout_height="@dimen/ic_album_overflow_height" -->
-            <!--     android:layout_alignParentRight="true" -->
-            <!--     android:layout_centerInParent="true" -->
-            <!--     android:src="@mipmap/ic_more_vert_white_24dp" -->
-            <!--     /> -->
 
         </RelativeLayout>
 
