@@ -32,22 +32,24 @@
                 android:textSize="@dimen/card_alarm_time_size"
                 />
 
-            <ImageView
-                android:id="@+id/nfcTagIcon"
-                android:layout_width="@dimen/card_alarm_icon_size"
-                android:layout_height="@dimen/card_alarm_icon_size"
-                android:layout_below="@id/alarmTime"
-                android:src="@mipmap/baseline_nfc_white_18dp"
+            <TextView
+                android:id="@+id/alarmTimeMeridian"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@id/alarmTime"
+                android:textColor="@color/white"
+                android:textSize="@dimen/card_alarm_meridian_size"
                 />
+                <!-- android:paddingBottom="@dimen/card_alarm_time_padding" -->
+                <!-- android:paddingLeft="@dimen/card_alarm_time_padding" -->
 
-            <ImageView
-                android:id="@+id/musicIcon"
-                android:layout_width="@dimen/card_alarm_icon_size"
-                android:layout_height="@dimen/card_alarm_icon_size"
+            <TextView
+                android:id="@+id/alarmName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/alarmTime"
-                android:layout_toRightOf="@id/nfcTagIcon"
-                android:layout_marginLeft="@dimen/card_alarm_icon_margin"
-                android:src="@mipmap/baseline_music_note_white_18dp"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/card_alarm_name_size"
                 />
 
             <Switch
@@ -57,15 +59,14 @@
                 android:gravity="right"
                 />
 
-            <TextView
-                android:id="@+id/alarmName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/musicIcon"
+                android:layout_width="@dimen/card_alarm_icon_size"
+                android:layout_height="@dimen/card_alarm_icon_size"
                 android:layout_below="@id/alarmTime"
-                android:layout_toRightOf="@id/musicIcon"
-                android:gravity="right"
-                android:textColor="@color/gray"
-                android:textSize="@dimen/card_alarm_name_size"
+                android:layout_toLeftOf="@id/alarmSwitch"
+                android:layout_marginRight="@dimen/card_alarm_icon_margin"
+                android:src="@mipmap/baseline_music_note_white_18dp"
                 />
 
         </RelativeLayout>

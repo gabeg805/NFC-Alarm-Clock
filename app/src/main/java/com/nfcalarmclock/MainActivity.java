@@ -111,9 +111,6 @@ public class MainActivity
                 {
                     DialogFragment timePicker = new AddAlarmActivity();
                     timePicker.show(getSupportFragmentManager(), "time picker");
-                    // Intent intent = new Intent(getApplicationContext(),
-                    //                            AddAlarmActivity.class);
-                    // startActivity(intent);
                 }
             });
     }

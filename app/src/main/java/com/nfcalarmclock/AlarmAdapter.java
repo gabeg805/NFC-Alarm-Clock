@@ -3,6 +3,7 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,37 +20,51 @@ public class AlarmAdapter
     extends RecyclerView.Adapter<AlarmAdapter.MyViewHolder>
 {
 
+    /**
+     * @brief The Context of the parent.
+     */
     private Context mContext;
-    private List<Alarm> alarmList;
 
+    /**
+     * @brief List of Alarms.
+     */
+    private List<Alarm> mAlarmList;
+
+    /**
+     * 
+     */
     public class MyViewHolder
         extends RecyclerView.ViewHolder
     {
         public TextView alarmTime;
-        public ImageView nfcTagIcon;
-        public ImageView musicIcon;
+        public TextView alarmTimeMeridian;
         public TextView alarmName;
+        public ImageView musicIcon;
         public Switch alarmSwitch;
 
         public MyViewHolder(View view)
         {
             super(view);
-            // toggleAlarm = (ImageView) view.findViewById(R.id.toggleAlarm);
             alarmTime = (TextView) view.findViewById(R.id.alarmTime);
-            nfcTagIcon = (ImageView) view.findViewById(R.id.nfcTagIcon);
-            musicIcon = (ImageView) view.findViewById(R.id.musicIcon);
+            alarmTimeMeridian = (TextView) view.findViewById(R.id.alarmTimeMeridian);
             alarmName = (TextView) view.findViewById(R.id.alarmName);
+            musicIcon = (ImageView) view.findViewById(R.id.musicIcon);
             alarmSwitch = (Switch) view.findViewById(R.id.alarmSwitch);
-            // overflow = (ImageView) view.findViewById(R.id.overflow);
         }
     }
 
-    public AlarmAdapter(Context mContext)
+    /**
+     * @brief Alarm adapter.
+     */
+    public AlarmAdapter(Context context)
     {
-        this.mContext = mContext;
-        this.alarmList = new ArrayList<>();
+        this.mContext = context;
+        this.mAlarmList = new ArrayList<>();
     }
 
+    /**
+     * @brief Create the view holder.
+     */
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
@@ -58,27 +73,26 @@ public class AlarmAdapter
         return new MyViewHolder(itemView);
     }
 
+    /**
+     * @brief Bind the view holder.
+     */
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position)
     {
-        Alarm alarm = alarmList.get(position);
-        String hour = String.valueOf(alarm.getHour());
+        Alarm alarm = mAlarmList.get(position);
+        boolean is24hourformat = DateFormat.is24HourFormat(mContext);
+        is24hourformat = false;
+        String hour = String.valueOf(alarm.toFormat(alarm.getHour(),
+                                                    is24hourformat));
         String minute = String.format("%02d", alarm.getMinute());
-        String meridian = "AM";
-        if (alarm.getHour() >= 12)
-        {
-            if (alarm.getHour() > 12)
-            {
-                hour = String.valueOf(alarm.getHour() % 12);
-            }
-            meridian = "PM";
-        }
-        if (hour.equals("0"))
-        {
-            hour = "12";
-        }
-        holder.alarmTime.setText(hour+":"+minute+" "+meridian);
+        String meridian = alarm.getMeridian(alarm.getHour(), is24hourformat);
+
+        Toast.makeText(mContext, hour+":"+minute+meridian+"~", Toast.LENGTH_SHORT).show();
+
+        holder.alarmTime.setText(hour+":"+minute);
+        holder.alarmTimeMeridian.setText(meridian);
         holder.alarmName.setText(alarm.getName());
+
         // holder.overflow.setOnClickListener(new View.OnClickListener()
         //     {
         //         @Override
@@ -132,12 +146,12 @@ public class AlarmAdapter
     @Override
     public int getItemCount()
     {
-        return alarmList.size();
+        return mAlarmList.size();
     }
 
     public List<Alarm> getAlarms()
     {
-        return alarmList;
+        return mAlarmList;
     }
 
 }

@@ -61,6 +61,29 @@ public class Alarm
     }
 
     /**
+     * @brief Convert hour to the appropriate form (either 12 or 24 hour
+     *        format).
+     * 
+     * @note See if you can change this to a static method.
+     */
+    public int toFormat(int hour, boolean is24hourformat)
+    {
+        int converted = hour;
+        if (!is24hourformat)
+        {
+            if (hour >= 12)
+            {
+                converted = hour % 12;
+            }
+            if (converted == 0)
+            {
+                converted = 12;
+            }
+        }
+        return converted;
+    }
+
+    /**
      * @brief Set the name of the alarm.
      */
     public void setName(String name)
@@ -138,6 +161,25 @@ public class Alarm
     public int getType()
     {
         return this.mType;
+    }
+
+    /**
+     * @brief Return the meridian (AM or PM).
+     */
+    public String getMeridian(int hour, boolean is24hourformat)
+    {
+        if (is24hourformat)
+        {
+            return "";
+        }
+        if (hour < 12)
+        {
+            return "AM";
+        }
+        else
+        {
+            return "PM";
+        }
     }
 
 }
