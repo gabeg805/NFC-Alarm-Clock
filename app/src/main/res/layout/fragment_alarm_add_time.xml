@@ -1,0 +1,23 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_alarm_add_time"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- <TextView -->
+    <!--     android:id="@+id/texterView" -->
+    <!--     android:layout_width="wrap_content" -->
+    <!--     android:layout_height="wrap_content" -->
+    <!--     android:text="Time Picker Widget" -->
+    <!--     android:textColor="@color/black" -->
+    <!--     /> -->
+
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <!-- android:layout_below="@id/texterView" -->
+
+</FrameLayout>

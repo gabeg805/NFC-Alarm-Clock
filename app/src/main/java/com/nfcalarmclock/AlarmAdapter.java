@@ -39,8 +39,8 @@ public class AlarmAdapter
         public TextView alarmTime;
         public TextView alarmTimeMeridian;
         public TextView alarmName;
-        public ImageView musicIcon;
         public Switch alarmSwitch;
+        public ImageView alarmMenu;
 
         public MyViewHolder(View view)
         {
@@ -48,7 +48,7 @@ public class AlarmAdapter
             alarmTime = (TextView) view.findViewById(R.id.alarmTime);
             alarmTimeMeridian = (TextView) view.findViewById(R.id.alarmTimeMeridian);
             alarmName = (TextView) view.findViewById(R.id.alarmName);
-            musicIcon = (ImageView) view.findViewById(R.id.musicIcon);
+            alarmMenu = (ImageView) view.findViewById(R.id.alarmMenu);
             alarmSwitch = (Switch) view.findViewById(R.id.alarmSwitch);
         }
     }
@@ -87,61 +87,80 @@ public class AlarmAdapter
         String minute = String.format("%02d", alarm.getMinute());
         String meridian = alarm.getMeridian(alarm.getHour(), is24hourformat);
 
-        Toast.makeText(mContext, hour+":"+minute+meridian+"~", Toast.LENGTH_SHORT).show();
-
         holder.alarmTime.setText(hour+":"+minute);
         holder.alarmTimeMeridian.setText(meridian);
         holder.alarmName.setText(alarm.getName());
-
-        // holder.overflow.setOnClickListener(new View.OnClickListener()
-        //     {
-        //         @Override
-        //         public void onClick(View view)
-        //         {
-        //             showPopupMenu(holder.overflow);
-        //         }
-        //     });
-    }
-
-    /**
-     * Showing popup menu when tapping on 3 dots
-     */
-    private void showPopupMenu(View view)
-    {
-        PopupMenu popup = new PopupMenu(mContext, view);
-        MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.menu_card_alarm, popup.getMenu());
-        popup.setOnMenuItemClickListener(new MyMenuItemClickListener());
-        popup.show();
-    }
-
-    /**
-     * Click listener for popup menu items
-     */
-    class MyMenuItemClickListener
-        implements PopupMenu.OnMenuItemClickListener
-    {
-
-        public MyMenuItemClickListener()
-        {
-        }
-
-        @Override
-        public boolean onMenuItemClick(MenuItem menuItem)
-        {
-            switch (menuItem.getItemId())
+        holder.alarmMenu.setOnClickListener(new View.OnClickListener()
             {
-            case R.id.action_add_favourite:
-                Toast.makeText(mContext, "Add to favourite", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.action_play_next:
-                Toast.makeText(mContext, "Play next", Toast.LENGTH_SHORT).show();
-                return true;
-            default:
-            }
-            return false;
-        }
+                @Override
+                public void onClick(View view)
+                {
+                    PopupMenu popup = new PopupMenu(mContext, view);
+                    MenuInflater inflater = popup.getMenuInflater();
+                    inflater.inflate(R.menu.menu_card_alarm, popup.getMenu());
+                    // popup.setOnMenuItemClickListener(new MyMenuItemClickListener());
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
+                        {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem menuItem)
+                            {
+                                switch (menuItem.getItemId())
+                                {
+                                case R.id.alarm_card_edit:
+                                    Toast.makeText(mContext, "Edit alarm.", Toast.LENGTH_SHORT).show();
+                                    return true;
+                                case R.id.alarm_card_copy:
+                                    Toast.makeText(mContext, "Copy alarm.", Toast.LENGTH_SHORT).show();
+                                    return true;
+                                case R.id.alarm_card_delete:
+                                    Toast.makeText(mContext, "Delete alarm.", Toast.LENGTH_SHORT).show();
+                                    return true;
+                                default:
+                                    break;
+                                }
+                                return false;
+                            }
+                        });
+                    popup.show();
+                    // showPopupMenu(holder.alarmMenu);
+                }
+            });
     }
+
+    // /**
+    //  * Showing popup menu when tapping on 3 dots
+    //  */
+    // private void showPopupMenu(View view)
+    // {
+    // }
+
+    // /**
+    //  * Click listener for popup menu items
+    //  */
+    // class MyMenuItemClickListener
+    //     implements PopupMenu.OnMenuItemClickListener
+    // {
+
+    //     public MyMenuItemClickListener()
+    //     {
+    //     }
+
+    //     @Override
+    //     public boolean onMenuItemClick(MenuItem menuItem)
+    //     {
+    //         switch (menuItem.getItemId())
+    //         {
+    //         case R.id.action_add_favourite:
+    //             Toast.makeText(mContext, "Add to favourite", Toast.LENGTH_SHORT).show();
+    //             return true;
+    //         case R.id.action_play_next:
+    //             Toast.makeText(mContext, "Play next", Toast.LENGTH_SHORT).show();
+    //             return true;
+    //         default:
+    //         }
+    //         return false;
+    //     }
+    // }
 
     @Override
     public int getItemCount()

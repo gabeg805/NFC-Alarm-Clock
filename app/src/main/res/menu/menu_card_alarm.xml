@@ -4,15 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/action_add_favourite"
+        android:id="@+id/alarm_card_edit"
+        android:title="@string/edit"
         android:orderInCategory="100"
-        android:title="@string/action_add_favourite"
         />
 
     <item
-        android:id="@+id/action_play_next"
+        android:id="@+id/alarm_card_copy"
+        android:title="@string/copy"
         android:orderInCategory="101"
-        android:title="@string/action_play_next"
+        />
+
+    <item
+        android:id="@+id/alarm_card_delete"
+        android:title="@string/delete"
+        android:orderInCategory="102"
         />
 
 </menu>

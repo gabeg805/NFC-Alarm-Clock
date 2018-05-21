@@ -15,10 +15,13 @@ import android.view.View;
 import android.util.Log;
 import java.util.List;
 
-import android.support.v4.app.DialogFragment;
-import android.app.TimePickerDialog;
-import android.app.Dialog;
-import android.widget.TimePicker;
+// import android.support.v4.app.DialogFragment;
+// import android.app.TimePickerDialog;
+// import android.app.Dialog;
+// import android.widget.TimePicker;
+
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
 
 /**
@@ -109,8 +112,21 @@ public class MainActivity
                 @Override
                 public void onClick(View view)
                 {
-                    DialogFragment timePicker = new AddAlarmActivity();
-                    timePicker.show(getSupportFragmentManager(), "time picker");
+                    Intent intent = new Intent(getApplicationContext(),
+                                               AlarmAddActivity.class);
+                    startActivity(intent);
+                    // AddAlarmFragment addalarm = new AddAlarmFragment();
+                    // AlarmDaysDialogFragment days = new AlarmDaysDialogFragment();
+                    // FragmentManager manager = MainActivity.this.getSupportFragmentManager();
+                    // FragmentTransaction transaction = manager.beginTransaction();
+                    // transaction.add(addalarm, "AddAlarm");
+                    // transaction.add(days, "DaysAlarm");
+                    // // transaction.add(R.id.fragment_yo, addalarm);
+                    // // transaction.replace(R.id.fragment_main, addalarm);
+                    // // transaction.addToBackStack(null);
+                    // transaction.commit();
+                    // // AddAlarmFragment timePicker = new AddAlarmFragment();
+                    // // timePicker.show(getSupportFragmentManager(), "time picker");
                 }
             });
     }

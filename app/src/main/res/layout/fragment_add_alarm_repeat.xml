@@ -1,0 +1,56 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <CheckBox
+        android:id="@+id/checkMonday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mon"
+        />
+
+    <CheckBox
+        android:id="@+id/checkTuesday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tue"
+        />
+
+    <CheckBox
+        android:id="@+id/checkWednesday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Wed"
+        />
+
+    <CheckBox
+        android:id="@+id/checkThursday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thu"
+        />
+
+    <CheckBox
+        android:id="@+id/checkFriday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fri"
+        />
+
+    <CheckBox
+        android:id="@+id/checkSaturday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sat"
+        />
+
+    <CheckBox
+        android:id="@+id/checkSunday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sun"
+        />
+
+</RelativeLayout>

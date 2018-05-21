@@ -12,8 +12,6 @@ public class Alarm
     private long mInterval = -1;
     private int mType = AlarmManager.RTC_WAKEUP;
 
-    /* MAYBE I SHOULD TAKE IN A CONTEXT INTO THE CONSTRUCTOR */
-
     /**
      * @brief Use the default set values for an alarm.
      * 

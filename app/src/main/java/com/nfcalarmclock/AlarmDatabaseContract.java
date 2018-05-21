@@ -85,9 +85,9 @@ public final class AlarmDatabaseContract
             + " ("
             + _ID + " INTEGER PRIMARY KEY,"
             + COLUMN_ID + " TEXT,"
-            + COLUMN_ENABLED + " TEXT,"
-            + COLUMN_HOUR + " TEXT,"
-            + COLUMN_MINUTE + " TEXT,"
+            + COLUMN_ENABLED + " INTEGER,"
+            + COLUMN_HOUR + " INTEGER,"
+            + COLUMN_MINUTE + " INTEGER,"
             + COLUMN_NFCTAG + " TEXT," 
             + COLUMN_MUSIC + " TEXT"
             + ");";
