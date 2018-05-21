@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/alarm_add_nav_button_container"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|right"
+    android:paddingBottom="10dp"
+    android:paddingRight="10dp">
+
+    <Button
+        android:id="@+id/alarm_add_negative_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Previous"
+        />
+
+    <Button
+        android:id="@+id/alarm_add_positive_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next"
+        />
+
+</LinearLayout>
+
+<!-- https://stackoverflow.com/questions/20586619/android-viewpager-with-bottom-dots?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa -->

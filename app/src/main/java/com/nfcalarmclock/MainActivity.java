@@ -35,7 +35,7 @@ public class MainActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.act_main);
         FloatingActionButton addalarm = this.getAddAlarmButton();
         RecyclerView alarmlist = this.getAlarmList();
         AlarmAdapter adapter = new AlarmAdapter(this);
@@ -56,7 +56,7 @@ public class MainActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        getMenuInflater().inflate(R.menu.menu_settings, menu);
+        getMenuInflater().inflate(R.menu.app_bar, menu);
         return true;
     }
 

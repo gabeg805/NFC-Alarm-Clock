@@ -1,134 +1,150 @@
 package com.nfcalarmclock;
 
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-// import android.support.v4.app.Fragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
-// import android.support.v7.app.AppCompatActivity;
 import android.app.Activity;
 import android.widget.TimePicker;
 // import java.util.Calendar;
 // import java.util.Date;
 // import java.util.Random;
-// import android.view.View;
-// import android.view.ViewGroup;
-import android.util.Log;
-import android.app.Dialog;
-import android.app.AlertDialog;
-// // import android.app.TimePickerDialog;
-// import android.text.format.DateFormat;
-// import android.widget.TimePicker.OnTimeChangedListener;
-
-// import android.support.annotation.NonNull;
 // import android.content.ContentValues;
 // import android.database.sqlite.SQLiteDatabase;
-import android.content.DialogInterface;
-
-
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-
-import android.support.v7.app.AppCompatActivity;
-
-// HACK THE PLANET!!!!!!!
 
 /**
  * @brief Add an alarm.
  */
 public class AlarmAddActivity
     extends AppCompatActivity
+    implements View.OnClickListener
 {
 
     private static final String NAME = "NFCAlarmClock";
+    private static int STEP = 1;
+    private static int MAXSTEP = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_alarm_add);
-
-        AlarmAddTimeFragment addalarm = new AlarmAddTimeFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(addalarm, "AddAlarm");
-        // transaction.add(R.id.fragment_yo, addalarm);
-        transaction.replace(R.id.alarm_add_fragment_container, addalarm);
-        // transaction.addToBackStack(null);
-        transaction.commit();
-        // AddAlarmFragment timePicker = new AddAlarmFragment();
-        // timePicker.show(getSupportFragmentManager(), "time picker");
+        setContentView(R.layout.act_alarm_add);
+        initButtons();
+        runFragment();
     }
 
-    // @Override
-    // public Dialog onCreateDialog(Bundle savedInstanceState)
-    // {
-    //     // String title = getArguments().getString("title");
-    //     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-    //     // builder.setTitle("Set an alarm");
+    @Override
+    public void onClick(View v)
+    {
+        int id = v.getId();
+        switch (id)
+        {
+        case R.id.alarm_add_positive_button:
+            this.nextFragment();
+            break;
+        case R.id.alarm_add_negative_button:
+            this.previousFragment();
+            break;
+        default:
+            return;
+        }
 
-    //     LayoutInflater inflater = LayoutInflater.from(getContext());
-    //     View view = inflater.inflate(R.layout.fragment_add_alarm, null);
-    //     builder.setView(view);
+    }
 
-    //     builder.setPositiveButton("Next", new DialogInterface.OnClickListener()
-    //         {
-    //             @Override
-    //             public void onClick(DialogInterface dialog, int which)
-    //             {
-    //                 // AlarmDaysDialogFragment days = new AlarmDaysDialogFragment();
-    //                 // FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-    //                 // transaction.replace(0, days, "SetRepeat");
-    //                 // transaction.commit();
-    //             }
-    //         });
-    //     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
-    //         {
-    //             @Override
-    //             public void onClick(DialogInterface dialog, int which)
-    //             {
-    //                 dialog.dismiss();
-    //             }
-    //         });
+    private void setupFragment(int step)
+    {
+        int posvisible = View.VISIBLE;
+        int negvisible = View.VISIBLE;
+        String postext = "Next";
+        String negtext = "Previous";
+        if (step == 1)
+        {
+            negvisible = View.GONE;
+        }
+        if (step == MAXSTEP)
+        {
+            postext = "Done";
+        }
+        getPositiveButton().setVisibility(posvisible);
+        getNegativeButton().setVisibility(negvisible);
+        getPositiveButton().setText(postext);
+        getNegativeButton().setText(negtext);
+    }
 
-    //     return builder.create();
-    // }
+    private void runFragment()
+    {
+        setupFragment(STEP);
+        displayFragment(STEP);
+    }
 
-    // @NonNull
-    // @Override
-    // public Dialog onCreateDialog(Bundle savedInstanceState)
-    // {
-    //     Activity activity = getActivity();
-    //     Calendar cal = Calendar.getInstance();
-    //     int hour = cal.get(Calendar.HOUR_OF_DAY);
-    //     int minute = cal.get(Calendar.MINUTE);
-    //     boolean is24format = DateFormat.is24HourFormat(activity);
-    //     TimePickerDialog dialog = new TimePickerDialog(activity, this, hour,
-    //                                                    minute, is24format);
-    //     dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Next", dialog);
-    //     return dialog;
-    // }
+    private void nextFragment()
+    {
+        STEP++;
+        runFragment();
+    }
 
-    // @Override
-    // public void onTimeSet(TimePicker view, int hourOfDay, int minute)
-    // {
-    //     String message = "HourS: "+Integer.toString(hourOfDay)+" | Minute: "+Integer.toString(minute);
-    //     Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-    //     // Log.e(NAME, message);
+    private void previousFragment()
+    {
+        STEP--;
+        runFragment();
+    }
 
-    //     // AlarmDatabase mDbHelper = new AlarmDatabase(getContext());
-    //     // SQLiteDatabase db = mDbHelper.getWritableDatabase();
-    //     // ContentValues values = new ContentValues();
+    private void displayFragment(int step)
+    {
+        Bundle args = new Bundle();
+        Fragment fragment = null;
+        String tag;
 
-    //     // // values.put(AlarmDatabaseContract.AlarmTable.COLUMN_ID, title);
-    //     // // values.put(AlarmDatabaseContract.AlarmTable.COLUMN_ID, title);
-    //     // values.put(AlarmDatabaseContract.AlarmTable.COLUMN_ENABLED, 1);
-    //     // values.put(AlarmDatabaseContract.AlarmTable.COLUMN_HOUR, hourOfDay);
-    //     // values.put(AlarmDatabaseContract.AlarmTable.COLUMN_MINUTE, minute);
+        Toast.makeText(this, "Step: "+String.valueOf(step), Toast.LENGTH_SHORT).show();
 
-    //     // long newRowId = db.insert(AlarmDatabaseContract.AlarmTable.TABLE_NAME, null, values);
-    // }
+        switch (step)
+        {
+        case 1:
+            fragment = new AlarmAddTimeFragment();
+            break;
+        case 2:
+            fragment = new AlarmAddDaysFragment();
+            break;
+        default:
+            return;
+        }
+
+        tag = fragment.getClass().getSimpleName();
+        args.putString("tag", tag);
+        fragment.setArguments(args);
+
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        // transaction.add(fragment, tag);
+        transaction.replace(R.id.alarm_add_fragment_container, fragment, tag);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    private void initButtons()
+    {
+        Button positive = getPositiveButton();
+        Button negative = getNegativeButton();
+        positive.setOnClickListener(this);
+        negative.setOnClickListener(this);
+    }
+
+    private Button getPositiveButton()
+    {
+        return (Button) findViewById(R.id.alarm_add_positive_button);
+    }
+
+    private Button getNegativeButton()
+    {
+        return (Button) findViewById(R.id.alarm_add_negative_button);
+    }
 
 }

@@ -97,7 +97,7 @@ public class AlarmAdapter
                 {
                     PopupMenu popup = new PopupMenu(mContext, view);
                     MenuInflater inflater = popup.getMenuInflater();
-                    inflater.inflate(R.menu.menu_card_alarm, popup.getMenu());
+                    inflater.inflate(R.menu.alarm_card, popup.getMenu());
                     // popup.setOnMenuItemClickListener(new MyMenuItemClickListener());
                     popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
                         {

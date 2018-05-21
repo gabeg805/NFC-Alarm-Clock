@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+
+    <LinearLayout
+        android:id="@+id/weekendList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/weekdayList"
+        android:layout_alignTop="@id/weekdayList"
+        android:orientation="vertical">
+
+        <CheckBox
+            android:id="@+id/checkSaturday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="Saturday"
+            />
+
+        <CheckBox
+            android:id="@+id/checkSunday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="Sunday"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/weekdayList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <CheckBox
+            android:id="@+id/checkMonday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="Monday"
+            />
+
+        <CheckBox
+            android:id="@+id/checkTuesday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="Tuesday"
+            />
+
+        <CheckBox
+            android:id="@+id/checkWednesday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="Wednesday"
+            />
+
+        <CheckBox
+            android:id="@+id/checkThursday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="Thursday"
+            />
+
+        <CheckBox
+            android:id="@+id/checkFriday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="Friday"
+            />
+
+    </LinearLayout>
+
+
+
+
+
+
+    <!-- <CheckBox -->
+    <!--     android:id="@+id/checkWednesday" -->
+    <!--     android:layout_width="wrap_content" -->
+    <!--     android:layout_height="wrap_content" -->
+    <!--     android:layout_marginTop="20dp" -->
+    <!--     android:layout_marginBottom="20dp" -->
+    <!--     android:layout_marginLeft="20dp" -->
+    <!--     android:layout_marginRight="20dp" -->
+    <!--     android:text="Wednesday" -->
+    <!--     /> -->
+
+    <!-- <CheckBox -->
+    <!--     android:id="@+id/checkThursday" -->
+    <!--     android:layout_width="wrap_content" -->
+    <!--     android:layout_height="wrap_content" -->
+    <!--     android:layout_marginTop="20dp" -->
+    <!--     android:layout_marginBottom="20dp" -->
+    <!--     android:layout_marginLeft="20dp" -->
+    <!--     android:layout_marginRight="20dp" -->
+    <!--     android:text="Thursday" -->
+    <!--     /> -->
+
+    <!-- <CheckBox -->
+    <!--     android:id="@+id/checkFriday" -->
+    <!--     android:layout_width="wrap_content" -->
+    <!--     android:layout_height="wrap_content" -->
+    <!--     android:layout_marginTop="20dp" -->
+    <!--     android:layout_marginBottom="20dp" -->
+    <!--     android:layout_marginLeft="20dp" -->
+    <!--     android:layout_marginRight="20dp" -->
+    <!--     android:text="Friday" -->
+    <!--     /> -->
+
+    <!-- <CheckBox -->
+    <!--     android:id="@+id/checkSaturday" -->
+    <!--     android:layout_width="wrap_content" -->
+    <!--     android:layout_height="wrap_content" -->
+    <!--     android:layout_marginTop="20dp" -->
+    <!--     android:layout_marginBottom="20dp" -->
+    <!--     android:layout_marginLeft="20dp" -->
+    <!--     android:layout_marginRight="20dp" -->
+    <!--     android:text="Saturday" -->
+    <!--     /> -->
+
+    <!-- <CheckBox -->
+    <!--     android:id="@+id/checkSunday" -->
+    <!--     android:layout_width="wrap_content" -->
+    <!--     android:layout_height="wrap_content" -->
+    <!--     android:layout_marginTop="20dp" -->
+    <!--     android:layout_marginBottom="20dp" -->
+    <!--     android:layout_marginLeft="20dp" -->
+    <!--     android:layout_marginRight="20dp" -->
+    <!--     android:text="Sunday" -->
+    <!--     /> -->
+
+</LinearLayout>
