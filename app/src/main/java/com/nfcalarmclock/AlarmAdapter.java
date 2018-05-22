@@ -37,19 +37,19 @@ public class AlarmAdapter
         extends RecyclerView.ViewHolder
     {
         public TextView alarmTime;
-        public TextView alarmTimeMeridian;
-        public TextView alarmName;
+        public TextView alarmMeridian;
+        public TextView alarmRepeatText;
         public Switch alarmSwitch;
-        public ImageView alarmMenu;
+        public ImageView alarmExpand;
 
         public MyViewHolder(View view)
         {
             super(view);
             alarmTime = (TextView) view.findViewById(R.id.alarmTime);
-            alarmTimeMeridian = (TextView) view.findViewById(R.id.alarmTimeMeridian);
-            alarmName = (TextView) view.findViewById(R.id.alarmName);
-            alarmMenu = (ImageView) view.findViewById(R.id.alarmMenu);
+            alarmMeridian = (TextView) view.findViewById(R.id.alarmMeridian);
+            alarmRepeatText = (TextView) view.findViewById(R.id.alarmRepeatText);
             alarmSwitch = (Switch) view.findViewById(R.id.alarmSwitch);
+            alarmExpand = (ImageView) view.findViewById(R.id.alarmExpand);
         }
     }
 
@@ -88,41 +88,42 @@ public class AlarmAdapter
         String meridian = alarm.getMeridian(alarm.getHour(), is24hourformat);
 
         holder.alarmTime.setText(hour+":"+minute);
-        holder.alarmTimeMeridian.setText(meridian);
-        holder.alarmName.setText(alarm.getName());
-        holder.alarmMenu.setOnClickListener(new View.OnClickListener()
+        holder.alarmMeridian.setText(meridian);
+        holder.alarmRepeatText.setText(alarm.getName());
+        holder.alarmExpand.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View view)
                 {
-                    PopupMenu popup = new PopupMenu(mContext, view);
-                    MenuInflater inflater = popup.getMenuInflater();
-                    inflater.inflate(R.menu.alarm_card, popup.getMenu());
-                    // popup.setOnMenuItemClickListener(new MyMenuItemClickListener());
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
-                        {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem menuItem)
-                            {
-                                switch (menuItem.getItemId())
-                                {
-                                case R.id.alarm_card_edit:
-                                    Toast.makeText(mContext, "Edit alarm.", Toast.LENGTH_SHORT).show();
-                                    return true;
-                                case R.id.alarm_card_copy:
-                                    Toast.makeText(mContext, "Copy alarm.", Toast.LENGTH_SHORT).show();
-                                    return true;
-                                case R.id.alarm_card_delete:
-                                    Toast.makeText(mContext, "Delete alarm.", Toast.LENGTH_SHORT).show();
-                                    return true;
-                                default:
-                                    break;
-                                }
-                                return false;
-                            }
-                        });
-                    popup.show();
-                    // showPopupMenu(holder.alarmMenu);
+                    Toast.makeText(mContext, "Expanded.", Toast.LENGTH_SHORT).show();
+        //             PopupMenu popup = new PopupMenu(mContext, view);
+        //             MenuInflater inflater = popup.getMenuInflater();
+        //             inflater.inflate(R.menu.alarm_card, popup.getMenu());
+        //             // popup.setOnMenuItemClickListener(new MyMenuItemClickListener());
+        //             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
+        //                 {
+        //                     @Override
+        //                     public boolean onMenuItemClick(MenuItem menuItem)
+        //                     {
+        //                         switch (menuItem.getItemId())
+        //                         {
+        //                         case R.id.alarm_card_edit:
+        //                             Toast.makeText(mContext, "Edit alarm.", Toast.LENGTH_SHORT).show();
+        //                             return true;
+        //                         case R.id.alarm_card_copy:
+        //                             Toast.makeText(mContext, "Copy alarm.", Toast.LENGTH_SHORT).show();
+        //                             return true;
+        //                         case R.id.alarm_card_delete:
+        //                             Toast.makeText(mContext, "Delete alarm.", Toast.LENGTH_SHORT).show();
+        //                             return true;
+        //                         default:
+        //                             break;
+        //                         }
+        //                         return false;
+        //                     }
+        //                 });
+        //             popup.show();
+        //             // showPopupMenu(holder.alarmMenu);
                 }
             });
     }

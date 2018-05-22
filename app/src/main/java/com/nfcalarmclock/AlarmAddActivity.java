@@ -114,6 +114,7 @@ public class AlarmAddActivity
             fragment = new AlarmAddDaysFragment();
             break;
         default:
+            /* Kill fragment here */
             return;
         }
 

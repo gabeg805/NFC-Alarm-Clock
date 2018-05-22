@@ -9,19 +9,26 @@
     <dimen name="card_alarm_margin_vertical">12dp</dimen>
     <dimen name="card_alarm_elevation">5dp</dimen>
     <dimen name="card_alarm_radius">10dp</dimen>
-    <dimen name="card_alarm_time_size">25dp</dimen>
-    <dimen name="card_alarm_meridian_size">15dp</dimen>
-    <dimen name="card_alarm_icon_size">20dp</dimen>
-    <dimen name="card_alarm_name_size">12dp</dimen>
-    <dimen name="card_alarm_switch_size">60dp</dimen>
+
+    <dimen name="alarm_card_icon_size">20dp</dimen>
+    <dimen name="alarm_card_switch_size">60dp</dimen>
+
+    <dimen name="alarm_card_meridian_size">15dp</dimen>
+    <dimen name="alarm_card_meridian_padding">5dp</dimen>
+
+    <dimen name="alarm_card_repeat_text_size">14dp</dimen>
+    <dimen name="alarm_card_time_size">32dp</dimen>
+    <dimen name="alarm_card_time_padding">10dp</dimen>
 
     <dimen name="card_alarm_inner_padding_top">10dp</dimen>
     <dimen name="card_alarm_inner_padding_bottom">10dp</dimen>
     <dimen name="card_alarm_inner_padding_left">20dp</dimen>
     <dimen name="card_alarm_inner_padding_right">20dp</dimen>
-    <dimen name="card_alarm_time_padding">5dp</dimen>
-    <dimen name="card_alarm_meridian_padding">5dp</dimen>
     <dimen name="card_alarm_icon_margin">15dp</dimen>
+
+
+    <dimen name="alarm_card_expand_margin_right">20dp</dimen>
+    
 
 
     <dimen name="fab_margin">16dp</dimen>
@@ -30,5 +37,8 @@
     <dimen name="ic_album_overflow_width">20dp</dimen>
     <dimen name="ic_album_overflow_height">30dp</dimen>
     <dimen name="ic_album_overflow_margin_top">10dp</dimen>
+
+    <dimen name="alarm_days_margin_title">20dp</dimen>
+    <dimen name="alarm_days_margin_checkbox">10dp</dimen>
 
 </resources>
