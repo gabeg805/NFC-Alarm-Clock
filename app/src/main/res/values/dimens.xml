@@ -10,25 +10,35 @@
     <dimen name="card_alarm_elevation">5dp</dimen>
     <dimen name="card_alarm_radius">10dp</dimen>
 
-    <dimen name="alarm_card_icon_size">20dp</dimen>
     <dimen name="alarm_card_switch_size">60dp</dimen>
 
-    <dimen name="alarm_card_meridian_size">15dp</dimen>
-    <dimen name="alarm_card_meridian_padding">5dp</dimen>
+    <!-- CardView -->
+    <dimen name="pt_card">16dp</dimen>
+    <dimen name="pb_card">12dp</dimen>
+    <dimen name="pl_card">16dp</dimen>
+    <dimen name="pr_card">16dp</dimen>
+    <dimen name="mb_card_time">10dp</dimen>
+    <dimen name="ml_card_meridian">5dp</dimen>
+    <dimen name="mb_card_item_spacing">10dp</dimen>
 
-    <dimen name="alarm_card_repeat_text_size">14dp</dimen>
-    <dimen name="alarm_card_time_size">32dp</dimen>
-    <dimen name="alarm_card_time_padding">10dp</dimen>
+    <dimen name="tsz_card">12sp</dimen>
+    <dimen name="tsz_card_time">32sp</dimen>
+    <dimen name="tsz_card_meridian">14sp</dimen>
+    <dimen name="tsz_card_repeat">10sp</dimen>
+    <dimen name="isz_card">22dp</dimen>
 
-    <dimen name="card_alarm_inner_padding_top">10dp</dimen>
-    <dimen name="card_alarm_inner_padding_bottom">10dp</dimen>
-    <dimen name="card_alarm_inner_padding_left">20dp</dimen>
-    <dimen name="card_alarm_inner_padding_right">20dp</dimen>
-    <dimen name="card_alarm_icon_margin">15dp</dimen>
+    <dimen name="sp_card">10dp</dimen>
+
+    <dimen name="card_expand_margin_right">20dp</dimen>
 
 
-    <dimen name="alarm_card_expand_margin_right">20dp</dimen>
-    
+
+
+    <dimen name="card_expand_size">20dp</dimen>
+
+    <dimen name="circle_size">24dp</dimen>
+    <dimen name="mr_card_circle">16dp</dimen>
+
 
 
     <dimen name="fab_margin">16dp</dimen>

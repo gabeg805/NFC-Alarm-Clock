@@ -16,6 +16,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+// For expandable card content
+import android.widget.RelativeLayout;
+
 public class AlarmAdapter
     extends RecyclerView.Adapter<AlarmAdapter.MyViewHolder>
 {
@@ -40,7 +43,10 @@ public class AlarmAdapter
         public TextView alarmMeridian;
         public TextView alarmRepeatText;
         public Switch alarmSwitch;
-        public ImageView alarmExpand;
+        public ImageView alarmExpandButton;
+        public ImageView alarmCollapseButton;
+        public RelativeLayout alarmMinorSummary;
+        public RelativeLayout alarmMinorExpand;
 
         public MyViewHolder(View view)
         {
@@ -49,7 +55,10 @@ public class AlarmAdapter
             alarmMeridian = (TextView) view.findViewById(R.id.alarmMeridian);
             alarmRepeatText = (TextView) view.findViewById(R.id.alarmRepeatText);
             alarmSwitch = (Switch) view.findViewById(R.id.alarmSwitch);
-            alarmExpand = (ImageView) view.findViewById(R.id.alarmExpand);
+            alarmExpandButton = (ImageView) view.findViewById(R.id.alarmExpandButton);
+            alarmCollapseButton = (ImageView) view.findViewById(R.id.alarmCollapseButton);
+            alarmMinorSummary = (RelativeLayout) itemView.findViewById(R.id.alarmMinorSummary);
+            alarmMinorExpand = (RelativeLayout) itemView.findViewById(R.id.alarmMinorExpand);
         }
     }
 
@@ -70,7 +79,10 @@ public class AlarmAdapter
     {
         View itemView = LayoutInflater.from(parent.getContext())
             .inflate(R.layout.view_card_alarm, parent, false);
-        return new MyViewHolder(itemView);
+        MyViewHolder holder = new MyViewHolder(itemView);
+        holder.alarmMinorExpand.setVisibility(View.GONE);
+        holder.alarmMinorExpand.setEnabled(false);
+        return holder;
     }
 
     /**
@@ -90,12 +102,32 @@ public class AlarmAdapter
         holder.alarmTime.setText(hour+":"+minute);
         holder.alarmMeridian.setText(meridian);
         holder.alarmRepeatText.setText(alarm.getName());
-        holder.alarmExpand.setOnClickListener(new View.OnClickListener()
+        holder.alarmExpandButton.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View view)
                 {
                     Toast.makeText(mContext, "Expanded.", Toast.LENGTH_SHORT).show();
+                    holder.alarmMinorSummary.setVisibility(View.GONE);
+                    holder.alarmMinorSummary.setEnabled(false);
+                    holder.alarmMinorExpand.setVisibility(View.VISIBLE);
+                    holder.alarmMinorExpand.setEnabled(true);
+                }
+            });
+        holder.alarmCollapseButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    Toast.makeText(mContext, "Collapsed.", Toast.LENGTH_SHORT).show();
+                    holder.alarmMinorSummary.setVisibility(View.VISIBLE);
+                    holder.alarmMinorSummary.setEnabled(true);
+                    holder.alarmMinorExpand.setVisibility(View.GONE);
+                    holder.alarmMinorExpand.setEnabled(false);
+                }
+            });
+    }
+
         //             PopupMenu popup = new PopupMenu(mContext, view);
         //             MenuInflater inflater = popup.getMenuInflater();
         //             inflater.inflate(R.menu.alarm_card, popup.getMenu());
@@ -124,9 +156,6 @@ public class AlarmAdapter
         //                 });
         //             popup.show();
         //             // showPopupMenu(holder.alarmMenu);
-                }
-            });
-    }
 
     // /**
     //  * Showing popup menu when tapping on 3 dots

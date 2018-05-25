@@ -1,107 +1,30 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <!-- android:layout_marginTop="@dimen/card_alarm_margin_vertical" -->
-    <!-- android:layout_marginBottom="@dimen/card_alarm_margin_vertical" -->
-    <!-- android:layout_marginLeft="@dimen/card_alarm_margin_horizontal" -->
-    <!-- android:layout_marginRight="@dimen/card_alarm_margin_horizontal" -->
 
     <android.support.v7.widget.CardView
         android:id="@+id/view_card_alarm"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="5dp"
-        android:layout_gravity="center"
         android:elevation="@dimen/card_alarm_elevation"
-        card_view:cardBackgroundColor="@color/darkerBlue">
+        app:cardBackgroundColor="@color/darkGray">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="@dimen/card_alarm_inner_padding_top"
-            android:paddingBottom="@dimen/card_alarm_inner_padding_bottom"
-            android:paddingLeft="@dimen/card_alarm_inner_padding_left"
-            android:paddingRight="@dimen/card_alarm_inner_padding_right">
+            android:paddingTop="@dimen/pt_card"
+            android:paddingBottom="@dimen/pb_card"
+            android:paddingLeft="@dimen/pl_card"
+            android:paddingRight="@dimen/pr_card">
 
-        <!--     <RelativeLayout -->
-        <!--         android:layout_width="match_parent" -->
-        <!--         android:layout_height="match_parent" -->
-        <!--         android:gravity="left|center_vertical"> -->
+            <include layout="@layout/card_alarm_major" />
 
-                <TextView
-                    android:id="@+id/alarmTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/alarm_card_time_padding"
-                    android:paddingBottom="@dimen/alarm_card_time_padding"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/alarm_card_time_size"
-                    />
+            <include layout="@layout/card_alarm_minor_summary" />
 
-                <TextView
-                    android:id="@+id/alarmMeridian"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@id/alarmTime"
-                    android:layout_toRightOf="@id/alarmTime"
-                    android:paddingLeft="@dimen/alarm_card_meridian_padding"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/alarm_card_meridian_size"
-                    />
-
-                <TextView
-                    android:id="@+id/alarmRepeatText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/alarmTime"
-                    android:textColor="@color/gray"
-                    android:textSize="@dimen/alarm_card_repeat_text_size"
-                    />
-
-            <!-- </RelativeLayout> -->
-
-            <!-- <RelativeLayout -->
-            <!--     android:layout_width="match_parent" -->
-            <!--     android:layout_height="match_parent" -->
-            <!--     android:gravity="right|center_vertical"> -->
-
-                <Switch
-                    android:id="@+id/alarmSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignTop="@id/alarmMeridian"
-                    android:switchMinWidth="@dimen/alarm_card_switch_size"
-                    />
-
-                <ImageView
-                    android:id="@+id/alarmExpand"
-                    android:layout_width="@dimen/alarm_card_icon_size"
-                    android:layout_height="@dimen/alarm_card_icon_size"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignTop="@id/alarmRepeatText"
-                    android:layout_below="@id/alarmSwitch"
-                    android:layout_marginRight="@dimen/alarm_card_expand_margin_right"
-                    android:src="@android:drawable/ic_menu_search"
-                    />
-
-                <!-- android:thumb="@drawable/round_button" -->
-                <!-- android:track="@drawable/button_black" -->
-
-                <!-- <ImageView -->
-                <!--     android:id="@+id/alarmMenu" -->
-                <!--     android:layout_width="@dimen/card_alarm_icon_size" -->
-                <!--     android:layout_height="@dimen/card_alarm_icon_size" -->
-                <!--     android:layout_toRightOf="@id/alarmSwitch" -->
-                <!--     android:layout_marginTop="5dp" -->
-                <!--     android:layout_marginLeft="@dimen/card_alarm_icon_margin" -->
-                <!--     android:src="@mipmap/ic_more_vert_white_24dp" -->
-                <!--     /> -->
-                <!-- android:layout_alignBaseline="@id/alarmMeridian" -->
-
-        <!--     </RelativeLayout> -->
+            <include layout="@layout/card_alarm_minor_expand" />
 
         </RelativeLayout>
 

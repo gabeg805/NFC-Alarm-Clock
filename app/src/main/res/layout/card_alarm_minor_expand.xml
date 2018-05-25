@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/alarmMinorExpand"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/alarmMinorSummary">
+
+    <CheckBox
+        android:id="@+id/alarmRepeatCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/mb_card_item_spacing"
+        android:textColor="@color/white"
+        android:textSize="@dimen/tsz_card"
+        android:text="Repeat"
+        />
+
+    <LinearLayout
+        android:id="@+id/alarmRepeatDays"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/alarmRepeatCheck"
+        android:layout_marginBottom="@dimen/mb_card_item_spacing"
+        android:gravity="center">
+
+        <Button
+            android:layout_width="@dimen/circle_size"
+            android:layout_height="@dimen/circle_size"
+            android:layout_marginRight="@dimen/mr_card_circle"
+            android:background="@drawable/circle"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="#fff"
+            android:text="S"
+            />
+
+        <Button
+            android:layout_width="@dimen/circle_size"
+            android:layout_height="@dimen/circle_size"
+            android:layout_marginRight="@dimen/mr_card_circle"
+            android:background="@drawable/circle"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="#fff"
+            android:text="M"
+            />
+
+        <Button
+            android:layout_width="@dimen/circle_size"
+            android:layout_height="@dimen/circle_size"
+            android:layout_marginRight="@dimen/mr_card_circle"
+            android:background="@drawable/circle"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="#fff"
+            android:text="T"
+            />
+
+        <Button
+            android:layout_width="@dimen/circle_size"
+            android:layout_height="@dimen/circle_size"
+            android:layout_marginRight="@dimen/mr_card_circle"
+            android:background="@drawable/circle"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="#fff"
+            android:text="W"
+            />
+
+        <Button
+            android:layout_width="@dimen/circle_size"
+            android:layout_height="@dimen/circle_size"
+            android:layout_marginRight="@dimen/mr_card_circle"
+            android:background="@drawable/circle"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="#fff"
+            android:text="T"
+            />
+
+        <Button
+            android:layout_width="@dimen/circle_size"
+            android:layout_height="@dimen/circle_size"
+            android:layout_marginRight="@dimen/mr_card_circle"
+            android:background="@drawable/circle"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="#fff"
+            android:text="F"
+            />
+
+        <Button
+            android:layout_width="@dimen/circle_size"
+            android:layout_height="@dimen/circle_size"
+            android:layout_marginRight="@dimen/mr_card_circle"
+            android:background="@drawable/circle"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="#fff"
+            android:text="S"
+            />
+
+    </LinearLayout>
+
+    <com.nfcalarmclock.ImageTextButton
+        android:id="@+id/alarmSound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/alarmRepeatDays"
+        android:layout_marginTop="@dimen/mb_card_item_spacing"
+        android:layout_marginBottom="@dimen/mb_card_item_spacing"
+        app:image="@mipmap/baseline_notifications_white_24dp"
+        app:text="Cuckoo clock"
+        />
+
+    <CheckBox
+        android:id="@+id/alarmVibrateCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/alarmRepeatDays"
+        android:layout_alignTop="@id/alarmSound"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="right"
+        android:textColor="@color/white"
+        android:textSize="@dimen/tsz_card"
+        android:text="Vibrate"
+        />
+
+    <ImageView
+        android:id="@+id/alarmNameIcon"
+        android:layout_width="@dimen/isz_card"
+        android:layout_height="@dimen/isz_card"
+        android:layout_below="@id/alarmSound"
+        android:layout_alignBaseline="@id/alarmName"
+        android:src="@mipmap/baseline_label_white_24dp"
+        />
+
+    <EditText
+        android:id="@+id/alarmName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/alarmSound"
+        android:layout_toRightOf="@id/alarmNameIcon"
+        android:layout_marginBottom="@dimen/mb_card_item_spacing"
+        android:textColor="@color/white"
+        android:textSize="@dimen/tsz_card"
+        android:text="Good morning!"
+        />
+
+    <com.nfcalarmclock.ImageTextButton
+        android:id="@+id/alarmDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/alarmName"
+        app:image="@mipmap/baseline_delete_white_24dp"
+        app:text="Delete"
+        />
+
+    <ImageView
+        android:id="@+id/alarmCollapseButton"
+        android:layout_width="@dimen/card_expand_size"
+        android:layout_height="@dimen/card_expand_size"
+        android:layout_below="@id/alarmName"
+        android:layout_alignBaseline="@id/alarmDelete"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="right"
+        android:src="@mipmap/baseline_keyboard_arrow_up_white_18dp"
+        />
+
+</RelativeLayout>

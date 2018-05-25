@@ -3,7 +3,7 @@
 
     <color name="colorPrimary">#1f285a</color>
     <color name="colorPrimaryDark">#192048</color>
-    <color name="colorAccent">#551f5a</color>
+    <color name="colorAccent">#666666</color>
 
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
@@ -18,32 +18,6 @@
     <color name="darkBlue">#121836</color>
     <color name="darkerBlue">#121836</color>
     <color name="darkestBlue">#0c1024</color>
-
-<!-- 108370 -->
-
-<!-- #1f285a -->
-<!-- #1b2451 -->
-<!-- #182048 -->
-<!-- #151c3e -->
-<!-- #121836 -->
-<!-- #0f142d -->
-<!-- #0c1024 -->
-<!-- #090c1b -->
-<!-- #060812 -->
-<!-- #030409 -->
-<!-- #000000 -->
-
-<!-- #808080 -->
-<!-- #737373 -->
-<!-- #666666 -->
-<!-- #595959 -->
-<!-- #4c4c4c -->
-<!-- #404040 -->
-<!-- #333333 -->
-<!-- #262626 -->
-<!-- #191919 -->
-<!-- #0c0c0c -->
-<!-- #000000 -->
 
     <color name="offWhite">#f1f5f8</color>
 

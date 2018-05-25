@@ -23,7 +23,6 @@ import java.util.List;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
-
 /**
  * @brief The application's main activity.
  */
@@ -43,6 +42,12 @@ public class MainActivity
         setupAlarmList(alarmlist, adapter);
         buildAlarmList(adapter);
     }
+
+    // @Override
+    // protected void onStart()
+    // {
+    //     super.onStart();
+    // }
 
     @Override
     public void onBackPressed()
@@ -89,16 +94,16 @@ public class MainActivity
     private void buildAlarmList(AlarmAdapter adapter)
     {
         List<Alarm> alarmList = adapter.getAlarms();
-        alarmList.add(new Alarm("True Romance", 13, 0));
-        alarmList.add(new Alarm("Xscpae", 8, 1));
-        alarmList.add(new Alarm("Maroon 5", 11, 2));
-        alarmList.add(new Alarm("Born to Die", 12, 3));
-        alarmList.add(new Alarm("Honeymoon", 14, 4));
-        alarmList.add(new Alarm("I Need a Doctor", 1, 5));
-        alarmList.add(new Alarm("Loud", 11, 6));
-        alarmList.add(new Alarm("Legend", 14, 7));
-        alarmList.add(new Alarm("Hello", 11, 8));
-        alarmList.add(new Alarm("Greatest Hits", 17, 9));
+        alarmList.add(new Alarm("Mon,Tue,Wed,Thu", 13, 0));
+        alarmList.add(new Alarm("Sat,Sun", 8, 1));
+        alarmList.add(new Alarm("Thu,Fri,Sat", 11, 2));
+        alarmList.add(new Alarm("Everyday", 12, 3));
+        alarmList.add(new Alarm("Weekend", 14, 4));
+        alarmList.add(new Alarm("Weekdays", 1, 5));
+        alarmList.add(new Alarm("Mon,Wed,Fri", 11, 6));
+        alarmList.add(new Alarm("Tue,Thu", 14, 7));
+        alarmList.add(new Alarm("Sun,Wed,Fri", 11, 8));
+        alarmList.add(new Alarm("Wed,Thu,Fri,Sat,Sun", 17, 9));
         adapter.notifyDataSetChanged();
     }
 

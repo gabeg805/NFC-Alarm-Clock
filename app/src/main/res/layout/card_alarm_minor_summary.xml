@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/alarmMinorSummary"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/alarmMajor"
+    android:layout_marginBottom="@dimen/mb_card_item_spacing">
+
+    <TextView
+        android:id="@+id/alarmRepeatText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="@dimen/tsz_card_repeat"
+        />
+
+    <ImageView
+        android:id="@+id/alarmExpandButton"
+        android:layout_width="@dimen/card_expand_size"
+        android:layout_height="@dimen/card_expand_size"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="right"
+        android:src="@mipmap/baseline_keyboard_arrow_down_white_18dp"
+        />
+
+</RelativeLayout>

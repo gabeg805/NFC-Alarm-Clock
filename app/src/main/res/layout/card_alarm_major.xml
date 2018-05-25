@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/alarmMajor"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/mb_card_time">
+
+    <TextView
+        android:id="@+id/alarmTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/lightGray"
+        android:textSize="@dimen/tsz_card_time"
+        />
+
+    <TextView
+        android:id="@+id/alarmMeridian"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/alarmTime"
+        android:layout_alignBaseline="@id/alarmTime"
+        android:layout_marginLeft="@dimen/ml_card_meridian"
+        android:textColor="@color/lightGray"
+        android:textSize="@dimen/tsz_card_meridian"
+        />
+
+    <Switch
+        android:id="@+id/alarmSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="right"
+        />
+
+</RelativeLayout>
