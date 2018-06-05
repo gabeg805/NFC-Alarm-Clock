@@ -8,17 +8,16 @@
         android:id="@+id/view_card_alarm"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="5dp"
-        android:elevation="@dimen/card_alarm_elevation"
-        app:cardBackgroundColor="@color/darkGray">
+        app:cardBackgroundColor="@color/black"
+        android:elevation="@dimen/card_alarm_elevation">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="@dimen/pt_card"
-            android:paddingBottom="@dimen/pb_card"
-            android:paddingLeft="@dimen/pl_card"
-            android:paddingRight="@dimen/pr_card">
+            android:layout_marginTop="@dimen/mt_card"
+            android:layout_marginBottom="@dimen/mb_card"
+            android:layout_marginStart="@dimen/ml_card"
+            android:layout_marginEnd="@dimen/mr_card">
 
             <include layout="@layout/card_alarm_major" />
 

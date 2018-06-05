@@ -2,13 +2,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- <android.support.design.widget.FloatingActionButton -->
-    <!--     android:id="@+id/fab_new_alarm" -->
-    <!--     android:layout_width="wrap_content" -->
-    <!--     android:layout_height="wrap_content" -->
-    <!--     android:layout_gravity="bottom|end" -->
-    <!--     android:layout_margin="@dimen/fab_new_alarm_margin" -->
-    <!--     app:srcCompat="@mipmap/ic_alarm_add_white_24dp" -->
-    <!--     /> -->
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_add_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_add_alarm_margin"
+        android:src="@mipmap/baseline_add_white_24dp"
+        />
 
 </merge>

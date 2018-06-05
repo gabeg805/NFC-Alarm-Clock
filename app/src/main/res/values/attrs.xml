@@ -12,6 +12,18 @@
         <attr name="textSize" format="reference|dimension" />
         <attr name="text" format="reference|string" />
         <attr name="spacing" format="reference|dimension" />
+
+    </declare-styleable>
+
+    <declare-styleable
+        name="DayOfWeekButtons">
+
+        <attr name="widthz" format="reference|dimension" />
+        <attr name="heightz" format="reference|dimension" />
+        <attr name="drawableColorz" format="reference|color" />
+        <attr name="textColorz" format="reference|color" />
+        <attr name="textSizez" format="reference|dimension" />
+
     </declare-styleable>
 
 </resources>

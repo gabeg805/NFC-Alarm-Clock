@@ -4,23 +4,27 @@
     android:id="@+id/alarmMinorSummary"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_below="@id/alarmMajor"
-    android:layout_marginBottom="@dimen/mb_card_item_spacing">
+    android:layout_below="@id/alarmMajor">
+    <!-- android:background="@drawable/borderhighlight" -->
 
     <TextView
         android:id="@+id/alarmRepeatText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="4dp"
+        android:textColor="?attr/colorAccent"
         android:textSize="@dimen/tsz_card_repeat"
+        android:textStyle="bold"
         />
 
     <ImageView
         android:id="@+id/alarmExpandButton"
         android:layout_width="@dimen/card_expand_size"
         android:layout_height="@dimen/card_expand_size"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="right"
+        android:layout_marginEnd="15dp"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="end"
         android:src="@mipmap/baseline_keyboard_arrow_down_white_18dp"
         />
 

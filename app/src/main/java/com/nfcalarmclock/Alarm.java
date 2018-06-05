@@ -6,9 +6,15 @@ import android.app.AlarmManager;
  */
 public class Alarm
 {
-    private String mName = "";
+
     private int mHour = 0;
     private int mMinute = 0;
+    private int mDays = 0;
+    private boolean mEnabled = true;
+    private boolean mRepeat = true;
+    private boolean mVibrate = false;
+    private String mName = "";
+    private String mSound = "";
     private long mInterval = -1;
     private int mType = AlarmManager.RTC_WAKEUP;
 
@@ -20,6 +26,7 @@ public class Alarm
      */
     public Alarm()
     {
+        this("", 7, 0);
     }
 
     /**
@@ -38,6 +45,9 @@ public class Alarm
         this.mName = name;
         this.mHour = hour;
         this.mMinute = minute;
+        this.mEnabled = true;
+        this.mRepeat = true;
+        this.mVibrate = true;
     }
 
     /**
@@ -82,14 +92,6 @@ public class Alarm
     }
 
     /**
-     * @brief Set the name of the alarm.
-     */
-    public void setName(String name)
-    {
-        this.mName = name;
-    }
-
-    /**
      * @brief Set the hour at which to run the alarm.
      */
     public void setHour(int hour)
@@ -103,6 +105,55 @@ public class Alarm
     public void setMinute(int minute)
     {
         this.mMinute = minute;
+    }
+
+    /**
+     * @brief Set the days on which the alarm will be run.
+     */
+    public void setDays(int days)
+    {
+        this.mDays = days;
+    }
+
+    /**
+     * @brief Set the enabled/disabled status of the alarm.
+     */
+    public void setEnabled(boolean state)
+    {
+        this.mEnabled = state;
+    }
+
+    /**
+     * @brief Set whether the alarm should be repeated or not.
+     */
+    public void setRepeat(boolean state)
+    {
+        this.mRepeat = state;
+    }
+
+    /**
+     * @brief Set whether or not the phone should vibrate when the alarm is
+     *        activated.
+     */
+    public void setVibrate(boolean state)
+    {
+        this.mVibrate = state;
+    }
+
+    /**
+     * @brief Set the name of the alarm.
+     */
+    public void setName(String name)
+    {
+        this.mName = name;
+    }
+
+    /**
+     * @brief Set the sound that will be played when the alarm is activated.
+     */
+    public void setSound(String sound)
+    {
+        this.mSound = sound;
     }
 
     /**

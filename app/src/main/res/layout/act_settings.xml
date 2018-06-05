@@ -6,13 +6,11 @@
     android:id="@+id/activity_settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/darkestBlue"
     tools:context=".SettingsActivity">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/activity_margin_vertical"
         android:text="Ayyyy settings!"
         android:textColor="@color/white"
         />

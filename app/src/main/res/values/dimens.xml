@@ -1,54 +1,40 @@
 <resources>
 
-    <dimen name="activity_margin_horizontal">12dp</dimen>
-    <dimen name="activity_margin_vertical">12dp</dimen>
-
     <dimen name="fab_add_alarm_margin">15dp</dimen>
 
-    <dimen name="card_alarm_margin_horizontal">25dp</dimen>
-    <dimen name="card_alarm_margin_vertical">12dp</dimen>
     <dimen name="card_alarm_elevation">5dp</dimen>
-    <dimen name="card_alarm_radius">10dp</dimen>
 
     <dimen name="alarm_card_switch_size">60dp</dimen>
 
     <!-- CardView -->
-    <dimen name="pt_card">16dp</dimen>
-    <dimen name="pb_card">12dp</dimen>
-    <dimen name="pl_card">16dp</dimen>
-    <dimen name="pr_card">16dp</dimen>
-    <dimen name="mb_card_time">10dp</dimen>
+    <dimen name="mt_card">10dp</dimen>
+    <dimen name="mb_card">10dp</dimen>
+    <dimen name="ml_card">16dp</dimen>
+    <dimen name="mr_card">16dp</dimen>
+    <dimen name="mb_card_time">0dp</dimen>
     <dimen name="ml_card_meridian">5dp</dimen>
-    <dimen name="mb_card_item_spacing">10dp</dimen>
+    <dimen name="mb_card_expand">10dp</dimen>
+    <dimen name="mb_card_major_minor_spacing">5dp</dimen>
+    <dimen name="mb_card_item_spacing">15dp</dimen>
 
-    <dimen name="tsz_card">12sp</dimen>
+    <dimen name="tsz_card">13sp</dimen>
     <dimen name="tsz_card_time">32sp</dimen>
     <dimen name="tsz_card_meridian">14sp</dimen>
-    <dimen name="tsz_card_repeat">10sp</dimen>
+    <dimen name="tsz_card_repeat">11sp</dimen>
+    <dimen name="tsz_card_days">16sp</dimen>
+
     <dimen name="isz_card">22dp</dimen>
 
     <dimen name="sp_card">10dp</dimen>
 
     <dimen name="card_expand_margin_right">20dp</dimen>
 
-
-
-
     <dimen name="card_expand_size">20dp</dimen>
 
-    <dimen name="circle_size">24dp</dimen>
+    <dimen name="circle_size">36dp</dimen>
     <dimen name="mr_card_circle">16dp</dimen>
-
-
 
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="item_offset">10dp</dimen>
-
-    <dimen name="ic_album_overflow_width">20dp</dimen>
-    <dimen name="ic_album_overflow_height">30dp</dimen>
-    <dimen name="ic_album_overflow_margin_top">10dp</dimen>
-
-    <dimen name="alarm_days_margin_title">20dp</dimen>
-    <dimen name="alarm_days_margin_checkbox">10dp</dimen>
 
 </resources>

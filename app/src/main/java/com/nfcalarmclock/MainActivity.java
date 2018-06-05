@@ -15,13 +15,9 @@ import android.view.View;
 import android.util.Log;
 import java.util.List;
 
-// import android.support.v4.app.DialogFragment;
-// import android.app.TimePickerDialog;
-// import android.app.Dialog;
-// import android.widget.TimePicker;
-
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.graphics.drawable.Drawable;
+import android.support.v7.widget.DividerItemDecoration;
 
 /**
  * @brief The application's main activity.
@@ -30,24 +26,18 @@ public class MainActivity
     extends AppCompatActivity
 {
 
+    AlarmCardAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_main);
-        FloatingActionButton addalarm = this.getAddAlarmButton();
-        RecyclerView alarmlist = this.getAlarmList();
-        AlarmAdapter adapter = new AlarmAdapter(this);
-        setupAddAlarmButton(addalarm);
-        setupAlarmList(alarmlist, adapter);
-        buildAlarmList(adapter);
+        mAdapter = new AlarmCardAdapter(this);
+        setupAddAlarmButton();
+        setupAlarmList(mAdapter);
+        buildAlarmList(mAdapter);
     }
-
-    // @Override
-    // protected void onStart()
-    // {
-    //     super.onStart();
-    // }
 
     @Override
     public void onBackPressed()
@@ -91,35 +81,55 @@ public class MainActivity
     /**
      * Adding few alarm for testing
      */
-    private void buildAlarmList(AlarmAdapter adapter)
+    private void buildAlarmList(AlarmCardAdapter adapter)
     {
-        List<Alarm> alarmList = adapter.getAlarms();
-        alarmList.add(new Alarm("Mon,Tue,Wed,Thu", 13, 0));
-        alarmList.add(new Alarm("Sat,Sun", 8, 1));
-        alarmList.add(new Alarm("Thu,Fri,Sat", 11, 2));
-        alarmList.add(new Alarm("Everyday", 12, 3));
-        alarmList.add(new Alarm("Weekend", 14, 4));
-        alarmList.add(new Alarm("Weekdays", 1, 5));
-        alarmList.add(new Alarm("Mon,Wed,Fri", 11, 6));
-        alarmList.add(new Alarm("Tue,Thu", 14, 7));
-        alarmList.add(new Alarm("Sun,Wed,Fri", 11, 8));
-        alarmList.add(new Alarm("Wed,Thu,Fri,Sat,Sun", 17, 9));
-        adapter.notifyDataSetChanged();
+        adapter.add(new Alarm("Mon,Tue,Wed,Thu", 13, 0));
+        adapter.add(new Alarm("Sat,Sun", 8, 1));
+        adapter.add(new Alarm("Thu,Fri,Sat", 11, 2));
+        adapter.add(new Alarm("Everyday", 12, 3));
+        adapter.add(new Alarm("Weekend", 14, 4));
+        adapter.add(new Alarm("Weekdays", 1, 5));
+        adapter.add(new Alarm("Mon,Wed,Fri", 11, 6));
+        adapter.add(new Alarm("Tue,Thu", 14, 7));
+        adapter.add(new Alarm("Sun,Wed,Fri", 11, 8));
+        adapter.add(new Alarm("Wed,Thu,Fri,Sat,Sun", 17, 9));
+
+        // List<Alarm> alarmlist = adapter.getAlarms();
+        // alarmlist.add(new Alarm("Mon,Tue,Wed,Thu", 13, 0));
+        // alarmlist.add(new Alarm("Sat,Sun", 8, 1));
+        // alarmlist.add(new Alarm("Thu,Fri,Sat", 11, 2));
+        // alarmlist.add(new Alarm("Everyday", 12, 3));
+        // alarmlist.add(new Alarm("Weekend", 14, 4));
+        // alarmlist.add(new Alarm("Weekdays", 1, 5));
+        // alarmlist.add(new Alarm("Mon,Wed,Fri", 11, 6));
+        // alarmlist.add(new Alarm("Tue,Thu", 14, 7));
+        // alarmlist.add(new Alarm("Sun,Wed,Fri", 11, 8));
+        // alarmlist.add(new Alarm("Wed,Thu,Fri,Sat,Sun", 17, 9));
+        // adapter.notifyDataSetChanged();
     }
 
     /**
      * @brief Setup the Add Alarm button.
      */
-    private void setupAddAlarmButton(FloatingActionButton button)
+    private void setupAddAlarmButton()
     {
+        FloatingActionButton button = this.getAddAlarmButton();
         button.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View view)
                 {
-                    Intent intent = new Intent(getApplicationContext(),
-                                               AlarmAddActivity.class);
-                    startActivity(intent);
+                    Toast.makeText(MainActivity.this, "Here is a toast!", 
+                                   Toast.LENGTH_LONG).show();
+                    // List<Alarm> alarmlist = mAdapter.getAlarms();
+                    // alarmlist.add(new Alarm());
+                    // mAdapter.notifyDataSetChanged();
+                    mAdapter.add(new Alarm());
+
+                    // Intent intent = new Intent(getApplicationContext(),
+                    //                            AlarmAddActivity.class);
+                    // startActivity(intent);
+
                     // AddAlarmFragment addalarm = new AddAlarmFragment();
                     // AlarmDaysDialogFragment days = new AlarmDaysDialogFragment();
                     // FragmentManager manager = MainActivity.this.getSupportFragmentManager();
@@ -134,17 +144,42 @@ public class MainActivity
                     // // timePicker.show(getSupportFragmentManager(), "time picker");
                 }
             });
+
+        RecyclerView alarmlist = this.getAlarmList();
+        alarmlist.addOnScrollListener(new RecyclerView.OnScrollListener()
+            {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx,
+                                       int dy)
+                {
+                    FloatingActionButton fab = getAddAlarmButton();
+                    if ((dy > 0) && fab.isShown())
+                    {
+                        fab.hide();
+                    }
+                    else if ((dy < 0) && !fab.isShown())
+                    {
+                        fab.show();
+                    }
+                }
+            });
     }
 
     /**
      * @brief Setup the alarm list content layout.
      */
-    private void setupAlarmList(RecyclerView alarmlist, AlarmAdapter adapter)
+    private void setupAlarmList(AlarmCardAdapter adapter)
     {
+        RecyclerView alarmlist = this.getAlarmList();
         RecyclerView.LayoutManager layoutmanager = new LinearLayoutManager(this);
         alarmlist.setLayoutManager(layoutmanager);
         alarmlist.setItemAnimator(new DefaultItemAnimator());
         alarmlist.setAdapter(adapter);
+        Drawable divider = ContextCompat.getDrawable(this, R.drawable.divider);
+        DividerItemDecoration itemdecoration = new DividerItemDecoration(
+            getApplicationContext(), LinearLayoutManager.VERTICAL);
+        itemdecoration.setDrawable(divider);
+        alarmlist.addItemDecoration(itemdecoration);
     }
 
     /**

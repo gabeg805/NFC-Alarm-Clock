@@ -9,6 +9,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -72,12 +73,13 @@ public class ImageTextButton
         this.mDefaultColor = r.getColor(R.color.white);
         this.mDefaultSpacing = r.getDimension(R.dimen.sp_card);
         this.mDefaultTextSize = r.getDimension(R.dimen.tsz_card);
-        Log.e(NAME, "Defaults:");
-        Log.e(NAME, "Width="+String.valueOf(this.mDefaultWidth));
-        Log.e(NAME, "Height="+String.valueOf(this.mDefaultHeight));
-        Log.e(NAME, "Color="+String.valueOf(this.mDefaultColor));
-        Log.e(NAME, "Spacing="+String.valueOf(this.mDefaultSpacing));
-        Log.e(NAME, "TextSize="+String.valueOf(this.mDefaultTextSize));
+        // Log.e(NAME, "Defaults:");
+        // Log.e(NAME, "Width="+String.valueOf(this.mDefaultWidth));
+        // Log.e(NAME, "Height="+String.valueOf(this.mDefaultHeight));
+        // Log.e(NAME, "Color="+String.valueOf(this.mDefaultColor));
+        // Log.e(NAME, "Spacing="+String.valueOf(this.mDefaultSpacing));
+        // Log.e(NAME, "TextSize="+String.valueOf(this.mDefaultTextSize));
+        // Log.e(NAME, "\n");
     }
 
     /**
@@ -94,11 +96,12 @@ public class ImageTextButton
         Drawable src = ta.getDrawable(R.styleable.ImageTextButton_image);
         float spacing = ta.getDimension(R.styleable.ImageTextButton_spacing,
                                         this.mDefaultSpacing);
-        Log.e(NAME, "Image:");
-        Log.e(NAME, "Width="+String.valueOf(width));
-        Log.e(NAME, "Height="+String.valueOf(height));
-        Log.e(NAME, "Color="+String.valueOf(color));
-        Log.e(NAME, "Spacing="+String.valueOf(spacing));
+        // Log.e(NAME, "Image:");
+        // Log.e(NAME, "Width="+String.valueOf(width));
+        // Log.e(NAME, "Height="+String.valueOf(height));
+        // Log.e(NAME, "Color="+String.valueOf(color));
+        // Log.e(NAME, "Spacing="+String.valueOf(spacing));
+        // Log.e(NAME, "\n");
         setImage(src, width, height, color);
         setSpacing(spacing);
     }
@@ -113,10 +116,11 @@ public class ImageTextButton
         int size = ta.getDimensionPixelSize(R.styleable.ImageTextButton_textSize,
                                             (int)this.mDefaultTextSize);
         String text = ta.getString(R.styleable.ImageTextButton_text);
-        Log.e(NAME, "Text:");
-        Log.e(NAME, "Color="+String.valueOf(color));
-        Log.e(NAME, "TextSize="+String.valueOf(size));
-        Log.e(NAME, "Text="+String.valueOf(text));
+        // Log.e(NAME, "Text:");
+        // Log.e(NAME, "Color="+String.valueOf(color));
+        // Log.e(NAME, "TextSize="+String.valueOf(size));
+        // Log.e(NAME, "Text="+String.valueOf(text));
+        // Log.e(NAME, "\n");
         setText(text, color, size);
     }
 
@@ -126,6 +130,9 @@ public class ImageTextButton
     private void setImage(Drawable src, float width, float height, int color)
     {
         ImageView iv = (ImageView) findViewById(R.id.itb_image);
+        int w = (int) width;
+        int h = (int) height;
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(w, h);
         if (src == null)
         {
             throw new RuntimeException("No image was provided.");
@@ -136,8 +143,7 @@ public class ImageTextButton
         }
         iv.setImageDrawable(src);
         iv.setAdjustViewBounds(true);
-        iv.setMaxWidth((int)width);
-        iv.setMaxHeight((int)height);
+        iv.setLayoutParams(params);
         iv.setColorFilter(color);
     }
 
@@ -161,6 +167,23 @@ public class ImageTextButton
     }
 
     /**
+     * @brief Call set functions on the text view.
+     */
+    public void setText(String text)
+    {
+        TextView tv = (TextView) findViewById(R.id.itb_text);
+        if (text == null)
+        {
+            throw new RuntimeException("No text was provided.");
+        }
+        if (tv == null)
+        {
+            throw new RuntimeException("Unable to find text ID.");
+        }
+        tv.setText(text);
+    }
+
+    /**
      * @brief Set the spacing between the image and text view.
      */
     private void setSpacing(float spacing)
@@ -168,14 +191,14 @@ public class ImageTextButton
         ImageView iv = (ImageView) findViewById(R.id.itb_image);
         float left = 0;
         float right = this.toDp(spacing);
-        int wrap = LinearLayout.LayoutParams.WRAP_CONTENT;
-        Log.e(NAME, String.valueOf(spacing));
-        Log.e(NAME, String.valueOf(left));
-        Log.e(NAME, String.valueOf(right));
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(wrap,
-                                                                     wrap);
-        lp.setMargins((int)left, 0, (int)right, 0);
-        iv.setLayoutParams(lp);
+        LinearLayout.LayoutParams params = 
+            (LinearLayout.LayoutParams) iv.getLayoutParams();
+        if (params == null)
+        {
+            return;
+        }
+        params.setMargins((int)left, 0, (int)right, 0);
+        iv.setLayoutParams(params);
     }
 
     /**
