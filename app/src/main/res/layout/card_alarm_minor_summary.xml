@@ -4,7 +4,8 @@
     android:id="@+id/alarmMinorSummary"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_below="@id/alarmMajor">
+    android:layout_below="@id/alarmMajor"
+    android:layout_marginTop="@dimen/mb_card_major_minor_spacing">
     <!-- android:background="@drawable/borderhighlight" -->
 
     <TextView

@@ -15,6 +15,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+// Scrolling
+import android.support.v7.widget.LinearSmoothScroller;
+import android.support.v7.widget.LinearLayoutManager;
+
 // Enter listener
 import android.widget.TextView.OnEditorActionListener;
 import android.view.KeyEvent;
@@ -89,23 +93,25 @@ public class AlarmCardAdapter
     @Override
     public AlarmCard onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        Context context = parent.getContext();
-        View item = LayoutInflater.from(context).inflate(
-            R.layout.view_card_alarm, parent, false);
-        AlarmCard holder = new AlarmCard(mContext, item);
-        holder.init();
-        holder.setShowMenuListener();
-        holder.setExpandListener();
-        holder.setCollapseListener();
-        holder.setDeleteListener(this.DeleteListener);
-        holder.setTimePickerListener(this.TimePickerListener);
-        holder.setSwitchListener(this.SwitchListener);
-        holder.setRepeatListener(this.RepeatListener);
-        holder.setSoundSetListener(this.SoundSetListener);
-        holder.setVibrateListener(this.VibrateListener);
-        holder.setNameSetListener(this.NameSetListener);
+        // Context context = parent.getContext();
+        int layout = R.layout.view_card_alarm;
+        View item = LayoutInflater.from(this.mContext).inflate(layout, parent,
+                                                               false);
+        AlarmCard card = new AlarmCard(this.mContext, item);
+        card.init();
+        card.setShowMenuListener();
+        card.setExpandListener(this.ExpandListener);
+        card.setCollapseListener(this.CollapseListener);
+        card.setDeleteListener(this.DeleteListener);
+        card.setTimePickerListener(this.TimePickerListener);
+        card.setSwitchListener(this.SwitchListener);
+        card.setRepeatListener(this.RepeatListener);
+        card.setSoundSetListener(this.SoundSetListener);
+        card.setVibrateListener(this.VibrateListener);
+        card.setNameSetListener(this.NameSetListener);
+
         Log.e("NFCAlarmClock", "onCreateViewHolder was called.");
-        return holder;
+        return card;
     }
 
     // AFTER SETTING TIME, THIS GETS CALLED AND RESETS THE VIEWS. FIGURE OUT HOW TO BIND CORRECTLY
@@ -114,13 +120,45 @@ public class AlarmCardAdapter
      * @brief Bind the view holder.
      */
     @Override
-    public void onBindViewHolder(final AlarmCard holder, int position)
+    public void onBindViewHolder(final AlarmCard card, int position)
     {
         Log.e("NFCAlarmClock", "onBindViewHolder was called at position: "+String.valueOf(position));
         Alarm alarm = mAlarmList.get(position);
-        this.mPosition = getPosition(holder);
-        holder.setAlarm(alarm);
-        holder.collapse();
+        this.mPosition = getPosition(card);
+        card.setAlarm(alarm);
+        card.collapse();
+    }
+
+    // // Called by RecyclerView when it starts observing this Adapter.
+    // @Override
+    // public void onAttachedToRecyclerView(RecyclerView recyclerView)
+    // {
+    //     Log.e("NFCAlarmClock", "onAttachedToRecyclerView was called.");
+    //     super.onAttachedToRecyclerView(recyclerView);
+    // }
+
+    // // Called by RecyclerView when it stops observing this Adapter.
+    // @Override
+    // public void onDetachedFromRecyclerView(RecyclerView recyclerView)
+    // {
+    //     Log.e("NFCAlarmClock", "onDetachedFromRecyclerView was called.");
+    //     super.onDetachedFromRecyclerView(recyclerView);
+    // }
+
+    /**
+     * @brief Add an alarm.
+     */
+    public void add(Alarm alarm)
+    {
+        this.mAlarmList.add(alarm);
+        this.notifyItemInserted(this.getItemCount()+1);
+    }
+
+    /**
+     * @brief Setup all the AlarmCard listeners.
+     */
+    public void setListeners(AlarmCard card)
+    {
     }
 
     /**
@@ -161,8 +199,8 @@ public class AlarmCardAdapter
      */
     public int getPosition(View v)
     {
-        ViewHolder holder = (ViewHolder) v.getTag();
-        return getPosition(holder);
+        ViewHolder card = (ViewHolder) v.getTag();
+        return getPosition(card);
     }
 
     /**
@@ -185,30 +223,56 @@ public class AlarmCardAdapter
         return mRecyclerView.findViewHolderForAdapterPosition(position);
     }
 
-    // // Called by RecyclerView when it starts observing this Adapter.
-    // @Override
-    // public void onAttachedToRecyclerView(RecyclerView recyclerView)
-    // {
-    //     Log.e("NFCAlarmClock", "onAttachedToRecyclerView was called.");
-    //     super.onAttachedToRecyclerView(recyclerView);
-    // }
-
-    // // Called by RecyclerView when it stops observing this Adapter.
-    // @Override
-    // public void onDetachedFromRecyclerView(RecyclerView recyclerView)
-    // {
-    //     Log.e("NFCAlarmClock", "onDetachedFromRecyclerView was called.");
-    //     super.onDetachedFromRecyclerView(recyclerView);
-    // }
+    /**
+     * @brief Create a SmoothScroller to scroll to the specified position.
+     * 
+     * @param pos  The adapter position to scroll to.
+     */
+    public RecyclerView.SmoothScroller getSmoothScroller(int pos)
+    {
+        RecyclerView.SmoothScroller scroller =
+            new LinearSmoothScroller(mContext)
+            {
+                @Override
+                protected int getVerticalSnapPreference()
+                {
+                    return LinearSmoothScroller.SNAP_TO_START;
+                }
+            };
+        scroller.setTargetPosition(pos);
+        return scroller;
+    }
 
     /**
-     * @brief Add an alarm.
+     * @brief Expand the alarm card.
      */
-    public void add(Alarm alarm)
-    {
-        this.mAlarmList.add(alarm);
-        this.notifyItemInserted(this.getItemCount()+1);
-    }
+    View.OnClickListener ExpandListener = new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Toast.makeText(mContext, "Expanded.",
+                               Toast.LENGTH_SHORT).show();
+                AlarmCard card = (AlarmCard) v.getTag();
+                int pos = getPosition(card);
+                RecyclerView.SmoothScroller scroller = getSmoothScroller(pos);
+                card.expand();
+                mRecyclerView.getLayoutManager().startSmoothScroll(scroller);
+            }
+        };
+
+    /**
+     * @brief Collapse the alarm card.
+     */
+    View.OnClickListener CollapseListener = new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                AlarmCard card = (AlarmCard) v.getTag();
+                card.collapse();
+            }
+        };
 
     /**
      * @brief Delete the alarm card.
@@ -216,11 +280,11 @@ public class AlarmCardAdapter
     View.OnClickListener DeleteListener = new View.OnClickListener()
         {
             @Override
-            public void onClick(View view)
+            public void onClick(View v)
             {
                 Toast.makeText(mContext, "Deleted.",
                                Toast.LENGTH_SHORT).show();
-                int position = getPosition(view);
+                int position = getPosition(v);
                 mAlarmList.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(0, getItemCount());
@@ -233,14 +297,14 @@ public class AlarmCardAdapter
     View.OnClickListener TimePickerListener = new View.OnClickListener()
         {
             @Override
-            public void onClick(View view)
+            public void onClick(View v)
             {
                 Toast.makeText(mContext, "Time Set!",
                                Toast.LENGTH_SHORT).show();
-                AlarmCard holder = (AlarmCard) view.getTag();
-                Alarm alarm = getAlarm(view);
-                TextView time = holder.hourminute;
-                TextView meridian = holder.meridian;
+                AlarmCard card = (AlarmCard) v.getTag();
+                Alarm alarm = getAlarm(v);
+                TextView time = card.hourminute;
+                TextView meridian = card.meridian;
                 AlarmTimePicker dialog = new AlarmTimePicker();
                 FragmentManager manager = mActivity.getSupportFragmentManager();
                 dialog.init(alarm, time, meridian);
@@ -254,10 +318,10 @@ public class AlarmCardAdapter
     CompoundButton.OnCheckedChangeListener SwitchListener =
         new CompoundButton.OnCheckedChangeListener()
         {
-            public void onCheckedChanged(CompoundButton view,
+            public void onCheckedChanged(CompoundButton v,
                                          boolean isChecked)
             {
-                Alarm alarm = getAlarm(view);
+                Alarm alarm = getAlarm(v);
                 alarm.setEnabled(isChecked);
             }
         };
@@ -269,10 +333,10 @@ public class AlarmCardAdapter
         new CompoundButton.OnCheckedChangeListener()
         {
             @Override
-            public void onCheckedChanged(CompoundButton view,
+            public void onCheckedChanged(CompoundButton v,
                                          boolean isChecked)
             {
-                Alarm alarm = getAlarm(view);
+                Alarm alarm = getAlarm(v);
                 alarm.setRepeat(isChecked);
             }
         };
@@ -285,12 +349,12 @@ public class AlarmCardAdapter
         new View.OnClickListener()
         {
             @Override
-            public void onClick(View view)
+            public void onClick(View v)
             {
                 Toast.makeText(mContext, "Sound.",
                                Toast.LENGTH_SHORT).show();
                 
-                mPosition = getPosition(view);
+                mPosition = getPosition(v);
                 Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE,
                                 RingtoneManager.TYPE_NOTIFICATION);
@@ -311,10 +375,10 @@ public class AlarmCardAdapter
         new CompoundButton.OnCheckedChangeListener()
         {
             @Override
-            public void onCheckedChanged(CompoundButton view,
+            public void onCheckedChanged(CompoundButton v,
                                          boolean isChecked)
             {
-                Alarm alarm = getAlarm(view);
+                Alarm alarm = getAlarm(v);
                 alarm.setVibrate(isChecked);
             }
         };
@@ -326,12 +390,12 @@ public class AlarmCardAdapter
         new View.OnClickListener()
         {
             @Override
-            public void onClick(View view)
+            public void onClick(View v)
             {
                 Toast.makeText(mContext, "Named.",
                                Toast.LENGTH_SHORT).show();
 
-                mPosition = getPosition(view);
+                mPosition = getPosition(v);
 				AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 				LayoutInflater inflater = LayoutInflater.from(mContext);
 				View prompt = inflater.inflate(R.layout.dlg_alarm_name, null);
@@ -419,11 +483,11 @@ public class AlarmCardAdapter
         {
             public void onClick(DialogInterface dialog, int id)
             {
-                AlarmCard holder = (AlarmCard) getViewHolder(mPosition);
+                AlarmCard card = (AlarmCard) getViewHolder(mPosition);
                 Alarm alarm = getAlarm(mPosition);
                 String text = mEditText.getText().toString();
                 alarm.setName(text);
-                holder.name.setText(text);
+                card.name.setText(text);
             }
         };
 

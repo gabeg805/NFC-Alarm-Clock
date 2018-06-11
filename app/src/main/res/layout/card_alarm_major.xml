@@ -3,8 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/alarmMajor"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/mb_card_major_minor_spacing">
+    android:layout_height="wrap_content">
     <!-- android:background="@drawable/borderhighlight" -->
 
     <RelativeLayout

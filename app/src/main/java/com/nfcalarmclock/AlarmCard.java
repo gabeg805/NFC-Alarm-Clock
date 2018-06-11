@@ -74,6 +74,8 @@ public class AlarmCard
         this.name = (ImageTextButton) v.findViewById(R.id.alarmName);
         this.delete = (ImageTextButton) v.findViewById(R.id.alarmDelete);
 
+        this.expandbutton.setTag(this);
+        this.collapsebutton.setTag(this);
         this.time.setTag(this);
         // this.hourminute.setTag(this);
         // this.meridian.setTag(this);
@@ -105,7 +107,8 @@ public class AlarmCard
         this.summary.setEnabled(false);
         this.expandable.setVisibility(View.VISIBLE);
         this.expandable.setEnabled(true);
-        setColor(R.color.darkestGray);
+        setColor(NacUtility.getThemeAttrColor(this.context,
+                                              R.attr.colorCardExpanded));
     }
 
     /**
@@ -117,7 +120,8 @@ public class AlarmCard
         this.summary.setEnabled(true);
         this.expandable.setVisibility(View.GONE);
         this.expandable.setEnabled(false);
-        setColor(R.color.black);
+        setColor(NacUtility.getThemeAttrColor(this.context,
+                                              R.attr.colorCard));
     }
 
     /**
@@ -210,11 +214,19 @@ public class AlarmCard
     /**
      * @brief Set the color of the card.
      */
-    public void setColor(int c)
+    public void setColor(int color)
     {
-        Resources resources = context.getResources();
-        int color = resources.getColor(c);
         this.card.setCardBackgroundColor(color);
+    }
+
+    /**
+     * @brief Set the color of the card using the resource ID.
+     */
+    public void setResourceColor(int id)
+    {
+        Resources r = context.getResources();
+        int c = r.getColor(id);
+        this.setColor(c);
     }
 
     /**
@@ -233,9 +245,9 @@ public class AlarmCard
      * 
      * @details The listener is called when clicking the expand button.
      */
-    public void setExpandListener()
+    public void setExpandListener(View.OnClickListener listener)
     {
-        this.expandbutton.setOnClickListener(this.ExpandListener);
+        this.expandbutton.setOnClickListener(listener);
     }
 
     /**
@@ -243,9 +255,9 @@ public class AlarmCard
      * 
      * @details The listener is called when clicking the collapse button.
      */
-    public void setCollapseListener()
+    public void setCollapseListener(View.OnClickListener listener)
     {
-        this.collapsebutton.setOnClickListener(this.CollapseListener);
+        this.collapsebutton.setOnClickListener(listener);
     }
 
     /**
@@ -335,34 +347,6 @@ public class AlarmCard
             {
                 MenuInflater inflater = activity.getMenuInflater();
                 inflater.inflate(R.menu.alarm_card, menu);
-            }
-        };
-
-    /**
-     * @brief Expand the alarm card.
-     */
-    View.OnClickListener ExpandListener = new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                Toast.makeText(context, "Expanded.",
-                               Toast.LENGTH_SHORT).show();
-                expand();
-            }
-        };
-
-    /**
-     * @brief Collapse the alarm card.
-     */
-    View.OnClickListener CollapseListener = new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                Toast.makeText(context, "Collapsed.",
-                               Toast.LENGTH_SHORT).show();
-                collapse();
             }
         };
 

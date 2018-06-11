@@ -27,10 +27,10 @@
     <color name="pink">#ec407a</color>
     <color name="purple">#800080</color>
 
-    <color name="lightGray">#b2b2b2</color>
-    <color name="darkGray">#364852</color>
-    <color name="darkerGray">#333333</color>
-    <color name="darkestGray">#111111</color>
+    <color name="gray_light">#b2b2b2</color>
+    <color name="gray_dark">#595959</color>
+    <color name="gray_darker">#333333</color>
+    <color name="gray_darkest">#111111</color>
 
     <!-- <color name="blue">#182048</color> -->
     <color name="darkBlue">#121836</color>

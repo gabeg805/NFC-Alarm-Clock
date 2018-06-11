@@ -14,14 +14,15 @@
     <dimen name="mb_card_time">0dp</dimen>
     <dimen name="ml_card_meridian">5dp</dimen>
     <dimen name="mb_card_expand">10dp</dimen>
-    <dimen name="mb_card_major_minor_spacing">5dp</dimen>
-    <dimen name="mb_card_item_spacing">15dp</dimen>
+    <dimen name="mb_card_major_minor_spacing">6dp</dimen>
+    <dimen name="mb_card_item_spacing">14dp</dimen>
+    <dimen name="mb_card_item_half_spacing">7dp</dimen>
 
     <dimen name="tsz_card">13sp</dimen>
-    <dimen name="tsz_card_time">32sp</dimen>
+    <dimen name="tsz_card_time">38sp</dimen>
     <dimen name="tsz_card_meridian">14sp</dimen>
     <dimen name="tsz_card_repeat">11sp</dimen>
-    <dimen name="tsz_card_days">16sp</dimen>
+    <dimen name="tsz_card_days">13sp</dimen>
 
     <dimen name="isz_card">22dp</dimen>
 
@@ -31,7 +32,7 @@
 
     <dimen name="card_expand_size">20dp</dimen>
 
-    <dimen name="circle_size">36dp</dimen>
+    <dimen name="circle_size">30dp</dimen>
     <dimen name="mr_card_circle">16dp</dimen>
 
     <dimen name="fab_margin">16dp</dimen>

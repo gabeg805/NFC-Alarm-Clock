@@ -2,15 +2,21 @@
 <selector
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:state_pressed="false">
+    <item android:state_pressed="true">
         <shape android:shape="oval">
-            <solid android:color="#fa09ad"/>
+            <solid android:color="?attr/colorCardFocus"/>
         </shape>
     </item>
 
-    <item android:state_pressed="true">
+    <item android:state_focused="true">
         <shape android:shape="oval">
-            <solid android:color="#c20586"/>
+            <solid android:color="?attr/colorCard"/>
+        </shape>
+    </item>
+
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="?attr/colorCardExpanded"/>
         </shape>
     </item>
 

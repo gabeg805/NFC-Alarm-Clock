@@ -1,28 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable
-        name="ImageTextButton">
+    <attr name="colorCard" format="reference" />
+    <attr name="colorCardExpanded" format="reference" />
+    <attr name="colorCardDivider" format="reference" />
+    <attr name="colorCardDrawable" format="reference" />
+    <attr name="colorCardText" format="reference" />
+    <attr name="colorCardFocus" format="reference" />
+    <attr name="colorCardFocusText" format="reference" />
 
-        <attr name="imageWidth" format="reference|dimension" />
-        <attr name="imageHeight" format="reference|dimension" />
-        <attr name="imageColor" format="reference|color" />
-        <attr name="image" format="reference" />
-        <attr name="textColor" format="reference|color" />
-        <attr name="textSize" format="reference|dimension" />
-        <attr name="text" format="reference|string" />
-        <attr name="spacing" format="reference|dimension" />
+
+    <!-- <declare-styleable name="NacSharedAttr"> -->
+        <attr name="nacWidth" format="reference|dimension" />
+        <attr name="nacHeight" format="reference|dimension" />
+        <attr name="nacDrawable" format="reference" />
+        <attr name="nacDrawableWidth" format="reference|dimension" />
+        <attr name="nacDrawableHeight" format="reference|dimension" />
+        <attr name="nacDrawableColor" format="reference|color" />
+        <attr name="nacTextSize" format="reference|dimension" />
+        <attr name="nacTextColor" format="reference|color" />
+        <attr name="nacText" format="reference|string" />
+    <!-- </declare-styleable> -->
+
+    <declare-styleable name="ImageTextButton">
+
+        <attr name="nacDrawableWidth" />
+        <attr name="nacDrawableHeight" />
+        <attr name="nacDrawableColor" />
+        <attr name="nacDrawable" />
+        <attr name="nacTextColor" />
+        <attr name="nacTextSize" />
+        <attr name="nacText" />
+        <attr name="nacDrawableTextSpacing" />
 
     </declare-styleable>
 
-    <declare-styleable
-        name="DayOfWeekButtons">
+    <declare-styleable name="DayOfWeekButtons">
 
-        <attr name="widthz" format="reference|dimension" />
-        <attr name="heightz" format="reference|dimension" />
-        <attr name="drawableColorz" format="reference|color" />
-        <attr name="textColorz" format="reference|color" />
-        <attr name="textSizez" format="reference|dimension" />
+        <attr name="nacWidth" />
+        <attr name="nacHeight" />
+        <attr name="nacDrawableColor" />
+        <attr name="nacTextColor" />
+        <attr name="nacTextSize" />
 
     </declare-styleable>
 

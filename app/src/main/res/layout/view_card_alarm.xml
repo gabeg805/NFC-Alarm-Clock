@@ -8,7 +8,7 @@
         android:id="@+id/view_card_alarm"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardBackgroundColor="@color/black"
+        app:cardBackgroundColor="?attr/colorCard"
         android:elevation="@dimen/card_alarm_elevation">
 
         <RelativeLayout
@@ -20,9 +20,7 @@
             android:layout_marginEnd="@dimen/mr_card">
 
             <include layout="@layout/card_alarm_major" />
-
             <include layout="@layout/card_alarm_minor_summary" />
-
             <include layout="@layout/card_alarm_minor_expand" />
 
         </RelativeLayout>
