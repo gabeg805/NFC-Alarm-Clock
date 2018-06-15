@@ -33,10 +33,12 @@ public class MainActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_main);
-        mAdapter = new AlarmCardAdapter(this);
+        this.deleteDatabase(NacDatabaseContract.DATABASE_NAME);
+        this.mAdapter = new AlarmCardAdapter(this);
         setupAddAlarmButton();
         setupAlarmList(mAdapter);
-        buildAlarmList(mAdapter);
+        // buildAlarmList(mAdapter);
+        this.mAdapter.build();
     }
 
     @Override
@@ -76,36 +78,6 @@ public class MainActivity
             break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Adding few alarm for testing
-     */
-    private void buildAlarmList(AlarmCardAdapter adapter)
-    {
-        adapter.add(new Alarm("Mon,Tue,Wed,Thu", 13, 0));
-        adapter.add(new Alarm("Sat,Sun", 8, 1));
-        adapter.add(new Alarm("Thu,Fri,Sat", 11, 2));
-        adapter.add(new Alarm("Everyday", 12, 3));
-        adapter.add(new Alarm("Weekend", 14, 4));
-        adapter.add(new Alarm("Weekdays", 1, 5));
-        adapter.add(new Alarm("Mon,Wed,Fri", 11, 6));
-        adapter.add(new Alarm("Tue,Thu", 14, 7));
-        adapter.add(new Alarm("Sun,Wed,Fri", 11, 8));
-        adapter.add(new Alarm("Wed,Thu,Fri,Sat,Sun", 17, 9));
-
-        // List<Alarm> alarmlist = adapter.getAlarms();
-        // alarmlist.add(new Alarm("Mon,Tue,Wed,Thu", 13, 0));
-        // alarmlist.add(new Alarm("Sat,Sun", 8, 1));
-        // alarmlist.add(new Alarm("Thu,Fri,Sat", 11, 2));
-        // alarmlist.add(new Alarm("Everyday", 12, 3));
-        // alarmlist.add(new Alarm("Weekend", 14, 4));
-        // alarmlist.add(new Alarm("Weekdays", 1, 5));
-        // alarmlist.add(new Alarm("Mon,Wed,Fri", 11, 6));
-        // alarmlist.add(new Alarm("Tue,Thu", 14, 7));
-        // alarmlist.add(new Alarm("Sun,Wed,Fri", 11, 8));
-        // alarmlist.add(new Alarm("Wed,Thu,Fri,Sat,Sun", 17, 9));
-        // adapter.notifyDataSetChanged();
     }
 
     /**

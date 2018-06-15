@@ -36,8 +36,10 @@ public class DayOfWeekButtons
     private int mButtonWidth;
     private int mButtonHeight;
     private int[] mButtonColor;
+    private int mButtonColorInitial;
     private int mTextSize;
     private int[] mTextColor;
+    private int mTextColorInitial;
     private final int mLength = 7;
 
     /**
@@ -155,6 +157,7 @@ public class DayOfWeekButtons
         {
             this.mButtonColor[i] = value;
         }
+        this.mButtonColorInitial = this.mButtonColor[0];
     }
 
     /**
@@ -184,6 +187,85 @@ public class DayOfWeekButtons
         for (int i=0;i < this.mLength; i++)
         {
             this.mTextColor[i] = value;
+        }
+        this.mTextColorInitial = this.mTextColor[0];
+    }
+
+    /**
+     * @brief Set an onClick listener for each of the day of week buttons.
+     */
+    public void setOnClickListener(View.OnClickListener listener)
+    {
+        Button b;
+        if (this.mButtons == null)
+        {
+            throw new RuntimeException("Unable to find button views.");
+        }
+        NacUtility.printf("Length : %d", this.mLength);
+        for (int i=0; i < this.mLength; i++)
+        {
+            NacUtility.printf("Setting listener : %d", i);
+            b = this.mButtons[i];
+            b.setOnClickListener(listener);
+        }
+    }
+
+    /**
+     * @brief Enable a button.
+     * 
+     * @details Sets the button color to the initial color of the text, and the
+     *          text is set to the initial color of the button.
+     * 
+     * @param b  The button to enable.
+     */
+    public void enableButton(int i)
+    {
+        this.mButtonColor[i] = this.mTextColorInitial;
+        this.mTextColor[i] = this.mButtonColorInitial;
+        this.setButtonColor(i);
+        this.setTextColor(i);
+    }
+
+    /**
+     * @brief Disable a button.
+     * 
+     * @details Sets the button color to its initial color, and the same is true
+     *          for the text.
+     * 
+     * @param b  The button to disable.
+     */
+    public void disableButton(int i)
+    {
+        this.mButtonColor[i] = this.mButtonColorInitial;
+        this.mTextColor[i] = this.mTextColorInitial;
+        this.setButtonColor(i);
+        this.setTextColor(i);
+    }
+
+    /**
+     * @brief Inverse the color of the drawable and text.
+     * 
+     * @details When the button is set to its initial color, its state is
+     *          off. As a result, returning False indicates it is off.
+     * 
+     * @param b  The button to toggle.
+     * 
+     * @return True when the button is enabled and False when the button is
+     *         disabled.
+     */
+    public boolean toggleButton(Button b)
+    {
+        int i = (int) b.getTag();
+        this.setInverseColor(i);
+        this.setButtonColor(i);
+        this.setTextColor(i);
+        if (this.mButtonColor[i] == this.mButtonColorInitial)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
         }
     }
 
@@ -216,7 +298,7 @@ public class DayOfWeekButtons
             b.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.mTextSize);
             b.setPadding(0, 0, 0, 0);
             b.setPaddingRelative(0, 0, 0, 0);
-            b.setOnClickListener(this.DayOfWeekButtonListener);
+            // b.setOnClickListener(this.DayOfWeekButtonListener);
             b.setTag(i);
         }
     }
@@ -259,19 +341,6 @@ public class DayOfWeekButtons
     }
 
     /**
-     * @brief Inverse the color of the drawable and text.
-     * 
-     * @param b  The button to toggle.
-     */
-    private void toggleButton(Button b)
-    {
-        int i = (int) b.getTag();
-        this.setInverseColor(i);
-        this.setButtonColor(i);
-        this.setTextColor(i);
-    }
-
-    /**
      * @brief Determine the spacing between buttons.
      * 
      * @return The spacing between the different buttons.
@@ -287,17 +356,17 @@ public class DayOfWeekButtons
         return (int) spacing;
     }
 
-    /**
-     * @brief Button click listener.
-     */
-    private View.OnClickListener DayOfWeekButtonListener =
-        new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                toggleButton((Button)v);
-            }
-        };
+    // /**
+    //  * @brief Button click listener.
+    //  */
+    // private View.OnClickListener DayOfWeekButtonListener =
+    //     new View.OnClickListener()
+    //     {
+    //         @Override
+    //         public void onClick(View v)
+    //         {
+    //             toggleButton((Button)v);
+    //         }
+    //     };
 
 }

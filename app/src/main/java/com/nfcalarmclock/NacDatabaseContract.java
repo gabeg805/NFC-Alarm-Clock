@@ -4,7 +4,7 @@ import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-public final class AlarmDatabaseContract
+public final class NacDatabaseContract
 {
 
     public static final String AUTHORITY = "com.nfcalarmclock";
@@ -13,10 +13,11 @@ public final class AlarmDatabaseContract
     public static final String DATABASE_NAME = "NFCAlarms.db";
     public static final int DATABASE_VERSION = 1;
 
-    /* @details To prevent someone from accidentally instantiating the contract
+    /**
+     * @details To prevent someone from accidentally instantiating the contract
      *          class, make the constructor private.
      */
-    private AlarmDatabaseContract()
+    private NacDatabaseContract()
     {
     }
 
@@ -29,13 +30,15 @@ public final class AlarmDatabaseContract
         }
 
         public static final String TABLE_NAME = "NfcAlarms";
-
-        public static final String COLUMN_ID = "Id";
         public static final String COLUMN_ENABLED = "Enabled";
         public static final String COLUMN_HOUR = "Hour";
         public static final String COLUMN_MINUTE = "Minute";
+        public static final String COLUMN_DAYS = "Days";
+        public static final String COLUMN_REPEAT = "Repeat";
+        public static final String COLUMN_VIBRATE = "Vibrate";
+        public static final String COLUMN_SOUND = "Sound";
+        public static final String COLUMN_NAME = "Name";
         public static final String COLUMN_NFCTAG = "NfcTag";
-        public static final String COLUMN_MUSIC = "Music";
 
         /*
          * URI Definitions
@@ -59,7 +62,7 @@ public final class AlarmDatabaseContract
         /**
          * The default sort order for this table
          */
-        public static final String DEFAULT_SORT_ORDER = COLUMN_ID + " ASC";
+        public static final String DEFAULT_SORT_ORDER = COLUMN_HOUR + " ASC";
 
         /*
          * MIME type definitions
@@ -84,12 +87,15 @@ public final class AlarmDatabaseContract
             "CREATE TABLE " + TABLE_NAME
             + " ("
             + _ID + " INTEGER PRIMARY KEY,"
-            + COLUMN_ID + " TEXT,"
             + COLUMN_ENABLED + " INTEGER,"
             + COLUMN_HOUR + " INTEGER,"
             + COLUMN_MINUTE + " INTEGER,"
-            + COLUMN_NFCTAG + " TEXT," 
-            + COLUMN_MUSIC + " TEXT"
+            + COLUMN_DAYS + " INTEGER,"
+            + COLUMN_REPEAT + " INTEGER,"
+            + COLUMN_VIBRATE + " INTEGER,"
+            + COLUMN_SOUND + " TEXT,"
+            + COLUMN_NAME + " TEXT,"
+            + COLUMN_NFCTAG + " TEXT"
             + ");";
 
         /**
@@ -102,12 +108,15 @@ public final class AlarmDatabaseContract
          * Array of all the columns. Makes for cleaner code
          */
         public static final String[] KEY_ARRAY = {
-            COLUMN_ID,
             COLUMN_ENABLED,
             COLUMN_HOUR,
             COLUMN_MINUTE,
-            COLUMN_NFCTAG,
-            COLUMN_MUSIC
+            COLUMN_DAYS,
+            COLUMN_REPEAT,
+            COLUMN_VIBRATE,
+            COLUMN_SOUND,
+            COLUMN_NAME,
+            COLUMN_NFCTAG
         };
     }
 

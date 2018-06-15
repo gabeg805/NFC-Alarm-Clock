@@ -77,14 +77,20 @@ public class AlarmCardAdapter
     private EditText mEditText;
 
     /**
+     * @brief The database.
+     */
+    private NacDatabase mDatabase;
+
+    /**
      * @brief Alarm adapter.
      */
     public AlarmCardAdapter(Context context)
     {
         this.mActivity = (AppCompatActivity) context;
         this.mContext = context;
-        this.mAlarmList = new ArrayList<>();
+        // this.mAlarmList = new ArrayList<>();
         this.mRecyclerView = this.mActivity.findViewById(R.id.content_alarm_list);
+        this.mDatabase = new NacDatabase(context);
     }
 
     /**
@@ -106,6 +112,7 @@ public class AlarmCardAdapter
         card.setTimePickerListener(this.TimePickerListener);
         card.setSwitchListener(this.SwitchListener);
         card.setRepeatListener(this.RepeatListener);
+        card.setRepeatDaysListener();
         card.setSoundSetListener(this.SoundSetListener);
         card.setVibrateListener(this.VibrateListener);
         card.setNameSetListener(this.NameSetListener);
@@ -114,7 +121,8 @@ public class AlarmCardAdapter
         return card;
     }
 
-    // AFTER SETTING TIME, THIS GETS CALLED AND RESETS THE VIEWS. FIGURE OUT HOW TO BIND CORRECTLY
+    // AFTER SETTING TIME, THIS GETS CALLED AND RESETS THE VIEWS. FIGURE OUT
+    // HOW TO BIND CORRECTLY
 
     /**
      * @brief Bind the view holder.
@@ -144,6 +152,24 @@ public class AlarmCardAdapter
     //     Log.e("NFCAlarmClock", "onDetachedFromRecyclerView was called.");
     //     super.onDetachedFromRecyclerView(recyclerView);
     // }
+
+    /**
+     * @brief Build the alarm list.
+     */
+    public void build()
+    {
+        Alarm a1 = new Alarm(11, 0);
+        Alarm a2 = new Alarm(12, 0);
+        Alarm a3 = new Alarm(13, 0);
+        a1.setVibrate(true);
+        a2.setDays(Alarm.Days.SATURDAY|Alarm.Days.SUNDAY);
+        a3.setDays(Alarm.Days.TUESDAY|Alarm.Days.WEDNESDAY|Alarm.Days.THURSDAY);
+        a3.setName("Oh Yeah!");
+        this.mDatabase.add(a1);
+        this.mDatabase.add(a2);
+        this.mDatabase.add(a3);
+        this.mAlarmList = this.mDatabase.read();
+    }
 
     /**
      * @brief Add an alarm.
