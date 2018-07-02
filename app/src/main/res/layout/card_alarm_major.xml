@@ -7,12 +7,12 @@
     <!-- android:background="@drawable/borderhighlight" -->
 
     <RelativeLayout
-        android:id="@+id/alarmTimeSet"
+        android:id="@+id/nacTimeContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/alarmTime"
+            android:id="@+id/nacTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
@@ -20,11 +20,11 @@
             />
 
         <TextView
-            android:id="@+id/alarmMeridian"
+            android:id="@+id/nacMeridian"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/alarmTime"
-            android:layout_alignBaseline="@id/alarmTime"
+            android:layout_toEndOf="@id/nacTime"
+            android:layout_alignBaseline="@id/nacTime"
             android:layout_marginStart="@dimen/ml_card_meridian"
             android:textColor="@color/white"
             android:textSize="@dimen/tsz_card_meridian"
@@ -33,7 +33,7 @@
     </RelativeLayout>
 
     <Switch
-        android:id="@+id/alarmSwitch"
+        android:id="@+id/nacSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"

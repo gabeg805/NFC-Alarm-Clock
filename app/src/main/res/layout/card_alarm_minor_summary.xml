@@ -9,7 +9,7 @@
     <!-- android:background="@drawable/borderhighlight" -->
 
     <TextView
-        android:id="@+id/alarmRepeatText"
+        android:id="@+id/nacRepeatText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -20,7 +20,7 @@
         />
 
     <ImageView
-        android:id="@+id/alarmExpandButton"
+        android:id="@+id/nacExpand"
         android:layout_width="@dimen/card_expand_size"
         android:layout_height="@dimen/card_expand_size"
         android:layout_marginEnd="15dp"

@@ -11,7 +11,7 @@
     <!-- android:background="@drawable/borderhighlight" -->
 
     <CheckBox
-        android:id="@+id/alarmRepeatCheck"
+        android:id="@+id/nacRepeatCheckbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/mb_card_item_spacing"
@@ -23,33 +23,33 @@
         />
 
     <com.nfcalarmclock.DayOfWeekButtons
-        android:id="@+id/alarmRepeatDays"
+        android:id="@+id/nacRepeatDays"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/alarmRepeatCheck"
+        android:layout_below="@id/nacRepeatCheckbox"
         android:layout_marginBottom="@dimen/mb_card_item_spacing"
         android:gravity="center"
         />
 
     <RelativeLayout
-        android:id="@+id/alarmSoundAndVibrate"
+        android:id="@+id/nacSoundAndVibrate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/alarmRepeatDays"
+        android:layout_below="@id/nacRepeatDays"
         android:layout_marginBottom="@dimen/mb_card_item_spacing">
 
         <com.nfcalarmclock.ImageTextButton
-            android:id="@+id/alarmSound"
+            android:id="@+id/nacSound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/alarmVibrateCheck"
+            android:layout_alignBottom="@id/nacVibrate"
             android:layout_marginBottom="5dp"
             app:nacDrawable="@mipmap/baseline_music_note_white_18dp"
             app:nacText="Cuckoo clock"
             />
 
         <CheckBox
-            android:id="@+id/alarmVibrateCheck"
+            android:id="@+id/nacVibrate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -64,20 +64,19 @@
     </RelativeLayout>
 
     <com.nfcalarmclock.ImageTextButton
-        android:id="@+id/alarmName"
-        android:layout_width="wrap_content"
+        android:id="@+id/nacName"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/alarmSoundAndVibrate"
+        android:layout_below="@id/nacSoundAndVibrate"
         android:layout_marginBottom="@dimen/mb_card_item_half_spacing"
         app:nacDrawable="@mipmap/baseline_label_white_24dp"
-        app:nacText="Good Morning!"
         />
 
     <View
         android:id="@+id/alarmExpandDivider"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_below="@id/alarmName"
+        android:layout_below="@id/nacName"
         android:layout_marginBottom="@dimen/mb_card_item_spacing"
         android:background="?attr/colorCardDivider"
         />
@@ -89,7 +88,7 @@
         android:layout_marginTop="5dp">
 
         <com.nfcalarmclock.ImageTextButton
-            android:id="@+id/alarmDelete"
+            android:id="@+id/nacDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:nacDrawable="@mipmap/baseline_delete_white_24dp"
@@ -97,11 +96,11 @@
             />
 
         <ImageView
-            android:id="@+id/alarmCollapseButton"
+            android:id="@+id/nacCollapse"
             android:layout_width="@dimen/card_expand_size"
             android:layout_height="@dimen/card_expand_size"
             android:layout_marginEnd="15dp"
-            android:layout_alignBaseline="@id/alarmDelete"
+            android:layout_alignBaseline="@id/nacDelete"
             android:layout_alignParentEnd="true"
             android:layout_gravity="end"
             android:src="@mipmap/baseline_keyboard_arrow_up_white_18dp"
