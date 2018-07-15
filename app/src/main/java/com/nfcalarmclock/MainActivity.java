@@ -41,7 +41,8 @@ public class MainActivity
 
         this.mRecyclerView.init();
 		this.mFloatingButton.init();
-		this.mRecyclerView.setItems(this.mAdapter, this.mFloatingButton);
+		this.mRecyclerView.setAdapter(this.mAdapter);
+		this.mRecyclerView.setScrollListener(this.mFloatingButton);
         this.mAdapter.build();
     }
 

@@ -1,2 +1,4 @@
 Notes:
 	- When creating new alarm, highlight it and scroll down to it.
+	- Recycler view private classes can be moved to their own files.
+

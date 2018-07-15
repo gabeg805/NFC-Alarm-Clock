@@ -3,16 +3,10 @@ package com.nfcalarmclock;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
-import android.util.DisplayMetrics;
-
 import android.view.View.MeasureSpec;
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
-import android.view.ViewGroup.LayoutParams;
 
 /**
- * @brief Expand and collapse regions in the alarm card.
+ * @brief NFC Alarm Clock expand and collapse regions in the alarm card.
  */
 public class NacCardRegion
 {
@@ -37,12 +31,22 @@ public class NacCardRegion
      */
     private ImageView mCollapseButton;
 
-	private int mExpandedHeight = 0;
-	private int mCollapsedHeight = 0;
-	private boolean mStuff = false;
+	/**
+	 * @brief The original height of the region when it is collapsed. This
+	 * 		  corresponds to the height of the summary region.
+	 */
+	private int mFromHeight = 0;
+
+	/**
+	 * @brief The height once the region is expanded. This corresponds to the
+	 * 		  height of the extra region.
+	 */
+	private int mToHeight = 0;
 
     /**
-     * @brief Constructor.
+     * @brief Expand and collapse regions and buttons.
+	 *
+	 * @param  r  The root view of the corresponding alarm card.
      */
     public NacCardRegion(View r)
     {
@@ -57,139 +61,79 @@ public class NacCardRegion
 	 */
 	public void init()
 	{
-        this.mExtraRegion.setVisibility(View.GONE);
-        this.mExtraRegion.setEnabled(false);
-
+		measureFromHeight();
+		measureToHeight();
 		collapse();
-
-		mSummaryRegion.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-					MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-		mCollapsedHeight = mSummaryRegion.getMeasuredHeight();
-		NacUtility.printf("Setting Collapsed Height : %d", mCollapsedHeight);
-
-		expand();
-		//mCard.requestLayout();
-
-		mExtraRegion.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-					MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-		mExpandedHeight = mExtraRegion.getMeasuredHeight();
-		NacUtility.printf("Setting Expanded Height : %d", mExpandedHeight);
-
-		collapse();
-		mStuff = true;
 	}
 
 	/**
-	 * @brief Expand the card region.
+	 * @brief Expand the alarm card and animate the view.
 	 */
-	public void expand()
+	public void expandAndAnimate()
+	{
+		expand();
+		NacSlideAnimation slide = new NacSlideAnimation(mExtraRegion,
+														mFromHeight,
+														mToHeight);
+		mExtraRegion.startAnimation(slide);
+	}
+
+	/**
+	 * @brief Collapse the alarm card and animate the view.
+	 */
+	public void collapseAndAnimate()
+	{
+		collapse();
+		NacSlideAnimation slide = new NacSlideAnimation(mSummaryRegion,
+														mToHeight,
+														mFromHeight);
+		mSummaryRegion.startAnimation(slide);
+	}
+
+	/**
+	 * @brief Expand the alarm card without animating the view.
+	 */
+	private void expand()
 	{
         this.mSummaryRegion.setVisibility(View.GONE);
         this.mSummaryRegion.setEnabled(false);
         this.mExtraRegion.setVisibility(View.VISIBLE);
         this.mExtraRegion.setEnabled(true);
-
-		if (mStuff)
-		{
-        Animation a = new Animation()
-        {
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-				NacUtility.printf("Interpolated Time : %f", interpolatedTime);
-				int height = 0;
-
-				if (interpolatedTime == 1)
-				{
-					height = LayoutParams.WRAP_CONTENT;
-				}
-				else
-				{
-					height = (int)(mExpandedHeight * interpolatedTime);
-				}
-
-                mExtraRegion.getLayoutParams().height = height;
-                mExtraRegion.requestLayout();
-				NacUtility.printf("Expand Transformation 1: %d", mExtraRegion.getLayoutParams().height);
-				NacUtility.printf("Expand Transformation 2: %d", mSummaryRegion.getLayoutParams().height);
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-
-		int duration = (int)(mExpandedHeight / mExtraRegion.getContext().getResources().getDisplayMetrics().density);
-		NacUtility.printf("Duration : %d", duration);
-        a.setDuration(duration);
-        mExtraRegion.startAnimation(a);
-		}
 	}
 
 	/**
-	 * @brief Collapse the card region.
+	 * @brief Collapse the alarm card without animating the view.
 	 */
-	public void collapse()
+	private void collapse()
 	{
         this.mSummaryRegion.setVisibility(View.VISIBLE);
         this.mSummaryRegion.setEnabled(true);
         this.mExtraRegion.setVisibility(View.GONE);
         this.mExtraRegion.setEnabled(false);
-
-		if (mStuff)
-		{
-        final int initialHeight = mExtraRegion.getMeasuredHeight();
-		NacUtility.printf("Initial Height : %d", initialHeight);
-
-        Animation a = new Animation()
-        {
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                if (interpolatedTime == 1)
-				{
-                    //mCard.setVisibility(View.GONE);
-                }
-				else
-				{
-					int height = initialHeight - (int)(initialHeight * interpolatedTime);
-					if (height < mCollapsedHeight)
-					{
-						height = mCollapsedHeight;
-					}
-                    mSummaryRegion.getLayoutParams().height = height;
-                    mSummaryRegion.requestLayout();
-					NacUtility.printf("Collapse Transformation 1: %d", mExtraRegion.getLayoutParams().height);
-					NacUtility.printf("Collapse Transformation 2: %d", mSummaryRegion.getLayoutParams().height);
-                }
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-
-		int duration = (int)(initialHeight / mSummaryRegion.getContext().getResources().getDisplayMetrics().density);
-		NacUtility.printf("Collapse duration : %d", duration);
-        a.setDuration(duration);
-        mSummaryRegion.startAnimation(a);
-		}
 	}
 
 	/**
-	 * @brief Return the expand region.
+	 * @brief Measure the height of the collapsed region.
 	 */
-	public RelativeLayout getExpandRegion()
+	private void measureFromHeight()
 	{
-		return this.mExtraRegion;
+		collapse();
+		mSummaryRegion.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+							   MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+		mFromHeight = mSummaryRegion.getMeasuredHeight();
+		NacUtility.printf("Setting Collapsed Height : %d", mFromHeight);
 	}
 
 	/**
-	 * @brief Return the collapse region.
+	 * @brief Measure the height of the expanded region.
 	 */
-	public RelativeLayout getCollapseRegion()
+	private void measureToHeight()
 	{
-		return this.mSummaryRegion;
+		expand();
+		mExtraRegion.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+							 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+		mToHeight = mExtraRegion.getMeasuredHeight();
+		NacUtility.printf("Setting Expanded Height : %d", mToHeight);
 	}
 
 	/**

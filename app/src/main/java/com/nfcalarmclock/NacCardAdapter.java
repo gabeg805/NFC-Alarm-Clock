@@ -115,7 +115,6 @@ public class NacCardAdapter
         NacCard card = new NacCard(context, root);
 		card.focus();
 		card.setDeleteListener(this);
-		card.setHeight();
 		return card;
     }
 

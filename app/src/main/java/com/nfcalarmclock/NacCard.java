@@ -12,7 +12,6 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnCreateContextMenuListener;
 import android.widget.LinearLayout;
 
-import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.LinearLayoutManager;
 
 import android.graphics.Color;
@@ -21,7 +20,6 @@ import android.graphics.drawable.TransitionDrawable;
 import android.transition.Transition;
 import android.os.Handler;
 
-import android.util.DisplayMetrics;
 
 import android.view.View.MeasureSpec;
 import android.view.animation.Animation;
@@ -48,9 +46,6 @@ public class NacCard
     public NacCardName mName;
     public NacCardDelete mDelete;
 
-	private int mExpandedHeight = 0;
-	private int mCollapsedHeight = 0;
-
     /**
      * @brief The alarm data used in populating this alarm card.
      */
@@ -75,26 +70,6 @@ public class NacCard
         this.mName = new NacCardName(c, r);
         this.mDelete = new NacCardDelete(r);
 
-	}
-
-	public void setHeight()
-	{
-		//mRegion.collapse();
-
-		//mCard.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-		//			MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-		//mCollapsedHeight = mCard.getMeasuredHeight();
-		//NacUtility.printf("Setting Collapsed Height : %d", mCollapsedHeight);
-
-		//mRegion.expand();
-		////mCard.requestLayout();
-
-		//mCard.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-		//			MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-		//mExpandedHeight = mCard.getMeasuredHeight();
-		//NacUtility.printf("Setting Expanded Height : %d", mExpandedHeight);
-
-		//mRegion.collapse();
 	}
 
     /**
@@ -155,42 +130,8 @@ public class NacCard
     public void expand()
     {
 		scrollToTop();
-		mRegion.expand();
+		mRegion.expandAndAnimate();
 		backgroundExpanded();
-
-        //mCard.getLayoutParams().height = mCollapsedHeight;
-        //Animation a = new Animation()
-        //{
-        //    @Override
-        //    protected void applyTransformation(float interpolatedTime, Transformation t) {
-		//		NacUtility.printf("Interpolated Time : %f", interpolatedTime);
-		//		int height = 0;
-
-		//		if (interpolatedTime == 1)
-		//		{
-		//			height = LayoutParams.WRAP_CONTENT;
-		//		}
-		//		else
-		//		{
-		//			height = (int)(mExpandedHeight * interpolatedTime);
-		//		}
-
-        //        mCard.getLayoutParams().height = height;
-        //        mCard.requestLayout();
-		//		NacUtility.printf("Transformation : %d", mCard.getLayoutParams().height);
-        //    }
-
-        //    @Override
-        //    public boolean willChangeBounds() {
-        //        return true;
-        //    }
-        //};
-
-		//int duration = (int)(mExpandedHeight / mCard.getContext().getResources().getDisplayMetrics().density);
-		//NacUtility.printf("Duration : %d", duration);
-        //a.setDuration(duration);
-        //mCard.startAnimation(a);
-
     }
 
     /**
@@ -198,44 +139,8 @@ public class NacCard
      */
     public void collapse()
     {
-		mRegion.collapse();
+		mRegion.collapseAndAnimate();
 		backgroundReset();
-		//mCard.animate().translationY(mCollapsedHeight);
-
-        //final int initialHeight = mCard.getMeasuredHeight();
-		//NacUtility.printf("Initial Height : %d", initialHeight);
-
-        //Animation a = new Animation()
-        //{
-        //    @Override
-        //    protected void applyTransformation(float interpolatedTime, Transformation t) {
-        //        if (interpolatedTime == 1)
-		//		{
-        //            //mCard.setVisibility(View.GONE);
-        //        }
-		//		else
-		//		{
-		//			int height = initialHeight - (int)(initialHeight * interpolatedTime);
-		//			if (height < mCollapsedHeight)
-		//			{
-		//				height = mCollapsedHeight;
-		//			}
-        //            mCard.getLayoutParams().height = height;
-        //            mCard.requestLayout();
-		//			NacUtility.printf("Collapse Transformation : %d", mCard.getLayoutParams().height);
-        //        }
-        //    }
-
-        //    @Override
-        //    public boolean willChangeBounds() {
-        //        return true;
-        //    }
-        //};
-
-		//int duration = (int)(initialHeight / mCard.getContext().getResources().getDisplayMetrics().density);
-		//NacUtility.printf("Collapse duration : %d", duration);
-        //a.setDuration(duration);
-        //mCard.startAnimation(a);
     }
 
 	/**
@@ -244,9 +149,8 @@ public class NacCard
 	public void scrollToTop()
 	{
 		int pos = getAdapterPosition();
-		RecyclerView.SmoothScroller scroller = getSmoothScroller(pos);
         RecyclerView rv = (RecyclerView) mActivity.findViewById(R.id.content_alarm_list);
-        rv.getLayoutManager().startSmoothScroll(scroller);
+        rv.getLayoutManager().startSmoothScroll(new NacSmoothScroller(mContext, pos));
 		//rv.scrollToPosition(pos);
 	}
 
@@ -285,27 +189,27 @@ public class NacCard
 	/**
 	 * @brief Create a smooth scroller that scrolls to the top of the screen.
 	 */
-    public RecyclerView.SmoothScroller getSmoothScroller(int pos)
-    {
-		RecyclerView.SmoothScroller scroller =
-			new LinearSmoothScroller(mContext)
-		{
-			private final float mpi = 100f;
-			@Override
-			protected int getVerticalSnapPreference()
-			{
-				return LinearSmoothScroller.SNAP_TO_START;
-			}
+    //public RecyclerView.SmoothScroller getSmoothScroller(int pos)
+    //{
+	//	RecyclerView.SmoothScroller scroller =
+	//		new LinearSmoothScroller(mContext)
+	//	{
+	//		private final float mpi = 100f;
+	//		@Override
+	//		protected int getVerticalSnapPreference()
+	//		{
+	//			return LinearSmoothScroller.SNAP_TO_START;
+	//		}
 
-			@Override
-			protected float calculateSpeedPerPixel(DisplayMetrics dm)
-			{
-				return mpi / dm.densityDpi;
-			}
-		};
-		scroller.setTargetPosition(pos);
-		return scroller;
-    }
+	//		@Override
+	//		protected float calculateSpeedPerPixel(DisplayMetrics dm)
+	//		{
+	//			return mpi / dm.densityDpi;
+	//		}
+	//	};
+	//	scroller.setTargetPosition(pos);
+	//	return scroller;
+    //}
 
 	/**
 	 * @brief Set listener to delete the card.
