@@ -3,7 +3,6 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +15,9 @@ import java.util.List;
 /**
  * @brief Alarm card adapter.
  */
-public class AlarmCardAdapter
-    extends RecyclerView.Adapter<AlarmCard>
+public class NacCardAdapter
+    extends RecyclerView.Adapter<NacCard>
+	implements View.OnClickListener
 {
 
     /**
@@ -36,16 +36,6 @@ public class AlarmCardAdapter
     private List<Alarm> mAlarmList;
 
     /**
-     * @brief Current adapter position.
-     */
-    private int mPosition;
-
-    /**
-     * @brief The RecyclerView containing the adapter.
-     */
-    private RecyclerView mRecyclerView;
-
-    /**
      * @brief The database.
      */
     private NacDatabase mDatabase;
@@ -58,19 +48,15 @@ public class AlarmCardAdapter
     /**
      * @brief Alarm adapter.
      */
-    public AlarmCardAdapter(Context context)
+    public NacCardAdapter(Context c)
     {
-        this.mActivity = (AppCompatActivity) context;
-        this.mContext = context;
-        this.mRecyclerView = this.mActivity.findViewById(R.id.content_alarm_list);
-        this.mDatabase = new NacDatabase(context);
+        this.mActivity = (AppCompatActivity) c;
+        this.mContext = c;
+        this.mDatabase = new NacDatabase(c);
     }
 
-    /**
-     * @brief Build the alarm list.
-     */
-    public void build()
-    {
+	public void unitTest()
+	{
         Alarm a1 = new Alarm(11, 0);
         Alarm a2 = new Alarm(12, 0);
         Alarm a3 = new Alarm(13, 0);
@@ -81,6 +67,14 @@ public class AlarmCardAdapter
         this.mDatabase.add(a1);
         this.mDatabase.add(a2);
         this.mDatabase.add(a3);
+	}
+
+    /**
+     * @brief Build the alarm list.
+     */
+    public void build()
+    {
+		unitTest();
         this.mAlarmList = this.mDatabase.read();
         this.mSize = this.mAlarmList.size();
     }
@@ -93,43 +87,60 @@ public class AlarmCardAdapter
         this.mSize += 1;
         this.mAlarmList.add(alarm);
         this.notifyItemInserted(this.mSize);
+		((RecyclerView)mActivity.findViewById(R.id.content_alarm_list)).scrollToPosition(this.mSize-1);
     }
 
-    /**
-     * @brief Remove the alarm.
-     */
-    public void remove(int pos)
-    {
+	/**
+	 * @brief Delete the alarm at the given position.
+	 */
+	public void delete(int pos)
+	{
         this.mSize -= 1;
         mAlarmList.remove(pos);
         notifyItemRemoved(pos);
         notifyItemRangeChanged(0, this.mSize);
-    }
+	}
 
     /**
      * @brief Create the view holder.
      */
     @Override
-    public AlarmCard onCreateViewHolder(ViewGroup parent, int viewType)
+    public NacCard onCreateViewHolder(ViewGroup parent, int viewType)
     {
+        NacUtility.printf("onCreateViewHolder was called.");
         Context context = parent.getContext();
         int layout = R.layout.view_card_alarm;
         View root = LayoutInflater.from(context).inflate(layout, parent,
                                                          false);
-        return new AlarmCard(this, context, root);
+        NacCard card = new NacCard(context, root);
+		card.focus();
+		card.setDeleteListener(this);
+		card.setHeight();
+		return card;
     }
 
     /**
      * @brief Bind the view holder.
      */
     @Override
-    public void onBindViewHolder(final AlarmCard card, int position)
+    public void onBindViewHolder(final NacCard card, int pos)
     {
-        NacUtility.printf("onBindViewHolder was called at position: %d", position);
-        Alarm alarm = mAlarmList.get(position);
-        card.init(alarm);
-        card.collapse();
+        NacUtility.printf("onBindViewHolder was called at position: %d", pos);
+        Alarm alarm = mAlarmList.get(pos);
+        card.init(alarm, pos);
+        //card.collapse();
     }
+
+    /**
+     * @brief Capture the click event on the delete button, and delete the card
+	 *        it belongs to.
+     */
+	@Override
+	public void onClick(View v)
+	{
+		int pos = (int) v.getTag();
+		delete(pos);
+	}
 
     /**
      * @brief Return the number of items in the recycler view.

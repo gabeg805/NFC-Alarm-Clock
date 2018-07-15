@@ -22,14 +22,9 @@ public class NacCardRepeat
 {
 
     /**
-     * @brief Context.
+     * @brief Alarm.
      */
-    private Context mContext;
-
-    /**
-     * @brief Alarm card.
-     */
-    private AlarmCard mCard;
+    private Alarm mAlarm;
 
     /**
      * @brief Text of days to repeat.
@@ -49,14 +44,11 @@ public class NacCardRepeat
     /**
      * @brief Constructor.
      */
-    public NacCardRepeat(AlarmCard card, Context context)
+    public NacCardRepeat(View r)
     {
-        this.mContext = context;
-        this.mCard = card;
-        View root = card.getRoot();
-        this.mText = (TextView) root.findViewById(R.id.nacRepeatText);
-        this.mCheckbox = (CheckBox) root.findViewById(R.id.nacRepeatCheckbox);
-        this.mDays = (DayOfWeekButtons) root.findViewById(R.id.nacRepeatDays);
+        this.mText = (TextView) r.findViewById(R.id.nacRepeatText);
+        this.mCheckbox = (CheckBox) r.findViewById(R.id.nacRepeatCheckbox);
+        this.mDays = (DayOfWeekButtons) r.findViewById(R.id.nacRepeatDays);
         this.mDays.setOnClickListener(this);
         this.mCheckbox.setOnCheckedChangeListener(this);
     }
@@ -64,11 +56,12 @@ public class NacCardRepeat
     /**
      * @brief Initialize the repeat text, checkbox, and day buttons.
      */
-    public void init()
+    public void init(Alarm alarm)
     {
-        Alarm alarm = this.mCard.getAlarm();
+		this.mAlarm = alarm;
         this.mText.setText(alarm.getDaysString());
         this.mCheckbox.setChecked(alarm.getRepeat());
+
         if (!alarm.getRepeat())
         {
             return;
@@ -92,9 +85,7 @@ public class NacCardRepeat
     @Override
     public void onCheckedChanged(CompoundButton v, boolean state)
     {
-        Alarm alarm = mCard.getAlarm();
-        alarm.setRepeat(state);
-        NacUtility.printf("Repeat : %b", state);
+        mAlarm.setRepeat(state);
     }
 
     /**
@@ -108,11 +99,11 @@ public class NacCardRepeat
         {
             return;
         }
-        Alarm alarm = mCard.getAlarm();
-        byte day = alarm.indexToDay((int)v.getTag());
+
+        byte day = mAlarm.indexToDay((int)v.getTag());
         mDays.toggleButton((Button)v);
-        alarm.toggleDay(day);
-        mText.setText(alarm.getDaysString());
+        mAlarm.toggleDay(day);
+        mText.setText(mAlarm.getDaysString());
     }
 
 }

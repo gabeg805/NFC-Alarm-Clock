@@ -10,6 +10,7 @@
 
         <item name="colorCard">?android:attr/colorBackground</item>
         <item name="colorCardExpanded">@color/gray_darkest</item>
+        <item name="colorCardHighlight">@color/gray_darker</item>
         <item name="colorCardDivider">@color/gray_darker</item>
         <item name="colorCardDrawable">@color/white</item>
         <item name="colorCardText">@color/white</item>

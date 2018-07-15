@@ -13,14 +13,9 @@ public class NacCardSwitch
 {
 
     /**
-     * @brief Context.
+     * @brief Alarm.
      */
-     private Context mContext;
-
-    /**
-     * @brief Alarm card.
-     */
-     private AlarmCard mCard;
+     private Alarm mAlarm;
 
     /**
      * @brief Switch.
@@ -30,21 +25,19 @@ public class NacCardSwitch
     /**
      * @brief Constructor.
      */
-    public NacCardSwitch(AlarmCard card, Context context)
+    public NacCardSwitch(View r)
     {
-        this.mContext = context;
-        this.mCard = card;
-        View root = card.getRoot();
-        this.mSwitch = (Switch) root.findViewById(R.id.nacSwitch);
+        this.mSwitch = (Switch) r.findViewById(R.id.nacSwitch);
         this.mSwitch.setOnCheckedChangeListener(this);
     }
 
     /**
      * @brief Initialize the Switch.
      */
-    public void init()
+    public void init(Alarm alarm)
     {
-        this.mSwitch.setChecked(mCard.getAlarm().getEnabled());
+		this.mAlarm = alarm;
+        this.mSwitch.setChecked(this.mAlarm.getEnabled());
     }
 
     /**
@@ -53,9 +46,7 @@ public class NacCardSwitch
     @Override
     public void onCheckedChanged(CompoundButton v, boolean state)
     {
-        Alarm alarm = mCard.getAlarm();
-        alarm.setEnabled(state);
-        NacUtility.printf("Switch : %b", state);
+        mAlarm.setEnabled(state);
     }
 
 }

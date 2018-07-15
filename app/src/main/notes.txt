@@ -1,0 +1,2 @@
+Notes:
+	- When creating new alarm, highlight it and scroll down to it.

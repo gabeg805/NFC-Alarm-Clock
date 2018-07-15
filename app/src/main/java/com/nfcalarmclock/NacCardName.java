@@ -25,9 +25,9 @@ public class NacCardName
      private Context mContext;
 
     /**
-     * @brief Alarm card.
+     * @brief Alarm.
      */
-     private AlarmCard mCard;
+     private Alarm mAlarm;
 
     /**
      * @brief Name.
@@ -42,22 +42,21 @@ public class NacCardName
     /**
      * @brief Constructor.
      */
-    public NacCardName(AlarmCard card, Context context)
+    public NacCardName(Context c, View r)
     {
-        this.mContext = context;
-        this.mCard = card;
-        View root = card.getRoot();
+        this.mContext = c;
         this.mNameDialog = new NacCardNameDialog();
-        this.mName = (ImageTextButton) root.findViewById(R.id.nacName);
+        this.mName = (ImageTextButton) r.findViewById(R.id.nacName);
         this.mName.setOnClickListener(this);
     }
 
     /**
      * @brief Initialize the name.
      */
-    public void init()
+    public void init(Alarm alarm)
     {
-        this.mName.setText(this.mCard.getAlarm().getName());
+		this.mAlarm = alarm;
+        this.mName.setText(this.mAlarm.getName());
     }
 
     /**
@@ -104,8 +103,7 @@ public class NacCardName
         public void saveData()
         {
             String text = mEditText.getText().toString();
-            Alarm alarm = mCard.getAlarm();
-            alarm.setName(text);
+            mAlarm.setName(text);
             mName.setText(text);
         }
 
@@ -114,9 +112,8 @@ public class NacCardName
          */
         private void initEditText(View v)
         {
-            Alarm alarm = mCard.getAlarm();
             this.mEditText = (EditText) v.findViewById(R.id.nacNameInput);
-            this.mEditText.setText(alarm.getName());
+            this.mEditText.setText(mAlarm.getName());
             this.mEditText.selectAll();
             this.mEditText.setOnEditorActionListener(this);
             this.mEditText.setRawInputType(InputType.TYPE_CLASS_TEXT);

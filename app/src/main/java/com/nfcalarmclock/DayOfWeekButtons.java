@@ -201,10 +201,8 @@ public class DayOfWeekButtons
         {
             throw new RuntimeException("Unable to find button views.");
         }
-        NacUtility.printf("Length : %d", this.mLength);
         for (int i=0; i < this.mLength; i++)
         {
-            NacUtility.printf("Setting listener : %d", i);
             b = this.mButtons[i];
             b.setOnClickListener(listener);
         }

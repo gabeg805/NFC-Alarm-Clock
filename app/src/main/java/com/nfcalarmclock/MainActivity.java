@@ -14,10 +14,16 @@ import android.view.View;
  */
 public class MainActivity
     extends AppCompatActivity
+	implements View.OnClickListener
 {
 
     private NacCardRecyclerView mRecyclerView;
-    private NacFloatingButton mFloatingButton;
+	private NacFloatingButton mFloatingButton;
+
+    /**
+     * @brief Alarm card adapter.
+     */
+    private NacCardAdapter mAdapter;
 
     /**
      * @brief Create the application.
@@ -28,11 +34,25 @@ public class MainActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_main);
         this.deleteDatabase(NacDatabaseContract.DATABASE_NAME);
+
+		this.mAdapter = new NacCardAdapter(this);
+		this.mFloatingButton = new NacFloatingButton(this);
         this.mRecyclerView = new NacCardRecyclerView(this);
-        this.mFloatingButton = new NacFloatingButton(this);
-        this.mRecyclerView.init(this.mFloatingButton);
-        this.mFloatingButton.init(this.mRecyclerView);
+
+        this.mRecyclerView.init();
+		this.mFloatingButton.init();
+		this.mRecyclerView.setItems(this.mAdapter, this.mFloatingButton);
+        this.mAdapter.build();
     }
+
+	/**
+	 * @brief Add a new alarm when the floating action button is clicked.
+	 */
+	@Override
+	public void onClick(View v)
+	{
+        this.mAdapter.add(new Alarm());
+	}
 
     /**
      * @brief The back button was pressed.
@@ -73,7 +93,7 @@ public class MainActivity
             startActivity(intent);
             return true;
         default:
-            Toast.makeText(this, "Yo this is the default thing", 
+            Toast.makeText(this, "Yo this is the default thing",
                            Toast.LENGTH_LONG).show();
             break;
         }

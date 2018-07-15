@@ -13,16 +13,10 @@ public class NacCardVibrate
     implements CompoundButton.OnCheckedChangeListener
 {
 
-    /**
-     * @brief Context.
-     */
-     private Context mContext;
-
-    /**
-     * @brief Alarm card.
-     */
-     private AlarmCard mCard;
-
+	/**
+	 * @brief Alarm.
+	 */
+	private Alarm mAlarm;
     /**
      * @brief Vibrate checkbox.
      */
@@ -31,21 +25,19 @@ public class NacCardVibrate
     /**
      * @brief Constructor.
      */
-    public NacCardVibrate(AlarmCard card, Context context)
+    public NacCardVibrate(View r)
     {
-        this.mContext = context;
-        this.mCard = card;
-        View root = card.getRoot();
-        this.mVibrate = (CheckBox) root.findViewById(R.id.nacVibrate);
+        this.mVibrate = (CheckBox) r.findViewById(R.id.nacVibrate);
         this.mVibrate.setOnCheckedChangeListener(this);
     }
 
     /**
      * @brief Initialize the vibrate checkbox.
      */
-    public void init()
+    public void init(Alarm alarm)
     {
-        this.mVibrate.setChecked(mCard.getAlarm().getVibrate());
+		this.mAlarm = alarm;
+        this.mVibrate.setChecked(this.mAlarm.getVibrate());
     }
 
     /**
@@ -54,8 +46,7 @@ public class NacCardVibrate
     @Override
     public void onCheckedChanged(CompoundButton v, boolean state)
     {
-        Alarm alarm = mCard.getAlarm();
-        alarm.setVibrate(state);
+        mAlarm.setVibrate(state);
         NacUtility.printf("Vibrate : %b", state);
     }
 

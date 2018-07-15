@@ -23,9 +23,9 @@ public class NacCardTime
     private Context mContext;
 
     /**
-     * @brief Alarm card.
+     * @brief Alarm.
      */
-    private AlarmCard mCard;
+    private Alarm mAlarm;
 
     /**
      * @brief Container of the time and meridian views.
@@ -45,38 +45,36 @@ public class NacCardTime
     /**
      * @brief Constructor.
      */
-    public NacCardTime(AlarmCard card, Context context)
+    public NacCardTime(Context context, View r)
     {
         this.mContext = context;
-        this.mCard = card;
-        View root = card.getRoot();
-        this.mContainer = (RelativeLayout) root.findViewById(R.id.nacTimeContainer);
-        this.mTime = (TextView) root.findViewById(R.id.nacTime);
-        this.mMeridian = (TextView) root.findViewById(R.id.nacMeridian);
+        this.mContainer = (RelativeLayout) r.findViewById(R.id.nacTimeContainer);
+        this.mTime = (TextView) r.findViewById(R.id.nacTime);
+        this.mMeridian = (TextView) r.findViewById(R.id.nacMeridian);
         this.mContainer.setOnClickListener(this);
     }
 
     /**
      * @brief Initialize the time.
      */
-    public void init()
+    public void init(Alarm alarm)
     {
-        set();
+		this.mAlarm = alarm;
+        this.setTime();
     }
 
     /**
      * @brief Set the time.
      */
-    public void set()
+    public void setTime()
     {
-        Alarm alarm = this.mCard.getAlarm();
         Locale locale = Locale.getDefault();
-        int h = alarm.getHour();
-        int m = alarm.getMinute();
+        int h = this.mAlarm.getHour();
+        int m = this.mAlarm.getMinute();
         boolean format = DateFormat.is24HourFormat(this.mContext);
-        String hour = String.valueOf(alarm.toFormat(h, format));
+        String hour = String.valueOf(this.mAlarm.toFormat(h, format));
         String minute = String.format(locale, "%02d", m);
-        String meridian = alarm.getMeridian(h, format);
+        String meridian = this.mAlarm.getMeridian(h, format);
         this.mTime.setText(hour+":"+minute);
         this.mMeridian.setText(meridian);
     }
@@ -88,10 +86,9 @@ public class NacCardTime
     public void onClick(View v)
     {
         AppCompatActivity activity = (AppCompatActivity) mContext;
-        Alarm alarm = mCard.getAlarm();
         AlarmTimePicker dialog = new AlarmTimePicker();
         FragmentManager manager = activity.getSupportFragmentManager();
-        dialog.init(alarm, mTime, mMeridian);
+        dialog.init(mAlarm, mTime, mMeridian);
         dialog.show(manager, "AlarmTimePicker");
     }
 

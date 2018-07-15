@@ -8,18 +8,7 @@ import android.widget.Toast;
  * @brief Delete the alarm and its card.
  */
 public class NacCardDelete
-    implements View.OnClickListener
 {
-
-    /**
-     * @brief Context.
-     */
-     private Context mContext;
-
-    /**
-     * @brief Alarm card.
-     */
-     private AlarmCard mCard;
 
     /**
      * @brief Delete button.
@@ -29,24 +18,25 @@ public class NacCardDelete
     /**
      * @brief Constructor.
      */
-    public NacCardDelete(AlarmCard card, Context context)
+    public NacCardDelete(View r)
     {
-        this.mContext = context;
-        this.mCard = card;
-        View root = card.getRoot();
-        this.mDelete = (ImageTextButton) root.findViewById(R.id.nacDelete);
-        this.mDelete.setOnClickListener(this);
+        this.mDelete = (ImageTextButton) r.findViewById(R.id.nacDelete);
     }
 
-    /**
-     * @brief Delete the alarm card.
-     */
-    @Override
-    public void onClick(View v)
-    {
-        Toast.makeText(mContext, "Deleted alarm.",
-                       Toast.LENGTH_SHORT).show();
-        mCard.remove();
-    }
+	/**
+	 * @brief Initialize the delete button.
+	 */
+	public void init(int pos)
+	{
+		this.mDelete.setTag(pos);
+	}
+
+	/**
+	 * @brief Set the click listener for the delete button.
+	 */
+	public void setListener(View.OnClickListener listener)
+	{
+		this.mDelete.setOnClickListener(listener);
+	}
 
 }

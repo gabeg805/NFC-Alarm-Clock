@@ -31,9 +31,9 @@ public class NacCardSound
      private Context mContext;
 
     /**
-     * @brief Alarm card.
+     * @brief Alarm.
      */
-     private AlarmCard mCard;
+     private Alarm mAlarm;
 
     /**
      * @brief Sound.
@@ -53,21 +53,20 @@ public class NacCardSound
     /**
      * @brief Constructor.
      */
-    public NacCardSound(AlarmCard card, Context context)
+    public NacCardSound(Context c, View r)
     {
-        this.mContext = context;
-        this.mCard = card;
-        View root = card.getRoot();
+        this.mContext = c;
         this.mSoundDialog = new NacCardSoundDialog();
-        this.mSound = (ImageTextButton) root.findViewById(R.id.nacSound);
+        this.mSound = (ImageTextButton) r.findViewById(R.id.nacSound);
         this.mSound.setOnClickListener(this);
     }
 
     /**
      * @brief Initialize the sound view.
      */
-    public void init()
+    public void init(Alarm alarm)
     {
+		this.mAlarm = alarm;
         // this.mSound.setText(this.mCard.getAlarm().getSound());
     }
 
@@ -150,8 +149,7 @@ public class NacCardSound
         // public void saveData()
         // {
         //     String text = mEditText.getText().toString();
-        //     Alarm alarm = mCard.getAlarm();
-        //     alarm.setName(text);
+        //     malarm.setName(text);
         //     mName.setText(text);
         // }
 

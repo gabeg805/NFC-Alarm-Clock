@@ -2,12 +2,14 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 /**
  * @brief Recycler view for all alarm cards.
@@ -16,73 +18,56 @@ public class NacCardRecyclerView
 {
 
     /**
-     * @brief Activity.
+     * @brief Context.
      */
-    private AppCompatActivity mActivity;
+    private Context mContext;
 
     /**
      * @brief Container for displaying the list of alarm cards.
      */
     private RecyclerView mRecyclerView;
 
-    /**
-     * @brief Alarm card adapter.
-     */
-    private AlarmCardAdapter mAdapter;
+	/**
+	 * @brief Floating action button to add new alarms.
+	 */
+	private NacFloatingButton mFloatingButton;
 
     /**
      * @brief Constructor.
      */
-    public NacCardRecyclerView(AppCompatActivity activity)
+    public NacCardRecyclerView(Context c)
     {
-        this.mActivity = activity;
-        this.mRecyclerView = (RecyclerView) activity.findViewById(R.id.content_alarm_list);
-        this.mAdapter = new AlarmCardAdapter(activity);
-    }
-
-    /**
-     * @brief Add an alarm to the adapter.
-     */
-    public void addAlarm()
-    {
-        this.mAdapter.add(new Alarm());
-    }
-
-    /**
-     * @brief Initialize the recycler view and alarm adapter.
-     */
-    public void init(NacFloatingButton fb)
-    {
-        this.initRecyclerView(fb);
-        this.initAdapter();
+		AppCompatActivity a = (AppCompatActivity) c;
+        this.mContext = c;
+        this.mRecyclerView = (RecyclerView) a.findViewById(R.id.content_alarm_list);
     }
 
     /**
      * @brief Initialize the recycler view
      */
-    private void initRecyclerView(NacFloatingButton fb)
+    public void init()
     {
-        NacLayoutManager manager = new NacLayoutManager(this.mActivity, fb);
+        NacLayoutManager manager = new NacLayoutManager(this.mContext);
         DefaultItemAnimator anim = new DefaultItemAnimator();
-        Drawable div = ContextCompat.getDrawable(this.mActivity,
+        Drawable div = ContextCompat.getDrawable(this.mContext,
                                                  R.drawable.divider);
-        DividerItemDecoration decor = new DividerItemDecoration(this.mActivity,
+        DividerItemDecoration decor = new DividerItemDecoration(this.mContext,
                                                                 LinearLayoutManager.VERTICAL);
         decor.setDrawable(div);
-        this.mRecyclerView.setAdapter(this.mAdapter);
         this.mRecyclerView.setLayoutManager(manager);
         this.mRecyclerView.setItemAnimator(anim);
         this.mRecyclerView.addItemDecoration(decor);
-        this.mRecyclerView.addOnScrollListener(new NacScrollListener(fb));
+        this.mRecyclerView.addOnScrollListener(new NacScrollListener());
     }
 
-    /**
-     * @brief Initialize the alarm adapter
-     */
-    private void initAdapter()
-    {
-        this.mAdapter.build();
-    }
+	/**
+	 * @brief Set the recycler view adapter and floating action button.
+	 */
+	public void setItems(NacCardAdapter adapter, NacFloatingButton fb)
+	{
+		this.mFloatingButton = fb;
+		this.mRecyclerView.setAdapter(adapter);
+	}
 
     /**
      * @brief Layout manager for the recycler view to catch over scrolling so as
@@ -93,17 +78,11 @@ public class NacCardRecyclerView
     {
 
         /**
-         * @brief Floating action button.
-         */
-        private NacFloatingButton mFloatingButton;
-
-        /**
          * @brief Constructor.
          */
-        public NacLayoutManager(Context c, NacFloatingButton fb)
+        public NacLayoutManager(Context c)
         {
             super(c);
-            this.mFloatingButton = fb;
         }
 
         /**
@@ -116,6 +95,7 @@ public class NacCardRecyclerView
         {
             int scrollRange = super.scrollVerticallyBy(dx, recycler, state);
             int overscroll = dx - scrollRange;
+
             if (overscroll > 0)
             {
                 if (mFloatingButton.isShown())
@@ -130,6 +110,7 @@ public class NacCardRecyclerView
                     mFloatingButton.show();
                 }
             }
+
             return scrollRange;
         }
 
@@ -143,19 +124,6 @@ public class NacCardRecyclerView
     private class NacScrollListener
         extends RecyclerView.OnScrollListener
     {
-
-        /**
-         * @brief The floating button.
-         */
-        private NacFloatingButton mFloatingButton;
-
-        /**
-         * @brief Constructor.
-         */
-        public NacScrollListener(NacFloatingButton fb)
-        {
-            this.mFloatingButton = fb;
-        }
 
         /**
          * @brief Hide the floating button when scrolling down and display it when

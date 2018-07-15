@@ -3,6 +3,7 @@
 
     <attr name="colorCard" format="reference" />
     <attr name="colorCardExpanded" format="reference" />
+    <attr name="colorCardHighlight" format="reference" />
     <attr name="colorCardDivider" format="reference" />
     <attr name="colorCardDrawable" format="reference" />
     <attr name="colorCardText" format="reference" />
