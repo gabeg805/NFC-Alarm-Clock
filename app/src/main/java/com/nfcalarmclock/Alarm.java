@@ -14,7 +14,6 @@ public class Alarm
      */
     public class Days
     {
-
         public final static byte NONE = 0;
         public final static byte SUNDAY = 1;
         public final static byte MONDAY = 2;
@@ -25,15 +24,64 @@ public class Alarm
         public final static byte SATURDAY = 64;
     }
 
+	/**
+	 * @brief The database in which to save the alarm.
+	 */
+	private NacDatabase mDatabase = null;
+
+	/**
+	 * @brief The database ID number.
+	 */
+	private long mId = -1;
+
+	/**
+	 * @brief Indicates whether the alarm is enabled or not.
+	 */
     private boolean mEnabled = true;
+
+	/**
+	 * @brief The hour at which to run the alarm.
+	 */
     private int mHour = 0;
+
+	/**
+	 * @brief The minute at which to run the alarm.
+	 */
     private int mMinute = 0;
+
+	/**
+	 * @brief The days on which to run the alarm.
+	 */
     private int mDays = Days.MONDAY|Days.TUESDAY|Days.WEDNESDAY|Days.THURSDAY|Days.FRIDAY;
+
+	/**
+	 * @brief Indicates whether the alarm should be repeated or not.
+	 */
     private boolean mRepeat = true;
+
+	/**
+	 * @brief Indicates whether the phone should vibrate when the alarm is run.
+	 */
     private boolean mVibrate = false;
+
+	/**
+	 * @brief The sound to play when the alarm is run.
+	 */
     private String mSound = "";
+
+	/**
+	 * @brief The name of the alarm.
+	 */
     private String mName = "";
+
+	/**
+	 * @brief The interval of the alarm.
+	 */
     private long mInterval = -1;
+
+	/**
+	 * @brief The alarm type.
+	 */
     private int mType = AlarmManager.RTC_WAKEUP;
 
     /**
@@ -42,8 +90,8 @@ public class Alarm
     public Alarm()
     {
         Calendar cal = Calendar.getInstance();
-        this.mHour = cal.get(Calendar.HOUR_OF_DAY);
-        this.mMinute = cal.get(Calendar.MINUTE);
+        this.setHour(cal.get(Calendar.HOUR_OF_DAY));
+        this.setMinute(cal.get(Calendar.MINUTE));
     }
 
     /**
@@ -51,8 +99,8 @@ public class Alarm
      */
     public Alarm(int hour, int minute)
     {
-        this.mHour = hour;
-        this.mMinute = minute;
+        this.setHour(hour);
+        this.setMinute(minute);
     }
 
     /**
@@ -61,7 +109,7 @@ public class Alarm
     public Alarm(int hour, int minute, int days)
     {
         this(hour, minute);
-        this.mDays = days;
+        this.setDays(days);
     }
 
     /**
@@ -70,8 +118,21 @@ public class Alarm
     public Alarm(String name, int hour, int minute)
     {
         this(hour, minute);
-        this.mName = name;
+        this.setName(name);
     }
+
+	/**
+	 * @brief Update the database.
+	 */
+	public void update()
+	{
+		if (this.mDatabase == null)
+		{
+			return;
+		}
+
+		this.mDatabase.update(this);
+	}
 
     /**
      * @brief Print all values in the alarm object.
@@ -81,7 +142,7 @@ public class Alarm
         NacUtility.printf("Enabled : %b", this.mEnabled);
         NacUtility.printf("Hour    : %d", this.mHour);
         NacUtility.printf("Minute  : %d", this.mMinute);
-        NacUtility.printf("Days    : 0x%x", this.mDays);
+        NacUtility.printf("Days    : %s", this.getDaysString());
         NacUtility.printf("Repeat  : %b", this.mRepeat);
         NacUtility.printf("Vibrate : %b", this.mVibrate);
         NacUtility.printf("Sound   : %s", this.mSound);
@@ -98,12 +159,14 @@ public class Alarm
     public int toFormat(int hour, boolean is24hourformat)
     {
         int converted = hour;
+
         if (!is24hourformat)
         {
             if (hour >= 12)
             {
                 converted = hour % 12;
             }
+
             if (converted == 0)
             {
                 converted = 12;
@@ -138,13 +201,21 @@ public class Alarm
         }
     }
 
-    /**
-     * @brief Toggle a day.
-     */
-    public void toggleDay(int day)
-    {
-        this.mDays ^= day;
-    }
+	/**
+	 * @brief Set the database.
+	 */
+	public void setDatabase(NacDatabase db)
+	{
+		this.mDatabase = db;
+	}
+
+	/**
+	 * @brief Set the database row ID number.
+	 */
+	public void setId(long id)
+	{
+		this.mId = id;
+	}
 
     /**
      * @brief Set the enabled/disabled status of the alarm.
@@ -152,6 +223,7 @@ public class Alarm
     public void setEnabled(boolean state)
     {
         this.mEnabled = state;
+		this.update();
     }
 
     /**
@@ -160,6 +232,7 @@ public class Alarm
     public void setHour(int hour)
     {
         this.mHour = hour;
+		this.update();
     }
 
     /**
@@ -168,6 +241,7 @@ public class Alarm
     public void setMinute(int minute)
     {
         this.mMinute = minute;
+		this.update();
     }
 
     /**
@@ -176,6 +250,16 @@ public class Alarm
     public void setDays(int days)
     {
         this.mDays = days;
+		this.setRepeat(true);
+		this.update();
+    }
+
+    /**
+     * @brief Toggle a day.
+     */
+    public void toggleDay(int day)
+    {
+		this.setDays(mDays^day);
     }
 
     /**
@@ -184,6 +268,7 @@ public class Alarm
     public void setRepeat(boolean state)
     {
         this.mRepeat = state;
+		this.update();
     }
 
     /**
@@ -193,6 +278,7 @@ public class Alarm
     public void setVibrate(boolean state)
     {
         this.mVibrate = state;
+		this.update();
     }
 
     /**
@@ -201,6 +287,7 @@ public class Alarm
     public void setSound(String sound)
     {
         this.mSound = sound;
+		this.update();
     }
 
     /**
@@ -209,6 +296,7 @@ public class Alarm
     public void setName(String name)
     {
         this.mName = name;
+		this.update();
     }
 
     /**
@@ -226,6 +314,22 @@ public class Alarm
     {
         this.mType = type;
     }
+
+	/**
+	 * @brief Return the database.
+	 */
+	public NacDatabase getDatabase()
+	{
+		return this.mDatabase;
+	}
+
+	/**
+	 * @brief Return the database row ID number.
+	 */
+	public long getId()
+	{
+		return this.mId;
+	}
 
     /**
      * @brief Return the enabled flag for the alarm.
@@ -270,6 +374,7 @@ public class Alarm
         String[] names = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
         byte[] values = {Days.SUNDAY, Days.MONDAY, Days.TUESDAY, Days.WEDNESDAY,
                          Days.THURSDAY, Days.FRIDAY, Days.SATURDAY};
+
         for (int i=0; i < values.length; i++)
         {
             if ((this.mDays & values[i]) != 0)
@@ -281,6 +386,7 @@ public class Alarm
                 conv += names[i];
             }
         }
+
         return conv;
     }
 
@@ -342,6 +448,7 @@ public class Alarm
         {
             return "";
         }
+
         if (hour < 12)
         {
             return "AM";

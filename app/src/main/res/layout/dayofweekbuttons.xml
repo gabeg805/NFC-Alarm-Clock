@@ -6,7 +6,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
-        android:text="S"
+        android:text="@string/dowb_sun"
         android:textColor="@color/white"
         android:gravity="center"
         style="?android:attr/buttonBarButtonStyle"
@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
-        android:text="M"
+        android:text="@string/dowb_mon"
         android:gravity="center"
         style="?android:attr/buttonBarButtonStyle"
         />
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         style="?android:attr/buttonBarButtonStyle"
         android:fontFamily="sans-serif-medium"
-        android:text="T"
+        android:text="@string/dowb_tue"
         />
 
     <Button
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         style="?android:attr/buttonBarButtonStyle"
         android:fontFamily="sans-serif-medium"
-        android:text="W"
+        android:text="@string/dowb_wed"
         />
 
     <Button
@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         style="?android:attr/buttonBarButtonStyle"
         android:fontFamily="sans-serif-medium"
-        android:text="T"
+        android:text="@string/dowb_thu"
         />
 
     <Button
@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         style="?android:attr/buttonBarButtonStyle"
         android:fontFamily="sans-serif-medium"
-        android:text="F"
+        android:text="@string/dowb_fri"
         />
 
     <Button
@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         style="?android:attr/buttonBarButtonStyle"
         android:fontFamily="sans-serif-medium"
-        android:text="S"
+        android:text="@string/dowb_sat"
         />
 
 </merge>

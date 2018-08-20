@@ -71,14 +71,14 @@ public class NacSlideAnimation
 	{
         int newHeight;
 
-		NacUtility.printf("View Height : %d", mView.getHeight());
-		NacUtility.printf("To Height   : %d", mToHeight);
+		//NacUtility.printf("View Height : %d", mView.getHeight());
+		//NacUtility.printf("To Height   : %d", mToHeight);
 
         if (mView.getHeight() != mToHeight)
 		{
             newHeight = (int) (mFromHeight + ((mToHeight - mFromHeight) * time));
             mView.getLayoutParams().height = newHeight;
-			NacUtility.printf("Transform Height : %d", mView.getLayoutParams().height);
+			//NacUtility.printf("Transform Height : %d", mView.getLayoutParams().height);
             mView.requestLayout();
         }
     }

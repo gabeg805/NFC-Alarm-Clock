@@ -121,7 +121,6 @@ public class NacCardRegion
 		mSummaryRegion.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
 							   MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
 		mFromHeight = mSummaryRegion.getMeasuredHeight();
-		NacUtility.printf("Setting Collapsed Height : %d", mFromHeight);
 	}
 
 	/**
@@ -133,7 +132,6 @@ public class NacCardRegion
 		mExtraRegion.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
 							 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
 		mToHeight = mExtraRegion.getMeasuredHeight();
-		NacUtility.printf("Setting Expanded Height : %d", mToHeight);
 	}
 
 	/**

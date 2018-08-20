@@ -17,7 +17,14 @@ public class MainActivity
 	implements View.OnClickListener
 {
 
-    private NacCardRecyclerView mRecyclerView;
+	/**
+	 * @brief Recycler view containing the alarm cards.
+	 */
+    private NacRecyclerView mRecyclerView;
+
+	/**
+	 * @brief Floating button to add new alarms.
+	 */
 	private NacFloatingButton mFloatingButton;
 
     /**
@@ -27,17 +34,19 @@ public class MainActivity
 
     /**
      * @brief Create the application.
+	 *
+	 * @param  savedInstanceState  The saved instance state.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_main);
-        this.deleteDatabase(NacDatabaseContract.DATABASE_NAME);
+        //this.deleteDatabase(NacDatabaseContract.DATABASE_NAME);
 
 		this.mAdapter = new NacCardAdapter(this);
 		this.mFloatingButton = new NacFloatingButton(this);
-        this.mRecyclerView = new NacCardRecyclerView(this);
+        this.mRecyclerView = new NacRecyclerView(this);
 
         this.mRecyclerView.init();
 		this.mFloatingButton.init();
@@ -48,11 +57,13 @@ public class MainActivity
 
 	/**
 	 * @brief Add a new alarm when the floating action button is clicked.
+	 *
+	 * @param  v  The view that was clicked.
 	 */
 	@Override
 	public void onClick(View v)
 	{
-        this.mAdapter.add(new Alarm());
+        this.mAdapter.add();
 	}
 
     /**
@@ -64,8 +75,24 @@ public class MainActivity
         super.onBackPressed();
     }
 
+	/**
+	 * @brief Update the database when app is closed.
+	 *
+	 * @details This will be run when user closes the app, hits the home
+	 *          button, or hits the power button.
+	 */
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		NacUtility.print("Stopping!");
+		this.mAdapter.save();
+	}
+
     /**
      * @brief Create the options menu in the action bar.
+	 *
+	 * @param  menu  The menu view.
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -77,6 +104,8 @@ public class MainActivity
     /**
      * @brief A menu item was selected. Determine which action to take depending on
      *        the item selected.
+	 *
+	 * @param  item  The menu item that was selected.
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item)

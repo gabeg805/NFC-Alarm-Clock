@@ -12,7 +12,7 @@ import android.support.v7.widget.RecyclerView;
 /**
  * @brief Recycler view for all alarm cards.
  */
-public class NacCardRecyclerView
+public class NacRecyclerView
 {
 
     /**
@@ -30,7 +30,7 @@ public class NacCardRecyclerView
 	 *
 	 * @param  c  The activity context.
      */
-    public NacCardRecyclerView(Context c)
+    public NacRecyclerView(Context c)
     {
 		AppCompatActivity a = (AppCompatActivity) c;
         this.mContext = c;

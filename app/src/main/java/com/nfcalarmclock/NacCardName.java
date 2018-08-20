@@ -7,6 +7,7 @@ import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -91,7 +92,7 @@ public class NacCardName
         public void show()
         {
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            View v = inflater.inflate(R.layout.dlg_alarm_name, null);
+            View v = inflater.inflate(R.layout.dlg_alarm_name, (ViewGroup)null);
             initDialog(v);
             initEditText(v);
         }

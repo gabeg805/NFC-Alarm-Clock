@@ -6,17 +6,19 @@
     android:orientation="vertical"
     android:paddingTop="10dp"
     android:paddingBottom="-25dp"
-    android:paddingLeft="?dialogPreferredPadding"
-    android:paddingRight="?dialogPreferredPadding">
+    android:paddingStart="?dialogPreferredPadding"
+    android:paddingEnd="?dialogPreferredPadding">
 
     <EditText
         android:id="@+id/nacNameInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="-5dp"
+        android:layout_marginStart="-5dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:maxLines="1"
-        android:maxLength="30">
+        android:maxLength="30"
+		android:inputType="text"
+		android:hint="@string/dlg_name_hint">
 
         <requestFocus />
 

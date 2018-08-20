@@ -2,12 +2,14 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/alarmMinorExpand"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@id/alarmMinorSummary"
     android:layout_marginTop="@dimen/mb_card_expand"
-    android:layout_marginBottom="@dimen/mb_card_expand">
+    android:layout_marginBottom="@dimen/mb_card_expand"
+	tools:ignore="ContentDescription,RtlSymmetry">
     <!-- android:background="@drawable/borderhighlight" -->
 
     <CheckBox
@@ -15,11 +17,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/mb_card_item_spacing"
-        android:paddingLeft="@dimen/sp_card"
+        android:paddingStart="@dimen/sp_card"
         android:buttonTint="@color/white"
         android:textColor="@color/white"
         android:textSize="@dimen/tsz_card"
-        android:text="Repeat"
+        android:text="@string/card_repeat"
         />
 
     <com.nfcalarmclock.DayOfWeekButtons
@@ -44,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/nacVibrate"
             android:layout_marginBottom="5dp"
-            app:nacDrawable="@mipmap/baseline_music_note_white_18dp"
+            app:nacDrawable="@mipmap/baseline_music_note_white_24dp"
             app:nacText="Cuckoo clock"
             />
 
@@ -54,11 +56,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_gravity="end"
-            android:paddingLeft="@dimen/sp_card"
+            android:paddingStart="@dimen/sp_card"
             android:buttonTint="@color/white"
             android:textColor="@color/white"
             android:textSize="@dimen/tsz_card"
-            android:text="Vibrate"
+            android:text="@string/card_vibrate"
             />
 
     </RelativeLayout>
@@ -69,7 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/nacSoundAndVibrate"
         android:layout_marginBottom="@dimen/mb_card_item_half_spacing"
-        app:nacDrawable="@mipmap/baseline_label_white_24dp"
+        app:nacDrawable="@mipmap/baseline_label_white_32dp"
         />
 
     <View
@@ -91,7 +93,7 @@
             android:id="@+id/nacDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:nacDrawable="@mipmap/baseline_delete_white_24dp"
+            app:nacDrawable="@mipmap/baseline_delete_white_32dp"
             app:nacText="Delete"
             />
 
@@ -103,7 +105,7 @@
             android:layout_alignBaseline="@id/nacDelete"
             android:layout_alignParentEnd="true"
             android:layout_gravity="end"
-            android:src="@mipmap/baseline_keyboard_arrow_up_white_18dp"
+            android:src="@mipmap/baseline_keyboard_arrow_up_white_24dp"
             />
 
     </RelativeLayout>

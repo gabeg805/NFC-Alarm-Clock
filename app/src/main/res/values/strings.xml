@@ -8,4 +8,22 @@
     <string name="delete">Delete</string>
     <string name="done">Done</string>
 
+	<string name="card_repeat">Repeat</string>
+	<string name="card_vibrate">Vibrate</string>
+
+	<string name="dowb_sun">S</string>
+	<string name="dowb_mon">M</string>
+	<string name="dowb_tue">T</string>
+	<string name="dowb_wed">W</string>
+	<string name="dowb_thu">T</string>
+	<string name="dowb_fri">F</string>
+	<string name="dowb_sat">S</string>
+
+	<string name="dlg_ringtone_title">Select a ringtone</string>
+	<string name="dlg_music_title">Select a song</string>
+	<string name="dlg_prompt_title">Select Alarm Sound</string>
+	<string name="dlg_prompt_ringtone">Choose ringtone&#8230;</string>
+	<string name="dlg_prompt_music">Browse music&#8230;</string>
+	<string name="dlg_name_hint">Alarm name</string>
+
 </resources>

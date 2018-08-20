@@ -60,38 +60,35 @@ public class NacDatabase
     /**
      * @brief Add to the database.
      */
-    public void add(Alarm alarm)
+    public long add(Alarm alarm)
     {
         this.setDatabase();
-        ContentValues values = new ContentValues();
-        boolean enabled = alarm.getEnabled();
-        int hour = alarm.getHour();
-        int minute = alarm.getMinute();
-        int days = alarm.getDays();
-        boolean repeat = alarm.getRepeat();
-        boolean vibrate = alarm.getVibrate();
-        String sound = alarm.getSound();
-        String name = alarm.getName();
-        values.put(NacDatabaseContract.AlarmTable.COLUMN_ENABLED, enabled);
-        values.put(NacDatabaseContract.AlarmTable.COLUMN_HOUR, hour);
-        values.put(NacDatabaseContract.AlarmTable.COLUMN_MINUTE, minute);
-        values.put(NacDatabaseContract.AlarmTable.COLUMN_DAYS, days);
-        values.put(NacDatabaseContract.AlarmTable.COLUMN_REPEAT, repeat);
-        values.put(NacDatabaseContract.AlarmTable.COLUMN_VIBRATE, vibrate);
-        values.put(NacDatabaseContract.AlarmTable.COLUMN_SOUND, sound);
-        values.put(NacDatabaseContract.AlarmTable.COLUMN_NAME, name);
-        // values.put(NacDatabaseContract.AlarmTable.COLUMN_NFCTAG, tag);
+
+		ContentValues cv = this.getContentValues(alarm);
         long id = this.mDatabase.insert(NacDatabaseContract.AlarmTable.TABLE_NAME,
-                                        null, values);
-        if (id < 0)
-        {
-            Log.e("NFCAlarmClock", "Uh oh! Error with adding to database.");
-        }
-        else
+                                        null, cv);
+
+        if (id < 0) { Log.e("NFCAlarmClock", "Uh oh! Error with adding to database."); } else
         {
             Log.e("NFCAlarmClock", "Added to database successfully!");
         }
+
+		return id;
     }
+
+	/**
+	 * @brief Update a row in the database.
+	 */
+	public void update(Alarm alarm)
+	{
+		this.setDatabase();
+
+		ContentValues cv = this.getContentValues(alarm);
+		long id = alarm.getId();
+
+		this.mDatabase.update(NacDatabaseContract.AlarmTable.TABLE_NAME, cv,
+							  "_id=?", new String[]{String.valueOf(id)});
+	}
 
     /**
      * @brief Read all alarms from the database.
@@ -99,13 +96,16 @@ public class NacDatabase
     public List<Alarm> read()
     {
         this.setDatabase();
+
         Cursor cursor = this.mDatabase.query(NacDatabaseContract.AlarmTable.TABLE_NAME,
                                              null, null, null, null, null,
                                              null);
         List<Alarm> list = new ArrayList<>();
+
         while(cursor.moveToNext())
         {
             Alarm alarm = new Alarm();
+			long id = cursor.getLong(0);
             boolean enabled = (cursor.getInt(1) != 0);
             int hour = cursor.getInt(2);
             int minute = cursor.getInt(3);
@@ -114,6 +114,8 @@ public class NacDatabase
             boolean vibrate = (cursor.getInt(6) != 0);
             String sound = cursor.getString(7);
             String name = cursor.getString(8);
+			alarm.setDatabase(this);
+			alarm.setId(id);
             alarm.setEnabled(enabled);
             alarm.setHour(hour);
             alarm.setMinute(minute);
@@ -125,6 +127,7 @@ public class NacDatabase
             alarm.print();
             list.add(alarm);
         }
+
         cursor.close();
         return list;
     }
@@ -138,7 +141,38 @@ public class NacDatabase
         {
             return;
         }
-        this.mDatabase = this.getWritableDatabase();
+		else
+		{
+        	this.mDatabase = this.getWritableDatabase();
+		}
     }
+
+	/**
+	 * @brief Return a ContentValues object based on the given alarm.
+	 */
+	private ContentValues getContentValues(Alarm alarm)
+	{
+        ContentValues cv = new ContentValues();
+        boolean enabled = alarm.getEnabled();
+        int hour = alarm.getHour();
+        int minute = alarm.getMinute();
+        int days = alarm.getDays();
+        boolean repeat = alarm.getRepeat();
+        boolean vibrate = alarm.getVibrate();
+        String sound = alarm.getSound();
+        String name = alarm.getName();
+
+        cv.put(NacDatabaseContract.AlarmTable.COLUMN_ENABLED, enabled);
+        cv.put(NacDatabaseContract.AlarmTable.COLUMN_HOUR, hour);
+        cv.put(NacDatabaseContract.AlarmTable.COLUMN_MINUTE, minute);
+        cv.put(NacDatabaseContract.AlarmTable.COLUMN_DAYS, days);
+        cv.put(NacDatabaseContract.AlarmTable.COLUMN_REPEAT, repeat);
+        cv.put(NacDatabaseContract.AlarmTable.COLUMN_VIBRATE, vibrate);
+        cv.put(NacDatabaseContract.AlarmTable.COLUMN_SOUND, sound);
+        cv.put(NacDatabaseContract.AlarmTable.COLUMN_NAME, name);
+        // cv.put(NacDatabaseContract.AlarmTable.COLUMN_NFCTAG, tag);
+
+		return cv;
+	}
 
 }

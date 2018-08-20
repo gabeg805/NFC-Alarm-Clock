@@ -64,6 +64,7 @@ public class NacCardRepeat
 
         if (!alarm.getRepeat())
         {
+			// Disable days of week buttons.
             return;
         }
         else
@@ -86,6 +87,8 @@ public class NacCardRepeat
     public void onCheckedChanged(CompoundButton v, boolean state)
     {
         mAlarm.setRepeat(state);
+		// See if this is called by setChecked()
+		// Disable/enable day of week buttons.
     }
 
     /**
@@ -95,11 +98,13 @@ public class NacCardRepeat
     @Override
     public void onClick(View v)
     {
+		// Day of week buttons should be disabled if checkbox is unchecked.
         if (!mCheckbox.isChecked())
         {
             return;
         }
 
+		// When the button is enabled handle day of week button days.
         byte day = mAlarm.indexToDay((int)v.getTag());
         mDays.toggleButton((Button)v);
         mAlarm.toggleDay(day);

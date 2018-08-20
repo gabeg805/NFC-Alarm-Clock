@@ -21,7 +21,9 @@ public class NacFloatingButton
     private FloatingActionButton mFloatingButton;
 
     /**
-     * @brief Constructor.
+     * @brief Define the floating button view.
+	 * 
+	 * @param  a  The main activity.
      */
     public NacFloatingButton(AppCompatActivity a)
     {

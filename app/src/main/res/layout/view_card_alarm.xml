@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardBackgroundColor="?attr/colorCard"
-        android:elevation="@dimen/card_alarm_elevation">
+        android:elevation="@dimen/elv_card">
 
         <RelativeLayout
             android:layout_width="match_parent"

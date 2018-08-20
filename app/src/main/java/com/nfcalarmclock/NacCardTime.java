@@ -6,9 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import java.util.Locale;
-
+import android.widget.TextView; import java.util.Locale; 
 /**
  * @brief The time to activate the alarm at. Users can change the time by
  *        selecting the view.
@@ -75,7 +73,9 @@ public class NacCardTime
         String hour = String.valueOf(this.mAlarm.toFormat(h, format));
         String minute = String.format(locale, "%02d", m);
         String meridian = this.mAlarm.getMeridian(h, format);
-        this.mTime.setText(hour+":"+minute);
+		String time = hour+":"+minute;
+
+        this.mTime.setText(time);
         this.mMeridian.setText(meridian);
     }
 
@@ -88,6 +88,7 @@ public class NacCardTime
         AppCompatActivity activity = (AppCompatActivity) mContext;
         AlarmTimePicker dialog = new AlarmTimePicker();
         FragmentManager manager = activity.getSupportFragmentManager();
+
         dialog.init(mAlarm, mTime, mMeridian);
         dialog.show(manager, "AlarmTimePicker");
     }

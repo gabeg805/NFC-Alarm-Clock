@@ -1,16 +1,16 @@
 <resources>
 
-    <dimen name="fab_add_alarm_margin">15dp</dimen>
-
-    <dimen name="card_alarm_elevation">5dp</dimen>
-
-    <dimen name="alarm_card_switch_size">60dp</dimen>
+	<!-- Floating button -->
+    <dimen name="m_fab">16dp</dimen>
 
     <!-- CardView -->
+    <dimen name="elv_card">5dp</dimen>
     <dimen name="mt_card">10dp</dimen>
     <dimen name="mb_card">10dp</dimen>
     <dimen name="ml_card">16dp</dimen>
     <dimen name="mr_card">16dp</dimen>
+    <dimen name="sp_card">10dp</dimen>
+
     <dimen name="mb_card_time">0dp</dimen>
     <dimen name="ml_card_meridian">5dp</dimen>
     <dimen name="mb_card_expand">10dp</dimen>
@@ -24,18 +24,21 @@
     <dimen name="tsz_card_repeat">11sp</dimen>
     <dimen name="tsz_card_days">13sp</dimen>
 
+	<!-- Music list -->
+    <dimen name="tsz_song">24sp</dimen>
+    <dimen name="tsz_directory">12sp</dimen>
+
+	<!-- Sound prompt -->
+    <dimen name="mb_prompt">8dp</dimen>
+    <dimen name="tsz_prompt">15sp</dimen>
+
+	<!-- ImageTextButton -->
     <dimen name="isz_card">22dp</dimen>
 
-    <dimen name="sp_card">10dp</dimen>
-
-    <dimen name="card_expand_margin_right">20dp</dimen>
-
+	<!-- Expand button -->
     <dimen name="card_expand_size">20dp</dimen>
 
+	<!-- DayOfWeekButton -->
     <dimen name="circle_size">30dp</dimen>
-    <dimen name="mr_card_circle">16dp</dimen>
-
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="item_offset">10dp</dimen>
 
 </resources>

@@ -23,12 +23,12 @@ public class NacCardAdapter
     /**
      * @brief The Activity of the parent.
      */
-    private AppCompatActivity mActivity;
+    private AppCompatActivity mActivity = null;
 
     /**
      * @brief The Context of the parent.
      */
-    private Context mContext;
+    private Context mContext = null;
 
     /**
      * @brief List of alarms.
@@ -43,10 +43,17 @@ public class NacCardAdapter
     /**
      * @brief Number of alarm cards in the recycler view.
      */
-    private int mSize;
+    private int mSize = 0;
+
+	/**
+	 * @brief Indicator that the alarm was added through the floating action button.
+	 */
+	private boolean mWasAdded = false;
 
     /**
      * @brief Alarm adapter.
+	 *
+	 * @param  c  The activity context.
      */
     public NacCardAdapter(Context c)
     {
@@ -60,6 +67,7 @@ public class NacCardAdapter
         Alarm a1 = new Alarm(11, 0);
         Alarm a2 = new Alarm(12, 0);
         Alarm a3 = new Alarm(13, 0);
+
         a1.setVibrate(true);
         a2.setDays(Alarm.Days.SATURDAY|Alarm.Days.SUNDAY);
         a3.setDays(Alarm.Days.TUESDAY|Alarm.Days.WEDNESDAY|Alarm.Days.THURSDAY);
@@ -74,65 +82,124 @@ public class NacCardAdapter
      */
     public void build()
     {
-		unitTest();
+		//unitTest();
         this.mAlarmList = this.mDatabase.read();
         this.mSize = this.mAlarmList.size();
     }
 
     /**
      * @brief Add an alarm.
+	 *
+	 * @param  alarm  The alarm to add.
      */
-    public void add(Alarm alarm)
+    public void add()
     {
-        this.mSize += 1;
+		Alarm alarm = new Alarm();
+		long id = this.mDatabase.add(alarm);
+
+		if (id < 0)
+		{
+			// Indicate visually that this is an error.
+			return;
+		}
+
+		alarm.setId(id);
+		alarm.setDatabase(this.mDatabase);
         this.mAlarmList.add(alarm);
+
+		this.mWasAdded = true;
+        this.mSize = this.mAlarmList.size();
+
         this.notifyItemInserted(this.mSize);
 		((RecyclerView)mActivity.findViewById(R.id.content_alarm_list)).scrollToPosition(this.mSize-1);
     }
 
 	/**
 	 * @brief Delete the alarm at the given position.
+	 *
+	 * @param  pos  The card position of the alarm to delete.
 	 */
 	public void delete(int pos)
 	{
         this.mSize -= 1;
+
         mAlarmList.remove(pos);
         notifyItemRemoved(pos);
         notifyItemRangeChanged(0, this.mSize);
 	}
 
+	/**
+	 * @brief Save the state of all alarms.
+	 */
+	public void save()
+	{
+		int i = 0;
+
+		for (Alarm a : this.mAlarmList)
+		{
+			NacUtility.printf("Alarm %d", i);
+			a.print();
+			i++;
+		}
+	}
+
     /**
      * @brief Create the view holder.
+	 *
+	 * @param  parent  The parent view.
+	 * @param  viewType  The type of view.
      */
     @Override
     public NacCard onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        NacUtility.printf("onCreateViewHolder was called.");
         Context context = parent.getContext();
         int layout = R.layout.view_card_alarm;
         View root = LayoutInflater.from(context).inflate(layout, parent,
                                                          false);
         NacCard card = new NacCard(context, root);
-		card.focus();
-		card.setDeleteListener(this);
+
 		return card;
     }
 
     /**
      * @brief Bind the view holder.
+	 *
+	 * @param  card  The alarm card.
+	 * @param  pos  The position of the alarm card.
      */
     @Override
     public void onBindViewHolder(final NacCard card, int pos)
     {
-        NacUtility.printf("onBindViewHolder was called at position: %d", pos);
         Alarm alarm = mAlarmList.get(pos);
+
         card.init(alarm, pos);
+		card.setDeleteListener(this);
         //card.collapse();
+
+		if (this.mWasAdded)
+		{
+			card.focus();
+			this.mWasAdded = false;
+		}
     }
+
+	@Override
+	public void onViewAttachedToWindow(NacCard holder)
+	{
+		//int pos = ((RecyclerView.ViewHolder)holder).getAdapterPosition();
+	}
+
+	@Override
+	public void onViewDetachedFromWindow(NacCard holder)
+	{
+		//int pos = ((RecyclerView.ViewHolder)holder).getAdapterPosition();
+	}
 
     /**
      * @brief Capture the click event on the delete button, and delete the card
 	 *        it belongs to.
+	 *
+	 * @param  v  The view that was clicked.
      */
 	@Override
 	public void onClick(View v)
