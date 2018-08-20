@@ -82,7 +82,7 @@ public class NacCardAdapter
      */
     public void build()
     {
-		//unitTest();
+		unitTest();
         this.mAlarmList = this.mDatabase.read();
         this.mSize = this.mAlarmList.size();
     }

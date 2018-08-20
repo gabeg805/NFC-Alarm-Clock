@@ -16,7 +16,7 @@ public class NacScrollListener
 
 	/**
 	 * @brief Set the floating action button that will be shown/hid when
-	 * 		  scrolling.
+	 *		  scrolling.
 	 *
 	 * @param  fb  The activity's floating action button.
 	 */
@@ -27,7 +27,7 @@ public class NacScrollListener
 
 	/**
 	 * @brief Show the floating action button when scrolling up and hide it
-	 * 		  when scrolling down.
+	 *		  when scrolling down.
 	 *
 	 * @param  rv  The recycler view.
 	 * @param  dx  The change in scrolling in the x-direction.
@@ -36,13 +36,35 @@ public class NacScrollListener
 	@Override
 	public void onScrolled(RecyclerView rv, int dx, int dy)
 	{
-		if ((dy > 0) && mFloatingButton.isShown())
+		super.onScrolled(rv, dx, dy);
+
+		if ((dy < 0) && !mFloatingButton.isShown())
+		{
+			mFloatingButton.show();
+		}
+		else if ((dy > 0) && mFloatingButton.isShown())
 		{
 			mFloatingButton.hide();
 		}
-		else if ((dy < 0) && !mFloatingButton.isShown())
+	}
+
+	/**
+	 * @brief Display the floating button when at the bottom of the list.
+	 *
+	 * @param  rv  The recycler view.
+	 * @param  state The scroll state (Idle, Dragging, or Settling).
+	 */
+	@Override
+	public void onScrollStateChanged(RecyclerView rv, int state)
+	{
+		super.onScrollStateChanged(rv, state);
+
+		if ((state == 0) && !rv.canScrollVertically(1))
 		{
-			mFloatingButton.show();
+			if (!mFloatingButton.isShown())
+			{
+				mFloatingButton.show();
+			}
 		}
 	}
 

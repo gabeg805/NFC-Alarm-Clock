@@ -3,15 +3,15 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat">
 
-        <item name="android:colorBackground">@color/black</item>
+        <item name="android:colorBackground">@color/gray_dark</item>
         <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryDark">@color/black</item>
-        <item name="colorAccent">@color/oranger</item>
+        <item name="colorAccent">@color/orange</item>
 
         <item name="colorCard">?android:attr/colorBackground</item>
-        <item name="colorCardExpanded">@color/gray_darkest</item>
-        <item name="colorCardHighlight">@color/gray_darker</item>
-        <item name="colorCardDivider">@color/gray_darker</item>
+        <item name="colorCardExpanded">@color/gray_dark</item>
+        <item name="colorCardHighlight">@color/white</item>
+        <item name="colorCardDivider">@color/gray</item>
         <item name="colorCardDrawable">@color/white</item>
         <item name="colorCardText">@color/white</item>
         <item name="colorCardFocus">@color/white</item>

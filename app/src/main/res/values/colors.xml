@@ -2,18 +2,24 @@
 <resources>
 
     <!-- Theme colors -->
+	<!--
     <color name="colorPrimary">#1f285a</color>
     <color name="colorPrimaryDark">#192048</color>
     <color name="colorAccent">#666666</color>
+	-->
 
     <!-- Standard colors -->
     <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="orange">#fb8c00</color>
+    <color name="gray">#333333</color>
+	<color name="gray_dark">#101010</color>
+
+	<!--
     <color name="silver">#c0c0c0</color>
     <color name="gray">#808080</color>
-    <color name="black">#000000</color>
     <color name="red">#ff0000</color>
     <color name="orange">#ffa500</color>
-    <color name="oranger">#fb8c00</color>
     <color name="maroon">#800000</color>
     <color name="yellow">#ffff00</color>
     <color name="olive">#808000</color>
@@ -29,13 +35,15 @@
 
     <color name="gray_light">#b2b2b2</color>
     <color name="gray_dark">#595959</color>
-    <color name="gray_darker">#333333</color>
     <color name="gray_darkest">#111111</color>
+	-->
 
-    <!-- <color name="blue">#182048</color> -->
+    <!--
+	<color name="blue">#182048</color>
     <color name="darkBlue">#121836</color>
     <color name="darkerBlue">#121836</color>
     <color name="darkestBlue">#0c1024</color>
     <color name="offWhite">#f1f5f8</color>
+	-->
 
 </resources>

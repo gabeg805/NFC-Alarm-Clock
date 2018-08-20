@@ -42,7 +42,7 @@ public class MainActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_main);
-        //this.deleteDatabase(NacDatabaseContract.DATABASE_NAME);
+        this.deleteDatabase(NacDatabaseContract.DATABASE_NAME);
 
 		this.mAdapter = new NacCardAdapter(this);
 		this.mFloatingButton = new NacFloatingButton(this);
