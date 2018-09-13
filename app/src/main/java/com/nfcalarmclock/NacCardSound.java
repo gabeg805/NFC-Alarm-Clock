@@ -2,6 +2,8 @@ package com.nfcalarmclock;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -45,8 +47,8 @@ public class NacCardSound
     public NacCardSound(Context c, View r)
     {
         this.mContext = c;
-        this.mPromptDialog = new NacCardSoundPromptDialog(mContext);
         this.mSound = (ImageTextButton) r.findViewById(R.id.nacSound);
+
         this.mSound.setOnClickListener(this);
     }
 
@@ -56,7 +58,19 @@ public class NacCardSound
     public void init(Alarm alarm)
     {
 		this.mAlarm = alarm;
-        // this.mSound.setText(this.mCard.getAlarm().getSound());
+		String path = this.mAlarm.getSound();
+
+		if (path.isEmpty())
+		{
+			return;
+		}
+
+		Uri uri = Uri.parse(path);
+		Ringtone ringtone = RingtoneManager.getRingtone(mContext, uri);
+		String name = ringtone.getTitle(mContext);
+
+		ringtone.stop();
+		this.mSound.setText(name);
     }
 
     /**
@@ -65,27 +79,10 @@ public class NacCardSound
     @Override
     public void onClick(View v)
     {
+        this.mPromptDialog = new NacCardSoundPromptDialog(mContext, mSound,
+			mAlarm);
+
         this.mPromptDialog.show();
     }
 
 }
-
-//listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-//	@Override
-//	public void onItemClick(AdapterView<?> parent, final View view,
-//		int position, long id)
-//	{
-//		//final String item = (String) parent.getItemAtPosition(position);
-//		view.animate().setDuration(2000).alpha(0)
-//				.withEndAction(new Runnable() {
-//					@Override
-//					public void run() {
-//						//list.remove(item);
-//						//adapter.notifyDataSetChanged();
-//						view.setAlpha(1);
-//					}
-//				});
-//	}
-
-//});

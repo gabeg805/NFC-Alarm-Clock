@@ -9,18 +9,20 @@ public class NacSong
 {
 	public String name = "";
 	public String dir = "";
-	public Uri uri = null;
+	public String ringtone = "";
+	public String path = "";
 
 	public NacSong(String n, String d)
 	{
-		this(n, d, null);
+		this(n, d, "");
 	}
 
-	public NacSong(String n, String d, Uri u)
+	public NacSong(String n, String d, String r)
 	{
 		this.name = n;
 		this.dir = d;
-		this.uri = u;
+		this.ringtone = r;
+		this.path = this.dir + "/" + this.name;
 	}
 
 }

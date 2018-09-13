@@ -15,49 +15,49 @@ import android.support.v7.widget.RecyclerView;
 public class NacRecyclerView
 {
 
-    /**
-     * @brief Context.
-     */
-    private Context mContext;
+	/**
+	 * @brief Context.
+	 */
+	private Context mContext;
 
-    /**
-     * @brief Container for displaying the list of alarm cards.
-     */
-    private RecyclerView mRecyclerView;
+	/**
+	 * @brief Container for displaying the list of alarm cards.
+	 */
+	private RecyclerView mRecyclerView;
 
-    /**
-     * @brief The recycler view containing all alarm cards.
+	/**
+	 * @brief The recycler view containing all alarm cards.
 	 *
 	 * @param  c  The activity context.
-     */
-    public NacRecyclerView(Context c)
-    {
+	 */
+	public NacRecyclerView(Context c)
+	{
 		AppCompatActivity a = (AppCompatActivity) c;
-        this.mContext = c;
-        this.mRecyclerView = (RecyclerView) a.findViewById(R.id.content_alarm_list);
-    }
+		this.mContext = c;
+		this.mRecyclerView = (RecyclerView) a.findViewById(R.id.content_alarm_list);
+	}
 
-    /**
-     * @brief Initialize the recycler view.
-     */
-    public void init()
-    {
-		LinearLayoutManager manager = new LinearLayoutManager(this.mContext);
-        DefaultItemAnimator anim = new DefaultItemAnimator();
-        Drawable div = ContextCompat.getDrawable(this.mContext,
-                                                 R.drawable.divider);
-        DividerItemDecoration decor = new DividerItemDecoration(this.mContext,
-                                                                LinearLayoutManager.VERTICAL);
-        decor.setDrawable(div);
-        this.mRecyclerView.setLayoutManager(manager);
-        this.mRecyclerView.setItemAnimator(anim);
-        this.mRecyclerView.addItemDecoration(decor);
-    }
+	/**
+	 * @brief Initialize the recycler view.
+	 */
+	public void init()
+	{
+		//LinearLayoutManager manager = new LinearLayoutManager(this.mContext);
+		DefaultItemAnimator anim = new DefaultItemAnimator();
+		Drawable div = ContextCompat.getDrawable(this.mContext,
+			R.drawable.divider);
+		DividerItemDecoration decor = new DividerItemDecoration(this.mContext,
+			LinearLayoutManager.VERTICAL);
+
+		decor.setDrawable(div);
+		this.mRecyclerView.setItemAnimator(anim);
+		this.mRecyclerView.addItemDecoration(decor);
+	}
 
 	/**
 	 * @brief Set the recycler view adapter and floating action button.
 	 *
-	 * @param  adapter  The alarm card adapter.
+	 * @param  adapter	The alarm card adapter.
 	 */
 	public void setAdapter(NacCardAdapter adapter)
 	{
@@ -65,8 +65,18 @@ public class NacRecyclerView
 	}
 
 	/**
+	 * @brief Set the recycler view layout manager.
+	 *
+	 * @param  manager	The linear layout manager.
+	 */
+	public void setLayoutManager(Context c)
+	{
+		this.mRecyclerView.setLayoutManager(new LinearLayoutManager(c));
+	}
+
+	/**
 	 * @brief Set a listener when scrolling to show/hide the floating action
-	 * 		  listener.
+	 *		  listener.
 	 * 
 	 * @param  fb  The activity's floating action button.
 	 */

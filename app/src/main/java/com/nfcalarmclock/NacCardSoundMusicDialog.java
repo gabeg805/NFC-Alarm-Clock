@@ -19,13 +19,23 @@ import java.util.Locale;
 
 public class NacCardSoundMusicDialog
 	extends NacCardDialog
-	implements DialogInterface.OnClickListener
+	implements DialogInterface.OnClickListener,NacDialogMusicList.ItemClickListener
 {
 
 	/**
 	 * @brief Context.
 	 */
 	private Context mContext;
+
+	/**
+	 * @brief The sound view in the alarm card.
+	 */
+	private ImageTextButton mSoundView = null;
+
+	/**
+	 * @brief Media player.
+	 */
+	private NacMediaPlayer mPlayer = null;
 
 	/**
 	 * @brief Root view.
@@ -35,21 +45,24 @@ public class NacCardSoundMusicDialog
 	/**
 	 * @brief List of ringtones.
 	 */
-	private List<NacSong> mSounds = null;
+	public List<NacSong> mSounds = null;
 
 	/**
-	 * @brief Media player.
+	 * @brief The index in the songs list pointing to the currently selected
+	 * item.
 	 */
-	private NacCardMediaPlayer mPlayer = null;
+	public int mIndex = -1;
 
 	/**
 	 * @param  c  Context.
 	 */
-	public NacCardSoundMusicDialog(Context c, NacCardMediaPlayer mp)
+	public NacCardSoundMusicDialog(Context c, ImageTextButton b,
+		NacMediaPlayer mp)
 	{
 		super(c);
 
 		this.mContext = c;
+		this.mSoundView = b;
 		this.mPlayer = mp;
 		this.mRoot = super.inflate(R.layout.dlg_alarm_sound_music, (ViewGroup)null);
 
@@ -99,42 +112,32 @@ public class NacCardSoundMusicDialog
 
 		for (String d : search)
 		{
-			String path = root+"/"+d;
-			NacUtility.printf("Directory : %s", path);
-			File dir = new File(path);
-			File[] files = dir.listFiles(this.getMusicFilter());
+			String dir = root+"/"+d;
+			File obj = new File(dir);
+			File[] files = obj.listFiles(this.getMusicFilter());
 
 			for (int i=0; (files != null) && (i < files.length); i++)
 			{
 				String name = files[i].getName();
-				this.mSounds.add(new NacSong(name, path));
-				NacUtility.printf("File : %s", name);
+				this.mSounds.add(new NacSong(name, dir));
+				NacUtility.printf("File : %s/%s", dir, name);
 			}
 		}
 	}
 
+	/**
+	 * @brief Create the recycler view in the dialog.
+	 */
 	private void createRecyclerView()
 	{
 		RecyclerView recyclerView = mRoot.findViewById(R.id.dlg_music_list);
 		recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-		MyRecyclerViewAdapter adapter = new MyRecyclerViewAdapter(mContext,
+		NacDialogMusicList adapter = new NacDialogMusicList(mContext,
 			mSounds);
-		//adapter.setClickListener(this);
+		adapter.setClickListener(this);
 		recyclerView.setAdapter(adapter);
 		recyclerView.addItemDecoration(new DividerItemDecoration(mContext,
 			LinearLayoutManager.VERTICAL));
-
-		//for (int i=0; i < this.mSounds.size(); i++)
-		//{
-		//	//MusicSelection ms = new MusicSelection(mContext, null);
-		//	String name = this.mSounds.get(i).name;
-		//	String dir = this.mSounds.get(i).dir;
-
-		//	//NacUtility.printf("InitMusicSelection ::: %s ::: %s.", name, dir);
-		//	//ms.setSongName(name);
-		//	//ms.setDirName(dir);
-		//	//layout.addView(ms);
-		//}
 	}
 
 	/**
@@ -150,14 +153,13 @@ public class NacCardSoundMusicDialog
 				String[] extensions = {".3gp", ".mp4", ".m4a", ".aac",
 					".ts", ".flac", ".mid", ".xmf", ".mxmf", ".rtttl",
 					".rtx", ".ota", ".imy", ".mp3", ".mkv", ".wav",
-					".ogg", ".txt"};
+					".ogg"};
 				String lower = name.toLowerCase(locale);
 
 				for (String e : extensions)
 				{
 					if (lower.endsWith(e))
 					{
-						//NacUtility.printf("Name : %s | Ends with : %s", name, e);
 						return true;
 					}
 				}
@@ -169,101 +171,24 @@ public class NacCardSoundMusicDialog
 	}
 
 	/**
+	 * @brief Handle item click events in the music list.
+	 */
+	@Override
+	public void onItemClick(View v, int i)
+	{
+		String path = this.mSounds.get(i).path;
+		this.mIndex = i;
+
+		this.mPlayer.play(path);
+	}
+
+	/**
 	 * @brief Handles click events on the Ok/Cancel buttons in the dialog.
 	 */
 	@Override
 	public void onClick(DialogInterface dialog, int which)
 	{
 		super.onClick(dialog, which);
-		mPlayer.reset();
 	}
 
-	public class MyRecyclerViewAdapter
-		extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder>
-	{
-
-		private LayoutInflater mInflater;
-		//private ItemClickListener mClickListener;
-		private List<NacSong> mSongs;
-
-		// data is passed into the constructor
-		MyRecyclerViewAdapter(Context context, List<NacSong> songs)
-		{
-			this.mInflater = LayoutInflater.from(context);
-			this.mSongs = songs;
-		}
-
-		// inflates the row layout from xml when needed
-		@Override
-		public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-		{
-			View view = mInflater.inflate(R.layout.list_item_music, parent, false);
-			return new ViewHolder(view);
-		}
-
-		// binds the data to the TextView in each row
-		@Override
-		public void onBindViewHolder(ViewHolder holder, int position)
-		{
-			NacSong song = mSongs.get(position);
-			holder.setName(song.name);
-			holder.setDirectory(song.dir);
-		}
-
-		// total number of rows
-		@Override
-		public int getItemCount()
-		{
-			return mSongs.size();
-		}
-
-		// stores and recycles views as they are scrolled off screen
-		public class ViewHolder
-			extends RecyclerView.ViewHolder
-		{
-
-		//implements View.OnClickListener {
-			private TextView mNameView;
-			private TextView mDirectoryView;
-
-			ViewHolder(View itemView)
-			{
-				super(itemView);
-				mNameView = itemView.findViewById(R.id.ms_song);
-				mDirectoryView = itemView.findViewById(R.id.ms_directory);
-				//itemView.setOnClickListener(this);
-			}
-
-			//@Override
-			//public void onClick(View view) {
-			//	if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
-			//}
-
-			public void setName(String name)
-			{
-				mNameView.setText(name);
-			}
-
-			public void setDirectory(String dir)
-			{
-				mDirectoryView.setText(dir);
-			}
-		}
-
-		// convenience method for getting data at click position
-		NacSong getItem(int id)
-		{
-			return mSongs.get(id);
-		}
-
-		// allows clicks events to be caught
-		//void setClickListener(ItemClickListener itemClickListener) {
-		//	this.mClickListener = itemClickListener;
-		//}
-
-		//// parent activity will implement this method to respond to click events
-		//public interface ItemClickListener {
-		//	void onItemClick(View view, int position);
-		//}
-	}
 }

@@ -14,34 +14,34 @@ public class NacCardRegion
     /**
      * @brief Summary region.
      */
-    private RelativeLayout mSummaryRegion;
+    private RelativeLayout mSummaryRegion = null;
 
     /**
      * @brief Extra region.
      */
-    private RelativeLayout mExtraRegion;
+    private RelativeLayout mExtraRegion = null;
 
     /**
      * @brief Expand button.
      */
-    private ImageView mExpandButton;
+    private ImageView mExpandButton = null;
 
     /**
      * @brief Collapse button.
      */
-    private ImageView mCollapseButton;
+    private ImageView mCollapseButton = null;
 
 	/**
 	 * @brief The original height of the region when it is collapsed. This
 	 * 		  corresponds to the height of the summary region.
 	 */
-	private int mFromHeight = 0;
+	public int mFromHeight = 0;
 
 	/**
 	 * @brief The height once the region is expanded. This corresponds to the
 	 * 		  height of the extra region.
 	 */
-	private int mToHeight = 0;
+	public int mToHeight = 0;
 
     /**
      * @brief Expand and collapse regions and buttons.
@@ -129,13 +129,16 @@ public class NacCardRegion
 	private void measureToHeight()
 	{
 		expand();
-		mExtraRegion.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-							 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+		mExtraRegion.measure(MeasureSpec.makeMeasureSpec(0,
+			MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0,
+			MeasureSpec.UNSPECIFIED));
 		mToHeight = mExtraRegion.getMeasuredHeight();
 	}
 
 	/**
 	 * @brief Set a listener to expand the card.
+	 *
+	 * @param  listener  The on click listener.
 	 */
 	public void setExpandListener(View.OnClickListener listener)
 	{
@@ -144,10 +147,40 @@ public class NacCardRegion
 
 	/**
 	 * @brief Set a listener to collapse the card.
+	 *
+	 * @param  listener  The on click listener.
 	 */
 	public void setCollapseListener(View.OnClickListener listener)
 	{
         this.mCollapseButton.setOnClickListener(listener);
+	}
+
+	/**
+	 * @brief Return the height of the view that is visible.
+	 */
+	public int getHeight()
+	{
+		View v = this.getView();
+
+		return NacUtility.getHeight(v);
+	}
+
+	/**
+	 * @brief Return the view that is visible.
+	 */
+	public View getView()
+	{
+		if (this.mSummaryRegion.isShown())
+		{
+			return this.mSummaryRegion;
+		}
+
+		if (this.mExtraRegion.isShown())
+		{
+			return this.mExtraRegion;
+		}
+
+		return null;
 	}
 
 }

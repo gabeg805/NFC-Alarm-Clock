@@ -24,7 +24,7 @@ public class NacCardDelete
     }
 
 	/**
-	 * @brief Initialize the delete button.
+	 * @brief Set the card position as a tag for the delete button.
 	 */
 	public void init(int pos)
 	{

@@ -3,8 +3,8 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
-import android.net.Uri;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
@@ -20,12 +20,17 @@ public class NacCardSoundRingtoneDialog
 	/**
 	 * @brief Context.
 	 */
-	private Context mContext;
+	private Context mContext = null;
 
 	/**
-	 * @brief Root view.
+	 * @brief The sound view in the alarm card.
 	 */
-	private View mRoot = null;
+	private ImageTextButton mSoundView = null;
+
+	/**
+	 * @brief Media player.
+	 */
+	private NacMediaPlayer mPlayer = null;
 
 	/**
 	 * @brief Ringtone manager.
@@ -33,23 +38,31 @@ public class NacCardSoundRingtoneDialog
  	private RingtoneManager mRingtoneManager = null;
 
 	/**
-	 * @brief List of ringtones.
+	 * @brief Root view.
 	 */
-	private List<NacSong> mSounds = null;
+	private View mRoot = null;
 
 	/**
-	 * @brief Media player.
+	 * @brief List of ringtones.
 	 */
-	private NacCardMediaPlayer mPlayer = null;
+	public List<NacSong> mSounds = null;
+
+	/**
+	 * @brief The index in the songs list pointing to the currently selected
+	 * item.
+	 */
+	public int mIndex = -1;
 
 	/**
 	 * @param  c  Context.
 	 */
-	public NacCardSoundRingtoneDialog(Context c, NacCardMediaPlayer mp)
+	public NacCardSoundRingtoneDialog(Context c, ImageTextButton b,
+		NacMediaPlayer mp)
 	{
 		super(c);
 
 		this.mContext = c;
+		this.mSoundView = b;
 		this.mPlayer = mp;
 		this.mRingtoneManager = new RingtoneManager(mContext);
 		this.mRoot = super.inflate(R.layout.dlg_alarm_sound_ringtone);
@@ -93,12 +106,13 @@ public class NacCardSoundRingtoneDialog
 			found = false;
 			String name = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
 			String id = cursor.getString(RingtoneManager.ID_COLUMN_INDEX);
-			String dir = cursor.getString(RingtoneManager.URI_COLUMN_INDEX)+"/"+id;
-			Uri uri = Uri.parse(dir);
+			String dir = cursor.getString(RingtoneManager.URI_COLUMN_INDEX);
+
+			NacUtility.printf("File : %s/%s (%s)", dir, id, name);
 
 			for (NacSong s : this.mSounds)
 			{
-				if (s.name == name)
+				if (s.ringtone == name)
 				{
 					found = true;
 					break;
@@ -110,7 +124,7 @@ public class NacCardSoundRingtoneDialog
 				continue;
 			}
 
-			this.mSounds.add(new NacSong(name, dir, uri));
+			this.mSounds.add(new NacSong(id, dir, name));
 		}
 	}
 
@@ -124,18 +138,13 @@ public class NacCardSoundRingtoneDialog
 		for(int i=0; i < this.mSounds.size(); i++)
 		{
 			RadioButton rb = new RadioButton(mContext);
-			String name = this.mSounds.get(i).name;
+			String name = this.mSounds.get(i).ringtone;
 
 			rb.setText(name);
 			rb.setTag(i);
 			rb.setOnCheckedChangeListener(this);
 			rg.addView(rb);
 		}
-
-		// Uri actualUri = RingtoneManager.getActualDefaultRingtoneUri(this,
-		//                                                             RingtoneManager.TYPE_NOTIFICATION);
-		// Alarm alarm = mCard.getAlarm();
-		// this.mEditText.setText(alarm.getName());
 	}
 
 	/**
@@ -151,10 +160,10 @@ public class NacCardSoundRingtoneDialog
 		}
 
 		int i = (int) b.getTag();
-		Uri uri = mSounds.get(i).uri;
+		String path = this.mSounds.get(i).path;
+		this.mIndex = i;
 
-		mPlayer.reset();
-		mPlayer.run(uri);
+		this.mPlayer.play(path);
 	}
 
 	/**
@@ -164,7 +173,6 @@ public class NacCardSoundRingtoneDialog
 	public void onClick(DialogInterface dialog, int which)
 	{
 		super.onClick(dialog, which);
-		mPlayer.reset();
 	}
 
 }

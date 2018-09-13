@@ -9,44 +9,58 @@ import android.widget.Switch;
  * @brief Switch button that indicates whether the alarm is enabled or not.
  */
 public class NacCardSwitch
-    implements CompoundButton.OnCheckedChangeListener
+	implements CompoundButton.OnCheckedChangeListener
 {
 
-    /**
-     * @brief Alarm.
-     */
-     private Alarm mAlarm;
+	/**
+	 * @brief Alarm.
+	 */
+	 private Alarm mAlarm = null;
 
-    /**
-     * @brief Switch.
-     */
-     private Switch mSwitch;
+	/**
+	 * @brief Switch.
+	 */
+	 private Switch mSwitch = null;
 
-    /**
-     * @brief Constructor.
-     */
-    public NacCardSwitch(View r)
-    {
-        this.mSwitch = (Switch) r.findViewById(R.id.nacSwitch);
-        this.mSwitch.setOnCheckedChangeListener(this);
-    }
+	/**
+	 * @brief Constructor.
+	 */
+	public NacCardSwitch(View r)
+	{
+		super();
 
-    /**
-     * @brief Initialize the Switch.
-     */
-    public void init(Alarm alarm)
-    {
+		this.mSwitch = (Switch) r.findViewById(R.id.nacSwitch);
+	}
+
+	/**
+	 * @brief Initialize the Switch.
+	 */
+	public void init(Alarm alarm)
+	{
 		this.mAlarm = alarm;
-        this.mSwitch.setChecked(this.mAlarm.getEnabled());
-    }
+		boolean state = this.mAlarm.getEnabled();
 
-    /**
-     * @brief Set the on/off state of the alarm.
-     */
-    @Override
-    public void onCheckedChanged(CompoundButton v, boolean state)
-    {
-        mAlarm.setEnabled(state);
-    }
+		this.mSwitch.setChecked(state);
+		this.mSwitch.setOnCheckedChangeListener(this);
+	}
+
+	/**
+	 * @brief Return the height of the view that is visible.
+	 */
+	public int getHeight()
+	{
+		return NacUtility.getHeight(this.mSwitch);
+	}
+
+	/**
+	 * @brief Set the on/off state of the alarm.
+	 */
+	@Override
+	public void onCheckedChanged(CompoundButton v, boolean state)
+	{
+		NacUtility.printf("Switch : %b", state);
+		this.mAlarm.setEnabled(state);
+		this.mAlarm.changed();
+	}
 
 }

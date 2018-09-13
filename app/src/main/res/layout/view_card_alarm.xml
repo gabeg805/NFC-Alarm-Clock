@@ -1,30 +1,110 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/view_card_alarm"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:cardBackgroundColor="?attr/colorCard"
-        android:elevation="@dimen/elv_card">
+<!--
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
+-->
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/mt_card"
-            android:layout_marginBottom="@dimen/mb_card"
-            android:layout_marginStart="@dimen/ml_card"
-            android:layout_marginEnd="@dimen/mr_card">
+<!--
+<resources>
+    <dimen name="activity_padding_horizontal">16dp</dimen>
+    <dimen name="padd_10">10dp</dimen>
+    <dimen name="ic_delete">30dp</dimen>
+    <dimen name="thumbnail">90dp</dimen>
+</resources>
+-->
 
-            <include layout="@layout/card_alarm_major" />
-            <include layout="@layout/card_alarm_minor_summary" />
-            <include layout="@layout/card_alarm_minor_expand" />
+	<RelativeLayout
+		android:id="@+id/view_background_copy"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@color/green">
 
-        </RelativeLayout>
+		<ImageView
+			android:id="@+id/copy_icon"
+			android:layout_width="30dp"
+			android:layout_height="30dp"
+			android:layout_alignParentLeft="true"
+			android:layout_centerVertical="true"
+			android:layout_marginLeft="10dp"
+			android:src="@mipmap/baseline_file_copy_white_48"
+			/>
 
-    </android.support.v7.widget.CardView>
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:layout_marginLeft="10dp"
+			android:layout_toRightOf="@id/copy_icon"
+			android:text="COPY"
+			android:textColor="#fff"
+			android:textSize="13dp"
+			/>
 
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:id="@+id/view_background_delete"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@color/red">
+
+		<ImageView
+			android:id="@+id/delete_icon"
+			android:layout_width="30dp"
+			android:layout_height="30dp"
+			android:layout_alignParentRight="true"
+			android:layout_centerVertical="true"
+			android:layout_marginRight="10dp"
+			android:src="@mipmap/baseline_delete_white_32dp"
+			/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:layout_marginRight="10dp"
+			android:layout_toLeftOf="@id/delete_icon"
+			android:text="DELETE"
+			android:textColor="#fff"
+			android:textSize="13dp"
+			/>
+
+	</RelativeLayout>
+
+	<android.support.v7.widget.CardView
+		android:id="@+id/view_card_alarm"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:cardBackgroundColor="?attr/colorCard"
+		android:elevation="@dimen/elv_card">
+
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/mt_card"
+			android:layout_marginBottom="@dimen/mb_card"
+			android:layout_marginStart="@dimen/ml_card"
+			android:layout_marginEnd="@dimen/mr_card">
+
+			<include layout="@layout/card_alarm_major" />
+			<include layout="@layout/card_alarm_minor_summary" />
+			<include layout="@layout/card_alarm_minor_expand" />
+
+		</RelativeLayout>
+
+	</android.support.v7.widget.CardView>
+
+</FrameLayout>
+<!--
 </LinearLayout>
+-->

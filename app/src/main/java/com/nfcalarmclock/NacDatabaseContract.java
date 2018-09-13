@@ -30,7 +30,9 @@ public final class NacDatabaseContract
         }
 
         public static final String TABLE_NAME = "NfcAlarms";
+        public static final String COLUMN_ID = "Id";
         public static final String COLUMN_ENABLED = "Enabled";
+        public static final String COLUMN_24HOURFORMAT = "HourFormat";
         public static final String COLUMN_HOUR = "Hour";
         public static final String COLUMN_MINUTE = "Minute";
         public static final String COLUMN_DAYS = "Days";
@@ -48,16 +50,13 @@ public final class NacDatabaseContract
          * The content style URI
          */
         public static final Uri CONTENT_URI = Uri.parse(SCHEME + AUTHORITY
-                                                        + SLASH + TABLE_NAME);
+			+ SLASH + TABLE_NAME);
 
         /**
          * The content URI base for a single row. An ID must be appended.
          */
         public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME
-                                                                + AUTHORITY
-                                                                + SLASH
-                                                                + TABLE_NAME
-                                                                + SLASH);
+			+ AUTHORITY + SLASH + TABLE_NAME + SLASH);
 
         /**
          * The default sort order for this table
@@ -87,7 +86,9 @@ public final class NacDatabaseContract
             "CREATE TABLE " + TABLE_NAME
             + " ("
             + _ID + " INTEGER PRIMARY KEY,"
+            + COLUMN_ID + " INTEGER,"
             + COLUMN_ENABLED + " INTEGER,"
+			+ COLUMN_24HOURFORMAT + " INTEGER,"
             + COLUMN_HOUR + " INTEGER,"
             + COLUMN_MINUTE + " INTEGER,"
             + COLUMN_DAYS + " INTEGER,"
@@ -108,7 +109,9 @@ public final class NacDatabaseContract
          * Array of all the columns. Makes for cleaner code
          */
         public static final String[] KEY_ARRAY = {
+            COLUMN_ID,
             COLUMN_ENABLED,
+			COLUMN_24HOURFORMAT,
             COLUMN_HOUR,
             COLUMN_MINUTE,
             COLUMN_DAYS,

@@ -10,11 +10,10 @@
     android:layout_marginTop="@dimen/mb_card_expand"
     android:layout_marginBottom="@dimen/mb_card_expand"
 	tools:ignore="ContentDescription,RtlSymmetry">
-    <!-- android:background="@drawable/borderhighlight" -->
 
     <CheckBox
         android:id="@+id/nacRepeatCheckbox"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/mb_card_item_spacing"
         android:paddingStart="@dimen/sp_card"
@@ -42,12 +41,12 @@
 
         <com.nfcalarmclock.ImageTextButton
             android:id="@+id/nacSound"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/nacVibrate"
             android:layout_marginBottom="5dp"
             app:nacDrawable="@mipmap/baseline_music_note_white_24dp"
-            app:nacText="Cuckoo clock"
+            app:nacText=""
             />
 
         <CheckBox

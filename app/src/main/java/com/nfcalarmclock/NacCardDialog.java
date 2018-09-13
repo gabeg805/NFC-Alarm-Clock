@@ -60,7 +60,8 @@ public class NacCardDialog
 	 * @param  positive Positive button onClick listener.
 	 * @param  negative  Negative button onClick listener.
 	 *
-	 * @return The alert dialog.  */
+	 * @return The alert dialog.
+	 */
 	public AlertDialog build(View v, String title,
 		DialogInterface.OnClickListener positive,
 		DialogInterface.OnClickListener negative)
@@ -86,6 +87,9 @@ public class NacCardDialog
 		return (this.mDialog = builder.show());
 	}
 
+	/**
+	 * @see AlertDialog()
+	 */
 	public AlertDialog build(View v, String title, boolean setpositive,
 		boolean setnegative)
 	{

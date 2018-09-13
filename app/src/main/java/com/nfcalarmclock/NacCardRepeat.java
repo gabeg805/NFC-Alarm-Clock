@@ -9,106 +9,139 @@ import android.widget.TextView;
 
 /**
  * @brief Container for all repeat views. Users are able to repeat the alarm on
- *        the requested days.
+ *		  the requested days.
  * 
  * @details The repeat views are:
- *              * The text displayed by default beneath the time.
- *              * The checkbox indicating whether or not the user wants to
- *                repeat the alarm.
- *              * The alarm day buttons.
+ *				* The text displayed by default beneath the time.
+ *				* The checkbox indicating whether or not the user wants to
+ *				  repeat the alarm.
+ *				* The alarm day buttons.
  */
 public class NacCardRepeat
-    implements CompoundButton.OnCheckedChangeListener,View.OnClickListener
+	implements CompoundButton.OnCheckedChangeListener,View.OnClickListener
 {
 
-    /**
-     * @brief Alarm.
-     */
-    private Alarm mAlarm;
+	/**
+	 * @brief Alarm.
+	 */
+	private Alarm mAlarm = null;
 
-    /**
-     * @brief Text of days to repeat.
-     */
-    private TextView mText;
+	/**
+	 * @brief Text of days to repeat.
+	 */
+	private TextView mText = null;
 
-    /**
-     * @brief Repeat checkbox.
-     */
-    private CheckBox mCheckbox;
+	/**
+	 * @brief Repeat checkbox.
+	 */
+	private CheckBox mCheckbox = null;
 
-    /**
-     * @brief Buttons to select which days to repeat the alarm on.
-     */
-    private DayOfWeekButtons mDays;
+	/**
+	 * @brief Buttons to select which days to repeat the alarm on.
+	 */
+	private DayOfWeekButtons mDays = null;
 
-    /**
-     * @brief Constructor.
-     */
-    public NacCardRepeat(View r)
-    {
-        this.mText = (TextView) r.findViewById(R.id.nacRepeatText);
-        this.mCheckbox = (CheckBox) r.findViewById(R.id.nacRepeatCheckbox);
-        this.mDays = (DayOfWeekButtons) r.findViewById(R.id.nacRepeatDays);
-        this.mDays.setOnClickListener(this);
-        this.mCheckbox.setOnCheckedChangeListener(this);
-    }
+	/**
+	 * @brief Constructor.
+	 */
+	public NacCardRepeat(View r)
+	{
+		super();
 
-    /**
-     * @brief Initialize the repeat text, checkbox, and day buttons.
-     */
-    public void init(Alarm alarm)
-    {
+		this.mText = (TextView) r.findViewById(R.id.nacRepeatText);
+		this.mCheckbox = (CheckBox) r.findViewById(R.id.nacRepeatCheckbox);
+		this.mDays = (DayOfWeekButtons) r.findViewById(R.id.nacRepeatDays);
+	}
+
+	/**
+	 * @brief Initialize the repeat text, checkbox, and day buttons.
+	 */
+	public void init(Alarm alarm)
+	{
 		this.mAlarm = alarm;
-        this.mText.setText(alarm.getDaysString());
-        this.mCheckbox.setChecked(alarm.getRepeat());
+		boolean state = this.mAlarm.getRepeat();
+		String days = this.mAlarm.getDaysString();
+		int data = this.mAlarm.getDays();
 
-        if (!alarm.getRepeat())
-        {
-			// Disable days of week buttons.
-            return;
-        }
-        else
-        {
-            int days = alarm.getDays();
-            for (int i=0; i < 7; i++)
-            {
-                if (((days >> i) & 1) != 0)
-                {
-                    this.mDays.enableButton(i);
-                }
-            }
-        }
-    }
+		this.mText.setText(days);
+		this.mCheckbox.setChecked(state);
+		this.mCheckbox.setOnCheckedChangeListener(this);
+		this.mDays.setOnClickListener(this);
 
-    /**
-     * @brief Save the repeat state of the alarm.
-     */
-    @Override
-    public void onCheckedChanged(CompoundButton v, boolean state)
-    {
-        mAlarm.setRepeat(state);
-		// See if this is called by setChecked()
-		// Disable/enable day of week buttons.
-    }
+		for (int i=0; i < 7; i++)
+		{
+			if (((data >> i) & 1) != 0)
+			{
+				this.mDays.enableButton(i);
+			}
+		}
 
-    /**
-     * @brief Save which day was selected to be repeated, or deselected so that
-     *        it is not repeated.
-     */
-    @Override
-    public void onClick(View v)
-    {
-		// Day of week buttons should be disabled if checkbox is unchecked.
-        if (!mCheckbox.isChecked())
-        {
-            return;
-        }
+		if (!state)
+		{
+			this.disable();
+		}
+		else
+		{
+			this.enable();
 
-		// When the button is enabled handle day of week button days.
-        byte day = mAlarm.indexToDay((int)v.getTag());
-        mDays.toggleButton((Button)v);
-        mAlarm.toggleDay(day);
-        mText.setText(mAlarm.getDaysString());
-    }
+		}
+	}
+
+	/**
+	 * @brief Enable the days view.
+	 */
+	public void enable()
+	{
+		this.mDays.animate().alpha(1f);
+	}
+
+	/**
+	 * @brief Disable the days view.
+	 */
+	public void disable()
+	{
+		this.mDays.animate().alpha(0.25f);
+	}
+
+	/**
+	 * @brief Save the repeat state of the alarm.
+	 */
+	@Override
+	public void onCheckedChanged(CompoundButton v, boolean state)
+	{
+		NacUtility.printf("Repeat : %b", state);
+		this.mAlarm.setRepeat(state);
+		this.mAlarm.changed();
+
+		if (!state)
+		{
+			this.disable();
+		}
+		else
+		{
+			this.enable();
+		}
+	}
+
+	/**
+	 * @brief Save which day was selected to be repeated, or deselected so that
+	 *		  it is not repeated.
+	 */
+	@Override
+	public void onClick(View v)
+	{
+		if (!this.mCheckbox.isChecked())
+		{
+			return;
+		}
+
+		int index = (int) v.getTag();
+		byte day = this.mAlarm.getWeekDays().get(index);
+
+		this.mDays.toggleButton((Button)v);
+		this.mAlarm.toggleDay(day);
+		this.mText.setText(mAlarm.getDaysString());
+		this.mAlarm.changed();
+	}
 
 }

@@ -9,9 +9,9 @@
         <item name="colorAccent">@color/orange</item>
 
         <item name="colorCard">?android:attr/colorBackground</item>
-        <item name="colorCardExpanded">@color/gray_dark</item>
+        <item name="colorCardExpanded">@color/gray</item>
         <item name="colorCardHighlight">@color/white</item>
-        <item name="colorCardDivider">@color/gray</item>
+        <item name="colorCardDivider">@color/orange</item>
         <item name="colorCardDrawable">@color/white</item>
         <item name="colorCardText">@color/white</item>
         <item name="colorCardFocus">@color/white</item>
