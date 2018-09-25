@@ -1,14 +1,17 @@
 package com.nfcalarmclock;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.util.DisplayMetrics;
 
+/**
+ * @brief A generic dialog object.
+ */
 public class NacCardDialog
 	implements DialogInterface.OnClickListener
 {
@@ -123,7 +126,7 @@ public class NacCardDialog
 			return;
 		}
 
-		AppCompatActivity a = (AppCompatActivity) mContext;
+		Activity a = (Activity) mContext;
 		DisplayMetrics dm = a.getResources().getDisplayMetrics();
 		int width = (int)(dm.widthPixels * w);
 		int height = (int)(dm.heightPixels * h);
@@ -198,6 +201,7 @@ public class NacCardDialog
 	@Override
 	public void onClick(DialogInterface dialog, int which)
 	{
+		NacUtility.printf("Dialog clicked.");
 		switch (which)
 		{
 		case DialogInterface.BUTTON_POSITIVE:

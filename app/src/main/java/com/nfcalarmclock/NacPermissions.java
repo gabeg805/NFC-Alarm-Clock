@@ -30,8 +30,7 @@ public class NacPermissions
 	 */
 	public static int setRead(Context c)
 	{
-		AppCompatActivity a = (AppCompatActivity) c;
-		return NacPermissions.setRead(a);
+		return NacPermissions.setRead((AppCompatActivity)c);
 	}
 
 	/**

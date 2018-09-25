@@ -42,10 +42,12 @@ public class NacAlarmActivity
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		//setContentView(R.layout.stuff);
 
+		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 		Context context = this.getApplicationContext();
 		Intent intent = this.getIntent();
-		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-		NacAlarmParcel parcel = (NacAlarmParcel) intent.getParcelableExtra("Alarm");
+		Bundle bundle = (Bundle) intent.getBundleExtra("bundle");
+		NacAlarmParcel parcel = (NacAlarmParcel)
+			bundle.getParcelable("parcel");
 		Alarm alarm = parcel.toAlarm();
 
 		alarm.print();
@@ -146,8 +148,14 @@ public class NacAlarmActivity
 	 */
 	public void scheduleNextAlarm(Context c, Alarm a)
 	{
+		NacUtility.printf("scheduleNextAlarm()");
 		if (!a.getRepeat())
 		{
+			NacDatabase db = new NacDatabase(this);
+
+			a.toggleToday();
+			db.update(a);
+			NacUtility.printf("returning from scheduleNextAlarm()");
 			return;
 		}
 

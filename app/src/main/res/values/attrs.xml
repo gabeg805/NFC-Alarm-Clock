@@ -2,6 +2,7 @@
 <resources>
 
     <attr name="colorCard" format="reference" />
+    <attr name="colorCardAccent" format="reference" />
     <attr name="colorCardExpanded" format="reference" />
     <attr name="colorCardHighlight" format="reference" />
     <attr name="colorCardDivider" format="reference" />
@@ -10,6 +11,10 @@
     <attr name="colorCardFocus" format="reference" />
     <attr name="colorCardFocusText" format="reference" />
 
+    <declare-styleable name="NacPreference">
+		<attr name="summaryEnabled" format="reference" />
+		<attr name="summaryDisabled" format="reference" />
+	</declare-styleable>
 
     <!-- <declare-styleable name="NacSharedAttr"> -->
         <attr name="nacWidth" format="reference|dimension" />

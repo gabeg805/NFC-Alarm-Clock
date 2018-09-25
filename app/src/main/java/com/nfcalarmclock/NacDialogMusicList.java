@@ -45,16 +45,16 @@ public class NacDialogMusicList
 	/**
 	 * @brief List of songs.
 	 */
-	private List<NacSong> mSongs;
+	private List<NacSound> mSounds;
 
 	/**
 	 * @param  c  The app context.
 	 * @param  s  List of songs.
 	 */
-	public NacDialogMusicList(Context c, List<NacSong> s)
+	public NacDialogMusicList(Context c, List<NacSound> s)
 	{
 		this.mContext = c;
-		this.mSongs = s;
+		this.mSounds = s;
 	}
 
 	/**
@@ -66,9 +66,9 @@ public class NacDialogMusicList
 	}
 
 	// convenience method for getting data at click position
-	public NacSong getItem(int id)
+	public NacSound getItem(int id)
 	{
-		return mSongs.get(id);
+		return mSounds.get(id);
 	}
 
 	/**
@@ -89,17 +89,20 @@ public class NacDialogMusicList
 	@Override
 	public void onBindViewHolder(NacDialogMusicItem item, int position)
 	{
-		NacSong song = mSongs.get(position);
+		NacSound sound = mSounds.get(position);
+		File file = new File(sound.path);
+		String name = sound.name;
+		String dir = file.getParent();
 
-		item.setName(song.name);
-		item.setDirectory(song.dir);
+		item.setName(name);
+		item.setDirectory(dir);
 	}
 
 	// total number of rows
 	@Override
 	public int getItemCount()
 	{
-		return mSongs.size();
+		return mSounds.size();
 	}
 
 	// stores and recycles views as they are scrolled off screen

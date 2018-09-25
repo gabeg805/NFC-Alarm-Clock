@@ -153,6 +153,7 @@ public class Alarm
 	{
 		this(hour, minute);
 		this.setDays(days);
+		this.setRepeat(true);
 	}
 
 	/**
@@ -250,15 +251,36 @@ public class Alarm
 	public void setDays(int days)
 	{
 		this.mDays = days;
-		this.setRepeat(true);
 	}
 
 	/**
 	 * @brief Toggle a day.
 	 */
-	public void toggleDay(int day)
+	public void toggleDay(byte day)
 	{
 		this.setDays(mDays^day);
+	}
+
+	/**
+	 * @brief Toggle today.
+	 */
+	public void toggleToday()
+	{
+		byte day = this.getToday();
+
+		this.toggleDay(day);
+	}
+
+	/**
+	 * @return Today's day.
+	 */
+	public byte getToday()
+	{
+		Calendar c = Calendar.getInstance();
+		int day = c.get(Calendar.DAY_OF_WEEK);
+		int index = this.getCalendarDays().indexOf(day);
+
+		return this.getWeekDays().get(index);
 	}
 
 	/**
@@ -433,6 +455,27 @@ public class Alarm
 	/**
 	 * @return The calendar instance with the specified alarm's time.
 	 */
+	public List<Calendar> getNextCalendars()
+	{
+		List<Calendar> calendars = getCalendars();
+		List<Calendar> next = new ArrayList<>();
+		int dow = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+
+		for (Calendar c : calendars)
+		{
+			int nextdow = c.get(Calendar.DAY_OF_WEEK);
+
+			if (!this.getRepeat() && (nextdow < dow))
+			{
+				continue;
+			}
+
+			next.add(c);
+		}
+
+		return next;
+	}
+
 	public List<Calendar> getCalendars()
 	{
 		Calendar today = Calendar.getInstance();
@@ -490,7 +533,7 @@ public class Alarm
 			}
 		}
 
-		return conv;
+		return (conv.isEmpty()) ? "None" : conv;
 	}
 
 	/**
@@ -524,6 +567,14 @@ public class Alarm
 	public String getName()
 	{
 		return this.mName;
+	}
+
+	/**
+	 * @brief Check if the given index of day will run the alarm.
+	 */
+	public boolean isDay(int index)
+	{
+		return ((this.getDays() & this.getWeekDays().get(index)) != 0);
 	}
 
 	/**

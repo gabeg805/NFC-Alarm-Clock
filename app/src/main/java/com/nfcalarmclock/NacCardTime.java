@@ -3,7 +3,6 @@ package com.nfcalarmclock;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;

@@ -3,3 +3,4 @@ Notes:
 	- Recycler view private classes can be moved to their own files.
 
 When i expand a card and it goes out of view, then back into view, it will be collapsed but the background will be as if it was expanded.
+When permissions are not set, read of music is incorrect.

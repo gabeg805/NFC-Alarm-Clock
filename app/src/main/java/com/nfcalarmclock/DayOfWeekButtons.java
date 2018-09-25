@@ -17,354 +17,436 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.support.annotation.Nullable;
 import java.util.List;
 
 /**
  * @class A button that consists of an image to the left, and text to the right
- *        of it.
+ *		  of it.
  */
 public class DayOfWeekButtons
-    extends LinearLayout
+	extends LinearLayout
 {
 
-    private static final String NAME = "NFCAlarmClock";
+	/**
+	 * @brief Context.
+	 */
+	private Context mContext;
 
-    private Context mContext;
-    private Button[] mButtons;
-    private int mButtonWidth;
-    private int mButtonHeight;
-    private int[] mButtonColor;
-    private int mButtonColorInitial;
-    private int mTextSize;
-    private int[] mTextColor;
-    private int mTextColorInitial;
-    private final int mLength = 7;
+	/**
+	 * @brief A button for each day.
+	 */
+	private Button[] mButtons;
 
-    /**
-     * @brief The constructor.
-     * 
-     * @param context  The application context.
-     * @param attrs    A collection of attributes associated with a tag in an XML
-     *                 document.
-     */
-    public DayOfWeekButtons(Context context, @Nullable AttributeSet attrs)
-    {
-        super(context, attrs);
-        this.mContext = context;
-        int[] id = R.styleable.DayOfWeekButtons;
-        int layout = R.layout.dayofweekbuttons;
-        Theme theme = this.mContext.getTheme();
-        TypedArray ta = theme.obtainStyledAttributes(attrs, id, 0, 0);
-        setOrientation(LinearLayout.HORIZONTAL);
-        LayoutInflater.from(this.mContext).inflate(layout, this, true);
-        init(ta);
-    }
+	/**
+	 * @brief Button width.
+	 */
+	private int mButtonWidth;
 
-    /**
-     * @brief Finish setting up the View.
-     */
-    @Override
-    protected void onFinishInflate()
-    {
-        super.onFinishInflate();
-        setButtons();
-    }
+	/**
+	 * @brief Button height.
+	 */
+	private int mButtonHeight;
 
-    /**
-     * @brief Setup the contents of the button.
-     * 
-     * @param ta  Array of values that were retrieved from the context's theme.
-     */
-    private void init(TypedArray ta)
-    {
-        try
-        {
-            initButtons(ta);
-        }
-        finally
-        {
-            ta.recycle();
-        }
-    }
+	/**
+	 * @brief Button color.
+	 */
+	private int[] mButtonColorList;
 
-    /**
-     * @brief Define all elements of the day of week buttons.
-     * 
-     * @param ta  Array of values that were retrieved from the context's theme.
-     */
-    private void initButtons(TypedArray ta)
-    {
-        Resources r = this.mContext.getResources();
-        initButtonView();
-        initButtonSize(ta, r);
-        initButtonColor(ta);
-        initTextSize(ta, r);
-        initTextColor(ta);
-    }
+	/**
+	 * @brief Initial button color.
+	 */
+	private int mButtonColor;
 
-    /**
-     * @brief Define the button views.
-     */
-    private void initButtonView()
-    {
-        this.mButtons = new Button[this.mLength];
-        this.mButtons[0] = (Button) findViewById(R.id.dowb_sun);
-        this.mButtons[1] = (Button) findViewById(R.id.dowb_mon);
-        this.mButtons[2] = (Button) findViewById(R.id.dowb_tue);
-        this.mButtons[3] = (Button) findViewById(R.id.dowb_wed);
-        this.mButtons[4] = (Button) findViewById(R.id.dowb_thu);
-        this.mButtons[5] = (Button) findViewById(R.id.dowb_fri);
-        this.mButtons[6] = (Button) findViewById(R.id.dowb_sat);
-        for (int i=0; i < this.mLength; i++)
-        {
-            if (this.mButtons[i] == null)
-            {
-                throw new RuntimeException("Unable to find button ID for #"+String.valueOf(i)+".");
-            }
-        }
-    }
+	/**
+	 * @brief Text color.
+	 */
+	private int[] mTextColorList;
 
-    /**
-     * @brief Define the size of the buttons.
-     * 
-     * @param ta  Array of values that were retrieved from the context's theme.
-     */
-    private void initButtonSize(TypedArray ta, Resources r)
-    {
-        int wid = R.styleable.DayOfWeekButtons_nacWidth;
-        int hid = R.styleable.DayOfWeekButtons_nacHeight;
-        float width = r.getDimension(R.dimen.circle_size);
-        float height = r.getDimension(R.dimen.circle_size);
-        this.mButtonWidth = (int) ta.getDimension(wid, width);
-        this.mButtonHeight = (int) ta.getDimension(hid, height);
-    }
+	/**
+	 * @brief Initial text color.
+	 */
+	private int mTextColor;
 
-    /**
-     * @brief Define the color of the buttons.
-     * 
-     * @param ta  Array of values that were retrieved from the context's theme.
-     */
-    private void initButtonColor(TypedArray ta)
-    {
-        this.mButtonColor = new int[this.mLength];
-        int cid = R.styleable.DayOfWeekButtons_nacDrawableColor;
-        int color = NacUtility.getThemeAttrColor(this.mContext,
-                                                 R.attr.colorCardExpanded);
-        int value = ta.getColor(cid, color);
-        for (int i=0;i < this.mLength; i++)
-        {
-            this.mButtonColor[i] = value;
-        }
-        this.mButtonColorInitial = this.mButtonColor[0];
-    }
+	/**
+	 * @brief Text size.
+	 */
+	private int mTextSize;
 
-    /**
-     * @brief Define the text size in the buttons.
-     * 
-     * @param ta  Array of values that were retrieved from the context's theme.
-     */
-    private void initTextSize(TypedArray ta, Resources r)
-    {
-        int tsid = R.styleable.DayOfWeekButtons_nacTextSize;
-        float size = r.getDimension(R.dimen.tsz_card_days);
-        this.mTextSize = (int) ta.getDimension(tsid, size);
-    }
+	/**
+	 * @brief Number of days.
+	 */
+	private final int mLength = 7;
 
-    /**
-     * @brief Define the text color in the buttons.
-     * 
-     * @param ta  Array of values that were retrieved from the context's theme.
-     */
-    private void initTextColor(TypedArray ta)
-    {
-        this.mTextColor = new int[this.mLength];
-        int cid = R.styleable.DayOfWeekButtons_nacTextColor;
-        int color = NacUtility.getThemeAttrColor(this.mContext,
-                                                 R.attr.colorCardText);
-        int value = ta.getColor(cid, color);
-        for (int i=0;i < this.mLength; i++)
-        {
-            this.mTextColor[i] = value;
-        }
-        this.mTextColorInitial = this.mTextColor[0];
-    }
+	/**
+	 */
+	public DayOfWeekButtons(Context context)
+	{
+		this(context, null);
+	}
 
-    /**
-     * @brief Set an onClick listener for each of the day of week buttons.
-     */
-    public void setOnClickListener(View.OnClickListener listener)
-    {
-        Button b;
-        if (this.mButtons == null)
-        {
-            throw new RuntimeException("Unable to find button views.");
-        }
-        for (int i=0; i < this.mLength; i++)
-        {
-            b = this.mButtons[i];
-            b.setOnClickListener(listener);
-        }
-    }
+	/**
+	 */
+	public DayOfWeekButtons(Context context, AttributeSet attrs)
+	{
+		this(context, attrs, 0);
+	}
 
-    /**
-     * @brief Enable a button.
-     * 
-     * @details Sets the button color to the initial color of the text, and the
-     *          text is set to the initial color of the button.
-     * 
-     * @param b  The button to enable.
-     */
-    public void enableButton(int i)
-    {
-        this.mButtonColor[i] = this.mTextColorInitial;
-        this.mTextColor[i] = this.mButtonColorInitial;
-        this.setButtonColor(i);
-        this.setTextColor(i);
-    }
+	/**
+	 */
+	public DayOfWeekButtons(Context context, AttributeSet attrs,
+		int defStyleAttr)
+	{
+		super(context, attrs, defStyleAttr);
 
-    /**
-     * @brief Disable a button.
-     * 
-     * @details Sets the button color to its initial color, and the same is true
-     *          for the text.
-     * 
-     * @param b  The button to disable.
-     */
-    public void disableButton(int i)
-    {
-        this.mButtonColor[i] = this.mButtonColorInitial;
-        this.mTextColor[i] = this.mTextColorInitial;
-        this.setButtonColor(i);
-        this.setTextColor(i);
-    }
+		this.mContext = context;
+		TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
+			R.styleable.DayOfWeekButtons, 0, 0);
+		Resources r = context.getResources();
 
-    /**
-     * @brief Inverse the color of the drawable and text.
-     * 
-     * @details When the button is set to its initial color, its state is
-     *          off. As a result, returning False indicates it is off.
-     * 
-     * @param b  The button to toggle.
-     * 
-     * @return True when the button is enabled and False when the button is
-     *         disabled.
-     */
-    public boolean toggleButton(Button b)
-    {
-        int i = (int) b.getTag();
-        this.setInverseColor(i);
-        this.setButtonColor(i);
-        this.setTextColor(i);
-        if (this.mButtonColor[i] == this.mButtonColorInitial)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
+		setOrientation(LinearLayout.HORIZONTAL);
+		LayoutInflater.from(context).inflate(R.layout.dayofweekbuttons,
+			this, true);
 
-    /**
-     * @brief Setup the buttons that represent the different days of the week.
-     */
-    private void setButtons()
-    {
-        Button b;
-        if (this.mButtons == null)
-        {
-            throw new RuntimeException("Unable to find button views.");
-        }
-        for (int i=0; i < this.mLength; i++)
-        {
-            b = this.mButtons[i];
-            LinearLayout.LayoutParams params =
-                (LinearLayout.LayoutParams) b.getLayoutParams();
-            params.width = this.mButtonWidth;
-            params.height = this.mButtonHeight;
-            if (i > 0)
-            {
-                params.setMargins(this.getButtonSpacing(), 0, 0, 0);
-            }
-            b.setLayoutParams(params);
-            b.setBackgroundResource(R.drawable.circle);
-            this.setButtonColor(i);
-            b.setCompoundDrawablePadding(0);
-            this.setTextColor(i);
-            b.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.mTextSize);
-            b.setPadding(0, 0, 0, 0);
-            b.setPaddingRelative(0, 0, 0, 0);
-            // b.setOnClickListener(this.DayOfWeekButtonListener);
-            b.setTag(i);
-        }
-    }
+		try
+		{
 
-    /**
-     * @brief Set the button color.
-     * 
-     * @param i  The index corresponding to the desired button to change.
-     */
-    private void setButtonColor(int i)
-    {
-        Button b = this.mButtons[i];
-        int c = this.mButtonColor[i];
-        Drawable d = b.getBackground();
-        d.setColorFilter(c, PorterDuff.Mode.SRC);
-    }
+			float width = r.getDimension(R.dimen.circle_size);
+			float height = r.getDimension(R.dimen.circle_size);
+			float size = r.getDimension(R.dimen.tsz_card_days);
+			int expandedcolor = NacUtility.getThemeAttrColor(this.mContext,
+				R.attr.colorCardExpanded);
+			int textcolor = NacUtility.getThemeAttrColor(this.mContext,
+				R.attr.colorCardText);
 
-    /**
-     * @brief Set the color of the text.
-     * 
-     * @param i  The index corresponding to the desired button to change.
-     */
-    private void setTextColor(int i)
-    {
-        Button b = this.mButtons[i];
-        int c = this.mTextColor[i];
-        b.setTextColor(c);
-    }
+			this.mButtonWidth = (int) a.getDimension(
+				R.styleable.DayOfWeekButtons_nacWidth, width);
+			this.mButtonHeight = (int) a.getDimension(
+				R.styleable.DayOfWeekButtons_nacHeight, height);
+			this.mTextSize = (int) a.getDimension(
+				R.styleable.DayOfWeekButtons_nacTextSize, size);
+			this.mButtonColorList = new int[this.mLength];
+			this.mTextColorList = new int[this.mLength];
+			this.mButtonColor = a.getColor(
+				R.styleable.DayOfWeekButtons_nacDrawableColor, expandedcolor);
+			this.mTextColor = a.getColor(
+				R.styleable.DayOfWeekButtons_nacTextColor, textcolor);
 
-    /**
-     * @brief Set the button and text colors to their inverse values.
-     * 
-     * @param i  The index corresponding to the desired button to change.
-     */
-    private void setInverseColor(int i)
-    {
-        int tmp = this.mButtonColor[i];
-        this.mButtonColor[i] = this.mTextColor[i];
-        this.mTextColor[i] = tmp;
-    }
+			for (int i=0; i < this.mLength; i++)
+			{
+				this.mButtonColorList[i] = this.mButtonColor;
+				this.mTextColorList[i] = this.mTextColor;
+			}
+		}
+		finally
+		{
+			a.recycle();
+		}
 
-    /**
-     * @brief Determine the spacing between buttons.
-     * 
-     * @return The spacing between the different buttons.
-     */
-    private int getButtonSpacing()
-    {
-        Resources r = this.mContext.getResources();
-        DisplayMetrics metrics = r.getDisplayMetrics();
-        float left = r.getDimension(R.dimen.ml_card);
-        float right = r.getDimension(R.dimen.mr_card);
-        double spacing = (metrics.widthPixels - 2.5*(left+right)
-                         - 7*this.mButtonWidth) / 6.0;
-        return (int) spacing;
-    }
+		init();
+	}
 
-    // /**
-    //  * @brief Button click listener.
-    //  */
-    // private View.OnClickListener DayOfWeekButtonListener =
-    //     new View.OnClickListener()
-    //     {
-    //         @Override
-    //         public void onClick(View v)
-    //         {
-    //             toggleButton((Button)v);
-    //         }
-    //     };
+	/**
+	 * @brief Finish setting up the View.
+	 */
+	@Override
+	protected void onFinishInflate()
+	{
+		super.onFinishInflate();
+		finishSetup();
+	}
+
+	/**
+	 * @brief Setup the contents of the button.
+	 */
+	private void init()
+	{
+		this.mButtons = new Button[this.mLength];
+		this.mButtons[0] = (Button) findViewById(R.id.dowb_sun);
+		this.mButtons[1] = (Button) findViewById(R.id.dowb_mon);
+		this.mButtons[2] = (Button) findViewById(R.id.dowb_tue);
+		this.mButtons[3] = (Button) findViewById(R.id.dowb_wed);
+		this.mButtons[4] = (Button) findViewById(R.id.dowb_thu);
+		this.mButtons[5] = (Button) findViewById(R.id.dowb_fri);
+		this.mButtons[6] = (Button) findViewById(R.id.dowb_sat);
+
+		for (int i=0; i < this.mLength; i++)
+		{
+			if (this.mButtons[i] == null)
+			{
+				throw new RuntimeException("Unable to find button ID for #"+String.valueOf(i)+".");
+			}
+		}
+	}
+
+	/**
+	 * @brief Initialize the button and text colors.
+	 *
+	 * @param  days  The button days that will be highlighted.
+	 */
+	public void init(int days)
+	{
+		Alarm a = new Alarm();
+
+		a.setDays(days);
+		this.init(a);
+	}
+
+	/**
+	 * @brief Initialize the button and text colors.
+	 *
+	 * @param  a  The alarm.
+	 */
+	public void init(Alarm a)
+	{
+		for (int i=0; i < 7; i++)
+		{
+			if (a.isDay(i))
+			{
+				enableButton(i);
+			}
+			else
+			{
+				disableButton(i);
+			}
+		}
+	}
+
+	/**
+	 * @brief Setup the buttons that represent the different days of the week.
+	 */
+	private void finishSetup()
+	{
+		if (this.mButtons == null)
+		{
+			throw new RuntimeException("Unable to find button views.");
+		}
+
+		int spacing = this.getButtonSpacing();
+
+		for (int i=0; i < this.mLength; i++)
+		{
+			Button b = this.mButtons[i];
+			LayoutParams params = (LayoutParams) b.getLayoutParams();
+			params.width = this.mButtonWidth;
+			params.height = this.mButtonHeight;
+
+			if (i > 0)
+			{
+				params.setMargins(spacing, 0, 0, 0);
+			}
+
+			b.setLayoutParams(params);
+			b.setBackgroundResource(R.drawable.circle);
+			this.drawButton(i);
+			b.setCompoundDrawablePadding(0);
+			this.drawText(i);
+			b.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.mTextSize);
+			b.setPadding(0, 0, 0, 0);
+			b.setPaddingRelative(0, 0, 0, 0);
+			b.setTag(i);
+		}
+	}
+
+	/**
+	 * @brief Enable a button.
+	 * 
+	 * @details Sets the button color to the initial color of the text, and the
+	 *			text is set to the initial color of the button.
+	 * 
+	 * @param  index  The index of the desired button.
+	 */
+	public void enableButton(int index)
+	{
+		this.mButtonColorList[index] = this.mTextColor;
+		this.mTextColorList[index] = this.mButtonColor;
+
+		this.drawButton(index);
+		this.drawText(index);
+	}
+
+	/**
+	 * @brief Disable a button.
+	 * 
+	 * @details Sets the button color to its initial color, and the same is true
+	 *			for the text.
+	 * 
+	 * @param  index  The index of the desired button.
+	 */
+	public void disableButton(int index)
+	{
+		this.mButtonColorList[index] = this.mButtonColor;
+		this.mTextColorList[index] = this.mTextColor;
+
+		this.drawButton(index);
+		this.drawText(index);
+	}
+
+	/**
+	 * @brief Inverse the color of the drawable and text.
+	 * 
+	 * @param  index  The index corresponding to the desired button to change.
+	 * 
+	 * @return True when the button is enabled and False when the button is
+	 *		   disabled.
+	 */
+	public boolean toggleButton(int index)
+	{
+		this.inverseColors(index);
+		this.drawButton(index);
+		this.drawText(index);
+
+		return (this.mButtonColorList[index] != this.mButtonColor);
+	}
+
+	/**
+	 * @brief Inverse the colors of the button and text.
+	 * 
+	 * @param  index  The index corresponding to the desired button to change.
+	 */
+	private void inverseColors(int index)
+	{
+		int tmp = this.mButtonColorList[index];
+		this.mButtonColorList[index] = this.mTextColorList[index];
+		this.mTextColorList[index] = tmp;
+	}
+
+	/**
+	 * @brief Draw the button with the desired color.
+	 *
+	 * @param  index  The index corresponding to the desired button.
+	 * @param  color  The color to change the button to.
+	 */
+	public void drawButton(int index, int color)
+	{
+		Button button = this.mButtons[index];
+		Drawable drawable = button.getBackground();
+		this.mButtonColorList[index] = color;
+
+		drawable.setColorFilter(color, PorterDuff.Mode.SRC);
+		invalidate();
+		requestLayout();
+	}
+
+	/**
+	 * @brief Draw the text with the desired color.
+	 * 
+	 * @param  index  The index corresponding to the desired button.
+	 * @param  color  The color to change the button to.
+	 */
+	private void drawText(int index, int color)
+	{
+		Button button = this.mButtons[index];
+		this.mTextColorList[index] = color;
+
+		button.setTextColor(color);
+		invalidate();
+		requestLayout();
+	}
+
+	/**
+	 * @brief Set the button color.
+	 * 
+	 * @param  index  The index corresponding to the desired button to change.
+	 */
+	private void drawButton(int index)
+	{
+		this.drawButton(index, this.mButtonColorList[index]);
+	}
+
+	/**
+	 * @brief Set the color of the text.
+	 * 
+	 * @param  index  The index corresponding to the desired button to change.
+	 */
+	private void drawText(int index)
+	{
+		this.drawText(index, this.mTextColorList[index]);
+	}
+
+	/**
+	 * @brief Set the button color.
+	 *
+	 * @param  color  The button color.
+	 */
+	public void setButtonColor(int color)
+	{
+		this.mButtonColor = color;
+	}
+
+	/**
+	 * @brief Set the text color.
+	 *
+	 * @param  color  The text color.
+	 */
+	public void setTextColor(int color)
+	{
+		this.mTextColor = color;
+	}
+
+	/**
+	 * @brief Set an onClick listener for each of the day of week buttons.
+	 */
+	public void setOnClickListener(View.OnClickListener listener)
+	{
+		if (this.mButtons == null)
+		{
+			throw new RuntimeException("Unable to find button views.");
+		}
+
+		for (int i=0; i < this.mLength; i++)
+		{
+			Button b = this.mButtons[i];
+			b.setOnClickListener(listener);
+		}
+	}
+
+	/**
+	 * @return The alarm days.
+	 */
+	public int getDays()
+	{
+		Alarm a = new Alarm();
+		List<Byte> weekdays = a.getWeekDays();
+		int days = Alarm.Days.NONE;
+
+		for (int i=0; i < this.mLength; i++)
+		{
+			if (this.isDayEnabled(i))
+			{
+				days |= weekdays.get(i);
+			}
+		}
+
+		return days;
+	}
+
+	/**
+	 * @brief Determine the spacing between buttons.
+	 * 
+	 * @return The spacing between the different buttons.
+	 */
+	private int getButtonSpacing()
+	{
+		Resources r = this.mContext.getResources();
+		DisplayMetrics metrics = r.getDisplayMetrics();
+		float left = r.getDimension(R.dimen.ml_card);
+		float right = r.getDimension(R.dimen.mr_card);
+		double spacing = (metrics.widthPixels - 2.5*(left+right)
+						 - 7*this.mButtonWidth) / 6.0;
+
+		return (int) spacing;
+	}
+
+	/**
+	 * @return True if the button is enabled and false if it is not.
+	 */
+	public boolean isDayEnabled(int index)
+	{
+		return (this.mButtonColorList[index] == this.mTextColor)
+			&& (this.mTextColorList[index] == this.mButtonColor);
+	}
 
 }

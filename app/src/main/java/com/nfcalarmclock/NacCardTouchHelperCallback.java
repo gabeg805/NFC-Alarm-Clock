@@ -1,45 +1,28 @@
 package com.nfcalarmclock;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.RectF;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.helper.ItemTouchUIUtil;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
-import android.view.MotionEvent;
 import android.view.View;
 
-enum ButtonState
-{
-    GONE,
-    LEFT_VISIBLE,
-    RIGHT_VISIBLE
-}
-
+/**
+ * @brief Class to handle callback events when swiping card.
+ */
 public class NacCardTouchHelperCallback
 	extends ItemTouchHelper.Callback
 {
 
+	/**
+	 * @brief The adapter that will implement the event methods.
+	 */
     private NacCardTouchHelperAdapter mAdapter = null;
-	private Canvas mCanvas = null;
-	private RecyclerView mRecyclerView = null;
+
+	/**
+	 * @brief The current view holder.
+	 */
 	private ViewHolder mViewHolder = null;
-	private float mDx = 0;
-	private boolean mActive = false;
-	private ButtonState mState = ButtonState.GONE;
-	private RectF mRect = null;
-	private Paint mPaint = null;
-	private static final float mWidth = 100;
-	private Bitmap mIconCopy = null;
-	private Bitmap mIconDelete = null;
 
 	/**
 	 * @param  adapter  The object that overrides the event methods.
@@ -49,10 +32,53 @@ public class NacCardTouchHelperCallback
         mAdapter = adapter;
     }
 
+	/**
+	 * @brief Return the foreground view of the view holder.
+	 */
+	private View getForegroundView()
+	{
+		return ((NacCard)this.mViewHolder).mCard;
+	}
+
+	/**
+	 * @brief Return the background copy view of the view holder.
+	 */
+	private View getBackgroundCopyView()
+	{
+		return ((NacCard)this.mViewHolder).mBackgroundCopy;
+	}
+
+	/**
+	 * @brief Return the background delete view of the view holder.
+	 */
+	private View getBackgroundDeleteView()
+	{
+		return ((NacCard)this.mViewHolder).mBackgroundDelete;
+	}
+
+	/**
+	 * @brief Clear the view.
+	 * 
+	 * @param  rv  The recycler view.
+	 * @param  vh  The view holder.
+	 */
     @Override
-    public int convertToAbsoluteDirection(int flags, int layoutDirection) {
-		NacUtility.printf("Converting to absolute direction %d.", layoutDirection);
-        return super.convertToAbsoluteDirection(flags, layoutDirection);
+    public void clearView(RecyclerView rv, ViewHolder vh)
+	{
+        final View fg = this.getForegroundView();
+
+        getDefaultUIUtil().clearView(fg);
+    }
+	/**
+	 * @brief Convert the movement of the card to an absolute direction.
+	 *
+	 * @param  flags  Movement flags.
+	 * @param  dir  The direction information.
+	 */
+    @Override
+    public int convertToAbsoluteDirection(int flags, int dir)
+	{
+        return super.convertToAbsoluteDirection(flags, dir);
     }
 
 	/**
@@ -60,12 +86,13 @@ public class NacCardTouchHelperCallback
 	 *        left and right.
 	 *
 	 * @param  rv  The recycler view.
-	 * @param  holder  The view holder.
+	 * @param  vh  The view holder.
 	 */
     @Override
-    public int getMovementFlags(RecyclerView rv, ViewHolder holder)
+    public int getMovementFlags(RecyclerView rv, ViewHolder vh)
 	{
-		NacUtility.printf("Getting movement flags! %b %b" , (rv == null), (holder == null));
+		this.mViewHolder = vh;
+
         return makeMovementFlags(0,
 			ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT);
     }
@@ -76,159 +103,114 @@ public class NacCardTouchHelperCallback
     @Override
     public boolean isItemViewSwipeEnabled()
 	{
-		NacUtility.printf("CHECKING IF ITEM VIEW SWIPE IS ENABLED.");
-        return true;
+        return (this.mViewHolder == null) ? true :
+			((NacCard)this.mViewHolder).isCollapsed();
     }
 
+	/**
+	 * @brief Called when the child is drawn.
+	 *
+	 * @param  c  The canvas.
+	 * @param  rv  The recycler view.
+	 * @param  vh  The view holder.
+	 * @param  dx  The amount the card has been swiped in the x-direction.
+	 * @param  dy  The amount the card has been swiped in the y-direcdtion.
+	 * @param  action  The action that was done on the card.
+	 * @param  active  Whether the card is being used by the user or not.
+	 */
     @Override
-    public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        final View foregroundView = ((NacCard) viewHolder).mCard;
-        getDefaultUIUtil().clearView(foregroundView);
-    }
+    public void onChildDraw(Canvas c, RecyclerView rv, ViewHolder vh,
+		float dx, float dy, int action, boolean active)
+	{
+		this.mViewHolder = vh;
+        final View fg = this.getForegroundView();
+		final View copy = this.getBackgroundCopyView();
+		final View delete = this.getBackgroundDeleteView();
 
-    @Override
-    public void onChildDraw(Canvas c, RecyclerView recyclerView,
-                            RecyclerView.ViewHolder viewHolder, float dX, float dY,
-                            int actionState, boolean isCurrentlyActive) {
-        final View foregroundView = ((NacCard) viewHolder).mCard;
-		final View backgroundCopyView = ((NacCard) viewHolder).mBackgroundCopy;
-		final View backgroundDeleteView = ((NacCard) viewHolder).mBackgroundDelete;
-
-		if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE)
+		if (action == ItemTouchHelper.ACTION_STATE_SWIPE)
 		{
-			if (dX > 0)
+			if (dx > 0)
 			{
-				backgroundCopyView.setVisibility(View.VISIBLE);
-				backgroundDeleteView.setVisibility(View.GONE);
+				copy.setVisibility(View.VISIBLE);
+				delete.setVisibility(View.GONE);
 			}
-			else if (dX < 0)
+			else if (dx < 0)
 			{
-				backgroundCopyView.setVisibility(View.GONE);
-				backgroundDeleteView.setVisibility(View.VISIBLE);
+				copy.setVisibility(View.GONE);
+				delete.setVisibility(View.VISIBLE);
 			}
 		}
 
-        getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY,
-                actionState, isCurrentlyActive);
+        getDefaultUIUtil().onDraw(c, rv, fg, dx, dy, action, active);
     }
 
-
+	/**
+	 * @brief Called when onChildDraw is over.
+	 *
+	 * @param  c  The canvas.
+	 * @param  rv  The recycler view.
+	 * @param  vh  The view holder.
+	 * @param  dx  The amount the card has been swiped in the x-direction.
+	 * @param  dy  The amount the card has been swiped in the y-direcdtion.
+	 * @param  action  The action that was done on the card.
+	 * @param  active  Whether the card is being used by the user or not.
+	 */
     @Override
-    public void onChildDrawOver(Canvas c, RecyclerView recyclerView,
-                                RecyclerView.ViewHolder viewHolder, float dX, float dY,
-                                int actionState, boolean isCurrentlyActive) {
-        final View foregroundView = ((NacCard) viewHolder).mCard;
-        getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView, dX, dY,
-                actionState, isCurrentlyActive);
+    public void onChildDrawOver(Canvas c, RecyclerView rv, ViewHolder vh,
+		float dx, float dy, int action, boolean active)
+	{
+        final View view = this.getForegroundView();
+
+        getDefaultUIUtil().onDrawOver(c, rv, view, dx, dy, action, active);
     }
 
 	/**
 	 * @brief Disallow movement of cards.
 	 *
 	 * @param  rv  The recycler view.
-	 * @param  holder  The view holder.
+	 * @param  vh  The view holder.
 	 * @param  target  The target view holder.
 	 */
     @Override
-    public boolean onMove(RecyclerView rv, ViewHolder holder, ViewHolder target)
+    public boolean onMove(RecyclerView rv, ViewHolder vh, ViewHolder target)
 	{
-		NacUtility.printf("Running onMove.");
         return false;
     }
 
+	/**
+	 * @brief Called when the item that was selected has changed.
+	 * 
+	 * @param  vh  The view holder.
+	 * @param  action  The action that was taken.
+	 */
     @Override
-    public void onSelectedChanged(ViewHolder viewHolder, int actionState)
+    public void onSelectedChanged(ViewHolder vh, int action)
 	{
-		NacUtility.printf("On Selected Changed!");
-        if (viewHolder != null) {
-            final View foregroundView = ((NacCard) viewHolder).mCard;
+        if (vh != null)
+		{
+            final View fg= this.getForegroundView();
 
-            getDefaultUIUtil().onSelected(foregroundView);
+            getDefaultUIUtil().onSelected(fg);
         }
     }
 
+	/**
+	 * @brief Called when item is swiped.
+	 *
+	 * @param  vh  The view holder.
+	 * @param  dir  The direction that the item was swiped.
+	 */
     @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-		NacUtility.printf("~~~~ Running onSwiped in %d direction.", direction);
-        //listener.onItemDelete(viewHolder, direction, viewHolder.getAdapterPosition());
-        mAdapter.onItemDelete(viewHolder.getAdapterPosition());
+    public void onSwiped(ViewHolder vh, int dir)
+	{
+		if (dir == ItemTouchHelper.LEFT)
+		{
+        	mAdapter.onItemDelete(vh.getAdapterPosition());
+		}
+		else if (dir == ItemTouchHelper.RIGHT)
+		{
+			mAdapter.onItemCopy(vh.getAdapterPosition());
+		}
     }
 
 }
-
-
-			//if (active || (mState == ButtonState.GONE))
-			//{
-			//	if (dx > 0)
-			//	{
-			//		drawLeftButton(c, holder, dx);
-			//	}
-			//	else if (dx < 0)
-			//	{
-			//		drawRightButton(c, holder, dx);
-			//	}
-			//}
-
-            //if (mState != ButtonState.GONE)
-			//{
-            //    if (mState == ButtonState.LEFT_VISIBLE)
-			//	{
-			//		dx = Math.max(dx, mWidth);
-			//		drawLeftButton(c, holder, dx);
-			//	}
-            //    else if (mState == ButtonState.RIGHT_VISIBLE)
-			//	{
-			//		dx = Math.min(dx, -mWidth);
-			//		drawRightButton(c, holder, dx);
-			//	}
-            //}
-            //else
-			//{
-			//	rv.setOnTouchListener(this);
-            //}
-
-			//Paint p = new Paint();
-			//Resources r = ((NacCard)holder).mContext.getResources();
-			//View v = ((NacCard)holder).mCard;
-			//float top = (float) v.getTop();
-			//float bottom = (float) v.getBottom();
-			//float left = (float) v.getLeft();
-			//float right = (float) v.getRight();
-			//float height = bottom - top;
-			//float width = height / 3;
-
-
-			//if (dx > 0)
-			//{
-			//	p.setColor(Color.parseColor("#388E3C"));
-
-			//	RectF background = new RectF(left, top, dx, bottom);
-
-			//	c.drawRect(background, p);
-
-			//	Bitmap icon = BitmapFactory.decodeResource(r,
-			//		R.mipmap.baseline_delete_white_32dp);
-			//		//R.drawable.ic_mode_edit_white_24dp);
-			//	RectF icon_dest = new RectF(left+width, top+width,
-			//		left+2*width, bottom-width);
-
-			//	c.drawBitmap(icon, null, icon_dest, p);
-			//}
-			//else if (dx < 0)
-			//{
-			//	p.setColor(Color.parseColor("#D32F2F"));
-
-			//	RectF background = new RectF(right+dx, top, right, bottom);
-
-			//	c.drawRect(background, p);
-
-			//	Bitmap icon = BitmapFactory.decodeResource(r,
-			//		R.mipmap.baseline_delete_white_32dp);
-			//	RectF icon_dest = new RectF(right-2*width, top+width,
-			//		right-width, bottom-width);
-
-			//	c.drawBitmap(icon, null, icon_dest, p);
-			//}
-			//else
-			//{
-			//}

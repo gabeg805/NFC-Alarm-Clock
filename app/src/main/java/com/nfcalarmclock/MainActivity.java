@@ -1,14 +1,14 @@
 package com.nfcalarmclock;
 
-import android.os.Bundle;
+import android.app.AlarmManager.AlarmClockInfo;
 import android.content.Intent;
-import android.widget.Toast;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.design.widget.Snackbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+import java.lang.System;
 
 /**
  * @brief The application's main activity.
@@ -42,8 +42,9 @@ public class MainActivity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		NacUtility.printf("onCreate() in MainActivity.");
 		setContentView(R.layout.act_main);
-		this.deleteDatabase(NacDatabaseContract.DATABASE_NAME);
+		//this.deleteDatabase(NacDatabaseContract.DATABASE_NAME);
 
 		this.mAdapter = new NacCardAdapter(this);
 		this.mFloatingButton = new NacFloatingButton(this);
@@ -54,7 +55,29 @@ public class MainActivity
 		this.mRecyclerView.setAdapter(this.mAdapter);
 		this.mRecyclerView.setLayoutManager(this);
 		this.mRecyclerView.setScrollListener(this.mFloatingButton);
+		//this.mAdapter.build();
+	}
+
+	@Override
+	protected void onStart()
+	{
+		super.onStart();
+		NacUtility.printf("onStart() in MainActivity.");
+	}
+
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		NacUtility.printf("onResume() in MainActivity.");
 		this.mAdapter.build();
+	}
+
+	@Override
+	protected void onRestart()
+	{
+		super.onRestart();
+		NacUtility.printf("onRestart() in MainActivity.");
 	}
 
 	/**
@@ -69,29 +92,6 @@ public class MainActivity
 	}
 
 	/**
-	 * @brief The back button was pressed.
-	 */
-	@Override
-	public void onBackPressed()
-	{
-		super.onBackPressed();
-	}
-
-	/**
-	 * @brief Update the database when app is closed.
-	 *
-	 * @details This will be run when user closes the app, hits the home
-	 *			button, or hits the power button.
-	 */
-	//@Override
-	//protected void onStop()
-	//{
-	//	super.onStop();
-	//	NacUtility.print("Stopping!");
-	//	this.mAdapter.save();
-	//}
-
-	/**
 	 * @brief Create the options menu in the action bar.
 	 *
 	 * @param  menu  The menu view.
@@ -99,7 +99,7 @@ public class MainActivity
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		getMenuInflater().inflate(R.menu.app_bar, menu);
+		getMenuInflater().inflate(R.menu.menu_action_bar, menu);
 		return true;
 	}
 
@@ -116,14 +116,11 @@ public class MainActivity
 
 		switch (id)
 		{
-		case android.R.id.home:
-			Toast.makeText(this, "Yo this is the home",
-				Toast.LENGTH_LONG).show();
+		case R.id.menu_next_alarm:
+			showNextAlarm();
 			return true;
 		case R.id.menu_settings:
-			Intent intent = new Intent(getApplicationContext(),
-				SettingsActivity.class);
-			startActivity(intent);
+			startSettingsActivity();
 			return true;
 		default:
 			Toast.makeText(this, "Yo this is the default thing",
@@ -132,6 +129,64 @@ public class MainActivity
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	/**
+	 * @brief Start the settings activity.
+	 */
+	private void startSettingsActivity()
+	{
+		Intent intent = new Intent(this, SettingsActivity.class);
+
+		startActivity(intent);
+	}
+
+	/**
+	 * @brief Display a toast showing the next scheduled alarm.
+	 */
+	private void showNextAlarm()
+	{
+		NacAlarmScheduler scheduler = new NacAlarmScheduler(this);
+		AlarmClockInfo next = scheduler.getNext();
+		String msg = "";
+
+		if (next == null)
+		{
+			msg = "No scheduled alarms.";
+		}
+		else
+		{
+			long time = (next.getTriggerTime() - System.currentTimeMillis())
+				/ 1000;
+			long day = (time / (60*60*24)) % 365;
+			long hr = (time / (60*60)) % 24;
+			long min = (time / 60) % 60;
+			long sec = time % 60;
+			String dayunit = (day != 1) ? " days " : " day ";
+			String hrunit = (hr != 1) ? " hours " : " hour ";
+			String minunit = (min != 1) ? " minutes " : " minute ";
+			String secunit = (sec != 1) ? " seconds " : " second ";
+
+			msg = "Time remaining: ";
+
+			if (day > 0)
+			{
+				msg += String.valueOf(day)+dayunit+String.valueOf(hr)+hrunit;
+			}
+			else
+			{
+				if (hr > 0)
+				{
+					msg += String.valueOf(hr)+hrunit+String.valueOf(min)+minunit;
+				}
+				else
+				{
+					msg += String.valueOf(min)+minunit+String.valueOf(sec)+secunit;
+				}
+			}
+		}
+
+		Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 	}
 
 }

@@ -3,7 +3,7 @@ package com.nfcalarmclock;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
+import android.os.Bundle;
 
 /**
  * @brief Alarm receiver.
@@ -21,14 +21,13 @@ public class NacAlarmReceiver
 	@Override
 	public void onReceive(final Context c, Intent i)
 	{
-		//Toast.makeText(c, "On Receive!!!", Toast.LENGTH_SHORT).show();
-		NacUtility.print("On Receive!!!");
-		i.setExtrasClassLoader(NacAlarmParcel.class.getClassLoader());
+		Bundle bundle = (Bundle) i.getBundleExtra("bundle");
+		NacAlarmParcel parcel = (NacAlarmParcel)
+			bundle.getParcelable("parcel");
+		Intent intent = new Intent(c.getApplicationContext(),
+			NacAlarmActivity.class);
 
-		NacAlarmParcel parcel = (NacAlarmParcel) i.getParcelableExtra("Alarm");
-		Intent intent = new Intent(c.getApplicationContext(), NacAlarmActivity.class);
-
-		intent.putExtra("Alarm", parcel);
+		intent.putExtra("bundle", bundle);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		c.startActivity(intent);
 	}

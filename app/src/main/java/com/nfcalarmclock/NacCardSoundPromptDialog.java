@@ -15,19 +15,23 @@ public class NacCardSoundPromptDialog
 {
 
 	/**
+	 * @brief Interface for other classes to implement what to do when an
+	 *        item is selected.
+	 */
+	public interface OnItemSelectedListener
+	{
+		public void onItemSelected(NacSound sound);
+	}
+
+	/**
 	 * @brief Context.
 	 */
 	private Context mContext = null;
 
 	/**
-	 * @brief The sound view in the alarm card.
+	 * @brief Listener for when an item in a dialog is selected.
 	 */
-	private ImageTextButton mSoundView = null;
-
-	/**
-	 * @brief The alarm.
-	 */
-	private Alarm mAlarm = null;
+	private OnItemSelectedListener mListener = null;
 
 	/**
 	 * @brief Dialog.
@@ -47,13 +51,11 @@ public class NacCardSoundPromptDialog
 	/**
 	 * @param  c  Context.
 	 */
-	public NacCardSoundPromptDialog(Context c, ImageTextButton b, Alarm a)
+	public NacCardSoundPromptDialog(Context c)
 	{
 		super(c);
 
 		this.mContext = c;
-		this.mSoundView = b;
-		this.mAlarm = a;
 		this.mRoot = super.inflate(R.layout.dlg_alarm_sound_prompt);
 		this.mPlayer = new NacMediaPlayer(mContext);
 		Button music = (Button) mRoot.findViewById(R.id.dlg_music);
@@ -76,6 +78,51 @@ public class NacCardSoundPromptDialog
 	}
 
 	/**
+	 * @brief Item has been selected in the dialog.
+	 */
+	private void itemSelected(NacSound sound)
+	{
+		if (this.mListener != null)
+		{
+			mListener.onItemSelected(sound);
+		}
+	}
+
+	/**
+	 * @brief Set the listener for when an item is selected.
+	 */
+	public void setOnItemSelectedListener(OnItemSelectedListener listener)
+	{
+		this.mListener = listener;
+	}
+
+	/**
+	 * @return The sound selection or null if none found.
+	 */
+	private NacSound getSound()
+	{
+		List<NacSound> sounds;
+		int index = -1;
+
+		if (mDialog instanceof NacCardSoundRingtoneDialog)
+		{
+			sounds = ((NacCardSoundRingtoneDialog)mDialog).mSounds;
+			index = ((NacCardSoundRingtoneDialog)mDialog).mIndex;
+		}
+		else if (mDialog instanceof NacCardSoundMusicDialog)
+		{
+			sounds = ((NacCardSoundMusicDialog)mDialog).mSounds;
+			index = ((NacCardSoundMusicDialog)mDialog).mIndex;
+		}
+		else
+		{
+			return null;
+		}
+
+		return (index < 0) ? null : sounds.get(index);
+	}
+
+	/**
 	 * @brief Handle button click events.
 	 */
 	@Override
@@ -95,7 +142,7 @@ public class NacCardSoundPromptDialog
 		else if (tag.equals("music"))
 		{
 			NacCardSoundMusicDialog d = new NacCardSoundMusicDialog(mContext,
-				mSoundView, mPlayer);
+				mPlayer);
 			d.show();
 			d.setOnDismissListener(this);
 			mDialog = d;
@@ -103,7 +150,7 @@ public class NacCardSoundPromptDialog
 		else if (tag.equals("ringtone"))
 		{
 			NacCardSoundRingtoneDialog d = new NacCardSoundRingtoneDialog(
-				mContext, mSoundView, mPlayer);
+				mContext, mPlayer);
 			d.show();
 			d.setOnDismissListener(this);
 			mDialog = d;
@@ -120,51 +167,17 @@ public class NacCardSoundPromptDialog
 	@Override
 	public void onDismiss(DialogInterface dialog)
 	{
+		NacSound sound = this.getSound();
+
 		mPlayer.reset();
 
-		if (mDialog.wasCanceled())
+		if (mDialog.wasCanceled() || (sound == null))
 		{
 			return;
 		}
 
-		List<NacSong> sounds;
-		int index = -1;
-		NacSong selection;
-		String path = "";
-		String name = "";
-
-		if (mDialog instanceof NacCardSoundRingtoneDialog)
-		{
-			sounds = ((NacCardSoundRingtoneDialog)mDialog).mSounds;
-			index = ((NacCardSoundRingtoneDialog)mDialog).mIndex;
-			selection = sounds.get(index);
-			path = selection.path;
-			name = selection.ringtone;
-		}
-		else if (mDialog instanceof NacCardSoundMusicDialog)
-		{
-			sounds = ((NacCardSoundMusicDialog)mDialog).mSounds;
-			index = ((NacCardSoundMusicDialog)mDialog).mIndex;
-			selection = sounds.get(index);
-			path = selection.path;
-			name = selection.name;
-		}
-		else
-		{
-			return;
-		}
-
-		if (!path.isEmpty() && !name.isEmpty())
-		{
-			NacUtility.printf("Sound : %s", path);
-			this.mSoundView.setText(name);
-			this.mAlarm.setSound(path);
-			this.mAlarm.changed();
-		}
-
+		itemSelected(sound);
 		super.dismiss();
 	}
 
 }
-
-

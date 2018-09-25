@@ -1,9 +1,11 @@
 package com.nfcalarmclock;
 
 import android.app.AlarmManager;
+import android.app.AlarmManager.AlarmClockInfo;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import java.util.Calendar;
 import java.util.List;
 
@@ -69,7 +71,7 @@ public class NacAlarmScheduler
 	 */
 	public void add(Alarm a)
 	{
-		List<Calendar> cals = a.getCalendars();
+		List<Calendar> cals = a.getNextCalendars();
 
 		for (Calendar c : cals)
 		{
@@ -93,8 +95,7 @@ public class NacAlarmScheduler
 			PendingIntent.FLAG_CANCEL_CURRENT);
 		PendingIntent showpending = PendingIntent.getActivity(this.mContext,
 			id, showintent, 0);
-		AlarmManager.AlarmClockInfo clock = new
-			AlarmManager.AlarmClockInfo(millis, showpending);
+		AlarmClockInfo clock = new AlarmClockInfo(millis, showpending);
 
 		this.mAlarmManager.setAlarmClock(clock, operationpending);
 	}
@@ -150,6 +151,14 @@ public class NacAlarmScheduler
 	}
 
 	/**
+	 * @return The next alarm clock scheduled.
+	 */
+	public AlarmClockInfo getNext()
+	{
+		return this.mAlarmManager.getNextAlarmClock();
+	}
+
+	/**
 	 * @return The operation intent.
 	 */
 	public Intent getOperationIntent()
@@ -163,9 +172,11 @@ public class NacAlarmScheduler
 	public Intent getOperationIntent(Alarm a)
 	{
 		Intent intent = this.getOperationIntent();
+		Bundle bundle = new Bundle();
 		NacAlarmParcel parcel = new NacAlarmParcel(a);
 
-		intent.putExtra("Alarm", parcel);
+		bundle.putParcelable("parcel", parcel);
+		intent.putExtra("bundle", bundle);
 
 		return intent;
 	}
@@ -179,39 +190,3 @@ public class NacAlarmScheduler
 	}
 
 }
-
-		//NacUtility.print("On Manage in the Adapter was called");
-		//int id = alarm.getId();
-		//Intent i = new Intent(mContext, NacAlarmReceiver.class);
-		//PendingIntent p = PendingIntent.getBroadcast(mContext, id, i,
-		//	PendingIntent.FLAG_NO_CREATE);
-
-		//if (p != null)
-		//{
-		//	NacUtility.print("Cancelling in the alarm manager.");
-		//	mAlarmManager.cancel(p);
-		//}
-
-		//if (alarm.getEnabled())
-		//{
-		//	NacAlarmParcel parcel = new NacAlarmParcel(alarm);
-		//	Intent intent = new Intent(mContext, NacAlarmReceiver.class);
-		//	Intent act = new Intent(mContext, MainActivity.class);
-		//	
-		//	intent.putExtra("Alarm", parcel);
-
-		//	PendingIntent pending = PendingIntent.getBroadcast(mContext, id,
-		//		intent, PendingIntent.FLAG_CANCEL_CURRENT);
-		//	PendingIntent actp = PendingIntent.getActivity(mContext, id, act,
-		//		0);
-		//	Calendar cal = alarm.getCalendar();
-
-		//	AlarmManager.AlarmClockInfo clock = new
-		//		AlarmManager.AlarmClockInfo(cal.getTimeInMillis(), null);
-		//	mAlarmManager.setAlarmClock(clock, pending);
-
-		//	//mAlarmManager.setExact(AlarmManager.RTC_WAKEUP,
-		//	//	cal.getTimeInMillis(), pending);
-		//	//mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
-		//	//	cal.getTimeInMillis(), pending);
-		//}

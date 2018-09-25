@@ -29,34 +29,34 @@ public class NacUtility
 	{
 		Log.i(name, string);
 
-		File logFile = new File("/storage/emulated/0/log.file");
+		//File logFile = new File("/storage/emulated/0/log.file");
 
-		if (!logFile.exists())
-		{
-			try
-		 	{
-				logFile.createNewFile();
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-		}
+		//if (!logFile.exists())
+		//{
+		//	try
+		// 	{
+		//		logFile.createNewFile();
+		//	}
+		//	catch (IOException e)
+		//	{
+		//		e.printStackTrace();
+		//	}
+		//}
 
-		try
-		{
-			//BufferedWriter for performance, true to set append to file flag
-			BufferedWriter buf = new BufferedWriter(new FileWriter(logFile,
-				true));
+		//try
+		//{
+		//	//BufferedWriter for performance, true to set append to file flag
+		//	BufferedWriter buf = new BufferedWriter(new FileWriter(logFile,
+		//		true));
 
-			buf.append(string);
-			buf.newLine();
-			buf.close();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		//	buf.append(string);
+		//	buf.newLine();
+		//	buf.close();
+		//}
+		//catch (IOException e)
+		//{
+		//	e.printStackTrace();
+		//}
 	}
 
 	/**

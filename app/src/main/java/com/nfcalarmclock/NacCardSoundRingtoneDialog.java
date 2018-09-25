@@ -23,11 +23,6 @@ public class NacCardSoundRingtoneDialog
 	private Context mContext = null;
 
 	/**
-	 * @brief The sound view in the alarm card.
-	 */
-	private ImageTextButton mSoundView = null;
-
-	/**
 	 * @brief Media player.
 	 */
 	private NacMediaPlayer mPlayer = null;
@@ -45,7 +40,7 @@ public class NacCardSoundRingtoneDialog
 	/**
 	 * @brief List of ringtones.
 	 */
-	public List<NacSong> mSounds = null;
+	public List<NacSound> mSounds = null;
 
 	/**
 	 * @brief The index in the songs list pointing to the currently selected
@@ -56,13 +51,11 @@ public class NacCardSoundRingtoneDialog
 	/**
 	 * @param  c  Context.
 	 */
-	public NacCardSoundRingtoneDialog(Context c, ImageTextButton b,
-		NacMediaPlayer mp)
+	public NacCardSoundRingtoneDialog(Context c, NacMediaPlayer mp)
 	{
 		super(c);
 
 		this.mContext = c;
-		this.mSoundView = b;
 		this.mPlayer = mp;
 		this.mRingtoneManager = new RingtoneManager(mContext);
 		this.mRoot = super.inflate(R.layout.dlg_alarm_sound_ringtone);
@@ -110,9 +103,9 @@ public class NacCardSoundRingtoneDialog
 
 			NacUtility.printf("File : %s/%s (%s)", dir, id, name);
 
-			for (NacSong s : this.mSounds)
+			for (NacSound s : this.mSounds)
 			{
-				if (s.ringtone == name)
+				if (name.equals(s.name))
 				{
 					found = true;
 					break;
@@ -124,7 +117,7 @@ public class NacCardSoundRingtoneDialog
 				continue;
 			}
 
-			this.mSounds.add(new NacSong(id, dir, name));
+			this.mSounds.add(new NacSound(id, dir, name));
 		}
 	}
 
@@ -138,7 +131,7 @@ public class NacCardSoundRingtoneDialog
 		for(int i=0; i < this.mSounds.size(); i++)
 		{
 			RadioButton rb = new RadioButton(mContext);
-			String name = this.mSounds.get(i).ringtone;
+			String name = this.mSounds.get(i).name;
 
 			rb.setText(name);
 			rb.setTag(i);
@@ -164,15 +157,6 @@ public class NacCardSoundRingtoneDialog
 		this.mIndex = i;
 
 		this.mPlayer.play(path);
-	}
-
-	/**
-	 * @brief Handles click events on the Ok/Cancel buttons in the dialog.
-	 */
-	@Override
-	public void onClick(DialogInterface dialog, int which)
-	{
-		super.onClick(dialog, which);
 	}
 
 }

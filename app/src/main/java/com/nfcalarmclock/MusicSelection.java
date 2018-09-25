@@ -32,16 +32,16 @@ public class MusicSelection
 	 */
 	private TextView mSongView = null;
 	private String mSongName;
-    private int mSongTextSize;
-    private int mSongTextColor;
+	private int mSongTextSize;
+	private int mSongTextColor;
 
 	/**
 	 * @brief Directory where song is located.
 	 */
 	private TextView mDirView= null;
 	private String mDirName;
-    private int mDirTextSize;
-    private int mDirTextColor;
+	private int mDirTextSize;
+	private int mDirTextColor;
 
 	private enum MusicType
 	{
@@ -56,14 +56,14 @@ public class MusicSelection
 		super(context, attrs);
 
 		this.mContext = context;
-        int[] id = R.styleable.MusicSelection;
-        int layout = R.layout.musicselection;
-        Theme theme = this.mContext.getTheme();
-        TypedArray ta = theme.obtainStyledAttributes(attrs, id, 0, 0);
+		int[] id = R.styleable.MusicSelection;
+		int layout = R.layout.musicselection;
+		Theme theme = this.mContext.getTheme();
+		TypedArray ta = theme.obtainStyledAttributes(attrs, id, 0, 0);
 
-        setOrientation(LinearLayout.VERTICAL);
-        LayoutInflater.from(this.mContext).inflate(layout, this, true);
-        init(ta);
+		setOrientation(LinearLayout.VERTICAL);
+		LayoutInflater.from(this.mContext).inflate(layout, this, true);
+		init(ta);
 
 		//setSong();
 		//setDirectory();
@@ -95,38 +95,38 @@ public class MusicSelection
 		}
 	}
 
-    /**
-     * @brief Initialize all elements of the text view.
-     * 
-     * @param ta Array of values that were retrieved from the context's theme.
-     */
-    private void initSong(TypedArray ta)
-    {
-        Resources r = this.mContext.getResources();
-        initView(MusicType.SONG);
-        initText(MusicType.SONG, ta);
-        initTextColor(MusicType.SONG, ta);
-        initTextSize(MusicType.SONG, ta, r);
-    }
+	/**
+	 * @brief Initialize all elements of the text view.
+	 * 
+	 * @param ta Array of values that were retrieved from the context's theme.
+	 */
+	private void initSong(TypedArray ta)
+	{
+		Resources r = this.mContext.getResources();
+		initView(MusicType.SONG);
+		initText(MusicType.SONG, ta);
+		initTextColor(MusicType.SONG, ta);
+		initTextSize(MusicType.SONG, ta, r);
+	}
 
-    /**
-     * @brief Initialize all elements of the text view.
-     * 
-     * @param ta Array of values that were retrieved from the context's theme.
-     */
-    private void initDirectory(TypedArray ta)
-    {
-        Resources r = this.mContext.getResources();
-        initView(MusicType.DIRECTORY);
-        initText(MusicType.DIRECTORY, ta);
-        initTextColor(MusicType.DIRECTORY, ta);
-        initTextSize(MusicType.DIRECTORY, ta, r);
-    }
+	/**
+	 * @brief Initialize all elements of the text view.
+	 * 
+	 * @param ta Array of values that were retrieved from the context's theme.
+	 */
+	private void initDirectory(TypedArray ta)
+	{
+		Resources r = this.mContext.getResources();
+		initView(MusicType.DIRECTORY);
+		initText(MusicType.DIRECTORY, ta);
+		initTextColor(MusicType.DIRECTORY, ta);
+		initTextSize(MusicType.DIRECTORY, ta, r);
+	}
 /**
-     * @brief Define the text view.
-     */
-    private void initView(MusicType type)
-    {
+	 * @brief Define the text view.
+	 */
+	private void initView(MusicType type)
+	{
 		TextView tv;
 
 		switch (type)
@@ -143,51 +143,51 @@ public class MusicSelection
 				return;
 		}
 
-        if (tv == null)
-        {
-            throw new RuntimeException("Unable to create TextView.");
-        }
-        //<attr name="nacTextColor" />
-        //<attr name="nacTextSize" />
-        //<attr name="nacText" />
-        //<attr name="nacSubTextColor" />
-        //<attr name="nacSubTextSize" />
-        //<attr name="nacSubText" />
-    }
+		if (tv == null)
+		{
+			throw new RuntimeException("Unable to create TextView.");
+		}
+		//<attr name="nacTextColor" />
+		//<attr name="nacTextSize" />
+		//<attr name="nacText" />
+		//<attr name="nacSubTextColor" />
+		//<attr name="nacSubTextSize" />
+		//<attr name="nacSubText" />
+	}
 
-    /**
-     * @brief Define the text string.
-     * 
-     * @param ta Array of values that were retrieved from the context's theme.
-     */
-    private void initText(MusicType type, TypedArray ta)
-    {
-        int tid;
+	/**
+	 * @brief Define the text string.
+	 * 
+	 * @param ta Array of values that were retrieved from the context's theme.
+	 */
+	private void initText(MusicType type, TypedArray ta)
+	{
+		int tid;
 
 		switch (type)
 		{
 			case SONG:
 				tid = R.styleable.MusicSelection_nacText;
-        		this.mSongName = ta.getString(tid);
+				this.mSongName = ta.getString(tid);
 				break;
 			case DIRECTORY:
 				tid = R.styleable.MusicSelection_nacSubText;
-        		this.mDirName = ta.getString(tid);
+				this.mDirName = ta.getString(tid);
 				break;
 			default:
 				return;
 		}
-    }
+	}
 
-    /**
-     * @brief Define the color of the text.
-     * 
-     * @param ta Array of values that were retrieved from the context's theme.
-     */
-    private void initTextColor(MusicType type, TypedArray ta)
-    {
-        int cid;
-        int color;
+	/**
+	 * @brief Define the color of the text.
+	 * 
+	 * @param ta Array of values that were retrieved from the context's theme.
+	 */
+	private void initTextColor(MusicType type, TypedArray ta)
+	{
+		int cid;
+		int color;
 
 		switch (type)
 		{
@@ -195,29 +195,29 @@ public class MusicSelection
 				cid = R.styleable.MusicSelection_nacTextColor;
 				color = NacUtility.getThemeAttrColor(this.mContext,
 							R.attr.colorCardDrawable);
-        		this.mSongTextColor = ta.getColor(cid, color);
+				this.mSongTextColor = ta.getColor(cid, color);
 				break;
 			case DIRECTORY:
 				cid = R.styleable.MusicSelection_nacSubTextColor;
 				color = NacUtility.getThemeAttrColor(this.mContext,
 							R.attr.colorCardDrawable);
-        		this.mDirTextColor = ta.getColor(cid, color);
+				this.mDirTextColor = ta.getColor(cid, color);
 				break;
 			default:
 				return;
 		}
-    }
+	}
 
-    /**
-     * @brief Define the size of the text.
-     * 
-     * @param ta Array of values that were retrieved from the context's theme.
-     */
-    private void initTextSize(MusicType type, TypedArray ta,
+	/**
+	 * @brief Define the size of the text.
+	 * 
+	 * @param ta Array of values that were retrieved from the context's theme.
+	 */
+	private void initTextSize(MusicType type, TypedArray ta,
 		Resources r)
-    {
-        int tsid;
-        int size;
+	{
+		int tsid;
+		int size;
 
 		switch (type)
 		{
@@ -234,7 +234,7 @@ public class MusicSelection
 			default:
 				return;
 		}
-    }
+	}
 
 	public void setSong()
 	{

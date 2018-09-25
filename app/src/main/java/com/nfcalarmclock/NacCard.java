@@ -1,10 +1,10 @@
 package com.nfcalarmclock;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,13 +20,8 @@ import android.widget.RelativeLayout;
  */
 public class NacCard
     extends RecyclerView.ViewHolder
-    implements View.OnCreateContextMenuListener,View.OnClickListener
+    implements View.OnClickListener
 {
-
-	/**
-	 * @brief Activity.
-	 */
-    public AppCompatActivity mActivity;
 
 	/**
 	 * @brief Context.
@@ -110,12 +105,11 @@ public class NacCard
     public NacCard(Context c, View r)
     {
         super(r);
-        this.mActivity = (AppCompatActivity) c;
         this.mContext = c;
         this.mCard = (CardView) r.findViewById(R.id.view_card_alarm);
 		this.mBackgroundCopy = (RelativeLayout) r.findViewById(R.id.view_background_copy);
 		this.mBackgroundDelete = (RelativeLayout) r.findViewById(R.id.view_background_delete);
-		this.mRecyclerView = (RecyclerView) mActivity.findViewById(
+		this.mRecyclerView = (RecyclerView) ((Activity)c).findViewById(
 			R.id.content_alarm_list);
 
 		this.mRegion = new NacCardRegion(r);
@@ -124,7 +118,7 @@ public class NacCard
         this.mRepeat = new NacCardRepeat(r);
         this.mSound = new NacCardSound(c, r);
         this.mVibrate = new NacCardVibrate(r);
-        this.mName = new NacCardName(c, r);
+        this.mName = new NacCardName(r);
         this.mDelete = new NacCardDelete(r);
 	}
 
@@ -150,8 +144,6 @@ public class NacCard
         this.mName.init(alarm);
 		this.mDelete.init(pos);
 
-        //this.mActivity.registerForContextMenu(this.mCard);
-        //this.mCard.setOnCreateContextMenuListener(this);
 		this.mCard.setOnClickListener(this);
 		this.mRegion.setExpandListener(this);
 		this.mRegion.setCollapseListener(this);
@@ -332,21 +324,6 @@ public class NacCard
 
 		return ((cardheight+ypos) > screenheight) ? false : true;
 	}
-
-    /**
-     * @brief Display the context menu for the selected alarm card.
-	 *
-	 * @param  menu  The context menu.
-	 * @param  v  The view.
-	 * @param  menuInfo  The menu info.
-     */
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenuInfo menuInfo)
-    {
-        MenuInflater inflater = mActivity.getMenuInflater();
-        inflater.inflate(R.menu.alarm_card, menu);
-    }
 
 	/**
 	 * @brief Expand or collapse the card.

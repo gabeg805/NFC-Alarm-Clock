@@ -1,8 +1,8 @@
 package com.nfcalarmclock;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
-import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -26,14 +26,14 @@ public class NacCardAdapter
 {
 
 	/**
-	 * @brief The app activity.
-	 */
-	private AppCompatActivity mActivity = null;
-
-	/**
 	 * @brief The Context of the parent.
 	 */
 	private Context mContext = null;
+
+	/**
+	 * @brief The recycler view.
+	 */
+	private RecyclerView mRecyclerView = null;
 
 	/**
 	 * @brief Alarm scheduler.
@@ -48,21 +48,33 @@ public class NacCardAdapter
 	/**
 	 * @brief The database.
 	 */
-	private NacDatabase mDatabase;
+	private NacDatabase mDatabase = null;
 
 	/**
 	 * @brief Number of alarm cards in the recycler view.
 	 */
 	private int mSize = 0;
-	private int mFirstVisible = 0;
-	private int mLastVisible = 0;
 
 	/**
 	 * @brief Indicator that the alarm was added through the floating action button.
 	 */
 	private boolean mWasAdded = false;
 
+	/**
+	 * @brief Handle card swipe events.
+	 */
 	private ItemTouchHelper mTouchHelper = null;
+
+	/**
+	 * @brief The alarm to restore, when prompted after deletion.
+	 */
+	private Alarm mRestoreAlarm = null;
+
+	/**
+	 * @brief The position of the alarm to restore, when prompted after
+	 *        deletion.
+	 */
+	private int mRestorePosition = -1;
 
 	/**
 	 * @brief Alarm adapter.
@@ -71,52 +83,31 @@ public class NacCardAdapter
 	 */
 	public NacCardAdapter(Context c)
 	{
-		this.mActivity = (AppCompatActivity) c;
 		this.mContext = c;
 		this.mScheduler = new NacAlarmScheduler(c);
 		this.mDatabase = new NacDatabase(c);
 
-		this.setItemTouchHelper();
+		this.setTouchHelper();
 	}
 
-	private void setItemTouchHelper()
+	private void setTouchHelper()
 	{
+		RecyclerView rv = this.mRecyclerView;
+		
+		if (rv == null)
+		{
+			AppCompatActivity a = (AppCompatActivity) this.mContext;
+			rv = (RecyclerView) a.findViewById(R.id.content_alarm_list);
+		}
+
 		if (this.mTouchHelper == null)
 		{
 			ItemTouchHelper.Callback callback = new NacCardTouchHelperCallback(this);
 			this.mTouchHelper = new ItemTouchHelper(callback);
 		}
 
-		RecyclerView rv = (RecyclerView) this.mActivity.findViewById(
-			R.id.content_alarm_list);
-
 		this.mTouchHelper.attachToRecyclerView(null);
 		this.mTouchHelper.attachToRecyclerView(rv);
-	}
-
-	public void unitTest()
-	{
-		Alarm a1 = new Alarm(11, 0);
-		Alarm a2 = new Alarm(12, 0);
-		Alarm a3 = new Alarm(13, 0);
-
-		a1.setOnChangedListener(this);
-		a2.setOnChangedListener(this);
-		a3.setOnChangedListener(this);
-		a1.set24HourFormat(false);
-		a2.set24HourFormat(false);
-		a3.set24HourFormat(false);
-		a1.setVibrate(true);
-		a2.setDays(Alarm.Days.SATURDAY|Alarm.Days.SUNDAY);
-		a3.setDays(Alarm.Days.TUESDAY|Alarm.Days.WEDNESDAY|Alarm.Days.THURSDAY);
-		a3.setName("Oh Yeah!");
-		a1.setSound("content://media/internal/audio/media/12");
-		a2.setSound("/storage/emulated/0/Music/Alvvays - Dreams Tonite.mp3");
-		a3.setSound("content://media/internal/audio/media/13");
-
-		this.mDatabase.add(a1);
-		this.mDatabase.add(a2);
-		this.mDatabase.add(a3);
 	}
 
 	/**
@@ -124,10 +115,10 @@ public class NacCardAdapter
 	 */
 	public void build()
 	{
-		//unitTest();
 		this.mDatabase.print();
 		this.mAlarmList = this.mDatabase.read();
 		this.mSize = this.mAlarmList.size();
+		this.notifyDataSetChanged();
 	}
 
 	/**
@@ -151,11 +142,15 @@ public class NacCardAdapter
 	{
 		if (this.mDatabase.add(a) < 0)
 		{
-			// Indicate visually that this is an error.
+			Toast.makeText(this.mContext, "Error occurred when adding alarm to database.",
+				Toast.LENGTH_SHORT).show();
 			return;
 		}
 
 		a.print();
+		// Using update instead of add for testing. Things should never get
+		// canceled in update, only added
+		this.mScheduler.update(a);
 		this.mAlarmList.add(a);
 		this.resize();
 		this.notifyItemInserted(this.mSize-1);
@@ -180,7 +175,23 @@ public class NacCardAdapter
 		this.mAlarmList.remove(pos);
 		this.resize();
 		this.notifyItemRemoved(pos);
-		this.notifyItemRangeChanged(pos, this.mLastVisible);
+		this.notifyItemRangeChanged(pos, this.getLastVisible(pos));
+	}
+
+	/**
+	 * @brief Restore a previously deleted alarm.
+	 * 
+	 * @param  a  The alarm to restore.
+	 * @param  pos  The position to insert the alarm.
+	 */
+	public void restore(Alarm a, int pos)
+	{
+		NacUtility.printf("Undoing alarm deletion! Position = %d", pos);
+		this.mWasAdded = true;
+
+		this.mAlarmList.add(pos, a);
+		this.resize();
+		this.notifyItemInserted(pos);
 	}
 
 	/**
@@ -196,10 +207,7 @@ public class NacCardAdapter
 	 */
 	private void scrollToAlarm(int index)
 	{
-		RecyclerView rv = (RecyclerView) this.mActivity.findViewById(
-			R.id.content_alarm_list);
-
-		rv.scrollToPosition(index);
+		this.mRecyclerView.scrollToPosition(index);
 	}
 
 	/**
@@ -226,10 +234,28 @@ public class NacCardAdapter
 		return -1;
 	}
 
+	/**
+	 * @return The last visible view holder in the recycler view.
+	 */
+	private int getLastVisible(int start)
+	{
+		for (int i=start; i < this.mSize; i++)
+		{
+			if (this.mRecyclerView.findViewHolderForAdapterPosition(i) == null)
+			{
+				return i-1;
+			}
+		}
+
+		return -1;
+	}
+
 	@Override
 	public void onItemCopy(int pos)
 	{
+		this.setTouchHelper();
 		NacUtility.printf("Item copy %d.", pos);
+
 		Alarm alarm = this.mAlarmList.get(pos);
 		Alarm copy = new Alarm();
 
@@ -243,29 +269,29 @@ public class NacCardAdapter
 		copy.setVibrate(alarm.getVibrate());
 		copy.setSound(alarm.getSound());
 		copy.setName(alarm.getName());
-
 		this.add(copy);
+		Toast.makeText(this.mContext, "Copied alarm.",
+			Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
 	public void onItemDelete(int pos)
 	{
 		NacUtility.printf("Item delete %d.", pos);
+		this.mRestoreAlarm = this.mAlarmList.get(pos);
+		this.mRestorePosition = pos;
+
 		this.delete(pos);
 
-		// showing snack bar with Undo option
-		Snackbar snackbar = Snackbar
-				.make(((AppCompatActivity)mContext).findViewById(R.id.activity_main), " removed from cart!", Snackbar.LENGTH_LONG);
-		snackbar.setAction("UNDO", new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
+		AppCompatActivity a = (AppCompatActivity) this.mContext;
+		View root = a.findViewById(R.id.activity_main);
+		int color = NacUtility.getThemeAttrColor(this.mContext,
+			R.attr.colorCardAccent);
+		Snackbar snackbar = Snackbar.make(root, "Deleted alarm.",
+			Snackbar.LENGTH_LONG);
 
-				NacUtility.printf("Undoing remove!");
-				// undo is selected, restore the deleted item
-				//mAdapter.restoreItem(deletedItem, deletedIndex);
-			}
-		});
-		snackbar.setActionTextColor(Color.YELLOW);
+		snackbar.setAction("UNDO", this);
+		snackbar.setActionTextColor(color);
 		snackbar.show();
 	}
 
@@ -294,9 +320,8 @@ public class NacCardAdapter
 		int layout = R.layout.view_card_alarm;
 		View root = LayoutInflater.from(context).inflate(layout, parent,
 			false);
-		NacCard card = new NacCard(context, root);
 
-		return card;
+		return new NacCard(context, root);
 	}
 
 	/**
@@ -310,7 +335,6 @@ public class NacCardAdapter
 	{
 		Alarm alarm = mAlarmList.get(pos);
 		NacUtility.printf("onBindViewHolder %d", pos);
-		//NacUtility.printf("First visible=%d and last visible=%d", this.mFirstVisible, this.mLastVisible);
 
 		alarm.setOnChangedListener(this);
 		card.init(alarm);
@@ -318,50 +342,6 @@ public class NacCardAdapter
 		card.focus(this.mWasAdded);
 
 		this.mWasAdded = false;
-	}
-
-	@Override
-	public void onViewAttachedToWindow(NacCard holder)
-	{
-		int pos = holder.getAdapterPosition();
-
-		if (pos > this.mLastVisible)
-		{
-			this.mLastVisible = pos;
-		}
-		else if (pos < this.mFirstVisible)
-		{
-			this.mFirstVisible = pos;
-		}
-		else
-		{
-			NacUtility.print("Why are positions equal to stuff???????");
-		}
-
-		NacUtility.printf("onViewAttachedToWindow %d. First=%d and Last=%d",
-			pos, this.mFirstVisible, this.mLastVisible);
-	}
-
-	@Override
-	public void onViewDetachedFromWindow(NacCard holder)
-	{
-		int pos = holder.getAdapterPosition();
-
-		if (pos == this.mFirstVisible)
-		{
-			this.mFirstVisible = pos+1;
-		}
-		else if (pos == this.mLastVisible)
-		{
-			this.mLastVisible = pos-1;
-		}
-		else
-		{
-			NacUtility.print("Why are positions equal to stuff???????");
-		}
-
-		NacUtility.printf("onViewDetachedFromWindow %d. First=%d and Last=%d",
-			pos, this.mFirstVisible, this.mLastVisible);
 	}
 
 	/**
@@ -373,8 +353,27 @@ public class NacCardAdapter
 	@Override
 	public void onClick(View v)
 	{
-		int pos = (int) v.getTag();
-		delete(pos);
+		Object tag = v.getTag();
+
+		if (tag == null)
+		{
+			restore(mRestoreAlarm, mRestorePosition);
+		}
+		else
+		{
+			delete((int)tag);
+		}
+	}
+
+	/**
+	 * @brief Set the recycler view.
+	 */
+	@Override
+	public void onAttachedToRecyclerView(RecyclerView rv)
+	{
+		super.onAttachedToRecyclerView(rv);
+
+		mRecyclerView = rv;
 	}
 
 	/**

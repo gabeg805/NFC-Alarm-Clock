@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<!--
+Auto-dismiss
+Max snoozes
+Volume level
+-->
+
+	<PreferenceCategory
+		android:key="pref_defaults"
+		android:title="@string/pref_defaults">
+
+<!--
+		<CheckBoxPreference
+			android:key="pref_alarm_defaults_repeat"
+			android:title="@string/pref_alarm_defaults_repeat_title"
+			android:summary="@string/pref_alarm_defaults_repeat_summary"
+			android:persistent="true"
+			android:defaultValue="true"
+			/>
+-->
+
+		<com.nfcalarmclock.NacPreferenceRepeat
+			android:key="pref_defaults_repeat"
+			android:title="@string/pref_defaults_repeat_title"
+			app:summaryEnabled="@string/pref_defaults_repeat_summary_enabled"
+			app:summaryDisabled="@string/pref_defaults_repeat_summary_disabled"
+			android:defaultValue="true"
+			/>
+
+		<com.nfcalarmclock.NacPreferenceDayOfWeek
+			android:key="pref_alarm_defaults_days"
+			android:title="@string/pref_defaults_days_title"
+			android:summary="@string/pref_defaults_days_summary"
+			android:defaultValue="62"
+			/>
+
+		<com.nfcalarmclock.NacPreferenceVibrate
+			android:key="pref_defaults_repeat"
+			android:title="@string/pref_defaults_vibrate_title"
+			app:summaryEnabled="@string/pref_defaults_vibrate_summary_enabled"
+			app:summaryDisabled="@string/pref_defaults_vibrate_summary_disabled"
+			android:defaultValue="true"
+			/>
+
+<!--
+		<com.nfcalarmclock.NacPreferenceSound
+			android:key="pref_alarm_defaults_sound"
+			android:title="@string/pref_alarm_defaults_sound_title"
+			android:summary="@string/pref_alarm_defaults_sound_summary"
+			android:persistent="true"
+			android:defaultValue="None"
+			/>
+-->
+
+		<com.nfcalarmclock.NacPreferenceName
+			android:key="pref_alarm_defaults_name"
+			android:title="@string/pref_alarm_defaults_name_title"
+			android:summary="@string/pref_alarm_defaults_name_summary"
+			android:defaultValue=""
+			/>
+
+	</PreferenceCategory>
+
+</PreferenceScreen>

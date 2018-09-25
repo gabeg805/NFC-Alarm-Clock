@@ -66,41 +66,8 @@ public class NacCardRepeat
 		this.mText.setText(days);
 		this.mCheckbox.setChecked(state);
 		this.mCheckbox.setOnCheckedChangeListener(this);
+		this.mDays.init(alarm);
 		this.mDays.setOnClickListener(this);
-
-		for (int i=0; i < 7; i++)
-		{
-			if (((data >> i) & 1) != 0)
-			{
-				this.mDays.enableButton(i);
-			}
-		}
-
-		if (!state)
-		{
-			this.disable();
-		}
-		else
-		{
-			this.enable();
-
-		}
-	}
-
-	/**
-	 * @brief Enable the days view.
-	 */
-	public void enable()
-	{
-		this.mDays.animate().alpha(1f);
-	}
-
-	/**
-	 * @brief Disable the days view.
-	 */
-	public void disable()
-	{
-		this.mDays.animate().alpha(0.25f);
 	}
 
 	/**
@@ -112,15 +79,6 @@ public class NacCardRepeat
 		NacUtility.printf("Repeat : %b", state);
 		this.mAlarm.setRepeat(state);
 		this.mAlarm.changed();
-
-		if (!state)
-		{
-			this.disable();
-		}
-		else
-		{
-			this.enable();
-		}
 	}
 
 	/**
@@ -130,15 +88,10 @@ public class NacCardRepeat
 	@Override
 	public void onClick(View v)
 	{
-		if (!this.mCheckbox.isChecked())
-		{
-			return;
-		}
-
 		int index = (int) v.getTag();
 		byte day = this.mAlarm.getWeekDays().get(index);
 
-		this.mDays.toggleButton((Button)v);
+		this.mDays.toggleButton(index);
 		this.mAlarm.toggleDay(day);
 		this.mText.setText(mAlarm.getDaysString());
 		this.mAlarm.changed();

@@ -28,24 +28,19 @@ public class NacCardSoundMusicDialog
 	private Context mContext;
 
 	/**
-	 * @brief The sound view in the alarm card.
-	 */
-	private ImageTextButton mSoundView = null;
-
-	/**
 	 * @brief Media player.
 	 */
-	private NacMediaPlayer mPlayer = null;
+	private NacMediaPlayer mPlayer;
 
 	/**
 	 * @brief Root view.
 	 */
-	private View mRoot = null;
+	private View mRoot;
 
 	/**
 	 * @brief List of ringtones.
 	 */
-	public List<NacSong> mSounds = null;
+	public List<NacSound> mSounds;
 
 	/**
 	 * @brief The index in the songs list pointing to the currently selected
@@ -56,13 +51,11 @@ public class NacCardSoundMusicDialog
 	/**
 	 * @param  c  Context.
 	 */
-	public NacCardSoundMusicDialog(Context c, ImageTextButton b,
-		NacMediaPlayer mp)
+	public NacCardSoundMusicDialog(Context c, NacMediaPlayer mp)
 	{
 		super(c);
 
 		this.mContext = c;
-		this.mSoundView = b;
 		this.mPlayer = mp;
 		this.mRoot = super.inflate(R.layout.dlg_alarm_sound_music, (ViewGroup)null);
 
@@ -119,7 +112,7 @@ public class NacCardSoundMusicDialog
 			for (int i=0; (files != null) && (i < files.length); i++)
 			{
 				String name = files[i].getName();
-				this.mSounds.add(new NacSong(name, dir));
+				this.mSounds.add(new NacSound(name, dir));
 				NacUtility.printf("File : %s/%s", dir, name);
 			}
 		}
@@ -180,15 +173,6 @@ public class NacCardSoundMusicDialog
 		this.mIndex = i;
 
 		this.mPlayer.play(path);
-	}
-
-	/**
-	 * @brief Handles click events on the Ok/Cancel buttons in the dialog.
-	 */
-	@Override
-	public void onClick(DialogInterface dialog, int which)
-	{
-		super.onClick(dialog, which);
 	}
 
 }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,7 @@ import java.util.List;
  *        by selecting the sound view.
  */
 public class NacCardSound
-    implements View.OnClickListener
+    implements View.OnClickListener,NacCardSoundPromptDialog.OnItemSelectedListener
 {
 
     /**
@@ -34,7 +33,7 @@ public class NacCardSound
     /**
      * @brief Sound.
      */
-     private ImageTextButton mSound = null;
+     private ImageTextButton mSoundView = null;
 
     /**
      * @brief Sound dialog.
@@ -47,9 +46,9 @@ public class NacCardSound
     public NacCardSound(Context c, View r)
     {
         this.mContext = c;
-        this.mSound = (ImageTextButton) r.findViewById(R.id.nacSound);
+        this.mSoundView = (ImageTextButton) r.findViewById(R.id.nacSound);
 
-        this.mSound.setOnClickListener(this);
+        this.mSoundView.setOnClickListener(this);
     }
 
     /**
@@ -70,19 +69,40 @@ public class NacCardSound
 		String name = ringtone.getTitle(mContext);
 
 		ringtone.stop();
-		this.mSound.setText(name);
+		this.mSoundView.setText(name);
     }
 
     /**
-     * @brief Display the dialog that allows users to set the name of thee alarm.
+     * @brief Display the dialog that allows users to set the name of the
+	 *        alarm.
      */
     @Override
     public void onClick(View v)
     {
-        this.mPromptDialog = new NacCardSoundPromptDialog(mContext, mSound,
-			mAlarm);
+        this.mPromptDialog = new NacCardSoundPromptDialog(mContext);
 
+		this.mPromptDialog.setOnItemSelectedListener(this);
         this.mPromptDialog.show();
     }
+
+	/**
+	 * @brief Handle the sound item when it has been selected.
+	 */
+	@Override
+	public void onItemSelected(NacSound sound)
+	{
+		String path = sound.path;
+		String name = sound.name;
+
+		if (path.isEmpty() || name.isEmpty())
+		{
+			return;
+		}
+
+		NacUtility.printf("Sound : %s", path);
+		this.mSoundView.setText(name);
+		this.mAlarm.setSound(path);
+		this.mAlarm.changed();
+	}
 
 }
