@@ -23,7 +23,7 @@
         android:text="@string/card_repeat"
         />
 
-    <com.nfcalarmclock.DayOfWeekButtons
+    <com.nfcalarmclock.NacDayOfWeek
         android:id="@+id/nacRepeatDays"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

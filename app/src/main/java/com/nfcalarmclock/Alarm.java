@@ -170,7 +170,7 @@ public class Alarm
 	 */
 	public void print()
 	{
-		NacUtility.printf("Id	   : %d", this.mId);
+		NacUtility.printf("Id      : %d", this.mId);
 		NacUtility.printf("Enabled : %b", this.mEnabled);
 		NacUtility.printf("Hour    : %d", this.mHour);
 		NacUtility.printf("Minute  : %d", this.mMinute);

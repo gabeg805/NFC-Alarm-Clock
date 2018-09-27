@@ -18,7 +18,7 @@ import android.widget.TextView;
  *				* The alarm day buttons.
  */
 public class NacCardRepeat
-	implements CompoundButton.OnCheckedChangeListener,View.OnClickListener
+	implements CompoundButton.OnCheckedChangeListener,NacDayOfWeek.OnClickListener
 {
 
 	/**
@@ -29,17 +29,17 @@ public class NacCardRepeat
 	/**
 	 * @brief Text of days to repeat.
 	 */
-	private TextView mText = null;
+	private TextView mTextView = null;
 
 	/**
 	 * @brief Repeat checkbox.
 	 */
-	private CheckBox mCheckbox = null;
+	private CheckBox mCheckBox = null;
 
 	/**
 	 * @brief Buttons to select which days to repeat the alarm on.
 	 */
-	private DayOfWeekButtons mDays = null;
+	private NacDayOfWeek mDayOfWeek = null;
 
 	/**
 	 * @brief Constructor.
@@ -48,9 +48,9 @@ public class NacCardRepeat
 	{
 		super();
 
-		this.mText = (TextView) r.findViewById(R.id.nacRepeatText);
-		this.mCheckbox = (CheckBox) r.findViewById(R.id.nacRepeatCheckbox);
-		this.mDays = (DayOfWeekButtons) r.findViewById(R.id.nacRepeatDays);
+		this.mTextView = (TextView) r.findViewById(R.id.nacRepeatText);
+		this.mCheckBox = (CheckBox) r.findViewById(R.id.nacRepeatCheckbox);
+		this.mDayOfWeek = (NacDayOfWeek) r.findViewById(R.id.nacRepeatDays);
 	}
 
 	/**
@@ -63,11 +63,11 @@ public class NacCardRepeat
 		String days = this.mAlarm.getDaysString();
 		int data = this.mAlarm.getDays();
 
-		this.mText.setText(days);
-		this.mCheckbox.setChecked(state);
-		this.mCheckbox.setOnCheckedChangeListener(this);
-		this.mDays.init(alarm);
-		this.mDays.setOnClickListener(this);
+		this.mTextView.setText(days);
+		this.mCheckBox.setChecked(state);
+		this.mCheckBox.setOnCheckedChangeListener(this);
+		this.mDayOfWeek.setDays(alarm);
+		this.mDayOfWeek.setOnClickListener(this);
 	}
 
 	/**
@@ -85,15 +85,15 @@ public class NacCardRepeat
 	 * @brief Save which day was selected to be repeated, or deselected so that
 	 *		  it is not repeated.
 	 */
+	//public void onClick(View v)
 	@Override
-	public void onClick(View v)
+	public void onClick(NacDayButton button, int index)
 	{
-		int index = (int) v.getTag();
 		byte day = this.mAlarm.getWeekDays().get(index);
 
-		this.mDays.toggleButton(index);
+		button.animateToggle();
 		this.mAlarm.toggleDay(day);
-		this.mText.setText(mAlarm.getDaysString());
+		this.mTextView.setText(this.mAlarm.getDaysString());
 		this.mAlarm.changed();
 	}
 

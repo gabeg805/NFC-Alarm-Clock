@@ -1,69 +1,52 @@
 <merge
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <Button
+    <com.nfcalarmclock.NacDayButton
         android:id="@+id/dowb_sun"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
         android:text="@string/dowb_sun"
-        android:textColor="@color/white"
-        android:gravity="center"
-        style="?android:attr/buttonBarButtonStyle"
         />
 
-    <Button
+    <com.nfcalarmclock.NacDayButton
         android:id="@+id/dowb_mon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
         android:text="@string/dowb_mon"
-        android:gravity="center"
-        style="?android:attr/buttonBarButtonStyle"
         />
 
-    <Button
+    <com.nfcalarmclock.NacDayButton
         android:id="@+id/dowb_tue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="?android:attr/buttonBarButtonStyle"
-        android:fontFamily="sans-serif-medium"
         android:text="@string/dowb_tue"
         />
 
-    <Button
+    <com.nfcalarmclock.NacDayButton
         android:id="@+id/dowb_wed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="?android:attr/buttonBarButtonStyle"
-        android:fontFamily="sans-serif-medium"
         android:text="@string/dowb_wed"
         />
 
-    <Button
+    <com.nfcalarmclock.NacDayButton
         android:id="@+id/dowb_thu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="?android:attr/buttonBarButtonStyle"
-        android:fontFamily="sans-serif-medium"
         android:text="@string/dowb_thu"
         />
 
-    <Button
+    <com.nfcalarmclock.NacDayButton
         android:id="@+id/dowb_fri"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="?android:attr/buttonBarButtonStyle"
-        android:fontFamily="sans-serif-medium"
         android:text="@string/dowb_fri"
         />
 
-    <Button
+    <com.nfcalarmclock.NacDayButton
         android:id="@+id/dowb_sat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="?android:attr/buttonBarButtonStyle"
-        android:fontFamily="sans-serif-medium"
         android:text="@string/dowb_sat"
         />
 

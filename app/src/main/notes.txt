@@ -4,3 +4,4 @@ Notes:
 
 When i expand a card and it goes out of view, then back into view, it will be collapsed but the background will be as if it was expanded.
 When permissions are not set, read of music is incorrect.
+When click and holding on day button, there's a rectangle showing up as the drawable.

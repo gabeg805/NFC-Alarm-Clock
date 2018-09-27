@@ -29,7 +29,7 @@ public class NacCardNameDialog
 	/**
 	 * EditText in the dialog.
 	 */
-	private EditText mEditText = null;
+	private EditText mEditText;
 
 	/**
 	 */
@@ -73,8 +73,7 @@ public class NacCardNameDialog
 	 * @brief Close the keyboard when the user hits enter.
 	 */
 	@Override
-	public boolean onEditorAction(TextView tv, int actionId,
-								  KeyEvent event)
+	public boolean onEditorAction(TextView tv, int action, KeyEvent event)
 	{
 		if ((event == null) && (action == EditorInfo.IME_ACTION_DONE))
 		{
@@ -84,33 +83,6 @@ public class NacCardNameDialog
 		}
 
 		return false;
-
-		//if (event == null)
-		//{
-		//	if (actionId == EditorInfo.IME_ACTION_DONE)
-		//	{
-		//		closeKeyboard(tv);
-		//		this.dismiss();
-		//	}
-		//	else
-		//	{
-		//		return false;
-		//	}
-		//}
-		//else if (actionId == EditorInfo.IME_NULL)
-		//{
-		//	if ((event.getAction() != KeyEvent.ACTION_DOWN)
-		//		&& (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
-		//	{
-		//		closeKeyboard(tv);
-		//		this.dismiss();
-		//	}
-		//}
-		//else
-		//{
-		//	return false;
-		//}
-		//return true;
 	}
 
 	/**

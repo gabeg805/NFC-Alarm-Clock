@@ -2,7 +2,6 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat">
-
 		<!-- <item name="android:windowActionBar">true</item> -->
         <item name="android:colorBackground">@color/gray_dark</item>
         <item name="colorPrimary">@color/black</item>
@@ -18,7 +17,17 @@
         <item name="colorCardText">@color/white</item>
         <item name="colorCardFocus">@color/white</item>
         <item name="colorCardFocusText">@color/black</item>
-
     </style>
+
+	<style name="NacDayButton">
+		<item name="android:width">@dimen/circle_size</item>
+		<item name="android:height">@dimen/circle_size</item>
+		<item name="android:duration">500</item>
+		<item name="android:backgroundTint">?attr/colorCardExpanded</item>
+		<item name="android:background">@drawable/circle</item>
+		<item name="android:textColor">?attr/colorCardText</item>
+		<item name="android:textSize">@dimen/tsz_card_days</item>
+		<item name="android:text"></item>
+	</style>
 
 </resources>

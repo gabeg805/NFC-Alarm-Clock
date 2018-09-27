@@ -16,6 +16,17 @@
 		<attr name="summaryDisabled" format="reference" />
 	</declare-styleable>
 
+    <declare-styleable name="NacDayButton">
+		<attr name="android:width" />
+		<attr name="android:height" />
+		<attr name="android:duration" />
+		<attr name="android:backgroundTint" />
+		<attr name="android:background" />
+		<attr name="android:textColor" />
+		<attr name="android:textSize" />
+		<attr name="android:text" />
+    </declare-styleable>
+
     <!-- <declare-styleable name="NacSharedAttr"> -->
         <attr name="nacWidth" format="reference|dimension" />
         <attr name="nacHeight" format="reference|dimension" />
@@ -32,7 +43,6 @@
     <!-- </declare-styleable> -->
 
     <declare-styleable name="ImageTextButton">
-
         <attr name="nacDrawableWidth" />
         <attr name="nacDrawableHeight" />
         <attr name="nacDrawableColor" />
@@ -41,17 +51,6 @@
         <attr name="nacTextSize" />
         <attr name="nacText" />
         <attr name="nacDrawableTextSpacing" />
-
-    </declare-styleable>
-
-    <declare-styleable name="DayOfWeekButtons">
-
-        <attr name="nacWidth" />
-        <attr name="nacHeight" />
-        <attr name="nacDrawableColor" />
-        <attr name="nacTextColor" />
-        <attr name="nacTextSize" />
-
     </declare-styleable>
 
 	<declare-styleable name="MusicSelection">

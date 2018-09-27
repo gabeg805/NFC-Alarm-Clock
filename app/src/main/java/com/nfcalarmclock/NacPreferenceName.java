@@ -19,7 +19,7 @@ import android.widget.Toast;
  */
 public class NacPreferenceName
 	extends Preference
-	implements Preference.OnPreferenceClickListener,View.OnClickListener
+	implements Preference.OnPreferenceClickListener,View.OnClickListener,NacDialog.OnDismissedListener
 {
 
 	/**
@@ -37,6 +37,10 @@ public class NacPreferenceName
 	 */
 	protected String mDefault;
 
+	/**
+	 * Alarm.
+	 */
+	protected Alarm mAlarm;
 	/**
 	 */
 	public NacPreferenceName(Context context)
@@ -58,6 +62,8 @@ public class NacPreferenceName
 		super(context, attrs, style);
 		setLayoutResource(R.layout.pref_name);
 		setOnPreferenceClickListener(this);
+
+		this.mAlarm = new Alarm();
 	}
 
 	/**
@@ -75,28 +81,34 @@ public class NacPreferenceName
 		this.mTextView = (TextView) v.findViewById(R.id.widget);
 		int width = (this.getDisplayWidth() / 4);
 
+		this.mTextView.setText(this.mValue);
 		this.mTextView.setOnClickListener(this);
 		this.mTextView.setMaxWidth(width);
 	}
 
 	/**
 	 */
-	//@Override
-	//public void onCheckedChanged(CompoundButton button, boolean state)
-	//{
-	//	this.mValue = state;
-	//	this.mCheckBox.setChecked(state);
-	//	notifyChanged();
+	@Override
+	public void onDialogDismissed()
+	{
+		this.mValue = this.mAlarm.getName();
 
-	//	persistBoolean(this.mValue);
-	//}
+		this.mTextView.setText(this.mValue);
+		persistString(this.mValue);
+	}
 
 	/**
 	 */
 	@Override
 	public boolean onPreferenceClick(Preference pref)
 	{
-		NacUtility.printf("Preference was clicked!");
+		NacCardNameDialog dialog = new NacCardNameDialog(this.mAlarm);
+		Context context = this.mTextView.getContext();
+
+		dialog.build(context, R.layout.dlg_alarm_name);
+		dialog.addDismissListener(this);
+		dialog.show();
+
 		return true;
 	}
 

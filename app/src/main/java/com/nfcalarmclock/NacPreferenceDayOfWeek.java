@@ -10,31 +10,31 @@ import android.view.ViewGroup;
 
 public class NacPreferenceDayOfWeek
 	extends Preference
-	implements View.OnClickListener
+	implements NacDayOfWeek.OnClickListener
 {
 
 	/**
 	 * @brief Day of week buttons.
 	 */
-	private DayOfWeekButtons mDays = null;
+	private NacDayOfWeek mDayOfWeek = null;
 
 	/**
 	 * @brief Value of days.
 	 */
-	private int mValue = 0;
+	private int mValue;
 
 	/**
 	 */
 	public NacPreferenceDayOfWeek(Context context)
 	{
-		this(context, null);
+		super(context, null);
 	}
 
 	/**
 	 */
 	public NacPreferenceDayOfWeek(Context context, AttributeSet attrs)
 	{
-		this(context, attrs, 0);
+		super(context, attrs, 0);
 	}
 
 	/**
@@ -65,13 +65,13 @@ public class NacPreferenceDayOfWeek
 	{
 		super.onBindView(v);
 
-		this.mDays = (DayOfWeekButtons) v.findViewById(R.id.widget);
-		int color = NacUtility.getThemeAttrColor(getContext(),
-			R.attr.colorCard);
-		this.mDays.setButtonColor(color);
+		this.mDayOfWeek = (NacDayOfWeek) v.findViewById(R.id.widget);
+		//int color = NacUtility.getThemeAttrColor(getContext(),
+		//	R.attr.colorCard);
+		//this.mDays.setButtonColor(color);
 
-		this.mDays.init(this.mValue);
-		this.mDays.setOnClickListener(this);
+		this.mDayOfWeek.setDays(this.mValue);
+		this.mDayOfWeek.setOnClickListener(this);
 	}
 
 	/**
@@ -102,14 +102,10 @@ public class NacPreferenceDayOfWeek
 	/**
 	 */
 	@Override
-	public void onClick(View v)
+	public void onClick(NacDayButton button, int index)
 	{
-		int index = (int) v.getTag();
-
-		this.mDays.toggleButton(index);
-
-		this.mValue = this.mDays.getDays();
-
+		button.animateToggle();
+		this.mValue = this.mDayOfWeek.getDays();
 		persistInt(this.mValue);
 	}
 

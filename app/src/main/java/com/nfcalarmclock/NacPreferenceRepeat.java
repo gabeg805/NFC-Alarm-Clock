@@ -88,8 +88,8 @@ public class NacPreferenceRepeat
 
 		this.mCheckBox = (CheckBox) v.findViewById(R.id.widget);
 
-		this.mCheckBox.setOnCheckedChangeListener(this);
 		this.mCheckBox.setChecked(this.mValue);
+		this.mCheckBox.setOnCheckedChangeListener(this);
 	}
 
 	/**
@@ -106,9 +106,8 @@ public class NacPreferenceRepeat
 	public void onCheckedChanged(CompoundButton button, boolean state)
 	{
 		this.mValue = state;
-		this.mCheckBox.setChecked(state);
-		notifyChanged();
 
+		this.mCheckBox.setChecked(this.mValue);
 		persistBoolean(this.mValue);
 	}
 
@@ -138,18 +137,4 @@ public class NacPreferenceRepeat
 		}
 	}
 
-	/**
-	 * @return The width of the display.
-	 */
-	//private int getDisplayWidth()
-	//{
-	//	DisplayMetrics metrics = new DisplayMetrics();
-	//	AppCompatActivity act = (AppCompatActivity) getContext();
-
-	//	act.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-	//	return metrics.widthPixels;
-	//}
-
 }
-
