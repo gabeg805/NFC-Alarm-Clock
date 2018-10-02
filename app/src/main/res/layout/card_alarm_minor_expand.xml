@@ -23,6 +23,18 @@
         android:text="@string/card_repeat"
         />
 
+<!--
+	<com.nfcalarmclock.NacDayButton
+		android:id="@+id/nacRepeatDays"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/nacRepeatCheckbox"
+		android:layout_marginBottom="@dimen/mb_card_item_spacing"
+		android:gravity="center"
+		android:text="H"
+		/>
+-->
+
     <com.nfcalarmclock.NacDayOfWeek
         android:id="@+id/nacRepeatDays"
         android:layout_width="match_parent"
@@ -30,6 +42,8 @@
         android:layout_below="@id/nacRepeatCheckbox"
         android:layout_marginBottom="@dimen/mb_card_item_spacing"
         android:gravity="center"
+		app:nacTextColor="@color/black"
+		app:nacBackgroundColor="@color/orange"
         />
 
     <RelativeLayout

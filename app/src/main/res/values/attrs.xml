@@ -17,19 +17,54 @@
 	</declare-styleable>
 
     <declare-styleable name="NacDayButton">
+		<attr name="nacWidth" />
+		<attr name="nacHeight" />
+		<attr name="nacDuration" />
+		<attr name="nacTextColor" />
+		<attr name="nacTextSize" />
+        <attr name="nacText" />
+		<attr name="nacBackgroundColor" />
+		<attr name="nacDrawable" />
+    </declare-styleable>
+
+<!--
+    <declare-styleable name="NacDayButton">
 		<attr name="android:width" />
 		<attr name="android:height" />
 		<attr name="android:duration" />
-		<attr name="android:backgroundTint" />
-		<attr name="android:background" />
 		<attr name="android:textColor" />
 		<attr name="android:textSize" />
 		<attr name="android:text" />
+		<attr name="android:backgroundTint" />
+		<attr name="android:background" />
+    </declare-styleable>
+
+    <declare-styleable name="NacDayOfWeek">
+		<attr name="android:width" />
+		<attr name="android:height" />
+		<attr name="android:duration" />
+		<attr name="android:textColor" />
+		<attr name="android:textSize" />
+		<attr name="android:backgroundTint" />
+		<attr name="android:background" />
+    </declare-styleable>
+-->
+    <declare-styleable name="NacDayOfWeek">
+		<attr name="nacWidth" />
+		<attr name="nacHeight" />
+		<attr name="nacDuration" />
+		<attr name="nacTextColor" />
+		<attr name="nacTextSize" />
+        <attr name="nacText" />
+		<attr name="nacBackgroundColor" />
+		<attr name="nacDrawable" />
     </declare-styleable>
 
     <!-- <declare-styleable name="NacSharedAttr"> -->
         <attr name="nacWidth" format="reference|dimension" />
         <attr name="nacHeight" format="reference|dimension" />
+        <attr name="nacDuration" format="reference|integer" />
+        <attr name="nacBackgroundColor" format="reference|color" />
         <attr name="nacDrawable" format="reference" />
         <attr name="nacDrawableWidth" format="reference|dimension" />
         <attr name="nacDrawableHeight" format="reference|dimension" />
@@ -54,7 +89,6 @@
     </declare-styleable>
 
 	<declare-styleable name="MusicSelection">
-
 		<attr name="nacWidth" />
         <attr name="nacTextColor" />
         <attr name="nacTextSize" />
@@ -62,7 +96,6 @@
         <attr name="nacSubTextColor" />
         <attr name="nacSubTextSize" />
         <attr name="nacSubText" />
-
 	</declare-styleable>
 
 </resources>

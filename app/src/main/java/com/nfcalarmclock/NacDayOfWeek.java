@@ -14,6 +14,8 @@ import android.widget.LinearLayout.LayoutParams;
 import android.support.annotation.Nullable;
 import java.util.List;
 
+import android.util.TypedValue;
+
 /**
  * @class A button that consists of an image to the left, and text to the right
  *		  of it.
@@ -134,7 +136,6 @@ public class NacDayOfWeek
 		LayoutInflater.from(context).inflate(R.layout.nac_day_of_week,
 			this, true);
 
-		this.mListener = null;
 		this.mButtons = new NacDayButton[this.mLength];
 		this.mButtons[0] = (NacDayButton) findViewById(R.id.dowb_sun);
 		this.mButtons[1] = (NacDayButton) findViewById(R.id.dowb_mon);
@@ -143,6 +144,50 @@ public class NacDayOfWeek
 		this.mButtons[4] = (NacDayButton) findViewById(R.id.dowb_thu);
 		this.mButtons[5] = (NacDayButton) findViewById(R.id.dowb_fri);
 		this.mButtons[6] = (NacDayButton) findViewById(R.id.dowb_sat);
+		this.mListener = null;
+
+		Resources.Theme theme = context.getTheme();
+		TypedArray ta = theme.obtainStyledAttributes(attrs,
+			R.styleable.NacDayOfWeek, 0, 0);
+		Resources res = context.getResources();
+		int widthid = R.styleable.NacDayOfWeek_nacWidth;
+		int heightid = R.styleable.NacDayOfWeek_nacHeight;
+		int textcolorid = R.styleable.NacDayOfWeek_nacTextColor;
+		int textsizeid = R.styleable.NacDayOfWeek_nacTextSize;
+		int textid = R.styleable.NacDayOfWeek_nacText;
+		int durationid = R.styleable.NacDayOfWeek_nacDuration;
+		int bgcolorid = R.styleable.NacDayOfWeek_nacBackgroundColor;
+		int drawableid = R.styleable.NacDayOfWeek_nacDrawable;
+		//TypedValue value = new TypedValue();
+
+		NacUtility.printf("NacDayOfWeek");
+		NacUtility.printf("TextSize  : %d", textsizeid);
+		NacUtility.printf("TextColor : %d", textcolorid);
+		NacUtility.printf("Bg        : %d", bgcolorid);
+		NacUtility.printf("Text      : %d", textid);
+		NacUtility.printf("Height    : %d", heightid);
+		NacUtility.printf("Width     : %d", widthid);
+		NacUtility.printf("Duration  : %d", durationid);
+		NacUtility.printf("Drawable  : %d", drawableid);
+
+		//TypedArray ta = res.obtainAttributes(attrs, R.styleable.NacDayButton);
+		NacUtility.printf("Index Count : %d", ta.getIndexCount());
+		NacUtility.printf("Length      : %d", ta.length());
+
+		try
+		{
+			for (int i=0; i < ta.length(); i++)
+			{
+				//TypedValue value = new TypedValue();
+
+				NacUtility.printf("Index : %d || Id : %d || Has : %b",
+					i, ta.getResourceId(i, -1), ta.hasValue(i));
+			}
+		}
+		finally
+		{
+			ta.recycle();
+		}
 
 		for (int i=0; i < this.mLength; i++)
 		{
@@ -152,6 +197,7 @@ public class NacDayOfWeek
 			}
 
 			this.mButtons[i].setOnClickListener(this);
+			this.mButtons[i].mergeAttributes(context, attrs);
 		}
 	}
 
@@ -198,6 +244,8 @@ public class NacDayOfWeek
 		}
 
 		int spacing = this.getButtonSpacing();
+		NacUtility.printf("DayOfWeek Default Color : %d", this.mButtons[0].getDefaultButtonColor());
+		//super.setBackgroundColor(this.mButtons[0].getDefaultButtonColor());
 
 		for (int i=0; i < this.mLength; i++)
 		{
