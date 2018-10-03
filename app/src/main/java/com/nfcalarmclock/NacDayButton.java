@@ -41,7 +41,7 @@ public class NacDayButton
 	/**
 	 * Attributes for button and text.
 	 */
-	public static class NacDayAttributes
+	public class NacDayAttributes
 	{
 		public int width;
 		public int height;
@@ -49,12 +49,78 @@ public class NacDayButton
 		public int textColor;
 		public int textSize;
 		public String text;
-		public int backgroundTint;
-		public int background;
+		public int backgroundColor;
+		public int drawable;
 
-		public NacDayAttributes()
+		/**
+		 * Initialize the attributes.
+		 */
+		public NacDayAttributes(Context context, AttributeSet attrs)
 		{
+			TypedArray ta = context.getTheme().obtainStyledAttributes(attrs,
+				R.styleable.NacDayButton, 0, R.style.NacDayButton);
+
+			try
+			{
+				Resources res = context.getResources();
+				int textsize = (int) res.getDimension(R.dimen.tsz_card_days);
+				this.width = (int) ta.getDimension(R.styleable.NacDayButton_nacWidth, 2*textsize);
+				this.height = (int) ta.getDimension(R.styleable.NacDayButton_nacHeight, 2*textsize);
+				this.duration = ta.getInt(R.styleable.NacDayButton_nacDuration, 500);
+				this.textColor = ta.getColor(R.styleable.NacDayButton_nacTextColor, Color.WHITE);
+				this.textSize = (int) ta.getDimension(R.styleable.NacDayButton_nacTextSize, textsize);
+				this.text = ta.getString(R.styleable.NacDayButton_nacText);
+				this.backgroundColor = ta.getColor(R.styleable.NacDayButton_nacBackgroundColor, Color.WHITE);
+				this.drawable = ta.getResourceId(R.styleable.NacDayButton_nacDrawable, R.drawable.circle);
+			}
+			finally
+			{
+				ta.recycle();
+			}
 		}
+
+		/**
+		 * Merge the attribute corresponding to the given index.
+		 *
+		 * @param  index  The index of the attribute to overwrite.
+		 * @param  attributes  The attribute class to merge with this one.
+		 */
+		public void merge(int index, NacDayAttributes attributes)
+		{
+			if (index == R.styleable.NacDayButton_nacWidth)
+			{
+				this.width = attributes.width;
+			}
+			else if (index == R.styleable.NacDayButton_nacHeight)
+			{
+				this.height = attributes.height;
+			}
+			else if (index == R.styleable.NacDayButton_nacDuration)
+			{
+				this.duration = attributes.duration;
+			}
+			else if (index == R.styleable.NacDayButton_nacTextColor)
+			{
+				this.textColor = attributes.textColor;
+			}
+			else if (index == R.styleable.NacDayButton_nacTextSize)
+			{
+				this.textSize = attributes.textSize;
+			}
+			else if (index == R.styleable.NacDayButton_nacText)
+			{
+				this.text = attributes.text;
+			}
+			else if (index == R.styleable.NacDayButton_nacBackgroundColor)
+			{
+				this.backgroundColor = attributes.backgroundColor;
+			}
+			else if (index == R.styleable.NacDayButton_nacDrawable)
+			{
+				this.drawable = attributes.drawable;
+			}
+		}
+
 	}
 
 	/**
@@ -117,132 +183,25 @@ public class NacDayButton
 	}
 
 	/**
-	 * Parse the view attributes.
+	 * Merge attributes of another class that utilizes this one, with this
+	 * class.
 	 */
-	public static NacDayAttributes parseAttributes(Context context,
-		AttributeSet attrs)
-	{
-		Resources res = context.getResources();
-		Resources.Theme theme = context.getTheme();
-		TypedArray ta = theme.obtainStyledAttributes(attrs,
-			R.styleable.NacDayButton, 0, R.style.NacDayButton);
-		int widthid = R.styleable.NacDayOfWeek_nacWidth;
-		int heightid = R.styleable.NacDayOfWeek_nacHeight;
-		int durationid = R.styleable.NacDayOfWeek_nacDuration;
-		int textcolorid = R.styleable.NacDayOfWeek_nacTextColor;
-		int textsizeid = R.styleable.NacDayOfWeek_nacTextSize;
-		int textid = R.styleable.NacDayOfWeek_nacText;
-		int bgcolorid = R.styleable.NacDayOfWeek_nacBackgroundColor;
-		int drawableid = R.styleable.NacDayOfWeek_nacDrawable;
-		//int widthid = R.styleable.NacDayButton_android_width;
-		//int heightid = R.styleable.NacDayButton_android_height;
-		//int durationid = R.styleable.NacDayButton_android_duration;
-		//int textcolorid = R.styleable.NacDayButton_android_textColor;
-		//int textsizeid = R.styleable.NacDayButton_android_textSize;
-		//int textid = R.styleable.NacDayButton_android_text;
-		//int bgid = R.styleable.NacDayButton_android_backgroundTint;
-		//int backgroundid = R.styleable.NacDayButton_android_background;
-		NacDayAttributes parsed = new NacDayAttributes();
-
-		try
-		{
-			parsed.width = (int) ta.getDimension(widthid, -1);
-			parsed.height = (int) ta.getDimension(heightid, -1);
-			parsed.duration = ta.getInt(durationid, 0);
-			parsed.textColor = ta.getColor(textcolorid, -1);
-			parsed.textSize = (int) ta.getDimension(textsizeid, -1);
-			parsed.text = ta.getText(textid).toString();
-			parsed.backgroundTint = ta.getColor(bgcolorid, -1);
-			parsed.background = ta.getResourceId(drawableid, -1);
-		}
-		finally
-		{
-			ta.recycle();
-		}
-
-		return parsed;
-	}
-
 	public void mergeAttributes(Context context, AttributeSet attrs)
 	{
-		//NacDayAttributes parsed = NacDayButton.parseAttributes(context, attrs);
-
+		NacDayAttributes parsed = new NacDayAttributes(context, attrs);
 		Resources res = context.getResources();
-		TypedArray ta = res.obtainAttributes(attrs,
-			R.styleable.NacDayButton);
-		NacUtility.printf("Index Count : %d", ta.getIndexCount());
-		NacUtility.printf("Length      : %d", ta.length());
+		TypedArray ta = res.obtainAttributes(attrs, R.styleable.NacDayButton);
 
 		try
 		{
-			for (int i=0; i < ta.length(); i++)
+			for (int index=0; index < ta.length(); index++)
 			{
-				//TypedValue value = new TypedValue();
-				NacUtility.printf("Index : %d || Type : %d || Has : %b",
-					i, ta.getType(i), ta.hasValue(i));
-
-				if (!ta.hasValue(i))
+				if (!ta.hasValue(index))
 				{
 					continue;
 				}
 
-				switch (i)
-				{
-					case R.styleable.NacDayButton_nacWidth:
-						NacUtility.printf("Width");
-						this.mAttributes.width = (int) ta.getDimension(i, -1);
-						break;
-					case R.styleable.NacDayButton_nacHeight:
-						NacUtility.printf("Height");
-						this.mAttributes.height = (int) ta.getDimension(i, -1);
-						break;
-					case R.styleable.NacDayButton_nacDuration:
-						NacUtility.printf("Duration");
-						this.mAttributes.duration = ta.getInt(i, 0);
-						break;
-					case R.styleable.NacDayButton_nacTextColor:
-						NacUtility.printf("TextColor");
-						this.mAttributes.textColor = ta.getColor(i, -1);
-						break;
-					case R.styleable.NacDayButton_nacTextSize:
-						NacUtility.printf("TextSize");
-						this.mAttributes.textSize = (int) ta.getDimension(i, -1);
-						break;
-					case R.styleable.NacDayButton_nacText:
-						NacUtility.printf("Text");
-						this.mAttributes.text = ta.getText(i).toString();
-						break;
-					case R.styleable.NacDayButton_nacBackgroundColor:
-						NacUtility.printf("Background");
-						//this.mAttributes.backgroundTint = res.getColor(ta.getResourceId(i, -1));
-						this.mAttributes.backgroundTint = ta.getColor(i, -1);
-						//TypedValue value = new TypedValue();
-						//TypedValue resolve = new TypedValue();
-						//ta.getValue(i, value);
-						//NacUtility.printf("Data : %d", value.data);
-						//NacUtility.printf("Density : %d", value.density);
-						//NacUtility.printf("Resource : %d", value.resourceId);
-						//NacUtility.printf("String : %s", value.string);
-						//NacUtility.printf("Type : %d", value.type);
-						//boolean yo = context.getTheme().resolveAttribute(value.data, resolve, true);
-						//NacUtility.printf("Yo : %b", yo);
-						//NacUtility.printf("Data : %d", resolve.data);
-						//NacUtility.printf("Density : %d", resolve.density);
-						//NacUtility.printf("Resource : %d", resolve.resourceId);
-						//NacUtility.printf("String : %s", resolve.string);
-						//NacUtility.printf("Type : %d", resolve.type);
-						//this.mAttributes.backgroundTint = resolve.data;
-						break;
-					case R.styleable.NacDayButton_nacDrawable:
-						NacUtility.printf("Drawable");
-						this.mAttributes.background = ta.getResourceId(i, -1);
-						//this.mAttributes.background = 0;
-						//this.mAttributes.background = ta.getColor(i, -1);
-						break;
-					default:
-						NacUtility.printf("Default");
-						break;
-				}
+				this.mAttributes.merge(index, parsed);
 			}
 		}
 		finally
@@ -277,7 +236,7 @@ public class NacDayButton
 		LayoutInflater.from(context).inflate(R.layout.nac_day_button,
 			this, true);
 
-		this.mAttributes = parseAttributes(context, attrs);
+		this.mAttributes = new NacDayAttributes(context, attrs);
 		this.mButton = (Button) findViewById(R.id.nac_day_button);
 		this.mButtonAnimator = null;
 		this.mTextAnimator = null;
@@ -295,25 +254,8 @@ public class NacDayButton
 	/**
 	 * Set view attributes.
 	 */
-	//public void setViewAttributes(NacDayAttributes attributes)
-	//{
-	//	this.mAttributes = attributes;
-
-	//	setViewAttributes();
-	//}
-
 	private void setViewAttributes()
 	{
-		NacUtility.printf("Attributes");
-		NacUtility.printf("Width      : %d", this.mAttributes.width);
-		NacUtility.printf("Height     : %d", this.mAttributes.height);
-		NacUtility.printf("Duration   : %d", this.mAttributes.duration);
-		NacUtility.printf("TextColor  : %d", this.mAttributes.textColor);
-		NacUtility.printf("TextSize   : %d", this.mAttributes.textSize);
-		NacUtility.printf("Text       : %s", this.mAttributes.text);
-		NacUtility.printf("Background : %d", this.mAttributes.backgroundTint);
-		NacUtility.printf("Drawable   : %d", this.mAttributes.background);
-		super.setElevation(0);
 		this.setWidthAndHeight(this.getButtonWidth(), this.getButtonHeight());
 		this.setBackground(this.getBackgroundResource());
 		this.setButtonColor(this.getButtonColor());
@@ -342,7 +284,6 @@ public class NacDayButton
 
 		if (animator.equals(this.mButtonAnimator))
 		{
-			NacUtility.printf("Animating color : %d", color);
 			this.setButtonColor(color);
 		}
 		else if (animator.equals(this.mTextAnimator))
@@ -434,7 +375,6 @@ public class NacDayButton
 		{
 			from = this.getTextColor();
 			to = this.getButtonColor();
-			NacUtility.printf("From : %d || To : %d", from, to);
 		}
 		else if (type == NacDayViewType.TEXT)
 		{
@@ -506,8 +446,6 @@ public class NacDayButton
 	 */
 	public void setButtonColor(int color)
 	{
-		//this.mButtonGraphics.color = color;
-		//Drawable drawable = this.mButton.getBackground();
 		Drawable drawable = this.getBackground();
 
 		drawable.setColorFilter(color, PorterDuff.Mode.SRC);
@@ -522,7 +460,7 @@ public class NacDayButton
 	 */
 	public void setDefaultButtonColor(int color)
 	{
-		this.mAttributes.backgroundTint = color;
+		this.mAttributes.backgroundColor = color;
 	}
 
 	/**
@@ -612,7 +550,7 @@ public class NacDayButton
 	 */
 	public void setBackground(int resid)
 	{
-		this.mAttributes.background = resid;
+		this.mAttributes.drawable = resid;
 		this.mButton.setBackgroundResource(resid);
 	}
 
@@ -623,10 +561,7 @@ public class NacDayButton
 	{
 		Object tag = this.mButton.getTag();
 
-		int value = (tag != null) ? (Integer) tag : this.getDefaultButtonColor();
-		NacUtility.printf("Getting button color : %d", value);
-		return value;
-		//return (tag != null) ? (Integer) tag : this.getDefaultButtonColor();
+		return (tag != null) ? (Integer) tag : this.getDefaultButtonColor();
 	}
 
 	/**
@@ -634,8 +569,7 @@ public class NacDayButton
 	 */
 	public int getDefaultButtonColor()
 	{
-		NacUtility.printf("Getting default button color : %d", this.mAttributes.backgroundTint);
-		return this.mAttributes.backgroundTint;
+		return this.mAttributes.backgroundColor;
 	}
 
 	/**
@@ -702,7 +636,7 @@ public class NacDayButton
 	 */
 	public int getBackgroundResource()
 	{
-		return this.mAttributes.background;
+		return this.mAttributes.drawable;
 	}
 
 	/**

@@ -30,15 +30,4 @@
 		<item name="nacDrawable">@drawable/circle</item>
 	</style>
 
-<!--
-		<item name="android:width">@dimen/circle_size</item>
-		<item name="android:height">@dimen/circle_size</item>
-		<item name="android:duration">500</item>
-		<item name="android:textColor">?attr/colorCardText</item>
-		<item name="android:textSize">@dimen/tsz_card_days</item>
-		<item name="android:text"></item>
-		<item name="android:backgroundTint">?attr/colorCardExpanded</item>
-		<item name="android:background">@drawable/circle</item>
--->
-
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:id="@android:id/widget_frame"
 	android:orientation="vertical"
 	android:minHeight="?android:attr/listPreferredItemHeightSmall"
@@ -37,6 +38,7 @@
         android:layout_below="@android:id/summary"
 		android:paddingTop="?android:attr/listPreferredItemPaddingLeft"
         android:gravity="center"
+		app:nacBackgroundColor="?attr/colorCard"
         />
 
 </LinearLayout>

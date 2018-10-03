@@ -27,28 +27,6 @@
 		<attr name="nacDrawable" />
     </declare-styleable>
 
-<!--
-    <declare-styleable name="NacDayButton">
-		<attr name="android:width" />
-		<attr name="android:height" />
-		<attr name="android:duration" />
-		<attr name="android:textColor" />
-		<attr name="android:textSize" />
-		<attr name="android:text" />
-		<attr name="android:backgroundTint" />
-		<attr name="android:background" />
-    </declare-styleable>
-
-    <declare-styleable name="NacDayOfWeek">
-		<attr name="android:width" />
-		<attr name="android:height" />
-		<attr name="android:duration" />
-		<attr name="android:textColor" />
-		<attr name="android:textSize" />
-		<attr name="android:backgroundTint" />
-		<attr name="android:background" />
-    </declare-styleable>
--->
     <declare-styleable name="NacDayOfWeek">
 		<attr name="nacWidth" />
 		<attr name="nacHeight" />
