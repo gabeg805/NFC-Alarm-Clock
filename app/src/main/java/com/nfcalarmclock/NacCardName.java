@@ -74,7 +74,7 @@ public class NacCardName
 	/**
 	 */
 	@Override
-	public void onDialogDismissed()
+	public void onDialogDismissed(NacDialog dialog)
 	{
 		this.setName();
 	}

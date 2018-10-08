@@ -25,71 +25,58 @@ public class NacDialogMusicList
 {
 
 	/**
-	 * @brief Definition for the item listener.
+	 * Item click listener interface to implement.
 	 */
 	public interface ItemClickListener
 	{
-		void onItemClick(View v, int p);
+		void onItemClick(View view, int position);
 	}
 
 	/**
-	 * @brief The app context.
+	 * Item click listener.
 	 */
-	private Context mContext = null;
+	private ItemClickListener mListener;
 
 	/**
-	 * @brief The item click listener.
-	 */
-	private ItemClickListener mClickListener;
-
-	/**
-	 * @brief List of songs.
+	 * List of songs.
 	 */
 	private List<NacSound> mSounds;
 
 	/**
-	 * @param  c  The app context.
-	 * @param  s  List of songs.
 	 */
-	public NacDialogMusicList(Context c, List<NacSound> s)
+	public NacDialogMusicList(List<NacSound> songs)
 	{
-		this.mContext = c;
-		this.mSounds = s;
+		this.mSounds = songs;
 	}
 
 	/**
-	 * @brief Set the item click listener.
+	 * Set the item click listener.
 	 */
 	public void setClickListener(ItemClickListener listener)
 	{
-		this.mClickListener = listener;
-	}
-
-	// convenience method for getting data at click position
-	public NacSound getItem(int id)
-	{
-		return mSounds.get(id);
+		this.mListener = listener;
 	}
 
 	/**
-	 * @brief Inflate the row.
+	 * Inflate the row.
 	 */
 	@Override
-	public NacDialogMusicItem onCreateViewHolder(ViewGroup p, int t)
+	public NacDialogMusicItem onCreateViewHolder(ViewGroup parent, int type)
 	{
-		View view = LayoutInflater.from(mContext).inflate(
-			R.layout.list_item_music, p, false);
+		Context context = parent.getContext();
+		View view = LayoutInflater.from(context).inflate(
+			R.layout.list_item_music, parent, false);
 
 		return new NacDialogMusicItem(view);
 	}
 
 	/**
-	 * @brief Bind data to the viewholder.
+	 * Bind data to the viewholder.
 	 */
 	@Override
 	public void onBindViewHolder(NacDialogMusicItem item, int position)
 	{
-		NacSound sound = mSounds.get(position);
+		NacSound sound = this.mSounds.get(position);
 		File file = new File(sound.path);
 		String name = sound.name;
 		String dir = file.getParent();
@@ -105,59 +92,61 @@ public class NacDialogMusicList
 		return mSounds.size();
 	}
 
-	// stores and recycles views as they are scrolled off screen
+	/**
+	 * Stores and recycles views as they are scrolled off screen.
+	 */
 	public class NacDialogMusicItem
 		extends RecyclerView.ViewHolder
 		implements View.OnClickListener
 	{
 
 		/**
-		 * @brief The name of the song.
+		 * The name of the song.
 		 */
-		private TextView mNameView = null;
+		private TextView mNameView;
 
 		/**
-		 * @brief The directory where the song is located.
+		 * The directory where the song is located.
 		 */
-		private TextView mDirectoryView = null;
+		private TextView mDirectoryView;
 
 		/**
-		 * @param  v  The parent view.
+		 * @param  root  The parent view.
 		 */
-		public NacDialogMusicItem(View v)
+		public NacDialogMusicItem(View root)
 		{
-			super(v);
+			super(root);
 
-			this.mNameView = v.findViewById(R.id.ms_song);
-			this.mDirectoryView = v.findViewById(R.id.ms_directory);
+			this.mNameView = root.findViewById(R.id.ms_song);
+			this.mDirectoryView = root.findViewById(R.id.ms_directory);
 
-			v.setOnClickListener(this);
+			root.setOnClickListener(this);
 		}
 
 		/**
-		 * @brief Set the name of the song.
+		 * Set the name of the song.
 		 */
 		public void setName(String name)
 		{
-			mNameView.setText(name);
+			this.mNameView.setText(name);
 		}
 
 		/**
-		 * @brief Set the directory where the song is located.
+		 * Set the directory where the song is located.
 		 */
 		public void setDirectory(String dir)
 		{
-			mDirectoryView.setText(dir);
+			this.mDirectoryView.setText(dir);
 		}
 
 		/**
 		 */
 		@Override
-		public void onClick(View v)
+		public void onClick(View view)
 		{
-			if (mClickListener != null)
+			if (mListener != null)
 			{
-				mClickListener.onItemClick(v, getAdapterPosition());
+				mListener.onItemClick(view, getAdapterPosition());
 			}
 		}
 

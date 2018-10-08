@@ -89,7 +89,7 @@ public class NacPreferenceName
 	/**
 	 */
 	@Override
-	public void onDialogDismissed()
+	public void onDialogDismissed(NacDialog dialog)
 	{
 		this.mValue = this.mAlarm.getName();
 

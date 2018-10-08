@@ -12,7 +12,7 @@ import android.widget.RadioGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NacCardSoundRingtoneDialog
+public class NacSoundDialog
 	extends NacDialog
 	implements CompoundButton.OnCheckedChangeListener
 {
@@ -20,21 +20,21 @@ public class NacCardSoundRingtoneDialog
 	/**
 	 * Media player.
 	 */
-	private NacMediaPlayer mPlayer;
+	protected NacMediaPlayer mPlayer;
 
 	/**
 	 * List of ringtones.
 	 */
-	private List<NacSound> mSounds;
+	protected List<NacSound> mSounds;
 
 	/**
 	 * The index in the songs list pointing to the currently selected item.
 	 */
-	private int mIndex;
+	protected int mIndex;
 
 	/**
 	 */
-	public NacCardSoundRingtoneDialog(NacMediaPlayer mp)
+	public NacSoundDialog(NacMediaPlayer mp)
 	{
 		super();
 
@@ -50,7 +50,6 @@ public class NacCardSoundRingtoneDialog
 	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
 		String title = context.getString(R.string.dlg_ringtone_title);
-		this.mSounds = this.getSoundList(context);
 
 		builder.setTitle(title);
 		this.setPositiveButton("OK");
@@ -64,6 +63,7 @@ public class NacCardSoundRingtoneDialog
 	public void onShowDialog(Context context, View root)
 	{
 		RadioGroup rg = (RadioGroup) root.findViewById(R.id.radio_group);
+		this.mSounds = this.getSoundList(context);
 
 		for(int i=0; i < this.mSounds.size(); i++)
 		{
@@ -88,32 +88,10 @@ public class NacCardSoundRingtoneDialog
 	/**
 	 * @return The list of sounds for the ringtone manager.
 	 */
-	private List<NacSound> getSoundList(Context context)
+	protected List<NacSound> getSoundList(Context context)
 	{
-		RingtoneManager manager = new RingtoneManager(context);
-		List<NacSound> list = new ArrayList<>();
-
-		manager.setType(RingtoneManager.TYPE_ALARM);
-
-		Cursor cursor = manager.getCursor();
-
-		while (cursor.moveToNext())
-		{
-			String name = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
-			String id = cursor.getString(RingtoneManager.ID_COLUMN_INDEX);
-			String dir = cursor.getString(RingtoneManager.URI_COLUMN_INDEX);
-
-			NacUtility.printf("File : %s/%s (%s)", dir, id, name);
-
-			if (this.containsSongName(list, name))
-			{
-				continue;
-			}
-
-			list.add(new NacSound(id, dir, name));
-		}
-
-		return list;
+		NacUtility.printf("Getting sound list in NacSoundDialog");
+		return null;
 	}
 
 	/**

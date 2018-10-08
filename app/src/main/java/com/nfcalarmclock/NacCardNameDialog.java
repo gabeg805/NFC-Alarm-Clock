@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.text.InputType;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -35,6 +33,7 @@ public class NacCardNameDialog
 	 */
 	public NacCardNameDialog(Alarm a)
 	{
+		super();
 		this.mAlarm = a;
 		this.addDismissListener(this);
 	}
@@ -42,15 +41,25 @@ public class NacCardNameDialog
 	/**
 	 */
 	@Override
-	public void onBuildDialog(AlertDialog.Builder builder, View root)
+	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
-		NacUtility.printf("NameDialog onInflated!");
-		this.mEditText = (EditText) root.findViewById(R.id.alarm_name);
+		String title = "Set Alarm Name";
 
-		builder.setTitle("Set Alarm Name");
+		builder.setTitle(title);
 		this.setPositiveButton("OK");
 		this.setNegativeButton("Cancel");
-		this.mEditText.setText(mAlarm.getName());
+	}
+
+	/**
+	 * Setup the views when the dialog is shown.
+	 */
+	@Override
+	public void onShowDialog(Context context, View root)
+	{
+		String name = this.mAlarm.getName();
+		this.mEditText = (EditText) root.findViewById(R.id.alarm_name);
+
+		this.mEditText.setText(name);
 		this.mEditText.selectAll();
 		this.mEditText.setOnEditorActionListener(this);
 		this.mEditText.setRawInputType(InputType.TYPE_CLASS_TEXT);
@@ -60,7 +69,7 @@ public class NacCardNameDialog
 	/**
 	 */
 	@Override
-	public void onDialogDismissed()
+	public void onDialogDismissed(NacDialog dialog)
 	{
 		String text = this.mEditText.getText().toString();
 

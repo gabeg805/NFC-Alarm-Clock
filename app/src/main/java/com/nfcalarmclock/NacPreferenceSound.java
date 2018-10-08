@@ -134,10 +134,11 @@ public class NacPreferenceSound
 	@Override
 	public boolean onPreferenceClick(Preference pref)
 	{
-		this.mDialog = new NacCardSoundPromptDialog(getContext());
+		NacUtility.printf("Sound preference clicked!");
+		//this.mDialog = new NacCardSoundPromptDialog(getContext());
 
-		this.mDialog.setOnItemSelectedListener(this);
-		this.mDialog.show();
+		//this.mDialog.setOnItemSelectedListener(this);
+		//this.mDialog.show();
 		return true;
 	}
 

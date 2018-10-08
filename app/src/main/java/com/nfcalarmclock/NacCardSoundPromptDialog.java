@@ -1,5 +1,6 @@
 package com.nfcalarmclock;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.View;
@@ -10,13 +11,13 @@ import java.util.List;
  * @brief The dialog class that will handle saving the name of the alarm.
  */
 public class NacCardSoundPromptDialog
-	extends NacCardDialog
-	implements View.OnClickListener,DialogInterface.OnDismissListener
+	extends NacDialog
+	implements View.OnClickListener,NacDialog.OnDismissedListener,NacDialog.OnCanceledListener
 {
 
 	/**
-	 * @brief Interface for other classes to implement what to do when an
-	 *        item is selected.
+	 * Interface for other classes to implement what to do when an item is
+	 * selected.
 	 */
 	public interface OnItemSelectedListener
 	{
@@ -24,42 +25,46 @@ public class NacCardSoundPromptDialog
 	}
 
 	/**
-	 * @brief Context.
+	 * Listener for when an item in a dialog is selected.
 	 */
-	private Context mContext = null;
+	private OnItemSelectedListener mListener;
 
 	/**
-	 * @brief Listener for when an item in a dialog is selected.
+	 * Media player.
 	 */
-	private OnItemSelectedListener mListener = null;
+	private NacMediaPlayer mPlayer;
 
 	/**
-	 * @brief Dialog.
 	 */
-	private NacCardDialog mDialog = null;
-
-	/**
-	 * @brief Root view.
-	 */
-	private View mRoot = null;
-
-	/**
-	 * @brief Media player.
-	 */
-	private NacMediaPlayer mPlayer = null;
-
-	/**
-	 * @param  c  Context.
-	 */
-	public NacCardSoundPromptDialog(Context c)
+	public NacCardSoundPromptDialog()
 	{
-		super(c);
+		super();
 
-		this.mContext = c;
-		this.mRoot = super.inflate(R.layout.dlg_alarm_sound_prompt);
-		this.mPlayer = new NacMediaPlayer(mContext);
-		Button music = (Button) mRoot.findViewById(R.id.dlg_music);
-		Button ringtone = (Button) mRoot.findViewById(R.id.dlg_ringtone);
+		this.mListener = null;
+		this.mPlayer = null;
+	}
+
+	/**
+	 * Build the dialog.
+	 */
+	@Override
+	public void onBuildDialog(Context context, AlertDialog.Builder builder)
+	{
+		String title = context.getString(R.string.dlg_prompt_title);
+		this.mPlayer = new NacMediaPlayer(context);
+
+		builder.setTitle(title);
+		this.setNegativeButton("Cancel");
+	}
+
+	/**
+	 * Setup the views when the dialog is shown.
+	 */
+	@Override
+	public void onShowDialog(Context context, View root)
+	{
+		Button music = (Button) root.findViewById(R.id.dlg_music);
+		Button ringtone = (Button) root.findViewById(R.id.dlg_ringtone);
 
 		music.setOnClickListener(this);
 		ringtone.setOnClickListener(this);
@@ -68,17 +73,7 @@ public class NacCardSoundPromptDialog
 	}
 
 	/**
-	 * @brief Show the dialog to set the alarm name.
-	 */
-	public void show()
-	{
-		String title = mContext.getString(R.string.dlg_prompt_title);
-
-		super.build(mRoot, title, false, true);
-	}
-
-	/**
-	 * @brief Item has been selected in the dialog.
+	 * Item has been selected in the dialog.
 	 */
 	private void itemSelected(NacSound sound)
 	{
@@ -89,7 +84,7 @@ public class NacCardSoundPromptDialog
 	}
 
 	/**
-	 * @brief Set the listener for when an item is selected.
+	 * Set the listener for when an item is selected.
 	 */
 	public void setOnItemSelectedListener(OnItemSelectedListener listener)
 	{
@@ -99,27 +94,20 @@ public class NacCardSoundPromptDialog
 	/**
 	 * @return The sound selection or null if none found.
 	 */
-	private NacSound getSound()
+	private NacSound getSound(NacDialog dialog)
 	{
-		List<NacSound> sounds;
-		int index = -1;
+		NacSound sound = null;
 
-		if (mDialog instanceof NacCardSoundRingtoneDialog)
+		if (dialog instanceof NacCardSoundRingtoneDialog)
 		{
-			sounds = ((NacCardSoundRingtoneDialog)mDialog).mSounds;
-			index = ((NacCardSoundRingtoneDialog)mDialog).mIndex;
+			sound = ((NacCardSoundRingtoneDialog)dialog).getSound();
 		}
-		else if (mDialog instanceof NacCardSoundMusicDialog)
+		else if (dialog instanceof NacCardSoundMusicDialog)
 		{
-			sounds = ((NacCardSoundMusicDialog)mDialog).mSounds;
-			index = ((NacCardSoundMusicDialog)mDialog).mIndex;
-		}
-		else
-		{
-			return null;
+			sound = ((NacCardSoundMusicDialog)dialog).getSound();
 		}
 
-		return (index < 0) ? null : sounds.get(index);
+		return sound;
 	}
 
 	/**
@@ -128,56 +116,72 @@ public class NacCardSoundPromptDialog
 	@Override
 	public void onClick(View v)
 	{
+		Context context = v.getContext();
 		String tag = (String) v.getTag();
-
-		if (mDialog != null)
-		{
-			mDialog.dismiss();
-		}
+		NacDialog dialog = null;
+		int layout = R.layout.dlg_sound_list;
+		double widthscale = 0;
+		double heightscale = 0.75;
+		boolean wrapwidth = false;
+		boolean wrapheight = true;
 
 		if (tag == null)
 		{
 			return;
 		}
-		else if (tag.equals("music"))
-		{
-			NacCardSoundMusicDialog d = new NacCardSoundMusicDialog(mContext,
-				mPlayer);
-			d.show();
-			d.setOnDismissListener(this);
-			mDialog = d;
-		}
 		else if (tag.equals("ringtone"))
 		{
-			NacCardSoundRingtoneDialog d = new NacCardSoundRingtoneDialog(
-				mContext, mPlayer);
-			d.show();
-			d.setOnDismissListener(this);
-			mDialog = d;
+			dialog = new NacCardSoundRingtoneDialog(mPlayer);
+			widthscale = 0.8;
+		}
+		else if (tag.equals("music"))
+		{
+			try
+			{
+				dialog = new NacCardSoundMusicDialog(mPlayer);
+				widthscale = 0.9;
+			}
+			catch (UnsupportedOperationException e)
+			{
+				NacUtility.printf("Caught the exception. Not going to show the dialog.");
+				return;
+			}
 		}
 		else
 		{
 			return;
 		}
+
+		dialog.build(context, layout);
+		dialog.addDismissListener(this);
+		dialog.addCancelListener(this);
+		dialog.show();
+		dialog.scale(widthscale, heightscale, wrapwidth, wrapheight);
 	}
 
 	/**
-	 * @brief Handles click events on the Ok/Cancel buttons in the dialog.
 	 */
 	@Override
-	public void onDismiss(DialogInterface dialog)
+	public void onDialogCanceled(NacDialog dialog)
 	{
-		NacSound sound = this.getSound();
+		this.mPlayer.reset();
+		this.cancel();
+	}
 
-		mPlayer.reset();
+	/**
+	 */
+	@Override
+	public void onDialogDismissed(NacDialog dialog)
+	{
+		NacSound sound = this.getSound(dialog);
 
-		if (mDialog.wasCanceled() || (sound == null))
+		this.mPlayer.reset();
+		this.dismiss();
+
+		if (sound != null)
 		{
-			return;
+			this.itemSelected(sound);
 		}
-
-		itemSelected(sound);
-		super.dismiss();
 	}
 
 }

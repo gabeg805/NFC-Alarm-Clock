@@ -15,6 +15,11 @@ import android.support.v7.app.AppCompatActivity;
 public class NacPermissions
 {
 
+	public interface OnResultListener
+	{
+		public void onResult(int request, String[] permissions, int[] grant);
+	}
+
 	/**
 	 * @brief Check if the app has READ_EXTERNAL_STORAGE permissions.
 	 */
@@ -47,6 +52,7 @@ public class NacPermissions
 			// Show an explanation to the user *asynchronously* -- don't block
 			// this thread waiting for the user's response! After the user
 			// sees the explanation, try again to request the permission.
+			return -1;
 		}
 		else
 		{
@@ -60,9 +66,8 @@ public class NacPermissions
 			// MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
 			// app-defined int constant. The callback method gets the
 			// result of the request.
+			return 0;
 		}
-
-		return 0;
 	}
 
 }

@@ -6,7 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.util.DisplayMetrics;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +23,19 @@ public class NacDialog
 
 	/**
 	 */
-	public interface OnDismissedListener
-	{
-		public void onDialogDismissed();
-	}
-
 	public interface OnCanceledListener
 	{
-		public void onDialogCanceled();
+		public void onDialogCanceled(NacDialog dialog);
+	}
+
+	public interface OnDismissedListener
+	{
+		public void onDialogDismissed(NacDialog dialog);
+	}
+
+	public interface OnHiddenListener
+	{
+		public void onDialogHidden(NacDialog dialog);
 	}
 
 	/**
@@ -48,8 +56,9 @@ public class NacDialog
 	/**
 	 * The dialog listener.
 	 */
-	private List<OnDismissedListener> mDismissListener;
-	private List<OnCanceledListener> mCancelListener;
+	private List<OnCanceledListener> mCanceledListener;
+	private List<OnDismissedListener> mDismissedListener;
+	private List<OnHiddenListener> mHiddenListener;
 
 	/**
 	 */
@@ -58,23 +67,36 @@ public class NacDialog
 		this.mBuilder = null;
 		this.mDialog = null;
 		this.mRoot = null;
-		this.mDismissListener = new ArrayList<>();
-		this.mCancelListener = new ArrayList<>();
+		this.mCanceledListener = new ArrayList<>();
+		this.mDismissedListener = new ArrayList<>();
+		this.mHiddenListener = new ArrayList<>();
 	}
 
 	/**
-	 * Show the dialog.
+	 * Add a cancel listener. More than one can be added, and they will be
+	 * run in the order that they are added.
 	 */
-	public AlertDialog show()
+	public void addCancelListener(OnCanceledListener listener)
 	{
-		this.mDialog = this.mBuilder.show();
-
-		return this.mDialog;
+		this.mCanceledListener.add(listener);
 	}
 
-	public void onBuildDialog(AlertDialog.Builder builder, View root)
+	/**
+	 * Add a dismiss listener. More than one can be added, and they will be
+	 * run in the order that they are added.
+	 */
+	public void addDismissListener(OnDismissedListener listener)
 	{
-		NacUtility.printf("NacDialog onInflated!");
+		this.mDismissedListener.add(listener);
+	}
+
+	/**
+	 * Add a hidden listener. More than one can be added, and they will be
+	 * run in the order that they are added.
+	 */
+	public void addHiddenListener(OnHiddenListener listener)
+	{
+		this.mHiddenListener.add(listener);
 	}
 
 	/**
@@ -92,7 +114,7 @@ public class NacDialog
 
 		this.removeParent(root);
 		this.mBuilder.setView(root);
-		this.onBuildDialog(this.mBuilder, mRoot);
+		this.onBuildDialog(context, this.mBuilder);
 
 		return this.mBuilder;
 	}
@@ -111,48 +133,26 @@ public class NacDialog
 	}
 
 	/**
+	 * Cancel the dialog and call the onDialogCanceled listener.
 	 */
-	public void setPositiveButton(String title)
+	public void cancel()
 	{
-		if (this.mBuilder == null)
+		if (this.mDialog == null)
 		{
 			return;
 		}
 
-		this.mBuilder.setPositiveButton(title, this);
-	}
-
-	/**
-	 */
-	public void setNegativeButton(String title)
-	{
-		if (this.mBuilder == null)
+		for (OnCanceledListener listener : this.mCanceledListener)
 		{
-			return;
+			listener.onDialogCanceled(this);
 		}
 
-		this.mBuilder.setNegativeButton(title, this);
+		this.mDialog.cancel();
 	}
 
 	/**
+	 * Dismiss the dialog and call the onDialogDismissed listener.
 	 */
-	public void addDismissListener(OnDismissedListener listener)
-	{
-		this.mDismissListener.add(listener);
-	}
-
-	/**
-	 */
-	public void addCancelListener(OnCanceledListener listener)
-	{
-		this.mCancelListener.add(listener);
-	}
-
-	public View getRoot()
-	{
-		return this.mRoot;
-	}
-
 	public void dismiss()
 	{
 		if (this.mDialog == null)
@@ -160,34 +160,78 @@ public class NacDialog
 			return;
 		}
 
-		this.onClick(this.mDialog, DialogInterface.BUTTON_POSITIVE);
+		for (OnDismissedListener listener : this.mDismissedListener)
+		{
+			listener.onDialogDismissed(this);
+		}
+
+		this.mDialog.dismiss();
 	}
 
 	/**
-	 * @brief Scale the dialog size.
-	 *
-	 * @param  w  Width. Value must be 0 <= w <= 1.
-	 * @param  h  Height. Value must be 0 <= h <= 1.
+	 * @return The root view.
 	 */
-	public void scale(double w, double h)
+	public View getRoot()
 	{
-		if ((this.mBuilder == null) || (this.mDialog == null)
-			|| (w < 0) || (w > 1) || (h < 0) || (h > 1))
+		return this.mRoot;
+	}
+
+	/**
+	 * Hide the dialog and call the onDialogHidden listener.
+	 */
+	public void hide()
+	{
+		if (this.mDialog == null)
 		{
 			return;
 		}
 
-		Activity a = (Activity) this.mBuilder.getContext();
-		DisplayMetrics dm = a.getResources().getDisplayMetrics();
-		int width = (int)(dm.widthPixels * w);
-		int height = (int)(dm.heightPixels * h);
+		for (OnHiddenListener listener : this.mHiddenListener)
+		{
+			listener.onDialogHidden(this);
+		}
 
-		this.mDialog.getWindow().setLayout(width, height);
+		this.mDialog.hide();
 	}
 
 	/**
-	 * @brief Remove the parent from the view that will be attached to the
-	 *        dialog.
+	 * Called when the dialog is being built.
+	 *
+	 * This will typically be overriden by the user.
+	 */
+	public void onBuildDialog(Context context, AlertDialog.Builder builder)
+	{
+	}
+
+	/**
+	 * Handles click events on the Ok/Cancel buttons in the dialog.
+	 */
+	@Override
+	public void onClick(DialogInterface dialog, int which)
+	{
+		switch (which)
+		{
+		case DialogInterface.BUTTON_POSITIVE:
+			this.dismiss();
+			break;
+		case DialogInterface.BUTTON_NEGATIVE:
+		default:
+			this.cancel();
+			break;
+		}
+	}
+
+	/**
+	 * Called when the dialog is being shown.
+	 *
+	 * This will typically be overriden by the user.
+	 */
+	public void onShowDialog(Context context, View root)
+	{
+	}
+
+	/**
+	 * Remove the parent from the view that will be attached to the dialog.
 	 */
 	private void removeParent(View v)
 	{
@@ -200,33 +244,116 @@ public class NacDialog
 	}
 
 	/**
-	 * @brief Handles click events on the Ok/Cancel buttons in the dialog.
+	 * Scale the dialog size.
+	 *
+	 * @param  width  Width. Value must be 0 <= w <= 1.
+	 * @param  height  Height. Value must be 0 <= h <= 1.
+	 * @param  wrapWidth  Wrap the width in the event that the dialog is
+	 *                    scaled too big.
+	 * @param  wrapHeight  Wrap the height in the event that the dialog is
+	 *                     scaled too big.
 	 */
-	@Override
-	public void onClick(DialogInterface dialog, int which)
+	public void scale(double width, double height, boolean wrapWidth, boolean wrapHeight)
 	{
-		NacUtility.printf("Dialog clicked.");
-
-		switch (which)
+		if ((this.mBuilder == null) || (this.mDialog == null)
+			|| (width < 0) || (width > 1) || (height < 0) || (height > 1))
 		{
-		case DialogInterface.BUTTON_POSITIVE:
-			for (OnDismissedListener listener : this.mDismissListener)
-			{
-				listener.onDialogDismissed();
-			}
-
-			dialog.dismiss();
-			return;
-		case DialogInterface.BUTTON_NEGATIVE:
-		default:
-			for (OnCanceledListener listener : this.mCancelListener)
-			{
-				listener.onDialogCanceled();
-			}
-
-			dialog.cancel();
 			return;
 		}
+
+		Context context = this.mDialog.getContext();
+		DisplayMetrics dm = context.getResources().getDisplayMetrics();
+		int dialogwidth = (int)(dm.widthPixels * width);
+		int dialogheight = (int)(dm.heightPixels * height);
+
+		if (wrapWidth || wrapHeight)
+		{
+			View view = this.mRoot.getRootView();
+			view.requestLayout();
+			view.invalidate();
+			view.measure(MeasureSpec.makeMeasureSpec(0,
+				MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0,
+				MeasureSpec.UNSPECIFIED));
+
+			int viewwidth = view.getMeasuredWidth();
+			int viewheight = view.getMeasuredHeight();
+
+			//NacUtility.printf("View Size : %d x %d",
+			//	viewwidth, viewheight);
+
+			if (wrapWidth && (viewwidth < dialogwidth))
+			{
+				dialogwidth = viewwidth;
+			}
+
+			if (wrapHeight && (viewheight < dialogheight))
+			{
+				dialogheight = viewheight;
+			}
+		}
+
+		//NacUtility.printf("Final Dialog Size : %d x %d",
+		//	dialogwidth, dialogheight);
+
+		this.mDialog.getWindow().setLayout(dialogwidth, dialogheight);
+	}
+
+	/**
+	 * Scale the dialog size.
+	 *
+	 * @param  w  Width. Value must be 0 <= w <= 1.
+	 * @param  h  Height. Value must be 0 <= h <= 1.
+	 */
+	public void scale(double w, double h)
+	{
+		this.scale(w, h, false, false);
+	}
+
+	/**
+	 * Set the negative button which will call onDialogCanceled when clicked.
+	 */
+	public void setNegativeButton(String title)
+	{
+		if (this.mBuilder == null)
+		{
+			return;
+		}
+
+		this.mBuilder.setNegativeButton(title, this);
+	}
+
+	/**
+	 * Set the positive button which will call onDialogDismissed when clicked.
+	 */
+	public void setPositiveButton(String title)
+	{
+		if (this.mBuilder == null)
+		{
+			return;
+		}
+
+		this.mBuilder.setPositiveButton(title, this);
+	}
+
+	/**
+	 * Show the dialog.
+	 */
+	public AlertDialog show()
+	{
+		Context context = this.mRoot.getContext();
+
+		if (this.mDialog != null)
+		{
+			this.mDialog.show();
+		}
+		else
+		{
+			this.mDialog = this.mBuilder.show();
+		}
+
+		this.onShowDialog(context, this.mRoot);
+
+		return this.mDialog;
 	}
 
 }

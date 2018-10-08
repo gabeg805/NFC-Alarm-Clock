@@ -82,6 +82,14 @@ public class NacMediaPlayer
 	}
 
 	/**
+	 * @return The context.
+	 */
+	public Context getContext()
+	{
+		return this.mContext;
+	}
+
+	/**
 	 * @brief Set the OnCompletion callback.
 	 */
 	public void setOnCompletionListener(MediaPlayer.OnCompletionListener

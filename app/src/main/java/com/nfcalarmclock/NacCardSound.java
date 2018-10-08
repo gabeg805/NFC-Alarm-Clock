@@ -21,32 +21,22 @@ public class NacCardSound
 {
 
     /**
-     * @brief Context.
-     */
-     private Context mContext = null;
-
-    /**
      * @brief Alarm.
      */
-     private Alarm mAlarm = null;
+     private Alarm mAlarm;
 
     /**
      * @brief Sound.
      */
-     private ImageTextButton mSoundView = null;
-
-    /**
-     * @brief Sound dialog.
-     */
-     private NacCardSoundPromptDialog mPromptDialog = null;
+     private ImageTextButton mSoundView;
 
     /**
      * @brief Constructor.
      */
     public NacCardSound(Context c, View r)
     {
-        this.mContext = c;
         this.mSoundView = (ImageTextButton) r.findViewById(R.id.nacSound);
+		this.mAlarm = null;
 
         this.mSoundView.setOnClickListener(this);
     }
@@ -56,17 +46,18 @@ public class NacCardSound
      */
     public void init(Alarm alarm)
     {
+		String path = alarm.getSound();
 		this.mAlarm = alarm;
-		String path = this.mAlarm.getSound();
 
 		if (path.isEmpty())
 		{
 			return;
 		}
 
+		Context context = this.mSoundView.getContext();
 		Uri uri = Uri.parse(path);
-		Ringtone ringtone = RingtoneManager.getRingtone(mContext, uri);
-		String name = ringtone.getTitle(mContext);
+		Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
+		String name = ringtone.getTitle(context);
 
 		ringtone.stop();
 		this.mSoundView.setText(name);
@@ -79,10 +70,12 @@ public class NacCardSound
     @Override
     public void onClick(View v)
     {
-        this.mPromptDialog = new NacCardSoundPromptDialog(mContext);
+		Context context = v.getContext();
+        NacCardSoundPromptDialog dialog = new NacCardSoundPromptDialog();
 
-		this.mPromptDialog.setOnItemSelectedListener(this);
-        this.mPromptDialog.show();
+		dialog.build(context, R.layout.dlg_sound_prompt);
+		dialog.setOnItemSelectedListener(this);
+        dialog.show();
     }
 
 	/**

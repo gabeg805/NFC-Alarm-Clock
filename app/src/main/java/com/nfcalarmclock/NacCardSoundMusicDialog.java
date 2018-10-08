@@ -1,5 +1,6 @@
 package com.nfcalarmclock;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Environment;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.FileOutputStream;
@@ -17,124 +19,186 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.Manifest;
+import android.support.v4.app.ActivityCompat;
+import android.content.pm.PackageManager;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+
+/**
+ * Music dialog when selecting an alarm sound.
+ */
 public class NacCardSoundMusicDialog
-	extends NacCardDialog
-	implements DialogInterface.OnClickListener,NacDialogMusicList.ItemClickListener
+	extends NacDialog
+	implements CompoundButton.OnCheckedChangeListener,View.OnLongClickListener,NacPermissions.OnResultListener
 {
 
 	/**
-	 * @brief Context.
-	 */
-	private Context mContext;
-
-	/**
-	 * @brief Media player.
+	 * Media player.
 	 */
 	private NacMediaPlayer mPlayer;
 
 	/**
-	 * @brief Root view.
+	 * List of ringtones.
 	 */
-	private View mRoot;
+	private List<NacSound> mSounds;
 
 	/**
-	 * @brief List of ringtones.
+	 * The index in the songs list pointing to the currently selected item.
 	 */
-	public List<NacSound> mSounds;
+	private int mIndex;
 
+	private static final int NAC_SOUND_READ_REQUEST = 1;
 	/**
-	 * @brief The index in the songs list pointing to the currently selected
-	 * item.
 	 */
-	public int mIndex = -1;
-
-	/**
-	 * @param  c  Context.
-	 */
-	public NacCardSoundMusicDialog(Context c, NacMediaPlayer mp)
+	public NacCardSoundMusicDialog(NacMediaPlayer mp)
 	{
-		super(c);
+		super();
 
-		this.mContext = c;
+		Context context = mp.getContext();
 		this.mPlayer = mp;
-		this.mRoot = super.inflate(R.layout.dlg_alarm_sound_music, (ViewGroup)null);
+		this.mSounds = null;
+		this.mIndex = -1;
+	}
 
-		if (!NacPermissions.hasRead(mContext))
+	/**
+	 */
+	@Override
+	public void onResult(int request, String[] permissions, int[] grant)
+	{
+		NacUtility.printf("OnResult listener worked!");
+		NacUtility.printf("Request : %d", request);
+		
+		for (String p : permissions)
 		{
-			NacUtility.print("Do not have permissions.");
-			if (NacPermissions.setRead(mContext) < 0)
-			{
-				return;
-			}
+			NacUtility.printf("Permission : %s", p);
 		}
-		else
+		
+		for (int g : grant)
 		{
-			NacUtility.print("Have permissions.");
+			NacUtility.printf("Grant : %d", g);
+		}
+
+		switch (request)
+		{
+			case NAC_SOUND_READ_REQUEST:
+				if ((grant.length > 0)
+					&& (grant[0] == PackageManager.PERMISSION_GRANTED))
+				{
+					this.show();
+				}
+				else
+				{
+					this.dismiss();
+				}
+
+				break;
+			default:
+				break;
 		}
 	}
 
 	/**
-	 * @brief Show the music selection dialog.
+	 * Build the dialog.
 	 */
-	public void show()
+	@Override
+	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
-		String title = mContext.getString(R.string.dlg_music_title);
+		String title = context.getString(R.string.dlg_music_title);
 
-		this.init();
-		super.build(mRoot, title, this, this);
-		super.scale(0.75, 0.75);
+		builder.setTitle(title);
+		this.setPositiveButton("OK");
+		this.setNegativeButton("Cancel");
 	}
 
 	/**
-	 * @brief Initialize the music dialog.
+	 * Show path of sound when long clicked.
 	 */
-	private void init()
+	@Override
+	public boolean onLongClick(View view)
 	{
-		setSoundList();
-		createRecyclerView();
+		Context context = view.getContext();
+		int index = (int) view.getTag();
+		String path = this.mSounds.get(index).path;
+
+		Toast.makeText(context, path, Toast.LENGTH_LONG).show();
+
+		return true;
 	}
 
 	/**
-	 * @brief Setup the dialog's list of music.
+	 * Setup views for when the dialog is shown.
 	 */
-	private void setSoundList()
+	@Override
+	public void onShowDialog(Context context, View root)
 	{
-		this.mSounds = new ArrayList<>();
+		if (!NacPermissions.hasRead(context))
+		{
+			ActivityCompat.requestPermissions((Activity)context,
+				new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
+				NAC_SOUND_READ_REQUEST);
+
+			((MainActivity)context).setPermissionResultListener(this);
+			this.hide();
+			return;
+		}
+
+		this.mSounds = this.getSoundList();
+		RadioGroup rg = (RadioGroup) root.findViewById(R.id.radio_group);
+
+		for(int i=0; i < this.mSounds.size(); i++)
+		{
+			RadioButton rb = new RadioButton(context);
+			String name = this.mSounds.get(i).name;
+
+			rb.setText(name);
+			rb.setTag(i);
+			rb.setOnCheckedChangeListener(this);
+			rb.setOnLongClickListener(this);
+			rg.addView(rb);
+		}
+	}
+
+	/**
+	 * @return The sound at the given index, or null if index is not set (=-1).
+	 */
+	public NacSound getSound()
+	{
+		return (this.mIndex < 0) ? null : this.mSounds.get(this.mIndex);
+	}
+
+	/**
+	 * Setup the dialog's list of music.
+	 */
+	private List<NacSound> getSoundList()
+	{
+		List<NacSound> list = new ArrayList<>();
 		String root = Environment.getExternalStorageDirectory().toString();
 		String[] search = {"Download", "Music", "Playlists"};
+		FilenameFilter filter = this.getMusicFilter();
 
 		for (String d : search)
 		{
 			String dir = root+"/"+d;
 			File obj = new File(dir);
-			File[] files = obj.listFiles(this.getMusicFilter());
+			File[] files = obj.listFiles(filter);
 
 			for (int i=0; (files != null) && (i < files.length); i++)
 			{
 				String name = files[i].getName();
-				this.mSounds.add(new NacSound(name, dir));
-				NacUtility.printf("File : %s/%s", dir, name);
+
+				list.add(new NacSound(name, dir));
 			}
 		}
+
+		return list;
 	}
 
 	/**
-	 * @brief Create the recycler view in the dialog.
-	 */
-	private void createRecyclerView()
-	{
-		RecyclerView recyclerView = mRoot.findViewById(R.id.dlg_music_list);
-		recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-		NacDialogMusicList adapter = new NacDialogMusicList(mContext,
-			mSounds);
-		adapter.setClickListener(this);
-		recyclerView.setAdapter(adapter);
-		recyclerView.addItemDecoration(new DividerItemDecoration(mContext,
-			LinearLayoutManager.VERTICAL));
-	}
-
-	/**
-	 * @brief Return the music file listing filter.
+	 * Return the music file listing filter.
 	 */
 	private FilenameFilter getMusicFilter()
 	{
@@ -164,11 +228,17 @@ public class NacCardSoundMusicDialog
 	}
 
 	/**
-	 * @brief Handle item click events in the music list.
+	 * Handle selection of radio button.
 	 */
 	@Override
-	public void onItemClick(View v, int i)
+	public void onCheckedChanged(CompoundButton b, boolean state)
 	{
+		if (!state)
+		{
+			return;
+		}
+
+		int i = (int) b.getTag();
 		String path = this.mSounds.get(i).path;
 		this.mIndex = i;
 
