@@ -1,8 +1,9 @@
 package com.nfcalarmclock;
 
-import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.Manifest;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,37 +16,49 @@ import android.support.v7.app.AppCompatActivity;
 public class NacPermissions
 {
 
+	/**
+	 * Result listener.
+	 */
 	public interface OnResultListener
 	{
 		public void onResult(int request, String[] permissions, int[] grant);
 	}
 
 	/**
-	 * @brief Check if the app has READ_EXTERNAL_STORAGE permissions.
+	 * Check if the app has READ_EXTERNAL_STORAGE permissions.
 	 */
-	public static boolean hasRead(Context c)
+	public static boolean hasRead(Context context)
 	{
-		return ContextCompat.checkSelfPermission(c,
+		return ContextCompat.checkSelfPermission(context,
 			Manifest.permission.READ_EXTERNAL_STORAGE)
 			== PackageManager.PERMISSION_GRANTED;
 	}
 
 	/**
-	 * @brief Prompt the user to set the READ_EXTERNAL_STORAGE permissions.
+	 * Request permission.
 	 */
-	public static int setRead(Context c)
+	public static void request(Context context, String permission, int result)
 	{
-		return NacPermissions.setRead((AppCompatActivity)c);
+		ActivityCompat.requestPermissions((Activity) context,
+			new String[] { permission }, result);
+	}
+
+	/**
+	 * Prompt the user to set the READ_EXTERNAL_STORAGE permissions.
+	 */
+	public static int setRead(Context context)
+	{
+		return NacPermissions.setRead((Activity)context);
 	}
 
 	/**
 	 * @brief Prompt the user to set the READ_EXTERNAL_STORAGE permissions.
 	 */
-	public static int setRead(AppCompatActivity a)
+	public static int setRead(Activity activity)
 	{
 		// Permission is not granted
 		// Should we show an explanation?
-		if (ActivityCompat.shouldShowRequestPermissionRationale(a,
+		if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
 				Manifest.permission.READ_EXTERNAL_STORAGE))
 		{
 			NacUtility.print("Should show request permission rationale.");
@@ -58,16 +71,23 @@ public class NacPermissions
 		{
 			NacUtility.print("NOT Should show request permission rationale.");
 			// No explanation needed; request the permission
-			ActivityCompat.requestPermissions(a, new String[]
-				{
-					Manifest.permission.READ_EXTERNAL_STORAGE
-				}, 1);
+			ActivityCompat.requestPermissions(activity,
+				new String[] { Manifest.permission.READ_EXTERNAL_STORAGE }, 1);
 
 			// MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
 			// app-defined int constant. The callback method gets the
 			// result of the request.
 			return 0;
 		}
+	}
+
+	/**
+	 * Set the permissions result listener.
+	 */
+	public static void setResultListener(Context context,
+		OnResultListener listener)
+	{
+		((MainActivity)context).setPermissionResultListener(listener);
 	}
 
 }

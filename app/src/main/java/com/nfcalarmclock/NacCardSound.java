@@ -13,25 +13,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @brief The sound to play when the alarm is activated. Users can change this
- *        by selecting the sound view.
+ * The sound to play when the alarm is activated. Users can change this by
+ * selecting the sound view.
  */
 public class NacCardSound
-    implements View.OnClickListener,NacCardSoundPromptDialog.OnItemSelectedListener
+    implements View.OnClickListener,NacSoundDialog.OnItemClickListener
 {
 
     /**
-     * @brief Alarm.
+     * Alarm.
      */
      private Alarm mAlarm;
 
     /**
-     * @brief Sound.
+     * Sound.
      */
      private ImageTextButton mSoundView;
 
     /**
-     * @brief Constructor.
      */
     public NacCardSound(Context c, View r)
     {
@@ -42,7 +41,7 @@ public class NacCardSound
     }
 
     /**
-     * @brief Initialize the sound view.
+     * Initialize the sound view.
      */
     public void init(Alarm alarm)
     {
@@ -64,17 +63,16 @@ public class NacCardSound
     }
 
     /**
-     * @brief Display the dialog that allows users to set the name of the
-	 *        alarm.
+     * Display the dialog that allows users to set the name of the alarm.
      */
     @Override
     public void onClick(View v)
     {
 		Context context = v.getContext();
-        NacCardSoundPromptDialog dialog = new NacCardSoundPromptDialog();
+        NacSoundPromptDialog dialog = new NacSoundPromptDialog();
 
 		dialog.build(context, R.layout.dlg_sound_prompt);
-		dialog.setOnItemSelectedListener(this);
+		dialog.setOnItemClickListener(this);
         dialog.show();
     }
 
@@ -82,7 +80,7 @@ public class NacCardSound
 	 * @brief Handle the sound item when it has been selected.
 	 */
 	@Override
-	public void onItemSelected(NacSound sound)
+	public void onItemClick(NacSound sound)
 	{
 		String path = sound.path;
 		String name = sound.name;

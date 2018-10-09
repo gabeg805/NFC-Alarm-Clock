@@ -19,13 +19,13 @@ import android.widget.LinearLayout.LayoutParams;
 
 public class NacPreferenceSound
 	extends Preference
-	implements Preference.OnPreferenceClickListener,NacCardSoundPromptDialog.OnItemSelectedListener,SeekBar.OnSeekBarChangeListener
+	implements Preference.OnPreferenceClickListener,NacSoundDialog.OnItemClickListener,SeekBar.OnSeekBarChangeListener
 {
 
 	/**
 	 * @brief Day of week buttons.
 	 */
-	private NacCardSoundPromptDialog mDialog;
+	private NacSoundPromptDialog mDialog;
 
 	/**
 	 * @brief Text view containing the name of the sound to play.
@@ -145,7 +145,7 @@ public class NacPreferenceSound
 	/**
 	 */
 	@Override
-	public void onItemSelected(NacSound sound)
+	public void onItemClick(NacSound sound)
 	{
 		NacUtility.printf("Item has been selected!!!");
 
