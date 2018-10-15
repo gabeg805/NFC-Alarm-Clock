@@ -14,7 +14,7 @@ public class Alarm
 {
 
 	/**
-	 * @brief Definition for the change listener object.
+	 * Definition for the change listener object.
 	 */
 	public interface OnChangedListener
 	{
@@ -22,103 +22,112 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Change listener.
+	 * Change listener.
 	 */
-	private OnChangedListener mChangeListener = null;
+	private OnChangedListener mChangeListener;
 
 	/**
-	 * @brief A list of possible days the alarm can run on.
+	 * A list of possible days the alarm can run on.
 	 */
 	public class Days
 	{
-		public final static byte NONE = 0;
-		public final static byte SUNDAY = 1;
-		public final static byte MONDAY = 2;
-		public final static byte TUESDAY = 4;
-		public final static byte WEDNESDAY = 8;
-		public final static byte THURSDAY = 16;
-		public final static byte FRIDAY = 32;
-		public final static byte SATURDAY = 64;
+		public static final byte NONE = 0;
+		public static final byte SUNDAY = 1;
+		public static final byte MONDAY = 2;
+		public static final byte TUESDAY = 4;
+		public static final byte WEDNESDAY = 8;
+		public static final byte THURSDAY = 16;
+		public static final byte FRIDAY = 32;
+		public static final byte SATURDAY = 64;
 	}
 
 	/**
-	 * @brief The alarm ID.
+	 * The alarm ID.
 	 */
-	private int mId = -1;
+	private int mId;
 
 	/**
-	 * @brief Indicates whether the alarm is enabled or not.
+	 * Indicates whether the alarm is enabled or not.
 	 */
-	private boolean mEnabled = true;
+	private boolean mEnabled;
 
 	/**
-	 * @brief Indicator if using a 24 hour format to display time or not.
+	 * Indicator if using a 24 hour format to display time or not.
 	 */
-	private boolean m24HourFormat = true;
+	private boolean m24HourFormat;
 
 	/**
-	 * @brief The hour at which to run the alarm.
+	 * The hour at which to run the alarm.
 	 */
-	private int mHour = 0;
+	private int mHour;
 
 	/**
-	 * @brief The minute at which to run the alarm.
+	 * The minute at which to run the alarm.
 	 */
-	private int mMinute = 0;
+	private int mMinute;
 
 	/**
-	 * @brief The days on which to run the alarm.
+	 * The days on which to run the alarm.
 	 */
-	private int mDays = Days.MONDAY|Days.TUESDAY|Days.WEDNESDAY|Days.THURSDAY|Days.FRIDAY;
+	private int mDays;
 
 	/**
-	 * @brief Indicates whether the alarm should be repeated or not.
+	 * Indicates whether the alarm should be repeated or not.
 	 */
-	private boolean mRepeat = true;
+	private boolean mRepeat;
 
 	/**
-	 * @brief Indicates whether the phone should vibrate when the alarm is run.
+	 * Indicates whether the phone should vibrate when the alarm is run.
 	 */
-	private boolean mVibrate = true;
+	private boolean mVibrate;
 
 	/**
-	 * @brief The sound to play when the alarm is run.
+	 * The sound to play when the alarm is run.
 	 */
-	private String mSound = "";
+	private String mSound;
 
 	/**
-	 * @brief The name of the alarm.
+	 * The name of the alarm.
 	 */
-	private String mName = "";
+	private String mName;
 
 	/**
-	 * @brief Week days.
+	 * Week days.
 	 */
 	private List<Byte> mWeekDays = new ArrayList<Byte>(Arrays.asList(
 		Days.SUNDAY, Days.MONDAY, Days.TUESDAY, Days.WEDNESDAY, Days.THURSDAY,
 		Days.FRIDAY, Days.SATURDAY));
 
 	/**
-	 * @brief Calendar days.
+	 * Calendar days.
 	 */
 	private List<Integer> mCalendarDays = new ArrayList<Integer>(Arrays.asList(
 		Calendar.SUNDAY, Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY,
 		Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY));
 
 	/**
-	 * @brief Use the default set values for an alarm.
+	 * Use the default set values for an alarm.
 	 */
 	public Alarm()
 	{
 		Calendar cal = Calendar.getInstance();
-		this.mChangeListener = null;
 
+		this.setOnChangedListener(null);
+		this.setId(-1);
+		this.setEnabled(true);
+		this.set24HourFormat(true);
 		this.setHour(cal.get(Calendar.HOUR_OF_DAY));
 		this.setMinute(cal.get(Calendar.MINUTE));
+		this.setDays(Days.MONDAY|Days.TUESDAY|Days.WEDNESDAY|Days.THURSDAY|Days.FRIDAY);
+		this.setRepeat(true);
+		this.setVibrate(true);
+		this.setSound("");
+		this.setName("");
+
 	}
 
 	/**
-	 * @brief Set the id and 24 hour format.
+	 * Set the id and 24 hour format.
 	 */
 	public Alarm(boolean state, int id)
 	{
@@ -127,7 +136,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Set the 24 hour format.
+	 * Set the 24 hour format.
 	 */
 	public Alarm(boolean state)
 	{
@@ -136,18 +145,17 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Set the hour and minute to run the alarm at.
+	 * Set the hour and minute to run the alarm at.
 	 */
 	public Alarm(int hour, int minute)
 	{
-		this.mChangeListener = null;
-
+		this();
 		this.setHour(hour);
 		this.setMinute(minute);
 	}
 
 	/**
-	 * @brief Set the time and date to run the alarm at.
+	 * Set the time and date to run the alarm at.
 	 */
 	public Alarm(int hour, int minute, int days)
 	{
@@ -157,7 +165,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Set the name and the time to run the alarm at.
+	 * Set the name and the time to run the alarm at.
 	 */
 	public Alarm(String name, int hour, int minute)
 	{
@@ -166,7 +174,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Print all values in the alarm object.
+	 * Print all values in the alarm object.
 	 */
 	public void print()
 	{
@@ -184,19 +192,18 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Call the listener when the alarm info has changed.
+	 * Call the listener when the alarm info has changed.
 	 */
 	public void changed()
 	{
-		if (this.mChangeListener != null)
+		if (this.hasListener())
 		{
-			NacUtility.print("Calling ALARM Changed().");
 			this.mChangeListener.onChanged(this);
 		}
 	}
 
 	/**
-	 * @brief Set a listener for when the alarm is changed.
+	 * Set a listener for when the alarm is changed.
 	 * 
 	 * @param  listener  The change listener.
 	 */
@@ -206,7 +213,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Set the ID.
+	 * Set the ID.
 	 */
 	public void setId(int id)
 	{
@@ -214,7 +221,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Set the enabled/disabled status of the alarm.
+	 * Set the enabled/disabled status of the alarm.
 	 */
 	public void setEnabled(boolean state)
 	{
@@ -222,7 +229,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Set the 24 hour format indicator.
+	 * Set the 24 hour format indicator.
 	 */
 	public void set24HourFormat(boolean state)
 	{
@@ -230,7 +237,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Set the hour at which to run the alarm.
+	 * Set the hour at which to run the alarm.
 	 */
 	public void setHour(int hour)
 	{
@@ -238,7 +245,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Set the minute at which to run the alarm.
+	 * Set the minute at which to run the alarm.
 	 */
 	public void setMinute(int minute)
 	{
@@ -246,7 +253,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Set the days on which the alarm will be run.
+	 * Set the days on which the alarm will be run.
 	 */
 	public void setDays(int days)
 	{
@@ -254,7 +261,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Toggle a day.
+	 * Toggle a day.
 	 */
 	public void toggleDay(byte day)
 	{
@@ -262,7 +269,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Toggle today.
+	 * Toggle today.
 	 */
 	public void toggleToday()
 	{
@@ -284,7 +291,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Set whether the alarm should be repeated or not.
+	 * Set whether the alarm should be repeated or not.
 	 */
 	public void setRepeat(boolean state)
 	{
@@ -292,8 +299,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Set whether or not the phone should vibrate when the alarm is
-	 *		  activated.
+	 * Set whether or not the phone should vibrate when the alarm is activated.
 	 */
 	public void setVibrate(boolean state)
 	{
@@ -301,7 +307,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Set the sound that will be played when the alarm is activated.
+	 * Set the sound that will be played when the alarm is activated.
 	 */
 	public void setSound(String sound)
 	{
@@ -309,7 +315,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Set the name of the alarm.
+	 * Set the name of the alarm.
 	 */
 	public void setName(String name)
 	{
@@ -317,7 +323,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Return the ID.
+	 * @return The ID.
 	 */
 	public int getId()
 	{
@@ -336,7 +342,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Return the enabled flag for the alarm.
+	 * @return The enabled flag for the alarm.
 	 */
 	public boolean getEnabled()
 	{
@@ -344,7 +350,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Return the 24 hour format indicator.
+	 * @return The 24 hour format indicator.
 	 */
 	public boolean get24HourFormat()
 	{
@@ -352,7 +358,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Return the hour at which to run the alarm.
+	 * @return The hour at which to run the alarm.
 	 */
 	public int getHour()
 	{
@@ -360,7 +366,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Return the minutes at which to run the alarm.
+	 * @return The minutes at which to run the alarm.
 	 */
 	public int getMinute()
 	{
@@ -368,13 +374,13 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Return the hour value in String format.
+	 * @return The hour value in String format.
 	 */
 	public String getHourString()
 	{
 		int hour = this.getHour();
 
-		if (!this.m24HourFormat)
+		if (!this.is24HourFormat())
 		{
 			if (hour > 12)
 			{
@@ -393,15 +399,15 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Return the minutes value in String format.
+	 * @return The minutes value in String format.
 	 */
 	public String getMinuteString()
 	{
-		return String.format(Locale.getDefault(), "%02d", this.mMinute);
+		return String.format(Locale.getDefault(), "%02d", this.getMinute());
 	}
 
 	/**
-	 * @brief Return the time string.
+	 * @return The time string.
 	 */
 	public String getTime()
 	{
@@ -409,11 +415,11 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Return the meridian (AM or PM).
+	 * @return The meridian (AM or PM).
 	 */
 	public String getMeridian()
 	{
-		if (this.m24HourFormat)
+		if (this.is24HourFormat())
 		{
 			return "";
 		}
@@ -429,7 +435,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Return the days on which to run the alarm.
+	 * @return The days on which to run the alarm.
 	 */
 	public int getDays()
 	{
@@ -476,6 +482,9 @@ public class Alarm
 		return next;
 	}
 
+	/**
+	 * @return The calendar instances of all days the alarm is set to run.
+	 */
 	public List<Calendar> getCalendars()
 	{
 		Calendar today = Calendar.getInstance();
@@ -510,7 +519,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Convert days to comma separated string.
+	 * Convert days to comma separated string.
 	 * 
 	 * @return Comma separated string of days to repeat alarm on.
 	 */
@@ -537,7 +546,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Return whether the alarm should be repeated or not.
+	 * @return Whether the alarm should be repeated or not.
 	 */
 	public boolean getRepeat()
 	{
@@ -545,8 +554,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Return whether or not the phone should vibrate when the alarm is
-	 *		  activated.
+	 * @return Whether or not the phone should vibrate when the alarm is run.
 	 */
 	public boolean getVibrate()
 	{
@@ -554,7 +562,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Return the sound that will be played when the alarm is activated.
+	 * @return The sound that will be played when the alarm is activated.
 	 */
 	public String getSound()
 	{
@@ -562,7 +570,7 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Return the name of the alarm.
+	 * @return The name of the alarm.
 	 */
 	public String getName()
 	{
@@ -570,7 +578,15 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Check if the given index of day will run the alarm.
+	 * Check if 24 hour format is enabled.
+	 */
+	public boolean is24HourFormat()
+	{
+		return this.m24HourFormat;
+	}
+
+	/**
+	 * Check if the given index of day will run the alarm.
 	 */
 	public boolean isDay(int index)
 	{
@@ -578,11 +594,19 @@ public class Alarm
 	}
 
 	/**
-	 * @brief Check if the given day will run the alarm.
+	 * Check if the given day will run the alarm.
 	 */
 	public boolean isDay(byte d)
 	{
 		return ((this.getDays() & d) != 0);
+	}
+
+	/**
+	 * Check if alarm has a listener.
+	 */
+	public boolean hasListener()
+	{
+		return (this.mChangeListener != null);
 	}
 
 }

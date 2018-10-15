@@ -1,4 +1,3 @@
-
 package com.nfcalarmclock;
 
 import android.content.Context;
@@ -11,13 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
 /**
  * Vibrate preference.
  */
 public class NacPreferenceVibrate
 	extends Preference
-	implements CompoundButton.OnCheckedChangeListener
+	implements Preference.OnPreferenceClickListener,CompoundButton.OnCheckedChangeListener
 {
 
 	/**
@@ -33,7 +33,7 @@ public class NacPreferenceVibrate
 	/**
 	 * Default constant value for the object.
 	 */
-	protected boolean mDefault;
+	protected static final boolean mDefault = true;
 
 	/**
 	 * Summary text when enabling/disabling the preference.
@@ -60,11 +60,11 @@ public class NacPreferenceVibrate
 	{
 		super(context, attrs, style);
 		setLayoutResource(R.layout.pref_vibrate);
+		setOnPreferenceClickListener(this);
 
 		Resources.Theme theme = context.getTheme();
 		TypedArray a = theme.obtainStyledAttributes(attrs,
 			R.styleable.NacPreference, 0, 0);
-		this.mDefault = true;
 		this.mSummaryState = new String[2];
 		this.mSummaryState[0] = a.getString(R.styleable.NacPreference_summaryEnabled);
 		this.mSummaryState[1] = a.getString(R.styleable.NacPreference_summaryDisabled);
@@ -76,11 +76,16 @@ public class NacPreferenceVibrate
 	}
 
 	/**
-	 * Bind the title and summary sections of the preference view, and leave
-	 * the rest to the user.
-	 *
-	 * Set the width of the title and summary to leave space for the other
-	 * view(s) the user may use.
+	 * @return The desired summary text.
+	 */
+	@Override
+	public CharSequence getSummary()
+	{
+		return (this.mValue) ? this.mSummaryState[0] : this.mSummaryState[1];
+	}
+
+	/**
+	 * Setup the checkbox and summary text.
 	 */
 	@Override
 	protected void onBindView(View v)
@@ -91,17 +96,11 @@ public class NacPreferenceVibrate
 
 		this.mCheckBox.setChecked(this.mValue);
 		this.mCheckBox.setOnCheckedChangeListener(this);
+		this.setSummary();
 	}
 
 	/**
-	 */
-	@Override
-	public CharSequence getSummary()
-	{
-		return (this.mValue) ? this.mSummaryState[0] : this.mSummaryState[1];
-	}
-
-	/**
+	 * Handle checkbox changes.
 	 */
 	@Override
 	public void onCheckedChanged(CompoundButton button, boolean state)
@@ -109,6 +108,7 @@ public class NacPreferenceVibrate
 		this.mValue = state;
 
 		this.mCheckBox.setChecked(this.mValue);
+		this.setSummary();
 		persistBoolean(this.mValue);
 	}
 
@@ -119,6 +119,17 @@ public class NacPreferenceVibrate
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
 		return (boolean) a.getBoolean(index, mDefault);
+	}
+
+	/**
+	 * Allow users to select the whole preference to change the checkbox.
+	 */
+	@Override
+	public boolean onPreferenceClick(Preference pref)
+	{
+		NacUtility.printf("Vibrate preference clicked.");
+		this.mCheckBox.performClick();
+		return true;
 	}
 
 	/**
@@ -134,22 +145,26 @@ public class NacPreferenceVibrate
 		else
 		{
 			this.mValue = (boolean) defval;
+
 			persistBoolean(this.mValue);
 		}
 	}
 
 	/**
-	 * @return The width of the display.
+	 * Set the summary text.
 	 */
-	//private int getDisplayWidth()
-	//{
-	//	DisplayMetrics metrics = new DisplayMetrics();
-	//	AppCompatActivity act = (AppCompatActivity) getContext();
+	public void setSummary()
+	{
+		View root = (View) this.mCheckBox.getParent();
+		TextView tv = root.findViewById(android.R.id.summary);
+		CharSequence summary = this.getSummary();
 
-	//	act.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		if (tv == null)
+		{
+			return;
+		}
 
-	//	return metrics.widthPixels;
-	//}
+		tv.setText(summary);
+	}
 
 }
-

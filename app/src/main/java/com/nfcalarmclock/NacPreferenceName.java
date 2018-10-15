@@ -1,46 +1,38 @@
-
 package com.nfcalarmclock;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.content.SharedPreferences;
 import android.preference.Preference;
-import android.support.v7.app.AppCompatActivity;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Name preference.
  */
 public class NacPreferenceName
 	extends Preference
-	implements Preference.OnPreferenceClickListener,View.OnClickListener,NacDialog.OnDismissedListener
+	implements Preference.OnPreferenceClickListener,NacDialog.OnDismissedListener
 {
 
 	/**
-	 * Text view with name of alarm.
-	 */
-	private TextView mTextView;
-
-	/**
-	 * Check value.
+	 * Name of the alarm.
 	 */
 	protected String mValue;
 
 	/**
 	 * Default constant value for the object.
 	 */
-	protected String mDefault;
+	protected static final String mDefault = "None";
 
 	/**
 	 * Alarm.
 	 */
 	protected Alarm mAlarm;
+
 	/**
 	 */
 	public NacPreferenceName(Context context)
@@ -63,7 +55,10 @@ public class NacPreferenceName
 		setLayoutResource(R.layout.pref_name);
 		setOnPreferenceClickListener(this);
 
+		SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(
+			context);
 		this.mAlarm = new Alarm();
+		this.mValue = shared.getString("pref_name", this.mDefault);
 	}
 
 	/**
@@ -78,12 +73,16 @@ public class NacPreferenceName
 	{
 		super.onBindView(v);
 
-		this.mTextView = (TextView) v.findViewById(R.id.widget);
-		int width = (this.getDisplayWidth() / 4);
+		NacUtility.printf("Name onBindView : %s", this.mValue);
+		this.setSummary(this.mValue);
+	}
 
-		this.mTextView.setText(this.mValue);
-		this.mTextView.setOnClickListener(this);
-		this.mTextView.setMaxWidth(width);
+	/**
+	 */
+	@Override
+	public CharSequence getSummary()
+	{
+		return this.mValue;
 	}
 
 	/**
@@ -92,9 +91,12 @@ public class NacPreferenceName
 	public void onDialogDismissed(NacDialog dialog)
 	{
 		this.mValue = this.mAlarm.getName();
+		SharedPreferences.Editor editor = getEditor();
 
-		this.mTextView.setText(this.mValue);
-		persistString(this.mValue);
+		NacUtility.printf("Name onDialogDismissed : %s", this.mValue);
+		this.setSummary(this.mValue);
+		editor.putString("pref_name", this.mValue);
+		editor.apply();
 	}
 
 	/**
@@ -102,61 +104,15 @@ public class NacPreferenceName
 	@Override
 	public boolean onPreferenceClick(Preference pref)
 	{
+		NacUtility.printf("Name preference clicked.");
+		Context context = getContext();
 		NacCardNameDialog dialog = new NacCardNameDialog(this.mAlarm);
-		Context context = this.mTextView.getContext();
 
 		dialog.build(context, R.layout.dlg_alarm_name);
 		dialog.addDismissListener(this);
 		dialog.show();
 
 		return true;
-	}
-
-	@Override
-	public void onClick(View v)
-	{
-		String text = ((TextView)v).getText().toString();
-
-		Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
-	}
-
-	/**
-	 * @return The default value.
-	 */
-	@Override
-	protected Object onGetDefaultValue(TypedArray a, int index)
-	{
-		return (String) a.getString(index);
-	}
-
-	/**
-	 * Set the initial preference value.
-	 */
-	@Override
-	protected void onSetInitialValue(boolean restore, Object defval)
-	{
-		if (restore)
-		{
-			this.mValue = getPersistedString(this.mValue);
-		}
-		else
-		{
-			this.mValue = (String) defval;
-			persistString(this.mValue);
-		}
-	}
-
-	/**
-	 * @return The width of the display.
-	 */
-	private int getDisplayWidth()
-	{
-		DisplayMetrics metrics = new DisplayMetrics();
-		AppCompatActivity act = (AppCompatActivity) getContext();
-
-		act.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-		return metrics.widthPixels;
 	}
 
 }

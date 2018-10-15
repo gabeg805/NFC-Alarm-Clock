@@ -90,11 +90,6 @@ public class NacDayOfWeek
 		int id = button.getId();
 		int index = -1;
 
-		if (this.mListener == null)
-		{
-			return;
-		}
-
 		switch (id)
 		{
 			case R.id.dowb_sun:
@@ -120,6 +115,14 @@ public class NacDayOfWeek
 				break;
 			default:
 				return;
+		}
+
+		NacUtility.printf("NacDayOfWeek Index : %d (%b)", index, this.isDayEnabled(index));
+		this.mButtons[index].animateToggle();
+
+		if (this.mListener == null)
+		{
+			return;
 		}
 
 		this.mListener.onClick(button, index);
@@ -155,6 +158,7 @@ public class NacDayOfWeek
 
 			this.mButtons[i].setOnClickListener(this);
 			this.mButtons[i].mergeAttributes(context, attrs);
+			this.mButtons[i].setViewAttributes();
 		}
 	}
 

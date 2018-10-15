@@ -18,6 +18,7 @@
 	<string name="dowb_fri">F</string>
 	<string name="dowb_sat">S</string>
 
+	<!-- Dialogs -->
 	<string name="dlg_ringtone_title">Select a ringtone</string>
 	<string name="dlg_music_title">Select a song</string>
 	<string name="dlg_prompt_title">Select Alarm Sound</string>
@@ -25,21 +26,38 @@
 	<string name="dlg_prompt_music">Browse music&#8230;</string>
 	<string name="dlg_name_hint">Alarm name</string>
 
-	<string name="pref_defaults">Default Values for New Alarms</string>
-	<string name="pref_defaults_repeat_title">Repeat</string>
-	<string name="pref_defaults_days_title">Days</string>
-	<string name="pref_defaults_vibrate_title">Vibrate</string>
-	<string name="pref_alarm_defaults_sound_title">Sound</string>
-	<string name="pref_alarm_defaults_name_title">Name</string>
-	<string name="pref_defaults_repeat_summary_enabled">Repeat an alarm even after it is run.</string>
-	<string name="pref_defaults_repeat_summary_disabled">Disable an alarm after it is run.</string>
-	<string name="pref_defaults_days_summary">Schedule alarms on the selected days.</string>
-	<string name="pref_defaults_vibrate_summary">Vibrate the phone when the alarm is triggered.</string>
-	<string name="pref_defaults_vibrate_summary_enabled">Vibrate the phone when the alarm is triggered.</string>
-	<string name="pref_defaults_vibrate_summary_disabled">Vibrate the phone when the alarm is not triggered.</string>
-	<string name="pref_alarm_defaults_sound_summary">Play the selected media.</string>
-	<string name="pref_alarm_defaults_name_summary">Name of the alarm and other words to make this way longer for testing.</string>
+	<!-- Defaults preference -->
+	<string name="pref_defaults_key">pref_defaults</string>
+	<string name="pref_defaults_title">Default Values for New Alarms</string>
 
+	<!-- Repeat preferenece -->
+	<string name="pref_repeat_key">pref_repeat</string>
+	<string name="pref_repeat_title">Repeat</string>
+	<string name="pref_repeat_summary_enabled">Repeat the alarm.</string>
+	<string name="pref_repeat_summary_disabled">Disable the alarm after it is run.</string>
+
+	<!-- Days preference -->
+	<string name="pref_days_key">pref_deys</string>
+	<string name="pref_days_title">Days</string>
+	<string name="pref_days_summary">None</string>
+
+	<!-- Vibrate preference -->
+	<string name="pref_vibrate_key">pref_vibrate</string>
+	<string name="pref_vibrate_title">Vibrate</string>
+	<string name="pref_vibrate_summary_enabled">Vibrate the phone.</string>
+	<string name="pref_vibrate_summary_disabled">Do not vibrate the phone.</string>
+
+	<!-- Sound preference -->
+	<string name="pref_sound_key">pref_sound</string>
+	<string name="pref_sound_title">Sound</string>
+	<string name="pref_sound_summary">None</string>
+
+	<!-- Name preference -->
+	<string name="pref_name_key">pref_name</string>
+	<string name="pref_name_title">Name</string>
+	<string name="pref_name_summary">None</string>
+
+	<!-- Menus -->
 	<string name="menu_next_alarm">Display next alarm</string>
 	<string name="menu_settings">Settings</string>
 </resources>

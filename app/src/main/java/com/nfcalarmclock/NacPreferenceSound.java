@@ -7,38 +7,41 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.ImageView;
-import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import android.text.TextUtils.TruncateAt;
 import android.util.DisplayMetrics;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.RelativeLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
+import android.support.v4.content.ContextCompat;
+import android.graphics.Color;
+import android.text.style.ForegroundColorSpan;
+import android.text.Spannable;
+import android.text.SpannableString;
+
+/**
+ */
 public class NacPreferenceSound
 	extends Preference
-	implements Preference.OnPreferenceClickListener,NacSoundDialog.OnItemClickListener,SeekBar.OnSeekBarChangeListener
+	implements Preference.OnPreferenceClickListener,NacSoundDialog.OnItemClickListener
 {
 
 	/**
-	 * @brief Day of week buttons.
+	 * Name and path of the sound.
 	 */
-	private NacSoundPromptDialog mDialog;
+	private String mValueName;
+	private String mValuePath;
 
 	/**
-	 * @brief Text view containing the name of the sound to play.
+	 * Default constant value for the object.
 	 */
-	private TextView mTextView;
-	private TextView mSubtitleView;
-	private ImageView mImageView;
-	private SeekBar mSeekBar;
-
-	/**
-	 * @brief Name of sound to play.
-	 */
-	private String mName;
+	private String mDefault;
 
 	/**
 	 */
@@ -59,21 +62,12 @@ public class NacPreferenceSound
 	public NacPreferenceSound(Context context, AttributeSet attrs, int style)
 	{
 		super(context, attrs, style);
-		this.setOnPreferenceClickListener(this);
-	}
+		setLayoutResource(R.layout.pref_sound);
+		setOnPreferenceClickListener(this);
 
-	/**
-	 */
-	@Override
-	protected View onCreateView(ViewGroup parent)
-	{
-		super.onCreateView(parent);
-
-		Context context = getContext();
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(
-			Context.LAYOUT_INFLATER_SERVICE);
-
-		return inflater.inflate(R.layout.pref_sound, parent, false);
+		SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getContext());
+		this.mValueName = shared.getString("pref_sound_name", "None");
+		this.mValuePath = shared.getString("pref_sound_path", "");
 	}
 
 	/**
@@ -83,63 +77,14 @@ public class NacPreferenceSound
 	{
 		super.onBindView(v);
 
-		this.mTextView = (TextView) v.findViewById(R.id.widget);
-		this.mSubtitleView = (TextView) v.findViewById(android.R.id.summary);
-		this.mImageView = (ImageView) v.findViewById(R.id.icon);
-		this.mSeekBar = (SeekBar) v.findViewById(R.id.volume);
-		DisplayMetrics displayMetrics = new DisplayMetrics();
-		AppCompatActivity act = (AppCompatActivity) getContext();
-
-		act.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-		int height = displayMetrics.heightPixels;
-		int width = displayMetrics.widthPixels;
-		LayoutParams params = new LayoutParams((int)(width*2.0/3.0), -1);
-
-		this.mTextView.setText(this.mName);
-		this.mTextView.setMaxWidth(width / 2);
-		this.mSubtitleView.setMaxWidth(width / 2);
-		this.mSeekBar.setLayoutParams(params);
-		this.mSeekBar.setKeyProgressIncrement(10);
-		this.mSeekBar.setOnSeekBarChangeListener(this);
+		NacUtility.printf("Sound onBindView : %s", this.mValueName);
+		this.setSummary(this.mValueName);
 	}
 
-	/**
-	 */
 	@Override
-	protected Object onGetDefaultValue(TypedArray a, int index)
+	public CharSequence getSummary()
 	{
-		return (String) a.getString(index);
-	}
-
-	/**
-	 */
-	@Override
-	protected void onSetInitialValue(boolean restore, Object defval)
-	{
-		if (restore)
-		{
-			this.mName = getPersistedString(this.mName);
-		}
-		else
-		{
-			this.mName = (String) defval;
-
-			persistString(this.mName);
-		}
-	}
-
-	/**
-	 */
-	@Override
-	public boolean onPreferenceClick(Preference pref)
-	{
-		NacUtility.printf("Sound preference clicked!");
-		//this.mDialog = new NacCardSoundPromptDialog(getContext());
-
-		//this.mDialog.setOnItemSelectedListener(this);
-		//this.mDialog.show();
-		return true;
+		return this.mValueName;
 	}
 
 	/**
@@ -148,7 +93,6 @@ public class NacPreferenceSound
 	public void onItemClick(NacSound sound)
 	{
 		NacUtility.printf("Item has been selected!!!");
-
 		String path = sound.path;
 		String name = sound.name;
 
@@ -158,28 +102,30 @@ public class NacPreferenceSound
 		}
 
 		NacUtility.printf("Sound : %s", path);
-		this.mName = name;
+		this.mValueName = name;
+		this.mValuePath = path;
+		SharedPreferences.Editor editor = getEditor();
 
-		persistString(this.mName);
-		this.mTextView.setText(this.mName);
+		this.setSummary(this.mValueName);
+		editor.putString("pref_sound_name", this.mValueName);
+		editor.putString("pref_sound_path", this.mValuePath);
+		editor.apply();
 	}
 
+	/**
+	 */
 	@Override
-	public void onProgressChanged(SeekBar bar, int progress, boolean from)
+	public boolean onPreferenceClick(Preference pref)
 	{
-		NacUtility.printf("Progress : %d", progress);
-	}
+		NacUtility.printf("Sound preference clicked.");
+		Context context = getContext();
+		NacSoundPromptDialog dialog = new NacSoundPromptDialog();
 
-	@Override
-	public void onStartTrackingTouch(SeekBar bar)
-	{
-		NacUtility.printf("Start tracking touch");
-	}
+		dialog.build(context, R.layout.dlg_sound_prompt);
+		dialog.setOnItemClickListener(this);
+		dialog.show();
 
-	@Override
-	public void onStopTrackingTouch(SeekBar bar)
-	{
-		NacUtility.printf("Stop tracking touch");
+		return true;
 	}
 
 }

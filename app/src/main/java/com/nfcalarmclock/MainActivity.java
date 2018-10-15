@@ -10,14 +10,12 @@ import android.view.View;
 import android.widget.Toast;
 import java.lang.System;
 
-import android.support.v4.app.ActivityCompat;
-
 /**
  * The application's main activity.
  */
 public class MainActivity
-	extends AppCompatActivity
-	implements View.OnClickListener,ActivityCompat.OnRequestPermissionsResultCallback
+	extends NacActivity
+	implements View.OnClickListener
 {
 
 	/**
@@ -35,8 +33,6 @@ public class MainActivity
 	 */
 	private NacCardAdapter mAdapter;
 
-	private NacPermissions.OnResultListener mListener;
-
 	/**
 	 * Create the application.
 	 *
@@ -47,11 +43,11 @@ public class MainActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_main);
+		//PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 		this.mAdapter = new NacCardAdapter(this);
 		this.mFloatingButton = new NacFloatingButton(this);
 		this.mRecyclerView = new NacRecyclerView(this);
-		this.mListener = null;
 
 		this.mRecyclerView.init();
 		this.mFloatingButton.init();
@@ -190,25 +186,6 @@ public class MainActivity
 		}
 
 		Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-	}
-
-	/**
-	 */
-	public void setPermissionResultListener(NacPermissions.OnResultListener listener)
-	{
-		this.mListener = listener;
-	}
-
-	/**
-	 */
-	@Override
-	public void onRequestPermissionsResult(int requestCode, String[] permissions,
-		int[] grantResults)
-	{
-		if (this.mListener != null)
-		{
-			this.mListener.onResult(requestCode, permissions, grantResults);
-		}
 	}
 
 }

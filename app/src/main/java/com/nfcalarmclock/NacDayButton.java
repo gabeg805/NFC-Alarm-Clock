@@ -254,12 +254,12 @@ public class NacDayButton
 	/**
 	 * Set view attributes.
 	 */
-	private void setViewAttributes()
+	public void setViewAttributes()
 	{
 		this.setWidthAndHeight(this.getButtonWidth(), this.getButtonHeight());
 		this.setBackground(this.getBackgroundResource());
-		this.setButtonColor(this.getButtonColor());
-		this.setTextColor(this.getTextColor());
+		this.setButtonColor(this.getDefaultButtonColor());
+		this.setTextColor(this.getDefaultTextColor());
 		this.setText(this.getText());
 		this.setTextSize(this.getTextSize());
 	}

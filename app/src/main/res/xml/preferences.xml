@@ -10,57 +10,42 @@ Volume level
 -->
 
 	<PreferenceCategory
-		android:key="pref_defaults"
-		android:title="@string/pref_defaults">
-
-<!--
-		<CheckBoxPreference
-			android:key="pref_alarm_defaults_repeat"
-			android:title="@string/pref_alarm_defaults_repeat_title"
-			android:summary="@string/pref_alarm_defaults_repeat_summary"
-			android:persistent="true"
-			android:defaultValue="true"
-			/>
--->
+		android:key="@string/pref_defaults_key"
+		android:title="@string/pref_defaults_title">
 
 		<com.nfcalarmclock.NacPreferenceRepeat
-			android:key="pref_defaults_repeat"
-			android:title="@string/pref_defaults_repeat_title"
-			app:summaryEnabled="@string/pref_defaults_repeat_summary_enabled"
-			app:summaryDisabled="@string/pref_defaults_repeat_summary_disabled"
+			android:key="@string/pref_repeat_key"
+			android:title="@string/pref_repeat_title"
+			android:enabled="true"
+			app:summaryEnabled="@string/pref_repeat_summary_enabled"
+			app:summaryDisabled="@string/pref_repeat_summary_disabled"
 			android:defaultValue="true"
 			/>
 
-		<com.nfcalarmclock.NacPreferenceDayOfWeek
-			android:key="pref_alarm_defaults_days"
-			android:title="@string/pref_defaults_days_title"
-			android:summary="@string/pref_defaults_days_summary"
-			android:defaultValue="62"
+		<com.nfcalarmclock.NacPreferenceDays
+			android:key="@string/pref_days_key"
+			android:title="@string/pref_days_title"
+			android:summary="@string/pref_days_summary"
 			/>
 
 		<com.nfcalarmclock.NacPreferenceVibrate
-			android:key="pref_defaults_repeat"
-			android:title="@string/pref_defaults_vibrate_title"
-			app:summaryEnabled="@string/pref_defaults_vibrate_summary_enabled"
-			app:summaryDisabled="@string/pref_defaults_vibrate_summary_disabled"
+			android:key="@string/pref_vibrate_key"
+			android:title="@string/pref_vibrate_title"
+			app:summaryEnabled="@string/pref_vibrate_summary_enabled"
+			app:summaryDisabled="@string/pref_vibrate_summary_disabled"
 			android:defaultValue="true"
 			/>
 
-<!--
 		<com.nfcalarmclock.NacPreferenceSound
-			android:key="pref_alarm_defaults_sound"
-			android:title="@string/pref_alarm_defaults_sound_title"
-			android:summary="@string/pref_alarm_defaults_sound_summary"
-			android:persistent="true"
-			android:defaultValue="None"
+			android:key="@string/pref_sound_key"
+			android:title="@string/pref_sound_title"
+			android:summary="@string/pref_sound_summary"
 			/>
--->
 
 		<com.nfcalarmclock.NacPreferenceName
-			android:key="pref_alarm_defaults_name"
-			android:title="@string/pref_alarm_defaults_name_title"
-			android:summary="@string/pref_alarm_defaults_name_summary"
-			android:defaultValue=""
+			android:key="@string/pref_name_key"
+			android:title="@string/pref_name_title"
+			android:summary="@string/pref_name_summary"
 			/>
 
 	</PreferenceCategory>

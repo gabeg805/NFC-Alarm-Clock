@@ -85,13 +85,11 @@ public class NacCardRepeat
 	 * @brief Save which day was selected to be repeated, or deselected so that
 	 *		  it is not repeated.
 	 */
-	//public void onClick(View v)
 	@Override
 	public void onClick(NacDayButton button, int index)
 	{
 		byte day = this.mAlarm.getWeekDays().get(index);
 
-		button.animateToggle();
 		this.mAlarm.toggleDay(day);
 		this.mTextView.setText(this.mAlarm.getDaysString());
 		this.mAlarm.changed();

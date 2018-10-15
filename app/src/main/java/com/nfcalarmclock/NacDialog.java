@@ -23,6 +23,11 @@ public class NacDialog
 
 	/**
 	 */
+	public interface OnBuildListener
+	{
+		public void onBuildDialog(NacDialog dialog, AlertDialog.Builder builder);
+	}
+
 	public interface OnCanceledListener
 	{
 		public void onDialogCanceled(NacDialog dialog);
@@ -36,6 +41,11 @@ public class NacDialog
 	public interface OnHiddenListener
 	{
 		public void onDialogHidden(NacDialog dialog);
+	}
+
+	public interface OnShowListener
+	{
+		public void onShowDialog(NacDialog dialog, View root);
 	}
 
 	/**
@@ -56,9 +66,11 @@ public class NacDialog
 	/**
 	 * The dialog listener.
 	 */
+	private OnBuildListener mBuildListener;
 	private List<OnCanceledListener> mCanceledListener;
 	private List<OnDismissedListener> mDismissedListener;
 	private List<OnHiddenListener> mHiddenListener;
+	private OnShowListener mShowListener;
 
 	/**
 	 */
@@ -67,9 +79,11 @@ public class NacDialog
 		this.mBuilder = null;
 		this.mDialog = null;
 		this.mRoot = null;
+		this.mBuildListener = null;
 		this.mCanceledListener = new ArrayList<>();
 		this.mDismissedListener = new ArrayList<>();
 		this.mHiddenListener = new ArrayList<>();
+		this.mShowListener = null;
 	}
 
 	/**
@@ -171,7 +185,7 @@ public class NacDialog
 	/**
 	 * @return The root view.
 	 */
-	public View getRoot()
+	public View getRootView()
 	{
 		return this.mRoot;
 	}
@@ -201,6 +215,10 @@ public class NacDialog
 	 */
 	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
+		if (this.mBuildListener != null)
+		{
+			this.mBuildListener.onBuildDialog(this, builder);
+		}
 	}
 
 	/**
@@ -228,6 +246,10 @@ public class NacDialog
 	 */
 	public void onShowDialog(Context context, View root)
 	{
+		if (this.mShowListener != null)
+		{
+			this.mShowListener.onShowDialog(this, root);
+		}
 	}
 
 	/**
@@ -323,6 +345,22 @@ public class NacDialog
 	}
 
 	/**
+	 * Set the onBuild listener.
+	 */
+	public void setOnBuildListener(OnBuildListener listener)
+	{
+		this.mBuildListener = listener;
+	}
+
+	/**
+	 * Set the onShow listener.
+	 */
+	public void setOnShowListener(OnShowListener listener)
+	{
+		this.mShowListener = listener;
+	}
+
+	/**
 	 * Set the positive button which will call onDialogDismissed when clicked.
 	 */
 	public void setPositiveButton(String title)
@@ -351,6 +389,7 @@ public class NacDialog
 			this.mDialog = this.mBuilder.show();
 		}
 
+		this.mDialog.getWindow().setBackgroundDrawableResource(R.color.gray);
 		this.onShowDialog(context, this.mRoot);
 
 		return this.mDialog;

@@ -9,9 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
 /**
- * @brief NFC Alarm Clock Utility class.
- * 
- * @details Composed of static methods that can be used for various things.
+ * Permissions class handling checks, listeners, etc.
  */
 public class NacPermissions
 {
@@ -87,7 +85,7 @@ public class NacPermissions
 	public static void setResultListener(Context context,
 		OnResultListener listener)
 	{
-		((MainActivity)context).setPermissionResultListener(listener);
+		((NacActivity)context).setPermissionResultListener(listener);
 	}
 
 }

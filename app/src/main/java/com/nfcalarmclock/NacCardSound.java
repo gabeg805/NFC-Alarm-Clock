@@ -17,34 +17,34 @@ import java.util.List;
  * selecting the sound view.
  */
 public class NacCardSound
-    implements View.OnClickListener,NacSoundDialog.OnItemClickListener
+	implements View.OnClickListener,NacSoundDialog.OnItemClickListener
 {
 
-    /**
-     * Alarm.
-     */
-     private Alarm mAlarm;
+	/**
+	 * Alarm.
+	 */
+	 private Alarm mAlarm;
 
-    /**
-     * Sound.
-     */
-     private ImageTextButton mSoundView;
+	/**
+	 * Sound.
+	 */
+	 private ImageTextButton mSoundView;
 
-    /**
-     */
-    public NacCardSound(Context c, View r)
-    {
-        this.mSoundView = (ImageTextButton) r.findViewById(R.id.nacSound);
+	/**
+	 */
+	public NacCardSound(Context c, View r)
+	{
+		this.mSoundView = (ImageTextButton) r.findViewById(R.id.nacSound);
 		this.mAlarm = null;
 
-        this.mSoundView.setOnClickListener(this);
-    }
+		this.mSoundView.setOnClickListener(this);
+	}
 
-    /**
-     * Initialize the sound view.
-     */
-    public void init(Alarm alarm)
-    {
+	/**
+	 * Initialize the sound view.
+	 */
+	public void init(Alarm alarm)
+	{
 		String path = alarm.getSound();
 		this.mAlarm = alarm;
 
@@ -60,21 +60,21 @@ public class NacCardSound
 
 		ringtone.stop();
 		this.mSoundView.setText(name);
-    }
+	}
 
-    /**
-     * Display the dialog that allows users to set the name of the alarm.
-     */
-    @Override
-    public void onClick(View v)
-    {
+	/**
+	 * Display the dialog that allows users to set the name of the alarm.
+	 */
+	@Override
+	public void onClick(View v)
+	{
 		Context context = v.getContext();
-        NacSoundPromptDialog dialog = new NacSoundPromptDialog();
+		NacSoundPromptDialog dialog = new NacSoundPromptDialog();
 
 		dialog.build(context, R.layout.dlg_sound_prompt);
 		dialog.setOnItemClickListener(this);
-        dialog.show();
-    }
+		dialog.show();
+	}
 
 	/**
 	 * @brief Handle the sound item when it has been selected.

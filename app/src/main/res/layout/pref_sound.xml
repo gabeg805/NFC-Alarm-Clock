@@ -1,80 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@android:id/widget_frame"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:minHeight="?android:attr/listPreferredItemHeightSmall"
-	android:paddingTop="?android:attr/listPreferredItemPaddingLeft"
-	android:paddingBottom="?android:attr/listPreferredItemPaddingRight"
-	android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
-	android:paddingRight="?android:attr/listPreferredItemPaddingRight">
+	android:minHeight="?android:attr/listPreferredItemHeight"
+	android:gravity="center_vertical"
+	android:padding="?android:attr/listPreferredItemPaddingLeft"
+	android:background="?android:attr/selectableItemBackground">
 
 	<RelativeLayout
-		android:id="@+id/info"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:paddingBottom="?android:attr/listPreferredItemPaddingLeft">
+		android:layout_weight="1">
 
 		<TextView
-			android:id="@android:id/title"
+			android:id="@+android:id/title"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:singleLine="true"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textColor="?android:attr/textColorPrimary"
 			android:textSize="16sp"
-			android:text="Title"
+			android:ellipsize="marquee"
+			android:fadingEdge="horizontal"
 			/>
 
 		<TextView
-			android:id="@android:id/summary"
+			android:id="@+android:id/summary"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_below="@android:id/title"
+			android:layout_alignStart="@android:id/title"
 			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:textColor="?android:attr/textColorSecondary"
 			android:textSize="14sp"
-			android:text="Summary"
-			/>
-
-		<TextView
-			android:id="@+id/widget"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignParentRight="true"
-			android:layout_centerVertical="true"
-			android:ellipsize="end"
-			android:singleLine="true"
-			android:textAppearance="?android:attr/textAppearanceSmall"
-			android:textColor="?android:attr/colorAccent"
-			android:textSize="12sp"
-			android:text=""
+			android:maxLines="4"
 			/>
 
 	</RelativeLayout>
 
-	<LinearLayout
-		android:layout_width="wrap_content"
-		android:layout_height="@dimen/isz_card"
-		android:layout_below="@+id/info"
-		android:layout_centerHorizontal="true"
-		android:orientation="horizontal">
-
-		<ImageView
-			android:id="@+id/icon"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:src="@mipmap/baseline_music_note_white_24dp"
-			/>
-
-		<SeekBar
-			android:id="@+id/volume"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_centerVertical="true"
-			android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
-			android:progressTint="@color/white"
-			android:thumbTint="@color/white"
-			/>
-
-	</LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>
