@@ -53,6 +53,7 @@ public class NacPreferenceDays
 	}
 
 	/**
+	 * @return The summary text.
 	 */
 	@Override
 	public CharSequence getSummary()
@@ -65,17 +66,17 @@ public class NacPreferenceDays
 	}
 
 	/**
+	 * Set the summary text.
 	 */
 	@Override
 	protected void onBindView(View v)
 	{
 		super.onBindView(v);
-
-		NacUtility.printf("Days onBindView : %s", this.getSummary());
 		this.setSummary(this.getSummary());
 	}
 
 	/**
+	 * Build the dialog.
 	 */
 	@Override
 	public void onBuildDialog(NacDialog dialog, AlertDialog.Builder builder)
@@ -87,16 +88,8 @@ public class NacPreferenceDays
 		dialog.setNegativeButton("Cancel");
 	}
 
-	@Override
-	public void onShowDialog(NacDialog dialog, View root)
-	{
-		NacUtility.printf("DoW onShowDialog : %d", this.mValue);
-		NacDayOfWeek dow = root.findViewById(R.id.days);
-
-		dow.setDays(this.mValue);
-	}
-
 	/**
+	 * Save the selected days when the dialog is dismissed.
 	 */
 	@Override
 	public void onDialogDismissed(NacDialog dialog)
@@ -105,12 +98,12 @@ public class NacPreferenceDays
 		NacDayOfWeek dow = root.findViewById(R.id.days);
 		this.mValue = dow.getDays();
 
-		NacUtility.printf("DayOfWeek dialog dismissed with value : %d", this.mValue);
 		this.setSummary(this.getSummary());
 		persistInt(this.mValue);
 	}
 
 	/**
+	 * @return The default value.
 	 */
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
@@ -119,6 +112,7 @@ public class NacPreferenceDays
 	}
 
 	/**
+	 * Display the dialog when the preference is selected.
 	 */
 	@Override
 	public boolean onPreferenceClick(Preference pref)
@@ -137,6 +131,18 @@ public class NacPreferenceDays
 	}
 
 	/**
+	 * Set the days in the dialog.
+	 */
+	@Override
+	public void onShowDialog(NacDialog dialog, View root)
+	{
+		NacDayOfWeek dow = root.findViewById(R.id.days);
+
+		dow.setDays(this.mValue);
+	}
+
+	/**
+	 * Set the initial preference value.
 	 */
 	@Override
 	protected void onSetInitialValue(boolean restore, Object defval)
