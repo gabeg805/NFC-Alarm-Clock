@@ -33,15 +33,24 @@ public class NacPreferenceSound
 {
 
 	/**
-	 * Name and path of the sound.
+	 * Name of the sound.
 	 */
-	private String mValueName;
-	private String mValuePath;
+	protected String mValueName;
 
 	/**
-	 * Default constant value for the object.
+	 * Path of the sound.
 	 */
-	private String mDefault;
+	protected String mValuePath;
+
+	/**
+	 * Default for the sound name.
+	 */
+	protected static final String mDefaultName = "None";
+
+	/**
+	 * Default for the sound path.
+	 */
+	protected static final String mDefaultPath = "";
 
 	/**
 	 */
@@ -66,21 +75,13 @@ public class NacPreferenceSound
 		setOnPreferenceClickListener(this);
 
 		SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getContext());
-		this.mValueName = shared.getString("pref_sound_name", "None");
-		this.mValuePath = shared.getString("pref_sound_path", "");
+		this.mValueName = shared.getString("pref_sound_name", this.mDefaultName);
+		this.mValuePath = shared.getString("pref_sound_path", this.mDefaultPath);
 	}
 
 	/**
+	 * @return The summary text.
 	 */
-	@Override
-	protected void onBindView(View v)
-	{
-		super.onBindView(v);
-
-		NacUtility.printf("Sound onBindView : %s", this.mValueName);
-		this.setSummary(this.mValueName);
-	}
-
 	@Override
 	public CharSequence getSummary()
 	{
@@ -88,11 +89,21 @@ public class NacPreferenceSound
 	}
 
 	/**
+	 * Set the summary text.
+	 */
+	@Override
+	protected void onBindView(View v)
+	{
+		super.onBindView(v);
+		this.setSummary(this.mValueName);
+	}
+
+	/**
+	 * Capture which item in the list was selected.
 	 */
 	@Override
 	public void onItemClick(NacSound sound)
 	{
-		NacUtility.printf("Item has been selected!!!");
 		String path = sound.path;
 		String name = sound.name;
 
@@ -101,7 +112,6 @@ public class NacPreferenceSound
 			return;
 		}
 
-		NacUtility.printf("Sound : %s", path);
 		this.mValueName = name;
 		this.mValuePath = path;
 		SharedPreferences.Editor editor = getEditor();
@@ -113,11 +123,11 @@ public class NacPreferenceSound
 	}
 
 	/**
+	 * When the preference is clicked, display the dialog.
 	 */
 	@Override
 	public boolean onPreferenceClick(Preference pref)
 	{
-		NacUtility.printf("Sound preference clicked.");
 		Context context = getContext();
 		NacSoundPromptDialog dialog = new NacSoundPromptDialog();
 

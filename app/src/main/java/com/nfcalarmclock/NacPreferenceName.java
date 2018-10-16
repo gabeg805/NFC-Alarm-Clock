@@ -2,9 +2,7 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.content.SharedPreferences;
 import android.preference.Preference;
-import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,11 +27,6 @@ public class NacPreferenceName
 	protected static final String mDefault = "None";
 
 	/**
-	 * Alarm.
-	 */
-	protected Alarm mAlarm;
-
-	/**
 	 */
 	public NacPreferenceName(Context context)
 	{
@@ -54,11 +47,15 @@ public class NacPreferenceName
 		super(context, attrs, style);
 		setLayoutResource(R.layout.pref_name);
 		setOnPreferenceClickListener(this);
+	}
 
-		SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(
-			context);
-		this.mAlarm = new Alarm();
-		this.mValue = shared.getString("pref_name", this.mDefault);
+	/**
+	 * @return The summary text.
+	 */
+	@Override
+	public CharSequence getSummary()
+	{
+		return (this.mValue != null) ? this.mValue : this.mDefault;
 	}
 
 	/**
@@ -72,17 +69,7 @@ public class NacPreferenceName
 	protected void onBindView(View v)
 	{
 		super.onBindView(v);
-
-		NacUtility.printf("Name onBindView : %s", this.mValue);
-		this.setSummary(this.mValue);
-	}
-
-	/**
-	 */
-	@Override
-	public CharSequence getSummary()
-	{
-		return this.mValue;
+		this.setSummary(this.getSummary());
 	}
 
 	/**
@@ -90,13 +77,20 @@ public class NacPreferenceName
 	@Override
 	public void onDialogDismissed(NacDialog dialog)
 	{
-		this.mValue = this.mAlarm.getName();
-		SharedPreferences.Editor editor = getEditor();
+		Object data = dialog.getData();
+		this.mValue = (data != null) ? (String) data : "";
 
-		NacUtility.printf("Name onDialogDismissed : %s", this.mValue);
-		this.setSummary(this.mValue);
-		editor.putString("pref_name", this.mValue);
-		editor.apply();
+		this.setSummary(this.getSummary());
+		persistString(this.mValue);
+	}
+
+	/**
+	 * @return The default value.
+	 */
+	@Override
+	protected Object onGetDefaultValue(TypedArray a, int index)
+	{
+		return (String) a.getString(index);
 	}
 
 	/**
@@ -104,15 +98,32 @@ public class NacPreferenceName
 	@Override
 	public boolean onPreferenceClick(Preference pref)
 	{
-		NacUtility.printf("Name preference clicked.");
 		Context context = getContext();
-		NacCardNameDialog dialog = new NacCardNameDialog(this.mAlarm);
+		NacNameDialog dialog = new NacNameDialog();
 
 		dialog.build(context, R.layout.dlg_alarm_name);
 		dialog.addDismissListener(this);
 		dialog.show();
 
 		return true;
+	}
+
+	/**
+	 * Set the initial preference value.
+	 */
+	@Override
+	protected void onSetInitialValue(boolean restore, Object defval)
+	{
+		if (restore)
+		{
+			this.mValue = getPersistedString(this.mValue);
+		}
+		else
+		{
+			this.mValue = (String) defval;
+
+			persistString(this.mValue);
+		}
 	}
 
 }

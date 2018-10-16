@@ -3,9 +3,7 @@ package com.nfcalarmclock;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.content.SharedPreferences;
 import android.preference.Preference;
-import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -117,7 +115,6 @@ public class NacPreferenceDays
 	@Override
 	public boolean onPreferenceClick(Preference pref)
 	{
-		NacUtility.printf("Days preference clicked.");
 		Context context = getContext();
 		NacDialog dialog = new NacDialog();
 

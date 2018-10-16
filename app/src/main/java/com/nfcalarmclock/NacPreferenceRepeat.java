@@ -127,8 +127,8 @@ public class NacPreferenceRepeat
 	@Override
 	public boolean onPreferenceClick(Preference pref)
 	{
-		NacUtility.printf("Repeat preference clicked.");
 		this.mCheckBox.performClick();
+
 		return true;
 	}
 
@@ -159,12 +159,10 @@ public class NacPreferenceRepeat
 		TextView tv = root.findViewById(android.R.id.summary);
 		CharSequence summary = this.getSummary();
 
-		if (tv == null)
+		if (tv != null)
 		{
-			return;
+			tv.setText(summary);
 		}
-
-		tv.setText(summary);
 	}
 
 }

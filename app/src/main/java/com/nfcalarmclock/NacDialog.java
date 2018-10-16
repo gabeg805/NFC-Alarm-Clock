@@ -22,27 +22,40 @@ public class NacDialog
 {
 
 	/**
+	 * Build listener.
 	 */
 	public interface OnBuildListener
 	{
 		public void onBuildDialog(NacDialog dialog, AlertDialog.Builder builder);
 	}
 
+	/**
+	 * Canceled listener.
+	 */
 	public interface OnCanceledListener
 	{
 		public void onDialogCanceled(NacDialog dialog);
 	}
 
+	/**
+	 * Dismissed listener.
+	 */
 	public interface OnDismissedListener
 	{
 		public void onDialogDismissed(NacDialog dialog);
 	}
 
+	/**
+	 * Hide listener.
+	 */
 	public interface OnHiddenListener
 	{
 		public void onDialogHidden(NacDialog dialog);
 	}
 
+	/**
+	 * Show listener.
+	 */
 	public interface OnShowListener
 	{
 		public void onShowDialog(NacDialog dialog, View root);
@@ -52,6 +65,11 @@ public class NacDialog
 	 * Alert dialog builder.
 	 */
 	private AlertDialog.Builder mBuilder;
+
+	/**
+	 * Saved data.
+	 */
+	private Object mData;
 
 	/**
 	 * Alert dialog.
@@ -64,7 +82,7 @@ public class NacDialog
 	private View mRoot;
 
 	/**
-	 * The dialog listener.
+	 * The dialog listeners.
 	 */
 	private OnBuildListener mBuildListener;
 	private List<OnCanceledListener> mCanceledListener;
@@ -77,6 +95,7 @@ public class NacDialog
 	public NacDialog()
 	{
 		this.mBuilder = null;
+		this.mData = null;
 		this.mDialog = null;
 		this.mRoot = null;
 		this.mBuildListener = null;
@@ -183,6 +202,14 @@ public class NacDialog
 	}
 
 	/**
+	 * @return The saved data.
+	 */
+	public Object getData()
+	{
+		return this.mData;
+	}
+
+	/**
 	 * @return The root view.
 	 */
 	public View getRootView()
@@ -263,6 +290,16 @@ public class NacDialog
 		{
 			parent.removeView(v);
 		}
+	}
+
+	/**
+	 * Save data.
+	 *
+	 * @param  data  Data to save.
+	 */
+	public void saveData(Object data)
+	{
+		this.mData = data;
 	}
 
 	/**

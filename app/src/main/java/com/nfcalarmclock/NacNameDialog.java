@@ -12,17 +12,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 /**
- * @brief The dialog class that will handle saving the name of the alarm.
+ * The dialog class that will handle saving the name of the alarm.
  */
-public class NacCardNameDialog
+public class NacNameDialog
 	extends NacDialog
 	implements NacDialog.OnDismissedListener,TextView.OnEditorActionListener
 {
-
-	/**
-	 * Alarm.
-	 */
-	private Alarm mAlarm;
 
 	/**
 	 * EditText in the dialog.
@@ -31,14 +26,17 @@ public class NacCardNameDialog
 
 	/**
 	 */
-	public NacCardNameDialog(Alarm a)
+	public NacNameDialog()
 	{
 		super();
-		this.mAlarm = a;
+
+		this.mEditText = null;
+
 		this.addDismissListener(this);
 	}
 
 	/**
+	 * Build the dialog.
 	 */
 	@Override
 	public void onBuildDialog(Context context, AlertDialog.Builder builder)
@@ -56,8 +54,9 @@ public class NacCardNameDialog
 	@Override
 	public void onShowDialog(Context context, View root)
 	{
-		String name = this.mAlarm.getName();
 		this.mEditText = (EditText) root.findViewById(R.id.alarm_name);
+		Object data = this.getData();
+		String name = (data != null) ? (String) data : "";
 
 		this.mEditText.setText(name);
 		this.mEditText.selectAll();
@@ -67,19 +66,18 @@ public class NacCardNameDialog
 	}
 
 	/**
+	 * Save the alarm name as the dialog data.
 	 */
 	@Override
 	public void onDialogDismissed(NacDialog dialog)
 	{
-		String text = this.mEditText.getText().toString();
+		String name = this.mEditText.getText().toString();
 
-		NacUtility.printf("Name : %s", text);
-		this.mAlarm.setName(text);
-		this.mAlarm.changed();
+		dialog.saveData(name);
 	}
 
 	/**
-	 * @brief Close the keyboard when the user hits enter.
+	 * Close the keyboard when the user hits enter.
 	 */
 	@Override
 	public boolean onEditorAction(TextView tv, int action, KeyEvent event)
@@ -88,6 +86,7 @@ public class NacCardNameDialog
 		{
 			closeKeyboard(tv);
 			this.dismiss();
+
 			return true;
 		}
 
@@ -95,7 +94,7 @@ public class NacCardNameDialog
 	}
 
 	/**
-	 * @brief Close the keyboard.
+	 * Close the keyboard.
 	 */
 	private void closeKeyboard(TextView tv)
 	{

@@ -127,7 +127,6 @@ public class NacPreferenceVibrate
 	@Override
 	public boolean onPreferenceClick(Preference pref)
 	{
-		NacUtility.printf("Vibrate preference clicked.");
 		this.mCheckBox.performClick();
 		return true;
 	}
@@ -161,10 +160,8 @@ public class NacPreferenceVibrate
 
 		if (tv == null)
 		{
-			return;
+			tv.setText(summary);
 		}
-
-		tv.setText(summary);
 	}
 
 }

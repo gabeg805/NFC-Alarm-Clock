@@ -23,19 +23,22 @@ public class NacCardName
 	/**
 	 * Alarm.
 	 */
-	 private Alarm mAlarm = null;
+	 private Alarm mAlarm;
 
 	/**
 	 * Name view.
 	 */
-	 private ImageTextButton mName = null;
+	 private ImageTextButton mName;
 
 	/**
 	 */
 	public NacCardName(View r)
 	{
 		super();
+
+		this.mAlarm = null;
 		this.mName = (ImageTextButton) r.findViewById(R.id.nacName);
+
 		this.mName.setOnClickListener(this);
 	}
 
@@ -45,15 +48,8 @@ public class NacCardName
 	public void init(Alarm alarm)
 	{
 		this.mAlarm = alarm;
-		this.setName();
-	}
+		String name = alarm.getName();
 
-	/**
-	 * Set the name.
-	 */
-	public void setName()
-	{
-		String name = this.mAlarm.getName();
 		this.mName.setText(name);
 	}
 
@@ -63,7 +59,7 @@ public class NacCardName
 	@Override
 	public void onClick(View v)
 	{
-		NacCardNameDialog dialog = new NacCardNameDialog(this.mAlarm);
+		NacNameDialog dialog = new NacNameDialog();
 		Context context = v.getContext();
 
 		dialog.build(context, R.layout.dlg_alarm_name);
@@ -72,11 +68,18 @@ public class NacCardName
 	}
 
 	/**
+	 * Notify alarm listener that the alarm has been modified.
 	 */
 	@Override
 	public void onDialogDismissed(NacDialog dialog)
 	{
-		this.setName();
+		Object data = dialog.getData();
+		String name = (data != null) ? (String) data : "";
+
+		NacUtility.printf("Name : %s", name);
+		this.mName.setText(name);
+		this.mAlarm.setName(name);
+		this.mAlarm.changed();
 	}
 
 }
