@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.Toast;
 import java.lang.System;
 
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.CoordinatorLayout;
+
 /**
  * The application's main activity.
  */
@@ -141,20 +144,17 @@ public class MainActivity
 	}
 
 	/**
-	 * Display a toast showing the next scheduled alarm.
+	 * Display a snackbar showing the next scheduled alarm.
 	 */
 	private void showNextAlarm()
 	{
 		NacAlarmScheduler scheduler = new NacAlarmScheduler(this);
 		AlarmClockInfo next = scheduler.getNext();
-		String msg = "";
+		String msg = "No scheduled alarms.";
 
-		if (next == null)
+		if (next != null)
 		{
-			msg = "No scheduled alarms.";
-		}
-		else
-		{
+			msg = "Next alarm in ";
 			long time = (next.getTriggerTime() - System.currentTimeMillis())
 				/ 1000;
 			long day = (time / (60*60*24)) % 365;
@@ -165,8 +165,6 @@ public class MainActivity
 			String hrunit = (hr != 1) ? " hours " : " hour ";
 			String minunit = (min != 1) ? " minutes " : " minute ";
 			String secunit = (sec != 1) ? " seconds " : " second ";
-
-			msg = "Time remaining: ";
 
 			if (day > 0)
 			{
@@ -185,7 +183,7 @@ public class MainActivity
 			}
 		}
 
-		Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+		NacUtility.snackbar(this, msg, "DISMISS", null);
 	}
 
 }

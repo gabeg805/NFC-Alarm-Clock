@@ -1,7 +1,10 @@
 package com.nfcalarmclock;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,42 @@ import java.io.IOException;
  */
 public class NacUtility
 {
+
+	/**
+	 * Determine the height of the view.
+	 * 
+	 * @param  v  The view.
+	 * 
+	 * @return The height of the view.
+	 */
+	public static int getHeight(View view)
+	{
+		view.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+			MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+
+		ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams)
+			view.getLayoutParams();
+		int margins = lp.topMargin + lp.bottomMargin;
+		int height = view.getMeasuredHeight();
+
+		return height+margins;
+	}
+
+	/**
+	 * Convert the id to a theme attribute color.
+	 * 
+	 * @return A theme attribute color.
+	 */
+	public static int getThemeAttrColor(Context context, int id)
+	{
+		TypedValue tv = new TypedValue();
+		Resources.Theme theme = context.getTheme();
+		boolean success = theme.resolveAttribute(id, tv, true);
+
+		return (tv.resourceId == 0)
+			? tv.data
+			: ContextCompat.getColor(context, tv.resourceId);
+	}
 
 	/**
 	 * @brief Wrapper for Log object to print to the logcat easily.
@@ -96,39 +135,57 @@ public class NacUtility
 	}
 
 	/**
-	 * Convert the id to a theme attribute color.
-	 * 
-	 * @return A theme attribute color.
+	 * Display a snackbar with the given message.
+	 *
+	 * @param  root  The root view.
+	 * @param  message  The message to display.
+	 * @param  action  The action message.
+	 * @param  listener  The callback to run when the action is clicked.
 	 */
-	public static int getThemeAttrColor(Context context, int id)
+	public static Snackbar snackbar(View root, String message, String action,
+		View.OnClickListener listener)
 	{
-		TypedValue tv = new TypedValue();
-		Resources.Theme theme = context.getTheme();
-		boolean success = theme.resolveAttribute(id, tv, true);
+		Context context = root.getContext();
+		int color = NacUtility.getThemeAttrColor(context,
+			R.attr.colorCardAccent);
+		Snackbar snackbar = Snackbar.make(root, message, Snackbar.LENGTH_LONG);
 
-		return (tv.resourceId == 0)
-			? tv.data
-			: ContextCompat.getColor(context, tv.resourceId);
+		if (!action.isEmpty())
+		{
+			if (listener == null)
+			{
+				listener = new View.OnClickListener()
+				{
+					@Override
+					public void onClick(View view)
+					{
+					}
+				};
+			}
+
+			snackbar.setAction(action, listener);
+		}
+
+		snackbar.setActionTextColor(color);
+		snackbar.show();
+
+		return snackbar;
 	}
 
 	/**
-	 * Determine the height of the view.
-	 * 
-	 * @param  v  The view.
-	 * 
-	 * @return The height of the view.
+	 * Display a snackbar with the given message.
+	 *
+	 * @param  activity  The main activity.
+	 * @param  message  The message to display.
+	 * @param  action  The action message.
+	 * @param  listener  The callback to run when the action is clicked.
 	 */
-	public static int getHeight(View view)
+	public static Snackbar snackbar(Activity activity, String message, String action,
+		View.OnClickListener listener)
 	{
-		view.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-			MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+		CoordinatorLayout root = activity.findViewById(R.id.activity_main);
 
-		ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams)
-			view.getLayoutParams();
-		int margins = lp.topMargin + lp.bottomMargin;
-		int height = view.getMeasuredHeight();
-
-		return height+margins;
+		return NacUtility.snackbar(root, message, action, listener);
 	}
 
 }

@@ -203,6 +203,29 @@ public class Alarm
 	}
 
 	/**
+	 * Copy this alarm.
+	 *
+	 * @return A copy of this alarm.
+	 */
+	public Alarm copy()
+	{
+		Alarm copy = new Alarm();
+
+		copy.setId(this.getId());
+		copy.setEnabled(this.getEnabled());
+		copy.set24HourFormat(this.get24HourFormat());
+		copy.setHour(this.getHour());
+		copy.setMinute(this.getMinute());
+		copy.setDays(this.getDays());
+		copy.setRepeat(this.getRepeat());
+		copy.setVibrate(this.getVibrate());
+		copy.setSound(this.getSound());
+		copy.setName(this.getName());
+
+		return copy;
+	}
+
+	/**
 	 * Set a listener for when the alarm is changed.
 	 * 
 	 * @param  listener  The change listener.

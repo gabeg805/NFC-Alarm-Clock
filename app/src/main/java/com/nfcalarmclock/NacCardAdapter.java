@@ -1,26 +1,20 @@
 package com.nfcalarmclock;
 
-import android.support.design.widget.CoordinatorLayout;
-
 import android.content.Context;
-import android.graphics.Color;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.support.v7.widget.helper.ItemTouchHelper;
-
 import android.preference.PreferenceManager;
 import android.content.SharedPreferences;
+import android.support.design.widget.Snackbar;
 
 /**
  * @brief Alarm card adapter.
@@ -70,10 +64,45 @@ public class NacCardAdapter
 	 */
 	private Alarm mRestoreAlarm = null;
 
+	private Undo mUndo;
+
 	/**
 	 * The position of the alarm to restore, when prompted after deletion.
 	 */
 	private int mRestorePosition = -1;
+
+	public static class Undo
+	{
+		public enum Type
+		{
+			NONE,
+			COPY,
+			DELETE,
+			RESTORE
+		}
+
+		public Alarm alarm;
+		public int position;
+		public Type type;
+
+		public Undo()
+		{
+			this.reset();
+		}
+
+		public void reset()
+		{
+			this.set(null, -1, Type.NONE);
+		}
+
+		public void set(Alarm alarm, int position, Type type)
+		{
+			this.alarm = alarm;
+			this.position = position;
+			this.type = type;
+		}
+
+	}
 
 	/**
 	 */
@@ -91,6 +120,7 @@ public class NacCardAdapter
 		this.mTouchHelper = new NacCardTouchHelper(callback);
 		this.mAlarmList = null;
 		this.mWasAdded = false;
+		this.mUndo = new Undo();
 	}
 
 	/**
@@ -107,13 +137,27 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * Add an alarm.
+	 * @see add
 	 *
 	 * @param  alarm  The alarm to add.
 	 */
-	public void add(Alarm a)
+	public void add(Alarm alarm)
 	{
-		if (this.mDatabase.add(a) < 0)
+		int index = this.mAlarmList.size();
+
+		this.add(alarm, index);
+		this.mRecyclerView.scrollToPosition(index);
+	}
+
+	/**
+	 * @see add
+	 *
+	 * @param  alarm  The alarm to add.
+	 * @param  position  The position to add the alarm.
+	 */
+	public void add(Alarm alarm, int position)
+	{
+		if (this.mDatabase.add(alarm) < 0)
 		{
 			Toast.makeText(this.mRootView.getContext(),
 				"Error occurred when adding alarm to database.",
@@ -123,13 +167,13 @@ public class NacCardAdapter
 
 		// Using update instead of add for testing. Things should never get
 		// canceled in update, only added
-		int index = this.mAlarmList.size();
+		//int index = this.mAlarmList.size();
 		this.mWasAdded = true;
 
-		this.mScheduler.update(a);
-		this.mAlarmList.add(a);
-		this.notifyItemInserted(index);
-		this.mRecyclerView.scrollToPosition(index);
+		this.mScheduler.update(alarm);
+		this.mAlarmList.add(alarm);
+		this.notifyItemInserted(position);
+		//this.mRecyclerView.scrollToPosition(position);
 	}
 
 	/**
@@ -152,24 +196,14 @@ public class NacCardAdapter
 	public void delete(int pos)
 	{
 		Alarm alarm = this.mAlarmList.get(pos);
-		this.mRestoreAlarm = alarm;
-		this.mRestorePosition = pos;
 
 		this.mScheduler.cancel(alarm);
 		this.mDatabase.delete(alarm);
 		this.mAlarmList.remove(pos);
 		this.notifyItemRemoved(pos);
 		this.notifyItemRangeChanged(pos, this.getLastVisible(pos));
-
-		Context context = this.mRootView.getContext();
-		int color = NacUtility.getThemeAttrColor(context,
-			R.attr.colorCardAccent);
-		Snackbar snackbar = Snackbar.make(this.mRootView, "Deleted alarm.",
-			Snackbar.LENGTH_LONG);
-
-		snackbar.setAction("UNDO", this);
-		snackbar.setActionTextColor(color);
-		snackbar.show();
+		this.undo(alarm, pos, Undo.Type.DELETE);
+		NacUtility.snackbar(this.mRootView, "Deleted alarm.", "UNDO", this);
 	}
 
 	/**
@@ -262,11 +296,23 @@ public class NacCardAdapter
 	@Override
 	public void onClick(View v)
 	{
-		Object tag = v.getTag();
+		Alarm alarm = this.mUndo.alarm;
+		int position = this.mUndo.position;
+		Undo.Type type = this.mUndo.type;
 
-		if (tag == null)
+		this.mUndo.reset();
+
+		if (type == Undo.Type.COPY)
 		{
-			restore(this.mRestoreAlarm, this.mRestorePosition);
+			this.delete(position);
+		}
+		else if (type == Undo.Type.DELETE)
+		{
+			this.restore(alarm, position);
+		}
+		else if (type == Undo.Type.RESTORE)
+		{
+			this.delete(position);
 		}
 	}
 
@@ -304,27 +350,15 @@ public class NacCardAdapter
 	@Override
 	public void onItemCopy(int pos)
 	{
-		this.mTouchHelper.reset();
-		//this.resetTouchHelper();
-
 		Alarm alarm = this.mAlarmList.get(pos);
-		Alarm copy = new Alarm();
+		Alarm copy = alarm.copy();
+		int newpos = this.mAlarmList.size();
 
 		copy.setId(this.getUniqueId());
-		copy.setEnabled(alarm.getEnabled());
-		copy.set24HourFormat(alarm.get24HourFormat());
-		copy.setHour(alarm.getHour());
-		copy.setMinute(alarm.getMinute());
-		copy.setDays(alarm.getDays());
-		copy.setRepeat(alarm.getRepeat());
-		copy.setVibrate(alarm.getVibrate());
-		copy.setSound(alarm.getSound());
-		copy.setName(alarm.getName());
+		this.mTouchHelper.reset();
 		this.add(copy);
-
-		Context context = this.mRootView.getContext();
-		Toast.makeText(context, "Copied alarm.",
-			Toast.LENGTH_SHORT).show();
+		this.undo(copy, newpos, Undo.Type.COPY);
+		NacUtility.snackbar(this.mRootView, "Copied alarm.", "UNDO", this);
 	}
 
 	/**
@@ -341,15 +375,26 @@ public class NacCardAdapter
 	/**
 	 * Restore a previously deleted alarm.
 	 * 
-	 * @param  a  The alarm to restore.
-	 * @param  pos  The position to insert the alarm.
+	 * @param  alarm  The alarm to restore.
+	 * @param  position  The position to insert the alarm.
 	 */
-	public void restore(Alarm a, int pos)
+	public void restore(Alarm alarm, int position)
 	{
-		this.mWasAdded = true;
+		//this.mWasAdded = true;
 
-		this.mAlarmList.add(pos, a);
-		this.notifyItemInserted(pos);
+		//this.mAlarmList.add(position, alarm);
+		//this.notifyItemInserted(position);
+		this.add(alarm, position);
+		this.undo(alarm, position, Undo.Type.RESTORE);
+		NacUtility.snackbar(this.mRootView, "Restored alarm.", "UNDO", this);
+	}
+
+	/**
+	 * Save undo parameters.
+	 */
+	public void undo(Alarm alarm, int position, Undo.Type type)
+	{
+		this.mUndo.set(alarm, position, type);
 	}
 
 }
