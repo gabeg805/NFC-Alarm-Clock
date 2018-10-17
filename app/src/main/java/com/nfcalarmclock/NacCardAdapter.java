@@ -1,5 +1,7 @@
 package com.nfcalarmclock;
 
+import android.support.design.widget.CoordinatorLayout;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
@@ -17,116 +19,87 @@ import java.util.List;
 
 import android.support.v7.widget.helper.ItemTouchHelper;
 
+import android.preference.PreferenceManager;
+import android.content.SharedPreferences;
+
 /**
  * @brief Alarm card adapter.
  */
 public class NacCardAdapter
-	extends RecyclerView.Adapter<NacCard>
-	implements View.OnClickListener,Alarm.OnChangedListener,NacCardTouchHelperAdapter
+	extends RecyclerView.Adapter<NacCardHolder>
+	implements View.OnClickListener,Alarm.OnChangedListener,NacCardHolder.OnDeleteListener,NacCardTouchHelper.Adapter
 {
 
 	/**
-	 * @brief The Context of the parent.
+	 * Main activity root view.
 	 */
-	private Context mContext = null;
+	private CoordinatorLayout mRootView;
 
 	/**
-	 * @brief The recycler view.
+	 * RecyclerView containing list of alarm cards.
 	 */
-	private RecyclerView mRecyclerView = null;
+	private RecyclerView mRecyclerView;
 
 	/**
-	 * @brief Alarm scheduler.
+	 * Alarm scheduler.
 	 */
-	private NacAlarmScheduler mScheduler = null;
+	private NacAlarmScheduler mScheduler;
 
 	/**
-	 * @brief List of alarms.
+	 * The database.
+	 */
+	private NacDatabase mDatabase;
+
+	/**
+	 * Handle card swipe events.
+	 */
+	private NacCardTouchHelper mTouchHelper;
+
+	/**
+	 * List of alarms.
 	 */
 	private List<Alarm> mAlarmList;
 
 	/**
-	 * @brief The database.
+	 * Indicator that the alarm was added through the floating action button.
 	 */
-	private NacDatabase mDatabase = null;
+	private boolean mWasAdded;
 
 	/**
-	 * @brief Number of alarm cards in the recycler view.
-	 */
-	private int mSize = 0;
-
-	/**
-	 * @brief Indicator that the alarm was added through the floating action button.
-	 */
-	private boolean mWasAdded = false;
-
-	/**
-	 * @brief Handle card swipe events.
-	 */
-	private ItemTouchHelper mTouchHelper = null;
-
-	/**
-	 * @brief The alarm to restore, when prompted after deletion.
+	 * The alarm to restore, when prompted after deletion.
 	 */
 	private Alarm mRestoreAlarm = null;
 
 	/**
-	 * @brief The position of the alarm to restore, when prompted after
-	 *        deletion.
+	 * The position of the alarm to restore, when prompted after deletion.
 	 */
 	private int mRestorePosition = -1;
 
 	/**
-	 * @brief Alarm adapter.
-	 *
-	 * @param  c  The activity context.
 	 */
-	public NacCardAdapter(Context c)
+	public NacCardAdapter(Context context)
 	{
-		this.mContext = c;
-		this.mScheduler = new NacAlarmScheduler(c);
-		this.mDatabase = new NacDatabase(c);
+		AppCompatActivity activity = (AppCompatActivity) context;
+		NacCardTouchHelper.Callback callback =
+			new NacCardTouchHelper.Callback(this);
 
-		this.setTouchHelper();
-	}
-
-	private void setTouchHelper()
-	{
-		RecyclerView rv = this.mRecyclerView;
-		
-		if (rv == null)
-		{
-			AppCompatActivity a = (AppCompatActivity) this.mContext;
-			rv = (RecyclerView) a.findViewById(R.id.content_alarm_list);
-		}
-
-		if (this.mTouchHelper == null)
-		{
-			ItemTouchHelper.Callback callback = new NacCardTouchHelperCallback(this);
-			this.mTouchHelper = new ItemTouchHelper(callback);
-		}
-
-		this.mTouchHelper.attachToRecyclerView(null);
-		this.mTouchHelper.attachToRecyclerView(rv);
+		this.mRootView = activity.findViewById(R.id.activity_main);
+		this.mRecyclerView = (RecyclerView) this.mRootView.findViewById(
+			R.id.content_alarm_list);
+		this.mScheduler = new NacAlarmScheduler(context);
+		this.mDatabase = new NacDatabase(context);
+		this.mTouchHelper = new NacCardTouchHelper(callback);
+		this.mAlarmList = null;
+		this.mWasAdded = false;
 	}
 
 	/**
-	 * @brief Build the alarm list.
-	 */
-	public void build()
-	{
-		this.mDatabase.print();
-		this.mAlarmList = this.mDatabase.read();
-		this.mSize = this.mAlarmList.size();
-		this.notifyDataSetChanged();
-	}
-
-	/**
-	 * @brief Add an alarm.
+	 * Add an alarm.
 	 */
 	public void add()
 	{
-		boolean format = DateFormat.is24HourFormat(this.mContext);
+		Context context = this.mRootView.getContext();
+		boolean format = DateFormat.is24HourFormat(context);
 		int id = this.getUniqueId();
 		Alarm alarm = new Alarm(format, id);
 
@@ -134,7 +107,7 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * @brief Add an alarm.
+	 * Add an alarm.
 	 *
 	 * @param  alarm  The alarm to add.
 	 */
@@ -142,77 +115,92 @@ public class NacCardAdapter
 	{
 		if (this.mDatabase.add(a) < 0)
 		{
-			Toast.makeText(this.mContext, "Error occurred when adding alarm to database.",
+			Toast.makeText(this.mRootView.getContext(),
+				"Error occurred when adding alarm to database.",
 				Toast.LENGTH_SHORT).show();
 			return;
 		}
 
-		a.print();
 		// Using update instead of add for testing. Things should never get
 		// canceled in update, only added
+		int index = this.mAlarmList.size();
+		this.mWasAdded = true;
+
 		this.mScheduler.update(a);
 		this.mAlarmList.add(a);
-		this.resize();
-		this.notifyItemInserted(this.mSize-1);
-		this.scrollToAlarm(this.mSize-1);
-
-		this.mWasAdded = true;
+		this.notifyItemInserted(index);
+		this.mRecyclerView.scrollToPosition(index);
 	}
 
 	/**
-	 * @brief Delete the alarm at the given position.
+	 * Build the alarm list.
+	 */
+	public void build()
+	{
+		this.mAlarmList = this.mDatabase.read();
+
+		this.mTouchHelper.setRecyclerView(this.mRecyclerView);
+		this.mTouchHelper.reset();
+		this.notifyDataSetChanged();
+	}
+
+	/**
+	 * Delete the alarm at the given position.
 	 *
 	 * @param  pos	The card position of the alarm to delete.
 	 */
 	public void delete(int pos)
 	{
 		Alarm alarm = this.mAlarmList.get(pos);
-		NacUtility.printf("Removing alarm at position %d.", pos);
-		alarm.print();
+		this.mRestoreAlarm = alarm;
+		this.mRestorePosition = pos;
 
 		this.mScheduler.cancel(alarm);
 		this.mDatabase.delete(alarm);
 		this.mAlarmList.remove(pos);
-		this.resize();
 		this.notifyItemRemoved(pos);
 		this.notifyItemRangeChanged(pos, this.getLastVisible(pos));
+
+		Context context = this.mRootView.getContext();
+		int color = NacUtility.getThemeAttrColor(context,
+			R.attr.colorCardAccent);
+		Snackbar snackbar = Snackbar.make(this.mRootView, "Deleted alarm.",
+			Snackbar.LENGTH_LONG);
+
+		snackbar.setAction("UNDO", this);
+		snackbar.setActionTextColor(color);
+		snackbar.show();
 	}
 
 	/**
-	 * @brief Restore a previously deleted alarm.
-	 * 
-	 * @param  a  The alarm to restore.
-	 * @param  pos  The position to insert the alarm.
+	 * @return The number of items in the recycler view.
 	 */
-	public void restore(Alarm a, int pos)
+	@Override
+	public int getItemCount()
 	{
-		NacUtility.printf("Undoing alarm deletion! Position = %d", pos);
-		this.mWasAdded = true;
-
-		this.mAlarmList.add(pos, a);
-		this.resize();
-		this.notifyItemInserted(pos);
+		return this.mAlarmList.size();
 	}
 
 	/**
-	 * @brief Resize the alarm list.
+	 * @return The last visible view holder in the recycler view.
 	 */
-	private void resize()
+	private int getLastVisible(int start)
 	{
-		this.mSize = this.mAlarmList.size();
+		int size = this.mAlarmList.size();
+
+		for (int i=start; i < size; i++)
+		{
+			if (this.mRecyclerView.findViewHolderForAdapterPosition(i) == null)
+			{
+				return i-1;
+			}
+		}
+
+		return -1;
 	}
 
 	/**
-	 * @brief Scroll to the alarm.
-	 */
-	private void scrollToAlarm(int index)
-	{
-		this.mRecyclerView.scrollToPosition(index);
-	}
-
-	/**
-	 * @brief Determine a unique integer ID number to use for newly created
-	 *		  alarms.
+	 * Determine a unique integer ID number to use for newly created alarms.
 	 */
 	private int getUniqueId()
 	{
@@ -235,26 +223,89 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * @return The last visible view holder in the recycler view.
+	 * Setup the alarm card.
+	 *
+	 * @param  card  The alarm card.
+	 * @param  pos	The position of the alarm card.
 	 */
-	private int getLastVisible(int start)
+	@Override
+	public void onBindViewHolder(final NacCardHolder card, int pos)
 	{
-		for (int i=start; i < this.mSize; i++)
-		{
-			if (this.mRecyclerView.findViewHolderForAdapterPosition(i) == null)
-			{
-				return i-1;
-			}
-		}
+		Alarm alarm = mAlarmList.get(pos);
 
-		return -1;
+		alarm.setOnChangedListener(this);
+		card.init(alarm, this.mWasAdded);
+		card.setOnDeleteListener(this);
+		//card.focus(this.mWasAdded);
+
+		this.mWasAdded = false;
 	}
 
+	/**
+	 * Update the database when alarm data is changed.
+	 *
+	 * @param  a  The alarm that was changed.
+	 */
+	@Override
+	public void onChanged(Alarm a)
+	{
+		this.mDatabase.update(a);
+		this.mScheduler.update(a);
+	}
+
+	/**
+	 * Capture the click event on the delete button, and delete the card it
+	 * belongs to.
+	 *
+	 * @param  v  The view that was clicked.
+	 */
+	@Override
+	public void onClick(View v)
+	{
+		Object tag = v.getTag();
+
+		if (tag == null)
+		{
+			restore(this.mRestoreAlarm, this.mRestorePosition);
+		}
+	}
+
+	/**
+	 * Create the view holder.
+	 *
+	 * @param  parent  The parent view.
+	 * @param  viewType  The type of view.
+	 */
+	@Override
+	public NacCardHolder onCreateViewHolder(ViewGroup parent, int viewType)
+	{
+		Context context = parent.getContext();
+		int layout = R.layout.view_card_alarm;
+		View root = LayoutInflater.from(context).inflate(layout, parent,
+			false);
+
+		return new NacCardHolder(root);
+	}
+
+	/**
+	 * Delete the alarm.
+	 */
+	@Override
+	public void onDelete(int pos)
+	{
+		this.delete(pos);
+	}
+
+	/**
+	 * Copy the alarm.
+	 *
+	 * @param  pos  The position of the alarm to copy.
+	 */
 	@Override
 	public void onItemCopy(int pos)
 	{
-		this.setTouchHelper();
-		NacUtility.printf("Item copy %d.", pos);
+		this.mTouchHelper.reset();
+		//this.resetTouchHelper();
 
 		Alarm alarm = this.mAlarmList.get(pos);
 		Alarm copy = new Alarm();
@@ -270,119 +321,35 @@ public class NacCardAdapter
 		copy.setSound(alarm.getSound());
 		copy.setName(alarm.getName());
 		this.add(copy);
-		Toast.makeText(this.mContext, "Copied alarm.",
+
+		Context context = this.mRootView.getContext();
+		Toast.makeText(context, "Copied alarm.",
 			Toast.LENGTH_SHORT).show();
 	}
 
+	/**
+	 * Delete the alarm.
+	 * 
+	 * @param  pos  The position of the alarm to delete.
+	 */
 	@Override
 	public void onItemDelete(int pos)
 	{
-		NacUtility.printf("Item delete %d.", pos);
-		this.mRestoreAlarm = this.mAlarmList.get(pos);
-		this.mRestorePosition = pos;
-
 		this.delete(pos);
-
-		AppCompatActivity a = (AppCompatActivity) this.mContext;
-		View root = a.findViewById(R.id.activity_main);
-		int color = NacUtility.getThemeAttrColor(this.mContext,
-			R.attr.colorCardAccent);
-		Snackbar snackbar = Snackbar.make(root, "Deleted alarm.",
-			Snackbar.LENGTH_LONG);
-
-		snackbar.setAction("UNDO", this);
-		snackbar.setActionTextColor(color);
-		snackbar.show();
 	}
 
 	/**
-	 * @brief Update the database when alarm data is changed.
-	 *
-	 * @param  a  The alarm object that was changed.
+	 * Restore a previously deleted alarm.
+	 * 
+	 * @param  a  The alarm to restore.
+	 * @param  pos  The position to insert the alarm.
 	 */
-	@Override
-	public void onChanged(Alarm a)
+	public void restore(Alarm a, int pos)
 	{
-		this.mDatabase.update(a);
-		this.mScheduler.update(a);
-	}
+		this.mWasAdded = true;
 
-	/**
-	 * @brief Create the view holder.
-	 *
-	 * @param  parent  The parent view.
-	 * @param  viewType  The type of view.
-	 */
-	@Override
-	public NacCard onCreateViewHolder(ViewGroup parent, int viewType)
-	{
-		Context context = parent.getContext();
-		int layout = R.layout.view_card_alarm;
-		View root = LayoutInflater.from(context).inflate(layout, parent,
-			false);
-
-		return new NacCard(context, root);
-	}
-
-	/**
-	 * @brief Bind the view holder.
-	 *
-	 * @param  card  The alarm card.
-	 * @param  pos	The position of the alarm card.
-	 */
-	@Override
-	public void onBindViewHolder(final NacCard card, int pos)
-	{
-		Alarm alarm = mAlarmList.get(pos);
-		NacUtility.printf("onBindViewHolder %d", pos);
-
-		alarm.setOnChangedListener(this);
-		card.init(alarm);
-		card.setDeleteListener(this);
-		card.focus(this.mWasAdded);
-
-		this.mWasAdded = false;
-	}
-
-	/**
-	 * @brief Capture the click event on the delete button, and delete the card
-	 *		  it belongs to.
-	 *
-	 * @param  v  The view that was clicked.
-	 */
-	@Override
-	public void onClick(View v)
-	{
-		Object tag = v.getTag();
-
-		if (tag == null)
-		{
-			restore(mRestoreAlarm, mRestorePosition);
-		}
-		else
-		{
-			delete((int)tag);
-		}
-	}
-
-	/**
-	 * @brief Set the recycler view.
-	 */
-	@Override
-	public void onAttachedToRecyclerView(RecyclerView rv)
-	{
-		super.onAttachedToRecyclerView(rv);
-
-		mRecyclerView = rv;
-	}
-
-	/**
-	 * @brief Return the number of items in the recycler view.
-	 */
-	@Override
-	public int getItemCount()
-	{
-		return this.mSize;
+		this.mAlarmList.add(pos, a);
+		this.notifyItemInserted(pos);
 	}
 
 }

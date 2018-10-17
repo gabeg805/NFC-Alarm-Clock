@@ -1,17 +1,9 @@
 package com.nfcalarmclock;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.os.Handler;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSmoothScroller;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -19,143 +11,125 @@ import android.widget.RelativeLayout;
  * @brief Holder of all important views.
  */
 public class NacCard
-    extends RecyclerView.ViewHolder
     implements View.OnClickListener
 {
 
 	/**
-	 * @brief Context.
+	 * Collapse listener for another class to implement.
 	 */
-    public Context mContext;
+	public interface OnCollapseListener
+	{
+		public void onCollapse(NacCard card);
+	}
 
 	/**
-	 * @brief The recycler view.
+	 * Expand listener for another class to implement.
 	 */
-    public RecyclerView mRecyclerView;
+	public interface OnExpandListener
+	{
+		public void onExpand(NacCard card);
+	}
 
 	/**
-	 * @brief The alarm card view.
+	 * Expand/collapse states.
 	 */
-    public CardView mCard;
+	public static class State
+	{
+		public static final byte EXPANDED = 1;
+		public static final byte COLLAPSED = 2;
+	}
+
+	/**
+	 * Collapse listener for the callback.
+	 */
+	public OnCollapseListener mCollapseListener;
+
+	/**
+	 * Expand listener for the callback.
+	 */
+	public OnExpandListener mExpandListener;
+
+	/**
+	 * Card view.
+	 */
+    public CardView mCardView;
+
+	/**
+	 * Summary and extra regions in the alarm card.
+	 */
+	private NacCardRegion mRegion;
+
+	/**
+	 * View that is displayed when copying the alarm (swiping right).
+	 */
 	public RelativeLayout mBackgroundCopy;
+
+	/**
+	 * View that is displayed when deleting the alarm (swiping left).
+	 */
 	public RelativeLayout mBackgroundDelete;
 
 	/**
-	 * @brief Summary and extra regions in the alarm card.
+	 * Background color transition.
 	 */
-	public NacCardRegion mRegion;
+	private TransitionDrawable mTransition;
 
 	/**
-	 * @brief The on/off switch for the alarm.
+	 * The expand/collapse state of the card.
 	 */
-    public NacCardSwitch mSwitch;
-
-	/**
-	 * @brief The alarm time.
-	 */
-    public NacCardTime mTime;
-
-	/**
-	 * @brief Repeat checkbox.
-	 */
-    public NacCardRepeat mRepeat;
-
-	/**
-	 * @brief Sound selector.
-	 */
-    public NacCardSound mSound;
-
-	/**
-	 * @brief Vibrate checkbox.
-	 */
-    public NacCardVibrate mVibrate;
-
-	/**
-	 * @brief Name label and selector.
-	 */
-    public NacCardName mName;
-
-	/**
-	 * @brief Button to delete the alarm card.
-	 */
-    public NacCardDelete mDelete;
-
-	/**
-	 * @brief Background color transition.
-	 */
-	private TransitionDrawable mTransition = null;
-
-	/**
-	 * @brief Expand/collapse state.
-	 */
-	public class CardState
-	{
-		public final static byte EXPANDED = 1;
-		public final static byte COLLAPSED = 2;
-	}
-
-	public byte mCardState = CardState.COLLAPSED;
+	private byte mState;
 
     /**
-     * @brief Define all views in the holder.
-	 *
-	 * @param  c  The activity's context.
-	 * @param  r  The root view.
      */
-    public NacCard(Context c, View r)
+    public NacCard(View root)
     {
-        super(r);
-        this.mContext = c;
-        this.mCard = (CardView) r.findViewById(R.id.view_card_alarm);
-		this.mBackgroundCopy = (RelativeLayout) r.findViewById(R.id.view_background_copy);
-		this.mBackgroundDelete = (RelativeLayout) r.findViewById(R.id.view_background_delete);
-		this.mRecyclerView = (RecyclerView) ((Activity)c).findViewById(
-			R.id.content_alarm_list);
-
-		this.mRegion = new NacCardRegion(r);
-        this.mTime = new NacCardTime(c, r);
-        this.mSwitch = new NacCardSwitch(r);
-        this.mRepeat = new NacCardRepeat(r);
-        this.mSound = new NacCardSound(c, r);
-        this.mVibrate = new NacCardVibrate(r);
-        this.mName = new NacCardName(r);
-        this.mDelete = new NacCardDelete(r);
+        this.mCardView = (CardView) root.findViewById(R.id.view_card_alarm);
+		this.mBackgroundCopy = (RelativeLayout) root.findViewById(
+			R.id.view_background_copy);
+		this.mBackgroundDelete = (RelativeLayout) root.findViewById(
+			R.id.view_background_delete);
+		this.mRegion = new NacCardRegion(root);
+		this.mTransition = null;
+		this.mExpandListener = null;
+		this.mCollapseListener = null;
+		this.mState = State.COLLAPSED;
 	}
 
     /**
-     * @brief Initialize the alarm card.
-	 *
-	 * @param  alarm  The alarm to use to populate data in the alarm card.
-	 * @param  pos  The position of the alarm card in the recycler view.
+     * Collapse the alarm card.
      */
-    public void init(Alarm alarm)
+    public void collapse()
     {
-		this.mBackgroundCopy.setVisibility(View.GONE);
-		this.mBackgroundDelete.setVisibility(View.GONE);
+		this.mState = State.COLLAPSED;
 
-		int pos = this.getAdapterPosition();
+		this.mRegion.collapse();
+		this.setBackgroundColor(this.mState);
 
-		this.mRegion.init();
-        this.mTime.init(alarm);
-        this.mSwitch.init(alarm);
-        this.mRepeat.init(alarm);
-        this.mSound.init(alarm);
-        this.mVibrate.init(alarm);
-        this.mName.init(alarm);
-		this.mDelete.init(pos);
-
-		this.mCard.setOnClickListener(this);
-		this.mRegion.setExpandListener(this);
-		this.mRegion.setCollapseListener(this);
-
-		if (this.mCardState == CardState.EXPANDED)
+		if (this.mCollapseListener != null)
 		{
-			collapse();
+			this.mCollapseListener.onCollapse(this);
+		}
+    }
+
+    /**
+     * Expand the alarm card.
+     */
+    public void expand()
+    {
+		this.mState = State.EXPANDED;
+
+		this.unfocus();
+		this.mRegion.expand();
+		this.setBackgroundColor(this.mState);
+
+		if (this.mExpandListener != null)
+		{
+			this.mExpandListener.onExpand(this);
 		}
     }
 
 	/**
-	 * @brief Focus the alarm card.
+	 * Focus the alarm card.
 	 */
 	public void focus(boolean state)
 	{
@@ -164,133 +138,66 @@ public class NacCard
 			return;
 		}
 
+		Context context = this.mCardView.getContext();
 		int duration = 2200;
-		int bg = NacUtility.getThemeAttrColor(this.mContext, R.attr.colorCard);
-		int highlight= NacUtility.getThemeAttrColor(this.mContext,
+		int bg = NacUtility.getThemeAttrColor(context, R.attr.colorCard);
+		int highlight = NacUtility.getThemeAttrColor(context,
 			R.attr.colorCardExpanded);
 		ColorDrawable[] color = {new ColorDrawable(highlight),
 			new ColorDrawable(bg)};
 		this.mTransition = new TransitionDrawable(color);
 
-		this.mCard.setBackground(this.mTransition);
+		this.mCardView.setBackground(this.mTransition);
 		this.mTransition.startTransition(duration);
 	}
 
 	/**
-	 * @brief Unfocus the alarm card.
+	 * @return The region height.
 	 */
-	public void unfocus()
+	public int getRegionHeight()
 	{
-		if (this.mTransition != null)
-		{
-			this.mTransition.resetTransition();
-			this.setBackgroundColor(CardState.COLLAPSED);
-
-			this.mTransition = null;
-		}
+		return this.mRegion.getHeight();
 	}
 
     /**
-     * @brief Expand the alarm card.
+     * Initialize the alarm card.
+	 *
+	 * @param  wasAdded  Indicator for whether or not the card should be
+	 * 					 focused.
      */
-    public void expand()
+    public void init(boolean wasAdded)
     {
-		this.mCardState = CardState.EXPANDED;
+		this.mBackgroundCopy.setVisibility(View.GONE);
+		this.mBackgroundDelete.setVisibility(View.GONE);
 
-		this.unfocus();
-		mRegion.expandAndAnimate();
-		this.setBackgroundColor(this.mCardState);
-		this.scrollOnPartiallyVisible();
+		this.mRegion.init();
+
+		this.mCardView.setOnClickListener(this);
+		this.mRegion.setExpandListener(this);
+		this.mRegion.setCollapseListener(this);
+
+		if (this.isExpanded())
+		{
+			this.collapse();
+		}
+
+		this.focus(wasAdded);
     }
 
-    /**
-     * @brief Collapse the alarm card.
-     */
-    public void collapse()
-    {
-		this.mCardState = CardState.COLLAPSED;
-
-		mRegion.collapseAndAnimate();
-		this.setBackgroundColor(this.mCardState);
-    }
-
 	/**
-	 * @brief Scroll when the alarm card is partially visible.
+	 * @return True if the card is collapsed and false otherwise.
 	 */
-	public void scrollOnPartiallyVisible()
+	public boolean isCollapsed()
 	{
-		if (this.isCompletelyVisible())
-		{
-			return;
-		}
-
-		int delay = 200;
-
-		new Handler().postDelayed(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				int pos = getAdapterPosition();
-
-				mRecyclerView.getLayoutManager().startSmoothScroll(
-					new NacSmoothScroller(mContext, pos,
-						LinearSmoothScroller.SNAP_TO_END));
-			}
-		}, delay);
+		return this.isCollapsed(this.mState);
 	}
 
 	/**
-	 * @brief Set the background color.
+	 * @see isCollapsed
 	 */
-	private void setBackgroundColor(byte state)
+	public boolean isCollapsed(byte state)
 	{
-		if (state == CardState.EXPANDED)
-		{
-			NacUtility.setBackground(this.mContext, this.mCard,
-				R.attr.colorCardExpanded);
-		}
-		else if (state == CardState.COLLAPSED)
-		{
-			NacUtility.setBackground(this.mContext, this.mCard,
-				R.attr.colorCard);
-		}
-	}
-
-	/**
-	 * @brief Set listener to delete the card.
-	 *
-	 * @param  listener  The card delete listener.
-	 */
-	public void setDeleteListener(View.OnClickListener listener)
-	{
-		this.mDelete.setListener(this);
-		this.mDelete.setListener(listener);
-	}
-
-	/**
-	 * @brief Return the card height.
-	 *
-	 * @return The card height.
-	 */
-	private int getCardHeight()
-	{
-		int regionheight = this.mRegion.getHeight();
-		int timeheight = this.mTime.getHeight();
-		int switchheight = this.mSwitch.getHeight();
-
-		return (timeheight >= switchheight) ? regionheight + timeheight 
-			: regionheight + switchheight;
-	}
-
-	/**
-	 * @brief Return the screen height.
-	 *
-	 * @return The screen height.
-	 */
-	private int getScreenHeight()
-	{
-		return this.mRecyclerView.getHeight();
+		return (state == State.COLLAPSED);
 	}
 
 	/**
@@ -298,67 +205,90 @@ public class NacCard
 	 */
 	public boolean isExpanded()
 	{
-		return (this.mCardState == CardState.EXPANDED);
+		return this.isExpanded(this.mState);
 	}
 
 	/**
-	 * @return True if the card is collapsed and false otherwise.
+	 * @see isExpanded
 	 */
-	public boolean isCollapsed()
+	public boolean isExpanded(byte state)
 	{
-		return (this.mCardState == CardState.COLLAPSED);
+		return (state == State.EXPANDED);
 	}
 
 	/**
-	 * @brief Check if the card is completely visible.
+	 * Expand or collapse the card.
 	 *
-	 * @return True if it is visible. False otherwise.
-	 */
-	private boolean isCompletelyVisible()
-	{
-		LinearLayoutManager lv = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-		int pos = getAdapterPosition();
-		int ypos = lv.findViewByPosition(pos).getTop();
-		int cardheight = this.getCardHeight();
-		int screenheight = this.getScreenHeight();
-
-		return ((cardheight+ypos) > screenheight) ? false : true;
-	}
-
-	/**
-	 * @brief Expand or collapse the card.
-	 *
-	 * @details When the alarm card is not at the top of the screen, clicking
-	 * 			the expand button will scroll the screen so that the alarm card
-	 * 			is at the top.
-	 *
-	 * @param  v  The view that was clicked on.
+	 * @param  view  The view that was clicked on.
 	 */
 	@Override
-	public void onClick(View v)
+	public void onClick(View view)
 	{
-		int id = v.getId();
+		int id = view.getId();
 
-		switch (id)
+		if (id == R.id.view_card_alarm)
 		{
-			case R.id.view_card_alarm:
-				if (this.isExpanded())
-				{
-					this.collapse();
-				}
-				else if (this.isCollapsed())
-				{
-					this.expand();
-				}
-				break;
-			case R.id.nacExpand:
-				this.expand();
-				break;
-			case R.id.nacCollapse:
+			if (this.isExpanded())
+			{
 				this.collapse();
-				break;
-			default:
-				break;
+			}
+			else if (this.isCollapsed())
+			{
+				this.expand();
+			}
+		}
+		else if (id == R.id.nacExpand)
+		{
+			this.expand();
+		}
+		else if (id == R.id.nacCollapse)
+		{
+			this.collapse();
+		}
+	}
+
+	/**
+	 * Set the background color.
+	 */
+	public void setBackgroundColor(byte state)
+	{
+		if (this.isExpanded(state))
+		{
+			NacUtility.setBackground(this.mCardView, R.attr.colorCardExpanded);
+		}
+		else if (this.isCollapsed(state))
+		{
+			NacUtility.setBackground(this.mCardView, R.attr.colorCard);
+		}
+	}
+
+	/**
+	 * Set the OnCollapse listener.
+	 */
+	public void setOnCollapseListener(OnCollapseListener listener)
+	{
+		this.mCollapseListener = listener;
+	}
+
+	/**
+	 * Set the OnExpand listener.
+	 */
+	public void setOnExpandListener(OnExpandListener listener)
+	{
+		this.mExpandListener = listener;
+	}
+
+	/**
+	 * Unfocus the alarm card.
+	 */
+	public void unfocus()
+	{
+		if (this.mTransition != null)
+		{
+			this.mTransition.resetTransition();
+			this.setBackgroundColor(State.COLLAPSED);
+
+			this.mTransition = null;
 		}
 	}
 

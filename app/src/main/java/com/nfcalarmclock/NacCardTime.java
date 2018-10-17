@@ -2,7 +2,6 @@ package com.nfcalarmclock;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -10,56 +9,50 @@ import android.widget.TimePicker;
 import java.util.Locale; 
 
 /**
- * @brief The time to activate the alarm at. Users can change the time by
- *		  selecting the view.
+ * The time to activate the alarm at. Users can change the time by selecting
+ * the view.
  */
 public class NacCardTime
 	implements View.OnClickListener,TimePickerDialog.OnTimeSetListener
 {
 
 	/**
-	 * @brief Context.
+	 * Container of the time and meridian views.
 	 */
-	private Context mContext = null;
+	private RelativeLayout mContainer;
 
 	/**
-	 * @brief Alarm.
+	 * Time text.
+	 */
+	private TextView mTime;
+
+	/**
+	 * Meridian text (AM/PM).
+	 */
+	private TextView mMeridian;
+
+	/**
+	 * Alarm.
 	 */
 	private Alarm mAlarm = null;
 
 	/**
-	 * @brief Container of the time and meridian views.
 	 */
-	private RelativeLayout mContainer = null;
-
-	/**
-	 * @brief Time text.
-	 */
-	private TextView mTime = null;
-
-	/**
-	 * @brief Meridian text (AM/PM).
-	 */
-	private TextView mMeridian = null;
-
-	/**
-	 * @param  context	The app context.
-	 * @param  r  The root view.
-	 */
-	public NacCardTime(Context context, View r)
+	public NacCardTime(View root)
 	{
 		super();
 
-		this.mContext = context;
-		this.mContainer = (RelativeLayout) r.findViewById(R.id.nacTimeContainer);
-		this.mTime = (TextView) r.findViewById(R.id.nacTime);
-		this.mMeridian = (TextView) r.findViewById(R.id.nacMeridian);
+		this.mContainer = (RelativeLayout) root.findViewById(
+			R.id.nacTimeContainer);
+		this.mTime = (TextView) root.findViewById(R.id.nacTime);
+		this.mMeridian = (TextView) root.findViewById(R.id.nacMeridian);
+		this.mAlarm = null;
 
 		this.mContainer.setOnClickListener(this);
 	}
 
 	/**
-	 * @brief Initialize the time.
+	 * Initialize the time.
 	 */
 	public void init(Alarm alarm)
 	{
@@ -69,7 +62,7 @@ public class NacCardTime
 	}
 
 	/**
-	 * @brief Set the time.
+	 * Set the time.
 	 */
 	public void setTime()
 	{
@@ -81,7 +74,7 @@ public class NacCardTime
 	}
 
 	/**
-	 * @brief Return the height of the view that is visible.
+	 * Return the height of the view that is visible.
 	 */
 	public int getHeight()
 	{
@@ -89,16 +82,17 @@ public class NacCardTime
 	}
 
 	/**
-	 * @brief Display the time picker dialog.
+	 * Display the time picker dialog.
 	 */
 	@Override
 	public void onClick(View v)
 	{
+		Context context = this.mContainer.getContext();
 		int hour = this.mAlarm.getHour();
 		int minute = this.mAlarm.getMinute();
 		boolean format = this.mAlarm.get24HourFormat();
-		TimePickerDialog dialog = new TimePickerDialog(this.mContext, this,
-			hour, minute, format);
+		TimePickerDialog dialog = new TimePickerDialog(context, this, hour,
+			minute, format);
 
 		dialog.show();
 	}

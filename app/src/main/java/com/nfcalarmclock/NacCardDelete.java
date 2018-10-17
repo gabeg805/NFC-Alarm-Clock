@@ -1,40 +1,29 @@
 package com.nfcalarmclock;
 
-import android.content.Context;
 import android.view.View;
-import android.widget.Toast;
 
 /**
- * @brief Delete the alarm and its card.
+ * Delete the alarm and its card.
  */
 public class NacCardDelete
 {
 
     /**
-     * @brief Delete button.
+     * Delete button.
      */
      private ImageTextButton mDelete;
 
     /**
-     * @brief Constructor.
      */
-    public NacCardDelete(View r)
+    public NacCardDelete(View root)
     {
-        this.mDelete = (ImageTextButton) r.findViewById(R.id.nacDelete);
+        this.mDelete = (ImageTextButton) root.findViewById(R.id.nacDelete);
     }
 
 	/**
-	 * @brief Set the card position as a tag for the delete button.
+	 * Set the click listener for the delete button.
 	 */
-	public void init(int pos)
-	{
-		this.mDelete.setTag(pos);
-	}
-
-	/**
-	 * @brief Set the click listener for the delete button.
-	 */
-	public void setListener(View.OnClickListener listener)
+	public void setOnClickListener(View.OnClickListener listener)
 	{
 		this.mDelete.setOnClickListener(listener);
 	}

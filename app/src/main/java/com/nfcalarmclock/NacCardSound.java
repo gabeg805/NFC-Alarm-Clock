@@ -21,20 +21,20 @@ public class NacCardSound
 {
 
 	/**
-	 * Alarm.
-	 */
-	 private Alarm mAlarm;
-
-	/**
 	 * Sound.
 	 */
 	 private ImageTextButton mSoundView;
 
 	/**
+	 * Alarm.
 	 */
-	public NacCardSound(Context c, View r)
+	 private Alarm mAlarm;
+
+	/**
+	 */
+	public NacCardSound(View root)
 	{
-		this.mSoundView = (ImageTextButton) r.findViewById(R.id.nacSound);
+		this.mSoundView = (ImageTextButton) root.findViewById(R.id.nacSound);
 		this.mAlarm = null;
 
 		this.mSoundView.setOnClickListener(this);

@@ -60,7 +60,7 @@ public class NacUtility
 	}
 
 	/**
-	 * @brief Print the string to logcat using this class' name.
+	 * Print the string to logcat using this class' name.
 	 */
 	public static void print(String string)
 	{
@@ -68,10 +68,7 @@ public class NacUtility
 	}
 
 	/**
-	 * @brief Format a print statement to logcat.
-	 * 
-	 * @details Can easily print any objects as long as the format string is
-	 *			correct.
+	 * Format a print statement to logcat.
 	 */
 	public static void printf(String format, Object... args)
 	{
@@ -79,7 +76,7 @@ public class NacUtility
 	}
 
 	/**
-	 * @brief Print to logcat with default string formatting.
+	 * Print to logcat with default string formatting.
 	 */
 	public static void printf(String string)
 	{
@@ -87,48 +84,49 @@ public class NacUtility
 	}
 
 	/**
-	 * @brief Set background color of the view.
+	 * Set background color of the view.
 	 */
-	public static void setBackground(Context c, View v, int id)
+	public static void setBackground(View view, int id)
 	{
-		int bg = NacUtility.getThemeAttrColor(c, id);
+		Context context = view.getContext();
+		int bg = NacUtility.getThemeAttrColor(context, id);
 
-		v.setBackground(null);
-		v.setBackgroundColor(bg);
+		view.setBackground(null);
+		view.setBackgroundColor(bg);
 	}
 
 	/**
-	 * @brief Convert the id to a theme attribute color.
+	 * Convert the id to a theme attribute color.
 	 * 
 	 * @return A theme attribute color.
 	 */
-	public static int getThemeAttrColor(Context c, int id)
+	public static int getThemeAttrColor(Context context, int id)
 	{
 		TypedValue tv = new TypedValue();
-		Resources.Theme theme = c.getTheme();
+		Resources.Theme theme = context.getTheme();
 		boolean success = theme.resolveAttribute(id, tv, true);
 
 		return (tv.resourceId == 0)
 			? tv.data
-			: ContextCompat.getColor(c, tv.resourceId);
+			: ContextCompat.getColor(context, tv.resourceId);
 	}
 
 	/**
-	 * @brief Determine the height of the view.
+	 * Determine the height of the view.
 	 * 
 	 * @param  v  The view.
 	 * 
 	 * @return The height of the view.
 	 */
-	public static int getHeight(View v)
+	public static int getHeight(View view)
 	{
-		v.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+		view.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
 			MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
 
 		ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams)
-			v.getLayoutParams();
+			view.getLayoutParams();
 		int margins = lp.topMargin + lp.bottomMargin;
-		int height = v.getMeasuredHeight();
+		int height = view.getMeasuredHeight();
 
 		return height+margins;
 	}

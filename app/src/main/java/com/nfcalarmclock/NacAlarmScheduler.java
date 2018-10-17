@@ -10,20 +10,20 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- * @brief The alarm scheduler.
+ * The alarm scheduler.
  */
 public class NacAlarmScheduler
 {
 
 	/**
-	 * @brief Application context.
+	 * Application context.
 	 */
-	private Context mContext = null;
+	private Context mContext;
 
 	/**
-	 * @brief Alarm manager.
+	 * Alarm manager.
 	 */
-	private AlarmManager mAlarmManager = null;
+	private AlarmManager mAlarmManager;
 
 	/**
 	 */
@@ -35,13 +35,10 @@ public class NacAlarmScheduler
 	}
 
 	/**
-	 * @brief Update scheduler.
+	 * Update the scheduler.
 	 */
 	public void update(Alarm a)
 	{
-		NacUtility.print("Updating all scheduled alarms!");
-		a.print();
-
 		this.cancel(a);
 
 		if (a.getEnabled())
@@ -51,13 +48,10 @@ public class NacAlarmScheduler
 	}
 
 	/**
-	 * @brief Update scheduler.
+	 * Update the scheduler.
 	 */
 	public void update(Alarm a, Calendar c)
 	{
-		NacUtility.print("Updating a scheduled alarm!");
-		a.print();
-
 		this.cancel(a, c);
 
 		if (a.getEnabled())
@@ -67,7 +61,7 @@ public class NacAlarmScheduler
 	}
 
 	/**
-	 * @brief Add the alarm to the scheduler.
+	 * Add all alarms to the scheduler.
 	 */
 	public void add(Alarm a)
 	{
@@ -80,11 +74,10 @@ public class NacAlarmScheduler
 	}
 
 	/**
-	 * @brief Add the alarm to the scheduler.
+	 * Add the alarm to the scheduler.
 	 */
 	public void add(Alarm a, Calendar c)
 	{
-		NacUtility.printf("Scheduled alarm : %s", c.getTime().toString());	
 		int id = a.getId(c);
 		long millis = c.getTimeInMillis();
 		Intent operationintent = this.getOperationIntent(a);
@@ -101,7 +94,7 @@ public class NacAlarmScheduler
 	}
 
 	/**
-	 * @brief Cancel the matching alarm.
+	 * Cancel all matching alarms.
 	 */
 	public void cancel(Alarm a)
 	{
@@ -114,29 +107,28 @@ public class NacAlarmScheduler
 	}
 
 	/**
-	 * @brief Cancel the matching alarm.
+	 * Cancel the matching alarm.
 	 */
 	public void cancel(Alarm a, Calendar c)
 	{
 		int id = a.getId(c);
 		Intent intent = this.getOperationIntent();
-		PendingIntent pending = PendingIntent.getBroadcast(mContext, id,
+		PendingIntent pending = PendingIntent.getBroadcast(this.mContext, id,
 			intent, PendingIntent.FLAG_NO_CREATE);
 
 		if (this.contains(pending))
 		{
-			NacUtility.printf("CANCELLED ALARM : %s", c.getTime().toString());	
 			this.mAlarmManager.cancel(pending);
 		}
 	}
 
 	/**
-	 * @brief Check if scheduler contains a matching alarm.
+	 * Check if scheduler contains a matching alarm.
 	 */
 	public boolean contains(int id)
 	{
 		Intent intent = this.getOperationIntent();
-		PendingIntent pending = PendingIntent.getBroadcast(mContext, id,
+		PendingIntent pending = PendingIntent.getBroadcast(this.mContext, id,
 			intent, PendingIntent.FLAG_NO_CREATE);
 
 		return this.contains(pending);
