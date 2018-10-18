@@ -45,6 +45,11 @@ public class NacCardAdapter
 	private NacDatabase mDatabase;
 
 	/**
+	 * The alarm to restore, when prompted after deletion.
+	 */
+	private NacCardUndo mUndo;
+
+	/**
 	 * Handle card swipe events.
 	 */
 	private NacCardTouchHelper mTouchHelper;
@@ -60,51 +65,6 @@ public class NacCardAdapter
 	private boolean mWasAdded;
 
 	/**
-	 * The alarm to restore, when prompted after deletion.
-	 */
-	private Alarm mRestoreAlarm = null;
-
-	private Undo mUndo;
-
-	/**
-	 * The position of the alarm to restore, when prompted after deletion.
-	 */
-	private int mRestorePosition = -1;
-
-	public static class Undo
-	{
-		public enum Type
-		{
-			NONE,
-			COPY,
-			DELETE,
-			RESTORE
-		}
-
-		public Alarm alarm;
-		public int position;
-		public Type type;
-
-		public Undo()
-		{
-			this.reset();
-		}
-
-		public void reset()
-		{
-			this.set(null, -1, Type.NONE);
-		}
-
-		public void set(Alarm alarm, int position, Type type)
-		{
-			this.alarm = alarm;
-			this.position = position;
-			this.type = type;
-		}
-
-	}
-
-	/**
 	 */
 	public NacCardAdapter(Context context)
 	{
@@ -117,10 +77,10 @@ public class NacCardAdapter
 			R.id.content_alarm_list);
 		this.mScheduler = new NacAlarmScheduler(context);
 		this.mDatabase = new NacDatabase(context);
+		this.mUndo = new NacCardUndo();
 		this.mTouchHelper = new NacCardTouchHelper(callback);
 		this.mAlarmList = null;
 		this.mWasAdded = false;
-		this.mUndo = new Undo();
 	}
 
 	/**
@@ -159,15 +119,14 @@ public class NacCardAdapter
 	{
 		if (this.mDatabase.add(alarm) < 0)
 		{
-			Toast.makeText(this.mRootView.getContext(),
+			NacUtility.snackbar(this.mRootView,
 				"Error occurred when adding alarm to database.",
-				Toast.LENGTH_SHORT).show();
+				"DISMISS", null);
 			return;
 		}
 
 		// Using update instead of add for testing. Things should never get
 		// canceled in update, only added
-		//int index = this.mAlarmList.size();
 		this.mWasAdded = true;
 
 		this.mScheduler.update(alarm);
@@ -202,7 +161,7 @@ public class NacCardAdapter
 		this.mAlarmList.remove(pos);
 		this.notifyItemRemoved(pos);
 		this.notifyItemRangeChanged(pos, this.getLastVisible(pos));
-		this.undo(alarm, pos, Undo.Type.DELETE);
+		this.undo(alarm, pos, NacCardUndo.Type.DELETE);
 		NacUtility.snackbar(this.mRootView, "Deleted alarm.", "UNDO", this);
 	}
 
@@ -298,19 +257,19 @@ public class NacCardAdapter
 	{
 		Alarm alarm = this.mUndo.alarm;
 		int position = this.mUndo.position;
-		Undo.Type type = this.mUndo.type;
+		NacCardUndo.Type type = this.mUndo.type;
 
 		this.mUndo.reset();
 
-		if (type == Undo.Type.COPY)
+		if (type == NacCardUndo.Type.COPY)
 		{
 			this.delete(position);
 		}
-		else if (type == Undo.Type.DELETE)
+		else if (type == NacCardUndo.Type.DELETE)
 		{
 			this.restore(alarm, position);
 		}
-		else if (type == Undo.Type.RESTORE)
+		else if (type == NacCardUndo.Type.RESTORE)
 		{
 			this.delete(position);
 		}
@@ -357,7 +316,7 @@ public class NacCardAdapter
 		copy.setId(this.getUniqueId());
 		this.mTouchHelper.reset();
 		this.add(copy);
-		this.undo(copy, newpos, Undo.Type.COPY);
+		this.undo(copy, newpos, NacCardUndo.Type.COPY);
 		NacUtility.snackbar(this.mRootView, "Copied alarm.", "UNDO", this);
 	}
 
@@ -380,19 +339,15 @@ public class NacCardAdapter
 	 */
 	public void restore(Alarm alarm, int position)
 	{
-		//this.mWasAdded = true;
-
-		//this.mAlarmList.add(position, alarm);
-		//this.notifyItemInserted(position);
 		this.add(alarm, position);
-		this.undo(alarm, position, Undo.Type.RESTORE);
+		this.undo(alarm, position, NacCardUndo.Type.RESTORE);
 		NacUtility.snackbar(this.mRootView, "Restored alarm.", "UNDO", this);
 	}
 
 	/**
 	 * Save undo parameters.
 	 */
-	public void undo(Alarm alarm, int position, Undo.Type type)
+	public void undo(Alarm alarm, int position, NacCardUndo.Type type)
 	{
 		this.mUndo.set(alarm, position, type);
 	}

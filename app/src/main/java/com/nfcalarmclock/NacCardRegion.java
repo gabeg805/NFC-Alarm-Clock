@@ -62,7 +62,7 @@ public class NacCardRegion
 	{
 		this.measureFromHeight();
 		this.measureToHeight();
-		this.collapse();
+		this.collapseNoAnimation();
 	}
 
 	/**

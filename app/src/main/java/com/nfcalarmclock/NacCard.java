@@ -7,6 +7,8 @@ import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import android.os.Handler;
+
 /**
  * @brief Holder of all important views.
  */
@@ -33,10 +35,10 @@ public class NacCard
 	/**
 	 * Expand/collapse states.
 	 */
-	public static class State
+	public enum State
 	{
-		public static final byte EXPANDED = 1;
-		public static final byte COLLAPSED = 2;
+		EXPANDED,
+		COLLAPSED
 	}
 
 	/**
@@ -77,7 +79,7 @@ public class NacCard
 	/**
 	 * The expand/collapse state of the card.
 	 */
-	private byte mState;
+	private State mState;
 
     /**
      */
@@ -139,16 +141,31 @@ public class NacCard
 		}
 
 		Context context = this.mCardView.getContext();
-		int duration = 2200;
+		final int fadeInDuration = 1000;
+		final int fadeOutDuration = 1300;
 		int bg = NacUtility.getThemeAttrColor(context, R.attr.colorCard);
 		int highlight = NacUtility.getThemeAttrColor(context,
-			R.attr.colorCardExpanded);
-		ColorDrawable[] color = {new ColorDrawable(highlight),
-			new ColorDrawable(bg)};
+			R.attr.colorCardHighlight);
+		ColorDrawable[] color = {new ColorDrawable(bg),
+			new ColorDrawable(highlight)};
 		this.mTransition = new TransitionDrawable(color);
 
 		this.mCardView.setBackground(this.mTransition);
-		this.mTransition.startTransition(duration);
+		this.mTransition.startTransition(fadeInDuration);
+
+		new Handler().postDelayed(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if (mTransition == null)
+				{
+					return;
+				}
+
+				mTransition.reverseTransition(fadeOutDuration);
+			}
+		}, fadeInDuration);
 	}
 
 	/**
@@ -195,7 +212,7 @@ public class NacCard
 	/**
 	 * @see isCollapsed
 	 */
-	public boolean isCollapsed(byte state)
+	public boolean isCollapsed(State state)
 	{
 		return (state == State.COLLAPSED);
 	}
@@ -211,7 +228,7 @@ public class NacCard
 	/**
 	 * @see isExpanded
 	 */
-	public boolean isExpanded(byte state)
+	public boolean isExpanded(State state)
 	{
 		return (state == State.EXPANDED);
 	}
@@ -250,7 +267,7 @@ public class NacCard
 	/**
 	 * Set the background color.
 	 */
-	public void setBackgroundColor(byte state)
+	public void setBackgroundColor(State state)
 	{
 		if (this.isExpanded(state))
 		{
