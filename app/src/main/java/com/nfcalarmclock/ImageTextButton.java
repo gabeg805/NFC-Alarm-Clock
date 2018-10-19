@@ -268,4 +268,12 @@ public class ImageTextButton
         this.setText();
     }
 
+	/**
+	 * @return The layout TextView.
+	 */
+	public TextView getTextView()
+	{
+		return this.mTextView;
+	}
+
 }

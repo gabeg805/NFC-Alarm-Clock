@@ -1,6 +1,7 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -89,9 +90,39 @@ public class NacCardAdapter
 	public void add()
 	{
 		Context context = this.mRootView.getContext();
+		Resources res = context.getResources();
+		SharedPreferences shared =
+			PreferenceManager.getDefaultSharedPreferences(context);
 		boolean format = DateFormat.is24HourFormat(context);
 		int id = this.getUniqueId();
 		Alarm alarm = new Alarm(format, id);
+
+		String repeatkey = res.getString(R.string.pref_repeat_key);
+		String dayskey = res.getString(R.string.pref_days_key);
+		String vibratekey = res.getString(R.string.pref_vibrate_key);
+		String soundkey = res.getString(R.string.pref_sound_key);
+		String namekey = res.getString(R.string.pref_name_key);
+
+		boolean repeat = shared.getBoolean(repeatkey,
+			Alarm.getRepeatDefault());
+		int days = shared.getInt(dayskey, Alarm.getDaysDefault());
+		boolean vibrate = shared.getBoolean(vibratekey,
+			Alarm.getVibrateDefault());
+		String sound = shared.getString(soundkey, "");
+		String name = shared.getString(namekey, "");
+
+		NacUtility.printf("Repeat    : %b", repeat);
+		NacUtility.printf("Days      : %d", days);
+		NacUtility.printf("Vibrate   : %b", vibrate);
+		NacUtility.printf("SoundPath : %s", sound);
+		NacUtility.printf("Name      : %s", name);
+
+		alarm.setRepeat(repeat);
+		alarm.setDays(days);
+		alarm.setVibrate(vibrate);
+		//alarm.setSound(soundname);
+		alarm.setSound(sound);
+		alarm.setName(name);
 
 		this.add(alarm);
 	}
@@ -148,9 +179,26 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * Copy the alarm.
+	 *
+	 * @param  pos  The position of the alarm card to copy.
+	 */
+	public void copy(int pos)
+	{
+		Alarm alarm = this.mAlarmList.get(pos);
+		Alarm copy = alarm.copy();
+		int newpos = this.mAlarmList.size();
+
+		copy.setId(this.getUniqueId());
+		this.add(copy);
+		this.undo(copy, newpos, NacCardUndo.Type.COPY);
+		NacUtility.snackbar(this.mRootView, "Copied alarm.", "UNDO", this);
+	}
+
+	/**
 	 * Delete the alarm at the given position.
 	 *
-	 * @param  pos	The card position of the alarm to delete.
+	 * @param  pos	The position of the alarm card to delete.
 	 */
 	public void delete(int pos)
 	{
@@ -309,15 +357,8 @@ public class NacCardAdapter
 	@Override
 	public void onItemCopy(int pos)
 	{
-		Alarm alarm = this.mAlarmList.get(pos);
-		Alarm copy = alarm.copy();
-		int newpos = this.mAlarmList.size();
-
-		copy.setId(this.getUniqueId());
 		this.mTouchHelper.reset();
-		this.add(copy);
-		this.undo(copy, newpos, NacCardUndo.Type.COPY);
-		NacUtility.snackbar(this.mRootView, "Copied alarm.", "UNDO", this);
+		this.copy(pos);
 	}
 
 	/**
@@ -328,6 +369,7 @@ public class NacCardAdapter
 	@Override
 	public void onItemDelete(int pos)
 	{
+		// Should i reset the touch helper here?
 		this.delete(pos);
 	}
 

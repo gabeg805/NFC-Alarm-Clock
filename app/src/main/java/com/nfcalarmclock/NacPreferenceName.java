@@ -22,11 +22,6 @@ public class NacPreferenceName
 	protected String mValue;
 
 	/**
-	 * Default constant value for the object.
-	 */
-	protected static final String mDefault = "None";
-
-	/**
 	 */
 	public NacPreferenceName(Context context)
 	{
@@ -55,7 +50,7 @@ public class NacPreferenceName
 	@Override
 	public CharSequence getSummary()
 	{
-		return (this.mValue != null) ? this.mValue : this.mDefault;
+		return (this.mValue != null) ? this.mValue : Alarm.getNameDefault();
 	}
 
 	/**

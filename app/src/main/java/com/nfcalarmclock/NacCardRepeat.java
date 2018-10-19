@@ -8,70 +8,60 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 /**
- * @brief Container for all repeat views. Users are able to repeat the alarm on
- *		  the requested days.
- * 
- * @details The repeat views are:
- *				* The text displayed by default beneath the time.
- *				* The checkbox indicating whether or not the user wants to
- *				  repeat the alarm.
- *				* The alarm day buttons.
+ * Container for all repeat views. Users are able to repeat the alarm on the
+ * requested days.
  */
 public class NacCardRepeat
 	implements CompoundButton.OnCheckedChangeListener,NacDayOfWeek.OnClickListener
 {
 
 	/**
-	 * @brief Alarm.
+	 * Alarm.
 	 */
-	private Alarm mAlarm = null;
+	private Alarm mAlarm;
 
 	/**
-	 * @brief Text of days to repeat.
+	 * Text of days to repeat.
 	 */
 	private TextView mTextView = null;
 
 	/**
-	 * @brief Repeat checkbox.
+	 * Repeat checkbox.
 	 */
 	private CheckBox mCheckBox = null;
 
 	/**
-	 * @brief Buttons to select which days to repeat the alarm on.
+	 * Buttons to select which days to repeat the alarm on.
 	 */
 	private NacDayOfWeek mDayOfWeek = null;
 
 	/**
-	 * @brief Constructor.
 	 */
-	public NacCardRepeat(View r)
+	public NacCardRepeat(View root)
 	{
 		super();
 
-		this.mTextView = (TextView) r.findViewById(R.id.nacRepeatText);
-		this.mCheckBox = (CheckBox) r.findViewById(R.id.nacRepeatCheckbox);
-		this.mDayOfWeek = (NacDayOfWeek) r.findViewById(R.id.nacRepeatDays);
+		this.mTextView = (TextView) root.findViewById(R.id.nacRepeatText);
+		this.mCheckBox = (CheckBox) root.findViewById(R.id.nacRepeatCheckbox);
+		this.mDayOfWeek = (NacDayOfWeek) root.findViewById(R.id.nacRepeatDays);
 	}
 
 	/**
-	 * @brief Initialize the repeat text, checkbox, and day buttons.
+	 * Initialize the repeat text, checkbox, and day buttons.
 	 */
 	public void init(Alarm alarm)
 	{
 		this.mAlarm = alarm;
-		boolean state = this.mAlarm.getRepeat();
-		String days = this.mAlarm.getDaysString();
-		int data = this.mAlarm.getDays();
 
-		this.mTextView.setText(days);
-		this.mCheckBox.setChecked(state);
+		this.setRepeatText();
+		this.mCheckBox.setChecked(alarm.getRepeat());
+		this.mDayOfWeek.setDays(alarm.getDays());
 		this.mCheckBox.setOnCheckedChangeListener(this);
-		this.mDayOfWeek.setDays(alarm);
 		this.mDayOfWeek.setOnClickListener(this);
 	}
 
 	/**
-	 * @brief Save the repeat state of the alarm.
+	 * Save the repeat state of the alarm.
 	 */
 	@Override
 	public void onCheckedChanged(CompoundButton v, boolean state)
@@ -91,8 +81,23 @@ public class NacCardRepeat
 		byte day = this.mAlarm.getWeekDays().get(index);
 
 		this.mAlarm.toggleDay(day);
-		this.mTextView.setText(this.mAlarm.getDaysString());
+		this.setRepeatText();
 		this.mAlarm.changed();
+	}
+
+	/**
+	 * Set the repeat summary text.
+	 */
+	public void setRepeatText()
+	{
+		String string = this.mAlarm.getDaysString();
+
+		if (string.isEmpty())
+		{
+			string = Alarm.getDaysStringDefault();
+		}
+
+		this.mTextView.setText(string);
 	}
 
 }

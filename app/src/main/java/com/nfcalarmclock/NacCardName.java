@@ -13,6 +13,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import android.graphics.Typeface;
+
 /**
  * @brief The alarm name. Users can change the name upon clicking the view.
  */
@@ -48,9 +50,8 @@ public class NacCardName
 	public void init(Alarm alarm)
 	{
 		this.mAlarm = alarm;
-		String name = alarm.getName();
 
-		this.mName.setText(name);
+		this.setName();
 	}
 
 	/**
@@ -76,10 +77,38 @@ public class NacCardName
 		Object data = dialog.getData();
 		String name = (data != null) ? (String) data : "";
 
+		//this.mName.setText(name);
+		this.mAlarm.setName(name);
+		this.setName();
+		this.mAlarm.changed();
+	}
+
+	/**
+	 * Set the name of the alarm.
+	 */
+	public void setName()
+	{
+		TextView tv = this.mName.getTextView();
+		String name = this.mAlarm.getName();
+		float alpha = 1.0f;
+		int face = Typeface.NORMAL;
+
+		if (name.isEmpty())
+		{
+			NacUtility.printf("Opacity set to 0.5");
+			name = Alarm.getNameDefault();
+			alpha = 0.5f;
+			face = Typeface.ITALIC;
+		}
+		else
+		{
+			NacUtility.printf("Opacity set to 1.0");
+		}
+
 		NacUtility.printf("Name : %s", name);
 		this.mName.setText(name);
-		this.mAlarm.setName(name);
-		this.mAlarm.changed();
+		tv.setAlpha(alpha);
+		tv.setTypeface(Typeface.defaultFromStyle(face));
 	}
 
 }

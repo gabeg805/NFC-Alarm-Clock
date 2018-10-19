@@ -33,7 +33,7 @@ public class NacPreferenceRepeat
 	/**
 	 * Default constant value for the object.
 	 */
-	protected static final boolean mDefault = true;
+	protected static final boolean DEFAULT = true;
 
 	/**
 	 * Summary text when enabling/disabling the preference.
@@ -118,7 +118,7 @@ public class NacPreferenceRepeat
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		return (boolean) a.getBoolean(index, mDefault);
+		return (boolean) a.getBoolean(index, DEFAULT);
 	}
 
 	/**

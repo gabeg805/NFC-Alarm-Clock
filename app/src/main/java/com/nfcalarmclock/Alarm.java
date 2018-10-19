@@ -1,6 +1,10 @@
 package com.nfcalarmclock;
 
 import android.app.AlarmManager;
+import android.content.Context;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -127,6 +131,15 @@ public class Alarm
 	}
 
 	/**
+	 * Set the 24 hour format.
+	 */
+	public Alarm(boolean state)
+	{
+		this();
+		this.set24HourFormat(state);
+	}
+
+	/**
 	 * Set the id and 24 hour format.
 	 */
 	public Alarm(boolean state, int id)
@@ -136,12 +149,12 @@ public class Alarm
 	}
 
 	/**
-	 * Set the 24 hour format.
+	 * Set the days the alarm will run.
 	 */
-	public Alarm(boolean state)
+	public Alarm(int days)
 	{
 		this();
-		this.set24HourFormat(state);
+		this.setDays(days);
 	}
 
 	/**
@@ -334,7 +347,7 @@ public class Alarm
 	 */
 	public void setSound(String sound)
 	{
-		this.mSound = sound;
+		this.mSound = (sound != null) ? sound : "";
 	}
 
 	/**
@@ -342,7 +355,7 @@ public class Alarm
 	 */
 	public void setName(String name)
 	{
-		this.mName = name;
+		this.mName = (name != null) ? name : "";
 	}
 
 	/**
@@ -466,6 +479,14 @@ public class Alarm
 	}
 
 	/**
+	 * @return The default days on which to run the alarm.
+	 */
+	public static int getDaysDefault()
+	{
+		return 0;
+	}
+
+	/**
 	 * @return All the days of week.
 	 */
 	public List<Byte> getWeekDays()
@@ -542,13 +563,11 @@ public class Alarm
 	}
 
 	/**
-	 * Convert days to comma separated string.
-	 * 
 	 * @return Comma separated string of days to repeat alarm on.
 	 */
 	public String getDaysString()
 	{
-		String conv = "";
+		String string = "";
 		String[] names = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 		List<Byte> dow = this.getWeekDays();
 
@@ -556,16 +575,26 @@ public class Alarm
 		{
 			if (this.isDay(dow.get(i)))
 			{
-				if (!conv.isEmpty())
+				if (!string.isEmpty())
 				{
-					conv += ",";
+					string += ",";
 				}
 
-				conv += names[i];
+				string += names[i];
 			}
 		}
 
-		return (conv.isEmpty()) ? "None" : conv;
+		return string;
+		//return (string.isEmpty()) ? "Never" : conv;
+	}
+
+	/**
+	 * @return The default days string. This should be used if getDaysString
+	 *         is empty.
+	 */
+	public static String getDaysStringDefault()
+	{
+		return "Never";
 	}
 
 	/**
@@ -577,11 +606,27 @@ public class Alarm
 	}
 
 	/**
+	 * @return The default repeat state.
+	 */
+	public static boolean getRepeatDefault()
+	{
+		return true;
+	}
+
+	/**
 	 * @return Whether or not the phone should vibrate when the alarm is run.
 	 */
 	public boolean getVibrate()
 	{
 		return this.mVibrate;
+	}
+
+	/**
+	 * @return The default vibrate state.
+	 */
+	public static boolean getVibrateDefault()
+	{
+		return true;
 	}
 
 	/**
@@ -593,11 +638,58 @@ public class Alarm
 	}
 
 	/**
+	 * @return The default sound.
+	 */
+	public static String getSoundDefault()
+	{
+		return "";
+	}
+
+	/**
+	 * @return The sound name.
+	 */
+	public String getSoundName(Context context)
+	{
+		String path = this.getSound();
+
+		if (path.isEmpty())
+		{
+			NacUtility.printf("Path in alarm : %s", path);
+			return "";
+		}
+
+		Uri uri = Uri.parse(path);
+		Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
+		String name = ringtone.getTitle(context);
+
+		ringtone.stop();
+
+		NacUtility.printf("Path name in alarm : %s", name);
+		return name;
+	}
+
+	/**
+	 * @return The default sound name string.
+	 */
+	public static String getSoundNameDefault()
+	{
+		return "None";
+	}
+
+	/**
 	 * @return The name of the alarm.
 	 */
 	public String getName()
 	{
 		return this.mName;
+	}
+
+	/**
+	 * @return The default name of the alarm.
+	 */
+	public static String getNameDefault()
+	{
+		return "None";
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.preference.Preference;
 import android.util.AttributeSet;
@@ -33,24 +34,9 @@ public class NacPreferenceSound
 {
 
 	/**
-	 * Name of the sound.
-	 */
-	protected String mValueName;
-
-	/**
 	 * Path of the sound.
 	 */
-	protected String mValuePath;
-
-	/**
-	 * Default for the sound name.
-	 */
-	protected static final String mDefaultName = "None";
-
-	/**
-	 * Default for the sound path.
-	 */
-	protected static final String mDefaultPath = "";
+	protected String mValue;
 
 	/**
 	 */
@@ -73,10 +59,6 @@ public class NacPreferenceSound
 		super(context, attrs, style);
 		setLayoutResource(R.layout.pref_sound);
 		setOnPreferenceClickListener(this);
-
-		SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getContext());
-		this.mValueName = shared.getString("pref_sound_name", this.mDefaultName);
-		this.mValuePath = shared.getString("pref_sound_path", this.mDefaultPath);
 	}
 
 	/**
@@ -85,7 +67,15 @@ public class NacPreferenceSound
 	@Override
 	public CharSequence getSummary()
 	{
-		return this.mValueName;
+		Context context = getContext();
+		String path = this.mValue;
+		Alarm alarm = new Alarm();
+
+		alarm.setSound(path);
+
+		String name = alarm.getSoundName(context);
+
+		return (!name.isEmpty()) ? name : Alarm.getSoundNameDefault();
 	}
 
 	/**
@@ -95,7 +85,16 @@ public class NacPreferenceSound
 	protected void onBindView(View v)
 	{
 		super.onBindView(v);
-		this.setSummary(this.mValueName);
+		this.setSummary(this.getSummary());
+	}
+
+	/**
+	 * @return The default value.
+	 */
+	@Override
+	protected Object onGetDefaultValue(TypedArray a, int index)
+	{
+		return (String) a.getString(index);
 	}
 
 	/**
@@ -105,21 +104,18 @@ public class NacPreferenceSound
 	public void onItemClick(NacSound sound)
 	{
 		String path = sound.path;
-		String name = sound.name;
+		//String name = sound.name;
 
-		if (path.isEmpty() || name.isEmpty())
+		//if (path.isEmpty() || name.isEmpty())
+		if (path.isEmpty())
 		{
 			return;
 		}
 
-		this.mValueName = name;
-		this.mValuePath = path;
-		SharedPreferences.Editor editor = getEditor();
+		this.mValue = path;
 
-		this.setSummary(this.mValueName);
-		editor.putString("pref_sound_name", this.mValueName);
-		editor.putString("pref_sound_path", this.mValuePath);
-		editor.apply();
+		this.setSummary(this.getSummary());
+		persistString(this.mValue);
 	}
 
 	/**
@@ -138,5 +134,22 @@ public class NacPreferenceSound
 		return true;
 	}
 
-}
+	/**
+	 * Set the initial preference value.
+	 */
+	@Override
+	protected void onSetInitialValue(boolean restore, Object defval)
+	{
+		if (restore)
+		{
+			this.mValue = getPersistedString(this.mValue);
+		}
+		else
+		{
+			this.mValue = (String) defval;
 
+			persistString(this.mValue);
+		}
+	}
+
+}

@@ -39,7 +39,7 @@
 	<!-- Days preference -->
 	<string name="pref_days_key">pref_deys</string>
 	<string name="pref_days_title">Days</string>
-	<string name="pref_days_summary">None</string>
+	<string name="pref_days_summary">Never</string>
 
 	<!-- Vibrate preference -->
 	<string name="pref_vibrate_key">pref_vibrate</string>

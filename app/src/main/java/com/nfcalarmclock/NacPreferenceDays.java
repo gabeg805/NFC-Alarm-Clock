@@ -23,11 +23,6 @@ public class NacPreferenceDays
 	protected int mValue;
 
 	/**
-	 * Default value to input into a DayOfWeek object.
-	 */
-	protected static final int mDefault = 0;
-
-	/**
 	 */
 	public NacPreferenceDays(Context context)
 	{
@@ -56,11 +51,12 @@ public class NacPreferenceDays
 	@Override
 	public CharSequence getSummary()
 	{
-		Alarm alarm = new Alarm();
+		Alarm alarm = new Alarm(this.mValue);
+		String days = alarm.getDaysString();
 
-		alarm.setDays(this.mValue);
-
-		return alarm.getDaysString();
+		//alarm.setDays(this.mValue);
+		return (!days.isEmpty()) ? days : Alarm.getDaysStringDefault();
+		//return alarm.getDaysString();
 	}
 
 	/**
@@ -106,7 +102,7 @@ public class NacPreferenceDays
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		return (Integer) a.getInteger(index, this.mDefault);
+		return (Integer) a.getInteger(index, Alarm.getDaysDefault());
 	}
 
 	/**

@@ -2,12 +2,14 @@ package com.nfcalarmclock;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,21 +47,9 @@ public class NacCardSound
 	 */
 	public void init(Alarm alarm)
 	{
-		String path = alarm.getSound();
 		this.mAlarm = alarm;
 
-		if (path.isEmpty())
-		{
-			return;
-		}
-
-		Context context = this.mSoundView.getContext();
-		Uri uri = Uri.parse(path);
-		Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
-		String name = ringtone.getTitle(context);
-
-		ringtone.stop();
-		this.mSoundView.setText(name);
+		this.setSound();
 	}
 
 	/**
@@ -77,23 +67,56 @@ public class NacCardSound
 	}
 
 	/**
-	 * @brief Handle the sound item when it has been selected.
+	 * Handle the sound item when it has been selected.
 	 */
 	@Override
 	public void onItemClick(NacSound sound)
 	{
 		String path = sound.path;
-		String name = sound.name;
+		//String name = sound.name;
 
-		if (path.isEmpty() || name.isEmpty())
+		//if (path.isEmpty() || name.isEmpty())
+		//{
+		//	return;
+		//}
+
+		//this.mSoundView.setText(name);
+		this.mAlarm.setSound(path);
+		this.setSound();
+		this.mAlarm.changed();
+	}
+
+	/**
+	 * Set the sound.
+	 */
+	public void setSound()
+	{
+		TextView tv = this.mSoundView.getTextView();
+		String path = this.mAlarm.getSound();
+		String name = Alarm.getSoundNameDefault();
+		float alpha = 0.5f;
+		int face = Typeface.ITALIC;
+
+		NacUtility.printf("Parsing path : %s", path);
+
+		if (!path.isEmpty())
 		{
-			return;
+			Context context = this.mSoundView.getContext();
+			name = this.mAlarm.getSoundName(context);
+			alpha = 1.0f;
+			face = Typeface.NORMAL;
+			NacUtility.printf("Opacity set to 1.0");
+		}
+		else
+		{
+			NacUtility.printf("Opacity set to 0.5");
 		}
 
+		NacUtility.printf("Parsed name : %s", name);
 		NacUtility.printf("Sound : %s", path);
+		tv.setAlpha(alpha);
+		tv.setTypeface(Typeface.defaultFromStyle(face));
 		this.mSoundView.setText(name);
-		this.mAlarm.setSound(path);
-		this.mAlarm.changed();
 	}
 
 }
