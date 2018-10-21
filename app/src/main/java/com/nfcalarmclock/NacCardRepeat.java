@@ -3,7 +3,6 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -94,7 +93,7 @@ public class NacCardRepeat
 
 		if (string.isEmpty())
 		{
-			string = Alarm.getDaysStringDefault();
+			string = Alarm.getDaysStringMessage();
 		}
 
 		this.mTextView.setText(string);

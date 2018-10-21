@@ -1,83 +1,151 @@
 package com.nfcalarmclock;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.nfc.tech.IsoDep;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.view.animation.Animation;
-import android.view.animation.AlphaAnimation;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import java.util.Calendar;
 
+import android.view.LayoutInflater;
+import android.content.DialogInterface;
+import android.animation.ValueAnimator;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.view.animation.AlphaAnimation;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ImageView;
+
 /**
- * @brief Activity to dismiss/snooze the alarm.
+ * Activity to dismiss/snooze the alarm.
  */
 public class NacAlarmActivity
 	extends Activity
-	implements DialogInterface.OnClickListener,DialogInterface.OnShowListener,NfcAdapter.ReaderCallback
+	implements NfcAdapter.ReaderCallback,NacDialog.OnDismissedListener,NacDialog.OnCanceledListener
 {
 
-	private AlertDialog mDialog = null;
-	private NfcAdapter mNfcAdapter = null;
+	private NacAlarmDialog mDialog;
+	//private AlertDialog mDialog;
+	private NfcAdapter mNfcAdapter;
+	private NacMediaPlayer mPlayer;
+	private Alarm mAlarm;
 
+	/**
+	 * Initialize the activity.
+	 */
+	public void init()
+	{
+		this.scheduleNextAlarm();
+		this.vibrate();
+
+		this.mPlayer = new NacMediaPlayer(this);
+		this.mDialog = new NacAlarmDialog();
+
+		this.mPlayer.play(this.mAlarm.getSound(), false);
+		this.mDialog.build(this, R.layout.stuff);
+		this.mDialog.addCancelListener(this);
+		this.mDialog.addDismissListener(this);
+		this.mDialog.show();
+	}
+
+	/**
+	 * Create the activity.
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		//setContentView(R.layout.stuff);
+		NacUtility.printf("onCreate() in NacAlarmActivity");
 
-		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-		Context context = this.getApplicationContext();
-		Intent intent = this.getIntent();
+		Intent intent = getIntent();
 		Bundle bundle = (Bundle) intent.getBundleExtra("bundle");
 		NacAlarmParcel parcel = (NacAlarmParcel)
 			bundle.getParcelable("parcel");
-		Alarm alarm = parcel.toAlarm();
+		this.mAlarm = parcel.toAlarm();
+		this.mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
-		alarm.print();
+		if (mNfcAdapter == null)
+		{
+			Toast.makeText(this, "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
+			//finish();
+			//return;
+		}
+		else
+		{
+			if (!mNfcAdapter.isEnabled())
+			{
+				Toast.makeText(this, "NFC is not enabled..", Toast.LENGTH_LONG).show();
+				return;
+			}
+		}
 
-		//if (mNfcAdapter == null)
-		//{
-		//	// Stop here, we definitely need NFC
-		//	Toast.makeText(this, "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
-		//	finish();
-		//	return;
-
-		//}
-
-		//if (!mNfcAdapter.isEnabled())
-		//{
-		//	Toast.makeText(this, "NFC is not enabled..", Toast.LENGTH_LONG).show();
-		//	return;
-		//}
-
-		vibrate(context, alarm);
-		playRingtone(context, alarm);
-		scheduleNextAlarm(context, alarm);
-		showDialog();
+		init();
 	}
 
+	/**
+	 * Called when the dialog is canceled.
+	 */
+	@Override
+	public void onDialogCanceled(NacDialog dialog)
+	{
+		this.snooze();
+		finish();
+	}
+
+	/**
+	 * Called when the dialog is dismissed.
+	 */
+	@Override
+	public void onDialogDismissed(NacDialog dialog)
+	{
+		NacUtility.printf("Dialog dismissed.");
+		this.mPlayer.reset();
+		finish();
+	}
+
+	/**
+	 * Disable reader mode.
+	 *
+	 * @see onResume for more information on reader mode.
+	 */
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		NacUtility.print("onPause() in NacAlarmActivity");
+
+		if (this.mNfcAdapter != null)
+		{
+			this.mNfcAdapter.disableReaderMode(this);
+		}
+	}
+
+	/**
+	 * Enable reader mode, which means the NFC controller will only act as an
+	 * NFC tag reader/writer, thus disabling any peer-to-peer (Android Beam)
+	 * and card-emulation modes
+	 */
 	@Override
 	public void onResume()
 	{
-		NacUtility.print("RESUME has been on!");
 		super.onResume();
+		NacUtility.print("onResume() in NacAlarmActivity");
+
 
 		if (this.mNfcAdapter != null)
 		{
@@ -91,161 +159,101 @@ public class NacAlarmActivity
 		}
 	}
 
+	/**
+	 * Discover an NFC tag.
+	 */
 	@Override
-	public void onPause()
+	public void onTagDiscovered(Tag tag)
 	{
-		NacUtility.print("PAUSE has been on!");
-		super.onPause();
-
-		if (this.mNfcAdapter != null)
-		{
-			this.mNfcAdapter.disableReaderMode(this);
-		}
-	}
-
-	@Override
-	public void onTagDiscovered(Tag t)
-	{
+		Toast.makeText(this, "Tag has been discovered.", Toast.LENGTH_LONG).show();
 		NacUtility.print("Tag has been discovered!");
-		//IsoDep dep = IsoDep.get(tag)
+		this.mDialog.dismiss();
+		//IsoDep dep = IsoDep.get(tag);
 
-		//dep.connect()
+		//dep.connect();
 
-		////val response = dep.transceive(Utils.hexStringToByteArray(
-		////		"00A4040007A0000002471001"))
-		////runOnUiThread { textView.append("\nCard Response: "
-		////		+ Utils.toHex(response)) }
+		//byte[] response = dep.transceive(Utils.hexStringToByteArray("00A4040007A0000002471001"));
+		////runOnUiThread { textView.append("\nCard Response: "+ Utils.toHex(response)) }
+		//Toast.makeText(this, "Card Response: "+Utils.toHex(response), Toast.LENGTH_LONG).show();
 
-		//dep.close()
-	}
-
-	public void showDialog()
-	{
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		//LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-		//View v = inflater.inflate(R.layout.stuff, (ViewGroup)null);
-
-		//builder.setView(v);
-		builder.setView(R.layout.stuff);
-		builder.setTitle("Dismiss Alarm");
-		builder.setIcon(R.mipmap.ic_launcher);
-		builder.setPositiveButton("Snooze", this);
-		//builder.setCancelable(false);
-
-		this.mDialog = builder.create();
-
-		this.mDialog.setCancelable(false);
-		this.mDialog.setCanceledOnTouchOutside(false);
-		this.mDialog.setOnShowListener(this);
-		this.mDialog.show();
+		//dep.close();
 	}
 
 	/**
-	 * @brief Schedule the next alarm.
-	 *
-	 * @param  c  Application context.
-	 * @param  a  Alarm.
+	 * Schedule the next alarm.
 	 */
-	public void scheduleNextAlarm(Context c, Alarm a)
+	public void scheduleNextAlarm()
 	{
 		NacUtility.printf("scheduleNextAlarm()");
-		if (!a.getRepeat())
+		if (!this.mAlarm.getRepeat())
 		{
 			NacDatabase db = new NacDatabase(this);
 
-			a.toggleToday();
-			db.update(a);
+			this.mAlarm.toggleToday();
+			db.update(this.mAlarm);
 			NacUtility.printf("returning from scheduleNextAlarm()");
 			return;
 		}
 
-		NacAlarmScheduler scheduler = new NacAlarmScheduler(c);
+		NacAlarmScheduler scheduler = new NacAlarmScheduler(this);
 		Calendar next = Calendar.getInstance();
 
-		next.set(Calendar.HOUR_OF_DAY, a.getHour());
-		next.set(Calendar.MINUTE, a.getMinute());
+		next.set(Calendar.HOUR_OF_DAY, this.mAlarm.getHour());
+		next.set(Calendar.MINUTE, this.mAlarm.getMinute());
 		next.set(Calendar.SECOND, 0);
 		next.set(Calendar.MILLISECOND, 0);
 		next.add(Calendar.DAY_OF_MONTH, 7);
 
 		NacUtility.printf("Next alarm : %s", next.getTime().toString());	
-		scheduler.update(a, next);
+		scheduler.update(this.mAlarm, next);
 	}
 
 	/**
-	 * @brief Play the alarm ringtone.
-	 *
-	 * @param  c  Application context.
-	 * @param  i  Intent.
+	 * Snooze the alarm.
 	 */
-	public void playRingtone(Context c, Alarm a)
+	public void snooze()
 	{
-		String sound = a.getSound();
+		NacUtility.printf("Snoozing alarm");
+		this.mPlayer.reset();
 
-		if (sound.isEmpty())
+		NacAlarmScheduler scheduler = new NacAlarmScheduler(this);
+		Calendar snooze = Calendar.getInstance();
+
+		snooze.add(Calendar.MINUTE, 1);
+
+		this.mAlarm.setHour(snooze.get(Calendar.HOUR));
+		this.mAlarm.setMinute(snooze.get(Calendar.MINUTE));
+
+		NacUtility.printf("Next alarm : %s", snooze.getTime().toString());	
+		scheduler.update(this.mAlarm, snooze);
+	}
+
+	/**
+	 * Vibrate the phone.
+	 */
+	public void vibrate()
+	{
+		if (!this.mAlarm.getVibrate())
 		{
 			return;
 		}
 
-		// Change to looping once complete
-		Uri uri = Uri.parse(sound);
-		NacMediaPlayer player = new NacMediaPlayer(c);
-		player.play(uri, false);
-	}
-
-	/**
-	 * @brief Vibrate the phone.
-	 */
-	public void vibrate(Context c, Alarm a)
-	{
-		if (!a.getVibrate())
-		{
-			return;
-		}
-
-		Vibrator v = (Vibrator) c.getSystemService(Context.VIBRATOR_SERVICE);
+		Vibrator vibrator = (Vibrator) getSystemService(
+			Context.VIBRATOR_SERVICE);
 		long duration = 500;
 
-		if (v.hasVibrator())
+		if (vibrator.hasVibrator())
 		{
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 			{
-				v.vibrate(VibrationEffect.createOneShot(duration,
+				vibrator.vibrate(VibrationEffect.createOneShot(duration,
 					VibrationEffect.DEFAULT_AMPLITUDE));
 			}
 			else
 			{
-				v.vibrate(duration);
+				vibrator.vibrate(duration);
 			}
 		}
-	}
-
-	@Override
-	public void onShow(DialogInterface dialog)
-	{
-		ImageView icon = (ImageView) mDialog.findViewById(R.id.nac_nfc_icon);
-		AlphaAnimation animation = new AlphaAnimation(0.1f, 1f);
-		ViewGroup.LayoutParams params = icon.getLayoutParams();
-		int width = mDialog.getWindow().getDecorView().getWidth();
-		int height = mDialog.getWindow().getDecorView().getHeight();
-		int duration = 2000;
-		//params.width = width/3;
-		//params.height = height/3;
-
-		NacUtility.printf("Dialog WxH : %d x %d", width, height);
-		NacUtility.printf("Icon WxH   : %d x %d", params.width, params.height);
-
-		icon.setLayoutParams(params);
-		animation.setDuration(duration);
-		animation.setRepeatMode(ValueAnimator.REVERSE);
-		animation.setRepeatCount(ValueAnimator.INFINITE);
-		icon.startAnimation(animation);
-	}
-
-	@Override
-	public void onClick(DialogInterface dialog, int which)
-	{
-		NacAlarmActivity.this.finish();
 	}
 
 }

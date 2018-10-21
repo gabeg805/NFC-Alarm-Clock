@@ -594,7 +594,15 @@ public class Alarm
 	 */
 	public static String getDaysStringDefault()
 	{
-		return "Never";
+		return "None";
+	}
+
+	/**
+	 * @return The default message for the days string.
+	 */
+	public static String getDaysStringMessage()
+	{
+		return "No day selected";
 	}
 
 	/**
@@ -677,6 +685,14 @@ public class Alarm
 	}
 
 	/**
+	 * @return The default sound name message.
+	 */
+	public static String getSoundNameMessage()
+	{
+		return "Song or ringtone";
+	}
+
+	/**
 	 * @return The name of the alarm.
 	 */
 	public String getName()
@@ -690,6 +706,14 @@ public class Alarm
 	public static String getNameDefault()
 	{
 		return "None";
+	}
+
+	/**
+	 * @return The default name message.
+	 */
+	public static String getNameMessage()
+	{
+		return "Alarm name";
 	}
 
 	/**

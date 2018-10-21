@@ -5,38 +5,61 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 
 /**
- * @brief Wrapper for the MediaPlayer class.
+ * Wrapper for the MediaPlayer class.
  */
 public class NacMediaPlayer
 	implements MediaPlayer.OnCompletionListener
 {
 
 	/**
-	 * @brief Media player.
+	 * Application context.
 	 */
-	private MediaPlayer mPlayer = null;
+	private Context mContext;
 
 	/**
-	 * @brief Application context.
+	 * Media player.
 	 */
-	private Context mContext = null;
+	private MediaPlayer mPlayer;
 
 	/**
-	 * @brief User supplied OnCompletion listener.
+	 * User supplied OnCompletion listener.
 	 */
-	private MediaPlayer.OnCompletionListener mListener = null;
+	private MediaPlayer.OnCompletionListener mListener;
 
 	/**
-	 * @brief Set the context.
+	 * Set the context.
 	 */
-	public NacMediaPlayer(Context c)
+	public NacMediaPlayer(Context context)
 	{
-		this.mContext = c;
+		this.mContext = context;
+		this.mPlayer = null;
 		this.mListener = this;
 	}
 
 	/**
-	 * @brief Run the media player.
+	 * Run after media player has completed playing the sound.
+	 */
+	@Override
+	public void onCompletion(MediaPlayer mp)
+	{
+		this.reset();
+	}
+
+	/**
+	 * @see play
+	 */
+	public void play(String media)
+	{
+		if (media.isEmpty())
+		{
+			return;
+		}
+
+		this.play(media, true);
+	}
+
+	/**
+	 * @see play
 	 */
 	public void play(Uri uri)
 	{
@@ -44,7 +67,23 @@ public class NacMediaPlayer
 	}
 
 	/**
-	 * @brief Run the media player.
+	 * @see play
+	 */
+	public void play(String media, boolean loop)
+	{
+		if (media.isEmpty())
+		{
+			return;
+		}
+
+		this.play(Uri.parse(media), loop);
+	}
+
+	/**
+	 * Run the media player.
+	 *
+	 * @param  media  The media to play.
+	 * @param  loop  Whether or not to loop the song.
 	 */
 	public void play(Uri uri, boolean loop)
 	{
@@ -58,17 +97,7 @@ public class NacMediaPlayer
 	}
 
 	/**
-	 * @see run()
-	 */
-	public void play(String str)
-	{
-		Uri uri = Uri.parse(str);
-
-		this.play(uri);
-	}
-
-	/**
-	 * @brief Reset the media player.
+	 * Reset the media player.
 	 */
 	public void reset()
 	{
@@ -82,29 +111,12 @@ public class NacMediaPlayer
 	}
 
 	/**
-	 * @return The context.
-	 */
-	public Context getContext()
-	{
-		return this.mContext;
-	}
-
-	/**
-	 * @brief Set the OnCompletion callback.
+	 * Set the OnCompletion callback.
 	 */
 	public void setOnCompletionListener(MediaPlayer.OnCompletionListener
 		listener)
 	{
 		this.mListener = listener;
-	}
-
-	/**
-	 * @brief Run after media player has completed playing the sound.
-	 */
-	@Override
-	public void onCompletion(MediaPlayer mp)
-	{
-		this.reset();
 	}
 
 }

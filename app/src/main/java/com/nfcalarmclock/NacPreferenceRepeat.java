@@ -5,15 +5,13 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.preference.Preference;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;;
 
 /**
- * Repeat preference.
+ * Preference that indicates repeating the alarm.
  */
 public class NacPreferenceRepeat
 	extends Preference

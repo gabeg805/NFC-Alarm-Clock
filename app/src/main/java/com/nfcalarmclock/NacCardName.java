@@ -1,19 +1,7 @@
 package com.nfcalarmclock;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.text.InputType;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.TextView;
-
-import android.graphics.Typeface;
 
 /**
  * @brief The alarm name. Users can change the name upon clicking the view.
@@ -77,7 +65,6 @@ public class NacCardName
 		Object data = dialog.getData();
 		String name = (data != null) ? (String) data : "";
 
-		//this.mName.setText(name);
 		this.mAlarm.setName(name);
 		this.setName();
 		this.mAlarm.changed();
@@ -88,27 +75,18 @@ public class NacCardName
 	 */
 	public void setName()
 	{
-		TextView tv = this.mName.getTextView();
 		String name = this.mAlarm.getName();
-		float alpha = 1.0f;
-		int face = Typeface.NORMAL;
+		boolean focus = true;
 
 		if (name.isEmpty())
 		{
-			NacUtility.printf("Opacity set to 0.5");
-			name = Alarm.getNameDefault();
-			alpha = 0.5f;
-			face = Typeface.ITALIC;
-		}
-		else
-		{
-			NacUtility.printf("Opacity set to 1.0");
+			name = Alarm.getNameMessage();
+			focus = false;
 		}
 
 		NacUtility.printf("Name : %s", name);
 		this.mName.setText(name);
-		tv.setAlpha(alpha);
-		tv.setTypeface(Typeface.defaultFromStyle(face));
+		this.mName.setFocus(focus);
 	}
 
 }

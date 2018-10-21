@@ -34,8 +34,7 @@
 
 		<activity
 			android:name=".NacAlarmActivity"
-			android:label="@string/app_alert_name"
-			android:launchMode="singleInstance">
+			android:label="@string/app_alert_name">
 		</activity>
 
 		<activity

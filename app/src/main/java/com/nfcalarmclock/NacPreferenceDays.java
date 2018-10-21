@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.Preference;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 /**
- * Day of week preference.
+ * Preference that displays the day of week dialog.
  */
 public class NacPreferenceDays
 	extends Preference
@@ -54,9 +52,7 @@ public class NacPreferenceDays
 		Alarm alarm = new Alarm(this.mValue);
 		String days = alarm.getDaysString();
 
-		//alarm.setDays(this.mValue);
 		return (!days.isEmpty()) ? days : Alarm.getDaysStringDefault();
-		//return alarm.getDaysString();
 	}
 
 	/**

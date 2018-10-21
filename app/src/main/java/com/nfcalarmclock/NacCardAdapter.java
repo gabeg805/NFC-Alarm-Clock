@@ -13,12 +13,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.preference.PreferenceManager;
-import android.content.SharedPreferences;
-import android.support.design.widget.Snackbar;
-
 /**
- * @brief Alarm card adapter.
+ * Alarm card adapter.
  */
 public class NacCardAdapter
 	extends RecyclerView.Adapter<NacCardHolder>
@@ -90,40 +86,16 @@ public class NacCardAdapter
 	public void add()
 	{
 		Context context = this.mRootView.getContext();
-		Resources res = context.getResources();
-		SharedPreferences shared =
-			PreferenceManager.getDefaultSharedPreferences(context);
 		boolean format = DateFormat.is24HourFormat(context);
 		int id = this.getUniqueId();
 		Alarm alarm = new Alarm(format, id);
+		NacSharedPreferences shared = new NacSharedPreferences(context);
 
-		String repeatkey = res.getString(R.string.pref_repeat_key);
-		String dayskey = res.getString(R.string.pref_days_key);
-		String vibratekey = res.getString(R.string.pref_vibrate_key);
-		String soundkey = res.getString(R.string.pref_sound_key);
-		String namekey = res.getString(R.string.pref_name_key);
-
-		boolean repeat = shared.getBoolean(repeatkey,
-			Alarm.getRepeatDefault());
-		int days = shared.getInt(dayskey, Alarm.getDaysDefault());
-		boolean vibrate = shared.getBoolean(vibratekey,
-			Alarm.getVibrateDefault());
-		String sound = shared.getString(soundkey, "");
-		String name = shared.getString(namekey, "");
-
-		NacUtility.printf("Repeat    : %b", repeat);
-		NacUtility.printf("Days      : %d", days);
-		NacUtility.printf("Vibrate   : %b", vibrate);
-		NacUtility.printf("SoundPath : %s", sound);
-		NacUtility.printf("Name      : %s", name);
-
-		alarm.setRepeat(repeat);
-		alarm.setDays(days);
-		alarm.setVibrate(vibrate);
-		//alarm.setSound(soundname);
-		alarm.setSound(sound);
-		alarm.setName(name);
-
+		alarm.setRepeat(shared.repeat);
+		alarm.setDays(shared.days);
+		alarm.setVibrate(shared.vibrate);
+		alarm.setSound(shared.sound);
+		alarm.setName(shared.name);
 		this.add(alarm);
 	}
 

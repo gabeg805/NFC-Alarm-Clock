@@ -18,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import android.graphics.Typeface;
+
 /**
  * @class A button that consists of an image to the left, and text to the right
  *        of it.
@@ -274,6 +276,18 @@ public class ImageTextButton
 	public TextView getTextView()
 	{
 		return this.mTextView;
+	}
+
+	/**
+	 * Set the text focus
+	 *
+	 * @param  focus  When true, alpha will be 1.0, and when false, alpha will be 0.5.
+	 */
+	public void setFocus(boolean focus)
+	{
+		float alpha = (focus) ? 1.0f : 0.5f;
+
+		this.mTextView.setAlpha(alpha);
 	}
 
 }

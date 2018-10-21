@@ -1,32 +1,13 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.preference.Preference;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import android.text.TextUtils.TruncateAt;
-import android.util.DisplayMetrics;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.RelativeLayout;
-import android.widget.LinearLayout.LayoutParams;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-
-import android.support.v4.content.ContextCompat;
-import android.graphics.Color;
-import android.text.style.ForegroundColorSpan;
-import android.text.Spannable;
-import android.text.SpannableString;
 
 /**
+ * Preference that displays the sound prompt dialog.
  */
 public class NacPreferenceSound
 	extends Preference

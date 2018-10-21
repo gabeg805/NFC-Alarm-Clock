@@ -60,4 +60,5 @@
 	<!-- Menus -->
 	<string name="menu_next_alarm">Display next alarm</string>
 	<string name="menu_settings">Settings</string>
+
 </resources>

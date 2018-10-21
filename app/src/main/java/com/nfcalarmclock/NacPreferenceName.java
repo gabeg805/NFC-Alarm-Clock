@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.Preference;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 /**
- * Name preference.
+ * Preference that displays the name of the alarm.
  */
 public class NacPreferenceName
 	extends Preference
@@ -54,11 +52,7 @@ public class NacPreferenceName
 	}
 
 	/**
-	 * Bind the title and summary sections of the preference view, and leave
-	 * the rest to the user.
-	 *
-	 * Set the width of the title and summary to leave space for the other
-	 * view(s) the user may use.
+	 * Bind the summary section text of the preference.
 	 */
 	@Override
 	protected void onBindView(View v)
@@ -68,6 +62,8 @@ public class NacPreferenceName
 	}
 
 	/**
+	 * Persist the summary string and set the new summary when the dialog is
+	 * dismissed.
 	 */
 	@Override
 	public void onDialogDismissed(NacDialog dialog)
@@ -89,6 +85,7 @@ public class NacPreferenceName
 	}
 
 	/**
+	 * Display the dialog when the preference is clicked.
 	 */
 	@Override
 	public boolean onPreferenceClick(Preference pref)
