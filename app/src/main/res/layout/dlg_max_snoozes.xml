@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:paddingTop="10dp"
+    android:paddingBottom="-10dp">
+
+	<RadioGroup
+		android:id="@+id/radio_group"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="-5dp"
+		android:layout_gravity="center_vertical"
+		android:paddingStart="?dialogPreferredPadding"
+		android:paddingEnd="?dialogPreferredPadding"
+		android:orientation="vertical">
+
+		<RadioButton
+			android:id="@+id/radio_none"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="None"
+			/>
+
+		<RadioButton
+			android:id="@+id/radio1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="1"
+			/>
+
+		<RadioButton
+			android:id="@+id/radio2"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="2"
+			/>
+
+		<RadioButton
+			android:id="@+id/radio3"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="3"
+			/>
+
+		<RadioButton
+			android:id="@+id/radio4"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="4"
+			/>
+
+		<RadioButton
+			android:id="@+id/radio5"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="5"
+			/>
+
+		<RadioButton
+			android:id="@+id/radio_unlimited"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Unlimited"
+			/>
+
+	</RadioGroup>
+
+</LinearLayout>
+

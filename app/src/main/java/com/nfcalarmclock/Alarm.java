@@ -483,7 +483,7 @@ public class Alarm
 	 */
 	public static int getDaysDefault()
 	{
-		return 0;
+		return Days.MONDAY | Days.TUESDAY | Days.WEDNESDAY | Days.THURSDAY | Days.FRIDAY;
 	}
 
 	/**

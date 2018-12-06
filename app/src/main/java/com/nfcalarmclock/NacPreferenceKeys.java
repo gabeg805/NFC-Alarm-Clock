@@ -10,6 +10,21 @@ public class NacPreferenceKeys
 {
 
 	/**
+	 * Auto dismiss.
+	 */
+	public String autoDismiss;
+
+	/**
+	 * Max snoozes.
+	 */
+	public String maxSnoozes;
+
+	/**
+	 * Snooze duration.
+	 */
+	public String snoozeDuration;
+
+	/**
 	 * Repeat.
 	 */
 	public String repeat;
@@ -40,6 +55,9 @@ public class NacPreferenceKeys
 	{
 		Resources res = context.getResources();
 
+		this.autoDismiss = res.getString(R.string.pref_auto_dismiss_key);
+		this.maxSnoozes = res.getString(R.string.pref_max_snooze_key);
+		this.snoozeDuration = res.getString(R.string.pref_snooze_duration_key);
 		this.repeat = res.getString(R.string.pref_repeat_key);
 		this.days = res.getString(R.string.pref_days_key);
 		this.vibrate = res.getString(R.string.pref_vibrate_key);

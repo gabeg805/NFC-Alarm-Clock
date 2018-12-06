@@ -26,9 +26,25 @@
 	<string name="dlg_prompt_music">Browse music&#8230;</string>
 	<string name="dlg_name_hint">Alarm name</string>
 
+	<!-- General preference -->
+	<string name="pref_general_key">pref_general</string>
+	<string name="pref_general_title">General</string>
+
+	<!-- Auto dismiss duration -->
+	<string name="pref_auto_dismiss_key">pref_auto_dismiss</string>
+	<string name="pref_auto_dismiss_title">Auto-Dismiss</string>
+
+	<!-- Max number of snoozes -->
+	<string name="pref_max_snooze_key">pref_max_snooze</string>
+	<string name="pref_max_snooze_title">Max Snoozes</string>
+
+	<!-- Snooze duration-->
+	<string name="pref_snooze_duration_key">pref_snooze_duration</string>
+	<string name="pref_snooze_duration_title">Snooze Duration</string>
+
 	<!-- Defaults preference -->
 	<string name="pref_defaults_key">pref_defaults</string>
-	<string name="pref_defaults_title">Default Values for New Alarms</string>
+	<string name="pref_defaults_title">Default Alarm</string>
 
 	<!-- Repeat preferenece -->
 	<string name="pref_repeat_key">pref_repeat</string>

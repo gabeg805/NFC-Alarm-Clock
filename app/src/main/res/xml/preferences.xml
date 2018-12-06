@@ -3,11 +3,31 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<!--
-Auto-dismiss
-Max snoozes
-Volume level
--->
+	<PreferenceCategory
+		android:key="@string/pref_general_key"
+		android:title="@string/pref_general_title">
+
+		<com.nfcalarmclock.NacPreferenceAutoDismiss
+			android:key="@string/pref_auto_dismiss_key"
+			android:title="@string/pref_auto_dismiss_title"
+			android:defaultValue="15"
+			/>
+
+		<com.nfcalarmclock.NacPreferenceMaxSnooze
+			android:key="@string/pref_max_snooze_key"
+			android:title="@string/pref_max_snooze_title"
+			android:defaultValue="-1"
+			/>
+
+		<com.nfcalarmclock.NacPreferenceSnoozeDuration
+			android:key="@string/pref_snooze_duration_key"
+			android:title="@string/pref_snooze_duration_title"
+			android:defaultValue="5"
+			/>
+
+		<!-- Volume level -->
+
+	</PreferenceCategory>
 
 	<PreferenceCategory
 		android:key="@string/pref_defaults_key"
