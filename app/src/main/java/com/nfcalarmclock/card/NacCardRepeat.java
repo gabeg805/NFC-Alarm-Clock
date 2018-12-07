@@ -17,7 +17,7 @@ public class NacCardRepeat
 	/**
 	 * Alarm.
 	 */
-	private Alarm mAlarm;
+	private NacAlarm mAlarm;
 
 	/**
 	 * Text of days to repeat.
@@ -48,7 +48,7 @@ public class NacCardRepeat
 	/**
 	 * Initialize the repeat text, checkbox, and day buttons.
 	 */
-	public void init(Alarm alarm)
+	public void init(NacAlarm alarm)
 	{
 		this.mAlarm = alarm;
 
@@ -93,7 +93,7 @@ public class NacCardRepeat
 
 		if (string.isEmpty())
 		{
-			string = Alarm.getDaysStringMessage();
+			string = NacAlarm.getDaysStringMessage();
 		}
 
 		this.mTextView.setText(string);

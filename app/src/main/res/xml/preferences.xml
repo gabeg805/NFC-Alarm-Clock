@@ -46,6 +46,7 @@
 			android:key="@string/pref_days_key"
 			android:title="@string/pref_days_title"
 			android:summary="@string/pref_days_summary"
+			android:defaultValue="62"
 			/>
 
 		<com.nfcalarmclock.NacPreferenceVibrate

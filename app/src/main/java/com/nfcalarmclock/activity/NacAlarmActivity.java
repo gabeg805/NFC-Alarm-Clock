@@ -12,6 +12,7 @@ import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
@@ -38,63 +39,15 @@ import android.widget.ImageView;
  */
 public class NacAlarmActivity
 	extends Activity
-	implements NacDialog.OnDismissedListener,NacDialog.OnCanceledListener
+	implements NacDialog.OnDismissedListener,NacDialog.OnCanceledListener,NacDialog.OnShowListener
 {
 
 	private NacAlarmDialog mDialog;
 	private NfcAdapter mNfcAdapter;
 	private NacMediaPlayer mPlayer;
-	private Alarm mAlarm;
+	private NacAlarm mAlarm;
 	private NacSharedPreferences mShared;
 	private int mSnoozeCount;
-
-	/**
-	 * Setup the alarm.
-	 */
-	private void setupAlarm()
-	{
-		this.mShared = new NacSharedPreferences(this);
-
-		Intent intent = getIntent();
-		Bundle bundle = (Bundle) intent.getBundleExtra("bundle");
-		NacAlarmParcel parcel = (NacAlarmParcel)
-			bundle.getParcelable("parcel");
-		this.mAlarm = parcel.toAlarm();
-		this.mPlayer = new NacMediaPlayer(this);
-		this.mSnoozeCount = 0;
-
-		this.scheduleNextAlarm();
-		this.mPlayer.play(this.mAlarm.getSound(), false);
-		this.vibrate();
-	}
-
-	/**
-	 * Setup NFC discovery.
-	 */
-	private void setupNfc()
-	{
-		this.mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-
-		if (this.mNfcAdapter == null)
-		{
-			Toast.makeText(this, "This device doesn't support NFC.",
-				Toast.LENGTH_LONG).show();
-			//finish();
-		}
-	}
-
-	/**
-	 * Setup the dialog that will be displayed.
-	 */
-	public void setupDialog()
-	{
-		this.mDialog = new NacAlarmDialog();
-
-		this.mDialog.build(this, R.layout.stuff);
-		this.mDialog.addCancelListener(this);
-		this.mDialog.addDismissListener(this);
-		this.mDialog.show();
-	}
 
 	/**
 	 * Create the activity.
@@ -116,7 +69,11 @@ public class NacAlarmActivity
 	@Override
 	public void onDialogCanceled(NacDialog dialog)
 	{
-		this.snooze();
+		if (!this.snooze())
+		{
+			return;
+		}
+
 		finish();
 	}
 
@@ -131,6 +88,18 @@ public class NacAlarmActivity
 	}
 
 	/**
+	 * NFC tag discovered so dismiss the dialog.
+	 */
+	@Override
+	protected void onNewIntent(Intent intent)
+	{
+		Toast.makeText(this, "Alarm dismissed.", Toast.LENGTH_LONG)
+			.show();
+		this.mDialog.dismiss();
+		super.onNewIntent(intent);
+	}
+
+	/**
 	 * Disable tag discovery for the foreground app (this app).
 	 *
 	 * @see onResume for more information on reader mode.
@@ -142,8 +111,7 @@ public class NacAlarmActivity
 
 		if (this.mNfcAdapter == null)
 		{
-			return;
-			//finish();
+			finish();
 		}
 
 		this.mNfcAdapter.disableForegroundDispatch(this);
@@ -159,8 +127,7 @@ public class NacAlarmActivity
 
 		if (this.mNfcAdapter == null)
 		{
-			return;
-			//finish();
+			finish();
 		}
 
 		if (!this.mNfcAdapter.isEnabled())
@@ -179,15 +146,19 @@ public class NacAlarmActivity
 	}
 
 	/**
-	 * NFC tag discovered so dismiss the dialog.
+	 * Called when the dialog is shown.
 	 */
 	@Override
-	protected void onNewIntent(Intent intent)
+	public void onShowDialog(NacDialog dialog, View root)
 	{
-		Toast.makeText(this, "Alarm dismissed.", Toast.LENGTH_LONG)
-			.show();
-		this.mDialog.dismiss();
-		super.onNewIntent(intent);
+		new Handler().postDelayed(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				finish();
+			}
+		}, this.mShared.autoDismiss);
 	}
 
 	/**
@@ -218,33 +189,84 @@ public class NacAlarmActivity
 	}
 
 	/**
+	 * Setup the alarm.
+	 */
+	private void setupAlarm()
+	{
+		this.mShared = new NacSharedPreferences(this);
+
+		Intent intent = getIntent();
+		Bundle bundle = (Bundle) intent.getBundleExtra("bundle");
+		NacAlarmParcel parcel = (NacAlarmParcel)
+			bundle.getParcelable("parcel");
+		this.mAlarm = parcel.toAlarm();
+		this.mPlayer = new NacMediaPlayer(this);
+		//this.mSnoozeCount = 0;
+		this.mSnoozeCount = this.mShared.instance.getInt("snoozeCount", 0);
+		//c++;
+		//this.mShared.instance.edit().putInt("numRun", c).commit();
+
+		this.scheduleNextAlarm();
+		this.mPlayer.play(this.mAlarm.getSound(), false);
+		this.vibrate();
+	}
+
+	/**
+	 * Setup the dialog that will be displayed.
+	 */
+	public void setupDialog()
+	{
+		this.mDialog = new NacAlarmDialog();
+
+		this.mDialog.build(this, R.layout.stuff);
+		this.mDialog.addCancelListener(this);
+		this.mDialog.addDismissListener(this);
+		this.mDialog.show();
+	}
+
+	/**
+	 * Setup NFC discovery.
+	 */
+	private void setupNfc()
+	{
+		this.mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
+		if (this.mNfcAdapter == null)
+		{
+			Toast.makeText(this, "This device doesn't support NFC.",
+				Toast.LENGTH_LONG).show();
+			finish();
+		}
+	}
+
+	/**
 	 * Snooze the alarm.
 	 */
-	public void snooze()
+	public boolean snooze()
 	{
-		this.mSnoozeCount += 1;
-
-		if ((this.mShared.maxSnoozes >= 0) && (this.mSnoozeCount > this.mShared.maxSnoozes))
+		if ((this.mShared.maxSnoozes == 0) || (this.mSnoozeCount > this.mShared.maxSnoozes))
 		{
-			Toast.makeText(this, "Unable to snooze alarm", Toast.LENGTH_LONG)
+			Toast.makeText(this, "Unable to snooze the alarm.", Toast.LENGTH_LONG)
 				.show();
-			return;
+			return false;
 		}
-
-		Toast.makeText(this, "Alarm snoozed", Toast.LENGTH_LONG)
-			.show();
-		this.mPlayer.reset();
 
 		NacAlarmScheduler scheduler = new NacAlarmScheduler(this);
 		Calendar snooze = Calendar.getInstance();
+		this.mSnoozeCount += 1;
 
+		Toast.makeText(this, "Alarm snoozed.", Toast.LENGTH_LONG)
+			.show();
+		this.mPlayer.reset();
 		snooze.add(Calendar.MINUTE, this.mShared.snoozeDuration);
-
 		this.mAlarm.setHour(snooze.get(Calendar.HOUR));
 		this.mAlarm.setMinute(snooze.get(Calendar.MINUTE));
-
 		NacUtility.printf("Next alarm : %s", snooze.getTime().toString());	
 		scheduler.update(this.mAlarm, snooze);
+		this.mShared.instance.edit().putInt("snoozeCount", this.mSnoozeCount)
+			.apply();
+
+		return true;
 	}
 
 	/**

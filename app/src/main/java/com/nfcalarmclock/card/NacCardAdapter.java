@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class NacCardAdapter
 	extends RecyclerView.Adapter<NacCardHolder>
-	implements View.OnClickListener,Alarm.OnChangedListener,NacCardHolder.OnDeleteListener,NacCardTouchHelper.Adapter
+	implements View.OnClickListener,NacAlarm.OnChangedListener,NacCardHolder.OnDeleteListener,NacCardTouchHelper.Adapter
 {
 
 	/**
@@ -54,7 +54,7 @@ public class NacCardAdapter
 	/**
 	 * List of alarms.
 	 */
-	private List<Alarm> mAlarmList;
+	private List<NacAlarm> mAlarmList;
 
 	/**
 	 * Indicator that the alarm was added through the floating action button.
@@ -88,7 +88,7 @@ public class NacCardAdapter
 		Context context = this.mRootView.getContext();
 		boolean format = DateFormat.is24HourFormat(context);
 		int id = this.getUniqueId();
-		Alarm alarm = new Alarm(format, id);
+		NacAlarm alarm = new NacAlarm(format, id);
 		NacSharedPreferences shared = new NacSharedPreferences(context);
 
 		alarm.setRepeat(shared.repeat);
@@ -104,7 +104,7 @@ public class NacCardAdapter
 	 *
 	 * @param  alarm  The alarm to add.
 	 */
-	public void add(Alarm alarm)
+	public void add(NacAlarm alarm)
 	{
 		int index = this.mAlarmList.size();
 
@@ -118,7 +118,7 @@ public class NacCardAdapter
 	 * @param  alarm  The alarm to add.
 	 * @param  position  The position to add the alarm.
 	 */
-	public void add(Alarm alarm, int position)
+	public void add(NacAlarm alarm, int position)
 	{
 		if (this.mDatabase.add(alarm) < 0)
 		{
@@ -157,8 +157,8 @@ public class NacCardAdapter
 	 */
 	public void copy(int pos)
 	{
-		Alarm alarm = this.mAlarmList.get(pos);
-		Alarm copy = alarm.copy();
+		NacAlarm alarm = this.mAlarmList.get(pos);
+		NacAlarm copy = alarm.copy();
 		int newpos = this.mAlarmList.size();
 
 		copy.setId(this.getUniqueId());
@@ -174,7 +174,7 @@ public class NacCardAdapter
 	 */
 	public void delete(int pos)
 	{
-		Alarm alarm = this.mAlarmList.get(pos);
+		NacAlarm alarm = this.mAlarmList.get(pos);
 
 		this.mScheduler.cancel(alarm);
 		this.mDatabase.delete(alarm);
@@ -219,7 +219,7 @@ public class NacCardAdapter
 	{
 		List<Integer> used = new ArrayList<>();
 
-		for (Alarm a : this.mAlarmList)
+		for (NacAlarm a : this.mAlarmList)
 		{
 			used.add(a.getId());
 		}
@@ -244,7 +244,7 @@ public class NacCardAdapter
 	@Override
 	public void onBindViewHolder(final NacCardHolder card, int pos)
 	{
-		Alarm alarm = mAlarmList.get(pos);
+		NacAlarm alarm = mAlarmList.get(pos);
 
 		alarm.setOnChangedListener(this);
 		card.init(alarm, this.mWasAdded);
@@ -260,7 +260,7 @@ public class NacCardAdapter
 	 * @param  a  The alarm that was changed.
 	 */
 	@Override
-	public void onChanged(Alarm a)
+	public void onChanged(NacAlarm a)
 	{
 		this.mDatabase.update(a);
 		this.mScheduler.update(a);
@@ -275,7 +275,7 @@ public class NacCardAdapter
 	@Override
 	public void onClick(View v)
 	{
-		Alarm alarm = this.mUndo.alarm;
+		NacAlarm alarm = this.mUndo.alarm;
 		int position = this.mUndo.position;
 		NacCardUndo.Type type = this.mUndo.type;
 
@@ -351,7 +351,7 @@ public class NacCardAdapter
 	 * @param  alarm  The alarm to restore.
 	 * @param  position  The position to insert the alarm.
 	 */
-	public void restore(Alarm alarm, int position)
+	public void restore(NacAlarm alarm, int position)
 	{
 		this.add(alarm, position);
 		this.undo(alarm, position, NacCardUndo.Type.RESTORE);
@@ -361,7 +361,7 @@ public class NacCardAdapter
 	/**
 	 * Save undo parameters.
 	 */
-	public void undo(Alarm alarm, int position, NacCardUndo.Type type)
+	public void undo(NacAlarm alarm, int position, NacCardUndo.Type type)
 	{
 		this.mUndo.set(alarm, position, type);
 	}

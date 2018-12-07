@@ -8,17 +8,17 @@ import android.view.View;
 public class NacCardDelete
 {
 
-    /**
-     * Delete button.
-     */
-     private ImageTextButton mDelete;
+	/**
+	 * Delete button.
+	 */
+	 private NacImageTextButton mDelete;
 
-    /**
-     */
-    public NacCardDelete(View root)
-    {
-        this.mDelete = (ImageTextButton) root.findViewById(R.id.nacDelete);
-    }
+	/**
+	 */
+	public NacCardDelete(View root)
+	{
+		this.mDelete = (NacImageTextButton) root.findViewById(R.id.nacDelete);
+	}
 
 	/**
 	 * Set the click listener for the delete button.

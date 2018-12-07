@@ -34,7 +34,7 @@ public class NacCardTime
 	/**
 	 * Alarm.
 	 */
-	private Alarm mAlarm = null;
+	private NacAlarm mAlarm;
 
 	/**
 	 */
@@ -54,7 +54,7 @@ public class NacCardTime
 	/**
 	 * Initialize the time.
 	 */
-	public void init(Alarm alarm)
+	public void init(NacAlarm alarm)
 	{
 		this.mAlarm = alarm;
 

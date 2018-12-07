@@ -3,11 +3,10 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.RelativeLayout;
-
-import android.os.Handler;
 
 /**
  * @brief Holder of all important views.

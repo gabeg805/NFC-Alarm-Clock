@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * @brief Alarm.
+ * Alarm object.
  */
-public class Alarm
+public class NacAlarm
 {
 
 	/**
@@ -22,7 +22,7 @@ public class Alarm
 	 */
 	public interface OnChangedListener
 	{
-		public void onChanged(Alarm alarm);
+		public void onChanged(NacAlarm alarm);
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class Alarm
 	/**
 	 * Use the default set values for an alarm.
 	 */
-	public Alarm()
+	public NacAlarm()
 	{
 		Calendar cal = Calendar.getInstance();
 
@@ -133,7 +133,7 @@ public class Alarm
 	/**
 	 * Set the 24 hour format.
 	 */
-	public Alarm(boolean state)
+	public NacAlarm(boolean state)
 	{
 		this();
 		this.set24HourFormat(state);
@@ -142,7 +142,7 @@ public class Alarm
 	/**
 	 * Set the id and 24 hour format.
 	 */
-	public Alarm(boolean state, int id)
+	public NacAlarm(boolean state, int id)
 	{
 		this(state);
 		this.setId(id);
@@ -151,7 +151,7 @@ public class Alarm
 	/**
 	 * Set the days the alarm will run.
 	 */
-	public Alarm(int days)
+	public NacAlarm(int days)
 	{
 		this();
 		this.setDays(days);
@@ -160,7 +160,7 @@ public class Alarm
 	/**
 	 * Set the hour and minute to run the alarm at.
 	 */
-	public Alarm(int hour, int minute)
+	public NacAlarm(int hour, int minute)
 	{
 		this();
 		this.setHour(hour);
@@ -170,7 +170,7 @@ public class Alarm
 	/**
 	 * Set the time and date to run the alarm at.
 	 */
-	public Alarm(int hour, int minute, int days)
+	public NacAlarm(int hour, int minute, int days)
 	{
 		this(hour, minute);
 		this.setDays(days);
@@ -180,7 +180,7 @@ public class Alarm
 	/**
 	 * Set the name and the time to run the alarm at.
 	 */
-	public Alarm(String name, int hour, int minute)
+	public NacAlarm(String name, int hour, int minute)
 	{
 		this(hour, minute);
 		this.setName(name);
@@ -220,9 +220,9 @@ public class Alarm
 	 *
 	 * @return A copy of this alarm.
 	 */
-	public Alarm copy()
+	public NacAlarm copy()
 	{
-		Alarm copy = new Alarm();
+		NacAlarm copy = new NacAlarm();
 
 		copy.setId(this.getId());
 		copy.setEnabled(this.getEnabled());

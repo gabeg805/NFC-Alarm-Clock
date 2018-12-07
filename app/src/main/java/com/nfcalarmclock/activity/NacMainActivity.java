@@ -16,7 +16,7 @@ import android.support.design.widget.CoordinatorLayout;
 /**
  * The application's main activity.
  */
-public class MainActivity
+public class NacMainActivity
 	extends NacActivity
 	implements View.OnClickListener
 {
@@ -138,7 +138,7 @@ public class MainActivity
 	 */
 	private void startSettingsActivity()
 	{
-		Intent intent = new Intent(this, SettingsActivity.class);
+		Intent intent = new Intent(this, NacSettingsActivity.class);
 
 		startActivity(intent);
 	}

@@ -31,7 +31,7 @@
     <dimen name="mb_prompt">8dp</dimen>
     <dimen name="tsz_prompt">15sp</dimen>
 
-	<!-- ImageTextButton -->
+	<!-- NacImageTextButton -->
     <dimen name="isz_card">22dp</dimen>
 
 	<!-- Expand button -->

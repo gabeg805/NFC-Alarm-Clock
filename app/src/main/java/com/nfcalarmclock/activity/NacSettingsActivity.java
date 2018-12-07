@@ -10,7 +10,7 @@ import android.preference.PreferenceManager;
 /**
  * Display all the configurable settings for the app.
  */
-public class SettingsActivity
+public class NacSettingsActivity
 	extends NacActivity
 {
 

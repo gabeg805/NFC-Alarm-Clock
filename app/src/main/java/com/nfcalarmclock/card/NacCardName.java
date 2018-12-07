@@ -13,12 +13,12 @@ public class NacCardName
 	/**
 	 * Alarm.
 	 */
-	 private Alarm mAlarm;
+	 private NacAlarm mAlarm;
 
 	/**
 	 * Name view.
 	 */
-	 private ImageTextButton mName;
+	 private NacImageTextButton mName;
 
 	/**
 	 */
@@ -27,7 +27,7 @@ public class NacCardName
 		super();
 
 		this.mAlarm = null;
-		this.mName = (ImageTextButton) r.findViewById(R.id.nacName);
+		this.mName = (NacImageTextButton) r.findViewById(R.id.nacName);
 
 		this.mName.setOnClickListener(this);
 	}
@@ -35,7 +35,7 @@ public class NacCardName
 	/**
 	 * Initialize the name.
 	 */
-	public void init(Alarm alarm)
+	public void init(NacAlarm alarm)
 	{
 		this.mAlarm = alarm;
 
@@ -80,7 +80,7 @@ public class NacCardName
 
 		if (name.isEmpty())
 		{
-			name = Alarm.getNameMessage();
+			name = NacAlarm.getNameMessage();
 			focus = false;
 		}
 

@@ -35,7 +35,7 @@ public class NacDatabase
 	/**
 	 * Add to the database.
 	 */
-	public long add(Alarm alarm)
+	public long add(NacAlarm alarm)
 	{
 		this.setDatabase();
 
@@ -49,7 +49,7 @@ public class NacDatabase
 	/**
 	 * Delete a row from the database.
 	 */
-	public int delete(Alarm alarm)
+	public int delete(NacAlarm alarm)
 	{
 		this.setDatabase();
 
@@ -64,7 +64,7 @@ public class NacDatabase
 	/**
 	 * @return A ContentValues object based on the given alarm.
 	 */
-	private ContentValues getContentValues(Alarm alarm)
+	private ContentValues getContentValues(NacAlarm alarm)
 	{
 		ContentValues cv = new ContentValues();
 		int id = alarm.getId();
@@ -99,7 +99,7 @@ public class NacDatabase
 	 *
 	 * @return Where arguments for the where clause.
 	 */
-	private String[] getWhereArgs(Alarm alarm)
+	private String[] getWhereArgs(NacAlarm alarm)
 	{
 		String id = String.valueOf(alarm.getId());
 
@@ -148,9 +148,9 @@ public class NacDatabase
 	{
 		this.setDatabase();
 
-		List<Alarm> list = this.read();
+		List<NacAlarm> list = this.read();
 
-		for (Alarm a : list)
+		for (NacAlarm a : list)
 		{
 			a.print();
 			NacUtility.print("\n");
@@ -160,18 +160,18 @@ public class NacDatabase
 	/**
 	 * Read all alarms from the database.
 	 */
-	public List<Alarm> read()
+	public List<NacAlarm> read()
 	{
 		this.setDatabase();
 
 		String table = NacDatabaseContract.AlarmTable.TABLE_NAME;
 		Cursor cursor = this.mDatabase.query(table, null, null, null, null,
 			null, null);
-		List<Alarm> list = new ArrayList<>();
+		List<NacAlarm> list = new ArrayList<>();
 
 		while(cursor.moveToNext())
 		{
-			Alarm alarm = new Alarm();
+			NacAlarm alarm = new NacAlarm();
 			int id = cursor.getInt(1);
 			boolean enabled = (cursor.getInt(2) != 0);
 			boolean format = (cursor.getInt(3) != 0);
@@ -215,7 +215,7 @@ public class NacDatabase
 	/**
 	 * Update a row in the database.
 	 */
-	public int update(Alarm alarm)
+	public int update(NacAlarm alarm)
 	{
 		this.setDatabase();
 

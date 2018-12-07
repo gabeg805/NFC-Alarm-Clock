@@ -49,10 +49,10 @@ public class NacPreferenceDays
 	@Override
 	public CharSequence getSummary()
 	{
-		Alarm alarm = new Alarm(this.mValue);
+		NacAlarm alarm = new NacAlarm(this.mValue);
 		String days = alarm.getDaysString();
 
-		return (!days.isEmpty()) ? days : Alarm.getDaysStringDefault();
+		return (!days.isEmpty()) ? days : NacAlarm.getDaysStringDefault();
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class NacPreferenceDays
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		return (Integer) a.getInteger(index, Alarm.getDaysDefault());
+		return (Integer) a.getInteger(index, NacAlarm.getDaysDefault());
 	}
 
 	/**

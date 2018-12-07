@@ -12,8 +12,8 @@ import android.view.View;
  * Card view holder.
  */
 public class NacCardHolder
-    extends RecyclerView.ViewHolder
-    implements View.OnClickListener,NacCard.OnExpandListener
+	extends RecyclerView.ViewHolder
+	implements View.OnClickListener,NacCard.OnExpandListener
 {
 
 	/**
@@ -32,66 +32,66 @@ public class NacCardHolder
 	/**
 	 * The recycler view.
 	 */
-    public RecyclerView mRecyclerView;
+	public RecyclerView mRecyclerView;
 
 	/**
 	 * Alarm card view.
 	 */
-    public NacCard mCard;
+	public NacCard mCard;
 
 	/**
 	 * The on/off switch for the alarm.
 	 */
-    public NacCardSwitch mSwitch;
+	public NacCardSwitch mSwitch;
 
 	/**
 	 * The alarm time.
 	 */
-    public NacCardTime mTime;
+	public NacCardTime mTime;
 
 	/**
 	 * Repeat checkbox.
 	 */
-    public NacCardRepeat mRepeat;
+	public NacCardRepeat mRepeat;
 
 	/**
 	 * Sound selector.
 	 */
-    public NacCardSound mSound;
+	public NacCardSound mSound;
 
 	/**
 	 * Vibrate checkbox.
 	 */
-    public NacCardVibrate mVibrate;
+	public NacCardVibrate mVibrate;
 
 	/**
 	 * Alarm name.
 	 */
-    public NacCardName mName;
+	public NacCardName mName;
 
 	/**
 	 * Button to delete the alarm card.
 	 */
-    public NacCardDelete mDelete;
+	public NacCardDelete mDelete;
 
-    /**
-     */
-    public NacCardHolder(View root)
-    {
-        super(root);
+	/**
+	 */
+	public NacCardHolder(View root)
+	{
+		super(root);
 
 		Activity activity = (Activity) root.getContext();
 
 		this.mRecyclerView = (RecyclerView) activity.findViewById(
 			R.id.content_alarm_list);
 		this.mCard = new NacCard(root);
-        this.mTime = new NacCardTime(root);
-        this.mSwitch = new NacCardSwitch(root);
-        this.mRepeat = new NacCardRepeat(root);
-        this.mSound = new NacCardSound(root);
-        this.mVibrate = new NacCardVibrate(root);
-        this.mName = new NacCardName(root);
-        this.mDelete = new NacCardDelete(root);
+		this.mTime = new NacCardTime(root);
+		this.mSwitch = new NacCardSwitch(root);
+		this.mRepeat = new NacCardRepeat(root);
+		this.mSound = new NacCardSound(root);
+		this.mVibrate = new NacCardVibrate(root);
+		this.mName = new NacCardName(root);
+		this.mDelete = new NacCardDelete(root);
 	}
 
 	/**
@@ -115,25 +115,25 @@ public class NacCardHolder
 		return this.mRecyclerView.getHeight();
 	}
 
-    /**
-     * Initialize the alarm card.
+	/**
+	 * Initialize the alarm card.
 	 *
 	 * @param  alarm  The alarm to use to populate data in the alarm card.
 	 * @param  wasAdded  Indicator for whether or not the card should be
-	 * 					 focused.
-     */
-    public void init(Alarm alarm, boolean wasAdded)
-    {
+	 *					 focused.
+	 */
+	public void init(NacAlarm alarm, boolean wasAdded)
+	{
 		this.mCard.init(wasAdded);
-        this.mTime.init(alarm);
-        this.mSwitch.init(alarm);
-        this.mRepeat.init(alarm);
-        this.mSound.init(alarm);
-        this.mVibrate.init(alarm);
-        this.mName.init(alarm);
+		this.mTime.init(alarm);
+		this.mSwitch.init(alarm);
+		this.mRepeat.init(alarm);
+		this.mSound.init(alarm);
+		this.mVibrate.init(alarm);
+		this.mName.init(alarm);
 		this.mCard.setOnExpandListener(this);
 		this.mDelete.setOnClickListener(this);
-    }
+	}
 
 	/**
 	 * Check if the card is completely visible.

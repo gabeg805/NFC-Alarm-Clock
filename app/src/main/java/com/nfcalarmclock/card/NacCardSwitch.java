@@ -6,36 +6,36 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 
 /**
- * @brief Switch button that indicates whether the alarm is enabled or not.
+ * Switch button that indicates whether the alarm is enabled or not.
  */
 public class NacCardSwitch
 	implements CompoundButton.OnCheckedChangeListener
 {
 
 	/**
-	 * @brief Alarm.
+	 * Alarm.
 	 */
-	 private Alarm mAlarm = null;
+	 private NacAlarm mAlarm;
 
 	/**
-	 * @brief Switch.
+	 * On/off switch.
 	 */
-	 private Switch mSwitch = null;
+	 private Switch mSwitch;
 
 	/**
-	 * @brief Constructor.
 	 */
 	public NacCardSwitch(View r)
 	{
 		super();
 
+		this.mAlarm = null;
 		this.mSwitch = (Switch) r.findViewById(R.id.nacSwitch);
 	}
 
 	/**
-	 * @brief Initialize the Switch.
+	 * Initialize the Switch.
 	 */
-	public void init(Alarm alarm)
+	public void init(NacAlarm alarm)
 	{
 		this.mAlarm = alarm;
 		boolean state = this.mAlarm.getEnabled();
@@ -45,7 +45,7 @@ public class NacCardSwitch
 	}
 
 	/**
-	 * @brief Return the height of the view that is visible.
+	 * Return the height of the view that is visible.
 	 */
 	public int getHeight()
 	{
@@ -53,7 +53,7 @@ public class NacCardSwitch
 	}
 
 	/**
-	 * @brief Set the on/off state of the alarm.
+	 * Set the on/off state of the alarm.
 	 */
 	@Override
 	public void onCheckedChanged(CompoundButton v, boolean state)

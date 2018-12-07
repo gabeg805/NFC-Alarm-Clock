@@ -36,7 +36,7 @@ public class NacFloatingButton
      */
     public void init()
     {
-        this.mFloatingButton.setOnClickListener((MainActivity)this.mActivity);
+        this.mFloatingButton.setOnClickListener((NacMainActivity)this.mActivity);
     }
 
     /**

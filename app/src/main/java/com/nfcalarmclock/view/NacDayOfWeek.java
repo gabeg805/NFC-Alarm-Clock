@@ -17,8 +17,7 @@ import java.util.List;
 import android.util.TypedValue;
 
 /**
- * @class A button that consists of an image to the left, and text to the right
- *		  of it.
+ * A button that consists of an image to the left, and text to the right of it.
  */
 public class NacDayOfWeek
 	extends LinearLayout
@@ -169,7 +168,7 @@ public class NacDayOfWeek
 	 */
 	public void setDays(int days)
 	{
-		Alarm alarm = new Alarm();
+		NacAlarm alarm = new NacAlarm();
 		alarm.setDays(days);
 		this.setDays(alarm);
 	}
@@ -179,7 +178,7 @@ public class NacDayOfWeek
 	 *
 	 * @param  alarm  The alarm containing the days that will be enabled.
 	 */
-	public void setDays(Alarm alarm)
+	public void setDays(NacAlarm alarm)
 	{
 		for (int i=0; i < this.mLength; i++)
 		{
@@ -236,9 +235,9 @@ public class NacDayOfWeek
 	 */
 	public int getDays()
 	{
-		Alarm a = new Alarm();
+		NacAlarm a = new NacAlarm();
 		List<Byte> weekdays = a.getWeekDays();
-		int days = Alarm.Days.NONE;
+		int days = NacAlarm.Days.NONE;
 
 		for (int i=0; i < this.mLength; i++)
 		{

@@ -24,7 +24,7 @@ import android.graphics.Typeface;
  * @class A button that consists of an image to the left, and text to the right
  *        of it.
  */
-public class ImageTextButton
+public class NacImageTextButton
     extends LinearLayout
 {
 
@@ -43,11 +43,11 @@ public class ImageTextButton
     /**
      * @brief The constructor.
      */
-    public ImageTextButton(Context context, @Nullable AttributeSet attrs)
+    public NacImageTextButton(Context context, @Nullable AttributeSet attrs)
     {
         super(context, attrs);
         this.mContext = context;
-        int[] id = R.styleable.ImageTextButton;
+        int[] id = R.styleable.NacImageTextButton;
         int layout = R.layout.imagetextbutton;
         Theme theme = this.mContext.getTheme();
         TypedArray ta = theme.obtainStyledAttributes(attrs, id, 0, 0);
@@ -129,7 +129,7 @@ public class ImageTextButton
      */
     private void initImageDrawable(TypedArray ta)
     {
-        int did = R.styleable.ImageTextButton_nacDrawable;
+        int did = R.styleable.NacImageTextButton_nacDrawable;
         this.mImageDrawable = ta.getDrawable(did);
     }
 
@@ -140,8 +140,8 @@ public class ImageTextButton
      */
     private void initImageSize(TypedArray ta, Resources r)
     {
-        int wid = R.styleable.ImageTextButton_nacDrawableWidth;
-        int hid = R.styleable.ImageTextButton_nacDrawableHeight;
+        int wid = R.styleable.NacImageTextButton_nacDrawableWidth;
+        int hid = R.styleable.NacImageTextButton_nacDrawableHeight;
         float width = r.getDimension(R.dimen.isz_card);
         float height = r.getDimension(R.dimen.isz_card);
         this.mImageWidth = (int) ta.getDimension(wid, width);
@@ -155,7 +155,7 @@ public class ImageTextButton
      */
     private void initImageColor(TypedArray ta)
     {
-        int cid = R.styleable.ImageTextButton_nacDrawableColor;
+        int cid = R.styleable.NacImageTextButton_nacDrawableColor;
         int color = NacUtility.getThemeAttrColor(this.mContext,
                                                  R.attr.colorCardDrawable);
         this.mImageColor = ta.getColor(cid, color);
@@ -168,7 +168,7 @@ public class ImageTextButton
      */
     private void initImageSpacing(TypedArray ta, Resources r)
     {
-        int sid = R.styleable.ImageTextButton_nacDrawableTextSpacing;
+        int sid = R.styleable.NacImageTextButton_nacDrawableTextSpacing;
         float spacing = r.getDimension(R.dimen.sp_card);
         this.mImageSpacing = (int) ta.getDimension(sid, spacing);
     }
@@ -192,7 +192,7 @@ public class ImageTextButton
      */
     private void initTextString(TypedArray ta)
     {
-        int tid = R.styleable.ImageTextButton_nacText;
+        int tid = R.styleable.NacImageTextButton_nacText;
         this.mTextString = ta.getString(tid);
     }
 
@@ -203,7 +203,7 @@ public class ImageTextButton
      */
     private void initTextColor(TypedArray ta)
     {
-        int cid = R.styleable.ImageTextButton_nacTextColor;
+        int cid = R.styleable.NacImageTextButton_nacTextColor;
         int color = NacUtility.getThemeAttrColor(this.mContext,
                                                  R.attr.colorCardDrawable);
         this.mTextColor = ta.getColor(cid, color);
@@ -216,7 +216,7 @@ public class ImageTextButton
      */
     private void initTextSize(TypedArray ta, Resources r)
     {
-        int tsid = R.styleable.ImageTextButton_nacTextSize;
+        int tsid = R.styleable.NacImageTextButton_nacTextSize;
         int size = (int) r.getDimension(R.dimen.tsz_card);
         this.mTextSize = ta.getDimensionPixelSize(tsid, size);
     }

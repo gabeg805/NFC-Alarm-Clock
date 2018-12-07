@@ -3,64 +3,67 @@ package com.nfcalarmclock;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * Make the NacAlarm object serializable by using a parcel.
+ */
 public class NacAlarmParcel
 	implements Parcelable
 {
 
 	/**
-	 * @brief The alarm ID.
+	 * The alarm ID.
 	 */
 	private int mId;
 
 	/**
-	 * @brief Indicates whether the alarm is enabled or not.
+	 * Indicates whether the alarm is enabled or not.
 	 */
 	private boolean mEnabled;
 
 	/**
-	 * @brief Indicator if using a 24 hour format to display time or not.
+	 * Indicator if using a 24 hour format to display time or not.
 	 */
 	private boolean m24HourFormat;
 
 	/**
-	 * @brief The hour at which to run the alarm.
+	 * The hour at which to run the alarm.
 	 */
 	private int mHour;
 
 	/**
-	 * @brief The minute at which to run the alarm.
+	 * The minute at which to run the alarm.
 	 */
 	private int mMinute;
 
 	/**
-	 * @brief The days on which to run the alarm.
+	 * The days on which to run the alarm.
 	 */
 	private int mDays;
 
 	/**
-	 * @brief Indicates whether the alarm should be repeated or not.
+	 * Indicates whether the alarm should be repeated or not.
 	 */
 	private boolean mRepeat;
 
 	/**
-	 * @brief Indicates whether the phone should vibrate when the alarm is run.
+	 * Indicates whether the phone should vibrate when the alarm is run.
 	 */
 	private boolean mVibrate;
 
 	/**
-	 * @brief The sound to play when the alarm is run.
+	 * The sound to play when the alarm is run.
 	 */
 	private String mSound;
 
 	/**
-	 * @brief The name of the alarm.
+	 * The name of the alarm.
 	 */
 	private String mName;
 
 	/**
-	 * @brief Populate values with input alarm.
+	 * Populate values with input alarm.
 	 */
-	public NacAlarmParcel(Alarm a)
+	public NacAlarmParcel(NacAlarm a)
 	{
 		mId = a.getId();
 		mEnabled = a.getEnabled();
@@ -75,7 +78,7 @@ public class NacAlarmParcel
 	}
 
 	/**
-	 * @brief Populate values with input parcel.
+	 * Populate values with input parcel.
 	 */
 	public NacAlarmParcel(Parcel in)
 	{
@@ -94,9 +97,9 @@ public class NacAlarmParcel
 	/**
 	 * @return The equivalent alarm given the parcel values.
 	 */
-	public Alarm toAlarm()
+	public NacAlarm toAlarm()
 	{
-		Alarm a = new Alarm();
+		NacAlarm a = new NacAlarm();
 
 		a.setId(this.mId);
 		a.setEnabled(this.mEnabled);
@@ -113,7 +116,7 @@ public class NacAlarmParcel
 	}
 
 	/**
-	 * @brief Describe contents.
+	 * Describe contents.
 	 */
 	@Override
 	public int describeContents()
@@ -122,7 +125,7 @@ public class NacAlarmParcel
 	}
 
 	/**
-	 * @brief Write data into parcel.
+	 * Write data into parcel.
 	 */
 	@Override
 	public void writeToParcel(Parcel out, int flags)
@@ -140,7 +143,7 @@ public class NacAlarmParcel
 	}
 
 	/**
-	 * @brief Generate object.
+	 * Generate object.
 	 */
 	public static final Parcelable.Creator<NacAlarmParcel> CREATOR = new
 		Parcelable.Creator<NacAlarmParcel>()

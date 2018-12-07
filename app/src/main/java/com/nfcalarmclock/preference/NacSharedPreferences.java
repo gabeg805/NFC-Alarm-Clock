@@ -12,6 +12,11 @@ public class NacSharedPreferences
 {
 
 	/**
+	 * Shared preferences instance.
+	 */
+	public SharedPreferences instance;
+
+	/**
 	 * Auto dismiss.
 	 */
 	public int autoDismiss;
@@ -62,12 +67,13 @@ public class NacSharedPreferences
 		int dismissdef = 15;
 		int snoozesdef = -1;
 		int durationdef = 5;
-		boolean repeatdef = Alarm.getRepeatDefault();
-		int daysdef = Alarm.getDaysDefault();
-		boolean vibratedef = Alarm.getVibrateDefault();
+		boolean repeatdef = NacAlarm.getRepeatDefault();
+		int daysdef = NacAlarm.getDaysDefault();
+		boolean vibratedef = NacAlarm.getVibrateDefault();
 		String sounddef = "";
 		String namedef = "";
 
+		this.instance = shared;
 		this.autoDismiss = shared.getInt(keys.autoDismiss, dismissdef);
 		this.maxSnoozes = shared.getInt(keys.maxSnoozes, snoozesdef);
 		this.snoozeDuration = shared.getInt(keys.snoozeDuration, durationdef);

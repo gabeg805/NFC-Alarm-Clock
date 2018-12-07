@@ -50,13 +50,13 @@ public class NacPreferenceSound
 	{
 		Context context = getContext();
 		String path = this.mValue;
-		Alarm alarm = new Alarm();
+		NacAlarm alarm = new NacAlarm();
 
 		alarm.setSound(path);
 
 		String name = alarm.getSoundName(context);
 
-		return (!name.isEmpty()) ? name : Alarm.getSoundNameDefault();
+		return (!name.isEmpty()) ? name : NacAlarm.getSoundNameDefault();
 	}
 
 	/**

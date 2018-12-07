@@ -18,9 +18,9 @@ public class NacCardUndo
 	}
 
 	/**
-	 * Alarm information.
+	 * Alarm.
 	 */
-	public Alarm alarm;
+	public NacAlarm alarm;
 
 	/**
 	 * Position of the alarm card in the RecyclerView.
@@ -54,7 +54,7 @@ public class NacCardUndo
 	 * @param  position  Position of the alarm card.
 	 * @param  type  Type of undo.
 	 */
-	public void set(Alarm alarm, int position, Type type)
+	public void set(NacAlarm alarm, int position, Type type)
 	{
 		this.alarm = alarm;
 		this.position = position;

@@ -39,7 +39,7 @@
         android:layout_below="@id/nacRepeatDays"
         android:layout_marginBottom="@dimen/mb_card_item_spacing">
 
-        <com.nfcalarmclock.ImageTextButton
+        <com.nfcalarmclock.NacImageTextButton
             android:id="@+id/nacSound"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
 
     </RelativeLayout>
 
-    <com.nfcalarmclock.ImageTextButton
+    <com.nfcalarmclock.NacImageTextButton
         android:id="@+id/nacName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
         android:layout_below="@id/alarmExpandDivider"
         android:layout_marginTop="5dp">
 
-        <com.nfcalarmclock.ImageTextButton
+        <com.nfcalarmclock.NacImageTextButton
             android:id="@+id/nacDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

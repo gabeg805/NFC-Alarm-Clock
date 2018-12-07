@@ -14,18 +14,18 @@ public class NacCardSound
 	/**
 	 * Sound.
 	 */
-	 private ImageTextButton mSoundView;
+	 private NacImageTextButton mSoundView;
 
 	/**
 	 * Alarm.
 	 */
-	 private Alarm mAlarm;
+	 private NacAlarm mAlarm;
 
 	/**
 	 */
 	public NacCardSound(View root)
 	{
-		this.mSoundView = (ImageTextButton) root.findViewById(R.id.nacSound);
+		this.mSoundView = (NacImageTextButton) root.findViewById(R.id.nacSound);
 		this.mAlarm = null;
 
 		this.mSoundView.setOnClickListener(this);
@@ -34,7 +34,7 @@ public class NacCardSound
 	/**
 	 * Initialize the sound view.
 	 */
-	public void init(Alarm alarm)
+	public void init(NacAlarm alarm)
 	{
 		this.mAlarm = alarm;
 
@@ -74,7 +74,7 @@ public class NacCardSound
 	public void setSound()
 	{
 		String path = this.mAlarm.getSound();
-		String name = Alarm.getSoundNameMessage();
+		String name = NacAlarm.getSoundNameMessage();
 		boolean focus = false;
 
 		if (!path.isEmpty())

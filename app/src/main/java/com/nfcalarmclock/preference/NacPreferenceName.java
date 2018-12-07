@@ -48,7 +48,7 @@ public class NacPreferenceName
 	@Override
 	public CharSequence getSummary()
 	{
-		return (this.mValue != null) ? this.mValue : Alarm.getNameDefault();
+		return (this.mValue != null) ? this.mValue : NacAlarm.getNameDefault();
 	}
 
 	/**

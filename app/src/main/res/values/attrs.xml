@@ -55,7 +55,7 @@
         <attr name="nacSubText" format="reference|string" />
     <!-- </declare-styleable> -->
 
-    <declare-styleable name="ImageTextButton">
+    <declare-styleable name="NacImageTextButton">
         <attr name="nacDrawableWidth" />
         <attr name="nacDrawableHeight" />
         <attr name="nacDrawableColor" />

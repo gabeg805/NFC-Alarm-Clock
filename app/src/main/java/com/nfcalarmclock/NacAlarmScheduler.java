@@ -37,7 +37,7 @@ public class NacAlarmScheduler
 	/**
 	 * Update the scheduler.
 	 */
-	public void update(Alarm a)
+	public void update(NacAlarm a)
 	{
 		this.cancel(a);
 
@@ -50,7 +50,7 @@ public class NacAlarmScheduler
 	/**
 	 * Update the scheduler.
 	 */
-	public void update(Alarm a, Calendar c)
+	public void update(NacAlarm a, Calendar c)
 	{
 		this.cancel(a, c);
 
@@ -63,7 +63,7 @@ public class NacAlarmScheduler
 	/**
 	 * Add all alarms to the scheduler.
 	 */
-	public void add(Alarm a)
+	public void add(NacAlarm a)
 	{
 		List<Calendar> cals = a.getNextCalendars();
 
@@ -76,7 +76,7 @@ public class NacAlarmScheduler
 	/**
 	 * Add the alarm to the scheduler.
 	 */
-	public void add(Alarm a, Calendar c)
+	public void add(NacAlarm a, Calendar c)
 	{
 		int id = a.getId(c);
 		long millis = c.getTimeInMillis();
@@ -96,7 +96,7 @@ public class NacAlarmScheduler
 	/**
 	 * Cancel all matching alarms.
 	 */
-	public void cancel(Alarm a)
+	public void cancel(NacAlarm a)
 	{
 		List<Calendar> cals = a.getCalendars();
 
@@ -109,7 +109,7 @@ public class NacAlarmScheduler
 	/**
 	 * Cancel the matching alarm.
 	 */
-	public void cancel(Alarm a, Calendar c)
+	public void cancel(NacAlarm a, Calendar c)
 	{
 		int id = a.getId(c);
 		Intent intent = this.getOperationIntent();
@@ -161,7 +161,7 @@ public class NacAlarmScheduler
 	/**
 	 * @return The operation intent with the added alarm as a Parcel.
 	 */
-	public Intent getOperationIntent(Alarm a)
+	public Intent getOperationIntent(NacAlarm a)
 	{
 		Intent intent = this.getOperationIntent();
 		Bundle bundle = new Bundle();
@@ -178,7 +178,7 @@ public class NacAlarmScheduler
 	 */
 	public Intent getShowIntent()
 	{
-		return new Intent(this.mContext, MainActivity.class);
+		return new Intent(this.mContext, NacMainActivity.class);
 	}
 
 }

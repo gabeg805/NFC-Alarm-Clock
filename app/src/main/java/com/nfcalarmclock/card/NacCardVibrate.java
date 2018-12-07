@@ -6,22 +6,22 @@ import android.widget.CompoundButton;
 import android.widget.CheckBox;
 
 /**
- * @brief Checkbox to indicate whether the phone should vibrate when the alarm
- *		  is activated.
+ * Checkbox to indicate whether the phone should vibrate when the alarm is
+ * activated.
  */
 public class NacCardVibrate
 	implements CompoundButton.OnCheckedChangeListener
 {
 
 	/**
-	 * @brief Alarm.
+	 * Alarm.
 	 */
-	private Alarm mAlarm = null;
+	private NacAlarm mAlarm;
 
 	/**
-	 * @brief Vibrate checkbox.
+	 * Vibrate checkbox.
 	 */
-	private CheckBox mVibrate = null;
+	private CheckBox mVibrate;
 
 	/**
 	 * @param  r  The root view.
@@ -30,13 +30,14 @@ public class NacCardVibrate
 	{
 		super();
 
+		this.mAlarm = null;
 		this.mVibrate = (CheckBox) r.findViewById(R.id.nacVibrate);
 	}
 
 	/**
-	 * @brief Initialize the vibrate checkbox.
+	 * Initialize the vibrate checkbox.
 	 */
-	public void init(Alarm alarm)
+	public void init(NacAlarm alarm)
 	{
 		this.mAlarm = alarm;
 		boolean state = this.mAlarm.getVibrate();
@@ -46,7 +47,7 @@ public class NacCardVibrate
 	}
 
 	/**
-	 * @brief Save the vibrate state of the alarm.
+	 * Save the vibrate state of the alarm.
 	 */
 	@Override
 	public void onCheckedChanged(CompoundButton v, boolean state)
