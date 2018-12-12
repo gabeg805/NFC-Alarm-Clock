@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
-	xmlns:android="http://schemas.android.com/apk/res/android">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
 
 	<LinearLayout
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:orientation="vertical"
-		android:scrollbars="vertical"
 		android:paddingTop="?dialogPreferredPadding"
 		android:paddingStart="?dialogPreferredPadding"
-		android:paddingEnd="?dialogPreferredPadding">
+		android:paddingEnd="?dialogPreferredPadding"
+		android:orientation="vertical"
+		android:scrollbars="vertical">
 
-		<RadioGroup
-			android:id="@+id/radio_group"
+		<LinearLayout
+			android:id="@+id/group"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginStart="-5dp"
-			android:layout_gravity="center_vertical"
-			android:orientation="vertical">
-		</RadioGroup>
+			android:orientation="vertical"
+			/>
 
 	</LinearLayout>
 

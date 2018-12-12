@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class NacSoundPromptDialog
 	extends NacDialog
-	implements View.OnClickListener,NacDialog.OnDismissedListener
+	implements View.OnClickListener,NacDialog.OnDismissListener
 {
 
 	/**
@@ -48,25 +48,18 @@ public class NacSoundPromptDialog
 	public void onClick(View v)
 	{
 		Context context = v.getContext();
-		int layout = R.layout.dlg_sound_list;
-		double widthscale = 0;
-		double heightscale = 0.75;
-		boolean wrapwidth = false;
-		boolean wrapheight = true;
-		NacSoundDialog dialog = null;
 		int id = v.getId();
+		NacSoundDialog dialog = null;
 
 		if (id == R.id.dlg_ringtone)
 		{
 			dialog = new NacSoundRingtoneDialog();
-			widthscale = 0.8;
 		}
 		else if (id == R.id.dlg_music)
 		{
 			try
 			{
 				dialog = new NacSoundMusicDialog();
-				widthscale = 0.9;
 			}
 			catch (UnsupportedOperationException e)
 			{
@@ -79,20 +72,21 @@ public class NacSoundPromptDialog
 			return;
 		}
 
-		dialog.build(context, layout);
+		dialog.build(context);
 		dialog.setOnItemClickListener(this.mItemClickListener);
 		dialog.addDismissListener(this);
 		dialog.show();
-		dialog.scale(widthscale, heightscale, wrapwidth, wrapheight);
+		dialog.scale();
 	}
 
 	/**
 	 */
 	@Override
-	public void onDialogDismissed(NacDialog dialog)
+	public boolean onDismissDialog(NacDialog dialog)
 	{
-		NacUtility.printf("Dialog dismissed.");
 		this.dismiss();
+
+		return true;
 	}
 
 	/**

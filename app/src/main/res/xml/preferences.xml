@@ -10,19 +10,19 @@
 		<com.nfcalarmclock.NacPreferenceAutoDismiss
 			android:key="@string/pref_auto_dismiss_key"
 			android:title="@string/pref_auto_dismiss_title"
-			android:defaultValue="15"
+			android:defaultValue="4"
 			/>
 
 		<com.nfcalarmclock.NacPreferenceMaxSnooze
 			android:key="@string/pref_max_snooze_key"
 			android:title="@string/pref_max_snooze_title"
-			android:defaultValue="-1"
+			android:defaultValue="11"
 			/>
 
 		<com.nfcalarmclock.NacPreferenceSnoozeDuration
 			android:key="@string/pref_snooze_duration_key"
 			android:title="@string/pref_snooze_duration_title"
-			android:defaultValue="5"
+			android:defaultValue="1"
 			/>
 
 		<!-- Volume level -->

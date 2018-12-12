@@ -30,27 +30,27 @@ public class NacDialog
 	}
 
 	/**
-	 * Canceled listener.
+	 * Cancel listener.
 	 */
-	public interface OnCanceledListener
+	public interface OnCancelListener
 	{
-		public void onDialogCanceled(NacDialog dialog);
+		public boolean onCancelDialog(NacDialog dialog);
 	}
 
 	/**
-	 * Dismissed listener.
+	 * Dismiss listener.
 	 */
-	public interface OnDismissedListener
+	public interface OnDismissListener
 	{
-		public void onDialogDismissed(NacDialog dialog);
+		public boolean onDismissDialog(NacDialog dialog);
 	}
 
 	/**
 	 * Hide listener.
 	 */
-	public interface OnHiddenListener
+	public interface OnHideListener
 	{
-		public void onDialogHidden(NacDialog dialog);
+		public boolean onHideDialog(NacDialog dialog);
 	}
 
 	/**
@@ -85,9 +85,9 @@ public class NacDialog
 	 * The dialog listeners.
 	 */
 	private OnBuildListener mBuildListener;
-	private List<OnCanceledListener> mCanceledListener;
-	private List<OnDismissedListener> mDismissedListener;
-	private List<OnHiddenListener> mHiddenListener;
+	private List<OnCancelListener> mCanceledListener;
+	private List<OnDismissListener> mDismissedListener;
+	private List<OnHideListener> mHiddenListener;
 	private OnShowListener mShowListener;
 
 	/**
@@ -109,7 +109,7 @@ public class NacDialog
 	 * Add a cancel listener. More than one can be added, and they will be
 	 * run in the order that they are added.
 	 */
-	public void addCancelListener(OnCanceledListener listener)
+	public void addCancelListener(OnCancelListener listener)
 	{
 		this.mCanceledListener.add(listener);
 	}
@@ -118,7 +118,7 @@ public class NacDialog
 	 * Add a dismiss listener. More than one can be added, and they will be
 	 * run in the order that they are added.
 	 */
-	public void addDismissListener(OnDismissedListener listener)
+	public void addDismissListener(OnDismissListener listener)
 	{
 		this.mDismissedListener.add(listener);
 	}
@@ -127,7 +127,7 @@ public class NacDialog
 	 * Add a hidden listener. More than one can be added, and they will be
 	 * run in the order that they are added.
 	 */
-	public void addHiddenListener(OnHiddenListener listener)
+	public void addHiddenListener(OnHideListener listener)
 	{
 		this.mHiddenListener.add(listener);
 	}
@@ -166,7 +166,7 @@ public class NacDialog
 	}
 
 	/**
-	 * Cancel the dialog and call the onDialogCanceled listener.
+	 * Cancel the dialog and call the onCancelDialog listener.
 	 */
 	public void cancel()
 	{
@@ -175,16 +175,19 @@ public class NacDialog
 			return;
 		}
 
-		for (OnCanceledListener listener : this.mCanceledListener)
+		for (OnCancelListener listener : this.mCanceledListener)
 		{
-			listener.onDialogCanceled(this);
+			if (!listener.onCancelDialog(this))
+			{
+				return;
+			}
 		}
 
 		this.mDialog.cancel();
 	}
 
 	/**
-	 * Dismiss the dialog and call the onDialogDismissed listener.
+	 * Dismiss the dialog and call the onDismissDialog listener.
 	 */
 	public void dismiss()
 	{
@@ -193,9 +196,12 @@ public class NacDialog
 			return;
 		}
 
-		for (OnDismissedListener listener : this.mDismissedListener)
+		for (OnDismissListener listener : this.mDismissedListener)
 		{
-			listener.onDialogDismissed(this);
+			if (!listener.onDismissDialog(this))
+			{
+				return;
+			}
 		}
 
 		this.mDialog.dismiss();
@@ -218,7 +224,7 @@ public class NacDialog
 	}
 
 	/**
-	 * Hide the dialog and call the onDialogHidden listener.
+	 * Hide the dialog and call the onHideDialog listener.
 	 */
 	public void hide()
 	{
@@ -227,9 +233,12 @@ public class NacDialog
 			return;
 		}
 
-		for (OnHiddenListener listener : this.mHiddenListener)
+		for (OnHideListener listener : this.mHiddenListener)
 		{
-			listener.onDialogHidden(this);
+			if (!listener.onHideDialog(this))
+			{
+				return;
+			}
 		}
 
 		this.mDialog.hide();
@@ -369,7 +378,7 @@ public class NacDialog
 	}
 
 	/**
-	 * Set the negative button which will call onDialogCanceled when clicked.
+	 * Set the negative button which will call onCancelDialog when clicked.
 	 */
 	public void setNegativeButton(String title)
 	{
@@ -398,7 +407,7 @@ public class NacDialog
 	}
 
 	/**
-	 * Set the positive button which will call onDialogDismissed when clicked.
+	 * Set the positive button which will call onDismissDialog when clicked.
 	 */
 	public void setPositiveButton(String title)
 	{

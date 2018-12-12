@@ -18,14 +18,15 @@ public class NacSound
 
 	/**
 	 */
-	public NacSound(String n, String d)
+	public NacSound(String p, String n)
 	{
-		this(n, d, "");
+		this.path = p;
+		this.name = n;
 	}
 
 	/**
 	 */
-	public NacSound(String n, String d, String r)
+	public NacSound(String d, String n, String r)
 	{
 		this.path = d+"/"+n;
 		this.name = n;

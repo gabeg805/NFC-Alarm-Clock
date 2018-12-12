@@ -11,7 +11,7 @@ import android.view.View;
  */
 public class NacPreferenceName
 	extends Preference
-	implements Preference.OnPreferenceClickListener,NacDialog.OnDismissedListener
+	implements Preference.OnPreferenceClickListener,NacDialog.OnDismissListener
 {
 
 	/**
@@ -66,13 +66,15 @@ public class NacPreferenceName
 	 * dismissed.
 	 */
 	@Override
-	public void onDialogDismissed(NacDialog dialog)
+	public boolean onDismissDialog(NacDialog dialog)
 	{
 		Object data = dialog.getData();
 		this.mValue = (data != null) ? (String) data : "";
 
 		this.setSummary(this.getSummary());
 		persistString(this.mValue);
+
+		return true;
 	}
 
 	/**

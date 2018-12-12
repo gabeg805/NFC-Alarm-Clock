@@ -40,4 +40,11 @@
 	<!-- DayOfWeekButton -->
     <dimen name="circle_size">30dp</dimen>
 
+	<!-- Number picker -->>
+	<dimen name="m_scroll_option">30dp</dimen>
+
+	<!-- Music dialog -->
+	<dimen name="sp_dlg_music">15dp</dimen>
+	<dimen name="isz_dlg_music">30dp</dimen>
+
 </resources>

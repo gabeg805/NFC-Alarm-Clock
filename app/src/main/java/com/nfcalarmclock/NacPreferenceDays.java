@@ -6,15 +6,13 @@ import android.content.res.TypedArray;
 import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 /**
- * Preference that displays how long to wait before auto dismissing the alarm.
+ * Preference that displays the day of week dialog.
  */
-public class NacPreferenceAutoDismiss
+public class NacPreferenceDays
 	extends Preference
-	implements Preference.OnPreferenceClickListener,NacDialog.OnDismissedListener,NacDialog.OnBuildListener,NacDialog.OnShowListener
+	implements Preference.OnPreferenceClickListener,NacDialog.OnDismissListener,NacDialog.OnBuildListener,NacDialog.OnShowListener
 {
 
 	/**
@@ -24,21 +22,21 @@ public class NacPreferenceAutoDismiss
 
 	/**
 	 */
-	public NacPreferenceAutoDismiss(Context context)
+	public NacPreferenceDays(Context context)
 	{
 		this(context, null);
 	}
 
 	/**
 	 */
-	public NacPreferenceAutoDismiss(Context context, AttributeSet attrs)
+	public NacPreferenceDays(Context context, AttributeSet attrs)
 	{
 		this(context, attrs, 0);
 	}
 
 	/**
 	 */
-	public NacPreferenceAutoDismiss(Context context, AttributeSet attrs, int style)
+	public NacPreferenceDays(Context context, AttributeSet attrs, int style)
 	{
 		super(context, attrs, style);
 		setLayoutResource(R.layout.pref_days);
@@ -51,14 +49,10 @@ public class NacPreferenceAutoDismiss
 	@Override
 	public CharSequence getSummary()
 	{
-		if (this.mValue == 0)
-		{
-			return "Off";
-		}
-		else
-		{
-			return String.valueOf(this.mValue) + ((this.mValue == 1) ? " minute" : " minutes");
-		}
+		NacAlarm alarm = new NacAlarm(this.mValue);
+		String days = alarm.getDaysString();
+
+		return (!days.isEmpty()) ? days : NacAlarm.getDaysStringDefault();
 	}
 
 	/**
@@ -77,7 +71,7 @@ public class NacPreferenceAutoDismiss
 	@Override
 	public void onBuildDialog(NacDialog dialog, AlertDialog.Builder builder)
 	{
-		String title = "Auto-Dismiss";
+		String title = "Select Days";
 
 		builder.setTitle(title);
 		dialog.setPositiveButton("OK");
@@ -88,25 +82,16 @@ public class NacPreferenceAutoDismiss
 	 * Save the selected days when the dialog is dismissed.
 	 */
 	@Override
-	public void onDialogDismissed(NacDialog dialog)
+	public boolean onDismissDialog(NacDialog dialog)
 	{
 		View root = dialog.getRootView();
-		int[] ids = {R.id.radio_off, R.id.radio_5min, R.id.radio_10min, R.id.radio_15min, R.id.radio_20min, R.id.radio_25min, R.id.radio_30min};
-		RadioButton button;
-
-		for (int i=0; i < ids.length; i++)
-		{
-			button = root.findViewById(ids[i]);
-
-			if (button.isChecked())
-			{
-				this.mValue = i*5;
-				break;
-			}
-		}
+		NacDayOfWeek dow = root.findViewById(R.id.days);
+		this.mValue = dow.getDays();
 
 		this.setSummary(this.getSummary());
 		persistInt(this.mValue);
+
+		return true;
 	}
 
 	/**
@@ -115,7 +100,7 @@ public class NacPreferenceAutoDismiss
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		return (Integer) a.getInteger(index, 15);
+		return (Integer) a.getInteger(index, NacAlarm.getDaysDefault());
 	}
 
 	/**
@@ -129,7 +114,7 @@ public class NacPreferenceAutoDismiss
 
 		dialog.setOnBuildListener(this);
 		dialog.setOnShowListener(this);
-		dialog.build(context, R.layout.dlg_auto_dismiss);
+		dialog.build(context, R.layout.dlg_alarm_days);
 		dialog.addDismissListener(this);
 		dialog.show();
 
@@ -142,16 +127,9 @@ public class NacPreferenceAutoDismiss
 	@Override
 	public void onShowDialog(NacDialog dialog, View root)
 	{
-		RadioGroup group = root.findViewById(R.id.radio_group);
-		int[] ids = {R.id.radio_off, R.id.radio_5min, R.id.radio_10min, R.id.radio_15min, R.id.radio_20min, R.id.radio_25min, R.id.radio_30min};
-		RadioButton button;
+		NacDayOfWeek dow = root.findViewById(R.id.days);
 
-		for (int i=0; i < ids.length; i++)
-		{
-			button = root.findViewById(ids[i]);
-
-			button.setChecked((i*5 == this.mValue));
-		}
+		dow.setDays(this.mValue);
 	}
 
 	/**

@@ -39,7 +39,7 @@ import android.widget.ImageView;
  */
 public class NacAlarmActivity
 	extends Activity
-	implements NacDialog.OnDismissedListener,NacDialog.OnCanceledListener,NacDialog.OnShowListener
+	implements NacDialog.OnDismissListener,NacDialog.OnCancelListener,NacDialog.OnShowListener
 {
 
 	private NacAlarmDialog mDialog;
@@ -67,24 +67,28 @@ public class NacAlarmActivity
 	 * Called when the dialog is canceled.
 	 */
 	@Override
-	public void onDialogCanceled(NacDialog dialog)
+	public boolean onCancelDialog(NacDialog dialog)
 	{
-		if (!this.snooze())
+		if (this.snooze())
 		{
-			return;
+			finish();
+			return true;
 		}
 
-		finish();
+		return false;
 	}
 
 	/**
 	 * Called when the dialog is dismissed.
 	 */
 	@Override
-	public void onDialogDismissed(NacDialog dialog)
+	public boolean onDismissDialog(NacDialog dialog)
 	{
 		this.mPlayer.reset();
+		this.mShared.instance.edit().putInt("snoozeCount"+String.valueOf(this.mAlarm.getId()), 0).commit();
 		finish();
+
+		return true;
 	}
 
 	/**
@@ -151,6 +155,11 @@ public class NacAlarmActivity
 	@Override
 	public void onShowDialog(NacDialog dialog, View root)
 	{
+		if (this.mShared.autoDismiss == 0)
+		{
+			return;
+		}
+
 		new Handler().postDelayed(new Runnable()
 		{
 			@Override
@@ -201,13 +210,11 @@ public class NacAlarmActivity
 			bundle.getParcelable("parcel");
 		this.mAlarm = parcel.toAlarm();
 		this.mPlayer = new NacMediaPlayer(this);
-		//this.mSnoozeCount = 0;
-		this.mSnoozeCount = this.mShared.instance.getInt("snoozeCount", 0);
-		//c++;
-		//this.mShared.instance.edit().putInt("numRun", c).commit();
+		this.mSnoozeCount = this.mShared.instance.getInt("snoozeCount"+String.valueOf(this.mAlarm.getId()), 0);
 
+		NacUtility.printf("Alarm Id : %d", this.mAlarm.getId());
 		this.scheduleNextAlarm();
-		this.mPlayer.play(this.mAlarm.getSound(), false);
+		this.mPlayer.play(this.mAlarm.getSound(), true);
 		this.vibrate();
 	}
 
@@ -244,7 +251,8 @@ public class NacAlarmActivity
 	 */
 	public boolean snooze()
 	{
-		if ((this.mShared.maxSnoozes == 0) || (this.mSnoozeCount > this.mShared.maxSnoozes))
+		if ((this.mSnoozeCount >= this.mShared.maxSnoozes)
+			&& (this.mShared.maxSnoozes >= 0))
 		{
 			Toast.makeText(this, "Unable to snooze the alarm.", Toast.LENGTH_LONG)
 				.show();
@@ -263,7 +271,7 @@ public class NacAlarmActivity
 		this.mAlarm.setMinute(snooze.get(Calendar.MINUTE));
 		NacUtility.printf("Next alarm : %s", snooze.getTime().toString());	
 		scheduler.update(this.mAlarm, snooze);
-		this.mShared.instance.edit().putInt("snoozeCount", this.mSnoozeCount)
+		this.mShared.instance.edit().putInt("snoozeCount"+String.valueOf(this.mAlarm.getId()), this.mSnoozeCount)
 			.apply();
 
 		return true;

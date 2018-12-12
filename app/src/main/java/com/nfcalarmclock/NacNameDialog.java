@@ -16,7 +16,7 @@ import android.widget.TextView;
  */
 public class NacNameDialog
 	extends NacDialog
-	implements NacDialog.OnDismissedListener,TextView.OnEditorActionListener
+	implements NacDialog.OnDismissListener,TextView.OnEditorActionListener
 {
 
 	/**
@@ -69,11 +69,13 @@ public class NacNameDialog
 	 * Save the alarm name as the dialog data.
 	 */
 	@Override
-	public void onDialogDismissed(NacDialog dialog)
+	public boolean onDismissDialog(NacDialog dialog)
 	{
 		String name = this.mEditText.getText().toString();
 
 		dialog.saveData(name);
+
+		return true;
 	}
 
 	/**

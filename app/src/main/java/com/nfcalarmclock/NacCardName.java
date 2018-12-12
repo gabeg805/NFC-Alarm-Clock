@@ -7,7 +7,7 @@ import android.view.View;
  * @brief The alarm name. Users can change the name upon clicking the view.
  */
 public class NacCardName
-	implements View.OnClickListener,NacDialog.OnDismissedListener
+	implements View.OnClickListener,NacDialog.OnDismissListener
 {
 
 	/**
@@ -60,7 +60,7 @@ public class NacCardName
 	 * Notify alarm listener that the alarm has been modified.
 	 */
 	@Override
-	public void onDialogDismissed(NacDialog dialog)
+	public boolean onDismissDialog(NacDialog dialog)
 	{
 		Object data = dialog.getData();
 		String name = (data != null) ? (String) data : "";
@@ -68,6 +68,8 @@ public class NacCardName
 		this.mAlarm.setName(name);
 		this.setName();
 		this.mAlarm.changed();
+
+		return true;
 	}
 
 	/**

@@ -53,7 +53,21 @@
         <attr name="nacSubTextSize" format="reference|dimension" />
         <attr name="nacSubTextColor" format="reference|color" />
         <attr name="nacSubText" format="reference|string" />
+        <attr name="nacSpacing" format="reference|dimension" />
     <!-- </declare-styleable> -->
+
+    <declare-styleable name="NacImageSubTextButton">
+        <attr name="nacDrawableWidth" />
+        <attr name="nacDrawableHeight" />
+        <attr name="nacDrawableColor" />
+        <attr name="nacDrawable" />
+        <attr name="nacTextColor" />
+        <attr name="nacTextSize" />
+        <attr name="nacText" />
+        <attr name="nacSubTextColor" />
+        <attr name="nacSubText" />
+        <attr name="nacSpacing" />
+    </declare-styleable>
 
     <declare-styleable name="NacImageTextButton">
         <attr name="nacDrawableWidth" />
@@ -63,17 +77,7 @@
         <attr name="nacTextColor" />
         <attr name="nacTextSize" />
         <attr name="nacText" />
-        <attr name="nacDrawableTextSpacing" />
+        <attr name="nacSpacing" />
     </declare-styleable>
-
-	<declare-styleable name="MusicSelection">
-		<attr name="nacWidth" />
-        <attr name="nacTextColor" />
-        <attr name="nacTextSize" />
-        <attr name="nacText" />
-        <attr name="nacSubTextColor" />
-        <attr name="nacSubTextSize" />
-        <attr name="nacSubText" />
-	</declare-styleable>
 
 </resources>
