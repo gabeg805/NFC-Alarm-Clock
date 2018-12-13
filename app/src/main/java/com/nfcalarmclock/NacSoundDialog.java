@@ -12,19 +12,20 @@ import java.util.Locale;
 /**
  * Sound dialog.
  */
-public class NacSoundDialog
+public abstract class NacSoundDialog
 	extends NacDialog
 	implements NacDialog.OnDismissListener,NacDialog.OnCancelListener
 {
 
-	public AlertDialog.Builder build(Context context)
-	{
-		return null;
-	}
+	/**
+	 * Build the dialog using a custom layout.
+	 */
+	public abstract AlertDialog.Builder build(Context context);
 
-	public void scale()
-	{
-	}
+	/**
+	 * Scale the dialog using custom scaling.
+	 */
+	public abstract void scale();
 
 	/**
 	 * Interface for other classes to implement what to do when an item is
@@ -46,11 +47,6 @@ public class NacSoundDialog
 	protected NacSound mSound;
 
 	/**
-	 * The index in the songs list pointing to the currently selected item.
-	 */
-	protected int mIndex;
-
-	/**
 	 * On item click listener.
 	 */
 	protected OnItemClickListener mItemClickListener;
@@ -63,27 +59,10 @@ public class NacSoundDialog
 
 		this.mPlayer = null;
 		this.mSound = null;
-		this.mIndex = -1;
 		this.mItemClickListener = null;
 
 		this.addDismissListener(this);
 		this.addCancelListener(this);
-	}
-
-	/**
-	 * Check if the sound list contains the name of the given sound.
-	 */
-	protected boolean containsName(List<NacSound> sounds, String name)
-	{
-		for (NacSound s : sounds)
-		{
-			if (s.containsName(name))
-			{
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	/**
@@ -97,10 +76,11 @@ public class NacSoundDialog
 			{
 				Locale locale = Locale.getDefault();
 				String lower = name.toLowerCase(locale);
-				String[] extensions = {".3gp", ".mp4", ".m4a", ".aac",
-					".ts", ".flac", ".mid", ".xmf", ".mxmf", ".rtttl",
-					".rtx", ".ota", ".imy", ".mp3", ".mkv", ".wav",
-					".ogg"};
+				String[] extensions = { ".mp3" };
+				//String[] extensions = {".3gp", ".mp4", ".m4a", ".aac",
+				//	".ts", ".flac", ".mid", ".xmf", ".mxmf", ".rtttl",
+				//	".rtx", ".ota", ".imy", ".mp3", ".mkv", ".wav",
+				//	".ogg"};
 
 				if (dir.isDirectory())
 				{

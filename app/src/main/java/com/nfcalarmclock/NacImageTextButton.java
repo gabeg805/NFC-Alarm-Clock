@@ -3,27 +3,19 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
-import android.content.res.Resources.Theme;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import android.graphics.Typeface;
-
 /**
- * @class A button that consists of an image to the left, and text to the right
- *        of it.
+ * A button that consists of an image to the left, and text to the right of it.
  */
 public class NacImageTextButton
     extends LinearLayout
@@ -32,7 +24,7 @@ public class NacImageTextButton
 	/**
 	 * Attributes for the view.
 	 */
-	public class NacImageTextButtonAttributes
+	public static class Attributes
 	{
 		public int imageColor;
 		public int imageHeight;
@@ -46,7 +38,7 @@ public class NacImageTextButton
 		/**
 		 * Initialize the attributes.
 		 */
-		public NacImageTextButtonAttributes(Context context, AttributeSet attrs)
+		public Attributes(Context context, AttributeSet attrs)
 		{
 			if (attrs == null)
 			{
@@ -94,7 +86,7 @@ public class NacImageTextButton
 	/**
 	 * Attributes.
 	 */
-	public NacImageTextButtonAttributes mAttributes;
+	public Attributes mAttributes;
 
 	/**
 	 */
@@ -139,10 +131,10 @@ public class NacImageTextButton
 		Context context = getContext();
 
         setOrientation(LinearLayout.HORIZONTAL);
-        LayoutInflater.from(context).inflate(R.layout.imagetextbutton, this,
-			true);
+        LayoutInflater.from(context).inflate(R.layout.nac_image_text_button,
+			this, true);
 
-		this.mAttributes = new NacImageTextButtonAttributes(context, attrs);
+		this.mAttributes = new Attributes(context, attrs);
 		this.mImage = (ImageView) findViewById(R.id.itb_image);
 		this.mText = (TextView) findViewById(R.id.itb_text);
 
@@ -150,8 +142,6 @@ public class NacImageTextButton
 		{
 			throw new RuntimeException("Unable to find Image or Text view IDs.");
 		}
-
-		// set padding and/or click listener
     }
 
 	/**
@@ -164,21 +154,18 @@ public class NacImageTextButton
 	}
 
 	/**
+	 * Set the attributes member variable.
+	 */
+	public void setAttributes(Attributes attr)
+	{
+		this.mAttributes = attr;
+	}
+
+	/**
 	 * Set view attributes.
 	 */
 	public void setViewAttributes()
 	{
-		//NacUtility.printf("Width : %d", getImageWidth());
-		//NacUtility.printf("Height: %d", getImageHeight());
-		//NacUtility.printf("Resource : %d", getImageBackgroundResource());
-		//NacUtility.printf("Image Color : %d", getImageColor());
-		//NacUtility.printf("Spacing : %d", getSpacing());
-		//NacUtility.printf("Title : %s", getTextTitle());
-		//NacUtility.printf("Subtitle : %s", getTextSubtitle());
-		//NacUtility.printf("Title Color : %d", getTextTitleColor());
-		//NacUtility.printf("Subtitle Color : %d", getTextSubtitleColor());
-		//NacUtility.printf("Text Size : %d", getTextSize());
-
 		this.setImageSize(this.getImageWidth(), this.getImageHeight());
 		this.setImageBackground(this.getImageBackgroundResource());
 		this.setImageColor(this.getImageColor());
@@ -221,6 +208,11 @@ public class NacImageTextButton
 	 */
 	public void setImageBackground(int resid)
 	{
+		if (resid == View.NO_ID)
+		{
+			return;
+		}
+
 		this.mAttributes.imageId = resid;
 
 		this.mImage.setImageResource(resid);
@@ -238,6 +230,17 @@ public class NacImageTextButton
 
 		this.mImage.setImageTintList(colorlist);
 		this.redraw();
+	}
+
+	/**
+	 * Set margins.
+	 */
+	public void setMargins(int start, int top, int end, int bottom)
+	{
+		LayoutParams params = (LayoutParams) this.getLayoutParams();
+
+        params.setMargins(start, top, end, bottom);
+		this.setLayoutParams(params);
 	}
 
 	/**
@@ -360,12 +363,6 @@ public class NacImageTextButton
 	{
 		return this.mAttributes.text;
 	}
-
-    //private void initImageDrawable(TypedArray ta)
-    //{
-    //    int did = R.styleable.NacImageTextButton_nacDrawable;
-    //    this.mImageDrawable = ta.getDrawable(did);
-    //}
 
 	/**
 	 * @return The layout TextView.

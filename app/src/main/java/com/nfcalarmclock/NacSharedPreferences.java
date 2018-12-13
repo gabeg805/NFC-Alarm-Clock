@@ -83,9 +83,9 @@ public class NacSharedPreferences
 		this.sound = shared.getString(keys.sound, sounddef);
 		this.name = shared.getString(keys.name, namedef);
 
-		this.autoDismiss = (this.autoDismiss == 1) ? 1 : 5*this.autoDismiss;
+		this.autoDismiss = (this.autoDismiss == 1) ? 1 : 5*(this.autoDismiss-1);
 		this.maxSnoozes = (this.maxSnoozes == 11) ? -1 : this.maxSnoozes;
-		this.snoozeDuration = (this.snoozeDuration == 1) ? 1 : 5*this.snoozeDuration;
+		this.snoozeDuration = (this.snoozeDuration == 0) ? 1 : 5*this.snoozeDuration;
 	}
 
 }

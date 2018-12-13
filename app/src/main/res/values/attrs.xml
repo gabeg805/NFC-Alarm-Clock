@@ -80,4 +80,22 @@
         <attr name="nacSpacing" />
     </declare-styleable>
 
+    <declare-styleable name="NacButtonGroup">
+		<attr name="android:background" />
+        <attr name="nacPaddingStart" />
+        <attr name="nacPaddingTop" />
+        <attr name="nacPaddingBottom" />
+        <attr name="nacPaddingEnd" />
+        <attr name="nacDrawableWidth" />
+        <attr name="nacDrawableHeight" />
+        <attr name="nacDrawableColor" />
+        <attr name="nacDrawable" />
+        <attr name="nacTextColor" />
+        <attr name="nacTextSize" />
+        <attr name="nacText" />
+        <attr name="nacSubTextColor" />
+        <attr name="nacSubText" />
+        <attr name="nacSpacing" />
+    </declare-styleable>
+
 </resources>

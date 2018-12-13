@@ -8,7 +8,6 @@ import android.Manifest;
 import android.media.MediaMetadataRetriever;
 import android.os.Environment;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 import java.io.IOException;
 import java.io.File;
@@ -40,7 +39,7 @@ public class NacSoundMusicDialog
 	/**
 	 * Add a directory entry to the dialog.
 	 */
-	public void addDirectoryEntry(LinearLayout container,
+	public void addDirectoryEntry(NacButtonGroup container,
 		String text, File file)
 	{
 		Context context = container.getContext();
@@ -48,22 +47,17 @@ public class NacSoundMusicDialog
 		int size = (int) context.getResources().getDimension(R.dimen.isz_dlg_music);
 		int spacing = (int) context.getResources().getDimension(R.dimen.sp_dlg_music);
 
-		entry.setImageBackground(R.mipmap.baseline_folder_black_48dp);
-		entry.setImageColor(Color.WHITE);
-		entry.setImageSize(size, size);
-		entry.setSpacing(spacing);
-		entry.setText(text);
-		entry.setTextColor(Color.WHITE);
-		entry.setPadding(0, 0, 0, spacing);
 		entry.setTag(file);
 		entry.setOnClickListener(this);
-		container.addView(entry);
+		container.add(entry);
+		entry.setImageBackground(R.mipmap.baseline_folder_white_48dp);
+		entry.setText(text);
 	}
 
 	/**
 	 * Add a music file entry to the dialog.
 	 */
-	public void addFileEntry(LinearLayout container, String text, File file)
+	public void addFileEntry(NacButtonGroup container, String text, File file)
 	{
 		if (file.length() == 0)
 		{
@@ -76,7 +70,15 @@ public class NacSoundMusicDialog
 		int size = (int) context.getResources().getDimension(R.dimen.isz_dlg_music);
 		int spacing = (int) context.getResources().getDimension(R.dimen.sp_dlg_music);
 
-		retriever.setDataSource(file.getAbsolutePath());
+		try
+		{
+			retriever.setDataSource(file.getAbsolutePath());
+		}
+		catch (RuntimeException re)
+		{
+			NacUtility.printf("Something wrong with file '%s'.", file.getAbsolutePath());
+			return;
+		}
 
 		String title = this.getTitle(retriever, file);
 		String artist = this.getArtist(retriever, file);
@@ -85,18 +87,12 @@ public class NacSoundMusicDialog
 		NacUtility.printf("Artist : %s", artist);
 
 		retriever.release();
-		entry.setImageBackground(R.mipmap.baseline_play_arrow_white_48dp);
-		entry.setImageColor(Color.WHITE);
-		entry.setImageSize(size, size);
-		entry.setSpacing(spacing);
-		entry.setTextTitle(title);
-		entry.setTextSubtitle(artist);
-		entry.setTextTitleColor(Color.WHITE);
-		entry.setTextSubtitleColor(Color.WHITE);
-		entry.setPadding(0, 0, 0, spacing);
 		entry.setTag(file);
 		entry.setOnClickListener(this);
-		container.addView(entry);
+		container.add(entry);
+		entry.setImageBackground(R.mipmap.baseline_play_arrow_white_48dp);
+		entry.setTextTitle(title);
+		entry.setTextSubtitle(artist);
 	}
 
 	/**
@@ -303,7 +299,7 @@ public class NacSoundMusicDialog
 	public void showDirectory(String path)
 	{
 		View root = this.getRootView();
-		LinearLayout container = (LinearLayout) root.findViewById(R.id.group);
+		NacButtonGroup container = (NacButtonGroup) root.findViewById(R.id.group);
 		String mainpath = Environment.getExternalStorageDirectory().toString();
 		path = (path == null) ? mainpath : path;
 		List<File> files = this.getDirectoryListing(path);

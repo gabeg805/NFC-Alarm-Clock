@@ -33,6 +33,51 @@ public class NacSoundRingtoneDialog
 	}
 
 	/**
+	 * @return The list of ringtones for the ringtone manager.
+	 */
+	public List<NacSound> getRingtones(Context context)
+	{
+		RingtoneManager manager = new RingtoneManager(context);
+		List<NacSound> list = new ArrayList<>();
+
+		manager.setType(RingtoneManager.TYPE_ALARM);
+
+		Cursor cursor = manager.getCursor();
+
+		while (cursor.moveToNext())
+		{
+			String name = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
+			String id = cursor.getString(RingtoneManager.ID_COLUMN_INDEX);
+			String dir = cursor.getString(RingtoneManager.URI_COLUMN_INDEX);
+
+			if (this.containsName(list, name))
+			{
+				continue;
+			}
+
+			list.add(new NacSound(dir, id, name));
+		}
+
+		return list;
+	}
+
+	/**
+	 * Check if the sound list contains the name of the given sound.
+	 */
+	protected boolean containsName(List<NacSound> sounds, String name)
+	{
+		for (NacSound s : sounds)
+		{
+			if (s.containsName(name))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Build the dialog.
 	 */
 	@Override
@@ -83,34 +128,8 @@ public class NacSoundRingtoneDialog
 	}
 
 	/**
-	 * @return The list of ringtones for the ringtone manager.
+	 * Scale the dialog.
 	 */
-	public List<NacSound> getRingtones(Context context)
-	{
-		RingtoneManager manager = new RingtoneManager(context);
-		List<NacSound> list = new ArrayList<>();
-
-		manager.setType(RingtoneManager.TYPE_ALARM);
-
-		Cursor cursor = manager.getCursor();
-
-		while (cursor.moveToNext())
-		{
-			String name = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
-			String id = cursor.getString(RingtoneManager.ID_COLUMN_INDEX);
-			String dir = cursor.getString(RingtoneManager.URI_COLUMN_INDEX);
-
-			if (this.containsName(list, name))
-			{
-				continue;
-			}
-
-			list.add(new NacSound(dir, id, name));
-		}
-
-		return list;
-	}
-
 	@Override
 	public void scale()
 	{

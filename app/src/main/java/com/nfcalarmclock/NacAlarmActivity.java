@@ -1,15 +1,11 @@
 package com.nfcalarmclock;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.nfc.NfcAdapter;
-import android.nfc.Tag;
-import android.nfc.tech.IsoDep;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,22 +13,10 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import java.util.Calendar;
-
-import android.view.LayoutInflater;
-import android.content.DialogInterface;
-import android.animation.ValueAnimator;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.view.animation.AlphaAnimation;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ImageView;
 
 /**
  * Activity to dismiss/snooze the alarm.
@@ -42,11 +26,35 @@ public class NacAlarmActivity
 	implements NacDialog.OnDismissListener,NacDialog.OnCancelListener,NacDialog.OnShowListener
 {
 
-	private NacAlarmDialog mDialog;
+	/**
+	 * NFC adapter.
+	 */
 	private NfcAdapter mNfcAdapter;
-	private NacMediaPlayer mPlayer;
+
+	/**
+	 * Dialog to display activity in.
+	 */
+	private NacAlarmDialog mDialog;
+
+	/**
+	 * Alarm.
+	 */
 	private NacAlarm mAlarm;
+
+	/**
+	 * Media player.
+	 */
+	private NacMediaPlayer mPlayer;
+
+	/**
+	 * Shared preference information. Contains information such as: snooze
+	 * duration, max snoozes, and auto dismiss time.
+	 */
 	private NacSharedPreferences mShared;
+
+	/**
+	 * Count the number of snoozes that have occurred for a given alarm.
+	 */
 	private int mSnoozeCount;
 
 	/**
@@ -225,7 +233,7 @@ public class NacAlarmActivity
 	{
 		this.mDialog = new NacAlarmDialog();
 
-		this.mDialog.build(this, R.layout.stuff);
+		this.mDialog.build(this, R.layout.act_alarm);
 		this.mDialog.addCancelListener(this);
 		this.mDialog.addDismissListener(this);
 		this.mDialog.show();

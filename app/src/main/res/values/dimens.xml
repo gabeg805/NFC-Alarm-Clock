@@ -44,6 +44,11 @@
 	<dimen name="m_scroll_option">30dp</dimen>
 
 	<!-- Music dialog -->
+	<dimen name="tsz_dlg_music">15sp</dimen>
+	<dimen name="pl_dlg_music">30dp</dimen>
+	<dimen name="pt_dlg_music">10dp</dimen>
+	<dimen name="pr_dlg_music">30dp</dimen>
+	<dimen name="pb_dlg_music">10dp</dimen>
 	<dimen name="sp_dlg_music">15dp</dimen>
 	<dimen name="isz_dlg_music">30dp</dimen>
 

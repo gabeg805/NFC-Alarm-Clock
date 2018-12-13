@@ -1,73 +1,49 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
-import android.content.res.Resources.Theme;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.Nullable;
-import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import android.graphics.Typeface;
-import android.support.v4.content.ContextCompat;
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
-import android.content.Context;
-import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
-
-import android.support.annotation.Nullable;
-import android.content.res.Resources.Theme;
-import android.content.res.ColorStateList;
+import android.widget.TextView;
 
 /**
- * @class A button that consists of an image to the left, and text to the right
- *        of it.
+ * A button that consists of an image to the left, and text to the right of it.
+ * The text can have a title and subtitle, where the title is above the
+ * subtitle.
  */
 public class NacImageSubTextButton
-    extends RelativeLayout
+    extends LinearLayout
 {
 
 	/**
 	 * Attributes for the view.
 	 */
-	public class NacImageSubTextButtonAttributes
+	public static class Attributes
 	{
-		public int imageWidth;
-		public int imageHeight;
 		public int imageColor;
+		public int imageHeight;
 		public int imageId;
+		public int imageWidth;
 		public int spacing;
-		public String textTitle;
-		public String textSubtitle;
 		public int textSize;
-		public int textTitleColor;
+		public String textSubtitle;
 		public int textSubtitleColor;
+		public String textTitle;
+		public int textTitleColor;
 
 		/**
 		 * Initialize the attributes.
 		 */
-		public NacImageSubTextButtonAttributes(Context context, AttributeSet attrs)
+		public Attributes(Context context, AttributeSet attrs)
 		{
 			if (attrs == null)
 			{
@@ -83,16 +59,17 @@ public class NacImageSubTextButton
 				Resources res = context.getResources();
 				int textsize = (int) res.getDimension(R.dimen.tsz_card_days);
 				int spacing = (int) res.getDimension(R.dimen.sp_card);
-				this.imageWidth = (int) ta.getDimension(R.styleable.NacImageSubTextButton_nacDrawableWidth, 2*textsize);
-				this.imageHeight = (int) ta.getDimension(R.styleable.NacImageSubTextButton_nacDrawableHeight, 2*textsize);
+
 				this.imageColor = ta.getColor(R.styleable.NacImageSubTextButton_nacDrawableColor, Color.WHITE);
+				this.imageHeight = (int) ta.getDimension(R.styleable.NacImageSubTextButton_nacDrawableHeight, 2*textsize);
 				this.imageId = ta.getResourceId(R.styleable.NacImageSubTextButton_nacDrawable, R.drawable.circle);
+				this.imageWidth = (int) ta.getDimension(R.styleable.NacImageSubTextButton_nacDrawableWidth, 2*textsize);
 				this.spacing= (int) ta.getDimension(R.styleable.NacImageSubTextButton_nacSpacing, spacing);
 				this.textSize = (int) ta.getDimension(R.styleable.NacImageSubTextButton_nacTextSize, textsize);
-				this.textTitleColor = ta.getColor(R.styleable.NacImageSubTextButton_nacTextColor, Color.WHITE);
+				this.textSubtitle = ta.getString(R.styleable.NacImageSubTextButton_nacSubText);
 				this.textSubtitleColor = ta.getColor(R.styleable.NacImageSubTextButton_nacSubTextColor, Color.WHITE);
 				this.textTitle = ta.getString(R.styleable.NacImageSubTextButton_nacText);
-				this.textSubtitle = ta.getString(R.styleable.NacImageSubTextButton_nacSubText);
+				this.textTitleColor = ta.getColor(R.styleable.NacImageSubTextButton_nacTextColor, Color.WHITE);
 			}
 			finally
 			{
@@ -120,7 +97,7 @@ public class NacImageSubTextButton
 	/**
 	 * Attributes.
 	 */
-	public NacImageSubTextButtonAttributes mAttributes;
+	private Attributes mAttributes;
 
 	/**
 	 */
@@ -164,10 +141,11 @@ public class NacImageSubTextButton
     {
 		Context context = getContext();
 
-        LayoutInflater.from(context).inflate(R.layout.poopimagetextbutton, this,
-			true);
+		setOrientation(LinearLayout.HORIZONTAL);
+        LayoutInflater.from(context).inflate(R.layout.nac_image_subtext_button,
+			this, true);
 
-		this.mAttributes = new NacImageSubTextButtonAttributes(context, attrs);
+		this.mAttributes = new Attributes(context, attrs);
 		this.mImage = (ImageView) findViewById(R.id.itb_image);
 		this.mTitle = (TextView) findViewById(R.id.itb_text_title);
 		this.mSubtitle = (TextView) findViewById(R.id.itb_text_subtitle);
@@ -176,8 +154,6 @@ public class NacImageSubTextButton
 		{
 			throw new RuntimeException("Unable to find Image or Title or Subtitle view IDs.");
 		}
-
-		// set padding and/or click listener
     }
 
 	/**
@@ -190,21 +166,18 @@ public class NacImageSubTextButton
 	}
 
 	/**
+	 * Set the attributes member variable.
+	 */
+	public void setAttributes(Attributes attr)
+	{
+		this.mAttributes = attr;
+	}
+
+	/**
 	 * Set view attributes.
 	 */
 	public void setViewAttributes()
 	{
-		//NacUtility.printf("Width : %d", getImageWidth());
-		//NacUtility.printf("Height: %d", getImageHeight());
-		//NacUtility.printf("Resource : %d", getImageBackgroundResource());
-		//NacUtility.printf("Image Color : %d", getImageColor());
-		//NacUtility.printf("Spacing : %d", getSpacing());
-		//NacUtility.printf("Title : %s", getTextTitle());
-		//NacUtility.printf("Subtitle : %s", getTextSubtitle());
-		//NacUtility.printf("Title Color : %d", getTextTitleColor());
-		//NacUtility.printf("Subtitle Color : %d", getTextSubtitleColor());
-		//NacUtility.printf("Text Size : %d", getTextSize());
-
 		this.setImageSize(this.getImageWidth(), this.getImageHeight());
 		this.setImageBackground(this.getImageBackgroundResource());
 		this.setImageColor(this.getImageColor());
@@ -248,6 +221,11 @@ public class NacImageSubTextButton
 	 */
 	public void setImageBackground(int resid)
 	{
+		if (resid == View.NO_ID)
+		{
+			return;
+		}
+
 		this.mAttributes.imageId = resid;
 
 		this.mImage.setImageResource(resid);
@@ -276,6 +254,7 @@ public class NacImageSubTextButton
 	{
 		this.mAttributes.spacing = spacing;
 		LayoutParams params = (LayoutParams) this.mImage.getLayoutParams();
+
         params.setMargins(0, 0, spacing, 0);
         this.mImage.setLayoutParams(params);
 	}

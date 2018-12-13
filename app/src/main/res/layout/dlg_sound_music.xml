@@ -4,19 +4,30 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
 	<LinearLayout
-		android:layout_width="wrap_content"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:paddingTop="?dialogPreferredPadding"
-		android:paddingStart="?dialogPreferredPadding"
-		android:paddingEnd="?dialogPreferredPadding"
+		android:layout_marginTop="?dialogPreferredPadding"
 		android:orientation="vertical"
 		android:scrollbars="vertical">
 
-		<LinearLayout
+		<!-- android:paddingStart="?dialogPreferredPadding" -->
+
+		<com.nfcalarmclock.NacButtonGroup
 			android:id="@+id/group"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:orientation="vertical"
+			android:background="?android:attr/selectableItemBackground"
+			app:nacPaddingStart="@dimen/pl_dlg_music"
+			app:nacPaddingTop="@dimen/pt_dlg_music"
+			app:nacPaddingEnd="@dimen/pr_dlg_music"
+			app:nacPaddingBottom="@dimen/pb_dlg_music"
+			app:nacDrawableColor="@color/white"
+			app:nacDrawableWidth="@dimen/isz_dlg_music"
+			app:nacDrawableHeight="@dimen/isz_dlg_music"
+			app:nacSpacing="@dimen/sp_dlg_music"
+			app:nacTextColor="@color/white"
+			app:nacTextSize="@dimen/tsz_dlg_music"
+			app:nacSubTextColor="@color/white"
 			/>
 
 	</LinearLayout>
