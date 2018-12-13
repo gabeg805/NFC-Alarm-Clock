@@ -6,7 +6,8 @@
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="?dialogPreferredPadding"
+		android:paddingTop="?dialogPreferredPadding"
+		android:paddingBottom="?dialogPreferredPadding"
 		android:orientation="vertical"
 		android:scrollbars="vertical">
 

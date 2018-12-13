@@ -133,7 +133,7 @@ public class NacSoundRingtoneDialog
 	@Override
 	public void scale()
 	{
-		this.scale(0.7, 0.7, false, true);
+		this.scale(0.7, 0.8, false, true);
 	}
 
 }

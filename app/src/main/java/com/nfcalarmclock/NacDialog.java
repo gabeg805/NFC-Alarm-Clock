@@ -18,7 +18,7 @@ import java.util.List;
  * @brief A generic dialog object.
  */
 public class NacDialog
-	implements DialogInterface.OnClickListener
+	implements DialogInterface.OnClickListener,DialogInterface.OnCancelListener
 {
 
 	/**
@@ -147,6 +147,7 @@ public class NacDialog
 
 		this.removeParent(root);
 		this.mBuilder.setView(root);
+		this.mBuilder.setOnCancelListener(this);
 		this.onBuildDialog(context, this.mBuilder);
 
 		return this.mBuilder;
@@ -255,6 +256,12 @@ public class NacDialog
 		{
 			this.mBuildListener.onBuildDialog(this, builder);
 		}
+	}
+
+	@Override
+	public void onCancel(DialogInterface dialog)
+	{
+		this.cancel();
 	}
 
 	/**

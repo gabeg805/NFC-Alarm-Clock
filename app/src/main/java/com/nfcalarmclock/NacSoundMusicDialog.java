@@ -290,7 +290,7 @@ public class NacSoundMusicDialog
 	@Override
 	public void scale()
 	{
-		this.scale(0.75, 0.7, false, true);
+		this.scale(0.8, 0.8, false, true);
 	}
 
 	/**
