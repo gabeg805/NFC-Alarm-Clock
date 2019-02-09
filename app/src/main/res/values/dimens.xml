@@ -34,6 +34,9 @@
 	<!-- NacImageTextButton -->
     <dimen name="isz_card">22dp</dimen>
 
+	<!-- DayOfWeekButton -->
+    <dimen name="switch_size">58dp</dimen>
+
 	<!-- Expand button -->
     <dimen name="card_expand_size">20dp</dimen>
 

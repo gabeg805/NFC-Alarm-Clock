@@ -39,6 +39,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="end"
+		android:switchMinWidth="@dimen/switch_size"
         />
 
 </RelativeLayout>
