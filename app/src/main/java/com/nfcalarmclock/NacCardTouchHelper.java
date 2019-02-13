@@ -81,7 +81,7 @@ public class NacCardTouchHelper
 		private ViewHolder mViewHolder;
 
 		/**
-		 * @param  adapter  The object that overrides the event methods.
+		 * @param  adapter	The object that overrides the event methods.
 		 */
 		public Callback(Adapter adapter)
 		{
@@ -90,27 +90,81 @@ public class NacCardTouchHelper
 		}
 
 		/**
-		 * @return The foreground view of the view holder.
+		 * @return The card.
 		 */
-		private View getForegroundView()
+		private NacCard getCard()
 		{
-			return ((NacCardHolder)this.mViewHolder).mCard.mCardView;
+			NacCardHolder holder = this.getCardHolder();
+
+			return (holder != null) ? holder.mCard : null;
 		}
 
 		/**
-		 * @return The background copy view of the view holder.
+		 * @return The card holder.
 		 */
-		private View getBackgroundCopyView()
+		private NacCardHolder getCardHolder()
 		{
-			return ((NacCardHolder)this.mViewHolder).mCard.mBackgroundCopy;
+			return (NacCardHolder) this.mViewHolder;
+		}
+
+		/**
+		 * @return The root view of the card.
+		 */
+		private View getCardRoot()
+		{
+			NacCard card = this.getCard();
+
+			return (card != null) ? card.getRootView() : null;
+		}
+
+		/**
+		 * @return The card view.
+		 */
+		private View getCardView()
+		{
+			NacCard card = this.getCard();
+
+			return (card != null) ? card.getCardView() : null;
+		}
+
+		/**
+		 * @return The card view depending on the action being done.
+		 */
+		private View getCardView(int action)
+		{
+			//return (action == ItemTouchHelper.ACTION_STATE_DRAG)
+			//	? this.getCardRoot() : this.getCardView();
+			return (action == ItemTouchHelper.ACTION_STATE_SWIPE)
+				? this.getCardView() : this.getCardRoot();
+		}
+
+		/**
+		 * @return The copy view, which resides in the background of the view
+		 *         holder.
+		 */
+		private View getCopyView()
+		{
+			NacCard card = this.getCard();
+
+			return (card != null) ? card.getCopyView() : null;
 		}
 
 		/**
 		 * @return The background delete view of the view holder.
 		 */
-		private View getBackgroundDeleteView()
+		private View getDeleteView()
 		{
-			return ((NacCardHolder)this.mViewHolder).mCard.mBackgroundDelete;
+			NacCard card = this.getCard();
+
+			return (card != null) ? card.getDeleteView() : null;
+		}
+
+		/**
+		 * @return The view holder.
+		 */
+		private ViewHolder getViewHolder()
+		{
+			return this.mViewHolder;
 		}
 
 		/**
@@ -122,7 +176,8 @@ public class NacCardTouchHelper
 		@Override
 		public void clearView(RecyclerView rv, ViewHolder vh)
 		{
-			final View fg = this.getForegroundView();
+			//final View fg = this.getForegroundView();
+			final View fg = this.getCardView();
 
 			getDefaultUIUtil().clearView(fg);
 		}
@@ -131,7 +186,7 @@ public class NacCardTouchHelper
 		 * Convert the movement of the card to an absolute direction.
 		 *
 		 * @param  flags  Movement flags.
-		 * @param  dir  The direction information.
+		 * @param  dir	The direction information.
 		 */
 		@Override
 		public int convertToAbsoluteDirection(int flags, int dir)
@@ -159,7 +214,7 @@ public class NacCardTouchHelper
 		 * Allow the card to be swiped.
 		 *
 		 * @bug When the app is opened up fresh and a card is expanded, swiping
-		 *      will work because the ViewHolder is null.
+		 *		will work because the ViewHolder is null.
 		 */
 		@Override
 		public boolean isItemViewSwipeEnabled()
@@ -184,9 +239,10 @@ public class NacCardTouchHelper
 			float dx, float dy, int action, boolean active)
 		{
 			this.mViewHolder = vh;
-			final View fg = this.getForegroundView();
-			final View copy = this.getBackgroundCopyView();
-			final View delete = this.getBackgroundDeleteView();
+			//final View fg = this.getForegroundView();
+			final View fg = this.getCardView();
+			final View copy = this.getCopyView();
+			final View delete = this.getDeleteView();
 
 			if (action == ItemTouchHelper.ACTION_STATE_SWIPE)
 			{
@@ -220,7 +276,8 @@ public class NacCardTouchHelper
 		public void onChildDrawOver(Canvas c, RecyclerView rv, ViewHolder vh,
 			float dx, float dy, int action, boolean active)
 		{
-			final View view = this.getForegroundView();
+			//final View view = this.getForegroundView();
+			final View view = this.getCardView();
 
 			getDefaultUIUtil().onDrawOver(c, rv, view, dx, dy, action, active);
 		}
@@ -249,7 +306,8 @@ public class NacCardTouchHelper
 		{
 			if (vh != null)
 			{
-				final View fg = this.getForegroundView();
+				//final View fg = this.getForegroundView();
+				final View fg = this.getCardView();
 
 				getDefaultUIUtil().onSelected(fg);
 			}
@@ -259,7 +317,7 @@ public class NacCardTouchHelper
 		 * Called when item is swiped.
 		 *
 		 * @param  vh  The view holder.
-		 * @param  dir  The direction that the item was swiped.
+		 * @param  dir	The direction that the item was swiped.
 		 */
 		@Override
 		public void onSwiped(ViewHolder vh, int dir)

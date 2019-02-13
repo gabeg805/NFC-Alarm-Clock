@@ -106,7 +106,7 @@ public class NacCardAdapter
 	 */
 	public void add(NacAlarm alarm)
 	{
-		int index = this.mAlarmList.size();
+		int index = this.size();
 
 		this.add(alarm, index);
 		this.mRecyclerView.scrollToPosition(index);
@@ -133,7 +133,7 @@ public class NacCardAdapter
 		this.mWasAdded = true;
 
 		this.mScheduler.update(alarm);
-		this.mAlarmList.add(alarm);
+		this.mAlarmList.add(position, alarm);
 		this.notifyItemInserted(position);
 		//this.mRecyclerView.scrollToPosition(position);
 	}
@@ -157,9 +157,9 @@ public class NacCardAdapter
 	 */
 	public void copy(int pos)
 	{
-		NacAlarm alarm = this.mAlarmList.get(pos);
+		NacAlarm alarm = this.get(pos);
 		NacAlarm copy = alarm.copy();
-		int newpos = this.mAlarmList.size();
+		int newpos = this.size();
 
 		copy.setId(this.getUniqueId());
 		this.add(copy);
@@ -174,7 +174,7 @@ public class NacCardAdapter
 	 */
 	public void delete(int pos)
 	{
-		NacAlarm alarm = this.mAlarmList.get(pos);
+		NacAlarm alarm = this.get(pos);
 
 		this.mScheduler.cancel(alarm);
 		this.mDatabase.delete(alarm);
@@ -183,6 +183,14 @@ public class NacCardAdapter
 		this.notifyItemRangeChanged(pos, this.getLastVisible(pos));
 		this.undo(alarm, pos, NacCardUndo.Type.DELETE);
 		NacUtility.snackbar(this.mRootView, "Deleted alarm.", "UNDO", this);
+	}
+
+	/**
+	 * @return The alarm at the given index.
+	 */
+	public NacAlarm get(int index)
+	{
+		return this.mAlarmList.get(index);
 	}
 
 	/**
@@ -199,7 +207,7 @@ public class NacCardAdapter
 	 */
 	private int getLastVisible(int start)
 	{
-		int size = this.mAlarmList.size();
+		int size = this.size();
 
 		for (int i=start; i < size; i++)
 		{
@@ -244,7 +252,7 @@ public class NacCardAdapter
 	@Override
 	public void onBindViewHolder(final NacCardHolder card, int pos)
 	{
-		NacAlarm alarm = mAlarmList.get(pos);
+		NacAlarm alarm = this.get(pos);
 
 		alarm.setOnChangedListener(this);
 		card.init(alarm, this.mWasAdded);
@@ -356,6 +364,14 @@ public class NacCardAdapter
 		this.add(alarm, position);
 		this.undo(alarm, position, NacCardUndo.Type.RESTORE);
 		NacUtility.snackbar(this.mRootView, "Restored alarm.", "UNDO", this);
+	}
+
+	/**
+	 * @return The number of elements in the adapter.
+	 */
+	public int size()
+	{
+		return this.mAlarmList.size();
 	}
 
 	/**

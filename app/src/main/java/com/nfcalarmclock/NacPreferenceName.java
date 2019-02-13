@@ -48,7 +48,8 @@ public class NacPreferenceName
 	@Override
 	public CharSequence getSummary()
 	{
-		return (this.mValue != null) ? this.mValue : NacAlarm.getNameDefault();
+		return ((this.mValue != null) && !this.mValue.isEmpty()) ? this.mValue
+			: NacAlarm.getNameDefault();
 	}
 
 	/**
@@ -97,6 +98,7 @@ public class NacPreferenceName
 
 		dialog.build(context, R.layout.dlg_alarm_name);
 		dialog.addDismissListener(this);
+		dialog.saveData(this.mValue);
 		dialog.show();
 
 		return true;

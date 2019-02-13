@@ -4,7 +4,6 @@
     android:id="@+id/alarmMajor"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <!-- android:background="@drawable/borderhighlight" -->
 
     <RelativeLayout
         android:id="@+id/nacTimeContainer"
@@ -39,6 +38,9 @@
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="end"
+		android:paddingStart="@dimen/sp_card"
+		android:paddingTop="@dimen/sp_card"
+		android:paddingBottom="@dimen/sp_card"
 		android:switchMinWidth="@dimen/switch_size"
         />
 

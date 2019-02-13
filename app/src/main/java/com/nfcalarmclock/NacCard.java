@@ -51,10 +51,19 @@ public class NacCard
 	public OnExpandListener mExpandListener;
 
 	/**
+	 * Root view.
+	 */
+	private View mRoot;
+
+	/**
 	 * Card view.
 	 */
-    public CardView mCardView;
+    private CardView mCardView;
 
+	/**
+	 * Clickable region in the card to expand/collapse.
+	 */
+	private RelativeLayout mClickable;
 	/**
 	 * Summary and extra regions in the alarm card.
 	 */
@@ -63,12 +72,12 @@ public class NacCard
 	/**
 	 * View that is displayed when copying the alarm (swiping right).
 	 */
-	public RelativeLayout mBackgroundCopy;
+	private RelativeLayout mCopyView;
 
 	/**
 	 * View that is displayed when deleting the alarm (swiping left).
 	 */
-	public RelativeLayout mBackgroundDelete;
+	private RelativeLayout mDeleteView;
 
 	/**
 	 * Background color transition.
@@ -84,10 +93,12 @@ public class NacCard
      */
     public NacCard(View root)
     {
+		this.mRoot = root;
         this.mCardView = (CardView) root.findViewById(R.id.view_card_alarm);
-		this.mBackgroundCopy = (RelativeLayout) root.findViewById(
+        this.mClickable = (RelativeLayout) root.findViewById(R.id.alarmMajor);
+		this.mCopyView = (RelativeLayout) root.findViewById(
 			R.id.view_background_copy);
-		this.mBackgroundDelete = (RelativeLayout) root.findViewById(
+		this.mDeleteView = (RelativeLayout) root.findViewById(
 			R.id.view_background_delete);
 		this.mRegion = new NacCardRegion(root);
 		this.mTransition = null;
@@ -168,6 +179,39 @@ public class NacCard
 	}
 
 	/**
+	 * @return The card view.
+	 */
+	public CardView getCardView()
+	{
+		return this.mCardView;
+	}
+
+	/**
+	 * @return The copy view, which resides in the background of the card view.
+	 */
+	public View getCopyView()
+	{
+		return this.mCopyView;
+	}
+
+	/**
+	 * @return The delete view, which resides in the background of the card
+	 *         view.
+	 */
+	public View getDeleteView()
+	{
+		return this.mDeleteView;
+	}
+
+	/**
+	 * @return The root view.
+	 */
+	public View getRootView()
+	{
+		return this.mRoot;
+	}
+
+	/**
 	 * @return The region height.
 	 */
 	public int getRegionHeight()
@@ -183,12 +227,13 @@ public class NacCard
      */
     public void init(boolean wasAdded)
     {
-		this.mBackgroundCopy.setVisibility(View.GONE);
-		this.mBackgroundDelete.setVisibility(View.GONE);
+		this.mCopyView.setVisibility(View.GONE);
+		this.mDeleteView.setVisibility(View.GONE);
 
 		this.mRegion.init();
 
-		this.mCardView.setOnClickListener(this);
+		//this.mCardView.setOnClickListener(this);
+		this.mClickable.setOnClickListener(this);
 		this.mRegion.setExpandListener(this);
 		this.mRegion.setCollapseListener(this);
 
@@ -242,7 +287,35 @@ public class NacCard
 	{
 		int id = view.getId();
 
-		if (id == R.id.view_card_alarm)
+		//if (id == R.id.view_card_alarm)
+		//{
+		//	if (this.isExpanded())
+		//	{
+		//		this.collapse();
+		//	}
+		//	else if (this.isCollapsed())
+		//	{
+		//		this.expand();
+		//	}
+		//}
+		//else if (id == R.id.nacExpand)
+		//{
+		//	this.expand();
+		//}
+		//else if (id == R.id.nacCollapse)
+		//{
+		//	this.collapse();
+		//}
+
+		if (id == R.id.nacExpand)
+		{
+			this.expand();
+		}
+		else if (id == R.id.nacCollapse)
+		{
+			this.collapse();
+		}
+		else
 		{
 			if (this.isExpanded())
 			{
@@ -252,14 +325,6 @@ public class NacCard
 			{
 				this.expand();
 			}
-		}
-		else if (id == R.id.nacExpand)
-		{
-			this.expand();
-		}
-		else if (id == R.id.nacCollapse)
-		{
-			this.collapse();
 		}
 	}
 

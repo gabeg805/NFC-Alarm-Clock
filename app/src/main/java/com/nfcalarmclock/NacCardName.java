@@ -2,6 +2,7 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.TextView;
 
 /**
  * @brief The alarm name. Users can change the name upon clicking the view.
@@ -18,16 +19,22 @@ public class NacCardName
 	/**
 	 * Name view.
 	 */
-	 private NacImageTextButton mName;
+	 private NacImageTextButton mName = null;
+
+	/**
+	 * Text of days to repeat.
+	 */
+	private TextView mTextView = null;
 
 	/**
 	 */
-	public NacCardName(View r)
+	public NacCardName(View root)
 	{
 		super();
 
 		this.mAlarm = null;
-		this.mName = (NacImageTextButton) r.findViewById(R.id.nacName);
+		this.mName = (NacImageTextButton) root.findViewById(R.id.nacName);
+		this.mTextView = (TextView) root.findViewById(R.id.nacRepeatTextName);
 
 		this.mName.setOnClickListener(this);
 	}
@@ -78,17 +85,20 @@ public class NacCardName
 	public void setName()
 	{
 		String name = this.mAlarm.getName();
+		String text = name+"  ";
 		boolean focus = true;
 
 		if (name.isEmpty())
 		{
 			name = NacAlarm.getNameMessage();
+			text = "";
 			focus = false;
 		}
 
 		NacUtility.printf("Name : %s", name);
 		this.mName.setText(name);
 		this.mName.setFocus(focus);
+		this.mTextView.setText(text);
 	}
 
 }

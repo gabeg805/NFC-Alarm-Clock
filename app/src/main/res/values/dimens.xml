@@ -10,17 +10,19 @@
     <dimen name="ml_card">16dp</dimen>
     <dimen name="mr_card">16dp</dimen>
     <dimen name="sp_card">10dp</dimen>
+    <dimen name="sp_text">4dp</dimen>
 
     <dimen name="ml_card_meridian">5dp</dimen>
     <dimen name="mb_card_expand">10dp</dimen>
-    <dimen name="mb_card_major_minor_spacing">6dp</dimen>
+    <dimen name="mb_card_major_minor_spacing">4dp</dimen>
     <dimen name="mb_card_item_spacing">14dp</dimen>
     <dimen name="mb_card_item_half_spacing">7dp</dimen>
 
     <dimen name="tsz_card">13sp</dimen>
     <dimen name="tsz_card_time">38sp</dimen>
     <dimen name="tsz_card_meridian">14sp</dimen>
-    <dimen name="tsz_card_repeat">11sp</dimen>
+    <dimen name="tsz_card_repeat">12sp</dimen>
+    <dimen name="tsz_card_name">12sp</dimen>
     <dimen name="tsz_card_days">13sp</dimen>
 
 	<!-- Music list -->

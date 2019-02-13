@@ -191,6 +191,7 @@ public class NacAlarm
 	 */
 	public void print()
 	{
+		NacUtility.printf("Alarm Information");
 		NacUtility.printf("Id      : %d", this.mId);
 		NacUtility.printf("Enabled : %b", this.mEnabled);
 		NacUtility.printf("Hour    : %d", this.mHour);
@@ -201,7 +202,6 @@ public class NacAlarm
 		NacUtility.printf("Sound   : %s", this.mSound);
 		NacUtility.printf("Name    : %s", this.mName);
 		NacUtility.printf("Format  : %s", this.m24HourFormat);
-		NacUtility.printf("\n\n");
 	}
 
 	/**
@@ -662,7 +662,6 @@ public class NacAlarm
 
 		if (path.isEmpty())
 		{
-			NacUtility.printf("Path in alarm : %s", path);
 			return "";
 		}
 
@@ -672,7 +671,6 @@ public class NacAlarm
 
 		ringtone.stop();
 
-		NacUtility.printf("Path name in alarm : %s", name);
 		return name;
 	}
 

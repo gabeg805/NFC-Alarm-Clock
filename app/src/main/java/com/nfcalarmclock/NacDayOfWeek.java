@@ -116,7 +116,6 @@ public class NacDayOfWeek
 				return;
 		}
 
-		NacUtility.printf("NacDayOfWeek Index : %d (%b)", index, this.isDayEnabled(index));
 		this.mButtons[index].animateToggle();
 
 		if (this.mListener == null)
@@ -204,7 +203,6 @@ public class NacDayOfWeek
 		}
 
 		int spacing = this.getButtonSpacing();
-		NacUtility.printf("DayOfWeek Default Color : %d", this.mButtons[0].getDefaultButtonColor());
 		//super.setBackgroundColor(this.mButtons[0].getDefaultButtonColor());
 
 		for (int i=0; i < this.mLength; i++)

@@ -9,11 +9,22 @@
     android:layout_marginTop="@dimen/mb_card_major_minor_spacing">
 
     <TextView
+        android:id="@+id/nacRepeatTextName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+		android:layout_marginStart="@dimen/sp_text"
+		android:maxLength="24"
+        android:textColor="@color/sky_blue"
+        android:textSize="@dimen/tsz_card_name"
+        android:textStyle="bold"
+        />
+
+    <TextView
         android:id="@+id/nacRepeatText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="2dp"
+		android:layout_toRightOf="@id/nacRepeatTextName"
+		android:layout_marginStart="@dimen/sp_text"
         android:textColor="?attr/colorAccent"
         android:textSize="@dimen/tsz_card_repeat"
         android:textStyle="bold"
@@ -23,7 +34,8 @@
         android:id="@+id/nacExpand"
         android:layout_width="@dimen/card_expand_size"
         android:layout_height="@dimen/card_expand_size"
-        android:layout_marginEnd="2dp"
+		android:layout_marginEnd="@dimen/sp_text"
+		android:layout_alignBottom="@id/nacRepeatText"
         android:layout_alignParentEnd="true"
         android:layout_gravity="end"
         android:src="@mipmap/baseline_keyboard_arrow_down_white_24dp"

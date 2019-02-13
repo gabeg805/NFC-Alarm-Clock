@@ -9,17 +9,22 @@
 	-->
 
     <!-- Standard colors -->
-    <color name="white">#ffffff</color>
     <color name="black">#000000</color>
-    <color name="orange">#fb8c00</color>
+	<color name="blue">#1d00fb</color>
+	<color name="dark_orange">#fb4b00</color>
+	<color name="eggshell">#f0ead6</color>
     <color name="gray">#333333</color>
     <color name="gray_mid">#222222</color>
 	<color name="gray_dark">#101010</color>
-    <color name="red">#ff0000</color>
     <color name="green">#008000</color>
+    <color name="orange">#fb8c00</color>
+    <color name="red">#ff0000</color>
+	<color name="sky_blue">#00c0fb</color>
+    <color name="silver">#c0c0c0</color>
+    <color name="white">#ffffff</color>
+	<color name="yellow">#fbc900</color>
 
 	<!--
-    <color name="silver">#c0c0c0</color>
     <color name="gray">#808080</color>
     <color name="red">#ff0000</color>
     <color name="orange">#ffa500</color>
