@@ -7,11 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 import java.lang.System;
-
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.CoordinatorLayout;
 
 /**
  * The application's main activity.

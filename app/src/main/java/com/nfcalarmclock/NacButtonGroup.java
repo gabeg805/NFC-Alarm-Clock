@@ -19,7 +19,7 @@ import android.widget.TextView;
  */
 @SuppressWarnings("ResourceType")
 public class NacButtonGroup
-    extends LinearLayout
+	extends LinearLayout
 {
 
 	/**
@@ -125,34 +125,34 @@ public class NacButtonGroup
 		init(attrs);
 	}
 
-    /**
-     */
-    public NacButtonGroup(Context context, AttributeSet attrs,
+	/**
+	 */
+	public NacButtonGroup(Context context, AttributeSet attrs,
 		int defStyleAttr)
-    {
-        super(context, attrs, defStyleAttr);
+	{
+		super(context, attrs, defStyleAttr);
 		init(attrs);
-    }
+	}
 
-    /**
-     * Finish setting up the view.
-     */
-    @Override
-    protected void onFinishInflate()
-    {
-        super.onFinishInflate();
-    }
+	/**
+	 * Finish setting up the view.
+	 */
+	@Override
+	protected void onFinishInflate()
+	{
+		super.onFinishInflate();
+	}
 
-    /**
-     * Setup the contents of the button.
-     */
-    private void init(AttributeSet attrs)
-    {
+	/**
+	 * Setup the contents of the button.
+	 */
+	private void init(AttributeSet attrs)
+	{
 		Context context = getContext();
 		this.mAttributes = new NacButtonGroupAttributes(context, attrs);
 
-        setOrientation(LinearLayout.VERTICAL);
-    }
+		setOrientation(LinearLayout.VERTICAL);
+	}
 
 	/**
 	 * Add view to container.

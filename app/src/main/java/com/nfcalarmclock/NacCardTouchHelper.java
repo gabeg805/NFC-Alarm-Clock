@@ -30,6 +30,11 @@ public class NacCardTouchHelper
 		 */
 		public void onItemDelete(int pos);
 
+		/**
+		 * Called when an alarm card should be moved.
+		 */
+		public void onItemMove(int from, int to);
+
 	}
 
 	/**
@@ -81,12 +86,49 @@ public class NacCardTouchHelper
 		private ViewHolder mViewHolder;
 
 		/**
+		 * Current action that the user is doing (drag/swipe).
+		 */
+		private int mAction;
+
+		/**
 		 * @param  adapter	The object that overrides the event methods.
 		 */
 		public Callback(Adapter adapter)
 		{
 			this.mAdapter = adapter;
 			this.mViewHolder = null;
+			this.mAction = -1;
+		}
+
+		/**
+		 * Clear the view.
+		 * 
+		 * @param  rv  The recycler view.
+		 * @param  vh  The view holder.
+		 */
+		@Override
+		public void clearView(RecyclerView rv, ViewHolder vh)
+		{
+			final View fg = this.getCardView(this.mAction);
+
+			if (this.mAction == ItemTouchHelper.ACTION_STATE_DRAG)
+			{
+				fg.setAlpha(1.0f);
+			}
+
+			getDefaultUIUtil().clearView(fg);
+		}
+
+		/**
+		 * Convert the movement of the card to an absolute direction.
+		 *
+		 * @param  flags  Movement flags.
+		 * @param  dir	The direction information.
+		 */
+		@Override
+		public int convertToAbsoluteDirection(int flags, int dir)
+		{
+			return super.convertToAbsoluteDirection(flags, dir);
 		}
 
 		/**
@@ -160,41 +202,6 @@ public class NacCardTouchHelper
 		}
 
 		/**
-		 * @return The view holder.
-		 */
-		private ViewHolder getViewHolder()
-		{
-			return this.mViewHolder;
-		}
-
-		/**
-		 * Clear the view.
-		 * 
-		 * @param  rv  The recycler view.
-		 * @param  vh  The view holder.
-		 */
-		@Override
-		public void clearView(RecyclerView rv, ViewHolder vh)
-		{
-			//final View fg = this.getForegroundView();
-			final View fg = this.getCardView();
-
-			getDefaultUIUtil().clearView(fg);
-		}
-
-		/**
-		 * Convert the movement of the card to an absolute direction.
-		 *
-		 * @param  flags  Movement flags.
-		 * @param  dir	The direction information.
-		 */
-		@Override
-		public int convertToAbsoluteDirection(int flags, int dir)
-		{
-			return super.convertToAbsoluteDirection(flags, dir);
-		}
-
-		/**
 		 * Set te movement flags for the card, to allow it to be swiped left and
 		 * right.
 		 *
@@ -206,8 +213,33 @@ public class NacCardTouchHelper
 		{
 			this.mViewHolder = vh;
 
-			return makeMovementFlags(0,
+			return makeMovementFlags(ItemTouchHelper.UP|ItemTouchHelper.DOWN,
 				ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT);
+		}
+
+		/**
+		 * @return The view holder.
+		 */
+		private ViewHolder getViewHolder()
+		{
+			return this.mViewHolder;
+		}
+
+		/**
+		 * Check if card is collapsed.
+		 */
+		public boolean isCollapsed()
+		{
+			if (this.mViewHolder == null)
+			{
+				return true;
+			}
+			else
+			{
+				NacCard card = this.getCard();
+
+				return (card != null) ? card.isCollapsed() : true;
+			}
 		}
 
 		/**
@@ -219,8 +251,18 @@ public class NacCardTouchHelper
 		@Override
 		public boolean isItemViewSwipeEnabled()
 		{
-			return (this.mViewHolder == null) ? true :
-				((NacCardHolder)this.mViewHolder).mCard.isCollapsed();
+			return this.isCollapsed();
+			//return (this.mviewholder == null) ? true :
+			//	((naccardholder)this.mviewholder).mcard.iscollapsed();
+		}
+
+		/**
+		 * Allow the card to be dragged.
+		 */
+		@Override
+		public boolean isLongPressDragEnabled()
+		{
+			return this.isCollapsed();
 		}
 
 		/**
@@ -239,8 +281,9 @@ public class NacCardTouchHelper
 			float dx, float dy, int action, boolean active)
 		{
 			this.mViewHolder = vh;
-			//final View fg = this.getForegroundView();
-			final View fg = this.getCardView();
+			this.mAction = action;
+
+			final View fg = this.getCardView(action);
 			final View copy = this.getCopyView();
 			final View delete = this.getDeleteView();
 
@@ -276,8 +319,7 @@ public class NacCardTouchHelper
 		public void onChildDrawOver(Canvas c, RecyclerView rv, ViewHolder vh,
 			float dx, float dy, int action, boolean active)
 		{
-			//final View view = this.getForegroundView();
-			final View view = this.getCardView();
+			final View view = this.getCardView(action);
 
 			getDefaultUIUtil().onDrawOver(c, rv, view, dx, dy, action, active);
 		}
@@ -292,7 +334,10 @@ public class NacCardTouchHelper
 		@Override
 		public boolean onMove(RecyclerView rv, ViewHolder vh, ViewHolder target)
 		{
-			return false;
+			this.mAdapter.onItemMove(vh.getAdapterPosition(),
+				target.getAdapterPosition());
+
+			return true;
 		}
 
 		/**
@@ -306,8 +351,12 @@ public class NacCardTouchHelper
 		{
 			if (vh != null)
 			{
-				//final View fg = this.getForegroundView();
-				final View fg = this.getCardView();
+				final View fg = this.getCardView(action);
+
+				if (action == ItemTouchHelper.ACTION_STATE_DRAG)
+				{
+					fg.setAlpha(0.75f);
+				}
 
 				getDefaultUIUtil().onSelected(fg);
 			}

@@ -1,49 +1,49 @@
 <resources>
 
 	<!-- Floating button -->
-    <dimen name="m_fab">16dp</dimen>
+	<dimen name="m_fab">16dp</dimen>
 
-    <!-- CardView -->
-    <dimen name="elv_card">5dp</dimen>
-    <dimen name="mt_card">10dp</dimen>
-    <dimen name="mb_card">10dp</dimen>
-    <dimen name="ml_card">16dp</dimen>
-    <dimen name="mr_card">16dp</dimen>
-    <dimen name="sp_card">10dp</dimen>
-    <dimen name="sp_text">4dp</dimen>
+	<!-- CardView -->
+	<dimen name="elv_card">5dp</dimen>
+	<dimen name="mt_card">10dp</dimen>
+	<dimen name="mb_card">10dp</dimen>
+	<dimen name="ml_card">16dp</dimen>
+	<dimen name="mr_card">16dp</dimen>
+	<dimen name="sp_card">10dp</dimen>
+	<dimen name="sp_text">4dp</dimen>
 
-    <dimen name="ml_card_meridian">5dp</dimen>
-    <dimen name="mb_card_expand">10dp</dimen>
-    <dimen name="mb_card_major_minor_spacing">4dp</dimen>
-    <dimen name="mb_card_item_spacing">14dp</dimen>
-    <dimen name="mb_card_item_half_spacing">7dp</dimen>
+	<dimen name="ml_card_meridian">5dp</dimen>
+	<dimen name="mb_card_expand">10dp</dimen>
+	<dimen name="mb_card_major_minor_spacing">4dp</dimen>
+	<dimen name="mb_card_item_spacing">14dp</dimen>
+	<dimen name="mb_card_item_half_spacing">7dp</dimen>
 
-    <dimen name="tsz_card">13sp</dimen>
-    <dimen name="tsz_card_time">38sp</dimen>
-    <dimen name="tsz_card_meridian">14sp</dimen>
-    <dimen name="tsz_card_repeat">12sp</dimen>
-    <dimen name="tsz_card_name">12sp</dimen>
-    <dimen name="tsz_card_days">13sp</dimen>
+	<dimen name="tsz_card">13sp</dimen>
+	<dimen name="tsz_card_time">38sp</dimen>
+	<dimen name="tsz_card_meridian">14sp</dimen>
+	<dimen name="tsz_card_repeat">12sp</dimen>
+	<dimen name="tsz_card_name">12sp</dimen>
+	<dimen name="tsz_card_days">13sp</dimen>
 
 	<!-- Music list -->
-    <dimen name="tsz_song">24sp</dimen>
-    <dimen name="tsz_directory">12sp</dimen>
+	<dimen name="tsz_song">24sp</dimen>
+	<dimen name="tsz_directory">12sp</dimen>
 
 	<!-- Sound prompt -->
-    <dimen name="mb_prompt">8dp</dimen>
-    <dimen name="tsz_prompt">15sp</dimen>
+	<dimen name="mb_prompt">8dp</dimen>
+	<dimen name="tsz_prompt">15sp</dimen>
 
 	<!-- NacImageTextButton -->
-    <dimen name="isz_card">22dp</dimen>
+	<dimen name="isz_card">22dp</dimen>
 
 	<!-- DayOfWeekButton -->
-    <dimen name="switch_size">58dp</dimen>
+	<dimen name="switch_size">58dp</dimen>
 
 	<!-- Expand button -->
-    <dimen name="card_expand_size">20dp</dimen>
+	<dimen name="card_expand_size">20dp</dimen>
 
 	<!-- DayOfWeekButton -->
-    <dimen name="circle_size">30dp</dimen>
+	<dimen name="circle_size">30dp</dimen>
 
 	<!-- Number picker -->>
 	<dimen name="m_scroll_option">30dp</dimen>

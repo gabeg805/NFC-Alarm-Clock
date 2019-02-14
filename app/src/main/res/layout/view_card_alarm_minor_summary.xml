@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/alarmMinorSummary"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_below="@id/alarmMajor"
-    android:layout_marginTop="@dimen/mb_card_major_minor_spacing">
+	android:id="@+id/alarmMinorSummary"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_below="@id/alarmMajor"
+	android:layout_marginTop="@dimen/mb_card_major_minor_spacing">
 
-    <TextView
-        android:id="@+id/nacRepeatTextName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+	<TextView
+		android:id="@+id/nacRepeatTextName"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
 		android:layout_marginStart="@dimen/sp_text"
-		android:maxLength="24"
-        android:textColor="@color/sky_blue"
-        android:textSize="@dimen/tsz_card_name"
-        android:textStyle="bold"
-        />
+		android:maxLength="@integer/max_entry_length"
+		android:textColor="@color/sky_blue"
+		android:textSize="@dimen/tsz_card_name"
+		android:textStyle="bold"
+		/>
 
-    <TextView
-        android:id="@+id/nacRepeatText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+	<TextView
+		android:id="@+id/nacRepeatText"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
 		android:layout_toRightOf="@id/nacRepeatTextName"
 		android:layout_marginStart="@dimen/sp_text"
-        android:textColor="?attr/colorAccent"
-        android:textSize="@dimen/tsz_card_repeat"
-        android:textStyle="bold"
-        />
+		android:textColor="?attr/colorAccent"
+		android:textSize="@dimen/tsz_card_repeat"
+		android:textStyle="bold"
+		/>
 
-    <ImageView
-        android:id="@+id/nacExpand"
-        android:layout_width="@dimen/card_expand_size"
-        android:layout_height="@dimen/card_expand_size"
+	<ImageView
+		android:id="@+id/nacExpand"
+		android:layout_width="@dimen/card_expand_size"
+		android:layout_height="@dimen/card_expand_size"
 		android:layout_marginEnd="@dimen/sp_text"
 		android:layout_alignBottom="@id/nacRepeatText"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="end"
-        android:src="@mipmap/baseline_keyboard_arrow_down_white_24dp"
+		android:layout_alignParentEnd="true"
+		android:layout_gravity="end"
+		android:src="@mipmap/baseline_keyboard_arrow_down_white_24dp"
 		tools:ignore="ContentDescription"
-        />
+		/>
 
 </RelativeLayout>

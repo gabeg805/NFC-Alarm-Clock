@@ -18,7 +18,7 @@ import android.widget.TextView;
  * A button that consists of an image to the left, and text to the right of it.
  */
 public class NacImageTextButton
-    extends LinearLayout
+	extends LinearLayout
 {
 
 	/**
@@ -104,34 +104,34 @@ public class NacImageTextButton
 		init(attrs);
 	}
 
-    /**
-     */
-    public NacImageTextButton(Context context, AttributeSet attrs,
+	/**
+	 */
+	public NacImageTextButton(Context context, AttributeSet attrs,
 		int defStyleAttr)
-    {
-        super(context, attrs, defStyleAttr);
+	{
+		super(context, attrs, defStyleAttr);
 		init(attrs);
-    }
+	}
 
-    /**
-     * Finish setting up the view.
-     */
-    @Override
-    protected void onFinishInflate()
-    {
-        super.onFinishInflate();
+	/**
+	 * Finish setting up the view.
+	 */
+	@Override
+	protected void onFinishInflate()
+	{
+		super.onFinishInflate();
 		this.setViewAttributes();
-    }
+	}
 
-    /**
-     * Setup the contents of the button.
-     */
-    private void init(AttributeSet attrs)
-    {
+	/**
+	 * Setup the contents of the button.
+	 */
+	private void init(AttributeSet attrs)
+	{
 		Context context = getContext();
 
-        setOrientation(LinearLayout.HORIZONTAL);
-        LayoutInflater.from(context).inflate(R.layout.nac_image_text_button,
+		setOrientation(LinearLayout.HORIZONTAL);
+		LayoutInflater.from(context).inflate(R.layout.nac_image_text_button,
 			this, true);
 
 		this.mAttributes = new Attributes(context, attrs);
@@ -142,7 +142,7 @@ public class NacImageTextButton
 		{
 			throw new RuntimeException("Unable to find Image or Text view IDs.");
 		}
-    }
+	}
 
 	/**
 	 * Redraw the view.
@@ -187,7 +187,7 @@ public class NacImageTextButton
 		this.mAttributes.imageHeight = height;
 
 		this.mImage.setLayoutParams(params);
-        //iv.setAdjustViewBounds(true);
+		//iv.setAdjustViewBounds(true);
 		this.redraw();
 	}
 
@@ -239,22 +239,22 @@ public class NacImageTextButton
 	{
 		LayoutParams params = (LayoutParams) this.getLayoutParams();
 
-        params.setMargins(start, top, end, bottom);
+		params.setMargins(start, top, end, bottom);
 		this.setLayoutParams(params);
 	}
 
 	/**
 	 * Set the spacing between the image and text.
 	 * 
-	 * @param  spacing  The spacing.
+	 * @param  spacing	The spacing.
 	 */
 	public void setSpacing(int spacing)
 	{
 		this.mAttributes.spacing = spacing;
 		LayoutParams params = (LayoutParams) this.mImage.getLayoutParams();
 
-        params.setMargins(0, 0, spacing, 0);
-        this.mImage.setLayoutParams(params);
+		params.setMargins(0, 0, spacing, 0);
+		this.mImage.setLayoutParams(params);
 	}
 
 	/**

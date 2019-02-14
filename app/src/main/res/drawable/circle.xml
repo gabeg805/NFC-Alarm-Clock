@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector
-    xmlns:android="http://schemas.android.com/apk/res/android">
+	xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:state_pressed="true">
-        <shape android:shape="oval">
-            <solid android:color="?attr/colorCardFocus"/>
-        </shape>
-    </item>
+	<item android:state_pressed="true">
+		<shape android:shape="oval">
+			<solid android:color="?attr/colorCardFocus"/>
+		</shape>
+	</item>
 
-    <item android:state_focused="true">
-        <shape android:shape="oval">
-            <solid android:color="?attr/colorCard"/>
-        </shape>
-    </item>
+	<item android:state_focused="true">
+		<shape android:shape="oval">
+			<solid android:color="?attr/colorCard"/>
+		</shape>
+	</item>
 
-    <item>
-        <shape android:shape="oval">
-            <solid android:color="?attr/colorCardExpanded"/>
-        </shape>
-    </item>
+	<item>
+		<shape android:shape="oval">
+			<solid android:color="?attr/colorCardExpanded"/>
+		</shape>
+	</item>
 
 </selector>

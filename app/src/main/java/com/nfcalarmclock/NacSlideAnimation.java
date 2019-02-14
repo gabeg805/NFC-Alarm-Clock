@@ -6,52 +6,41 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
 /**
- * @brief NFC Alarm Clock Slide Animation.
+ * NFC Alarm Clock Slide Animation.
  */
 public class NacSlideAnimation
 	extends Animation
 {
 
 	/**
-	 * @brief The view to animate.
+	 * The view to animate.
 	 */
-    private View mView;
+	private View mView;
 
 	/**
-	 * @brief The original height of the view.
+	 * The original height of the view.
 	 */
-    private int mFromHeight;
+	private int mFromHeight;
 
 	/**
-	 * @brief The height to set the view to, once the animation is complete.
+	 * The height to set the view to, once the animation is complete.
 	 */
-    private int mToHeight;
+	private int mToHeight;
 
 	/**
-	 * @brief Constructor where the animation duraiton is calculated for the
-	 * 		  user.
-	 *
-	 * @note See NacSlideAnimation for information on the params.
 	 */
-    public NacSlideAnimation(View v, int from, int to)
+	public NacSlideAnimation(View v, int from, int to)
 	{
 		this(v, from, to, -1);
-    }
+	}
 
 	/**
-	 * @brief Constructor setting all aspects of the slide animation object.
-	 *
-	 * @param  v  The view to animate.
-	 * @param  from  The original height of the view. The view will be set to
-	 * 				 this size even if it is not this size to begin with.
-	 * @param  to  The height of the view once the animation is finished.
-	 * @param  duration   The duration of the animation.
 	 */
 	public NacSlideAnimation(View v, int from, int to, int duration)
 	{
-        this.mView = v;
-        this.mFromHeight = from;
-        this.mToHeight = to;
+		this.mView = v;
+		this.mFromHeight = from;
+		this.mToHeight = to;
 
 		if (duration < 0)
 		{
@@ -64,42 +53,37 @@ public class NacSlideAnimation
 	}
 
 	/**
-	 * @brief Apply the transformation to the view to animate it.
+	 * Apply the transformation to the view to animate it.
 	 */
-    @Override
-    protected void applyTransformation(float time, Transformation trans)
+	@Override
+	protected void applyTransformation(float time, Transformation trans)
 	{
-        int newHeight;
-
-		//NacUtility.printf("View Height : %d", mView.getHeight());
-		//NacUtility.printf("To Height   : %d", mToHeight);
-
-        if (mView.getHeight() != mToHeight)
+		if (this.mView.getHeight() != this.mToHeight)
 		{
-            newHeight = (int) (mFromHeight + ((mToHeight - mFromHeight) * time));
-            mView.getLayoutParams().height = newHeight;
-			//NacUtility.printf("Transform Height : %d", mView.getLayoutParams().height);
-            mView.requestLayout();
-        }
-    }
+			int newHeight = (int) (this.mFromHeight + ((this.mToHeight
+				- this.mFromHeight) * time));
+			this.mView.getLayoutParams().height = newHeight;
+			this.mView.requestLayout();
+		}
+	}
 
 	/**
-	 * @brief Initialize the animation.
+	 * Initialize the animation.
 	 */
-    @Override
-    public void initialize(int width, int height,
-						   int parentWidth, int parentHeight)
+	@Override
+	public void initialize(int width, int height, int parentWidth,
+		int parentHeight)
 	{
-        super.initialize(width, height, parentWidth, parentHeight);
-    }
+		super.initialize(width, height, parentWidth, parentHeight);
+	}
 
 	/**
-	 * @brief Change the bounds of the animation.
+	 * Change the bounds of the animation.
 	 */
-    @Override
-    public boolean willChangeBounds()
+	@Override
+	public boolean willChangeBounds()
 	{
-        return true;
-    }
+		return true;
+	}
 
 }

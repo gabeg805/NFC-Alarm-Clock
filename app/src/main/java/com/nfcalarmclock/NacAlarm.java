@@ -192,7 +192,7 @@ public class NacAlarm
 	public void print()
 	{
 		NacUtility.printf("Alarm Information");
-		NacUtility.printf("Id      : %d", this.mId);
+		NacUtility.printf("Id	   : %d", this.mId);
 		NacUtility.printf("Enabled : %b", this.mEnabled);
 		NacUtility.printf("Hour    : %d", this.mHour);
 		NacUtility.printf("Minute  : %d", this.mMinute);
@@ -590,7 +590,7 @@ public class NacAlarm
 
 	/**
 	 * @return The default days string. This should be used if getDaysString
-	 *         is empty.
+	 *		   is empty.
 	 */
 	public static String getDaysStringDefault()
 	{

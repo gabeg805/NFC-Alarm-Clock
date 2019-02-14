@@ -95,6 +95,18 @@ public class NacDatabase
 	}
 
 	/**
+	 * @param  value  The value to convert to a where clause.
+	 *
+	 * @return Where arguments for the where clause.
+	 */
+	private String[] getWhereArgs(int value)
+	{
+		String id = String.valueOf(value);
+
+		return new String[] {id};
+	}
+
+	/**
 	 * @param  alarm  The alarm to convert to a where clause.
 	 *
 	 * @return Where arguments for the where clause.
@@ -210,6 +222,37 @@ public class NacDatabase
 		{
 			this.mDatabase = this.getWritableDatabase();
 		}
+	}
+
+	/**
+	 * Swap the IDs of two alarms.
+	 *
+	 * IDs will dictate the order in which alarms are displayed when the app is
+	 * started.
+	 *
+	 * @param  fromAlarm  An alarm that was moved.
+	 * @param  toAlarm	An alarm that was moved.
+	 */
+	public int swap(NacAlarm fromAlarm, NacAlarm toAlarm)
+	{
+		this.setDatabase();
+ 
+		int fromId = fromAlarm.getId();
+		int toId = toAlarm.getId();
+ 
+		fromAlarm.setId(toId);
+		toAlarm.setId(fromId);
+ 
+		String table = NacDatabaseContract.AlarmTable.TABLE_NAME;
+		ContentValues fromCv = this.getContentValues(fromAlarm);
+		ContentValues toCv = this.getContentValues(toAlarm);
+		String where = this.getWhereClause();
+		String[] fromArgs = this.getWhereArgs(toId);
+		String[] toArgs = this.getWhereArgs(fromId);
+		int fromRows = this.mDatabase.update(table, fromCv, where, fromArgs);
+		int toRows = this.mDatabase.update(table, toCv, where, toArgs);
+ 
+		return fromRows + toRows;
 	}
 
 	/**

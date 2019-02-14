@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
  * @brief Holder of all important views.
  */
 public class NacCard
-    implements View.OnClickListener
+	implements View.OnClickListener
 {
 
 	/**
@@ -58,7 +58,7 @@ public class NacCard
 	/**
 	 * Card view.
 	 */
-    private CardView mCardView;
+	private CardView mCardView;
 
 	/**
 	 * Clickable region in the card to expand/collapse.
@@ -89,13 +89,13 @@ public class NacCard
 	 */
 	private State mState;
 
-    /**
-     */
-    public NacCard(View root)
-    {
+	/**
+	 */
+	public NacCard(View root)
+	{
 		this.mRoot = root;
-        this.mCardView = (CardView) root.findViewById(R.id.view_card_alarm);
-        this.mClickable = (RelativeLayout) root.findViewById(R.id.alarmMajor);
+		this.mCardView = (CardView) root.findViewById(R.id.view_card_alarm);
+		this.mClickable = (RelativeLayout) root.findViewById(R.id.alarmMajor);
 		this.mCopyView = (RelativeLayout) root.findViewById(
 			R.id.view_background_copy);
 		this.mDeleteView = (RelativeLayout) root.findViewById(
@@ -107,11 +107,11 @@ public class NacCard
 		this.mState = State.COLLAPSED;
 	}
 
-    /**
-     * Collapse the alarm card.
-     */
-    public void collapse()
-    {
+	/**
+	 * Collapse the alarm card.
+	 */
+	public void collapse()
+	{
 		this.mState = State.COLLAPSED;
 
 		this.mRegion.collapse();
@@ -121,13 +121,13 @@ public class NacCard
 		{
 			this.mCollapseListener.onCollapse(this);
 		}
-    }
+	}
 
-    /**
-     * Expand the alarm card.
-     */
-    public void expand()
-    {
+	/**
+	 * Expand the alarm card.
+	 */
+	public void expand()
+	{
 		this.mState = State.EXPANDED;
 
 		this.unfocus();
@@ -138,7 +138,7 @@ public class NacCard
 		{
 			this.mExpandListener.onExpand(this);
 		}
-    }
+	}
 
 	/**
 	 * Focus the alarm card.
@@ -196,7 +196,7 @@ public class NacCard
 
 	/**
 	 * @return The delete view, which resides in the background of the card
-	 *         view.
+	 *		   view.
 	 */
 	public View getDeleteView()
 	{
@@ -219,14 +219,14 @@ public class NacCard
 		return this.mRegion.getHeight();
 	}
 
-    /**
-     * Initialize the alarm card.
+	/**
+	 * Initialize the alarm card.
 	 *
 	 * @param  wasAdded  Indicator for whether or not the card should be
-	 * 					 focused.
-     */
-    public void init(boolean wasAdded)
-    {
+	 *					 focused.
+	 */
+	public void init(boolean wasAdded)
+	{
 		this.mCopyView.setVisibility(View.GONE);
 		this.mDeleteView.setVisibility(View.GONE);
 
@@ -243,7 +243,7 @@ public class NacCard
 		}
 
 		this.focus(wasAdded);
-    }
+	}
 
 	/**
 	 * @return True if the card is collapsed and false otherwise.

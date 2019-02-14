@@ -2,6 +2,7 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 /**
@@ -26,6 +27,8 @@ public class NacCardName
 	 */
 	private TextView mTextView = null;
 
+	private int mMarginStart;
+
 	/**
 	 */
 	public NacCardName(View root)
@@ -35,6 +38,7 @@ public class NacCardName
 		this.mAlarm = null;
 		this.mName = (NacImageTextButton) root.findViewById(R.id.nacName);
 		this.mTextView = (TextView) root.findViewById(R.id.nacRepeatTextName);
+		this.mMarginStart = root.getResources().getDimensionPixelSize(R.dimen.sp_text);
 
 		this.mName.setOnClickListener(this);
 	}
@@ -59,6 +63,7 @@ public class NacCardName
 		Context context = v.getContext();
 
 		dialog.build(context, R.layout.dlg_alarm_name);
+		dialog.saveData(this.mAlarm.getName());
 		dialog.addDismissListener(this);
 		dialog.show();
 	}
@@ -87,15 +92,21 @@ public class NacCardName
 		String name = this.mAlarm.getName();
 		String text = name+"  ";
 		boolean focus = true;
+		LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT,
+			LayoutParams.WRAP_CONTENT);
+		int margin = this.mMarginStart;
 
 		if (name.isEmpty())
 		{
 			name = NacAlarm.getNameMessage();
 			text = "";
 			focus = false;
+			margin = 0;
 		}
 
 		NacUtility.printf("Name : %s", name);
+		params.setMarginStart(margin);
+		this.mTextView.setLayoutParams(params);
 		this.mName.setText(name);
 		this.mName.setFocus(focus);
 		this.mTextView.setText(text);

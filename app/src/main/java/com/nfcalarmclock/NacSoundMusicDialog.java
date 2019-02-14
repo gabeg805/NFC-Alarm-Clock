@@ -8,7 +8,6 @@ import android.Manifest;
 import android.media.MediaMetadataRetriever;
 import android.os.Environment;
 import android.view.View;
-import android.widget.Toast;
 import java.io.IOException;
 import java.io.File;
 import java.io.FilenameFilter;

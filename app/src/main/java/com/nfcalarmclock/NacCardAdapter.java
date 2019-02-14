@@ -9,8 +9,8 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -153,7 +153,7 @@ public class NacCardAdapter
 	/**
 	 * Copy the alarm.
 	 *
-	 * @param  pos  The position of the alarm card to copy.
+	 * @param  pos	The position of the alarm card to copy.
 	 */
 	public void copy(int pos)
 	{
@@ -332,25 +332,44 @@ public class NacCardAdapter
 	/**
 	 * Copy the alarm.
 	 *
-	 * @param  pos  The position of the alarm to copy.
+	 * @param  pos	The position of the alarm to copy.
 	 */
 	@Override
 	public void onItemCopy(int pos)
 	{
-		this.mTouchHelper.reset();
+		//this.mTouchHelper.reset();
+		this.notifyItemChanged(pos);
 		this.copy(pos);
 	}
 
 	/**
 	 * Delete the alarm.
 	 * 
-	 * @param  pos  The position of the alarm to delete.
+	 * @param  pos	The position of the alarm to delete.
 	 */
 	@Override
 	public void onItemDelete(int pos)
 	{
 		// Should i reset the touch helper here?
+		this.notifyItemChanged(pos);
 		this.delete(pos);
+	}
+
+	/**
+	 * Drag and reorder the alarm.
+	 *
+	 * @param  from  The position that the alarm is moving from.
+	 * @param  to  The position the alarm is moving to.
+	 */
+	@Override
+	public void onItemMove(int fromIndex, int toIndex)
+	{
+		NacAlarm fromAlarm = this.get(fromIndex);
+		NacAlarm toAlarm = this.get(toIndex);
+
+		Collections.swap(this.mAlarmList, fromIndex, toIndex);
+		this.mDatabase.swap(fromAlarm, toAlarm);
+		this.notifyItemMoved(fromIndex, toIndex);
 	}
 
 	/**

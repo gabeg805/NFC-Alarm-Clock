@@ -21,7 +21,7 @@ import android.widget.TextView;
  * subtitle.
  */
 public class NacImageSubTextButton
-    extends LinearLayout
+	extends LinearLayout
 {
 
 	/**
@@ -115,34 +115,34 @@ public class NacImageSubTextButton
 		init(attrs);
 	}
 
-    /**
-     */
-    public NacImageSubTextButton(Context context, AttributeSet attrs,
+	/**
+	 */
+	public NacImageSubTextButton(Context context, AttributeSet attrs,
 		int defStyleAttr)
-    {
-        super(context, attrs, defStyleAttr);
+	{
+		super(context, attrs, defStyleAttr);
 		init(attrs);
-    }
+	}
 
-    /**
-     * Finish setting up the view.
-     */
-    @Override
-    protected void onFinishInflate()
-    {
-        super.onFinishInflate();
+	/**
+	 * Finish setting up the view.
+	 */
+	@Override
+	protected void onFinishInflate()
+	{
+		super.onFinishInflate();
 		this.setViewAttributes();
-    }
+	}
 
-    /**
-     * Setup the contents of the button.
-     */
-    private void init(AttributeSet attrs)
-    {
+	/**
+	 * Setup the contents of the button.
+	 */
+	private void init(AttributeSet attrs)
+	{
 		Context context = getContext();
 
 		setOrientation(LinearLayout.HORIZONTAL);
-        LayoutInflater.from(context).inflate(R.layout.nac_image_subtext_button,
+		LayoutInflater.from(context).inflate(R.layout.nac_image_subtext_button,
 			this, true);
 
 		this.mAttributes = new Attributes(context, attrs);
@@ -154,7 +154,7 @@ public class NacImageSubTextButton
 		{
 			throw new RuntimeException("Unable to find Image or Title or Subtitle view IDs.");
 		}
-    }
+	}
 
 	/**
 	 * Redraw the view.
@@ -248,15 +248,15 @@ public class NacImageSubTextButton
 	/**
 	 * Set the spacing between the image and text.
 	 * 
-	 * @param  spacing  The spacing.
+	 * @param  spacing	The spacing.
 	 */
 	public void setSpacing(int spacing)
 	{
 		this.mAttributes.spacing = spacing;
 		LayoutParams params = (LayoutParams) this.mImage.getLayoutParams();
 
-        params.setMargins(0, 0, spacing, 0);
-        this.mImage.setLayoutParams(params);
+		params.setMargins(0, 0, spacing, 0);
+		this.mImage.setLayoutParams(params);
 	}
 
 	/**

@@ -1,54 +1,54 @@
 <merge
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.nfcalarmclock.NacDayButton
-        android:id="@+id/dowb_sun"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:nacText="@string/dowb_sun"
-        />
+	<com.nfcalarmclock.NacDayButton
+		android:id="@+id/dowb_sun"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:nacText="@string/dowb_sun"
+		/>
 
-    <com.nfcalarmclock.NacDayButton
-        android:id="@+id/dowb_mon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:nacText="@string/dowb_mon"
-        />
+	<com.nfcalarmclock.NacDayButton
+		android:id="@+id/dowb_mon"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:nacText="@string/dowb_mon"
+		/>
 
-    <com.nfcalarmclock.NacDayButton
-        android:id="@+id/dowb_tue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:nacText="@string/dowb_tue"
-        />
+	<com.nfcalarmclock.NacDayButton
+		android:id="@+id/dowb_tue"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:nacText="@string/dowb_tue"
+		/>
 
-    <com.nfcalarmclock.NacDayButton
-        android:id="@+id/dowb_wed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:nacText="@string/dowb_wed"
-        />
+	<com.nfcalarmclock.NacDayButton
+		android:id="@+id/dowb_wed"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:nacText="@string/dowb_wed"
+		/>
 
-    <com.nfcalarmclock.NacDayButton
-        android:id="@+id/dowb_thu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:nacText="@string/dowb_thu"
-        />
+	<com.nfcalarmclock.NacDayButton
+		android:id="@+id/dowb_thu"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:nacText="@string/dowb_thu"
+		/>
 
-    <com.nfcalarmclock.NacDayButton
-        android:id="@+id/dowb_fri"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:nacText="@string/dowb_fri"
-        />
+	<com.nfcalarmclock.NacDayButton
+		android:id="@+id/dowb_fri"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:nacText="@string/dowb_fri"
+		/>
 
-    <com.nfcalarmclock.NacDayButton
-        android:id="@+id/dowb_sat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:nacText="@string/dowb_sat"
-        />
+	<com.nfcalarmclock.NacDayButton
+		android:id="@+id/dowb_sat"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:nacText="@string/dowb_sat"
+		/>
 
 </merge>

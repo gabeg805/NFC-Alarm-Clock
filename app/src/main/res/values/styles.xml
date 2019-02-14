@@ -1,23 +1,23 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat">
+	<!-- Base application theme. -->
+	<style name="AppTheme" parent="Theme.AppCompat">
 		<!-- <item name="android:windowActionBar">true</item> -->
-        <item name="android:colorBackground">@color/gray_dark</item>
-        <item name="colorPrimary">@color/black</item>
-        <item name="colorPrimaryDark">@color/black</item>
-        <item name="colorAccent">@color/orange</item>
+		<item name="android:colorBackground">@color/gray_dark</item>
+		<item name="colorPrimary">@color/black</item>
+		<item name="colorPrimaryDark">@color/black</item>
+		<item name="colorAccent">@color/orange</item>
 
-        <item name="colorCard">?android:attr/colorBackground</item>
-        <item name="colorCardAccent">@color/orange</item>
-        <item name="colorCardExpanded">@color/gray</item>
-        <item name="colorCardHighlight">@color/gray_mid</item>
-        <item name="colorCardDivider">@color/orange</item>
-        <item name="colorCardDrawable">@color/white</item>
-        <item name="colorCardText">@color/white</item>
-        <item name="colorCardFocus">@color/white</item>
-        <item name="colorCardFocusText">@color/black</item>
-    </style>
+		<item name="colorCard">?android:attr/colorBackground</item>
+		<item name="colorCardAccent">@color/orange</item>
+		<item name="colorCardExpanded">@color/gray</item>
+		<item name="colorCardHighlight">@color/gray_mid</item>
+		<item name="colorCardDivider">@color/orange</item>
+		<item name="colorCardDrawable">@color/white</item>
+		<item name="colorCardText">@color/white</item>
+		<item name="colorCardFocus">@color/white</item>
+		<item name="colorCardFocusText">@color/black</item>
+	</style>
 
 	<style name="NacDayButton">
 		<item name="nacWidth">@dimen/circle_size</item>

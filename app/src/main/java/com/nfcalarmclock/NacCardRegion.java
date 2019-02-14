@@ -11,25 +11,25 @@ import android.view.View.MeasureSpec;
 public class NacCardRegion
 {
 
-    /**
-     * Summary region.
-     */
-    private RelativeLayout mSummaryRegion;
+	/**
+	 * Summary region.
+	 */
+	private RelativeLayout mSummaryRegion;
 
-    /**
-     * Extra region.
-     */
-    private RelativeLayout mExtraRegion;
+	/**
+	 * Extra region.
+	 */
+	private RelativeLayout mExtraRegion;
 
-    /**
-     * Expand button.
-     */
-    private ImageView mExpandButton;
+	/**
+	 * Expand button.
+	 */
+	private ImageView mExpandButton;
 
-    /**
-     * Collapse button.
-     */
-    private ImageView mCollapseButton;
+	/**
+	 * Collapse button.
+	 */
+	private ImageView mCollapseButton;
 
 	/**
 	 * The original height of the region when it is collapsed. This corresponds
@@ -43,17 +43,17 @@ public class NacCardRegion
 	 */
 	public int mToHeight;
 
-    /**
-     */
-    public NacCardRegion(View root)
-    {
+	/**
+	 */
+	public NacCardRegion(View root)
+	{
 		this.mSummaryRegion = (RelativeLayout) root.findViewById(R.id.alarmMinorSummary);
 		this.mExtraRegion = (RelativeLayout) root.findViewById(R.id.alarmMinorExpand);
-        this.mExpandButton = (ImageView) root.findViewById(R.id.nacExpand);
-        this.mCollapseButton = (ImageView) root.findViewById(R.id.nacCollapse);
+		this.mExpandButton = (ImageView) root.findViewById(R.id.nacExpand);
+		this.mCollapseButton = (ImageView) root.findViewById(R.id.nacCollapse);
 		this.mFromHeight = 0;
 		this.mToHeight = 0;
-    }
+	}
 
 	/**
 	 * Initialize the summary and expandable regions.
@@ -85,10 +85,10 @@ public class NacCardRegion
 	 */
 	public void collapseNoAnimation()
 	{
-        this.mSummaryRegion.setVisibility(View.VISIBLE);
-        this.mSummaryRegion.setEnabled(true);
-        this.mExtraRegion.setVisibility(View.GONE);
-        this.mExtraRegion.setEnabled(false);
+		this.mSummaryRegion.setVisibility(View.VISIBLE);
+		this.mSummaryRegion.setEnabled(true);
+		this.mExtraRegion.setVisibility(View.GONE);
+		this.mExtraRegion.setEnabled(false);
 	}
 
 	/**
@@ -111,10 +111,10 @@ public class NacCardRegion
 	 */
 	public void expandNoAnimation()
 	{
-        this.mSummaryRegion.setVisibility(View.GONE);
-        this.mSummaryRegion.setEnabled(false);
-        this.mExtraRegion.setVisibility(View.VISIBLE);
-        this.mExtraRegion.setEnabled(true);
+		this.mSummaryRegion.setVisibility(View.GONE);
+		this.mSummaryRegion.setEnabled(false);
+		this.mExtraRegion.setVisibility(View.VISIBLE);
+		this.mExtraRegion.setEnabled(true);
 	}
 
 	/**
@@ -179,7 +179,7 @@ public class NacCardRegion
 	 */
 	public void setCollapseListener(View.OnClickListener listener)
 	{
-        this.mCollapseButton.setOnClickListener(listener);
+		this.mCollapseButton.setOnClickListener(listener);
 	}
 
 	/**
@@ -189,7 +189,7 @@ public class NacCardRegion
 	 */
 	public void setExpandListener(View.OnClickListener listener)
 	{
-        this.mExpandButton.setOnClickListener(listener);
+		this.mExpandButton.setOnClickListener(listener);
 	}
 
 }

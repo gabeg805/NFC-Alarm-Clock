@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:paddingTop="10dp"
-    android:paddingBottom="-25dp"
-    android:paddingStart="?dialogPreferredPadding"
-    android:paddingEnd="?dialogPreferredPadding">
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	android:paddingTop="10dp"
+	android:paddingBottom="-25dp"
+	android:paddingStart="?dialogPreferredPadding"
+	android:paddingEnd="?dialogPreferredPadding">
 
-    <EditText
-        android:id="@+id/alarm_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="-5dp"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:maxLines="1"
-        android:maxLength="30"
+	<EditText
+		android:id="@+id/alarm_name"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="-5dp"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:maxLines="1"
+		android:maxLength="@integer/max_entry_length"
 		android:inputType="text"
 		android:hint="@string/dlg_name_hint">
 
-        <requestFocus />
+		<requestFocus />
 
-    </EditText>
+	</EditText>
 
 </LinearLayout>
