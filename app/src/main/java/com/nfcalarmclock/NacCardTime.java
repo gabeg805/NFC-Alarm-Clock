@@ -91,10 +91,13 @@ public class NacCardTime
 		int hour = this.mAlarm.getHour();
 		int minute = this.mAlarm.getMinute();
 		boolean format = this.mAlarm.get24HourFormat();
-		TimePickerDialog dialog = new TimePickerDialog(context, this, hour,
-			minute, format);
+		//TimePickerDialog dialog = new TimePickerDialog(context, this, hour,
+		//	minute, format);
 
+		NacColorPickerDialog dialog = new NacColorPickerDialog();
+		dialog.build(context, R.layout.dlg_color_picker);
 		dialog.show();
+		dialog.scale(0.8, 0.8, false, false);
 	}
 
 	@Override

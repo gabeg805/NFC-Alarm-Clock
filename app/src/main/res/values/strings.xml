@@ -25,6 +25,7 @@
 	<string name="dlg_prompt_ringtone">Choose ringtone&#8230;</string>
 	<string name="dlg_prompt_music">Browse music&#8230;</string>
 	<string name="dlg_name_hint">Alarm name</string>
+	<string name="dlg_color_hint">Hex Color</string>
 
 	<!-- General preference -->
 	<string name="pref_general_key">pref_general</string>
