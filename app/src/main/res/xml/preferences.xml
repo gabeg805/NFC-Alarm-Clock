@@ -3,7 +3,8 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
-	<PreferenceCategory
+	<!-- General -->
+	<com.nfcalarmclock.NacPreferenceCategory
 		android:key="@string/pref_general_key"
 		android:title="@string/pref_general_title">
 
@@ -27,9 +28,59 @@
 
 		<!-- Volume level -->
 
-	</PreferenceCategory>
+	</com.nfcalarmclock.NacPreferenceCategory>
 
-	<PreferenceCategory
+	<!-- Colors -->
+	<com.nfcalarmclock.NacPreferenceCategory
+		android:key="@string/pref_color_key"
+		android:title="@string/pref_color_title">
+
+		<com.nfcalarmclock.NacPreferenceColor
+			android:key="@string/pref_theme_color_key"
+			android:title="@string/pref_theme_color_title"
+			android:summary="@string/pref_theme_color_summary"
+			android:defaultValue="0xfffb8c00"
+			/>
+
+		<com.nfcalarmclock.NacPreferenceColor
+			android:key="@string/pref_name_color_key"
+			android:title="@string/pref_name_color_title"
+			android:summary="@string/pref_name_color_summary"
+			android:defaultValue="0xff00c0fb"
+			/>
+
+		<com.nfcalarmclock.NacPreferenceColor
+			android:key="@string/pref_days_color_key"
+			android:title="@string/pref_days_color_title"
+			android:summary="@string/pref_days_color_summary"
+			android:defaultValue="0xfffb8c00"
+			/>
+
+		<com.nfcalarmclock.NacPreferenceColor
+			android:key="@string/pref_time_color_key"
+			android:title="@string/pref_time_color_title"
+			android:summary="@string/pref_time_color_summary"
+			android:defaultValue="0xffffffff"
+			/>
+
+		<com.nfcalarmclock.NacPreferenceColor
+			android:key="@string/pref_am_color_key"
+			android:title="@string/pref_am_color_title"
+			android:summary="@string/pref_am_color_summary"
+			android:defaultValue="0xffffffff"
+			/>
+
+		<com.nfcalarmclock.NacPreferenceColor
+			android:key="@string/pref_pm_color_key"
+			android:title="@string/pref_pm_color_title"
+			android:summary="@string/pref_pm_color_summary"
+			android:defaultValue="0xffffffff"
+			/>
+
+	</com.nfcalarmclock.NacPreferenceCategory>
+
+	<!-- Default Alarm -->
+	<com.nfcalarmclock.NacPreferenceCategory
 		android:key="@string/pref_defaults_key"
 		android:title="@string/pref_defaults_title">
 
@@ -69,6 +120,6 @@
 			android:summary="@string/pref_name_summary"
 			/>
 
-	</PreferenceCategory>
+	</com.nfcalarmclock.NacPreferenceCategory>
 
 </PreferenceScreen>

@@ -1,5 +1,7 @@
 package com.nfcalarmclock;
 
+import android.content.Context;
+import android.content.res.ColorStateList;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -34,7 +36,13 @@ public class NacFloatingButton
 	 */
 	public void init()
 	{
-		this.mFloatingButton.setOnClickListener((NacMainActivity)this.mActivity);
+		Context context = this.mFloatingButton.getContext();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
+
+		this.mFloatingButton.setBackgroundTintList(ColorStateList.valueOf(
+			shared.themeColor));
+		this.mFloatingButton.setOnClickListener(
+			(NacMainActivity)this.mActivity);
 	}
 
 	/**

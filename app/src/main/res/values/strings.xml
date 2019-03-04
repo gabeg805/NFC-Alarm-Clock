@@ -43,6 +43,40 @@
 	<string name="pref_snooze_duration_key">pref_snooze_duration</string>
 	<string name="pref_snooze_duration_title">Snooze Duration</string>
 
+	<!-- Color preference -->
+	<string name="pref_color_key">pref_color</string>
+	<string name="pref_color_title">Color Customization</string>
+
+	<!-- Theme color -->
+	<string name="pref_theme_color_key">pref_theme_color</string>
+	<string name="pref_theme_color_title">Theme</string>
+	<string name="pref_theme_color_summary">The theme color of the app.</string>
+
+	<!-- Name color -->
+	<string name="pref_name_color_key">pref_name_color</string>
+	<string name="pref_name_color_title">Name</string>
+	<string name="pref_name_color_summary">The name of an alarm.</string>
+
+	<!-- Days color -->
+	<string name="pref_days_color_key">pref_days_color</string>
+	<string name="pref_days_color_title">Days</string>
+	<string name="pref_days_color_summary">The days at which an alarm runs.</string>
+
+	<!-- Time color -->
+	<string name="pref_time_color_key">pref_time_color</string>
+	<string name="pref_time_color_title">Time</string>
+	<string name="pref_time_color_summary">The time at which an alarm runs.</string>
+
+	<!-- AM color -->
+	<string name="pref_am_color_key">pref_am_color</string>
+	<string name="pref_am_color_title">AM</string>
+	<string name="pref_am_color_summary">The color of the am of an alarm.</string>
+
+	<!-- PM color -->
+	<string name="pref_pm_color_key">pref_pm_color</string>
+	<string name="pref_pm_color_title">PM</string>
+	<string name="pref_pm_color_summary">The color of the pm of an alarm.</string>
+
 	<!-- Defaults preference -->
 	<string name="pref_defaults_key">pref_defaults</string>
 	<string name="pref_defaults_title">Default Alarm</string>

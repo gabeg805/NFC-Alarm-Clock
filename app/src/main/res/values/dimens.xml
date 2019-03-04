@@ -57,4 +57,9 @@
 	<dimen name="sp_dlg_music">15dp</dimen>
 	<dimen name="isz_dlg_music">30dp</dimen>
 
+	<!-- Color dialog -->
+	<dimen name="m_color">15dp</dimen>
+	<dimen name="isz_color_example">30dp</dimen>
+	<dimen name="isz_color_selector">15dp</dimen>
+
 </resources>

@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,7 +21,7 @@ import android.widget.TextView;
  */
 public class NacColorPickerDialog
 	extends NacDialog
-	implements NacDialog.OnDismissListener,TextView.OnEditorActionListener,View.OnTouchListener
+	implements TextView.OnEditorActionListener,View.OnTouchListener,TextWatcher
 {
 
 	/**
@@ -42,87 +44,28 @@ public class NacColorPickerDialog
 	public NacColorPickerDialog()
 	{
 		super();
-
-		this.addDismissListener(this);
 	}
 
 	/**
-	 * Build the dialog.
+	 * Ensure the text always starts with "#".
+	 *
+	 * @note This is required to implement TextWatcher.
 	 */
 	@Override
-	public void onBuildDialog(Context context, AlertDialog.Builder builder)
+	public void afterTextChanged(Editable s)
 	{
-		String title = "Choose Color";
-
-		builder.setTitle(title);
-		this.setPositiveButton("OK");
-		this.setNegativeButton("Cancel");
-	}
-
-	/**
-	 * Setup the views when the dialog is shown.
-	 */
-	@Override
-	public void onShowDialog(Context context, View root)
-	{
-		this.mColorPicker = (NacColorPicker) root.findViewById(R.id.color_picker);
-		this.mColorExample = (ImageView) root.findViewById(R.id.color_example);
-		this.mEditText = (EditText) root.findViewById(R.id.color_value);
-
-		Object data = this.getData();
-		String name = (data != null) ? (String) data : "ffffff";
-
-		this.mEditText.setText(name);
-		//this.mEditText.selectAll();
-		this.mEditText.setOnEditorActionListener(this);
-		this.mEditText.setRawInputType(InputType.TYPE_CLASS_TEXT);
-		this.mEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-		this.mColorPicker.setOnTouchListener(this);
-		this.mColorExample.setBackgroundColor(Color.parseColor("#"+name));
-	}
-
-	@Override
-	public boolean onTouch(View v, MotionEvent event)
-	{
-		v.onTouchEvent(event);
-
-		float[] hsv = this.mColorPicker.getHSV();
-		int color = Color.HSVToColor(hsv);
-		NacUtility.printf("Dialog onTouch! HSV = (%f, %f, %f)", hsv[0], hsv[1], hsv[2]);
-		this.mColorExample.setBackgroundColor(color);
-		this.mEditText.setText(Integer.toHexString(color));
-
-		return true;
-	}
-
-	/**
-	 * Save the alarm name as the dialog data.
-	 */
-	@Override
-	public boolean onDismissDialog(NacDialog dialog)
-	{
-		String name = this.mEditText.getText().toString();
-
-		dialog.saveData(name);
-
-		return true;
-	}
-
-	/**
-	 * Close the keyboard when the user hits enter.
-	 */
-	@Override
-	public boolean onEditorAction(TextView tv, int action, KeyEvent event)
-	{
-		if ((event == null) && (action == EditorInfo.IME_ACTION_DONE))
+		if (!s.toString().startsWith("#"))
 		{
-			closeKeyboard(tv);
-			//this.dismiss();
-
-			return true;
+			s.insert(0, "#");
 		}
+	}
 
-		return false;
+	/**
+	 * @note This is required to implement TextWatcher.
+	 */
+	@Override
+	public void beforeTextChanged(CharSequence seq, int start, int count, int after)
+	{
 	}
 
 	/**
@@ -139,6 +82,114 @@ public class NacColorPickerDialog
 		InputMethodManager manager = (InputMethodManager) service;
 
 		manager.hideSoftInputFromWindow(tv.getWindowToken(), flags);
+	}
+
+	/**
+	 * @return The color of the edit text box.
+	 */
+	public int getColor()
+	{
+		return this.mColorPicker.getColor();
+	}
+
+	/**
+	 * @return The last chosen color of the dialog.
+	 */
+	public String getHexColor()
+	{
+		return this.mColorPicker.getHexColor();
+	}
+
+	/**
+	 * Build the dialog.
+	 */
+	@Override
+	public void onBuildDialog(Context context, AlertDialog.Builder builder)
+	{
+		String title = "Choose Color";
+
+		builder.setTitle(title);
+		this.setPositiveButton("OK");
+		this.setNegativeButton("Cancel");
+	}
+
+	/**
+	 * Close the keyboard when the user hits enter.
+	 */
+	@Override
+	public boolean onEditorAction(TextView tv, int action, KeyEvent event)
+	{
+		if ((event == null) && (action == EditorInfo.IME_ACTION_DONE))
+		{
+			String name = this.mEditText.getText().toString();
+			int color = Color.parseColor(name);
+
+			closeKeyboard(tv);
+			this.mColorPicker.setColor(color);
+			this.mColorExample.setBackgroundColor(color);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Setup the views when the dialog is shown.
+	 */
+	@Override
+	public void onShowDialog(Context context, View root)
+	{
+		this.mColorPicker = (NacColorPicker) root.findViewById(R.id.color_picker);
+		this.mColorExample = (ImageView) root.findViewById(R.id.color_example);
+		this.mEditText = (EditText) root.findViewById(R.id.color_value);
+
+		this.mEditText.addTextChangedListener(this);
+		this.mEditText.setText(this.getHexColor());
+		this.mEditText.setOnEditorActionListener(this);
+		this.mEditText.setRawInputType(InputType.TYPE_CLASS_TEXT);
+		this.mEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+		this.mColorPicker.setOnTouchListener(this);
+		this.mColorExample.setBackgroundColor(this.getColor());
+	}
+
+	/**
+	 * @note This is required to implement TextWatcher.
+	 */
+	@Override
+	public void onTextChanged(CharSequence seq, int start, int before, int count)
+	{
+	}
+
+	/**
+	 * Capture touch events on the color picker.
+	 */
+	@Override
+	public boolean onTouch(View v, MotionEvent event)
+	{
+		v.onTouchEvent(event);
+
+		int color = this.getColor();
+		String hex = this.getHexColor();
+
+		this.mColorExample.setBackgroundColor(color);
+		this.mEditText.setText(hex);
+
+		return true;
+	}
+
+	/**
+	 * Set the color.
+	 */
+	public void setColor(int color)
+	{
+		NacUtility.printf("Set color : %d", color);
+		this.mColorPicker.setColor(color);
+		this.mColorExample.setBackgroundColor(color);
+
+		String hex = this.mColorPicker.getHexColor();
+
+		this.mEditText.setText(hex);
 	}
 
 }

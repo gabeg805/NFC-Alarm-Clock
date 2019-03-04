@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:padding="?android:attr/listPreferredItemPaddingLeft"
+	android:minHeight="?android:attr/listPreferredItemHeight"
+	android:gravity="center_vertical"
+	android:background="?android:attr/selectableItemBackground">
+
+	<RelativeLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_weight="1">
+
+		<TextView
+			android:id="@+android:id/title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textColor="?android:attr/textColorPrimary"
+			android:textSize="16sp"
+			android:ellipsize="marquee"
+			android:fadingEdge="horizontal"
+			/>
+
+		<TextView
+			android:id="@+android:id/summary"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@android:id/title"
+			android:layout_alignStart="@android:id/title"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:textColor="?android:attr/textColorSecondary"
+			android:textSize="14sp"
+			android:maxLines="4"
+			/>
+
+	</RelativeLayout>
+
+	<ImageView
+		android:id="@+id/widget"
+		android:layout_width="@dimen/isz_color_example"
+		android:layout_height="@dimen/isz_color_example"
+		/>
+
+</LinearLayout>

@@ -1,6 +1,7 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.View;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
@@ -20,13 +21,21 @@ public class NacCardName
 	/**
 	 * Name view.
 	 */
-	 private NacImageTextButton mName = null;
+	 private NacImageTextButton mName;
 
 	/**
 	 * Text of days to repeat.
 	 */
-	private TextView mTextView = null;
+	private TextView mTextView;
 
+	/**
+	 * Divider view.
+	 */
+	private View mDivider;
+
+	/**
+	 * Front margin of view.
+	 */
 	private int mMarginStart;
 
 	/**
@@ -38,6 +47,7 @@ public class NacCardName
 		this.mAlarm = null;
 		this.mName = (NacImageTextButton) root.findViewById(R.id.nacName);
 		this.mTextView = (TextView) root.findViewById(R.id.nacRepeatTextName);
+		this.mDivider = (View) root.findViewById(R.id.alarmExpandDivider);
 		this.mMarginStart = root.getResources().getDimensionPixelSize(R.dimen.sp_text);
 
 		this.mName.setOnClickListener(this);
@@ -48,9 +58,13 @@ public class NacCardName
 	 */
 	public void init(NacAlarm alarm)
 	{
+		Context context = this.mTextView.getContext();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
 		this.mAlarm = alarm;
 
 		this.setName();
+		this.mTextView.setTextColor(shared.nameColor);
+		this.mDivider.setBackgroundTintList(ColorStateList.valueOf(shared.themeColor));
 	}
 
 	/**

@@ -2,6 +2,6 @@
 <resources>
 
 	<integer name="max_entry_length">24</integer>
-	<integer name="max_hex_length">6</integer>
+	<integer name="max_hex_length">7</integer>
 
 </resources>

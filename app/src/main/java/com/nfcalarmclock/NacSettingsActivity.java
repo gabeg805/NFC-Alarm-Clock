@@ -4,8 +4,11 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.view.View;
+import android.widget.TextView;
 
 /**
  * Display all the configurable settings for the app.

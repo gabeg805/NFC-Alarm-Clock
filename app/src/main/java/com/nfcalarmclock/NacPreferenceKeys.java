@@ -50,6 +50,36 @@ public class NacPreferenceKeys
 	public String name;
 
 	/**
+	 * Theme color.
+	 */
+	public String themeColor;
+
+	/**
+	 * Time color.
+	 */
+	public String timeColor;
+
+	/**
+	 * AM color.
+	 */
+	public String amColor;
+
+	/**
+	 * PM color.
+	 */
+	public String pmColor;
+
+	/**
+	 * Color of the name of the alarm.
+	 */
+	public String nameColor;
+
+	/**
+	 * Color of the text that shows the days that the alarm runs.
+	 */
+	public String daysColor;
+
+	/**
 	 */
 	public NacPreferenceKeys(Context context)
 	{
@@ -63,6 +93,12 @@ public class NacPreferenceKeys
 		this.vibrate = res.getString(R.string.pref_vibrate_key);
 		this.sound = res.getString(R.string.pref_sound_key);
 		this.name = res.getString(R.string.pref_name_key);
+		this.themeColor = res.getString(R.string.pref_theme_color_key);
+		this.timeColor = res.getString(R.string.pref_time_color_key);
+		this.amColor = res.getString(R.string.pref_am_color_key);
+		this.pmColor = res.getString(R.string.pref_pm_color_key);
+		this.nameColor = res.getString(R.string.pref_name_color_key);
+		this.daysColor = res.getString(R.string.pref_days_color_key);
 	}
 
 }

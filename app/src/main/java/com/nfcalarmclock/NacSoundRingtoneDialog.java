@@ -83,6 +83,7 @@ public class NacSoundRingtoneDialog
 	@Override
 	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
+		NacUtility.printf("onBuildDialog in NacSoundRingtoneDialog");
 		String title = context.getString(R.string.dlg_ringtone_title);
 
 		builder.setTitle(title);
@@ -109,6 +110,7 @@ public class NacSoundRingtoneDialog
 	@Override
 	public void onShowDialog(Context context, View root)
 	{
+		NacUtility.printf("onShowDialog in NacSoundRingtoneDialog");
 		RadioGroup group = (RadioGroup) root.findViewById(R.id.radio_group);
 		List<NacSound> ringtones = this.getRingtones(context);
 		RadioButton button;
@@ -133,6 +135,7 @@ public class NacSoundRingtoneDialog
 	@Override
 	public void scale()
 	{
+		NacUtility.printf("Scaling NacSoundRingtoneDialog");
 		this.scale(0.7, 0.8, false, true);
 	}
 

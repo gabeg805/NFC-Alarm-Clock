@@ -13,25 +13,51 @@ import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+//import android.widget.RelativeLayout.LayoutParams;
+
+import android.view.LayoutInflater;
+import android.support.v4.view.ViewCompat;
 
 /**
- * Created by yarolegovich on 4/1/18.
+ * Color picker.
  */
-
 public class NacColorPicker
-	extends View
+	extends RelativeLayout
+	//extends View
 {
 
-    private static final int DEFAULT_BRIGHTNESS = 224;
-
+	/**
+	 * Center x-coordinate.
+	 */
     private float mCenterX;
+
+	/**
+	 * Center y-coordinate.
+	 */
     private float mCenterY;
+
+	/**
+	 * Radius of the color picker.
+	 */
     private float mRadius;
 
+	/**
+	 * Hue of the colors (solid color).
+	 */
     private Paint mHuePaint;
-    private Paint mSaturationPaint;
-    private Paint mBrightnessOverlayPaint;
 
+	/**
+	 * Color saturation (gradient from white to the actual color).
+	 */
+    private Paint mSaturationPaint;
+
+	/**
+	 * Hue, saturation, and value of the selected color.
+	 */
 	private float[] mHSV;
 
 	/**
@@ -60,6 +86,63 @@ public class NacColorPicker
     }
 
 	/**
+	 * Draw the color gradient.
+	 */
+    private void drawGradient()
+	{
+		int[] colors = new int[] {Color.RED, Color.MAGENTA, Color.BLUE,
+			Color.CYAN, Color.GREEN, Color.YELLOW, Color.RED};
+		float[] positions = new float[] {0.0000f, 0.1667f, 0.3333f, 0.5000f,
+                0.6667f, 0.8333f, 1.0000f};
+		int centerColor = Color.WHITE;
+		int edgeColor = 0x00FFFFFF;
+        Shader hueShader = new SweepGradient(this.mCenterX, this.mCenterY, colors, positions);
+        Shader satShader = new RadialGradient(this.mCenterX, this.mCenterY,
+			this.mRadius, centerColor, edgeColor, Shader.TileMode.CLAMP);
+
+        this.mHuePaint.setShader(hueShader);
+        this.mSaturationPaint.setShader(satShader);
+    }
+
+	/**
+	 * @return The hue, saturation, and value of the color that was selected.
+	 */
+	public float[] getHSV()
+	{
+		return this.mHSV;
+	}
+
+	/**
+	 * @return The color that was selected.
+	 */
+	public int getColor()
+	{
+		return Color.HSVToColor(this.getHSV());
+	}
+
+	/**
+	 * @return The hex string of the selected color.
+	 */
+	public String getHexColor()
+	{
+		int color = this.getColor();
+		String hex = Integer.toHexString(color);
+		int length = hex.length();
+
+		if (length > 6)
+		{
+			hex = hex.substring(length - 6);
+		}
+
+		return (hex.charAt(0) == '#') ? hex : "#"+hex;
+	}
+
+	private ImageView mColorSelector;
+
+	/**
+	 * Initialize the view attributes.
+	 *
+	 * @param  attrs  Attribute set.
 	 */
 	public void init(AttributeSet attrs)
     {
@@ -68,41 +151,90 @@ public class NacColorPicker
 			return;
 		}
 
+		super.setWillNotDraw(false);
+
+		Context context = this.getContext();
+		LayoutInflater.from(context).inflate(R.layout.nac_color_picker, this, true);
+		this.mColorSelector = (ImageView) findViewById(R.id.color_selector);
         this.mHuePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.mSaturationPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        this.mBrightnessOverlayPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        this.mBrightnessOverlayPaint.setColor(Color.BLACK);
-        this.mBrightnessOverlayPaint.setAlpha(brightnessToAlpha(DEFAULT_BRIGHTNESS));
 		this.mHSV = new float[3];
     }
 
+	/**
+	 * Measure dimensions of the view.
+	 *
+	 * @param  desiredSize  The desired size of the view.
+	 * @param  measureSpec  The measure specification to extract the size from.
+	 *
+	 * @return The size of the view.
+	 */
 	private int measureDimension(int desiredSize, int measureSpec)
 	{
 		int specMode = MeasureSpec.getMode(measureSpec);
 		int specSize = MeasureSpec.getSize(measureSpec);
-		int result = specSize;
 
-		if (specMode != MeasureSpec.EXACTLY)
+		if (specMode == MeasureSpec.EXACTLY)
 		{
-			result = (specMode == MeasureSpec.AT_MOST) ?
-				Math.min(result, specSize) : desiredSize;
+			return specSize;
 		}
-
-		if (result < desiredSize)
+		else if (specMode == MeasureSpec.AT_MOST)
 		{
-			//Log.e("ChartView", "The view is too small, the content might get cut");
+			return Math.min(desiredSize, specSize);
 		}
-
-		return result;
+		else
+		{
+			return desiredSize;
+		}
 	}
 
+	/**
+	 * Measure the height of the view.
+	 *
+	 * @see measureDimension
+	 */
+	private int measureHeight(int measureSpec)
+	{
+		int desiredHeight = getSuggestedMinimumHeight() + getPaddingTop()
+			+ getPaddingBottom();
+
+		return this.measureDimension(desiredHeight, measureSpec);
+	}
+
+	/**
+	 * Measure the width of the view.
+	 *
+	 * @see measureDimension
+	 */
+	private int measureWidth(int measureSpec)
+	{
+		int desiredWidth = getSuggestedMinimumWidth() + getPaddingLeft()
+			+ getPaddingRight();
+
+		return this.measureDimension(desiredWidth, measureSpec);
+	}
+
+	/**
+	 */
+    @Override
+	protected void onDraw(Canvas canvas)
+	{
+		NacUtility.printf("onDraw! Rad : %f", mRadius);
+        canvas.drawCircle(this.mCenterX, this.mCenterY, this.mRadius, this.mHuePaint);
+        canvas.drawCircle(this.mCenterX, this.mCenterY, this.mRadius, this.mSaturationPaint);
+		this.setSelectorPositionToColor();
+    }
+
+	/**
+	 */
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
 	{
-		int desiredWidth = getSuggestedMinimumWidth() + getPaddingLeft() + getPaddingRight();
-		int desiredHeight = getSuggestedMinimumHeight() + getPaddingTop() + getPaddingBottom();
-		int measuredWidth = measureDimension(desiredWidth, widthMeasureSpec);
-		int measuredHeight = measureDimension(desiredHeight, heightMeasureSpec);
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+		int measuredHeight = this.measureHeight(heightMeasureSpec);
+		int measuredWidth = this.measureWidth(widthMeasureSpec);
+		//int size = Math.max(measuredWidth, measuredHeight);
 		int size = Math.min(measuredWidth, measuredHeight);
 
 		if ((measuredWidth == 0) || (measuredHeight == 0))
@@ -110,9 +242,7 @@ public class NacColorPicker
 			size = Math.max(measuredWidth, measuredHeight);
 		}
 
-		NacUtility.printf("DW : %d || DH : %d || MW : %d || MH : %d || Size : %d",
-			desiredWidth, desiredHeight, measuredWidth, measuredHeight, size);
-		setMeasuredDimension(size, size);
+		this.setMeasuredDimension(size, size);
 	}
 
 	/**
@@ -124,25 +254,15 @@ public class NacColorPicker
 
         super.onSizeChanged(min, min, oldw, oldh);
 
-        //this.mRadius = Math.min(w, h) * 0.48f;
         this.mRadius = min * 0.5f;
         this.mCenterX = w * 0.5f;
         this.mCenterY = h * 0.5f;
-		NacUtility.printf("W : %d || H : %d || R : %f || OldW : %d || OldH : %d", w, h, this.mRadius, oldw, oldh);
 
-        recomputeShader();
+        drawGradient();
     }
 
 	/**
 	 */
-    @Override
-	protected void onDraw(Canvas canvas)
-	{
-        canvas.drawCircle(this.mCenterX, this.mCenterY, this.mRadius, this.mHuePaint);
-        canvas.drawCircle(this.mCenterX, this.mCenterY, this.mRadius, this.mSaturationPaint);
-        canvas.drawCircle(this.mCenterX, this.mCenterY, this.mRadius, this.mBrightnessOverlayPaint);
-    }
-
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
@@ -154,7 +274,6 @@ public class NacColorPicker
 
 		if (distance > this.mRadius)
 		{
-			NacUtility.printf("Outside of Radius!");
 			return true;
 		}
 
@@ -162,102 +281,58 @@ public class NacColorPicker
 		float hue = (float) (((theta >= 0) ? theta : (2*Math.PI + theta)) * 180f / Math.PI);
 		float sat = distance / this.mRadius;
 		float val = 1.0f;
-		float c = val * sat;
-		float hp = hue / 60f;
-		float comp = c * (1 - Math.abs((hp % 2) - 1));
 
-		this.mHSV[0] = hue;
-		this.mHSV[1] = sat;
-		this.mHSV[2] = val;
-
-		//NacUtility.printf("Calculated! X : %f | Y : %f | R : %f | Angle : %f",
-		//	x, y, rad, theta);
-		NacUtility.printf("More! H : %f | Sat : %f | C : %f | Hp : %f | Comp : %f", hue, sat, c, hp, comp);
-
-		float r1 = 0;
-		float g1 = 0;
-		float b1 = 0;
-		float m = val - c;
-
-		if ((hp >= 0) && (hp <= 1))
-		{
-			r1 = c;
-			g1 = comp;
-		}
-		else if ((hp > 1) && (hp <= 2))
-		{
-			r1 = comp;
-			g1 = c;
-		}
-		else if ((hp > 2) && (hp <= 3))
-		{
-			g1 = c;
-			b1 = comp;
-		}
-		else if ((hp > 3) && (hp <= 4))
-		{
-			g1 = comp;
-			b1 = c;
-		}
-		else if ((hp > 4) && (hp <= 5))
-		{
-			r1 = comp;
-			b1 = c;
-		}
-		else if ((hp > 5) && (hp <= 6))
-		{
-			r1 = c;
-			b1 = comp;
-		}
-
-		float r = r1 + m;
-		float g = g1 + m;
-		float b = b1 + m;
-
-		NacUtility.printf("LAST! R : %f | G: %f | B : %f", r, g, b);
+		this.setHsv(hue, sat, val);
+		this.setSelectorPosition(event.getX(), event.getY());
 
 		return true;
 	}
 
-	public float[] getHSV()
+	/**
+	 * Set the color of the color picker.
+	 */
+	public void setColor(int color)
 	{
-		return this.mHSV;
+		int red = Color.red(color);
+		int green = Color.green(color);
+		int blue = Color.blue(color);
+
+		Color.RGBToHSV(red, green, blue, this.mHSV);
+		this.setSelectorPositionToColor();
 	}
 
 	/**
+	 * Set the hue, saturation, and value.
 	 */
-    private void recomputeShader()
+	public void setHsv(float hue, float sat, float val)
 	{
-        Shader hueShader = new SweepGradient(this.mCenterX, this.mCenterY,
-            new int[] {
-                Color.RED, Color.MAGENTA, Color.BLUE, Color.CYAN,
-                Color.GREEN, Color.YELLOW, Color.RED},
-            new float[] {
-                0.0000f, 0.1667f, 0.3333f, 0.5000f,
-                0.6667f, 0.8333f, 1.0000f});
+		this.mHSV[0] = hue;
+		this.mHSV[1] = sat;
+		this.mHSV[2] = val;
 
-        this.mHuePaint.setShader(hueShader);
-
-        Shader satShader = new RadialGradient(this.mCenterX, this.mCenterY, this.mRadius,
-            Color.WHITE, 0x00FFFFFF,
-            Shader.TileMode.CLAMP);
-
-        this.mSaturationPaint.setShader(satShader);
-    }
+		this.setSelectorPositionToColor();
+	}
 
 	/**
+	 * Set selector position.
 	 */
-    public void setBrightness(int brightness)
+	public void setSelectorPosition(float x, float y)
 	{
-        this.mBrightnessOverlayPaint.setAlpha(brightnessToAlpha(brightness));
-        invalidate();
-    }
+		ViewGroup.LayoutParams params = this.mColorSelector.getLayoutParams();
+
+		this.mColorSelector.setX(x-(params.width/2.0f));
+		this.mColorSelector.setY(y-(params.height/2.0f));
+	}
 
 	/**
+	 * Set the selector position to the current color.
 	 */
-    private int brightnessToAlpha(int brightness)
+	public void setSelectorPositionToColor()
 	{
-        return 255 - brightness;
-    }
+		float x = this.mRadius + (float)(Math.cos(Math.toRadians(this.mHSV[0])) * this.mHSV[1] * this.mRadius);
+		float y = this.mRadius + (float)(-1 * Math.sin(Math.toRadians(this.mHSV[0])) * this.mHSV[1] * this.mRadius);
+
+		this.setSelectorPosition(x, y);
+	}
 
 }

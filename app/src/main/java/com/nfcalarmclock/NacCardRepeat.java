@@ -22,17 +22,17 @@ public class NacCardRepeat
 	/**
 	 * Text of days to repeat.
 	 */
-	private TextView mTextView = null;
+	private TextView mTextView;
 
 	/**
 	 * Repeat checkbox.
 	 */
-	private CheckBox mCheckBox = null;
+	private CheckBox mCheckBox;
 
 	/**
 	 * Buttons to select which days to repeat the alarm on.
 	 */
-	private NacDayOfWeek mDayOfWeek = null;
+	private NacDayOfWeek mDayOfWeek;
 
 	/**
 	 */
@@ -50,6 +50,8 @@ public class NacCardRepeat
 	 */
 	public void init(NacAlarm alarm)
 	{
+		Context context = this.mTextView.getContext();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
 		this.mAlarm = alarm;
 
 		this.setRepeatText();
@@ -57,6 +59,7 @@ public class NacCardRepeat
 		this.mDayOfWeek.setDays(alarm.getDays());
 		this.mCheckBox.setOnCheckedChangeListener(this);
 		this.mDayOfWeek.setOnClickListener(this);
+		this.mTextView.setTextColor(shared.daysColor);
 	}
 
 	/**

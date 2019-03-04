@@ -2,8 +2,8 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
 	android:orientation="vertical"
 	android:paddingTop="10dp"
 	android:paddingBottom="-10dp"
@@ -15,21 +15,23 @@
 		android:id="@+id/color_picker"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:layout_marginTop="?dialogPreferredPadding"
 		/>
 
 	<LinearLayout
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:orientation="horizontal">
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/isz_color_example"
+		android:layout_marginBottom="@dimen/isz_color_example"
+		android:orientation="horizontal"
+		android:layout_gravity="center_horizontal">
 
 		<ImageView
 			android:id="@+id/color_example"
-			android:layout_width="@dimen/circle_size"
-			android:layout_height="@dimen/circle_size"
+			android:layout_width="@dimen/isz_color_example"
+			android:layout_height="@dimen/isz_color_example"
 			android:layout_gravity="center_vertical"
-			android:layout_marginEnd="@dimen/circle_size"
-			android:padding="1dp"
-			android:background="@drawable/color_border"
+			android:layout_marginEnd="@dimen/m_color"
 			/>
 
 		<EditText
@@ -38,22 +40,12 @@
 			android:layout_height="wrap_content"
 			android:layout_marginStart="-5dp"
 			android:textAppearance="?android:attr/textAppearanceSmall"
-			android:maxLines="1"
-			android:maxLength="@integer/max_hex_length"
 			android:inputType="text"
-			android:text="ffac80"
-			android:hint="@string/dlg_color_hint">
-
-			<requestFocus />
-
+			android:hint="@string/dlg_color_hint"
+			android:maxLines="1"
+			android:maxLength="@integer/max_hex_length">
 		</EditText>
 
 	</LinearLayout>
-	<!--
-		android:layout_marginStart="25dp"
-		android:layout_marginEnd="25dp"
-		android:layout_marginStart="-5dp"
-		android:layout_marginTop="15dp"
-	-->
 
 </LinearLayout>
