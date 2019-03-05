@@ -11,11 +11,11 @@
 		android:id="@+id/dlg_ringtone"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginBottom="@dimen/mb_prompt"
+		android:layout_marginBottom="@dimen/mb_dlg_sound_prompt"
 		android:layout_marginLeft="?dialogPreferredPadding"
 		android:layout_marginRight="?dialogPreferredPadding"
 		android:text="@string/dlg_prompt_ringtone"
-		android:textSize="@dimen/tsz_prompt"
+		android:textSize="@dimen/tsz_dlg_sound_prompt"
 		android:textAllCaps="false"
 		/>
 
@@ -27,7 +27,7 @@
 		android:layout_marginLeft="?dialogPreferredPadding"
 		android:layout_marginRight="?dialogPreferredPadding"
 		android:text="@string/dlg_prompt_music"
-		android:textSize="@dimen/tsz_prompt"
+		android:textSize="@dimen/tsz_dlg_sound_prompt"
 		android:textAllCaps="false"
 		/>
 

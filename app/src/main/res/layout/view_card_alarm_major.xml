@@ -41,7 +41,7 @@
 		android:paddingStart="@dimen/sp_card"
 		android:paddingTop="@dimen/sp_card"
 		android:paddingBottom="@dimen/sp_card"
-		android:switchMinWidth="@dimen/switch_size"
+		android:switchMinWidth="@dimen/sz_switch"
 		/>
 
 </RelativeLayout>

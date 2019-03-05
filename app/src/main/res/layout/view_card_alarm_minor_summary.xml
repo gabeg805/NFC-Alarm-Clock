@@ -32,8 +32,8 @@
 
 	<ImageView
 		android:id="@+id/nacExpand"
-		android:layout_width="@dimen/card_expand_size"
-		android:layout_height="@dimen/card_expand_size"
+		android:layout_width="@dimen/isz_expand"
+		android:layout_height="@dimen/isz_expand"
 		android:layout_marginEnd="@dimen/sp_text"
 		android:layout_alignBottom="@id/nacRepeatText"
 		android:layout_alignParentEnd="true"

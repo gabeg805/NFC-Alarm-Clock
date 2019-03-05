@@ -21,7 +21,6 @@ import java.util.List;
  */
 public class NacDialog
 	implements DialogInterface.OnClickListener,DialogInterface.OnCancelListener,View.OnLayoutChangeListener
-	//implements DialogInterface.OnClickListener,View.OnClickListener,DialogInterface.OnCancelListener,View.OnLayoutChangeListener
 {
 
 	/**
@@ -81,47 +80,41 @@ public class NacDialog
 		/**
 		 * Scale the screen height by some fraction (0 <= x <= 1.0).
 		 */
-		private double mHeightScale;
+		public double heightScale;
 
 		/**
 		 * Scale the screen width by some fraction (0 <= x <= 1.0).
 		 */
-		private double mWidthScale;
+		public double widthScale;
 
 		/**
 		 * Wrap height content.
+		 *
+		 * True if it should be wrapped, and false otherwise.
 		 */
-		private boolean mWrapHeight;
+		public boolean wrapHeight;
 
 		/**
 		 * Wrap width content.
+		 *
+		 * True if it should be wrapped, and false otherwise.
 		 */
-		private boolean mWrapWidth;
+		public boolean wrapWidth;
+
+		/**
+		 * Check if the dialog has been scaled yet.
+		 */
+		public boolean isScaled;
 
 		/**
 		 */
 		public Scaler()
 		{
-			this.mHeightScale = 1.0;
-			this.mWidthScale = 1.0;
-			this.mWrapHeight = true;
-			this.mWrapWidth = true;
-		}
-
-		/**
-		 * @return The fraction to scale the height by.
-		 */
-		public double getHeightScale()
-		{
-			return this.mHeightScale;
-		}
-
-		/**
-		 * @return The fraction to scale the width by.
-		 */
-		public double getWidthScale()
-		{
-			return this.mWidthScale;
+			this.heightScale = 1.0;
+			this.widthScale = 1.0;
+			this.wrapHeight = true;
+			this.wrapWidth = true;
+			this.isScaled = false;
 		}
 
 		/**
@@ -129,8 +122,8 @@ public class NacDialog
 		 */
 		public void setHeightScale(double scale, boolean wrap)
 		{
-			this.mHeightScale = scale;
-			this.mWrapHeight = wrap;
+			this.heightScale = scale;
+			this.wrapHeight = wrap;
 		}
 
 		/**
@@ -138,26 +131,8 @@ public class NacDialog
 		 */
 		public void setWidthScale(double scale, boolean wrap)
 		{
-			this.mWidthScale = scale;
-			this.mWrapWidth = wrap;
-		}
-
-		/**
-		 * @return True if the height should wrap to content, and False
-		 * otherwise.
-		 */
-		public boolean wrapHeight()
-		{
-			return this.mWrapHeight;
-		}
-
-		/**
-		 * @return True if the width should wrap to content, and False
-		 * otherwise.
-		 */
-		public boolean wrapWidth()
-		{
-			return this.mWrapWidth;
+			this.widthScale = scale;
+			this.wrapWidth = wrap;
 		}
 
 	}
@@ -406,45 +381,16 @@ public class NacDialog
 	/**
 	 * Handles click events on the Ok/Cancel buttons in the dialog.
 	 */
-	//@Override
-	//public void onClick(View view)
-	//{
-	//	int tag = (int) view.getTag(R.id.nac_dialog_button_tag_key);
-
-	//	switch (tag)
-	//	{
-	//	case AlertDialog.BUTTON_POSITIVE:
-	//		NacUtility.printf("new onClick! Dismiss");
-	//		this.dismiss();
-	//		break;
-	//	case AlertDialog.BUTTON_NEUTRAL:
-	//		NacUtility.printf("new onClick! Neutral");
-	//		this.neutral();
-	//		break;
-	//	case AlertDialog.BUTTON_NEGATIVE:
-	//	default:
-	//		NacUtility.printf("new onClick! Cancel");
-	//		this.cancel();
-	//		break;
-	//	}
-	//}
-
 	@Override
 	public void onClick(DialogInterface dialog, int which)
 	{
 		switch (which)
 		{
 		case DialogInterface.BUTTON_POSITIVE:
-			NacUtility.printf("onClick! Dismiss");
 			this.dismiss();
-			break;
-		case DialogInterface.BUTTON_NEUTRAL:
-			NacUtility.printf("onClick! Neutral");
-			this.neutral();
 			break;
 		case DialogInterface.BUTTON_NEGATIVE:
 		default:
-			NacUtility.printf("onClick! Cancel");
 			this.cancel();
 			break;
 		}
@@ -457,17 +403,17 @@ public class NacDialog
 	public void onLayoutChange(View v, int left, int top, int right,
 		int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom)
 	{
-		if (this.mScaler == null)
+		if ((this.mScaler == null) || this.mScaler.isScaled)
 		{
 			return;
 		}
 
 		Context context = this.mDialog.getContext();
 		DisplayMetrics dm = context.getResources().getDisplayMetrics();
-		int dialogWidth = (int)(dm.widthPixels * this.mScaler.getWidthScale());
-		int dialogHeight = (int)(dm.heightPixels * this.mScaler.getHeightScale());
+		int dialogWidth = (int)(dm.widthPixels * this.mScaler.widthScale);
+		int dialogHeight = (int)(dm.heightPixels * this.mScaler.heightScale);
 
-		if (this.mScaler.wrapWidth() || this.mScaler.wrapHeight())
+		if (this.mScaler.wrapWidth || this.mScaler.wrapHeight)
 		{
 			this.mRoot.invalidate();
 			this.mRoot.requestLayout();
@@ -475,18 +421,85 @@ public class NacDialog
 				MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0,
 				MeasureSpec.UNSPECIFIED));
 
-			if (this.mScaler.wrapWidth() && (this.mRoot.getWidth() <= dialogWidth))
-			{
-				dialogWidth = LayoutParams.WRAP_CONTENT;
-			}
-
-			if (this.mScaler.wrapHeight() && (this.mRoot.getHeight() <= dialogHeight))
-			{
-				dialogHeight = LayoutParams.WRAP_CONTENT;
-			}
+			dialogWidth = this.calculateDialogWidth(dm.widthPixels);
+			dialogHeight = this.calculateDialogHeight(dm.heightPixels);
+			this.mScaler.isScaled = true;
 		}
 
+		NacUtility.printf("Dialog size : %d x %d", dialogWidth, dialogHeight);
 		this.mDialog.getWindow().setLayout(dialogWidth, dialogHeight);
+	}
+
+	/**
+	 * Calculate the dialog width.
+	 *
+	 * @param  screenWidth  The width of the phone screen.
+	 */
+	public int calculateDialogWidth(int screenWidth)
+	{
+		int scaledWidth = (int)(screenWidth * this.mScaler.widthScale);
+		int dialogWidth = scaledWidth;
+
+		if (!this.mScaler.wrapWidth)
+		{
+			return dialogWidth;
+		}
+
+		int rootWidth = this.mRoot.getWidth();
+		int uncertainty = (int) (4.0f * screenWidth / 100.0f);
+		int diff = Math.abs(rootWidth - dialogWidth);
+		//NacUtility.printf("Width Comparison : %d x %d (%d/%d)", rootWidth, scaledWidth, uncertainty, screenWidth);
+
+		if (rootWidth <= scaledWidth)
+		{
+			dialogWidth = (diff <= uncertainty) ? rootWidth : LayoutParams.WRAP_CONTENT;
+			//if (diff <= uncertainty)
+			//{
+			//	dialogWidth = rootWidth;
+			//}
+			//else
+			//{
+			//	dialogWidth = LayoutParams.WRAP_CONTENT;
+			//}
+		}
+
+		return dialogWidth;
+	}
+
+	/**
+	 * Calculate the dialog width.
+	 *
+	 * @param  screenWidth  The width of the phone screen.
+	 */
+	public int calculateDialogHeight(int screenHeight)
+	{
+		int scaledHeight = (int)(screenHeight * this.mScaler.heightScale);
+		int dialogHeight = scaledHeight;
+
+		if (!this.mScaler.wrapHeight)
+		{
+			return dialogHeight;
+		}
+
+		int rootHeight = this.mRoot.getHeight();
+		int uncertainty = (int) (4.0f * screenHeight / 100.0f);
+		int diff = Math.abs(rootHeight - dialogHeight);
+		//NacUtility.printf("Height Comparison : %d x %d (%d/%d)", rootHeight, scaledHeight, uncertainty, screenHeight);
+
+		if (rootHeight <= scaledHeight)
+		{
+			dialogHeight = (diff <= uncertainty) ? rootHeight : LayoutParams.WRAP_CONTENT;
+			//if (diff <= uncertainty)
+			//{
+			//	dialogHeight = rootHeight;
+			//}
+			//else
+			//{
+			//	dialogHeight = LayoutParams.WRAP_CONTENT;
+			//}
+		}
+
+		return dialogHeight;
 	}
 
 	/**
@@ -537,6 +550,7 @@ public class NacDialog
 	 */
 	public void scale(double width, double height, boolean wrapWidth, boolean wrapHeight)
 	{
+		NacUtility.printf("scale!");
 		if ((this.mBuilder == null) || (this.mDialog == null)
 			|| (width < 0) || (width > 1) || (height < 0) || (height > 1))
 		{
@@ -582,7 +596,6 @@ public class NacDialog
 
 			button.setTextColor(shared.themeColor);
 
-			//button.setTag(R.id.nac_dialog_button_tag_key, buttonTypes[i]);
 			if (buttonTypes[i] == AlertDialog.BUTTON_NEUTRAL)
 			{
 				button.setOnClickListener(new View.OnClickListener()
@@ -672,13 +685,6 @@ public class NacDialog
 
 		this.onShowDialog(context, this.mRoot);
 		this.setupDialog();
-
-		//Button neutralButton = this.mDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
-
-		//if (neutralButton != null)
-		//{
-		//	neutralButton.setOnClickListener(this);
-		//}
 
 		return this.mDialog;
 	}

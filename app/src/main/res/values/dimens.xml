@@ -1,7 +1,12 @@
 <resources>
 
+	<!-- VIEWS -->
+
 	<!-- Floating button -->
 	<dimen name="m_fab">16dp</dimen>
+
+	<!-- Switch -->
+	<dimen name="sz_switch">58dp</dimen>
 
 	<!-- CardView -->
 	<dimen name="elv_card">5dp</dimen>
@@ -29,21 +34,24 @@
 	<dimen name="tsz_song">24sp</dimen>
 	<dimen name="tsz_directory">12sp</dimen>
 
-	<!-- Sound prompt -->
-	<dimen name="mb_prompt">8dp</dimen>
-	<dimen name="tsz_prompt">15sp</dimen>
+	<!-- Expand/collapse button -->
+	<dimen name="isz_expand">20dp</dimen>
+	<dimen name="isz_collapse">20dp</dimen>
+
+	<!-- DayOfWeekButton -->
+	<dimen name="isz_circle">30dp</dimen>
 
 	<!-- NacImageTextButton -->
 	<dimen name="isz_card">22dp</dimen>
 
-	<!-- DayOfWeekButton -->
-	<dimen name="switch_size">58dp</dimen>
+	<!-- DIALOGS -->
 
-	<!-- Expand button -->
-	<dimen name="card_expand_size">20dp</dimen>
+	<dimen name="spt_dlg">10dp</dimen>
+	<dimen name="spb_dlg">-25dp</dimen>
 
-	<!-- DayOfWeekButton -->
-	<dimen name="circle_size">30dp</dimen>
+	<!-- Sound prompt -->
+	<dimen name="mb_dlg_sound_prompt">8dp</dimen>
+	<dimen name="tsz_dlg_sound_prompt">15sp</dimen>
 
 	<!-- Number picker -->>
 	<dimen name="m_scroll_option">30dp</dimen>
@@ -58,8 +66,12 @@
 	<dimen name="isz_dlg_music">30dp</dimen>
 
 	<!-- Color dialog -->
-	<dimen name="m_color">15dp</dimen>
+	<dimen name="m_color_example">15dp</dimen>
 	<dimen name="isz_color_example">30dp</dimen>
 	<dimen name="isz_color_selector">15dp</dimen>
+
+	<!-- Preference Days -->
+	<dimen name="m_dlg_alarm_days">25dp</dimen>
+	<dimen name="m_dlg_alarm_name">10dp</dimen>
 
 </resources>

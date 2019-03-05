@@ -100,6 +100,7 @@ public class NacSoundPromptDialog
 
 		music.setOnClickListener(this);
 		ringtone.setOnClickListener(this);
+		this.scale(0.9, 0.5, false, true);
 	}
 
 	/**
