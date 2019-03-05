@@ -4,7 +4,6 @@
 	package="com.nfcalarmclock">
 
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-	<!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> -->
 	<uses-permission android:name="android.permission.NFC" />
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -20,7 +19,6 @@
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme"
 		android:icon="@mipmap/ic_launcher">
-		<!-- android:roundIcon="@mipmap/ic_launcher_round" -->
 
 		<activity
 			android:name=".NacMainActivity"
