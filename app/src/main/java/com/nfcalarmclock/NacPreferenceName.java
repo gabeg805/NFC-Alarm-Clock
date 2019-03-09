@@ -97,7 +97,7 @@ public class NacPreferenceName
 		NacNameDialog dialog = new NacNameDialog();
 
 		dialog.build(context, R.layout.dlg_alarm_name);
-		dialog.addDismissListener(this);
+		dialog.addOnDismissListener(this);
 		dialog.saveData(this.mValue);
 		dialog.show();
 

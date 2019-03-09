@@ -61,8 +61,8 @@ public abstract class NacSoundDialog
 		this.mSound = null;
 		this.mItemClickListener = null;
 
-		this.addDismissListener(this);
-		this.addCancelListener(this);
+		this.addOnDismissListener(this);
+		this.addOnCancelListener(this);
 	}
 
 	/**

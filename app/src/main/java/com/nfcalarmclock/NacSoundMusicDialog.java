@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class NacSoundMusicDialog
 	extends NacSoundDialog
-	implements View.OnClickListener,NacPermissions.OnResultListener
+	implements View.OnClickListener,NacPermissions.OnResultListener,NacDialog.OnShowListener
 {
 
 	/**
@@ -33,6 +33,8 @@ public class NacSoundMusicDialog
 	public NacSoundMusicDialog()
 	{
 		super();
+
+		this.addOnShowListener(this);
 	}
 
 	/**
@@ -258,8 +260,10 @@ public class NacSoundMusicDialog
 	 * Setup views for when the dialog is shown.
 	 */
 	@Override
-	public void onShowDialog(Context context, View root)
+	public void onShowDialog(NacDialog dialog, View root)
 	{
+		Context context = root.getContext();
+
 		if (!NacPermissions.hasRead(context))
 		{
 			NacPermissions.request(context,
@@ -270,7 +274,6 @@ public class NacSoundMusicDialog
 			return;
 		}
 
-		super.onShowDialog(context, root);
 		this.showDirectory(null);
 	}
 

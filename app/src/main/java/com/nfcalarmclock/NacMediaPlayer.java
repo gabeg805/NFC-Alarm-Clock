@@ -105,7 +105,7 @@ public class NacMediaPlayer
 	}
 
 	/**
-	 * Reset the media player.
+	 * Stop and reset the media player.
 	 */
 	public void reset()
 	{
@@ -125,6 +125,14 @@ public class NacMediaPlayer
 		listener)
 	{
 		this.mListener = listener;
+	}
+
+	/**
+	 * @see reset()
+	 */
+	public void stop()
+	{
+		this.reset();
 	}
 
 }

@@ -13,7 +13,7 @@ import java.util.List;
 
 public class NacSoundRingtoneDialog
 	extends NacSoundDialog
-	implements CompoundButton.OnCheckedChangeListener
+	implements CompoundButton.OnCheckedChangeListener,NacDialog.OnShowListener
 {
 
 	/**
@@ -21,6 +21,8 @@ public class NacSoundRingtoneDialog
 	public NacSoundRingtoneDialog()
 	{
 		super();
+
+		this.addOnShowListener(this);
 	}
 
 	/**
@@ -108,9 +110,9 @@ public class NacSoundRingtoneDialog
 	 * Setup views when the dialog is shown.
 	 */
 	@Override
-	public void onShowDialog(Context context, View root)
+	public void onShowDialog(NacDialog dialog, View root)
 	{
-		NacUtility.printf("onShowDialog in NacSoundRingtoneDialog");
+		Context context = root.getContext();
 		RadioGroup group = (RadioGroup) root.findViewById(R.id.radio_group);
 		List<NacSound> ringtones = this.getRingtones(context);
 		RadioButton button;
@@ -135,7 +137,6 @@ public class NacSoundRingtoneDialog
 	@Override
 	public void scale()
 	{
-		NacUtility.printf("Scaling NacSoundRingtoneDialog");
 		this.scale(0.7, 0.8, false, true);
 	}
 

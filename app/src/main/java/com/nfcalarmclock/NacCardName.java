@@ -78,7 +78,7 @@ public class NacCardName
 
 		dialog.build(context, R.layout.dlg_alarm_name);
 		dialog.saveData(this.mAlarm.getName());
-		dialog.addDismissListener(this);
+		dialog.addOnDismissListener(this);
 		dialog.show();
 	}
 

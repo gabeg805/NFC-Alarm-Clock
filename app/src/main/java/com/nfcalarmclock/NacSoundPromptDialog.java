@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class NacSoundPromptDialog
 	extends NacDialog
-	implements View.OnClickListener,NacDialog.OnDismissListener
+	implements View.OnClickListener,NacDialog.OnDismissListener,NacDialog.OnShowListener
 {
 
 	/**
@@ -25,6 +25,8 @@ public class NacSoundPromptDialog
 	public NacSoundPromptDialog()
 	{
 		super();
+
+		this.addOnShowListener(this);
 
 		this.mItemClickListener = null;
 	}
@@ -74,7 +76,7 @@ public class NacSoundPromptDialog
 
 		dialog.build(context);
 		dialog.setOnItemClickListener(this.mItemClickListener);
-		dialog.addDismissListener(this);
+		dialog.addOnDismissListener(this);
 		dialog.show();
 		dialog.scale();
 	}
@@ -93,7 +95,7 @@ public class NacSoundPromptDialog
 	 * Setup the views when the dialog is shown.
 	 */
 	@Override
-	public void onShowDialog(Context context, View root)
+	public void onShowDialog(NacDialog dialog, View root)
 	{
 		Button music = (Button) root.findViewById(R.id.dlg_music);
 		Button ringtone = (Button) root.findViewById(R.id.dlg_ringtone);

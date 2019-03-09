@@ -66,11 +66,18 @@ public class NacCardTime
 	 */
 	public void setTime()
 	{
+		Context context = this.mTime.getContext();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
 		String time = this.mAlarm.getTime();
 		String meridian = this.mAlarm.getMeridian();
+		int timeColor = shared.timeColor;
+		int meridianColor = (meridian == "AM") ? shared.amColor
+			: shared.pmColor;
 
 		this.mTime.setText(time);
 		this.mMeridian.setText(meridian);
+		this.mTime.setTextColor(timeColor);
+		this.mMeridian.setTextColor(meridianColor);
 	}
 
 	/**

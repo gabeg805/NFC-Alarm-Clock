@@ -21,7 +21,7 @@ import android.widget.TextView;
  */
 public class NacColorPickerDialog
 	extends NacDialog
-	implements TextView.OnEditorActionListener,View.OnTouchListener,TextWatcher
+	implements TextView.OnEditorActionListener,View.OnTouchListener,TextWatcher,NacDialog.OnShowListener
 {
 
 	/**
@@ -44,6 +44,8 @@ public class NacColorPickerDialog
 	public NacColorPickerDialog()
 	{
 		super();
+
+		this.addOnShowListener(this);
 	}
 
 	/**
@@ -138,7 +140,7 @@ public class NacColorPickerDialog
 	 * Setup the views when the dialog is shown.
 	 */
 	@Override
-	public void onShowDialog(Context context, View root)
+	public void onShowDialog(NacDialog dialog, View root)
 	{
 		this.mColorPicker = (NacColorPicker) root.findViewById(R.id.color_picker);
 		this.mColorExample = (ImageView) root.findViewById(R.id.color_example);

@@ -16,7 +16,7 @@ import android.widget.TextView;
  */
 public class NacNameDialog
 	extends NacDialog
-	implements NacDialog.OnDismissListener,TextView.OnEditorActionListener
+	implements TextView.OnEditorActionListener,NacDialog.OnDismissListener,NacDialog.OnShowListener
 {
 
 	/**
@@ -32,7 +32,8 @@ public class NacNameDialog
 
 		this.mEditText = null;
 
-		this.addDismissListener(this);
+		this.addOnDismissListener(this);
+		this.addOnShowListener(this);
 	}
 
 	/**
@@ -52,7 +53,7 @@ public class NacNameDialog
 	 * Setup the views when the dialog is shown.
 	 */
 	@Override
-	public void onShowDialog(Context context, View root)
+	public void onShowDialog(NacDialog dialog, View root)
 	{
 		this.mEditText = (EditText) root.findViewById(R.id.alarm_name);
 		Object data = this.getData();

@@ -167,9 +167,9 @@ public abstract class NacPreferenceValuePicker
 		NacDialog dialog = new NacDialog();
 
 		dialog.setOnBuildListener(this);
-		dialog.setOnShowListener(this);
+		dialog.addOnDismissListener(this);
+		dialog.addOnShowListener(this);
 		dialog.build(context, getDialogLayout());
-		dialog.addDismissListener(this);
 		dialog.show();
 
 		return true;

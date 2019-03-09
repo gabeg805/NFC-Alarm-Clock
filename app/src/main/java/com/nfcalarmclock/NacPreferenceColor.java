@@ -72,14 +72,6 @@ public class NacPreferenceColor
 		this.mImageView.setBackgroundColor(this.mValue);
 	}
 
-	@Override
-	public boolean onNeutralActionDialog(NacDialog dialog)
-	{
-		((NacColorPickerDialog)dialog).setColor(this.mDefault);
-
-		return true;
-	}
-
 	/**
 	 * Save color when the dialog is dismissed.
 	 */
@@ -104,6 +96,17 @@ public class NacPreferenceColor
 	}
 
 	/**
+	 * Set the default color when the neutral button is pressed.
+	 */
+	@Override
+	public boolean onNeutralActionDialog(NacDialog dialog)
+	{
+		((NacColorPickerDialog)dialog).setColor(this.mDefault);
+
+		return true;
+	}
+
+	/**
 	 * Allow users to select the whole preference to change the checkbox.
 	 */
 	@Override
@@ -112,8 +115,8 @@ public class NacPreferenceColor
 		NacColorPickerDialog dialog = new NacColorPickerDialog();
 		Context context = this.mImageView.getContext();
 
-		dialog.addDismissListener(this);
-		dialog.addNeutralActionListener(this);
+		dialog.addOnDismissListener(this);
+		dialog.addOnNeutralActionListener(this);
 		dialog.build(context, R.layout.dlg_color_picker);
 		dialog.setNeutralButton("Default");
 		dialog.show();

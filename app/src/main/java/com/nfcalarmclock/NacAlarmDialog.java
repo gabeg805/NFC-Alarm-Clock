@@ -14,6 +14,7 @@ import android.widget.ImageView;
  */
 public class NacAlarmDialog
 	extends NacDialog
+	implements NacDialog.OnShowListener
 {
 
 	/**
@@ -21,6 +22,8 @@ public class NacAlarmDialog
 	public NacAlarmDialog()
 	{
 		super();
+
+		this.addOnShowListener(this);
 	}
 
 	/**
@@ -35,7 +38,6 @@ public class NacAlarmDialog
 		builder.setIcon(R.mipmap.ic_launcher);
 		builder.setNegativeButton("Snooze", this);
 		builder.setCancelable(false);
-		//this.mDialog.setCancelable(false);
 		//this.mDialog.setCanceledOnTouchOutside(false);
 	}
 
@@ -43,7 +45,7 @@ public class NacAlarmDialog
 	 * Setup the views when the dialog is shown.
 	 */
 	@Override
-	public void onShowDialog(Context context, View root)
+	public void onShowDialog(NacDialog dialog, View root)
 	{
 		ImageView icon = (ImageView) root.findViewById(R.id.nac_nfc_icon);
 		AlphaAnimation animation = new AlphaAnimation(0.1f, 1f);

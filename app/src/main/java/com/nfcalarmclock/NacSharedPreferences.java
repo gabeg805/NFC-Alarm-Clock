@@ -3,6 +3,7 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 
 /**
@@ -62,6 +63,16 @@ public class NacSharedPreferences
 	public int themeColor;
 
 	/**
+	 * Color of the name of the alarm.
+	 */
+	public int nameColor;
+
+	/**
+	 * Color of the text that shows which days the alarm runs.
+	 */
+	public int daysColor;
+
+	/**
 	 * Time color.
 	 */
 	public int timeColor;
@@ -75,16 +86,6 @@ public class NacSharedPreferences
 	 * PM color.
 	 */
 	public int pmColor;
-
-	/**
-	 * Color of the name of the alarm.
-	 */
-	public int nameColor;
-
-	/**
-	 * Color of the text that shows which days the alarm runs.
-	 */
-	public int daysColor;
 
 	/**
 	 */
@@ -103,12 +104,12 @@ public class NacSharedPreferences
 		this.vibrate = shared.getBoolean(keys.vibrate, NacAlarm.getVibrateDefault());
 		this.sound = shared.getString(keys.sound, "");
 		this.name = shared.getString(keys.name, "");
-		this.themeColor = shared.getInt(keys.themeColor, -1);
-		this.timeColor = shared.getInt(keys.timeColor, -1);
-		this.amColor = shared.getInt(keys.amColor, -1);
-		this.pmColor = shared.getInt(keys.pmColor, -1);
-		this.nameColor = shared.getInt(keys.nameColor, -1);
-		this.daysColor = shared.getInt(keys.daysColor, -1);
+		this.themeColor = shared.getInt(keys.themeColor, 0xfffb8c00);
+		this.timeColor = shared.getInt(keys.timeColor, Color.WHITE);
+		this.amColor = shared.getInt(keys.amColor, Color.WHITE);
+		this.pmColor = shared.getInt(keys.pmColor, Color.WHITE);
+		this.nameColor = shared.getInt(keys.nameColor, 0xff00c0fb);
+		this.daysColor = shared.getInt(keys.daysColor, 0xfffb8c00);
 
 		this.autoDismiss = (this.autoDismiss == 1) ? 1 : 5*(this.autoDismiss-1);
 		this.maxSnoozes = (this.maxSnoozes == 11) ? -1 : this.maxSnoozes;

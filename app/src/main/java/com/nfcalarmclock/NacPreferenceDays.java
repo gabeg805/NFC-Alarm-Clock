@@ -113,9 +113,9 @@ public class NacPreferenceDays
 		NacDialog dialog = new NacDialog();
 
 		dialog.setOnBuildListener(this);
-		dialog.setOnShowListener(this);
+		dialog.addOnDismissListener(this);
+		dialog.addOnShowListener(this);
 		dialog.build(context, R.layout.dlg_alarm_days);
-		dialog.addDismissListener(this);
 		dialog.show();
 
 		return true;

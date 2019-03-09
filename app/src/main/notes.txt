@@ -1,3 +1,10 @@
+- Add slider to color picker
+- Filter input in edittext
+- Add state list for switch
+- Auto kill alarm after some time
+- Vibrate constantly, not just once
+- Fix positioning of alarms when closing and opening app.
+
 Notes:
 	- When creating new alarm, highlight it and scroll down to it.
 	- Recycler view private classes can be moved to their own files.

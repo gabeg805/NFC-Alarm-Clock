@@ -20,7 +20,8 @@ import java.util.List;
  * @brief A generic dialog object.
  */
 public class NacDialog
-	implements DialogInterface.OnClickListener,DialogInterface.OnCancelListener,View.OnLayoutChangeListener
+	//implements DialogInterface.OnClickListener,DialogInterface.OnCancelListener,View.OnLayoutChangeListener
+	implements DialogInterface.OnClickListener,View.OnLayoutChangeListener
 {
 
 	/**
@@ -161,11 +162,11 @@ public class NacDialog
 	 * The dialog listeners.
 	 */
 	private OnBuildListener mBuildListener;
-	private List<OnCancelListener> mCanceledListener;
-	private List<OnDismissListener> mDismissedListener;
-	private List<OnHideListener> mHiddenListener;
+	private List<OnCancelListener> mCancelListener;
+	private List<OnDismissListener> mDismissListener;
+	private List<OnHideListener> mHideListener;
 	private List<OnNeutralActionListener> mNeutralActionListener;
-	private OnShowListener mShowListener;
+	private List<OnShowListener> mShowListener;
 
 	/**
 	 * Dialog scaler.
@@ -181,48 +182,67 @@ public class NacDialog
 		this.mDialog = null;
 		this.mRoot = null;
 		this.mBuildListener = null;
-		this.mCanceledListener = new ArrayList<>();
-		this.mDismissedListener = new ArrayList<>();
-		this.mHiddenListener = new ArrayList<>();
+		this.mCancelListener = new ArrayList<>();
+		this.mDismissListener = new ArrayList<>();
+		this.mHideListener = new ArrayList<>();
 		this.mNeutralActionListener = new ArrayList<>();
-		this.mShowListener = null;
+		this.mShowListener = new ArrayList<>();
 		this.mScaler = null;
 	}
 
 	/**
-	 * Add a cancel listener. More than one can be added, and they will be
-	 * run in the order that they are added.
+	 * Add an OnCancelListener.
+	 *
+	 * More than one can be added, and they will be run in the order that they
+	 * are added.
 	 */
-	public void addCancelListener(OnCancelListener listener)
+	public void addOnCancelListener(OnCancelListener listener)
 	{
-		this.mCanceledListener.add(listener);
+		this.mCancelListener.add(listener);
 	}
 
 	/**
-	 * Add a dismiss listener. More than one can be added, and they will be
-	 * run in the order that they are added.
+	 * Add an OnDismissListener.
+	 *
+	 * More than one can be added, and they will be run in the order that they
+	 * are added.
 	 */
-	public void addDismissListener(OnDismissListener listener)
+	public void addOnDismissListener(OnDismissListener listener)
 	{
-		this.mDismissedListener.add(listener);
+		this.mDismissListener.add(listener);
 	}
 
 	/**
-	 * Add a hidden listener. More than one can be added, and they will be
-	 * run in the order that they are added.
+	 * Add an OnHideListener.
+	 *
+	 * More than one can be added, and they will be run in the order that they
+	 * are added.
 	 */
-	public void addHiddenListener(OnHideListener listener)
+	public void addOnHideListener(OnHideListener listener)
 	{
-		this.mHiddenListener.add(listener);
+		this.mHideListener.add(listener);
 	}
 
 	/**
-	 * Add a neutral action listener. More than one can be added, and they will
-	 * be run in the order that they are added.
+	 * Add an OnNeutralActionListener.
+	 *
+	 * More than one can be added, and they will be run in the order that they
+	 * are added.
 	 */
-	public void addNeutralActionListener(OnNeutralActionListener listener)
+	public void addOnNeutralActionListener(OnNeutralActionListener listener)
 	{
 		this.mNeutralActionListener.add(listener);
+	}
+
+	/**
+	 * Add an OnShowListener.
+	 *
+	 * More than one can be added, and they will be run in the order that they
+	 * are added.
+	 */
+	public void addOnShowListener(OnShowListener listener)
+	{
+		this.mShowListener.add(listener);
 	}
 
 	/**
@@ -242,7 +262,7 @@ public class NacDialog
 
 		this.removeParent(root);
 		this.mBuilder.setView(root);
-		this.mBuilder.setOnCancelListener(this);
+		//this.mBuilder.setOnCancelListener(this);
 		this.onBuildDialog(context, this.mBuilder);
 
 		return this.mBuilder;
@@ -262,16 +282,74 @@ public class NacDialog
 	}
 
 	/**
+	 * Calculate the dialog width.
+	 *
+	 * @param  screenWidth  The width of the phone screen.
+	 */
+	public int calculateDialogHeight(int screenHeight)
+	{
+		int scaledHeight = (int)(screenHeight * this.mScaler.heightScale);
+		int dialogHeight = scaledHeight;
+
+		if (!this.mScaler.wrapHeight)
+		{
+			return dialogHeight;
+		}
+
+		int rootHeight = this.mRoot.getHeight();
+		int uncertainty = (int) (4.0f * screenHeight / 100.0f);
+		int diff = Math.abs(rootHeight - dialogHeight);
+		//NacUtility.printf("Height Comparison : %d x %d (%d/%d)", rootHeight, scaledHeight, uncertainty, screenHeight);
+
+		if (rootHeight <= scaledHeight)
+		{
+			dialogHeight = (diff <= uncertainty) ? rootHeight : LayoutParams.WRAP_CONTENT;
+		}
+
+		return dialogHeight;
+	}
+
+	/**
+	 * Calculate the dialog width.
+	 *
+	 * @param  screenWidth  The width of the phone screen.
+	 */
+	public int calculateDialogWidth(int screenWidth)
+	{
+		int scaledWidth = (int)(screenWidth * this.mScaler.widthScale);
+		int dialogWidth = scaledWidth;
+
+		if (!this.mScaler.wrapWidth)
+		{
+			return dialogWidth;
+		}
+
+		int rootWidth = this.mRoot.getWidth();
+		int uncertainty = (int) (4.0f * screenWidth / 100.0f);
+		int diff = Math.abs(rootWidth - dialogWidth);
+		//NacUtility.printf("Width Comparison : %d x %d (%d/%d)", rootWidth, scaledWidth, uncertainty, screenWidth);
+
+		if (rootWidth <= scaledWidth)
+		{
+			dialogWidth = (diff <= uncertainty) ? rootWidth : LayoutParams.WRAP_CONTENT;
+		}
+
+		return dialogWidth;
+	}
+
+
+	/**
 	 * Cancel the dialog and call the onCancelDialog listener.
 	 */
 	public void cancel()
 	{
+		NacUtility.printf("cancel!");
 		if (this.mDialog == null)
 		{
 			return;
 		}
 
-		for (OnCancelListener listener : this.mCanceledListener)
+		for (OnCancelListener listener : this.mCancelListener)
 		{
 			if (!listener.onCancelDialog(this))
 			{
@@ -287,12 +365,13 @@ public class NacDialog
 	 */
 	public void dismiss()
 	{
+		NacUtility.printf("dismiss!");
 		if (this.mDialog == null)
 		{
 			return;
 		}
 
-		for (OnDismissListener listener : this.mDismissedListener)
+		for (OnDismissListener listener : this.mDismissListener)
 		{
 			if (!listener.onDismissDialog(this))
 			{
@@ -329,7 +408,7 @@ public class NacDialog
 			return;
 		}
 
-		for (OnHideListener listener : this.mHiddenListener)
+		for (OnHideListener listener : this.mHideListener)
 		{
 			if (!listener.onHideDialog(this))
 			{
@@ -345,11 +424,6 @@ public class NacDialog
 	 */
 	public void neutral()
 	{
-		if (this.mDialog == null)
-		{
-			return;
-		}
-
 		for (OnNeutralActionListener listener : this.mNeutralActionListener)
 		{
 			if (!listener.onNeutralActionDialog(this))
@@ -372,12 +446,6 @@ public class NacDialog
 		}
 	}
 
-	@Override
-	public void onCancel(DialogInterface dialog)
-	{
-		this.cancel();
-	}
-
 	/**
 	 * Handles click events on the Ok/Cancel buttons in the dialog.
 	 */
@@ -387,10 +455,12 @@ public class NacDialog
 		switch (which)
 		{
 		case DialogInterface.BUTTON_POSITIVE:
+			NacUtility.printf("onClick dismiss!");
 			this.dismiss();
 			break;
 		case DialogInterface.BUTTON_NEGATIVE:
 		default:
+			NacUtility.printf("onClick cancel!");
 			this.cancel();
 			break;
 		}
@@ -429,92 +499,6 @@ public class NacDialog
 		NacUtility.printf("Dialog size : %d x %d", dialogWidth, dialogHeight);
 		this.mDialog.getWindow().setLayout(dialogWidth, dialogHeight);
 	}
-
-	/**
-	 * Calculate the dialog width.
-	 *
-	 * @param  screenWidth  The width of the phone screen.
-	 */
-	public int calculateDialogWidth(int screenWidth)
-	{
-		int scaledWidth = (int)(screenWidth * this.mScaler.widthScale);
-		int dialogWidth = scaledWidth;
-
-		if (!this.mScaler.wrapWidth)
-		{
-			return dialogWidth;
-		}
-
-		int rootWidth = this.mRoot.getWidth();
-		int uncertainty = (int) (4.0f * screenWidth / 100.0f);
-		int diff = Math.abs(rootWidth - dialogWidth);
-		//NacUtility.printf("Width Comparison : %d x %d (%d/%d)", rootWidth, scaledWidth, uncertainty, screenWidth);
-
-		if (rootWidth <= scaledWidth)
-		{
-			dialogWidth = (diff <= uncertainty) ? rootWidth : LayoutParams.WRAP_CONTENT;
-			//if (diff <= uncertainty)
-			//{
-			//	dialogWidth = rootWidth;
-			//}
-			//else
-			//{
-			//	dialogWidth = LayoutParams.WRAP_CONTENT;
-			//}
-		}
-
-		return dialogWidth;
-	}
-
-	/**
-	 * Calculate the dialog width.
-	 *
-	 * @param  screenWidth  The width of the phone screen.
-	 */
-	public int calculateDialogHeight(int screenHeight)
-	{
-		int scaledHeight = (int)(screenHeight * this.mScaler.heightScale);
-		int dialogHeight = scaledHeight;
-
-		if (!this.mScaler.wrapHeight)
-		{
-			return dialogHeight;
-		}
-
-		int rootHeight = this.mRoot.getHeight();
-		int uncertainty = (int) (4.0f * screenHeight / 100.0f);
-		int diff = Math.abs(rootHeight - dialogHeight);
-		//NacUtility.printf("Height Comparison : %d x %d (%d/%d)", rootHeight, scaledHeight, uncertainty, screenHeight);
-
-		if (rootHeight <= scaledHeight)
-		{
-			dialogHeight = (diff <= uncertainty) ? rootHeight : LayoutParams.WRAP_CONTENT;
-			//if (diff <= uncertainty)
-			//{
-			//	dialogHeight = rootHeight;
-			//}
-			//else
-			//{
-			//	dialogHeight = LayoutParams.WRAP_CONTENT;
-			//}
-		}
-
-		return dialogHeight;
-	}
-
-	/**
-	 * Called when the dialog is being shown.
-	 *
-	 * This will typically be overriden by the user.
-	 */
-	public void onShowDialog(Context context, View root)
-	{
-		if (this.mShowListener != null)
-		{
-			this.mShowListener.onShowDialog(this, root);
-		}
-	}
-
 	/**
 	 * Remove the parent from the view that will be attached to the dialog.
 	 */
@@ -550,7 +534,6 @@ public class NacDialog
 	 */
 	public void scale(double width, double height, boolean wrapWidth, boolean wrapHeight)
 	{
-		NacUtility.printf("scale!");
 		if ((this.mBuilder == null) || (this.mDialog == null)
 			|| (width < 0) || (width > 1) || (height < 0) || (height > 1))
 		{
@@ -647,14 +630,6 @@ public class NacDialog
 	}
 
 	/**
-	 * Set the onShow listener.
-	 */
-	public void setOnShowListener(OnShowListener listener)
-	{
-		this.mShowListener = listener;
-	}
-
-	/**
 	 * Set the positive button which will call onDismissDialog when clicked.
 	 */
 	public void setPositiveButton(String title)
@@ -672,8 +647,6 @@ public class NacDialog
 	 */
 	public AlertDialog show()
 	{
-		Context context = this.mRoot.getContext();
-
 		if (this.mDialog != null)
 		{
 			this.mDialog.show();
@@ -683,7 +656,11 @@ public class NacDialog
 			this.mDialog = this.mBuilder.show();
 		}
 
-		this.onShowDialog(context, this.mRoot);
+		for (OnShowListener listener : this.mShowListener)
+		{
+			listener.onShowDialog(this, this.mRoot);
+		}
+
 		this.setupDialog();
 
 		return this.mDialog;

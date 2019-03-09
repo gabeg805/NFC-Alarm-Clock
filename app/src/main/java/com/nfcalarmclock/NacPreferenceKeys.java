@@ -55,6 +55,16 @@ public class NacPreferenceKeys
 	public String themeColor;
 
 	/**
+	 * Color of the name of the alarm.
+	 */
+	public String nameColor;
+
+	/**
+	 * Color of the text that shows the days that the alarm runs.
+	 */
+	public String daysColor;
+
+	/**
 	 * Time color.
 	 */
 	public String timeColor;
@@ -68,16 +78,6 @@ public class NacPreferenceKeys
 	 * PM color.
 	 */
 	public String pmColor;
-
-	/**
-	 * Color of the name of the alarm.
-	 */
-	public String nameColor;
-
-	/**
-	 * Color of the text that shows the days that the alarm runs.
-	 */
-	public String daysColor;
 
 	/**
 	 */
