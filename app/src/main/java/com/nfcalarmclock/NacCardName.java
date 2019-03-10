@@ -118,7 +118,6 @@ public class NacCardName
 			margin = 0;
 		}
 
-		NacUtility.printf("Name : %s", name);
 		params.setMarginStart(margin);
 		this.mTextView.setLayoutParams(params);
 		this.mName.setText(name);

@@ -40,7 +40,7 @@
 			android:layout_height="wrap_content"
 			android:layout_marginStart="-5dp"
 			android:textAppearance="?android:attr/textAppearanceSmall"
-			android:inputType="text"
+			android:inputType="textNoSuggestions"
 			android:hint="@string/dlg_color_hint"
 			android:maxLines="1"
 			android:maxLength="@integer/max_hex_length">

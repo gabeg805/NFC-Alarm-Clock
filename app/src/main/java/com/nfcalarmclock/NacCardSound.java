@@ -84,7 +84,6 @@ public class NacCardSound
 			focus = true;
 		}
 
-		NacUtility.printf("Sound : %s (%s)", path, name);
 		this.mSoundView.setText(name);
 		this.mSoundView.setFocus(focus);
 	}

@@ -6,12 +6,12 @@ import android.content.res.Resources;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.MeasureSpec;
-import android.util.Log;
-import android.util.TypedValue;
-
+import android.widget.Toast;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -186,6 +186,54 @@ public class NacUtility
 		CoordinatorLayout root = activity.findViewById(R.id.activity_main);
 
 		return NacUtility.snackbar(root, message, action, listener);
+	}
+
+	/**
+	 * Create a toast that displays for a short period of time.
+	 */
+	public static Toast quickToast(View view, String message)
+	{
+		Context context = view.getContext();
+
+		return NacUtility.quickToast(context, message);
+	}
+
+	/**
+	 * Create a toast that displays for a short period of time.
+	 */
+	public static Toast quickToast(Context context, String message)
+	{
+		return NacUtility.toast(context, message, Toast.LENGTH_SHORT);
+	}
+
+	/**
+	 * Create a toast.
+	 */
+	public static Toast toast(View view, String message)
+	{
+		Context context = view.getContext();
+
+		return NacUtility.toast(context, message);
+	}
+
+	/**
+	 * Create a toast.
+	 */
+	public static Toast toast(Context context, String message)
+	{
+		return NacUtility.toast(context, message, Toast.LENGTH_LONG);
+	}
+
+	/**
+	 * Create a toast.
+	 */
+	public static Toast toast(Context context, String message, int duration)
+	{
+		Toast toast = Toast.makeText(context, message, duration);
+
+		toast.show();
+
+		return toast;
 	}
 
 }

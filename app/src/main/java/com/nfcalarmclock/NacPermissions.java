@@ -50,7 +50,7 @@ public class NacPermissions
 	}
 
 	/**
-	 * @brief Prompt the user to set the READ_EXTERNAL_STORAGE permissions.
+	 * Prompt the user to set the READ_EXTERNAL_STORAGE permissions.
 	 */
 	public static int setRead(Activity activity)
 	{

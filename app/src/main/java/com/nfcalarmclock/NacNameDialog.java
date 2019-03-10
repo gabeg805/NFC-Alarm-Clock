@@ -3,6 +3,7 @@ package com.nfcalarmclock;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
@@ -55,15 +56,18 @@ public class NacNameDialog
 	@Override
 	public void onShowDialog(NacDialog dialog, View root)
 	{
-		this.mEditText = (EditText) root.findViewById(R.id.alarm_name);
+		Context context = root.getContext();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
 		Object data = this.getData();
 		String name = (data != null) ? (String) data : "";
+		this.mEditText = (EditText) root.findViewById(R.id.alarm_name);
 
 		this.mEditText.setText(name);
 		this.mEditText.selectAll();
 		this.mEditText.setOnEditorActionListener(this);
 		this.mEditText.setRawInputType(InputType.TYPE_CLASS_TEXT);
 		this.mEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+		this.mEditText.setBackgroundTintList(ColorStateList.valueOf(shared.themeColor));
 		this.scale(0.8, 0.5, false, true);
 	}
 

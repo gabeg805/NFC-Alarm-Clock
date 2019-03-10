@@ -1,8 +1,10 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
@@ -90,10 +92,19 @@ public class NacPreferenceRepeat
 	{
 		super.onBindView(v);
 
+		Context context = v.getContext();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
+		int[][] states = new int[][] {
+			new int[] { android.R.attr.state_checked},
+			new int[] {-android.R.attr.state_checked}};
+		int[] colors = new int[] {shared.themeColor, Color.LTGRAY};
+		ColorStateList colorStateList = new ColorStateList(states, colors);
 		this.mCheckBox = (CheckBox) v.findViewById(R.id.widget);
 
 		this.mCheckBox.setChecked(this.mValue);
 		this.mCheckBox.setOnCheckedChangeListener(this);
+		this.mCheckBox.setButtonTintList(colorStateList);
+
 		this.setSummary();
 	}
 

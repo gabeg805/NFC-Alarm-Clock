@@ -68,7 +68,6 @@ public class NacCardRepeat
 	@Override
 	public void onCheckedChanged(CompoundButton v, boolean state)
 	{
-		NacUtility.printf("Repeat : %b", state);
 		this.mAlarm.setRepeat(state);
 		this.mAlarm.changed();
 	}

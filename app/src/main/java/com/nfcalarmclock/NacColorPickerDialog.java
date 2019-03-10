@@ -3,6 +3,7 @@ package com.nfcalarmclock;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.text.Editable;
 import android.text.InputType;
@@ -103,6 +104,26 @@ public class NacColorPickerDialog
 	}
 
 	/**
+	 * Check if valid hex string was input into the EditText.
+	 */
+	public boolean isHexString()
+	{
+		String name = this.mEditText.getText().toString();
+		//NacUtility.printf("Name : %s", name);
+
+		for (int i=1; i < name.length(); i++)
+		{
+			//NacUtility.printf("Char : %c | Result : %d", name.charAt(i), Character.digit(name.charAt(i), 16));
+			if (Character.digit(name.charAt(i), 16) == -1)
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
 	 * Build the dialog.
 	 */
 	@Override
@@ -123,6 +144,12 @@ public class NacColorPickerDialog
 	{
 		if ((event == null) && (action == EditorInfo.IME_ACTION_DONE))
 		{
+			if (!this.isHexString())
+			{
+				NacUtility.quickToast(tv.getContext(), "Invalid hex color");
+				return false;
+			}
+
 			String name = this.mEditText.getText().toString();
 			int color = Color.parseColor(name);
 
@@ -142,6 +169,8 @@ public class NacColorPickerDialog
 	@Override
 	public void onShowDialog(NacDialog dialog, View root)
 	{
+		Context context = root.getContext();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
 		this.mColorPicker = (NacColorPicker) root.findViewById(R.id.color_picker);
 		this.mColorExample = (ImageView) root.findViewById(R.id.color_example);
 		this.mEditText = (EditText) root.findViewById(R.id.color_value);
@@ -151,6 +180,7 @@ public class NacColorPickerDialog
 		this.mEditText.setOnEditorActionListener(this);
 		this.mEditText.setRawInputType(InputType.TYPE_CLASS_TEXT);
 		this.mEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+		this.mEditText.setBackgroundTintList(ColorStateList.valueOf(shared.themeColor));
 		this.mColorPicker.setOnTouchListener(this);
 		this.mColorExample.setBackgroundColor(this.getColor());
 	}

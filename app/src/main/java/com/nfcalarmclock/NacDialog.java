@@ -299,7 +299,6 @@ public class NacDialog
 		int rootHeight = this.mRoot.getHeight();
 		int uncertainty = (int) (4.0f * screenHeight / 100.0f);
 		int diff = Math.abs(rootHeight - dialogHeight);
-		//NacUtility.printf("Height Comparison : %d x %d (%d/%d)", rootHeight, scaledHeight, uncertainty, screenHeight);
 
 		if (rootHeight <= scaledHeight)
 		{
@@ -327,7 +326,6 @@ public class NacDialog
 		int rootWidth = this.mRoot.getWidth();
 		int uncertainty = (int) (4.0f * screenWidth / 100.0f);
 		int diff = Math.abs(rootWidth - dialogWidth);
-		//NacUtility.printf("Width Comparison : %d x %d (%d/%d)", rootWidth, scaledWidth, uncertainty, screenWidth);
 
 		if (rootWidth <= scaledWidth)
 		{
@@ -496,7 +494,6 @@ public class NacDialog
 			this.mScaler.isScaled = true;
 		}
 
-		NacUtility.printf("Dialog size : %d x %d", dialogWidth, dialogHeight);
 		this.mDialog.getWindow().setLayout(dialogWidth, dialogHeight);
 	}
 	/**

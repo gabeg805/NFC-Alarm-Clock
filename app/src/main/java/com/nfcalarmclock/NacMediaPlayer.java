@@ -3,7 +3,6 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.widget.Toast;
 
 /**
  * Wrapper for the MediaPlayer class.
@@ -94,8 +93,7 @@ public class NacMediaPlayer
 
 		if (this.mPlayer == null)
 		{
-			Toast.makeText(this.mContext, "Unable to play the selected file.",
-				Toast.LENGTH_SHORT).show();
+			NacUtility.quickToast(this.mContext, "Unable to play the selected file");
 			return;
 		}
 

@@ -201,7 +201,6 @@ public class NacCardDialog
 	@Override
 	public void onClick(DialogInterface dialog, int which)
 	{
-		NacUtility.printf("Dialog clicked.");
 		switch (which)
 		{
 		case DialogInterface.BUTTON_POSITIVE:

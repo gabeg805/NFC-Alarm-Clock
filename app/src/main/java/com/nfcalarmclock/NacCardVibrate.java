@@ -52,7 +52,6 @@ public class NacCardVibrate
 	@Override
 	public void onCheckedChanged(CompoundButton v, boolean state)
 	{
-		NacUtility.printf("Vibrate : %b", state);
 		this.mAlarm.setVibrate(state);
 		this.mAlarm.changed();
 	}

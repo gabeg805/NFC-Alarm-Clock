@@ -85,7 +85,6 @@ public class NacSoundRingtoneDialog
 	@Override
 	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
-		NacUtility.printf("onBuildDialog in NacSoundRingtoneDialog");
 		String title = context.getString(R.string.dlg_ringtone_title);
 
 		builder.setTitle(title);

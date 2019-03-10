@@ -84,9 +84,6 @@ public class NacSoundMusicDialog
 		String title = this.getTitle(retriever, file);
 		String artist = this.getArtist(retriever, file);
 
-		NacUtility.printf("Title  : %s", title);
-		NacUtility.printf("Artist : %s", artist);
-
 		retriever.release();
 		entry.setTag(file);
 		entry.setOnClickListener(this);
@@ -222,15 +219,12 @@ public class NacSoundMusicDialog
 			return;
 		}
 
-		NacUtility.printf("New Path : %s", newpath);
-
 		if (file.isDirectory())
 		{
 			this.showDirectory(newpath);
 		}
 		else if (file.isFile())
 		{
-			NacUtility.printf("Selected path : %s", newpath);
 			this.play(new NacSound(newpath, name));
 		}
 	}
