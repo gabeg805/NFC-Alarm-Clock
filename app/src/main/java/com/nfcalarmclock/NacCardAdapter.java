@@ -135,7 +135,6 @@ public class NacCardAdapter
 		this.mScheduler.update(alarm);
 		this.mAlarmList.add(position, alarm);
 		this.notifyItemInserted(position);
-		//this.mRecyclerView.scrollToPosition(position);
 	}
 
 	/**

@@ -37,7 +37,7 @@ public class NacAlarmDialog
 		builder.setTitle(title);
 		builder.setIcon(R.mipmap.ic_launcher);
 		builder.setNegativeButton("Snooze", this);
-		builder.setPositiveButton("Dismiss", this);
+		//builder.setPositiveButton("Dismiss", this);
 		builder.setCancelable(false);
 		//this.mDialog.setCanceledOnTouchOutside(false);
 	}

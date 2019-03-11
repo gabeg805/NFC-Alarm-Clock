@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 import android.util.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,13 +38,11 @@ public class NacDatabase
 	 */
 	public long add(NacAlarm alarm)
 	{
-		this.setDatabase();
-
-		String table = NacDatabaseContract.AlarmTable.TABLE_NAME;
 		ContentValues cv = this.getContentValues(alarm);
-		long id = this.mDatabase.insert(table, null, cv);
 
-		return id;
+		new Inserter().execute(cv);
+
+		return 0;
 	}
 
 	/**
@@ -269,6 +268,38 @@ public class NacDatabase
 		int rows = this.mDatabase.update(table, cv, where, args);
 
 		return rows;
+	}
+
+	/**
+	 * Insert entries to the database asynchronously.
+	 */
+	private class Inserter
+		extends AsyncTask<ContentValues, Void, Long>
+	{
+
+		/**
+		 */
+		public Inserter()
+		{
+		}
+
+		/**
+		 */
+		protected Long doInBackground(ContentValues... values)
+		{
+			setDatabase();
+
+			String table = NacDatabaseContract.AlarmTable.TABLE_NAME;
+			long result = 0;
+
+			for (int i=0; i < values.length; i++)
+			{
+				result += mDatabase.insert(table, null, values[i]);
+			}
+
+			return result;
+		}
+
 	}
 
 }
