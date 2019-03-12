@@ -37,6 +37,8 @@ public class NacVibrator
 			return -1;
 		}
 
+		this.mVibrator.cancel();
+
 		long duration = times[0];
 
 		while (true)

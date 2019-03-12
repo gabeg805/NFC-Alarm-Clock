@@ -19,26 +19,13 @@ import java.util.concurrent.TimeUnit;
  */
 public class NacAlarmActivity
 	extends Activity
-	implements NacDialog.OnDismissListener,NacDialog.OnShowListener,NacDialog.OnCancelListener
+	implements Runnable,NacDialog.OnShowListener,NacDialog.OnCancelListener
 {
 
 	/**
 	 * Alarm.
 	 */
 	private NacAlarm mAlarm;
-
-	/**
-	 * Shared preference information.
-	 *
-	 * Contains information such as: snooze duration, max snoozes, and auto
-	 * dismiss time.
-	 */
-	private NacSharedPreferences mShared;
-
-	/**
-	 * Dialog to display activity in.
-	 */
-	private NacAlarmDialog mDialog;
 
 	/**
 	 * Media player.
@@ -53,9 +40,30 @@ public class NacAlarmActivity
 	private NacVibrator mVibrator;
 
 	/**
-	 * NFC adapter.
+	 * Automatically dismiss the alarm in case it does not get dismissed.
 	 */
-	private NfcAdapter mNfcAdapter;
+	private Handler mHandler;
+
+	/**
+	 * Cleanup various alarm objects.
+	 */
+	public void cleanup()
+	{
+		if (this.mVibrator != null)
+		{
+			this.mVibrator.cancel(true);
+		}
+
+		if (this.mPlayer != null)
+		{
+			this.mPlayer.stop();
+		}
+
+		if (this.mHandler != null)
+		{
+			this.mHandler.removeCallbacksAndMessages(null);
+		}
+	}
 
 	/**
 	 * Disable NFC dispatch, so the app does not waste battery when it does not
@@ -63,12 +71,14 @@ public class NacAlarmActivity
 	 */
 	private void disableNfc()
 	{
-		if (this.mNfcAdapter == null)
+		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
+		if (nfcAdapter == null)
 		{
 			return;
 		}
 
-		this.mNfcAdapter.disableForegroundDispatch(this);
+		nfcAdapter.disableForegroundDispatch(this);
 	}
 
 	/**
@@ -76,12 +86,17 @@ public class NacAlarmActivity
 	 */
 	private void enableNfc()
 	{
-		if (this.mNfcAdapter == null)
+		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
+		if (nfcAdapter == null)
 		{
+			NacUtility.toast(this, "Your device doesn't support NFC");
+			this.cleanup();
+			finish();
 			return;
 		}
 
-		if (!this.mNfcAdapter.isEnabled())
+		if (!nfcAdapter.isEnabled())
 		{
 			NacUtility.toast(this, "Please enable NFC to dismiss the alarm");
 			startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
@@ -92,33 +107,17 @@ public class NacAlarmActivity
 		PendingIntent pending = PendingIntent.getActivity(this, 0, intent, 0);
 		IntentFilter[] filter = new IntentFilter[]{};
 
-		this.mNfcAdapter.enableForegroundDispatch(this, pending, filter, null);
-	}
-
-	/**
-	 * @return The auto dismiss time (in minutes).
-	 */
-	private int getAutoDismissTime()
-	{
-		return this.mShared.autoDismiss;
-	}
-
-	/**
-	 * @return The max snooze count.
-	 */
-	private int getMaxSnoozeCount()
-	{
-		return this.mShared.maxSnoozes;
+		nfcAdapter.enableForegroundDispatch(this, pending, filter, null);
 	}
 
 	/**
 	 * @return The snooze count.
 	 */
-	private int getSnoozeCount()
+	private int getSnoozeCount(NacSharedPreferences shared)
 	{
 		String key = this.getSnoozeCountKey();
 
-		return this.mShared.instance.getInt(key, 0);
+		return shared.instance.getInt(key, 0);
 	}
 
 	/**
@@ -135,18 +134,8 @@ public class NacAlarmActivity
 	@Override
 	public boolean onCancelDialog(NacDialog dialog)
 	{
-		if (this.snooze())
-		{
-			finish();
-			return true;
-		}
-
-		//Intent intent = getIntent();
-		//finish();
-		//startActivity(intent);
-		recreate();
-
-		return false;
+		this.snooze("Alarm snoozed");
+		return true;
 	}
 
 	/**
@@ -164,36 +153,32 @@ public class NacAlarmActivity
 			bundle.getParcelable("parcel");
 
 		this.mAlarm = parcel.toAlarm();
-		this.mShared = new NacSharedPreferences(this);
-		this.mDialog = new NacAlarmDialog();
 		this.mPlayer = new NacMediaPlayer(this);
 		this.mVibrator = new NacVibrator(this);
-		this.mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+		this.mHandler = new Handler();
 
-		scheduleNextAlarm();
-	}
-
-	/**
-	 * Called when the dialog is dismissed.
-	 */
-	@Override
-	public boolean onDismissDialog(NacDialog dialog)
-	{
-		NacUtility.toast(this, "Alarm dismissed");
-		this.setSnoozeCount(0);
-		finish();
-
-		return true;
+		this.scheduleNextAlarm();
+		this.playMusic();
+		this.vibrate();
 	}
 
 	/**
 	 * NFC tag discovered so dismiss the dialog.
+	 *
+	 * Note: Parent method must be called last. Causes issues with
+	 * setSnoozeCount.
 	 */
 	@Override
 	protected void onNewIntent(Intent intent)
 	{
+		NacSharedPreferences shared = new NacSharedPreferences(this);
+
+		NacUtility.quickToast(this, "Alarm dismissed");
+		this.setSnoozeCount(shared, 0);
+		this.cleanup();
+		finish();
+
 		// What happens if I reverse these two lines?
-		this.mDialog.dismiss();
 		super.onNewIntent(intent);
 	}
 
@@ -204,7 +189,6 @@ public class NacAlarmActivity
 	public void onPause()
 	{
 		super.onPause();
-
 		this.disableNfc();
 	}
 
@@ -215,14 +199,6 @@ public class NacAlarmActivity
 	public void onResume()
 	{
 		super.onResume();
-
-		if (this.mNfcAdapter == null)
-		{
-			//NacUtility.toast(this, "This device doesn't support NFC");
-			//finish();
-			return;
-		}
-
 		this.enableNfc();
 	}
 
@@ -232,7 +208,8 @@ public class NacAlarmActivity
 	@Override
 	public void onShowDialog(NacDialog dialog, View root)
 	{
-		int autoDismiss = this.getAutoDismissTime();
+		NacSharedPreferences shared = new NacSharedPreferences(this);
+		int autoDismiss = shared.autoDismiss;
 		long delay = TimeUnit.MINUTES.toMillis(autoDismiss);
 
 		if (autoDismiss == 0)
@@ -240,17 +217,7 @@ public class NacAlarmActivity
 			return;
 		}
 
-		new Handler().postDelayed(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				Context context = getApplicationContext();
-
-				NacUtility.toast(context, "Automatically dismissed alarm");
-				finish();
-			}
-		}, delay);
+		this.mHandler.postDelayed(this, delay);
 	}
 
 	/**
@@ -260,34 +227,12 @@ public class NacAlarmActivity
 	{
 		super.onStart();
 
-		this.mDialog.build(this, R.layout.act_alarm);
-		this.mDialog.addOnCancelListener(this);
-		this.mDialog.addOnDismissListener(this);
-		this.mDialog.addOnShowListener(this);
-		this.mDialog.show();
-		this.playMusic();
-		this.vibrate();
-	}
+		NacAlarmDialog dialog = new NacAlarmDialog();
 
-	/**
-	 */
-	@Override
-	public void onStop()
-	{
-		super.onStop();
-
-		if (this.mVibrator != null)
-		{
-			this.mVibrator.cancel(true);
-		}
-
-		if (this.mPlayer != null)
-		{
-			this.mPlayer.stop();
-		}
-
-		// This is done in onPause
-		//this.disableNfc();
+		dialog.build(this, R.layout.act_alarm);
+		dialog.addOnCancelListener(this);
+		dialog.addOnShowListener(this);
+		dialog.show();
 	}
 
 	/**
@@ -295,7 +240,20 @@ public class NacAlarmActivity
 	 */
 	private void playMusic()
 	{
-		this.mPlayer.play(this.mAlarm.getSound(), true);
+		if (this.mPlayer != null)
+		{
+			this.mPlayer.stop();
+			this.mPlayer.play(this.mAlarm.getSound(), true);
+		}
+	}
+
+	/**
+	 * Automatically dismiss the alarm.
+	 */
+	@Override
+	public void run()
+	{
+		this.snooze("Auto-dismissed the alarm");
 	}
 
 	/**
@@ -328,12 +286,11 @@ public class NacAlarmActivity
 	 *
 	 * @param  count  The snooze count.
 	 */
-	private void setSnoozeCount(int count)
+	private void setSnoozeCount(NacSharedPreferences shared, int count)
 	{
-		// Apply vs commit
 		String key = this.getSnoozeCountKey();
 
-		this.mShared.instance.edit().putInt(key, count).apply();
+		shared.instance.edit().putInt(key, count).apply();
 	}
 
 	/**
@@ -341,26 +298,46 @@ public class NacAlarmActivity
 	 */
 	public boolean snooze()
 	{
-		int snoozeCount = this.getSnoozeCount() + 1;
-		int maxSnoozeCount = this.getMaxSnoozeCount();
+		NacSharedPreferences shared = new NacSharedPreferences(this);
+		int snoozeCount = this.getSnoozeCount(shared) + 1;
+		int maxSnoozeCount = shared.maxSnoozes;
 
 		if ((snoozeCount > maxSnoozeCount) && (maxSnoozeCount >= 0))
 		{
-			NacUtility.quickToast(this, "Unable to snooze the alarm");
 			return false;
 		}
 
 		NacAlarmScheduler scheduler = new NacAlarmScheduler(this);
 		Calendar snooze = Calendar.getInstance();
 
-		NacUtility.toast(this, "Alarm snoozed");
-		snooze.add(Calendar.MINUTE, this.mShared.snoozeDuration);
+		snooze.add(Calendar.MINUTE, shared.snoozeDuration);
 		this.mAlarm.setHour(snooze.get(Calendar.HOUR));
 		this.mAlarm.setMinute(snooze.get(Calendar.MINUTE));
 		scheduler.update(this.mAlarm, snooze);
-		this.setSnoozeCount(snoozeCount);
+		this.setSnoozeCount(shared, snoozeCount);
 
 		return true;
+	}
+
+	/**
+	 * Snooze the alarm.
+	 */
+	public boolean snooze(String message)
+	{
+		this.cleanup();
+
+		if (this.snooze())
+		{
+			NacUtility.quickToast(this, message);
+			finish();
+			return true;
+		}
+		else
+		{
+			NacUtility.quickToast(this, "Unable to snooze the alarm");
+			recreate();
+			return false;
+		}
 	}
 
 	/**
@@ -368,7 +345,7 @@ public class NacAlarmActivity
 	 */
 	public void vibrate()
 	{
-		if (this.mAlarm.getVibrate())
+		if (this.mAlarm.getVibrate() && (this.mVibrator != null))
 		{
 			long duration = 500;
 

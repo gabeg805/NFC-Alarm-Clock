@@ -37,6 +37,14 @@ public class NacMediaPlayer
 	}
 
 	/**
+	 * Check if the media player is playing.
+	 */
+	public boolean isPlaying()
+	{
+		return (this.mPlayer != null) ? this.mPlayer.isPlaying() : false;
+	}
+
+	/**
 	 * Run after media player has completed playing the sound.
 	 */
 	@Override
