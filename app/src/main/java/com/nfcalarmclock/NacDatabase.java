@@ -40,7 +40,8 @@ public class NacDatabase
 	{
 		ContentValues cv = this.getContentValues(alarm);
 
-		new Inserter().execute(cv);
+		this.setDatabase();
+		new AsyncInsert().execute(cv);
 
 		return 0;
 	}
@@ -273,13 +274,13 @@ public class NacDatabase
 	/**
 	 * Insert entries to the database asynchronously.
 	 */
-	private class Inserter
+	private class AsyncInsert
 		extends AsyncTask<ContentValues, Void, Long>
 	{
 
 		/**
 		 */
-		public Inserter()
+		public AsyncInsert()
 		{
 		}
 
@@ -287,14 +288,23 @@ public class NacDatabase
 		 */
 		protected Long doInBackground(ContentValues... values)
 		{
-			setDatabase();
-
 			String table = NacDatabaseContract.AlarmTable.TABLE_NAME;
 			long result = 0;
 
-			for (int i=0; i < values.length; i++)
+			mDatabase.beginTransaction();
+
+			try
 			{
-				result += mDatabase.insert(table, null, values[i]);
+				for (int i=0; i < values.length; i++)
+				{
+					result += mDatabase.insert(table, null, values[i]);
+				}
+
+				mDatabase.setTransactionSuccessful();
+			}
+			finally
+			{
+				mDatabase.endTransaction();
 			}
 
 			return result;

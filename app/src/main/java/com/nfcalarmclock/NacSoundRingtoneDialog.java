@@ -85,10 +85,11 @@ public class NacSoundRingtoneDialog
 	@Override
 	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
+		super.onBuildDialog(context, builder);
+
 		String title = context.getString(R.string.dlg_ringtone_title);
 
 		builder.setTitle(title);
-		super.onBuildDialog(context, builder);
 	}
 
 	/**
@@ -102,7 +103,7 @@ public class NacSoundRingtoneDialog
 			return;
 		}
 
-		this.play((NacSound) b.getTag());
+		this.play((NacSound)b.getTag());
 	}
 
 	/**

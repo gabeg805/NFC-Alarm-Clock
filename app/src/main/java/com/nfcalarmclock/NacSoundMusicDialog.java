@@ -193,10 +193,11 @@ public class NacSoundMusicDialog
 	@Override
 	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
+		super.onBuildDialog(context, builder);
+
 		String title = context.getString(R.string.dlg_music_title);
 
 		builder.setTitle(title);
-		super.onBuildDialog(context, builder);
 	}
 
 	/**

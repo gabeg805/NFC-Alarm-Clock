@@ -76,11 +76,10 @@ public abstract class NacSoundDialog
 			{
 				Locale locale = Locale.getDefault();
 				String lower = name.toLowerCase(locale);
-				String[] extensions = { ".mp3" };
+				String[] extensions = { ".mp3", ".ogg" };
 				//String[] extensions = {".3gp", ".mp4", ".m4a", ".aac",
 				//	".ts", ".flac", ".mid", ".xmf", ".mxmf", ".rtttl",
-				//	".rtx", ".ota", ".imy", ".mp3", ".mkv", ".wav",
-				//	".ogg"};
+				//	".rtx", ".ota", ".imy", ".mp3", ".mkv", ".wav" };
 
 				if (dir.isDirectory())
 				{
@@ -129,7 +128,7 @@ public abstract class NacSoundDialog
 	@Override
 	public boolean onCancelDialog(NacDialog dialog)
 	{
-		this.mPlayer.reset();
+		this.mPlayer.release();
 
 		return true;
 	}
@@ -140,7 +139,7 @@ public abstract class NacSoundDialog
 	@Override
 	public boolean onDismissDialog(NacDialog dialog)
 	{
-		this.mPlayer.reset();
+		this.mPlayer.release();
 
 		if (this.mSound != null)
 		{

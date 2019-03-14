@@ -32,6 +32,7 @@
 			android:layout_height="@dimen/isz_color_example"
 			android:layout_gravity="center_vertical"
 			android:layout_marginEnd="@dimen/m_color_example"
+			android:contentDescription="@null"
 			/>
 
 		<EditText

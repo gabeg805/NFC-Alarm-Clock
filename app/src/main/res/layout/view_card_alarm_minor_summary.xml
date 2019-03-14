@@ -23,7 +23,7 @@
 		android:id="@+id/nacRepeatText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_toRightOf="@id/nacRepeatTextName"
+		android:layout_toEndOf="@id/nacRepeatTextName"
 		android:layout_marginStart="@dimen/sp_text"
 		android:textColor="?attr/colorAccent"
 		android:textSize="@dimen/tsz_card_repeat"

@@ -30,10 +30,6 @@
 	<dimen name="tsz_card_name">12sp</dimen>
 	<dimen name="tsz_card_days">13sp</dimen>
 
-	<!-- Music list -->
-	<dimen name="tsz_song">24sp</dimen>
-	<dimen name="tsz_directory">12sp</dimen>
-
 	<!-- Expand/collapse button -->
 	<dimen name="isz_expand">20dp</dimen>
 	<dimen name="isz_collapse">20dp</dimen>

@@ -21,7 +21,8 @@ import java.util.List;
  */
 public class NacDialog
 	//implements DialogInterface.OnClickListener,DialogInterface.OnCancelListener,View.OnLayoutChangeListener
-	implements DialogInterface.OnClickListener,View.OnLayoutChangeListener
+	//implements DialogInterface.OnClickListener,View.OnLayoutChangeListener
+	implements DialogInterface.OnClickListener,DialogInterface.OnCancelListener,View.OnLayoutChangeListener
 {
 
 	/**
@@ -169,6 +170,13 @@ public class NacDialog
 	private List<OnShowListener> mShowListener;
 
 	/**
+	 * Check if the dialog was canceled/dismissed.
+	 *
+	 * This is mainly to catch a user clicking outside of the dialog.
+	 */
+	private boolean mWasCanceledOrDismissed;
+
+	/**
 	 * Dialog scaler.
 	 */
 	private Scaler mScaler;
@@ -187,6 +195,7 @@ public class NacDialog
 		this.mHideListener = new ArrayList<>();
 		this.mNeutralActionListener = new ArrayList<>();
 		this.mShowListener = new ArrayList<>();
+		this.mWasCanceledOrDismissed = false;
 		this.mScaler = null;
 	}
 
@@ -335,14 +344,12 @@ public class NacDialog
 		return dialogWidth;
 	}
 
-
 	/**
-	 * Cancel the dialog and call the onCancelDialog listener.
+	 * Call the OnCancelDialog listeners.
 	 */
-	public void cancel()
+	public void callOnCancelListeners()
 	{
-		NacUtility.printf("cancel!");
-		if (this.mDialog == null)
+		if (this.wasCanceledOrDismissed())
 		{
 			return;
 		}
@@ -354,17 +361,14 @@ public class NacDialog
 				return;
 			}
 		}
-
-		this.mDialog.cancel();
 	}
 
 	/**
-	 * Dismiss the dialog and call the onDismissDialog listener.
+	 * Call the OnDismissDialog listeners.
 	 */
-	public void dismiss()
+	public void callOnDismissListeners()
 	{
-		NacUtility.printf("dismiss!");
-		if (this.mDialog == null)
+		if (this.wasCanceledOrDismissed())
 		{
 			return;
 		}
@@ -376,7 +380,51 @@ public class NacDialog
 				return;
 			}
 		}
+	}
 
+	/**
+	 * Cancel the dialog and call the onCancelDialog listener.
+	 */
+	public void cancel()
+	{
+		callOnCancelListeners();
+		cancelDialog();
+	}
+
+	/**
+	 * Cancel the dialog.
+	 */
+	public void cancelDialog()
+	{
+		if ((this.mDialog == null) || this.wasCanceledOrDismissed())
+		{
+			return;
+		}
+
+		this.setCanceledOrDismissed(true);
+		this.mDialog.cancel();
+	}
+
+	/**
+	 * Dismiss the dialog and call the onDismissDialog listener.
+	 */
+	public void dismiss()
+	{
+		callOnDismissListeners();
+		dismissDialog();
+	}
+
+	/**
+	 * Dismiss the dialog.
+	 */
+	public void dismissDialog()
+	{
+		if ((this.mDialog == null) || this.wasCanceledOrDismissed())
+		{
+			return;
+		}
+
+		this.setCanceledOrDismissed(true);
 		this.mDialog.dismiss();
 	}
 
@@ -453,15 +501,19 @@ public class NacDialog
 		switch (which)
 		{
 		case DialogInterface.BUTTON_POSITIVE:
-			NacUtility.printf("onClick dismiss!");
 			this.dismiss();
 			break;
 		case DialogInterface.BUTTON_NEGATIVE:
 		default:
-			NacUtility.printf("onClick cancel!");
 			this.cancel();
 			break;
 		}
+	}
+
+	@Override
+	public void onCancel(DialogInterface dialog)
+	{
+		this.cancel();
 	}
 
 	/**
@@ -555,41 +607,14 @@ public class NacDialog
 	}
 
 	/**
-	 * Setup dialog colors and listeners.
+	 * Set the status of whether the dialog was canceled or dismissed.
+	 *
+	 * @param  status  True means it was canceled or dismissed and false means
+	 *                 it was not.
 	 */
-	public void setupDialog()
+	private void setCanceledOrDismissed(boolean status)
 	{
-		Context context = this.mRoot.getContext();
-		NacSharedPreferences shared = new NacSharedPreferences(context);
-		int[] buttonTypes = new int[] { AlertDialog.BUTTON_NEGATIVE,
-			AlertDialog.BUTTON_POSITIVE, AlertDialog.BUTTON_NEUTRAL };
-		Button button;
-
-		for (int i=0; i < 3; i++)
-		{
-			button = this.mDialog.getButton(buttonTypes[i]);
-
-			if (button == null)
-			{
-				continue;
-			}
-
-			button.setTextColor(shared.themeColor);
-
-			if (buttonTypes[i] == AlertDialog.BUTTON_NEUTRAL)
-			{
-				button.setOnClickListener(new View.OnClickListener()
-				{
-					@Override
-					public void onClick(View view)
-					{
-						neutral();
-					}
-				});
-			}
-		}
-
-		this.mDialog.getWindow().setBackgroundDrawableResource(R.color.gray);
+		this.mWasCanceledOrDismissed = status;
 	}
 
 	/**
@@ -640,6 +665,46 @@ public class NacDialog
 	}
 
 	/**
+	 * Setup dialog colors and listeners.
+	 */
+	public void setupDialog()
+	{
+		Context context = this.mRoot.getContext();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
+		int[] buttonTypes = new int[] { AlertDialog.BUTTON_NEGATIVE,
+			AlertDialog.BUTTON_POSITIVE, AlertDialog.BUTTON_NEUTRAL };
+		Button button;
+
+		for (int i=0; i < 3; i++)
+		{
+			button = this.mDialog.getButton(buttonTypes[i]);
+
+			if (button == null)
+			{
+				continue;
+			}
+
+			button.setTextColor(shared.themeColor);
+
+			if (buttonTypes[i] == AlertDialog.BUTTON_NEUTRAL)
+			{
+				button.setOnClickListener(new View.OnClickListener()
+				{
+					@Override
+					public void onClick(View view)
+					{
+						neutral();
+					}
+				});
+			}
+		}
+
+		this.mDialog.getWindow().setBackgroundDrawableResource(R.color.gray);
+		this.mDialog.setOnCancelListener(this);
+		//this.mDialog.setOnDismissListener(this);
+	}
+
+	/**
 	 * Show the dialog.
 	 */
 	public AlertDialog show()
@@ -658,9 +723,18 @@ public class NacDialog
 			listener.onShowDialog(this, this.mRoot);
 		}
 
+		this.setCanceledOrDismissed(false);
 		this.setupDialog();
 
 		return this.mDialog;
+	}
+
+	/**
+	 * Check the status of whether the dialog was canceled or dismissed.
+	 */
+	public boolean wasCanceledOrDismissed()
+	{
+		return this.mWasCanceledOrDismissed;
 	}
 
 }

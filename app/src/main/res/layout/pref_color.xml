@@ -9,7 +9,7 @@
 	android:background="?android:attr/selectableItemBackground">
 
 	<RelativeLayout
-		android:layout_width="wrap_content"
+		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_weight="1">
 
@@ -43,6 +43,7 @@
 		android:id="@+id/widget"
 		android:layout_width="@dimen/isz_color_example"
 		android:layout_height="@dimen/isz_color_example"
+		android:contentDescription="@null"
 		/>
 
 </LinearLayout>

@@ -16,21 +16,22 @@
 			android:id="@+id/copy_icon"
 			android:layout_width="30dp"
 			android:layout_height="30dp"
-			android:layout_alignParentLeft="true"
+			android:layout_alignParentStart="true"
 			android:layout_centerVertical="true"
-			android:layout_marginLeft="10dp"
+			android:layout_marginStart="10dp"
 			android:src="@mipmap/baseline_file_copy_white_48"
+			android:contentDescription="@null"
 			/>
 
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
-			android:layout_marginLeft="10dp"
-			android:layout_toRightOf="@id/copy_icon"
-			android:text="COPY"
+			android:layout_marginStart="10dp"
+			android:layout_toEndOf="@id/copy_icon"
+			android:text="@string/copy"
 			android:textColor="#fff"
-			android:textSize="13dp"
+			android:textSize="13sp"
 			/>
 
 	</RelativeLayout>
@@ -45,21 +46,22 @@
 			android:id="@+id/delete_icon"
 			android:layout_width="30dp"
 			android:layout_height="30dp"
-			android:layout_alignParentRight="true"
+			android:layout_alignParentEnd="true"
 			android:layout_centerVertical="true"
-			android:layout_marginRight="10dp"
+			android:layout_marginEnd="10dp"
 			android:src="@mipmap/baseline_delete_white_32dp"
+			android:contentDescription="@null"
 			/>
 
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
-			android:layout_marginRight="10dp"
-			android:layout_toLeftOf="@id/delete_icon"
-			android:text="DELETE"
+			android:layout_marginEnd="10dp"
+			android:layout_toStartOf="@id/delete_icon"
+			android:text="@string/delete"
 			android:textColor="#fff"
-			android:textSize="13dp"
+			android:textSize="13sp"
 			/>
 
 	</RelativeLayout>

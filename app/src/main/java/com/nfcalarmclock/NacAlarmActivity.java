@@ -90,9 +90,9 @@ public class NacAlarmActivity
 
 		if (nfcAdapter == null)
 		{
-			NacUtility.toast(this, "Your device doesn't support NFC");
-			this.cleanup();
-			finish();
+			//NacUtility.toast(this, "Your device doesn't support NFC");
+			//this.cleanup();
+			//finish();
 			return;
 		}
 
