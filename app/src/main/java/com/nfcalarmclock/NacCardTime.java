@@ -70,9 +70,9 @@ public class NacCardTime
 		NacSharedPreferences shared = new NacSharedPreferences(context);
 		String time = this.mAlarm.getTime();
 		String meridian = this.mAlarm.getMeridian();
-		int timeColor = shared.timeColor;
-		int meridianColor = (meridian == "AM") ? shared.amColor
-			: shared.pmColor;
+		int timeColor = shared.getTimeColor();
+		int meridianColor = (meridian == "AM") ? shared.getAmColor()
+			: shared.getPmColor();
 
 		this.mTime.setText(time);
 		this.mMeridian.setText(meridian);

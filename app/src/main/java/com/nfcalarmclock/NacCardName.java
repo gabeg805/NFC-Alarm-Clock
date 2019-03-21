@@ -63,8 +63,8 @@ public class NacCardName
 		this.mAlarm = alarm;
 
 		this.setName();
-		this.mTextView.setTextColor(shared.nameColor);
-		this.mDivider.setBackgroundTintList(ColorStateList.valueOf(shared.themeColor));
+		this.mTextView.setTextColor(shared.getNameColor());
+		this.mDivider.setBackgroundTintList(ColorStateList.valueOf(shared.getThemeColor()));
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class NacCardName
 
 		if (name.isEmpty())
 		{
-			name = NacAlarm.getNameMessage();
+			name = NacSharedPreferences.DEFAULT_NAME_MESSAGE;
 			text = "";
 			focus = false;
 			margin = 0;

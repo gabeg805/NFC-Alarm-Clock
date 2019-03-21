@@ -6,30 +6,32 @@ import android.content.Intent;
 import android.os.Bundle;
 
 /**
- * @brief Alarm receiver.
+ * Receive the signal from the AlarmManager that it's time for the alarm to go
+ * off, which in turn start the NacAlarmActivity.
  */
 public class NacAlarmReceiver
 	extends BroadcastReceiver
 {
  
 	/**
-	 * @brief Method called when broadcast signal is received.
-	 *
-	 * @param  c  Application context.
-	 * @param  i  Intent.
 	 */
 	@Override
-	public void onReceive(final Context c, Intent i)
+	public void onReceive(final Context context, Intent intent)
 	{
-		Bundle bundle = (Bundle) i.getBundleExtra("bundle");
-		NacAlarmParcel parcel = (NacAlarmParcel)
-			bundle.getParcelable("parcel");
-		Intent intent = new Intent(c.getApplicationContext(),
-			NacAlarmActivity.class);
+		Bundle bundle = NacAlarmParcel.getExtra(intent);
+		NacAlarm alarm = NacAlarmParcel.getAlarm(bundle);
+		Intent newIntent = new Intent(context, NacAlarmActivity.class);
+		//NacDatabase db = new NacDatabase(context);
 
-		intent.putExtra("bundle", bundle);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		c.startActivity(intent);
+		//if (!db.exists(alarm))
+		//{
+		//	new NacAlarmScheduler(context).cancel(alarm);
+		//	return;
+		//}
+
+		newIntent.putExtra("bundle", bundle);
+		newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		context.startActivity(newIntent);
 	}
 
 }

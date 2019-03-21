@@ -59,7 +59,7 @@ public class NacCardRepeat
 		this.mDayOfWeek.setDays(alarm.getDays());
 		this.mCheckBox.setOnCheckedChangeListener(this);
 		this.mDayOfWeek.setOnClickListener(this);
-		this.mTextView.setTextColor(shared.daysColor);
+		this.mTextView.setTextColor(shared.getDaysColor());
 	}
 
 	/**
@@ -73,15 +73,13 @@ public class NacCardRepeat
 	}
 
 	/**
-	 * @brief Save which day was selected to be repeated, or deselected so that
-	 *		  it is not repeated.
+	 * Save which day was selected to be repeated, or deselected so that it is
+	 * not repeated.
 	 */
 	@Override
 	public void onClick(NacDayButton button, int index)
 	{
-		byte day = this.mAlarm.getWeekDays().get(index);
-
-		this.mAlarm.toggleDay(day);
+		this.mAlarm.toggleIndex(index);
 		this.setRepeatText();
 		this.mAlarm.changed();
 	}
@@ -91,11 +89,11 @@ public class NacCardRepeat
 	 */
 	public void setRepeatText()
 	{
-		String string = this.mAlarm.getDaysString();
+		String string = NacCalendar.toString(this.mAlarm.getDays());
 
 		if (string.isEmpty())
 		{
-			string = NacAlarm.getDaysStringMessage();
+			string = NacSharedPreferences.DEFAULT_DAYS_MESSAGE;
 		}
 
 		this.mTextView.setText(string);

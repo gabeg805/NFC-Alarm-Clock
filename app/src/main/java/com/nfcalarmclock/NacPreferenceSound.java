@@ -11,7 +11,7 @@ import android.view.View;
  */
 public class NacPreferenceSound
 	extends Preference
-	implements Preference.OnPreferenceClickListener,NacSoundDialog.OnItemClickListener
+	implements Preference.OnPreferenceClickListener,NacMediaDialog.OnItemClickListener
 {
 
 	/**
@@ -50,13 +50,10 @@ public class NacPreferenceSound
 	{
 		Context context = getContext();
 		String path = this.mValue;
-		NacAlarm alarm = new NacAlarm();
+		String name = NacMedia.getMediaName(context, path);
 
-		alarm.setSound(path);
-
-		String name = alarm.getSoundName(context);
-
-		return (!name.isEmpty()) ? name : NacAlarm.getSoundNameDefault();
+		return (!name.isEmpty()) ? name
+			: NacSharedPreferences.DEFAULT_SOUND_SUMMARY;
 	}
 
 	/**
@@ -82,12 +79,8 @@ public class NacPreferenceSound
 	 * Capture which item in the list was selected.
 	 */
 	@Override
-	public void onItemClick(NacSound sound)
+	public void onItemClick(String path, String name)
 	{
-		String path = sound.path;
-		//String name = sound.name;
-
-		//if (path.isEmpty() || name.isEmpty())
 		if (path.isEmpty())
 		{
 			return;

@@ -2,19 +2,14 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.content.res.Resources.Theme;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.support.annotation.Nullable;
-import java.util.List;
-
-import android.util.TypedValue;
+import java.util.EnumSet;
 
 /**
  * A button that consists of an image to the left, and text to the right of it.
@@ -38,14 +33,14 @@ public class NacDayOfWeek
 	private NacDayButton[] mButtons;
 
 	/**
-	 * Number of days.
-	 */
-	private final int mLength = 7;
-
-	/**
 	 * Click event listener.
 	 */
 	private NacDayOfWeek.OnClickListener mListener;
+
+	/**
+	 * Number of days.
+	 */
+	private static final int mLength = 7;
 
 	/**
 	 */
@@ -165,31 +160,33 @@ public class NacDayOfWeek
 	 *
 	 * @param  days  The button days that will be enabled.
 	 */
-	public void setDays(int days)
+	public void setDays(EnumSet<NacCalendar.Day> days)
 	{
-		NacAlarm alarm = new NacAlarm();
-		alarm.setDays(days);
-		this.setDays(alarm);
-	}
+		int index = 0;
 
-	/**
-	 * Set the days that will be enabled/disabled.
-	 *
-	 * @param  alarm  The alarm containing the days that will be enabled.
-	 */
-	public void setDays(NacAlarm alarm)
-	{
-		for (int i=0; i < this.mLength; i++)
+		for (NacCalendar.Day d : NacCalendar.WEEK)
 		{
-			if (alarm.isDay(i))
+			if (days.contains(d))
 			{
-				this.mButtons[i].enable();
+				this.mButtons[index].enable();
 			}
 			else
 			{
-				this.mButtons[i].disable();
+				this.mButtons[index].disable();
 			}
+
+			index++;
 		}
+	}
+
+	/**
+	 * @see setDays
+	 */
+	public void setDays(int value)
+	{
+		EnumSet<NacCalendar.Day> days = NacCalendar.valueToDays(value);
+
+		this.setDays(days);
 	}
 
 	/**
@@ -231,18 +228,19 @@ public class NacDayOfWeek
 	/**
 	 * @return The alarm days.
 	 */
-	public int getDays()
+	public EnumSet<NacCalendar.Day> getDays()
 	{
-		NacAlarm a = new NacAlarm();
-		List<Byte> weekdays = a.getWeekDays();
-		int days = NacAlarm.Days.NONE;
+		EnumSet<NacCalendar.Day> days = EnumSet.noneOf(NacCalendar.Day.class);
+		int index = 0;
 
-		for (int i=0; i < this.mLength; i++)
+		for (NacCalendar.Day d : NacCalendar.WEEK)
 		{
-			if (this.isDayEnabled(i))
+			if (this.isDayEnabled(index))
 			{
-				days |= weekdays.get(i);
+				days.add(d);
 			}
+
+			index++;
 		}
 
 		return days;

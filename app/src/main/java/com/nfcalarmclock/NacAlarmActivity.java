@@ -117,7 +117,7 @@ public class NacAlarmActivity
 	{
 		String key = this.getSnoozeCountKey();
 
-		return shared.instance.getInt(key, 0);
+		return shared.getInstance().getInt(key, 0);
 	}
 
 	/**
@@ -147,12 +147,7 @@ public class NacAlarmActivity
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-		Intent intent = getIntent();
-		Bundle bundle = (Bundle) intent.getBundleExtra("bundle");
-		NacAlarmParcel parcel = (NacAlarmParcel)
-			bundle.getParcelable("parcel");
-
-		this.mAlarm = parcel.toAlarm();
+		this.mAlarm = NacAlarmParcel.getAlarm(getIntent());
 		this.mPlayer = new NacMediaPlayer(this);
 		this.mVibrator = new NacVibrator(this);
 		this.mHandler = new Handler();
@@ -209,7 +204,7 @@ public class NacAlarmActivity
 	public void onShowDialog(NacDialog dialog, View root)
 	{
 		NacSharedPreferences shared = new NacSharedPreferences(this);
-		int autoDismiss = shared.autoDismiss;
+		int autoDismiss = shared.getAutoDismiss();
 		long delay = TimeUnit.MINUTES.toMillis(autoDismiss);
 
 		if (autoDismiss == 0)
@@ -290,7 +285,7 @@ public class NacAlarmActivity
 	{
 		String key = this.getSnoozeCountKey();
 
-		shared.instance.edit().putInt(key, count).apply();
+		shared.getInstance().edit().putInt(key, count).apply();
 	}
 
 	/**
@@ -300,7 +295,7 @@ public class NacAlarmActivity
 	{
 		NacSharedPreferences shared = new NacSharedPreferences(this);
 		int snoozeCount = this.getSnoozeCount(shared) + 1;
-		int maxSnoozeCount = shared.maxSnoozes;
+		int maxSnoozeCount = shared.getMaxSnooze();
 
 		if ((snoozeCount > maxSnoozeCount) && (maxSnoozeCount >= 0))
 		{
@@ -310,7 +305,7 @@ public class NacAlarmActivity
 		NacAlarmScheduler scheduler = new NacAlarmScheduler(this);
 		Calendar snooze = Calendar.getInstance();
 
-		snooze.add(Calendar.MINUTE, shared.snoozeDuration);
+		snooze.add(Calendar.MINUTE, shared.getSnoozeDuration());
 		this.mAlarm.setHour(snooze.get(Calendar.HOUR));
 		this.mAlarm.setMinute(snooze.get(Calendar.MINUTE));
 		scheduler.update(this.mAlarm, snooze);

@@ -42,7 +42,7 @@ public class NacPreferenceCategory
 		NacSharedPreferences shared = new NacSharedPreferences(context);
 		TextView title = (TextView) view.findViewById(android.R.id.title);
 
-		title.setTextColor(shared.themeColor);
+		title.setTextColor(shared.getThemeColor());
 	}
 
 }

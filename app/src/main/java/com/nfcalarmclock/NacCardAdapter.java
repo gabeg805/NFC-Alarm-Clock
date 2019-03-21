@@ -13,12 +13,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import android.app.AlarmManager;
+import android.app.AlarmManager.AlarmClockInfo;
+
 /**
  * Alarm card adapter.
  */
 public class NacCardAdapter
 	extends RecyclerView.Adapter<NacCardHolder>
-	implements View.OnClickListener,NacAlarm.OnChangedListener,NacCardHolder.OnDeleteListener,NacCardTouchHelper.Adapter
+	implements View.OnClickListener,NacAlarm.OnChangeListener,NacCardHolder.OnDeleteListener,NacCardTouchHelper.Adapter
 {
 
 	/**
@@ -72,10 +75,10 @@ public class NacCardAdapter
 		this.mRootView = activity.findViewById(R.id.activity_main);
 		this.mRecyclerView = (RecyclerView) this.mRootView.findViewById(
 			R.id.content_alarm_list);
-		this.mScheduler = new NacAlarmScheduler(context);
-		this.mDatabase = new NacDatabase(context);
-		this.mUndo = new NacCardUndo();
 		this.mTouchHelper = new NacCardTouchHelper(callback);
+		this.mUndo = new NacCardUndo();
+		this.mDatabase = new NacDatabase(context);
+		this.mScheduler = new NacAlarmScheduler(context);
 		this.mAlarmList = null;
 		this.mWasAdded = false;
 	}
@@ -88,14 +91,17 @@ public class NacCardAdapter
 		Context context = this.mRootView.getContext();
 		boolean format = DateFormat.is24HourFormat(context);
 		int id = this.getUniqueId();
-		NacAlarm alarm = new NacAlarm(format, id);
 		NacSharedPreferences shared = new NacSharedPreferences(context);
+		NacAlarm alarm = new NacAlarm.Builder()
+			.setId(id)
+			.setRepeat(shared.getRepeat())
+			.setDays(shared.getDays())
+			.setVibrate(shared.getVibrate())
+			.setSound(shared.getSound())
+			.setName(shared.getName())
+			.set24HourFormat(format)
+			.build();
 
-		alarm.setRepeat(shared.repeat);
-		alarm.setDays(shared.days);
-		alarm.setVibrate(shared.vibrate);
-		alarm.setSound(shared.sound);
-		alarm.setName(shared.name);
 		this.add(alarm);
 	}
 
@@ -253,10 +259,11 @@ public class NacCardAdapter
 	{
 		NacAlarm alarm = this.get(pos);
 
-		alarm.setOnChangedListener(this);
+		alarm.print();
+
+		alarm.setOnChangeListener(this);
 		card.init(alarm, this.mWasAdded);
 		card.setOnDeleteListener(this);
-		//card.focus(this.mWasAdded);
 
 		this.mWasAdded = false;
 	}
@@ -267,7 +274,7 @@ public class NacCardAdapter
 	 * @param  a  The alarm that was changed.
 	 */
 	@Override
-	public void onChanged(NacAlarm a)
+	public void onChange(NacAlarm a)
 	{
 		this.mDatabase.update(a);
 		this.mScheduler.update(a);
@@ -367,7 +374,11 @@ public class NacCardAdapter
 		NacAlarm toAlarm = this.get(toIndex);
 
 		Collections.swap(this.mAlarmList, fromIndex, toIndex);
+		this.mScheduler.cancel(fromAlarm);
+		this.mScheduler.cancel(toAlarm);
 		this.mDatabase.swap(fromAlarm, toAlarm);
+		this.mScheduler.add(fromAlarm);
+		this.mScheduler.add(toAlarm);
 		this.notifyItemMoved(fromIndex, toIndex);
 	}
 

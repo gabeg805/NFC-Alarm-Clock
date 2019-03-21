@@ -3,9 +3,7 @@ package com.nfcalarmclock;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.Manifest;
-import android.media.MediaMetadataRetriever;
 import android.os.Environment;
 import android.view.View;
 import java.io.IOException;
@@ -18,19 +16,19 @@ import java.util.List;
 /**
  * Music dialog when selecting an alarm sound.
  */
-public class NacSoundMusicDialog
-	extends NacSoundDialog
+public class NacMusicDialog
+	extends NacMediaDialog
 	implements View.OnClickListener,NacPermissions.OnResultListener,NacDialog.OnShowListener
 {
 
 	/**
 	 * Request value for Read permissions.
 	 */
-	private static final int NAC_SOUND_READ_REQUEST = 1;
+	private static final int NAC_MUSIC_DIALOG_READ_REQUEST = 1;
 
 	/**
 	 */
-	public NacSoundMusicDialog()
+	public NacMusicDialog()
 	{
 		super();
 
@@ -67,24 +65,12 @@ public class NacSoundMusicDialog
 
 		Context context = container.getContext();
 		NacImageSubTextButton entry = new NacImageSubTextButton(context);
-		MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 		int size = (int) context.getResources().getDimension(R.dimen.isz_dlg_music);
 		int spacing = (int) context.getResources().getDimension(R.dimen.sp_dlg_music);
 
-		try
-		{
-			retriever.setDataSource(file.getAbsolutePath());
-		}
-		catch (RuntimeException re)
-		{
-			NacUtility.printf("Something wrong with file '%s'.", file.getAbsolutePath());
-			return;
-		}
+		String title = NacMedia.getTitle(file);
+		String artist = NacMedia.getArtist(file);
 
-		String title = this.getTitle(retriever, file);
-		String artist = this.getArtist(retriever, file);
-
-		retriever.release();
 		entry.setTag(file);
 		entry.setOnClickListener(this);
 		container.add(entry);
@@ -103,68 +89,12 @@ public class NacSoundMusicDialog
 	}
 
 	/**
-	 * @return The artist name.
-	 */
-	public String getArtist(MediaMetadataRetriever retriever, File file)
-	{
-		String artist = retriever.extractMetadata(
-			MediaMetadataRetriever.METADATA_KEY_ARTIST);
-		String name = file.getName();
-		String defaultArtist = "Unknown";
-
-		if (artist == null)
-		{
-			artist = defaultArtist;
-
-			if (name.contains(" - "))
-			{
-				String[] parts = name.split(" - ");
-
-				try
-				{
-					int test = Integer.parseInt(parts[0]);
-				}
-				catch (NumberFormatException nfe)
-				{
-					artist = parts[0].trim();
-				}
-			}
-		}
-
-		return artist;
-	}
-
-	/**
-	 * @return The title of the track.
-	 */
-	public String getTitle(MediaMetadataRetriever retriever, File file)
-	{
-		String title = retriever.extractMetadata(
-			MediaMetadataRetriever.METADATA_KEY_TITLE);
-		String name = file.getName();
-		String defaultTitle = this.removeExtension(name);
-
-		if (title == null)
-		{
-			title = defaultTitle;
-
-			if (name.contains(" - "))
-			{
-				String[] parts = name.split(" - ");
-				title = this.removeExtension(parts[1].trim());
-			}
-		}
-
-		return title;
-	}
-
-	/**
 	 * @return A listing of music files and directories under a given path.
 	 *         Directories will be listed first, before files.
 	 */
 	public List<File> getDirectoryListing(String path)
 	{
-		File[] listing = new File(path).listFiles(this.getFilter());
+		File[] listing = new File(path).listFiles(NacMedia.getFilter());
 		List<File> directories = new ArrayList<>();
 		List<File> files = new ArrayList<>();
 
@@ -208,13 +138,13 @@ public class NacSoundMusicDialog
 	{
 		File file = (File) view.getTag();
 		String name = file.getName();
-		String newpath = "";
+		String path;
 
 		try
 		{
-			newpath  = file.getCanonicalPath();
+			path = file.getCanonicalPath();
 		}
-		catch (IOException ioe)
+		catch (IOException e)
 		{
 			NacUtility.printf("IOException occurred when trying to getCanonicalPath().");
 			return;
@@ -222,11 +152,11 @@ public class NacSoundMusicDialog
 
 		if (file.isDirectory())
 		{
-			this.showDirectory(newpath);
+			this.showDirectory(path);
 		}
 		else if (file.isFile())
 		{
-			this.play(new NacSound(newpath, name));
+			this.play(path, name);
 		}
 	}
 
@@ -236,7 +166,7 @@ public class NacSoundMusicDialog
 	@Override
 	public void onResult(int request, String[] permissions, int[] grant)
 	{
-		if (request == NAC_SOUND_READ_REQUEST)
+		if (request == NAC_MUSIC_DIALOG_READ_REQUEST)
 		{
 			if ((grant.length > 0)
 				&& (grant[0] == PackageManager.PERMISSION_GRANTED))
@@ -263,22 +193,13 @@ public class NacSoundMusicDialog
 		{
 			NacPermissions.request(context,
 				Manifest.permission.READ_EXTERNAL_STORAGE,
-				NAC_SOUND_READ_REQUEST);
+				NAC_MUSIC_DIALOG_READ_REQUEST);
 			NacPermissions.setResultListener(context, this);
 			this.hide();
 			return;
 		}
 
 		this.showDirectory(null);
-	}
-
-	/**
-	 * Remove extension from file name.
-	 */
-	public String removeExtension(String name)
-	{
-		return (name.contains(".")) ?
-			name.substring(0, name.lastIndexOf('.')) : name;
 	}
 
 	/**

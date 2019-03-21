@@ -27,94 +27,70 @@ public class NacAlarmScheduler
 
 	/**
 	 */
-	public NacAlarmScheduler(Context c)
+	public NacAlarmScheduler(Context context)
 	{
-		this.mContext = c;
-		this.mAlarmManager = (AlarmManager) c.getSystemService(
+		this.mContext = context;
+		this.mAlarmManager = (AlarmManager) context.getSystemService(
 			Context.ALARM_SERVICE);
-	}
-
-	/**
-	 * Update the scheduler.
-	 */
-	public void update(NacAlarm a)
-	{
-		this.cancel(a);
-
-		if (a.getEnabled())
-		{
-			this.add(a);
-		}
-	}
-
-	/**
-	 * Update the scheduler.
-	 */
-	public void update(NacAlarm a, Calendar c)
-	{
-		this.cancel(a, c);
-
-		if (a.getEnabled())
-		{
-			this.add(a, c);
-		}
 	}
 
 	/**
 	 * Add all alarms to the scheduler.
 	 */
-	public void add(NacAlarm a)
+	public void add(NacAlarm alarm)
 	{
-		List<Calendar> cals = a.getNextCalendars();
-
-		for (Calendar c : cals)
+		if (!alarm.getEnabled())
 		{
-			this.add(a, c);
+			return;
+		}
+
+		List<Calendar> calendars = NacCalendar.nextCalendars(alarm);
+
+		for (Calendar c : calendars)
+		{
+			this.add(alarm, c);
 		}
 	}
 
 	/**
 	 * Add the alarm to the scheduler.
 	 */
-	public void add(NacAlarm a, Calendar c)
+	public void add(NacAlarm alarm, Calendar calendar)
 	{
-		int id = a.getId(c);
-		long millis = c.getTimeInMillis();
-		Intent operationintent = this.getOperationIntent(a);
-		Intent showintent = this.getShowIntent();
+		if (!alarm.getEnabled())
+		{
+			return;
+		}
 
-		PendingIntent operationpending = PendingIntent.getBroadcast(
-			this.mContext, id, operationintent,
-			PendingIntent.FLAG_CANCEL_CURRENT);
-		PendingIntent showpending = PendingIntent.getActivity(this.mContext,
-			id, showintent, 0);
-		AlarmClockInfo clock = new AlarmClockInfo(millis, showpending);
+		int id = alarm.getId(calendar);
+		long millis = calendar.getTimeInMillis();
+		PendingIntent receiver = this.getReceiverPendingIntent(id, alarm);
+		PendingIntent show = this.getShowPendingIntent(id);
+		AlarmClockInfo clock = new AlarmClockInfo(millis, show);
 
-		this.mAlarmManager.setAlarmClock(clock, operationpending);
+		this.getAlarmManager().setAlarmClock(clock, receiver);
 	}
 
 	/**
 	 * Cancel all matching alarms.
 	 */
-	public void cancel(NacAlarm a)
+	public void cancel(NacAlarm alarm)
 	{
-		List<Calendar> cals = a.getCalendars();
+		List<Calendar> calendars = NacCalendar.toCalendars(alarm);
 
-		for (Calendar c : cals)
+		for (Calendar c : calendars)
 		{
-			this.cancel(a, c);
+			this.cancel(alarm, c);
 		}
 	}
 
 	/**
 	 * Cancel the matching alarm.
 	 */
-	public void cancel(NacAlarm a, Calendar c)
+	public void cancel(NacAlarm alarm, Calendar calendar)
 	{
-		int id = a.getId(c);
-		Intent intent = this.getOperationIntent();
-		PendingIntent pending = PendingIntent.getBroadcast(this.mContext, id,
-			intent, PendingIntent.FLAG_NO_CREATE);
+		int id = alarm.getId(calendar);
+		PendingIntent pending = this.getReceiverPendingIntent(id);
 
 		if (this.contains(pending))
 		{
@@ -127,9 +103,7 @@ public class NacAlarmScheduler
 	 */
 	public boolean contains(int id)
 	{
-		Intent intent = this.getOperationIntent();
-		PendingIntent pending = PendingIntent.getBroadcast(this.mContext, id,
-			intent, PendingIntent.FLAG_NO_CREATE);
+		PendingIntent pending = this.getReceiverPendingIntent(id);
 
 		return this.contains(pending);
 	}
@@ -137,9 +111,25 @@ public class NacAlarmScheduler
 	/**
 	 * @see contains()
 	 */
-	public boolean contains(PendingIntent p)
+	public boolean contains(PendingIntent pendingIntent)
 	{
-		return (p != null);
+		return (pendingIntent != null);
+	}
+
+	/**
+	 * @return The AlarmManager.
+	 */
+	private AlarmManager getAlarmManager()
+	{
+		return this.mAlarmManager;
+	}
+
+	/**
+	 * @return The context.
+	 */
+	private Context getContext()
+	{
+		return this.mContext;
 	}
 
 	/**
@@ -147,25 +137,28 @@ public class NacAlarmScheduler
 	 */
 	public AlarmClockInfo getNext()
 	{
-		return this.mAlarmManager.getNextAlarmClock();
+		return this.getAlarmManager().getNextAlarmClock();
 	}
 
 	/**
-	 * @return The operation intent.
+	 * @return The intent that will receive the alarm broadcast from the
+	 *         AlarmManager.
 	 */
-	public Intent getOperationIntent()
+	public Intent getReceiverIntent()
 	{
-		return new Intent(this.mContext, NacAlarmReceiver.class);
+		return new Intent(this.getContext(), NacAlarmReceiver.class);
 	}
 
 	/**
-	 * @return The operation intent with the added alarm as a Parcel.
+	 * @see getReceiverIntent
+	 *
+	 * @param  alarm  The alarm to add to the receiver intent as extra data.
 	 */
-	public Intent getOperationIntent(NacAlarm a)
+	public Intent getReceiverIntent(NacAlarm alarm)
 	{
-		Intent intent = this.getOperationIntent();
+		Intent intent = this.getReceiverIntent();
 		Bundle bundle = new Bundle();
-		NacAlarmParcel parcel = new NacAlarmParcel(a);
+		NacAlarmParcel parcel = new NacAlarmParcel(alarm);
 
 		bundle.putParcelable("parcel", parcel);
 		intent.putExtra("bundle", bundle);
@@ -174,11 +167,81 @@ public class NacAlarmScheduler
 	}
 
 	/**
-	 * @return The show intent when the alarm is selected.
+	 * @param  id  The ID corresponding to the alarm, offset by the day the
+	 *             alarm is supposed to go off.
+	 * @param  alarm  The alarm.
+	 *
+	 * @return The PendingIntent for the intent that will receive the
+	 *         AlarmManager broadcast. This will cancel any existing, matching
+	 *         PendingIntents.
+	 */
+	public PendingIntent getReceiverPendingIntent(int id, NacAlarm alarm)
+	{
+		Context context = this.getContext();
+		Intent intent = this.getReceiverIntent(alarm);
+
+		return PendingIntent.getBroadcast(context, id, intent,
+			PendingIntent.FLAG_CANCEL_CURRENT);
+	}
+
+	/**
+	 * @param  id  The ID corresponding to the alarm, offset by the day the
+	 *             alarm is supposed to go off.
+	 *
+	 * @return The PendingIntent for the intent that will receive the
+	 *         AlarmManager broadcast. This will not create a PendingIntent if
+	 *         an existing, matching, PendingIntent does not already exist.
+	 */
+	public PendingIntent getReceiverPendingIntent(int id)
+	{
+		Context context = this.getContext();
+		Intent intent = this.getReceiverIntent();
+
+		return PendingIntent.getBroadcast(context, id, intent,
+			PendingIntent.FLAG_NO_CREATE);
+	}
+
+
+	/**
+	 * @return The intent to show when the alarm is selected in the
+	 *         notification shade (the thing that is shown when you swipe down
+	 *         on the top notification bar).
 	 */
 	public Intent getShowIntent()
 	{
-		return new Intent(this.mContext, NacMainActivity.class);
+		return new Intent(this.getContext(), NacMainActivity.class);
+	}
+
+	/**
+	 * @param  id  The ID corresponding to the alarm, offset by the day the
+	 *             alarm is supposed to go off.
+	 *
+	 * @return The PendingIntent that will run the NacMainActivity.
+	 */
+	public PendingIntent getShowPendingIntent(int id)
+	{
+		Context context = this.getContext();
+		Intent intent = this.getShowIntent();
+
+		return PendingIntent.getActivity(context, id, intent, 0);
+	}
+
+	/**
+	 * Update the scheduler.
+	 */
+	public void update(NacAlarm alarm)
+	{
+		this.cancel(alarm);
+		this.add(alarm);
+	}
+
+	/**
+	 * Update the scheduler.
+	 */
+	public void update(NacAlarm alarm, Calendar calendar)
+	{
+		this.cancel(alarm, calendar);
+		this.add(alarm, calendar);
 	}
 
 }

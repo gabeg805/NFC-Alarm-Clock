@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
+import java.util.EnumSet;
 
 /**
  * Preference that displays the day of week dialog.
@@ -49,10 +50,9 @@ public class NacPreferenceDays
 	@Override
 	public CharSequence getSummary()
 	{
-		NacAlarm alarm = new NacAlarm(this.mValue);
-		String days = alarm.getDaysString();
+		String days = NacCalendar.toString(this.mValue);
 
-		return (!days.isEmpty()) ? days : NacAlarm.getDaysStringDefault();
+		return (!days.isEmpty()) ? days : NacSharedPreferences.DEFAULT_DAYS_SUMMARY;
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class NacPreferenceDays
 	{
 		View root = dialog.getRootView();
 		NacDayOfWeek dow = root.findViewById(R.id.days);
-		this.mValue = dow.getDays();
+		this.mValue = NacCalendar.daysToValue(dow.getDays());
 
 		this.setSummary(this.getSummary());
 		persistInt(this.mValue);
@@ -100,7 +100,7 @@ public class NacPreferenceDays
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		return (Integer) a.getInteger(index, NacAlarm.getDaysDefault());
+		return (Integer) a.getInteger(index, NacSharedPreferences.DEFAULT_DAYS);
 	}
 
 	/**

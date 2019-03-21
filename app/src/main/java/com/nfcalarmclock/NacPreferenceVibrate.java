@@ -97,7 +97,7 @@ public class NacPreferenceVibrate
 		int[][] states = new int[][] {
 			new int[] { android.R.attr.state_checked},
 			new int[] {-android.R.attr.state_checked}};
-		int[] colors = new int[] {shared.themeColor, Color.LTGRAY};
+		int[] colors = new int[] {shared.getThemeColor(), Color.LTGRAY};
 		ColorStateList colorStateList = new ColorStateList(states, colors);
 		this.mCheckBox = (CheckBox) v.findViewById(R.id.widget);
 

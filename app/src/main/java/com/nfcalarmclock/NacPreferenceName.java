@@ -49,7 +49,7 @@ public class NacPreferenceName
 	public CharSequence getSummary()
 	{
 		return ((this.mValue != null) && !this.mValue.isEmpty()) ? this.mValue
-			: NacAlarm.getNameDefault();
+			: NacSharedPreferences.DEFAULT_NAME_SUMMARY;
 	}
 
 	/**

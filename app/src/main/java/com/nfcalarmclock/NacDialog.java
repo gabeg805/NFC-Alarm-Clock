@@ -684,7 +684,7 @@ public class NacDialog
 				continue;
 			}
 
-			button.setTextColor(shared.themeColor);
+			button.setTextColor(shared.getThemeColor());
 
 			if (buttonTypes[i] == AlertDialog.BUTTON_NEUTRAL)
 			{

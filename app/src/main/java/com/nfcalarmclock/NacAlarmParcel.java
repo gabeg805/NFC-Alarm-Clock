@@ -1,5 +1,7 @@
 package com.nfcalarmclock;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -14,16 +16,6 @@ public class NacAlarmParcel
 	 * The alarm ID.
 	 */
 	private int mId;
-
-	/**
-	 * Indicates whether the alarm is enabled or not.
-	 */
-	private boolean mEnabled;
-
-	/**
-	 * Indicator if using a 24 hour format to display time or not.
-	 */
-	private boolean m24HourFormat;
 
 	/**
 	 * The hour at which to run the alarm.
@@ -61,20 +53,30 @@ public class NacAlarmParcel
 	private String mName;
 
 	/**
+	 * Indicates whether the alarm is enabled or not.
+	 */
+	private boolean mEnabled;
+
+	/**
+	 * Indicator if using a 24 hour format to display time or not.
+	 */
+	private boolean m24HourFormat;
+
+	/**
 	 * Populate values with input alarm.
 	 */
-	public NacAlarmParcel(NacAlarm a)
+	public NacAlarmParcel(NacAlarm alarm)
 	{
-		mId = a.getId();
-		mEnabled = a.getEnabled();
-		m24HourFormat = a.get24HourFormat();
-		mHour = a.getHour();
-		mMinute = a.getMinute();
-		mDays = a.getDays();
-		mRepeat = a.getRepeat();
-		mVibrate = a.getVibrate();
-		mSound = a.getSound();
-		mName = a.getName();
+		this.mId = alarm.getId();
+		this.mHour = alarm.getHour();
+		this.mMinute = alarm.getMinute();
+		this.mDays = NacCalendar.daysToValue(alarm.getDays());
+		this.mRepeat = alarm.getRepeat();
+		this.mVibrate = alarm.getVibrate();
+		this.mSound = alarm.getSound();
+		this.mName = alarm.getName();
+		this.mEnabled = alarm.getEnabled();
+		this.m24HourFormat = alarm.get24HourFormat();
 	}
 
 	/**
@@ -82,37 +84,16 @@ public class NacAlarmParcel
 	 */
 	public NacAlarmParcel(Parcel in)
 	{
-		mId = in.readInt();
-		mEnabled = (in.readInt() != 0);
-		m24HourFormat = (in.readInt() != 0);
-		mHour = in.readInt();
-		mMinute = in.readInt();
-		mDays = in.readInt();
-		mRepeat = (in.readInt() != 0);
-		mVibrate = (in.readInt() != 0);
-		mSound = in.readString();
-		mName = in.readString();
-	}
-
-	/**
-	 * @return The equivalent alarm given the parcel values.
-	 */
-	public NacAlarm toAlarm()
-	{
-		NacAlarm a = new NacAlarm();
-
-		a.setId(this.mId);
-		a.setEnabled(this.mEnabled);
-		a.set24HourFormat(this.m24HourFormat);
-		a.setHour(this.mHour);
-		a.setMinute(this.mMinute);
-		a.setDays(this.mDays);
-		a.setRepeat(this.mRepeat);
-		a.setVibrate(this.mVibrate);
-		a.setSound(this.mSound);
-		a.setName(this.mName);
-
-		return a;
+		this.mId = in.readInt();
+		this.mHour = in.readInt();
+		this.mMinute = in.readInt();
+		this.mDays = in.readInt();
+		this.mRepeat = (in.readInt() != 0);
+		this.mVibrate = (in.readInt() != 0);
+		this.mSound = in.readString();
+		this.mName = in.readString();
+		this.mEnabled = (in.readInt() != 0);
+		this.m24HourFormat = (in.readInt() != 0);
 	}
 
 	/**
@@ -125,21 +106,82 @@ public class NacAlarmParcel
 	}
 
 	/**
+	 * @param  intent  The intent.
+	 *
+	 * @return The alarm associated with the given Intent.
+	 */
+	public static NacAlarm getAlarm(Intent intent)
+	{
+		Bundle bundle = NacAlarmParcel.getExtra(intent);
+
+		return NacAlarmParcel.getAlarm(bundle);
+	}
+
+	/**
+	 * @see getAlarm
+	 *
+	 * @param  bundle  The extra bundle associated with an intent.
+	 */
+	public static NacAlarm getAlarm(Bundle bundle)
+	{
+		return NacAlarmParcel.getParcel(bundle).toAlarm();
+	}
+
+	/**
+	 * @param  intent  The intent.
+	 *
+	 * @return The extra data bundle that is part of the intent.
+	 */
+	public static Bundle getExtra(Intent intent)
+	{
+		return (Bundle) intent.getBundleExtra("bundle");
+	}
+
+	/**
+	 * @param  bundle  The extra bundle.
+	 *
+	 * @return The NacAlarmParcel that contains the NacAlarm within the bundle.
+	 */
+	public static NacAlarmParcel getParcel(Bundle bundle)
+	{
+		return (NacAlarmParcel) bundle.getParcelable("parcel");
+	}
+
+	/**
+	 * @return The equivalent alarm given the parcel values.
+	 */
+	public NacAlarm toAlarm()
+	{
+		return new NacAlarm.Builder()
+			.setId(this.mId)
+			.setHour(this.mHour)
+			.setMinute(this.mMinute)
+			.setDays(this.mDays)
+			.setRepeat(this.mRepeat)
+			.setVibrate(this.mVibrate)
+			.setSound(this.mSound)
+			.setName(this.mName)
+			.setEnabled(this.mEnabled)
+			.set24HourFormat(this.m24HourFormat)
+			.build();
+	}
+
+	/**
 	 * Write data into parcel.
 	 */
 	@Override
 	public void writeToParcel(Parcel out, int flags)
 	{
-		out.writeInt(mId);
-		out.writeInt(mEnabled ? 1 : 0);
-		out.writeInt(m24HourFormat ? 1 : 0);
-		out.writeInt(mHour);
-		out.writeInt(mMinute);
-		out.writeInt(mDays);
-		out.writeInt(mRepeat ? 1 : 0);
-		out.writeInt(mVibrate ? 1 : 0);
-		out.writeString(mSound);
-		out.writeString(mName);
+		out.writeInt(this.mId);
+		out.writeInt(this.mHour);
+		out.writeInt(this.mMinute);
+		out.writeInt(this.mDays);
+		out.writeInt(this.mRepeat ? 1 : 0);
+		out.writeInt(this.mVibrate ? 1 : 0);
+		out.writeString(this.mSound);
+		out.writeString(this.mName);
+		out.writeInt(this.mEnabled ? 1 : 0);
+		out.writeInt(this.m24HourFormat ? 1 : 0);
 	}
 
 	/**

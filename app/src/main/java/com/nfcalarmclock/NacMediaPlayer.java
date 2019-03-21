@@ -80,32 +80,6 @@ public class NacMediaPlayer
 	}
 
 	/**
-	 * @return The path to the ringtone/music file.
-	 *
-	 * @param  media  The path to the media file.
-	 */
-	public String getMediaPath(String media)
-	{
-		if (!media.startsWith("content://"))
-		{
-			return media;
-		}
-
-		Context context = this.getContext();
-		Uri uri = Uri.parse(media);
-		Cursor cursor = context.getContentResolver().query(uri,
-			new String[] { MediaStore.Audio.Media.DATA }, null, null, null);
-		cursor.moveToFirst();
-
-		String path = cursor.getString(cursor.getColumnIndexOrThrow(
-			MediaStore.Audio.Media.DATA));
-
-		cursor.close();
-
-		return path;
-	}
-
-	/**
 	 * @return The current stream volume.
 	 */
 	private int getStreamVolume()
@@ -207,7 +181,8 @@ public class NacMediaPlayer
 			return;
 		}
 
-		String path = this.getMediaPath(media);
+		Context context = this.getContext();
+		String path = NacMedia.getMediaPath(context, media);
 		AudioAttributes attrs = new AudioAttributes.Builder()
 			.setLegacyStreamType(AudioManager.STREAM_ALARM)
 			.setUsage(AudioAttributes.USAGE_ALARM)
@@ -230,8 +205,7 @@ public class NacMediaPlayer
 		}
 		catch (IllegalStateException | IOException | IllegalArgumentException | SecurityException e)
 		{
-			NacUtility.quickToast(this.getContext(),
-				"Unable to play selected file");
+			NacUtility.quickToast(context, "Unable to play selected file");
 		}
 	}
 

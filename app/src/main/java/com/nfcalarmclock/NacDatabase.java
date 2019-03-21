@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
-import android.util.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +18,7 @@ public class NacDatabase
 {
 
 	/**
-	 * Database.
+	 * The atabase.
 	 */
 	private SQLiteDatabase mDatabase;
 
@@ -53,12 +52,54 @@ public class NacDatabase
 	{
 		this.setDatabase();
 
-		String table = NacDatabaseContract.AlarmTable.TABLE_NAME;
+		SQLiteDatabase db = this.getDatabase();
+		String table = this.getTable();
 		String where = this.getWhereClause();
 		String[] args = this.getWhereArgs(alarm);
-		int rows = this.mDatabase.delete(table, where, args);
+		int rows = db.delete(table, where, args);
 
 		return rows;
+	}
+
+	/**
+	 * Check if the given alarm exists in the database.
+	 *
+	 * @param  alarm  The alarm to check existence against.
+	 *
+	 * @return True if the alarm exists in the database and False otherwise.
+	 */
+	public boolean exists(NacAlarm alarm)
+	{
+		this.setDatabase();
+
+		SQLiteDatabase db = this.getDatabase();
+		String table = this.getTable();
+		String where = NacDatabaseContract.AlarmTable.COLUMN_ID + "=? AND "
+			+ NacDatabaseContract.AlarmTable.COLUMN_ENABLED + "=? AND "
+			+ NacDatabaseContract.AlarmTable.COLUMN_24HOURFORMAT + "=? AND "
+			+ NacDatabaseContract.AlarmTable.COLUMN_DAYS + "=? AND "
+			+ NacDatabaseContract.AlarmTable.COLUMN_REPEAT + "=? AND "
+			+ NacDatabaseContract.AlarmTable.COLUMN_VIBRATE + "=? AND "
+			+ NacDatabaseContract.AlarmTable.COLUMN_SOUND + "=? AND "
+			+ NacDatabaseContract.AlarmTable.COLUMN_NAME + "=?";
+		String[] args = new String[] {
+			String.valueOf(alarm.getId()),
+			String.valueOf(alarm.getEnabled() ? 1 : 0),
+			String.valueOf(alarm.get24HourFormat() ? 1 : 0),
+			String.valueOf(NacCalendar.daysToValue(alarm.getDays())),
+			String.valueOf(alarm.getRepeat() ? 1 : 0),
+			String.valueOf(alarm.getVibrate() ? 1 : 0),
+			alarm.getSound(),
+			alarm.getName() };
+		String limit = "1";
+
+		Cursor cursor = db.query(table, null, where, args, null, null, null,
+			limit);
+		boolean exists = (cursor.getCount() > 0);
+
+		cursor.close();
+
+		return exists;
 	}
 
 	/**
@@ -72,7 +113,7 @@ public class NacDatabase
 		boolean format = alarm.get24HourFormat();
 		int hour = alarm.getHour();
 		int minute = alarm.getMinute();
-		int days = alarm.getDays();
+		int days = NacCalendar.daysToValue(alarm.getDays());
 		boolean repeat = alarm.getRepeat();
 		boolean vibrate = alarm.getVibrate();
 		String sound = alarm.getSound();
@@ -92,6 +133,22 @@ public class NacDatabase
 		// cv.put(NacDatabaseContract.AlarmTable.COLUMN_NFCTAG, tag);
 
 		return cv;
+	}
+
+	/**
+	 * @return The SQLiteDatabase.
+	 */
+	private SQLiteDatabase getDatabase()
+	{
+		return this.mDatabase;
+	}
+
+	/**
+	 * @return The table name.
+	 */
+	private String getTable()
+	{
+		return NacDatabaseContract.AlarmTable.TABLE_NAME;
 	}
 
 	/**
@@ -176,14 +233,13 @@ public class NacDatabase
 	{
 		this.setDatabase();
 
-		String table = NacDatabaseContract.AlarmTable.TABLE_NAME;
-		Cursor cursor = this.mDatabase.query(table, null, null, null, null,
-			null, null);
+		SQLiteDatabase db = this.getDatabase();
+		String table = this.getTable();
+		Cursor cursor = db.query(table, null, null, null, null, null, null);
 		List<NacAlarm> list = new ArrayList<>();
 
 		while(cursor.moveToNext())
 		{
-			NacAlarm alarm = new NacAlarm();
 			int id = cursor.getInt(1);
 			boolean enabled = (cursor.getInt(2) != 0);
 			boolean format = (cursor.getInt(3) != 0);
@@ -195,17 +251,18 @@ public class NacDatabase
 			String sound = cursor.getString(9);
 			String name = cursor.getString(10);
 
-			alarm.setId(id);
-			alarm.setEnabled(enabled);
-			alarm.set24HourFormat(format);
-			alarm.setHour(hour);
-			alarm.setMinute(minute);
-			alarm.setDays(days);
-			alarm.setRepeat(repeat);
-			alarm.setVibrate(vibrate);
-			alarm.setSound(sound);
-			alarm.setName(name);
-			list.add(alarm);
+			list.add(new NacAlarm.Builder()
+				.setId(id)
+				.setHour(hour)
+				.setMinute(minute)
+				.setDays(days)
+				.setRepeat(repeat)
+				.setVibrate(vibrate)
+				.setSound(sound)
+				.setName(name)
+				.setEnabled(enabled)
+				.set24HourFormat(format)
+				.build());
 		}
 
 		cursor.close();
@@ -218,9 +275,9 @@ public class NacDatabase
 	 */
 	private void setDatabase()
 	{
-		if (this.mDatabase == null)
+		if (this.getDatabase() == null)
 		{
-			this.mDatabase = this.getWritableDatabase();
+			this.mDatabase = getWritableDatabase();
 		}
 	}
 
@@ -243,14 +300,15 @@ public class NacDatabase
 		fromAlarm.setId(toId);
 		toAlarm.setId(fromId);
  
-		String table = NacDatabaseContract.AlarmTable.TABLE_NAME;
+ 		SQLiteDatabase db = this.getDatabase();
+		String table = this.getTable();
 		ContentValues fromCv = this.getContentValues(fromAlarm);
 		ContentValues toCv = this.getContentValues(toAlarm);
 		String where = this.getWhereClause();
 		String[] fromArgs = this.getWhereArgs(toId);
 		String[] toArgs = this.getWhereArgs(fromId);
-		int fromRows = this.mDatabase.update(table, fromCv, where, fromArgs);
-		int toRows = this.mDatabase.update(table, toCv, where, toArgs);
+		int fromRows = db.update(table, fromCv, where, fromArgs);
+		int toRows = db.update(table, toCv, where, toArgs);
  
 		return fromRows + toRows;
 	}
@@ -262,11 +320,12 @@ public class NacDatabase
 	{
 		this.setDatabase();
 
-		String table = NacDatabaseContract.AlarmTable.TABLE_NAME;
+ 		SQLiteDatabase db = this.getDatabase();
+		String table = this.getTable();
 		ContentValues cv = this.getContentValues(alarm);
 		String where = this.getWhereClause();
 		String[] args = this.getWhereArgs(alarm);
-		int rows = this.mDatabase.update(table, cv, where, args);
+		int rows = db.update(table, cv, where, args);
 
 		return rows;
 	}
@@ -288,23 +347,24 @@ public class NacDatabase
 		 */
 		protected Long doInBackground(ContentValues... values)
 		{
-			String table = NacDatabaseContract.AlarmTable.TABLE_NAME;
+			SQLiteDatabase db = getDatabase();
+			String table = getTable();
 			long result = 0;
 
-			mDatabase.beginTransaction();
+			db.beginTransaction();
 
 			try
 			{
 				for (int i=0; i < values.length; i++)
 				{
-					result += mDatabase.insert(table, null, values[i]);
+					result += db.insert(table, null, values[i]);
 				}
 
-				mDatabase.setTransactionSuccessful();
+				db.setTransactionSuccessful();
 			}
 			finally
 			{
-				mDatabase.endTransaction();
+				db.endTransaction();
 			}
 
 			return result;

@@ -1,15 +1,7 @@
 package com.nfcalarmclock;
 
-import android.app.AlarmManager;
-import android.content.Context;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import java.util.Arrays;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
+import java.util.EnumSet;
 
 /**
  * Alarm object.
@@ -20,45 +12,380 @@ public class NacAlarm
 	/**
 	 * Definition for the change listener object.
 	 */
-	public interface OnChangedListener
+	public interface OnChangeListener
 	{
-		public void onChanged(NacAlarm alarm);
+		public void onChange(NacAlarm alarm);
 	}
 
 	/**
-	 * Change listener.
+	 * Helper to build an alarm.
 	 */
-	private OnChangedListener mChangeListener;
+	public static class Builder
+	{
+
+		/**
+		 * Listener for when the alarm is changed.
+		 */
+		private OnChangeListener mOnChangeListener;
+
+		/**
+		 * The alarm ID.
+		 */
+		private int mId;
+
+		/**
+		 * Indicates whether the alarm is enabled or not.
+		 */
+		private boolean mEnabled;
+
+		/**
+		 * Indicator if using a 24 hour format to display time or not.
+		 */
+		private boolean m24HourFormat;
+
+		/**
+		 * The hour at which to run the alarm.
+		 */
+		private int mHour;
+
+		/**
+		 * The minute at which to run the alarm.
+		 */
+		private int mMinute;
+
+		/**
+		 * The days on which to run the alarm.
+		 */
+		private EnumSet<NacCalendar.Day> mDays;
+
+		/**
+		 * Indicates whether the alarm should be repeated or not.
+		 */
+		private boolean mRepeat;
+
+		/**
+		 * Indicates whether the phone should vibrate when the alarm is run.
+		 */
+		private boolean mVibrate;
+
+		/**
+		 * The sound to play when the alarm is run.
+		 */
+		private String mSound;
+
+		/**
+		 * The name of the alarm.
+		 */
+		private String mName;
+
+		/**
+		 */
+		public Builder()
+		{
+			this(Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
+				Calendar.getInstance().get(Calendar.MINUTE));
+		}
+
+		/**
+		 */
+		public Builder(int hour, int min)
+		{
+			this(-1, hour, min);
+		}
+
+		/**
+		 */
+		public Builder(int id, int hour, int min)
+		{
+			this.mOnChangeListener = null;
+			this.mId = id;
+			this.mHour = hour;
+			this.mMinute = min;
+			this.mEnabled = true;
+			this.m24HourFormat = false;
+			this.mDays = EnumSet.noneOf(NacCalendar.Day.class);
+			this.mRepeat = true;
+			this.mVibrate = true;
+			this.mSound = "";
+			this.mName = "";
+		}
+
+		/**
+		 * Build the alarm.
+		 */
+		public NacAlarm build()
+		{
+			return new NacAlarm(this);
+		}
+
+		/**
+		 * @return True if using 24 time format, and False if using 12 hour
+		 *         format.
+		 */
+		public boolean get24HourFormat()
+		{
+			return this.m24HourFormat;
+		}
+
+		/**
+		 * @return The days on which to run the alarm.
+		 */
+		public EnumSet<NacCalendar.Day> getDays()
+		{
+			return this.mDays;
+		}
+
+		/**
+		 * @return True if the alarm is enabled and false otherwise.
+		 */
+		public boolean getEnabled()
+		{
+			return this.mEnabled;
+		}
+
+		/**
+		 * @return The hour.
+		 */
+		public int getHour()
+		{
+			return this.mHour;
+		}
+
+		/**
+		 * @return The alarm ID.
+		 */
+		public int getId()
+		{
+			return this.mId;
+		}
+
+		/**
+		 * @return The minute.
+		 */
+		public int getMinute()
+		{
+			return this.mMinute;
+		}
+
+		/**
+		 * @return The alarm name.
+		 */
+		public String getName()
+		{
+			return this.mName;
+		}
+
+		/**
+		 * @return The OnChangeListener.
+		 */
+		public OnChangeListener getOnChangeListener()
+		{
+			return this.mOnChangeListener;
+		}
+
+		/**
+		 * @return True if repeating the alarm after it runs and false
+		 *         otherwise.
+		 */
+		public boolean getRepeat()
+		{
+			return this.mRepeat;
+		}
+
+		/**
+		 * @return The path to the media file to play when the alarm goes off.
+		 */
+		public String getSound()
+		{
+			return this.mSound;
+		}
+
+		/**
+		 * @return True if the phone should vibrate when the alarm is going off
+		 *         and false otherwise.
+		 */
+		public boolean getVibrate()
+		{
+			return this.mVibrate;
+		}
+
+		/**
+		 * Set the time format to 12 or 24 hour.
+		 *
+		 * @param  format  True indicates using 24 hour format, and False
+		 *                 indicates 12 hour format.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder set24HourFormat(boolean format)
+		{
+			this.m24HourFormat = format;
+
+			return this;
+		}
+
+		/**
+		 * Set the days to the run the alarm.
+		 *
+		 * @param  days  The set of days to run the alarm on.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setDays(EnumSet<NacCalendar.Day> days)
+		{
+			this.mDays = days;
+
+			return this;
+		}
+
+		/**
+		 * @see setDays
+		 */
+		public Builder setDays(int value)
+		{
+			return this.setDays(NacCalendar.valueToDays(value));
+		}
+
+		/**
+		 * Set whether the alarm is enabled or not.
+		 *
+		 * @param  enabled  True if the alarm is enabled and False otherwise.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setEnabled(boolean enabled)
+		{
+			this.mEnabled = enabled;
+
+			return this;
+		}
+
+		/**
+		 * Set the hour.
+		 *
+		 * @param  hour  The hour at which to run the alarm.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setHour(int hour)
+		{
+			this.mHour = hour;
+
+			return this;
+		}
+
+		/**
+		 * Set the alarm ID.
+		 *
+		 * @param  id  The unique ID of the alarm.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setId(int id)
+		{
+			this.mId = id;
+
+			return this;
+		}
+
+		/**
+		 * Set the minute.
+		 *
+		 * @param  minute  The minute at which to run the alarm.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setMinute(int minute)
+		{
+			this.mMinute = minute;
+
+			return this;
+		}
+
+		/**
+		 * Set the name of the alarm.
+		 *
+		 * @param  name  The alarm name.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setName(String name)
+		{
+			this.mName = (name != null) ? name : "";
+
+			return this;
+		}
+
+		/**
+		 * Set the listener for when the alarm is changed.
+		 *
+		 * @param  listener  The OnChangeListener.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setOnChangeListener(OnChangeListener listener)
+		{
+			this.mOnChangeListener = listener;
+
+			return this;
+		}
+
+		/**
+		 * Set whether the alarm should repeat every week or not.
+		 *
+		 * @param  repeat  True if repeating the alarm after it runs, and False
+		 *                 otherwise.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setRepeat(boolean repeat)
+		{
+			this.mRepeat = repeat;
+
+			return this;
+		}
+
+		/**
+		 * Set the sound to play when the alarm goes off.
+		 *
+		 * @param  path  The path to the media file to play when the alarm goes
+		 *               off.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setSound(String path)
+		{
+			this.mSound = (path != null) ? path : "";
+
+			return this;
+		}
+
+		/**
+		 * Set whether the alarm should vibrate the phone or not.
+		 *
+		 * @param  vibrate  True if the phone should vibrate when the alarm is
+		 *                  going off and false otherwise.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setVibrate(boolean vibrate)
+		{
+			this.mVibrate = vibrate;
+
+			return this;
+		}
+
+	}
 
 	/**
-	 * A list of possible days the alarm can run on.
+	 * Listener for when the alarm is changed.
 	 */
-	public class Days
-	{
-		public static final byte NONE = 0;
-		public static final byte SUNDAY = 1;
-		public static final byte MONDAY = 2;
-		public static final byte TUESDAY = 4;
-		public static final byte WEDNESDAY = 8;
-		public static final byte THURSDAY = 16;
-		public static final byte FRIDAY = 32;
-		public static final byte SATURDAY = 64;
-	}
+	private OnChangeListener mOnChangeListener;
 
 	/**
 	 * The alarm ID.
 	 */
 	private int mId;
-
-	/**
-	 * Indicates whether the alarm is enabled or not.
-	 */
-	private boolean mEnabled;
-
-	/**
-	 * Indicator if using a 24 hour format to display time or not.
-	 */
-	private boolean m24HourFormat;
 
 	/**
 	 * The hour at which to run the alarm.
@@ -73,7 +400,7 @@ public class NacAlarm
 	/**
 	 * The days on which to run the alarm.
 	 */
-	private int mDays;
+	private EnumSet<NacCalendar.Day> mDays;
 
 	/**
 	 * Indicates whether the alarm should be repeated or not.
@@ -96,112 +423,37 @@ public class NacAlarm
 	private String mName;
 
 	/**
-	 * Week days.
+	 * Indicates whether the alarm is enabled or not.
 	 */
-	private List<Byte> mWeekDays = new ArrayList<Byte>(Arrays.asList(
-		Days.SUNDAY, Days.MONDAY, Days.TUESDAY, Days.WEDNESDAY, Days.THURSDAY,
-		Days.FRIDAY, Days.SATURDAY));
+	private boolean mEnabled;
 
 	/**
-	 * Calendar days.
+	 * Indicator if using a 24 hour format to display time or not.
 	 */
-	private List<Integer> mCalendarDays = new ArrayList<Integer>(Arrays.asList(
-		Calendar.SUNDAY, Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY,
-		Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY));
+	private boolean m24HourFormat;
 
 	/**
-	 * Use the default set values for an alarm.
 	 */
 	public NacAlarm()
 	{
-		Calendar cal = Calendar.getInstance();
-
-		this.setOnChangedListener(null);
-		this.setId(-1);
-		this.setEnabled(true);
-		this.set24HourFormat(true);
-		this.setHour(cal.get(Calendar.HOUR_OF_DAY));
-		this.setMinute(cal.get(Calendar.MINUTE));
-		this.setDays(Days.MONDAY|Days.TUESDAY|Days.WEDNESDAY|Days.THURSDAY|Days.FRIDAY);
-		this.setRepeat(true);
-		this.setVibrate(true);
-		this.setSound("");
-		this.setName("");
-
+		this(new Builder());
 	}
 
 	/**
-	 * Set the 24 hour format.
 	 */
-	public NacAlarm(boolean state)
+	public NacAlarm(Builder builder)
 	{
-		this();
-		this.set24HourFormat(state);
-	}
-
-	/**
-	 * Set the id and 24 hour format.
-	 */
-	public NacAlarm(boolean state, int id)
-	{
-		this(state);
-		this.setId(id);
-	}
-
-	/**
-	 * Set the days the alarm will run.
-	 */
-	public NacAlarm(int days)
-	{
-		this();
-		this.setDays(days);
-	}
-
-	/**
-	 * Set the hour and minute to run the alarm at.
-	 */
-	public NacAlarm(int hour, int minute)
-	{
-		this();
-		this.setHour(hour);
-		this.setMinute(minute);
-	}
-
-	/**
-	 * Set the time and date to run the alarm at.
-	 */
-	public NacAlarm(int hour, int minute, int days)
-	{
-		this(hour, minute);
-		this.setDays(days);
-		this.setRepeat(true);
-	}
-
-	/**
-	 * Set the name and the time to run the alarm at.
-	 */
-	public NacAlarm(String name, int hour, int minute)
-	{
-		this(hour, minute);
-		this.setName(name);
-	}
-
-	/**
-	 * Print all values in the alarm object.
-	 */
-	public void print()
-	{
-		NacUtility.printf("Alarm Information");
-		NacUtility.printf("Id	   : %d", this.mId);
-		NacUtility.printf("Enabled : %b", this.mEnabled);
-		NacUtility.printf("Hour    : %d", this.mHour);
-		NacUtility.printf("Minute  : %d", this.mMinute);
-		NacUtility.printf("Days    : %s (%d)", this.getDaysString(), this.getDays());
-		NacUtility.printf("Repeat  : %b", this.mRepeat);
-		NacUtility.printf("Vibrate : %b", this.mVibrate);
-		NacUtility.printf("Sound   : %s", this.mSound);
-		NacUtility.printf("Name    : %s", this.mName);
-		NacUtility.printf("Format  : %s", this.m24HourFormat);
+		this.setOnChangeListener(builder.getOnChangeListener());
+		this.setId(builder.getId());
+		this.setHour(builder.getHour());
+		this.setMinute(builder.getMinute());
+		this.setDays(builder.getDays());
+		this.setRepeat(builder.getRepeat());
+		this.setVibrate(builder.getVibrate());
+		this.setSound(builder.getSound());
+		this.setName(builder.getName());
+		this.setEnabled(builder.getEnabled());
+		this.set24HourFormat(builder.get24HourFormat());
 	}
 
 	/**
@@ -211,7 +463,7 @@ public class NacAlarm
 	{
 		if (this.hasListener())
 		{
-			this.mChangeListener.onChanged(this);
+			this.getOnChangeListener().onChange(this);
 		}
 	}
 
@@ -222,171 +474,44 @@ public class NacAlarm
 	 */
 	public NacAlarm copy()
 	{
-		NacAlarm copy = new NacAlarm();
-
-		copy.setId(this.getId());
-		copy.setEnabled(this.getEnabled());
-		copy.set24HourFormat(this.get24HourFormat());
-		copy.setHour(this.getHour());
-		copy.setMinute(this.getMinute());
-		copy.setDays(this.getDays());
-		copy.setRepeat(this.getRepeat());
-		copy.setVibrate(this.getVibrate());
-		copy.setSound(this.getSound());
-		copy.setName(this.getName());
-
-		return copy;
+		return new NacAlarm.Builder()
+			.setId(this.getId())
+			.setHour(this.getHour())
+			.setMinute(this.getMinute())
+			.setDays(this.getDays())
+			.setRepeat(this.getRepeat())
+			.setVibrate(this.getVibrate())
+			.setSound(this.getSound())
+			.setName(this.getName())
+			.setEnabled(this.getEnabled())
+			.set24HourFormat(this.get24HourFormat())
+			.build();
 	}
 
 	/**
-	 * Set a listener for when the alarm is changed.
-	 * 
-	 * @param  listener  The change listener.
+	 * Check if this alarm equals the given alarm.
+	 *
+	 * @param  alarm  The alarm to compare against.
+	 *
+	 * @return True if both alarms are the same, and false otherwise.
 	 */
-	public void setOnChangedListener(OnChangedListener listener)
+	public boolean equals(NacAlarm alarm)
 	{
-		this.mChangeListener = listener;
+		return ((this.getId() == alarm.getId())
+			&& (this.getHour() == alarm.getHour())
+			&& (this.getMinute() == alarm.getMinute())
+			&& (this.getDays() == alarm.getDays())
+			&& (this.getRepeat() == alarm.getRepeat())
+			&& (this.getVibrate() == alarm.getVibrate())
+			&& (this.getSound() == alarm.getSound())
+			&& (this.getName() == alarm.getName())
+			&& (this.getEnabled() == alarm.getEnabled())
+			&& (this.get24HourFormat() == alarm.get24HourFormat()));
 	}
 
 	/**
-	 * Set the ID.
-	 */
-	public void setId(int id)
-	{
-		this.mId = id;
-	}
-
-	/**
-	 * Set the enabled/disabled status of the alarm.
-	 */
-	public void setEnabled(boolean state)
-	{
-		this.mEnabled = state;
-	}
-
-	/**
-	 * Set the 24 hour format indicator.
-	 */
-	public void set24HourFormat(boolean state)
-	{
-		this.m24HourFormat = state;
-	}
-
-	/**
-	 * Set the hour at which to run the alarm.
-	 */
-	public void setHour(int hour)
-	{
-		this.mHour = hour;
-	}
-
-	/**
-	 * Set the minute at which to run the alarm.
-	 */
-	public void setMinute(int minute)
-	{
-		this.mMinute = minute;
-	}
-
-	/**
-	 * Set the days on which the alarm will be run.
-	 */
-	public void setDays(int days)
-	{
-		this.mDays = days;
-	}
-
-	/**
-	 * Toggle a day.
-	 */
-	public void toggleDay(byte day)
-	{
-		this.setDays(mDays^day);
-	}
-
-	/**
-	 * Toggle today.
-	 */
-	public void toggleToday()
-	{
-		byte day = this.getToday();
-
-		this.toggleDay(day);
-	}
-
-	/**
-	 * @return Today's day.
-	 */
-	public byte getToday()
-	{
-		Calendar c = Calendar.getInstance();
-		int day = c.get(Calendar.DAY_OF_WEEK);
-		int index = this.getCalendarDays().indexOf(day);
-
-		return this.getWeekDays().get(index);
-	}
-
-	/**
-	 * Set whether the alarm should be repeated or not.
-	 */
-	public void setRepeat(boolean state)
-	{
-		this.mRepeat = state;
-	}
-
-	/**
-	 * Set whether or not the phone should vibrate when the alarm is activated.
-	 */
-	public void setVibrate(boolean state)
-	{
-		this.mVibrate = state;
-	}
-
-	/**
-	 * Set the sound that will be played when the alarm is activated.
-	 */
-	public void setSound(String sound)
-	{
-		this.mSound = (sound != null) ? sound : "";
-	}
-
-	/**
-	 * Set the name of the alarm.
-	 */
-	public void setName(String name)
-	{
-		this.mName = (name != null) ? name : "";
-	}
-
-	/**
-	 * @return The ID.
-	 */
-	public int getId()
-	{
-		return this.mId;
-	}
-
-	/**
-	 * @return The ID offset by the given day.
-	 */
-	public int getId(Calendar c)
-	{
-		int day = c.get(Calendar.DAY_OF_WEEK);
-		int offset = this.getCalendarDays().indexOf(day);
-
-		return this.getId()+offset;
-	}
-
-	/**
-	 * @return The enabled flag for the alarm.
-	 */
-	public boolean getEnabled()
-	{
-		return this.mEnabled;
-	}
-
-	/**
-	 * @return The 24 hour format indicator.
+	 * @return True if using 24 time format, and False if using 12 hour
+	 *         format.
 	 */
 	public boolean get24HourFormat()
 	{
@@ -394,7 +519,23 @@ public class NacAlarm
 	}
 
 	/**
-	 * @return The hour at which to run the alarm.
+	 * @return The days on which to run the alarm.
+	 */
+	public EnumSet<NacCalendar.Day> getDays()
+	{
+		return this.mDays;
+	}
+
+	/**
+	 * @return True if the alarm is enabled and false otherwise.
+	 */
+	public boolean getEnabled()
+	{
+		return this.mEnabled;
+	}
+
+	/**
+	 * @return The hour.
 	 */
 	public int getHour()
 	{
@@ -402,52 +543,25 @@ public class NacAlarm
 	}
 
 	/**
-	 * @return The minutes at which to run the alarm.
+	 * @return The alarm ID.
 	 */
-	public int getMinute()
+	public int getId()
 	{
-		return this.mMinute;
+		return this.mId;
 	}
 
 	/**
-	 * @return The hour value in String format.
+	 * @param  c  The calendar instance.
+	 *
+	 * @return The alarm ID, offset by the given day to make it unique to that
+	 *         day.
 	 */
-	public String getHourString()
+	public int getId(Calendar c)
 	{
-		int hour = this.getHour();
+		int day = c.get(Calendar.DAY_OF_WEEK);
+		int offset = NacCalendar.toIndex(day);
 
-		if (!this.is24HourFormat())
-		{
-			if (hour > 12)
-			{
-				hour = (hour % 12);
-			}
-			else
-			{
-				if (hour == 0)
-				{
-					hour = 12;
-				}
-			}
-		}
-
-		return String.valueOf(hour);
-	}
-
-	/**
-	 * @return The minutes value in String format.
-	 */
-	public String getMinuteString()
-	{
-		return String.format(Locale.getDefault(), "%02d", this.getMinute());
-	}
-
-	/**
-	 * @return The time string.
-	 */
-	public String getTime()
-	{
-		return this.getHourString()+":"+this.getMinuteString();
+		return this.getId() + offset;
 	}
 
 	/**
@@ -455,243 +569,19 @@ public class NacAlarm
 	 */
 	public String getMeridian()
 	{
-		if (this.is24HourFormat())
-		{
-			return "";
-		}
-
-		if (this.getHour() < 12)
-		{
-			return "AM";
-		}
-		else
-		{
-			return "PM";
-		}
+		return NacCalendar.getMeridian(this.getHour(), this.get24HourFormat());
 	}
 
 	/**
-	 * @return The days on which to run the alarm.
+	 * @return The minute.
 	 */
-	public int getDays()
+	public int getMinute()
 	{
-		return this.mDays;
+		return this.mMinute;
 	}
 
 	/**
-	 * @return The default days on which to run the alarm.
-	 */
-	public static int getDaysDefault()
-	{
-		return Days.MONDAY | Days.TUESDAY | Days.WEDNESDAY | Days.THURSDAY | Days.FRIDAY;
-	}
-
-	/**
-	 * @return All the days of week.
-	 */
-	public List<Byte> getWeekDays()
-	{
-		return this.mWeekDays;
-	}
-
-	/**
-	 * @return All the days of week.
-	 */
-	public List<Integer> getCalendarDays()
-	{
-		return this.mCalendarDays;
-	}
-
-	/**
-	 * @return The calendar instance with the specified alarm's time.
-	 */
-	public List<Calendar> getNextCalendars()
-	{
-		List<Calendar> calendars = getCalendars();
-		List<Calendar> next = new ArrayList<>();
-		int dow = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-
-		for (Calendar c : calendars)
-		{
-			int nextdow = c.get(Calendar.DAY_OF_WEEK);
-
-			if (!this.getRepeat() && (nextdow < dow))
-			{
-				continue;
-			}
-
-			next.add(c);
-		}
-
-		return next;
-	}
-
-	/**
-	 * @return The calendar instances of all days the alarm is set to run.
-	 */
-	public List<Calendar> getCalendars()
-	{
-		Calendar today = Calendar.getInstance();
-		List<Calendar> calendars = new ArrayList<>();
-		List<Byte> weekdays = this.getWeekDays();
-		List<Integer> caldays = this.getCalendarDays();
-
-		for (int i=0; i < weekdays.size(); i++)
-		{
-			if (!this.isDay(weekdays.get(i)))
-			{
-				continue;
-			}
-
-			Calendar c = Calendar.getInstance();
-
-			c.set(Calendar.DAY_OF_WEEK, caldays.get(i));
-			c.set(Calendar.HOUR_OF_DAY, this.getHour());
-			c.set(Calendar.MINUTE, this.getMinute());
-			c.set(Calendar.SECOND, 0);
-			c.set(Calendar.MILLISECOND, 0);
-
-			if (c.before(today))
-			{
-				c.add(Calendar.DAY_OF_MONTH, 7);
-			}
-
-			calendars.add(c);
-		}
-
-		return calendars;
-	}
-
-	/**
-	 * @return Comma separated string of days to repeat alarm on.
-	 */
-	public String getDaysString()
-	{
-		String string = "";
-		String[] names = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-		List<Byte> dow = this.getWeekDays();
-
-		for (int i=0; i < dow.size(); i++)
-		{
-			if (this.isDay(dow.get(i)))
-			{
-				if (!string.isEmpty())
-				{
-					string += ",";
-				}
-
-				string += names[i];
-			}
-		}
-
-		return string;
-		//return (string.isEmpty()) ? "Never" : conv;
-	}
-
-	/**
-	 * @return The default days string. This should be used if getDaysString
-	 *		   is empty.
-	 */
-	public static String getDaysStringDefault()
-	{
-		return "None";
-	}
-
-	/**
-	 * @return The default message for the days string.
-	 */
-	public static String getDaysStringMessage()
-	{
-		return "No day selected";
-	}
-
-	/**
-	 * @return Whether the alarm should be repeated or not.
-	 */
-	public boolean getRepeat()
-	{
-		return this.mRepeat;
-	}
-
-	/**
-	 * @return The default repeat state.
-	 */
-	public static boolean getRepeatDefault()
-	{
-		return true;
-	}
-
-	/**
-	 * @return Whether or not the phone should vibrate when the alarm is run.
-	 */
-	public boolean getVibrate()
-	{
-		return this.mVibrate;
-	}
-
-	/**
-	 * @return The default vibrate state.
-	 */
-	public static boolean getVibrateDefault()
-	{
-		return true;
-	}
-
-	/**
-	 * @return The sound that will be played when the alarm is activated.
-	 */
-	public String getSound()
-	{
-		return this.mSound;
-	}
-
-	/**
-	 * @return The default sound.
-	 */
-	public static String getSoundDefault()
-	{
-		return "";
-	}
-
-	/**
-	 * @return The sound name.
-	 */
-	public String getSoundName(Context context)
-	{
-		String path = this.getSound();
-
-		if (path.isEmpty())
-		{
-			return "";
-		}
-
-		Uri uri = Uri.parse(path);
-		Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
-		String name = ringtone.getTitle(context);
-
-		ringtone.stop();
-
-		return name;
-	}
-
-	/**
-	 * @return The default sound name string.
-	 */
-	public static String getSoundNameDefault()
-	{
-		return "None";
-	}
-
-	/**
-	 * @return The default sound name message.
-	 */
-	public static String getSoundNameMessage()
-	{
-		return "Song or ringtone";
-	}
-
-	/**
-	 * @return The name of the alarm.
+	 * @return The alarm name.
 	 */
 	public String getName()
 	{
@@ -699,43 +589,46 @@ public class NacAlarm
 	}
 
 	/**
-	 * @return The default name of the alarm.
+	 * @return The OnChangeListener.
 	 */
-	public static String getNameDefault()
+	protected OnChangeListener getOnChangeListener()
 	{
-		return "None";
+		return this.mOnChangeListener;
 	}
 
 	/**
-	 * @return The default name message.
+	 * @return True if repeating the alarm after it runs and false
+	 *         otherwise.
 	 */
-	public static String getNameMessage()
+	public boolean getRepeat()
 	{
-		return "Alarm name";
+		return this.mRepeat;
 	}
 
 	/**
-	 * Check if 24 hour format is enabled.
+	 * @return The path to the media file to play when the alarm goes off.
 	 */
-	public boolean is24HourFormat()
+	public String getSound()
 	{
-		return this.m24HourFormat;
+		return this.mSound;
 	}
 
 	/**
-	 * Check if the given index of day will run the alarm.
+	 * @return The time string.
 	 */
-	public boolean isDay(int index)
+	public String getTime()
 	{
-		return ((this.getDays() & this.getWeekDays().get(index)) != 0);
+		return NacCalendar.getTime(this.getHour(), this.getMinute(),
+			this.get24HourFormat());
 	}
 
 	/**
-	 * Check if the given day will run the alarm.
+	 * @return True if the phone should vibrate when the alarm is going off
+	 *         and false otherwise.
 	 */
-	public boolean isDay(byte d)
+	public boolean getVibrate()
 	{
-		return ((this.getDays() & d) != 0);
+		return this.mVibrate;
 	}
 
 	/**
@@ -743,7 +636,199 @@ public class NacAlarm
 	 */
 	public boolean hasListener()
 	{
-		return (this.mChangeListener != null);
+		return (this.getOnChangeListener() != null);
+	}
+
+	/**
+	 * Print all values in the alarm object.
+	 */
+	public void print()
+	{
+		NacUtility.printf("Alarm Information");
+		NacUtility.printf("Id      : %d", this.mId);
+		NacUtility.printf("Hour    : %d", this.mHour);
+		NacUtility.printf("Minute  : %d", this.mMinute);
+		NacUtility.printf("Days    : %s", NacCalendar.toString(this.getDays()));
+		NacUtility.printf("Repeat  : %b", this.mRepeat);
+		NacUtility.printf("Vibrate : %b", this.mVibrate);
+		NacUtility.printf("Sound   : %s", this.mSound);
+		NacUtility.printf("Name    : %s", this.mName);
+		NacUtility.printf("Enabled : %b", this.mEnabled);
+		NacUtility.printf("Format  : %s", this.m24HourFormat);
+	}
+
+	/**
+	 * Set the time format to 12 or 24 hour.
+	 *
+	 * @param  format  True indicates using 24 hour format, and False
+	 *                 indicates 12 hour format.
+	 */
+	public void set24HourFormat(boolean format)
+	{
+		this.m24HourFormat = format;
+	}
+
+	/**
+	 * Set the days to the run the alarm.
+	 *
+	 * @param  days  The set of days to run the alarm on.
+	 */
+	public void setDays(EnumSet<NacCalendar.Day> days)
+	{
+		this.mDays = days;
+	}
+
+	/**
+	 * @see setDays
+	 */
+	public void setDays(int value)
+	{
+		this.setDays(NacCalendar.valueToDays(value));
+	}
+
+	/**
+	 * Set whether the alarm is enabled or not.
+	 *
+	 * @param  enabled  True if the alarm is enabled and False otherwise.
+	 */
+	public void setEnabled(boolean enabled)
+	{
+		this.mEnabled = enabled;
+	}
+
+	/**
+	 * Set the hour.
+	 *
+	 * @param  hour  The hour at which to run the alarm.
+	 */
+	public void setHour(int hour)
+	{
+		this.mHour = hour;
+	}
+
+	/**
+	 * Set the alarm ID.
+	 *
+	 * @param  id  The unique ID of the alarm.
+	 */
+	public void setId(int id)
+	{
+		this.mId = id;
+	}
+
+	/**
+	 * Set the minute.
+	 *
+	 * @param  minute  The minute at which to run the alarm.
+	 */
+	public void setMinute(int minute)
+	{
+		this.mMinute = minute;
+	}
+
+	/**
+	 * Set the name of the alarm.
+	 *
+	 * @param  name  The alarm name.
+	 */
+	public void setName(String name)
+	{
+		this.mName = (name != null) ? name : "";
+	}
+
+	/**
+	 * Set a listener for when the alarm is changed.
+	 * 
+	 * @param  listener  The change listener.
+	 */
+	public void setOnChangeListener(OnChangeListener listener)
+	{
+		this.mOnChangeListener = listener;
+	}
+
+	/**
+	 * Set whether the alarm should repeat every week or not.
+	 *
+	 * @param  repeat  True if repeating the alarm after it runs, and False
+	 *                 otherwise.
+	 */
+	public void setRepeat(boolean repeat)
+	{
+		this.mRepeat = repeat;
+	}
+
+	/**
+	 * Set the sound to play when the alarm goes off.
+	 *
+	 * @param  path  The path to the media file to play when the alarm goes
+	 *               off.
+	 */
+	public void setSound(String path)
+	{
+		this.mSound = (path != null) ? path : "";
+	}
+
+	/**
+	 * Set whether the alarm should vibrate the phone or not.
+	 *
+	 * @param  vibrate  True if the phone should vibrate when the alarm is
+	 *                  going off and false otherwise.
+	 */
+	public void setVibrate(boolean vibrate)
+	{
+		this.mVibrate = vibrate;
+	}
+
+	/**
+	 * Toggle a day.
+	 */
+	public void toggleDay(NacCalendar.Day day)
+	{
+		if (this.getDays().contains(day))
+		{
+			this.getDays().remove(day);
+		}
+		else
+		{
+			this.getDays().add(day);
+		}
+	}
+
+	/**
+	 * Toggle the day at the given index.
+	 *
+	 * @param  index  The index of the day.
+	 */
+	public void toggleIndex(int index)
+	{
+		NacCalendar.Day day = NacCalendar.fromIndex(index);
+
+		this.toggleDay(day);
+	}
+
+	/**
+	 * Toggle today.
+	 */
+	public void toggleToday()
+	{
+		NacCalendar.Day day = NacCalendar.getToday();
+
+		this.toggleDay(day);
+	}
+
+	/**
+	 * Toggle the day(s) with the given value.
+	 *
+	 * @param  value  The value of a day or multiple days.
+	 */
+	public void toggleValue(int value)
+	{
+		EnumSet<NacCalendar.Day> days = NacCalendar.valueToDays(value);
+
+		for (NacCalendar.Day d : days)
+		{
+			this.toggleDay(d);
+		}
 	}
 
 }

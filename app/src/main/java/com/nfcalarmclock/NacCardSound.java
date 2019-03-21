@@ -8,7 +8,7 @@ import android.view.View;
  * selecting the sound view.
  */
 public class NacCardSound
-	implements View.OnClickListener,NacSoundDialog.OnItemClickListener
+	implements View.OnClickListener,NacMediaDialog.OnItemClickListener
 {
 
 	/**
@@ -59,10 +59,8 @@ public class NacCardSound
 	 * Handle the sound item when it has been selected.
 	 */
 	@Override
-	public void onItemClick(NacSound sound)
+	public void onItemClick(String path, String name)
 	{
-		String path = sound.path;
-
 		this.mAlarm.setSound(path);
 		this.mAlarm.changed();
 		this.setSound();
@@ -74,13 +72,13 @@ public class NacCardSound
 	public void setSound()
 	{
 		String path = this.mAlarm.getSound();
-		String name = NacAlarm.getSoundNameMessage();
+		String name = NacSharedPreferences.DEFAULT_SOUND_MESSAGE;
 		boolean focus = false;
 
 		if (!path.isEmpty())
 		{
 			Context context = this.mSoundView.getContext();
-			name = this.mAlarm.getSoundName(context);
+			name = NacMedia.getMediaName(context, path);
 			focus = true;
 		}
 

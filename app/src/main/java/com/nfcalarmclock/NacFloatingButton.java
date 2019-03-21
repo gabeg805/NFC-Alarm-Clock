@@ -40,7 +40,7 @@ public class NacFloatingButton
 		NacSharedPreferences shared = new NacSharedPreferences(context);
 
 		this.mFloatingButton.setBackgroundTintList(ColorStateList.valueOf(
-			shared.themeColor));
+			shared.getThemeColor()));
 		this.mFloatingButton.setOnClickListener(
 			(NacMainActivity)this.mActivity);
 	}

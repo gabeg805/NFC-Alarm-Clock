@@ -18,7 +18,7 @@ public class NacSoundPromptDialog
 	/**
 	 * Listener for when an item in a dialog is selected.
 	 */
-	private NacSoundDialog.OnItemClickListener mItemClickListener;
+	private NacMediaDialog.OnItemClickListener mItemClickListener;
 
 	/**
 	 */
@@ -51,17 +51,17 @@ public class NacSoundPromptDialog
 	{
 		Context context = v.getContext();
 		int id = v.getId();
-		NacSoundDialog dialog = null;
+		NacMediaDialog dialog = null;
 
 		if (id == R.id.dlg_ringtone)
 		{
-			dialog = new NacSoundRingtoneDialog();
+			dialog = new NacRingtoneDialog();
 		}
 		else if (id == R.id.dlg_music)
 		{
 			try
 			{
-				dialog = new NacSoundMusicDialog();
+				dialog = new NacMusicDialog();
 			}
 			catch (UnsupportedOperationException e)
 			{
@@ -109,7 +109,7 @@ public class NacSoundPromptDialog
 	 * Set the listener for when an item is selected.
 	 */
 	public void setOnItemClickListener(
-		NacSoundDialog.OnItemClickListener listener)
+		NacMediaDialog.OnItemClickListener listener)
 	{
 		this.mItemClickListener = listener;
 	}

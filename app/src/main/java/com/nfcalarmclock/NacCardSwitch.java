@@ -31,7 +31,6 @@ public class NacCardSwitch
 		super();
 
 		Context context = root.getContext();
-		NacSharedPreferences shared = new NacSharedPreferences(context);
 		this.mAlarm = null;
 		this.mSwitch = (Switch) root.findViewById(R.id.nacSwitch);
 	}
@@ -46,8 +45,8 @@ public class NacCardSwitch
 		int[][] states = new int[][] {
 			new int[] { android.R.attr.state_checked},
 			new int[] {-android.R.attr.state_checked}};
-		int[] thumbColors = new int[] {shared.themeColor, Color.LTGRAY};
-		int[] trackColors = new int[] {shared.themeColor, Color.GRAY};
+		int[] thumbColors = new int[] {shared.getThemeColor(), Color.LTGRAY};
+		int[] trackColors = new int[] {shared.getThemeColor(), Color.GRAY};
 		ColorStateList thumbStateList = new ColorStateList(states, thumbColors);
 		ColorStateList trackStateList = new ColorStateList(states, trackColors);
 		this.mAlarm = alarm;

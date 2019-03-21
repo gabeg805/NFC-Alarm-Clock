@@ -18,6 +18,16 @@ public class NacMainActivity
 {
 
 	/**
+	 * Alarm scheduler.
+	 */
+	private NacAlarmScheduler mScheduler;
+
+	/**
+	 * The database.
+	 */
+	private NacDatabase mDatabase;
+
+	/**
 	 * Recycler view containing the alarm cards.
 	 */
 	private NacRecyclerView mRecyclerView;
@@ -42,7 +52,6 @@ public class NacMainActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_main);
-		//PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 		this.mAdapter = new NacCardAdapter(this);
 		this.mFloatingButton = new NacFloatingButton(this);
@@ -58,26 +67,10 @@ public class NacMainActivity
 	/**
 	 */
 	@Override
-	protected void onStart()
-	{
-		super.onStart();
-	}
-
-	/**
-	 */
-	@Override
 	protected void onResume()
 	{
 		super.onResume();
 		this.mAdapter.build();
-	}
-
-	/**
-	 */
-	@Override
-	protected void onRestart()
-	{
-		super.onRestart();
 	}
 
 	/**
