@@ -119,6 +119,11 @@ public class NacSharedPreferences
 	public static final int DEFAULT_SNOOZE_DURATION_INDEX = 4;
 
 	/**
+	 * Default maximum number of alarms.
+	 */
+	public static final int DEFAULT_MAX_ALARMS = 50;
+
+	/**
 	 * Default days.
 	 */
 	public static final int DEFAULT_DAYS = NacCalendar.daysToValue(
@@ -204,7 +209,7 @@ public class NacSharedPreferences
 	/**
 	 * Default days message.
 	 */
-	public static final String DEFAULT_DAYS_MESSAGE = "No day selected";
+	public static final String DEFAULT_DAYS_MESSAGE = "Today";
 
 	/**
 	 */

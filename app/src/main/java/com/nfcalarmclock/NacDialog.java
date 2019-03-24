@@ -16,12 +16,12 @@ import android.widget.Button;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.view.inputmethod.InputMethodManager;
+
 /**
- * @brief A generic dialog object.
+ * A generic dialog object.
  */
 public class NacDialog
-	//implements DialogInterface.OnClickListener,DialogInterface.OnCancelListener,View.OnLayoutChangeListener
-	//implements DialogInterface.OnClickListener,View.OnLayoutChangeListener
 	implements DialogInterface.OnClickListener,DialogInterface.OnCancelListener,View.OnLayoutChangeListener
 {
 
@@ -403,6 +403,19 @@ public class NacDialog
 
 		this.setCanceledOrDismissed(true);
 		this.mDialog.cancel();
+		this.closeKeyboard();
+	}
+
+	/**
+	 * Close the keyboard.
+	 */
+	protected void closeKeyboard()
+	{
+		Context context = this.getRootView().getContext();
+		InputMethodManager inputManager = (InputMethodManager)
+			context.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+		inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
 	}
 
 	/**
@@ -426,6 +439,7 @@ public class NacDialog
 
 		this.setCanceledOrDismissed(true);
 		this.mDialog.dismiss();
+		this.closeKeyboard();
 	}
 
 	/**
@@ -727,6 +741,18 @@ public class NacDialog
 		this.setupDialog();
 
 		return this.mDialog;
+	}
+
+	/**
+	 * Show the keyboard.
+	 */
+	protected void showKeyboard()
+	{
+		Context context = this.getRootView().getContext();
+		InputMethodManager inputManager = (InputMethodManager)
+			context.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+		inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 	}
 
 	/**

@@ -30,8 +30,8 @@ public class NacSettingsActivity
 		super.onCreate(savedInstanceState);
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-		FragmentManager manage = getFragmentManager();
-		FragmentTransaction trans = manage.beginTransaction();
+		FragmentManager manager = getFragmentManager();
+		FragmentTransaction trans = manager.beginTransaction();
 
 		trans.replace(android.R.id.content, new SettingsFragment());
 		trans.commit();
@@ -42,6 +42,7 @@ public class NacSettingsActivity
 	 */
 	public static class SettingsFragment
 		extends PreferenceFragment
+		implements Preference.OnPreferenceChangeListener
 	{
 
 		/**
@@ -51,6 +52,30 @@ public class NacSettingsActivity
 		{
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.preferences);
+			this.setThemeColorChangeListener();
+		}
+
+		/**
+		 */
+		@Override
+		public boolean onPreferenceChange(Preference pref, Object newVal)
+		{
+			setPreferenceScreen(null);
+			addPreferencesFromResource(R.xml.preferences);
+			this.setThemeColorChangeListener();
+			return true;
+		}
+
+		/**
+		 * When the theme color is changed, refresh the whole activity so the
+		 * user can see how the new theme color looks.
+		 */
+		private void setThemeColorChangeListener()
+		{
+			String key = getResources().getString(R.string.pref_theme_color_key);
+			final Preference themeColorPreference = findPreference(key);
+
+			themeColorPreference.setOnPreferenceChangeListener(this);
 		}
 
 	}

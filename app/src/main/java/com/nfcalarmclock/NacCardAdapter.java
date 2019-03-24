@@ -88,6 +88,13 @@ public class NacCardAdapter
 	 */
 	public void add()
 	{
+		if (this.size() >= NacSharedPreferences.DEFAULT_MAX_ALARMS)
+		{
+			NacUtility.quickToast(this.mRootView,
+				"Maximum number of alarms created!");
+			return;
+		}
+
 		Context context = this.mRootView.getContext();
 		boolean format = DateFormat.is24HourFormat(context);
 		int id = this.getUniqueId();
@@ -140,7 +147,8 @@ public class NacCardAdapter
 
 		this.mScheduler.update(alarm);
 		this.mAlarmList.add(position, alarm);
-		this.notifyItemInserted(position);
+		//notifyItemInserted(position);
+		this.refresh(position);
 	}
 
 	/**
@@ -152,7 +160,7 @@ public class NacCardAdapter
 
 		this.mTouchHelper.setRecyclerView(this.mRecyclerView);
 		this.mTouchHelper.reset();
-		this.notifyDataSetChanged();
+		notifyDataSetChanged();
 	}
 
 	/**
@@ -160,15 +168,15 @@ public class NacCardAdapter
 	 *
 	 * @param  pos	The position of the alarm card to copy.
 	 */
-	public void copy(int pos)
+	public void copy(int position)
 	{
-		NacAlarm alarm = this.get(pos);
+		NacAlarm alarm = this.get(position);
 		NacAlarm copy = alarm.copy();
-		int newpos = this.size();
+		int newPosition = this.size();
 
 		copy.setId(this.getUniqueId());
 		this.add(copy);
-		this.undo(copy, newpos, NacCardUndo.Type.COPY);
+		this.undo(copy, newPosition, NacCardUndo.Type.COPY);
 		NacUtility.snackbar(this.mRootView, "Copied alarm.", "UNDO", this);
 	}
 
@@ -177,16 +185,17 @@ public class NacCardAdapter
 	 *
 	 * @param  pos	The position of the alarm card to delete.
 	 */
-	public void delete(int pos)
+	public void delete(int position)
 	{
-		NacAlarm alarm = this.get(pos);
+		NacAlarm alarm = this.get(position);
 
 		this.mScheduler.cancel(alarm);
 		this.mDatabase.delete(alarm);
-		this.mAlarmList.remove(pos);
-		this.notifyItemRemoved(pos);
-		this.notifyItemRangeChanged(pos, this.getLastVisible(pos));
-		this.undo(alarm, pos, NacCardUndo.Type.DELETE);
+		this.mAlarmList.remove(position);
+		//notifyItemRemoved(pos);
+		//notifyItemRangeChanged(pos, this.getLastVisible(pos));
+		this.refresh(position);
+		this.undo(alarm, position, NacCardUndo.Type.DELETE);
 		NacUtility.snackbar(this.mRootView, "Deleted alarm.", "UNDO", this);
 	}
 
@@ -223,6 +232,36 @@ public class NacCardAdapter
 		}
 
 		return -1;
+	}
+
+	/**
+	 * Refresh cards on screen, around the given position.
+	 */
+	private void refresh(int position)
+	{
+		int size = this.size();
+		int start = 0;
+		int end = size;
+
+		for (int i=0; i < position; i++)
+		{
+			if (this.mRecyclerView.findViewHolderForAdapterPosition(i) != null)
+			{
+				start = i;
+				break;
+			}
+		}
+
+		for (int i=position; i < size; i++)
+		{
+			if (this.mRecyclerView.findViewHolderForAdapterPosition(i) == null)
+			{
+				end = i-1;
+				break;
+			}
+		}
+
+		notifyItemRangeChanged(start, end-start);
 	}
 
 	/**
@@ -339,11 +378,12 @@ public class NacCardAdapter
 	 * @param  pos	The position of the alarm to copy.
 	 */
 	@Override
-	public void onItemCopy(int pos)
+	public void onItemCopy(int position)
 	{
 		//this.mTouchHelper.reset();
-		this.notifyItemChanged(pos);
-		this.copy(pos);
+		//notifyItemChanged(pos);
+		this.refresh(position);
+		this.copy(position);
 	}
 
 	/**
@@ -352,11 +392,11 @@ public class NacCardAdapter
 	 * @param  pos	The position of the alarm to delete.
 	 */
 	@Override
-	public void onItemDelete(int pos)
+	public void onItemDelete(int position)
 	{
-		// Should i reset the touch helper here?
-		this.notifyItemChanged(pos);
-		this.delete(pos);
+		//notifyItemChanged(pos);
+		this.refresh(position);
+		this.delete(position);
 	}
 
 	/**
@@ -377,7 +417,7 @@ public class NacCardAdapter
 		this.mDatabase.swap(fromAlarm, toAlarm);
 		this.mScheduler.add(fromAlarm);
 		this.mScheduler.add(toAlarm);
-		this.notifyItemMoved(fromIndex, toIndex);
+		notifyItemMoved(fromIndex, toIndex);
 	}
 
 	/**

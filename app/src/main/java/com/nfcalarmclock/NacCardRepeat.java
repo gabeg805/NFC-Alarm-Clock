@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.CheckBox;
+import android.widget.Switch;
 import android.widget.TextView;
 
 /**
@@ -35,6 +36,11 @@ public class NacCardRepeat
 	private NacDayOfWeek mDayOfWeek;
 
 	/**
+	 * On/off switch.
+	 */
+	 private Switch mSwitch;
+
+	/**
 	 */
 	public NacCardRepeat(View root)
 	{
@@ -43,7 +49,11 @@ public class NacCardRepeat
 		this.mTextView = (TextView) root.findViewById(R.id.nacRepeatText);
 		this.mCheckBox = (CheckBox) root.findViewById(R.id.nacRepeatCheckbox);
 		this.mDayOfWeek = (NacDayOfWeek) root.findViewById(R.id.nacRepeatDays);
+		this.mSwitch = (Switch) root.findViewById(R.id.nacSwitch);
+		this.mRoot = root;
 	}
+
+	private View mRoot;
 
 	/**
 	 * Initialize the repeat text, checkbox, and day buttons.
@@ -68,6 +78,15 @@ public class NacCardRepeat
 	@Override
 	public void onCheckedChanged(CompoundButton v, boolean state)
 	{
+		//if (!state)
+		//{
+		//	this.mDayOfWeek.setVisibility(View.GONE);
+		//}
+		//else
+		//{
+		//	this.mDayOfWeek.setVisibility(View.VISIBLE);
+		//}
+
 		this.mAlarm.setRepeat(state);
 		this.mAlarm.changed();
 	}
@@ -80,8 +99,15 @@ public class NacCardRepeat
 	public void onClick(NacDayButton button, int index)
 	{
 		this.mAlarm.toggleIndex(index);
-		this.setRepeatText();
+
+		if (this.mAlarm.getDays().isEmpty())
+		{
+			this.mSwitch.setChecked(false);
+			this.mAlarm.setEnabled(false);
+		}
+
 		this.mAlarm.changed();
+		this.setRepeatText();
 	}
 
 	/**

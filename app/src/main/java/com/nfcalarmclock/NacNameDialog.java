@@ -8,7 +8,6 @@ import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -68,6 +67,7 @@ public class NacNameDialog
 		this.mEditText.setRawInputType(InputType.TYPE_CLASS_TEXT);
 		this.mEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
 		this.mEditText.setBackgroundTintList(ColorStateList.valueOf(shared.getThemeColor()));
+		this.showKeyboard();
 		this.scale(0.8, 0.5, false, true);
 	}
 
@@ -92,29 +92,12 @@ public class NacNameDialog
 	{
 		if ((event == null) && (action == EditorInfo.IME_ACTION_DONE))
 		{
-			closeKeyboard(tv);
 			this.dismiss();
 
 			return true;
 		}
 
 		return false;
-	}
-
-	/**
-	 * Close the keyboard.
-	 */
-	private void closeKeyboard(TextView tv)
-	{
-		this.mEditText.clearFocus();
-
-		Context context = tv.getContext();
-		String name = Context.INPUT_METHOD_SERVICE;
-		int flags = InputMethodManager.RESULT_UNCHANGED_SHOWN;
-		Object service = context.getSystemService(name);
-		InputMethodManager manager = (InputMethodManager) service;
-
-		manager.hideSoftInputFromWindow(tv.getWindowToken(), flags);
 	}
 
 }

@@ -83,6 +83,7 @@ public class NacPreferenceColor
 
 		this.mImageView.setColorFilter(this.mValue, PorterDuff.Mode.SRC);
 		persistInt(this.mValue);
+		callChangeListener(this.mValue);
 
 		return true;
 	}

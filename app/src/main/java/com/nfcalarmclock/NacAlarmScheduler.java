@@ -76,11 +76,12 @@ public class NacAlarmScheduler
 	 */
 	public void cancel(NacAlarm alarm)
 	{
-		List<Calendar> calendars = NacCalendar.toCalendars(alarm);
+		Calendar calendar = Calendar.getInstance();
 
-		for (Calendar c : calendars)
+		for (NacCalendar.Day d : NacCalendar.WEEK)
 		{
-			this.cancel(alarm, c);
+			calendar.set(Calendar.DAY_OF_WEEK, NacCalendar.toCalendarDay(d));
+			this.cancel(alarm, calendar);
 		}
 	}
 

@@ -13,7 +13,6 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -70,22 +69,6 @@ public class NacColorPickerDialog
 	@Override
 	public void beforeTextChanged(CharSequence seq, int start, int count, int after)
 	{
-	}
-
-	/**
-	 * Close the keyboard.
-	 */
-	private void closeKeyboard(TextView tv)
-	{
-		this.mEditText.clearFocus();
-
-		Context context = tv.getContext();
-		String name = Context.INPUT_METHOD_SERVICE;
-		int flags = InputMethodManager.RESULT_UNCHANGED_SHOWN;
-		Object service = context.getSystemService(name);
-		InputMethodManager manager = (InputMethodManager) service;
-
-		manager.hideSoftInputFromWindow(tv.getWindowToken(), flags);
 	}
 
 	/**
@@ -154,9 +137,9 @@ public class NacColorPickerDialog
 			String name = this.mEditText.getText().toString();
 			int color = Color.parseColor(name);
 
-			closeKeyboard(tv);
 			this.mColorPicker.setColor(color);
 			this.mColorExample.setColorFilter(color, PorterDuff.Mode.SRC);
+			this.closeKeyboard();
 
 			return true;
 		}
