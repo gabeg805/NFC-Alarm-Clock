@@ -34,6 +34,40 @@ public class NacPreferenceSnoozeDuration
 	}
 
 	/**
+	 * @return The auto dismiss value in string form.
+	 */
+	public String indexToString(int index)
+	{
+		int min = this.getMinValue();
+
+		if ((index >= min) && (index < 4))
+		{
+			return String.valueOf(index+1);
+		}
+		else
+		{
+			return String.valueOf((index-3)*5);
+		}
+	}
+
+	/**
+	 * @return The time units for the summary.
+	 */
+	public String indexToUnit(int index)
+	{
+		int min = this.getMinValue();
+
+		if (index == min)
+		{
+			return " minute";
+		}
+		else
+		{
+			return " minutes";
+		}
+	}
+
+	/**
 	 */
 	@Override
 	public String getDialogTitle()
@@ -46,7 +80,7 @@ public class NacPreferenceSnoozeDuration
 	@Override
 	public int getMaxValue()
 	{
-		return 18;
+		return 21;
 	}
 
 	/**
@@ -63,10 +97,10 @@ public class NacPreferenceSnoozeDuration
 	@Override
 	public CharSequence getSummary()
 	{
-		int min = this.getMinValue();
+		String duration = this.indexToString(this.mValue);
+		String unit = this.indexToUnit(this.mValue);
 
-		return (this.mValue == min) ? "1 minute" :
-			String.valueOf(5*this.mValue)+" minutes";
+		return duration + unit;
 	}
 
 	/**
@@ -75,7 +109,8 @@ public class NacPreferenceSnoozeDuration
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		return (Integer) a.getInteger(index, 1);
+		return (Integer) a.getInteger(index,
+			NacSharedPreferences.DEFAULT_SNOOZE_DURATION_INDEX);
 	}
 
 	/**
@@ -88,11 +123,10 @@ public class NacPreferenceSnoozeDuration
 		int min = this.getMinValue();
 		int length = max+1;
 		String[] values = new String[length];
-		values[0] = "1";
 
-		for (int i=1; i < length; i++)
+		for (int i=0; i < length; i++)
 		{
-			values[i] = String.valueOf(5*i);
+			values[i] = this.indexToString(i);
 		}
 
 		this.mPicker.setMinValue(min);

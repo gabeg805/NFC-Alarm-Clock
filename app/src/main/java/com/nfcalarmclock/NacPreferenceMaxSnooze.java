@@ -86,7 +86,8 @@ public class NacPreferenceMaxSnooze
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		return (Integer) a.getInteger(index, this.getMaxValue());
+		return (Integer) a.getInteger(index,
+			NacSharedPreferences.DEFAULT_MAX_SNOOZE_INDEX);
 	}
 
 	/**

@@ -104,6 +104,21 @@ public class NacSharedPreferences
 	public static final int DEFAULT_SNOOZE_DURATION = 5;
 
 	/**
+	 * Default auto dismiss index value.
+	 */
+	public static final int DEFAULT_AUTO_DISMISS_INDEX = 7;
+
+	/**
+	 * Default max snooze index value.
+	 */
+	public static final int DEFAULT_MAX_SNOOZE_INDEX = 11;
+
+	/**
+	 * Default snooze duration index value.
+	 */
+	public static final int DEFAULT_SNOOZE_DURATION_INDEX = 4;
+
+	/**
 	 * Default days.
 	 */
 	public static final int DEFAULT_DAYS = NacCalendar.daysToValue(

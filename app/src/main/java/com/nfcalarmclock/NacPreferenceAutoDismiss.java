@@ -34,6 +34,48 @@ public class NacPreferenceAutoDismiss
 	}
 
 	/**
+	 * @return The auto dismiss value in string form.
+	 */
+	public String indexToString(int index)
+	{
+		int min = this.getMinValue();
+
+		if (index == min)
+		{
+			return "Off";
+		}
+		else if ((index > min) && (index < 5))
+		{
+			return String.valueOf(index);
+		}
+		else
+		{
+			return String.valueOf((index-4)*5);
+		}
+	}
+
+	/**
+	 * @return The time units for the summary.
+	 */
+	public String indexToUnit(int index)
+	{
+		int min = this.getMinValue();
+
+		if (index == min)
+		{
+			return "";
+		}
+		else if (index == 1)
+		{
+			return " minute";
+		}
+		else
+		{
+			return " minutes";
+		}
+	}
+
+	/**
 	 */
 	@Override
 	public String getDialogTitle()
@@ -46,7 +88,7 @@ public class NacPreferenceAutoDismiss
 	@Override
 	public int getMaxValue()
 	{
-		return 13;
+		return 16;
 	}
 
 	/**
@@ -63,17 +105,10 @@ public class NacPreferenceAutoDismiss
 	@Override
 	public CharSequence getSummary()
 	{
-		int min = this.getMinValue();
+		String dismiss = this.indexToString(this.mValue);
+		String unit = this.indexToUnit(this.mValue);
 
-		if (this.mValue == min)
-		{
-			return "Off";
-		}
-		else
-		{
-			return (this.mValue == 1) ? "1 minute"
-				: String.valueOf((this.mValue-1)*5)+" minutes";
-		}
+		return dismiss + unit;
 	}
 
 	/**
@@ -82,7 +117,8 @@ public class NacPreferenceAutoDismiss
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		return (Integer) a.getInteger(index, 4);
+		return (Integer) a.getInteger(index,
+			NacSharedPreferences.DEFAULT_AUTO_DISMISS_INDEX);
 	}
 
 	/**
@@ -95,12 +131,10 @@ public class NacPreferenceAutoDismiss
 		int min = this.getMinValue();
 		int length = max+1;
 		String[] values = new String[length];
-		values[0] = "Off";
-		values[1] = "1";
 
-		for (int i=2; i < length; i++)
+		for (int i=0; i < length; i++)
 		{
-			values[i] = String.valueOf((i-1)*5);
+			values[i] = this.indexToString(i);
 		}
 
 		this.mPicker.setMinValue(min);

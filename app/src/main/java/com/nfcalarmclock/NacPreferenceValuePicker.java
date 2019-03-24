@@ -14,7 +14,7 @@ import android.widget.NumberPicker;
  */
 public abstract class NacPreferenceValuePicker
 	extends Preference
-	implements Preference.OnPreferenceClickListener,NacDialog.OnDismissListener,NacDialog.OnBuildListener,NacDialog.OnShowListener,View.OnClickListener
+	implements Preference.OnPreferenceClickListener,View.OnClickListener,NumberPicker.OnValueChangeListener,NacDialog.OnDismissListener,NacDialog.OnBuildListener,NacDialog.OnShowListener
 {
 
 	/**
@@ -186,10 +186,11 @@ public abstract class NacPreferenceValuePicker
 		ImageButton decrement = root.findViewById(R.id.decrement);
 
 		setupValuePicker(root);
-		increment.setOnClickListener(this);
-		decrement.setOnClickListener(this);
 		increment.setTag(Direction.INCREMENT);
 		decrement.setTag(Direction.DECREMENT);
+		increment.setOnClickListener(this);
+		decrement.setOnClickListener(this);
+		this.mPicker.setOnValueChangedListener(this);
 	}
 
 	/**
@@ -208,6 +209,14 @@ public abstract class NacPreferenceValuePicker
 
 			persistInt(this.mValue);
 		}
+	}
+
+	/**
+	 * Value in the NumberPicker has changed.
+	 */
+	public void onValueChange(NumberPicker picker, int oldVal, int newVal)
+	{
+		this.mValue = newVal;
 	}
 
 }
