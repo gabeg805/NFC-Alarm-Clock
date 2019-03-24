@@ -38,7 +38,7 @@ public class NacPreferenceName
 	public NacPreferenceName(Context context, AttributeSet attrs, int style)
 	{
 		super(context, attrs, style);
-		setLayoutResource(R.layout.pref_name);
+		setLayoutResource(R.layout.nac_preference);
 		setOnPreferenceClickListener(this);
 	}
 
@@ -59,7 +59,7 @@ public class NacPreferenceName
 	protected void onBindView(View v)
 	{
 		super.onBindView(v);
-		this.setSummary(this.getSummary());
+		setSummary(this.getSummary());
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class NacPreferenceName
 		Object data = dialog.getData();
 		this.mValue = (data != null) ? (String) data : "";
 
-		this.setSummary(this.getSummary());
+		setSummary(this.getSummary());
 		persistString(this.mValue);
 
 		return true;

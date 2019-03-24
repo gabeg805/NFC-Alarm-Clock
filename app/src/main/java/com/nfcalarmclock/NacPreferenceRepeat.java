@@ -31,11 +31,6 @@ public class NacPreferenceRepeat
 	protected boolean mValue;
 
 	/**
-	 * Default constant value for the object.
-	 */
-	protected static final boolean DEFAULT = true;
-
-	/**
 	 * Summary text when enabling/disabling the preference.
 	 */
 	protected String[] mSummaryState;
@@ -59,7 +54,7 @@ public class NacPreferenceRepeat
 	public NacPreferenceRepeat(Context context, AttributeSet attrs, int style)
 	{
 		super(context, attrs, style);
-		setLayoutResource(R.layout.pref_repeat);
+		setLayoutResource(R.layout.nac_preference_widget);
 		setOnPreferenceClickListener(this);
 
 		Resources.Theme theme = context.getTheme();
@@ -127,7 +122,7 @@ public class NacPreferenceRepeat
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		return (boolean) a.getBoolean(index, DEFAULT);
+		return (boolean) a.getBoolean(index, NacSharedPreferences.DEFAULT_REPEAT);
 	}
 
 	/**

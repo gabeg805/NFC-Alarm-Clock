@@ -38,7 +38,7 @@
 		<com.nfcalarmclock.NacPreferenceRepeat
 			android:key="@string/pref_repeat_key"
 			android:title="@string/pref_repeat_title"
-			android:enabled="true"
+			android:widgetLayout="@layout/nac_preference_checkbox"
 			app:summaryEnabled="@string/pref_repeat_summary_enabled"
 			app:summaryDisabled="@string/pref_repeat_summary_disabled"
 			android:defaultValue="true"
@@ -47,6 +47,7 @@
 		<com.nfcalarmclock.NacPreferenceVibrate
 			android:key="@string/pref_vibrate_key"
 			android:title="@string/pref_vibrate_title"
+			android:widgetLayout="@layout/nac_preference_checkbox"
 			app:summaryEnabled="@string/pref_vibrate_summary_enabled"
 			app:summaryDisabled="@string/pref_vibrate_summary_disabled"
 			android:defaultValue="true"
@@ -82,6 +83,7 @@
 			android:key="@string/pref_theme_color_key"
 			android:title="@string/pref_theme_color_title"
 			android:summary="@string/pref_theme_color_summary"
+			android:widgetLayout="@layout/nac_preference_color"
 			android:defaultValue="0xfffb8c00"
 			/>
 
@@ -89,6 +91,7 @@
 			android:key="@string/pref_name_color_key"
 			android:title="@string/pref_name_color_title"
 			android:summary="@string/pref_name_color_summary"
+			android:widgetLayout="@layout/nac_preference_color"
 			android:defaultValue="0xff00c0fb"
 			/>
 
@@ -96,6 +99,7 @@
 			android:key="@string/pref_days_color_key"
 			android:title="@string/pref_days_color_title"
 			android:summary="@string/pref_days_color_summary"
+			android:widgetLayout="@layout/nac_preference_color"
 			android:defaultValue="0xfffb8c00"
 			/>
 
@@ -103,6 +107,7 @@
 			android:key="@string/pref_time_color_key"
 			android:title="@string/pref_time_color_title"
 			android:summary="@string/pref_time_color_summary"
+			android:widgetLayout="@layout/nac_preference_color"
 			android:defaultValue="0xffffffff"
 			/>
 
@@ -110,6 +115,7 @@
 			android:key="@string/pref_am_color_key"
 			android:title="@string/pref_am_color_title"
 			android:summary="@string/pref_am_color_summary"
+			android:widgetLayout="@layout/nac_preference_color"
 			android:defaultValue="0xffffffff"
 			/>
 
@@ -117,6 +123,7 @@
 			android:key="@string/pref_pm_color_key"
 			android:title="@string/pref_pm_color_title"
 			android:summary="@string/pref_pm_color_summary"
+			android:widgetLayout="@layout/nac_preference_color"
 			android:defaultValue="0xffffffff"
 			/>
 

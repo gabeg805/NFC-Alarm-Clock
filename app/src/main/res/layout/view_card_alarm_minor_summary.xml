@@ -6,7 +6,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:layout_below="@id/alarmMajor"
-	android:layout_marginTop="@dimen/mb_card_major_minor_spacing">
+	android:layout_marginTop="@dimen/mt_card_minor_spacing">
 
 	<TextView
 		android:id="@+id/nacRepeatTextName"
@@ -34,7 +34,7 @@
 		android:id="@+id/nacExpand"
 		android:layout_width="@dimen/isz_expand"
 		android:layout_height="@dimen/isz_expand"
-		android:layout_marginEnd="@dimen/sp_text"
+		android:layout_marginEnd="@dimen/mr_card_expand"
 		android:layout_alignBottom="@id/nacRepeatText"
 		android:layout_alignParentEnd="true"
 		android:layout_gravity="end"

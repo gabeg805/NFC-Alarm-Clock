@@ -111,7 +111,8 @@
 	<!-- Content description -->
 	<string name="decrement">Decrement the value</string>
 	<string name="increment">Increment the value</string>
-	<string name="color_selector">Select a color on the color picker</string>
+	<string name="color_selector">Select a color for the color picker</string>
+	<string name="shader_selector">Select a shade for the color picker</string>
 	<string name="nfc_instructions">Scan NFC Tag to dismiss the alarm.</string>
 	<string name="copy">COPY</string>
 	<string name="delete">DELETE</string>

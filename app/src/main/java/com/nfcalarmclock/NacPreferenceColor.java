@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
@@ -51,7 +52,7 @@ public class NacPreferenceColor
 	public NacPreferenceColor(Context context, AttributeSet attrs, int style)
 	{
 		super(context, attrs, style);
-		setLayoutResource(R.layout.pref_color);
+		setLayoutResource(R.layout.nac_preference_widget);
 		setOnPreferenceClickListener(this);
 
 		Resources.Theme theme = context.getTheme();
@@ -69,7 +70,7 @@ public class NacPreferenceColor
 
 		this.mImageView = (ImageView) v.findViewById(R.id.widget);
 
-		this.mImageView.setBackgroundColor(this.mValue);
+		this.mImageView.setColorFilter(this.mValue, PorterDuff.Mode.SRC);
 	}
 
 	/**
@@ -80,7 +81,7 @@ public class NacPreferenceColor
 	{
 		this.mValue = ((NacColorPickerDialog)dialog).getColor();
 
-		this.mImageView.setBackgroundColor(this.mValue);
+		this.mImageView.setColorFilter(this.mValue, PorterDuff.Mode.SRC);
 		persistInt(this.mValue);
 
 		return true;
@@ -120,7 +121,7 @@ public class NacPreferenceColor
 		dialog.build(context, R.layout.dlg_color_picker);
 		dialog.setNeutralButton("Default");
 		dialog.show();
-		dialog.scale(0.75, 0.8, false, true);
+		dialog.scale(0.75, 0.85, false, true);
 		dialog.setColor(this.mValue);
 
 		return true;

@@ -5,8 +5,8 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="vertical"
-	android:paddingTop="@dimen/spt_dlg"
-	android:paddingBottom="@dimen/spb_dlg">
+	android:paddingTop="@dimen/spt_dlg_days"
+	android:paddingBottom="@dimen/spb_dlg_days">
 
 
 	<com.nfcalarmclock.NacDayOfWeek

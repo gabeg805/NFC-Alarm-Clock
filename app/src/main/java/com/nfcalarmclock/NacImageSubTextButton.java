@@ -62,7 +62,7 @@ public class NacImageSubTextButton
 
 				this.imageColor = ta.getColor(R.styleable.NacImageSubTextButton_nacDrawableColor, Color.WHITE);
 				this.imageHeight = (int) ta.getDimension(R.styleable.NacImageSubTextButton_nacDrawableHeight, 2*textsize);
-				this.imageId = ta.getResourceId(R.styleable.NacImageSubTextButton_nacDrawable, R.drawable.circle);
+				this.imageId = ta.getResourceId(R.styleable.NacImageSubTextButton_nacDrawable, 0);
 				this.imageWidth = (int) ta.getDimension(R.styleable.NacImageSubTextButton_nacDrawableWidth, 2*textsize);
 				this.spacing= (int) ta.getDimension(R.styleable.NacImageSubTextButton_nacSpacing, spacing);
 				this.textSize = (int) ta.getDimension(R.styleable.NacImageSubTextButton_nacTextSize, textsize);

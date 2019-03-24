@@ -1,2 +1,0 @@
-- Add slider to color picker
-- Fix positioning of alarms when closing and opening app.

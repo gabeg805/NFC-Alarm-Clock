@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -155,7 +156,7 @@ public class NacColorPickerDialog
 
 			closeKeyboard(tv);
 			this.mColorPicker.setColor(color);
-			this.mColorExample.setBackgroundColor(color);
+			this.mColorExample.setColorFilter(color, PorterDuff.Mode.SRC);
 
 			return true;
 		}
@@ -182,7 +183,7 @@ public class NacColorPickerDialog
 		this.mEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
 		this.mEditText.setBackgroundTintList(ColorStateList.valueOf(shared.getThemeColor()));
 		this.mColorPicker.setOnTouchListener(this);
-		this.mColorExample.setBackgroundColor(this.getColor());
+		this.mColorExample.setColorFilter(this.getColor(), PorterDuff.Mode.SRC);
 	}
 
 	/**
@@ -204,7 +205,7 @@ public class NacColorPickerDialog
 		int color = this.getColor();
 		String hex = this.getHexColor();
 
-		this.mColorExample.setBackgroundColor(color);
+		this.mColorExample.setColorFilter(color, PorterDuff.Mode.SRC);
 		this.mEditText.setText(hex);
 
 		return true;
@@ -215,9 +216,8 @@ public class NacColorPickerDialog
 	 */
 	public void setColor(int color)
 	{
-		NacUtility.printf("Set color : %d", color);
 		this.mColorPicker.setColor(color);
-		this.mColorExample.setBackgroundColor(color);
+		this.mColorExample.setColorFilter(color, PorterDuff.Mode.SRC);
 
 		String hex = this.mColorPicker.getHexColor();
 

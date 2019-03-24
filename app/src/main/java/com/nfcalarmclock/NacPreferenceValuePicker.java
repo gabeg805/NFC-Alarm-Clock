@@ -65,7 +65,7 @@ public abstract class NacPreferenceValuePicker
 	public NacPreferenceValuePicker(Context context, AttributeSet attrs, int style)
 	{
 		super(context, attrs, style);
-		setLayoutResource(R.layout.pref_value_picker);
+		setLayoutResource(R.layout.nac_preference);
 		setOnPreferenceClickListener(this);
 
 		this.mPicker = null;

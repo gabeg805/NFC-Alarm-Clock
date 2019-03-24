@@ -27,7 +27,11 @@
 		<item name="nacTextSize">@dimen/tsz_card_days</item>
 		<item name="nacText"></item>
 		<item name="nacBackgroundColor">?attr/colorCardExpanded</item>
-		<item name="nacDrawable">@drawable/circle</item>
+		<item name="nacDrawable">@drawable/day_button</item>
+	</style>
+
+	<style name="NacColorPicker">
+		<item name="nacSpacing">?dialogPreferredPadding</item>
 	</style>
 
 </resources>

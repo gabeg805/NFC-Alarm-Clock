@@ -5,24 +5,27 @@
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	android:orientation="vertical"
-	android:paddingTop="10dp"
-	android:paddingBottom="-10dp"
+	android:paddingTop="@dimen/pad_tweak"
 	android:paddingStart="?dialogPreferredPadding"
-	android:paddingEnd="?dialogPreferredPadding">
+	android:paddingEnd="?dialogPreferredPadding"
+	android:clipChildren="false">
 
 
 	<com.nfcalarmclock.NacColorPicker
 		android:id="@+id/color_picker"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="?dialogPreferredPadding"
+		android:layout_marginTop="@dimen/mt_color_picker"
+		android:layout_marginBottom="@dimen/mb_color_picker"
+		android:layout_marginStart="@dimen/mh_color_picker"
+		android:layout_marginEnd="@dimen/mh_color_picker"
+		app:nacSpacing="@dimen/sp_color_picker"
 		/>
 
 	<LinearLayout
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/isz_color_example"
-		android:layout_marginBottom="@dimen/isz_color_example"
+		android:layout_marginBottom="@dimen/mb_color_example"
 		android:orientation="horizontal"
 		android:layout_gravity="center_horizontal">
 
@@ -31,15 +34,17 @@
 			android:layout_width="@dimen/isz_color_example"
 			android:layout_height="@dimen/isz_color_example"
 			android:layout_gravity="center_vertical"
-			android:layout_marginEnd="@dimen/m_color_example"
+			android:layout_marginEnd="@dimen/mr_color_example"
 			android:contentDescription="@null"
+			android:src="@drawable/color_example"
 			/>
 
 		<EditText
 			android:id="@+id/color_value"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginStart="-5dp"
+			android:layout_marginStart="@dimen/sp_tweak"
+			android:layout_gravity="fill"
 			android:textAppearance="?android:attr/textAppearanceSmall"
 			android:inputType="textNoSuggestions"
 			android:hint="@string/dlg_color_hint"

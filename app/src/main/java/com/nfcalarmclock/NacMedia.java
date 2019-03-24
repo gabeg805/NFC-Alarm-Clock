@@ -69,7 +69,7 @@ public class NacMedia
 	 */
 	public static String getMediaName(Context context, String path)
 	{
-		if (path.isEmpty())
+		if ((path == null) || path.isEmpty())
 		{
 			return "";
 		}
@@ -93,7 +93,11 @@ public class NacMedia
 	{
 		String path = media;
 
-		if (media.startsWith("content://"))
+		if ((media == null) || media.isEmpty())
+		{
+			return "";
+		}
+		else if (media.startsWith("content://"))
 		{
 			Uri uri = Uri.parse(media);
 			Cursor cursor = context.getContentResolver().query(uri,

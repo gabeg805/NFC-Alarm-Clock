@@ -5,9 +5,16 @@
 		android:id="@+id/color_selector"
 		android:layout_width="@dimen/isz_color_selector"
 		android:layout_height="@dimen/isz_color_selector"
-		android:tint="@color/black"
-		android:src="@mipmap/baseline_panorama_fish_eye_white_48dp"
 		android:contentDescription="@string/color_selector"
+		android:src="@drawable/color_selector"
+		/>
+
+	<ImageView
+		android:id="@+id/shader_selector"
+		android:layout_width="@dimen/isz_shader_selector"
+		android:layout_height="wrap_content"
+		android:contentDescription="@string/shader_selector"
+		android:src="@drawable/shader_selector"
 		/>
 
 </merge>

@@ -259,8 +259,6 @@ public class NacCardAdapter
 	{
 		NacAlarm alarm = this.get(pos);
 
-		alarm.print();
-
 		alarm.setOnChangeListener(this);
 		card.init(alarm, this.mWasAdded);
 		card.setOnDeleteListener(this);

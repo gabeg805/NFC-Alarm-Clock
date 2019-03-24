@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:padding="?android:attr/listPreferredItemPaddingLeft"
 	android:minHeight="?android:attr/listPreferredItemHeight"
 	android:gravity="center_vertical"
-	android:background="?android:attr/selectableItemBackground">
+	android:padding="?android:attr/listPreferredItemPaddingLeft"
+	android:baselineAligned="false"
+	tools:ignore="UselessParent">
 
 	<RelativeLayout
 		android:layout_width="0dp"
@@ -38,12 +40,5 @@
 			/>
 
 	</RelativeLayout>
-
-	<CheckBox
-		android:id="@+id/widget"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:focusable="false"
-		/>
 
 </LinearLayout>

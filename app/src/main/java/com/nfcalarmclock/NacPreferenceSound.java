@@ -38,7 +38,7 @@ public class NacPreferenceSound
 	public NacPreferenceSound(Context context, AttributeSet attrs, int style)
 	{
 		super(context, attrs, style);
-		setLayoutResource(R.layout.pref_sound);
+		setLayoutResource(R.layout.nac_preference);
 		setOnPreferenceClickListener(this);
 	}
 
@@ -63,7 +63,7 @@ public class NacPreferenceSound
 	protected void onBindView(View v)
 	{
 		super.onBindView(v);
-		this.setSummary(this.getSummary());
+		setSummary(this.getSummary());
 	}
 
 	/**
@@ -88,7 +88,7 @@ public class NacPreferenceSound
 
 		this.mValue = path;
 
-		this.setSummary(this.getSummary());
+		setSummary(this.getSummary());
 		persistString(this.mValue);
 	}
 

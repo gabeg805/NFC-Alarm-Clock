@@ -6,8 +6,7 @@
 	android:layout_height="match_parent"
 	android:gravity="center"
 	android:orientation="vertical"
-	android:paddingTop="10dp"
-	android:paddingBottom="-25dp"
+	android:paddingTop="@dimen/pad_tweak"
 	android:paddingStart="?dialogPreferredPadding"
 	android:paddingEnd="?dialogPreferredPadding"
 	tools:ignore="UseCompoundDrawables">
@@ -25,8 +24,8 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:gravity="start"
-		android:paddingTop="16dp"
-		android:textSize="12sp"
+		android:paddingTop="@dimen/pt_nfc_instructions"
+		android:textSize="@dimen/tsz_nfc_instructions"
 		android:text="@string/nfc_instructions"
 		/>
 

@@ -40,7 +40,7 @@ public class NacPreferenceDays
 	public NacPreferenceDays(Context context, AttributeSet attrs, int style)
 	{
 		super(context, attrs, style);
-		setLayoutResource(R.layout.pref_days);
+		setLayoutResource(R.layout.nac_preference);
 		setOnPreferenceClickListener(this);
 	}
 

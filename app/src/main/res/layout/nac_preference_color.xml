@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/widget"
+	android:layout_width="@dimen/isz_color_example"
+	android:layout_height="@dimen/isz_color_example"
+	android:contentDescription="@null"
+	android:src="@drawable/color_example"
+	/>

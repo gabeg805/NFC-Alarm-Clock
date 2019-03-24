@@ -71,7 +71,7 @@ public class NacDayButton
 				this.textSize = (int) ta.getDimension(R.styleable.NacDayButton_nacTextSize, textsize);
 				this.text = ta.getString(R.styleable.NacDayButton_nacText);
 				this.backgroundColor = ta.getColor(R.styleable.NacDayButton_nacBackgroundColor, Color.WHITE);
-				this.drawable = ta.getResourceId(R.styleable.NacDayButton_nacDrawable, R.drawable.circle);
+				this.drawable = ta.getResourceId(R.styleable.NacDayButton_nacDrawable, R.drawable.day_button);
 			}
 			finally
 			{

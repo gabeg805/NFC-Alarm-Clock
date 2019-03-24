@@ -38,6 +38,12 @@
 		<attr name="nacDrawable" />
 	</declare-styleable>
 
+	<declare-styleable name="NacColorPicker">
+		<attr name="nacWidth" />
+		<attr name="nacHeight" />
+		<attr name="nacSpacing" />
+	</declare-styleable>
+
 	<!-- <declare-styleable name="NacSharedAttr"> -->
 		<attr name="nacWidth" format="reference|dimension" />
 		<attr name="nacHeight" format="reference|dimension" />

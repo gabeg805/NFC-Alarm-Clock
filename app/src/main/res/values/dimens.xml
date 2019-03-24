@@ -1,6 +1,9 @@
 <resources>
 
-	<!-- VIEWS -->
+	<!-- GENERAL -->
+	<dimen name="pad_tweak">10dp</dimen>
+	<dimen name="sp_tweak">-5dp</dimen>
+	<dimen name="rad_general">3dp</dimen>
 
 	<!-- Floating button -->
 	<dimen name="m_fab">16dp</dimen>
@@ -8,7 +11,17 @@
 	<!-- Switch -->
 	<dimen name="sz_switch">58dp</dimen>
 
-	<!-- CardView -->
+	<!-- NacImageTextButton -->
+	<dimen name="isz_itb">22dp</dimen>
+	<dimen name="sp_itb">10dp</dimen>
+
+	<!-- Copy/delete alarms -->
+	<dimen name="ml_copy">10dp</dimen>
+	<dimen name="mr_delete">10dp</dimen>
+	<dimen name="isz_copy">30dp</dimen>
+	<dimen name="isz_delete">30dp</dimen>
+
+	<!-- Alarm card -->
 	<dimen name="elv_card">5dp</dimen>
 	<dimen name="mt_card">10dp</dimen>
 	<dimen name="mb_card">10dp</dimen>
@@ -16,34 +29,49 @@
 	<dimen name="mr_card">16dp</dimen>
 	<dimen name="sp_card">10dp</dimen>
 	<dimen name="sp_text">4dp</dimen>
-
-	<dimen name="ml_card_meridian">5dp</dimen>
-	<dimen name="mb_card_expand">10dp</dimen>
-	<dimen name="mb_card_major_minor_spacing">4dp</dimen>
 	<dimen name="mb_card_item_spacing">14dp</dimen>
-	<dimen name="mb_card_item_half_spacing">7dp</dimen>
-
+	<dimen name="mb_card_divider">16dp</dimen>
+	<dimen name="mt_card_minor_spacing">4dp</dimen>
 	<dimen name="tsz_card">13sp</dimen>
+	<dimen name="isz_card_divider">2dp</dimen>
+
+	<!-- Time -->
+	<dimen name="ml_card_meridian">5dp</dimen>
 	<dimen name="tsz_card_time">38sp</dimen>
 	<dimen name="tsz_card_meridian">14sp</dimen>
-	<dimen name="tsz_card_repeat">12sp</dimen>
-	<dimen name="tsz_card_name">12sp</dimen>
-	<dimen name="tsz_card_days">13sp</dimen>
 
-	<!-- Expand/collapse button -->
+	<!-- Repeat -->
+	<dimen name="sp_card_days">10dp</dimen>
+	<dimen name="tsz_card_repeat">12sp</dimen>
+	<dimen name="tsz_card_days">13sp</dimen>
+	<dimen name="isz_circle">30dp</dimen>
+
+	<!-- Sound -->
+	<dimen name="mb_card_center_sound">5dp</dimen>
+
+	<!-- Name -->
+	<dimen name="mb_card_name">8dp</dimen>
+	<dimen name="tsz_card_name">12sp</dimen>
+
+	<!-- Expand/collapse buttons -->
+	<dimen name="mb_card_expand">10dp</dimen>
+	<dimen name="mr_card_expand">14dp</dimen>
+	<dimen name="mr_card_collapse">14dp</dimen>
+	<dimen name="mt_card_center_collapse">3dp</dimen>
 	<dimen name="isz_expand">20dp</dimen>
 	<dimen name="isz_collapse">20dp</dimen>
 
-	<!-- DayOfWeekButton -->
-	<dimen name="isz_circle">30dp</dimen>
+	<!-- Activity alarm -->
+	<dimen name="pt_nfc_instructions">16dp</dimen>
+	<dimen name="tsz_nfc_instructions">12sp</dimen>
 
-	<!-- NacImageTextButton -->
-	<dimen name="isz_card">22dp</dimen>
+	<!-- Dialog days -->
+	<dimen name="spt_dlg_days">10dp</dimen>
+	<dimen name="spb_dlg_days">-25dp</dimen>
 
-	<!-- DIALOGS -->
-
-	<dimen name="spt_dlg">10dp</dimen>
-	<dimen name="spb_dlg">-25dp</dimen>
+	<!-- Dialog name -->
+	<dimen name="spt_dlg_name">10dp</dimen>
+	<dimen name="spb_dlg_name">-25dp</dimen>
 
 	<!-- Sound prompt -->
 	<dimen name="mb_dlg_sound_prompt">8dp</dimen>
@@ -62,11 +90,20 @@
 	<dimen name="isz_dlg_music">30dp</dimen>
 
 	<!-- Color dialog -->
-	<dimen name="m_color_example">15dp</dimen>
+	<dimen name="mr_color_example">15dp</dimen>
+	<dimen name="mb_color_example">30dp</dimen>
+	<dimen name="mt_color_picker">15dp</dimen>
+	<dimen name="mh_color_picker">15dp</dimen>
+	<dimen name="mb_color_picker">40dp</dimen>
+	<dimen name="sp_color_picker">35dp</dimen>
 	<dimen name="isz_color_example">30dp</dimen>
 	<dimen name="isz_color_selector">15dp</dimen>
+	<dimen name="isz_shader_selector">6dp</dimen>
+	<dimen name="rad_shader">5dp</dimen>
 
 	<!-- Preference Days -->
+	<dimen name="tsz_title">16sp</dimen>
+	<dimen name="tsz_summary">14sp</dimen>
 	<dimen name="m_dlg_alarm_days">25dp</dimen>
 	<dimen name="m_dlg_alarm_name">10dp</dimen>
 

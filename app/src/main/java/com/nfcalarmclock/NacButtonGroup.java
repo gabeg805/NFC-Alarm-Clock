@@ -62,9 +62,9 @@ public class NacButtonGroup
 			try
 			{
 				Resources res = context.getResources();
-				int spacing = (int) res.getDimension(R.dimen.sp_card);
-				float width = res.getDimension(R.dimen.isz_card);
-				float height = res.getDimension(R.dimen.isz_card);
+				int spacing = (int) res.getDimension(R.dimen.sp_card_days);
+				float width = res.getDimension(R.dimen.isz_circle);
+				float height = res.getDimension(R.dimen.isz_circle);
 				int textsize = (int) res.getDimension(R.dimen.tsz_card_days);
 
 				this.paddingBottom = (int) ta.getDimension(R.styleable.NacButtonGroup_nacPaddingBottom, 0);
@@ -73,7 +73,7 @@ public class NacButtonGroup
 				this.paddingTop = (int) ta.getDimension(R.styleable.NacButtonGroup_nacPaddingTop, 0);
 				this.imageColor = ta.getColor(R.styleable.NacButtonGroup_nacDrawableColor, Color.WHITE);
 				this.imageHeight = (int) ta.getDimension(R.styleable.NacButtonGroup_nacDrawableHeight, height);
-				this.imageId = ta.getResourceId(R.styleable.NacButtonGroup_nacDrawable, R.drawable.circle);
+				this.imageId = ta.getResourceId(R.styleable.NacButtonGroup_nacDrawable, R.drawable.day_button);
 				this.imageWidth = (int) ta.getDimension(R.styleable.NacButtonGroup_nacDrawableWidth, width);
 				this.spacing= (int) ta.getDimension(R.styleable.NacButtonGroup_nacSpacing, spacing);
 				this.text = ta.getString(R.styleable.NacButtonGroup_nacText);

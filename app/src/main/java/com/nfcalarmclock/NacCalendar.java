@@ -83,6 +83,8 @@ public class NacCalendar
 			{
 				return d;
 			}
+
+			i++;
 		}
 
 		return Day.SUNDAY;

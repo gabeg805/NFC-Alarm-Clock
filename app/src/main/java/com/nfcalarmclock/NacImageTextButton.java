@@ -52,13 +52,13 @@ public class NacImageTextButton
 			try
 			{
 				Resources res = context.getResources();
-				int spacing = (int) res.getDimension(R.dimen.sp_card);
-				float width = res.getDimension(R.dimen.isz_card);
-				float height = res.getDimension(R.dimen.isz_card);
+				int spacing = (int) res.getDimension(R.dimen.sp_itb);
+				float width = res.getDimension(R.dimen.isz_itb);
+				float height = res.getDimension(R.dimen.isz_itb);
 				int textsize = (int) res.getDimension(R.dimen.tsz_card_days);
 				this.imageColor = ta.getColor(R.styleable.NacImageTextButton_nacDrawableColor, Color.WHITE);
 				this.imageHeight = (int) ta.getDimension(R.styleable.NacImageTextButton_nacDrawableHeight, height);
-				this.imageId = ta.getResourceId(R.styleable.NacImageTextButton_nacDrawable, R.drawable.circle);
+				this.imageId = ta.getResourceId(R.styleable.NacImageTextButton_nacDrawable, 0);
 				this.imageWidth = (int) ta.getDimension(R.styleable.NacImageTextButton_nacDrawableWidth, width);
 				this.spacing= (int) ta.getDimension(R.styleable.NacImageTextButton_nacSpacing, spacing);
 				this.text = ta.getString(R.styleable.NacImageTextButton_nacText);

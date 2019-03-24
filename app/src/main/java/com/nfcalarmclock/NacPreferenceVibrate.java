@@ -31,11 +31,6 @@ public class NacPreferenceVibrate
 	protected boolean mValue;
 
 	/**
-	 * Default constant value for the object.
-	 */
-	protected static final boolean DEFAULT = true;
-
-	/**
 	 * Summary text when enabling/disabling the preference.
 	 */
 	protected String[] mSummaryState;
@@ -59,7 +54,7 @@ public class NacPreferenceVibrate
 	public NacPreferenceVibrate(Context context, AttributeSet attrs, int style)
 	{
 		super(context, attrs, style);
-		setLayoutResource(R.layout.pref_vibrate);
+		setLayoutResource(R.layout.nac_preference_widget);
 		setOnPreferenceClickListener(this);
 
 		Resources.Theme theme = context.getTheme();
@@ -126,7 +121,7 @@ public class NacPreferenceVibrate
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		return (boolean) a.getBoolean(index, DEFAULT);
+		return (boolean) a.getBoolean(index, NacSharedPreferences.DEFAULT_VIBRATE);
 	}
 
 	/**
