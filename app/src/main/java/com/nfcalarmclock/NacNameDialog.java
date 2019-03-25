@@ -16,7 +16,9 @@ import android.widget.TextView;
  */
 public class NacNameDialog
 	extends NacDialog
-	implements TextView.OnEditorActionListener,NacDialog.OnDismissListener,NacDialog.OnShowListener
+	implements TextView.OnEditorActionListener,
+		NacDialog.OnDismissListener,
+		NacDialog.OnShowListener
 {
 
 	/**
@@ -32,8 +34,8 @@ public class NacNameDialog
 
 		this.mEditText = null;
 
-		this.addOnDismissListener(this);
-		this.addOnShowListener(this);
+		addOnDismissListener(this);
+		addOnShowListener(this);
 	}
 
 	/**
@@ -45,30 +47,8 @@ public class NacNameDialog
 		String title = "Set Alarm Name";
 
 		builder.setTitle(title);
-		this.setPositiveButton("OK");
-		this.setNegativeButton("Cancel");
-	}
-
-	/**
-	 * Setup the views when the dialog is shown.
-	 */
-	@Override
-	public void onShowDialog(NacDialog dialog, View root)
-	{
-		Context context = root.getContext();
-		NacSharedPreferences shared = new NacSharedPreferences(context);
-		Object data = this.getData();
-		String name = (data != null) ? (String) data : "";
-		this.mEditText = (EditText) root.findViewById(R.id.alarm_name);
-
-		this.mEditText.setText(name);
-		this.mEditText.selectAll();
-		this.mEditText.setOnEditorActionListener(this);
-		this.mEditText.setRawInputType(InputType.TYPE_CLASS_TEXT);
-		this.mEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-		this.mEditText.setBackgroundTintList(ColorStateList.valueOf(shared.getThemeColor()));
-		this.showKeyboard();
-		this.scale(0.8, 0.5, false, true);
+		setPositiveButton("OK");
+		setNegativeButton("Cancel");
 	}
 
 	/**
@@ -92,12 +72,34 @@ public class NacNameDialog
 	{
 		if ((event == null) && (action == EditorInfo.IME_ACTION_DONE))
 		{
-			this.dismiss();
+			dismiss();
 
 			return true;
 		}
 
 		return false;
+	}
+
+	/**
+	 * Setup the views when the dialog is shown.
+	 */
+	@Override
+	public void onShowDialog(NacDialog dialog, View root)
+	{
+		Context context = root.getContext();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
+		Object data = this.getData();
+		String name = (data != null) ? (String) data : "";
+		this.mEditText = (EditText) root.findViewById(R.id.alarm_name);
+
+		this.mEditText.setText(name);
+		this.mEditText.selectAll();
+		this.mEditText.setOnEditorActionListener(this);
+		this.mEditText.setRawInputType(InputType.TYPE_CLASS_TEXT);
+		this.mEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+		this.mEditText.setBackgroundTintList(ColorStateList.valueOf(shared.getThemeColor()));
+		showKeyboard();
+		scale(0.8, 0.5, false, true);
 	}
 
 }

@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * The alarm scheduler.
  */
-public class NacAlarmScheduler
+public class NacScheduler
 {
 
 	/**
@@ -27,7 +27,7 @@ public class NacAlarmScheduler
 
 	/**
 	 */
-	public NacAlarmScheduler(Context context)
+	public NacScheduler(Context context)
 	{
 		this.mContext = context;
 		this.mAlarmManager = (AlarmManager) context.getSystemService(
@@ -45,6 +45,11 @@ public class NacAlarmScheduler
 		}
 
 		List<Calendar> calendars = NacCalendar.nextCalendars(alarm);
+
+		if (calendars.isEmpty())
+		{
+			calendars.add(NacCalendar.toCalendarTodayOrTomorrow(alarm));
+		}
 
 		for (Calendar c : calendars)
 		{
@@ -147,7 +152,7 @@ public class NacAlarmScheduler
 	 */
 	public Intent getReceiverIntent()
 	{
-		return new Intent(this.getContext(), NacAlarmReceiver.class);
+		return new Intent(this.getContext(), NacBroadcastReceiver.class);
 	}
 
 	/**

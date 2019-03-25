@@ -46,7 +46,7 @@
 			android:layout_marginStart="@dimen/sp_tweak"
 			android:layout_gravity="fill"
 			android:textAppearance="?android:attr/textAppearanceSmall"
-			android:inputType="textNoSuggestions"
+			android:inputType="textNoSuggestions|textAutoComplete"
 			android:hint="@string/dlg_color_hint"
 			android:maxLines="1"
 			android:maxLength="@integer/max_hex_length">

@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import java.util.Calendar;
 
 /**
  * Switch button that indicates whether the alarm is enabled or not.

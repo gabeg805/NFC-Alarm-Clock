@@ -22,7 +22,10 @@ import android.widget.TextView;
  */
 public class NacColorPickerDialog
 	extends NacDialog
-	implements TextView.OnEditorActionListener,View.OnTouchListener,TextWatcher,NacDialog.OnShowListener
+	implements TextView.OnEditorActionListener,
+		TextWatcher,
+		View.OnTouchListener,
+		NacDialog.OnShowListener
 {
 
 	/**
@@ -46,7 +49,7 @@ public class NacColorPickerDialog
 	{
 		super();
 
-		this.addOnShowListener(this);
+		addOnShowListener(this);
 	}
 
 	/**
@@ -93,11 +96,9 @@ public class NacColorPickerDialog
 	public boolean isHexString()
 	{
 		String name = this.mEditText.getText().toString();
-		//NacUtility.printf("Name : %s", name);
 
 		for (int i=1; i < name.length(); i++)
 		{
-			//NacUtility.printf("Char : %c | Result : %d", name.charAt(i), Character.digit(name.charAt(i), 16));
 			if (Character.digit(name.charAt(i), 16) == -1)
 			{
 				return false;
@@ -116,8 +117,8 @@ public class NacColorPickerDialog
 		String title = "Choose Color";
 
 		builder.setTitle(title);
-		this.setPositiveButton("OK");
-		this.setNegativeButton("Cancel");
+		setPositiveButton("OK");
+		setNegativeButton("Cancel");
 	}
 
 	/**
@@ -139,7 +140,7 @@ public class NacColorPickerDialog
 
 			this.mColorPicker.setColor(color);
 			this.mColorExample.setColorFilter(color, PorterDuff.Mode.SRC);
-			this.closeKeyboard();
+			closeKeyboard();
 
 			return true;
 		}

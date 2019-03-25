@@ -184,6 +184,29 @@ public class NacCalendar
 	}
 
 	/**
+	 * Convert the alarm on the given day to a Calendar.
+	 *
+	 * @param  alarm  The alarm.
+	 * @param  day  The day to convert.
+	 *
+	 * @return A Calendar.
+	 */
+	public static Calendar toCalendar(NacAlarm alarm, Day day)
+	{
+		int hour = alarm.getHour();
+		int minute = alarm.getMinute();
+		Calendar calendar = Calendar.getInstance();
+
+		calendar.set(Calendar.DAY_OF_WEEK, NacCalendar.toCalendarDay(day));
+		calendar.set(Calendar.HOUR_OF_DAY, hour);
+		calendar.set(Calendar.MINUTE, minute);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		return calendar;
+	}
+
+	/**
 	 * Convert from a Day to a Calendar day.
 	 *
 	 * @param  day  A Day.
@@ -236,20 +259,12 @@ public class NacCalendar
 	public static List<Calendar> toCalendars(NacAlarm alarm)
 	{
 		EnumSet<Day> days = alarm.getDays();
-		int hour = alarm.getHour();
-		int minute = alarm.getMinute();
 		Calendar today = Calendar.getInstance();
 		List<Calendar> calendars = new ArrayList<>();
 
 		for (Day d : days)
 		{
-			Calendar c = Calendar.getInstance();
-
-			c.set(Calendar.DAY_OF_WEEK, NacCalendar.toCalendarDay(d));
-			c.set(Calendar.HOUR_OF_DAY, hour);
-			c.set(Calendar.MINUTE, minute);
-			c.set(Calendar.SECOND, 0);
-			c.set(Calendar.MILLISECOND, 0);
+			Calendar c = NacCalendar.toCalendar(alarm, d);
 
 			if (c.before(today))
 			{
@@ -260,6 +275,27 @@ public class NacCalendar
 		}
 
 		return calendars;
+	}
+
+	/**
+	 * Convert the alarm to a calendar corresponding to today or tomorrow.
+	 *
+	 * @param  alarm  The alarm.
+	 *
+	 * @return A calendar.
+	 */
+	public static Calendar toCalendarTodayOrTomorrow(NacAlarm alarm)
+	{
+		Calendar now = Calendar.getInstance();
+		Calendar todayOrTomorrow = NacCalendar.toCalendar(alarm,
+			NacCalendar.getToday());
+
+		if (todayOrTomorrow.before(now))
+		{
+			todayOrTomorrow.add(Calendar.DAY_OF_MONTH, 1);
+		}
+
+		return todayOrTomorrow;
 	}
 
 	/**
@@ -294,6 +330,32 @@ public class NacCalendar
 		Day weekday = NacCalendar.toWeekDay(day);
 
 		return NacCalendar.toIndex(weekday);
+	}
+
+	/**
+	 * Convert an alarm to a string of days.
+	 *
+	 * If no days are specified and the alarm is enable.
+	 */
+	public static String toString(NacAlarm alarm)
+	{
+		String string = NacCalendar.toString(alarm.getDays());
+
+		if (string.isEmpty())
+		{
+			//if (!alarm.getEnabled())
+			//{
+			//	return "Today";
+			//}
+
+			int now = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+			int todayOrTomorrow = NacCalendar.toCalendarTodayOrTomorrow(alarm)
+				.get(Calendar.DAY_OF_MONTH);
+
+			return (now == todayOrTomorrow) ? "Today" : "Tomorrow";
+		}
+
+		return string;
 	}
 
 	/**

@@ -265,7 +265,7 @@ public class NacAlarmActivity
 			return;
 		}
 
-		NacAlarmScheduler scheduler = new NacAlarmScheduler(this);
+		NacScheduler scheduler = new NacScheduler(this);
 		Calendar next = Calendar.getInstance();
 
 		next.set(Calendar.HOUR_OF_DAY, this.mAlarm.getHour());
@@ -302,7 +302,7 @@ public class NacAlarmActivity
 			return false;
 		}
 
-		NacAlarmScheduler scheduler = new NacAlarmScheduler(this);
+		NacScheduler scheduler = new NacScheduler(this);
 		Calendar snooze = Calendar.getInstance();
 
 		snooze.add(Calendar.MINUTE, shared.getSnoozeDuration());

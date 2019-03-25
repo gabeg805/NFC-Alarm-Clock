@@ -209,7 +209,7 @@ public class NacSharedPreferences
 	/**
 	 * Default days message.
 	 */
-	public static final String DEFAULT_DAYS_MESSAGE = "Today";
+	public static final String DEFAULT_DAYS_MESSAGE = "";
 
 	/**
 	 */

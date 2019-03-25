@@ -18,16 +18,6 @@ public class NacMainActivity
 {
 
 	/**
-	 * Alarm scheduler.
-	 */
-	private NacAlarmScheduler mScheduler;
-
-	/**
-	 * The database.
-	 */
-	private NacDatabase mDatabase;
-
-	/**
 	 * Recycler view containing the alarm cards.
 	 */
 	private NacRecyclerView mRecyclerView;
@@ -137,7 +127,7 @@ public class NacMainActivity
 	 */
 	private void showNextAlarm()
 	{
-		NacAlarmScheduler scheduler = new NacAlarmScheduler(this);
+		NacScheduler scheduler = new NacScheduler(this);
 		AlarmClockInfo next = scheduler.getNext();
 		String msg = "No scheduled alarms.";
 

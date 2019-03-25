@@ -13,9 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import android.app.AlarmManager;
-import android.app.AlarmManager.AlarmClockInfo;
-
 /**
  * Alarm card adapter.
  */
@@ -37,7 +34,7 @@ public class NacCardAdapter
 	/**
 	 * Alarm scheduler.
 	 */
-	private NacAlarmScheduler mScheduler;
+	private NacScheduler mScheduler;
 
 	/**
 	 * The database.
@@ -78,7 +75,7 @@ public class NacCardAdapter
 		this.mTouchHelper = new NacCardTouchHelper(callback);
 		this.mUndo = new NacCardUndo();
 		this.mDatabase = new NacDatabase(context);
-		this.mScheduler = new NacAlarmScheduler(context);
+		this.mScheduler = new NacScheduler(context);
 		this.mAlarmList = null;
 		this.mWasAdded = false;
 	}

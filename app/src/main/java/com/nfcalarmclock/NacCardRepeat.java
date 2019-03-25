@@ -115,12 +115,24 @@ public class NacCardRepeat
 	 */
 	public void setRepeatText()
 	{
-		String string = NacCalendar.toString(this.mAlarm.getDays());
+		String string = NacCalendar.toString(this.mAlarm);
+		//String string = NacCalendar.toString(this.mAlarm.getDays());
 
-		if (string.isEmpty())
-		{
-			string = NacSharedPreferences.DEFAULT_DAYS_MESSAGE;
-		}
+		//if (string.isEmpty())
+		//{
+		//	int now = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+		//	int todayOrTomorrow = NacCalendar.toCalendarTodayOrTomorrow(
+		//		this.mAlarm).get(Calendar.DAY_OF_MONTH);
+
+		//	if (now == todayOrTomorrow)
+		//	{
+		//		string = "Today";
+		//	}
+		//	else
+		//	{
+		//		string = "Tomorrow";
+		//	}
+		//}
 
 		this.mTextView.setText(string);
 	}

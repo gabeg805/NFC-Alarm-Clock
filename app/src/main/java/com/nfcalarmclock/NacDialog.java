@@ -403,7 +403,6 @@ public class NacDialog
 
 		this.setCanceledOrDismissed(true);
 		this.mDialog.cancel();
-		this.closeKeyboard();
 	}
 
 	/**
@@ -439,7 +438,6 @@ public class NacDialog
 
 		this.setCanceledOrDismissed(true);
 		this.mDialog.dismiss();
-		this.closeKeyboard();
 	}
 
 	/**
