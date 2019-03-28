@@ -70,8 +70,8 @@
 		android:id="@+id/view_card_alarm"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		app:cardBackgroundColor="?attr/colorCard"
-		android:elevation="@dimen/elv_card">
+		android:elevation="@dimen/elv_card"
+		app:cardBackgroundColor="?attr/colorCard">
 
 		<RelativeLayout
 			android:layout_width="match_parent"

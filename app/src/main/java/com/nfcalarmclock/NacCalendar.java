@@ -343,11 +343,6 @@ public class NacCalendar
 
 		if (string.isEmpty())
 		{
-			//if (!alarm.getEnabled())
-			//{
-			//	return "Today";
-			//}
-
 			int now = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 			int todayOrTomorrow = NacCalendar.toCalendarTodayOrTomorrow(alarm)
 				.get(Calendar.DAY_OF_MONTH);

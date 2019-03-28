@@ -84,7 +84,7 @@ public class NacPreferenceDays
 	@Override
 	public boolean onDismissDialog(NacDialog dialog)
 	{
-		View root = dialog.getRootView();
+		View root = dialog.getRoot();
 		NacDayOfWeek dow = root.findViewById(R.id.days);
 		this.mValue = NacCalendar.daysToValue(dow.getDays());
 

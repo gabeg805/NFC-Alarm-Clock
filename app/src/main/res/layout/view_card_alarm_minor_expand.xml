@@ -9,104 +9,111 @@
 	android:layout_below="@id/alarmMinorSummary"
 	android:layout_marginTop="@dimen/mb_card_expand"
 	android:layout_marginBottom="@dimen/mb_card_expand"
+	android:clipChildren="false"
 	tools:ignore="ContentDescription,RtlSymmetry">
 
-	<CheckBox
-		android:id="@+id/nacRepeatCheckbox"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginBottom="@dimen/mb_card_item_spacing"
-		android:paddingStart="@dimen/sp_card"
-		android:buttonTint="@color/white"
-		android:textColor="@color/white"
-		android:textSize="@dimen/tsz_card"
-		android:text="@string/card_repeat"
-		/>
-
-	<com.nfcalarmclock.NacDayOfWeek
-		android:id="@+id/nacRepeatDays"
+	<LinearLayout
+		android:id="@+id/stuffAndThings"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_below="@id/nacRepeatCheckbox"
-		android:layout_marginBottom="@dimen/mb_card_item_spacing"
-		android:gravity="center"
-		/>
-
-	<RelativeLayout
-		android:id="@+id/nacSoundAndVibrate"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/nacRepeatDays"
-		android:layout_marginBottom="@dimen/mb_card_item_spacing">
-
-		<com.nfcalarmclock.NacImageTextButton
-			android:id="@+id/nacSound"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:layout_alignBottom="@id/nacVibrate"
-			android:layout_marginBottom="@dimen/mb_card_center_sound"
-			app:nacDrawable="@mipmap/baseline_music_note_white_24dp"
-			app:nacText=""
-			/>
+		android:orientation="vertical"
+		android:animateLayoutChanges="true"
+		android:clipChildren="false">
 
 		<CheckBox
-			android:id="@+id/nacVibrate"
+			android:id="@+id/nacRepeatCheckbox"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_alignParentEnd="true"
-			android:layout_gravity="end"
+			android:layout_marginBottom="@dimen/mb_card_item_spacing"
 			android:paddingStart="@dimen/sp_card"
 			android:buttonTint="@color/white"
 			android:textColor="@color/white"
 			android:textSize="@dimen/tsz_card"
-			android:text="@string/card_vibrate"
+			android:text="@string/card_repeat"
 			/>
 
-	</RelativeLayout>
+		<com.nfcalarmclock.NacDayOfWeek
+			android:id="@+id/nacRepeatDays"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/mb_card_item_spacing"
+			android:gravity="center"
+			/>
 
-	<com.nfcalarmclock.NacImageTextButton
-		android:id="@+id/nacName"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/nacSoundAndVibrate"
-		android:layout_marginBottom="@dimen/mb_card_name"
-		app:nacDrawable="@mipmap/baseline_label_white_32dp"
-		/>
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/mb_card_item_spacing"
+			android:clipChildren="false">
 
-	<View
-		android:id="@+id/alarmExpandDivider"
-		android:layout_width="match_parent"
-		android:layout_height="@dimen/isz_card_divider"
-		android:layout_below="@id/nacName"
-		android:layout_marginBottom="@dimen/mb_card_divider"
-		android:background="?attr/colorCardDivider"
-		/>
+			<com.nfcalarmclock.NacImageTextButton
+				android:id="@+id/nacSound"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_alignBottom="@id/nacVibrate"
+				android:layout_marginBottom="@dimen/mb_card_center_sound"
+				app:nacDrawable="@mipmap/baseline_music_note_white_24dp"
+				app:nacText=""
+				/>
 
-	<RelativeLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/alarmExpandDivider">
+			<CheckBox
+				android:id="@+id/nacVibrate"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentEnd="true"
+				android:layout_gravity="end"
+				android:paddingStart="@dimen/sp_card"
+				android:buttonTint="@color/white"
+				android:textColor="@color/white"
+				android:textSize="@dimen/tsz_card"
+				android:text="@string/card_vibrate"
+				/>
+
+		</RelativeLayout>
 
 		<com.nfcalarmclock.NacImageTextButton
-			android:id="@+id/nacDelete"
-			android:layout_width="wrap_content"
+			android:id="@+id/nacName"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			app:nacDrawable="@mipmap/baseline_delete_white_32dp"
-			app:nacText="Delete"
+			android:layout_marginBottom="@dimen/mb_card_name"
+			app:nacDrawable="@mipmap/baseline_label_white_32dp"
 			/>
 
-		<ImageView
-			android:id="@+id/nacCollapse"
-			android:layout_width="@dimen/isz_collapse"
-			android:layout_height="@dimen/isz_collapse"
-			android:layout_marginTop="@dimen/mt_card_center_collapse"
-			android:layout_marginEnd="@dimen/mr_card_collapse"
-			android:layout_alignBaseline="@id/nacDelete"
-			android:layout_alignParentEnd="true"
-			android:layout_gravity="end"
-			android:src="@mipmap/baseline_keyboard_arrow_up_white_24dp"
+		<View
+			android:id="@+id/alarmExpandDivider"
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/isz_card_divider"
+			android:layout_marginBottom="@dimen/mb_card_divider"
+			android:background="?attr/colorCardDivider"
 			/>
 
-	</RelativeLayout>
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:clipChildren="false">
+
+			<com.nfcalarmclock.NacImageTextButton
+				android:id="@+id/nacDelete"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				app:nacDrawable="@mipmap/baseline_delete_white_32dp"
+				app:nacText="Delete"
+				/>
+
+			<ImageView
+				android:id="@+id/nacCollapse"
+				android:layout_width="@dimen/isz_collapse"
+				android:layout_height="@dimen/isz_collapse"
+				android:layout_marginTop="@dimen/mt_card_center_collapse"
+				android:layout_marginEnd="@dimen/mr_card_collapse"
+				android:layout_alignBaseline="@id/nacDelete"
+				android:layout_alignParentEnd="true"
+				android:layout_gravity="end"
+				android:src="@mipmap/baseline_keyboard_arrow_up_white_24dp"
+				/>
+
+		</RelativeLayout>
+
+	</LinearLayout>
 
 </RelativeLayout>

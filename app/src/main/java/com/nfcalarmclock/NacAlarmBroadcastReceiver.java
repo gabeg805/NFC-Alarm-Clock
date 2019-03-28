@@ -9,7 +9,7 @@ import android.os.Bundle;
  * Receive the signal from the AlarmManager that it's time for the alarm to go
  * off, which in turn start the NacAlarmActivity.
  */
-public class NacBroadcastReceiver
+public class NacAlarmBroadcastReceiver
 	extends BroadcastReceiver
 {
  

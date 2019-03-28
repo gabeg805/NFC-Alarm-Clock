@@ -233,6 +233,12 @@ public class NacMedia
 	public static String getTitle(File file)
 	{
 		MediaMetadataRetriever retriever = NacMedia.getMediaMetadataRetriever(file);
+
+		if (retriever == null)
+		{
+			return "";
+		}
+
 		String title = retriever.extractMetadata(
 			MediaMetadataRetriever.METADATA_KEY_TITLE);
 		String name = file.getName();

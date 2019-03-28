@@ -111,6 +111,14 @@ public class NacAlarmActivity
 	}
 
 	/**
+	 * @return The alarm.
+	 */
+	private NacAlarm getAlarm()
+	{
+		return this.mAlarm;
+	}
+
+	/**
 	 * @return The snooze count.
 	 */
 	private int getSnoozeCount(NacSharedPreferences shared)
@@ -125,7 +133,7 @@ public class NacAlarmActivity
 	 */
 	private String getSnoozeCountKey()
 	{
-		return "snoozeCount" + String.valueOf(this.mAlarm.getId());
+		return "snoozeCount" + String.valueOf(this.getAlarm().getId());
 	}
 
 	/**
@@ -238,7 +246,7 @@ public class NacAlarmActivity
 		if (this.mPlayer != null)
 		{
 			this.mPlayer.stop();
-			this.mPlayer.play(this.mAlarm.getSound(), true);
+			this.mPlayer.play(this.getAlarm().getSound(), true);
 		}
 	}
 
@@ -256,24 +264,27 @@ public class NacAlarmActivity
 	 */
 	public void scheduleNextAlarm()
 	{
-		if (!this.mAlarm.getRepeat())
+		NacAlarm alarm = this.getAlarm();
+
+		if (!alarm.getRepeat() || alarm.getDays().isEmpty())
 		{
 			NacDatabase db = new NacDatabase(this);
 
-			this.mAlarm.toggleToday();
-			db.update(this.mAlarm);
+			alarm.setEnabled(false);
+			db.update(alarm);
+
 			return;
 		}
 
 		NacScheduler scheduler = new NacScheduler(this);
 		Calendar next = Calendar.getInstance();
 
-		next.set(Calendar.HOUR_OF_DAY, this.mAlarm.getHour());
-		next.set(Calendar.MINUTE, this.mAlarm.getMinute());
+		next.set(Calendar.HOUR_OF_DAY, alarm.getHour());
+		next.set(Calendar.MINUTE, alarm.getMinute());
 		next.set(Calendar.SECOND, 0);
 		next.set(Calendar.MILLISECOND, 0);
 		next.add(Calendar.DAY_OF_MONTH, 7);
-		scheduler.update(this.mAlarm, next);
+		scheduler.update(alarm, next);
 	}
 
 	/**
@@ -302,13 +313,14 @@ public class NacAlarmActivity
 			return false;
 		}
 
+		NacAlarm alarm = this.getAlarm();
 		NacScheduler scheduler = new NacScheduler(this);
 		Calendar snooze = Calendar.getInstance();
 
 		snooze.add(Calendar.MINUTE, shared.getSnoozeDuration());
-		this.mAlarm.setHour(snooze.get(Calendar.HOUR));
-		this.mAlarm.setMinute(snooze.get(Calendar.MINUTE));
-		scheduler.update(this.mAlarm, snooze);
+		alarm.setHour(snooze.get(Calendar.HOUR));
+		alarm.setMinute(snooze.get(Calendar.MINUTE));
+		scheduler.update(alarm, snooze);
 		this.setSnoozeCount(shared, snoozeCount);
 
 		return true;
@@ -340,7 +352,7 @@ public class NacAlarmActivity
 	 */
 	public void vibrate()
 	{
-		if (this.mAlarm.getVibrate() && (this.mVibrator != null))
+		if (this.getAlarm().getVibrate() && (this.mVibrator != null))
 		{
 			long duration = 500;
 

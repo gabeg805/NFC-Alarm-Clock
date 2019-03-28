@@ -71,6 +71,11 @@ public class NacMusicDialog
 		String title = NacMedia.getTitle(file);
 		String artist = NacMedia.getArtist(file);
 
+		if (title.isEmpty())
+		{
+			return;
+		}
+
 		entry.setTag(file);
 		entry.setOnClickListener(this);
 		container.add(entry);
@@ -216,7 +221,7 @@ public class NacMusicDialog
 	 */
 	public void showDirectory(String path)
 	{
-		View root = this.getRootView();
+		View root = this.getRoot();
 		NacButtonGroup container = (NacButtonGroup) root.findViewById(R.id.group);
 		String mainpath = Environment.getExternalStorageDirectory().toString();
 		path = (path == null) ? mainpath : path;

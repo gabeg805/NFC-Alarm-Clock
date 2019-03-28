@@ -645,16 +645,16 @@ public class NacAlarm
 	public void print()
 	{
 		NacUtility.printf("Alarm Information");
-		NacUtility.printf("Id      : %d", this.mId);
-		NacUtility.printf("Hour    : %d", this.mHour);
-		NacUtility.printf("Minute  : %d", this.mMinute);
-		NacUtility.printf("Days    : %s", NacCalendar.toString(this.getDays()));
-		NacUtility.printf("Repeat  : %b", this.mRepeat);
-		NacUtility.printf("Vibrate : %b", this.mVibrate);
-		NacUtility.printf("Sound   : %s", this.mSound);
-		NacUtility.printf("Name    : %s", this.mName);
-		NacUtility.printf("Enabled : %b", this.mEnabled);
-		NacUtility.printf("Format  : %s", this.m24HourFormat);
+		NacUtility.printf("Id           : %d", this.mId);
+		NacUtility.printf("Hour         : %d", this.mHour);
+		NacUtility.printf("Minute       : %d", this.mMinute);
+		NacUtility.printf("Days         : %s", NacCalendar.toString(this.getDays()));
+		NacUtility.printf("Repeat       : %b", this.mRepeat);
+		NacUtility.printf("Vibrate      : %b", this.mVibrate);
+		NacUtility.printf("Sound        : %s", this.mSound);
+		NacUtility.printf("Name         : %s", this.mName);
+		NacUtility.printf("Enabled      : %b", this.mEnabled);
+		NacUtility.printf("24 hr Format : %s", this.m24HourFormat);
 	}
 
 	/**

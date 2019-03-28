@@ -18,13 +18,16 @@ import java.util.List;
  */
 public class NacCardAdapter
 	extends RecyclerView.Adapter<NacCardHolder>
-	implements View.OnClickListener,NacAlarm.OnChangeListener,NacCardHolder.OnDeleteListener,NacCardTouchHelper.Adapter
+	implements View.OnClickListener,
+		NacAlarm.OnChangeListener,
+		NacCardHolder.OnDeleteListener,
+		NacCardTouchHelper.Adapter
 {
 
 	/**
 	 * Main activity root view.
 	 */
-	private CoordinatorLayout mRootView;
+	private CoordinatorLayout mRoot;
 
 	/**
 	 * RecyclerView containing list of alarm cards.
@@ -69,8 +72,9 @@ public class NacCardAdapter
 		NacCardTouchHelper.Callback callback =
 			new NacCardTouchHelper.Callback(this);
 
-		this.mRootView = activity.findViewById(R.id.activity_main);
-		this.mRecyclerView = (RecyclerView) this.mRootView.findViewById(
+		this.mRoot = (CoordinatorLayout) activity.findViewById(
+			R.id.activity_main);
+		this.mRecyclerView = (RecyclerView) this.getRoot().findViewById(
 			R.id.content_alarm_list);
 		this.mTouchHelper = new NacCardTouchHelper(callback);
 		this.mUndo = new NacCardUndo();
@@ -87,12 +91,12 @@ public class NacCardAdapter
 	{
 		if (this.size() >= NacSharedPreferences.DEFAULT_MAX_ALARMS)
 		{
-			NacUtility.quickToast(this.mRootView,
-				"Maximum number of alarms created!");
+			NacUtility.quickToast(this.getRoot(),
+				"Max number of alarms created");
 			return;
 		}
 
-		Context context = this.mRootView.getContext();
+		Context context = this.getContext();
 		boolean format = DateFormat.is24HourFormat(context);
 		int id = this.getUniqueId();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
@@ -119,7 +123,7 @@ public class NacCardAdapter
 		int index = this.size();
 
 		this.add(alarm, index);
-		this.mRecyclerView.scrollToPosition(index);
+		this.getRecyclerView().scrollToPosition(index);
 	}
 
 	/**
@@ -130,9 +134,9 @@ public class NacCardAdapter
 	 */
 	public void add(NacAlarm alarm, int position)
 	{
-		if (this.mDatabase.add(alarm) < 0)
+		if (this.getDatabase().add(alarm) < 0)
 		{
-			NacUtility.snackbar(this.mRootView,
+			NacUtility.snackbar(this.getRoot(),
 				"Error occurred when adding alarm to database.",
 				"DISMISS", null);
 			return;
@@ -142,10 +146,10 @@ public class NacCardAdapter
 		// canceled in update, only added
 		this.mWasAdded = true;
 
-		this.mScheduler.update(alarm);
-		this.mAlarmList.add(position, alarm);
-		//notifyItemInserted(position);
-		this.refresh(position);
+		this.getScheduler().update(alarm);
+		this.getAlarms().add(position, alarm);
+		notifyItemInserted(position);
+		//this.refresh(position);
 	}
 
 	/**
@@ -153,10 +157,10 @@ public class NacCardAdapter
 	 */
 	public void build()
 	{
-		this.mAlarmList = this.mDatabase.read();
+		this.mAlarmList = this.getDatabase().read();
 
-		this.mTouchHelper.setRecyclerView(this.mRecyclerView);
-		this.mTouchHelper.reset();
+		this.getTouchHelper().setRecyclerView(this.getRecyclerView());
+		this.getTouchHelper().reset();
 		notifyDataSetChanged();
 	}
 
@@ -172,9 +176,10 @@ public class NacCardAdapter
 		int newPosition = this.size();
 
 		copy.setId(this.getUniqueId());
+		notifyItemChanged(position);
 		this.add(copy);
 		this.undo(copy, newPosition, NacCardUndo.Type.COPY);
-		NacUtility.snackbar(this.mRootView, "Copied alarm.", "UNDO", this);
+		NacUtility.snackbar(this.getRoot(), "Copied alarm.", "UNDO", this);
 	}
 
 	/**
@@ -185,15 +190,22 @@ public class NacCardAdapter
 	public void delete(int position)
 	{
 		NacAlarm alarm = this.get(position);
+		int firstVisible = this.getFirstVisible(position);
+		int lastVisible = this.getLastVisible(position);
 
-		this.mScheduler.cancel(alarm);
-		this.mDatabase.delete(alarm);
-		this.mAlarmList.remove(position);
-		//notifyItemRemoved(pos);
-		//notifyItemRangeChanged(pos, this.getLastVisible(pos));
-		this.refresh(position);
+		this.getScheduler().cancel(alarm);
+		this.getDatabase().delete(alarm);
+		this.getAlarms().remove(position);
+		notifyItemRemoved(position);
+
+		if ((firstVisible >= 0) && (lastVisible >= 0))
+		{
+			notifyItemRangeChanged(firstVisible, lastVisible);
+			//this.refresh(position);
+		}
+
 		this.undo(alarm, position, NacCardUndo.Type.DELETE);
-		NacUtility.snackbar(this.mRootView, "Deleted alarm.", "UNDO", this);
+		NacUtility.snackbar(this.getRoot(), "Deleted alarm.", "UNDO", this);
 	}
 
 	/**
@@ -201,7 +213,50 @@ public class NacCardAdapter
 	 */
 	public NacAlarm get(int index)
 	{
-		return this.mAlarmList.get(index);
+		return this.getAlarms().get(index);
+	}
+
+	/**
+	 * @return The list of alarms.
+	 */
+	private List<NacAlarm> getAlarms()
+	{
+		return this.mAlarmList;
+	}
+
+	/**
+	 * @return The context.
+	 */
+	private Context getContext()
+	{
+		return this.getRoot().getContext();
+	}
+
+	/**
+	 * @return The alarm database.
+	 */
+	private NacDatabase getDatabase()
+	{
+		return this.mDatabase;
+	}
+
+	/**
+	 * @return The first visible view holder in the recycler view.
+	 */
+	private int getFirstVisible(int position)
+	{
+		int size = this.size();
+
+		for (int i=position-1; i >= 0; i--)
+		{
+			if (this.getRecyclerView().findViewHolderForAdapterPosition(i)
+				== null)
+			{
+				return i+1;
+			}
+		}
+
+		return 0;
 	}
 
 	/**
@@ -210,21 +265,77 @@ public class NacCardAdapter
 	@Override
 	public int getItemCount()
 	{
-		return this.mAlarmList.size();
+		return this.getAlarms().size();
 	}
 
 	/**
 	 * @return The last visible view holder in the recycler view.
 	 */
-	private int getLastVisible(int start)
+	private int getLastVisible(int position)
 	{
 		int size = this.size();
 
-		for (int i=start; i < size; i++)
+		for (int i=position; i < size; i++)
 		{
-			if (this.mRecyclerView.findViewHolderForAdapterPosition(i) == null)
+			if (this.getRecyclerView().findViewHolderForAdapterPosition(i)
+				== null)
 			{
 				return i-1;
+			}
+		}
+
+		return size-1;
+	}
+
+	/**
+	 * @return The RecyclerView.
+	 */
+	private RecyclerView getRecyclerView()
+	{
+		return this.mRecyclerView;
+	}
+
+	/**
+	 * @return The root view.
+	 */
+	private View getRoot()
+	{
+		return this.mRoot;
+	}
+
+	/**
+	 * @return The alarm scheduler.
+	 */
+	private NacScheduler getScheduler()
+	{
+		return this.mScheduler;
+	}
+
+	/**
+	 * @return The touch helper.
+	 */
+	private NacCardTouchHelper getTouchHelper()
+	{
+		return this.mTouchHelper;
+	}
+
+	/**
+	 * Determine a unique integer ID number to use for newly created alarms.
+	 */
+	private int getUniqueId()
+	{
+		List<Integer> used = new ArrayList<>();
+
+		for (NacAlarm a : this.getAlarms())
+		{
+			used.add(a.getId());
+		}
+
+		for (int i=1; i < Integer.MAX_VALUE; i+=7)
+		{
+			if (!used.contains(i))
+			{
+				return i;
 			}
 		}
 
@@ -242,7 +353,8 @@ public class NacCardAdapter
 
 		for (int i=0; i < position; i++)
 		{
-			if (this.mRecyclerView.findViewHolderForAdapterPosition(i) != null)
+			if (this.getRecyclerView().findViewHolderForAdapterPosition(i)
+				!= null)
 			{
 				start = i;
 				break;
@@ -251,7 +363,8 @@ public class NacCardAdapter
 
 		for (int i=position; i < size; i++)
 		{
-			if (this.mRecyclerView.findViewHolderForAdapterPosition(i) == null)
+			if (this.getRecyclerView().findViewHolderForAdapterPosition(i)
+				== null)
 			{
 				end = i-1;
 				break;
@@ -259,29 +372,6 @@ public class NacCardAdapter
 		}
 
 		notifyItemRangeChanged(start, end-start);
-	}
-
-	/**
-	 * Determine a unique integer ID number to use for newly created alarms.
-	 */
-	private int getUniqueId()
-	{
-		List<Integer> used = new ArrayList<>();
-
-		for (NacAlarm a : this.mAlarmList)
-		{
-			used.add(a.getId());
-		}
-
-		for (int i=1; i < Integer.MAX_VALUE; i+=7)
-		{
-			if (!used.contains(i))
-			{
-				return i;
-			}
-		}
-
-		return -1;
 	}
 
 	/**
@@ -310,8 +400,8 @@ public class NacCardAdapter
 	@Override
 	public void onChange(NacAlarm a)
 	{
-		this.mDatabase.update(a);
-		this.mScheduler.update(a);
+		this.getDatabase().update(a);
+		this.getScheduler().update(a);
 	}
 
 	/**
@@ -379,7 +469,7 @@ public class NacCardAdapter
 	{
 		//this.mTouchHelper.reset();
 		//notifyItemChanged(pos);
-		this.refresh(position);
+		//this.refresh(position);
 		this.copy(position);
 	}
 
@@ -392,7 +482,7 @@ public class NacCardAdapter
 	public void onItemDelete(int position)
 	{
 		//notifyItemChanged(pos);
-		this.refresh(position);
+		//this.refresh(position);
 		this.delete(position);
 	}
 
@@ -408,13 +498,22 @@ public class NacCardAdapter
 		NacAlarm fromAlarm = this.get(fromIndex);
 		NacAlarm toAlarm = this.get(toIndex);
 
-		Collections.swap(this.mAlarmList, fromIndex, toIndex);
-		this.mScheduler.cancel(fromAlarm);
-		this.mScheduler.cancel(toAlarm);
-		this.mDatabase.swap(fromAlarm, toAlarm);
-		this.mScheduler.add(fromAlarm);
-		this.mScheduler.add(toAlarm);
+		Collections.swap(this.getAlarms(), fromIndex, toIndex);
+		this.getScheduler().cancel(fromAlarm);
+		this.getScheduler().cancel(toAlarm);
+		this.getDatabase().swap(fromAlarm, toAlarm);
+		this.getScheduler().add(fromAlarm);
+		this.getScheduler().add(toAlarm);
 		notifyItemMoved(fromIndex, toIndex);
+	}
+
+	/**
+	 * Measure the expanded and collapsed sizes of the alarm card.
+	 */
+	@Override
+	public void onViewAttachedToWindow(NacCardHolder card)
+	{
+		card.measure();
 	}
 
 	/**
@@ -427,7 +526,7 @@ public class NacCardAdapter
 	{
 		this.add(alarm, position);
 		this.undo(alarm, position, NacCardUndo.Type.RESTORE);
-		NacUtility.snackbar(this.mRootView, "Restored alarm.", "UNDO", this);
+		NacUtility.snackbar(this.getRoot(), "Restored alarm.", "UNDO", this);
 	}
 
 	/**
@@ -435,7 +534,7 @@ public class NacCardAdapter
 	 */
 	public int size()
 	{
-		return this.mAlarmList.size();
+		return this.getAlarms().size();
 	}
 
 	/**

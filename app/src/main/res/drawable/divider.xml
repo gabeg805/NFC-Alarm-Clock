@@ -8,6 +8,8 @@
 		android:height="0dp"
 		/>
 
-	<solid android:color="?attr/colorCardDivider" />
+	<solid
+		android:color="?attr/colorCardDivider"
+		/>
 
 </shape>

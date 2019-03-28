@@ -410,7 +410,7 @@ public class NacDialog
 	 */
 	protected void closeKeyboard()
 	{
-		Context context = this.getRootView().getContext();
+		Context context = this.getRoot().getContext();
 		InputMethodManager inputManager = (InputMethodManager)
 			context.getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -451,7 +451,7 @@ public class NacDialog
 	/**
 	 * @return The root view.
 	 */
-	public View getRootView()
+	public View getRoot()
 	{
 		return this.mRoot;
 	}
@@ -746,7 +746,7 @@ public class NacDialog
 	 */
 	protected void showKeyboard()
 	{
-		Context context = this.getRootView().getContext();
+		Context context = this.getRoot().getContext();
 		InputMethodManager inputManager = (InputMethodManager)
 			context.getSystemService(Context.INPUT_METHOD_SERVICE);
 

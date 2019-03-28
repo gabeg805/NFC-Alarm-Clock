@@ -152,7 +152,7 @@ public class NacScheduler
 	 */
 	public Intent getReceiverIntent()
 	{
-		return new Intent(this.getContext(), NacBroadcastReceiver.class);
+		return new Intent(this.getContext(), NacAlarmBroadcastReceiver.class);
 	}
 
 	/**

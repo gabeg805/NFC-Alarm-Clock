@@ -132,16 +132,6 @@ public class NacCardTouchHelper
 		}
 
 		/**
-		 * @return The card.
-		 */
-		private NacCard getCard()
-		{
-			NacCardHolder holder = this.getCardHolder();
-
-			return (holder != null) ? holder.mCard : null;
-		}
-
-		/**
 		 * @return The card holder.
 		 */
 		private NacCardHolder getCardHolder()
@@ -154,9 +144,9 @@ public class NacCardTouchHelper
 		 */
 		private View getCardRoot()
 		{
-			NacCard card = this.getCard();
+			NacCardHolder holder = this.getCardHolder();
 
-			return (card != null) ? card.getRootView() : null;
+			return (holder != null) ? holder.getRoot() : null;
 		}
 
 		/**
@@ -164,9 +154,9 @@ public class NacCardTouchHelper
 		 */
 		private View getCardView()
 		{
-			NacCard card = this.getCard();
+			NacCardHolder holder = this.getCardHolder();
 
-			return (card != null) ? card.getCardView() : null;
+			return (holder != null) ? holder.getCardView() : null;
 		}
 
 		/**
@@ -174,8 +164,6 @@ public class NacCardTouchHelper
 		 */
 		private View getCardView(int action)
 		{
-			//return (action == ItemTouchHelper.ACTION_STATE_DRAG)
-			//	? this.getCardRoot() : this.getCardView();
 			return (action == ItemTouchHelper.ACTION_STATE_SWIPE)
 				? this.getCardView() : this.getCardRoot();
 		}
@@ -186,9 +174,9 @@ public class NacCardTouchHelper
 		 */
 		private View getCopyView()
 		{
-			NacCard card = this.getCard();
+			NacCardHolder holder = this.getCardHolder();
 
-			return (card != null) ? card.getCopyView() : null;
+			return (holder != null) ? holder.getCopyView() : null;
 		}
 
 		/**
@@ -196,9 +184,9 @@ public class NacCardTouchHelper
 		 */
 		private View getDeleteView()
 		{
-			NacCard card = this.getCard();
+			NacCardHolder holder = this.getCardHolder();
 
-			return (card != null) ? card.getDeleteView() : null;
+			return (holder != null) ? holder.getDeleteView() : null;
 		}
 
 		/**
@@ -230,16 +218,16 @@ public class NacCardTouchHelper
 		 */
 		public boolean isCollapsed()
 		{
-			if (this.mViewHolder == null)
-			{
-				return true;
-			}
-			else
-			{
-				NacCard card = this.getCard();
+			//if (this.mViewHolder == null)
+			//{
+			//	return true;
+			//}
+			//else
+			//{
+			NacCardHolder holder = this.getCardHolder();
 
-				return (card != null) ? card.isCollapsed() : true;
-			}
+			return (holder != null) ? holder.isCollapsed() : true;
+			//}
 		}
 
 		/**
@@ -252,8 +240,6 @@ public class NacCardTouchHelper
 		public boolean isItemViewSwipeEnabled()
 		{
 			return this.isCollapsed();
-			//return (this.mviewholder == null) ? true :
-			//	((naccardholder)this.mviewholder).mcard.iscollapsed();
 		}
 
 		/**

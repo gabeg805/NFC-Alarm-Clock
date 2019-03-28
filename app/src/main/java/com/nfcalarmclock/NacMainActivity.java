@@ -2,8 +2,12 @@ package com.nfcalarmclock;
 
 import android.app.AlarmManager.AlarmClockInfo;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,12 +24,12 @@ public class NacMainActivity
 	/**
 	 * Recycler view containing the alarm cards.
 	 */
-	private NacRecyclerView mRecyclerView;
+	private RecyclerView mRecyclerView;
 
 	/**
 	 * Floating button to add new alarms.
 	 */
-	private NacFloatingButton mFloatingButton;
+	private FloatingActionButton mFloatingButton;
 
 	/**
 	 * Alarm card adapter.
@@ -33,9 +37,6 @@ public class NacMainActivity
 	private NacCardAdapter mAdapter;
 
 	/**
-	 * Create the application.
-	 *
-	 * @param  savedInstanceState  The saved instance state.
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -43,15 +44,17 @@ public class NacMainActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_main);
 
+		NacSharedPreferences shared = new NacSharedPreferences(this);
 		this.mAdapter = new NacCardAdapter(this);
-		this.mFloatingButton = new NacFloatingButton(this);
-		this.mRecyclerView = new NacRecyclerView(this);
+		this.mFloatingButton = (FloatingActionButton) findViewById(R.id.fab_add_alarm);
+		this.mRecyclerView = (RecyclerView) findViewById(R.id.content_alarm_list);
 
-		this.mRecyclerView.init();
-		this.mFloatingButton.init();
+		this.mFloatingButton.setBackgroundTintList(ColorStateList.valueOf(
+			shared.getThemeColor()));
+		this.mFloatingButton.setOnClickListener(this);
 		this.mRecyclerView.setAdapter(this.mAdapter);
-		this.mRecyclerView.setLayoutManager(this);
-		this.mRecyclerView.setScrollListener(this.mFloatingButton);
+		this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+		this.mRecyclerView.addOnScrollListener(new ScrollListener());
 	}
 
 	/**
@@ -65,8 +68,6 @@ public class NacMainActivity
 
 	/**
 	 * Add a new alarm when the floating action button is clicked.
-	 *
-	 * @param  v  The view that was clicked.
 	 */
 	@Override
 	public void onClick(View view)
@@ -75,9 +76,6 @@ public class NacMainActivity
 	}
 
 	/**
-	 * Create the options menu in the action bar.
-	 *
-	 * @param  menu  The menu view.
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
@@ -87,10 +85,6 @@ public class NacMainActivity
 	}
 
 	/**
-	 * A menu item was selected. Determine which action to take depending on
-	 * the item selected.
-	 *
-	 * @param  item  The menu item that was selected.
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
@@ -103,23 +97,13 @@ public class NacMainActivity
 			showNextAlarm();
 			return true;
 		case R.id.menu_settings:
-			startSettingsActivity();
+			startActivity(new Intent(this, NacSettingsActivity.class));
 			return true;
 		default:
 			break;
 		}
 
 		return super.onOptionsItemSelected(item);
-	}
-
-	/**
-	 * Start the settings activity.
-	 */
-	private void startSettingsActivity()
-	{
-		Intent intent = new Intent(this, NacSettingsActivity.class);
-
-		startActivity(intent);
 	}
 
 	/**
@@ -163,6 +147,64 @@ public class NacMainActivity
 		}
 
 		NacUtility.snackbar(this, msg, "DISMISS", null);
+	}
+
+	/**
+	 * RecyclerView scroll listener to show/hide the floating action button.
+	 */
+	public class ScrollListener
+		extends RecyclerView.OnScrollListener
+	{
+
+		/**
+		 */
+		public ScrollListener()
+		{
+		}
+
+		/**
+		 * Show the floating action button when scrolling up and hide it when
+		 * scrolling down.
+		 *
+		 * @param  rv  The recycler view.
+		 * @param  dx  The change in scrolling in the x-direction.
+		 * @param  dy  The change in scrolling in the y-direction.
+		 */
+		@Override
+		public void onScrolled(RecyclerView rv, int dx, int dy)
+		{
+			super.onScrolled(rv, dx, dy);
+
+			if ((dy < 0) && !mFloatingButton.isShown())
+			{
+				mFloatingButton.show();
+			}
+			else if ((dy > 0) && mFloatingButton.isShown())
+			{
+				mFloatingButton.hide();
+			}
+		}
+
+		/**
+		 * Display the floating button when at the bottom of the list.
+		 *
+		 * @param  rv  The recycler view.
+		 * @param  state The scroll state (Idle, Dragging, or Settling).
+		 */
+		@Override
+		public void onScrollStateChanged(RecyclerView rv, int state)
+		{
+			super.onScrollStateChanged(rv, state);
+
+			if ((state == 0) && !rv.canScrollVertically(1))
+			{
+				if (!mFloatingButton.isShown())
+				{
+					mFloatingButton.show();
+				}
+			}
+		}
+
 	}
 
 }

@@ -6,8 +6,8 @@ android {
         applicationId "com.nfcalarmclock"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 28
-        versionName "4.2"
+        versionCode 29
+        versionName "4.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
