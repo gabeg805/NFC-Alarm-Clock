@@ -218,16 +218,9 @@ public class NacCardTouchHelper
 		 */
 		public boolean isCollapsed()
 		{
-			//if (this.mViewHolder == null)
-			//{
-			//	return true;
-			//}
-			//else
-			//{
 			NacCardHolder holder = this.getCardHolder();
 
 			return (holder != null) ? holder.isCollapsed() : true;
-			//}
 		}
 
 		/**
@@ -239,7 +232,7 @@ public class NacCardTouchHelper
 		@Override
 		public boolean isItemViewSwipeEnabled()
 		{
-			return this.isCollapsed();
+			return true;
 		}
 
 		/**
@@ -248,7 +241,7 @@ public class NacCardTouchHelper
 		@Override
 		public boolean isLongPressDragEnabled()
 		{
-			return this.isCollapsed();
+			return true;
 		}
 
 		/**
@@ -269,6 +262,11 @@ public class NacCardTouchHelper
 			this.mViewHolder = vh;
 			this.mAction = action;
 
+			if (!this.isCollapsed())
+			{
+				return;
+			}
+
 			final View fg = this.getCardView(action);
 			final View copy = this.getCopyView();
 			final View delete = this.getDeleteView();
@@ -284,6 +282,11 @@ public class NacCardTouchHelper
 				{
 					copy.setVisibility(View.GONE);
 					delete.setVisibility(View.VISIBLE);
+				}
+				else
+				{
+					copy.setVisibility(View.GONE);
+					delete.setVisibility(View.GONE);
 				}
 			}
 
@@ -341,6 +344,11 @@ public class NacCardTouchHelper
 
 				if (action == ItemTouchHelper.ACTION_STATE_DRAG)
 				{
+					if (!this.isCollapsed())
+					{
+						return;
+					}
+
 					fg.setAlpha(0.75f);
 				}
 

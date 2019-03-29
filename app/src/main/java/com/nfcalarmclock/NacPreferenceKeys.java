@@ -25,6 +25,11 @@ public class NacPreferenceKeys
 	public final String mSnoozeDuration;
 
 	/**
+	 * Require NFC to dismiss an alarm.
+	 */
+	public final String mRequireNfc;
+
+	/**
 	 * Repeat.
 	 */
 	public final String mRepeat;
@@ -88,6 +93,7 @@ public class NacPreferenceKeys
 		this.mAutoDismiss = res.getString(R.string.pref_auto_dismiss_key);
 		this.mMaxSnooze = res.getString(R.string.pref_max_snooze_key);
 		this.mSnoozeDuration = res.getString(R.string.pref_snooze_duration_key);
+		this.mRequireNfc = res.getString(R.string.pref_dismiss_button_key);
 		this.mRepeat = res.getString(R.string.pref_repeat_key);
 		this.mDays = res.getString(R.string.pref_days_key);
 		this.mVibrate = res.getString(R.string.pref_vibrate_key);
@@ -123,6 +129,14 @@ public class NacPreferenceKeys
 	public String getSnoozeDuration()
 	{
 		return this.mSnoozeDuration;
+	}
+
+	/**
+	 * @return The NFC required key.
+	 */
+	public String getRequireNfc()
+	{
+		return this.mRequireNfc;
 	}
 
 	/**

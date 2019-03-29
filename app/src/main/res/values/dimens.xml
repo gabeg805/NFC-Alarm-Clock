@@ -32,6 +32,7 @@
 	<dimen name="mb_card_item_spacing">14dp</dimen>
 	<dimen name="mb_card_divider">16dp</dimen>
 	<dimen name="mt_card_minor_spacing">4dp</dimen>
+	<dimen name="pb_last_card">150dp</dimen>
 	<dimen name="tsz_card">13sp</dimen>
 	<dimen name="isz_card_divider">2dp</dimen>
 

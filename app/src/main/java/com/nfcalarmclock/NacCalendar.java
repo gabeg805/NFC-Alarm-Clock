@@ -140,12 +140,71 @@ public class NacCalendar
 	}
 
 	/**
-	 * @return Today's day.
+	 * @return The Day today.
 	 */
 	public static Day getToday()
 	{
-		return NacCalendar.toWeekDay(Calendar.getInstance()
-			.get(Calendar.DAY_OF_WEEK));
+		Calendar today = Calendar.getInstance();
+
+		return NacCalendar.toWeekDay(today.get(Calendar.DAY_OF_WEEK));
+	}
+
+	/**
+	 * @see getTodayCalendar
+	 */
+	public static Calendar getTodayCalendar()
+	{
+		return NacCalendar.getTodayCalendar(null);
+	}
+
+	/**
+	 * @return Today's day, with the alarm hour and minute, if supplied.
+	 */
+	public static Calendar getTodayCalendar(NacAlarm alarm)
+	{
+		Calendar today = Calendar.getInstance();
+
+		if (alarm != null)
+		{
+			today.set(Calendar.HOUR_OF_DAY, alarm.getHour());
+			today.set(Calendar.MINUTE, alarm.getMinute());
+			today.set(Calendar.SECOND, 0);
+			today.set(Calendar.MILLISECOND, 0);
+		}
+
+		return today;
+	}
+
+	/**
+	 * @return The tomorrow Day.
+	 */
+	public static Day getTomorrow()
+	{
+		Calendar tomorrow = Calendar.getInstance();
+
+		tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+
+		return NacCalendar.toWeekDay(tomorrow.get(Calendar.DAY_OF_WEEK));
+	}
+
+	/**
+	 * @see getTomorrowCalendar
+	 */
+	public static Calendar getTomorrowCalendar()
+	{
+		return NacCalendar.getTomorrowCalendar(null);
+	}
+
+	/**
+	 * @return Tomorrow's day, with the alarm hour and minute, if supplied.
+	 */
+	public static Calendar getTomorrowCalendar(NacAlarm alarm)
+	{
+		Calendar tomorrow = NacCalendar.getTodayCalendar(alarm);
+
+		tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+
+		return tomorrow;
 	}
 
 	/**
@@ -197,6 +256,8 @@ public class NacCalendar
 		int minute = alarm.getMinute();
 		Calendar calendar = Calendar.getInstance();
 
+		NacUtility.printf("Converting to calendar! Day : %s | Hour : %d | Min : %d | Cal : %d",
+			day.toString(), hour, minute, NacCalendar.toCalendarDay(day));
 		calendar.set(Calendar.DAY_OF_WEEK, NacCalendar.toCalendarDay(day));
 		calendar.set(Calendar.HOUR_OF_DAY, hour);
 		calendar.set(Calendar.MINUTE, minute);
@@ -287,15 +348,10 @@ public class NacCalendar
 	public static Calendar toCalendarTodayOrTomorrow(NacAlarm alarm)
 	{
 		Calendar now = Calendar.getInstance();
-		Calendar todayOrTomorrow = NacCalendar.toCalendar(alarm,
-			NacCalendar.getToday());
+		Calendar today = NacCalendar.getTodayCalendar(alarm);
 
-		if (todayOrTomorrow.before(now))
-		{
-			todayOrTomorrow.add(Calendar.DAY_OF_MONTH, 1);
-		}
-
-		return todayOrTomorrow;
+		return (today.after(now)) ? today
+			: NacCalendar.getTomorrowCalendar(alarm);
 	}
 
 	/**
@@ -341,7 +397,7 @@ public class NacCalendar
 	{
 		String string = NacCalendar.toString(alarm.getDays());
 
-		if (string.isEmpty())
+		if (string.isEmpty() || !alarm.getRepeat())
 		{
 			int now = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 			int todayOrTomorrow = NacCalendar.toCalendarTodayOrTomorrow(alarm)

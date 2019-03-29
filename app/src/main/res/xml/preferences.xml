@@ -26,6 +26,15 @@
 			android:defaultValue="4"
 			/>
 
+		<com.nfcalarmclock.NacPreferenceDismissButton
+			android:key="@string/pref_dismiss_button_key"
+			android:title="@string/pref_dismiss_button_title"
+			android:widgetLayout="@layout/nac_preference_checkbox"
+			app:summaryEnabled="@string/pref_dismiss_button_summary_enabled"
+			app:summaryDisabled="@string/pref_dismiss_button_summary_disabled"
+			android:defaultValue="true"
+			/>
+
 		<!-- Volume level -->
 
 	</com.nfcalarmclock.NacPreferenceCategory>

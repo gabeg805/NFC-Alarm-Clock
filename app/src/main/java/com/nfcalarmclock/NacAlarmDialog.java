@@ -33,13 +33,18 @@ public class NacAlarmDialog
 	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
 		String title = "Dismiss Alarm";
+		NacSharedPreferences shared = new NacSharedPreferences(context);
 
 		builder.setTitle(title);
 		builder.setIcon(R.mipmap.ic_launcher);
 		builder.setNegativeButton("Snooze", this);
-		//builder.setPositiveButton("Dismiss", this);
 		builder.setCancelable(false);
 		//this.mDialog.setCanceledOnTouchOutside(false);
+
+		if (!shared.getRequireNfc())
+		{
+			builder.setPositiveButton("Dismiss", this);
+		}
 	}
 
 	/**

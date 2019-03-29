@@ -9,7 +9,6 @@
 	android:layout_below="@id/alarmMinorSummary"
 	android:layout_marginTop="@dimen/mb_card_expand"
 	android:layout_marginBottom="@dimen/mb_card_expand"
-	android:clipChildren="false"
 	tools:ignore="ContentDescription,RtlSymmetry">
 
 	<LinearLayout
@@ -17,8 +16,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:orientation="vertical"
-		android:animateLayoutChanges="true"
-		android:clipChildren="false">
+		android:animateLayoutChanges="true">
 
 		<CheckBox
 			android:id="@+id/nacRepeatCheckbox"
@@ -43,8 +41,7 @@
 		<RelativeLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginBottom="@dimen/mb_card_item_spacing"
-			android:clipChildren="false">
+			android:layout_marginBottom="@dimen/mb_card_item_spacing">
 
 			<com.nfcalarmclock.NacImageTextButton
 				android:id="@+id/nacSound"
@@ -89,8 +86,7 @@
 
 		<RelativeLayout
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:clipChildren="false">
+			android:layout_height="wrap_content">
 
 			<com.nfcalarmclock.NacImageTextButton
 				android:id="@+id/nacDelete"

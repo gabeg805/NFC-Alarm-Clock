@@ -19,7 +19,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class NacAlarmActivity
 	extends Activity
-	implements Runnable,NacDialog.OnShowListener,NacDialog.OnCancelListener
+	implements Runnable,
+		NacDialog.OnShowListener,
+		NacDialog.OnCancelListener,
+		NacDialog.OnDismissListener
 {
 
 	/**
@@ -79,6 +82,19 @@ public class NacAlarmActivity
 		}
 
 		nfcAdapter.disableForegroundDispatch(this);
+	}
+
+	/**
+	 * Dismiss the alarm.
+	 */
+	private void dismiss()
+	{
+		NacSharedPreferences shared = new NacSharedPreferences(this);
+
+		NacUtility.quickToast(this, "Alarm dismissed");
+		this.setSnoozeCount(shared, 0);
+		this.cleanup();
+		finish();
 	}
 
 	/**
@@ -166,6 +182,16 @@ public class NacAlarmActivity
 	}
 
 	/**
+	 * Called when the dialog is dismissed.
+	 */
+	@Override
+	public boolean onDismissDialog(NacDialog dialog)
+	{
+		this.dismiss();
+		return true;
+	}
+
+	/**
 	 * NFC tag discovered so dismiss the dialog.
 	 *
 	 * Note: Parent method must be called last. Causes issues with
@@ -174,14 +200,7 @@ public class NacAlarmActivity
 	@Override
 	protected void onNewIntent(Intent intent)
 	{
-		NacSharedPreferences shared = new NacSharedPreferences(this);
-
-		NacUtility.quickToast(this, "Alarm dismissed");
-		this.setSnoozeCount(shared, 0);
-		this.cleanup();
-		finish();
-
-		// What happens if I reverse these two lines?
+		this.dismiss();
 		super.onNewIntent(intent);
 	}
 
@@ -234,6 +253,7 @@ public class NacAlarmActivity
 
 		dialog.build(this, R.layout.act_alarm);
 		dialog.addOnCancelListener(this);
+		dialog.addOnDismissListener(this);
 		dialog.addOnShowListener(this);
 		dialog.show();
 	}
@@ -251,7 +271,7 @@ public class NacAlarmActivity
 	}
 
 	/**
-	 * Automatically dismiss the alarm.
+	 * Automatically snooze the alarm.
 	 */
 	@Override
 	public void run()
@@ -336,6 +356,7 @@ public class NacAlarmActivity
 		if (this.snooze())
 		{
 			NacUtility.quickToast(this, message);
+			this.cleanup();
 			finish();
 			return true;
 		}

@@ -45,6 +45,17 @@ import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 
 import java.lang.Thread;
+import android.support.v7.widget.LinearSmoothScroller;
+import android.util.DisplayMetrics;
+
+import android.view.animation.AlphaAnimation;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
+
+import java.util.EnumSet;
 
 /**
  * Card view holder.
@@ -213,28 +224,33 @@ public class NacCardHolder
 	}
 
 	/**
+	 * @see collapse
+	 */
+	public void collapse()
+	{
+		this.collapse(true);
+	}
+
+	/**
 	 * Collapse the alarm card.
 	 */
 	public void collapse(boolean animate)
 	{
-		NacUtility.printf("Collaapsed!");
-
 		if (animate)
 		{
 			CardView card = this.getCardView();
-			Transition transition = new ChangeBounds().setDuration(100);
+			TransitionDrawable transition = this.getColorTransition();
 
-			TransitionManager.beginDelayedTransition(card, transition);
+			card.setBackground(transition);
+			transition.startTransition(500);
+		}
+		else
+		{
+			this.setBackgroundColor(this.getState());
 		}
 
 		this.setState(State.COLLAPSED);
 		this.setRegions(this.getState());
-		this.setBackgroundColor(this.getState());
-	}
-
-	public void collapse()
-	{
-		this.collapse(true);
 	}
 
 	/**
@@ -251,34 +267,34 @@ public class NacCardHolder
 	}
 
 	/**
+	 * @see expand
+	 */
+	public void expand()
+	{
+		this.expand(true);
+	}
+
+	/**
 	 * Expand the alarm card.
 	 */
 	public void expand(boolean animate)
 	{
-		NacUtility.printf("Expanding!");
-
 		if (animate)
 		{
 			CardView card = this.getCardView();
-			Transition transition = new ChangeBounds().setDuration(300);
+			Transition transition = new ChangeBounds().setDuration(400);
 
 			TransitionManager.beginDelayedTransition(card, transition);
 		}
 
 		this.setState(State.EXPANDED);
 		this.setRegions(this.getState());
-		//this.unfocus();
 		this.setBackgroundColor(this.getState());
 
 		if (animate)
 		{
 			this.scrollOnPartiallyVisible();
 		}
-	}
-
-	public void expand()
-	{
-		this.expand(true);
 	}
 
 	/**
@@ -291,36 +307,11 @@ public class NacCardHolder
 			return;
 		}
 
-		//Context context = this.getContext();
-		//final int fadeInDuration = 1000;
-		//final int fadeOutDuration = 1300;
-		//int bg = NacUtility.getThemeAttrColor(context, R.attr.colorCard);
-		//int highlight = NacUtility.getThemeAttrColor(context,
-		//	R.attr.colorCardHighlight);
-		//ColorDrawable[] color = {new ColorDrawable(bg),
-		//	new ColorDrawable(highlight)};
-		//this.mTransition = new TransitionDrawable(color);
+		CardView card = this.getCardView();
+		AlphaAnimation animation = new AlphaAnimation(0.0f, 1.0f);
 
-		////CardView card = this.getCardView();
-
-		////TransitionManager.endTransitions(card);
-		//this.mCardView.setBackground(this.mTransition);
-		//this.mTransition.startTransition(fadeInDuration);
-
-		//new Handler().postDelayed(new Runnable()
-		//{
-		//	@Override
-		//	public void run()
-		//	{
-		//		NacUtility.printf("Post delayed");
-		//		if (mTransition == null)
-		//		{
-		//			return;
-		//		}
-
-		//		mTransition.reverseTransition(fadeOutDuration);
-		//	}
-		//}, fadeInDuration);
+		animation.setDuration(1000);
+		card.startAnimation(animation);
 	}
 
 	/**
@@ -434,6 +425,22 @@ public class NacCardHolder
 	}
 
 	/**
+	 * @return The color transition from the highlight color to the regular
+	 *         card background color.
+	 */
+	private TransitionDrawable getColorTransition()
+	{
+		Context context = this.getContext();
+		int bg = NacUtility.getThemeAttrColor(context, R.attr.colorCard);
+		int highlight = NacUtility.getThemeAttrColor(context,
+			R.attr.colorCardHighlight);
+		ColorDrawable[] color = {new ColorDrawable(highlight),
+			new ColorDrawable(bg)};
+
+		return new TransitionDrawable(color);
+	}
+
+	/**
 	 * Initialize the alarm card.
 	 *
 	 * @param  alarm  The alarm to use to populate data in the alarm card.
@@ -446,16 +453,16 @@ public class NacCardHolder
 
 		if (!this.isCollapsed())
 		{
-			this.collapse();
+			this.collapse(false);
 		}
 
-		//this.focus(wasAdded);
+		this.focus(wasAdded);
 		this.setSwipeViews();
 		this.setSwitch();
 		this.setTime();
-		this.setDays();
 		this.setRepeatDays();
 		this.setRepeat();
+		this.setDays();
 		this.setVibrate();
 		this.setSound();
 		this.setName();
@@ -486,14 +493,31 @@ public class NacCardHolder
 	 */
 	private boolean isCompletelyVisible()
 	{
-		LinearLayoutManager lv = (LinearLayoutManager)
-			this.mRecyclerView.getLayoutManager();
-		int pos = getAdapterPosition();
-		int ypos = lv.findViewByPosition(pos).getTop();
-		int cardheight = this.getCardHeight();
-		int screenheight = this.getScreenHeight();
+		int position = getAdapterPosition();
 
-		return ((cardheight+ypos) > screenheight) ? false : true;
+		if (position == RecyclerView.NO_POSITION)
+		{
+			return false;
+		}
+
+		LinearLayoutManager layoutManager = (LinearLayoutManager)
+			this.mRecyclerView.getLayoutManager();
+
+		// When deleting too many cards, things get weird and I'm not sure how
+		// to fix it. Just implementing some bandaids to mitigate the crashes.
+		if (layoutManager != null)
+		{
+			int y = layoutManager.findViewByPosition(position).getTop();
+			int cardHeight = this.getCardHeight();
+			int screenHeight = this.getScreenHeight();
+
+			return ((y < 0) || (cardHeight + y) > screenHeight) ? false
+				: true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	/**
@@ -517,20 +541,6 @@ public class NacCardHolder
 	 */
 	public void measure()
 	{
-		//while (this.getState() == State.NONE)
-		//{
-		//	NacUtility.printf("Waiting to measure");
-		//	try
-		//	{
-		//		Thread.sleep(200);
-		//	}
-		//	catch (InterruptedException e)
-		//	{
-		//		break;
-		//	}
-		//}
-		//NacUtility.printf("Done wiating to measure");
-
 		State state = this.getState();
 
 		this.measureExpandedHeight();
@@ -590,13 +600,14 @@ public class NacCardHolder
 		{
 			NacDayOfWeek dayButtons = this.getDayButtons();
 			alarm.setRepeat(state);
-			dayButtons.setVisibility((state) ? View.VISIBLE : View.GONE);
 
 			if (state && alarm.getDays().isEmpty())
 			{
 				alarm.setDays(NacSharedPreferences.DEFAULT_DAYS);
-				dayButtons.setDays(alarm.getDays());
 			}
+
+			this.setDays();
+			this.setRepeatDays();
 		}
 		else if (id == R.id.nacVibrate)
 		{
@@ -621,7 +632,7 @@ public class NacCardHolder
 
 		if (alarm.getDays().isEmpty() && repeat.isChecked())
 		{
-			dayButtons.setVisibility(View.GONE);
+			this.setDays();
 			repeat.setChecked(false);
 		}
 
@@ -720,25 +731,40 @@ public class NacCardHolder
 	 */
 	public void scrollOnPartiallyVisible()
 	{
+		int delay = 200;
+
 		if (this.isCompletelyVisible())
 		{
 			return;
 		}
-
-		int delay = 200;
 
 		new Handler().postDelayed(new Runnable()
 		{
 			@Override
 			public void run()
 			{
-				// To-do : Change getContext to the getContext method 
-				Context context = mRecyclerView.getContext();
-				int pos = getAdapterPosition();
+				int position = getAdapterPosition();
 
-				mRecyclerView.getLayoutManager().startSmoothScroll(
-					new NacSmoothScroller(context, pos,
-						LinearSmoothScroller.SNAP_TO_END));
+				if (position == RecyclerView.NO_POSITION)
+				{
+					return;
+				}
+
+				LinearLayoutManager layoutManager = (LinearLayoutManager)
+					mRecyclerView.getLayoutManager();
+
+				if ((layoutManager == null))
+				{
+					return;
+				}
+
+				Context context = getContext();
+				int y = layoutManager.findViewByPosition(position).getTop();
+				int snap = (y >= 0) ? LinearSmoothScroller.SNAP_TO_END
+					: LinearSmoothScroller.SNAP_TO_START;
+				SmoothScroller scroller = new SmoothScroller(context, position, snap);
+
+				layoutManager.startSmoothScroll(scroller);
 			}
 		}, delay);
 	}
@@ -791,8 +817,12 @@ public class NacCardHolder
 	{
 		NacAlarm alarm = this.getAlarm();
 		NacDayOfWeek dayButtons = this.getDayButtons();
+		CheckBox repeat = this.getRepeat();
+		EnumSet<NacCalendar.Day> days = alarm.getDays();
 
-		dayButtons.setDays(alarm.getDays());
+		dayButtons.setDays(days);
+		dayButtons.setVisibility((days.isEmpty() || !repeat.isChecked())
+			? View.GONE : View.VISIBLE);
 	}
 
 	/**
@@ -1040,37 +1070,53 @@ public class NacCardHolder
 	 */
 	public void unfocus()
 	{
-		if (this.mTransition != null)
-		{
-			this.mTransition.resetTransition();
-			this.setBackgroundColor(State.COLLAPSED);
-
-			this.mTransition = null;
-		}
+		this.getRoot().clearAnimation();
 	}
 
-	private void slideAnimation(final View view, int currentHeight, int newHeight)
+	/**
+	 * Smooth scroller
+	 */
+	public static class SmoothScroller
+		extends LinearSmoothScroller
 	{
-		ValueAnimator slideAnimator = ValueAnimator
-			.ofInt(currentHeight, newHeight)
-			.setDuration(500);
 
-		slideAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
+		/**
+		 * Scrolling snap preference.
+		 */
+		private final int mSnap;
+
+		/**
+		 * Speed to scroll in millimeters per pixel.
+		 */
+		private final float mSpeed = 100;
+
+		/**
+		 */
+		public SmoothScroller(Context context, int position, int snap)
 		{
-			@Override
-			public void onAnimationUpdate(ValueAnimator animation)
-			{
-				Integer value = (Integer) animation.getAnimatedValue();
-				view.getLayoutParams().height = value.intValue();
-				view.invalidate();
-				view.requestLayout();
-			}
-		});
+			super(context);
 
-		AnimatorSet animationSet = new AnimatorSet();
-		animationSet.setInterpolator(new AccelerateDecelerateInterpolator());
-		animationSet.play(slideAnimator);
-		animationSet.start();
+			this.mSnap = snap;
+
+			setTargetPosition(position);
+		}
+
+		/**
+		 */
+		@Override
+		protected float calculateSpeedPerPixel(DisplayMetrics dm)
+		{
+			return mSpeed / dm.densityDpi;
+		}
+
+		/**
+		 */
+		@Override
+		protected int getVerticalSnapPreference()
+		{
+			return mSnap;
+		}
+
 	}
 
 }

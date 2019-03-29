@@ -35,9 +35,15 @@
 	<string name="pref_max_snooze_key">pref_max_snooze</string>
 	<string name="pref_max_snooze_title">Max Snoozes</string>
 
-	<!-- Snooze duration-->
+	<!-- Snooze duration -->
 	<string name="pref_snooze_duration_key">pref_snooze_duration</string>
 	<string name="pref_snooze_duration_title">Snooze Duration</string>
+
+	<!-- Dismiss button -->
+	<string name="pref_dismiss_button_key">pref_dismiss_button</string>
+	<string name="pref_dismiss_button_title">Require NFC</string>
+	<string name="pref_dismiss_button_summary_enabled">NFC is required to dismiss an alarm.</string>
+	<string name="pref_dismiss_button_summary_disabled">Select a button to dismiss an alarm.</string>
 
 	<!-- Color preference -->
 	<string name="pref_color_key">pref_color</string>

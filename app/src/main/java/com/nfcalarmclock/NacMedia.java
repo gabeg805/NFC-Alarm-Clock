@@ -198,6 +198,12 @@ public class NacMedia
 	public static String getArtist(File file)
 	{
 		MediaMetadataRetriever retriever = NacMedia.getMediaMetadataRetriever(file);
+
+		if (retriever == null)
+		{
+			return "";
+		}
+
 		String artist = retriever.extractMetadata(
 			MediaMetadataRetriever.METADATA_KEY_ARTIST);
 		String name = file.getName();

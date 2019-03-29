@@ -34,6 +34,11 @@ public class NacSharedPreferences
 	public final int mSnoozeDuration;
 
 	/**
+	 * Require NFC to dismiss an alarm.
+	 */
+	public final boolean mRequireNfc;
+
+	/**
 	 * Day of week.
 	 */
 	public final int mDays;
@@ -102,6 +107,11 @@ public class NacSharedPreferences
 	 * Default snooze duration.
 	 */
 	public static final int DEFAULT_SNOOZE_DURATION = 5;
+
+	/**
+	 * Default show dismiss button.
+	 */
+	public static final boolean DEFAULT_REQUIRE_NFC = true;
 
 	/**
 	 * Default auto dismiss index value.
@@ -235,6 +245,7 @@ public class NacSharedPreferences
 		int autoDismiss = shared.getInt(keys.getAutoDismiss(), DEFAULT_AUTO_DISMISS);
 		int maxSnooze = shared.getInt(keys.getMaxSnooze(), DEFAULT_MAX_SNOOZE);
 		int snoozeDuration = shared.getInt(keys.getSnoozeDuration(), DEFAULT_SNOOZE_DURATION);
+		this.mRequireNfc = shared.getBoolean(keys.getRequireNfc(), DEFAULT_REQUIRE_NFC);
 
 		this.mAutoDismiss = (autoDismiss == 1) ? 1 : 5*(autoDismiss-1);
 		this.mMaxSnooze = (maxSnooze == 11) ? -1 : maxSnooze;
@@ -271,6 +282,14 @@ public class NacSharedPreferences
 	public int getSnoozeDuration()
 	{
 		return this.mSnoozeDuration;
+	}
+
+	/**
+	 * @return Whether NFC is required or not.
+	 */
+	public boolean getRequireNfc()
+	{
+		return this.mRequireNfc;
 	}
 
 	/**

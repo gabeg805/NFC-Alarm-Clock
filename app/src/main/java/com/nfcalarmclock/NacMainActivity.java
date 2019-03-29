@@ -3,8 +3,11 @@ package com.nfcalarmclock;
 import android.app.AlarmManager.AlarmClockInfo;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,13 +48,21 @@ public class NacMainActivity
 		setContentView(R.layout.act_main);
 
 		NacSharedPreferences shared = new NacSharedPreferences(this);
+		Drawable drawable = ContextCompat.getDrawable(this,
+			R.drawable.card_divider);
+		DividerItemDecoration divider = new DividerItemDecoration(this,
+			LinearLayoutManager.VERTICAL);
+		ColorStateList color = ColorStateList.valueOf(shared.getThemeColor());
 		this.mAdapter = new NacCardAdapter(this);
-		this.mFloatingButton = (FloatingActionButton) findViewById(R.id.fab_add_alarm);
-		this.mRecyclerView = (RecyclerView) findViewById(R.id.content_alarm_list);
+		this.mFloatingButton = (FloatingActionButton) findViewById(
+			R.id.fab_add_alarm);
+		this.mRecyclerView = (RecyclerView) findViewById(
+			R.id.content_alarm_list);
 
-		this.mFloatingButton.setBackgroundTintList(ColorStateList.valueOf(
-			shared.getThemeColor()));
+		divider.setDrawable(drawable);
+		this.mFloatingButton.setBackgroundTintList(color);
 		this.mFloatingButton.setOnClickListener(this);
+		this.mRecyclerView.addItemDecoration(divider);
 		this.mRecyclerView.setAdapter(this.mAdapter);
 		this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 		this.mRecyclerView.addOnScrollListener(new ScrollListener());

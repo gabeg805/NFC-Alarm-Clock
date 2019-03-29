@@ -397,7 +397,7 @@ public class NacColorPicker
 	 */
 	public float getShaderHeight(int height)
 	{
-		return height / 15.0f;
+		return height / 13.0f;
 	}
 
 	/**

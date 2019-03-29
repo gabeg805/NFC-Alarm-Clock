@@ -265,7 +265,7 @@ public class NacCardAdapter
 	@Override
 	public int getItemCount()
 	{
-		return this.getAlarms().size();
+		return this.size();
 	}
 
 	/**
@@ -378,12 +378,12 @@ public class NacCardAdapter
 	 * Setup the alarm card.
 	 *
 	 * @param  card  The alarm card.
-	 * @param  pos	The position of the alarm card.
+	 * @param  position  The position of the alarm card.
 	 */
 	@Override
-	public void onBindViewHolder(final NacCardHolder card, int pos)
+	public void onBindViewHolder(final NacCardHolder card, int position)
 	{
-		NacAlarm alarm = this.get(pos);
+		NacAlarm alarm = this.get(position);
 
 		alarm.setOnChangeListener(this);
 		card.init(alarm, this.mWasAdded);
@@ -514,6 +514,15 @@ public class NacCardAdapter
 	public void onViewAttachedToWindow(NacCardHolder card)
 	{
 		card.measure();
+	}
+
+	/**
+	 * Clear any animation that is occuring.
+	 */
+	@Override
+	public void onViewDetachedFromWindow(NacCardHolder card)
+	{
+		card.unfocus();
 	}
 
 	/**
