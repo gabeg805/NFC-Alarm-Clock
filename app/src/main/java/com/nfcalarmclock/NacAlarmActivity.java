@@ -60,6 +60,8 @@ public class NacAlarmActivity
 		if (this.mPlayer != null)
 		{
 			this.mPlayer.stop();
+			this.mPlayer.reset();
+			this.mPlayer.release();
 		}
 
 		if (this.mHandler != null)

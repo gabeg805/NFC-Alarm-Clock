@@ -98,7 +98,14 @@ public class NacMediaPlayer
 		if (focusChange == AudioManager.AUDIOFOCUS_GAIN)
 		{
 			change = "GAIN";
-			this.setVolume(this.mVolume, this.mVolume);
+			try
+			{
+				setVolume(this.mVolume, this.mVolume);
+			}
+			catch (IllegalStateException e)
+			{
+				NacUtility.printf("Unable to set volume on audio gain.");
+			}
 			this.startWrapper();
 		}
 		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS)
@@ -114,8 +121,15 @@ public class NacMediaPlayer
 		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
 		{
 			change = "LOSS_TRANSIENT_CAN_DUCK";
-			this.mVolume = this.getStreamVolume();
-			this.setVolume(this.mVolume/2, this.mVolume/2);
+			try
+			{
+				this.mVolume = this.getStreamVolume();
+				setVolume(this.mVolume/2, this.mVolume/2);
+			}
+			catch (IllegalStateException e)
+			{
+				NacUtility.printf("Unable to set volume on audio loss transient can duck.");
+			}
 		}
 
 		NacUtility.printf("NacMediaPlayer : onAudioFocusChange : AUDIOFOCUS_%s",
