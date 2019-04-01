@@ -6,13 +6,13 @@
 	<string name="card_repeat">Repeat</string>
 	<string name="card_vibrate">Vibrate</string>
 
-	<string name="dowb_sun">S</string>
-	<string name="dowb_mon">M</string>
-	<string name="dowb_tue">T</string>
-	<string name="dowb_wed">W</string>
-	<string name="dowb_thu">T</string>
-	<string name="dowb_fri">F</string>
-	<string name="dowb_sat">S</string>
+	<string name="dow_sun">S</string>
+	<string name="dow_mon">M</string>
+	<string name="dow_tue">T</string>
+	<string name="dow_wed">W</string>
+	<string name="dow_thu">T</string>
+	<string name="dow_fri">F</string>
+	<string name="dow_sat">S</string>
 
 	<!-- Dialogs -->
 	<string name="dlg_ringtone_title">Select a ringtone</string>

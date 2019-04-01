@@ -57,7 +57,7 @@ public class NacImageSubTextButton
 			try
 			{
 				Resources res = context.getResources();
-				int textsize = (int) res.getDimension(R.dimen.tsz_card_days);
+				int textsize = (int) res.getDimension(R.dimen.tsz_itb);
 				int spacing = (int) res.getDimension(R.dimen.sp_card);
 
 				this.imageColor = ta.getColor(R.styleable.NacImageSubTextButton_nacDrawableColor, Color.WHITE);

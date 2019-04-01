@@ -86,25 +86,25 @@ public class NacDayOfWeek
 
 		switch (id)
 		{
-			case R.id.dowb_sun:
+			case R.id.dow_sun:
 				index = 0;
 				break;
-			case R.id.dowb_mon:
+			case R.id.dow_mon:
 				index = 1;
 				break;
-			case R.id.dowb_tue:
+			case R.id.dow_tue:
 				index = 2;
 				break;
-			case R.id.dowb_wed:
+			case R.id.dow_wed:
 				index = 3;
 				break;
-			case R.id.dowb_thu:
+			case R.id.dow_thu:
 				index = 4;
 				break;
-			case R.id.dowb_fri:
+			case R.id.dow_fri:
 				index = 5;
 				break;
-			case R.id.dowb_sat:
+			case R.id.dow_sat:
 				index = 6;
 				break;
 			default:
@@ -133,13 +133,13 @@ public class NacDayOfWeek
 			this, true);
 
 		this.mButtons = new NacDayButton[this.mLength];
-		this.mButtons[0] = (NacDayButton) findViewById(R.id.dowb_sun);
-		this.mButtons[1] = (NacDayButton) findViewById(R.id.dowb_mon);
-		this.mButtons[2] = (NacDayButton) findViewById(R.id.dowb_tue);
-		this.mButtons[3] = (NacDayButton) findViewById(R.id.dowb_wed);
-		this.mButtons[4] = (NacDayButton) findViewById(R.id.dowb_thu);
-		this.mButtons[5] = (NacDayButton) findViewById(R.id.dowb_fri);
-		this.mButtons[6] = (NacDayButton) findViewById(R.id.dowb_sat);
+		this.mButtons[0] = (NacDayButton) findViewById(R.id.dow_sun);
+		this.mButtons[1] = (NacDayButton) findViewById(R.id.dow_mon);
+		this.mButtons[2] = (NacDayButton) findViewById(R.id.dow_tue);
+		this.mButtons[3] = (NacDayButton) findViewById(R.id.dow_wed);
+		this.mButtons[4] = (NacDayButton) findViewById(R.id.dow_thu);
+		this.mButtons[5] = (NacDayButton) findViewById(R.id.dow_fri);
+		this.mButtons[6] = (NacDayButton) findViewById(R.id.dow_sat);
 		this.mListener = null;
 
 		for (int i=0; i < this.mLength; i++)
@@ -200,19 +200,24 @@ public class NacDayOfWeek
 		}
 
 		int spacing = this.getButtonSpacing();
-		//super.setBackgroundColor(this.mButtons[0].getDefaultButtonColor());
 
 		for (int i=0; i < this.mLength; i++)
 		{
 			NacDayButton b = this.mButtons[i];
-			LayoutParams params = (LayoutParams) b.getLayoutParams();
+			int top = b.getPaddingTop();
+			int bottom = b.getPaddingBottom();
+			int start = b.getPaddingStart();
+			int end = b.getPaddingEnd();
 
-			if (i > 0)
+			if ((top == 0) && (bottom == 0) && (start == 0) && (end == 0))
 			{
-				params.setMargins(spacing, 0, 0, 0);
+				top = spacing;
+				bottom = spacing;
+				start = (i == 0) ? 2*spacing : spacing;
+				end = ((i+1) == this.mLength) ? 2*spacing : spacing;
 			}
 
-			b.setLayoutParams(params);
+			b.setPadding(start, top, end, bottom);
 			b.setTag(i);
 		}
 	}
@@ -247,7 +252,7 @@ public class NacDayOfWeek
 	}
 
 	/**
-	 * @brief Determine the spacing between buttons.
+	 * Determine the spacing between buttons.
 	 * 
 	 * @return The spacing between the different buttons.
 	 */
@@ -255,10 +260,10 @@ public class NacDayOfWeek
 	{
 		Resources r = getContext().getResources();
 		DisplayMetrics metrics = r.getDisplayMetrics();
-		float left = r.getDimension(R.dimen.ml_card);
-		float right = r.getDimension(R.dimen.mr_card);
-		double spacing = (metrics.widthPixels - 2.5*(left+right)
-						 - 7*this.mButtons[0].getButtonWidth()) / 6.0;
+		float left = r.getDimension(R.dimen.ml_card) + getPaddingLeft();
+		float right = r.getDimension(R.dimen.mr_card) + getPaddingRight();
+		double spacing = (metrics.widthPixels - (left+right)
+						 - 7*this.mButtons[0].getButtonWidth()) / 16.0;
 
 		return (int) spacing;
 	}

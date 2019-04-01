@@ -10,6 +10,27 @@
 	<attr name="colorCardText" format="reference" />
 	<attr name="colorCardFocus" format="reference" />
 	<attr name="colorCardFocusText" format="reference" />
+	<attr name="nacWidth" format="reference|dimension" />
+	<attr name="nacHeight" format="reference|dimension" />
+	<attr name="nacDuration" format="reference|integer" />
+	<attr name="nacBackgroundColor" format="reference|color" />
+	<attr name="nacDrawable" format="reference" />
+	<attr name="nacDrawableWidth" format="reference|dimension" />
+	<attr name="nacDrawableHeight" format="reference|dimension" />
+	<attr name="nacDrawableColor" format="reference|color" />
+	<attr name="nacTextSize" format="reference|dimension" />
+	<attr name="nacTextColor" format="reference|color" />
+	<attr name="nacText" format="reference|string" />
+	<attr name="nacSubTextSize" format="reference|dimension" />
+	<attr name="nacSubTextColor" format="reference|color" />
+	<attr name="nacSubText" format="reference|string" />
+	<attr name="nacSpacing" format="reference|dimension" />
+	<attr name="nacPaddingTop" format="reference|dimension" />
+	<attr name="nacPaddingBottom" format="reference|dimension" />
+	<attr name="nacPaddingStart" format="reference|dimension" />
+	<attr name="nacPaddingEnd" format="reference|dimension" />
+	<attr name="nacPaddingLeft" format="reference|dimension" />
+	<attr name="nacPaddingRight" format="reference|dimension" />
 
 	<declare-styleable name="NacPreference">
 		<attr name="summaryEnabled" format="reference" />
@@ -25,6 +46,12 @@
 		<attr name="nacText" />
 		<attr name="nacBackgroundColor" />
 		<attr name="nacDrawable" />
+		<attr name="nacPaddingTop" />
+		<attr name="nacPaddingBottom" />
+		<attr name="nacPaddingStart" />
+		<attr name="nacPaddingEnd" />
+		<attr name="nacPaddingLeft" />
+		<attr name="nacPaddingRight" />
 	</declare-styleable>
 
 	<declare-styleable name="NacDayOfWeek">
@@ -36,6 +63,12 @@
 		<attr name="nacText" />
 		<attr name="nacBackgroundColor" />
 		<attr name="nacDrawable" />
+		<attr name="nacPaddingTop" />
+		<attr name="nacPaddingBottom" />
+		<attr name="nacPaddingStart" />
+		<attr name="nacPaddingEnd" />
+		<attr name="nacPaddingLeft" />
+		<attr name="nacPaddingRight" />
 	</declare-styleable>
 
 	<declare-styleable name="NacColorPicker">
@@ -43,24 +76,6 @@
 		<attr name="nacHeight" />
 		<attr name="nacSpacing" />
 	</declare-styleable>
-
-	<!-- <declare-styleable name="NacSharedAttr"> -->
-		<attr name="nacWidth" format="reference|dimension" />
-		<attr name="nacHeight" format="reference|dimension" />
-		<attr name="nacDuration" format="reference|integer" />
-		<attr name="nacBackgroundColor" format="reference|color" />
-		<attr name="nacDrawable" format="reference" />
-		<attr name="nacDrawableWidth" format="reference|dimension" />
-		<attr name="nacDrawableHeight" format="reference|dimension" />
-		<attr name="nacDrawableColor" format="reference|color" />
-		<attr name="nacTextSize" format="reference|dimension" />
-		<attr name="nacTextColor" format="reference|color" />
-		<attr name="nacText" format="reference|string" />
-		<attr name="nacSubTextSize" format="reference|dimension" />
-		<attr name="nacSubTextColor" format="reference|color" />
-		<attr name="nacSubText" format="reference|string" />
-		<attr name="nacSpacing" format="reference|dimension" />
-	<!-- </declare-styleable> -->
 
 	<declare-styleable name="NacImageSubTextButton">
 		<attr name="nacDrawableWidth" />

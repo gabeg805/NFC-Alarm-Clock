@@ -443,9 +443,8 @@ public class NacCardAdapter
 	public NacCardHolder onCreateViewHolder(ViewGroup parent, int viewType)
 	{
 		Context context = parent.getContext();
-		int layout = R.layout.view_card_alarm;
-		View root = LayoutInflater.from(context).inflate(layout, parent,
-			false);
+		View root = LayoutInflater.from(context).inflate(R.layout.card_frame,
+			parent, false);
 
 		return new NacCardHolder(root);
 	}

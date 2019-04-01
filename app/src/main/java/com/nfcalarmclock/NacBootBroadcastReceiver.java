@@ -15,17 +15,24 @@ public class NacBootBroadcastReceiver
 {
 
 	/**
+	 * It is possible for another actor to send a spoofed intent with no
+	 * action string or a different action string and cause undesired behavior.
+	 * Ensure that the received Intent's action string matches the expected
+	 * value before restoring alarms.
 	 */
 	@Override
 	public void onReceive(final Context context, Intent intent)
 	{
-		NacDatabase db = new NacDatabase(context);
-		NacScheduler scheduler = new NacScheduler(context);
-		List<NacAlarm> alarms = db.read();
-
-		for (NacAlarm a : alarms)
+		if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED"))
 		{
-			scheduler.update(a);
+			NacDatabase db = new NacDatabase(context);
+			NacScheduler scheduler = new NacScheduler(context);
+			List<NacAlarm> alarms = db.read();
+
+			for (NacAlarm a : alarms)
+			{
+				scheduler.update(a);
+			}
 		}
 	}
 

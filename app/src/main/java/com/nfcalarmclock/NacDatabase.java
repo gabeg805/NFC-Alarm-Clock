@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.AsyncTask;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,12 +36,27 @@ public class NacDatabase
 	 */
 	public long add(NacAlarm alarm)
 	{
-		ContentValues cv = this.getContentValues(alarm);
-
 		this.setDatabase();
-		new AsyncInsert().execute(cv);
 
-		return 0;
+		ContentValues cv = this.getContentValues(alarm);
+		SQLiteDatabase db = this.getDatabase();
+		String table = this.getTable();
+		long result = 0;
+
+		db.beginTransaction();
+
+		try
+		{
+			result = db.insert(table, null, cv);
+
+			db.setTransactionSuccessful();
+		}
+		finally
+		{
+			db.endTransaction();
+		}
+
+		return result;
 	}
 
 	/**
@@ -328,48 +342,6 @@ public class NacDatabase
 		int rows = db.update(table, cv, where, args);
 
 		return rows;
-	}
-
-	/**
-	 * Insert entries to the database asynchronously.
-	 */
-	private class AsyncInsert
-		extends AsyncTask<ContentValues, Void, Long>
-	{
-
-		/**
-		 */
-		public AsyncInsert()
-		{
-		}
-
-		/**
-		 */
-		protected Long doInBackground(ContentValues... values)
-		{
-			SQLiteDatabase db = getDatabase();
-			String table = getTable();
-			long result = 0;
-
-			db.beginTransaction();
-
-			try
-			{
-				for (int i=0; i < values.length; i++)
-				{
-					result += db.insert(table, null, values[i]);
-				}
-
-				db.setTransactionSuccessful();
-			}
-			finally
-			{
-				db.endTransaction();
-			}
-
-			return result;
-		}
-
 	}
 
 }

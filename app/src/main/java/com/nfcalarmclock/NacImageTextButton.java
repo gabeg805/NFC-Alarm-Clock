@@ -55,7 +55,7 @@ public class NacImageTextButton
 				int spacing = (int) res.getDimension(R.dimen.sp_itb);
 				float width = res.getDimension(R.dimen.isz_itb);
 				float height = res.getDimension(R.dimen.isz_itb);
-				int textsize = (int) res.getDimension(R.dimen.tsz_card_days);
+				int textsize = (int) res.getDimension(R.dimen.tsz_itb);
 				this.imageColor = ta.getColor(R.styleable.NacImageTextButton_nacDrawableColor, Color.WHITE);
 				this.imageHeight = (int) ta.getDimension(R.styleable.NacImageTextButton_nacDrawableHeight, height);
 				this.imageId = ta.getResourceId(R.styleable.NacImageTextButton_nacDrawable, 0);

@@ -1,9 +1,11 @@
 package com.nfcalarmclock;
 
 import android.support.v4.content.ContextCompat;
+import android.animation.Animator;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -17,9 +19,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
-import android.support.annotation.Nullable;
-import android.content.res.Resources.Theme;
-import android.content.res.ColorStateList;
+import android.animation.ObjectAnimator;
 
 /**
  * A button that consists of an image to the left, and text to the right
@@ -27,7 +27,7 @@ import android.content.res.ColorStateList;
  */
 public class NacDayButton
 	extends LinearLayout
-	implements ValueAnimator.AnimatorUpdateListener,View.OnClickListener
+	implements View.OnClickListener
 {
 
 	/**
@@ -51,6 +51,10 @@ public class NacDayButton
 		public String text;
 		public int backgroundColor;
 		public int drawable;
+		public int paddingTop;
+		public int paddingBottom;
+		public int paddingStart;
+		public int paddingEnd;
 
 		/**
 		 * Initialize the attributes.
@@ -63,7 +67,7 @@ public class NacDayButton
 			try
 			{
 				Resources res = context.getResources();
-				int textsize = (int) res.getDimension(R.dimen.tsz_card_days);
+				int textsize = (int) res.getDimension(R.dimen.tsz_days);
 				this.width = (int) ta.getDimension(R.styleable.NacDayButton_nacWidth, 2*textsize);
 				this.height = (int) ta.getDimension(R.styleable.NacDayButton_nacHeight, 2*textsize);
 				this.duration = ta.getInt(R.styleable.NacDayButton_nacDuration, 500);
@@ -72,6 +76,20 @@ public class NacDayButton
 				this.text = ta.getString(R.styleable.NacDayButton_nacText);
 				this.backgroundColor = ta.getColor(R.styleable.NacDayButton_nacBackgroundColor, Color.WHITE);
 				this.drawable = ta.getResourceId(R.styleable.NacDayButton_nacDrawable, R.drawable.day_button);
+				this.paddingTop = (int) ta.getDimension(R.styleable.NacDayButton_nacPaddingTop, 0);
+				this.paddingBottom = (int) ta.getDimension(R.styleable.NacDayButton_nacPaddingBottom, 0);
+				this.paddingStart = (int) ta.getDimension(R.styleable.NacDayButton_nacPaddingStart, 0);
+				this.paddingEnd = (int) ta.getDimension(R.styleable.NacDayButton_nacPaddingEnd, 0);
+
+				if (this.paddingStart == 0)
+				{
+					this.paddingStart = (int) ta.getDimension(R.styleable.NacDayButton_nacPaddingLeft, 0);
+				}
+
+				if (this.paddingEnd == 0)
+				{
+					this.paddingEnd = (int) ta.getDimension(R.styleable.NacDayButton_nacPaddingRight, 0);
+				}
 			}
 			finally
 			{
@@ -119,6 +137,36 @@ public class NacDayButton
 			{
 				this.drawable = attributes.drawable;
 			}
+			else if (index == R.styleable.NacDayButton_nacPaddingTop)
+			{
+				this.paddingTop = attributes.paddingTop;
+			}
+			else if (index == R.styleable.NacDayButton_nacPaddingBottom)
+			{
+				this.paddingBottom = attributes.paddingBottom;
+			}
+			else if (index == R.styleable.NacDayButton_nacPaddingStart)
+			{
+				this.paddingStart = attributes.paddingStart;
+			}
+			else if (index == R.styleable.NacDayButton_nacPaddingEnd)
+			{
+				this.paddingEnd = attributes.paddingEnd;
+			}
+			else if (index == R.styleable.NacDayButton_nacPaddingLeft)
+			{
+				if (this.paddingStart == 0)
+				{
+					this.paddingStart = attributes.paddingStart;
+				}
+			}
+			else if (index == R.styleable.NacDayButton_nacPaddingRight)
+			{
+				if (this.paddingEnd == 0)
+				{
+					this.paddingEnd = attributes.paddingEnd;
+				}
+			}
 		}
 
 	}
@@ -145,12 +193,14 @@ public class NacDayButton
 	/**
 	 * Button animator.
 	 */
-	private ValueAnimator mButtonAnimator;
+	//private ValueAnimator mButtonAnimator;
+	private ObjectAnimator mButtonAnimator;
 
 	/**
 	 * Text animator.
 	 */
-	private ValueAnimator mTextAnimator;
+	//private ValueAnimator mTextAnimator;
+	private ObjectAnimator mTextAnimator;
 
 	/**
 	 * Click listener.
@@ -183,41 +233,305 @@ public class NacDayButton
 	}
 
 	/**
-	 * Merge attributes of another class that utilizes this one, with this
-	 * class.
+	 * Animate the button's change in color.
 	 */
-	public void mergeAttributes(Context context, AttributeSet attrs)
+	public void animateButton()
 	{
-		NacDayAttributes parsed = new NacDayAttributes(context, attrs);
-		Resources res = context.getResources();
-		TypedArray ta = res.obtainAttributes(attrs, R.styleable.NacDayButton);
+		animateDay(NacDayViewType.BUTTON);
+	}
 
-		try
+	/**
+	 * Animate the button or text.
+	 */
+	public void animateDay(NacDayViewType type)
+	{
+		this.cancelAnimator();
+
+		ObjectAnimator animator = this.startAnimator(type);
+
+		this.setAnimator(animator, type);
+
+
+	}
+
+	/**
+	 * Disable and animate the view.
+	 */
+	public void animateDisable()
+	{
+		this.disable();
+		this.animateButton();
+	}
+
+	/**
+	 * Enable and animate the view.
+	 */
+	public void animateEnable()
+	{
+		this.enable();
+		this.animateButton();
+	}
+
+	/**
+	 * Animate the text's change in color.
+	 */
+	public void animateText()
+	{
+		animateDay(NacDayViewType.TEXT);
+	}
+
+	/**
+	 * Toggle and animate the view.
+	 */
+	public void animateToggle()
+	{
+		this.toggle();
+		this.animateButton();
+	}
+
+	/**
+	 * Cancel the animator.
+	 */
+	public void cancelAnimator()
+	{
+		if (this.mButtonAnimator != null)
 		{
-			for (int index=0; index < ta.length(); index++)
-			{
-				if (!ta.hasValue(index))
-				{
-					continue;
-				}
-
-				this.mAttributes.merge(index, parsed);
-			}
+			this.mButtonAnimator.cancel();
+			this.setEndValues();
 		}
-		finally
+
+		if (this.mTextAnimator != null)
 		{
-			ta.recycle();
+			this.mTextAnimator.cancel();
+			this.setEndValues();
 		}
 	}
 
 	/**
-	 * Finish setting up the View.
+	 * Disable a button by setting the button color to its initial color, and
+	 * the same is true for the text.
 	 */
-	@Override
-	protected void onFinishInflate()
+	public void disable()
 	{
-		super.onFinishInflate();
-		this.setViewAttributes();
+		this.setButtonColor(this.getDefaultButtonColor());
+		this.setTextColor(this.getDefaultTextColor());
+	}
+
+	/**
+	 * Enable a button by setting the button color to the initial color of the
+	 * text, and the text is set to the initial color of the button.
+	 */
+	public void enable()
+	{
+		this.setButtonColor(this.getDefaultTextColor());
+		this.setTextColor(this.getDefaultButtonColor());
+	}
+
+	/**
+	 * @return The background drawable of the button.
+	 */
+	public Drawable getBackground()
+	{
+		return this.mButton.getBackground();
+	}
+
+	/**
+	 * @return The background resource of the button.
+	 */
+	public int getBackgroundResource()
+	{
+		return this.mAttributes.drawable;
+	}
+
+	/**
+	 * @return The button color.
+	 */
+	public int getButtonColor()
+	{
+		Object tag = this.mButton.getTag();
+
+		return (tag != null) ? (Integer) tag : this.getDefaultButtonColor();
+	}
+
+	/**
+	 * @return The view height.
+	 */
+	public int getButtonHeight()
+	{
+		return this.mAttributes.height;
+	}
+
+	/**
+	 * @return The view width.
+	 */
+	public int getButtonWidth()
+	{
+		return this.mAttributes.width;
+	}
+
+	/**
+	 * @return The default button color.
+	 */
+	public int getDefaultButtonColor()
+	{
+		return this.mAttributes.backgroundColor;
+	}
+
+	/**
+	 * @return The default text color.
+	 */
+	public int getDefaultTextColor()
+	{
+		return this.mAttributes.textColor;
+	}
+
+	/**
+	 * @return The animation duration.
+	 */
+	public int getDuration()
+	{
+		return (this.isEnabled()) ? this.mAttributes.duration
+			: this.mAttributes.duration / 2;
+	}
+
+	private void setEndValues()
+	{
+		int textColor = this.getTextColor();
+		int buttonColor = this.getButtonColor();
+		int defTextColor = this.getDefaultTextColor();
+		int defButtonColor = this.getDefaultButtonColor();
+
+		if (buttonColor == defButtonColor)
+		{
+			textColor = defTextColor;
+		}
+		else if (buttonColor == defTextColor)
+		{
+			textColor = defButtonColor;
+		}
+		else
+		{
+			if (textColor == defTextColor)
+			{
+				buttonColor = defButtonColor;
+			}
+			else if (textColor == defButtonColor)
+			{
+				buttonColor = defTextColor;
+			}
+			else
+			{
+				buttonColor = defButtonColor;
+				textColor = defTextColor;
+			}
+		}
+
+		this.setButtonColor(buttonColor);
+		this.setTextColor(textColor);
+	}
+
+	public int getFromValue(NacDayViewType type)
+	{
+		if (type == NacDayViewType.BUTTON)
+		{
+			return this.getTextColor();
+		}
+		else if (type == NacDayViewType.TEXT)
+		{
+			return this.getButtonColor();
+		}
+		else
+		{
+			return Color.WHITE;
+		}
+	}
+
+	public int getToValue(NacDayViewType type)
+	{
+		if (type == NacDayViewType.BUTTON)
+		{
+			return this.getButtonColor();
+		}
+		else if (type == NacDayViewType.TEXT)
+		{
+			return this.getTextColor();
+		}
+		else
+		{
+			return Color.WHITE;
+		}
+	}
+
+	//private void setAnimator(NacDayViewType type)
+	//{
+	//	if (type == NacDayViewType.BUTTON)
+	//	{
+
+	//		this.mButtonAnimator = animator;
+	//	}
+	//	else if (type == NacDayViewType.TEXT)
+	//	{
+
+	//		this.mTextAnimator = animator;
+	//	}
+	//}
+
+	/**
+	 * @return The bottom padding.
+	 */
+	public int getPaddingBottom()
+	{
+		return this.mAttributes.paddingBottom;
+	}
+
+	/**
+	 * @return The end padding.
+	 */
+	public int getPaddingEnd()
+	{
+		return this.mAttributes.paddingEnd;
+	}
+
+	/**
+	 * @return The start padding.
+	 */
+	public int getPaddingStart()
+	{
+		return this.mAttributes.paddingStart;
+	}
+
+	/**
+	 * @return The top padding.
+	 */
+	public int getPaddingTop()
+	{
+		return this.mAttributes.paddingTop;
+	}
+
+	/**
+	 * @return The text in the button.
+	 */
+	public String getText()
+	{
+		return this.mAttributes.text;
+	}
+
+	/**
+	 * @return The text color.
+	 */
+	public int getTextColor()
+	{
+		ColorStateList colorlist = this.mButton.getTextColors();
+
+		return (colorlist != null) ? colorlist.getDefaultColor() : this.getDefaultTextColor();
+	}
+
+	/**
+	 * @return The text size.
+	 */
+	public int getTextSize()
+	{
+		return this.mAttributes.textSize;
 	}
 
 	/**
@@ -249,174 +563,7 @@ public class NacDayButton
 
 		this.mButton.setPadding(0, 0, 0, 0);
 		this.mButton.setOnClickListener(this);
-	}
-
-	/**
-	 * Set view attributes.
-	 */
-	public void setViewAttributes()
-	{
-		this.setWidthAndHeight(this.getButtonWidth(), this.getButtonHeight());
-		this.setBackground(this.getBackgroundResource());
-		this.setButtonColor(this.getDefaultButtonColor());
-		this.setTextColor(this.getDefaultTextColor());
-		this.setText(this.getText());
-		this.setTextSize(this.getTextSize());
-	}
-
-	/**
-	 */
-	@Override
-	public void onClick(View v)
-	{
-		if (this.mListener != null)
-		{
-			this.mListener.onClick(this);
-		}
-	}
-
-	/**
-	 */
-	@Override
-	public void onAnimationUpdate(ValueAnimator animator)
-	{
-		int color = (int) animator.getAnimatedValue();
-
-		if (animator.equals(this.mButtonAnimator))
-		{
-			this.setButtonColor(color);
-		}
-		else if (animator.equals(this.mTextAnimator))
-		{
-			this.setTextColor(color);
-		}
-	}
-
-	/**
-	 * Redraw the view.
-	 */
-	public void redraw()
-	{
-		invalidate();
-		requestLayout();
-	}
-
-	/**
-	 * Enable a button by setting the button color to the initial color of the
-	 * text, and the text is set to the initial color of the button.
-	 */
-	public void enable()
-	{
-		this.setButtonColor(this.getDefaultTextColor());
-		this.setTextColor(this.getDefaultButtonColor());
-	}
-
-	/**
-	 * Disable a button by setting the button color to its initial color, and
-	 * the same is true for the text.
-	 */
-	public void disable()
-	{
-		this.setButtonColor(this.getDefaultButtonColor());
-		this.setTextColor(this.getDefaultTextColor());
-	}
-
-	/**
-	 * Inverse the color of the drawable and text.
-	 * 
-	 * @return True when the button is enabled and False when the button is
-	 *		   disabled.
-	 */
-	public boolean toggle()
-	{
-		this.inverseColors();
-
-		return this.isEnabled();
-	}
-
-	/**
-	 * Enable and animate the view.
-	 */
-	public void animateEnable()
-	{
-		this.enable();
-		this.animateButton();
-	}
-
-	/**
-	 * Disable and animate the view.
-	 */
-	public void animateDisable()
-	{
-		this.disable();
-		this.animateButton();
-	}
-
-	/**
-	 * Toggle and animate the view.
-	 */
-	public void animateToggle()
-	{
-		this.toggle();
-		this.animateButton();
-	}
-
-	/**
-	 * Animate the button or text.
-	 */
-	public void animateDay(NacDayViewType type)
-	{
-		ArgbEvaluator evaluator = new ArgbEvaluator();
-		int duration = this.getDuration();
-		int from;
-		int to;
-
-		if (type == NacDayViewType.BUTTON)
-		{
-			from = this.getTextColor();
-			to = this.getButtonColor();
-		}
-		else if (type == NacDayViewType.TEXT)
-		{
-			from = this.getButtonColor();
-			to = this.getTextColor();
-		}
-		else
-		{
-			return;
-		}
-
-		ValueAnimator animator = ValueAnimator.ofObject(evaluator, from, to);
-
-		animator.setDuration(duration);
-		animator.addUpdateListener(this);
-		animator.start();
-
-		if (type == NacDayViewType.BUTTON)
-		{
-			this.mButtonAnimator = animator;
-		}
-		else if (type == NacDayViewType.TEXT)
-		{
-			this.mTextAnimator = animator;
-		}
-	}
-
-
-	/**
-	 * Animate the button's change in color.
-	 */
-	public void animateButton()
-	{
-		animateDay(NacDayViewType.BUTTON);
-	}
-
-	/**
-	 * Animate the text's change in color.
-	 */
-	public void animateText()
-	{
-		animateDay(NacDayViewType.TEXT);
+		setOnClickListener(this);
 	}
 
 	/**
@@ -432,11 +579,106 @@ public class NacDayButton
 	}
 
 	/**
-	 * Set an onClick listener for each of the day of week buttons.
+	 * @return True if the button is enabled and false if it is not.
 	 */
-	public void setOnClickListener(NacDayButton.OnClickListener listener)
+	public boolean isEnabled()
 	{
-		this.mListener = listener;
+		return (this.getButtonColor() == this.getDefaultTextColor())
+			&& (this.getTextColor() == this.getDefaultButtonColor());
+	}
+
+	/**
+	 * Merge attributes of another class that utilizes this one, with this
+	 * class.
+	 */
+	public void mergeAttributes(Context context, AttributeSet attrs)
+	{
+		NacDayAttributes parsed = new NacDayAttributes(context, attrs);
+		Resources res = context.getResources();
+		TypedArray ta = res.obtainAttributes(attrs, R.styleable.NacDayButton);
+
+		try
+		{
+			for (int index=0; index < ta.length(); index++)
+			{
+				if (!ta.hasValue(index))
+				{
+					continue;
+				}
+
+				this.mAttributes.merge(index, parsed);
+			}
+		}
+		finally
+		{
+			ta.recycle();
+		}
+	}
+
+	/**
+	 */
+	@Override
+	public void onClick(View v)
+	{
+		if (this.mListener != null)
+		{
+			this.mListener.onClick(this);
+		}
+	}
+
+	/**
+	 * Finish setting up the View.
+	 */
+	@Override
+	protected void onFinishInflate()
+	{
+		super.onFinishInflate();
+		this.setViewAttributes();
+	}
+
+	/**
+	 * Redraw the view.
+	 */
+	public void redraw()
+	{
+		invalidate();
+		requestLayout();
+	}
+
+	/**
+	 * Set the currently used animator for the give view type.
+	 */
+	private void setAnimator(ObjectAnimator animator, NacDayViewType type)
+	{
+		if (type == NacDayViewType.BUTTON)
+		{
+			this.mButtonAnimator = animator;
+		}
+		else if (type == NacDayViewType.TEXT)
+		{
+			this.mTextAnimator = animator;
+		}
+	}
+
+	/**
+	 * Set the background drawable.
+	 * 
+	 * @param  bg  The background.
+	 */
+	public void setBackground(Drawable bg)
+	{
+		this.mButton.setBackground(bg);
+	}
+
+	/**
+	 * Set the background drawable.
+	 * 
+	 * @param  bg  The background.
+	 */
+	public void setBackground(int resid)
+	{
+		this.mAttributes.drawable = resid;
+		this.mButton.setBackgroundResource(resid);
 	}
 
 	/**
@@ -464,6 +706,46 @@ public class NacDayButton
 	}
 
 	/**
+	 * Set the default text color.
+	 *
+	 * @param  color  The default text color.
+	 */
+	public void setDefaultTextColor(int color)
+	{
+		this.mAttributes.textColor = color;
+	}
+
+	/**
+	 * Set the duration of the animation.
+	 *
+	 * @param  duration  The duration.
+	 */
+	public void setDuration(int duration)
+	{
+		this.mAttributes.duration = duration;
+	}
+
+	/**
+	 * Set an onClick listener for each of the day of week buttons.
+	 */
+	public void setOnClickListener(NacDayButton.OnClickListener listener)
+	{
+		this.mListener = listener;
+	}
+
+	/**
+	 * Set the text in the button.
+	 *
+	 * @param  text  The text to enter in the button.
+	 */
+	public void setText(String text)
+	{
+		this.mAttributes.text = text;
+		this.mButton.setText(text);
+		this.redraw();
+	}
+
+	/**
 	 * Set the text color.
 	 *
 	 * @param  color  The text color.
@@ -472,16 +754,6 @@ public class NacDayButton
 	{
 		this.mButton.setTextColor(color);
 		this.redraw();
-	}
-
-	/**
-	 * Set the default text color.
-	 *
-	 * @param  color  The default text color.
-	 */
-	public void setDefaultTextColor(int color)
-	{
-		this.mAttributes.textColor = color;
 	}
 
 	/**
@@ -497,15 +769,18 @@ public class NacDayButton
 	}
 
 	/**
-	 * Set the text in the button.
-	 *
-	 * @param  text  The text to enter in the button.
+	 * Set view attributes.
 	 */
-	public void setText(String text)
+	public void setViewAttributes()
 	{
-		this.mAttributes.text = text;
-		this.mButton.setText(text);
-		this.redraw();
+		this.setWidthAndHeight(this.getButtonWidth(), this.getButtonHeight());
+		this.setBackground(this.getBackgroundResource());
+		this.setButtonColor(this.getDefaultButtonColor());
+		this.setTextColor(this.getDefaultTextColor());
+		this.setText(this.getText());
+		this.setTextSize(this.getTextSize());
+		setPadding(this.getPaddingStart(), this.getPaddingTop(),
+			this.getPaddingEnd(), this.getPaddingBottom());
 	}
 
 	/**
@@ -524,136 +799,46 @@ public class NacDayButton
 	}
 
 	/**
-	 * Set the duration of the animation.
-	 *
-	 * @param  duration  The duration.
+	 * @return An ObjectAnimator to animate the day button.
 	 */
-	public void setDuration(int duration)
+	private ObjectAnimator startAnimator(NacDayViewType type)
 	{
-		this.mAttributes.duration = duration;
+		int duration = this.getDuration();
+		int from = this.getFromValue(type);
+		int to = this.getToValue(type);
+		ObjectAnimator animator;
+
+		
+		if (type == NacDayViewType.BUTTON)
+		{
+			animator = ObjectAnimator.ofArgb(this, "buttonColor", from, to);
+		}
+		else if (type == NacDayViewType.TEXT)
+		{
+			animator = ObjectAnimator.ofArgb(this, "textColor", from, to);
+		}
+		else
+		{
+			return null;
+		}
+
+		animator.setDuration(duration);
+		animator.start();
+
+		return animator;
 	}
 
 	/**
-	 * Set the background drawable.
+	 * Inverse the color of the drawable and text.
 	 * 
-	 * @param  bg  The background.
+	 * @return True when the button is enabled and False when the button is
+	 *		   disabled.
 	 */
-	public void setBackground(Drawable bg)
+	public boolean toggle()
 	{
-		this.mButton.setBackground(bg);
-	}
+		this.inverseColors();
 
-	/**
-	 * Set the background drawable.
-	 * 
-	 * @param  bg  The background.
-	 */
-	public void setBackground(int resid)
-	{
-		this.mAttributes.drawable = resid;
-		this.mButton.setBackgroundResource(resid);
-	}
-
-	/**
-	 * @return The button color.
-	 */
-	public int getButtonColor()
-	{
-		Object tag = this.mButton.getTag();
-
-		return (tag != null) ? (Integer) tag : this.getDefaultButtonColor();
-	}
-
-	/**
-	 * @return The default button color.
-	 */
-	public int getDefaultButtonColor()
-	{
-		return this.mAttributes.backgroundColor;
-	}
-
-	/**
-	 * @return The text color.
-	 */
-	public int getTextColor()
-	{
-		ColorStateList colorlist = this.mButton.getTextColors();
-
-		return (colorlist != null) ? colorlist.getDefaultColor() : this.getDefaultTextColor();
-	}
-
-	/**
-	 * @return The default text color.
-	 */
-	public int getDefaultTextColor()
-	{
-		return this.mAttributes.textColor;
-	}
-
-	/**
-	 * @return The text size.
-	 */
-	public int getTextSize()
-	{
-		return this.mAttributes.textSize;
-	}
-
-	/**
-	 * @return The text in the button.
-	 */
-	public String getText()
-	{
-		return this.mAttributes.text;
-	}
-
-	/**
-	 * @return The view width.
-	 */
-	public int getButtonWidth()
-	{
-		return this.mAttributes.width;
-	}
-
-	/**
-	 * @return The view height.
-	 */
-	public int getButtonHeight()
-	{
-		return this.mAttributes.height;
-	}
-
-	/**
-	 * @return The animation duration.
-	 */
-	public int getDuration()
-	{
-		return (this.isEnabled()) ? this.mAttributes.duration
-			: this.mAttributes.duration / 2;
-	}
-
-	/**
-	 * @return The background resource of the button.
-	 */
-	public int getBackgroundResource()
-	{
-		return this.mAttributes.drawable;
-	}
-
-	/**
-	 * @return The background drawable of the button.
-	 */
-	public Drawable getBackground()
-	{
-		return this.mButton.getBackground();
-	}
-
-	/**
-	 * @return True if the button is enabled and false if it is not.
-	 */
-	public boolean isEnabled()
-	{
-		return (this.getButtonColor() == this.getDefaultTextColor())
-			&& (this.getTextColor() == this.getDefaultButtonColor());
+		return this.isEnabled();
 	}
 
 }

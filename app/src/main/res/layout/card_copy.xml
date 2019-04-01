@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/nac_swipe_copy"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/green">
+
+	<ImageView
+		android:id="@+id/copy_icon"
+		android:layout_width="@dimen/isz_copy"
+		android:layout_height="@dimen/isz_copy"
+		android:layout_marginStart="@dimen/ml_copy"
+		android:layout_alignParentStart="true"
+		android:layout_centerVertical="true"
+		android:src="@mipmap/baseline_file_copy_white_48"
+		android:contentDescription="@null"
+		/>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_toEndOf="@id/copy_icon"
+		android:layout_marginStart="@dimen/ml_copy"
+		android:layout_centerVertical="true"
+		android:text="@string/copy"
+		android:textColor="@color/white"
+		android:textSize="@dimen/tsz_copy"
+		/>
+
+</RelativeLayout>

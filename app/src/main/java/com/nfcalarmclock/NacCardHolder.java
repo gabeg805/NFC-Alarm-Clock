@@ -126,12 +126,12 @@ public class NacCardHolder
 	/**
 	 * Text of days to repeat.
 	 */
-	private TextView mRepeatDays;
+	private TextView mSummaryDays;
 
 	/**
 	 * Text of days to repeat.
 	 */
-	private TextView mRepeatName;
+	private TextView mSummaryName;
 
 	/**
 	 * Buttons to select which days to repeat the alarm on.
@@ -157,11 +157,6 @@ public class NacCardHolder
 	 * Name view.
 	 */
 	 private NacImageTextButton mName;
-
-	/**
-	 * Divider view.
-	 */
-	private View mDivider;
 
 	/**
 	 * Delete button.
@@ -204,19 +199,18 @@ public class NacCardHolder
 		this.mRoot = root;
 		this.mRecyclerView = (RecyclerView) activity.findViewById(
 			R.id.content_alarm_list);
-		this.mCardView = (CardView) root.findViewById(R.id.view_card_alarm);
-		this.mSwitch = (Switch) root.findViewById(R.id.nacSwitch);
-		this.mTime = (TextView) root.findViewById(R.id.nacTime);
-		this.mMeridian = (TextView) root.findViewById(R.id.nacMeridian);
-		this.mRepeatDays = (TextView) root.findViewById(R.id.nacRepeatText);
-		this.mRepeatName = (TextView) root.findViewById(R.id.nacRepeatTextName);
-		this.mDayButtons = (NacDayOfWeek) root.findViewById(R.id.nacRepeatDays);
-		this.mRepeat = (CheckBox) root.findViewById(R.id.nacRepeatCheckbox);
-		this.mVibrate = (CheckBox) root.findViewById(R.id.nacVibrate);
-		this.mSound = (NacImageTextButton) root.findViewById(R.id.nacSound);
-		this.mName = (NacImageTextButton) root.findViewById(R.id.nacName);
-		this.mDivider = (View) root.findViewById(R.id.alarmExpandDivider);
-		this.mDelete = (NacImageTextButton) root.findViewById(R.id.nacDelete);
+		this.mCardView = (CardView) root.findViewById(R.id.nac_card);
+		this.mSwitch = (Switch) root.findViewById(R.id.nac_switch);
+		this.mTime = (TextView) root.findViewById(R.id.nac_time);
+		this.mMeridian = (TextView) root.findViewById(R.id.nac_meridian);
+		this.mSummaryDays = (TextView) root.findViewById(R.id.nac_summary_days);
+		this.mSummaryName = (TextView) root.findViewById(R.id.nac_summary_name);
+		this.mDayButtons = (NacDayOfWeek) root.findViewById(R.id.nac_days);
+		this.mRepeat = (CheckBox) root.findViewById(R.id.nac_repeat);
+		this.mVibrate = (CheckBox) root.findViewById(R.id.nac_vibrate);
+		this.mSound = (NacImageTextButton) root.findViewById(R.id.nac_sound);
+		this.mName = (NacImageTextButton) root.findViewById(R.id.nac_name);
+		this.mDelete = (NacImageTextButton) root.findViewById(R.id.nac_delete);
 		this.mTransition = null;
 		this.mState = State.NONE;
 		this.mCollapseHeight = 0;
@@ -362,7 +356,7 @@ public class NacCardHolder
 	{
 		View root = this.getRoot();
 
-		return (RelativeLayout) root.findViewById(R.id.view_background_copy);
+		return (RelativeLayout) root.findViewById(R.id.nac_swipe_copy);
 	}
 
 	/**
@@ -381,7 +375,7 @@ public class NacCardHolder
 	{
 		View root = this.getRoot();
 
-		return (RelativeLayout) root.findViewById(R.id.view_background_delete);
+		return (RelativeLayout) root.findViewById(R.id.nac_swipe_delete);
 	}
 
 	/**
@@ -460,7 +454,7 @@ public class NacCardHolder
 		this.setSwipeViews();
 		this.setSwitch();
 		this.setTime();
-		this.setRepeatDays();
+		this.setSummaryDays();
 		this.setRepeat();
 		this.setDays();
 		this.setVibrate();
@@ -591,12 +585,12 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 		int id = v.getId();
 
-		if (id == R.id.nacSwitch)
+		if (id == R.id.nac_switch)
 		{
 			alarm.setEnabled(state);
-			this.setRepeatDays();
+			this.setSummaryDays();
 		}
-		else if (id == R.id.nacRepeatCheckbox)
+		else if (id == R.id.nac_repeat)
 		{
 			NacDayOfWeek dayButtons = this.getDayButtons();
 			alarm.setRepeat(state);
@@ -607,9 +601,9 @@ public class NacCardHolder
 			}
 
 			this.setDays();
-			this.setRepeatDays();
+			this.setSummaryDays();
 		}
-		else if (id == R.id.nacVibrate)
+		else if (id == R.id.nac_vibrate)
 		{
 			alarm.setVibrate(state);
 		}
@@ -637,7 +631,7 @@ public class NacCardHolder
 		}
 
 		alarm.changed();
-		this.setRepeatDays();
+		this.setSummaryDays();
 	}
 
 	/**
@@ -650,31 +644,31 @@ public class NacCardHolder
 	{
 		int id = view.getId();
 
-		if (id == R.id.nacExpand)
-		{
-			this.expand();
-		}
-		else if (id == R.id.nacCollapse)
-		{
-			this.collapse();
-		}
-		else if (id == R.id.alarmMajor)
+		if (id == R.id.nac_header)
 		{
 			this.toggleViewState();
 		}
-		else if (id == R.id.nacTimeContainer)
+		else if (id == R.id.nac_summary)
+		{
+			this.expand();
+		}
+		else if (id == R.id.nac_collapse)
+		{
+			this.collapse();
+		}
+		else if (id == R.id.nac_time_parent)
 		{
 			this.showTimePickerDialog();
 		}
-		else if (id == R.id.nacSound)
+		else if (id == R.id.nac_sound)
 		{
 			this.showSoundDialog();
 		}
-		else if (id == R.id.nacName)
+		else if (id == R.id.nac_name)
 		{
 			this.showNameDialog();
 		}
-		else if (id == R.id.nacDelete)
+		else if (id == R.id.nac_delete)
 		{
 			this.delete();
 		}
@@ -722,7 +716,7 @@ public class NacCardHolder
 
 		if (alarm.getDays().isEmpty())
 		{
-			this.setRepeatDays();
+			this.setSummaryDays();
 		}
 	}
 
@@ -787,7 +781,10 @@ public class NacCardHolder
 	public void setColors()
 	{
 		Context context = this.getContext();
+		View root = this.getRoot();
+		View divider = (View) root.findViewById(R.id.nac_divider);
 		NacSharedPreferences shared = new NacSharedPreferences(context);
+
 		int[][] states = new int[][] {
 			new int[] { android.R.attr.state_checked},
 			new int[] {-android.R.attr.state_checked}};
@@ -804,9 +801,9 @@ public class NacCardHolder
 		this.mSwitch.getTrackDrawable().setTintList(trackStateList);
 		this.mTime.setTextColor(timeColor);
 		this.mMeridian.setTextColor(meridianColor);
-		this.mRepeatDays.setTextColor(shared.getDaysColor());
-		this.mRepeatName.setTextColor(shared.getNameColor());
-		this.mDivider.setBackgroundTintList(ColorStateList.valueOf(
+		this.mSummaryDays.setTextColor(shared.getDaysColor());
+		this.mSummaryName.setTextColor(shared.getNameColor());
+		divider.setBackgroundTintList(ColorStateList.valueOf(
 			shared.getThemeColor()));
 	}
 
@@ -831,15 +828,19 @@ public class NacCardHolder
 	public void setListeners()
 	{
 		View root = this.getRoot();
-		RelativeLayout majorClickable = (RelativeLayout) root.findViewById(
-			R.id.alarmMajor);
-		RelativeLayout timeContainer = (RelativeLayout) root.findViewById(
-			R.id.nacTimeContainer);
-		ImageView expandButton = (ImageView) root.findViewById(R.id.nacExpand);
-		ImageView collapseButton = (ImageView) root.findViewById(
-			R.id.nacCollapse);
+		RelativeLayout header = (RelativeLayout) root.findViewById(
+			R.id.nac_header);
+		RelativeLayout summary = (RelativeLayout) root.findViewById(
+			R.id.nac_summary);
+		RelativeLayout collapse = (RelativeLayout) root.findViewById(
+			R.id.nac_collapse);
+		RelativeLayout time = (RelativeLayout) root.findViewById(
+			R.id.nac_time_parent);
 
-		timeContainer.setOnClickListener(this);
+		time.setOnClickListener(this);
+		header.setOnClickListener(this);
+		summary.setOnClickListener(this);
+		collapse.setOnClickListener(this);
 		this.mSwitch.setOnCheckedChangeListener(this);
 		this.mDayButtons.setOnClickListener((NacDayOfWeek.OnClickListener)this);
 		this.mRepeat.setOnCheckedChangeListener(this);
@@ -847,10 +848,6 @@ public class NacCardHolder
 		this.mSound.setOnClickListener(this);
 		this.mName.setOnClickListener(this);
 		this.mDelete.setOnClickListener(this);
-
-		majorClickable.setOnClickListener(this);
-		expandButton.setOnClickListener(this);
-		collapseButton.setOnClickListener(this);
 	}
 
 	/**
@@ -878,8 +875,8 @@ public class NacCardHolder
 		}
 
 		params.setMarginStart(margin);
-		this.mRepeatName.setLayoutParams(params);
-		this.mRepeatName.setText(text);
+		this.mSummaryName.setLayoutParams(params);
+		this.mSummaryName.setText(text);
 		this.mName.setText(name);
 		this.mName.setFocus(focus);
 	}
@@ -900,18 +897,15 @@ public class NacCardHolder
 	private void setRegions(State state)
 	{
 		View root = this.getRoot();
-		RelativeLayout summaryRegion = (RelativeLayout) root.findViewById(
-			R.id.alarmMinorSummary);
-		RelativeLayout extraRegion = (RelativeLayout) root.findViewById(
-			R.id.alarmMinorExpand);
-		int summaryState = (this.isCollapsed(state)) ? View.VISIBLE : View.GONE;
-		int extraState = (this.isCollapsed(state)) ? View.GONE : View.VISIBLE;
+		RelativeLayout summary = (RelativeLayout) root.findViewById(
+			R.id.nac_summary);
+		LinearLayout extra = (LinearLayout) root.findViewById(R.id.nac_extra);
 		boolean enabled = this.isCollapsed(state);
 
-		summaryRegion.setVisibility(summaryState);
-		extraRegion.setVisibility(extraState);
-		summaryRegion.setEnabled(enabled);
-		extraRegion.setEnabled(!enabled);
+		summary.setVisibility((enabled) ? View.VISIBLE : View.GONE);
+		extra.setVisibility((enabled) ? View.GONE : View.VISIBLE);
+		summary.setEnabled(enabled);
+		extra.setEnabled(!enabled);
 	}
 
 	/**
@@ -928,12 +922,12 @@ public class NacCardHolder
 	/**
 	 * Set the repeat days text.
 	 */
-	public void setRepeatDays()
+	public void setSummaryDays()
 	{
 		NacAlarm alarm = this.getAlarm();
 		String string = NacCalendar.toString(alarm);
 
-		this.mRepeatDays.setText(string);
+		this.mSummaryDays.setText(string);
 	}
 
 	/**

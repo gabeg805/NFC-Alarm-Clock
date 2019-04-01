@@ -20,11 +20,11 @@
 	</style>
 
 	<style name="NacDayButton">
-		<item name="nacWidth">@dimen/isz_circle</item>
-		<item name="nacHeight">@dimen/isz_circle</item>
+		<item name="nacWidth">@dimen/isz_day</item>
+		<item name="nacHeight">@dimen/isz_day</item>
 		<item name="nacDuration">500</item>
 		<item name="nacTextColor">?attr/colorCardText</item>
-		<item name="nacTextSize">@dimen/tsz_card_days</item>
+		<item name="nacTextSize">@dimen/tsz_days</item>
 		<item name="nacText"></item>
 		<item name="nacBackgroundColor">?attr/colorCardExpanded</item>
 		<item name="nacDrawable">@drawable/day_button</item>

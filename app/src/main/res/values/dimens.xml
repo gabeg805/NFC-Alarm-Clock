@@ -10,9 +10,14 @@
 
 	<!-- Switch -->
 	<dimen name="sz_switch">58dp</dimen>
+	<dimen name="pt_switch">14dp</dimen>
+	<dimen name="pb_switch">14dp</dimen>
+	<dimen name="pl_switch">12dp</dimen>
+	<dimen name="pr_switch">12dp</dimen>
 
 	<!-- NacImageTextButton -->
 	<dimen name="isz_itb">22dp</dimen>
+	<dimen name="tsz_itb">13sp</dimen>
 	<dimen name="sp_itb">10dp</dimen>
 
 	<!-- Copy/delete alarms -->
@@ -20,45 +25,70 @@
 	<dimen name="mr_delete">10dp</dimen>
 	<dimen name="isz_copy">30dp</dimen>
 	<dimen name="isz_delete">30dp</dimen>
+	<dimen name="tsz_copy">14sp</dimen>
+	<dimen name="tsz_delete">14sp</dimen>
 
 	<!-- Alarm card -->
 	<dimen name="elv_card">5dp</dimen>
 	<dimen name="mt_card">10dp</dimen>
-	<dimen name="mb_card">10dp</dimen>
+	<dimen name="mb_card">5dp</dimen>
 	<dimen name="ml_card">16dp</dimen>
 	<dimen name="mr_card">16dp</dimen>
 	<dimen name="sp_card">10dp</dimen>
 	<dimen name="sp_text">4dp</dimen>
-	<dimen name="mb_card_item_spacing">14dp</dimen>
-	<dimen name="mb_card_divider">16dp</dimen>
-	<dimen name="mt_card_minor_spacing">4dp</dimen>
-	<dimen name="pb_last_card">150dp</dimen>
 	<dimen name="tsz_card">13sp</dimen>
 	<dimen name="isz_card_divider">2dp</dimen>
 
 	<!-- Time -->
 	<dimen name="ml_card_meridian">5dp</dimen>
-	<dimen name="tsz_card_time">38sp</dimen>
+	<dimen name="mr_card_time_parent">28dp</dimen>
+	<dimen name="mb_card_time_parent">6dp</dimen>
+	<dimen name="tsz_card_time">40sp</dimen>
 	<dimen name="tsz_card_meridian">14sp</dimen>
 
 	<!-- Repeat -->
-	<dimen name="sp_card_days">10dp</dimen>
-	<dimen name="tsz_card_repeat">12sp</dimen>
-	<dimen name="tsz_card_days">13sp</dimen>
-	<dimen name="isz_circle">30dp</dimen>
+	<dimen name="pt_repeat">12dp</dimen>
+	<dimen name="pb_repeat">12dp</dimen>
+	<dimen name="pl_repeat">10dp</dimen>
+	<dimen name="pr_repeat">14dp</dimen>
+
+	<!-- Days -->
+	<!--
+		<dimen name="pt_days">14dp</dimen>
+		<dimen name="pb_days">14dp</dimen>
+		<dimen name="pl_days">10dp</dimen>
+		<dimen name="pr_days">10dp</dimen>
+	-->
+	<dimen name="isz_day">32dp</dimen>
+	<dimen name="tsz_days">14sp</dimen>
+	<dimen name="tsz_summary_days">12sp</dimen>
 
 	<!-- Sound -->
-	<dimen name="mb_card_center_sound">5dp</dimen>
+	<dimen name="pt_sound">12dp</dimen>
+	<dimen name="pb_sound">12dp</dimen>
+	<dimen name="pl_sound">4dp</dimen>
 
 	<!-- Name -->
-	<dimen name="mb_card_name">8dp</dimen>
-	<dimen name="tsz_card_name">12sp</dimen>
+	<dimen name="pt_name">8dp</dimen>
+	<dimen name="pb_name">8dp</dimen>
+	<dimen name="pl_name">4dp</dimen>
+	<dimen name="tsz_summary_name">12sp</dimen>
+
+	<!-- Vibrate -->
+	<dimen name="pt_vibrate">12dp</dimen>
+	<dimen name="pb_vibrate">12dp</dimen>
+	<dimen name="pl_vibrate">10dp</dimen>
+	<dimen name="pr_vibrate">14dp</dimen>
+
+	<!-- Delete -->
+	<dimen name="pt_delete">16dp</dimen>
+	<dimen name="pb_delete">16dp</dimen>
+	<dimen name="pl_delete">4dp</dimen>
+	<dimen name="pr_delete">48dp</dimen>
 
 	<!-- Expand/collapse buttons -->
-	<dimen name="mb_card_expand">10dp</dimen>
-	<dimen name="mr_card_expand">14dp</dimen>
-	<dimen name="mr_card_collapse">14dp</dimen>
-	<dimen name="mt_card_center_collapse">3dp</dimen>
+	<dimen name="mr_expand">14dp</dimen>
+	<dimen name="mr_collapse">14dp</dimen>
 	<dimen name="isz_expand">20dp</dimen>
 	<dimen name="isz_collapse">20dp</dimen>
 

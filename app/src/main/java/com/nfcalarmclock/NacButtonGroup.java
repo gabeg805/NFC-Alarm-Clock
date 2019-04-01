@@ -62,10 +62,9 @@ public class NacButtonGroup
 			try
 			{
 				Resources res = context.getResources();
-				int spacing = (int) res.getDimension(R.dimen.sp_card_days);
-				float width = res.getDimension(R.dimen.isz_circle);
-				float height = res.getDimension(R.dimen.isz_circle);
-				int textsize = (int) res.getDimension(R.dimen.tsz_card_days);
+				float width = res.getDimension(R.dimen.isz_day);
+				float height = res.getDimension(R.dimen.isz_day);
+				int textsize = (int) res.getDimension(R.dimen.tsz_days);
 
 				this.paddingBottom = (int) ta.getDimension(R.styleable.NacButtonGroup_nacPaddingBottom, 0);
 				this.paddingEnd = (int) ta.getDimension(R.styleable.NacButtonGroup_nacPaddingEnd, 0);
@@ -75,7 +74,7 @@ public class NacButtonGroup
 				this.imageHeight = (int) ta.getDimension(R.styleable.NacButtonGroup_nacDrawableHeight, height);
 				this.imageId = ta.getResourceId(R.styleable.NacButtonGroup_nacDrawable, R.drawable.day_button);
 				this.imageWidth = (int) ta.getDimension(R.styleable.NacButtonGroup_nacDrawableWidth, width);
-				this.spacing= (int) ta.getDimension(R.styleable.NacButtonGroup_nacSpacing, spacing);
+				this.spacing= (int) ta.getDimension(R.styleable.NacButtonGroup_nacSpacing, 0);
 				this.text = ta.getString(R.styleable.NacButtonGroup_nacText);
 				this.textColor = ta.getColor(R.styleable.NacButtonGroup_nacTextColor, Color.WHITE);
 				this.textSize = (int) ta.getDimension(R.styleable.NacButtonGroup_nacTextSize, textsize);
