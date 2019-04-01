@@ -59,8 +59,6 @@ public class NacAlarmActivity
 
 		if (this.mPlayer != null)
 		{
-			this.mPlayer.stop();
-			this.mPlayer.reset();
 			this.mPlayer.release();
 		}
 
@@ -108,9 +106,9 @@ public class NacAlarmActivity
 
 		if (nfcAdapter == null)
 		{
-			NacUtility.toast(this, "Your device doesn't support NFC");
-			this.cleanup();
-			finish();
+			//NacUtility.toast(this, "Your device doesn't support NFC");
+			//this.cleanup();
+			//finish();
 			return;
 		}
 

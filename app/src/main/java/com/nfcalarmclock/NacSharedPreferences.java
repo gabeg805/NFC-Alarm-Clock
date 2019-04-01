@@ -247,9 +247,11 @@ public class NacSharedPreferences
 		int snoozeDuration = shared.getInt(keys.getSnoozeDuration(), DEFAULT_SNOOZE_DURATION);
 		this.mRequireNfc = shared.getBoolean(keys.getRequireNfc(), DEFAULT_REQUIRE_NFC);
 
-		this.mAutoDismiss = (autoDismiss == 1) ? 1 : 5*(autoDismiss-1);
+		//this.mAutoDismiss = (autoDismiss == 1) ? 1 : 5*(autoDismiss-1);
+		//this.mSnoozeDuration = (snoozeDuration == 0) ? 1 : 5*snoozeDuration;
+		this.mAutoDismiss = (autoDismiss < 5) ? autoDismiss : (autoDismiss-4)*5;
 		this.mMaxSnooze = (maxSnooze == 11) ? -1 : maxSnooze;
-		this.mSnoozeDuration = (snoozeDuration == 0) ? 1 : 5*snoozeDuration;
+		this.mSnoozeDuration = (snoozeDuration < 4) ? snoozeDuration+1 : (snoozeDuration-3)*5;
 	}
 
 	/**

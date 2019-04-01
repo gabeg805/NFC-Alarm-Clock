@@ -256,8 +256,6 @@ public class NacCalendar
 		int minute = alarm.getMinute();
 		Calendar calendar = Calendar.getInstance();
 
-		NacUtility.printf("Converting to calendar! Day : %s | Hour : %d | Min : %d | Cal : %d",
-			day.toString(), hour, minute, NacCalendar.toCalendarDay(day));
 		calendar.set(Calendar.DAY_OF_WEEK, NacCalendar.toCalendarDay(day));
 		calendar.set(Calendar.HOUR_OF_DAY, hour);
 		calendar.set(Calendar.MINUTE, minute);

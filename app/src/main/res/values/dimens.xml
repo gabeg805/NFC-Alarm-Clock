@@ -53,9 +53,9 @@
 	<dimen name="pr_repeat">14dp</dimen>
 
 	<!-- Days -->
+	<dimen name="pt_days">8dp</dimen>
+	<dimen name="pb_days">8dp</dimen>
 	<!--
-		<dimen name="pt_days">14dp</dimen>
-		<dimen name="pb_days">14dp</dimen>
 		<dimen name="pl_days">10dp</dimen>
 		<dimen name="pr_days">10dp</dimen>
 	-->
