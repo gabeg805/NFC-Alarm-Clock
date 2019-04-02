@@ -247,123 +247,9 @@ public class NacSharedPreferences
 		int snoozeDuration = shared.getInt(keys.getSnoozeDuration(), DEFAULT_SNOOZE_DURATION);
 		this.mRequireNfc = shared.getBoolean(keys.getRequireNfc(), DEFAULT_REQUIRE_NFC);
 
-		//this.mAutoDismiss = (autoDismiss == 1) ? 1 : 5*(autoDismiss-1);
-		//this.mSnoozeDuration = (snoozeDuration == 0) ? 1 : 5*snoozeDuration;
-		this.mAutoDismiss = (autoDismiss < 5) ? autoDismiss : (autoDismiss-4)*5;
-		this.mMaxSnooze = (maxSnooze == 11) ? -1 : maxSnooze;
-		this.mSnoozeDuration = (snoozeDuration < 4) ? snoozeDuration+1 : (snoozeDuration-3)*5;
-	}
-
-	/**
-	 * @return The SharedPreferences instance.
-	 */
-	public SharedPreferences getInstance()
-	{
-		return this.mInstance;
-	}
-
-	/**
-	 * @return Auto dismiss duration.
-	 */
-	public int getAutoDismiss()
-	{
-		return this.mAutoDismiss;
-	}
-
-	/**
-	 * @return The max number of snoozes.
-	 */
-	public int getMaxSnooze()
-	{
-		return this.mMaxSnooze;
-	}
-
-	/**
-	 * @return The snooze duration.
-	 */
-	public int getSnoozeDuration()
-	{
-		return this.mSnoozeDuration;
-	}
-
-	/**
-	 * @return Whether NFC is required or not.
-	 */
-	public boolean getRequireNfc()
-	{
-		return this.mRequireNfc;
-	}
-
-	/**
-	 * @return The alarm days.
-	 */
-	public int getDays()
-	{
-		return this.mDays;
-	}
-
-	/**
-	 * @return Whether the alarm should be repeated or not.
-	 */
-	public boolean getRepeat()
-	{
-		return this.mRepeat;
-	}
-
-	/**
-	 * @return Whether the alarm should vibrate the phone or not.
-	 */
-	public boolean getVibrate()
-	{
-		return this.mVibrate;
-	}
-
-	/**
-	 * @return The sound path.
-	 */
-	public String getSound()
-	{
-		return this.mSound;
-	}
-
-	/**
-	 * @return The name of the alarm.
-	 */
-	public String getName()
-	{
-		return this.mName;
-	}
-
-	/**
-	 * @return The theme color.
-	 */
-	public int getThemeColor()
-	{
-		return this.mThemeColor;
-	}
-
-	/**
-	 * @return The name color.
-	 */
-	public int getNameColor()
-	{
-		return this.mNameColor;
-	}
-
-	/**
-	 * @return The days color.
-	 */
-	public int getDaysColor()
-	{
-		return this.mDaysColor;
-	}
-
-	/**
-	 * @return The time color.
-	 */
-	public int getTimeColor()
-	{
-		return this.mTimeColor;
+		this.mAutoDismiss = NacSharedPreferences.getAutoDismiss(autoDismiss);
+		this.mMaxSnooze = NacSharedPreferences.getMaxSnooze(maxSnooze);
+		this.mSnoozeDuration = NacSharedPreferences.getSnoozeDuration(snoozeDuration);
 	}
 
 	/**
@@ -375,11 +261,150 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * @return Auto dismiss duration.
+	 */
+	public int getAutoDismiss()
+	{
+		return this.mAutoDismiss;
+	}
+
+	/**
+	 * @return Calculate the auto dismiss duration from an index value,
+	 *         corresponding to a location in the spainner widget.
+	 */
+	public static int getAutoDismiss(int index)
+	{
+		return (index < 5) ? index : (index-4)*5;
+	}
+
+	/**
+	 * @return The alarm days.
+	 */
+	public int getDays()
+	{
+		return this.mDays;
+	}
+
+	/**
+	 * @return The days color.
+	 */
+	public int getDaysColor()
+	{
+		return this.mDaysColor;
+	}
+
+	/**
+	 * @return The SharedPreferences instance.
+	 */
+	public SharedPreferences getInstance()
+	{
+		return this.mInstance;
+	}
+
+	/**
+	 * @return The max number of snoozes.
+	 */
+	public int getMaxSnooze()
+	{
+		return this.mMaxSnooze;
+	}
+
+	/**
+	 * @return Calculate the max snooze duration from an index corresponding
+	 *         to a location in the spinner widget.
+	 */
+	public static int getMaxSnooze(int index)
+	{
+		return (index == 11) ? -1 : index;
+	}
+
+	/**
+	 * @return The name of the alarm.
+	 */
+	public String getName()
+	{
+		return this.mName;
+	}
+
+	/**
+	 * @return The name color.
+	 */
+	public int getNameColor()
+	{
+		return this.mNameColor;
+	}
+
+	/**
 	 * @return The PM color.
 	 */
 	public int getPmColor()
 	{
 		return this.mPmColor;
+	}
+
+	/**
+	 * @return Whether the alarm should be repeated or not.
+	 */
+	public boolean getRepeat()
+	{
+		return this.mRepeat;
+	}
+
+	/**
+	 * @return Whether NFC is required or not.
+	 */
+	public boolean getRequireNfc()
+	{
+		return this.mRequireNfc;
+	}
+
+	/**
+	 * @return The snooze duration.
+	 */
+	public int getSnoozeDuration()
+	{
+		return this.mSnoozeDuration;
+	}
+
+	/**
+	 * @return Calculate the snooze duration from an index value, corresponding
+	 *         to a location in the spainner widget.
+	 */
+	public static int getSnoozeDuration(int index)
+	{
+		return (index < 4) ? index+1 : (index-3)*5;
+	}
+
+	/**
+	 * @return The sound path.
+	 */
+	public String getSound()
+	{
+		return this.mSound;
+	}
+
+	/**
+	 * @return The theme color.
+	 */
+	public int getThemeColor()
+	{
+		return this.mThemeColor;
+	}
+
+	/**
+	 * @return The time color.
+	 */
+	public int getTimeColor()
+	{
+		return this.mTimeColor;
+	}
+
+	/**
+	 * @return Whether the alarm should vibrate the phone or not.
+	 */
+	public boolean getVibrate()
+	{
+		return this.mVibrate;
 	}
 
 }

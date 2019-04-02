@@ -106,9 +106,7 @@ public class NacAlarmActivity
 
 		if (nfcAdapter == null)
 		{
-			//NacUtility.toast(this, "Your device doesn't support NFC");
-			//this.cleanup();
-			//finish();
+			NacUtility.toast(this, "Your device doesn't support NFC");
 			return;
 		}
 
@@ -250,8 +248,15 @@ public class NacAlarmActivity
 		super.onStart();
 
 		NacAlarmDialog dialog = new NacAlarmDialog();
+		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
 		dialog.build(this, R.layout.act_alarm);
+
+		if (nfcAdapter == null)
+		{
+			dialog.setPositiveButton("Dismiss");
+		}
+
 		dialog.addOnCancelListener(this);
 		dialog.addOnDismissListener(this);
 		dialog.addOnShowListener(this);

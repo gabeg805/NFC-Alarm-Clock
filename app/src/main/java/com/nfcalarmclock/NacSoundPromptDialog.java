@@ -8,11 +8,13 @@ import android.widget.Button;
 import java.util.List;
 
 /**
- * @brief The dialog class that will handle saving the name of the alarm.
+ * Save the name of the selected ringtone or song.
  */
 public class NacSoundPromptDialog
 	extends NacDialog
-	implements View.OnClickListener,NacDialog.OnDismissListener,NacDialog.OnShowListener
+	implements View.OnClickListener,
+		NacDialog.OnDismissListener,
+		NacDialog.OnShowListener
 {
 
 	/**
@@ -47,10 +49,10 @@ public class NacSoundPromptDialog
 	 * Handle button click events.
 	 */
 	@Override
-	public void onClick(View v)
+	public void onClick(View view)
 	{
-		Context context = v.getContext();
-		int id = v.getId();
+		Context context = view.getContext();
+		int id = view.getId();
 		NacMediaDialog dialog = null;
 
 		if (id == R.id.dlg_ringtone)
@@ -74,6 +76,7 @@ public class NacSoundPromptDialog
 			return;
 		}
 
+		dialog.saveData(this.getData());
 		dialog.build(context);
 		dialog.setOnItemClickListener(this.mItemClickListener);
 		dialog.addOnDismissListener(this);

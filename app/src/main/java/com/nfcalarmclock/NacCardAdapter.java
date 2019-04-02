@@ -45,14 +45,14 @@ public class NacCardAdapter
 	private NacDatabase mDatabase;
 
 	/**
-	 * The alarm to restore, when prompted after deletion.
-	 */
-	private NacCardUndo mUndo;
-
-	/**
 	 * Handle card swipe events.
 	 */
 	private NacCardTouchHelper mTouchHelper;
+
+	/**
+	 * The alarm to restore, when prompted after deletion.
+	 */
+	private Undo mUndo;
 
 	/**
 	 * List of alarms.
@@ -77,7 +77,7 @@ public class NacCardAdapter
 		this.mRecyclerView = (RecyclerView) this.getRoot().findViewById(
 			R.id.content_alarm_list);
 		this.mTouchHelper = new NacCardTouchHelper(callback);
-		this.mUndo = new NacCardUndo();
+		this.mUndo = new Undo();
 		this.mDatabase = new NacDatabase(context);
 		this.mScheduler = new NacScheduler(context);
 		this.mAlarmList = null;
@@ -178,7 +178,7 @@ public class NacCardAdapter
 		copy.setId(this.getUniqueId());
 		notifyItemChanged(position);
 		this.add(copy);
-		this.undo(copy, newPosition, NacCardUndo.Type.COPY);
+		this.undo(copy, newPosition, Undo.Type.COPY);
 		NacUtility.snackbar(this.getRoot(), "Copied alarm.", "UNDO", this);
 	}
 
@@ -204,7 +204,7 @@ public class NacCardAdapter
 			//this.refresh(position);
 		}
 
-		this.undo(alarm, position, NacCardUndo.Type.DELETE);
+		this.undo(alarm, position, Undo.Type.DELETE);
 		NacUtility.snackbar(this.getRoot(), "Deleted alarm.", "UNDO", this);
 	}
 
@@ -320,6 +320,14 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * @return The undo object.
+	 */
+	private Undo getUndo()
+	{
+		return this.mUndo;
+	}
+
+	/**
 	 * Determine a unique integer ID number to use for newly created alarms.
 	 */
 	private int getUniqueId()
@@ -413,21 +421,22 @@ public class NacCardAdapter
 	@Override
 	public void onClick(View v)
 	{
-		NacAlarm alarm = this.mUndo.alarm;
-		int position = this.mUndo.position;
-		NacCardUndo.Type type = this.mUndo.type;
+		Undo undo = this.getUndo();
+		NacAlarm alarm = undo.getAlarm();
+		int position = undo.getPosition();
+		Undo.Type type = undo.getType();
 
-		this.mUndo.reset();
+		undo.reset();
 
-		if (type == NacCardUndo.Type.COPY)
+		if (type == Undo.Type.COPY)
 		{
 			this.delete(position);
 		}
-		else if (type == NacCardUndo.Type.DELETE)
+		else if (type == Undo.Type.DELETE)
 		{
 			this.restore(alarm, position);
 		}
-		else if (type == NacCardUndo.Type.RESTORE)
+		else if (type == Undo.Type.RESTORE)
 		{
 			this.delete(position);
 		}
@@ -533,7 +542,7 @@ public class NacCardAdapter
 	public void restore(NacAlarm alarm, int position)
 	{
 		this.add(alarm, position);
-		this.undo(alarm, position, NacCardUndo.Type.RESTORE);
+		this.undo(alarm, position, Undo.Type.RESTORE);
 		NacUtility.snackbar(this.getRoot(), "Restored alarm.", "UNDO", this);
 	}
 
@@ -548,9 +557,96 @@ public class NacCardAdapter
 	/**
 	 * Save undo parameters.
 	 */
-	public void undo(NacAlarm alarm, int position, NacCardUndo.Type type)
+	public void undo(NacAlarm alarm, int position, Undo.Type type)
 	{
-		this.mUndo.set(alarm, position, type);
+		this.getUndo().set(alarm, position, type);
+	}
+
+	/**
+	 * Undo an alarm card.
+	 */
+	public static class Undo
+	{
+
+		/**
+		 * Type of undo operation.
+		 */
+		public enum Type
+		{
+			NONE,
+			COPY,
+			DELETE,
+			RESTORE
+		}
+
+		/**
+		 * Alarm.
+		 */
+		public NacAlarm mAlarm;
+
+		/**
+		 * Position of the alarm card in the RecyclerView.
+		 */
+		public int mPosition;
+
+		/**
+		 * Type of undo.
+		 */
+		public Type mType;
+
+		/**
+		 */
+		public Undo()
+		{
+			this.reset();
+		}
+
+		/**
+		 * Reset the member variables.
+		 */
+		public void reset()
+		{
+			this.set(null, -1, Type.NONE);
+		}
+
+		/**
+		 * Set the member variables.
+		 *
+		 * @param  alarm  The alarm info.
+		 * @param  position  Position of the alarm card.
+		 * @param  type  Type of undo.
+		 */
+		public void set(NacAlarm alarm, int position, Type type)
+		{
+			this.mAlarm = alarm;
+			this.mPosition = position;
+			this.mType = type;
+		}
+
+		/**
+		 * @return The alarm.
+		 */
+		public NacAlarm getAlarm()
+		{
+			return this.mAlarm;
+		}
+
+		/**
+		 * @return The position.
+		 */
+		public int getPosition()
+		{
+			return this.mPosition;
+		}
+
+		/**
+		 * @return The undo type.
+		 */
+		public Type getType()
+		{
+			return this.mType;
+		}
+
 	}
 
 }

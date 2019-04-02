@@ -14,7 +14,9 @@ import java.util.List;
  */
 public class NacRingtoneDialog
 	extends NacMediaDialog
-	implements CompoundButton.OnCheckedChangeListener,NacDialog.OnShowListener
+	implements CompoundButton.OnCheckedChangeListener,
+		NacDialog.OnNeutralActionListener,
+		NacDialog.OnShowListener
 {
 
 	/**
@@ -24,6 +26,7 @@ public class NacRingtoneDialog
 		super();
 
 		this.addOnShowListener(this);
+		this.addOnNeutralActionListener(this);
 	}
 
 	/**
@@ -33,6 +36,14 @@ public class NacRingtoneDialog
 	public AlertDialog.Builder build(Context context)
 	{
 		return this.build(context, R.layout.dlg_sound_ringtone);
+	}
+
+	/**
+	 * @return The RadioButton group.
+	 */
+	private RadioGroup getRadioGroup(NacDialog dialog)
+	{
+		return (RadioGroup) dialog.getRoot().findViewById(R.id.radio_group);
 	}
 
 	/**
@@ -66,27 +77,47 @@ public class NacRingtoneDialog
 	}
 
 	/**
+	 * Clear the selected item.
+	 */
+	@Override
+	public boolean onNeutralActionDialog(NacDialog dialog)
+	{
+		super.onNeutralActionDialog(dialog);
+
+		RadioGroup group = this.getRadioGroup(dialog);
+
+		group.clearCheck();
+
+		return true;
+	}
+
+	/**
 	 * Setup views when the dialog is shown.
 	 */
 	@Override
 	public void onShowDialog(NacDialog dialog, View root)
 	{
 		Context context = root.getContext();
-		RadioGroup group = (RadioGroup) root.findViewById(R.id.radio_group);
 		List<NacMedia.Pair> ringtones = NacMedia.getRingtones(context);
-		RadioButton button;
-		NacMedia.Pair pair;
+		RadioGroup group = this.getRadioGroup(dialog);
+		NacAlarm alarm = (NacAlarm) this.getData();
+		String path = alarm.getSound();
 
 		for(int i=0; i < ringtones.size(); i++)
 		{
-			button = new RadioButton(context);
-			pair = ringtones.get(i);
-
-			button.setText(pair.getName());
-			button.setTag(pair.getPath());
-			button.setOnCheckedChangeListener(this);
+			RadioButton button = new RadioButton(context);
+			NacMedia.Pair pair = ringtones.get(i);
 
 			group.addView(button);
+			button.setText(pair.getName());
+			button.setTag(pair.getPath());
+
+			if (path.equals(pair.getPath()))
+			{
+				button.setChecked(true);
+			}
+
+			button.setOnCheckedChangeListener(this);
 		}
 	}
 

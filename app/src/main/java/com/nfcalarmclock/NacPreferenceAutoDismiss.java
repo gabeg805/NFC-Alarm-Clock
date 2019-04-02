@@ -39,19 +39,9 @@ public class NacPreferenceAutoDismiss
 	public String indexToString(int index)
 	{
 		int min = this.getMinValue();
+		int value = NacSharedPreferences.getAutoDismiss(index);
 
-		if (index == min)
-		{
-			return "Off";
-		}
-		else if ((index > min) && (index < 5))
-		{
-			return String.valueOf(index);
-		}
-		else
-		{
-			return String.valueOf((index-4)*5);
-		}
+		return (value == min) ? "Off" : String.valueOf(value);
 	}
 
 	/**

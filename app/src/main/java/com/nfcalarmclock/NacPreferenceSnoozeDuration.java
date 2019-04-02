@@ -39,15 +39,9 @@ public class NacPreferenceSnoozeDuration
 	public String indexToString(int index)
 	{
 		int min = this.getMinValue();
+		int value = NacSharedPreferences.getSnoozeDuration(index);
 
-		if ((index >= min) && (index < 4))
-		{
-			return String.valueOf(index+1);
-		}
-		else
-		{
-			return String.valueOf((index-3)*5);
-		}
+		return String.valueOf(value);
 	}
 
 	/**

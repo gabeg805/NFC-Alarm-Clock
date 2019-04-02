@@ -11,7 +11,9 @@ import java.util.List;
  */
 public abstract class NacMediaDialog
 	extends NacDialog
-	implements NacDialog.OnDismissListener,NacDialog.OnCancelListener
+	implements NacDialog.OnDismissListener,
+		NacDialog.OnNeutralActionListener,
+		NacDialog.OnCancelListener
 {
 
 	/**
@@ -25,8 +27,7 @@ public abstract class NacMediaDialog
 	public abstract void scale();
 
 	/**
-	 * Interface for other classes to implement what to do when an item is
-	 * selected.
+	 * Called when an item is selected.
 	 */
 	public interface OnItemClickListener
 	{
@@ -89,6 +90,7 @@ public abstract class NacMediaDialog
 
 		this.setPositiveButton("OK");
 		this.setNegativeButton("Cancel");
+		this.setNeutralButton("Clear");
 	}
 
 	/**
@@ -109,13 +111,34 @@ public abstract class NacMediaDialog
 	public boolean onDismissDialog(NacDialog dialog)
 	{
 		this.mPlayer.release();
+		this.itemClick(this.mPath, this.mName);
 
-		if ((this.mPath != null) && (this.mName != null))
+		this.mPath = "";
+		this.mName = "";
+
+		return true;
+	}
+
+	/**
+	 * Clear the selected item.
+	 */
+	@Override
+	public boolean onNeutralActionDialog(NacDialog dialog)
+	{
+		try
 		{
-			this.itemClick(this.mPath, this.mName);
+			this.mPlayer.stop();
+		}
+		catch (IllegalStateException e)
+		{
+			NacUtility.printf("Caught IllegalStateException in NacMediaDialog onNeutralActionDialog");
+		}
+		finally
+		{
+			this.mPlayer.reset();
 
-			this.mPath = null;
-			this.mName = null;
+			this.mPath = "";
+			this.mName = "";
 		}
 
 		return true;

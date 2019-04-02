@@ -15,7 +15,9 @@ import android.widget.ImageView;;
  */
 public class NacPreferenceColor
 	extends Preference
-	implements Preference.OnPreferenceClickListener,NacDialog.OnDismissListener,NacDialog.OnNeutralActionListener
+	implements Preference.OnPreferenceClickListener,
+		NacDialog.OnDismissListener,
+		NacDialog.OnNeutralActionListener
 {
 
 	/**

@@ -18,7 +18,10 @@ import java.util.List;
  */
 public class NacMusicDialog
 	extends NacMediaDialog
-	implements View.OnClickListener,NacPermissions.OnResultListener,NacDialog.OnShowListener
+	implements View.OnClickListener,
+		NacPermissions.OnResultListener,
+		NacDialog.OnNeutralActionListener,
+		NacDialog.OnShowListener
 {
 
 	/**
@@ -33,6 +36,7 @@ public class NacMusicDialog
 		super();
 
 		this.addOnShowListener(this);
+		this.addOnNeutralActionListener(this);
 	}
 
 	/**
@@ -163,6 +167,15 @@ public class NacMusicDialog
 		{
 			this.play(path, name);
 		}
+	}
+
+	/**
+	 * Clear the selected item.
+	 */
+	@Override
+	public boolean onNeutralActionDialog(NacDialog dialog)
+	{
+		return super.onNeutralActionDialog(dialog);
 	}
 
 	/**

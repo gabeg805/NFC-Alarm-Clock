@@ -6,9 +6,17 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Handler;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.TransitionDrawable;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
+import android.transition.ChangeBounds;
+import android.transition.Transition;
+import android.transition.TransitionManager;
+import android.util.DisplayMetrics;
+import android.view.animation.AlphaAnimation;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -17,44 +25,6 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
-
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.TransitionDrawable;
-import android.support.v7.widget.CardView;
-
-import android.view.View.MeasureSpec;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
-import android.animation.AnimatorSet;
-import android.widget.ImageView;
-import android.graphics.Rect;
-import android.transition.AutoTransition;
-import android.transition.Explode;
-import android.transition.Fade;
-import android.transition.Slide;
-import android.transition.TransitionManager;
-import android.transition.TransitionSet;
-import android.transition.Transition;
-import android.view.Gravity;
-import android.transition.ChangeBounds;
-import android.transition.ChangeTransform;
-import android.support.v4.view.animation.LinearOutSlowInInterpolator;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
-
-import java.lang.Thread;
-import android.support.v7.widget.LinearSmoothScroller;
-import android.util.DisplayMetrics;
-
-import android.view.animation.AlphaAnimation;
-import android.view.animation.ScaleAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
-
 import java.util.EnumSet;
 
 /**
@@ -714,7 +684,7 @@ public class NacCardHolder
 		alarm.changed();
 		this.setTime();
 
-		if (alarm.getDays().isEmpty())
+		if (!alarm.getRepeat() || alarm.getDays().isEmpty())
 		{
 			this.setSummaryDays();
 		}
@@ -1021,8 +991,10 @@ public class NacCardHolder
 	public void showSoundDialog()
 	{
 		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
 		NacSoundPromptDialog dialog = new NacSoundPromptDialog();
 
+		dialog.saveData(alarm);
 		dialog.build(context, R.layout.dlg_sound_prompt);
 		dialog.setOnItemClickListener(this);
 		dialog.show();

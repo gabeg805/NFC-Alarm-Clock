@@ -39,7 +39,6 @@ public class NacAlarmDialog
 		builder.setIcon(R.mipmap.ic_launcher);
 		builder.setNegativeButton("Snooze", this);
 		builder.setCancelable(false);
-		//this.mDialog.setCanceledOnTouchOutside(false);
 
 		if (!shared.getRequireNfc())
 		{

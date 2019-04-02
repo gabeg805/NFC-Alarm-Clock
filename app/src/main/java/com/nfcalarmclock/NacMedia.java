@@ -74,7 +74,8 @@ public class NacMedia
 			return "";
 		}
 
-		Uri uri = Uri.parse(path);
+		Uri uri = (path.startsWith("content://")) ? Uri.parse(path)
+			: Uri.fromFile(new File(path));
 		Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
 		String name = ringtone.getTitle(context);
 
