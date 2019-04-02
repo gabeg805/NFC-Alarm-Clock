@@ -84,7 +84,6 @@
 	</com.nfcalarmclock.NacPreferenceCategory>
 
 	<!-- Colors -->
-	<!--
 	<com.nfcalarmclock.NacPreferenceCategory
 		android:key="@string/pref_color_key"
 		android:title="@string/pref_color_title">
@@ -138,6 +137,5 @@
 			/>
 
 	</com.nfcalarmclock.NacPreferenceCategory>
-	-->
 
 </PreferenceScreen>
