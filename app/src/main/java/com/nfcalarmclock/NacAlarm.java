@@ -474,8 +474,16 @@ public class NacAlarm
 	 */
 	public NacAlarm copy()
 	{
+		return this.copy(this.getId());
+	}
+
+	/**
+	 * @see copy
+	 */
+	public NacAlarm copy(int id)
+	{
 		return new NacAlarm.Builder()
-			.setId(this.getId())
+			.setId(id)
 			.setHour(this.getHour())
 			.setMinute(this.getMinute())
 			.setDays(this.getDays())

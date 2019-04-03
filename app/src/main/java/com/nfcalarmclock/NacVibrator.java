@@ -61,6 +61,7 @@ public class NacVibrator
 	/**
 	 * Vibrate the phone.
 	 */
+	@SuppressWarnings("deprecation")
 	public void vibrate(long duration)
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)

@@ -175,7 +175,6 @@ public class NacMediaPlayer
 	 */
 	public void play(String media)
 	{
-		//this.play(media, true);
 		this.play(media, false);
 	}
 
