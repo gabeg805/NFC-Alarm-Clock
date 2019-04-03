@@ -17,7 +17,12 @@ public class NacDatabase
 {
 
 	/**
-	 * The atabase.
+	 * The context.
+	 */
+	private Context mContext;
+
+	/**
+	 * The database.
 	 */
 	private SQLiteDatabase mDatabase;
 
@@ -28,6 +33,7 @@ public class NacDatabase
 		super(context, NacDatabaseContract.DATABASE_NAME, null,
 			NacDatabaseContract.DATABASE_VERSION);
 
+		this.mContext = context;
 		this.mDatabase = null;
 	}
 
@@ -38,8 +44,17 @@ public class NacDatabase
 	{
 		this.setDatabase();
 
-		ContentValues cv = this.getContentValues(alarm);
 		SQLiteDatabase db = this.getDatabase();
+
+		return this.add(db, alarm);
+	}
+
+	/**
+	 * @see add
+	 */
+	public long add(SQLiteDatabase db, NacAlarm alarm)
+	{
+		ContentValues cv = this.getContentValues(alarm);
 		String table = this.getTable();
 		long result = 0;
 
@@ -62,17 +77,39 @@ public class NacDatabase
 	/**
 	 * Delete a row from the database.
 	 */
-	public int delete(NacAlarm alarm)
+	public long delete(NacAlarm alarm)
 	{
 		this.setDatabase();
 
 		SQLiteDatabase db = this.getDatabase();
+
+		return this.delete(db, alarm);
+	}
+
+	/**
+	 * @see delete
+	 */
+	public long delete(SQLiteDatabase db, NacAlarm alarm)
+	{
 		String table = this.getTable();
 		String where = this.getWhereClause();
 		String[] args = this.getWhereArgs(alarm);
-		int rows = db.delete(table, where, args);
+		long result = 0;
 
-		return rows;
+		db.beginTransaction();
+
+		try
+		{
+			result = db.delete(table, where, args);
+
+			db.setTransactionSuccessful();
+		}
+		finally
+		{
+			db.endTransaction();
+		}
+
+		return result;
 	}
 
 	/**
@@ -150,6 +187,14 @@ public class NacDatabase
 	}
 
 	/**
+	 * @return The context.
+	 */
+	private Context getContext()
+	{
+		return this.mContext;
+	}
+
+	/**
 	 * @return The SQLiteDatabase.
 	 */
 	private SQLiteDatabase getDatabase()
@@ -199,11 +244,30 @@ public class NacDatabase
 
 	/**
 	 * Create the database for the first time.
+	 *
+	 * Add an example alarm when the app is first installed (this is presumed by
+	 * the database being created).
 	 */
 	@Override
 	public void onCreate(SQLiteDatabase db)
 	{
 		db.execSQL(NacDatabaseContract.AlarmTable.CREATE_TABLE);
+
+		Context context = this.getContext();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
+		NacAlarm alarm = new NacAlarm.Builder()
+			.setId(1)
+			.setHour(8)
+			.setMinute(0)
+			.setRepeat(shared.getRepeat())
+			.setDays(shared.getDays())
+			.setVibrate(shared.getVibrate())
+			.setSound(shared.getSound())
+			.setName("Work")
+			.set24HourFormat(false)
+			.build();
+
+		this.add(db, alarm);
 	}
 
 	/**
@@ -304,7 +368,7 @@ public class NacDatabase
 	 * @param  fromAlarm  An alarm that was moved.
 	 * @param  toAlarm	An alarm that was moved.
 	 */
-	public int swap(NacAlarm fromAlarm, NacAlarm toAlarm)
+	public long swap(NacAlarm fromAlarm, NacAlarm toAlarm)
 	{
 		this.setDatabase();
  
@@ -321,27 +385,63 @@ public class NacDatabase
 		String where = this.getWhereClause();
 		String[] fromArgs = this.getWhereArgs(toId);
 		String[] toArgs = this.getWhereArgs(fromId);
-		int fromRows = db.update(table, fromCv, where, fromArgs);
-		int toRows = db.update(table, toCv, where, toArgs);
- 
-		return fromRows + toRows;
+		long result = 0;
+
+		db.beginTransaction();
+
+		try
+		{
+			long fromRows = db.update(table, fromCv, where, fromArgs);
+			long toRows = db.update(table, toCv, where, toArgs);
+			result = fromRows + toRows; 
+
+			db.setTransactionSuccessful();
+		}
+		finally
+		{
+			db.endTransaction();
+		}
+
+		return result;
 	}
 
 	/**
 	 * Update a row in the database.
 	 */
-	public int update(NacAlarm alarm)
+	public long update(NacAlarm alarm)
 	{
 		this.setDatabase();
 
  		SQLiteDatabase db = this.getDatabase();
+
+		return this.update(db, alarm);
+	}
+
+	/**
+	 * @see update
+	 */
+	public long update(SQLiteDatabase db, NacAlarm alarm)
+	{
 		String table = this.getTable();
 		ContentValues cv = this.getContentValues(alarm);
 		String where = this.getWhereClause();
 		String[] args = this.getWhereArgs(alarm);
-		int rows = db.update(table, cv, where, args);
+		long result = 0;
 
-		return rows;
+		db.beginTransaction();
+
+		try
+		{
+			result = db.update(table, cv, where, args);
+
+			db.setTransactionSuccessful();
+		}
+		finally
+		{
+			db.endTransaction();
+		}
+
+		return result;
 	}
 
 }

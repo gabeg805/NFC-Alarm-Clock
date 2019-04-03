@@ -1,7 +1,10 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -134,21 +137,18 @@ public class NacCardAdapter
 	 */
 	public void add(NacAlarm alarm, int position)
 	{
-		if (this.getDatabase().add(alarm) < 0)
-		{
-			NacUtility.snackbar(this.getRoot(),
-				"Error occurred when adding alarm to database.",
-				"DISMISS", null);
-			return;
-		}
-
 		// Using update instead of add for testing. Things should never get
 		// canceled in update, only added
 		this.mWasAdded = true;
 
-		this.getScheduler().update(alarm);
+		Intent intent = this.getIntent(alarm, "add");
+
+		//this.getDatabase().add(alarm);
+		//this.getScheduler().update(alarm);
+		this.getContext().startService(intent);
 		this.getAlarms().add(position, alarm);
 		notifyItemInserted(position);
+
 		//this.refresh(position);
 	}
 
@@ -193,8 +193,10 @@ public class NacCardAdapter
 		int firstVisible = this.getFirstVisible(position);
 		int lastVisible = this.getLastVisible(position);
 
-		this.getScheduler().cancel(alarm);
-		this.getDatabase().delete(alarm);
+		Intent intent = this.getIntent(alarm, "delete");
+		//this.getDatabase().delete(alarm);
+		//this.getScheduler().cancel(alarm);
+		this.getContext().startService(intent);
 		this.getAlarms().remove(position);
 		notifyItemRemoved(position);
 
@@ -257,6 +259,25 @@ public class NacCardAdapter
 		}
 
 		return 0;
+	}
+
+	/**
+	 * @return The intent that will be used when starting the service for
+	 *         excecuting schedule and database updates.
+	 */
+	private Intent getIntent(NacAlarm alarm, String message)
+	{
+		Intent intent = new Intent(this.getContext(),
+			NacService.class);
+		Bundle bundle = new Bundle();
+		NacAlarmParcel parcel = new NacAlarmParcel(alarm);
+		Uri uri = Uri.parse(message);
+
+		bundle.putParcelable("parcel", parcel);
+		intent.putExtra("bundle", bundle);
+		intent.setData(uri);
+
+		return intent;
 	}
 
 	/**
@@ -406,10 +427,13 @@ public class NacCardAdapter
 	 * @param  a  The alarm that was changed.
 	 */
 	@Override
-	public void onChange(NacAlarm a)
+	public void onChange(NacAlarm alarm)
 	{
-		this.getDatabase().update(a);
-		this.getScheduler().update(a);
+		Intent intent = this.getIntent(alarm, "change");
+
+		this.getContext().startService(intent);
+		//this.getDatabase().update(alarm);
+		//this.getScheduler().update(alarm);
 	}
 
 	/**

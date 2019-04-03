@@ -209,9 +209,10 @@ public class NacMainActivity
 
 			if ((state == 0) && !rv.canScrollVertically(1))
 			{
-				if (!mFloatingButton.isShown())
+				//if (!mFloatingButton.isShown())
+				if (mFloatingButton.isShown())
 				{
-					mFloatingButton.show();
+					mFloatingButton.hide();
 				}
 			}
 		}

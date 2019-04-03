@@ -68,6 +68,12 @@
 
 		</receiver>
 
+		<!-- Execute schedule and database updates -->
+		<service
+			android:name=".NacService"
+			android:exported="false"
+			/>
+
 	</application>
 
 </manifest>
