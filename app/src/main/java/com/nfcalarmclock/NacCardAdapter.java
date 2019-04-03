@@ -92,13 +92,6 @@ public class NacCardAdapter
 	 */
 	public void add()
 	{
-		if (this.size() >= NacSharedPreferences.DEFAULT_MAX_ALARMS)
-		{
-			NacUtility.quickToast(this.getRoot(),
-				"Max number of alarms created");
-			return;
-		}
-
 		Context context = this.getContext();
 		boolean format = DateFormat.is24HourFormat(context);
 		int id = this.getUniqueId();
@@ -137,19 +130,21 @@ public class NacCardAdapter
 	 */
 	public void add(NacAlarm alarm, int position)
 	{
+		if ((position+1) >= NacSharedPreferences.DEFAULT_MAX_ALARMS)
+		{
+			NacUtility.quickToast(this.getRoot(),
+				"Max number of alarms created");
+			return;
+		}
+
 		// Using update instead of add for testing. Things should never get
 		// canceled in update, only added
+		Intent intent = this.getIntent(alarm, "add");
 		this.mWasAdded = true;
 
-		Intent intent = this.getIntent(alarm, "add");
-
-		//this.getDatabase().add(alarm);
-		//this.getScheduler().update(alarm);
 		this.getContext().startService(intent);
 		this.getAlarms().add(position, alarm);
 		notifyItemInserted(position);
-
-		//this.refresh(position);
 	}
 
 	/**
@@ -190,21 +185,22 @@ public class NacCardAdapter
 	public void delete(int position)
 	{
 		NacAlarm alarm = this.get(position);
-		int firstVisible = this.getFirstVisible(position);
-		int lastVisible = this.getLastVisible(position);
-
 		Intent intent = this.getIntent(alarm, "delete");
-		//this.getDatabase().delete(alarm);
-		//this.getScheduler().cancel(alarm);
+		int size = this.size()-1;
+		int firstVisible = ((position-2) >= 0) ? position-2 : 0;
+		int lastVisible = ((position+2) <= size) ? position+2 : size;
+		//int firstVisible = this.getFirstVisible(position);
+		//int lastVisible = this.getLastVisible(position);
+
 		this.getContext().startService(intent);
 		this.getAlarms().remove(position);
 		notifyItemRemoved(position);
 
-		if ((firstVisible >= 0) && (lastVisible >= 0))
-		{
+		//if ((firstVisible >= 0) && (lastVisible >= 0))
+		//{
 			notifyItemRangeChanged(firstVisible, lastVisible);
 			//this.refresh(position);
-		}
+		//}
 
 		this.undo(alarm, position, Undo.Type.DELETE);
 		NacUtility.snackbar(this.getRoot(), "Deleted alarm.", "UNDO", this);
