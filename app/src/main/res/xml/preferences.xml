@@ -32,7 +32,16 @@
 			android:widgetLayout="@layout/nac_preference_checkbox"
 			app:summaryEnabled="@string/pref_dismiss_button_summary_enabled"
 			app:summaryDisabled="@string/pref_dismiss_button_summary_disabled"
-			android:defaultValue="true"
+			android:defaultValue="false"
+			/>
+
+		<com.nfcalarmclock.NacPreferenceEasySnooze
+			android:key="@string/pref_easy_snooze_key"
+			android:title="@string/pref_easy_snooze_title"
+			android:widgetLayout="@layout/nac_preference_checkbox"
+			app:summaryEnabled="@string/pref_easy_snooze_summary_enabled"
+			app:summaryDisabled="@string/pref_easy_snooze_summary_disabled"
+			android:defaultValue="false"
 			/>
 
 		<!-- Volume level -->

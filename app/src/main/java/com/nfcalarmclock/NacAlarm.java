@@ -648,6 +648,14 @@ public class NacAlarm
 	}
 
 	/**
+	 * Check if the alarm is a one-time alarm.
+	 */
+	public boolean isOneTimeAlarm()
+	{
+		return (!this.getRepeat() || this.getDays().isEmpty());
+	}
+
+	/**
 	 * Print all values in the alarm object.
 	 */
 	public void print()

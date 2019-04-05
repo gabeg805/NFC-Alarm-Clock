@@ -11,6 +11,11 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.view.View;
 import android.view.Window;
+import android.view.MotionEvent;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
@@ -20,9 +25,7 @@ import java.util.concurrent.TimeUnit;
 public class NacAlarmActivity
 	extends Activity
 	implements Runnable,
-		NacDialog.OnShowListener,
-		NacDialog.OnCancelListener,
-		NacDialog.OnDismissListener
+		View.OnClickListener
 {
 
 	/**
@@ -89,12 +92,34 @@ public class NacAlarmActivity
 	 */
 	private void dismiss()
 	{
+		NacAlarm alarm = this.getAlarm();
 		NacSharedPreferences shared = new NacSharedPreferences(this);
 
-		NacUtility.quickToast(this, "Alarm dismissed");
+		if (alarm.isOneTimeAlarm())
+		{
+			NacDatabase db = new NacDatabase(this);
+
+			alarm.setEnabled(false);
+			db.update(alarm);
+			db.close();
+		}
+
 		this.setSnoozeCount(shared, 0);
 		this.cleanup();
 		finish();
+	}
+
+	/**
+	 * @see dismiss
+	 */
+	private void dismiss(String message)
+	{
+		if (!message.isEmpty())
+		{
+			NacUtility.quickToast(this, message);
+		}
+
+		this.dismiss();
 	}
 
 	/**
@@ -151,13 +176,30 @@ public class NacAlarmActivity
 	}
 
 	/**
-	 * Called when the dialog is canceled.
 	 */
 	@Override
-	public boolean onCancelDialog(NacDialog dialog)
+	public void onClick(View view)
 	{
-		this.snooze("Alarm snoozed");
-		return true;
+		int id = view.getId();
+
+		if (id == R.id.act_alarm)
+		{
+			NacSharedPreferences shared = new NacSharedPreferences(this);
+
+			if (shared.getEasySnooze())
+			{
+				NacUtility.printf("EasySnooze!");
+				this.snooze("Alarm snoozed");
+			}
+		}
+		else if (id == R.id.snooze)
+		{
+			this.snooze("Alarm snoozed");
+		}
+		else if (id == R.id.dismiss)
+		{
+			this.dismiss("Alarm dismissed");
+		}
 	}
 
 	/**
@@ -168,6 +210,7 @@ public class NacAlarmActivity
 	{
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.act_alarm);
 
 		this.mAlarm = NacAlarmParcel.getAlarm(getIntent());
 		this.mPlayer = new NacMediaPlayer(this);
@@ -177,16 +220,6 @@ public class NacAlarmActivity
 		this.scheduleNextAlarm();
 		this.playMusic();
 		this.vibrate();
-	}
-
-	/**
-	 * Called when the dialog is dismissed.
-	 */
-	@Override
-	public boolean onDismissDialog(NacDialog dialog)
-	{
-		this.dismiss();
-		return true;
 	}
 
 	/**
@@ -223,44 +256,39 @@ public class NacAlarmActivity
 	}
 
 	/**
-	 * Called when the dialog is shown.
-	 */
-	@Override
-	public void onShowDialog(NacDialog dialog, View root)
-	{
-		NacSharedPreferences shared = new NacSharedPreferences(this);
-		int autoDismiss = shared.getAutoDismiss();
-		long delay = TimeUnit.MINUTES.toMillis(autoDismiss);
-
-		if (autoDismiss == 0)
-		{
-			return;
-		}
-
-		this.mHandler.postDelayed(this, delay);
-	}
-
-	/**
 	 */
 	@Override
 	public void onStart()
 	{
 		super.onStart();
 
-		NacAlarmDialog dialog = new NacAlarmDialog();
+		NacSharedPreferences shared = new NacSharedPreferences(this);
 		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+		LinearLayout layout = (LinearLayout) findViewById(R.id.act_alarm);
+		Button snoozeButton = (Button) findViewById(R.id.snooze);
+		Button dismissButton = (Button) findViewById(R.id.dismiss);
+		int autoDismiss = shared.getAutoDismiss();
+		long delay = TimeUnit.MINUTES.toMillis(autoDismiss);
 
-		dialog.build(this, R.layout.act_alarm);
-
-		if (nfcAdapter == null)
+		if ((nfcAdapter == null) || !shared.getRequireNfc())
 		{
-			dialog.setPositiveButton("Dismiss");
+			dismissButton.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			dismissButton.setVisibility(View.GONE);
 		}
 
-		dialog.addOnCancelListener(this);
-		dialog.addOnDismissListener(this);
-		dialog.addOnShowListener(this);
-		dialog.show();
+		if (autoDismiss != 0)
+		{
+			this.mHandler.postDelayed(this, delay);
+		}
+
+		snoozeButton.setTextColor(shared.getThemeColor());
+		dismissButton.setTextColor(shared.getThemeColor());
+		layout.setOnClickListener(this);
+		snoozeButton.setOnClickListener(this);
+		dismissButton.setOnClickListener(this);
 	}
 
 	/**
@@ -276,12 +304,12 @@ public class NacAlarmActivity
 	}
 
 	/**
-	 * Automatically snooze the alarm.
+	 * Automatically dismiss the alarm.
 	 */
 	@Override
 	public void run()
 	{
-		this.snooze("Auto-dismissed the alarm");
+		this.dismiss("Auto-dismissed the alarm");
 	}
 
 	/**
@@ -291,13 +319,8 @@ public class NacAlarmActivity
 	{
 		NacAlarm alarm = this.getAlarm();
 
-		if (!alarm.getRepeat() || alarm.getDays().isEmpty())
+		if (alarm.isOneTimeAlarm())
 		{
-			NacDatabase db = new NacDatabase(this);
-
-			alarm.setEnabled(false);
-			db.update(alarm);
-
 			return;
 		}
 
@@ -343,7 +366,7 @@ public class NacAlarmActivity
 		Calendar snooze = Calendar.getInstance();
 
 		snooze.add(Calendar.MINUTE, shared.getSnoozeDuration());
-		alarm.setHour(snooze.get(Calendar.HOUR));
+		alarm.setHour(snooze.get(Calendar.HOUR_OF_DAY));
 		alarm.setMinute(snooze.get(Calendar.MINUTE));
 		scheduler.update(alarm, snooze);
 		this.setSnoozeCount(shared, snoozeCount);
@@ -356,8 +379,6 @@ public class NacAlarmActivity
 	 */
 	public boolean snooze(String message)
 	{
-		this.cleanup();
-
 		if (this.snooze())
 		{
 			NacUtility.quickToast(this, message);
@@ -368,7 +389,6 @@ public class NacAlarmActivity
 		else
 		{
 			NacUtility.quickToast(this, "Unable to snooze the alarm");
-			recreate();
 			return false;
 		}
 	}

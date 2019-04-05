@@ -9,12 +9,17 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import java.io.IOException;
 
+import android.media.AudioDeviceInfo;
+import android.os.Build;
+import android.media.AudioFocusRequest;
+
 /**
  * Wrapper for the MediaPlayer class.
  */
 public class NacMediaPlayer
 	extends MediaPlayer
-	implements MediaPlayer.OnCompletionListener,AudioManager.OnAudioFocusChangeListener
+	implements MediaPlayer.OnCompletionListener,
+		AudioManager.OnAudioFocusChangeListener
 {
 
 	/**
@@ -56,11 +61,54 @@ public class NacMediaPlayer
 	/**
 	 * Abandon audio focus.
 	 */
-	public void abandonAudioFocus()
+	@SuppressWarnings("deprecation")
+	public int abandonAudioFocus()
 	{
 		AudioManager am = this.getAudioManager();
+		int result = 0;
 
-		am.abandonAudioFocus(this);
+		//if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		//{
+		//	AudioFocusRequest request = this.getAudioFocusRequest();
+		//	result = am.abandonAudioFocus(request);
+		//}
+		//else
+		//{
+			result = am.abandonAudioFocus(this);
+		//}
+
+		return result;
+	}
+
+	/**
+	 * @return The audio attributes.
+	 */
+	private AudioAttributes getAudioAttributes()
+	{
+		return new AudioAttributes.Builder()
+			.setLegacyStreamType(AudioManager.STREAM_MUSIC)
+			.setUsage(AudioAttributes.USAGE_MEDIA)
+			.build();
+	}
+
+	/**
+	 * @return The audio focus request.
+	 */
+	private AudioFocusRequest getAudioFocusRequest()
+	{
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			AudioAttributes attrs = this.getAudioAttributes();
+
+			return new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+				.setAudioAttributes(attrs)
+				.setOnAudioFocusChangeListener(this)
+				.build();
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	/**
@@ -84,7 +132,7 @@ public class NacMediaPlayer
 	 */
 	private int getStreamVolume()
 	{
-		return this.mAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
+		return this.mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 	}
 
 	/**
@@ -195,11 +243,8 @@ public class NacMediaPlayer
 		}
 
 		Context context = this.getContext();
+		AudioAttributes attrs = this.getAudioAttributes();
 		String path = NacMedia.getMediaPath(context, media);
-		AudioAttributes attrs = new AudioAttributes.Builder()
-			.setLegacyStreamType(AudioManager.STREAM_ALARM)
-			.setUsage(AudioAttributes.USAGE_ALARM)
-			.build();
 
 		// Can log each step for better granularity in case error occurrs.
 		try
@@ -247,13 +292,25 @@ public class NacMediaPlayer
 	/**
 	 * Request audio focus.
 	 */
+	@SuppressWarnings("deprecation")
 	public boolean requestAudioFocus()
 	{
 		Context context = this.getContext();
 		AudioManager am = (AudioManager) context.getSystemService(
 			Context.AUDIO_SERVICE);
-		int result = am.requestAudioFocus(this, AudioManager.STREAM_ALARM,
-			AudioManager.AUDIOFOCUS_GAIN);
+		int result = 0;
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			AudioFocusRequest request = this.getAudioFocusRequest();
+			result = am.requestAudioFocus(request);
+		}
+		else
+		{
+			result = am.requestAudioFocus(this, AudioManager.STREAM_MUSIC,
+				AudioManager.AUDIOFOCUS_GAIN);
+		}
+
 		this.mAudioManager = am;
 		this.mVolume = this.getStreamVolume();
 

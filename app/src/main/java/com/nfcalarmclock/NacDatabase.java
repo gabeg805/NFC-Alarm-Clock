@@ -1,10 +1,13 @@
 package com.nfcalarmclock;
 
-import android.content.ContentValues;
 import android.content.Context;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
+import android.provider.BaseColumns;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,8 +33,8 @@ public class NacDatabase
 	 */
 	public NacDatabase(Context context)
 	{
-		super(context, NacDatabaseContract.DATABASE_NAME, null,
-			NacDatabaseContract.DATABASE_VERSION);
+		super(context, Contract.DATABASE_NAME, null,
+			Contract.DATABASE_VERSION);
 
 		this.mContext = context;
 		this.mDatabase = null;
@@ -125,14 +128,14 @@ public class NacDatabase
 
 		SQLiteDatabase db = this.getDatabase();
 		String table = this.getTable();
-		String where = NacDatabaseContract.AlarmTable.COLUMN_ID + "=? AND "
-			+ NacDatabaseContract.AlarmTable.COLUMN_ENABLED + "=? AND "
-			+ NacDatabaseContract.AlarmTable.COLUMN_24HOURFORMAT + "=? AND "
-			+ NacDatabaseContract.AlarmTable.COLUMN_DAYS + "=? AND "
-			+ NacDatabaseContract.AlarmTable.COLUMN_REPEAT + "=? AND "
-			+ NacDatabaseContract.AlarmTable.COLUMN_VIBRATE + "=? AND "
-			+ NacDatabaseContract.AlarmTable.COLUMN_SOUND + "=? AND "
-			+ NacDatabaseContract.AlarmTable.COLUMN_NAME + "=?";
+		String where = Contract.AlarmTable.COLUMN_ID + "=? AND "
+			+ Contract.AlarmTable.COLUMN_ENABLED + "=? AND "
+			+ Contract.AlarmTable.COLUMN_24HOURFORMAT + "=? AND "
+			+ Contract.AlarmTable.COLUMN_DAYS + "=? AND "
+			+ Contract.AlarmTable.COLUMN_REPEAT + "=? AND "
+			+ Contract.AlarmTable.COLUMN_VIBRATE + "=? AND "
+			+ Contract.AlarmTable.COLUMN_SOUND + "=? AND "
+			+ Contract.AlarmTable.COLUMN_NAME + "=?";
 		String[] args = new String[] {
 			String.valueOf(alarm.getId()),
 			String.valueOf(alarm.getEnabled() ? 1 : 0),
@@ -171,17 +174,17 @@ public class NacDatabase
 		String name = alarm.getName();
 		//int tag = alarm.getTag();
 
-		cv.put(NacDatabaseContract.AlarmTable.COLUMN_ID, id);
-		cv.put(NacDatabaseContract.AlarmTable.COLUMN_ENABLED, enabled);
-		cv.put(NacDatabaseContract.AlarmTable.COLUMN_24HOURFORMAT, format);
-		cv.put(NacDatabaseContract.AlarmTable.COLUMN_HOUR, hour);
-		cv.put(NacDatabaseContract.AlarmTable.COLUMN_MINUTE, minute);
-		cv.put(NacDatabaseContract.AlarmTable.COLUMN_DAYS, days);
-		cv.put(NacDatabaseContract.AlarmTable.COLUMN_REPEAT, repeat);
-		cv.put(NacDatabaseContract.AlarmTable.COLUMN_VIBRATE, vibrate);
-		cv.put(NacDatabaseContract.AlarmTable.COLUMN_SOUND, sound);
-		cv.put(NacDatabaseContract.AlarmTable.COLUMN_NAME, name);
-		// cv.put(NacDatabaseContract.AlarmTable.COLUMN_NFCTAG, tag);
+		cv.put(Contract.AlarmTable.COLUMN_ID, id);
+		cv.put(Contract.AlarmTable.COLUMN_ENABLED, enabled);
+		cv.put(Contract.AlarmTable.COLUMN_24HOURFORMAT, format);
+		cv.put(Contract.AlarmTable.COLUMN_HOUR, hour);
+		cv.put(Contract.AlarmTable.COLUMN_MINUTE, minute);
+		cv.put(Contract.AlarmTable.COLUMN_DAYS, days);
+		cv.put(Contract.AlarmTable.COLUMN_REPEAT, repeat);
+		cv.put(Contract.AlarmTable.COLUMN_VIBRATE, vibrate);
+		cv.put(Contract.AlarmTable.COLUMN_SOUND, sound);
+		cv.put(Contract.AlarmTable.COLUMN_NAME, name);
+		// cv.put(Contract.AlarmTable.COLUMN_NFCTAG, tag);
 
 		return cv;
 	}
@@ -207,7 +210,7 @@ public class NacDatabase
 	 */
 	private String getTable()
 	{
-		return NacDatabaseContract.AlarmTable.TABLE_NAME;
+		return Contract.AlarmTable.TABLE_NAME;
 	}
 
 	/**
@@ -239,7 +242,7 @@ public class NacDatabase
 	 */
 	private String getWhereClause()
 	{
-		return NacDatabaseContract.AlarmTable.COLUMN_ID + "=?";
+		return Contract.AlarmTable.COLUMN_ID + "=?";
 	}
 
 	/**
@@ -251,7 +254,7 @@ public class NacDatabase
 	@Override
 	public void onCreate(SQLiteDatabase db)
 	{
-		db.execSQL(NacDatabaseContract.AlarmTable.CREATE_TABLE);
+		db.execSQL(Contract.AlarmTable.CREATE_TABLE);
 
 		Context context = this.getContext();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
@@ -284,7 +287,7 @@ public class NacDatabase
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
 	{
-		db.execSQL(NacDatabaseContract.AlarmTable.DELETE_TABLE);
+		db.execSQL(Contract.AlarmTable.DELETE_TABLE);
 		onCreate(db);
 	}
 
@@ -442,6 +445,192 @@ public class NacDatabase
 		}
 
 		return result;
+	}
+
+	/**
+	 * Database contract.
+	 */
+	public static final class Contract
+	{
+
+		/**
+		 * Full app name.
+		 */
+		public static final String AUTHORITY = "com.nfcalarmclock";
+
+		/**
+		 * Scheme.
+		 */
+		public static final String SCHEME = "content://";
+
+		/**
+		 * Database name.
+		 */
+		public static final String DATABASE_NAME = "NFCAlarms.db";
+
+		/**
+		 * Database version.
+		 */
+		public static final int DATABASE_VERSION = 1;
+
+		/**
+		 * prevent someone from instantiating the contract class.
+		 */
+		private Contract()
+		{
+		}
+
+		/**
+		 * Define the table contents.
+		 */
+		public static final class AlarmTable
+			implements BaseColumns
+		{
+
+			/**
+			 * Prevent someone from instantiating the table class.
+			 */
+			private AlarmTable()
+			{
+			}
+
+			/**
+			 * Table name.
+			 */
+			public static final String TABLE_NAME = "NfcAlarms";
+
+			/**
+			 * ID of the alarm.
+			 */
+			public static final String COLUMN_ID = "Id";
+
+			/**
+			 * Enabled indicator.
+			 */
+			public static final String COLUMN_ENABLED = "Enabled";
+
+			/**
+			 * Hour format.
+			 */
+			public static final String COLUMN_24HOURFORMAT = "HourFormat";
+
+			/**
+			 * Hour.
+			 */
+			public static final String COLUMN_HOUR = "Hour";
+
+			/**
+			 * Minute.
+			 */
+			public static final String COLUMN_MINUTE = "Minute";
+
+			/**
+			 * Days the alarm is scheduled to run.
+			 */
+			public static final String COLUMN_DAYS = "Days";
+
+			/**
+			 * Repeat indicator.
+			 */
+			public static final String COLUMN_REPEAT = "Repeat";
+
+			/**
+			 * Vibrate the phone indicator.
+			 */
+			public static final String COLUMN_VIBRATE = "Vibrate";
+
+			/**
+			 * Sound played when the alarm is run.
+			 */
+			public static final String COLUMN_SOUND = "Sound";
+
+			/**
+			 * Name of the alarm.
+			 */
+			public static final String COLUMN_NAME = "Name";
+
+			/**
+			 * NFC tag.
+			 */
+			public static final String COLUMN_NFCTAG = "NfcTag";
+
+			/**
+			 * The content style URI
+			 */
+			public static final Uri CONTENT_URI = Uri.parse(SCHEME + AUTHORITY
+				+ "/" + TABLE_NAME);
+
+			/**
+			 * The content URI base for a single row. An ID must be appended.
+			 */
+			public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME
+				+ AUTHORITY + "/" + TABLE_NAME + "/");
+
+			/**
+			 * The default sort order for this table
+			 */
+			public static final String DEFAULT_SORT_ORDER = COLUMN_HOUR
+				+ " ASC";
+
+			/**
+			 * The MIME type of {@link #CONTENT_URI} providing rows
+			 */
+			public static final String CONTENT_TYPE =
+				ContentResolver.CURSOR_DIR_BASE_TYPE
+					+ "/vnd.com.nfcalarmclock";
+
+			/**
+			 * The MIME type of a {@link #CONTENT_URI} single row
+			 */
+			public static final String CONTENT_ITEM_TYPE =
+				ContentResolver.CURSOR_ITEM_BASE_TYPE
+					+ "/vnd.com.nfcalarmclock";
+
+			/**
+			 * SQL Statement to create the routes table.
+			 */
+			public static final String CREATE_TABLE =
+				"CREATE TABLE " + TABLE_NAME
+				+ " ("
+				+ _ID + " INTEGER PRIMARY KEY,"
+				+ COLUMN_ID + " INTEGER,"
+				+ COLUMN_ENABLED + " INTEGER,"
+				+ COLUMN_24HOURFORMAT + " INTEGER,"
+				+ COLUMN_HOUR + " INTEGER,"
+				+ COLUMN_MINUTE + " INTEGER,"
+				+ COLUMN_DAYS + " INTEGER,"
+				+ COLUMN_REPEAT + " INTEGER,"
+				+ COLUMN_VIBRATE + " INTEGER,"
+				+ COLUMN_SOUND + " TEXT,"
+				+ COLUMN_NAME + " TEXT,"
+				+ COLUMN_NFCTAG + " TEXT"
+				+ ");";
+
+			/**
+			 * SQL statement to delete the table
+			 */
+			public static final String DELETE_TABLE =
+				"DROP TABLE IF EXISTS " + TABLE_NAME;
+
+			/**
+			 * Array of all the columns.
+			 */
+			public static final String[] KEY_ARRAY = {
+				COLUMN_ID,
+				COLUMN_ENABLED,
+				COLUMN_24HOURFORMAT,
+				COLUMN_HOUR,
+				COLUMN_MINUTE,
+				COLUMN_DAYS,
+				COLUMN_REPEAT,
+				COLUMN_VIBRATE,
+				COLUMN_SOUND,
+				COLUMN_NAME,
+				COLUMN_NFCTAG
+			};
+
+		}
+
 	}
 
 }

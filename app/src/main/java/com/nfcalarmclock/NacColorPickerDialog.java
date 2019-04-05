@@ -182,15 +182,20 @@ public class NacColorPickerDialog
 	 * Capture touch events on the color picker.
 	 */
 	@Override
-	public boolean onTouch(View v, MotionEvent event)
+	public boolean onTouch(View view, MotionEvent event)
 	{
-		v.onTouchEvent(event);
+		view.onTouchEvent(event);
 
 		int color = this.getColor();
 		String hex = this.getHexColor();
 
 		this.mColorExample.setColorFilter(color, PorterDuff.Mode.SRC);
 		this.mEditText.setText(hex);
+
+		if (event.getAction() == MotionEvent.ACTION_UP)
+		{
+			view.performClick();
+		}
 
 		return true;
 	}

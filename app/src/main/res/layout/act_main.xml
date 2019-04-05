@@ -22,7 +22,7 @@
 		android:layout_height="wrap_content"
 		android:layout_gravity="bottom|center"
 		android:layout_margin="@dimen/m_fab"
-		android:src="@mipmap/baseline_add_white_32dp"
+		android:src="@mipmap/plus"
 		/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/nac_swipe_delete"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@color/red">
+	android:background="@color/red"
+	tools:ignore="Overdraw">
 
 	<ImageView
 		android:id="@+id/delete_icon"
@@ -13,7 +15,7 @@
 		android:layout_marginEnd="@dimen/mr_delete"
 		android:layout_alignParentEnd="true"
 		android:layout_centerVertical="true"
-		android:src="@mipmap/baseline_delete_white_32dp"
+		android:src="@mipmap/delete"
 		android:contentDescription="@null"
 		/>
 

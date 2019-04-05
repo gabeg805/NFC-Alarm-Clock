@@ -53,7 +53,7 @@ public class NacMusicDialog
 		entry.setTag(file);
 		entry.setOnClickListener(this);
 		container.add(entry);
-		entry.setImageBackground(R.mipmap.baseline_folder_white_48dp);
+		entry.setImageBackground(R.mipmap.folder);
 		entry.setText(text);
 	}
 
@@ -83,7 +83,7 @@ public class NacMusicDialog
 		entry.setTag(file);
 		entry.setOnClickListener(this);
 		container.add(entry);
-		entry.setImageBackground(R.mipmap.baseline_play_arrow_white_48dp);
+		entry.setImageBackground(R.mipmap.play);
 		entry.setTextTitle(title);
 		entry.setTextSubtitle(artist);
 	}

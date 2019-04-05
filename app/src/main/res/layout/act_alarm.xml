@@ -2,31 +2,65 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/act_alarm"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:gravity="center"
 	android:orientation="vertical"
 	android:paddingTop="@dimen/pad_tweak"
+	android:paddingBottom="@dimen/pad_tweak"
 	android:paddingStart="?dialogPreferredPadding"
 	android:paddingEnd="?dialogPreferredPadding"
 	tools:ignore="UseCompoundDrawables">
 
-	<ImageView
-		android:id="@+id/nac_nfc_icon"
+	<TextView
+		android:id="@+id/title"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:src="@mipmap/ic_nfc"
+		android:textSize="@dimen/tsz_act_alarm_title"
+		android:text="@string/act_alarm_title"
+		/>
+
+	<ImageView
+		android:id="@+id/icon"
+		android:layout_width="@dimen/isz_act_alarm_icon"
+		android:layout_height="@dimen/isz_act_alarm_icon"
+		android:layout_margin="@dimen/m_act_alarm_icon"
+		android:src="@mipmap/alarm"
 		android:contentDescription="@null"
 		/>
 
 	<TextView
-		android:id="@+id/nac_nfc_text"
+		android:id="@+id/instructions"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:gravity="start"
-		android:paddingTop="@dimen/pt_nfc_instructions"
-		android:textSize="@dimen/tsz_nfc_instructions"
-		android:text="@string/nfc_instructions"
+		android:textSize="@dimen/tsz_act_alarm_instructions"
+		android:text="@string/act_alarm_instructions"
 		/>
+
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_margin="@dimen/m_act_alarm_buttons"
+		android:orientation="horizontal">
+
+		<Button
+			android:id="@+id/snooze"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="?android:attr/selectableItemBackground"
+			android:text="@string/act_alarm_snooze"
+			/>
+
+		<Button
+			android:id="@+id/dismiss"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="?android:attr/selectableItemBackground"
+			android:text="@string/act_alarm_dismiss"
+			/>
+
+	</LinearLayout>
+
 
 </LinearLayout>

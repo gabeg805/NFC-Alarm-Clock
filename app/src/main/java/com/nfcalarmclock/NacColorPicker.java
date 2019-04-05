@@ -631,6 +631,21 @@ public class NacColorPicker
 		this.calculateColorSelection(eventX, eventY);
 		this.calculateShaderSelection(eventX, eventY);
 
+		if (event.getAction() == MotionEvent.ACTION_UP)
+		{
+			performClick();
+		}
+
+		return true;
+	}
+
+	/**
+	 */
+	@Override
+	public boolean performClick()
+	{
+		super.performClick();
+
 		return true;
 	}
 

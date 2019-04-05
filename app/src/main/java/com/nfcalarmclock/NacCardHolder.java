@@ -681,8 +681,10 @@ public class NacCardHolder
 
 		alarm.setHour(hr);
 		alarm.setMinute(min);
+		alarm.setEnabled(true);
 		alarm.changed();
 		this.setTime();
+		this.setSwitch();
 
 		if (!alarm.getRepeat() || alarm.getDays().isEmpty())
 		{

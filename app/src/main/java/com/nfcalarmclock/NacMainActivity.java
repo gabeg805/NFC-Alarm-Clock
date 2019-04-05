@@ -194,6 +194,10 @@ public class NacMainActivity
 			{
 				mFloatingButton.hide();
 			}
+			//else if ((dy == 0) && mFloatingButton.isShown())
+			//{
+			//	mFloatingButton.hide();
+			//}
 		}
 
 		/**

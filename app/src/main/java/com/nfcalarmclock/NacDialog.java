@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.DisplayMetrics;
+import android.view.inputmethod.InputMethodManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -16,13 +17,13 @@ import android.widget.Button;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.view.inputmethod.InputMethodManager;
-
 /**
  * A generic dialog object.
  */
 public class NacDialog
-	implements DialogInterface.OnClickListener,DialogInterface.OnCancelListener,View.OnLayoutChangeListener
+	implements View.OnLayoutChangeListener,
+		DialogInterface.OnClickListener,
+		DialogInterface.OnCancelListener
 {
 
 	/**

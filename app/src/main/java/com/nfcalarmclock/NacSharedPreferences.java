@@ -39,6 +39,11 @@ public class NacSharedPreferences
 	public final boolean mRequireNfc;
 
 	/**
+	 * Easy snooze.
+	 */
+	public final boolean mEasySnooze;
+
+	/**
 	 * Day of week.
 	 */
 	public final int mDays;
@@ -109,9 +114,14 @@ public class NacSharedPreferences
 	public static final int DEFAULT_SNOOZE_DURATION = 5;
 
 	/**
-	 * Default show dismiss button.
+	 * Default require NFC.
 	 */
 	public static final boolean DEFAULT_REQUIRE_NFC = true;
+
+	/**
+	 * Default easy snooze.
+	 */
+	public static final boolean DEFAULT_EASY_SNOOZE = false;
 
 	/**
 	 * Default auto dismiss index value.
@@ -246,6 +256,7 @@ public class NacSharedPreferences
 		int maxSnooze = shared.getInt(keys.getMaxSnooze(), DEFAULT_MAX_SNOOZE);
 		int snoozeDuration = shared.getInt(keys.getSnoozeDuration(), DEFAULT_SNOOZE_DURATION);
 		this.mRequireNfc = shared.getBoolean(keys.getRequireNfc(), DEFAULT_REQUIRE_NFC);
+		this.mEasySnooze = shared.getBoolean(keys.getEasySnooze(), DEFAULT_EASY_SNOOZE);
 
 		this.mAutoDismiss = NacSharedPreferences.getAutoDismiss(autoDismiss);
 		this.mMaxSnooze = NacSharedPreferences.getMaxSnooze(maxSnooze);
@@ -291,6 +302,14 @@ public class NacSharedPreferences
 	public int getDaysColor()
 	{
 		return this.mDaysColor;
+	}
+
+	/**
+	 * @return Whether easy snooze is enabled or not.
+	 */
+	public boolean getEasySnooze()
+	{
+		return this.mEasySnooze;
 	}
 
 	/**

@@ -3,9 +3,15 @@
 	<string name="app_name">NFC Alarm Clock</string>
 	<string name="app_alert_name">NFC Alert Dialog</string>
 
+	<string name="act_alarm_title">Dismiss Alarm</string>
+	<string name="act_alarm_instructions">Scan NFC Tag to dismiss the alarm.</string>
+	<string name="act_alarm_snooze">Snooze</string>
+	<string name="act_alarm_dismiss">Dismiss</string>
+
 	<string name="card_repeat">Repeat</string>
 	<string name="card_vibrate">Vibrate</string>
 
+	<!-- Day of week -->
 	<string name="dow_sun">S</string>
 	<string name="dow_mon">M</string>
 	<string name="dow_tue">T</string>
@@ -18,8 +24,8 @@
 	<string name="dlg_ringtone_title">Select a ringtone</string>
 	<string name="dlg_music_title">Select a song</string>
 	<string name="dlg_prompt_title">Select Alarm Sound</string>
-	<string name="dlg_prompt_ringtone">Choose ringtone&#8230;</string>
-	<string name="dlg_prompt_music">Browse music&#8230;</string>
+	<string name="dlg_prompt_ringtone">Choose ringtone</string>
+	<string name="dlg_prompt_music">Browse music</string>
 	<string name="dlg_name_hint">Alarm name</string>
 	<string name="dlg_color_hint">Hex Color</string>
 
@@ -39,11 +45,17 @@
 	<string name="pref_snooze_duration_key">pref_snooze_duration</string>
 	<string name="pref_snooze_duration_title">Snooze Duration</string>
 
-	<!-- Dismiss button -->
+	<!-- Require NFC -->
 	<string name="pref_dismiss_button_key">pref_dismiss_button</string>
 	<string name="pref_dismiss_button_title">Require NFC</string>
-	<string name="pref_dismiss_button_summary_enabled">NFC is required to dismiss an alarm.</string>
-	<string name="pref_dismiss_button_summary_disabled">Select a button to dismiss an alarm.</string>
+	<string name="pref_dismiss_button_summary_enabled">NFC is required to dismiss the alarm.</string>
+	<string name="pref_dismiss_button_summary_disabled">Dismiss the alarm normally.</string>
+
+	<!-- Easy snooze -->
+	<string name="pref_easy_snooze_key">pref_easy_snooze</string>
+	<string name="pref_easy_snooze_title">Easy Snooze</string>
+	<string name="pref_easy_snooze_summary_enabled">Snooze the alarm by touching anywhere.</string>
+	<string name="pref_easy_snooze_summary_disabled">Snooze the alarm normally.</string>
 
 	<!-- Color preference -->
 	<string name="pref_color_key">pref_color</string>
@@ -119,7 +131,6 @@
 	<string name="increment">Increment the value</string>
 	<string name="color_selector">Select a color for the color picker</string>
 	<string name="shader_selector">Select a shade for the color picker</string>
-	<string name="nfc_instructions">Scan NFC Tag to dismiss the alarm.</string>
 	<string name="copy">COPY</string>
 	<string name="delete">DELETE</string>
 

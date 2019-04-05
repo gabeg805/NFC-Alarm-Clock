@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/nac_swipe_copy"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@color/green">
+	android:background="@color/green"
+	tools:ignore="Overdraw">
 
 	<ImageView
 		android:id="@+id/copy_icon"
@@ -13,7 +15,7 @@
 		android:layout_marginStart="@dimen/ml_copy"
 		android:layout_alignParentStart="true"
 		android:layout_centerVertical="true"
-		android:src="@mipmap/baseline_file_copy_white_48"
+		android:src="@mipmap/file_copy"
 		android:contentDescription="@null"
 		/>
 

@@ -8,7 +8,7 @@
 	android:layout_height="wrap_content"
 	android:elevation="@dimen/elv_card"
 	app:cardBackgroundColor="?attr/colorCard"
-	tools:ignore="ContentDescription,RtlSymmetry">
+	tools:ignore="ContentDescription,RelativeOverlap,RtlSymmetry">
 
 	<RelativeLayout
 		android:layout_width="match_parent"
@@ -102,7 +102,7 @@
 			android:layout_marginEnd="@dimen/mr_expand"
 			android:layout_alignBottom="@id/nac_summary_days"
 			android:layout_alignParentEnd="true"
-			android:src="@mipmap/baseline_keyboard_arrow_down_white_24dp"
+			android:src="@mipmap/expand"
 			tools:ignore="ContentDescription"
 			/>
 
@@ -154,7 +154,7 @@
 				android:paddingTop="@dimen/pt_sound"
 				android:paddingBottom="@dimen/pb_sound"
 				android:paddingStart="@dimen/pl_sound"
-				app:nacDrawable="@mipmap/baseline_music_note_white_24dp"
+				app:nacDrawable="@mipmap/music_note"
 				app:nacText=""
 				/>
 
@@ -183,7 +183,7 @@
 			android:paddingTop="@dimen/pt_name"
 			android:paddingBottom="@dimen/pb_name"
 			android:paddingStart="@dimen/pl_name"
-			app:nacDrawable="@mipmap/baseline_label_white_32dp"
+			app:nacDrawable="@mipmap/label"
 			/>
 
 		<View
@@ -206,7 +206,7 @@
 				android:paddingBottom="@dimen/pb_delete"
 				android:paddingStart="@dimen/pl_delete"
 				android:paddingEnd="@dimen/pr_delete"
-				app:nacDrawable="@mipmap/baseline_delete_white_32dp"
+				app:nacDrawable="@mipmap/delete"
 				app:nacText="Delete"
 				/>
 
@@ -216,7 +216,7 @@
 				android:layout_marginEnd="@dimen/mr_collapse"
 				android:layout_alignParentEnd="true"
 				android:layout_centerVertical="true"
-				android:src="@mipmap/baseline_keyboard_arrow_up_white_24dp"
+				android:src="@mipmap/collapse"
 				/>
 
 		</RelativeLayout>

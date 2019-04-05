@@ -12,7 +12,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:background="?android:selectableItemBackgroundBorderless"
-		android:src="@mipmap/baseline_remove_white_48dp"
+		android:src="@mipmap/minus"
 		android:contentDescription="@string/decrement"
 		/>
 
@@ -29,7 +29,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:background="?android:selectableItemBackgroundBorderless"
-		android:src="@mipmap/baseline_add_white_32dp"
+		android:src="@mipmap/plus"
 		android:contentDescription="@string/increment"
 		/>
 

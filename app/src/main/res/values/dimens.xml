@@ -87,14 +87,17 @@
 	<dimen name="pr_delete">48dp</dimen>
 
 	<!-- Expand/collapse buttons -->
-	<dimen name="mr_expand">14dp</dimen>
-	<dimen name="mr_collapse">14dp</dimen>
+	<dimen name="mr_expand">24dp</dimen>
+	<dimen name="mr_collapse">24dp</dimen>
 	<dimen name="isz_expand">20dp</dimen>
 	<dimen name="isz_collapse">20dp</dimen>
 
 	<!-- Activity alarm -->
-	<dimen name="pt_nfc_instructions">16dp</dimen>
-	<dimen name="tsz_nfc_instructions">12sp</dimen>
+	<dimen name="m_act_alarm_icon">28dp</dimen>
+	<dimen name="m_act_alarm_buttons">28dp</dimen>
+	<dimen name="isz_act_alarm_icon">64dp</dimen>
+	<dimen name="tsz_act_alarm_title">26sp</dimen>
+	<dimen name="tsz_act_alarm_instructions">14sp</dimen>
 
 	<!-- Dialog days -->
 	<dimen name="spt_dlg_days">10dp</dimen>

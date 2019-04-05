@@ -30,6 +30,11 @@ public class NacPreferenceKeys
 	public final String mRequireNfc;
 
 	/**
+	 * Easy snoozing of the alarm.
+	 */
+	public final String mEasySnooze;
+
+	/**
 	 * Repeat.
 	 */
 	public final String mRepeat;
@@ -94,6 +99,7 @@ public class NacPreferenceKeys
 		this.mMaxSnooze = res.getString(R.string.pref_max_snooze_key);
 		this.mSnoozeDuration = res.getString(R.string.pref_snooze_duration_key);
 		this.mRequireNfc = res.getString(R.string.pref_dismiss_button_key);
+		this.mEasySnooze = res.getString(R.string.pref_easy_snooze_key);
 		this.mRepeat = res.getString(R.string.pref_repeat_key);
 		this.mDays = res.getString(R.string.pref_days_key);
 		this.mVibrate = res.getString(R.string.pref_vibrate_key);
@@ -108,43 +114,19 @@ public class NacPreferenceKeys
 	}
 
 	/**
+	 * @return The AM color key.
+	 */
+	public String getAmColor()
+	{
+		return this.mAmColor;
+	}
+
+	/**
 	 * @return The auto dismiss key.
 	 */
 	public String getAutoDismiss()
 	{
 		return this.mAutoDismiss;
-	}
-
-	/**
-	 * @return The max snooze key.
-	 */
-	public String getMaxSnooze()
-	{
-		return this.mMaxSnooze;
-	}
-
-	/**
-	 * @return The snooze duration key.
-	 */
-	public String getSnoozeDuration()
-	{
-		return this.mSnoozeDuration;
-	}
-
-	/**
-	 * @return The NFC required key.
-	 */
-	public String getRequireNfc()
-	{
-		return this.mRequireNfc;
-	}
-
-	/**
-	 * @return The repeat key.
-	 */
-	public String getRepeat()
-	{
-		return this.mRepeat;
 	}
 
 	/**
@@ -156,19 +138,27 @@ public class NacPreferenceKeys
 	}
 
 	/**
-	 * @return The vibrate key.
+	 * @return The days color key.
 	 */
-	public String getVibrate()
+	public String getDaysColor()
 	{
-		return this.mVibrate;
+		return this.mDaysColor;
 	}
 
 	/**
-	 * @return The sound key.
+	 * @return The easy snooze key.
 	 */
-	public String getSound()
+	public String getEasySnooze()
 	{
-		return this.mSound;
+		return this.mEasySnooze;
+	}
+
+	/**
+	 * @return The max snooze key.
+	 */
+	public String getMaxSnooze()
+	{
+		return this.mMaxSnooze;
 	}
 
 	/**
@@ -180,14 +170,6 @@ public class NacPreferenceKeys
 	}
 
 	/**
-	 * @return The theme color key.
-	 */
-	public String getThemeColor()
-	{
-		return this.mThemeColor;
-	}
-
-	/**
 	 * @return The name color key.
 	 */
 	public String getNameColor()
@@ -196,11 +178,51 @@ public class NacPreferenceKeys
 	}
 
 	/**
-	 * @return The days color key.
+	 * @return The PM color key.
 	 */
-	public String getDaysColor()
+	public String getPmColor()
 	{
-		return this.mDaysColor;
+		return this.mPmColor;
+	}
+
+	/**
+	 * @return The repeat key.
+	 */
+	public String getRepeat()
+	{
+		return this.mRepeat;
+	}
+
+	/**
+	 * @return The NFC required key.
+	 */
+	public String getRequireNfc()
+	{
+		return this.mRequireNfc;
+	}
+
+	/**
+	 * @return The snooze duration key.
+	 */
+	public String getSnoozeDuration()
+	{
+		return this.mSnoozeDuration;
+	}
+
+	/**
+	 * @return The sound key.
+	 */
+	public String getSound()
+	{
+		return this.mSound;
+	}
+
+	/**
+	 * @return The theme color key.
+	 */
+	public String getThemeColor()
+	{
+		return this.mThemeColor;
 	}
 
 	/**
@@ -212,19 +234,11 @@ public class NacPreferenceKeys
 	}
 
 	/**
-	 * @return The AM color key.
+	 * @return The vibrate key.
 	 */
-	public String getAmColor()
+	public String getVibrate()
 	{
-		return this.mAmColor;
-	}
-
-	/**
-	 * @return The PM color key.
-	 */
-	public String getPmColor()
-	{
-		return this.mPmColor;
+		return this.mVibrate;
 	}
 
 }

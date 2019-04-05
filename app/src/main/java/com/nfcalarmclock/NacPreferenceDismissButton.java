@@ -18,7 +18,8 @@ import android.widget.TextView;;
  */
 public class NacPreferenceDismissButton
 	extends Preference
-	implements Preference.OnPreferenceClickListener,CompoundButton.OnCheckedChangeListener
+	implements Preference.OnPreferenceClickListener,
+		CompoundButton.OnCheckedChangeListener
 {
 
 	/**

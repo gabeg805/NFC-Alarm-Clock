@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import java.util.ArrayList;
@@ -22,6 +25,7 @@ import java.util.List;
 public class NacCardAdapter
 	extends RecyclerView.Adapter<NacCardHolder>
 	implements View.OnClickListener,
+		RecyclerView.OnItemTouchListener,
 		NacAlarm.OnChangeListener,
 		NacCardHolder.OnDeleteListener,
 		NacCardTouchHelper.Adapter
@@ -67,6 +71,8 @@ public class NacCardAdapter
 	 */
 	private boolean mWasAdded;
 
+	private Snackbar mSnackbar;
+
 	/**
 	 */
 	public NacCardAdapter(Context context)
@@ -85,6 +91,8 @@ public class NacCardAdapter
 		this.mScheduler = new NacScheduler(context);
 		this.mAlarmList = null;
 		this.mWasAdded = false;
+
+		this.mRecyclerView.addOnItemTouchListener(this);
 	}
 
 	/**
@@ -182,7 +190,7 @@ public class NacCardAdapter
 		if (result == 0)
 		{
 			this.undo(copy, this.size(), Undo.Type.COPY);
-			NacUtility.snackbar(this.getRoot(), "Copied alarm.", "UNDO", this);
+			this.snackbar("Copied alarm.");
 		}
 
 		return result;
@@ -202,7 +210,7 @@ public class NacCardAdapter
 		this.getAlarms().remove(position);
 		notifyItemRemoved(position);
 		this.undo(alarm, position, Undo.Type.DELETE);
-		NacUtility.snackbar(this.getRoot(), "Deleted alarm.", "UNDO", this);
+		this.snackbar("Deleted alarm.");
 
 		return 0;
 	}
@@ -327,6 +335,14 @@ public class NacCardAdapter
 	private NacScheduler getScheduler()
 	{
 		return this.mScheduler;
+	}
+
+	/**
+	 * @return The snackbar.
+	 */
+	private Snackbar getSnackbar()
+	{
+		return this.mSnackbar;
 	}
 
 	/**
@@ -455,6 +471,26 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * @note Needed for RecyclerView.OnItemTouchListener
+	 */
+	public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e)
+	{
+		Snackbar snackbar = this.getSnackbar();
+
+		if (snackbar != null)
+		{
+			if (snackbar.isShown())
+			{
+				snackbar.dismiss();
+			}
+
+			this.mSnackbar = null;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Copy the alarm.
 	 *
 	 * @param  pos	The position of the alarm to copy.
@@ -498,6 +534,20 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * @note Needed for RecyclerView.OnItemTouchListener
+	 */
+	public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept)
+	{
+	}
+
+	/**
+	 * @note Needed for RecyclerView.OnItemTouchListener
+	 */
+	public void onTouchEvent(RecyclerView rv, MotionEvent e)
+	{
+	}
+
+	/**
 	 * Measure the expanded and collapsed sizes of the alarm card.
 	 */
 	@Override
@@ -528,7 +578,7 @@ public class NacCardAdapter
 		if (result == 0)
 		{
 			this.undo(alarm, position, Undo.Type.RESTORE);
-			NacUtility.snackbar(this.getRoot(), "Restored alarm.", "UNDO", this);
+			this.snackbar("Restored alarm.");
 		}
 	}
 
@@ -538,6 +588,15 @@ public class NacCardAdapter
 	public int size()
 	{
 		return this.getAlarms().size();
+	}
+
+	/**
+	 * Create a snackbar message.
+	 */
+	private void snackbar(String message)
+	{
+		mSnackbar = NacUtility.snackbar(this.getRoot(), message,
+			"UNDO", this);
 	}
 
 	/**
