@@ -188,7 +188,6 @@ public class NacAlarmActivity
 
 			if (shared.getEasySnooze())
 			{
-				NacUtility.printf("EasySnooze!");
 				this.snooze("Alarm snoozed");
 			}
 		}
