@@ -225,8 +225,10 @@ public class NacAlarmActivity
 		this.mHandler = new Handler();
 
 		this.scheduleNextAlarm();
+		this.setupAlarmButtons();
 		this.playMusic();
 		this.vibrate();
+		this.waitForAutoDismiss();
 	}
 
 	/**
@@ -263,49 +265,13 @@ public class NacAlarmActivity
 	}
 
 	/**
-	 */
-	@Override
-	public void onStart()
-	{
-		super.onStart();
-
-		NacSharedPreferences shared = new NacSharedPreferences(this);
-		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-		LinearLayout layout = (LinearLayout) findViewById(R.id.act_alarm);
-		Button snoozeButton = (Button) findViewById(R.id.snooze);
-		Button dismissButton = (Button) findViewById(R.id.dismiss);
-		int autoDismiss = shared.getAutoDismiss();
-		long delay = TimeUnit.MINUTES.toMillis(autoDismiss);
-
-		if ((nfcAdapter == null) || !shared.getRequireNfc())
-		{
-			dismissButton.setVisibility(View.VISIBLE);
-		}
-		else
-		{
-			dismissButton.setVisibility(View.GONE);
-		}
-
-		if (autoDismiss != 0)
-		{
-			this.mHandler.postDelayed(this, delay);
-		}
-
-		snoozeButton.setTextColor(shared.getThemeColor());
-		dismissButton.setTextColor(shared.getThemeColor());
-		layout.setOnClickListener(this);
-		snoozeButton.setOnClickListener(this);
-		dismissButton.setOnClickListener(this);
-	}
-
-	/**
 	 * Play music.
 	 */
 	private void playMusic()
 	{
 		if (this.mPlayer != null)
 		{
-			this.mPlayer.stop();
+			this.mPlayer.reset();
 			this.mPlayer.play(this.getAlarm().getSound(), true);
 		}
 	}
@@ -352,6 +318,33 @@ public class NacAlarmActivity
 		String key = this.getSnoozeCountKey();
 
 		shared.getInstance().edit().putInt(key, count).apply();
+	}
+
+	/**
+	 * Setup the snooze and dismiss buttons.
+	 */
+	public void setupAlarmButtons()
+	{
+		NacSharedPreferences shared = new NacSharedPreferences(this);
+		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+		LinearLayout layout = (LinearLayout) findViewById(R.id.act_alarm);
+		Button snoozeButton = (Button) findViewById(R.id.snooze);
+		Button dismissButton = (Button) findViewById(R.id.dismiss);
+
+		if ((nfcAdapter == null) || !shared.getRequireNfc())
+		{
+			dismissButton.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			dismissButton.setVisibility(View.GONE);
+		}
+
+		snoozeButton.setTextColor(shared.getThemeColor());
+		dismissButton.setTextColor(shared.getThemeColor());
+		layout.setOnClickListener(this);
+		snoozeButton.setOnClickListener(this);
+		dismissButton.setOnClickListener(this);
 	}
 
 	/**
@@ -410,6 +403,22 @@ public class NacAlarmActivity
 			long duration = 500;
 
 			this.mVibrator.execute(duration);
+		}
+	}
+
+	/**
+	 * Wait in the background until the activity needs to auto dismiss the
+	 * alarm.
+	 */
+	public void waitForAutoDismiss()
+	{
+		NacSharedPreferences shared = new NacSharedPreferences(this);
+		int autoDismiss = shared.getAutoDismiss();
+		long delay = TimeUnit.MINUTES.toMillis(autoDismiss);
+
+		if (autoDismiss != 0)
+		{
+			this.mHandler.postDelayed(this, delay);
 		}
 	}
 
