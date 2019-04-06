@@ -128,25 +128,33 @@ public class NacAlarmActivity
 	private void enableNfc()
 	{
 		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+		NacSharedPreferences shared = new NacSharedPreferences(this);
 
-		if (nfcAdapter == null)
+		if (!shared.getRequireNfc())
 		{
-			NacUtility.toast(this, "Your device doesn't support NFC");
 			return;
 		}
-
-		if (!nfcAdapter.isEnabled())
+		else if (nfcAdapter == null)
 		{
-			NacUtility.toast(this, "Please enable NFC to dismiss the alarm");
-			startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
+			NacUtility.quickToast(this, "Your device doesn't support NFC");
+			return;
 		}
+		else
+		{
+			if (!nfcAdapter.isEnabled())
+			{
+				NacUtility.toast(this, "Please enable NFC to dismiss the alarm");
+				startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
+			}
 
-		Intent intent = new Intent(this, NacAlarmActivity.class)
-			.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
-		PendingIntent pending = PendingIntent.getActivity(this, 0, intent, 0);
-		IntentFilter[] filter = new IntentFilter[]{};
+			Intent intent = new Intent(this, NacAlarmActivity.class)
+				.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+			PendingIntent pending = PendingIntent.getActivity(this, 0, intent,
+				0);
+			IntentFilter[] filter = new IntentFilter[]{};
 
-		nfcAdapter.enableForegroundDispatch(this, pending, filter, null);
+			nfcAdapter.enableForegroundDispatch(this, pending, filter, null);
+		}
 	}
 
 	/**

@@ -85,7 +85,7 @@ public class NacPermissions
 	public static void setResultListener(Context context,
 		OnResultListener listener)
 	{
-		((NacActivity)context).setPermissionResultListener(listener);
+		((NacActivity)context).setPermissionsResultListener(listener);
 	}
 
 }

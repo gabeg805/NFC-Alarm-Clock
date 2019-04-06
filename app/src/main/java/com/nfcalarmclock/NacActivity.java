@@ -15,14 +15,14 @@ public class NacActivity
 	/**
 	 * Permissions result listener.
 	 */
-	protected NacPermissions.OnResultListener mListener = null;
+	protected NacPermissions.OnResultListener mListener;
 
 	/**
-	 * Set custom permission result listener.
+	 * @return The result listener.
 	 */
-	public void setPermissionResultListener(NacPermissions.OnResultListener listener)
+	private NacPermissions.OnResultListener getPermissionsResultListener()
 	{
-		this.mListener = listener;
+		return this.mListener;
 	}
 
 	/**
@@ -33,10 +33,19 @@ public class NacActivity
 	public void onRequestPermissionsResult(int requestCode, String[] permissions,
 		int[] grantResults)
 	{
-		if (this.mListener != null)
+		if (this.getPermissionsResultListener() != null)
 		{
-			this.mListener.onResult(requestCode, permissions, grantResults);
+			this.getPermissionsResultListener().onResult(requestCode,
+				permissions, grantResults);
 		}
+	}
+
+	/**
+	 * Set custom permission result listener.
+	 */
+	public void setPermissionsResultListener(NacPermissions.OnResultListener listener)
+	{
+		this.mListener = listener;
 	}
 
 }

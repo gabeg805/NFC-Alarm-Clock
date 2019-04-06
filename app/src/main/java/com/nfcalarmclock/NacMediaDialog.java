@@ -61,12 +61,44 @@ public abstract class NacMediaDialog
 		super();
 
 		this.mPlayer = null;
-		this.mPath = null;
-		this.mName = null;
+		this.mPath = "";
+		this.mName = "";
 		this.mItemClickListener = null;
 
 		this.addOnDismissListener(this);
 		this.addOnCancelListener(this);
+	}
+
+	/**
+	 * Clear the media that was set.
+	 */
+	private void clearMedia()
+	{
+		this.setMedia("", "");
+	}
+
+	/**
+	 * @return The media path.
+	 */
+	private String getPath()
+	{
+		return this.mPath;
+	}
+
+	/**
+	 * @return The media player.
+	 */
+	private NacMediaPlayer getMediaPlayer()
+	{
+		return this.mPlayer;
+	}
+
+	/**
+	 * @return The media name.
+	 */
+	private String getName()
+	{
+		return this.mName;
 	}
 
 	/**
@@ -99,7 +131,7 @@ public abstract class NacMediaDialog
 	@Override
 	public boolean onCancelDialog(NacDialog dialog)
 	{
-		this.mPlayer.release();
+		this.getMediaPlayer().release();
 
 		return true;
 	}
@@ -110,11 +142,9 @@ public abstract class NacMediaDialog
 	@Override
 	public boolean onDismissDialog(NacDialog dialog)
 	{
-		this.mPlayer.release();
-		this.itemClick(this.mPath, this.mName);
-
-		this.mPath = "";
-		this.mName = "";
+		this.getMediaPlayer().release();
+		this.itemClick(this.getPath(), this.getName());
+		this.clearMedia();
 
 		return true;
 	}
@@ -125,21 +155,8 @@ public abstract class NacMediaDialog
 	@Override
 	public boolean onNeutralActionDialog(NacDialog dialog)
 	{
-		try
-		{
-			this.mPlayer.stop();
-		}
-		catch (IllegalStateException e)
-		{
-			NacUtility.printf("Caught IllegalStateException in NacMediaDialog onNeutralActionDialog");
-		}
-		finally
-		{
-			this.mPlayer.reset();
-
-			this.mPath = "";
-			this.mName = "";
-		}
+		this.getMediaPlayer().reset();
+		this.clearMedia();
 
 		return true;
 	}
@@ -149,10 +166,17 @@ public abstract class NacMediaDialog
 	 */
 	public void play(String path, String name)
 	{
+		this.setMedia(path, name);
+		this.getMediaPlayer().play(path);
+	}
+
+	/**
+	 * Set the media path and name.
+	 */
+	private void setMedia(String path, String name)
+	{
 		this.mPath = path;
 		this.mName = name;
-
-		this.mPlayer.play(path);
 	}
 
 	/**
