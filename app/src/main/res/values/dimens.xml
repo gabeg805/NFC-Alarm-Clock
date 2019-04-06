@@ -116,12 +116,16 @@
 
 	<!-- Music dialog -->
 	<dimen name="tsz_dlg_music">15sp</dimen>
-	<dimen name="pl_dlg_music">30dp</dimen>
 	<dimen name="pt_dlg_music">10dp</dimen>
-	<dimen name="pr_dlg_music">30dp</dimen>
 	<dimen name="pb_dlg_music">10dp</dimen>
-	<dimen name="sp_dlg_music">15dp</dimen>
+	<dimen name="pl_dlg_music">30dp</dimen>
+	<dimen name="pr_dlg_music">30dp</dimen>
+	<dimen name="sp_dlg_music">14dp</dimen>
 	<dimen name="isz_dlg_music">30dp</dimen>
+
+	<!-- Ringtone dialog -->
+	<dimen name="mb_ringtone">10dp</dimen>
+	<dimen name="ml_ringtone">30dp</dimen>
 
 	<!-- Color dialog -->
 	<dimen name="mr_color_example">15dp</dimen>

@@ -226,7 +226,7 @@ public class NacMusicDialog
 	@Override
 	public void scale()
 	{
-		this.scale(0.8, 0.8, false, true);
+		this.scale(0.9, 0.8, false, true);
 	}
 
 	/**

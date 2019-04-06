@@ -8,10 +8,10 @@
 		android:layout_height="wrap_content"
 		android:paddingTop="?dialogPreferredPadding"
 		android:paddingBottom="?dialogPreferredPadding"
+		android:paddingStart="?dialogPreferredPadding"
+		android:paddingEnd="?dialogPreferredPadding"
 		android:orientation="vertical"
 		android:scrollbars="vertical">
-
-		<!-- android:paddingStart="?dialogPreferredPadding" -->
 
 		<com.nfcalarmclock.NacButtonGroup
 			android:id="@+id/group"
