@@ -9,6 +9,7 @@
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	<uses-permission android:name="android.permission.INTERNET" />
 
 	<!-- Hardware restrictions (NFC is optional) -->
 	<uses-feature
@@ -49,6 +50,12 @@
 			android:parentActivityName=".NacMainActivity"
 			android:windowSoftInputMode="stateAlwaysHidden">
 		</activity>
+
+		<!-- Login to spotify -->
+		<activity
+			android:name="com.spotify.sdk.android.authentication.LoginActivity"
+			android:theme="@android:style/Theme.Translucent.NoTitleBar"
+			/>
 
 		<!-- Call the alarm activity when an alarm goes off -->
 		<receiver

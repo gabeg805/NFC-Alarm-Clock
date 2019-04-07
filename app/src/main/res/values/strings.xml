@@ -26,6 +26,7 @@
 	<string name="dlg_prompt_title">Select Alarm Sound</string>
 	<string name="dlg_prompt_ringtone">Choose ringtone</string>
 	<string name="dlg_prompt_music">Browse music</string>
+	<string name="dlg_prompt_spotify">Spotify</string>
 	<string name="dlg_name_hint">Alarm name</string>
 	<string name="dlg_color_hint">Hex Color</string>
 

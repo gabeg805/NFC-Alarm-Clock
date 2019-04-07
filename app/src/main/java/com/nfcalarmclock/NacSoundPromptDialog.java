@@ -7,6 +7,21 @@ import android.view.View;
 import android.widget.Button;
 import java.util.List;
 
+import com.spotify.android.appremote.api.ConnectionParams;
+import com.spotify.android.appremote.api.Connector;
+import com.spotify.android.appremote.api.SpotifyAppRemote;
+
+import com.spotify.protocol.client.Subscription;
+import com.spotify.protocol.types.PlayerState;
+import com.spotify.protocol.types.Track;
+
+import com.spotify.sdk.android.authentication.AuthenticationClient;
+import com.spotify.sdk.android.authentication.AuthenticationHandler;
+import com.spotify.sdk.android.authentication.AuthenticationRequest;
+import com.spotify.sdk.android.authentication.AuthenticationResponse;
+
+import android.support.v7.app.AppCompatActivity;
+
 /**
  * Save the name of the selected ringtone or song.
  */
@@ -71,6 +86,19 @@ public class NacSoundPromptDialog
 				return;
 			}
 		}
+		else if (id == R.id.dlg_spotify)
+		{
+			AuthenticationRequest.Builder builder =
+				new AuthenticationRequest.Builder(NacSpotify.CLIENT_ID,
+					AuthenticationResponse.Type.TOKEN, NacSpotify.REDIRECT_URI);
+
+			builder.setScopes(new String[] { "streaming" });
+			AuthenticationRequest request = builder.build();
+
+			AuthenticationClient.openLoginInBrowser((AppCompatActivity)context,
+				request);
+			return;
+		}
 		else
 		{
 			return;
@@ -102,9 +130,11 @@ public class NacSoundPromptDialog
 	{
 		Button music = (Button) root.findViewById(R.id.dlg_music);
 		Button ringtone = (Button) root.findViewById(R.id.dlg_ringtone);
+		Button spotify = (Button) root.findViewById(R.id.dlg_spotify);
 
 		music.setOnClickListener(this);
 		ringtone.setOnClickListener(this);
+		spotify.setOnClickListener(this);
 		this.scale(0.9, 0.5, false, true);
 	}
 

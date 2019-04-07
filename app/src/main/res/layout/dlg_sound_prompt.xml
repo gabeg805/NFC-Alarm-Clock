@@ -31,4 +31,16 @@
 		android:textAllCaps="false"
 		/>
 
+	<Button
+		android:id="@+id/dlg_spotify"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/dlg_music"
+		android:layout_marginLeft="?dialogPreferredPadding"
+		android:layout_marginRight="?dialogPreferredPadding"
+		android:text="@string/dlg_prompt_spotify"
+		android:textSize="@dimen/tsz_dlg_sound_prompt"
+		android:textAllCaps="false"
+		/>
+
 </RelativeLayout>
