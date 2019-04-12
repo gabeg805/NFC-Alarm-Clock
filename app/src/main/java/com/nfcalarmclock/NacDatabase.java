@@ -57,6 +57,11 @@ public class NacDatabase
 	 */
 	public long add(SQLiteDatabase db, NacAlarm alarm)
 	{
+		if (alarm == null)
+		{
+			return -1;
+		}
+
 		ContentValues cv = this.getContentValues(alarm);
 		String table = this.getTable();
 		long result = 0;
@@ -94,6 +99,11 @@ public class NacDatabase
 	 */
 	public long delete(SQLiteDatabase db, NacAlarm alarm)
 	{
+		if (alarm == null)
+		{
+			return -1;
+		}
+
 		String table = this.getTable();
 		String where = this.getWhereClause();
 		String[] args = this.getWhereArgs(alarm);
@@ -125,6 +135,11 @@ public class NacDatabase
 	public boolean exists(NacAlarm alarm)
 	{
 		this.setDatabase();
+
+		if (alarm == null)
+		{
+			return false;
+		}
 
 		SQLiteDatabase db = this.getDatabase();
 		String table = this.getTable();
@@ -161,6 +176,11 @@ public class NacDatabase
 	 */
 	private ContentValues getContentValues(NacAlarm alarm)
 	{
+		if (alarm == null)
+		{
+			return null;
+		}
+
 		ContentValues cv = new ContentValues();
 		int id = alarm.getId();
 		boolean enabled = alarm.getEnabled();
@@ -232,6 +252,11 @@ public class NacDatabase
 	 */
 	private String[] getWhereArgs(NacAlarm alarm)
 	{
+		if (alarm == null)
+		{
+			return null;
+		}
+
 		String id = String.valueOf(alarm.getId());
 
 		return new String[] {id};
@@ -375,6 +400,11 @@ public class NacDatabase
 	{
 		this.setDatabase();
  
+ 		if ((fromAlarm == null) || (toAlarm == null))
+		{
+			return -1;
+		}
+
 		int fromId = fromAlarm.getId();
 		int toId = toAlarm.getId();
  
@@ -425,6 +455,11 @@ public class NacDatabase
 	 */
 	public long update(SQLiteDatabase db, NacAlarm alarm)
 	{
+		if (alarm == null)
+		{
+			return -1;
+		}
+
 		String table = this.getTable();
 		ContentValues cv = this.getContentValues(alarm);
 		String where = this.getWhereClause();

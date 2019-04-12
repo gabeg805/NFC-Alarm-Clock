@@ -1,5 +1,6 @@
 package com.nfcalarmclock;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -112,6 +113,11 @@ public class NacAlarmParcel
 	 */
 	public static NacAlarm getAlarm(Intent intent)
 	{
+		if (intent == null)
+		{
+			return null;
+		}
+
 		Bundle bundle = NacAlarmParcel.getExtra(intent);
 
 		return NacAlarmParcel.getAlarm(bundle);
@@ -124,7 +130,8 @@ public class NacAlarmParcel
 	 */
 	public static NacAlarm getAlarm(Bundle bundle)
 	{
-		return NacAlarmParcel.getParcel(bundle).toAlarm();
+		return (bundle != null) ? NacAlarmParcel.getParcel(bundle).toAlarm()
+			: null;
 	}
 
 	/**
@@ -164,6 +171,33 @@ public class NacAlarmParcel
 			.setEnabled(this.mEnabled)
 			.set24HourFormat(this.m24HourFormat)
 			.build();
+	}
+
+	/**
+	 * @return A bundle that contains the alarm.
+	 */
+	public static Bundle toBundle(NacAlarm alarm)
+	{
+		NacAlarmParcel parcel = new NacAlarmParcel(alarm);
+		Bundle bundle = new Bundle();
+
+		bundle.putParcelable("parcel", parcel);
+
+		return bundle;
+	}
+
+	/**
+	 * @return An intent with the alarm.
+	 */
+	public static Intent toIntent(Context packageContext, Class<?> cls,
+		NacAlarm alarm)
+	{
+		Intent intent = new Intent(packageContext, cls);
+		Bundle bundle = NacAlarmParcel.toBundle(alarm);
+
+		intent.putExtra("bundle", bundle);
+
+		return intent;
 	}
 
 	/**

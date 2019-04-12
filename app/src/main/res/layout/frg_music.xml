@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="?dialogPreferredPadding"
+			android:paddingBottom="?dialogPreferredPadding"
+			android:paddingStart="?dialogPreferredPadding"
+			android:paddingEnd="?dialogPreferredPadding"
+			android:orientation="vertical"
+			android:scrollbars="vertical">
+
+			<com.nfcalarmclock.NacButtonGroup
+				android:id="@+id/group"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="?android:attr/selectableItemBackground"
+				app:nacPaddingTop="@dimen/pt_frg_sound"
+				app:nacPaddingBottom="@dimen/pb_frg_sound"
+				app:nacPaddingStart="@dimen/pl_frg_sound"
+				app:nacDrawableColor="@color/white"
+				app:nacDrawableWidth="@dimen/isz_frg_sound"
+				app:nacDrawableHeight="@dimen/isz_frg_sound"
+				app:nacSpacing="@dimen/sp_frg_sound"
+				app:nacTextColor="@color/white"
+				app:nacTextSize="@dimen/tsz_frg_sound"
+				app:nacSubTextColor="@color/white"
+				/>
+
+		</LinearLayout>
+
+	</ScrollView>
+
+	<include layout="@layout/frg_buttons" />
+
+</LinearLayout>

@@ -172,6 +172,11 @@ public class NacSharedPreferences
 	public static final String DEFAULT_NAME = "";
 
 	/**
+	 * Default color.
+	 */
+	public static final int DEFAULT_COLOR = Color.WHITE;
+
+	/**
 	 * Default theme color.
 	 */
 	public static final int DEFAULT_THEME_COLOR = 0xfffb8c00;

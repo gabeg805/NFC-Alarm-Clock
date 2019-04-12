@@ -27,6 +27,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import java.util.EnumSet;
 
+import android.os.Bundle;
+import android.content.Intent;
+
 /**
  * Card view holder.
  */
@@ -994,12 +997,21 @@ public class NacCardHolder
 	{
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
-		NacSoundPromptDialog dialog = new NacSoundPromptDialog();
+		//NacAlarmParcel parcel = new NacAlarmParcel(alarm);
+		//Bundle bundle = new Bundle();
+		//Intent intent = new Intent(context, FragmentPagerSupport.class);
+		Intent intent = NacAlarmParcel.toIntent(context,
+			FragmentPagerSupport.class, alarm);
 
-		dialog.saveData(alarm);
-		dialog.build(context, R.layout.dlg_sound_prompt);
-		dialog.setOnItemClickListener(this);
-		dialog.show();
+		//bundle.putParcelable("parcel", parcel);
+		//intent.putExtra("bundle", bundle);
+		context.startActivity(intent);
+		//NacSoundPromptDialog dialog = new NacSoundPromptDialog();
+
+		//dialog.saveData(alarm);
+		//dialog.build(context, R.layout.dlg_sound_prompt);
+		//dialog.setOnItemClickListener(this);
+		//dialog.show();
 	}
 
 	/**

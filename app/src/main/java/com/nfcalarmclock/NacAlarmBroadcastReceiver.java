@@ -19,7 +19,6 @@ public class NacAlarmBroadcastReceiver
 	public void onReceive(final Context context, Intent intent)
 	{
 		Bundle bundle = NacAlarmParcel.getExtra(intent);
-		NacAlarm alarm = NacAlarmParcel.getAlarm(bundle);
 		Intent newIntent = new Intent(context, NacAlarmActivity.class);
 
 		newIntent.putExtra("bundle", bundle);

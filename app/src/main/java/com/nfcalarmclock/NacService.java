@@ -24,8 +24,9 @@ public class NacService
 	protected void onHandleIntent(Intent intent)
 	{
 		String data = intent.getDataString();
-		Bundle bundle = NacAlarmParcel.getExtra(intent);
-		NacAlarm alarm = NacAlarmParcel.getAlarm(bundle);
+		//Bundle bundle = NacAlarmParcel.getExtra(intent);
+		//NacAlarm alarm = NacAlarmParcel.getAlarm(bundle);
+		NacAlarm alarm = NacAlarmParcel.getAlarm(intent);
 		NacDatabase db = new NacDatabase(this);
 		NacScheduler scheduler = new NacScheduler(this);
 

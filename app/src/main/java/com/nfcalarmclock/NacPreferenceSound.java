@@ -99,11 +99,12 @@ public class NacPreferenceSound
 	public boolean onPreferenceClick(Preference pref)
 	{
 		Context context = getContext();
-		NacSoundPromptDialog dialog = new NacSoundPromptDialog();
+		NacUtility.quickToast(context, "Sound prompt display!");
+		//NacSoundPromptDialog dialog = new NacSoundPromptDialog();
 
-		dialog.build(context, R.layout.dlg_sound_prompt);
-		dialog.setOnItemClickListener(this);
-		dialog.show();
+		//dialog.build(context, R.layout.dlg_sound_prompt);
+		//dialog.setOnItemClickListener(this);
+		//dialog.show();
 
 		return true;
 	}

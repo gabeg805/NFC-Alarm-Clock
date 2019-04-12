@@ -74,7 +74,7 @@ public class NacMedia
 			return "";
 		}
 
-		Uri uri = (path.startsWith("content://")) ? Uri.parse(path)
+		Uri uri = NacMedia.isRingtone(path) ? Uri.parse(path)
 			: Uri.fromFile(new File(path));
 		Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
 		String name = ringtone.getTitle(context);
@@ -98,7 +98,7 @@ public class NacMedia
 		{
 			return "";
 		}
-		else if (media.startsWith("content://"))
+		else if (NacMedia.isRingtone(media))
 		{
 			Uri uri = Uri.parse(media);
 			Cursor cursor = context.getContentResolver().query(uri,
@@ -156,6 +156,22 @@ public class NacMedia
 		}
 
 		return list;
+	}
+
+	/**
+	 * Check if the given media is a music file.
+	 */
+	public static boolean isFile(String media)
+	{
+		return media.startsWith("/");
+	}
+
+	/**
+	 * Check if the given media is a ringtone.
+	 */
+	public static boolean isRingtone(String media)
+	{
+		return media.startsWith("content://");
 	}
 
 	/**

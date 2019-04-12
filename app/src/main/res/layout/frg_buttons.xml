@@ -1,0 +1,45 @@
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/buttons"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:paddingTop="@dimen/p_frg_buttons"
+	android:paddingBottom="@dimen/p_frg_buttons"
+	android:paddingStart="@dimen/p_frg_buttons"
+	android:paddingEnd="@dimen/p_frg_buttons"
+	android:orientation="horizontal">
+
+	<Button
+		android:id="@+id/clear"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="?android:attr/selectableItemBackground"
+		android:text="Clear"
+		android:textSize="@dimen/tsz_frg_buttons"
+		/>
+
+	<View
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		/>
+
+	<Button
+		android:id="@+id/cancel"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="?android:attr/selectableItemBackground"
+		android:text="Cancel"
+		android:textSize="@dimen/tsz_frg_buttons"
+		/>
+
+	<Button
+		android:id="@+id/ok"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="?android:attr/selectableItemBackground"
+		android:text="Ok"
+		android:textSize="@dimen/tsz_frg_buttons"
+		/>
+
+</LinearLayout>
