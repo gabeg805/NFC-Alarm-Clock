@@ -11,6 +11,8 @@
 	<string name="card_repeat">Repeat</string>
 	<string name="card_vibrate">Vibrate</string>
 
+	<string name="frg_spotify_search_hint">Search spotify...</string>
+
 	<!-- Day of week -->
 	<string name="dow_sun">S</string>
 	<string name="dow_mon">M</string>

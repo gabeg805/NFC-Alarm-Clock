@@ -99,6 +99,9 @@
 	<dimen name="tsz_act_alarm_title">26sp</dimen>
 	<dimen name="tsz_act_alarm_instructions">14sp</dimen>
 
+	<!-- Number picker -->>
+	<dimen name="m_scroll_option">30dp</dimen>
+
 	<!-- Dialog days -->
 	<dimen name="spt_dlg_days">10dp</dimen>
 	<dimen name="spb_dlg_days">-25dp</dimen>
@@ -114,16 +117,25 @@
 	<!-- Fragment sound -->
 	<dimen name="p_frg_buttons">10dp</dimen>
 	<dimen name="tsz_frg_buttons">16sp</dimen>
-
-	<!-- Number picker -->>
-	<dimen name="m_scroll_option">30dp</dimen>
+	<dimen name="tsz_spotify_titles">20sp</dimen>
+	<dimen name="pt_spotify_titles">10dp</dimen>
+	<dimen name="pb_spotify_titles">10dp</dimen>
+	<dimen name="ml_spotify_search">-14dp</dimen>
+	<dimen name="isz_frg_spotify_image">130dp</dimen>
+	<dimen name="sp_frg_spotify_cover_text">10dp</dimen>
+	<dimen name="p_frg_spotify_cover">20dp</dimen>
 
 	<!-- Media fragment -->
+	<dimen name="pt_frg_music_path">10dp</dimen>
+	<dimen name="pb_frg_music_path">10dp</dimen>
+	<dimen name="pl_frg_music_path">30dp</dimen>
+	<dimen name="pr_frg_music_path">30dp</dimen>
 	<dimen name="pt_frg_sound">15dp</dimen>
 	<dimen name="pb_frg_sound">15dp</dimen>
 	<dimen name="sp_frg_sound">15dp</dimen>
 	<dimen name="pl_frg_sound">50dp</dimen>
-	<dimen name="tsz_frg_sound">15sp</dimen>
+	<dimen name="tsz_frg_sound">16sp</dimen>
+	<dimen name="tsz_frg_music_path">13sp</dimen>
 	<dimen name="isz_frg_sound">30dp</dimen>
 
 	<!-- Color dialog -->

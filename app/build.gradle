@@ -6,8 +6,8 @@ android {
 		applicationId "com.nfcalarmclock"
 		minSdkVersion 21
 		targetSdkVersion 27
-		versionCode 52
-		versionName "5.12"
+		versionCode 53
+		versionName "5.13"
 		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 	}
 	buildTypes {
@@ -23,6 +23,9 @@ android {
 
 repositories {
 	mavenCentral()
+	maven {
+		url "https://jitpack.io"
+	}
 	flatDir {
 		dirs 'libs'
 	}
@@ -40,6 +43,10 @@ dependencies {
 	implementation 'com.spotify.sdk:spotify-app-remote-release:0.6.1@aar'
 	implementation "com.google.code.gson:gson:2.8.5"
 	implementation 'com.github.kaaes:spotify-web-api-android:0.4.1@aar'
+	implementation 'com.squareup.retrofit:retrofit:1.9.0'
+	//implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+	//implementation 'com.squareup.okhttp3:okhttp:3.14.1'
+	implementation 'com.squareup.okhttp:okhttp:2.2.0'
 
 	testImplementation 'junit:junit:4.12'
 	androidTestImplementation 'com.android.support.test:runner:1.0.2'

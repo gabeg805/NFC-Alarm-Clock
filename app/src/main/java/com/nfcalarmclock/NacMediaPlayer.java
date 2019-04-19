@@ -244,7 +244,7 @@ public class NacMediaPlayer
 
 		Context context = this.getContext();
 		AudioAttributes attrs = this.getAudioAttributes();
-		String path = NacMedia.getMediaPath(context, media);
+		String path = NacSound.getPath(context, media);
 
 		// Can log each step for better granularity in case error occurrs.
 		try

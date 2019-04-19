@@ -21,6 +21,112 @@
 			android:orientation="vertical"
 			android:scrollbars="vertical">
 
+			<!-- Search bar -->
+			<android.support.v7.widget.SearchView
+				android:id="@+id/search"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="@dimen/ml_spotify_search"
+				android:iconifiedByDefault="true"
+				/>
+
+			<!-- Selected item -->
+			<LinearLayout
+				android:id="@+id/selected"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:visibility="gone">
+
+				<TextView
+					android:id="@+id/selected_title"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:paddingTop="@dimen/pt_spotify_titles"
+					android:paddingBottom="@dimen/pb_spotify_titles"
+					android:textSize="@dimen/tsz_spotify_titles"
+					android:textStyle="bold"
+					android:text=""
+					android:visibility="gone"
+					/>
+
+			</LinearLayout>
+
+			<!-- Tracks -->
+			<LinearLayout
+				android:id="@+id/tracks"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical">
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:paddingTop="@dimen/pt_spotify_titles"
+					android:paddingBottom="@dimen/pb_spotify_titles"
+					android:textSize="@dimen/tsz_spotify_titles"
+					android:textStyle="bold"
+					android:text="Top Tracks"
+					/>
+
+			</LinearLayout>
+
+			<!-- Artists -->
+			<LinearLayout
+				android:id="@+id/artists"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical">
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:paddingTop="@dimen/pt_spotify_titles"
+					android:paddingBottom="@dimen/pb_spotify_titles"
+					android:textSize="@dimen/tsz_spotify_titles"
+					android:textStyle="bold"
+					android:text="Top Artists"
+					/>
+			</LinearLayout>
+
+			<!-- Playlists -->
+			<LinearLayout
+				android:id="@+id/playlists"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical">
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:paddingTop="@dimen/pt_spotify_titles"
+					android:paddingBottom="@dimen/pb_spotify_titles"
+					android:textSize="@dimen/tsz_spotify_titles"
+					android:textStyle="bold"
+					android:text="Playlists"
+					/>
+
+			</LinearLayout>
+
+			<!-- Albums -->
+			<LinearLayout
+				android:id="@+id/albums"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical">
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:paddingTop="@dimen/pt_spotify_titles"
+					android:paddingBottom="@dimen/pb_spotify_titles"
+					android:textSize="@dimen/tsz_spotify_titles"
+					android:textStyle="bold"
+					android:text="Albums"
+					/>
+
+			</LinearLayout>
+
 		</LinearLayout>
 
 	</ScrollView>

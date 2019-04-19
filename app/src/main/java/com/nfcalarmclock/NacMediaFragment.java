@@ -27,6 +27,11 @@ public class NacMediaFragment
 	private NacMediaPlayer mPlayer;
 
 	/**
+	 * The initial selection flag.
+	 */
+	private boolean mInitialSelection;
+
+	/**
 	 */
 	public NacMediaFragment()
 	{
@@ -34,6 +39,7 @@ public class NacMediaFragment
 
 		this.mAlarm = null;
 		this.mPlayer = null;
+		this.mInitialSelection = true;
 	}
 
 	/**
@@ -45,13 +51,13 @@ public class NacMediaFragment
 	}
 
 	/**
-	 * @return The media path.
+	 * @return The sound path.
 	 */
-	protected String getMedia()
+	protected String getSoundPath()
 	{
 		NacAlarm alarm = this.getAlarm();
 
-		return (alarm == null) ? "" : alarm.getSound();
+		return (alarm == null) ? "" : alarm.getSoundPath();
 	}
 
 	/**
@@ -69,6 +75,15 @@ public class NacMediaFragment
 	public boolean isActionButton(int id)
 	{
 		return ((id == R.id.clear) || (id == R.id.cancel) || (id == R.id.ok));
+	}
+
+	/**
+	 * @return True if this is the first time the fragment is being selected,
+	 *         and False otherwise.
+	 */
+	public boolean isInitialSelection()
+	{
+		return this.mInitialSelection;
 	}
 
 	/**
@@ -119,6 +134,14 @@ public class NacMediaFragment
 	}
 
 	/**
+	 * Called when the fragment is first selected by the user.
+	 */
+	protected void onInitialSelection()
+	{
+		this.mInitialSelection = false;
+	}
+
+	/**
 	 */
 	@Override
 	public void onStart()
@@ -134,6 +157,17 @@ public class NacMediaFragment
 	{
 		super.onStop();
 		this.releasePlayer();
+	}
+
+	/**
+	 * Called when the fragment is selected by the user.
+	 */
+	protected void onSelected()
+	{
+		if (this.isInitialSelection())
+		{
+			this.onInitialSelection();
+		}
 	}
 
 	/**
@@ -173,7 +207,7 @@ public class NacMediaFragment
 
 		if (alarm != null)
 		{
-			alarm.setSound(media);
+			alarm.setSound(getContext(), media);
 		}
 	}
 

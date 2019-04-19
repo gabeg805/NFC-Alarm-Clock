@@ -16,16 +16,11 @@ import android.support.v4.view.ViewPager;
 
 /**
  */
-public class FragmentPagerSupport
+public class NacPagerFragment
 	extends FragmentActivity
 	implements TabLayout.OnTabSelectedListener,
 		ActivityCompat.OnRequestPermissionsResultCallback
 {
-
-	/**
-	 * Request value for Read permissions.
-	 */
-	private static final int NAC_MUSIC_DIALOG_READ_REQUEST = 1;
 
 	/**
 	 * The view pager.
@@ -35,7 +30,7 @@ public class FragmentPagerSupport
 	/**
 	 * The adapter for the view pager.
 	 */
-	private MyAdapter mAdapter;
+	private NacPagerAdapter mAdapter;
 
 	/**
 	 * The tab layout.
@@ -48,10 +43,15 @@ public class FragmentPagerSupport
 	private NacAlarm mAlarm;
 
 	/**
+	 * Current tab position.
+	 */
+	private int mPosition;
+
+	/**
 	 * The tab titles.
 	 */
-	private static final String[] mTitles = new String[] { "Ringtone",
-		"Browse...", "Spotify" };
+	private static final String[] mTitles = new String[] { "Browse",
+		"Ringtone", "Spotify" };
 
 	/**
 	 * @return The alarm.
@@ -66,19 +66,15 @@ public class FragmentPagerSupport
 	 */
 	private Fragment getFragment(int position)
 	{
-		FragmentManager manager = getSupportFragmentManager();
+		return this.mFragments[position];
+	}
 
-		for (Fragment f : manager.getFragments())
-		{
-			if (((position == 0) && (f instanceof NacRingtoneFragment))
-				|| ((position == 1) && (f instanceof NacMusicFragment))
-				|| ((position == 2) && (f instanceof NacSpotifyFragment)))
-			{
-				return f;
-			}
-		}
-
-		return null;
+	/**
+	 * @return The current tab position.
+	 */
+	private int getPosition()
+	{
+		return this.mPosition;
 	}
 
 	/**
@@ -99,7 +95,6 @@ public class FragmentPagerSupport
 
 	/**
 	 */
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -108,40 +103,65 @@ public class FragmentPagerSupport
 
 		Intent intent = getIntent();
 		FragmentManager manager = getSupportFragmentManager();
-		NacSharedPreferences shared = new NacSharedPreferences(this);
 		this.mAlarm = NacAlarmParcel.getAlarm(intent);
 		this.mPager = (ViewPager) findViewById(R.id.act_sound);
 		this.mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
-		this.mAdapter = new MyAdapter(manager, this.mTitles.length);
+		this.mAdapter = new NacPagerAdapter(manager, this.mAlarm, this.mTitles);
+		this.mFragments = new Fragment[3];
+		this.mPosition = 0;
 
-		this.mPager.setAdapter(this.mAdapter);
-		this.mTabLayout.setupWithViewPager(this.mPager);
+		this.setupPager();
+		this.setTabColors();
 		this.selectTab();
-		this.mTabLayout.setSelectedTabIndicatorColor(shared.getThemeColor());
-		this.mTabLayout.setTabTextColors(NacSharedPreferences.DEFAULT_COLOR,
-			shared.getThemeColor());
+	}
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+	private Fragment[] mFragments;
+
+	@Override
+	public void onAttachFragment(Fragment fragment)
+	{
+		super.onAttachFragment(fragment);
+
+		if (fragment instanceof NacMusicFragment)
 		{
-			this.mTabLayout.addOnTabSelectedListener(this);
+			this.mFragments[0] = fragment;
 		}
-		else
+		else if (fragment instanceof NacRingtoneFragment)
 		{
-			this.mTabLayout.setOnTabSelectedListener(this);
+			this.mFragments[1] = fragment;
 		}
+		else if (fragment instanceof NacSpotifyFragment)
+		{
+			this.mFragments[2] = fragment;
+		}
+
+		this.fragmentSelected(fragment);
+	}
+
+	private void fragmentSelected(Fragment selectedFragment)
+	{
+		int position = this.getPosition();
+		Fragment tabFragment = this.getFragment(position);
+
+		if ((tabFragment == null) || (selectedFragment == null)
+			|| (selectedFragment != tabFragment))
+		{
+			return;
+		}
+
+		((NacMediaFragment)selectedFragment).onSelected();
 	}
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode,
 		String[] permissions, int[] grantResults)
 	{
-		if (requestCode == NAC_MUSIC_DIALOG_READ_REQUEST)
+		if (requestCode == NacMusicFragment.READ_REQUEST)
 		{
 			if ((grantResults.length > 0)
 				&& (grantResults[0] == PackageManager.PERMISSION_GRANTED))
 			{
-				NacMusicFragment fragment = (NacMusicFragment)
-					this.getFragment(1);
+				Fragment fragment = this.getFragment(0);
 
 				getSupportFragmentManager().beginTransaction()
 					.detach(fragment)
@@ -150,7 +170,7 @@ public class FragmentPagerSupport
 			}
 			else
 			{
-				this.mTabLayout.getTabAt(0).select();
+				this.selectTab(1);
 			}
 		}
 	}
@@ -168,20 +188,10 @@ public class FragmentPagerSupport
 	public void onTabSelected(Tab tab)
 	{
 		int position = tab.getPosition();
+		Fragment fragment = this.getFragment(position);
+		this.mPosition = position;
 
-		if ((position == 1) && !NacPermissions.hasRead(this))
-		{
-			NacPermissions.request(this,
-				Manifest.permission.READ_EXTERNAL_STORAGE,
-				NAC_MUSIC_DIALOG_READ_REQUEST);
-		}
-		else if (position == 2)
-		{
-			NacSpotifyFragment fragment = (NacSpotifyFragment)
-				this.getFragment(position);
-
-			fragment.setupSpotify();
-		}
+		this.fragmentSelected(fragment);
 	}
 
 	/**
@@ -197,40 +207,99 @@ public class FragmentPagerSupport
 	private void selectTab()
 	{
 		String[] titles = this.getTitles();
-		String sound = this.getAlarm().getSound();
+		int type = this.getAlarm().getSoundType();
 
-		for (int i=0; i < titles.length; i++)
+		if (NacSound.isNone(type))
 		{
-			boolean selected = false;
+			this.selectTab(1);
+		}
+		else if (NacSound.isFile(type))
+		{
+			this.selectTab(0);
+		}
+		else if (NacSound.isRingtone(type))
+		{
+			this.selectTab(1);
+		}
+		else if (NacSound.isSpotify(type))
+		{
+			this.selectTab(2);
+		}
+	}
 
-			if (((i == 0) && NacMedia.isRingtone(sound))
-				|| ((i == 1) && NacMedia.isFile(sound))
-				|| ((i == 2) && false))
-			{
-				this.mTabLayout.getTabAt(i).select();
-				return;
-			}
+	/**
+	 * Select the tab at the given index.
+	 */
+	private void selectTab(int position)
+	{
+		Tab tab = this.mTabLayout.getTabAt(position);
+
+		tab.select();
+		onTabSelected(tab);
+	}
+
+	/**
+	 * Set the tab colors.
+	 */
+	private void setTabColors()
+	{
+		NacSharedPreferences shared = new NacSharedPreferences(this);
+
+		this.mTabLayout.setSelectedTabIndicatorColor(shared.getThemeColor());
+		this.mTabLayout.setTabTextColors(NacSharedPreferences.DEFAULT_COLOR,
+			shared.getThemeColor());
+	}
+
+	/**
+	 * Setup the pager.
+	 */
+	@SuppressWarnings("deprecation")
+	private void setupPager()
+	{
+		this.mPager.setAdapter(this.mAdapter);
+		this.mTabLayout.setupWithViewPager(this.mPager);
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			this.mTabLayout.addOnTabSelectedListener(this);
+		}
+		else
+		{
+			this.mTabLayout.setOnTabSelectedListener(this);
 		}
 	}
 
 	/**
 	 */
-	public class MyAdapter
+	public static class NacPagerAdapter
 		extends FragmentPagerAdapter
 	{
 
 		/**
+		 * Alarm.
+		 */
+		private final NacAlarm mAlarm;
+
+		/**
+		 * Tab titles.
+		 */
+		private final String[] mTitles;
+
+		/**
 		 * The number of items to swipe through.
 		 */
-		private int mCount;
+		private final int mCount;
 
 		/**
 		 */
-		public MyAdapter(FragmentManager fragmentManager, int count)
+		public NacPagerAdapter(FragmentManager fragmentManager, NacAlarm alarm,
+			String[] titles)
 		{
 			super(fragmentManager);
 
-			this.mCount = count;
+			this.mAlarm = alarm;
+			this.mTitles = titles;
+			this.mCount = titles.length;
 		}
 
 		/**
@@ -247,15 +316,15 @@ public class FragmentPagerSupport
 		@Override
 		public Fragment getItem(int position)
 		{
-			NacAlarm alarm = getAlarm();
+			NacAlarm alarm = this.mAlarm;
 
 			if (position == 0)
 			{
-				return NacRingtoneFragment.newInstance(alarm);
+				return NacMusicFragment.newInstance(alarm);
 			}
 			else if (position == 1)
 			{
-				return NacMusicFragment.newInstance(alarm);
+				return NacRingtoneFragment.newInstance(alarm);
 			}
 			else if (position == 2)
 			{
@@ -273,7 +342,7 @@ public class FragmentPagerSupport
 		@Override
 		public CharSequence getPageTitle(int position)
 		{
-			return getTitles()[position];
+			return this.mTitles[position];
 		}
 
 	}

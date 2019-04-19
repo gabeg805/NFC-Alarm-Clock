@@ -9,6 +9,9 @@
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	<!--
+	<uses-permission android:name="android.permission.INTERNET" />
+	-->
 
 	<!-- Hardware restrictions (NFC is optional) -->
 	<uses-feature
@@ -58,7 +61,17 @@
 		</activity>
 
 		<activity
-			android:name=".FragmentPagerSupport">
+			android:name=".NacPagerFragment">
+
+			<intent-filter>
+				<action android:name="android.intent.action.SEARCH" />
+			</intent-filter>
+
+			<meta-data
+				android:name="android.app.searchable"
+				android:resource="@xml/searchable"
+				/>
+
 		</activity>
 
 		<!-- Alarm activity -->

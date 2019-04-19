@@ -39,8 +39,7 @@ public class NacCardHolder
 		CompoundButton.OnCheckedChangeListener,
 		TimePickerDialog.OnTimeSetListener,
 		NacDialog.OnDismissListener,
-		NacDayOfWeek.OnClickListener,
-		NacMediaDialog.OnItemClickListener
+		NacDayOfWeek.OnClickListener
 {
 
 	/**
@@ -664,19 +663,6 @@ public class NacCardHolder
 		return true;
 	}
 
-	/**
-	 * Handle the sound item when it has been selected.
-	 */
-	@Override
-	public void onItemClick(String path, String name)
-	{
-		NacAlarm alarm = this.getAlarm();
-
-		alarm.setSound(path);
-		alarm.changed();
-		this.setSound();
-	}
-
 	@Override
 	public void onTimeSet(TimePicker tp, int hr, int min)
 	{
@@ -767,7 +753,7 @@ public class NacCardHolder
 		int[] trackColors = new int[] {shared.getThemeColor(), Color.GRAY};
 		ColorStateList thumbStateList = new ColorStateList(states, thumbColors);
 		ColorStateList trackStateList = new ColorStateList(states, trackColors);
-		String meridian = this.getAlarm().getMeridian();
+		String meridian = this.getAlarm().getMeridian(context);
 		int timeColor = shared.getTimeColor();
 		int meridianColor = (meridian == "AM") ? shared.getAmColor()
 			: shared.getPmColor();
@@ -910,16 +896,11 @@ public class NacCardHolder
 	 */
 	public void setSound()
 	{
-		String path = this.getAlarm().getSound();
-		String name = NacSharedPreferences.DEFAULT_SOUND_MESSAGE;
-		boolean focus = false;
-
-		if (!path.isEmpty())
-		{
-			Context context = this.getContext();
-			name = NacMedia.getMediaName(context, path);
-			focus = true;
-		}
+		NacAlarm alarm = this.getAlarm();
+		String path = alarm.getSoundPath();
+		String name = (!path.isEmpty()) ? alarm.getSoundName()
+			: NacSharedPreferences.DEFAULT_SOUND_MESSAGE;
+		boolean focus = (!path.isEmpty());
 
 		this.mSound.setText(name);
 		this.mSound.setFocus(focus);
@@ -957,9 +938,10 @@ public class NacCardHolder
 	 */
 	public void setTime()
 	{
+		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
-		String time = alarm.getTime();
-		String meridian = alarm.getMeridian();
+		String time = alarm.getTime(context);
+		String meridian = alarm.getMeridian(context);
 
 		this.mTime.setText(time);
 		this.mMeridian.setText(meridian);
@@ -997,21 +979,10 @@ public class NacCardHolder
 	{
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
-		//NacAlarmParcel parcel = new NacAlarmParcel(alarm);
-		//Bundle bundle = new Bundle();
-		//Intent intent = new Intent(context, FragmentPagerSupport.class);
 		Intent intent = NacAlarmParcel.toIntent(context,
-			FragmentPagerSupport.class, alarm);
+			NacPagerFragment.class, alarm);
 
-		//bundle.putParcelable("parcel", parcel);
-		//intent.putExtra("bundle", bundle);
 		context.startActivity(intent);
-		//NacSoundPromptDialog dialog = new NacSoundPromptDialog();
-
-		//dialog.saveData(alarm);
-		//dialog.build(context, R.layout.dlg_sound_prompt);
-		//dialog.setOnItemClickListener(this);
-		//dialog.show();
 	}
 
 	/**
@@ -1023,7 +994,7 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 		int hour = alarm.getHour();
 		int minute = alarm.getMinute();
-		boolean format = alarm.get24HourFormat();
+		boolean format = alarm.is24HourFormat(context);
 		TimePickerDialog dialog = new TimePickerDialog(context, this, hour,
 			minute, format);
 

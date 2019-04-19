@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,10 +122,12 @@ public class NacRingtoneFragment
 	{
 		this.mRadioGroup = (RadioGroup) root.findViewById(R.id.radio_group);
 		Context context = getContext();
-		List<NacMedia.Pair> ringtones = NacMedia.getRingtones(context);
 		NacAlarm alarm = this.getAlarm();
+		List<NacSound> ringtones = NacSound.getRingtones(context);
 		String path = (alarm != null) ? alarm.getSound() : "";
 		int[] padding = this.getPadding(context);
+		int textSize = (int) context.getResources().getDimension(
+			R.dimen.tsz_frg_sound);
 
 		for(int i=0; i < ringtones.size(); i++)
 		{
@@ -132,16 +135,17 @@ public class NacRingtoneFragment
 			RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
 				ViewGroup.LayoutParams.MATCH_PARENT,
 				ViewGroup.LayoutParams.WRAP_CONTENT);
-			NacMedia.Pair pair = ringtones.get(i);
+			NacSound sound = ringtones.get(i);
 
 			this.mRadioGroup.addView(button);
-			button.setText(pair.getName());
-			button.setTag(pair.getPath());
+			button.setText(sound.getName());
+			button.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+			button.setTag(sound.getPath());
 			button.setLayoutParams(params);
 			button.setPadding(padding[0], padding[1], padding[2], padding[3]);
 			button.setOnClickListener(this);
 
-			if (!path.isEmpty() && path.equals(pair.getPath()))
+			if (!path.isEmpty() && path.equals(sound.getPath()))
 			{
 				button.setChecked(true);
 			}

@@ -258,17 +258,6 @@ public class NacImageTextButton
 	}
 
 	/**
-	 * Set the color of the text.
-	 *
-	 * @param  color  The color.
-	 */
-	public void setTextColor(int color)
-	{
-		this.mText.setTextColor(color);
-		this.redraw();
-	}
-
-	/**
 	 * Set the text.
 	 *
 	 * @param  text  The text.
@@ -277,6 +266,17 @@ public class NacImageTextButton
 	{
 		this.mAttributes.text = text;
 		this.mText.setText(text);
+		this.redraw();
+	}
+
+	/**
+	 * Set the color of the text.
+	 *
+	 * @param  color  The color.
+	 */
+	public void setTextColor(int color)
+	{
+		this.mText.setTextColor(color);
 		this.redraw();
 	}
 

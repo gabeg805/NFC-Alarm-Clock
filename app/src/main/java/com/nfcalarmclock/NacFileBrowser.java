@@ -2,11 +2,9 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.os.Environment;
-import android.os.Handler;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,16 +28,12 @@ public class NacFileBrowser
 	}
 
 	/**
-	 * Direction.
+	 * The path view.
 	 */
-	private enum Direction
-	{
-		LEFT,
-		RIGHT
-	}
+	private TextView mPathView;
 
 	/**
-	 * The root view.
+	 * The container view for the directory/file buttons.
 	 */
 	private NacButtonGroup mContainer;
 
@@ -49,22 +43,11 @@ public class NacFileBrowser
 	private OnClickListener mListener;
 
 	/**
-	 * Direction the slide in/out animations should go.
 	 */
-	private Direction mDirection;
-
-	/**
-	 * Duration of the slide out animation.
-	 */
-	private long mDuration;
-
-	/**
-	 */
-	public NacFileBrowser(View root, int id)
+	public NacFileBrowser(View root, int pathId, int groupId)
 	{
-		this.mContainer = (NacButtonGroup) root.findViewById(id);
-		this.mDirection = Direction.RIGHT;
-		this.mDuration = 0;
+		this.mPathView = (TextView) root.findViewById(pathId);
+		this.mContainer = (NacButtonGroup) root.findViewById(groupId);
 
 		this.mContainer.removeAllViews();
 	}
@@ -139,8 +122,8 @@ public class NacFileBrowser
 
 		Context context = container.getContext();
 		NacImageSubTextButton entry = new NacImageSubTextButton(context);
-		String title = NacMedia.getTitle(file);
-		String artist = NacMedia.getArtist(file);
+		String title = NacSound.getTitle(file);
+		String artist = NacSound.getArtist(file);
 
 		if (title.isEmpty())
 		{
@@ -156,26 +139,13 @@ public class NacFileBrowser
 	}
 
 	/**
-	 * Run the animation to clear the views out of the browser.
+	 * Clear the views out of the browser.
 	 */
-	private void clearAnimation()
+	private void clearEntries()
 	{
-		final NacButtonGroup container = this.getContainer();
-		Animation slideOut = this.getOutAnimation();
-		long duration = slideOut.getDuration();
-		this.mDuration = duration;
+		NacButtonGroup container = this.getContainer();
 
-		container.startAnimation(slideOut);
-
-		new Handler().postDelayed(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				container.setVisibility(View.GONE);
-				container.removeAllViews();
-			}
-		}, duration);
+		container.removeAllViews();
 	}
 
 	/**
@@ -184,7 +154,7 @@ public class NacFileBrowser
 	 */
 	public List<File> fileListing(String path)
 	{
-		File[] listing = new File(path).listFiles(NacMedia.getFilter());
+		File[] listing = new File(path).listFiles(NacSound.getFilter());
 		List<File> directories = new ArrayList<>();
 		List<File> files = new ArrayList<>();
 		String home = this.getHome();
@@ -222,22 +192,6 @@ public class NacFileBrowser
 	}
 
 	/**
-	 * @return The direction the slide in/out animations should go.
-	 */
-	private Direction getDirection()
-	{
-		return this.mDirection;
-	}
-
-	/**
-	 * @return The duration of the slide out animation.
-	 */
-	private long getDuration()
-	{
-		return this.mDuration;
-	}
-
-	/**
 	 * @return The home directory.
 	 */
 	private String getHome()
@@ -246,35 +200,11 @@ public class NacFileBrowser
 	}
 
 	/**
-	 * @return The animation to use when sliding the browser in.
-	 */
-	private Animation getInAnimation()
-	{
-		Context context = this.getContainer().getContext();
-		int id = (this.getDirection() == Direction.LEFT)
-			? R.anim.slide_left_in : R.anim.slide_right_in;
-
-		return AnimationUtils.loadAnimation(context, id);
-	}
-
-	/**
 	 * @return The OnClickListener.
 	 */
 	private OnClickListener getListener()
 	{
 		return this.mListener;
-	}
-
-	/**
-	 * @return The animation to use when sliding the browser out.
-	 */
-	private Animation getOutAnimation()
-	{
-		Context context = this.getContainer().getContext();
-		int id = (this.getDirection() == Direction.LEFT)
-			? R.anim.slide_left_out : R.anim.slide_right_out;
-
-		return AnimationUtils.loadAnimation(context, id);
 	}
 
 	/**
@@ -293,9 +223,6 @@ public class NacFileBrowser
 		String name = file.getName();
 		String path;
 
-		this.mDirection = (name.equals("..")) ? Direction.LEFT
-			: Direction.RIGHT;
-
 		try
 		{
 			path = file.getCanonicalPath();
@@ -310,20 +237,14 @@ public class NacFileBrowser
 	}
 
 	/**
-	 * Run the animation to populate views into the browser.
+	 * Populate views into the browser.
 	 */
-	private void populateEntries(final String path)
+	private void populateEntries(String entryPath)
 	{
-		final NacButtonGroup container = this.getContainer();
+		String path = entryPath.isEmpty() ? getHome() : entryPath;
 
-		new Handler().postDelayed(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				addFileListing(path.isEmpty() ? getHome() : path);
-			}
-		}, this.getDuration());
+		this.mPathView.setText(path);
+		this.addFileListing(path);
 	}
 
 	/**
@@ -347,38 +268,8 @@ public class NacFileBrowser
 	 */
 	public void show(String path)
 	{
-		this.clearAnimation();
+		this.clearEntries();
 		this.populateEntries(path);
-		this.showAnimation();
-	}
-
-	/**
-	 * Run the animation to show the views in the browser.
-	 */
-	private void showAnimation()
-	{
-		final NacButtonGroup container = this.getContainer();
-		final Animation slideIn = this.getInAnimation();
-		long duration = slideIn.getDuration();
-
-		new Handler().postDelayed(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				container.setVisibility(View.GONE);
-				container.startAnimation(slideIn);
-
-				new Handler().postDelayed(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						container.setVisibility(View.VISIBLE);
-					}
-				}, 100);
-			}
-		}, duration);
 	}
 
 }

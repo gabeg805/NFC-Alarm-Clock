@@ -71,6 +71,12 @@
 		<attr name="nacPaddingRight" />
 	</declare-styleable>
 
+	<declare-styleable name="NacCoverImage">
+		<attr name="nacDrawableWidth" />
+		<attr name="nacDrawableHeight" />
+		<attr name="nacSpacing" />
+	</declare-styleable>
+
 	<declare-styleable name="NacColorPicker">
 		<attr name="nacWidth" />
 		<attr name="nacHeight" />

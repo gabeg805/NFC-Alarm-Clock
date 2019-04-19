@@ -19,6 +19,11 @@ public class NacAlarmParcel
 	private int mId;
 
 	/**
+	 * Indicates whether the alarm is enabled or not.
+	 */
+	private boolean mEnabled;
+
+	/**
 	 * The hour at which to run the alarm.
 	 */
 	private int mHour;
@@ -44,9 +49,19 @@ public class NacAlarmParcel
 	private boolean mVibrate;
 
 	/**
-	 * The sound to play when the alarm is run.
+	 * The type of sound to play when the alarm is run.
 	 */
-	private String mSound;
+	private int mSoundType;
+
+	/**
+	 * The path of the sound to play when the alarm is run.
+	 */
+	private String mSoundPath;
+
+	/**
+	 * The name of the sound to play when the alarm is run.
+	 */
+	private String mSoundName;
 
 	/**
 	 * The name of the alarm.
@@ -54,30 +69,21 @@ public class NacAlarmParcel
 	private String mName;
 
 	/**
-	 * Indicates whether the alarm is enabled or not.
-	 */
-	private boolean mEnabled;
-
-	/**
-	 * Indicator if using a 24 hour format to display time or not.
-	 */
-	private boolean m24HourFormat;
-
-	/**
 	 * Populate values with input alarm.
 	 */
 	public NacAlarmParcel(NacAlarm alarm)
 	{
 		this.mId = alarm.getId();
+		this.mEnabled = alarm.getEnabled();
 		this.mHour = alarm.getHour();
 		this.mMinute = alarm.getMinute();
 		this.mDays = NacCalendar.daysToValue(alarm.getDays());
 		this.mRepeat = alarm.getRepeat();
 		this.mVibrate = alarm.getVibrate();
-		this.mSound = alarm.getSound();
+		this.mSoundType = alarm.getSoundType();
+		this.mSoundPath = alarm.getSoundPath();
+		this.mSoundName = alarm.getSoundName();
 		this.mName = alarm.getName();
-		this.mEnabled = alarm.getEnabled();
-		this.m24HourFormat = alarm.get24HourFormat();
 	}
 
 	/**
@@ -86,15 +92,16 @@ public class NacAlarmParcel
 	public NacAlarmParcel(Parcel in)
 	{
 		this.mId = in.readInt();
+		this.mEnabled = (in.readInt() != 0);
 		this.mHour = in.readInt();
 		this.mMinute = in.readInt();
 		this.mDays = in.readInt();
 		this.mRepeat = (in.readInt() != 0);
 		this.mVibrate = (in.readInt() != 0);
-		this.mSound = in.readString();
+		this.mSoundType = in.readInt();
+		this.mSoundPath = in.readString();
+		this.mSoundName = in.readString();
 		this.mName = in.readString();
-		this.mEnabled = (in.readInt() != 0);
-		this.m24HourFormat = (in.readInt() != 0);
 	}
 
 	/**
@@ -161,15 +168,16 @@ public class NacAlarmParcel
 	{
 		return new NacAlarm.Builder()
 			.setId(this.mId)
+			.setEnabled(this.mEnabled)
 			.setHour(this.mHour)
 			.setMinute(this.mMinute)
 			.setDays(this.mDays)
 			.setRepeat(this.mRepeat)
 			.setVibrate(this.mVibrate)
-			.setSound(this.mSound)
+			.setSoundType(this.mSoundType)
+			.setSoundPath(this.mSoundPath)
+			.setSoundName(this.mSoundName)
 			.setName(this.mName)
-			.setEnabled(this.mEnabled)
-			.set24HourFormat(this.m24HourFormat)
 			.build();
 	}
 
@@ -207,15 +215,16 @@ public class NacAlarmParcel
 	public void writeToParcel(Parcel out, int flags)
 	{
 		out.writeInt(this.mId);
+		out.writeInt(this.mEnabled ? 1 : 0);
 		out.writeInt(this.mHour);
 		out.writeInt(this.mMinute);
 		out.writeInt(this.mDays);
 		out.writeInt(this.mRepeat ? 1 : 0);
 		out.writeInt(this.mVibrate ? 1 : 0);
-		out.writeString(this.mSound);
+		out.writeInt(this.mSoundType);
+		out.writeString(this.mSoundPath);
+		out.writeString(this.mSoundName);
 		out.writeString(this.mName);
-		out.writeInt(this.mEnabled ? 1 : 0);
-		out.writeInt(this.m24HourFormat ? 1 : 0);
 	}
 
 	/**

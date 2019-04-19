@@ -126,52 +126,6 @@ public class NacDatabase
 	}
 
 	/**
-	 * Check if the given alarm exists in the database.
-	 *
-	 * @param  alarm  The alarm to check existence against.
-	 *
-	 * @return True if the alarm exists in the database and False otherwise.
-	 */
-	public boolean exists(NacAlarm alarm)
-	{
-		this.setDatabase();
-
-		if (alarm == null)
-		{
-			return false;
-		}
-
-		SQLiteDatabase db = this.getDatabase();
-		String table = this.getTable();
-		String where = Contract.AlarmTable.COLUMN_ID + "=? AND "
-			+ Contract.AlarmTable.COLUMN_ENABLED + "=? AND "
-			+ Contract.AlarmTable.COLUMN_24HOURFORMAT + "=? AND "
-			+ Contract.AlarmTable.COLUMN_DAYS + "=? AND "
-			+ Contract.AlarmTable.COLUMN_REPEAT + "=? AND "
-			+ Contract.AlarmTable.COLUMN_VIBRATE + "=? AND "
-			+ Contract.AlarmTable.COLUMN_SOUND + "=? AND "
-			+ Contract.AlarmTable.COLUMN_NAME + "=?";
-		String[] args = new String[] {
-			String.valueOf(alarm.getId()),
-			String.valueOf(alarm.getEnabled() ? 1 : 0),
-			String.valueOf(alarm.get24HourFormat() ? 1 : 0),
-			String.valueOf(NacCalendar.daysToValue(alarm.getDays())),
-			String.valueOf(alarm.getRepeat() ? 1 : 0),
-			String.valueOf(alarm.getVibrate() ? 1 : 0),
-			alarm.getSound(),
-			alarm.getName() };
-		String limit = "1";
-
-		Cursor cursor = db.query(table, null, where, args, null, null, null,
-			limit);
-		boolean exists = (cursor.getCount() > 0);
-
-		cursor.close();
-
-		return exists;
-	}
-
-	/**
 	 * @return A ContentValues object based on the given alarm.
 	 */
 	private ContentValues getContentValues(NacAlarm alarm)
@@ -184,27 +138,28 @@ public class NacDatabase
 		ContentValues cv = new ContentValues();
 		int id = alarm.getId();
 		boolean enabled = alarm.getEnabled();
-		boolean format = alarm.get24HourFormat();
+		//boolean format = alarm.get24HourFormat();
 		int hour = alarm.getHour();
 		int minute = alarm.getMinute();
 		int days = NacCalendar.daysToValue(alarm.getDays());
 		boolean repeat = alarm.getRepeat();
 		boolean vibrate = alarm.getVibrate();
-		String sound = alarm.getSound();
+		int soundType = alarm.getSoundType();
+		String soundPath = alarm.getSoundPath();
+		String soundName = alarm.getSoundName();
 		String name = alarm.getName();
-		//int tag = alarm.getTag();
 
 		cv.put(Contract.AlarmTable.COLUMN_ID, id);
 		cv.put(Contract.AlarmTable.COLUMN_ENABLED, enabled);
-		cv.put(Contract.AlarmTable.COLUMN_24HOURFORMAT, format);
 		cv.put(Contract.AlarmTable.COLUMN_HOUR, hour);
 		cv.put(Contract.AlarmTable.COLUMN_MINUTE, minute);
 		cv.put(Contract.AlarmTable.COLUMN_DAYS, days);
 		cv.put(Contract.AlarmTable.COLUMN_REPEAT, repeat);
 		cv.put(Contract.AlarmTable.COLUMN_VIBRATE, vibrate);
-		cv.put(Contract.AlarmTable.COLUMN_SOUND, sound);
+		cv.put(Contract.AlarmTable.COLUMN_SOUND_TYPE, soundType);
+		cv.put(Contract.AlarmTable.COLUMN_SOUND_PATH, soundPath);
+		cv.put(Contract.AlarmTable.COLUMN_SOUND_NAME, soundName);
 		cv.put(Contract.AlarmTable.COLUMN_NAME, name);
-		// cv.put(Contract.AlarmTable.COLUMN_NFCTAG, tag);
 
 		return cv;
 	}
@@ -283,6 +238,9 @@ public class NacDatabase
 
 		Context context = this.getContext();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
+		String soundPath = shared.getSound();
+		String soundName = NacSound.getName(context, soundPath);
+		int soundType = NacSound.getType(soundPath);
 		NacAlarm alarm = new NacAlarm.Builder()
 			.setId(1)
 			.setHour(8)
@@ -290,9 +248,10 @@ public class NacDatabase
 			.setRepeat(shared.getRepeat())
 			.setDays(shared.getDays())
 			.setVibrate(shared.getVibrate())
-			.setSound(shared.getSound())
+			.setSoundType(soundType)
+			.setSoundPath(soundPath)
+			.setSoundName(soundName)
 			.setName("Work")
-			.set24HourFormat(false)
 			.build();
 
 		this.add(db, alarm);
@@ -303,6 +262,7 @@ public class NacDatabase
 	 */
 	public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion)
 	{
+		NacUtility.printf("onDowngrade! %d %d", oldVersion, newVersion);
 		onUpgrade(db, oldVersion, newVersion);
 	}
 
@@ -312,8 +272,26 @@ public class NacDatabase
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
 	{
+		NacUtility.printf("onUpgrade OF THE DATABASE! %d %d", oldVersion, newVersion);
+
+		List<NacAlarm> alarms = this.read(db, oldVersion);
+		int size = alarms.size();
+
 		db.execSQL(Contract.AlarmTable.DELETE_TABLE);
-		onCreate(db);
+
+		if (size == 0)
+		{
+			onCreate(db);
+		}
+		else
+		{
+			db.execSQL(Contract.AlarmTable.CREATE_TABLE);
+
+			for (NacAlarm a : alarms)
+			{
+				this.add(db, a);
+			}
+		}
 	}
 
 	/**
@@ -340,34 +318,76 @@ public class NacDatabase
 		this.setDatabase();
 
 		SQLiteDatabase db = this.getDatabase();
+
+		return this.read(db, Contract.DATABASE_VERSION);
+	}
+
+	public List<NacAlarm> read(SQLiteDatabase db, int version)
+	{
+		Context context = this.getContext();
 		String table = this.getTable();
 		Cursor cursor = db.query(table, null, null, null, null, null, null);
 		List<NacAlarm> list = new ArrayList<>();
 
 		while(cursor.moveToNext())
 		{
-			int id = cursor.getInt(1);
-			boolean enabled = (cursor.getInt(2) != 0);
-			boolean format = (cursor.getInt(3) != 0);
-			int hour = cursor.getInt(4);
-			int minute = cursor.getInt(5);
-			int days = cursor.getInt(6);
-			boolean repeat = (cursor.getInt(7) != 0);
-			boolean vibrate = (cursor.getInt(8) != 0);
-			String sound = cursor.getString(9);
-			String name = cursor.getString(10);
+			int id;
+			boolean enabled;
+			int hour;
+			int minute;
+			int days;
+			boolean repeat;
+			boolean vibrate;
+			int soundType;
+			String soundPath;
+			String soundName;
+			String name;
+
+			if (version == 1)
+			{
+				NacUtility.printf("Reading old version!");
+				id = cursor.getInt(1);
+				enabled = (cursor.getInt(2) != 0);
+				//boolean format = (cursor.getInt(3) != 0);
+				hour = cursor.getInt(4);
+				minute = cursor.getInt(5);
+				days = cursor.getInt(6);
+				repeat = (cursor.getInt(7) != 0);
+				vibrate = (cursor.getInt(8) != 0);
+				soundPath = cursor.getString(9);
+				name = cursor.getString(10);
+				soundType = NacSound.getType(soundPath);
+				soundName = NacSound.getName(context, soundPath);
+
+			}
+			else
+			{
+				NacUtility.printf("Reading NEW version!");
+				id = cursor.getInt(1);
+				enabled = (cursor.getInt(2) != 0);
+				hour = cursor.getInt(3);
+				minute = cursor.getInt(4);
+				days = cursor.getInt(5);
+				repeat = (cursor.getInt(6) != 0);
+				vibrate = (cursor.getInt(7) != 0);
+				soundType = cursor.getInt(8);
+				soundPath = cursor.getString(9);
+				soundName = cursor.getString(10);
+				name = cursor.getString(11);
+			}
 
 			list.add(new NacAlarm.Builder()
 				.setId(id)
+				.setEnabled(enabled)
 				.setHour(hour)
 				.setMinute(minute)
 				.setDays(days)
 				.setRepeat(repeat)
 				.setVibrate(vibrate)
-				.setSound(sound)
+				.setSoundType(soundType)
+				.setSoundPath(soundPath)
+				.setSoundName(soundName)
 				.setName(name)
-				.setEnabled(enabled)
-				.set24HourFormat(format)
 				.build());
 		}
 
@@ -506,7 +526,7 @@ public class NacDatabase
 		/**
 		 * Database version.
 		 */
-		public static final int DATABASE_VERSION = 1;
+		public static final int DATABASE_VERSION = 2;
 
 		/**
 		 * prevent someone from instantiating the contract class.
@@ -545,11 +565,6 @@ public class NacDatabase
 			public static final String COLUMN_ENABLED = "Enabled";
 
 			/**
-			 * Hour format.
-			 */
-			public static final String COLUMN_24HOURFORMAT = "HourFormat";
-
-			/**
 			 * Hour.
 			 */
 			public static final String COLUMN_HOUR = "Hour";
@@ -575,19 +590,24 @@ public class NacDatabase
 			public static final String COLUMN_VIBRATE = "Vibrate";
 
 			/**
-			 * Sound played when the alarm is run.
+			 * Type of sound played.
 			 */
-			public static final String COLUMN_SOUND = "Sound";
+			public static final String COLUMN_SOUND_TYPE = "SoundType";
+
+			/**
+			 * Path to the sound that is played when the alarm goes off.
+			 */
+			public static final String COLUMN_SOUND_PATH = "SoundPath";
+
+			/**
+			 * Name of the sound played.
+			 */
+			public static final String COLUMN_SOUND_NAME = "SoundName";
 
 			/**
 			 * Name of the alarm.
 			 */
 			public static final String COLUMN_NAME = "Name";
-
-			/**
-			 * NFC tag.
-			 */
-			public static final String COLUMN_NFCTAG = "NfcTag";
 
 			/**
 			 * The content style URI
@@ -630,15 +650,15 @@ public class NacDatabase
 				+ _ID + " INTEGER PRIMARY KEY,"
 				+ COLUMN_ID + " INTEGER,"
 				+ COLUMN_ENABLED + " INTEGER,"
-				+ COLUMN_24HOURFORMAT + " INTEGER,"
 				+ COLUMN_HOUR + " INTEGER,"
 				+ COLUMN_MINUTE + " INTEGER,"
 				+ COLUMN_DAYS + " INTEGER,"
 				+ COLUMN_REPEAT + " INTEGER,"
 				+ COLUMN_VIBRATE + " INTEGER,"
-				+ COLUMN_SOUND + " TEXT,"
-				+ COLUMN_NAME + " TEXT,"
-				+ COLUMN_NFCTAG + " TEXT"
+				+ COLUMN_SOUND_TYPE + " INTEGER,"
+				+ COLUMN_SOUND_PATH + " TEXT,"
+				+ COLUMN_SOUND_NAME + " TEXT,"
+				+ COLUMN_NAME + " TEXT"
 				+ ");";
 
 			/**
@@ -653,15 +673,15 @@ public class NacDatabase
 			public static final String[] KEY_ARRAY = {
 				COLUMN_ID,
 				COLUMN_ENABLED,
-				COLUMN_24HOURFORMAT,
 				COLUMN_HOUR,
 				COLUMN_MINUTE,
 				COLUMN_DAYS,
 				COLUMN_REPEAT,
 				COLUMN_VIBRATE,
-				COLUMN_SOUND,
+				COLUMN_SOUND_TYPE,
+				COLUMN_SOUND_PATH,
+				COLUMN_SOUND_NAME,
 				COLUMN_NAME,
-				COLUMN_NFCTAG
 			};
 
 		}

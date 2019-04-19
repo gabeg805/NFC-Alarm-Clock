@@ -10,7 +10,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -101,7 +100,6 @@ public class NacCardAdapter
 	public int add()
 	{
 		Context context = this.getContext();
-		boolean format = DateFormat.is24HourFormat(context);
 		int id = this.getUniqueId();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
 		NacAlarm alarm = new NacAlarm.Builder()
@@ -109,9 +107,8 @@ public class NacCardAdapter
 			.setRepeat(shared.getRepeat())
 			.setDays(shared.getDays())
 			.setVibrate(shared.getVibrate())
-			.setSound(shared.getSound())
+			.setSound(context, shared.getSound())
 			.setName(shared.getName())
-			.set24HourFormat(format)
 			.build();
 
 		return this.add(alarm);

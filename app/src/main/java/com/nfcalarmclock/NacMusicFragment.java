@@ -26,6 +26,11 @@ public class NacMusicFragment
 {
 
 	/**
+	 * Read request callback success result.
+	 */
+	public static final int READ_REQUEST = 1;
+
+	/**
 	 */
 	public NacMusicFragment()
 	{
@@ -75,6 +80,19 @@ public class NacMusicFragment
 	}
 
 	/**
+	 * Prompt the user to enable read permissions.
+	 */
+	@Override
+	protected void onSelected()
+	{
+		if (!NacPermissions.hasRead(getContext()))
+		{
+			NacPermissions.request(getActivity(),
+				Manifest.permission.READ_EXTERNAL_STORAGE, READ_REQUEST);
+		}
+	}
+
+	/**
 	 */
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState)
@@ -94,12 +112,13 @@ public class NacMusicFragment
 	 */
 	private void setupFileBrowser(View root)
 	{
-		NacFileBrowser browser = new NacFileBrowser(root, R.id.group);
-		String media = this.getMedia();
+		NacFileBrowser browser = new NacFileBrowser(root, R.id.path,
+			R.id.group);
+		String path = this.getSoundPath();
 		String parentPath = "";
-		File parentFile = new File(media).getParentFile();
+		File parentFile = new File(path).getParentFile();
 
-		if ((parentFile != null) && NacMedia.isFile(media))
+		if ((parentFile != null) && NacSound.isFile(path))
 		{
 
 			try

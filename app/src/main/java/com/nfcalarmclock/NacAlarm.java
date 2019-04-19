@@ -1,5 +1,7 @@
 package com.nfcalarmclock;
 
+import android.content.Context;
+import android.text.format.DateFormat;
 import java.util.Calendar;
 import java.util.EnumSet;
 
@@ -39,11 +41,6 @@ public class NacAlarm
 		private boolean mEnabled;
 
 		/**
-		 * Indicator if using a 24 hour format to display time or not.
-		 */
-		private boolean m24HourFormat;
-
-		/**
 		 * The hour at which to run the alarm.
 		 */
 		private int mHour;
@@ -69,9 +66,19 @@ public class NacAlarm
 		private boolean mVibrate;
 
 		/**
-		 * The sound to play when the alarm is run.
+		 * The type of sound to play.
 		 */
-		private String mSound;
+		private int mSoundType;
+
+		/**
+		 * The path to the sound to play.
+		 */
+		private String mSoundPath;
+
+		/**
+		 * The name of the sound to play.
+		 */
+		private String mSoundName;
 
 		/**
 		 * The name of the alarm.
@@ -102,11 +109,12 @@ public class NacAlarm
 			this.mHour = hour;
 			this.mMinute = min;
 			this.mEnabled = true;
-			this.m24HourFormat = false;
 			this.mDays = EnumSet.noneOf(NacCalendar.Day.class);
 			this.mRepeat = true;
 			this.mVibrate = true;
-			this.mSound = "";
+			this.mSoundType = NacSound.TYPE_NONE;
+			this.mSoundPath = "";
+			this.mSoundName = "";
 			this.mName = "";
 		}
 
@@ -116,15 +124,6 @@ public class NacAlarm
 		public NacAlarm build()
 		{
 			return new NacAlarm(this);
-		}
-
-		/**
-		 * @return True if using 24 time format, and False if using 12 hour
-		 *         format.
-		 */
-		public boolean get24HourFormat()
-		{
-			return this.m24HourFormat;
 		}
 
 		/**
@@ -197,7 +196,31 @@ public class NacAlarm
 		 */
 		public String getSound()
 		{
-			return this.mSound;
+			return this.getSoundPath();
+		}
+
+		/**
+		 * @return The path to the media file to play when the alarm goes off.
+		 */
+		public String getSoundName()
+		{
+			return this.mSoundName;
+		}
+
+		/**
+		 * @return The path to the media file to play when the alarm goes off.
+		 */
+		public String getSoundPath()
+		{
+			return this.mSoundPath;
+		}
+
+		/**
+		 * @return The path to the media file to play when the alarm goes off.
+		 */
+		public int getSoundType()
+		{
+			return this.mSoundType;
 		}
 
 		/**
@@ -207,21 +230,6 @@ public class NacAlarm
 		public boolean getVibrate()
 		{
 			return this.mVibrate;
-		}
-
-		/**
-		 * Set the time format to 12 or 24 hour.
-		 *
-		 * @param  format  True indicates using 24 hour format, and False
-		 *                 indicates 12 hour format.
-		 *
-		 * @return The Builder.
-		 */
-		public Builder set24HourFormat(boolean format)
-		{
-			this.m24HourFormat = format;
-
-			return this;
 		}
 
 		/**
@@ -346,6 +354,40 @@ public class NacAlarm
 		}
 
 		/**
+		 * Set the path, name, and type of the sound to play.
+		 *
+		 * @param  context  The application context.
+		 * @param  path  The path to the sound to play.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setSound(Context context, String path)
+		{
+			String name = NacSound.getName(context, path);
+			int type = NacSound.getType(path);
+
+			this.setSoundPath(path);
+			this.setSoundName(name);
+			this.setSoundType(type);
+
+			return this;
+		}
+
+		/**
+		 * Set the sound name.
+		 *
+		 * @param  name  The name of the media file to play.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setSoundName(String name)
+		{
+			this.mSoundName = (name != null) ? name : "";
+
+			return this;
+		}
+
+		/**
 		 * Set the sound to play when the alarm goes off.
 		 *
 		 * @param  path  The path to the media file to play when the alarm goes
@@ -353,9 +395,23 @@ public class NacAlarm
 		 *
 		 * @return The Builder.
 		 */
-		public Builder setSound(String path)
+		public Builder setSoundPath(String path)
 		{
-			this.mSound = (path != null) ? path : "";
+			this.mSoundPath = (path != null) ? path : "";
+
+			return this;
+		}
+
+		/**
+		 * Set the type of sound to play.
+		 *
+		 * @param  type  The type of media file to play.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setSoundType(int type)
+		{
+			this.mSoundType = type;
 
 			return this;
 		}
@@ -388,6 +444,11 @@ public class NacAlarm
 	private int mId;
 
 	/**
+	 * Indicates whether the alarm is enabled or not.
+	 */
+	private boolean mEnabled;
+
+	/**
 	 * The hour at which to run the alarm.
 	 */
 	private int mHour;
@@ -413,24 +474,24 @@ public class NacAlarm
 	private boolean mVibrate;
 
 	/**
-	 * The sound to play when the alarm is run.
+	 * The type of sound to play.
 	 */
-	private String mSound;
+	private int mSoundType;
+
+	/**
+	 * The path to the sound to play.
+	 */
+	private String mSoundPath;
+
+	/**
+	 * The name of the sound to play.
+	 */
+	private String mSoundName;
 
 	/**
 	 * The name of the alarm.
 	 */
 	private String mName;
-
-	/**
-	 * Indicates whether the alarm is enabled or not.
-	 */
-	private boolean mEnabled;
-
-	/**
-	 * Indicator if using a 24 hour format to display time or not.
-	 */
-	private boolean m24HourFormat;
 
 	/**
 	 */
@@ -445,15 +506,16 @@ public class NacAlarm
 	{
 		this.setOnChangeListener(builder.getOnChangeListener());
 		this.setId(builder.getId());
+		this.setEnabled(builder.getEnabled());
 		this.setHour(builder.getHour());
 		this.setMinute(builder.getMinute());
 		this.setDays(builder.getDays());
 		this.setRepeat(builder.getRepeat());
 		this.setVibrate(builder.getVibrate());
-		this.setSound(builder.getSound());
+		this.setSoundType(builder.getSoundType());
+		this.setSoundPath(builder.getSoundPath());
+		this.setSoundName(builder.getSoundName());
 		this.setName(builder.getName());
-		this.setEnabled(builder.getEnabled());
-		this.set24HourFormat(builder.get24HourFormat());
 	}
 
 	/**
@@ -484,15 +546,16 @@ public class NacAlarm
 	{
 		return new NacAlarm.Builder()
 			.setId(id)
+			.setEnabled(this.getEnabled())
 			.setHour(this.getHour())
 			.setMinute(this.getMinute())
 			.setDays(this.getDays())
 			.setRepeat(this.getRepeat())
 			.setVibrate(this.getVibrate())
-			.setSound(this.getSound())
+			.setSoundType(this.getSoundType())
+			.setSoundPath(this.getSoundPath())
+			.setSoundName(this.getSoundName())
 			.setName(this.getName())
-			.setEnabled(this.getEnabled())
-			.set24HourFormat(this.get24HourFormat())
 			.build();
 	}
 
@@ -506,24 +569,24 @@ public class NacAlarm
 	public boolean equals(NacAlarm alarm)
 	{
 		return ((this.getId() == alarm.getId())
+			&& (this.getEnabled() == alarm.getEnabled())
 			&& (this.getHour() == alarm.getHour())
 			&& (this.getMinute() == alarm.getMinute())
 			&& (this.getDays() == alarm.getDays())
 			&& (this.getRepeat() == alarm.getRepeat())
 			&& (this.getVibrate() == alarm.getVibrate())
-			&& (this.getSound() == alarm.getSound())
-			&& (this.getName() == alarm.getName())
-			&& (this.getEnabled() == alarm.getEnabled())
-			&& (this.get24HourFormat() == alarm.get24HourFormat()));
+			&& (this.getSoundType() == alarm.getSoundType())
+			&& (this.getSoundPath() == alarm.getSoundPath())
+			&& (this.getSoundName() == alarm.getSoundName())
+			&& (this.getName() == alarm.getName()));
 	}
 
 	/**
-	 * @return True if using 24 time format, and False if using 12 hour
-	 *         format.
+	 * @return The 24 hour format.
 	 */
-	public boolean get24HourFormat()
+	public boolean is24HourFormat(Context context)
 	{
-		return this.m24HourFormat;
+		return DateFormat.is24HourFormat(context);
 	}
 
 	/**
@@ -575,9 +638,10 @@ public class NacAlarm
 	/**
 	 * @return The meridian (AM or PM).
 	 */
-	public String getMeridian()
+	public String getMeridian(Context context)
 	{
-		return NacCalendar.getMeridian(this.getHour(), this.get24HourFormat());
+		return NacCalendar.getMeridian(this.getHour(),
+			this.is24HourFormat(context));
 	}
 
 	/**
@@ -618,16 +682,40 @@ public class NacAlarm
 	 */
 	public String getSound()
 	{
-		return this.mSound;
+		return this.getSoundPath();
+	}
+
+	/**
+	 * @return The path to the media file to play when the alarm goes off.
+	 */
+	public String getSoundName()
+	{
+		return this.mSoundName;
+	}
+
+	/**
+	 * @return The path to the media file to play when the alarm goes off.
+	 */
+	public String getSoundPath()
+	{
+		return this.mSoundPath;
+	}
+
+	/**
+	 * @return The path to the media file to play when the alarm goes off.
+	 */
+	public int getSoundType()
+	{
+		return this.mSoundType;
 	}
 
 	/**
 	 * @return The time string.
 	 */
-	public String getTime()
+	public String getTime(Context context)
 	{
 		return NacCalendar.getTime(this.getHour(), this.getMinute(),
-			this.get24HourFormat());
+			this.is24HourFormat(context));
 	}
 
 	/**
@@ -662,26 +750,16 @@ public class NacAlarm
 	{
 		NacUtility.printf("Alarm Information");
 		NacUtility.printf("Id           : %d", this.mId);
+		NacUtility.printf("Enabled      : %b", this.mEnabled);
 		NacUtility.printf("Hour         : %d", this.mHour);
 		NacUtility.printf("Minute       : %d", this.mMinute);
 		NacUtility.printf("Days         : %s", NacCalendar.toString(this.getDays()));
 		NacUtility.printf("Repeat       : %b", this.mRepeat);
 		NacUtility.printf("Vibrate      : %b", this.mVibrate);
-		NacUtility.printf("Sound        : %s", this.mSound);
+		NacUtility.printf("Sound Type   : %s", this.mSoundType);
+		NacUtility.printf("Sound Path   : %s", this.mSoundPath);
+		NacUtility.printf("Sound Name   : %s", this.mSoundName);
 		NacUtility.printf("Name         : %s", this.mName);
-		NacUtility.printf("Enabled      : %b", this.mEnabled);
-		NacUtility.printf("24 hr Format : %s", this.m24HourFormat);
-	}
-
-	/**
-	 * Set the time format to 12 or 24 hour.
-	 *
-	 * @param  format  True indicates using 24 hour format, and False
-	 *                 indicates 12 hour format.
-	 */
-	public void set24HourFormat(boolean format)
-	{
-		this.m24HourFormat = format;
 	}
 
 	/**
@@ -776,12 +854,48 @@ public class NacAlarm
 	/**
 	 * Set the sound to play when the alarm goes off.
 	 *
+	 * @param  context  The application context.
+	 * @param  path  The path to sound to play.
+	 */
+	public void setSound(Context context, String path)
+	{
+		String name = NacSound.getName(context, path);
+		int type = NacSound.getType(path);
+
+		this.setSoundPath(path);
+		this.setSoundName(name);
+		this.setSoundType(type);
+	}
+
+	/**
+	 * Set the sound name.
+	 *
+	 * @param  name  The name of the media file to play.
+	 */
+	public void setSoundName(String name)
+	{
+		this.mSoundName = (name != null) ? name : "";
+	}
+
+	/**
+	 * Set the sound to play when the alarm goes off.
+	 *
 	 * @param  path  The path to the media file to play when the alarm goes
 	 *               off.
 	 */
-	public void setSound(String path)
+	public void setSoundPath(String path)
 	{
-		this.mSound = (path != null) ? path : "";
+		this.mSoundPath = (path != null) ? path : "";
+	}
+
+	/**
+	 * Set the type of sound to play.
+	 *
+	 * @param  type  The type of media file to play.
+	 */
+	public void setSoundType(int type)
+	{
+		this.mSoundType = type;
 	}
 
 	/**

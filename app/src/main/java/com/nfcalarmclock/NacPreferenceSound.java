@@ -50,7 +50,7 @@ public class NacPreferenceSound
 	{
 		Context context = getContext();
 		String path = this.mValue;
-		String name = NacMedia.getMediaName(context, path);
+		String name = NacSound.getName(context, path);
 
 		return (!name.isEmpty()) ? name
 			: NacSharedPreferences.DEFAULT_SOUND_SUMMARY;

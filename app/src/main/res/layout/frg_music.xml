@@ -6,6 +6,24 @@
 	android:layout_height="match_parent"
 	android:orientation="vertical">
 
+	<TextView
+		android:id="@+id/path"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/pt_frg_music_path"
+		android:paddingBottom="@dimen/pb_frg_music_path"
+		android:paddingStart="@dimen/pl_frg_music_path"
+		android:paddingEnd="@dimen/pr_frg_music_path"
+		android:textSize="@dimen/tsz_frg_music_path"
+		android:text=""
+		/>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1dp"
+		android:background="@color/white"
+		/>
+
 	<ScrollView
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
