@@ -1,6 +1,8 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.format.DateFormat;
 import java.util.Calendar;
 import java.util.EnumSet;
@@ -9,6 +11,7 @@ import java.util.EnumSet;
  * Alarm object.
  */
 public class NacAlarm
+	implements Parcelable
 {
 
 	/**
@@ -519,6 +522,33 @@ public class NacAlarm
 	}
 
 	/**
+	 * Populate values with input parcel.
+	 */
+	public NacAlarm(Parcel input)
+	{
+		this.setOnChangeListener(null);
+		this.setId(input.readInt());
+		this.setEnabled((input.readInt() != 0));
+		this.setHour(input.readInt());
+		this.setMinute(input.readInt());
+		this.setDays(input.readInt());
+		this.setRepeat((input.readInt() != 0));
+		this.setVibrate((input.readInt() != 0));
+		this.setSoundType(input.readInt());
+		this.setSoundPath(input.readString());
+		this.setSoundName(input.readString());
+		this.setName(input.readString());
+	}
+
+	/**
+	 * Check if any days are selected.
+	 */
+	public boolean areDaysSelected()
+	{
+		return !this.getDays().isEmpty();
+	}
+
+	/**
 	 * Call the listener when the alarm info has changed.
 	 */
 	public void changed()
@@ -557,6 +587,15 @@ public class NacAlarm
 			.setSoundName(this.getSoundName())
 			.setName(this.getName())
 			.build();
+	}
+
+	/**
+	 * Describe contents (required for Parcelable).
+	 */
+	@Override
+	public int describeContents()
+	{
+		return 0;
 	}
 
 	/**
@@ -740,7 +779,7 @@ public class NacAlarm
 	 */
 	public boolean isOneTimeAlarm()
 	{
-		return (!this.getRepeat() || this.getDays().isEmpty());
+		return (!this.getRepeat() || !this.areDaysSelected());
 	}
 
 	/**
@@ -960,5 +999,41 @@ public class NacAlarm
 			this.toggleDay(d);
 		}
 	}
+
+	/**
+	 * Write data into parcel (required for Parcelable).
+	 */
+	@Override
+	public void writeToParcel(Parcel output, int flags)
+	{
+		output.writeInt(this.getId());
+		output.writeInt(this.getEnabled() ? 1 : 0);
+		output.writeInt(this.getHour());
+		output.writeInt(this.getMinute());
+		output.writeInt(NacCalendar.daysToValue(this.getDays()));
+		output.writeInt(this.getRepeat() ? 1 : 0);
+		output.writeInt(this.getVibrate() ? 1 : 0);
+		output.writeInt(this.getSoundType());
+		output.writeString(this.getSoundPath());
+		output.writeString(this.getSoundName());
+		output.writeString(this.getName());
+	}
+
+	/**
+	 * Generate parcel (required for Parcelable).
+	 */
+	public static final Parcelable.Creator<NacAlarm> CREATOR = new
+		Parcelable.Creator<NacAlarm>()
+	{
+		public NacAlarm createFromParcel(Parcel input)
+		{
+			return new NacAlarm(input);
+		}
+
+		public NacAlarm[] newArray(int size)
+		{
+			return new NacAlarm[size];
+		}
+	};
 
 }

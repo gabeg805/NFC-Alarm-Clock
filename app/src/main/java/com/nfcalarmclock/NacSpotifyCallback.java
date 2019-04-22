@@ -37,6 +37,23 @@ import kaaes.spotify.webapi.android.models.SavedTrack;
 import kaaes.spotify.webapi.android.models.UserPrivate;
 import retrofit.client.Response;
 
+import com.spotify.android.appremote.api.ConnectionParams;
+import com.spotify.android.appremote.api.Connector;
+import com.spotify.android.appremote.api.SpotifyAppRemote;
+
+import com.spotify.android.appremote.api.error.AuthenticationFailedException;
+import com.spotify.android.appremote.api.error.CouldNotFindSpotifyApp;
+import com.spotify.android.appremote.api.error.LoggedOutException;
+import com.spotify.android.appremote.api.error.NotLoggedInException;
+import com.spotify.android.appremote.api.error.OfflineModeException;
+import com.spotify.android.appremote.api.error.SpotifyConnectionTerminatedException;
+import com.spotify.android.appremote.api.error.SpotifyDisconnectedException;
+import com.spotify.android.appremote.api.error.SpotifyRemoteServiceException;
+import com.spotify.android.appremote.api.error.UnsupportedFeatureVersionException;
+import com.spotify.android.appremote.api.error.UserNotAuthorizedException;
+
+import java.util.concurrent.TimeUnit;
+
 /**
  * Method call order:
  *
@@ -44,6 +61,7 @@ import retrofit.client.Response;
  * request() -> requestSuccess() -> onRequestSuccess()
  */
 public class NacSpotifyCallback
+	implements Connector.ConnectionListener
 {
 
 	/**
@@ -79,6 +97,11 @@ public class NacSpotifyCallback
 	}
 
 	/**
+	 * The application context.
+	 */
+	private final Context mContext;
+
+	/**
 	 * Spotify API.
 	 */
 	private final SpotifyApi mSpotifyApi;
@@ -87,6 +110,11 @@ public class NacSpotifyCallback
 	 * Spotify service.
 	 */
 	private final SpotifyService mSpotifyService;
+
+	/**
+	 * Spotify remote.
+	 */
+	private SpotifyAppRemote mSpotifyRemote;
 
 	/**
 	 * User ID.
@@ -119,12 +147,16 @@ public class NacSpotifyCallback
 
 	/**
 	 */
-	public NacSpotifyCallback(SpotifyApi api, SpotifyService service)
+	public NacSpotifyCallback(Context context, SpotifyApi api,
+		SpotifyService service)
 	{
+		this.mContext = context;
 		this.mSpotifyApi = api;
 		this.mSpotifyService = service;
+		this.mSpotifyRemote = null;
 		this.mRequestOrder = new Request[] { Request.TOP_TRACKS,
-			Request.TOP_ARTISTS, Request.MY_PLAYLISTS, Request.MY_SAVED_ALBUMS };
+			Request.TOP_ARTISTS, Request.MY_PLAYLISTS,
+			Request.MY_SAVED_ALBUMS };
 		this.mRequestPosition = -1;
 		this.mRequestFailedListener = null;
 		this.mRequestSuccessListener = null;
@@ -171,6 +203,14 @@ public class NacSpotifyCallback
 	private int getRequestPosition()
 	{
 		return this.mRequestPosition;
+	}
+
+	/**
+	 * @return The spotify remote.
+	 */
+	private SpotifyAppRemote getRemote()
+	{
+		return this.mSpotifyRemote;
 	}
 
 	/**
@@ -274,6 +314,91 @@ public class NacSpotifyCallback
 		}
 
 		return i;
+	}
+
+	/**
+	 * Play the uri.
+	 */
+
+    private void connected() {
+        // Play a playlist
+        mSpotifyRemote.getPlayerApi().play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL");
+
+        // Subscribe to PlayerState
+        //mSpotifyAppRemote.getPlayerApi()
+        //        .subscribeToPlayerState()
+        //        .setEventCallback(playerState -> {
+        //            final Track track = playerState.track;
+        //            if (track != null) {
+        //                Log.d("MainActivity", track.name + " by " + track.artist.name);
+        //            }
+        //        });
+    }
+
+	public void play(String uri)
+	{
+		this.setSpotifyRemote();
+
+		for (int sec=0; (this.mSpotifyRemote == null) && (sec < 5); sec++)
+		{
+			try
+			{
+				TimeUnit.SECONDS.sleep(1);
+			}
+			catch (InterruptedException e)
+			{
+				return;
+			}
+		}
+
+		if (this.mSpotifyRemote != null)
+		{
+			this.mSpotifyRemote.getPlayerApi().play(uri);
+		}
+		else
+		{
+			NacUtility.quickToast(this.mContext, "Unable to play Uri : "+uri);
+		}
+	}
+
+	public void onConnected(SpotifyAppRemote spotifyAppRemote) {
+		NacUtility.printf("MainActivity WORKEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+		mSpotifyRemote = spotifyAppRemote;
+
+		// Now you can start interacting with App Remote
+		//connected();
+
+	}
+
+	public void onFailure(Throwable error) {
+		NacUtility.printf("This SHIT DID NOT WORK!");
+		if (error instanceof SpotifyRemoteServiceException) {
+			if (error.getCause() instanceof SecurityException) {
+				NacUtility.quickToast(this.mContext, "SecurityException");
+			} else if (error.getCause() instanceof IllegalStateException) {
+				NacUtility.quickToast(this.mContext, "IllegalStateException");
+			}
+		} else if (error instanceof NotLoggedInException) {
+			NacUtility.quickToast(this.mContext, "NotLoggedInException");
+		} else if (error instanceof AuthenticationFailedException) {
+			NacUtility.quickToast(this.mContext, "AuthenticationFailedException");
+		} else if (error instanceof CouldNotFindSpotifyApp) {
+			NacUtility.quickToast(this.mContext, "CouldNotFindSpotifyApp");
+		} else if (error instanceof LoggedOutException) {
+			NacUtility.quickToast(this.mContext, "LoggedOutException");
+		} else if (error instanceof OfflineModeException) {
+			NacUtility.quickToast(this.mContext, "OfflineModeException");
+		} else if (error instanceof UserNotAuthorizedException) {
+			NacUtility.quickToast(this.mContext, "UserNotAuthorizedException");
+		} else if (error instanceof UnsupportedFeatureVersionException) {
+			NacUtility.quickToast(this.mContext, "UnsupportedFeatureVersionException");
+		} else if (error instanceof SpotifyDisconnectedException) {
+			NacUtility.quickToast(this.mContext, "SpotifyDisconnectedException");
+		} else if (error instanceof SpotifyConnectionTerminatedException) {
+			NacUtility.quickToast(this.mContext, "SpotifyConnectionTerminatedException");
+		} else {
+			NacUtility.quickToast(this.mContext, String.format("Connection failed: %s", error));
+		}
 	}
 
 	/**
@@ -418,6 +543,27 @@ public class NacSpotifyCallback
 	}
 
 	/**
+	 * Set the remote spotify app.
+	 */
+	private void setSpotifyRemote()
+	{
+		if (this.mSpotifyRemote != null)
+		{
+			return;
+		}
+
+        ConnectionParams connectionParams =
+                new ConnectionParams.Builder(NacSpotify.CLIENT_ID)
+						.setAuthMethod(ConnectionParams.AuthMethod.NONE)
+                        .setRedirectUri(NacSpotify.REDIRECT_URI)
+                        .showAuthView(false)
+                        .build();
+						//.setAuthMethod(ConnectionParams.AuthMethod.APP_ID)
+
+        SpotifyAppRemote.connect(this.mContext, connectionParams, this);
+	}
+
+	/**
 	 * Sleep for the set amount of time.
 	 */
 	private void sleep(long milliseconds)
@@ -544,7 +690,7 @@ public class NacSpotifyCallback
 
 			for (PlaylistTrack t : playlist.tracks.items)
 			{
-				ids.add(t.track.id);
+				ids.add(t.track.uri);
 				names.add(t.track.name);
 				artists.add(t.track.artists.get(0).name);
 			}

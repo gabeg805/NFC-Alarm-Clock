@@ -6,6 +6,8 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -17,6 +19,7 @@ import java.util.Locale;
  * Sound utility class.
  */
 public class NacSound
+	implements Parcelable
 {
 
 	/**
@@ -70,12 +73,56 @@ public class NacSound
 	private String mName;
 
 	/**
+	 * Extra data the user may want to save.
+	 */
+	private String mData;
+
+	/**
+	 */
+	public NacSound(Context context, String path)
+	{
+		this.setType(NacSound.getType(path));
+		this.setPath(path);
+		this.setName(NacSound.getName(context, path));
+		this.setData("");
+	}
+
+	/**
 	 */
 	public NacSound(int type, String path, String name)
 	{
-		this.mType = type;
-		this.mPath = path;
-		this.mName = name;
+		this.setType(type);
+		this.setPath(path);
+		this.setName(name);
+		this.setData("");
+	}
+
+	/**
+	 * Populate values with input parcel.
+	 */
+	public NacSound(Parcel input)
+	{
+		this.setType(input.readInt());
+		this.setPath(input.readString());
+		this.setName(input.readString());
+		this.setData(input.readString());
+	}
+
+	/**
+	 * Describe contents (required for Parcelable).
+	 */
+	@Override
+	public int describeContents()
+	{
+		return 0;
+	}
+
+	/**
+	 * @return The extra data.
+	 */
+	public String getData()
+	{
+		return this.mData;
 	}
 
 	/**
@@ -101,6 +148,69 @@ public class NacSound
 	{
 		return this.mType;
 	}
+
+	/**
+	 * Set the data.
+	 */
+	public void setData(String data)
+	{
+		this.mData = data;
+	}
+
+	/**
+	 * Set the sound name.
+	 */
+	public void setName(String name)
+	{
+		this.mName = name;
+	}
+
+	/**
+	 * Set the sound path.
+	 */
+	public void setPath(String path)
+	{
+		this.mPath = path;
+	}
+
+	/**
+	 * Set the sound type.
+	 */
+	public void setType(int type)
+	{
+		this.mType = type;
+	}
+
+	/**
+	 * Write data into parcel (required for Parcelable).
+	 */
+	@Override
+	public void writeToParcel(Parcel output, int flags)
+	{
+		output.writeInt(this.getType());
+		output.writeString(this.getPath());
+		output.writeString(this.getName());
+		output.writeString(this.getData());
+	}
+
+	/**
+	 * Generate parcel (required for Parcelable).
+	 */
+	public static final Parcelable.Creator<NacSound> CREATOR = new
+		Parcelable.Creator<NacSound>()
+	{
+		public NacSound createFromParcel(Parcel input)
+		{
+			return new NacSound(input);
+		}
+
+		public NacSound[] newArray(int size)
+		{
+			return new NacSound[size];
+		}
+	};
+
+
 
 	/**
 	 * @param  file  The File object.
@@ -333,7 +443,11 @@ public class NacSound
 	 */
 	public static int getType(String path)
 	{
-		if (NacSound.isRingtone(path))
+		if (NacSound.isNone(path))
+		{
+			return TYPE_NONE;
+		}
+		else if (NacSound.isRingtone(path))
 		{
 			return TYPE_RINGTONE;
 		}

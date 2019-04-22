@@ -219,7 +219,7 @@ public class NacAlarmActivity
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.act_alarm);
 
-		this.mAlarm = NacAlarmParcel.getAlarm(getIntent());
+		this.mAlarm = NacIntent.getAlarm(getIntent());
 		this.mPlayer = new NacMediaPlayer(this);
 		this.mVibrator = new NacVibrator(this);
 		this.mHandler = new Handler();

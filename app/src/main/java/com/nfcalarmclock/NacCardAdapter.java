@@ -149,10 +149,11 @@ public class NacCardAdapter
 
 		// Using update instead of add for testing. Things should never get
 		// canceled in update, only added
-		Intent intent = this.getIntent(alarm, "add");
+		Context context = this.getContext();
+		Intent intent = NacIntent.createService(context, "add", alarm);
 		this.mWasAdded = true;
 
-		this.getContext().startService(intent);
+		context.startService(intent);
 		this.getAlarms().add(position, alarm);
 		notifyItemInserted(position);
 
@@ -201,9 +202,10 @@ public class NacCardAdapter
 	public int delete(int position)
 	{
 		NacAlarm alarm = this.get(position);
-		Intent intent = this.getIntent(alarm, "delete");
+		Context context = this.getContext();
+		Intent intent = NacIntent.createService(context, "delete", alarm);
 
-		this.getContext().startService(intent);
+		context.startService(intent);
 		this.getAlarms().remove(position);
 		notifyItemRemoved(position);
 		this.undo(alarm, position, Undo.Type.DELETE);
@@ -261,25 +263,6 @@ public class NacCardAdapter
 		}
 
 		return 0;
-	}
-
-	/**
-	 * @return The intent that will be used when starting the service for
-	 *         excecuting schedule and database updates.
-	 */
-	private Intent getIntent(NacAlarm alarm, String message)
-	{
-		Intent intent = new Intent(this.getContext(),
-			NacService.class);
-		Bundle bundle = new Bundle();
-		NacAlarmParcel parcel = new NacAlarmParcel(alarm);
-		Uri uri = Uri.parse(message);
-
-		bundle.putParcelable("parcel", parcel);
-		intent.putExtra("bundle", bundle);
-		intent.setData(uri);
-
-		return intent;
 	}
 
 	/**
@@ -407,9 +390,10 @@ public class NacCardAdapter
 	@Override
 	public void onChange(NacAlarm alarm)
 	{
-		Intent intent = this.getIntent(alarm, "change");
+		Context context = this.getContext();
+		Intent intent = NacIntent.createService(context, "change", alarm);
 
-		this.getContext().startService(intent);
+		context.startService(intent);
 	}
 
 	/**

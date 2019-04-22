@@ -43,17 +43,20 @@ public class NacScheduler
 		{
 			return;
 		}
-
-		List<Calendar> calendars = NacCalendar.nextCalendars(alarm);
-
-		if (calendars.isEmpty())
+		else if (alarm.isOneTimeAlarm())
 		{
-			calendars.add(NacCalendar.toCalendarTodayOrTomorrow(alarm));
+			Calendar next = NacCalendar.toCalendarTodayOrTomorrow(alarm);
+
+			this.add(alarm, next);
 		}
-
-		for (Calendar c : calendars)
+		else
 		{
-			this.add(alarm, c);
+			List<Calendar> calendars = NacCalendar.nextCalendars(alarm);
+
+			for (Calendar c : calendars)
+			{
+				this.add(alarm, c);
+			}
 		}
 	}
 
@@ -162,14 +165,17 @@ public class NacScheduler
 	 */
 	public Intent getReceiverIntent(NacAlarm alarm)
 	{
-		Intent intent = this.getReceiverIntent();
-		Bundle bundle = new Bundle();
-		NacAlarmParcel parcel = new NacAlarmParcel(alarm);
+		return NacIntent.toIntent(this.getContext(),
+			NacAlarmBroadcastReceiver.class, alarm);
 
-		bundle.putParcelable("parcel", parcel);
-		intent.putExtra("bundle", bundle);
+		//Intent intent = this.getReceiverIntent();
+		//Bundle bundle = new Bundle();
+		//NacAlarmParcel parcel = new NacAlarmParcel(alarm);
 
-		return intent;
+		//bundle.putParcelable("parcel", parcel);
+		//intent.putExtra("bundle", bundle);
+
+		//return intent;
 	}
 
 	/**

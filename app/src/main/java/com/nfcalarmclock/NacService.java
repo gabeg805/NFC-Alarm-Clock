@@ -23,38 +23,54 @@ public class NacService
 	@Override
 	protected void onHandleIntent(Intent intent)
 	{
-		String data = intent.getDataString();
-		//Bundle bundle = NacAlarmParcel.getExtra(intent);
-		//NacAlarm alarm = NacAlarmParcel.getAlarm(bundle);
-		NacAlarm alarm = NacAlarmParcel.getAlarm(intent);
-		NacDatabase db = new NacDatabase(this);
-		NacScheduler scheduler = new NacScheduler(this);
+		String key = intent.getDataString();
+		NacAlarm alarm = NacIntent.getAlarm(intent);
+		NacSound sound = NacIntent.getSound(intent);
 
-		if (data.equals("add"))
+		if (alarm != null)
 		{
-			db.add(alarm);
-			scheduler.update(alarm);
-		}
-		else if (data.equals("delete"))
-		{
-			db.delete(alarm);
-			scheduler.cancel(alarm);
-		}
-		else if (data.equals("change"))
-		{
-			db.update(alarm);
-			scheduler.update(alarm);
-		}
-		//else if (data.equals())
-		//{
-		//	scheduler.cancel(fromAlarm);
-		//	scheduler.cancel(toAlarm);
-		//	db.swap(fromAlarm, toAlarm);
-		//	scheduler.add(fromAlarm);
-		//	scheduler.add(toAlarm);
-		//}
+			NacUtility.printf("Doing %s to alarm", key);
+			NacDatabase db = new NacDatabase(this);
+			NacScheduler scheduler = new NacScheduler(this);
+			alarm.print();
 
-		db.close();
+			if (key.equals("add"))
+			{
+				db.add(alarm);
+				scheduler.update(alarm);
+			}
+			else if (key.equals("delete"))
+			{
+				db.delete(alarm);
+				scheduler.cancel(alarm);
+			}
+			else if (key.equals("change"))
+			{
+				db.update(alarm);
+				scheduler.update(alarm);
+			}
+			//else if (data.equals())
+			//{
+			//	scheduler.cancel(fromAlarm);
+			//	scheduler.cancel(toAlarm);
+			//	db.swap(fromAlarm, toAlarm);
+			//	scheduler.add(fromAlarm);
+			//	scheduler.add(toAlarm);
+			//}
+
+			db.close();
+		}
+		else if (sound != null)
+		{
+			NacUtility.printf("Doing %s to sound", key);
+			NacSharedPreferences shared = new NacSharedPreferences(this);
+
+			shared.getInstance().edit().putString(key, sound.getPath()).apply();
+		}
+		else
+		{
+			NacUtility.printf("Not doing shit with %s", key);
+		}
 	}
 
 }

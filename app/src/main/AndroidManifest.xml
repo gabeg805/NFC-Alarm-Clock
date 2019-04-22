@@ -9,6 +9,7 @@
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
 	<!--
 	<uses-permission android:name="android.permission.INTERNET" />
 	-->
@@ -36,32 +37,12 @@
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
-
-			<!-- An intent filter that will receive the response
-			     from the authentication service -->
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-
-				<category android:name="android.intent.category.DEFAULT" />
-				<category android:name="android.intent.category.BROWSABLE" />
-
-				<!-- this needs to match the scheme and host of the redirect URI
-				     as defined in My applications page -->
-				<data
-					android:host="callback"
-					android:scheme="nfcalarmclock"
-					/>
-			</intent-filter>
-
 		</activity>
 
 		<!-- Sound activity -->
 		<activity
-			android:name=".NacSoundActivity">
-		</activity>
-
-		<activity
-			android:name=".NacPagerFragment">
+			android:name=".NacPagerFragment"
+			android:launchMode="singleInstance">
 
 			<intent-filter>
 				<action android:name="android.intent.action.SEARCH" />
@@ -71,8 +52,24 @@
 				android:name="android.app.searchable"
 				android:resource="@xml/searchable"
 				/>
-
 		</activity>
+
+			<!-- An intent filter that will receive the response
+			     from the authentication service -->
+<!--
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+
+				<data
+					android:host="callback"
+					android:scheme="nfcalarmclock"
+					/>
+			</intent-filter>
+			-->
+
 
 		<!-- Alarm activity -->
 		<activity
@@ -89,10 +86,12 @@
 		</activity>
 
 		<!-- Login to spotify -->
+		<!--
 		<activity
 			android:name="com.spotify.sdk.android.authentication.LoginActivity"
 			android:theme="@android:style/Theme.Translucent.NoTitleBar"
 			/>
+			-->
 
 		<!-- Call the alarm activity when an alarm goes off -->
 		<receiver

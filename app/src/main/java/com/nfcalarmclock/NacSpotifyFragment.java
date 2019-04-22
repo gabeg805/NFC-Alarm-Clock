@@ -2,6 +2,7 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -49,17 +50,16 @@ import android.os.AsyncTask;
 import android.widget.ImageView;
 import android.content.res.Resources;
 
-import com.spotify.android.appremote.api.ConnectionParams;
-import com.spotify.android.appremote.api.Connector;
-import com.spotify.android.appremote.api.SpotifyAppRemote;
+import java.net.URL;
+import java.net.HttpURLConnection;
+import java.io.OutputStreamWriter;
 
 /**
  */
 public class NacSpotifyFragment
 	extends NacMediaFragment
 	implements View.OnClickListener,
-		NacSpotifyCallback.OnRequestSuccessListener,
-		Connector.ConnectionListener
+		NacSpotifyCallback.OnRequestSuccessListener
 {
 
 	/**
@@ -126,21 +126,24 @@ public class NacSpotifyFragment
 			//AuthenticationClient.openDownloadSpotifyActivity(activity);
 			//activity.finish();
 			//return;
+			//"app-remote-control",
+			//"playlist-read"
+			//"user-read-recently-played" (BETA)
 		}
 
-		AuthenticationRequest request = new AuthenticationRequest.Builder(
-			NacSpotify.CLIENT_ID, AuthenticationResponse.Type.TOKEN,
-			NacSpotify.REDIRECT_URI)
-			.setScopes(new String[] { 
-				"playlist-read-private", 
-				"streaming", "user-library-read", 
-				"user-read-private", "user-top-read" })
-			.build();
-		//"app-remote-control"
-		//"playlist-read"
-		//"user-modify-playback-state"
-		//"user-read-recently-played" (BETA)
+		AuthenticationRequest request =
+			new AuthenticationRequest.Builder(NacSpotify.CLIENT_ID,
+			AuthenticationResponse.Type.TOKEN, NacSpotify.REDIRECT_URI)
+				.setScopes(new String[] { 
+					"user-modify-playback-state",
+					"playlist-read-private", 
+					"streaming", "user-library-read", 
+					"user-read-private", "user-top-read" })
+				.build();
 
+		//AuthenticationClient.openLoginInBrowser(activity, request);
+		//AuthenticationClient.openLoginActivity(activity,
+		//	NacSpotify.REQUEST_CODE, request);
 		Intent intent = AuthenticationClient.createLoginActivityIntent(
 			activity, request);
 		startActivityForResult(intent, NacSpotify.REQUEST_CODE);
@@ -208,11 +211,6 @@ public class NacSpotifyFragment
 		}
 	}
 
-	private boolean isSelectRequest(NacSpotifyCallback.Request request)
-	{
-		return (request == NacSpotifyCallback.Request.PLAYLIST);
-	}
-
 	/**
 	 * @return The selected view.
 	 */
@@ -246,12 +244,33 @@ public class NacSpotifyFragment
 	}
 
 	/**
+	 * Check if the request corresponds to a selection.
+	 */
+	private boolean isSelectRequest(NacSpotifyCallback.Request request)
+	{
+		return (request == NacSpotifyCallback.Request.PLAYLIST);
+	}
+
+	/**
 	 * Create a new instance of this fragment.
 	 */
 	public static Fragment newInstance(NacAlarm alarm)
 	{
 		Fragment fragment = new NacSpotifyFragment();
-		Bundle bundle = NacAlarmParcel.toBundle(alarm);
+		Bundle bundle = NacBundle.toBundle(alarm);
+
+		fragment.setArguments(bundle);
+
+		return fragment;
+	}
+
+	/**
+	 * Create a new instance of this fragment.
+	 */
+	public static Fragment newInstance(NacSound sound)
+	{
+		Fragment fragment = new NacSpotifyFragment();
+		Bundle bundle = NacBundle.toBundle(sound);
 
 		fragment.setArguments(bundle);
 
@@ -266,7 +285,6 @@ public class NacSpotifyFragment
 	{
 		super.onActivityResult(requestCode, resultCode, intent);
 
-		// Check if result comes from the correct activity
 		if (requestCode == NacSpotify.REQUEST_CODE)
 		{
 			AuthenticationResponse response = AuthenticationClient.getResponse(
@@ -274,19 +292,17 @@ public class NacSpotifyFragment
 
 			switch (response.getType())
 			{
-				// Response was successful and contains auth token
 				case TOKEN:
 					this.startSpotify(response);
 					break;
-				// Auth flow returned an error
 				case ERROR:
-					NacUtility.quickToast(getContext(), "ERROR actvity result! %s"+response.getError());
-					NacUtility.printf("ERROR actvity result! %s", response.getError());
+					NacUtility.quickToast(getContext(),
+						"Unable to authenticate Spotify credentials. "+response.getError()+"("+response.getCode()+")"+" "+response.getState());
+					AuthenticationClient.stopLoginActivity(getActivity(),
+						NacSpotify.REQUEST_CODE);
 					break;
-				// Most likely auth flow was cancelled
 				default:
 					NacUtility.quickToast(getContext(), "Default actvity result!");
-					NacUtility.printf("Default actvity result!");
 					break;
 			}
 		}
@@ -305,7 +321,8 @@ public class NacSpotifyFragment
 		}
 		else if (view instanceof NacImageSubTextButton)
 		{
-			NacUtility.printf("Id : %s | Spotify Remote : %b", (String) view.getTag(), mSpotifyRemote != null);
+			//new AsyncPlay(this.mToken).execute((String) view.getTag());
+			this.mSpotifyRequester.play((String)view.getTag());
 			return;
 		}
 
@@ -336,6 +353,8 @@ public class NacSpotifyFragment
 		return inflater.inflate(R.layout.frg_spotify, container, false);
 	}
 
+	/**
+	 */
 	@Override
 	protected void onInitialSelection()
 	{
@@ -370,37 +389,18 @@ public class NacSpotifyFragment
 	/**
 	 * Start spotify.
 	 */
-	private SpotifyAppRemote mSpotifyRemote;
+	private String mToken;
 
 	private void startSpotify(AuthenticationResponse response)
 	{
 		String token = response.getAccessToken();
+		this.mToken = token;
 		SpotifyApi api = new SpotifyApi().setAccessToken(token);
 		SpotifyService spotify = api.getService();
-		this.mSpotifyRequester = new NacSpotifyCallback(api, spotify);
+		this.mSpotifyRequester = new NacSpotifyCallback(getContext(), api, spotify);
 
-		ConnectionParams connectionParams =
-			new ConnectionParams.Builder(NacSpotify.CLIENT_ID)
-				.setRedirectUri(NacSpotify.REDIRECT_URI)
-				.showAuthView(true)
-				.build();
-
-		SpotifyAppRemote.connect(getContext(), connectionParams, this);
 		this.mSpotifyRequester.setOnRequestSuccessListener(this);
 		this.mSpotifyRequester.start();
-	}
-
-	@Override
-	public void onConnected(SpotifyAppRemote spotifyAppRemote)
-	{
-		NacUtility.printf("MainActivity WORKEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-		mSpotifyRemote = spotifyAppRemote;
-	}
-
-	@Override
-	public void onFailure(Throwable throwable)
-	{
-		NacUtility.printf("MainActivity: %s", throwable.getMessage());
 	}
 
 	/**
@@ -416,18 +416,18 @@ public class NacSpotifyFragment
 			String id = ids.get(i);
 			String name = names.get(i);
 			String info = (data != null) ? data.get(i) : "";
-			View view;
 			
 			if (this.isSelectRequest(request))
 			{
 				NacUtility.printf("Selected playlist track : %s", name);
-				view = new NacImageSubTextButton(context);
+				NacImageSubTextButton button = new NacImageSubTextButton(context);
 
-				((NacImageSubTextButton)view).setTextTitle(name);
-				((NacImageSubTextButton)view).setTextSubtitle(info);
-				((NacImageSubTextButton)view).setImageBackground(R.mipmap.play);
-				view.setTag(id);
-				view.setOnClickListener(this);
+				button.setTextTitle(name);
+				button.setTextSubtitle(info);
+				button.setImageBackground(R.mipmap.play);
+				button.setTag(id);
+				button.setOnClickListener(this);
+				root.addView(button);
 			}
 			else
 			{
@@ -438,11 +438,8 @@ public class NacSpotifyFragment
 				cover.setTag(id);
 				cover.setOnClickListener(this);
 				new AsyncImageDownload(cover).execute(info);
-
-				view = cover;
+				root.addView(cover);
 			}
-
-			root.addView(view);
 		}
 
 		if (names.size() == 0)
@@ -453,6 +450,73 @@ public class NacSpotifyFragment
 
 	/**
 	 */
+	private class AsyncPlay
+		extends AsyncTask<String, String, Integer>
+	{
+
+		/**
+		 */
+		private String mToken;
+
+		/**
+		 */
+		public AsyncPlay(String token)
+		{
+			this.mToken = token;
+		}
+
+		/**
+		 */
+		@Override
+		protected Integer doInBackground(String... params)
+		{
+			try
+			{
+				URL url = new URL("https://api.spotify.com/v1/me/player/play");
+				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+				connection.setRequestProperty("Authorization", "Bearer "+this.mToken);
+				connection.setRequestMethod("PUT");
+				connection.setDoOutput(true);
+				connection.setRequestProperty("Content-Type", "application/json");
+				connection.setRequestProperty("Accept", "application/json");
+				OutputStreamWriter osw = new OutputStreamWriter(connection.getOutputStream());
+
+				//{"uris": ["spotify:track:4iV5W9uYEdYUVa79Axb7Rh", "spotify:track:1301WleyT98MSxVHPZCA6M"]}
+
+				String payload = String.format("{\"uris\": [\"spotify:track:%1$s\"]}", params[0]);
+				NacUtility.printf("Payload : %s", payload);
+
+				osw.write(payload);
+				osw.flush();
+				osw.close();
+				NacUtility.quickToast(getContext(), "Connection response : "+String.valueOf(connection.getResponseCode()));
+				return connection.getResponseCode();
+			}
+			catch (IOException e)
+			{
+				NacUtility.printf("IOexception when trying to put play :(");
+				return -1;
+			}
+		}
+
+		/**
+		 * @return The token.
+		 */
+		private String getToken()
+		{
+			return this.mToken;
+		}
+
+		/**
+		 */
+		@Override
+		protected void onPostExecute(Integer result)
+		{
+			NacUtility.printf("onPostExecute : %d", result);
+		}
+
+	}
+
 	private class AsyncImageDownload
 		extends AsyncTask<String, String, Bitmap>
 	{

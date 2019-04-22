@@ -38,9 +38,19 @@ public class NacPagerFragment
 	private TabLayout mTabLayout;
 
 	/**
+	 * List of fragments.
+	 */
+	private Fragment[] mFragments;
+
+	/**
 	 * The alarm.
 	 */
 	private NacAlarm mAlarm;
+
+	/**
+	 * The sound.
+	 */
+	private NacSound mSound;
 
 	/**
 	 * Current tab position.
@@ -50,8 +60,27 @@ public class NacPagerFragment
 	/**
 	 * The tab titles.
 	 */
+	//private static final String[] mTitles = new String[] { "Browse",
+	//	"Ringtone", "Spotify" };
 	private static final String[] mTitles = new String[] { "Browse",
-		"Ringtone", "Spotify" };
+		"Ringtone" };
+
+	/**
+	 * Select a fragment.
+	 */
+	private void fragmentSelected(Fragment selectedFragment)
+	{
+		int position = this.getPosition();
+		Fragment tabFragment = this.getFragment(position);
+
+		if ((tabFragment == null) || (selectedFragment == null)
+			|| (selectedFragment != tabFragment))
+		{
+			return;
+		}
+
+		((NacMediaFragment)selectedFragment).onSelected();
+	}
 
 	/**
 	 * @return The alarm.
@@ -66,7 +95,23 @@ public class NacPagerFragment
 	 */
 	private Fragment getFragment(int position)
 	{
-		return this.mFragments[position];
+		return this.getFragments()[position];
+	}
+
+	/**
+	 * @return The list of fragments.
+	 */
+	private Fragment[] getFragments()
+	{
+		return this.mFragments;
+	}
+
+	/**
+	 * @return The view page adapter.
+	 */
+	private NacPagerAdapter getPagerAdapter()
+	{
+		return this.mAdapter;
 	}
 
 	/**
@@ -75,6 +120,36 @@ public class NacPagerFragment
 	private int getPosition()
 	{
 		return this.mPosition;
+	}
+
+	/**
+	 * @return The sound.
+	 */
+	private NacSound getSound()
+	{
+		return this.mSound;
+	}
+
+	/**
+	 * @return The sound type.
+	 */
+	private int getSoundType()
+	{
+		NacAlarm alarm = this.getAlarm();
+		NacSound sound = this.getSound();
+
+		if (alarm != null)
+		{
+			return alarm.getSoundType();
+		}
+		else if (sound != null)
+		{
+			return sound.getType();
+		}
+		else
+		{
+			return NacSound.TYPE_NONE;
+		}
 	}
 
 	/**
@@ -94,6 +169,39 @@ public class NacPagerFragment
 	}
 
 	/**
+	 * @return The view pager.
+	 */
+	private ViewPager getViewPager()
+	{
+		return this.mPager;
+	}
+
+	/**
+	 */
+	@Override
+	public void onAttachFragment(Fragment fragment)
+	{
+		super.onAttachFragment(fragment);
+
+		Fragment[] list = this.getFragments();
+
+		if (fragment instanceof NacMusicFragment)
+		{
+			list[0] = fragment;
+		}
+		else if (fragment instanceof NacRingtoneFragment)
+		{
+			list[1] = fragment;
+		}
+		else if (fragment instanceof NacSpotifyFragment)
+		{
+			list[2] = fragment;
+		}
+
+		this.fragmentSelected(fragment);
+	}
+
+	/**
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -103,53 +211,18 @@ public class NacPagerFragment
 
 		Intent intent = getIntent();
 		FragmentManager manager = getSupportFragmentManager();
-		this.mAlarm = NacAlarmParcel.getAlarm(intent);
+		this.mAlarm = NacIntent.getAlarm(intent);
+		this.mSound = NacIntent.getSound(intent);
 		this.mPager = (ViewPager) findViewById(R.id.act_sound);
 		this.mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
-		this.mAdapter = new NacPagerAdapter(manager, this.mAlarm, this.mTitles);
-		this.mFragments = new Fragment[3];
+		//this.mAdapter = new NacPagerAdapter(manager, this.mAlarm, this.mTitles);
+		this.mAdapter = new NacPagerAdapter(manager);
+		this.mFragments = new Fragment[this.mTitles.length];
 		this.mPosition = 0;
 
 		this.setupPager();
 		this.setTabColors();
 		this.selectTab();
-	}
-
-	private Fragment[] mFragments;
-
-	@Override
-	public void onAttachFragment(Fragment fragment)
-	{
-		super.onAttachFragment(fragment);
-
-		if (fragment instanceof NacMusicFragment)
-		{
-			this.mFragments[0] = fragment;
-		}
-		else if (fragment instanceof NacRingtoneFragment)
-		{
-			this.mFragments[1] = fragment;
-		}
-		else if (fragment instanceof NacSpotifyFragment)
-		{
-			this.mFragments[2] = fragment;
-		}
-
-		this.fragmentSelected(fragment);
-	}
-
-	private void fragmentSelected(Fragment selectedFragment)
-	{
-		int position = this.getPosition();
-		Fragment tabFragment = this.getFragment(position);
-
-		if ((tabFragment == null) || (selectedFragment == null)
-			|| (selectedFragment != tabFragment))
-		{
-			return;
-		}
-
-		((NacMediaFragment)selectedFragment).onSelected();
 	}
 
 	@Override
@@ -206,8 +279,8 @@ public class NacPagerFragment
 	 */
 	private void selectTab()
 	{
-		String[] titles = this.getTitles();
-		int type = this.getAlarm().getSoundType();
+		//int type = this.getAlarm().getSoundType();
+		int type = this.getSoundType();
 
 		if (NacSound.isNone(type))
 		{
@@ -232,7 +305,8 @@ public class NacPagerFragment
 	 */
 	private void selectTab(int position)
 	{
-		Tab tab = this.mTabLayout.getTabAt(position);
+		TabLayout tabLayout = this.getTabLayout();
+		Tab tab = tabLayout.getTabAt(position);
 
 		tab.select();
 		onTabSelected(tab);
@@ -244,9 +318,10 @@ public class NacPagerFragment
 	private void setTabColors()
 	{
 		NacSharedPreferences shared = new NacSharedPreferences(this);
+		TabLayout tabLayout = this.getTabLayout();
 
-		this.mTabLayout.setSelectedTabIndicatorColor(shared.getThemeColor());
-		this.mTabLayout.setTabTextColors(NacSharedPreferences.DEFAULT_COLOR,
+		tabLayout.setSelectedTabIndicatorColor(shared.getThemeColor());
+		tabLayout.setTabTextColors(NacSharedPreferences.DEFAULT_COLOR,
 			shared.getThemeColor());
 	}
 
@@ -256,50 +331,47 @@ public class NacPagerFragment
 	@SuppressWarnings("deprecation")
 	private void setupPager()
 	{
-		this.mPager.setAdapter(this.mAdapter);
-		this.mTabLayout.setupWithViewPager(this.mPager);
+		ViewPager pager = this.getViewPager();
+		NacPagerAdapter adapter = this.getPagerAdapter();
+		TabLayout tabLayout = this.getTabLayout();
+
+		pager.setAdapter(adapter);
+		tabLayout.setupWithViewPager(pager);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{
-			this.mTabLayout.addOnTabSelectedListener(this);
+			tabLayout.addOnTabSelectedListener(this);
 		}
 		else
 		{
-			this.mTabLayout.setOnTabSelectedListener(this);
+			tabLayout.setOnTabSelectedListener(this);
 		}
 	}
 
 	/**
 	 */
-	public static class NacPagerAdapter
+	//public static class NacPagerAdapter
+	public class NacPagerAdapter
 		extends FragmentPagerAdapter
 	{
 
-		/**
-		 * Alarm.
-		 */
-		private final NacAlarm mAlarm;
+		///**
+		// * Alarm.
+		// */
+		//private final NacAlarm mAlarm;
 
-		/**
-		 * Tab titles.
-		 */
-		private final String[] mTitles;
-
-		/**
-		 * The number of items to swipe through.
-		 */
-		private final int mCount;
+		///**
+		// * Tab titles.
+		// */
+		//private final String[] mTitles;
 
 		/**
 		 */
-		public NacPagerAdapter(FragmentManager fragmentManager, NacAlarm alarm,
-			String[] titles)
+		//public NacPagerAdapter(FragmentManager fragmentManager, NacAlarm alarm,
+		//	String[] titles)
+		public NacPagerAdapter(FragmentManager fragmentManager)
 		{
 			super(fragmentManager);
-
-			this.mAlarm = alarm;
-			this.mTitles = titles;
-			this.mCount = titles.length;
 		}
 
 		/**
@@ -308,7 +380,8 @@ public class NacPagerFragment
 		@Override
 		public int getCount()
 		{
-			return this.mCount;
+			//return this.getTitles().length;
+			return getTitles().length;
 		}
 
 		/**
@@ -316,25 +389,44 @@ public class NacPagerFragment
 		@Override
 		public Fragment getItem(int position)
 		{
-			NacAlarm alarm = this.mAlarm;
+			NacAlarm alarm = getAlarm();
+			NacSound sound = getSound();
 
 			if (position == 0)
 			{
-				return NacMusicFragment.newInstance(alarm);
+				if (alarm != null)
+				{
+					return NacMusicFragment.newInstance(alarm);
+				}
+				else if (sound != null)
+				{
+					return NacMusicFragment.newInstance(sound);
+				}
 			}
 			else if (position == 1)
 			{
-				return NacRingtoneFragment.newInstance(alarm);
+				if (alarm != null)
+				{
+					return NacRingtoneFragment.newInstance(alarm);
+				}
+				else if (sound != null)
+				{
+					return NacRingtoneFragment.newInstance(sound);
+				}
 			}
 			else if (position == 2)
 			{
-				return NacSpotifyFragment.newInstance(alarm);
+				if (alarm != null)
+				{
+					return NacSpotifyFragment.newInstance(alarm);
+				}
+				else if (sound != null)
+				{
+					return NacSpotifyFragment.newInstance(sound);
+				}
 			}
-			else
-			{
-				NacUtility.printf("Trying to display position : %d", position);
-				return null;
-			}
+
+			return null;
 		}
 
 		/**
@@ -342,8 +434,17 @@ public class NacPagerFragment
 		@Override
 		public CharSequence getPageTitle(int position)
 		{
-			return this.mTitles[position];
+			//return this.getTitles()[position];
+			return getTitles()[position];
 		}
+
+		///**
+		// * @return The tab titles.
+		// */
+		//private String[] getTitles()
+		//{
+		//	return this.mTitles;
+		//}
 
 	}
 

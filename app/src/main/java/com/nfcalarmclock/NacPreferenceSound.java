@@ -1,6 +1,7 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.preference.Preference;
 import android.util.AttributeSet;
@@ -11,7 +12,7 @@ import android.view.View;
  */
 public class NacPreferenceSound
 	extends Preference
-	implements Preference.OnPreferenceClickListener,NacMediaDialog.OnItemClickListener
+	implements Preference.OnPreferenceClickListener
 {
 
 	/**
@@ -78,19 +79,19 @@ public class NacPreferenceSound
 	/**
 	 * Capture which item in the list was selected.
 	 */
-	@Override
-	public void onItemClick(String path, String name)
-	{
-		if (path.isEmpty())
-		{
-			return;
-		}
+	//@Override
+	//public void onItemClick(String path, String name)
+	//{
+	//	if (path.isEmpty())
+	//	{
+	//		return;
+	//	}
 
-		this.mValue = path;
+	//	this.mValue = path;
 
-		setSummary(this.getSummary());
-		persistString(this.mValue);
-	}
+	//	setSummary(this.getSummary());
+	//	persistString(this.mValue);
+	//}
 
 	/**
 	 * When the preference is clicked, display the dialog.
@@ -98,13 +99,16 @@ public class NacPreferenceSound
 	@Override
 	public boolean onPreferenceClick(Preference pref)
 	{
+		NacUtility.printf("Sound prompt display!");
 		Context context = getContext();
-		NacUtility.quickToast(context, "Sound prompt display!");
-		//NacSoundPromptDialog dialog = new NacSoundPromptDialog();
+		NacSound sound = new NacSound(context, this.mValue);
 
-		//dialog.build(context, R.layout.dlg_sound_prompt);
-		//dialog.setOnItemClickListener(this);
-		//dialog.show();
+		sound.setData(getKey());
+
+		Intent intent = NacIntent.toIntent(context, NacPagerFragment.class,
+			sound);
+
+		context.startActivity(intent);
 
 		return true;
 	}

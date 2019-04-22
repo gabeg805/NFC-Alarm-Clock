@@ -16,13 +16,11 @@ public class NacAlarmBroadcastReceiver
 	/**
 	 */
 	@Override
-	public void onReceive(final Context context, Intent intent)
+	public void onReceive(Context context, Intent intent)
 	{
-		Bundle bundle = NacAlarmParcel.getExtra(intent);
-		Intent newIntent = new Intent(context, NacAlarmActivity.class);
+		Bundle bundle = NacIntent.getAlarmBundle(intent);
+		Intent newIntent = NacIntent.createAlarmActivity(context, bundle);
 
-		newIntent.putExtra("bundle", bundle);
-		newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(newIntent);
 	}
 

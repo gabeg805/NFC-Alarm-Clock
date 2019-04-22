@@ -43,7 +43,20 @@ public class NacMusicFragment
 	public static Fragment newInstance(NacAlarm alarm)
 	{
 		Fragment fragment = new NacMusicFragment();
-		Bundle bundle = NacAlarmParcel.toBundle(alarm);
+		Bundle bundle = NacBundle.toBundle(alarm);
+
+		fragment.setArguments(bundle);
+
+		return fragment;
+	}
+
+	/**
+	 * Create a new instance of this fragment.
+	 */
+	public static Fragment newInstance(NacSound sound)
+	{
+		Fragment fragment = new NacMusicFragment();
+		Bundle bundle = NacBundle.toBundle(sound);
 
 		fragment.setArguments(bundle);
 

@@ -567,7 +567,7 @@ public class NacCardHolder
 			NacDayOfWeek dayButtons = this.getDayButtons();
 			alarm.setRepeat(state);
 
-			if (state && alarm.getDays().isEmpty())
+			if (state && !alarm.areDaysSelected())
 			{
 				alarm.setDays(NacSharedPreferences.DEFAULT_DAYS);
 			}
@@ -596,7 +596,7 @@ public class NacCardHolder
 
 		alarm.toggleIndex(index);
 
-		if (alarm.getDays().isEmpty() && repeat.isChecked())
+		if (!alarm.areDaysSelected() && repeat.isChecked())
 		{
 			this.setDays();
 			repeat.setChecked(false);
@@ -675,7 +675,7 @@ public class NacCardHolder
 		this.setTime();
 		this.setSwitch();
 
-		if (!alarm.getRepeat() || alarm.getDays().isEmpty())
+		if (!alarm.isOneTimeAlarm())
 		{
 			this.setSummaryDays();
 		}
@@ -979,8 +979,8 @@ public class NacCardHolder
 	{
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
-		Intent intent = NacAlarmParcel.toIntent(context,
-			NacPagerFragment.class, alarm);
+		Intent intent = NacIntent.toIntent(context, NacPagerFragment.class,
+			alarm);
 
 		context.startActivity(intent);
 	}

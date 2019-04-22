@@ -1,6 +1,7 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -22,6 +23,11 @@ public class NacMediaFragment
 	private NacAlarm mAlarm;
 
 	/**
+	 * The sound.
+	 */
+	private NacSound mSound;
+
+	/**
 	 * Media player.
 	 */
 	private NacMediaPlayer mPlayer;
@@ -38,6 +44,7 @@ public class NacMediaFragment
 		super();
 
 		this.mAlarm = null;
+		this.mSound = null;
 		this.mPlayer = null;
 		this.mInitialSelection = true;
 	}
@@ -51,13 +58,33 @@ public class NacMediaFragment
 	}
 
 	/**
+	 * @return The alarm.
+	 */
+	protected NacSound getSound()
+	{
+		return this.mSound;
+	}
+
+	/**
 	 * @return The sound path.
 	 */
 	protected String getSoundPath()
 	{
 		NacAlarm alarm = this.getAlarm();
+		NacSound sound = this.getSound();
 
-		return (alarm == null) ? "" : alarm.getSoundPath();
+		if (alarm != null)
+		{
+			return alarm.getSoundPath();
+		}
+		else if (sound != null)
+		{
+			return sound.getPath();
+		}
+		else
+		{
+			return "";
+		}
 	}
 
 	/**
@@ -97,7 +124,8 @@ public class NacMediaFragment
 
 		if (args != null)
 		{
-			this.mAlarm = NacAlarmParcel.getAlarm(args);
+			this.mAlarm = NacBundle.getAlarm(args);
+			this.mSound = NacBundle.getSound(args);
 		}
 	}
 
@@ -114,7 +142,6 @@ public class NacMediaFragment
 		{
 			this.setMedia("");
 			player.reset();
-			//group.clearCheck();
 		}
 		else if (id == R.id.cancel)
 		{
@@ -123,11 +150,25 @@ public class NacMediaFragment
 		}
 		else if (id == R.id.ok)
 		{
-			NacDatabase db = new NacDatabase(getContext());
+			Context context = getContext();
 			NacAlarm alarm = this.getAlarm();
+			NacSound sound = this.getSound();
+			Intent intent = null;
 
-			db.update(alarm);
-			db.close();
+			if (alarm != null)
+			{
+				intent = NacIntent.createService(context, "change", alarm);
+			}
+			else if (sound != null)
+			{
+				intent = NacIntent.createService(context, sound.getData(), sound);
+			}
+
+			if (intent != null)
+			{
+				context.startService(intent);
+			}
+
 			player.release();
 			activity.finish();
 		}
