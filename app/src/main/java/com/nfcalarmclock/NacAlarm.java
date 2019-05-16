@@ -197,14 +197,6 @@ public class NacAlarm
 		/**
 		 * @return The path to the media file to play when the alarm goes off.
 		 */
-		public String getSound()
-		{
-			return this.getSoundPath();
-		}
-
-		/**
-		 * @return The path to the media file to play when the alarm goes off.
-		 */
 		public String getSoundName()
 		{
 			return this.mSoundName;
@@ -714,14 +706,6 @@ public class NacAlarm
 	public boolean getRepeat()
 	{
 		return this.mRepeat;
-	}
-
-	/**
-	 * @return The path to the media file to play when the alarm goes off.
-	 */
-	public String getSound()
-	{
-		return this.getSoundPath();
 	}
 
 	/**

@@ -30,26 +30,70 @@ public class NacRingtoneFragment
 	private RadioGroup mRadioGroup;
 
 	/**
+	 * Radio button padding.
+	 */
+	private int[] mPadding;
+
+	/**
+	 * Radio button text size.
+	 */
+	private int mTextSize;
+
+	/**
 	 */
 	public NacRingtoneFragment()
 	{
 		super();
 
 		this.mRadioGroup = null;
+		this.mPadding = new int[4];
+		this.mTextSize = 0;
+	}
+
+	/**
+	 * Create a radio button.
+	 */
+	private void addRadioButton(NacSound sound)
+	{
+		Context context = getContext();
+		RadioButton button  = new RadioButton(context);
+		RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
+			ViewGroup.LayoutParams.MATCH_PARENT,
+			ViewGroup.LayoutParams.WRAP_CONTENT);
+		String path = getSoundPath();
+		int[] padding = this.getPadding();
+		int textSize = this.getTextSize();
+
+		this.mRadioGroup.addView(button);
+		button.setText(sound.getName());
+		button.setTag(sound.getPath());
+		button.setLayoutParams(params);
+		button.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+		button.setPadding(padding[0], padding[1], padding[2], padding[3]);
+		button.setOnClickListener(this);
+
+		if (!path.isEmpty() && path.equals(sound.getPath()))
+		{
+			button.setChecked(true);
+		}
+	}
+
+	/**
+	 * @see addRadioButton
+	 */
+	private void addRandomRadioButton()
+	{
+		//NacSound sound = new NacSound(NacSound.TYPE_RINGTONE_RANDOM);
+
+		//this.addRadioButton(sound);
 	}
 
 	/**
 	 * @return The radio button padding.
 	 */
-	private int[] getPadding(Context context)
+	private int[] getPadding()
 	{
-		Resources res = context.getResources();
-		int top = (int) res.getDimension(R.dimen.pt_frg_sound);
-		int bottom = (int) res.getDimension(R.dimen.pb_frg_sound);
-		int start = (int) res.getDimension(R.dimen.sp_frg_sound);
-		int end = 0;
-
-		return new int[] {start, top, end, bottom};
+		return this.mPadding;
 	}
 
 	/**
@@ -58,6 +102,14 @@ public class NacRingtoneFragment
 	private RadioGroup getRadioGroup()
 	{
 		return this.mRadioGroup;
+	}
+
+	/**
+	 * @return The text size.
+	 */
+	private int getTextSize()
+	{
+		return this.mTextSize;
 	}
 
 	/**
@@ -106,7 +158,11 @@ public class NacRingtoneFragment
 
 			this.setMedia(path);
 			player.reset();
-			player.play(path);
+
+			if (!NacSound.isRandomRingtone(path))
+			{
+				player.play(path);
+			}
 		}
 	}
 
@@ -124,6 +180,8 @@ public class NacRingtoneFragment
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState)
 	{
+		setupPadding();
+		setupTextSize();
 		setupActionButtons(view);
 		setupRadioButtons(view);
 	}
@@ -135,34 +193,39 @@ public class NacRingtoneFragment
 	{
 		this.mRadioGroup = (RadioGroup) root.findViewById(R.id.radio_group);
 		Context context = getContext();
-		NacAlarm alarm = this.getAlarm();
 		List<NacSound> ringtones = NacSound.getRingtones(context);
-		String path = (alarm != null) ? alarm.getSound() : "";
-		int[] padding = this.getPadding(context);
-		int textSize = (int) context.getResources().getDimension(
-			R.dimen.tsz_frg_sound);
+
+		this.addRandomRadioButton();
 
 		for(int i=0; i < ringtones.size(); i++)
 		{
-			RadioButton button  = new RadioButton(context);
-			RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
-				ViewGroup.LayoutParams.MATCH_PARENT,
-				ViewGroup.LayoutParams.WRAP_CONTENT);
 			NacSound sound = ringtones.get(i);
 
-			this.mRadioGroup.addView(button);
-			button.setText(sound.getName());
-			button.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-			button.setTag(sound.getPath());
-			button.setLayoutParams(params);
-			button.setPadding(padding[0], padding[1], padding[2], padding[3]);
-			button.setOnClickListener(this);
-
-			if (!path.isEmpty() && path.equals(sound.getPath()))
-			{
-				button.setChecked(true);
-			}
+			this.addRadioButton(sound);
 		}
+	}
+
+	/**
+	 * Setup the padding.
+	 */
+	private void setupPadding()
+	{
+		Context context = getContext();
+		Resources res = context.getResources();
+		this.mPadding[0] = (int) res.getDimension(R.dimen.sp_frg_sound);
+		this.mPadding[1] = (int) res.getDimension(R.dimen.pt_frg_sound);
+		this.mPadding[2] = 0;
+		this.mPadding[3] = (int) res.getDimension(R.dimen.pb_frg_sound);
+	}
+
+	/**
+	 * Setup the text size.
+	 */
+	private void setupTextSize()
+	{
+		Context context = getContext();
+		Resources res = context.getResources();
+		this.mTextSize = (int) res.getDimension(R.dimen.tsz_frg_sound);
 	}
 
 }

@@ -75,7 +75,7 @@ public class NacDialog
 	}
 
 	/**
-	 * Scaling structure.
+	 * Scaling structure. To-do: Can this be static?
 	 */
 	public class Scaler
 	{
@@ -161,6 +161,11 @@ public class NacDialog
 	private View mRoot;
 
 	/**
+	 * Unique identifier.
+	 */
+	private Object mId;
+
+	/**
 	 * The dialog listeners.
 	 */
 	private OnBuildListener mBuildListener;
@@ -198,6 +203,7 @@ public class NacDialog
 		this.mShowListener = new ArrayList<>();
 		this.mWasCanceledOrDismissed = false;
 		this.mScaler = null;
+		this.mId = null;
 	}
 
 	/**
@@ -287,6 +293,11 @@ public class NacDialog
 	{
 		LayoutInflater inflater = LayoutInflater.from(context);
 		this.mRoot = inflater.inflate(id, (ViewGroup)null);
+
+		if (this.getId() == null)
+		{
+			this.setId(id);
+		}
 
 		return build(context, this.mRoot);
 	}
@@ -447,6 +458,46 @@ public class NacDialog
 	public Object getData()
 	{
 		return this.mData;
+	}
+
+	/**
+	 * @see getData
+	 */
+	public boolean getDataBoolean()
+	{
+		return (this.mData != null) ? (boolean) this.mData : false;
+	}
+
+	/**
+	 * @see getData
+	 */
+	public float getDataFloat()
+	{
+		return (this.mData != null) ? (float) this.mData : -1f;
+	}
+
+	/**
+	 * @see getData
+	 */
+	public int getDataInt()
+	{
+		return (this.mData != null) ? (int) this.mData : -1;
+	}
+
+	/**
+	 * @see getData
+	 */
+	public String getDataString()
+	{
+		return (this.mData != null) ? (String) this.mData : "";
+	}
+
+	/**
+	 * @return The unique identifier.
+	 */
+	public Object getId()
+	{
+		return this.mId;
 	}
 
 	/**
@@ -628,6 +679,14 @@ public class NacDialog
 	private void setCanceledOrDismissed(boolean status)
 	{
 		this.mWasCanceledOrDismissed = status;
+	}
+
+	/**
+	 * Set the unique identifier.
+	 */
+	public void setId(Object id)
+	{
+		this.mId = id;
 	}
 
 	/**

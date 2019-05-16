@@ -16,8 +16,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 /**
  * Activity to dismiss/snooze the alarm.
@@ -92,8 +94,9 @@ public class NacAlarmActivity
 	 */
 	private void dismiss()
 	{
-		NacAlarm alarm = this.getAlarm();
 		NacSharedPreferences shared = new NacSharedPreferences(this);
+		NacAlarm alarm = this.getAlarm();
+		int id = alarm.getId();
 
 		if (alarm.isOneTimeAlarm())
 		{
@@ -104,7 +107,7 @@ public class NacAlarmActivity
 			db.close();
 		}
 
-		this.setSnoozeCount(shared, 0);
+		shared.editSnoozeCount(id, 0);
 		this.cleanup();
 		finish();
 	}
@@ -166,21 +169,19 @@ public class NacAlarmActivity
 	}
 
 	/**
-	 * @return The snooze count.
+	 * @return The media player.
 	 */
-	private int getSnoozeCount(NacSharedPreferences shared)
+	private NacMediaPlayer getMediaPlayer()
 	{
-		String key = this.getSnoozeCountKey();
-
-		return shared.getInstance().getInt(key, 0);
+		return this.mPlayer;
 	}
 
 	/**
-	 * @return The snooze count key.
+	 * Do not let the user back out of the activity.
 	 */
-	private String getSnoozeCountKey()
+	@Override
+	public void onBackPressed()
 	{
-		return "snoozeCount" + String.valueOf(this.getAlarm().getId());
 	}
 
 	/**
@@ -269,10 +270,28 @@ public class NacAlarmActivity
 	 */
 	private void playMusic()
 	{
-		if (this.mPlayer != null)
+		NacSharedPreferences shared = new NacSharedPreferences(this);
+		NacMediaPlayer player = this.getMediaPlayer();
+		NacAlarm alarm = this.getAlarm();
+		String path = alarm.getSoundPath();
+		int type = alarm.getSoundType();
+		boolean repeat = true;
+		boolean shuffle = shared.getShuffle();
+
+		if (player == null)
 		{
-			this.mPlayer.reset();
-			this.mPlayer.play(this.getAlarm().getSound(), true);
+			return;
+		}
+
+		player.reset();
+
+		if (NacSound.isFilePlaylist(type))
+		{
+			player.playPlaylist(path, repeat, shuffle);
+		}
+		else
+		{
+			player.play(path, repeat);
 		}
 	}
 
@@ -309,18 +328,6 @@ public class NacAlarmActivity
 	}
 
 	/**
-	 * Set the snooze count.
-	 *
-	 * @param  count  The snooze count.
-	 */
-	private void setSnoozeCount(NacSharedPreferences shared, int count)
-	{
-		String key = this.getSnoozeCountKey();
-
-		shared.getInstance().edit().putInt(key, count).apply();
-	}
-
-	/**
 	 * Setup the snooze and dismiss buttons.
 	 */
 	public void setupAlarmButtons()
@@ -353,7 +360,9 @@ public class NacAlarmActivity
 	public boolean snooze()
 	{
 		NacSharedPreferences shared = new NacSharedPreferences(this);
-		int snoozeCount = this.getSnoozeCount(shared) + 1;
+		NacAlarm alarm = this.getAlarm();
+		int id = alarm.getId();
+		int snoozeCount = shared.getSnoozeCount(id) + 1;
 		int maxSnoozeCount = shared.getMaxSnooze();
 
 		if ((snoozeCount > maxSnoozeCount) && (maxSnoozeCount >= 0))
@@ -361,7 +370,6 @@ public class NacAlarmActivity
 			return false;
 		}
 
-		NacAlarm alarm = this.getAlarm();
 		NacScheduler scheduler = new NacScheduler(this);
 		Calendar snooze = Calendar.getInstance();
 
@@ -369,7 +377,7 @@ public class NacAlarmActivity
 		alarm.setHour(snooze.get(Calendar.HOUR_OF_DAY));
 		alarm.setMinute(snooze.get(Calendar.MINUTE));
 		scheduler.update(alarm, snooze);
-		this.setSnoozeCount(shared, snoozeCount);
+		shared.editSnoozeCount(id, snoozeCount);
 
 		return true;
 	}
@@ -413,8 +421,8 @@ public class NacAlarmActivity
 	public void waitForAutoDismiss()
 	{
 		NacSharedPreferences shared = new NacSharedPreferences(this);
-		int autoDismiss = shared.getAutoDismiss();
-		long delay = TimeUnit.MINUTES.toMillis(autoDismiss);
+		int autoDismiss = shared.getAutoDismissTime();
+		long delay = TimeUnit.MINUTES.toMillis(autoDismiss) - 2000;
 
 		if (autoDismiss != 0)
 		{

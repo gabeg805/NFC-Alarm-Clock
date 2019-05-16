@@ -80,6 +80,8 @@
 			android:layout_height="wrap_content"
 			android:layout_marginStart="@dimen/sp_text"
 			android:maxLength="@integer/max_entry_length"
+			android:maxLines="1"
+			android:ellipsize="end"
 			android:textColor="@color/sky_blue"
 			android:textSize="@dimen/tsz_summary_name"
 			android:textStyle="bold"

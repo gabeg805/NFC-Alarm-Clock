@@ -4,6 +4,7 @@
 	<dimen name="pad_tweak">10dp</dimen>
 	<dimen name="sp_tweak">-5dp</dimen>
 	<dimen name="rad_general">3dp</dimen>
+	<dimen name="isz_pref_icon">32dp</dimen>
 
 	<!-- Floating button -->
 	<dimen name="m_fab">16dp</dimen>
@@ -65,7 +66,7 @@
 
 	<!-- Sound -->
 	<dimen name="pt_sound">12dp</dimen>
-	<dimen name="pb_sound">12dp</dimen>
+	<dimen name="pb_sound">10dp</dimen>
 	<dimen name="pl_sound">4dp</dimen>
 
 	<!-- Name -->

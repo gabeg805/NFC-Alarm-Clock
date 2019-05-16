@@ -10,84 +10,119 @@ public class NacPreferenceKeys
 {
 
 	/**
+	 * General screen.
+	 */
+	private final String mGeneralScreen;
+
+	/**
+	 * Default alarm screen.
+	 */
+	private final String mDefaultAlarmScreen;
+
+	/**
+	 * Color screen.
+	 */
+	private final String mColorScreen;
+
+	/**
+	 * General screen title.
+	 */
+	private final String mGeneralScreenTitle;
+
+	/**
+	 * Default alarm screen title.
+	 */
+	private final String mDefaultAlarmScreenTitle;
+
+	/**
+	 * Color screen title.
+	 */
+	private final String mColorScreenTitle;
+
+	/**
 	 * Auto dismiss.
 	 */
-	public final String mAutoDismiss;
+	private final String mAutoDismiss;
 
 	/**
 	 * Max snoozes.
 	 */
-	public final String mMaxSnooze;
+	private final String mMaxSnooze;
 
 	/**
 	 * Snooze duration.
 	 */
-	public final String mSnoozeDuration;
+	private final String mSnoozeDuration;
 
 	/**
 	 * Require NFC to dismiss an alarm.
 	 */
-	public final String mRequireNfc;
+	private final String mRequireNfc;
 
 	/**
 	 * Easy snoozing of the alarm.
 	 */
-	public final String mEasySnooze;
+	private final String mEasySnooze;
+
+	/**
+	 * Shuffle the alarm playlist.
+	 */
+	private final String mShuffle;
 
 	/**
 	 * Repeat.
 	 */
-	public final String mRepeat;
+	private final String mRepeat;
 
 	/**
 	 * Day of week.
 	 */
-	public final String mDays;
+	private final String mDays;
 
 	/**
 	 * Vibrate.
 	 */
-	public final String mVibrate;
+	private final String mVibrate;
 
 	/**
 	 * Sound path.
 	 */
-	public final String mSound;
+	private final String mSound;
 
 	/**
 	 * Name of the alarm.
 	 */
-	public final String mName;
+	private final String mName;
 
 	/**
 	 * Theme color.
 	 */
-	public final String mThemeColor;
+	private final String mThemeColor;
 
 	/**
 	 * Color of the name of the alarm.
 	 */
-	public final String mNameColor;
+	private final String mNameColor;
 
 	/**
 	 * Color of the text that shows the days that the alarm runs.
 	 */
-	public final String mDaysColor;
+	private final String mDaysColor;
 
 	/**
 	 * Time color.
 	 */
-	public final String mTimeColor;
+	private final String mTimeColor;
 
 	/**
 	 * AM color.
 	 */
-	public final String mAmColor;
+	private final String mAmColor;
 
 	/**
 	 * PM color.
 	 */
-	public final String mPmColor;
+	private final String mPmColor;
 
 	/**
 	 */
@@ -95,11 +130,18 @@ public class NacPreferenceKeys
 	{
 		Resources res = context.getResources();
 
+		this.mGeneralScreen = res.getString(R.string.pref_screen_general_key);
+		this.mDefaultAlarmScreen = res.getString(R.string.pref_screen_default_alarm_key);
+		this.mColorScreen = res.getString(R.string.pref_screen_color_key);
+		this.mGeneralScreenTitle = res.getString(R.string.pref_screen_general_title);
+		this.mDefaultAlarmScreenTitle = res.getString(R.string.pref_screen_default_alarm_title);
+		this.mColorScreenTitle = res.getString(R.string.pref_screen_color_title);
 		this.mAutoDismiss = res.getString(R.string.pref_auto_dismiss_key);
 		this.mMaxSnooze = res.getString(R.string.pref_max_snooze_key);
 		this.mSnoozeDuration = res.getString(R.string.pref_snooze_duration_key);
 		this.mRequireNfc = res.getString(R.string.pref_dismiss_button_key);
 		this.mEasySnooze = res.getString(R.string.pref_easy_snooze_key);
+		this.mShuffle = res.getString(R.string.pref_shuffle_playlist_key);
 		this.mRepeat = res.getString(R.string.pref_repeat_key);
 		this.mDays = res.getString(R.string.pref_days_key);
 		this.mVibrate = res.getString(R.string.pref_vibrate_key);
@@ -130,6 +172,22 @@ public class NacPreferenceKeys
 	}
 
 	/**
+	 * @return The color screen key.
+	 */
+	public String getColorScreen()
+	{
+		return this.mColorScreen;
+	}
+
+	/**
+	 * @return The color screen title.
+	 */
+	public String getColorScreenTitle()
+	{
+		return this.mColorScreenTitle;
+	}
+
+	/**
 	 * @return The days key.
 	 */
 	public String getDays()
@@ -146,11 +204,43 @@ public class NacPreferenceKeys
 	}
 
 	/**
+	 * @return The default alarm screen key.
+	 */
+	public String getDefaultAlarmScreen()
+	{
+		return this.mDefaultAlarmScreen;
+	}
+
+	/**
+	 * @return The default alarm screen title.
+	 */
+	public String getDefaultAlarmScreenTitle()
+	{
+		return this.mDefaultAlarmScreenTitle;
+	}
+
+	/**
 	 * @return The easy snooze key.
 	 */
 	public String getEasySnooze()
 	{
 		return this.mEasySnooze;
+	}
+
+	/**
+	 * @return The general screen key.
+	 */
+	public String getGeneralScreen()
+	{
+		return this.mGeneralScreen;
+	}
+
+	/**
+	 * @return The general screen title.
+	 */
+	public String getGeneralScreenTitle()
+	{
+		return this.mGeneralScreenTitle;
 	}
 
 	/**
@@ -199,6 +289,22 @@ public class NacPreferenceKeys
 	public String getRequireNfc()
 	{
 		return this.mRequireNfc;
+	}
+
+	/**
+	 * @return The shuffle key.
+	 */
+	public String getShuffle()
+	{
+		return this.mShuffle;
+	}
+
+	/**
+	 * @return The snooze counter.
+	 */
+	public String getSnoozeCount(int id)
+	{
+		return "snoozeCount" + String.valueOf(id);
 	}
 
 	/**

@@ -8,6 +8,9 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.MediaStore;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import android.media.AudioDeviceInfo;
 import android.os.Build;
@@ -23,6 +26,139 @@ public class NacMediaPlayer
 {
 
 	/**
+	 * Playlist object.
+	 */
+	public static class Playlist
+	{
+
+		/**
+		 * List of music files.
+		 */
+		private List<NacSound> mPlaylist;
+
+		/**
+		 * Index corresponding to the current place in the playlist.
+		 */
+		private int mIndex;
+
+		/**
+		 * Repeat the playlist.
+		 */
+		private boolean mRepeat;
+
+		/**
+		 */
+		public Playlist(Context context, String path)
+		{
+			this(context, path, false, false);
+		}
+
+		/**
+		 */
+		public Playlist(Context context, String path, boolean repeat,
+			boolean shuffle)
+		{
+			this.mPlaylist = NacSound.getFiles(context, path);
+			this.mIndex = 0;
+			this.mRepeat = repeat;
+
+			if (shuffle)
+			{
+				this.shuffle();
+			}
+		}
+
+		/**
+		 * @return The playlist index.
+		 */
+		public int getIndex()
+		{
+			return this.mIndex;
+		}
+
+		/**
+		 * @return The next playlist track.
+		 */
+		public NacSound getNextTrack()
+		{
+			int size = this.getSize();
+			int index = this.getIndex();
+			int nextIndex = this.repeat() ? (index+1) % size : index+1;
+
+			if ((size == 0) || (nextIndex >= size))
+			{
+				return null;
+			}
+
+			this.setIndex(nextIndex);
+
+			return this.getTrack();
+		}
+
+		/**
+		 * @return The playlist.
+		 */
+		public List<NacSound> getPlaylist()
+		{
+			return this.mPlaylist;
+		}
+
+		/**
+		 * @return The size of the playlist.
+		 */
+		public int getSize()
+		{
+			List<NacSound> playlist = this.getPlaylist();
+
+			return (playlist == null) ? 0 : playlist.size();
+		}
+
+		/**
+		 * @return The current playlist track.
+		 */
+		public NacSound getTrack()
+		{
+			return this.getTrack(this.getIndex());
+		}
+
+		/**
+		 * @return The playlist track.
+		 */
+		public NacSound getTrack(int index)
+		{
+			List<NacSound> playlist = this.getPlaylist();
+			int size = this.getSize();
+
+			return ((size > 0) && (index < size)) ? playlist.get(index) : null;
+		}
+
+		/**
+		 * @return True if the playlist should be repeated and False otherwise.
+		 */
+		public boolean repeat()
+		{
+			return this.mRepeat;
+		}
+
+		/**
+		 * Set the playlist index.
+		 */
+		public void setIndex(int index)
+		{
+			this.mIndex = index;
+		}
+
+		/**
+		 * @return True if the playlist is shuffled and False otherwise.
+		 */
+		public void shuffle()
+		{
+			Collections.shuffle(this.mPlaylist);
+		}
+
+	}
+
+	/**
 	 * Application context.
 	 */
 	private Context mContext;
@@ -31,6 +167,11 @@ public class NacMediaPlayer
 	 * Audio manager to request/abandon audio focus.
 	 */
 	private AudioManager mAudioManager;
+
+	/**
+	 * Playlist container.
+	 */
+	private Playlist mPlaylist;
 
 	/**
 	 * Stream volume.
@@ -55,6 +196,7 @@ public class NacMediaPlayer
 
 		this.mContext = context;
 		this.mAudioManager = null;
+		this.mPlaylist = null;
 		this.mVolume = 0;
 	}
 
@@ -128,6 +270,14 @@ public class NacMediaPlayer
 	}
 
 	/**
+	 * @return The playlist.
+	 */
+	private Playlist getPlaylist()
+	{
+		return this.mPlaylist;
+	}
+
+	/**
 	 * @return The current stream volume.
 	 */
 	private int getStreamVolume()
@@ -184,10 +334,26 @@ public class NacMediaPlayer
 			change);
 	}
 
+	/**
+	 */
 	@Override
 	public void onCompletion(MediaPlayer mp)
 	{
 		this.stopWrapper();
+
+		Playlist playlist = this.getPlaylist();
+		NacSound track = (playlist != null) ? playlist.getNextTrack() : null;
+
+		if (track != null)
+		{
+			this.resetWrapper();
+			this.play(track, playlist.repeat());
+			return;
+		}
+		else
+		{
+			this.mPlaylist = null;
+		}
 
 		if (!isLooping())
 		{
@@ -221,6 +387,22 @@ public class NacMediaPlayer
 	/**
 	 * @see play
 	 */
+	public void play(NacSound sound)
+	{
+		this.play(sound, false);
+	}
+
+	/**
+	 * @see play
+	 */
+	public void play(NacSound sound, boolean repeat)
+	{
+		this.play(sound.getPath(), repeat);
+	}
+
+	/**
+	 * @see play
+	 */
 	public void play(String media)
 	{
 		this.play(media, false);
@@ -229,7 +411,7 @@ public class NacMediaPlayer
 	/**
 	 * @see play
 	 */
-	public void play(String media, boolean loop)
+	public void play(String media, boolean repeat)
 	{
 		if (media.isEmpty())
 		{
@@ -255,7 +437,7 @@ public class NacMediaPlayer
 			}
 
 			setDataSource(path);
-			setLooping(loop);
+			setLooping(repeat);
 			setAudioAttributes(attrs);
 			setOnCompletionListener(this);
 			prepare();
@@ -264,6 +446,22 @@ public class NacMediaPlayer
 		catch (IllegalStateException | IOException | IllegalArgumentException | SecurityException e)
 		{
 			NacUtility.quickToast(context, "Unable to play selected file");
+		}
+	}
+
+	/**
+	 * Play a playlist.
+	 */
+	public void playPlaylist(String path, boolean repeat, boolean shuffle)
+	{
+		Context context = this.getContext();
+		this.mPlaylist = new Playlist(context, path, repeat, shuffle);
+		Playlist playlist = this.getPlaylist();
+		NacSound track = playlist.getTrack();
+
+		if (track != null)
+		{
+			this.play(track, repeat);
 		}
 	}
 

@@ -147,8 +147,6 @@ public class NacCardAdapter
 			return -1;
 		}
 
-		// Using update instead of add for testing. Things should never get
-		// canceled in update, only added
 		Context context = this.getContext();
 		Intent intent = NacIntent.createService(context, "add", alarm);
 		this.mWasAdded = true;
@@ -502,15 +500,18 @@ public class NacCardAdapter
 	@Override
 	public void onItemMove(int fromIndex, int toIndex)
 	{
+		Context context = this.getContext();
 		NacAlarm fromAlarm = this.get(fromIndex);
 		NacAlarm toAlarm = this.get(toIndex);
+		Intent intent = NacIntent.createService(context, "swap", fromAlarm, toAlarm);
 
+		context.startService(intent);
 		Collections.swap(this.getAlarms(), fromIndex, toIndex);
-		this.getScheduler().cancel(fromAlarm);
-		this.getScheduler().cancel(toAlarm);
-		this.getDatabase().swap(fromAlarm, toAlarm);
-		this.getScheduler().add(fromAlarm);
-		this.getScheduler().add(toAlarm);
+		//this.getScheduler().cancel(fromAlarm);
+		//this.getScheduler().cancel(toAlarm);
+		//this.getDatabase().swap(fromAlarm, toAlarm);
+		//this.getScheduler().add(fromAlarm);
+		//this.getScheduler().add(toAlarm);
 		notifyItemMoved(fromIndex, toIndex);
 	}
 

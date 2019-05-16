@@ -43,11 +43,17 @@ public class NacFileBrowser
 	private OnClickListener mListener;
 
 	/**
+	 * Currently selected view.
+	 */
+	private NacImageSubTextButton mSelected;
+
+	/**
 	 */
 	public NacFileBrowser(View root, int pathId, int groupId)
 	{
 		this.mPathView = (TextView) root.findViewById(pathId);
 		this.mContainer = (NacButtonGroup) root.findViewById(groupId);
+		this.mSelected = null;
 
 		this.mContainer.removeAllViews();
 	}
@@ -94,9 +100,9 @@ public class NacFileBrowser
 	/**
 	 * Add all files under the given path.
 	 */
-	public void addFileListing(String path)
+	public void addListing(String path)
 	{
-		for (File file : this.fileListing(path))
+		for (File file : NacFileBrowser.listing(path))
 		{
 			this.addEntry(file);
 		}
@@ -149,15 +155,114 @@ public class NacFileBrowser
 	}
 
 	/**
+	 * @return The container view.
+	 */
+	private NacButtonGroup getContainer()
+	{
+		return this.mContainer;
+	}
+
+	/**
+	 * @return The home directory.
+	 */
+	public static String getHome()
+	{
+		return Environment.getExternalStorageDirectory().toString();
+	}
+
+	/**
+	 * @return The OnClickListener.
+	 */
+	private OnClickListener getListener()
+	{
+		return this.mListener;
+	}
+
+	/**
+	 * @return The currently selected view.
+	 */
+	public NacImageSubTextButton getSelected()
+	{
+		return this.mSelected;
+	}
+
+	/**
+	 * @return The currently selected name.
+	 */
+	public String getSelectedName()
+	{
+		return this.getSelectedName(this.getSelected());
+	}
+
+	/**
+	 * @return The selected name.
+	 */
+	public String getSelectedName(View view)
+	{
+		if (view == null)
+		{
+			return "";
+		}
+
+		File file = (File) view.getTag();
+
+		return file.getName();
+	}
+
+	/**
+	 * @return The path of the currently selected view.
+	 */
+	public String getSelectedPath()
+	{
+		return this.getSelectedPath(this.getSelected());
+	}
+
+	/**
+	 * @return The selected path.
+	 */
+	public String getSelectedPath(View view)
+	{
+		if (view == null)
+		{
+			return "";
+		}
+
+		File file = (File) view.getTag();
+		String name = file.getName();
+
+		try
+		{
+			return file.getCanonicalPath();
+		}
+		catch (IOException e)
+		{
+			NacUtility.printf("NacFileBrowser : getSelectedPath : IOException occurred when trying to getCanonicalPath().");
+			return "";
+		}
+	}
+
+	/**
+	 * @return True if the given path matches the currently selected path, and
+	 *         False otherwise.
+	 */
+	public boolean isSelected(String path)
+	{
+		NacImageSubTextButton button = this.getSelected();
+		String selectedPath = this.getSelectedPath(button);
+
+		return ((button != null) && (path.equals(selectedPath)));
+	}
+
+	/**
 	 * @return A listing of music files and directories under a given path.
 	 *         Directories will be listed first, before files.
 	 */
-	public List<File> fileListing(String path)
+	public static List<File> listing(String path)
 	{
 		File[] listing = new File(path).listFiles(NacSound.getFilter());
 		List<File> directories = new ArrayList<>();
 		List<File> files = new ArrayList<>();
-		String home = this.getHome();
+		String home = NacFileBrowser.getHome();
 
 		if (!path.equals(home))
 		{
@@ -184,30 +289,6 @@ public class NacFileBrowser
 	}
 
 	/**
-	 * @return The container view.
-	 */
-	private NacButtonGroup getContainer()
-	{
-		return this.mContainer;
-	}
-
-	/**
-	 * @return The home directory.
-	 */
-	private String getHome()
-	{
-		return Environment.getExternalStorageDirectory().toString();
-	}
-
-	/**
-	 * @return The OnClickListener.
-	 */
-	private OnClickListener getListener()
-	{
-		return this.mListener;
-	}
-
-	/**
 	 */
 	@Override
 	public void onClick(View view)
@@ -220,17 +301,24 @@ public class NacFileBrowser
 		}
 
 		File file = (File) view.getTag();
-		String name = file.getName();
-		String path;
+		String name = this.getSelectedName(view);
+		String path = this.getSelectedPath(view);
 
-		try
+		if (path.isEmpty())
 		{
-			path = file.getCanonicalPath();
-		}
-		catch (IOException e)
-		{
-			NacUtility.printf("NacFileBrowser : onClick : IOException occurred when trying to getCanonicalPath().");
 			return;
+		}
+
+		if (file.isFile())
+		{
+			if (this.isSelected(path))
+			{
+				this.setSelected(null);
+			}
+			else
+			{
+				this.setSelected(view);
+			}
 		}
 
 		listener.onClick(this, file, path, name);
@@ -244,7 +332,7 @@ public class NacFileBrowser
 		String path = entryPath.isEmpty() ? getHome() : entryPath;
 
 		this.mPathView.setText(path);
-		this.addFileListing(path);
+		this.addListing(path);
 	}
 
 	/**
@@ -253,6 +341,24 @@ public class NacFileBrowser
 	public void setOnClickListener(OnClickListener listener)
 	{
 		this.mListener = listener;
+	}
+
+	/**
+	 * Set the currently selected file.
+	 */
+	public void setSelected(View view)
+	{
+		if (this.getSelected() != null)
+		{
+			this.getSelected().unselect();
+		}
+
+		this.mSelected = (NacImageSubTextButton) view;
+
+		if (this.getSelected() != null)
+		{
+			this.getSelected().select();
+		}
 	}
 
 	/**

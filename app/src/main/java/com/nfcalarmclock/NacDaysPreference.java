@@ -1,19 +1,19 @@
 package com.nfcalarmclock;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
-import java.util.EnumSet;
 
 /**
  * Preference that displays the day of week dialog.
  */
-public class NacPreferenceDays
+public class NacDaysPreference
 	extends Preference
-	implements Preference.OnPreferenceClickListener,NacDialog.OnDismissListener,NacDialog.OnBuildListener,NacDialog.OnShowListener
+	implements Preference.OnPreferenceClickListener,
+		NacDialog.OnShowListener,
+		NacDialog.OnDismissListener
 {
 
 	/**
@@ -23,21 +23,21 @@ public class NacPreferenceDays
 
 	/**
 	 */
-	public NacPreferenceDays(Context context)
+	public NacDaysPreference(Context context)
 	{
 		this(context, null);
 	}
 
 	/**
 	 */
-	public NacPreferenceDays(Context context, AttributeSet attrs)
+	public NacDaysPreference(Context context, AttributeSet attrs)
 	{
 		this(context, attrs, 0);
 	}
 
 	/**
 	 */
-	public NacPreferenceDays(Context context, AttributeSet attrs, int style)
+	public NacDaysPreference(Context context, AttributeSet attrs, int style)
 	{
 		super(context, attrs, style);
 		setLayoutResource(R.layout.nac_preference);
@@ -50,9 +50,7 @@ public class NacPreferenceDays
 	@Override
 	public CharSequence getSummary()
 	{
-		String days = NacCalendar.toString(this.mValue);
-
-		return (!days.isEmpty()) ? days : NacSharedPreferences.DEFAULT_DAYS_SUMMARY;
+		return NacSharedPreferences.getDaysSummary(this.mValue);
 	}
 
 	/**
@@ -63,19 +61,6 @@ public class NacPreferenceDays
 	{
 		super.onBindView(v);
 		this.setSummary(this.getSummary());
-	}
-
-	/**
-	 * Build the dialog.
-	 */
-	@Override
-	public void onBuildDialog(NacDialog dialog, AlertDialog.Builder builder)
-	{
-		String title = "Select Days";
-
-		builder.setTitle(title);
-		dialog.setPositiveButton("OK");
-		dialog.setNegativeButton("Cancel");
 	}
 
 	/**
@@ -107,15 +92,14 @@ public class NacPreferenceDays
 	 * Display the dialog when the preference is selected.
 	 */
 	@Override
-	public boolean onPreferenceClick(Preference pref)
+	public boolean onPreferenceClick(Preference preference)
 	{
 		Context context = getContext();
-		NacDialog dialog = new NacDialog();
+		NacDayOfWeekDialog dialog = new NacDayOfWeekDialog();
 
-		dialog.setOnBuildListener(this);
-		dialog.addOnDismissListener(this);
+		dialog.build(context);
 		dialog.addOnShowListener(this);
-		dialog.build(context, R.layout.dlg_alarm_days);
+		dialog.addOnDismissListener(this);
 		dialog.show();
 
 		return true;

@@ -1,6 +1,7 @@
 package com.nfcalarmclock;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -24,53 +25,53 @@ public class NacService
 	protected void onHandleIntent(Intent intent)
 	{
 		String key = intent.getDataString();
-		NacAlarm alarm = NacIntent.getAlarm(intent);
-		NacSound sound = NacIntent.getSound(intent);
+		NacDatabase db = new NacDatabase(this);
+		NacScheduler scheduler = new NacScheduler(this);
+		NacSharedPreferences shared = new NacSharedPreferences(this);
 
-		if (alarm != null)
+		if (key.equals("swap"))
 		{
-			NacUtility.printf("Doing %s to alarm", key);
-			NacDatabase db = new NacDatabase(this);
-			NacScheduler scheduler = new NacScheduler(this);
-			alarm.print();
+			NacAlarm[] alarms = NacIntent.getAlarms(intent);
+			NacAlarm fromAlarm = alarms[0];
+			NacAlarm toAlarm = alarms[1];
+			int fromId = fromAlarm.getId();
+			int toId = toAlarm.getId();
+			int fromSnoozeCount = shared.getSnoozeCount(fromId);
+			int toSnoozeCount = shared.getSnoozeCount(toId);
+
+			scheduler.cancel(fromAlarm);
+			scheduler.cancel(toAlarm);
+			db.swap(fromAlarm, toAlarm);
+			scheduler.add(fromAlarm);
+			scheduler.add(toAlarm);
+			shared.editSnoozeCount(fromId, toSnoozeCount);
+			shared.editSnoozeCount(toId, fromSnoozeCount);
+		}
+		else
+		{
+			NacAlarm alarm = NacIntent.getAlarm(intent);
+			int id = alarm.getId();
 
 			if (key.equals("add"))
 			{
 				db.add(alarm);
 				scheduler.update(alarm);
+				shared.editSnoozeCount(id, 0);
 			}
 			else if (key.equals("delete"))
 			{
 				db.delete(alarm);
 				scheduler.cancel(alarm);
+				shared.editSnoozeCount(id, 0);
 			}
 			else if (key.equals("change"))
 			{
 				db.update(alarm);
 				scheduler.update(alarm);
 			}
-			//else if (data.equals())
-			//{
-			//	scheduler.cancel(fromAlarm);
-			//	scheduler.cancel(toAlarm);
-			//	db.swap(fromAlarm, toAlarm);
-			//	scheduler.add(fromAlarm);
-			//	scheduler.add(toAlarm);
-			//}
+		}
 
-			db.close();
-		}
-		else if (sound != null)
-		{
-			NacUtility.printf("Doing %s to sound", key);
-			NacSharedPreferences shared = new NacSharedPreferences(this);
-
-			shared.getInstance().edit().putString(key, sound.getPath()).apply();
-		}
-		else
-		{
-			NacUtility.printf("Not doing shit with %s", key);
-		}
+		db.close();
 	}
 
 }

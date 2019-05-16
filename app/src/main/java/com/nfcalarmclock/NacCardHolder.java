@@ -3,7 +3,9 @@ package com.nfcalarmclock;
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.os.Handler;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -12,6 +14,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
+import android.text.TextUtils;
 import android.transition.ChangeBounds;
 import android.transition.Transition;
 import android.transition.TransitionManager;
@@ -26,9 +29,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import java.util.EnumSet;
-
-import android.os.Bundle;
-import android.content.Intent;
 
 /**
  * Card view holder.
@@ -256,6 +256,7 @@ public class NacCardHolder
 		this.setState(State.EXPANDED);
 		this.setRegions(this.getState());
 		this.setBackgroundColor(this.getState());
+		this.setSoundEllipsis();
 
 		if (animate)
 		{
@@ -295,6 +296,16 @@ public class NacCardHolder
 	{
 		return (this.isCollapsed()) ? this.getCollapseHeight()
 			: this.getExpandHeight();
+	}
+
+	/**
+	 * @return The card padding.
+	 */
+	private int getCardPaddingHorizontal()
+	{
+		RelativeLayout header = this.getRoot().findViewById(R.id.nac_header);
+
+		return header.getPaddingStart() + header.getPaddingEnd();
 	}
 
 	/**
@@ -367,6 +378,14 @@ public class NacCardHolder
 	}
 
 	/**
+	 * @return The context resources.
+	 */
+	public Resources getResources()
+	{
+		return this.getContext().getResources();
+	}
+
+	/**
 	 * @return The root view.
 	 */
 	public View getRoot()
@@ -380,6 +399,14 @@ public class NacCardHolder
 	private int getScreenHeight()
 	{
 		return this.mRecyclerView.getHeight();
+	}
+
+	/**
+	 * @return The screen width.
+	 */
+	private int getScreenWidth()
+	{
+		return this.getResources().getDisplayMetrics().widthPixels;
 	}
 
 	/**
@@ -561,6 +588,14 @@ public class NacCardHolder
 		{
 			alarm.setEnabled(state);
 			this.setSummaryDays();
+
+			if (!state)
+			{
+				Context context = this.getContext();
+				NacSharedPreferences shared = new NacSharedPreferences(context);
+
+				shared.editSnoozeCount(alarm.getId(), 0);
+			}
 		}
 		else if (id == R.id.nac_repeat)
 		{
@@ -674,11 +709,7 @@ public class NacCardHolder
 		alarm.changed();
 		this.setTime();
 		this.setSwitch();
-
-		if (!alarm.isOneTimeAlarm())
-		{
-			this.setSummaryDays();
-		}
+		this.setSummaryDays();
 	}
 
 	/**
@@ -836,10 +867,13 @@ public class NacCardHolder
 		}
 
 		params.setMarginStart(margin);
-		this.mSummaryName.setLayoutParams(params);
 		this.mSummaryName.setText(text);
+		this.mSummaryName.setLayoutParams(params);
 		this.mName.setText(name);
 		this.mName.setFocus(focus);
+		this.mName.getTextView().setMaxLines(1);
+		this.mName.getTextView().setEllipsize(TextUtils.TruncateAt.END);
+		this.setSummaryNameEllipsis();
 	}
 
 	/**
@@ -896,14 +930,49 @@ public class NacCardHolder
 	 */
 	public void setSound()
 	{
+		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
 		String path = alarm.getSoundPath();
-		String name = (!path.isEmpty()) ? alarm.getSoundName()
-			: NacSharedPreferences.DEFAULT_SOUND_MESSAGE;
+		String message = NacSharedPreferences.getSoundMessage(context, path);
 		boolean focus = (!path.isEmpty());
 
-		this.mSound.setText(name);
+		this.mSound.setText(message);
 		this.mSound.setFocus(focus);
+		this.mSound.getTextView().setMaxLines(1);
+		this.mSound.getTextView().setEllipsize(TextUtils.TruncateAt.END);
+	}
+
+	/**
+	 * Set ellipsis in the sound name if it is too long.
+	 */
+	private void setSoundEllipsis()
+	{
+		RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) this.mSound.getLayoutParams();
+		int maxWidth = this.getSoundMaxWidth();
+
+		if (params == null)
+		{
+			params = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		}
+
+		params.width = maxWidth;
+
+		this.mSound.setLayoutParams(params);
+	}
+
+	/**
+	 * @return The max width of the sound name before it gets ellipsized.
+	 */
+	private int getSoundMaxWidth()
+	{
+		int screenWidth = this.getScreenWidth();
+		int padding = this.getCardPaddingHorizontal();
+		int vibrate = NacUtility.getWidth(this.mVibrate);
+		int textsize = this.mSound.getTextSize();
+
+		return screenWidth - vibrate - padding - textsize;
 	}
 
 	/**
@@ -912,6 +981,43 @@ public class NacCardHolder
 	private void setState(State state)
 	{
 		this.mState = state;
+	}
+
+	/**
+	 * Set ellipsis for the summary name if it is too long.
+	 */
+	private void setSummaryNameEllipsis()
+	{
+		RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)
+			this.mSummaryName.getLayoutParams();
+		int maxWidth = this.getSummaryNameMaxWidth();
+		int width = NacUtility.getWidth(this.mSummaryName);
+		
+		if (params == null)
+		{
+			params = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		}
+
+		params.width = (width > maxWidth) ? maxWidth : width;
+
+		this.mSummaryName.setLayoutParams(params);
+	}
+
+	/**
+	 * @return The max width of the summary name before it gets ellipsized.
+	 */
+	private int getSummaryNameMaxWidth()
+	{
+		int screenWidth = this.getScreenWidth();
+		int padding = this.getCardPaddingHorizontal();
+		int textsize = (int) this.mSummaryName.getTextSize();
+		int summaryDays = 27 * textsize / 2;
+		int expandImage = 2 * (int) this.getResources().getDimension(
+			R.dimen.isz_expand);
+
+		return screenWidth - summaryDays - padding - expandImage;
 	}
 
 	/**

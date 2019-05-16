@@ -9,9 +9,10 @@ import android.view.View;
 /**
  * Preference that displays the name of the alarm.
  */
-public class NacPreferenceName
+public class NacNamePreference
 	extends Preference
-	implements Preference.OnPreferenceClickListener,NacDialog.OnDismissListener
+	implements Preference.OnPreferenceClickListener,
+		NacDialog.OnDismissListener
 {
 
 	/**
@@ -21,21 +22,21 @@ public class NacPreferenceName
 
 	/**
 	 */
-	public NacPreferenceName(Context context)
+	public NacNamePreference(Context context)
 	{
 		this(context, null);
 	}
 
 	/**
 	 */
-	public NacPreferenceName(Context context, AttributeSet attrs)
+	public NacNamePreference(Context context, AttributeSet attrs)
 	{
 		this(context, attrs, 0);
 	}
 
 	/**
 	 */
-	public NacPreferenceName(Context context, AttributeSet attrs, int style)
+	public NacNamePreference(Context context, AttributeSet attrs, int style)
 	{
 		super(context, attrs, style);
 		setLayoutResource(R.layout.nac_preference);
@@ -48,8 +49,7 @@ public class NacPreferenceName
 	@Override
 	public CharSequence getSummary()
 	{
-		return ((this.mValue != null) && !this.mValue.isEmpty()) ? this.mValue
-			: NacSharedPreferences.DEFAULT_NAME_SUMMARY;
+		return NacSharedPreferences.getNameSummary(this.mValue);
 	}
 
 	/**
@@ -69,8 +69,7 @@ public class NacPreferenceName
 	@Override
 	public boolean onDismissDialog(NacDialog dialog)
 	{
-		Object data = dialog.getData();
-		this.mValue = (data != null) ? (String) data : "";
+		this.mValue = dialog.getDataString();
 
 		setSummary(this.getSummary());
 		persistString(this.mValue);
@@ -96,7 +95,7 @@ public class NacPreferenceName
 		Context context = getContext();
 		NacNameDialog dialog = new NacNameDialog();
 
-		dialog.build(context, R.layout.dlg_alarm_name);
+		dialog.build(context);
 		dialog.addOnDismissListener(this);
 		dialog.saveData(this.mValue);
 		dialog.show();

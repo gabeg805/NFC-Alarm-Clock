@@ -11,6 +11,7 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -58,6 +59,16 @@ public class NacSound
 	public static final int TYPE_SPOTIFY_RANDOM = 6;
 
 	/**
+	 * Path for a random ringtone.
+	 */
+	public static final String RANDOM_RINGTONE_PATH = "TYPE_RINGTONE_RANDOM";
+
+	/**
+	 * Name for a random ringtone.
+	 */
+	public static final String RANDOM_RINGTONE_NAME = "Ringtone Playlist";
+
+	/**
 	 * Type of sound file.
 	 */
 	private int mType;
@@ -81,10 +92,21 @@ public class NacSound
 	 */
 	public NacSound(Context context, String path)
 	{
-		this.setType(NacSound.getType(path));
-		this.setPath(path);
-		this.setName(NacSound.getName(context, path));
+		this.set(context, path);
 		this.setData("");
+	}
+
+	/**
+	 */
+	public NacSound(int type)
+	{
+		this.setType(type);
+
+		if (NacSound.isRandomRingtone(type))
+		{
+			this.setPath(RANDOM_RINGTONE_PATH);
+			this.setName(RANDOM_RINGTONE_NAME);
+		}
 	}
 
 	/**
@@ -147,6 +169,27 @@ public class NacSound
 	public int getType()
 	{
 		return this.mType;
+	}
+
+	/**
+	 * Print the contents of the object.
+	 */
+	public void print()
+	{
+		NacUtility.printf("Type : %d", this.getType());
+		NacUtility.printf("Name : %s", this.getName());
+		NacUtility.printf("Path : %s", this.getPath());
+		NacUtility.printf("Data : %s", this.getData());
+	}
+
+	/**
+	 * Set all attributes of the sound, from the given path.
+	 */
+	public void set(Context context, String path)
+	{
+		this.setType(NacSound.getType(path));
+		this.setPath(path);
+		this.setName(NacSound.getName(context, path));
 	}
 
 	/**
@@ -253,6 +296,47 @@ public class NacSound
 		}
 
 		return artist;
+	}
+
+	/**
+	 * @return A list of NacSound objects corresponding to the files in the
+	 *         given path.
+	 */
+	public static List<NacSound> getFiles(Context context, String path)
+	{
+		if ((path == null) || (path.isEmpty()))
+		{
+			return null;
+		}
+
+		File directory = new File(path);
+		List<NacSound> files = new ArrayList<>();
+
+		if (!directory.isDirectory())
+		{
+			return null;
+		}
+
+		for (File file : NacFileBrowser.listing(path))
+		{
+			if (file.isDirectory())
+			{
+				continue;
+			}
+
+			try
+			{
+				String canonicalPath = file.getCanonicalPath();
+				NacUtility.printf("Path : %s", canonicalPath);
+				files.add(new NacSound(context, canonicalPath));
+			}
+			catch (IOException e)
+			{
+				NacUtility.printf("NacSound : getFiles : IOException occurred when trying to getCanonicalPath().");
+			}
+		}
+
+		return files;
 	}
 
 	/**
@@ -455,6 +539,14 @@ public class NacSound
 		{
 			return TYPE_FILE;
 		}
+		else if (NacSound.isRandomRingtone(path))
+		{
+			return TYPE_RINGTONE_RANDOM;
+		}
+		else if (NacSound.isFilePlaylist(path))
+		{
+			return TYPE_FILE_RANDOM;
+		}
 		else if (NacSound.isSpotify(path))
 		{
 			return TYPE_SPOTIFY;
@@ -466,19 +558,26 @@ public class NacSound
 	}
 
 	/**
+	 * Check if the given type is for a music file.
+	 */
+	public static boolean isFile(int type)
+	{
+		return (type == TYPE_FILE);
+	}
+
+	/**
 	 * Check if the given path corresponds to a music file.
 	 */
 	public static boolean isFile(String path)
 	{
-		return path.startsWith("/");
-	}
+		if (path.startsWith("/"))
+		{
+			File file = new File(path);
 
-	/**
-	 * Check if the given type is a music file.
-	 */
-	public static boolean isFile(int type)
-	{
-		return ((type == TYPE_FILE) || (type == TYPE_FILE_RANDOM));
+			return file.isFile();
+		}
+
+		return false;
 	}
 
 	/**
@@ -498,6 +597,53 @@ public class NacSound
 	}
 
 	/**
+	 * Check if the given type is for a random music file.
+	 */
+	public static boolean isFilePlaylist(int type)
+	{
+		return (type == TYPE_FILE_RANDOM);
+	}
+
+	/**
+	 * Check if the given path corresponds to a music playlist.
+	 */
+	public static boolean isFilePlaylist(String path)
+	{
+		if (path.startsWith("/"))
+		{
+			File file = new File(path);
+
+			return file.isDirectory();
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if the given type corresponds to a random ringtone.
+	 */
+	public static boolean isRandomRingtone(int type)
+	{
+		return (type == TYPE_RINGTONE_RANDOM);
+	}
+
+	/**
+	 * Check if the given path corresponds to a random ringtone.
+	 */
+	public static boolean isRandomRingtone(String path)
+	{
+		return path.equals(RANDOM_RINGTONE_PATH);
+	}
+
+	/**
+	 * Check if the given type corresponds to a ringtone.
+	 */
+	public static boolean isRingtone(int type)
+	{
+		return (type == TYPE_RINGTONE);
+	}
+
+	/**
 	 * Check if the given path corresponds to a ringtone.
 	 */
 	public static boolean isRingtone(String path)
@@ -506,11 +652,11 @@ public class NacSound
 	}
 
 	/**
-	 * Check if the given type corresponds to a ringtone.
+	 * Check if the given type corresponds to a spotify file.
 	 */
-	public static boolean isRingtone(int type)
+	public static boolean isSpotify(int type)
 	{
-		return ((type == TYPE_RINGTONE) || (type == TYPE_RINGTONE_RANDOM));
+		return (type == TYPE_SPOTIFY);
 	}
 
 	/**
@@ -519,14 +665,6 @@ public class NacSound
 	public static boolean isSpotify(String path)
 	{
 		return path.startsWith("spotify");
-	}
-
-	/**
-	 * Check if the given type corresponds to a spotify file.
-	 */
-	public static boolean isSpotify(int type)
-	{
-		return ((type == TYPE_SPOTIFY) || (type == TYPE_SPOTIFY_RANDOM));
 	}
 
 	/**

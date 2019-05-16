@@ -194,29 +194,25 @@ public class NacMainActivity
 			{
 				mFloatingButton.hide();
 			}
-			//else if ((dy == 0) && mFloatingButton.isShown())
-			//{
-			//	mFloatingButton.hide();
-			//}
 		}
 
 		/**
 		 * Display the floating button when at the bottom of the list.
 		 *
 		 * @param  rv  The recycler view.
-		 * @param  state The scroll state (Idle, Dragging, or Settling).
+		 * @param  state The scroll state (Idle=0, Dragging=1, or Settling=2).
 		 */
 		@Override
 		public void onScrollStateChanged(RecyclerView rv, int state)
 		{
 			super.onScrollStateChanged(rv, state);
 
-			if ((state == 0) && !rv.canScrollVertically(1))
+			if ((state == RecyclerView.SCROLL_STATE_IDLE)
+				&& !rv.canScrollVertically(1))
 			{
-				//if (!mFloatingButton.isShown())
-				if (mFloatingButton.isShown())
+				if (!mFloatingButton.isShown())
 				{
-					mFloatingButton.hide();
+					mFloatingButton.show();
 				}
 			}
 		}

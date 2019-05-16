@@ -345,7 +345,6 @@ public class NacDatabase
 
 			if (version == 1)
 			{
-				NacUtility.printf("Reading old version!");
 				id = cursor.getInt(1);
 				enabled = (cursor.getInt(2) != 0);
 				//boolean format = (cursor.getInt(3) != 0);
@@ -362,7 +361,6 @@ public class NacDatabase
 			}
 			else
 			{
-				NacUtility.printf("Reading NEW version!");
 				id = cursor.getInt(1);
 				enabled = (cursor.getInt(2) != 0);
 				hour = cursor.getInt(3);

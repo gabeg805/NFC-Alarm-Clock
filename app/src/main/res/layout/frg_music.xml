@@ -14,6 +14,8 @@
 		android:paddingBottom="@dimen/pb_frg_music_path"
 		android:paddingStart="@dimen/pl_frg_music_path"
 		android:paddingEnd="@dimen/pr_frg_music_path"
+		android:singleLine="true"
+		android:ellipsize="start"
 		android:textSize="@dimen/tsz_frg_music_path"
 		android:text=""
 		/>

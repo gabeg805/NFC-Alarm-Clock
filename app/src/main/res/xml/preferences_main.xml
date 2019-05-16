@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<Preference
+		android:key="@string/pref_screen_general_key"
+		android:title="@string/pref_screen_general_title"
+		android:fragment="com.nfcalarmclock.NacGeneralSettings"
+		/>
+
+	<Preference
+		android:key="@string/pref_screen_default_alarm_key"
+		android:title="@string/pref_screen_default_alarm_title"
+		android:fragment="com.nfcalarmclock.NacDefaultAlarmSettings"
+		/>
+
+	<Preference
+		android:key="@string/pref_screen_color_key"
+		android:title="@string/pref_screen_color_title"
+		android:fragment="com.nfcalarmclock.NacColorSettings"
+		/>
+
+</PreferenceScreen>

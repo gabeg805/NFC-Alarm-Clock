@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<com.nfcalarmclock.NacPreferenceColor
+		android:key="@string/pref_theme_color_key"
+		android:title="@string/pref_theme_color_title"
+		android:summary="@string/pref_theme_color_summary"
+		android:widgetLayout="@layout/nac_preference_color"
+		android:defaultValue="0xfffb8c00"
+		/>
+
+	<com.nfcalarmclock.NacPreferenceColor
+		android:key="@string/pref_name_color_key"
+		android:title="@string/pref_name_color_title"
+		android:summary="@string/pref_name_color_summary"
+		android:widgetLayout="@layout/nac_preference_color"
+		android:defaultValue="0xff00c0fb"
+		/>
+
+	<com.nfcalarmclock.NacPreferenceColor
+		android:key="@string/pref_days_color_key"
+		android:title="@string/pref_days_color_title"
+		android:summary="@string/pref_days_color_summary"
+		android:widgetLayout="@layout/nac_preference_color"
+		android:defaultValue="0xfffb8c00"
+		/>
+
+	<com.nfcalarmclock.NacPreferenceColor
+		android:key="@string/pref_time_color_key"
+		android:title="@string/pref_time_color_title"
+		android:summary="@string/pref_time_color_summary"
+		android:widgetLayout="@layout/nac_preference_color"
+		android:defaultValue="0xffffffff"
+		/>
+
+	<com.nfcalarmclock.NacPreferenceColor
+		android:key="@string/pref_am_color_key"
+		android:title="@string/pref_am_color_title"
+		android:summary="@string/pref_am_color_summary"
+		android:widgetLayout="@layout/nac_preference_color"
+		android:defaultValue="0xffffffff"
+		/>
+
+	<com.nfcalarmclock.NacPreferenceColor
+		android:key="@string/pref_pm_color_key"
+		android:title="@string/pref_pm_color_title"
+		android:summary="@string/pref_pm_color_summary"
+		android:widgetLayout="@layout/nac_preference_color"
+		android:defaultValue="0xffffffff"
+		/>
+
+</PreferenceScreen>

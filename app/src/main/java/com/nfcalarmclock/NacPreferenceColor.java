@@ -56,10 +56,6 @@ public class NacPreferenceColor
 		super(context, attrs, style);
 		setLayoutResource(R.layout.nac_preference_widget);
 		setOnPreferenceClickListener(this);
-
-		Resources.Theme theme = context.getTheme();
-		TypedArray a = theme.obtainStyledAttributes(attrs,
-			R.styleable.NacPreference, 0, 0);
 	}
 
 	/**

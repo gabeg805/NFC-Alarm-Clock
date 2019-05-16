@@ -7,6 +7,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -163,6 +164,38 @@ public class NacImageSubTextButton
 	{
 		invalidate();
 		requestLayout();
+	}
+
+	/**
+	 * Select this item.
+	 */
+	public void select()
+	{
+		Context context = getContext();
+		int color = ContextCompat.getColor(context, R.color.gray);
+
+		setBackgroundColor(color);
+	}
+
+	/**
+	 * Unselect this item.
+	 */
+	public void unselect()
+	{
+		Context context = getContext();
+		Resources res = context.getResources();
+		TypedValue tv = new TypedValue();
+		boolean success = context.getTheme().resolveAttribute(
+			android.R.attr.selectableItemBackground, tv, true);
+
+		if (tv.resourceId != 0)
+		{
+			setBackgroundResource(tv.resourceId);
+		}
+		else
+		{
+			setBackgroundColor(tv.data);
+		}
 	}
 
 	/**

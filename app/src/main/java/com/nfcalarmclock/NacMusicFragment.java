@@ -1,5 +1,6 @@
 package com.nfcalarmclock;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -22,7 +23,9 @@ import java.util.List;
  */
 public class NacMusicFragment
 	extends NacMediaFragment
-	implements NacFileBrowser.OnClickListener
+	implements NacFileBrowser.OnClickListener,
+		NacDialog.OnBuildListener,
+		NacDialog.OnDismissListener
 {
 
 	/**
@@ -66,11 +69,54 @@ public class NacMusicFragment
 	/**
 	 */
 	@Override
+	public void onBuildDialog(NacDialog dialog, AlertDialog.Builder builder)
+	{
+		builder.setTitle("Continue?");
+
+		dialog.setPositiveButton("YES");
+		dialog.setNegativeButton("NO");
+	}
+
+	/**
+	 */
+	@Override
+	public void onClick(View view)
+	{
+		int id = view.getId();
+
+		if (id == R.id.ok)
+		{
+			String path = getSoundPath();
+			File file = new File(path);
+
+			if (file.isDirectory())
+			{
+				Context context = getContext();
+				NacDialog dialog = new NacDialog();
+
+				dialog.saveData(view);
+				dialog.setOnBuildListener(this);
+				dialog.addOnDismissListener(this);
+				dialog.build(context, R.layout.dlg_media_playlist);
+				dialog.show();
+				dialog.scale(0.85, 1.0, false, true);
+
+				return;
+			}
+		}
+
+		super.onClick(view);
+	}
+
+	/**
+	 */
+	@Override
 	public void onClick(NacFileBrowser browser, File file, String path,
 		String name)
 	{
 		if (file.isDirectory())
 		{
+			this.setMedia(path);
 			browser.show(path);
 		}
 		else if (file.isFile())
@@ -90,6 +136,18 @@ public class NacMusicFragment
 		Bundle savedInstanceState)
 	{
 		return inflater.inflate(R.layout.frg_music, container, false);
+	}
+
+	/**
+	 */
+	@Override
+	public boolean onDismissDialog(NacDialog dialog)
+	{
+		View view = (View) dialog.getData();
+
+		super.onClick(view);
+
+		return true;
 	}
 
 	/**
@@ -127,24 +185,28 @@ public class NacMusicFragment
 	{
 		NacFileBrowser browser = new NacFileBrowser(root, R.id.path,
 			R.id.group);
-		String path = this.getSoundPath();
-		String parentPath = "";
-		File parentFile = new File(path).getParentFile();
+		String path = getSoundPath();
+		File pathFile = new File(path);
 
-		if ((parentFile != null) && NacSound.isFile(path))
+		if (pathFile.isFile())
 		{
+			File parentFile = pathFile.getParentFile();
 
-			try
+			if (parentFile != null)
 			{
-				parentPath = parentFile.getCanonicalPath();
-			}
-			catch (IOException e)
-			{
+
+				try
+				{
+					path = parentFile.getCanonicalPath();
+				}
+				catch (IOException e)
+				{
+				}
 			}
 		}
 
 		browser.setOnClickListener(this);
-		browser.show(parentPath);
+		browser.show(path);
 	}
 
 }

@@ -62,6 +62,26 @@ public class NacUtility
 	}
 
 	/**
+	 * Determine the width of the view.
+	 * 
+	 * @param  v  The view.
+	 * 
+	 * @return The width of the view.
+	 */
+	public static int getWidth(View view)
+	{
+		view.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+			MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+
+		ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams)
+			view.getLayoutParams();
+		int margins = lp.leftMargin + lp.rightMargin;
+		int width = view.getMeasuredWidth();
+
+		return width+margins;
+	}
+
+	/**
 	 * @brief Wrapper for Log object to print to the logcat easily.
 	 */
 	public static void print(String name, String string)

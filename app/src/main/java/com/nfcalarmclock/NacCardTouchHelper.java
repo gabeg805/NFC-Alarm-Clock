@@ -365,7 +365,14 @@ public class NacCardTouchHelper
 		@Override
 		public void onSwiped(ViewHolder vh, int dir)
 		{
-			if (dir == ItemTouchHelper.LEFT)
+			// This may be unnecessary
+			this.mViewHolder = vh;
+
+			if (!this.isCollapsed())
+			{
+				return;
+			}
+			else if (dir == ItemTouchHelper.LEFT)
 			{
 				mAdapter.onItemDelete(vh.getAdapterPosition());
 			}

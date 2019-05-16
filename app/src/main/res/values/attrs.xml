@@ -32,10 +32,12 @@
 	<attr name="nacPaddingLeft" format="reference|dimension" />
 	<attr name="nacPaddingRight" format="reference|dimension" />
 
+	<!-- Might be able to delete this 
 	<declare-styleable name="NacPreference">
 		<attr name="summaryEnabled" format="reference" />
 		<attr name="summaryDisabled" format="reference" />
 	</declare-styleable>
+	-->
 
 	<declare-styleable name="NacDayButton">
 		<attr name="nacWidth" />

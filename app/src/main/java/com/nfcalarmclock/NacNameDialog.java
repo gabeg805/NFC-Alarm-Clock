@@ -41,6 +41,14 @@ public class NacNameDialog
 	/**
 	 * Build the dialog.
 	 */
+	public void build(Context context)
+	{
+		this.build(context, R.layout.dlg_alarm_name);
+	}
+
+	/**
+	 * Build the dialog.
+	 */
 	@Override
 	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{

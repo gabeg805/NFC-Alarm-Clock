@@ -13,10 +13,9 @@ import android.widget.CompoundButton;
 import android.widget.TextView;;
 
 /**
- * Preference that indicates whether to display a dismiss button or not, when
- * an alarm goes off.
+ * Preference that indicates repeating the alarm.
  */
-public class NacPreferenceDismissButton
+public class NacCheckboxPreference
 	extends Preference
 	implements Preference.OnPreferenceClickListener,
 		CompoundButton.OnCheckedChangeListener
@@ -33,70 +32,83 @@ public class NacPreferenceDismissButton
 	protected boolean mValue;
 
 	/**
-	 * Summary text when enabling/disabling the preference.
+	 * Summary text when checkbox is enabled.
 	 */
-	protected String[] mSummaryState;
+	protected String mSummaryOn;
+
+	/**
+	 * Summary text when checkbox is disabled.
+	 */
+	protected String mSummaryOff;
 
 	/**
 	 */
-	public NacPreferenceDismissButton(Context context)
+	public NacCheckboxPreference(Context context)
 	{
 		this(context, null);
 	}
 
 	/**
 	 */
-	public NacPreferenceDismissButton(Context context, AttributeSet attrs)
+	public NacCheckboxPreference(Context context, AttributeSet attrs)
 	{
 		this(context, attrs, 0);
 	}
 
 	/**
 	 */
-	public NacPreferenceDismissButton(Context context, AttributeSet attrs, int style)
+	public NacCheckboxPreference(Context context, AttributeSet attrs, int style)
 	{
 		super(context, attrs, style);
-		setLayoutResource(R.layout.nac_preference_widget);
+		setLayoutResource(R.layout.nac_preference_checkers);
 		setOnPreferenceClickListener(this);
 
-		Resources.Theme theme = context.getTheme();
-		TypedArray a = theme.obtainStyledAttributes(attrs,
-			R.styleable.NacPreference, 0, 0);
-		this.mSummaryState = new String[2];
-		this.mSummaryState[0] = a.getString(R.styleable.NacPreference_summaryEnabled);
-		this.mSummaryState[1] = a.getString(R.styleable.NacPreference_summaryDisabled);
+		int[] array = new int[] { android.R.attr.summaryOn,
+			android.R.attr.summaryOff };
+		TypedArray ta = context.obtainStyledAttributes(attrs, array);
 
-		if (this.mSummaryState[0] == null || this.mSummaryState[1] == null)
+		try
 		{
-			throw new Resources.NotFoundException();
+			this.mSummaryOn = ta.getString(0);
+			this.mSummaryOff = ta.getString(1);
+		}
+		finally
+		{
+			ta.recycle();
 		}
 	}
 
 	/**
-	 * @return The desired summary text.
+	 * @return The checked status.
+	 */
+	public boolean getChecked()
+	{
+		return this.mValue;
+	}
+
+	/**
 	 */
 	@Override
 	public CharSequence getSummary()
 	{
-		return (this.mValue) ? this.mSummaryState[0] : this.mSummaryState[1];
+		return (this.mValue) ? this.mSummaryOn : this.mSummaryOff;
 	}
 
 	/**
-	 * Setup the checkbox and summary text.
 	 */
 	@Override
-	protected void onBindView(View v)
+	protected void onBindView(View view)
 	{
-		super.onBindView(v);
+		super.onBindView(view);
 
-		Context context = v.getContext();
+		Context context = view.getContext();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
 		int[][] states = new int[][] {
-			new int[] { android.R.attr.state_checked},
-			new int[] {-android.R.attr.state_checked}};
-		int[] colors = new int[] {shared.getThemeColor(), Color.LTGRAY};
+			new int[] {  android.R.attr.state_checked },
+			new int[] { -android.R.attr.state_checked } };
+		int[] colors = new int[] { shared.getThemeColor(), Color.LTGRAY };
 		ColorStateList colorStateList = new ColorStateList(states, colors);
-		this.mCheckBox = (CheckBox) v.findViewById(R.id.widget);
+		this.mCheckBox = (CheckBox) view.findViewById(R.id.widget);
 
 		this.mCheckBox.setChecked(this.mValue);
 		this.mCheckBox.setOnCheckedChangeListener(this);
@@ -113,20 +125,19 @@ public class NacPreferenceDismissButton
 	{
 		this.mValue = state;
 
-		this.mCheckBox.setChecked(this.mValue);
+		this.mCheckBox.setChecked(state);
 		this.setSummary();
-		persistBoolean(this.mValue);
+		persistBoolean(state);
 	}
 
 	/**
 	 * @return The default value.
 	 */
-	@Override
-	protected Object onGetDefaultValue(TypedArray a, int index)
-	{
-		return (boolean) a.getBoolean(index,
-			NacSharedPreferences.DEFAULT_REQUIRE_NFC);
-	}
+	//@Override
+	//protected Object onGetDefaultValue(TypedArray a, int index)
+	//{
+	//	return (boolean) a.getBoolean(index, NacSharedPreferences.DEFAULT_REPEAT);
+	//}
 
 	/**
 	 * Allow users to select the whole preference to change the checkbox.

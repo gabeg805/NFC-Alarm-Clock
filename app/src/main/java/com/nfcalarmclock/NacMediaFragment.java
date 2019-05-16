@@ -1,5 +1,6 @@
 package com.nfcalarmclock;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -145,7 +146,6 @@ public class NacMediaFragment
 		}
 		else if (id == R.id.cancel)
 		{
-			player.release();
 			activity.finish();
 		}
 		else if (id == R.id.ok)
@@ -153,23 +153,20 @@ public class NacMediaFragment
 			Context context = getContext();
 			NacAlarm alarm = this.getAlarm();
 			NacSound sound = this.getSound();
-			Intent intent = null;
 
 			if (alarm != null)
 			{
-				intent = NacIntent.createService(context, "change", alarm);
+				Intent intent = NacIntent.createService(context, "change", alarm);
+
+				context.startService(intent);
 			}
 			else if (sound != null)
 			{
-				intent = NacIntent.createService(context, sound.getData(), sound);
+				Intent intent = NacIntent.toIntent(sound);
+
+				activity.setResult(Activity.RESULT_OK, intent);
 			}
 
-			if (intent != null)
-			{
-				context.startService(intent);
-			}
-
-			player.release();
 			activity.finish();
 		}
 	}
@@ -244,11 +241,17 @@ public class NacMediaFragment
 	 */
 	protected void setMedia(String media)
 	{
+		Context context = getContext();
 		NacAlarm alarm = this.getAlarm();
+		NacSound sound = this.getSound();
 
 		if (alarm != null)
 		{
-			alarm.setSound(getContext(), media);
+			alarm.setSound(context, media);
+		}
+		else if (sound != null)
+		{
+			sound.set(context, media);
 		}
 	}
 
