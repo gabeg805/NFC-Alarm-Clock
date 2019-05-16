@@ -188,7 +188,11 @@ public class NacMusicFragment
 		String path = getSoundPath();
 		File pathFile = new File(path);
 
-		if (pathFile.isFile())
+		if (NacSound.isFilePlaylist(path))
+		{
+			;
+		}
+		else if (NacSound.isFile(path) && pathFile.isFile())
 		{
 			File parentFile = pathFile.getParentFile();
 
@@ -203,6 +207,10 @@ public class NacMusicFragment
 				{
 				}
 			}
+		}
+		else
+		{
+			path = NacFileBrowser.getHome();
 		}
 
 		browser.setOnClickListener(this);
