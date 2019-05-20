@@ -20,6 +20,7 @@ public class NacGeneralSettings
 	{
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.general_preferences);
+		//PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 	}
 
 }

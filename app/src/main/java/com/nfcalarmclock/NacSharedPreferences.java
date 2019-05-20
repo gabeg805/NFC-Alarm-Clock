@@ -64,6 +64,11 @@ public class NacSharedPreferences
 	public static final boolean DEFAULT_SHUFFLE = false;
 
 	/**
+	 * Default Monday first value.
+	 */
+	public static final boolean DEFAULT_MONDAY_FIRST = false;
+
+	/**
 	 * Default auto dismiss index value.
 	 */
 	public static final int DEFAULT_AUTO_DISMISS_INDEX = 7;
@@ -187,175 +192,329 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * Edit the AM preference color.
+	 * @see editAmColor
 	 */
 	public void editAmColor(int color)
 	{
+		this.editAmColor(color, false);
+	}
+
+	/**
+	 * Edit the AM preference color.
+	 */
+	public void editAmColor(int color, boolean commit)
+	{
 		String key = this.getKeys().getAmColor();
 
-		this.getInstance().edit().putInt(key, color).apply();
+		this.saveInt(key, color, commit);
+	}
+
+	/**
+	 * @see editAutoDismiss
+	 */
+	public void editAutoDismiss(int index)
+	{
+		this.editAutoDismiss(index, false);
 	}
 
 	/**
 	 * Edit the auto dismiss preference value.
 	 */
-	public void editAutoDismiss(int index)
+	public void editAutoDismiss(int index, boolean commit)
 	{
 		String key = this.getKeys().getAutoDismiss();
 
-		this.getInstance().edit().putInt(key, index).apply();
+		this.saveInt(key, index, commit);
+	}
+
+	/**
+	 * @see editDays
+	 */
+	public void editDays(int days)
+	{
+		this.editDays(days, false);
 	}
 
 	/**
 	 * Edit the days preference value.
 	 */
-	public void editDays(int days)
+	public void editDays(int days, boolean commit)
 	{
 		String key = this.getKeys().getDays();
 
-		this.getInstance().edit().putInt(key, days).apply();
+		this.saveInt(key, days, commit);
+	}
+
+	/**
+	 * @see editDaysColor
+	 */
+	public void editDaysColor(int color)
+	{
+		this.editDaysColor(color, false);
 	}
 
 	/**
 	 * Edit the days preference color.
 	 */
-	public void editDaysColor(int color)
+	public void editDaysColor(int color, boolean commit)
 	{
 		String key = this.getKeys().getDaysColor();
 
-		this.getInstance().edit().putInt(key, color).apply();
+		this.saveInt(key, color, commit);
+	}
+
+	/**
+	 * @see editEasySnooze
+	 */
+	public void editEasySnooze(boolean easy)
+	{
+		this.editEasySnooze(easy, false);
 	}
 
 	/**
 	 * Edit the easy snooze preference value.
 	 */
-	public void editEasySnooze(boolean easy)
+	public void editEasySnooze(boolean easy, boolean commit)
 	{
 		String key = this.getKeys().getEasySnooze();
 
-		this.getInstance().edit().putBoolean(key, easy).apply();
+		this.saveBoolean(key, easy, commit);
+	}
+
+	/**
+	 * @see editMaxSnooze
+	 */
+	public void editMaxSnooze(int max)
+	{
+		this.editMaxSnooze(max, false);
 	}
 
 	/**
 	 * Edit the max snooze preference value.
 	 */
-	public void editMaxSnooze(int max)
+	public void editMaxSnooze(int max, boolean commit)
 	{
 		String key = this.getKeys().getMaxSnooze();
 
-		this.getInstance().edit().putInt(key, max).apply();
+		this.saveInt(key, max, commit);
+	}
+
+	/**
+	 * @see editMondayFirst
+	 */
+	public void editMondayFirst(boolean mondayFirst)
+	{
+		this.editMondayFirst(mondayFirst, false);
+	}
+
+	/**
+	 * Edit the monday first preference value.
+	 */
+	public void editMondayFirst(boolean mondayFirst, boolean commit)
+	{
+		String key = this.getKeys().getMondayFirst();
+
+		this.saveBoolean(key, mondayFirst, commit);
+	}
+
+	/**
+	 * @see editName
+	 */
+	public void editName(String name)
+	{
+		this.editName(name, false);
 	}
 
 	/**
 	 * Edit the alarm name preference value.
 	 */
-	public void editName(String name)
+	public void editName(String name, boolean commit)
 	{
 		String key = this.getKeys().getName();
 
-		this.getInstance().edit().putString(key, name).apply();
+		this.saveString(key, name, commit);
+	}
+
+	/**
+	 * @see editNameColor
+	 */
+	public void editNameColor(int color)
+	{
+		this.editNameColor(color, false);
 	}
 
 	/**
 	 * Edit the alarm name preference color.
 	 */
-	public void editNameColor(int color)
+	public void editNameColor(int color, boolean commit)
 	{
 		String key = this.getKeys().getNameColor();
 
-		this.getInstance().edit().putInt(key, color).apply();
+		this.saveInt(key, color, commit);
+	}
+
+	/**
+	 * @see editPmColor
+	 */
+	public void editPmColor(int color)
+	{
+		this.editPmColor(color, false);
 	}
 
 	/**
 	 * Edit the PM preference color.
 	 */
-	public void editPmColor(int color)
+	public void editPmColor(int color, boolean commit)
 	{
 		String key = this.getKeys().getPmColor();
 
-		this.getInstance().edit().putInt(key, color).apply();
+		this.saveInt(key, color, commit);
+	}
+
+	/**
+	 * @see editRepeat
+	 */
+	public void editRepeat(boolean repeat)
+	{
+		this.editRepeat(repeat, false);
 	}
 
 	/**
 	 * Edit the repeat preference value.
 	 */
-	public void editRepeat(boolean repeat)
+	public void editRepeat(boolean repeat, boolean commit)
 	{
 		String key = this.getKeys().getRepeat();
 
-		this.getInstance().edit().putBoolean(key, repeat).apply();
+		this.saveBoolean(key, repeat, commit);
+	}
+
+	/**
+	 * @see editRequireNfc
+	 */
+	public void editRequireNfc(boolean require)
+	{
+		this.editRequireNfc(require, false);
 	}
 
 	/**
 	 * Edit the require NFC preference value.
 	 */
-	public void editRequireNfc(boolean require)
+	public void editRequireNfc(boolean require, boolean commit)
 	{
 		String key = this.getKeys().getRequireNfc();
 
-		this.getInstance().edit().putBoolean(key, require).apply();
+		this.saveBoolean(key, require, commit);
+	}
+
+	/**
+	 * @see editSnoozeCount
+	 */
+	public void editSnoozeCount(int id, int count)
+	{
+		this.editSnoozeCount(id, count, false);
 	}
 
 	/**
 	 * Edit the snooze count value.
 	 */
-	public void editSnoozeCount(int id, int count)
+	public void editSnoozeCount(int id, int count, boolean commit)
 	{
 		String key = this.getKeys().getSnoozeCount(id);
 
-		this.getSharedPreferences().edit().putInt(key, count).apply();
+		this.saveInt(key, count, commit);
+	}
+
+	/**
+	 * @see editSnoozeDuration
+	 */
+	public void editSnoozeDuration(int duration)
+	{
+		this.editSnoozeDuration(duration, false);
 	}
 
 	/**
 	 * Edit the snooze duration preference value.
 	 */
-	public void editSnoozeDuration(int duration)
+	public void editSnoozeDuration(int duration, boolean commit)
 	{
 		String key = this.getKeys().getSnoozeDuration();
 
-		this.getInstance().edit().putInt(key, duration).apply();
+		this.saveInt(key, duration, commit);
+	}
+
+	/**
+	 * @see editSound
+	 */
+	public void editSound(String path)
+	{
+		this.editSound(path, false);
 	}
 
 	/**
 	 * Edit the sound preference value.
 	 */
-	public void editSound(String path)
+	public void editSound(String path, boolean commit)
 	{
 		String key = this.getKeys().getSound();
 
-		this.getInstance().edit().putString(key, path).apply();
+		this.saveString(key, path, commit);
+	}
+
+	/**
+	 * @see editThemeColor
+	 */
+	public void editThemeColor(int color)
+	{
+		this.editThemeColor(color, false);
 	}
 
 	/**
 	 * Edit the theme color preference value.
 	 */
-	public void editThemeColor(int color)
+	public void editThemeColor(int color, boolean commit)
 	{
 		String key = this.getKeys().getThemeColor();
 
-		this.getInstance().edit().putInt(key, color).apply();
+		this.saveInt(key, color, commit);
+	}
+
+	/**
+	 * @see editTimeColor
+	 */
+	public void editTimeColor(int color)
+	{
+		this.editTimeColor(color, false);
 	}
 
 	/**
 	 * Edit the time color preference value.
 	 */
-	public void editTimeColor(int color)
+	public void editTimeColor(int color, boolean commit)
 	{
 		String key = this.getKeys().getTimeColor();
 
-		this.getInstance().edit().putInt(key, color).apply();
+		this.saveInt(key, color, commit);
+	}
+
+	/**
+	 * @see editVibrate
+	 */
+	public void editVibrate(boolean vibrate)
+	{
+		this.editVibrate(vibrate, false);
 	}
 
 	/**
 	 * Edit the vibrate preference value.
 	 */
-	public void editVibrate(boolean vibrate)
+	public void editVibrate(boolean vibrate, boolean commit)
 	{
 		String key = this.getKeys().getVibrate();
 
-		this.getInstance().edit().putBoolean(key, vibrate).apply();
-	}
+		this.saveBoolean(key, vibrate, commit);
 
+	}
 
 	/**
 	 * @return The AM color.
@@ -564,6 +723,17 @@ public class NacSharedPreferences
 	public static int getMaxSnoozeValue(int index)
 	{
 		return (index == 11) ? -1 : index;
+	}
+
+	/**
+	 * @return The monday first value.
+	 */
+	public boolean getMondayFirst()
+	{
+		String key = this.getKeys().getMondayFirst();
+
+		return this.getSharedPreferences().getBoolean(key,
+			DEFAULT_MONDAY_FIRST);
 	}
 
 	/**
@@ -809,6 +979,86 @@ public class NacSharedPreferences
 		String key = this.getKeys().getVibrate();
 
 		return this.getSharedPreferences().getBoolean(key, DEFAULT_VIBRATE);
+	}
+
+	/**
+	 * @see save
+	 */
+	public void save(SharedPreferences.Editor editor)
+	{
+		this.save(editor, false);
+	}
+
+	/**
+	 * Save the changes that were made to the shared preference.
+	 */
+	public void save(SharedPreferences.Editor editor, boolean commit)
+	{
+		if (commit)
+		{
+			editor.commit();
+		}
+		else
+		{
+			editor.apply();
+		}
+	}
+
+	/**
+	 * @see saveBoolean
+	 */
+	public void saveBoolean(String key, boolean value)
+	{
+		this.saveBoolean(key, value, false);
+	}
+
+	/**
+	 * Save a boolean to the shared preference.
+	 */
+	public void saveBoolean(String key, boolean value, boolean commit)
+	{
+		SharedPreferences.Editor editor = this.getInstance().edit()
+			.putBoolean(key, value);
+
+		this.save(editor, commit);
+	}
+
+	/**
+	 * @see saveInt
+	 */
+	public void saveInt(String key, int value)
+	{
+		this.saveInt(key, value, false);
+	}
+
+	/**
+	 * Save an int to the shared preference.
+	 */
+	public void saveInt(String key, int value, boolean commit)
+	{
+		SharedPreferences.Editor editor = this.getInstance().edit()
+			.putInt(key, value);
+
+		this.save(editor, commit);
+	}
+
+	/**
+	 * @see saveString
+	 */
+	public void saveString(String key, String value)
+	{
+		this.saveString(key, value, false);
+	}
+
+	/**
+	 * Save a string to the shared preference.
+	 */
+	public void saveString(String key, String value, boolean commit)
+	{
+		SharedPreferences.Editor editor = this.getInstance().edit()
+			.putString(key, value);
+
+		this.save(editor, commit);
 	}
 
 }

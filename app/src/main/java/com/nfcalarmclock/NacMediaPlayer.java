@@ -291,6 +291,7 @@ public class NacMediaPlayer
 	@Override
 	public void onAudioFocusChange(int focusChange)
 	{
+		NacUtility.printf("onAudioFocusChange! %d", focusChange);
 		String change = "UNKOWN";
 
 		if (focusChange == AudioManager.AUDIOFOCUS_GAIN)

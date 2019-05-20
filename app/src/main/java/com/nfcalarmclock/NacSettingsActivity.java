@@ -39,7 +39,7 @@ public class NacSettingsActivity
 	{
 		super.onCreate(savedInstanceState);
 
-		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+		//PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 		FragmentManager manager = getFragmentManager();
 
@@ -99,7 +99,7 @@ public class NacSettingsActivity
 		public void onCreate(Bundle savedInstanceState)
 		{
 			super.onCreate(savedInstanceState);
-			addPreferencesFromResource(R.xml.preferences_main);
+			addPreferencesFromResource(R.xml.main_preferences);
 
 			NacPreferenceKeys keys = this.getKeys();
 			Resources res = getResources();

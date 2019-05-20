@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import java.util.EnumSet;
@@ -67,13 +68,83 @@ public class NacDayOfWeek
 	}
 
 	/**
-	 * @brief Finish setting up the View.
+	 * Determine the spacing between buttons.
+	 * 
+	 * @return The spacing between the different buttons.
 	 */
-	@Override
-	protected void onFinishInflate()
+	private int getButtonSpacing()
 	{
-		super.onFinishInflate();
-		this.finishSetup();
+		Resources r = getContext().getResources();
+		DisplayMetrics metrics = r.getDisplayMetrics();
+		float left = r.getDimension(R.dimen.ml_card) + getPaddingLeft();
+		float right = r.getDimension(R.dimen.mr_card) + getPaddingRight();
+		double spacing = (metrics.widthPixels - (left+right)
+						 - 7*this.mButtons[0].getButtonWidth()) / 16.0;
+
+		return (int) spacing;
+	}
+
+	/**
+	 * @return The alarm days.
+	 */
+	public EnumSet<NacCalendar.Day> getDays()
+	{
+		EnumSet<NacCalendar.Day> days = EnumSet.noneOf(NacCalendar.Day.class);
+		int index = 0;
+
+		for (NacCalendar.Day d : NacCalendar.WEEK)
+		{
+			if (this.isDayEnabled(index))
+			{
+				days.add(d);
+			}
+
+			index++;
+		}
+
+		return days;
+	}
+
+	/**
+	 * Initialize the view.
+	 */
+	public void init(AttributeSet attrs)
+	{
+		Context context = getContext();
+
+		setOrientation(LinearLayout.HORIZONTAL);
+		LayoutInflater.from(context).inflate(R.layout.nac_day_of_week,
+			this, true);
+
+		this.mButtons = new NacDayButton[this.mLength];
+		this.mButtons[0] = (NacDayButton) findViewById(R.id.dow_sun);
+		this.mButtons[1] = (NacDayButton) findViewById(R.id.dow_mon);
+		this.mButtons[2] = (NacDayButton) findViewById(R.id.dow_tue);
+		this.mButtons[3] = (NacDayButton) findViewById(R.id.dow_wed);
+		this.mButtons[4] = (NacDayButton) findViewById(R.id.dow_thu);
+		this.mButtons[5] = (NacDayButton) findViewById(R.id.dow_fri);
+		this.mButtons[6] = (NacDayButton) findViewById(R.id.dow_sat);
+		this.mListener = null;
+
+		for (int i=0; i < this.mLength; i++)
+		{
+			if (this.mButtons[i] == null)
+			{
+				throw new RuntimeException("Unable to find NacDayButton ID for #"+String.valueOf(i)+".");
+			}
+
+			this.mButtons[i].setOnClickListener(this);
+			this.mButtons[i].mergeAttributes(context, attrs);
+			this.mButtons[i].setViewAttributes();
+		}
+	}
+
+	/**
+	 * @return True if the button is enabled and false if it is not.
+	 */
+	public boolean isDayEnabled(int index)
+	{
+		return this.mButtons[index].isEnabled();
 	}
 
 	/**
@@ -122,36 +193,25 @@ public class NacDayOfWeek
 	}
 
 	/**
-	 * Initialize the view.
 	 */
-	public void init(AttributeSet attrs)
+	@Override
+	protected void onFinishInflate()
 	{
-		Context context = getContext();
+		super.onFinishInflate();
 
-		setOrientation(LinearLayout.HORIZONTAL);
-		LayoutInflater.from(context).inflate(R.layout.nac_day_of_week,
-			this, true);
+		if (this.mButtons == null)
+		{
+			throw new RuntimeException("Unable to find button views.");
+		}
 
-		this.mButtons = new NacDayButton[this.mLength];
-		this.mButtons[0] = (NacDayButton) findViewById(R.id.dow_sun);
-		this.mButtons[1] = (NacDayButton) findViewById(R.id.dow_mon);
-		this.mButtons[2] = (NacDayButton) findViewById(R.id.dow_tue);
-		this.mButtons[3] = (NacDayButton) findViewById(R.id.dow_wed);
-		this.mButtons[4] = (NacDayButton) findViewById(R.id.dow_thu);
-		this.mButtons[5] = (NacDayButton) findViewById(R.id.dow_fri);
-		this.mButtons[6] = (NacDayButton) findViewById(R.id.dow_sat);
-		this.mListener = null;
+		int spacing = this.getButtonSpacing();
 
 		for (int i=0; i < this.mLength; i++)
 		{
-			if (this.mButtons[i] == null)
-			{
-				throw new RuntimeException("Unable to find NacDayButton ID for #"+String.valueOf(i)+".");
-			}
+			NacDayButton b = this.mButtons[i];
 
-			this.mButtons[i].setOnClickListener(this);
-			this.mButtons[i].mergeAttributes(context, attrs);
-			this.mButtons[i].setViewAttributes();
+			b.setPadding(spacing, spacing, spacing, spacing);
+			b.setTag(i);
 		}
 	}
 
@@ -190,90 +250,39 @@ public class NacDayOfWeek
 	}
 
 	/**
-	 * @brief Setup the buttons that represent the different days of the week.
+	 * Set Monday to be the first day in the week, and Sunday to be last.
 	 */
-	private void finishSetup()
+	public void setMondayFirst(boolean mondayFirst)
 	{
-		if (this.mButtons == null)
+		NacDayButton sunday = this.mButtons[0];
+		NacDayButton monday = this.mButtons[1];
+		View firstChild = getChildAt(0);
+		View lastChild = getChildAt(6);
+
+		if (mondayFirst)
 		{
-			throw new RuntimeException("Unable to find button views.");
-		}
-
-		int spacing = this.getButtonSpacing();
-
-		for (int i=0; i < this.mLength; i++)
-		{
-			NacDayButton b = this.mButtons[i];
-			int top = b.getPaddingTop();
-			int bottom = b.getPaddingBottom();
-			int start = b.getPaddingStart();
-			int end = b.getPaddingEnd();
-
-			if ((top == 0) && (bottom == 0) && (start == 0) && (end == 0))
+			if (firstChild.getId() != monday.getId())
 			{
-				top = spacing;
-				bottom = spacing;
-				start = (i == 0) ? 2*spacing : spacing;
-				end = ((i+1) == this.mLength) ? 2*spacing : spacing;
+				removeView(firstChild);
+				addView(firstChild, 6);
 			}
-
-			b.setPadding(start, top, end, bottom);
-			b.setTag(i);
+		}
+		else
+		{
+			if (firstChild.getId() != sunday.getId())
+			{
+				removeView(lastChild);
+				addView(lastChild, 0);
+			}
 		}
 	}
 
 	/**
-	 * @brief Set an onClick listener for each of the day of week buttons.
+	 * Set an onClick listener for each of the day of week buttons.
 	 */
 	public void setOnClickListener(NacDayOfWeek.OnClickListener listener)
 	{
 		this.mListener = listener;
-	}
-
-	/**
-	 * @return The alarm days.
-	 */
-	public EnumSet<NacCalendar.Day> getDays()
-	{
-		EnumSet<NacCalendar.Day> days = EnumSet.noneOf(NacCalendar.Day.class);
-		int index = 0;
-
-		for (NacCalendar.Day d : NacCalendar.WEEK)
-		{
-			if (this.isDayEnabled(index))
-			{
-				days.add(d);
-			}
-
-			index++;
-		}
-
-		return days;
-	}
-
-	/**
-	 * Determine the spacing between buttons.
-	 * 
-	 * @return The spacing between the different buttons.
-	 */
-	private int getButtonSpacing()
-	{
-		Resources r = getContext().getResources();
-		DisplayMetrics metrics = r.getDisplayMetrics();
-		float left = r.getDimension(R.dimen.ml_card) + getPaddingLeft();
-		float right = r.getDimension(R.dimen.mr_card) + getPaddingRight();
-		double spacing = (metrics.widthPixels - (left+right)
-						 - 7*this.mButtons[0].getButtonWidth()) / 16.0;
-
-		return (int) spacing;
-	}
-
-	/**
-	 * @return True if the button is enabled and false if it is not.
-	 */
-	public boolean isDayEnabled(int index)
-	{
-		return this.mButtons[index].isEnabled();
 	}
 
 }

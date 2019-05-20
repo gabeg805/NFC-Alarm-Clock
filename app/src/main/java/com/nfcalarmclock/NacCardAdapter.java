@@ -389,7 +389,7 @@ public class NacCardAdapter
 	public void onChange(NacAlarm alarm)
 	{
 		Context context = this.getContext();
-		Intent intent = NacIntent.createService(context, "change", alarm);
+		Intent intent = NacIntent.createService(context, "update", alarm);
 
 		context.startService(intent);
 	}

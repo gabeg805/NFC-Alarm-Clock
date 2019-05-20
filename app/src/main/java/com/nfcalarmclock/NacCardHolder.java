@@ -804,11 +804,14 @@ public class NacCardHolder
 	 */
 	public void setDays()
 	{
+		Context context = this.getContext();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
 		NacAlarm alarm = this.getAlarm();
 		NacDayOfWeek dayButtons = this.getDayButtons();
 		CheckBox repeat = this.getRepeat();
 		EnumSet<NacCalendar.Day> days = alarm.getDays();
 
+		dayButtons.setMondayFirst(shared.getMondayFirst());
 		dayButtons.setDays(days);
 		dayButtons.setVisibility((days.isEmpty() || !repeat.isChecked())
 			? View.GONE : View.VISIBLE);

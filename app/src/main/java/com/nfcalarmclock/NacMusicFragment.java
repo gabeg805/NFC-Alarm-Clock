@@ -123,9 +123,17 @@ public class NacMusicFragment
 		{
 			NacMediaPlayer player = this.getMediaPlayer();
 
-			this.setMedia(path);
 			player.reset();
-			player.play(path);
+
+			if (browser.isSelected())
+			{
+				this.setMedia(path);
+				player.play(path);
+			}
+			else
+			{
+				this.setMedia("");
+			}
 		}
 	}
 
@@ -185,7 +193,8 @@ public class NacMusicFragment
 	{
 		NacFileBrowser browser = new NacFileBrowser(root, R.id.path,
 			R.id.group);
-		String path = getSoundPath();
+		String sound = getSoundPath();
+		String path = sound;
 		File pathFile = new File(path);
 
 		if (NacSound.isFilePlaylist(path))
@@ -215,6 +224,7 @@ public class NacMusicFragment
 
 		browser.setOnClickListener(this);
 		browser.show(path);
+		browser.select(sound);
 	}
 
 }

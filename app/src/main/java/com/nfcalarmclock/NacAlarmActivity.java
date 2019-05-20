@@ -21,6 +21,9 @@ import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
 
+import android.speech.tts.TextToSpeech;
+import java.util.Locale;
+
 /**
  * Activity to dismiss/snooze the alarm.
  */
@@ -29,6 +32,183 @@ public class NacAlarmActivity
 	implements Runnable,
 		View.OnClickListener
 {
+
+	/**
+	 * Text to speech.
+	 */
+	public class NacTextToSpeech
+		implements TextToSpeech.OnInitListener
+	{
+
+		/**
+		 * The context.
+		 */
+		private Context mContext;
+
+		/**
+		 * The speech engine.
+		 */
+		private TextToSpeech mSpeech;
+
+		/**
+		 * Message buffer to speak.
+		 */
+		private String mBuffer;
+
+		/**
+		 * Check if speech engine is initialized.
+		 */
+		private boolean mInitialized;
+
+		/**
+		 */
+		public NacTextToSpeech(Context context)
+		{
+			this.mContext = context;
+			this.mSpeech = null;
+			this.mBuffer = "";
+			this.mInitialized = false;
+		}
+
+		/**
+		 * @return The speech buffer.
+		 */
+		private String getBuffer()
+		{
+			return this.mBuffer;
+		}
+
+		/**
+		 * @return The context.
+		 */
+		private Context getContext()
+		{
+			return this.mContext;
+		}
+
+		/**
+		 * @return The speech engine.
+		 */
+		private TextToSpeech getTextToSpeech()
+		{
+			return this.mSpeech;
+		}
+
+		/**
+		 * @return True if there is a buffer present and False otherwise.
+		 */
+		public boolean hasBuffer()
+		{
+			String buffer = this.getBuffer();
+
+			return ((buffer != null) && (!buffer.isEmpty()));
+		}
+
+		/**
+		 * @return True if the speech engine is initialized and False otherwise.
+		 */
+		public boolean isInitialized()
+		{
+			return (this.mInitialized && (this.mSpeech != null));
+		}
+
+		/**
+		 */
+		@Override
+		public void onInit(int status)
+		{
+			NacUtility.printf("onInit! %d", status);
+			this.mInitialized = (status == TextToSpeech.SUCCESS);
+
+			if (this.isInitialized())
+			{
+				NacUtility.printf("Initialized!");
+				TextToSpeech speech = this.getTextToSpeech();
+
+				speech.setLanguage(Locale.US);
+
+				if (this.hasBuffer())
+				{
+					String buffer = this.getBuffer();
+					NacUtility.printf("Buffer is Present on initialisation!");
+
+					this.speak(buffer);
+					this.setBuffer("");
+				}
+			}
+		}
+
+		/**
+		 * Set the speech message buffer.
+		 */
+		private void setBuffer(String buffer)
+		{
+			NacUtility.printf("setting Buffer! '%s'", buffer);
+			this.mBuffer = buffer;
+		}
+
+		/**
+		 * Shutdown the speech engine.
+		 */
+		public void shutdown()
+		{
+			//TextToSpeech speech = this.getTextToSpeech();
+
+			if (this.mSpeech != null)
+			{
+				this.mSpeech.shutdown();
+
+				this.mSpeech = null;
+			}
+		}
+
+		/**
+		 * Speak the given text.
+		 */
+		public void speak(String message)
+		{
+			Context context = this.getContext();
+			TextToSpeech speech = this.getTextToSpeech();
+			NacUtility.printf("Speaking! %s", message);
+
+			if (speech == null)
+			{
+				NacUtility.printf("Speech is null so need to create it!");
+				this.mSpeech = new TextToSpeech(context, this);
+				speech = this.mSpeech;
+			}
+
+			if (this.isInitialized())
+			{
+				NacUtility.printf("Speech is already initialized! Speaking!");
+				speech.speak(message, TextToSpeech.QUEUE_FLUSH, null, "AlarmTime");
+			}
+			else
+			{
+				NacUtility.printf("Speech is NOT already initialized! Need to set buffer");
+				this.setBuffer(message);
+			}
+		}
+
+		/**
+		 * Stop the speech engine.
+		 */
+		public void stop()
+		{
+			TextToSpeech speech = this.getTextToSpeech();
+
+			if (speech != null)
+			{
+				speech.stop();
+			}
+		}
+
+	}
+
+	/**
+	 * The text-to-speech engine.
+	 */
+	private NacTextToSpeech mSpeech;
 
 	/**
 	 * Alarm.
@@ -57,19 +237,23 @@ public class NacAlarmActivity
 	 */
 	public void cleanup()
 	{
-		if (this.mVibrator != null)
+		NacVibrator vibrator = this.getVibrator();
+		NacMediaPlayer player = this.getMediaPlayer();
+		Handler handler = this.getHandler();
+
+		if (vibrator != null)
 		{
-			this.mVibrator.cancel(true);
+			vibrator.cancel(true);
 		}
 
-		if (this.mPlayer != null)
+		if (player != null)
 		{
-			this.mPlayer.release();
+			player.release();
 		}
 
-		if (this.mHandler != null)
+		if (handler != null)
 		{
-			this.mHandler.removeCallbacksAndMessages(null);
+			handler.removeCallbacksAndMessages(null);
 		}
 	}
 
@@ -169,11 +353,27 @@ public class NacAlarmActivity
 	}
 
 	/**
+	 * @return The handler.
+	 */
+	private Handler getHandler()
+	{
+		return this.mHandler;
+	}
+
+	/**
 	 * @return The media player.
 	 */
 	private NacMediaPlayer getMediaPlayer()
 	{
 		return this.mPlayer;
+	}
+
+	/**
+	 * @return The phone vibrator.
+	 */
+	private NacVibrator getVibrator()
+	{
+		return this.mVibrator;
 	}
 
 	/**
@@ -224,11 +424,12 @@ public class NacAlarmActivity
 		this.mPlayer = new NacMediaPlayer(this);
 		this.mVibrator = new NacVibrator(this);
 		this.mHandler = new Handler();
+		this.mSpeech = new NacTextToSpeech(this);
 
 		this.scheduleNextAlarm();
 		this.setupAlarmButtons();
-		this.playMusic();
-		this.vibrate();
+		//this.playMusic();
+		//this.vibrate();
 		this.waitForAutoDismiss();
 	}
 
@@ -253,6 +454,30 @@ public class NacAlarmActivity
 	{
 		super.onPause();
 		this.disableNfc();
+		NacUtility.printf("onPause!");
+		this.mSpeech.stop();
+
+		//if (this.mSpeech != null)
+		//{
+		//	NacUtility.printf("Stopping the speech engine!");
+		//	this.mSpeech.stop();
+		//}
+	}
+
+	@Override
+	public void onDestroy()
+	{
+		super.onDestroy();
+		NacUtility.printf("onDestroy!");
+		//this.mSpeech.shutdown();
+
+		//if (this.mSpeech != null)
+		//{
+		//	NacUtility.printf("Shutting down the speech engine!");
+		//	this.mSpeech.shutdown();
+
+		//	this.mSpeech = null;
+		//}
 	}
 
 	/**
@@ -263,6 +488,17 @@ public class NacAlarmActivity
 	{
 		super.onResume();
 		this.enableNfc();
+		NacUtility.printf("onResume!");
+		this.mSpeech.speak("The time, is, 8, O-Clock, AM.");
+
+		//if (this.mSpeech == null)
+		//{
+		//	this.mSpeech = new TextToSpeech(this, this);
+		//}
+		//else
+		//{
+		//	this.mSpeech.speak("The time is 8 O-Clock.", TextToSpeech.QUEUE_FLUSH, null);
+		//}
 	}
 
 	/**
@@ -406,17 +642,22 @@ public class NacAlarmActivity
 	 */
 	public void vibrate()
 	{
-		if (this.getAlarm().getVibrate() && (this.mVibrator != null))
-		{
-			long duration = 500;
+		NacAlarm alarm = this.getAlarm();
+		NacVibrator vibrator = this.getVibrator();
+		long duration = 500;
 
-			this.mVibrator.execute(duration);
+		if (alarm.getVibrate() && (vibrator != null))
+		{
+			vibrator.execute(duration);
 		}
 	}
 
 	/**
 	 * Wait in the background until the activity needs to auto dismiss the
 	 * alarm.
+	 *
+	 * Auto dismiss a bit early to avoid the race condition between a new alarm
+	 * starting at the same time that the alarm will auto-dismiss.
 	 */
 	public void waitForAutoDismiss()
 	{

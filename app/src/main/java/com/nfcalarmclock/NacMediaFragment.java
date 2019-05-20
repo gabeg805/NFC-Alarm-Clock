@@ -156,9 +156,7 @@ public class NacMediaFragment
 
 			if (alarm != null)
 			{
-				Intent intent = NacIntent.createService(context, "change", alarm);
-
-				context.startService(intent);
+				NacService.updateAlarm(context, alarm);
 			}
 			else if (sound != null)
 			{
@@ -193,8 +191,8 @@ public class NacMediaFragment
 	@Override
 	public void onStop()
 	{
-		super.onStop();
 		this.releasePlayer();
+		super.onStop();
 	}
 
 	/**

@@ -83,6 +83,12 @@
 	<string name="pref_shuffle_playlist_summary_enabled">If a playlist has been selected, when the alarm goes off shuffle the playlist.</string>
 	<string name="pref_shuffle_playlist_summary_disabled">If a playlist has been selected, when the alarm goes off, play the playlist sequentially.</string>
 
+	<!-- Monday first -->
+	<string name="pref_monday_first_key">pref_monday_first</string>
+	<string name="pref_monday_first_title">Start Week With Monday</string>
+	<string name="pref_monday_first_summary_enabled">Monday will be the first day-of-week.</string>
+	<string name="pref_monday_first_summary_disabled">Sunday will be the first day-of-week.</string>
+
 	<!-- Color preference -->
 	<string name="pref_color_key">pref_color</string>
 	<string name="pref_color_title">Color Customization</string>

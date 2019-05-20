@@ -44,4 +44,12 @@
 		android:defaultValue="false"
 		/>
 
+	<com.nfcalarmclock.NacCheckboxPreference
+		android:key="@string/pref_monday_first_key"
+		android:title="@string/pref_monday_first_title"
+		android:summaryOn=" @string/pref_monday_first_summary_enabled"
+		android:summaryOff="@string/pref_monday_first_summary_disabled"
+		android:defaultValue="false"
+		/>
+
 </PreferenceScreen>

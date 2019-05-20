@@ -179,25 +179,9 @@ public class NacFileBrowser
 	}
 
 	/**
-	 * @return The currently selected view.
+	 * @return The name of the file represented by the view.
 	 */
-	public NacImageSubTextButton getSelected()
-	{
-		return this.mSelected;
-	}
-
-	/**
-	 * @return The currently selected name.
-	 */
-	public String getSelectedName()
-	{
-		return this.getSelectedName(this.getSelected());
-	}
-
-	/**
-	 * @return The selected name.
-	 */
-	public String getSelectedName(View view)
+	public String getName(View view)
 	{
 		if (view == null)
 		{
@@ -210,17 +194,9 @@ public class NacFileBrowser
 	}
 
 	/**
-	 * @return The path of the currently selected view.
+	 * @return The file path repesented by the view.
 	 */
-	public String getSelectedPath()
-	{
-		return this.getSelectedPath(this.getSelected());
-	}
-
-	/**
-	 * @return The selected path.
-	 */
-	public String getSelectedPath(View view)
+	public String getPath(View view)
 	{
 		if (view == null)
 		{
@@ -242,15 +218,46 @@ public class NacFileBrowser
 	}
 
 	/**
+	 * @return The currently selected view.
+	 */
+	public NacImageSubTextButton getSelected()
+	{
+		return this.mSelected;
+	}
+
+	/**
+	 * @return The currently selected name.
+	 */
+	public String getSelectedName()
+	{
+		return this.getName(this.getSelected());
+	}
+
+	/**
+	 * @return The path of the currently selected view.
+	 */
+	public String getSelectedPath()
+	{
+		return this.getPath(this.getSelected());
+	}
+
+	/**
+	 * @return True if something is selected and False otherwise.
+	 */
+	public boolean isSelected()
+	{
+		return (this.getSelected() != null);
+	}
+
+	/**
 	 * @return True if the given path matches the currently selected path, and
 	 *         False otherwise.
 	 */
 	public boolean isSelected(String path)
 	{
-		NacImageSubTextButton button = this.getSelected();
-		String selectedPath = this.getSelectedPath(button);
+		String selectedPath = this.getSelectedPath();
 
-		return ((button != null) && (path.equals(selectedPath)));
+		return (!path.isEmpty() && (path.equals(selectedPath)));
 	}
 
 	/**
@@ -301,8 +308,8 @@ public class NacFileBrowser
 		}
 
 		File file = (File) view.getTag();
-		String name = this.getSelectedName(view);
-		String path = this.getSelectedPath(view);
+		String name = this.getName(view);
+		String path = this.getPath(view);
 
 		if (path.isEmpty())
 		{
@@ -313,11 +320,11 @@ public class NacFileBrowser
 		{
 			if (this.isSelected(path))
 			{
-				this.setSelected(null);
+				this.select((View)null);
 			}
 			else
 			{
-				this.setSelected(view);
+				this.select(view);
 			}
 		}
 
@@ -344,9 +351,37 @@ public class NacFileBrowser
 	}
 
 	/**
+	 * @see select
+	 */
+	public void select(String path)
+	{
+		File file = new File(path);
+
+		if (path.isEmpty() || !file.isFile())
+		{
+			return;
+		}
+
+		NacButtonGroup container = this.getContainer();
+		int count = container.getChildCount();
+
+		for (int i=0; i < count; i++)
+		{
+			View view = container.getChildAt(i);
+			String viewPath = this.getPath(view);
+
+			if (path.equals(viewPath))
+			{
+				this.select(view);
+				return;
+			}
+		}
+	}
+
+	/**
 	 * Set the currently selected file.
 	 */
-	public void setSelected(View view)
+	public void select(View view)
 	{
 		if (this.getSelected() != null)
 		{

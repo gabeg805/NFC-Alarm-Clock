@@ -111,9 +111,13 @@ public class NacDaysPreference
 	@Override
 	public void onShowDialog(NacDialog dialog, View root)
 	{
+		Context context = getContext();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
 		NacDayOfWeek dow = root.findViewById(R.id.days);
+		boolean mondayFirst = shared.getMondayFirst();
 
 		dow.setDays(this.mValue);
+		dow.setMondayFirst(mondayFirst);
 	}
 
 	/**

@@ -70,6 +70,11 @@ public class NacPreferenceKeys
 	private final String mShuffle;
 
 	/**
+	 * Monday as the first day-of-week.
+	 */
+	private final String mMondayFirst;
+
+	/**
 	 * Repeat.
 	 */
 	private final String mRepeat;
@@ -142,6 +147,7 @@ public class NacPreferenceKeys
 		this.mRequireNfc = res.getString(R.string.pref_dismiss_button_key);
 		this.mEasySnooze = res.getString(R.string.pref_easy_snooze_key);
 		this.mShuffle = res.getString(R.string.pref_shuffle_playlist_key);
+		this.mMondayFirst = res.getString(R.string.pref_monday_first_key);
 		this.mRepeat = res.getString(R.string.pref_repeat_key);
 		this.mDays = res.getString(R.string.pref_days_key);
 		this.mVibrate = res.getString(R.string.pref_vibrate_key);
@@ -249,6 +255,14 @@ public class NacPreferenceKeys
 	public String getMaxSnooze()
 	{
 		return this.mMaxSnooze;
+	}
+
+	/**
+	 * @return The monday first key.
+	 */
+	public String getMondayFirst()
+	{
+		return this.mMondayFirst;
 	}
 
 	/**
