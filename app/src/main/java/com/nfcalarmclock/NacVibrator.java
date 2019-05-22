@@ -24,7 +24,8 @@ public class NacVibrator
 	 */
 	public NacVibrator(Activity activity)
 	{
-		this.mVibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+		this.mVibrator = (Vibrator) activity.getSystemService(
+			Context.VIBRATOR_SERVICE);
 	}
 
 
@@ -56,6 +57,14 @@ public class NacVibrator
 		}
 
 		return 0;
+	}
+
+	/**
+	 * Check if the task is finished.
+	 */
+	public boolean isFinished()
+	{
+		return (getStatus() == AsyncTask.Status.FINISHED);
 	}
 
 	/**

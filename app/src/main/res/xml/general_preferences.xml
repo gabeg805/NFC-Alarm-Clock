@@ -36,6 +36,7 @@
 		android:defaultValue="false"
 		/>
 
+	<!--
 	<com.nfcalarmclock.NacCheckboxPreference
 		android:key="@string/pref_shuffle_playlist_key"
 		android:title="@string/pref_shuffle_playlist_title"
@@ -51,5 +52,6 @@
 		android:summaryOff="@string/pref_monday_first_summary_disabled"
 		android:defaultValue="false"
 		/>
+	-->
 
 </PreferenceScreen>

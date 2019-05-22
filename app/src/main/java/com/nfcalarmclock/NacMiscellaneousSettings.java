@@ -4,9 +4,9 @@ import android.os.Bundle;
 //import android.preference.PreferenceManager;
 
 /**
- * General settings fragment.
+ * Miscellaneous fragment.
  */
-public class NacGeneralSettings
+public class NacMiscellaneousSettings
 	extends NacSettingsFragment
 {
 
@@ -16,7 +16,7 @@ public class NacGeneralSettings
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.general_preferences);
+		addPreferencesFromResource(R.xml.miscellaneous_preferences);
 		//PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 	}
 

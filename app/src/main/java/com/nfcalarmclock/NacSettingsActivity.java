@@ -106,13 +106,17 @@ public class NacSettingsActivity
 			Preference general = findPreference(keys.getGeneralScreen());
 			Preference alarm = findPreference(keys.getDefaultAlarmScreen());
 			Preference color = findPreference(keys.getColorScreen());
+			Preference miscellaneous = findPreference(
+				keys.getMiscellaneousScreen());
 
 			general.setIcon(this.createIconDrawable(R.mipmap.settings));
 			alarm.setIcon(this.createIconDrawable(R.mipmap.alarm));
 			color.setIcon(this.createIconDrawable(R.mipmap.palette));
+			miscellaneous.setIcon(this.createIconDrawable(R.mipmap.extension));
 			general.setOnPreferenceClickListener(this);
 			alarm.setOnPreferenceClickListener(this);
 			color.setOnPreferenceClickListener(this);
+			miscellaneous.setOnPreferenceClickListener(this);
 		}
 
 		/**
@@ -154,6 +158,11 @@ public class NacSettingsActivity
 			{
 				fragment = new NacColorSettings();
 				title = keys.getColorScreenTitle();
+			}
+			else if (preferenceKey.equals(keys.getMiscellaneousScreen()))
+			{
+				fragment = new NacMiscellaneousSettings();
+				title = keys.getMiscellaneousScreenTitle();
 			}
 			else
 			{

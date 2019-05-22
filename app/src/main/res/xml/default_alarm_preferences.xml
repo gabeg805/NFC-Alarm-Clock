@@ -3,18 +3,18 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
-	<com.nfcalarmclock.NacDaysPreference
-		android:key="@string/pref_days_key"
-		android:title="@string/pref_days_title"
-		android:summary="@string/pref_days_summary"
-		android:defaultValue="62"
-		/>
-
 	<com.nfcalarmclock.NacNamePreference
 		android:key="@string/pref_name_key"
 		android:title="@string/pref_name_title"
 		android:summary="@string/pref_name_summary"
 		android:defaultValue=""
+		/>
+
+	<com.nfcalarmclock.NacDaysPreference
+		android:key="@string/pref_days_key"
+		android:title="@string/pref_days_title"
+		android:summary="@string/pref_days_summary"
+		android:defaultValue="62"
 		/>
 
 	<com.nfcalarmclock.NacCheckboxPreference

@@ -222,10 +222,30 @@ public class NacMediaPlayer
 		return result;
 	}
 
+	@SuppressWarnings("deprecation")
+	public static int abandonAudioFocus(Context context,
+		AudioManager.OnAudioFocusChangeListener listener)
+	{
+		AudioManager am = NacMediaPlayer.getAudioManagerService(context);
+		int result = 0;
+
+		//if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		//{
+		//	AudioFocusRequest request = this.getAudioFocusRequest();
+		//	result = am.abandonAudioFocus(request);
+		//}
+		//else
+		//{
+			result = am.abandonAudioFocus(listener);
+		//}
+
+		return result;
+	}
+
 	/**
 	 * @return The audio attributes.
 	 */
-	private AudioAttributes getAudioAttributes()
+	public static AudioAttributes getAudioAttributes()
 	{
 		return new AudioAttributes.Builder()
 			.setLegacyStreamType(AudioManager.STREAM_MUSIC)
@@ -236,11 +256,33 @@ public class NacMediaPlayer
 	/**
 	 * @return The audio focus request.
 	 */
+	public static AudioFocusRequest getAudioFocusRequestTransient(
+		AudioManager.OnAudioFocusChangeListener listener)
+	{
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			AudioAttributes attrs = NacMediaPlayer.getAudioAttributes();
+
+			return new AudioFocusRequest.Builder(
+				AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+				.setAudioAttributes(attrs)
+				.setOnAudioFocusChangeListener(listener)
+				.build();
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	/**
+	 * @return The audio focus request.
+	 */
 	private AudioFocusRequest getAudioFocusRequest()
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{
-			AudioAttributes attrs = this.getAudioAttributes();
+			AudioAttributes attrs = NacMediaPlayer.getAudioAttributes();
 
 			return new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
 				.setAudioAttributes(attrs)
@@ -259,6 +301,15 @@ public class NacMediaPlayer
 	private AudioManager getAudioManager()
 	{
 		return this.mAudioManager;
+	}
+
+	/**
+	 * @return The audio manager.
+	 */
+	public static AudioManager getAudioManagerService(Context context)
+	{
+		return (AudioManager) context.getSystemService(
+			Context.AUDIO_SERVICE);
 	}
 
 	/**
@@ -348,7 +399,8 @@ public class NacMediaPlayer
 		if (track != null)
 		{
 			this.resetWrapper();
-			this.play(track, playlist.repeat());
+			this.play(track);
+			//this.play(track, playlist.repeat());
 			return;
 		}
 		else
@@ -426,7 +478,7 @@ public class NacMediaPlayer
 		}
 
 		Context context = this.getContext();
-		AudioAttributes attrs = this.getAudioAttributes();
+		AudioAttributes attrs = NacMediaPlayer.getAudioAttributes();
 		String path = NacSound.getPath(context, media);
 
 		// Can log each step for better granularity in case error occurrs.
@@ -462,7 +514,7 @@ public class NacMediaPlayer
 
 		if (track != null)
 		{
-			this.play(track, repeat);
+			this.play(track);
 		}
 	}
 
@@ -512,6 +564,32 @@ public class NacMediaPlayer
 
 		this.mAudioManager = am;
 		this.mVolume = this.getStreamVolume();
+
+		return (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+	}
+
+	@SuppressWarnings("deprecation")
+	public static boolean requestAudioFocusTransient(Context context,
+		AudioManager.OnAudioFocusChangeListener listener)
+	{
+		AudioManager am = (AudioManager) context.getSystemService(
+			Context.AUDIO_SERVICE);
+		int result = 0;
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			AudioFocusRequest request = NacMediaPlayer
+				.getAudioFocusRequestTransient(listener);
+			result = am.requestAudioFocus(request);
+		}
+		else
+		{
+			result = am.requestAudioFocus(listener, AudioManager.STREAM_MUSIC,
+				AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+		}
+
+		//this.mAudioManager = am;
+		//this.mVolume = this.getStreamVolume();
 
 		return (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
 	}

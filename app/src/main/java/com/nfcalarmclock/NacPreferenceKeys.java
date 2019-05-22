@@ -25,6 +25,11 @@ public class NacPreferenceKeys
 	private final String mColorScreen;
 
 	/**
+	 * Miscellaneous screen.
+	 */
+	private final String mMiscellaneousScreen;
+
+	/**
 	 * General screen title.
 	 */
 	private final String mGeneralScreenTitle;
@@ -38,6 +43,11 @@ public class NacPreferenceKeys
 	 * Color screen title.
 	 */
 	private final String mColorScreenTitle;
+
+	/**
+	 * Miscellaneous screen title.
+	 */
+	private final String mMiscellaneousTitle;
 
 	/**
 	 * Auto dismiss.
@@ -138,9 +148,11 @@ public class NacPreferenceKeys
 		this.mGeneralScreen = res.getString(R.string.pref_screen_general_key);
 		this.mDefaultAlarmScreen = res.getString(R.string.pref_screen_default_alarm_key);
 		this.mColorScreen = res.getString(R.string.pref_screen_color_key);
+		this.mMiscellaneousScreen = res.getString(R.string.pref_screen_misc_key);
 		this.mGeneralScreenTitle = res.getString(R.string.pref_screen_general_title);
 		this.mDefaultAlarmScreenTitle = res.getString(R.string.pref_screen_default_alarm_title);
 		this.mColorScreenTitle = res.getString(R.string.pref_screen_color_title);
+		this.mMiscellaneousTitle = res.getString(R.string.pref_screen_misc_title);
 		this.mAutoDismiss = res.getString(R.string.pref_auto_dismiss_key);
 		this.mMaxSnooze = res.getString(R.string.pref_max_snooze_key);
 		this.mSnoozeDuration = res.getString(R.string.pref_snooze_duration_key);
@@ -255,6 +267,22 @@ public class NacPreferenceKeys
 	public String getMaxSnooze()
 	{
 		return this.mMaxSnooze;
+	}
+
+	/**
+	 * @return The miscellaneous screen key.
+	 */
+	public String getMiscellaneousScreen()
+	{
+		return this.mMiscellaneousScreen;
+	}
+
+	/**
+	 * @return The miscellaneous screen title.
+	 */
+	public String getMiscellaneousScreenTitle()
+	{
+		return this.mMiscellaneousTitle;
 	}
 
 	/**
