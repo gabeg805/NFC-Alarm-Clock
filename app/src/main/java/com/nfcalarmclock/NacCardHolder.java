@@ -1103,7 +1103,7 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 		int hour = alarm.getHour();
 		int minute = alarm.getMinute();
-		boolean format = alarm.is24HourFormat(context);
+		boolean format = NacCalendar.is24HourFormat(context);
 		TimePickerDialog dialog = new TimePickerDialog(context, this, hour,
 			minute, format);
 

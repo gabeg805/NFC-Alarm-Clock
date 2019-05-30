@@ -69,6 +69,16 @@ public class NacSharedPreferences
 	public static final boolean DEFAULT_MONDAY_FIRST = false;
 
 	/**
+	 * Default speak to me value.
+	 */
+	public static final boolean DEFAULT_SPEAK_TO_ME = false;
+
+	/**
+	 * Default speak frequency value.
+	 */
+	public static final int DEFAULT_SPEAK_FREQUENCY = 1;
+
+	/**
 	 * Default auto dismiss index value.
 	 */
 	public static final int DEFAULT_AUTO_DISMISS_INDEX = 7;
@@ -459,6 +469,42 @@ public class NacSharedPreferences
 		String key = this.getKeys().getSound();
 
 		this.saveString(key, path, commit);
+	}
+
+	/**
+	 * @see editSpeakFrequency
+	 */
+	public void editSpeakFrequency(int freq)
+	{
+		this.editSpeakFrequency(freq, false);
+	}
+
+	/**
+	 * Edit the speak frequency preference value.
+	 */
+	public void editSpeakFrequency(int freq, boolean commit)
+	{
+		String key = this.getKeys().getSpeakFrequency();
+
+		this.saveInt(key, freq, commit);
+	}
+
+	/**
+	 * @see editSpeakToMe
+	 */
+	public void editSpeakToMe(boolean speak)
+	{
+		this.editSpeakToMe(speak, false);
+	}
+
+	/**
+	 * Edit the speak to me preference value.
+	 */
+	public void editSpeakToMe(boolean speak, boolean commit)
+	{
+		String key = this.getKeys().getSpeakToMe();
+
+		this.saveBoolean(key, speak, commit);
 	}
 
 	/**
@@ -949,6 +995,56 @@ public class NacSharedPreferences
 
 		return (!name.isEmpty()) ? name
 			: NacSharedPreferences.DEFAULT_SOUND_SUMMARY;
+	}
+
+	/**
+	 * @return The speak frequency value.
+	 */
+	public int getSpeakFrequency()
+	{
+		String key = this.getKeys().getSpeakFrequency();
+
+		return this.getSharedPreferences().getInt(key,
+			DEFAULT_SPEAK_FREQUENCY);
+	}
+
+	/**
+	 * @see getSpeakFrequencySummary
+	 */
+	public String getSpeakFrequencySummary()
+	{
+		int freq = this.getSpeakFrequency();
+
+		return NacSharedPreferences.getSpeakFrequencySummary(freq);
+	}
+
+	/**
+	 * @return The summary text to use when displaying the speak frequency
+	 *         widget.
+	 */
+	public static String getSpeakFrequencySummary(int freq)
+	{
+		String value = String.valueOf(freq);
+
+		if (freq == 0)
+		{
+			return "Once";
+		}
+		else
+		{
+			return "Every " + value + ((freq == 1) ? " minute" : " minutes");
+		}
+	}
+
+	/**
+	 * @return The speak to me value.
+	 */
+	public boolean getSpeakToMe()
+	{
+		String key = this.getKeys().getSpeakToMe();
+
+		return this.getSharedPreferences().getBoolean(key,
+			DEFAULT_SPEAK_TO_ME);
 	}
 
 	/**

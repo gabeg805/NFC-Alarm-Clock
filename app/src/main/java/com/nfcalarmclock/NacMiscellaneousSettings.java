@@ -1,7 +1,7 @@
 package com.nfcalarmclock;
 
 import android.os.Bundle;
-//import android.preference.PreferenceManager;
+import android.preference.PreferenceManager;
 
 /**
  * Miscellaneous fragment.
@@ -17,7 +17,8 @@ public class NacMiscellaneousSettings
 	{
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.miscellaneous_preferences);
-		//PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+		PreferenceManager.setDefaultValues(getContext(),
+			R.xml.miscellaneous_preferences, false);
 	}
 
 }

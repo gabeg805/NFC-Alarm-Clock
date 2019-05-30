@@ -5,25 +5,28 @@
 	<Preference
 		android:key="@string/pref_screen_general_key"
 		android:title="@string/pref_screen_general_title"
+		android:summary="@string/pref_screen_general_summary"
 		android:fragment="com.nfcalarmclock.NacGeneralSettings"
 		/>
 
 	<Preference
 		android:key="@string/pref_screen_default_alarm_key"
 		android:title="@string/pref_screen_default_alarm_title"
-		android:description="@string/pref_screen_default_alarm_desc"
+		android:summary="@string/pref_screen_default_alarm_summary"
 		android:fragment="com.nfcalarmclock.NacDefaultAlarmSettings"
 		/>
 
 	<Preference
 		android:key="@string/pref_screen_color_key"
 		android:title="@string/pref_screen_color_title"
+		android:summary="@string/pref_screen_color_summary"
 		android:fragment="com.nfcalarmclock.NacColorSettings"
 		/>
 
 	<Preference
 		android:key="@string/pref_screen_misc_key"
 		android:title="@string/pref_screen_misc_title"
+		android:summary="@string/pref_screen_misc_summary"
 		android:fragment="com.nfcalarmclock.NacMiscellaneousSettings"
 		/>
 

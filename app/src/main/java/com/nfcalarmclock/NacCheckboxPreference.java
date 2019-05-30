@@ -176,11 +176,14 @@ public class NacCheckboxPreference
 		View root = (View) this.mCheckBox.getParent();
 		TextView tv = root.findViewById(android.R.id.summary);
 		CharSequence summary = this.getSummary();
+		boolean state = this.getChecked();
 
 		if (tv != null)
 		{
 			tv.setText(summary);
 		}
+
+		notifyDependencyChange(!state);
 	}
 
 }

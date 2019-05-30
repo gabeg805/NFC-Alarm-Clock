@@ -164,19 +164,19 @@ public class NacMediaPlayer
 	private Context mContext;
 
 	/**
-	 * Audio manager to request/abandon audio focus.
-	 */
-	private AudioManager mAudioManager;
-
-	/**
 	 * Playlist container.
 	 */
 	private Playlist mPlaylist;
 
 	/**
-	 * Stream volume.
+	 * Audio focus state.
 	 */
-	private int mVolume;
+	private int mAudioFocusState;
+
+	/**
+	 * Check if player was playing (caused by losing audio focus).
+	 */
+	private boolean mWasPlaying;
 
 	/**
 	 * Result values.
@@ -195,38 +195,19 @@ public class NacMediaPlayer
 		super();
 
 		this.mContext = context;
-		this.mAudioManager = null;
 		this.mPlaylist = null;
-		this.mVolume = 0;
+		this.mAudioFocusState = AudioManager.AUDIOFOCUS_NONE;
+		this.mWasPlaying = false;
 	}
 
 	/**
 	 * Abandon audio focus.
 	 */
 	@SuppressWarnings("deprecation")
-	public int abandonAudioFocus()
-	{
-		AudioManager am = this.getAudioManager();
-		int result = 0;
-
-		//if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-		//{
-		//	AudioFocusRequest request = this.getAudioFocusRequest();
-		//	result = am.abandonAudioFocus(request);
-		//}
-		//else
-		//{
-			result = am.abandonAudioFocus(this);
-		//}
-
-		return result;
-	}
-
-	@SuppressWarnings("deprecation")
 	public static int abandonAudioFocus(Context context,
 		AudioManager.OnAudioFocusChangeListener listener)
 	{
-		AudioManager am = NacMediaPlayer.getAudioManagerService(context);
+		AudioManager am = NacMediaPlayer.getAudioManager(context);
 		int result = 0;
 
 		//if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -256,15 +237,14 @@ public class NacMediaPlayer
 	/**
 	 * @return The audio focus request.
 	 */
-	public static AudioFocusRequest getAudioFocusRequestTransient(
-		AudioManager.OnAudioFocusChangeListener listener)
+	public static AudioFocusRequest getAudioFocusRequest(
+		AudioManager.OnAudioFocusChangeListener listener, int focus)
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{
 			AudioAttributes attrs = NacMediaPlayer.getAudioAttributes();
 
-			return new AudioFocusRequest.Builder(
-				AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+			return new AudioFocusRequest.Builder(focus)
 				.setAudioAttributes(attrs)
 				.setOnAudioFocusChangeListener(listener)
 				.build();
@@ -276,37 +256,27 @@ public class NacMediaPlayer
 	}
 
 	/**
-	 * @return The audio focus request.
+	 * @return The audio focus state.
 	 */
-	private AudioFocusRequest getAudioFocusRequest()
+	private int getAudioFocusState()
 	{
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-		{
-			AudioAttributes attrs = NacMediaPlayer.getAudioAttributes();
+		return this.mAudioFocusState;
+	}
 
-			return new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
-				.setAudioAttributes(attrs)
-				.setOnAudioFocusChangeListener(this)
-				.build();
-		}
-		else
-		{
-			return null;
-		}
+	/**
+	 * @see getAudioManager
+	 */
+	public AudioManager getAudioManager()
+	{
+		Context context = this.getContext();
+
+		return NacMediaPlayer.getAudioManager(context);
 	}
 
 	/**
 	 * @return The audio manager.
 	 */
-	private AudioManager getAudioManager()
-	{
-		return this.mAudioManager;
-	}
-
-	/**
-	 * @return The audio manager.
-	 */
-	public static AudioManager getAudioManagerService(Context context)
+	public static AudioManager getAudioManager(Context context)
 	{
 		return (AudioManager) context.getSystemService(
 			Context.AUDIO_SERVICE);
@@ -333,7 +303,24 @@ public class NacMediaPlayer
 	 */
 	private int getStreamVolume()
 	{
-		return this.mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+		return this.getAudioManager().getStreamVolume(
+			AudioManager.STREAM_MUSIC);
+	}
+
+	/**
+	 * Check if the media player is playing.
+	 */
+	public boolean isPlayingWrapper()
+	{
+		try
+		{
+			return isPlaying();
+		}
+		catch (IllegalStateException e)
+		{
+			NacUtility.printf("NacMediaPlayer : IllegalStateException caught in isPlaying()");
+			return false;
+		}
 	}
 
 	/**
@@ -342,48 +329,28 @@ public class NacMediaPlayer
 	@Override
 	public void onAudioFocusChange(int focusChange)
 	{
-		NacUtility.printf("onAudioFocusChange! %d", focusChange);
-		String change = "UNKOWN";
+		this.zPrintInfo(focusChange);
+		this.mAudioFocusState = focusChange;
+		this.mWasPlaying = this.isPlayingWrapper();
 
 		if (focusChange == AudioManager.AUDIOFOCUS_GAIN)
 		{
-			change = "GAIN";
-			try
-			{
-				setVolume(this.mVolume, this.mVolume);
-			}
-			catch (IllegalStateException e)
-			{
-				NacUtility.printf("Unable to set volume on audio gain.");
-			}
+			this.mWasPlaying = true;
+			this.setVolume();
 			this.startWrapper();
 		}
 		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS)
 		{
-			change = "LOSS";
 			this.stopWrapper();
 		}
 		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)
 		{
-			change = "LOSS_TRANSIENT";
 			this.pauseWrapper();
 		}
 		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
 		{
-			change = "LOSS_TRANSIENT_CAN_DUCK";
-			try
-			{
-				this.mVolume = this.getStreamVolume();
-				setVolume(this.mVolume/2, this.mVolume/2);
-			}
-			catch (IllegalStateException e)
-			{
-				NacUtility.printf("Unable to set volume on audio loss transient can duck.");
-			}
+			this.setVolumeDucking();
 		}
-
-		NacUtility.printf("NacMediaPlayer : onAudioFocusChange : AUDIOFOCUS_%s",
-			change);
 	}
 
 	/**
@@ -393,6 +360,7 @@ public class NacMediaPlayer
 	{
 		this.stopWrapper();
 
+		Context context = this.getContext();
 		Playlist playlist = this.getPlaylist();
 		NacSound track = (playlist != null) ? playlist.getNextTrack() : null;
 
@@ -400,7 +368,6 @@ public class NacMediaPlayer
 		{
 			this.resetWrapper();
 			this.play(track);
-			//this.play(track, playlist.repeat());
 			return;
 		}
 		else
@@ -411,7 +378,7 @@ public class NacMediaPlayer
 		if (!isLooping())
 		{
 			this.resetWrapper();
-			this.abandonAudioFocus();
+			NacMediaPlayer.abandonAudioFocus(context, this);
 		}
 		else
 		{
@@ -466,25 +433,26 @@ public class NacMediaPlayer
 	 */
 	public void play(String media, boolean repeat)
 	{
+		Context context = this.getContext();
+
 		if (media.isEmpty())
 		{
 			return;
 		}
 
-		if(!this.requestAudioFocus())
+		if(!NacMediaPlayer.requestAudioFocus(context, this))
 		{
 			NacUtility.printf("Audio Focus NOT Granted!");
 			return;
 		}
 
-		Context context = this.getContext();
 		AudioAttributes attrs = NacMediaPlayer.getAudioAttributes();
 		String path = NacSound.getPath(context, media);
 
-		// Can log each step for better granularity in case error occurrs.
+		// Can log each step for better granularity in case errors occur.
 		try
 		{
-			if (isPlaying())
+			if (this.isPlayingWrapper())
 			{
 				reset();
 			}
@@ -541,55 +509,46 @@ public class NacMediaPlayer
 	}
 
 	/**
-	 * Request audio focus.
+	 * @see requestAudioFocus
 	 */
-	@SuppressWarnings("deprecation")
-	public boolean requestAudioFocus()
+	public static boolean requestAudioFocus(Context context,
+		AudioManager.OnAudioFocusChangeListener listener)
 	{
-		Context context = this.getContext();
-		AudioManager am = (AudioManager) context.getSystemService(
-			Context.AUDIO_SERVICE);
-		int result = 0;
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-		{
-			AudioFocusRequest request = this.getAudioFocusRequest();
-			result = am.requestAudioFocus(request);
-		}
-		else
-		{
-			result = am.requestAudioFocus(this, AudioManager.STREAM_MUSIC,
-				AudioManager.AUDIOFOCUS_GAIN);
-		}
-
-		this.mAudioManager = am;
-		this.mVolume = this.getStreamVolume();
-
-		return (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+		return NacMediaPlayer.requestAudioFocus(context, listener,
+			AudioManager.AUDIOFOCUS_GAIN);
 	}
 
-	@SuppressWarnings("deprecation")
+	/**
+	 * @see requestAudioFocus
+	 */
 	public static boolean requestAudioFocusTransient(Context context,
 		AudioManager.OnAudioFocusChangeListener listener)
 	{
-		AudioManager am = (AudioManager) context.getSystemService(
-			Context.AUDIO_SERVICE);
+		return NacMediaPlayer.requestAudioFocus(context, listener,
+			AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+	}
+
+	/**
+	 * Request audio focus.
+	 */
+	@SuppressWarnings("deprecation")
+	public static boolean requestAudioFocus(Context context,
+		AudioManager.OnAudioFocusChangeListener listener, int focus)
+	{
+		AudioManager am = NacMediaPlayer.getAudioManager(context);
 		int result = 0;
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{
 			AudioFocusRequest request = NacMediaPlayer
-				.getAudioFocusRequestTransient(listener);
+				.getAudioFocusRequest(listener, focus);
 			result = am.requestAudioFocus(request);
 		}
 		else
 		{
 			result = am.requestAudioFocus(listener, AudioManager.STREAM_MUSIC,
-				AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+				focus);
 		}
-
-		//this.mAudioManager = am;
-		//this.mVolume = this.getStreamVolume();
 
 		return (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
 	}
@@ -609,6 +568,47 @@ public class NacMediaPlayer
 			NacUtility.printf("NacMediaPlayer : IllegalStateException caught in reset()");
 			return this.RESULT_ILLEGAL_STATE_EXCEPTION;
 		}
+	}
+
+	/**
+	 * Set the volume to it's original level.
+	 */
+	private void setVolume()
+	{
+		int volume = this.getStreamVolume();
+
+		if (this.getAudioFocusState() ==
+			AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
+		{
+			volume *= 2;
+		}
+
+		this.setVolume(volume);
+	}
+
+	/**
+	 * Set the volume.
+	 */
+	private void setVolume(int level)
+	{
+		try
+		{
+			setVolume(level, level);
+		}
+		catch (IllegalStateException e)
+		{
+			NacUtility.printf("Unable to set volume : %d", level);
+		}
+	}
+
+	/**
+	 * Set the volume when ducking.
+	 */
+	private void setVolumeDucking()
+	{
+		int volume = this.getStreamVolume();
+
+		this.setVolume(volume/2);
 	}
 
 	/**
@@ -643,6 +643,42 @@ public class NacMediaPlayer
 			NacUtility.printf("NacMediaPlayer : IllegalStateException caught in stop()");
 			return this.RESULT_ILLEGAL_STATE_EXCEPTION;
 		}
+	}
+
+	/**
+	 * @return True if the player was playing before losing audio focus, and
+	 *         False otherwise.
+	 */
+	public boolean wasPlaying()
+	{
+		return this.mWasPlaying;
+	}
+
+	// Temp method
+	private void zPrintInfo(int focusChange)
+	{
+		NacUtility.printf("onAudioFocusChange! %d", focusChange);
+		String change = "UNKOWN";
+
+		if (focusChange == AudioManager.AUDIOFOCUS_GAIN)
+		{
+			change = "GAIN";
+		}
+		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS)
+		{
+			change = "LOSS";
+		}
+		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)
+		{
+			change = "LOSS_TRANSIENT";
+		}
+		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
+		{
+			change = "LOSS_TRANSIENT_CAN_DUCK";
+		}
+
+		NacUtility.printf("NacMediaPlayer : onAudioFocusChange : AUDIOFOCUS_%s",
+			change);
 	}
 
 }

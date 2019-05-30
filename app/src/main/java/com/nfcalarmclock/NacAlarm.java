@@ -3,7 +3,6 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.text.format.DateFormat;
 import java.util.Calendar;
 import java.util.EnumSet;
 
@@ -613,14 +612,6 @@ public class NacAlarm
 	}
 
 	/**
-	 * @return The 24 hour format.
-	 */
-	public boolean is24HourFormat(Context context)
-	{
-		return DateFormat.is24HourFormat(context);
-	}
-
-	/**
 	 * @return The days on which to run the alarm.
 	 */
 	public EnumSet<NacCalendar.Day> getDays()
@@ -672,7 +663,7 @@ public class NacAlarm
 	public String getMeridian(Context context)
 	{
 		return NacCalendar.getMeridian(this.getHour(),
-			this.is24HourFormat(context));
+			NacCalendar.is24HourFormat(context));
 	}
 
 	/**
@@ -738,7 +729,7 @@ public class NacAlarm
 	public String getTime(Context context)
 	{
 		return NacCalendar.getTime(this.getHour(), this.getMinute(),
-			this.is24HourFormat(context));
+			NacCalendar.is24HourFormat(context));
 	}
 
 	/**

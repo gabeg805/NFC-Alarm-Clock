@@ -46,11 +46,23 @@
 	<string name="pref_screen_misc_key">pref_screen_misc</string>
 
 	<string name="pref_screen_general_title">General</string>
-	<string name="pref_screen_default_alarm_title">New Alarms</string>
+	<string name="pref_screen_default_alarm_title">Alarm Defaults</string>
 	<string name="pref_screen_color_title">Colors</string>
 	<string name="pref_screen_misc_title">Miscellaneous</string>
 
-	<string name="pref_screen_default_alarm_desc">Presets for newly created alarms.</string>
+	<string name="pref_screen_general_summary">General things to avoid waking up</string>
+	<string name="pref_screen_default_alarm_summary">Default settings for alarms created with \"+\"</string>
+	<string name="pref_screen_color_summary">Color customizations</string>
+	<string name="pref_screen_misc_summary">Extra cool features</string>
+
+
+
+	<string name="pref_general_snooze_category">Snooze</string>
+	<string name="pref_general_dismiss_category">Dismiss</string>
+	<string name="pref_misc_music_category">Music</string>
+	<string name="pref_misc_dow_order_category">Day of Week</string>
+	<string name="pref_misc_tts_category">Text-to-Speech</string>
+
 
 	<!-- General preference -->
 	<string name="pref_general_key">pref_general</string>
@@ -98,6 +110,9 @@
 	<string name="pref_speak_to_me_summary_enabled">Say the current time when the alarm goes off.</string>
 	<string name="pref_speak_to_me_summary_disabled">Do not say anything.</string>
 
+	<!-- Speak frequency -->
+	<string name="pref_speak_frequency_key">pref_speak_frequency</string>
+	<string name="pref_speak_frequency_title">Speak Frequency</string>
 
 
 

@@ -2,6 +2,7 @@ package com.nfcalarmclock;
 
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 
 /**
  * Color fragment.
@@ -17,6 +18,8 @@ public class NacColorSettings
 	private void init()
 	{
 		addPreferencesFromResource(R.xml.color_preferences);
+		PreferenceManager.setDefaultValues(getContext(),
+			R.xml.color_preferences, false);
 
 		NacPreferenceKeys keys = this.getKeys();
 		Preference theme = findPreference(keys.getThemeColor());

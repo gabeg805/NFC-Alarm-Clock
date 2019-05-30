@@ -2,56 +2,50 @@
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<com.nfcalarmclock.NacAutoDismissPreference
-		android:key="@string/pref_auto_dismiss_key"
-		android:title="@string/pref_auto_dismiss_title"
-		android:defaultValue="7"
-		/>
+	<!-- Snooze -->
+	<com.nfcalarmclock.NacPreferenceCategory
+		android:title="@string/pref_general_snooze_category">
 
-	<com.nfcalarmclock.NacMaxSnoozePreference
-		android:key="@string/pref_max_snooze_key"
-		android:title="@string/pref_max_snooze_title"
-		android:defaultValue="11"
-		/>
+		<com.nfcalarmclock.NacMaxSnoozePreference
+			android:key="@string/pref_max_snooze_key"
+			android:title="@string/pref_max_snooze_title"
+			android:defaultValue="11"
+			/>
 
-	<com.nfcalarmclock.NacSnoozeDurationPreference
-		android:key="@string/pref_snooze_duration_key"
-		android:title="@string/pref_snooze_duration_title"
-		android:defaultValue="4"
-		/>
+		<com.nfcalarmclock.NacSnoozeDurationPreference
+			android:key="@string/pref_snooze_duration_key"
+			android:title="@string/pref_snooze_duration_title"
+			android:defaultValue="4"
+			/>
 
-	<com.nfcalarmclock.NacCheckboxPreference
-		android:key="@string/pref_dismiss_button_key"
-		android:title="@string/pref_dismiss_button_title"
-		android:summaryOn="@string/pref_dismiss_button_summary_enabled"
-		android:summaryOff="@string/pref_dismiss_button_summary_disabled"
-		android:defaultValue="false"
-		/>
+		<com.nfcalarmclock.NacCheckboxPreference
+			android:key="@string/pref_easy_snooze_key"
+			android:title="@string/pref_easy_snooze_title"
+			android:summaryOn="@string/pref_easy_snooze_summary_enabled"
+			android:summaryOff="@string/pref_easy_snooze_summary_disabled"
+			android:defaultValue="false"
+			/>
 
-	<com.nfcalarmclock.NacCheckboxPreference
-		android:key="@string/pref_easy_snooze_key"
-		android:title="@string/pref_easy_snooze_title"
-		android:summaryOn="@string/pref_easy_snooze_summary_enabled"
-		android:summaryOff="@string/pref_easy_snooze_summary_disabled"
-		android:defaultValue="false"
-		/>
+	</com.nfcalarmclock.NacPreferenceCategory>
 
-	<!--
-	<com.nfcalarmclock.NacCheckboxPreference
-		android:key="@string/pref_shuffle_playlist_key"
-		android:title="@string/pref_shuffle_playlist_title"
-		android:summaryOn=" @string/pref_shuffle_playlist_summary_enabled"
-		android:summaryOff="@string/pref_shuffle_playlist_summary_disabled"
-		android:defaultValue="false"
-		/>
+	<!-- Dismiss -->
+	<com.nfcalarmclock.NacPreferenceCategory
+		android:title="@string/pref_general_dismiss_category">
 
-	<com.nfcalarmclock.NacCheckboxPreference
-		android:key="@string/pref_monday_first_key"
-		android:title="@string/pref_monday_first_title"
-		android:summaryOn=" @string/pref_monday_first_summary_enabled"
-		android:summaryOff="@string/pref_monday_first_summary_disabled"
-		android:defaultValue="false"
-		/>
-	-->
+		<com.nfcalarmclock.NacAutoDismissPreference
+			android:key="@string/pref_auto_dismiss_key"
+			android:title="@string/pref_auto_dismiss_title"
+			android:defaultValue="7"
+			/>
+
+		<com.nfcalarmclock.NacCheckboxPreference
+			android:key="@string/pref_dismiss_button_key"
+			android:title="@string/pref_dismiss_button_title"
+			android:summaryOn="@string/pref_dismiss_button_summary_enabled"
+			android:summaryOff="@string/pref_dismiss_button_summary_disabled"
+			android:defaultValue="false"
+			/>
+
+	</com.nfcalarmclock.NacPreferenceCategory>
 
 </PreferenceScreen>

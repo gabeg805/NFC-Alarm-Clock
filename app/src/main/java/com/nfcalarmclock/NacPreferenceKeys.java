@@ -85,6 +85,16 @@ public class NacPreferenceKeys
 	private final String mMondayFirst;
 
 	/**
+	 * Speak the current time to the user.
+	 */
+	private final String mSpeakToMe;
+
+	/**
+	 * Frequency at which to speak the current time to the user.
+	 */
+	private final String mSpeakFrequency;
+
+	/**
 	 * Repeat.
 	 */
 	private final String mRepeat;
@@ -160,6 +170,8 @@ public class NacPreferenceKeys
 		this.mEasySnooze = res.getString(R.string.pref_easy_snooze_key);
 		this.mShuffle = res.getString(R.string.pref_shuffle_playlist_key);
 		this.mMondayFirst = res.getString(R.string.pref_monday_first_key);
+		this.mSpeakToMe = res.getString(R.string.pref_speak_to_me_key);
+		this.mSpeakFrequency = res.getString(R.string.pref_speak_frequency_key);
 		this.mRepeat = res.getString(R.string.pref_repeat_key);
 		this.mDays = res.getString(R.string.pref_days_key);
 		this.mVibrate = res.getString(R.string.pref_vibrate_key);
@@ -363,6 +375,22 @@ public class NacPreferenceKeys
 	public String getSound()
 	{
 		return this.mSound;
+	}
+
+	/**
+	 * @return The speak frequency key.
+	 */
+	public String getSpeakFrequency()
+	{
+		return this.mSpeakFrequency;
+	}
+
+	/**
+	 * @return The speak to me key.
+	 */
+	public String getSpeakToMe()
+	{
+		return this.mSpeakToMe;
 	}
 
 	/**

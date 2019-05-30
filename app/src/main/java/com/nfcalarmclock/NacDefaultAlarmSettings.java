@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 
 /**
  * Default alarm fragment.
@@ -50,6 +51,8 @@ public class NacDefaultAlarmSettings
 	{
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.default_alarm_preferences);
+		PreferenceManager.setDefaultValues(getContext(),
+			R.xml.default_alarm_preferences, false);
 
 		NacPreferenceKeys keys = this.getSharedPreferences().getKeys();
 		this.mSound = (NacSoundPreference) findPreference(keys.getSound());

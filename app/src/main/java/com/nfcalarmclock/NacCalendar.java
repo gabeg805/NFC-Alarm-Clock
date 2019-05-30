@@ -1,5 +1,7 @@
 package com.nfcalarmclock;
 
+import android.content.Context;
+import android.text.format.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.EnumSet;
@@ -108,6 +110,20 @@ public class NacCalendar
 	}
 
 	/**
+	 * @param  context  The application context.
+	 * @param  hour  The hour.
+	 * @param  minute  The minutes.
+	 *
+	 * @return The time.
+	 */
+	public static String getTime(Context context, int hour, int minute)
+	{
+		boolean format = NacCalendar.is24HourFormat(context);
+
+		return NacCalendar.getTime(hour, minute, format);
+	}
+
+	/**
 	 * @param  hour  The hour.
 	 * @param  minute  The minutes.
 	 * @param  format  The 24 hour format, to determine how to interpret the
@@ -205,6 +221,15 @@ public class NacCalendar
 		tomorrow.add(Calendar.DAY_OF_MONTH, 1);
 
 		return tomorrow;
+	}
+
+	/**
+	 * @return True if the locale is in 24 hour time format, and False
+	 *         otherwise.
+	 */
+	public static boolean is24HourFormat(Context context)
+	{
+		return DateFormat.is24HourFormat(context);
 	}
 
 	/**

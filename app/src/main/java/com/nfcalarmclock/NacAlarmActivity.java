@@ -6,14 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.view.MotionEvent;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 /**
  * Activity to dismiss/snooze the alarm.
@@ -87,6 +82,7 @@ public class NacAlarmActivity
 	@Override
 	public void onAutoDismiss()
 	{
+		// Auto dismissed your "Name" at 7:30 AM alarm
 		NacUtility.toast(this, "Auto-dismissed the alarm");
 		this.dismiss();
 	}
@@ -139,14 +135,16 @@ public class NacAlarmActivity
 		setContentView(R.layout.act_alarm);
 
 		NacAlarm alarm  = NacIntent.getAlarm(getIntent());
+		NacWakeUpAction wakeUp = new NacWakeUpAction(this, alarm);
+		NacScheduler scheduler = new NacScheduler(this);
 		this.mAlarm = alarm;
-		this.mWakeUp = new NacWakeUpAction(this, alarm);
+		this.mWakeUp = wakeUp;
 
-		this.scheduleNextAlarm();
+		//this.scheduleNextAlarm();
+		scheduler.scheduleNext(alarm);
 		this.setupAlarmButtons();
-
-		this.getWakeUp().setOnAutoDismissListener(this);
-		this.getWakeUp().start();
+		wakeUp.setOnAutoDismissListener(this);
+		wakeUp.start();
 	}
 
 	/**
@@ -193,29 +191,6 @@ public class NacAlarmActivity
 		super.onResume();
 		NacUtility.printf("onResume!");
 		this.getWakeUp().resume();
-	}
-
-	/**
-	 * Schedule the next alarm.
-	 */
-	public void scheduleNextAlarm()
-	{
-		NacAlarm alarm = this.getAlarm();
-
-		if (alarm.isOneTimeAlarm())
-		{
-			return;
-		}
-
-		NacScheduler scheduler = new NacScheduler(this);
-		Calendar next = Calendar.getInstance();
-
-		next.set(Calendar.HOUR_OF_DAY, alarm.getHour());
-		next.set(Calendar.MINUTE, alarm.getMinute());
-		next.set(Calendar.SECOND, 0);
-		next.set(Calendar.MILLISECOND, 0);
-		next.add(Calendar.DAY_OF_MONTH, 7);
-		scheduler.update(alarm, next);
 	}
 
 	/**

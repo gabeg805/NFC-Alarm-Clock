@@ -21,17 +21,10 @@ public class NacScheduler
 	private Context mContext;
 
 	/**
-	 * Alarm manager.
-	 */
-	private AlarmManager mAlarmManager;
-
-	/**
 	 */
 	public NacScheduler(Context context)
 	{
 		this.mContext = context;
-		this.mAlarmManager = (AlarmManager) context.getSystemService(
-			Context.ALARM_SERVICE);
 	}
 
 	/**
@@ -103,7 +96,7 @@ public class NacScheduler
 
 		if (this.contains(pending))
 		{
-			this.mAlarmManager.cancel(pending);
+			this.getAlarmManager().cancel(pending);
 		}
 	}
 
@@ -130,7 +123,8 @@ public class NacScheduler
 	 */
 	private AlarmManager getAlarmManager()
 	{
-		return this.mAlarmManager;
+		return (AlarmManager) this.getContext().getSystemService(
+			Context.ALARM_SERVICE);
 	}
 
 	/**
@@ -236,6 +230,26 @@ public class NacScheduler
 		Intent intent = this.getShowIntent();
 
 		return PendingIntent.getActivity(context, id, intent, 0);
+	}
+
+	/**
+	 * Schedule the next alarm.
+	 */
+	public void scheduleNext(NacAlarm alarm)
+	{
+		if (alarm.isOneTimeAlarm())
+		{
+			return;
+		}
+
+		Calendar next = Calendar.getInstance();
+
+		next.set(Calendar.HOUR_OF_DAY, alarm.getHour());
+		next.set(Calendar.MINUTE, alarm.getMinute());
+		next.set(Calendar.SECOND, 0);
+		next.set(Calendar.MILLISECOND, 0);
+		next.add(Calendar.DAY_OF_MONTH, 7);
+		this.update(alarm, next);
 	}
 
 	/**

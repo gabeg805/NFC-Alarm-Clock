@@ -34,14 +34,17 @@ public class NacWakeUpAction
 	private NacAlarm mAlarm;
 
 	/**
+	 * Shared preferences.
+	 */
+	private NacSharedPreferences mShared;
+
+	/**
 	 * Media player.
 	 */
 	private NacMediaPlayer mPlayer;
 
 	/**
 	 * Vibrate the phone.
-	 *
-	 * Will be canceled once the activity is done.
 	 */
 	private NacVibrator mVibrator;
 
@@ -53,7 +56,12 @@ public class NacWakeUpAction
 	/**
 	 * Automatically dismiss the alarm in case it does not get dismissed.
 	 */
-	private Handler mHandler;
+	private Handler mAutoDismissHandler;
+
+	/**
+	 * Say the current time at user specified intervals.
+	 */
+	private Handler mSpeakHandler;
 
 	/**
 	 * On auto dismiss listener.
@@ -66,9 +74,12 @@ public class NacWakeUpAction
 	{
 		this.mContext = context;
 		this.mAlarm = alarm;
+		this.mShared = new NacSharedPreferences(context);
 		this.mPlayer = new NacMediaPlayer(context);
+		this.mVibrator = null;
 		this.mSpeech = new NacTextToSpeech(context, this);
-		this.mHandler = new Handler();
+		this.mAutoDismissHandler = new Handler();
+		this.mSpeakHandler = new Handler();
 		this.mListener = null;
 
 		this.setupVibrator();
@@ -79,10 +90,13 @@ public class NacWakeUpAction
 	 */
 	public void cleanup()
 	{
+		Context context = this.getContext();
 		NacVibrator vibrator = this.getVibrator();
 		NacMediaPlayer player = this.getMediaPlayer();
-		Handler handler = this.getHandler();
+		Handler autoDismissHandler = this.getAutoDismissHandler();
+		Handler speakHandler = this.getSpeakHandler();
 
+		// Add a thing for Nfc to dismiss its activity if it is still running
 		if (vibrator != null)
 		{
 			vibrator.cancel(true);
@@ -93,10 +107,17 @@ public class NacWakeUpAction
 			player.release();
 		}
 
-		if (handler != null)
+		if (autoDismissHandler != null)
 		{
-			handler.removeCallbacksAndMessages(null);
+			autoDismissHandler .removeCallbacksAndMessages(null);
 		}
+
+		if (speakHandler != null)
+		{
+			speakHandler .removeCallbacksAndMessages(null);
+		}
+
+		NacNfc.finish(context);
 	}
 
 	/**
@@ -108,19 +129,19 @@ public class NacWakeUpAction
 	}
 
 	/**
+	 * @return The auto dismiss handler.
+	 */
+	private Handler getAutoDismissHandler()
+	{
+		return this.mAutoDismissHandler;
+	}
+
+	/**
 	 * @return The context.
 	 */
 	private Context getContext()
 	{
 		return this.mContext;
-	}
-
-	/**
-	 * @return The handler.
-	 */
-	private Handler getHandler()
-	{
-		return this.mHandler;
 	}
 
 	/**
@@ -140,11 +161,62 @@ public class NacWakeUpAction
 	}
 
 	/**
+	 * @return The shared preferences.
+	 */
+	private NacSharedPreferences getSharedPreferences()
+	{
+		return this.mShared;
+	}
+
+	/**
+	 * @return The handler to say the current time periodically.
+	 */
+	private Handler getSpeakHandler()
+	{
+		return this.mSpeakHandler;
+	}
+
+	/**
 	 * @return Text-to-speech engine.
 	 */
 	private NacTextToSpeech getTextToSpeech()
 	{
 		return this.mSpeech;
+	}
+
+	/**
+	 * @return The time to say.
+	 */
+	private String getTimeToSay()
+	{
+		Context context = this.getContext();
+		Calendar calendar = Calendar.getInstance();
+		boolean format = NacCalendar.is24HourFormat(context);
+		int hour = calendar.get(Calendar.HOUR_OF_DAY);
+		int minute = calendar.get(Calendar.MINUTE);
+		String[] time = NacCalendar.getTime(hour, minute, format).split(":");
+		String ampm = (!format) ? ((hour < 12) ? ", AM" : ", PM") : "";
+
+		if (time[1].charAt(0) == '0')
+		{
+			if (time[1].charAt(1) == '0')
+			{
+				time[1] = "";
+			}
+			else
+			{
+				time[1] = "O, " + time[1].charAt(1);
+			}
+		}
+
+		if (!time[1].isEmpty())
+		{
+			time[1] = ", " + time[1];
+		}
+
+		NacUtility.printf("The time, is, "+time[0]+time[1]+ampm);
+
+		return "The time, is, " + time[0] + time[1] + ampm;
 	}
 
 	/**
@@ -161,7 +233,6 @@ public class NacWakeUpAction
 	public void onDoneSpeaking()
 	{
 		NacUtility.printf("onDoneSpeaking!");
-		// Will play music cause issues?
 		this.playMusic();
 		this.vibrate();
 	}
@@ -172,7 +243,6 @@ public class NacWakeUpAction
 	public void onStartSpeaking()
 	{
 		NacUtility.printf("onStartSpeaking!");
-
 		this.stopVibrate();
 	}
 
@@ -193,19 +263,22 @@ public class NacWakeUpAction
 	 */
 	private void playMusic()
 	{
+		NacMediaPlayer player = this.getMediaPlayer();
+
+		if ((player == null) || player.isPlaying() || player.wasPlaying())
+		{
+			NacUtility.printf("Dont have to play music!");
+			return;
+		}
+
+		NacUtility.printf("Playing some music!");
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
-		NacMediaPlayer player = this.getMediaPlayer();
-		NacSharedPreferences shared = new NacSharedPreferences(context);
+		NacSharedPreferences shared = this.getSharedPreferences();
 		String path = alarm.getSoundPath();
 		int type = alarm.getSoundType();
 		boolean repeat = true;
 		boolean shuffle = shared.getShuffle();
-
-		if (player == null)
-		{
-			return;
-		}
 
 		player.reset();
 
@@ -225,9 +298,14 @@ public class NacWakeUpAction
 	public void resume()
 	{
 		Context context = this.getContext();
+		//NacSharedPreferences shared = this.getSharedPreferences();
 
 		NacNfc.enable(context);
-		this.speak();
+
+		//if (shared.getSpeakToMe())
+		//{
+		//	this.speak();
+		//}
 	}
 
 	/**
@@ -267,29 +345,45 @@ public class NacWakeUpAction
 	 */
 	public void shutdown()
 	{
-		//this.getTextToSpeech().shutdown();
+		//this.getMediaPlayer().release();
+		this.getTextToSpeech().shutdown();
 	}
 
 	/**
-	 * Speak the current time.
+	 * Speak at the desired frequency, specified in the shared preference.
 	 */
 	private void speak()
 	{
-		NacTextToSpeech speech = this.getTextToSpeech();
+		NacSharedPreferences shared = this.getSharedPreferences();
+		final long freq = shared.getSpeakFrequency() * 60L * 1000L;
+		final Handler handler = this.getSpeakHandler();
+		final Runnable sayTime = new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					NacTextToSpeech speech = getTextToSpeech();
 
-		if (speech.isSpeaking() || speech.hasBuffer())
-		{
-			NacUtility.printf("Speaking is already occurring!");
-			return;
-		}
+					if (speech.isSpeaking() || speech.hasBuffer())
+					{
+						NacUtility.printf("Speaking is already occurring!");
+						return;
+					}
 
-		NacUtility.printf("Running speak from WakeUpAction!");
-		Calendar calendar = Calendar.getInstance();
-		String hour = String.valueOf(calendar.get(Calendar.HOUR));
-		String minute = String.valueOf(calendar.get(Calendar.MINUTE));
-		String ampm = (calendar.get(Calendar.AM_PM) == 0) ? "AM" : "PM";
+					NacUtility.printf("Running speak from WakeUpAction!");
+					String text = getTimeToSay();
 
-		speech.speak("The time, is, "+hour+", "+minute+", "+ampm);
+					speech.speak(text);
+
+					if (freq != 0)
+					{
+						handler.postDelayed(this, freq);
+					}
+				}
+			};
+
+		NacUtility.printf("Speaking frequency : %d %d", shared.getSpeakFrequency(), freq);
+		handler.post(sayTime);
 	}
 
 	/**
@@ -298,7 +392,17 @@ public class NacWakeUpAction
 	public void start()
 	{
 		NacUtility.printf("Starting wake up process!");
-		this.speak();
+		NacSharedPreferences shared = this.getSharedPreferences();
+
+		if (shared.getSpeakToMe())
+		{
+			this.speak();
+		}
+		else
+		{
+			this.playMusic();
+		}
+
 		this.waitForAutoDismiss();
 	}
 
@@ -353,7 +457,7 @@ public class NacWakeUpAction
 
 		if (autoDismiss != 0)
 		{
-			this.getHandler().postDelayed(this, delay);
+			this.getAutoDismissHandler().postDelayed(this, delay);
 		}
 	}
 
