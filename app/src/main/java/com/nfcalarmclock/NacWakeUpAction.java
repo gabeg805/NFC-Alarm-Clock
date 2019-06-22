@@ -191,10 +191,11 @@ public class NacWakeUpAction
 	{
 		Context context = this.getContext();
 		Calendar calendar = Calendar.getInstance();
-		boolean format = NacCalendar.is24HourFormat(context);
+		boolean format = NacCalendar.Time.is24HourFormat(context);
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
 		int minute = calendar.get(Calendar.MINUTE);
-		String[] time = NacCalendar.getTime(hour, minute, format).split(":");
+		String[] time = NacCalendar.Time.getTime(hour, minute, format)
+			.split(":");
 		String ampm = (!format) ? ((hour < 12) ? ", AM" : ", PM") : "";
 
 		if (time[1].charAt(0) == '0')

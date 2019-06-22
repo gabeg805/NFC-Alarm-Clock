@@ -3,16 +3,13 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.nfcalarmclock">
 
-	<!-- Permissions that are used -->
+	<!-- Permissions -->
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.NFC" />
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
-	<!--
-	<uses-permission android:name="android.permission.INTERNET" />
-	-->
+	<!-- <uses-permission android:name="android.permission.INTERNET" /> -->
 
 	<!-- Hardware restrictions (NFC is optional) -->
 	<uses-feature
@@ -20,6 +17,7 @@
 		android:required="false"
 		/>
 
+	<!-- Application -->
 	<application
 		android:label="@string/app_name"
 		android:theme="@style/AppTheme"
@@ -39,9 +37,9 @@
 			</intent-filter>
 		</activity>
 
-		<!-- Sound activity -->
+		<!-- Media activity -->
 		<activity
-			android:name=".NacPagerFragment"
+			android:name=".NacMediaActivity"
 			android:launchMode="singleInstance">
 
 			<intent-filter>
@@ -70,11 +68,18 @@
 			</intent-filter>
 			-->
 
+		<!-- Login to spotify -->
+		<!--
+		<activity
+			android:name="com.spotify.sdk.android.authentication.LoginActivity"
+			android:theme="@android:style/Theme.Translucent.NoTitleBar"
+			/>
+			-->
+
 
 		<!-- Alarm activity -->
 		<activity
-			android:name=".NacAlarmActivity"
-			android:label="@string/app_alert_name">
+			android:name=".NacAlarmActivity">
 		</activity>
 
 		<!-- Settings activity -->
@@ -84,14 +89,6 @@
 			android:parentActivityName=".NacMainActivity"
 			android:windowSoftInputMode="stateAlwaysHidden">
 		</activity>
-
-		<!-- Login to spotify -->
-		<!--
-		<activity
-			android:name="com.spotify.sdk.android.authentication.LoginActivity"
-			android:theme="@android:style/Theme.Translucent.NoTitleBar"
-			/>
-			-->
 
 		<!-- Call the alarm activity when an alarm goes off -->
 		<receiver

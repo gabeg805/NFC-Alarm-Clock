@@ -449,6 +449,7 @@ public class NacCardHolder
 			this.collapse(false);
 		}
 
+		this.setListeners(null);
 		this.focus(wasAdded);
 		this.setSwipeViews();
 		this.setSwitch();
@@ -822,6 +823,14 @@ public class NacCardHolder
 	 */
 	public void setListeners()
 	{
+		this.setListeners(this);
+	}
+
+	/**
+	 * Set the listeners of the various views.
+	 */
+	public void setListeners(Object listener)
+	{
 		View root = this.getRoot();
 		RelativeLayout header = (RelativeLayout) root.findViewById(
 			R.id.nac_header);
@@ -832,17 +841,28 @@ public class NacCardHolder
 		RelativeLayout time = (RelativeLayout) root.findViewById(
 			R.id.nac_time_parent);
 
-		time.setOnClickListener(this);
-		header.setOnClickListener(this);
-		summary.setOnClickListener(this);
-		collapse.setOnClickListener(this);
-		this.mSwitch.setOnCheckedChangeListener(this);
-		this.mDayButtons.setOnClickListener((NacDayOfWeek.OnClickListener)this);
-		this.mRepeat.setOnCheckedChangeListener(this);
-		this.mVibrate.setOnCheckedChangeListener(this);
-		this.mSound.setOnClickListener(this);
-		this.mName.setOnClickListener(this);
-		this.mDelete.setOnClickListener(this);
+		//time.setOnClickListener(this);
+		//header.setOnClickListener(this);
+		//summary.setOnClickListener(this);
+		//collapse.setOnClickListener(this);
+		//this.mSwitch.setOnCheckedChangeListener(this);
+		//this.mDayButtons.setOnClickListener((NacDayOfWeek.OnClickListener)this);
+		//this.mRepeat.setOnCheckedChangeListener(this);
+		//this.mVibrate.setOnCheckedChangeListener(this);
+		//this.mSound.setOnClickListener(this);
+		//this.mName.setOnClickListener(this);
+		//this.mDelete.setOnClickListener(this);
+		time.setOnClickListener((View.OnClickListener)listener);
+		header.setOnClickListener((View.OnClickListener)listener);
+		summary.setOnClickListener((View.OnClickListener)listener);
+		collapse.setOnClickListener((View.OnClickListener)listener);
+		this.mSwitch.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener)listener);
+		this.mDayButtons.setOnClickListener((NacDayOfWeek.OnClickListener)listener);
+		this.mRepeat.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener)listener);
+		this.mVibrate.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener)listener);
+		this.mSound.setOnClickListener((View.OnClickListener)listener);
+		this.mName.setOnClickListener((View.OnClickListener)listener);
+		this.mDelete.setOnClickListener((View.OnClickListener)listener);
 	}
 
 	/**
@@ -922,8 +942,11 @@ public class NacCardHolder
 	 */
 	public void setSummaryDays()
 	{
+		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
-		String string = NacCalendar.toString(alarm);
+		NacSharedPreferences shared = new NacSharedPreferences(context);
+		String string = NacCalendar.Days.toString(alarm,
+			shared.getMondayFirst());
 
 		this.mSummaryDays.setText(string);
 	}
@@ -1088,7 +1111,7 @@ public class NacCardHolder
 	{
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
-		Intent intent = NacIntent.toIntent(context, NacPagerFragment.class,
+		Intent intent = NacIntent.toIntent(context, NacMediaActivity.class,
 			alarm);
 
 		context.startActivity(intent);
@@ -1103,7 +1126,7 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 		int hour = alarm.getHour();
 		int minute = alarm.getMinute();
-		boolean format = NacCalendar.is24HourFormat(context);
+		boolean format = NacCalendar.Time.is24HourFormat(context);
 		TimePickerDialog dialog = new TimePickerDialog(context, this, hour,
 			minute, format);
 

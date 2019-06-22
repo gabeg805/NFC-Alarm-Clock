@@ -203,13 +203,13 @@ public class NacAlarmActivity
 		Button snoozeButton = (Button) findViewById(R.id.snooze);
 		Button dismissButton = (Button) findViewById(R.id.dismiss);
 
-		if (NacNfc.exists(this) || !shared.getRequireNfc())
+		if (NacNfc.exists(this) && shared.getRequireNfc())
 		{
-			dismissButton.setVisibility(View.VISIBLE);
+			dismissButton.setVisibility(View.GONE);
 		}
 		else
 		{
-			dismissButton.setVisibility(View.GONE);
+			dismissButton.setVisibility(View.VISIBLE);
 		}
 
 		snoozeButton.setTextColor(shared.getThemeColor());

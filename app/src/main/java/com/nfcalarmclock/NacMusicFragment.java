@@ -29,6 +29,11 @@ public class NacMusicFragment
 {
 
 	/**
+	 * File browser.
+	 */
+	private NacFileBrowser mFileBrowser;
+
+	/**
 	 * Read request callback success result.
 	 */
 	public static final int READ_REQUEST = 1;
@@ -38,6 +43,16 @@ public class NacMusicFragment
 	public NacMusicFragment()
 	{
 		super();
+
+		this.mFileBrowser = null;
+	}
+
+	/**
+	 * Back button was been pressed.
+	 */
+	public boolean backPressed()
+	{
+		return this.mFileBrowser.previousDirectory();
 	}
 
 	/**
@@ -196,6 +211,7 @@ public class NacMusicFragment
 		String sound = getSoundPath();
 		String path = sound;
 		File pathFile = new File(path);
+		this.mFileBrowser = browser;
 
 		if (NacSound.isFilePlaylist(path))
 		{

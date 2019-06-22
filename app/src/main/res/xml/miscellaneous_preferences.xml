@@ -9,7 +9,7 @@
 		<com.nfcalarmclock.NacCheckboxPreference
 			android:key="@string/pref_monday_first_key"
 			android:title="@string/pref_monday_first_title"
-			android:summaryOn=" @string/pref_monday_first_summary_enabled"
+			android:summaryOn="@string/pref_monday_first_summary_enabled"
 			android:summaryOff="@string/pref_monday_first_summary_disabled"
 			android:defaultValue="false"
 			/>
@@ -23,7 +23,7 @@
 		<com.nfcalarmclock.NacCheckboxPreference
 			android:key="@string/pref_shuffle_playlist_key"
 			android:title="@string/pref_shuffle_playlist_title"
-			android:summaryOn=" @string/pref_shuffle_playlist_summary_enabled"
+			android:summaryOn="@string/pref_shuffle_playlist_summary_enabled"
 			android:summaryOff="@string/pref_shuffle_playlist_summary_disabled"
 			android:defaultValue="false"
 			/>
@@ -37,7 +37,7 @@
 		<com.nfcalarmclock.NacCheckboxPreference
 			android:key="@string/pref_speak_to_me_key"
 			android:title="@string/pref_speak_to_me_title"
-			android:summaryOn=" @string/pref_speak_to_me_summary_enabled"
+			android:summaryOn="@string/pref_speak_to_me_summary_enabled"
 			android:summaryOff="@string/pref_speak_to_me_summary_disabled"
 			android:defaultValue="false"
 			/>

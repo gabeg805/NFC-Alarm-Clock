@@ -54,7 +54,7 @@ public class NacDefaultAlarmSettings
 		PreferenceManager.setDefaultValues(getContext(),
 			R.xml.default_alarm_preferences, false);
 
-		NacPreferenceKeys keys = this.getSharedPreferences().getKeys();
+		NacSharedKeys keys = this.getSharedPreferences().getKeys();
 		this.mSound = (NacSoundPreference) findPreference(keys.getSound());
 
 		this.mSound.setOnPreferenceClickListener(this);
@@ -69,7 +69,7 @@ public class NacDefaultAlarmSettings
 		Context context = getContext();
 		String path = this.getSharedPreferences().getSound();
 		NacSound sound = new NacSound(context, path);
-		Intent intent = NacIntent.toIntent(context, NacPagerFragment.class,
+		Intent intent = NacIntent.toIntent(context, NacMediaActivity.class,
 			sound);
 
 		startActivityForResult(intent, REQUEST_CODE);

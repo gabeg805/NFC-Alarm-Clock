@@ -26,12 +26,22 @@ public class NacSharedPreferences
 	/**
 	 * Shared preference keys.
 	 */
-	private final NacPreferenceKeys mKeys;
+	private final NacSharedKeys mKeys;
+
+	/**
+	 * Default display next alarm format.
+	 */
+	private static final boolean DEFAULT_DISPLAY_TIME_REMAINING = true;
 
 	/**
 	 * Default auto dismiss duration.
 	 */
 	public static final int DEFAULT_AUTO_DISMISS = 15;
+
+	/**
+	 * Default require NFC.
+	 */
+	public static final boolean DEFAULT_REQUIRE_NFC = true;
 
 	/**
 	 * Default max snooze count.
@@ -47,11 +57,6 @@ public class NacSharedPreferences
 	 * Default snooze duration.
 	 */
 	public static final int DEFAULT_SNOOZE_DURATION = 5;
-
-	/**
-	 * Default require NFC.
-	 */
-	public static final boolean DEFAULT_REQUIRE_NFC = true;
 
 	/**
 	 * Default easy snooze.
@@ -101,7 +106,7 @@ public class NacSharedPreferences
 	/**
 	 * Default days.
 	 */
-	public static final int DEFAULT_DAYS = NacCalendar.daysToValue(
+	public static final int DEFAULT_DAYS = NacCalendar.Days.daysToValue(
 		EnumSet.of(NacCalendar.Day.MONDAY, NacCalendar.Day.TUESDAY,
 			NacCalendar.Day.WEDNESDAY, NacCalendar.Day.THURSDAY,
 			NacCalendar.Day.FRIDAY));
@@ -197,7 +202,7 @@ public class NacSharedPreferences
 	{
 		this.mSharedPreferences = PreferenceManager
 			.getDefaultSharedPreferences(context);
-		this.mKeys = new NacPreferenceKeys(context);
+		this.mKeys = new NacSharedKeys(context);
 		this.mContext = context;
 	}
 
@@ -271,6 +276,24 @@ public class NacSharedPreferences
 		String key = this.getKeys().getDaysColor();
 
 		this.saveInt(key, color, commit);
+	}
+
+	/**
+	 * @see editDisplayTimeRemaining
+	 */
+	public void editDisplayTimeRemaining(boolean timeRemaining)
+	{
+		this.editDisplayTimeRemaining(timeRemaining, false);
+	}
+
+	/**
+	 * Edit the display time remaining preference.
+	 */
+	public void editDisplayTimeRemaining(boolean timeRemaining, boolean commit)
+	{
+		String key = this.getKeys().getDisplayTimeRemaining();
+
+		this.saveBoolean(key, timeRemaining, commit);
 	}
 
 	/**
@@ -678,10 +701,22 @@ public class NacSharedPreferences
 	 */
 	public static String getDaysSummary(int value)
 	{
-		String days = NacCalendar.toString(value);
+		String days = NacCalendar.Days.toString(value);
 
 		return (!days.isEmpty()) ? days
 			: NacSharedPreferences.DEFAULT_DAYS_SUMMARY;
+	}
+
+	/**
+	 * @return Whether the display next alarm should show time remaining for
+	 *         the next alarm or not.
+	 */
+	public boolean getDisplayTimeRemaining()
+	{
+		String key = this.getKeys().getDisplayTimeRemaining();
+
+		return this.getSharedPreferences().getBoolean(key,
+			DEFAULT_DISPLAY_TIME_REMAINING);
 	}
 
 	/**
@@ -705,7 +740,7 @@ public class NacSharedPreferences
 	/**
 	 * @return The preference keys.
 	 */
-	public NacPreferenceKeys getKeys()
+	public NacSharedKeys getKeys()
 	{
 		return this.mKeys;
 	}

@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<CheckBox
+<LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/widget"
-	android:layout_width="wrap_content"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:focusable="false"
-	/>
+	android:padding="?android:attr/listPreferredItemPaddingLeft"
+	android:minHeight="?android:attr/listPreferredItemHeight"
+	android:gravity="center_vertical"
+	android:baselineAligned="false"
+	tools:ignore="UselessParent">
+
+	<include layout="@layout/nac_preference_text" />
+
+	<CheckBox
+		android:id="@+id/widget"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:focusable="false"
+		/>
+
+</LinearLayout>

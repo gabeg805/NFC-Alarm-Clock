@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ImageView
+<LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/widget"
-	android:layout_width="@dimen/isz_color_example"
-	android:layout_height="@dimen/isz_color_example"
-	android:contentDescription="@null"
-	android:src="@drawable/color_example"
-	/>
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:padding="?android:attr/listPreferredItemPaddingLeft"
+	android:minHeight="?android:attr/listPreferredItemHeight"
+	android:gravity="center_vertical"
+	android:baselineAligned="false"
+	tools:ignore="UselessParent">
+
+	<include layout="@layout/nac_preference_text" />
+
+	<ImageView
+		android:id="@+id/widget"
+		android:layout_width="@dimen/isz_color_example"
+		android:layout_height="@dimen/isz_color_example"
+		android:contentDescription="@null"
+		android:src="@drawable/color_example"
+		/>
+
+</LinearLayout>

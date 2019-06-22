@@ -6,7 +6,7 @@ import android.content.res.Resources;
 /**
  * Container, or Keeper, if you will, of keys...of each preference.
  */
-public class NacPreferenceKeys
+public class NacSharedKeys
 {
 
 	/**
@@ -50,9 +50,19 @@ public class NacPreferenceKeys
 	private final String mMiscellaneousTitle;
 
 	/**
+	 * Display time remaining.
+	 */
+	private final String mDisplayTimeRemaining;
+
+	/**
 	 * Auto dismiss.
 	 */
 	private final String mAutoDismiss;
+
+	/**
+	 * Require NFC to dismiss an alarm.
+	 */
+	private final String mRequireNfc;
 
 	/**
 	 * Max snoozes.
@@ -63,11 +73,6 @@ public class NacPreferenceKeys
 	 * Snooze duration.
 	 */
 	private final String mSnoozeDuration;
-
-	/**
-	 * Require NFC to dismiss an alarm.
-	 */
-	private final String mRequireNfc;
 
 	/**
 	 * Easy snoozing of the alarm.
@@ -151,7 +156,7 @@ public class NacPreferenceKeys
 
 	/**
 	 */
-	public NacPreferenceKeys(Context context)
+	public NacSharedKeys(Context context)
 	{
 		Resources res = context.getResources();
 
@@ -163,10 +168,11 @@ public class NacPreferenceKeys
 		this.mDefaultAlarmScreenTitle = res.getString(R.string.pref_screen_default_alarm_title);
 		this.mColorScreenTitle = res.getString(R.string.pref_screen_color_title);
 		this.mMiscellaneousTitle = res.getString(R.string.pref_screen_misc_title);
+		this.mDisplayTimeRemaining = res.getString(R.string.pref_display_time_remaining_key);
 		this.mAutoDismiss = res.getString(R.string.pref_auto_dismiss_key);
+		this.mRequireNfc = res.getString(R.string.pref_dismiss_button_key);
 		this.mMaxSnooze = res.getString(R.string.pref_max_snooze_key);
 		this.mSnoozeDuration = res.getString(R.string.pref_snooze_duration_key);
-		this.mRequireNfc = res.getString(R.string.pref_dismiss_button_key);
 		this.mEasySnooze = res.getString(R.string.pref_easy_snooze_key);
 		this.mShuffle = res.getString(R.string.pref_shuffle_playlist_key);
 		this.mMondayFirst = res.getString(R.string.pref_monday_first_key);
@@ -247,6 +253,14 @@ public class NacPreferenceKeys
 	public String getDefaultAlarmScreenTitle()
 	{
 		return this.mDefaultAlarmScreenTitle;
+	}
+
+	/**
+	 * @return The display time remaining key.
+	 */
+	public String getDisplayTimeRemaining()
+	{
+		return this.mDisplayTimeRemaining;
 	}
 
 	/**

@@ -13,7 +13,7 @@ import android.widget.ImageView;;
 /**
  * Preference that allows a user to select a color.
  */
-public class NacPreferenceColor
+public class NacColorPreference
 	extends Preference
 	implements Preference.OnPreferenceClickListener,
 		NacDialog.OnDismissListener,
@@ -37,24 +37,24 @@ public class NacPreferenceColor
 
 	/**
 	 */
-	public NacPreferenceColor(Context context)
+	public NacColorPreference(Context context)
 	{
 		this(context, null);
 	}
 
 	/**
 	 */
-	public NacPreferenceColor(Context context, AttributeSet attrs)
+	public NacColorPreference(Context context, AttributeSet attrs)
 	{
 		this(context, attrs, 0);
 	}
 
 	/**
 	 */
-	public NacPreferenceColor(Context context, AttributeSet attrs, int style)
+	public NacColorPreference(Context context, AttributeSet attrs, int style)
 	{
 		super(context, attrs, style);
-		setLayoutResource(R.layout.nac_preference_widget);
+		setLayoutResource(R.layout.nac_preference_color);
 		setOnPreferenceClickListener(this);
 	}
 

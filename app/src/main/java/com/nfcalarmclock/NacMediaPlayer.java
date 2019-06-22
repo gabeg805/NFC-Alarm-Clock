@@ -196,7 +196,7 @@ public class NacMediaPlayer
 
 		this.mContext = context;
 		this.mPlaylist = null;
-		this.mAudioFocusState = AudioManager.AUDIOFOCUS_NONE;
+		this.mAudioFocusState = 0;
 		this.mWasPlaying = false;
 	}
 

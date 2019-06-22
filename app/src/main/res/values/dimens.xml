@@ -6,6 +6,13 @@
 	<dimen name="rad_general">3dp</dimen>
 	<dimen name="isz_pref_icon">32dp</dimen>
 
+	<!-- Alarm Activity -->
+	<dimen name="m_act_alarm_icon">28dp</dimen>
+	<dimen name="m_act_alarm_buttons">28dp</dimen>
+	<dimen name="isz_act_alarm_icon">64dp</dimen>
+	<dimen name="tsz_act_alarm_title">26sp</dimen>
+	<dimen name="tsz_act_alarm_instructions">14sp</dimen>
+
 	<!-- Floating button -->
 	<dimen name="m_fab">16dp</dimen>
 
@@ -56,10 +63,6 @@
 	<!-- Days -->
 	<dimen name="pt_days">8dp</dimen>
 	<dimen name="pb_days">8dp</dimen>
-	<!--
-		<dimen name="pl_days">10dp</dimen>
-		<dimen name="pr_days">10dp</dimen>
-	-->
 	<dimen name="isz_day">32dp</dimen>
 	<dimen name="tsz_days">14sp</dimen>
 	<dimen name="tsz_summary_days">12sp</dimen>
@@ -93,13 +96,6 @@
 	<dimen name="isz_expand">20dp</dimen>
 	<dimen name="isz_collapse">20dp</dimen>
 
-	<!-- Activity alarm -->
-	<dimen name="m_act_alarm_icon">28dp</dimen>
-	<dimen name="m_act_alarm_buttons">28dp</dimen>
-	<dimen name="isz_act_alarm_icon">64dp</dimen>
-	<dimen name="tsz_act_alarm_title">26sp</dimen>
-	<dimen name="tsz_act_alarm_instructions">14sp</dimen>
-
 	<!-- Number picker -->>
 	<dimen name="m_scroll_option">30dp</dimen>
 
@@ -110,10 +106,6 @@
 	<!-- Dialog name -->
 	<dimen name="spt_dlg_name">10dp</dimen>
 	<dimen name="spb_dlg_name">-25dp</dimen>
-
-	<!-- Sound prompt -->
-	<dimen name="mb_dlg_sound_prompt">8dp</dimen>
-	<dimen name="tsz_dlg_sound_prompt">15sp</dimen>
 
 	<!-- Fragment sound -->
 	<dimen name="p_frg_buttons">10dp</dimen>

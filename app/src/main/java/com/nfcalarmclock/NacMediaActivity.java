@@ -16,7 +16,7 @@ import android.support.v4.view.ViewPager;
 
 /**
  */
-public class NacPagerFragment
+public class NacMediaActivity
 	extends FragmentActivity
 	implements TabLayout.OnTabSelectedListener,
 		ActivityCompat.OnRequestPermissionsResultCallback
@@ -199,6 +199,26 @@ public class NacPagerFragment
 		}
 
 		this.fragmentSelected(fragment);
+	}
+
+	/**
+	 */
+	@Override
+	public void onBackPressed()
+	{
+		int position = this.getPosition();
+		NacMusicFragment musicFragment = (NacMusicFragment)
+			this.getFragments()[0];
+
+		if (position == 0)
+		{
+			if ((musicFragment != null) && musicFragment.backPressed())
+			{
+				return;
+			}
+		}
+
+		super.onBackPressed();
 	}
 
 	/**

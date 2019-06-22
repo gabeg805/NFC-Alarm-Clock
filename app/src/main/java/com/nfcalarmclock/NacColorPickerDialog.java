@@ -136,7 +136,17 @@ public class NacColorPickerDialog
 			}
 
 			String name = this.mEditText.getText().toString();
-			int color = Color.parseColor(name);
+			int color;
+
+			try
+			{
+				color = Color.parseColor(name);
+			}
+			catch (IllegalArgumentException e)
+			{
+				NacUtility.quickToast(tv.getContext(), "Invalid hex color");
+				return false;
+			}
 
 			this.mColorPicker.setColor(color);
 			this.mColorExample.setColorFilter(color, PorterDuff.Mode.SRC);

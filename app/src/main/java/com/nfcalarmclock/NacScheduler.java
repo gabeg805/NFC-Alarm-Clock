@@ -36,20 +36,12 @@ public class NacScheduler
 		{
 			return;
 		}
-		else if (alarm.isOneTimeAlarm())
-		{
-			Calendar next = NacCalendar.toCalendarTodayOrTomorrow(alarm);
 
-			this.add(alarm, next);
-		}
-		else
-		{
-			List<Calendar> calendars = NacCalendar.nextCalendars(alarm);
+		List<Calendar> calendars = NacCalendar.toCalendars(alarm);
 
-			for (Calendar c : calendars)
-			{
-				this.add(alarm, c);
-			}
+		for (Calendar c : calendars)
+		{
+			this.add(alarm, c);
 		}
 	}
 
@@ -81,7 +73,8 @@ public class NacScheduler
 
 		for (NacCalendar.Day d : NacCalendar.WEEK)
 		{
-			calendar.set(Calendar.DAY_OF_WEEK, NacCalendar.toCalendarDay(d));
+			calendar.set(Calendar.DAY_OF_WEEK, NacCalendar.Days
+				.toCalendarDay(d));
 			this.cancel(alarm, calendar);
 		}
 	}

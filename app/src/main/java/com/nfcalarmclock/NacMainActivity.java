@@ -14,7 +14,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import java.lang.System;
 
 /**
  * The application's main activity.
@@ -38,6 +37,15 @@ public class NacMainActivity
 	 * Alarm card adapter.
 	 */
 	private NacCardAdapter mAdapter;
+
+	/**
+	 * Add a new alarm when the floating action button is clicked.
+	 */
+	@Override
+	public void onClick(View view)
+	{
+		this.mAdapter.add();
+	}
 
 	/**
 	 */
@@ -66,24 +74,6 @@ public class NacMainActivity
 		this.mRecyclerView.setAdapter(this.mAdapter);
 		this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 		this.mRecyclerView.addOnScrollListener(new ScrollListener());
-	}
-
-	/**
-	 */
-	@Override
-	protected void onResume()
-	{
-		super.onResume();
-		this.mAdapter.build();
-	}
-
-	/**
-	 * Add a new alarm when the floating action button is clicked.
-	 */
-	@Override
-	public void onClick(View view)
-	{
-		this.mAdapter.add();
 	}
 
 	/**
@@ -118,46 +108,32 @@ public class NacMainActivity
 	}
 
 	/**
+	 */
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		this.mAdapter.build();
+	}
+
+	/**
 	 * Display a snackbar showing the next scheduled alarm.
 	 */
 	private void showNextAlarm()
 	{
 		NacScheduler scheduler = new NacScheduler(this);
 		AlarmClockInfo next = scheduler.getNext();
-		String msg = "No scheduled alarms.";
+		String message = "No scheduled alarms.";
 
 		if (next != null)
 		{
-			msg = "Next alarm in ";
-			long time = (next.getTriggerTime() - System.currentTimeMillis())
-				/ 1000;
-			long day = (time / (60*60*24)) % 365;
-			long hr = (time / (60*60)) % 24;
-			long min = (time / 60) % 60;
-			long sec = time % 60;
-			String dayunit = (day != 1) ? " days " : " day ";
-			String hrunit = (hr != 1) ? " hours " : " hour ";
-			String minunit = (min != 1) ? " minutes " : " minute ";
-			String secunit = (sec != 1) ? " seconds " : " second ";
-
-			if (day > 0)
-			{
-				msg += String.valueOf(day)+dayunit+String.valueOf(hr)+hrunit;
-			}
-			else
-			{
-				if (hr > 0)
-				{
-					msg += String.valueOf(hr)+hrunit+String.valueOf(min)+minunit;
-				}
-				else
-				{
-					msg += String.valueOf(min)+minunit+String.valueOf(sec)+secunit;
-				}
-			}
+			NacSharedPreferences shared = new NacSharedPreferences(this);
+			boolean timeRemaining = shared.getDisplayTimeRemaining();
+			long millis = next.getTriggerTime();
+			message = NacCalendar.getNextMessage(millis, timeRemaining);
 		}
 
-		NacUtility.snackbar(this, msg, "DISMISS", null);
+		NacUtility.snackbar(this, message, "DISMISS", null);
 	}
 
 	/**

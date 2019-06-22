@@ -99,6 +99,9 @@ public class NacNfc
 				.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
 			PendingIntent pending = PendingIntent.getActivity(context, 0,
 				intent, 0);
+			// Can I use null for the filter?
+			// https://stackoverflow.com/questions/16510140/android-nfc-intent-filter-to-show-my-application-when-nfc-discover-a-tag
+			// <action android:name="android.nfc.action.ACTION_NDEF_DISCOVERED />
 			IntentFilter[] filter = new IntentFilter[]{};
 
 			nfcAdapter.enableForegroundDispatch((Activity)context, pending,

@@ -21,7 +21,7 @@ public class NacColorSettings
 		PreferenceManager.setDefaultValues(getContext(),
 			R.xml.color_preferences, false);
 
-		NacPreferenceKeys keys = this.getKeys();
+		NacSharedKeys keys = this.getKeys();
 		Preference theme = findPreference(keys.getThemeColor());
 
 		theme.setOnPreferenceChangeListener(this);

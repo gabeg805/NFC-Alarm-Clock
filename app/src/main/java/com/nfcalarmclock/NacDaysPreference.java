@@ -71,7 +71,7 @@ public class NacDaysPreference
 	{
 		View root = dialog.getRoot();
 		NacDayOfWeek dow = root.findViewById(R.id.days);
-		this.mValue = NacCalendar.daysToValue(dow.getDays());
+		this.mValue = NacCalendar.Days.daysToValue(dow.getDays());
 
 		this.setSummary(this.getSummary());
 		persistInt(this.mValue);

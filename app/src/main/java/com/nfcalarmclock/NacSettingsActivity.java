@@ -101,7 +101,7 @@ public class NacSettingsActivity
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.main_preferences);
 
-			NacPreferenceKeys keys = this.getKeys();
+			NacSharedKeys keys = this.getKeys();
 			Resources res = getResources();
 			Preference general = findPreference(keys.getGeneralScreen());
 			Preference alarm = findPreference(keys.getDefaultAlarmScreen());
@@ -137,7 +137,7 @@ public class NacSettingsActivity
 		@Override
 		public boolean onPreferenceClick(Preference preference)
 		{
-			NacPreferenceKeys keys = this.getKeys();
+			NacSharedKeys keys = this.getKeys();
 			String preferenceKey = preference.getKey();
 			FragmentManager manager = getFragmentManager();
 			Fragment fragment;

@@ -244,7 +244,7 @@ public class NacDayOfWeek
 	 */
 	public void setDays(int value)
 	{
-		EnumSet<NacCalendar.Day> days = NacCalendar.valueToDays(value);
+		EnumSet<NacCalendar.Day> days = NacCalendar.Days.valueToDays(value);
 
 		this.setDays(days);
 	}

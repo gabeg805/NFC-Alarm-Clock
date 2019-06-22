@@ -2,12 +2,7 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -61,16 +57,24 @@ public class NacCardAdapter
 	private Undo mUndo;
 
 	/**
+	 * The snackbar.
+	 */
+	private NacSnackbar mSnackbar;
+
+	/**
 	 * List of alarms.
 	 */
 	private List<NacAlarm> mAlarmList;
 
 	/**
+	 * Previously enabled alarm.
+	 */
+	private Calendar mPreviousCalendar;
+
+	/**
 	 * Indicator that the alarm was added through the floating action button.
 	 */
 	private boolean mWasAdded;
-
-	private Snackbar mSnackbar;
 
 	/**
 	 */
@@ -84,11 +88,13 @@ public class NacCardAdapter
 			R.id.activity_main);
 		this.mRecyclerView = (RecyclerView) this.getRoot().findViewById(
 			R.id.content_alarm_list);
-		this.mTouchHelper = new NacCardTouchHelper(callback);
-		this.mUndo = new Undo();
 		this.mDatabase = new NacDatabase(context);
 		this.mScheduler = new NacScheduler(context);
+		this.mTouchHelper = new NacCardTouchHelper(callback);
+		this.mUndo = new Undo();
+		this.mSnackbar = new NacSnackbar(this.mRoot);
 		this.mAlarmList = null;
+		this.mPreviousCalendar = null;
 		this.mWasAdded = false;
 
 		this.mRecyclerView.addOnItemTouchListener(this);
@@ -151,11 +157,30 @@ public class NacCardAdapter
 		Intent intent = NacIntent.createService(context, "add", alarm);
 		this.mWasAdded = true;
 
-		context.startService(intent);
+		//context.startService(intent);
+		this.startService(intent);
 		this.getAlarms().add(position, alarm);
 		notifyItemInserted(position);
 
 		return 0;
+	}
+
+	/**
+	 * @return True if all alarms are disabled, and False otherwise.
+	 */
+	private boolean areAllAlarmsDisabled()
+	{
+		List<NacAlarm> alarms = this.getAlarms();
+
+		for (NacAlarm a : alarms)
+		{
+			if (a.getEnabled())
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -185,7 +210,7 @@ public class NacCardAdapter
 
 		if (result == 0)
 		{
-			this.undo(copy, this.size(), Undo.Type.COPY);
+			this.undo(copy, this.size()-1, Undo.Type.COPY);
 			this.snackbar("Copied alarm.");
 		}
 
@@ -203,7 +228,8 @@ public class NacCardAdapter
 		Context context = this.getContext();
 		Intent intent = NacIntent.createService(context, "delete", alarm);
 
-		context.startService(intent);
+		//context.startService(intent);
+		this.startService(intent);
 		this.getAlarms().remove(position);
 		notifyItemRemoved(position);
 		this.undo(alarm, position, Undo.Type.DELETE);
@@ -292,6 +318,14 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * @return The previous calendar.
+	 */
+	private Calendar getPreviousCalendar()
+	{
+		return this.mPreviousCalendar;
+	}
+
+	/**
 	 * @return The RecyclerView.
 	 */
 	private RecyclerView getRecyclerView()
@@ -318,7 +352,7 @@ public class NacCardAdapter
 	/**
 	 * @return The snackbar.
 	 */
-	private Snackbar getSnackbar()
+	private NacSnackbar getSnackbar()
 	{
 		return this.mSnackbar;
 	}
@@ -363,6 +397,17 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * @return True if the next calendar has been found, and False otherwise.
+	 */
+	private boolean isNextCalendar(Calendar next)
+	{
+		Calendar previous = this.getPreviousCalendar();
+
+		return ((previous == null)
+			|| ((next != null) && !next.after(previous)));
+	}
+
+	/**
 	 * Setup the alarm card.
 	 *
 	 * @param  card  The alarm card.
@@ -391,7 +436,19 @@ public class NacCardAdapter
 		Context context = this.getContext();
 		Intent intent = NacIntent.createService(context, "update", alarm);
 
-		context.startService(intent);
+		if (alarm.wasEnabled())
+		{
+			this.showNextAlarm(alarm);
+		}
+		else
+		{
+			if (this.areAllAlarmsDisabled())
+			{
+				this.mPreviousCalendar = null;
+			}
+		}
+
+		this.startService(intent);
 	}
 
 	/**
@@ -452,18 +509,18 @@ public class NacCardAdapter
 	/**
 	 * @note Needed for RecyclerView.OnItemTouchListener
 	 */
-	public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e)
+	public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent ev)
 	{
-		Snackbar snackbar = this.getSnackbar();
+		int action = ev.getAction();
 
-		if (snackbar != null)
+		if (action == MotionEvent.ACTION_UP)
 		{
-			if (snackbar.isShown())
+			NacSnackbar snackbar = this.getSnackbar();
+
+			if (snackbar.canDismiss())
 			{
 				snackbar.dismiss();
 			}
-
-			this.mSnackbar = null;
 		}
 
 		return false;
@@ -505,13 +562,9 @@ public class NacCardAdapter
 		NacAlarm toAlarm = this.get(toIndex);
 		Intent intent = NacIntent.createService(context, "swap", fromAlarm, toAlarm);
 
-		context.startService(intent);
+		//context.startService(intent);
+		this.startService(intent);
 		Collections.swap(this.getAlarms(), fromIndex, toIndex);
-		//this.getScheduler().cancel(fromAlarm);
-		//this.getScheduler().cancel(toAlarm);
-		//this.getDatabase().swap(fromAlarm, toAlarm);
-		//this.getScheduler().add(fromAlarm);
-		//this.getScheduler().add(toAlarm);
 		notifyItemMoved(fromIndex, toIndex);
 	}
 
@@ -565,6 +618,30 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * Show next alarm.
+	 */
+	private void showNextAlarm(NacAlarm alarm)
+	{
+		List<Calendar> calendars = NacCalendar.toCalendars(alarm);
+		Calendar next = NacCalendar.getNext(calendars);
+
+		// Should I give warning if same alarm exists? previous == next
+		if (!this.isNextCalendar(next))
+		{
+			return;
+		}
+
+		Context context = this.getContext();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
+		boolean timeRemaining = shared.getDisplayTimeRemaining();
+		long millis = next.getTimeInMillis();
+		String message = NacCalendar.getNextMessage(millis, timeRemaining);
+		this.mPreviousCalendar = next;
+
+		this.snackbar(message, "DISMISS", null, false);
+	}
+
+	/**
 	 * @return The number of elements in the adapter.
 	 */
 	public int size()
@@ -573,12 +650,40 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * Create a snackbar message.
+	 * @see snackbar
 	 */
 	private void snackbar(String message)
 	{
-		mSnackbar = NacUtility.snackbar(this.getRoot(), message,
-			"UNDO", this);
+		this.snackbar(message, "UNDO", this, true);
+	}
+
+	/**
+	 * Create a snackbar message.
+	 */
+	private void snackbar(String message, String action,
+		View.OnClickListener listener, boolean dismiss)
+	{
+		NacSnackbar snackbar = this.getSnackbar();
+
+		snackbar.show(message, action, listener, dismiss);
+	}
+
+	/**
+	 * Start a background service.
+	 */
+	private void startService(Intent intent)
+	{
+		Context context = this.getContext();
+
+		try
+		{
+			context.startService(intent);
+		}
+		catch (IllegalStateException e)
+		{
+			NacUtility.printf("NacCardAdapter : IllegalStateException caught in startService()");
+			return;
+		}
 	}
 
 	/**

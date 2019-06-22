@@ -245,7 +245,7 @@ public class NacAlarm
 		 */
 		public Builder setDays(int value)
 		{
-			return this.setDays(NacCalendar.valueToDays(value));
+			return this.setDays(NacCalendar.Days.valueToDays(value));
 		}
 
 		/**
@@ -488,6 +488,11 @@ public class NacAlarm
 	private String mName;
 
 	/**
+	 * Was the alarm enabled.
+	 */
+	private boolean mWasEnabled;
+
+	/**
 	 */
 	public NacAlarm()
 	{
@@ -510,6 +515,8 @@ public class NacAlarm
 		this.setSoundPath(builder.getSoundPath());
 		this.setSoundName(builder.getSoundName());
 		this.setName(builder.getName());
+
+		this.mWasEnabled = false;
 	}
 
 	/**
@@ -517,18 +524,19 @@ public class NacAlarm
 	 */
 	public NacAlarm(Parcel input)
 	{
-		this.setOnChangeListener(null);
-		this.setId(input.readInt());
-		this.setEnabled((input.readInt() != 0));
-		this.setHour(input.readInt());
-		this.setMinute(input.readInt());
-		this.setDays(input.readInt());
-		this.setRepeat((input.readInt() != 0));
-		this.setVibrate((input.readInt() != 0));
-		this.setSoundType(input.readInt());
-		this.setSoundPath(input.readString());
-		this.setSoundName(input.readString());
-		this.setName(input.readString());
+		this(new Builder()
+			.setOnChangeListener(null)
+			.setId(input.readInt())
+			.setEnabled((input.readInt() != 0))
+			.setHour(input.readInt())
+			.setMinute(input.readInt())
+			.setDays(input.readInt())
+			.setRepeat((input.readInt() != 0))
+			.setVibrate((input.readInt() != 0))
+			.setSoundType(input.readInt())
+			.setSoundPath(input.readString())
+			.setSoundName(input.readString())
+			.setName(input.readString()));
 	}
 
 	/**
@@ -548,6 +556,8 @@ public class NacAlarm
 		{
 			this.getOnChangeListener().onChange(this);
 		}
+
+		this.mWasEnabled = false;
 	}
 
 	/**
@@ -652,7 +662,7 @@ public class NacAlarm
 	public int getId(Calendar c)
 	{
 		int day = c.get(Calendar.DAY_OF_WEEK);
-		int offset = NacCalendar.toIndex(day);
+		int offset = NacCalendar.Days.toIndex(day);
 
 		return this.getId() + offset;
 	}
@@ -662,8 +672,8 @@ public class NacAlarm
 	 */
 	public String getMeridian(Context context)
 	{
-		return NacCalendar.getMeridian(this.getHour(),
-			NacCalendar.is24HourFormat(context));
+		return NacCalendar.Time.getMeridian(this.getHour(),
+			NacCalendar.Time.is24HourFormat(context));
 	}
 
 	/**
@@ -728,8 +738,8 @@ public class NacAlarm
 	 */
 	public String getTime(Context context)
 	{
-		return NacCalendar.getTime(this.getHour(), this.getMinute(),
-			NacCalendar.is24HourFormat(context));
+		return NacCalendar.Time.getTime(context, this.getHour(),
+			this.getMinute());
 	}
 
 	/**
@@ -767,7 +777,7 @@ public class NacAlarm
 		NacUtility.printf("Enabled      : %b", this.mEnabled);
 		NacUtility.printf("Hour         : %d", this.mHour);
 		NacUtility.printf("Minute       : %d", this.mMinute);
-		NacUtility.printf("Days         : %s", NacCalendar.toString(this.getDays()));
+		NacUtility.printf("Days         : %s", NacCalendar.Days.toString(this.getDays()));
 		NacUtility.printf("Repeat       : %b", this.mRepeat);
 		NacUtility.printf("Vibrate      : %b", this.mVibrate);
 		NacUtility.printf("Sound Type   : %s", this.mSoundType);
@@ -791,7 +801,7 @@ public class NacAlarm
 	 */
 	public void setDays(int value)
 	{
-		this.setDays(NacCalendar.valueToDays(value));
+		this.setDays(NacCalendar.Days.valueToDays(value));
 	}
 
 	/**
@@ -802,6 +812,7 @@ public class NacAlarm
 	public void setEnabled(boolean enabled)
 	{
 		this.mEnabled = enabled;
+		this.mWasEnabled = (enabled) ? enabled : this.mWasEnabled;
 	}
 
 	/**
@@ -945,7 +956,7 @@ public class NacAlarm
 	 */
 	public void toggleIndex(int index)
 	{
-		NacCalendar.Day day = NacCalendar.fromIndex(index);
+		NacCalendar.Day day = NacCalendar.Days.fromIndex(index);
 
 		this.toggleDay(day);
 	}
@@ -955,7 +966,7 @@ public class NacAlarm
 	 */
 	public void toggleToday()
 	{
-		NacCalendar.Day day = NacCalendar.getToday();
+		NacCalendar.Day day = NacCalendar.Days.getToday();
 
 		this.toggleDay(day);
 	}
@@ -967,12 +978,21 @@ public class NacAlarm
 	 */
 	public void toggleValue(int value)
 	{
-		EnumSet<NacCalendar.Day> days = NacCalendar.valueToDays(value);
+		EnumSet<NacCalendar.Day> days = NacCalendar.Days.valueToDays(value);
 
 		for (NacCalendar.Day d : days)
 		{
 			this.toggleDay(d);
 		}
+	}
+
+	/**
+	 * @return True if the alarm was enabled before the changed listener was
+	 *         called, and False otherwise.
+	 */
+	public boolean wasEnabled()
+	{
+		return this.mWasEnabled;
 	}
 
 	/**
@@ -985,7 +1005,7 @@ public class NacAlarm
 		output.writeInt(this.getEnabled() ? 1 : 0);
 		output.writeInt(this.getHour());
 		output.writeInt(this.getMinute());
-		output.writeInt(NacCalendar.daysToValue(this.getDays()));
+		output.writeInt(NacCalendar.Days.daysToValue(this.getDays()));
 		output.writeInt(this.getRepeat() ? 1 : 0);
 		output.writeInt(this.getVibrate() ? 1 : 0);
 		output.writeInt(this.getSoundType());

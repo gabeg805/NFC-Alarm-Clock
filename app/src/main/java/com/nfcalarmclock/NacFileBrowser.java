@@ -48,12 +48,18 @@ public class NacFileBrowser
 	private NacImageSubTextButton mSelected;
 
 	/**
+	 * Current directory.
+	 */
+	private String mCurrentDirectory;
+
+	/**
 	 */
 	public NacFileBrowser(View root, int pathId, int groupId)
 	{
 		this.mPathView = (TextView) root.findViewById(pathId);
 		this.mContainer = (NacButtonGroup) root.findViewById(groupId);
 		this.mSelected = null;
+		this.mCurrentDirectory = NacFileBrowser.getHome();
 
 		this.mContainer.removeAllViews();
 	}
@@ -160,6 +166,14 @@ public class NacFileBrowser
 	private NacButtonGroup getContainer()
 	{
 		return this.mContainer;
+	}
+
+	/**
+	 * @return The current directory path.
+	 */
+	public String getCurrentDirectory()
+	{
+		return this.mCurrentDirectory;
 	}
 
 	/**
@@ -327,6 +341,10 @@ public class NacFileBrowser
 				this.select(view);
 			}
 		}
+		else
+		{
+			this.mCurrentDirectory = path;
+		}
 
 		listener.onClick(this, file, path, name);
 	}
@@ -334,12 +352,38 @@ public class NacFileBrowser
 	/**
 	 * Populate views into the browser.
 	 */
-	private void populateEntries(String entryPath)
+	private void populateEntries(String showPath)
 	{
-		String path = entryPath.isEmpty() ? getHome() : entryPath;
+		this.mPathView.setText(showPath);
+		this.addListing(showPath);
+	}
 
-		this.mPathView.setText(path);
-		this.addListing(path);
+	/**
+	 * Change directory to previous ("../") directory.
+	 */
+	public boolean previousDirectory()
+	{
+		String home = NacFileBrowser.getHome();
+		String currentDirectory = this.getCurrentDirectory();
+
+		if (home.equals(currentDirectory))
+		{
+			return false;
+		}
+
+		try
+		{
+			File parentFile = new File(currentDirectory + "/..");
+			String parentPath = parentFile.getCanonicalPath();
+
+			this.show(parentPath);
+			return true;
+		}
+		catch (IOException e)
+		{
+			NacUtility.printf("NacFileBrowser : previousDirectory : IOException occurred when trying to getCanonicalPath().");
+			return false;
+		}
 	}
 
 	/**
@@ -409,8 +453,11 @@ public class NacFileBrowser
 	 */
 	public void show(String path)
 	{
+		String showPath = path.isEmpty() ? NacFileBrowser.getHome() : path;
+		this.mCurrentDirectory = showPath;
+
 		this.clearEntries();
-		this.populateEntries(path);
+		this.populateEntries(showPath);
 	}
 
 }

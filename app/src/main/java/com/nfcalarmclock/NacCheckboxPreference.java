@@ -60,7 +60,7 @@ public class NacCheckboxPreference
 	public NacCheckboxPreference(Context context, AttributeSet attrs, int style)
 	{
 		super(context, attrs, style);
-		setLayoutResource(R.layout.nac_preference_checkers);
+		setLayoutResource(R.layout.nac_preference_checkbox);
 		setOnPreferenceClickListener(this);
 
 		int[] array = new int[] { android.R.attr.summaryOn,

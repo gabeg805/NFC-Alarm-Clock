@@ -1,5 +1,6 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/buttons"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
@@ -7,14 +8,15 @@
 	android:paddingBottom="@dimen/p_frg_buttons"
 	android:paddingStart="@dimen/p_frg_buttons"
 	android:paddingEnd="@dimen/p_frg_buttons"
-	android:orientation="horizontal">
+	android:orientation="horizontal"
+	tools:ignore="ButtonOrder">
 
 	<Button
 		android:id="@+id/clear"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:background="?android:attr/selectableItemBackground"
-		android:text="Clear"
+		android:text="@string/clear"
 		android:textSize="@dimen/tsz_frg_buttons"
 		/>
 
@@ -29,7 +31,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:background="?android:attr/selectableItemBackground"
-		android:text="Cancel"
+		android:text="@string/cancel"
 		android:textSize="@dimen/tsz_frg_buttons"
 		/>
 
@@ -38,7 +40,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:background="?android:attr/selectableItemBackground"
-		android:text="Ok"
+		android:text="@string/ok"
 		android:textSize="@dimen/tsz_frg_buttons"
 		/>
 

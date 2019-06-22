@@ -141,7 +141,7 @@ public class NacDatabase
 		//boolean format = alarm.get24HourFormat();
 		int hour = alarm.getHour();
 		int minute = alarm.getMinute();
-		int days = NacCalendar.daysToValue(alarm.getDays());
+		int days = NacCalendar.Days.daysToValue(alarm.getDays());
 		boolean repeat = alarm.getRepeat();
 		boolean vibrate = alarm.getVibrate();
 		int soundType = alarm.getSoundType();

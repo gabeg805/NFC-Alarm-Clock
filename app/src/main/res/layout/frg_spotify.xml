@@ -66,7 +66,7 @@
 					android:paddingBottom="@dimen/pb_spotify_titles"
 					android:textSize="@dimen/tsz_spotify_titles"
 					android:textStyle="bold"
-					android:text="Top Tracks"
+					android:text="@string/frg_spotify_top_tracks"
 					/>
 
 			</LinearLayout>
@@ -85,7 +85,7 @@
 					android:paddingBottom="@dimen/pb_spotify_titles"
 					android:textSize="@dimen/tsz_spotify_titles"
 					android:textStyle="bold"
-					android:text="Top Artists"
+					android:text="@string/frg_spotify_top_artists"
 					/>
 			</LinearLayout>
 
@@ -103,7 +103,7 @@
 					android:paddingBottom="@dimen/pb_spotify_titles"
 					android:textSize="@dimen/tsz_spotify_titles"
 					android:textStyle="bold"
-					android:text="Playlists"
+					android:text="@string/frg_spotify_playlists"
 					/>
 
 			</LinearLayout>
@@ -122,7 +122,7 @@
 					android:paddingBottom="@dimen/pb_spotify_titles"
 					android:textSize="@dimen/tsz_spotify_titles"
 					android:textStyle="bold"
-					android:text="Albums"
+					android:text="@string/frg_spotify_albums"
 					/>
 
 			</LinearLayout>
