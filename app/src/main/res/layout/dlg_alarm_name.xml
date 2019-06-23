@@ -4,8 +4,8 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="vertical"
-	android:paddingTop="@dimen/spt_dlg_name"
-	android:paddingBottom="@dimen/spb_dlg_name"
+	android:paddingTop="@dimen/spt_dlg"
+	android:paddingBottom="@dimen/spb_dlg"
 	android:paddingStart="?dialogPreferredPadding"
 	android:paddingEnd="?dialogPreferredPadding">
 
@@ -13,8 +13,8 @@
 		android:id="@+id/alarm_name"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/m_dlg_alarm_name"
-		android:layout_marginBottom="@dimen/m_dlg_alarm_name"
+		android:layout_marginTop="@dimen/m_dlg_name"
+		android:layout_marginBottom="@dimen/m_dlg_name"
 		android:textAppearance="?android:attr/textAppearanceSmall"
 		android:maxLines="1"
 		android:maxLength="@integer/max_entry_length"

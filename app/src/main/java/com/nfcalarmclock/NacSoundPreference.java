@@ -78,6 +78,7 @@ public class NacSoundPreference
 	}
 
 	/**
+	 * Set the sound.
 	 */
 	public void setSound(NacSound sound)
 	{

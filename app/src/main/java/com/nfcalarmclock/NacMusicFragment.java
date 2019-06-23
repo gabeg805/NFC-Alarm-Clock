@@ -86,7 +86,7 @@ public class NacMusicFragment
 	@Override
 	public void onBuildDialog(NacDialog dialog, AlertDialog.Builder builder)
 	{
-		builder.setTitle("Continue?");
+		builder.setTitle("You Selected a Folder");
 
 		dialog.setPositiveButton("YES");
 		dialog.setNegativeButton("NO");

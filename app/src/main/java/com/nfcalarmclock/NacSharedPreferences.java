@@ -1004,7 +1004,7 @@ public class NacSharedPreferences
 
 		if (NacSound.isFilePlaylist(type))
 		{
-			name += " Playlist";
+			//name += " Playlist";
 		}
 
 		return name;

@@ -20,6 +20,12 @@
 	<com.nfcalarmclock.NacPreferenceCategory
 		android:title="@string/pref_misc_music_category">
 
+		<Preference
+			android:summary="@string/pref_shuffle_playlist_note"
+			android:selectable="false"
+			android:enabled="false"
+			/>
+
 		<com.nfcalarmclock.NacCheckboxPreference
 			android:key="@string/pref_shuffle_playlist_key"
 			android:title="@string/pref_shuffle_playlist_title"

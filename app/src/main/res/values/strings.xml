@@ -1,10 +1,8 @@
 <resources>
 
+	<!-- App name -->
 	<string name="app_name">NFC Alarm Clock</string>
 
-	<!-- Menu -->
-	<string name="menu_next_alarm">Display next alarm</string>
-	<string name="menu_settings">Settings</string>
 
 	<!-- Alarm Activity -->
 	<string name="act_alarm_title">Dismiss Alarm</string>
@@ -12,11 +10,18 @@
 	<string name="act_alarm_snooze">Snooze</string>
 	<string name="act_alarm_dismiss">Dismiss</string>
 
+
+	<!-- Menu -->
+	<string name="menu_next_alarm">Display next alarm</string>
+	<string name="menu_settings">Settings</string>
+
+
 	<!-- Card -->
 	<string name="copy">COPY</string>
 	<string name="delete">DELETE</string>
 	<string name="card_repeat">Repeat</string>
 	<string name="card_vibrate">Vibrate</string>
+
 
 	<!-- Day of week -->
 	<string name="dow_sun">S</string>
@@ -27,6 +32,20 @@
 	<string name="dow_fri">F</string>
 	<string name="dow_sat">S</string>
 
+
+	<!-- Dialogs -->
+	<string name="dlg_name_hint">Alarm name</string>
+	<string name="dlg_color_hint">Hex Color</string>
+	<string name="dlg_playlist_question">Do you want to play all the music in the selected folder?</string>
+
+
+	<!-- Content description -->
+	<string name="decrement">Decrement the value</string>
+	<string name="increment">Increment the value</string>
+	<string name="color_selector">Select a color for the color picker</string>
+	<string name="shader_selector">Select a shade for the color picker</string>
+
+
 	<!-- Prompt buttons -->
 	<string name="ok">OK</string>
 	<string name="cancel">Cancel</string>
@@ -34,28 +53,7 @@
 
 
 
-
-
-
-	<string name="frg_spotify_search_hint">Search spotify&#8230;</string>
-	<string name="frg_spotify_albums">Albums</string>
-	<string name="frg_spotify_playlists">Playlists</string>
-	<string name="frg_spotify_top_artists">Top Artists</string>
-	<string name="frg_spotify_top_tracks">Top Tracks</string>
-
-	<string name="dlg_playlist_question">You have selected a folder.\n\nWould you like to play the music in this folder as a playlist when your alarm goes off?</string>
-
-
-	<!-- Dialogs -->
-	<string name="dlg_name_hint">Alarm name</string>
-	<string name="dlg_color_hint">Hex Color</string>
-
-
-
-
-
-
-
+	<!-- Settings main activity -->
 	<string name="pref_screen_general_key">pref_screen_general</string>
 	<string name="pref_screen_default_alarm_key">pref_screen_default_alarm</string>
 	<string name="pref_screen_color_key">pref_screen_color</string>
@@ -72,24 +70,23 @@
 	<string name="pref_screen_misc_summary">Extra cool features</string>
 
 
-
+	<!-- General settings -->
+	<string name="pref_general_display_next_alarm_category">Display Next Alarm</string>
 	<string name="pref_general_snooze_category">Snooze</string>
 	<string name="pref_general_dismiss_category">Dismiss</string>
-	<string name="pref_general_display_next_alarm_category">Display Next Alarm</string>
-	<string name="pref_misc_music_category">Music</string>
-	<string name="pref_misc_dow_order_category">Day of Week</string>
-	<string name="pref_misc_tts_category">Text-to-Speech</string>
 
 
-	<!-- Next alarm time format -->
+	<!-- Display next alarm -->
 	<string name="pref_display_time_remaining_key">pref_display_time_remaining</string>
 	<string name="pref_display_time_remaining_title">Show Time Remaining</string>
 	<string name="pref_display_time_remaining_summary_enabled">e.g. Next alarm in 7 hours 30 minutes</string>
 	<string name="pref_display_time_remaining_summary_disabled">e.g. Next alarm on Mon, 7:00 AM</string>
 
+
 	<!-- Auto dismiss duration -->
 	<string name="pref_auto_dismiss_key">pref_auto_dismiss</string>
 	<string name="pref_auto_dismiss_title">Auto-Dismiss</string>
+
 
 	<!-- Require NFC -->
 	<string name="pref_dismiss_button_key">pref_dismiss_button</string>
@@ -97,13 +94,16 @@
 	<string name="pref_dismiss_button_summary_enabled">NFC is required to dismiss the alarm.</string>
 	<string name="pref_dismiss_button_summary_disabled">Dismiss the alarm normally.</string>
 
+
 	<!-- Max number of snoozes -->
 	<string name="pref_max_snooze_key">pref_max_snooze</string>
 	<string name="pref_max_snooze_title">Max Snoozes</string>
 
+
 	<!-- Snooze duration -->
 	<string name="pref_snooze_duration_key">pref_snooze_duration</string>
 	<string name="pref_snooze_duration_title">Snooze Duration</string>
+
 
 	<!-- Easy snooze -->
 	<string name="pref_easy_snooze_key">pref_easy_snooze</string>
@@ -111,61 +111,17 @@
 	<string name="pref_easy_snooze_summary_enabled">Snooze the alarm by touching anywhere.</string>
 	<string name="pref_easy_snooze_summary_disabled">Snooze the alarm normally.</string>
 
-	<!-- Shuffle playlist -->
-	<string name="pref_shuffle_playlist_key">pref_shuffle_playlist</string>
-	<string name="pref_shuffle_playlist_title">Shuffle Playlist</string>
-	<string name="pref_shuffle_playlist_summary_enabled">Shuffle the alarm playlist. (Only applicable if folder was selected)</string>
-	<string name="pref_shuffle_playlist_summary_disabled">Play the alarm playlist sequentially. (Only applicable if folder was selected)</string>
 
-	<!-- Monday first -->
-	<string name="pref_monday_first_key">pref_monday_first</string>
-	<string name="pref_monday_first_title">Start Week With Monday</string>
-	<string name="pref_monday_first_summary_enabled">Monday will be the first day-of-week.</string>
-	<string name="pref_monday_first_summary_disabled">Sunday will be the first day-of-week.</string>
-
-	<!-- Speak to me -->
-	<string name="pref_speak_to_me_key">pref_speak_to_me</string>
-	<string name="pref_speak_to_me_title">Speak to Me</string>
-	<string name="pref_speak_to_me_summary_enabled">Say the current time when the alarm goes off.</string>
-	<string name="pref_speak_to_me_summary_disabled">Do not say anything.</string>
-
-	<!-- Speak frequency -->
-	<string name="pref_speak_frequency_key">pref_speak_frequency</string>
-	<string name="pref_speak_frequency_title">Speak Frequency</string>
+	<!-- Name preference -->
+	<string name="pref_name_key">pref_name</string>
+	<string name="pref_name_title">Name</string>
+	<string name="pref_name_summary">None</string>
 
 
-
-
-	<!-- Theme color -->
-	<string name="pref_theme_color_key">pref_theme_color</string>
-	<string name="pref_theme_color_title">Theme</string>
-	<string name="pref_theme_color_summary">The theme color.</string>
-
-	<!-- Name color -->
-	<string name="pref_name_color_key">pref_name_color</string>
-	<string name="pref_name_color_title">Name</string>
-	<string name="pref_name_color_summary">e.g. Work</string>
-
-	<!-- Days color -->
-	<string name="pref_days_color_key">pref_days_color</string>
-	<string name="pref_days_color_title">Days</string>
-	<string name="pref_days_color_summary">e.g. Mon,Tue,Wed,Thu,Fri</string>
-
-	<!-- Time color -->
-	<string name="pref_time_color_key">pref_time_color</string>
-	<string name="pref_time_color_title">Time</string>
-	<string name="pref_time_color_summary">e.g. 12:30</string>
-
-	<!-- AM color -->
-	<string name="pref_am_color_key">pref_am_color</string>
-	<string name="pref_am_color_title">AM</string>
-	<string name="pref_am_color_summary">Colored if AM is in the alarm time.</string>
-
-	<!-- PM color -->
-	<string name="pref_pm_color_key">pref_pm_color</string>
-	<string name="pref_pm_color_title">PM</string>
-	<string name="pref_pm_color_summary">Colored if PM is in the alarm time.</string>
-
+	<!-- Days preference -->
+	<string name="pref_days_key">pref_deys</string>
+	<string name="pref_days_title">Days</string>
+	<string name="pref_days_summary">Never</string>
 
 
 	<!-- Repeat preferenece -->
@@ -174,10 +130,6 @@
 	<string name="pref_repeat_summary_enabled">Repeat the alarm.</string>
 	<string name="pref_repeat_summary_disabled">Disable the alarm after it is run.</string>
 
-	<!-- Days preference -->
-	<string name="pref_days_key">pref_deys</string>
-	<string name="pref_days_title">Days</string>
-	<string name="pref_days_summary">Never</string>
 
 	<!-- Vibrate preference -->
 	<string name="pref_vibrate_key">pref_vibrate</string>
@@ -185,20 +137,87 @@
 	<string name="pref_vibrate_summary_enabled">Vibrate the phone.</string>
 	<string name="pref_vibrate_summary_disabled">Do not vibrate the phone.</string>
 
+
 	<!-- Sound preference -->
 	<string name="pref_sound_key">pref_sound</string>
 	<string name="pref_sound_title">Sound</string>
 	<string name="pref_sound_summary">None</string>
 
-	<!-- Name preference -->
-	<string name="pref_name_key">pref_name</string>
-	<string name="pref_name_title">Name</string>
-	<string name="pref_name_summary">None</string>
 
-	<!-- Content description -->
-	<string name="decrement">Decrement the value</string>
-	<string name="increment">Increment the value</string>
-	<string name="color_selector">Select a color for the color picker</string>
-	<string name="shader_selector">Select a shade for the color picker</string>
+	<!-- Miscellaneous settings -->
+	<string name="pref_misc_music_category">Music</string>
+	<string name="pref_misc_dow_order_category">Day of Week</string>
+	<string name="pref_misc_tts_category">Text-to-Speech</string>
+
+
+	<!-- Monday first -->
+	<string name="pref_monday_first_key">pref_monday_first</string>
+	<string name="pref_monday_first_title">Start Week With Monday</string>
+	<string name="pref_monday_first_summary_enabled">e.g. &#160; Mon, Tue, Wed, Thu, Fri, Sat, Sun</string>
+	<string name="pref_monday_first_summary_disabled">e.g. &#160; Sun, Mon, Tue, Wed, Thu, Fri, Sat</string>
+
+
+	<!-- Shuffle playlist -->
+	<string name="pref_shuffle_playlist_key">pref_shuffle_playlist</string>
+	<string name="pref_shuffle_playlist_title">Shuffle Music Folder</string>
+	<string name="pref_shuffle_playlist_summary_enabled">Shuffle the music in a folder.</string>
+	<string name="pref_shuffle_playlist_summary_disabled">Play the music in a folder sequentially.</string>
+	<string name="pref_shuffle_playlist_note">Only applicable to alarms with a music folder selected.</string>
+
+
+	<!-- Speak to me -->
+	<string name="pref_speak_to_me_key">pref_speak_to_me</string>
+	<string name="pref_speak_to_me_title">Speak to Me</string>
+	<string name="pref_speak_to_me_summary_enabled">Say the current time when the alarm goes off.</string>
+	<string name="pref_speak_to_me_summary_disabled">Do not say anything.</string>
+
+
+	<!-- Speak frequency -->
+	<string name="pref_speak_frequency_key">pref_speak_frequency</string>
+	<string name="pref_speak_frequency_title">Speak Frequency</string>
+
+
+	<!-- Theme color -->
+	<string name="pref_theme_color_key">pref_theme_color</string>
+	<string name="pref_theme_color_title">Theme</string>
+	<string name="pref_theme_color_summary">The theme color.</string>
+
+
+	<!-- Name color -->
+	<string name="pref_name_color_key">pref_name_color</string>
+	<string name="pref_name_color_title">Name</string>
+	<string name="pref_name_color_summary">e.g. Work</string>
+
+
+	<!-- Days color -->
+	<string name="pref_days_color_key">pref_days_color</string>
+	<string name="pref_days_color_title">Days</string>
+	<string name="pref_days_color_summary">e.g. Mon,Tue,Wed,Thu,Fri</string>
+
+
+	<!-- Time color -->
+	<string name="pref_time_color_key">pref_time_color</string>
+	<string name="pref_time_color_title">Time</string>
+	<string name="pref_time_color_summary">e.g. 12:30</string>
+
+
+	<!-- AM color -->
+	<string name="pref_am_color_key">pref_am_color</string>
+	<string name="pref_am_color_title">AM</string>
+	<string name="pref_am_color_summary">Colored if AM is in the alarm time.</string>
+
+
+	<!-- PM color -->
+	<string name="pref_pm_color_key">pref_pm_color</string>
+	<string name="pref_pm_color_title">PM</string>
+	<string name="pref_pm_color_summary">Colored if PM is in the alarm time.</string>
+
+
+	<!-- Spotify -->
+	<string name="frg_spotify_search_hint">Search spotify&#8230;</string>
+	<string name="frg_spotify_albums">Albums</string>
+	<string name="frg_spotify_playlists">Playlists</string>
+	<string name="frg_spotify_top_artists">Top Artists</string>
+	<string name="frg_spotify_top_tracks">Top Tracks</string>
 
 </resources>
