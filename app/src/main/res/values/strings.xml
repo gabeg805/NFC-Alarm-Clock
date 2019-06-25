@@ -168,7 +168,7 @@
 	<!-- Speak to me -->
 	<string name="pref_speak_to_me_key">pref_speak_to_me</string>
 	<string name="pref_speak_to_me_title">Speak to Me</string>
-	<string name="pref_speak_to_me_summary_enabled">Say the current time when the alarm goes off.</string>
+	<string name="pref_speak_to_me_summary_enabled">Say the current time when the alarm goes off. (Experimental)</string>
 	<string name="pref_speak_to_me_summary_disabled">Do not say anything.</string>
 
 

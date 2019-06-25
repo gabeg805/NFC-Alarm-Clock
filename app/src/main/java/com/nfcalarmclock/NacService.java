@@ -97,7 +97,6 @@ public class NacService
 		int fromSnoozeCount = shared.getSnoozeCount(fromId);
 		int toSnoozeCount = shared.getSnoozeCount(toId);
 
-		// Do I need to change ID's?
 		scheduler.cancel(fromAlarm);
 		scheduler.cancel(toAlarm);
 		db.swap(fromAlarm, toAlarm);

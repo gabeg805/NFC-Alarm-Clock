@@ -175,18 +175,7 @@ public class NacIntent
 	 */
 	public static Bundle getBundle(Intent intent, String name)
 	{
-		if (intent == null)
-		{
-			return null;
-		}
-		else if (intent.hasExtra(name))
-		{
-			return intent.getBundleExtra(name);
-		}
-		else
-		{
-			return null;
-		}
+		return (intent != null) ? intent.getBundleExtra(name) : null;
 	}
 
 	/**

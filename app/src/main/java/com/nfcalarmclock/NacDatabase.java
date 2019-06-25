@@ -181,6 +181,42 @@ public class NacDatabase
 	}
 
 	/**
+	 * @return The row of the database corresponding to the alarm.
+	 */
+	private Cursor getRow(NacAlarm alarm)
+	{
+		this.setDatabase();
+
+		SQLiteDatabase db = this.getDatabase();
+		String table = this.getTable();
+		int id = alarm.getId();
+		String where = this.getWhereClause();
+		String[] whereArgs = this.getWhereArgs(id);
+
+		return db.query(table, null, where, whereArgs, null, null, null);
+	}
+
+	/**
+	 * @return The row ID.
+	 */
+	private int getRowId(NacAlarm alarm)
+	{
+		Cursor cursor = this.getRow(alarm);
+		int id = -1;
+
+		if ((cursor != null) && (cursor.getCount() == 1))
+		{
+			cursor.moveToFirst();
+
+			id = cursor.getInt(0);
+
+			cursor.close();
+		}
+
+		return id;
+	}
+
+	/**
 	 * @return The table name.
 	 */
 	private String getTable()
@@ -218,7 +254,15 @@ public class NacDatabase
 	}
 
 	/**
-	 * @return Where clause using all fields of an alarm.
+	 * @return The where clause for matching with the row ID.
+	 */
+	private String getWhereIdClause()
+	{
+		return Contract.AlarmTable._ID + "=?";
+	}
+
+	/**
+	 * @return The where clause for matching with the alarm ID.
 	 */
 	private String getWhereClause()
 	{
@@ -423,17 +467,14 @@ public class NacDatabase
 			return -1;
 		}
 
-		int fromId = fromAlarm.getId();
-		int toId = toAlarm.getId();
- 
-		fromAlarm.setId(toId);
-		toAlarm.setId(fromId);
+		int fromId = this.getRowId(fromAlarm);
+		int toId = this.getRowId(toAlarm);
  
  		SQLiteDatabase db = this.getDatabase();
 		String table = this.getTable();
 		ContentValues fromCv = this.getContentValues(fromAlarm);
 		ContentValues toCv = this.getContentValues(toAlarm);
-		String where = this.getWhereClause();
+		String where = this.getWhereIdClause();
 		String[] fromArgs = this.getWhereArgs(toId);
 		String[] toArgs = this.getWhereArgs(fromId);
 		long result = 0;

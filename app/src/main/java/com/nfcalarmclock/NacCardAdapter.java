@@ -157,7 +157,6 @@ public class NacCardAdapter
 		Intent intent = NacIntent.createService(context, "add", alarm);
 		this.mWasAdded = true;
 
-		//context.startService(intent);
 		this.startService(intent);
 		this.getAlarms().add(position, alarm);
 		notifyItemInserted(position);
@@ -228,7 +227,6 @@ public class NacCardAdapter
 		Context context = this.getContext();
 		Intent intent = NacIntent.createService(context, "delete", alarm);
 
-		//context.startService(intent);
 		this.startService(intent);
 		this.getAlarms().remove(position);
 		notifyItemRemoved(position);
@@ -562,9 +560,9 @@ public class NacCardAdapter
 		NacAlarm toAlarm = this.get(toIndex);
 		Intent intent = NacIntent.createService(context, "swap", fromAlarm, toAlarm);
 
-		//context.startService(intent);
-		this.startService(intent);
 		Collections.swap(this.getAlarms(), fromIndex, toIndex);
+
+		this.startService(intent);
 		notifyItemMoved(fromIndex, toIndex);
 	}
 
