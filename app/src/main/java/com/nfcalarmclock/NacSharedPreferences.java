@@ -29,9 +29,19 @@ public class NacSharedPreferences
 	private final NacSharedKeys mKeys;
 
 	/**
+	 * Default value to see if this is the app's first run after installing.
+	 */
+	private static final boolean DEFAULT_APP_FIRST_RUN = true;
+
+	/**
 	 * Default display next alarm format.
 	 */
 	private static final boolean DEFAULT_DISPLAY_TIME_REMAINING = true;
+
+	/**
+	 * Default auto dismiss message.
+	 */
+	public static final String DEFAULT_AUTO_DISMISS_MESSAGE = "";
 
 	/**
 	 * Default auto dismiss duration.
@@ -225,6 +235,24 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * @see editAppFirstRun
+	 */
+	public void editAppFirstRun(boolean first)
+	{
+		this.editAppFirstRun(first, false);
+	}
+
+	/**
+	 * Edit the app first run value.
+	 */
+	public void editAppFirstRun(boolean first, boolean commit)
+	{
+		String key = this.getKeys().getAppFirstRun();
+
+		this.saveBoolean(key, first, commit);
+	}
+
+	/**
 	 * @see editAutoDismiss
 	 */
 	public void editAutoDismiss(int index)
@@ -240,6 +268,24 @@ public class NacSharedPreferences
 		String key = this.getKeys().getAutoDismiss();
 
 		this.saveInt(key, index, commit);
+	}
+
+	/**
+	 * @see editAutoDismissMessage
+	 */
+	public void editAutoDismissMessage(String message)
+	{
+		this.editAutoDismissMessage(message, false);
+	}
+
+	/**
+	 * Edit the auto dismiss message.
+	 */
+	public void editAutoDismissMessage(String message, boolean commit)
+	{
+		String key = this.getKeys().getAutoDismissMessage();
+
+		this.saveString(key, message, commit);
 	}
 
 	/**
@@ -607,6 +653,17 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * @return Whether the alarm was auto-dismissed or not.
+	 */
+	public String getAutoDismissMessage()
+	{
+		String key = this.getKeys().getAutoDismissMessage();
+
+		return this.getSharedPreferences().getString(key,
+			DEFAULT_AUTO_DISMISS_MESSAGE);
+	}
+
+	/**
 	 * @see getAutoDismissSummary
 	 */
 	public String getAutoDismissSummary()
@@ -807,6 +864,25 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * @return The meridian color.
+	 */
+	public int getMeridianColor(String meridian)
+	{
+		if (meridian.equals("AM"))
+		{
+			return this.getAmColor();
+		}
+		else if (meridian.equals("PM"))
+		{
+			return this.getPmColor();
+		}
+		else
+		{
+			return DEFAULT_COLOR;
+		}
+	}
+
+	/**
 	 * @return The monday first value.
 	 */
 	public boolean getMondayFirst()
@@ -864,6 +940,16 @@ public class NacSharedPreferences
 		String key = this.getKeys().getPmColor();
 
 		return this.getSharedPreferences().getInt(key, DEFAULT_PM_COLOR);
+	}
+
+	/**
+	 * @return The app's first run value.
+	 */
+	public boolean getAppFirstRun()
+	{
+		String key = this.getKeys().getAppFirstRun();
+
+		return this.getSharedPreferences().getBoolean(key, DEFAULT_APP_FIRST_RUN);
 	}
 
 	/**

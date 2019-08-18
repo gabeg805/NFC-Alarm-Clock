@@ -42,6 +42,11 @@ public class NacCheckboxPreference
 	protected String mSummaryOff;
 
 	/**
+	 * Default value.
+	 */
+	protected static final boolean DEFAULT_VALUE = true;
+
+	/**
 	 */
 	public NacCheckboxPreference(Context context)
 	{
@@ -133,11 +138,11 @@ public class NacCheckboxPreference
 	/**
 	 * @return The default value.
 	 */
-	//@Override
-	//protected Object onGetDefaultValue(TypedArray a, int index)
-	//{
-	//	return (boolean) a.getBoolean(index, NacSharedPreferences.DEFAULT_REPEAT);
-	//}
+	@Override
+	protected Object onGetDefaultValue(TypedArray a, int index)
+	{
+		return (boolean) a.getBoolean(index, DEFAULT_VALUE);
+	}
 
 	/**
 	 * Allow users to select the whole preference to change the checkbox.

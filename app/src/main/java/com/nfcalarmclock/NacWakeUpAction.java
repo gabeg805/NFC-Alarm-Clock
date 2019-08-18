@@ -20,7 +20,7 @@ public class NacWakeUpAction
 	 */
 	public interface OnAutoDismissListener
 	{
-		public void onAutoDismiss();
+		public void onAutoDismiss(NacAlarm alarm);
 	}
 
 	/**
@@ -36,7 +36,7 @@ public class NacWakeUpAction
 	/**
 	 * Shared preferences.
 	 */
-	private NacSharedPreferences mShared;
+	private NacSharedPreferences mSharedPreferences;
 
 	/**
 	 * Media player.
@@ -74,7 +74,7 @@ public class NacWakeUpAction
 	{
 		this.mContext = context;
 		this.mAlarm = alarm;
-		this.mShared = new NacSharedPreferences(context);
+		this.mSharedPreferences = new NacSharedPreferences(context);
 		this.mPlayer = new NacMediaPlayer(context);
 		this.mVibrator = null;
 		this.mSpeech = new NacTextToSpeech(context, this);
@@ -165,7 +165,7 @@ public class NacWakeUpAction
 	 */
 	private NacSharedPreferences getSharedPreferences()
 	{
-		return this.mShared;
+		return this.mSharedPreferences;
 	}
 
 	/**
@@ -317,7 +317,9 @@ public class NacWakeUpAction
 	{
 		if (this.getOnAutoDismissListener() != null)
 		{
-			this.getOnAutoDismissListener().onAutoDismiss();
+			NacAlarm alarm = this.getAlarm();
+
+			this.getOnAutoDismissListener().onAutoDismiss(alarm);
 		}
 	}
 
@@ -452,7 +454,7 @@ public class NacWakeUpAction
 	public void waitForAutoDismiss()
 	{
 		Context context = this.getContext();
-		NacSharedPreferences shared = new NacSharedPreferences(context);
+		NacSharedPreferences shared = this.getSharedPreferences();
 		int autoDismiss = shared.getAutoDismissTime();
 		long delay = TimeUnit.MINUTES.toMillis(autoDismiss) - 2000;
 

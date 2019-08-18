@@ -638,6 +638,15 @@ public class NacAlarm
 	}
 
 	/**
+	 * @return The full time string.
+	 */
+	public String getFullTime(Context context)
+	{
+		return NacCalendar.Time.getFullTime(context, this.getHour(),
+			this.getMinute());
+	}
+
+	/**
 	 * @return The hour.
 	 */
 	public int getHour()
@@ -812,7 +821,9 @@ public class NacAlarm
 	public void setEnabled(boolean enabled)
 	{
 		this.mEnabled = enabled;
-		this.mWasEnabled = (enabled) ? enabled : this.mWasEnabled;
+
+		this.setWasEnabled(enabled);
+		//this.mWasEnabled = (enabled) ? enabled : this.mWasEnabled;
 	}
 
 	/**
@@ -932,6 +943,14 @@ public class NacAlarm
 	public void setVibrate(boolean vibrate)
 	{
 		this.mVibrate = vibrate;
+	}
+
+	/**
+	 * Set was enabled flag.
+	 */
+	public void setWasEnabled(boolean enabled)
+	{
+		this.mWasEnabled = (enabled) ? enabled : this.mWasEnabled;
 	}
 
 	/**

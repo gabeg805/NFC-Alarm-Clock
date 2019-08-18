@@ -103,7 +103,6 @@ public class NacNameDialog
 		this.mEditText.setText(name);
 		this.mEditText.selectAll();
 		this.mEditText.setOnEditorActionListener(this);
-		this.mEditText.setRawInputType(InputType.TYPE_CLASS_TEXT);
 		this.mEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
 		this.mEditText.setBackgroundTintList(ColorStateList.valueOf(shared.getThemeColor()));
 		showKeyboard();

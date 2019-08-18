@@ -37,16 +37,6 @@ public class NacCardAdapter
 	private RecyclerView mRecyclerView;
 
 	/**
-	 * Alarm scheduler.
-	 */
-	private NacScheduler mScheduler;
-
-	/**
-	 * The database.
-	 */
-	private NacDatabase mDatabase;
-
-	/**
 	 * Handle card swipe events.
 	 */
 	private NacCardTouchHelper mTouchHelper;
@@ -69,7 +59,7 @@ public class NacCardAdapter
 	/**
 	 * Previously enabled alarm.
 	 */
-	private Calendar mPreviousCalendar;
+	private NacAlarm mNextAlarm;
 
 	/**
 	 * Indicator that the alarm was added through the floating action button.
@@ -88,13 +78,11 @@ public class NacCardAdapter
 			R.id.activity_main);
 		this.mRecyclerView = (RecyclerView) this.getRoot().findViewById(
 			R.id.content_alarm_list);
-		this.mDatabase = new NacDatabase(context);
-		this.mScheduler = new NacScheduler(context);
 		this.mTouchHelper = new NacCardTouchHelper(callback);
 		this.mUndo = new Undo();
 		this.mSnackbar = new NacSnackbar(this.mRoot);
 		this.mAlarmList = null;
-		this.mPreviousCalendar = null;
+		this.mNextAlarm = null;
 		this.mWasAdded = false;
 
 		this.mRecyclerView.addOnItemTouchListener(this);
@@ -160,6 +148,7 @@ public class NacCardAdapter
 		this.startService(intent);
 		this.getAlarms().add(position, alarm);
 		notifyItemInserted(position);
+		NacUtility.printf("New alarm at position : %d", position);
 
 		return 0;
 	}
@@ -187,11 +176,25 @@ public class NacCardAdapter
 	 */
 	public void build()
 	{
-		this.mAlarmList = this.getDatabase().read();
+		Context context = this.getContext();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
+		NacDatabase db = new NacDatabase(context);
+		this.mAlarmList = db.read();
+
+		if (shared.getAppFirstRun())
+		{
+			for (NacAlarm a : this.mAlarmList)
+			{
+				this.onChange(a);
+			}
+
+			shared.editAppFirstRun(false);
+		}
 
 		this.getTouchHelper().setRecyclerView(this.getRecyclerView());
 		this.getTouchHelper().reset();
 		notifyDataSetChanged();
+		db.close();
 	}
 
 	/**
@@ -206,6 +209,7 @@ public class NacCardAdapter
 		NacAlarm alarm = this.get(position);
 		NacAlarm copy = alarm.copy(this.getUniqueId());
 		int result = this.add(copy);
+		this.mWasAdded = false;
 
 		if (result == 0)
 		{
@@ -261,14 +265,6 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * @return The alarm database.
-	 */
-	private NacDatabase getDatabase()
-	{
-		return this.mDatabase;
-	}
-
-	/**
 	 * @return The first visible view holder in the recycler view.
 	 */
 	private int getFirstVisible(int position)
@@ -288,12 +284,28 @@ public class NacCardAdapter
 	}
 
 	/**
+	 */
+	@Override
+	public long getItemId(int position)
+	{
+		return position;
+	}
+
+	/**
 	 * @return The number of items in the recycler view.
 	 */
 	@Override
 	public int getItemCount()
 	{
 		return this.size();
+	}
+
+	/**
+	 */
+	@Override
+	public int getItemViewType(int position)
+	{
+		return position;
 	}
 
 	/**
@@ -316,11 +328,11 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * @return The previous calendar.
+	 * @return The next alarm that will be triggered.
 	 */
-	private Calendar getPreviousCalendar()
+	private NacAlarm getNextAlarm()
 	{
-		return this.mPreviousCalendar;
+		return this.mNextAlarm;
 	}
 
 	/**
@@ -337,14 +349,6 @@ public class NacCardAdapter
 	private View getRoot()
 	{
 		return this.mRoot;
-	}
-
-	/**
-	 * @return The alarm scheduler.
-	 */
-	private NacScheduler getScheduler()
-	{
-		return this.mScheduler;
 	}
 
 	/**
@@ -397,12 +401,15 @@ public class NacCardAdapter
 	/**
 	 * @return True if the next calendar has been found, and False otherwise.
 	 */
-	private boolean isNextCalendar(Calendar next)
+	//private boolean isNextCalendar(Calendar calendar)
+	private boolean isNextAlarm(NacAlarm alarm)
 	{
-		Calendar previous = this.getPreviousCalendar();
+		NacAlarm nextAlarm = this.getNextAlarm();
+		Calendar nextCalendar = NacCalendar.getNext(nextAlarm);
+		Calendar calendar = NacCalendar.getNext(alarm);
 
-		return ((previous == null)
-			|| ((next != null) && !next.after(previous)));
+		return ((nextCalendar == null)
+			|| ((calendar != null) && !calendar.after(nextCalendar)));
 	}
 
 	/**
@@ -442,7 +449,7 @@ public class NacCardAdapter
 		{
 			if (this.areAllAlarmsDisabled())
 			{
-				this.mPreviousCalendar = null;
+				this.mNextAlarm = null;
 			}
 		}
 
@@ -595,7 +602,7 @@ public class NacCardAdapter
 	@Override
 	public void onViewDetachedFromWindow(NacCardHolder card)
 	{
-		card.unfocus();
+		//card.unfocus();
 	}
 
 	/**
@@ -620,21 +627,26 @@ public class NacCardAdapter
 	 */
 	private void showNextAlarm(NacAlarm alarm)
 	{
-		List<Calendar> calendars = NacCalendar.toCalendars(alarm);
-		Calendar next = NacCalendar.getNext(calendars);
+		NacAlarm nextAlarm = this.getNextAlarm();
+		int nextId = (nextAlarm != null) ? nextAlarm.getId() : -1;
+		int id = alarm.getId();
 
-		// Should I give warning if same alarm exists? previous == next
-		if (!this.isNextCalendar(next))
+		if (id == nextId)
+		{
+			alarm = NacCalendar.getNextAlarm(this.getAlarms());
+		}
+		else if (!this.isNextAlarm(alarm))
 		{
 			return;
 		}
 
 		Context context = this.getContext();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
+		Calendar calendar = NacCalendar.getNext(alarm);
 		boolean timeRemaining = shared.getDisplayTimeRemaining();
-		long millis = next.getTimeInMillis();
+		long millis = calendar.getTimeInMillis();
 		String message = NacCalendar.getNextMessage(millis, timeRemaining);
-		this.mPreviousCalendar = next;
+		this.mNextAlarm = alarm;
 
 		this.snackbar(message, "DISMISS", null, false);
 	}

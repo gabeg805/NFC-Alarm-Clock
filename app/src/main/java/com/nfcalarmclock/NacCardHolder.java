@@ -30,6 +30,15 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import java.util.EnumSet;
 
+//import android.animation.Animator;
+//import android.animation.AnimatorListenerAdapter;
+import android.transition.ChangeBounds;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.view.Gravity;
+import android.view.animation.Animation;
+import android.view.animation.AccelerateInterpolator;
+
 /**
  * Card view holder.
  */
@@ -61,6 +70,11 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Shared preferences.
+	 */
+	private NacSharedPreferences mSharedPreferences;
+
+	/**
 	 * Alarm.
 	 */
 	private NacAlarm mAlarm;
@@ -83,7 +97,8 @@ public class NacCardHolder
 	/**
 	 * On/off switch for an alarm.
 	 */
-	 private Switch mSwitch;
+	 //private Switch mSwitch;
+	 private NacCardSwitch mSwitch;
 
 	/**
 	 * Time text.
@@ -161,18 +176,31 @@ public class NacCardHolder
 	public OnDeleteListener mDeleteListener;
 
 	/**
+	 * Repeat checkbox animation.
+	 */
+	public NacSlideAnimation mDaysAnimation;
+	public NacSlideAnimation mCardAnimation;
+
+	public RelativeLayout mSummaryRegion;
+	public LinearLayout mExtraRegion;
+
+	/**
 	 */
 	public NacCardHolder(View root)
 	{
 		super(root);
 
-		Activity activity = (Activity) root.getContext();
+		Context context = root.getContext();
+		this.mSharedPreferences = new NacSharedPreferences(context);
 		this.mAlarm = null;
 		this.mRoot = root;
-		this.mRecyclerView = (RecyclerView) activity.findViewById(
+		this.mRecyclerView = (RecyclerView) ((Activity)context).findViewById(
 			R.id.content_alarm_list);
 		this.mCardView = (CardView) root.findViewById(R.id.nac_card);
-		this.mSwitch = (Switch) root.findViewById(R.id.nac_switch);
+		this.mSummaryRegion = (RelativeLayout) root.findViewById(R.id.nac_summary);
+		this.mExtraRegion = (LinearLayout) root.findViewById(R.id.nac_extra);
+		//this.mSwitch = (Switch) root.findViewById(R.id.nac_switch);
+		this.mSwitch = new NacCardSwitch(root);
 		this.mTime = (TextView) root.findViewById(R.id.nac_time);
 		this.mMeridian = (TextView) root.findViewById(R.id.nac_meridian);
 		this.mSummaryDays = (TextView) root.findViewById(R.id.nac_summary_days);
@@ -187,6 +215,9 @@ public class NacCardHolder
 		this.mState = State.NONE;
 		this.mCollapseHeight = 0;
 		this.mExpandHeight = 0;
+		this.mDaysAnimation = new NacSlideAnimation(this.mDayButtons);
+		this.mCardAnimation = new NacCardSlideAnimation(this.mCardView,
+			this.mSummaryRegion, this.mExtraRegion);
 	}
 
 	/**
@@ -202,21 +233,24 @@ public class NacCardHolder
 	 */
 	public void collapse(boolean animate)
 	{
+		this.setState(State.COLLAPSED);
+		this.setBackgroundColor(this.getState());
+
 		if (animate)
 		{
+			View root = this.getRoot();
 			CardView card = this.getCardView();
-			TransitionDrawable transition = this.getColorTransition();
 
-			card.setBackground(transition);
-			transition.startTransition(500);
+			this.mCardAnimation.setDuration(350);
+			this.mCardAnimation.setHeights(this.mExpandHeight, this.mCollapseHeight);
+			this.mCardAnimation.setupForClose();
+			card.setAnimation(this.mCardAnimation);
+			card.startAnimation(this.mCardAnimation);
 		}
 		else
 		{
-			this.setBackgroundColor(this.getState());
+			this.setRegions(this.getState());
 		}
-
-		this.setState(State.COLLAPSED);
-		this.setRegions(this.getState());
 	}
 
 	/**
@@ -245,40 +279,29 @@ public class NacCardHolder
 	 */
 	public void expand(boolean animate)
 	{
-		if (animate)
-		{
-			CardView card = this.getCardView();
-			Transition transition = new ChangeBounds().setDuration(400);
-
-			TransitionManager.beginDelayedTransition(card, transition);
-		}
-
 		this.setState(State.EXPANDED);
-		this.setRegions(this.getState());
 		this.setBackgroundColor(this.getState());
 		this.setSoundEllipsis();
 
 		if (animate)
 		{
+			CardView card = this.getCardView();
+			RelativeLayout summary = (RelativeLayout) this.mRoot.findViewById(
+				R.id.nac_summary);
+			LinearLayout extra = (LinearLayout) this.mRoot.findViewById(R.id.nac_extra);
+			int intermediate = this.mExpandHeight - this.mDayButtons.getMeasuredHeight();
+
+			this.mCardAnimation.setDuration(400);
+			this.mCardAnimation.setHeights(this.mCollapseHeight, this.mExpandHeight);
+			this.mCardAnimation.setupForOpen();
+			card.setAnimation(this.mCardAnimation);
+			card.startAnimation(this.mCardAnimation);
 			this.scrollOnPartiallyVisible();
 		}
-	}
-
-	/**
-	 * Focus the alarm card.
-	 */
-	public void focus(boolean state)
-	{
-		if (!state)
+		else
 		{
-			return;
+			this.setRegions(this.getState());
 		}
-
-		CardView card = this.getCardView();
-		AlphaAnimation animation = new AlphaAnimation(0.0f, 1.0f);
-
-		animation.setDuration(1000);
-		card.startAnimation(animation);
 	}
 
 	/**
@@ -410,6 +433,14 @@ public class NacCardHolder
 	}
 
 	/**
+	 * @return The shared preferences.
+	 */
+	private NacSharedPreferences getSharedPreferences()
+	{
+		return this.mSharedPreferences;
+	}
+
+	/**
 	 * @return The expand/collapse state.
 	 */
 	private State getState()
@@ -434,6 +465,15 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Hide the swipe views.
+	 */
+	private void hideSwipeViews()
+	{
+		this.getCopyView().setVisibility(View.GONE);
+		this.getDeleteView().setVisibility(View.GONE);
+	}
+
+	/**
 	 * Initialize the alarm card.
 	 *
 	 * @param  alarm  The alarm to use to populate data in the alarm card.
@@ -450,18 +490,28 @@ public class NacCardHolder
 		}
 
 		this.setListeners(null);
-		this.focus(wasAdded);
-		this.setSwipeViews();
-		this.setSwitch();
+		this.hideSwipeViews();
+		//this.setSwitch();
+		this.mSwitch.init(alarm.getEnabled());
 		this.setTime();
 		this.setSummaryDays();
-		this.setRepeat();
-		this.setDays();
+		this.setupRepeat();
+		this.setDays(false);
 		this.setVibrate();
 		this.setSound();
 		this.setName();
 		this.setColors();
 		this.setListeners();
+
+		this.mDaysAnimation.setInterpolator(new AccelerateInterpolator());
+		this.mDaysAnimation.setDuration(400);
+		this.mDaysAnimation.setHideOnEnd();
+
+		if (wasAdded)
+		{
+			this.showTimePickerDialog();
+			//this.expand();
+		}
 	}
 
 	/**
@@ -501,7 +551,9 @@ public class NacCardHolder
 		// to fix it. Just implementing some bandaids to mitigate the crashes.
 		if (layoutManager != null)
 		{
-			int y = layoutManager.findViewByPosition(position).getTop();
+			View view = layoutManager.findViewByPosition(position);
+			//int y = layoutManager.findViewByPosition(position).getTop();
+			int y = (view != null) ? view.getTop() : -1;
 			int cardHeight = this.getCardHeight();
 			int screenHeight = this.getScreenHeight();
 
@@ -555,12 +607,17 @@ public class NacCardHolder
 	 */
 	private void measureCollapsedHeight()
 	{
-		CardView card = this.getCardView();
+		View root = this.getRoot();
+		RelativeLayout time = root.findViewById(R.id.nac_header);
+		RelativeLayout summary = root.findViewById(R.id.nac_summary);
 
 		this.collapse(false);
-		card.invalidate();
-		card.requestLayout();
-		this.mCollapseHeight = NacUtility.getHeight(card);
+		time.requestLayout();
+		summary.requestLayout();
+
+		int timeHeight = NacUtility.getHeight(time);
+		int summaryHeight = NacUtility.getHeight(summary);
+		this.mCollapseHeight = timeHeight + summaryHeight;
 	}
 
 	/**
@@ -568,12 +625,17 @@ public class NacCardHolder
 	 */
 	private void measureExpandedHeight()
 	{
-		CardView card = this.getCardView();
+		View root = this.getRoot();
+		RelativeLayout time = root.findViewById(R.id.nac_header);
+		LinearLayout extra = root.findViewById(R.id.nac_extra);
 
 		this.expand(false);
-		card.invalidate();
-		card.requestLayout();
-		this.mExpandHeight = NacUtility.getHeight(card);
+		time.requestLayout();
+		extra.requestLayout();
+
+		int timeHeight = NacUtility.getHeight(time);
+		int extraHeight = NacUtility.getHeight(extra);
+		this.mExpandHeight = timeHeight + extraHeight;
 	}
 
 	/**
@@ -593,21 +655,15 @@ public class NacCardHolder
 			if (!state)
 			{
 				Context context = this.getContext();
-				NacSharedPreferences shared = new NacSharedPreferences(context);
+				NacSharedPreferences shared = this.getSharedPreferences();
 
 				shared.editSnoozeCount(alarm.getId(), 0);
 			}
 		}
 		else if (id == R.id.nac_repeat)
 		{
-			NacDayOfWeek dayButtons = this.getDayButtons();
-			alarm.setRepeat(state);
-
-			if (state && !alarm.areDaysSelected())
-			{
-				alarm.setDays(NacSharedPreferences.DEFAULT_DAYS);
-			}
-
+			this.setRepeat(state);
+			this.setCardExpandHeight(state);
 			this.setDays();
 			this.setSummaryDays();
 		}
@@ -640,6 +696,7 @@ public class NacCardHolder
 
 		alarm.changed();
 		this.setSummaryDays();
+		this.setSummaryNameEllipsis();
 	}
 
 	/**
@@ -709,7 +766,8 @@ public class NacCardHolder
 		alarm.setEnabled(true);
 		alarm.changed();
 		this.setTime();
-		this.setSwitch();
+		//this.setSwitch();
+		this.mSwitch.set(alarm.getEnabled());
 		this.setSummaryDays();
 	}
 
@@ -769,6 +827,35 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Set the card height when it is expanded and the repeat checkbox has been
+	 * pressed.
+	 */
+	public void setCardExpandHeight(boolean repeat)
+	{
+		CardView card = this.getCardView();
+		NacDayOfWeek dayButtons = this.getDayButtons();
+		int daysHeight = NacUtility.getHeight(dayButtons);
+		NacUtility.printf("Repeat : %b | Height : %d | Days : %d", repeat, mExpandHeight, daysHeight);
+
+		if (repeat)
+		{
+			this.mCardAnimation.setHeights(this.mExpandHeight, this.mExpandHeight+daysHeight);
+			this.mExpandHeight += daysHeight;
+		}
+		else
+		{
+			this.mCardAnimation.setHeights(this.mExpandHeight, this.mExpandHeight-daysHeight);
+			this.mExpandHeight -= daysHeight;
+		}
+
+		this.mCardAnimation.setDuration(400);
+		this.mCardAnimation.setupForSkipListener();
+		card.setAnimation(this.mCardAnimation);
+		card.startAnimation(this.mCardAnimation);
+
+	}
+
+	/**
 	 * Set the colors of the various views.
 	 */
 	public void setColors()
@@ -776,46 +863,71 @@ public class NacCardHolder
 		Context context = this.getContext();
 		View root = this.getRoot();
 		View divider = (View) root.findViewById(R.id.nac_divider);
-		NacSharedPreferences shared = new NacSharedPreferences(context);
+		NacSharedPreferences shared = this.getSharedPreferences();
 
-		int[][] states = new int[][] {
-			new int[] { android.R.attr.state_checked},
-			new int[] {-android.R.attr.state_checked}};
-		int[] thumbColors = new int[] {shared.getThemeColor(), Color.LTGRAY};
-		int[] trackColors = new int[] {shared.getThemeColor(), Color.GRAY};
-		ColorStateList thumbStateList = new ColorStateList(states, thumbColors);
-		ColorStateList trackStateList = new ColorStateList(states, trackColors);
 		String meridian = this.getAlarm().getMeridian(context);
 		int timeColor = shared.getTimeColor();
 		int meridianColor = (meridian == "AM") ? shared.getAmColor()
 			: shared.getPmColor();
+		int daysColor = shared.getDaysColor();
+		int nameColor = shared.getNameColor();
+		int themeColor = shared.getThemeColor();
 
-		this.mSwitch.getThumbDrawable().setTintList(thumbStateList);
-		this.mSwitch.getTrackDrawable().setTintList(trackStateList);
+		//this.mSwitch.getThumbDrawable().setTintList(thumbStateList);
+		//this.mSwitch.getTrackDrawable().setTintList(trackStateList);
+		this.mSwitch.setColor(shared);
 		this.mTime.setTextColor(timeColor);
 		this.mMeridian.setTextColor(meridianColor);
-		this.mSummaryDays.setTextColor(shared.getDaysColor());
-		this.mSummaryName.setTextColor(shared.getNameColor());
-		divider.setBackgroundTintList(ColorStateList.valueOf(
-			shared.getThemeColor()));
+		this.mSummaryDays.setTextColor(daysColor);
+		this.mSummaryName.setTextColor(nameColor);
+		divider.setBackgroundTintList(ColorStateList.valueOf(themeColor));
 	}
 
 	/**
 	 * Set which day buttons are enabled.
 	 */
-	public void setDays()
+	public void setDays(boolean animate)
 	{
-		Context context = this.getContext();
-		NacSharedPreferences shared = new NacSharedPreferences(context);
+		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
-		NacDayOfWeek dayButtons = this.getDayButtons();
 		CheckBox repeat = this.getRepeat();
 		EnumSet<NacCalendar.Day> days = alarm.getDays();
+		NacDayOfWeek dayButtons = this.getDayButtons();
+		int currentVisibility = dayButtons.getVisibility();
+		int newVisibility = (days.isEmpty() || !repeat.isChecked()) ?
+			View.GONE : View.VISIBLE;
 
 		dayButtons.setMondayFirst(shared.getMondayFirst());
 		dayButtons.setDays(days);
-		dayButtons.setVisibility((days.isEmpty() || !repeat.isChecked())
-			? View.GONE : View.VISIBLE);
+
+		if (!animate)
+		{
+			dayButtons.setVisibility(newVisibility);
+			return;
+		}
+
+		if (currentVisibility != newVisibility)
+		{
+			if (newVisibility == View.GONE)
+			{
+				this.mDaysAnimation.setupForClose();
+			}
+			else
+			{
+				this.mDaysAnimation.setupForOpen();
+			}
+
+			dayButtons.setAnimation(this.mDaysAnimation);
+			dayButtons.startAnimation(this.mDaysAnimation);
+		}
+	}
+
+	/**
+	 * @see setDays
+	 */
+	public void setDays()
+	{
+		this.setDays(true);
 	}
 
 	/**
@@ -841,21 +953,11 @@ public class NacCardHolder
 		RelativeLayout time = (RelativeLayout) root.findViewById(
 			R.id.nac_time_parent);
 
-		//time.setOnClickListener(this);
-		//header.setOnClickListener(this);
-		//summary.setOnClickListener(this);
-		//collapse.setOnClickListener(this);
-		//this.mSwitch.setOnCheckedChangeListener(this);
-		//this.mDayButtons.setOnClickListener((NacDayOfWeek.OnClickListener)this);
-		//this.mRepeat.setOnCheckedChangeListener(this);
-		//this.mVibrate.setOnCheckedChangeListener(this);
-		//this.mSound.setOnClickListener(this);
-		//this.mName.setOnClickListener(this);
-		//this.mDelete.setOnClickListener(this);
 		time.setOnClickListener((View.OnClickListener)listener);
 		header.setOnClickListener((View.OnClickListener)listener);
 		summary.setOnClickListener((View.OnClickListener)listener);
 		collapse.setOnClickListener((View.OnClickListener)listener);
+		//this.mSwitch.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener)listener);
 		this.mSwitch.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener)listener);
 		this.mDayButtons.setOnClickListener((NacDayOfWeek.OnClickListener)listener);
 		this.mRepeat.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener)listener);
@@ -929,26 +1031,16 @@ public class NacCardHolder
 	/**
 	 * Set the repeat checked status.
 	 */
-	public void setRepeat()
+	public void setRepeat(boolean repeat)
 	{
 		NacAlarm alarm = this.getAlarm();
-		CheckBox repeat = this.getRepeat();
 
-		repeat.setChecked(alarm.getRepeat());
-	}
+		alarm.setRepeat(repeat);
 
-	/**
-	 * Set the repeat days text.
-	 */
-	public void setSummaryDays()
-	{
-		Context context = this.getContext();
-		NacAlarm alarm = this.getAlarm();
-		NacSharedPreferences shared = new NacSharedPreferences(context);
-		String string = NacCalendar.Days.toString(alarm,
-			shared.getMondayFirst());
-
-		this.mSummaryDays.setText(string);
+		if (repeat && !alarm.areDaysSelected())
+		{
+			alarm.setDays(NacSharedPreferences.DEFAULT_DAYS);
+		}
 	}
 
 	/**
@@ -1010,6 +1102,20 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Set the repeat days text.
+	 */
+	public void setSummaryDays()
+	{
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+		NacSharedPreferences shared = this.getSharedPreferences();
+		String string = NacCalendar.Days.toString(alarm,
+			shared.getMondayFirst());
+
+		this.mSummaryDays.setText(string);
+	}
+
+	/**
 	 * Set ellipsis for the summary name if it is too long.
 	 */
 	private void setSummaryNameEllipsis()
@@ -1032,6 +1138,17 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Setup the repeat checkbox.
+	 */
+	public void setupRepeat()
+	{
+		NacAlarm alarm = this.getAlarm();
+		CheckBox repeat = this.getRepeat();
+
+		repeat.setChecked(alarm.getRepeat());
+	}
+
+	/**
 	 * @return The max width of the summary name before it gets ellipsized.
 	 */
 	private int getSummaryNameMaxWidth()
@@ -1039,31 +1156,22 @@ public class NacCardHolder
 		int screenWidth = this.getScreenWidth();
 		int padding = this.getCardPaddingHorizontal();
 		int textsize = (int) this.mSummaryName.getTextSize();
-		int summaryDays = 27 * textsize / 2;
-		int expandImage = 2 * (int) this.getResources().getDimension(
+		int summaryDays = this.mSummaryDays.getText().length() * textsize / 2;
+		int expandImage = 3 * (int) this.getResources().getDimension(
 			R.dimen.isz_expand);
 
 		return screenWidth - summaryDays - padding - expandImage;
 	}
 
 	/**
-	 * Setup the swipe views.
-	 */
-	private void setSwipeViews()
-	{
-		this.getCopyView().setVisibility(View.GONE);
-		this.getDeleteView().setVisibility(View.GONE);
-	}
-
-	/**
 	 * Set the switch enabled status.
 	 */
-	public void setSwitch()
-	{
-		NacAlarm alarm = this.getAlarm();
+	//public void setSwitch()
+	//{
+	//	NacAlarm alarm = this.getAlarm();
 
-		this.mSwitch.setChecked(alarm.getEnabled());
-	}
+	//	this.mSwitch.setChecked(alarm.getEnabled());
+	//}
 
 	/**
 	 * Set the time.
@@ -1146,14 +1254,6 @@ public class NacCardHolder
 		{
 			this.expand();
 		}
-	}
-
-	/**
-	 * Unfocus the alarm card.
-	 */
-	public void unfocus()
-	{
-		this.getRoot().clearAnimation();
 	}
 
 	/**

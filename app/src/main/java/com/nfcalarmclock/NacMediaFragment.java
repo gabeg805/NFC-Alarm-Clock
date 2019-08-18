@@ -180,6 +180,15 @@ public class NacMediaFragment
 	/**
 	 */
 	@Override
+	public void onPause()
+	{
+		this.releasePlayer();
+		super.onPause();
+	}
+
+	/**
+	 */
+	@Override
 	public void onStart()
 	{
 		super.onStart();
@@ -191,7 +200,7 @@ public class NacMediaFragment
 	@Override
 	public void onStop()
 	{
-		this.releasePlayer();
+		//this.releasePlayer();
 		super.onStop();
 	}
 

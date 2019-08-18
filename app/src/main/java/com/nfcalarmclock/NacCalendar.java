@@ -69,6 +69,38 @@ public class NacCalendar
 	}
 
 	/**
+	 * @see getNext
+	 */
+	public static Calendar getNext(NacAlarm alarm)
+	{
+		List<Calendar> calendars = NacCalendar.toCalendars(alarm);
+
+		return NacCalendar.getNext(calendars);
+	}
+
+	/**
+	 * @return The next alarm from the given list of alarms.
+	 */
+	public static NacAlarm getNextAlarm(List<NacAlarm> alarms)
+	{
+		Calendar nextCalendar = null;
+		NacAlarm nextAlarm = null;
+
+		for (NacAlarm a : alarms)
+		{
+			Calendar calendar = NacCalendar.getNext(a);
+
+			if ((nextCalendar == null) || calendar.before(nextCalendar))
+			{
+				nextCalendar = calendar;
+				nextAlarm = a;
+			}
+		}
+
+		return nextAlarm;
+	}
+
+	/**
 	 * @return The message to display when the next action will occur.
 	 */
 	public static String getNextMessage(Calendar next)
@@ -212,7 +244,11 @@ public class NacCalendar
 	{
 		List<Calendar> calendars = new ArrayList<>();
 
-		if (alarm.isOneTimeAlarm())
+		if (alarm == null)
+		{
+			;
+		}
+		else if (alarm.isOneTimeAlarm())
 		{
 			Calendar c = NacCalendar.toNextOneTimeCalendar(alarm);
 
@@ -617,6 +653,39 @@ public class NacCalendar
 	 */
 	public static class Time
 	{
+
+		/**
+		 * @see getFullTime
+		 */
+		public static String getFullTime(Context context)
+		{
+			Calendar calendar = Calendar.getInstance();
+			int hour = calendar.get(Calendar.HOUR_OF_DAY);
+			int minute = calendar.get(Calendar.MINUTE);
+
+			return NacCalendar.Time.getFullTime(context, hour, minute);
+		}
+
+		/**
+		 * @return The full time string, HH:MM AM/PM.
+		 */
+		public static String getFullTime(Context context, int hour, int minute)
+		{
+			String time = NacCalendar.Time.getTime(context, hour, minute);
+			String meridian = NacCalendar.Time.getMeridian(context, hour);
+
+			return (!meridian.isEmpty()) ? time+" "+meridian : time;
+		}
+
+		/**
+		 * @see getMeridian
+		 */
+		public static String getMeridian(Context context, int hour)
+		{
+			boolean format = NacCalendar.Time.is24HourFormat(context);
+
+			return NacCalendar.Time.getMeridian(hour, format);
+		}
 
 		/**
 		 * @param  hour  The hour.

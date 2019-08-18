@@ -10,6 +10,11 @@ public class NacSharedKeys
 {
 
 	/**
+	 * The first run after installing the app.
+	 */
+	private final String mAppFirstRun;
+
+	/**
 	 * General screen.
 	 */
 	private final String mGeneralScreen;
@@ -53,6 +58,11 @@ public class NacSharedKeys
 	 * Display time remaining.
 	 */
 	private final String mDisplayTimeRemaining;
+
+	/**
+	 * Auto dismiss message.
+	 */
+	private final String mAutoDismissMessage;
 
 	/**
 	 * Auto dismiss.
@@ -160,6 +170,7 @@ public class NacSharedKeys
 	{
 		Resources res = context.getResources();
 
+		this.mAppFirstRun = res.getString(R.string.app_first_run);
 		this.mGeneralScreen = res.getString(R.string.pref_screen_general_key);
 		this.mDefaultAlarmScreen = res.getString(R.string.pref_screen_default_alarm_key);
 		this.mColorScreen = res.getString(R.string.pref_screen_color_key);
@@ -169,6 +180,7 @@ public class NacSharedKeys
 		this.mColorScreenTitle = res.getString(R.string.pref_screen_color_title);
 		this.mMiscellaneousTitle = res.getString(R.string.pref_screen_misc_title);
 		this.mDisplayTimeRemaining = res.getString(R.string.pref_display_time_remaining_key);
+		this.mAutoDismissMessage = res.getString(R.string.alarm_auto_dismiss_message);
 		this.mAutoDismiss = res.getString(R.string.pref_auto_dismiss_key);
 		this.mRequireNfc = res.getString(R.string.pref_dismiss_button_key);
 		this.mMaxSnooze = res.getString(R.string.pref_max_snooze_key);
@@ -205,6 +217,14 @@ public class NacSharedKeys
 	public String getAutoDismiss()
 	{
 		return this.mAutoDismiss;
+	}
+
+	/**
+	 * @return The auto dismiss message key.
+	 */
+	public String getAutoDismissMessage()
+	{
+		return this.mAutoDismissMessage;
 	}
 
 	/**
@@ -341,6 +361,14 @@ public class NacSharedKeys
 	public String getPmColor()
 	{
 		return this.mPmColor;
+	}
+
+	/**
+	 * @return The post install, first run key.
+	 */
+	public String getAppFirstRun()
+	{
+		return this.mAppFirstRun;
 	}
 
 	/**

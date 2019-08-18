@@ -1,7 +1,8 @@
 <resources>
 
-	<!-- App name -->
+	<!-- App -->
 	<string name="app_name">NFC Alarm Clock</string>
+	<string name="app_first_run">app_first_run</string>
 
 
 	<!-- Alarm Activity -->
@@ -9,6 +10,7 @@
 	<string name="act_alarm_instructions">Scan NFC Tag to dismiss the alarm.</string>
 	<string name="act_alarm_snooze">Snooze</string>
 	<string name="act_alarm_dismiss">Dismiss</string>
+	<string name="alarm_auto_dismiss_message"></string>
 
 
 	<!-- Menu -->

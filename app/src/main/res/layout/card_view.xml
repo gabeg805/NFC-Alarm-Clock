@@ -65,165 +65,164 @@
 
 		</RelativeLayout>
 
-	<RelativeLayout
-		android:id="@+id/nac_summary"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/nac_header"
-		android:paddingBottom="@dimen/mb_card"
-		android:paddingStart="@dimen/ml_card"
-		android:paddingEnd="@dimen/mr_card">
-
-		<TextView
-			android:id="@+id/nac_summary_name"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginStart="@dimen/sp_text"
-			android:maxLength="@integer/max_entry_length"
-			android:maxLines="1"
-			android:ellipsize="end"
-			android:textColor="@color/sky_blue"
-			android:textSize="@dimen/tsz_summary_name"
-			android:textStyle="bold"
-			/>
-
-		<TextView
-			android:id="@+id/nac_summary_days"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_toEndOf="@id/nac_summary_name"
-			android:layout_marginStart="@dimen/sp_text"
-			android:textColor="?attr/colorAccent"
-			android:textSize="@dimen/tsz_summary_days"
-			android:textStyle="bold"
-			/>
-
-		<ImageView
-			android:layout_width="@dimen/isz_expand"
-			android:layout_height="@dimen/isz_expand"
-			android:layout_marginEnd="@dimen/mr_expand"
-			android:layout_alignBottom="@id/nac_summary_days"
-			android:layout_alignParentEnd="true"
-			android:src="@mipmap/expand"
-			tools:ignore="ContentDescription"
-			/>
-
-	</RelativeLayout>
-
-	<LinearLayout
-		android:id="@+id/nac_extra"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/nac_summary"
-		android:paddingBottom="@dimen/mb_card"
-		android:paddingStart="@dimen/ml_card"
-		android:paddingEnd="@dimen/mr_card"
-		android:orientation="vertical"
-		android:animateLayoutChanges="true">
-
-		<CheckBox
-			android:id="@+id/nac_repeat"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:paddingTop="@dimen/pt_repeat"
-			android:paddingBottom="@dimen/pb_repeat"
-			android:paddingStart="@dimen/pl_repeat"
-			android:paddingEnd="@dimen/pr_repeat"
-			android:buttonTint="@color/white"
-			android:textColor="@color/white"
-			android:textSize="@dimen/tsz_card"
-			android:text="@string/card_repeat"
-			/>
-
-		<com.nfcalarmclock.NacDayOfWeek
-			android:id="@+id/nac_days"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:gravity="center"
-			android:paddingTop="@dimen/pt_days"
-			android:paddingBottom="@dimen/pb_days"
-			/>
-
 		<RelativeLayout
+			android:id="@+id/nac_summary"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
+			android:layout_height="wrap_content"
+			android:layout_below="@id/nac_header"
+			android:paddingBottom="@dimen/mb_card"
+			android:paddingStart="@dimen/ml_card"
+			android:paddingEnd="@dimen/mr_card">
 
-			<com.nfcalarmclock.NacImageTextButton
-				android:id="@+id/nac_sound"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:layout_alignBottom="@id/nac_vibrate"
-				android:paddingTop="@dimen/pt_sound"
-				android:paddingBottom="@dimen/pb_sound"
-				android:paddingStart="@dimen/pl_sound"
-				app:nacDrawable="@mipmap/music_note"
-				app:nacText=""
-				/>
-
-			<CheckBox
-				android:id="@+id/nac_vibrate"
+			<TextView
+				android:id="@+id/nac_summary_name"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_alignParentEnd="true"
-				android:layout_gravity="end"
-				android:paddingTop="@dimen/pt_vibrate"
-				android:paddingBottom="@dimen/pb_vibrate"
-				android:paddingStart="@dimen/pl_vibrate"
-				android:paddingEnd="@dimen/pr_vibrate"
-				android:buttonTint="@color/white"
-				android:textColor="@color/white"
-				android:textSize="@dimen/tsz_card"
-				android:text="@string/card_vibrate"
+				android:layout_marginStart="@dimen/sp_text"
+				android:maxLength="@integer/max_entry_length"
+				android:maxLines="1"
+				android:ellipsize="end"
+				android:textColor="@color/sky_blue"
+				android:textSize="@dimen/tsz_summary_name"
+				android:textStyle="bold"
 				/>
 
-		</RelativeLayout>
-
-		<com.nfcalarmclock.NacImageTextButton
-			android:id="@+id/nac_name"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:paddingTop="@dimen/pt_name"
-			android:paddingBottom="@dimen/pb_name"
-			android:paddingStart="@dimen/pl_name"
-			app:nacDrawable="@mipmap/label"
-			/>
-
-		<View
-			android:id="@+id/nac_divider"
-			android:layout_width="match_parent"
-			android:layout_height="@dimen/isz_card_divider"
-			android:background="?attr/colorCardDivider"
-			/>
-
-		<RelativeLayout
-			android:id="@+id/nac_collapse"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
-
-			<com.nfcalarmclock.NacImageTextButton
-				android:id="@+id/nac_delete"
+			<TextView
+				android:id="@+id/nac_summary_days"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:paddingTop="@dimen/pt_delete"
-				android:paddingBottom="@dimen/pb_delete"
-				android:paddingStart="@dimen/pl_delete"
-				android:paddingEnd="@dimen/pr_delete"
-				app:nacDrawable="@mipmap/delete"
-				app:nacText="Delete"
+				android:layout_toEndOf="@id/nac_summary_name"
+				android:layout_marginStart="@dimen/sp_text"
+				android:textColor="?attr/colorAccent"
+				android:textSize="@dimen/tsz_summary_days"
+				android:textStyle="bold"
 				/>
 
 			<ImageView
-				android:layout_width="@dimen/isz_collapse"
-				android:layout_height="@dimen/isz_collapse"
-				android:layout_marginEnd="@dimen/mr_collapse"
+				android:layout_width="@dimen/isz_expand"
+				android:layout_height="@dimen/isz_expand"
+				android:layout_marginEnd="@dimen/mr_expand"
+				android:layout_alignBottom="@id/nac_summary_days"
 				android:layout_alignParentEnd="true"
-				android:layout_centerVertical="true"
-				android:src="@mipmap/collapse"
+				android:src="@mipmap/expand"
+				tools:ignore="ContentDescription"
 				/>
 
 		</RelativeLayout>
 
-	</LinearLayout>
+		<LinearLayout
+			android:id="@+id/nac_extra"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/nac_summary"
+			android:paddingBottom="@dimen/mb_card"
+			android:paddingStart="@dimen/ml_card"
+			android:paddingEnd="@dimen/mr_card"
+			android:orientation="vertical">
+
+			<CheckBox
+				android:id="@+id/nac_repeat"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingTop="@dimen/pt_repeat"
+				android:paddingBottom="@dimen/pb_repeat"
+				android:paddingStart="@dimen/pl_repeat"
+				android:paddingEnd="@dimen/pr_repeat"
+				android:buttonTint="@color/white"
+				android:textColor="@color/white"
+				android:textSize="@dimen/tsz_card"
+				android:text="@string/card_repeat"
+				/>
+
+			<com.nfcalarmclock.NacDayOfWeek
+				android:id="@+id/nac_days"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+				android:paddingTop="@dimen/pt_days"
+				android:paddingBottom="@dimen/pb_days"
+				/>
+
+			<RelativeLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<com.nfcalarmclock.NacImageTextButton
+					android:id="@+id/nac_sound"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:layout_alignBottom="@id/nac_vibrate"
+					android:paddingTop="@dimen/pt_sound"
+					android:paddingBottom="@dimen/pb_sound"
+					android:paddingStart="@dimen/pl_sound"
+					app:nacDrawable="@mipmap/music_note"
+					app:nacText=""
+					/>
+
+				<CheckBox
+					android:id="@+id/nac_vibrate"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentEnd="true"
+					android:layout_gravity="end"
+					android:paddingTop="@dimen/pt_vibrate"
+					android:paddingBottom="@dimen/pb_vibrate"
+					android:paddingStart="@dimen/pl_vibrate"
+					android:paddingEnd="@dimen/pr_vibrate"
+					android:buttonTint="@color/white"
+					android:textColor="@color/white"
+					android:textSize="@dimen/tsz_card"
+					android:text="@string/card_vibrate"
+					/>
+
+			</RelativeLayout>
+
+			<com.nfcalarmclock.NacImageTextButton
+				android:id="@+id/nac_name"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingTop="@dimen/pt_name"
+				android:paddingBottom="@dimen/pb_name"
+				android:paddingStart="@dimen/pl_name"
+				app:nacDrawable="@mipmap/label"
+				/>
+
+			<View
+				android:id="@+id/nac_divider"
+				android:layout_width="match_parent"
+				android:layout_height="@dimen/isz_card_divider"
+				android:background="?attr/colorCardDivider"
+				/>
+
+			<RelativeLayout
+				android:id="@+id/nac_collapse"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<com.nfcalarmclock.NacImageTextButton
+					android:id="@+id/nac_delete"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:paddingTop="@dimen/pt_delete"
+					android:paddingBottom="@dimen/pb_delete"
+					android:paddingStart="@dimen/pl_delete"
+					android:paddingEnd="@dimen/pr_delete"
+					app:nacDrawable="@mipmap/delete"
+					app:nacText="Delete"
+					/>
+
+				<ImageView
+					android:layout_width="@dimen/isz_collapse"
+					android:layout_height="@dimen/isz_collapse"
+					android:layout_marginEnd="@dimen/mr_collapse"
+					android:layout_alignParentEnd="true"
+					android:layout_centerVertical="true"
+					android:src="@mipmap/collapse"
+					/>
+
+			</RelativeLayout>
+
+		</LinearLayout>
 
 	</RelativeLayout>
 

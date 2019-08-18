@@ -24,6 +24,11 @@ public class NacMainActivity
 {
 
 	/**
+	 * Shared preferences.
+	 */
+	private NacSharedPreferences mSharedPreferences;
+
+	/**
 	 * Recycler view containing the alarm cards.
 	 */
 	private RecyclerView mRecyclerView;
@@ -39,12 +44,47 @@ public class NacMainActivity
 	private NacCardAdapter mAdapter;
 
 	/**
+	 * @return The alarm card adapter.
+	 */
+	private NacCardAdapter getCardAdapter()
+	{
+		return this.mAdapter;
+	}
+
+	/**
+	 * @return The floating action button.
+	 */
+	private FloatingActionButton getFloatingButton()
+	{
+		return this.mFloatingButton;
+	}
+
+	/**
+	 * @return The recycler view.
+	 */
+	private RecyclerView getRecyclerView()
+	{
+		return this.mRecyclerView;
+	}
+
+	/**
+	 * @return The shared preferences.
+	 */
+	private NacSharedPreferences getSharedPreferences()
+	{
+		return this.mSharedPreferences;
+	}
+
+
+	/**
 	 * Add a new alarm when the floating action button is clicked.
 	 */
 	@Override
 	public void onClick(View view)
 	{
-		this.mAdapter.add();
+		NacCardAdapter adapter = this.getCardAdapter();
+
+		adapter.add();
 	}
 
 	/**
@@ -61,6 +101,8 @@ public class NacMainActivity
 		DividerItemDecoration divider = new DividerItemDecoration(this,
 			LinearLayoutManager.VERTICAL);
 		ColorStateList color = ColorStateList.valueOf(shared.getThemeColor());
+
+		this.mSharedPreferences = shared;
 		this.mAdapter = new NacCardAdapter(this);
 		this.mFloatingButton = (FloatingActionButton) findViewById(
 			R.id.fab_add_alarm);
@@ -73,7 +115,6 @@ public class NacMainActivity
 		this.mRecyclerView.addItemDecoration(divider);
 		this.mRecyclerView.setAdapter(this.mAdapter);
 		this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-		this.mRecyclerView.addOnScrollListener(new ScrollListener());
 	}
 
 	/**
@@ -113,7 +154,19 @@ public class NacMainActivity
 	protected void onResume()
 	{
 		super.onResume();
-		this.mAdapter.build();
+
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacCardAdapter adapter = this.getCardAdapter();
+		String message = shared.getAutoDismissMessage();
+
+		adapter.build();
+
+		if (!message.isEmpty())
+		{
+			NacUtility.toast(this, message);
+
+			shared.editAutoDismissMessage("");
+		}
 	}
 
 	/**
@@ -127,72 +180,13 @@ public class NacMainActivity
 
 		if (next != null)
 		{
-			NacSharedPreferences shared = new NacSharedPreferences(this);
+			NacSharedPreferences shared = this.getSharedPreferences();
 			boolean timeRemaining = shared.getDisplayTimeRemaining();
 			long millis = next.getTriggerTime();
 			message = NacCalendar.getNextMessage(millis, timeRemaining);
 		}
 
 		NacUtility.snackbar(this, message, "DISMISS", null);
-	}
-
-	/**
-	 * RecyclerView scroll listener to show/hide the floating action button.
-	 */
-	public class ScrollListener
-		extends RecyclerView.OnScrollListener
-	{
-
-		/**
-		 */
-		public ScrollListener()
-		{
-		}
-
-		/**
-		 * Show the floating action button when scrolling up and hide it when
-		 * scrolling down.
-		 *
-		 * @param  rv  The recycler view.
-		 * @param  dx  The change in scrolling in the x-direction.
-		 * @param  dy  The change in scrolling in the y-direction.
-		 */
-		@Override
-		public void onScrolled(RecyclerView rv, int dx, int dy)
-		{
-			super.onScrolled(rv, dx, dy);
-
-			if ((dy < 0) && !mFloatingButton.isShown())
-			{
-				mFloatingButton.show();
-			}
-			else if ((dy > 0) && mFloatingButton.isShown())
-			{
-				mFloatingButton.hide();
-			}
-		}
-
-		/**
-		 * Display the floating button when at the bottom of the list.
-		 *
-		 * @param  rv  The recycler view.
-		 * @param  state The scroll state (Idle=0, Dragging=1, or Settling=2).
-		 */
-		@Override
-		public void onScrollStateChanged(RecyclerView rv, int state)
-		{
-			super.onScrollStateChanged(rv, state);
-
-			if ((state == RecyclerView.SCROLL_STATE_IDLE)
-				&& !rv.canScrollVertically(1))
-			{
-				if (!mFloatingButton.isShown())
-				{
-					mFloatingButton.show();
-				}
-			}
-		}
-
 	}
 
 }
