@@ -120,19 +120,41 @@
 			android:paddingEnd="@dimen/mr_card"
 			android:orientation="vertical">
 
-			<CheckBox
-				android:id="@+id/nac_repeat"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:paddingTop="@dimen/pt_repeat"
-				android:paddingBottom="@dimen/pb_repeat"
-				android:paddingStart="@dimen/pl_repeat"
-				android:paddingEnd="@dimen/pr_repeat"
-				android:buttonTint="@color/white"
-				android:textColor="@color/white"
-				android:textSize="@dimen/tsz_card"
-				android:text="@string/card_repeat"
-				/>
+			<RelativeLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<CheckBox
+					android:id="@+id/nac_repeat"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentLeft="true"
+					android:paddingTop="@dimen/pt_repeat"
+					android:paddingBottom="@dimen/pb_repeat"
+					android:paddingStart="@dimen/pl_repeat"
+					android:paddingEnd="@dimen/pr_repeat"
+					android:buttonTint="@color/white"
+					android:textColor="@color/white"
+					android:textSize="@dimen/tsz_card"
+					android:text="@string/card_repeat"
+					/>
+
+				<CheckBox
+					android:id="@+id/nac_nfc"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:paddingTop="@dimen/pt_nfc"
+					android:paddingBottom="@dimen/pb_nfc"
+					android:paddingStart="@dimen/pl_nfc"
+					android:paddingEnd="@dimen/pr_nfc"
+					android:buttonTint="@color/white"
+					android:textColor="@color/white"
+					android:textSize="@dimen/tsz_card"
+					android:text="@string/card_nfc"
+					/>
+
+			</RelativeLayout>
 
 			<com.nfcalarmclock.NacDayOfWeek
 				android:id="@+id/nac_days"

@@ -10,7 +10,7 @@
 
 	<!-- Standard colors -->
 	<color name="black">#000000</color>
-	<color name="gray">#333333</color>
+	<color name="gray">#2e2e2e</color>
 	<color name="gray_mid">#222222</color>
 	<color name="gray_dark">#101010</color>
 	<color name="green">#008000</color>

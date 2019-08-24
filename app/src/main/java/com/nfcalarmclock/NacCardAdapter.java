@@ -22,7 +22,7 @@ public class NacCardAdapter
 	implements View.OnClickListener,
 		RecyclerView.OnItemTouchListener,
 		NacAlarm.OnChangeListener,
-		NacCardHolder.OnDeleteListener,
+		NacCardDelete.OnDeleteListener,
 		NacCardTouchHelper.Adapter
 {
 
@@ -148,7 +148,6 @@ public class NacCardAdapter
 		this.startService(intent);
 		this.getAlarms().add(position, alarm);
 		notifyItemInserted(position);
-		NacUtility.printf("New alarm at position : %d", position);
 
 		return 0;
 	}
@@ -565,7 +564,8 @@ public class NacCardAdapter
 		Context context = this.getContext();
 		NacAlarm fromAlarm = this.get(fromIndex);
 		NacAlarm toAlarm = this.get(toIndex);
-		Intent intent = NacIntent.createService(context, "swap", fromAlarm, toAlarm);
+		Intent intent = NacIntent.createService(context, "swap", fromAlarm,
+			toAlarm);
 
 		Collections.swap(this.getAlarms(), fromIndex, toIndex);
 

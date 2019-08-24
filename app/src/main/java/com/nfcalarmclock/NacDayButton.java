@@ -70,7 +70,7 @@ public class NacDayButton
 				int textsize = (int) res.getDimension(R.dimen.tsz_days);
 				this.width = (int) ta.getDimension(R.styleable.NacDayButton_nacWidth, 2*textsize);
 				this.height = (int) ta.getDimension(R.styleable.NacDayButton_nacHeight, 2*textsize);
-				this.duration = ta.getInt(R.styleable.NacDayButton_nacDuration, 500);
+				this.duration = ta.getInt(R.styleable.NacDayButton_nacDuration, 1000);
 				this.textColor = ta.getColor(R.styleable.NacDayButton_nacTextColor, Color.WHITE);
 				this.textSize = (int) ta.getDimension(R.styleable.NacDayButton_nacTextSize, textsize);
 				this.text = ta.getString(R.styleable.NacDayButton_nacText);
@@ -391,7 +391,7 @@ public class NacDayButton
 	public int getDuration()
 	{
 		return (this.isEnabled()) ? this.mAttributes.duration
-			: this.mAttributes.duration / 2;
+			: this.mAttributes.duration * 2 / 3;
 	}
 
 	private void setEndValues()

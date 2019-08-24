@@ -74,11 +74,7 @@ public class NacNfc
 		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
 		NacSharedPreferences shared = new NacSharedPreferences(context);
 
-		if (!shared.getRequireNfc())
-		{
-			return;
-		}
-		else if (nfcAdapter == null)
+		if (nfcAdapter == null)
 		{
 			NacUtility.quickToast(context, "Your device doesn't support NFC");
 			return;

@@ -253,8 +253,13 @@ public class NacWakeUpAction
 	public void pause()
 	{
 		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
 
-		NacNfc.disable(context);
+		if (alarm.getUseNfc())
+		{
+			NacNfc.disable(context);
+		}
+
 		this.getTextToSpeech().stop();
 		//this.getTextToSpeech().shutdown();
 	}
@@ -299,9 +304,13 @@ public class NacWakeUpAction
 	public void resume()
 	{
 		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
 		//NacSharedPreferences shared = this.getSharedPreferences();
 
-		NacNfc.enable(context);
+		if (alarm.getUseNfc())
+		{
+			NacNfc.enable(context);
+		}
 
 		//if (shared.getSpeakToMe())
 		//{

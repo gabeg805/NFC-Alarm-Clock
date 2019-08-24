@@ -237,12 +237,14 @@ public class NacAlarmActivity
 	public void setupAlarmButtons()
 	{
 		NacSharedPreferences shared = new NacSharedPreferences(this);
+		NacAlarm alarm = this.getAlarm();
 		//LinearLayout layout = (LinearLayout) findViewById(R.id.act_alarm);
 		RelativeLayout layout = (RelativeLayout) findViewById(R.id.act_alarm);
 		Button snoozeButton = (Button) findViewById(R.id.snooze);
 		Button dismissButton = (Button) findViewById(R.id.dismiss);
 
-		if (NacNfc.exists(this) && shared.getRequireNfc())
+		//if (NacNfc.exists(this) && shared.getRequireNfc())
+		if (NacNfc.exists(this) && alarm.getUseNfc())
 		{
 			dismissButton.setVisibility(View.GONE);
 		}

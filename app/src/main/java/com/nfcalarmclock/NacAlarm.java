@@ -63,6 +63,11 @@ public class NacAlarm
 		private boolean mRepeat;
 
 		/**
+		 * Indicates whether the alarm should use NFC or not.
+		 */
+		private boolean mNfc;
+
+		/**
 		 * Indicates whether the phone should vibrate when the alarm is run.
 		 */
 		private boolean mVibrate;
@@ -112,8 +117,9 @@ public class NacAlarm
 			this.mMinute = min;
 			this.mEnabled = true;
 			this.mDays = EnumSet.noneOf(NacCalendar.Day.class);
-			this.mRepeat = true;
-			this.mVibrate = true;
+			this.mRepeat = NacSharedPreferences.DEFAULT_REPEAT;
+			this.mNfc = NacSharedPreferences.DEFAULT_USE_NFC;
+			this.mVibrate = NacSharedPreferences.DEFAULT_VIBRATE;
 			this.mSoundType = NacSound.TYPE_NONE;
 			this.mSoundPath = "";
 			this.mSoundName = "";
@@ -215,6 +221,14 @@ public class NacAlarm
 		public int getSoundType()
 		{
 			return this.mSoundType;
+		}
+
+		/**
+		 * @return True if using NFC, and False otherwise.
+		 */
+		public boolean getUseNfc()
+		{
+			return this.mNfc;
 		}
 
 		/**
@@ -411,6 +425,21 @@ public class NacAlarm
 		}
 
 		/**
+		 * Set whether the alarm should use NFC to dismiss or not.
+		 *
+		 * @param  nfc  True if the phone should use NFC to dismiss, and False
+		 *              otherwise.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setUseNfc(boolean nfc)
+		{
+			this.mNfc = nfc;
+
+			return this;
+		}
+
+		/**
 		 * Set whether the alarm should vibrate the phone or not.
 		 *
 		 * @param  vibrate  True if the phone should vibrate when the alarm is
@@ -463,6 +492,11 @@ public class NacAlarm
 	private boolean mRepeat;
 
 	/**
+	 * Indicates whether the alarm should use NFC or not.
+	 */
+	private boolean mNfc;
+
+	/**
 	 * Indicates whether the phone should vibrate when the alarm is run.
 	 */
 	private boolean mVibrate;
@@ -510,6 +544,7 @@ public class NacAlarm
 		this.setMinute(builder.getMinute());
 		this.setDays(builder.getDays());
 		this.setRepeat(builder.getRepeat());
+		this.setUseNfc(builder.getUseNfc());
 		this.setVibrate(builder.getVibrate());
 		this.setSoundType(builder.getSoundType());
 		this.setSoundPath(builder.getSoundPath());
@@ -532,6 +567,7 @@ public class NacAlarm
 			.setMinute(input.readInt())
 			.setDays(input.readInt())
 			.setRepeat((input.readInt() != 0))
+			.setUseNfc((input.readInt() != 0))
 			.setVibrate((input.readInt() != 0))
 			.setSoundType(input.readInt())
 			.setSoundPath(input.readString())
@@ -582,6 +618,7 @@ public class NacAlarm
 			.setMinute(this.getMinute())
 			.setDays(this.getDays())
 			.setRepeat(this.getRepeat())
+			.setUseNfc(this.getUseNfc())
 			.setVibrate(this.getVibrate())
 			.setSoundType(this.getSoundType())
 			.setSoundPath(this.getSoundPath())
@@ -752,6 +789,14 @@ public class NacAlarm
 	}
 
 	/**
+	 * @return True if using NFC, and False otherwise.
+	 */
+	public boolean getUseNfc()
+	{
+		return this.mNfc;
+	}
+
+	/**
 	 * @return True if the phone should vibrate when the alarm is going off
 	 *         and false otherwise.
 	 */
@@ -788,6 +833,7 @@ public class NacAlarm
 		NacUtility.printf("Minute       : %d", this.mMinute);
 		NacUtility.printf("Days         : %s", NacCalendar.Days.toString(this.getDays()));
 		NacUtility.printf("Repeat       : %b", this.mRepeat);
+		NacUtility.printf("Use NFC      : %b", this.mNfc);
 		NacUtility.printf("Vibrate      : %b", this.mVibrate);
 		NacUtility.printf("Sound Type   : %s", this.mSoundType);
 		NacUtility.printf("Sound Path   : %s", this.mSoundPath);
@@ -935,6 +981,17 @@ public class NacAlarm
 	}
 
 	/**
+	 * Set whether the alarm should use NFC to dismiss or not.
+	 *
+	 * @param  nfc  True if the phone should use NFC to dismiss, and False
+	 *              otherwise.
+	 */
+	public void setUseNfc(boolean nfc)
+	{
+		this.mNfc = nfc;
+	}
+
+	/**
 	 * Set whether the alarm should vibrate the phone or not.
 	 *
 	 * @param  vibrate  True if the phone should vibrate when the alarm is
@@ -1026,6 +1083,7 @@ public class NacAlarm
 		output.writeInt(this.getMinute());
 		output.writeInt(NacCalendar.Days.daysToValue(this.getDays()));
 		output.writeInt(this.getRepeat() ? 1 : 0);
+		output.writeInt(this.getUseNfc() ? 1 : 0);
 		output.writeInt(this.getVibrate() ? 1 : 0);
 		output.writeInt(this.getSoundType());
 		output.writeString(this.getSoundPath());

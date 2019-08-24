@@ -70,9 +70,9 @@ public class NacSharedKeys
 	private final String mAutoDismiss;
 
 	/**
-	 * Require NFC to dismiss an alarm.
+	 * Use NFC to dismiss an alarm.
 	 */
-	private final String mRequireNfc;
+	private final String mUseNfc;
 
 	/**
 	 * Max snoozes.
@@ -182,7 +182,6 @@ public class NacSharedKeys
 		this.mDisplayTimeRemaining = res.getString(R.string.pref_display_time_remaining_key);
 		this.mAutoDismissMessage = res.getString(R.string.alarm_auto_dismiss_message);
 		this.mAutoDismiss = res.getString(R.string.pref_auto_dismiss_key);
-		this.mRequireNfc = res.getString(R.string.pref_dismiss_button_key);
 		this.mMaxSnooze = res.getString(R.string.pref_max_snooze_key);
 		this.mSnoozeDuration = res.getString(R.string.pref_snooze_duration_key);
 		this.mEasySnooze = res.getString(R.string.pref_easy_snooze_key);
@@ -190,8 +189,9 @@ public class NacSharedKeys
 		this.mMondayFirst = res.getString(R.string.pref_monday_first_key);
 		this.mSpeakToMe = res.getString(R.string.pref_speak_to_me_key);
 		this.mSpeakFrequency = res.getString(R.string.pref_speak_frequency_key);
-		this.mRepeat = res.getString(R.string.pref_repeat_key);
 		this.mDays = res.getString(R.string.pref_days_key);
+		this.mRepeat = res.getString(R.string.pref_repeat_key);
+		this.mUseNfc = res.getString(R.string.pref_use_nfc_key);
 		this.mVibrate = res.getString(R.string.pref_vibrate_key);
 		this.mSound = res.getString(R.string.pref_sound_key);
 		this.mName = res.getString(R.string.pref_name_key);
@@ -380,14 +380,6 @@ public class NacSharedKeys
 	}
 
 	/**
-	 * @return The NFC required key.
-	 */
-	public String getRequireNfc()
-	{
-		return this.mRequireNfc;
-	}
-
-	/**
 	 * @return The shuffle key.
 	 */
 	public String getShuffle()
@@ -449,6 +441,14 @@ public class NacSharedKeys
 	public String getTimeColor()
 	{
 		return this.mTimeColor;
+	}
+
+	/**
+	 * @return The use NFC key.
+	 */
+	public String getUseNfc()
+	{
+		return this.mUseNfc;
 	}
 
 	/**

@@ -49,9 +49,9 @@ public class NacSharedPreferences
 	public static final int DEFAULT_AUTO_DISMISS = 15;
 
 	/**
-	 * Default require NFC.
+	 * Default use NFC.
 	 */
-	public static final boolean DEFAULT_REQUIRE_NFC = true;
+	public static final boolean DEFAULT_USE_NFC = false;
 
 	/**
 	 * Default max snooze count.
@@ -466,24 +466,6 @@ public class NacSharedPreferences
 		String key = this.getKeys().getRepeat();
 
 		this.saveBoolean(key, repeat, commit);
-	}
-
-	/**
-	 * @see editRequireNfc
-	 */
-	public void editRequireNfc(boolean require)
-	{
-		this.editRequireNfc(require, false);
-	}
-
-	/**
-	 * Edit the require NFC preference value.
-	 */
-	public void editRequireNfc(boolean require, boolean commit)
-	{
-		String key = this.getKeys().getRequireNfc();
-
-		this.saveBoolean(key, require, commit);
 	}
 
 	/**
@@ -965,11 +947,11 @@ public class NacSharedPreferences
 	/**
 	 * @return Whether NFC is required or not.
 	 */
-	public boolean getRequireNfc()
+	public boolean getUseNfc()
 	{
-		String key = this.getKeys().getRequireNfc();
+		String key = this.getKeys().getUseNfc();
 
-		return this.getSharedPreferences().getBoolean(key, DEFAULT_REQUIRE_NFC);
+		return this.getSharedPreferences().getBoolean(key, DEFAULT_USE_NFC);
 	}
 
 	/**

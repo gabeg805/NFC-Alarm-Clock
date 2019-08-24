@@ -7,9 +7,15 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 
 /**
+ * On/off switch on an alarm card.
  */
 public class NacCardSwitch
 {
+
+	/**
+	 * Alarm.
+	 */
+	private NacAlarm mAlarm;
 
 	/**
 	 * On/off switch for an alarm.
@@ -20,23 +26,37 @@ public class NacCardSwitch
 	 */
 	public NacCardSwitch(View root)
 	{
+		this.mAlarm = null;
 		this.mSwitch = (Switch) root.findViewById(R.id.nac_switch);
+	}
+
+	/**
+	 * @return The alarm.
+	 */
+	private NacAlarm getAlarm()
+	{
+		return this.mAlarm;
 	}
 
 	/**
 	 * Initialize the switch.
 	 */
-	public void init(boolean value)
+	public void init(NacAlarm alarm)
 	{
-		this.set(value);
+		this.mAlarm = alarm;
+
+		this.set();
 	}
 
 	/**
 	 * Set the switch.
 	 */
-	public void set(boolean value)
+	public void set()
 	{
-		this.mSwitch.setChecked(value);
+		NacAlarm alarm = this.getAlarm();
+		boolean enabled = alarm.getEnabled();
+
+		this.mSwitch.setChecked(enabled);
 	}
 
 	/**

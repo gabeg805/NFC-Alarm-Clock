@@ -26,6 +26,7 @@
 			android:defaultValue="7"
 			/>
 
+		<!--
 		<com.nfcalarmclock.NacCheckboxPreference
 			android:key="@string/pref_dismiss_button_key"
 			android:title="@string/pref_dismiss_button_title"
@@ -33,6 +34,7 @@
 			android:summaryOff="@string/pref_dismiss_button_summary_disabled"
 			android:defaultValue="false"
 			/>
+		-->
 
 	</com.nfcalarmclock.NacPreferenceCategory>
 

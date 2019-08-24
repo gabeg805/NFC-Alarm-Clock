@@ -22,7 +22,8 @@
 	<string name="copy">COPY</string>
 	<string name="delete">DELETE</string>
 	<string name="card_repeat">Repeat</string>
-	<string name="card_vibrate">Vibrate</string>
+	<string name="card_nfc">Use NFC</string>
+	<string name="card_vibrate">  Vibrate</string>
 
 
 	<!-- Day of week -->
@@ -90,11 +91,12 @@
 	<string name="pref_auto_dismiss_title">Auto-Dismiss</string>
 
 
-	<!-- Require NFC -->
+	<!-- Require NFC
 	<string name="pref_dismiss_button_key">pref_dismiss_button</string>
 	<string name="pref_dismiss_button_title">Require NFC</string>
 	<string name="pref_dismiss_button_summary_enabled">NFC is required to dismiss the alarm.</string>
 	<string name="pref_dismiss_button_summary_disabled">Dismiss the alarm normally.</string>
+	-->
 
 
 	<!-- Max number of snoozes -->
@@ -131,6 +133,13 @@
 	<string name="pref_repeat_title">Repeat</string>
 	<string name="pref_repeat_summary_enabled">Repeat the alarm.</string>
 	<string name="pref_repeat_summary_disabled">Disable the alarm after it is run.</string>
+
+
+	<!-- Use NFC -->
+	<string name="pref_use_nfc_key">pref_use_nfc</string>
+	<string name="pref_use_nfc_title">Use NFC</string>
+	<string name="pref_use_nfc_summary_enabled">NFC is used to dismiss the alarm.</string>
+	<string name="pref_use_nfc_summary_disabled">Dismiss the alarm normally.</string>
 
 
 	<!-- Vibrate preference -->

@@ -13,6 +13,15 @@ public class NacCardSlideAnimation
 {
 
 	/**
+	 * Callback when the animation starts or ends.
+	 */
+	public interface OnAnimationListener
+	{
+		public void onAnimationEnd(Animation animation);
+		public void onAnimationStart(Animation animation);
+	}
+
+	/**
 	 * Collapse view.
 	 */
 	private View mCollapseView;
@@ -23,13 +32,20 @@ public class NacCardSlideAnimation
 	private View mExpandView;
 
 	/**
+	 * Animation start/end listener.
 	 */
-	public NacCardSlideAnimation(View mainView, View collapseView, View expandView)
+	private OnAnimationListener mAnimationListener;
+
+	/**
+	 */
+	public NacCardSlideAnimation(View mainView, View collapseView,
+		View expandView)
 	{
 		super(mainView);
 
 		this.mCollapseView = collapseView;
 		this.mExpandView = expandView;
+		this.mAnimationListener = null;
 
 		setAnimationListener(this);
 		setInterpolator(new AccelerateInterpolator());
@@ -54,6 +70,11 @@ public class NacCardSlideAnimation
 			this.mExpandView.setVisibility(View.GONE);
 			this.mCollapseView.setEnabled(true);
 			this.mExpandView.setEnabled(false);
+
+			if (this.mAnimationListener != null)
+			{
+				this.mAnimationListener.onAnimationEnd(animation);
+			}
 		}
 	}
 
@@ -83,7 +104,20 @@ public class NacCardSlideAnimation
 			this.mExpandView.setVisibility(View.VISIBLE);
 			this.mCollapseView.setEnabled(false);
 			this.mExpandView.setEnabled(true);
+
+			if (this.mAnimationListener != null)
+			{
+				this.mAnimationListener.onAnimationStart(animation);
+			}
 		}
+	}
+
+	/**
+	 * Set the animation start/end listener.
+	 */
+	public void setOnAnimationListener(OnAnimationListener listener)
+	{
+		this.mAnimationListener = listener;
 	}
 
 }

@@ -67,43 +67,50 @@
 
 
 	<!-- Repeat -->
-	<dimen name="pt_repeat">12dp</dimen>
-	<dimen name="pb_repeat">12dp</dimen>
+	<dimen name="pt_repeat">22dp</dimen>
+	<dimen name="pb_repeat">16dp</dimen>
 	<dimen name="pl_repeat">10dp</dimen>
 	<dimen name="pr_repeat">14dp</dimen>
 
 
+	<!-- NFC -->
+	<dimen name="pt_nfc">22dp</dimen>
+	<dimen name="pb_nfc">16dp</dimen>
+	<dimen name="pl_nfc">14dp</dimen>
+	<dimen name="pr_nfc">12dp</dimen>
+
+
 	<!-- Days -->
-	<dimen name="pt_days">8dp</dimen>
-	<dimen name="pb_days">8dp</dimen>
+	<dimen name="pt_days">12dp</dimen>
+	<dimen name="pb_days">12dp</dimen>
 	<dimen name="isz_day">32dp</dimen>
 	<dimen name="tsz_days">14sp</dimen>
 	<dimen name="tsz_summary_days">12sp</dimen>
 
 
 	<!-- Sound -->
-	<dimen name="pt_sound">12dp</dimen>
-	<dimen name="pb_sound">10dp</dimen>
+	<dimen name="pt_sound">16dp</dimen>
+	<dimen name="pb_sound">16dp</dimen>
 	<dimen name="pl_sound">4dp</dimen>
 
 
+	<!-- Vibrate -->
+	<dimen name="pt_vibrate">16dp</dimen>
+	<dimen name="pb_vibrate">16dp</dimen>
+	<dimen name="pl_vibrate">10dp</dimen>
+	<dimen name="pr_vibrate">25dp</dimen>
+
+
 	<!-- Name -->
-	<dimen name="pt_name">8dp</dimen>
-	<dimen name="pb_name">8dp</dimen>
+	<dimen name="pt_name">12dp</dimen>
+	<dimen name="pb_name">12dp</dimen>
 	<dimen name="pl_name">4dp</dimen>
 	<dimen name="tsz_summary_name">12sp</dimen>
 
 
-	<!-- Vibrate -->
-	<dimen name="pt_vibrate">12dp</dimen>
-	<dimen name="pb_vibrate">12dp</dimen>
-	<dimen name="pl_vibrate">10dp</dimen>
-	<dimen name="pr_vibrate">14dp</dimen>
-
-
 	<!-- Delete -->
-	<dimen name="pt_delete">16dp</dimen>
-	<dimen name="pb_delete">16dp</dimen>
+	<dimen name="pt_delete">20dp</dimen>
+	<dimen name="pb_delete">20dp</dimen>
 	<dimen name="pl_delete">4dp</dimen>
 	<dimen name="pr_delete">48dp</dimen>
 
