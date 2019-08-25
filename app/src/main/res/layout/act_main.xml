@@ -12,7 +12,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:layout_marginBottom="@dimen/mb_fab"
-		android:paddingBottom="@dimen/sz_fab"
+		android:paddingBottom="@dimen/pb_for_fab"
 		android:clipToPadding="false"
 		android:scrollbars="vertical"
 		android:layoutAnimation="@anim/layout_animation_fall_down"

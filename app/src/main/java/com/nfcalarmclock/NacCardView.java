@@ -321,7 +321,12 @@ public class NacCardView
 	 */
 	private int getScreenHeight()
 	{
-		return this.mRecyclerView.getHeight();
+		Context context = this.getContext();
+		int fabHeight = (int) context.getResources()
+			.getDimension(R.dimen.pb_for_fab);
+		int recyclerHeight = this.mRecyclerView.getHeight();
+
+		return recyclerHeight - fabHeight;
 	}
 
 	/**
@@ -390,10 +395,10 @@ public class NacCardView
 		{
 			View view = layoutManager.findViewByPosition(position);
 			int y = (view != null) ? view.getTop() : -1;
-			int cardHeight = this.getHeight();
+			int expandHeight = this.getExpandHeight();
 			int screenHeight = this.getScreenHeight();
 
-			return ((y < 0) || (cardHeight + y) > screenHeight) ? false
+			return ((y < 0) || (expandHeight + y) > screenHeight) ? false
 				: true;
 		}
 		else
@@ -499,8 +504,6 @@ public class NacCardView
 	 */
 	public void scroll(final int position)
 	{
-		int delay = 200;
-
 		if (this.isCompletelyVisible(position)
 			|| (position == RecyclerView.NO_POSITION))
 		{
@@ -512,24 +515,9 @@ public class NacCardView
 			@Override
 			public void run()
 			{
-				LinearLayoutManager layoutManager = (LinearLayoutManager)
-					mRecyclerView.getLayoutManager();
-
-				if (layoutManager == null)
-				{
-					return;
-				}
-
-				Context context = getContext();
-				int y = layoutManager.findViewByPosition(position).getTop();
-				int snap = (y >= 0) ? LinearSmoothScroller.SNAP_TO_END
-					: LinearSmoothScroller.SNAP_TO_START;
-				NacSmoothScroller scroller = new NacSmoothScroller(context,
-					position, snap, 100);
-
-				layoutManager.startSmoothScroll(scroller);
+				mRecyclerView.smoothScrollToPosition(position);
 			}
-		}, delay);
+		}, EXPAND_DURATION+50);
 	}
 
 	/**
@@ -592,12 +580,14 @@ public class NacCardView
 
 		if (repeat)
 		{
-			animation.setHeights(this.mExpandHeight, this.mExpandHeight+daysHeight);
+			animation.setHeights(this.mExpandHeight,
+				this.mExpandHeight+daysHeight);
 			this.mExpandHeight += daysHeight;
 		}
 		else
 		{
-			animation.setHeights(this.mExpandHeight, this.mExpandHeight-daysHeight);
+			animation.setHeights(this.mExpandHeight,
+				this.mExpandHeight-daysHeight);
 			this.mExpandHeight -= daysHeight;
 		}
 

@@ -10,16 +10,18 @@
 	<!-- Alarm Activity -->
 	<dimen name="m_act_alarm_icon">28dp</dimen>
 	<dimen name="m_act_alarm_buttons">28dp</dimen>
-	<dimen name="mb_act_alarm_info">15dp</dimen>
+	<dimen name="mb_act_alarm_info">20dp</dimen>
+	<dimen name="mb_act_alarm_info_name">10dp</dimen>
 	<dimen name="isz_act_alarm_icon">64dp</dimen>
 	<dimen name="tsz_act_alarm_title">26sp</dimen>
-	<dimen name="tsz_act_alarm_info">18sp</dimen>
+	<dimen name="tsz_act_alarm_info_name">16sp</dimen>
+	<dimen name="tsz_act_alarm_info_time">14sp</dimen>
 	<dimen name="tsz_act_alarm_instructions">14sp</dimen>
 
 
 	<!-- Floating button -->
 	<dimen name="isz_fab">54dp</dimen>
-	<dimen name="sz_fab">70dp</dimen>
+	<dimen name="pb_for_fab">70dp</dimen>
 	<dimen name="mb_fab">16dp</dimen>
 
 

@@ -12,23 +12,15 @@ public class NacSmoothScroller
 {
 
 	/**
-	 * Scrolling snap preference.
-	 */
-	private final int mSnap;
-
-	/**
 	 * Speed to scroll in millimeters per pixel.
 	 */
-	private final float mSpeed;
+	private static final float SPEED = 250f;
 
 	/**
 	 */
-	public NacSmoothScroller(Context context, int position, int snap, int speed)
+	public NacSmoothScroller(Context context, int position)
 	{
 		super(context);
-
-		this.mSnap = snap;
-		this.mSpeed = speed;
 
 		setTargetPosition(position);
 	}
@@ -38,15 +30,15 @@ public class NacSmoothScroller
 	@Override
 	protected float calculateSpeedPerPixel(DisplayMetrics dm)
 	{
-		return mSpeed / dm.densityDpi;
+		return SPEED / dm.densityDpi;
 	}
 
 	/**
 	 */
-	@Override
-	protected int getVerticalSnapPreference()
-	{
-		return mSnap;
-	}
+	//@Override
+	//protected int getVerticalSnapPreference()
+	//{
+	//	return mSnap;
+	//}
 
 }

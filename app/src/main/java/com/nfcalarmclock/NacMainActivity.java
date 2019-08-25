@@ -100,6 +100,7 @@ public class NacMainActivity
 			R.drawable.card_divider);
 		DividerItemDecoration divider = new DividerItemDecoration(this,
 			LinearLayoutManager.VERTICAL);
+		NacLayoutManager layoutManager = new NacLayoutManager(this);
 		ColorStateList color = ColorStateList.valueOf(shared.getThemeColor());
 
 		this.mSharedPreferences = shared;
@@ -114,7 +115,7 @@ public class NacMainActivity
 		this.mFloatingButton.setOnClickListener(this);
 		this.mRecyclerView.addItemDecoration(divider);
 		this.mRecyclerView.setAdapter(this.mAdapter);
-		this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+		this.mRecyclerView.setLayoutManager(layoutManager);
 	}
 
 	/**

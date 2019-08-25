@@ -75,12 +75,26 @@
 		android:layout_marginBottom="@dimen/mb_act_alarm_info">
 
 		<TextView
-			android:id="@+id/nametime"
+			android:id="@+id/name"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/mb_act_alarm_info_name"
+			android:layout_marginStart="@dimen/mb_act_alarm_info"
+			android:layout_marginEnd="@dimen/mb_act_alarm_info"
 			android:layout_centerHorizontal="true"
+			android:maxLines="1"
+			android:ellipsize="end"
 			android:textColor="@color/white"
-			android:textSize="@dimen/tsz_act_alarm_info"
+			android:textSize="@dimen/tsz_act_alarm_info_name"
+			/>
+
+		<TextView
+			android:id="@+id/time"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/name"
+			android:layout_centerHorizontal="true"
+			android:textSize="@dimen/tsz_act_alarm_info_time"
 			/>
 
 	</RelativeLayout>

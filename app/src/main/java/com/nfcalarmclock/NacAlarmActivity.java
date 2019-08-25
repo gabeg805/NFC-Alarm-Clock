@@ -265,39 +265,15 @@ public class NacAlarmActivity
 	 */
 	public void setupAlarmInfo()
 	{
-		NacSharedPreferences shared = new NacSharedPreferences(this);
 		NacAlarm alarm = this.getAlarm();
-		TextView nametime = (TextView) findViewById(R.id.nametime);
+		TextView name = (TextView) findViewById(R.id.name);
+		TextView time = (TextView) findViewById(R.id.time);
 		String alarmName = alarm.getName();
 		String alarmTime = alarm.getTime(this);
 		String alarmMeridian = alarm.getMeridian(this);
 
-		if (alarmName.isEmpty())
-		{
-			return;
-		}
-
-		int nameColor = shared.getNameColor();
-		int timeColor = shared.getTimeColor();
-		int meridianColor = shared.getMeridianColor(alarmMeridian);
-		Spannable nameColorized = new SpannableString(alarmName);
-		Spannable timeColorized = new SpannableString(alarmTime);
-		Spannable meridianColorized = new SpannableString(alarmMeridian);
-
-		nameColorized.setSpan(new ForegroundColorSpan(nameColor), 0,
-			alarmName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		timeColorized.setSpan(new ForegroundColorSpan(timeColor), 0,
-			alarmTime.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		meridianColorized.setSpan(new ForegroundColorSpan(meridianColor), 0,
-			alarmMeridian.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-		nametime.setText(nameColorized);
-		nametime.append("  @  ");
-		nametime.append(timeColorized);
-		nametime.append(" ");
-		nametime.append(meridianColorized);
-
-		// Ellipsize name if it's too long
+		name.setText(alarmName);
+		time.setText(alarmTime+" "+alarmMeridian);
 	}
 
 	/**
