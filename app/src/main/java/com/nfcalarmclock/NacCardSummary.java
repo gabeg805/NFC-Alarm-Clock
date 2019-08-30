@@ -33,49 +33,19 @@ public class NacCardSummary
 	private TextView mName;
 
 	/**
-	 * Card padding.
+	 * Card measurement.
 	 */
-	private int mCardPadding;
-
-	///**
-	// * Summary days.
-	// */
-	//private class Days
-	//{
-	//}
-
-	///**
-	// * Summary name.
-	// */
-	//private class Days
-	//{
-	//}
+	private NacCardMeasure mMeasure;
 
 	/**
 	 */
-	public NacCardSummary(Context context, View root)
+	public NacCardSummary(Context context, View root, NacCardMeasure measure)
 	{
 		this.mContext = context;
 		this.mAlarm = null;
 		this.mDays = (TextView) root.findViewById(R.id.nac_summary_days);
 		this.mName = (TextView) root.findViewById(R.id.nac_summary_name);
-
-		RelativeLayout header = root.findViewById(R.id.nac_header);
-		this.mCardPadding = header.getPaddingStart() + header.getPaddingEnd();
-	}
-
-	/**
-	 * Ellipsize the name.
-	 */
-	private void ellipsize()
-	{
-		RelativeLayout.LayoutParams params = this.getNameLayoutParams();
-		int maxWidth = this.getNameMaxWidth();
-		int width = NacUtility.getWidth(this.mName);
-
-		params.width = (width > maxWidth) ? maxWidth : width;
-
-		this.mName.setLayoutParams(params);
+		this.mMeasure = measure;
 	}
 
 	/**
@@ -91,7 +61,7 @@ public class NacCardSummary
 	 */
 	private int getCardPadding()
 	{
-		return this.mCardPadding;
+		return this.mMeasure.getCardPadding();
 	}
 
 	/**
@@ -143,7 +113,7 @@ public class NacCardSummary
 	 */
 	private int getScreenWidth()
 	{
-		return this.getResources().getDisplayMetrics().widthPixels;
+		return this.mMeasure.getScreenWidth();
 	}
 
 	/**
@@ -187,6 +157,7 @@ public class NacCardSummary
 			shared.getMondayFirst());
 
 		this.mDays.setText(string);
+		this.mDays.requestLayout();
 	}
 
 	/**
@@ -209,7 +180,6 @@ public class NacCardSummary
 		params.setMarginStart(margin);
 		this.mName.setText(text);
 		this.mName.setLayoutParams(params);
-		this.ellipsize();
 	}
 
 }

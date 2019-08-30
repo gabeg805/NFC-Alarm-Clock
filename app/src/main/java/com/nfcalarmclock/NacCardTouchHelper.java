@@ -201,6 +201,11 @@ public class NacCardTouchHelper
 		{
 			this.mViewHolder = vh;
 
+			if (!this.isCollapsed())
+			{
+				return 0;
+			}
+
 			return makeMovementFlags(ItemTouchHelper.UP|ItemTouchHelper.DOWN,
 				ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT);
 		}
@@ -304,14 +309,14 @@ public class NacCardTouchHelper
 		 * @param  action  The action that was done on the card.
 		 * @param  active  Whether the card is being used by the user or not.
 		 */
-		@Override
-		public void onChildDrawOver(Canvas c, RecyclerView rv, ViewHolder vh,
-			float dx, float dy, int action, boolean active)
-		{
-			final View view = this.getCardView(action);
+		//@Override
+		//public void onChildDrawOver(Canvas c, RecyclerView rv, ViewHolder vh,
+		//	float dx, float dy, int action, boolean active)
+		//{
+		//	final View view = this.getCardView(action);
 
-			getDefaultUIUtil().onDrawOver(c, rv, view, dx, dy, action, active);
-		}
+		//	getDefaultUIUtil().onDrawOver(c, rv, view, dx, dy, action, active);
+		//}
 
 		/**
 		 * Disallow movement of cards.
@@ -340,15 +345,15 @@ public class NacCardTouchHelper
 		{
 			if (vh != null)
 			{
+				if (!this.isCollapsed())
+				{
+					return;
+				}
+
 				final View fg = this.getCardView(action);
 
 				if (action == ItemTouchHelper.ACTION_STATE_DRAG)
 				{
-					if (!this.isCollapsed())
-					{
-						return;
-					}
-
 					fg.setAlpha(0.75f);
 				}
 

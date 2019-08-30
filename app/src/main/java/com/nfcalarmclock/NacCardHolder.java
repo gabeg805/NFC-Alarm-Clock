@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TimePicker;
 
 /**
@@ -19,8 +20,22 @@ public class NacCardHolder
 		CompoundButton.OnCheckedChangeListener,
 		TimePickerDialog.OnTimeSetListener,
 		NacDialog.OnDismissListener,
-		NacDayOfWeek.OnClickListener
+		NacDayOfWeek.OnClickListener,
+		SeekBar.OnSeekBarChangeListener
 {
+
+	/**
+	 * States.
+	 */
+	public enum State
+	{
+		NONE,
+		CREATED,
+		ADDED,
+		COPIED,
+		DELETED,
+		MOVED
+	}
 
 	/**
 	 * Shared preferences.
@@ -68,14 +83,14 @@ public class NacCardHolder
 	private NacCardNfc mUseNfc;
 
 	/**
-	 * Vibrate checkbox.
-	 */
-	private NacCardVibrate mVibrate;
-
-	/**
 	 * Sound.
 	 */
 	 private NacCardSound mSound;
+
+	/**
+	 * Vibrate checkbox.
+	 */
+	private NacCardVibrate mVibrate;
 
 	/**
 	 * Name.
@@ -89,7 +104,7 @@ public class NacCardHolder
 
 	/**
 	 */
-	public NacCardHolder(View root)
+	public NacCardHolder(View root, NacCardMeasure measure)
 	{
 		super(root);
 
@@ -97,13 +112,13 @@ public class NacCardHolder
 		this.mSharedPreferences = new NacSharedPreferences(context);
 		this.mAlarm = null;
 		this.mRoot = root;
-		this.mCard = new NacCardView(context, root);
+		this.mCard = new NacCardView(context, root, measure);
 		this.mSwitch = new NacCardSwitch(root);
 		this.mTime = new NacCardTime(context, root);
-		this.mSummary = new NacCardSummary(context, root);
-		this.mDays = new NacCardDays(root);
+		this.mSummary = new NacCardSummary(context, root, measure);
+		this.mDays = new NacCardDays(root, measure);
 		this.mUseNfc = new NacCardNfc(root);
-		this.mSound = new NacCardSound(context, root);
+		this.mSound = new NacCardSound(context, root, measure);
 		this.mVibrate = new NacCardVibrate(root);
 		this.mName = new NacCardName(context, root);
 		this.mDelete = new NacCardDelete(root);
@@ -181,7 +196,8 @@ public class NacCardHolder
 	 * @param  wasAdded  Indicator for whether or not the card should be
 	 *					 focused.
 	 */
-	public void init(NacAlarm alarm, boolean wasAdded)
+	//public void init(NacAlarm alarm, boolean wasAdded)
+	public void init(NacAlarm alarm, NacCardHolder.State state)
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		this.mAlarm = alarm;
@@ -199,10 +215,10 @@ public class NacCardHolder
 		this.setColors();
 		this.setListeners(this);
 
-		if (wasAdded)
+		if (state == NacCardHolder.State.ADDED)
 		{
 			this.mTime.showDialog(this);
-			//this.expand();
+			this.mCard.expand(getAdapterPosition());
 		}
 	}
 
@@ -355,6 +371,29 @@ public class NacCardHolder
 		return true;
 	}
 
+	/**
+	 */
+	@Override
+	public void onProgressChanged(SeekBar seekBar, int progress,
+		boolean fromUser)
+	{
+		NacUtility.printf("onProgressChanged! %d", progress);
+	}
+
+	@Override
+	public void onStartTrackingTouch(SeekBar seekBar)
+	{
+		NacUtility.printf("onStartTrackingTouch!");
+	}
+
+	@Override
+	public void onStopTrackingTouch(SeekBar seekBar)
+	{
+		NacUtility.printf("onStopTrackingTouch!");
+	}
+
+	/**
+	 */
 	@Override
 	public void onTimeSet(TimePicker tp, int hr, int min)
 	{
@@ -394,7 +433,7 @@ public class NacCardHolder
 		this.mSwitch.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener)listener);
 		this.mDays.setListeners(listener);
 		this.mUseNfc.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener)listener);
-		this.mSound.setOnClickListener((View.OnClickListener)listener);
+		this.mSound.setListener(listener);
 		this.mVibrate.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener)listener);
 		this.mName.setOnClickListener((View.OnClickListener)listener);
 		this.mDelete.setOnClickListener((View.OnClickListener)listener);

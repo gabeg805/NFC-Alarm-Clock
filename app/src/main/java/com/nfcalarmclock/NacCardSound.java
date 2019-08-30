@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 
 /**
  * Sound for an alarm card.
@@ -30,26 +33,34 @@ public class NacCardSound
 	 private NacImageTextButton mSound;
 
 	/**
+	 * Volume.
+	 */
+	private SeekBar mVolume;
+
+	/**
 	 * Card padding.
 	 */
-	private int mCardPadding;
+	//private int mCardPadding;
+	private NacCardMeasure mMeasure;
 
 	/**
 	 * Vibrate width.
 	 */
-	private int mVibrateWidth;
+	//private int mVibrateWidth;
 
 	/**
 	 */
-	public NacCardSound(Context context, View root)
+	public NacCardSound(Context context, View root, NacCardMeasure measure)
 	{
 		this.mContext = context;
 		this.mSound = (NacImageTextButton) root.findViewById(R.id.nac_sound);
+		this.mVolume = (SeekBar) root.findViewById(R.id.nac_volume_slider);
+		this.mMeasure = measure;
 
-		RelativeLayout header = root.findViewById(R.id.nac_header);
-		CheckBox vibrate = (CheckBox) root.findViewById(R.id.nac_vibrate);
-		this.mCardPadding = header.getPaddingStart() + header.getPaddingEnd();
-		this.mVibrateWidth = NacUtility.getWidth(vibrate);
+		//RelativeLayout header = root.findViewById(R.id.nac_header);
+		//CheckBox vibrate = (CheckBox) root.findViewById(R.id.nac_vibrate);
+		//this.mCardPadding = header.getPaddingStart() + header.getPaddingEnd();
+		//this.mVibrateWidth = NacUtility.getWidth(vibrate);
 	}
 
 	/**
@@ -77,7 +88,8 @@ public class NacCardSound
 	 */
 	private int getCardPadding()
 	{
-		return this.mCardPadding;
+		return this.mMeasure.getCardPadding();
+		//return this.mCardPadding;
 	}
 
 	/**
@@ -108,7 +120,7 @@ public class NacCardSound
 	{
 		int screenWidth = this.getScreenWidth();
 		int padding = this.getCardPadding();
-		int vibrate = this.mVibrateWidth;
+		int vibrate = this.getVibrateWidth();
 		int textsize = this.mSound.getTextSize();
 
 		return screenWidth - vibrate - padding - textsize;
@@ -117,17 +129,26 @@ public class NacCardSound
 	/**
 	 * @return The context resources.
 	 */
-	public Resources getResources()
-	{
-		return this.getContext().getResources();
-	}
+	//public Resources getResources()
+	//{
+	//	return this.getContext().getResources();
+	//}
 
 	/**
 	 * @return The screen width.
 	 */
 	private int getScreenWidth()
 	{
-		return this.getResources().getDisplayMetrics().widthPixels;
+		return this.mMeasure.getScreenWidth();
+		//return this.getResources().getDisplayMetrics().widthPixels;
+	}
+
+	/**
+	 * @return The vibrate width.
+	 */
+	private int getVibrateWidth()
+	{
+		return this.mMeasure.getVibrateWidth();
 	}
 
 	/**
@@ -159,11 +180,13 @@ public class NacCardSound
 	}
 
 	/**
-	 * Set the on click listener.
+	 * Set the listeners.
 	 */
-	public void setOnClickListener(View.OnClickListener listener)
+	public void setListener(Object listener)
 	{
 		this.mSound.setOnClickListener((View.OnClickListener)listener);
+		this.mVolume.setOnSeekBarChangeListener((SeekBar.OnSeekBarChangeListener)listener);
+		//this.mSound.setOnClickListener((View.OnClickListener)listener);
 	}
 
 	/**

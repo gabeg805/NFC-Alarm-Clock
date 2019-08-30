@@ -33,12 +33,18 @@ public class NacCardDays
 	private NacSlideAnimation mDaysAnimation;
 
 	/**
+	 * Card measurement.
 	 */
-	public NacCardDays(View root)
+	private NacCardMeasure mMeasure;
+
+	/**
+	 */
+	public NacCardDays(View root, NacCardMeasure measure)
 	{
 		this.mDayButtons = (NacDayOfWeek) root.findViewById(R.id.nac_days);
 		this.mRepeat = (CheckBox) root.findViewById(R.id.nac_repeat);
 		this.mDaysAnimation = new NacSlideAnimation(this.mDayButtons);
+		this.mMeasure = measure;
 	}
 
 	/**
@@ -62,9 +68,10 @@ public class NacCardDays
 	 */
 	public int getHeight()
 	{
-		NacDayOfWeek dayButtons = this.getDayButtons();
+		return this.mMeasure.getDayButtonsHeight();
+		//NacDayOfWeek dayButtons = this.getDayButtons();
 
-		return NacUtility.getHeight(dayButtons);
+		//return NacUtility.getHeight(dayButtons);
 	}
 
 	/**

@@ -31,6 +31,7 @@
 	<dimen name="pb_switch">14dp</dimen>
 	<dimen name="pl_switch">12dp</dimen>
 	<dimen name="pr_switch">0dp</dimen>
+	<dimen name="mr_summary">22dp</dimen>
 
 
 	<!-- NacImageTextButton -->
@@ -91,6 +92,7 @@
 
 
 	<!-- Sound -->
+	<dimen name="isz_sound">24dp</dimen>
 	<dimen name="pt_sound">16dp</dimen>
 	<dimen name="pb_sound">16dp</dimen>
 	<dimen name="pl_sound">4dp</dimen>
@@ -103,10 +105,20 @@
 	<dimen name="pr_vibrate">25dp</dimen>
 
 
+	<!-- Volume -->
+	<dimen name="isz_volume_settings">18dp</dimen>
+	<dimen name="pt_volume">16dp</dimen>
+	<dimen name="pb_volume">16dp</dimen>
+	<dimen name="pl_volume">6dp</dimen>
+	<dimen name="pr_volume">4dp</dimen>
+	<dimen name="pl_volume_slider">12dp</dimen>
+	<dimen name="pr_volume_slider">12dp</dimen>
+
+
 	<!-- Name -->
 	<dimen name="pt_name">12dp</dimen>
 	<dimen name="pb_name">12dp</dimen>
-	<dimen name="pl_name">4dp</dimen>
+	<dimen name="pl_name">6dp</dimen>
 	<dimen name="tsz_summary_name">12sp</dimen>
 
 
@@ -118,8 +130,8 @@
 
 
 	<!-- Expand/collapse buttons -->
-	<dimen name="mr_expand">10dp</dimen>
-	<dimen name="mr_collapse">10dp</dimen>
+	<dimen name="mr_expand">16dp</dimen>
+	<dimen name="mr_collapse">16dp</dimen>
 	<dimen name="isz_expand">20dp</dimen>
 	<dimen name="isz_collapse">20dp</dimen>
 
