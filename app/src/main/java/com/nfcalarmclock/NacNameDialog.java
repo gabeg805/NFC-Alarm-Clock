@@ -96,8 +96,7 @@ public class NacNameDialog
 	{
 		Context context = root.getContext();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
-		Object data = this.getData();
-		String name = (data != null) ? (String) data : "";
+		String name = this.getDataString();
 		this.mEditText = (EditText) root.findViewById(R.id.alarm_name);
 
 		this.mEditText.setText(name);

@@ -25,19 +25,6 @@ public class NacCardHolder
 {
 
 	/**
-	 * States.
-	 */
-	public enum State
-	{
-		NONE,
-		CREATED,
-		ADDED,
-		COPIED,
-		DELETED,
-		MOVED
-	}
-
-	/**
 	 * Shared preferences.
 	 */
 	private NacSharedPreferences mSharedPreferences;
@@ -196,8 +183,7 @@ public class NacCardHolder
 	 * @param  wasAdded  Indicator for whether or not the card should be
 	 *					 focused.
 	 */
-	//public void init(NacAlarm alarm, boolean wasAdded)
-	public void init(NacAlarm alarm, NacCardHolder.State state)
+	public void init(NacAlarm alarm)
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		this.mAlarm = alarm;
@@ -214,12 +200,17 @@ public class NacCardHolder
 		this.mName.init(alarm);
 		this.setColors();
 		this.setListeners(this);
+	}
 
-		if (state == NacCardHolder.State.ADDED)
-		{
-			this.mTime.showDialog(this);
-			this.mCard.expand(getAdapterPosition());
-		}
+	/**
+	 * Interact with an alarm.
+	 *
+	 * Should be called when an alarm has been newly added.
+	 */
+	public void interact()
+	{
+		this.mTime.showDialog(this);
+		this.mCard.expand(getAdapterPosition());
 	}
 
 	/**
@@ -236,14 +227,6 @@ public class NacCardHolder
 	public boolean isExpanded()
 	{
 		return this.mCard.isExpanded();
-	}
-
-	/**
-	 * Measure the alarm card.
-	 */
-	public void measure()
-	{
-		this.mCard.measure();
 	}
 
 	/**
@@ -343,6 +326,10 @@ public class NacCardHolder
 		{
 			this.mSound.startActivity();
 		}
+		else if (id == R.id.nac_volume_settings)
+		{
+			this.mSound.showAudioSourceDialog(this);
+		}
 		else if (id == R.id.nac_name)
 		{
 			this.mName.showDialog(this);
@@ -359,14 +346,28 @@ public class NacCardHolder
 	@Override
 	public boolean onDismissDialog(NacDialog dialog)
 	{
-		Object data = dialog.getData();
-		String name = (data != null) ? (String) data : "";
 		NacAlarm alarm = this.getAlarm();
+		int id = (int) dialog.getId();
 
-		alarm.setName(name);
-		alarm.changed();
-		this.mName.set();
-		this.mSummary.setName();
+		if (id == R.layout.dlg_alarm_name)
+		{
+			String name = dialog.getDataString();
+
+			alarm.setName(name);
+			alarm.changed();
+			this.mName.set();
+			this.mSummary.setName();
+		}
+		else if (id == R.layout.dlg_alarm_audio_source)
+		{
+			String source = dialog.getDataString();
+
+			alarm.setAudioSource(source);
+			alarm.changed();
+		}
+		else
+		{
+		}
 
 		return true;
 	}
@@ -377,19 +378,22 @@ public class NacCardHolder
 	public void onProgressChanged(SeekBar seekBar, int progress,
 		boolean fromUser)
 	{
-		NacUtility.printf("onProgressChanged! %d", progress);
+		NacAlarm alarm = this.getAlarm();
+
+		alarm.setVolume(progress);
 	}
 
 	@Override
 	public void onStartTrackingTouch(SeekBar seekBar)
 	{
-		NacUtility.printf("onStartTrackingTouch!");
 	}
 
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar)
 	{
-		NacUtility.printf("onStopTrackingTouch!");
+		NacAlarm alarm = this.getAlarm();
+
+		alarm.changed();
 	}
 
 	/**

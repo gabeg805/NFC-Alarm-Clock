@@ -35,6 +35,11 @@ public class NacSharedKeys
 	private final String mMiscellaneousScreen;
 
 	/**
+	 * About screen.
+	 */
+	private final String mAboutScreen;
+
+	/**
 	 * General screen title.
 	 */
 	private final String mGeneralScreenTitle;
@@ -55,6 +60,11 @@ public class NacSharedKeys
 	private final String mMiscellaneousTitle;
 
 	/**
+	 * About screen title.
+	 */
+	private final String mAboutScreenTitle;
+
+	/**
 	 * Display time remaining.
 	 */
 	private final String mDisplayTimeRemaining;
@@ -68,11 +78,6 @@ public class NacSharedKeys
 	 * Auto dismiss.
 	 */
 	private final String mAutoDismiss;
-
-	/**
-	 * Use NFC to dismiss an alarm.
-	 */
-	private final String mUseNfc;
 
 	/**
 	 * Max snoozes.
@@ -115,6 +120,11 @@ public class NacSharedKeys
 	private final String mRepeat;
 
 	/**
+	 * Use NFC to dismiss an alarm.
+	 */
+	private final String mUseNfc;
+
+	/**
 	 * Day of week.
 	 */
 	private final String mDays;
@@ -123,6 +133,16 @@ public class NacSharedKeys
 	 * Vibrate.
 	 */
 	private final String mVibrate;
+
+	/**
+	 * Sound level.
+	 */
+	private final String mVolume;
+
+	/**
+	 * Audio source.
+	 */
+	private final String mAudioSource;
 
 	/**
 	 * Sound path.
@@ -175,10 +195,12 @@ public class NacSharedKeys
 		this.mDefaultAlarmScreen = res.getString(R.string.pref_screen_default_alarm_key);
 		this.mColorScreen = res.getString(R.string.pref_screen_color_key);
 		this.mMiscellaneousScreen = res.getString(R.string.pref_screen_misc_key);
+		this.mAboutScreen = res.getString(R.string.pref_screen_about_key);
 		this.mGeneralScreenTitle = res.getString(R.string.pref_screen_general_title);
 		this.mDefaultAlarmScreenTitle = res.getString(R.string.pref_screen_default_alarm_title);
 		this.mColorScreenTitle = res.getString(R.string.pref_screen_color_title);
 		this.mMiscellaneousTitle = res.getString(R.string.pref_screen_misc_title);
+		this.mAboutScreenTitle = res.getString(R.string.pref_screen_about_title);
 		this.mDisplayTimeRemaining = res.getString(R.string.pref_display_time_remaining_key);
 		this.mAutoDismissMessage = res.getString(R.string.alarm_auto_dismiss_message);
 		this.mAutoDismiss = res.getString(R.string.pref_auto_dismiss_key);
@@ -189,10 +211,12 @@ public class NacSharedKeys
 		this.mMondayFirst = res.getString(R.string.pref_monday_first_key);
 		this.mSpeakToMe = res.getString(R.string.pref_speak_to_me_key);
 		this.mSpeakFrequency = res.getString(R.string.pref_speak_frequency_key);
-		this.mDays = res.getString(R.string.pref_days_key);
 		this.mRepeat = res.getString(R.string.pref_repeat_key);
 		this.mUseNfc = res.getString(R.string.pref_use_nfc_key);
+		this.mDays = res.getString(R.string.pref_days_key);
 		this.mVibrate = res.getString(R.string.pref_vibrate_key);
+		this.mVolume = res.getString(R.string.pref_volume_key);
+		this.mAudioSource = res.getString(R.string.pref_audio_source_key);
 		this.mSound = res.getString(R.string.pref_sound_key);
 		this.mName = res.getString(R.string.pref_name_key);
 		this.mThemeColor = res.getString(R.string.pref_theme_color_key);
@@ -204,11 +228,35 @@ public class NacSharedKeys
 	}
 
 	/**
+	 * @return The about screen.
+	 */
+	public String getAboutScreen()
+	{
+		return this.mAboutScreen;
+	}
+
+	/**
+	 * @return The about screen title.
+	 */
+	public String getAboutScreenTitle()
+	{
+		return this.mAboutScreenTitle;
+	}
+
+	/**
 	 * @return The AM color key.
 	 */
 	public String getAmColor()
 	{
 		return this.mAmColor;
+	}
+
+	/**
+	 * @return The audio source key.
+	 */
+	public String getAudioSource()
+	{
+		return this.mAudioSource;
 	}
 
 	/**
@@ -457,6 +505,14 @@ public class NacSharedKeys
 	public String getVibrate()
 	{
 		return this.mVibrate;
+	}
+
+	/**
+	 * @return The volume key.
+	 */
+	public String getVolume()
+	{
+		return this.mVolume;
 	}
 
 }

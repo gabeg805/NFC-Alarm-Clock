@@ -132,6 +132,16 @@ public class NacSharedPreferences
 	public static final boolean DEFAULT_VIBRATE = true;
 
 	/**
+	 * Default volume.
+	 */
+	public static final int DEFAULT_VOLUME = 75;
+
+	/**
+	 * Default audio source.
+	 */
+	public static final String DEFAULT_AUDIO_SOURCE = "Music";
+
+	/**
 	 * Default sound path.
 	 */
 	public static final String DEFAULT_SOUND = "";
@@ -621,6 +631,17 @@ public class NacSharedPreferences
 		String key = this.getKeys().getAmColor();
 
 		return this.getSharedPreferences().getInt(key, DEFAULT_AM_COLOR);
+	}
+
+	/**
+	 * @return The audio source.
+	 */
+	public String getAudioSource()
+	{
+		String key = this.getKeys().getAudioSource();
+
+		return this.getSharedPreferences().getString(key,
+			DEFAULT_AUDIO_SOURCE);
 	}
 
 	/**
@@ -1178,6 +1199,16 @@ public class NacSharedPreferences
 		String key = this.getKeys().getVibrate();
 
 		return this.getSharedPreferences().getBoolean(key, DEFAULT_VIBRATE);
+	}
+
+	/**
+	 * @return The alarm volume level.
+	 */
+	public int getVolume()
+	{
+		String key = this.getKeys().getVolume();
+
+		return this.getSharedPreferences().getInt(key, DEFAULT_VOLUME);
 	}
 
 	/**

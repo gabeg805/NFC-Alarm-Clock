@@ -11,10 +11,10 @@
 	<dimen name="m_act_alarm_icon">28dp</dimen>
 	<dimen name="m_act_alarm_buttons">28dp</dimen>
 	<dimen name="mb_act_alarm_info">20dp</dimen>
-	<dimen name="mb_act_alarm_info_name">10dp</dimen>
+	<dimen name="mb_act_alarm_info_name">8dp</dimen>
 	<dimen name="isz_act_alarm_icon">64dp</dimen>
 	<dimen name="tsz_act_alarm_title">26sp</dimen>
-	<dimen name="tsz_act_alarm_info_name">16sp</dimen>
+	<dimen name="tsz_act_alarm_info_name">18sp</dimen>
 	<dimen name="tsz_act_alarm_info_time">14sp</dimen>
 	<dimen name="tsz_act_alarm_instructions">14sp</dimen>
 
@@ -106,13 +106,17 @@
 
 
 	<!-- Volume -->
-	<dimen name="isz_volume_settings">18dp</dimen>
-	<dimen name="pt_volume">16dp</dimen>
-	<dimen name="pb_volume">16dp</dimen>
-	<dimen name="pl_volume">6dp</dimen>
-	<dimen name="pr_volume">4dp</dimen>
-	<dimen name="pl_volume_slider">12dp</dimen>
-	<dimen name="pr_volume_slider">12dp</dimen>
+	<dimen name="isz_volume_settings">50dp</dimen>
+	<dimen name="pt_volume_slider">16dp</dimen>
+	<dimen name="pb_volume_slider">16dp</dimen>
+	<dimen name="pt_volume_settings">16dp</dimen>
+	<dimen name="pb_volume_settings">16dp</dimen>
+	<dimen name="pl_volume_settings">16dp</dimen>
+	<dimen name="pr_volume_settings">16dp</dimen>
+
+	<dimen name="ml_volume_icon">6dp</dimen>
+	<dimen name="sp_volume_icon">14dp</dimen>
+	<dimen name="sp_volume_settings">14dp</dimen>
 
 
 	<!-- Name -->

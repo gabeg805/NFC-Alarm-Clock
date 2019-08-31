@@ -141,6 +141,8 @@ public class NacDatabase
 
 	/**
 	 * @return A ContentValues object based on the given alarm.
+	 *
+	 * Change this every new database version.
 	 */
 	private ContentValues getContentValues(int version, NacAlarm alarm)
 	{
@@ -164,12 +166,14 @@ public class NacDatabase
 		switch (version)
 		{
 			case 0:
+			case 4:
+				cv.put(Contract.AlarmTable.COLUMN_VOLUME, alarm.getVolume());
+				cv.put(Contract.AlarmTable.COLUMN_AUDIO_SOURCE, alarm.getAudioSource());
 			case 3:
 				cv.put(Contract.AlarmTable.COLUMN_USE_NFC, alarm.getUseNfc());
 			case 2:
 				cv.put(Contract.AlarmTable.COLUMN_SOUND_TYPE, alarm.getSoundType());
 				cv.put(Contract.AlarmTable.COLUMN_SOUND_NAME, alarm.getSoundName());
-				break;
 			case 1:
 			default:
 				break;
@@ -289,11 +293,14 @@ public class NacDatabase
 	 *
 	 * Add an example alarm when the app is first installed (this is presumed by
 	 * the database being created).
+	 *
+	 * Change this every new database version.
 	 */
 	@Override
 	public void onCreate(SQLiteDatabase db)
 	{
-		db.execSQL(Contract.AlarmTable.CREATE_TABLE_V3);
+		//db.execSQL(Contract.AlarmTable.CREATE_TABLE_V3);
+		db.execSQL(Contract.AlarmTable.CREATE_TABLE_V4);
 
 		Context context = this.getContext();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
@@ -308,6 +315,8 @@ public class NacDatabase
 			.setRepeat(shared.getRepeat())
 			.setUseNfc(shared.getUseNfc())
 			.setVibrate(shared.getVibrate())
+			.setVolume(shared.getVolume())
+			.setAudioSource(shared.getAudioSource())
 			.setSoundType(soundType)
 			.setSoundPath(soundPath)
 			.setSoundName(soundName)
@@ -327,6 +336,8 @@ public class NacDatabase
 
 	/**
 	 * Upgrade the database to the most up-to-date version.
+	 *
+	 * Change this every new database version.
 	 */
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
@@ -344,8 +355,11 @@ public class NacDatabase
 				db.execSQL(Contract.AlarmTable.CREATE_TABLE_V2);
 				break;
 			case 3:
-			default:
 				db.execSQL(Contract.AlarmTable.CREATE_TABLE_V3);
+				break;
+			case 4:
+			default:
+				db.execSQL(Contract.AlarmTable.CREATE_TABLE_V4);
 				break;
 		}
 
@@ -374,7 +388,7 @@ public class NacDatabase
 	}
 
 	/**
-	 * Read all alarms from the database.
+	 * @see read
 	 */
 	public List<NacAlarm> read()
 	{
@@ -386,6 +400,9 @@ public class NacDatabase
 		return this.read(db, version);
 	}
 
+	/**
+	 * Read all alarms from the database.
+	 */
 	public List<NacAlarm> read(SQLiteDatabase db, int version)
 	{
 		Context context = this.getContext();
@@ -401,6 +418,22 @@ public class NacDatabase
 			switch (version)
 			{
 				case 0:
+				case 4:
+					alarm.setId(cursor.getInt(1));
+					alarm.setEnabled((cursor.getInt(2) != 0));
+					alarm.setHour(cursor.getInt(3));
+					alarm.setMinute(cursor.getInt(4));
+					alarm.setDays(cursor.getInt(5));
+					alarm.setRepeat((cursor.getInt(6) != 0));
+					alarm.setUseNfc((cursor.getInt(7) != 0));
+					alarm.setVibrate((cursor.getInt(8) != 0));
+					alarm.setVolume(cursor.getInt(9));
+					alarm.setAudioSource(cursor.getString(10));
+					alarm.setSoundType(cursor.getInt(11));
+					alarm.setSoundPath(cursor.getString(12));
+					alarm.setSoundName(cursor.getString(13));
+					alarm.setName(cursor.getString(14));
+					break;
 				case 3:
 					offset = 1;
 					alarm.setUseNfc((cursor.getInt(7) != 0));
@@ -588,7 +621,7 @@ public class NacDatabase
 		/**
 		 * Database version.
 		 */
-		public static final int DATABASE_VERSION = 3;
+		public static final int DATABASE_VERSION = 4;
 
 		/**
 		 * prevent someone from instantiating the contract class.
@@ -657,6 +690,16 @@ public class NacDatabase
 			public static final String COLUMN_VIBRATE = "Vibrate";
 
 			/**
+			 * Volume level.
+			 */
+			public static final String COLUMN_VOLUME = "Volume";
+
+			/**
+			 * Volume level.
+			 */
+			public static final String COLUMN_AUDIO_SOURCE = "AudioSource";
+
+			/**
 			 * Type of sound played.
 			 */
 			public static final String COLUMN_SOUND_TYPE = "SoundType";
@@ -722,6 +765,29 @@ public class NacDatabase
 			public static final String CONTENT_ITEM_TYPE =
 				ContentResolver.CURSOR_ITEM_BASE_TYPE
 					+ "/vnd.com.nfcalarmclock";
+
+			/**
+			 * SQL Statement to create the table (version 4).
+			 */
+			public static final String CREATE_TABLE_V4 =
+				"CREATE TABLE " + TABLE_NAME
+				+ " ("
+				+ _ID + " INTEGER PRIMARY KEY,"
+				+ COLUMN_ID + " INTEGER,"
+				+ COLUMN_ENABLED + " INTEGER,"
+				+ COLUMN_HOUR + " INTEGER,"
+				+ COLUMN_MINUTE + " INTEGER,"
+				+ COLUMN_DAYS + " INTEGER,"
+				+ COLUMN_REPEAT + " INTEGER,"
+				+ COLUMN_USE_NFC + " INTEGER,"
+				+ COLUMN_VIBRATE + " INTEGER,"
+				+ COLUMN_VOLUME + " INTEGER,"
+				+ COLUMN_AUDIO_SOURCE + " TEXT,"
+				+ COLUMN_SOUND_TYPE + " INTEGER,"
+				+ COLUMN_SOUND_PATH + " TEXT,"
+				+ COLUMN_SOUND_NAME + " TEXT,"
+				+ COLUMN_NAME + " TEXT"
+				+ ");";
 
 			/**
 			 * SQL Statement to create the table (version 3).
@@ -802,6 +868,8 @@ public class NacDatabase
 				COLUMN_REPEAT,
 				COLUMN_USE_NFC,
 				COLUMN_VIBRATE,
+				COLUMN_VOLUME,
+				COLUMN_AUDIO_SOURCE,
 				COLUMN_SOUND_TYPE,
 				COLUMN_SOUND_PATH,
 				COLUMN_SOUND_NAME,

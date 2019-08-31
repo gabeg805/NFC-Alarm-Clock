@@ -73,6 +73,16 @@ public class NacAlarm
 		private boolean mVibrate;
 
 		/**
+		 * The volume.
+		 */
+		private int mVolume;
+
+		/**
+		 * The audio source.
+		 */
+		private String mAudioSource;
+
+		/**
 		 * The type of sound to play.
 		 */
 		private int mSoundType;
@@ -120,6 +130,8 @@ public class NacAlarm
 			this.mRepeat = NacSharedPreferences.DEFAULT_REPEAT;
 			this.mNfc = NacSharedPreferences.DEFAULT_USE_NFC;
 			this.mVibrate = NacSharedPreferences.DEFAULT_VIBRATE;
+			this.mVolume = NacSharedPreferences.DEFAULT_VOLUME;
+			this.mAudioSource = NacSharedPreferences.DEFAULT_AUDIO_SOURCE;
 			this.mSoundType = NacSound.TYPE_NONE;
 			this.mSoundPath = "";
 			this.mSoundName = "";
@@ -140,6 +152,14 @@ public class NacAlarm
 		public EnumSet<NacCalendar.Day> getDays()
 		{
 			return this.mDays;
+		}
+
+		/**
+		 * @return The audio source.
+		 */
+		public String getAudioSource()
+		{
+			return this.mAudioSource;
 		}
 
 		/**
@@ -238,6 +258,28 @@ public class NacAlarm
 		public boolean getVibrate()
 		{
 			return this.mVibrate;
+		}
+
+		/**
+		 * @return The volume level.
+		 */
+		public int getVolume()
+		{
+			return this.mVolume;
+		}
+
+		/**
+		 * Set the audio source.
+		 *
+		 * @param  source  The audio source.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setAudioSource(String source)
+		{
+			this.mAudioSource = source;
+
+			return this;
 		}
 
 		/**
@@ -454,6 +496,20 @@ public class NacAlarm
 			return this;
 		}
 
+		/**
+		 * Set the volume level.
+		 *
+		 * @param  volume  The volume level.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setVolume(int volume)
+		{
+			this.mVolume = volume;
+
+			return this;
+		}
+
 	}
 
 	/**
@@ -502,6 +558,16 @@ public class NacAlarm
 	private boolean mVibrate;
 
 	/**
+	 * The volume level.
+	 */
+	private int mVolume;
+
+	/**
+	 * The audio source.
+	 */
+	private String mAudioSource;
+
+	/**
 	 * The type of sound to play.
 	 */
 	private int mSoundType;
@@ -546,6 +612,8 @@ public class NacAlarm
 		this.setRepeat(builder.getRepeat());
 		this.setUseNfc(builder.getUseNfc());
 		this.setVibrate(builder.getVibrate());
+		this.setVolume(builder.getVolume());
+		this.setAudioSource(builder.getAudioSource());
 		this.setSoundType(builder.getSoundType());
 		this.setSoundPath(builder.getSoundPath());
 		this.setSoundName(builder.getSoundName());
@@ -556,6 +624,8 @@ public class NacAlarm
 
 	/**
 	 * Populate values with input parcel.
+	 *
+	 * Update this when adding/removing an element.
 	 */
 	public NacAlarm(Parcel input)
 	{
@@ -569,6 +639,8 @@ public class NacAlarm
 			.setRepeat((input.readInt() != 0))
 			.setUseNfc((input.readInt() != 0))
 			.setVibrate((input.readInt() != 0))
+			.setVolume(input.readInt())
+			.setAudioSource(input.readString())
 			.setSoundType(input.readInt())
 			.setSoundPath(input.readString())
 			.setSoundName(input.readString())
@@ -656,6 +728,14 @@ public class NacAlarm
 			&& (this.getSoundPath() == alarm.getSoundPath())
 			&& (this.getSoundName() == alarm.getSoundName())
 			&& (this.getName() == alarm.getName()));
+	}
+
+	/**
+	 * @return The audio source.
+	 */
+	public String getAudioSource()
+	{
+		return this.mAudioSource;
 	}
 
 	/**
@@ -806,6 +886,14 @@ public class NacAlarm
 	}
 
 	/**
+	 * @return The volume level.
+	 */
+	public int getVolume()
+	{
+		return this.mVolume;
+	}
+
+	/**
 	 * Check if alarm has a listener.
 	 */
 	public boolean hasListener()
@@ -835,10 +923,22 @@ public class NacAlarm
 		NacUtility.printf("Repeat       : %b", this.mRepeat);
 		NacUtility.printf("Use NFC      : %b", this.mNfc);
 		NacUtility.printf("Vibrate      : %b", this.mVibrate);
+		NacUtility.printf("Volume       : %d", this.mVolume);
+		NacUtility.printf("Audio Source : %s", this.mAudioSource);
 		NacUtility.printf("Sound Type   : %s", this.mSoundType);
 		NacUtility.printf("Sound Path   : %s", this.mSoundPath);
 		NacUtility.printf("Sound Name   : %s", this.mSoundName);
 		NacUtility.printf("Name         : %s", this.mName);
+	}
+
+	/**
+	 * Set the audio source.
+	 *
+	 * @param  source  The audio source.
+	 */
+	public void setAudioSource(String source)
+	{
+		this.mAudioSource = source;
 	}
 
 	/**
@@ -869,7 +969,6 @@ public class NacAlarm
 		this.mEnabled = enabled;
 
 		this.setWasEnabled(enabled);
-		//this.mWasEnabled = (enabled) ? enabled : this.mWasEnabled;
 	}
 
 	/**
@@ -1003,6 +1102,16 @@ public class NacAlarm
 	}
 
 	/**
+	 * Set the volume level.
+	 *
+	 * @param  volume  The volume level.
+	 */
+	public void setVolume(int volume)
+	{
+		this.mVolume = volume;
+	}
+
+	/**
 	 * Set was enabled flag.
 	 */
 	public void setWasEnabled(boolean enabled)
@@ -1073,6 +1182,8 @@ public class NacAlarm
 
 	/**
 	 * Write data into parcel (required for Parcelable).
+	 *
+	 * Update this when adding/removing an element.
 	 */
 	@Override
 	public void writeToParcel(Parcel output, int flags)
@@ -1085,6 +1196,8 @@ public class NacAlarm
 		output.writeInt(this.getRepeat() ? 1 : 0);
 		output.writeInt(this.getUseNfc() ? 1 : 0);
 		output.writeInt(this.getVibrate() ? 1 : 0);
+		output.writeInt(this.getVolume());
+		output.writeString(this.getAudioSource());
 		output.writeInt(this.getSoundType());
 		output.writeString(this.getSoundPath());
 		output.writeString(this.getSoundName());

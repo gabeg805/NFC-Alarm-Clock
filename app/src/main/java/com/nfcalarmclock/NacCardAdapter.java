@@ -64,8 +64,7 @@ public class NacCardAdapter
 	/**
 	 * Indicator that the alarm was added through the floating action button.
 	 */
-	//private boolean mWasAdded;
-	private List<NacCardHolder.State> mStateList;
+	private boolean mWasAdded;
 
 	/**
 	 * Alarm card measure.
@@ -88,13 +87,12 @@ public class NacCardAdapter
 		this.mUndo = new Undo();
 		this.mSnackbar = new NacSnackbar(this.mRoot);
 		this.mAlarmList = null;
-		this.mStateList = null;
 		this.mNextAlarm = null;
-		//this.mWasAdded = false;
+		this.mWasAdded = false;
 		this.mMeasure = new NacCardMeasure(context);
 
 		this.mRecyclerView.addOnItemTouchListener(this);
-		//setHasStableIds(true);
+		setHasStableIds(true);
 	}
 
 	/**
@@ -109,6 +107,7 @@ public class NacCardAdapter
 			.setId(id)
 			.setRepeat(shared.getRepeat())
 			.setDays(shared.getDays())
+			.setUseNfc(shared.getUseNfc())
 			.setVibrate(shared.getVibrate())
 			.setSound(context, shared.getSound())
 			.setName(shared.getName())
@@ -152,11 +151,10 @@ public class NacCardAdapter
 
 		Context context = this.getContext();
 		Intent intent = NacIntent.createService(context, "add", alarm);
-		//this.mWasAdded = true;
+		this.mWasAdded = true;
 
 		this.startService(intent);
 		this.getAlarms().add(position, alarm);
-		this.mStateList.add(position, NacCardHolder.State.ADDED);
 		notifyItemInserted(position);
 
 		return 0;
@@ -189,8 +187,6 @@ public class NacCardAdapter
 		NacSharedPreferences shared = new NacSharedPreferences(context);
 		NacDatabase db = new NacDatabase(context);
 		this.mAlarmList = db.read();
-		this.mStateList = new ArrayList<>();
-		NacUtility.printf("BUILDING");
 
 		if (shared.getAppFirstRun())
 		{
@@ -200,11 +196,6 @@ public class NacCardAdapter
 			}
 
 			shared.editAppFirstRun(false);
-		}
-
-		for (NacAlarm a : this.getAlarms())
-		{
-			this.mStateList.add(NacCardHolder.State.CREATED);
 		}
 
 		this.getTouchHelper().setRecyclerView(this.getRecyclerView());
@@ -226,8 +217,7 @@ public class NacCardAdapter
 		NacAlarm alarm = this.get(position);
 		NacAlarm copy = alarm.copy(this.getUniqueId());
 		int result = this.add(copy);
-		//this.mWasAdded = false;
-		this.mStateList.set(position, NacCardHolder.State.COPIED);
+		this.mWasAdded = false;
 
 		if (result == 0)
 		{
@@ -248,10 +238,10 @@ public class NacCardAdapter
 		NacAlarm alarm = this.get(position);
 		Context context = this.getContext();
 		Intent intent = NacIntent.createService(context, "delete", alarm);
+		this.mWasAdded = false;
 
 		this.startService(intent);
 		this.getAlarms().remove(position);
-		this.mStateList.remove(position);
 		notifyItemRemoved(position);
 		this.undo(alarm, position, Undo.Type.DELETE);
 		this.snackbar("Deleted alarm.");
@@ -284,14 +274,13 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * @return The unique ID of an alarm. Used alongside setHasStableIds().
 	 */
-	//@Override
-	//public long getItemId(int position)
-	//{
-	//	NacUtility.printf("Item ID : %d %d", position, this.get(position).getId());
-	//	return this.get(position).getId();
-	//	//return position;
-	//}
+	@Override
+	public long getItemId(int position)
+	{
+		return this.get(position).getId();
+	}
 
 	/**
 	 * @return The number of items in the recycler view.
@@ -301,14 +290,6 @@ public class NacCardAdapter
 	{
 		return this.size();
 	}
-
-	/**
-	 */
-	//@Override
-	//public int getItemViewType(int position)
-	//{
-	//	return position;
-	//}
 
 	/**
 	 * @return The next alarm that will be triggered.
@@ -404,15 +385,16 @@ public class NacCardAdapter
 	@Override
 	public void onBindViewHolder(final NacCardHolder card, int position)
 	{
-		NacUtility.printf("onBindViewHolder! %s", this.mStateList.get(position).toString());
 		NacAlarm alarm = this.get(position);
 
 		alarm.setOnChangeListener(this);
-		card.init(alarm, this.mStateList.get(position));
+		card.init(alarm);
 		card.setOnDeleteListener(this);
 
-		this.mStateList.set(position, NacCardHolder.State.NONE);
-		//this.mWasAdded = false;
+		if (this.wasAdded())
+		{
+			card.interact();
+		}
 	}
 
 	/**
@@ -425,6 +407,7 @@ public class NacCardAdapter
 	{
 		Context context = this.getContext();
 		Intent intent = NacIntent.createService(context, "update", alarm);
+		this.mWasAdded = false;
 
 		if (alarm.wasEnabled())
 		{
@@ -519,32 +502,6 @@ public class NacCardAdapter
 			}
 		}
 
-		//NacUtility.printf("onInterceptTouch! %d %f %f", ev.getAction(), ev.getX(), ev.getY());
-		//View view = rv.findChildViewUnder(ev.getX(), ev.getY());
-
-		//if (view == null)
-		//{
-		//	NacUtility.printf("View is NULL!");
-		//	return false;
-		//}
-
-		////NacCardHolder holder = (NacCardHolder) rv.findContaingViewHolder(view);
-		//NacCardHolder holder = (NacCardHolder) rv.getChildViewHolder(view);
-
-		//if (holder == null)
-		//{
-		//	NacUtility.printf("HOLDER is NULL!");
-		//}
-		//else if(holder.isExpanded())
-		//{
-		//	NacUtility.printf("View is expanded!");
-		//	//view.getParent().requestDisallowInterceptTouchEvent(true);
-		//}
-		//else
-		//{
-		//	NacUtility.printf("View is collapsed!");
-		//}
-
 		return false;
 	}
 
@@ -584,11 +541,10 @@ public class NacCardAdapter
 		NacAlarm toAlarm = this.get(toIndex);
 		Intent intent = NacIntent.createService(context, "swap", fromAlarm,
 			toAlarm);
+		this.mWasAdded = false;
 
 		this.startService(intent);
 		Collections.swap(this.getAlarms(), fromIndex, toIndex);
-		this.mStateList.set(fromIndex, NacCardHolder.State.MOVED);
-		this.mStateList.set(toIndex, NacCardHolder.State.MOVED);
 		notifyItemMoved(fromIndex, toIndex);
 	}
 
@@ -597,7 +553,6 @@ public class NacCardAdapter
 	 */
 	public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept)
 	{
-		NacUtility.printf("onRequestDisallowInterceptTouchEvent! %b", disallowIntercept);
 	}
 
 	/**
@@ -605,25 +560,6 @@ public class NacCardAdapter
 	 */
 	public void onTouchEvent(RecyclerView rv, MotionEvent e)
 	{
-	}
-
-	/**
-	 * Measure the expanded and collapsed sizes of the alarm card.
-	 */
-	@Override
-	public void onViewAttachedToWindow(NacCardHolder card)
-	{
-		//NacUtility.printf("Measuring card! %d", card.getAdapterPosition());
-		//card.measure();
-	}
-
-	/**
-	 * Clear any animation that is occuring.
-	 */
-	@Override
-	public void onViewDetachedFromWindow(NacCardHolder card)
-	{
-		//card.unfocus();
 	}
 
 	/**
@@ -635,7 +571,7 @@ public class NacCardAdapter
 	public void restore(NacAlarm alarm, int position)
 	{
 		int result = this.add(alarm, position);
-		this.mStateList.set(position, NacCardHolder.State.DELETED);
+		this.mWasAdded = false;
 
 		if (result == 0)
 		{
@@ -670,7 +606,7 @@ public class NacCardAdapter
 		String message = NacCalendar.getNextMessage(millis, timeRemaining);
 		this.mNextAlarm = alarm;
 
-		this.snackbar(message, "DISMISS", null, false);
+		this.snackbar(message, "DISMISS", null, true);
 	}
 
 	/**
@@ -724,6 +660,14 @@ public class NacCardAdapter
 	public void undo(NacAlarm alarm, int position, Undo.Type type)
 	{
 		this.getUndo().set(alarm, position, type);
+	}
+
+	/**
+	 * @return True if the alarm was added, and False otherwise.
+	 */
+	public boolean wasAdded()
+	{
+		return this.mWasAdded;
 	}
 
 	/**

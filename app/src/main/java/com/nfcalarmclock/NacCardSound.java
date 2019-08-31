@@ -38,15 +38,14 @@ public class NacCardSound
 	private SeekBar mVolume;
 
 	/**
-	 * Card padding.
+	 * Media source settings.
 	 */
-	//private int mCardPadding;
-	private NacCardMeasure mMeasure;
+	private ImageView mMediaSource;
 
 	/**
-	 * Vibrate width.
+	 * Card measurement.
 	 */
-	//private int mVibrateWidth;
+	private NacCardMeasure mMeasure;
 
 	/**
 	 */
@@ -55,12 +54,8 @@ public class NacCardSound
 		this.mContext = context;
 		this.mSound = (NacImageTextButton) root.findViewById(R.id.nac_sound);
 		this.mVolume = (SeekBar) root.findViewById(R.id.nac_volume_slider);
+		this.mMediaSource = (ImageView) root.findViewById(R.id.nac_volume_settings);
 		this.mMeasure = measure;
-
-		//RelativeLayout header = root.findViewById(R.id.nac_header);
-		//CheckBox vibrate = (CheckBox) root.findViewById(R.id.nac_vibrate);
-		//this.mCardPadding = header.getPaddingStart() + header.getPaddingEnd();
-		//this.mVibrateWidth = NacUtility.getWidth(vibrate);
 	}
 
 	/**
@@ -89,7 +84,6 @@ public class NacCardSound
 	private int getCardPadding()
 	{
 		return this.mMeasure.getCardPadding();
-		//return this.mCardPadding;
 	}
 
 	/**
@@ -127,20 +121,11 @@ public class NacCardSound
 	}
 
 	/**
-	 * @return The context resources.
-	 */
-	//public Resources getResources()
-	//{
-	//	return this.getContext().getResources();
-	//}
-
-	/**
 	 * @return The screen width.
 	 */
 	private int getScreenWidth()
 	{
 		return this.mMeasure.getScreenWidth();
-		//return this.getResources().getDisplayMetrics().widthPixels;
 	}
 
 	/**
@@ -162,9 +147,28 @@ public class NacCardSound
 	}
 
 	/**
-	 * Set the sound.
+	 * Set the volume and sound to play when the alarm goes off.
 	 */
 	public void set()
+	{
+		this.setSound();
+		this.setVolume();
+	}
+
+	/**
+	 * Set the listeners.
+	 */
+	public void setListener(Object listener)
+	{
+		this.mSound.setOnClickListener((View.OnClickListener)listener);
+		this.mVolume.setOnSeekBarChangeListener((SeekBar.OnSeekBarChangeListener)listener);
+		this.mMediaSource.setOnClickListener((View.OnClickListener)listener);
+	}
+
+	/**
+	 * Set the sound.
+	 */
+	public void setSound()
 	{
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
@@ -180,13 +184,29 @@ public class NacCardSound
 	}
 
 	/**
-	 * Set the listeners.
+	 * Set the volume.
 	 */
-	public void setListener(Object listener)
+	public void setVolume()
 	{
-		this.mSound.setOnClickListener((View.OnClickListener)listener);
-		this.mVolume.setOnSeekBarChangeListener((SeekBar.OnSeekBarChangeListener)listener);
-		//this.mSound.setOnClickListener((View.OnClickListener)listener);
+		NacAlarm alarm = this.getAlarm();
+
+		//this.mVolume.incrementProgressBy(10);
+		this.mVolume.setProgress(alarm.getVolume());
+	}
+
+	/**
+	 * Show the media settings dialog.
+	 */
+	public void showAudioSourceDialog(NacDialog.OnDismissListener listener)
+	{
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+		NacAudioSourceDialog dialog = new NacAudioSourceDialog();
+
+		dialog.build(context);
+		dialog.saveData(alarm.getAudioSource());
+		dialog.addOnDismissListener(listener);
+		dialog.show();
 	}
 
 	/**

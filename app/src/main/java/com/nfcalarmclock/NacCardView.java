@@ -98,6 +98,11 @@ public class NacCardView
 	private static final int EXPAND_COLOR_DURATION = 350;
 
 	/**
+	 * Wait time during init, before collapsing an expanded alarm card.
+	 */
+	private static final int INIT_WAIT = 200;
+
+	/**
 	 */
 	public NacCardView(Context context, View root, NacCardMeasure measure)
 	{
@@ -137,7 +142,6 @@ public class NacCardView
 			NacCardSlideAnimation animation = this.getAnimation();
 			int expandHeight = this.getExpandHeight();
 			int collapseHeight = this.getCollapseHeight();
-			NacUtility.printf("Collapse animate : %d %d", expandHeight, collapseHeight);
 
 			animation.setDuration(COLLAPSE_DURATION);
 			animation.setHeights(expandHeight, collapseHeight);
@@ -148,9 +152,30 @@ public class NacCardView
 		else
 		{
 			this.setCollapseBackgroundColor();
+			//this.setCollapseHeight();
 			this.showCollapse();
 		}
 	}
+
+	/**
+	 * Set the collapse height for the alarm card.
+	 */
+	//public void setCollapseHeight()
+	//{
+	//	CardView card = this.getCardView();
+	//	ViewGroup.LayoutParams params = card.getLayoutParams();
+
+	//	if (params == null)
+	//	{
+	//		params = new ViewGroup.LayoutParams(
+	//			ViewGroup.LayoutParams.WRAP_CONTENT,
+	//			ViewGroup.LayoutParams.WRAP_CONTENT);
+	//	}
+
+	//	params.height = this.getCollapseHeight();
+	//	card.setLayoutParams(params);
+	//	card.requestLayout();
+	//}
 
 	/**
 	 * @see expand
@@ -254,12 +279,6 @@ public class NacCardView
 	 */
 	public int getCollapseHeight()
 	{
-		//NacDayOfWeek dayButtons = this.mMeasure.getDayButtons();
-		//int daysHeight = this.mMeasure.getDayButtonsHeight();
-		//int collapseHeight = this.mMeasure.getCollapseHeight();
-
-		//return (dayButtons.getVisibility() == View.VISIBLE) ? collapseHeight
-		//	: collapseHeight-daysHeight;
 		return this.mMeasure.getCollapseHeight();
 	}
 
@@ -307,13 +326,7 @@ public class NacCardView
 	 */
 	public int getHeight()
 	{
-		//CardView card = this.getCardView();
-		//ViewGroup.LayoutParams params = card.getLayoutParams();
-
-		//return (params != null) ? params.height : 0;
-		//return this.getCardView().getHeight();
 		return NacUtility.getHeight(this.getCardView());
-		//return this.getCardView().getMeasuredHeight();
 	}
 
 	/**
@@ -338,25 +351,17 @@ public class NacCardView
 	 */
 	public void init()
 	{
-		//CardView card = this.getCardView();
-		//int height = this.getHeight();
-		//int expandHeight = this.getExpandHeight();
-		//int collapseHeight = this.getCollapseHeight();
-		//ViewGroup.LayoutParams params = card.getLayoutParams();
-
-		if (this.isExpanded())
-		{
-			NacUtility.printf("COLLAPSING!");
-			this.collapse(false);
-		}
-
-		//if ((height > 0) && (height == expandHeight) && (collapseHeight != 0)
-		//	&& (params != null))
+		//// Might be easier to just have init be hideSwipeViews?
+		//if (this.isExpanded())
 		//{
-		//	NacUtility.printf("Setting the HAIL MARY card height!");
-		//	params.height = collapseHeight;
-		//	card.setLayoutParams(params);
-		//	card.requestLayout();
+		//	new Handler().postDelayed(new Runnable()
+		//	{
+		//		@Override
+		//		public void run()
+		//		{
+		//			collapse();
+		//		}
+		//	}, INIT_WAIT);
 		//}
 
 		this.hideSwipeViews();
@@ -409,77 +414,12 @@ public class NacCardView
 	 */
 	public boolean isExpanded()
 	{
-		//int summaryVisible = this.mSummary.getVisibility();
 		int extraVisible = this.mExtra.getVisibility();
+		int collapseHeight = this.getCollapseHeight();
+		int height = this.getCardView().getMeasuredHeight();
 
-		return (extraVisible == View.VISIBLE);
-
-		//int height = this.getHeight();
-		//int expandHeight = this.getExpandHeight();
-		//int collapseHeight = this.getCollapseHeight();
-
-		//return (!this.isMeasured() || (height != collapseHeight)
-		//	|| (!this.mSummary.isEnabled() && this.mExtra.isEnabled()));
+		return (extraVisible == View.VISIBLE) || (height > collapseHeight);
 	}
-
-	/**
-	 * @return True if the card view is measured, and False otherwise.
-	 */
-	//public boolean isMeasured()
-	//{
-	//	int expandHeight = this.getExpandHeight();
-	//	int collapseHeight = this.getCollapseHeight();
-
-	//	return ((expandHeight != 0) || (collapseHeight != 0));
-	//}
-
-	/**
-	 * Measure the alarm card.
-	 */
-	public void measure()
-	{
-		//boolean collapsed = this.isCollapsed() || !this.isMeasured();
-
-		//this.measureExpandedHeight();
-		//this.measureCollapsedHeight();
-
-		//if (collapsed)
-		//{
-		//	this.collapse(false);
-		//}
-		//else
-		//{
-		//	this.expand(-1, false);
-		//}
-	}
-
-	/**
-	 * Measure the height of the alarm card when it is collapsed.
-	 */
-	//private void measureCollapsedHeight()
-	//{
-	//	this.collapse(false);
-	//	this.mHeader.requestLayout();
-	//	this.mSummary.requestLayout();
-
-	//	int timeHeight = NacUtility.getHeight(this.mHeader);
-	//	int summaryHeight = NacUtility.getHeight(this.mSummary);
-	//	this.mCollapseHeight = timeHeight + summaryHeight;
-	//}
-
-	/**
-	 * Measure the height of the alarm card when it is expanded.
-	 */
-	//private void measureExpandedHeight()
-	//{
-	//	this.expand(-1, false);
-	//	this.mHeader.requestLayout();
-	//	this.mExtra.requestLayout();
-
-	//	int timeHeight = NacUtility.getHeight(this.mHeader);
-	//	int extraHeight = NacUtility.getHeight(this.mExtra);
-	//	this.mExpandHeight = timeHeight + extraHeight;
-	//}
 
 	@Override
 	public void onAnimationEnd(Animation animation)
@@ -584,16 +524,10 @@ public class NacCardView
 		if (repeat)
 		{
 			animation.setHeights(expandHeight, expandHeight+daysHeight);
-			//animation.setHeights(this.mExpandHeight,
-			//	this.mExpandHeight+daysHeight);
-			//this.mExpandHeight += daysHeight;
 		}
 		else
 		{
 			animation.setHeights(expandHeight, expandHeight-daysHeight);
-			//animation.setHeights(this.mExpandHeight,
-			//	this.mExpandHeight-daysHeight);
-			//this.mExpandHeight -= daysHeight;
 		}
 
 		animation.setDuration(400);

@@ -30,4 +30,11 @@
 		android:fragment="com.nfcalarmclock.NacMiscellaneousSettings"
 		/>
 
+	<Preference
+		android:key="@string/pref_screen_about_key"
+		android:title="@string/pref_screen_about_title"
+		android:summary="@string/pref_screen_about_summary"
+		android:fragment="com.nfcalarmclock.NacAboutSettings"
+		/>
+
 </PreferenceScreen>

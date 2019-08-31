@@ -19,6 +19,9 @@ android {
 			matchingFallbacks = ['debug', 'release']
 		}
 	}
+	applicationVariants.all { variant ->    
+		variant.resValue "string", "versionName", variant.versionName
+	}
 }
 
 repositories {

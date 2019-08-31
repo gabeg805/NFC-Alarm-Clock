@@ -132,7 +132,8 @@
 			android:paddingBottom="@dimen/mb_card"
 			android:paddingStart="@dimen/ml_card"
 			android:paddingEnd="@dimen/mr_card"
-			android:orientation="vertical">
+			android:orientation="vertical"
+			android:visibility="gone">
 
 			<RelativeLayout
 				android:layout_width="match_parent"
@@ -196,6 +197,8 @@
 					app:nacDrawableHeight="@dimen/isz_sound"
 					app:nacText=""
 					/>
+				<!--
+				-->
 
 				<CheckBox
 					android:id="@+id/nac_vibrate"
@@ -217,18 +220,15 @@
 
 			<RelativeLayout
 				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="@dimen/pt_volume"
-				android:layout_marginBottom="@dimen/pb_volume"
-				android:layout_marginStart="@dimen/pl_volume"
-				android:layout_marginEnd="@dimen/pr_volume">
+				android:layout_height="wrap_content">
 
 				<ImageView
 					android:id="@+id/nac_volume_icon"
 					android:layout_width="@dimen/isz_itb"
 					android:layout_height="@dimen/isz_itb"
 					android:layout_centerVertical="true"
-					android:layout_marginEnd="@dimen/pl_volume_slider"
+					android:layout_marginStart="@dimen/ml_volume_icon"
+					android:layout_marginEnd="@dimen/sp_volume_icon"
 					android:src="@mipmap/volume_high"
 					/>
 
@@ -236,7 +236,11 @@
 					android:id="@+id/nac_volume_settings"
 					android:layout_width="@dimen/isz_volume_settings"
 					android:layout_height="@dimen/isz_volume_settings"
-					android:layout_marginStart="@dimen/pr_volume_slider"
+					android:layout_marginStart="@dimen/sp_volume_settings"
+					android:paddingTop="@dimen/pt_volume_settings"
+					android:paddingBottom="@dimen/pb_volume_settings"
+					android:paddingStart="@dimen/pl_volume_settings"
+					android:paddingEnd="@dimen/pr_volume_settings"
 					android:layout_alignParentEnd="true"
 					android:layout_centerVertical="true"
 					android:src="@mipmap/settings"
@@ -249,6 +253,8 @@
 					android:layout_toRightOf="@id/nac_volume_icon"
 					android:layout_toLeftOf="@id/nac_volume_settings"
 					android:layout_centerVertical="true"
+					android:paddingTop="@dimen/pt_volume_slider"
+					android:paddingBottom="@dimen/pb_volume_slider"
 					android:max="100"
 					android:progress="75"
 					/>
