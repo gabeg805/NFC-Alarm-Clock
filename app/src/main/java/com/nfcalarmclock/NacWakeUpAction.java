@@ -109,12 +109,12 @@ public class NacWakeUpAction
 
 		if (autoDismissHandler != null)
 		{
-			autoDismissHandler .removeCallbacksAndMessages(null);
+			autoDismissHandler.removeCallbacksAndMessages(null);
 		}
 
 		if (speakHandler != null)
 		{
-			speakHandler .removeCallbacksAndMessages(null);
+			speakHandler.removeCallbacksAndMessages(null);
 		}
 
 		NacNfc.finish(context);

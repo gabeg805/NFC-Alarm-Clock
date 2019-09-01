@@ -39,9 +39,14 @@ public class NacCardSound
 	private SeekBar mVolume;
 
 	/**
+	 * Volume icon.
+	 */
+	private ImageView mVolumeIcon;
+
+	/**
 	 * Media source settings.
 	 */
-	private ImageView mMediaSource;
+	private ImageView mAudioSourceIcon;
 
 	/**
 	 * Card measurement.
@@ -55,7 +60,8 @@ public class NacCardSound
 		this.mContext = context;
 		this.mSound = (TextView) root.findViewById(R.id.nac_sound);
 		this.mVolume = (SeekBar) root.findViewById(R.id.nac_volume_slider);
-		this.mMediaSource = (ImageView) root.findViewById(R.id.nac_volume_settings);
+		this.mVolumeIcon = (ImageView) root.findViewById(R.id.nac_volume_icon);
+		this.mAudioSourceIcon = (ImageView) root.findViewById(R.id.nac_volume_settings);
 		this.mMeasure = measure;
 	}
 
@@ -116,6 +122,7 @@ public class NacCardSound
 	{
 		this.setSound();
 		this.setVolume();
+		this.setVolumeIcon();
 	}
 
 	/**
@@ -125,7 +132,7 @@ public class NacCardSound
 	{
 		this.mSound.setOnClickListener((View.OnClickListener)listener);
 		this.mVolume.setOnSeekBarChangeListener((SeekBar.OnSeekBarChangeListener)listener);
-		this.mMediaSource.setOnClickListener((View.OnClickListener)listener);
+		this.mAudioSourceIcon.setOnClickListener((View.OnClickListener)listener);
 	}
 
 	/**
@@ -152,6 +159,28 @@ public class NacCardSound
 
 		//this.mVolume.incrementProgressBy(10);
 		this.mVolume.setProgress(alarm.getVolume());
+	}
+
+	/**
+	 * Set the volume icon.
+	 */
+	public void setVolumeIcon()
+	{
+		NacAlarm alarm = this.getAlarm();
+		int progress = alarm.getVolume();
+
+		if (progress == 0)
+		{
+			this.mVolumeIcon.setImageResource(R.mipmap.volume_off);
+		}
+		else if ((progress > 0) && (progress < 50))
+		{
+			this.mVolumeIcon.setImageResource(R.mipmap.volume_low);
+		}
+		else
+		{
+			this.mVolumeIcon.setImageResource(R.mipmap.volume_high);
+		}
 	}
 
 	/**

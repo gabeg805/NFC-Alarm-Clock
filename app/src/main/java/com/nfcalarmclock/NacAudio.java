@@ -67,7 +67,10 @@ public class NacAudio
 		 */
 		public Attributes(String source)
 		{
-			this.setFocus(AudioManager.AUDIOFOCUS_NONE);
+			int focus = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+				? AudioManager.AUDIOFOCUS_NONE : 0;
+
+			this.setFocus(focus);
 			this.setSource(source);
 			this.setVolume(-1);
 
@@ -128,6 +131,18 @@ public class NacAudio
 		public int getVolume()
 		{
 			return this.mVolume;
+		}
+
+		/**
+		 * @return The calculate volume level.
+		 */
+		public float getVolumeLevel()
+		{
+			int volume = this.getVolume();
+
+			return (volume >= 0)
+				? (float) (1 - (Math.log(100-volume) / Math.log(100)))
+				: -1f;
 		}
 
 		/**

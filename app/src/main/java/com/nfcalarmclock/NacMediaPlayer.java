@@ -475,10 +475,9 @@ public class NacMediaPlayer
 	private void setVolume()
 	{
 		NacAudio.Attributes attrs = this.mAttributes;
-		int volume = attrs.getVolume();
-		float level = (float) (1 - (Math.log(100-volume) / Math.log(100)));
+		float level = attrs.getVolumeLevel();
 
-		if (volume < 0)
+		if (level < 0)
 		{
 			return;
 		}
@@ -489,7 +488,8 @@ public class NacMediaPlayer
 		}
 		catch (IllegalStateException e)
 		{
-			NacUtility.printf("NacMediaPlayer : IllegalStateException caught in setVolume : Unable to set volume %d (%f)", volume, level);
+			NacUtility.printf("NacMediaPlayer : IllegalStateException caught in setVolume : Unable to set volume %d (%f)",
+				attrs.getVolume(), level);
 		}
 	}
 

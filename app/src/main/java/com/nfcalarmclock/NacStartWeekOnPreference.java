@@ -172,7 +172,7 @@ public class NacStartWeekOnPreference
 				break;
 		}
 
-		dialog.scale(0.5, 0.7, false, true);
+		dialog.scale(0.7, 0.7, false, true);
 	}
 
 }

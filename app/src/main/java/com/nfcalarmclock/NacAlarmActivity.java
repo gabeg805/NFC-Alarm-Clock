@@ -288,7 +288,7 @@ public class NacAlarmActivity
 		NacAlarm alarm = this.getAlarm();
 		int id = alarm.getId();
 		int snoozeCount = shared.getSnoozeCount(id) + 1;
-		int maxSnoozeCount = shared.getMaxSnooze();
+		int maxSnoozeCount = shared.getMaxSnoozeValue();
 
 		if ((snoozeCount > maxSnoozeCount) && (maxSnoozeCount >= 0))
 		{
@@ -298,7 +298,7 @@ public class NacAlarmActivity
 		NacScheduler scheduler = new NacScheduler(this);
 		Calendar snooze = Calendar.getInstance();
 
-		snooze.add(Calendar.MINUTE, shared.getSnoozeDuration());
+		snooze.add(Calendar.MINUTE, shared.getSnoozeDurationValue());
 		alarm.setHour(snooze.get(Calendar.HOUR_OF_DAY));
 		alarm.setMinute(snooze.get(Calendar.MINUTE));
 		scheduler.update(alarm, snooze);

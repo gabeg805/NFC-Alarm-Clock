@@ -42,6 +42,19 @@
 	<string name="dlg_playlist_question">Do you want to play all the music in the selected folder?</string>
 
 
+	<!-- Audio source dialog -->
+	<string name="audio_source_alarm">Alarm</string>
+	<string name="audio_source_music">Music</string>
+	<string name="audio_source_notification">Notification</string>
+	<string name="audio_source_ringer">Ringer</string>
+	<string name="audio_source_system">System</string>
+
+
+	<!-- Start week on dialog -->
+	<string name="start_week_on_mon">Monday</string>
+	<string name="start_week_on_sun">Sunday</string>
+
+
 	<!-- Content description -->
 	<string name="decrement">Decrement the value</string>
 	<string name="increment">Increment the value</string>
@@ -113,14 +126,14 @@
 
 	<!-- Time remaining format -->
 	<string name="pref_next_alarm_format_key">pref_time_remaining_format</string>
-	<string name="pref_next_alarm_format_title">Next alarm format...</string>
+	<string name="pref_next_alarm_format_title">Next alarm format&#8230;</string>
 	<string name="next_alarm_format_0">Next alarm in 7 hours 30 minutes</string>
 	<string name="next_alarm_format_1">Next alarm on Mon, 7:00 AM</string>
 
 
 	<!-- Start Week On -->
 	<string name="pref_start_week_on_key">pref_start_week_on</string>
-	<string name="pref_start_week_on_title">Start week on...</string>
+	<string name="pref_start_week_on_title">Start week on&#8230;</string>
 
 
 	<!-- Default settings -->
@@ -167,13 +180,10 @@
 	<!-- Volume and audio source preference -->
 	<string name="pref_volume_key">pref_volume</string>
 	<string name="pref_audio_source_key">pref_audio_source</string>
-	<string name="pref_volume_title">Volume</string>
-	<string name="pref_volume_summary">69</string>
 
 
 	<!-- Miscellaneous settings -->
 	<string name="pref_misc_music_category">Music</string>
-	<string name="pref_misc_dow_order_category">Day of Week</string>
 	<string name="pref_misc_tts_category">Text-to-Speech</string>
 
 

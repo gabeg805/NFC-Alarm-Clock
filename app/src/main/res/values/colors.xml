@@ -11,7 +11,6 @@
 	<!-- Standard colors -->
 	<color name="black">#000000</color>
 	<color name="gray">#262626</color>
-	<color name="gray_mid">#222222</color>
 	<color name="gray_dark">#101010</color>
 	<color name="green">#008000</color>
 	<color name="orange">#fb8c00</color>

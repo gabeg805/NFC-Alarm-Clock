@@ -381,6 +381,7 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 
 		alarm.setVolume(progress);
+		this.mSound.setVolumeIcon();
 	}
 
 	@Override

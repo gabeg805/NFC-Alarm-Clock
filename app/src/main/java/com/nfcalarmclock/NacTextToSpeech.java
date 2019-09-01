@@ -357,8 +357,8 @@ public class NacTextToSpeech
 				return;
 			}
 
-			//speech.speak(message, TextToSpeech.QUEUE_FLUSH, null, "AlarmTime");
-			this.mSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null, "AlarmTime");
+			this.mSpeech.speak(message, TextToSpeech.QUEUE_FLUSH,
+				NacBundle.toBundle(attrs), "AlarmTime");
 		}
 		else
 		{

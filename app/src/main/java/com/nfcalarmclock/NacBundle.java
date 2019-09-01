@@ -1,6 +1,7 @@
 package com.nfcalarmclock;
 
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 
 /**
  */
@@ -55,6 +56,20 @@ public class NacBundle
 		Bundle bundle = new Bundle();
 
 		bundle.putParcelable(SOUND_PARCEL_NAME, sound);
+
+		return bundle;
+	}
+
+	/**
+	 * @return A bundle that contains the parameter to control the volume level
+	 *         of a Text-to-Speech engine.
+	 */
+	public static Bundle toBundle(NacAudio.Attributes attrs)
+	{
+		Bundle bundle = new Bundle();
+
+		bundle.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME,
+			attrs.getVolumeLevel());
 
 		return bundle;
 	}

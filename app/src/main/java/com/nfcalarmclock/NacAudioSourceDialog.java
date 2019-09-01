@@ -121,7 +121,7 @@ public class NacAudioSourceDialog
 			this.mAudioSources.check(R.id.system);
 		}
 
-		scale(0.6, 0.7, false, true);
+		scale(0.7, 0.7, false, true);
 	}
 
 }
