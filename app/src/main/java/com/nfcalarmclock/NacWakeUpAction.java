@@ -233,7 +233,6 @@ public class NacWakeUpAction
 	@Override
 	public void onDoneSpeaking()
 	{
-		NacUtility.printf("onDoneSpeaking!");
 		this.playMusic();
 		this.vibrate();
 	}
@@ -243,7 +242,6 @@ public class NacWakeUpAction
 	@Override
 	public void onStartSpeaking()
 	{
-		NacUtility.printf("onStartSpeaking!");
 		this.stopVibrate();
 	}
 
@@ -273,29 +271,14 @@ public class NacWakeUpAction
 
 		if ((player == null) || player.isPlaying() || player.wasPlaying())
 		{
-			NacUtility.printf("Dont have to play music!");
 			return;
 		}
 
-		NacUtility.printf("Playing some music!");
-		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
 		NacSharedPreferences shared = this.getSharedPreferences();
-		String path = alarm.getSoundPath();
-		int type = alarm.getSoundType();
-		boolean repeat = true;
-		boolean shuffle = shared.getShuffle();
 
 		player.reset();
-
-		if (NacSound.isFilePlaylist(type))
-		{
-			player.playPlaylist(path, repeat, shuffle);
-		}
-		else
-		{
-			player.play(path, repeat);
-		}
+		player.play(alarm, true, shared.getShuffle());
 	}
 
 	/**
@@ -378,14 +361,14 @@ public class NacWakeUpAction
 
 					if (speech.isSpeaking() || speech.hasBuffer())
 					{
-						NacUtility.printf("Speaking is already occurring!");
 						return;
 					}
 
-					NacUtility.printf("Running speak from WakeUpAction!");
 					String text = getTimeToSay();
+					NacAlarm alarm = getAlarm();
+					NacAudio.Attributes attrs = new NacAudio.Attributes(alarm);
 
-					speech.speak(text);
+					speech.speak(text, attrs);
 
 					if (freq != 0)
 					{
@@ -394,7 +377,6 @@ public class NacWakeUpAction
 				}
 			};
 
-		NacUtility.printf("Speaking frequency : %d %d", shared.getSpeakFrequency(), freq);
 		handler.post(sayTime);
 	}
 
@@ -403,7 +385,6 @@ public class NacWakeUpAction
 	 */
 	public void start()
 	{
-		NacUtility.printf("Starting wake up process!");
 		NacSharedPreferences shared = this.getSharedPreferences();
 
 		if (shared.getSpeakToMe())
@@ -429,7 +410,6 @@ public class NacWakeUpAction
 		{
 			if (!vibrator.isFinished())
 			{
-				NacUtility.printf("Canceling vibrate.");
 				vibrator.cancel(true);
 			}
 		}
@@ -440,13 +420,11 @@ public class NacWakeUpAction
 	 */
 	public void vibrate()
 	{
-		NacUtility.printf("Prepping vibrate.");
 		this.setupVibrator();
 
 		NacVibrator vibrator = this.getVibrator();
 		long duration = 500;
 
-		NacUtility.printf("Starting vibrate.");
 		if (vibrator != null)
 		{
 			vibrator.execute(duration);

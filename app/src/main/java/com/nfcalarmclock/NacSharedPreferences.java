@@ -34,11 +34,6 @@ public class NacSharedPreferences
 	private static final boolean DEFAULT_APP_FIRST_RUN = true;
 
 	/**
-	 * Default display next alarm format.
-	 */
-	private static final boolean DEFAULT_DISPLAY_TIME_REMAINING = true;
-
-	/**
 	 * Default auto dismiss message.
 	 */
 	public static final String DEFAULT_AUTO_DISMISS_MESSAGE = "";
@@ -47,6 +42,19 @@ public class NacSharedPreferences
 	 * Default auto dismiss duration.
 	 */
 	public static final int DEFAULT_AUTO_DISMISS = 15;
+
+	/**
+	 * Default format to display the next alarm.
+	 *
+	 * 0 = Next alarm in 7 hours 30 minutes
+	 * 1 = Next alarm on Mon, 7:00 AM
+	 */
+	public static final int DEFAULT_NEXT_ALARM_FORMAT = 0;
+
+	/**
+	 * Default show alarm information value.
+	 */
+	public static final boolean DEFAULT_SHOW_ALARM_INFO = true;
 
 	/**
 	 * Default use NFC.
@@ -79,9 +87,13 @@ public class NacSharedPreferences
 	public static final boolean DEFAULT_SHUFFLE = false;
 
 	/**
-	 * Default Monday first value.
+	 * Default value to start week on.
+	 *
+	 * Sunday = 0
+	 * Monday = 1
+	 * Saturday = 6
 	 */
-	public static final boolean DEFAULT_MONDAY_FIRST = false;
+	public static final int DEFAULT_START_WEEK_ON = 0;
 
 	/**
 	 * Default speak to me value.
@@ -335,24 +347,6 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @see editDisplayTimeRemaining
-	 */
-	public void editDisplayTimeRemaining(boolean timeRemaining)
-	{
-		this.editDisplayTimeRemaining(timeRemaining, false);
-	}
-
-	/**
-	 * Edit the display time remaining preference.
-	 */
-	public void editDisplayTimeRemaining(boolean timeRemaining, boolean commit)
-	{
-		String key = this.getKeys().getDisplayTimeRemaining();
-
-		this.saveBoolean(key, timeRemaining, commit);
-	}
-
-	/**
 	 * @see editEasySnooze
 	 */
 	public void editEasySnooze(boolean easy)
@@ -386,24 +380,6 @@ public class NacSharedPreferences
 		String key = this.getKeys().getMaxSnooze();
 
 		this.saveInt(key, max, commit);
-	}
-
-	/**
-	 * @see editMondayFirst
-	 */
-	public void editMondayFirst(boolean mondayFirst)
-	{
-		this.editMondayFirst(mondayFirst, false);
-	}
-
-	/**
-	 * Edit the monday first preference value.
-	 */
-	public void editMondayFirst(boolean mondayFirst, boolean commit)
-	{
-		String key = this.getKeys().getMondayFirst();
-
-		this.saveBoolean(key, mondayFirst, commit);
 	}
 
 	/**
@@ -443,6 +419,24 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * @see editNextAlarmFormat
+	 */
+	public void editNextAlarmFormat(int format)
+	{
+		this.editNextAlarmFormat(format, false);
+	}
+
+	/**
+	 * Edit the display time remaining preference.
+	 */
+	public void editNextAlarmFormat(int format, boolean commit)
+	{
+		String key = this.getKeys().getNextAlarmFormat();
+
+		this.saveInt(key, format, commit);
+	}
+
+	/**
 	 * @see editPmColor
 	 */
 	public void editPmColor(int color)
@@ -476,6 +470,16 @@ public class NacSharedPreferences
 		String key = this.getKeys().getRepeat();
 
 		this.saveBoolean(key, repeat, commit);
+	}
+
+	/**
+	 * Edit the show alarm information value.
+	 */
+	public void editShowAlarmInfo(boolean show, boolean commit)
+	{
+		String key = this.getKeys().getShowAlarmInfo();
+
+		this.saveBoolean(key, show, commit);
 	}
 
 	/**
@@ -569,6 +573,24 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * @see editStartWeekOn
+	 */
+	public void editStartWeekOn(int start)
+	{
+		this.editStartWeekOn(start, false);
+	}
+
+	/**
+	 * Edit the preference value indicating which day to start on.
+	 */
+	public void editStartWeekOn(int start, boolean commit)
+	{
+		String key = this.getKeys().getStartWeekOn();
+
+		this.saveInt(key, start, commit);
+	}
+
+	/**
 	 * @see editThemeColor
 	 */
 	public void editThemeColor(int color)
@@ -631,6 +653,16 @@ public class NacSharedPreferences
 		String key = this.getKeys().getAmColor();
 
 		return this.getSharedPreferences().getInt(key, DEFAULT_AM_COLOR);
+	}
+
+	/**
+	 * @return The app's first run value.
+	 */
+	public boolean getAppFirstRun()
+	{
+		String key = this.getKeys().getAppFirstRun();
+
+		return this.getSharedPreferences().getBoolean(key, DEFAULT_APP_FIRST_RUN);
 	}
 
 	/**
@@ -768,18 +800,6 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @return Whether the display next alarm should show time remaining for
-	 *         the next alarm or not.
-	 */
-	public boolean getDisplayTimeRemaining()
-	{
-		String key = this.getKeys().getDisplayTimeRemaining();
-
-		return this.getSharedPreferences().getBoolean(key,
-			DEFAULT_DISPLAY_TIME_REMAINING);
-	}
-
-	/**
 	 * @return Whether easy snooze is enabled or not.
 	 */
 	public boolean getEasySnooze()
@@ -886,17 +906,6 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @return The monday first value.
-	 */
-	public boolean getMondayFirst()
-	{
-		String key = this.getKeys().getMondayFirst();
-
-		return this.getSharedPreferences().getBoolean(key,
-			DEFAULT_MONDAY_FIRST);
-	}
-
-	/**
 	 * @return The name of the alarm.
 	 */
 	public String getName()
@@ -936,6 +945,18 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * @return Whether the display next alarm should show time remaining for
+	 *         the next alarm or not.
+	 */
+	public int getNextAlarmFormat()
+	{
+		String key = this.getKeys().getNextAlarmFormat();
+
+		return this.getSharedPreferences().getInt(key,
+			DEFAULT_NEXT_ALARM_FORMAT);
+	}
+
+	/**
 	 * @return The PM color.
 	 */
 	public int getPmColor()
@@ -943,16 +964,6 @@ public class NacSharedPreferences
 		String key = this.getKeys().getPmColor();
 
 		return this.getSharedPreferences().getInt(key, DEFAULT_PM_COLOR);
-	}
-
-	/**
-	 * @return The app's first run value.
-	 */
-	public boolean getAppFirstRun()
-	{
-		String key = this.getKeys().getAppFirstRun();
-
-		return this.getSharedPreferences().getBoolean(key, DEFAULT_APP_FIRST_RUN);
 	}
 
 	/**
@@ -966,21 +977,21 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @return Whether NFC is required or not.
-	 */
-	public boolean getUseNfc()
-	{
-		String key = this.getKeys().getUseNfc();
-
-		return this.getSharedPreferences().getBoolean(key, DEFAULT_USE_NFC);
-	}
-
-	/**
 	 * @return The SharedPreferences object.
 	 */
 	public SharedPreferences getSharedPreferences()
 	{
 		return this.mSharedPreferences;
+	}
+
+	/**
+	 * @return Whether the alarm information should be shown or not.
+	 */
+	public boolean getShowAlarmInfo()
+	{
+		String key = this.getKeys().getShowAlarmInfo();
+
+		return this.getSharedPreferences().getBoolean(key, DEFAULT_SHOW_ALARM_INFO);
 	}
 
 	/**
@@ -1172,6 +1183,17 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * @return The value indicating which day to start on.
+	 */
+	public int getStartWeekOn()
+	{
+		String key = this.getKeys().getStartWeekOn();
+
+		return this.getSharedPreferences().getInt(key,
+			DEFAULT_START_WEEK_ON);
+	}
+
+	/**
 	 * @return The theme color.
 	 */
 	public int getThemeColor()
@@ -1189,6 +1211,16 @@ public class NacSharedPreferences
 		String key = this.getKeys().getTimeColor();
 
 		return this.getSharedPreferences().getInt(key, DEFAULT_TIME_COLOR);
+	}
+
+	/**
+	 * @return Whether NFC is required or not.
+	 */
+	public boolean getUseNfc()
+	{
+		String key = this.getKeys().getUseNfc();
+
+		return this.getSharedPreferences().getBoolean(key, DEFAULT_USE_NFC);
 	}
 
 	/**

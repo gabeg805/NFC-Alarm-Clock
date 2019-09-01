@@ -2,20 +2,6 @@
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<!-- Next alarm time format -->
-	<com.nfcalarmclock.NacPreferenceCategory
-		android:title="@string/pref_general_display_next_alarm_category">
-
-		<com.nfcalarmclock.NacCheckboxPreference
-			android:key="@string/pref_display_time_remaining_key"
-			android:title="@string/pref_display_time_remaining_title"
-			android:summaryOn="@string/pref_display_time_remaining_summary_enabled"
-			android:summaryOff="@string/pref_display_time_remaining_summary_disabled"
-			android:defaultValue="true"
-			/>
-
-	</com.nfcalarmclock.NacPreferenceCategory>
-
 	<!-- Dismiss -->
 	<com.nfcalarmclock.NacPreferenceCategory
 		android:title="@string/pref_general_dismiss_category">
@@ -25,16 +11,6 @@
 			android:title="@string/pref_auto_dismiss_title"
 			android:defaultValue="7"
 			/>
-
-		<!--
-		<com.nfcalarmclock.NacCheckboxPreference
-			android:key="@string/pref_dismiss_button_key"
-			android:title="@string/pref_dismiss_button_title"
-			android:summaryOn="@string/pref_dismiss_button_summary_enabled"
-			android:summaryOff="@string/pref_dismiss_button_summary_disabled"
-			android:defaultValue="false"
-			/>
-		-->
 
 	</com.nfcalarmclock.NacPreferenceCategory>
 
@@ -60,6 +36,32 @@
 			android:summaryOn="@string/pref_easy_snooze_summary_enabled"
 			android:summaryOff="@string/pref_easy_snooze_summary_disabled"
 			android:defaultValue="false"
+			/>
+
+	</com.nfcalarmclock.NacPreferenceCategory>
+
+	<!-- Tweaks -->
+	<com.nfcalarmclock.NacPreferenceCategory
+		android:title="@string/pref_general_tweaks_category">
+
+		<com.nfcalarmclock.NacNextAlarmFormatPreference
+			android:key="@string/pref_next_alarm_format_key"
+			android:title="@string/pref_next_alarm_format_title"
+			android:defaultValue="0"
+			/>
+
+		<com.nfcalarmclock.NacStartWeekOnPreference
+			android:key="@string/pref_start_week_on_key"
+			android:title="@string/pref_start_week_on_title"
+			android:defaultValue="0"
+			/>
+
+		<com.nfcalarmclock.NacCheckboxPreference
+			android:key="@string/pref_alarm_info_key"
+			android:title="@string/pref_alarm_info_title"
+			android:summaryOn="@string/pref_alarm_info_summary_enabled"
+			android:summaryOff="@string/pref_alarm_info_summary_disabled"
+			android:defaultValue="true"
 			/>
 
 	</com.nfcalarmclock.NacPreferenceCategory>

@@ -182,9 +182,9 @@ public class NacMainActivity
 		if (next != null)
 		{
 			NacSharedPreferences shared = this.getSharedPreferences();
-			boolean timeRemaining = shared.getDisplayTimeRemaining();
+			int nextAlarmFormat = shared.getNextAlarmFormat();
 			long millis = next.getTriggerTime();
-			message = NacCalendar.getNextMessage(millis, timeRemaining);
+			message = NacCalendar.getNextMessage(millis, nextAlarmFormat);
 		}
 
 		NacUtility.snackbar(this, message, "DISMISS", null);

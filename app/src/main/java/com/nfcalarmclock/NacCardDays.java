@@ -154,7 +154,7 @@ public class NacCardDays
 		EnumSet<NacCalendar.Day> days = alarm.getDays();
 		NacDayOfWeek dayButtons = this.getDayButtons();
 
-		dayButtons.setMondayFirst(shared.getMondayFirst());
+		dayButtons.setStartWeekOn(shared.getStartWeekOn());
 		dayButtons.setDays(days);
 	}
 

@@ -143,7 +143,7 @@ public class NacMusicFragment
 			if (browser.isSelected())
 			{
 				this.setMedia(path);
-				player.play(path);
+				player.play(path, true);
 			}
 			else
 			{

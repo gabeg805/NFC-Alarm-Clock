@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 /**
  * Sound for an alarm card.
@@ -30,7 +31,7 @@ public class NacCardSound
 	/**
 	 * Sound.
 	 */
-	 private NacImageTextButton mSound;
+	private TextView mSound;
 
 	/**
 	 * Volume.
@@ -52,22 +53,10 @@ public class NacCardSound
 	public NacCardSound(Context context, View root, NacCardMeasure measure)
 	{
 		this.mContext = context;
-		this.mSound = (NacImageTextButton) root.findViewById(R.id.nac_sound);
+		this.mSound = (TextView) root.findViewById(R.id.nac_sound);
 		this.mVolume = (SeekBar) root.findViewById(R.id.nac_volume_slider);
 		this.mMediaSource = (ImageView) root.findViewById(R.id.nac_volume_settings);
 		this.mMeasure = measure;
-	}
-
-	/**
-	 * Ellipsize the sound.
-	 */
-	private void ellipsize()
-	{
-		RelativeLayout.LayoutParams params = this.getLayoutParams();
-		params.width = this.getMaxWidth();
-
-		this.mSound.setLayoutParams(params);
-
 	}
 
 	/**
@@ -92,32 +81,6 @@ public class NacCardSound
 	private Context getContext()
 	{
 		return this.mContext;
-	}
-
-	/**
-	 * @return The layout params.
-	 */
-	private RelativeLayout.LayoutParams getLayoutParams()
-	{
-		RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)
-			this.mSound.getLayoutParams();
-		
-		return (params != null) ? params : new RelativeLayout.LayoutParams(
-			RelativeLayout.LayoutParams.WRAP_CONTENT,
-			RelativeLayout.LayoutParams.WRAP_CONTENT);
-	}
-
-	/**
-	 * @return The max width of the sound name before it gets ellipsized.
-	 */
-	private int getMaxWidth()
-	{
-		int screenWidth = this.getScreenWidth();
-		int padding = this.getCardPadding();
-		int vibrate = this.getVibrateWidth();
-		int textsize = this.mSound.getTextSize();
-
-		return screenWidth - vibrate - padding - textsize;
 	}
 
 	/**
@@ -174,13 +137,10 @@ public class NacCardSound
 		NacAlarm alarm = this.getAlarm();
 		String path = alarm.getSoundPath();
 		String message = NacSharedPreferences.getSoundMessage(context, path);
-		boolean focus = (!path.isEmpty());
+		float alpha = (!path.isEmpty()) ? 1.0f : 0.5f;
 
 		this.mSound.setText(message);
-		this.mSound.setFocus(focus);
-		this.mSound.getTextView().setMaxLines(1);
-		this.mSound.getTextView().setEllipsize(TextUtils.TruncateAt.END);
-		this.ellipsize();
+		this.mSound.setAlpha(alpha);
 	}
 
 	/**

@@ -75,7 +75,7 @@
 			android:paddingEnd="@dimen/mr_card">
 
 			<RelativeLayout
-				android:id="@+id/poop"
+				android:id="@+id/nac_summary_text"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_toLeftOf="@id/nac_summary_expand"
@@ -115,7 +115,7 @@
 				android:id="@+id/nac_summary_expand"
 				android:layout_width="@dimen/isz_expand"
 				android:layout_height="@dimen/isz_expand"
-				android:layout_alignBottom="@id/poop"
+				android:layout_alignBottom="@id/nac_summary_text"
 				android:layout_alignParentEnd="true"
 				android:layout_marginEnd="@dimen/mr_expand"
 				android:src="@mipmap/expand"
@@ -184,21 +184,33 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content">
 
-				<com.nfcalarmclock.NacImageTextButton
+				<ImageView
+					android:id="@+id/sound_icon"
+					android:layout_width="@dimen/isz_sound"
+					android:layout_height="@dimen/isz_sound"
+					android:layout_marginStart="@dimen/sp_sound"
+					android:layout_centerVertical="true"
+					android:src="@mipmap/music_note"
+					tools:ignore="ContentDescription"
+					/>
+
+				<TextView
 					android:id="@+id/nac_sound"
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"
-					android:layout_alignBottom="@id/nac_vibrate"
+					android:layout_toLeftOf="@id/nac_vibrate"
+					android:layout_toRightOf="@id/sound_icon"
+					android:layout_centerVertical="true"
 					android:paddingTop="@dimen/pt_sound"
 					android:paddingBottom="@dimen/pb_sound"
 					android:paddingStart="@dimen/pl_sound"
-					app:nacDrawable="@mipmap/music_note"
-					app:nacDrawableWidth="@dimen/isz_sound"
-					app:nacDrawableHeight="@dimen/isz_sound"
-					app:nacText=""
+					android:paddingEnd="@dimen/pr_sound"
+					android:maxLength="@integer/max_entry_length"
+					android:maxLines="1"
+					android:ellipsize="end"
+					android:textColor="@color/white"
+					android:text=""
 					/>
-				<!--
-				-->
 
 				<CheckBox
 					android:id="@+id/nac_vibrate"
@@ -268,6 +280,7 @@
 				android:paddingTop="@dimen/pt_name"
 				android:paddingBottom="@dimen/pb_name"
 				android:paddingStart="@dimen/pl_name"
+				app:nacSpacing="@dimen/sp_name"
 				app:nacDrawable="@mipmap/label"
 				/>
 

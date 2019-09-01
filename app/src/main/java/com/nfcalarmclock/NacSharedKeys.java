@@ -65,9 +65,9 @@ public class NacSharedKeys
 	private final String mAboutScreenTitle;
 
 	/**
-	 * Display time remaining.
+	 * Next alarm display format.
 	 */
-	private final String mDisplayTimeRemaining;
+	private final String mNextAlarmFormat;
 
 	/**
 	 * Auto dismiss message.
@@ -78,6 +78,11 @@ public class NacSharedKeys
 	 * Auto dismiss.
 	 */
 	private final String mAutoDismiss;
+
+	/**
+	 * Show alarm information in alarm activity.
+	 */
+	private final String mShowAlarmInfo;
 
 	/**
 	 * Max snoozes.
@@ -100,9 +105,9 @@ public class NacSharedKeys
 	private final String mShuffle;
 
 	/**
-	 * Monday as the first day-of-week.
+	 * Start week on.
 	 */
-	private final String mMondayFirst;
+	private final String mStartWeekOn;
 
 	/**
 	 * Speak the current time to the user.
@@ -201,14 +206,15 @@ public class NacSharedKeys
 		this.mColorScreenTitle = res.getString(R.string.pref_screen_color_title);
 		this.mMiscellaneousTitle = res.getString(R.string.pref_screen_misc_title);
 		this.mAboutScreenTitle = res.getString(R.string.pref_screen_about_title);
-		this.mDisplayTimeRemaining = res.getString(R.string.pref_display_time_remaining_key);
+		this.mNextAlarmFormat = res.getString(R.string.pref_next_alarm_format_key);
 		this.mAutoDismissMessage = res.getString(R.string.alarm_auto_dismiss_message);
 		this.mAutoDismiss = res.getString(R.string.pref_auto_dismiss_key);
+		this.mShowAlarmInfo = res.getString(R.string.pref_alarm_info_key);
 		this.mMaxSnooze = res.getString(R.string.pref_max_snooze_key);
 		this.mSnoozeDuration = res.getString(R.string.pref_snooze_duration_key);
 		this.mEasySnooze = res.getString(R.string.pref_easy_snooze_key);
 		this.mShuffle = res.getString(R.string.pref_shuffle_playlist_key);
-		this.mMondayFirst = res.getString(R.string.pref_monday_first_key);
+		this.mStartWeekOn = res.getString(R.string.pref_start_week_on_key);
 		this.mSpeakToMe = res.getString(R.string.pref_speak_to_me_key);
 		this.mSpeakFrequency = res.getString(R.string.pref_speak_frequency_key);
 		this.mRepeat = res.getString(R.string.pref_repeat_key);
@@ -324,14 +330,6 @@ public class NacSharedKeys
 	}
 
 	/**
-	 * @return The display time remaining key.
-	 */
-	public String getDisplayTimeRemaining()
-	{
-		return this.mDisplayTimeRemaining;
-	}
-
-	/**
 	 * @return The easy snooze key.
 	 */
 	public String getEasySnooze()
@@ -380,14 +378,6 @@ public class NacSharedKeys
 	}
 
 	/**
-	 * @return The monday first key.
-	 */
-	public String getMondayFirst()
-	{
-		return this.mMondayFirst;
-	}
-
-	/**
 	 * @return The name key.
 	 */
 	public String getName()
@@ -401,6 +391,14 @@ public class NacSharedKeys
 	public String getNameColor()
 	{
 		return this.mNameColor;
+	}
+
+	/**
+	 * @return The display time remaining key.
+	 */
+	public String getNextAlarmFormat()
+	{
+		return this.mNextAlarmFormat;
 	}
 
 	/**
@@ -425,6 +423,14 @@ public class NacSharedKeys
 	public String getRepeat()
 	{
 		return this.mRepeat;
+	}
+
+	/**
+	 * @return The alarm information key.
+	 */
+	public String getShowAlarmInfo()
+	{
+		return this.mShowAlarmInfo;
 	}
 
 	/**
@@ -473,6 +479,14 @@ public class NacSharedKeys
 	public String getSpeakToMe()
 	{
 		return this.mSpeakToMe;
+	}
+
+	/**
+	 * @return The start week on key.
+	 */
+	public String getStartWeekOn()
+	{
+		return this.mStartWeekOn;
 	}
 
 	/**

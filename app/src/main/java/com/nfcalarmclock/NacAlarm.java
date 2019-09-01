@@ -513,6 +513,18 @@ public class NacAlarm
 	}
 
 	/**
+	 * Track changes that were made to the alarm.
+	 */
+	public enum ChangeTracker
+	{
+		NONE,
+		ENABLE,
+		TIME,
+		REPEAT,
+		DAY
+	}
+
+	/**
 	 * Listener for when the alarm is changed.
 	 */
 	private OnChangeListener mOnChangeListener;
@@ -590,7 +602,7 @@ public class NacAlarm
 	/**
 	 * Was the alarm enabled.
 	 */
-	private boolean mWasEnabled;
+	private ChangeTracker mTracker;
 
 	/**
 	 */
@@ -619,7 +631,7 @@ public class NacAlarm
 		this.setSoundName(builder.getSoundName());
 		this.setName(builder.getName());
 
-		this.mWasEnabled = false;
+		this.mTracker = ChangeTracker.NONE;
 	}
 
 	/**
@@ -665,7 +677,7 @@ public class NacAlarm
 			this.getOnChangeListener().onChange(this);
 		}
 
-		this.mWasEnabled = false;
+		this.mTracker = ChangeTracker.NONE;
 	}
 
 	/**
@@ -736,6 +748,14 @@ public class NacAlarm
 	public String getAudioSource()
 	{
 		return this.mAudioSource;
+	}
+
+	/**
+	 * @return The change tracker.
+	 */
+	public ChangeTracker getChangeTracker()
+	{
+		return this.mTracker;
 	}
 
 	/**
@@ -949,6 +969,7 @@ public class NacAlarm
 	public void setDays(EnumSet<NacCalendar.Day> days)
 	{
 		this.mDays = days;
+		this.mTracker = ChangeTracker.DAY;
 	}
 
 	/**
@@ -968,7 +989,7 @@ public class NacAlarm
 	{
 		this.mEnabled = enabled;
 
-		this.setWasEnabled(enabled);
+		this.mTracker = ChangeTracker.ENABLE;
 	}
 
 	/**
@@ -979,6 +1000,7 @@ public class NacAlarm
 	public void setHour(int hour)
 	{
 		this.mHour = hour;
+		this.mTracker = ChangeTracker.TIME;
 	}
 
 	/**
@@ -999,6 +1021,7 @@ public class NacAlarm
 	public void setMinute(int minute)
 	{
 		this.mMinute = minute;
+		this.mTracker = ChangeTracker.TIME;
 	}
 
 	/**
@@ -1030,6 +1053,7 @@ public class NacAlarm
 	public void setRepeat(boolean repeat)
 	{
 		this.mRepeat = repeat;
+		this.mTracker = ChangeTracker.REPEAT;
 	}
 
 	/**
@@ -1112,14 +1136,6 @@ public class NacAlarm
 	}
 
 	/**
-	 * Set was enabled flag.
-	 */
-	public void setWasEnabled(boolean enabled)
-	{
-		this.mWasEnabled = (enabled) ? enabled : this.mWasEnabled;
-	}
-
-	/**
 	 * Toggle a day.
 	 */
 	public void toggleDay(NacCalendar.Day day)
@@ -1132,6 +1148,8 @@ public class NacAlarm
 		{
 			this.getDays().add(day);
 		}
+
+		this.mTracker = ChangeTracker.DAY;
 	}
 
 	/**
@@ -1175,9 +1193,9 @@ public class NacAlarm
 	 * @return True if the alarm was enabled before the changed listener was
 	 *         called, and False otherwise.
 	 */
-	public boolean wasEnabled()
+	public boolean wasChanged()
 	{
-		return this.mWasEnabled;
+		return (this.mTracker != ChangeTracker.NONE);
 	}
 
 	/**

@@ -188,8 +188,8 @@ public class NacCardHolder
 		NacSharedPreferences shared = this.getSharedPreferences();
 		this.mAlarm = alarm;
 
-		this.mCard.init();
 		this.setListeners(null);
+		this.mCard.init(alarm);
 		this.mSwitch.init(alarm);
 		this.mTime.init(alarm);
 		this.mSummary.init(shared, alarm);
@@ -251,6 +251,7 @@ public class NacCardHolder
 		}
 		else if (id == R.id.nac_repeat)
 		{
+			this.mCard.setRepeatHeight(this.mDays, state);
 			alarm.setRepeat(state);
 
 			if (state && !alarm.areDaysSelected())
@@ -258,7 +259,6 @@ public class NacCardHolder
 				alarm.setDays(NacSharedPreferences.DEFAULT_DAYS);
 			}
 
-			this.mCard.setRepeatHeight(this.mDays, state);
 			this.mDays.set(shared);
 			this.mSummary.set(shared);
 		}

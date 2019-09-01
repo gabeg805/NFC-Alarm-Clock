@@ -89,11 +89,17 @@ public class NacSound
 	private String mData;
 
 	/**
+	 * Repeat the media.
+	 */
+	private boolean mRepeat;
+
+	/**
 	 */
 	public NacSound(Context context, String path)
 	{
 		this.set(context, path);
 		this.setData("");
+		this.setRepeat(false);
 	}
 
 	/**
@@ -107,16 +113,26 @@ public class NacSound
 			this.setPath(RANDOM_RINGTONE_PATH);
 			this.setName(RANDOM_RINGTONE_NAME);
 		}
+
+		this.setRepeat(false);
 	}
 
 	/**
 	 */
 	public NacSound(int type, String path, String name)
 	{
+		this(type, path, name, false);
+	}
+
+	/**
+	 */
+	public NacSound(int type, String path, String name, boolean repeat)
+	{
 		this.setType(type);
 		this.setPath(path);
 		this.setName(name);
 		this.setData("");
+		this.setRepeat(repeat);
 	}
 
 	/**
@@ -128,6 +144,7 @@ public class NacSound
 		this.setPath(input.readString());
 		this.setName(input.readString());
 		this.setData(input.readString());
+		this.setRepeat((input.readInt() != 0));
 	}
 
 	/**
@@ -164,6 +181,14 @@ public class NacSound
 	}
 
 	/**
+	 * @return True if the media should be repeated, and False otherwise.
+	 */
+	public boolean getRepeat()
+	{
+		return this.mRepeat;
+	}
+
+	/**
 	 * @return The type of sound file.
 	 */
 	public int getType()
@@ -176,10 +201,11 @@ public class NacSound
 	 */
 	public void print()
 	{
-		NacUtility.printf("Type : %d", this.getType());
-		NacUtility.printf("Name : %s", this.getName());
-		NacUtility.printf("Path : %s", this.getPath());
-		NacUtility.printf("Data : %s", this.getData());
+		NacUtility.printf("Type   : %d", this.getType());
+		NacUtility.printf("Name   : %s", this.getName());
+		NacUtility.printf("Path   : %s", this.getPath());
+		NacUtility.printf("Data   : %s", this.getData());
+		NacUtility.printf("Repeat : %b", this.getRepeat());
 	}
 
 	/**
@@ -217,6 +243,14 @@ public class NacSound
 	}
 
 	/**
+	 * Set the repeat flag.
+	 */
+	public void setRepeat(boolean repeat)
+	{
+		this.mRepeat = repeat;
+	}
+
+	/**
 	 * Set the sound type.
 	 */
 	public void setType(int type)
@@ -234,6 +268,7 @@ public class NacSound
 		output.writeString(this.getPath());
 		output.writeString(this.getName());
 		output.writeString(this.getData());
+		output.writeInt(this.getRepeat() ? 1 : 0);
 	}
 
 	/**

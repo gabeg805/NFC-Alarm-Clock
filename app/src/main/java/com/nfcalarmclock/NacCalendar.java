@@ -88,6 +88,11 @@ public class NacCalendar
 
 		for (NacAlarm a : alarms)
 		{
+			if (!a.getEnabled())
+			{
+				continue;
+			}
+
 			Calendar calendar = NacCalendar.getNext(a);
 
 			if ((nextCalendar == null) || calendar.before(nextCalendar))
@@ -147,9 +152,9 @@ public class NacCalendar
 	/**
 	 * @return The next message in the desired format.
 	 */
-	public static String getNextMessage(long millis, boolean timeRemaining)
+	public static String getNextMessage(long millis, int format)
 	{
-		if (timeRemaining)
+		if (format == 0)
 		{
 			return NacCalendar.getNextMessage(millis);
 		}
@@ -482,7 +487,7 @@ public class NacCalendar
 		 */
 		public static String toString(NacAlarm alarm)
 		{
-			return NacCalendar.Days.toString(alarm, false);
+			return NacCalendar.Days.toString(alarm, 0);
 		}
 
 		/**
@@ -490,9 +495,9 @@ public class NacCalendar
 		 *
 		 * If no days are specified and the alarm is enable.
 		 */
-		public static String toString(NacAlarm alarm, boolean mondayFirst)
+		public static String toString(NacAlarm alarm, int start)
 		{
-			String string = NacCalendar.Days.toString(alarm.getDays(), mondayFirst);
+			String string = NacCalendar.Days.toString(alarm.getDays(), start);
 
 			if (string.isEmpty() || !alarm.getRepeat())
 			{
@@ -511,24 +516,25 @@ public class NacCalendar
 		 */
 		public static String toString(EnumSet<Day> days)
 		{
-			return NacCalendar.Days.toString(days, false);
+			return NacCalendar.Days.toString(days, 0);
 		}
 
 		/**
 		 * Convert a set of days to a comma separate string of days.
 		 *
 		 * @param  days  The set of days.
+		 * @param  start  The day to start the week on.
 		 *
 		 * @return A string of the days.
 		 */
-		public static String toString(EnumSet<Day> days, boolean mondayFirst)
+		public static String toString(EnumSet<Day> days, int start)
 		{
 			String string = "";
 			int index = 0;
 			String[] names;
 			Day[] set;
 
-			if (mondayFirst)
+			if (start == 1)
 			{
 				names = new String[] { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",
 					"Sun" };
@@ -566,17 +572,17 @@ public class NacCalendar
 		 */
 		public static String toString(int value)
 		{
-			return NacCalendar.Days.toString(value, false);
+			return NacCalendar.Days.toString(value, 0);
 		}
 
 		/**
 		 * @see toString
 		 */
-		public static String toString(int value, boolean mondayFirst)
+		public static String toString(int value, int start)
 		{
 			EnumSet<Day> days = NacCalendar.Days.valueToDays(value);
 
-			return NacCalendar.Days.toString(days, mondayFirst);
+			return NacCalendar.Days.toString(days, start);
 		}
 
 		/**

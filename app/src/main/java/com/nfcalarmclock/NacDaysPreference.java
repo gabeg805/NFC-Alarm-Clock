@@ -114,10 +114,10 @@ public class NacDaysPreference
 		Context context = getContext();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
 		NacDayOfWeek dow = root.findViewById(R.id.days);
-		boolean mondayFirst = shared.getMondayFirst();
+		int start = shared.getStartWeekOn();
 
 		dow.setDays(this.mValue);
-		dow.setMondayFirst(mondayFirst);
+		dow.setStartWeekOn(start);
 	}
 
 	/**

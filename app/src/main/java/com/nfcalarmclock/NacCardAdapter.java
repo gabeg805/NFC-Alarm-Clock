@@ -409,7 +409,7 @@ public class NacCardAdapter
 		Intent intent = NacIntent.createService(context, "update", alarm);
 		this.mWasAdded = false;
 
-		if (alarm.wasEnabled())
+		if (alarm.wasChanged() && alarm.getEnabled())
 		{
 			this.showNextAlarm(alarm);
 		}
@@ -601,9 +601,9 @@ public class NacCardAdapter
 		Context context = this.getContext();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
 		Calendar calendar = NacCalendar.getNext(alarm);
-		boolean timeRemaining = shared.getDisplayTimeRemaining();
+		int nextAlarmFormat = shared.getNextAlarmFormat();
 		long millis = calendar.getTimeInMillis();
-		String message = NacCalendar.getNextMessage(millis, timeRemaining);
+		String message = NacCalendar.getNextMessage(millis, nextAlarmFormat);
 		this.mNextAlarm = alarm;
 
 		this.snackbar(message, "DISMISS", null, true);

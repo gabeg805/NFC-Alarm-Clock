@@ -154,7 +154,7 @@ public class NacCardSummary
 	{
 		NacAlarm alarm = this.getAlarm();
 		String string = NacCalendar.Days.toString(alarm,
-			shared.getMondayFirst());
+			shared.getStartWeekOn());
 
 		this.mDays.setText(string);
 		this.mDays.requestLayout();

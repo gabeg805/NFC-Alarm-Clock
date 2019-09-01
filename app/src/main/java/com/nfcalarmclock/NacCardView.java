@@ -28,6 +28,11 @@ public class NacCardView
 	private Context mContext;
 
 	/**
+	 * Alarm.
+	 */
+	private NacAlarm mAlarm;
+
+	/**
 	 * The recycler view.
 	 */
 	private RecyclerView mRecyclerView;
@@ -107,6 +112,7 @@ public class NacCardView
 	public NacCardView(Context context, View root, NacCardMeasure measure)
 	{
 		this.mContext = context;
+		this.mAlarm = null;
 		this.mRecyclerView = (RecyclerView) ((Activity)context).findViewById(
 			R.id.content_alarm_list);
 		this.mCardView = (CardView) root.findViewById(R.id.nac_card);
@@ -152,30 +158,9 @@ public class NacCardView
 		else
 		{
 			this.setCollapseBackgroundColor();
-			//this.setCollapseHeight();
 			this.showCollapse();
 		}
 	}
-
-	/**
-	 * Set the collapse height for the alarm card.
-	 */
-	//public void setCollapseHeight()
-	//{
-	//	CardView card = this.getCardView();
-	//	ViewGroup.LayoutParams params = card.getLayoutParams();
-
-	//	if (params == null)
-	//	{
-	//		params = new ViewGroup.LayoutParams(
-	//			ViewGroup.LayoutParams.WRAP_CONTENT,
-	//			ViewGroup.LayoutParams.WRAP_CONTENT);
-	//	}
-
-	//	params.height = this.getCollapseHeight();
-	//	card.setLayoutParams(params);
-	//	card.requestLayout();
-	//}
 
 	/**
 	 * @see expand
@@ -212,41 +197,11 @@ public class NacCardView
 	}
 
 	/**
-	 * @return A color transition starting and ending on the provided colors.
+	 * @return The alarm.
 	 */
-	private TransitionDrawable getColorTransition(int startId, int endId)
+	private NacAlarm getAlarm()
 	{
-		Context context = this.getContext();
-		int start = NacUtility.getThemeAttrColor(context, startId);
-		int end = NacUtility.getThemeAttrColor(context, endId);
-		ColorDrawable[] color = {new ColorDrawable(start),
-			new ColorDrawable(end)};
-
-		return new TransitionDrawable(color);
-	}
-
-	/**
-	 * @return The color transition from the highlight color to the regular
-	 *         card background color.
-	 */
-	private TransitionDrawable getCollapseColorTransition()
-	{
-		int startId = R.attr.colorCardExpanded;
-		int endId = R.attr.colorCard;
-
-		return this.getColorTransition(startId, endId);
-	}
-
-	/**
-	 * @return The color transition from the highlight color to the regular
-	 *         card background color.
-	 */
-	private TransitionDrawable getExpandColorTransition()
-	{
-		int startId = R.attr.colorCard;
-		int endId = R.attr.colorCardExpanded;
-
-		return this.getColorTransition(startId, endId);
+		return this.mAlarm;
 	}
 
 	/**
@@ -275,11 +230,37 @@ public class NacCardView
 	}
 
 	/**
+	 * @return The color transition from the highlight color to the regular
+	 *         card background color.
+	 */
+	private TransitionDrawable getCollapseColorTransition()
+	{
+		int startId = R.attr.colorCardExpanded;
+		int endId = R.attr.colorCard;
+
+		return this.getColorTransition(startId, endId);
+	}
+
+	/**
 	 * @return The height of the card when it is collapsed.
 	 */
 	public int getCollapseHeight()
 	{
 		return this.mMeasure.getCollapseHeight();
+	}
+
+	/**
+	 * @return A color transition starting and ending on the provided colors.
+	 */
+	private TransitionDrawable getColorTransition(int startId, int endId)
+	{
+		Context context = this.getContext();
+		int start = NacUtility.getThemeAttrColor(context, startId);
+		int end = NacUtility.getThemeAttrColor(context, endId);
+		ColorDrawable[] color = {new ColorDrawable(start),
+			new ColorDrawable(end)};
+
+		return new TransitionDrawable(color);
 	}
 
 	/**
@@ -308,17 +289,31 @@ public class NacCardView
 	}
 
 	/**
+	 * @return The color transition from the highlight color to the regular
+	 *         card background color.
+	 */
+	private TransitionDrawable getExpandColorTransition()
+	{
+		int startId = R.attr.colorCard;
+		int endId = R.attr.colorCardExpanded;
+
+		return this.getColorTransition(startId, endId);
+	}
+
+	/**
 	 * @return The height of the card when it is expanded.
 	 */
 	public int getExpandHeight()
 	{
+		NacAlarm alarm = this.getAlarm();
 		NacDayOfWeek dayButtons = this.mMeasure.getDayButtons();
 		int daysHeight = this.mMeasure.getDayButtonsHeight();
-		int collapseHeight = this.mMeasure.getCollapseHeight();
 		int expandHeight = this.mMeasure.getExpandHeight();
 
-		return (dayButtons.getVisibility() == View.VISIBLE) ? expandHeight
+		return (alarm.getRepeat()) ? expandHeight
 			: expandHeight-daysHeight;
+		//return (dayButtons.getVisibility() == View.VISIBLE) ? expandHeight
+		//	: expandHeight-daysHeight;
 	}
 
 	/**
@@ -349,7 +344,7 @@ public class NacCardView
 	/**
 	 * Initialize the view state.
 	 */
-	public void init()
+	public void init(NacAlarm alarm)
 	{
 		//// Might be easier to just have init be hideSwipeViews?
 		//if (this.isExpanded())
@@ -363,6 +358,8 @@ public class NacCardView
 		//		}
 		//	}, INIT_WAIT);
 		//}
+
+		this.mAlarm = alarm;
 
 		this.hideSwipeViews();
 	}
@@ -513,6 +510,9 @@ public class NacCardView
 	/**
 	 * Set the card height when it is expanded and the repeat checkbox has been
 	 * pressed.
+	 *
+	 * @note This should be called before the alarm repeat is changed, or else
+	 *       determining the expand height will return an incorrect value.
 	 */
 	public void setRepeatHeight(NacCardDays days, boolean repeat)
 	{

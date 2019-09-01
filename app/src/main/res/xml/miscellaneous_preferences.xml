@@ -2,20 +2,6 @@
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<!-- Day of week order -->
-	<com.nfcalarmclock.NacPreferenceCategory
-		android:title="@string/pref_misc_dow_order_category">
-
-		<com.nfcalarmclock.NacCheckboxPreference
-			android:key="@string/pref_monday_first_key"
-			android:title="@string/pref_monday_first_title"
-			android:summaryOn="@string/pref_monday_first_summary_enabled"
-			android:summaryOff="@string/pref_monday_first_summary_disabled"
-			android:defaultValue="false"
-			/>
-
-	</com.nfcalarmclock.NacPreferenceCategory>
-
 	<!-- Music -->
 	<com.nfcalarmclock.NacPreferenceCategory
 		android:title="@string/pref_misc_music_category">

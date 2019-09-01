@@ -11,7 +11,7 @@
 	<dimen name="m_act_alarm_icon">28dp</dimen>
 	<dimen name="m_act_alarm_buttons">28dp</dimen>
 	<dimen name="mb_act_alarm_info">20dp</dimen>
-	<dimen name="mb_act_alarm_info_name">8dp</dimen>
+	<dimen name="mb_act_alarm_info_name">2dp</dimen>
 	<dimen name="isz_act_alarm_icon">64dp</dimen>
 	<dimen name="tsz_act_alarm_title">26sp</dimen>
 	<dimen name="tsz_act_alarm_info_name">18sp</dimen>
@@ -80,7 +80,7 @@
 	<dimen name="pt_nfc">22dp</dimen>
 	<dimen name="pb_nfc">16dp</dimen>
 	<dimen name="pl_nfc">14dp</dimen>
-	<dimen name="pr_nfc">12dp</dimen>
+	<dimen name="pr_nfc">6dp</dimen>
 
 
 	<!-- Days -->
@@ -93,16 +93,18 @@
 
 	<!-- Sound -->
 	<dimen name="isz_sound">24dp</dimen>
+	<dimen name="sp_sound">6dp</dimen>
 	<dimen name="pt_sound">16dp</dimen>
 	<dimen name="pb_sound">16dp</dimen>
-	<dimen name="pl_sound">4dp</dimen>
+	<dimen name="pl_sound">14dp</dimen>
+	<dimen name="pr_sound">10dp</dimen>
 
 
 	<!-- Vibrate -->
 	<dimen name="pt_vibrate">16dp</dimen>
 	<dimen name="pb_vibrate">16dp</dimen>
 	<dimen name="pl_vibrate">10dp</dimen>
-	<dimen name="pr_vibrate">25dp</dimen>
+	<dimen name="pr_vibrate">20dp</dimen>
 
 
 	<!-- Volume -->
@@ -120,6 +122,7 @@
 
 
 	<!-- Name -->
+	<dimen name="sp_name">16dp</dimen>
 	<dimen name="pt_name">12dp</dimen>
 	<dimen name="pb_name">12dp</dimen>
 	<dimen name="pl_name">6dp</dimen>

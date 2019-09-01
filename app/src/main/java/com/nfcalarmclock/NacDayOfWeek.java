@@ -250,16 +250,16 @@ public class NacDayOfWeek
 	}
 
 	/**
-	 * Set Monday to be the first day in the week, and Sunday to be last.
+	 * Set the day to start week on.
 	 */
-	public void setMondayFirst(boolean mondayFirst)
+	public void setStartWeekOn(int start)
 	{
 		NacDayButton sunday = this.mButtons[0];
 		NacDayButton monday = this.mButtons[1];
 		View firstChild = getChildAt(0);
 		View lastChild = getChildAt(6);
 
-		if (mondayFirst)
+		if (start == 1)
 		{
 			if (firstChild.getId() != monday.getId())
 			{

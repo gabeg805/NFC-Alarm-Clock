@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	android:paddingTop="@dimen/spt_dlg"
+	android:paddingBottom="@dimen/spb_dlg"
+	android:paddingStart="?dialogPreferredPadding"
+	android:paddingEnd="?dialogPreferredPadding">
+
+	<RadioGroup
+		android:id="@+id/formats"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="14dp">
+
+		<RadioButton
+			android:id="@+id/nextin"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="12dp"
+			android:layout_marginBottom="12dp"
+			android:text="@string/next_alarm_format_0"
+			android:checked="true"
+			/>
+
+		<RadioButton
+			android:id="@+id/nexton"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="12dp"
+			android:text="@string/next_alarm_format_1"
+			/>
+
+	</RadioGroup>
+
+</LinearLayout>

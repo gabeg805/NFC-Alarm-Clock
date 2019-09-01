@@ -46,7 +46,7 @@ public class NacAlarmActivity
 	 */
 	private void dismiss()
 	{
-		NacSharedPreferences shared = new NacSharedPreferences(this);
+		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 		int id = alarm.getId();
 
@@ -137,7 +137,7 @@ public class NacAlarmActivity
 	@Override
 	public void onClick(View view)
 	{
-		NacSharedPreferences shared = new NacSharedPreferences(this);
+		NacSharedPreferences shared = this.getSharedPreferences();
 		int id = view.getId();
 
 		if ((id == R.id.snooze) || ((id == R.id.act_alarm)
@@ -236,14 +236,12 @@ public class NacAlarmActivity
 	 */
 	public void setupAlarmButtons()
 	{
-		NacSharedPreferences shared = new NacSharedPreferences(this);
+		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
-		//LinearLayout layout = (LinearLayout) findViewById(R.id.act_alarm);
 		RelativeLayout layout = (RelativeLayout) findViewById(R.id.act_alarm);
 		Button snoozeButton = (Button) findViewById(R.id.snooze);
 		Button dismissButton = (Button) findViewById(R.id.dismiss);
 
-		//if (NacNfc.exists(this) && shared.getRequireNfc())
 		if (NacNfc.exists(this) && alarm.getUseNfc())
 		{
 			dismissButton.setVisibility(View.GONE);
@@ -265,15 +263,20 @@ public class NacAlarmActivity
 	 */
 	public void setupAlarmInfo()
 	{
-		NacAlarm alarm = this.getAlarm();
-		TextView name = (TextView) findViewById(R.id.name);
-		TextView time = (TextView) findViewById(R.id.time);
-		String alarmName = alarm.getName();
-		String alarmTime = alarm.getTime(this);
-		String alarmMeridian = alarm.getMeridian(this);
+		NacSharedPreferences shared = this.getSharedPreferences();
 
-		name.setText(alarmName);
-		time.setText(alarmTime+" "+alarmMeridian);
+		if (shared.getShowAlarmInfo())
+		{
+			NacAlarm alarm = this.getAlarm();
+			TextView name = (TextView) findViewById(R.id.name);
+			TextView time = (TextView) findViewById(R.id.time);
+			String alarmName = alarm.getName();
+			String alarmTime = alarm.getTime(this);
+			String alarmMeridian = alarm.getMeridian(this);
+
+			name.setText(alarmName);
+			time.setText(alarmTime+" "+alarmMeridian);
+		}
 	}
 
 	/**
@@ -281,7 +284,7 @@ public class NacAlarmActivity
 	 */
 	public boolean snooze()
 	{
-		NacSharedPreferences shared = new NacSharedPreferences(this);
+		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 		int id = alarm.getId();
 		int snoozeCount = shared.getSnoozeCount(id) + 1;

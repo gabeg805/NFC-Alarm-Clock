@@ -92,9 +92,7 @@ public class NacTextToSpeech
 		@Override
 		public void onDone(String utteranceId)
 		{
-			NacUtility.printf("onDone! %s", utteranceId);
-
-			NacMediaPlayer.abandonAudioFocus(this.getContext(),
+			NacAudio.abandonAudioFocus(this.getContext(),
 				this.getOnAudioFocusChangeListener());
 
 			if (this.getOnSpeakingListener() != null)
@@ -108,8 +106,6 @@ public class NacTextToSpeech
 		@Override
 		public void onStart(String utteranceId)
 		{
-			NacUtility.printf("onStart! %s", utteranceId);
-
 			if (this.getOnSpeakingListener() != null)
 			{
 				this.getOnSpeakingListener().onStartSpeaking();
@@ -161,6 +157,11 @@ public class NacTextToSpeech
 	private NacUtteranceListener mUtterance;
 
 	/**
+	 * Audio attributes.
+	 */
+	private NacAudio.Attributes mAudioAttributes;
+
+	/**
 	 */
 	public NacTextToSpeech(Context context, OnSpeakingListener listener)
 	{
@@ -169,6 +170,7 @@ public class NacTextToSpeech
 		this.mBuffer = "";
 		this.mInitialized = false;
 		this.mUtterance = new NacUtteranceListener(context, this);
+		this.mAudioAttributes = new NacAudio.Attributes("Music");
 
 		this.setOnSpeakingListener(listener);
 	}
@@ -239,7 +241,7 @@ public class NacTextToSpeech
 	@Override
 	public void onAudioFocusChange(int focusChange)
 	{
-		NacUtility.printf("onAudioFocusChange! %d", focusChange);
+		//NacUtility.printf("onAudioFocusChange! %d", focusChange);
 		String change = "UNKOWN";
 
 		if (focusChange == AudioManager.AUDIOFOCUS_GAIN)
@@ -259,8 +261,8 @@ public class NacTextToSpeech
 			change = "LOSS_TRANSIENT_CAN_DUCK";
 		}
 
-		NacUtility.printf("NacAlarmActivity : onAudioFocusChange : AUDIOFOCUS_%s",
-			change);
+		//NacUtility.printf("NacTextToSpeech : onAudioFocusChange : AUDIOFOCUS_%s",
+		//	change);
 	}
 
 	/**
@@ -268,12 +270,10 @@ public class NacTextToSpeech
 	@Override
 	public void onInit(int status)
 	{
-		NacUtility.printf("onInit! %d", status);
 		this.mInitialized = (status == TextToSpeech.SUCCESS);
 
 		if (this.isInitialized())
 		{
-			NacUtility.printf("Initialized!");
 			TextToSpeech speech = this.getTextToSpeech();
 
 			//speech.setLanguage(Locale.US);
@@ -282,7 +282,6 @@ public class NacTextToSpeech
 			if (this.hasBuffer())
 			{
 				String buffer = this.getBuffer();
-				NacUtility.printf("Buffer is Present on initialisation!");
 
 				this.speak(buffer);
 				this.setBuffer("");
@@ -326,28 +325,33 @@ public class NacTextToSpeech
 	}
 
 	/**
-	 * Speak the given text.
+	 * @see speak
 	 */
 	public void speak(String message)
 	{
+		this.speak(message, this.mAudioAttributes);
+	}
+
+	/**
+	 * Speak the given text.
+	 */
+	public void speak(String message, NacAudio.Attributes attrs)
+	{
 		Context context = this.getContext();
 		TextToSpeech speech = this.getTextToSpeech();
+		this.mAudioAttributes = attrs;
 		NacUtility.printf("Speaking! %s", message);
 
 		if (speech == null)
 		{
-			NacUtility.printf("Speech is null so need to create it!");
 			this.mSpeech = new TextToSpeech(context, this);
-			//speech = this.mSpeech;
 
 			this.mSpeech.setOnUtteranceProgressListener(this.mUtterance);
 		}
 
 		if (this.isInitialized())
 		{
-			NacUtility.printf("Speech is already initialized! Speaking!");
-
-			if(!NacMediaPlayer.requestAudioFocusTransient(context, this))
+			if(!NacAudio.requestAudioFocusTransient(context, this, attrs))
 			{
 				NacUtility.printf("Audio Focus TRANSIENT NOT Granted!");
 				return;
@@ -358,7 +362,6 @@ public class NacTextToSpeech
 		}
 		else
 		{
-			NacUtility.printf("Speech is NOT already initialized! Need to set buffer");
 			this.setBuffer(message);
 		}
 	}

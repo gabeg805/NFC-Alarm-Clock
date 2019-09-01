@@ -159,10 +159,10 @@ public class NacRingtoneFragment
 			this.setMedia(path);
 			player.reset();
 
-			if (!NacSound.isRandomRingtone(path))
-			{
-				player.play(path);
-			}
+			//if (!NacSound.isRandomRingtone(path))
+			//{
+				player.play(path, true);
+			//}
 		}
 	}
 
