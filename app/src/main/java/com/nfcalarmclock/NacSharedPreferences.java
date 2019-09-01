@@ -54,7 +54,7 @@ public class NacSharedPreferences
 	/**
 	 * Default show alarm information value.
 	 */
-	public static final boolean DEFAULT_SHOW_ALARM_INFO = true;
+	public static final boolean DEFAULT_SHOW_ALARM_INFO = false;
 
 	/**
 	 * Default use NFC.

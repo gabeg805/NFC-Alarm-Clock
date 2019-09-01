@@ -61,7 +61,7 @@
 			android:title="@string/pref_alarm_info_title"
 			android:summaryOn="@string/pref_alarm_info_summary_enabled"
 			android:summaryOff="@string/pref_alarm_info_summary_disabled"
-			android:defaultValue="true"
+			android:defaultValue="false"
 			/>
 
 	</com.nfcalarmclock.NacPreferenceCategory>
