@@ -952,6 +952,14 @@ public class NacAlarm
 	}
 
 	/**
+	 * Reset the change tracker.
+	 */
+	public void resetChangeTracker()
+	{
+		this.mTracker = ChangeTracker.NONE;
+	}
+
+	/**
 	 * Set the audio source.
 	 *
 	 * @param  source  The audio source.

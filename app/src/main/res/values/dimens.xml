@@ -14,8 +14,8 @@
 	<dimen name="mb_act_alarm_info_name">2dp</dimen>
 	<dimen name="isz_act_alarm_icon">64dp</dimen>
 	<dimen name="tsz_act_alarm_title">26sp</dimen>
-	<dimen name="tsz_act_alarm_info_name">16sp</dimen>
-	<dimen name="tsz_act_alarm_info_time">12sp</dimen>
+	<dimen name="tsz_act_alarm_info_name">18sp</dimen>
+	<dimen name="tsz_act_alarm_info_time">14sp</dimen>
 	<dimen name="tsz_act_alarm_instructions">14sp</dimen>
 
 

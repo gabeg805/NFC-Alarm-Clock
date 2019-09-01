@@ -409,6 +409,7 @@ public class NacCardAdapter
 		Intent intent = NacIntent.createService(context, "update", alarm);
 		this.mWasAdded = false;
 
+		NacUtility.printf("Change Tracker : %s", alarm.getChangeTracker().toString());
 		if (alarm.wasChanged() && alarm.getEnabled())
 		{
 			this.showNextAlarm(alarm);

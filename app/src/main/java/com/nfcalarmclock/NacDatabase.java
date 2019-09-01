@@ -469,6 +469,7 @@ public class NacDatabase
 					break;
 			}
 
+			alarm.resetChangeTracker();
 			list.add(alarm);
 		}
 
