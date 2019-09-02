@@ -26,15 +26,15 @@
 				android:id="@+id/nac_time_parent"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:paddingBottom="@dimen/mb_card_time_parent"
-				android:paddingEnd="@dimen/mr_card_time_parent">
+				android:paddingBottom="@dimen/mb_time_parent"
+				android:paddingEnd="@dimen/mr_time_parent">
 
 				<TextView
 					android:id="@+id/nac_time"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_card_time"
+					android:textSize="@dimen/tsz_time"
 					/>
 
 				<TextView
@@ -43,9 +43,9 @@
 					android:layout_height="wrap_content"
 					android:layout_toEndOf="@id/nac_time"
 					android:layout_alignBaseline="@id/nac_time"
-					android:layout_marginStart="@dimen/ml_card_meridian"
+					android:layout_marginStart="@dimen/ml_meridian"
 					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_card_meridian"
+					android:textSize="@dimen/tsz_meridian"
 					/>
 
 			</RelativeLayout>
@@ -152,7 +152,7 @@
 					android:paddingEnd="@dimen/pr_repeat"
 					android:buttonTint="@color/white"
 					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_card"
+					android:textSize="@dimen/tsz_general"
 					android:text="@string/card_repeat"
 					/>
 
@@ -168,7 +168,7 @@
 					android:paddingEnd="@dimen/pr_nfc"
 					android:buttonTint="@color/white"
 					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_card"
+					android:textSize="@dimen/tsz_general"
 					android:text="@string/card_nfc"
 					/>
 
@@ -199,7 +199,7 @@
 					android:paddingEnd="@dimen/pr_vibrate"
 					android:buttonTint="@color/white"
 					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_card"
+					android:textSize="@dimen/tsz_general"
 					android:text="@string/card_vibrate"
 					/>
 
@@ -216,8 +216,8 @@
 
 					<ImageView
 						android:id="@+id/sound_icon"
-						android:layout_width="@dimen/isz_sound"
-						android:layout_height="@dimen/isz_sound"
+						android:layout_width="@dimen/isz_general_tweak"
+						android:layout_height="@dimen/isz_general_tweak"
 						android:layout_marginEnd="@dimen/sp_sound"
 						android:layout_centerVertical="true"
 						android:src="@mipmap/music_note"
@@ -233,6 +233,7 @@
 						android:maxLines="1"
 						android:ellipsize="end"
 						android:textColor="@color/white"
+						android:textSize="@dimen/tsz_general"
 						android:text=""
 						/>
 
@@ -246,8 +247,8 @@
 
 				<ImageView
 					android:id="@+id/nac_volume_icon"
-					android:layout_width="@dimen/isz_itb"
-					android:layout_height="@dimen/isz_itb"
+					android:layout_width="@dimen/isz_general"
+					android:layout_height="@dimen/isz_general"
 					android:layout_centerVertical="true"
 					android:layout_marginStart="@dimen/ml_volume_icon"
 					android:layout_marginEnd="@dimen/sp_volume_icon"
@@ -285,21 +286,44 @@
 
 			</RelativeLayout>
 
-			<com.nfcalarmclock.NacImageTextButton
+			<LinearLayout
 				android:id="@+id/nac_name"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:paddingTop="@dimen/pt_name"
 				android:paddingBottom="@dimen/pb_name"
 				android:paddingStart="@dimen/pl_name"
-				app:nacSpacing="@dimen/sp_name"
-				app:nacDrawable="@mipmap/label"
-				/>
+				android:paddingEnd="@dimen/pr_name"
+				android:orientation="horizontal">
+
+				<ImageView
+					android:layout_width="@dimen/isz_general"
+					android:layout_height="@dimen/isz_general"
+					android:layout_marginEnd="@dimen/sp_name"
+					android:layout_centerVertical="true"
+					android:src="@mipmap/label"
+					tools:ignore="ContentDescription"
+					/>
+
+				<TextView
+					android:id="@+id/name"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerVertical="true"
+					android:maxLength="@integer/max_entry_length"
+					android:maxLines="1"
+					android:ellipsize="end"
+					android:textColor="@color/white"
+					android:textSize="@dimen/tsz_general"
+					android:text=""
+					/>
+
+			</LinearLayout>
 
 			<View
 				android:id="@+id/nac_divider"
 				android:layout_width="match_parent"
-				android:layout_height="@dimen/isz_card_divider"
+				android:layout_height="@dimen/isz_divider"
 				android:background="?attr/colorCardDivider"
 				/>
 
@@ -319,8 +343,8 @@
 					android:orientation="horizontal">
 
 					<ImageView
-						android:layout_width="@dimen/isz_itb"
-						android:layout_height="@dimen/isz_itb"
+						android:layout_width="@dimen/isz_general"
+						android:layout_height="@dimen/isz_general"
 						android:layout_marginEnd="@dimen/sp_name"
 						android:src="@mipmap/delete"
 						/>
@@ -328,6 +352,8 @@
 					<TextView
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
+						android:textColor="@color/white"
+						android:textSize="@dimen/tsz_general"
 						android:text="Delete"
 						/>
 

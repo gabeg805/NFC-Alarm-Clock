@@ -929,6 +929,15 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * @return The name message.
+	 */
+	public static String getNameMessage(String name)
+	{
+		return ((name != null) && !name.isEmpty()) ? name
+			: NacSharedPreferences.DEFAULT_NAME_MESSAGE;
+	}
+
+	/**
 	 * @return The name summary.
 	 */
 	public String getNameSummary()
@@ -1091,7 +1100,7 @@ public class NacSharedPreferences
 	 */
 	public static String getSoundMessage(Context context, String path)
 	{
-		return (!path.isEmpty())
+		return ((path != null) && !path.isEmpty())
 			? NacSharedPreferences.getSoundName(context, path)
 			: NacSharedPreferences.DEFAULT_SOUND_MESSAGE;
 	}

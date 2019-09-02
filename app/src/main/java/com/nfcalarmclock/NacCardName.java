@@ -1,8 +1,10 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
-import android.text.TextUtils;
+//import android.text.TextUtils;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
  * Name for the alarm card.
@@ -18,7 +20,9 @@ public class NacCardName
 	/**
 	 * Name view.
 	 */
-	 private NacImageTextButton mName;
+	 //private NacImageTextButton mName;
+	 private LinearLayout mNameParent;
+	 private TextView mName;
 
 	/**
 	 * Alarm.
@@ -31,7 +35,9 @@ public class NacCardName
 	{
 		this.mContext = context;
 		this.mAlarm = null;
-		this.mName = (NacImageTextButton) root.findViewById(R.id.nac_name);
+		//this.mName = (NacImageTextButton) root.findViewById(R.id.nac_name);
+		this.mNameParent = (LinearLayout) root.findViewById(R.id.nac_name);
+		this.mName = (TextView) root.findViewById(R.id.name);
 	}
 
 	/**
@@ -66,19 +72,13 @@ public class NacCardName
 	public void set()
 	{
 		NacAlarm alarm = this.getAlarm();
-		String name = alarm.getName();
-		boolean focus = true;
-
-		if (name.isEmpty())
-		{
-			name = NacSharedPreferences.DEFAULT_NAME_MESSAGE;
-			focus = false;
-		}
+		String alarmName = alarm.getName();
+		String name = NacSharedPreferences.getNameMessage(alarmName);
+		float alpha = ((alarmName != null) && !alarmName.isEmpty()) ? 1.0f
+			: 0.5f;
 
 		this.mName.setText(name);
-		this.mName.setFocus(focus);
-		this.mName.getTextView().setMaxLines(1);
-		this.mName.getTextView().setEllipsize(TextUtils.TruncateAt.END);
+		this.mName.setAlpha(alpha);
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class NacCardName
 	 */
 	public void setOnClickListener(View.OnClickListener listener)
 	{
-		this.mName.setOnClickListener(listener);
+		this.mNameParent.setOnClickListener(listener);
 	}
 
 	/**

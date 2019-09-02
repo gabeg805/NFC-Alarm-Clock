@@ -5,6 +5,20 @@
 	<dimen name="sp_tweak">-5dp</dimen>
 	<dimen name="rad_general">3dp</dimen>
 	<dimen name="isz_pref_icon">32dp</dimen>
+	<dimen name="isz_general">22dp</dimen>
+	<dimen name="isz_general_tweak">24dp</dimen>
+	<dimen name="tsz_general">14dp</dimen>
+
+
+	<!-- Alarm card -->
+	<dimen name="elv_card">5dp</dimen>
+	<dimen name="mt_card">10dp</dimen>
+	<dimen name="mb_card">5dp</dimen>
+	<dimen name="ml_card">16dp</dimen>
+	<dimen name="mr_card">16dp</dimen>
+	<dimen name="sp_card">10dp</dimen>
+	<dimen name="sp_text">4dp</dimen>
+	<dimen name="isz_divider">2dp</dimen>
 
 
 	<!-- Alarm Activity -->
@@ -49,24 +63,12 @@
 	<dimen name="tsz_delete">14sp</dimen>
 
 
-	<!-- Alarm card -->
-	<dimen name="elv_card">5dp</dimen>
-	<dimen name="mt_card">10dp</dimen>
-	<dimen name="mb_card">5dp</dimen>
-	<dimen name="ml_card">16dp</dimen>
-	<dimen name="mr_card">16dp</dimen>
-	<dimen name="sp_card">10dp</dimen>
-	<dimen name="sp_text">4dp</dimen>
-	<dimen name="tsz_card">13sp</dimen>
-	<dimen name="isz_card_divider">2dp</dimen>
-
-
 	<!-- Time -->
-	<dimen name="ml_card_meridian">5dp</dimen>
-	<dimen name="mr_card_time_parent">28dp</dimen>
-	<dimen name="mb_card_time_parent">6dp</dimen>
-	<dimen name="tsz_card_time">40sp</dimen>
-	<dimen name="tsz_card_meridian">14sp</dimen>
+	<dimen name="ml_meridian">5dp</dimen>
+	<dimen name="mr_time_parent">28dp</dimen>
+	<dimen name="mb_time_parent">6dp</dimen>
+	<dimen name="tsz_time">40sp</dimen>
+	<dimen name="tsz_meridian">14sp</dimen>
 
 
 	<!-- Repeat -->
@@ -92,7 +94,6 @@
 
 
 	<!-- Sound -->
-	<dimen name="isz_sound">24dp</dimen>
 	<dimen name="sp_sound">14dp</dimen>
 	<dimen name="pt_sound">16dp</dimen>
 	<dimen name="pb_sound">16dp</dimen>
@@ -124,9 +125,10 @@
 
 	<!-- Name -->
 	<dimen name="sp_name">16dp</dimen>
-	<dimen name="pt_name">12dp</dimen>
-	<dimen name="pb_name">12dp</dimen>
+	<dimen name="pt_name">16dp</dimen>
+	<dimen name="pb_name">14dp</dimen>
 	<dimen name="pl_name">6dp</dimen>
+	<dimen name="pr_name">6dp</dimen>
 	<dimen name="tsz_summary_name">12sp</dimen>
 
 
