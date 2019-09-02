@@ -136,7 +136,7 @@
 	<dimen name="sp_delete">16dp</dimen>
 	<dimen name="pt_delete">20dp</dimen>
 	<dimen name="pb_delete">20dp</dimen>
-	<dimen name="pl_delete">4dp</dimen>
+	<dimen name="pl_delete">6dp</dimen>
 	<dimen name="pr_delete">48dp</dimen>
 
 
