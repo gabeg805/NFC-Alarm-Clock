@@ -137,13 +137,15 @@
 
 			<RelativeLayout
 				android:layout_width="match_parent"
-				android:layout_height="wrap_content">
+				android:layout_height="wrap_content"
+				android:layout_marginTop="6dp">
 
 				<CheckBox
 					android:id="@+id/nac_repeat"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_alignParentStart="true"
+					android:layout_centerVertical="true"
 					android:paddingTop="@dimen/pt_repeat"
 					android:paddingBottom="@dimen/pb_repeat"
 					android:paddingStart="@dimen/pl_repeat"
@@ -159,6 +161,7 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_alignParentEnd="true"
+					android:layout_centerVertical="true"
 					android:paddingTop="@dimen/pt_nfc"
 					android:paddingBottom="@dimen/pb_nfc"
 					android:paddingStart="@dimen/pl_nfc"
@@ -184,40 +187,12 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content">
 
-				<ImageView
-					android:id="@+id/sound_icon"
-					android:layout_width="@dimen/isz_sound"
-					android:layout_height="@dimen/isz_sound"
-					android:layout_marginStart="@dimen/sp_sound"
-					android:layout_centerVertical="true"
-					android:src="@mipmap/music_note"
-					tools:ignore="ContentDescription"
-					/>
-
-				<TextView
-					android:id="@+id/nac_sound"
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content"
-					android:layout_toStartOf="@id/nac_vibrate"
-					android:layout_toEndOf="@id/sound_icon"
-					android:layout_centerVertical="true"
-					android:paddingTop="@dimen/pt_sound"
-					android:paddingBottom="@dimen/pb_sound"
-					android:paddingStart="@dimen/pl_sound"
-					android:paddingEnd="@dimen/pr_sound"
-					android:maxLength="@integer/max_entry_length"
-					android:maxLines="1"
-					android:ellipsize="end"
-					android:textColor="@color/white"
-					android:text=""
-					/>
-
 				<CheckBox
 					android:id="@+id/nac_vibrate"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_alignParentEnd="true"
-					android:layout_gravity="end"
+					android:layout_centerVertical="true"
 					android:paddingTop="@dimen/pt_vibrate"
 					android:paddingBottom="@dimen/pb_vibrate"
 					android:paddingStart="@dimen/pl_vibrate"
@@ -227,6 +202,41 @@
 					android:textSize="@dimen/tsz_card"
 					android:text="@string/card_vibrate"
 					/>
+
+				<LinearLayout
+					android:id="@+id/nac_sound"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:layout_toStartOf="@id/nac_vibrate"
+					android:paddingTop="@dimen/pt_sound"
+					android:paddingBottom="@dimen/pb_sound"
+					android:paddingStart="@dimen/pl_sound"
+					android:paddingEnd="@dimen/pr_sound"
+					android:orientation="horizontal">
+
+					<ImageView
+						android:id="@+id/sound_icon"
+						android:layout_width="@dimen/isz_sound"
+						android:layout_height="@dimen/isz_sound"
+						android:layout_marginEnd="@dimen/sp_sound"
+						android:layout_centerVertical="true"
+						android:src="@mipmap/music_note"
+						tools:ignore="ContentDescription"
+						/>
+
+					<TextView
+						android:id="@+id/sound_name"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_centerVertical="true"
+						android:maxLength="@integer/max_entry_length"
+						android:maxLines="1"
+						android:ellipsize="end"
+						android:textColor="@color/white"
+						android:text=""
+						/>
+
+				</LinearLayout>
 
 			</RelativeLayout>
 
@@ -267,6 +277,8 @@
 					android:layout_centerVertical="true"
 					android:paddingTop="@dimen/pt_volume_slider"
 					android:paddingBottom="@dimen/pb_volume_slider"
+					android:paddingStart="@dimen/pl_volume_slider"
+					android:paddingEnd="@dimen/pr_volume_slider"
 					android:max="100"
 					android:progress="75"
 					/>
@@ -296,7 +308,7 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content">
 
-				<com.nfcalarmclock.NacImageTextButton
+				<LinearLayout
 					android:id="@+id/nac_delete"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
@@ -304,9 +316,22 @@
 					android:paddingBottom="@dimen/pb_delete"
 					android:paddingStart="@dimen/pl_delete"
 					android:paddingEnd="@dimen/pr_delete"
-					app:nacDrawable="@mipmap/delete"
-					app:nacText="Delete"
-					/>
+					android:orientation="horizontal">
+
+					<ImageView
+						android:layout_width="@dimen/isz_itb"
+						android:layout_height="@dimen/isz_itb"
+						android:layout_marginEnd="@dimen/sp_name"
+						android:src="@mipmap/delete"
+						/>
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Delete"
+						/>
+
+				</LinearLayout>
 
 				<ImageView
 					android:layout_width="@dimen/isz_collapse"

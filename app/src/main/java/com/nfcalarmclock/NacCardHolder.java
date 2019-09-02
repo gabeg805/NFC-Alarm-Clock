@@ -191,7 +191,7 @@ public class NacCardHolder
 		this.setListeners(null);
 		this.mCard.init(alarm);
 		this.mSwitch.init(alarm);
-		this.mTime.init(alarm);
+		this.mTime.init(shared, alarm);
 		this.mSummary.init(shared, alarm);
 		this.mDays.init(shared, alarm);
 		this.mUseNfc.init(alarm);
@@ -409,7 +409,7 @@ public class NacCardHolder
 		alarm.setMinute(min);
 		alarm.setEnabled(true);
 		alarm.changed();
-		this.mTime.set();
+		this.mTime.set(shared);
 		this.mSwitch.set();
 		this.mSummary.set(shared);
 	}

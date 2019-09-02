@@ -61,17 +61,17 @@ public class NacCardTime
 	/**
 	 * Initialize the time.
 	 */
-	public void init(NacAlarm alarm)
+	public void init(NacSharedPreferences shared, NacAlarm alarm)
 	{
 		this.mAlarm = alarm;
 
-		this.set();
+		this.set(shared);
 	}
 
 	/**
 	 * Set the time.
 	 */
-	public void set()
+	public void set(NacSharedPreferences shared)
 	{
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
@@ -80,6 +80,7 @@ public class NacCardTime
 
 		this.mTime.setText(time);
 		this.mMeridian.setText(meridian);
+		this.setColor(shared);
 	}
 
 	/**

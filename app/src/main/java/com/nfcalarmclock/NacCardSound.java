@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -27,6 +28,11 @@ public class NacCardSound
 	 * Alarm.
 	 */
 	private NacAlarm mAlarm;
+
+	/**
+	 * Sound.
+	 */
+	private LinearLayout mSoundParent;
 
 	/**
 	 * Sound.
@@ -58,7 +64,8 @@ public class NacCardSound
 	public NacCardSound(Context context, View root, NacCardMeasure measure)
 	{
 		this.mContext = context;
-		this.mSound = (TextView) root.findViewById(R.id.nac_sound);
+		this.mSoundParent = (LinearLayout) root.findViewById(R.id.nac_sound);
+		this.mSound = (TextView) root.findViewById(R.id.sound_name);
 		this.mVolume = (SeekBar) root.findViewById(R.id.nac_volume_slider);
 		this.mVolumeIcon = (ImageView) root.findViewById(R.id.nac_volume_icon);
 		this.mAudioSourceIcon = (ImageView) root.findViewById(R.id.nac_volume_settings);
@@ -130,7 +137,7 @@ public class NacCardSound
 	 */
 	public void setListener(Object listener)
 	{
-		this.mSound.setOnClickListener((View.OnClickListener)listener);
+		this.mSoundParent.setOnClickListener((View.OnClickListener)listener);
 		this.mVolume.setOnSeekBarChangeListener((SeekBar.OnSeekBarChangeListener)listener);
 		this.mAudioSourceIcon.setOnClickListener((View.OnClickListener)listener);
 	}
@@ -173,9 +180,13 @@ public class NacCardSound
 		{
 			this.mVolumeIcon.setImageResource(R.mipmap.volume_off);
 		}
-		else if ((progress > 0) && (progress < 50))
+		else if ((progress > 0) && (progress <= 33))
 		{
 			this.mVolumeIcon.setImageResource(R.mipmap.volume_low);
+		}
+		else if ((progress > 33) && (progress <= 66))
+		{
+			this.mVolumeIcon.setImageResource(R.mipmap.volume_med);
 		}
 		else
 		{

@@ -82,7 +82,8 @@ public class NacAudioSourceDialog
 		RadioButton button = this.getCheckedButton();
 		String source = button.getText().toString();
 
-		dialog.saveData(source);
+		dialog.saveData(((source == null) || source.isEmpty())
+			? NacSharedPreferences.DEFAULT_AUDIO_SOURCE : source);
 
 		return true;
 	}
@@ -119,6 +120,10 @@ public class NacAudioSourceDialog
 		else if (source.equals("System"))
 		{
 			this.mAudioSources.check(R.id.system);
+		}
+		else
+		{
+			this.mAudioSources.check(R.id.music);
 		}
 
 		scale(0.7, 0.7, false, true);

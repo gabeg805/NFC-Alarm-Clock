@@ -70,14 +70,14 @@
 
 
 	<!-- Repeat -->
-	<dimen name="pt_repeat">22dp</dimen>
+	<dimen name="pt_repeat">16dp</dimen>
 	<dimen name="pb_repeat">16dp</dimen>
 	<dimen name="pl_repeat">10dp</dimen>
 	<dimen name="pr_repeat">14dp</dimen>
 
 
 	<!-- NFC -->
-	<dimen name="pt_nfc">22dp</dimen>
+	<dimen name="pt_nfc">16dp</dimen>
 	<dimen name="pb_nfc">16dp</dimen>
 	<dimen name="pl_nfc">14dp</dimen>
 	<dimen name="pr_nfc">6dp</dimen>
@@ -93,10 +93,10 @@
 
 	<!-- Sound -->
 	<dimen name="isz_sound">24dp</dimen>
-	<dimen name="sp_sound">6dp</dimen>
+	<dimen name="sp_sound">14dp</dimen>
 	<dimen name="pt_sound">16dp</dimen>
 	<dimen name="pb_sound">16dp</dimen>
-	<dimen name="pl_sound">14dp</dimen>
+	<dimen name="pl_sound">6dp</dimen>
 	<dimen name="pr_sound">10dp</dimen>
 
 
@@ -109,16 +109,17 @@
 
 	<!-- Volume -->
 	<dimen name="isz_volume_settings">50dp</dimen>
+	<dimen name="ml_volume_icon">6dp</dimen>
+	<dimen name="sp_volume_icon">16dp</dimen>
 	<dimen name="pt_volume_slider">16dp</dimen>
 	<dimen name="pb_volume_slider">16dp</dimen>
+	<dimen name="pl_volume_slider">0dp</dimen>
+	<dimen name="pr_volume_slider">8dp</dimen>
+	<dimen name="sp_volume_settings">14dp</dimen>
 	<dimen name="pt_volume_settings">16dp</dimen>
 	<dimen name="pb_volume_settings">16dp</dimen>
 	<dimen name="pl_volume_settings">16dp</dimen>
 	<dimen name="pr_volume_settings">16dp</dimen>
-
-	<dimen name="ml_volume_icon">6dp</dimen>
-	<dimen name="sp_volume_icon">14dp</dimen>
-	<dimen name="sp_volume_settings">14dp</dimen>
 
 
 	<!-- Name -->
@@ -130,6 +131,7 @@
 
 
 	<!-- Delete -->
+	<dimen name="sp_delete">16dp</dimen>
 	<dimen name="pt_delete">20dp</dimen>
 	<dimen name="pb_delete">20dp</dimen>
 	<dimen name="pl_delete">4dp</dimen>

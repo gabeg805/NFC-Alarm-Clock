@@ -185,7 +185,7 @@ public class NacAudio
 			int stream = AudioManager.STREAM_MUSIC;
 			int usage = AudioAttributes.USAGE_MEDIA;
 
-			if (source.isEmpty() || source.equals("Music"))
+			if ((source == null) || source.isEmpty() || source.equals("Music"))
 			{
 			}
 			else if (source.equals("Alarm"))
