@@ -81,8 +81,7 @@ public class NacWakeUpAction
 		this.mAutoDismissHandler = new Handler();
 		this.mSpeakHandler = new Handler();
 		this.mListener = null;
-
-		this.setupVibrator();
+		//this.setupVibrate();
 	}
 
 	/**
@@ -253,7 +252,7 @@ public class NacWakeUpAction
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
 
-		if (alarm.getUseNfc())
+		if ((alarm != null) && alarm.getUseNfc())
 		{
 			NacNfc.disable(context);
 		}
@@ -267,15 +266,15 @@ public class NacWakeUpAction
 	 */
 	private void playMusic()
 	{
+		NacSharedPreferences shared = this.getSharedPreferences();
 		NacMediaPlayer player = this.getMediaPlayer();
+		NacAlarm alarm = this.getAlarm();
 
-		if ((player == null) || player.isPlaying() || player.wasPlaying())
+		if ((alarm == null) || (player == null) || player.isPlaying()
+			|| player.wasPlaying())
 		{
 			return;
 		}
-
-		NacAlarm alarm = this.getAlarm();
-		NacSharedPreferences shared = this.getSharedPreferences();
 
 		player.reset();
 		player.play(alarm, true, shared.getShuffle());
@@ -290,7 +289,7 @@ public class NacWakeUpAction
 		NacAlarm alarm = this.getAlarm();
 		//NacSharedPreferences shared = this.getSharedPreferences();
 
-		if (alarm.getUseNfc())
+		if ((alarm != null) && alarm.getUseNfc())
 		{
 			NacNfc.enable(context);
 		}
@@ -326,13 +325,14 @@ public class NacWakeUpAction
 	/**
 	 * @return Setup a new vibrator object.
 	 */
-	private void setupVibrator()
+	private void setupVibrate()
 	{
 		this.stopVibrate();
 
 		Activity activity = (Activity) this.getContext();
 		NacAlarm alarm = this.getAlarm();
-		this.mVibrator = alarm.getVibrate() ? new NacVibrator(activity) : null;
+		this.mVibrator = ((alarm == null) || alarm.getVibrate())
+			? new NacVibrator(activity) : null;
 	}
 
 	/**
@@ -394,6 +394,7 @@ public class NacWakeUpAction
 		else
 		{
 			this.playMusic();
+			this.vibrate();
 		}
 
 		this.waitForAutoDismiss();
@@ -420,7 +421,7 @@ public class NacWakeUpAction
 	 */
 	public void vibrate()
 	{
-		this.setupVibrator();
+		this.setupVibrate();
 
 		NacVibrator vibrator = this.getVibrator();
 		long duration = 500;

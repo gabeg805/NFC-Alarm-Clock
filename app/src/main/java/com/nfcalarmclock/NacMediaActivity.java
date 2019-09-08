@@ -185,6 +185,11 @@ public class NacMediaActivity
 
 		Fragment[] list = this.getFragments();
 
+		if (list == null)
+		{
+			this.mFragments = new Fragment[this.mTitles.length];
+		}
+
 		if (fragment instanceof NacMusicFragment)
 		{
 			list[0] = fragment;

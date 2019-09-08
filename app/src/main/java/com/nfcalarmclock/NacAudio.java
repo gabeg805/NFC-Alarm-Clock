@@ -59,8 +59,12 @@ public class NacAudio
 		 */
 		public Attributes(NacAlarm alarm)
 		{
-			this(alarm.getAudioSource());
-			this.setVolume(alarm.getVolume());
+			this((alarm != null) ? alarm.getAudioSource() : "");
+
+			if (alarm != null)
+			{
+				this.setVolume(alarm.getVolume());
+			}
 		}
 
 		/**
@@ -185,7 +189,7 @@ public class NacAudio
 			int stream = AudioManager.STREAM_MUSIC;
 			int usage = AudioAttributes.USAGE_MEDIA;
 
-			if ((source == null) || source.isEmpty() || source.equals("Music"))
+			if ((source == null) || source.isEmpty() || source.equals("Media"))
 			{
 			}
 			else if (source.equals("Alarm"))
@@ -198,7 +202,7 @@ public class NacAudio
 				stream = AudioManager.STREAM_NOTIFICATION;
 				usage = AudioAttributes.USAGE_NOTIFICATION;
 			}
-			else if (source.equals("Ringer"))
+			else if (source.equals("Ringtone"))
 			{
 				stream = AudioManager.STREAM_RING;
 				usage = AudioAttributes.USAGE_MEDIA; // Might need to be different

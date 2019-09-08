@@ -244,6 +244,53 @@ public class NacMediaFragment
 	}
 
 	/**
+	 * Play audio from the media player safely.
+	 */
+	protected int safePlay(String path, boolean repeat)
+	{
+		this.safeReset();
+		this.setMedia(path);
+
+		NacMediaPlayer player = this.getMediaPlayer();
+
+		if (player == null)
+		{
+			this.setupMediaPlayer();
+
+			if (player == null)
+			{
+				return -1;
+			}
+		}
+
+		if ((path != null) && (!path.isEmpty()))
+		{
+			player.play(path, repeat);
+		}
+
+		return 0;
+	}
+
+	/**
+	 * Reset the media player safely.
+	 */
+	protected int safeReset()
+	{
+		NacMediaPlayer player = this.getMediaPlayer();
+
+		if (player == null)
+		{
+			this.setupMediaPlayer();
+
+			return (player != null) ? 0 : -1;
+		}
+
+		player.reset();
+
+		return 0;
+	}
+
+	/**
 	 * Set the alarm sound.
 	 */
 	protected void setMedia(String media)

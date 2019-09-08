@@ -27,11 +27,11 @@
 			/>
 
 		<RadioButton
-			android:id="@+id/music"
+			android:id="@+id/media"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginBottom="12dp"
-			android:text="@string/audio_source_music"
+			android:text="@string/audio_source_media"
 			android:checked="true"
 			/>
 
@@ -44,11 +44,11 @@
 			/>
 
 		<RadioButton
-			android:id="@+id/ringer"
+			android:id="@+id/ringtone"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginBottom="12dp"
-			android:text="@string/audio_source_ringer"
+			android:text="@string/audio_source_ringtone"
 			/>
 
 		<RadioButton

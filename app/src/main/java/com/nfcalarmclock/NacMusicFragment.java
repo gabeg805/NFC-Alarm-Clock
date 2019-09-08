@@ -136,19 +136,26 @@ public class NacMusicFragment
 		}
 		else if (file.isFile())
 		{
-			NacMediaPlayer player = this.getMediaPlayer();
+			path = (browser.isSelected()) ? path : "";
 
-			player.reset();
+			if (this.safePlay(path, true) < 0)
+			{
+				NacUtility.toast(getContext(), "Unable to play music");
+			}
 
-			if (browser.isSelected())
-			{
-				this.setMedia(path);
-				player.play(path, true);
-			}
-			else
-			{
-				this.setMedia("");
-			}
+			//NacMediaPlayer player = this.getMediaPlayer();
+
+			//player.reset();
+
+			//if (browser.isSelected())
+			//{
+			//	this.setMedia(path);
+			//	player.play(path, true);
+			//}
+			//else
+			//{
+			//	this.setMedia("");
+			//}
 		}
 	}
 

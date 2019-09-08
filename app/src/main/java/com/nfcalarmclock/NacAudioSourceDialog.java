@@ -105,17 +105,17 @@ public class NacAudioSourceDialog
 		{
 			this.mAudioSources.check(R.id.alarm);
 		}
-		else if (source.equals("Music"))
+		else if (source.equals("Media"))
 		{
-			this.mAudioSources.check(R.id.music);
+			this.mAudioSources.check(R.id.media);
 		}
 		else if (source.equals("Notification"))
 		{
 			this.mAudioSources.check(R.id.notification);
 		}
-		else if (source.equals("Ringer"))
+		else if (source.equals("Ringtone"))
 		{
-			this.mAudioSources.check(R.id.ringer);
+			this.mAudioSources.check(R.id.ringtone);
 		}
 		else if (source.equals("System"))
 		{
@@ -123,7 +123,7 @@ public class NacAudioSourceDialog
 		}
 		else
 		{
-			this.mAudioSources.check(R.id.music);
+			this.mAudioSources.check(R.id.media);
 		}
 
 		scale(0.7, 0.7, false, true);

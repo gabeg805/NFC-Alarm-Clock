@@ -48,18 +48,21 @@ public class NacAlarmActivity
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
-		int id = alarm.getId();
 
-		if (alarm.isOneTimeAlarm())
+		if (alarm != null)
 		{
-			NacDatabase db = new NacDatabase(this);
+			if (alarm.isOneTimeAlarm())
+			{
+				NacDatabase db = new NacDatabase(this);
 
-			alarm.setEnabled(false);
-			db.update(alarm);
-			db.close();
+				alarm.setEnabled(false);
+				db.update(alarm);
+				db.close();
+			}
+
+			shared.editSnoozeCount(alarm.getId(), 0);
 		}
 
-		shared.editSnoozeCount(id, 0);
 		finish();
 	}
 
@@ -107,9 +110,18 @@ public class NacAlarmActivity
 		Calendar calendar = Calendar.getInstance();
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
 		int minute = calendar.get(Calendar.MINUTE) + 1;
-		String name = alarm.getName();
-		String time = NacCalendar.Time.getFullTime(this, hour, minute);
-		String message = "Auto-dismissed \""+name+"\" at "+time;
+		String message = "";
+
+		if (alarm != null)
+		{
+			String name = alarm.getName();
+			String time = NacCalendar.Time.getFullTime(this, hour, minute);
+			message = "Auto-dismissed \""+name+"\" at "+time;
+		}
+		else
+		{
+			message = "Error with the alarm";
+		}
 
 		if (pm.isInteractive())
 		{
@@ -172,6 +184,14 @@ public class NacAlarmActivity
 		setContentView(R.layout.act_alarm);
 
 		NacAlarm alarm  = NacIntent.getAlarm(getIntent());
+
+		if (alarm == null)
+		{
+			NacDatabase db = new NacDatabase(this);
+			alarm = db.findAlarm(Calendar.getInstance());
+			db.close();
+		}
+
 		NacWakeUpAction wakeUp = new NacWakeUpAction(this, alarm);
 		NacScheduler scheduler = new NacScheduler(this);
 		this.mSharedPreferences = new NacSharedPreferences(this);
@@ -191,7 +211,6 @@ public class NacAlarmActivity
 	public void onDestroy()
 	{
 		super.onDestroy();
-		NacUtility.printf("onDestroy!");
 		this.getWakeUp().shutdown();
 	}
 
@@ -216,7 +235,6 @@ public class NacAlarmActivity
 	public void onPause()
 	{
 		super.onPause();
-		NacUtility.printf("onPause!");
 		this.getWakeUp().pause();
 	}
 
@@ -227,7 +245,6 @@ public class NacAlarmActivity
 	public void onResume()
 	{
 		super.onResume();
-		NacUtility.printf("onResume!");
 		this.getWakeUp().resume();
 	}
 
@@ -242,7 +259,7 @@ public class NacAlarmActivity
 		Button snoozeButton = (Button) findViewById(R.id.snooze);
 		Button dismissButton = (Button) findViewById(R.id.dismiss);
 
-		if (NacNfc.exists(this) && alarm.getUseNfc())
+		if ((alarm != null) && NacNfc.exists(this) && alarm.getUseNfc())
 		{
 			dismissButton.setVisibility(View.GONE);
 		}
@@ -264,10 +281,10 @@ public class NacAlarmActivity
 	public void setupAlarmInfo()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
+		NacAlarm alarm = this.getAlarm();
 
-		if (shared.getShowAlarmInfo())
+		if ((alarm != null) && shared.getShowAlarmInfo())
 		{
-			NacAlarm alarm = this.getAlarm();
 			TextView name = (TextView) findViewById(R.id.name);
 			TextView time = (TextView) findViewById(R.id.time);
 			String alarmName = alarm.getName();

@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -137,6 +138,45 @@ public class NacDatabase
 		}
 
 		return result;
+	}
+
+	/**
+	 * Find the alarm.
+	 */
+	public NacAlarm findAlarm(Calendar calendar)
+	{
+		this.setDatabase();
+
+		String hour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
+		String minute = String.valueOf(calendar.get(Calendar.MINUTE));
+		NacCalendar.Day day = NacCalendar.Days.toWeekDay(
+			calendar.get(Calendar.DAY_OF_WEEK));
+		NacAlarm alarm = null;
+
+		String[] whereArgs = new String[] { hour, minute };
+		String whereClause = Contract.AlarmTable.COLUMN_HOUR + "=? AND "
+			+ Contract.AlarmTable.COLUMN_MINUTE + "=?";
+
+		SQLiteDatabase db = this.getDatabase();
+		int version = db.getVersion();
+		String table = this.getTable();
+		Cursor cursor = db.query(table, null, whereClause, whereArgs, null,
+			null, null);
+
+		while (cursor.moveToNext())
+		{
+			NacAlarm a = this.toAlarm(cursor, version);
+
+			if (alarm.getDays().contains(day))
+			{
+				alarm = a;
+				break;
+			}
+		}
+
+		cursor.close();
+
+		return alarm;
 	}
 
 	/**
@@ -412,70 +452,82 @@ public class NacDatabase
 
 		while (cursor.moveToNext())
 		{
-			NacAlarm alarm = new NacAlarm();
-			int offset = -1;
+			NacAlarm alarm = this.toAlarm(cursor, version);
 
-			switch (version)
-			{
-				case 0:
-				case 4:
-					alarm.setId(cursor.getInt(1));
-					alarm.setEnabled((cursor.getInt(2) != 0));
-					alarm.setHour(cursor.getInt(3));
-					alarm.setMinute(cursor.getInt(4));
-					alarm.setDays(cursor.getInt(5));
-					alarm.setRepeat((cursor.getInt(6) != 0));
-					alarm.setUseNfc((cursor.getInt(7) != 0));
-					alarm.setVibrate((cursor.getInt(8) != 0));
-					alarm.setVolume(cursor.getInt(9));
-					alarm.setAudioSource(cursor.getString(10));
-					alarm.setSoundType(cursor.getInt(11));
-					alarm.setSoundPath(cursor.getString(12));
-					alarm.setSoundName(cursor.getString(13));
-					alarm.setName(cursor.getString(14));
-					break;
-				case 3:
-					offset = 1;
-					alarm.setUseNfc((cursor.getInt(7) != 0));
-				case 2:
-					offset = (offset < 0) ? 0: offset;
-					alarm.setId(cursor.getInt(1));
-					alarm.setEnabled((cursor.getInt(2) != 0));
-					alarm.setHour(cursor.getInt(3));
-					alarm.setMinute(cursor.getInt(4));
-					alarm.setDays(cursor.getInt(5));
-					alarm.setRepeat((cursor.getInt(6) != 0));
-					alarm.setVibrate((cursor.getInt(7+offset) != 0));
-					alarm.setSoundType(cursor.getInt(8+offset));
-					alarm.setSoundPath(cursor.getString(9+offset));
-					alarm.setSoundName(cursor.getString(10+offset));
-					alarm.setName(cursor.getString(11+offset));
-					break;
-				case 1:
-				default:
-					alarm.setId(cursor.getInt(1));
-					alarm.setEnabled((cursor.getInt(2) != 0));
-					// Index 3: 24 hour format
-					alarm.setHour(cursor.getInt(4));
-					alarm.setMinute(cursor.getInt(5));
-					alarm.setDays(cursor.getInt(6));
-					alarm.setRepeat((cursor.getInt(7) != 0));
-					alarm.setVibrate((cursor.getInt(8) != 0));
-					alarm.setSoundPath(cursor.getString(9));
-					alarm.setName(cursor.getString(10));
-					// Index 11: NFC tag
-					alarm.setSoundType(NacSound.getType(alarm.getSoundPath()));
-					alarm.setSoundName(NacSound.getName(context, alarm.getSoundPath()));
-					break;
-			}
-
-			alarm.resetChangeTracker();
 			list.add(alarm);
 		}
 
 		cursor.close();
 
 		return list;
+	}
+
+	/**
+	 * Convert a Cursor object to an alarm.
+	 */
+	public NacAlarm toAlarm(Cursor cursor, int version)
+	{
+		NacAlarm alarm = new NacAlarm();
+		int offset = -1;
+
+		switch (version)
+		{
+			case 0:
+			case 4:
+				alarm.setId(cursor.getInt(1));
+				alarm.setEnabled((cursor.getInt(2) != 0));
+				alarm.setHour(cursor.getInt(3));
+				alarm.setMinute(cursor.getInt(4));
+				alarm.setDays(cursor.getInt(5));
+				alarm.setRepeat((cursor.getInt(6) != 0));
+				alarm.setUseNfc((cursor.getInt(7) != 0));
+				alarm.setVibrate((cursor.getInt(8) != 0));
+				alarm.setVolume(cursor.getInt(9));
+				alarm.setAudioSource(cursor.getString(10));
+				alarm.setSoundType(cursor.getInt(11));
+				alarm.setSoundPath(cursor.getString(12));
+				alarm.setSoundName(cursor.getString(13));
+				alarm.setName(cursor.getString(14));
+				break;
+			case 3:
+				offset = 1;
+				alarm.setUseNfc((cursor.getInt(7) != 0));
+			case 2:
+				offset = (offset < 0) ? 0: offset;
+				alarm.setId(cursor.getInt(1));
+				alarm.setEnabled((cursor.getInt(2) != 0));
+				alarm.setHour(cursor.getInt(3));
+				alarm.setMinute(cursor.getInt(4));
+				alarm.setDays(cursor.getInt(5));
+				alarm.setRepeat((cursor.getInt(6) != 0));
+				alarm.setVibrate((cursor.getInt(7+offset) != 0));
+				alarm.setSoundType(cursor.getInt(8+offset));
+				alarm.setSoundPath(cursor.getString(9+offset));
+				alarm.setSoundName(cursor.getString(10+offset));
+				alarm.setName(cursor.getString(11+offset));
+				break;
+			case 1:
+			default:
+				alarm.setId(cursor.getInt(1));
+				alarm.setEnabled((cursor.getInt(2) != 0));
+				// Index 3: 24 hour format
+				alarm.setHour(cursor.getInt(4));
+				alarm.setMinute(cursor.getInt(5));
+				alarm.setDays(cursor.getInt(6));
+				alarm.setRepeat((cursor.getInt(7) != 0));
+				alarm.setVibrate((cursor.getInt(8) != 0));
+				alarm.setSoundPath(cursor.getString(9));
+				alarm.setName(cursor.getString(10));
+				// Index 11: NFC tag
+				alarm.setSoundType(NacSound.getType(alarm.getSoundPath()));
+				alarm.setSoundName(NacSound.getName(this.getContext(),
+					alarm.getSoundPath()));
+				break;
+		}
+
+		alarm.resetChangeTracker();
+
+		return alarm;
 	}
 
 	/**

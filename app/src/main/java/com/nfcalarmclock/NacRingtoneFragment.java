@@ -153,16 +153,17 @@ public class NacRingtoneFragment
 		}
 		else if (!this.isActionButton(id))
 		{
-			NacMediaPlayer player = this.getMediaPlayer();
 			String path = (String) view.getTag();
 
-			this.setMedia(path);
-			player.reset();
+			if (this.safePlay(path, true) < 0)
+			{
+				NacUtility.toast(getContext(), "Unable to play ringtone");
+			}
 
-			//if (!NacSound.isRandomRingtone(path))
-			//{
-				player.play(path, true);
-			//}
+			//NacMediaPlayer player = this.getMediaPlayer();
+			//this.setMedia(path);
+			//player.reset();
+			//player.play(path, true);
 		}
 	}
 

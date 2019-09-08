@@ -44,9 +44,9 @@
 
 	<!-- Audio source dialog -->
 	<string name="audio_source_alarm">Alarm</string>
-	<string name="audio_source_music">Music</string>
+	<string name="audio_source_media">Media</string>
 	<string name="audio_source_notification">Notification</string>
-	<string name="audio_source_ringer">Ringer</string>
+	<string name="audio_source_ringtone">Ringtone</string>
 	<string name="audio_source_system">System</string>
 
 
