@@ -3,9 +3,9 @@ package com.nfcalarmclock;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
+//import android.support.design.widget.CoordinatorLayout;
+//import android.support.design.widget.Snackbar;
+//import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -16,6 +16,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * @brief NFC Alarm Clock Utility class.

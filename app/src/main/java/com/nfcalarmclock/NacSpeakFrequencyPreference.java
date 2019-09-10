@@ -2,9 +2,11 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.preference.Preference;
+//import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.preference.Preference;
 
 /**
  * Preference that allows the user to choose how frequent the time should be
@@ -97,15 +99,15 @@ public class NacSpeakFrequencyPreference
 	 * Set the initial preference value.
 	 */
 	@Override
-	protected void onSetInitialValue(boolean restore, Object defval)
+	protected void onSetInitialValue(Object defaultValue)
 	{
-		if (restore)
+		if (defaultValue == null)
 		{
 			this.mValue = getPersistedInt(this.mValue);
 		}
 		else
 		{
-			this.mValue = (Integer) defval;
+			this.mValue = (Integer) defaultValue;
 
 			persistInt(this.mValue);
 		}

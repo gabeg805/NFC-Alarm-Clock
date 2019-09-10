@@ -3,10 +3,12 @@ package com.nfcalarmclock;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.preference.Preference;
+//import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RadioGroup;
+
+import androidx.preference.Preference;
 
 /**
  * Preference that prompts the user what day to start the week on.
@@ -138,15 +140,15 @@ public class NacStartWeekOnPreference
 	 * Set the initial preference value.
 	 */
 	@Override
-	protected void onSetInitialValue(boolean restore, Object defval)
+	protected void onSetInitialValue(Object defaultValue)
 	{
-		if (restore)
+		if (defaultValue == null)
 		{
 			this.mValue = getPersistedInt(this.mValue);
 		}
 		else
 		{
-			this.mValue = (Integer) defval;
+			this.mValue = (Integer) defaultValue;
 
 			persistInt(this.mValue);
 		}

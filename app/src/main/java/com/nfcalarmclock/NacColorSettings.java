@@ -1,8 +1,11 @@
 package com.nfcalarmclock;
 
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
+//import android.preference.Preference;
+//import android.preference.PreferenceManager;
+
+import androidx.preference.Preference;
+import androidx.preference.PreferenceManager;
 
 /**
  * Color fragment.
@@ -30,9 +33,9 @@ public class NacColorSettings
 	/**
 	 */
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreatePreferences(Bundle savedInstanceState, String rootKey)
 	{
-		super.onCreate(savedInstanceState);
+		//super.onCreatePreferences(savedInstanceState, rootKey);
 		this.init();
 	}
 

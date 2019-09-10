@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+//import android.support.v4.app.Fragment;
+//import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +38,7 @@ import kaaes.spotify.webapi.android.models.UserPrivate;
 import retrofit.client.Response;
 
 import android.app.SearchManager;
-import android.support.v7.widget.SearchView;
+//import android.support.v7.widget.SearchView;
 
 import java.net.URL;
 import java.net.HttpURLConnection;
@@ -53,6 +53,10 @@ import android.content.res.Resources;
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.io.OutputStreamWriter;
+
+import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 /**
  */

@@ -25,7 +25,7 @@
 		android:layout_toStartOf="@id/delete_icon"
 		android:layout_marginEnd="@dimen/mr_delete"
 		android:layout_centerVertical="true"
-		android:text="@string/delete"
+		android:text="@string/card_swipe_delete"
 		android:textColor="@color/white"
 		android:textSize="@dimen/tsz_delete"
 		/>

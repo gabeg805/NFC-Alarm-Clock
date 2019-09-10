@@ -1,11 +1,16 @@
 package com.nfcalarmclock;
 
 import android.graphics.Canvas;
-import android.support.v7.widget.helper.ItemTouchUIUtil;
-import android.support.v7.widget.helper.ItemTouchHelper;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.ViewHolder;
+//import android.support.v7.widget.helper.ItemTouchUIUtil;
+//import android.support.v7.widget.helper.ItemTouchHelper;
+//import android.support.v7.widget.RecyclerView;
+//import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
+
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.ItemTouchUIUtil;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
 /**
  * Touch helper.

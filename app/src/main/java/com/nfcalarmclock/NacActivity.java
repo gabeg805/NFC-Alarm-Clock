@@ -1,7 +1,10 @@
 package com.nfcalarmclock;
 
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+//import android.support.v4.app.ActivityCompat;
+//import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 /**
  * Activity class handling setting the permissions result listener and calling

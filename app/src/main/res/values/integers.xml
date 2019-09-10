@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<integer name="max_entry_length">128</integer>
+	<integer name="max_entry_length">512</integer>
 	<integer name="max_hex_length">7</integer>
 	<integer name="anim_duration_medium">700</integer>
 

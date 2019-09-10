@@ -1,8 +1,8 @@
 package com.nfcalarmclock;
 
-import android.support.v4.content.ContextCompat;
 import android.animation.Animator;
 import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -11,6 +11,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+//import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -19,7 +20,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
-import android.animation.ObjectAnimator;
+import androidx.core.content.ContextCompat;
 
 /**
  * A button that consists of an image to the left, and text to the right

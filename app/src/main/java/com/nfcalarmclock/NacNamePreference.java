@@ -2,9 +2,12 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.preference.Preference;
+//import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.preference.Preference;
+import androidx.preference.PreferenceViewHolder;
 
 /**
  * Preference that displays the name of the alarm.
@@ -56,10 +59,10 @@ public class NacNamePreference
 	 * Bind the summary section text of the preference.
 	 */
 	@Override
-	protected void onBindView(View v)
+	public void onBindViewHolder(PreferenceViewHolder holder)
 	{
-		super.onBindView(v);
-		setSummary(this.getSummary());
+		super.onBindViewHolder(holder);
+		//setSummary(this.getSummary());
 	}
 
 	/**
@@ -71,7 +74,7 @@ public class NacNamePreference
 	{
 		this.mValue = dialog.getDataString();
 
-		setSummary(this.getSummary());
+		this.setSummary(this.getSummary());
 		persistString(this.mValue);
 
 		return true;
@@ -107,15 +110,15 @@ public class NacNamePreference
 	 * Set the initial preference value.
 	 */
 	@Override
-	protected void onSetInitialValue(boolean restore, Object defval)
+	protected void onSetInitialValue(Object defaultValue)
 	{
-		if (restore)
+		if (defaultValue == null)
 		{
 			this.mValue = getPersistedString(this.mValue);
 		}
 		else
 		{
-			this.mValue = (String) defval;
+			this.mValue = (String) defaultValue;
 
 			persistString(this.mValue);
 		}

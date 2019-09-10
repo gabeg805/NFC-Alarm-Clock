@@ -7,7 +7,7 @@
 	<dimen name="isz_pref_icon">32dp</dimen>
 	<dimen name="isz_general">22dp</dimen>
 	<dimen name="isz_general_tweak">24dp</dimen>
-	<dimen name="tsz_general">14dp</dimen>
+	<dimen name="tsz_general">14sp</dimen>
 
 
 	<!-- Alarm card -->
@@ -133,7 +133,7 @@
 
 
 	<!-- Delete -->
-	<dimen name="sp_delete">16dp</dimen>
+	<!-- <dimen name="sp_delete">16dp</dimen> -->
 	<dimen name="pt_delete">20dp</dimen>
 	<dimen name="pb_delete">20dp</dimen>
 	<dimen name="pl_delete">6dp</dimen>

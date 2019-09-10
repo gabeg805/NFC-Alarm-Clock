@@ -3,8 +3,8 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+//import android.support.v4.app.Fragment;
+//import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +53,9 @@ import com.spotify.android.appremote.api.error.UnsupportedFeatureVersionExceptio
 import com.spotify.android.appremote.api.error.UserNotAuthorizedException;
 
 import java.util.concurrent.TimeUnit;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 /**
  * Method call order:

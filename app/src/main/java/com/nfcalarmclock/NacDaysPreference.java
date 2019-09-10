@@ -2,9 +2,12 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.preference.Preference;
+//import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.preference.Preference;
+import androidx.preference.PreferenceViewHolder;
 
 /**
  * Preference that displays the day of week dialog.
@@ -57,10 +60,10 @@ public class NacDaysPreference
 	 * Set the summary text.
 	 */
 	@Override
-	protected void onBindView(View v)
+	public void onBindViewHolder(PreferenceViewHolder holder)
 	{
-		super.onBindView(v);
-		this.setSummary(this.getSummary());
+		super.onBindViewHolder(holder);
+		//this.setSummary(this.getSummary());
 	}
 
 	/**
@@ -124,15 +127,15 @@ public class NacDaysPreference
 	 * Set the initial preference value.
 	 */
 	@Override
-	protected void onSetInitialValue(boolean restore, Object defval)
+	protected void onSetInitialValue(Object defaultValue)
 	{
-		if (restore)
+		if (defaultValue == null)
 		{
 			this.mValue = getPersistedInt(this.mValue);
 		}
 		else
 		{
-			this.mValue = (Integer) defval;
+			this.mValue = (Integer) defaultValue;
 
 			persistInt(this.mValue);
 		}

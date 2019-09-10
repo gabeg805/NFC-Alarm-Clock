@@ -5,14 +5,23 @@ import android.content.pm.PackageManager;
 import android.Manifest;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.design.widget.TabLayout.Tab;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
+//import android.support.design.widget.TabLayout;
+//import android.support.design.widget.TabLayout.Tab;
+//import android.support.v4.app.ActivityCompat;
+//import android.support.v4.app.Fragment;
+//import android.support.v4.app.FragmentActivity;
+//import android.support.v4.app.FragmentPagerAdapter;
+//import android.support.v4.app.FragmentManager;
+//import android.support.v4.view.ViewPager;
+
+import androidx.core.app.ActivityCompat;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayout.Tab;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentManager;
+import androidx.viewpager.widget.ViewPager;
 
 /**
  */
@@ -241,7 +250,8 @@ public class NacMediaActivity
 		this.mPager = (ViewPager) findViewById(R.id.act_sound);
 		this.mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
 		//this.mAdapter = new NacPagerAdapter(manager, this.mAlarm, this.mTitles);
-		this.mAdapter = new NacPagerAdapter(manager);
+		this.mAdapter = new NacPagerAdapter(manager,
+			FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 		this.mFragments = new Fragment[this.mTitles.length];
 		this.mPosition = 0;
 
@@ -394,9 +404,9 @@ public class NacMediaActivity
 		 */
 		//public NacPagerAdapter(FragmentManager fragmentManager, NacAlarm alarm,
 		//	String[] titles)
-		public NacPagerAdapter(FragmentManager fragmentManager)
+		public NacPagerAdapter(FragmentManager fragmentManager, int behavior)
 		{
-			super(fragmentManager);
+			super(fragmentManager, behavior);
 		}
 
 		/**

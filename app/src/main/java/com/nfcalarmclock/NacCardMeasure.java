@@ -2,11 +2,13 @@ package com.nfcalarmclock;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+//import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Measurements of an alarm card.

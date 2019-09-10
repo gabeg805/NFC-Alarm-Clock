@@ -19,8 +19,9 @@
 
 
 	<!-- Card -->
-	<string name="copy">COPY</string>
-	<string name="delete">DELETE</string>
+	<string name="card_swipe_copy">COPY</string>
+	<string name="card_swipe_delete">DELETE</string>
+	<string name="card_delete">Delete</string>
 	<string name="card_repeat">Repeat</string>
 	<string name="card_nfc">Use NFC</string>
 	<string name="card_vibrate">  Vibrate</string>

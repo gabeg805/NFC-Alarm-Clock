@@ -71,8 +71,9 @@ public class NacAudio
 		 */
 		public Attributes(String source)
 		{
-			int focus = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-				? AudioManager.AUDIOFOCUS_NONE : 0;
+			//int focus = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+			//	? AudioManager.AUDIOFOCUS_NONE : 0;
+			int focus = 0;
 
 			this.setFocus(focus);
 			this.setSource(source);

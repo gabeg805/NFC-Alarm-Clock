@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.preference.PreferenceManager;
+//import android.preference.PreferenceManager;
 import java.util.EnumSet;
+
+import androidx.preference.PreferenceManager;
 
 /**
  * Container for the values of each preference.
@@ -933,7 +935,7 @@ public class NacSharedPreferences
 	 */
 	public static String getNameMessage(String name)
 	{
-		return ((name != null) && !name.isEmpty()) ? name
+		return ((name != null) && !name.isEmpty()) ? name.replace("\n", " ")
 			: NacSharedPreferences.DEFAULT_NAME_MESSAGE;
 	}
 
@@ -942,17 +944,17 @@ public class NacSharedPreferences
 	 */
 	public String getNameSummary()
 	{
-		String value = this.getName();
+		String name = this.getName();
 
-		return NacSharedPreferences.getNameSummary(value);
+		return NacSharedPreferences.getNameSummary(name);
 	}
 
 	/**
 	 * @see getNameSummary
 	 */
-	public static String getNameSummary(String value)
+	public static String getNameSummary(String name)
 	{
-		return ((value != null) && !value.isEmpty()) ? value
+		return ((name != null) && !name.isEmpty()) ? name.replace("\n", " ")
 			: NacSharedPreferences.DEFAULT_NAME_SUMMARY;
 	}
 

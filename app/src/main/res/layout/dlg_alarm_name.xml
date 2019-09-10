@@ -2,7 +2,7 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
+	android:layout_height="wrap_content"
 	android:orientation="vertical"
 	android:paddingTop="@dimen/spt_dlg"
 	android:paddingBottom="@dimen/spb_dlg"
@@ -15,10 +15,12 @@
 		android:layout_height="wrap_content"
 		android:layout_marginTop="@dimen/m_dlg_name"
 		android:layout_marginBottom="@dimen/m_dlg_name"
-		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:maxLines="1"
 		android:maxLength="@integer/max_entry_length"
-		android:inputType="textCapSentences"
+		android:maxLines="4"
+		android:singleLine="false"
+		android:isScrollContainer="true"
+		android:textSize="@dimen/tsz_general"
+		android:inputType="textCapSentences|textMultiLine"
 		android:hint="@string/dlg_name_hint">
 
 		<requestFocus />

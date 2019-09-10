@@ -1,13 +1,18 @@
 package com.nfcalarmclock;
 
-import android.app.FragmentManager;
+//import android.app.FragmentManager;
+//import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
+//import android.preference.Preference;
+//import android.preference.PreferenceManager;
+
+import androidx.fragment.app.FragmentManager;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceManager;
 
 /**
  * Default alarm fragment.
@@ -47,9 +52,9 @@ public class NacDefaultAlarmSettings
 	/**
 	 */
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreatePreferences(Bundle savedInstanceState, String rootKey)
 	{
-		super.onCreate(savedInstanceState);
+		//super.onCreatePreferences(savedInstanceState, rootKey);
 		addPreferencesFromResource(R.xml.default_alarm_preferences);
 		PreferenceManager.setDefaultValues(getContext(),
 			R.xml.default_alarm_preferences, false);

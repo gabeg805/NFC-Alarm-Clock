@@ -5,10 +5,13 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.preference.Preference;
+//import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;;
+
+import androidx.preference.Preference;
+import androidx.preference.PreferenceViewHolder;
 
 /**
  * Preference that allows a user to select a color.
@@ -62,11 +65,11 @@ public class NacColorPreference
 	 * Setup the checkbox and summary text.
 	 */
 	@Override
-	protected void onBindView(View v)
+	public void onBindViewHolder(PreferenceViewHolder holder)
 	{
-		super.onBindView(v);
+		super.onBindViewHolder(holder);
 
-		this.mImageView = (ImageView) v.findViewById(R.id.widget);
+		this.mImageView = (ImageView) holder.findViewById(R.id.widget);
 
 		this.mImageView.setColorFilter(this.mValue, PorterDuff.Mode.SRC);
 	}
@@ -130,15 +133,15 @@ public class NacColorPreference
 	 * Set the initial preference value.
 	 */
 	@Override
-	protected void onSetInitialValue(boolean restore, Object defval)
+	protected void onSetInitialValue(Object defaultValue)
 	{
-		if (restore)
+		if (defaultValue == null)
 		{
 			this.mValue = getPersistedInt(this.mValue);
 		}
 		else
 		{
-			this.mValue = (Integer) defval;
+			this.mValue = (Integer) defaultValue;
 
 			persistInt(this.mValue);
 		}

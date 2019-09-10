@@ -13,7 +13,6 @@
 		android:layout_height="wrap_content"
 		android:layout_marginTop="@dimen/m_dlg"
 		android:layout_marginBottom="@dimen/m_dlg"
-		android:textAppearance="?android:attr/textAppearanceSmall"
 		android:textColor="?android:attr/textColorPrimary"
 		android:textSize="@dimen/tsz_title"
 		android:text="@string/dlg_playlist_question"

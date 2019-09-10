@@ -3,9 +3,11 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.preference.Preference;
+//import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.preference.Preference;
 
 /**
  * Preference that displays the sound prompt dialog.
@@ -63,15 +65,15 @@ public class NacSoundPreference
 	 * Set the initial preference value.
 	 */
 	@Override
-	protected void onSetInitialValue(boolean restore, Object defval)
+	protected void onSetInitialValue(Object defaultValue)
 	{
-		if (restore)
+		if (defaultValue == null)
 		{
 			this.mValue = getPersistedString(this.mValue);
 		}
 		else
 		{
-			this.mValue = (String) defval;
+			this.mValue = (String) defaultValue;
 
 			persistString(this.mValue);
 		}

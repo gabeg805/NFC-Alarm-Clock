@@ -1,8 +1,10 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
-import android.support.v7.widget.LinearSmoothScroller;
+//import android.support.v7.widget.LinearSmoothScroller;
 import android.util.DisplayMetrics;
+
+import androidx.recyclerview.widget.LinearSmoothScroller;
 
 /**
  * Smooth scroller

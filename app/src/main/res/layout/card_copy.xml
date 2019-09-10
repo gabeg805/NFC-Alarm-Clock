@@ -25,7 +25,7 @@
 		android:layout_toEndOf="@id/copy_icon"
 		android:layout_marginStart="@dimen/ml_copy"
 		android:layout_centerVertical="true"
-		android:text="@string/copy"
+		android:text="@string/card_swipe_copy"
 		android:textColor="@color/white"
 		android:textSize="@dimen/tsz_copy"
 		/>

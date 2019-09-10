@@ -5,12 +5,15 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.preference.Preference;
+//import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;;
+
+import androidx.preference.Preference;
+import androidx.preference.PreferenceViewHolder;
 
 /**
  * Preference that indicates repeating the alarm.
@@ -102,18 +105,18 @@ public class NacCheckboxPreference
 	/**
 	 */
 	@Override
-	protected void onBindView(View view)
+	public void onBindViewHolder(PreferenceViewHolder holder)
 	{
-		super.onBindView(view);
+		super.onBindViewHolder(holder);
 
-		Context context = view.getContext();
+		Context context = getContext();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
 		int[][] states = new int[][] {
 			new int[] {  android.R.attr.state_checked },
 			new int[] { -android.R.attr.state_checked } };
 		int[] colors = new int[] { shared.getThemeColor(), Color.LTGRAY };
 		ColorStateList colorStateList = new ColorStateList(states, colors);
-		this.mCheckBox = (CheckBox) view.findViewById(R.id.widget);
+		this.mCheckBox = (CheckBox) holder.findViewById(R.id.widget);
 
 		this.mCheckBox.setChecked(this.mValue);
 		this.mCheckBox.setOnCheckedChangeListener(this);
@@ -159,15 +162,15 @@ public class NacCheckboxPreference
 	 * Set the initial preference value.
 	 */
 	@Override
-	protected void onSetInitialValue(boolean restore, Object defval)
+	protected void onSetInitialValue(Object defaultValue)
 	{
-		if (restore)
+		if (defaultValue == null)
 		{
 			this.mValue = getPersistedBoolean(this.mValue);
 		}
 		else
 		{
-			this.mValue = (boolean) defval;
+			this.mValue = (boolean) defaultValue;
 
 			persistBoolean(this.mValue);
 		}

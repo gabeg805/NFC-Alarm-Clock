@@ -322,7 +322,8 @@ public class NacCalendar
 	 */
 	public static String toString(Calendar calendar, String format)
 	{
-		SimpleDateFormat formatter = new SimpleDateFormat(format);
+		SimpleDateFormat formatter = new SimpleDateFormat(format,
+			Locale.getDefault());
 		Date date = calendar.getTime();
 
 		return formatter.format(date);

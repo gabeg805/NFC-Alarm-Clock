@@ -1,7 +1,9 @@
 package com.nfcalarmclock;
 
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+//import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
 
 /**
  * About fragment.
@@ -13,9 +15,9 @@ public class NacAboutSettings
 	/**
 	 */
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreatePreferences(Bundle savedInstanceState, String rootKey)
 	{
-		super.onCreate(savedInstanceState);
+		//super.onCreatePreferences(savedInstanceState, rootKey);
 		addPreferencesFromResource(R.xml.about_preferences);
 	}
 

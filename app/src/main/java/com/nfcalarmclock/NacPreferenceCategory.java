@@ -1,11 +1,17 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
-import android.preference.PreferenceCategory;
+//import android.preference.PreferenceCategory;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.preference.PreferenceCategory;
+import androidx.preference.PreferenceViewHolder;
+
+/**
+ * Preference category.
+ */
 public class NacPreferenceCategory
 	extends PreferenceCategory
 {
@@ -34,13 +40,13 @@ public class NacPreferenceCategory
 	/**
 	 */
 	@Override
-	protected void onBindView(View view)
+	public void onBindViewHolder(PreferenceViewHolder holder)
 	{
-		super.onBindView(view);
+		super.onBindViewHolder(holder);
 
-		Context context = view.getContext();
+		Context context = getContext();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
-		TextView title = (TextView) view.findViewById(android.R.id.title);
+		TextView title = (TextView) holder.findViewById(android.R.id.title);
 
 		title.setTextColor(shared.getThemeColor());
 	}

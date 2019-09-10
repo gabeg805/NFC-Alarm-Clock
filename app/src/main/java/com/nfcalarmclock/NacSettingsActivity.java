@@ -1,20 +1,27 @@
 package com.nfcalarmclock;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentManager.BackStackEntry;
-import android.content.Context;
-import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
-import android.view.View;
+//import android.app.Fragment;
+//import android.app.FragmentManager;
+//import android.app.FragmentManager.BackStackEntry;
+//import android.support.v4.app.Fragment;
+//import android.support.v4.app.FragmentManager;
+//import android.support.v4.app.FragmentManager.BackStackEntry;
 
+import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
+//import android.preference.Preference;
+//import android.preference.PreferenceManager;
+import android.view.View;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentManager.BackStackEntry;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceManager;
 
 /**
  * Display all the configurable settings for the app.
@@ -29,7 +36,7 @@ public class NacSettingsActivity
 	 */
 	private int getStackCount()
 	{
-		return getFragmentManager().getBackStackEntryCount();
+		return getSupportFragmentManager().getBackStackEntryCount();
 	}
 
 	/**
@@ -41,7 +48,7 @@ public class NacSettingsActivity
 
 		//PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-		FragmentManager manager = getFragmentManager();
+		FragmentManager manager = getSupportFragmentManager();
 
 		manager.beginTransaction()
 			.replace(android.R.id.content, new SettingsFragment())
@@ -59,7 +66,7 @@ public class NacSettingsActivity
 
 		if (count > 0)
 		{
-			BackStackEntry entry = getFragmentManager().getBackStackEntryAt(0);
+			BackStackEntry entry = getSupportFragmentManager().getBackStackEntryAt(0);
 			title = entry.getName();
 		}
 
@@ -75,7 +82,7 @@ public class NacSettingsActivity
 
 		if (count > 0)
 		{
-			getFragmentManager().popBackStack();
+			getSupportFragmentManager().popBackStack();
 			return false;
 		}
 		else
@@ -96,9 +103,10 @@ public class NacSettingsActivity
 		/**
 		 */
 		@Override
-		public void onCreate(Bundle savedInstanceState)
+		public void onCreatePreferences(Bundle savedInstanceState,
+			String rootKey)
 		{
-			super.onCreate(savedInstanceState);
+			//super.onCreatePreferences(savedInstanceState, rootKey);
 			addPreferencesFromResource(R.xml.main_preferences);
 
 			NacSharedKeys keys = this.getKeys();
@@ -143,6 +151,7 @@ public class NacSettingsActivity
 			NacSharedKeys keys = this.getKeys();
 			String preferenceKey = preference.getKey();
 			FragmentManager manager = getFragmentManager();
+			//FragmentManager manager = getFragmentManager();
 			Fragment fragment;
 			String title;
 
