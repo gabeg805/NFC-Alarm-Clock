@@ -103,7 +103,11 @@ public class NacMusicFragment
 	{
 		int id = view.getId();
 
-		if (id == R.id.ok)
+		if (id == R.id.clear)
+		{
+			this.mFileBrowser.deselect();
+		}
+		else if (id == R.id.ok)
 		{
 			String path = getSoundPath();
 			File file = new File(path);

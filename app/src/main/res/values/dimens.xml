@@ -5,9 +5,10 @@
 	<dimen name="sp_tweak">-5dp</dimen>
 	<dimen name="rad_general">3dp</dimen>
 	<dimen name="isz_pref_icon">32dp</dimen>
+	<dimen name="ml_pref_checkbox">20dp</dimen>
 	<dimen name="isz_general">22dp</dimen>
 	<dimen name="isz_general_tweak">24dp</dimen>
-	<dimen name="tsz_general">14sp</dimen>
+	<dimen name="tsz_general">16sp</dimen>
 
 
 	<!-- Alarm card -->

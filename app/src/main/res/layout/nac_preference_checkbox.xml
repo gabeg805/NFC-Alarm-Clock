@@ -16,6 +16,7 @@
 		android:id="@+id/widget"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_marginStart="@dimen/ml_pref_checkbox"
 		android:focusable="false"
 		/>
 

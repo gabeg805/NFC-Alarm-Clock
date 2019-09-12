@@ -17,10 +17,16 @@ public class NacPreferenceCategory
 {
 
 	/**
+	 * Shared preferences.
+	 */
+	private NacSharedPreferences mShared;
+
+	/**
 	 */
 	public NacPreferenceCategory(Context context)
 	{
 		super(context);
+		this.init();
 	}
 
 	/**
@@ -28,6 +34,7 @@ public class NacPreferenceCategory
 	public NacPreferenceCategory(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
+		this.init();
 	}
 
 	/**
@@ -35,6 +42,26 @@ public class NacPreferenceCategory
 	public NacPreferenceCategory(Context context, AttributeSet attrs, int style)
 	{
 		super(context, attrs, style);
+		this.init();
+	}
+
+	/**
+	 * @return The shared preferences.
+	 */
+	private NacSharedPreferences getShared()
+	{
+		return this.mShared;
+	}
+
+	/**
+	 * Initialize the preference category.
+	 */
+	private void init()
+	{
+		Context context = getContext();
+		this.mShared = new NacSharedPreferences(context);
+
+		setIconSpaceReserved(false);
 	}
 
 	/**
@@ -44,11 +71,9 @@ public class NacPreferenceCategory
 	{
 		super.onBindViewHolder(holder);
 
-		Context context = getContext();
-		NacSharedPreferences shared = new NacSharedPreferences(context);
 		TextView title = (TextView) holder.findViewById(android.R.id.title);
 
-		title.setTextColor(shared.getThemeColor());
+		title.setTextColor(this.getShared().getThemeColor());
 	}
 
 }

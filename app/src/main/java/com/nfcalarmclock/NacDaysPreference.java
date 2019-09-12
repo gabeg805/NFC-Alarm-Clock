@@ -63,7 +63,6 @@ public class NacDaysPreference
 	public void onBindViewHolder(PreferenceViewHolder holder)
 	{
 		super.onBindViewHolder(holder);
-		//this.setSummary(this.getSummary());
 	}
 
 	/**
@@ -76,7 +75,7 @@ public class NacDaysPreference
 		NacDayOfWeek dow = root.findViewById(R.id.days);
 		this.mValue = NacCalendar.Days.daysToValue(dow.getDays());
 
-		this.setSummary(this.getSummary());
+		setSummary(this.getSummary());
 		persistInt(this.mValue);
 
 		return true;

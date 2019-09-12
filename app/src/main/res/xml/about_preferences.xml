@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
-	xmlns:android="http://schemas.android.com/apk/res/android">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
 
 	<Preference
 		android:key="@string/pref_about_author_key"
 		android:title="@string/pref_about_author_title"
 		android:summary="@string/pref_about_author_summary"
+		app:iconSpaceReserved="false"
+		app:allowDividerBelow="true"
 		/>
 
 	<Preference
 		android:key="@string/pref_about_version_key"
 		android:title="@string/pref_about_version_title"
 		android:summary="@string/versionName"
+		app:iconSpaceReserved="false"
+		app:allowDividerAbove="true"
 		/>
 
 </PreferenceScreen>

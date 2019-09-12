@@ -23,6 +23,8 @@
 		android:summaryOn="@string/pref_repeat_summary_enabled"
 		android:summaryOff="@string/pref_repeat_summary_disabled"
 		android:defaultValue="true"
+		app:allowDividerAbove="true"
+		app:allowDividerBelow="true"
 		/>
 
 	<com.nfcalarmclock.NacCheckboxPreference
@@ -31,6 +33,8 @@
 		android:summaryOn="@string/pref_use_nfc_summary_enabled"
 		android:summaryOff="@string/pref_use_nfc_summary_disabled"
 		android:defaultValue="false"
+		app:allowDividerAbove="true"
+		app:allowDividerBelow="true"
 		/>
 
 	<com.nfcalarmclock.NacCheckboxPreference
@@ -39,6 +43,7 @@
 		android:summaryOn="@string/pref_vibrate_summary_enabled"
 		android:summaryOff="@string/pref_vibrate_summary_disabled"
 		android:defaultValue="true"
+		app:allowDividerAbove="true"
 		/>
 
 	<com.nfcalarmclock.NacSoundPreference

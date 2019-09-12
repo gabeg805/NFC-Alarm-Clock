@@ -62,7 +62,6 @@ public class NacNamePreference
 	public void onBindViewHolder(PreferenceViewHolder holder)
 	{
 		super.onBindViewHolder(holder);
-		//setSummary(this.getSummary());
 	}
 
 	/**
@@ -74,7 +73,7 @@ public class NacNamePreference
 	{
 		this.mValue = dialog.getDataString();
 
-		this.setSummary(this.getSummary());
+		setSummary(this.getSummary());
 		persistString(this.mValue);
 
 		return true;

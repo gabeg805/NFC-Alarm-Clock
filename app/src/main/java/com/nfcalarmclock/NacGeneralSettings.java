@@ -1,8 +1,6 @@
 package com.nfcalarmclock;
 
 import android.os.Bundle;
-//import android.preference.PreferenceManager;
-
 import androidx.preference.PreferenceManager;
 
 /**
@@ -17,7 +15,6 @@ public class NacGeneralSettings
 	@Override
 	public void onCreatePreferences(Bundle savedInstanceState, String rootKey)
 	{
-		//super.onCreatePreferences(savedInstanceState, rootKey);
 		addPreferencesFromResource(R.xml.general_preferences);
 		PreferenceManager.setDefaultValues(getContext(),
 			R.xml.general_preferences, false);

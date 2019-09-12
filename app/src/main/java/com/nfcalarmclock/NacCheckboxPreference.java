@@ -5,13 +5,11 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-//import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;;
-
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 
@@ -45,6 +43,16 @@ public class NacCheckboxPreference
 	protected String mSummaryOff;
 
 	/**
+	 * Color state list of the checkbox.
+	 */
+	protected ColorStateList mColorStateList;
+
+	/**
+	 * Binding view holder flag.
+	 */
+	protected boolean mBindFlag;
+
+	/**
 	 * Default value.
 	 */
 	protected static final boolean DEFAULT_VALUE = true;
@@ -53,14 +61,16 @@ public class NacCheckboxPreference
 	 */
 	public NacCheckboxPreference(Context context)
 	{
-		this(context, null);
+		super(context);
+		this.init(context, null);
 	}
 
 	/**
 	 */
 	public NacCheckboxPreference(Context context, AttributeSet attrs)
 	{
-		this(context, attrs, 0);
+		super(context, attrs);
+		this.init(context, attrs);
 	}
 
 	/**
@@ -68,22 +78,7 @@ public class NacCheckboxPreference
 	public NacCheckboxPreference(Context context, AttributeSet attrs, int style)
 	{
 		super(context, attrs, style);
-		setLayoutResource(R.layout.nac_preference_checkbox);
-		setOnPreferenceClickListener(this);
-
-		int[] array = new int[] { android.R.attr.summaryOn,
-			android.R.attr.summaryOff };
-		TypedArray ta = context.obtainStyledAttributes(attrs, array);
-
-		try
-		{
-			this.mSummaryOn = ta.getString(0);
-			this.mSummaryOff = ta.getString(1);
-		}
-		finally
-		{
-			ta.recycle();
-		}
+		this.init(context, attrs);
 	}
 
 	/**
@@ -103,26 +98,57 @@ public class NacCheckboxPreference
 	}
 
 	/**
+	 * Initialize the preference.
+	 */
+	private void init(Context context, AttributeSet attrs)
+	{
+		setLayoutResource(R.layout.nac_preference_checkbox);
+		setOnPreferenceClickListener(this);
+
+		this.mColorStateList = null;
+		this.mBindFlag = false;
+		int[] array = new int[] { android.R.attr.summaryOn,
+			android.R.attr.summaryOff };
+		TypedArray ta = context.obtainStyledAttributes(attrs, array);
+
+		try
+		{
+			this.mSummaryOn = ta.getString(0);
+			this.mSummaryOff = ta.getString(1);
+		}
+		finally
+		{
+			ta.recycle();
+		}
+	}
+
+	/**
 	 */
 	@Override
-	public void onBindViewHolder(PreferenceViewHolder holder)
+	public void onAttached()
 	{
-		super.onBindViewHolder(holder);
-
+		super.onAttached();
 		Context context = getContext();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
 		int[][] states = new int[][] {
 			new int[] {  android.R.attr.state_checked },
 			new int[] { -android.R.attr.state_checked } };
 		int[] colors = new int[] { shared.getThemeColor(), Color.LTGRAY };
-		ColorStateList colorStateList = new ColorStateList(states, colors);
+		this.mColorStateList = new ColorStateList(states, colors);
+	}
+
+	/**
+	 */
+	@Override
+	public void onBindViewHolder(PreferenceViewHolder holder)
+	{
+		super.onBindViewHolder(holder);
+
 		this.mCheckBox = (CheckBox) holder.findViewById(R.id.widget);
 
 		this.mCheckBox.setChecked(this.mValue);
 		this.mCheckBox.setOnCheckedChangeListener(this);
-		this.mCheckBox.setButtonTintList(colorStateList);
-
-		this.setSummary();
+		this.mCheckBox.setButtonTintList(this.mColorStateList);
 	}
 
 	/**
@@ -134,8 +160,9 @@ public class NacCheckboxPreference
 		this.mValue = state;
 
 		this.mCheckBox.setChecked(state);
-		this.setSummary();
+		setSummary(this.getSummary());
 		persistBoolean(state);
+		notifyDependencyChange(!state);
 	}
 
 	/**
@@ -174,24 +201,6 @@ public class NacCheckboxPreference
 
 			persistBoolean(this.mValue);
 		}
-	}
-
-	/**
-	 * Set the summary text.
-	 */
-	public void setSummary()
-	{
-		View root = (View) this.mCheckBox.getParent();
-		TextView tv = root.findViewById(android.R.id.summary);
-		CharSequence summary = this.getSummary();
-		boolean state = this.getChecked();
-
-		if (tv != null)
-		{
-			tv.setText(summary);
-		}
-
-		notifyDependencyChange(!state);
 	}
 
 }

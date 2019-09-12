@@ -161,6 +161,14 @@ public class NacFileBrowser
 	}
 
 	/**
+	 * Deselect the currently selected item from the file browser.
+	 */
+	public void deselect()
+	{
+		this.select((View)null);
+	}
+
+	/**
 	 * @return The container view.
 	 */
 	private NacButtonGroup getContainer()
@@ -334,7 +342,7 @@ public class NacFileBrowser
 		{
 			if (this.isSelected(path))
 			{
-				this.select((View)null);
+				this.deselect();
 			}
 			else
 			{

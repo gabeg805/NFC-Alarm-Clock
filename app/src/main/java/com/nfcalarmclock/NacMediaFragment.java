@@ -138,14 +138,15 @@ public class NacMediaFragment
 	@Override
 	public void onClick(View view)
 	{
-		NacMediaPlayer player = this.getMediaPlayer();
+		//NacMediaPlayer player = this.getMediaPlayer();
 		FragmentActivity activity = getActivity();
 		int id = view.getId();
 
 		if (id == R.id.clear)
 		{
 			this.setMedia("");
-			player.reset();
+			this.safeReset();
+			//player.reset();
 		}
 		else if (id == R.id.cancel)
 		{
