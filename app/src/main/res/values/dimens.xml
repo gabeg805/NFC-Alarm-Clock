@@ -91,7 +91,7 @@
 	<dimen name="pb_days">12dp</dimen>
 	<dimen name="isz_day">32dp</dimen>
 	<dimen name="tsz_days">14sp</dimen>
-	<dimen name="tsz_summary_days">12sp</dimen>
+	<dimen name="tsz_summary_days">14sp</dimen>
 
 
 	<!-- Sound -->
@@ -130,7 +130,7 @@
 	<dimen name="pb_name">14dp</dimen>
 	<dimen name="pl_name">6dp</dimen>
 	<dimen name="pr_name">6dp</dimen>
-	<dimen name="tsz_summary_name">12sp</dimen>
+	<dimen name="tsz_summary_name">14sp</dimen>
 
 
 	<!-- Delete -->
