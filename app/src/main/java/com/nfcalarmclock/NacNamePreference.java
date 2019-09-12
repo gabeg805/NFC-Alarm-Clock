@@ -56,15 +56,6 @@ public class NacNamePreference
 	}
 
 	/**
-	 * Bind the summary section text of the preference.
-	 */
-	@Override
-	public void onBindViewHolder(PreferenceViewHolder holder)
-	{
-		super.onBindViewHolder(holder);
-	}
-
-	/**
 	 * Persist the summary string and set the new summary when the dialog is
 	 * dismissed.
 	 */

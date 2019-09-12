@@ -146,6 +146,7 @@ public class NacCheckboxPreference
 
 		this.mCheckBox = (CheckBox) holder.findViewById(R.id.widget);
 
+		this.mCheckBox.setOnCheckedChangeListener(null);
 		this.mCheckBox.setChecked(this.mValue);
 		this.mCheckBox.setOnCheckedChangeListener(this);
 		this.mCheckBox.setButtonTintList(this.mColorStateList);

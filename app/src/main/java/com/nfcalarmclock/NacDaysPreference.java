@@ -57,15 +57,6 @@ public class NacDaysPreference
 	}
 
 	/**
-	 * Set the summary text.
-	 */
-	@Override
-	public void onBindViewHolder(PreferenceViewHolder holder)
-	{
-		super.onBindViewHolder(holder);
-	}
-
-	/**
 	 * Save the selected days when the dialog is dismissed.
 	 */
 	@Override
