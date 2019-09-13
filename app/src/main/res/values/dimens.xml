@@ -8,7 +8,7 @@
 	<dimen name="ml_pref_checkbox">20dp</dimen>
 	<dimen name="isz_general">22dp</dimen>
 	<dimen name="isz_general_tweak">24dp</dimen>
-	<dimen name="tsz_general">16sp</dimen>
+	<dimen name="tsz_general">15sp</dimen>
 
 
 	<!-- Alarm card -->
@@ -60,8 +60,8 @@
 	<dimen name="mr_delete">10dp</dimen>
 	<dimen name="isz_copy">30dp</dimen>
 	<dimen name="isz_delete">30dp</dimen>
-	<dimen name="tsz_copy">14sp</dimen>
-	<dimen name="tsz_delete">14sp</dimen>
+	<dimen name="tsz_copy">16sp</dimen>
+	<dimen name="tsz_delete">16sp</dimen>
 
 
 	<!-- Time -->
@@ -91,7 +91,7 @@
 	<dimen name="pb_days">12dp</dimen>
 	<dimen name="isz_day">32dp</dimen>
 	<dimen name="tsz_days">14sp</dimen>
-	<dimen name="tsz_summary_days">14sp</dimen>
+	<dimen name="tsz_summary_days">13sp</dimen>
 
 
 	<!-- Sound -->
@@ -130,7 +130,7 @@
 	<dimen name="pb_name">14dp</dimen>
 	<dimen name="pl_name">6dp</dimen>
 	<dimen name="pr_name">6dp</dimen>
-	<dimen name="tsz_summary_name">14sp</dimen>
+	<dimen name="tsz_summary_name">13sp</dimen>
 
 
 	<!-- Delete -->

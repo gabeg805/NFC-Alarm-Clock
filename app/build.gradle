@@ -6,8 +6,8 @@ android {
 		applicationId "com.nfcalarmclock"
 		minSdkVersion 21
 		targetSdkVersion 28
-		versionCode 83
-		versionName "8.2.15"
+		versionCode 84
+		versionName "8.2.16"
 		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 	}
 	buildTypes {
@@ -46,12 +46,6 @@ dependencies {
 	implementation 'androidx.recyclerview:recyclerview:1.0.0'
 	implementation 'androidx.viewpager:viewpager:1.0.0'
 	implementation 'com.google.android.material:material:1.0.0'
-
-	//implementation 'com.android.support:appcompat-v7:28.0.0'
-	//implementation 'com.android.support:support-v4:28.0.0'
-	//implementation 'com.android.support:design:28.0.0'
-	//implementation 'com.android.support:recyclerview-v7:28.0.0'
-	//implementation 'com.android.support:cardview-v7:28.0.0'
 
 	implementation 'com.spotify.sdk:spotify-auth-release:1.1.0@aar'
 	implementation 'com.spotify.sdk:spotify-app-remote-release:0.6.1@aar'
