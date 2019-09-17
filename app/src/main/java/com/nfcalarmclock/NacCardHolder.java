@@ -198,7 +198,7 @@ public class NacCardHolder
 		this.mSummary.init(shared, alarm);
 		this.mDays.init(shared, alarm);
 		this.mUseNfc.init(alarm);
-		this.mSound.init(alarm);
+		this.mSound.init(shared, alarm);
 		this.mVibrate.init(alarm);
 		this.mName.init(alarm);
 		this.setColors();

@@ -3,6 +3,7 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.PorterDuff;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,21 +116,22 @@ public class NacCardSound
 	/**
 	 * Initialize the sound.
 	 */
-	public void init(NacAlarm alarm)
+	public void init(NacSharedPreferences shared, NacAlarm alarm)
 	{
 		this.mAlarm = alarm;
 
-		this.set();
+		this.set(shared);
 	}
 
 	/**
 	 * Set the volume and sound to play when the alarm goes off.
 	 */
-	public void set()
+	public void set(NacSharedPreferences shared)
 	{
 		this.setSound();
 		this.setVolume();
 		this.setVolumeIcon();
+		this.setVolumeColor(shared);
 	}
 
 	/**
@@ -166,6 +168,19 @@ public class NacCardSound
 
 		//this.mVolume.incrementProgressBy(10);
 		this.mVolume.setProgress(alarm.getVolume());
+	}
+
+	/**
+	 * Set the volume color.
+	 */
+	public void setVolumeColor(NacSharedPreferences shared)
+	{
+		int themeColor = shared.getThemeColor();
+
+		this.mVolume.getProgressDrawable().setColorFilter(themeColor,
+			PorterDuff.Mode.SRC_IN);
+		this.mVolume.getThumb().setColorFilter(themeColor,
+			PorterDuff.Mode.SRC_IN);
 	}
 
 	/**
