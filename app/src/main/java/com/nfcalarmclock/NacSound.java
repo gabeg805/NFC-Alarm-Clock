@@ -416,13 +416,20 @@ public class NacSound
 	 */
 	public static MediaMetadataRetriever getMediaMetadataRetriever(File file)
 	{
+		String path = file.getAbsolutePath();
+
+		if (path == null)
+		{
+			return null;
+		}
+
 		MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 
 		try
 		{
-			retriever.setDataSource(file.getAbsolutePath());
+			retriever.setDataSource(path);
 		}
-		catch (RuntimeException e)
+		catch (IllegalArgumentException e)
 		{
 			NacUtility.printf("Something wrong with file '%s'.", file.getAbsolutePath());
 			retriever.release();
@@ -445,9 +452,14 @@ public class NacSound
 		Uri uri = NacSound.isRingtone(path) ? Uri.parse(path)
 			: Uri.fromFile(new File(path));
 		Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
-		String name = ringtone.getTitle(context);
+		String name = "";
 
-		ringtone.stop();
+		if (ringtone != null)
+		{
+			name = ringtone.getTitle(context);
+
+			ringtone.stop();
+		}
 
 		return name;
 	}

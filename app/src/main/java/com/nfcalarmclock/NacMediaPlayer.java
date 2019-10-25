@@ -193,7 +193,7 @@ public class NacMediaPlayer
 
 		this.mContext = context;
 		this.mPlaylist = null;
-		this.mAttributes = new NacAudio.Attributes();
+		this.mAttributes = new NacAudio.Attributes(context);
 		this.mWasPlaying = false;
 	}
 
@@ -235,7 +235,6 @@ public class NacMediaPlayer
 	@Override
 	public void onAudioFocusChange(int focusChange)
 	{
-		//this.zPrintInfo(focusChange);
 		Context context = this.getContext();
 		NacAudio.Attributes attrs = this.mAttributes;
 		this.mWasPlaying = this.isPlayingWrapper();
@@ -251,15 +250,17 @@ public class NacMediaPlayer
 		}
 		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS)
 		{
+			attrs.revertVolume();
 			this.stopWrapper();
 		}
 		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)
 		{
+			attrs.revertVolume();
 			this.pauseWrapper();
 		}
 		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
 		{
-			attrs.duckVolume(context);
+			attrs.duckVolume();
 		}
 	}
 
@@ -322,7 +323,7 @@ public class NacMediaPlayer
 		String path = alarm.getSoundPath();
 
 		this.mAttributes.setSource(alarm.getAudioSource());
-		this.mAttributes.setVolume(alarm.getVolume());
+		this.mAttributes.setVolumeLevel(alarm.getVolume());
 
 		if (NacSound.isFilePlaylist(alarm.getSoundType()))
 		{
@@ -341,33 +342,6 @@ public class NacMediaPlayer
 	{
 		this.play(sound.getPath(), sound.getRepeat());
 	}
-
-	/**
-	 * @see play
-	 */
-	//public void play(NacSound sound, boolean repeat)
-	//{
-	//	this.play(sound.getPath(), repeat);
-	//}
-
-	/**
-	 * @see play
-	 */
-	//public void play(NacSound sound, String audioSource, int volume,
-	//	boolean repeat)
-	//{
-	//	this.play(sound.getPath(), repeat);
-	//}
-
-	/**
-	 * @see play
-	 */
-	//public void play(String media)
-	//{
-	//	int volume = this.getStreamVolume();
-
-	//	this.play(media, volume, false);
-	//}
 
 	/**
 	 * @see play
@@ -416,7 +390,6 @@ public class NacMediaPlayer
 	/**
 	 * Play a playlist.
 	 */
-	//public void playPlaylist(NacAlarm alarm, boolean repeat, boolean shuffle)
 	public void playPlaylist(String path, boolean repeat, boolean shuffle)
 	{
 		Context context = this.getContext();
@@ -475,22 +448,8 @@ public class NacMediaPlayer
 	private void setVolume()
 	{
 		NacAudio.Attributes attrs = this.mAttributes;
-		float level = attrs.getVolumeLevel();
 
-		if (level < 0)
-		{
-			return;
-		}
-
-		try
-		{
-			setVolume(level, level);
-		}
-		catch (IllegalStateException e)
-		{
-			NacUtility.printf("NacMediaPlayer : IllegalStateException caught in setVolume : Unable to set volume %d (%f)",
-				attrs.getVolume(), level);
-		}
+		attrs.setVolume();
 	}
 
 	/**
@@ -534,33 +493,6 @@ public class NacMediaPlayer
 	public boolean wasPlaying()
 	{
 		return this.mWasPlaying;
-	}
-
-	// Temp method
-	private void zPrintInfo(int focusChange)
-	{
-		NacUtility.printf("onAudioFocusChange! %d", focusChange);
-		String change = "UNKOWN";
-
-		if (focusChange == AudioManager.AUDIOFOCUS_GAIN)
-		{
-			change = "GAIN";
-		}
-		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS)
-		{
-			change = "LOSS";
-		}
-		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)
-		{
-			change = "LOSS_TRANSIENT";
-		}
-		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
-		{
-			change = "LOSS_TRANSIENT_CAN_DUCK";
-		}
-
-		NacUtility.printf("NacMediaPlayer : onAudioFocusChange : AUDIOFOCUS_%s",
-			change);
 	}
 
 }

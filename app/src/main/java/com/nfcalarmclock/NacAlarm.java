@@ -660,7 +660,7 @@ public class NacAlarm
 	}
 
 	/**
-	 * Check if any days are selected.
+	 * @return True if any days are selected, and False otherwise.
 	 */
 	public boolean areDaysSelected()
 	{
@@ -759,6 +759,15 @@ public class NacAlarm
 	}
 
 	/**
+	 * @return The time string.
+	 */
+	public String getClockTime(Context context)
+	{
+		return NacCalendar.Time.getClockTime(context, this.getHour(),
+			this.getMinute());
+	}
+
+	/**
 	 * @return The days on which to run the alarm.
 	 */
 	public EnumSet<NacCalendar.Day> getDays()
@@ -779,8 +788,9 @@ public class NacAlarm
 	 */
 	public String getFullTime(Context context)
 	{
-		return NacCalendar.Time.getFullTime(context, this.getHour(),
-			this.getMinute());
+		Calendar next = NacCalendar.getNext(this);
+
+		return NacCalendar.Time.getFullTime(context, next);
 	}
 
 	/**
@@ -880,15 +890,6 @@ public class NacAlarm
 	}
 
 	/**
-	 * @return The time string.
-	 */
-	public String getTime(Context context)
-	{
-		return NacCalendar.Time.getTime(context, this.getHour(),
-			this.getMinute());
-	}
-
-	/**
 	 * @return True if using NFC, and False otherwise.
 	 */
 	public boolean getUseNfc()
@@ -919,14 +920,6 @@ public class NacAlarm
 	public boolean hasListener()
 	{
 		return (this.getOnChangeListener() != null);
-	}
-
-	/**
-	 * Check if the alarm is a one-time alarm.
-	 */
-	public boolean isOneTimeAlarm()
-	{
-		return (!this.getRepeat() || !this.areDaysSelected());
 	}
 
 	/**

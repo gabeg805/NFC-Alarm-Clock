@@ -68,6 +68,14 @@ public class NacDayOfWeek
 	}
 
 	/**
+	 * @return True if any days are selected, and False otherwise.
+	 */
+	public boolean areDaysSelected()
+	{
+		return !this.getDays().isEmpty();
+	}
+
+	/**
 	 * Determine the spacing between buttons.
 	 * 
 	 * @return The spacing between the different buttons.
@@ -79,7 +87,7 @@ public class NacDayOfWeek
 		float left = r.getDimension(R.dimen.ml_card) + getPaddingLeft();
 		float right = r.getDimension(R.dimen.mr_card) + getPaddingRight();
 		double spacing = (metrics.widthPixels - (left+right)
-						 - 7*this.mButtons[0].getButtonWidth()) / 16.0;
+			- 7*this.mButtons[0].getButtonWidth()) / 16.0;
 
 		return (int) spacing;
 	}

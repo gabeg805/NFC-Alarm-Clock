@@ -33,14 +33,29 @@ public class NacIntent
 	public static final String SOUND_BUNDLE_NAME = "NacSoundBundle";
 
 	/**
+	 * Add an alarm to an intent.
+	 */
+	public static Intent addAlarm(Intent intent, NacAlarm alarm)
+	{
+		if (intent != null)
+		{
+			Bundle bundle = NacBundle.toBundle(alarm);
+
+			intent.putExtra(ALARM_BUNDLE_NAME, bundle);
+		}
+
+		return intent;
+	}
+
+	/**
 	 * @return The intent that will be used to start the Alarm activity.
 	 */
 	public static Intent createAlarmActivity(Context context, Bundle bundle)
 	{
 		Intent intent = new Intent(context, NacAlarmActivity.class);
 
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.putExtra(ALARM_BUNDLE_NAME, bundle);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
 		return intent;
 	}

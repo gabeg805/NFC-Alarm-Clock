@@ -77,7 +77,7 @@ public class NacCardDays
 	/**
 	 * @return The repeat checkbox.
 	 */
-	private CheckBox getRepeat()
+	public CheckBox getRepeat()
 	{
 		return this.mRepeat;
 	}
@@ -88,7 +88,6 @@ public class NacCardDays
 	public void init(NacSharedPreferences shared, NacAlarm alarm)
 	{
 		this.mAlarm = alarm;
-
 
 		this.mDaysAnimation.setInterpolator(new AccelerateInterpolator());
 		this.mDaysAnimation.setDuration(400);
@@ -111,7 +110,7 @@ public class NacCardDays
 	{
 		this.setDays(shared);
 		this.setRepeat();
-		this.changeVisibility(animate);
+		//this.changeVisibility(animate);
 	}
 
 	public void changeVisibility(boolean animate)
@@ -120,10 +119,7 @@ public class NacCardDays
 		CheckBox repeat = this.getRepeat();
 		NacDayOfWeek dayButtons = this.getDayButtons();
 		int currentVisibility = dayButtons.getVisibility();
-		int newVisibility = (alarm.areDaysSelected() && repeat.isChecked()) ?
-			View.VISIBLE: View.GONE;
-		//int newVisibility = (!alarm.areDaysSelected() || !repeat.isChecked()) ?
-		//	View.GONE : View.VISIBLE;
+		int newVisibility = alarm.areDaysSelected() ? View.VISIBLE: View.GONE;
 
 		if (!animate)
 		{

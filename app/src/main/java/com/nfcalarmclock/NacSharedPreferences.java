@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-//import android.preference.PreferenceManager;
-import java.util.EnumSet;
-
 import androidx.preference.PreferenceManager;
+import java.util.EnumSet;
 
 /**
  * Container for the values of each preference.
@@ -34,11 +32,6 @@ public class NacSharedPreferences
 	 * Default value to see if this is the app's first run after installing.
 	 */
 	private static final boolean DEFAULT_APP_FIRST_RUN = true;
-
-	/**
-	 * Default auto dismiss message.
-	 */
-	public static final String DEFAULT_AUTO_DISMISS_MESSAGE = "";
 
 	/**
 	 * Default auto dismiss duration.
@@ -82,6 +75,16 @@ public class NacSharedPreferences
 	 * Default easy snooze.
 	 */
 	public static final boolean DEFAULT_EASY_SNOOZE = false;
+
+	/**
+	 * Default show missed alarm notification.
+	 */
+	public static final boolean DEFAULT_MISSED_ALARM_NOTIFICATION = true;
+
+	/**
+	 * Default show upcoming alarm notification.
+	 */
+	public static final boolean DEFAULT_UPCOMING_ALARM_NOTIFICATION = false;
 
 	/**
 	 * Default shuffle value.
@@ -295,24 +298,6 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @see editAutoDismissMessage
-	 */
-	public void editAutoDismissMessage(String message)
-	{
-		this.editAutoDismissMessage(message, false);
-	}
-
-	/**
-	 * Edit the auto dismiss message.
-	 */
-	public void editAutoDismissMessage(String message, boolean commit)
-	{
-		String key = this.getKeys().getAutoDismissMessage();
-
-		this.saveString(key, message, commit);
-	}
-
-	/**
 	 * @see editDays
 	 */
 	public void editDays(int days)
@@ -473,16 +458,6 @@ public class NacSharedPreferences
 		String key = this.getKeys().getRepeat();
 
 		this.saveBoolean(key, repeat, commit);
-	}
-
-	/**
-	 * Edit the show alarm information value.
-	 */
-	public void editShowAlarmInfo(boolean show, boolean commit)
-	{
-		String key = this.getKeys().getShowAlarmInfo();
-
-		this.saveBoolean(key, show, commit);
 	}
 
 	/**
@@ -693,17 +668,6 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @return Whether the alarm was auto-dismissed or not.
-	 */
-	public String getAutoDismissMessage()
-	{
-		String key = this.getKeys().getAutoDismissMessage();
-
-		return this.getSharedPreferences().getString(key,
-			DEFAULT_AUTO_DISMISS_MESSAGE);
-	}
-
-	/**
 	 * @see getAutoDismissSummary
 	 */
 	public String getAutoDismissSummary()
@@ -908,6 +872,17 @@ public class NacSharedPreferences
 		{
 			return DEFAULT_COLOR;
 		}
+	}
+
+	/**
+	 * @return True to display missed alarm notifications, and False otherwise.
+	 */
+	public boolean getMissedAlarmNotification()
+	{
+		String key = this.getKeys().getMissedAlarmNotification();
+
+		return this.getSharedPreferences().getBoolean(key,
+			DEFAULT_MISSED_ALARM_NOTIFICATION);
 	}
 
 	/**
@@ -1225,6 +1200,17 @@ public class NacSharedPreferences
 		String key = this.getKeys().getTimeColor();
 
 		return this.getSharedPreferences().getInt(key, DEFAULT_TIME_COLOR);
+	}
+
+	/**
+	 * @return True to display upcoming alarm notifications, and False otherwise.
+	 */
+	public boolean getUpcomingAlarmNotification()
+	{
+		String key = this.getKeys().getUpcomingAlarmNotification();
+
+		return this.getSharedPreferences().getBoolean(key,
+			DEFAULT_UPCOMING_ALARM_NOTIFICATION);
 	}
 
 	/**

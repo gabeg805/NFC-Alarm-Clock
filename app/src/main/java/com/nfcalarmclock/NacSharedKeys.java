@@ -65,24 +65,9 @@ public class NacSharedKeys
 	private final String mAboutScreenTitle;
 
 	/**
-	 * Next alarm display format.
-	 */
-	private final String mNextAlarmFormat;
-
-	/**
-	 * Auto dismiss message.
-	 */
-	private final String mAutoDismissMessage;
-
-	/**
 	 * Auto dismiss.
 	 */
 	private final String mAutoDismiss;
-
-	/**
-	 * Show alarm information in alarm activity.
-	 */
-	private final String mShowAlarmInfo;
 
 	/**
 	 * Max snoozes.
@@ -100,9 +85,19 @@ public class NacSharedKeys
 	private final String mEasySnooze;
 
 	/**
-	 * Shuffle the alarm playlist.
+	 * Show missed alarm notifications.
 	 */
-	private final String mShuffle;
+	private final String mMissedAlarmNotification;
+
+	/**
+	 * Show upcoming alarm notifications.
+	 */
+	private final String mUpcomingAlarmNotification;
+
+	/**
+	 * Next alarm display format.
+	 */
+	private final String mNextAlarmFormat;
 
 	/**
 	 * Start week on.
@@ -110,14 +105,9 @@ public class NacSharedKeys
 	private final String mStartWeekOn;
 
 	/**
-	 * Speak the current time to the user.
+	 * Show alarm information in alarm activity.
 	 */
-	private final String mSpeakToMe;
-
-	/**
-	 * Frequency at which to speak the current time to the user.
-	 */
-	private final String mSpeakFrequency;
+	private final String mShowAlarmInfo;
 
 	/**
 	 * Repeat.
@@ -190,6 +180,21 @@ public class NacSharedKeys
 	private final String mPmColor;
 
 	/**
+	 * Shuffle the alarm playlist.
+	 */
+	private final String mShuffle;
+
+	/**
+	 * Speak the current time to the user.
+	 */
+	private final String mSpeakToMe;
+
+	/**
+	 * Frequency at which to speak the current time to the user.
+	 */
+	private final String mSpeakFrequency;
+
+	/**
 	 */
 	public NacSharedKeys(Context context)
 	{
@@ -206,17 +211,15 @@ public class NacSharedKeys
 		this.mColorScreenTitle = res.getString(R.string.pref_screen_color_title);
 		this.mMiscellaneousTitle = res.getString(R.string.pref_screen_misc_title);
 		this.mAboutScreenTitle = res.getString(R.string.pref_screen_about_title);
-		this.mNextAlarmFormat = res.getString(R.string.pref_next_alarm_format_key);
-		this.mAutoDismissMessage = res.getString(R.string.alarm_auto_dismiss_message);
 		this.mAutoDismiss = res.getString(R.string.pref_auto_dismiss_key);
-		this.mShowAlarmInfo = res.getString(R.string.pref_alarm_info_key);
 		this.mMaxSnooze = res.getString(R.string.pref_max_snooze_key);
 		this.mSnoozeDuration = res.getString(R.string.pref_snooze_duration_key);
 		this.mEasySnooze = res.getString(R.string.pref_easy_snooze_key);
-		this.mShuffle = res.getString(R.string.pref_shuffle_playlist_key);
+		this.mMissedAlarmNotification = res.getString(R.string.pref_missed_alarm_notification_key);
+		this.mUpcomingAlarmNotification = res.getString(R.string.pref_upcoming_alarm_notification_key);
+		this.mNextAlarmFormat = res.getString(R.string.pref_next_alarm_format_key);
 		this.mStartWeekOn = res.getString(R.string.pref_start_week_on_key);
-		this.mSpeakToMe = res.getString(R.string.pref_speak_to_me_key);
-		this.mSpeakFrequency = res.getString(R.string.pref_speak_frequency_key);
+		this.mShowAlarmInfo = res.getString(R.string.pref_alarm_info_key);
 		this.mRepeat = res.getString(R.string.pref_repeat_key);
 		this.mUseNfc = res.getString(R.string.pref_use_nfc_key);
 		this.mDays = res.getString(R.string.pref_days_key);
@@ -231,6 +234,9 @@ public class NacSharedKeys
 		this.mTimeColor = res.getString(R.string.pref_time_color_key);
 		this.mAmColor = res.getString(R.string.pref_am_color_key);
 		this.mPmColor = res.getString(R.string.pref_pm_color_key);
+		this.mShuffle = res.getString(R.string.pref_shuffle_playlist_key);
+		this.mSpeakToMe = res.getString(R.string.pref_speak_to_me_key);
+		this.mSpeakFrequency = res.getString(R.string.pref_speak_frequency_key);
 	}
 
 	/**
@@ -258,6 +264,14 @@ public class NacSharedKeys
 	}
 
 	/**
+	 * @return The post install, first run key.
+	 */
+	public String getAppFirstRun()
+	{
+		return this.mAppFirstRun;
+	}
+
+	/**
 	 * @return The audio source key.
 	 */
 	public String getAudioSource()
@@ -271,14 +285,6 @@ public class NacSharedKeys
 	public String getAutoDismiss()
 	{
 		return this.mAutoDismiss;
-	}
-
-	/**
-	 * @return The auto dismiss message key.
-	 */
-	public String getAutoDismissMessage()
-	{
-		return this.mAutoDismissMessage;
 	}
 
 	/**
@@ -378,6 +384,14 @@ public class NacSharedKeys
 	}
 
 	/**
+	 * @return The missed alarm notification key.
+	 */
+	public String getMissedAlarmNotification()
+	{
+		return this.mMissedAlarmNotification;
+	}
+
+	/**
 	 * @return The name key.
 	 */
 	public String getName()
@@ -407,14 +421,6 @@ public class NacSharedKeys
 	public String getPmColor()
 	{
 		return this.mPmColor;
-	}
-
-	/**
-	 * @return The post install, first run key.
-	 */
-	public String getAppFirstRun()
-	{
-		return this.mAppFirstRun;
 	}
 
 	/**
@@ -503,6 +509,14 @@ public class NacSharedKeys
 	public String getTimeColor()
 	{
 		return this.mTimeColor;
+	}
+
+	/**
+	 * @return The upcoming alarm notification key.
+	 */
+	public String getUpcomingAlarmNotification()
+	{
+		return this.mUpcomingAlarmNotification;
 	}
 
 	/**

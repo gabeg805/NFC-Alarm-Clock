@@ -47,6 +47,31 @@
 
 	</com.nfcalarmclock.NacPreferenceCategory>
 
+	<!-- Notifications -->
+	<com.nfcalarmclock.NacPreferenceCategory
+		android:title="@string/pref_general_notification_category">
+
+		<com.nfcalarmclock.NacCheckboxPreference
+			android:key="@string/pref_missed_alarm_notification_key"
+			android:title="@string/pref_missed_alarm_notification_title"
+			android:summaryOn="@string/pref_missed_alarm_notification_summary_enabled"
+			android:summaryOff="@string/pref_missed_alarm_notification_summary_disabled"
+			android:defaultValue="true"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.NacCheckboxPreference
+			android:key="@string/pref_upcoming_alarm_notification_key"
+			android:title="@string/pref_upcoming_alarm_notification_title"
+			android:summaryOn="@string/pref_upcoming_alarm_notification_summary_enabled"
+			android:summaryOff="@string/pref_upcoming_alarm_notification_summary_disabled"
+			android:defaultValue="false"
+			app:allowDividerBelow="true"
+			/>
+
+	</com.nfcalarmclock.NacPreferenceCategory>
+
 	<!-- Tweaks -->
 	<com.nfcalarmclock.NacPreferenceCategory
 		android:title="@string/pref_general_tweaks_category">

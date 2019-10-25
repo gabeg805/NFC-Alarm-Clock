@@ -2,21 +2,17 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.Intent;
-//import android.support.design.widget.CoordinatorLayout;
-//import android.support.v7.app.AppCompatActivity;
-//import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Alarm card adapter.
@@ -41,6 +37,11 @@ public class NacCardAdapter
 	private RecyclerView mRecyclerView;
 
 	/**
+	 * Shared preferences.
+	 */
+	private NacSharedPreferences mShared;
+
+	/**
 	 * Handle card swipe events.
 	 */
 	private NacCardTouchHelper mTouchHelper;
@@ -54,6 +55,11 @@ public class NacCardAdapter
 	 * The snackbar.
 	 */
 	private NacSnackbar mSnackbar;
+
+	/**
+	 * Upcoming notifications.
+	 */
+	private NacUpcomingAlarmNotification mNotification;
 
 	/**
 	 * List of alarms.
@@ -87,8 +93,10 @@ public class NacCardAdapter
 			R.id.activity_main);
 		this.mRecyclerView = (RecyclerView) this.getRoot().findViewById(
 			R.id.content_alarm_list);
+		this.mShared = new NacSharedPreferences(context);
 		this.mTouchHelper = new NacCardTouchHelper(callback);
 		this.mUndo = new Undo();
+		this.mNotification = new NacUpcomingAlarmNotification(context);
 		this.mSnackbar = new NacSnackbar(this.mRoot);
 		this.mAlarmList = null;
 		this.mNextAlarm = null;
@@ -105,8 +113,8 @@ public class NacCardAdapter
 	public int add()
 	{
 		Context context = this.getContext();
+		NacSharedPreferences shared = this.getSharedPreferences();
 		int id = this.getUniqueId();
-		NacSharedPreferences shared = new NacSharedPreferences(context);
 		NacAlarm alarm = new NacAlarm.Builder()
 			.setId(id)
 			.setRepeat(shared.getRepeat())
@@ -159,6 +167,8 @@ public class NacCardAdapter
 
 		this.startService(intent);
 		this.getAlarms().add(position, alarm);
+		this.updateNotification();
+		this.showNextAlarm(alarm);
 		notifyItemInserted(position);
 
 		return 0;
@@ -188,9 +198,10 @@ public class NacCardAdapter
 	public void build()
 	{
 		Context context = this.getContext();
-		NacSharedPreferences shared = new NacSharedPreferences(context);
+		NacSharedPreferences shared = this.getSharedPreferences();
 		NacDatabase db = new NacDatabase(context);
 		this.mAlarmList = db.read();
+		this.mNextAlarm = NacCalendar.getNextAlarm(this.mAlarmList);
 
 		if (shared.getAppFirstRun())
 		{
@@ -204,6 +215,7 @@ public class NacCardAdapter
 
 		this.getTouchHelper().setRecyclerView(this.getRecyclerView());
 		this.getTouchHelper().reset();
+		this.updateNotification();
 		notifyDataSetChanged();
 		db.close();
 		this.mMeasure.measure(this.mRecyclerView);
@@ -244,11 +256,13 @@ public class NacCardAdapter
 		Intent intent = NacIntent.createService(context, "delete", alarm);
 		this.mWasAdded = false;
 
-		this.startService(intent);
+		//this.startService(intent);
 		this.getAlarms().remove(position);
+		this.updateNotification();
 		notifyItemRemoved(position);
 		this.undo(alarm, position, Undo.Type.DELETE);
 		this.snackbar("Deleted alarm.");
+		this.startService(intent);
 
 		return 0;
 	}
@@ -298,9 +312,17 @@ public class NacCardAdapter
 	/**
 	 * @return The next alarm that will be triggered.
 	 */
-	private NacAlarm getNextAlarm()
+	public NacAlarm getNextAlarm()
 	{
 		return this.mNextAlarm;
+	}
+
+	/**
+	 * @return The notification.
+	 */
+	public NacUpcomingAlarmNotification getNotification()
+	{
+		return this.mNotification;
 	}
 
 	/**
@@ -317,6 +339,14 @@ public class NacCardAdapter
 	private View getRoot()
 	{
 		return this.mRoot;
+	}
+
+	/**
+	 * @return The shared preferences.
+	 */
+	private NacSharedPreferences getSharedPreferences()
+	{
+		return this.mShared;
 	}
 
 	/**
@@ -369,7 +399,6 @@ public class NacCardAdapter
 	/**
 	 * @return True if the next calendar has been found, and False otherwise.
 	 */
-	//private boolean isNextCalendar(Calendar calendar)
 	private boolean isNextAlarm(NacAlarm alarm)
 	{
 		NacAlarm nextAlarm = this.getNextAlarm();
@@ -413,19 +442,21 @@ public class NacCardAdapter
 		Intent intent = NacIntent.createService(context, "update", alarm);
 		this.mWasAdded = false;
 
-		NacUtility.printf("Change Tracker : %s", alarm.getChangeTracker().toString());
 		if (alarm.wasChanged() && alarm.getEnabled())
 		{
 			this.showNextAlarm(alarm);
 		}
 		else
 		{
+			//this.mNotification.hide(alarm);
+
 			if (this.areAllAlarmsDisabled())
 			{
 				this.mNextAlarm = null;
 			}
 		}
 
+		this.updateNotification();
 		this.startService(intent);
 	}
 
@@ -603,12 +634,8 @@ public class NacCardAdapter
 			return;
 		}
 
-		Context context = this.getContext();
-		NacSharedPreferences shared = new NacSharedPreferences(context);
-		Calendar calendar = NacCalendar.getNext(alarm);
-		int nextAlarmFormat = shared.getNextAlarmFormat();
-		long millis = calendar.getTimeInMillis();
-		String message = NacCalendar.getNextMessage(millis, nextAlarmFormat);
+		NacSharedPreferences shared = this.getSharedPreferences();
+		String message = NacCalendar.getNextMessage(shared, alarm);
 		this.mNextAlarm = alarm;
 
 		this.snackbar(message, "DISMISS", null, true);
@@ -665,6 +692,20 @@ public class NacCardAdapter
 	public void undo(NacAlarm alarm, int position, Undo.Type type)
 	{
 		this.getUndo().set(alarm, position, type);
+	}
+
+	/**
+	 * Update the notification.
+	 */
+	public void updateNotification()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		List<NacAlarm> alarms = this.getAlarms();
+
+		if (shared.getUpcomingAlarmNotification())
+		{
+			this.getNotification().update(alarms);
+		}
 	}
 
 	/**

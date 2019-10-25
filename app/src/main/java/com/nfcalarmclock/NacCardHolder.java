@@ -2,15 +2,12 @@ package com.nfcalarmclock;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
-//import android.support.v7.widget.CardView;
-//import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TimePicker;
-
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -254,15 +251,7 @@ public class NacCardHolder
 		}
 		else if (id == R.id.nac_repeat)
 		{
-			this.mCard.setRepeatHeight(this.mDays, state);
 			alarm.setRepeat(state);
-
-			if (state && !alarm.areDaysSelected())
-			{
-				alarm.setDays(NacSharedPreferences.DEFAULT_DAYS);
-			}
-
-			this.mDays.set(shared);
 			this.mSummary.set(shared);
 		}
 		else if (id == R.id.nac_nfc)
@@ -289,10 +278,17 @@ public class NacCardHolder
 
 		alarm.toggleIndex(index);
 
-		if (!alarm.areDaysSelected() && alarm.getRepeat())
+		if (!alarm.areDaysSelected())
 		{
-			alarm.setRepeat(false);
+			//alarm.setRepeat(false);
+			this.mDays.getRepeat().setEnabled(false);
+			this.mDays.getRepeat().setAlpha(0.5f);
 			this.mDays.set(shared);
+		}
+		else
+		{
+			this.mDays.getRepeat().setEnabled(true);
+			this.mDays.getRepeat().setAlpha(1.0f);
 		}
 
 		alarm.changed();

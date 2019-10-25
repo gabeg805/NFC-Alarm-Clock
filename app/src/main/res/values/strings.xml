@@ -18,6 +18,13 @@
 	<string name="menu_settings">Settings</string>
 
 
+	<!-- Notification -->
+	<string name="noti_channel_upcoming_name">Upcoming Alarms</string>
+	<string name="noti_channel_upcoming_description">Alarms that are scheduled.</string>
+	<string name="noti_channel_missed_name">Missed Alarms</string>
+	<string name="noti_channel_missed_description">Alarms that have been automatically dismissed.</string>
+
+
 	<!-- Card -->
 	<string name="card_swipe_copy">COPY</string>
 	<string name="card_swipe_delete">DELETE</string>
@@ -40,7 +47,9 @@
 	<!-- Dialogs -->
 	<string name="dlg_name_hint">Alarm name</string>
 	<string name="dlg_color_hint">Hex Color</string>
-	<string name="dlg_playlist_question">Do you want to play all the music in the selected folder?</string>
+	<string name="dlg_playlist_question">Do you want to play all music in this folder?</string>
+	<string name="dlg_permission_draw_overlay">Allow <b>NFC Alarm Clock</b> to be shown over other apps?</string>
+	<string name="dlg_permission_draw_overlay_explanation">Without this permission, <b>NFC Alarm Clock</b> will be unable to open when an alarm goes off.\n\nOn Android 10, there are new restrictions in place to prevent apps from opening when they are not in focus. If apps are not in focus, they are unable to open up from the background.</string>
 
 
 	<!-- Audio source dialog -->
@@ -91,21 +100,17 @@
 
 
 	<!-- General settings -->
+
+	<!-- Categories -->
 	<string name="pref_general_dismiss_category">Dismiss</string>
 	<string name="pref_general_snooze_category">Snooze</string>
+	<string name="pref_general_notification_category">Notifications</string>
 	<string name="pref_general_tweaks_category">Tweaks</string>
-
+wswq
 
 	<!-- Auto dismiss duration -->
 	<string name="pref_auto_dismiss_key">pref_auto_dismiss</string>
 	<string name="pref_auto_dismiss_title">Auto-Dismiss</string>
-
-
-	<!-- Hide alarm information -->
-	<string name="pref_alarm_info_key">pref_alarm_info</string>
-	<string name="pref_alarm_info_title">Show alarm information</string>
-	<string name="pref_alarm_info_summary_enabled">Show the alarm name and time, at the bottom of the screen, when an alarm goes off.</string>
-	<string name="pref_alarm_info_summary_disabled">Do not show alarm information.\n</string>
 
 
 	<!-- Max number of snoozes -->
@@ -125,6 +130,20 @@
 	<string name="pref_easy_snooze_summary_disabled">Snooze the alarm normally.</string>
 
 
+	<!-- Missed alarm notifications -->
+	<string name="pref_missed_alarm_notification_key">pref_missed_alarm_notification</string>
+	<string name="pref_missed_alarm_notification_title">Missed Alarms</string>
+	<string name="pref_missed_alarm_notification_summary_enabled">Show notifications for missed alarms.</string>
+	<string name="pref_missed_alarm_notification_summary_disabled">Do not show notifications for missed alarms.</string>
+
+
+	<!-- Upcoming alarm notifications -->
+	<string name="pref_upcoming_alarm_notification_key">pref_upcoming_alarm_notification</string>
+	<string name="pref_upcoming_alarm_notification_title">Upcoming Alarms</string>
+	<string name="pref_upcoming_alarm_notification_summary_enabled">Show notifications for upcoming alarms.</string>
+	<string name="pref_upcoming_alarm_notification_summary_disabled">Do not show notifications for upcoming alarms.</string>
+
+
 	<!-- Time remaining format -->
 	<string name="pref_next_alarm_format_key">pref_time_remaining_format</string>
 	<string name="pref_next_alarm_format_title">Next alarm format&#8230;</string>
@@ -135,6 +154,13 @@
 	<!-- Start Week On -->
 	<string name="pref_start_week_on_key">pref_start_week_on</string>
 	<string name="pref_start_week_on_title">Start week on&#8230;</string>
+
+
+	<!-- Hide alarm information -->
+	<string name="pref_alarm_info_key">pref_alarm_info</string>
+	<string name="pref_alarm_info_title">Show alarm information</string>
+	<string name="pref_alarm_info_summary_enabled">Show the alarm name and time, at the bottom of the screen, when an alarm goes off.</string>
+	<string name="pref_alarm_info_summary_disabled">Do not show alarm information.\n</string>
 
 
 	<!-- Default settings -->
@@ -207,6 +233,30 @@
 	<string name="pref_speak_frequency_key">pref_speak_frequency</string>
 	<string name="pref_speak_frequency_title">Speak Frequency</string>
 
+
+	<!-- About settings -->
+	<string name="pref_about_app_category">App</string>
+	<string name="pref_about_permissions_category">Permissions</string>
+
+	<string name="pref_about_nfc_key">pref_about_nfc</string>
+	<string name="pref_about_nfc_title">NFC</string>
+	<string name="pref_about_nfc_summary">(Optional) Allow the app to detect NFC tags.</string>
+
+	<string name="pref_about_storage_key">pref_about_storage</string>
+	<string name="pref_about_storage_title">Storage</string>
+	<string name="pref_about_storage_summary">(Optional) Read music that is stored on the phone.</string>
+
+	<string name="pref_about_vibrate_key">pref_about_vibrate</string>
+	<string name="pref_about_vibrate_title">Vibrate</string>
+	<string name="pref_about_vibrate_summary">(Optional) Allow the app to vibrate the phone.</string>
+
+	<string name="pref_about_boot_key">pref_about_boot</string>
+	<string name="pref_about_boot_title">Startup</string>
+	<string name="pref_about_boot_summary">(Required) Restore alarms when the phone is turned on. Android will delete alarms when the phone is turned off.</string>
+
+	<string name="pref_about_wakelock_key">pref_about_wakelock</string>
+	<string name="pref_about_wakelock_title">Wakelock</string>
+	<string name="pref_about_wakelock_summary">(Required) Prevent the phone from sleeping so that an activated alarm will continue to go off.</string>
 
 	<!-- Theme color -->
 	<string name="pref_theme_color_key">pref_theme_color</string>

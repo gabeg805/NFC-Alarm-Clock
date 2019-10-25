@@ -3,20 +3,74 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
-	<Preference
-		android:key="@string/pref_about_author_key"
-		android:title="@string/pref_about_author_title"
-		android:summary="@string/pref_about_author_summary"
-		app:iconSpaceReserved="false"
-		app:allowDividerBelow="true"
-		/>
+	<!-- App -->
+	<com.nfcalarmclock.NacPreferenceCategory
+		android:title="@string/pref_about_app_category">
 
-	<Preference
-		android:key="@string/pref_about_version_key"
-		android:title="@string/pref_about_version_title"
-		android:summary="@string/versionName"
-		app:iconSpaceReserved="false"
-		app:allowDividerAbove="true"
-		/>
+		<Preference
+			android:key="@string/pref_about_author_key"
+			android:title="@string/pref_about_author_title"
+			android:summary="@string/pref_about_author_summary"
+			app:iconSpaceReserved="false"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<Preference
+			android:key="@string/pref_about_version_key"
+			android:title="@string/pref_about_version_title"
+			android:summary="@string/versionName"
+			app:iconSpaceReserved="false"
+			app:allowDividerAbove="true"
+			/>
+
+	</com.nfcalarmclock.NacPreferenceCategory>
+
+	<!-- Permissions -->
+	<com.nfcalarmclock.NacPreferenceCategory
+		android:title="@string/pref_about_permissions_category">
+
+		<Preference
+			android:key="@string/pref_about_nfc_key"
+			android:title="@string/pref_about_nfc_title"
+			android:summary="@string/pref_about_nfc_summary"
+			app:iconSpaceReserved="false"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<Preference
+			android:key="@string/pref_about_storage_key"
+			android:title="@string/pref_about_storage_title"
+			android:summary="@string/pref_about_storage_summary"
+			app:iconSpaceReserved="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<Preference
+			android:key="@string/pref_about_vibrate_key"
+			android:title="@string/pref_about_vibrate_title"
+			android:summary="@string/pref_about_vibrate_summary"
+			app:iconSpaceReserved="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<Preference
+			android:key="@string/pref_about_boot_key"
+			android:title="@string/pref_about_boot_title"
+			android:summary="@string/pref_about_boot_summary"
+			app:iconSpaceReserved="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<Preference
+			android:key="@string/pref_about_wakelock_key"
+			android:title="@string/pref_about_wakelock_title"
+			android:summary="@string/pref_about_wakelock_summary"
+			app:iconSpaceReserved="false"
+			app:allowDividerBelow="true"
+			/>
+
+	</com.nfcalarmclock.NacPreferenceCategory>
 
 </PreferenceScreen>

@@ -6,16 +6,11 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Handler;
-//import android.support.v7.widget.CardView;
-//import android.support.v7.widget.LinearLayoutManager;
-//import android.support.v7.widget.LinearSmoothScroller;
-//import android.support.v7.widget.RecyclerView;
 import android.view.animation.Animation;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
@@ -315,10 +310,8 @@ public class NacCardView
 		int daysHeight = this.mMeasure.getDayButtonsHeight();
 		int expandHeight = this.mMeasure.getExpandHeight();
 
-		return (alarm.getRepeat()) ? expandHeight
+		return (dayButtons.getVisibility() == View.VISIBLE) ? expandHeight
 			: expandHeight-daysHeight;
-		//return (dayButtons.getVisibility() == View.VISIBLE) ? expandHeight
-		//	: expandHeight-daysHeight;
 	}
 
 	/**
@@ -510,35 +503,6 @@ public class NacCardView
 		time.setOnClickListener(listener);
 		this.mSummary.setOnClickListener(listener);
 		this.mHeader.setOnClickListener(listener);
-	}
-
-	/**
-	 * Set the card height when it is expanded and the repeat checkbox has been
-	 * pressed.
-	 *
-	 * @note This should be called before the alarm repeat is changed, or else
-	 *       determining the expand height will return an incorrect value.
-	 */
-	public void setRepeatHeight(NacCardDays days, boolean repeat)
-	{
-		CardView card = this.getCardView();
-		NacCardSlideAnimation animation = this.getAnimation();
-		int expandHeight = this.getExpandHeight();
-		int daysHeight = days.getHeight();
-
-		if (repeat)
-		{
-			animation.setHeights(expandHeight, expandHeight+daysHeight);
-		}
-		else
-		{
-			animation.setHeights(expandHeight, expandHeight-daysHeight);
-		}
-
-		animation.setDuration(400);
-		animation.setupForSkipListener();
-		card.setAnimation(animation);
-		card.startAnimation(animation);
 	}
 
 	/**

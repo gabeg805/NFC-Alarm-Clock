@@ -197,6 +197,7 @@ public class NacMediaActivity
 		if (list == null)
 		{
 			this.mFragments = new Fragment[this.mTitles.length];
+			list = this.mFragments;
 		}
 
 		if (fragment instanceof NacMusicFragment)

@@ -170,7 +170,7 @@ public class NacTextToSpeech
 		this.mBuffer = "";
 		this.mInitialized = false;
 		this.mUtterance = new NacUtteranceListener(context, this);
-		this.mAudioAttributes = new NacAudio.Attributes("Music");
+		this.mAudioAttributes = new NacAudio.Attributes(context, "Music");
 
 		this.setOnSpeakingListener(listener);
 	}

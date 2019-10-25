@@ -1,22 +1,13 @@
 package com.nfcalarmclock;
 
-//import android.app.Fragment;
-//import android.app.FragmentManager;
-//import android.app.FragmentManager.BackStackEntry;
-//import android.support.v4.app.Fragment;
-//import android.support.v4.app.FragmentManager;
-//import android.support.v4.app.FragmentManager.BackStackEntry;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-//import android.preference.Preference;
-//import android.preference.PreferenceManager;
 import android.view.View;
-
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentManager.BackStackEntry;
@@ -27,7 +18,7 @@ import androidx.preference.PreferenceManager;
  * Display all the configurable settings for the app.
  */
 public class NacSettingsActivity
-	extends NacActivity
+	extends AppCompatActivity
 	implements FragmentManager.OnBackStackChangedListener
 {
 
@@ -112,19 +103,19 @@ public class NacSettingsActivity
 			NacSharedKeys keys = this.getKeys();
 			Resources res = getResources();
 			Preference general = findPreference(keys.getGeneralScreen());
-			Preference alarm = findPreference(keys.getDefaultAlarmScreen());
+			//Preference alarm = findPreference(keys.getDefaultAlarmScreen());
 			Preference color = findPreference(keys.getColorScreen());
 			Preference miscellaneous = findPreference(
 				keys.getMiscellaneousScreen());
 			Preference about = findPreference(keys.getAboutScreen());
 
 			general.setIcon(this.createIconDrawable(R.mipmap.settings));
-			alarm.setIcon(this.createIconDrawable(R.mipmap.alarm));
+			//alarm.setIcon(this.createIconDrawable(R.mipmap.alarm));
 			color.setIcon(this.createIconDrawable(R.mipmap.palette));
 			miscellaneous.setIcon(this.createIconDrawable(R.mipmap.extension));
 			about.setIcon(this.createIconDrawable(R.mipmap.about));
 			general.setOnPreferenceClickListener(this);
-			alarm.setOnPreferenceClickListener(this);
+			//alarm.setOnPreferenceClickListener(this);
 			color.setOnPreferenceClickListener(this);
 			miscellaneous.setOnPreferenceClickListener(this);
 			about.setOnPreferenceClickListener(this);
@@ -161,11 +152,11 @@ public class NacSettingsActivity
 				title = keys.getGeneralScreenTitle();
 
 			}
-			else if (preferenceKey.equals(keys.getDefaultAlarmScreen()))
-			{
-				fragment = new NacDefaultAlarmSettings();
-				title = keys.getDefaultAlarmScreenTitle();
-			}
+			//else if (preferenceKey.equals(keys.getDefaultAlarmScreen()))
+			//{
+			//	fragment = new NacDefaultAlarmSettings();
+			//	title = keys.getDefaultAlarmScreenTitle();
+			//}
 			else if (preferenceKey.equals(keys.getColorScreen()))
 			{
 				fragment = new NacColorSettings();

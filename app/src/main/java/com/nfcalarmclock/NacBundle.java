@@ -67,9 +67,10 @@ public class NacBundle
 	public static Bundle toBundle(NacAudio.Attributes attrs)
 	{
 		Bundle bundle = new Bundle();
+		float value = attrs.getVolumeLevel() / 100.0f;
 
-		bundle.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME,
-			attrs.getVolumeLevel());
+		bundle.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, value);
+			//attrs.getVolumeLevel());
 
 		return bundle;
 	}

@@ -51,11 +51,19 @@ public class NacAlarmActivity
 
 		if (alarm != null)
 		{
-			if (alarm.isOneTimeAlarm())
+			if (!alarm.getRepeat())
 			{
-				NacDatabase db = new NacDatabase(this);
+				alarm.toggleToday();
 
-				alarm.setEnabled(false);
+				if (!alarm.areDaysSelected())
+				{
+					alarm.setEnabled(false);
+				}
+
+				NacDatabase db = new NacDatabase(this);
+				//NacNotification notification = new NacNotification(this);
+
+				//notification.hide(alarm);
 				db.update(alarm);
 				db.close();
 			}
@@ -105,32 +113,14 @@ public class NacAlarmActivity
 	@Override
 	public void onAutoDismiss(NacAlarm alarm)
 	{
-		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		NacSharedPreferences shared = this.getSharedPreferences();
-		Calendar calendar = Calendar.getInstance();
-		int hour = calendar.get(Calendar.HOUR_OF_DAY);
-		int minute = calendar.get(Calendar.MINUTE) + 1;
-		String message = "";
 
-		if (alarm != null)
+		if (shared.getMissedAlarmNotification())
 		{
-			String name = alarm.getName();
-			String time = NacCalendar.Time.getFullTime(this, hour, minute);
-			message = "Auto-dismissed \""+name+"\" at "+time;
-		}
-		else
-		{
-			message = "Error with the alarm";
-		}
+			NacMissedAlarmNotification notification =
+				new NacMissedAlarmNotification(this);
 
-		if (pm.isInteractive())
-		{
-			NacUtility.toast(this, message);
-			shared.editAutoDismissMessage("");
-		}
-		else
-		{
-			shared.editAutoDismissMessage(message);
+			notification.show(alarm);
 		}
 
 		this.dismiss();
@@ -180,6 +170,7 @@ public class NacAlarmActivity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		NacUtility.printf("NacAlarmActivity onCreate()!");
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.act_alarm);
 
@@ -286,13 +277,9 @@ public class NacAlarmActivity
 		if ((alarm != null) && shared.getShowAlarmInfo())
 		{
 			TextView name = (TextView) findViewById(R.id.name);
-			TextView time = (TextView) findViewById(R.id.time);
 			String alarmName = alarm.getName();
-			String alarmTime = alarm.getTime(this);
-			String alarmMeridian = alarm.getMeridian(this);
 
 			name.setText(alarmName);
-			time.setText(alarmTime+" "+alarmMeridian);
 		}
 	}
 

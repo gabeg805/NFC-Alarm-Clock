@@ -75,7 +75,7 @@ public class NacCardTime
 	{
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
-		String time = alarm.getTime(context);
+		String time = alarm.getClockTime(context);
 		String meridian = alarm.getMeridian(context);
 
 		this.mTime.setText(time);

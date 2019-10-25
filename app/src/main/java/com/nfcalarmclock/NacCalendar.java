@@ -95,7 +95,11 @@ public class NacCalendar
 
 			Calendar calendar = NacCalendar.getNext(a);
 
-			if ((nextCalendar == null) || calendar.before(nextCalendar))
+			if (calendar == null)
+			{
+				continue;
+			}
+			else if ((nextCalendar == null) || calendar.before(nextCalendar))
 			{
 				nextCalendar = calendar;
 				nextAlarm = a;
@@ -110,7 +114,7 @@ public class NacCalendar
 	 */
 	public static String getNextMessage(Calendar next)
 	{
-		return "Next alarm on " + NacCalendar.toString(next, "EEE, h:mm a");
+		return "Next alarm on " + NacCalendar.toString(next, "EEE h:mm a");
 	}
 
 	/**
@@ -147,6 +151,25 @@ public class NacCalendar
 		}
 
 		return msg;
+	}
+
+	/**
+	 * @see getNextMessage
+	 */
+	public static String getNextMessage(NacSharedPreferences shared,
+		NacAlarm alarm)
+	{
+		Calendar calendar = NacCalendar.getNext(alarm);
+
+		if ((shared == null) || (alarm == null) || (calendar == null))
+		{
+			return "No scheduled alarms.";
+		}
+
+		int nextAlarmFormat = shared.getNextAlarmFormat();
+		long millis = calendar.getTimeInMillis();
+
+		return NacCalendar.getNextMessage(millis, nextAlarmFormat);
 	}
 
 	/**
@@ -251,16 +274,21 @@ public class NacCalendar
 
 		if (alarm == null)
 		{
+			NacUtility.printf("Alarm is null when converting to calendars!");
 			;
 		}
-		else if (alarm.isOneTimeAlarm())
+		else if (!alarm.areDaysSelected())
 		{
+			NacUtility.printf("Alarm is not null but no days are selected!");
+			alarm.print();
 			Calendar c = NacCalendar.toNextOneTimeCalendar(alarm);
 
 			calendars.add(c);
 		}
 		else
 		{
+			NacUtility.printf("Alarm is not null and days are selected!");
+			alarm.print();
 			EnumSet<Day> days = alarm.getDays();
 
 			for (Day d : days)
@@ -500,7 +528,7 @@ public class NacCalendar
 		{
 			String string = NacCalendar.Days.toString(alarm.getDays(), start);
 
-			if (string.isEmpty() || !alarm.getRepeat())
+			if (string.isEmpty() || !alarm.areDaysSelected())
 			{
 				int now = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 				int next = NacCalendar.toNextOneTimeCalendar(alarm)
@@ -662,26 +690,61 @@ public class NacCalendar
 	{
 
 		/**
-		 * @see getFullTime
+		 * @param  context  The application context.
+		 * @param  hour  The hour.
+		 * @param  minute  The minutes.
+		 *
+		 * @return The time.
 		 */
-		public static String getFullTime(Context context)
+		public static String getClockTime(Context context, int hour, int minute)
 		{
-			Calendar calendar = Calendar.getInstance();
-			int hour = calendar.get(Calendar.HOUR_OF_DAY);
-			int minute = calendar.get(Calendar.MINUTE);
+			boolean format = NacCalendar.Time.is24HourFormat(context);
 
-			return NacCalendar.Time.getFullTime(context, hour, minute);
+			return NacCalendar.Time.getClockTime(hour, minute, format);
 		}
 
 		/**
-		 * @return The full time string, HH:MM AM/PM.
+		 * @param  hour  The hour.
+		 * @param  minute  The minutes.
+		 * @param  format  The 24 hour format, to determine how to interpret the
+		 *                 hour.
+		 *
+		 * @return The time.
 		 */
-		public static String getFullTime(Context context, int hour, int minute)
+		public static String getClockTime(int hour, int minute, boolean format)
 		{
-			String time = NacCalendar.Time.getTime(context, hour, minute);
+			if (!format)
+			{
+				if (hour > 12)
+				{
+					hour = (hour % 12);
+				}
+				else
+				{
+					if (hour == 0)
+					{
+						hour = 12;
+					}
+				}
+			}
+
+			String hourString = String.valueOf(hour);
+			String minuteString = String.format(Locale.getDefault(), "%02d",
+				minute);
+
+			return hourString + ":" + minuteString;
+		}
+
+		/**
+		 * @return The full time string, EEE, HH:MM AM/PM.
+		 */
+		public static String getFullTime(Context context, Calendar calendar)
+		{
+			String date = NacCalendar.toString(calendar, "EEE h:mm");
+			int hour = calendar.get(Calendar.HOUR_OF_DAY);
 			String meridian = NacCalendar.Time.getMeridian(context, hour);
 
-			return (!meridian.isEmpty()) ? time+" "+meridian : time;
+			return (!meridian.isEmpty()) ? date+" "+meridian : date;
 		}
 
 		/**
@@ -712,49 +775,26 @@ public class NacCalendar
 		}
 
 		/**
-		 * @param  context  The application context.
-		 * @param  hour  The hour.
-		 * @param  minute  The minutes.
-		 *
-		 * @return The time.
+		 * @see getTime
 		 */
-		public static String getTime(Context context, int hour, int minute)
+		public static String getTime(Context context)
 		{
-			boolean format = NacCalendar.Time.is24HourFormat(context);
+			Calendar calendar = Calendar.getInstance();
+			int hour = calendar.get(Calendar.HOUR_OF_DAY);
+			int minute = calendar.get(Calendar.MINUTE);
 
-			return NacCalendar.Time.getTime(hour, minute, format);
+			return NacCalendar.Time.getTime(context, hour, minute);
 		}
 
 		/**
-		 * @param  hour  The hour.
-		 * @param  minute  The minutes.
-		 * @param  format  The 24 hour format, to determine how to interpret the
-		 *                 hour.
-		 *
-		 * @return The time.
+		 * @return The full time string, HH:MM AM/PM.
 		 */
-		public static String getTime(int hour, int minute, boolean format)
+		public static String getTime(Context context, int hour, int minute)
 		{
-			if (!format)
-			{
-				if (hour > 12)
-				{
-					hour = (hour % 12);
-				}
-				else
-				{
-					if (hour == 0)
-					{
-						hour = 12;
-					}
-				}
-			}
+			String time = NacCalendar.Time.getClockTime(context, hour, minute);
+			String meridian = NacCalendar.Time.getMeridian(context, hour);
 
-			String hourString = String.valueOf(hour);
-			String minuteString = String.format(Locale.getDefault(), "%02d",
-				minute);
-
-			return hourString + ":" + minuteString;
+			return (!meridian.isEmpty()) ? time+" "+meridian : time;
 		}
 
 		/**

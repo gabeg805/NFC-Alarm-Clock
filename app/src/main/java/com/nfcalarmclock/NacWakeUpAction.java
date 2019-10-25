@@ -193,7 +193,7 @@ public class NacWakeUpAction
 		boolean format = NacCalendar.Time.is24HourFormat(context);
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
 		int minute = calendar.get(Calendar.MINUTE);
-		String[] time = NacCalendar.Time.getTime(hour, minute, format)
+		String[] time = NacCalendar.Time.getClockTime(hour, minute, format)
 			.split(":");
 		String ampm = (!format) ? ((hour < 12) ? ", AM" : ", PM") : "";
 
@@ -350,6 +350,7 @@ public class NacWakeUpAction
 	private void speak()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
+		final Context context = this.getContext();
 		final long freq = shared.getSpeakFrequency() * 60L * 1000L;
 		final Handler handler = this.getSpeakHandler();
 		final Runnable sayTime = new Runnable()
@@ -366,7 +367,8 @@ public class NacWakeUpAction
 
 					String text = getTimeToSay();
 					NacAlarm alarm = getAlarm();
-					NacAudio.Attributes attrs = new NacAudio.Attributes(alarm);
+					NacAudio.Attributes attrs = new NacAudio.Attributes(
+						context, alarm);
 
 					speech.speak(text, attrs);
 

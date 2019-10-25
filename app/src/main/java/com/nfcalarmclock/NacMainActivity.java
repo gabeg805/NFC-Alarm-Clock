@@ -5,16 +5,9 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-//import android.support.design.widget.FloatingActionButton;
-//import android.support.v4.content.ContextCompat;
-//import android.support.v7.widget.DividerItemDecoration;
-//import android.support.v7.app.AppCompatActivity;
-//import android.support.v7.widget.LinearLayoutManager;
-//import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -26,9 +19,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
  * The application's main activity.
  */
 public class NacMainActivity
-	extends NacActivity
-	implements View.OnClickListener
+	extends AppCompatActivity
+	implements View.OnClickListener,
+		NacDialog.OnDismissListener
 {
+
+	/**
+	 * Result code when requesting SYSTEM_ALERT_WINDOW permission.
+	 */
+	public static int DRAW_OVERLAY_REQUEST = 1234;
 
 	/**
 	 * Shared preferences.
@@ -82,6 +81,31 @@ public class NacMainActivity
 		return this.mSharedPreferences;
 	}
 
+	/**
+	 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode,
+		Intent data)
+	{
+		super.onActivityResult(requestCode, resultCode, data);
+
+		NacUtility.printf("Req : %d | Res : %d", requestCode, resultCode);
+
+		if (requestCode == DRAW_OVERLAY_REQUEST)
+		{
+			if (!NacPermissions.hasDrawOverlay(this))
+			{
+				// You don't have permission
+				//checkPermission();
+				NacUtility.printf("Alarms may not go off as expected if app is not open.");
+			} else {
+				NacUtility.printf("Alarms will go off as expected!");
+				// Do as per your logic
+			}
+
+		}
+
+	}
 
 	/**
 	 * Add a new alarm when the floating action button is clicked.
@@ -102,13 +126,22 @@ public class NacMainActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_main);
 
+		if (!NacPermissions.hasDrawOverlay(this))
+		{
+			NacPermissionsDrawOverlayDialog dialog =
+				new NacPermissionsDrawOverlayDialog();
+
+			dialog.addOnDismissListener(this);
+			dialog.build(this);
+			dialog.show();
+		}
+
 		NacSharedPreferences shared = new NacSharedPreferences(this);
 		Drawable drawable = ContextCompat.getDrawable(this,
 			R.drawable.card_divider);
 		DividerItemDecoration divider = new DividerItemDecoration(this,
 			LinearLayoutManager.VERTICAL);
 		NacLayoutManager layoutManager = new NacLayoutManager(this);
-		ColorStateList color = ColorStateList.valueOf(shared.getThemeColor());
 
 		this.mSharedPreferences = shared;
 		this.mAdapter = new NacCardAdapter(this);
@@ -118,7 +151,6 @@ public class NacMainActivity
 			R.id.content_alarm_list);
 
 		divider.setDrawable(drawable);
-		this.mFloatingButton.setBackgroundTintList(color);
 		this.mFloatingButton.setOnClickListener(this);
 		this.mRecyclerView.addItemDecoration(divider);
 		this.mRecyclerView.setAdapter(this.mAdapter);
@@ -157,6 +189,17 @@ public class NacMainActivity
 	}
 
 	/**
+	 * Show Android prompt where the user can enable the SYSTEM_DIALOG_WINDOW
+	 * permission.
+	 */
+	@Override
+	public boolean onDismissDialog(NacDialog dialog)
+	{
+		NacPermissions.requestDrawOverlay(this, DRAW_OVERLAY_REQUEST);
+		return true;
+	}
+
+	/**
 	 */
 	@Override
 	protected void onResume()
@@ -164,17 +207,10 @@ public class NacMainActivity
 		super.onResume();
 
 		NacSharedPreferences shared = this.getSharedPreferences();
-		NacCardAdapter adapter = this.getCardAdapter();
-		String message = shared.getAutoDismissMessage();
+		ColorStateList color = ColorStateList.valueOf(shared.getThemeColor());
 
-		adapter.build();
-
-		if (!message.isEmpty())
-		{
-			NacUtility.toast(this, message);
-
-			shared.editAutoDismissMessage("");
-		}
+		this.getCardAdapter().build();
+		this.getFloatingButton().setBackgroundTintList(color);
 	}
 
 	/**
@@ -182,17 +218,9 @@ public class NacMainActivity
 	 */
 	private void showNextAlarm()
 	{
-		NacScheduler scheduler = new NacScheduler(this);
-		AlarmClockInfo next = scheduler.getNext();
-		String message = "No scheduled alarms.";
-
-		if (next != null)
-		{
-			NacSharedPreferences shared = this.getSharedPreferences();
-			int nextAlarmFormat = shared.getNextAlarmFormat();
-			long millis = next.getTriggerTime();
-			message = NacCalendar.getNextMessage(millis, nextAlarmFormat);
-		}
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacAlarm alarm = this.mAdapter.getNextAlarm();
+		String message = NacCalendar.getNextMessage(shared, alarm);
 
 		NacUtility.snackbar(this, message, "DISMISS", null);
 	}

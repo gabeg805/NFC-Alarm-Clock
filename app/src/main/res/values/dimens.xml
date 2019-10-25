@@ -154,6 +154,7 @@
 	<dimen name="m_dlg">10dp</dimen>
 	<dimen name="m_dlg_days">25dp</dimen>
 	<dimen name="m_dlg_name">10dp</dimen>
+	<dimen name="mr_dlg_permission">25dp</dimen>
 
 
 	<!-- Preference -->
