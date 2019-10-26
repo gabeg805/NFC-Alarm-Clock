@@ -1,6 +1,6 @@
 package com.nfcalarmclock;
 
-import android.app.Activity;
+//import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -22,9 +22,10 @@ public class NacVibrator
 
 	/**
 	 */
-	public NacVibrator(Activity activity)
+	//public NacVibrator(Activity activity)
+	public NacVibrator(Context context)
 	{
-		this.mVibrator = (Vibrator) activity.getSystemService(
+		this.mVibrator = (Vibrator) context.getSystemService(
 			Context.VIBRATOR_SERVICE);
 	}
 

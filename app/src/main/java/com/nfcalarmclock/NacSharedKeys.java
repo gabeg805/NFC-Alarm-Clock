@@ -15,19 +15,14 @@ public class NacSharedKeys
 	private final String mAppFirstRun;
 
 	/**
+	 * Appearance screen.
+	 */
+	private final String mAppearanceScreen;
+
+	/**
 	 * General screen.
 	 */
 	private final String mGeneralScreen;
-
-	/**
-	 * Default alarm screen.
-	 */
-	private final String mDefaultAlarmScreen;
-
-	/**
-	 * Color screen.
-	 */
-	private final String mColorScreen;
 
 	/**
 	 * Miscellaneous screen.
@@ -40,19 +35,14 @@ public class NacSharedKeys
 	private final String mAboutScreen;
 
 	/**
+	 * Appearance screen title.
+	 */
+	private final String mAppearanceScreenTitle;
+
+	/**
 	 * General screen title.
 	 */
 	private final String mGeneralScreenTitle;
-
-	/**
-	 * Default alarm screen title.
-	 */
-	private final String mDefaultAlarmScreenTitle;
-
-	/**
-	 * Color screen title.
-	 */
-	private final String mColorScreenTitle;
 
 	/**
 	 * Miscellaneous screen title.
@@ -201,14 +191,12 @@ public class NacSharedKeys
 		Resources res = context.getResources();
 
 		this.mAppFirstRun = res.getString(R.string.app_first_run);
+		this.mAppearanceScreen = res.getString(R.string.pref_screen_appearance_key);
 		this.mGeneralScreen = res.getString(R.string.pref_screen_general_key);
-		this.mDefaultAlarmScreen = res.getString(R.string.pref_screen_default_alarm_key);
-		this.mColorScreen = res.getString(R.string.pref_screen_color_key);
 		this.mMiscellaneousScreen = res.getString(R.string.pref_screen_misc_key);
 		this.mAboutScreen = res.getString(R.string.pref_screen_about_key);
+		this.mAppearanceScreenTitle = res.getString(R.string.pref_screen_appearance_title);
 		this.mGeneralScreenTitle = res.getString(R.string.pref_screen_general_title);
-		this.mDefaultAlarmScreenTitle = res.getString(R.string.pref_screen_default_alarm_title);
-		this.mColorScreenTitle = res.getString(R.string.pref_screen_color_title);
 		this.mMiscellaneousTitle = res.getString(R.string.pref_screen_misc_title);
 		this.mAboutScreenTitle = res.getString(R.string.pref_screen_about_title);
 		this.mAutoDismiss = res.getString(R.string.pref_auto_dismiss_key);
@@ -264,6 +252,22 @@ public class NacSharedKeys
 	}
 
 	/**
+	 * @return The appearance screen key.
+	 */
+	public String getAppearanceScreen()
+	{
+		return this.mAppearanceScreen;
+	}
+
+	/**
+	 * @return The appearance screen title.
+	 */
+	public String getAppearanceScreenTitle()
+	{
+		return this.mAppearanceScreenTitle;
+	}
+
+	/**
 	 * @return The post install, first run key.
 	 */
 	public String getAppFirstRun()
@@ -288,22 +292,6 @@ public class NacSharedKeys
 	}
 
 	/**
-	 * @return The color screen key.
-	 */
-	public String getColorScreen()
-	{
-		return this.mColorScreen;
-	}
-
-	/**
-	 * @return The color screen title.
-	 */
-	public String getColorScreenTitle()
-	{
-		return this.mColorScreenTitle;
-	}
-
-	/**
 	 * @return The days key.
 	 */
 	public String getDays()
@@ -317,22 +305,6 @@ public class NacSharedKeys
 	public String getDaysColor()
 	{
 		return this.mDaysColor;
-	}
-
-	/**
-	 * @return The default alarm screen key.
-	 */
-	public String getDefaultAlarmScreen()
-	{
-		return this.mDefaultAlarmScreen;
-	}
-
-	/**
-	 * @return The default alarm screen title.
-	 */
-	public String getDefaultAlarmScreenTitle()
-	{
-		return this.mDefaultAlarmScreenTitle;
 	}
 
 	/**

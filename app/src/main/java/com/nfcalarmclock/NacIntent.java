@@ -6,6 +6,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.AlarmClock;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.EnumSet;
+import java.util.List;
 
 /**
  */
@@ -194,6 +199,84 @@ public class NacIntent
 	}
 
 	/**
+	 * @return The alarm that was specified using the SET_ALARM action.
+	 */
+	public static NacAlarm getSetAlarm(Context context, Intent intent)
+	{
+		if (!NacIntent.isSetAlarmAction(intent))
+		{
+			return null;
+		}
+
+		NacAlarm.Builder builder = new NacAlarm.Builder();
+		Calendar calendar = Calendar.getInstance();
+		boolean isSet = false;
+
+		if (intent.hasExtra(AlarmClock.EXTRA_HOUR))
+		{
+			int hour = intent.getIntExtra(AlarmClock.EXTRA_HOUR,
+				calendar.get(Calendar.HOUR_OF_DAY));
+			isSet = true;
+
+			builder.setHour(hour);
+		}
+
+		if (intent.hasExtra(AlarmClock.EXTRA_MINUTES))
+		{
+			int minute = intent.getIntExtra(AlarmClock.EXTRA_MINUTES,
+				calendar.get(Calendar.MINUTE));
+			isSet = true;
+
+			builder.setMinute(minute);
+		}
+
+		if (intent.hasExtra(AlarmClock.EXTRA_MESSAGE))
+		{
+			String name = intent.getStringExtra(AlarmClock.EXTRA_MESSAGE);
+			isSet = true;
+
+			builder.setName(name);
+		}
+
+		if (intent.hasExtra(AlarmClock.EXTRA_DAYS))
+		{
+			ArrayList<Integer> extraDays =
+				intent.getIntegerArrayListExtra(AlarmClock.EXTRA_DAYS);
+			EnumSet<NacCalendar.Day> days =
+				EnumSet.noneOf(NacCalendar.Day.class);
+			isSet = true;
+
+			for (int d : extraDays)
+			{
+				days.add(NacCalendar.Days.toWeekDay(d));
+			}
+
+			builder.setDays(days);
+		}
+
+		if (intent.hasExtra(AlarmClock.EXTRA_RINGTONE))
+		{
+			String ringtone = intent.getStringExtra(AlarmClock.EXTRA_RINGTONE);
+			isSet = true;
+
+			builder.setSound(context, ringtone);
+		}
+
+		if (intent.hasExtra(AlarmClock.EXTRA_VIBRATE))
+		{
+			boolean vibrate = intent.getBooleanExtra(AlarmClock.EXTRA_VIBRATE,
+				NacSharedPreferences.DEFAULT_VIBRATE);
+			isSet = true;
+
+			builder.setVibrate(vibrate);
+		}
+
+		//getBooleanExtra(AlarmClock.EXTRA_SKIP_UI);
+
+		return (isSet) ? builder.build() : null;
+	}
+
+	/**
 	 * @return The sound associated with the given intent.
 	 */
 	public static NacSound getSound(Intent intent)
@@ -214,6 +297,22 @@ public class NacIntent
 	public static Bundle getSoundBundle(Intent intent)
 	{
 		return NacIntent.getBundle(intent, SOUND_BUNDLE_NAME);
+	}
+
+	/**
+	 * @return True if the intent was called from the SET_ALARM action, and
+	 *         False otherwise.
+	 */
+	public static boolean isSetAlarmAction(Intent intent)
+	{
+		if (intent == null)
+		{
+			return false;
+		}
+
+		String action = intent.getAction();
+
+		return action.equals(AlarmClock.ACTION_SET_ALARM);
 	}
 
 	/**

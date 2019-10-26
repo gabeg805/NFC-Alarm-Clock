@@ -10,16 +10,9 @@
 		/>
 
 	<Preference
-		android:key="@string/pref_screen_default_alarm_key"
-		android:title="@string/pref_screen_default_alarm_title"
-		android:summary="@string/pref_screen_default_alarm_summary"
-		android:fragment="com.nfcalarmclock.NacDefaultAlarmSettings"
-		/>
-
-	<Preference
-		android:key="@string/pref_screen_color_key"
-		android:title="@string/pref_screen_color_title"
-		android:summary="@string/pref_screen_color_summary"
+		android:key="@string/pref_screen_appearance_key"
+		android:title="@string/pref_screen_appearance_title"
+		android:summary="@string/pref_screen_appearance_summary"
 		android:fragment="com.nfcalarmclock.NacColorSettings"
 		/>
 

@@ -74,7 +74,7 @@ public class NacCardAdapter
 	/**
 	 * Indicator that the alarm was added through the floating action button.
 	 */
-	private boolean mWasAdded;
+	private boolean mWasAddedWithFloatingButton;
 
 	/**
 	 * Alarm card measure.
@@ -100,7 +100,7 @@ public class NacCardAdapter
 		this.mSnackbar = new NacSnackbar(this.mRoot);
 		this.mAlarmList = null;
 		this.mNextAlarm = null;
-		this.mWasAdded = false;
+		this.mWasAddedWithFloatingButton = false;
 		this.mMeasure = new NacCardMeasure(context);
 
 		this.mRecyclerView.addOnItemTouchListener(this);
@@ -163,7 +163,7 @@ public class NacCardAdapter
 
 		Context context = this.getContext();
 		Intent intent = NacIntent.createService(context, "add", alarm);
-		this.mWasAdded = true;
+		//this.mWasAddedWithFloatingButton = true;
 
 		this.startService(intent);
 		this.getAlarms().add(position, alarm);
@@ -233,13 +233,15 @@ public class NacCardAdapter
 		NacAlarm alarm = this.get(position);
 		NacAlarm copy = alarm.copy(this.getUniqueId());
 		int result = this.add(copy);
-		this.mWasAdded = false;
+		//this.mWasAddedWithFloatingButton = false;
 
 		if (result == 0)
 		{
 			this.undo(copy, this.size()-1, Undo.Type.COPY);
 			this.snackbar("Copied alarm.");
 		}
+
+		this.setWasAddedWithFloatingButton(false);
 
 		return result;
 	}
@@ -254,9 +256,9 @@ public class NacCardAdapter
 		NacAlarm alarm = this.get(position);
 		Context context = this.getContext();
 		Intent intent = NacIntent.createService(context, "delete", alarm);
-		this.mWasAdded = false;
+		//this.mWasAddedWithFloatingButton = false;
 
-		//this.startService(intent);
+		this.setWasAddedWithFloatingButton(false);
 		this.getAlarms().remove(position);
 		this.updateNotification();
 		notifyItemRemoved(position);
@@ -376,7 +378,7 @@ public class NacCardAdapter
 	/**
 	 * Determine a unique integer ID number to use for newly created alarms.
 	 */
-	private int getUniqueId()
+	public int getUniqueId()
 	{
 		List<Integer> used = new ArrayList<>();
 
@@ -424,10 +426,12 @@ public class NacCardAdapter
 		card.init(alarm);
 		card.setOnDeleteListener(this);
 
-		if (this.wasAdded())
+		if (this.wasAddedWithFloatingButton())
 		{
 			card.interact();
 		}
+
+		this.setWasAddedWithFloatingButton(false);
 	}
 
 	/**
@@ -440,7 +444,7 @@ public class NacCardAdapter
 	{
 		Context context = this.getContext();
 		Intent intent = NacIntent.createService(context, "update", alarm);
-		this.mWasAdded = false;
+		//this.mWasAddedWithFloatingButton = false;
 
 		if (alarm.wasChanged() && alarm.getEnabled())
 		{
@@ -448,14 +452,13 @@ public class NacCardAdapter
 		}
 		else
 		{
-			//this.mNotification.hide(alarm);
-
 			if (this.areAllAlarmsDisabled())
 			{
 				this.mNextAlarm = null;
 			}
 		}
 
+		this.setWasAddedWithFloatingButton(false);
 		this.updateNotification();
 		this.startService(intent);
 	}
@@ -577,8 +580,9 @@ public class NacCardAdapter
 		NacAlarm toAlarm = this.get(toIndex);
 		Intent intent = NacIntent.createService(context, "swap", fromAlarm,
 			toAlarm);
-		this.mWasAdded = false;
+		//this.mWasAddedWithFloatingButton = false;
 
+		this.setWasAddedWithFloatingButton(false);
 		this.startService(intent);
 		Collections.swap(this.getAlarms(), fromIndex, toIndex);
 		notifyItemMoved(fromIndex, toIndex);
@@ -607,13 +611,23 @@ public class NacCardAdapter
 	public void restore(NacAlarm alarm, int position)
 	{
 		int result = this.add(alarm, position);
-		this.mWasAdded = false;
+		//this.mWasAddedWithFloatingButton = false;
 
 		if (result == 0)
 		{
 			this.undo(alarm, position, Undo.Type.RESTORE);
 			this.snackbar("Restored alarm.");
 		}
+
+		this.setWasAddedWithFloatingButton(false);
+	}
+
+	/**
+	 * Set whether an alarm was added with the floating button.
+	 */
+	public void setWasAddedWithFloatingButton(boolean added)
+	{
+		this.mWasAddedWithFloatingButton = added;
 	}
 
 	/**
@@ -704,6 +718,7 @@ public class NacCardAdapter
 
 		if (shared.getUpcomingAlarmNotification())
 		{
+			NacUtility.printf("updateNotification!");
 			this.getNotification().update(alarms);
 		}
 	}
@@ -711,9 +726,9 @@ public class NacCardAdapter
 	/**
 	 * @return True if the alarm was added, and False otherwise.
 	 */
-	public boolean wasAdded()
+	public boolean wasAddedWithFloatingButton()
 	{
-		return this.mWasAdded;
+		return this.mWasAddedWithFloatingButton;
 	}
 
 	/**

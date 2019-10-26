@@ -37,8 +37,6 @@ public class NacSettingsActivity
 	{
 		super.onCreate(savedInstanceState);
 
-		//PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
 		FragmentManager manager = getSupportFragmentManager();
 
 		manager.beginTransaction()
@@ -97,26 +95,22 @@ public class NacSettingsActivity
 		public void onCreatePreferences(Bundle savedInstanceState,
 			String rootKey)
 		{
-			//super.onCreatePreferences(savedInstanceState, rootKey);
 			addPreferencesFromResource(R.xml.main_preferences);
 
 			NacSharedKeys keys = this.getKeys();
 			Resources res = getResources();
+			Preference appearance = findPreference(keys.getAppearanceScreen());
 			Preference general = findPreference(keys.getGeneralScreen());
-			//Preference alarm = findPreference(keys.getDefaultAlarmScreen());
-			Preference color = findPreference(keys.getColorScreen());
 			Preference miscellaneous = findPreference(
 				keys.getMiscellaneousScreen());
 			Preference about = findPreference(keys.getAboutScreen());
 
+			appearance.setIcon(this.createIconDrawable(R.mipmap.palette));
 			general.setIcon(this.createIconDrawable(R.mipmap.settings));
-			//alarm.setIcon(this.createIconDrawable(R.mipmap.alarm));
-			color.setIcon(this.createIconDrawable(R.mipmap.palette));
 			miscellaneous.setIcon(this.createIconDrawable(R.mipmap.extension));
 			about.setIcon(this.createIconDrawable(R.mipmap.about));
+			appearance.setOnPreferenceClickListener(this);
 			general.setOnPreferenceClickListener(this);
-			//alarm.setOnPreferenceClickListener(this);
-			color.setOnPreferenceClickListener(this);
 			miscellaneous.setOnPreferenceClickListener(this);
 			about.setOnPreferenceClickListener(this);
 		}
@@ -142,7 +136,6 @@ public class NacSettingsActivity
 			NacSharedKeys keys = this.getKeys();
 			String preferenceKey = preference.getKey();
 			FragmentManager manager = getFragmentManager();
-			//FragmentManager manager = getFragmentManager();
 			Fragment fragment;
 			String title;
 
@@ -152,15 +145,10 @@ public class NacSettingsActivity
 				title = keys.getGeneralScreenTitle();
 
 			}
-			//else if (preferenceKey.equals(keys.getDefaultAlarmScreen()))
-			//{
-			//	fragment = new NacDefaultAlarmSettings();
-			//	title = keys.getDefaultAlarmScreenTitle();
-			//}
-			else if (preferenceKey.equals(keys.getColorScreen()))
+			else if (preferenceKey.equals(keys.getAppearanceScreen()))
 			{
-				fragment = new NacColorSettings();
-				title = keys.getColorScreenTitle();
+				fragment = new NacAppearanceSettings();
+				title = keys.getAppearanceScreenTitle();
 			}
 			else if (preferenceKey.equals(keys.getMiscellaneousScreen()))
 			{

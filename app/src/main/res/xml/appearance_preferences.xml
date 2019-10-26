@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<!-- Colors -->
+	<com.nfcalarmclock.NacPreferenceCategory
+		android:title="@string/pref_appearance_color_category">
+
+		<com.nfcalarmclock.NacColorPreference
+			android:key="@string/pref_theme_color_key"
+			android:title="@string/pref_theme_color_title"
+			android:summary="@string/pref_theme_color_summary"
+			android:defaultValue="0xfffb8c00"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.NacColorPreference
+			android:key="@string/pref_name_color_key"
+			android:title="@string/pref_name_color_title"
+			android:summary="@string/pref_name_color_summary"
+			android:defaultValue="0xff00c0fb"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.NacColorPreference
+			android:key="@string/pref_days_color_key"
+			android:title="@string/pref_days_color_title"
+			android:summary="@string/pref_days_color_summary"
+			android:defaultValue="0xfffb8c00"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.NacColorPreference
+			android:key="@string/pref_time_color_key"
+			android:title="@string/pref_time_color_title"
+			android:summary="@string/pref_time_color_summary"
+			android:defaultValue="0xffffffff"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.NacColorPreference
+			android:key="@string/pref_am_color_key"
+			android:title="@string/pref_am_color_title"
+			android:summary="@string/pref_am_color_summary"
+			android:defaultValue="0xffffffff"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.NacColorPreference
+			android:key="@string/pref_pm_color_key"
+			android:title="@string/pref_pm_color_title"
+			android:summary="@string/pref_pm_color_summary"
+			android:defaultValue="0xffffffff"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="true"
+			/>
+
+	</com.nfcalarmclock.NacPreferenceCategory>
+
+	<!-- Notifications -->
+	<com.nfcalarmclock.NacPreferenceCategory
+		android:title="@string/pref_appearance_notification_category">
+
+		<com.nfcalarmclock.NacCheckboxPreference
+			android:key="@string/pref_missed_alarm_notification_key"
+			android:title="@string/pref_missed_alarm_notification_title"
+			android:summaryOn="@string/pref_missed_alarm_notification_summary_enabled"
+			android:summaryOff="@string/pref_missed_alarm_notification_summary_disabled"
+			android:defaultValue="true"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.NacCheckboxPreference
+			android:key="@string/pref_upcoming_alarm_notification_key"
+			android:title="@string/pref_upcoming_alarm_notification_title"
+			android:summaryOn="@string/pref_upcoming_alarm_notification_summary_enabled"
+			android:summaryOff="@string/pref_upcoming_alarm_notification_summary_disabled"
+			android:defaultValue="false"
+			app:allowDividerBelow="true"
+			/>
+
+	</com.nfcalarmclock.NacPreferenceCategory>
+
+	<!-- Tweaks -->
+	<com.nfcalarmclock.NacPreferenceCategory
+		android:title="@string/pref_appearance_tweaks_category">
+
+		<com.nfcalarmclock.NacNextAlarmFormatPreference
+			android:key="@string/pref_next_alarm_format_key"
+			android:title="@string/pref_next_alarm_format_title"
+			android:defaultValue="0"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.NacStartWeekOnPreference
+			android:key="@string/pref_start_week_on_key"
+			android:title="@string/pref_start_week_on_title"
+			android:defaultValue="0"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.NacCheckboxPreference
+			android:key="@string/pref_alarm_info_key"
+			android:title="@string/pref_alarm_info_title"
+			android:summaryOn="@string/pref_alarm_info_summary_enabled"
+			android:summaryOff="@string/pref_alarm_info_summary_disabled"
+			android:defaultValue="false"
+			/>
+
+	</com.nfcalarmclock.NacPreferenceCategory>
+
+</PreferenceScreen>

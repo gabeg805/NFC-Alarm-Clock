@@ -5,9 +5,9 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 
 /**
- * Color fragment.
+ * Appearance fragment.
  */
-public class NacColorSettings
+public class NacAppearanceSettings
 	extends NacSettingsFragment
 	implements Preference.OnPreferenceChangeListener
 {
@@ -17,9 +17,9 @@ public class NacColorSettings
 	 */
 	private void init()
 	{
-		addPreferencesFromResource(R.xml.color_preferences);
+		addPreferencesFromResource(R.xml.appearance_preferences);
 		PreferenceManager.setDefaultValues(getContext(),
-			R.xml.color_preferences, false);
+			R.xml.appearance_preferences, false);
 
 		NacSharedKeys keys = this.getKeys();
 		Preference theme = findPreference(keys.getThemeColor());

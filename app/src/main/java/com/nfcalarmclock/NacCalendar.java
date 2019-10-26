@@ -73,8 +73,10 @@ public class NacCalendar
 	 */
 	public static Calendar getNext(NacAlarm alarm)
 	{
+		//NacUtility.printf("getNext() calling toCalendars(alarm)!");
 		List<Calendar> calendars = NacCalendar.toCalendars(alarm);
 
+		//NacUtility.printf("getNext() calling getNext(calendars)!");
 		return NacCalendar.getNext(calendars);
 	}
 
@@ -274,31 +276,30 @@ public class NacCalendar
 
 		if (alarm == null)
 		{
-			NacUtility.printf("Alarm is null when converting to calendars!");
-			;
+			//NacUtility.printf("Alarm is null when converting to calendars!");
 		}
 		else if (!alarm.areDaysSelected())
 		{
-			NacUtility.printf("Alarm is not null but no days are selected!");
-			alarm.print();
+			//NacUtility.printf("Alarm is not null but no days are selected!");
+			//alarm.print();
 			Calendar c = NacCalendar.toNextOneTimeCalendar(alarm);
 
 			calendars.add(c);
 		}
 		else
 		{
-			NacUtility.printf("Alarm is not null and days are selected!");
-			alarm.print();
+			//NacUtility.printf("Alarm is not null and days are selected!");
+			//alarm.print();
 			EnumSet<Day> days = alarm.getDays();
 
 			for (Day d : days)
 			{
 				Calendar c = NacCalendar.toNextCalendar(alarm, d);
 
-				if (c == null)
-				{
-					continue;
-				}
+				//if (c == null)
+				//{
+				//	continue;
+				//}
 
 				calendars.add(c);
 			}
@@ -330,14 +331,14 @@ public class NacCalendar
 	{
 		Calendar calendar = NacCalendar.toCalendar(alarm, day);
 		Calendar now = Calendar.getInstance();
-		boolean repeat = alarm.getRepeat();
+		//boolean repeat = alarm.getRepeat();
 
 		if (calendar.before(now))
 		{
-			if (!repeat)
-			{
-				return null;
-			}
+			//if (!repeat)
+			//{
+			//	return null;
+			//}
 
 			calendar.add(Calendar.DAY_OF_MONTH, 7);
 		}

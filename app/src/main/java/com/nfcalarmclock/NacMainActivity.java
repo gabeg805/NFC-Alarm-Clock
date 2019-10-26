@@ -50,6 +50,24 @@ public class NacMainActivity
 	private NacCardAdapter mAdapter;
 
 	/**
+	 * Add an alarm that was created from the SET_ALARM intent.
+	 */
+	private void addSetAlarmFromIntent()
+	{
+		Intent intent = getIntent();
+		NacCardAdapter adapter = this.getCardAdapter();
+		NacAlarm alarm = NacIntent.getSetAlarm(this, intent);
+
+		if (alarm != null)
+		{
+			alarm.setId(adapter.getUniqueId());
+			alarm.print();
+			adapter.add(alarm);
+			//adapter.setWasAddedWithFloatingButton(false);
+		}
+	}
+
+	/**
 	 * @return The alarm card adapter.
 	 */
 	private NacCardAdapter getCardAdapter()
@@ -89,8 +107,6 @@ public class NacMainActivity
 	{
 		super.onActivityResult(requestCode, resultCode, data);
 
-		NacUtility.printf("Req : %d | Res : %d", requestCode, resultCode);
-
 		if (requestCode == DRAW_OVERLAY_REQUEST)
 		{
 			if (!NacPermissions.hasDrawOverlay(this))
@@ -116,6 +132,7 @@ public class NacMainActivity
 		NacCardAdapter adapter = this.getCardAdapter();
 
 		adapter.add();
+		adapter.setWasAddedWithFloatingButton(true);
 	}
 
 	/**
@@ -126,14 +143,9 @@ public class NacMainActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_main);
 
-		if (!NacPermissions.hasDrawOverlay(this))
+		if (this.shouldShowDrawOverlayDialog())
 		{
-			NacPermissionsDrawOverlayDialog dialog =
-				new NacPermissionsDrawOverlayDialog();
-
-			dialog.addOnDismissListener(this);
-			dialog.build(this);
-			dialog.show();
+			this.showDrawOverlayDialog();
 		}
 
 		NacSharedPreferences shared = new NacSharedPreferences(this);
@@ -198,19 +210,60 @@ public class NacMainActivity
 		NacPermissions.requestDrawOverlay(this, DRAW_OVERLAY_REQUEST);
 		return true;
 	}
-
 	/**
 	 */
 	@Override
 	protected void onResume()
 	{
 		super.onResume();
+		this.setupAlarmCardAdapter();
+		this.setupFloatingActionButton();
+		this.addSetAlarmFromIntent();
+	}
 
+	/**
+	 * Setup the alarm card adapter.
+	 */
+	private void setupAlarmCardAdapter()
+	{
+		NacCardAdapter adapter = this.getCardAdapter();
+
+		adapter.build();
+	}
+
+	/**
+	 * Setup the floating action button.
+	 */
+	private void setupFloatingActionButton()
+	{
 		NacSharedPreferences shared = this.getSharedPreferences();
+		FloatingActionButton floatingButton = this.getFloatingButton();
 		ColorStateList color = ColorStateList.valueOf(shared.getThemeColor());
 
-		this.getCardAdapter().build();
-		this.getFloatingButton().setBackgroundTintList(color);
+		floatingButton.setBackgroundTintList(color);
+	}
+
+	/**
+	 * @return True if the draw overlay permission dialog should be show, and
+	 *         False otherwise.
+	 */
+	private boolean shouldShowDrawOverlayDialog()
+	{
+		return (!NacPermissions.hasDrawOverlay(this) &&
+			!NacIntent.isSetAlarmAction(getIntent()));
+	}
+
+	/**
+	 * Show the draw overlay dialog.
+	 */
+	private void showDrawOverlayDialog()
+	{
+		NacPermissionsDrawOverlayDialog dialog =
+			new NacPermissionsDrawOverlayDialog();
+
+		dialog.addOnDismissListener(this);
+		dialog.build(this);
+		dialog.show();
 	}
 
 	/**

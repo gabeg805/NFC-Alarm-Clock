@@ -4,6 +4,7 @@ package com.nfcalarmclock;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
+import android.os.Vibrator;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
@@ -90,21 +91,12 @@ public class NacWakeUpAction
 	public void cleanup()
 	{
 		Context context = this.getContext();
-		NacVibrator vibrator = this.getVibrator();
-		NacMediaPlayer player = this.getMediaPlayer();
 		Handler autoDismissHandler = this.getAutoDismissHandler();
 		Handler speakHandler = this.getSpeakHandler();
 
 		// Add a thing for Nfc to dismiss its activity if it is still running
-		if (vibrator != null)
-		{
-			vibrator.cancel(true);
-		}
-
-		if (player != null)
-		{
-			player.release();
-		}
+		this.stopVibrate();
+		this.stopPlayer();
 
 		if (autoDismissHandler != null)
 		{
@@ -329,10 +321,11 @@ public class NacWakeUpAction
 	{
 		this.stopVibrate();
 
-		Activity activity = (Activity) this.getContext();
+		//Activity activity = (Activity) this.getContext();
+		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
 		this.mVibrator = ((alarm == null) || alarm.getVibrate())
-			? new NacVibrator(activity) : null;
+			? new NacVibrator(context) : null;
 	}
 
 	/**
@@ -403,6 +396,24 @@ public class NacWakeUpAction
 	}
 
 	/**
+	 * Stop the media player.
+	 */
+	private void stopPlayer()
+	{
+		Context context = this.getContext();
+		NacMediaPlayer player = this.getMediaPlayer();
+
+		if (player == null)
+		{
+			player = new NacMediaPlayer(context);
+		}
+
+		player.resetWrapper();
+		player.stopWrapper();
+		player.release();
+	}
+
+	/**
 	 * Stop vibrating the phone.
 	 */
 	private void stopVibrate()
@@ -415,6 +426,14 @@ public class NacWakeUpAction
 			{
 				vibrator.cancel(true);
 			}
+		}
+		else
+		{
+			Context context = this.getContext();
+			Vibrator v = (Vibrator) context.getSystemService(
+				Context.VIBRATOR_SERVICE);
+
+			v.cancel();
 		}
 	}
 

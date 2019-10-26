@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-//import android.media.AudioDeviceInfo;
 
 /**
  * Wrapper for the MediaPlayer class.
@@ -301,7 +300,7 @@ public class NacMediaPlayer
 	/**
 	 * Pause the media player.
 	 */
-	private int pauseWrapper()
+	public int pauseWrapper()
 	{
 		try
 		{
@@ -406,7 +405,7 @@ public class NacMediaPlayer
 	/**
 	 * Prepare the media player
 	 */
-	private int prepareWrapper()
+	public int prepareWrapper()
 	{
 		try
 		{
@@ -428,7 +427,7 @@ public class NacMediaPlayer
 	/**
 	 * Reset the media player.
 	 */
-	private int resetWrapper()
+	public int resetWrapper()
 	{
 		try
 		{
@@ -455,7 +454,7 @@ public class NacMediaPlayer
 	/**
 	 * Start the media player.
 	 */
-	private int startWrapper()
+	public int startWrapper()
 	{
 		try
 		{
