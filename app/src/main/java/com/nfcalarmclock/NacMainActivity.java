@@ -4,6 +4,7 @@ import android.app.AlarmManager.AlarmClockInfo;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -249,8 +250,9 @@ public class NacMainActivity
 	 */
 	private boolean shouldShowDrawOverlayDialog()
 	{
-		return (!NacPermissions.hasDrawOverlay(this) &&
-			!NacIntent.isSetAlarmAction(getIntent()));
+		return ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+			&& !NacPermissions.hasDrawOverlay(this)
+			&& !NacIntent.isSetAlarmAction(getIntent()));
 	}
 
 	/**
@@ -272,7 +274,7 @@ public class NacMainActivity
 	private void showNextAlarm()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		NacAlarm alarm = this.mAdapter.getNextAlarm();
+		NacAlarm alarm = this.getCardAdapter().getNextAlarm();
 		String message = NacCalendar.getNextMessage(shared, alarm);
 
 		NacUtility.snackbar(this, message, "DISMISS", null);

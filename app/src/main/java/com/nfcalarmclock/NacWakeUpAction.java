@@ -1,10 +1,13 @@
 package com.nfcalarmclock;
 
 // CHANGE NAME TO NACWAKEUPPROCESS?
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.os.VibrationEffect;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
@@ -47,7 +50,8 @@ public class NacWakeUpAction
 	/**
 	 * Vibrate the phone.
 	 */
-	private NacVibrator mVibrator;
+	//private NacVibrator mVibrator;
+	private Vibrator mVibrator;
 
 	/**
 	 * The text-to-speech engine.
@@ -77,7 +81,9 @@ public class NacWakeUpAction
 		this.mAlarm = alarm;
 		this.mSharedPreferences = new NacSharedPreferences(context);
 		this.mPlayer = new NacMediaPlayer(context);
-		this.mVibrator = null;
+		//this.mVibrator = null;
+		this.mVibrator = (Vibrator) context.getSystemService(
+			Context.VIBRATOR_SERVICE);
 		this.mSpeech = new NacTextToSpeech(context, this);
 		this.mAutoDismissHandler = new Handler();
 		this.mSpeakHandler = new Handler();
@@ -214,7 +220,8 @@ public class NacWakeUpAction
 	/**
 	 * @return The phone vibrator.
 	 */
-	private NacVibrator getVibrator()
+	//private NacVibrator getVibrator()
+	private Vibrator getVibrator()
 	{
 		return this.mVibrator;
 	}
@@ -322,10 +329,10 @@ public class NacWakeUpAction
 		this.stopVibrate();
 
 		//Activity activity = (Activity) this.getContext();
-		Context context = this.getContext();
-		NacAlarm alarm = this.getAlarm();
-		this.mVibrator = ((alarm == null) || alarm.getVibrate())
-			? new NacVibrator(context) : null;
+		//Context context = this.getContext();
+		//NacAlarm alarm = this.getAlarm();
+		//this.mVibrator = ((alarm == null) || alarm.getVibrate())
+		//	? new NacVibrator(context) : null;
 	}
 
 	/**
@@ -418,38 +425,69 @@ public class NacWakeUpAction
 	 */
 	private void stopVibrate()
 	{
-		NacVibrator vibrator = this.getVibrator();
+		//NacVibrator vibrator = this.getVibrator();
+		Vibrator vibrator = this.getVibrator();
+
+		if (vibrator == null)
+		{
+			Context context = this.getContext();
+			vibrator = (Vibrator) context.getSystemService(
+				Context.VIBRATOR_SERVICE);
+			this.mVibrator = vibrator;
+		}
 
 		if (vibrator != null)
 		{
-			if (!vibrator.isFinished())
-			{
-				vibrator.cancel(true);
-			}
+			vibrator.cancel();
 		}
-		else
-		{
-			Context context = this.getContext();
-			Vibrator v = (Vibrator) context.getSystemService(
-				Context.VIBRATOR_SERVICE);
 
-			v.cancel();
-		}
+		//if (vibrator != null)
+		//{
+		//	if (!vibrator.isFinished())
+		//	{
+		//		vibrator.cancel(true);
+		//	}
+		//}
+		//else
+		//{
+		//	Context context = this.getContext();
+		//	Vibrator v = (Vibrator) context.getSystemService(
+		//		Context.VIBRATOR_SERVICE);
+
+		//	v.cancel();
+		//}
 	}
 
 	/**
 	 * Vibrate the phone repeatedly until the alarm is dismissed.
 	 */
+	@SuppressWarnings("deprecation")
+	@TargetApi(Build.VERSION_CODES.O)
 	public void vibrate()
 	{
-		this.setupVibrate();
+		//this.setupVibrate();
+		this.stopVibrate();
 
-		NacVibrator vibrator = this.getVibrator();
+		//NacVibrator vibrator = this.getVibrator();
+		NacAlarm alarm = this.getAlarm();
+		Vibrator vibrator = this.getVibrator();
 		long duration = 500;
+		long[] pattern = {0, duration, 2*duration};
 
-		if (vibrator != null)
+		if ((vibrator != null) && (alarm != null) && alarm.getVibrate())
 		{
-			vibrator.execute(duration);
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+			{
+				//vibrator.vibrate(VibrationEffect.createOneShot(duration,
+				//	VibrationEffect.DEFAULT_AMPLITUDE));
+				vibrator.vibrate(VibrationEffect.createWaveform(pattern, 0));
+			}
+			else
+			{
+				vibrator.vibrate(pattern, 0);
+			}
+
+			//vibrator.execute(duration);
 		}
 	}
 

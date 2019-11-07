@@ -54,6 +54,90 @@ public class NacCalendar
 	public static final EnumSet<Day> WEEK = EnumSet.allOf(Day.class);
 
 	/**
+	 * @see getMessage
+	 */
+	public static String getMessage(String prefix, Calendar next)
+	{
+		return prefix + " on " + NacCalendar.toString(next, "EEE h:mm a");
+		//return "Next alarm on " + NacCalendar.toString(next, "EEE h:mm a");
+	}
+
+	/**
+	 * @see getMessage
+	 */
+	public static String getMessage(String prefix, long millis)
+	{
+		long time = (millis - System.currentTimeMillis())
+			/ 1000;
+		long day = (time / (60*60*24)) % 365;
+		long hr = (time / (60*60)) % 24;
+		long min = (time / 60) % 60;
+		long sec = time % 60;
+		String dayunit = (day != 1) ? " days " : " day ";
+		String hrunit = (hr != 1) ? " hours " : " hour ";
+		String minunit = (min != 1) ? " minutes " : " minute ";
+		String secunit = (sec != 1) ? " seconds " : " second ";
+		String msg = prefix + " in ";
+		//String msg = "Next alarm in ";
+
+		if (day > 0)
+		{
+			msg += String.valueOf(day)+dayunit+String.valueOf(hr)+hrunit;
+		}
+		else
+		{
+			if (hr > 0)
+			{
+				msg += String.valueOf(hr)+hrunit+String.valueOf(min)+minunit;
+			}
+			else
+			{
+				msg += String.valueOf(min)+minunit+String.valueOf(sec)+secunit;
+			}
+		}
+
+		return msg;
+	}
+
+	/**
+	 * @see getMessage
+	 */
+	public static String getMessage(String prefix, NacSharedPreferences shared,
+		NacAlarm alarm)
+	{
+		Calendar calendar = NacCalendar.getNext(alarm);
+
+		if ((shared == null) || (alarm == null) || (calendar == null))
+		{
+			return "No scheduled alarms.";
+		}
+
+		int nextAlarmFormat = shared.getNextAlarmFormat();
+		long millis = calendar.getTimeInMillis();
+
+		return NacCalendar.getMessage(prefix, millis, nextAlarmFormat);
+	}
+
+	/**
+	 * @return The message to display.
+	 */
+	public static String getMessage(String prefix, long millis, int format)
+	{
+		if (format == 0)
+		{
+			return NacCalendar.getMessage(prefix, millis);
+		}
+		else
+		{
+			Calendar calendar = Calendar.getInstance();
+
+			calendar.setTimeInMillis(millis);
+
+			return NacCalendar.getMessage(prefix, calendar);
+		}
+	}
+
+	/**
 	 * @return The next calendar in the list.
 	 */
 	public static Calendar getNext(List<Calendar> calendars)
@@ -116,7 +200,8 @@ public class NacCalendar
 	 */
 	public static String getNextMessage(Calendar next)
 	{
-		return "Next alarm on " + NacCalendar.toString(next, "EEE h:mm a");
+		return NacCalendar.getMessage("Next alarm", next);
+		//return "Next alarm on " + NacCalendar.toString(next, "EEE h:mm a");
 	}
 
 	/**
@@ -124,35 +209,36 @@ public class NacCalendar
 	 */
 	public static String getNextMessage(long millis)
 	{
-		long time = (millis - System.currentTimeMillis())
-			/ 1000;
-		long day = (time / (60*60*24)) % 365;
-		long hr = (time / (60*60)) % 24;
-		long min = (time / 60) % 60;
-		long sec = time % 60;
-		String dayunit = (day != 1) ? " days " : " day ";
-		String hrunit = (hr != 1) ? " hours " : " hour ";
-		String minunit = (min != 1) ? " minutes " : " minute ";
-		String secunit = (sec != 1) ? " seconds " : " second ";
-		String msg = "Next alarm in ";
+		return NacCalendar.getMessage("Next alarm", millis);
+		//long time = (millis - System.currentTimeMillis())
+		//	/ 1000;
+		//long day = (time / (60*60*24)) % 365;
+		//long hr = (time / (60*60)) % 24;
+		//long min = (time / 60) % 60;
+		//long sec = time % 60;
+		//String dayunit = (day != 1) ? " days " : " day ";
+		//String hrunit = (hr != 1) ? " hours " : " hour ";
+		//String minunit = (min != 1) ? " minutes " : " minute ";
+		//String secunit = (sec != 1) ? " seconds " : " second ";
+		//String msg = "Next alarm in ";
 
-		if (day > 0)
-		{
-			msg += String.valueOf(day)+dayunit+String.valueOf(hr)+hrunit;
-		}
-		else
-		{
-			if (hr > 0)
-			{
-				msg += String.valueOf(hr)+hrunit+String.valueOf(min)+minunit;
-			}
-			else
-			{
-				msg += String.valueOf(min)+minunit+String.valueOf(sec)+secunit;
-			}
-		}
+		//if (day > 0)
+		//{
+		//	msg += String.valueOf(day)+dayunit+String.valueOf(hr)+hrunit;
+		//}
+		//else
+		//{
+		//	if (hr > 0)
+		//	{
+		//		msg += String.valueOf(hr)+hrunit+String.valueOf(min)+minunit;
+		//	}
+		//	else
+		//	{
+		//		msg += String.valueOf(min)+minunit+String.valueOf(sec)+secunit;
+		//	}
+		//}
 
-		return msg;
+		//return msg;
 	}
 
 	/**
@@ -161,17 +247,18 @@ public class NacCalendar
 	public static String getNextMessage(NacSharedPreferences shared,
 		NacAlarm alarm)
 	{
-		Calendar calendar = NacCalendar.getNext(alarm);
+		return NacCalendar.getMessage("Next alarm", shared, alarm);
+		//Calendar calendar = NacCalendar.getNext(alarm);
 
-		if ((shared == null) || (alarm == null) || (calendar == null))
-		{
-			return "No scheduled alarms.";
-		}
+		//if ((shared == null) || (alarm == null) || (calendar == null))
+		//{
+		//	return "No scheduled alarms.";
+		//}
 
-		int nextAlarmFormat = shared.getNextAlarmFormat();
-		long millis = calendar.getTimeInMillis();
+		//int nextAlarmFormat = shared.getNextAlarmFormat();
+		//long millis = calendar.getTimeInMillis();
 
-		return NacCalendar.getNextMessage(millis, nextAlarmFormat);
+		//return NacCalendar.getNextMessage(millis, nextAlarmFormat);
 	}
 
 	/**
@@ -179,18 +266,19 @@ public class NacCalendar
 	 */
 	public static String getNextMessage(long millis, int format)
 	{
-		if (format == 0)
-		{
-			return NacCalendar.getNextMessage(millis);
-		}
-		else
-		{
-			Calendar calendar = Calendar.getInstance();
+		return NacCalendar.getMessage("Next alarm", millis, format);
+		//if (format == 0)
+		//{
+		//	return NacCalendar.getNextMessage(millis);
+		//}
+		//else
+		//{
+		//	Calendar calendar = Calendar.getInstance();
 
-			calendar.setTimeInMillis(millis);
+		//	calendar.setTimeInMillis(millis);
 
-			return NacCalendar.getNextMessage(calendar);
-		}
+		//	return NacCalendar.getNextMessage(calendar);
+		//}
 	}
 
 	/**

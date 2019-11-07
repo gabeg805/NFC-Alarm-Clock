@@ -280,6 +280,7 @@ public class NacAlarmActivity
 			String alarmName = alarm.getName();
 
 			name.setText(alarmName);
+			name.setSelected(true);
 		}
 	}
 

@@ -168,7 +168,7 @@ public class NacCardAdapter
 		this.startService(intent);
 		this.getAlarms().add(position, alarm);
 		this.updateNotification();
-		this.showNextAlarm(alarm);
+		//this.showNextAlarm(alarm);
 		notifyItemInserted(position);
 
 		return 0;
@@ -446,17 +446,34 @@ public class NacCardAdapter
 		Intent intent = NacIntent.createService(context, "update", alarm);
 		//this.mWasAddedWithFloatingButton = false;
 
-		if (alarm.wasChanged() && alarm.getEnabled())
+		if (alarm.wasChanged())
 		{
-			this.showNextAlarm(alarm);
-		}
-		else
-		{
-			if (this.areAllAlarmsDisabled())
+			List<NacAlarm> alarms = this.getAlarms();
+			NacAlarm nextAlarm = NacCalendar.getNextAlarm(alarms);
+
+			if (alarm.getEnabled())
 			{
-				this.mNextAlarm = null;
+				this.showNextAlarm(alarm);
 			}
+			else
+			{
+				this.showNextAlarm(nextAlarm);
+			}
+
+			this.mNextAlarm = nextAlarm;
 		}
+
+		//if (alarm.wasChanged() && alarm.getEnabled())
+		//{
+		//	this.showNextAlarm(alarm);
+		//}
+		//else
+		//{
+		//	if (this.areAllAlarmsDisabled())
+		//	{
+		//		this.mNextAlarm = null;
+		//	}
+		//}
 
 		this.setWasAddedWithFloatingButton(false);
 		this.updateNotification();
@@ -635,24 +652,34 @@ public class NacCardAdapter
 	 */
 	private void showNextAlarm(NacAlarm alarm)
 	{
-		NacAlarm nextAlarm = this.getNextAlarm();
-		int nextId = (nextAlarm != null) ? nextAlarm.getId() : -1;
-		int id = alarm.getId();
-
-		if (id == nextId)
-		{
-			alarm = NacCalendar.getNextAlarm(this.getAlarms());
-		}
-		else if (!this.isNextAlarm(alarm))
-		{
-			return;
-		}
-
 		NacSharedPreferences shared = this.getSharedPreferences();
-		String message = NacCalendar.getNextMessage(shared, alarm);
-		this.mNextAlarm = alarm;
+		String message = NacCalendar.getMessage("Alarm will run", shared,
+			alarm);
+		//String message = NacCalendar.getNextMessage(shared, alarm);
+		//String name = alarm.getName();
+		//String prefix = ((name != null) && !name.isEmpty())
+		//	? String.format("'%s' will run", name) : "Alarm will run";
 
 		this.snackbar(message, "DISMISS", null, true);
+
+		//NacAlarm nextAlarm = this.getNextAlarm();
+		//int nextId = (nextAlarm != null) ? nextAlarm.getId() : -1;
+		//int id = alarm.getId();
+
+		//if (id == nextId)
+		//{
+		//	alarm = NacCalendar.getNextAlarm(this.getAlarms());
+		//}
+		//else if (!this.isNextAlarm(alarm))
+		//{
+		//	return;
+		//}
+
+		//NacSharedPreferences shared = this.getSharedPreferences();
+		//String message = NacCalendar.getNextMessage(shared, alarm);
+		//this.mNextAlarm = alarm;
+
+		//this.snackbar(message, "DISMISS", null, true);
 	}
 
 	/**

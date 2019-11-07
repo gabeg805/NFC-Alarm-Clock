@@ -312,7 +312,8 @@ public class NacIntent
 
 		String action = intent.getAction();
 
-		return action.equals(AlarmClock.ACTION_SET_ALARM);
+		return (action != null) ? action.equals(AlarmClock.ACTION_SET_ALARM)
+			: false;
 	}
 
 	/**
