@@ -429,7 +429,8 @@ public class NacSound
 		{
 			retriever.setDataSource(path);
 		}
-		//catch (RuntimeException | IllegalArgumentException e)
+		//catch (IllegalArgumentException e) // RuntimeException occurs
+		//sometimes
 		catch (RuntimeException e)
 		{
 			NacUtility.printf("Something wrong with file '%s'.", file.getAbsolutePath());

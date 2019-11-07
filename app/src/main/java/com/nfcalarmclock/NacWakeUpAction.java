@@ -50,7 +50,6 @@ public class NacWakeUpAction
 	/**
 	 * Vibrate the phone.
 	 */
-	//private NacVibrator mVibrator;
 	private Vibrator mVibrator;
 
 	/**
@@ -81,14 +80,12 @@ public class NacWakeUpAction
 		this.mAlarm = alarm;
 		this.mSharedPreferences = new NacSharedPreferences(context);
 		this.mPlayer = new NacMediaPlayer(context);
-		//this.mVibrator = null;
 		this.mVibrator = (Vibrator) context.getSystemService(
 			Context.VIBRATOR_SERVICE);
 		this.mSpeech = new NacTextToSpeech(context, this);
 		this.mAutoDismissHandler = new Handler();
 		this.mSpeakHandler = new Handler();
 		this.mListener = null;
-		//this.setupVibrate();
 	}
 
 	/**
@@ -220,7 +217,6 @@ public class NacWakeUpAction
 	/**
 	 * @return The phone vibrator.
 	 */
-	//private NacVibrator getVibrator()
 	private Vibrator getVibrator()
 	{
 		return this.mVibrator;
@@ -322,20 +318,6 @@ public class NacWakeUpAction
 	}
 
 	/**
-	 * @return Setup a new vibrator object.
-	 */
-	private void setupVibrate()
-	{
-		this.stopVibrate();
-
-		//Activity activity = (Activity) this.getContext();
-		//Context context = this.getContext();
-		//NacAlarm alarm = this.getAlarm();
-		//this.mVibrator = ((alarm == null) || alarm.getVibrate())
-		//	? new NacVibrator(context) : null;
-	}
-
-	/**
 	 * Shutdown the wakeup actions.
 	 */
 	public void shutdown()
@@ -425,7 +407,6 @@ public class NacWakeUpAction
 	 */
 	private void stopVibrate()
 	{
-		//NacVibrator vibrator = this.getVibrator();
 		Vibrator vibrator = this.getVibrator();
 
 		if (vibrator == null)
@@ -440,22 +421,6 @@ public class NacWakeUpAction
 		{
 			vibrator.cancel();
 		}
-
-		//if (vibrator != null)
-		//{
-		//	if (!vibrator.isFinished())
-		//	{
-		//		vibrator.cancel(true);
-		//	}
-		//}
-		//else
-		//{
-		//	Context context = this.getContext();
-		//	Vibrator v = (Vibrator) context.getSystemService(
-		//		Context.VIBRATOR_SERVICE);
-
-		//	v.cancel();
-		//}
 	}
 
 	/**
@@ -465,10 +430,8 @@ public class NacWakeUpAction
 	@TargetApi(Build.VERSION_CODES.O)
 	public void vibrate()
 	{
-		//this.setupVibrate();
 		this.stopVibrate();
 
-		//NacVibrator vibrator = this.getVibrator();
 		NacAlarm alarm = this.getAlarm();
 		Vibrator vibrator = this.getVibrator();
 		long duration = 500;
@@ -478,16 +441,12 @@ public class NacWakeUpAction
 		{
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 			{
-				//vibrator.vibrate(VibrationEffect.createOneShot(duration,
-				//	VibrationEffect.DEFAULT_AMPLITUDE));
 				vibrator.vibrate(VibrationEffect.createWaveform(pattern, 0));
 			}
 			else
 			{
 				vibrator.vibrate(pattern, 0);
 			}
-
-			//vibrator.execute(duration);
 		}
 	}
 

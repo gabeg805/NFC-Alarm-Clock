@@ -635,7 +635,8 @@ public class NacCardAdapter
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm nextAlarm = this.getNextAlarm();
-		String prefix = (alarm.getId() == nextAlarm.getId()) ? "Next alarm"
+		String prefix = ((nextAlarm != null)
+			&& (alarm.getId() == nextAlarm.getId())) ? "Next alarm"
 			: "Alarm will run";
 		String message = NacCalendar.getMessage(prefix, shared, alarm);
 
