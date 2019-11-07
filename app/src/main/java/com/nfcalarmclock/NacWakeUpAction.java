@@ -472,7 +472,7 @@ public class NacWakeUpAction
 		NacAlarm alarm = this.getAlarm();
 		Vibrator vibrator = this.getVibrator();
 		long duration = 500;
-		long[] pattern = {0, duration, 2*duration};
+		long[] pattern = {0, duration, duration};
 
 		if ((vibrator != null) && (alarm != null) && alarm.getVibrate())
 		{

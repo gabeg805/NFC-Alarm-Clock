@@ -163,12 +163,10 @@ public class NacCardAdapter
 
 		Context context = this.getContext();
 		Intent intent = NacIntent.createService(context, "add", alarm);
-		//this.mWasAddedWithFloatingButton = true;
 
 		this.startService(intent);
 		this.getAlarms().add(position, alarm);
 		this.updateNotification();
-		//this.showNextAlarm(alarm);
 		notifyItemInserted(position);
 
 		return 0;
@@ -233,7 +231,6 @@ public class NacCardAdapter
 		NacAlarm alarm = this.get(position);
 		NacAlarm copy = alarm.copy(this.getUniqueId());
 		int result = this.add(copy);
-		//this.mWasAddedWithFloatingButton = false;
 
 		if (result == 0)
 		{
@@ -256,7 +253,6 @@ public class NacCardAdapter
 		NacAlarm alarm = this.get(position);
 		Context context = this.getContext();
 		Intent intent = NacIntent.createService(context, "delete", alarm);
-		//this.mWasAddedWithFloatingButton = false;
 
 		this.setWasAddedWithFloatingButton(false);
 		this.getAlarms().remove(position);
@@ -444,7 +440,6 @@ public class NacCardAdapter
 	{
 		Context context = this.getContext();
 		Intent intent = NacIntent.createService(context, "update", alarm);
-		//this.mWasAddedWithFloatingButton = false;
 
 		if (alarm.wasChanged())
 		{
@@ -462,18 +457,6 @@ public class NacCardAdapter
 
 			this.mNextAlarm = nextAlarm;
 		}
-
-		//if (alarm.wasChanged() && alarm.getEnabled())
-		//{
-		//	this.showNextAlarm(alarm);
-		//}
-		//else
-		//{
-		//	if (this.areAllAlarmsDisabled())
-		//	{
-		//		this.mNextAlarm = null;
-		//	}
-		//}
 
 		this.setWasAddedWithFloatingButton(false);
 		this.updateNotification();
@@ -597,7 +580,6 @@ public class NacCardAdapter
 		NacAlarm toAlarm = this.get(toIndex);
 		Intent intent = NacIntent.createService(context, "swap", fromAlarm,
 			toAlarm);
-		//this.mWasAddedWithFloatingButton = false;
 
 		this.setWasAddedWithFloatingButton(false);
 		this.startService(intent);
@@ -628,7 +610,6 @@ public class NacCardAdapter
 	public void restore(NacAlarm alarm, int position)
 	{
 		int result = this.add(alarm, position);
-		//this.mWasAddedWithFloatingButton = false;
 
 		if (result == 0)
 		{
@@ -653,33 +634,12 @@ public class NacCardAdapter
 	private void showNextAlarm(NacAlarm alarm)
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		String message = NacCalendar.getMessage("Alarm will run", shared,
-			alarm);
-		//String message = NacCalendar.getNextMessage(shared, alarm);
-		//String name = alarm.getName();
-		//String prefix = ((name != null) && !name.isEmpty())
-		//	? String.format("'%s' will run", name) : "Alarm will run";
+		NacAlarm nextAlarm = this.getNextAlarm();
+		String prefix = (alarm.getId() == nextAlarm.getId()) ? "Next alarm"
+			: "Alarm will run";
+		String message = NacCalendar.getMessage(prefix, shared, alarm);
 
 		this.snackbar(message, "DISMISS", null, true);
-
-		//NacAlarm nextAlarm = this.getNextAlarm();
-		//int nextId = (nextAlarm != null) ? nextAlarm.getId() : -1;
-		//int id = alarm.getId();
-
-		//if (id == nextId)
-		//{
-		//	alarm = NacCalendar.getNextAlarm(this.getAlarms());
-		//}
-		//else if (!this.isNextAlarm(alarm))
-		//{
-		//	return;
-		//}
-
-		//NacSharedPreferences shared = this.getSharedPreferences();
-		//String message = NacCalendar.getNextMessage(shared, alarm);
-		//this.mNextAlarm = alarm;
-
-		//this.snackbar(message, "DISMISS", null, true);
 	}
 
 	/**

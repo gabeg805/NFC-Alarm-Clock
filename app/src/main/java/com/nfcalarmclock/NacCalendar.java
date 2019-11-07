@@ -201,7 +201,6 @@ public class NacCalendar
 	public static String getNextMessage(Calendar next)
 	{
 		return NacCalendar.getMessage("Next alarm", next);
-		//return "Next alarm on " + NacCalendar.toString(next, "EEE h:mm a");
 	}
 
 	/**
@@ -210,35 +209,6 @@ public class NacCalendar
 	public static String getNextMessage(long millis)
 	{
 		return NacCalendar.getMessage("Next alarm", millis);
-		//long time = (millis - System.currentTimeMillis())
-		//	/ 1000;
-		//long day = (time / (60*60*24)) % 365;
-		//long hr = (time / (60*60)) % 24;
-		//long min = (time / 60) % 60;
-		//long sec = time % 60;
-		//String dayunit = (day != 1) ? " days " : " day ";
-		//String hrunit = (hr != 1) ? " hours " : " hour ";
-		//String minunit = (min != 1) ? " minutes " : " minute ";
-		//String secunit = (sec != 1) ? " seconds " : " second ";
-		//String msg = "Next alarm in ";
-
-		//if (day > 0)
-		//{
-		//	msg += String.valueOf(day)+dayunit+String.valueOf(hr)+hrunit;
-		//}
-		//else
-		//{
-		//	if (hr > 0)
-		//	{
-		//		msg += String.valueOf(hr)+hrunit+String.valueOf(min)+minunit;
-		//	}
-		//	else
-		//	{
-		//		msg += String.valueOf(min)+minunit+String.valueOf(sec)+secunit;
-		//	}
-		//}
-
-		//return msg;
 	}
 
 	/**
@@ -248,17 +218,6 @@ public class NacCalendar
 		NacAlarm alarm)
 	{
 		return NacCalendar.getMessage("Next alarm", shared, alarm);
-		//Calendar calendar = NacCalendar.getNext(alarm);
-
-		//if ((shared == null) || (alarm == null) || (calendar == null))
-		//{
-		//	return "No scheduled alarms.";
-		//}
-
-		//int nextAlarmFormat = shared.getNextAlarmFormat();
-		//long millis = calendar.getTimeInMillis();
-
-		//return NacCalendar.getNextMessage(millis, nextAlarmFormat);
 	}
 
 	/**
@@ -267,18 +226,6 @@ public class NacCalendar
 	public static String getNextMessage(long millis, int format)
 	{
 		return NacCalendar.getMessage("Next alarm", millis, format);
-		//if (format == 0)
-		//{
-		//	return NacCalendar.getNextMessage(millis);
-		//}
-		//else
-		//{
-		//	Calendar calendar = Calendar.getInstance();
-
-		//	calendar.setTimeInMillis(millis);
-
-		//	return NacCalendar.getNextMessage(calendar);
-		//}
 	}
 
 	/**
@@ -364,30 +311,21 @@ public class NacCalendar
 
 		if (alarm == null)
 		{
-			//NacUtility.printf("Alarm is null when converting to calendars!");
+			;
 		}
 		else if (!alarm.areDaysSelected())
 		{
-			//NacUtility.printf("Alarm is not null but no days are selected!");
-			//alarm.print();
 			Calendar c = NacCalendar.toNextOneTimeCalendar(alarm);
 
 			calendars.add(c);
 		}
 		else
 		{
-			//NacUtility.printf("Alarm is not null and days are selected!");
-			//alarm.print();
 			EnumSet<Day> days = alarm.getDays();
 
 			for (Day d : days)
 			{
 				Calendar c = NacCalendar.toNextCalendar(alarm, d);
-
-				//if (c == null)
-				//{
-				//	continue;
-				//}
 
 				calendars.add(c);
 			}
@@ -423,11 +361,6 @@ public class NacCalendar
 
 		if (calendar.before(now))
 		{
-			//if (!repeat)
-			//{
-			//	return null;
-			//}
-
 			calendar.add(Calendar.DAY_OF_MONTH, 7);
 		}
 
