@@ -19,8 +19,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import java.util.Calendar;
 
-import android.app.KeyguardManager;
-
 /**
  * Activity to dismiss/snooze the alarm.
  */
@@ -174,27 +172,7 @@ public class NacAlarmActivity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)
-		{
-			setTurnScreenOn(true);
-			setShowWhenLocked(true);
-		}
-		else
-		{
-			Window window = getWindow();
-
-			window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-			window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-		}
-
-		//KeyguardManager manager = getSystemService();
-
-		//if (manager.isKeyguardLocked())
-		//{
-		//	manager.requestDismissKeyguard(this, null);
-		//}
-
+		this.setupShowWhenLocked();
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.act_alarm);
 
@@ -251,21 +229,6 @@ public class NacAlarmActivity
 	{
 		super.onPause();
 		this.getWakeUp().pause();
-		// KeyguardManager manager = ;
-		// dismiss stuff securely
-
-		//if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)
-		//{
-		//	setTurnScreenOn(false);
-		//	setShowWhenLocked(false);
-		//}
-		//else
-		//{
-		//	Window window = getWindow();
-
-		//	window.clearFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-		//	window.clearFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-		//}
 	}
 
 	/**
@@ -322,6 +285,25 @@ public class NacAlarmActivity
 			name.setSelected(true);
 		}
 	}
+
+	/**
+	 * Show the activity when the phone is locked.
+	 */
+	 public void setupShowWhenLocked()
+	 {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)
+		{
+			setTurnScreenOn(true);
+			setShowWhenLocked(true);
+		}
+		else
+		{
+			Window window = getWindow();
+
+			window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+			window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+		}
+	 }
 
 	/**
 	 * Snooze the alarm.
