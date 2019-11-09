@@ -67,9 +67,14 @@ public class NacCardAdapter
 	private List<NacAlarm> mAlarmList;
 
 	/**
-	 * Previously enabled alarm.
+	 * Next alarm to go off.
 	 */
 	private NacAlarm mNextAlarm;
+
+	/**
+	 * Previous alarm to go off, in calendar form.
+	 */
+	private Calendar mPreviousCalendar;
 
 	/**
 	 * Indicator that the alarm was added through the floating action button.
@@ -100,6 +105,7 @@ public class NacCardAdapter
 		this.mSnackbar = new NacSnackbar(this.mRoot);
 		this.mAlarmList = null;
 		this.mNextAlarm = null;
+		this.mPreviousCalendar = null;
 		this.mWasAddedWithFloatingButton = false;
 		this.mMeasure = new NacCardMeasure(context);
 
@@ -324,6 +330,14 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * @return The previous calendar.
+	 */
+	private Calendar getPreviousCalendar()
+	{
+		return this.mPreviousCalendar;
+	}
+
+	/**
 	 * @return The RecyclerView.
 	 */
 	private RecyclerView getRecyclerView()
@@ -448,7 +462,7 @@ public class NacCardAdapter
 
 			if (alarm.getEnabled())
 			{
-				this.showNextAlarm(alarm);
+				this.showAlarm(alarm);
 			}
 			else
 			{
@@ -631,13 +645,38 @@ public class NacCardAdapter
 	/**
 	 * Show next alarm.
 	 */
+	private void showAlarm(NacAlarm alarm)
+	{
+		Calendar alarmCalendar = NacCalendar.getNext(alarm);
+		Calendar previousCalendar = this.getPreviousCalendar();
+
+		if ((alarm == null) || (alarmCalendar.equals(previousCalendar))
+			|| !alarm.getEnabled())
+		{
+			return;
+		}
+
+		NacSharedPreferences shared = this.getSharedPreferences();
+		String name = alarm.getName();
+		String prefix = "Will run";
+
+		if ((name != null) && !name.isEmpty())
+		{
+			prefix = (name.length() > 15) ? String.format("\"%12s...\"", name)
+				: String.format("\"%s\"", name);
+			prefix += " will run";
+		}
+
+		String message = NacCalendar.getMessage(prefix, shared, alarm);
+		this.mPreviousCalendar = alarmCalendar;
+
+		this.snackbar(message, "DISMISS", null, true);
+	}
+
 	private void showNextAlarm(NacAlarm alarm)
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		NacAlarm nextAlarm = this.getNextAlarm();
-		String prefix = ((nextAlarm != null)
-			&& (alarm.getId() == nextAlarm.getId())) ? "Next alarm"
-			: "Alarm will run";
+		String prefix = "Next alarm";
 		String message = NacCalendar.getMessage(prefix, shared, alarm);
 
 		this.snackbar(message, "DISMISS", null, true);

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.text.Spannable;
@@ -11,11 +12,14 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import java.util.Calendar;
+
+import android.app.KeyguardManager;
 
 /**
  * Activity to dismiss/snooze the alarm.
@@ -170,7 +174,27 @@ public class NacAlarmActivity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		NacUtility.printf("NacAlarmActivity onCreate()!");
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)
+		{
+			setTurnScreenOn(true);
+			setShowWhenLocked(true);
+		}
+		else
+		{
+			Window window = getWindow();
+
+			window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+			window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+		}
+
+		//KeyguardManager manager = getSystemService();
+
+		//if (manager.isKeyguardLocked())
+		//{
+		//	manager.requestDismissKeyguard(this, null);
+		//}
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.act_alarm);
 
@@ -227,6 +251,21 @@ public class NacAlarmActivity
 	{
 		super.onPause();
 		this.getWakeUp().pause();
+		// KeyguardManager manager = ;
+		// dismiss stuff securely
+
+		//if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)
+		//{
+		//	setTurnScreenOn(false);
+		//	setShowWhenLocked(false);
+		//}
+		//else
+		//{
+		//	Window window = getWindow();
+
+		//	window.clearFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+		//	window.clearFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+		//}
 	}
 
 	/**

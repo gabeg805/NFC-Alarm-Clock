@@ -280,7 +280,7 @@ public class NacCardHolder
 
 		if (!alarm.areDaysSelected())
 		{
-			//alarm.setRepeat(false);
+			alarm.setRepeat(false);
 			this.mDays.getRepeat().setEnabled(false);
 			this.mDays.getRepeat().setAlpha(0.5f);
 			this.mDays.set(shared);
