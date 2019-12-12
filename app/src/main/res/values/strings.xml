@@ -115,11 +115,18 @@
 	<!-- Categories -->
 	<string name="pref_general_dismiss_category">Dismiss</string>
 	<string name="pref_general_snooze_category">Snooze</string>
-wswq
+
 
 	<!-- Auto dismiss duration -->
 	<string name="pref_auto_dismiss_key">pref_auto_dismiss</string>
 	<string name="pref_auto_dismiss_title">Auto-Dismiss</string>
+
+
+	<!-- Prevent app from closing -->
+	<string name="pref_prevent_app_from_closing_key">pref_prevent_app_from_closing</string>
+	<string name="pref_prevent_app_from_closing_title">Prevent app from closing</string>
+	<string name="pref_prevent_app_from_closing_summary_enabled">Prevent the app from closing until the alarm has been dismissed. (Experimental)</string>
+	<string name="pref_prevent_app_from_closing_summary_disabled">Do not prevent the app from closing.\n</string>
 
 
 	<!-- Max number of snoozes -->
@@ -182,7 +189,6 @@ wswq
 	<string name="pref_audio_source_key">pref_audio_source</string>
 	<string name="pref_volume_key">pref_volume</string>
 	<string name="pref_volume_title">Volume</string>
-	<string name="pref_volume_summary">Set the default volume level.</string>
 
 
 	<!-- ******************* -->

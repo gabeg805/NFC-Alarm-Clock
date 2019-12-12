@@ -60,6 +60,11 @@ public class NacSharedKeys
 	private final String mAutoDismiss;
 
 	/**
+	 * Prevent app from closing.
+	 */
+	private final String mPreventAppFromClosing;
+
+	/**
 	 * Max snoozes.
 	 */
 	private final String mMaxSnooze;
@@ -205,6 +210,7 @@ public class NacSharedKeys
 		this.mMiscellaneousTitle = res.getString(R.string.pref_screen_misc_title);
 		this.mAboutScreenTitle = res.getString(R.string.pref_screen_about_title);
 		this.mAutoDismiss = res.getString(R.string.pref_auto_dismiss_key);
+		this.mPreventAppFromClosing = res.getString(R.string.pref_prevent_app_from_closing_key);
 		this.mMaxSnooze = res.getString(R.string.pref_max_snooze_key);
 		this.mSnoozeDuration = res.getString(R.string.pref_snooze_duration_key);
 		this.mEasySnooze = res.getString(R.string.pref_easy_snooze_key);
@@ -407,6 +413,14 @@ public class NacSharedKeys
 	public String getPmColor()
 	{
 		return this.mPmColor;
+	}
+
+	/**
+	 * @return The prevent app from closing key.
+	 */
+	public String getPreventAppFromClosing()
+	{
+		return this.mPreventAppFromClosing;
 	}
 
 	/**

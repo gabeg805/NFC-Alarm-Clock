@@ -39,6 +39,11 @@ public class NacSharedPreferences
 	public static final int DEFAULT_AUTO_DISMISS = 15;
 
 	/**
+	 * Default prevent app from closing.
+	 */
+	public static final boolean DEFAULT_PREVENT_APP_FROM_CLOSING = false;
+
+	/**
 	 * Default format to display the next alarm.
 	 *
 	 * 0 = Next alarm in 7 hours 30 minutes
@@ -988,6 +993,18 @@ public class NacSharedPreferences
 		String key = this.getKeys().getPmColor();
 
 		return this.getSharedPreferences().getInt(key, DEFAULT_PM_COLOR);
+	}
+
+	/**
+	 * @return Whether you should prevent app from closing during an alarm
+	 *         activity or not.
+	 */
+	public boolean getPreventAppFromClosing()
+	{
+		String key = this.getKeys().getPreventAppFromClosing();
+
+		return this.getSharedPreferences().getBoolean(key,
+			DEFAULT_PREVENT_APP_FROM_CLOSING);
 	}
 
 	/**
