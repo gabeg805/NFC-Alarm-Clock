@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:padding="?android:attr/listPreferredItemPaddingLeft"
+	android:minHeight="?android:attr/listPreferredItemHeight"
+	android:gravity="center_vertical"
+	android:baselineAligned="false"
+	tools:ignore="UselessParent">
+
+	<!--
+	<include layout="@layout/nac_preference_text" />
+	-->
+
+	<RelativeLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight="1">
+
+		<TextView
+			android:id="@+android:id/title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textColor="?android:attr/textColorPrimary"
+			android:textSize="@dimen/tsz_title"
+			android:ellipsize="marquee"
+			android:fadingEdge="horizontal"
+			/>
+
+	<ImageView
+		android:id="@+id/widget"
+		android:layout_width="@dimen/isz_volume_settings"
+		android:layout_height="@dimen/isz_volume_settings"
+		android:layout_below="@android:id/title"
+		android:layout_marginStart="@dimen/sp_volume_settings"
+		android:layout_alignParentEnd="true"
+		android:layout_centerVertical="true"
+		android:paddingTop="@dimen/pt_volume_settings"
+		android:paddingBottom="@dimen/pb_volume_settings"
+		android:paddingStart="@dimen/pl_volume_settings"
+		android:paddingEnd="@dimen/pr_volume_settings"
+		android:src="@mipmap/settings"
+		/>
+
+		<SeekBar
+			android:id="@+id/volume_slider"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_toStartOf="@id/widget"
+			android:layout_below="@android:id/title"
+			android:layout_centerVertical="true"
+			android:paddingTop="@dimen/pt_volume_slider"
+			android:paddingBottom="@dimen/pb_volume_slider"
+			android:paddingStart="@dimen/pl_volume_slider"
+			android:paddingEnd="@dimen/pr_volume_slider"
+			android:max="100"
+			android:progress="75"
+			/>
+
+	</RelativeLayout>
+
+</LinearLayout>

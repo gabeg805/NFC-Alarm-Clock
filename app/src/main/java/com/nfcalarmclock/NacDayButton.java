@@ -4,14 +4,18 @@ import android.animation.Animator;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.BlendMode;
+import android.graphics.BlendModeColorFilter;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-//import android.support.v4.content.ContextCompat;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -19,8 +23,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-
-import androidx.core.content.ContextCompat;
 
 /**
  * A button that consists of an image to the left, and text to the right
@@ -687,11 +689,25 @@ public class NacDayButton
 	 *
 	 * @param  color  The button color.
 	 */
+	@SuppressWarnings("deprecation")
+	@TargetApi(Build.VERSION_CODES.Q)
+	@SuppressLint("NewApi")
 	public void setButtonColor(int color)
 	{
 		Drawable drawable = this.getBackground();
 
-		drawable.setColorFilter(color, PorterDuff.Mode.SRC);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+		{
+			BlendModeColorFilter blendFilter = new BlendModeColorFilter(
+				color, BlendMode.SRC_IN);
+
+			drawable.setColorFilter(blendFilter);
+		}
+		else
+		{
+			drawable.setColorFilter(color, PorterDuff.Mode.SRC);
+		}
+
 		this.mButton.setTag(color);
 		this.redraw();
 	}

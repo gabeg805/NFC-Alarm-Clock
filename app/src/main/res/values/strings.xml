@@ -15,6 +15,7 @@
 	<!-- Menu -->
 	<string name="menu_next_alarm">Display next alarm</string>
 	<string name="menu_settings">Settings</string>
+	<string name="menu_sort">Sort</string>
 
 
 	<!-- Notification -->
@@ -178,8 +179,10 @@ wswq
 
 
 	<!-- Default alarm volume and audio source -->
-	<string name="pref_volume_key">pref_volume</string>
 	<string name="pref_audio_source_key">pref_audio_source</string>
+	<string name="pref_volume_key">pref_volume</string>
+	<string name="pref_volume_title">Volume</string>
+	<string name="pref_volume_summary">Set the default volume level.</string>
 
 
 	<!-- ******************* -->
@@ -259,6 +262,13 @@ wswq
 	<string name="pref_alarm_info_title">Show alarm information</string>
 	<string name="pref_alarm_info_summary_enabled">Show the alarm name at the bottom of the screen when an alarm goes off.</string>
 	<string name="pref_alarm_info_summary_disabled">Do not show alarm information.\n</string>
+
+
+	<!-- Expand new alarm card -->
+	<string name="pref_expand_new_alarm_key">pref_expand_new_alarm</string>
+	<string name="pref_expand_new_alarm_title">Expand new alarms</string>
+	<string name="pref_expand_new_alarm_summary_enabled">Alarms created with the \'+\' button are expanded.</string>
+	<string name="pref_expand_new_alarm_summary_disabled">Alarms are not expanded.\n</string>
 
 
 	<!-- ********************** -->

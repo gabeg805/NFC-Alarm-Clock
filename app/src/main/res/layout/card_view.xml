@@ -79,7 +79,8 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_toStartOf="@id/nac_summary_expand"
-				android:gravity="left">
+				android:gravity="left"
+				tools:ignore="RtlHardcoded">
 
 				<TextView
 					android:id="@+id/nac_summary_name"

@@ -8,6 +8,7 @@ import android.os.Bundle;
 /**
  * Execute schedule and database updates off of the UI main thread.
  */
+// To-do: Change this to JobIntentService?
 public class NacService
 	extends IntentService
 {

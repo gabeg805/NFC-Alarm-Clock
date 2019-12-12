@@ -100,6 +100,13 @@
 			android:title="@string/pref_sound_title"
 			android:summary="@string/pref_sound_summary"
 			android:defaultValue=""
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.NacVolumePreference
+			android:key="@string/pref_volume_key"
+			android:title="@string/pref_volume_title"
+			android:defaultValue="75"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
 			/>

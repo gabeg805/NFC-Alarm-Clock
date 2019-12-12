@@ -138,25 +138,30 @@ public abstract class NacNotification
 	public List<CharSequence> getNotificationText(NotificationManager manager,
 		NacAlarm alarm)
 	{
-		StatusBarNotification[] statusbar = manager.getActiveNotifications();
 		List<CharSequence> lines = new ArrayList<>();
 		String text = this.getText(alarm);
 
-		for (StatusBarNotification sb : statusbar)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 		{
-			Notification notification = sb.getNotification();
-			String group = notification.getGroup();
-			CharSequence[] extraLines = (CharSequence[]) notification.extras
-				.get(NotificationCompat.EXTRA_TEXT_LINES);
+			StatusBarNotification[] statusbar = manager
+				.getActiveNotifications();
 
-			if (group.equals(this.getGroup()))
+			for (StatusBarNotification sb : statusbar)
 			{
-				for (CharSequence line : extraLines)
-				{
-					lines.add(line);
-				}
-			}
+				Notification notification = sb.getNotification();
+				String group = notification.getGroup();
+				CharSequence[] extraLines = (CharSequence[]) notification.extras
+					.get(NotificationCompat.EXTRA_TEXT_LINES);
 
+				if (group.equals(this.getGroup()))
+				{
+					for (CharSequence line : extraLines)
+					{
+						lines.add(line);
+					}
+				}
+
+			}
 		}
 
 		lines.add((CharSequence) text);

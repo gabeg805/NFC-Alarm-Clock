@@ -100,6 +100,11 @@ public class NacSharedKeys
 	private final String mShowAlarmInfo;
 
 	/**
+	 * Expand a new alarm card.
+	 */
+	private final String mExpandNewAlarm;
+
+	/**
 	 * Repeat.
 	 */
 	private final String mRepeat;
@@ -208,6 +213,7 @@ public class NacSharedKeys
 		this.mNextAlarmFormat = res.getString(R.string.pref_next_alarm_format_key);
 		this.mStartWeekOn = res.getString(R.string.pref_start_week_on_key);
 		this.mShowAlarmInfo = res.getString(R.string.pref_alarm_info_key);
+		this.mExpandNewAlarm = res.getString(R.string.pref_expand_new_alarm_key);
 		this.mRepeat = res.getString(R.string.pref_repeat_key);
 		this.mUseNfc = res.getString(R.string.pref_use_nfc_key);
 		this.mDays = res.getString(R.string.pref_days_key);
@@ -313,6 +319,14 @@ public class NacSharedKeys
 	public String getEasySnooze()
 	{
 		return this.mEasySnooze;
+	}
+
+	/**
+	 * @return The expand new alarm card key.
+	 */
+	public String getExpandNewAlarm()
+	{
+		return this.mExpandNewAlarm;
 	}
 
 	/**

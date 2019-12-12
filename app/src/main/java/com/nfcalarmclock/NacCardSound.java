@@ -1,9 +1,15 @@
 package com.nfcalarmclock;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.BlendMode;
+import android.graphics.BlendModeColorFilter;
+import android.graphics.drawable.Drawable;
 import android.graphics.PorterDuff;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -173,14 +179,28 @@ public class NacCardSound
 	/**
 	 * Set the volume color.
 	 */
+	@SuppressWarnings("deprecation")
+	@TargetApi(Build.VERSION_CODES.Q)
+	@SuppressLint("NewApi")
 	public void setVolumeColor(NacSharedPreferences shared)
 	{
 		int themeColor = shared.getThemeColor();
+		Drawable progressDrawable = this.mVolume.getProgressDrawable();
+		Drawable thumbDrawable = this.mVolume.getThumb();
 
-		this.mVolume.getProgressDrawable().setColorFilter(themeColor,
-			PorterDuff.Mode.SRC_IN);
-		this.mVolume.getThumb().setColorFilter(themeColor,
-			PorterDuff.Mode.SRC_IN);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+		{
+			BlendModeColorFilter blendFilter = new BlendModeColorFilter(
+				themeColor, BlendMode.SRC_IN);
+
+			progressDrawable.setColorFilter(blendFilter);
+			thumbDrawable.setColorFilter(blendFilter);
+		}
+		else
+		{
+			progressDrawable.setColorFilter(themeColor, PorterDuff.Mode.SRC_IN);
+			thumbDrawable.setColorFilter(themeColor, PorterDuff.Mode.SRC_IN);
+		}
 	}
 
 	/**

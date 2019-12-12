@@ -52,6 +52,12 @@ public class NacSharedPreferences
 	public static final boolean DEFAULT_SHOW_ALARM_INFO = false;
 
 	/**
+	 * When a new alarm is created with the "+" button, the alarm card is
+	 * expanded.
+	 */
+	public static final boolean DEFAULT_EXPAND_NEW_ALARM = true;
+
+	/**
 	 * Default use NFC.
 	 */
 	public static final boolean DEFAULT_USE_NFC = false;
@@ -277,6 +283,24 @@ public class NacSharedPreferences
 		String key = this.getKeys().getAppFirstRun();
 
 		this.saveBoolean(key, first, commit);
+	}
+
+	/**
+	 * @see editAudioSource
+	 */
+	public void editAudioSource(String source)
+	{
+		this.editAudioSource(source, false);
+	}
+
+	/**
+	 * @return Edit the audio source.
+	 */
+	public void editAudioSource(String source, boolean commit)
+	{
+		String key = this.getKeys().getAudioSource();
+
+		this.saveString(key, source, commit);
 	}
 
 	/**
@@ -776,6 +800,17 @@ public class NacSharedPreferences
 		String key = this.getKeys().getEasySnooze();
 
 		return this.getSharedPreferences().getBoolean(key, DEFAULT_EASY_SNOOZE);
+	}
+
+	/**
+	 * @return Whether a new alarm card should be expanded or not.
+	 */
+	public boolean getExpandNewAlarm()
+	{
+		String key = this.getKeys().getExpandNewAlarm();
+
+		return this.getSharedPreferences().getBoolean(key,
+			DEFAULT_EXPAND_NEW_ALARM);
 	}
 
 	/**

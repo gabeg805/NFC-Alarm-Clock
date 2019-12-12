@@ -88,6 +88,14 @@
 	<com.nfcalarmclock.NacPreferenceCategory
 		android:title="@string/pref_appearance_tweaks_category">
 
+		<com.nfcalarmclock.NacCheckboxPreference
+			android:key="@string/pref_expand_new_alarm_key"
+			android:title="@string/pref_expand_new_alarm_title"
+			android:summaryOn="@string/pref_expand_new_alarm_summary_enabled"
+			android:summaryOff="@string/pref_expand_new_alarm_summary_disabled"
+			android:defaultValue="true"
+			/>
+
 		<com.nfcalarmclock.NacNextAlarmFormatPreference
 			android:key="@string/pref_next_alarm_format_key"
 			android:title="@string/pref_next_alarm_format_title"

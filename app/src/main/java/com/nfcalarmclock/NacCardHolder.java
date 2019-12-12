@@ -2,6 +2,7 @@ package com.nfcalarmclock;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -209,8 +210,15 @@ public class NacCardHolder
 	 */
 	public void interact()
 	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		boolean expandCard = shared.getExpandNewAlarm();
+
 		this.mTime.showDialog(this);
-		this.mCard.expand(getAdapterPosition());
+
+		if (expandCard)
+		{
+			this.mCard.expand(getAdapterPosition());
+		}
 	}
 
 	/**
@@ -308,14 +316,17 @@ public class NacCardHolder
 		if (id == R.id.nac_header)
 		{
 			this.mCard.toggle(getAdapterPosition());
+			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		}
 		else if (id == R.id.nac_summary)
 		{
 			this.mCard.expand(getAdapterPosition());
+			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		}
 		else if (id == R.id.nac_collapse)
 		{
 			this.mCard.collapse();
+			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		}
 		else if (id == R.id.nac_time_parent)
 		{

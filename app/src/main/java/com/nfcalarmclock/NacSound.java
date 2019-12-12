@@ -480,6 +480,8 @@ public class NacSound
 		}
 		else if (NacSound.isRingtone(path))
 		{
+			// To-do: Why don't I save the path as a 'content://' string as
+			// opposed to a full '/system/...' path?
 			Uri uri = Uri.parse(path);
 			Cursor cursor = context.getContentResolver().query(uri,
 				new String[] { MediaStore.Audio.Media.DATA }, null, null, null);

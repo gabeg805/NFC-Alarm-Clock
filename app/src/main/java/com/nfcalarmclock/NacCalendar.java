@@ -157,10 +157,8 @@ public class NacCalendar
 	 */
 	public static Calendar getNext(NacAlarm alarm)
 	{
-		//NacUtility.printf("getNext() calling toCalendars(alarm)!");
 		List<Calendar> calendars = NacCalendar.toCalendars(alarm);
 
-		//NacUtility.printf("getNext() calling getNext(calendars)!");
 		return NacCalendar.getNext(calendars);
 	}
 

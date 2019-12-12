@@ -44,12 +44,18 @@ public class NacAlarmActivity
 	private NacAlarm mAlarm;
 
 	/**
+	 * Flag indicating alarm was dismissed.
+	 */
+	private boolean mWasDismissed;
+
+	/**
 	 * Dismiss the alarm.
 	 */
 	private void dismiss()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
+		this.mWasDismissed = true;
 
 		if (alarm != null)
 		{
@@ -172,26 +178,24 @@ public class NacAlarmActivity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		//this.setupShowWhenLocked();
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.act_alarm);
+		this.setAlarm(savedInstanceState);
 
-		NacAlarm alarm  = NacIntent.getAlarm(getIntent());
-
-		if (alarm == null)
-		{
-			NacDatabase db = new NacDatabase(this);
-			alarm = db.findAlarm(Calendar.getInstance());
-			db.close();
-		}
-
+		NacAlarm alarm = this.getAlarm();
 		NacWakeUpAction wakeUp = new NacWakeUpAction(this, alarm);
 		NacScheduler scheduler = new NacScheduler(this);
 		this.mSharedPreferences = new NacSharedPreferences(this);
-		this.mAlarm = alarm;
 		this.mWakeUp = wakeUp;
+		this.mWasDismissed = false;
+
+		if (alarm == null)
+		{
+			return;
+		}
 
 		scheduler.scheduleNext(alarm);
+		this.setupShowWhenLocked();
 		this.setupAlarmButtons();
 		this.setupAlarmInfo();
 		wakeUp.setOnAutoDismissListener(this);
@@ -216,7 +220,6 @@ public class NacAlarmActivity
 	@Override
 	protected void onNewIntent(Intent intent)
 	{
-		// Add toast here? Or i think there already is one in dismiss()
 		this.dismiss();
 		super.onNewIntent(intent);
 	}
@@ -239,6 +242,64 @@ public class NacAlarmActivity
 	{
 		super.onResume();
 		this.getWakeUp().resume();
+	}
+
+	/**
+	 * Save the alarm before the activity is killed.
+	 */
+	@Override
+	public void onSaveInstanceState(Bundle outState)
+	{
+		super.onSaveInstanceState(outState);
+
+		NacAlarm alarm = this.getAlarm();
+
+		if (alarm != null)
+		{
+			outState.putParcelable(NacBundle.ALARM_PARCEL_NAME, alarm);
+		}
+	}
+
+	@Override
+	public void onStop()
+	{
+		super.onStop();
+
+		if (!this.mWasDismissed)
+		{
+			Intent intent = getIntent();
+
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			this.getWakeUp().cleanup();
+			startActivity(intent);
+		}
+	}
+
+	/**
+	 * Set the alarm.
+	 */
+	public void setAlarm(Bundle savedInstanceState)
+	{
+		NacAlarm alarm = NacIntent.getAlarm(getIntent());
+
+		if (alarm == null)
+		{
+			alarm = NacBundle.getAlarm(savedInstanceState);
+		}
+
+		if (alarm == null)
+		{
+			NacDatabase db = new NacDatabase(this);
+			alarm = db.findAlarm(Calendar.getInstance());
+			db.close();
+		}
+
+		if (alarm == null)
+		{
+			super.finish();
+		}
+
+		this.mAlarm = alarm;
 	}
 
 	/**
@@ -289,8 +350,16 @@ public class NacAlarmActivity
 	/**
 	 * Show the activity when the phone is locked.
 	 */
+	 @SuppressWarnings("deprecation")
 	 public void setupShowWhenLocked()
 	 {
+	 	NacAlarm alarm = this.getAlarm();
+
+		if (alarm.getUseNfc())
+		{
+			return;
+		}
+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)
 		{
 			setTurnScreenOn(true);

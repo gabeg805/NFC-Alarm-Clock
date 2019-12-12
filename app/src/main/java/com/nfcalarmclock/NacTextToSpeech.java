@@ -2,6 +2,7 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import java.util.Locale;
@@ -162,15 +163,22 @@ public class NacTextToSpeech
 	private NacAudio.Attributes mAudioAttributes;
 
 	/**
+	 * Utterance ID when speaking through the TTS engine.
+	 */
+	public static final String UTTERANCE_ID = "NacAlarmTts";
+
+	/**
 	 */
 	public NacTextToSpeech(Context context, OnSpeakingListener listener)
 	{
+		NacSharedPreferences shared = new NacSharedPreferences(context);
 		this.mContext = context;
 		this.mSpeech = null;
 		this.mBuffer = "";
 		this.mInitialized = false;
 		this.mUtterance = new NacUtteranceListener(context, this);
-		this.mAudioAttributes = new NacAudio.Attributes(context, "Music");
+		this.mAudioAttributes = new NacAudio.Attributes(context,
+			shared.getAudioSource());
 
 		this.setOnSpeakingListener(listener);
 	}
@@ -241,7 +249,6 @@ public class NacTextToSpeech
 	@Override
 	public void onAudioFocusChange(int focusChange)
 	{
-		//NacUtility.printf("onAudioFocusChange! %d", focusChange);
 		String change = "UNKOWN";
 
 		if (focusChange == AudioManager.AUDIOFOCUS_GAIN)
@@ -260,9 +267,6 @@ public class NacTextToSpeech
 		{
 			change = "LOSS_TRANSIENT_CAN_DUCK";
 		}
-
-		//NacUtility.printf("NacTextToSpeech : onAudioFocusChange : AUDIOFOCUS_%s",
-		//	change);
 	}
 
 	/**
@@ -276,8 +280,8 @@ public class NacTextToSpeech
 		{
 			TextToSpeech speech = this.getTextToSpeech();
 
-			//speech.setLanguage(Locale.US);
-			this.mSpeech.setLanguage(Locale.US);
+			speech.setLanguage(Locale.US);
+			//this.mSpeech.setLanguage(Locale.US);
 
 			if (this.hasBuffer())
 			{
@@ -294,7 +298,6 @@ public class NacTextToSpeech
 	 */
 	private void setBuffer(String buffer)
 	{
-		NacUtility.printf("setting Buffer! '%s'", buffer);
 		this.mBuffer = buffer;
 	}
 
@@ -311,14 +314,12 @@ public class NacTextToSpeech
 	 */
 	public void shutdown()
 	{
-		//this.stop();
-
 		TextToSpeech speech = this.getTextToSpeech();
 
 		if (speech != null)
 		{
-			//speech.shutdown();
-			this.mSpeech.shutdown();
+			speech.shutdown();
+			//this.mSpeech.shutdown();
 
 			this.mSpeech = null;
 		}
@@ -340,13 +341,15 @@ public class NacTextToSpeech
 		Context context = this.getContext();
 		TextToSpeech speech = this.getTextToSpeech();
 		this.mAudioAttributes = attrs;
-		NacUtility.printf("Speaking! %s", message);
 
 		if (speech == null)
 		{
-			this.mSpeech = new TextToSpeech(context, this);
+			//this.mSpeech = new TextToSpeech(context, this);
+			speech = new TextToSpeech(context, this);
+			this.mSpeech = speech;
 
-			this.mSpeech.setOnUtteranceProgressListener(this.mUtterance);
+			speech.setOnUtteranceProgressListener(this.mUtterance);
+			//this.mSpeech.setOnUtteranceProgressListener(this.mUtterance);
 		}
 
 		if (this.isInitialized())
@@ -357,8 +360,11 @@ public class NacTextToSpeech
 				return;
 			}
 
-			this.mSpeech.speak(message, TextToSpeech.QUEUE_FLUSH,
-				NacBundle.toBundle(attrs), "AlarmTime");
+			Bundle bundle = NacBundle.toBundle(attrs);
+
+			//this.mSpeech.speak(message, TextToSpeech.QUEUE_FLUSH,
+			speech.speak(message, TextToSpeech.QUEUE_FLUSH, bundle,
+				UTTERANCE_ID);
 		}
 		else
 		{
@@ -375,8 +381,8 @@ public class NacTextToSpeech
 
 		if (speech != null)
 		{
-			//speech.stop();
-			this.mSpeech.stop();
+			speech.stop();
+			//this.mSpeech.stop();
 		}
 	}
 

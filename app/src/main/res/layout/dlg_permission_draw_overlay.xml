@@ -9,7 +9,7 @@
 	android:paddingBottom="@dimen/spb_dlg"
 	android:paddingStart="?dialogPreferredPadding"
 	android:paddingEnd="?dialogPreferredPadding"
-	tools:ignore="UselessParent">
+	tools:ignore="ContentDescription,UselessParent">
 
 	<LinearLayout
 		android:layout_width="match_parent"

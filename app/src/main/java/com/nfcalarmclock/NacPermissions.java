@@ -60,8 +60,14 @@ public class NacPermissions
 
 	/**
 	 */
+	@TargetApi(Build.VERSION_CODES.M)
 	public static void requestDrawOverlay(Activity activity, int requestCode)
 	{
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+		{
+			return;
+		}
+
 		Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
 			Uri.parse("package:" + activity.getPackageName()));
 

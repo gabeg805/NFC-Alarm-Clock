@@ -463,71 +463,17 @@ public class NacDatabase
 	}
 
 	/**
-	 * Convert a Cursor object to an alarm.
+	 * Sort the database.
 	 */
-	public NacAlarm toAlarm(Cursor cursor, int version)
+	//public void sort(List<NacAlarm> current, List<NacAlarm> sorted)
+	public void sort(List<NacAlarm> sorted)
 	{
-		NacAlarm alarm = new NacAlarm();
-		int offset = -1;
+		this.setDatabase();
 
-		switch (version)
+		for (int i=0; i < sorted.size(); i++)
 		{
-			case 0:
-			case 4:
-				alarm.setId(cursor.getInt(1));
-				alarm.setEnabled((cursor.getInt(2) != 0));
-				alarm.setHour(cursor.getInt(3));
-				alarm.setMinute(cursor.getInt(4));
-				alarm.setDays(cursor.getInt(5));
-				alarm.setRepeat((cursor.getInt(6) != 0));
-				alarm.setUseNfc((cursor.getInt(7) != 0));
-				alarm.setVibrate((cursor.getInt(8) != 0));
-				alarm.setVolume(cursor.getInt(9));
-				alarm.setAudioSource(cursor.getString(10));
-				alarm.setSoundType(cursor.getInt(11));
-				alarm.setSoundPath(cursor.getString(12));
-				alarm.setSoundName(cursor.getString(13));
-				alarm.setName(cursor.getString(14));
-				break;
-			case 3:
-				offset = 1;
-				alarm.setUseNfc((cursor.getInt(7) != 0));
-			case 2:
-				offset = (offset < 0) ? 0: offset;
-				alarm.setId(cursor.getInt(1));
-				alarm.setEnabled((cursor.getInt(2) != 0));
-				alarm.setHour(cursor.getInt(3));
-				alarm.setMinute(cursor.getInt(4));
-				alarm.setDays(cursor.getInt(5));
-				alarm.setRepeat((cursor.getInt(6) != 0));
-				alarm.setVibrate((cursor.getInt(7+offset) != 0));
-				alarm.setSoundType(cursor.getInt(8+offset));
-				alarm.setSoundPath(cursor.getString(9+offset));
-				alarm.setSoundName(cursor.getString(10+offset));
-				alarm.setName(cursor.getString(11+offset));
-				break;
-			case 1:
-			default:
-				alarm.setId(cursor.getInt(1));
-				alarm.setEnabled((cursor.getInt(2) != 0));
-				// Index 3: 24 hour format
-				alarm.setHour(cursor.getInt(4));
-				alarm.setMinute(cursor.getInt(5));
-				alarm.setDays(cursor.getInt(6));
-				alarm.setRepeat((cursor.getInt(7) != 0));
-				alarm.setVibrate((cursor.getInt(8) != 0));
-				alarm.setSoundPath(cursor.getString(9));
-				alarm.setName(cursor.getString(10));
-				// Index 11: NFC tag
-				alarm.setSoundType(NacSound.getType(alarm.getSoundPath()));
-				alarm.setSoundName(NacSound.getName(this.getContext(),
-					alarm.getSoundPath()));
-				break;
+			this.updateRow(i+1, sorted.get(i));
 		}
-
-		alarm.resetChangeTracker();
-
-		return alarm;
 	}
 
 	/**
@@ -598,7 +544,75 @@ public class NacDatabase
 	}
 
 	/**
-	 * Update a row in the database.
+	 * Convert a Cursor object to an alarm.
+	 */
+	public NacAlarm toAlarm(Cursor cursor, int version)
+	{
+		NacAlarm alarm = new NacAlarm();
+		int offset = -1;
+
+		switch (version)
+		{
+			case 0:
+			case 4:
+				alarm.setId(cursor.getInt(1));
+				alarm.setEnabled((cursor.getInt(2) != 0));
+				alarm.setHour(cursor.getInt(3));
+				alarm.setMinute(cursor.getInt(4));
+				alarm.setDays(cursor.getInt(5));
+				alarm.setRepeat((cursor.getInt(6) != 0));
+				alarm.setUseNfc((cursor.getInt(7) != 0));
+				alarm.setVibrate((cursor.getInt(8) != 0));
+				alarm.setVolume(cursor.getInt(9));
+				alarm.setAudioSource(cursor.getString(10));
+				alarm.setSoundType(cursor.getInt(11));
+				alarm.setSoundPath(cursor.getString(12));
+				alarm.setSoundName(cursor.getString(13));
+				alarm.setName(cursor.getString(14));
+				break;
+			case 3:
+				offset = 1;
+				alarm.setUseNfc((cursor.getInt(7) != 0));
+			case 2:
+				offset = (offset < 0) ? 0: offset;
+				alarm.setId(cursor.getInt(1));
+				alarm.setEnabled((cursor.getInt(2) != 0));
+				alarm.setHour(cursor.getInt(3));
+				alarm.setMinute(cursor.getInt(4));
+				alarm.setDays(cursor.getInt(5));
+				alarm.setRepeat((cursor.getInt(6) != 0));
+				alarm.setVibrate((cursor.getInt(7+offset) != 0));
+				alarm.setSoundType(cursor.getInt(8+offset));
+				alarm.setSoundPath(cursor.getString(9+offset));
+				alarm.setSoundName(cursor.getString(10+offset));
+				alarm.setName(cursor.getString(11+offset));
+				break;
+			case 1:
+			default:
+				alarm.setId(cursor.getInt(1));
+				alarm.setEnabled((cursor.getInt(2) != 0));
+				// Index 3: 24 hour format
+				alarm.setHour(cursor.getInt(4));
+				alarm.setMinute(cursor.getInt(5));
+				alarm.setDays(cursor.getInt(6));
+				alarm.setRepeat((cursor.getInt(7) != 0));
+				alarm.setVibrate((cursor.getInt(8) != 0));
+				alarm.setSoundPath(cursor.getString(9));
+				alarm.setName(cursor.getString(10));
+				// Index 11: NFC tag
+				alarm.setSoundType(NacSound.getType(alarm.getSoundPath()));
+				alarm.setSoundName(NacSound.getName(this.getContext(),
+					alarm.getSoundPath()));
+				break;
+		}
+
+		alarm.resetChangeTracker();
+
+		return alarm;
+	}
+
+	/**
+	 * Update the row in the database with the given alarm information.
 	 */
 	public long update(NacAlarm alarm)
 	{
@@ -624,6 +638,51 @@ public class NacDatabase
 		ContentValues cv = this.getContentValues(version, alarm);
 		String where = this.getWhereClause();
 		String[] args = this.getWhereArgs(alarm);
+		long result = 0;
+
+		db.beginTransaction();
+
+		try
+		{
+			result = db.update(table, cv, where, args);
+
+			db.setTransactionSuccessful();
+		}
+		finally
+		{
+			db.endTransaction();
+		}
+
+		return result;
+	}
+
+	/**
+	 * Update a row in the database.
+	 */
+	public long updateRow(int row, NacAlarm alarm)
+	{
+		this.setDatabase();
+
+		SQLiteDatabase db = this.getDatabase();
+
+		return this.updateRow(db, row, alarm);
+	}
+
+	/**
+	 * @see updateRow
+	 */
+	public long updateRow(SQLiteDatabase db, int row, NacAlarm alarm)
+	{
+		if (alarm == null)
+		{
+			return -1;
+		}
+
+		int version = db.getVersion();
+		String table = this.getTable();
+		ContentValues cv = this.getContentValues(version, alarm);
+		String where = this.getWhereIdClause();
+		String[] args = this.getWhereArgs(row);
 		long result = 0;
 
 		db.beginTransaction();

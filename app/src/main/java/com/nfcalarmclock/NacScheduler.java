@@ -59,10 +59,14 @@ public class NacScheduler
 		Context context = this.getContext();
 		int id = alarm.getId(calendar);
 		long millis = calendar.getTimeInMillis();
+		//Intent operationIntent = NacIntent.toIntent(context,
+		//	NacAlarmActivity.class, alarm);
+		//PendingIntent operationPendingIntent = PendingIntent.getActivity(
+		//	context, id, operationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		Intent operationIntent = NacIntent.toIntent(context,
-			NacAlarmActivity.class, alarm);
-		PendingIntent operationPendingIntent = PendingIntent.getActivity(
-			context, id, operationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			NacAlarmBroadcastReceiver.class, alarm);
+		PendingIntent operationPendingIntent = PendingIntent.getBroadcast(
+			context, id, operationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 		Intent showIntent = new Intent(context, NacMainActivity.class);
 		PendingIntent showPendingIntent = PendingIntent.getActivity(context, id,
 			showIntent, 0);
@@ -93,9 +97,12 @@ public class NacScheduler
 	public void cancel(NacAlarm alarm, Calendar calendar)
 	{
 		Context context = this.getContext();
-		Intent intent = new Intent(context, NacAlarmActivity.class);
 		int id = alarm.getId(calendar);
-		PendingIntent pending = PendingIntent.getActivity(context, id, intent,
+		//Intent intent = new Intent(context, NacAlarmActivity.class);
+		//PendingIntent pending = PendingIntent.getActivity(context, id, intent,
+		//	PendingIntent.FLAG_NO_CREATE);
+		Intent intent = new Intent(context, NacAlarmBroadcastReceiver.class);
+		PendingIntent pending = PendingIntent.getBroadcast(context, id, intent,
 			PendingIntent.FLAG_NO_CREATE);
 
 		if (pending != null)

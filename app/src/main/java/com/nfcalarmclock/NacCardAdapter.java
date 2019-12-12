@@ -710,6 +710,55 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * Sort the enabled alarms from soonest to latest.
+	 */
+	public void sort()
+	{
+		List<NacAlarm> enabledAlarms = new ArrayList<>();
+		List<NacAlarm> disabledAlarms = new ArrayList<>();
+
+		for (NacAlarm a : this.getAlarms())
+		{
+			if (a.getEnabled())
+			{
+				Calendar next = NacCalendar.getNext(a);
+				int pos = 0;
+
+				for (NacAlarm e : enabledAlarms)
+				{
+					Calendar cal = NacCalendar.getNext(e);
+
+					if (next.before(cal))
+					{
+						break;
+					}
+
+					pos++;
+				}
+
+				enabledAlarms.add(pos, a);
+			}
+			else
+			{
+				disabledAlarms.add(a);
+			}
+		}
+
+		Context context = this.getContext();
+		NacDatabase db = new NacDatabase(context);
+		List<NacAlarm> sorted = new ArrayList<>();
+
+		sorted.addAll(enabledAlarms);
+		sorted.addAll(disabledAlarms);
+		db.sort(sorted);
+
+		this.mAlarmList = sorted;
+
+		notifyDataSetChanged();
+		db.close();
+	}
+
+	/**
 	 * Start a background service.
 	 */
 	private void startService(Intent intent)
