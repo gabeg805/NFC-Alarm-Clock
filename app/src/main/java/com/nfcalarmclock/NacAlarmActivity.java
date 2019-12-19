@@ -357,22 +357,25 @@ public class NacAlarmActivity
 	 {
 	 	NacAlarm alarm = this.getAlarm();
 
-		if (alarm.getUseNfc())
-		{
-			return;
-		}
-
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)
 		{
 			setTurnScreenOn(true);
-			setShowWhenLocked(true);
+
+			if (!alarm.getUseNfc())
+			{
+				setShowWhenLocked(true);
+			}
 		}
 		else
 		{
 			Window window = getWindow();
 
-			window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 			window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+
+			if (!alarm.getUseNfc())
+			{
+				window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+			}
 		}
 	 }
 

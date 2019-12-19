@@ -127,6 +127,7 @@ public class NacCardAdapter
 			.setDays(shared.getDays())
 			.setUseNfc(shared.getUseNfc())
 			.setVibrate(shared.getVibrate())
+			.setVolume(shared.getVolume())
 			.setSound(context, shared.getSound())
 			.setName(shared.getName())
 			.build();

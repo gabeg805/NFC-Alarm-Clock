@@ -194,11 +194,11 @@ public class NacMainActivity
 		case R.id.menu_settings:
 			startActivity(new Intent(this, NacSettingsActivity.class));
 			return true;
-		case R.id.menu_sort:
-			NacCardAdapter adapter = this.getCardAdapter();
+		//case R.id.menu_sort:
+		//	NacCardAdapter adapter = this.getCardAdapter();
 
-			adapter.sort();
-			return true;
+		//	adapter.sort();
+		//	return true;
 		default:
 			break;
 		}

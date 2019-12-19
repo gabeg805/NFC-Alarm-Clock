@@ -274,7 +274,7 @@
 	<string name="pref_expand_new_alarm_key">pref_expand_new_alarm</string>
 	<string name="pref_expand_new_alarm_title">Expand new alarms</string>
 	<string name="pref_expand_new_alarm_summary_enabled">Alarms created with the \'+\' button are expanded.</string>
-	<string name="pref_expand_new_alarm_summary_disabled">Alarms are not expanded.\n</string>
+	<string name="pref_expand_new_alarm_summary_disabled">Alarms are not expanded.</string>
 
 
 	<!-- ********************** -->
