@@ -3,11 +3,14 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.BaseColumns;
+import androidx.core.app.JobIntentService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -445,7 +448,6 @@ public class NacDatabase
 	 */
 	public List<NacAlarm> read(SQLiteDatabase db, int version)
 	{
-		Context context = this.getContext();
 		String table = this.getTable();
 		Cursor cursor = db.query(table, null, null, null, null, null, null);
 		List<NacAlarm> list = new ArrayList<>();
@@ -470,10 +472,41 @@ public class NacDatabase
 	{
 		this.setDatabase();
 
+		//NacUtility.printf("SOOOOOOOOOOOOOOOOOOOOOOOOOOORT");
+		//SQLiteDatabase db = this.getDatabase();
+		//String table = this.getTable();
+		//Cursor cursor = db.query(table, null, null, null, null, null, null);
+
+		//while (cursor.moveToNext())
+		//{
+		//	NacUtility.printf("ID : %d", cursor.getInt(0));
+		//	NacAlarm alarm = this.toAlarm(cursor, 0);
+		//	alarm.print();
+		//}
+
+		//cursor.close();
+		//NacUtility.printf("SOOOOOOOOOOOOOOOOOOOOOOOOOOORT");
+
 		for (int i=0; i < sorted.size(); i++)
 		{
+			//sorted.get(i).print();
 			this.updateRow(i+1, sorted.get(i));
 		}
+
+		//NacUtility.printf("AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+
+		//SQLiteDatabase db = this.getDatabase();
+		//String table = this.getTable();
+		//Cursor cursor = db.query(table, null, null, null, null, null, null);
+
+		//while (cursor.moveToNext())
+		//{
+		//	NacUtility.printf("ID : %d", cursor.getInt(0));
+		//	NacAlarm alarm = this.toAlarm(cursor, 0);
+		//	alarm.print();
+		//}
+
+		//NacUtility.printf("ENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNND");
 	}
 
 	/**
@@ -988,6 +1021,128 @@ public class NacDatabase
 				COLUMN_NAME,
 			};
 
+		}
+
+	}
+
+	/**
+	 * Execute database tasks in the background.
+	 */
+	public static class BackgroundService
+		extends JobIntentService
+	{
+
+		/**
+		 * Job ID.
+		 */
+		public static final int JOB_ID = 1000;
+
+		/**
+		 * Add an alarm.
+		 */
+		public static void addAlarm(Context context, NacAlarm alarm)
+		{
+			NacDatabase db = new NacDatabase(context);
+			NacScheduler scheduler = new NacScheduler(context);
+			NacSharedPreferences shared = new NacSharedPreferences(context);
+			int id = alarm.getId();
+
+			db.add(alarm);
+			db.close();
+			scheduler.update(alarm);
+			shared.editSnoozeCount(id, 0);
+		}
+
+		/**
+		 * Delete an alarm.
+		 */
+		public static void deleteAlarm(Context context, NacAlarm alarm)
+		{
+			NacDatabase db = new NacDatabase(context);
+			NacScheduler scheduler = new NacScheduler(context);
+			NacSharedPreferences shared = new NacSharedPreferences(context);
+			int id = alarm.getId();
+
+			db.delete(alarm);
+			db.close();
+			scheduler.cancel(alarm);
+			shared.editSnoozeCount(id, 0);
+		}
+
+		/**
+		 */
+		public static void enqueueWork(Context context, Intent work)
+		{
+			enqueueWork(context, BackgroundService.class, JOB_ID, work);
+		}
+
+		/**
+		 */
+		@Override
+		protected void onHandleWork(Intent intent)
+		{
+			String key = intent.getDataString();
+
+			if (key.equals("swap"))
+			{
+				NacAlarm[] alarms = NacIntent.getAlarms(intent);
+
+				BackgroundService.swapAlarms(this, alarms[0], alarms[1]);
+			}
+			else
+			{
+				NacAlarm alarm = NacIntent.getAlarm(intent);
+
+				if (key.equals("add"))
+				{
+					BackgroundService.addAlarm(this, alarm);
+				}
+				else if (key.equals("delete"))
+				{
+					BackgroundService.deleteAlarm(this, alarm);
+				}
+				else if (key.equals("update"))
+				{
+					BackgroundService.updateAlarm(this, alarm);
+				}
+			}
+		}
+
+		/**
+		 * Swap two alarms.
+		 */
+		public static void swapAlarms(Context context, NacAlarm fromAlarm,
+			NacAlarm toAlarm)
+		{
+			NacDatabase db = new NacDatabase(context);
+			NacScheduler scheduler = new NacScheduler(context);
+			NacSharedPreferences shared = new NacSharedPreferences(context);
+			int fromId = fromAlarm.getId();
+			int toId = toAlarm.getId();
+			int fromSnoozeCount = shared.getSnoozeCount(fromId);
+			int toSnoozeCount = shared.getSnoozeCount(toId);
+
+			scheduler.cancel(fromAlarm);
+			scheduler.cancel(toAlarm);
+			db.swap(fromAlarm, toAlarm);
+			db.close();
+			scheduler.add(fromAlarm);
+			scheduler.add(toAlarm);
+			shared.editSnoozeCount(fromId, toSnoozeCount);
+			shared.editSnoozeCount(toId, fromSnoozeCount);
+		}
+
+		/**
+		 * Update an alarm.
+		 */
+		public static void updateAlarm(Context context, NacAlarm alarm)
+		{
+			NacDatabase db = new NacDatabase(context);
+			NacScheduler scheduler = new NacScheduler(context);
+
+			db.update(alarm);
+			db.close();
+			scheduler.update(alarm);
 		}
 
 	}

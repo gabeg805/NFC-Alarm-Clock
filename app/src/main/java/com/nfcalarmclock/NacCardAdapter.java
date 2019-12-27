@@ -371,6 +371,49 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * @return The list of alarms, in sort order, from soonest to latest, with
+	 *         disabled alarms at the end.
+	 */
+	private List<NacAlarm> getSortedAlarms()
+	{
+		List<NacAlarm> enabledAlarms = new ArrayList<>();
+		List<NacAlarm> disabledAlarms = new ArrayList<>();
+		List<NacAlarm> sorted = new ArrayList<>();
+
+		for (NacAlarm a : this.getAlarms())
+		{
+			if (a.getEnabled())
+			{
+				Calendar next = NacCalendar.getNext(a);
+				int pos = 0;
+
+				for (NacAlarm e : enabledAlarms)
+				{
+					Calendar cal = NacCalendar.getNext(e);
+
+					if (next.before(cal))
+					{
+						break;
+					}
+
+					pos++;
+				}
+
+				enabledAlarms.add(pos, a);
+			}
+			else
+			{
+				disabledAlarms.add(a);
+			}
+		}
+
+		sorted.addAll(enabledAlarms);
+		sorted.addAll(disabledAlarms);
+
+		return sorted;
+	}
+
+	/**
 	 * @return The touch helper.
 	 */
 	private NacCardTouchHelper getTouchHelper()
@@ -715,48 +758,13 @@ public class NacCardAdapter
 	 */
 	public void sort()
 	{
-		List<NacAlarm> enabledAlarms = new ArrayList<>();
-		List<NacAlarm> disabledAlarms = new ArrayList<>();
-
-		for (NacAlarm a : this.getAlarms())
-		{
-			if (a.getEnabled())
-			{
-				Calendar next = NacCalendar.getNext(a);
-				int pos = 0;
-
-				for (NacAlarm e : enabledAlarms)
-				{
-					Calendar cal = NacCalendar.getNext(e);
-
-					if (next.before(cal))
-					{
-						break;
-					}
-
-					pos++;
-				}
-
-				enabledAlarms.add(pos, a);
-			}
-			else
-			{
-				disabledAlarms.add(a);
-			}
-		}
-
 		Context context = this.getContext();
 		NacDatabase db = new NacDatabase(context);
-		List<NacAlarm> sorted = new ArrayList<>();
+		this.mAlarmList = this.getSortedAlarms();
 
-		sorted.addAll(enabledAlarms);
-		sorted.addAll(disabledAlarms);
-		db.sort(sorted);
-
-		this.mAlarmList = sorted;
-
-		notifyDataSetChanged();
+		db.sort(this.mAlarmList);
 		db.close();
+		notifyDataSetChanged();
 	}
 
 	/**

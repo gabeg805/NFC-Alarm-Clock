@@ -106,7 +106,7 @@
 
 		<!-- Execute schedule and database updates -->
 		<service
-			android:name=".NacService"
+			android:name=".NacDatabase.BackgroundService"
 			android:exported="false"
 			/>
 

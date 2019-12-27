@@ -77,7 +77,8 @@ public class NacIntent
 			return null;
 		}
 
-		Intent intent = new Intent(context, NacService.class);
+		Intent intent = new Intent(context,
+			NacDatabase.BackgroundService.class);
 		Bundle bundle = NacBundle.toBundle(alarm);
 		Uri uri = Uri.parse(message);
 
@@ -98,7 +99,8 @@ public class NacIntent
 			return null;
 		}
 
-		Intent intent = new Intent(context, NacService.class);
+		Intent intent = new Intent(context,
+			NacDatabase.BackgroundService.class);
 		Bundle fromBundle = NacBundle.toBundle(fromAlarm);
 		Bundle toBundle = NacBundle.toBundle(toAlarm);
 		Uri uri = Uri.parse(message);
@@ -122,7 +124,8 @@ public class NacIntent
 			return null;
 		}
 
-		Intent intent = new Intent(context, NacService.class);
+		Intent intent = new Intent(context,
+			NacDatabase.BackgroundService.class);
 		Bundle bundle = NacBundle.toBundle(sound);
 		Uri uri = Uri.parse(message);
 
