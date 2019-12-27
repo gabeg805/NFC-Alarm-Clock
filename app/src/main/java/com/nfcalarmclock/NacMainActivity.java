@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The application's main activity.
@@ -279,8 +281,10 @@ public class NacMainActivity
 	private void showNextAlarm()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		NacAlarm alarm = this.getCardAdapter().getNextAlarm();
-		String message = NacCalendar.getNextMessage(shared, alarm);
+		NacCardAdapter adapter = this.getCardAdapter();
+		List<NacAlarm> alarms = adapter.getAlarms();
+		NacAlarm nextAlarm = NacCalendar.getNextAlarm(alarms);
+		String message = NacCalendar.getNextMessage(shared, nextAlarm);
 
 		NacUtility.snackbar(this, message, "DISMISS", null);
 	}

@@ -283,7 +283,7 @@ public class NacCardAdapter
 	/**
 	 * @return The list of alarms.
 	 */
-	private List<NacAlarm> getAlarms()
+	public List<NacAlarm> getAlarms()
 	{
 		return this.mAlarmList;
 	}
@@ -374,7 +374,7 @@ public class NacCardAdapter
 	 * @return The list of alarms, in sort order, from soonest to latest, with
 	 *         disabled alarms at the end.
 	 */
-	private List<NacAlarm> getSortedAlarms()
+	public List<NacAlarm> getSortedAlarms()
 	{
 		List<NacAlarm> enabledAlarms = new ArrayList<>();
 		List<NacAlarm> disabledAlarms = new ArrayList<>();
