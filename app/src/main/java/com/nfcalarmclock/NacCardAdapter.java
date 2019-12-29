@@ -776,7 +776,8 @@ public class NacCardAdapter
 
 		try
 		{
-			context.startService(intent);
+			//context.startService(intent);
+			NacDatabase.BackgroundService.enqueueWork(context, intent);
 		}
 		catch (IllegalStateException e)
 		{

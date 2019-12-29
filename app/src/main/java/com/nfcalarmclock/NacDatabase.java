@@ -1073,7 +1073,8 @@ public class NacDatabase
 		 */
 		public static void enqueueWork(Context context, Intent work)
 		{
-			enqueueWork(context, BackgroundService.class, JOB_ID, work);
+			enqueueWork(context, NacDatabase.BackgroundService.class,
+				JOB_ID, work);
 		}
 
 		/**
