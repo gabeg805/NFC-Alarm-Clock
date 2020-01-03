@@ -40,16 +40,32 @@ public class NacIntent
 	/**
 	 * Add an alarm to an intent.
 	 */
-	public static Intent addAlarm(Intent intent, NacAlarm alarm)
+	public static Intent addAlarm(Intent intent, Bundle bundle)
 	{
 		if (intent != null)
 		{
-			Bundle bundle = NacBundle.toBundle(alarm);
-
 			intent.putExtra(ALARM_BUNDLE_NAME, bundle);
 		}
 
 		return intent;
+	}
+
+	/**
+	 * Add an alarm to an intent.
+	 */
+	public static Intent addAlarm(Intent intent, NacAlarm alarm)
+	{
+		return NacIntent.addAlarm(intent, NacBundle.toBundle(alarm));
+	}
+
+	/**
+	 * @return The intent that will be used to start the Alarm activity.
+	 */
+	public static Intent createAlarmActivity(Context context, NacAlarm alarm)
+	{
+		Bundle bundle = NacBundle.toBundle(alarm);
+
+		return NacIntent.createAlarmActivity(context, bundle);
 	}
 
 	/**

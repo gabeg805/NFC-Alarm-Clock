@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.os.PowerManager;
+
 /**
  * Permissions class handling checks, listeners, etc.
  */
@@ -50,6 +52,38 @@ public class NacPermissions
 	}
 
 	/**
+	 * @return True if the app has REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+	 *         permissions, and False otherwise.
+	 */
+	@TargetApi(Build.VERSION_CODES.M)
+	public static boolean hasIgnoreBatteryOptimization(Context context)
+	{
+		String packageName = context.getPackageName();
+		PowerManager pm = (PowerManager) context.getSystemService(
+			Context.POWER_SERVICE);
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			NacUtility.printf("Build version greater than O");
+			if (pm.isIgnoringBatteryOptimizations(packageName))
+			{
+				NacUtility.printf("Ignore battery optimizations!");
+				return true;
+			}
+			else
+			{
+				NacUtility.printf("DO NOT Ignore battery optimizations!");
+				return false;
+			}
+		}
+		else
+		{
+			NacUtility.printf("HAS the ignore battery optimizations by default!");
+			return true;
+		}
+	}
+
+	/**
 	 * Request permission.
 	 */
 	public static void request(Context context, String permission, int result)
@@ -69,6 +103,25 @@ public class NacPermissions
 		}
 
 		Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+			Uri.parse("package:" + activity.getPackageName()));
+
+		activity.startActivityForResult(intent, requestCode);
+	}
+
+	/**
+	 * Show the ignore battery optimizations setting.
+	 */
+	@TargetApi(Build.VERSION_CODES.M)
+	public static void requestIgnoreBatteryOptimization(Activity activity,
+		int requestCode)
+	{
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+		{
+			return;
+		}
+
+		Intent intent = new Intent(
+			Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
 			Uri.parse("package:" + activity.getPackageName()));
 
 		activity.startActivityForResult(intent, requestCode);

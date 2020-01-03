@@ -97,7 +97,6 @@ public class NacWakeUpAction
 		Handler autoDismissHandler = this.getAutoDismissHandler();
 		Handler speakHandler = this.getSpeakHandler();
 
-		// Add a thing for Nfc to dismiss its activity if it is still running
 		this.stopVibrate();
 		this.stopPlayer();
 
@@ -111,7 +110,7 @@ public class NacWakeUpAction
 			speakHandler.removeCallbacksAndMessages(null);
 		}
 
-		NacNfc.finish(context);
+		//NacNfc.finish(context);
 	}
 
 	/**
@@ -244,13 +243,13 @@ public class NacWakeUpAction
 	 */
 	public void pause()
 	{
-		Context context = this.getContext();
-		NacAlarm alarm = this.getAlarm();
+		//Context context = this.getContext();
+		//NacAlarm alarm = this.getAlarm();
 
-		if ((alarm != null) && alarm.getUseNfc())
-		{
-			NacNfc.disable(context);
-		}
+		//if ((alarm != null) && alarm.getUseNfc())
+		//{
+		//	NacNfc.disable(context);
+		//}
 
 		this.getTextToSpeech().stop();
 		//this.getTextToSpeech().shutdown();
@@ -280,14 +279,14 @@ public class NacWakeUpAction
 	 */
 	public void resume()
 	{
-		Context context = this.getContext();
-		NacAlarm alarm = this.getAlarm();
-		//NacSharedPreferences shared = this.getSharedPreferences();
+		//Context context = this.getContext();
+		//NacAlarm alarm = this.getAlarm();
+		////NacSharedPreferences shared = this.getSharedPreferences();
 
-		if ((alarm != null) && alarm.getUseNfc())
-		{
-			NacNfc.enable(context);
-		}
+		//if ((alarm != null) && alarm.getUseNfc())
+		//{
+		//	NacNfc.enable(context);
+		//}
 
 		//if (shared.getSpeakToMe())
 		//{

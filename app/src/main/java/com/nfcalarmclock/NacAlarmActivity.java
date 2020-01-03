@@ -24,8 +24,8 @@ import java.util.Calendar;
  */
 public class NacAlarmActivity
 	extends Activity
-	implements View.OnClickListener,
-		NacWakeUpAction.OnAutoDismissListener
+	implements View.OnClickListener
+	//	NacWakeUpAction.OnAutoDismissListener
 {
 
 	/**
@@ -36,7 +36,7 @@ public class NacAlarmActivity
 	/**
 	 * Actions to take upon waking up, such as enabling NFC, playing music, etc.
 	 */
-	private NacWakeUpAction mWakeUp;
+	//private NacWakeUpAction mWakeUp;
 
 	/**
 	 * Alarm.
@@ -46,50 +46,60 @@ public class NacAlarmActivity
 	/**
 	 * Flag indicating alarm was dismissed.
 	 */
-	private boolean mWasDismissed;
+	//private boolean mWasDismissed;
 
 	/**
 	 * Dismiss the alarm.
 	 */
-	private void dismiss()
+	//private void dismiss()
+	//{
+	//	NacSharedPreferences shared = this.getSharedPreferences();
+	//	NacAlarm alarm = this.getAlarm();
+	//	this.mWasDismissed = true;
+
+	//	if (alarm != null)
+	//	{
+	//		if (!alarm.getRepeat())
+	//		{
+	//			alarm.toggleToday();
+
+	//			if (!alarm.areDaysSelected())
+	//			{
+	//				alarm.setEnabled(false);
+	//			}
+
+	//			NacDatabase db = new NacDatabase(this);
+	//			//NacNotification notification = new NacNotification(this);
+
+	//			//notification.hide(alarm);
+	//			db.update(alarm);
+	//			db.close();
+	//		}
+
+	//		shared.editSnoozeCount(alarm.getId(), 0);
+	//	}
+
+	//	this.finish();
+	//}
+
+	public void dismiss()
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-		NacAlarm alarm = this.getAlarm();
-		this.mWasDismissed = true;
+		Intent dismissIntent =  new Intent(
+			NacForegroundService.ACTION_DISMISS_ALARM, null, this,
+			NacForegroundService.class);
 
-		if (alarm != null)
-		{
-			if (!alarm.getRepeat())
-			{
-				alarm.toggleToday();
-
-				if (!alarm.areDaysSelected())
-				{
-					alarm.setEnabled(false);
-				}
-
-				NacDatabase db = new NacDatabase(this);
-				//NacNotification notification = new NacNotification(this);
-
-				//notification.hide(alarm);
-				db.update(alarm);
-				db.close();
-			}
-
-			shared.editSnoozeCount(alarm.getId(), 0);
-		}
-
-		this.finish();
+		startService(dismissIntent);
+		super.finish();
 	}
 
 	/**
 	 */
-	@Override
-	public void finish()
-	{
-		this.getWakeUp().cleanup();
-		super.finish();
-	}
+	//@Override
+	//public void finish()
+	//{
+	//	this.getWakeUp().cleanup();
+	//	super.finish();
+	//}
 
 	/**
 	 * @return The alarm.
@@ -102,10 +112,10 @@ public class NacAlarmActivity
 	/**
 	 * @return The wake up actions.
 	 */
-	private NacWakeUpAction getWakeUp()
-	{
-		return this.mWakeUp;
-	}
+	//private NacWakeUpAction getWakeUp()
+	//{
+	//	return this.mWakeUp;
+	//}
 
 	/**
 	 * @return The shared preferences.
@@ -118,21 +128,21 @@ public class NacAlarmActivity
 	/**
 	 * Automatically dismiss the alarm.
 	 */
-	@Override
-	public void onAutoDismiss(NacAlarm alarm)
-	{
-		NacSharedPreferences shared = this.getSharedPreferences();
+	//@Override
+	//public void onAutoDismiss(NacAlarm alarm)
+	//{
+	//	NacSharedPreferences shared = this.getSharedPreferences();
 
-		if (shared.getMissedAlarmNotification())
-		{
-			NacMissedAlarmNotification notification =
-				new NacMissedAlarmNotification(this);
+	//	if (shared.getMissedAlarmNotification())
+	//	{
+	//		NacMissedAlarmNotification notification =
+	//			new NacMissedAlarmNotification(this);
 
-			notification.show(alarm);
-		}
+	//		notification.show(alarm);
+	//	}
 
-		this.dismiss();
-	}
+	//	this.dismiss();
+	//}
 
 	/**
 	 * Do not let the user back out of the activity.
@@ -153,20 +163,21 @@ public class NacAlarmActivity
 		if ((id == R.id.snooze) || ((id == R.id.act_alarm)
 			&& shared.getEasySnooze()))
 		{
-			if (this.snooze())
-			{
-				NacUtility.quickToast(this, "Alarm snoozed");
-				this.finish();
-			}
-			else
-			{
-				NacUtility.quickToast(this, "Unable to snooze the alarm");
-			}
+			this.snooze();
+
+			//if (this.snooze())
+			//{
+			//	NacUtility.quickToast(this, "Alarm snoozed");
+			//	this.finish();
+			//}
+			//else
+			//{
+			//	NacUtility.quickToast(this, "Unable to snooze the alarm");
+			//}
 
 		}
 		else if (id == R.id.dismiss)
 		{
-			NacUtility.quickToast(this, "Alarm dismissed");
 			this.dismiss();
 		}
 	}
@@ -183,23 +194,23 @@ public class NacAlarmActivity
 		this.setAlarm(savedInstanceState);
 
 		NacAlarm alarm = this.getAlarm();
-		NacWakeUpAction wakeUp = new NacWakeUpAction(this, alarm);
-		NacScheduler scheduler = new NacScheduler(this);
+		//NacWakeUpAction wakeUp = new NacWakeUpAction(this, alarm);
+		//NacScheduler scheduler = new NacScheduler(this);
 		this.mSharedPreferences = new NacSharedPreferences(this);
-		this.mWakeUp = wakeUp;
-		this.mWasDismissed = false;
+		//this.mWakeUp = wakeUp;
+		//this.mWasDismissed = false;
 
 		if (alarm == null)
 		{
 			return;
 		}
 
-		scheduler.scheduleNext(alarm);
+		//scheduler.scheduleNext(alarm);
 		this.setupShowWhenLocked();
 		this.setupAlarmButtons();
 		this.setupAlarmInfo();
-		wakeUp.setOnAutoDismissListener(this);
-		wakeUp.start();
+		//wakeUp.setOnAutoDismissListener(this);
+		//wakeUp.start();
 	}
 
 	/**
@@ -208,7 +219,8 @@ public class NacAlarmActivity
 	public void onDestroy()
 	{
 		super.onDestroy();
-		this.getWakeUp().shutdown();
+		NacNfc.finish(this);
+		//this.getWakeUp().shutdown();
 	}
 
 	/**
@@ -231,7 +243,15 @@ public class NacAlarmActivity
 	public void onPause()
 	{
 		super.onPause();
-		this.getWakeUp().pause();
+		//this.getWakeUp().pause();
+		// Nfc stuff should be here
+		NacAlarm alarm = this.getAlarm();
+
+		if ((alarm != null) && alarm.getUseNfc())
+		{
+			NacNfc.disable(this);
+		}
+
 	}
 
 	/**
@@ -241,7 +261,14 @@ public class NacAlarmActivity
 	public void onResume()
 	{
 		super.onResume();
-		this.getWakeUp().resume();
+		//this.getWakeUp().resume();
+		// Nfc stuff should be here
+		NacAlarm alarm = this.getAlarm();
+
+		if ((alarm != null) && alarm.getUseNfc())
+		{
+			NacNfc.enable(this);
+		}
 	}
 
 	/**
@@ -267,12 +294,15 @@ public class NacAlarmActivity
 
 		NacSharedPreferences shared = this.getSharedPreferences();
 
-		if (shared.getPreventAppFromClosing() && !this.wasDismissed())
+		//if (shared.getPreventAppFromClosing() && !this.wasDismissed())
+		if (shared.getPreventAppFromClosing())
 		{
 			Intent intent = getIntent();
 
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			this.getWakeUp().cleanup();
+			//this.getWakeUp().cleanup();
+			// Send message to cleanup
+			NacNfc.finish(this);
 			startActivity(intent);
 		}
 	}
@@ -382,7 +412,33 @@ public class NacAlarmActivity
 	/**
 	 * Snooze the alarm.
 	 */
-	public boolean snooze()
+	//public boolean snooze()
+	//{
+	//	NacSharedPreferences shared = this.getSharedPreferences();
+	//	NacAlarm alarm = this.getAlarm();
+	//	int id = alarm.getId();
+	//	int snoozeCount = shared.getSnoozeCount(id) + 1;
+	//	int maxSnoozeCount = shared.getMaxSnoozeValue();
+
+	//	if ((snoozeCount > maxSnoozeCount) && (maxSnoozeCount >= 0))
+	//	{
+	//		return false;
+	//	}
+
+	//	NacScheduler scheduler = new NacScheduler(this);
+	//	Calendar snooze = Calendar.getInstance();
+	//	this.mWasDismissed = true;
+
+	//	snooze.add(Calendar.MINUTE, shared.getSnoozeDurationValue());
+	//	alarm.setHour(snooze.get(Calendar.HOUR_OF_DAY));
+	//	alarm.setMinute(snooze.get(Calendar.MINUTE));
+	//	scheduler.update(alarm, snooze);
+	//	shared.editSnoozeCount(id, snoozeCount);
+
+	//	return true;
+	//}
+
+	public void snooze()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
@@ -392,28 +448,24 @@ public class NacAlarmActivity
 
 		if ((snoozeCount > maxSnoozeCount) && (maxSnoozeCount >= 0))
 		{
-			return false;
+			NacUtility.quickToast(this, "Unable to snooze the alarm");
+			return;
 		}
 
-		NacScheduler scheduler = new NacScheduler(this);
-		Calendar snooze = Calendar.getInstance();
-		this.mWasDismissed = true;
+		Intent snoozeIntent = new Intent(
+			NacForegroundService.ACTION_SNOOZE_ALARM, null, this,
+			NacForegroundService.class);
 
-		snooze.add(Calendar.MINUTE, shared.getSnoozeDurationValue());
-		alarm.setHour(snooze.get(Calendar.HOUR_OF_DAY));
-		alarm.setMinute(snooze.get(Calendar.MINUTE));
-		scheduler.update(alarm, snooze);
-		shared.editSnoozeCount(id, snoozeCount);
-
-		return true;
+		startService(snoozeIntent);
+		super.finish();
 	}
 
 	/**
 	 * @return True if the alarm was dismissed, and False otherwise.
 	 */
-	public boolean wasDismissed()
-	{
-		return this.mWasDismissed;
-	}
+	//public boolean wasDismissed()
+	//{
+	//	return this.mWasDismissed;
+	//}
 
 }

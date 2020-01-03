@@ -11,12 +11,12 @@
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.NFC" />
 	<uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 	<uses-permission android:name="android.permission.INTERNET" tools:node="remove" />
 	<!-- For disabling the lockscreen use DISABLE_KEYGUARD -->
-	<!-- <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" /> -->
-	<!-- <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> -->
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+	<uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+	<!-- <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" /> -->
 
 	<!-- Hardware restrictions (NFC is optional) -->
 	<uses-feature
@@ -109,6 +109,11 @@
 			android:name=".NacDatabase$BackgroundService"
 			android:exported="false"
 			android:permission="android.permission.BIND_JOB_SERVICE"
+			/>
+
+		<service
+			android:name=".NacForegroundService"
+			android:exported="false"
 			/>
 
 		 <service

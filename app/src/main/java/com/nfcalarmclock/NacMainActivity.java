@@ -30,7 +30,13 @@ public class NacMainActivity
 	/**
 	 * Result code when requesting SYSTEM_ALERT_WINDOW permission.
 	 */
-	public static int DRAW_OVERLAY_REQUEST = 1234;
+	public static int REQUEST_DRAW_OVERLAY_CODE = 1234;
+
+	/**
+	 * Result code when requesting REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+	 * permission.
+	 */
+	public static int REQUEST_IGNORE_BATTERY_OPTIMIZATION_CODE = 4321;
 
 	/**
 	 * Shared preferences.
@@ -110,7 +116,7 @@ public class NacMainActivity
 	{
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (requestCode == DRAW_OVERLAY_REQUEST)
+		if (requestCode == REQUEST_DRAW_OVERLAY_CODE)
 		{
 			if (!NacPermissions.hasDrawOverlay(this))
 			{
@@ -121,9 +127,19 @@ public class NacMainActivity
 				NacUtility.printf("Alarms will go off as expected!");
 				// Do as per your logic
 			}
-
 		}
-
+		//else if (requestCode == REQUEST_IGNORE_BATTERY_OPTIMIZATION_CODE)
+		//{
+		//	if (!NacPermissions.hasIgnoreBatteryOptimization(this))
+		//	{
+		//		// You don't have permission
+		//		//checkPermission();
+		//		NacUtility.printf("Alarms may not go off as expected if app is not open.");
+		//	} else {
+		//		NacUtility.printf("Alarms will go off as expected!");
+		//		// Do as per your logic
+		//	}
+		//}
 	}
 
 	/**
@@ -150,6 +166,12 @@ public class NacMainActivity
 		{
 			this.showDrawOverlayDialog();
 		}
+
+		//if (!NacPermissions.hasIgnoreBatteryOptimization(this))
+		//{
+		//	NacPermissions.requestIgnoreBatteryOptimization(this,
+		//		REQUEST_IGNORE_BATTERY_OPTIMIZATION_CODE);
+		//}
 
 		NacSharedPreferences shared = new NacSharedPreferences(this);
 		Drawable drawable = ContextCompat.getDrawable(this,
@@ -215,7 +237,7 @@ public class NacMainActivity
 	@Override
 	public boolean onDismissDialog(NacDialog dialog)
 	{
-		NacPermissions.requestDrawOverlay(this, DRAW_OVERLAY_REQUEST);
+		NacPermissions.requestDrawOverlay(this, REQUEST_DRAW_OVERLAY_CODE);
 		return true;
 	}
 	/**
@@ -252,7 +274,7 @@ public class NacMainActivity
 	}
 
 	/**
-	 * @return True if the draw overlay permission dialog should be show, and
+	 * @return True if the draw overlay permission dialog should be shown, and
 	 *         False otherwise.
 	 */
 	private boolean shouldShowDrawOverlayDialog()

@@ -23,6 +23,8 @@
 	<string name="noti_channel_upcoming_description">Alarms that are scheduled.</string>
 	<string name="noti_channel_missed_name">Missed Alarms</string>
 	<string name="noti_channel_missed_description">Alarms that have been automatically dismissed.</string>
+	<string name="noti_channel_active_name">Active Alarms</string>
+	<string name="noti_channel_active_description">Alarms that are currently active.</string>
 
 
 	<!-- Card -->
