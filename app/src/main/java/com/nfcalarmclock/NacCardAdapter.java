@@ -504,6 +504,8 @@ public class NacCardAdapter
 			List<NacAlarm> alarms = this.getAlarms();
 			NacAlarm nextAlarm = NacCalendar.getNextAlarm(alarms);
 
+			alarm.print();
+
 			if (alarm.getEnabled())
 			{
 				this.showAlarm(alarm);
@@ -722,6 +724,11 @@ public class NacCardAdapter
 		NacSharedPreferences shared = this.getSharedPreferences();
 		String prefix = "Next alarm";
 		String message = NacCalendar.getMessage(prefix, shared, alarm);
+
+		if (alarm == null)
+		{
+			this.mPreviousCalendar = null;
+		}
 
 		this.snackbar(message, "DISMISS", null, true);
 	}

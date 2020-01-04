@@ -39,11 +39,6 @@ public class NacForegroundService
 	private NacWakeUpAction mWakeUp;
 
 	/**
-	 * Flag if alarm was dismissed or not.
-	 */
-	private boolean mWasDismissed;
-
-	/**
 	 * Shared preferences.
 	 */
 	private NacSharedPreferences mSharedPreferences;
@@ -61,7 +56,6 @@ public class NacForegroundService
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
-		this.mWasDismissed = true;
 
 		if (alarm != null)
 		{
@@ -184,16 +178,21 @@ public class NacForegroundService
 		}
 		else if (intent.getAction().equals(ACTION_SNOOZE_ALARM))
 		{
-			NacUtility.printf("Clicked Previous");
+			NacUtility.printf("SNOOZED");
 			this.snooze();
 		}
 		else if (intent.getAction().equals(ACTION_DISMISS_ALARM))
 		{
-			NacUtility.printf("Clicked Play");
+			NacUtility.printf("DISMISSED");
 			this.dismiss();
 		}
+		else
+		{
+			NacUtility.printf("NOTHIING");
+		}
 
-		return START_STICKY;
+		return START_REDELIVER_INTENT;
+		//return START_STICKY;
 	}
 
 	/**
@@ -219,7 +218,6 @@ public class NacForegroundService
 		NacWakeUpAction wakeUp = new NacWakeUpAction(this, alarm);
 		NacScheduler scheduler = new NacScheduler(this);
 		this.mWakeUp = wakeUp;
-		this.mWasDismissed = false;
 
 		scheduler.scheduleNext(alarm);
 		wakeUp.setOnAutoDismissListener(this);
@@ -263,7 +261,6 @@ public class NacForegroundService
 
 		NacScheduler scheduler = new NacScheduler(this);
 		Calendar snooze = Calendar.getInstance();
-		this.mWasDismissed = true;
 
 		snooze.add(Calendar.MINUTE, shared.getSnoozeDurationValue());
 		alarm.setHour(snooze.get(Calendar.HOUR_OF_DAY));
@@ -273,14 +270,6 @@ public class NacForegroundService
 
 		NacUtility.quickToast(this, "Alarm snoozed");
 		this.finish();
-	}
-
-	/**
-	 * @return True if the alarm was dismissed, and False otherwise.
-	 */
-	public boolean wasDismissed()
-	{
-		return this.mWasDismissed;
 	}
 
 }

@@ -25,7 +25,6 @@ import java.util.Calendar;
 public class NacAlarmActivity
 	extends Activity
 	implements View.OnClickListener
-	//	NacWakeUpAction.OnAutoDismissListener
 {
 
 	/**
@@ -34,54 +33,13 @@ public class NacAlarmActivity
 	private NacSharedPreferences mSharedPreferences;
 
 	/**
-	 * Actions to take upon waking up, such as enabling NFC, playing music, etc.
-	 */
-	//private NacWakeUpAction mWakeUp;
-
-	/**
 	 * Alarm.
 	 */
 	private NacAlarm mAlarm;
 
 	/**
-	 * Flag indicating alarm was dismissed.
-	 */
-	//private boolean mWasDismissed;
-
-	/**
 	 * Dismiss the alarm.
 	 */
-	//private void dismiss()
-	//{
-	//	NacSharedPreferences shared = this.getSharedPreferences();
-	//	NacAlarm alarm = this.getAlarm();
-	//	this.mWasDismissed = true;
-
-	//	if (alarm != null)
-	//	{
-	//		if (!alarm.getRepeat())
-	//		{
-	//			alarm.toggleToday();
-
-	//			if (!alarm.areDaysSelected())
-	//			{
-	//				alarm.setEnabled(false);
-	//			}
-
-	//			NacDatabase db = new NacDatabase(this);
-	//			//NacNotification notification = new NacNotification(this);
-
-	//			//notification.hide(alarm);
-	//			db.update(alarm);
-	//			db.close();
-	//		}
-
-	//		shared.editSnoozeCount(alarm.getId(), 0);
-	//	}
-
-	//	this.finish();
-	//}
-
 	public void dismiss()
 	{
 		Intent dismissIntent =  new Intent(
@@ -93,15 +51,6 @@ public class NacAlarmActivity
 	}
 
 	/**
-	 */
-	//@Override
-	//public void finish()
-	//{
-	//	this.getWakeUp().cleanup();
-	//	super.finish();
-	//}
-
-	/**
 	 * @return The alarm.
 	 */
 	private NacAlarm getAlarm()
@@ -110,39 +59,12 @@ public class NacAlarmActivity
 	}
 
 	/**
-	 * @return The wake up actions.
-	 */
-	//private NacWakeUpAction getWakeUp()
-	//{
-	//	return this.mWakeUp;
-	//}
-
-	/**
 	 * @return The shared preferences.
 	 */
 	private NacSharedPreferences getSharedPreferences()
 	{
 		return this.mSharedPreferences;
 	}
-
-	/**
-	 * Automatically dismiss the alarm.
-	 */
-	//@Override
-	//public void onAutoDismiss(NacAlarm alarm)
-	//{
-	//	NacSharedPreferences shared = this.getSharedPreferences();
-
-	//	if (shared.getMissedAlarmNotification())
-	//	{
-	//		NacMissedAlarmNotification notification =
-	//			new NacMissedAlarmNotification(this);
-
-	//		notification.show(alarm);
-	//	}
-
-	//	this.dismiss();
-	//}
 
 	/**
 	 * Do not let the user back out of the activity.
@@ -165,16 +87,6 @@ public class NacAlarmActivity
 		{
 			this.snooze();
 
-			//if (this.snooze())
-			//{
-			//	NacUtility.quickToast(this, "Alarm snoozed");
-			//	this.finish();
-			//}
-			//else
-			//{
-			//	NacUtility.quickToast(this, "Unable to snooze the alarm");
-			//}
-
 		}
 		else if (id == R.id.dismiss)
 		{
@@ -194,23 +106,11 @@ public class NacAlarmActivity
 		this.setAlarm(savedInstanceState);
 
 		NacAlarm alarm = this.getAlarm();
-		//NacWakeUpAction wakeUp = new NacWakeUpAction(this, alarm);
-		//NacScheduler scheduler = new NacScheduler(this);
 		this.mSharedPreferences = new NacSharedPreferences(this);
-		//this.mWakeUp = wakeUp;
-		//this.mWasDismissed = false;
 
-		if (alarm == null)
-		{
-			return;
-		}
-
-		//scheduler.scheduleNext(alarm);
 		this.setupShowWhenLocked();
 		this.setupAlarmButtons();
 		this.setupAlarmInfo();
-		//wakeUp.setOnAutoDismissListener(this);
-		//wakeUp.start();
 	}
 
 	/**
@@ -220,7 +120,6 @@ public class NacAlarmActivity
 	{
 		super.onDestroy();
 		NacNfc.finish(this);
-		//this.getWakeUp().shutdown();
 	}
 
 	/**
@@ -243,8 +142,7 @@ public class NacAlarmActivity
 	public void onPause()
 	{
 		super.onPause();
-		//this.getWakeUp().pause();
-		// Nfc stuff should be here
+
 		NacAlarm alarm = this.getAlarm();
 
 		if ((alarm != null) && alarm.getUseNfc())
@@ -261,8 +159,7 @@ public class NacAlarmActivity
 	public void onResume()
 	{
 		super.onResume();
-		//this.getWakeUp().resume();
-		// Nfc stuff should be here
+
 		NacAlarm alarm = this.getAlarm();
 
 		if ((alarm != null) && alarm.getUseNfc())
@@ -291,20 +188,7 @@ public class NacAlarmActivity
 	public void onStop()
 	{
 		super.onStop();
-
-		NacSharedPreferences shared = this.getSharedPreferences();
-
-		//if (shared.getPreventAppFromClosing() && !this.wasDismissed())
-		if (shared.getPreventAppFromClosing())
-		{
-			Intent intent = getIntent();
-
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			//this.getWakeUp().cleanup();
-			// Send message to cleanup
-			NacNfc.finish(this);
-			startActivity(intent);
-		}
+		NacNfc.finish(this);
 	}
 
 	/**
@@ -391,7 +275,7 @@ public class NacAlarmActivity
 		{
 			setTurnScreenOn(true);
 
-			if (!alarm.getUseNfc())
+			if ((alarm != null) && !alarm.getUseNfc())
 			{
 				setShowWhenLocked(true);
 			}
@@ -402,7 +286,7 @@ public class NacAlarmActivity
 
 			window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
-			if (!alarm.getUseNfc())
+			if ((alarm != null) && !alarm.getUseNfc())
 			{
 				window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 			}
@@ -412,32 +296,6 @@ public class NacAlarmActivity
 	/**
 	 * Snooze the alarm.
 	 */
-	//public boolean snooze()
-	//{
-	//	NacSharedPreferences shared = this.getSharedPreferences();
-	//	NacAlarm alarm = this.getAlarm();
-	//	int id = alarm.getId();
-	//	int snoozeCount = shared.getSnoozeCount(id) + 1;
-	//	int maxSnoozeCount = shared.getMaxSnoozeValue();
-
-	//	if ((snoozeCount > maxSnoozeCount) && (maxSnoozeCount >= 0))
-	//	{
-	//		return false;
-	//	}
-
-	//	NacScheduler scheduler = new NacScheduler(this);
-	//	Calendar snooze = Calendar.getInstance();
-	//	this.mWasDismissed = true;
-
-	//	snooze.add(Calendar.MINUTE, shared.getSnoozeDurationValue());
-	//	alarm.setHour(snooze.get(Calendar.HOUR_OF_DAY));
-	//	alarm.setMinute(snooze.get(Calendar.MINUTE));
-	//	scheduler.update(alarm, snooze);
-	//	shared.editSnoozeCount(id, snoozeCount);
-
-	//	return true;
-	//}
-
 	public void snooze()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
@@ -459,13 +317,5 @@ public class NacAlarmActivity
 		startService(snoozeIntent);
 		super.finish();
 	}
-
-	/**
-	 * @return True if the alarm was dismissed, and False otherwise.
-	 */
-	//public boolean wasDismissed()
-	//{
-	//	return this.mWasDismissed;
-	//}
 
 }

@@ -249,6 +249,7 @@ public class NacCardHolder
 
 		if (id == R.id.nac_switch)
 		{
+			v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 			alarm.setEnabled(state);
 			this.mSummary.set(shared);
 

@@ -6,6 +6,7 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,20 +24,20 @@ import java.util.List;
  */
 public class NacMainActivity
 	extends AppCompatActivity
-	implements View.OnClickListener,
-		NacDialog.OnDismissListener
+	implements View.OnClickListener
+		//NacDialog.OnDismissListener
 {
 
-	/**
-	 * Result code when requesting SYSTEM_ALERT_WINDOW permission.
-	 */
-	public static int REQUEST_DRAW_OVERLAY_CODE = 1234;
+	///**
+	// * Result code when requesting SYSTEM_ALERT_WINDOW permission.
+	// */
+	//public static int REQUEST_DRAW_OVERLAY_CODE = 1234;
 
-	/**
-	 * Result code when requesting REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-	 * permission.
-	 */
-	public static int REQUEST_IGNORE_BATTERY_OPTIMIZATION_CODE = 4321;
+	///**
+	// * Result code when requesting REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+	// * permission.
+	// */
+	//public static int REQUEST_IGNORE_BATTERY_OPTIMIZATION_CODE = 4321;
 
 	/**
 	 * Shared preferences.
@@ -116,18 +117,18 @@ public class NacMainActivity
 	{
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (requestCode == REQUEST_DRAW_OVERLAY_CODE)
-		{
-			if (!NacPermissions.hasDrawOverlay(this))
-			{
-				// You don't have permission
-				//checkPermission();
-				NacUtility.printf("Alarms may not go off as expected if app is not open.");
-			} else {
-				NacUtility.printf("Alarms will go off as expected!");
-				// Do as per your logic
-			}
-		}
+		//if (requestCode == REQUEST_DRAW_OVERLAY_CODE)
+		//{
+		//	if (!NacPermissions.hasDrawOverlay(this))
+		//	{
+		//		// You don't have permission
+		//		//checkPermission();
+		//		NacUtility.printf("Alarms may not go off as expected if app is not open.");
+		//	} else {
+		//		NacUtility.printf("Alarms will go off as expected!");
+		//		// Do as per your logic
+		//	}
+		//}
 		//else if (requestCode == REQUEST_IGNORE_BATTERY_OPTIMIZATION_CODE)
 		//{
 		//	if (!NacPermissions.hasIgnoreBatteryOptimization(this))
@@ -150,6 +151,7 @@ public class NacMainActivity
 	{
 		NacCardAdapter adapter = this.getCardAdapter();
 
+		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		adapter.add();
 		adapter.setWasAddedWithFloatingButton(true);
 	}
@@ -162,10 +164,10 @@ public class NacMainActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_main);
 
-		if (this.shouldShowDrawOverlayDialog())
-		{
-			this.showDrawOverlayDialog();
-		}
+		//if (this.shouldShowDrawOverlayDialog())
+		//{
+		//	this.showDrawOverlayDialog();
+		//}
 
 		//if (!NacPermissions.hasIgnoreBatteryOptimization(this))
 		//{
@@ -234,12 +236,12 @@ public class NacMainActivity
 	 * Show Android prompt where the user can enable the SYSTEM_DIALOG_WINDOW
 	 * permission.
 	 */
-	@Override
-	public boolean onDismissDialog(NacDialog dialog)
-	{
-		NacPermissions.requestDrawOverlay(this, REQUEST_DRAW_OVERLAY_CODE);
-		return true;
-	}
+	//@Override
+	//public boolean onDismissDialog(NacDialog dialog)
+	//{
+	//	NacPermissions.requestDrawOverlay(this, REQUEST_DRAW_OVERLAY_CODE);
+	//	return true;
+	//}
 	/**
 	 */
 	@Override
@@ -277,25 +279,25 @@ public class NacMainActivity
 	 * @return True if the draw overlay permission dialog should be shown, and
 	 *         False otherwise.
 	 */
-	private boolean shouldShowDrawOverlayDialog()
-	{
-		return ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-			&& !NacPermissions.hasDrawOverlay(this)
-			&& !NacIntent.isSetAlarmAction(getIntent()));
-	}
+	//private boolean shouldShowDrawOverlayDialog()
+	//{
+	//	return ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+	//		&& !NacPermissions.hasDrawOverlay(this)
+	//		&& !NacIntent.isSetAlarmAction(getIntent()));
+	//}
 
 	/**
 	 * Show the draw overlay dialog.
 	 */
-	private void showDrawOverlayDialog()
-	{
-		NacPermissionsDrawOverlayDialog dialog =
-			new NacPermissionsDrawOverlayDialog();
+	//private void showDrawOverlayDialog()
+	//{
+	//	NacPermissionsDrawOverlayDialog dialog =
+	//		new NacPermissionsDrawOverlayDialog();
 
-		dialog.addOnDismissListener(this);
-		dialog.build(this);
-		dialog.show();
-	}
+	//	dialog.addOnDismissListener(this);
+	//	dialog.build(this);
+	//	dialog.show();
+	//}
 
 	/**
 	 * Display a snackbar showing the next scheduled alarm.
