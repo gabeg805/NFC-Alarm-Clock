@@ -108,7 +108,7 @@ public class NacAlarmActivity
 		NacAlarm alarm = this.getAlarm();
 		this.mSharedPreferences = new NacSharedPreferences(this);
 
-		this.setupShowWhenLocked();
+		//this.setupShowWhenLocked();
 		this.setupAlarmButtons();
 		this.setupAlarmInfo();
 	}

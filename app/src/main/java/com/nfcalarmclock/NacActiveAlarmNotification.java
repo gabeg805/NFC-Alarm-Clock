@@ -100,9 +100,9 @@ public class NacActiveAlarmNotification
 			.setAutoCancel(false)
 			.setOngoing(true)
 			.setShowWhen(true)
+			.setTicker(TITLE)
 			.addAction(R.mipmap.alarm_snooze, "Snooze", snoozePending)
 			.addAction(R.mipmap.alarm_dismiss, "Dismiss", dismissPending);
-			//.setTicker("Truiton Music Player")
 
 		return builder.build();
 	}

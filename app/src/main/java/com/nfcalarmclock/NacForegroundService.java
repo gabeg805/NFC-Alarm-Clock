@@ -149,50 +149,33 @@ public class NacForegroundService
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
-		NacUtility.printf("onStartCommand! Intent = %b | Flags = %d | StartId = %d",
-			intent != null, flags, startId);
-
-		if (intent == null)
+		if ((intent == null) || (intent.getAction() == null))
 		{
-			NacUtility.printf("onStartCommand! intent is null");
 		}
-
-		if ((intent != null) && (intent.getAction() == null))
+		else if (intent.getAction().equals(ACTION_START_SERVICE))
 		{
-			NacUtility.printf("onStartCommand! intent ACTION is null");
-		}
-
-		if (intent.getAction().equals(ACTION_START_SERVICE))
-		{
-			NacUtility.printf("Received Start Foreground Intent ");
 			this.mSharedPreferences = new NacSharedPreferences(this);
 			this.mAlarm = NacIntent.getAlarm(intent);
 
 			this.showNotification();
 			this.setupActiveAlarm();
+
+			return START_REDELIVER_INTENT;
 		}
 		else if (intent.getAction().equals(ACTION_STOP_SERVICE))
 		{
-			NacUtility.printf("Received Stop Foreground Intent");
 			this.finish();
 		}
 		else if (intent.getAction().equals(ACTION_SNOOZE_ALARM))
 		{
-			NacUtility.printf("SNOOZED");
 			this.snooze();
 		}
 		else if (intent.getAction().equals(ACTION_DISMISS_ALARM))
 		{
-			NacUtility.printf("DISMISSED");
 			this.dismiss();
 		}
-		else
-		{
-			NacUtility.printf("NOTHIING");
-		}
 
-		return START_REDELIVER_INTENT;
-		//return START_STICKY;
+		return START_NOT_STICKY;
 	}
 
 	/**

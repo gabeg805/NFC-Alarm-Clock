@@ -56,6 +56,14 @@
 			/>
 
 		<Preference
+			android:key="@string/pref_about_set_alarm_key"
+			android:title="@string/pref_about_set_alarm_title"
+			android:summary="@string/pref_about_set_alarm_summary"
+			app:iconSpaceReserved="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<Preference
 			android:key="@string/pref_about_boot_key"
 			android:title="@string/pref_about_boot_title"
 			android:summary="@string/pref_about_boot_summary"
@@ -67,6 +75,22 @@
 			android:key="@string/pref_about_wakelock_key"
 			android:title="@string/pref_about_wakelock_title"
 			android:summary="@string/pref_about_wakelock_summary"
+			app:iconSpaceReserved="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<Preference
+			android:key="@string/pref_about_full_screen_intent_key"
+			android:title="@string/pref_about_full_screen_intent_title"
+			android:summary="@string/pref_about_full_screen_intent_summary"
+			app:iconSpaceReserved="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<Preference
+			android:key="@string/pref_about_foreground_service_key"
+			android:title="@string/pref_about_foreground_service_title"
+			android:summary="@string/pref_about_foreground_service_summary"
 			app:iconSpaceReserved="false"
 			app:allowDividerBelow="true"
 			/>

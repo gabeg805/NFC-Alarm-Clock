@@ -346,6 +346,12 @@
 	<string name="pref_about_vibrate_summary">(Optional) Allow the app to vibrate the phone.</string>
 
 
+	<!-- SET_ALARM permission -->
+	<string name="pref_about_set_alarm_key">pref_about_set_alarm</string>
+	<string name="pref_about_set_alarm_title">Set Alarm</string>
+	<string name="pref_about_set_alarm_summary">(Required) Allows the application to set an alarm.</string>
+
+
 	<!-- RECEIVE_BOOT_COMPLETED permission -->
 	<string name="pref_about_boot_key">pref_about_boot</string>
 	<string name="pref_about_boot_title">Startup</string>
@@ -356,6 +362,18 @@
 	<string name="pref_about_wakelock_key">pref_about_wakelock</string>
 	<string name="pref_about_wakelock_title">Wakelock</string>
 	<string name="pref_about_wakelock_summary">(Required) Prevent the phone from sleeping so that an activated alarm will continue to go off.</string>
+
+
+	<!-- USE_FULL_SCREEN_INTENT permission -->
+	<string name="pref_about_full_screen_intent_key">pref_about_full_screen_intent</string>
+	<string name="pref_about_full_screen_intent_title">Full Screen</string>
+	<string name="pref_about_full_screen_intent_summary">(Required) Allows the app to use the full screen when an alarm is activated.</string>
+
+
+	<!-- FOREGROUND_SERVICE permission -->
+	<string name="pref_about_foreground_service_key">pref_about_foreground_service</string>
+	<string name="pref_about_foreground_service_title">Foreground Service</string>
+	<string name="pref_about_foreground_service_summary">(Required) Allows the app to run a foreground service when an alarm is activated.</string>
 
 
 	<!-- Spotify -->

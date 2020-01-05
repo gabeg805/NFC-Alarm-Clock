@@ -5,16 +5,16 @@
 	package="com.nfcalarmclock">
 
 	<!-- Permissions -->
+	<uses-permission android:name="android.permission.NFC" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
-	<uses-permission android:name="android.permission.VIBRATE" />
-	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.NFC" />
-	<uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
-	<!-- <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> -->
-	<uses-permission android:name="android.permission.INTERNET" tools:node="remove" />
 	<uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+	<!-- <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" tools:node="remove" /> -->
+	<uses-permission android:name="android.permission.INTERNET" tools:node="remove" />
 
 	<!-- Hardware restrictions (NFC is optional) -->
 	<uses-feature
