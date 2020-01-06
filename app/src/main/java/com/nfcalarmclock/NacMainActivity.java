@@ -25,19 +25,7 @@ import java.util.List;
 public class NacMainActivity
 	extends AppCompatActivity
 	implements View.OnClickListener
-		//NacDialog.OnDismissListener
 {
-
-	///**
-	// * Result code when requesting SYSTEM_ALERT_WINDOW permission.
-	// */
-	//public static int REQUEST_DRAW_OVERLAY_CODE = 1234;
-
-	///**
-	// * Result code when requesting REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-	// * permission.
-	// */
-	//public static int REQUEST_IGNORE_BATTERY_OPTIMIZATION_CODE = 4321;
 
 	/**
 	 * Shared preferences.
@@ -110,40 +98,6 @@ public class NacMainActivity
 	}
 
 	/**
-	 */
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode,
-		Intent data)
-	{
-		super.onActivityResult(requestCode, resultCode, data);
-
-		//if (requestCode == REQUEST_DRAW_OVERLAY_CODE)
-		//{
-		//	if (!NacPermissions.hasDrawOverlay(this))
-		//	{
-		//		// You don't have permission
-		//		//checkPermission();
-		//		NacUtility.printf("Alarms may not go off as expected if app is not open.");
-		//	} else {
-		//		NacUtility.printf("Alarms will go off as expected!");
-		//		// Do as per your logic
-		//	}
-		//}
-		//else if (requestCode == REQUEST_IGNORE_BATTERY_OPTIMIZATION_CODE)
-		//{
-		//	if (!NacPermissions.hasIgnoreBatteryOptimization(this))
-		//	{
-		//		// You don't have permission
-		//		//checkPermission();
-		//		NacUtility.printf("Alarms may not go off as expected if app is not open.");
-		//	} else {
-		//		NacUtility.printf("Alarms will go off as expected!");
-		//		// Do as per your logic
-		//	}
-		//}
-	}
-
-	/**
 	 * Add a new alarm when the floating action button is clicked.
 	 */
 	@Override
@@ -163,17 +117,6 @@ public class NacMainActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_main);
-
-		//if (this.shouldShowDrawOverlayDialog())
-		//{
-		//	this.showDrawOverlayDialog();
-		//}
-
-		//if (!NacPermissions.hasIgnoreBatteryOptimization(this))
-		//{
-		//	NacPermissions.requestIgnoreBatteryOptimization(this,
-		//		REQUEST_IGNORE_BATTERY_OPTIMIZATION_CODE);
-		//}
 
 		NacSharedPreferences shared = new NacSharedPreferences(this);
 		Drawable drawable = ContextCompat.getDrawable(this,
@@ -233,16 +176,6 @@ public class NacMainActivity
 	}
 
 	/**
-	 * Show Android prompt where the user can enable the SYSTEM_DIALOG_WINDOW
-	 * permission.
-	 */
-	//@Override
-	//public boolean onDismissDialog(NacDialog dialog)
-	//{
-	//	NacPermissions.requestDrawOverlay(this, REQUEST_DRAW_OVERLAY_CODE);
-	//	return true;
-	//}
-	/**
 	 */
 	@Override
 	protected void onResume()
@@ -274,30 +207,6 @@ public class NacMainActivity
 
 		floatingButton.setBackgroundTintList(color);
 	}
-
-	/**
-	 * @return True if the draw overlay permission dialog should be shown, and
-	 *         False otherwise.
-	 */
-	//private boolean shouldShowDrawOverlayDialog()
-	//{
-	//	return ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-	//		&& !NacPermissions.hasDrawOverlay(this)
-	//		&& !NacIntent.isSetAlarmAction(getIntent()));
-	//}
-
-	/**
-	 * Show the draw overlay dialog.
-	 */
-	//private void showDrawOverlayDialog()
-	//{
-	//	NacPermissionsDrawOverlayDialog dialog =
-	//		new NacPermissionsDrawOverlayDialog();
-
-	//	dialog.addOnDismissListener(this);
-	//	dialog.build(this);
-	//	dialog.show();
-	//}
 
 	/**
 	 * Display a snackbar showing the next scheduled alarm.

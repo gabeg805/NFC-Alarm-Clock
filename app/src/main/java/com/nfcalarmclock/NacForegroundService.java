@@ -1,9 +1,12 @@
 package com.nfcalarmclock;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import java.util.Calendar;
 
 /**
@@ -48,6 +51,10 @@ public class NacForegroundService
 	 */
 	private NacAlarm mAlarm;
 
+	/**
+	 * Wakelock.
+	 */
+	private WakeLock mWakeLock;
 
 	/**
 	 * Dismiss the alarm.
@@ -138,10 +145,25 @@ public class NacForegroundService
 	/**
 	 */
 	@Override
+	public void onCreate()
+	{
+		super.onCreate();
+
+		this.mWakeLock = null;
+	}
+
+	/**
+	 */
+	@Override
 	public void onDestroy()
 	{
 		super.onDestroy();
 		this.getWakeUp().shutdown();
+
+		if (this.mWakeLock != null)
+		{
+			this.mWakeLock.release();
+		}
 	}
 
 	/**
@@ -149,22 +171,21 @@ public class NacForegroundService
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
-		if ((intent == null) || (intent.getAction() == null))
+		if ((intent == null) || (intent.getAction() == null)
+			|| intent.getAction().equals(ACTION_STOP_SERVICE))
 		{
+			this.finish();
 		}
 		else if (intent.getAction().equals(ACTION_START_SERVICE))
 		{
 			this.mSharedPreferences = new NacSharedPreferences(this);
 			this.mAlarm = NacIntent.getAlarm(intent);
 
+			this.setupWakeLock();
 			this.showNotification();
 			this.setupActiveAlarm();
 
 			return START_REDELIVER_INTENT;
-		}
-		else if (intent.getAction().equals(ACTION_STOP_SERVICE))
-		{
-			this.finish();
 		}
 		else if (intent.getAction().equals(ACTION_SNOOZE_ALARM))
 		{
@@ -175,7 +196,7 @@ public class NacForegroundService
 			this.dismiss();
 		}
 
-		return START_NOT_STICKY;
+		return START_STICKY;
 	}
 
 	/**
@@ -205,6 +226,28 @@ public class NacForegroundService
 		scheduler.scheduleNext(alarm);
 		wakeUp.setOnAutoDismissListener(this);
 		wakeUp.start();
+	}
+
+	/**
+	 * Setup the wake lock so that the screen remains on.
+	 */
+	public void setupWakeLock()
+	{
+		NacAlarm alarm = this.getAlarm();
+
+		if (alarm == null)
+		{
+			return;
+		}
+
+		String tag = "NFC Alarm Clock:NacForegroundService";
+		PowerManager pm = (PowerManager) getSystemService(
+			Context.POWER_SERVICE);
+		this.mWakeLock = pm.newWakeLock(
+			PowerManager.SCREEN_BRIGHT_WAKE_LOCK|PowerManager.ACQUIRE_CAUSES_WAKEUP,
+			tag);
+
+		this.mWakeLock.acquire();
 	}
 
 	/**

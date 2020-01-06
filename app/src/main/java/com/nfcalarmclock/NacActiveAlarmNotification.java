@@ -122,7 +122,7 @@ public class NacActiveAlarmNotification
 		CharSequence name = res.getString(R.string.noti_channel_active_name);
 		String description = res.getString(R.string.noti_channel_active_description);
 		NotificationChannel channel = new NotificationChannel(CHANNEL, name,
-			NotificationManager.IMPORTANCE_MAX);
+			NotificationManager.IMPORTANCE_HIGH);
 		NotificationManager manager = context.getSystemService(
 			NotificationManager.class);
 

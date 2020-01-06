@@ -286,6 +286,7 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 
 		alarm.toggleIndex(index);
+		button.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 
 		if (!alarm.areDaysSelected())
 		{
@@ -340,6 +341,7 @@ public class NacCardHolder
 		else if (id == R.id.nac_volume_settings)
 		{
 			this.mSound.showAudioSourceDialog(this);
+			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		}
 		else if (id == R.id.nac_name)
 		{
