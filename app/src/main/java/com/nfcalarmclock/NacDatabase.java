@@ -651,9 +651,23 @@ public class NacDatabase
 	{
 		this.setDatabase();
 
+		List<NacAlarm> list = new ArrayList<>();
+
+		list.add(alarm);
+
+		return this.update(alarm);
+	}
+
+	/**
+	 * @see update
+	 */
+	public long update(List<NacAlarm> alarms)
+	{
+		this.setDatabase();
+
 		SQLiteDatabase db = this.getDatabase();
 
-		return this.update(db, alarm);
+		return this.update(db, alarms);
 	}
 
 	/**
@@ -661,23 +675,43 @@ public class NacDatabase
 	 */
 	public long update(SQLiteDatabase db, NacAlarm alarm)
 	{
-		if (alarm == null)
+		List<NacAlarm> list = new ArrayList<>();
+
+		list.add(alarm);
+
+		return this.update(db, list);
+	}
+
+	/**
+	 * @see update
+	 */
+	public long update(SQLiteDatabase db, List<NacAlarm> alarms)
+	{
+		if ((alarms == null) || (alarms.size() == 0))
 		{
 			return -1;
 		}
 
 		int version = db.getVersion();
 		String table = this.getTable();
-		ContentValues cv = this.getContentValues(version, alarm);
 		String where = this.getWhereClause();
-		String[] args = this.getWhereArgs(alarm);
 		long result = 0;
 
 		db.beginTransaction();
 
 		try
 		{
-			result = db.update(table, cv, where, args);
+			for (NacAlarm a : alarms)
+			{
+				if (a == null)
+				{
+					return -1;
+				}
+
+				ContentValues cv = this.getContentValues(version, a);
+				String[] args = this.getWhereArgs(a);
+				result += db.update(table, cv, where, args);
+			}
 
 			db.setTransactionSuccessful();
 		}

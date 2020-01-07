@@ -162,6 +162,14 @@ public class NacCardHolder
 	}
 
 	/**
+	 * @return The NFC Alarm Clock card view.
+	 */
+	public NacCardView getNacCardView()
+	{
+		return this.mCard;
+	}
+
+	/**
 	 * @return The root view.
 	 */
 	public View getRoot()
@@ -318,6 +326,7 @@ public class NacCardHolder
 		if (id == R.id.nac_header)
 		{
 			this.mCard.toggle(getAdapterPosition());
+			this.getAlarm().changed();
 			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		}
 		else if (id == R.id.nac_summary)
@@ -328,6 +337,7 @@ public class NacCardHolder
 		else if (id == R.id.nac_collapse)
 		{
 			this.mCard.collapse();
+			this.getAlarm().changed();
 			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		}
 		else if (id == R.id.nac_time_parent)

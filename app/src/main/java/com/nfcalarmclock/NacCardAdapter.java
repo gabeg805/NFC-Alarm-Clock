@@ -39,7 +39,12 @@ public class NacCardAdapter
 	/**
 	 * Shared preferences.
 	 */
-	private NacSharedPreferences mShared;
+	private NacSharedPreferences mSharedPreferences;
+
+	/**
+	 * Scheduler.
+	 */
+	private NacScheduler mScheduler;
 
 	/**
 	 * Handle card swipe events.
@@ -98,7 +103,8 @@ public class NacCardAdapter
 			R.id.activity_main);
 		this.mRecyclerView = (RecyclerView) this.getRoot().findViewById(
 			R.id.content_alarm_list);
-		this.mShared = new NacSharedPreferences(context);
+		this.mSharedPreferences = new NacSharedPreferences(context);
+		this.mScheduler = new NacScheduler(context);
 		this.mTouchHelper = new NacCardTouchHelper(callback);
 		this.mUndo = new Undo();
 		this.mNotification = new NacUpcomingAlarmNotification(context);
@@ -168,10 +174,10 @@ public class NacCardAdapter
 			return -1;
 		}
 
-		Context context = this.getContext();
-		Intent intent = NacIntent.createService(context, "add", alarm);
+		int id = alarm.getId();
 
-		this.startService(intent);
+		this.getScheduler().update(alarm);
+		this.getSharedPreferences().editSnoozeCount(id, 0);
 		this.getAlarms().add(position, alarm);
 		this.updateNotification();
 		notifyItemInserted(position);
@@ -220,6 +226,7 @@ public class NacCardAdapter
 
 		this.getTouchHelper().setRecyclerView(this.getRecyclerView());
 		this.getTouchHelper().reset();
+		this.sort();
 		this.updateNotification();
 		notifyDataSetChanged();
 		db.close();
@@ -258,16 +265,16 @@ public class NacCardAdapter
 	public int delete(int position)
 	{
 		NacAlarm alarm = this.get(position);
-		Context context = this.getContext();
-		Intent intent = NacIntent.createService(context, "delete", alarm);
+		int id = alarm.getId();
 
 		this.setWasAddedWithFloatingButton(false);
+		this.getScheduler().cancel(alarm);
+		this.getSharedPreferences().editSnoozeCount(id, 0);
 		this.getAlarms().remove(position);
 		this.updateNotification();
 		notifyItemRemoved(position);
 		this.undo(alarm, position, Undo.Type.DELETE);
 		this.snackbar("Deleted alarm.");
-		this.startService(intent);
 
 		return 0;
 	}
@@ -355,11 +362,19 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * @return The scheduler.
+	 */
+	private NacScheduler getScheduler()
+	{
+		return this.mScheduler;
+	}
+
+	/**
 	 * @return The shared preferences.
 	 */
 	private NacSharedPreferences getSharedPreferences()
 	{
-		return this.mShared;
+		return this.mSharedPreferences;
 	}
 
 	/**
@@ -453,19 +468,6 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * @return True if the next calendar has been found, and False otherwise.
-	 */
-	private boolean isNextAlarm(NacAlarm alarm)
-	{
-		NacAlarm nextAlarm = this.getNextAlarm();
-		Calendar nextCalendar = NacCalendar.getNext(nextAlarm);
-		Calendar calendar = NacCalendar.getNext(alarm);
-
-		return ((nextCalendar == null)
-			|| ((calendar != null) && !calendar.after(nextCalendar)));
-	}
-
-	/**
 	 * Setup the alarm card.
 	 *
 	 * @param  card  The alarm card.
@@ -496,15 +498,10 @@ public class NacCardAdapter
 	@Override
 	public void onChange(NacAlarm alarm)
 	{
-		Context context = this.getContext();
-		Intent intent = NacIntent.createService(context, "update", alarm);
-
 		if (alarm.wasChanged())
 		{
 			List<NacAlarm> alarms = this.getAlarms();
 			NacAlarm nextAlarm = NacCalendar.getNextAlarm(alarms);
-
-			alarm.print();
 
 			if (alarm.getEnabled())
 			{
@@ -518,9 +515,19 @@ public class NacCardAdapter
 			this.mNextAlarm = nextAlarm;
 		}
 
+		RecyclerView rv = this.getRecyclerView();
+		int id = alarm.getId();
+		NacCardHolder holder = (NacCardHolder) rv.findViewHolderForItemId(id);
+		NacCardView card = (holder != null) ? holder.getNacCardView() : null;
+
+		if ((card != null) && card.isCollapsed())
+		{
+			this.sort();
+		}
+
 		this.setWasAddedWithFloatingButton(false);
+		this.getScheduler().update(alarm);
 		this.updateNotification();
-		this.startService(intent);
 	}
 
 	/**
@@ -681,6 +688,19 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * Save alarms to the database.
+	 */
+	public void saveAlarms()
+	{
+		Context context = this.getContext();
+		NacDatabase db = new NacDatabase(context);
+		List<NacAlarm> alarms = this.getAlarms();
+
+		db.update(alarms);
+		db.close();
+	}
+
+	/**
 	 * Set whether an alarm was added with the floating button.
 	 */
 	public void setWasAddedWithFloatingButton(boolean added)
@@ -765,13 +785,14 @@ public class NacCardAdapter
 	 */
 	public void sort()
 	{
-		Context context = this.getContext();
-		NacDatabase db = new NacDatabase(context);
 		this.mAlarmList = this.getSortedAlarms();
+		//Context context = this.getContext();
+		//NacDatabase db = new NacDatabase(context);
+		//this.mAlarmList = this.getSortedAlarms();
 
-		db.sort(this.mAlarmList);
-		db.close();
-		notifyDataSetChanged();
+		//db.sort(this.mAlarmList);
+		//db.close();
+		//notifyDataSetChanged();
 	}
 
 	/**
