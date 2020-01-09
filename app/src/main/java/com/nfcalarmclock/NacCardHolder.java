@@ -326,7 +326,6 @@ public class NacCardHolder
 		if (id == R.id.nac_header)
 		{
 			this.mCard.toggle(getAdapterPosition());
-			this.getAlarm().changed();
 			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		}
 		else if (id == R.id.nac_summary)
@@ -337,7 +336,6 @@ public class NacCardHolder
 		else if (id == R.id.nac_collapse)
 		{
 			this.mCard.collapse();
-			this.getAlarm().changed();
 			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		}
 		else if (id == R.id.nac_time_parent)
@@ -475,6 +473,17 @@ public class NacCardHolder
 	public void setOnDeleteListener(NacCardDelete.OnDeleteListener listener)
 	{
 		this.mDelete.setOnDeleteListener(listener);
+	}
+
+	/**
+	 * Set listener for when a menu item is clicked.
+	 */
+	public void setOnCreateContextMenuListener(
+		View.OnCreateContextMenuListener listener)
+	{
+		View root = this.getRoot();
+
+		this.mCard.setOnCreateContextMenuListener(root, listener);
 	}
 
 }

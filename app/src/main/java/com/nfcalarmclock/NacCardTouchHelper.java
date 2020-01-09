@@ -1,12 +1,7 @@
 package com.nfcalarmclock;
 
 import android.graphics.Canvas;
-//import android.support.v7.widget.helper.ItemTouchUIUtil;
-//import android.support.v7.widget.helper.ItemTouchHelper;
-//import android.support.v7.widget.RecyclerView;
-//import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
-
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.ItemTouchUIUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,10 +30,10 @@ public class NacCardTouchHelper
 		 */
 		public void onItemDelete(int pos);
 
-		/**
-		 * Called when an alarm card should be moved.
-		 */
-		public void onItemMove(int from, int to);
+		///**
+		// * Called when an alarm card should be moved.
+		// */
+		//public void onItemMove(int from, int to);
 
 	}
 
@@ -116,10 +111,10 @@ public class NacCardTouchHelper
 		{
 			final View fg = this.getCardView(this.mAction);
 
-			if (this.mAction == ItemTouchHelper.ACTION_STATE_DRAG)
-			{
-				fg.setAlpha(1.0f);
-			}
+			//if (this.mAction == ItemTouchHelper.ACTION_STATE_DRAG)
+			//{
+			//	fg.setAlpha(1.0f);
+			//}
 
 			getDefaultUIUtil().clearView(fg);
 		}
@@ -211,7 +206,8 @@ public class NacCardTouchHelper
 				return 0;
 			}
 
-			return makeMovementFlags(ItemTouchHelper.UP|ItemTouchHelper.DOWN,
+			//return makeMovementFlags(ItemTouchHelper.UP|ItemTouchHelper.DOWN,
+			return makeMovementFlags(0,
 				ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT);
 		}
 
@@ -251,7 +247,8 @@ public class NacCardTouchHelper
 		@Override
 		public boolean isLongPressDragEnabled()
 		{
-			return true;
+			return false;
+			//return true;
 		}
 
 		/**
@@ -333,10 +330,12 @@ public class NacCardTouchHelper
 		@Override
 		public boolean onMove(RecyclerView rv, ViewHolder vh, ViewHolder target)
 		{
-			this.mAdapter.onItemMove(vh.getAdapterPosition(),
-				target.getAdapterPosition());
+			return false;
 
-			return true;
+			//this.mAdapter.onItemMove(vh.getAdapterPosition(),
+			//	target.getAdapterPosition());
+
+			//return true;
 		}
 
 		/**
@@ -357,10 +356,10 @@ public class NacCardTouchHelper
 
 				final View fg = this.getCardView(action);
 
-				if (action == ItemTouchHelper.ACTION_STATE_DRAG)
-				{
-					fg.setAlpha(0.75f);
-				}
+				//if (action == ItemTouchHelper.ACTION_STATE_DRAG)
+				//{
+				//	fg.setAlpha(0.75f);
+				//}
 
 				getDefaultUIUtil().onSelected(fg);
 			}

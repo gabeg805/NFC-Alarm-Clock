@@ -655,7 +655,7 @@ public class NacDatabase
 
 		list.add(alarm);
 
-		return this.update(alarm);
+		return this.update(list);
 	}
 
 	/**

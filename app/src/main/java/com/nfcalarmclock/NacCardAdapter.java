@@ -2,7 +2,11 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +24,8 @@ import java.util.List;
 public class NacCardAdapter
 	extends RecyclerView.Adapter<NacCardHolder>
 	implements View.OnClickListener,
+		View.OnCreateContextMenuListener,
+		MenuItem.OnMenuItemClickListener,
 		RecyclerView.OnItemTouchListener,
 		NacAlarm.OnChangeListener,
 		NacCardDelete.OnDeleteListener,
@@ -72,11 +78,6 @@ public class NacCardAdapter
 	private List<NacAlarm> mAlarmList;
 
 	/**
-	 * Next alarm to go off.
-	 */
-	private NacAlarm mNextAlarm;
-
-	/**
 	 * Previous alarm to go off, in calendar form.
 	 */
 	private Calendar mPreviousCalendar;
@@ -90,6 +91,11 @@ public class NacCardAdapter
 	 * Alarm card measure.
 	 */
 	private NacCardMeasure mMeasure;
+
+	/**
+	 * Card that was last clicked on to show a menu.
+	 */
+	private View mLastCardClicked;
 
 	/**
 	 */
@@ -110,10 +116,10 @@ public class NacCardAdapter
 		this.mNotification = new NacUpcomingAlarmNotification(context);
 		this.mSnackbar = new NacSnackbar(this.mRoot);
 		this.mAlarmList = null;
-		this.mNextAlarm = null;
 		this.mPreviousCalendar = null;
 		this.mWasAddedWithFloatingButton = false;
 		this.mMeasure = new NacCardMeasure(context);
+		this.mLastCardClicked = null;
 
 		this.mRecyclerView.addOnItemTouchListener(this);
 		setHasStableIds(true);
@@ -212,7 +218,6 @@ public class NacCardAdapter
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacDatabase db = new NacDatabase(context);
 		this.mAlarmList = db.read();
-		this.mNextAlarm = NacCalendar.getNextAlarm(this.mAlarmList);
 
 		if (shared.getAppFirstRun())
 		{
@@ -326,7 +331,9 @@ public class NacCardAdapter
 	 */
 	public NacAlarm getNextAlarm()
 	{
-		return this.mNextAlarm;
+		List<NacAlarm> alarms = this.getAlarms();
+
+		return NacCalendar.getNextAlarm(alarms);
 	}
 
 	/**
@@ -481,6 +488,7 @@ public class NacCardAdapter
 		alarm.setOnChangeListener(this);
 		card.init(alarm);
 		card.setOnDeleteListener(this);
+		card.setOnCreateContextMenuListener(this);
 
 		if (this.wasAddedWithFloatingButton())
 		{
@@ -491,6 +499,66 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * Create the context menu.
+	 */
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View view,
+		ContextMenuInfo menuInfo)
+	{
+		if (menu.size() > 0)
+		{
+			return;
+		}
+
+		Context context = this.getContext();
+		AppCompatActivity activity = (AppCompatActivity) context;
+		this.mLastCardClicked = view;
+
+		activity.getMenuInflater().inflate(R.menu.menu_card, menu);
+
+		for (int i=0; i < menu.size(); i++)
+		{
+			MenuItem item = menu.getItem(i);
+
+			item.setOnMenuItemClickListener(this);
+		}
+	}
+
+	/**
+	 * Catch when a menu item is clicked.
+	 */
+	@Override
+	public boolean onMenuItemClick(MenuItem item)
+	{
+		int id = item.getItemId();
+
+		switch (id)
+		{
+			case R.id.menu_next_run_time:
+				RecyclerView rv = this.getRecyclerView();
+				View view = this.mLastCardClicked;
+				NacCardHolder holder = (NacCardHolder)
+					rv.findContainingViewHolder(view);
+
+				if (holder != null)
+				{
+					NacAlarm alarm = holder.getAlarm();
+
+					this.showAlarm(alarm);
+				}
+
+				break;
+
+			default:
+				break;
+		}
+
+		this.mLastCardClicked = null;
+
+		return true;
+	}
+
+	/**
 	 * Update the database when alarm data is changed.
 	 *
 	 * @param  a  The alarm that was changed.
@@ -498,33 +566,8 @@ public class NacCardAdapter
 	@Override
 	public void onChange(NacAlarm alarm)
 	{
-		if (alarm.wasChanged())
-		{
-			List<NacAlarm> alarms = this.getAlarms();
-			NacAlarm nextAlarm = NacCalendar.getNextAlarm(alarms);
-
-			if (alarm.getEnabled())
-			{
-				this.showAlarm(alarm);
-			}
-			else
-			{
-				this.showNextAlarm(nextAlarm);
-			}
-
-			this.mNextAlarm = nextAlarm;
-		}
-
-		RecyclerView rv = this.getRecyclerView();
-		int id = alarm.getId();
-		NacCardHolder holder = (NacCardHolder) rv.findViewHolderForItemId(id);
-		NacCardView card = (holder != null) ? holder.getNacCardView() : null;
-
-		if ((card != null) && card.isCollapsed())
-		{
-			this.sort();
-		}
-
+		this.showAlarmChange(alarm);
+		this.sortHighlight(alarm);
 		this.setWasAddedWithFloatingButton(false);
 		this.getScheduler().update(alarm);
 		this.updateNotification();
@@ -633,26 +676,44 @@ public class NacCardAdapter
 		this.delete(position);
 	}
 
-	/**
-	 * Drag and reorder the alarm.
-	 *
-	 * @param  from  The position that the alarm is moving from.
-	 * @param  to  The position the alarm is moving to.
-	 */
-	@Override
-	public void onItemMove(int fromIndex, int toIndex)
-	{
-		Context context = this.getContext();
-		NacAlarm fromAlarm = this.get(fromIndex);
-		NacAlarm toAlarm = this.get(toIndex);
-		Intent intent = NacIntent.createService(context, "swap", fromAlarm,
-			toAlarm);
+	///**
+	// * Drag and reorder the alarm.
+	// *
+	// * @param  from  The position that the alarm is moving from.
+	// * @param  to  The position the alarm is moving to.
+	// */
+	//@Override
+	//public void onItemMove(int fromIndex, int toIndex)
+	//{
+	//	Context context = this.getContext();
+	//	NacAlarm fromAlarm = this.get(fromIndex);
+	//	NacAlarm toAlarm = this.get(toIndex);
+	//	Intent intent = NacIntent.createService(context, "swap", fromAlarm,
+	//		toAlarm);
 
-		this.setWasAddedWithFloatingButton(false);
-		this.startService(intent);
-		Collections.swap(this.getAlarms(), fromIndex, toIndex);
-		notifyItemMoved(fromIndex, toIndex);
-	}
+	//	this.setWasAddedWithFloatingButton(false);
+	//	this.startService(intent);
+	//	Collections.swap(this.getAlarms(), fromIndex, toIndex);
+	//	notifyItemMoved(fromIndex, toIndex);
+	//}
+
+	/**
+	 */
+	//@Override
+	//public boolean onLongClick(View view)
+	//{
+	//	RecyclerView rv = this.getRecyclerView();
+	//	NacCardHolder holder = (NacCardHolder) rv.findContainingViewHolder(view);
+
+	//	if (holder != null)
+	//	{
+	//		NacAlarm alarm = holder.getAlarm();
+
+	//		this.showAlarm(alarm);
+	//	}
+
+	//	return true;
+	//}
 
 	/**
 	 * @note Needed for RecyclerView.OnItemTouchListener
@@ -709,15 +770,11 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * Show next alarm.
+	 * Show the most recently edited alarm.
 	 */
-	private void showAlarm(NacAlarm alarm)
+	public void showAlarm(NacAlarm alarm)
 	{
-		Calendar alarmCalendar = NacCalendar.getNext(alarm);
-		Calendar previousCalendar = this.getPreviousCalendar();
-
-		if ((alarm == null) || (alarmCalendar.equals(previousCalendar))
-			|| !alarm.getEnabled())
+		if (alarm == null)
 		{
 			return;
 		}
@@ -734,16 +791,54 @@ public class NacCardAdapter
 		}
 
 		String message = NacCalendar.getMessage(prefix, shared, alarm);
-		this.mPreviousCalendar = alarmCalendar;
 
 		this.snackbar(message, "DISMISS", null, true);
 	}
 
-	private void showNextAlarm(NacAlarm alarm)
+	/**
+	 * Show a message either for the recently changed alarm, or the next alarm.
+	 */
+	private void showAlarmChange(NacAlarm alarm)
+	{
+		if (!alarm.wasChanged())
+		{
+			return;
+		}
+
+		if (alarm.getEnabled())
+		{
+			this.showAlarmRuntime(alarm);
+		}
+		else
+		{
+			this.showNextAlarm();
+		}
+	}
+
+	/**
+	 * Show when the alarm will next run.
+	 */
+	private void showAlarmRuntime(NacAlarm alarm)
+	{
+		Calendar alarmCalendar = NacCalendar.getNext(alarm);
+		Calendar previousCalendar = this.getPreviousCalendar();
+
+		if (!alarmCalendar.equals(previousCalendar))
+		{
+			this.showAlarm(alarm);
+
+			this.mPreviousCalendar = alarmCalendar;
+		}
+	}
+
+	/**
+	 * Show the next alarm.
+	 */
+	public void showNextAlarm()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		String prefix = "Next alarm";
-		String message = NacCalendar.getMessage(prefix, shared, alarm);
+		NacAlarm alarm = this.getNextAlarm();
+		String message = NacCalendar.getNextMessage(shared, alarm);
 
 		if (alarm == null)
 		{
@@ -786,32 +881,90 @@ public class NacCardAdapter
 	public void sort()
 	{
 		this.mAlarmList = this.getSortedAlarms();
-		//Context context = this.getContext();
-		//NacDatabase db = new NacDatabase(context);
-		//this.mAlarmList = this.getSortedAlarms();
 
-		//db.sort(this.mAlarmList);
-		//db.close();
-		//notifyDataSetChanged();
+		notifyDataSetChanged();
 	}
 
 	/**
-	 * Start a background service.
+	 * Sort an alarm into the alarm list.
 	 */
-	private void startService(Intent intent)
+	public void sortAlarm(NacAlarm alarm)
 	{
-		Context context = this.getContext();
-
-		try
+		if (alarm == null)
 		{
-			//context.startService(intent);
-			NacDatabase.BackgroundService.enqueueWork(context, intent);
-		}
-		catch (IllegalStateException e)
-		{
-			NacUtility.printf("NacCardAdapter : IllegalStateException caught in startService()");
 			return;
 		}
+
+		this.sortRemoveAlarm(alarm);
+		this.sortInsertAlarm(alarm);
+	}
+
+	/**
+	 * Sort and highlight the alarm, if the alarm card is collapsed.
+	 */
+	public void sortHighlight(NacAlarm alarm)
+	{
+		int id = alarm.getId();
+		RecyclerView rv = this.getRecyclerView();
+		NacCardHolder holder = (NacCardHolder) rv.findViewHolderForItemId(id);
+		NacCardView card = (holder != null) ? holder.getNacCardView() : null;
+
+		if ((card != null) && card.isCollapseState())
+		{
+			this.sortAlarm(alarm);
+			card.highlight();
+		}
+	}
+
+	/**
+	 * Insert the alarm into the sorted list.
+	 */
+	private int sortInsertAlarm(NacAlarm alarm)
+	{
+		List<NacAlarm> alarmList = this.getAlarms();
+		int size = alarmList.size();
+		Calendar next = NacCalendar.getNext(alarm);
+		boolean enabled = alarm.getEnabled();
+
+		for (int i=0; i < size; i++)
+		{
+			NacAlarm a = alarmList.get(i);
+			Calendar cal = (enabled && a.getEnabled()) ? NacCalendar.getNext(a)
+				: null;
+
+			if (!a.getEnabled() || ((cal != null) && next.before(cal)))
+			{
+				alarmList.add(i, alarm);
+				notifyItemInserted(i);
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
+	/**
+	 * Remove alarm from the sorted list.
+	 */
+	private int sortRemoveAlarm(NacAlarm alarm)
+	{
+		List<NacAlarm> alarmList = this.getAlarms();
+		int size = alarmList.size();
+		int id = alarm.getId();
+
+		for (int i=0; i < size; i++)
+		{
+			NacAlarm a = alarmList.get(i);
+
+			if (a.getId() == id)
+			{
+				alarmList.remove(i);
+				notifyItemRemoved(i);
+				return i;
+			}
+		}
+
+		return -1;
 	}
 
 	/**

@@ -59,7 +59,6 @@ public class NacMainActivity
 		if (alarm != null)
 		{
 			alarm.setId(adapter.getUniqueId());
-			alarm.print();
 			adapter.add(alarm);
 			//adapter.setWasAddedWithFloatingButton(false);
 		}
@@ -157,19 +156,11 @@ public class NacMainActivity
 
 		switch (id)
 		{
-		case R.id.menu_next_alarm:
-			showNextAlarm();
-			return true;
-		case R.id.menu_settings:
-			startActivity(new Intent(this, NacSettingsActivity.class));
-			return true;
-		//case R.id.menu_sort:
-		//	NacCardAdapter adapter = this.getCardAdapter();
-
-		//	adapter.sort();
-		//	return true;
-		default:
-			break;
+			case R.id.menu_settings:
+				startActivity(new Intent(this, NacSettingsActivity.class));
+				return true;
+			default:
+				break;
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -215,20 +206,6 @@ public class NacMainActivity
 		ColorStateList color = ColorStateList.valueOf(shared.getThemeColor());
 
 		floatingButton.setBackgroundTintList(color);
-	}
-
-	/**
-	 * Display a snackbar showing the next scheduled alarm.
-	 */
-	private void showNextAlarm()
-	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-		NacCardAdapter adapter = this.getCardAdapter();
-		List<NacAlarm> alarms = adapter.getAlarms();
-		NacAlarm nextAlarm = NacCalendar.getNextAlarm(alarms);
-		String message = NacCalendar.getNextMessage(shared, nextAlarm);
-
-		NacUtility.snackbar(this, message, "DISMISS", null);
 	}
 
 }

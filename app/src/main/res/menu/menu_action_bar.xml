@@ -9,12 +9,14 @@
 		android:showAsAction="never"
 		/>
 
+	<!--
 	<item
 		android:id="@+id/menu_next_alarm"
 		android:orderInCategory="200"
 		android:title="@string/menu_next_alarm"
 		android:showAsAction="never"
 		/>
+	-->
 
 	<!--
 	<item
