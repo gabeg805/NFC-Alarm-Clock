@@ -925,8 +925,9 @@ public class NacCardAdapter
 		int size = alarmList.size();
 		Calendar next = NacCalendar.getNext(alarm);
 		boolean enabled = alarm.getEnabled();
+		int i = 0;
 
-		for (int i=0; i < size; i++)
+		for (i=0; i < size; i++)
 		{
 			NacAlarm a = alarmList.get(i);
 			Calendar cal = (enabled && a.getEnabled()) ? NacCalendar.getNext(a)
@@ -934,13 +935,14 @@ public class NacCardAdapter
 
 			if (!a.getEnabled() || ((cal != null) && next.before(cal)))
 			{
-				alarmList.add(i, alarm);
-				notifyItemInserted(i);
-				return i;
+				break;
 			}
 		}
 
-		return -1;
+		alarmList.add(i, alarm);
+		notifyItemInserted(i);
+
+		return i;
 	}
 
 	/**
