@@ -172,7 +172,7 @@ public class NacMainActivity
 	protected void onPause()
 	{
 		super.onPause();
-		this.getCardAdapter().saveAlarms();
+		//this.getCardAdapter().saveAlarms();
 	}
 
 	/**

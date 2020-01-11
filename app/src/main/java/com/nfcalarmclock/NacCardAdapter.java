@@ -570,6 +570,7 @@ public class NacCardAdapter
 		this.sortHighlight(alarm);
 		this.setWasAddedWithFloatingButton(false);
 		this.getScheduler().update(alarm);
+		this.saveAlarm(alarm);
 		this.updateNotification();
 	}
 
@@ -751,6 +752,15 @@ public class NacCardAdapter
 	/**
 	 * Save alarms to the database.
 	 */
+	public void saveAlarm(NacAlarm alarm)
+	{
+		Context context = this.getContext();
+		NacDatabase db = new NacDatabase(context);
+
+		db.update(alarm);
+		db.close();
+	}
+
 	public void saveAlarms()
 	{
 		Context context = this.getContext();
