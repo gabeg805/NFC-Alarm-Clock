@@ -66,6 +66,9 @@ public class NacForegroundService
 
 		if (alarm != null)
 		{
+			NacDatabase db = new NacDatabase(this);
+			int id = alarm.getId();
+
 			if (!alarm.getRepeat())
 			{
 				alarm.toggleToday();
@@ -75,15 +78,18 @@ public class NacForegroundService
 					alarm.setEnabled(false);
 				}
 
-				NacDatabase db = new NacDatabase(this);
-				//NacNotification notification = new NacNotification(this);
-
-				//notification.hide(alarm);
 				db.update(alarm);
-				db.close();
+			}
+			else
+			{
+				NacScheduler scheduler = new NacScheduler(this);
+				NacAlarm actualAlarm = db.findAlarm(id);
+
+				scheduler.scheduleNext(actualAlarm);
 			}
 
 			shared.editSnoozeCount(alarm.getId(), 0);
+			db.close();
 		}
 
 		NacUtility.quickToast(this, "Alarm dismissed");
@@ -94,7 +100,13 @@ public class NacForegroundService
 	 */
 	public void finish()
 	{
-		this.getWakeUp().cleanup();
+		NacWakeUpAction wakeup = this.getWakeUp();
+
+		if (wakeup != null)
+		{
+			wakeup.cleanup();
+		}
+
 		super.stopForeground(true);
 		super.stopSelf();
 	}
@@ -158,7 +170,13 @@ public class NacForegroundService
 	public void onDestroy()
 	{
 		super.onDestroy();
-		this.getWakeUp().shutdown();
+
+		NacWakeUpAction wakeup = this.getWakeUp();
+
+		if (wakeup != null)
+		{
+			wakeup.shutdown();
+		}
 
 		if (this.mWakeLock != null)
 		{
@@ -185,6 +203,7 @@ public class NacForegroundService
 			this.showNotification();
 			this.setupActiveAlarm();
 
+			//return START_STICKY;
 			return START_REDELIVER_INTENT;
 		}
 		else if (intent.getAction().equals(ACTION_SNOOZE_ALARM))
@@ -197,6 +216,7 @@ public class NacForegroundService
 		}
 
 		return START_STICKY;
+		//return START_NOT_STICKY;
 	}
 
 	/**

@@ -1,11 +1,16 @@
 package com.nfcalarmclock;
 
+import android.annotation.TargetApi;
 import android.app.AlarmManager.AlarmClockInfo;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.service.notification.StatusBarNotification;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -181,9 +186,67 @@ public class NacMainActivity
 	protected void onResume()
 	{
 		super.onResume();
+		this.setupAlarmActivity();
 		this.setupAlarmCardAdapter();
 		this.setupFloatingActionButton();
 		this.addSetAlarmFromIntent();
+	}
+
+	/**
+	 * Setup the alarm activity.
+	 */
+	@TargetApi(Build.VERSION_CODES.M)
+	private void setupAlarmActivity()
+	{
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+		{
+			NacUtility.printf("Build version is too young!");
+			return;
+		}
+
+		NotificationManager manager = getSystemService(NotificationManager.class);
+		StatusBarNotification[] statusbar = manager.getActiveNotifications();
+		Notification activeNotification = null;
+		long activePosted = 0;
+
+		NacUtility.printf("Number of notifications : %d", statusbar.length);
+		for (StatusBarNotification sb : statusbar)
+		{
+			Notification notification = sb.getNotification();
+			String group = notification.getGroup();
+			long posted = sb.getPostTime();
+			NacUtility.printf("Posted : %d", posted);
+
+			if (group.equals(NacActiveAlarmNotification.GROUP))
+			{
+				NacUtility.printf("Group equals group!");
+				if ((activePosted == 0) || (posted < activePosted))
+				{
+					NacUtility.printf("Updating saved notification!");
+					activeNotification = notification;
+					activePosted = posted;
+					continue;
+				}
+			}
+		}
+
+		NacUtility.printf("Activie notification status! %b", activeNotification == null);
+
+		if (activeNotification != null)
+		{
+			PendingIntent pending = activeNotification.contentIntent;
+
+			NacUtility.printf("Sending pending intent!");
+			try
+			{
+				pending.send();
+			}
+			catch (PendingIntent.CanceledException e)
+			{
+				NacUtility.printf("Caught canceled exception for pending intent!");
+			}
+			NacUtility.printf("Done pending intent!");
+		}
 	}
 
 	/**

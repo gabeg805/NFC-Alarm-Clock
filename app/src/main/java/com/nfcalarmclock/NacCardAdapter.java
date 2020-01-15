@@ -180,6 +180,8 @@ public class NacCardAdapter
 			return -1;
 		}
 
+		Context context = this.getContext();
+		NacDatabase db = new NacDatabase(context);
 		int id = alarm.getId();
 
 		this.getScheduler().update(alarm);
@@ -187,6 +189,8 @@ public class NacCardAdapter
 		this.getAlarms().add(position, alarm);
 		this.updateNotification();
 		notifyItemInserted(position);
+		db.add(alarm);
+		db.close();
 
 		return 0;
 	}
@@ -269,6 +273,8 @@ public class NacCardAdapter
 	 */
 	public int delete(int position)
 	{
+		Context context = this.getContext();
+		NacDatabase db = new NacDatabase(context);
 		NacAlarm alarm = this.get(position);
 		int id = alarm.getId();
 
@@ -278,6 +284,8 @@ public class NacCardAdapter
 		this.getAlarms().remove(position);
 		this.updateNotification();
 		notifyItemRemoved(position);
+		db.delete(alarm);
+		db.close();
 		this.undo(alarm, position, Undo.Type.DELETE);
 		this.snackbar("Deleted alarm.");
 
@@ -566,12 +574,16 @@ public class NacCardAdapter
 	@Override
 	public void onChange(NacAlarm alarm)
 	{
+		Context context = this.getContext();
+		NacDatabase db = new NacDatabase(context);
+
 		this.showAlarmChange(alarm);
 		this.sortHighlight(alarm);
 		this.setWasAddedWithFloatingButton(false);
 		this.getScheduler().update(alarm);
-		this.saveAlarm(alarm);
 		this.updateNotification();
+		db.update(alarm);
+		db.close();
 	}
 
 	/**
@@ -752,15 +764,6 @@ public class NacCardAdapter
 	/**
 	 * Save alarms to the database.
 	 */
-	public void saveAlarm(NacAlarm alarm)
-	{
-		Context context = this.getContext();
-		NacDatabase db = new NacDatabase(context);
-
-		db.update(alarm);
-		db.close();
-	}
-
 	public void saveAlarms()
 	{
 		Context context = this.getContext();

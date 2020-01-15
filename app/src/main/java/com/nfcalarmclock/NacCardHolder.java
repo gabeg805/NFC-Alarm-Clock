@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class NacCardHolder
 	extends RecyclerView.ViewHolder
 	implements View.OnClickListener,
+		View.OnLongClickListener,
 		CompoundButton.OnCheckedChangeListener,
 		TimePickerDialog.OnTimeSetListener,
 		NacDialog.OnDismissListener,
@@ -321,12 +322,18 @@ public class NacCardHolder
 	@Override
 	public void onClick(View view)
 	{
+		NacAlarm alarm = this.getAlarm();
 		int id = view.getId();
 
 		if (id == R.id.nac_header)
 		{
 			this.mCard.toggle(getAdapterPosition());
 			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+
+			if (this.mCard.isCollapseState() && alarm.wasChanged())
+			{
+				alarm.changed();
+			}
 		}
 		else if (id == R.id.nac_summary)
 		{
@@ -337,6 +344,11 @@ public class NacCardHolder
 		{
 			this.mCard.collapse();
 			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+
+			if (alarm.wasChanged())
+			{
+				alarm.changed();
+			}
 		}
 		else if (id == R.id.nac_time_parent)
 		{
@@ -389,6 +401,26 @@ public class NacCardHolder
 		else
 		{
 		}
+
+		return true;
+	}
+
+	/**
+	 */
+	@Override
+	public boolean onLongClick(View view)
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacAlarm alarm = this.getAlarm();
+
+		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+		alarm.setRepeat(false);
+		alarm.setDays(0);
+		alarm.changed();
+		this.mDays.getRepeat().setEnabled(false);
+		this.mDays.getRepeat().setAlpha(0.5f);
+		this.mDays.set(shared);
+		this.mSummary.set(shared);
 
 		return true;
 	}

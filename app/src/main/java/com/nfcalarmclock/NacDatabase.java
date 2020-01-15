@@ -146,6 +146,24 @@ public class NacDatabase
 	/**
 	 * Find the alarm.
 	 */
+	public NacAlarm findAlarm(int id)
+	{
+		this.setDatabase();
+
+		SQLiteDatabase db = this.getDatabase();
+		String table = this.getTable();
+		String where = this.getWhereClause();
+		String[] whereArgs = this.getWhereArgs(id);
+		Cursor cursor = db.query(table, null, where, whereArgs, null, null,
+			null);
+		int version = db.getVersion();
+		NacAlarm alarm = this.toAlarm(cursor, version);
+
+		cursor.close();
+
+		return alarm;
+	}
+
 	public NacAlarm findAlarm(Calendar calendar)
 	{
 		this.setDatabase();
@@ -583,6 +601,11 @@ public class NacDatabase
 	{
 		NacAlarm alarm = new NacAlarm();
 		int offset = -1;
+
+		if (cursor == null)
+		{
+			return null;
+		}
 
 		switch (version)
 		{

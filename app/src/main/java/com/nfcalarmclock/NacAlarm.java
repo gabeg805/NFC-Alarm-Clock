@@ -518,6 +518,7 @@ public class NacAlarm
 	public enum ChangeTracker
 	{
 		NONE,
+		STATE,
 		ENABLE,
 		TIME,
 		REPEAT,
@@ -960,6 +961,14 @@ public class NacAlarm
 	public void setAudioSource(String source)
 	{
 		this.mAudioSource = source;
+	}
+
+	/**
+	 * Set the change tracker.
+	 */
+	public void setChangeTracker(ChangeTracker change)
+	{
+		this.mTracker = change;
 	}
 
 	/**

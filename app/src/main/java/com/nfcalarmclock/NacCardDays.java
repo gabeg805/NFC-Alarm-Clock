@@ -110,35 +110,6 @@ public class NacCardDays
 	{
 		this.setDays(shared);
 		this.setRepeat();
-		//this.changeVisibility(animate);
-	}
-
-	public void changeVisibility(boolean animate)
-	{
-		NacAlarm alarm = this.getAlarm();
-		CheckBox repeat = this.getRepeat();
-		NacDayOfWeek dayButtons = this.getDayButtons();
-		int currentVisibility = dayButtons.getVisibility();
-		int newVisibility = alarm.areDaysSelected() ? View.VISIBLE: View.GONE;
-
-		if (!animate)
-		{
-			dayButtons.setVisibility(newVisibility);
-		}
-		else if (currentVisibility != newVisibility)
-		{
-			if (newVisibility == View.GONE)
-			{
-				this.mDaysAnimation.setupForClose();
-			}
-			else
-			{
-				this.mDaysAnimation.setupForOpen();
-			}
-
-			dayButtons.setAnimation(this.mDaysAnimation);
-			dayButtons.startAnimation(this.mDaysAnimation);
-		}
 	}
 
 	/**
@@ -172,6 +143,7 @@ public class NacCardDays
 	{
 		this.mDayButtons.setOnClickListener((NacDayOfWeek.OnClickListener)listener);
 		this.mRepeat.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener)listener);
+		this.mRepeat.setOnLongClickListener((View.OnLongClickListener)listener);
 	}
 
 }
