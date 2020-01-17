@@ -72,7 +72,7 @@ public class NacCardName
 	public void set()
 	{
 		NacAlarm alarm = this.getAlarm();
-		String alarmName = alarm.getName();
+		String alarmName = alarm.getNameNormalized();
 		String name = NacSharedPreferences.getNameMessage(alarmName);
 		float alpha = ((alarmName != null) && !alarmName.isEmpty()) ? 1.0f
 			: 0.5f;

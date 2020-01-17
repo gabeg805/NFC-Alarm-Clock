@@ -157,9 +157,16 @@ public class NacDatabase
 		Cursor cursor = db.query(table, null, where, whereArgs, null, null,
 			null);
 		int version = db.getVersion();
-		NacAlarm alarm = this.toAlarm(cursor, version);
+		NacAlarm alarm = null;
 
-		cursor.close();
+		if (cursor != null)
+		{
+			cursor.moveToFirst();
+
+			alarm = this.toAlarm(cursor, version);
+
+			cursor.close();
+		}
 
 		return alarm;
 	}
@@ -188,7 +195,7 @@ public class NacDatabase
 		{
 			NacAlarm a = this.toAlarm(cursor, version);
 
-			if (alarm.getDays().contains(day))
+			if ((alarm != null) && alarm.getDays().contains(day))
 			{
 				alarm = a;
 				break;

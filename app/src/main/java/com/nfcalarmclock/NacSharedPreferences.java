@@ -950,7 +950,7 @@ public class NacSharedPreferences
 	 */
 	public static String getNameMessage(String name)
 	{
-		return ((name != null) && !name.isEmpty()) ? name.replace("\n", " ")
+		return (!name.isEmpty()) ? name
 			: NacSharedPreferences.DEFAULT_NAME_MESSAGE;
 	}
 

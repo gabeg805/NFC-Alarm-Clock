@@ -793,12 +793,13 @@ public class NacCardAdapter
 		}
 
 		NacSharedPreferences shared = this.getSharedPreferences();
-		String name = alarm.getName();
+		String name = alarm.getNameNormalized();
 		String prefix = "Will run";
 
-		if ((name != null) && !name.isEmpty())
+		if (!name.isEmpty())
 		{
-			prefix = (name.length() > 15) ? String.format("\"%12s...\"", name)
+			// Maybe change this length
+			prefix = (name.length() > 16) ? String.format("\"%12s...\"", name)
 				: String.format("\"%s\"", name);
 			prefix += " will run";
 		}

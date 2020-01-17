@@ -413,7 +413,7 @@ public class NacCardHolder
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 
-		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+		//view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		alarm.setRepeat(false);
 		alarm.setDays(0);
 		alarm.changed();

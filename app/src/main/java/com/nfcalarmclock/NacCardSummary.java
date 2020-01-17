@@ -167,13 +167,13 @@ public class NacCardSummary
 	{
 		RelativeLayout.LayoutParams params = this.getNameLayoutParams();
 		NacAlarm alarm = this.getAlarm();
-		String name = alarm.getName();
+		String name = alarm.getNameNormalized();
 		String text = "";
 		int margin = 0;
 
-		if ((name != null) && !name.isEmpty())
+		if (!name.isEmpty())
 		{
-			text = name.replace("\n", " ") + " ";
+			text = name + " ";
 			margin = this.getResources().getDimensionPixelSize(R.dimen.sp_text);
 		}
 

@@ -256,7 +256,7 @@ public class NacAlarmActivity
 		if ((alarm != null) && shared.getShowAlarmInfo())
 		{
 			TextView name = (TextView) findViewById(R.id.name);
-			String alarmName = alarm.getName();
+			String alarmName = alarm.getNameNormalized();
 
 			name.setText(alarmName);
 			name.setSelected(true);

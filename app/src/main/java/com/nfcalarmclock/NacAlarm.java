@@ -846,7 +846,20 @@ public class NacAlarm
 	 */
 	public String getName()
 	{
-		return this.mName;
+		String name = this.mName;
+
+		return (name != null) ? name : "";
+	}
+
+	/**
+	 * @return The normalized alarm name (with newlines replaced with spaces).
+	 */
+	public String getNameNormalized()
+	{
+		String name = this.getName();
+
+		return ((name != null) && !name.isEmpty()) ? name.replace("\n", " ")
+			: name;
 	}
 
 	/**
