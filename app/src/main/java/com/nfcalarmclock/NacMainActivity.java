@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import java.lang.System;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,12 @@ public class NacMainActivity
 	extends AppCompatActivity
 	implements View.OnClickListener
 {
+
+	/**
+	 * Wait time between a notification posting and running the alarm activity
+	 * for that notification.
+	 */
+	private static final long ACTIVE_ALARM_POST_DURATION = 2000;
 
 	/**
 	 * Shared preferences.
@@ -67,6 +74,45 @@ public class NacMainActivity
 			adapter.add(alarm);
 			//adapter.setWasAddedWithFloatingButton(false);
 		}
+	}
+
+	/**
+	 * @return The notification for the most recent (if more than 1) active
+	 *         alarm.
+	 */
+	@TargetApi(Build.VERSION_CODES.M)
+	private StatusBarNotification getActiveAlarmNotification()
+	{
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+		{
+			return null;
+		}
+
+		NotificationManager manager = getSystemService(
+			NotificationManager.class);
+		StatusBarNotification[] statusbar = manager.getActiveNotifications();
+		StatusBarNotification activeNotification = null;
+
+		for (StatusBarNotification sb : statusbar)
+		{
+			Notification notification = sb.getNotification();
+			String group = notification.getGroup();
+			long posted = sb.getPostTime();
+
+			if (!group.equals(NacActiveAlarmNotification.GROUP))
+			{
+				continue;
+			}
+
+			if ((activeNotification == null)
+				|| (activeNotification.getPostTime() > posted))
+			{
+				activeNotification = sb;
+				continue;
+			}
+		}
+
+		return activeNotification;
 	}
 
 	/**
@@ -122,6 +168,7 @@ public class NacMainActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_main);
 
+		NacUtility.printf("NacMAINActivity: onCreate!");
 		NacSharedPreferences shared = new NacSharedPreferences(this);
 		Drawable drawable = ContextCompat.getDrawable(this,
 			R.drawable.card_divider);
@@ -174,69 +221,31 @@ public class NacMainActivity
 	/**
 	 */
 	@Override
-	protected void onPause()
-	{
-		super.onPause();
-		//this.getCardAdapter().saveAlarms();
-	}
-
-	/**
-	 */
-	@Override
 	protected void onResume()
 	{
 		super.onResume();
-		this.setupAlarmActivity();
+		this.setupActiveAlarmActivity();
 		this.setupAlarmCardAdapter();
 		this.setupFloatingActionButton();
 		this.addSetAlarmFromIntent();
 	}
 
 	/**
-	 * Setup the alarm activity.
+	 * Show the alarm activity.
 	 */
-	@TargetApi(Build.VERSION_CODES.M)
-	private void setupAlarmActivity()
+	private void showAlarmActivity(StatusBarNotification activeNotification)
 	{
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+		if (activeNotification == null)
 		{
-			NacUtility.printf("Build version is too young!");
 			return;
 		}
 
-		NotificationManager manager = getSystemService(NotificationManager.class);
-		StatusBarNotification[] statusbar = manager.getActiveNotifications();
-		Notification activeNotification = null;
-		long activePosted = 0;
+		Notification noti = activeNotification.getNotification();
 
-		NacUtility.printf("Number of notifications : %d", statusbar.length);
-		for (StatusBarNotification sb : statusbar)
+		if (noti != null)
 		{
-			Notification notification = sb.getNotification();
-			String group = notification.getGroup();
-			long posted = sb.getPostTime();
-			NacUtility.printf("Posted : %d", posted);
+			PendingIntent pending = noti.contentIntent;
 
-			if (group.equals(NacActiveAlarmNotification.GROUP))
-			{
-				NacUtility.printf("Group equals group!");
-				if ((activePosted == 0) || (posted < activePosted))
-				{
-					NacUtility.printf("Updating saved notification!");
-					activeNotification = notification;
-					activePosted = posted;
-					continue;
-				}
-			}
-		}
-
-		NacUtility.printf("Activie notification status! %b", activeNotification == null);
-
-		if (activeNotification != null)
-		{
-			PendingIntent pending = activeNotification.contentIntent;
-
-			NacUtility.printf("Sending pending intent!");
 			try
 			{
 				pending.send();
@@ -245,7 +254,28 @@ public class NacMainActivity
 			{
 				NacUtility.printf("Caught canceled exception for pending intent!");
 			}
-			NacUtility.printf("Done pending intent!");
+		}
+	}
+
+	/**
+	 * Setup the alarm activity for any active alarms.
+	 */
+	private void setupActiveAlarmActivity()
+	{
+		StatusBarNotification activeNotification =
+			this.getActiveAlarmNotification();
+
+		if (activeNotification == null)
+		{
+			return;
+		}
+
+		long currentTime = System.currentTimeMillis();
+		long postTime = activeNotification.getPostTime();
+
+		if ((currentTime-postTime) >= ACTIVE_ALARM_POST_DURATION)
+		{
+			this.showAlarmActivity(activeNotification);
 		}
 	}
 

@@ -42,12 +42,14 @@ public class NacAlarmActivity
 	 */
 	public void dismiss()
 	{
+		NacAlarm alarm = this.getAlarm();
 		Intent dismissIntent =  new Intent(
 			NacForegroundService.ACTION_DISMISS_ALARM, null, this,
 			NacForegroundService.class);
+		dismissIntent = NacIntent.addAlarm(dismissIntent, alarm);
 
 		startService(dismissIntent);
-		super.finish();
+		finish();
 	}
 
 	/**
@@ -114,15 +116,6 @@ public class NacAlarmActivity
 	}
 
 	/**
-	 */
-	@Override
-	public void onDestroy()
-	{
-		super.onDestroy();
-		NacNfc.finish(this);
-	}
-
-	/**
 	 * NFC tag discovered so dismiss the dialog.
 	 *
 	 * Note: Parent method must be called last. Causes issues with
@@ -142,14 +135,7 @@ public class NacAlarmActivity
 	public void onPause()
 	{
 		super.onPause();
-
-		NacAlarm alarm = this.getAlarm();
-
-		if ((alarm != null) && alarm.getUseNfc())
-		{
-			NacNfc.disable(this);
-		}
-
+		NacNfc.disable(this);
 	}
 
 	/**
@@ -160,11 +146,16 @@ public class NacAlarmActivity
 	{
 		super.onResume();
 
-		NacAlarm alarm = this.getAlarm();
-
-		if ((alarm != null) && alarm.getUseNfc())
+		if (NacNfc.exists(this))
 		{
 			NacNfc.enable(this);
+		}
+		else
+		{
+			if (this.shouldUseNfc())
+			{
+				NacUtility.quickToast(this, "Your device doesn't support NFC");
+			}
 		}
 	}
 
@@ -182,13 +173,6 @@ public class NacAlarmActivity
 		{
 			outState.putParcelable(NacBundle.ALARM_PARCEL_NAME, alarm);
 		}
-	}
-
-	@Override
-	public void onStop()
-	{
-		super.onStop();
-		NacNfc.finish(this);
 	}
 
 	/**
@@ -212,7 +196,7 @@ public class NacAlarmActivity
 
 		if (alarm == null)
 		{
-			super.finish();
+			finish();
 		}
 
 		this.mAlarm = alarm;
@@ -294,6 +278,16 @@ public class NacAlarmActivity
 	 }
 
 	/**
+	 * @return True if should use NFC, and False otherwise.
+	 */
+	public boolean shouldUseNfc()
+	{
+		NacAlarm alarm = this.getAlarm();
+
+		return ((alarm != null) && alarm.getUseNfc());
+	}
+
+	/**
 	 * Snooze the alarm.
 	 */
 	public void snooze()
@@ -313,9 +307,10 @@ public class NacAlarmActivity
 		Intent snoozeIntent = new Intent(
 			NacForegroundService.ACTION_SNOOZE_ALARM, null, this,
 			NacForegroundService.class);
+		snoozeIntent = NacIntent.addAlarm(snoozeIntent, alarm);
 
 		startService(snoozeIntent);
-		super.finish();
+		finish();
 	}
 
 }

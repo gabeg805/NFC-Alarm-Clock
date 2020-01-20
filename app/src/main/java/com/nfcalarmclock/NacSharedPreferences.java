@@ -245,6 +245,11 @@ public class NacSharedPreferences
 	public static final String DEFAULT_DAYS_MESSAGE = "";
 
 	/**
+	 * Default max name length.
+	 */
+	public static final int DEFAULT_MAX_NAME_LENGTH = 32;
+
+	/**
 	 */
 	public NacSharedPreferences(Context context)
 	{

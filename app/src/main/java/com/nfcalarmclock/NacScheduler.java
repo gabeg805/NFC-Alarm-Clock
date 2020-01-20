@@ -59,10 +59,6 @@ public class NacScheduler
 		Context context = this.getContext();
 		int id = alarm.getId(calendar);
 		long millis = calendar.getTimeInMillis();
-		//Intent operationIntent = NacIntent.toIntent(context,
-		//	NacAlarmActivity.class, alarm);
-		//PendingIntent operationPendingIntent = PendingIntent.getActivity(
-		//	context, id, operationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		Intent operationIntent = NacIntent.toIntent(context,
 			NacAlarmBroadcastReceiver.class, alarm);
 		PendingIntent operationPendingIntent = PendingIntent.getBroadcast(

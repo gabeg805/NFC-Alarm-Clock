@@ -2,6 +2,7 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.media.MediaMetadataRetriever;
@@ -12,6 +13,7 @@ import android.provider.MediaStore;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.lang.IllegalArgumentException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -487,8 +489,16 @@ public class NacSound
 				new String[] { MediaStore.Audio.Media.DATA }, null, null, null);
 			cursor.moveToFirst();
 
-			path = cursor.getString(cursor.getColumnIndexOrThrow(
-				MediaStore.Audio.Media.DATA));
+			try
+			{
+				int index = cursor.getColumnIndexOrThrow(
+					MediaStore.Audio.Media.DATA);
+				path = cursor.getString(index);
+			}
+			catch (CursorIndexOutOfBoundsException | IllegalArgumentException e)
+			{
+				path = "";
+			}
 
 			cursor.close();
 		}

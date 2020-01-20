@@ -20,7 +20,6 @@ public class NacAlarmBroadcastReceiver
 	public void onReceive(final Context context, Intent intent)
 	{
 		Bundle bundle = NacIntent.getAlarmBundle(intent);
-		Intent newIntent = NacIntent.createAlarmActivity(context, bundle);
 		Intent startIntent = new Intent(
 			NacForegroundService.ACTION_START_SERVICE, null, context,
 			NacForegroundService.class);

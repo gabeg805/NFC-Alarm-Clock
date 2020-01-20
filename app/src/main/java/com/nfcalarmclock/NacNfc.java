@@ -19,11 +19,6 @@ public class NacNfc
 	private Context mContext;
 
 	/**
-	 * The NFC activity request code.
-	 */
-	private static final int REQUEST_CODE = 222;
-
-	/**
 	 */
 	public NacNfc(Context context)
 	{
@@ -76,7 +71,6 @@ public class NacNfc
 
 		if (nfcAdapter == null)
 		{
-			NacUtility.quickToast(context, "Your device doesn't support NFC");
 			return;
 		}
 		else
@@ -88,7 +82,6 @@ public class NacNfc
 
 				NacUtility.toast(context, "Please enable NFC to dismiss the alarm");
 				activity.startActivity(settings);
-				//activity.startActivityForResult(settings, REQUEST_CODE);
 			}
 
 			Intent intent = new Intent(context, NacAlarmActivity.class)
@@ -121,28 +114,6 @@ public class NacNfc
 	public static boolean exists(Context context)
 	{
 		return (NfcAdapter.getDefaultAdapter(context) != null);
-	}
-
-	/**
-	 * @see finish
-	 */
-	public void finish()
-	{
-		Context context = this.getContext();
-
-		NacNfc.finish(context);
-	}
-
-	/**
-	 * Finish the child activity if it is still active.
-	 */
-	public static void finish(Context context)
-	{
-		Activity activity = (Activity) context;
-
-		activity.finishAndRemoveTask();
-		//activity.finishAffinity();
-		//activity.finishActivity(REQUEST_CODE);
 	}
 
 	/**

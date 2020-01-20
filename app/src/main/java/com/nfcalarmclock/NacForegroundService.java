@@ -57,6 +57,31 @@ public class NacForegroundService
 	private WakeLock mWakeLock;
 
 	/**
+	 * Run cleanup.
+	 */
+	private void cleanup()
+	{
+		NacAlarm alarm = this.getAlarm();
+		NacWakeUpAction wakeUp = this.getWakeUp();
+		WakeLock wakeLock = this.getWakeLock();
+
+		if ((wakeUp == null) && (alarm != null))
+		{
+			wakeUp = new NacWakeUpAction(this, alarm);
+		}
+
+		if (wakeUp != null)
+		{
+			wakeUp.cleanup();
+		}
+
+		if (wakeLock != null)
+		{
+			wakeLock.release();
+		}
+	}
+
+	/**
 	 * Dismiss the alarm.
 	 */
 	private void dismiss()
@@ -71,11 +96,13 @@ public class NacForegroundService
 
 			if (!alarm.getRepeat())
 			{
-				alarm.toggleToday();
-
 				if (!alarm.areDaysSelected())
 				{
 					alarm.setEnabled(false);
+				}
+				else
+				{
+					alarm.toggleToday();
 				}
 
 				db.update(alarm);
@@ -100,13 +127,7 @@ public class NacForegroundService
 	 */
 	public void finish()
 	{
-		NacWakeUpAction wakeup = this.getWakeUp();
-
-		if (wakeup != null)
-		{
-			wakeup.cleanup();
-		}
-
+		this.cleanup();
 		super.stopForeground(true);
 		super.stopSelf();
 	}
@@ -133,6 +154,14 @@ public class NacForegroundService
 	private NacWakeUpAction getWakeUp()
 	{
 		return this.mWakeUp;
+	}
+
+	/**
+	 * @return The wake lock.
+	 */
+	private WakeLock getWakeLock()
+	{
+		return this.mWakeLock;
 	}
 
 	/**
@@ -170,18 +199,7 @@ public class NacForegroundService
 	public void onDestroy()
 	{
 		super.onDestroy();
-
-		NacWakeUpAction wakeup = this.getWakeUp();
-
-		if (wakeup != null)
-		{
-			wakeup.shutdown();
-		}
-
-		if (this.mWakeLock != null)
-		{
-			this.mWakeLock.release();
-		}
+		this.cleanup();
 	}
 
 	/**
@@ -189,6 +207,9 @@ public class NacForegroundService
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
+		this.mSharedPreferences = new NacSharedPreferences(this);
+		this.mAlarm = NacIntent.getAlarm(intent);
+
 		if ((intent == null) || (intent.getAction() == null)
 			|| intent.getAction().equals(ACTION_STOP_SERVICE))
 		{
@@ -196,15 +217,11 @@ public class NacForegroundService
 		}
 		else if (intent.getAction().equals(ACTION_START_SERVICE))
 		{
-			this.mSharedPreferences = new NacSharedPreferences(this);
-			this.mAlarm = NacIntent.getAlarm(intent);
-
 			this.setupWakeLock();
 			this.showNotification();
 			this.setupActiveAlarm();
 
-			//return START_STICKY;
-			return START_REDELIVER_INTENT;
+			return START_STICKY;
 		}
 		else if (intent.getAction().equals(ACTION_SNOOZE_ALARM))
 		{
@@ -215,8 +232,7 @@ public class NacForegroundService
 			this.dismiss();
 		}
 
-		return START_STICKY;
-		//return START_NOT_STICKY;
+		return START_NOT_STICKY;
 	}
 
 	/**

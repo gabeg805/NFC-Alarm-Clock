@@ -859,7 +859,19 @@ public class NacAlarm
 		String name = this.getName();
 
 		return ((name != null) && !name.isEmpty()) ? name.replace("\n", " ")
-			: name;
+			: "";
+	}
+
+	/**
+	 * @see getNameNormalized
+	 */
+	public String getNameNormalizedForMessage()
+	{
+		String name = this.getNameNormalized();
+		int max = NacSharedPreferences.DEFAULT_MAX_NAME_LENGTH;
+
+		return (name.length() > max) ?
+			String.format("%1$s...", name.substring(0, max-3)) : name;
 	}
 
 	/**

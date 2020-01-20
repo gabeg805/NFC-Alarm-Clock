@@ -793,17 +793,9 @@ public class NacCardAdapter
 		}
 
 		NacSharedPreferences shared = this.getSharedPreferences();
-		String name = alarm.getNameNormalized();
-		String prefix = "Will run";
-
-		if (!name.isEmpty())
-		{
-			// Maybe change this length
-			prefix = (name.length() > 16) ? String.format("\"%12s...\"", name)
-				: String.format("\"%s\"", name);
-			prefix += " will run";
-		}
-
+		String name = alarm.getNameNormalizedForMessage();
+		String prefix = name.isEmpty() ? "Will run"
+			: String.format("\"%1$s\" will run", name);
 		String message = NacCalendar.getMessage(prefix, shared, alarm);
 
 		this.snackbar(message, "DISMISS", null, true);

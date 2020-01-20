@@ -110,7 +110,7 @@ public class NacWakeUpAction
 			speakHandler.removeCallbacksAndMessages(null);
 		}
 
-		//NacNfc.finish(context);
+		this.getTextToSpeech().shutdown();
 	}
 
 	/**
@@ -243,16 +243,7 @@ public class NacWakeUpAction
 	 */
 	public void pause()
 	{
-		//Context context = this.getContext();
-		//NacAlarm alarm = this.getAlarm();
-
-		//if ((alarm != null) && alarm.getUseNfc())
-		//{
-		//	NacNfc.disable(context);
-		//}
-
 		this.getTextToSpeech().stop();
-		//this.getTextToSpeech().shutdown();
 	}
 
 	/**
@@ -279,19 +270,12 @@ public class NacWakeUpAction
 	 */
 	public void resume()
 	{
-		//Context context = this.getContext();
-		//NacAlarm alarm = this.getAlarm();
-		////NacSharedPreferences shared = this.getSharedPreferences();
+		NacSharedPreferences shared = this.getSharedPreferences();
 
-		//if ((alarm != null) && alarm.getUseNfc())
-		//{
-		//	NacNfc.enable(context);
-		//}
-
-		//if (shared.getSpeakToMe())
-		//{
-		//	this.speak();
-		//}
+		if (shared.getSpeakToMe())
+		{
+			this.speak();
+		}
 	}
 
 	/**
@@ -314,15 +298,6 @@ public class NacWakeUpAction
 	public void setOnAutoDismissListener(OnAutoDismissListener listener)
 	{
 		this.mListener = listener;
-	}
-
-	/**
-	 * Shutdown the wakeup actions.
-	 */
-	public void shutdown()
-	{
-		//this.getMediaPlayer().release();
-		this.getTextToSpeech().shutdown();
 	}
 
 	/**

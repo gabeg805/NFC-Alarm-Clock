@@ -73,26 +73,33 @@ public class NacCalendar
 		long hr = (time / (60*60)) % 24;
 		long min = (time / 60) % 60;
 		long sec = time % 60;
-		String dayunit = (day != 1) ? " days " : " day ";
-		String hrunit = (hr != 1) ? " hours " : " hour ";
-		String minunit = (min != 1) ? " minutes " : " minute ";
-		String secunit = (sec != 1) ? " seconds " : " second ";
+		String dayunit = (day != 1) ? "days"    : "day";
+		String hrunit  = (hr  != 1) ? "hours"   : "hour";
+		String minunit = (min != 1) ? "minutes" : "minute";
+		String secunit = (sec != 1) ? "seconds" : "second";
 		String msg = prefix + " in ";
-		//String msg = "Next alarm in ";
+		String format = "%1$d %2$s %3$d %4$s";
 
 		if (day > 0)
 		{
-			msg += String.valueOf(day)+dayunit+String.valueOf(hr)+hrunit;
+			msg += String.format(format, day, dayunit, hr, hrunit);
 		}
 		else
 		{
 			if (hr > 0)
 			{
-				msg += String.valueOf(hr)+hrunit+String.valueOf(min)+minunit;
+				msg += String.format(format, hr, hrunit, min, minunit);
 			}
 			else
 			{
-				msg += String.valueOf(min)+minunit+String.valueOf(sec)+secunit;
+				if (min > 0)
+				{
+					msg += String.format(format, min, minunit, sec, secunit);
+				}
+				else
+				{
+					msg += String.format(format, sec, secunit, "", "");
+				}
 			}
 		}
 
@@ -110,6 +117,12 @@ public class NacCalendar
 		if ((shared == null) || (alarm == null) || (calendar == null))
 		{
 			return "No scheduled alarms.";
+		}
+		else if (!alarm.getEnabled())
+		{
+			String name = alarm.getNameNormalizedForMessage();
+
+			return String.format("\"%1$s\" is disabled.", name);
 		}
 
 		int nextAlarmFormat = shared.getNextAlarmFormat();
