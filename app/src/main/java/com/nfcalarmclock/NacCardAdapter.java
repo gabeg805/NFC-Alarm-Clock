@@ -154,15 +154,23 @@ public class NacCardAdapter
 	 */
 	public int add(NacAlarm alarm)
 	{
-		int index = this.size();
-		int result = this.add(alarm, index);
+		List<NacAlarm> alarmList = this.getAlarms();
+		Calendar next = NacCalendar.getNext(alarm);
+		int index = 0;
 
-		if (result == 0)
+		for (NacAlarm a : alarmList)
 		{
-			this.getRecyclerView().scrollToPosition(index);
+			Calendar n = NacCalendar.getNext(a);
+
+			if (!a.getEnabled() || next.before(n))
+			{
+				break;
+			}
+
+			index++;
 		}
 
-		return result;
+		return this.add(alarm, index);
 	}
 
 	/**
@@ -193,24 +201,6 @@ public class NacCardAdapter
 		db.close();
 
 		return 0;
-	}
-
-	/**
-	 * @return True if all alarms are disabled, and False otherwise.
-	 */
-	private boolean areAllAlarmsDisabled()
-	{
-		List<NacAlarm> alarms = this.getAlarms();
-
-		for (NacAlarm a : alarms)
-		{
-			if (a.getEnabled())
-			{
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 	/**
