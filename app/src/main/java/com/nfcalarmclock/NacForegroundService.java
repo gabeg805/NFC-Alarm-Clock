@@ -75,7 +75,7 @@ public class NacForegroundService
 			wakeUp.cleanup();
 		}
 
-		if (wakeLock != null)
+		if ((wakeLock != null) && wakeLock.isHeld())
 		{
 			wakeLock.release();
 		}
@@ -93,26 +93,24 @@ public class NacForegroundService
 		{
 			NacDatabase db = new NacDatabase(this);
 			int id = alarm.getId();
+			NacAlarm actualAlarm = db.findAlarm(id);
 
-			if (!alarm.getRepeat())
+			if (!actualAlarm.getRepeat())
 			{
-				if (!alarm.areDaysSelected())
+				if (!actualAlarm.areDaysSelected())
 				{
-					alarm.setEnabled(false);
+					actualAlarm.setEnabled(false);
 				}
 				else
 				{
-					alarm.toggleToday();
+					actualAlarm.toggleToday();
 				}
 
-				db.update(alarm);
+				db.update(actualAlarm);
 			}
 			else
 			{
-				NacScheduler scheduler = new NacScheduler(this);
-				NacAlarm actualAlarm = db.findAlarm(id);
-
-				scheduler.scheduleNext(actualAlarm);
+				NacScheduler.scheduleNext(this, actualAlarm);
 			}
 
 			shared.editSnoozeCount(alarm.getId(), 0);
@@ -207,8 +205,7 @@ public class NacForegroundService
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
-		this.mSharedPreferences = new NacSharedPreferences(this);
-		this.mAlarm = NacIntent.getAlarm(intent);
+		this.prepareAlarm(intent);
 
 		if ((intent == null) || (intent.getAction() == null)
 			|| intent.getAction().equals(ACTION_STOP_SERVICE))
@@ -220,8 +217,6 @@ public class NacForegroundService
 			this.setupWakeLock();
 			this.showNotification();
 			this.setupActiveAlarm();
-
-			return START_STICKY;
 		}
 		else if (intent.getAction().equals(ACTION_SNOOZE_ALARM))
 		{
@@ -232,7 +227,8 @@ public class NacForegroundService
 			this.dismiss();
 		}
 
-		return START_NOT_STICKY;
+		//return START_NOT_STICKY;
+		return START_STICKY;
 	}
 
 	/**
@@ -241,6 +237,33 @@ public class NacForegroundService
 	public IBinder onBind(Intent intent)
 	{
 		return null;
+	}
+
+	/**
+	 * Prepare the alarm information.
+	 */
+	private void prepareAlarm(Intent intent)
+	{
+		if (this.mSharedPreferences == null)
+		{
+			this.mSharedPreferences = new NacSharedPreferences(this);
+		}
+
+		if (this.mAlarm == null)
+		{
+			NacUtility.printf("Alarm was NULL to start with! Getting it from the intent!");
+			this.mAlarm = NacIntent.getAlarm(intent);
+		}
+
+		if (this.mAlarm != null)
+		{
+			NacUtility.printf("Alarm was not NULL Hurray!");
+			this.mAlarm.print();
+		}
+		else
+		{
+			NacUtility.printf("Alarm was NULL wtf!");
+		}
 	}
 
 	/**

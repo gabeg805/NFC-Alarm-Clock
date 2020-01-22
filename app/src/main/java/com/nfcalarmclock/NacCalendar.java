@@ -98,7 +98,7 @@ public class NacCalendar
 				}
 				else
 				{
-					msg += String.format(format, sec, secunit, "", "");
+					msg += String.format(format.substring(0, 9), sec, secunit);
 				}
 			}
 		}

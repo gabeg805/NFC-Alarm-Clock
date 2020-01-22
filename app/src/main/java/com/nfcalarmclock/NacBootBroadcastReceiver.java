@@ -29,10 +29,7 @@ public class NacBootBroadcastReceiver
 			NacScheduler scheduler = new NacScheduler(context);
 			List<NacAlarm> alarms = db.read();
 
-			for (NacAlarm a : alarms)
-			{
-				scheduler.update(a);
-			}
+			scheduler.update(alarms);
 		}
 	}
 

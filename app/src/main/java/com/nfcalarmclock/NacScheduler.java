@@ -31,7 +31,7 @@ public class NacScheduler
 	/**
 	 * Add all alarms to the scheduler.
 	 */
-	public void add(NacAlarm alarm)
+	public static void add(Context context, NacAlarm alarm)
 	{
 		if (!alarm.getEnabled())
 		{
@@ -42,21 +42,30 @@ public class NacScheduler
 
 		for (Calendar c : calendars)
 		{
-			this.add(alarm, c);
+			NacScheduler.add(context, alarm, c);
 		}
+	}
+
+	/**
+	 * @see add
+	 */
+	public void add(NacAlarm alarm)
+	{
+		Context context = this.getContext();
+
+		NacScheduler.add(context, alarm);
 	}
 
 	/**
 	 * Add the alarm to the scheduler.
 	 */
-	public void add(NacAlarm alarm, Calendar calendar)
+	public static void add(Context context, NacAlarm alarm, Calendar calendar)
 	{
 		if (!alarm.getEnabled())
 		{
 			return;
 		}
 
-		Context context = this.getContext();
 		int id = alarm.getId(calendar);
 		long millis = calendar.getTimeInMillis();
 		Intent operationIntent = NacIntent.toIntent(context,
@@ -67,15 +76,25 @@ public class NacScheduler
 		PendingIntent showPendingIntent = PendingIntent.getActivity(context, id,
 			showIntent, 0);
 		AlarmClockInfo clock = new AlarmClockInfo(millis, showPendingIntent);
-		AlarmManager manager = this.getAlarmManager(context);
+		AlarmManager manager = NacScheduler.getAlarmManager(context);
 
 		manager.setAlarmClock(clock, operationPendingIntent);
 	}
 
 	/**
+	 * @see add
+	 */
+	public void add(NacAlarm alarm, Calendar calendar)
+	{
+		Context context = this.getContext();
+
+		NacScheduler.add(context, alarm, calendar);
+	}
+
+	/**
 	 * Cancel all matching alarms.
 	 */
-	public void cancel(NacAlarm alarm)
+	public static void cancel(Context context, NacAlarm alarm)
 	{
 		Calendar calendar = Calendar.getInstance();
 
@@ -83,36 +102,62 @@ public class NacScheduler
 		{
 			calendar.set(Calendar.DAY_OF_WEEK, NacCalendar.Days
 				.toCalendarDay(d));
-			this.cancel(alarm, calendar);
+			NacScheduler.cancel(context, alarm, calendar);
 		}
+	}
+
+	/**
+	 * @see cancel
+	 */
+	public void cancel(NacAlarm alarm)
+	{
+		Context context = this.getContext();
+
+		NacScheduler.cancel(context, alarm);
 	}
 
 	/**
 	 * Cancel the matching alarm.
 	 */
-	public void cancel(NacAlarm alarm, Calendar calendar)
+	public static void cancel(Context context, NacAlarm alarm,
+		Calendar calendar)
 	{
-		Context context = this.getContext();
 		int id = alarm.getId(calendar);
-		//Intent intent = new Intent(context, NacAlarmActivity.class);
-		//PendingIntent pending = PendingIntent.getActivity(context, id, intent,
-		//	PendingIntent.FLAG_NO_CREATE);
 		Intent intent = new Intent(context, NacAlarmBroadcastReceiver.class);
 		PendingIntent pending = PendingIntent.getBroadcast(context, id, intent,
 			PendingIntent.FLAG_NO_CREATE);
 
 		if (pending != null)
 		{
-			this.getAlarmManager(context).cancel(pending);
+			NacScheduler.getAlarmManager(context).cancel(pending);
 		}
+	}
+
+	/**
+	 * @see cancel
+	 */
+	public void cancel(NacAlarm alarm, Calendar calendar)
+	{
+		Context context = this.getContext();
+
+		NacScheduler.cancel(context, alarm, calendar);
 	}
 
 	/**
 	 * @return The AlarmManager.
 	 */
-	private AlarmManager getAlarmManager(Context context)
+	public static AlarmManager getAlarmManager(Context context)
 	{
 		return (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+	}
+
+	/**
+	 * @see getAlarmManager
+	 */
+	public AlarmManager getAlarmManager()
+	{
+		return (AlarmManager) this.getContext()
+			.getSystemService(Context.ALARM_SERVICE);
 	}
 
 	/**
@@ -126,7 +171,7 @@ public class NacScheduler
 	/**
 	 * Schedule the next alarm.
 	 */
-	public void scheduleNext(NacAlarm alarm)
+	public static void scheduleNext(Context context, NacAlarm alarm)
 	{
 		if (!alarm.getRepeat() || !alarm.areDaysSelected())
 		{
@@ -140,16 +185,67 @@ public class NacScheduler
 		next.set(Calendar.SECOND, 0);
 		next.set(Calendar.MILLISECOND, 0);
 		next.add(Calendar.DAY_OF_MONTH, 7);
-		this.update(alarm, next);
+		NacScheduler.update(context, alarm, next);
+	}
+
+	/**
+	 * Schedule the next alarm.
+	 */
+	public void scheduleNext(NacAlarm alarm)
+	{
+		Context context = this.getContext();
+
+		NacScheduler.scheduleNext(context, alarm);
+	}
+
+	/**
+	 * Update a list of alarms.
+	 */
+	public static void update(Context context, List<NacAlarm> alarms)
+	{
+		for (NacAlarm a : alarms)
+		{
+			NacScheduler.update(context, a);
+		}
+	}
+
+	/**
+	 * @see update
+	 */
+	public void update(List<NacAlarm> alarms)
+	{
+		Context context = this.getContext();
+
+		NacScheduler.update(context, alarms);
+	}
+
+	/**
+	 * Update a single alarm.
+	 */
+	public static void update(Context context, NacAlarm alarm)
+	{
+		NacScheduler.cancel(context, alarm);
+		NacScheduler.add(context, alarm);
+	}
+
+	/**
+	 * @see update
+	 */
+	public void update(NacAlarm alarm)
+	{
+		Context context = this.getContext();
+
+		NacScheduler.update(context, alarm);
 	}
 
 	/**
 	 * Update the scheduler.
 	 */
-	public void update(NacAlarm alarm)
+	public static void update(Context context, NacAlarm alarm,
+		Calendar calendar)
 	{
-		this.cancel(alarm);
-		this.add(alarm);
+		NacScheduler.cancel(context, alarm, calendar);
+		NacScheduler.add(context, alarm, calendar);
 	}
 
 	/**
@@ -157,8 +253,9 @@ public class NacScheduler
 	 */
 	public void update(NacAlarm alarm, Calendar calendar)
 	{
-		this.cancel(alarm, calendar);
-		this.add(alarm, calendar);
+		Context context = this.getContext();
+
+		NacScheduler.update(context, alarm, calendar);
 	}
 
 }
