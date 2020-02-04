@@ -208,7 +208,8 @@ public class NacForegroundService
 		this.prepareAlarm(intent);
 
 		if ((intent == null) || (intent.getAction() == null)
-			|| intent.getAction().equals(ACTION_STOP_SERVICE))
+			|| intent.getAction().equals(ACTION_STOP_SERVICE)
+			|| (this.getAlarm() == null))
 		{
 			this.finish();
 		}
@@ -217,6 +218,8 @@ public class NacForegroundService
 			this.setupWakeLock();
 			this.showNotification();
 			this.setupActiveAlarm();
+
+			return START_STICKY;
 		}
 		else if (intent.getAction().equals(ACTION_SNOOZE_ALARM))
 		{
@@ -227,8 +230,7 @@ public class NacForegroundService
 			this.dismiss();
 		}
 
-		//return START_NOT_STICKY;
-		return START_STICKY;
+		return START_NOT_STICKY;
 	}
 
 	/**

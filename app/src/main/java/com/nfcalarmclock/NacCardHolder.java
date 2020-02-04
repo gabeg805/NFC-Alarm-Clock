@@ -247,6 +247,17 @@ public class NacCardHolder
 	}
 
 	/**
+	 * @return True if the alarm is snoozed and False otherwise.
+	 */
+	public boolean isSnoozed()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacAlarm alarm = this.getAlarm();
+
+		return alarm.isSnoozed(shared);
+	}
+
+	/**
 	 * Save the repeat state of the alarm.
 	 */
 	@Override
@@ -255,6 +266,15 @@ public class NacCardHolder
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 		int id = v.getId();
+
+		if (alarm.isSnoozed(shared))
+		{
+			Context context = this.getContext();
+			NacUtility.quickToast(context,
+				"Unable to modify a snoozed alarm");
+			v.setChecked(!state);
+			return;
+		}
 
 		if (id == R.id.nac_switch)
 		{
@@ -294,8 +314,16 @@ public class NacCardHolder
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 
-		alarm.toggleIndex(index);
+		if (alarm.isSnoozed(shared))
+		{
+			Context context = this.getContext();
+			NacUtility.quickToast(context, "Unable to modify a snoozed alarm");
+			button.cancelAnimator();
+			return;
+		}
+
 		button.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+		alarm.toggleIndex(index);
 
 		if (!alarm.areDaysSelected())
 		{
@@ -352,6 +380,15 @@ public class NacCardHolder
 		}
 		else if (id == R.id.nac_time_parent)
 		{
+			NacSharedPreferences shared = this.getSharedPreferences();
+			Context context = this.getContext();
+
+			if (alarm.isSnoozed(shared))
+			{
+				NacUtility.quickToast(context, "Unable to modify a snoozed alarm");
+				return;
+			}
+
 			this.mTime.showDialog(this);
 		}
 		else if (id == R.id.nac_sound)
@@ -369,6 +406,15 @@ public class NacCardHolder
 		}
 		else if (id == R.id.nac_delete)
 		{
+			NacSharedPreferences shared = this.getSharedPreferences();
+			Context context = this.getContext();
+
+			if (alarm.isSnoozed(shared))
+			{
+				NacUtility.quickToast(context, "Unable to delete a snoozed alarm");
+				return;
+			}
+
 			this.delete();
 		}
 	}
@@ -412,6 +458,13 @@ public class NacCardHolder
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
+
+		if (shared.getPreventAppFromClosing() && (shared.getSnoozeCount(alarm.getId()) > 0))
+		{
+			Context context = this.getContext();
+			NacUtility.quickToast(context, "Unable to change days on a snoozed alarm");
+			return true;
+		}
 
 		//view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		alarm.setRepeat(false);

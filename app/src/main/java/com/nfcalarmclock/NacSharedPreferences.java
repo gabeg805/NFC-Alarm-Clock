@@ -507,7 +507,7 @@ public class NacSharedPreferences
 	 */
 	public void editSnoozeCount(int id, int count, boolean commit)
 	{
-		String key = this.getKeys().getSnoozeCount(id);
+		String key = NacSharedKeys.getSnoozeCount(id);
 		NacUtility.printf("Edit Snooze Count : %d", count);
 
 		this.saveInt(key, count, commit);
@@ -1055,7 +1055,7 @@ public class NacSharedPreferences
 	 */
 	public int getSnoozeCount(int id)
 	{
-		String key = this.getKeys().getSnoozeCount(id);
+		String key = NacSharedKeys.getSnoozeCount(id);
 
 		return this.getSharedPreferences().getInt(key,
 			DEFAULT_SNOOZE_COUNT);

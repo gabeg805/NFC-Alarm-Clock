@@ -949,6 +949,17 @@ public class NacAlarm
 	}
 
 	/**
+	 * @return True if the alarm is snoozed and False otherwise.
+	 */
+	public boolean isSnoozed(NacSharedPreferences shared)
+	{
+		int id = this.getId();
+
+		return (shared.getPreventAppFromClosing()
+			&& (shared.getSnoozeCount(id) > 0));
+	}
+
+	/**
 	 * Print all values in the alarm object.
 	 */
 	public void print()

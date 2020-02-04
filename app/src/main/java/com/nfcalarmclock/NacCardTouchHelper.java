@@ -226,7 +226,14 @@ public class NacCardTouchHelper
 		{
 			NacCardHolder holder = this.getCardHolder();
 
-			return (holder != null) ? holder.isCollapsed() : true;
+			if (holder != null)
+			{
+				return (holder.isCollapsed() && !holder.isSnoozed());
+			}
+			else
+			{
+				return true;
+			}
 		}
 
 		/**
