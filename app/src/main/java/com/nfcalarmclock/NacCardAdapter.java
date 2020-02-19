@@ -402,29 +402,48 @@ public class NacCardAdapter
 
 		for (NacAlarm a : this.getAlarms())
 		{
-			if (a.getEnabled())
+			List<NacAlarm> list = (a.getEnabled()) ? enabledAlarms
+				: disabledAlarms;
+			Calendar next = NacCalendar.getNext(a);
+			int pos = 0;
+
+			for (NacAlarm e : list)
 			{
-				Calendar next = NacCalendar.getNext(a);
-				int pos = 0;
+				Calendar cal = NacCalendar.getNext(e);
 
-				for (NacAlarm e : enabledAlarms)
+				if (next.before(cal))
 				{
-					Calendar cal = NacCalendar.getNext(e);
-
-					if (next.before(cal))
-					{
-						break;
-					}
-
-					pos++;
+					break;
 				}
 
-				enabledAlarms.add(pos, a);
+				pos++;
 			}
-			else
-			{
-				disabledAlarms.add(a);
-			}
+
+			list.add(pos, a);
+
+			//if (a.getEnabled())
+			//{
+			//	Calendar next = NacCalendar.getNext(a);
+			//	int pos = 0;
+
+			//	for (NacAlarm e : enabledAlarms)
+			//	{
+			//		Calendar cal = NacCalendar.getNext(e);
+
+			//		if (next.before(cal))
+			//		{
+			//			break;
+			//		}
+
+			//		pos++;
+			//	}
+
+			//	enabledAlarms.add(pos, a);
+			//}
+			//else
+			//{
+			//	disabledAlarms.add(a);
+			//}
 		}
 
 		sorted.addAll(enabledAlarms);

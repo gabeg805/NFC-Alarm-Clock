@@ -8,7 +8,7 @@
 	<dimen name="ml_pref_checkbox">20dp</dimen>
 	<dimen name="isz_general">22dp</dimen>
 	<dimen name="isz_general_tweak">24dp</dimen>
-	<dimen name="tsz_general">15sp</dimen>
+	<dimen name="tsz_general">16sp</dimen>
 
 
 	<!-- Alarm card -->

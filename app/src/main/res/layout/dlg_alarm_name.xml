@@ -16,7 +16,7 @@
 		android:layout_marginTop="@dimen/m_dlg_name"
 		android:layout_marginBottom="@dimen/m_dlg_name"
 		android:maxLength="@integer/max_entry_length"
-		android:maxLines="4"
+		android:maxLines="8"
 		android:singleLine="false"
 		android:isScrollContainer="true"
 		android:textSize="@dimen/tsz_general"

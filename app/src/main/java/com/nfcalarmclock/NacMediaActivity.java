@@ -342,12 +342,16 @@ public class NacMediaActivity
 	private void selectTab(int position)
 	{
 		TabLayout tabLayout = this.getTabLayout();
-		Tab tab = tabLayout.getTabAt(position);
 
-		if (tab != null)
+		if (tabLayout != null)
 		{
-			tab.select();
-			onTabSelected(tab);
+			Tab tab = tabLayout.getTabAt(position);
+
+			if (tab != null)
+			{
+				tab.select();
+				onTabSelected(tab);
+			}
 		}
 	}
 
