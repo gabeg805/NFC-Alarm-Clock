@@ -3,6 +3,8 @@
 	<!-- App -->
 	<string name="app_name">NFC Alarm Clock</string>
 	<string name="app_first_run">app_first_run</string>
+	<string name="app_rating_counter">app_rating_counter</string>
+	<string name="sys_previous_volume">sys_previous_volume</string>
 
 
 	<!-- Alarm Activity -->
@@ -54,6 +56,10 @@
 	<string name="dlg_name_hint">Alarm name</string>
 	<string name="dlg_color_hint">Hex Color</string>
 	<string name="dlg_playlist_question">Do you want to play all music in this folder?</string>
+
+
+	<!-- Rate my app dialog -->
+	<string name="dlg_rate_my_app">If you have been enjoying the app, please rate it!\n\nYou can also leave a comment with any suggestions and I will do my best to implement them.</string>
 
 
 	<!-- Draw overlay permission dialog -->

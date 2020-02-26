@@ -936,19 +936,19 @@ public class NacCardAdapter
 	 */
 	private int sortInsertAlarm(NacAlarm alarm)
 	{
+		boolean enabled = alarm.getEnabled();
+		Calendar next = NacCalendar.getNext(alarm);
 		List<NacAlarm> alarmList = this.getAlarms();
 		int size = alarmList.size();
-		Calendar next = NacCalendar.getNext(alarm);
-		boolean enabled = alarm.getEnabled();
 		int i = 0;
 
 		for (i=0; i < size; i++)
 		{
 			NacAlarm a = alarmList.get(i);
-			Calendar cal = (enabled && a.getEnabled()) ? NacCalendar.getNext(a)
+			Calendar cal = (enabled == a.getEnabled()) ? NacCalendar.getNext(a)
 				: null;
 
-			if (!a.getEnabled() || ((cal != null) && next.before(cal)))
+			if ((cal != null) && (next.before(cal)))
 			{
 				break;
 			}

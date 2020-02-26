@@ -34,6 +34,16 @@ public class NacSharedPreferences
 	private static final boolean DEFAULT_APP_FIRST_RUN = true;
 
 	/**
+	 * Default app rating counter.
+	 */
+	public static final int DEFAULT_RATE_MY_APP_COUNTER = 0;
+
+	/**
+	 * Default app rating counter limit.
+	 */
+	public static final int DEFAULT_RATE_MY_APP_LIMIT = 50;
+
+	/**
 	 * Default auto dismiss duration.
 	 */
 	public static final int DEFAULT_AUTO_DISMISS = 15;
@@ -163,6 +173,11 @@ public class NacSharedPreferences
 	 * Default volume.
 	 */
 	public static final int DEFAULT_VOLUME = 75;
+
+	/**
+	 * Default previous volume.
+	 */
+	public static final int DEFAULT_PREVIOUS_VOLUME = -1;
 
 	/**
 	 * Default audio source.
@@ -474,6 +489,42 @@ public class NacSharedPreferences
 		String key = this.getKeys().getPmColor();
 
 		this.saveInt(key, color, commit);
+	}
+
+	/**
+	 * @see editPreviousVolume
+	 */
+	public void editPreviousVolume(int previous)
+	{
+		this.editPreviousVolume(previous, false);
+	}
+
+	/**
+	 * Edit the previous system volume, before an alarm goes off.
+	 */
+	public void editPreviousVolume(int previous, boolean commit)
+	{
+		String key = this.getKeys().getPreviousVolume();
+
+		this.saveInt(key, previous, commit);
+	}
+
+	/**
+	 * @see editRateMyAppCounter
+	 */
+	public void editRateMyAppCounter(int counter)
+	{
+		this.editRateMyAppCounter(counter, false);
+	}
+
+	/**
+	 * Edit the app rating counter.
+	 */
+	public void editRateMyAppCounter(int counter, boolean commit)
+	{
+		String key = this.getKeys().getRateMyAppCounter();
+
+		this.saveInt(key, counter, commit);
 	}
 
 	/**
@@ -1010,6 +1061,27 @@ public class NacSharedPreferences
 
 		return this.getSharedPreferences().getBoolean(key,
 			DEFAULT_PREVENT_APP_FROM_CLOSING);
+	}
+
+	/**
+	 * @return The previous system volume, before an alarm goes off.
+	 */
+	public int getPreviousVolume()
+	{
+		String key = this.getKeys().getPreviousVolume();
+
+		return this.getSharedPreferences().getInt(key, DEFAULT_PREVIOUS_VOLUME);
+	}
+
+	/**
+	 * @return The app's rating counter.
+	 */
+	public int getRateMyAppCounter()
+	{
+		String key = this.getKeys().getRateMyAppCounter();
+
+		return this.getSharedPreferences().getInt(key,
+			DEFAULT_RATE_MY_APP_COUNTER);
 	}
 
 	/**

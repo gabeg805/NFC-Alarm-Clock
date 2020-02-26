@@ -19,6 +19,11 @@ public class NacAudio
 	{
 
 		/**
+		 * Shared preferences.
+		 */
+		private NacSharedPreferences mShared;
+
+		/**
 		 * Context.
 		 */
 		private Context mContext;
@@ -51,7 +56,7 @@ public class NacAudio
 		/**
 		 * Previously set stream volume.
 		 */
-		private int mPreviousVolume;
+		//private int mPreviousVolume;
 
 		/**
 		 * Ducking flag.
@@ -84,6 +89,7 @@ public class NacAudio
 			//int focus = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 			//	? AudioManager.AUDIOFOCUS_NONE : 0;
 			this.mContext = context;
+			this.mShared = new NacSharedPreferences(context);
 
 			this.setFocus(0);
 			this.setSource(source);
@@ -97,9 +103,19 @@ public class NacAudio
 		 */
 		public void duckVolume()
 		{
-			this.mPreviousVolume = this.getStreamVolume();
-			this.mVolume = this.mPreviousVolume / 2;
+			NacSharedPreferences shared = this.getSharedPreferences();
+			int current = this.getStreamVolume();
+			int duck = current / 2;
+			this.mVolume = duck;
 			this.mWasDucking = true;
+
+			shared.editPreviousVolume(current);
+			this.setStreamVolume(duck);
+
+			//int current = this.getStreamVolume();
+			//this.mVolume = current / 2;
+			//this.mPreviousVolume = current;
+			//this.mWasDucking = true;
 		}
 
 		/**
@@ -130,6 +146,14 @@ public class NacAudio
 		public int getFocus()
 		{
 			return this.mFocus;
+		}
+
+		/**
+		 * @return The shared preferences.
+		 */
+		private NacSharedPreferences getSharedPreferences()
+		{
+			return this.mShared;
 		}
 
 		/**
@@ -187,6 +211,17 @@ public class NacAudio
 		}
 
 		/**
+		 * Revert the effects of ducking.
+		 */
+		public void revertDucking()
+		{
+			if (this.wasDucking())
+			{
+				this.mWasDucking = false;
+			}
+		}
+
+		/**
 		 * Revert the volume level.
 		 */
 		public void revertVolume()
@@ -198,22 +233,18 @@ public class NacAudio
 				return;
 			}
 
-			int temp = this.mPreviousVolume;
-			this.mPreviousVolume = this.mVolume;
-			this.mVolume = temp;
+			//int temp = this.mPreviousVolume;
+			//this.mPreviousVolume = this.mVolume;
+			//this.mVolume = temp;
 
-			this.setStreamVolume(temp);
-		}
+			NacSharedPreferences shared = this.getSharedPreferences();
+			//int current = this.mVolume;
+			int current = this.getStreamVolume();
+			int previous = shared.getPreviousVolume();
+			this.mVolume = previous;
 
-		/**
-		 * Revert the effects of ducking.
-		 */
-		public void revertDucking()
-		{
-			if (this.wasDucking())
-			{
-				this.mWasDucking = false;
-			}
+			shared.editPreviousVolume(previous);
+			this.setStreamVolume(previous);
 		}
 
 		/**
@@ -288,13 +319,15 @@ public class NacAudio
 				return;
 			}
 
+			NacSharedPreferences shared = this.getSharedPreferences();
 			int previous = this.getStreamVolume();
 			int max = this.getStreamMaxVolume();
 			int volume = (int) (max * level / 100.0f);
 
 			this.setStreamVolume(volume);
 
-			this.mPreviousVolume = previous;
+			//this.mPreviousVolume = previous;
+			shared.editPreviousVolume(previous);
 			this.mVolume = volume;
 		}
 

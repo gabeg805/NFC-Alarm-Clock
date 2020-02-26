@@ -45,7 +45,7 @@
 			android:layout_height="wrap_content"
 			android:layout_marginStart="@dimen/sp_tweak"
 			android:layout_gravity="fill"
-			android:textSize="@dimen/tsz_general"
+			android:textSize="@dimen/tsz_dlg_color"
 			android:inputType="textNoSuggestions|textAutoComplete"
 			android:hint="@string/dlg_color_hint"
 			android:maxLines="1"

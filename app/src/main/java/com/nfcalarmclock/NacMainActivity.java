@@ -168,7 +168,6 @@ public class NacMainActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_main);
 
-		NacUtility.printf("NacMAINActivity: onCreate!");
 		NacSharedPreferences shared = new NacSharedPreferences(this);
 		Drawable drawable = ContextCompat.getDrawable(this,
 			R.drawable.card_divider);
@@ -227,34 +226,8 @@ public class NacMainActivity
 		this.setupActiveAlarmActivity();
 		this.setupAlarmCardAdapter();
 		this.setupFloatingActionButton();
+		this.setupGoogleRatingDialog();
 		this.addSetAlarmFromIntent();
-	}
-
-	/**
-	 * Show the alarm activity.
-	 */
-	private void showAlarmActivity(StatusBarNotification activeNotification)
-	{
-		if (activeNotification == null)
-		{
-			return;
-		}
-
-		Notification noti = activeNotification.getNotification();
-
-		if (noti != null)
-		{
-			PendingIntent pending = noti.contentIntent;
-
-			try
-			{
-				pending.send();
-			}
-			catch (PendingIntent.CanceledException e)
-			{
-				NacUtility.printf("Caught canceled exception for pending intent!");
-			}
-		}
 	}
 
 	/**
@@ -299,6 +272,54 @@ public class NacMainActivity
 		ColorStateList color = ColorStateList.valueOf(shared.getThemeColor());
 
 		floatingButton.setBackgroundTintList(color);
+	}
+
+	/**
+	 * Setup the Google rating dialog.
+	 */
+	private void setupGoogleRatingDialog()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		int counter = shared.getRateMyAppCounter();
+
+		if ((counter+1) == NacSharedPreferences.DEFAULT_RATE_MY_APP_LIMIT)
+		{
+			NacRateMyAppDialog dialog = new NacRateMyAppDialog(this);
+
+			dialog.build();
+			dialog.show();
+		}
+		else if (counter >= 0)
+		{
+			shared.editRateMyAppCounter(counter+1);
+		}
+	}
+
+	/**
+	 * Show the alarm activity.
+	 */
+	private void showAlarmActivity(StatusBarNotification activeNotification)
+	{
+		if (activeNotification == null)
+		{
+			return;
+		}
+
+		Notification noti = activeNotification.getNotification();
+
+		if (noti != null)
+		{
+			PendingIntent pending = noti.contentIntent;
+
+			try
+			{
+				pending.send();
+			}
+			catch (PendingIntent.CanceledException e)
+			{
+				NacUtility.printf("Caught canceled exception for pending intent!");
+			}
+		}
 	}
 
 }

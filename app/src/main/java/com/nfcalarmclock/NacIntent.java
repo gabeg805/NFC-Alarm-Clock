@@ -74,8 +74,10 @@ public class NacIntent
 	public static Intent createAlarmActivity(Context context, Bundle bundle)
 	{
 		Intent intent = new Intent(context, NacAlarmActivity.class);
+		int flags = Intent.FLAG_ACTIVITY_NEW_TASK
+			| Intent.FLAG_ACTIVITY_CLEAR_TASK;
 
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.addFlags(flags);
 		intent.putExtra(ALARM_BUNDLE_NAME, bundle);
 
 		return intent;

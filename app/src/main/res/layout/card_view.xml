@@ -153,7 +153,7 @@
 					android:paddingEnd="@dimen/pr_repeat"
 					android:buttonTint="@color/white"
 					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_general"
+					android:textSize="@dimen/tsz_card"
 					android:text="@string/card_repeat"
 					/>
 
@@ -169,7 +169,7 @@
 					android:paddingEnd="@dimen/pr_nfc"
 					android:buttonTint="@color/white"
 					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_general"
+					android:textSize="@dimen/tsz_card"
 					android:text="@string/card_nfc"
 					/>
 
@@ -200,7 +200,7 @@
 					android:paddingEnd="@dimen/pr_vibrate"
 					android:buttonTint="@color/white"
 					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_general"
+					android:textSize="@dimen/tsz_card"
 					android:text="@string/card_vibrate"
 					/>
 
@@ -233,7 +233,7 @@
 						android:maxLines="1"
 						android:ellipsize="end"
 						android:textColor="@color/white"
-						android:textSize="@dimen/tsz_general"
+						android:textSize="@dimen/tsz_card"
 						android:text=""
 						/>
 
@@ -313,7 +313,7 @@
 					android:maxLines="1"
 					android:ellipsize="end"
 					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_general"
+					android:textSize="@dimen/tsz_card"
 					android:text=""
 					/>
 
@@ -352,7 +352,7 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:textColor="@color/white"
-						android:textSize="@dimen/tsz_general"
+						android:textSize="@dimen/tsz_card"
 						android:text="@string/card_delete"
 						/>
 

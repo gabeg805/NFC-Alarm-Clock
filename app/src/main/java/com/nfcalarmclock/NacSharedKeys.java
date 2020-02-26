@@ -15,6 +15,11 @@ public class NacSharedKeys
 	private final String mAppFirstRun;
 
 	/**
+	 * The counter used to determine when to show the rate-my-app dialog.
+	 */
+	private final String mRateMyAppCounter;
+
+	/**
 	 * Appearance screen.
 	 */
 	private final String mAppearanceScreen;
@@ -130,9 +135,14 @@ public class NacSharedKeys
 	private final String mVibrate;
 
 	/**
-	 * Sound level.
+	 * Volume level.
 	 */
 	private final String mVolume;
+
+	/**
+	 * Previous volume level, before alarm goes off.
+	 */
+	private final String mPreviousVolume;
 
 	/**
 	 * Audio source.
@@ -201,6 +211,7 @@ public class NacSharedKeys
 		Resources res = context.getResources();
 
 		this.mAppFirstRun = res.getString(R.string.app_first_run);
+		this.mRateMyAppCounter = res.getString(R.string.app_rating_counter);
 		this.mAppearanceScreen = res.getString(R.string.pref_screen_appearance_key);
 		this.mGeneralScreen = res.getString(R.string.pref_screen_general_key);
 		this.mMiscellaneousScreen = res.getString(R.string.pref_screen_misc_key);
@@ -225,6 +236,7 @@ public class NacSharedKeys
 		this.mDays = res.getString(R.string.pref_days_key);
 		this.mVibrate = res.getString(R.string.pref_vibrate_key);
 		this.mVolume = res.getString(R.string.pref_volume_key);
+		this.mPreviousVolume = res.getString(R.string.sys_previous_volume);
 		this.mAudioSource = res.getString(R.string.pref_audio_source_key);
 		this.mSound = res.getString(R.string.pref_sound_key);
 		this.mName = res.getString(R.string.pref_name_key);
@@ -421,6 +433,23 @@ public class NacSharedKeys
 	public String getPreventAppFromClosing()
 	{
 		return this.mPreventAppFromClosing;
+	}
+
+	/**
+	 * @return The previous system volume, before an alarm goes off.
+	 */
+	public String getPreviousVolume()
+	{
+		return this.mPreviousVolume;
+	}
+
+	/**
+	 * @return The counter used to check when the rate-my-app dialog should be
+	 *         shown.
+	 */
+	public String getRateMyAppCounter()
+	{
+		return this.mRateMyAppCounter;
 	}
 
 	/**

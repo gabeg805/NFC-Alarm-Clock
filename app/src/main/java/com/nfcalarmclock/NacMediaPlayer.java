@@ -197,6 +197,14 @@ public class NacMediaPlayer
 	}
 
 	/**
+	 * @return The audio attributes.
+	 */
+	private NacAudio.Attributes getAudioAttributes()
+	{
+		return this.mAttributes;
+	}
+
+	/**
 	 * @return The context.
 	 */
 	private Context getContext()
@@ -235,7 +243,7 @@ public class NacMediaPlayer
 	public void onAudioFocusChange(int focusChange)
 	{
 		Context context = this.getContext();
-		NacAudio.Attributes attrs = this.mAttributes;
+		NacAudio.Attributes attrs = this.getAudioAttributes();
 		this.mWasPlaying = this.isPlayingWrapper();
 
 		attrs.setFocus(focusChange);
@@ -319,10 +327,11 @@ public class NacMediaPlayer
 	 */
 	public void play(NacAlarm alarm, boolean repeat, boolean shuffle)
 	{
+		NacAudio.Attributes attrs = this.getAudioAttributes();
 		String path = alarm.getSoundPath();
 
-		this.mAttributes.setSource(alarm.getAudioSource());
-		this.mAttributes.setVolumeLevel(alarm.getVolume());
+		attrs.setSource(alarm.getAudioSource());
+		attrs.setVolumeLevel(alarm.getVolume());
 
 		if (NacSound.isFilePlaylist(alarm.getSoundType()))
 		{
@@ -348,7 +357,7 @@ public class NacMediaPlayer
 	public void play(String media, boolean repeat)
 	{
 		Context context = this.getContext();
-		NacAudio.Attributes attrs = this.mAttributes;
+		NacAudio.Attributes attrs = this.getAudioAttributes();
 
 		if (media.isEmpty())
 		{
@@ -369,7 +378,7 @@ public class NacMediaPlayer
 		{
 			if (this.isPlayingWrapper())
 			{
-				reset();
+				this.resetWrapper();
 			}
 
 			setDataSource(path);
@@ -431,6 +440,9 @@ public class NacMediaPlayer
 	{
 		try
 		{
+			NacAudio.Attributes attrs = this.getAudioAttributes();
+
+			attrs.revertVolume();
 			reset();
 			return this.RESULT_SUCCESS;
 		}
@@ -446,7 +458,7 @@ public class NacMediaPlayer
 	 */
 	private void setVolume()
 	{
-		NacAudio.Attributes attrs = this.mAttributes;
+		NacAudio.Attributes attrs = this.getAudioAttributes();
 
 		attrs.setVolume();
 	}
