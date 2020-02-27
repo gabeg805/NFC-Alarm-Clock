@@ -20,7 +20,7 @@
 	<dimen name="sp_card">10dp</dimen>
 	<dimen name="sp_text">4dp</dimen>
 	<dimen name="isz_divider">2dp</dimen>
-	<dimen name="tsz_card">16sp</dimen>
+	<dimen name="tsz_card">15sp</dimen>
 
 
 	<!-- Alarm Activity -->
@@ -131,7 +131,7 @@
 	<dimen name="pl_name">6dp</dimen>
 	<dimen name="pr_name">6dp</dimen>
 	<dimen name="tsz_summary_name">13sp</dimen>
-	<dimen name="tsz_dlg_name">18sp</dimen>
+	<dimen name="tsz_dlg_name">16sp</dimen>
 
 
 	<!-- Delete -->

@@ -59,7 +59,7 @@
 
 
 	<!-- Rate my app dialog -->
-	<string name="dlg_rate_my_app">If you have been enjoying the app, please rate it!\n\nYou can also leave a comment with any suggestions and I will do my best to implement them.</string>
+	<string name="dlg_rate_my_app">If you have been enjoying the <b>NFC Alarm Clock</b> app, please take a moment to rate it. Thank you for your support!</string>
 
 
 	<!-- Draw overlay permission dialog -->

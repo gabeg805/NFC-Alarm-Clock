@@ -44,6 +44,11 @@ public class NacSharedPreferences
 	public static final int DEFAULT_RATE_MY_APP_LIMIT = 50;
 
 	/**
+	 * Counter amount indicating that the app has been rated.
+	 */
+	public static final int DEFAULT_RATE_MY_APP_RATED = -999;
+
+	/**
 	 * Default auto dismiss duration.
 	 */
 	public static final int DEFAULT_AUTO_DISMISS = 15;

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.view.View;
 
 /**
  * The dialog class to handle prompting the user for permissions, or simply
@@ -11,7 +12,8 @@ import android.net.Uri;
  */
 public class NacRateMyAppDialog
 	extends NacDialog
-	implements NacDialog.OnDismissListener,
+	implements NacDialog.OnShowListener,
+		NacDialog.OnDismissListener,
 		NacDialog.OnCancelListener,
 		NacDialog.OnNeutralActionListener
 		
@@ -36,6 +38,7 @@ public class NacRateMyAppDialog
 		this.mContext = context;
 		this.mShared = new NacSharedPreferences(context);
 
+		addOnShowListener(this);
 		addOnDismissListener(this);
 		addOnCancelListener(this);
 		addOnNeutralActionListener(this);
@@ -73,12 +76,12 @@ public class NacRateMyAppDialog
 	@Override
 	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
-		String title = "Rate my app";
+		String title = "Rate this app";
 
 		builder.setTitle(title);
-		setPositiveButton("Rate");
+		setPositiveButton("Rate Now");
 		setNegativeButton("Later");
-		setNeutralButton("Never");
+		setNeutralButton("No, Thanks");
 
 	}
 
@@ -104,7 +107,8 @@ public class NacRateMyAppDialog
 		Uri uri = Uri.parse("market://details?id=com.nfcalarmclock");
 		Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 
-		shared.editRateMyAppCounter(-1);
+		shared.editRateMyAppCounter(
+			NacSharedPreferences.DEFAULT_RATE_MY_APP_RATED);
 		context.startActivity(intent);
 
 		return true;
@@ -117,9 +121,18 @@ public class NacRateMyAppDialog
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 
-		shared.editRateMyAppCounter(-1);
+		shared.editRateMyAppCounter(
+			-2*NacSharedPreferences.DEFAULT_RATE_MY_APP_LIMIT);
 
 		return true;
+	}
+
+	/**
+	 */
+	@Override
+	public void onShowDialog(NacDialog dialog, View root)
+	{
+		scale(0.9, 0.7, false, true);
 	}
 
 }
