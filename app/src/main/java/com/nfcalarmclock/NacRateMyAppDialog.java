@@ -76,7 +76,7 @@ public class NacRateMyAppDialog
 	@Override
 	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
-		String title = "Rate this app";
+		String title = "Rate the app";
 
 		builder.setTitle(title);
 		setPositiveButton("Rate Now");

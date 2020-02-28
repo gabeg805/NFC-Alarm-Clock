@@ -41,7 +41,7 @@ public class NacSharedPreferences
 	/**
 	 * Default app rating counter limit.
 	 */
-	public static final int DEFAULT_RATE_MY_APP_LIMIT = 50;
+	public static final int DEFAULT_RATE_MY_APP_LIMIT = 30;
 
 	/**
 	 * Counter amount indicating that the app has been rated.

@@ -815,6 +815,8 @@ public class NacCardAdapter
 	 */
 	private void showAlarmChange(NacAlarm alarm)
 	{
+		alarm.print();
+
 		if (!alarm.wasChanged())
 		{
 			return;
@@ -822,10 +824,12 @@ public class NacCardAdapter
 
 		if (alarm.getEnabled())
 		{
+			NacUtility.printf("Showing alarm runtime!");
 			this.showAlarmRuntime(alarm);
 		}
 		else
 		{
+			NacUtility.printf("Showing next alarm!");
 			this.showNextAlarm();
 		}
 	}
@@ -836,14 +840,14 @@ public class NacCardAdapter
 	private void showAlarmRuntime(NacAlarm alarm)
 	{
 		Calendar alarmCalendar = NacCalendar.getNext(alarm);
-		Calendar previousCalendar = this.getPreviousCalendar();
+		//Calendar previousCalendar = this.getPreviousCalendar();
 
-		if (!alarmCalendar.equals(previousCalendar))
-		{
-			this.showAlarm(alarm);
+		//if (!alarmCalendar.equals(previousCalendar))
+		//{
+		this.showAlarm(alarm);
 
-			this.mPreviousCalendar = alarmCalendar;
-		}
+		this.mPreviousCalendar = alarmCalendar;
+		//}
 	}
 
 	/**
@@ -936,7 +940,7 @@ public class NacCardAdapter
 	 */
 	private int sortInsertAlarm(NacAlarm alarm)
 	{
-		boolean enabled = alarm.getEnabled();
+		boolean insertEnabled = alarm.getEnabled();
 		Calendar next = NacCalendar.getNext(alarm);
 		List<NacAlarm> alarmList = this.getAlarms();
 		int size = alarmList.size();
@@ -945,13 +949,30 @@ public class NacCardAdapter
 		for (i=0; i < size; i++)
 		{
 			NacAlarm a = alarmList.get(i);
-			Calendar cal = (enabled == a.getEnabled()) ? NacCalendar.getNext(a)
-				: null;
+			boolean alarmEnabled = a.getEnabled();
 
-			if ((cal != null) && (next.before(cal)))
+			if (insertEnabled && !alarmEnabled)
 			{
 				break;
 			}
+			else if (insertEnabled == alarmEnabled)
+			{
+				Calendar cal = NacCalendar.getNext(a);
+
+				if (next.before(cal))
+				{
+					break;
+				}
+			}
+
+			//NacAlarm a = alarmList.get(i);
+			//Calendar cal = (enabled == a.getEnabled()) ? NacCalendar.getNext(a)
+			//	: null;
+
+			//if ((cal != null) && (next.before(cal)))
+			//{
+			//	break;
+			//}
 		}
 
 		alarmList.add(i, alarm);
