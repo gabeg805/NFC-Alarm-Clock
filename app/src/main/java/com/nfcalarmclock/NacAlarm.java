@@ -949,6 +949,17 @@ public class NacAlarm
 	}
 
 	/**
+	 * @return True if the alarm has a sound that will be played when it goes
+	 *         off, and False otherwise.
+	 */
+	public boolean hasSound()
+	{
+		String sound = this.getSoundPath();
+
+		return ((sound != null) && !sound.isEmpty());
+	}
+
+	/**
 	 * @return True if the alarm is snoozed and False otherwise.
 	 */
 	public boolean isSnoozed(NacSharedPreferences shared)

@@ -56,6 +56,20 @@
             </intent-filter>
 		</activity>
 
+		<!-- Alarm activity -->
+		<activity
+			android:name=".NacAlarmActivity"
+			android:excludeFromRecents="true">
+		</activity>
+
+		<!-- Settings activity -->
+		<activity
+			android:name=".NacSettingsActivity"
+			android:label="Settings"
+			android:parentActivityName=".NacMainActivity"
+			android:windowSoftInputMode="stateAlwaysHidden">
+		</activity>
+
 		<!-- Media activity -->
 		<activity
 			android:name=".NacMediaActivity"
@@ -69,20 +83,6 @@
 				android:name="android.app.searchable"
 				android:resource="@xml/searchable"
 				/>
-		</activity>
-
-		<!-- Alarm activity -->
-		<activity
-			android:name=".NacAlarmActivity"
-			android:autoRemoveFromRecents="true">
-		</activity>
-
-		<!-- Settings activity -->
-		<activity
-			android:name=".NacSettingsActivity"
-			android:label="Settings"
-			android:parentActivityName=".NacMainActivity"
-			android:windowSoftInputMode="stateAlwaysHidden">
 		</activity>
 
 		<!-- Call the alarm activity when an alarm goes off -->

@@ -89,6 +89,20 @@ public class NacWakeUpAction
 	}
 
 	/**
+	 * @return True if music can be played, and False otherwise.
+	 */
+	public boolean canPlayMusic()
+	{
+		NacMediaPlayer player = this.getMediaPlayer();
+		NacAlarm alarm = this.getAlarm();
+
+		// Might want to override whats playing when waking up.
+		// Also, don't know what wasPlaying really does.
+		return ((alarm != null) && (player != null) && alarm.hasSound());
+			//|| player.isPlaying() || player.wasPlaying())
+	}
+
+	/**
 	 * Cleanup various alarm objects.
 	 */
 	public void cleanup()
@@ -255,8 +269,7 @@ public class NacWakeUpAction
 		NacMediaPlayer player = this.getMediaPlayer();
 		NacAlarm alarm = this.getAlarm();
 
-		if ((alarm == null) || (player == null) || player.isPlaying()
-			|| player.wasPlaying())
+		if (!this.canPlayMusic())
 		{
 			return;
 		}

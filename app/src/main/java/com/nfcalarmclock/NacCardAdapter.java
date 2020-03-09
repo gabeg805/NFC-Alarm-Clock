@@ -928,7 +928,8 @@ public class NacCardAdapter
 		NacCardHolder holder = (NacCardHolder) rv.findViewHolderForItemId(id);
 		NacCardView card = (holder != null) ? holder.getNacCardView() : null;
 
-		if ((card != null) && card.isCollapseState())
+		//if ((card != null) && card.isCollapseState())
+		if (card != null)
 		{
 			this.sortAlarm(alarm);
 			card.highlight();
