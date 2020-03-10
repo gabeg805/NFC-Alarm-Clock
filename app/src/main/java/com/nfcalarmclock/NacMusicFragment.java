@@ -206,6 +206,7 @@ public class NacMusicFragment
 
 		if (!NacPermissions.hasRead(getContext()))
 		{
+			NacUtility.quickToast(getContext(), "You don't have read permissions!");
 			return;
 		}
 
@@ -223,10 +224,11 @@ public class NacMusicFragment
 		String path = sound;
 		File pathFile = new File(path);
 		this.mFileBrowser = browser;
+		Context context = getContext();
 
 		if (NacSound.isFilePlaylist(path))
 		{
-			;
+			NacUtility.quickToast(context, "Is file playlist!");
 		}
 		else if (NacSound.isFile(path) && pathFile.isFile())
 		{
@@ -238,15 +240,18 @@ public class NacMusicFragment
 				try
 				{
 					path = parentFile.getCanonicalPath();
+					NacUtility.quickToast(context, "File path : "+path);
 				}
 				catch (IOException e)
 				{
+					NacUtility.quickToast(context, "IO exception reading parent file!");
 				}
 			}
 		}
 		else
 		{
 			path = NacFileBrowser.getHome();
+			NacUtility.quickToast(context, "Getting home : %s"+path);
 		}
 
 		browser.setOnClickListener(this);

@@ -363,6 +363,14 @@ public class NacFileBrowser
 	private void populateEntries(String showPath)
 	{
 		this.mPathView.setText(showPath);
+		NacButtonGroup container = this.getContainer();
+
+		if (container == null)
+		{
+			Context context = container.getContext();
+			NacUtility.quickToast(context, "Populating entries at : "+showPath);
+		}
+
 		this.addListing(showPath);
 	}
 

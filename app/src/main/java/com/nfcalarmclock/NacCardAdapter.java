@@ -233,6 +233,31 @@ public class NacCardAdapter
 	}
 
 	/**
+	 */
+	private boolean canInsertAlarm(NacAlarm alarmToInsert, NacAlarm alarmInList,
+		Calendar nextRun)
+	{
+		boolean insertEnabled = alarmToInsert.getEnabled();
+		boolean alarmEnabled = alarmInList.getEnabled();
+
+		if (insertEnabled && !alarmEnabled)
+		{
+			return true;
+		}
+		else if (insertEnabled == alarmEnabled)
+		{
+			Calendar cal = NacCalendar.getNext(alarmInList);
+
+			if (nextRun.before(cal))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Copy the alarm.
 	 *
 	 * @param  pos	The position of the alarm card to copy.
@@ -280,6 +305,28 @@ public class NacCardAdapter
 		this.snackbar("Deleted alarm.");
 
 		return 0;
+	}
+
+	/**
+	 * @return The index at which the given alarm is found.
+	 */
+	public int find(NacAlarm alarm)
+	{
+		List<NacAlarm> alarmList = this.getAlarms();
+		int size = alarmList.size();
+		int id = alarm.getId();
+
+		for (int i=0; i < size; i++)
+		{
+			NacAlarm a = alarmList.get(i);
+
+			if (a.getId() == id)
+			{
+				return i;
+			}
+		}
+
+		return -1;
 	}
 
 	/**
@@ -486,6 +533,23 @@ public class NacCardAdapter
 			{
 				return i;
 			}
+		}
+
+		return -1;
+	}
+
+	/**
+	 * Insert the alarm at the given location.
+	 */
+	public int insertAlarm(NacAlarm alarm, int index)
+	{
+		if (index >= 0)
+		{
+			List<NacAlarm> alarmList = this.getAlarms();
+
+			alarmList.add(index, alarm);
+			notifyItemInserted(index);
+			return index;
 		}
 
 		return -1;
@@ -752,6 +816,22 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * Remove the alarm at the given index.
+	 */
+	public int removeAlarm(int index)
+	{
+		if (index >= 0)
+		{
+			List<NacAlarm> alarmList = this.getAlarms();
+
+			alarmList.remove(index);
+			notifyItemRemoved(index);
+		}
+
+		return -1;
+	}
+
+	/**
 	 * Restore a previously deleted alarm.
 	 * 
 	 * @param  alarm  The alarm to restore.
@@ -907,15 +987,27 @@ public class NacCardAdapter
 	/**
 	 * Sort an alarm into the alarm list.
 	 */
-	public void sortAlarm(NacAlarm alarm)
+	public int sortAlarm(NacAlarm alarm)
 	{
 		if (alarm == null)
 		{
-			return;
+			return -1;
 		}
 
-		this.sortRemoveAlarm(alarm);
-		this.sortInsertAlarm(alarm);
+		int index = this.find(alarm);
+		int insertIndex = this.whereToPutAlarm(alarm);
+
+		if (index != insertIndex)
+		{
+			this.removeAlarm(index);
+			this.insertAlarm(alarm, insertIndex);
+			return insertIndex;
+		}
+
+		//this.sortRemoveAlarm(alarm);
+		//this.sortInsertAlarm(alarm);
+
+		return -1;
 	}
 
 	/**
@@ -931,8 +1023,13 @@ public class NacCardAdapter
 		//if ((card != null) && card.isCollapseState())
 		if (card != null)
 		{
-			this.sortAlarm(alarm);
-			card.highlight();
+			int index = this.sortAlarm(alarm);
+
+			if (index >= 0)
+			{
+				rv.scrollToPosition(index);
+				card.highlight();
+			}
 		}
 	}
 
@@ -941,69 +1038,19 @@ public class NacCardAdapter
 	 */
 	private int sortInsertAlarm(NacAlarm alarm)
 	{
-		boolean insertEnabled = alarm.getEnabled();
-		Calendar next = NacCalendar.getNext(alarm);
-		List<NacAlarm> alarmList = this.getAlarms();
-		int size = alarmList.size();
-		int i = 0;
+		int index = this.whereToPutAlarm(alarm);
 
-		for (i=0; i < size; i++)
-		{
-			NacAlarm a = alarmList.get(i);
-			boolean alarmEnabled = a.getEnabled();
-
-			if (insertEnabled && !alarmEnabled)
-			{
-				break;
-			}
-			else if (insertEnabled == alarmEnabled)
-			{
-				Calendar cal = NacCalendar.getNext(a);
-
-				if (next.before(cal))
-				{
-					break;
-				}
-			}
-
-			//NacAlarm a = alarmList.get(i);
-			//Calendar cal = (enabled == a.getEnabled()) ? NacCalendar.getNext(a)
-			//	: null;
-
-			//if ((cal != null) && (next.before(cal)))
-			//{
-			//	break;
-			//}
-		}
-
-		alarmList.add(i, alarm);
-		notifyItemInserted(i);
-
-		return i;
+		return this.insertAlarm(alarm, index);
 	}
 
 	/**
-	 * Remove alarm from the sorted list.
+	 * @see sortRemoveAlarm
 	 */
 	private int sortRemoveAlarm(NacAlarm alarm)
 	{
-		List<NacAlarm> alarmList = this.getAlarms();
-		int size = alarmList.size();
-		int id = alarm.getId();
+		int index = this.find(alarm);
 
-		for (int i=0; i < size; i++)
-		{
-			NacAlarm a = alarmList.get(i);
-
-			if (a.getId() == id)
-			{
-				alarmList.remove(i);
-				notifyItemRemoved(i);
-				return i;
-			}
-		}
-
-		return -1;
+		return this.removeAlarm(index);
 	}
 
 	/**
@@ -1035,6 +1082,35 @@ public class NacCardAdapter
 	public boolean wasAddedWithFloatingButton()
 	{
 		return this.mWasAddedWithFloatingButton;
+	}
+
+	/**
+	 * @return Where to insert the alarm in the list (ignoring it's current
+	 *         position if it already exists in the list.
+	 */
+	private int whereToPutAlarm(NacAlarm alarm)
+	{
+		Calendar next = NacCalendar.getNext(alarm);
+		boolean matchFound = false;
+		int id = alarm.getId();
+		int i = 0;
+
+		//for (i=0; i < size; i++)
+		for (NacAlarm a : this.getAlarms())
+		{
+			if (a.getId() == id)
+			{
+				matchFound = true;
+				continue;
+			}
+
+			if (this.canInsertAlarm(alarm, a, next))
+			{
+				break;
+			}
+		}
+
+		return (matchFound) ? i-1 : i;
 	}
 
 	/**
