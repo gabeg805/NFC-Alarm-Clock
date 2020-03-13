@@ -41,6 +41,7 @@
 			android:orientation="vertical"
 			android:scrollbars="vertical">
 
+			<!--
 			<com.nfcalarmclock.NacButtonGroup
 				android:id="@+id/group"
 				android:layout_width="match_parent"
@@ -57,6 +58,7 @@
 				app:nacTextSize="@dimen/tsz_frg_sound"
 				app:nacSubTextColor="@color/white"
 				/>
+			-->
 
 		</LinearLayout>
 
