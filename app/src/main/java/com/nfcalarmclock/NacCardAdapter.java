@@ -995,19 +995,22 @@ public class NacCardAdapter
 		}
 
 		int index = this.find(alarm);
-		int insertIndex = this.whereToPutAlarm(alarm);
+		int whereIndex = this.whereToPutAlarm(alarm);
+		int insertIndex = whereIndex;
 
-		if (index != insertIndex)
+		if (index < 0)
 		{
+			insertIndex = -1;
+		}
+		else if (index != whereIndex)
+		{
+			insertIndex = (whereIndex > index) ? whereIndex-1 : whereIndex;
+
 			this.removeAlarm(index);
 			this.insertAlarm(alarm, insertIndex);
-			return insertIndex;
 		}
 
-		//this.sortRemoveAlarm(alarm);
-		//this.sortInsertAlarm(alarm);
-
-		return -1;
+		return insertIndex;
 	}
 
 	/**
@@ -1090,27 +1093,27 @@ public class NacCardAdapter
 	 */
 	private int whereToPutAlarm(NacAlarm alarm)
 	{
+		List<NacAlarm> alarmList = this.getAlarms();
 		Calendar next = NacCalendar.getNext(alarm);
-		boolean matchFound = false;
 		int id = alarm.getId();
-		int i = 0;
+		int size = alarmList.size();
 
-		//for (i=0; i < size; i++)
-		for (NacAlarm a : this.getAlarms())
+		for (int i=0; i < size; i++)
 		{
+			NacAlarm a = alarmList.get(i);
+
 			if (a.getId() == id)
 			{
-				matchFound = true;
 				continue;
 			}
 
 			if (this.canInsertAlarm(alarm, a, next))
 			{
-				break;
+				return i;
 			}
 		}
 
-		return (matchFound) ? i-1 : i;
+		return size;
 	}
 
 	/**

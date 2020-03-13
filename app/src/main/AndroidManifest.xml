@@ -31,10 +31,6 @@
 		android:supportsRtl="true">
 
 		<!-- Main activity -->
-			<!--
-			android:relinquishTaskIdentity="true"
-			android:autoRemoveFromRecents="false"
-			-->
 		<activity
 			android:name=".NacMainActivity"
 			android:label="@string/app_name"

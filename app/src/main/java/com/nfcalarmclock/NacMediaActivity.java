@@ -5,15 +5,6 @@ import android.content.pm.PackageManager;
 import android.Manifest;
 import android.os.Build;
 import android.os.Bundle;
-//import android.support.design.widget.TabLayout;
-//import android.support.design.widget.TabLayout.Tab;
-//import android.support.v4.app.ActivityCompat;
-//import android.support.v4.app.Fragment;
-//import android.support.v4.app.FragmentActivity;
-//import android.support.v4.app.FragmentPagerAdapter;
-//import android.support.v4.app.FragmentManager;
-//import android.support.v4.view.ViewPager;
-
 import androidx.core.app.ActivityCompat;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayout.Tab;

@@ -206,7 +206,7 @@ public class NacMusicFragment
 
 		if (!NacPermissions.hasRead(getContext()))
 		{
-			NacUtility.quickToast(getContext(), "You don't have read permissions!");
+			NacUtility.printf("You don't have read permissions!");
 			return;
 		}
 
@@ -228,7 +228,7 @@ public class NacMusicFragment
 
 		if (NacSound.isFilePlaylist(path))
 		{
-			NacUtility.quickToast(context, "Is file playlist!");
+			NacUtility.printf("Is file playlist!");
 		}
 		else if (NacSound.isFile(path) && pathFile.isFile())
 		{
@@ -240,23 +240,24 @@ public class NacMusicFragment
 				try
 				{
 					path = parentFile.getCanonicalPath();
-					NacUtility.quickToast(context, "File path : "+path);
+					NacUtility.printf("File path : %s", path);
 				}
 				catch (IOException e)
 				{
-					NacUtility.quickToast(context, "IO exception reading parent file!");
+					NacUtility.printf("IO exception reading parent file!");
 				}
 			}
 		}
 		else
 		{
 			path = NacFileBrowser.getHome();
-			NacUtility.quickToast(context, "Getting home : %s"+path);
+			NacUtility.printf("Getting home : %s", path);
 		}
 
 		browser.setOnClickListener(this);
-		browser.show(path);
-		browser.select(sound);
+		browser.show();
+		//browser.show(path);
+		//browser.select(sound);
 	}
 
 }

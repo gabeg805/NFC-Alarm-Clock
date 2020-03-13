@@ -301,14 +301,16 @@ public class NacForegroundService
 			return;
 		}
 
+		NacSharedPreferences shared = this.getSharedPreferences();
 		String tag = "NFC Alarm Clock:NacForegroundService";
 		PowerManager pm = (PowerManager) getSystemService(
 			Context.POWER_SERVICE);
 		this.mWakeLock = pm.newWakeLock(
 			PowerManager.SCREEN_BRIGHT_WAKE_LOCK|PowerManager.ACQUIRE_CAUSES_WAKEUP,
 			tag);
+		long timeout = shared.getAutoDismissTime() * 60 * 1000;
 
-		this.mWakeLock.acquire();
+		this.mWakeLock.acquire(timeout);
 	}
 
 	/**

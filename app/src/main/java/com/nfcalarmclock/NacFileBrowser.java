@@ -11,6 +11,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import android.database.Cursor;
+import android.provider.MediaStore;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
 /**
  * A music file browser.
  */
@@ -52,6 +59,8 @@ public class NacFileBrowser
 	 */
 	private String mCurrentDirectory;
 
+	private HashMap<String, List<String>> mDirectories;
+
 	/**
 	 */
 	public NacFileBrowser(View root, int pathId, int groupId)
@@ -60,8 +69,10 @@ public class NacFileBrowser
 		this.mContainer = (NacButtonGroup) root.findViewById(groupId);
 		this.mSelected = null;
 		this.mCurrentDirectory = NacFileBrowser.getHome();
+		this.mDirectories = new HashMap<String, List<String>>();
 
 		this.mContainer.removeAllViews();
+		this.scanDirectories(view.getContext());
 	}
 
 	/**
@@ -95,10 +106,12 @@ public class NacFileBrowser
 	{
 		if (file.isDirectory())
 		{
+			NacUtility.printf("Adding directory!");
 			this.addDirectory(file);
 		}
 		else if (file.isFile())
 		{
+			NacUtility.printf("Adding file!");
 			this.addFile(file);
 		}
 	}
@@ -108,8 +121,19 @@ public class NacFileBrowser
 	 */
 	public void addListing(String path)
 	{
+		NacUtility.printf("adding listing : %s", path);
+
 		for (File file : NacFileBrowser.listing(path))
 		{
+			try
+			{
+				NacUtility.printf("File : %s", file.getCanonicalPath());
+			}
+			catch (IOException e)
+			{
+				NacUtility.printf("File getCanonicalPath exception!");
+			}
+
 			this.addEntry(file);
 		}
 	}
@@ -185,11 +209,20 @@ public class NacFileBrowser
 	}
 
 	/**
+	 * @return The directories.
+	 */
+	public HashMap<String, List<String>> getDirectories()
+	{
+		return this.mDirectories;
+	}
+
+	/**
 	 * @return The home directory.
 	 */
 	public static String getHome()
 	{
 		return Environment.getExternalStorageDirectory().toString();
+		//return "/sdcard";
 	}
 
 	/**
@@ -288,10 +321,15 @@ public class NacFileBrowser
 	 */
 	public static List<File> listing(String path)
 	{
-		File[] listing = new File(path).listFiles(NacSound.getFilter());
+		//File[] listing = new File(path).listFiles(NacSound.getFilter());
+		File[] listing = new File(path).listFiles();
 		List<File> directories = new ArrayList<>();
 		List<File> files = new ArrayList<>();
 		String home = NacFileBrowser.getHome();
+
+		NacUtility.printf("Listing : %s", path);
+		NacUtility.printf("Home : %s", home);
+		NacUtility.printf("Listing length : %d", (listing != null) ? listing.length : -1);
 
 		if (!path.equals(home))
 		{
@@ -300,6 +338,7 @@ public class NacFileBrowser
 
 		for (int i=0; (listing != null) && (i < listing.length); i++)
 		{
+			NacUtility.printf("Listing file : %d", i);
 			if (listing[i].isDirectory())
 			{
 				directories.add(listing[i]);
@@ -368,7 +407,11 @@ public class NacFileBrowser
 		if (container == null)
 		{
 			Context context = container.getContext();
-			NacUtility.quickToast(context, "Populating entries at : "+showPath);
+			NacUtility.printf("Container is null!");
+		}
+		else
+		{
+			NacUtility.printf("Populating entries at : %s", showPath);
 		}
 
 		this.addListing(showPath);
@@ -454,6 +497,100 @@ public class NacFileBrowser
 		{
 			this.getSelected().select();
 		}
+	}
+
+	/**
+	 * Scan directories and save the file listings in each.
+	 */
+	private void scanDirectories(Context context)
+	{
+		HashMap<String, List<String>> directories = this.getDirectories();
+		List<String> alarm = new ArrayList<>();
+		List<String> audiobook = new ArrayList<>();
+		List<String> music = new ArrayList<>();
+		List<String> notification = new ArrayList<>();
+		List<String> podcast = new ArrayList<>();
+		List<String> ringtone = new ArrayList<>();
+		String[] columns = new String[] {
+			//MediaStore.Audio.Media.VOLUME_NAME,
+			MediaStore.Audio.Media.RELATIVE_PATH,
+			MediaStore.Audio.Media.DISPLAY_NAME,
+			MediaStore.Audio.Media.IS_ALARM,
+			MediaStore.Audio.Media.IS_AUDIOBOOK,
+			MediaStore.Audio.Media.IS_MUSIC,
+			MediaStore.Audio.Media.IS_NOTIFICATION,
+			MediaStore.Audio.Media.IS_PODCAST,
+			MediaStore.Audio.Media.IS_RINGTONE,
+			};
+		String home = NacFileBrowser.getHome();
+		Locale locale = Locale.getDefault();
+		Cursor c = context.getContentResolver().query(
+			MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, columns, null, null,
+			"_display_name");
+
+		while (c.moveToNext())
+		{
+			int pathIndex = c.getColumnIndex(
+				MediaStore.Audio.Media.RELATIVE_PATH);
+			int nameIndex = c.getColumnIndex(
+				MediaStore.Audio.Media.DISPLAY_NAME);
+			int isAlarmIndex = c.getColumnIndex(
+				MediaStore.Audio.Media.IS_ALARM);
+			int isAudiobookIndex = c.getColumnIndex(
+				MediaStore.Audio.Media.IS_AUDIOBOOK);
+			int isMusicIndex = c.getColumnIndex(
+				MediaStore.Audio.Media.IS_MUSIC);
+			int isNotificationIndex = c.getColumnIndex(
+				MediaStore.Audio.Media.IS_NOTIFICATION);
+			int isPodcastIndex = c.getColumnIndex(
+				MediaStore.Audio.Media.IS_PODCAST);
+			int isRingtoneIndex = c.getColumnIndex(
+				MediaStore.Audio.Media.IS_RINGTONE);
+			String path = c.getString(pathIndex);
+			String name = c.getString(nameIndex);
+			int isAlarm = c.getInt(isAlarmIndex);
+			int isAudiobook = c.getInt(isAudiobookIndex);
+			int isMusic = c.getInt(isMusicIndex);
+			int isNotification = c.getInt(isNotificationIndex);
+			int isPodcast = c.getInt(isPodcastIndex);
+			int isRingtone = c.getInt(isRingtoneIndex);
+			String fullpath = String.format("%s/%s%s", home, path, name);
+
+			NacUtility.printf("Browser show : '%s'", fullpath);
+
+			if (isAlarm != 0)
+			{
+				alarm.add(fullpath);
+			}
+			else if (isAudiobook != 0)
+			{
+				audiobook.add(fullpath);
+			}
+			else if (isMusic != 0)
+			{
+				music.add(fullpath);
+			}
+			else if (isNotification != 0)
+			{
+				notification.add(fullpath);
+			}
+			else if (isPodcast != 0)
+			{
+				podcast.add(fullpath);
+			}
+			else if (isRingtone != 0)
+			{
+				ringtone.add(fullpath);
+			}
+		}
+
+		directories.put("Current", home);
+		directories.put("Alarm", alarm);
+		directories.put("Audiobook", audiobook);
+		directories.put("Music", music);
+		directories.put("Notification", notification);
+		directories.put("Podcast", podcast);
+		directories.put("Ringtone", ringtone);
 	}
 
 	/**
