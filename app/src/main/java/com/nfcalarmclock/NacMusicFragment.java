@@ -136,6 +136,7 @@ public class NacMusicFragment
 		if (file.isDirectory())
 		{
 			this.setMedia(path);
+			NacUtility.printf("Clicked on path : %s", path);
 			browser.show(path);
 		}
 		else if (file.isFile())
@@ -218,8 +219,10 @@ public class NacMusicFragment
 	 */
 	private void setupFileBrowser(View root)
 	{
+		//NacFileBrowser browser = new NacFileBrowser(root, R.id.path,
+		//	R.id.group);
 		NacFileBrowser browser = new NacFileBrowser(root, R.id.path,
-			R.id.group);
+			R.id.container);
 		String sound = getSoundPath();
 		String path = sound;
 		File pathFile = new File(path);

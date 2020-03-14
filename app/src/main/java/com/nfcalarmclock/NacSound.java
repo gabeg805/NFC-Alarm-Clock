@@ -354,7 +354,7 @@ public class NacSound
 			return null;
 		}
 
-		for (File file : NacFileBrowser.listing(path))
+		for (File file : NacFileBrowser.listing(context, path))
 		{
 			if (file.isDirectory())
 			{
@@ -435,7 +435,7 @@ public class NacSound
 		//sometimes
 		catch (RuntimeException e)
 		{
-			NacUtility.printf("Something wrong with file '%s'.", file.getAbsolutePath());
+			NacUtility.printf("Something wrong with file '%s'.", path);
 			retriever.release();
 			return null;
 		}
