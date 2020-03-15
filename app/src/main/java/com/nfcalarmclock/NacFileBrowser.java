@@ -697,18 +697,10 @@ public class NacFileBrowser
 		NacFileListingTree tree = this.mFileListing;
 		String home = NacFileBrowser.getHome();
 		String[] columns = new String[] {
-			//MediaStore.Audio.Media.VOLUME_NAME,
 			MediaStore.Audio.Media._ID,
 			MediaStore.Audio.Media.RELATIVE_PATH,
 			MediaStore.Audio.Media.DISPLAY_NAME,
-			MediaStore.Audio.Media.IS_ALARM,
-			MediaStore.Audio.Media.IS_AUDIOBOOK,
-			MediaStore.Audio.Media.IS_MUSIC,
-			MediaStore.Audio.Media.IS_NOTIFICATION,
-			MediaStore.Audio.Media.IS_PODCAST,
-			MediaStore.Audio.Media.IS_RINGTONE,
 			};
-		Locale locale = Locale.getDefault();
 		Cursor c = context.getContentResolver().query(
 			MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, columns, null, null,
 			"_display_name");
@@ -720,42 +712,28 @@ public class NacFileBrowser
 				MediaStore.Audio.Media.RELATIVE_PATH);
 			int nameIndex = c.getColumnIndex(
 				MediaStore.Audio.Media.DISPLAY_NAME);
-			//int isAlarmIndex = c.getColumnIndex(
-			//	MediaStore.Audio.Media.IS_ALARM);
-			//int isAudiobookIndex = c.getColumnIndex(
-			//	MediaStore.Audio.Media.IS_AUDIOBOOK);
-			//int isMusicIndex = c.getColumnIndex(
-			//	MediaStore.Audio.Media.IS_MUSIC);
-			//int isNotificationIndex = c.getColumnIndex(
-			//	MediaStore.Audio.Media.IS_NOTIFICATION);
-			//int isPodcastIndex = c.getColumnIndex(
-			//	MediaStore.Audio.Media.IS_PODCAST);
-			//int isRingtoneIndex = c.getColumnIndex(
-			//	MediaStore.Audio.Media.IS_RINGTONE);
 			long id = c.getLong(idIndex);
 			String path = c.getString(pathIndex);
 			String name = c.getString(nameIndex);
-			//int isAlarm = c.getInt(isAlarmIndex);
-			//int isAudiobook = c.getInt(isAudiobookIndex);
-			//int isMusic = c.getInt(isMusicIndex);
-			//int isNotification = c.getInt(isNotificationIndex);
-			//int isPodcast = c.getInt(isPodcastIndex);
-			//int isRingtone = c.getInt(isRingtoneIndex);
 			String fullpath = String.format("%s/%s%s", home, path, name);
 			String[] parts = path.split("/");
 			NacTreeNode<String> currentDirectory = tree.getDirectory();
-			Uri contentUri = ContentUris.withAppendedId(
-				MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
-			NacUtility.printf("\nBrowser show : %s/%s", path, name);
-			NacUtility.printf("Content uri : %s || %s", contentUri.toString(), contentUri.getPath());
+			//Uri contentUri = ContentUris.withAppendedId(
+			//	MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
+			//NacFile file = new NacFile(contentUri, fullpath, name, NacFile.Type.FILE);
+
+			NacUtility.printf("\nBrowser show : %s", fullpath);
+			//NacUtility.printf("Content uri : %s || %s", contentUri.toString(), contentUri.getPath());
 
 			for (int i=0; i < parts.length; i++)
 			{
-				tree.add(".", parts[i]);
-				tree.cd(parts[i]);
+				String dir = parts[i];
+
+				tree.add(dir);
+				tree.cd(dir);
 			}
 
-			tree.add(".", name);
+			tree.add(name, id);
 			tree.cd(currentDirectory);
 		}
 	}

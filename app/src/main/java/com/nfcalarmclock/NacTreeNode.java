@@ -1,10 +1,10 @@
 package com.nfcalarmclock;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
+ * Node in a tree.
  */
 public class NacTreeNode<T>
 {
@@ -15,28 +15,34 @@ public class NacTreeNode<T>
 	private NacTreeNode<T> mRoot;
 
 	/**
-	 * Data.
-	 */
-	private T mData;
-
-	/**
 	 * Children of this node.
 	 */
 	private List<NacTreeNode<T>> mChildren;
 
 	/**
+	 * Key.
+	 */
+	private T mKey;
+
+	/**
+	 * Value.
+	 */
+	private Object mValue;
+
+	/**
 	 */
 	public NacTreeNode()
 	{
-		this(null, null);
+		this(null, null, null);
 	}
 
 	/**
 	 */
-	public NacTreeNode(NacTreeNode<T> root, T data)
+	public NacTreeNode(NacTreeNode<T> root, T key, Object value)
 	{
 		this.mRoot = root;
-		this.mData = data;
+		this.mKey = key;
+		this.mValue = value;
 		this.mChildren = new ArrayList<>();
 	}
 
@@ -45,8 +51,6 @@ public class NacTreeNode<T>
 	 */
 	public void addChild(NacTreeNode<T> child)
 	{
-		// Should also try exists(child) when I get a chance.
-		//if (this.exists(child.getData()))
 		if (this.exists(child))
 		{
 			return;
@@ -58,11 +62,19 @@ public class NacTreeNode<T>
 	/**
 	 * @see addChild
 	 */
-	public void addChild(T childData)
+	public void addChild(T key, Object value)
 	{
-		NacTreeNode<T> child = new NacTreeNode<T>(this, childData);
+		NacTreeNode<T> child = new NacTreeNode<T>(this, key, value);
 
 		this.addChild(child);
+	}
+
+	/**
+	 * @see addChild
+	 */
+	public void addChild(T key)
+	{
+		this.addChild(key, null);
 	}
 
 	/**
@@ -76,9 +88,9 @@ public class NacTreeNode<T>
 	/**
 	 * @return True if the child exists, and False otherwise.
 	 */
-	public boolean exists(T data)
+	public boolean exists(T key)
 	{
-		return (this.getChild(data) != null);
+		return (this.getChild(key) != null);
 	}
 
 	/**
@@ -86,7 +98,7 @@ public class NacTreeNode<T>
 	 */
 	public boolean exists(NacTreeNode<T> child)
 	{
-		return ((child != null) && this.exists(child.getData()));
+		return (this.getChild(child) != null);
 	}
 
 	/**
@@ -104,13 +116,13 @@ public class NacTreeNode<T>
 	/**
 	 * @return The requested child with the given data.
 	 */
-	public NacTreeNode<T> getChild(T data)
+	public NacTreeNode<T> getChild(T key)
 	{
 		List<NacTreeNode<T>> children = this.getChildren();
 
 		for (NacTreeNode<T> c : children)
 		{
-			if (c.getData().equals(data))
+			if (c.getKey().equals(key))
 			{
 				return c;
 			}
@@ -124,7 +136,7 @@ public class NacTreeNode<T>
 	 */
 	public NacTreeNode<T> getChild(NacTreeNode<T> child)
 	{
-		return (child != null) ? this.getChild(child.getData()) : null;
+		return (child != null) ? this.getChild(child.getKey()) : null;
 	}
 
 	/**
@@ -136,11 +148,11 @@ public class NacTreeNode<T>
 	}
 
 	/**
-	 * @return The data.
+	 * @return The key of the node.
 	 */
-	public T getData()
+	public T getKey()
 	{
-		return this.mData;
+		return this.mKey;
 	}
 
 	/**
@@ -152,19 +164,19 @@ public class NacTreeNode<T>
 	}
 
 	/**
+	 * @return The value of the node.
+	 */
+	public Object getValue()
+	{
+		return this.mValue;
+	}
+
+	/**
 	 * @see count
 	 */
 	public int size()
 	{
 		return this.count();
 	}
-
-	///**
-	// * Sort the children.
-	// */
-	//public void sort()
-	//{
-	//	Collections.sort(this.mChildren);
-	//}
 
 }

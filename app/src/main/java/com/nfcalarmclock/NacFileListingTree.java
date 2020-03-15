@@ -14,7 +14,6 @@ public class NacFileListingTree
 	 * The current directory.
 	 */
 	private NacTreeNode<String> mDirectory;
-	//private NacTreeNode<NacFile> mDirectory;
 
 	/**
 	 */
@@ -25,36 +24,54 @@ public class NacFileListingTree
 	}
 
 	/**
-	 * Add item to the given directory.
+	 * Add a file/folder to the given directory.
+	 *
+	 * @param  name  The name of the file or directory.
+	 * @param  id    The content ID, used to create the content Uri.
 	 */
-	public void add(String childData, String subChildData)
+	public void add(String name, long id)
 	{
 		NacTreeNode<String> dir = this.getDirectory();
-		//NacTreeNode<NacFile> dir = this.getDirectory();
 
 		if (dir == null)
 		{
 			return;
 		}
 
-		NacTreeNode<String> childDir = (childData.isEmpty() || childData.equals("."))
-		//NacTreeNode<NacFile> childDir = (childData.isEmpty() || childData.equals("."))
-			? dir : dir.getChild(childData);
-
-		if (childDir == null)
-		{
-			return;
-		}
-
-		childDir.addChild(subChildData);
+		dir.addChild(name, (id < 0) ? null : id);
 	}
 
 	/**
 	 * @see add
 	 */
-	public void add(String childData)
+	public void add(String name)
 	{
-		this.add(".", childData);
+		this.add(name, -1);
+	}
+
+	/**
+	 * Add item to the given directory.
+	 */
+	public void addToDirectory(String toDirectory, String name, long id)
+	{
+		NacTreeNode<String> currentDir = this.getDirectory();
+		NacTreeNode<String> dir = childData.equals(".") ? currentDir
+			: currentDir.getChild(toDirectory);
+
+		if (dir == null)
+		{
+			return;
+		}
+
+		dir.addChild(name, (id < 0) ? null : id);
+	}
+
+	/**
+	 * @see addToDirectory
+	 */
+	public void addToDirectory(String toDirectory, String name)
+	{
+		this.addToDirectory(toDirectory, name, -1);
 	}
 
 	/**
@@ -86,7 +103,6 @@ public class NacFileListingTree
 	 * @return The current directory.
 	 */
 	public NacTreeNode<String> getDirectory()
-	//public NacTreeNode<NacFile> getDirectory()
 	{
 		return this.mDirectory;
 	}
@@ -96,32 +112,25 @@ public class NacFileListingTree
 	 */
 	public String getHome()
 	{
-		return this.getData();
+		return this.getKey();
 	}
 
 	/**
 	 * List contents.
 	 */
 	public List<String> ls()
-	//public List<NacFile> ls()
 	{
 		NacTreeNode<String> dir = this.getDirectory();
 		List<String> listing = new ArrayList<>();
-		//NacTreeNode<NacFile> dir = this.getDirectory();
-		//List<NacFile> listing = new ArrayList<>();
 
 		if (dir == null)
 		{
 			return listing;
 		}
 
-		List<NacTreeNode<String>> children = dir.getChildren();
-		//List<NacTreeNode<NacFile>> children = dir.getChildren();
-
-		for (NacTreeNode<String> child : children)
-		//for (NacTreeNode<NacFile> child : children)
+		for (NacTreeNode<String> child : dir.getChildren())
 		{
-			listing.add(child.getData());
+			listing.add(child.getKey());
 		}
 
 		return listing;
@@ -134,13 +143,13 @@ public class NacFileListingTree
 	{
 		NacTreeNode<String> dir = this.getDirectory();
 
-		if (dir.getData().equals(path))
+		if (dir.getKey().equals(path))
 		{
 			return this.ls();
 		}
 		else
 		{
-			String home = this.getData();
+			String home = this.getHome();
 			String newPath = path.replace(home, "");
 			String[] items = newPath.split("/");
 			NacTreeNode<String> newDir = dir;
