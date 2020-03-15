@@ -381,16 +381,24 @@ public class NacMediaPlayer
 				this.resetWrapper();
 			}
 
+			NacUtility.printf("SetDataSource");
 			setDataSource(path);
+			NacUtility.printf("SetLooping");
 			setLooping(repeat);
+			NacUtility.printf("SetAudioAttributes");
 			setAudioAttributes(audioAttributes);
+			NacUtility.printf("SetListener");
 			setOnCompletionListener(this);
+			NacUtility.printf("Prepare");
 			prepare();
+			NacUtility.printf("SetVolume");
 			this.setVolume();
+			NacUtility.printf("Start");
 			start();
 		}
 		catch (IllegalStateException | IOException | IllegalArgumentException | SecurityException e)
 		{
+			NacUtility.printf("NacMediaPlayer : play : %s", e.toString());
 			NacUtility.quickToast(context, "Unable to play selected file");
 		}
 	}

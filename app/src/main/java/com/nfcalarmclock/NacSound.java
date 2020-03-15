@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 /**
  * Sound utility class.
  */
@@ -297,42 +300,66 @@ public class NacSound
 	 *
 	 * @return The artist name.
 	 */
-	public static String getArtist(File file)
+	//public static String getArtist(File file)
+	public static String getArtist(Context context, File file)
 	{
-		MediaMetadataRetriever retriever = NacSound.getMediaMetadataRetriever(file);
+		Uri uri = Uri.fromFile(file);
+		String[] columns = new String[] { MediaStore.Audio.Artists.ARTIST };
+		Cursor c = context.getContentResolver().query(uri, columns,
+			null, null, null);
+		String artist = "";
 
-		if (retriever == null)
+		c.moveToFirst();
+
+		try
 		{
-			return "";
+			int artistIndex = c.getColumnIndexOrThrow(
+				MediaStore.Audio.Artists.ARTIST);
+			artist = c.getString(artistIndex);
+			NacUtility.printf("NacSound : getArtist : %s", artist);
+		}
+		catch (IllegalArgumentException e)
+		{
+			NacUtility.printf("NacSound : getArtist : IllegalArgumentException!");
 		}
 
-		String artist = retriever.extractMetadata(
-			MediaMetadataRetriever.METADATA_KEY_ARTIST);
-		String name = file.getName();
-		String defaultArtist = "Unknown";
-
-		retriever.release();
-
-		if (artist == null)
-		{
-			artist = defaultArtist;
-
-			if (name.contains(" - "))
-			{
-				String[] parts = name.split(" - ");
-
-				try
-				{
-					int test = Integer.parseInt(parts[0]);
-				}
-				catch (NumberFormatException nfe)
-				{
-					artist = parts[0].trim();
-				}
-			}
-		}
+		c.close();
 
 		return artist;
+		//MediaMetadataRetriever retriever = NacSound.getMediaMetadataRetriever(file);
+
+		//if (retriever == null)
+		//{
+		//	return "";
+		//}
+
+		//String artist = retriever.extractMetadata(
+		//	MediaMetadataRetriever.METADATA_KEY_ARTIST);
+		//String name = file.getName();
+		//String defaultArtist = "Unknown";
+
+		//retriever.release();
+
+		//if (artist == null)
+		//{
+		//	artist = defaultArtist;
+
+		//	if (name.contains(" - "))
+		//	{
+		//		String[] parts = name.split(" - ");
+
+		//		try
+		//		{
+		//			int test = Integer.parseInt(parts[0]);
+		//		}
+		//		catch (NumberFormatException nfe)
+		//		{
+		//			artist = parts[0].trim();
+		//		}
+		//	}
+		//}
+
+		//return artist;
 	}
 
 	/**
@@ -426,18 +453,50 @@ public class NacSound
 		}
 
 		MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+		FileInputStream inputStream = null;
 
 		try
 		{
-			retriever.setDataSource(path);
+			//retriever.setDataSource(path);
+			inputStream = new FileInputStream(path);
+		}
+		catch (FileNotFoundException e)
+		{
+			NacUtility.printf("File not found exception!");
+			return null;
+		}
+
+		try
+		{
+			retriever.setDataSource(inputStream.getFD());
 		}
 		//catch (IllegalArgumentException e) // RuntimeException occurs
 		//sometimes
+		catch (IOException e)
+		{
+			NacUtility.printf("IO exception!");
+			retriever = null;
+		}
 		catch (RuntimeException e)
 		{
+			NacUtility.printf("Runtime exception!");
+			retriever = null;
+		}
+		finally
+		{
 			NacUtility.printf("Something wrong with file '%s'.", path);
-			retriever.release();
-			return null;
+			if (inputStream != null)
+			{
+				try
+				{
+					inputStream.close();
+				}
+				catch (IOException e)
+				{
+					NacUtility.printf("input stream file exception.");
+				}
+			}
+			//return null;
 		}
 
 		return retriever;
@@ -485,22 +544,40 @@ public class NacSound
 			// To-do: Why don't I save the path as a 'content://' string as
 			// opposed to a full '/system/...' path?
 			Uri uri = Uri.parse(path);
-			Cursor cursor = context.getContentResolver().query(uri,
-				new String[] { MediaStore.Audio.Media.DATA }, null, null, null);
-			cursor.moveToFirst();
+			//String[] columns = new String[] { MediaStore.Audio.Media.DATA };
+			//String home
+			String[] columns = new String[] {
+				MediaStore.Audio.Media.VOLUME_NAME,
+				MediaStore.Audio.Media.RELATIVE_PATH,
+				MediaStore.Audio.Media.DISPLAY_NAME
+				};
+			Cursor c = context.getContentResolver().query(uri, columns,
+				null, null, null);
+			c.moveToFirst();
 
 			try
 			{
-				int index = cursor.getColumnIndexOrThrow(
-					MediaStore.Audio.Media.DATA);
-				path = cursor.getString(index);
+				int volumeIndex = c.getColumnIndex(
+					MediaStore.Audio.Media.VOLUME_NAME);
+				int pathIndex = c.getColumnIndex(
+					MediaStore.Audio.Media.RELATIVE_PATH);
+				int nameIndex = c.getColumnIndex(
+					MediaStore.Audio.Media.DISPLAY_NAME);
+				String volume = c.getString(volumeIndex);
+				String relpath = c.getString(pathIndex);
+				String name = c.getString(nameIndex);
+				NacUtility.printf("NacSound : getPath : %s/%s/%s", volume, relpath, name);
+				path = relpath+name;
+				//int index = cursor.getColumnIndexOrThrow(
+				//	MediaStore.Audio.Media.DATA);
+				//path = cursor.getString(index);
 			}
 			catch (CursorIndexOutOfBoundsException | IllegalArgumentException e)
 			{
 				path = "";
 			}
 
-			cursor.close();
+			c.close();
 		}
 		else
 		{
@@ -553,34 +630,80 @@ public class NacSound
 	/**
 	 * @return The title of the track.
 	 */
-	public static String getTitle(File file)
+	//public static String getTitle(File file)
+	public static String getTitle(Context context, File file)
 	{
-		MediaMetadataRetriever retriever = NacSound.getMediaMetadataRetriever(file);
+		//Uri uri = Uri.fromFile(file);
+		String path = file.getAbsolutePath();
+		String[] items = path.split("/");
+		String name = items[items.length-1];
 
-		if (retriever == null)
-		{
-			return "";
-		}
+		return name;
 
-		String title = retriever.extractMetadata(
-			MediaMetadataRetriever.METADATA_KEY_TITLE);
-		String name = file.getName();
-		String defaultTitle = NacSound.removeExtension(name);
+		//String path = "Music/Men I Trust/Headroom/Men I Trust - Headroom - 01 Morse Code ft. Odile & Geoffroy.mp3";
+		//Uri uri = Uri.parse(path);
+		//Uri uri = MediaStore.Audio.Media.getContentUriForPath(path);
+		//Uri uri = Uri.parse(path);
 
-		retriever.release();
 
-		if (title == null)
-		{
-			title = defaultTitle;
+		//Uri base = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+		//Uri uri = Uri.withAppendedPath(base, path);
+		//NacUtility.printf("Base : %s | %s | %s", base.toString(), base.getPath(), base.getEncodedPath());
+		//NacUtility.printf("Uri : %s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
+		//	uri.toString(), uri.getPath(), uri.getEncodedPath(),
+		//	uri.getScheme(), uri.getAuthority(), uri.getFragment(), uri.getHost(), uri.getUserInfo());
+		//NacUtility.printf("Correct : %s | %s | %s", newUri.toString(), newUri.getPath(), newUri.getEncodedPath());
 
-			if (name.contains(" - "))
-			{
-				String[] parts = name.split(" - ");
-				title = NacSound.removeExtension(parts[1].trim());
-			}
-		}
 
-		return title;
+		//String[] columns = new String[] { MediaStore.Audio.Media.DISPLAY_NAME };
+		//Cursor c = context.getContentResolver().query(uri, columns,
+		//	null, null, null);
+		//String title = "";
+
+		//c.moveToFirst();
+
+		//try
+		//{
+		//	int titleIndex = c.getColumnIndexOrThrow(
+		//		MediaStore.Audio.Media.DISPLAY_NAME);
+		//	title = c.getString(titleIndex);
+		//	NacUtility.printf("NacSound : getTitle : %s", title);
+		//}
+		//catch (IllegalArgumentException e)
+		//{
+		//	NacUtility.printf("NacSound : getTitle : IllegalArgumentException!");
+		//}
+
+		//c.close();
+
+		//return title;
+
+		//MediaMetadataRetriever retriever = NacSound.getMediaMetadataRetriever(file);
+
+		//if (retriever == null)
+		//{
+		//	return "";
+		//}
+
+		//String title = retriever.extractMetadata(
+		//	MediaMetadataRetriever.METADATA_KEY_TITLE);
+		//String name = file.getName();
+		//String defaultTitle = NacSound.removeExtension(name);
+
+		//retriever.release();
+
+		//if (title == null)
+		//{
+		//	title = defaultTitle;
+
+		//	if (name.contains(" - "))
+		//	{
+		//		String[] parts = name.split(" - ");
+		//		title = NacSound.removeExtension(parts[1].trim());
+		//	}
+		//}
+
+		//return title;
 	}
 
 	/**

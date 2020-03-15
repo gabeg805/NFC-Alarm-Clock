@@ -145,6 +145,7 @@ public class NacMusicFragment
 
 			if (this.safePlay(path, true) < 0)
 			{
+				NacUtility.printf("FUUUUUCK!");
 				NacUtility.toast(getContext(), "Unable to play music");
 			}
 

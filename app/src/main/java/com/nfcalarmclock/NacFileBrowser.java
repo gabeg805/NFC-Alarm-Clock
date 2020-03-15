@@ -149,8 +149,9 @@ public class NacFileBrowser
 
 		Context context = this.getContext();
 		NacImageSubTextButton entry = new NacImageSubTextButton(context);
-		String title = NacSound.getTitle(file);
-		String artist = NacSound.getArtist(file);
+		String title = NacSound.getTitle(context, file);
+		String artist = "Unknown";
+		//String artist = NacSound.getArtist(context, file);
 
 		if (title.isEmpty())
 		{
@@ -417,6 +418,7 @@ public class NacFileBrowser
 		List<String> ringtone = new ArrayList<>();
 		String[] columns = new String[] {
 			//MediaStore.Audio.Media.VOLUME_NAME,
+			MediaStore.Audio.Media.DATA,
 			MediaStore.Audio.Media.RELATIVE_PATH,
 			MediaStore.Audio.Media.DISPLAY_NAME,
 			MediaStore.Audio.Media.IS_ALARM,
@@ -434,6 +436,8 @@ public class NacFileBrowser
 
 		while (c.moveToNext())
 		{
+			int dataIndex = c.getColumnIndex(
+				MediaStore.Audio.Media.DATA);
 			int pathIndex = c.getColumnIndex(
 				MediaStore.Audio.Media.RELATIVE_PATH);
 			int nameIndex = c.getColumnIndex(
@@ -450,6 +454,7 @@ public class NacFileBrowser
 				MediaStore.Audio.Media.IS_PODCAST);
 			int isRingtoneIndex = c.getColumnIndex(
 				MediaStore.Audio.Media.IS_RINGTONE);
+			String data = c.getString(dataIndex);
 			String path = c.getString(pathIndex);
 			String name = c.getString(nameIndex);
 			int isAlarm = c.getInt(isAlarmIndex);
@@ -460,7 +465,8 @@ public class NacFileBrowser
 			int isRingtone = c.getInt(isRingtoneIndex);
 			String fullpath = String.format("%s/%s%s", home, path, name);
 
-			NacUtility.printf("Browser show : '%s'", fullpath);
+			NacUtility.printf("DATA : %s", data);
+			NacUtility.printf("Browser show : %s", fullpath);
 
 			if (isAlarm != 0)
 			{

@@ -254,21 +254,27 @@ public class NacMediaFragment
 
 		NacMediaPlayer player = this.getMediaPlayer();
 
+		NacUtility.printf("Player is null? %b %b", player == null, this.mPlayer == null);
 		if (player == null)
 		{
 			this.setupMediaPlayer();
 
+			NacUtility.printf("Player is STILL null? %b %b", player == null, this.mPlayer == null);
 			if (player == null)
 			{
+				NacUtility.printf("Unable to setup media player.");
 				return -1;
 			}
 		}
 
+		NacUtility.printf("Checking path : '%s'", path);
 		if ((path != null) && (!path.isEmpty()))
 		{
+			NacUtility.printf("Playing this shit");
 			player.play(path, repeat);
 		}
 
+		NacUtility.printf("Returning 0");
 		return 0;
 	}
 
