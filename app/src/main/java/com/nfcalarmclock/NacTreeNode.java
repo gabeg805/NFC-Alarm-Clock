@@ -46,7 +46,8 @@ public class NacTreeNode<T>
 	public void addChild(NacTreeNode<T> child)
 	{
 		// Should also try exists(child) when I get a chance.
-		if (this.exists(child.getData()))
+		//if (this.exists(child.getData()))
+		if (this.exists(child))
 		{
 			return;
 		}
@@ -81,6 +82,14 @@ public class NacTreeNode<T>
 	}
 
 	/**
+	 * @see exists
+	 */
+	public boolean exists(NacTreeNode<T> child)
+	{
+		return ((child != null) && this.exists(child.getData()));
+	}
+
+	/**
 	 * @see getChild
 	 */
 	public NacTreeNode<T> getChild(int index)
@@ -108,6 +117,14 @@ public class NacTreeNode<T>
 		}
 
 		return null;
+	}
+
+	/**
+	 * @see getChild
+	 */
+	public NacTreeNode<T> getChild(NacTreeNode<T> child)
+	{
+		return (child != null) ? this.getChild(child.getData()) : null;
 	}
 
 	/**

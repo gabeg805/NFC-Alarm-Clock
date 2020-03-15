@@ -14,6 +14,7 @@ public class NacFileListingTree
 	 * The current directory.
 	 */
 	private NacTreeNode<String> mDirectory;
+	//private NacTreeNode<NacFile> mDirectory;
 
 	/**
 	 */
@@ -29,6 +30,7 @@ public class NacFileListingTree
 	public void add(String childData, String subChildData)
 	{
 		NacTreeNode<String> dir = this.getDirectory();
+		//NacTreeNode<NacFile> dir = this.getDirectory();
 
 		if (dir == null)
 		{
@@ -36,6 +38,7 @@ public class NacFileListingTree
 		}
 
 		NacTreeNode<String> childDir = (childData.isEmpty() || childData.equals("."))
+		//NacTreeNode<NacFile> childDir = (childData.isEmpty() || childData.equals("."))
 			? dir : dir.getChild(childData);
 
 		if (childDir == null)
@@ -83,6 +86,7 @@ public class NacFileListingTree
 	 * @return The current directory.
 	 */
 	public NacTreeNode<String> getDirectory()
+	//public NacTreeNode<NacFile> getDirectory()
 	{
 		return this.mDirectory;
 	}
@@ -99,9 +103,12 @@ public class NacFileListingTree
 	 * List contents.
 	 */
 	public List<String> ls()
+	//public List<NacFile> ls()
 	{
 		NacTreeNode<String> dir = this.getDirectory();
 		List<String> listing = new ArrayList<>();
+		//NacTreeNode<NacFile> dir = this.getDirectory();
+		//List<NacFile> listing = new ArrayList<>();
 
 		if (dir == null)
 		{
@@ -109,8 +116,10 @@ public class NacFileListingTree
 		}
 
 		List<NacTreeNode<String>> children = dir.getChildren();
+		//List<NacTreeNode<NacFile>> children = dir.getChildren();
 
 		for (NacTreeNode<String> child : children)
+		//for (NacTreeNode<NacFile> child : children)
 		{
 			listing.add(child.getData());
 		}

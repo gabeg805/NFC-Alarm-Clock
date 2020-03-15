@@ -382,7 +382,9 @@ public class NacMediaPlayer
 			}
 
 			NacUtility.printf("SetDataSource");
-			setDataSource(path);
+			//setDataSource(path);
+			Uri poop = Uri.parse("content://media/external/audio/media/45");
+			setDataSource(context, poop);
 			NacUtility.printf("SetLooping");
 			setLooping(repeat);
 			NacUtility.printf("SetAudioAttributes");

@@ -303,24 +303,48 @@ public class NacSound
 	//public static String getArtist(File file)
 	public static String getArtist(Context context, File file)
 	{
-		Uri uri = Uri.fromFile(file);
-		String[] columns = new String[] { MediaStore.Audio.Artists.ARTIST };
-		Cursor c = context.getContentResolver().query(uri, columns,
+		//Uri uri = Uri.fromFile(file);
+		String path = file.getAbsolutePath();
+		String[] items = path.split("/");
+		String filename = items[items.length-1];
+
+		String[] columns = new String[] {
+			MediaStore.Audio.Media._ID,
+			MediaStore.Audio.Media.DISPLAY_NAME,
+			MediaStore.Audio.Artists.ARTIST };
+		Cursor c = context.getContentResolver().query(
+			MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, columns,
 			null, null, null);
 		String artist = "";
 
-		c.moveToFirst();
+		//c.moveToFirst();
 
-		try
+		while (c.moveToNext())
 		{
-			int artistIndex = c.getColumnIndexOrThrow(
-				MediaStore.Audio.Artists.ARTIST);
-			artist = c.getString(artistIndex);
-			NacUtility.printf("NacSound : getArtist : %s", artist);
-		}
-		catch (IllegalArgumentException e)
-		{
-			NacUtility.printf("NacSound : getArtist : IllegalArgumentException!");
+			try
+			{
+				int idIndex = c.getColumnIndexOrThrow(
+					MediaStore.Audio.Media._ID);
+				int nameIndex = c.getColumnIndexOrThrow(
+					MediaStore.Audio.Media.DISPLAY_NAME);
+				int artistIndex = c.getColumnIndexOrThrow(
+					MediaStore.Audio.Artists.ARTIST);
+
+				long id = c.getLong(idIndex);
+				String name = c.getString(nameIndex);
+				NacUtility.printf("Name : %s || %s", filename, name);
+
+				if (name.equals(filename))
+				{
+					artist = c.getString(artistIndex);
+					NacUtility.printf("NacSound : getArtist : %s", artist);
+					break;
+				}
+			}
+			catch (IllegalArgumentException e)
+			{
+				NacUtility.printf("NacSound : getArtist : IllegalArgumentException!");
+			}
 		}
 
 		c.close();

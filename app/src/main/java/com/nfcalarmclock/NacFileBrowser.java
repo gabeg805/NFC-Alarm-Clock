@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import android.view.LayoutInflater;
+import android.net.Uri;
+import android.content.ContentUris;
 
 /**
  * A music file browser.
@@ -150,8 +152,8 @@ public class NacFileBrowser
 		Context context = this.getContext();
 		NacImageSubTextButton entry = new NacImageSubTextButton(context);
 		String title = NacSound.getTitle(context, file);
-		String artist = "Unknown";
-		//String artist = NacSound.getArtist(context, file);
+		//String artist = "Unknown";
+		String artist = NacSound.getArtist(context, file);
 
 		if (title.isEmpty())
 		{
@@ -696,6 +698,7 @@ public class NacFileBrowser
 		String home = NacFileBrowser.getHome();
 		String[] columns = new String[] {
 			//MediaStore.Audio.Media.VOLUME_NAME,
+			MediaStore.Audio.Media._ID,
 			MediaStore.Audio.Media.RELATIVE_PATH,
 			MediaStore.Audio.Media.DISPLAY_NAME,
 			MediaStore.Audio.Media.IS_ALARM,
@@ -712,22 +715,24 @@ public class NacFileBrowser
 
 		while (c.moveToNext())
 		{
+			int idIndex = c.getColumnIndex(MediaStore.Audio.Media._ID);
 			int pathIndex = c.getColumnIndex(
 				MediaStore.Audio.Media.RELATIVE_PATH);
 			int nameIndex = c.getColumnIndex(
 				MediaStore.Audio.Media.DISPLAY_NAME);
-			int isAlarmIndex = c.getColumnIndex(
-				MediaStore.Audio.Media.IS_ALARM);
-			int isAudiobookIndex = c.getColumnIndex(
-				MediaStore.Audio.Media.IS_AUDIOBOOK);
-			int isMusicIndex = c.getColumnIndex(
-				MediaStore.Audio.Media.IS_MUSIC);
-			int isNotificationIndex = c.getColumnIndex(
-				MediaStore.Audio.Media.IS_NOTIFICATION);
-			int isPodcastIndex = c.getColumnIndex(
-				MediaStore.Audio.Media.IS_PODCAST);
-			int isRingtoneIndex = c.getColumnIndex(
-				MediaStore.Audio.Media.IS_RINGTONE);
+			//int isAlarmIndex = c.getColumnIndex(
+			//	MediaStore.Audio.Media.IS_ALARM);
+			//int isAudiobookIndex = c.getColumnIndex(
+			//	MediaStore.Audio.Media.IS_AUDIOBOOK);
+			//int isMusicIndex = c.getColumnIndex(
+			//	MediaStore.Audio.Media.IS_MUSIC);
+			//int isNotificationIndex = c.getColumnIndex(
+			//	MediaStore.Audio.Media.IS_NOTIFICATION);
+			//int isPodcastIndex = c.getColumnIndex(
+			//	MediaStore.Audio.Media.IS_PODCAST);
+			//int isRingtoneIndex = c.getColumnIndex(
+			//	MediaStore.Audio.Media.IS_RINGTONE);
+			long id = c.getLong(idIndex);
 			String path = c.getString(pathIndex);
 			String name = c.getString(nameIndex);
 			//int isAlarm = c.getInt(isAlarmIndex);
@@ -739,7 +744,10 @@ public class NacFileBrowser
 			String fullpath = String.format("%s/%s%s", home, path, name);
 			String[] parts = path.split("/");
 			NacTreeNode<String> currentDirectory = tree.getDirectory();
+			Uri contentUri = ContentUris.withAppendedId(
+				MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
 			NacUtility.printf("\nBrowser show : %s/%s", path, name);
+			NacUtility.printf("Content uri : %s || %s", contentUri.toString(), contentUri.getPath());
 
 			for (int i=0; i < parts.length; i++)
 			{
