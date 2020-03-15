@@ -381,21 +381,15 @@ public class NacMediaPlayer
 				this.resetWrapper();
 			}
 
-			NacUtility.printf("SetDataSource");
 			//setDataSource(path);
+			NacUtility.printf("Playing poop (but not really) : %s", path);
 			Uri poop = Uri.parse("content://media/external/audio/media/45");
 			setDataSource(context, poop);
-			NacUtility.printf("SetLooping");
 			setLooping(repeat);
-			NacUtility.printf("SetAudioAttributes");
 			setAudioAttributes(audioAttributes);
-			NacUtility.printf("SetListener");
 			setOnCompletionListener(this);
-			NacUtility.printf("Prepare");
 			prepare();
-			NacUtility.printf("SetVolume");
 			this.setVolume();
-			NacUtility.printf("Start");
 			start();
 		}
 		catch (IllegalStateException | IOException | IllegalArgumentException | SecurityException e)

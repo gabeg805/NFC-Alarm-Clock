@@ -129,17 +129,20 @@ public class NacMusicFragment
 
 	/**
 	 */
+	//public void onClick(NacFileBrowser browser, File file, String path,
 	@Override
-	public void onClick(NacFileBrowser browser, File file, String path,
-		String name)
+	public void onClick(NacFileBrowser browser, NacFile.Metadata metadata,
+		String path, String name)
 	{
-		if (file.isDirectory())
+		//if (file.isDirectory())
+		if (metadata.isDirectory())
 		{
 			this.setMedia(path);
 			NacUtility.printf("Clicked on path : %s", path);
 			browser.show(path);
 		}
-		else if (file.isFile())
+		//else if (file.isFile())
+		else if (metadata.isFile())
 		{
 			path = (browser.isSelected()) ? path : "";
 

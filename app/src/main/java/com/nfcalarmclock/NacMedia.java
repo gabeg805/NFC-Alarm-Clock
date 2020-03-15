@@ -11,12 +11,12 @@ public class NacMedia
 		/**
 		 * Artist of the media.
 		 */
-		public final String ARTIST;
+		//public final String ARTIST;
 
 		/**
 		 * Title of the media.
 		 */
-		public final String TITLE;
+		//public final String TITLE;
 
 	}
 

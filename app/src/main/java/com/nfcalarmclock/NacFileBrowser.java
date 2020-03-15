@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import android.view.LayoutInflater;
-import android.net.Uri;
-import android.content.ContentUris;
 
 /**
  * A music file browser.
@@ -36,8 +34,9 @@ public class NacFileBrowser
 	 */
 	public interface OnClickListener
 	{
-		public void onClick(NacFileBrowser browser, File file, String path,
-			String name);
+		//public void onClick(NacFileBrowser browser, File file, String path,
+		public void onClick(NacFileBrowser browser, NacFile.Metadata metadata,
+			String path, String name);
 	}
 
 	private Context mContext;
@@ -69,7 +68,7 @@ public class NacFileBrowser
 	private String mCurrentDirectory;
 
 	private HashMap<String, List<String>> mDirectories;
-	private NacFileListingTree mFileListing;
+	private NacFile.Tree mFileTree;
 
 	/**
 	 */
@@ -83,7 +82,7 @@ public class NacFileBrowser
 		//this.mCurrentDirectory = NacFileBrowser.getHome();
 		//this.mDirectories = new HashMap<String, List<String>>();
 		String home = NacFileBrowser.getHome();
-		this.mFileListing = new NacFileListingTree(home);
+		this.mFileTree = new NacFile.Tree(home);
 
 		this.scanDirectories();
 		//this.mContainer.removeAllViews();
@@ -92,7 +91,8 @@ public class NacFileBrowser
 	/**
 	 * Add a directory entry to the file browser.
 	 */
-	public void addDirectory(File file)
+	//public void addDirectory(File file)
+	public void addDirectory(NacFile.Metadata metadata)
 	{
 		NacButtonGroup container = this.getContainer();
 
@@ -105,43 +105,51 @@ public class NacFileBrowser
 		//Context context = container.getContext();
 		Context context = this.getContext();
 		NacImageTextButton entry = new NacImageTextButton(context);
-		String name = file.getName();
+		String name = metadata.getName();
+		//String name = file.getName();
 
 		container.add(entry);
 		entry.setText(name.equals("..") ? "(Previous folder)" : name);
 		entry.setImageBackground(R.mipmap.folder);
-		entry.setTag(file);
+		entry.setTag(metadata);
+		//entry.setTag(file);
 		entry.setOnClickListener(this);
 	}
 
 	/**
 	 * Add an entry.
 	 */
-	public void addEntry(File file)
+	//public void addEntry(File file)
+	public void addEntry(NacFile.Metadata metadata)
 	{
-		if (file.isDirectory())
+		//if (file.isDirectory())
+		if (metadata.isDirectory())
 		{
 			NacUtility.printf("Adding directory!");
-			this.addDirectory(file);
+			//this.addDirectory(file);
+			this.addDirectory(metadata);
 		}
-		else if (file.isFile())
+		//else if (file.isFile())
+		else if (metadata.isFile())
 		{
 			NacUtility.printf("Adding file!");
-			this.addFile(file);
+			//this.addFile(file);
+			this.addFile(metadata);
 		}
 	}
 
 	/**
 	 * Add a music file entry to the file browser.
 	 */
-	public void addFile(File file)
+	//public void addFile(File file)
+	public void addFile(NacFile.Metadata metadata)
 	{
 		NacButtonGroup container = this.getContainer();
 
-		if (file.length() == 0)
-		{
-			return;
-		}
+		//if (file.length() == 0)
+		//{
+		//	return;
+		//}
 
 		if (container == null)
 		{
@@ -151,9 +159,11 @@ public class NacFileBrowser
 
 		Context context = this.getContext();
 		NacImageSubTextButton entry = new NacImageSubTextButton(context);
-		String title = NacSound.getTitle(context, file);
+		//String title = NacSound.getTitle(context, file);
+		String title = NacSound.getTitle(context, metadata);
 		//String artist = "Unknown";
-		String artist = NacSound.getArtist(context, file);
+		String artist = NacSound.getArtist(context, metadata);
+		//String artist = NacSound.getArtist(context, file);
 
 		if (title.isEmpty())
 		{
@@ -164,7 +174,8 @@ public class NacFileBrowser
 		entry.setTextTitle(title);
 		entry.setTextSubtitle(artist);
 		entry.setImageBackground(R.mipmap.play);
-		entry.setTag(file);
+		entry.setTag(metadata);
+		//entry.setTag(file);
 		entry.setOnClickListener(this);
 	}
 
@@ -173,18 +184,20 @@ public class NacFileBrowser
 	 */
 	public void addListing(String path)
 	{
-		for (File file : this.listing(path))
+		//for (File file : this.listing(path))
+		for (NacFile.Metadata metadata : this.listing(path))
 		{
-			try
-			{
-				NacUtility.printf("File : %s", file.getCanonicalPath());
-			}
-			catch (IOException e)
-			{
-				NacUtility.printf("File getCanonicalPath exception!");
-			}
+			//try
+			//{
+			//	NacUtility.printf("File : %s", file.getCanonicalPath());
+			//}
+			//catch (IOException e)
+			//{
+			//	NacUtility.printf("File getCanonicalPath exception!");
+			//}
 
-			this.addEntry(file);
+			this.addEntry(metadata);
+			//this.addEntry(file);
 		}
 	}
 
@@ -289,9 +302,11 @@ public class NacFileBrowser
 			return "";
 		}
 
-		File file = (File) view.getTag();
+		//File file = (File) view.getTag();
+		NacFile.Metadata metadata = (NacFile.Metadata) view.getTag();
 
-		return file.getName();
+		return metadata.getName();
+		//return file.getName();
 	}
 
 	/**
@@ -304,18 +319,20 @@ public class NacFileBrowser
 			return "";
 		}
 
-		File file = (File) view.getTag();
-		String name = file.getName();
+		//File file = (File) view.getTag();
+		//String name = file.getName();
+		NacFile.Metadata metadata = (NacFile.Metadata) view.getTag();
 
-		try
-		{
-			return file.getCanonicalPath();
-		}
-		catch (IOException e)
-		{
-			NacUtility.printf("NacFileBrowser : getSelectedPath : IOException occurred when trying to getCanonicalPath().");
-			return "";
-		}
+		return metadata.getPath();
+		//try
+		//{
+		//	return file.getCanonicalPath();
+		//}
+		//catch (IOException e)
+		//{
+		//	NacUtility.printf("NacFileBrowser : getSelectedPath : IOException occurred when trying to getCanonicalPath().");
+		//	return "";
+		//}
 	}
 
 	/**
@@ -361,12 +378,12 @@ public class NacFileBrowser
 		return (!path.isEmpty() && (path.equals(selectedPath)));
 	}
 
-	public List<File> listing(String listPath)
+	public List<NacFile.Metadata> listing(String listPath)
 	{
-		NacFileListingTree tree = this.mFileListing;
+		NacFile.Tree tree = this.mFileTree;
 		String home = tree.getHome();
-		List<File> directories = new ArrayList<>();
-		List<File> files = new ArrayList<>();
+		List<NacFile.Metadata> directories = new ArrayList<>();
+		List<NacFile.Metadata> files = new ArrayList<>();
 		//List<String> contents = listPath.equals(home) ? tree.ls()
 		//	: tree.ls(dir);
 
@@ -374,19 +391,26 @@ public class NacFileBrowser
 		NacUtility.printf("Path : %s", listPath);
 
 
-		for (String name : tree.ls(listPath))
+		//for (String name : tree.ls(listPath))
+		for (NacFile.Metadata metadata : tree.ls(listPath))
 		{
-			NacUtility.printf("Name : %s", name);
-			String path = String.format("%s/%s", listPath, name);
-			File file = new File(path);
+			metadata.print();
 
-			if (file.isDirectory())
+			//String path = String.format("%s/%s", listPath, name);
+			//NacUtility.printf("Listing (path) : %s", path);
+			//File file = new File(path);
+
+			//if (file.isDirectory())
+			if (metadata.isDirectory())
 			{
-				directories.add(file);
+				//directories.add(file);
+				directories.add(metadata);
 			}
-			else if (file.isFile())
+			//else if (file.isFile())
+			else if (metadata.isFile())
 			{
-				files.add(file);
+				//files.add(file);
+				files.add(metadata);
 			}
 			else
 			{
@@ -394,8 +418,8 @@ public class NacFileBrowser
 			}
 		}
 
-		Collections.sort(directories);
-		Collections.sort(files);
+		//Collections.sort(directories);
+		//Collections.sort(files);
 		directories.addAll(files);
 
 		return directories;
@@ -566,7 +590,8 @@ public class NacFileBrowser
 			return;
 		}
 
-		File file = (File) view.getTag();
+		//File file = (File) view.getTag();
+		NacFile.Metadata metadata = (NacFile.Metadata) view.getTag();
 		String name = this.getName(view);
 		String path = this.getPath(view);
 
@@ -575,7 +600,8 @@ public class NacFileBrowser
 			return;
 		}
 
-		if (file.isFile())
+		//if (file.isFile())
+		if (metadata.isFile())
 		{
 			if (this.isSelected(path))
 			{
@@ -591,7 +617,8 @@ public class NacFileBrowser
 			this.mCurrentDirectory = path;
 		}
 
-		listener.onClick(this, file, path, name);
+		listener.onClick(this, metadata, path, name);
+		//listener.onClick(this, file, path, name);
 	}
 
 	/**
@@ -694,7 +721,7 @@ public class NacFileBrowser
 	private void scanDirectories()
 	{
 		Context context = this.getContext();
-		NacFileListingTree tree = this.mFileListing;
+		NacFile.Tree tree = this.mFileTree;
 		String home = NacFileBrowser.getHome();
 		String[] columns = new String[] {
 			MediaStore.Audio.Media._ID,
@@ -715,14 +742,13 @@ public class NacFileBrowser
 			long id = c.getLong(idIndex);
 			String path = c.getString(pathIndex);
 			String name = c.getString(nameIndex);
-			String fullpath = String.format("%s/%s%s", home, path, name);
 			String[] parts = path.split("/");
 			NacTreeNode<String> currentDirectory = tree.getDirectory();
 			//Uri contentUri = ContentUris.withAppendedId(
 			//	MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
 			//NacFile file = new NacFile(contentUri, fullpath, name, NacFile.Type.FILE);
 
-			NacUtility.printf("\nBrowser show : %s", fullpath);
+			NacUtility.printf("\nBrowser show : %s%s", path, name);
 			//NacUtility.printf("Content uri : %s || %s", contentUri.toString(), contentUri.getPath());
 
 			for (int i=0; i < parts.length; i++)

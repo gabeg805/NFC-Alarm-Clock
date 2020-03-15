@@ -11,6 +11,47 @@ public class NacFileListingTree
 {
 
 	/**
+	 */
+	public static class File
+	{
+
+		/**
+		 * File name.
+		 */
+		private String mName;
+
+		/**
+		 * File ID.
+		 */
+		private long mId;
+
+		/**
+		 */
+		public File(String name, long id)
+		{
+			this.mName = name;
+			this.mId = id;
+		}
+
+		/**
+		 * @return The file ID.
+		 */
+		public long getId()
+		{
+			return this.mId;
+		}
+
+		/**
+		 * @return The file name.
+		 */
+		public String getName()
+		{
+			return this.mName;
+		}
+
+	}
+
+	/**
 	 * The current directory.
 	 */
 	private NacTreeNode<String> mDirectory;
@@ -19,7 +60,7 @@ public class NacFileListingTree
 	 */
 	public NacFileListingTree(String path)
 	{
-		super(null, path);
+		super(null, path, null);
 		this.setDirectory(this);
 	}
 
@@ -55,7 +96,7 @@ public class NacFileListingTree
 	public void addToDirectory(String toDirectory, String name, long id)
 	{
 		NacTreeNode<String> currentDir = this.getDirectory();
-		NacTreeNode<String> dir = childData.equals(".") ? currentDir
+		NacTreeNode<String> dir = toDirectory.equals(".") ? currentDir
 			: currentDir.getChild(toDirectory);
 
 		if (dir == null)
@@ -92,11 +133,6 @@ public class NacFileListingTree
 	public void cd(NacTreeNode<String> dir)
 	{
 		this.setDirectory(dir);
-		NacUtility.printf("Listing files after cd to: %s! %b", dir.getData(), dir != null);
-		for (String p : this.ls())
-		{
-			NacUtility.printf("cd : ls : %s", p);
-		}
 	}
 
 	/**
@@ -161,7 +197,6 @@ public class NacFileListingTree
 					continue;
 				}
 
-				NacUtility.printf("Item : %s", items[i]);
 				newDir = newDir.getChild(items[i]);
 				this.setDirectory(newDir);
 			}
