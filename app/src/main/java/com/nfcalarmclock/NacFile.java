@@ -166,7 +166,6 @@ public class NacFile
 			}
 
 			dir.addChild(name, id);
-			//dir.addChild(name, (id < 0) ? null : id);
 		}
 
 		/**
@@ -207,11 +206,11 @@ public class NacFile
 		 */
 		public void cd(String path)
 		{
-			NacTreeNode<String> dir = this.getDirectory();
-			NacTreeNode<String> newDir = (path.equals("..")) ? dir.getRoot()
-				: dir.getChild(path);
+			NacTreeNode<String> fromDir = this.getDirectory();
+			NacTreeNode<String> toDir = path.equals("..") ? fromDir.getRoot()
+				: fromDir.getChild(path);
 
-			this.cd(newDir);
+			this.cd(toDir);
 		}
 
 		/**
@@ -219,6 +218,11 @@ public class NacFile
 		 */
 		public void cd(NacTreeNode<String> dir)
 		{
+			if (dir == null)
+			{
+				return;
+			}
+
 			this.setDirectory(dir);
 		}
 
@@ -228,6 +232,16 @@ public class NacFile
 		public NacTreeNode<String> getDirectory()
 		{
 			return this.mDirectory;
+		}
+
+		/**
+		 * @return The path of the current directory.
+		 */
+		public String getDirectoryPath()
+		{
+			NacTreeNode<String> currentDir = this.getDirectory();
+
+			return this.getPath(currentDir);
 		}
 
 		/**
@@ -262,7 +276,22 @@ public class NacFile
 		}
 
 		/**
-		 * List contents of a directory.
+		 * @return The key of the given path.
+		 */
+		public String getPathKey(String path)
+		{
+			if ((path == null) || path.isEmpty())
+			{
+				return "";
+			}
+
+			String[] items = this.strip(path).split("/");
+
+			return (items.length > 0) ? items[items.length-1] : "";
+		}
+
+		/**
+		 * List contents of the current directory.
 		 */
 		public List<Metadata> ls()
 		{
@@ -293,16 +322,17 @@ public class NacFile
 		public List<Metadata> ls(String path)
 		{
 			NacTreeNode<String> dir = this.getDirectory();
+			String home = this.getHome();
+			String pathKey = this.getPathKey(path);
+			String dirKey = dir.getKey();
 
-			if (dir.getKey().equals(path))
+			if (dirKey.equals(pathKey) || path.equals(home))
 			{
 				return this.ls();
 			}
 			else
 			{
-				String home = this.getHome();
-				String newPath = path.replace(home, "");
-				String[] items = newPath.split("/");
+				String[] items = this.strip(path).split("/");
 				NacTreeNode<String> newDir = dir;
 
 				for (int i=0; i < items.length; i++)
@@ -324,6 +354,136 @@ public class NacFile
 		}
 
 		/**
+		 * Sorted ls.
+		 */
+		public List<Metadata> lsSort()
+		{
+			List<Metadata> directories = new ArrayList<>();
+			List<Metadata> files = new ArrayList<>();
+			List<Metadata> list;
+
+			for (Metadata metadata : this.ls())
+			{
+				String name = metadata.getName();
+				int i = 0;
+
+				if (metadata.isDirectory())
+				{
+					list = directories;
+				}
+				else if (metadata.isFile())
+				{
+					list = files;
+				}
+				else
+				{
+					continue;
+				}
+
+				for (i=0; i < list.size(); i++)
+				{
+					Metadata md = list.get(i);
+
+					if (name.compareTo(md.getName()) <= 0)
+					{
+						break;
+					}
+				}
+
+				list.add(i, metadata);
+			}
+
+			directories.addAll(files);
+
+
+			return directories;
+		}
+
+		/**
+		 * Sorted ls.
+		 */
+		public List<Metadata> lsSort(String path)
+		{
+			List<Metadata> directories = new ArrayList<>();
+			List<Metadata> files = new ArrayList<>();
+			List<Metadata> list;
+
+			for (Metadata metadata : this.ls(path))
+			{
+				String name = metadata.getName();
+				int i = 0;
+
+				if (metadata.isDirectory())
+				{
+					list = directories;
+				}
+				else if (metadata.isFile())
+				{
+					list = files;
+				}
+				else
+				{
+					continue;
+				}
+
+				for (i=0; i < list.size(); i++)
+				{
+					Metadata md = list.get(i);
+
+					if (name.compareTo(md.getName()) <= 0)
+					{
+						break;
+					}
+				}
+
+				list.add(i, metadata);
+			}
+
+			directories.addAll(files);
+
+
+			return directories;
+		}
+
+		/**
+		 * Print the contents of the current directory.
+		 */
+		public void print()
+		{
+			for (Metadata metadata : this.ls())
+			{
+				NacUtility.printf("NacFile.Tree : print : %s", metadata.getPath());
+			}
+		}
+
+		/**
+		 * Strip the home directory away from a path.
+		 */
+		public String strip(String path)
+		{
+			String home = this.getHome();
+			String strippedPath = path.replace(home, "");
+			int length = strippedPath.length();
+
+			if (length == 0)
+			{
+				return "";
+			}
+
+			if (strippedPath.charAt(length-1) == '/')
+			{
+				strippedPath = strippedPath.substring(0, length-1);
+			}
+
+			if (strippedPath.charAt(0) == '/')
+			{
+				strippedPath = strippedPath.substring(1);
+			}
+
+			return strippedPath;
+		}
+
+		/**
 		 * Set the current directory.
 		 */
 		public void setDirectory(NacTreeNode<String> dir)
@@ -331,6 +491,15 @@ public class NacFile
 			this.mDirectory = dir;
 		}
 
+	}
+
+	/**
+	 * Remove extension from file name.
+	 */
+	public static String removeExtension(String name)
+	{
+		return (name.contains(".")) ?
+			name.substring(0, name.lastIndexOf('.')) : name;
 	}
 
 }

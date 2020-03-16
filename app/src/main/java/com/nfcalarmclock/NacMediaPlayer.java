@@ -54,7 +54,7 @@ public class NacMediaPlayer
 		public Playlist(Context context, String path, boolean repeat,
 			boolean shuffle)
 		{
-			this.mPlaylist = NacSound.getFiles(context, path);
+			this.mPlaylist = NacMedia.getFiles(context, path);
 			this.mIndex = 0;
 			this.mRepeat = repeat;
 
