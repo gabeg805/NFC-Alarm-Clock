@@ -214,9 +214,9 @@ public class NacSound
 	 */
 	public void set(Context context, String path)
 	{
-		this.setType(NacSound.getType(path));
+		this.setType(NacMedia.getType(context, path));
 		this.setPath(path);
-		this.setName(NacSound.getName(context, path));
+		this.setName(NacMedia.getTitle(context, path));
 	}
 
 	/**
@@ -288,31 +288,6 @@ public class NacSound
 			return new NacSound[size];
 		}
 	};
-
-	/**
-	 * @return The sound name.
-	 */
-	public static String getName(Context context, String path)
-	{
-		if ((path == null) || path.isEmpty())
-		{
-			return "";
-		}
-
-		Uri uri = NacSound.isRingtone(path) ? Uri.parse(path)
-			: Uri.fromFile(new File(path));
-		Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
-		String name = "";
-
-		if (ringtone != null)
-		{
-			name = ringtone.getTitle(context);
-
-			ringtone.stop();
-		}
-
-		return name;
-	}
 
 	/**
 	 * @return The path to the ringtone/music file.

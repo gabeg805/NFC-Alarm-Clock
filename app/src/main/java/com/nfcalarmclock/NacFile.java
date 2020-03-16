@@ -207,10 +207,30 @@ public class NacFile
 		public void cd(String path)
 		{
 			NacTreeNode<String> fromDir = this.getDirectory();
-			NacTreeNode<String> toDir = path.equals("..") ? fromDir.getRoot()
-				: fromDir.getChild(path);
+			String name = NacFile.basename(path);
 
-			this.cd(toDir);
+			if (name.equals(".."))
+			{
+				this.cd(fromDir.getRoot());
+			}
+			else
+			{
+				String currentDir = this.getDirectoryPath();
+				String newDir = path.replace(currentDir, "");
+				String[] items = this.strip(newDir).split("/");
+				NacTreeNode<String> toDir = fromDir;
+
+				for (int i=0; i < items.length; i++)
+				{
+					if (items[i].isEmpty())
+					{
+						continue;
+					}
+
+					toDir = toDir.getChild(items[i]);
+					this.cd(toDir);
+				}
+			}
 		}
 
 		/**
@@ -276,21 +296,6 @@ public class NacFile
 		}
 
 		/**
-		 * @return The key of the given path.
-		 */
-		public String getPathKey(String path)
-		{
-			if ((path == null) || path.isEmpty())
-			{
-				return "";
-			}
-
-			String[] items = this.strip(path).split("/");
-
-			return (items.length > 0) ? items[items.length-1] : "";
-		}
-
-		/**
 		 * List contents of the current directory.
 		 */
 		public List<Metadata> ls()
@@ -323,7 +328,7 @@ public class NacFile
 		{
 			NacTreeNode<String> dir = this.getDirectory();
 			String home = this.getHome();
-			String pathKey = this.getPathKey(path);
+			String pathKey = NacFile.basename(path);
 			String dirKey = dir.getKey();
 
 			if (dirKey.equals(pathKey) || path.equals(home))
@@ -491,6 +496,48 @@ public class NacFile
 			this.mDirectory = dir;
 		}
 
+		/**
+		 * Convert relative path to absolute path, given a file name.
+		 */
+		public String relativeToAbsolutePath(String relativePath, String name)
+		{
+			for (Metadata metadata : this.lsSort(relativePath))
+			{
+				if (metadata.getName().equals(name))
+				{
+					return metadata.getPath();
+				}
+			}
+
+			return relativePath;
+		}
+
+	}
+
+	/**
+	 * @return The basename of a file path.
+	 */
+	public static String basename(String path)
+	{
+		if ((path == null) || path.isEmpty())
+		{
+			return "";
+		}
+
+		//String[] items = this.strip(path).split("/");
+		String[] items = path.split("/");
+
+		return (items.length > 0) ? items[items.length-1] : "";
+	}
+
+	/**
+	 * @return The dirname of a file path.
+	 */
+	public static String dirname(String path)
+	{
+		String basename = NacFile.basename(path);
+
+		return path.substring(0, path.length()-basename.length());
 	}
 
 	/**

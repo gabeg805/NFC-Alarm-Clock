@@ -354,6 +354,45 @@ public class NacMediaPlayer
 	/**
 	 * @see play
 	 */
+	public void play(Uri contentUri, boolean repeat)
+	{
+		Context context = this.getContext();
+		NacAudio.Attributes attrs = this.getAudioAttributes();
+
+		if(!NacAudio.requestAudioFocusGain(context, this, attrs))
+		{
+			//NacUtility.printf("Audio Focus NOT Granted!");
+			return;
+		}
+
+		AudioAttributes audioAttributes = attrs.getAudioAttributes();
+
+		// Can log each step for better granularity in case errors occur.
+		try
+		{
+			if (this.isPlayingWrapper())
+			{
+				this.resetWrapper();
+			}
+
+			//setDataSource(path);
+			NacUtility.printf("Playing poop : %s", contentUri.toString());
+			//Uri poop = Uri.parse("content://media/external/audio/media/45");
+			setDataSource(context, contentUri);
+			setLooping(repeat);
+			setAudioAttributes(audioAttributes);
+			setOnCompletionListener(this);
+			prepare();
+			this.setVolume();
+			start();
+		}
+		catch (IllegalStateException | IOException | IllegalArgumentException | SecurityException e)
+		{
+			NacUtility.printf("NacMediaPlayer : play : %s", e.toString());
+			NacUtility.quickToast(context, "Unable to play selected file");
+		}
+	}
+
 	public void play(String media, boolean repeat)
 	{
 		Context context = this.getContext();

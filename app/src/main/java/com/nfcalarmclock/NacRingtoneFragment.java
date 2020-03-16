@@ -2,22 +2,16 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
-//import android.support.v4.app.Fragment;
-//import android.support.v4.app.FragmentActivity;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
+import java.util.List;
 
 /**
  * Display a dialog that shows a list of alarm ringtones.
@@ -56,26 +50,26 @@ public class NacRingtoneFragment
 	/**
 	 * Create a radio button.
 	 */
-	private void addRadioButton(NacSound sound)
+	private void addRadioButton(String path)
 	{
 		Context context = getContext();
 		RadioButton button  = new RadioButton(context);
 		RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
 			ViewGroup.LayoutParams.MATCH_PARENT,
 			ViewGroup.LayoutParams.WRAP_CONTENT);
-		String path = getSoundPath();
+		String selectedPath = getSoundPath();
 		int[] padding = this.getPadding();
 		int textSize = this.getTextSize();
 
 		this.mRadioGroup.addView(button);
-		button.setText(sound.getName());
-		button.setTag(sound.getPath());
+		button.setText(NacMedia.getTitle(context, path));
+		button.setTag(path);
 		button.setLayoutParams(params);
 		button.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
 		button.setPadding(padding[0], padding[1], padding[2], padding[3]);
 		button.setOnClickListener(this);
 
-		if (!path.isEmpty() && path.equals(sound.getPath()))
+		if (!selectedPath.isEmpty() && selectedPath.equals(path))
 		{
 			button.setChecked(true);
 		}
@@ -148,6 +142,7 @@ public class NacRingtoneFragment
 	{
 		super.onClick(view);
 
+		Context context = getContext();
 		int id = view.getId();
 
 		if (id == R.id.clear)
@@ -157,16 +152,12 @@ public class NacRingtoneFragment
 		else if (!this.isActionButton(id))
 		{
 			String path = (String) view.getTag();
+			Uri playUri = NacMedia.toUri(path);
 
-			if (this.safePlay(path, true) < 0)
+			if (this.safePlay(playUri, true) < 0)
 			{
-				NacUtility.toast(getContext(), "Unable to play ringtone");
+				NacUtility.toast(context, "Unable to play ringtone");
 			}
-
-			//NacMediaPlayer player = this.getMediaPlayer();
-			//this.setMedia(path);
-			//player.reset();
-			//player.play(path, true);
 		}
 	}
 
@@ -197,15 +188,10 @@ public class NacRingtoneFragment
 	{
 		this.mRadioGroup = (RadioGroup) root.findViewById(R.id.radio_group);
 		Context context = getContext();
-		List<NacSound> ringtones = NacSound.getRingtones(context);
 
-		this.addRandomRadioButton();
-
-		for(int i=0; i < ringtones.size(); i++)
+		for (String ringtone : NacMedia.getRingtones(context))
 		{
-			NacSound sound = ringtones.get(i);
-
-			this.addRadioButton(sound);
+			this.addRadioButton(ringtone);
 		}
 	}
 

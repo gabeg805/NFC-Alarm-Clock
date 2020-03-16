@@ -3,6 +3,7 @@ package com.nfcalarmclock;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -135,7 +136,6 @@ public class NacMediaFragment
 	@Override
 	public void onClick(View view)
 	{
-		//NacMediaPlayer player = this.getMediaPlayer();
 		FragmentActivity activity = getActivity();
 		int id = view.getId();
 
@@ -143,7 +143,6 @@ public class NacMediaFragment
 		{
 			this.setMedia("");
 			this.safeReset();
-			//player.reset();
 		}
 		else if (id == R.id.cancel)
 		{
@@ -247,34 +246,31 @@ public class NacMediaFragment
 	/**
 	 * Play audio from the media player safely.
 	 */
-	protected int safePlay(String path, boolean repeat)
+	protected int safePlay(Uri contentUri, boolean repeat)
 	{
+		NacMediaPlayer player = this.getMediaPlayer();
+		String path = contentUri.toString();
+
+		if (path.isEmpty() || !path.startsWith("content://"))
+		{
+			return -1;
+		}
+
 		this.safeReset();
 		this.setMedia(path);
 
-		NacMediaPlayer player = this.getMediaPlayer();
-
-		NacUtility.printf("Player is null? %b %b", player == null, this.mPlayer == null);
 		if (player == null)
 		{
 			this.setupMediaPlayer();
 
-			NacUtility.printf("Player is STILL null? %b %b", player == null, this.mPlayer == null);
 			if (player == null)
 			{
-				NacUtility.printf("Unable to setup media player.");
 				return -1;
 			}
 		}
 
-		NacUtility.printf("Checking path : '%s'", path);
-		if ((path != null) && (!path.isEmpty()))
-		{
-			NacUtility.printf("Playing this shit");
-			player.play(path, repeat);
-		}
+		player.play(contentUri, repeat);
 
-		NacUtility.printf("Returning 0");
 		return 0;
 	}
 
@@ -299,6 +295,9 @@ public class NacMediaFragment
 
 	/**
 	 * Set the alarm sound.
+	 *
+	 * Use Alarm when editing an alarm card, and use Sound when editing a
+	 * preference.
 	 */
 	protected void setMedia(String media)
 	{

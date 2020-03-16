@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.Manifest;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,7 +53,17 @@ public class NacMusicFragment
 	 */
 	public boolean backPressed()
 	{
-		return this.mFileBrowser.previousDirectory();
+		NacFileBrowser browser = this.getFileBrowser();
+
+		return (browser != null) ? browser.previousDirectory() : false;
+	}
+
+	/**
+	 * @return The file browser.
+	 */
+	public NacFileBrowser getFileBrowser()
+	{
+		return this.mFileBrowser;
 	}
 
 	/**
@@ -101,14 +112,18 @@ public class NacMusicFragment
 
 		if (id == R.id.clear)
 		{
-			this.mFileBrowser.deselect();
+			NacFileBrowser browser = this.getFileBrowser();
+
+			if (browser != null)
+			{
+				browser.deselect();
+			}
 		}
 		else if (id == R.id.ok)
 		{
 			String path = getSoundPath();
-			File file = new File(path);
 
-			if (file.isDirectory())
+			if (NacMedia.isDirectory(path))
 			{
 				Context context = getContext();
 				NacDialog dialog = new NacDialog();
@@ -129,42 +144,31 @@ public class NacMusicFragment
 
 	/**
 	 */
-	//public void onClick(NacFileBrowser browser, File file, String path,
 	@Override
 	public void onClick(NacFileBrowser browser, NacFile.Metadata metadata,
 		String path, String name)
 	{
-		//if (file.isDirectory())
 		if (metadata.isDirectory())
 		{
 			this.setMedia(path);
-			NacUtility.printf("Clicked on path : %s", path);
 			browser.show(path);
 		}
-		//else if (file.isFile())
 		else if (metadata.isFile())
 		{
-			path = (browser.isSelected()) ? path : "";
+			Context context = getContext();
+			Uri playUri = NacMedia.toUri(metadata);
 
-			if (this.safePlay(path, true) < 0)
+			if (browser.isSelected())
 			{
-				NacUtility.printf("FUUUUUCK!");
-				NacUtility.toast(getContext(), "Unable to play music");
+				if (this.safePlay(playUri, true) < 0)
+				{
+					NacUtility.toast(context, "Unable to play music");
+				}
 			}
-
-			//NacMediaPlayer player = this.getMediaPlayer();
-
-			//player.reset();
-
-			//if (browser.isSelected())
-			//{
-			//	this.setMedia(path);
-			//	player.play(path, true);
-			//}
-			//else
-			//{
-			//	this.setMedia("");
-			//}
+			else
+			{
+				this.safeReset();
+			}
 		}
 	}
 
@@ -211,7 +215,7 @@ public class NacMusicFragment
 
 		if (!NacPermissions.hasRead(getContext()))
 		{
-			NacUtility.printf("You don't have read permissions!");
+			NacUtility.toast(getContext(), "You don't have read permissions!");
 			return;
 		}
 
@@ -223,48 +227,30 @@ public class NacMusicFragment
 	 */
 	private void setupFileBrowser(View root)
 	{
-		//NacFileBrowser browser = new NacFileBrowser(root, R.id.path,
-		//	R.id.group);
+		Context context = getContext();
 		NacFileBrowser browser = new NacFileBrowser(root, R.id.path,
 			R.id.container);
-		String sound = getSoundPath();
-		String path = sound;
-		File pathFile = new File(path);
+		String home = NacFileBrowser.getHome();
+		String path = getSoundPath();
 		this.mFileBrowser = browser;
-		Context context = getContext();
+		String absolutePath = home;
+		String filePath = "";
 
-		if (NacSound.isFilePlaylist(path))
+		if (NacMedia.isDirectory(path))
 		{
-			NacUtility.printf("Is file playlist!");
+			absolutePath = path;
 		}
-		else if (NacSound.isFile(path) && pathFile.isFile())
+		else if (NacMedia.isFile(context, path))
 		{
-			File parentFile = pathFile.getParentFile();
+			String relativePath = NacMedia.getRelativePath(context, path);
+			String name = NacMedia.getName(context, path);
 
-			if (parentFile != null)
-			{
-
-				try
-				{
-					path = parentFile.getCanonicalPath();
-					NacUtility.printf("File path : %s", path);
-				}
-				catch (IOException e)
-				{
-					NacUtility.printf("IO exception reading parent file!");
-				}
-			}
-		}
-		else
-		{
-			path = NacFileBrowser.getHome();
-			NacUtility.printf("Getting home : %s", path);
+			absolutePath = String.format("%s/%s", home, relativePath);
+			filePath = String.format("%s%s", absolutePath, name);
 		}
 
 		browser.setOnClickListener(this);
-		browser.show();
-		//browser.show(path);
-		//browser.select(sound);
+		browser.show(absolutePath, filePath);
 	}
 
 }

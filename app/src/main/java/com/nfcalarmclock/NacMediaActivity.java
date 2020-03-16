@@ -1,13 +1,12 @@
 package com.nfcalarmclock;
 
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayout.Tab;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.Manifest;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayout.Tab;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -306,22 +305,21 @@ public class NacMediaActivity
 	 */
 	private void selectTab()
 	{
-		//int type = this.getAlarm().getSoundType();
 		int type = this.getSoundType();
 
-		if (NacSound.isNone(type))
+		if (NacMedia.isNone(type))
 		{
 			this.selectTab(1);
 		}
-		else if (NacSound.isFile(type))
+		else if (NacMedia.isFile(type) || NacMedia.isDirectory(type))
 		{
 			this.selectTab(0);
 		}
-		else if (NacSound.isRingtone(type))
+		else if (NacMedia.isRingtone(type))
 		{
 			this.selectTab(1);
 		}
-		else if (NacSound.isSpotify(type))
+		else if (NacMedia.isSpotify(type))
 		{
 			this.selectTab(2);
 		}

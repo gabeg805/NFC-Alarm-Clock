@@ -367,14 +367,13 @@ public class NacDatabase
 	@Override
 	public void onCreate(SQLiteDatabase db)
 	{
-		//db.execSQL(Contract.AlarmTable.CREATE_TABLE_V3);
 		db.execSQL(Contract.AlarmTable.CREATE_TABLE_V4);
 
 		Context context = this.getContext();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
 		String soundPath = shared.getSound();
-		String soundName = NacSound.getName(context, soundPath);
-		int soundType = NacSound.getType(soundPath);
+		String soundName = NacMedia.getTitle(context, soundPath);
+		int soundType = NacMedia.getType(context, soundPath);
 		NacAlarm alarm = new NacAlarm.Builder()
 			.setId(1)
 			.setHour(8)
@@ -606,6 +605,7 @@ public class NacDatabase
 	 */
 	public NacAlarm toAlarm(Cursor cursor, int version)
 	{
+		Context context = this.getContext();
 		NacAlarm alarm = new NacAlarm();
 		int offset = -1;
 
@@ -663,8 +663,9 @@ public class NacDatabase
 				alarm.setSoundPath(cursor.getString(9));
 				alarm.setName(cursor.getString(10));
 				// Index 11: NFC tag
-				alarm.setSoundType(NacSound.getType(alarm.getSoundPath()));
-				alarm.setSoundName(NacSound.getName(this.getContext(),
+				alarm.setSoundType(NacMedia.getType(context,
+					alarm.getSoundPath()));
+				alarm.setSoundName(NacMedia.getTitle(context,
 					alarm.getSoundPath()));
 				break;
 		}

@@ -132,7 +132,7 @@ public class NacAlarm
 			this.mVibrate = NacSharedPreferences.DEFAULT_VIBRATE;
 			this.mVolume = NacSharedPreferences.DEFAULT_VOLUME;
 			this.mAudioSource = NacSharedPreferences.DEFAULT_AUDIO_SOURCE;
-			this.mSoundType = NacSound.TYPE_NONE;
+			this.mSoundType = NacMedia.TYPE_NONE;
 			this.mSoundPath = "";
 			this.mSoundName = "";
 			this.mName = "";
@@ -413,8 +413,8 @@ public class NacAlarm
 		 */
 		public Builder setSound(Context context, String path)
 		{
-			String name = NacSound.getName(context, path);
-			int type = NacSound.getType(path);
+			String name = NacMedia.getTitle(context, path);
+			int type = NacMedia.getType(context, path);
 
 			this.setSoundPath(path);
 			this.setSoundName(name);
@@ -1121,8 +1121,8 @@ public class NacAlarm
 	 */
 	public void setSound(Context context, String path)
 	{
-		String name = NacSound.getName(context, path);
-		int type = NacSound.getType(path);
+		String name = NacMedia.getTitle(context, path);
+		int type = NacMedia.getType(context, path);
 
 		this.setSoundPath(path);
 		this.setSoundName(name);

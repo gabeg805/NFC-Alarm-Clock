@@ -3,24 +3,10 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Environment;
-import android.provider.MediaStore;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import android.view.LayoutInflater;
 
 /**
  * A music file browser.
@@ -363,6 +349,7 @@ public class NacFileBrowser
 	/**
 	 * Populate views into the browser.
 	 */
+	// To-do: The previous directory has an extra '/' in the path.
 	private void populateEntries(String path)
 	{
 		String home = NacFileBrowser.getHome();
@@ -412,24 +399,26 @@ public class NacFileBrowser
 	 * To-do: Change this so that when it defaults to an already selected music
 	 * item. It won't mess up.
 	 */
-	public void select(String path)
+	public void select(String selectPath)
 	{
-		File file = new File(path);
-
-		if (path.isEmpty() || !file.isFile())
+		if (selectPath.isEmpty())
 		{
 			return;
 		}
 
 		NacButtonGroup container = this.getContainer();
 		int count = container.getChildCount();
+		NacMedia.Tree tree = this.getTree();
+		String dir = NacFile.dirname(selectPath);
+		String name = NacFile.basename(selectPath);
+		String absolutePath = tree.relativeToAbsolutePath(dir, name);
 
 		for (int i=0; i < count; i++)
 		{
 			View view = container.getChildAt(i);
 			String viewPath = this.getPath(view);
 
-			if (path.equals(viewPath))
+			if (absolutePath.equals(viewPath))
 			{
 				this.select(view);
 				return;
@@ -456,22 +445,34 @@ public class NacFileBrowser
 	}
 
 	/**
-	 * Show the home directory.
+	 * Show the directory contents at the given path and select the file.
 	 */
-	public void show()
+	public void show(String directoryPath, String filePath)
 	{
-		String home = NacFileBrowser.getHome();
+		this.clearEntries();
+		this.populateEntries(directoryPath);
+		this.getTree().cd(directoryPath);
 
-		this.show(home);
+		if ((filePath != null) && !filePath.isEmpty())
+		{
+			this.select(filePath);
+		}
 	}
 
 	/**
-	 * Show the directory contents at the given path.
+	 * @see show
 	 */
-	public void show(String path)
+	public void show(String directoryPath)
 	{
-		this.clearEntries();
-		this.populateEntries(path);
+		this.show(directoryPath, null);
+	}
+
+	/**
+	 * @see show
+	 */
+	public void show()
+	{
+		this.show(NacFileBrowser.getHome());
 	}
 
 }
