@@ -10,7 +10,7 @@ import androidx.preference.Preference;
 /**
  * Preference that displays the sound prompt dialog.
  */
-public class NacSoundPreference
+public class NacMediaPreference
 	extends Preference
 {
 
@@ -21,21 +21,21 @@ public class NacSoundPreference
 
 	/**
 	 */
-	public NacSoundPreference(Context context)
+	public NacMediaPreference(Context context)
 	{
 		this(context, null);
 	}
 
 	/**
 	 */
-	public NacSoundPreference(Context context, AttributeSet attrs)
+	public NacMediaPreference(Context context, AttributeSet attrs)
 	{
 		this(context, attrs, 0);
 	}
 
 	/**
 	 */
-	public NacSoundPreference(Context context, AttributeSet attrs, int style)
+	public NacMediaPreference(Context context, AttributeSet attrs, int style)
 	{
 		super(context, attrs, style);
 		setLayoutResource(R.layout.nac_preference);
@@ -47,7 +47,7 @@ public class NacSoundPreference
 	@Override
 	public CharSequence getSummary()
 	{
-		return NacSharedPreferences.getSoundSummary(getContext(), this.mValue);
+		return NacSharedPreferences.getMediaSummary(getContext(), this.mValue);
 	}
 
 	/**
@@ -80,14 +80,14 @@ public class NacSoundPreference
 	/**
 	 * Set the sound.
 	 */
-	public void setSound(NacSound sound)
+	public void setMedia(String media)
 	{
-		if (sound == null)
+		if (media == null)
 		{
 			return;
 		}
 
-		this.mValue = sound.getPath();
+		this.mValue = media;
 
 		persistString(this.mValue);
 		notifyChanged();

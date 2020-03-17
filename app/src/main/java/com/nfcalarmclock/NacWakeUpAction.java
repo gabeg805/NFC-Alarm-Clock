@@ -98,7 +98,7 @@ public class NacWakeUpAction
 
 		// Might want to override whats playing when waking up.
 		// Also, don't know what wasPlaying really does.
-		return ((alarm != null) && (player != null) && alarm.hasSound());
+		return ((alarm != null) && (player != null) && alarm.hasMedia());
 			//|| player.isPlaying() || player.wasPlaying())
 	}
 
@@ -386,7 +386,7 @@ public class NacWakeUpAction
 
 		player.resetWrapper();
 		player.stopWrapper();
-		player.release();
+		player.releaseWrapper();
 	}
 
 	/**

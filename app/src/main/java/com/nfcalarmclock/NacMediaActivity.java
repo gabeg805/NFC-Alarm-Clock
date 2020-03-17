@@ -22,17 +22,17 @@ public class NacMediaActivity
 {
 
 	/**
-	 * The view pager.
+	 * View pager.
 	 */
 	private ViewPager mPager;
 
 	/**
-	 * The adapter for the view pager.
+	 * Adapter for the view pager.
 	 */
 	private NacPagerAdapter mAdapter;
 
 	/**
-	 * The tab layout.
+	 * Tab layout.
 	 */
 	private TabLayout mTabLayout;
 
@@ -42,14 +42,14 @@ public class NacMediaActivity
 	private Fragment[] mFragments;
 
 	/**
-	 * The alarm.
+	 * Alarm.
 	 */
 	private NacAlarm mAlarm;
 
 	/**
-	 * The sound.
+	 * Media path.
 	 */
-	private NacSound mSound;
+	private String mMediaPath;
 
 	/**
 	 * Current tab position.
@@ -122,32 +122,32 @@ public class NacMediaActivity
 	}
 
 	/**
-	 * @return The sound.
+	 * @return The media path.
 	 */
-	private NacSound getSound()
+	private String getMedia()
 	{
-		return this.mSound;
+		return this.mMediaPath;
 	}
 
 	/**
-	 * @return The sound type.
+	 * @return The media type.
 	 */
-	private int getSoundType()
+	private int getMediaType()
 	{
 		NacAlarm alarm = this.getAlarm();
-		NacSound sound = this.getSound();
+		String media = this.getMedia();
 
 		if (alarm != null)
 		{
-			return alarm.getSoundType();
+			return alarm.getMediaType();
 		}
-		else if (sound != null)
+		else if (media != null)
 		{
-			return sound.getType();
+			return NacMedia.getType(this, media);
 		}
 		else
 		{
-			return NacSound.TYPE_NONE;
+			return NacMedia.TYPE_NONE;
 		}
 	}
 
@@ -237,7 +237,7 @@ public class NacMediaActivity
 		Intent intent = getIntent();
 		FragmentManager manager = getSupportFragmentManager();
 		this.mAlarm = NacIntent.getAlarm(intent);
-		this.mSound = NacIntent.getSound(intent);
+		this.mMediaPath = NacIntent.getMedia(intent);
 		this.mPager = (ViewPager) findViewById(R.id.act_sound);
 		this.mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
 		//this.mAdapter = new NacPagerAdapter(manager, this.mAlarm, this.mTitles);
@@ -305,7 +305,7 @@ public class NacMediaActivity
 	 */
 	private void selectTab()
 	{
-		int type = this.getSoundType();
+		int type = this.getMediaType();
 
 		if (NacMedia.isNone(type))
 		{
@@ -422,7 +422,7 @@ public class NacMediaActivity
 		public Fragment getItem(int position)
 		{
 			NacAlarm alarm = getAlarm();
-			NacSound sound = getSound();
+			String media = getMedia();
 
 			if (position == 0)
 			{
@@ -430,9 +430,9 @@ public class NacMediaActivity
 				{
 					return NacMusicFragment.newInstance(alarm);
 				}
-				else if (sound != null)
+				else if (media != null)
 				{
-					return NacMusicFragment.newInstance(sound);
+					return NacMusicFragment.newInstance(media);
 				}
 			}
 			else if (position == 1)
@@ -441,9 +441,9 @@ public class NacMediaActivity
 				{
 					return NacRingtoneFragment.newInstance(alarm);
 				}
-				else if (sound != null)
+				else if (media != null)
 				{
-					return NacRingtoneFragment.newInstance(sound);
+					return NacRingtoneFragment.newInstance(media);
 				}
 			}
 			else if (position == 2)
@@ -452,9 +452,9 @@ public class NacMediaActivity
 				{
 					return NacSpotifyFragment.newInstance(alarm);
 				}
-				else if (sound != null)
+				else if (media!= null)
 				{
-					return NacSpotifyFragment.newInstance(sound);
+					return NacSpotifyFragment.newInstance(media);
 				}
 			}
 

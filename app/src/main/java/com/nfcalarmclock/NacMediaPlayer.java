@@ -6,6 +6,7 @@ import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class NacMediaPlayer
 		/**
 		 * List of music files.
 		 */
-		private List<NacSound> mPlaylist;
+		private List<Uri> mPlaylist;
 
 		/**
 		 * Index corresponding to the current place in the playlist.
@@ -75,11 +76,12 @@ public class NacMediaPlayer
 		/**
 		 * @return The next playlist track.
 		 */
-		public NacSound getNextTrack()
+		public Uri getNextTrack()
 		{
 			int size = this.getSize();
 			int index = this.getIndex();
-			int nextIndex = this.repeat() ? (index+1) % size : index+1;
+			boolean repeat = this.getRepeat();
+			int nextIndex = repeat ? (index+1) % size : index+1;
 
 			if ((size == 0) || (nextIndex >= size))
 			{
@@ -94,9 +96,17 @@ public class NacMediaPlayer
 		/**
 		 * @return The playlist.
 		 */
-		public List<NacSound> getPlaylist()
+		public List<Uri> getPlaylist()
 		{
 			return this.mPlaylist;
+		}
+
+		/**
+		 * @return True if the playlist should be repeated, and False otherwise.
+		 */
+		public boolean getRepeat()
+		{
+			return this.mRepeat;
 		}
 
 		/**
@@ -104,7 +114,7 @@ public class NacMediaPlayer
 		 */
 		public int getSize()
 		{
-			List<NacSound> playlist = this.getPlaylist();
+			List<Uri> playlist = this.getPlaylist();
 
 			return (playlist == null) ? 0 : playlist.size();
 		}
@@ -112,7 +122,7 @@ public class NacMediaPlayer
 		/**
 		 * @return The current playlist track.
 		 */
-		public NacSound getTrack()
+		public Uri getTrack()
 		{
 			return this.getTrack(this.getIndex());
 		}
@@ -120,20 +130,12 @@ public class NacMediaPlayer
 		/**
 		 * @return The playlist track.
 		 */
-		public NacSound getTrack(int index)
+		public Uri getTrack(int index)
 		{
-			List<NacSound> playlist = this.getPlaylist();
+			List<Uri> playlist = this.getPlaylist();
 			int size = this.getSize();
 
 			return ((size > 0) && (index < size)) ? playlist.get(index) : null;
-		}
-
-		/**
-		 * @return True if the playlist should be repeated and False otherwise.
-		 */
-		public boolean repeat()
-		{
-			return this.mRepeat;
 		}
 
 		/**
@@ -170,6 +172,11 @@ public class NacMediaPlayer
 	private NacAudio.Attributes mAttributes;
 
 	/**
+	 * Handler to add some delay if looping media.
+	 */
+	private Handler mHandler;
+
+	/**
 	 * Check if player was playing (caused by losing audio focus).
 	 */
 	private boolean mWasPlaying;
@@ -193,7 +200,21 @@ public class NacMediaPlayer
 		this.mContext = context;
 		this.mPlaylist = null;
 		this.mAttributes = new NacAudio.Attributes(context);
+		this.mHandler = new Handler();
 		this.mWasPlaying = false;
+	}
+
+	/**
+	 * Cleanup the handler.
+	 */
+	private void cleanupHandler()
+	{
+		Handler handler = this.getHandler();
+
+		if (handler != null)
+		{
+			handler.removeCallbacksAndMessages(null);
+		}
 	}
 
 	/**
@@ -213,6 +234,14 @@ public class NacMediaPlayer
 	}
 
 	/**
+	 * @return The handler.
+	 */
+	private Handler getHandler()
+	{
+		return this.mHandler;
+	}
+
+	/**
 	 * @return The playlist.
 	 */
 	private Playlist getPlaylist()
@@ -221,7 +250,15 @@ public class NacMediaPlayer
 	}
 
 	/**
-	 * Check if the media player is playing.
+	 * @return True if a playlist has been created, and False otherwise.
+	 */
+	public boolean hasPlaylist()
+	{
+		return (this.getPlaylist() != null);
+	}
+
+	/**
+	 * @return True if the media player is playing, and False otherwise.
 	 */
 	public boolean isPlayingWrapper()
 	{
@@ -231,7 +268,7 @@ public class NacMediaPlayer
 		}
 		catch (IllegalStateException e)
 		{
-			NacUtility.printf("NacMediaPlayer : IllegalStateException caught in isPlaying()");
+			NacUtility.printf("NacMediaPlayer : IllegalStateException : isPlaying()");
 			return false;
 		}
 	}
@@ -276,33 +313,22 @@ public class NacMediaPlayer
 	@Override
 	public void onCompletion(MediaPlayer mp)
 	{
-		this.stopWrapper();
-
-		Context context = this.getContext();
-		Playlist playlist = this.getPlaylist();
-		NacSound track = (playlist != null) ? playlist.getNextTrack() : null;
-
-		if (track != null)
+		if (this.hasPlaylist())
 		{
-			this.resetWrapper();
-			this.play(track);
+			if (this.playNextTrack() == 0)
+			{
+				return;
+			}
+		}
+		else if (this.shouldRepeat())
+		{
+			this.repeatTrack();
 			return;
 		}
-		else
-		{
-			this.mPlaylist = null;
-		}
 
-		if (!isLooping())
-		{
-			this.resetWrapper();
-			NacAudio.abandonAudioFocus(context, this);
-		}
-		else
-		{
-			this.prepareWrapper();
-			this.startWrapper();
-		}
+		Context context = this.getContext();
+		this.resetWrapper();
+		NacAudio.abandonAudioFocus(context, this);
 	}
 
 	/**
@@ -317,7 +343,7 @@ public class NacMediaPlayer
 		}
 		catch (IllegalStateException e)
 		{
-			NacUtility.printf("NacMediaPlayer : IllegalStateException caught in pause()");
+			NacUtility.printf("NacMediaPlayer : IllegalStateException : pause()");
 			return this.RESULT_ILLEGAL_STATE_EXCEPTION;
 		}
 	}
@@ -328,27 +354,23 @@ public class NacMediaPlayer
 	public void play(NacAlarm alarm, boolean repeat, boolean shuffle)
 	{
 		NacAudio.Attributes attrs = this.getAudioAttributes();
-		String path = alarm.getSoundPath();
+		String source = alarm.getAudioSource();
+		int volume = alarm.getVolume();
+		int type = alarm.getMediaType();
+		String path = alarm.getMediaPath();
+		Uri track = NacMedia.toUri(path);
 
-		attrs.setSource(alarm.getAudioSource());
-		attrs.setVolumeLevel(alarm.getVolume());
+		attrs.setSource(source);
+		attrs.setVolumeLevel(volume);
 
-		if (NacSound.isFilePlaylist(alarm.getSoundType()))
+		if (NacMedia.isDirectory(type))
 		{
 			this.playPlaylist(path, repeat, shuffle);
 		}
 		else
 		{
-			this.play(path, repeat);
+			this.play(track, repeat);
 		}
-	}
-
-	/**
-	 * @see play
-	 */
-	public void play(NacSound sound)
-	{
-		this.play(sound.getPath(), sound.getRepeat());
 	}
 
 	/**
@@ -361,13 +383,12 @@ public class NacMediaPlayer
 
 		if(!NacAudio.requestAudioFocusGain(context, this, attrs))
 		{
-			//NacUtility.printf("Audio Focus NOT Granted!");
+			NacUtility.quickToast(context, "Unable to play audio");
 			return;
 		}
 
 		AudioAttributes audioAttributes = attrs.getAudioAttributes();
 
-		// Can log each step for better granularity in case errors occur.
 		try
 		{
 			if (this.isPlayingWrapper())
@@ -375,59 +396,12 @@ public class NacMediaPlayer
 				this.resetWrapper();
 			}
 
-			//setDataSource(path);
-			NacUtility.printf("Playing poop : %s", contentUri.toString());
-			//Uri poop = Uri.parse("content://media/external/audio/media/45");
+			attrs.setRepeat(repeat);
 			setDataSource(context, contentUri);
-			setLooping(repeat);
+			setLooping(false);
 			setAudioAttributes(audioAttributes);
 			setOnCompletionListener(this);
-			prepare();
-			this.setVolume();
-			start();
-		}
-		catch (IllegalStateException | IOException | IllegalArgumentException | SecurityException e)
-		{
-			NacUtility.printf("NacMediaPlayer : play : %s", e.toString());
-			NacUtility.quickToast(context, "Unable to play selected file");
-		}
-	}
-
-	public void play(String media, boolean repeat)
-	{
-		Context context = this.getContext();
-		NacAudio.Attributes attrs = this.getAudioAttributes();
-
-		if (media.isEmpty())
-		{
-			return;
-		}
-
-		if(!NacAudio.requestAudioFocusGain(context, this, attrs))
-		{
-			//NacUtility.printf("Audio Focus NOT Granted!");
-			return;
-		}
-
-		AudioAttributes audioAttributes = attrs.getAudioAttributes();
-		String path = NacSound.getPath(context, media);
-
-		// Can log each step for better granularity in case errors occur.
-		try
-		{
-			if (this.isPlayingWrapper())
-			{
-				this.resetWrapper();
-			}
-
-			//setDataSource(path);
-			NacUtility.printf("Playing poop (but not really) : %s", path);
-			Uri poop = Uri.parse("content://media/external/audio/media/45");
-			setDataSource(context, poop);
-			setLooping(repeat);
-			setAudioAttributes(audioAttributes);
-			setOnCompletionListener(this);
-			prepare();
+			this.prepareWrapper();
 			this.setVolume();
 			start();
 		}
@@ -439,18 +413,40 @@ public class NacMediaPlayer
 	}
 
 	/**
+	 * Play the next track in a playlist.
+	 */
+	public int playNextTrack()
+	{
+		Playlist playlist = this.getPlaylist();
+		Uri track = (playlist != null) ? playlist.getNextTrack() : null;
+		boolean repeat = playlist.getRepeat();
+
+		if (track != null)
+		{
+			this.resetWrapper();
+			this.play(track, repeat);
+			return 0;
+		}
+		else
+		{
+			this.mPlaylist = null;
+			return -1;
+		}
+	}
+
+	/**
 	 * Play a playlist.
 	 */
 	public void playPlaylist(String path, boolean repeat, boolean shuffle)
 	{
 		Context context = this.getContext();
-		this.mPlaylist = new Playlist(context, path, repeat, shuffle);
-		Playlist playlist = this.getPlaylist();
-		NacSound track = playlist.getTrack();
+		Playlist playlist = new Playlist(context, path, repeat, shuffle);
+		Uri track = playlist.getTrack();
+		this.mPlaylist = playlist;
 
 		if (track != null)
 		{
-			this.play(track);
+			this.play(track, repeat);
 		}
 	}
 
@@ -466,14 +462,39 @@ public class NacMediaPlayer
 		}
 		catch (IllegalStateException e)
 		{
-			NacUtility.printf("NacMediaPlayer : IllegalStateException caught in prepare()");
+			NacUtility.printf("NacMediaPlayer : IllegalStateException : prepare()");
 			return this.RESULT_ILLEGAL_STATE_EXCEPTION;
 		}
 		catch (IOException e)
 		{
-			NacUtility.printf("NacMediaPlayer : IOException caught in prepare()");
+			NacUtility.printf("NacMediaPlayer : IOException : prepare()");
 			return this.RESULT_IO_EXCEPTION;
 		}
+	}
+
+	/**
+	 * Release the media player.
+	 */
+	public void releaseWrapper()
+	{
+		this.cleanupHandler();
+		release();
+	}
+
+	/**
+	 * Repeat the currently playing track.
+	 */
+	public void repeatTrack()
+	{
+		this.cleanupHandler();
+
+		this.getHandler().postDelayed(new Runnable() {
+				@Override
+				public void run()
+				{
+					startWrapper();
+				}
+			}, 500);
 	}
 
 	/**
@@ -486,12 +507,30 @@ public class NacMediaPlayer
 			NacAudio.Attributes attrs = this.getAudioAttributes();
 
 			attrs.revertVolume();
+			this.cleanupHandler();
 			reset();
 			return this.RESULT_SUCCESS;
 		}
 		catch (IllegalStateException e)
 		{
-			NacUtility.printf("NacMediaPlayer : IllegalStateException caught in reset()");
+			NacUtility.printf("NacMediaPlayer : IllegalStateException : reset()");
+			return this.RESULT_ILLEGAL_STATE_EXCEPTION;
+		}
+	}
+
+	/**
+	 * Go back to the beginning of the song.
+	 */
+	public int seekToBeginningWrapper()
+	{
+		try
+		{
+			seekTo(0);
+			return this.RESULT_SUCCESS;
+		}
+		catch (IllegalStateException e)
+		{
+			NacUtility.printf("NacMediaPlayer : IllegalStateException : seekToBeginningWrapper()");
 			return this.RESULT_ILLEGAL_STATE_EXCEPTION;
 		}
 	}
@@ -507,6 +546,16 @@ public class NacMediaPlayer
 	}
 
 	/**
+	 * @return True if the media player should repeat, and False otherwise.
+	 */
+	public boolean shouldRepeat()
+	{
+		NacAudio.Attributes attrs = this.getAudioAttributes();
+
+		return (attrs != null) ? attrs.getRepeat() : false;
+	}
+
+	/**
 	 * Start the media player.
 	 */
 	public int startWrapper()
@@ -518,7 +567,7 @@ public class NacMediaPlayer
 		}
 		catch (IllegalStateException e)
 		{
-			NacUtility.printf("NacMediaPlayer : IllegalStateException caught in start()");
+			NacUtility.printf("NacMediaPlayer : IllegalStateException : start()");
 			return this.RESULT_ILLEGAL_STATE_EXCEPTION;
 		}
 	}
@@ -530,12 +579,13 @@ public class NacMediaPlayer
 	{
 		try
 		{
+			this.cleanupHandler();
 			stop();
 			return this.RESULT_SUCCESS;
 		}
 		catch (IllegalStateException e)
 		{
-			NacUtility.printf("NacMediaPlayer : IllegalStateException caught in stop()");
+			NacUtility.printf("NacMediaPlayer : IllegalStateException : stop()");
 			return this.RESULT_ILLEGAL_STATE_EXCEPTION;
 		}
 	}

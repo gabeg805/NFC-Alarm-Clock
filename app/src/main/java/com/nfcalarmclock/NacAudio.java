@@ -64,6 +64,11 @@ public class NacAudio
 		private boolean mWasDucking;
 
 		/**
+		 * Repeat.
+		 */
+		private boolean mRepeat;
+
+		/**
 		 */
 		public Attributes(Context context)
 		{
@@ -94,8 +99,10 @@ public class NacAudio
 			this.setFocus(0);
 			this.setSource(source);
 			this.setVolumeLevel(-1);
+			this.setRepeat(false);
+			this.setWasDucking(false);
 
-			this.mWasDucking = false;
+			//this.mWasDucking = false;
 		}
 
 		/**
@@ -107,8 +114,9 @@ public class NacAudio
 			int current = this.getStreamVolume();
 			int duck = current / 2;
 			this.mVolume = duck;
-			this.mWasDucking = true;
+			//this.mWasDucking = true;
 
+			this.setWasDucking(true);
 			shared.editPreviousVolume(current);
 			this.setStreamVolume(duck);
 
@@ -146,6 +154,14 @@ public class NacAudio
 		public int getFocus()
 		{
 			return this.mFocus;
+		}
+
+		/**
+		 * @return True if the audio should be repeated, and False otherwise.
+		 */
+		public boolean getRepeat()
+		{
+			return this.mRepeat;
 		}
 
 		/**
@@ -217,7 +233,8 @@ public class NacAudio
 		{
 			if (this.wasDucking())
 			{
-				this.mWasDucking = false;
+				//this.mWasDucking = false;
+				this.setWasDucking(false);
 			}
 		}
 
@@ -253,6 +270,14 @@ public class NacAudio
 		public void setFocus(int focus)
 		{
 			this.mFocus = focus;
+		}
+
+		/**
+		 * Set whether the audio should be repeated or not.
+		 */
+		public void setRepeat(boolean repeat)
+		{
+			this.mRepeat = repeat;
 		}
 
 		/**
@@ -300,6 +325,28 @@ public class NacAudio
 		}
 
 		/**
+		 * Set the volume of the stream.
+		 */
+		public void setStreamVolume(int volume)
+		{
+			Context context = this.getContext();
+			AudioManager manager = NacAudio.getAudioManager(context);
+			int stream = this.getStream();
+
+			try
+			{
+				if (!manager.isVolumeFixed())
+				{
+					manager.setStreamVolume(stream, volume, 0);
+				}
+			}
+			catch (SecurityException e)
+			{
+				NacUtility.printf("NacAudio : SecurityException : Unable to setStreamVolume");
+			}
+		}
+
+		/**
 		 * Set the audio usage.
 		 */
 		public void setUsage(int usage)
@@ -331,31 +378,20 @@ public class NacAudio
 			this.mVolume = volume;
 		}
 
-		public void setStreamVolume(int volume)
-		{
-			Context context = this.getContext();
-			AudioManager manager = NacAudio.getAudioManager(context);
-			int stream = this.getStream();
-
-			try
-			{
-				if (!manager.isVolumeFixed())
-				{
-					manager.setStreamVolume(stream, volume, 0);
-				}
-			}
-			catch (SecurityException e)
-			{
-				NacUtility.printf("NacAudio : SecurityException : Unable to setStreamVolume");
-			}
-		}
-
 		/**
 		 * Set the volume level.
 		 */
 		public void setVolumeLevel(int level)
 		{
 			this.mLevel = level;
+		}
+
+		/**
+		 * Set whether the volume was ducked or not.
+		 */
+		public void setWasDucking(boolean wasDucking)
+		{
+			this.mWasDucking = wasDucking;
 		}
 
 		/**

@@ -73,32 +73,32 @@ public class NacAlarm
 		private boolean mVibrate;
 
 		/**
-		 * The volume.
+		 * Volume level.
 		 */
 		private int mVolume;
 
 		/**
-		 * The audio source.
+		 * Audio source.
 		 */
 		private String mAudioSource;
 
 		/**
-		 * The type of sound to play.
+		 * Type of media.
 		 */
-		private int mSoundType;
+		private int mMediaType;
 
 		/**
-		 * The path to the sound to play.
+		 * Path of the media.
 		 */
-		private String mSoundPath;
+		private String mMediaPath;
 
 		/**
-		 * The name of the sound to play.
+		 * Title of the media.
 		 */
-		private String mSoundName;
+		private String mMediaTitle;
 
 		/**
-		 * The name of the alarm.
+		 * Name of the alarm.
 		 */
 		private String mName;
 
@@ -132,9 +132,9 @@ public class NacAlarm
 			this.mVibrate = NacSharedPreferences.DEFAULT_VIBRATE;
 			this.mVolume = NacSharedPreferences.DEFAULT_VOLUME;
 			this.mAudioSource = NacSharedPreferences.DEFAULT_AUDIO_SOURCE;
-			this.mSoundType = NacMedia.TYPE_NONE;
-			this.mSoundPath = "";
-			this.mSoundName = "";
+			this.mMediaType = NacMedia.TYPE_NONE;
+			this.mMediaPath = "";
+			this.mMediaTitle = "";
 			this.mName = "";
 		}
 
@@ -222,25 +222,25 @@ public class NacAlarm
 		/**
 		 * @return The path to the media file to play when the alarm goes off.
 		 */
-		public String getSoundName()
+		public String getMediaPath()
 		{
-			return this.mSoundName;
+			return this.mMediaPath;
+		}
+
+		/**
+		 * @return The title of the media file.
+		 */
+		public String getMediaTitle()
+		{
+			return this.mMediaTitle;
 		}
 
 		/**
 		 * @return The path to the media file to play when the alarm goes off.
 		 */
-		public String getSoundPath()
+		public int getMediaType()
 		{
-			return this.mSoundPath;
-		}
-
-		/**
-		 * @return The path to the media file to play when the alarm goes off.
-		 */
-		public int getSoundType()
-		{
-			return this.mSoundType;
+			return this.mMediaType;
 		}
 
 		/**
@@ -411,28 +411,28 @@ public class NacAlarm
 		 *
 		 * @return The Builder.
 		 */
-		public Builder setSound(Context context, String path)
+		public Builder setMedia(Context context, String path)
 		{
-			String name = NacMedia.getTitle(context, path);
 			int type = NacMedia.getType(context, path);
+			String title = NacMedia.getTitle(context, path);
 
-			this.setSoundPath(path);
-			this.setSoundName(name);
-			this.setSoundType(type);
+			this.setMediaType(type);
+			this.setMediaPath(path);
+			this.setMediaTitle(title);
 
 			return this;
 		}
 
 		/**
-		 * Set the sound name.
+		 * Set the media title.
 		 *
-		 * @param  name  The name of the media file to play.
+		 * @param  title  The title of the media file to play.
 		 *
 		 * @return The Builder.
 		 */
-		public Builder setSoundName(String name)
+		public Builder setMediaTitle(String title)
 		{
-			this.mSoundName = (name != null) ? name : "";
+			this.mMediaTitle = (title != null) ? title : "";
 
 			return this;
 		}
@@ -445,9 +445,9 @@ public class NacAlarm
 		 *
 		 * @return The Builder.
 		 */
-		public Builder setSoundPath(String path)
+		public Builder setMediaPath(String path)
 		{
-			this.mSoundPath = (path != null) ? path : "";
+			this.mMediaPath = (path != null) ? path : "";
 
 			return this;
 		}
@@ -459,9 +459,9 @@ public class NacAlarm
 		 *
 		 * @return The Builder.
 		 */
-		public Builder setSoundType(int type)
+		public Builder setMediaType(int type)
 		{
-			this.mSoundType = type;
+			this.mMediaType = type;
 
 			return this;
 		}
@@ -571,32 +571,32 @@ public class NacAlarm
 	private boolean mVibrate;
 
 	/**
-	 * The volume level.
+	 * Volume level.
 	 */
 	private int mVolume;
 
 	/**
-	 * The audio source.
+	 * Audio source.
 	 */
 	private String mAudioSource;
 
 	/**
-	 * The type of sound to play.
+	 * Type of media.
 	 */
-	private int mSoundType;
+	private int mMediaType;
 
 	/**
-	 * The path to the sound to play.
+	 * Path of the media file.
 	 */
-	private String mSoundPath;
+	private String mMediaPath;
 
 	/**
-	 * The name of the sound to play.
+	 * Title of the media file.
 	 */
-	private String mSoundName;
+	private String mMediaTitle;
 
 	/**
-	 * The name of the alarm.
+	 * Name of the alarm.
 	 */
 	private String mName;
 
@@ -627,9 +627,9 @@ public class NacAlarm
 		this.setVibrate(builder.getVibrate());
 		this.setVolume(builder.getVolume());
 		this.setAudioSource(builder.getAudioSource());
-		this.setSoundType(builder.getSoundType());
-		this.setSoundPath(builder.getSoundPath());
-		this.setSoundName(builder.getSoundName());
+		this.setMediaType(builder.getMediaType());
+		this.setMediaPath(builder.getMediaPath());
+		this.setMediaTitle(builder.getMediaTitle());
 		this.setName(builder.getName());
 
 		this.mTracker = ChangeTracker.NONE;
@@ -654,9 +654,9 @@ public class NacAlarm
 			.setVibrate((input.readInt() != 0))
 			.setVolume(input.readInt())
 			.setAudioSource(input.readString())
-			.setSoundType(input.readInt())
-			.setSoundPath(input.readString())
-			.setSoundName(input.readString())
+			.setMediaType(input.readInt())
+			.setMediaPath(input.readString())
+			.setMediaTitle(input.readString())
 			.setName(input.readString()));
 	}
 
@@ -705,9 +705,9 @@ public class NacAlarm
 			.setRepeat(this.getRepeat())
 			.setUseNfc(this.getUseNfc())
 			.setVibrate(this.getVibrate())
-			.setSoundType(this.getSoundType())
-			.setSoundPath(this.getSoundPath())
-			.setSoundName(this.getSoundName())
+			.setMediaType(this.getMediaType())
+			.setMediaPath(this.getMediaPath())
+			.setMediaTitle(this.getMediaTitle())
 			.setName(this.getName())
 			.build();
 	}
@@ -737,9 +737,9 @@ public class NacAlarm
 			&& (this.getDays() == alarm.getDays())
 			&& (this.getRepeat() == alarm.getRepeat())
 			&& (this.getVibrate() == alarm.getVibrate())
-			&& (this.getSoundType() == alarm.getSoundType())
-			&& (this.getSoundPath() == alarm.getSoundPath())
-			&& (this.getSoundName() == alarm.getSoundName())
+			&& (this.getMediaType() == alarm.getMediaType())
+			&& (this.getMediaPath() == alarm.getMediaPath())
+			&& (this.getMediaTitle() == alarm.getMediaTitle())
 			&& (this.getName() == alarm.getName()));
 	}
 
@@ -892,27 +892,27 @@ public class NacAlarm
 	}
 
 	/**
-	 * @return The path to the media file to play when the alarm goes off.
+	 * @return The title of the media file.
 	 */
-	public String getSoundName()
+	public String getMediaTitle()
 	{
-		return this.mSoundName;
+		return this.mMediaTitle;
 	}
 
 	/**
 	 * @return The path to the media file to play when the alarm goes off.
 	 */
-	public String getSoundPath()
+	public String getMediaPath()
 	{
-		return this.mSoundPath;
+		return this.mMediaPath;
 	}
 
 	/**
 	 * @return The path to the media file to play when the alarm goes off.
 	 */
-	public int getSoundType()
+	public int getMediaType()
 	{
-		return this.mSoundType;
+		return this.mMediaType;
 	}
 
 	/**
@@ -952,9 +952,9 @@ public class NacAlarm
 	 * @return True if the alarm has a sound that will be played when it goes
 	 *         off, and False otherwise.
 	 */
-	public boolean hasSound()
+	public boolean hasMedia()
 	{
-		String sound = this.getSoundPath();
+		String sound = this.getMediaPath();
 
 		return ((sound != null) && !sound.isEmpty());
 	}
@@ -986,9 +986,9 @@ public class NacAlarm
 		NacUtility.printf("Vibrate      : %b", this.mVibrate);
 		NacUtility.printf("Volume       : %d", this.mVolume);
 		NacUtility.printf("Audio Source : %s", this.mAudioSource);
-		NacUtility.printf("Sound Type   : %s", this.mSoundType);
-		NacUtility.printf("Sound Path   : %s", this.mSoundPath);
-		NacUtility.printf("Sound Name   : %s", this.mSoundName);
+		NacUtility.printf("Media Type   : %s", this.mMediaType);
+		NacUtility.printf("Media Path   : %s", this.mMediaPath);
+		NacUtility.printf("Media Name   : %s", this.mMediaTitle);
 		NacUtility.printf("Name         : %s", this.mName);
 	}
 
@@ -1119,24 +1119,24 @@ public class NacAlarm
 	 * @param  context  The application context.
 	 * @param  path  The path to sound to play.
 	 */
-	public void setSound(Context context, String path)
+	public void setMedia(Context context, String path)
 	{
-		String name = NacMedia.getTitle(context, path);
 		int type = NacMedia.getType(context, path);
+		String title = NacMedia.getTitle(context, path);
 
-		this.setSoundPath(path);
-		this.setSoundName(name);
-		this.setSoundType(type);
+		this.setMediaType(type);
+		this.setMediaPath(path);
+		this.setMediaTitle(title);
 	}
 
 	/**
-	 * Set the sound name.
+	 * Set the media title.
 	 *
-	 * @param  name  The name of the media file to play.
+	 * @param  title  The title of the media file to play.
 	 */
-	public void setSoundName(String name)
+	public void setMediaTitle(String title)
 	{
-		this.mSoundName = (name != null) ? name : "";
+		this.mMediaTitle = (title != null) ? title : "";
 	}
 
 	/**
@@ -1145,9 +1145,9 @@ public class NacAlarm
 	 * @param  path  The path to the media file to play when the alarm goes
 	 *               off.
 	 */
-	public void setSoundPath(String path)
+	public void setMediaPath(String path)
 	{
-		this.mSoundPath = (path != null) ? path : "";
+		this.mMediaPath = (path != null) ? path : "";
 	}
 
 	/**
@@ -1155,9 +1155,9 @@ public class NacAlarm
 	 *
 	 * @param  type  The type of media file to play.
 	 */
-	public void setSoundType(int type)
+	public void setMediaType(int type)
 	{
-		this.mSoundType = type;
+		this.mMediaType = type;
 	}
 
 	/**
@@ -1273,9 +1273,9 @@ public class NacAlarm
 		output.writeInt(this.getVibrate() ? 1 : 0);
 		output.writeInt(this.getVolume());
 		output.writeString(this.getAudioSource());
-		output.writeInt(this.getSoundType());
-		output.writeString(this.getSoundPath());
-		output.writeString(this.getSoundName());
+		output.writeInt(this.getMediaType());
+		output.writeString(this.getMediaPath());
+		output.writeString(this.getMediaTitle());
 		output.writeString(this.getName());
 	}
 

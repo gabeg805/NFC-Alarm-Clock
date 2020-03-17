@@ -150,9 +150,9 @@ public class NacSharedKeys
 	private final String mAudioSource;
 
 	/**
-	 * Sound path.
+	 * Media path.
 	 */
-	private final String mSound;
+	private final String mMediaPath;
 
 	/**
 	 * Name of the alarm.
@@ -238,7 +238,7 @@ public class NacSharedKeys
 		this.mVolume = res.getString(R.string.pref_volume_key);
 		this.mPreviousVolume = res.getString(R.string.sys_previous_volume);
 		this.mAudioSource = res.getString(R.string.pref_audio_source_key);
-		this.mSound = res.getString(R.string.pref_sound_key);
+		this.mMediaPath = res.getString(R.string.pref_sound_key);
 		this.mName = res.getString(R.string.pref_name_key);
 		this.mThemeColor = res.getString(R.string.pref_theme_color_key);
 		this.mNameColor = res.getString(R.string.pref_name_color_key);
@@ -493,11 +493,11 @@ public class NacSharedKeys
 	}
 
 	/**
-	 * @return The sound key.
+	 * @return The media path key.
 	 */
-	public String getSound()
+	public String getMediaPath()
 	{
-		return this.mSound;
+		return this.mMediaPath;
 	}
 
 	/**

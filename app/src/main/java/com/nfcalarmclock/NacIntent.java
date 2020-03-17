@@ -33,9 +33,9 @@ public class NacIntent
 	public static final String ALARM_TO_BUNDLE_NAME = "NacAlarmToBundle";
 
 	/**
-	 * Tag name for retrieving a NacSound from a bundle.
+	 * Tag name for retrieving a media path from a bundle.
 	 */
-	public static final String SOUND_BUNDLE_NAME = "NacSoundBundle";
+	public static final String MEDIA_BUNDLE_NAME = "NacMediaBundle";
 
 	/**
 	 * Add an alarm to an intent.
@@ -125,29 +125,6 @@ public class NacIntent
 
 		intent.putExtra(ALARM_FROM_BUNDLE_NAME, fromBundle);
 		intent.putExtra(ALARM_TO_BUNDLE_NAME, toBundle);
-		intent.setData(uri);
-
-		return intent;
-	}
-
-	/**
-	 * @return The intent that will be used when starting the service for
-	 *         excecuting schedule and database updates.
-	 */
-	public static Intent createService(Context context, String message,
-		NacSound sound)
-	{
-		if (sound == null)
-		{
-			return null;
-		}
-
-		Intent intent = new Intent(context,
-			NacDatabase.BackgroundService.class);
-		Bundle bundle = NacBundle.toBundle(sound);
-		Uri uri = Uri.parse(message);
-
-		intent.putExtra(SOUND_BUNDLE_NAME, bundle);
 		intent.setData(uri);
 
 		return intent;
@@ -280,7 +257,7 @@ public class NacIntent
 			String ringtone = intent.getStringExtra(AlarmClock.EXTRA_RINGTONE);
 			isSet = true;
 
-			builder.setSound(context, ringtone);
+			builder.setMedia(context, ringtone);
 		}
 
 		if (intent.hasExtra(AlarmClock.EXTRA_VIBRATE))
@@ -300,24 +277,24 @@ public class NacIntent
 	/**
 	 * @return The sound associated with the given intent.
 	 */
-	public static NacSound getSound(Intent intent)
+	public static String getMedia(Intent intent)
 	{
 		if (intent == null)
 		{
 			return null;
 		}
 
-		Bundle bundle = NacIntent.getSoundBundle(intent);
+		Bundle bundle = NacIntent.getMediaBundle(intent);
 
-		return NacBundle.getSound(bundle);
+		return NacBundle.getMedia(bundle);
 	}
 
 	/**
 	 * @return The sound bundle.
 	 */
-	public static Bundle getSoundBundle(Intent intent)
+	public static Bundle getMediaBundle(Intent intent)
 	{
-		return NacIntent.getBundle(intent, SOUND_BUNDLE_NAME);
+		return NacIntent.getBundle(intent, MEDIA_BUNDLE_NAME);
 	}
 
 	/**
@@ -348,9 +325,9 @@ public class NacIntent
 	/**
 	 * @return An intent with a sound.
 	 */
-	public static Intent toIntent(NacSound sound)
+	public static Intent toIntent(String media)
 	{
-		return NacIntent.toIntent(null, null, sound);
+		return NacIntent.toIntent(null, null, media);
 	}
 
 	/**
@@ -372,13 +349,13 @@ public class NacIntent
 	 * @see toIntent
 	 */
 	public static Intent toIntent(Context packageContext, Class<?> cls,
-		NacSound sound)
+		String media)
 	{
 		Intent intent = (cls != null) ? new Intent(packageContext, cls)
 			: new Intent();
-		Bundle bundle = NacBundle.toBundle(sound);
+		Bundle bundle = NacBundle.toBundle(media);
 
-		intent.putExtra(SOUND_BUNDLE_NAME, bundle);
+		intent.putExtra(MEDIA_BUNDLE_NAME, bundle);
 
 		return intent;
 	}

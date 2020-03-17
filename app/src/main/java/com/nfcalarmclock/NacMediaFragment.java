@@ -20,14 +20,14 @@ public class NacMediaFragment
 {
 
 	/**
-	 * The alarm.
+	 * Alarm.
 	 */
 	private NacAlarm mAlarm;
 
 	/**
-	 * The sound.
+	 * Media path.
 	 */
-	private NacSound mSound;
+	private String mMediaPath;
 
 	/**
 	 * Media player.
@@ -46,7 +46,7 @@ public class NacMediaFragment
 		super();
 
 		this.mAlarm = null;
-		this.mSound = null;
+		this.mMediaPath = null;
 		this.mPlayer = null;
 		this.mInitialSelection = true;
 	}
@@ -62,26 +62,26 @@ public class NacMediaFragment
 	/**
 	 * @return The alarm.
 	 */
-	protected NacSound getSound()
+	protected String getMedia()
 	{
-		return this.mSound;
+		return this.mMediaPath;
 	}
 
 	/**
-	 * @return The sound path.
+	 * @return The media path.
 	 */
-	protected String getSoundPath()
+	protected String getMediaPath()
 	{
 		NacAlarm alarm = this.getAlarm();
-		NacSound sound = this.getSound();
+		String media = this.getMedia();
 
 		if (alarm != null)
 		{
-			return alarm.getSoundPath();
+			return alarm.getMediaPath();
 		}
-		else if (sound != null)
+		else if (media != null)
 		{
-			return sound.getPath();
+			return media;
 		}
 		else
 		{
@@ -127,7 +127,7 @@ public class NacMediaFragment
 		if (args != null)
 		{
 			this.mAlarm = NacBundle.getAlarm(args);
-			this.mSound = NacBundle.getSound(args);
+			this.mMediaPath = NacBundle.getMedia(args);
 		}
 	}
 
@@ -152,16 +152,15 @@ public class NacMediaFragment
 		{
 			Context context = getContext();
 			NacAlarm alarm = this.getAlarm();
-			NacSound sound = this.getSound();
+			String media = this.getMedia();
 
 			if (alarm != null)
 			{
 				NacDatabase.BackgroundService.updateAlarm(context, alarm);
 			}
-			else if (sound != null)
+			else
 			{
-				Intent intent = NacIntent.toIntent(sound);
-
+				Intent intent = NacIntent.toIntent(media);
 				activity.setResult(Activity.RESULT_OK, intent);
 			}
 
@@ -224,7 +223,7 @@ public class NacMediaFragment
 
 		if (player != null)
 		{
-			player.release();
+			player.releaseWrapper();
 
 			this.mPlayer = null;
 		}
@@ -296,22 +295,22 @@ public class NacMediaFragment
 	/**
 	 * Set the alarm sound.
 	 *
-	 * Use Alarm when editing an alarm card, and use Sound when editing a
+	 * Use Alarm when editing an alarm card, and use media path when editing a
 	 * preference.
 	 */
 	protected void setMedia(String media)
 	{
 		Context context = getContext();
 		NacAlarm alarm = this.getAlarm();
-		NacSound sound = this.getSound();
+		//String path = this.getMedia();
 
 		if (alarm != null)
 		{
-			alarm.setSound(context, media);
+			alarm.setMedia(context, media);
 		}
-		else if (sound != null)
+		else
 		{
-			sound.set(context, media);
+			this.mMediaPath = media;
 		}
 	}
 

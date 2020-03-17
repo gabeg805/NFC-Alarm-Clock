@@ -140,7 +140,7 @@ public class NacCardAdapter
 			.setUseNfc(shared.getUseNfc())
 			.setVibrate(shared.getVibrate())
 			.setVolume(shared.getVolume())
-			.setSound(context, shared.getSound())
+			.setMedia(context, shared.getMediaPath())
 			.setName(shared.getName())
 			.build();
 

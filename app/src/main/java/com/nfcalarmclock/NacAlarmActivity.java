@@ -3,13 +3,8 @@ package com.nfcalarmclock;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PowerManager;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -254,6 +249,7 @@ public class NacAlarmActivity
 	 public void setupShowWhenLocked()
 	 {
 	 	NacAlarm alarm = this.getAlarm();
+		Window window = getWindow();
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)
 		{
@@ -266,7 +262,6 @@ public class NacAlarmActivity
 		}
 		else
 		{
-			Window window = getWindow();
 
 			window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
@@ -275,6 +270,8 @@ public class NacAlarmActivity
 				window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 			}
 		}
+
+		window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	 }
 
 	/**

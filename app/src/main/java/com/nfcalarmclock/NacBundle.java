@@ -9,14 +9,14 @@ public class NacBundle
 {
 
 	/**
-	 * The tag name associated with a parceled alarm.
+	 * Tag name associated with a parceled alarm.
 	 */
 	public static final String ALARM_PARCEL_NAME = "NacAlarmParcel";
 
 	/**
-	 * The tag name associated with a parceled sound.
+	 * Tag name associated with a media path.
 	 */
-	public static final String SOUND_PARCEL_NAME = "NacSoundParcel";
+	public static final String MEDIA_PARCEL_NAME = "NacMediaParcel";
 
 	/**
 	 * @return The alarm contained in the bundle.
@@ -30,10 +30,10 @@ public class NacBundle
 	/**
 	 * @return The sound contained in the bundle.
 	 */
-	public static NacSound getSound(Bundle bundle)
+	public static String getMedia(Bundle bundle)
 	{
 		return (bundle != null)
-			? (NacSound) bundle.getParcelable(SOUND_PARCEL_NAME) : null;
+			? (String) bundle.getString(MEDIA_PARCEL_NAME) : null;
 	}
 
 	/**
@@ -51,11 +51,11 @@ public class NacBundle
 	/**
 	 * @return A bundle that contains the sound.
 	 */
-	public static Bundle toBundle(NacSound sound)
+	public static Bundle toBundle(String media)
 	{
 		Bundle bundle = new Bundle();
 
-		bundle.putParcelable(SOUND_PARCEL_NAME, sound);
+		bundle.putString(MEDIA_PARCEL_NAME, media);
 
 		return bundle;
 	}

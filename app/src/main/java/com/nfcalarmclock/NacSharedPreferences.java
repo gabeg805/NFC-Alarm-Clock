@@ -192,7 +192,7 @@ public class NacSharedPreferences
 	/**
 	 * Default sound path.
 	 */
-	public static final String DEFAULT_SOUND = "";
+	public static final String DEFAULT_MEDIA_PATH = "";
 
 	/**
 	 * Default alarm name.
@@ -237,12 +237,12 @@ public class NacSharedPreferences
 	/**
 	 * Default sound summary text.
 	 */
-	public static final String DEFAULT_SOUND_SUMMARY = "None";
+	public static final String DEFAULT_MEDIA_SUMMARY = "None";
 
 	/**
 	 * Default sound message.
 	 */
-	public static final String DEFAULT_SOUND_MESSAGE = "Song or ringtone";
+	public static final String DEFAULT_MEDIA_MESSAGE = "Song or ringtone";
 
 	/**
 	 * Default name summary text.
@@ -589,19 +589,19 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @see editSound
+	 * @see editMediaPath
 	 */
-	public void editSound(String path)
+	public void editMediaPath(String path)
 	{
-		this.editSound(path, false);
+		this.editMediaPath(path, false);
 	}
 
 	/**
 	 * Edit the sound preference value.
 	 */
-	public void editSound(String path, boolean commit)
+	public void editMediaPath(String path, boolean commit)
 	{
-		String key = this.getKeys().getSound();
+		String key = this.getKeys().getMediaPath();
 
 		this.saveString(key, path, commit);
 	}
@@ -957,6 +957,48 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * @return The media path.
+	 */
+	public String getMediaPath()
+	{
+		String key = this.getKeys().getMediaPath();
+
+		return this.getSharedPreferences().getString(key, DEFAULT_MEDIA_PATH);
+	}
+
+	/**
+	 * @return The sound message.
+	 */
+	public static String getMediaMessage(Context context, String path)
+	{
+		return ((path != null) && !path.isEmpty())
+			? NacMedia.getTitle(context, path)
+			: NacSharedPreferences.DEFAULT_MEDIA_MESSAGE;
+	}
+
+	/**
+	 * @return The media summary.
+	 */
+	public String getMediaSummary()
+	{
+		Context context = this.getContext();
+		String path = this.getMediaPath();
+
+		return NacSharedPreferences.getMediaSummary(context, path);
+	}
+
+	/**
+	 * @see getMediaSummary
+	 */
+	public static String getMediaSummary(Context context, String path)
+	{
+		String name = NacMedia.getTitle(context, path);
+
+		return (!name.isEmpty()) ? name
+			: NacSharedPreferences.DEFAULT_MEDIA_SUMMARY;
+	}
+
+	/**
 	 * @return The meridian color.
 	 */
 	public int getMeridianColor(String meridian)
@@ -1194,65 +1236,6 @@ public class NacSharedPreferences
 	public static int getSnoozeDurationValue(int index)
 	{
 		return (index < 4) ? index+1 : (index-3)*5;
-	}
-
-	/**
-	 * @return The sound path.
-	 */
-	public String getSound()
-	{
-		String key = this.getKeys().getSound();
-
-		return this.getSharedPreferences().getString(key, DEFAULT_SOUND);
-	}
-
-	/**
-	 * @return The sound message.
-	 */
-	public static String getSoundMessage(Context context, String path)
-	{
-		return ((path != null) && !path.isEmpty())
-			? NacSharedPreferences.getSoundName(context, path)
-			: NacSharedPreferences.DEFAULT_SOUND_MESSAGE;
-	}
-
-	/**
-	 * @return The sound name.
-	 */
-	public static String getSoundName(Context context, String path)
-	{
-		NacSound sound = new NacSound(context, path);
-		int type = sound.getType();
-		String name = sound.getName();
-
-		if (NacSound.isFilePlaylist(type))
-		{
-			//name += " Playlist";
-		}
-
-		return name;
-	}
-
-	/**
-	 * @return The sound summary.
-	 */
-	public String getSoundSummary()
-	{
-		Context context = this.getContext();
-		String path = this.getSound();
-
-		return NacSharedPreferences.getSoundSummary(context, path);
-	}
-
-	/**
-	 * @see getSoundSummary
-	 */
-	public static String getSoundSummary(Context context, String path)
-	{
-		String name = NacSharedPreferences.getSoundName(context, path);
-
-		return (!name.isEmpty()) ? name
-			: NacSharedPreferences.DEFAULT_SOUND_SUMMARY;
 	}
 
 	/**

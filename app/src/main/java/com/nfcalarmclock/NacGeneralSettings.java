@@ -22,7 +22,15 @@ public class NacGeneralSettings
 	/**
 	 * The sound preference.
 	 */
-	private NacSoundPreference mSound;
+	private NacMediaPreference mMediaPreference;
+
+	/**
+	 * @return The media preference.
+	 */
+	private NacMediaPreference getMediaPreference()
+	{
+		return this.mMediaPreference;
+	}
 
 	/**
 	 */
@@ -31,14 +39,15 @@ public class NacGeneralSettings
 	{
 		super.onActivityResult(requestCode, resultCode, data);
 
+		NacUtility.printf("Nac sound has been set!? %d", requestCode);
 		if (requestCode != REQUEST_CODE)
 		{
 			return;
 		}
 
-		NacSound sound = NacIntent.getSound(data);
+		String media = NacIntent.getMedia(data);
 
-		this.mSound.setSound(sound);
+		this.setPreferenceMedia(media);
 	}
 
 	/**
@@ -51,9 +60,11 @@ public class NacGeneralSettings
 			R.xml.general_preferences, false);
 
 		NacSharedKeys keys = this.getSharedPreferences().getKeys();
-		this.mSound = (NacSoundPreference) findPreference(keys.getSound());
+		NacMediaPreference mediaPreference = (NacMediaPreference)
+			findPreference(keys.getMediaPath());
+		this.mMediaPreference = mediaPreference;
 
-		this.mSound.setOnPreferenceClickListener(this);
+		mediaPreference.setOnPreferenceClickListener(this);
 	}
 
 	/**
@@ -62,14 +73,21 @@ public class NacGeneralSettings
 	public boolean onPreferenceClick(Preference preference)
 	{
 		Context context = getContext();
-		String path = this.getSharedPreferences().getSound();
-		NacSound sound = new NacSound(context, path);
+		String media = this.getSharedPreferences().getMediaPath();
 		Intent intent = NacIntent.toIntent(context, NacMediaActivity.class,
-			sound);
+			media);
 
 		startActivityForResult(intent, REQUEST_CODE);
 
 		return true;
+	}
+
+	/**
+	 * Set the media to be used in the media preference.
+	 */
+	public void setPreferenceMedia(String media)
+	{
+		this.getMediaPreference().setMedia(media);
 	}
 
 }

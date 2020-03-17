@@ -157,8 +157,8 @@ public class NacCardSound
 	{
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
-		String path = alarm.getSoundPath();
-		String message = NacSharedPreferences.getSoundMessage(context, path);
+		String path = alarm.getMediaPath();
+		String message = NacSharedPreferences.getMediaMessage(context, path);
 		float alpha = ((path != null) && !path.isEmpty()) ? 1.0f : 0.5f;
 
 		this.mSound.setText(message);

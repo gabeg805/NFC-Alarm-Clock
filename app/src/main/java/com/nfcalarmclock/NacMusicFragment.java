@@ -82,10 +82,10 @@ public class NacMusicFragment
 	/**
 	 * Create a new instance of this fragment.
 	 */
-	public static Fragment newInstance(NacSound sound)
+	public static Fragment newInstance(String media)
 	{
 		Fragment fragment = new NacMusicFragment();
-		Bundle bundle = NacBundle.toBundle(sound);
+		Bundle bundle = NacBundle.toBundle(media);
 
 		fragment.setArguments(bundle);
 
@@ -121,7 +121,7 @@ public class NacMusicFragment
 		}
 		else if (id == R.id.ok)
 		{
-			String path = getSoundPath();
+			String path = getMediaPath();
 
 			if (NacMedia.isDirectory(path))
 			{
@@ -156,11 +156,11 @@ public class NacMusicFragment
 		else if (metadata.isFile())
 		{
 			Context context = getContext();
-			Uri playUri = NacMedia.toUri(metadata);
+			Uri uri = metadata.toExternalUri();
 
 			if (browser.isSelected())
 			{
-				if (this.safePlay(playUri, true) < 0)
+				if (this.safePlay(uri, true) < 0)
 				{
 					NacUtility.toast(context, "Unable to play music");
 				}
@@ -231,7 +231,7 @@ public class NacMusicFragment
 		NacFileBrowser browser = new NacFileBrowser(root, R.id.path,
 			R.id.container);
 		String home = NacFileBrowser.getHome();
-		String path = getSoundPath();
+		String path = getMediaPath();
 		this.mFileBrowser = browser;
 		String absolutePath = home;
 		String filePath = "";

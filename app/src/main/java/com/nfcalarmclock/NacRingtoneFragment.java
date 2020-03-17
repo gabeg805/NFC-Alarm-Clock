@@ -57,7 +57,7 @@ public class NacRingtoneFragment
 		RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
 			ViewGroup.LayoutParams.MATCH_PARENT,
 			ViewGroup.LayoutParams.WRAP_CONTENT);
-		String selectedPath = getSoundPath();
+		String selectedPath = getMediaPath();
 		int[] padding = this.getPadding();
 		int textSize = this.getTextSize();
 
@@ -80,9 +80,6 @@ public class NacRingtoneFragment
 	 */
 	private void addRandomRadioButton()
 	{
-		//NacSound sound = new NacSound(NacSound.TYPE_RINGTONE_RANDOM);
-
-		//this.addRadioButton(sound);
 	}
 
 	/**
@@ -125,10 +122,10 @@ public class NacRingtoneFragment
 	/**
 	 * Create a new instance of this fragment.
 	 */
-	public static Fragment newInstance(NacSound sound)
+	public static Fragment newInstance(String media)
 	{
 		Fragment fragment = new NacRingtoneFragment();
-		Bundle bundle = NacBundle.toBundle(sound);
+		Bundle bundle = NacBundle.toBundle(media);
 
 		fragment.setArguments(bundle);
 
@@ -152,9 +149,9 @@ public class NacRingtoneFragment
 		else if (!this.isActionButton(id))
 		{
 			String path = (String) view.getTag();
-			Uri playUri = NacMedia.toUri(path);
+			Uri uri = NacMedia.toUri(path);
 
-			if (this.safePlay(playUri, true) < 0)
+			if (this.safePlay(uri, true) < 0)
 			{
 				NacUtility.toast(context, "Unable to play ringtone");
 			}

@@ -135,7 +135,8 @@ public class NacSettingsActivity
 		{
 			NacSharedKeys keys = this.getKeys();
 			String preferenceKey = preference.getKey();
-			FragmentManager manager = getFragmentManager();
+			//FragmentManager manager = getFragmentManager();
+			FragmentManager manager = getParentFragmentManager();
 			Fragment fragment;
 			String title;
 

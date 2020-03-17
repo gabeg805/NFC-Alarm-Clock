@@ -1,6 +1,8 @@
 package com.nfcalarmclock;
 
+import android.content.ContentUris;
 import android.net.Uri;
+import android.provider.MediaStore;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -125,6 +127,24 @@ public class NacFile
 			NacUtility.printf("ID        : %d", this.getId());
 			NacUtility.printf("Is Dir?   : %b", this.isDirectory());
 			NacUtility.printf("Is File?  : %b", this.isFile());
+		}
+
+		/**
+		 * Convert the input to an external Uri.
+		 */
+		public Uri toExternalUri()
+		{
+			return ContentUris.withAppendedId(
+				MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, this.getId());
+		}
+
+		/**
+		 * Convert the input to an internal Uri.
+		 */
+		public Uri toInternalUri()
+		{
+			return ContentUris.withAppendedId(
+				MediaStore.Audio.Media.INTERNAL_CONTENT_URI, this.getId());
 		}
 
 	}
@@ -301,7 +321,7 @@ public class NacFile
 		public List<Metadata> ls()
 		{
 			NacTreeNode<String> node = this.getDirectory();
-			String dirPath = this.getPath(node);
+			String dirPath = this.getDirectoryPath();
 			List<Metadata> listing = new ArrayList<>();
 
 			if (node == null)
@@ -468,17 +488,13 @@ public class NacFile
 		{
 			String home = this.getHome();
 			String strippedPath = path.replace(home, "");
-			int length = strippedPath.length();
 
-			if (length == 0)
+			if (strippedPath.isEmpty())
 			{
 				return "";
 			}
 
-			if (strippedPath.charAt(length-1) == '/')
-			{
-				strippedPath = strippedPath.substring(0, length-1);
-			}
+			strippedPath = NacFile.strip(strippedPath);
 
 			if (strippedPath.charAt(0) == '/')
 			{
@@ -547,6 +563,53 @@ public class NacFile
 	{
 		return (name.contains(".")) ?
 			name.substring(0, name.lastIndexOf('.')) : name;
+	}
+
+	/**
+	 * Strip away any trailing '/' characters.
+	 */
+	public static String strip(String path)
+	{
+		String normalPath = path;
+		int length = path.length();
+
+		if (length == 0)
+		{
+			return "";
+		}
+
+		if (normalPath.charAt(length-1) == '/')
+		{
+			normalPath= normalPath.substring(0, length-1);
+		}
+
+		return normalPath;
+	}
+
+	/**
+	 * Convert a path to a relative path.
+	 */
+	public static String toRelativePath(String path)
+	{
+		String emulated = "/storage/emulated/0";
+		String sdcard = "/sdcard";
+		String relativePath = path;
+
+		if (path.startsWith(emulated))
+		{
+			relativePath = path.substring(emulated.length());
+		}
+		else if (path.startsWith(sdcard))
+		{
+			relativePath = path.substring(sdcard.length());
+		}
+
+		if (!relativePath.isEmpty() && (relativePath.charAt(0) == '/'))
+		{
+			relativePath = relativePath.substring(1);
+		}
+
+		return relativePath;
 	}
 
 }

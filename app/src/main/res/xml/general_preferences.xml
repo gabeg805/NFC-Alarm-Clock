@@ -104,7 +104,7 @@
 			app:allowDividerBelow="false"
 			/>
 
-		<com.nfcalarmclock.NacSoundPreference
+		<com.nfcalarmclock.NacMediaPreference
 			android:key="@string/pref_sound_key"
 			android:title="@string/pref_sound_title"
 			android:summary="@string/pref_sound_summary"

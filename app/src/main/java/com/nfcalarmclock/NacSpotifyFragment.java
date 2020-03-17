@@ -271,10 +271,12 @@ public class NacSpotifyFragment
 	/**
 	 * Create a new instance of this fragment.
 	 */
-	public static Fragment newInstance(NacSound sound)
+	//public static Fragment newInstance(NacSound sound)
+	public static Fragment newInstance(String media)
 	{
 		Fragment fragment = new NacSpotifyFragment();
-		Bundle bundle = NacBundle.toBundle(sound);
+		Bundle bundle = NacBundle.toBundle(media);
+		//Bundle bundle = NacBundle.toBundle(sound);
 
 		fragment.setArguments(bundle);
 

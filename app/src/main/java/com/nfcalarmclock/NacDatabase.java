@@ -229,7 +229,7 @@ public class NacDatabase
 		cv.put(Contract.AlarmTable.COLUMN_REPEAT, alarm.getRepeat());
 		cv.put(Contract.AlarmTable.COLUMN_VIBRATE, alarm.getVibrate());
 		cv.put(Contract.AlarmTable.COLUMN_NAME, alarm.getName());
-		cv.put(Contract.AlarmTable.COLUMN_SOUND_PATH, alarm.getSoundPath());
+		cv.put(Contract.AlarmTable.COLUMN_SOUND_PATH, alarm.getMediaPath());
 
 		switch (version)
 		{
@@ -240,8 +240,8 @@ public class NacDatabase
 			case 3:
 				cv.put(Contract.AlarmTable.COLUMN_USE_NFC, alarm.getUseNfc());
 			case 2:
-				cv.put(Contract.AlarmTable.COLUMN_SOUND_TYPE, alarm.getSoundType());
-				cv.put(Contract.AlarmTable.COLUMN_SOUND_NAME, alarm.getSoundName());
+				cv.put(Contract.AlarmTable.COLUMN_SOUND_TYPE, alarm.getMediaType());
+				cv.put(Contract.AlarmTable.COLUMN_SOUND_NAME, alarm.getMediaTitle());
 			case 1:
 			default:
 				break;
@@ -371,9 +371,9 @@ public class NacDatabase
 
 		Context context = this.getContext();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
-		String soundPath = shared.getSound();
-		String soundName = NacMedia.getTitle(context, soundPath);
-		int soundType = NacMedia.getType(context, soundPath);
+		String mediaPath = shared.getMediaPath();
+		String mediaTitle = NacMedia.getTitle(context, mediaPath);
+		int mediaType = NacMedia.getType(context, mediaPath);
 		NacAlarm alarm = new NacAlarm.Builder()
 			.setId(1)
 			.setHour(8)
@@ -384,9 +384,9 @@ public class NacDatabase
 			.setVibrate(shared.getVibrate())
 			.setVolume(shared.getVolume())
 			.setAudioSource(shared.getAudioSource())
-			.setSoundType(soundType)
-			.setSoundPath(soundPath)
-			.setSoundName(soundName)
+			.setMediaType(mediaType)
+			.setMediaPath(mediaPath)
+			.setMediaTitle(mediaTitle)
 			.setName("Work")
 			.build();
 
@@ -628,9 +628,9 @@ public class NacDatabase
 				alarm.setVibrate((cursor.getInt(8) != 0));
 				alarm.setVolume(cursor.getInt(9));
 				alarm.setAudioSource(cursor.getString(10));
-				alarm.setSoundType(cursor.getInt(11));
-				alarm.setSoundPath(cursor.getString(12));
-				alarm.setSoundName(cursor.getString(13));
+				alarm.setMediaType(cursor.getInt(11));
+				alarm.setMediaPath(cursor.getString(12));
+				alarm.setMediaTitle(cursor.getString(13));
 				alarm.setName(cursor.getString(14));
 				break;
 			case 3:
@@ -645,9 +645,9 @@ public class NacDatabase
 				alarm.setDays(cursor.getInt(5));
 				alarm.setRepeat((cursor.getInt(6) != 0));
 				alarm.setVibrate((cursor.getInt(7+offset) != 0));
-				alarm.setSoundType(cursor.getInt(8+offset));
-				alarm.setSoundPath(cursor.getString(9+offset));
-				alarm.setSoundName(cursor.getString(10+offset));
+				alarm.setMediaType(cursor.getInt(8+offset));
+				alarm.setMediaPath(cursor.getString(9+offset));
+				alarm.setMediaTitle(cursor.getString(10+offset));
 				alarm.setName(cursor.getString(11+offset));
 				break;
 			case 1:
@@ -660,13 +660,13 @@ public class NacDatabase
 				alarm.setDays(cursor.getInt(6));
 				alarm.setRepeat((cursor.getInt(7) != 0));
 				alarm.setVibrate((cursor.getInt(8) != 0));
-				alarm.setSoundPath(cursor.getString(9));
+				alarm.setMediaPath(cursor.getString(9));
 				alarm.setName(cursor.getString(10));
 				// Index 11: NFC tag
-				alarm.setSoundType(NacMedia.getType(context,
-					alarm.getSoundPath()));
-				alarm.setSoundName(NacMedia.getTitle(context,
-					alarm.getSoundPath()));
+				alarm.setMediaType(NacMedia.getType(context,
+					alarm.getMediaPath()));
+				alarm.setMediaTitle(NacMedia.getTitle(context,
+					alarm.getMediaPath()));
 				break;
 		}
 
@@ -910,17 +910,17 @@ public class NacDatabase
 			public static final String COLUMN_AUDIO_SOURCE = "AudioSource";
 
 			/**
-			 * Type of sound played.
+			 * Type of media.
 			 */
 			public static final String COLUMN_SOUND_TYPE = "SoundType";
 
 			/**
-			 * Path to the sound that is played when the alarm goes off.
+			 * Path to the media file.
 			 */
 			public static final String COLUMN_SOUND_PATH = "SoundPath";
 
 			/**
-			 * Name of the sound played.
+			 * Title of the media.
 			 */
 			public static final String COLUMN_SOUND_NAME = "SoundName";
 
@@ -935,7 +935,7 @@ public class NacDatabase
 			public static final String COLUMN_24HOURFORMAT = "HourFormat";
 
 			/**
-			 * Sound played when the alarm is run.
+			 * Path to the media file.
 			 */
 			public static final String COLUMN_SOUND = "Sound";
 

@@ -305,10 +305,9 @@ public class NacForegroundService
 		String tag = "NFC Alarm Clock:NacForegroundService";
 		PowerManager pm = (PowerManager) getSystemService(
 			Context.POWER_SERVICE);
-		this.mWakeLock = pm.newWakeLock(
-			PowerManager.SCREEN_BRIGHT_WAKE_LOCK|PowerManager.ACQUIRE_CAUSES_WAKEUP,
+		this.mWakeLock = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP,
 			tag);
-		long timeout = shared.getAutoDismissTime() * 60 * 1000;
+		long timeout = shared.getAutoDismissTime() * 59 * 1000;
 
 		this.mWakeLock.acquire(timeout);
 	}
