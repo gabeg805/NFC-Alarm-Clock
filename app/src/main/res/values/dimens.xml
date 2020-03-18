@@ -8,7 +8,7 @@
 	<dimen name="ml_pref_checkbox">20dp</dimen>
 	<dimen name="isz_general">22dp</dimen>
 	<dimen name="isz_general_tweak">24dp</dimen>
-	<dimen name="tsz_general">16sp</dimen>
+	<!-- <dimen name="tsz_general">16sp</dimen> -->
 
 
 	<!-- Alarm card -->
@@ -155,7 +155,6 @@
 	<dimen name="m_dlg">10dp</dimen>
 	<dimen name="m_dlg_days">25dp</dimen>
 	<dimen name="m_dlg_name">10dp</dimen>
-	<dimen name="mr_dlg_permission">25dp</dimen>
 
 
 	<!-- Preference -->
@@ -184,6 +183,7 @@
 	<!-- Fragment sound -->
 	<dimen name="p_frg_buttons">10dp</dimen>
 	<dimen name="tsz_frg_buttons">16sp</dimen>
+	<!--
 	<dimen name="tsz_spotify_titles">20sp</dimen>
 	<dimen name="pt_spotify_titles">10dp</dimen>
 	<dimen name="pb_spotify_titles">10dp</dimen>
@@ -191,6 +191,7 @@
 	<dimen name="isz_frg_spotify_image">130dp</dimen>
 	<dimen name="sp_frg_spotify_cover_text">10dp</dimen>
 	<dimen name="p_frg_spotify_cover">20dp</dimen>
+	-->
 
 
 	<!-- Media fragment -->

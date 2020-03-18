@@ -1,9 +1,11 @@
 package com.nfcalarmclock;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import java.io.File;
 import java.util.ArrayList;
@@ -70,30 +72,37 @@ public class NacMedia
 		 * current directory if specified, and create a file tree out of the
 		 * output.
 		 */
+		@SuppressWarnings("deprecation")
+		@TargetApi(Build.VERSION_CODES.Q)
 		public void scan(Context context, boolean filter)
 		{
 			NacTreeNode<String> currentDir = this.getDirectory();
 			String currentPath = NacFile.toRelativePath(this.getDirectoryPath());
-			String home = NacFileBrowser.getHome();
+			boolean canQueryRelativePath = NacMedia.canQueryRelativePath();
 			Uri baseUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 			String[] columns = new String[] {
 				MediaStore.Audio.Media._ID,
-				MediaStore.Audio.Media.RELATIVE_PATH,
+					canQueryRelativePath ?
+						MediaStore.Audio.Media.RELATIVE_PATH :
+						MediaStore.Audio.Media.DATA,
 				MediaStore.Audio.Media.DISPLAY_NAME,
 				};
 			Cursor c = context.getContentResolver().query(baseUri, columns,
 				null, null, "_display_name");
+			int idIndex = c.getColumnIndex(columns[0]);
+			int pathIndex = c.getColumnIndex(columns[1]);
+			int nameIndex = c.getColumnIndex(columns[2]);
 
 			while (c.moveToNext())
 			{
-				int idIndex = c.getColumnIndex(MediaStore.Audio.Media._ID);
-				int pathIndex = c.getColumnIndex(
-					MediaStore.Audio.Media.RELATIVE_PATH);
-				int nameIndex = c.getColumnIndex(
-					MediaStore.Audio.Media.DISPLAY_NAME);
 				long id = c.getLong(idIndex);
 				String path = NacFile.strip(c.getString(pathIndex));
 				String name = c.getString(nameIndex);
+
+				if (!canQueryRelativePath)
+				{
+					path = NacMedia.parseRelativePath(path);
+				}
 
 				if (filter && !currentPath.equals(path))
 				{
@@ -113,6 +122,8 @@ public class NacMedia
 				this.add(name, id);
 				this.cd(currentDir);
 			}
+
+			c.close();
 		}
 
 		/**
@@ -123,6 +134,24 @@ public class NacMedia
 			this.scan(context, false);
 		}
 
+	}
+
+	/**
+	 * @return True if the current build can query the relative path, and False
+	 *         otherwise.
+	 */
+	public static boolean canQueryRelativePath()
+	{
+		return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q);
+	}
+
+	/**
+	 * @return True if the current build can query the volume name, and False
+	 *         otherwise.
+	 */
+	public static boolean canQueryVolumeName()
+	{
+		return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q);
 	}
 
 	/**
@@ -276,16 +305,23 @@ public class NacMedia
 	/**
 	 * @return The relative path.
 	 */
+	@SuppressWarnings("deprecation")
+	@TargetApi(Build.VERSION_CODES.Q)
 	public static String getRelativePath(Context context, Uri contentUri)
 	{
 		String contentPath = contentUri.toString();
+		boolean canQueryRelativePath = NacMedia.canQueryRelativePath();
 
 		if (!contentPath.startsWith("content://"))
 		{
-			return NacFile.dirname(contentPath);
+			return NacMedia.parseRelativePath(contentPath);
 		}
 
-		String[] columns = new String[] { MediaStore.Audio.Media.RELATIVE_PATH };
+		String[] columns = new String[] {
+				canQueryRelativePath ?
+					MediaStore.Audio.Media.RELATIVE_PATH :
+					MediaStore.Audio.Media.DATA,
+				};
 		Cursor c = context.getContentResolver().query(contentUri, columns, null,
 			null, null);
 		String path = "";
@@ -294,9 +330,13 @@ public class NacMedia
 
 		try
 		{
-			int pathIndex = c.getColumnIndexOrThrow(
-				MediaStore.Audio.Media.RELATIVE_PATH);
+			int pathIndex = c.getColumnIndexOrThrow(columns[0]);
 			path = c.getString(pathIndex);
+
+			if (!canQueryRelativePath)
+			{
+				path = NacMedia.parseRelativePath(path);
+			}
 		}
 		catch (IllegalArgumentException e)
 		{
@@ -445,13 +485,21 @@ public class NacMedia
 	/**
 	 * @return The volume name.
 	 */
+	@SuppressWarnings("deprecation")
+	@TargetApi(Build.VERSION_CODES.Q)
 	public static String getVolumeName(Context context, Uri contentUri)
 	{
+		String contentPrefix = "content://";
 		String contentPath = contentUri.toString();
 
-		if (!contentPath.startsWith("content://"))
+		if (!contentPath.startsWith(contentPrefix))
 		{
 			return "";
+		}
+
+		if (!NacMedia.canQueryVolumeName())
+		{
+			return NacMedia.parseVolumeName(contentPath);
 		}
 
 		String[] columns = new String[] { MediaStore.Audio.Media.VOLUME_NAME };
@@ -463,8 +511,7 @@ public class NacMedia
 
 		try
 		{
-			int volumeIndex = c.getColumnIndexOrThrow(
-				MediaStore.Audio.Media.VOLUME_NAME);
+			int volumeIndex = c.getColumnIndexOrThrow(columns[0]);
 			volume = c.getString(volumeIndex);
 		}
 		catch (IllegalArgumentException e)
@@ -595,6 +642,49 @@ public class NacMedia
 	public static boolean isSpotify(String path)
 	{
 		return path.startsWith("spotify");
+	}
+
+	/**
+	 * Parse the relative path from a path retrieved by querying for
+	 * MediaStore.Audio.Media.DATA
+	 *
+	 * This should only be done on any version before Q.
+	 */
+	public static String parseRelativePath(String filePath)
+	{
+		String relativeFilePath = NacFile.toRelativePath(filePath);
+		String relativePath = NacFile.dirname(relativeFilePath);
+
+		return NacFile.strip(relativePath);
+	}
+
+	/**
+	 * Parse the volume name from a path.
+	 *
+	 * This should only be done on any version before Q.
+	 */
+	public static String parseVolumeName(String contentPath)
+	{
+		String contentPrefix = "content://";
+		String[] items = contentPath.replace(contentPrefix, "").split("/");
+		int index = 0;
+
+		if (items.length == 0)
+		{
+			return "";
+		}
+
+		if (items[0].isEmpty())
+		{
+			index++;
+		}
+
+		if (items[index].equals("media"))
+		{
+			index++;
+		}
+
+		return items[index];
 	}
 
 	/**

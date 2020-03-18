@@ -79,26 +79,29 @@ public class NacCalendar
 		String secunit = (sec != 1) ? "seconds" : "second";
 		String msg = prefix + " in ";
 		String format = "%1$d %2$s %3$d %4$s";
+		Locale locale = Locale.getDefault();
 
 		if (day > 0)
 		{
-			msg += String.format(format, day, dayunit, hr, hrunit);
+			msg += String.format(locale, format, day, dayunit, hr, hrunit);
 		}
 		else
 		{
 			if (hr > 0)
 			{
-				msg += String.format(format, hr, hrunit, min, minunit);
+				msg += String.format(locale, format, hr, hrunit, min, minunit);
 			}
 			else
 			{
 				if (min > 0)
 				{
-					msg += String.format(format, min, minunit, sec, secunit);
+					msg += String.format(locale, format, min, minunit, sec,
+						secunit);
 				}
 				else
 				{
-					msg += String.format(format.substring(0, 9), sec, secunit);
+					msg += String.format(locale, format.substring(0, 9), sec,
+						secunit);
 				}
 			}
 		}

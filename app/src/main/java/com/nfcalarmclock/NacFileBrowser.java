@@ -164,6 +164,7 @@ public class NacFileBrowser
 	/**
 	 * @return The container view.
 	 */
+	@SuppressWarnings("InflateParams")
 	private NacButtonGroup getContainer()
 	{
 		Context context = this.getContext();
@@ -174,6 +175,7 @@ public class NacFileBrowser
 		{
 			NacButtonGroup group = (NacButtonGroup) LayoutInflater.from(context)
 				.inflate(R.layout.nac_file_browser, null);
+				//.inflate(R.layout.nac_file_browser, container, false);
 			container.addView(group);
 			return group;
 		}
@@ -349,7 +351,6 @@ public class NacFileBrowser
 	/**
 	 * Populate views into the browser.
 	 */
-	// To-do: The previous directory has an extra '/' in the path.
 	private void populateEntries(String path)
 	{
 		String home = NacFileBrowser.getHome();

@@ -6,6 +6,7 @@
 	android:layout_height="match_parent"
 	android:orientation="vertical">
 
+<!--
 	<ScrollView
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
@@ -21,7 +22,7 @@
 			android:orientation="vertical"
 			android:scrollbars="vertical">
 
-			<!-- Search bar -->
+			Search bar
 			<androidx.appcompat.widget.SearchView
 				android:id="@+id/search"
 				android:layout_width="match_parent"
@@ -30,7 +31,7 @@
 				android:iconifiedByDefault="true"
 				/>
 
-			<!-- Selected item -->
+			Selected item
 			<LinearLayout
 				android:id="@+id/selected"
 				android:layout_width="match_parent"
@@ -52,7 +53,7 @@
 
 			</LinearLayout>
 
-			<!-- Tracks -->
+			Tracks
 			<LinearLayout
 				android:id="@+id/tracks"
 				android:layout_width="match_parent"
@@ -71,7 +72,7 @@
 
 			</LinearLayout>
 
-			<!-- Artists -->
+			Artists
 			<LinearLayout
 				android:id="@+id/artists"
 				android:layout_width="match_parent"
@@ -89,7 +90,7 @@
 					/>
 			</LinearLayout>
 
-			<!-- Playlists -->
+			Playlists
 			<LinearLayout
 				android:id="@+id/playlists"
 				android:layout_width="match_parent"
@@ -108,7 +109,7 @@
 
 			</LinearLayout>
 
-			<!-- Albums -->
+			Albums
 			<LinearLayout
 				android:id="@+id/albums"
 				android:layout_width="match_parent"
@@ -132,5 +133,6 @@
 	</ScrollView>
 
 	<include layout="@layout/frg_buttons" />
+-->
 
 </LinearLayout>

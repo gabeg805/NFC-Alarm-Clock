@@ -16,9 +16,7 @@
 
 	<!-- Menu -->
 	<string name="menu_next_run_time">Show next run time</string>
-	<string name="menu_next_alarm">Show next alarm</string>
 	<string name="menu_settings">Settings</string>
-	<string name="menu_sort">Sort</string>
 
 
 	<!-- Notification -->
@@ -60,11 +58,6 @@
 
 	<!-- Rate my app dialog -->
 	<string name="dlg_rate_my_app">If you have been enjoying the <b>NFC Alarm Clock</b> app, please take a moment to rate it. Thank you for your support!</string>
-
-
-	<!-- Draw overlay permission dialog -->
-	<string name="dlg_permission_draw_overlay">Allow <b>NFC Alarm Clock</b> to be shown over other apps?</string>
-	<string name="dlg_permission_draw_overlay_explanation">Without this permission, <b>NFC Alarm Clock</b> will be unable to open when an alarm goes off.\n\nOn Android 10, there are new restrictions in place to prevent apps from opening when they are not in focus. If apps are not in focus, they are unable to open up from the background.</string>
 
 
 	<!-- Audio source dialog -->
@@ -385,9 +378,11 @@
 
 	<!-- Spotify -->
 	<string name="frg_spotify_search_hint">Search spotify&#8230;</string>
+	<!--
 	<string name="frg_spotify_albums">Albums</string>
 	<string name="frg_spotify_playlists">Playlists</string>
 	<string name="frg_spotify_top_artists">Top Artists</string>
 	<string name="frg_spotify_top_tracks">Top Tracks</string>
+	-->
 
 </resources>

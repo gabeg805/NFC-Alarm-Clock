@@ -198,10 +198,10 @@ public class NacMediaActivity
 		{
 			list[1] = fragment;
 		}
-		else if (fragment instanceof NacSpotifyFragment)
-		{
-			list[2] = fragment;
-		}
+		//else if (fragment instanceof NacSpotifyFragment)
+		//{
+		//	list[2] = fragment;
+		//}
 
 		this.fragmentSelected(fragment);
 	}
@@ -446,17 +446,17 @@ public class NacMediaActivity
 					return NacRingtoneFragment.newInstance(media);
 				}
 			}
-			else if (position == 2)
-			{
-				if (alarm != null)
-				{
-					return NacSpotifyFragment.newInstance(alarm);
-				}
-				else if (media!= null)
-				{
-					return NacSpotifyFragment.newInstance(media);
-				}
-			}
+			//else if (position == 2)
+			//{
+			//	if (alarm != null)
+			//	{
+			//		return NacSpotifyFragment.newInstance(alarm);
+			//	}
+			//	else if (media!= null)
+			//	{
+			//		return NacSpotifyFragment.newInstance(media);
+			//	}
+			//}
 
 			return null;
 		}

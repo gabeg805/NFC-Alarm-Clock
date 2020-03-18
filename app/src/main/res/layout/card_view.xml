@@ -214,7 +214,8 @@
 					android:paddingStart="@dimen/pl_sound"
 					android:paddingEnd="@dimen/pr_sound"
 					android:orientation="horizontal"
-					android:gravity="center_vertical">
+					android:gravity="center_vertical"
+					tools:ignore="UseCompoundDrawables">
 
 					<ImageView
 						android:id="@+id/sound_icon"
@@ -222,7 +223,6 @@
 						android:layout_height="@dimen/isz_general_tweak"
 						android:layout_marginEnd="@dimen/sp_sound"
 						android:src="@mipmap/music_note"
-						tools:ignore="ContentDescription"
 						/>
 
 					<TextView
@@ -295,14 +295,14 @@
 				android:paddingStart="@dimen/pl_name"
 				android:paddingEnd="@dimen/pr_name"
 				android:orientation="horizontal"
-				android:gravity="center_vertical">
+				android:gravity="center_vertical"
+				tools:ignore="UseCompoundDrawables">
 
 				<ImageView
 					android:layout_width="@dimen/isz_general"
 					android:layout_height="@dimen/isz_general"
 					android:layout_marginEnd="@dimen/sp_name"
 					android:src="@mipmap/label"
-					tools:ignore="ContentDescription"
 					/>
 
 				<TextView
@@ -339,7 +339,8 @@
 					android:paddingBottom="@dimen/pb_delete"
 					android:paddingStart="@dimen/pl_delete"
 					android:paddingEnd="@dimen/pr_delete"
-					android:orientation="horizontal">
+					android:orientation="horizontal"
+					tools:ignore="UseCompoundDrawables">
 
 					<ImageView
 						android:layout_width="@dimen/isz_general"

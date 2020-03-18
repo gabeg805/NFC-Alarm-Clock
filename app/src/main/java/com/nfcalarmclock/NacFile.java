@@ -589,6 +589,8 @@ public class NacFile
 	/**
 	 * Convert a path to a relative path.
 	 */
+	// To-do: See if you can just use relative paths?
+	@SuppressWarnings("SdCardPath")
 	public static String toRelativePath(String path)
 	{
 		String emulated = "/storage/emulated/0";
