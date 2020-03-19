@@ -197,8 +197,8 @@
 	<!-- Media fragment -->
 	<dimen name="pt_frg_music_path">10dp</dimen>
 	<dimen name="pb_frg_music_path">10dp</dimen>
-	<dimen name="pl_frg_music_path">30dp</dimen>
-	<dimen name="pr_frg_music_path">30dp</dimen>
+	<dimen name="pl_frg_music_path">15dp</dimen>
+	<dimen name="pr_frg_music_path">15dp</dimen>
 	<dimen name="pt_frg_sound">15dp</dimen>
 	<dimen name="pb_frg_sound">15dp</dimen>
 	<dimen name="sp_frg_sound">15dp</dimen>

@@ -6,7 +6,6 @@ import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 /**
  * A music file browser.
@@ -32,11 +31,6 @@ public class NacFileBrowser
 	private NacMedia.Tree mFileTree;
 
 	/**
-	 * The path view.
-	 */
-	private TextView mPathView;
-
-	/**
 	 * The container view for the directory/file buttons.
 	 */
 	private LinearLayout mContainer;
@@ -53,14 +47,12 @@ public class NacFileBrowser
 
 	/**
 	 */
-	public NacFileBrowser(View root, int pathId, int groupId)
+	public NacFileBrowser(View root, int groupId)
 	{
-		String home = NacFileBrowser.getHome();
 		Context context = root.getContext();
-		NacMedia.Tree tree = new NacMedia.Tree(home);
+		NacMedia.Tree tree = new NacMedia.Tree("");
 		this.mContext = context;
 		this.mFileTree = tree;
-		this.mPathView = (TextView) root.findViewById(pathId);
 		this.mContainer = (LinearLayout) root.findViewById(groupId);
 		this.mSelected = null;
 		this.mListener = null;
@@ -204,14 +196,6 @@ public class NacFileBrowser
 	}
 
 	/**
-	 * @return The home directory.
-	 */
-	public static String getHome()
-	{
-		return Environment.getExternalStorageDirectory().toString();
-	}
-
-	/**
 	 * @return The OnClickListener.
 	 */
 	private OnClickListener getListener()
@@ -247,14 +231,6 @@ public class NacFileBrowser
 		NacFile.Metadata metadata = (NacFile.Metadata) view.getTag();
 
 		return metadata.getPath();
-	}
-
-	/**
-	 * @return The view displaying the current file path.
-	 */
-	public TextView getPathView()
-	{
-		return this.mPathView;
 	}
 
 	/**
@@ -353,12 +329,9 @@ public class NacFileBrowser
 	 */
 	private void populateEntries(String path)
 	{
-		String home = NacFileBrowser.getHome();
 		NacMedia.Tree tree = this.getTree();
 
-		this.getPathView().setText(path);
-
-		if (!path.equals(home))
+		if (!path.isEmpty())
 		{
 			NacFile.Metadata metadata = new NacFile.Metadata(path, "..", -1);
 
@@ -473,7 +446,7 @@ public class NacFileBrowser
 	 */
 	public void show()
 	{
-		this.show(NacFileBrowser.getHome());
+		this.show("");
 	}
 
 }

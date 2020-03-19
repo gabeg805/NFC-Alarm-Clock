@@ -33,33 +33,12 @@ public class NacFile
 		private long mId;
 
 		/**
-		 * Flag indicating whether the file is a directory.
-		 */
-		private boolean mIsDirectory;
-
-		/**
-		 * Flag indicating whether the file is a file.
-		 */
-		private boolean mIsFile;
-
-		/**
 		 */
 		public Metadata(String directory, String name, long id)
 		{
 			this.mDirectory = directory;
 			this.mName = name;
 			this.mId = id;
-			this.mIsDirectory = false;
-			this.mIsFile = false;
-
-			if (!directory.isEmpty())
-			{
-				String path = this.getPath();
-				File file = new File(path);
-
-				this.mIsDirectory = file.isDirectory();
-				this.mIsFile = file.isFile();
-			}
 		}
 
 		/**
@@ -98,7 +77,10 @@ public class NacFile
 		 */
 		public String getPath()
 		{
-			return String.format("%s/%s", this.getDirectory(), this.getName());
+			String dir = this.getDirectory();
+			String name = this.getName();
+
+			return dir.isEmpty() ? name : String.format("%s/%s", dir, name);
 		}
 
 		/**
@@ -106,7 +88,7 @@ public class NacFile
 		 */
 		public boolean isDirectory()
 		{
-			return this.mIsDirectory;
+			return (this.getId() == -1);
 		}
 
 		/**
@@ -114,7 +96,7 @@ public class NacFile
 		 */
 		public boolean isFile()
 		{
-			return this.mIsFile;
+			return (this.getId() != -1);
 		}
 
 		/**
@@ -180,7 +162,8 @@ public class NacFile
 		{
 			NacTreeNode<String> dir = this.getDirectory();
 
-			if (dir == null)
+			//if (dir == null)
+			if ((dir == null) || (name == null) || name.isEmpty())
 			{
 				return;
 			}
@@ -307,8 +290,17 @@ public class NacFile
 
 			while (ref != null)
 			{
-				path = path.isEmpty() ? node.getKey()
-					: String.format("%s/%s", ref.getKey(), path);
+				String key = ref.getKey();
+
+				if (path.isEmpty())
+				{
+					path = key;
+				}
+				else if (!key.isEmpty())
+				{
+					path = String.format("%s/%s", key, path);
+				}
+
 				ref = ref.getRoot();
 			}
 

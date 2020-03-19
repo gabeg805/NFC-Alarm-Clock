@@ -547,14 +547,7 @@ public class NacMedia
 	 */
 	public static boolean isDirectory(String path)
 	{
-		if (path.startsWith("/"))
-		{
-			File file = new File(path);
-
-			return file.isDirectory();
-		}
-
-		return false;
+		return !path.startsWith("content://");
 	}
 
 	/**

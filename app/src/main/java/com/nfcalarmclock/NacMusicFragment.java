@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -35,6 +36,11 @@ public class NacMusicFragment
 	private NacFileBrowser mFileBrowser;
 
 	/**
+	 * Text view showing the current directory.
+	 */
+	private TextView mDirectoryTextView;
+
+	/**
 	 * Read request callback success result.
 	 */
 	public static final int READ_REQUEST = 1;
@@ -56,6 +62,14 @@ public class NacMusicFragment
 		NacFileBrowser browser = this.getFileBrowser();
 
 		return (browser != null) ? browser.previousDirectory() : false;
+	}
+
+	/**
+	 * @return The view displaying the current directory path.
+	 */
+	public TextView getDirectoryTextView()
+	{
+		return this.mDirectoryTextView;
 	}
 
 	/**
@@ -150,7 +164,10 @@ public class NacMusicFragment
 	{
 		if (metadata.isDirectory())
 		{
+			String textPath = path.isEmpty() ? "" : String.format("%s/", path);
+
 			this.setMedia(path);
+			this.getDirectoryTextView().setText(textPath);
 			browser.show(path);
 		}
 		else if (metadata.isFile())
@@ -215,7 +232,6 @@ public class NacMusicFragment
 
 		if (!NacPermissions.hasRead(getContext()))
 		{
-			NacUtility.toast(getContext(), "You don't have read permissions!");
 			return;
 		}
 
@@ -228,29 +244,24 @@ public class NacMusicFragment
 	private void setupFileBrowser(View root)
 	{
 		Context context = getContext();
-		NacFileBrowser browser = new NacFileBrowser(root, R.id.path,
-			R.id.container);
-		String home = NacFileBrowser.getHome();
-		String path = getMediaPath();
-		this.mFileBrowser = browser;
-		String absolutePath = home;
+		NacFileBrowser browser = new NacFileBrowser(root, R.id.container);
+		TextView textview = (TextView) root.findViewById(R.id.path);
+		String contentPath = getMediaPath();
+		String dirPath = contentPath;
 		String filePath = "";
+		this.mDirectoryTextView = textview;
+		this.mFileBrowser = browser;
 
-		if (NacMedia.isDirectory(path))
+		if (NacMedia.isFile(context, contentPath))
 		{
-			absolutePath = path;
-		}
-		else if (NacMedia.isFile(context, path))
-		{
-			String relativePath = NacMedia.getRelativePath(context, path);
-			String name = NacMedia.getName(context, path);
-
-			absolutePath = String.format("%s/%s", home, relativePath);
-			filePath = String.format("%s%s", absolutePath, name);
+			String name = NacMedia.getName(context, contentPath);
+			dirPath = NacMedia.getRelativePath(context, contentPath);
+			filePath = String.format("%s%s", dirPath, name);
 		}
 
+		this.getDirectoryTextView().setText(dirPath);
 		browser.setOnClickListener(this);
-		browser.show(absolutePath, filePath);
+		browser.show(dirPath, filePath);
 	}
 
 }
