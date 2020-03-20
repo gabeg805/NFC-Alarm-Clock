@@ -231,6 +231,12 @@ public class NacFile
 					}
 
 					toDir = toDir.getChild(items[i]);
+
+					if (toDir == null)
+					{
+						break;
+					}
+
 					this.cd(toDir);
 				}
 			}
@@ -360,6 +366,12 @@ public class NacFile
 					}
 
 					newDir = newDir.getChild(items[i]);
+
+					if (newDir == null)
+					{
+						break;
+					}
+
 					this.setDirectory(newDir);
 				}
 

@@ -179,6 +179,8 @@ public class NacMusicFragment
 			{
 				if (this.safePlay(uri, true) < 0)
 				{
+					NacUtility.printf("Unable to play music : %d | %s",
+						metadata.getId(), metadata.getPath());
 					NacUtility.toast(context, "Unable to play music");
 				}
 			}
@@ -257,6 +259,14 @@ public class NacMusicFragment
 			String name = NacMedia.getName(context, contentPath);
 			dirPath = NacMedia.getRelativePath(context, contentPath);
 			filePath = String.format("%s%s", dirPath, name);
+		}
+		else if (NacMedia.isDirectory(contentPath))
+		{
+			dirPath = contentPath;
+		}
+		else
+		{
+			dirPath = "";
 		}
 
 		this.getDirectoryTextView().setText(dirPath);

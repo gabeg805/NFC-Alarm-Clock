@@ -153,6 +153,7 @@ public class NacRingtoneFragment
 
 			if (this.safePlay(uri, true) < 0)
 			{
+				NacUtility.printf("Unable to play ringtone : %s", path);
 				NacUtility.toast(context, "Unable to play ringtone");
 			}
 		}

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Handler;
 import android.view.animation.Animation;
@@ -96,7 +97,12 @@ public class NacCardView
 	/**
 	 * Card animation.
 	 */
-	private NacCardSlideAnimation mAnimation;
+	private NacCardSlideAnimation mSlideAnimation;
+
+	/**
+	 * Color animator for highlighting the card.
+	 */
+	private ObjectAnimator mHighlightAnimator;
 
 	/**
 	 * Card measurement
@@ -158,13 +164,14 @@ public class NacCardView
 		this.mDivider = (View) root.findViewById(R.id.nac_divider);
 		this.mCopy = (RelativeLayout) root.findViewById(R.id.nac_swipe_copy);
 		this.mDelete = (RelativeLayout) root.findViewById(R.id.nac_swipe_delete);
-		this.mAnimation = new NacCardSlideAnimation(this.mCardView,
+		this.mSlideAnimation = new NacCardSlideAnimation(this.mCardView,
 			this.mSummary, this.mExtra);
+		this.mHighlightAnimator = null;
 		this.mMeasure = measure;
 		this.mListener = null;
 		this.mState = State.COLLAPSED;
 
-		this.mAnimation.setOnAnimationListener(this);
+		this.getSlideAnimation().setOnAnimationListener(this);
 	}
 
 	/**
@@ -173,11 +180,12 @@ public class NacCardView
 	public void animateCollapse()
 	{
 		CardView card = this.getCardView();
-		NacCardSlideAnimation animation = this.getAnimation();
+		NacCardSlideAnimation animation = this.getSlideAnimation();
 		int expandHeight = this.getExpandHeight();
 		int collapseHeight = this.getCollapseHeight();
 
 		this.setState(State.COLLAPSED);
+		this.resetHighlight();
 		animation.setDuration(COLLAPSE_DURATION);
 		animation.setHeights(expandHeight, collapseHeight);
 		animation.setupForClose();
@@ -192,17 +200,92 @@ public class NacCardView
 	public void animateExpand()
 	{
 		CardView card = this.getCardView();
-		NacCardSlideAnimation animation = this.getAnimation();
+		NacCardSlideAnimation animation = this.getSlideAnimation();
 		int expandHeight = this.getExpandHeight();
 		int collapseHeight = this.getCollapseHeight();
 
 		this.setState(State.EXPANDED);
+		this.resetHighlight();
 		animation.setDuration(EXPAND_DURATION);
 		animation.setHeights(collapseHeight, expandHeight);
 		animation.setupForOpen();
 		card.setAnimation(animation);
 		card.startAnimation(animation);
 		//this.scroll(position);
+	}
+
+	/**
+	 * Call the state change listener.
+	 */
+	public void callStateChangeListener()
+	{
+		OnStateChangeListener listener = this.getListener();
+
+		if (listener != null)
+		{
+			listener.onStateChange(this, this.getState());
+		}
+	}
+
+	/**
+	 * @return The color animator from the expanded color, to the regular
+	 *         background color.
+	 */
+	private ObjectAnimator createCollapseColorAnimator()
+	{
+		int startId = R.attr.colorCardExpanded;
+		int endId = R.attr.colorCard;
+		ObjectAnimator animator = this.createColorAnimator(startId, endId);
+
+		animator.setDuration(COLLAPSE_COLOR_DURATION);
+
+		return animator;
+	}
+
+	/**
+	 * @return An object animator that will change the backgroun color of the
+	 *         CardView from the specified colors.
+	 */
+	private ObjectAnimator createColorAnimator(int startId, int endId)
+	{
+		Context context = this.getContext();
+		CardView card = this.getCardView();
+		int start = NacUtility.getThemeAttrColor(context, startId);
+		int end = NacUtility.getThemeAttrColor(context, endId);
+
+		return ObjectAnimator.ofArgb(card, "backgroundColor", start, end);
+	}
+
+	/**
+	 * @return The color animator from the regular background color, to the
+	 *         expanded color.
+	 */
+	private ObjectAnimator createExpandColorAnimator()
+	{
+		int startId = R.attr.colorCard;
+		int endId = R.attr.colorCardExpanded;
+		ObjectAnimator animator = this.createColorAnimator(startId, endId);
+
+		animator.setDuration(EXPAND_COLOR_DURATION);
+
+		return animator;
+	}
+
+	/**
+	 * @return The color animator from the expanded color, to the regular
+	 *         background color.
+	 */
+	private ObjectAnimator createHighlightColorAnimator()
+	{
+		int startId = R.attr.colorCard;
+		int endId = R.attr.colorCardExpanded;
+		ObjectAnimator animator = this.createColorAnimator(startId, endId);
+
+		animator.setDuration(HIGHLIGHT_DURATION);
+		animator.setRepeatCount(1);
+		animator.setRepeatMode(ObjectAnimator.REVERSE);
+
+		return animator;
 	}
 
 	/**
@@ -258,14 +341,6 @@ public class NacCardView
 	}
 
 	/**
-	 * @return The card animation.
-	 */
-	private NacCardSlideAnimation getAnimation()
-	{
-		return this.mAnimation;
-	}
-
-	/**
 	 * @return The card height.
 	 */
 	private int getCardHeight()
@@ -283,37 +358,11 @@ public class NacCardView
 	}
 
 	/**
-	 * @return The color transition from the highlight color to the regular
-	 *         card background color.
-	 */
-	private TransitionDrawable getCollapseColorTransition()
-	{
-		int startId = R.attr.colorCardExpanded;
-		int endId = R.attr.colorCard;
-
-		return this.getColorTransition(startId, endId);
-	}
-
-	/**
 	 * @return The height of the card when it is collapsed.
 	 */
 	public int getCollapseHeight()
 	{
 		return this.mMeasure.getCollapseHeight();
-	}
-
-	/**
-	 * @return A color transition starting and ending on the provided colors.
-	 */
-	private TransitionDrawable getColorTransition(int startId, int endId)
-	{
-		Context context = this.getContext();
-		int start = NacUtility.getThemeAttrColor(context, startId);
-		int end = NacUtility.getThemeAttrColor(context, endId);
-		ColorDrawable[] color = {new ColorDrawable(start),
-			new ColorDrawable(end)};
-
-		return new TransitionDrawable(color);
 	}
 
 	/**
@@ -342,18 +391,6 @@ public class NacCardView
 	}
 
 	/**
-	 * @return The color transition from the highlight color to the regular
-	 *         card background color.
-	 */
-	private TransitionDrawable getExpandColorTransition()
-	{
-		int startId = R.attr.colorCard;
-		int endId = R.attr.colorCardExpanded;
-
-		return this.getColorTransition(startId, endId);
-	}
-
-	/**
 	 * @return The height of the card when it is expanded.
 	 */
 	public int getExpandHeight()
@@ -376,6 +413,14 @@ public class NacCardView
 	}
 
 	/**
+	 * @return The highlight color animator.
+	 */
+	private ObjectAnimator getHighlightAnimator()
+	{
+		return this.mHighlightAnimator;
+	}
+
+	/**
 	 * @return The OnStateChange listener.
 	 */
 	private OnStateChangeListener getListener()
@@ -389,6 +434,14 @@ public class NacCardView
 	private int getScreenHeight()
 	{
 		return this.mMeasure.getScreenHeight();
+	}
+
+	/**
+	 * @return The slide animation.
+	 */
+	private NacCardSlideAnimation getSlideAnimation()
+	{
+		return this.mSlideAnimation;
 	}
 
 	/**
@@ -413,17 +466,9 @@ public class NacCardView
 	 */
 	public void highlight()
 	{
-		Context context = this.getContext();
-		CardView card = this.getCardView();
-		int bg = NacUtility.getThemeAttrColor(context, R.attr.colorCard);
-		int highlight = NacUtility.getThemeAttrColor(context,
-			R.attr.colorCardExpanded);
-		ObjectAnimator animator = ObjectAnimator.ofArgb(card, "backgroundColor",
-			bg, highlight);
+		ObjectAnimator animator = this.createHighlightColorAnimator();
+		this.mHighlightAnimator = animator;
 
-		animator.setDuration(HIGHLIGHT_DURATION);
-		animator.setRepeatCount(1);
-		animator.setRepeatMode(ObjectAnimator.REVERSE);
 		animator.start();
 	}
 
@@ -513,12 +558,10 @@ public class NacCardView
 	@Override
 	public void onAnimationEnd(Animation animation)
 	{
-		CardView card = this.getCardView();
-		TransitionDrawable transition = this.getCollapseColorTransition();
+		ObjectAnimator animator = this.createCollapseColorAnimator();
 
 		this.callStateChangeListener();
-		card.setBackground(transition);
-		transition.startTransition(COLLAPSE_COLOR_DURATION);
+		animator.start();
 	}
 
 	/**
@@ -526,24 +569,22 @@ public class NacCardView
 	@Override
 	public void onAnimationStart(Animation animation)
 	{
-		CardView card = this.getCardView();
-		TransitionDrawable transition = this.getExpandColorTransition();
+		ObjectAnimator animator = this.createExpandColorAnimator();
 
 		this.callStateChangeListener();
-		card.setBackground(transition);
-		transition.startTransition(EXPAND_COLOR_DURATION);
+		animator.start();
 	}
 
 	/**
-	 * Call the state change listener.
+	 * Reset the animator that highlights card.
 	 */
-	public void callStateChangeListener()
+	public void resetHighlight()
 	{
-		OnStateChangeListener listener = this.getListener();
+		ObjectAnimator animator = this.getHighlightAnimator();
 
-		if (listener != null)
+		if ((animator != null) && animator.isRunning())
 		{
-			listener.onStateChange(this, this.getState());
+			animator.cancel();
 		}
 	}
 

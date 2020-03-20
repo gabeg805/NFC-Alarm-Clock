@@ -172,6 +172,11 @@ public class NacMedia
 			int artistIndex = c.getColumnIndexOrThrow(
 				MediaStore.Audio.Artists.ARTIST);
 			artist = c.getString(artistIndex);
+
+			if (artist.equals("<unknown>"))
+			{
+				artist = "Unknown";
+			}
 		}
 		catch (IllegalArgumentException e)
 		{
