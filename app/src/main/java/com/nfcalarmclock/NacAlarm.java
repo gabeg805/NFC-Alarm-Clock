@@ -606,6 +606,11 @@ public class NacAlarm
 	private ChangeTracker mTracker;
 
 	/**
+	 * Latch for the change tracker.
+	 */
+	private boolean mLatch;
+
+	/**
 	 */
 	public NacAlarm()
 	{
@@ -631,8 +636,8 @@ public class NacAlarm
 		this.setMediaPath(builder.getMediaPath());
 		this.setMediaTitle(builder.getMediaTitle());
 		this.setName(builder.getName());
-
-		this.mTracker = ChangeTracker.NONE;
+		this.setChangeTracker(ChangeTracker.NONE);
+		this.unlatchChangeTracker();
 	}
 
 	/**
@@ -678,7 +683,10 @@ public class NacAlarm
 			this.getOnChangeListener().onChange(this);
 		}
 
-		this.mTracker = ChangeTracker.NONE;
+		if (!this.isChangeTrackerLatched())
+		{
+			this.resetChangeTracker();
+		}
 	}
 
 	/**
@@ -960,6 +968,14 @@ public class NacAlarm
 	}
 
 	/**
+	 * @return True if the change tracker is latched, and False otherwise.
+	 */
+	public boolean isChangeTrackerLatched()
+	{
+		return this.mLatch;
+	}
+
+	/**
 	 * @return True if the alarm is snoozed and False otherwise.
 	 */
 	public boolean isSnoozed(NacSharedPreferences shared)
@@ -968,6 +984,15 @@ public class NacAlarm
 
 		return (shared.getPreventAppFromClosing()
 			&& (shared.getSnoozeCount(id) > 0));
+	}
+
+	/**
+	 * Latch the change tracker, so that if a change is made, it does not get
+	 * reset.
+	 */
+	public void latchChangeTracker()
+	{
+		this.mLatch = true;
 	}
 
 	/**
@@ -990,6 +1015,8 @@ public class NacAlarm
 		NacUtility.printf("Media Path   : %s", this.mMediaPath);
 		NacUtility.printf("Media Name   : %s", this.mMediaTitle);
 		NacUtility.printf("Name         : %s", this.mName);
+		NacUtility.printf("Change Track : %s", this.mTracker.toString());
+		NacUtility.printf("Latch        : %b", this.mLatch);
 	}
 
 	/**
@@ -997,7 +1024,7 @@ public class NacAlarm
 	 */
 	public void resetChangeTracker()
 	{
-		this.mTracker = ChangeTracker.NONE;
+		this.setChangeTracker(ChangeTracker.NONE);
 	}
 
 	/**
@@ -1026,7 +1053,7 @@ public class NacAlarm
 	public void setDays(EnumSet<NacCalendar.Day> days)
 	{
 		this.mDays = days;
-		this.mTracker = ChangeTracker.DAY;
+		this.setChangeTracker(ChangeTracker.DAY);
 	}
 
 	/**
@@ -1045,8 +1072,7 @@ public class NacAlarm
 	public void setEnabled(boolean enabled)
 	{
 		this.mEnabled = enabled;
-
-		this.mTracker = ChangeTracker.ENABLE;
+		this.setChangeTracker(ChangeTracker.ENABLE);
 	}
 
 	/**
@@ -1057,7 +1083,7 @@ public class NacAlarm
 	public void setHour(int hour)
 	{
 		this.mHour = hour;
-		this.mTracker = ChangeTracker.TIME;
+		this.setChangeTracker(ChangeTracker.TIME);
 	}
 
 	/**
@@ -1078,7 +1104,7 @@ public class NacAlarm
 	public void setMinute(int minute)
 	{
 		this.mMinute = minute;
-		this.mTracker = ChangeTracker.TIME;
+		this.setChangeTracker(ChangeTracker.TIME);
 	}
 
 	/**
@@ -1110,7 +1136,7 @@ public class NacAlarm
 	public void setRepeat(boolean repeat)
 	{
 		this.mRepeat = repeat;
-		this.mTracker = ChangeTracker.REPEAT;
+		this.setChangeTracker(ChangeTracker.REPEAT);
 	}
 
 	/**
@@ -1206,7 +1232,7 @@ public class NacAlarm
 			this.getDays().add(day);
 		}
 
-		this.mTracker = ChangeTracker.DAY;
+		this.setChangeTracker(ChangeTracker.DAY);
 	}
 
 	/**
@@ -1247,12 +1273,21 @@ public class NacAlarm
 	}
 
 	/**
+	 * Unlatch the change tracker, so that if a change is made, it will get
+	 * reset.
+	 */
+	public void unlatchChangeTracker()
+	{
+		this.mLatch = false;
+	}
+
+	/**
 	 * @return True if the alarm was enabled before the changed listener was
 	 *         called, and False otherwise.
 	 */
 	public boolean wasChanged()
 	{
-		return (this.mTracker != ChangeTracker.NONE);
+		return (this.getChangeTracker() != ChangeTracker.NONE);
 	}
 
 	/**

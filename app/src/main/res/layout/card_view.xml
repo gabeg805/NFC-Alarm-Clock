@@ -9,6 +9,7 @@
 	android:elevation="@dimen/elv_card"
 	app:cardBackgroundColor="?attr/colorCard"
 	tools:ignore="ContentDescription,RelativeOverlap,RtlSymmetry">
+	<!-- android:animateLayoutChanges="true" -->
 
 	<RelativeLayout
 		android:layout_width="match_parent"

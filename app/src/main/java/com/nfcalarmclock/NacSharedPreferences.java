@@ -564,7 +564,6 @@ public class NacSharedPreferences
 	public void editSnoozeCount(int id, int count, boolean commit)
 	{
 		String key = NacSharedKeys.getSnoozeCount(id);
-		NacUtility.printf("Edit Snooze Count : %d", count);
 
 		this.saveInt(key, count, commit);
 	}

@@ -29,7 +29,8 @@ public class NacCardAdapter
 		RecyclerView.OnItemTouchListener,
 		NacAlarm.OnChangeListener,
 		NacCardDelete.OnDeleteListener,
-		NacCardTouchHelper.Adapter
+		NacCardTouchHelper.Adapter,
+		NacCardView.OnStateChangeListener
 {
 
 	/**
@@ -312,6 +313,11 @@ public class NacCardAdapter
 	 */
 	public int find(NacAlarm alarm)
 	{
+		if (alarm == null)
+		{
+			return -1;
+		}
+
 		List<NacAlarm> alarmList = this.getAlarms();
 		int size = alarmList.size();
 		int id = alarm.getId();
@@ -343,6 +349,18 @@ public class NacCardAdapter
 	public List<NacAlarm> getAlarms()
 	{
 		return this.mAlarmList;
+	}
+
+	/**
+	 * @return The NacCardView for a given alarm.
+	 */
+	private NacCardView getCard(NacAlarm alarm)
+	{
+		int id = alarm.getId();
+		RecyclerView rv = this.getRecyclerView();
+		NacCardHolder holder = (NacCardHolder) rv.findViewHolderForItemId(id);
+
+		return (holder != null) ? holder.getNacCardView() : null;
 	}
 
 	/**
@@ -467,30 +485,6 @@ public class NacCardAdapter
 			}
 
 			list.add(pos, a);
-
-			//if (a.getEnabled())
-			//{
-			//	Calendar next = NacCalendar.getNext(a);
-			//	int pos = 0;
-
-			//	for (NacAlarm e : enabledAlarms)
-			//	{
-			//		Calendar cal = NacCalendar.getNext(e);
-
-			//		if (next.before(cal))
-			//		{
-			//			break;
-			//		}
-
-			//		pos++;
-			//	}
-
-			//	enabledAlarms.add(pos, a);
-			//}
-			//else
-			//{
-			//	disabledAlarms.add(a);
-			//}
 		}
 
 		sorted.addAll(enabledAlarms);
@@ -570,6 +564,7 @@ public class NacCardAdapter
 		card.init(alarm);
 		card.setOnDeleteListener(this);
 		card.setOnCreateContextMenuListener(this);
+		card.setOnStateChangeListener(this);
 
 		if (this.wasAddedWithFloatingButton())
 		{
@@ -762,50 +757,24 @@ public class NacCardAdapter
 		this.delete(position);
 	}
 
-	///**
-	// * Drag and reorder the alarm.
-	// *
-	// * @param  from  The position that the alarm is moving from.
-	// * @param  to  The position the alarm is moving to.
-	// */
-	//@Override
-	//public void onItemMove(int fromIndex, int toIndex)
-	//{
-	//	Context context = this.getContext();
-	//	NacAlarm fromAlarm = this.get(fromIndex);
-	//	NacAlarm toAlarm = this.get(toIndex);
-	//	Intent intent = NacIntent.createService(context, "swap", fromAlarm,
-	//		toAlarm);
-
-	//	this.setWasAddedWithFloatingButton(false);
-	//	this.startService(intent);
-	//	Collections.swap(this.getAlarms(), fromIndex, toIndex);
-	//	notifyItemMoved(fromIndex, toIndex);
-	//}
-
-	/**
-	 */
-	//@Override
-	//public boolean onLongClick(View view)
-	//{
-	//	RecyclerView rv = this.getRecyclerView();
-	//	NacCardHolder holder = (NacCardHolder) rv.findContainingViewHolder(view);
-
-	//	if (holder != null)
-	//	{
-	//		NacAlarm alarm = holder.getAlarm();
-
-	//		this.showAlarm(alarm);
-	//	}
-
-	//	return true;
-	//}
-
 	/**
 	 * @note Needed for RecyclerView.OnItemTouchListener
 	 */
 	public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept)
 	{
+	}
+
+	/**
+	 */
+	public void onStateChange(NacCardView card, NacCardView.State state)
+	{
+		NacAlarm alarm = card.getAlarm();
+
+		if (alarm.isChangeTrackerLatched() && card.isCollapsedState())
+		{
+			this.sortHighlight(alarm);
+			alarm.unlatchChangeTracker();
+		}
 	}
 
 	/**
@@ -895,8 +864,6 @@ public class NacCardAdapter
 	 */
 	private void showAlarmChange(NacAlarm alarm)
 	{
-		alarm.print();
-
 		if (!alarm.wasChanged())
 		{
 			return;
@@ -904,12 +871,10 @@ public class NacCardAdapter
 
 		if (alarm.getEnabled())
 		{
-			NacUtility.printf("Showing alarm runtime!");
 			this.showAlarmRuntime(alarm);
 		}
 		else
 		{
-			NacUtility.printf("Showing next alarm!");
 			this.showNextAlarm();
 		}
 	}
@@ -987,14 +952,13 @@ public class NacCardAdapter
 	/**
 	 * Sort an alarm into the alarm list.
 	 */
-	public int sortAlarm(NacAlarm alarm)
+	public int sortAlarm(NacAlarm alarm, int index)
 	{
 		if (alarm == null)
 		{
 			return -1;
 		}
 
-		int index = this.find(alarm);
 		int whereIndex = this.whereToPutAlarm(alarm);
 		int insertIndex = whereIndex;
 
@@ -1014,23 +978,41 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * Sort an alarm into the alarm list.
+	 */
+	public int sortAlarm(NacAlarm alarm)
+	{
+		int index = this.find(alarm);
+
+		return this.sortAlarm(alarm, index);
+	}
+
+	/**
 	 * Sort and highlight the alarm, if the alarm card is collapsed.
 	 */
 	public void sortHighlight(NacAlarm alarm)
 	{
-		int id = alarm.getId();
-		RecyclerView rv = this.getRecyclerView();
-		NacCardHolder holder = (NacCardHolder) rv.findViewHolderForItemId(id);
-		NacCardView card = (holder != null) ? holder.getNacCardView() : null;
+		NacCardView card = this.getCard(alarm);
 
-		//if ((card != null) && card.isCollapseState())
-		if (card != null)
+		if (card == null)
 		{
-			int index = this.sortAlarm(alarm);
+			return;
+		}
+		else if (card.isExpandedState())
+		{
+			alarm.latchChangeTracker();
+		}
+		else
+		{
+			int findIndex = this.find(alarm);
+			int sortIndex = this.sortAlarm(alarm, findIndex);
 
-			if (index >= 0)
+			if (alarm.isChangeTrackerLatched() && (findIndex == sortIndex))
 			{
-				rv.scrollToPosition(index);
+			}
+			else if (sortIndex >= 0)
+			{
+				this.getRecyclerView().scrollToPosition(sortIndex);
 				card.highlight();
 			}
 		}

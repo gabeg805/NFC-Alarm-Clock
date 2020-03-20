@@ -226,7 +226,8 @@ public class NacCardHolder
 
 		if (expandCard)
 		{
-			this.mCard.expand(getAdapterPosition());
+			//this.mCard.expand(getAdapterPosition());
+			this.mCard.expand();
 		}
 	}
 
@@ -343,9 +344,6 @@ public class NacCardHolder
 	}
 
 	/**
-	 * When delete button is clicked, call the delete listener to delete the view.
-	 *
-	 * @param  view  The delete view.
 	 */
 	@Override
 	public void onClick(View view)
@@ -355,17 +353,19 @@ public class NacCardHolder
 
 		if (id == R.id.nac_header)
 		{
-			this.mCard.toggle(getAdapterPosition());
+			//this.mCard.toggleState(getAdapterPosition());
+			this.mCard.toggleState();
 			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 
-			if (this.mCard.isCollapseState() && alarm.wasChanged())
-			{
-				alarm.changed();
-			}
+			//if (this.mCard.isCollapsedState() && alarm.wasChanged())
+			//{
+			//	alarm.changed();
+			//}
 		}
 		else if (id == R.id.nac_summary)
 		{
-			this.mCard.expand(getAdapterPosition());
+			//this.mCard.expand(getAdapterPosition());
+			this.mCard.expand();
 			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		}
 		else if (id == R.id.nac_collapse)
@@ -373,10 +373,10 @@ public class NacCardHolder
 			this.mCard.collapse();
 			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 
-			if (alarm.wasChanged())
-			{
-				alarm.changed();
-			}
+			//if (alarm.wasChanged())
+			//{
+			//	alarm.changed();
+			//}
 		}
 		else if (id == R.id.nac_time_parent)
 		{
@@ -466,7 +466,6 @@ public class NacCardHolder
 			return true;
 		}
 
-		//view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		alarm.setRepeat(false);
 		alarm.setDays(0);
 		alarm.changed();
@@ -490,11 +489,15 @@ public class NacCardHolder
 		this.mSound.setVolumeIcon();
 	}
 
+	/**
+	 */
 	@Override
 	public void onStartTrackingTouch(SeekBar seekBar)
 	{
 	}
 
+	/**
+	 */
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar)
 	{
@@ -569,6 +572,15 @@ public class NacCardHolder
 		View root = this.getRoot();
 
 		this.mCard.setOnCreateContextMenuListener(root, listener);
+	}
+
+	/**
+	 * Set the listener for when the alarm card expands or collapses.
+	 */
+	public void setOnStateChangeListener(
+		NacCardView.OnStateChangeListener listener)
+	{
+		this.mCard.setOnStateChangeListener(listener);
 	}
 
 }

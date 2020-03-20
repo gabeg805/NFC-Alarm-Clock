@@ -17,6 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.animation.LayoutTransition;
+import android.transition.TransitionManager;
+
 /**
  */
 public class NacCardView
@@ -24,9 +27,17 @@ public class NacCardView
 {
 
 	/**
+	 * Card state change listener.
+	 */
+	public interface OnStateChangeListener
+	{
+		public void onStateChange(NacCardView card, State state);
+	}
+
+	/**
 	 * Card state.
 	 */
-	public enum CardState
+	public enum State
 	{
 		COLLAPSED,
 		EXPANDED
@@ -93,14 +104,14 @@ public class NacCardView
 	private NacCardMeasure mMeasure;
 
 	/**
-	 * Transition drawable.
+	 * State change listener.
 	 */
-	//private TransitionDrawable mTransition;
+	private OnStateChangeListener mListener;
 
 	/**
 	 * Card expand/collapse state.
 	 */
-	private CardState mState;
+	private State mState;
 
 	/**
 	 * Collapse duration.
@@ -120,7 +131,7 @@ public class NacCardView
 	/**
 	 * Expand color transition duration.
 	 */
-	private static final int EXPAND_COLOR_DURATION = 350;
+	private static final int EXPAND_COLOR_DURATION = 250;
 
 	/**
 	 * Wait time during init, before collapsing an expanded alarm card.
@@ -150,91 +161,98 @@ public class NacCardView
 		this.mAnimation = new NacCardSlideAnimation(this.mCardView,
 			this.mSummary, this.mExtra);
 		this.mMeasure = measure;
-		//this.mTransition = null;
-		this.mState = CardState.COLLAPSED;
+		this.mListener = null;
+		this.mState = State.COLLAPSED;
 
 		this.mAnimation.setOnAnimationListener(this);
 	}
 
 	/**
-	 * @see collapse
+	 * Animate the card collapsing.
+	 */
+	public void animateCollapse()
+	{
+		CardView card = this.getCardView();
+		NacCardSlideAnimation animation = this.getAnimation();
+		int expandHeight = this.getExpandHeight();
+		int collapseHeight = this.getCollapseHeight();
+
+		this.setState(State.COLLAPSED);
+		animation.setDuration(COLLAPSE_DURATION);
+		animation.setHeights(expandHeight, collapseHeight);
+		animation.setupForClose();
+		card.setAnimation(animation);
+		card.startAnimation(animation);
+	}
+
+	/**
+	 * Animate the card expanding.
+	 */
+	//public void animateExpand(int position)
+	public void animateExpand()
+	{
+		CardView card = this.getCardView();
+		NacCardSlideAnimation animation = this.getAnimation();
+		int expandHeight = this.getExpandHeight();
+		int collapseHeight = this.getCollapseHeight();
+
+		this.setState(State.EXPANDED);
+		animation.setDuration(EXPAND_DURATION);
+		animation.setHeights(collapseHeight, expandHeight);
+		animation.setupForOpen();
+		card.setAnimation(animation);
+		card.startAnimation(animation);
+		//this.scroll(position);
+	}
+
+	/**
+	 * Collapse the card without any animations.
+	 */
+	public void doCollapse()
+	{
+		this.setState(State.COLLAPSED);
+		this.setCollapseBackgroundColor();
+		this.mSummary.setVisibility(View.VISIBLE);
+		this.mExtra.setVisibility(View.GONE);
+		this.mSummary.setEnabled(true);
+		this.mExtra.setEnabled(false);
+		this.callStateChangeListener();
+	}
+
+	/**
+	 * Expand the card without any animations.
+	 */
+	public void doExpand()
+	{
+		this.setState(State.EXPANDED);
+		this.setExpandBackgroundColor();
+		this.mSummary.setVisibility(View.GONE);
+		this.mExtra.setVisibility(View.VISIBLE);
+		this.mSummary.setEnabled(false);
+		this.mExtra.setEnabled(true);
+		this.callStateChangeListener();
+	}
+
+	/**
+	 * @see animateCollapse
 	 */
 	public void collapse()
 	{
-		this.collapse(true);
+		this.animateCollapse();
 	}
 
 	/**
-	 * Collapse the alarm card.
+	 * @see animateExpand
 	 */
-	public void collapse(boolean animate)
+	public void expand()
 	{
-		this.mState = CardState.COLLAPSED;
-
-		//this.resetHighlight();
-
-		if (animate)
-		{
-			CardView card = this.getCardView();
-			NacCardSlideAnimation animation = this.getAnimation();
-			int expandHeight = this.getExpandHeight();
-			int collapseHeight = this.getCollapseHeight();
-
-			animation.setDuration(COLLAPSE_DURATION);
-			animation.setHeights(expandHeight, collapseHeight);
-			animation.setupForClose();
-			card.setAnimation(animation);
-			card.startAnimation(animation);
-		}
-		else
-		{
-			this.setCollapseBackgroundColor();
-			this.showCollapse();
-		}
-	}
-
-	/**
-	 * @see expand
-	 */
-	public void expand(int position)
-	{
-		this.expand(position, true);
-	}
-
-	/**
-	 * Expand the alarm card.
-	 */
-	public void expand(int position, boolean animate)
-	{
-		this.mState = CardState.EXPANDED;
-
-		//this.resetHighlight();
-
-		if (animate)
-		{
-			CardView card = this.getCardView();
-			NacCardSlideAnimation animation = this.getAnimation();
-			int expandHeight = this.getExpandHeight();
-			int collapseHeight = this.getCollapseHeight();
-
-			animation.setDuration(EXPAND_DURATION);
-			animation.setHeights(collapseHeight, expandHeight);
-			animation.setupForOpen();
-			card.setAnimation(animation);
-			card.startAnimation(animation);
-			//this.scroll(position);
-		}
-		else
-		{
-			this.setExpandBackgroundColor();
-			this.showExpand();
-		}
+		this.animateExpand();
 	}
 
 	/**
 	 * @return The alarm.
 	 */
-	private NacAlarm getAlarm()
+	public NacAlarm getAlarm()
 	{
 		return this.mAlarm;
 	}
@@ -358,11 +376,27 @@ public class NacCardView
 	}
 
 	/**
+	 * @return The OnStateChange listener.
+	 */
+	private OnStateChangeListener getListener()
+	{
+		return this.mListener;
+	}
+
+	/**
 	 * @return The screen height.
 	 */
 	private int getScreenHeight()
 	{
 		return this.mMeasure.getScreenHeight();
+	}
+
+	/**
+	 * @return The card state.
+	 */
+	private State getState()
+	{
+		return this.mState;
 	}
 
 	/**
@@ -391,36 +425,6 @@ public class NacCardView
 		animator.setRepeatCount(1);
 		animator.setRepeatMode(ObjectAnimator.REVERSE);
 		animator.start();
-
-		//Context context = this.getContext();
-		//CardView card = this.getCardView();
-		//int bg = NacUtility.getThemeAttrColor(context, R.attr.colorCard);
-		//int highlight = NacUtility.getThemeAttrColor(context,
-		//	R.attr.colorCardExpanded);
-		//ColorDrawable[] color = {new ColorDrawable(bg),
-		//	new ColorDrawable(highlight)};
-		//this.mTransition = new TransitionDrawable(color);
-		//final int fadeInDuration = 500;
-		//final int fadeOutDuration = 700;
-
-		//card.setBackground(this.mTransition);
-		//NacUtility.printf("Highlighting the thing!");
-		//this.mTransition.startTransition(fadeInDuration);
-
-		//new Handler().postDelayed(new Runnable()
-		//{
-		//	@Override
-		//	public void run()
-		//	{
-		//		NacUtility.printf("Run the post delayed! %b", mTransition != null);
-		//		if (mTransition == null)
-		//		{
-		//			return;
-		//		}
-
-		//		mTransition.reverseTransition(fadeOutDuration);
-		//	}
-		//}, fadeInDuration);
 	}
 
 	/**
@@ -428,21 +432,7 @@ public class NacCardView
 	 */
 	public void init(NacAlarm alarm)
 	{
-		//// Might be easier to just have init be hideSwipeViews?
-		//if (this.isExpanded())
-		//{
-		//	new Handler().postDelayed(new Runnable()
-		//	{
-		//		@Override
-		//		public void run()
-		//		{
-		//			collapse();
-		//		}
-		//	}, INIT_WAIT);
-		//}
-
 		this.mAlarm = alarm;
-
 		this.hideSwipeViews();
 	}
 
@@ -458,9 +448,9 @@ public class NacCardView
 	 * @return True if the alarm card is in the collapsed state, and False
 	 *         otherwise.
 	 */
-	public boolean isCollapseState()
+	public boolean isCollapsedState()
 	{
-		return (this.mState == CardState.COLLAPSED);
+		return (this.getState() == State.COLLAPSED);
 	}
 
 	/**
@@ -509,39 +499,53 @@ public class NacCardView
 		return (extraVisible == View.VISIBLE) || (height > collapseHeight);
 	}
 
+	/**
+	 * @return True if the alarm card is in the expanded state, and False
+	 *         otherwise.
+	 */
+	public boolean isExpandedState()
+	{
+		return (this.getState() == State.EXPANDED);
+	}
+
+	/**
+	 */
 	@Override
 	public void onAnimationEnd(Animation animation)
 	{
 		CardView card = this.getCardView();
 		TransitionDrawable transition = this.getCollapseColorTransition();
 
+		this.callStateChangeListener();
 		card.setBackground(transition);
 		transition.startTransition(COLLAPSE_COLOR_DURATION);
 	}
 
+	/**
+	 */
 	@Override
 	public void onAnimationStart(Animation animation)
 	{
 		CardView card = this.getCardView();
 		TransitionDrawable transition = this.getExpandColorTransition();
 
+		this.callStateChangeListener();
 		card.setBackground(transition);
 		transition.startTransition(EXPAND_COLOR_DURATION);
 	}
 
 	/**
-	 * Reset highlighting a card, so that it goes back to the way it originally
-	 * looked.
+	 * Call the state change listener.
 	 */
-	//public void resetHighlight()
-	//{
-	//	if (this.mTransition != null)
-	//	{
-	//		this.mTransition.resetTransition();
+	public void callStateChangeListener()
+	{
+		OnStateChangeListener listener = this.getListener();
 
-	//		this.mTransition = null;
-	//	}
-	//}
+		if (listener != null)
+		{
+			listener.onStateChange(this, this.getState());
+		}
+	}
 
 	/**
 	 * Scroll when the alarm card is partially visible.
@@ -627,35 +631,30 @@ public class NacCardView
 	}
 
 	/**
-	 * Show the collapse views.
+	 * Set the listener for when the alarm card expands or collapses.
 	 */
-	private void showCollapse()
+	public void setOnStateChangeListener(OnStateChangeListener listener)
 	{
-		this.mSummary.setVisibility(View.VISIBLE);
-		this.mExtra.setVisibility(View.GONE);
-		this.mSummary.setEnabled(true);
-		this.mExtra.setEnabled(false);
+		this.mListener = listener;
 	}
 
 	/**
-	 * Show the expand views.
+	 * Set the card state.
 	 */
-	private void showExpand()
+	private void setState(State state)
 	{
-		this.mSummary.setVisibility(View.GONE);
-		this.mExtra.setVisibility(View.VISIBLE);
-		this.mSummary.setEnabled(false);
-		this.mExtra.setEnabled(true);
+		this.mState = state;
 	}
 
 	/**
 	 * Toggle expand/collapse view state.
 	 */
-	public void toggle(int position)
+	//public void toggleState(int position)
+	public void toggleState()
 	{
 		if (this.isCollapsed())
 		{
-			this.expand(position);
+			this.expand();
 		}
 		else
 		{
