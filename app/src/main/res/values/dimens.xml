@@ -201,8 +201,9 @@
 	<dimen name="pr_frg_music_path">15dp</dimen>
 	<dimen name="pt_frg_sound">15dp</dimen>
 	<dimen name="pb_frg_sound">15dp</dimen>
-	<dimen name="sp_frg_sound">15dp</dimen>
 	<dimen name="pl_frg_sound">25dp</dimen>
+	<dimen name="pl_frg_ringtone">50dp</dimen>
+	<dimen name="sp_frg_sound">15dp</dimen>
 	<dimen name="tsz_frg_sound">16sp</dimen>
 	<dimen name="tsz_frg_music_path">13sp</dimen>
 	<dimen name="isz_frg_sound">30dp</dimen>
