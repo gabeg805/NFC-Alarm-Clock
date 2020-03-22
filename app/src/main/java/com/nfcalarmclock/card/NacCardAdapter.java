@@ -1056,7 +1056,6 @@ public class NacCardAdapter
 
 		if (shared.getUpcomingAlarmNotification())
 		{
-			NacUtility.printf("updateNotification!");
 			this.getNotification().update(alarms);
 		}
 	}

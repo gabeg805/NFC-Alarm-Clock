@@ -13,8 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import android.os.PowerManager;
-
 /**
  * Permissions class handling checks, listeners, etc.
  */

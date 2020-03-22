@@ -385,13 +385,13 @@ public class NacFile
 		/**
 		 * Sorted ls.
 		 */
-		public List<Metadata> lsSort()
+		public List<Metadata> lsSort(String path)
 		{
 			List<Metadata> directories = new ArrayList<>();
 			List<Metadata> files = new ArrayList<>();
 			List<Metadata> list;
 
-			for (Metadata metadata : this.ls())
+			for (Metadata metadata : this.ls(path))
 			{
 				String name = metadata.getName();
 				int i = 0;
@@ -429,15 +429,15 @@ public class NacFile
 		}
 
 		/**
-		 * Sorted ls.
+		 * @see lsSort
 		 */
-		public List<Metadata> lsSort(String path)
+		public List<Metadata> lsSort()
 		{
 			List<Metadata> directories = new ArrayList<>();
 			List<Metadata> files = new ArrayList<>();
 			List<Metadata> list;
 
-			for (Metadata metadata : this.ls(path))
+			for (Metadata metadata : this.ls())
 			{
 				String name = metadata.getName();
 				int i = 0;
@@ -593,7 +593,6 @@ public class NacFile
 	/**
 	 * Convert a path to a relative path.
 	 */
-	// To-do: See if you can just use relative paths?
 	@SuppressWarnings("SdCardPath")
 	public static String toRelativePath(String path)
 	{

@@ -75,9 +75,9 @@ public class NacDialog
 	}
 
 	/**
-	 * Scaling structure. To-do: Can this be static?
+	 * Scaling structure.
 	 */
-	public class Scaler
+	public static class Scaler
 	{
 
 		/**

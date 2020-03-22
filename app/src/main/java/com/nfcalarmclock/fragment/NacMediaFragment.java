@@ -230,24 +230,10 @@ public class NacMediaFragment
 	}
 
 	/**
-	 * Reset the player.
-	 */
-	protected void resetPlayer()
-	{
-		NacMediaPlayer player = this.getMediaPlayer();
-
-		if (player != null)
-		{
-			player.reset();
-		}
-	}
-
-	/**
 	 * Play audio from the media player safely.
 	 */
 	protected int safePlay(Uri contentUri, boolean repeat)
 	{
-		NacMediaPlayer player = this.getMediaPlayer();
 		String path = contentUri.toString();
 
 		if (path.isEmpty() || !path.startsWith("content://"))
@@ -257,10 +243,11 @@ public class NacMediaFragment
 
 		this.safeReset();
 		this.setMedia(path);
+		NacMediaPlayer player = this.getMediaPlayer();
 
 		if (player == null)
 		{
-			this.setupMediaPlayer();
+			player = this.setupMediaPlayer();
 
 			if (player == null)
 			{
@@ -282,7 +269,7 @@ public class NacMediaFragment
 
 		if (player == null)
 		{
-			this.setupMediaPlayer();
+			player = this.setupMediaPlayer();
 
 			return (player != null) ? 0 : -1;
 		}
@@ -335,9 +322,12 @@ public class NacMediaFragment
 	/**
 	 * Setup the media player.
 	 */
-	protected void setupMediaPlayer()
+	protected NacMediaPlayer setupMediaPlayer()
 	{
-		this.mPlayer = new NacMediaPlayer(getContext());
+		Context context = getContext();
+		this.mPlayer = new NacMediaPlayer(context);
+
+		return this.mPlayer;
 	}
 
 }

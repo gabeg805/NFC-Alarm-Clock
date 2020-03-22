@@ -2,13 +2,12 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
 /**
- * A music file browser.
+ * A file browser.
  */
 public class NacFileBrowser
 	implements View.OnClickListener
@@ -369,9 +368,6 @@ public class NacFileBrowser
 
 	/**
 	 * @see select
-	 *
-	 * To-do: Change this so that when it defaults to an already selected music
-	 * item. It won't mess up.
 	 */
 	public void select(String selectPath)
 	{

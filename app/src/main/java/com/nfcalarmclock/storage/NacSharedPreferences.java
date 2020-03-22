@@ -879,7 +879,7 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @return The SharedPreferences instance. To-do: Change this.
+	 * @return The SharedPreferences instance.
 	 */
 	public SharedPreferences getInstance()
 	{

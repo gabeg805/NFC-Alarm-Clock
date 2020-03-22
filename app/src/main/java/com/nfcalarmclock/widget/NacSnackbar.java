@@ -1,11 +1,8 @@
 package com.nfcalarmclock;
 
-//import android.support.design.widget.Snackbar;
-//import android.support.design.widget.BaseTransientBottomBar;
 import android.view.View;
 import java.util.LinkedList;
 import java.util.Queue;
-
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 

@@ -212,6 +212,22 @@ public class NacCardTouchHelper
 		}
 
 		/**
+		 */
+		@Override
+		public float getSwipeEscapeVelocity(float defaultValue)
+		{
+			return 6*defaultValue;
+		}
+
+		/**
+		 */
+		@Override
+		public float getSwipeThreshold(ViewHolder vh)
+		{
+			return 0.6f;
+		}
+
+		/**
 		 * @return The view holder.
 		 */
 		private ViewHolder getViewHolder()

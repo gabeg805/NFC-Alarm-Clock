@@ -383,6 +383,7 @@ public class NacMediaPlayer
 
 		if(!NacAudio.requestAudioFocusGain(context, this, attrs))
 		{
+			NacUtility.printf("NacMediaPlayer : play : Unable to gain audio focus");
 			NacUtility.quickToast(context, "Unable to play audio");
 			return;
 		}
@@ -391,11 +392,7 @@ public class NacMediaPlayer
 
 		try
 		{
-			if (this.isPlayingWrapper())
-			{
-				this.resetWrapper();
-			}
-
+			this.resetWrapper();
 			attrs.setRepeat(repeat);
 			setDataSource(context, contentUri);
 			setLooping(false);
