@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import androidx.annotation.Keep;
 
 /**
  * A button that consists of an image to the left, and text to the right
@@ -690,8 +691,9 @@ public class NacDayButton
 	 * @param  color  The button color.
 	 */
 	@SuppressWarnings("deprecation")
-	@TargetApi(Build.VERSION_CODES.Q)
 	@SuppressLint("NewApi")
+	@Keep
+	@TargetApi(Build.VERSION_CODES.Q)
 	public void setButtonColor(int color)
 	{
 		Drawable drawable = this.getBackground();
@@ -767,6 +769,7 @@ public class NacDayButton
 	 *
 	 * @param  color  The text color.
 	 */
+	@Keep
 	public void setTextColor(int color)
 	{
 		this.mButton.setTextColor(color);
@@ -825,7 +828,6 @@ public class NacDayButton
 		int to = this.getToValue(type);
 		ObjectAnimator animator;
 
-		
 		if (type == NacDayViewType.BUTTON)
 		{
 			animator = ObjectAnimator.ofArgb(this, "buttonColor", from, to);

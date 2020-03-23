@@ -224,7 +224,7 @@ public class NacCardTouchHelper
 		@Override
 		public float getSwipeThreshold(ViewHolder vh)
 		{
-			return 0.6f;
+			return 0.5f;
 		}
 
 		/**

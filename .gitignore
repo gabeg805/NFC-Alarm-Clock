@@ -8,4 +8,5 @@
 /build
 /captures
 .externalNativeBuild
-NacSpotify.java
+keystore.properties
+app/my-new-release-key.jks

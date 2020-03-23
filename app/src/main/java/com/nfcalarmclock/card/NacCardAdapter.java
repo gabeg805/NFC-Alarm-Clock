@@ -155,21 +155,7 @@ public class NacCardAdapter
 	 */
 	public int add(NacAlarm alarm)
 	{
-		List<NacAlarm> alarmList = this.getAlarms();
-		Calendar next = NacCalendar.getNext(alarm);
-		int index = 0;
-
-		for (NacAlarm a : alarmList)
-		{
-			Calendar n = NacCalendar.getNext(a);
-
-			if (!a.getEnabled() || next.before(n))
-			{
-				break;
-			}
-
-			index++;
-		}
+		int index = this.whereToPutAlarm(alarm);
 
 		return this.add(alarm, index);
 	}
@@ -269,11 +255,11 @@ public class NacCardAdapter
 
 		NacAlarm alarm = this.get(position);
 		NacAlarm copy = alarm.copy(this.getUniqueId());
-		int result = this.add(copy);
+		int result = this.add(copy, position+1);
 
 		if (result == 0)
 		{
-			this.undo(copy, this.size()-1, Undo.Type.COPY);
+			this.undo(copy, position+1, Undo.Type.COPY);
 			this.snackbar("Copied alarm.");
 		}
 
@@ -530,6 +516,19 @@ public class NacCardAdapter
 		}
 
 		return -1;
+	}
+
+	/**
+	 * Highlight an alarm card.
+	 */
+	public void highlight(NacAlarm alarm)
+	{
+		NacCardView card = this.getCard(alarm);
+
+		if (card != null)
+		{
+			card.highlight();
+		}
 	}
 
 	/**
@@ -1013,7 +1012,7 @@ public class NacCardAdapter
 			else if (sortIndex >= 0)
 			{
 				this.getRecyclerView().scrollToPosition(sortIndex);
-				card.highlight();
+				this.highlight(alarm);
 			}
 		}
 	}
@@ -1079,9 +1078,9 @@ public class NacCardAdapter
 		int id = alarm.getId();
 		int size = alarmList.size();
 
-		for (int i=0; i < size; i++)
+		for (int index=0; index < size; index++)
 		{
-			NacAlarm a = alarmList.get(i);
+			NacAlarm a = alarmList.get(index);
 
 			if (a.getId() == id)
 			{
@@ -1090,7 +1089,7 @@ public class NacCardAdapter
 
 			if (this.canInsertAlarm(alarm, a, next))
 			{
-				return i;
+				return index;
 			}
 		}
 
