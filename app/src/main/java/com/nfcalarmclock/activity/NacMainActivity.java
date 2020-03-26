@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.InsetDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
@@ -169,11 +170,14 @@ public class NacMainActivity
 		setContentView(R.layout.act_main);
 
 		NacSharedPreferences shared = new NacSharedPreferences(this);
-		Drawable drawable = ContextCompat.getDrawable(this,
-			R.drawable.card_divider);
 		DividerItemDecoration divider = new DividerItemDecoration(this,
 			LinearLayoutManager.VERTICAL);
 		NacLayoutManager layoutManager = new NacLayoutManager(this);
+		Drawable drawable = ContextCompat.getDrawable(this,
+			R.drawable.card_divider);
+		int padding = getResources().getDimensionPixelSize(R.dimen.sp_main);
+		InsetDrawable insetDrawable = new InsetDrawable(drawable, padding, 0,
+			padding, 0);
 
 		this.mSharedPreferences = shared;
 		this.mAdapter = new NacCardAdapter(this);
@@ -182,7 +186,8 @@ public class NacMainActivity
 		this.mRecyclerView = (RecyclerView) findViewById(
 			R.id.content_alarm_list);
 
-		divider.setDrawable(drawable);
+		divider.setDrawable(insetDrawable);
+		//divider.setDrawable(drawable);
 		this.mFloatingButton.setOnClickListener(this);
 		this.mRecyclerView.addItemDecoration(divider);
 		this.mRecyclerView.setAdapter(this.mAdapter);

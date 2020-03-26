@@ -10,7 +10,6 @@
 	app:contentPaddingRight="@dimen/sp_main"
 	app:cardBackgroundColor="?attr/colorCard"
 	tools:ignore="RelativeOverlap,RtlSymmetry">
-	<!-- android:animateLayoutChanges="true" -->
 
 	<RelativeLayout
 		android:layout_width="match_parent"
@@ -19,17 +18,15 @@
 		<RelativeLayout
 			android:id="@+id/nac_header"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
-			<!--
-			android:paddingTop="@dimen/sp_support"
-			android:paddingBottom="@dimen/sp_support">
-			-->
+			android:layout_height="wrap_content"
+			android:paddingTop="@dimen/sp_row">
 
 			<RelativeLayout
 				android:id="@+id/nac_time_parent"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:paddingTop="@dimen/sp_support"
+				android:paddingTop="@dimen/sp_row"
+				android:paddingBottom="@dimen/sp_row"
 				android:paddingEnd="@dimen/sp_main">
 
 				<TextView
@@ -37,7 +34,7 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_title"
+					android:textSize="@dimen/tsz_attention"
 					/>
 
 				<TextView
@@ -48,7 +45,7 @@
 					android:layout_alignBaseline="@id/nac_time"
 					android:layout_marginStart="@dimen/sp_support"
 					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_main"
+					android:textSize="@dimen/tsz_main_custom"
 					/>
 
 			</RelativeLayout>
@@ -71,61 +68,38 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_below="@id/nac_header"
-			android:paddingBottom="@dimen/sp_support">
+			android:paddingBottom="@dimen/sp_row_last"
+			android:gravity="left"
+			tools:ignore="RtlHardcoded">
 
-			<!-- TODO see if I can get rid of this -->
-			<RelativeLayout
-				android:id="@+id/nac_summary_text"
-				android:layout_width="match_parent"
+			<TextView
+				android:id="@+id/nac_summary_name"
+				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:layout_toStartOf="@id/nac_summary_days"
 				android:layout_marginStart="@dimen/sp_align"
 				android:layout_marginEnd="@dimen/sp_support"
-				android:gravity="left"
-				tools:ignore="RtlHardcoded,UselessParent">
-				<!--
-				android:layout_toStartOf="@id/nac_summary_expand"
-				-->
-
-				<TextView
-					android:id="@+id/nac_summary_name"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_toStartOf="@id/nac_summary_days"
-					android:layout_marginEnd="@dimen/sp_support"
-					android:maxLength="@integer/max_entry_length"
-					android:maxLines="1"
-					android:ellipsize="end"
-					android:textColor="@color/sky_blue"
-					android:textSize="@dimen/tsz_support"
-					android:textStyle="bold"
-					/>
-
-				<TextView
-					android:id="@+id/nac_summary_days"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_alignParentEnd="true"
-					android:maxLines="1"
-					android:textColor="?attr/colorAccent"
-					android:textSize="@dimen/tsz_support"
-					android:textStyle="bold"
-					android:text=""
-					/>
-
-			</RelativeLayout>
-
-			<!--
-			<ImageView
-				android:id="@+id/nac_summary_expand"
-				android:layout_width="@dimen/isz_main"
-				android:layout_height="@dimen/isz_main"
-				android:layout_alignBottom="@id/nac_summary_text"
-				android:layout_alignParentEnd="true"
-				android:layout_marginEnd="@dimen/mr_expand"
-				android:src="@mipmap/expand"
-				tools:ignore="ContentDescription"
+				android:maxLength="@integer/max_entry_length"
+				android:maxLines="1"
+				android:ellipsize="end"
+				android:textColor="@color/sky_blue"
+				android:textSize="@dimen/tsz_support"
+				android:textStyle="bold"
 				/>
-			-->
+
+			<TextView
+				android:id="@+id/nac_summary_days"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentEnd="true"
+				android:layout_marginStart="@dimen/sp_align"
+				android:layout_marginEnd="@dimen/sp_support"
+				android:maxLines="1"
+				android:textColor="?attr/colorAccent"
+				android:textSize="@dimen/tsz_support"
+				android:textStyle="bold"
+				android:text=""
+				/>
 
 		</RelativeLayout>
 
@@ -137,13 +111,101 @@
 			android:orientation="vertical"
 			android:visibility="gone">
 
+			<!--
+			<View
+				android:id="@+id/nac_divider2"
+				android:layout_width="match_parent"
+				android:layout_height="@dimen/isz_divider"
+				android:layout_marginTop="@dimen/sp_row"
+				android:background="?attr/colorCardDivider"
+				/>
+			-->
+
+			<LinearLayout
+				android:id="@+id/nac_divider2"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingTop="@dimen/sp_row"
+				android:gravity="center"
+				android:alpha="0.6"
+				android:orientation="horizontal">
+
+				<View
+					android:layout_width="4dp"
+					android:layout_height="4dp"
+					android:layout_marginEnd="@dimen/sp_support"
+					android:background="@drawable/color_selector"
+					/>
+
+				<View
+					android:layout_width="8dp"
+					android:layout_height="8dp"
+					android:background="@drawable/color_selector"
+					/>
+
+				<View
+					android:layout_width="4dp"
+					android:layout_height="4dp"
+					android:layout_marginStart="@dimen/sp_support"
+					android:background="@drawable/color_selector"
+					/>
+
+			</LinearLayout>
+
+			<!--
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/sp_row"
+				android:orientation="horizontal">
+
+				<View
+					android:layout_width="@dimen/sz_none"
+					android:layout_height="match_parent"
+					android:layout_weight="4"
+					/>
+
+				<View
+					android:id="@+id/nac_divider2"
+					android:layout_width="@dimen/sz_none"
+					android:layout_height="@dimen/isz_divider"
+					android:layout_weight="1"
+					android:background="?attr/colorCardDivider"
+					/>
+
+				<View
+					android:layout_width="@dimen/sz_none"
+					android:layout_height="match_parent"
+					android:layout_weight="4"
+					/>
+
+			</LinearLayout>
+			-->
+
+			<!--
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/sp_row_last"
+				android:layout_marginBottom="@dimen/sp_row"
+				android:layout_marginStart="@dimen/sp_align"
+				android:layout_alignParentStart="true"
+				android:maxLines="1"
+				android:alpha="0.3"
+				android:textColor="@color/white"
+				android:textSize="@dimen/tsz_main"
+				android:textStyle="bold"
+				android:text="Day of week"
+				/>
+			-->
+
 			<com.nfcalarmclock.NacDayOfWeek
 				android:id="@+id/nac_days"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:gravity="center"
-				android:paddingTop="@dimen/sp_row"
+				android:paddingTop="@dimen/sp_row_last"
 				android:paddingBottom="@dimen/sp_row"
+				android:gravity="center"
 				app:nacBackgroundColor="@color/gray_light"
 				/>
 
@@ -345,7 +407,7 @@
 			</LinearLayout>
 
 			<View
-				android:id="@+id/nac_divider"
+				android:id="@+id/nac_divider1"
 				android:layout_width="match_parent"
 				android:layout_height="@dimen/isz_divider"
 				android:background="?attr/colorCardDivider"

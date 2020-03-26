@@ -53,7 +53,7 @@
 	<!-- Dialogs -->
 	<!-- ******* -->
 
-	<string name="dlg_name_hint">Alarm name</string>
+	<string name="dlg_name_hint">Label</string>
 	<string name="dlg_color_hint">Hex Color</string>
 	<string name="dlg_playlist_question">Do you want to play all the music in this folder?</string>
 

@@ -4,13 +4,14 @@
 	android:shape="rectangle">
 
 	<size
-		android:width="4dp"
-		android:height="4dp"
+		android:width="@dimen/isz_divider"
+		android:height="@dimen/isz_divider"
 		/>
 
 	<solid
-		android:color="?attr/colorCard"
+		android:color="@color/gray"
 		/>
+		<!-- android:color="@color/gray_dark" -->
 
 </shape>
 

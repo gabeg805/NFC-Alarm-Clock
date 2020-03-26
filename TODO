@@ -1,1 +1,8 @@
-* Add ContentDescriptions. Don't just ignore the warnings.
+* Change Days dialog to reflect the look of the alarm card. Change
+  backgroundColor.
+
+* Only have toast for NFC.
+
+* Increase size of alarm cards. Feels cramped.
+
+* Add Snoozed icon to alarm that is snoozed

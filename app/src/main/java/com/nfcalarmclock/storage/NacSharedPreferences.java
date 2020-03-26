@@ -242,7 +242,7 @@ public class NacSharedPreferences
 	/**
 	 * Default sound message.
 	 */
-	public static final String DEFAULT_MEDIA_MESSAGE = "Song or ringtone";
+	public static final String DEFAULT_MEDIA_MESSAGE = "Music or Ringtone";
 
 	/**
 	 * Default name summary text.
@@ -252,7 +252,7 @@ public class NacSharedPreferences
 	/**
 	 * Default name message.
 	 */
-	public static final String DEFAULT_NAME_MESSAGE = "Alarm name";
+	public static final String DEFAULT_NAME_MESSAGE = "Label";
 
 	/**
 	 * Default days summary text.

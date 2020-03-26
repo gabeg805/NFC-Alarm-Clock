@@ -377,22 +377,12 @@ public class NacCardHolder
 			alarm.toggleRepeat();
 			alarm.changed();
 			this.mDays.setRepeat();
-
-			if (alarm.getRepeat())
-			{
-				NacUtility.quickToast(context, "Repeat alarm");
-			}
 		}
 		else if (id == R.id.nac_vibrate)
 		{
 			alarm.toggleVibrate();
 			alarm.changed();
 			this.mVibrate.set();
-
-			if (alarm.getVibrate())
-			{
-				NacUtility.quickToast(context, "Vibrate phone");
-			}
 		}
 		else if (id == R.id.nac_nfc)
 		{

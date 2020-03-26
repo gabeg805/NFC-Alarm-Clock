@@ -80,9 +80,15 @@ public class NacCardView
 	private RelativeLayout mHeader;
 
 	/**
-	 * Divider.
+	 * First divider.
 	 */
-	private View mDivider;
+	private View mDivider1;
+
+	/**
+	 * Second divider.
+	 */
+	private LinearLayout mDivider2;
+	//private View mDivider2;
 
 	/**
 	 * Copy view.
@@ -122,22 +128,22 @@ public class NacCardView
 	/**
 	 * Collapse duration.
 	 */
-	private static final int COLLAPSE_DURATION = 350;
+	private static final int COLLAPSE_DURATION = 250;
 
 	/**
 	 * Expand duration.
 	 */
-	private static final int EXPAND_DURATION = 450;
+	private static final int EXPAND_DURATION = 250;
 
 	/**
 	 * Collapse color transition duration.
 	 */
-	private static final int COLLAPSE_COLOR_DURATION = 250;
+	private static final int COLLAPSE_COLOR_DURATION = 200;
 
 	/**
 	 * Expand color transition duration.
 	 */
-	private static final int EXPAND_COLOR_DURATION = 250;
+	private static final int EXPAND_COLOR_DURATION = 200;
 
 	/**
 	 * Wait time during init, before collapsing an expanded alarm card.
@@ -161,7 +167,9 @@ public class NacCardView
 		this.mSummary = (RelativeLayout) root.findViewById(R.id.nac_summary);
 		this.mExtra = (LinearLayout) root.findViewById(R.id.nac_extra);
 		this.mHeader = (RelativeLayout) root.findViewById(R.id.nac_header);
-		this.mDivider = (View) root.findViewById(R.id.nac_divider);
+		this.mDivider1 = (View) root.findViewById(R.id.nac_divider1);
+		//this.mDivider2 = (View) root.findViewById(R.id.nac_divider2);
+		this.mDivider2 = (LinearLayout) root.findViewById(R.id.nac_divider2);
 		this.mCopy = (RelativeLayout) root.findViewById(R.id.nac_swipe_copy);
 		this.mDelete = (RelativeLayout) root.findViewById(R.id.nac_swipe_delete);
 		this.mSlideAnimation = new NacCardSlideAnimation(this.mCardView,
@@ -637,7 +645,16 @@ public class NacCardView
 	public void setColor(NacSharedPreferences shared)
 	{
 		int themeColor = shared.getThemeColor();
-		this.mDivider.setBackgroundTintList(ColorStateList.valueOf(themeColor));
+		ColorStateList tint = ColorStateList.valueOf(themeColor);
+		int count = this.mDivider2.getChildCount();
+
+		this.mDivider1.setBackgroundTintList(tint);
+		//this.mDivider2.setBackgroundTintList(tint);
+
+		for (int i=0; i < count; i++)
+		{
+			this.mDivider2.getChildAt(i).setBackgroundTintList(tint);
+		}
 	}
 
 	/**
