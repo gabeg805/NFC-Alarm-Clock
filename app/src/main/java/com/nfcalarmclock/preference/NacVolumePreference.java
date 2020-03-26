@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
@@ -83,7 +83,7 @@ public class NacVolumePreference
 		super.onBindViewHolder(holder);
 
 		this.mSeek = (SeekBar) holder.findViewById(R.id.volume_slider);
-		ImageView image = (ImageView) holder.findViewById(R.id.widget);
+		RelativeLayout image = (RelativeLayout) holder.findViewById(R.id.widget);
 
 		this.mSeek.setProgress(this.mValue);
 		this.mSeek.setOnSeekBarChangeListener(this);

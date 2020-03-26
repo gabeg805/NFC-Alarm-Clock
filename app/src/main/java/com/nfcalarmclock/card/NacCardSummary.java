@@ -95,7 +95,7 @@ public class NacCardSummary
 		int textsize = (int) this.mName.getTextSize();
 		int summaryDays = this.mDays.getText().length() * textsize / 2;
 		int expandImage = 3 * (int) this.getResources().getDimension(
-			R.dimen.isz_expand);
+			R.dimen.isz_main);
 
 		return screenWidth - summaryDays - padding - expandImage;
 	}
@@ -165,21 +165,23 @@ public class NacCardSummary
 	 */
 	public void setName()
 	{
-		RelativeLayout.LayoutParams params = this.getNameLayoutParams();
+		//RelativeLayout.LayoutParams params = this.getNameLayoutParams();
 		NacAlarm alarm = this.getAlarm();
 		String name = alarm.getNameNormalized();
-		String text = "";
-		int margin = 0;
+		//String text = "";
+		//int margin = 0;
 
-		if (!name.isEmpty())
-		{
-			text = name + " ";
-			margin = this.getResources().getDimensionPixelSize(R.dimen.sp_text);
-		}
+		//if (!name.isEmpty())
+		//{
+		//	text = name + " ";
+		//	margin = this.getResources().getDimensionPixelSize(R.dimen.sp_text);
+		//}
 
-		params.setMarginStart(margin);
-		this.mName.setText(text);
-		this.mName.setLayoutParams(params);
+		this.mName.setText(name);
+		this.mName.setVisibility(name.isEmpty() ? View.GONE : View.VISIBLE);
+		//params.setMarginStart(margin);
+		//this.mName.setText(text);
+		//this.mName.setLayoutParams(params);
 	}
 
 }

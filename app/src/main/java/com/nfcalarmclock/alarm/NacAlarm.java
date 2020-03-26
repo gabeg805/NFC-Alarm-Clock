@@ -992,6 +992,7 @@ public class NacAlarm
 	 */
 	public void latchChangeTracker()
 	{
+		NacUtility.printf("Something latched the change tracker T_T!");
 		this.mLatch = true;
 	}
 
@@ -1243,8 +1244,34 @@ public class NacAlarm
 	public void toggleIndex(int index)
 	{
 		NacCalendar.Day day = NacCalendar.Days.fromIndex(index);
-
 		this.toggleDay(day);
+	}
+
+	/**
+	 * Toggle repeat.
+	 */
+	public void toggleRepeat()
+	{
+		boolean repeat = this.getRepeat();
+		this.setRepeat(!repeat);
+	}
+
+	/**
+	 * Toggle use NFC.
+	 */
+	public void toggleUseNfc()
+	{
+		boolean useNfc = this.getUseNfc();
+		this.setUseNfc(!useNfc);
+	}
+
+	/**
+	 * Toggle vibrate.
+	 */
+	public void toggleVibrate()
+	{
+		boolean vibrate = this.getVibrate();
+		this.setVibrate(!vibrate);
 	}
 
 	/**

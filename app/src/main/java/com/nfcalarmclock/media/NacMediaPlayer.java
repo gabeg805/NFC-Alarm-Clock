@@ -205,6 +205,15 @@ public class NacMediaPlayer
 	}
 
 	/**
+	 * Abandon audio focus.
+	 */
+	public void abandonAudioFocus()
+	{
+		Context context = this.getContext();
+		NacAudio.abandonAudioFocus(context, this);
+	}
+
+	/**
 	 * Cleanup the handler.
 	 */
 	private void cleanupHandler()
@@ -279,31 +288,39 @@ public class NacMediaPlayer
 	@Override
 	public void onAudioFocusChange(int focusChange)
 	{
+		NacUtility.printf("NacMediaPlayer : onAudioFocusChange!");
 		Context context = this.getContext();
 		NacAudio.Attributes attrs = this.getAudioAttributes();
+		NacUtility.printf("NacMediaPlayer : isPlayingWrapper!");
 		this.mWasPlaying = this.isPlayingWrapper();
 
+		NacUtility.printf("NacMediaPlayer : Doing attrs things!");
 		attrs.setFocus(focusChange);
 		attrs.revertDucking();
 
+		NacUtility.printf("NacMediaPlayer : checking focusChange! %d", focusChange);
 		if (focusChange == AudioManager.AUDIOFOCUS_GAIN)
 		{
+			NacUtility.printf("NacMediaPlayer : GAIN!");
 			this.mWasPlaying = true;
 			this.setVolume();
 			this.startWrapper();
 		}
 		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS)
 		{
+			NacUtility.printf("NacMediaPlayer : LOSS!");
 			attrs.revertVolume();
 			this.stopWrapper();
 		}
 		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)
 		{
+			NacUtility.printf("NacMediaPlayer : LOSS TRANSIENT!");
 			attrs.revertVolume();
 			this.pauseWrapper();
 		}
 		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
 		{
+			NacUtility.printf("NacMediaPlayer : LOSS TRANSIENT DUCK!");
 			attrs.duckVolume();
 		}
 	}
@@ -365,10 +382,12 @@ public class NacMediaPlayer
 
 		if (NacMedia.isDirectory(type))
 		{
+			NacUtility.printf("NacMediaPlayer : play : isDirectory");
 			this.playPlaylist(path, repeat, shuffle);
 		}
 		else
 		{
+			NacUtility.printf("NacMediaPlayer : play : isFile");
 			this.play(track, repeat);
 		}
 	}
@@ -380,6 +399,7 @@ public class NacMediaPlayer
 	{
 		Context context = this.getContext();
 		NacAudio.Attributes attrs = this.getAudioAttributes();
+		NacUtility.printf("NacMediaPlayer : play : Starting");
 
 		if(!NacAudio.requestAudioFocusGain(context, this, attrs))
 		{
@@ -388,18 +408,27 @@ public class NacMediaPlayer
 			return;
 		}
 
+		NacUtility.printf("NacMediaPlayer : play : getting Audio Atributes");
 		AudioAttributes audioAttributes = attrs.getAudioAttributes();
 
 		try
 		{
+			NacUtility.printf("NacMediaPlayer : play : Resetting wrapper");
 			this.resetWrapper();
 			attrs.setRepeat(repeat);
+			NacUtility.printf("NacMediaPlayer : play : Set data source");
 			setDataSource(context, contentUri);
+			NacUtility.printf("NacMediaPlayer : play : Set looping");
 			setLooping(false);
+			NacUtility.printf("NacMediaPlayer : play : Set attributes");
 			setAudioAttributes(audioAttributes);
+			NacUtility.printf("NacMediaPlayer : play : on listener");
 			setOnCompletionListener(this);
+			NacUtility.printf("NacMediaPlayer : play : prepare wrapper");
 			this.prepareWrapper();
+			NacUtility.printf("NacMediaPlayer : play : set volume");
 			this.setVolume();
+			NacUtility.printf("NacMediaPlayer : play : start");
 			start();
 		}
 		catch (IllegalStateException | IOException | IllegalArgumentException | SecurityException e)
@@ -474,6 +503,7 @@ public class NacMediaPlayer
 	 */
 	public void releaseWrapper()
 	{
+		this.abandonAudioFocus();
 		this.cleanupHandler();
 		release();
 	}
@@ -484,7 +514,6 @@ public class NacMediaPlayer
 	public void repeatTrack()
 	{
 		this.cleanupHandler();
-
 		this.getHandler().postDelayed(new Runnable() {
 				@Override
 				public void run()
@@ -501,9 +530,7 @@ public class NacMediaPlayer
 	{
 		try
 		{
-			NacAudio.Attributes attrs = this.getAudioAttributes();
-
-			attrs.revertVolume();
+			this.getAudioAttributes().revertVolume();
 			this.cleanupHandler();
 			reset();
 			return this.RESULT_SUCCESS;
@@ -576,6 +603,7 @@ public class NacMediaPlayer
 	{
 		try
 		{
+			this.abandonAudioFocus();
 			this.cleanupHandler();
 			stop();
 			return this.RESULT_SUCCESS;

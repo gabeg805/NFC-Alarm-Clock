@@ -32,9 +32,11 @@
 	<string name="card_swipe_copy">COPY</string>
 	<string name="card_swipe_delete">DELETE</string>
 	<string name="card_delete">Delete</string>
+	<!--
 	<string name="card_repeat">Repeat</string>
-	<string name="card_nfc">Use NFC</string>
+	<string name="card_nfc">Use NFC</string> 
 	<string name="card_vibrate">  Vibrate</string>
+	-->
 
 
 	<!-- Day of week -->
@@ -53,7 +55,7 @@
 
 	<string name="dlg_name_hint">Alarm name</string>
 	<string name="dlg_color_hint">Hex Color</string>
-	<string name="dlg_playlist_question">Do you want to play all music in this folder?</string>
+	<string name="dlg_playlist_question">Do you want to play all the music in this folder?</string>
 
 
 	<!-- Rate my app dialog -->
@@ -275,7 +277,7 @@
 	<!-- Expand new alarm card -->
 	<string name="pref_expand_new_alarm_key">pref_expand_new_alarm</string>
 	<string name="pref_expand_new_alarm_title">Expand new alarms</string>
-	<string name="pref_expand_new_alarm_summary_enabled">Alarms created with the \'+\' button are expanded.</string>
+	<string name="pref_expand_new_alarm_summary_enabled">Alarms created with the &#8220;+&#8221; button are expanded.</string>
 	<string name="pref_expand_new_alarm_summary_disabled">Alarms are not expanded.</string>
 
 
@@ -384,5 +386,22 @@
 	<string name="frg_spotify_top_artists">Top Artists</string>
 	<string name="frg_spotify_top_tracks">Top Tracks</string>
 	-->
+
+
+	<!-- ******************** -->
+	<!-- Content Descriptions -->
+	<!-- ******************** -->
+
+	<string name="cd_btn_repeat">Select to repeat the alarm.</string>
+	<string name="cd_btn_vibrate">Select to vibrate the phone when the alarm goes off.</string>
+	<string name="cd_btn_nfc">Select to require NFC in order to dismiss the alarm.</string>
+	<string name="cd_ic_media">Select to change the media that plays when the alarm goes off.</string>
+	<string name="cd_ic_volume">Slide to change the volume of the alarm.</string>
+	<string name="cd_ic_volume_settings">Select to change the audio source the media plays out of.</string>
+	<string name="cd_ic_name">Select to change the name of the alarm.</string>
+	<string name="cd_btn_delete">Select to delete the alarm.</string>
+	<string name="cd_btn_collapse">Select to collapse the alarm card.</string>
+	<string name="cd_ic_color_example">Example of the selected color.</string>
+	<string name="cd_ic_file_entry">Type of entry being displayed, such as a file or directory.</string>
 
 </resources>

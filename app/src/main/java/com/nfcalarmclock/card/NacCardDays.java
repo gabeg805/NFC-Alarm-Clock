@@ -2,8 +2,9 @@ package com.nfcalarmclock;
 
 import android.view.animation.AccelerateInterpolator;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
+import java.lang.Float;
 import java.util.EnumSet;
 
 /**
@@ -23,9 +24,9 @@ public class NacCardDays
 	private NacDayOfWeek mDayButtons;
 
 	/**
-	 * Repeat checkbox.
+	 * Repeat alarm view.
 	 */
-	private CheckBox mRepeat;
+	private RelativeLayout mRepeat;
 
 	/**
 	 * Slide animation for the day buttons.
@@ -42,7 +43,7 @@ public class NacCardDays
 	public NacCardDays(View root, NacCardMeasure measure)
 	{
 		this.mDayButtons = (NacDayOfWeek) root.findViewById(R.id.nac_days);
-		this.mRepeat = (CheckBox) root.findViewById(R.id.nac_repeat);
+		this.mRepeat = (RelativeLayout) root.findViewById(R.id.nac_repeat);
 		this.mDaysAnimation = new NacSlideAnimation(this.mDayButtons);
 		this.mMeasure = measure;
 	}
@@ -69,15 +70,12 @@ public class NacCardDays
 	public int getHeight()
 	{
 		return this.mMeasure.getDayButtonsHeight();
-		//NacDayOfWeek dayButtons = this.getDayButtons();
-
-		//return NacUtility.getHeight(dayButtons);
 	}
 
 	/**
-	 * @return The repeat checkbox.
+	 * @return The repeat view.
 	 */
-	public CheckBox getRepeat()
+	public RelativeLayout getRepeat()
 	{
 		return this.mRepeat;
 	}
@@ -131,9 +129,19 @@ public class NacCardDays
 	public void setRepeat()
 	{
 		NacAlarm alarm = this.getAlarm();
-		CheckBox repeat = this.getRepeat();
+		boolean repeat = alarm.getRepeat();
+		RelativeLayout view = this.getRepeat();
 
-		repeat.setChecked(alarm.getRepeat());
+		if (!alarm.areDaysSelected())
+		{
+			view.setEnabled(false);
+			view.setAlpha(0.3f);
+		}
+		else
+		{
+			view.setEnabled(true);
+			view.setAlpha(repeat ? 1.0f : 0.3f);
+		}
 	}
 
 	/**
@@ -142,7 +150,7 @@ public class NacCardDays
 	public void setListeners(Object listener)
 	{
 		this.mDayButtons.setOnClickListener((NacDayOfWeek.OnClickListener)listener);
-		this.mRepeat.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener)listener);
+		this.mRepeat.setOnClickListener((View.OnClickListener)listener);
 		this.mRepeat.setOnLongClickListener((View.OnLongClickListener)listener);
 	}
 

@@ -644,8 +644,12 @@ public class NacCardAdapter
 		Context context = this.getContext();
 		NacDatabase db = new NacDatabase(context);
 
-		this.showAlarmChange(alarm);
-		this.sortHighlight(alarm);
+		if (alarm.wasChanged() && !alarm.isChangeTrackerLatched())
+		{
+			this.showAlarmChange(alarm);
+			this.sortHighlight(alarm);
+		}
+
 		this.setWasAddedWithFloatingButton(false);
 		this.getScheduler().update(alarm);
 		this.updateNotification();
@@ -771,6 +775,7 @@ public class NacCardAdapter
 
 		if (alarm.isChangeTrackerLatched() && card.isCollapsedState())
 		{
+			this.showAlarmChange(alarm);
 			this.sortHighlight(alarm);
 			alarm.unlatchChangeTracker();
 		}

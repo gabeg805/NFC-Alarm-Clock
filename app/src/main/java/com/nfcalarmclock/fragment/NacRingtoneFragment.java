@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import androidx.fragment.app.Fragment;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.List;
 
 /**
@@ -50,7 +52,7 @@ public class NacRingtoneFragment
 	/**
 	 * Create a radio button.
 	 */
-	private void addRadioButton(String path)
+	private void addRadioButton(String title, String path)
 	{
 		Context context = getContext();
 		RadioButton button  = new RadioButton(context);
@@ -62,7 +64,7 @@ public class NacRingtoneFragment
 		int textSize = this.getTextSize();
 
 		this.mRadioGroup.addView(button);
-		button.setText(NacMedia.getTitle(context, path));
+		button.setText(title);
 		button.setTag(path);
 		button.setLayoutParams(params);
 		button.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
@@ -186,24 +188,29 @@ public class NacRingtoneFragment
 	{
 		this.mRadioGroup = (RadioGroup) root.findViewById(R.id.radio_group);
 		Context context = getContext();
+		TreeMap<String,String> ringtones = NacMedia.getRingtones(context);
 
-		for (String ringtone : NacMedia.getRingtones(context))
+		for (Map.Entry<String,String> entry : ringtones.entrySet())
 		{
-			this.addRadioButton(ringtone);
+			String title = entry.getKey();
+			String path = entry.getValue();
+
+			this.addRadioButton(title, path);
 		}
 	}
 
 	/**
-	 * Setup the padding.
+	 * Setup the padding (left, top, right, bottom).
 	 */
 	private void setupPadding()
 	{
 		Context context = getContext();
 		Resources res = context.getResources();
-		this.mPadding[0] = (int) res.getDimension(R.dimen.sp_frg_sound);
-		this.mPadding[1] = (int) res.getDimension(R.dimen.pt_frg_sound);
+		int main = (int) res.getDimension(R.dimen.sp_main);
+		this.mPadding[0] = main;
+		this.mPadding[1] = main;
 		this.mPadding[2] = 0;
-		this.mPadding[3] = (int) res.getDimension(R.dimen.pb_frg_sound);
+		this.mPadding[3] = main;
 	}
 
 	/**
@@ -213,7 +220,7 @@ public class NacRingtoneFragment
 	{
 		Context context = getContext();
 		Resources res = context.getResources();
-		this.mTextSize = (int) res.getDimension(R.dimen.tsz_frg_sound);
+		this.mTextSize = (int) res.getDimension(R.dimen.tsz_main);
 	}
 
 }

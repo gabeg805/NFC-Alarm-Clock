@@ -5,16 +5,12 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="vertical"
-	android:paddingTop="@dimen/spt_dlg"
-	android:paddingBottom="@dimen/spb_dlg">
-
+	android:padding="@dimen/sp_main">
 
 	<com.nfcalarmclock.NacDayOfWeek
 		android:id="@+id/days"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/m_dlg_days"
-		android:layout_marginBottom="@dimen/m_dlg_days"
 		android:gravity="center"
 		/>
 

@@ -8,7 +8,7 @@
 	android:minHeight="?android:attr/listPreferredItemHeight"
 	android:gravity="center_vertical"
 	android:baselineAligned="false"
-	tools:ignore="ContentDescription,UselessParent">
+	tools:ignore="ContentDescription,RtlSymmetry,UselessParent">
 
 	<RelativeLayout
 		android:layout_width="0dp"
@@ -22,25 +22,26 @@
 			android:singleLine="true"
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:textColor="?android:attr/textColorPrimary"
-			android:textSize="@dimen/tsz_title"
+			android:textSize="@dimen/tsz_main"
 			android:ellipsize="marquee"
 			android:fadingEdge="horizontal"
 			/>
 
-		<ImageView
+		<RelativeLayout
 			android:id="@+id/widget"
-			android:layout_width="@dimen/isz_volume_settings"
-			android:layout_height="@dimen/isz_volume_settings"
+			android:layout_width="@dimen/sz_touch"
+			android:layout_height="@dimen/sz_touch"
 			android:layout_below="@android:id/title"
-			android:layout_marginStart="@dimen/sp_volume_settings"
-			android:layout_alignParentEnd="true"
-			android:layout_centerVertical="true"
-			android:paddingTop="@dimen/pt_volume_settings"
-			android:paddingBottom="@dimen/pb_volume_settings"
-			android:paddingStart="@dimen/pl_volume_settings"
-			android:paddingEnd="@dimen/pr_volume_settings"
-			android:src="@mipmap/settings"
-			/>
+			android:layout_alignParentEnd="true">
+
+			<ImageView
+				android:layout_width="@dimen/isz_main"
+				android:layout_height="@dimen/isz_main"
+				android:layout_centerInParent="true"
+				android:src="@mipmap/settings"
+				/>
+
+		</RelativeLayout>
 
 		<SeekBar
 			android:id="@+id/volume_slider"
@@ -48,11 +49,9 @@
 			android:layout_height="wrap_content"
 			android:layout_toStartOf="@id/widget"
 			android:layout_below="@android:id/title"
-			android:layout_centerVertical="true"
-			android:paddingTop="@dimen/pt_volume_slider"
-			android:paddingBottom="@dimen/pb_volume_slider"
-			android:paddingStart="@dimen/pl_volume_slider"
-			android:paddingEnd="@dimen/pr_volume_slider"
+			android:paddingTop="@dimen/sp_main"
+			android:paddingBottom="@dimen/sp_main"
+			android:paddingStart="@dimen/sz_none"
 			android:max="100"
 			android:progress="75"
 			/>

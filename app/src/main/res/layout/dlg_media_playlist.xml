@@ -3,18 +3,16 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
-	android:paddingTop="@dimen/spt_dlg"
-	android:paddingBottom="@dimen/spb_dlg"
 	android:paddingStart="?dialogPreferredPadding"
 	android:paddingEnd="?dialogPreferredPadding">
 
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/m_dlg"
-		android:layout_marginBottom="@dimen/m_dlg"
+		android:layout_marginTop="@dimen/sp_main"
+		android:layout_marginBottom="@dimen/sp_main"
 		android:textColor="?android:attr/textColorPrimary"
-		android:textSize="@dimen/tsz_title"
+		android:textSize="@dimen/tsz_main"
 		android:text="@string/dlg_playlist_question"
 		/>
 

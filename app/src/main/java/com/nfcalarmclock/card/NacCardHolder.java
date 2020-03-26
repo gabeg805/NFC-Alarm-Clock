@@ -288,19 +288,19 @@ public class NacCardHolder
 				shared.editSnoozeCount(alarm.getId(), 0);
 			}
 		}
-		else if (id == R.id.nac_repeat)
-		{
-			alarm.setRepeat(state);
-			this.mSummary.set(shared);
-		}
-		else if (id == R.id.nac_nfc)
-		{
-			alarm.setUseNfc(state);
-		}
-		else if (id == R.id.nac_vibrate)
-		{
-			alarm.setVibrate(state);
-		}
+		//else if (id == R.id.nac_repeat)
+		//{
+		//	alarm.setRepeat(state);
+		//	this.mSummary.set(shared);
+		//}
+		//else if (id == R.id.nac_nfc)
+		//{
+		//	alarm.setUseNfc(state);
+		//}
+		//else if (id == R.id.nac_vibrate)
+		//{
+		//	alarm.setVibrate(state);
+		//}
 
 		alarm.changed();
 	}
@@ -329,17 +329,10 @@ public class NacCardHolder
 		if (!alarm.areDaysSelected())
 		{
 			alarm.setRepeat(false);
-			this.mDays.getRepeat().setEnabled(false);
-			this.mDays.getRepeat().setAlpha(0.5f);
-			this.mDays.set(shared);
-		}
-		else
-		{
-			this.mDays.getRepeat().setEnabled(true);
-			this.mDays.getRepeat().setAlpha(1.0f);
 		}
 
 		alarm.changed();
+		this.mDays.set(shared);
 		this.mSummary.set(shared);
 	}
 
@@ -348,23 +341,17 @@ public class NacCardHolder
 	@Override
 	public void onClick(View view)
 	{
+		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
 		int id = view.getId();
 
 		if (id == R.id.nac_header)
 		{
-			//this.mCard.toggleState(getAdapterPosition());
 			this.mCard.toggleState();
 			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-
-			//if (this.mCard.isCollapsedState() && alarm.wasChanged())
-			//{
-			//	alarm.changed();
-			//}
 		}
 		else if (id == R.id.nac_summary)
 		{
-			//this.mCard.expand(getAdapterPosition());
 			this.mCard.expand();
 			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		}
@@ -372,16 +359,10 @@ public class NacCardHolder
 		{
 			this.mCard.collapse();
 			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-
-			//if (alarm.wasChanged())
-			//{
-			//	alarm.changed();
-			//}
 		}
 		else if (id == R.id.nac_time_parent)
 		{
 			NacSharedPreferences shared = this.getSharedPreferences();
-			Context context = this.getContext();
 
 			if (alarm.isSnoozed(shared))
 			{
@@ -390,6 +371,39 @@ public class NacCardHolder
 			}
 
 			this.mTime.showDialog(this);
+		}
+		else if (id == R.id.nac_repeat)
+		{
+			alarm.toggleRepeat();
+			alarm.changed();
+			this.mDays.setRepeat();
+
+			if (alarm.getRepeat())
+			{
+				NacUtility.quickToast(context, "Repeat alarm");
+			}
+		}
+		else if (id == R.id.nac_vibrate)
+		{
+			alarm.toggleVibrate();
+			alarm.changed();
+			this.mVibrate.set();
+
+			if (alarm.getVibrate())
+			{
+				NacUtility.quickToast(context, "Vibrate phone");
+			}
+		}
+		else if (id == R.id.nac_nfc)
+		{
+			alarm.toggleUseNfc();
+			alarm.changed();
+			this.mUseNfc.set();
+
+			if (alarm.getUseNfc())
+			{
+				NacUtility.quickToast(context, "NFC required to dismiss alarm");
+			}
 		}
 		else if (id == R.id.nac_sound)
 		{
@@ -407,7 +421,6 @@ public class NacCardHolder
 		else if (id == R.id.nac_delete)
 		{
 			NacSharedPreferences shared = this.getSharedPreferences();
-			Context context = this.getContext();
 
 			if (alarm.isSnoozed(shared))
 			{
@@ -469,8 +482,6 @@ public class NacCardHolder
 		alarm.setRepeat(false);
 		alarm.setDays(0);
 		alarm.changed();
-		this.mDays.getRepeat().setEnabled(false);
-		this.mDays.getRepeat().setAlpha(0.5f);
 		this.mDays.set(shared);
 		this.mSummary.set(shared);
 
@@ -546,9 +557,11 @@ public class NacCardHolder
 		this.mCard.setOnClickListener(root, (View.OnClickListener)listener);
 		this.mSwitch.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener)listener);
 		this.mDays.setListeners(listener);
-		this.mUseNfc.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener)listener);
+		this.mUseNfc.setOnClickListener((View.OnClickListener)listener);
+		//this.mUseNfc.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener)listener);
 		this.mSound.setListener(listener);
-		this.mVibrate.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener)listener);
+		//this.mVibrate.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener)listener);
+		this.mVibrate.setOnClickListener((View.OnClickListener)listener);
 		this.mName.setOnClickListener((View.OnClickListener)listener);
 		this.mDelete.setOnClickListener((View.OnClickListener)listener);
 	}

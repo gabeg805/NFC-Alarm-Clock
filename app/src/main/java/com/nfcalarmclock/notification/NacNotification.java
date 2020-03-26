@@ -92,7 +92,7 @@ public abstract class NacNotification
 			context, channel)
 			.setGroup(this.getGroup())
 			.setContentTitle(boldTitle)
-			.setSmallIcon(R.mipmap.notification_icon)
+			.setSmallIcon(R.mipmap.notification)
 			.setPriority(NotificationCompat.PRIORITY_DEFAULT)
 			.setCategory(NotificationCompat.CATEGORY_ALARM)
 			.setContentIntent(pending)

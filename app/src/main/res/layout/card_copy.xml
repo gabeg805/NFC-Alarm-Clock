@@ -10,12 +10,12 @@
 
 	<ImageView
 		android:id="@+id/copy_icon"
-		android:layout_width="@dimen/isz_copy"
-		android:layout_height="@dimen/isz_copy"
-		android:layout_marginStart="@dimen/ml_copy"
+		android:layout_width="@dimen/isz_main_custom"
+		android:layout_height="@dimen/isz_main_custom"
+		android:layout_marginStart="@dimen/sp_main"
 		android:layout_alignParentStart="true"
 		android:layout_centerVertical="true"
-		android:src="@mipmap/file_copy"
+		android:src="@mipmap/copy"
 		android:contentDescription="@null"
 		/>
 
@@ -23,11 +23,12 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_toEndOf="@id/copy_icon"
-		android:layout_marginStart="@dimen/ml_copy"
+		android:layout_marginStart="@dimen/sp_main"
 		android:layout_centerVertical="true"
-		android:text="@string/card_swipe_copy"
 		android:textColor="@color/white"
-		android:textSize="@dimen/tsz_copy"
+		android:textSize="@dimen/tsz_main_custom"
+		android:textStyle="bold"
+		android:text="@string/card_swipe_copy"
 		/>
 
 </RelativeLayout>

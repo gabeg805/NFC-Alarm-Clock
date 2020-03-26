@@ -59,7 +59,7 @@ public class NacCardSound
 	/**
 	 * Media source settings.
 	 */
-	private ImageView mAudioSourceIcon;
+	private RelativeLayout mAudioSourceIcon;
 
 	/**
 	 * Card measurement.
@@ -75,7 +75,7 @@ public class NacCardSound
 		this.mSound = (TextView) root.findViewById(R.id.sound_name);
 		this.mVolume = (SeekBar) root.findViewById(R.id.nac_volume_slider);
 		this.mVolumeIcon = (ImageView) root.findViewById(R.id.nac_volume_icon);
-		this.mAudioSourceIcon = (ImageView) root.findViewById(R.id.nac_volume_settings);
+		this.mAudioSourceIcon = (RelativeLayout) root.findViewById(R.id.nac_volume_settings);
 		this.mMeasure = measure;
 	}
 
@@ -109,14 +109,6 @@ public class NacCardSound
 	private int getScreenWidth()
 	{
 		return this.mMeasure.getScreenWidth();
-	}
-
-	/**
-	 * @return The vibrate width.
-	 */
-	private int getVibrateWidth()
-	{
-		return this.mMeasure.getVibrateWidth();
 	}
 
 	/**
@@ -159,7 +151,7 @@ public class NacCardSound
 		NacAlarm alarm = this.getAlarm();
 		String path = alarm.getMediaPath();
 		String message = NacSharedPreferences.getMediaMessage(context, path);
-		float alpha = ((path != null) && !path.isEmpty()) ? 1.0f : 0.5f;
+		float alpha = ((path != null) && !path.isEmpty()) ? 1.0f : 0.3f;
 
 		this.mSound.setText(message);
 		this.mSound.setAlpha(alpha);

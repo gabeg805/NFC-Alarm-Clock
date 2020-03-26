@@ -12,7 +12,7 @@
 		android:singleLine="true"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:textColor="?android:attr/textColorPrimary"
-		android:textSize="@dimen/tsz_title"
+		android:textSize="@dimen/tsz_main"
 		android:ellipsize="marquee"
 		android:fadingEdge="horizontal"
 		/>
@@ -25,7 +25,7 @@
 		android:layout_alignStart="@android:id/title"
 		android:textAppearance="?android:attr/textAppearanceSmall"
 		android:textColor="?android:attr/textColorSecondary"
-		android:textSize="@dimen/tsz_summary"
+		android:textSize="@dimen/tsz_support"
 		android:maxLines="4"
 		/>
 

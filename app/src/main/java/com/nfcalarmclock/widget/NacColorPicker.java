@@ -544,7 +544,7 @@ public class NacColorPicker
 	{
 		Context context = getContext();
 		Resources res = context.getResources();
-		float curve = res.getDimension(R.dimen.rad_shader);
+		float curve = res.getDimension(R.dimen.sz_radius);
 		float centerX = this.getCenterX();
 		float centerY = this.getCenterY();
 		float radius = this.getRadius();

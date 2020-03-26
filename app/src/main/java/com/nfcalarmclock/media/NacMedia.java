@@ -8,8 +8,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import java.io.File;
+import java.lang.Integer;
 import java.util.ArrayList;
+import java.util.TreeMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  */
@@ -137,6 +140,15 @@ public class NacMedia
 	}
 
 	/**
+	 * @return True if the current build can query the media duration, and False
+	 *         otherwise.
+	 */
+	public static boolean canQueryDuration()
+	{
+		return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q);
+	}
+
+	/**
 	 * @return True if the current build can query the relative path, and False
 	 *         otherwise.
 	 */
@@ -186,6 +198,63 @@ public class NacMedia
 		c.close();
 
 		return artist;
+	}
+
+	/**
+	 * @return The duration of the track.
+	 */
+	@TargetApi(Build.VERSION_CODES.Q)
+	public static String getDuration(Context context, Uri contentUri)
+	{
+		String contentPath = contentUri.toString();
+
+		if (!NacMedia.canQueryDuration()
+			|| !contentPath.startsWith("content://"))
+		{
+			return "";
+		}
+
+		String[] columns = new String[] { MediaStore.Audio.Media.DURATION };
+		Cursor c = context.getContentResolver().query(contentUri, columns, null,
+			null, null);
+		String millis = "";
+
+		c.moveToFirst();
+
+		try
+		{
+			int durationIndex = c.getColumnIndexOrThrow(
+				MediaStore.Audio.Media.DURATION);
+			millis = c.getString(durationIndex);
+		}
+		catch (IllegalArgumentException e)
+		{
+			NacUtility.printf("NacMedia : getDuration : IllegalArgumentException!");
+		}
+
+		c.close();
+
+		return NacMedia.parseDuration(millis);
+	}
+
+	/**
+	 * @see getDuration
+	 */
+	public static String getDuration(Context context, NacFile.Metadata metadata)
+	{
+		Uri contentUri = metadata.toExternalUri();
+
+		return NacMedia.getDuration(context, contentUri);
+	}
+
+	/**
+	 * @see getDuration
+	 */
+	public static String getDuration(Context context, String path)
+	{
+		Uri contentUri = Uri.parse(path);
+
+		return NacMedia.getDuration(context, contentUri);
 	}
 
 	/**
@@ -368,11 +437,10 @@ public class NacMedia
 	 *
 	 * @return A list of alarm ringtones.
 	 */
-	public static List<String> getRingtones(Context context)
+	public static TreeMap<String,String> getRingtones(Context context)
 	{
 		RingtoneManager manager = new RingtoneManager(context);
-		List<String> ringtonePaths = new ArrayList<>();
-		List<String> ringtoneTitles = new ArrayList<>();
+		TreeMap<String,String> ringtones = new TreeMap<>();
 
 		manager.setType(RingtoneManager.TYPE_ALARM);
 
@@ -385,16 +453,15 @@ public class NacMedia
 			String dir = c.getString(RingtoneManager.URI_COLUMN_INDEX);
 			String path = String.format("%s/%s", dir, id);
 
-			if (ringtoneTitles.contains(title))
+			if (ringtones.containsKey(title))
 			{
 				continue;
 			}
 
-			ringtonePaths.add(path);
-			ringtoneTitles.add(title);
+			ringtones.put(title, path);
 		}
 
-		return ringtonePaths;
+		return ringtones;
 	}
 
 	/**
@@ -552,7 +619,7 @@ public class NacMedia
 	 */
 	public static boolean isDirectory(String path)
 	{
-		return !path.startsWith("content://");
+		return !path.isEmpty() && !path.startsWith("content://");
 	}
 
 	/**
@@ -640,6 +707,40 @@ public class NacMedia
 	public static boolean isSpotify(String path)
 	{
 		return path.startsWith("spotify");
+	}
+
+	/**
+	 * Parse the duration string returned from the MediaStore query.
+	 */
+	public static String parseDuration(String millis)
+	{
+		String duration = "";
+
+		try
+		{
+			int value = Integer.parseInt(millis) / 1000;
+			int hours = value / 3600;
+			int minutes = value / 60;
+			int seconds =  value % 60;
+			Locale locale = Locale.getDefault();
+
+			if (hours == 0)
+			{
+				duration = String.format(locale, "%1$02d:%2$02d", minutes,
+					seconds);
+			}
+			else
+			{
+				duration = String.format(locale, "%1$02d:%2$02d:%3$02d", hours,
+					minutes, seconds);
+			}
+		}
+		catch (NumberFormatException e)
+		{
+			NacUtility.printf("NacMedia : getDuration : NumberFormatException!");
+		}
+
+		return duration;
 	}
 
 	/**

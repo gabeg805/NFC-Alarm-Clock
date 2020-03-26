@@ -8,7 +8,7 @@
 		/>
 
 	<corners
-		android:radius="@dimen/rad_general"
+		android:radius="@dimen/sz_radius"
 		/>
 
 </shape>

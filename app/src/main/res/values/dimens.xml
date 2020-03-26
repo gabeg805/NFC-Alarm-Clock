@@ -1,188 +1,33 @@
 <resources>
 
-	<!-- GENERAL -->
-	<dimen name="pad_tweak">10dp</dimen>
-	<dimen name="sp_tweak">-5dp</dimen>
-	<dimen name="rad_general">3dp</dimen>
-	<dimen name="isz_pref_icon">32dp</dimen>
-	<dimen name="ml_pref_checkbox">20dp</dimen>
-	<dimen name="isz_general">22dp</dimen>
-	<dimen name="isz_general_tweak">24dp</dimen>
-	<!-- <dimen name="tsz_general">16sp</dimen> -->
+	<!-- Spacing -->
+	<dimen name="sp_section">24dp</dimen>
+	<dimen name="sp_main">16dp</dimen>
+	<dimen name="sp_support">8dp</dimen>
+	<dimen name="sp_align">4dp</dimen>
+	<dimen name="sp_row_last">16dp</dimen>
+	<dimen name="sp_row">8dp</dimen>
 
+	<!-- Sizing -->
+	<dimen name="sz_touch">48dp</dimen>
+	<dimen name="sz_radius">6dp</dimen>
+	<dimen name="sz_none">0dp</dimen>
 
-	<!-- Alarm card -->
-	<dimen name="elv_card">5dp</dimen>
-	<dimen name="mt_card">10dp</dimen>
-	<dimen name="mb_card">5dp</dimen>
-	<dimen name="ml_card">16dp</dimen>
-	<dimen name="mr_card">16dp</dimen>
-	<dimen name="sp_card">10dp</dimen>
-	<dimen name="sp_text">4dp</dimen>
-	<dimen name="isz_divider">2dp</dimen>
-	<dimen name="tsz_card">15sp</dimen>
+	<!-- Image -->
+	<dimen name="isz_main_extra">54dp</dimen>
+	<dimen name="isz_main_custom">32dp</dimen>
+	<dimen name="isz_main">24dp</dimen>
+	<dimen name="isz_support">16dp</dimen>
+	<dimen name="isz_support_extra">8dp</dimen>
+	<dimen name="isz_divider">1dp</dimen>
 
-
-	<!-- Alarm Activity -->
-	<dimen name="m_act_alarm_icon">28dp</dimen>
-	<dimen name="m_act_alarm_buttons">28dp</dimen>
-	<dimen name="mb_act_alarm_info">20dp</dimen>
-	<dimen name="mb_act_alarm_info_name">2dp</dimen>
-	<dimen name="isz_act_alarm_icon">64dp</dimen>
-	<dimen name="tsz_act_alarm_title">26sp</dimen>
-	<dimen name="tsz_act_alarm_info_name">18sp</dimen>
-	<dimen name="tsz_act_alarm_instructions">14sp</dimen>
-
-
-	<!-- Floating button -->
-	<dimen name="isz_fab">54dp</dimen>
-	<dimen name="pb_for_fab">70dp</dimen>
-	<dimen name="mb_fab">16dp</dimen>
-
-
-	<!-- Switch -->
-	<dimen name="sz_switch">58dp</dimen>
-	<dimen name="pt_switch">14dp</dimen>
-	<dimen name="pb_switch">14dp</dimen>
-	<dimen name="pl_switch">12dp</dimen>
-	<dimen name="pr_switch">0dp</dimen>
-	<dimen name="mr_summary">22dp</dimen>
-
-
-	<!-- NacImageTextButton -->
-	<dimen name="isz_itb">22dp</dimen>
-	<dimen name="tsz_itb">13sp</dimen>
-	<dimen name="sp_itb">10dp</dimen>
-
-
-	<!-- Copy/delete alarms -->
-	<dimen name="ml_copy">10dp</dimen>
-	<dimen name="mr_delete">10dp</dimen>
-	<dimen name="isz_copy">30dp</dimen>
-	<dimen name="isz_delete">30dp</dimen>
-	<dimen name="tsz_copy">18sp</dimen>
-	<dimen name="tsz_delete">18sp</dimen>
-
-
-	<!-- Time -->
-	<dimen name="ml_meridian">5dp</dimen>
-	<dimen name="mr_time_parent">28dp</dimen>
-	<dimen name="mb_time_parent">6dp</dimen>
-	<dimen name="tsz_time">40sp</dimen>
-	<dimen name="tsz_meridian">14sp</dimen>
-
-
-	<!-- Repeat -->
-	<dimen name="pt_repeat">16dp</dimen>
-	<dimen name="pb_repeat">16dp</dimen>
-	<dimen name="pl_repeat">10dp</dimen>
-	<dimen name="pr_repeat">14dp</dimen>
-
-
-	<!-- NFC -->
-	<dimen name="pt_nfc">16dp</dimen>
-	<dimen name="pb_nfc">16dp</dimen>
-	<dimen name="pl_nfc">14dp</dimen>
-	<dimen name="pr_nfc">6dp</dimen>
-
-
-	<!-- Days -->
-	<dimen name="pt_days">12dp</dimen>
-	<dimen name="pb_days">12dp</dimen>
-	<dimen name="isz_day">32dp</dimen>
-	<dimen name="tsz_days">14sp</dimen>
-	<dimen name="tsz_summary_days">13sp</dimen>
-
-
-	<!-- Sound -->
-	<dimen name="sp_sound">14dp</dimen>
-	<dimen name="pt_sound">16dp</dimen>
-	<dimen name="pb_sound">16dp</dimen>
-	<dimen name="pl_sound">6dp</dimen>
-	<dimen name="pr_sound">10dp</dimen>
-
-
-	<!-- Vibrate -->
-	<dimen name="pt_vibrate">16dp</dimen>
-	<dimen name="pb_vibrate">16dp</dimen>
-	<dimen name="pl_vibrate">10dp</dimen>
-	<dimen name="pr_vibrate">20dp</dimen>
-
-
-	<!-- Volume -->
-	<dimen name="isz_volume_settings">50dp</dimen>
-	<dimen name="ml_volume_icon">6dp</dimen>
-	<dimen name="sp_volume_icon">16dp</dimen>
-	<dimen name="pt_volume_slider">16dp</dimen>
-	<dimen name="pb_volume_slider">16dp</dimen>
-	<dimen name="pl_volume_slider">0dp</dimen>
-	<dimen name="pr_volume_slider">8dp</dimen>
-	<dimen name="sp_volume_settings">14dp</dimen>
-	<dimen name="pt_volume_settings">16dp</dimen>
-	<dimen name="pb_volume_settings">16dp</dimen>
-	<dimen name="pl_volume_settings">16dp</dimen>
-	<dimen name="pr_volume_settings">16dp</dimen>
-
-
-	<!-- Name -->
-	<dimen name="sp_name">16dp</dimen>
-	<dimen name="pt_name">16dp</dimen>
-	<dimen name="pb_name">14dp</dimen>
-	<dimen name="pl_name">6dp</dimen>
-	<dimen name="pr_name">6dp</dimen>
-	<dimen name="tsz_summary_name">13sp</dimen>
-	<dimen name="tsz_dlg_name">16sp</dimen>
-
-
-	<!-- Delete -->
-	<!-- <dimen name="sp_delete">16dp</dimen> -->
-	<dimen name="pt_delete">20dp</dimen>
-	<dimen name="pb_delete">20dp</dimen>
-	<dimen name="pl_delete">6dp</dimen>
-	<dimen name="pr_delete">48dp</dimen>
-
-
-	<!-- Expand/collapse buttons -->
-	<dimen name="mr_expand">16dp</dimen>
-	<dimen name="mr_collapse">16dp</dimen>
-	<dimen name="isz_expand">20dp</dimen>
-	<dimen name="isz_collapse">20dp</dimen>
-
-
-	<!-- Dialog -->
-	<dimen name="spt_dlg">10dp</dimen>
-	<dimen name="spb_dlg">-25dp</dimen>
-	<dimen name="m_dlg">10dp</dimen>
-	<dimen name="m_dlg_days">25dp</dimen>
-	<dimen name="m_dlg_name">10dp</dimen>
-
-
-	<!-- Preference -->
-	<dimen name="tsz_title">16sp</dimen>
-	<dimen name="tsz_summary">14sp</dimen>
-
-
-	<!-- Color dialog -->
-	<dimen name="mr_color_example">15dp</dimen>
-	<dimen name="mb_color_example">30dp</dimen>
-	<dimen name="mt_color_picker">15dp</dimen>
-	<dimen name="mh_color_picker">15dp</dimen>
-	<dimen name="mb_color_picker">40dp</dimen>
-	<dimen name="sp_color_picker">35dp</dimen>
-	<dimen name="isz_color_example">30dp</dimen>
-	<dimen name="isz_color_selector">15dp</dimen>
-	<dimen name="isz_shader_selector">6dp</dimen>
-	<dimen name="tsz_dlg_color">16sp</dimen>
-	<dimen name="rad_shader">5dp</dimen>
-
-
-	<!-- Number picker -->>
-	<dimen name="m_scroll_option">30dp</dimen>
-
+	<!-- Text -->
+	<dimen name="tsz_title">32sp</dimen>
+	<dimen name="tsz_main_custom">18sp</dimen>
+	<dimen name="tsz_main">16sp</dimen>
+	<dimen name="tsz_support">14sp</dimen>
 
 	<!-- Fragment sound -->
-	<dimen name="p_frg_buttons">10dp</dimen>
-	<dimen name="tsz_frg_buttons">16sp</dimen>
 	<!--
 	<dimen name="tsz_spotify_titles">20sp</dimen>
 	<dimen name="pt_spotify_titles">10dp</dimen>
@@ -192,20 +37,5 @@
 	<dimen name="sp_frg_spotify_cover_text">10dp</dimen>
 	<dimen name="p_frg_spotify_cover">20dp</dimen>
 	-->
-
-
-	<!-- Media fragment -->
-	<dimen name="pt_frg_music_path">10dp</dimen>
-	<dimen name="pb_frg_music_path">10dp</dimen>
-	<dimen name="pl_frg_music_path">15dp</dimen>
-	<dimen name="pr_frg_music_path">15dp</dimen>
-	<dimen name="pt_frg_sound">15dp</dimen>
-	<dimen name="pb_frg_sound">15dp</dimen>
-	<dimen name="pl_frg_sound">25dp</dimen>
-	<dimen name="pl_frg_ringtone">50dp</dimen>
-	<dimen name="sp_frg_sound">15dp</dimen>
-	<dimen name="tsz_frg_sound">16sp</dimen>
-	<dimen name="tsz_frg_music_path">13sp</dimen>
-	<dimen name="isz_frg_sound">30dp</dimen>
 
 </resources>

@@ -1,7 +1,6 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
-//import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,10 +17,13 @@ public class NacCardName
 	private Context mContext;
 
 	/**
+	 * Parent view of the name view.
+	 */
+	 private LinearLayout mNameParent;
+
+	/**
 	 * Name view.
 	 */
-	 //private NacImageTextButton mName;
-	 private LinearLayout mNameParent;
 	 private TextView mName;
 
 	/**
@@ -35,7 +37,6 @@ public class NacCardName
 	{
 		this.mContext = context;
 		this.mAlarm = null;
-		//this.mName = (NacImageTextButton) root.findViewById(R.id.nac_name);
 		this.mNameParent = (LinearLayout) root.findViewById(R.id.nac_name);
 		this.mName = (TextView) root.findViewById(R.id.name);
 	}
@@ -75,7 +76,7 @@ public class NacCardName
 		String alarmName = alarm.getNameNormalized();
 		String name = NacSharedPreferences.getNameMessage(alarmName);
 		float alpha = ((alarmName != null) && !alarmName.isEmpty()) ? 1.0f
-			: 0.5f;
+			: 0.3f;
 
 		this.mName.setText(name);
 		this.mName.setAlpha(alpha);

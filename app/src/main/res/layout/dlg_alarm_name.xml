@@ -4,22 +4,17 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:orientation="vertical"
-	android:paddingTop="@dimen/spt_dlg"
-	android:paddingBottom="@dimen/spb_dlg"
-	android:paddingStart="?dialogPreferredPadding"
-	android:paddingEnd="?dialogPreferredPadding">
+	android:padding="@dimen/sp_main">
 
 	<EditText
 		android:id="@+id/alarm_name"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/m_dlg_name"
-		android:layout_marginBottom="@dimen/m_dlg_name"
 		android:maxLength="@integer/max_entry_length"
 		android:maxLines="10"
 		android:singleLine="false"
 		android:isScrollContainer="true"
-		android:textSize="@dimen/tsz_dlg_name"
+		android:textSize="@dimen/tsz_main_custom"
 		android:inputType="textCapSentences|textMultiLine"
 		android:hint="@string/dlg_name_hint"
 		android:importantForAutofill="no">

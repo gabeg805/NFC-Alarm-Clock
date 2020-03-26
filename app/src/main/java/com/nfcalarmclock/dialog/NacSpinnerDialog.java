@@ -155,6 +155,7 @@ public class NacSpinnerDialog
 		decrement.setTag(Direction.DECREMENT);
 		increment.setOnClickListener(this);
 		decrement.setOnClickListener(this);
+		dialog.scale(0.8, 0.7, false, true);
 	}
 
 	/**

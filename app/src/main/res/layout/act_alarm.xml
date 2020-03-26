@@ -5,11 +5,13 @@
 	android:id="@+id/act_alarm"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:paddingTop="@dimen/pad_tweak"
-	android:paddingBottom="@dimen/pad_tweak"
 	android:paddingStart="?dialogPreferredPadding"
 	android:paddingEnd="?dialogPreferredPadding"
 	tools:ignore="UseCompoundDrawables">
+	<!--
+	android:paddingTop="@dimen/pad_tweak"
+	android:paddingBottom="@dimen/pad_tweak"
+	-->
 
 	<LinearLayout
 		android:layout_width="match_parent"
@@ -21,15 +23,16 @@
 			android:id="@+id/title"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textSize="@dimen/tsz_act_alarm_title"
+			android:textSize="@dimen/tsz_title"
 			android:text="@string/act_alarm_title"
 			/>
 
 		<ImageView
 			android:id="@+id/icon"
-			android:layout_width="@dimen/isz_act_alarm_icon"
-			android:layout_height="@dimen/isz_act_alarm_icon"
-			android:layout_margin="@dimen/m_act_alarm_icon"
+			android:layout_width="@dimen/isz_main_extra"
+			android:layout_height="@dimen/isz_main_extra"
+			android:layout_marginTop="@dimen/sp_section"
+			android:layout_marginBottom="@dimen/sp_section"
 			android:src="@mipmap/alarm"
 			android:contentDescription="@null"
 			/>
@@ -38,14 +41,15 @@
 			android:id="@+id/instructions"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textSize="@dimen/tsz_act_alarm_instructions"
+			android:textSize="@dimen/tsz_support"
 			android:text="@string/act_alarm_instructions"
 			/>
 
 		<LinearLayout
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_margin="@dimen/m_act_alarm_buttons"
+			android:layout_marginTop="@dimen/sp_section"
+			android:layout_marginBottom="@dimen/sp_section"
 			android:orientation="horizontal">
 
 			<Button
@@ -72,15 +76,14 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_alignParentBottom="true"
-		android:layout_marginBottom="@dimen/mb_act_alarm_info">
+		android:layout_marginBottom="@dimen/sp_section">
 
 		<TextView
 			android:id="@+id/name"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginBottom="@dimen/mb_act_alarm_info_name"
-			android:layout_marginStart="@dimen/mb_act_alarm_info"
-			android:layout_marginEnd="@dimen/mb_act_alarm_info"
+			android:layout_marginStart="@dimen/sp_main"
+			android:layout_marginEnd="@dimen/sp_main"
 			android:layout_centerHorizontal="true"
 			android:focusable="true"
 			android:focusableInTouchMode="true"
@@ -89,7 +92,7 @@
 			android:ellipsize="marquee"
 			android:marqueeRepeatLimit ="marquee_forever"
 			android:textColor="@color/white"
-			android:textSize="@dimen/tsz_act_alarm_info_name"
+			android:textSize="@dimen/tsz_main"
 			/>
 
 	</RelativeLayout>

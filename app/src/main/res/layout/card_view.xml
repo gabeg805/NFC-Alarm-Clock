@@ -6,9 +6,10 @@
 	android:id="@+id/nac_card"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:elevation="@dimen/elv_card"
+	app:contentPaddingLeft="@dimen/sp_main"
+	app:contentPaddingRight="@dimen/sp_main"
 	app:cardBackgroundColor="?attr/colorCard"
-	tools:ignore="ContentDescription,RelativeOverlap,RtlSymmetry">
+	tools:ignore="RelativeOverlap,RtlSymmetry">
 	<!-- android:animateLayoutChanges="true" -->
 
 	<RelativeLayout
@@ -18,24 +19,25 @@
 		<RelativeLayout
 			android:id="@+id/nac_header"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:paddingTop="@dimen/mt_card"
-			android:paddingStart="@dimen/ml_card"
-			android:paddingEnd="@dimen/mr_card">
+			android:layout_height="wrap_content">
+			<!--
+			android:paddingTop="@dimen/sp_support"
+			android:paddingBottom="@dimen/sp_support">
+			-->
 
 			<RelativeLayout
 				android:id="@+id/nac_time_parent"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:paddingBottom="@dimen/mb_time_parent"
-				android:paddingEnd="@dimen/mr_time_parent">
+				android:paddingTop="@dimen/sp_support"
+				android:paddingEnd="@dimen/sp_main">
 
 				<TextView
 					android:id="@+id/nac_time"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_time"
+					android:textSize="@dimen/tsz_title"
 					/>
 
 				<TextView
@@ -44,9 +46,9 @@
 					android:layout_height="wrap_content"
 					android:layout_toEndOf="@id/nac_time"
 					android:layout_alignBaseline="@id/nac_time"
-					android:layout_marginStart="@dimen/ml_meridian"
+					android:layout_marginStart="@dimen/sp_support"
 					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_meridian"
+					android:textSize="@dimen/tsz_main"
 					/>
 
 			</RelativeLayout>
@@ -57,11 +59,9 @@
 				android:layout_height="wrap_content"
 				android:layout_alignParentEnd="true"
 				android:layout_centerVertical="true"
-				android:paddingTop="@dimen/pt_switch"
-				android:paddingBottom="@dimen/pb_switch"
-				android:paddingStart="@dimen/pl_switch"
-				android:paddingEnd="@dimen/pr_switch"
-				android:switchMinWidth="@dimen/sz_switch"
+				android:paddingTop="@dimen/sp_main"
+				android:paddingBottom="@dimen/sp_main"
+				android:switchMinWidth="@dimen/isz_main_extra"
 				/>
 
 		</RelativeLayout>
@@ -71,29 +71,32 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_below="@id/nac_header"
-			android:paddingBottom="@dimen/mb_card"
-			android:paddingStart="@dimen/ml_card"
-			android:paddingEnd="@dimen/mr_card">
+			android:paddingBottom="@dimen/sp_support">
 
+			<!-- TODO see if I can get rid of this -->
 			<RelativeLayout
 				android:id="@+id/nac_summary_text"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_toStartOf="@id/nac_summary_expand"
+				android:layout_marginStart="@dimen/sp_align"
+				android:layout_marginEnd="@dimen/sp_support"
 				android:gravity="left"
-				tools:ignore="RtlHardcoded">
+				tools:ignore="RtlHardcoded,UselessParent">
+				<!--
+				android:layout_toStartOf="@id/nac_summary_expand"
+				-->
 
 				<TextView
 					android:id="@+id/nac_summary_name"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_toStartOf="@id/nac_summary_days"
-					android:layout_marginStart="@dimen/sp_text"
+					android:layout_marginEnd="@dimen/sp_support"
 					android:maxLength="@integer/max_entry_length"
 					android:maxLines="1"
 					android:ellipsize="end"
 					android:textColor="@color/sky_blue"
-					android:textSize="@dimen/tsz_summary_name"
+					android:textSize="@dimen/tsz_support"
 					android:textStyle="bold"
 					/>
 
@@ -102,27 +105,27 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_alignParentEnd="true"
-					android:layout_marginStart="@dimen/sp_text"
-					android:layout_marginEnd="@dimen/mr_summary"
 					android:maxLines="1"
 					android:textColor="?attr/colorAccent"
-					android:textSize="@dimen/tsz_summary_days"
+					android:textSize="@dimen/tsz_support"
 					android:textStyle="bold"
 					android:text=""
 					/>
 
 			</RelativeLayout>
 
+			<!--
 			<ImageView
 				android:id="@+id/nac_summary_expand"
-				android:layout_width="@dimen/isz_expand"
-				android:layout_height="@dimen/isz_expand"
+				android:layout_width="@dimen/isz_main"
+				android:layout_height="@dimen/isz_main"
 				android:layout_alignBottom="@id/nac_summary_text"
 				android:layout_alignParentEnd="true"
 				android:layout_marginEnd="@dimen/mr_expand"
 				android:src="@mipmap/expand"
 				tools:ignore="ContentDescription"
 				/>
+			-->
 
 		</RelativeLayout>
 
@@ -131,116 +134,133 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_below="@id/nac_summary"
-			android:paddingBottom="@dimen/mb_card"
-			android:paddingStart="@dimen/ml_card"
-			android:paddingEnd="@dimen/mr_card"
 			android:orientation="vertical"
 			android:visibility="gone">
-
-			<RelativeLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="6dp">
-
-				<CheckBox
-					android:id="@+id/nac_repeat"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_alignParentStart="true"
-					android:layout_centerVertical="true"
-					android:paddingTop="@dimen/pt_repeat"
-					android:paddingBottom="@dimen/pb_repeat"
-					android:paddingStart="@dimen/pl_repeat"
-					android:paddingEnd="@dimen/pr_repeat"
-					android:buttonTint="@color/white"
-					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_card"
-					android:text="@string/card_repeat"
-					/>
-
-				<CheckBox
-					android:id="@+id/nac_nfc"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_alignParentEnd="true"
-					android:layout_centerVertical="true"
-					android:paddingTop="@dimen/pt_nfc"
-					android:paddingBottom="@dimen/pb_nfc"
-					android:paddingStart="@dimen/pl_nfc"
-					android:paddingEnd="@dimen/pr_nfc"
-					android:buttonTint="@color/white"
-					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_card"
-					android:text="@string/card_nfc"
-					/>
-
-			</RelativeLayout>
 
 			<com.nfcalarmclock.NacDayOfWeek
 				android:id="@+id/nac_days"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:gravity="center"
-				android:paddingTop="@dimen/pt_days"
-				android:paddingBottom="@dimen/pb_days"
+				android:paddingTop="@dimen/sp_row"
+				android:paddingBottom="@dimen/sp_row"
+				app:nacBackgroundColor="@color/gray_light"
 				/>
 
-			<RelativeLayout
+			<LinearLayout
 				android:layout_width="match_parent"
-				android:layout_height="wrap_content">
+				android:layout_height="wrap_content"
+				android:orientation="horizontal">
 
-				<CheckBox
-					android:id="@+id/nac_vibrate"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_alignParentEnd="true"
-					android:layout_centerVertical="true"
-					android:paddingTop="@dimen/pt_vibrate"
-					android:paddingBottom="@dimen/pb_vibrate"
-					android:paddingStart="@dimen/pl_vibrate"
-					android:paddingEnd="@dimen/pr_vibrate"
-					android:buttonTint="@color/white"
-					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_card"
-					android:text="@string/card_vibrate"
+				<View
+					android:layout_width="@dimen/sz_none"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
 					/>
 
-				<LinearLayout
-					android:id="@+id/nac_sound"
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content"
-					android:layout_toStartOf="@id/nac_vibrate"
-					android:paddingTop="@dimen/pt_sound"
-					android:paddingBottom="@dimen/pb_sound"
-					android:paddingStart="@dimen/pl_sound"
-					android:paddingEnd="@dimen/pr_sound"
-					android:orientation="horizontal"
-					android:gravity="center_vertical"
-					tools:ignore="UseCompoundDrawables">
+				<RelativeLayout
+					android:id="@+id/nac_repeat"
+					android:layout_width="@dimen/sz_touch"
+					android:layout_height="@dimen/sz_touch">
 
 					<ImageView
-						android:id="@+id/sound_icon"
-						android:layout_width="@dimen/isz_general_tweak"
-						android:layout_height="@dimen/isz_general_tweak"
-						android:layout_marginEnd="@dimen/sp_sound"
-						android:src="@mipmap/music_note"
+						android:layout_width="@dimen/isz_main"
+						android:layout_height="@dimen/isz_main"
+						android:layout_centerInParent="true"
+						android:contentDescription="@string/cd_btn_repeat"
+						android:background="?android:selectableItemBackgroundBorderless"
+						android:tint="@color/white"
+						android:src="@mipmap/repeat"
 						/>
 
-					<TextView
-						android:id="@+id/sound_name"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:maxLength="@integer/max_entry_length"
-						android:maxLines="1"
-						android:ellipsize="end"
-						android:textColor="@color/white"
-						android:textSize="@dimen/tsz_card"
-						android:text=""
+				</RelativeLayout>
+
+				<View
+					android:layout_width="@dimen/sz_none"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					/>
+
+				<RelativeLayout
+					android:id="@+id/nac_vibrate"
+					android:layout_width="@dimen/sz_touch"
+					android:layout_height="@dimen/sz_touch">
+
+					<ImageView
+						android:layout_width="@dimen/isz_main"
+						android:layout_height="@dimen/isz_main"
+						android:layout_centerInParent="true"
+						android:contentDescription="@string/cd_btn_vibrate"
+						android:background="?android:selectableItemBackgroundBorderless"
+						android:tint="@color/white"
+						android:src="@mipmap/vibrate"
 						/>
 
-				</LinearLayout>
+				</RelativeLayout>
 
-			</RelativeLayout>
+				<View
+					android:layout_width="@dimen/sz_none"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					/>
+
+				<RelativeLayout
+					android:id="@+id/nac_nfc"
+					android:layout_width="@dimen/sz_touch"
+					android:layout_height="@dimen/sz_touch">
+
+					<ImageView
+						android:layout_width="@dimen/isz_main"
+						android:layout_height="@dimen/isz_main"
+						android:layout_centerInParent="true"
+						android:contentDescription="@string/cd_btn_nfc"
+						android:background="?android:selectableItemBackgroundBorderless"
+						android:tint="@color/white"
+						android:src="@mipmap/tap_and_play"
+						/>
+
+				</RelativeLayout>
+
+				<View
+					android:layout_width="@dimen/sz_none"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:id="@+id/nac_sound"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingTop="@dimen/sp_row"
+				android:paddingBottom="@dimen/sp_row"
+				android:orientation="horizontal"
+				android:gravity="center_vertical"
+				tools:ignore="UseCompoundDrawables">
+
+				<ImageView
+					android:id="@+id/sound_icon"
+					android:layout_width="@dimen/isz_main"
+					android:layout_height="@dimen/isz_main"
+					android:layout_marginEnd="@dimen/sp_main"
+					android:contentDescription="@string/cd_ic_media"
+					android:src="@mipmap/music_note"
+					/>
+
+				<TextView
+					android:id="@+id/sound_name"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:maxLength="@integer/max_entry_length"
+					android:maxLines="1"
+					android:ellipsize="end"
+					android:textColor="@color/white"
+					android:textSize="@dimen/tsz_main"
+					android:text=""
+					/>
+
+			</LinearLayout>
 
 			<RelativeLayout
 				android:layout_width="match_parent"
@@ -248,27 +268,32 @@
 
 				<ImageView
 					android:id="@+id/nac_volume_icon"
-					android:layout_width="@dimen/isz_general"
-					android:layout_height="@dimen/isz_general"
+					android:layout_width="@dimen/isz_main"
+					android:layout_height="@dimen/isz_main"
 					android:layout_centerVertical="true"
-					android:layout_marginStart="@dimen/ml_volume_icon"
-					android:layout_marginEnd="@dimen/sp_volume_icon"
+					android:layout_marginEnd="@dimen/sp_main"
+					android:contentDescription="@string/cd_ic_volume"
 					android:src="@mipmap/volume_high"
 					/>
 
-				<ImageView
+				<RelativeLayout
 					android:id="@+id/nac_volume_settings"
-					android:layout_width="@dimen/isz_volume_settings"
-					android:layout_height="@dimen/isz_volume_settings"
-					android:layout_marginStart="@dimen/sp_volume_settings"
-					android:paddingTop="@dimen/pt_volume_settings"
-					android:paddingBottom="@dimen/pb_volume_settings"
-					android:paddingStart="@dimen/pl_volume_settings"
-					android:paddingEnd="@dimen/pr_volume_settings"
+					android:layout_width="@dimen/sz_touch"
+					android:layout_height="@dimen/sz_touch"
 					android:layout_alignParentEnd="true"
-					android:layout_centerVertical="true"
-					android:src="@mipmap/settings"
-					/>
+					android:layout_centerVertical="true">
+
+					<ImageView
+						android:layout_width="@dimen/isz_main"
+						android:layout_height="@dimen/isz_main"
+						android:layout_marginEnd="@dimen/sp_support"
+						android:layout_alignParentEnd="true"
+						android:layout_centerVertical="true"
+						android:contentDescription="@string/cd_ic_volume_settings"
+						android:src="@mipmap/settings"
+						/>
+
+				</RelativeLayout>
 
 				<SeekBar
 					android:id="@+id/nac_volume_slider"
@@ -277,10 +302,9 @@
 					android:layout_toEndOf="@id/nac_volume_icon"
 					android:layout_toStartOf="@id/nac_volume_settings"
 					android:layout_centerVertical="true"
-					android:paddingTop="@dimen/pt_volume_slider"
-					android:paddingBottom="@dimen/pb_volume_slider"
-					android:paddingStart="@dimen/pl_volume_slider"
-					android:paddingEnd="@dimen/pr_volume_slider"
+					android:paddingTop="@dimen/sp_row"
+					android:paddingBottom="@dimen/sp_row"
+					android:paddingStart="@dimen/sz_none"
 					android:max="100"
 					android:progress="75"
 					/>
@@ -291,18 +315,17 @@
 				android:id="@+id/nac_name"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:paddingTop="@dimen/pt_name"
-				android:paddingBottom="@dimen/pb_name"
-				android:paddingStart="@dimen/pl_name"
-				android:paddingEnd="@dimen/pr_name"
+				android:paddingTop="@dimen/sp_row"
+				android:paddingBottom="@dimen/sp_row_last"
 				android:orientation="horizontal"
 				android:gravity="center_vertical"
 				tools:ignore="UseCompoundDrawables">
 
 				<ImageView
-					android:layout_width="@dimen/isz_general"
-					android:layout_height="@dimen/isz_general"
-					android:layout_marginEnd="@dimen/sp_name"
+					android:layout_width="@dimen/isz_main"
+					android:layout_height="@dimen/isz_main"
+					android:layout_marginEnd="@dimen/sp_main"
+					android:contentDescription="@string/cd_ic_name"
 					android:src="@mipmap/label"
 					/>
 
@@ -310,11 +333,12 @@
 					android:id="@+id/name"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
+					android:layout_marginEnd="@dimen/sp_support"
 					android:maxLength="@integer/max_entry_length"
 					android:maxLines="1"
 					android:ellipsize="end"
 					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_card"
+					android:textSize="@dimen/tsz_main"
 					android:text=""
 					/>
 
@@ -336,17 +360,17 @@
 					android:id="@+id/nac_delete"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:paddingTop="@dimen/pt_delete"
-					android:paddingBottom="@dimen/pb_delete"
-					android:paddingStart="@dimen/pl_delete"
-					android:paddingEnd="@dimen/pr_delete"
+					android:paddingTop="@dimen/sp_row_last"
+					android:paddingBottom="@dimen/sp_row_last"
+					android:paddingEnd="@dimen/sp_main"
 					android:orientation="horizontal"
 					tools:ignore="UseCompoundDrawables">
 
 					<ImageView
-						android:layout_width="@dimen/isz_general"
-						android:layout_height="@dimen/isz_general"
-						android:layout_marginEnd="@dimen/sp_name"
+						android:layout_width="@dimen/isz_main"
+						android:layout_height="@dimen/isz_main"
+						android:layout_marginEnd="@dimen/sp_main"
+						android:contentDescription="@string/cd_btn_delete"
 						android:src="@mipmap/delete"
 						/>
 
@@ -354,18 +378,19 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:textColor="@color/white"
-						android:textSize="@dimen/tsz_card"
+						android:textSize="@dimen/tsz_main"
 						android:text="@string/card_delete"
 						/>
 
 				</LinearLayout>
 
 				<ImageView
-					android:layout_width="@dimen/isz_collapse"
-					android:layout_height="@dimen/isz_collapse"
-					android:layout_marginEnd="@dimen/mr_collapse"
+					android:layout_width="@dimen/isz_main"
+					android:layout_height="@dimen/isz_main"
+					android:layout_marginEnd="@dimen/sp_support"
 					android:layout_alignParentEnd="true"
 					android:layout_centerVertical="true"
+					android:contentDescription="@string/cd_btn_collapse"
 					android:src="@mipmap/collapse"
 					/>
 

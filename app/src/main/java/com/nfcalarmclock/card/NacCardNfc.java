@@ -1,11 +1,12 @@
 package com.nfcalarmclock;
 
 import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.CheckBox;
+//import android.widget.CompoundButton;
+//import android.widget.CheckBox;
+import android.widget.RelativeLayout;
 
 /**
- * Use NFC checkbox for an alarm card.
+ * NFC view for an alarm card.
  */
 public class NacCardNfc
 {
@@ -18,13 +19,15 @@ public class NacCardNfc
 	/**
 	 * Use NFC checkbox.
 	 */
-	private CheckBox mUseNfc;
+	private RelativeLayout mUseNfc;
+	//private CheckBox mUseNfc;
 
 	/**
 	 */
 	public NacCardNfc(View root)
 	{
-		this.mUseNfc = (CheckBox) root.findViewById(R.id.nac_nfc);
+		this.mUseNfc = (RelativeLayout) root.findViewById(R.id.nac_nfc);
+		//this.mUseNfc = (CheckBox) root.findViewById(R.id.nac_nfc);
 	}
 
 	/**
@@ -36,12 +39,19 @@ public class NacCardNfc
 	}
 
 	/**
+	 * @return The NFC view.
+	 */
+	private RelativeLayout getNfc()
+	{
+		return this.mUseNfc;
+	}
+
+	/**
 	 * Initialize the nfc checkbox.
 	 */
 	public void init(NacAlarm alarm)
 	{
 		this.mAlarm = alarm;
-
 		this.set();
 	}
 
@@ -51,18 +61,23 @@ public class NacCardNfc
 	public void set()
 	{
 		NacAlarm alarm = this.getAlarm();
+		boolean useNfc = alarm.getUseNfc();
+		RelativeLayout view = this.getNfc();
 
-		this.mUseNfc.setChecked(alarm.getUseNfc());
+		view.setAlpha(useNfc ? 1.0f : 0.3f);
+		//this.mUseNfc.setChecked(alarm.getUseNfc());
 	}
 
 	/**
 	 * Set the on checked change listener.
 	 */
-	public void setOnCheckedChangeListener(
-		CompoundButton.OnCheckedChangeListener listener)
+	//public void setOnCheckedChangeListener(
+	//	CompoundButton.OnCheckedChangeListener listener)
+	public void setOnClickListener(View.OnClickListener listener)
 	{
-		this.mUseNfc.setOnCheckedChangeListener(
-			(CompoundButton.OnCheckedChangeListener)listener);
+		this.mUseNfc.setOnClickListener((View.OnClickListener)listener);
+		//this.mUseNfc.setOnCheckedChangeListener(
+		//	(CompoundButton.OnCheckedChangeListener)listener);
 	}
 
 }

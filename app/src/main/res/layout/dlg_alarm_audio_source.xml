@@ -5,24 +5,22 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="vertical"
-	android:paddingTop="@dimen/spt_dlg"
-	android:paddingBottom="@dimen/spb_dlg"
-	android:paddingStart="?dialogPreferredPadding"
-	android:paddingEnd="?dialogPreferredPadding"
-	tools:ignore="UselessParent">
+	android:padding="@dimen/sp_main"
+	tools:ignore="RtlSymmetry,UselessParent">
 
 	<RadioGroup
 		android:id="@+id/audio_sources"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginStart="20dp">
+		android:layout_marginStart="@dimen/sp_main">
 
 		<RadioButton
 			android:id="@+id/alarm"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginTop="12dp"
-			android:layout_marginBottom="12dp"
+			android:layout_marginBottom="@dimen/sp_row"
+			android:paddingStart="@dimen/sp_main"
+			android:textSize="@dimen/tsz_main"
 			android:text="@string/audio_source_alarm"
 			/>
 
@@ -30,7 +28,9 @@
 			android:id="@+id/media"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginBottom="12dp"
+			android:layout_marginBottom="@dimen/sp_row"
+			android:paddingStart="@dimen/sp_main"
+			android:textSize="@dimen/tsz_main"
 			android:text="@string/audio_source_media"
 			android:checked="true"
 			/>
@@ -39,7 +39,9 @@
 			android:id="@+id/notification"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginBottom="12dp"
+			android:layout_marginBottom="@dimen/sp_row"
+			android:paddingStart="@dimen/sp_main"
+			android:textSize="@dimen/tsz_main"
 			android:text="@string/audio_source_notification"
 			/>
 
@@ -47,7 +49,9 @@
 			android:id="@+id/ringtone"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginBottom="12dp"
+			android:layout_marginBottom="@dimen/sp_row"
+			android:paddingStart="@dimen/sp_main"
+			android:textSize="@dimen/tsz_main"
 			android:text="@string/audio_source_ringtone"
 			/>
 
@@ -55,7 +59,8 @@
 			android:id="@+id/system"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginBottom="12dp"
+			android:paddingStart="@dimen/sp_main"
+			android:textSize="@dimen/tsz_main"
 			android:text="@string/audio_source_system"
 			/>
 

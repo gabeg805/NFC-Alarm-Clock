@@ -65,11 +65,6 @@ public class NacForegroundService
 		NacWakeUpAction wakeUp = this.getWakeUp();
 		WakeLock wakeLock = this.getWakeLock();
 
-		if ((wakeUp == null) && (alarm != null))
-		{
-			wakeUp = new NacWakeUpAction(this, alarm);
-		}
-
 		if (wakeUp != null)
 		{
 			wakeUp.cleanup();
@@ -79,6 +74,9 @@ public class NacForegroundService
 		{
 			wakeLock.release();
 		}
+
+		this.mWakeUp = null;
+		this.mWakeLock = null;
 	}
 
 	/**
@@ -253,18 +251,7 @@ public class NacForegroundService
 
 		if (this.mAlarm == null)
 		{
-			NacUtility.printf("Alarm was NULL to start with! Getting it from the intent!");
 			this.mAlarm = NacIntent.getAlarm(intent);
-		}
-
-		if (this.mAlarm != null)
-		{
-			NacUtility.printf("Alarm was not NULL Hurray!");
-			this.mAlarm.print();
-		}
-		else
-		{
-			NacUtility.printf("Alarm was NULL wtf!");
 		}
 	}
 

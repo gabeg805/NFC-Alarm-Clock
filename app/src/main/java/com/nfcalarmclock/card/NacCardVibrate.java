@@ -1,11 +1,12 @@
 package com.nfcalarmclock;
 
 import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.CheckBox;
+//import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
+//import android.widget.CheckBox;
 
 /**
- * Vibrate checkbox for an alarm card.
+ * Vibrate view for an alarm card.
  */
 public class NacCardVibrate
 {
@@ -18,13 +19,15 @@ public class NacCardVibrate
 	/**
 	 * Vibrate checkbox.
 	 */
-	private CheckBox mVibrate;
+	private RelativeLayout mVibrate;
+	//private CheckBox mVibrate;
 
 	/**
 	 */
 	public NacCardVibrate(View root)
 	{
-		this.mVibrate = (CheckBox) root.findViewById(R.id.nac_vibrate);
+		this.mVibrate = (RelativeLayout) root.findViewById(R.id.nac_vibrate);
+		//this.mVibrate = (CheckBox) root.findViewById(R.id.nac_vibrate);
 	}
 
 	/**
@@ -36,12 +39,19 @@ public class NacCardVibrate
 	}
 
 	/**
+	 * @return The vibrate view.
+	 */
+	private RelativeLayout getVibrate()
+	{
+		return this.mVibrate;
+	}
+
+	/**
 	 * Initialize the vibrate checkbox.
 	 */
 	public void init(NacAlarm alarm)
 	{
 		this.mAlarm = alarm;
-
 		this.set();
 	}
 
@@ -51,18 +61,23 @@ public class NacCardVibrate
 	public void set()
 	{
 		NacAlarm alarm = this.getAlarm();
+		boolean vibrate = alarm.getVibrate();
+		RelativeLayout view = this.getVibrate();
 
-		this.mVibrate.setChecked(alarm.getVibrate());
+		view.setAlpha(vibrate ? 1.0f : 0.3f);
+		//view.setChecked(alarm.getVibrate());
 	}
 
 	/**
 	 * Set the on checked change listener.
 	 */
-	public void setOnCheckedChangeListener(
-		CompoundButton.OnCheckedChangeListener listener)
+	//public void setOnCheckedChangeListener(
+	//	CompoundButton.OnCheckedChangeListener listener)
+	public void setOnClickListener(View.OnClickListener listener)
 	{
-		this.mVibrate.setOnCheckedChangeListener(
-			(CompoundButton.OnCheckedChangeListener)listener);
+		this.mVibrate.setOnClickListener((View.OnClickListener)listener);
+		//this.mVibrate.setOnCheckedChangeListener(
+		//	(CompoundButton.OnCheckedChangeListener)listener);
 	}
 
 }

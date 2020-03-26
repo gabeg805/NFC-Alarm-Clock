@@ -3,11 +3,9 @@ package com.nfcalarmclock;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
-//import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RadioGroup;
-
 import androidx.preference.Preference;
 
 /**

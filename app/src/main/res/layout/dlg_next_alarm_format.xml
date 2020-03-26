@@ -5,24 +5,22 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="vertical"
-	android:paddingTop="@dimen/spt_dlg"
-	android:paddingBottom="@dimen/spb_dlg"
-	android:paddingStart="?dialogPreferredPadding"
-	android:paddingEnd="?dialogPreferredPadding"
-	tools:ignore="UselessParent">
+	android:padding="@dimen/sp_main"
+	tools:ignore="RtlSymmetry,UselessParent">
 
 	<RadioGroup
 		android:id="@+id/formats"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginStart="14dp">
+		android:layout_marginStart="@dimen/sp_main">
 
 		<RadioButton
 			android:id="@+id/nextin"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginTop="12dp"
-			android:layout_marginBottom="12dp"
+			android:layout_marginBottom="@dimen/sp_row"
+			android:paddingStart="@dimen/sp_main"
+			android:textSize="@dimen/tsz_main"
 			android:text="@string/next_alarm_format_0"
 			android:checked="true"
 			/>
@@ -31,7 +29,8 @@
 			android:id="@+id/nexton"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginBottom="12dp"
+			android:paddingStart="@dimen/sp_main"
+			android:textSize="@dimen/tsz_main"
 			android:text="@string/next_alarm_format_1"
 			/>
 

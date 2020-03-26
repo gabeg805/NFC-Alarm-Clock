@@ -16,9 +16,8 @@ android {
 		applicationId "com.nfcalarmclock"
 		minSdkVersion 21
 		targetSdkVersion 29
-		versionCode 150
-		versionName "9.2.1"
-		//testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+		versionCode 151
+		versionName "9.3.0"
 	}
 	signingConfigs {
 		release {
@@ -41,6 +40,11 @@ android {
 	}
 	applicationVariants.all { variant ->    
 		variant.resValue "string", "versionName", variant.versionName
+	}
+	lintOptions {
+		enable 'ConvertToWebp', 'DalvikOverride', 'DuplicateStrings',
+			'IconExpectedSize', 'MinSdkTooLow', 'MissingRegistered',
+			'NegativeMargin', 'Registered', 'TypographyQuotes'
 	}
 }
 
@@ -75,8 +79,4 @@ dependencies {
 	//implementation 'com.squareup.retrofit2:retrofit:2.5.0'
 	//implementation 'com.squareup.okhttp3:okhttp:3.14.1'
 	//implementation 'com.squareup.okhttp:okhttp:2.2.0'
-
-	//testImplementation 'junit:junit:4.12'
-	//androidTestImplementation 'com.android.support.test:runner:1.0.2'
-	//androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }

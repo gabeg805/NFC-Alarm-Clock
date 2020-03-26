@@ -93,7 +93,7 @@ public class NacActiveAlarmNotification
 			.setContentTitle(title)
 			.setContentText(text)
 			.setLargeIcon(icon)
-			.setSmallIcon(R.mipmap.notification_icon)
+			.setSmallIcon(R.mipmap.notification)
 			.setCategory(NotificationCompat.CATEGORY_ALARM)
 			.setPriority(NotificationCompat.PRIORITY_MAX)
 			.setFullScreenIntent(activityPending, true)
@@ -101,8 +101,8 @@ public class NacActiveAlarmNotification
 			.setOngoing(true)
 			.setShowWhen(true)
 			.setTicker(TITLE)
-			.addAction(R.mipmap.alarm_snooze, "Snooze", snoozePending)
-			.addAction(R.mipmap.alarm_dismiss, "Dismiss", dismissPending);
+			.addAction(R.mipmap.snooze, "Snooze", snoozePending)
+			.addAction(R.mipmap.dismiss, "Dismiss", dismissPending);
 
 		return builder.build();
 	}

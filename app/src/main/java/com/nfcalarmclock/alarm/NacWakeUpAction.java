@@ -111,8 +111,8 @@ public class NacWakeUpAction
 		Handler autoDismissHandler = this.getAutoDismissHandler();
 		Handler speakHandler = this.getSpeakHandler();
 
-		this.stopVibrate();
-		this.stopPlayer();
+		this.cleanupVibrate();
+		this.cleanupPlayer();
 
 		if (autoDismissHandler != null)
 		{
@@ -125,6 +125,44 @@ public class NacWakeUpAction
 		}
 
 		this.getTextToSpeech().shutdown();
+	}
+
+	/**
+	 * Cleanup the media player.
+	 */
+	private void cleanupPlayer()
+	{
+		Context context = this.getContext();
+		NacMediaPlayer player = this.getMediaPlayer();
+
+		if (player == null)
+		{
+			player = new NacMediaPlayer(context);
+		}
+
+		player.resetWrapper();
+		player.releaseWrapper();
+	}
+
+	/**
+	 * Cleanup vibrating the phone.
+	 */
+	private void cleanupVibrate()
+	{
+		Vibrator vibrator = this.getVibrator();
+
+		if (vibrator == null)
+		{
+			Context context = this.getContext();
+			vibrator = (Vibrator) context.getSystemService(
+				Context.VIBRATOR_SERVICE);
+			this.mVibrator = vibrator;
+		}
+
+		if (vibrator != null)
+		{
+			vibrator.cancel();
+		}
 	}
 
 	/**
@@ -249,7 +287,7 @@ public class NacWakeUpAction
 	@Override
 	public void onStartSpeaking()
 	{
-		this.stopVibrate();
+		this.cleanupVibrate();
 	}
 
 	/**
@@ -372,52 +410,13 @@ public class NacWakeUpAction
 	}
 
 	/**
-	 * Stop the media player.
-	 */
-	private void stopPlayer()
-	{
-		Context context = this.getContext();
-		NacMediaPlayer player = this.getMediaPlayer();
-
-		if (player == null)
-		{
-			player = new NacMediaPlayer(context);
-		}
-
-		player.resetWrapper();
-		player.stopWrapper();
-		player.releaseWrapper();
-	}
-
-	/**
-	 * Stop vibrating the phone.
-	 */
-	private void stopVibrate()
-	{
-		Vibrator vibrator = this.getVibrator();
-
-		if (vibrator == null)
-		{
-			Context context = this.getContext();
-			vibrator = (Vibrator) context.getSystemService(
-				Context.VIBRATOR_SERVICE);
-			this.mVibrator = vibrator;
-		}
-
-		if (vibrator != null)
-		{
-			vibrator.cancel();
-		}
-	}
-
-	/**
 	 * Vibrate the phone repeatedly until the alarm is dismissed.
 	 */
 	@SuppressWarnings("deprecation")
 	@TargetApi(Build.VERSION_CODES.O)
 	public void vibrate()
 	{
-		this.stopVibrate();
+		this.cleanupVibrate();
 
 		NacAlarm alarm = this.getAlarm();
 		Vibrator vibrator = this.getVibrator();

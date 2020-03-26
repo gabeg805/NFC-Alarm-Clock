@@ -84,8 +84,8 @@ public class NacDayOfWeek
 	{
 		Resources r = getContext().getResources();
 		DisplayMetrics metrics = r.getDisplayMetrics();
-		float left = r.getDimension(R.dimen.ml_card) + getPaddingLeft();
-		float right = r.getDimension(R.dimen.mr_card) + getPaddingRight();
+		float left = r.getDimension(R.dimen.sp_main) + getPaddingLeft();
+		float right = r.getDimension(R.dimen.sp_main) + getPaddingRight();
 		double spacing = (metrics.widthPixels - (left+right)
 			- 7*this.mButtons[0].getButtonWidth()) / 16.0;
 

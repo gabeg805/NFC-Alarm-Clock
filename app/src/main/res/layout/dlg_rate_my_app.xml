@@ -5,8 +5,6 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="vertical"
-	android:paddingTop="@dimen/spt_dlg"
-	android:paddingBottom="@dimen/spb_dlg"
 	android:paddingStart="?dialogPreferredPadding"
 	android:paddingEnd="?dialogPreferredPadding"
 	tools:ignore="ContentDescription,UselessParent">
@@ -14,15 +12,15 @@
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:paddingTop="?dialogPreferredPadding"
-		android:paddingBottom="?dialogPreferredPadding"
+		android:paddingTop="@dimen/sp_main"
+		android:paddingBottom="@dimen/sp_main"
 		android:orientation="horizontal">
 
 		<TextView
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:textColor="@color/white"
-			android:textSize="@dimen/tsz_title"
+			android:textSize="@dimen/tsz_main"
 			android:text="@string/dlg_rate_my_app"
 			/>
 

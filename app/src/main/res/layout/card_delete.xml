@@ -10,9 +10,9 @@
 
 	<ImageView
 		android:id="@+id/delete_icon"
-		android:layout_width="@dimen/isz_delete"
-		android:layout_height="@dimen/isz_delete"
-		android:layout_marginEnd="@dimen/mr_delete"
+		android:layout_width="@dimen/isz_main_custom"
+		android:layout_height="@dimen/isz_main_custom"
+		android:layout_marginEnd="@dimen/sp_main"
 		android:layout_alignParentEnd="true"
 		android:layout_centerVertical="true"
 		android:src="@mipmap/delete"
@@ -23,11 +23,12 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_toStartOf="@id/delete_icon"
-		android:layout_marginEnd="@dimen/mr_delete"
+		android:layout_marginEnd="@dimen/sp_main"
 		android:layout_centerVertical="true"
-		android:text="@string/card_swipe_delete"
 		android:textColor="@color/white"
-		android:textSize="@dimen/tsz_delete"
+		android:textSize="@dimen/tsz_main_custom"
+		android:textStyle="bold"
+		android:text="@string/card_swipe_delete"
 		/>
 
 </RelativeLayout>

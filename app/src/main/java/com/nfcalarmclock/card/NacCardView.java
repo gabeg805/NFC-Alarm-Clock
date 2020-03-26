@@ -513,7 +513,7 @@ public class NacCardView
 		LinearLayoutManager layoutManager = (LinearLayoutManager)
 			this.mRecyclerView.getLayoutManager();
 
-		// To-do: When deleting too many cards, things get weird and I'm not
+		// @TODO: When deleting too many cards, things get weird and I'm not
 		// sure how to fix it. Just implementing some bandaids to mitigate the
 		// crashes.
 		if (layoutManager != null)
@@ -637,7 +637,6 @@ public class NacCardView
 	public void setColor(NacSharedPreferences shared)
 	{
 		int themeColor = shared.getThemeColor();
-
 		this.mDivider.setBackgroundTintList(ColorStateList.valueOf(themeColor));
 	}
 

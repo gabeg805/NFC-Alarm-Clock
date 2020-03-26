@@ -11,8 +11,8 @@
 		android:id="@+id/content_alarm_list"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:layout_marginBottom="@dimen/mb_fab"
-		android:paddingBottom="@dimen/pb_for_fab"
+		android:layout_marginBottom="@dimen/sp_main"
+		android:paddingBottom="@dimen/isz_main_extra"
 		android:clipToPadding="false"
 		android:scrollbars="vertical"
 		android:descendantFocusability="blocksDescendants"
@@ -20,10 +20,10 @@
 
 	<com.google.android.material.floatingactionbutton.FloatingActionButton
 		android:id="@+id/fab_add_alarm"
-		android:layout_width="@dimen/isz_fab"
-		android:layout_height="@dimen/isz_fab"
+		android:layout_width="@dimen/isz_main_extra"
+		android:layout_height="@dimen/isz_main_extra"
 		android:layout_gravity="bottom|center"
-		android:layout_marginBottom="@dimen/mb_fab"
+		android:layout_marginBottom="@dimen/sp_main"
 		android:src="@mipmap/plus"
 		/>
 

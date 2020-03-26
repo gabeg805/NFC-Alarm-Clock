@@ -64,7 +64,7 @@ public class NacCardMeasure
 	/**
 	 * Vibrate width.
 	 */
-	private int mVibrateWidth;
+	//private int mVibrateWidth;
 
 	/**
 	 * Check if card has been measured.
@@ -84,7 +84,7 @@ public class NacCardMeasure
 		this.mCardPadding = 0;
 		this.mDayButtons = null;
 		this.mDayButtonsHeight = 0;
-		this.mVibrateWidth = 0;
+		//this.mVibrateWidth = 0;
 		this.mIsMeasured = false;
 	}
 
@@ -163,10 +163,10 @@ public class NacCardMeasure
 	/**
 	 * @return The vibrate width.
 	 */
-	public int getVibrateWidth()
-	{
-		return this.mVibrateWidth;
-	}
+	//public int getVibrateWidth()
+	//{
+	//	return this.mVibrateWidth;
+	//}
 
 	/**
 	 * @return True if alarm card is measured, and False otherwise.
@@ -194,7 +194,6 @@ public class NacCardMeasure
 	 */
 	public void measure(NacCardHolder holder)
 	{
-		//NacUtility.printf("NacCardMeasure MEASURING!");
 		View root = holder.getRoot();
 
 		this.setScreenWidth();
@@ -202,7 +201,7 @@ public class NacCardMeasure
 		this.setCardPadding(root);
 		this.setDayButtons(root);
 		this.setDayButtonsHeight(root);
-		this.setVibrateWidth(root);
+		//this.setVibrateWidth(root);
 		this.setHeaderHeight(root);
 		this.setExpandHeight(root);
 		this.setCollapseHeight(root);
@@ -298,7 +297,7 @@ public class NacCardMeasure
 		RecyclerView rv = (RecyclerView) ((Activity)context).findViewById(
 			R.id.content_alarm_list);
 		int fabHeight = (int) context.getResources()
-			.getDimension(R.dimen.pb_for_fab);
+			.getDimension(R.dimen.isz_main_extra);
 		int recyclerHeight = rv.getHeight();
 		this.mScreenHeight = recyclerHeight - fabHeight;
 		//NacUtility.printf("SCREEN HEIGHT : %d", mScreenHeight);
@@ -317,11 +316,11 @@ public class NacCardMeasure
 	/**
 	 * Set the vibrate width.
 	 */
-	private void setVibrateWidth(View root)
-	{
-		CheckBox vibrate = (CheckBox) root.findViewById(R.id.nac_vibrate);
-		this.mVibrateWidth = NacUtility.getWidth(vibrate);
-		//NacUtility.printf("VIBRATE WIDTH : %d", mVibrateWidth);
-	}
+	//private void setVibrateWidth(View root)
+	//{
+	//	CheckBox vibrate = (CheckBox) root.findViewById(R.id.nac_vibrate);
+	//	this.mVibrateWidth = NacUtility.getWidth(vibrate);
+	//	//NacUtility.printf("VIBRATE WIDTH : %d", mVibrateWidth);
+	//}
 
 }

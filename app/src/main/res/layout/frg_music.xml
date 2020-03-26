@@ -10,20 +10,21 @@
 		android:id="@+id/path"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:paddingTop="@dimen/pt_frg_music_path"
-		android:paddingBottom="@dimen/pb_frg_music_path"
-		android:paddingStart="@dimen/pl_frg_music_path"
-		android:paddingEnd="@dimen/pr_frg_music_path"
+		android:paddingTop="@dimen/sp_align"
+		android:paddingBottom="@dimen/sp_align"
+		android:paddingStart="@dimen/sp_support"
+		android:paddingEnd="@dimen/sp_support"
 		android:singleLine="true"
 		android:ellipsize="start"
-		android:textSize="@dimen/tsz_frg_music_path"
+		android:textStyle="italic"
+		android:textSize="@dimen/tsz_support"
 		android:text=""
 		/>
 
 	<View
 		android:layout_width="match_parent"
-		android:layout_height="1dp"
-		android:background="@color/white"
+		android:layout_height="@dimen/isz_divider"
+		android:background="@color/gray_light"
 		/>
 
 	<ScrollView
@@ -35,32 +36,8 @@
 			android:id="@+id/container"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:paddingTop="?dialogPreferredPadding"
-			android:paddingBottom="?dialogPreferredPadding"
-			android:paddingStart="?dialogPreferredPadding"
-			android:paddingEnd="?dialogPreferredPadding"
 			android:orientation="vertical"
 			android:scrollbars="vertical">
-
-			<!--
-			<com.nfcalarmclock.NacButtonGroup
-				android:id="@+id/group"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:background="?android:attr/selectableItemBackground"
-				app:nacPaddingTop="@dimen/pt_frg_sound"
-				app:nacPaddingBottom="@dimen/pb_frg_sound"
-				app:nacPaddingStart="@dimen/pl_frg_sound"
-				app:nacDrawableColor="@color/white"
-				app:nacDrawableWidth="@dimen/isz_frg_sound"
-				app:nacDrawableHeight="@dimen/isz_frg_sound"
-				app:nacSpacing="@dimen/sp_frg_sound"
-				app:nacTextColor="@color/white"
-				app:nacTextSize="@dimen/tsz_frg_sound"
-				app:nacSubTextColor="@color/white"
-				/>
-			-->
-
 		</LinearLayout>
 
 	</ScrollView>

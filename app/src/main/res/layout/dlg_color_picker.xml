@@ -5,7 +5,6 @@
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	android:orientation="vertical"
-	android:paddingTop="@dimen/pad_tweak"
 	android:paddingStart="?dialogPreferredPadding"
 	android:paddingEnd="?dialogPreferredPadding"
 	android:clipChildren="false">
@@ -15,27 +14,27 @@
 		android:id="@+id/color_picker"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/mt_color_picker"
-		android:layout_marginBottom="@dimen/mb_color_picker"
-		android:layout_marginStart="@dimen/mh_color_picker"
-		android:layout_marginEnd="@dimen/mh_color_picker"
-		app:nacSpacing="@dimen/sp_color_picker"
+		android:layout_marginTop="@dimen/sp_main"
+		android:layout_marginBottom="@dimen/sp_section"
+		android:layout_marginStart="@dimen/sp_main"
+		android:layout_marginEnd="@dimen/sp_main"
+		app:nacSpacing="@dimen/isz_main_custom"
 		/>
 
 	<LinearLayout
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginBottom="@dimen/mb_color_example"
+		android:layout_marginBottom="@dimen/sp_section"
 		android:orientation="horizontal"
 		android:layout_gravity="center_horizontal">
 
 		<ImageView
 			android:id="@+id/color_example"
-			android:layout_width="@dimen/isz_color_example"
-			android:layout_height="@dimen/isz_color_example"
+			android:layout_width="@dimen/isz_main_custom"
+			android:layout_height="@dimen/isz_main_custom"
 			android:layout_gravity="center_vertical"
-			android:layout_marginEnd="@dimen/mr_color_example"
-			android:contentDescription="@null"
+			android:layout_marginEnd="@dimen/sp_main"
+			android:contentDescription="@string/cd_ic_color_example"
 			android:src="@drawable/color_example"
 			/>
 
@@ -43,9 +42,8 @@
 			android:id="@+id/color_value"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginStart="@dimen/sp_tweak"
 			android:layout_gravity="fill"
-			android:textSize="@dimen/tsz_dlg_color"
+			android:textSize="@dimen/tsz_main"
 			android:inputType="textNoSuggestions|textAutoComplete"
 			android:hint="@string/dlg_color_hint"
 			android:maxLines="1"

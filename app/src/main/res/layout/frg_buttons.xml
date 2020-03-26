@@ -4,10 +4,7 @@
 	android:id="@+id/buttons"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:paddingTop="@dimen/p_frg_buttons"
-	android:paddingBottom="@dimen/p_frg_buttons"
-	android:paddingStart="@dimen/p_frg_buttons"
-	android:paddingEnd="@dimen/p_frg_buttons"
+	android:padding="@dimen/sp_align"
 	android:orientation="horizontal"
 	tools:ignore="ButtonOrder">
 
@@ -17,12 +14,12 @@
 		android:layout_height="wrap_content"
 		android:background="?android:attr/selectableItemBackground"
 		android:text="@string/clear"
-		android:textSize="@dimen/tsz_frg_buttons"
+		android:textSize="@dimen/tsz_main"
 		/>
 
 	<View
 		android:layout_width="0dp"
-		android:layout_height="0dp"
+		android:layout_height="match_parent"
 		android:layout_weight="1"
 		/>
 
@@ -32,7 +29,7 @@
 		android:layout_height="wrap_content"
 		android:background="?android:attr/selectableItemBackground"
 		android:text="@string/cancel"
-		android:textSize="@dimen/tsz_frg_buttons"
+		android:textSize="@dimen/tsz_main"
 		/>
 
 	<Button
@@ -41,7 +38,7 @@
 		android:layout_height="wrap_content"
 		android:background="?android:attr/selectableItemBackground"
 		android:text="@string/ok"
-		android:textSize="@dimen/tsz_frg_buttons"
+		android:textSize="@dimen/tsz_main"
 		/>
 
 </LinearLayout>

@@ -2,12 +2,19 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import androidx.core.content.ContextCompat;
 
 /**
  * A file browser.
+ *
+ * @TODO Selected file gets deselected when moving directories.
  */
 public class NacFileBrowser
 	implements View.OnClickListener
@@ -37,12 +44,17 @@ public class NacFileBrowser
 	/**
 	 * Currently selected view.
 	 */
-	private NacImageSubTextButton mSelected;
+	private RelativeLayout mSelected;
 
 	/**
 	 * File browser click listener.
 	 */
 	private OnClickListener mListener;
+
+	/**
+	 * Layout inflater.
+	 */
+	private LayoutInflater mInflater;
 
 	/**
 	 */
@@ -55,30 +67,44 @@ public class NacFileBrowser
 		this.mContainer = (LinearLayout) root.findViewById(groupId);
 		this.mSelected = null;
 		this.mListener = null;
+		this.mInflater = (LayoutInflater) context.getSystemService(
+			Context.LAYOUT_INFLATER_SERVICE);
 
 		tree.scan(context);
 	}
 
 	/**
 	 * Add a directory entry to the file browser.
+	 *
+	 * @TODO Count number of songs in subdirectories and make that the
+	 *       annotation.
 	 */
 	public void addDirectory(NacFile.Metadata metadata)
 	{
-		NacButtonGroup container = this.getContainer();
+		Context context = this.getContext();
+		LinearLayout container = this.getContainer();
+		LayoutInflater inflater = this.getLayoutInflater();
 
-		if (container == null)
+		if ((container == null) || (inflater == null))
 		{
-			NacUtility.printf("NacFileBrowser : addDirectory : Container is null.");
+			NacUtility.printf("NacFileBrowser : addDirectory : Container null? %b",
+				container == null);
+			NacUtility.printf("NacFileBrowser : addDirectory : Inflater null? %b",
+				inflater == null);
 			return;
 		}
 
-		Context context = this.getContext();
-		NacImageTextButton entry = new NacImageTextButton(context);
+		View entry = inflater.inflate(R.layout.nac_file_entry, container, false);
 		String name = metadata.getName();
+		ImageView imageView = entry.findViewById(R.id.image);
+		TextView titleView = entry.findViewById(R.id.title);
+		TextView subtitleView = entry.findViewById(R.id.subtitle);
+		TextView annotationView = entry.findViewById(R.id.annotation);
 
-		container.add(entry);
-		entry.setText(name.equals("..") ? "(Previous folder)" : name);
-		entry.setImageBackground(R.mipmap.folder);
+		container.addView(entry);
+		imageView.setImageResource(R.mipmap.folder);
+		titleView.setText(name.equals("..") ? "(Previous folder)" : name);
+		//annotationView.setText("NOOO");
 		entry.setTag(metadata);
 		entry.setOnClickListener(this);
 	}
@@ -103,33 +129,45 @@ public class NacFileBrowser
 	 */
 	public void addFile(NacFile.Metadata metadata)
 	{
-		NacButtonGroup container = this.getContainer();
+		Context context = this.getContext();
+		LinearLayout container = this.getContainer();
+		LayoutInflater inflater = this.getLayoutInflater();
 
 		//if (file.length() == 0)
 		//{
 		//	return;
 		//}
 
-		if (container == null)
+		if ((container == null) || (inflater == null))
 		{
-			NacUtility.printf("NacFileBrowser : addFile : Container is null.");
+			NacUtility.printf("NacFileBrowser : addFile : Container null? %b",
+				container == null);
+			NacUtility.printf("NacFileBrowser : addFile : Inflater null? %b",
+				inflater == null);
 			return;
 		}
 
-		Context context = this.getContext();
-		NacImageSubTextButton entry = new NacImageSubTextButton(context);
+		View entry = inflater.inflate(R.layout.nac_file_entry, container, false);
 		String title = NacMedia.getTitle(context, metadata);
 		String artist = NacMedia.getArtist(context, metadata);
+		String duration = NacMedia.getDuration(context, metadata);
 
 		if (title.isEmpty())
 		{
 			return;
 		}
 
-		container.add(entry);
-		entry.setTextTitle(title);
-		entry.setTextSubtitle(artist);
-		entry.setImageBackground(R.mipmap.play);
+		ImageView imageView = entry.findViewById(R.id.image);
+		TextView titleView = entry.findViewById(R.id.title);
+		TextView subtitleView = entry.findViewById(R.id.subtitle);
+		TextView annotationView = entry.findViewById(R.id.annotation);
+
+		container.addView(entry);
+		imageView.setImageResource(R.mipmap.play);
+		titleView.setText(title);
+		subtitleView.setText(artist);
+		subtitleView.setVisibility(View.VISIBLE);
+		annotationView.setText(duration);
 		entry.setTag(metadata);
 		entry.setOnClickListener(this);
 	}
@@ -139,8 +177,7 @@ public class NacFileBrowser
 	 */
 	private void clearEntries()
 	{
-		NacButtonGroup container = this.getContainer();
-
+		LinearLayout container = this.getContainer();
 		container.removeAllViews();
 	}
 
@@ -153,37 +190,36 @@ public class NacFileBrowser
 	}
 
 	/**
-	 * @return The container view.
+	 * Deselect the desired view.
 	 */
-	@SuppressWarnings("InflateParams")
-	private NacButtonGroup getContainer()
+	private void deselectView(View view)
 	{
-		Context context = this.getContext();
-		LinearLayout container = this.mContainer;
-		int count = container.getChildCount();
-
-		if (count == 0)
+		if (view == null)
 		{
-			NacButtonGroup group = (NacButtonGroup) LayoutInflater.from(context)
-				.inflate(R.layout.nac_file_browser, null);
-				//.inflate(R.layout.nac_file_browser, container, false);
-			container.addView(group);
-			return group;
+			return;
+		}
+
+		Context context = this.getContext();
+		TypedValue tv = new TypedValue();
+		boolean success = context.getTheme().resolveAttribute(
+			android.R.attr.selectableItemBackground, tv, true);
+
+		if (tv.resourceId != 0)
+		{
+			view.setBackgroundResource(tv.resourceId);
 		}
 		else
 		{
-			for (int i=0; i < count; i++)
-			{
-				View view = container.getChildAt(i);
-
-				if (view.getVisibility() == View.VISIBLE)
-				{
-					return (NacButtonGroup) view;
-				}
-			}
+			view.setBackgroundColor(tv.data);
 		}
+	}
 
-		return null;
+	/**
+	 * @return The container view.
+	 */
+	private LinearLayout getContainer()
+	{
+		return this.mContainer;
 	}
 
 	/**
@@ -192,6 +228,14 @@ public class NacFileBrowser
 	private Context getContext()
 	{
 		return this.mContext;
+	}
+
+	/**
+	 * @return The layout inflater.
+	 */
+	private LayoutInflater getLayoutInflater()
+	{
+		return this.mInflater;
 	}
 
 	/**
@@ -235,7 +279,7 @@ public class NacFileBrowser
 	/**
 	 * @return The currently selected view.
 	 */
-	public NacImageSubTextButton getSelected()
+	public RelativeLayout getSelected()
 	{
 		return this.mSelected;
 	}
@@ -376,7 +420,7 @@ public class NacFileBrowser
 			return;
 		}
 
-		NacButtonGroup container = this.getContainer();
+		LinearLayout container = this.getContainer();
 		int count = container.getChildCount();
 		NacMedia.Tree tree = this.getTree();
 		String dir = NacFile.dirname(selectPath);
@@ -401,17 +445,28 @@ public class NacFileBrowser
 	 */
 	public void select(View view)
 	{
-		if (this.getSelected() != null)
+		RelativeLayout selected = this.getSelected();
+
+		this.deselectView(selected);
+		this.selectView(view);
+
+		this.mSelected = (RelativeLayout) view;
+	}
+
+	/**
+	 * Select the desired view.
+	 */
+	private void selectView(View view)
+	{
+		if (view == null)
 		{
-			this.getSelected().unselect();
+			return;
 		}
 
-		this.mSelected = (NacImageSubTextButton) view;
+		Context context = this.getContext();
+		int color = ContextCompat.getColor(context, R.color.gray_light);
 
-		if (this.getSelected() != null)
-		{
-			this.getSelected().select();
-		}
+		view.setBackgroundColor(color);
 	}
 
 	/**
