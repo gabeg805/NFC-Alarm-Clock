@@ -17,7 +17,7 @@ public class NacGeneralSettings
 	/**
 	 * Activity request code.
 	 */
-	private static final int REQUEST_CODE = 69;
+	private static final int MEDIA_REQUEST_CODE = 222;
 
 	/**
 	 * The sound preference.
@@ -39,8 +39,7 @@ public class NacGeneralSettings
 	{
 		super.onActivityResult(requestCode, resultCode, data);
 
-		NacUtility.printf("Nac sound has been set!? %d", requestCode);
-		if (requestCode != REQUEST_CODE)
+		if (requestCode != MEDIA_REQUEST_CODE)
 		{
 			return;
 		}
@@ -77,7 +76,7 @@ public class NacGeneralSettings
 		Intent intent = NacIntent.toIntent(context, NacMediaActivity.class,
 			media);
 
-		startActivityForResult(intent, REQUEST_CODE);
+		startActivityForResult(intent, MEDIA_REQUEST_CODE);
 
 		return true;
 	}

@@ -24,12 +24,14 @@ public class NacTextToSpeech
 		/**
 		 * Called when speech engine is done speaking.
 		 */
-		public void onDoneSpeaking();
+		public void onDoneSpeaking(NacTextToSpeech tts,
+			NacAudio.Attributes attrs);
 
 		/**
 		 * Called when speech engine has started speaking.
 		 */
-		public void onStartSpeaking();
+		public void onStartSpeaking(NacTextToSpeech tts,
+			NacAudio.Attributes attrs);
 	}
 
 	/**
@@ -44,6 +46,11 @@ public class NacTextToSpeech
 		private Context mContext;
 
 		/**
+		 * Text-to-speech engine.
+		 */
+		private NacTextToSpeech mTextToSpeech;
+
+		/**
 		 * Audio focus change listener.
 		 */
 		private AudioManager.OnAudioFocusChangeListener
@@ -56,10 +63,11 @@ public class NacTextToSpeech
 
 		/**
 		 */
-		public NacUtteranceListener(Context context,
+		public NacUtteranceListener(Context context, NacTextToSpeech tts,
 			AudioManager.OnAudioFocusChangeListener listener)
 		{
 			this.mContext = context;
+			this.mTextToSpeech = tts;
 			this.mOnAudioFocusChangeListener = listener;
 		}
 
@@ -89,17 +97,30 @@ public class NacTextToSpeech
 		}
 
 		/**
+		 * @return The text-to-speech engine.
+		 */
+		private NacTextToSpeech getTextToSpeech()
+		{
+			return this.mTextToSpeech;
+		}
+
+		/**
 		 */
 		@Override
 		public void onDone(String utteranceId)
 		{
+			OnSpeakingListener listener = getOnSpeakingListener();
+			NacTextToSpeech tts = getTextToSpeech();
+			NacAudio.Attributes attrs = (tts != null) ? tts.getAudioAttributes()
+				: null;
+
+			if (listener != null)
+			{
+				listener.onDoneSpeaking(tts, attrs);
+			}
+
 			NacAudio.abandonAudioFocus(this.getContext(),
 				this.getOnAudioFocusChangeListener());
-
-			if (this.getOnSpeakingListener() != null)
-			{
-				this.getOnSpeakingListener().onDoneSpeaking();
-			}
 		}
 
 		/**
@@ -107,9 +128,14 @@ public class NacTextToSpeech
 		@Override
 		public void onStart(String utteranceId)
 		{
-			if (this.getOnSpeakingListener() != null)
+			OnSpeakingListener listener = getOnSpeakingListener();
+			NacTextToSpeech tts = getTextToSpeech();
+			NacAudio.Attributes attrs = (tts != null) ? tts.getAudioAttributes()
+				: null;
+
+			if (listener != null)
 			{
-				this.getOnSpeakingListener().onStartSpeaking();
+				listener.onStartSpeaking(tts, attrs);
 			}
 		}
 
@@ -176,11 +202,21 @@ public class NacTextToSpeech
 		this.mSpeech = null;
 		this.mBuffer = "";
 		this.mInitialized = false;
-		this.mUtterance = new NacUtteranceListener(context, this);
+		this.mUtterance = new NacUtteranceListener(context, this, this);
 		this.mAudioAttributes = new NacAudio.Attributes(context,
 			shared.getAudioSource());
+		int defaultFocus = AudioManager.AUDIOFOCUS_GAIN_TRANSIENT;
 
+		this.getAudioAttributes().setFocus(defaultFocus);
 		this.setOnSpeakingListener(listener);
+	}
+
+	/**
+	 * @return The audio attributes.
+	 */
+	public NacAudio.Attributes getAudioAttributes()
+	{
+		return this.mAudioAttributes;
 	}
 
 	/**
@@ -279,14 +315,11 @@ public class NacTextToSpeech
 		if (this.isInitialized())
 		{
 			TextToSpeech speech = this.getTextToSpeech();
-
-			speech.setLanguage(Locale.US);
-			//this.mSpeech.setLanguage(Locale.US);
+			speech.setLanguage(Locale.getDefault());
 
 			if (this.hasBuffer())
 			{
 				String buffer = this.getBuffer();
-
 				this.speak(buffer);
 				this.setBuffer("");
 			}
@@ -319,8 +352,6 @@ public class NacTextToSpeech
 		if (speech != null)
 		{
 			speech.shutdown();
-			//this.mSpeech.shutdown();
-
 			this.mSpeech = null;
 		}
 	}
@@ -330,7 +361,7 @@ public class NacTextToSpeech
 	 */
 	public void speak(String message)
 	{
-		this.speak(message, this.mAudioAttributes);
+		this.speak(message, this.getAudioAttributes());
 	}
 
 	/**
@@ -344,25 +375,21 @@ public class NacTextToSpeech
 
 		if (speech == null)
 		{
-			//this.mSpeech = new TextToSpeech(context, this);
 			speech = new TextToSpeech(context, this);
 			this.mSpeech = speech;
-
 			speech.setOnUtteranceProgressListener(this.mUtterance);
-			//this.mSpeech.setOnUtteranceProgressListener(this.mUtterance);
 		}
 
 		if (this.isInitialized())
 		{
-			if(!NacAudio.requestAudioFocusTransient(context, this, attrs))
+			if(!NacAudio.requestAudioFocus(context, this, attrs))
 			{
 				NacUtility.printf("Audio Focus TRANSIENT NOT Granted!");
 				return;
 			}
 
 			Bundle bundle = NacBundle.toBundle(attrs);
-
-			//this.mSpeech.speak(message, TextToSpeech.QUEUE_FLUSH,
+			speech.setAudioAttributes(attrs.getAudioAttributes());
 			speech.speak(message, TextToSpeech.QUEUE_FLUSH, bundle,
 				UTTERANCE_ID);
 		}
@@ -382,7 +409,6 @@ public class NacTextToSpeech
 		if (speech != null)
 		{
 			speech.stop();
-			//this.mSpeech.stop();
 		}
 	}
 

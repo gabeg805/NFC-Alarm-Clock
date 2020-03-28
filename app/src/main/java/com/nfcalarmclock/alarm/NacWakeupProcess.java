@@ -1,9 +1,8 @@
 package com.nfcalarmclock;
 
-// CHANGE NAME TO NACWAKEUPPROCESS?
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -14,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Actions to take upon waking up, such as enabling NFC, playing music, etc.
  */
-public class NacWakeUpAction
+public class NacWakeupProcess
 	implements Runnable,
 		NacTextToSpeech.OnSpeakingListener
 {
@@ -74,7 +73,7 @@ public class NacWakeUpAction
 
 	/**
 	 */
-	public NacWakeUpAction(Context context, NacAlarm alarm)
+	public NacWakeupProcess(Context context, NacAlarm alarm)
 	{
 		this.mContext = context;
 		this.mAlarm = alarm;
@@ -86,20 +85,31 @@ public class NacWakeUpAction
 		this.mAutoDismissHandler = new Handler();
 		this.mSpeakHandler = new Handler();
 		this.mListener = null;
+
+		NacTextToSpeech speech = this.getTextToSpeech();
+		speech.getAudioAttributes().merge(alarm);
 	}
 
 	/**
 	 * @return True if music can be played, and False otherwise.
 	 */
-	public boolean canPlayMusic()
+	private boolean canPlayMusic()
 	{
 		NacMediaPlayer player = this.getMediaPlayer();
 		NacAlarm alarm = this.getAlarm();
 
 		// Might want to override whats playing when waking up.
-		// Also, don't know what wasPlaying really does.
 		return ((alarm != null) && (player != null) && alarm.hasMedia());
-			//|| player.isPlaying() || player.wasPlaying())
+	}
+
+	/**
+	 * @return True if the user wants to use to text-to-speech, and False
+	 *         otherwise.
+	 */
+	private boolean canUseTts()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		return ((shared != null) && shared.getSpeakToMe());
 	}
 
 	/**
@@ -260,9 +270,10 @@ public class NacWakeUpAction
 			time[1] = ", " + time[1];
 		}
 
-		NacUtility.printf("The time, is, "+time[0]+time[1]+ampm);
+		String say = String.format(", , The time, is, %1$s %2$s %3$s", time[0],
+			time[1], ampm);
 
-		return "The time, is, " + time[0] + time[1] + ampm;
+		return say;
 	}
 
 	/**
@@ -276,7 +287,7 @@ public class NacWakeUpAction
 	/**
 	 */
 	@Override
-	public void onDoneSpeaking()
+	public void onDoneSpeaking(NacTextToSpeech tts, NacAudio.Attributes attrs)
 	{
 		this.playMusic();
 		this.vibrate();
@@ -285,7 +296,7 @@ public class NacWakeUpAction
 	/**
 	 */
 	@Override
-	public void onStartSpeaking()
+	public void onStartSpeaking(NacTextToSpeech tts, NacAudio.Attributes attrs)
 	{
 		this.cleanupVibrate();
 	}
@@ -312,8 +323,15 @@ public class NacWakeUpAction
 			return;
 		}
 
-		player.reset();
-		player.play(alarm, true, shared.getShuffle());
+		if (!player.wasPlaying())
+		{
+			player.reset();
+			player.play(alarm, true, shared.getShuffle());
+		}
+		else
+		{
+			player.startWrapper();
+		}
 	}
 
 	/**
@@ -335,11 +353,12 @@ public class NacWakeUpAction
 	@Override
 	public void run()
 	{
-		if (this.getOnAutoDismissListener() != null)
-		{
-			NacAlarm alarm = this.getAlarm();
+		OnAutoDismissListener listener = this.getOnAutoDismissListener();
+		NacAlarm alarm = this.getAlarm();
 
-			this.getOnAutoDismissListener().onAutoDismiss(alarm);
+		if (listener != null)
+		{
+			listener.onAutoDismiss(alarm);
 		}
 	}
 
@@ -352,12 +371,23 @@ public class NacWakeUpAction
 	}
 
 	/**
+	 * Setup the volume for the music player and text-to-speech engine.
+	 */
+	private void setupVolume()
+	{
+		NacAlarm alarm = this.getAlarm();
+		NacMediaPlayer player = this.getMediaPlayer();
+		NacAudio.Attributes attrs = player.getAudioAttributes();
+
+		attrs.merge(alarm).setVolume();
+	}
+
+	/**
 	 * Speak at the desired frequency, specified in the shared preference.
 	 */
 	private void speak()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		final Context context = this.getContext();
 		final long freq = shared.getSpeakFrequency() * 60L * 1000L;
 		final Handler handler = this.getSpeakHandler();
 		final Runnable sayTime = new Runnable()
@@ -373,11 +403,7 @@ public class NacWakeUpAction
 					}
 
 					String text = getTimeToSay();
-					NacAlarm alarm = getAlarm();
-					NacAudio.Attributes attrs = new NacAudio.Attributes(
-						context, alarm);
-
-					speech.speak(text, attrs);
+					speech.speak(text);
 
 					if (freq != 0)
 					{
@@ -394,9 +420,9 @@ public class NacWakeUpAction
 	 */
 	public void start()
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
+		this.setupVolume();
 
-		if (shared.getSpeakToMe())
+		if (this.canUseTts())
 		{
 			this.speak();
 		}

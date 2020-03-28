@@ -53,6 +53,7 @@
 		<!-- Alarm activity -->
 		<activity
 			android:name=".NacAlarmActivity"
+			android:taskAffinity=""
 			android:excludeFromRecents="true">
 		</activity>
 

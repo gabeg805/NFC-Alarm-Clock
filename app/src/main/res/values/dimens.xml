@@ -7,11 +7,16 @@
 	<dimen name="sp_align">4dp</dimen>
 	<dimen name="sp_row_last">16dp</dimen>
 	<dimen name="sp_row">8dp</dimen>
+	<dimen name="sp_snooze_icon">12dp</dimen>
 
 	<!-- Sizing -->
 	<dimen name="sz_touch">48dp</dimen>
+	<dimen name="sz_extend">16dp</dimen>
 	<dimen name="sz_radius">6dp</dimen>
 	<dimen name="sz_none">0dp</dimen>
+	<dimen name="sz_divider1">8dp</dimen>
+	<dimen name="sz_divider2">4dp</dimen>
+	<dimen name="sz_divider">1dp</dimen>
 
 	<!-- Image -->
 	<dimen name="isz_main_extra">54dp</dimen>
@@ -19,7 +24,6 @@
 	<dimen name="isz_main">24dp</dimen>
 	<dimen name="isz_support">16dp</dimen>
 	<dimen name="isz_support_extra">8dp</dimen>
-	<dimen name="isz_divider">1dp</dimen>
 
 	<!-- Text -->
 	<dimen name="tsz_attention">40sp</dimen>

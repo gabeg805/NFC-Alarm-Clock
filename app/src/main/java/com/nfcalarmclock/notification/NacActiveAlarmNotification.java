@@ -14,7 +14,6 @@ import android.os.Build;
 import android.text.Html;
 import android.text.Spanned;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import java.lang.Float;
 import java.util.Calendar;
 
@@ -172,7 +171,7 @@ public class NacActiveAlarmNotification
 	{
 		NacAlarm alarm = this.getAlarm();
 
-		if ((alarm == null) || (alarm.getUseNfc()))
+		if ((alarm == null) || alarm.getUseNfc())
 		{
 			return activityPendingIntent;
 		}

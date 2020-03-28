@@ -49,16 +49,6 @@ public class NacAudio
 		private int mLevel;
 
 		/**
-		 * Stream volume.
-		 */
-		private int mVolume;
-
-		/**
-		 * Previously set stream volume.
-		 */
-		//private int mPreviousVolume;
-
-		/**
 		 * Ducking flag.
 		 */
 		private boolean mWasDucking;
@@ -79,30 +69,30 @@ public class NacAudio
 		 */
 		public Attributes(Context context, NacAlarm alarm)
 		{
-			this(context, (alarm != null) ? alarm.getAudioSource() : "");
-
-			if (alarm != null)
-			{
-				this.setVolumeLevel(alarm.getVolume());
-			}
+			this(context, "");
+			this.merge(alarm);
 		}
 
 		/**
 		 */
 		public Attributes(Context context, String source)
 		{
-			//int focus = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-			//	? AudioManager.AUDIOFOCUS_NONE : 0;
 			this.mContext = context;
 			this.mShared = new NacSharedPreferences(context);
 
-			this.setFocus(0);
+			this.setFocus(AudioManager.AUDIOFOCUS_GAIN);
 			this.setSource(source);
 			this.setVolumeLevel(-1);
 			this.setRepeat(false);
 			this.setWasDucking(false);
+		}
 
-			//this.mWasDucking = false;
+		/**
+		 * @return True if volume can be changed, and False otherwise.
+		 */
+		public boolean canVolumeChange()
+		{
+			return (this.getVolumeLevel() >= 0);
 		}
 
 		/**
@@ -113,17 +103,10 @@ public class NacAudio
 			NacSharedPreferences shared = this.getSharedPreferences();
 			int current = this.getStreamVolume();
 			int duck = current / 2;
-			this.mVolume = duck;
-			//this.mWasDucking = true;
 
 			this.setWasDucking(true);
 			shared.editPreviousVolume(current);
 			this.setStreamVolume(duck);
-
-			//int current = this.getStreamVolume();
-			//this.mVolume = current / 2;
-			//this.mPreviousVolume = current;
-			//this.mWasDucking = true;
 		}
 
 		/**
@@ -211,19 +194,36 @@ public class NacAudio
 		}
 
 		/**
-		 * @return The volume.
-		 */
-		public int getVolume()
-		{
-			return this.mVolume;
-		}
-
-		/**
 		 * @return The calculate volume level.
 		 */
 		public int getVolumeLevel()
 		{
 			return this.mLevel;
+		}
+
+		/**
+		 * @return True if the stream volume is already set to the desired
+		 *         volume level.
+		 */
+		public boolean isStreamVolumeAlreadySet()
+		{
+			int previous = this.getStreamVolume();
+			int volume = this.toStreamVolume();
+			return (previous == volume);
+		}
+
+		/**
+		 * Merge the current audio attributes with that of the alarm.
+		 */
+		public Attributes merge(NacAlarm alarm)
+		{
+			if (alarm != null)
+			{
+				this.setSource(alarm.getAudioSource());
+				this.setVolumeLevel(alarm.getVolume());
+			}
+
+			return this;
 		}
 
 		/**
@@ -233,7 +233,6 @@ public class NacAudio
 		{
 			if (this.wasDucking())
 			{
-				//this.mWasDucking = false;
 				this.setWasDucking(false);
 			}
 		}
@@ -243,24 +242,14 @@ public class NacAudio
 		 */
 		public void revertVolume()
 		{
-			int level = this.getVolumeLevel();
-
-			if (level < 0)
+			if (!this.canVolumeChange())
 			{
 				return;
 			}
 
-			//int temp = this.mPreviousVolume;
-			//this.mPreviousVolume = this.mVolume;
-			//this.mVolume = temp;
-
 			NacSharedPreferences shared = this.getSharedPreferences();
-			//int current = this.mVolume;
-			int current = this.getStreamVolume();
 			int previous = shared.getPreviousVolume();
-			this.mVolume = previous;
 
-			shared.editPreviousVolume(previous);
 			this.setStreamVolume(previous);
 		}
 
@@ -304,7 +293,7 @@ public class NacAudio
 			else if (source.equals("Ringtone"))
 			{
 				stream = AudioManager.STREAM_RING;
-				usage = AudioAttributes.USAGE_MEDIA; // Might need to be different
+				usage = AudioAttributes.USAGE_MEDIA;
 			}
 			else if (source.equals("System"))
 			{
@@ -342,7 +331,7 @@ public class NacAudio
 			}
 			catch (SecurityException e)
 			{
-				NacUtility.printf("NacAudio : SecurityException : Unable to setStreamVolume");
+				NacUtility.printf("NacAudio : SecurityException : setStreamVolume");
 			}
 		}
 
@@ -359,23 +348,17 @@ public class NacAudio
 		 */
 		public void setVolume()
 		{
-			int level = this.getVolumeLevel();
-
-			if (level < 0)
+			if (!this.canVolumeChange())
 			{
 				return;
 			}
 
 			NacSharedPreferences shared = this.getSharedPreferences();
 			int previous = this.getStreamVolume();
-			int max = this.getStreamMaxVolume();
-			int volume = (int) (max * level / 100.0f);
+			int volume = this.toStreamVolume();
 
 			this.setStreamVolume(volume);
-
-			//this.mPreviousVolume = previous;
 			shared.editPreviousVolume(previous);
-			this.mVolume = volume;
 		}
 
 		/**
@@ -392,6 +375,25 @@ public class NacAudio
 		public void setWasDucking(boolean wasDucking)
 		{
 			this.mWasDucking = wasDucking;
+		}
+
+		/**
+		 * @see toStreamVolume
+		 */
+		public int toStreamVolume()
+		{
+			int level = this.getVolumeLevel();
+			return this.toStreamVolume(level);
+		}
+
+		/**
+		 * Convert the volume level to the stream volume format.
+		 */
+		public int toStreamVolume(int volumeLevel)
+		{
+			int max = this.getStreamMaxVolume();
+			int volume = (int) (max * volumeLevel / 100.0f);
+			return volume;
 		}
 
 		/**

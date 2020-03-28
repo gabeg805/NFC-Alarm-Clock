@@ -199,7 +199,7 @@ public class NacCardHolder
 		this.mAlarm = alarm;
 
 		this.setListeners(null);
-		this.mCard.init(alarm);
+		this.mCard.init(shared, alarm);
 		this.mSwitch.init(alarm);
 		this.mTime.init(shared, alarm);
 		this.mSummary.init(shared, alarm);
@@ -226,7 +226,6 @@ public class NacCardHolder
 
 		if (expandCard)
 		{
-			//this.mCard.expand(getAdapterPosition());
 			this.mCard.expand();
 		}
 	}

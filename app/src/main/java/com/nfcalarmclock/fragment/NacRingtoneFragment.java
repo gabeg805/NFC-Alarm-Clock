@@ -13,7 +13,6 @@ import android.widget.RadioGroup;
 import androidx.fragment.app.Fragment;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.List;
 
 /**
  * Display a dialog that shows a list of alarm ringtones.

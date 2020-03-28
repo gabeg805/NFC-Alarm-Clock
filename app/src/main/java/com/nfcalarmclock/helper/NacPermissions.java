@@ -6,10 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.Manifest;
-import android.net.Uri;
-import android.os.Build;
-import android.provider.Settings;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -39,39 +35,22 @@ public class NacPermissions
 	}
 
 	/**
-	 * @return True if the app has SYSTEM_ALERT_WINDOW permissions, and False
-	 *         otherwise.
-	 */
-	@TargetApi(Build.VERSION_CODES.M)
-	public static boolean hasDrawOverlay(Context context)
-	{
-		return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ?
-			Settings.canDrawOverlays(context) : true;
-	}
-
-	/**
 	 * Request permission.
 	 */
-	public static void request(Context context, String permission, int result)
+	public static void request(Context context, String permission,
+		int requestCode)
 	{
 		ActivityCompat.requestPermissions((Activity) context,
-			new String[] { permission }, result);
+			new String[] { permission }, requestCode);
 	}
 
 	/**
+	 * Request read permissions.
 	 */
-	@TargetApi(Build.VERSION_CODES.M)
-	public static void requestDrawOverlay(Activity activity, int requestCode)
+	public static void requestRead(Context context, int requestCode)
 	{
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
-		{
-			return;
-		}
-
-		Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-			Uri.parse("package:" + activity.getPackageName()));
-
-		activity.startActivityForResult(intent, requestCode);
+		NacPermissions.request(context,
+			Manifest.permission.READ_EXTERNAL_STORAGE, requestCode);
 	}
 
 	/**

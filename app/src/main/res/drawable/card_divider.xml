@@ -4,8 +4,8 @@
 	android:shape="rectangle">
 
 	<size
-		android:width="@dimen/isz_divider"
-		android:height="@dimen/isz_divider"
+		android:width="@dimen/sz_divider"
+		android:height="@dimen/sz_divider"
 		/>
 
 	<solid

@@ -1,7 +1,6 @@
 package com.nfcalarmclock;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.view.View;
 
 /**

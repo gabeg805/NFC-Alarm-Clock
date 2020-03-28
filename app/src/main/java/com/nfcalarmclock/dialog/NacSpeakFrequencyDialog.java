@@ -1,7 +1,6 @@
 package com.nfcalarmclock;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.view.View;
 
 /**
@@ -47,7 +46,6 @@ public class NacSpeakFrequencyDialog
 
 		for (int i=1; i < length; i++)
 		{
-			//values[i] = NacSharedPreferences.getSpeakFrequencySummary(i);
 			values[i] = String.valueOf(i);
 		}
 

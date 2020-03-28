@@ -1,9 +1,7 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
-//import android.support.v7.widget.LinearSmoothScroller;
 import android.util.DisplayMetrics;
-
 import androidx.recyclerview.widget.LinearSmoothScroller;
 
 /**
@@ -23,7 +21,6 @@ public class NacSmoothScroller
 	public NacSmoothScroller(Context context, int position)
 	{
 		super(context);
-
 		setTargetPosition(position);
 	}
 

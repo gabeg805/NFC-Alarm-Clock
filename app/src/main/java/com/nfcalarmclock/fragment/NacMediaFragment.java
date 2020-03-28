@@ -3,9 +3,9 @@ package com.nfcalarmclock;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import androidx.fragment.app.Fragment;
@@ -289,7 +289,6 @@ public class NacMediaFragment
 	{
 		Context context = getContext();
 		NacAlarm alarm = this.getAlarm();
-		//String path = this.getMedia();
 
 		if (alarm != null)
 		{
@@ -325,7 +324,8 @@ public class NacMediaFragment
 	protected NacMediaPlayer setupMediaPlayer()
 	{
 		Context context = getContext();
-		this.mPlayer = new NacMediaPlayer(context);
+		int focus = AudioManager.AUDIOFOCUS_GAIN_TRANSIENT;
+		this.mPlayer = new NacMediaPlayer(context, focus);
 
 		return this.mPlayer;
 	}

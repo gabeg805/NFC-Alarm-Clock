@@ -4,22 +4,13 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
-import android.os.Handler;
 import android.view.animation.Animation;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.animation.LayoutTransition;
-import android.transition.TransitionManager;
 
 /**
  */
@@ -65,6 +56,11 @@ public class NacCardView
 	private CardView mCardView;
 
 	/**
+	 * Header.
+	 */
+	private RelativeLayout mHeader;
+
+	/**
 	 * Summary region.
 	 */
 	private RelativeLayout mSummary;
@@ -75,11 +71,6 @@ public class NacCardView
 	private LinearLayout mExtra;
 
 	/**
-	 * Header.
-	 */
-	private RelativeLayout mHeader;
-
-	/**
 	 * First divider.
 	 */
 	private View mDivider1;
@@ -88,7 +79,6 @@ public class NacCardView
 	 * Second divider.
 	 */
 	private LinearLayout mDivider2;
-	//private View mDivider2;
 
 	/**
 	 * Copy view.
@@ -99,6 +89,11 @@ public class NacCardView
 	 * Delete view.
 	 */
 	private RelativeLayout mDelete;
+
+	/**
+	 * Icon indicating the alarm has been snoozed.
+	 */
+	private ImageView mSnoozeIcon;
 
 	/**
 	 * Card animation.
@@ -164,14 +159,14 @@ public class NacCardView
 		this.mRecyclerView = (RecyclerView) ((Activity)context).findViewById(
 			R.id.content_alarm_list);
 		this.mCardView = (CardView) root.findViewById(R.id.nac_card);
+		this.mHeader = (RelativeLayout) root.findViewById(R.id.nac_header);
 		this.mSummary = (RelativeLayout) root.findViewById(R.id.nac_summary);
 		this.mExtra = (LinearLayout) root.findViewById(R.id.nac_extra);
-		this.mHeader = (RelativeLayout) root.findViewById(R.id.nac_header);
 		this.mDivider1 = (View) root.findViewById(R.id.nac_divider1);
-		//this.mDivider2 = (View) root.findViewById(R.id.nac_divider2);
 		this.mDivider2 = (LinearLayout) root.findViewById(R.id.nac_divider2);
 		this.mCopy = (RelativeLayout) root.findViewById(R.id.nac_swipe_copy);
 		this.mDelete = (RelativeLayout) root.findViewById(R.id.nac_swipe_delete);
+		this.mSnoozeIcon = (ImageView) root.findViewById(R.id.nac_snooze);
 		this.mSlideAnimation = new NacCardSlideAnimation(this.mCardView,
 			this.mSummary, this.mExtra);
 		this.mHighlightAnimator = null;
@@ -204,7 +199,6 @@ public class NacCardView
 	/**
 	 * Animate the card expanding.
 	 */
-	//public void animateExpand(int position)
 	public void animateExpand()
 	{
 		CardView card = this.getCardView();
@@ -219,7 +213,6 @@ public class NacCardView
 		animation.setupForOpen();
 		card.setAnimation(animation);
 		card.startAnimation(animation);
-		//this.scroll(position);
 	}
 
 	/**
@@ -483,10 +476,12 @@ public class NacCardView
 	/**
 	 * Initialize the view state.
 	 */
-	public void init(NacAlarm alarm)
+	public void init(NacSharedPreferences shared, NacAlarm alarm)
 	{
 		this.mAlarm = alarm;
+
 		this.hideSwipeViews();
+		this.setupSnoozeIcon(shared);
 	}
 
 	/**
@@ -504,40 +499,6 @@ public class NacCardView
 	public boolean isCollapsedState()
 	{
 		return (this.getState() == State.COLLAPSED);
-	}
-
-	/**
-	 * Check if the card is completely visible.
-	 *
-	 * @return True if it is visible. False otherwise.
-	 */
-	private boolean isCompletelyVisible(int position)
-	{
-		if (position == RecyclerView.NO_POSITION)
-		{
-			return false;
-		}
-
-		LinearLayoutManager layoutManager = (LinearLayoutManager)
-			this.mRecyclerView.getLayoutManager();
-
-		// @TODO: When deleting too many cards, things get weird and I'm not
-		// sure how to fix it. Just implementing some bandaids to mitigate the
-		// crashes.
-		if (layoutManager != null)
-		{
-			View view = layoutManager.findViewByPosition(position);
-			int y = (view != null) ? view.getTop() : -1;
-			int expandHeight = this.getExpandHeight();
-			int screenHeight = this.getScreenHeight();
-
-			return ((y < 0) || (expandHeight + y) > screenHeight) ? false
-				: true;
-		}
-		else
-		{
-			return false;
-		}
 	}
 
 	/**
@@ -597,27 +558,6 @@ public class NacCardView
 	}
 
 	/**
-	 * Scroll when the alarm card is partially visible.
-	 */
-	public void scroll(final int position)
-	{
-		if (this.isCompletelyVisible(position)
-			|| (position == RecyclerView.NO_POSITION))
-		{
-			return;
-		}
-
-		new Handler().postDelayed(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				mRecyclerView.smoothScrollToPosition(position);
-			}
-		}, EXPAND_DURATION+50);
-	}
-
-	/**
 	 * Set the background color for when the card is collapsed.
 	 */
 	public void setCollapseBackgroundColor()
@@ -649,7 +589,6 @@ public class NacCardView
 		int count = this.mDivider2.getChildCount();
 
 		this.mDivider1.setBackgroundTintList(tint);
-		//this.mDivider2.setBackgroundTintList(tint);
 
 		for (int i=0; i < count; i++)
 		{
@@ -704,9 +643,18 @@ public class NacCardView
 	}
 
 	/**
+	 * Setup the snooze icon.
+	 */
+	private void setupSnoozeIcon(NacSharedPreferences shared)
+	{
+		NacAlarm alarm = this.getAlarm();
+		this.mSnoozeIcon.setVisibility(alarm.isSnoozed(shared) ? View.VISIBLE
+			: View.GONE);
+	}
+
+	/**
 	 * Toggle expand/collapse view state.
 	 */
-	//public void toggleState(int position)
 	public void toggleState()
 	{
 		if (this.isCollapsed())

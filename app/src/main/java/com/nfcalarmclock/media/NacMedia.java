@@ -7,9 +7,9 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import java.io.File;
-import java.lang.Integer;
+import java.lang.Long;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 import java.util.TreeMap;
 import java.util.List;
 import java.util.Locale;
@@ -718,10 +718,11 @@ public class NacMedia
 
 		try
 		{
-			int value = Integer.parseInt(millis) / 1000;
-			int hours = value / 3600;
-			int minutes = value / 60;
-			int seconds =  value % 60;
+			long value = Long.parseLong(millis);
+			long rounded = (value+500) / 1000;
+			long hours = TimeUnit.SECONDS.toHours(rounded) % 24;
+			long minutes = TimeUnit.SECONDS.toMinutes(rounded) % 60;
+			long seconds = rounded % 60;
 			Locale locale = Locale.getDefault();
 
 			if (hours == 0)

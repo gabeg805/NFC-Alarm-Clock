@@ -2,10 +2,7 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-//import android.preference.Preference;
 import android.util.AttributeSet;
-import android.view.View;
-
 import androidx.preference.Preference;
 
 /**

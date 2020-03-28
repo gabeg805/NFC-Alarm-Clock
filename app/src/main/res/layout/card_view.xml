@@ -25,9 +25,9 @@
 				android:id="@+id/nac_time_parent"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:paddingTop="@dimen/sp_row"
-				android:paddingBottom="@dimen/sp_row"
-				android:paddingEnd="@dimen/sp_main">
+				android:paddingTop="@dimen/sp_align"
+				android:paddingBottom="@dimen/sp_align"
+				android:paddingEnd="@dimen/sz_extend">
 
 				<TextView
 					android:id="@+id/nac_time"
@@ -50,14 +50,26 @@
 
 			</RelativeLayout>
 
+			<ImageView
+				android:id="@+id/nac_snooze"
+				android:layout_width="@dimen/isz_main"
+				android:layout_height="@dimen/isz_main"
+				android:layout_toEndOf="@id/nac_time_parent"
+				android:layout_alignBottom="@id/nac_switch"
+				android:layout_marginStart="@dimen/sp_support"
+				android:layout_marginBottom="@dimen/sp_snooze_icon"
+				android:visibility="gone"
+				android:src="@mipmap/snooze"
+				/>
+
 			<Switch
 				android:id="@+id/nac_switch"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_alignParentEnd="true"
-				android:layout_centerVertical="true"
-				android:paddingTop="@dimen/sp_main"
-				android:paddingBottom="@dimen/sp_main"
+				android:layout_alignBottom="@id/nac_time_parent"
+				android:paddingTop="@dimen/sz_extend"
+				android:paddingBottom="@dimen/sz_extend"
 				android:switchMinWidth="@dimen/isz_main_extra"
 				/>
 
@@ -68,7 +80,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_below="@id/nac_header"
-			android:paddingBottom="@dimen/sp_row_last"
+			android:paddingBottom="@dimen/sp_row"
 			android:gravity="left"
 			tools:ignore="RtlHardcoded">
 
@@ -91,9 +103,9 @@
 				android:id="@+id/nac_summary_days"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_alignParentEnd="true"
 				android:layout_marginStart="@dimen/sp_align"
 				android:layout_marginEnd="@dimen/sp_support"
+				android:layout_alignParentEnd="true"
 				android:maxLines="1"
 				android:textColor="?attr/colorAccent"
 				android:textSize="@dimen/tsz_support"
@@ -127,25 +139,24 @@
 				android:layout_height="wrap_content"
 				android:paddingTop="@dimen/sp_row"
 				android:gravity="center"
-				android:alpha="0.6"
 				android:orientation="horizontal">
 
 				<View
-					android:layout_width="4dp"
-					android:layout_height="4dp"
+					android:layout_width="@dimen/sz_divider2"
+					android:layout_height="@dimen/sz_divider2"
 					android:layout_marginEnd="@dimen/sp_support"
 					android:background="@drawable/color_selector"
 					/>
 
 				<View
-					android:layout_width="8dp"
-					android:layout_height="8dp"
+					android:layout_width="@dimen/sz_divider1"
+					android:layout_height="@dimen/sz_divider1"
 					android:background="@drawable/color_selector"
 					/>
 
 				<View
-					android:layout_width="4dp"
-					android:layout_height="4dp"
+					android:layout_width="@dimen/sz_divider2"
+					android:layout_height="@dimen/sz_divider2"
 					android:layout_marginStart="@dimen/sp_support"
 					android:background="@drawable/color_selector"
 					/>
@@ -409,7 +420,7 @@
 			<View
 				android:id="@+id/nac_divider1"
 				android:layout_width="match_parent"
-				android:layout_height="@dimen/isz_divider"
+				android:layout_height="@dimen/sz_divider"
 				android:background="?attr/colorCardDivider"
 				/>
 

@@ -1,7 +1,6 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import androidx.preference.PreferenceManager;

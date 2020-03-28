@@ -23,7 +23,7 @@
 
 	<View
 		android:layout_width="match_parent"
-		android:layout_height="@dimen/isz_divider"
+		android:layout_height="@dimen/sz_divider"
 		android:background="@color/gray_light"
 		/>
 

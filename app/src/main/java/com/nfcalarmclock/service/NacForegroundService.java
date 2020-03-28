@@ -13,7 +13,7 @@ import java.util.Calendar;
  */
 public class NacForegroundService
 	extends Service
-	implements NacWakeUpAction.OnAutoDismissListener
+	implements NacWakeupProcess.OnAutoDismissListener
 {
 
 	/**
@@ -39,7 +39,7 @@ public class NacForegroundService
 	/**
 	 * Wake up action.
 	 */
-	private NacWakeUpAction mWakeUp;
+	private NacWakeupProcess mWakeup;
 
 	/**
 	 * Shared preferences.
@@ -62,12 +62,12 @@ public class NacForegroundService
 	private void cleanup()
 	{
 		NacAlarm alarm = this.getAlarm();
-		NacWakeUpAction wakeUp = this.getWakeUp();
+		NacWakeupProcess wakeup = this.getWakeup();
 		WakeLock wakeLock = this.getWakeLock();
 
-		if (wakeUp != null)
+		if (wakeup != null)
 		{
-			wakeUp.cleanup();
+			wakeup.cleanup();
 		}
 
 		if ((wakeLock != null) && wakeLock.isHeld())
@@ -75,7 +75,7 @@ public class NacForegroundService
 			wakeLock.release();
 		}
 
-		this.mWakeUp = null;
+		this.mWakeup = null;
 		this.mWakeLock = null;
 	}
 
@@ -147,9 +147,9 @@ public class NacForegroundService
 	/**
 	 * @return The wake up actions.
 	 */
-	private NacWakeUpAction getWakeUp()
+	private NacWakeupProcess getWakeup()
 	{
-		return this.mWakeUp;
+		return this.mWakeup;
 	}
 
 	/**
@@ -267,13 +267,13 @@ public class NacForegroundService
 			return;
 		}
 
-		NacWakeUpAction wakeUp = new NacWakeUpAction(this, alarm);
+		NacWakeupProcess wakeup = new NacWakeupProcess(this, alarm);
 		NacScheduler scheduler = new NacScheduler(this);
-		this.mWakeUp = wakeUp;
+		this.mWakeup = wakeup;
 
 		scheduler.scheduleNext(alarm);
-		wakeUp.setOnAutoDismissListener(this);
-		wakeUp.start();
+		wakeup.setOnAutoDismissListener(this);
+		wakeup.start();
 	}
 
 	/**

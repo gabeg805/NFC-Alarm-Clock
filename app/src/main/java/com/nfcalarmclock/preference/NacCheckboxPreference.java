@@ -2,14 +2,11 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.TextView;;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 

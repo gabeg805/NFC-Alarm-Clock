@@ -889,14 +889,10 @@ public class NacCardAdapter
 	private void showAlarmRuntime(NacAlarm alarm)
 	{
 		Calendar alarmCalendar = NacCalendar.getNext(alarm);
-		//Calendar previousCalendar = this.getPreviousCalendar();
 
-		//if (!alarmCalendar.equals(previousCalendar))
-		//{
 		this.showAlarm(alarm);
 
 		this.mPreviousCalendar = alarmCalendar;
-		//}
 	}
 
 	/**

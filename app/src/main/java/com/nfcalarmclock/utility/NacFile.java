@@ -3,9 +3,7 @@ package com.nfcalarmclock;
 import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.MediaStore;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**

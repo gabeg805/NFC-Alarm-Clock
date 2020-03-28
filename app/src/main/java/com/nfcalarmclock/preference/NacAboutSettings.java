@@ -1,7 +1,6 @@
 package com.nfcalarmclock;
 
 import android.os.Bundle;
-import androidx.preference.PreferenceManager;
 
 /**
  * About fragment.

@@ -981,9 +981,9 @@ public class NacAlarm
 	public boolean isSnoozed(NacSharedPreferences shared)
 	{
 		int id = this.getId();
-
-		return (shared.getPreventAppFromClosing()
-			&& (shared.getSnoozeCount(id) > 0));
+		return (shared.getSnoozeCount(id) > 0);
+		//return (shared.getPreventAppFromClosing()
+		//	&& (shared.getSnoozeCount(id) > 0));
 	}
 
 	/**

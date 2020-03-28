@@ -3,20 +3,12 @@ package com.nfcalarmclock;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-//import android.support.design.widget.CoordinatorLayout;
-//import android.support.design.widget.Snackbar;
-//import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.MeasureSpec;
 import android.widget.Toast;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import com.google.android.material.snackbar.Snackbar;
@@ -91,35 +83,6 @@ public class NacUtility
 	public static void print(String name, String string)
 	{
 		Log.i(name, string);
-
-		//File logFile = new File("/storage/emulated/0/log.file");
-
-		//if (!logFile.exists())
-		//{
-		//	try
-		// 	{
-		//		logFile.createNewFile();
-		//	}
-		//	catch (IOException e)
-		//	{
-		//		e.printStackTrace();
-		//	}
-		//}
-
-		//try
-		//{
-		//	//BufferedWriter for performance, true to set append to file flag
-		//	BufferedWriter buf = new BufferedWriter(new FileWriter(logFile,
-		//		true));
-
-		//	buf.append(string);
-		//	buf.newLine();
-		//	buf.close();
-		//}
-		//catch (IOException e)
-		//{
-		//	e.printStackTrace();
-		//}
 	}
 
 	/**
@@ -208,7 +171,6 @@ public class NacUtility
 		View.OnClickListener listener)
 	{
 		CoordinatorLayout root = activity.findViewById(R.id.activity_main);
-
 		return NacUtility.snackbar(root, message, action, listener);
 	}
 

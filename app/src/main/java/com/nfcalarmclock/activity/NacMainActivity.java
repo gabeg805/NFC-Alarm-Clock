@@ -1,7 +1,6 @@
 package com.nfcalarmclock;
 
 import android.annotation.TargetApi;
-import android.app.AlarmManager.AlarmClockInfo;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -23,8 +22,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.lang.System;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The application's main activity.

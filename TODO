@@ -1,8 +1,16 @@
-* Change Days dialog to reflect the look of the alarm card. Change
-  backgroundColor.
+----
+TODO
+----
 
-* Only have toast for NFC.
+* Figure out out to consolidate NacNotifications
 
-* Increase size of alarm cards. Feels cramped.
+* Figure out how to close notification activity (NacAlarmActivity) from the
+  notification. The action just calls the NacForegroundService, but if the
+  NacAlarmActivity is in the foreground, it will not be closed.
 
-* Add Snoozed icon to alarm that is snoozed
+* Change to the androix MediaPlayer
+
+----
+DONE
+----
+

@@ -2,23 +2,13 @@ package com.nfcalarmclock;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.Manifest;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Display a browser for the user to browse for music files.
@@ -43,7 +33,7 @@ public class NacMusicFragment
 	/**
 	 * Read request callback success result.
 	 */
-	public static final int READ_REQUEST = 1;
+	public static final int READ_REQUEST_CODE = 1;
 
 	/**
 	 */
@@ -218,10 +208,11 @@ public class NacMusicFragment
 	@Override
 	protected void onSelected()
 	{
-		if (!NacPermissions.hasRead(getContext()))
+		Context context = getContext();
+
+		if (!NacPermissions.hasRead(context))
 		{
-			NacPermissions.request(getActivity(),
-				Manifest.permission.READ_EXTERNAL_STORAGE, READ_REQUEST);
+			NacPermissions.requestRead(context, READ_REQUEST_CODE);
 		}
 	}
 

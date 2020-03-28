@@ -5,8 +5,6 @@ import android.app.AlarmManager.AlarmClockInfo;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
 import java.util.Calendar;
 import java.util.List;
 
