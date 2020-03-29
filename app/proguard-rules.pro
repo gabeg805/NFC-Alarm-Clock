@@ -21,3 +21,6 @@
 #-renamesourcefileattribute SourceFile
 
 -keep class com.nfcalarmclock.** { *; }
+#-dontusemixedcaseclassnames
+#-dontskipnonpubliclibraryclasses
+-verbose

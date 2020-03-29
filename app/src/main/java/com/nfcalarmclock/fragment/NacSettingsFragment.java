@@ -1,12 +1,7 @@
 package com.nfcalarmclock;
 
-//import android.app.FragmentManager;
-//import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-//import android.preference.Preference;
-//import android.preference.PreferenceFragment;
-
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;

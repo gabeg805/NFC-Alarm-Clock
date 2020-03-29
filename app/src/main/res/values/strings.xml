@@ -392,6 +392,7 @@
 	<!-- Content Descriptions -->
 	<!-- ******************** -->
 
+	<string name="cd_ic_snoozed">Alarm has been snoozed.</string>
 	<string name="cd_btn_repeat">Select to repeat the alarm.</string>
 	<string name="cd_btn_vibrate">Select to vibrate the phone when the alarm goes off.</string>
 	<string name="cd_btn_nfc">Select to require NFC in order to dismiss the alarm.</string>

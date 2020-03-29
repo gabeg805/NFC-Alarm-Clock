@@ -10,8 +10,8 @@
 
 	<ImageView
 		android:id="@+id/delete_icon"
-		android:layout_width="@dimen/isz_main_custom"
-		android:layout_height="@dimen/isz_main_custom"
+		android:layout_width="@dimen/isz_icon"
+		android:layout_height="@dimen/isz_icon"
 		android:layout_marginEnd="@dimen/sp_main"
 		android:layout_alignParentEnd="true"
 		android:layout_centerVertical="true"
@@ -26,7 +26,7 @@
 		android:layout_marginEnd="@dimen/sp_main"
 		android:layout_centerVertical="true"
 		android:textColor="@color/white"
-		android:textSize="@dimen/tsz_main_custom"
+		android:textSize="@dimen/tsz_icon"
 		android:textStyle="bold"
 		android:text="@string/card_swipe_delete"
 		/>

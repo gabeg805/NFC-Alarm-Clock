@@ -10,7 +10,7 @@
 	android:clipChildren="false">
 
 
-	<com.nfcalarmclock.NacColorPicker
+	<com.nfcalarmclock.widget.NacColorPicker
 		android:id="@+id/color_picker"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
 		android:layout_marginBottom="@dimen/sp_section"
 		android:layout_marginStart="@dimen/sp_main"
 		android:layout_marginEnd="@dimen/sp_main"
-		app:nacSpacing="@dimen/isz_main_custom"
+		app:nacSpacing="@dimen/isz_icon"
 		/>
 
 	<LinearLayout
@@ -30,8 +30,8 @@
 
 		<ImageView
 			android:id="@+id/color_example"
-			android:layout_width="@dimen/isz_main_custom"
-			android:layout_height="@dimen/isz_main_custom"
+			android:layout_width="@dimen/isz_icon"
+			android:layout_height="@dimen/isz_icon"
 			android:layout_gravity="center_vertical"
 			android:layout_marginEnd="@dimen/sp_main"
 			android:contentDescription="@string/cd_ic_color_example"

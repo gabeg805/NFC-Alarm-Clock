@@ -9,7 +9,7 @@ import androidx.preference.PreferenceManager;
 /**
  * General settings fragment.
  */
-public class NacGeneralSettings
+public class NacGeneralSettingsFragment
 	extends NacSettingsFragment
 	implements Preference.OnPreferenceClickListener
 {
@@ -45,7 +45,6 @@ public class NacGeneralSettings
 		}
 
 		String media = NacIntent.getMedia(data);
-
 		this.setPreferenceMedia(media);
 	}
 
@@ -77,7 +76,6 @@ public class NacGeneralSettings
 			media);
 
 		startActivityForResult(intent, MEDIA_REQUEST_CODE);
-
 		return true;
 	}
 

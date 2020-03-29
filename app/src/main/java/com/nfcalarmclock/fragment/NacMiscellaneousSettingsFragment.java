@@ -8,7 +8,7 @@ import androidx.preference.PreferenceManager;
 /**
  * Miscellaneous fragment.
  */
-public class NacMiscellaneousSettings
+public class NacMiscellaneousSettingsFragment
 	extends NacSettingsFragment
 {
 
@@ -32,7 +32,6 @@ public class NacMiscellaneousSettings
 		String speakFreqKey = res.getString(R.string.pref_speak_frequency_key);
 		NacCheckboxPreference speak = (NacCheckboxPreference) findPreference(speakKey);
 		NacSpeakFrequencyPreference speakFreq = (NacSpeakFrequencyPreference) findPreference(speakFreqKey);
-
 		boolean state = speak.getChecked();
 
 		speak.notifyDependencyChange(!state);

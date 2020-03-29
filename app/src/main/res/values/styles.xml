@@ -19,8 +19,8 @@
 	</style>
 
 	<style name="NacDayButton">
-		<item name="nacWidth">@dimen/isz_main_custom</item>
-		<item name="nacHeight">@dimen/isz_main_custom</item>
+		<item name="nacWidth">@dimen/isz_icon</item>
+		<item name="nacHeight">@dimen/isz_icon</item>
 		<item name="nacDuration">500</item>
 		<item name="nacTextColor">?attr/colorCardText</item>
 		<item name="nacTextSize">@dimen/tsz_main</item>

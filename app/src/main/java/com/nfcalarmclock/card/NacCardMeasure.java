@@ -297,7 +297,7 @@ public class NacCardMeasure
 		RecyclerView rv = (RecyclerView) ((Activity)context).findViewById(
 			R.id.content_alarm_list);
 		int fabHeight = (int) context.getResources()
-			.getDimension(R.dimen.isz_main_extra);
+			.getDimension(R.dimen.isz_icon);
 		int recyclerHeight = rv.getHeight();
 		this.mScreenHeight = recyclerHeight - fabHeight;
 		//NacUtility.printf("SCREEN HEIGHT : %d", mScreenHeight);

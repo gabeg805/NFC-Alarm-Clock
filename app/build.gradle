@@ -16,8 +16,8 @@ android {
 		applicationId "com.nfcalarmclock"
 		minSdkVersion 21
 		targetSdkVersion 29
-		versionCode 153
-		versionName "9.4.0"
+		versionCode 154
+		versionName "9.4.1"
 	}
 	signingConfigs {
 		release {
@@ -42,7 +42,8 @@ android {
 		variant.resValue "string", "versionName", variant.versionName
 	}
 	lintOptions {
-		enable 'ConvertToWebp', 'DalvikOverride', 'DuplicateStrings',
+		//enable 'ConvertToWebp', 'DalvikOverride', 'DuplicateStrings',
+		enable 'ConvertToWebp', 'DalvikOverride',
 			'IconExpectedSize', 'MinSdkTooLow', 'MissingRegistered',
 			'NegativeMargin', 'Registered', 'TypographyQuotes'
 	}

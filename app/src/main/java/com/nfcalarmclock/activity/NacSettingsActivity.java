@@ -121,7 +121,7 @@ public class NacSettingsActivity
 		private BitmapDrawable createIconDrawable(int id)
 		{
 			Resources res = getResources();
-			int size = (int) res.getDimension(R.dimen.isz_main_custom);
+			int size = (int) res.getDimension(R.dimen.isz_icon);
 			Bitmap bitmap = BitmapFactory.decodeResource(res, id);
 			Bitmap scaled = Bitmap.createScaledBitmap(bitmap, size, size, true);
 
@@ -142,23 +142,23 @@ public class NacSettingsActivity
 
 			if (preferenceKey.equals(keys.getGeneralScreen()))
 			{
-				fragment = new NacGeneralSettings();
+				fragment = new NacGeneralSettingsFragment();
 				title = keys.getGeneralScreenTitle();
 
 			}
 			else if (preferenceKey.equals(keys.getAppearanceScreen()))
 			{
-				fragment = new NacAppearanceSettings();
+				fragment = new NacAppearanceSettingsFragment();
 				title = keys.getAppearanceScreenTitle();
 			}
 			else if (preferenceKey.equals(keys.getMiscellaneousScreen()))
 			{
-				fragment = new NacMiscellaneousSettings();
+				fragment = new NacMiscellaneousSettingsFragment();
 				title = keys.getMiscellaneousScreenTitle();
 			}
 			else if (preferenceKey.equals(keys.getAboutScreen()))
 			{
-				fragment = new NacAboutSettings();
+				fragment = new NacAboutSettingsFragment();
 				title = keys.getAboutScreenTitle();
 			}
 			else

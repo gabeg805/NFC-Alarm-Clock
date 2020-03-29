@@ -366,6 +366,7 @@ public class NacCardHolder
 			if (alarm.isSnoozed(shared))
 			{
 				NacUtility.quickToast(context, "Unable to modify a snoozed alarm");
+				view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 				return;
 			}
 
@@ -376,18 +377,21 @@ public class NacCardHolder
 			alarm.toggleRepeat();
 			alarm.changed();
 			this.mDays.setRepeat();
+			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		}
 		else if (id == R.id.nac_vibrate)
 		{
 			alarm.toggleVibrate();
 			alarm.changed();
 			this.mVibrate.set();
+			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		}
 		else if (id == R.id.nac_nfc)
 		{
 			alarm.toggleUseNfc();
 			alarm.changed();
 			this.mUseNfc.set();
+			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 
 			if (alarm.getUseNfc())
 			{
@@ -414,6 +418,7 @@ public class NacCardHolder
 			if (alarm.isSnoozed(shared))
 			{
 				NacUtility.quickToast(context, "Unable to delete a snoozed alarm");
+				view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 				return;
 			}
 

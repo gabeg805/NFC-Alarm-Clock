@@ -2,6 +2,9 @@
 TODO
 ----
 
+* Test upcoming alarm notification. I commented it out of the Manifest because I
+  didn't know why it was in there.
+
 * Figure out out to consolidate NacNotifications
 
 * Figure out how to close notification activity (NacAlarmActivity) from the

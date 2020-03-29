@@ -18,14 +18,13 @@
 		<RelativeLayout
 			android:id="@+id/nac_header"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:paddingTop="@dimen/sp_row">
+			android:layout_height="wrap_content">
 
 			<RelativeLayout
 				android:id="@+id/nac_time_parent"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:paddingTop="@dimen/sp_align"
+				android:paddingTop="@dimen/sp_row_last"
 				android:paddingBottom="@dimen/sp_align"
 				android:paddingEnd="@dimen/sz_extend">
 
@@ -58,6 +57,7 @@
 				android:layout_alignBottom="@id/nac_switch"
 				android:layout_marginStart="@dimen/sp_support"
 				android:layout_marginBottom="@dimen/sp_snooze_icon"
+				android:contentDescription="@string/cd_ic_snoozed"
 				android:visibility="gone"
 				android:src="@mipmap/snooze"
 				/>
@@ -70,7 +70,7 @@
 				android:layout_alignBottom="@id/nac_time_parent"
 				android:paddingTop="@dimen/sz_extend"
 				android:paddingBottom="@dimen/sz_extend"
-				android:switchMinWidth="@dimen/isz_main_extra"
+				android:switchMinWidth="@dimen/isz_attention"
 				/>
 
 		</RelativeLayout>
@@ -80,7 +80,8 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_below="@id/nac_header"
-			android:paddingBottom="@dimen/sp_row"
+			android:paddingTop="@dimen/sp_align"
+			android:paddingBottom="@dimen/sp_row_last"
 			android:gravity="left"
 			tools:ignore="RtlHardcoded">
 
@@ -237,8 +238,8 @@
 					android:layout_height="@dimen/sz_touch">
 
 					<ImageView
-						android:layout_width="@dimen/isz_main"
-						android:layout_height="@dimen/isz_main"
+						android:layout_width="@dimen/isz_icon_button"
+						android:layout_height="@dimen/isz_icon_button"
 						android:layout_centerInParent="true"
 						android:contentDescription="@string/cd_btn_repeat"
 						android:background="?android:selectableItemBackgroundBorderless"
@@ -260,8 +261,8 @@
 					android:layout_height="@dimen/sz_touch">
 
 					<ImageView
-						android:layout_width="@dimen/isz_main"
-						android:layout_height="@dimen/isz_main"
+						android:layout_width="@dimen/isz_icon_button"
+						android:layout_height="@dimen/isz_icon_button"
 						android:layout_centerInParent="true"
 						android:contentDescription="@string/cd_btn_vibrate"
 						android:background="?android:selectableItemBackgroundBorderless"
@@ -283,8 +284,8 @@
 					android:layout_height="@dimen/sz_touch">
 
 					<ImageView
-						android:layout_width="@dimen/isz_main"
-						android:layout_height="@dimen/isz_main"
+						android:layout_width="@dimen/isz_icon_button"
+						android:layout_height="@dimen/isz_icon_button"
 						android:layout_centerInParent="true"
 						android:contentDescription="@string/cd_btn_nfc"
 						android:background="?android:selectableItemBackgroundBorderless"

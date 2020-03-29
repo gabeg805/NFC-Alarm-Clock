@@ -5,7 +5,7 @@ import android.os.Bundle;
 /**
  * About fragment.
  */
-public class NacAboutSettings
+public class NacAboutSettingsFragment
 	extends NacSettingsFragment
 {
 

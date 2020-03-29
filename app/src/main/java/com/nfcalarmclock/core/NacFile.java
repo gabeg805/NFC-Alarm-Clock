@@ -572,6 +572,11 @@ public class NacFile
 	 */
 	public static String strip(String path)
 	{
+		if (path == null)
+		{
+			return "";
+		}
+
 		String normalPath = path;
 		int length = path.length();
 

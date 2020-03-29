@@ -110,8 +110,9 @@
 			android:exported="false"
 			/>
 
+		 <!--
 		 <service
-		 	android:name=".NacUpcomingAlarmNotification"
+		 	android:name=".notification.NacUpcomingAlarmNotification"
 			android:label="UpcomingAlarm"
 			android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
 
@@ -119,6 +120,7 @@
 				<action android:name="android.service.notification.NotificationListenerService" />
 			</intent-filter>
 		 </service>
+		 -->
 
 			<!-- An intent filter that will receive the response
 			     from the authentication service -->

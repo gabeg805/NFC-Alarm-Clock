@@ -19,15 +19,17 @@
 	<dimen name="sz_divider">1dp</dimen>
 
 	<!-- Image -->
-	<dimen name="isz_main_extra">54dp</dimen>
-	<dimen name="isz_main_custom">32dp</dimen>
+	<dimen name="isz_attention">54dp</dimen>
 	<dimen name="isz_main">24dp</dimen>
+	<dimen name="isz_icon">32dp</dimen>
+	<dimen name="isz_icon_button">28dp</dimen>
 	<dimen name="isz_support">16dp</dimen>
 	<dimen name="isz_support_extra">8dp</dimen>
 
 	<!-- Text -->
 	<dimen name="tsz_attention">40sp</dimen>
 	<dimen name="tsz_title">32sp</dimen>
+	<dimen name="tsz_icon">22sp</dimen>
 	<dimen name="tsz_main_custom">18sp</dimen>
 	<dimen name="tsz_main">16sp</dimen>
 	<dimen name="tsz_support">14sp</dimen>

@@ -6,28 +6,28 @@
 		android:key="@string/pref_screen_general_key"
 		android:title="@string/pref_screen_general_title"
 		android:summary="@string/pref_screen_general_summary"
-		android:fragment="com.nfcalarmclock.NacGeneralSettings"
+		android:fragment="com.nfcalarmclock.NacGeneralSettingsFragment"
 		/>
 
 	<Preference
 		android:key="@string/pref_screen_appearance_key"
 		android:title="@string/pref_screen_appearance_title"
 		android:summary="@string/pref_screen_appearance_summary"
-		android:fragment="com.nfcalarmclock.NacColorSettings"
+		android:fragment="com.nfcalarmclock.NacAppearanceSettingsFragment"
 		/>
 
 	<Preference
 		android:key="@string/pref_screen_misc_key"
 		android:title="@string/pref_screen_misc_title"
 		android:summary="@string/pref_screen_misc_summary"
-		android:fragment="com.nfcalarmclock.NacMiscellaneousSettings"
+		android:fragment="com.nfcalarmclock.NacMiscellaneousSettingsFragment"
 		/>
 
 	<Preference
 		android:key="@string/pref_screen_about_key"
 		android:title="@string/pref_screen_about_title"
 		android:summary="@string/pref_screen_about_summary"
-		android:fragment="com.nfcalarmclock.NacAboutSettings"
+		android:fragment="com.nfcalarmclock.NacAboutSettingsFragment"
 		/>
 
 </PreferenceScreen>

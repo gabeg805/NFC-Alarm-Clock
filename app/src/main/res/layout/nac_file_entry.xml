@@ -13,8 +13,8 @@
 
 	<ImageView
 		android:id="@+id/image"
-		android:layout_width="@dimen/isz_main_custom"
-		android:layout_height="@dimen/isz_main_custom"
+		android:layout_width="@dimen/isz_icon"
+		android:layout_height="@dimen/isz_icon"
 		android:layout_alignParentStart="true"
 		android:layout_centerVertical="true"
 		android:contentDescription="@string/cd_ic_file_entry"
@@ -28,6 +28,7 @@
 		android:layout_toStartOf="@id/annotation"
 		android:layout_centerVertical="true"
 		android:paddingStart="@dimen/sp_main"
+		android:paddingEnd="@dimen/sp_main"
 		android:orientation="vertical">
 
 		<TextView

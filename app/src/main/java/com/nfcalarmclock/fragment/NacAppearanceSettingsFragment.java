@@ -7,7 +7,7 @@ import androidx.preference.PreferenceManager;
 /**
  * Appearance fragment.
  */
-public class NacAppearanceSettings
+public class NacAppearanceSettingsFragment
 	extends NacSettingsFragment
 	implements Preference.OnPreferenceChangeListener
 {
