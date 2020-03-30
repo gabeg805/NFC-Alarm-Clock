@@ -78,8 +78,7 @@ public class NacWakeupProcess
 		this.mContext = context;
 		this.mAlarm = alarm;
 		this.mSharedPreferences = new NacSharedPreferences(context);
-		this.mPlayer = new NacMediaPlayer(context,
-			AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+		this.mPlayer = new NacMediaPlayer(context);
 		this.mVibrator = (Vibrator) context.getSystemService(
 			Context.VIBRATOR_SERVICE);
 		this.mSpeech = new NacTextToSpeech(context, this);
