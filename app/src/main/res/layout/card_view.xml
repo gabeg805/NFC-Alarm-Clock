@@ -95,7 +95,6 @@
 				android:textColor="?attr/colorAccent"
 				android:textSize="@dimen/tsz_support"
 				android:textStyle="bold"
-				android:fontFeatureSettings="smcp"
 				android:text=""
 				/>
 
@@ -115,6 +114,7 @@
 				/>
 
 			<!--
+				android:fontFeatureSettings="smcp"
 			<TextView
 				android:id="@+id/nac_summary_name"
 				android:layout_width="wrap_content"

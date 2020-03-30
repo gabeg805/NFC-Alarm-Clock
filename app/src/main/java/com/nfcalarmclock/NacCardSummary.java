@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import java.util.Locale;
 
 /**
  * Summary information for an alarm card.
@@ -156,10 +155,8 @@ public class NacCardSummary
 		NacAlarm alarm = this.getAlarm();
 		String string = NacCalendar.Days.toString(alarm,
 			shared.getStartWeekOn());
-		Locale locale = Locale.getDefault();
 
-		//this.mDays.setText(string);
-		this.mDays.setText(string.toLowerCase(locale));
+		this.mDays.setText(string);
 		this.mDays.requestLayout();
 	}
 

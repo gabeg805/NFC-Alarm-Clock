@@ -471,6 +471,34 @@ public class NacCalendar
 		}
 
 		/**
+		 * @return True if every day is in the set, and False otherwise.
+		 */
+		public static boolean isEveryday(EnumSet<Day> days)
+		{
+			EnumSet<Day> everyday = EnumSet.allOf(Day.class);
+			return days.equals(everyday);
+		}
+
+		/**
+		 * @return True if all weekdays are in the set, and False otherwise.
+		 */
+		public static boolean isWeekday(EnumSet<Day> days)
+		{
+			EnumSet<Day> weekdays = EnumSet.of(Day.MONDAY, Day.TUESDAY,
+				Day.WEDNESDAY, Day.THURSDAY, Day.FRIDAY);
+			return days.equals(weekdays);
+		}
+
+		/**
+		 * @return True if all weekend days are in the set, and False otherwise.
+		 */
+		public static boolean isWeekend(EnumSet<Day> days)
+		{
+			EnumSet<Day> weekend = EnumSet.of(Day.SUNDAY, Day.SATURDAY);
+			return days.equals(weekend);
+		}
+
+		/**
 		 * Convert from a Day to a Calendar day.
 		 *
 		 * @param  day  A Day.
@@ -552,7 +580,8 @@ public class NacCalendar
 		 */
 		public static String toString(NacAlarm alarm)
 		{
-			return NacCalendar.Days.toString(alarm, 0);
+			return NacCalendar.Days.toString(alarm,
+				NacSharedPreferences.DEFAULT_START_WEEK_ON);
 		}
 
 		/**
@@ -581,56 +610,58 @@ public class NacCalendar
 		 */
 		public static String toString(EnumSet<Day> days)
 		{
-			return NacCalendar.Days.toString(days, 0);
+			return NacCalendar.Days.toString(days,
+				NacSharedPreferences.DEFAULT_START_WEEK_ON);
 		}
 
 		/**
 		 * Convert a set of days to a comma separate string of days.
 		 *
-		 * @param  days  The set of days.
+		 * @param  convertDays  The set of days to convert.
 		 * @param  start  The day to start the week on.
 		 *
 		 * @return A string of the days.
 		 */
-		public static String toString(EnumSet<Day> days, int start)
+		public static String toString(EnumSet<Day> daysToConvert, int start)
 		{
-			String string = "";
-			int index = 0;
-			String[] names;
-			Day[] set;
-
-			if (start == 1)
+			if (NacCalendar.Days.isEveryday(daysToConvert))
 			{
-				names = new String[] { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",
-					"Sun" };
-				set = new Day[] { Day.MONDAY, Day.TUESDAY, Day.WEDNESDAY,
-					Day.THURSDAY, Day.FRIDAY, Day.SATURDAY, Day.SUNDAY };
+				return "Everyday";
 			}
-			else
+			else if (NacCalendar.Days.isWeekday(daysToConvert))
 			{
-				names = new String[] { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri",
-					"Sat" };
-				set = new Day[] { Day.SUNDAY, Day.MONDAY, Day.TUESDAY, Day.WEDNESDAY,
-					Day.THURSDAY, Day.FRIDAY, Day.SATURDAY };
+				return "Weekdays";
+			}
+			else if (NacCalendar.Days.isWeekend(daysToConvert))
+			{
+				return "Weekend";
 			}
 
-			for (Day d : set)
+			Object[] daySet = EnumSet.allOf(Day.class).toArray();
+			String convertedString = "";
+			int count = 0;
+			int length = daySet.length;
+
+			for (int i=start; count < length; i=(i+1) % length)
 			{
-				if (days.contains(d))
+				Day day = (Day) daySet[i];
+				String name = day.name();
+
+				if (daysToConvert.contains(day))
 				{
-					if (!string.isEmpty())
+					if (!convertedString.isEmpty())
 					{
-						//string += ", ";
-						string += " \u2027 ";
+						convertedString += " \u2027 ";
 					}
 
-					string += names[index];
+					convertedString += name.charAt(0)
+						+ name.substring(1, 3).toLowerCase();
 				}
 
-				index++;
+				count++;
 			}
 
-			return string;
+			return convertedString;
 		}
 
 		/**
@@ -638,7 +669,8 @@ public class NacCalendar
 		 */
 		public static String toString(int value)
 		{
-			return NacCalendar.Days.toString(value, 0);
+			return NacCalendar.Days.toString(value,
+				NacSharedPreferences.DEFAULT_START_WEEK_ON);
 		}
 
 		/**
