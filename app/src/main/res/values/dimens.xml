@@ -29,8 +29,7 @@
 	<!-- Text -->
 	<dimen name="tsz_attention">40sp</dimen>
 	<dimen name="tsz_title">32sp</dimen>
-	<dimen name="tsz_icon">22sp</dimen>
-	<dimen name="tsz_main_custom">18sp</dimen>
+	<dimen name="tsz_icon">18sp</dimen>
 	<dimen name="tsz_main">16sp</dimen>
 	<dimen name="tsz_support">14sp</dimen>
 

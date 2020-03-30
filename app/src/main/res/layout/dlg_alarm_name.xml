@@ -14,7 +14,7 @@
 		android:maxLines="10"
 		android:singleLine="false"
 		android:isScrollContainer="true"
-		android:textSize="@dimen/tsz_main_custom"
+		android:textSize="@dimen/tsz_main"
 		android:inputType="textCapSentences|textMultiLine"
 		android:hint="@string/dlg_name_hint"
 		android:importantForAutofill="no">
