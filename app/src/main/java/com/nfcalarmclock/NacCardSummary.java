@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import java.util.Locale;
 
 /**
  * Summary information for an alarm card.
@@ -155,8 +156,10 @@ public class NacCardSummary
 		NacAlarm alarm = this.getAlarm();
 		String string = NacCalendar.Days.toString(alarm,
 			shared.getStartWeekOn());
+		Locale locale = Locale.getDefault();
 
-		this.mDays.setText(string);
+		//this.mDays.setText(string);
+		this.mDays.setText(string.toLowerCase(locale));
 		this.mDays.requestLayout();
 	}
 
@@ -165,23 +168,12 @@ public class NacCardSummary
 	 */
 	public void setName()
 	{
-		//RelativeLayout.LayoutParams params = this.getNameLayoutParams();
 		NacAlarm alarm = this.getAlarm();
 		String name = alarm.getNameNormalized();
-		//String text = "";
-		//int margin = 0;
-
-		//if (!name.isEmpty())
-		//{
-		//	text = name + " ";
-		//	margin = this.getResources().getDimensionPixelSize(R.dimen.sp_text);
-		//}
 
 		this.mName.setText(name);
 		this.mName.setVisibility(name.isEmpty() ? View.GONE : View.VISIBLE);
-		//params.setMarginStart(margin);
-		//this.mName.setText(text);
-		//this.mName.setLayoutParams(params);
+		//this.mName.setSelected(true); // For marquee
 	}
 
 }

@@ -2,6 +2,8 @@
 TODO
 ----
 
+* Try gain transient for alarm sound
+
 * Test upcoming alarm notification. I commented it out of the Manifest because I
   didn't know why it was in there.
 

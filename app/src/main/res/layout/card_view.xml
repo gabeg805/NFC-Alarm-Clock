@@ -81,10 +81,40 @@
 			android:layout_height="wrap_content"
 			android:layout_below="@id/nac_header"
 			android:paddingTop="@dimen/sp_align"
-			android:paddingBottom="@dimen/sp_row_last"
-			android:gravity="left"
-			tools:ignore="RtlHardcoded">
+			android:paddingBottom="@dimen/sp_row_last">
 
+			<TextView
+				android:id="@+id/nac_summary_days"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignBaseline="@id/nac_summary_name"
+				android:layout_marginStart="@dimen/sp_align"
+				android:layout_marginEnd="@dimen/sp_support"
+				android:layout_alignParentStart="true"
+				android:maxLines="1"
+				android:textColor="?attr/colorAccent"
+				android:textSize="@dimen/tsz_support"
+				android:textStyle="bold"
+				android:fontFeatureSettings="smcp"
+				android:text=""
+				/>
+
+			<TextView
+				android:id="@+id/nac_summary_name"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_toEndOf="@id/nac_summary_days"
+				android:layout_marginStart="@dimen/sp_align"
+				android:layout_marginEnd="@dimen/sp_support"
+				android:maxLength="@integer/max_entry_length"
+				android:maxLines="1"
+				android:ellipsize="end"
+				android:textColor="@color/sky_blue"
+				android:textSize="@dimen/tsz_support"
+				android:textStyle="bold"
+				/>
+
+			<!--
 			<TextView
 				android:id="@+id/nac_summary_name"
 				android:layout_width="wrap_content"
@@ -104,15 +134,18 @@
 				android:id="@+id/nac_summary_days"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:layout_alignBaseline="@id/nac_summary_name"
 				android:layout_marginStart="@dimen/sp_align"
 				android:layout_marginEnd="@dimen/sp_support"
 				android:layout_alignParentEnd="true"
 				android:maxLines="1"
 				android:textColor="?attr/colorAccent"
-				android:textSize="@dimen/tsz_support"
+				android:textSize="@dimen/tsz_support_yo"
 				android:textStyle="bold"
+				android:fontFeatureSettings="smcp"
 				android:text=""
 				/>
+			-->
 
 		</RelativeLayout>
 

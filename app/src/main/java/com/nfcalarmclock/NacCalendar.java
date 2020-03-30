@@ -620,7 +620,8 @@ public class NacCalendar
 				{
 					if (!string.isEmpty())
 					{
-						string += ",";
+						//string += ", ";
+						string += " \u2027 ";
 					}
 
 					string += names[index];
