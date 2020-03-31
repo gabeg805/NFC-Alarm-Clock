@@ -2,10 +2,11 @@
 TODO
 ----
 
-* Try gain transient for alarm sound
+* Mention open-source and/or permissions in screenshots?
 
-* Test upcoming alarm notification. I commented it out of the Manifest because I
-  didn't know why it was in there.
+* Add privacy policy to app in app store.
+
+* Add language translations.
 
 * Figure out out to consolidate NacNotifications
 

@@ -24,6 +24,7 @@
 	<View
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/sz_divider"
+		android:layout_marginBottom="@dimen/sp_row"
 		android:background="@color/gray_light"
 		/>
 
