@@ -6,7 +6,7 @@
 - _Application_ : The NFC Alarm Clock application.
 - _Developer_ : Gabe Gonzalez, the developer of the _Application_.
 - _User_ : Anyone that uses the _Application_, or is curious about the _Application_'s policies.
-- _SPI_ : Short for Sensitive Personal Information, which is to say things like personal data revealing racial or ethnic origin, political opinions, religious or philosophical beliefs, or trade union membership, and the processing of genetic data, biometric data for the purpose of uniquely identifying a natural person, data concerning health or data concerning a natural person’s sex life or sexual orientation.
+- _PSI_ : Short for Personal and Sensitive Information, which includes, but isn't limited to, personally identifiable information, financial and payment information, authentication information, phonebook, contacts SMS and call related data, microphone and camera sensor data, and sensitive device or usage data.
 
 
 ## Introduction
@@ -22,9 +22,9 @@ This information is stored locally, only visible to the _Application_, and is ne
 
 The _Application_ never accesses or saves Sensitive Personal Information.
 
-If a _User_ chooses to store any _SPI_ in the _Application_, the _User_ is responsible for complying with any regulatory controls regarding that data.
+If a _User_ chooses to store any _PSI_ in the _Application_, the _User_ is responsible for complying with any regulatory controls regarding that data.
 
-The _Application_ does not use any third-party libraries that may collect _SPI_; however, this Privacy Policy cannot speak for the Android or Google libraries.
+The _Application_ does not use any third-party libraries that may collect _PSI_; however, this Privacy Policy cannot speak for the Android or Google libraries.
 
 
 ## Security
