@@ -7,8 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 /**
- * Receive the signal from the AlarmManager that it's time for the alarm to go
- * off, which in turn start the NacAlarmActivity.
+ * Receive this signal from AlarmManager and start the foreground service.
  */
 public class NacAlarmBroadcastReceiver
 	extends BroadcastReceiver

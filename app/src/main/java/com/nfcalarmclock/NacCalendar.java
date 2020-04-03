@@ -49,9 +49,21 @@ public class NacCalendar
 	}
 
 	/**
-	 * Every day of week enum.
+	 * Every day of week.
 	 */
 	public static final EnumSet<Day> WEEK = EnumSet.allOf(Day.class);
+
+	/**
+	 * All weekday days.
+	 */
+	public static final EnumSet<Day> WEEKDAY = EnumSet.of(Day.MONDAY,
+		Day.TUESDAY, Day.WEDNESDAY, Day.THURSDAY, Day.FRIDAY);
+
+	/**
+	 * All weekend days.
+	 */
+	public static final EnumSet<Day> WEEKEND = EnumSet.of(Day.SUNDAY,
+		Day.SATURDAY);
 
 	/**
 	 * @see getMessage
@@ -475,8 +487,7 @@ public class NacCalendar
 		 */
 		public static boolean isEveryday(EnumSet<Day> days)
 		{
-			EnumSet<Day> everyday = EnumSet.allOf(Day.class);
-			return days.equals(everyday);
+			return days.equals(NacCalendar.WEEK);
 		}
 
 		/**
@@ -484,9 +495,7 @@ public class NacCalendar
 		 */
 		public static boolean isWeekday(EnumSet<Day> days)
 		{
-			EnumSet<Day> weekdays = EnumSet.of(Day.MONDAY, Day.TUESDAY,
-				Day.WEDNESDAY, Day.THURSDAY, Day.FRIDAY);
-			return days.equals(weekdays);
+			return days.equals(NacCalendar.WEEKDAY);
 		}
 
 		/**
@@ -494,8 +503,7 @@ public class NacCalendar
 		 */
 		public static boolean isWeekend(EnumSet<Day> days)
 		{
-			EnumSet<Day> weekend = EnumSet.of(Day.SUNDAY, Day.SATURDAY);
-			return days.equals(weekend);
+			return days.equals(NacCalendar.WEEKEND);
 		}
 
 		/**

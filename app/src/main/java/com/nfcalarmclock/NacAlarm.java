@@ -103,6 +103,11 @@ public class NacAlarm
 		private String mName;
 
 		/**
+		 * Tag.
+		 */
+		private Object mTag;
+
+		/**
 		 */
 		public Builder()
 		{
@@ -136,6 +141,7 @@ public class NacAlarm
 			this.mMediaPath = "";
 			this.mMediaTitle = "";
 			this.mName = "";
+			this.mTag = null;
 		}
 
 		/**
@@ -244,6 +250,14 @@ public class NacAlarm
 		}
 
 		/**
+		 * @return The tag.
+		 */
+		public Object getTag()
+		{
+			return this.mTag;
+		}
+
+		/**
 		 * @return True if using NFC, and False otherwise.
 		 */
 		public boolean getUseNfc()
@@ -278,7 +292,6 @@ public class NacAlarm
 		public Builder setAudioSource(String source)
 		{
 			this.mAudioSource = source;
-
 			return this;
 		}
 
@@ -292,7 +305,6 @@ public class NacAlarm
 		public Builder setDays(EnumSet<NacCalendar.Day> days)
 		{
 			this.mDays = days;
-
 			return this;
 		}
 
@@ -314,7 +326,6 @@ public class NacAlarm
 		public Builder setEnabled(boolean enabled)
 		{
 			this.mEnabled = enabled;
-
 			return this;
 		}
 
@@ -328,7 +339,6 @@ public class NacAlarm
 		public Builder setHour(int hour)
 		{
 			this.mHour = hour;
-
 			return this;
 		}
 
@@ -342,7 +352,65 @@ public class NacAlarm
 		public Builder setId(int id)
 		{
 			this.mId = id;
+			return this;
+		}
 
+		/**
+		 * Set the path, name, and type of the sound to play.
+		 *
+		 * @param  context  The application context.
+		 * @param  path  The path to the sound to play.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setMedia(Context context, String path)
+		{
+			int type = NacMedia.getType(context, path);
+			String title = NacMedia.getTitle(context, path);
+
+			this.setMediaType(type);
+			this.setMediaPath(path);
+			this.setMediaTitle(title);
+			return this;
+		}
+
+		/**
+		 * Set the media title.
+		 *
+		 * @param  title  The title of the media file to play.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setMediaTitle(String title)
+		{
+			this.mMediaTitle = (title != null) ? title : "";
+			return this;
+		}
+
+		/**
+		 * Set the sound to play when the alarm goes off.
+		 *
+		 * @param  path  The path to the media file to play when the alarm goes
+		 *               off.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setMediaPath(String path)
+		{
+			this.mMediaPath = (path != null) ? path : "";
+			return this;
+		}
+
+		/**
+		 * Set the type of sound to play.
+		 *
+		 * @param  type  The type of media file to play.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setMediaType(int type)
+		{
+			this.mMediaType = type;
 			return this;
 		}
 
@@ -356,7 +424,6 @@ public class NacAlarm
 		public Builder setMinute(int minute)
 		{
 			this.mMinute = minute;
-
 			return this;
 		}
 
@@ -384,7 +451,6 @@ public class NacAlarm
 		public Builder setOnChangeListener(OnChangeListener listener)
 		{
 			this.mOnChangeListener = listener;
-
 			return this;
 		}
 
@@ -399,70 +465,15 @@ public class NacAlarm
 		public Builder setRepeat(boolean repeat)
 		{
 			this.mRepeat = repeat;
-
 			return this;
 		}
 
 		/**
-		 * Set the path, name, and type of the sound to play.
-		 *
-		 * @param  context  The application context.
-		 * @param  path  The path to the sound to play.
-		 *
-		 * @return The Builder.
+		 * Set the tag.
 		 */
-		public Builder setMedia(Context context, String path)
+		public Builder setTag(Object tag)
 		{
-			int type = NacMedia.getType(context, path);
-			String title = NacMedia.getTitle(context, path);
-
-			this.setMediaType(type);
-			this.setMediaPath(path);
-			this.setMediaTitle(title);
-
-			return this;
-		}
-
-		/**
-		 * Set the media title.
-		 *
-		 * @param  title  The title of the media file to play.
-		 *
-		 * @return The Builder.
-		 */
-		public Builder setMediaTitle(String title)
-		{
-			this.mMediaTitle = (title != null) ? title : "";
-
-			return this;
-		}
-
-		/**
-		 * Set the sound to play when the alarm goes off.
-		 *
-		 * @param  path  The path to the media file to play when the alarm goes
-		 *               off.
-		 *
-		 * @return The Builder.
-		 */
-		public Builder setMediaPath(String path)
-		{
-			this.mMediaPath = (path != null) ? path : "";
-
-			return this;
-		}
-
-		/**
-		 * Set the type of sound to play.
-		 *
-		 * @param  type  The type of media file to play.
-		 *
-		 * @return The Builder.
-		 */
-		public Builder setMediaType(int type)
-		{
-			this.mMediaType = type;
-
+			this.mTag = tag;
 			return this;
 		}
 
@@ -477,7 +488,6 @@ public class NacAlarm
 		public Builder setUseNfc(boolean nfc)
 		{
 			this.mNfc = nfc;
-
 			return this;
 		}
 
@@ -492,7 +502,6 @@ public class NacAlarm
 		public Builder setVibrate(boolean vibrate)
 		{
 			this.mVibrate = vibrate;
-
 			return this;
 		}
 
@@ -506,7 +515,6 @@ public class NacAlarm
 		public Builder setVolume(int volume)
 		{
 			this.mVolume = volume;
-
 			return this;
 		}
 
@@ -601,6 +609,11 @@ public class NacAlarm
 	private String mName;
 
 	/**
+	 * Tag.
+	 */
+	private Object mTag;
+
+	/**
 	 * Was the alarm enabled.
 	 */
 	private ChangeTracker mTracker;
@@ -636,6 +649,7 @@ public class NacAlarm
 		this.setMediaPath(builder.getMediaPath());
 		this.setMediaTitle(builder.getMediaTitle());
 		this.setName(builder.getName());
+		this.setTag(builder.getTag());
 		this.setChangeTracker(ChangeTracker.NONE);
 		this.unlatchChangeTracker();
 	}
@@ -662,7 +676,8 @@ public class NacAlarm
 			.setMediaType(input.readInt())
 			.setMediaPath(input.readString())
 			.setMediaTitle(input.readString())
-			.setName(input.readString()));
+			.setName(input.readString())
+			.setTag(null));
 	}
 
 	/**
@@ -738,7 +753,8 @@ public class NacAlarm
 	 */
 	public boolean equals(NacAlarm alarm)
 	{
-		return ((this.getId() == alarm.getId())
+		return ((alarm != null)
+			&& (this.getId() == alarm.getId())
 			&& (this.getEnabled() == alarm.getEnabled())
 			&& (this.getHour() == alarm.getHour())
 			&& (this.getMinute() == alarm.getMinute())
@@ -921,6 +937,14 @@ public class NacAlarm
 	public int getMediaType()
 	{
 		return this.mMediaType;
+	}
+
+	/**
+	 * @return The tag.
+	 */
+	public Object getTag()
+	{
+		return this.mTag;
 	}
 
 	/**
@@ -1185,6 +1209,14 @@ public class NacAlarm
 	public void setMediaType(int type)
 	{
 		this.mMediaType = type;
+	}
+
+	/**
+	 * Set the tag.
+	 */
+	public void setTag(Object tag)
+	{
+		this.mTag = tag;
 	}
 
 	/**

@@ -6,22 +6,27 @@ import android.content.Intent;
 import java.util.List;
 
 /**
- * Restore alarms on boot up.
+ * Receive this signal from AlarmManager and start the foreground service.
  */
-public class NacBootBroadcastReceiver
+public class NacTimeChangeBroadcastReceiver
 	extends BroadcastReceiver
 {
-
+ 
 	/**
 	 * It is possible for another actor to send a spoofed intent with no
 	 * action string or a different action string and cause undesired behavior.
 	 * Ensure that the received Intent's action string matches the expected
-	 * value before restoring alarms.
+	 * value before updating alarms.
 	 */
 	@Override
 	public void onReceive(final Context context, Intent intent)
 	{
-		if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED))
+		String action = intent.getAction();
+
+		if (action.equals(Intent.ACTION_DATE_CHANGED)
+			|| action.equals(Intent.ACTION_TIME_CHANGED)
+			|| action.equals(Intent.ACTION_TIMEZONE_CHANGED)
+			|| action.equals(Intent.ACTION_LOCALE_CHANGED))
 		{
 			NacScheduler.updateAll(context);
 		}

@@ -10,22 +10,11 @@
 		app:showAsAction="never"
 		/>
 
-	<!--
 	<item
-		android:id="@+id/menu_next_alarm"
+		android:id="@+id/menu_show_next_alarm"
 		android:orderInCategory="200"
-		android:title="@string/menu_next_alarm"
-		android:showAsAction="never"
+		android:title="@string/menu_show_next_alarm"
+		app:showAsAction="never"
 		/>
-	-->
-
-	<!--
-	<item
-		android:id="@+id/menu_sort"
-		android:orderInCategory="300"
-		android:title="@string/menu_sort"
-		android:showAsAction="never"
-		/>
-	-->
 
 </menu>

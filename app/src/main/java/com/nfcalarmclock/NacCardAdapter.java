@@ -49,11 +49,6 @@ public class NacCardAdapter
 	private NacSharedPreferences mSharedPreferences;
 
 	/**
-	 * Scheduler.
-	 */
-	private NacScheduler mScheduler;
-
-	/**
 	 * Handle card swipe events.
 	 */
 	private NacCardTouchHelper mTouchHelper;
@@ -111,7 +106,6 @@ public class NacCardAdapter
 		this.mRecyclerView = (RecyclerView) this.getRoot().findViewById(
 			R.id.content_alarm_list);
 		this.mSharedPreferences = new NacSharedPreferences(context);
-		this.mScheduler = new NacScheduler(context);
 		this.mTouchHelper = new NacCardTouchHelper(callback);
 		this.mUndo = new Undo();
 		this.mNotification = new NacUpcomingAlarmNotification(context);
@@ -179,7 +173,8 @@ public class NacCardAdapter
 		NacDatabase db = new NacDatabase(context);
 		int id = alarm.getId();
 
-		this.getScheduler().update(alarm);
+		//this.getScheduler().update(alarm);
+		NacScheduler.update(context, alarm);
 		this.getSharedPreferences().editSnoozeCount(id, 0);
 		this.getAlarms().add(position, alarm);
 		this.updateNotification();
@@ -281,7 +276,8 @@ public class NacCardAdapter
 		int id = alarm.getId();
 
 		this.setWasAddedWithFloatingButton(false);
-		this.getScheduler().cancel(alarm);
+		//this.getScheduler().cancel(alarm);
+		NacScheduler.cancel(context, alarm);
 		this.getSharedPreferences().editSnoozeCount(id, 0);
 		this.getAlarms().remove(position);
 		this.updateNotification();
@@ -415,14 +411,6 @@ public class NacCardAdapter
 	private View getRoot()
 	{
 		return this.mRoot;
-	}
-
-	/**
-	 * @return The scheduler.
-	 */
-	private NacScheduler getScheduler()
-	{
-		return this.mScheduler;
 	}
 
 	/**
@@ -605,27 +593,30 @@ public class NacCardAdapter
 	@Override
 	public boolean onMenuItemClick(MenuItem item)
 	{
+		RecyclerView rv = this.getRecyclerView();
+		View view = this.mLastCardClicked;
+		NacCardHolder holder = (NacCardHolder)rv.findContainingViewHolder(view);
 		int id = item.getItemId();
 
-		switch (id)
+		if (holder != null)
 		{
-			case R.id.menu_next_run_time:
-				RecyclerView rv = this.getRecyclerView();
-				View view = this.mLastCardClicked;
-				NacCardHolder holder = (NacCardHolder)
-					rv.findContainingViewHolder(view);
+			NacAlarm alarm = holder.getAlarm();
+			int position = holder.getAdapterPosition();
 
-				if (holder != null)
-				{
-					NacAlarm alarm = holder.getAlarm();
-
+			switch (id)
+			{
+				case R.id.menu_copy_alarm:
+					this.copy(position);
+					break;
+				case R.id.menu_delete_alarm:
+					this.delete(position);
+					break;
+				case R.id.menu_show_next_alarm:
 					this.showAlarm(alarm);
-				}
-
-				break;
-
-			default:
-				break;
+					break;
+				default:
+					break;
+			}
 		}
 
 		this.mLastCardClicked = null;
@@ -651,7 +642,8 @@ public class NacCardAdapter
 		}
 
 		this.setWasAddedWithFloatingButton(false);
-		this.getScheduler().update(alarm);
+		//this.getScheduler().update(alarm);
+		NacScheduler.update(context, alarm);
 		this.updateNotification();
 		db.update(alarm);
 		db.close();

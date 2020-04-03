@@ -5,7 +5,7 @@
 		android:id="@+id/color_selector"
 		android:layout_width="@dimen/isz_support"
 		android:layout_height="@dimen/isz_support"
-		android:contentDescription="@string/color_selector"
+		android:contentDescription="@string/cd_ic_color_selector"
 		android:src="@drawable/color_selector"
 		/>
 
@@ -13,7 +13,7 @@
 		android:id="@+id/shader_selector"
 		android:layout_width="@dimen/isz_support_extra"
 		android:layout_height="wrap_content"
-		android:contentDescription="@string/shader_selector"
+		android:contentDescription="@string/cd_ic_shader_selector"
 		android:src="@drawable/shader_selector"
 		/>
 

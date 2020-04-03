@@ -128,6 +128,15 @@ public class NacIntent
 	}
 
 	/**
+	 * @return The intent action (never null).
+	 */
+	public static String getAction(Intent intent)
+	{
+		String action = (intent != null) ? intent.getAction() : null;
+		return (action != null) ? action : "";
+	}
+
+	/**
 	 * @return The alarm associated with the given Intent.
 	 */
 	public static NacAlarm getAlarm(Intent intent)

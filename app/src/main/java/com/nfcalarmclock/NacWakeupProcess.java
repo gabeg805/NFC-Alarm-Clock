@@ -78,16 +78,16 @@ public class NacWakeupProcess
 		this.mContext = context;
 		this.mAlarm = alarm;
 		this.mSharedPreferences = new NacSharedPreferences(context);
-		this.mPlayer = new NacMediaPlayer(context);
-		this.mVibrator = (Vibrator) context.getSystemService(
-			Context.VIBRATOR_SERVICE);
-		this.mSpeech = new NacTextToSpeech(context, this);
+		//this.mPlayer = new NacMediaPlayer(context);
+		//this.mVibrator = (Vibrator) context.getSystemService(
+		//	Context.VIBRATOR_SERVICE);
+		//this.mSpeech = new NacTextToSpeech(context, this);
 		this.mAutoDismissHandler = new Handler();
-		this.mSpeakHandler = new Handler();
+		//this.mSpeakHandler = new Handler();
 		this.mListener = null;
 
-		NacTextToSpeech speech = this.getTextToSpeech();
-		speech.getAudioAttributes().merge(alarm);
+		//NacTextToSpeech speech = this.getTextToSpeech();
+		//speech.getAudioAttributes().merge(alarm);
 	}
 
 	/**
@@ -117,24 +117,23 @@ public class NacWakeupProcess
 	 */
 	public void cleanup()
 	{
-		Context context = this.getContext();
-		Handler autoDismissHandler = this.getAutoDismissHandler();
-		Handler speakHandler = this.getSpeakHandler();
-
 		this.cleanupVibrate();
 		this.cleanupPlayer();
+		this.cleanupTextToSpeech();
+		this.cleanupAutoDismiss();
+	}
+
+	/**
+	 * Cleanup the auto dismiss handler.
+	 */
+	private void cleanupAutoDismiss()
+	{
+		Handler autoDismissHandler = this.getAutoDismissHandler();
 
 		if (autoDismissHandler != null)
 		{
 			autoDismissHandler.removeCallbacksAndMessages(null);
 		}
-
-		if (speakHandler != null)
-		{
-			speakHandler.removeCallbacksAndMessages(null);
-		}
-
-		this.getTextToSpeech().shutdown();
 	}
 
 	/**
@@ -152,6 +151,29 @@ public class NacWakeupProcess
 
 		player.resetWrapper();
 		player.releaseWrapper();
+		this.mPlayer = null;
+	}
+
+	/**
+	 * Cleanup the text-to-speech engine.
+	 */
+	private void cleanupTextToSpeech()
+	{
+		NacTextToSpeech speech = this.getTextToSpeech();
+		Handler speakHandler = this.getSpeakHandler();
+
+		if (speakHandler != null)
+		{
+			speakHandler.removeCallbacksAndMessages(null);
+		}
+
+		if (speech != null)
+		{
+			speech.shutdown();
+		}
+
+		this.mSpeech = null;
+		this.mSpeakHandler = null;
 	}
 
 	/**
@@ -159,26 +181,23 @@ public class NacWakeupProcess
 	 */
 	private void cleanupVibrate()
 	{
-		Vibrator vibrator = this.getVibrator();
+		this.setupVibrate();
+	}
 
-		if (vibrator == null)
-		{
-			Context context = this.getContext();
-			vibrator = (Vibrator) context.getSystemService(
-				Context.VIBRATOR_SERVICE);
-			this.mVibrator = vibrator;
-		}
-
-		if (vibrator != null)
-		{
-			vibrator.cancel();
-		}
+	/**
+	 * Check if one wakeup process equals another.
+	 */
+	public boolean equals(NacWakeupProcess process)
+	{
+		NacAlarm thisAlarm = this.getAlarm();
+		NacAlarm procAlarm = process.getAlarm();
+		return thisAlarm.equals(procAlarm);
 	}
 
 	/**
 	 * @return The alarm.
 	 */
-	private NacAlarm getAlarm()
+	public NacAlarm getAlarm()
 	{
 		return this.mAlarm;
 	}
@@ -371,6 +390,67 @@ public class NacWakeupProcess
 	}
 
 	/**
+	 * Setup the media player.
+	 */
+	private void setupMediaPlayer()
+	{
+		Context context = this.getContext();
+		NacMediaPlayer player = this.getMediaPlayer();
+
+		if (player == null)
+		{
+			player = new NacMediaPlayer(context);
+			this.mPlayer = player;
+		}
+	}
+
+	/**
+	 * Setup the text-to-speech engine.
+	 */
+	private void setupTextToSpeech()
+	{
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+		NacTextToSpeech speech = this.getTextToSpeech();
+		Handler speakHandler = this.getSpeakHandler();
+
+		if (speech == null)
+		{
+			speech = new NacTextToSpeech(context, this);
+			this.mSpeech = speech;
+		}
+
+		if (speakHandler == null)
+		{
+			speakHandler = new Handler();
+			this.mSpeakHandler = speakHandler;
+		}
+
+		speech.getAudioAttributes().merge(alarm);
+	}
+
+	/**
+	 * Setup the vibrator.
+	 */
+	private void setupVibrate()
+	{
+		Vibrator vibrator = this.getVibrator();
+
+		if (vibrator == null)
+		{
+			Context context = this.getContext();
+			vibrator = (Vibrator) context.getSystemService(
+				Context.VIBRATOR_SERVICE);
+			this.mVibrator = vibrator;
+		}
+
+		if (vibrator != null)
+		{
+			vibrator.cancel();
+		}
+	}
+
+	/**
 	 * Setup the volume for the music player and text-to-speech engine.
 	 */
 	private void setupVolume()
@@ -420,6 +500,9 @@ public class NacWakeupProcess
 	 */
 	public void start()
 	{
+		this.setupMediaPlayer();
+		this.setupTextToSpeech();
+		this.setupVibrate();
 		this.setupVolume();
 
 		if (this.canUseTts())
@@ -436,14 +519,23 @@ public class NacWakeupProcess
 	}
 
 	/**
+	 * Stop the wake up process.
+	 */
+	public void stop()
+	{
+		this.cleanupVibrate();
+		this.cleanupPlayer();
+		this.cleanupTextToSpeech();
+	}
+
+	/**
 	 * Vibrate the phone repeatedly until the alarm is dismissed.
 	 */
 	@SuppressWarnings("deprecation")
 	@TargetApi(Build.VERSION_CODES.O)
 	public void vibrate()
 	{
-		this.cleanupVibrate();
-
+		//this.cleanupVibrate();
 		NacAlarm alarm = this.getAlarm();
 		Vibrator vibrator = this.getVibrator();
 		long duration = 500;

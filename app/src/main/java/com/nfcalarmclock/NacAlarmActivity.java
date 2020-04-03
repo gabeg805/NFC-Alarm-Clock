@@ -1,7 +1,10 @@
 package com.nfcalarmclock;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +24,31 @@ public class NacAlarmActivity
 {
 
 	/**
+	 * Receiver to stop the activity when the foreground service is done.
+	 */
+	private class StopActivityReceiver
+		extends BroadcastReceiver
+	{
+
+		/**
+		 */
+		@Override
+		public void onReceive(Context context, Intent intent)
+		{
+			String action = NacIntent.getAction(intent);
+			NacAlarm intentAlarm = NacIntent.getAlarm(intent);
+			NacAlarm alarm = getAlarm();
+
+			if (action.equals(NacAlarmActivity.ACTION_STOP_ACTIVITY)
+				&& (alarm.getId() == intentAlarm.getId()))
+			{
+				finish();
+			}
+		}
+
+	}
+
+	/**
 	 * Shared preferences.
 	 */
 	private NacSharedPreferences mSharedPreferences;
@@ -29,6 +57,34 @@ public class NacAlarmActivity
 	 * Alarm.
 	 */
 	private NacAlarm mAlarm;
+
+	/**
+	 * Stop the activity action.
+	 */
+	public static final String ACTION_STOP_ACTIVITY =
+		"com.nfcalarmclock.ACTION_STOP_ALARM_ACTIVITY";
+
+	/**
+	 * Receiver to stop the activity.
+	 */
+    private StopActivityReceiver mStopReceiver;
+
+	/**
+	 * Cleanup NFC.
+	 */
+	private void cleanupNfc()
+	{
+		NacNfc.disable(this);
+	}
+
+	/**
+	 * Cleanup the Stop receiver.
+	 */
+	private void cleanupStopReceiver()
+	{
+		StopActivityReceiver receiver = this.getStopReceiver();
+		unregisterReceiver(receiver);
+	}
 
 	/**
 	 * Dismiss the alarm.
@@ -59,6 +115,14 @@ public class NacAlarmActivity
 	private NacSharedPreferences getSharedPreferences()
 	{
 		return this.mSharedPreferences;
+	}
+
+	/**
+	 * @return The stop receiver.
+	 */
+	private StopActivityReceiver getStopReceiver()
+	{
+		return this.mStopReceiver;
 	}
 
 	/**
@@ -102,6 +166,7 @@ public class NacAlarmActivity
 
 		NacAlarm alarm = this.getAlarm();
 		this.mSharedPreferences = new NacSharedPreferences(this);
+		this.mStopReceiver = new StopActivityReceiver();
 
 		this.setupShowWhenLocked();
 		this.setupAlarmButtons();
@@ -122,34 +187,23 @@ public class NacAlarmActivity
 	}
 
 	/**
-	 * Disable tag discovery.
 	 */
 	@Override
 	public void onPause()
 	{
 		super.onPause();
-		NacNfc.disable(this);
+		this.cleanupNfc();
+		this.cleanupStopReceiver();
 	}
 
 	/**
-	 * Enable tag discovery.
 	 */
 	@Override
 	public void onResume()
 	{
 		super.onResume();
-
-		if (NacNfc.exists(this))
-		{
-			NacNfc.enable(this);
-		}
-		else
-		{
-			if (this.shouldUseNfc())
-			{
-				NacUtility.quickToast(this, "Your device doesn't support NFC");
-			}
-		}
+		this.setupNfc();
+		this.setupStopReceiver();
 	}
 
 	/**
@@ -241,6 +295,24 @@ public class NacAlarmActivity
 	}
 
 	/**
+	 * Setup NFC.
+	 */
+	private void setupNfc()
+	{
+		if (NacNfc.exists(this))
+		{
+			NacNfc.enable(this);
+		}
+		else
+		{
+			if (this.shouldUseNfc())
+			{
+				NacUtility.quickToast(this, "Your device doesn't support NFC");
+			}
+		}
+	}
+
+	/**
 	 * Show the activity when the phone is locked.
 	 */
 	 @SuppressWarnings("deprecation")
@@ -271,6 +343,17 @@ public class NacAlarmActivity
 
 		window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	 }
+
+	/**
+	 * Setup the receiver for the Stop signal.
+	 */
+	private void setupStopReceiver()
+	{
+		StopActivityReceiver receiver = this.getStopReceiver();
+		IntentFilter filter = new IntentFilter(
+			NacAlarmActivity.ACTION_STOP_ACTIVITY);
+		registerReceiver(receiver, filter);
+	}
 
 	/**
 	 * @return True if should use NFC, and False otherwise.

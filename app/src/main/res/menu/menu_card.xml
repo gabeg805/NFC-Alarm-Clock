@@ -4,9 +4,23 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
 	<item
-		android:id="@+id/menu_next_run_time"
+		android:id="@+id/menu_copy_alarm"
 		android:orderInCategory="100"
-		android:title="@string/menu_next_run_time"
+		android:title="@string/menu_copy_alarm"
+		app:showAsAction="never"
+		/>
+
+	<item
+		android:id="@+id/menu_delete_alarm"
+		android:orderInCategory="200"
+		android:title="@string/menu_delete_alarm"
+		app:showAsAction="never"
+		/>
+
+	<item
+		android:id="@+id/menu_show_next_alarm"
+		android:orderInCategory="300"
+		android:title="@string/menu_show_next_alarm"
 		app:showAsAction="never"
 		/>
 

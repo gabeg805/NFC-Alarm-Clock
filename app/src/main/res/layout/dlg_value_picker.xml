@@ -19,7 +19,7 @@
 		android:layout_height="@dimen/isz_main"
 		android:background="?android:selectableItemBackgroundBorderless"
 		android:src="@mipmap/minus"
-		android:contentDescription="@string/decrement"
+		android:contentDescription="@string/cd_ic_decrement"
 		/>
 
 	<View
@@ -46,7 +46,7 @@
 		android:layout_height="@dimen/isz_main"
 		android:background="?android:selectableItemBackgroundBorderless"
 		android:src="@mipmap/plus"
-		android:contentDescription="@string/increment"
+		android:contentDescription="@string/cd_ic_increment"
 		/>
 
 	<View

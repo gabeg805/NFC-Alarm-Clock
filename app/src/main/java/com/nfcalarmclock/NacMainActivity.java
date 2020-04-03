@@ -70,7 +70,7 @@ public class NacMainActivity
 		{
 			alarm.setId(adapter.getUniqueId());
 			adapter.add(alarm);
-			//adapter.setWasAddedWithFloatingButton(false);
+			adapter.setWasAddedWithFloatingButton(true);
 		}
 	}
 
@@ -212,6 +212,10 @@ public class NacMainActivity
 			case R.id.menu_settings:
 				startActivity(new Intent(this, NacSettingsActivity.class));
 				return true;
+			case R.id.menu_show_next_alarm:
+				NacCardAdapter adapter = this.getCardAdapter();
+				adapter.showNextAlarm();
+				return true;
 			default:
 				break;
 		}
@@ -237,10 +241,11 @@ public class NacMainActivity
 	 */
 	private void setupActiveAlarmActivity()
 	{
+		NacSharedPreferences shared = this.getSharedPreferences();
 		StatusBarNotification activeNotification =
 			this.getActiveAlarmNotification();
 
-		if (activeNotification == null)
+		if (!shared.getPreventAppFromClosing() || (activeNotification == null))
 		{
 			return;
 		}
@@ -260,7 +265,6 @@ public class NacMainActivity
 	private void setupAlarmCardAdapter()
 	{
 		NacCardAdapter adapter = this.getCardAdapter();
-
 		adapter.build();
 	}
 
@@ -288,7 +292,7 @@ public class NacMainActivity
 		{
 			return;
 		}
-		else if ((counter+1) == NacSharedPreferences.DEFAULT_RATE_MY_APP_LIMIT)
+		else if ((counter+1) >= NacSharedPreferences.DEFAULT_RATE_MY_APP_LIMIT)
 		{
 			NacRateMyAppDialog dialog = new NacRateMyAppDialog(this);
 

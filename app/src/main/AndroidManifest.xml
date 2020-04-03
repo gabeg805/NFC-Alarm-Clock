@@ -80,7 +80,22 @@
 				/>
 		</activity>
 
-		<!-- Call the alarm activity when an alarm goes off -->
+		<!-- Start an active alarm (show notification and call alarm
+		     activity) -->
+		<service
+			android:name=".NacForegroundService"
+			android:exported="false"
+			/>
+
+		<!-- Execute schedule and database updates -->
+		<service
+			android:name=".NacDatabase$BackgroundService"
+			android:exported="false"
+			android:permission="android.permission.BIND_JOB_SERVICE"
+			/>
+
+		<!-- Alarm manager broadcasts this so that alarms can be started.
+		     Start the foreground service. -->
 		<receiver
 			android:name=".NacAlarmBroadcastReceiver"
 			/>
@@ -95,20 +110,25 @@
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
 			</intent-filter>
-
+			<!--
+			android:directBootAware="true"
+			<action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+			-->
 		</receiver>
 
-		<!-- Execute schedule and database updates -->
-		<service
-			android:name=".NacDatabase$BackgroundService"
-			android:exported="false"
-			android:permission="android.permission.BIND_JOB_SERVICE"
-			/>
+		<!-- Change alarms when time changes. -->
+		<receiver
+			android:name=".NacTimeChangeBroadcastReceiver"
+			android:enabled="true"
+			android:exported="false">
 
-		<service
-			android:name=".NacForegroundService"
-			android:exported="false"
-			/>
+			<intent-filter>
+				<action android:name="android.intent.action.DATE_CHANGED" />
+				<action android:name="android.intent.action.TIME_SET" />
+				<action android:name="android.intent.action.TIMEZONE_CHANGED" />
+				<action android:name="android.intent.action.LOCALE_CHANGED" />
+			</intent-filter>
+		</receiver>
 
 			<!-- An intent filter that will receive the response
 			     from the authentication service -->

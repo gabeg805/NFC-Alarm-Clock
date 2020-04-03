@@ -1108,13 +1108,13 @@ public class NacDatabase
 		public static void addAlarm(Context context, NacAlarm alarm)
 		{
 			NacDatabase db = new NacDatabase(context);
-			NacScheduler scheduler = new NacScheduler(context);
 			NacSharedPreferences shared = new NacSharedPreferences(context);
 			int id = alarm.getId();
 
 			db.add(alarm);
 			db.close();
-			scheduler.update(alarm);
+			//scheduler.update(alarm);
+			NacScheduler.update(context, alarm);
 			shared.editSnoozeCount(id, 0);
 		}
 
@@ -1124,13 +1124,13 @@ public class NacDatabase
 		public static void deleteAlarm(Context context, NacAlarm alarm)
 		{
 			NacDatabase db = new NacDatabase(context);
-			NacScheduler scheduler = new NacScheduler(context);
 			NacSharedPreferences shared = new NacSharedPreferences(context);
 			int id = alarm.getId();
 
 			db.delete(alarm);
 			db.close();
-			scheduler.cancel(alarm);
+			//scheduler.cancel(alarm);
+			NacScheduler.cancel(context, alarm);
 			shared.editSnoozeCount(id, 0);
 		}
 
@@ -1181,19 +1181,22 @@ public class NacDatabase
 			NacAlarm toAlarm)
 		{
 			NacDatabase db = new NacDatabase(context);
-			NacScheduler scheduler = new NacScheduler(context);
 			NacSharedPreferences shared = new NacSharedPreferences(context);
 			int fromId = fromAlarm.getId();
 			int toId = toAlarm.getId();
 			int fromSnoozeCount = shared.getSnoozeCount(fromId);
 			int toSnoozeCount = shared.getSnoozeCount(toId);
 
-			scheduler.cancel(fromAlarm);
-			scheduler.cancel(toAlarm);
+			//scheduler.cancel(fromAlarm);
+			//scheduler.cancel(toAlarm);
+			NacScheduler.cancel(context, fromAlarm);
+			NacScheduler.cancel(context, toAlarm);
 			db.swap(fromAlarm, toAlarm);
 			db.close();
-			scheduler.add(fromAlarm);
-			scheduler.add(toAlarm);
+			//scheduler.add(fromAlarm);
+			//scheduler.add(toAlarm);
+			NacScheduler.add(context, fromAlarm);
+			NacScheduler.add(context, toAlarm);
 			shared.editSnoozeCount(fromId, toSnoozeCount);
 			shared.editSnoozeCount(toId, fromSnoozeCount);
 		}
@@ -1204,11 +1207,11 @@ public class NacDatabase
 		public static void updateAlarm(Context context, NacAlarm alarm)
 		{
 			NacDatabase db = new NacDatabase(context);
-			NacScheduler scheduler = new NacScheduler(context);
 
 			db.update(alarm);
 			db.close();
-			scheduler.update(alarm);
+			NacScheduler.update(context, alarm);
+			//scheduler.update(alarm);
 		}
 
 	}
