@@ -34,7 +34,7 @@ While the information that is stored should only be visible to the _Application_
 
 ## Children’s Privacy
 
-This Privacy Policy does not address anyone under the age of 13. The _Application_ does not knowingly collect PII from anyone, let alone children under 13.
+This Privacy Policy does not address anyone under the age of 13. The _Application_ does not knowingly collect PSI from anyone, let alone children under 13.
 
 
 ## Changes to This Privacy Policy
