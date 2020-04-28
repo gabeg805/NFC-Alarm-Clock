@@ -44,7 +44,7 @@
 			android:layout_gravity="fill"
 			android:textSize="@dimen/tsz_main"
 			android:inputType="textNoSuggestions|textAutoComplete"
-			android:hint="@string/dlg_color_hint"
+			android:hint="@string/color_hint"
 			android:maxLines="1"
 			android:maxLength="@integer/max_hex_length"
 			android:importantForAutofill="no">

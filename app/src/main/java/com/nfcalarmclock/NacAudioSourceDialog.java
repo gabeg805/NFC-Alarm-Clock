@@ -5,21 +5,26 @@ import android.content.Context;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import java.util.List;
 
 /**
  * The dialog class to handle choosing a media source for the alarm sound.
  */
 public class NacAudioSourceDialog
 	extends NacDialog
-	implements RadioGroup.OnCheckedChangeListener,
-		NacDialog.OnDismissListener,
+	implements NacDialog.OnDismissListener,
 		NacDialog.OnShowListener
 {
 
 	/**
 	 * Radio button group for each alarm source.
 	 */
-	private RadioGroup mAudioSources;
+	private RadioGroup mRadioGroup;
+
+	/**
+	 * Defaults.
+	 */
+	private NacSharedDefaults mDefaults;
 
 	/**
 	 */
@@ -27,7 +32,8 @@ public class NacAudioSourceDialog
 	{
 		super();
 
-		this.mAudioSources = null;
+		this.mRadioGroup = null;
+		this.mDefaults = null;
 
 		addOnDismissListener(this);
 		addOnShowListener(this);
@@ -38,7 +44,16 @@ public class NacAudioSourceDialog
 	 */
 	public void build(Context context)
 	{
+		this.mDefaults = new NacSharedDefaults(context);
 		this.build(context, R.layout.dlg_alarm_audio_source);
+	}
+
+	/**
+	 * @return The audio sources radio group.
+	 */
+	public RadioGroup getRadioGroup()
+	{
+		return this.mRadioGroup;
 	}
 
 	/**
@@ -46,9 +61,17 @@ public class NacAudioSourceDialog
 	 */
 	public RadioButton getCheckedButton()
 	{
-		int checkedId = this.mAudioSources.getCheckedRadioButtonId();
-
+		RadioGroup group = this.getRadioGroup();
+		int checkedId = group.getCheckedRadioButtonId();
 		return this.getRoot().findViewById(checkedId);
+	}
+
+	/**
+	 * @return The defaults.
+	 */
+	private NacSharedDefaults getDefaults()
+	{
+		return this.mDefaults;
 	}
 
 	/**
@@ -65,26 +88,18 @@ public class NacAudioSourceDialog
 	}
 
 	/**
-	 */
-	@Override
-	public void onCheckedChanged(RadioGroup group, int checkedId)
-	{
-		RadioButton button = this.getCheckedButton();
-		String source = button.getText().toString();
-	}
-
-	/**
 	 * Save the audio source index as the dialog data.
 	 */
 	@Override
 	public boolean onDismissDialog(NacDialog dialog)
 	{
+		NacSharedDefaults defaults = this.getDefaults();
 		RadioButton button = this.getCheckedButton();
 		String source = button.getText().toString();
+		String data = (source == null) || source.isEmpty()
+			? defaults.getAudioSources().get(1) : source;
 
-		dialog.saveData(((source == null) || source.isEmpty())
-			? NacSharedPreferences.DEFAULT_AUDIO_SOURCE : source);
-
+		dialog.saveData(data);
 		return true;
 	}
 
@@ -95,37 +110,38 @@ public class NacAudioSourceDialog
 	public void onShowDialog(NacDialog dialog, View root)
 	{
 		Context context = root.getContext();
+		RadioGroup group = (RadioGroup) root.findViewById(R.id.audio_sources);
+		String data = this.getDataString();
+		NacSharedDefaults defaults = this.getDefaults();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
-		String source = this.getDataString();
-		this.mAudioSources = (RadioGroup) root.findViewById(R.id.audio_sources);
+		List<String> audioSources = defaults.getAudioSources();
 
-		this.mAudioSources.setOnCheckedChangeListener(this);
-
-		if (source.equals("Alarm"))
+		if (data.equals(audioSources.get(0)))
 		{
-			this.mAudioSources.check(R.id.alarm);
+			group.check(R.id.alarm);
 		}
-		else if (source.equals("Media"))
+		else if (data.equals(audioSources.get(1)))
 		{
-			this.mAudioSources.check(R.id.media);
+			group.check(R.id.media);
 		}
-		else if (source.equals("Notification"))
+		else if (data.equals(audioSources.get(2)))
 		{
-			this.mAudioSources.check(R.id.notification);
+			group.check(R.id.notification);
 		}
-		else if (source.equals("Ringtone"))
+		else if (data.equals(audioSources.get(3)))
 		{
-			this.mAudioSources.check(R.id.ringtone);
+			group.check(R.id.ringtone);
 		}
-		else if (source.equals("System"))
+		else if (data.equals(audioSources.get(4)))
 		{
-			this.mAudioSources.check(R.id.system);
+			group.check(R.id.system);
 		}
 		else
 		{
-			this.mAudioSources.check(R.id.media);
+			group.check(R.id.media);
 		}
 
+		this.mRadioGroup = group;
 		scale(0.7, 0.7, false, true);
 	}
 

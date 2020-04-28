@@ -5,6 +5,7 @@ import android.text.format.DateFormat;
 import java.lang.System;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumSet;
@@ -13,6 +14,8 @@ import java.util.Locale;
 
 /**
  * A list of possible days the alarm can run on.
+ *
+ * TODO Fix getNextMessage and getMessage so that they're language compliant.
  */
 public class NacCalendar
 {
@@ -64,6 +67,11 @@ public class NacCalendar
 	 */
 	public static final EnumSet<Day> WEEKEND = EnumSet.of(Day.SUNDAY,
 		Day.SATURDAY);
+
+	/**
+	 * Length of week.
+	 */
+	public static final int WEEK_LENGTH = WEEK.size();
 
 	/**
 	 * @see getMessage
@@ -584,42 +592,27 @@ public class NacCalendar
 		}
 
 		/**
-		 * @see toString
-		 */
-		public static String toString(NacAlarm alarm)
-		{
-			return NacCalendar.Days.toString(alarm,
-				NacSharedPreferences.DEFAULT_START_WEEK_ON);
-		}
-
-		/**
 		 * Convert an alarm to a string of days.
 		 *
 		 * If no days are specified and the alarm is enable.
 		 */
-		public static String toString(NacAlarm alarm, int start)
+		public static String toString(Context context, NacAlarm alarm,
+			int start)
 		{
-			String string = NacCalendar.Days.toString(alarm.getDays(), start);
+			EnumSet<Day> days = alarm.getDays();
+			String string = NacCalendar.Days.toString(context, days, start);
 
 			if (string.isEmpty() || !alarm.areDaysSelected())
 			{
+				NacSharedConstants cons = new NacSharedConstants(context);
 				int now = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 				int next = NacCalendar.toNextOneTimeCalendar(alarm)
 					.get(Calendar.DAY_OF_MONTH);
 
-				return (now == next) ? "Today" : "Tomorrow";
+				return (now == next) ? cons.getToday() : cons.getTomorrow();
 			}
 
 			return string;
-		}
-
-		/**
-		 * @see toString
-		 */
-		public static String toString(EnumSet<Day> days)
-		{
-			return NacCalendar.Days.toString(days,
-				NacSharedPreferences.DEFAULT_START_WEEK_ON);
 		}
 
 		/**
@@ -630,65 +623,53 @@ public class NacCalendar
 		 *
 		 * @return A string of the days.
 		 */
-		public static String toString(EnumSet<Day> daysToConvert, int start)
+		public static String toString(Context context,
+			EnumSet<Day> daysToConvert, int start)
 		{
+			NacSharedConstants cons = new NacSharedConstants(context);
+
 			if (NacCalendar.Days.isEveryday(daysToConvert))
 			{
-				return "Everyday";
+				return cons.getEveryday();
 			}
 			else if (NacCalendar.Days.isWeekday(daysToConvert))
 			{
-				return "Weekdays";
+				return cons.getWeekdays();
 			}
 			else if (NacCalendar.Days.isWeekend(daysToConvert))
 			{
-				return "Weekend";
+				return cons.getWeekend();
 			}
 
-			Object[] daySet = EnumSet.allOf(Day.class).toArray();
-			String convertedString = "";
-			int count = 0;
-			int length = daySet.length;
+			List<String> dow = cons.getDaysOfWeekAbbr();
+			List<Day> days = Arrays.asList(Day.values());
+			String string = "";
 
-			for (int i=start; count < length; i=(i+1) % length)
+			for (int count=0, i=start;
+				count < WEEK_LENGTH;
+				count++, i=(i+1) % WEEK_LENGTH)
 			{
-				Day day = (Day) daySet[i];
-				String name = day.name();
-
-				if (daysToConvert.contains(day))
+				if (daysToConvert.contains(days.get(i)))
 				{
-					if (!convertedString.isEmpty())
+					if (!string.isEmpty())
 					{
-						convertedString += " \u2027 ";
+						string += " \u2027 ";
 					}
 
-					convertedString += name.charAt(0)
-						+ name.substring(1, 3).toLowerCase();
+					string += dow.get(i);
 				}
-
-				count++;
 			}
 
-			return convertedString;
+			return string;
 		}
 
 		/**
 		 * @see toString
 		 */
-		public static String toString(int value)
-		{
-			return NacCalendar.Days.toString(value,
-				NacSharedPreferences.DEFAULT_START_WEEK_ON);
-		}
-
-		/**
-		 * @see toString
-		 */
-		public static String toString(int value, int start)
+		public static String toString(Context context, int value, int start)
 		{
 			EnumSet<Day> days = NacCalendar.Days.valueToDays(value);
-
-			return NacCalendar.Days.toString(days, start);
+			return NacCalendar.Days.toString(context, days, start);
 		}
 
 		/**

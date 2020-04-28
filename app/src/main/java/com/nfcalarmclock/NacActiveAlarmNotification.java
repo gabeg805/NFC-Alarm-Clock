@@ -118,8 +118,8 @@ public class NacActiveAlarmNotification
 
 		Context context = this.getContext();
 		Resources res = context.getResources();
-		CharSequence name = res.getString(R.string.noti_channel_active_name);
-		String description = res.getString(R.string.noti_channel_active_description);
+		CharSequence name = res.getString(R.string.active_alarm);
+		String description = res.getString(R.string.active_alarm_description);
 		NotificationChannel channel = new NotificationChannel(CHANNEL, name,
 			NotificationManager.IMPORTANCE_HIGH);
 		NotificationManager manager = context.getSystemService(

@@ -350,10 +350,11 @@ public class NacMediaActivity
 	private void setTabColors()
 	{
 		NacSharedPreferences shared = new NacSharedPreferences(this);
+		NacSharedDefaults defaults = new NacSharedDefaults(this);
 		TabLayout tabLayout = this.getTabLayout();
 
 		tabLayout.setSelectedTabIndicatorColor(shared.getThemeColor());
-		tabLayout.setTabTextColors(NacSharedPreferences.DEFAULT_COLOR,
+		tabLayout.setTabTextColors(defaults.getColor(),
 			shared.getThemeColor());
 	}
 

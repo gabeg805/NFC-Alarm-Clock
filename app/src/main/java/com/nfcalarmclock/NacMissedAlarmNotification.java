@@ -72,8 +72,8 @@ public class NacMissedAlarmNotification
 
 		Context context = this.getContext();
 		Resources res = context.getResources();
-		CharSequence name = res.getString(R.string.noti_channel_missed_name);
-		String description = res.getString(R.string.noti_channel_missed_description);
+		CharSequence name = res.getString(R.string.missed_alarm);
+		String description = res.getString(R.string.missed_alarm_description);
 		NotificationChannel channel = new NotificationChannel(MISSED_CHANNEL,
 			name, NotificationManager.IMPORTANCE_DEFAULT);
 		NotificationManager manager = context.getSystemService(

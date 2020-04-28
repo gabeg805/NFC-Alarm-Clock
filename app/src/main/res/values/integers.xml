@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+	<integer name="default_auto_dismiss_index">7</integer>
+	<integer name="default_max_snooze_index">11</integer>
+	<integer name="default_snooze_duration_index">4</integer>
+	<integer name="default_days">62</integer>
+	<integer name="default_volume">75</integer>
+	<integer name="default_color">0xffffffff</integer>
+	<integer name="default_theme_color">0xfffb8c00</integer>
+	<integer name="default_name_color">0xff00c0fb</integer>
+	<integer name="default_days_color">0xfffb8c00</integer>
+	<integer name="default_time_color">0xffffffff</integer>
+	<integer name="default_am_color">0xffffffff</integer>
+	<integer name="default_pm_color">0xffffffff</integer>
+	<integer name="default_next_alarm_format_index">0</integer>
+	<integer name="default_start_week_on_index">0</integer>
+	<integer name="default_speak_frequency_index">0</integer>
+
 	<integer name="max_entry_length">512</integer>
 	<integer name="max_hex_length">7</integer>
 

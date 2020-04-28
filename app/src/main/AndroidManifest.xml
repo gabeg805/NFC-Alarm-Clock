@@ -60,7 +60,7 @@
 		<!-- Settings activity -->
 		<activity
 			android:name=".NacSettingsActivity"
-			android:label="Settings"
+			android:label="@string/settings"
 			android:parentActivityName=".NacMainActivity"
 			android:windowSoftInputMode="stateAlwaysHidden">
 		</activity>

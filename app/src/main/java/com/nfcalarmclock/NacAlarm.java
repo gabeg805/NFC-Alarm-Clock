@@ -111,37 +111,38 @@ public class NacAlarm
 		 */
 		public Builder()
 		{
-			this(Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
-				Calendar.getInstance().get(Calendar.MINUTE));
+			this(null);
 		}
 
 		/**
 		 */
-		public Builder(int hour, int min)
+		public Builder(Context context)
 		{
-			this(-1, hour, min);
-		}
+			Calendar calendar = Calendar.getInstance();
+			int hour = calendar.get(Calendar.HOUR_OF_DAY);
+			int minute = calendar.get(Calendar.MINUTE);
 
-		/**
-		 */
-		public Builder(int id, int hour, int min)
-		{
 			this.mOnChangeListener = null;
-			this.mId = id;
+			this.mId = -1;
 			this.mHour = hour;
-			this.mMinute = min;
+			this.mMinute = minute;
 			this.mEnabled = true;
-			this.mDays = EnumSet.noneOf(NacCalendar.Day.class);
-			this.mRepeat = NacSharedPreferences.DEFAULT_REPEAT;
-			this.mNfc = NacSharedPreferences.DEFAULT_USE_NFC;
-			this.mVibrate = NacSharedPreferences.DEFAULT_VIBRATE;
-			this.mVolume = NacSharedPreferences.DEFAULT_VOLUME;
-			this.mAudioSource = NacSharedPreferences.DEFAULT_AUDIO_SOURCE;
 			this.mMediaType = NacMedia.TYPE_NONE;
 			this.mMediaPath = "";
 			this.mMediaTitle = "";
 			this.mName = "";
 			this.mTag = null;
+
+			if (context != null)
+			{
+				NacSharedDefaults defaults = new NacSharedDefaults(context);
+				this.mDays = NacCalendar.Days.valueToDays(defaults.getDays());
+				this.mRepeat = defaults.getRepeat();
+				this.mNfc = defaults.getUseNfc();
+				this.mVibrate = defaults.getVibrate();
+				this.mVolume = defaults.getVolume();
+				this.mAudioSource = defaults.getAudioSources().get(1);
+			}
 		}
 
 		/**
@@ -645,9 +646,9 @@ public class NacAlarm
 		this.setVibrate(builder.getVibrate());
 		this.setVolume(builder.getVolume());
 		this.setAudioSource(builder.getAudioSource());
-		this.setMediaType(builder.getMediaType());
-		this.setMediaPath(builder.getMediaPath());
 		this.setMediaTitle(builder.getMediaTitle());
+		this.setMediaPath(builder.getMediaPath());
+		this.setMediaType(builder.getMediaType());
 		this.setName(builder.getName());
 		this.setTag(builder.getTag());
 		this.setChangeTracker(ChangeTracker.NONE);
@@ -728,9 +729,11 @@ public class NacAlarm
 			.setRepeat(this.getRepeat())
 			.setUseNfc(this.getUseNfc())
 			.setVibrate(this.getVibrate())
-			.setMediaType(this.getMediaType())
-			.setMediaPath(this.getMediaPath())
+			.setVolume(this.getVolume())
+			.setAudioSource(this.getAudioSource())
 			.setMediaTitle(this.getMediaTitle())
+			.setMediaPath(this.getMediaPath())
+			.setMediaType(this.getMediaType())
 			.setName(this.getName())
 			.build();
 	}
@@ -1030,7 +1033,8 @@ public class NacAlarm
 		NacUtility.printf("Enabled      : %b", this.mEnabled);
 		NacUtility.printf("Hour         : %d", this.mHour);
 		NacUtility.printf("Minute       : %d", this.mMinute);
-		NacUtility.printf("Days         : %s", NacCalendar.Days.toString(this.getDays()));
+		//NacUtility.printf("Days         : %s", NacCalendar.Days.toString(this.getDays()));
+		NacUtility.printf("Days         : %s", this.getDays());
 		NacUtility.printf("Repeat       : %b", this.mRepeat);
 		NacUtility.printf("Use NFC      : %b", this.mNfc);
 		NacUtility.printf("Vibrate      : %b", this.mVibrate);

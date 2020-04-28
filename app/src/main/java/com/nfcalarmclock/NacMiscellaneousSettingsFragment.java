@@ -1,6 +1,6 @@
 package com.nfcalarmclock;
 
-import android.content.res.Resources;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import androidx.preference.PreferenceManager;
@@ -27,11 +27,10 @@ public class NacMiscellaneousSettingsFragment
 	{
 		super.onViewCreated(view, savedInstanceState);
 
-		Resources res = getContext().getResources();
-		String speakKey= res.getString(R.string.pref_speak_to_me_key);
-		String speakFreqKey = res.getString(R.string.pref_speak_frequency_key);
-		NacCheckboxPreference speak = (NacCheckboxPreference) findPreference(speakKey);
-		NacSpeakFrequencyPreference speakFreq = (NacSpeakFrequencyPreference) findPreference(speakFreqKey);
+		Context context = getContext();
+		NacSharedKeys keys = new NacSharedKeys(context);
+		NacCheckboxPreference speak = (NacCheckboxPreference) findPreference(keys.getSpeakToMe());
+		NacSpeakFrequencyPreference speakFreq = (NacSpeakFrequencyPreference) findPreference(keys.getSpeakFrequency());
 		boolean state = speak.getChecked();
 
 		speak.notifyDependencyChange(!state);

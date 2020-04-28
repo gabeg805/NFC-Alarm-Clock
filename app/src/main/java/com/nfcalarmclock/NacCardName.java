@@ -72,13 +72,13 @@ public class NacCardName
 	 */
 	public void set()
 	{
+		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
-		String alarmName = alarm.getNameNormalized();
-		String name = NacSharedPreferences.getNameMessage(alarmName);
-		float alpha = ((alarmName != null) && !alarmName.isEmpty()) ? 1.0f
-			: 0.3f;
+		String name = alarm.getNameNormalized();
+		String message = NacSharedPreferences.getNameMessage(context, name);
+		float alpha = (name != null) && !name.isEmpty() ? 1.0f : 0.3f;
 
-		this.mName.setText(name);
+		this.mName.setText(message);
 		this.mName.setAlpha(alpha);
 	}
 

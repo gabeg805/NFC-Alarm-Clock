@@ -5,20 +5,20 @@
 
 	<!-- App -->
 	<com.nfcalarmclock.NacPreferenceCategory
-		android:title="@string/pref_about_app_category">
+		android:title="@string/app_category">
 
 		<Preference
-			android:key="@string/pref_about_author_key"
-			android:title="@string/pref_about_author_title"
-			android:summary="@string/pref_about_author_summary"
+			android:key="@string/author_key"
+			android:title="@string/author_title"
+			android:summary="@string/author"
 			app:iconSpaceReserved="false"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
 			/>
 
 		<Preference
-			android:key="@string/pref_about_version_key"
-			android:title="@string/pref_about_version_title"
+			android:key="@string/version_key"
+			android:title="@string/version_title"
 			android:summary="@string/versionName"
 			app:iconSpaceReserved="false"
 			app:allowDividerAbove="true"
@@ -28,69 +28,69 @@
 
 	<!-- Permissions -->
 	<com.nfcalarmclock.NacPreferenceCategory
-		android:title="@string/pref_about_permissions_category">
+		android:title="@string/permissions_category">
 
 		<Preference
-			android:key="@string/pref_about_nfc_key"
-			android:title="@string/pref_about_nfc_title"
-			android:summary="@string/pref_about_nfc_summary"
+			android:key="@string/about_nfc_key"
+			android:title="@string/about_nfc"
+			android:summary="@string/about_nfc_summary"
 			app:iconSpaceReserved="false"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
 			/>
 
 		<Preference
-			android:key="@string/pref_about_storage_key"
-			android:title="@string/pref_about_storage_title"
-			android:summary="@string/pref_about_storage_summary"
+			android:key="@string/about_storage_key"
+			android:title="@string/about_storage"
+			android:summary="@string/about_storage_summary"
 			app:iconSpaceReserved="false"
 			app:allowDividerBelow="false"
 			/>
 
 		<Preference
-			android:key="@string/pref_about_vibrate_key"
-			android:title="@string/pref_about_vibrate_title"
-			android:summary="@string/pref_about_vibrate_summary"
+			android:key="@string/about_vibrate_key"
+			android:title="@string/about_vibrate"
+			android:summary="@string/about_vibrate_summary"
 			app:iconSpaceReserved="false"
 			app:allowDividerBelow="false"
 			/>
 
 		<Preference
-			android:key="@string/pref_about_set_alarm_key"
-			android:title="@string/pref_about_set_alarm_title"
-			android:summary="@string/pref_about_set_alarm_summary"
+			android:key="@string/about_set_alarm_key"
+			android:title="@string/about_set_alarm"
+			android:summary="@string/about_set_alarm_summary"
 			app:iconSpaceReserved="false"
 			app:allowDividerBelow="false"
 			/>
 
 		<Preference
-			android:key="@string/pref_about_boot_key"
-			android:title="@string/pref_about_boot_title"
-			android:summary="@string/pref_about_boot_summary"
+			android:key="@string/about_boot_key"
+			android:title="@string/about_boot"
+			android:summary="@string/about_boot_summary"
 			app:iconSpaceReserved="false"
 			app:allowDividerBelow="false"
 			/>
 
 		<Preference
-			android:key="@string/pref_about_wakelock_key"
-			android:title="@string/pref_about_wakelock_title"
-			android:summary="@string/pref_about_wakelock_summary"
+			android:key="@string/about_wakelock_key"
+			android:title="@string/about_wakelock"
+			android:summary="@string/about_wakelock_summary"
 			app:iconSpaceReserved="false"
 			app:allowDividerBelow="false"
 			/>
 
 		<Preference
-			android:key="@string/pref_about_full_screen_intent_key"
-			android:title="@string/pref_about_full_screen_intent_title"
-			android:summary="@string/pref_about_full_screen_intent_summary"
+			android:key="@string/about_full_screen_intent_key"
+			android:title="@string/about_full_screen_intent"
+			android:summary="@string/about_full_screen_intent_summary"
 			app:iconSpaceReserved="false"
 			app:allowDividerBelow="false"
 			/>
 
 		<Preference
-			android:key="@string/pref_about_foreground_service_key"
-			android:title="@string/pref_about_foreground_service_title"
-			android:summary="@string/pref_about_foreground_service_summary"
+			android:key="@string/about_foreground_service_key"
+			android:title="@string/about_foreground_service"
+			android:summary="@string/about_foreground_service_summary"
 			app:iconSpaceReserved="false"
 			app:allowDividerBelow="true"
 			/>

@@ -25,10 +25,11 @@
 		android:layout_toStartOf="@id/delete_icon"
 		android:layout_marginEnd="@dimen/sp_main"
 		android:layout_centerVertical="true"
+		android:textAllCaps="true"
 		android:textColor="@color/white"
 		android:textSize="@dimen/tsz_icon"
 		android:textStyle="bold"
-		android:text="@string/card_swipe_delete"
+		android:text="@string/delete_alarm"
 		/>
 
 </RelativeLayout>

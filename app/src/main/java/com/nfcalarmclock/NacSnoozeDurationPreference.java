@@ -63,7 +63,6 @@ public class NacSnoozeDurationPreference
 
 		persistInt(this.mValue);
 		notifyChanged();
-
 		return true;
 	}
 
@@ -73,8 +72,9 @@ public class NacSnoozeDurationPreference
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
+		NacSharedDefaults defaults = new NacSharedDefaults(getContext());
 		return (Integer) a.getInteger(index,
-			NacSharedPreferences.DEFAULT_SNOOZE_DURATION_INDEX);
+			defaults.getSnoozeDurationIndex());
 	}
 
 	/**
@@ -89,7 +89,6 @@ public class NacSnoozeDurationPreference
 		dialog.build(context);
 		dialog.addOnDismissListener(this);
 		dialog.show();
-
 		return true;
 	}
 
@@ -106,7 +105,6 @@ public class NacSnoozeDurationPreference
 		else
 		{
 			this.mValue = (Integer) defaultValue;
-
 			persistInt(this.mValue);
 		}
 	}

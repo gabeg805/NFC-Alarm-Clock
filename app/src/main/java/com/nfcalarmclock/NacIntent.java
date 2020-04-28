@@ -212,7 +212,8 @@ public class NacIntent
 			return null;
 		}
 
-		NacAlarm.Builder builder = new NacAlarm.Builder();
+		NacSharedDefaults defaults = new NacSharedDefaults(context);
+		NacAlarm.Builder builder = new NacAlarm.Builder(context);
 		Calendar calendar = Calendar.getInstance();
 		boolean isSet = false;
 
@@ -269,7 +270,7 @@ public class NacIntent
 		if (intent.hasExtra(AlarmClock.EXTRA_VIBRATE))
 		{
 			boolean vibrate = intent.getBooleanExtra(AlarmClock.EXTRA_VIBRATE,
-				NacSharedPreferences.DEFAULT_VIBRATE);
+				defaults.getVibrate());
 			isSet = true;
 
 			builder.setVibrate(vibrate);

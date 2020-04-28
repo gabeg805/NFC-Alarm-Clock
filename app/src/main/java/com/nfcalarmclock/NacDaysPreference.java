@@ -22,6 +22,11 @@ public class NacDaysPreference
 	protected int mValue;
 
 	/**
+	 * Shared preferences.
+	 */
+	protected NacSharedPreferences mSharedPreferences;
+
+	/**
 	 */
 	public NacDaysPreference(Context context)
 	{
@@ -42,6 +47,16 @@ public class NacDaysPreference
 		super(context, attrs, style);
 		setLayoutResource(R.layout.nac_preference);
 		setOnPreferenceClickListener(this);
+
+		this.mSharedPreferences = new NacSharedPreferences(context);
+	}
+
+	/**
+	 * @return The shared preferences.
+	 */
+	protected NacSharedPreferences getShared()
+	{
+		return this.mSharedPreferences;
 	}
 
 	/**
@@ -50,7 +65,7 @@ public class NacDaysPreference
 	@Override
 	public CharSequence getSummary()
 	{
-		return NacSharedPreferences.getDaysSummary(this.mValue);
+		return this.getShared().getDaysSummary();
 	}
 
 	/**
@@ -65,7 +80,6 @@ public class NacDaysPreference
 
 		setSummary(this.getSummary());
 		persistInt(this.mValue);
-
 		return true;
 	}
 
@@ -75,7 +89,7 @@ public class NacDaysPreference
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		return (Integer) a.getInteger(index, NacSharedPreferences.DEFAULT_DAYS);
+		return (Integer) a.getInteger(index, NacSharedDefaults.getDaysValue());
 	}
 
 	/**
@@ -91,7 +105,6 @@ public class NacDaysPreference
 		dialog.addOnShowListener(this);
 		dialog.addOnDismissListener(this);
 		dialog.show();
-
 		return true;
 	}
 
@@ -101,10 +114,8 @@ public class NacDaysPreference
 	@Override
 	public void onShowDialog(NacDialog dialog, View root)
 	{
-		Context context = getContext();
-		NacSharedPreferences shared = new NacSharedPreferences(context);
 		NacDayOfWeek dow = root.findViewById(R.id.days);
-		int start = shared.getStartWeekOn();
+		int start = this.getShared().getStartWeekOn();
 
 		dow.setDays(this.mValue);
 		dow.setStartWeekOn(start);
@@ -123,7 +134,6 @@ public class NacDaysPreference
 		else
 		{
 			this.mValue = (Integer) defaultValue;
-
 			persistInt(this.mValue);
 		}
 	}

@@ -5,6 +5,7 @@ import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.os.Build;
+import java.util.List;
 
 /**
  * Audio container.
@@ -274,28 +275,32 @@ public class NacAudio
 		 */
 		public void setSource(String source)
 		{
+			Context context = this.getContext();
+			NacSharedDefaults defaults = new NacSharedDefaults(context);
+			List<String> audioSources = defaults.getAudioSources();
 			int stream = AudioManager.STREAM_MUSIC;
 			int usage = AudioAttributes.USAGE_MEDIA;
 
-			if ((source == null) || source.isEmpty() || source.equals("Media"))
+			if ((source == null) || source.isEmpty()
+				|| source.equals(audioSources.get(1)))
 			{
 			}
-			else if (source.equals("Alarm"))
+			else if (source.equals(audioSources.get(0)))
 			{
 				stream = AudioManager.STREAM_ALARM;
 				usage = AudioAttributes.USAGE_ALARM;
 			}
-			else if (source.equals("Notification"))
+			else if (source.equals(audioSources.get(2)))
 			{
 				stream = AudioManager.STREAM_NOTIFICATION;
 				usage = AudioAttributes.USAGE_NOTIFICATION;
 			}
-			else if (source.equals("Ringtone"))
+			else if (source.equals(audioSources.get(3)))
 			{
 				stream = AudioManager.STREAM_RING;
 				usage = AudioAttributes.USAGE_MEDIA;
 			}
-			else if (source.equals("System"))
+			else if (source.equals(audioSources.get(4)))
 			{
 				stream = AudioManager.STREAM_SYSTEM;
 				usage = AudioAttributes.USAGE_MEDIA;

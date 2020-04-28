@@ -371,10 +371,12 @@ public class NacDatabase
 
 		Context context = this.getContext();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
+		NacSharedConstants cons = new NacSharedConstants(context);
 		String mediaPath = shared.getMediaPath();
 		String mediaTitle = NacMedia.getTitle(context, mediaPath);
 		int mediaType = NacMedia.getType(context, mediaPath);
-		NacAlarm alarm = new NacAlarm.Builder()
+		String name = cons.getNameExample();
+		NacAlarm alarm = new NacAlarm.Builder(context)
 			.setId(1)
 			.setHour(8)
 			.setMinute(0)
@@ -384,10 +386,10 @@ public class NacDatabase
 			.setVibrate(shared.getVibrate())
 			.setVolume(shared.getVolume())
 			.setAudioSource(shared.getAudioSource())
-			.setMediaType(mediaType)
-			.setMediaPath(mediaPath)
 			.setMediaTitle(mediaTitle)
-			.setName("Work")
+			.setMediaPath(mediaPath)
+			.setMediaType(mediaType)
+			.setName(name)
 			.build();
 
 		this.add(db, alarm);
@@ -683,9 +685,7 @@ public class NacDatabase
 		this.setDatabase();
 
 		List<NacAlarm> list = new ArrayList<>();
-
 		list.add(alarm);
-
 		return this.update(list);
 	}
 
@@ -697,7 +697,6 @@ public class NacDatabase
 		this.setDatabase();
 
 		SQLiteDatabase db = this.getDatabase();
-
 		return this.update(db, alarms);
 	}
 
@@ -707,9 +706,7 @@ public class NacDatabase
 	public long update(SQLiteDatabase db, NacAlarm alarm)
 	{
 		List<NacAlarm> list = new ArrayList<>();
-
 		list.add(alarm);
-
 		return this.update(db, list);
 	}
 
@@ -762,7 +759,6 @@ public class NacDatabase
 		this.setDatabase();
 
 		SQLiteDatabase db = this.getDatabase();
-
 		return this.updateRow(db, row, alarm);
 	}
 

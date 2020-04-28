@@ -25,10 +25,11 @@
 		android:layout_toEndOf="@id/copy_icon"
 		android:layout_marginStart="@dimen/sp_main"
 		android:layout_centerVertical="true"
+		android:textAllCaps="true"
 		android:textColor="@color/white"
 		android:textSize="@dimen/tsz_icon"
 		android:textStyle="bold"
-		android:text="@string/card_swipe_copy"
+		android:text="@string/copy_alarm"
 		/>
 
 </RelativeLayout>

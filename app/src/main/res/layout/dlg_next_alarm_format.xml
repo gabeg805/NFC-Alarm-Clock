@@ -21,7 +21,7 @@
 			android:layout_marginBottom="@dimen/sp_row"
 			android:paddingStart="@dimen/sp_main"
 			android:textSize="@dimen/tsz_main"
-			android:text="@string/next_alarm_format_0"
+			android:text="@string/next_alarm_format_countdown"
 			android:checked="true"
 			/>
 
@@ -31,7 +31,7 @@
 			android:layout_height="wrap_content"
 			android:paddingStart="@dimen/sp_main"
 			android:textSize="@dimen/tsz_main"
-			android:text="@string/next_alarm_format_1"
+			android:text="@string/next_alarm_format_time"
 			/>
 
 	</RadioGroup>

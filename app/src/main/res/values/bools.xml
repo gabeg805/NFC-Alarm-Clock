@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<bool name="default_prevent_app_from_closing">false</bool>
+	<bool name="default_easy_snooze">false</bool>
+	<bool name="default_repeat">true</bool>
+	<bool name="default_use_nfc">false</bool>
+	<bool name="default_vibrate">true</bool>
+	<bool name="default_missed_alarm">true</bool>
+	<bool name="default_upcoming_alarm">false</bool>
+	<bool name="default_expand_new_alarm">true</bool>
+	<bool name="default_show_alarm_info">false</bool>
+	<bool name="default_shuffle_playlist">false</bool>
+	<bool name="default_speak_to_me">false</bool>
+
+</resources>

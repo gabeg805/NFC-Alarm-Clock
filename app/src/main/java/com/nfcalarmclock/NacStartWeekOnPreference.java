@@ -2,6 +2,7 @@ package com.nfcalarmclock;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
@@ -53,15 +54,18 @@ public class NacStartWeekOnPreference
 	@Override
 	public CharSequence getSummary()
 	{
+		Context context = getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
+
 		switch (this.mValue)
 		{
-			case 6:
-				return "Saturday";
+			//case 6:
+			//	return "Saturday";
 			case 1:
-				return "Monday";
+				return cons.getMonday();
 			case 0:
 			default:
-				return "Sunday";
+				return cons.getSunday();
 		}
 	}
 
@@ -70,10 +74,12 @@ public class NacStartWeekOnPreference
 	@Override
 	public void onBuildDialog(NacDialog dialog, AlertDialog.Builder builder)
 	{
-		builder.setTitle("Start week on");
+		Context context = getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
 
-		dialog.setPositiveButton("Ok");
-		dialog.setNegativeButton("Cancel");
+		builder.setTitle(cons.getStartWeekOnTitle());
+		dialog.setPositiveButton(cons.getOk());
+		dialog.setNegativeButton(cons.getCancel());
 	}
 
 	/**
@@ -102,7 +108,6 @@ public class NacStartWeekOnPreference
 
 		persistInt(this.mValue);
 		notifyChanged();
-
 		return true;
 	}
 
@@ -112,8 +117,10 @@ public class NacStartWeekOnPreference
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
+		Context context = getContext();
+		NacSharedDefaults defaults = new NacSharedDefaults(context);
 		return (Integer) a.getInteger(index,
-			NacSharedPreferences.DEFAULT_START_WEEK_ON);
+			defaults.getStartWeekOnIndex());
 	}
 
 	/**
@@ -130,7 +137,6 @@ public class NacStartWeekOnPreference
 		dialog.addOnShowListener(this);
 		dialog.build(context, R.layout.dlg_start_week_on);
 		dialog.show();
-
 		return true;
 	}
 
@@ -147,7 +153,6 @@ public class NacStartWeekOnPreference
 		else
 		{
 			this.mValue = (Integer) defaultValue;
-
 			persistInt(this.mValue);
 		}
 	}
@@ -161,8 +166,8 @@ public class NacStartWeekOnPreference
 
 		switch (this.mValue)
 		{
-			case 6:
-				break;
+			//case 6:
+			//	break;
 			case 1:
 				days.check(R.id.monday);
 				break;

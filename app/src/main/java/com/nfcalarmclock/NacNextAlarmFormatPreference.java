@@ -4,11 +4,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-//import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RadioGroup;
-
 import androidx.preference.Preference;
 
 /**
@@ -62,10 +60,10 @@ public class NacNextAlarmFormatPreference
 		switch (this.mValue)
 		{
 			case 1:
-				return res.getString(R.string.next_alarm_format_1);
+				return res.getString(R.string.next_alarm_format_time);
 			case 0:
 			default:
-				return res.getString(R.string.next_alarm_format_0);
+				return res.getString(R.string.next_alarm_format_countdown);
 		}
 	}
 
@@ -113,8 +111,10 @@ public class NacNextAlarmFormatPreference
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
+		Context context = getContext();
+		NacSharedDefaults defaults = new NacSharedDefaults(context);
 		return (Integer) a.getInteger(index,
-			NacSharedPreferences.DEFAULT_NEXT_ALARM_FORMAT);
+			defaults.getNextAlarmFormatIndex());
 	}
 
 	/**
@@ -131,7 +131,6 @@ public class NacNextAlarmFormatPreference
 		dialog.addOnShowListener(this);
 		dialog.build(context, R.layout.dlg_next_alarm_format);
 		dialog.show();
-
 		return true;
 	}
 
@@ -148,7 +147,6 @@ public class NacNextAlarmFormatPreference
 		else
 		{
 			this.mValue = (Integer) defaultValue;
-
 			persistInt(this.mValue);
 		}
 	}

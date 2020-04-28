@@ -73,8 +73,8 @@ public class NacUpcomingAlarmNotification
 
 		Context context = this.getContext();
 		Resources res = context.getResources();
-		CharSequence name = res.getString(R.string.noti_channel_upcoming_name);
-		String description = res.getString(R.string.noti_channel_upcoming_description);
+		CharSequence name = res.getString(R.string.upcoming_alarm);
+		String description = res.getString(R.string.upcoming_alarm_description);
 		NotificationChannel channel = new NotificationChannel(UPCOMING_CHANNEL,
 			name, NotificationManager.IMPORTANCE_LOW);
 		NotificationManager manager = context.getSystemService(

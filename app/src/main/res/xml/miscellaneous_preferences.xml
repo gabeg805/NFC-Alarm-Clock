@@ -5,21 +5,21 @@
 
 	<!-- Music -->
 	<com.nfcalarmclock.NacPreferenceCategory
-		android:title="@string/pref_misc_music_category">
+		android:title="@string/music_category">
 
 		<Preference
-			android:summary="@string/pref_shuffle_playlist_note"
+			android:summary="@string/shuffle_playlist_note"
 			android:selectable="false"
 			android:enabled="false"
 			app:iconSpaceReserved="false"
 			/>
 
 		<com.nfcalarmclock.NacCheckboxPreference
-			android:key="@string/pref_shuffle_playlist_key"
-			android:title="@string/pref_shuffle_playlist_title"
-			android:summaryOn="@string/pref_shuffle_playlist_summary_enabled"
-			android:summaryOff="@string/pref_shuffle_playlist_summary_disabled"
-			android:defaultValue="false"
+			android:key="@string/shuffle_playlist_key"
+			android:title="@string/shuffle_playlist"
+			android:summaryOn="@string/shuffle_playlist_true"
+			android:summaryOff="@string/shuffle_playlist_false"
+			android:defaultValue="@bool/default_shuffle_playlist"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="true"
 			/>
@@ -28,23 +28,23 @@
 
 	<!-- Text-to-Speech -->
 	<com.nfcalarmclock.NacPreferenceCategory
-		android:title="@string/pref_misc_tts_category">
+		android:title="@string/tts_category">
 
 		<com.nfcalarmclock.NacCheckboxPreference
-			android:key="@string/pref_speak_to_me_key"
-			android:title="@string/pref_speak_to_me_title"
-			android:summaryOn="@string/pref_speak_to_me_summary_enabled"
-			android:summaryOff="@string/pref_speak_to_me_summary_disabled"
-			android:defaultValue="false"
+			android:key="@string/speak_to_me_key"
+			android:title="@string/speak_to_me"
+			android:summaryOn="@string/speak_to_me_true"
+			android:summaryOff="@string/speak_to_me_false"
+			android:defaultValue="@bool/default_speak_to_me"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
 			/>
 
 		<com.nfcalarmclock.NacSpeakFrequencyPreference
-			android:key="@string/pref_speak_frequency_key"
-			android:title="@string/pref_speak_frequency_title"
-			android:dependency="@string/pref_speak_to_me_key"
-			android:defaultValue="0"
+			android:key="@string/speak_frequency_key"
+			android:title="@string/speak_frequency"
+			android:dependency="@string/speak_to_me_key"
+			android:defaultValue="@integer/default_speak_frequency_index"
 			/>
 
 	</com.nfcalarmclock.NacPreferenceCategory>

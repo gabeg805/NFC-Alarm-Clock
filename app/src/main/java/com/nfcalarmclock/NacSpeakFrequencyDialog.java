@@ -1,6 +1,7 @@
 package com.nfcalarmclock;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.view.View;
 
 /**
@@ -25,9 +26,12 @@ public class NacSpeakFrequencyDialog
 	@Override
 	public void onBuildDialog(NacDialog dialog, AlertDialog.Builder builder)
 	{
-		builder.setTitle("Frequency");
-		dialog.setPositiveButton("OK");
-		dialog.setNegativeButton("Cancel");
+		Context context = dialog.getRoot().getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
+
+		builder.setTitle(cons.getSpeakFrequency());
+		dialog.setPositiveButton(cons.getOk());
+		dialog.setNegativeButton(cons.getCancel());
 	}
 
 	/**
@@ -38,11 +42,13 @@ public class NacSpeakFrequencyDialog
 	{
 		super.onShowDialog(dialog, root);
 
+		Context context = dialog.getRoot().getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
 		int index = this.getDataInt();
 		int length = 31;
 		String[] values = new String[length];
 
-		values[0] = "Once";
+		values[0] = cons.getFrequencyOnce();
 
 		for (int i=1; i < length; i++)
 		{

@@ -55,7 +55,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:background="?android:attr/selectableItemBackground"
-				android:text="@string/act_alarm_snooze"
+				android:text="@string/snooze_alarm"
 				/>
 
 			<Button
@@ -63,7 +63,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:background="?android:attr/selectableItemBackground"
-				android:text="@string/act_alarm_dismiss"
+				android:text="@string/dismiss_alarm"
 				/>
 
 		</LinearLayout>

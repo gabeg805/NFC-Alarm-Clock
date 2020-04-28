@@ -61,7 +61,6 @@ public class NacMaxSnoozePreference
 
 		persistInt(this.mValue);
 		notifyChanged();
-
 		return true;
 	}
 
@@ -71,8 +70,8 @@ public class NacMaxSnoozePreference
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		return (Integer) a.getInteger(index,
-			NacSharedPreferences.DEFAULT_AUTO_DISMISS_INDEX);
+		NacSharedDefaults defaults = new NacSharedDefaults(getContext());
+		return (Integer) a.getInteger(index, defaults.getMaxSnoozeIndex());
 	}
 
 	/**
@@ -87,7 +86,6 @@ public class NacMaxSnoozePreference
 		dialog.build(context);
 		dialog.addOnDismissListener(this);
 		dialog.show();
-
 		return true;
 	}
 
@@ -104,7 +102,6 @@ public class NacMaxSnoozePreference
 		else
 		{
 			this.mValue = (Integer) defaultValue;
-
 			persistInt(this.mValue);
 		}
 	}

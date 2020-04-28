@@ -397,7 +397,7 @@
 						android:layout_height="wrap_content"
 						android:textColor="@color/white"
 						android:textSize="@dimen/tsz_main"
-						android:text="@string/card_delete"
+						android:text="@string/delete_alarm"
 						/>
 
 				</LinearLayout>

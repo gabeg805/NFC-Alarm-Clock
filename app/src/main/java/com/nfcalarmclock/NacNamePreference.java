@@ -2,10 +2,8 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-//import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
-
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 
@@ -52,7 +50,8 @@ public class NacNamePreference
 	@Override
 	public CharSequence getSummary()
 	{
-		return NacSharedPreferences.getNameSummary(this.mValue);
+		Context context = getContext();
+		return NacSharedPreferences.getNameSummary(context, this.mValue);
 	}
 
 	/**
@@ -66,7 +65,6 @@ public class NacNamePreference
 
 		setSummary(this.getSummary());
 		persistString(this.mValue);
-
 		return true;
 	}
 
@@ -92,7 +90,6 @@ public class NacNamePreference
 		dialog.addOnDismissListener(this);
 		dialog.saveData(this.mValue);
 		dialog.show();
-
 		return true;
 	}
 
@@ -109,7 +106,6 @@ public class NacNamePreference
 		else
 		{
 			this.mValue = (String) defaultValue;
-
 			persistString(this.mValue);
 		}
 	}

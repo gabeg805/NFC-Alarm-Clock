@@ -110,9 +110,7 @@ public class NacVolumePreference
 	public boolean onDismissDialog(NacDialog dialog)
 	{
 		this.mSource = dialog.getDataString();
-
 		this.mShared.editAudioSource(this.mSource);
-
 		return true;
 	}
 
@@ -122,8 +120,9 @@ public class NacVolumePreference
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		return (Integer) a.getInteger(index,
-			NacSharedPreferences.DEFAULT_VOLUME);
+		Context context = getContext();
+		NacSharedDefaults defaults = new NacSharedDefaults(context);
+		return (Integer) a.getInteger(index, defaults.getVolume());
 	}
 
 	/**
@@ -139,7 +138,6 @@ public class NacVolumePreference
 		else
 		{
 			this.mValue = (Integer) defaultValue;
-
 			persistInt(this.mValue);
 		}
 	}

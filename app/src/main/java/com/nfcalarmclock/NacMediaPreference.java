@@ -45,7 +45,8 @@ public class NacMediaPreference
 	@Override
 	public CharSequence getSummary()
 	{
-		return NacSharedPreferences.getMediaSummary(getContext(), this.mValue);
+		Context context = getContext();
+		return NacSharedPreferences.getMediaSummary(context, this.mValue);
 	}
 
 	/**
@@ -70,7 +71,6 @@ public class NacMediaPreference
 		else
 		{
 			this.mValue = (String) defaultValue;
-
 			persistString(this.mValue);
 		}
 	}

@@ -122,7 +122,6 @@ public class NacCardSummary
 	public void init(NacSharedPreferences shared, NacAlarm alarm)
 	{
 		this.mAlarm = alarm;
-
 		this.set(shared);
 	}
 
@@ -152,9 +151,10 @@ public class NacCardSummary
 	 */
 	public void setDays(NacSharedPreferences shared)
 	{
+		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
-		String string = NacCalendar.Days.toString(alarm,
-			shared.getStartWeekOn());
+		int start = shared.getStartWeekOn();
+		String string = NacCalendar.Days.toString(context, alarm, start);
 
 		this.mDays.setText(string);
 		this.mDays.requestLayout();

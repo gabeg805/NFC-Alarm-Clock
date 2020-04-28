@@ -2,10 +2,8 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-//import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
-
 import androidx.preference.Preference;
 
 /**
@@ -52,7 +50,9 @@ public class NacSpeakFrequencyPreference
 	@Override
 	public CharSequence getSummary()
 	{
-		return NacSharedPreferences.getSpeakFrequencySummary(this.mValue);
+		Context context = getContext();
+		return NacSharedPreferences.getSpeakFrequencySummary(context,
+			this.mValue);
 	}
 
 	/**
@@ -65,7 +65,6 @@ public class NacSpeakFrequencyPreference
 
 		persistInt(this.mValue);
 		notifyChanged();
-
 		return true;
 	}
 
@@ -75,8 +74,10 @@ public class NacSpeakFrequencyPreference
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
+		Context context = getContext();
+		NacSharedDefaults defaults = new NacSharedDefaults(context);
 		return (Integer) a.getInteger(index,
-			NacSharedPreferences.DEFAULT_SPEAK_FREQUENCY);
+			defaults.getSpeakFrequencyIndex());
 	}
 
 	/**
@@ -91,7 +92,6 @@ public class NacSpeakFrequencyPreference
 		dialog.build(context);
 		dialog.addOnDismissListener(this);
 		dialog.show();
-
 		return true;
 	}
 
@@ -108,7 +108,6 @@ public class NacSpeakFrequencyPreference
 		else
 		{
 			this.mValue = (Integer) defaultValue;
-
 			persistInt(this.mValue);
 		}
 	}

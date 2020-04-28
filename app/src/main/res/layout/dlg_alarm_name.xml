@@ -16,7 +16,7 @@
 		android:isScrollContainer="true"
 		android:textSize="@dimen/tsz_main"
 		android:inputType="textCapSentences|textMultiLine"
-		android:hint="@string/dlg_name_hint"
+		android:hint="@string/name_hint"
 		android:importantForAutofill="no">
 
 		<requestFocus />

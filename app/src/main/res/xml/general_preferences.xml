@@ -5,22 +5,22 @@
 
 	<!-- Dismiss -->
 	<com.nfcalarmclock.NacPreferenceCategory
-		android:title="@string/pref_general_dismiss_category">
+		android:title="@string/dismiss_options_category">
 
 		<com.nfcalarmclock.NacAutoDismissPreference
-			android:key="@string/pref_auto_dismiss_key"
-			android:title="@string/pref_auto_dismiss_title"
-			android:defaultValue="7"
+			android:key="@string/auto_dismiss_key"
+			android:title="@string/auto_dismiss"
+			android:defaultValue="@integer/default_auto_dismiss_index"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
 			/>
 
 		<com.nfcalarmclock.NacCheckboxPreference
-			android:key="@string/pref_prevent_app_from_closing_key"
-			android:title="@string/pref_prevent_app_from_closing_title"
-			android:summaryOn="@string/pref_prevent_app_from_closing_summary_enabled"
-			android:summaryOff="@string/pref_prevent_app_from_closing_summary_disabled"
-			android:defaultValue="false"
+			android:key="@string/prevent_app_from_closing_key"
+			android:title="@string/prevent_app_from_closing"
+			android:summaryOn="@string/prevent_app_from_closing_true"
+			android:summaryOff="@string/prevent_app_from_closing_false"
+			android:defaultValue="@bool/default_prevent_app_from_closing"
 			app:allowDividerBelow="true"
 			/>
 
@@ -28,29 +28,29 @@
 
 	<!-- Snooze -->
 	<com.nfcalarmclock.NacPreferenceCategory
-		android:title="@string/pref_general_snooze_category">
+		android:title="@string/snooze_options_category">
 
 		<com.nfcalarmclock.NacMaxSnoozePreference
-			android:key="@string/pref_max_snooze_key"
-			android:title="@string/pref_max_snooze_title"
-			android:defaultValue="11"
+			android:key="@string/max_snooze_key"
+			android:title="@string/max_snooze"
+			android:defaultValue="@integer/default_max_snooze_index"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
 			/>
 
 		<com.nfcalarmclock.NacSnoozeDurationPreference
-			android:key="@string/pref_snooze_duration_key"
-			android:title="@string/pref_snooze_duration_title"
-			android:defaultValue="4"
+			android:key="@string/snooze_duration_key"
+			android:title="@string/snooze_duration"
+			android:defaultValue="@integer/default_snooze_duration_index"
 			app:allowDividerBelow="false"
 			/>
 
 		<com.nfcalarmclock.NacCheckboxPreference
-			android:key="@string/pref_easy_snooze_key"
-			android:title="@string/pref_easy_snooze_title"
-			android:summaryOn="@string/pref_easy_snooze_summary_enabled"
-			android:summaryOff="@string/pref_easy_snooze_summary_disabled"
-			android:defaultValue="false"
+			android:key="@string/easy_snooze_key"
+			android:title="@string/easy_snooze"
+			android:summaryOn="@string/easy_snooze_true"
+			android:summaryOff="@string/easy_snooze_false"
+			android:defaultValue="@bool/default_easy_snooze"
 			app:allowDividerBelow="true"
 			/>
 
@@ -58,64 +58,62 @@
 
 	<!-- Default alarm -->
 	<com.nfcalarmclock.NacPreferenceCategory
-		android:title="Default Alarm">
+		android:title="@string/default_alarm_category">
 
 		<com.nfcalarmclock.NacNamePreference
-			android:key="@string/pref_name_key"
-			android:title="@string/pref_name_title"
-			android:summary="@string/pref_name_summary"
+			android:key="@string/alarm_name_key"
+			android:title="@string/alarm_name"
 			android:defaultValue=""
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
 			/>
 
 		<com.nfcalarmclock.NacDaysPreference
-			android:key="@string/pref_days_key"
-			android:title="@string/pref_days_title"
-			android:summary="@string/pref_days_summary"
-			android:defaultValue="62"
+			android:key="@string/alarm_days_key"
+			android:title="@string/alarm_days"
+			android:defaultValue="@integer/default_days"
 			app:allowDividerBelow="false"
 			/>
 
 		<com.nfcalarmclock.NacCheckboxPreference
-			android:key="@string/pref_repeat_key"
-			android:title="@string/pref_repeat_title"
-			android:summaryOn="@string/pref_repeat_summary_enabled"
-			android:summaryOff="@string/pref_repeat_summary_disabled"
-			android:defaultValue="true"
+			android:key="@string/alarm_repeat_key"
+			android:title="@string/alarm_repeat"
+			android:summaryOn="@string/alarm_repeat_true"
+			android:summaryOff="@string/alarm_repeat_false"
+			android:defaultValue="@bool/default_repeat"
 			app:allowDividerBelow="false"
 			/>
 
 		<com.nfcalarmclock.NacCheckboxPreference
-			android:key="@string/pref_use_nfc_key"
-			android:title="@string/pref_use_nfc_title"
-			android:summaryOn="@string/pref_use_nfc_summary_enabled"
-			android:summaryOff="@string/pref_use_nfc_summary_disabled"
-			android:defaultValue="false"
+			android:key="@string/alarm_use_nfc_key"
+			android:title="@string/alarm_use_nfc"
+			android:summaryOn="@string/alarm_use_nfc_true"
+			android:summaryOff="@string/alarm_use_nfc_false"
+			android:defaultValue="@bool/default_use_nfc"
 			app:allowDividerBelow="false"
 			/>
 
 		<com.nfcalarmclock.NacCheckboxPreference
-			android:key="@string/pref_vibrate_key"
-			android:title="@string/pref_vibrate_title"
-			android:summaryOn="@string/pref_vibrate_summary_enabled"
-			android:summaryOff="@string/pref_vibrate_summary_disabled"
-			android:defaultValue="true"
+			android:key="@string/alarm_vibrate_key"
+			android:title="@string/alarm_vibrate"
+			android:summaryOn="@string/alarm_vibrate_true"
+			android:summaryOff="@string/alarm_vibrate_false"
+			android:defaultValue="@bool/default_vibrate"
 			app:allowDividerBelow="false"
 			/>
 
 		<com.nfcalarmclock.NacMediaPreference
-			android:key="@string/pref_sound_key"
-			android:title="@string/pref_sound_title"
-			android:summary="@string/pref_sound_summary"
+			android:key="@string/alarm_sound_key"
+			android:title="@string/alarm_sound"
+			android:summary="@string/alarm_sound_summary"
 			android:defaultValue=""
 			app:allowDividerBelow="false"
 			/>
 
 		<com.nfcalarmclock.NacVolumePreference
-			android:key="@string/pref_volume_key"
-			android:title="@string/pref_volume_title"
-			android:defaultValue="75"
+			android:key="@string/alarm_volume_key"
+			android:title="@string/alarm_volume"
+			android:defaultValue="@integer/default_volume"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
 			/>

@@ -50,8 +50,9 @@ public class NacSettingsActivity
 	@Override
 	public void onBackStackChanged()
 	{
+		NacSharedConstants cons = new NacSharedConstants(this);
 		int count = this.getStackCount();
-		String title = "Settings";
+		String title = cons.getSettings();
 
 		if (count > 0)
 		{
@@ -99,11 +100,10 @@ public class NacSettingsActivity
 
 			NacSharedKeys keys = this.getKeys();
 			Resources res = getResources();
-			Preference appearance = findPreference(keys.getAppearanceScreen());
-			Preference general = findPreference(keys.getGeneralScreen());
-			Preference miscellaneous = findPreference(
-				keys.getMiscellaneousScreen());
-			Preference about = findPreference(keys.getAboutScreen());
+			Preference appearance = findPreference(keys.getAppearance());
+			Preference general = findPreference(keys.getGeneral());
+			Preference miscellaneous = findPreference(keys.getMiscellaneous());
+			Preference about = findPreference(keys.getAbout());
 
 			appearance.setIcon(this.createIconDrawable(R.mipmap.palette));
 			general.setIcon(this.createIconDrawable(R.mipmap.settings));
@@ -135,31 +135,30 @@ public class NacSettingsActivity
 		{
 			NacSharedKeys keys = this.getKeys();
 			String preferenceKey = preference.getKey();
-			//FragmentManager manager = getFragmentManager();
 			FragmentManager manager = getParentFragmentManager();
 			Fragment fragment;
 			String title;
 
-			if (preferenceKey.equals(keys.getGeneralScreen()))
+			if (preferenceKey.equals(keys.getGeneral()))
 			{
 				fragment = new NacGeneralSettingsFragment();
-				title = keys.getGeneralScreenTitle();
+				title = keys.getGeneralTitle();
 
 			}
-			else if (preferenceKey.equals(keys.getAppearanceScreen()))
+			else if (preferenceKey.equals(keys.getAppearance()))
 			{
 				fragment = new NacAppearanceSettingsFragment();
-				title = keys.getAppearanceScreenTitle();
+				title = keys.getAppearanceTitle();
 			}
-			else if (preferenceKey.equals(keys.getMiscellaneousScreen()))
+			else if (preferenceKey.equals(keys.getMiscellaneous()))
 			{
 				fragment = new NacMiscellaneousSettingsFragment();
-				title = keys.getMiscellaneousScreenTitle();
+				title = keys.getMiscellaneousTitle();
 			}
-			else if (preferenceKey.equals(keys.getAboutScreen()))
+			else if (preferenceKey.equals(keys.getAbout()))
 			{
 				fragment = new NacAboutSettingsFragment();
-				title = keys.getAboutScreenTitle();
+				title = keys.getAboutTitle();
 			}
 			else
 			{

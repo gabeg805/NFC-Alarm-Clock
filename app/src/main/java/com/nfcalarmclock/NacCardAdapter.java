@@ -128,7 +128,7 @@ public class NacCardAdapter
 		Context context = this.getContext();
 		NacSharedPreferences shared = this.getSharedPreferences();
 		int id = this.getUniqueId();
-		NacAlarm alarm = new NacAlarm.Builder()
+		NacAlarm alarm = new NacAlarm.Builder(context)
 			.setId(id)
 			.setRepeat(shared.getRepeat())
 			.setDays(shared.getDays())
@@ -150,7 +150,6 @@ public class NacCardAdapter
 	public int add(NacAlarm alarm)
 	{
 		int index = this.whereToPutAlarm(alarm);
-
 		return this.add(alarm, index);
 	}
 
@@ -173,7 +172,6 @@ public class NacCardAdapter
 		NacDatabase db = new NacDatabase(context);
 		int id = alarm.getId();
 
-		//this.getScheduler().update(alarm);
 		NacScheduler.update(context, alarm);
 		this.getSharedPreferences().editSnoozeCount(id, 0);
 		this.getAlarms().add(position, alarm);
@@ -275,9 +273,8 @@ public class NacCardAdapter
 		NacAlarm alarm = this.get(position);
 		int id = alarm.getId();
 
-		this.setWasAddedWithFloatingButton(false);
-		//this.getScheduler().cancel(alarm);
 		NacScheduler.cancel(context, alarm);
+		this.setWasAddedWithFloatingButton(false);
 		this.getSharedPreferences().editSnoozeCount(id, 0);
 		this.getAlarms().remove(position);
 		this.updateNotification();
@@ -641,9 +638,8 @@ public class NacCardAdapter
 			this.sortHighlight(alarm);
 		}
 
-		this.setWasAddedWithFloatingButton(false);
-		//this.getScheduler().update(alarm);
 		NacScheduler.update(context, alarm);
+		this.setWasAddedWithFloatingButton(false);
 		this.updateNotification();
 		db.update(alarm);
 		db.close();
