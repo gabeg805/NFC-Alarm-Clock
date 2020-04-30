@@ -65,7 +65,7 @@
 
 		<com.nfcalarmclock.NacCheckboxPreference
 			android:key="@string/missed_alarm_key"
-			android:title="@string/missed_alarm"
+			android:title="@string/missed_alarm_other"
 			android:summaryOn="@string/missed_alarm_true"
 			android:summaryOff="@string/missed_alarm_false"
 			android:defaultValue="@bool/default_missed_alarm"
@@ -75,7 +75,7 @@
 
 		<com.nfcalarmclock.NacCheckboxPreference
 			android:key="@string/upcoming_alarm_key"
-			android:title="@string/upcoming_alarm"
+			android:title="@string/upcoming_alarm_other"
 			android:summaryOn="@string/upcoming_alarm_true"
 			android:summaryOff="@string/upcoming_alarm_false"
 			android:defaultValue="@bool/default_upcoming_alarm"

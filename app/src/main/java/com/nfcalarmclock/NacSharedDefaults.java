@@ -153,6 +153,14 @@ public class NacSharedDefaults
 	}
 
 	/**
+	 * @return Previous volume.
+	 */
+	public int getPreviousVolume()
+	{
+		return this.getInteger(R.integer.default_previous_volume);
+	}
+
+	/**
 	 * @return Rate my app counter.
 	 */
 	public int getRateMyAppCounter()
@@ -198,6 +206,14 @@ public class NacSharedDefaults
 	public boolean getShufflePlaylist()
 	{
 		return this.getBoolean(R.bool.default_shuffle_playlist);
+	}
+
+	/**
+	 * @return Snooze count.
+	 */
+	public int getSnoozeCount()
+	{
+		return this.getInteger(R.integer.default_snooze_count);
 	}
 
 	/**

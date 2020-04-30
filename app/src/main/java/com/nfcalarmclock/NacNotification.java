@@ -17,6 +17,7 @@ import androidx.core.app.NotificationManagerCompat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Notification for the app to keep it in memory.
@@ -76,7 +77,8 @@ public abstract class NacNotification
 	{
 		Context context = this.getContext();
 		PendingIntent pending = this.getMainActivityIntent(context);
-		String title = "<b>"+this.getTitle()+"</b>";
+		Locale locale = Locale.getDefault();
+		String title = String.format(locale, "<b>%1$s</b>", this.getTitle());
 		Spanned boldTitle;
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)

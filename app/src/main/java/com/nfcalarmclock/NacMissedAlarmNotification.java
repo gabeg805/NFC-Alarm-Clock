@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  */
@@ -28,11 +29,6 @@ public class NacMissedAlarmNotification
 	 * Group.
 	 */
 	protected static final String MISSED_GROUP = "NacNotiGroupMissed";
-
-	/**
-	 * Title of this type of notification.
-	 */
-	protected static final String MISSED_TITLE = "Missed Alarms";
 
 	/**
 	 * Notification ID.
@@ -56,7 +52,6 @@ public class NacMissedAlarmNotification
 	public NacMissedAlarmNotification(Context context)
 	{
 		super(context);
-
 		this.mLines = null;
 	}
 
@@ -71,19 +66,18 @@ public class NacMissedAlarmNotification
 		}
 
 		Context context = this.getContext();
-		Resources res = context.getResources();
-		CharSequence name = res.getString(R.string.missed_alarm);
-		String description = res.getString(R.string.missed_alarm_description);
+		NacSharedConstants cons = new NacSharedConstants(context);
 		NotificationChannel channel = new NotificationChannel(MISSED_CHANNEL,
-			name, NotificationManager.IMPORTANCE_DEFAULT);
+			cons.getMissedNotification(),
+			NotificationManager.IMPORTANCE_DEFAULT);
 		NotificationManager manager = context.getSystemService(
 			NotificationManager.class);
 
-		channel.setDescription(description);
+		channel.setDescription(cons.getMissedNotificationDescription());
 		channel.setShowBadge(true);
 		channel.enableLights(true);
 		channel.enableVibration(true);
-		channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+		channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
 		manager.createNotificationChannel(channel);
 	}
 
@@ -111,8 +105,10 @@ public class NacMissedAlarmNotification
 		Context context = this.getContext();
 		String time = alarm.getFullTime(context);
 		String name = alarm.getName();
+		Locale locale = Locale.getDefault();
 
-		return (name.isEmpty()) ? time : time+"  —  "+name;
+		return (name.isEmpty()) ? time
+			: String.format(locale, "%1$s  —  %2$s", time, name);
 	}
 
 	/**
@@ -120,11 +116,12 @@ public class NacMissedAlarmNotification
 	 */
 	public String getTitle()
 	{
+		Context context = this.getContext();
 		List<CharSequence> lines = this.getLines();
-		String title = MISSED_TITLE;
+		NacSharedConstants cons = new NacSharedConstants(context);
+		int count = (lines == null) ? 1 : lines.size();
 
-		return ((lines == null) || (lines.size() == 1)) ?
-			title.substring(0, title.length()-1) : title;
+		return cons.getMissedAlarm(count);
 	}
 
 	/**
@@ -134,7 +131,6 @@ public class NacMissedAlarmNotification
 	{
 		Context context = this.getContext();
 		NotificationManagerCompat manager = this.getNotificationManager(context);
-
 		manager.cancel(MISSED_ID);
 	}
 
@@ -173,9 +169,14 @@ public class NacMissedAlarmNotification
 		{
 			manager.cancel(MISSED_ID);
 		}
-		else if (lines.size() > 0)
+		else if (size > 0)
 		{
-			builder.setContentText(String.valueOf(lines.size())+" alarms");
+			NacSharedConstants cons = new NacSharedConstants(context);
+			Locale locale = Locale.getDefault();
+			String word = cons.getAlarm(size);
+			String content = String.format(locale, "%1$d %2$s", size, word);
+
+			builder.setContentText(content);
 		}
 
 		builder.setStyle(inbox);

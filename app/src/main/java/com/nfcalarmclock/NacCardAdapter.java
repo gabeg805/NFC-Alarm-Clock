@@ -45,11 +45,6 @@ public class NacCardAdapter
 	private RecyclerView mRecyclerView;
 
 	/**
-	 * Shared constants.
-	 */
-	private NacSharedConstants mSharedConstants;
-
-	/**
 	 * Shared preferences.
 	 */
 	private NacSharedPreferences mSharedPreferences;
@@ -111,7 +106,6 @@ public class NacCardAdapter
 			R.id.activity_main);
 		this.mRecyclerView = (RecyclerView) this.getRoot().findViewById(
 			R.id.content_alarm_list);
-		this.mSharedConstants = new NacSharedConstants(context);
 		this.mSharedPreferences = new NacSharedPreferences(context);
 		this.mTouchHelper = new NacCardTouchHelper(callback);
 		this.mUndo = new Undo();
@@ -169,10 +163,10 @@ public class NacCardAdapter
 	public int add(NacAlarm alarm, int position)
 	{
 		Context context = this.getContext();
+		NacSharedConstants cons = this.getSharedConstants();
 
-		if ((position+1) >= NacSharedPreferences.DEFAULT_MAX_ALARMS)
+		if ((position+1) >= cons.getMaxAlarms())
 		{
-			NacSharedConstants cons = this.getSharedConstants();
 			NacUtility.quickToast(context, cons.getMaxAlarmsError());
 			return -1;
 		}
@@ -261,8 +255,12 @@ public class NacCardAdapter
 		if (result == 0)
 		{
 			NacSharedConstants cons = this.getSharedConstants();
+			Locale locale = Locale.getDefault();
+			String message = String.format(locale, "%1$s.",
+				cons.getCopiedAlarm());
+
 			this.undo(copy, position+1, Undo.Type.COPY);
-			this.snackbar(cons.getCopiedAlarm()+".");
+			this.snackbar(message);
 		}
 
 		this.setWasAddedWithFloatingButton(false);
@@ -282,6 +280,9 @@ public class NacCardAdapter
 		NacDatabase db = new NacDatabase(context);
 		NacAlarm alarm = this.get(position);
 		int id = alarm.getId();
+		Locale locale = Locale.getDefault();
+		String message = String.format(locale, "%1$s.",
+			cons.getDeletedAlarm());
 
 		NacScheduler.cancel(context, alarm);
 		this.setWasAddedWithFloatingButton(false);
@@ -292,7 +293,7 @@ public class NacCardAdapter
 		db.delete(alarm);
 		db.close();
 		this.undo(alarm, position, Undo.Type.DELETE);
-		this.snackbar(cons.getDeletedAlarm()+".");
+		this.snackbar(message);
 
 		return 0;
 	}
@@ -425,7 +426,7 @@ public class NacCardAdapter
 	 */
 	private NacSharedConstants getSharedConstants()
 	{
-		return this.mSharedConstants;
+		return this.getSharedPreferences().getConstants();
 	}
 
 	/**
@@ -823,8 +824,12 @@ public class NacCardAdapter
 		if (result == 0)
 		{
 			NacSharedConstants cons = this.getSharedConstants();
+			Locale locale = Locale.getDefault();
+			String message = String.format(locale, "%1$s.",
+				cons.getRestoredAlarm());
+
 			this.undo(alarm, position, Undo.Type.RESTORE);
-			this.snackbar(cons.getRestoredAlarm()+".");
+			this.snackbar(message);
 		}
 
 		this.setWasAddedWithFloatingButton(false);
@@ -863,13 +868,7 @@ public class NacCardAdapter
 
 		NacSharedConstants cons = this.getSharedConstants();
 		NacSharedPreferences shared = this.getSharedPreferences();
-		Locale locale = Locale.getDefault();
-		String willRun = cons.getWillRun();
-		String name = alarm.getNameNormalizedForMessage();
-		String prefix = name.isEmpty() ? willRun
-			: String.format(locale, "\"%1$s\" %2$s", name,
-				willRun.toLowerCase(locale));
-		String message = NacCalendar.getMessage(prefix, shared, alarm);
+		String message = NacCalendar.getMessageWillRun(shared, alarm);
 
 		this.snackbar(message, cons.getDismiss(), null, true);
 	}
@@ -914,7 +913,7 @@ public class NacCardAdapter
 		NacSharedConstants cons = this.getSharedConstants();
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getNextAlarm();
-		String message = NacCalendar.getNextMessage(shared, alarm);
+		String message = NacCalendar.getMessageNextAlarm(shared, alarm);
 
 		if (alarm == null)
 		{

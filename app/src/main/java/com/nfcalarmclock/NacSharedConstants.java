@@ -31,6 +31,30 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Active notification.
+	 */
+	public String getActiveNotification()
+	{
+		return this.getString(R.string.active_alarm_other);
+	}
+
+	/**
+	 * @return Active notification description.
+	 */
+	public String getActiveNotificationDescription()
+	{
+		return this.getString(R.string.active_alarm_description);
+	}
+
+	/**
+	 * @return Alarm word.
+	 */
+	public String getAlarm(int quantity)
+	{
+		return this.getPluralString(R.plurals.alarm, quantity);
+	}
+
+	/**
 	 * @return The app name.
 	 */
 	public String getAppName()
@@ -197,6 +221,22 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Is disabled.
+	 */
+	public String getIsDisabled()
+	{
+		return this.getString(R.string.is_disabled);
+	}
+
+	/**
+	 * @return Max alarms.
+	 */
+	public int getMaxAlarms()
+	{
+		return this.getInteger(R.integer.max_alarms);
+	}
+
+	/**
 	 * @return Max alarm error.
 	 */
 	public String getMaxAlarmsError()
@@ -210,6 +250,38 @@ public class NacSharedConstants
 	public String getMaxSnooze()
 	{
 		return this.getString(R.string.max_snooze);
+	}
+
+	/**
+	 * @return Name length.
+	 */
+	public int getMessageNameLength()
+	{
+		return this.getInteger(R.integer.max_message_name_length);
+	}
+
+	/**
+	 * @return Missed alarm.
+	 */
+	public String getMissedAlarm(int quantity)
+	{
+		return this.getPluralString(R.plurals.missed_alarm, quantity);
+	}
+
+	/**
+	 * @return Missed notification.
+	 */
+	public String getMissedNotification()
+	{
+		return this.getString(R.string.missed_alarm_other);
+	}
+
+	/**
+	 * @return Missed notification description.
+	 */
+	public String getMissedNotificationDescription()
+	{
+		return this.getString(R.string.missed_alarm_description);
 	}
 
 	/**
@@ -245,6 +317,14 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Next alarm.
+	 */
+	public String getNextAlarm()
+	{
+		return this.getString(R.string.next_alarm);
+	}
+
+	/**
 	 * @return NFC request.
 	 */
 	public String getNfcRequest()
@@ -269,11 +349,27 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return No alarms.
+	 */
+	public String getNoAlarms()
+	{
+		return this.getString(R.string.no_alarms);
+	}
+
+	/**
 	 * @return None.
 	 */
 	public String getNone()
 	{
 		return this.getString(R.string.none);
+	}
+
+	/**
+	 * @return Off.
+	 */
+	public String getOff()
+	{
+		return this.getString(R.string.off);
 	}
 
 	/**
@@ -560,6 +656,22 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Time in.
+	 */
+	public String getTimeIn()
+	{
+		return this.getString(R.string.time_in);
+	}
+
+	/**
+	 * @return Time on.
+	 */
+	public String getTimeOn()
+	{
+		return this.getString(R.string.time_on);
+	}
+
+	/**
 	 * @return Today.
 	 */
 	public String getToday()
@@ -584,11 +696,67 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Unit day.
+	 */
+	public String getUnitDay(int quantity)
+	{
+		return this.getPluralString(R.plurals.unit_day, quantity);
+	}
+
+	/**
+	 * @return Unit hour.
+	 */
+	public String getUnitHour(int quantity)
+	{
+		return this.getPluralString(R.plurals.unit_hour, quantity);
+	}
+
+	/**
+	 * @return Unit minute.
+	 */
+	public String getUnitMinute(int quantity)
+	{
+		return this.getPluralString(R.plurals.unit_minute, quantity);
+	}
+
+	/**
+	 * @return Unit second.
+	 */
+	public String getUnitSecond(int quantity)
+	{
+		return this.getPluralString(R.plurals.unit_second, quantity);
+	}
+
+	/**
 	 * @return Unknown.
 	 */
 	public String getUnknown()
 	{
 		return this.getString(R.string.unknown);
+	}
+
+	/**
+	 * @return Upcoming alarm.
+	 */
+	public String getUpcomingAlarm(int quantity)
+	{
+		return this.getPluralString(R.plurals.upcoming_alarm, quantity);
+	}
+
+	/**
+	 * @return Upcoming notification.
+	 */
+	public String getUpcomingNotification()
+	{
+		return this.getString(R.string.upcoming_alarm_other);
+	}
+
+	/**
+	 * @return Upcoming notification description.
+	 */
+	public String getUpcomingNotificationDescription()
+	{
+		return this.getString(R.string.upcoming_alarm_description);
 	}
 
 	/**

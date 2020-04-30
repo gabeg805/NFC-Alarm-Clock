@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  */
@@ -77,8 +78,11 @@ public class NacFile
 		{
 			String dir = this.getDirectory();
 			String name = this.getName();
+			Locale locale = Locale.getDefault();
 
-			return dir.isEmpty() ? name : String.format("%s/%s", dir, name);
+			return dir.isEmpty()
+				? name
+				: String.format(locale, "%1$s/%2$s", dir, name);
 		}
 
 		/**
@@ -291,6 +295,7 @@ public class NacFile
 
 			NacTreeNode<String> ref = node;
 			String path = "";
+			Locale locale = Locale.getDefault();
 
 			while (ref != null)
 			{
@@ -302,7 +307,7 @@ public class NacFile
 				}
 				else if (!key.isEmpty())
 				{
-					path = String.format("%s/%s", key, path);
+					path = String.format(locale, "%1$s/%2$s", key, path);
 				}
 
 				ref = ref.getRoot();

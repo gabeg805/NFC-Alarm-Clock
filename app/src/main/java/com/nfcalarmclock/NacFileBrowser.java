@@ -381,7 +381,6 @@ public class NacFileBrowser
 		if (!path.isEmpty())
 		{
 			NacFile.Metadata metadata = new NacFile.Metadata(path, "..", -1);
-
 			this.addDirectory(metadata);
 		}
 

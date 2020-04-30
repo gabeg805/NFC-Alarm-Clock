@@ -16,6 +16,7 @@ import android.text.Spanned;
 import androidx.core.app.NotificationCompat;
 import java.lang.Float;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Notification to display for active alarms.
@@ -112,19 +113,18 @@ public class NacActiveAlarmNotification
 		}
 
 		Context context = this.getContext();
-		Resources res = context.getResources();
-		CharSequence name = res.getString(R.string.active_alarm);
-		String description = res.getString(R.string.active_alarm_description);
-		NotificationChannel channel = new NotificationChannel(CHANNEL, name,
+		NacSharedConstants cons = new NacSharedConstants(context);
+		NotificationChannel channel = new NotificationChannel(CHANNEL,
+			cons.getActiveNotification(),
 			NotificationManager.IMPORTANCE_HIGH);
 		NotificationManager manager = context.getSystemService(
 			NotificationManager.class);
 
-		channel.setDescription(description);
+		channel.setDescription(cons.getActiveNotificationDescription());
 		channel.setShowBadge(true);
 		channel.enableLights(true);
 		channel.enableVibration(true);
-		channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+		channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
 		manager.createNotificationChannel(channel);
 	}
 
@@ -227,16 +227,15 @@ public class NacActiveAlarmNotification
 	 */
 	public String getText()
 	{
+		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
 		Calendar now = Calendar.getInstance();
-		String text = NacCalendar.toString(now, "EEE h:mm a");
+		String time = NacCalendar.Time.getFullTime(context, now);
+		String name = alarm.getName();
+		Locale locale = Locale.getDefault();
 
-		if ((alarm != null) && !alarm.getName().isEmpty())
-		{
-			text = alarm.getName() + " - " + text;
-		}
-
-		return text;
+		return name.isEmpty() ? time
+			: String.format(locale, "%1$s  —  %2$s", time, name);
 	}
 
 	/**
@@ -248,7 +247,8 @@ public class NacActiveAlarmNotification
 	{
 		Context context = this.getContext();
 		NacSharedConstants cons = new NacSharedConstants(context);
-		String title = "<b>" + cons.getAppName() + "</b>";
+		Locale locale = Locale.getDefault();
+		String title = String.format(locale, "<b>%s</b>", cons.getAppName());
 
 		return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
 			? Html.fromHtml(title, Html.FROM_HTML_MODE_LEGACY)

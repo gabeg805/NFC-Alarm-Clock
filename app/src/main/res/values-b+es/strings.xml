@@ -15,9 +15,39 @@
 	<string name="delete_alarm">Borrar</string>
 	<string name="settings">Configuración</string>
 	<string name="show_next_alarm">Muestra próxima alarma</string>
-	<string name="upcoming_alarm">Alarmas próximas</string>
-	<string name="missed_alarm">Alarmas perdidas</string>
-	<string name="active_alarm">Alarmas activadas</string>
+
+	<string name="alarm_one">alarma</string>
+	<string name="alarm_other">alarmas</string>
+	<plurals name="alarm">
+		<item quantity="one">@string/alarm_one</item>
+		<item quantity="other">@string/alarm_other</item>
+	</plurals>
+
+	<string name="upcoming_alarm_one">Próxima alarma</string>
+	<string name="upcoming_alarm_other">Próximas alarmas</string>
+	<plurals name="upcoming_alarm">
+		<item quantity="one">@string/upcoming_alarm_one</item>
+		<item quantity="other">@string/upcoming_alarm_other</item>
+	</plurals>
+
+	<string name="missed_alarm_one">Alarma perdida</string>
+	<string name="missed_alarm_other">Alarmas perdidas</string>
+	<plurals name="missed_alarm">
+		<item quantity="one">@string/missed_alarm_one</item>
+		<item quantity="other">@string/missed_alarm_other</item>
+	</plurals>
+
+	<string name="active_alarm_one">Alarma activa</string>
+	<string name="active_alarm_other">Alarmas activas</string>
+	<plurals name="active_alarm">
+		<item quantity="one">@string/active_alarm_one</item>
+		<item quantity="other">@string/active_alarm_other</item>
+	</plurals>
+
+	<!--<string name="upcoming_alarm">Alarmas próximas</string>-->
+	<!--<string name="missed_alarm">Alarmas perdidas</string>-->
+	<!--<string name="active_alarm">Alarmas activadas</string>-->
+
 	<string name="upcoming_alarm_description">Alarmas programadas.</string>
 	<string name="missed_alarm_description">Alarmas desactivadas automaticamente.</string>
 	<string name="active_alarm_description">Alarmas que están activas.</string>
@@ -55,6 +85,40 @@
 	<string name="select_format">Selecciona un estilo</string>
 	<string name="folder_selected">Seleccionaste una carpeta</string>
 	<string name="nfc_request">Por favor, habilite la NFC para descartar la alarma</string>
+	<string name="no_alarms">No hay alarmas programadas</string>
+	<string name="next_alarm">@string/upcoming_alarm_one</string>
+	<string name="time_in">en</string>
+	<string name="time_on"></string>
+	<string name="is_disabled">está desactivada</string>
+	<string name="off">Desactivada</string>
+
+	<string name="unit_day_one">día</string>
+	<string name="unit_day_other">días</string>
+	<plurals name="unit_day">
+		<item quantity="one">@string/unit_day_one</item>
+		<item quantity="other">@string/unit_day_other</item>
+	</plurals>
+
+	<string name="unit_hour_one">hora</string>
+	<string name="unit_hour_other">horas</string>
+	<plurals name="unit_hour">
+		<item quantity="one">@string/unit_hour_one</item>
+		<item quantity="other">@string/unit_hour_other</item>
+	</plurals>
+
+	<string name="unit_minute_one">minuto</string>
+	<string name="unit_minute_other">minutos</string>
+	<plurals name="unit_minute">
+		<item quantity="one">@string/unit_minute_one</item>
+		<item quantity="other">@string/unit_minute_other</item>
+	</plurals>
+
+	<string name="unit_second_one">segundo</string>
+	<string name="unit_second_other">segundos</string>
+	<plurals name="unit_second">
+		<item quantity="one">@string/unit_second_one</item>
+		<item quantity="other">@string/unit_second_other</item>
+	</plurals>
 
 
 	<!-- Alarm Activity -->
@@ -287,8 +351,8 @@
 	<!-- Time remaining format -->
 	<string name="next_alarm_format">Estilo de la proxima alarma&#8230;</string>
 	<string name="next_alarm_format_key">pref_time_remaining_format</string>
-	<string name="next_alarm_format_countdown">Proxima alarma en 7 horas 30 minutos</string>
-	<string name="next_alarm_format_time">Proxima alarma Lun, 7:00 AM</string>
+	<string name="next_alarm_format_time_in">Próxima alarma en 7 horas 30 minutos</string>
+	<string name="next_alarm_format_time_on">Próxima alarma Lun 7:00 AM</string>
 
 
 	<!-- Start Week On -->

@@ -15,9 +15,39 @@
 	<string name="delete_alarm">Delete</string>
 	<string name="settings">Settings</string>
 	<string name="show_next_alarm">Show next alarm</string>
-	<string name="upcoming_alarm">Upcoming alarms</string>
-	<string name="missed_alarm">Missed alarms</string>
-	<string name="active_alarm">Active alarms</string>
+
+	<string name="alarm_one">alarm</string>
+	<string name="alarm_other">alarms</string>
+	<plurals name="alarm">
+		<item quantity="one">@string/alarm_one</item>
+		<item quantity="other">@string/alarm_other</item>
+	</plurals>
+
+	<string name="upcoming_alarm_one">Upcoming alarm</string>
+	<string name="upcoming_alarm_other">Upcoming alarms</string>
+	<plurals name="upcoming_alarm">
+		<item quantity="one">@string/upcoming_alarm_one</item>
+		<item quantity="other">@string/upcoming_alarm_other</item>
+	</plurals>
+
+	<string name="missed_alarm_one">Missed alarm</string>
+	<string name="missed_alarm_other">Missed alarms</string>
+	<plurals name="missed_alarm">
+		<item quantity="one">@string/missed_alarm_one</item>
+		<item quantity="other">@string/missed_alarm_other</item>
+	</plurals>
+
+	<string name="active_alarm_one">Active alarm</string>
+	<string name="active_alarm_other">Active alarms</string>
+	<plurals name="active_alarm">
+		<item quantity="one">@string/active_alarm_one</item>
+		<item quantity="other">@string/active_alarm_other</item>
+	</plurals>
+
+	<!--<string name="upcoming_alarm">Upcoming alarms</string>-->
+	<!--<string name="missed_alarm">Missed alarms</string>-->
+	<!--<string name="active_alarm">Active alarms</string>-->
+
 	<string name="upcoming_alarm_description">Alarms that are scheduled.</string>
 	<string name="missed_alarm_description">Alarms that have been automatically dismissed.</string>
 	<string name="active_alarm_description">Alarms that are currently active.</string>
@@ -55,6 +85,40 @@
 	<string name="select_format">Select a format</string>
 	<string name="folder_selected">You selected a folder</string>
 	<string name="nfc_request">Please enable NFC to dismiss the alarm</string>
+	<string name="no_alarms">No alarms scheduled</string>
+	<string name="next_alarm">Next alarm</string>
+	<string name="time_in">in</string>
+	<string name="time_on">on</string>
+	<string name="is_disabled">is disabled</string>
+	<string name="off">Off</string>
+
+	<string name="unit_day_one">day</string>
+	<string name="unit_day_other">days</string>
+	<plurals name="unit_day">
+		<item quantity="one">@string/unit_day_one</item>
+		<item quantity="other">@string/unit_day_other</item>
+	</plurals>
+
+	<string name="unit_hour_one">hour</string>
+	<string name="unit_hour_other">hours</string>
+	<plurals name="unit_hour">
+		<item quantity="one">@string/unit_hour_one</item>
+		<item quantity="other">@string/unit_hour_other</item>
+	</plurals>
+
+	<string name="unit_minute_one">minute</string>
+	<string name="unit_minute_other">minutes</string>
+	<plurals name="unit_minute">
+		<item quantity="one">@string/unit_minute_one</item>
+		<item quantity="other">@string/unit_minute_other</item>
+	</plurals>
+
+	<string name="unit_second_one">second</string>
+	<string name="unit_second_other">seconds</string>
+	<plurals name="unit_second">
+		<item quantity="one">@string/unit_second_one</item>
+		<item quantity="other">@string/unit_second_other</item>
+	</plurals>
 
 
 	<!-- Alarm Activity -->
@@ -287,8 +351,8 @@
 	<!-- Time remaining format -->
 	<string name="next_alarm_format">Next alarm format&#8230;</string>
 	<string name="next_alarm_format_key">pref_time_remaining_format</string>
-	<string name="next_alarm_format_countdown">Next alarm in 7 hours 30 minutes</string>
-	<string name="next_alarm_format_time">Next alarm on Mon, 7:00 AM</string>
+	<string name="next_alarm_format_time_in">Next alarm in 7 hours 30 minutes</string>
+	<string name="next_alarm_format_time_on">Next alarm on Mon 7:00 AM</string>
 
 
 	<!-- Start Week On -->

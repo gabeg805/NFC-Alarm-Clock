@@ -446,13 +446,14 @@ public class NacMedia
 		manager.setType(RingtoneManager.TYPE_ALARM);
 
 		Cursor c = manager.getCursor();
+		Locale locale = Locale.getDefault();
 
 		while (c.moveToNext())
 		{
 			String title = c.getString(RingtoneManager.TITLE_COLUMN_INDEX);
 			String id = c.getString(RingtoneManager.ID_COLUMN_INDEX);
 			String dir = c.getString(RingtoneManager.URI_COLUMN_INDEX);
-			String path = String.format("%s/%s", dir, id);
+			String path = String.format(locale, "%1$s/%2$s", dir, id);
 
 			if (ringtones.containsKey(title))
 			{

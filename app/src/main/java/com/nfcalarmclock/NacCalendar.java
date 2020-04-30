@@ -76,101 +76,130 @@ public class NacCalendar
 	/**
 	 * @see getMessage
 	 */
-	public static String getMessage(String prefix, Calendar next)
+	public static String getMessageTimeOn(Context context, Calendar calendar,
+		String prefix)
 	{
-		return prefix + " on " + NacCalendar.toString(next, "EEE h:mm a");
-		//return "Next alarm on " + NacCalendar.toString(next, "EEE h:mm a");
+		NacSharedConstants cons = new NacSharedConstants(context);
+		String time = NacCalendar.Time.getFullTime(context, calendar);
+		Locale locale = Locale.getDefault();
+
+		return String.format(locale, "%1$s %2$s %3$s", prefix,
+			cons.getTimeOn(), time);
 	}
 
 	/**
 	 * @see getMessage
 	 */
-	public static String getMessage(String prefix, long millis)
+	public static String getMessageTimeIn(Context context, Calendar calendar,
+		String prefix)
 	{
-		long time = (millis - System.currentTimeMillis())
-			/ 1000;
+		NacSharedConstants cons = new NacSharedConstants(context);
+		long millis = calendar.getTimeInMillis();
+		long time = (millis - System.currentTimeMillis()) / 1000;
 		long day = (time / (60*60*24)) % 365;
 		long hr = (time / (60*60)) % 24;
 		long min = (time / 60) % 60;
 		long sec = time % 60;
-		String dayunit = (day != 1) ? "days"    : "day";
-		String hrunit  = (hr  != 1) ? "hours"   : "hour";
-		String minunit = (min != 1) ? "minutes" : "minute";
-		String secunit = (sec != 1) ? "seconds" : "second";
-		String msg = prefix + " in ";
+		String dayunit = cons.getUnitDay((int)day);
+		String hrunit  = cons.getUnitHour((int)hr);
+		String minunit = cons.getUnitMinute((int)min);
+		String secunit = cons.getUnitSecond((int)sec);
+		String timeRemaining;
 		String format = "%1$d %2$s %3$d %4$s";
 		Locale locale = Locale.getDefault();
 
 		if (day > 0)
 		{
-			msg += String.format(locale, format, day, dayunit, hr, hrunit);
+			timeRemaining = String.format(locale, format, day, dayunit, hr,
+				hrunit);
 		}
 		else
 		{
 			if (hr > 0)
 			{
-				msg += String.format(locale, format, hr, hrunit, min, minunit);
+				timeRemaining = String.format(locale, format, hr, hrunit, min,
+					minunit);
 			}
 			else
 			{
-				if (min > 0)
-				{
-					msg += String.format(locale, format, min, minunit, sec,
-						secunit);
-				}
-				else
-				{
-					msg += String.format(locale, format.substring(0, 9), sec,
-						secunit);
-				}
+				format = (min > 0) ? format : format.substring(10, 19);
+				timeRemaining = String.format(locale, format, min, minunit,
+					sec, secunit);
 			}
 		}
 
-		return msg;
+		return String.format(locale, "%1$s %2$s %3$s", prefix,
+			cons.getTimeIn(), timeRemaining);
 	}
 
 	/**
 	 * @see getMessage
 	 */
-	public static String getMessage(String prefix, NacSharedPreferences shared,
-		NacAlarm alarm)
+	public static String getMessage(NacSharedPreferences shared,
+		NacAlarm alarm, String prefix)
 	{
+		NacSharedConstants cons = shared.getConstants();
 		Calendar calendar = NacCalendar.getNext(alarm);
+		Locale locale = Locale.getDefault();
 
 		if ((shared == null) || (alarm == null) || (calendar == null))
 		{
-			return "No scheduled alarms.";
+			return String.format(locale, "%1$s.", cons.getNoAlarms());
 		}
 		else if (!alarm.getEnabled())
 		{
-			String name = alarm.getNameNormalizedForMessage();
+			int length = cons.getMessageNameLength();
+			String name = alarm.getNameNormalizedForMessage(length);
+			String isDisabled = cons.getIsDisabled();
+			String alarmWord = NacUtility.capitalize(cons.getAlarm(1));
 
-			return String.format("\"%1$s\" is disabled.", name);
-		}
-
-		int nextAlarmFormat = shared.getNextAlarmFormat();
-		long millis = calendar.getTimeInMillis();
-
-		return NacCalendar.getMessage(prefix, millis, nextAlarmFormat);
-	}
-
-	/**
-	 * @return The message to display.
-	 */
-	public static String getMessage(String prefix, long millis, int format)
-	{
-		if (format == 0)
-		{
-			return NacCalendar.getMessage(prefix, millis);
+			return name.isEmpty()
+				? String.format(locale, "%1$s %2$s.", alarmWord, isDisabled)
+				: String.format(locale, "\"%1$s\" %2$s.", name, isDisabled);
 		}
 		else
 		{
-			Calendar calendar = Calendar.getInstance();
+			Context context = shared.getContext();
+			int messageFormat = shared.getNextAlarmFormat();
 
-			calendar.setTimeInMillis(millis);
-
-			return NacCalendar.getMessage(prefix, calendar);
+			if (messageFormat == 0)
+			{
+				return NacCalendar.getMessageTimeIn(context, calendar, prefix);
+			}
+			else
+			{
+				return NacCalendar.getMessageTimeOn(context, calendar, prefix);
+			}
 		}
+	}
+
+	/**
+	 * @return The message to display when the next alarm will occur.
+	 */
+	public static String getMessageNextAlarm(NacSharedPreferences shared,
+		NacAlarm alarm)
+	{
+		NacSharedConstants cons = shared.getConstants();
+		String prefix = cons.getNextAlarm();
+		return NacCalendar.getMessage(shared, alarm, prefix);
+	}
+
+	/**
+	 * @return The message to display when the alarm will run.
+	 */
+	public static String getMessageWillRun(NacSharedPreferences shared,
+		NacAlarm alarm)
+	{
+		NacSharedConstants cons = shared.getConstants();
+		int length = cons.getMessageNameLength();
+		Locale locale = Locale.getDefault();
+		String willRun = cons.getWillRun();
+		String name = alarm.getNameNormalizedForMessage(length);
+		String prefix = name.isEmpty() ? willRun
+			: String.format(locale, "\"%1$s\" %2$s", name,
+				willRun.toLowerCase(locale));
+
+		return NacCalendar.getMessage(shared, alarm, prefix);
 	}
 
 	/**
@@ -227,39 +256,6 @@ public class NacCalendar
 		}
 
 		return nextAlarm;
-	}
-
-	/**
-	 * @return The message to display when the next action will occur.
-	 */
-	public static String getNextMessage(Calendar next)
-	{
-		return NacCalendar.getMessage("Next alarm", next);
-	}
-
-	/**
-	 * @return The message to display when the next action will occur.
-	 */
-	public static String getNextMessage(long millis)
-	{
-		return NacCalendar.getMessage("Next alarm", millis);
-	}
-
-	/**
-	 * @see getNextMessage
-	 */
-	public static String getNextMessage(NacSharedPreferences shared,
-		NacAlarm alarm)
-	{
-		return NacCalendar.getMessage("Next alarm", shared, alarm);
-	}
-
-	/**
-	 * @return The next message in the desired format.
-	 */
-	public static String getNextMessage(long millis, int format)
-	{
-		return NacCalendar.getMessage("Next alarm", millis, format);
 	}
 
 	/**
@@ -406,10 +402,9 @@ public class NacCalendar
 	 */
 	public static String toString(Calendar calendar, String format)
 	{
-		SimpleDateFormat formatter = new SimpleDateFormat(format,
-			Locale.getDefault());
+		Locale locale = Locale.getDefault();
+		SimpleDateFormat formatter = new SimpleDateFormat(format, locale);
 		Date date = calendar.getTime();
-
 		return formatter.format(date);
 	}
 
@@ -787,11 +782,8 @@ public class NacCalendar
 				hour = NacCalendar.Time.to12HourFormat(hour);
 			}
 
-			String hourString = String.valueOf(hour);
-			String minuteString = String.format(Locale.getDefault(), "%02d",
-				minute);
-
-			return hourString + ":" + minuteString;
+			Locale locale = Locale.getDefault();
+			return String.format(locale, "%1$d:%2$02d", hour, minute);
 		}
 
 		/**
@@ -799,11 +791,17 @@ public class NacCalendar
 		 */
 		public static String getFullTime(Context context, Calendar calendar)
 		{
-			String date = NacCalendar.toString(calendar, "EEE h:mm");
+			String format = NacCalendar.Time.is24HourFormat(context)
+				? "EEE HH:mm" : "EEE hh:mm a";
 			int hour = calendar.get(Calendar.HOUR_OF_DAY);
-			String meridian = NacCalendar.Time.getMeridian(context, hour);
+			int convertedHour = NacCalendar.Time.to12HourFormat(hour);
 
-			return (!meridian.isEmpty()) ? date+" "+meridian : date;
+			if (convertedHour < 10)
+			{
+				format = format.replaceFirst("h", " ");
+			}
+
+			return NacCalendar.toString(calendar, format);
 		}
 
 		/**
@@ -853,8 +851,10 @@ public class NacCalendar
 		{
 			String time = NacCalendar.Time.getClockTime(context, hour, minute);
 			String meridian = NacCalendar.Time.getMeridian(context, hour);
+			Locale locale = Locale.getDefault();
 
-			return !meridian.isEmpty() ? time+" "+meridian : time;
+			return meridian.isEmpty() ? time
+				: String.format(locale, "%1$s %2$s", time, meridian);
 		}
 
 		/**

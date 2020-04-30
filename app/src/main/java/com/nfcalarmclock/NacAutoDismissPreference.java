@@ -48,7 +48,8 @@ public class NacAutoDismissPreference
 	@Override
 	public CharSequence getSummary()
 	{
-		return NacSharedPreferences.getAutoDismissSummary(this.mValue);
+		Context context = getContext();
+		return NacSharedPreferences.getAutoDismissSummary(context, this.mValue);
 	}
 
 	/**

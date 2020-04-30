@@ -39,13 +39,15 @@ public class NacAutoDismissDialog
 	{
 		super.onShowDialog(dialog, root);
 
+		Context context = getContext();
 		int index = this.getDataInt();
 		int length = 17;
 		String[] values = new String[length];
 
 		for (int i=0; i < length; i++)
 		{
-			String summary = NacSharedPreferences.getAutoDismissSummary(i);
+			String summary = NacSharedPreferences.getAutoDismissSummary(
+				context, i);
 			values[i] = summary.split("\\s+")[0];
 		}
 

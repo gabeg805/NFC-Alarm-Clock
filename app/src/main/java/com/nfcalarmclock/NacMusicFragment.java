@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
+import java.util.Locale;
 
 /**
  * Display a browser for the user to browse for music files.
@@ -154,7 +155,9 @@ public class NacMusicFragment
 	{
 		if (metadata.isDirectory())
 		{
-			String textPath = path.isEmpty() ? "" : String.format("%s/", path);
+			Locale locale = Locale.getDefault();
+			String textPath = path.isEmpty() ? ""
+				: String.format(locale, "%1$s/", path);
 
 			this.setMedia(path);
 			this.getDirectoryTextView().setText(textPath);
@@ -248,9 +251,10 @@ public class NacMusicFragment
 
 		if (NacMedia.isFile(context, contentPath))
 		{
+			Locale locale = Locale.getDefault();
 			String name = NacMedia.getName(context, contentPath);
 			dirPath = NacMedia.getRelativePath(context, contentPath);
-			filePath = String.format("%s%s", dirPath, name);
+			filePath = String.format(locale, "%1$s%2$s", dirPath, name);
 		}
 		else if (NacMedia.isDirectory(contentPath))
 		{

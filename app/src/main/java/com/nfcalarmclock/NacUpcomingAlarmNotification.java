@@ -13,6 +13,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  */
@@ -29,11 +30,6 @@ public class NacUpcomingAlarmNotification
 	 * Group.
 	 */
 	protected static final String UPCOMING_GROUP = "NacNotiGroupUpcoming";
-
-	/**
-	 * Title of this type of notification.
-	 */
-	protected static final String UPCOMING_TITLE = "Upcoming Alarms";
 
 	/**
 	 * Notification ID.
@@ -57,7 +53,6 @@ public class NacUpcomingAlarmNotification
 	public NacUpcomingAlarmNotification(Context context)
 	{
 		super(context);
-
 		this.mLines = null;
 	}
 
@@ -72,19 +67,18 @@ public class NacUpcomingAlarmNotification
 		}
 
 		Context context = this.getContext();
-		Resources res = context.getResources();
-		CharSequence name = res.getString(R.string.upcoming_alarm);
-		String description = res.getString(R.string.upcoming_alarm_description);
+		NacSharedConstants cons = new NacSharedConstants(context);
 		NotificationChannel channel = new NotificationChannel(UPCOMING_CHANNEL,
-			name, NotificationManager.IMPORTANCE_LOW);
+			cons.getUpcomingNotification(),
+			NotificationManager.IMPORTANCE_LOW);
 		NotificationManager manager = context.getSystemService(
 			NotificationManager.class);
 
-		channel.setDescription(description);
+		channel.setDescription(cons.getUpcomingNotificationDescription());
 		channel.setShowBadge(false);
 		channel.enableLights(false);
 		channel.enableVibration(false);
-		channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+		channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
 		manager.createNotificationChannel(channel);
 	}
 
@@ -112,8 +106,10 @@ public class NacUpcomingAlarmNotification
 		Context context = this.getContext();
 		String time = alarm.getFullTime(context);
 		String name = alarm.getName();
+		Locale locale = Locale.getDefault();
 
-		return (name.isEmpty()) ? time : time+"  —  "+name;
+		return (name.isEmpty()) ? time
+			: String.format(locale, "%1$s  —  %2$s", time, name);
 	}
 
 	/**
@@ -121,11 +117,12 @@ public class NacUpcomingAlarmNotification
 	 */
 	public String getTitle()
 	{
+		Context context = this.getContext();
 		List<CharSequence> lines = this.getLines();
-		String title = UPCOMING_TITLE;
+		NacSharedConstants cons = new NacSharedConstants(context);
+		int count = (lines == null) ? 1 : lines.size();
 
-		return ((lines == null) || (lines.size() == 1)) ?
-			title.substring(0, title.length()-1) : title;
+		return cons.getUpcomingAlarm(count);
 	}
 
 	/**
@@ -135,7 +132,6 @@ public class NacUpcomingAlarmNotification
 	{
 		Context context = this.getContext();
 		NotificationManagerCompat manager = this.getNotificationManager(context);
-
 		manager.cancel(UPCOMING_ID);
 	}
 
@@ -177,7 +173,12 @@ public class NacUpcomingAlarmNotification
 		}
 		else if (size > 0)
 		{
-			builder.setContentText(String.valueOf(lines.size())+" alarms");
+			NacSharedConstants cons = new NacSharedConstants(context);
+			Locale locale = Locale.getDefault();
+			String word = cons.getAlarm(size);
+			String content = String.format(locale, "%1$d %2$s", size, word);
+
+			builder.setContentText(content);
 		}
 
 		builder.setStyle(inbox);

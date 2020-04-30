@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import java.util.Calendar;
 import java.util.EnumSet;
+import java.util.Locale;
 
 /**
  * Alarm object.
@@ -818,7 +819,6 @@ public class NacAlarm
 	public String getFullTime(Context context)
 	{
 		Calendar next = NacCalendar.getNext(this);
-
 		return NacCalendar.Time.getFullTime(context, next);
 	}
 
@@ -875,7 +875,6 @@ public class NacAlarm
 	public String getName()
 	{
 		String name = this.mName;
-
 		return (name != null) ? name : "";
 	}
 
@@ -885,21 +884,18 @@ public class NacAlarm
 	public String getNameNormalized()
 	{
 		String name = this.getName();
-
-		return ((name != null) && !name.isEmpty()) ? name.replace("\n", " ")
-			: "";
+		return !name.isEmpty() ? name.replace("\n", " ") : name;
 	}
 
 	/**
 	 * @see getNameNormalized
 	 */
-	public String getNameNormalizedForMessage()
+	public String getNameNormalizedForMessage(int max)
 	{
 		String name = this.getNameNormalized();
-		int max = NacSharedPreferences.DEFAULT_MAX_NAME_LENGTH;
-
+		Locale locale = Locale.getDefault();
 		return (name.length() > max) ?
-			String.format("%1$s...", name.substring(0, max-3)) : name;
+			String.format(locale, "%1$s...", name.substring(0, max-3)) : name;
 	}
 
 	/**
@@ -981,7 +977,7 @@ public class NacAlarm
 	 */
 	public boolean hasListener()
 	{
-		return (this.getOnChangeListener() != null);
+		return this.getOnChangeListener() != null;
 	}
 
 	/**
@@ -991,7 +987,6 @@ public class NacAlarm
 	public boolean hasMedia()
 	{
 		String sound = this.getMediaPath();
-
 		return ((sound != null) && !sound.isEmpty());
 	}
 

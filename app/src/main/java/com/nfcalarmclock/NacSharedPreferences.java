@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import androidx.preference.PreferenceManager;
+import java.util.Locale;
 
 /**
  * Container for the values of each preference.
@@ -19,7 +20,7 @@ public class NacSharedPreferences
 	/**
 	 * Shared preferences instance.
 	 */
-	private final SharedPreferences mSharedPreferences;
+	private final SharedPreferences mInstance;
 
 	/**
 	 * Shared preference keys.
@@ -37,62 +38,12 @@ public class NacSharedPreferences
 	private final NacSharedConstants mConstants;
 
 	/**
-	 * Default app rating counter.
-	 */
-	public static final int DEFAULT_RATE_MY_APP_COUNTER = 0;
-
-	/**
-	 * Default app rating counter limit.
-	 */
-	public static final int DEFAULT_RATE_MY_APP_LIMIT = 30;
-
-	/**
-	 * Counter amount indicating that the app has been rated.
-	 */
-	public static final int DEFAULT_RATE_MY_APP_RATED = -999;
-
-	/**
-	 * Default auto dismiss duration.
-	 */
-	public static final int DEFAULT_AUTO_DISMISS = 15;
-
-	/**
-	 * Default max snooze count.
-	 */
-	public static final int DEFAULT_MAX_SNOOZE = -1;
-
-	/**
-	 * Default snooze count.
-	 */
-	public static final int DEFAULT_SNOOZE_COUNT = 0;
-
-	/**
-	 * Default snooze duration.
-	 */
-	public static final int DEFAULT_SNOOZE_DURATION = 5;
-
-	/**
-	 * Default maximum number of alarms.
-	 */
-	public static final int DEFAULT_MAX_ALARMS = 50;
-
-	/**
-	 * Default previous volume.
-	 */
-	public static final int DEFAULT_PREVIOUS_VOLUME = -1;
-
-	/**
-	 * Default max name length.
-	 */
-	public static final int DEFAULT_MAX_NAME_LENGTH = 32;
-
-	/**
 	 */
 	public NacSharedPreferences(Context context)
 	{
 		this.mContext = context;
-		this.mSharedPreferences = PreferenceManager
-			.getDefaultSharedPreferences(context);
+		this.mInstance = PreferenceManager.getDefaultSharedPreferences(
+			context);
 		this.mKeys = new NacSharedKeys(context);
 		this.mDefaults = new NacSharedDefaults(context);
 		this.mConstants = new NacSharedConstants(context);
@@ -538,7 +489,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getAmColor();
 		int value = this.getDefaults().getAmColor();
-		return this.getSharedPreferences().getInt(key, value);
+		return this.getInstance().getInt(key, value);
 	}
 
 	/**
@@ -548,7 +499,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getAppFirstRun();
 		boolean value = this.getDefaults().getAppFirstRun();
-		return this.getSharedPreferences().getBoolean(key, value);
+		return this.getInstance().getBoolean(key, value);
 	}
 
 	/**
@@ -556,11 +507,9 @@ public class NacSharedPreferences
 	 */
 	public String getAudioSource()
 	{
-		Context context = this.getContext();
-		NacSharedConstants cons = new NacSharedConstants(context);
 		String key = this.getKeys().getAudioSource();
-		String value = cons.getAudioSources().get(1);
-		return this.getSharedPreferences().getString(key, value);
+		String value = this.getConstants().getAudioSources().get(1);
+		return this.getInstance().getString(key, value);
 	}
 
 	/**
@@ -570,7 +519,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getAutoDismiss();
 		int value = this.getDefaults().getAutoDismissIndex();
-		return this.getSharedPreferences().getInt(key, value);
+		return this.getInstance().getInt(key, value);
 	}
 
 	/**
@@ -578,30 +527,28 @@ public class NacSharedPreferences
 	 */
 	public String getAutoDismissSummary()
 	{
+		Context context = this.getContext();
 		int index = this.getAutoDismiss();
-		return NacSharedPreferences.getAutoDismissSummary(index);
+		return NacSharedPreferences.getAutoDismissSummary(context, index);
 	}
 
 	/**
 	 * @return The summary text to use when displaying the auto dismiss widget.
 	 */
-	public static String getAutoDismissSummary(int index)
+	public static String getAutoDismissSummary(Context context, int index)
 	{
+		NacSharedConstants cons = new NacSharedConstants(context);
 		int value = NacSharedPreferences.getAutoDismissTime(index);
 		String dismiss = String.valueOf(value);
 
 		if (index == 0)
 		{
-			return "Off";
-		}
-		else if (index == 1)
-		{
-			return dismiss + " minute";
-
+			return cons.getOff();
 		}
 		else
 		{
-			return dismiss + " minutes";
+			Locale locale = Locale.getDefault();
+			return String.format(locale, "%1$s %2$s", dismiss, cons.getUnitMinute(index));
 		}
 	}
 
@@ -646,7 +593,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getDays();
 		int value = this.getDefaults().getDays();
-		return this.getSharedPreferences().getInt(key, value);
+		return this.getInstance().getInt(key, value);
 	}
 
 	/**
@@ -656,7 +603,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getDaysColor();
 		int value = this.getDefaults().getDaysColor();
-		return this.getSharedPreferences().getInt(key, value);
+		return this.getInstance().getInt(key, value);
 	}
 
 	/**
@@ -687,7 +634,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getEasySnooze();
 
-		return this.getSharedPreferences().getBoolean(key,
+		return this.getInstance().getBoolean(key,
 			this.getDefaults().getEasySnooze());
 	}
 
@@ -698,7 +645,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getExpandNewAlarm();
 		boolean value = this.getDefaults().getExpandNewAlarm();
-		return this.getSharedPreferences().getBoolean(key, value);
+		return this.getInstance().getBoolean(key, value);
 	}
 
 	/**
@@ -706,7 +653,7 @@ public class NacSharedPreferences
 	 */
 	public SharedPreferences getInstance()
 	{
-		return this.mSharedPreferences;
+		return this.mInstance;
 	}
 
 	/**
@@ -723,7 +670,7 @@ public class NacSharedPreferences
 	public int getMaxSnooze()
 	{
 		String key = this.getKeys().getMaxSnooze();
-		return this.getSharedPreferences().getInt(key,
+		return this.getInstance().getInt(key,
 			this.getDefaults().getMaxSnoozeIndex());
 	}
 
@@ -783,7 +730,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getMediaPath();
 		String defaultValue = "";
-		return this.getSharedPreferences().getString(key, defaultValue);
+		return this.getInstance().getString(key, defaultValue);
 	}
 
 	/**
@@ -841,7 +788,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getMissedAlarmNotification();
 		boolean value = this.getDefaults().getMissedAlarm();
-		return this.getSharedPreferences().getBoolean(key, value);
+		return this.getInstance().getBoolean(key, value);
 	}
 
 	/**
@@ -851,7 +798,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getName();
 		String defaultValue = "";
-		return this.getSharedPreferences().getString(key, defaultValue);
+		return this.getInstance().getString(key, defaultValue);
 	}
 
 	/**
@@ -861,7 +808,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getNameColor();
 		int value = this.getDefaults().getNameColor();
-		return this.getSharedPreferences().getInt(key, value);
+		return this.getInstance().getInt(key, value);
 	}
 
 	/**
@@ -900,7 +847,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getNextAlarmFormat();
 		int value = this.getDefaults().getNextAlarmFormatIndex();
-		return this.getSharedPreferences().getInt(key, value);
+		return this.getInstance().getInt(key, value);
 	}
 
 	/**
@@ -910,7 +857,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getPmColor();
 		int value = this.getDefaults().getPmColor();
-		return this.getSharedPreferences().getInt(key, value);
+		return this.getInstance().getInt(key, value);
 	}
 
 	/**
@@ -921,7 +868,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getPreventAppFromClosing();
 		boolean value = this.getDefaults().getPreventAppFromClosing();
-		return this.getSharedPreferences().getBoolean(key, value);
+		return this.getInstance().getBoolean(key, value);
 	}
 
 	/**
@@ -930,8 +877,8 @@ public class NacSharedPreferences
 	public int getPreviousVolume()
 	{
 		String key = this.getKeys().getPreviousVolume();
-
-		return this.getSharedPreferences().getInt(key, DEFAULT_PREVIOUS_VOLUME);
+		int value = this.getDefaults().getPreviousVolume();
+		return this.getInstance().getInt(key, value);
 	}
 
 	/**
@@ -941,7 +888,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getRateMyAppCounter();
 		int value = this.getDefaults().getRateMyAppCounter();
-		return this.getSharedPreferences().getInt(key, value);
+		return this.getInstance().getInt(key, value);
 	}
 
 	/**
@@ -951,15 +898,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getRepeat();
 		boolean value = this.getDefaults().getRepeat();
-		return this.getSharedPreferences().getBoolean(key, value);
-	}
-
-	/**
-	 * @return The SharedPreferences object.
-	 */
-	public SharedPreferences getSharedPreferences()
-	{
-		return this.mSharedPreferences;
+		return this.getInstance().getBoolean(key, value);
 	}
 
 	/**
@@ -969,7 +908,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getShowAlarmInfo();
 		boolean value = this.getDefaults().getShowAlarmInfo();
-		return this.getSharedPreferences().getBoolean(key, value);
+		return this.getInstance().getBoolean(key, value);
 	}
 
 	/**
@@ -979,7 +918,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getShuffle();
 		boolean value = this.getDefaults().getShufflePlaylist();
-		return this.getSharedPreferences().getBoolean(key, value);
+		return this.getInstance().getBoolean(key, value);
 	}
 
 	/**
@@ -988,9 +927,8 @@ public class NacSharedPreferences
 	public int getSnoozeCount(int id)
 	{
 		String key = NacSharedKeys.getSnoozeCount(id);
-
-		return this.getSharedPreferences().getInt(key,
-			DEFAULT_SNOOZE_COUNT);
+		int value = this.getDefaults().getSnoozeCount();
+		return this.getInstance().getInt(key, value);
 	}
 
 	/**
@@ -1000,7 +938,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getSnoozeDuration();
 
-		return this.getSharedPreferences().getInt(key,
+		return this.getInstance().getInt(key,
 			this.getDefaults().getSnoozeDurationIndex());
 	}
 
@@ -1056,7 +994,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getSpeakFrequency();
 		int value = this.getDefaults().getSpeakFrequencyIndex();
-		return this.getSharedPreferences().getInt(key, value);
+		return this.getInstance().getInt(key, value);
 	}
 
 	/**
@@ -1096,7 +1034,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getSpeakToMe();
 		boolean value = this.getDefaults().getSpeakToMe();
-		return this.getSharedPreferences().getBoolean(key, value);
+		return this.getInstance().getBoolean(key, value);
 	}
 
 	/**
@@ -1106,7 +1044,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getStartWeekOn();
 		int value = this.getDefaults().getStartWeekOnIndex();
-		return this.getSharedPreferences().getInt(key, value);
+		return this.getInstance().getInt(key, value);
 	}
 
 	/**
@@ -1116,7 +1054,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getThemeColor();
 		int value = this.getDefaults().getThemeColor();
-		return this.getSharedPreferences().getInt(key, value);
+		return this.getInstance().getInt(key, value);
 	}
 
 	/**
@@ -1126,7 +1064,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getTimeColor();
 		int value = this.getDefaults().getTimeColor();
-		return this.getSharedPreferences().getInt(key, value);
+		return this.getInstance().getInt(key, value);
 	}
 
 	/**
@@ -1136,7 +1074,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getUpcomingAlarmNotification();
 		boolean value = this.getDefaults().getUpcomingAlarm();
-		return this.getSharedPreferences().getBoolean(key, value);
+		return this.getInstance().getBoolean(key, value);
 	}
 
 	/**
@@ -1146,7 +1084,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getUseNfc();
 		boolean value = this.getDefaults().getUseNfc();
-		return this.getSharedPreferences().getBoolean(key, value);
+		return this.getInstance().getBoolean(key, value);
 	}
 
 	/**
@@ -1156,7 +1094,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getVibrate();
 		boolean value = this.getDefaults().getVibrate();
-		return this.getSharedPreferences().getBoolean(key, value);
+		return this.getInstance().getBoolean(key, value);
 	}
 
 	/**
@@ -1166,7 +1104,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getVolume();
 		int value = this.getDefaults().getVolume();
-		return this.getSharedPreferences().getInt(key, value);
+		return this.getInstance().getInt(key, value);
 	}
 
 	/**

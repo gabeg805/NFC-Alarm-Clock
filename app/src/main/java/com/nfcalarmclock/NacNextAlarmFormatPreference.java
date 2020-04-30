@@ -60,10 +60,10 @@ public class NacNextAlarmFormatPreference
 		switch (this.mValue)
 		{
 			case 1:
-				return res.getString(R.string.next_alarm_format_time);
+				return res.getString(R.string.next_alarm_format_time_on);
 			case 0:
 			default:
-				return res.getString(R.string.next_alarm_format_countdown);
+				return res.getString(R.string.next_alarm_format_time_in);
 		}
 	}
 

@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import com.google.android.material.snackbar.Snackbar;
+import java.util.Locale;
 
 /**
  * @brief NFC Alarm Clock Utility class.
@@ -20,6 +21,17 @@ import com.google.android.material.snackbar.Snackbar;
  */
 public class NacUtility
 {
+
+	/**
+	 * Capitalize the first letter in the string.
+	 */
+	public static String capitalize(String word)
+	{
+		Locale locale = Locale.getDefault();
+		return String.format(locale, "%1$s%2$s",
+			word.substring(0, 1).toUpperCase(locale),
+			word.substring(1));
+	}
 
 	/**
 	 * Determine the height of the view.
