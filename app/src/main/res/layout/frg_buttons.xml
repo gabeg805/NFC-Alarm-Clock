@@ -13,8 +13,8 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:background="?android:attr/selectableItemBackground"
-		android:text="@string/clear"
-		android:textSize="@dimen/tsz_main"
+		android:text="@string/prompt_clear"
+		android:textSize="@dimen/tsz_support"
 		/>
 
 	<View
@@ -28,8 +28,8 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:background="?android:attr/selectableItemBackground"
-		android:text="@string/cancel"
-		android:textSize="@dimen/tsz_main"
+		android:text="@string/prompt_cancel"
+		android:textSize="@dimen/tsz_support"
 		/>
 
 	<Button
@@ -37,8 +37,8 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:background="?android:attr/selectableItemBackground"
-		android:text="@string/ok"
-		android:textSize="@dimen/tsz_main"
+		android:text="@string/prompt_ok"
+		android:textSize="@dimen/tsz_support"
 		/>
 
 </LinearLayout>

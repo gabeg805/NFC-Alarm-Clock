@@ -29,7 +29,7 @@ public class NacSharedResource
 	}
 
 	/**
-	 * @return A resource boolean.
+	 * @return A boolean.
 	 */
 	public boolean getBoolean(int id)
 	{
@@ -37,11 +37,19 @@ public class NacSharedResource
 	}
 
 	/**
-	 * @return A resource integer.
+	 * @return An integer.
 	 */
 	public int getInteger(int id)
 	{
 		return this.getResources().getInteger(id);
+	}
+
+	/**
+	 * @return A plural string.
+	 */
+	public String getPluralString(int id, int quantity)
+	{
+		return this.getResources().getQuantityString(id, quantity);
 	}
 
 	/**
@@ -53,7 +61,7 @@ public class NacSharedResource
 	}
 
 	/**
-	 * @return A resource string.
+	 * @return A string.
 	 */
 	public String getString(int id)
 	{

@@ -276,8 +276,8 @@ public class NacAudio
 		public void setSource(String source)
 		{
 			Context context = this.getContext();
-			NacSharedDefaults defaults = new NacSharedDefaults(context);
-			List<String> audioSources = defaults.getAudioSources();
+			NacSharedConstants cons = new NacSharedConstants(context);
+			List<String> audioSources = cons.getAudioSources();
 			int stream = AudioManager.STREAM_MUSIC;
 			int usage = AudioAttributes.USAGE_MEDIA;
 

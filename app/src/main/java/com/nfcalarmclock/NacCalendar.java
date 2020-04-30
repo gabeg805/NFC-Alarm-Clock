@@ -748,6 +748,18 @@ public class NacCalendar
 	{
 
 		/**
+		 * @see getClockTime
+		 */
+		public static String getClockTime(Context context)
+		{
+			Calendar calendar = Calendar.getInstance();
+			int hour = calendar.get(Calendar.HOUR_OF_DAY);
+			int minute = calendar.get(Calendar.MINUTE);
+
+			return NacCalendar.Time.getClockTime(context, hour, minute);
+		}
+
+		/**
 		 * @param  context  The application context.
 		 * @param  hour  The hour.
 		 * @param  minute  The minutes.
@@ -757,7 +769,6 @@ public class NacCalendar
 		public static String getClockTime(Context context, int hour, int minute)
 		{
 			boolean format = NacCalendar.Time.is24HourFormat(context);
-
 			return NacCalendar.Time.getClockTime(hour, minute, format);
 		}
 
@@ -773,17 +784,7 @@ public class NacCalendar
 		{
 			if (!format)
 			{
-				if (hour > 12)
-				{
-					hour = (hour % 12);
-				}
-				else
-				{
-					if (hour == 0)
-					{
-						hour = 12;
-					}
-				}
+				hour = NacCalendar.Time.to12HourFormat(hour);
 			}
 
 			String hourString = String.valueOf(hour);
@@ -811,7 +812,6 @@ public class NacCalendar
 		public static String getMeridian(Context context, int hour)
 		{
 			boolean format = NacCalendar.Time.is24HourFormat(context);
-
 			return NacCalendar.Time.getMeridian(hour, format);
 		}
 
@@ -828,8 +828,10 @@ public class NacCalendar
 			{
 				return "";
 			}
-
-			return (hour < 12) ? "AM" : "PM";
+			else
+			{
+				return (hour < 12) ? "AM" : "PM";
+			}
 		}
 
 		/**
@@ -852,7 +854,7 @@ public class NacCalendar
 			String time = NacCalendar.Time.getClockTime(context, hour, minute);
 			String meridian = NacCalendar.Time.getMeridian(context, hour);
 
-			return (!meridian.isEmpty()) ? time+" "+meridian : time;
+			return !meridian.isEmpty() ? time+" "+meridian : time;
 		}
 
 		/**
@@ -862,6 +864,21 @@ public class NacCalendar
 		public static boolean is24HourFormat(Context context)
 		{
 			return DateFormat.is24HourFormat(context);
+		}
+
+		/**
+		 * Convert an hour to 12 hour format.
+		 */
+		public static int to12HourFormat(int hour)
+		{
+			if (hour > 12)
+			{
+				return hour % 12;
+			}
+			else
+			{
+				return (hour == 0) ? 12 : hour;
+			}
 		}
 
 	}

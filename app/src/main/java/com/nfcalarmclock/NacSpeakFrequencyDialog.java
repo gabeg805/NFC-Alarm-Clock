@@ -8,15 +8,13 @@ import android.view.View;
  */
 public class NacSpeakFrequencyDialog
 	extends NacSpinnerDialog
-	implements NacDialog.OnBuildListener,
-		NacDialog.OnShowListener
+	implements NacDialog.OnShowListener
 {
 
 	/**
 	 */
 	public NacSpeakFrequencyDialog()
 	{
-		this.setOnBuildListener(this);
 		this.addOnShowListener(this);
 	}
 
@@ -24,14 +22,13 @@ public class NacSpeakFrequencyDialog
 	 * Build the dialog.
 	 */
 	@Override
-	public void onBuildDialog(NacDialog dialog, AlertDialog.Builder builder)
+	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
-		Context context = dialog.getRoot().getContext();
 		NacSharedConstants cons = new NacSharedConstants(context);
 
-		builder.setTitle(cons.getSpeakFrequency());
-		dialog.setPositiveButton(cons.getOk());
-		dialog.setNegativeButton(cons.getCancel());
+		builder.setTitle(cons.getSelectSpeakFrequency());
+		setPositiveButton(cons.getOk());
+		setNegativeButton(cons.getCancel());
 	}
 
 	/**
@@ -42,7 +39,7 @@ public class NacSpeakFrequencyDialog
 	{
 		super.onShowDialog(dialog, root);
 
-		Context context = dialog.getRoot().getContext();
+		Context context = getContext();
 		NacSharedConstants cons = new NacSharedConstants(context);
 		int index = this.getDataInt();
 		int length = 31;

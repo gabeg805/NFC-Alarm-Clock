@@ -135,13 +135,14 @@ public class NacAlarm
 
 			if (context != null)
 			{
+				NacSharedConstants cons = new NacSharedConstants(context);
 				NacSharedDefaults defaults = new NacSharedDefaults(context);
 				this.mDays = NacCalendar.Days.valueToDays(defaults.getDays());
 				this.mRepeat = defaults.getRepeat();
 				this.mNfc = defaults.getUseNfc();
 				this.mVibrate = defaults.getVibrate();
 				this.mVolume = defaults.getVolume();
-				this.mAudioSource = defaults.getAudioSources().get(1);
+				this.mAudioSource = cons.getAudioSources().get(1);
 			}
 		}
 

@@ -61,8 +61,7 @@ public class NacMediaActivity
 	 */
 	//private static final String[] mTitles = new String[] { "Browse",
 	//	"Ringtone", "Spotify" };
-	private static final String[] mTitles = new String[] { "Browse",
-		"Ringtone" };
+	private final String[] mTitles = new String[2];
 
 	/**
 	 * Select a fragment.
@@ -236,10 +235,13 @@ public class NacMediaActivity
 
 		Intent intent = getIntent();
 		FragmentManager manager = getSupportFragmentManager();
+		NacSharedConstants cons = new NacSharedConstants(this);
 		this.mAlarm = NacIntent.getAlarm(intent);
 		this.mMediaPath = NacIntent.getMedia(intent);
 		this.mPager = (ViewPager) findViewById(R.id.act_sound);
 		this.mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+		this.mTitles[0] = cons.getBrowse();
+		this.mTitles[1] = cons.getAudioSources().get(3);
 		//this.mAdapter = new NacPagerAdapter(manager, this.mAlarm, this.mTitles);
 		this.mAdapter = new NacPagerAdapter(manager,
 			FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);

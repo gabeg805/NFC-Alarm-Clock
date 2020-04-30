@@ -32,17 +32,9 @@ public class NacSpinnerDialog
 	 */
 	public NacSpinnerDialog()
 	{
+		super(R.layout.dlg_value_picker);
 		this.mPicker = null;
-
 		this.addOnShowListener(this);
-	}
-
-	/**
-	 * Build the dialog.
-	 */
-	public void build(Context context)
-	{
-		this.build(context, R.layout.dlg_value_picker);
 	}
 
 	/**

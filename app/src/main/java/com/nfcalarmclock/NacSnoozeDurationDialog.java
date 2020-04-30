@@ -1,21 +1,20 @@
 package com.nfcalarmclock;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.view.View;
 
 /**
  */
 public class NacSnoozeDurationDialog
 	extends NacSpinnerDialog
-	implements NacDialog.OnBuildListener,
-		NacDialog.OnShowListener
+	implements NacDialog.OnShowListener
 {
 
 	/**
 	 */
 	public NacSnoozeDurationDialog()
 	{
-		this.setOnBuildListener(this);
 		this.addOnShowListener(this);
 	}
 
@@ -23,11 +22,13 @@ public class NacSnoozeDurationDialog
 	 * Build the dialog.
 	 */
 	@Override
-	public void onBuildDialog(NacDialog dialog, AlertDialog.Builder builder)
+	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
-		builder.setTitle("Snooze Duration");
-		dialog.setPositiveButton("OK");
-		dialog.setNegativeButton("Cancel");
+		NacSharedConstants cons = new NacSharedConstants(context);
+
+		builder.setTitle(cons.getSnoozeDuration());
+		setPositiveButton(cons.getOk());
+		setNegativeButton(cons.getCancel());
 	}
 
 	/**

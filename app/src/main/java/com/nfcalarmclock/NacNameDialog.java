@@ -28,7 +28,7 @@ public class NacNameDialog
 	 */
 	public NacNameDialog()
 	{
-		super();
+		super(R.layout.dlg_alarm_name);
 
 		this.mEditText = null;
 
@@ -39,22 +39,14 @@ public class NacNameDialog
 	/**
 	 * Build the dialog.
 	 */
-	public void build(Context context)
-	{
-		this.build(context, R.layout.dlg_alarm_name);
-	}
-
-	/**
-	 * Build the dialog.
-	 */
 	@Override
 	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
-		String title = "Set Alarm Name";
+		NacSharedConstants cons = new NacSharedConstants(context);
 
-		builder.setTitle(title);
-		setPositiveButton("OK");
-		setNegativeButton("Cancel");
+		builder.setTitle(cons.getSetAlarmName());
+		setPositiveButton(cons.getOk());
+		setNegativeButton(cons.getCancel());
 	}
 
 	/**
@@ -64,9 +56,7 @@ public class NacNameDialog
 	public boolean onDismissDialog(NacDialog dialog)
 	{
 		String name = this.mEditText.getText().toString();
-
 		dialog.saveData(name);
-
 		return true;
 	}
 
@@ -79,10 +69,8 @@ public class NacNameDialog
 		if ((event == null) && (action == EditorInfo.IME_ACTION_DONE))
 		{
 			dismiss();
-
 			return true;
 		}
-
 		return false;
 	}
 

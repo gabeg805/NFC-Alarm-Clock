@@ -8,35 +8,28 @@ import android.view.View;
  */
 public class NacDayOfWeekDialog
 	extends NacDialog
-	implements NacDialog.OnBuildListener,
-		NacDialog.OnShowListener
+	implements NacDialog.OnShowListener
 {
 
 	/**
 	 */
 	public NacDayOfWeekDialog()
 	{
-		this.setOnBuildListener(this);
+		super(R.layout.dlg_alarm_days);
 		this.addOnShowListener(this);
 	}
 
 	/**
 	 * Build the dialog.
 	 */
-	public void build(Context context)
-	{
-		this.build(context, R.layout.dlg_alarm_days);
-	}
-
-	/**
-	 * Build the dialog.
-	 */
 	@Override
-	public void onBuildDialog(NacDialog dialog, AlertDialog.Builder builder)
+	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
-		builder.setTitle("Select Days");
-		dialog.setPositiveButton("OK");
-		dialog.setNegativeButton("Cancel");
+		NacSharedConstants cons = new NacSharedConstants(context);
+
+		builder.setTitle(cons.getSelectDays());
+		setPositiveButton(cons.getOk());
+		setNegativeButton(cons.getCancel());
 	}
 
 	/**
@@ -47,7 +40,6 @@ public class NacDayOfWeekDialog
 	{
 		NacDayOfWeek dow = root.findViewById(R.id.days);
 		int value = this.getDataInt();
-
 		dow.setDays(value);
 	}
 

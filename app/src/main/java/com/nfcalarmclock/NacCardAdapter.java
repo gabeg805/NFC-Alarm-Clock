@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Alarm card adapter.
@@ -42,6 +43,11 @@ public class NacCardAdapter
 	 * RecyclerView containing list of alarm cards.
 	 */
 	private RecyclerView mRecyclerView;
+
+	/**
+	 * Shared constants.
+	 */
+	private NacSharedConstants mSharedConstants;
 
 	/**
 	 * Shared preferences.
@@ -105,6 +111,7 @@ public class NacCardAdapter
 			R.id.activity_main);
 		this.mRecyclerView = (RecyclerView) this.getRoot().findViewById(
 			R.id.content_alarm_list);
+		this.mSharedConstants = new NacSharedConstants(context);
 		this.mSharedPreferences = new NacSharedPreferences(context);
 		this.mTouchHelper = new NacCardTouchHelper(callback);
 		this.mUndo = new Undo();
@@ -161,14 +168,15 @@ public class NacCardAdapter
 	 */
 	public int add(NacAlarm alarm, int position)
 	{
+		Context context = this.getContext();
+
 		if ((position+1) >= NacSharedPreferences.DEFAULT_MAX_ALARMS)
 		{
-			NacUtility.quickToast(this.getRoot(),
-				"Max number of alarms created");
+			NacSharedConstants cons = this.getSharedConstants();
+			NacUtility.quickToast(context, cons.getMaxAlarmsError());
 			return -1;
 		}
 
-		Context context = this.getContext();
 		NacDatabase db = new NacDatabase(context);
 		int id = alarm.getId();
 
@@ -252,8 +260,9 @@ public class NacCardAdapter
 
 		if (result == 0)
 		{
+			NacSharedConstants cons = this.getSharedConstants();
 			this.undo(copy, position+1, Undo.Type.COPY);
-			this.snackbar("Copied alarm.");
+			this.snackbar(cons.getCopiedAlarm()+".");
 		}
 
 		this.setWasAddedWithFloatingButton(false);
@@ -269,6 +278,7 @@ public class NacCardAdapter
 	public int delete(int position)
 	{
 		Context context = this.getContext();
+		NacSharedConstants cons = this.getSharedConstants();
 		NacDatabase db = new NacDatabase(context);
 		NacAlarm alarm = this.get(position);
 		int id = alarm.getId();
@@ -282,7 +292,7 @@ public class NacCardAdapter
 		db.delete(alarm);
 		db.close();
 		this.undo(alarm, position, Undo.Type.DELETE);
-		this.snackbar("Deleted alarm.");
+		this.snackbar(cons.getDeletedAlarm()+".");
 
 		return 0;
 	}
@@ -408,6 +418,14 @@ public class NacCardAdapter
 	private View getRoot()
 	{
 		return this.mRoot;
+	}
+
+	/**
+	 * @return The shared constants.
+	 */
+	private NacSharedConstants getSharedConstants()
+	{
+		return this.mSharedConstants;
 	}
 
 	/**
@@ -804,8 +822,9 @@ public class NacCardAdapter
 
 		if (result == 0)
 		{
+			NacSharedConstants cons = this.getSharedConstants();
 			this.undo(alarm, position, Undo.Type.RESTORE);
-			this.snackbar("Restored alarm.");
+			this.snackbar(cons.getRestoredAlarm()+".");
 		}
 
 		this.setWasAddedWithFloatingButton(false);
@@ -842,13 +861,17 @@ public class NacCardAdapter
 			return;
 		}
 
+		NacSharedConstants cons = this.getSharedConstants();
 		NacSharedPreferences shared = this.getSharedPreferences();
+		Locale locale = Locale.getDefault();
+		String willRun = cons.getWillRun();
 		String name = alarm.getNameNormalizedForMessage();
-		String prefix = name.isEmpty() ? "Will run"
-			: String.format("\"%1$s\" will run", name);
+		String prefix = name.isEmpty() ? willRun
+			: String.format(locale, "\"%1$s\" %2$s", name,
+				willRun.toLowerCase(locale));
 		String message = NacCalendar.getMessage(prefix, shared, alarm);
 
-		this.snackbar(message, "DISMISS", null, true);
+		this.snackbar(message, cons.getDismiss(), null, true);
 	}
 
 	/**
@@ -888,6 +911,7 @@ public class NacCardAdapter
 	 */
 	public void showNextAlarm()
 	{
+		NacSharedConstants cons = this.getSharedConstants();
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getNextAlarm();
 		String message = NacCalendar.getNextMessage(shared, alarm);
@@ -897,7 +921,7 @@ public class NacCardAdapter
 			this.mPreviousCalendar = null;
 		}
 
-		this.snackbar(message, "DISMISS", null, true);
+		this.snackbar(message, cons.getDismiss(), null, true);
 	}
 
 	/**
@@ -913,7 +937,8 @@ public class NacCardAdapter
 	 */
 	private void snackbar(String message)
 	{
-		this.snackbar(message, "UNDO", this, true);
+		NacSharedConstants cons = this.getSharedConstants();
+		this.snackbar(message, cons.getUndo(), this, true);
 	}
 
 	/**

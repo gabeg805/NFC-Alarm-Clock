@@ -10,11 +10,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
+import java.util.Locale;
 
 /**
  * A file browser.
  *
- * @TODO Selected file gets deselected when moving directories.
+ * TODO Selected file gets deselected when moving directories.
  */
 public class NacFileBrowser
 	implements View.OnClickListener
@@ -94,6 +95,8 @@ public class NacFileBrowser
 			return;
 		}
 
+		NacSharedConstants cons = new NacSharedConstants(context);
+		Locale locale = Locale.getDefault();
 		View entry = inflater.inflate(R.layout.nac_file_entry, container, false);
 		String name = metadata.getName();
 		ImageView imageView = entry.findViewById(R.id.image);
@@ -103,8 +106,9 @@ public class NacFileBrowser
 
 		container.addView(entry);
 		imageView.setImageResource(R.mipmap.folder);
-		titleView.setText(name.equals("..") ? "(Previous folder)" : name);
-		//annotationView.setText("NOOO");
+		titleView.setText(name.equals("..")
+			? String.format(locale, "(%1$s)", cons.getPreviousFolder())
+			: name);
 		entry.setTag(metadata);
 		entry.setOnClickListener(this);
 	}

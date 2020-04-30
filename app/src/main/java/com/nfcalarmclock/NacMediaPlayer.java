@@ -402,11 +402,12 @@ public class NacMediaPlayer
 	{
 		Context context = this.getContext();
 		NacAudio.Attributes attrs = this.getAudioAttributes();
+		NacSharedConstants cons = new NacSharedConstants(context);
 
 		if(!NacAudio.requestAudioFocus(context, this, attrs))
 		{
 			NacUtility.printf("Unable to gain audio focus.");
-			NacUtility.quickToast(context, "Unable to play audio");
+			NacUtility.quickToast(context, cons.getPlayAudioError());
 			return;
 		}
 
@@ -426,7 +427,7 @@ public class NacMediaPlayer
 		catch (IllegalStateException | IOException | IllegalArgumentException | SecurityException e)
 		{
 			NacUtility.printf("NacMediaPlayer : play : %s", e.toString());
-			NacUtility.quickToast(context, "Unable to play selected file");
+			NacUtility.quickToast(context, cons.getPlayFileError());
 		}
 	}
 

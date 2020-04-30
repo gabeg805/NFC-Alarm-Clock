@@ -1,7 +1,9 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -51,7 +53,7 @@ public class NacRingtoneFragment
 	/**
 	 * Create a radio button.
 	 */
-	private void addRadioButton(String title, String path)
+	private RadioButton addRadioButton(String title, String path)
 	{
 		Context context = getContext();
 		RadioButton button  = new RadioButton(context);
@@ -74,6 +76,8 @@ public class NacRingtoneFragment
 		{
 			button.setChecked(true);
 		}
+
+		return button;
 	}
 
 	/**
@@ -154,8 +158,9 @@ public class NacRingtoneFragment
 
 			if (this.safePlay(uri, true) < 0)
 			{
+				NacSharedConstants cons = new NacSharedConstants(context);
 				NacUtility.printf("Unable to play ringtone : %s", path);
-				NacUtility.toast(context, "Unable to play ringtone");
+				NacUtility.toast(context, cons.getPlayAudioError());
 			}
 		}
 	}
@@ -181,6 +186,21 @@ public class NacRingtoneFragment
 	}
 
 	/**
+	 * Set the radio button's color state list.
+	 */
+	public void setRadioButtonColor(NacSharedPreferences shared,
+		RadioButton radioButton)
+	{
+		int[][] states = new int[][] {
+			new int[] {  android.R.attr.state_checked },
+			new int[] { -android.R.attr.state_checked } };
+		int[] colors = new int[] { shared.getThemeColor(), Color.LTGRAY };
+		ColorStateList stateList = new ColorStateList(states, colors);
+
+		radioButton.setButtonTintList(stateList);
+	}
+
+	/**
 	 * Setup radio buttons.
 	 */
 	private void setupRadioButtons(View root)
@@ -188,13 +208,15 @@ public class NacRingtoneFragment
 		this.mRadioGroup = (RadioGroup) root.findViewById(R.id.radio_group);
 		Context context = getContext();
 		TreeMap<String,String> ringtones = NacMedia.getRingtones(context);
+		NacSharedPreferences shared = new NacSharedPreferences(context);
 
 		for (Map.Entry<String,String> entry : ringtones.entrySet())
 		{
 			String title = entry.getKey();
 			String path = entry.getValue();
+			RadioButton button = this.addRadioButton(title, path);
 
-			this.addRadioButton(title, path);
+			this.setRadioButtonColor(shared, button);
 		}
 	}
 

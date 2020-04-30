@@ -16,6 +16,9 @@
 	<integer name="default_next_alarm_format_index">0</integer>
 	<integer name="default_start_week_on_index">0</integer>
 	<integer name="default_speak_frequency_index">0</integer>
+	<integer name="default_rate_my_app_counter">0</integer>
+	<integer name="default_rate_my_app_limit">5</integer>
+	<integer name="default_rate_my_app_rated">-999</integer>
 
 	<integer name="max_entry_length">512</integer>
 	<integer name="max_hex_length">7</integer>

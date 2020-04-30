@@ -23,6 +23,38 @@
 	<string name="active_alarm_description">Alarms that are currently active.</string>
 	<string name="frequency_once">Once</string>
 	<string name="frequency_interval">Every</string>
+	<string name="nfc_unsupported">Your device does not support NFC</string>
+	<string name="snooze_error">Unable to snooze the alarm</string>
+	<string name="select_audio_source">Select an audio source</string>
+	<string name="select_days">Select days</string>
+	<string name="select_speak_frequency">Select speak frequency</string>
+	<string name="rate_title">Rate the app</string>
+	<string name="rate_now">Rate Now</string>
+	<string name="rate_later">Later</string>
+	<string name="rate_never">No, Thanks</string>
+	<string name="max_alarms_error">Max number of alarms created</string>
+	<string name="copied_alarm">Copied alarm</string>
+	<string name="deleted_alarm">Deleted alarm</string>
+	<string name="restored_alarm">Restored alarm</string>
+	<string name="dismissed_alarm">Dismissed alarm</string>
+	<string name="snoozed_alarm">Snoozed alarm</string>
+	<string name="will_run">Will run</string>
+	<string name="undo">Undo</string>
+	<string name="snoozed_days_error">Unable to change days on a snoozed alarm</string>
+	<string name="snoozed_delete_error">Unable to delete a snoozed alarm</string>
+	<string name="snoozed_modify_error">Unable to modify a snoozed alarm</string>
+	<string name="nfc_required">NFC required to dismiss the alarm</string>
+	<string name="set_alarm_name">Set alarm name</string>
+	<string name="select_color">Select a color</string>
+	<string name="select_color_error">Invalid hex color</string>
+	<string name="previous_folder">Previous folder</string>
+	<string name="browse">Browse</string>
+	<string name="unknown">Unknown</string>
+	<string name="play_audio_error">Unable to play audio</string>
+	<string name="play_file_error">Unable to play selected file</string>
+	<string name="select_format">Select a format</string>
+	<string name="folder_selected">You selected a folder</string>
+	<string name="nfc_request">Please enable NFC to dismiss the alarm</string>
 
 
 	<!-- Alarm Activity -->
@@ -77,9 +109,10 @@
 
 
 	<!-- Prompt buttons -->
-	<string name="ok">OK</string>
-	<string name="cancel">Cancel</string>
-	<string name="clear">Clear</string>
+	<string name="prompt_ok">OK</string>
+	<string name="prompt_cancel">Cancel</string>
+	<string name="prompt_clear">Clear</string>
+	<string name="prompt_default">Default</string>
 
 
 

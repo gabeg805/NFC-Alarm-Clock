@@ -187,7 +187,8 @@ public class NacMedia
 
 			if (artist.equals("<unknown>"))
 			{
-				artist = "Unknown";
+				NacSharedConstants cons = new NacSharedConstants(context);
+				artist = cons.getUnknown();
 			}
 		}
 		catch (IllegalArgumentException e)

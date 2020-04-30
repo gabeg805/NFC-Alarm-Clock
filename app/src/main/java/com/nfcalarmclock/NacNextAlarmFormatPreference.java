@@ -72,10 +72,12 @@ public class NacNextAlarmFormatPreference
 	@Override
 	public void onBuildDialog(NacDialog dialog, AlertDialog.Builder builder)
 	{
-		builder.setTitle("Select a format");
+		Context context = dialog.getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
 
-		dialog.setPositiveButton("Ok");
-		dialog.setNegativeButton("Cancel");
+		builder.setTitle(cons.getSelectFormat());
+		dialog.setPositiveButton(cons.getOk());
+		dialog.setNegativeButton(cons.getCancel());
 	}
 
 	/**

@@ -307,7 +307,8 @@ public class NacAlarmActivity
 		{
 			if (this.shouldUseNfc())
 			{
-				NacUtility.quickToast(this, "Your device doesn't support NFC");
+				NacSharedConstants cons = new NacSharedConstants(this);
+				NacUtility.quickToast(this, cons.getNfcUnsupported());
 			}
 		}
 	}
@@ -378,7 +379,8 @@ public class NacAlarmActivity
 
 		if ((snoozeCount > maxSnoozeCount) && (maxSnoozeCount >= 0))
 		{
-			NacUtility.quickToast(this, "Unable to snooze the alarm");
+			NacSharedConstants cons = new NacSharedConstants(this);
+			NacUtility.quickToast(this, cons.getSnoozeError());
 			return;
 		}
 

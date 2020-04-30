@@ -1,7 +1,7 @@
 <resources>
 
 	<!-- App -->
-	<string name="app_name">NFC Alarma Despertador</string>
+	<string name="app_name">NFC Despertador</string>
 	<string name="app_first_run">app_first_run</string>
 	<string name="app_rating_counter">app_rating_counter</string>
 	<string name="sys_previous_volume">sys_previous_volume</string>
@@ -23,6 +23,38 @@
 	<string name="active_alarm_description">Alarmas que están activas.</string>
 	<string name="frequency_once">Una vez</string>
 	<string name="frequency_interval">Cada</string>
+	<string name="nfc_unsupported">Tu teléfono no soporta NFC</string>
+	<string name="snooze_error">Incapaz de posponer la alarma</string>
+	<string name="select_audio_source">Seleccione una fuente de audio</string>
+	<string name="select_days">Seleccione los días</string>
+	<string name="select_speak_frequency">Seleccione la frequencia de hablar</string>
+	<string name="rate_title">Califica esta app</string>
+	<string name="rate_now">Califica Ahora</string>
+	<string name="rate_later">Al Rato</string>
+	<string name="rate_never">No, Gracias</string>
+	<string name="max_alarms_error">Número máximo de alarmas creadas</string>
+	<string name="copied_alarm">Alarma copiada</string>
+	<string name="deleted_alarm">Alarma borrada</string>
+	<string name="restored_alarm">Alarma restaurada</string>
+	<string name="dismissed_alarm">Alarma descartada</string>
+	<string name="snoozed_alarm">Alarma posponada</string>
+	<string name="will_run">Va sonar</string>
+	<string name="undo">Deshacer</string>
+	<string name="snoozed_days_error">Incapaz de cambiar el día de una alarma posponada</string>
+	<string name="snoozed_delete_error">Incapaz de borrar una alarma posponada</string>
+	<string name="snoozed_modify_error">Incapaz de modificar una alarma posponada</string>
+	<string name="nfc_required">NFC requerido para dscartar la alarma</string>
+	<string name="set_alarm_name">Nombre de la alarma</string>
+	<string name="select_color">Elige un color</string>
+	<string name="select_color_error">Color inválido</string>
+	<string name="previous_folder">Carpeta anterior</string>
+	<string name="browse">Navegar</string>
+	<string name="unknown">Desconocido</string>
+	<string name="play_audio_error">Incapaz de tocar audio</string>
+	<string name="play_file_error">Incapaz de tocar la canción seleccionada</string>
+	<string name="select_format">Selecciona un estilo</string>
+	<string name="folder_selected">Seleccionaste una carpeta</string>
+	<string name="nfc_request">Por favor, habilite la NFC para descartar la alarma</string>
 
 
 	<!-- Alarm Activity -->
@@ -56,11 +88,11 @@
 	<!-- Dialogs -->
 	<!-- ******* -->
 
-	<string name="dlg_playlist_question">Quieres tocar toda la música de esta carpeta?</string>
+	<string name="dlg_playlist_question">¿Quieres tocar toda la música de esta carpeta?</string>
 
 
 	<!-- Rate my app dialog -->
-	<string name="dlg_rate_my_app">Si haz disfrutado esta aplicacion, tomate un momento para evaluar la. !Gracias por tu apoyo! <b>NFC Alarm Clock</b></string>
+	<string name="dlg_rate_my_app">Si haz disfrutado la <b>NFC Despertador</b>, por favor tómate un momento para calificarla. ¡Gracias por su apoyo! </string>
 
 
 	<!-- Audio source dialog -->
@@ -77,9 +109,10 @@
 
 
 	<!-- Prompt buttons -->
-	<string name="ok">OK</string>
-	<string name="cancel">Cancelar</string>
-	<string name="clear">Despejar</string>
+	<string name="prompt_ok">OK</string>
+	<string name="prompt_cancel">Cancelar</string>
+	<string name="prompt_clear">Despejar</string>
+	<string name="prompt_default">Original</string>
 
 
 
@@ -252,7 +285,7 @@
 
 
 	<!-- Time remaining format -->
-	<string name="next_alarm_format">Formato de la proxima alarma&#8230;</string>
+	<string name="next_alarm_format">Estilo de la proxima alarma&#8230;</string>
 	<string name="next_alarm_format_key">pref_time_remaining_format</string>
 	<string name="next_alarm_format_countdown">Proxima alarma en 7 horas 30 minutos</string>
 	<string name="next_alarm_format_time">Proxima alarma Lun, 7:00 AM</string>

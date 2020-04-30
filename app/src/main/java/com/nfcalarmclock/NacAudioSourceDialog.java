@@ -22,30 +22,30 @@ public class NacAudioSourceDialog
 	private RadioGroup mRadioGroup;
 
 	/**
-	 * Defaults.
+	 * Constants.
 	 */
-	private NacSharedDefaults mDefaults;
+	private NacSharedConstants mConstants;
 
 	/**
 	 */
 	public NacAudioSourceDialog()
 	{
-		super();
+		super(R.layout.dlg_alarm_audio_source);
 
 		this.mRadioGroup = null;
-		this.mDefaults = null;
+		this.mConstants = null;
 
 		addOnDismissListener(this);
 		addOnShowListener(this);
 	}
 
 	/**
-	 * Build the dialog.
 	 */
-	public void build(Context context)
+	@Override
+	public AlertDialog.Builder build(Context context)
 	{
-		this.mDefaults = new NacSharedDefaults(context);
-		this.build(context, R.layout.dlg_alarm_audio_source);
+		this.mConstants = new NacSharedConstants(context);
+		return super.build(context);
 	}
 
 	/**
@@ -67,11 +67,11 @@ public class NacAudioSourceDialog
 	}
 
 	/**
-	 * @return The defaults.
+	 * @return The constants.
 	 */
-	private NacSharedDefaults getDefaults()
+	private NacSharedConstants getConstants()
 	{
-		return this.mDefaults;
+		return this.mConstants;
 	}
 
 	/**
@@ -80,11 +80,11 @@ public class NacAudioSourceDialog
 	@Override
 	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
-		String title = "Choose an audio source";
+		NacSharedConstants cons = new NacSharedConstants(context);
 
-		builder.setTitle(title);
-		setPositiveButton("OK");
-		setNegativeButton("Cancel");
+		builder.setTitle(cons.getSelectAudioSource());
+		setPositiveButton(cons.getOk());
+		setNegativeButton(cons.getCancel());
 	}
 
 	/**
@@ -93,11 +93,11 @@ public class NacAudioSourceDialog
 	@Override
 	public boolean onDismissDialog(NacDialog dialog)
 	{
-		NacSharedDefaults defaults = this.getDefaults();
+		NacSharedConstants cons = this.getConstants();
 		RadioButton button = this.getCheckedButton();
 		String source = button.getText().toString();
 		String data = (source == null) || source.isEmpty()
-			? defaults.getAudioSources().get(1) : source;
+			? cons.getAudioSources().get(1) : source;
 
 		dialog.saveData(data);
 		return true;
@@ -112,9 +112,8 @@ public class NacAudioSourceDialog
 		Context context = root.getContext();
 		RadioGroup group = (RadioGroup) root.findViewById(R.id.audio_sources);
 		String data = this.getDataString();
-		NacSharedDefaults defaults = this.getDefaults();
-		NacSharedPreferences shared = new NacSharedPreferences(context);
-		List<String> audioSources = defaults.getAudioSources();
+		NacSharedConstants cons = this.getConstants();
+		List<String> audioSources = cons.getAudioSources();
 
 		if (data.equals(audioSources.get(0)))
 		{

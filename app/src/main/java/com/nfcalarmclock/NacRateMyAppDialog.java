@@ -20,24 +20,15 @@ public class NacRateMyAppDialog
 {
 
 	/**
-	 * Context.
-	 */
-	private Context mContext;
-
-	/**
 	 * Shared preferences.
 	 */
 	private NacSharedPreferences mShared;
 
 	/**
 	 */
-	public NacRateMyAppDialog(Context context)
+	public NacRateMyAppDialog()
 	{
-		super();
-
-		this.mContext = context;
-		this.mShared = new NacSharedPreferences(context);
-
+		super(R.layout.dlg_rate_my_app);
 		addOnShowListener(this);
 		addOnDismissListener(this);
 		addOnCancelListener(this);
@@ -47,19 +38,11 @@ public class NacRateMyAppDialog
 	/**
 	 * Build the dialog.
 	 */
-	public void build()
+	@Override
+	public AlertDialog.Builder build(Context context)
 	{
-		Context context = this.getContext();
-
-		this.build(context, R.layout.dlg_rate_my_app);
-	}
-
-	/**
-	 * @return The context.
-	 */
-	private Context getContext()
-	{
-		return this.mContext;
+		this.mShared = new NacSharedPreferences(context);
+		return super.build(context);
 	}
 
 	/**
@@ -76,13 +59,12 @@ public class NacRateMyAppDialog
 	@Override
 	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
-		String title = "Rate the app";
+		NacSharedConstants cons = new NacSharedConstants(context);
 
-		builder.setTitle(title);
-		setPositiveButton("Rate Now");
-		setNegativeButton("Later");
-		setNeutralButton("No, Thanks");
-
+		builder.setTitle(cons.getRateTitle());
+		setPositiveButton(cons.getRateNow());
+		setNegativeButton(cons.getRateLater());
+		setNeutralButton(cons.getRateNever());
 	}
 
 	/**
@@ -91,9 +73,7 @@ public class NacRateMyAppDialog
 	public boolean onCancelDialog(NacDialog dialog)
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-
-		shared.editRateMyAppCounter(0);
-
+		shared.resetRateMyApp();
 		return true;
 	}
 
@@ -102,15 +82,13 @@ public class NacRateMyAppDialog
 	@Override
 	public boolean onDismissDialog(NacDialog dialog)
 	{
+		Context context = getContext();
 		NacSharedPreferences shared = this.getSharedPreferences();
-		Context context = this.getContext();
 		Uri uri = Uri.parse("market://details?id=com.nfcalarmclock");
 		Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 
-		shared.editRateMyAppCounter(
-			NacSharedPreferences.DEFAULT_RATE_MY_APP_RATED);
+		shared.setRateMyAppRated();
 		context.startActivity(intent);
-
 		return true;
 	}
 
@@ -120,10 +98,8 @@ public class NacRateMyAppDialog
 	public boolean onNeutralActionDialog(NacDialog dialog)
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-
-		shared.editRateMyAppCounter(
-			-2*NacSharedPreferences.DEFAULT_RATE_MY_APP_LIMIT);
-
+		shared.setRateMyAppPostpone();
+		dialog.neutralDismiss();
 		return true;
 	}
 

@@ -39,11 +39,6 @@ public class NacActiveAlarmNotification
 	public static final String GROUP = "NacNotiGroupActiveAlarm";
 
 	/**
-	 * Title of this type of notification.
-	 */
-	public static final String TITLE = "NFC Alarm Clock";
-
-	/**
 	 * Context.
 	 */
 	private Context mContext;
@@ -67,7 +62,6 @@ public class NacActiveAlarmNotification
 	{
 		this.mContext = context;
 		this.mAlarm = alarm;
-
 		this.createChannel();
 	}
 
@@ -84,6 +78,7 @@ public class NacActiveAlarmNotification
 		PendingIntent snoozePending = this.getSnoozePendingIntent();
 		PendingIntent dismissPending = this.getDismissPendingIntent(
 			activityPending);
+		NacSharedConstants cons = new NacSharedConstants(context);
 
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(
 			context, CHANNEL)
@@ -99,9 +94,9 @@ public class NacActiveAlarmNotification
 			.setAutoCancel(false)
 			.setOngoing(true)
 			.setShowWhen(true)
-			.setTicker(TITLE)
-			.addAction(R.mipmap.snooze, "Snooze", snoozePending)
-			.addAction(R.mipmap.dismiss, "Dismiss", dismissPending);
+			.setTicker(cons.getAppName())
+			.addAction(R.mipmap.snooze, cons.getSnooze(), snoozePending)
+			.addAction(R.mipmap.dismiss, cons.getDismiss(), dismissPending);
 
 		return builder.build();
 	}
@@ -251,7 +246,9 @@ public class NacActiveAlarmNotification
 	@TargetApi(Build.VERSION_CODES.N)
 	public Spanned getTitle()
 	{
-		String title = "<b>" + TITLE + "</b>";
+		Context context = this.getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
+		String title = "<b>" + cons.getAppName() + "</b>";
 
 		return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
 			? Html.fromHtml(title, Html.FROM_HTML_MODE_LEGACY)

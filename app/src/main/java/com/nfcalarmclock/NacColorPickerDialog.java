@@ -46,8 +46,7 @@ public class NacColorPickerDialog
 	 */
 	public NacColorPickerDialog()
 	{
-		super();
-
+		super(R.layout.dlg_color_picker);
 		addOnShowListener(this);
 	}
 
@@ -74,11 +73,35 @@ public class NacColorPickerDialog
 	}
 
 	/**
+	 * @return True if can parse the color, and False otherwise.
+	 */
+	public boolean canParseColor(String name)
+	{
+		try
+		{
+			int color = Color.parseColor(name);
+			return true;
+		}
+		catch (IllegalArgumentException e)
+		{
+			return false;
+		}
+	}
+
+	/**
 	 * @return The color of the edit text box.
 	 */
 	public int getColor()
 	{
 		return this.mColorPicker.getColor();
+	}
+
+	/**
+	 * @return The EditText color.
+	 */
+	public String getEditTextColor()
+	{
+		return this.mEditText.getText().toString();
 	}
 
 	/**
@@ -92,10 +115,8 @@ public class NacColorPickerDialog
 	/**
 	 * Check if valid hex string was input into the EditText.
 	 */
-	public boolean isHexString()
+	public boolean isHexString(String name)
 	{
-		String name = this.mEditText.getText().toString();
-
 		for (int i=1; i < name.length(); i++)
 		{
 			if (Character.digit(name.charAt(i), 16) == -1)
@@ -103,7 +124,6 @@ public class NacColorPickerDialog
 				return false;
 			}
 		}
-
 		return true;
 	}
 
@@ -113,11 +133,11 @@ public class NacColorPickerDialog
 	@Override
 	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
-		String title = "Choose Color";
+		NacSharedConstants cons = new NacSharedConstants(context);
 
-		builder.setTitle(title);
-		setPositiveButton("OK");
-		setNegativeButton("Cancel");
+		builder.setTitle(cons.getSelectColor());
+		setPositiveButton(cons.getOk());
+		setNegativeButton(cons.getCancel());
 	}
 
 	/**
@@ -126,35 +146,27 @@ public class NacColorPickerDialog
 	@Override
 	public boolean onEditorAction(TextView tv, int action, KeyEvent event)
 	{
-		if ((event == null) && (action == EditorInfo.IME_ACTION_DONE))
+		//if ((event == null) && (action == EditorInfo.IME_ACTION_DONE))
+		if ((event != null) || (action != EditorInfo.IME_ACTION_DONE))
 		{
-			if (!this.isHexString())
-			{
-				NacUtility.quickToast(tv.getContext(), "Invalid hex color");
-				return false;
-			}
-
-			String name = this.mEditText.getText().toString();
-			int color;
-
-			try
-			{
-				color = Color.parseColor(name);
-			}
-			catch (IllegalArgumentException e)
-			{
-				NacUtility.quickToast(tv.getContext(), "Invalid hex color");
-				return false;
-			}
-
-			this.mColorPicker.setColor(color);
-			this.mColorExample.setColorFilter(color, PorterDuff.Mode.SRC);
-			closeKeyboard();
-
-			return true;
+			return false;
 		}
 
-		return false;
+		Context context = tv.getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
+		String name = this.getEditTextColor();
+
+		if (!this.isHexString(name) || !this.canParseColor(name))
+		{
+			NacUtility.quickToast(context, cons.getSelectColorError());
+			return false;
+		}
+
+		int color = Color.parseColor(name);
+		this.mColorPicker.setColor(color);
+		this.mColorExample.setColorFilter(color, PorterDuff.Mode.SRC);
+		closeKeyboard();
+		return true;
 	}
 
 	/**

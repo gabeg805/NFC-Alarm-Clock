@@ -2,9 +2,7 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.res.Resources;
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
 
 /**
  * Default values.
@@ -36,17 +34,11 @@ public class NacSharedDefaults
 	}
 
 	/**
-	 * @return The audio sources.
+	 * @return App first run
 	 */
-	public List<String> getAudioSources()
+	public boolean getAppFirstRun()
 	{
-		List<String> sources = new ArrayList<>();
-		sources.add(this.getString(R.string.audio_source_alarm));
-		sources.add(this.getString(R.string.audio_source_media));
-		sources.add(this.getString(R.string.audio_source_notification));
-		sources.add(this.getString(R.string.audio_source_ringtone));
-		sources.add(this.getString(R.string.audio_source_system));
-		return sources;
+		return this.getBoolean(R.bool.default_app_first_run);
 	}
 
 	/**
@@ -158,6 +150,30 @@ public class NacSharedDefaults
 	public boolean getPreventAppFromClosing()
 	{
 		return this.getBoolean(R.bool.default_prevent_app_from_closing);
+	}
+
+	/**
+	 * @return Rate my app counter.
+	 */
+	public int getRateMyAppCounter()
+	{
+		return this.getInteger(R.integer.default_rate_my_app_counter);
+	}
+
+	/**
+	 * @return Rate my app limit.
+	 */
+	public int getRateMyAppLimit()
+	{
+		return this.getInteger(R.integer.default_rate_my_app_limit);
+	}
+
+	/**
+	 * @return Rate my app rated.
+	 */
+	public int getRateMyAppRated()
+	{
+		return this.getInteger(R.integer.default_rate_my_app_rated);
 	}
 
 	/**

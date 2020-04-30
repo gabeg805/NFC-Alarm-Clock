@@ -264,33 +264,8 @@ public class NacWakeupProcess
 	private String getTimeToSay()
 	{
 		Context context = this.getContext();
-		Calendar calendar = Calendar.getInstance();
-		boolean format = NacCalendar.Time.is24HourFormat(context);
-		int hour = calendar.get(Calendar.HOUR_OF_DAY);
-		int minute = calendar.get(Calendar.MINUTE);
-		String[] time = NacCalendar.Time.getClockTime(hour, minute, format)
-			.split(":");
-		String ampm = (!format) ? ((hour < 12) ? ", AM" : ", PM") : "";
-
-		if (time[1].charAt(0) == '0')
-		{
-			if (time[1].charAt(1) == '0')
-			{
-				time[1] = "";
-			}
-			else
-			{
-				time[1] = "O, " + time[1].charAt(1);
-			}
-		}
-
-		if (!time[1].isEmpty())
-		{
-			time[1] = ", " + time[1];
-		}
-
-		String say = String.format(", , The time, is, %1$s %2$s %3$s", time[0],
-			time[1], ampm);
+		NacSharedConstants cons = new NacSharedConstants(context);
+		String say = cons.getSpeakToMe(context);
 
 		return say;
 	}

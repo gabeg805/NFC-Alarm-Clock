@@ -111,13 +111,14 @@ public class NacColorPreference
 	@Override
 	public boolean onPreferenceClick(Preference pref)
 	{
-		NacColorPickerDialog dialog = new NacColorPickerDialog();
 		Context context = this.mImageView.getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
+		NacColorPickerDialog dialog = new NacColorPickerDialog();
 
 		dialog.addOnDismissListener(this);
 		dialog.addOnNeutralActionListener(this);
-		dialog.build(context, R.layout.dlg_color_picker);
-		dialog.setNeutralButton("Default");
+		dialog.build(context);
+		dialog.setNeutralButton(cons.getDefault());
 		dialog.show();
 		dialog.scale(0.75, 0.85, false, true);
 		dialog.setColor(this.mValue);

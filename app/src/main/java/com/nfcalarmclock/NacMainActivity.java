@@ -288,20 +288,19 @@ public class NacMainActivity
 		NacSharedPreferences shared = this.getSharedPreferences();
 		int counter = shared.getRateMyAppCounter();
 
-		if (counter == NacSharedPreferences.DEFAULT_RATE_MY_APP_RATED)
+		if (shared.isRateMyAppRated())
 		{
 			return;
 		}
-		else if ((counter+1) >= NacSharedPreferences.DEFAULT_RATE_MY_APP_LIMIT)
+		else if (shared.isRateMyAppLimit())
 		{
-			NacRateMyAppDialog dialog = new NacRateMyAppDialog(this);
-
-			dialog.build();
+			NacRateMyAppDialog dialog = new NacRateMyAppDialog();
+			dialog.build(this);
 			dialog.show();
 		}
 		else
 		{
-			shared.editRateMyAppCounter(counter+1);
+			shared.incrementRateMyApp();
 		}
 	}
 

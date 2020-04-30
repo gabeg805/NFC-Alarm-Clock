@@ -147,7 +147,8 @@ public class NacForegroundService
 			db.close();
 		}
 
-		NacUtility.quickToast(this, "Alarm dismissed");
+		NacSharedConstants cons = new NacSharedConstants(this);
+		NacUtility.quickToast(this, cons.getDismissedAlarm());
 		this.finish();
 	}
 
@@ -454,6 +455,7 @@ public class NacForegroundService
 	 */
 	public void snooze()
 	{
+		NacSharedConstants cons = new NacSharedConstants(this);
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 		int id = alarm.getId();
@@ -462,7 +464,7 @@ public class NacForegroundService
 
 		if ((snoozeCount > maxSnoozeCount) && (maxSnoozeCount >= 0))
 		{
-			NacUtility.quickToast(this, "Unable to snooze the alarm");
+			NacUtility.quickToast(this, cons.getSnoozeError());
 			return;
 		}
 
@@ -474,7 +476,7 @@ public class NacForegroundService
 		NacScheduler.update(this, alarm, snooze);
 		shared.editSnoozeCount(id, snoozeCount);
 
-		NacUtility.quickToast(this, "Alarm snoozed");
+		NacUtility.quickToast(this, cons.getSnoozedAlarm());
 		this.finish();
 	}
 

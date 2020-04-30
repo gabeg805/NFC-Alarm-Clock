@@ -1,21 +1,20 @@
 package com.nfcalarmclock;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.view.View;
 
 /**
  */
 public class NacAutoDismissDialog
 	extends NacSpinnerDialog
-	implements NacDialog.OnBuildListener,
-		NacDialog.OnShowListener
+	implements NacDialog.OnShowListener
 {
 
 	/**
 	 */
 	public NacAutoDismissDialog()
 	{
-		this.setOnBuildListener(this);
 		this.addOnShowListener(this);
 	}
 
@@ -23,11 +22,13 @@ public class NacAutoDismissDialog
 	 * Build the dialog.
 	 */
 	@Override
-	public void onBuildDialog(NacDialog dialog, AlertDialog.Builder builder)
+	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
-		builder.setTitle("Auto-Dismiss");
-		dialog.setPositiveButton("OK");
-		dialog.setNegativeButton("Cancel");
+		NacSharedConstants cons = new NacSharedConstants(context);
+
+		builder.setTitle(cons.getAutoDismiss());
+		setPositiveButton(cons.getOk());
+		setNegativeButton(cons.getCancel());
 	}
 
 	/**

@@ -1,21 +1,20 @@
 package com.nfcalarmclock;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.view.View;
 
 /**
  */
 public class NacMaxSnoozeDialog
 	extends NacSpinnerDialog
-	implements NacDialog.OnBuildListener,
-		NacDialog.OnShowListener
+	implements NacDialog.OnShowListener
 {
 
 	/**
 	 */
 	public NacMaxSnoozeDialog()
 	{
-		this.setOnBuildListener(this);
 		this.addOnShowListener(this);
 	}
 
@@ -23,11 +22,13 @@ public class NacMaxSnoozeDialog
 	 * Build the dialog.
 	 */
 	@Override
-	public void onBuildDialog(NacDialog dialog, AlertDialog.Builder builder)
+	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
-		builder.setTitle("Max Snoozes");
-		dialog.setPositiveButton("OK");
-		dialog.setNegativeButton("Cancel");
+		NacSharedConstants cons = new NacSharedConstants(context);
+
+		builder.setTitle(cons.getMaxSnooze());
+		setPositiveButton(cons.getOk());
+		setNegativeButton(cons.getCancel());
 	}
 
 	/**

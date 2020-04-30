@@ -19,7 +19,8 @@ import java.util.List;
  * A generic dialog object.
  */
 public class NacDialog
-	implements View.OnLayoutChangeListener,
+	implements View.OnClickListener,
+		View.OnLayoutChangeListener,
 		DialogInterface.OnClickListener,
 		DialogInterface.OnCancelListener
 {
@@ -164,6 +165,11 @@ public class NacDialog
 	private Object mId;
 
 	/**
+	 * Layout ID.
+	 */
+	private int mLayoutId;
+
+	/**
 	 * The dialog listeners.
 	 */
 	private OnBuildListener mBuildListener;
@@ -202,6 +208,15 @@ public class NacDialog
 		this.mWasCanceledOrDismissed = false;
 		this.mScaler = null;
 		this.mId = null;
+		this.mLayoutId = -1;
+	}
+
+	/**
+	 */
+	public NacDialog(int id)
+	{
+		this();
+		this.setLayoutId(id);
 	}
 
 	/**
@@ -257,6 +272,15 @@ public class NacDialog
 	public void addOnShowListener(OnShowListener listener)
 	{
 		this.mShowListener.add(listener);
+	}
+
+	/**
+	 * @see build
+	 */
+	public AlertDialog.Builder build(Context context)
+	{
+		int id = this.getLayoutId();
+		return this.build(context, id);
 	}
 
 	/**
@@ -393,6 +417,20 @@ public class NacDialog
 	}
 
 	/**
+	 * Call the OnNeutralAction listeners.
+	 */
+	public void callOnNeutralActionListeners()
+	{
+		for (OnNeutralActionListener listener : this.mNeutralActionListener)
+		{
+			if (!listener.onNeutralActionDialog(this))
+			{
+				return;
+			}
+		}
+	}
+
+	/**
 	 * Cancel the dialog and call the onCancelDialog listener.
 	 */
 	public void cancel()
@@ -420,7 +458,7 @@ public class NacDialog
 	 */
 	protected void closeKeyboard()
 	{
-		Context context = this.getRoot().getContext();
+		Context context = this.getContext();
 		InputMethodManager inputManager = (InputMethodManager)
 			context.getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -448,6 +486,14 @@ public class NacDialog
 
 		this.setCanceledOrDismissed(true);
 		this.mDialog.dismiss();
+	}
+
+	/**
+	 * @return The context.
+	 */
+	public Context getContext()
+	{
+		return this.getRoot().getContext();
 	}
 
 	/**
@@ -499,6 +545,14 @@ public class NacDialog
 	}
 
 	/**
+	 * @return The layout.
+	 */
+	public int getLayoutId()
+	{
+		return this.mLayoutId;
+	}
+
+	/**
 	 * @return The root view.
 	 */
 	public View getRoot()
@@ -532,13 +586,16 @@ public class NacDialog
 	 */
 	public void neutral()
 	{
-		for (OnNeutralActionListener listener : this.mNeutralActionListener)
-		{
-			if (!listener.onNeutralActionDialog(this))
-			{
-				return;
-			}
-		}
+		this.callOnNeutralActionListeners();
+	}
+
+	/**
+	 * Dismiss the dialog neutrally (so as not to call the cancel/dismiss
+	 * listeners).
+	 */
+	public void neutralDismiss()
+	{
+		this.mDialog.dismiss();
 	}
 
 	/**
@@ -555,6 +612,16 @@ public class NacDialog
 	}
 
 	/**
+	 * Handles clicks events for the Neutral button, so that the user can
+	 * choose whether it closes the dialog or not.
+	 */
+	@Override
+	public void onClick(View view)
+	{
+		neutral();
+	}
+
+	/**
 	 * Handles click events on the Ok/Cancel buttons in the dialog.
 	 */
 	@Override
@@ -562,13 +629,13 @@ public class NacDialog
 	{
 		switch (which)
 		{
-		case DialogInterface.BUTTON_POSITIVE:
-			this.dismiss();
-			break;
-		case DialogInterface.BUTTON_NEGATIVE:
-		default:
-			this.cancel();
-			break;
+			case DialogInterface.BUTTON_POSITIVE:
+				this.dismiss();
+				break;
+			case DialogInterface.BUTTON_NEGATIVE:
+			default:
+				this.cancel();
+				break;
 		}
 	}
 
@@ -688,6 +755,14 @@ public class NacDialog
 	}
 
 	/**
+	 * Set the layout.
+	 */
+	public void setLayoutId(int id)
+	{
+		this.mLayoutId = id;
+	}
+
+	/**
 	 * Set the negative button which will call onCancelDialog when clicked.
 	 */
 	public void setNegativeButton(String title)
@@ -739,15 +814,14 @@ public class NacDialog
 	 */
 	public void setupDialog()
 	{
-		Context context = this.mRoot.getContext();
+		Context context = this.getContext();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
 		int[] buttonTypes = new int[] { AlertDialog.BUTTON_NEGATIVE,
 			AlertDialog.BUTTON_POSITIVE, AlertDialog.BUTTON_NEUTRAL };
-		Button button;
 
 		for (int i=0; i < 3; i++)
 		{
-			button = this.mDialog.getButton(buttonTypes[i]);
+			Button button = this.mDialog.getButton(buttonTypes[i]);
 
 			if (button == null)
 			{
@@ -758,14 +832,7 @@ public class NacDialog
 
 			if (buttonTypes[i] == AlertDialog.BUTTON_NEUTRAL)
 			{
-				button.setOnClickListener(new View.OnClickListener()
-				{
-					@Override
-					public void onClick(View view)
-					{
-						neutral();
-					}
-				});
+				button.setOnClickListener(this);
 			}
 		}
 
@@ -804,7 +871,7 @@ public class NacDialog
 	 */
 	protected void showKeyboard()
 	{
-		Context context = this.getRoot().getContext();
+		Context context = this.getContext();
 		InputMethodManager inputManager = (InputMethodManager)
 			context.getSystemService(Context.INPUT_METHOD_SERVICE);
 

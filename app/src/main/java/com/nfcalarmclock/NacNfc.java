@@ -77,11 +77,11 @@ public class NacNfc
 		{
 			if (!nfcAdapter.isEnabled())
 			{
-				Activity activity = (Activity) context;
 				Intent settings = new Intent(Settings.ACTION_NFC_SETTINGS);
+				NacSharedConstants cons = new NacSharedConstants(context);
 
-				NacUtility.toast(context, "Please enable NFC to dismiss the alarm");
-				activity.startActivity(settings);
+				NacUtility.toast(context, cons.getNfcRequest());
+				context.startActivity(settings);
 			}
 
 			Intent intent = new Intent(context, NacAlarmActivity.class)

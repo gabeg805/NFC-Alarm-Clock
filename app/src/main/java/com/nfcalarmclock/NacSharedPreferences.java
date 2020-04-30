@@ -37,11 +37,6 @@ public class NacSharedPreferences
 	private final NacSharedConstants mConstants;
 
 	/**
-	 * Default value to see if this is the app's first run after installing.
-	 */
-	private static final boolean DEFAULT_APP_FIRST_RUN = true;
-
-	/**
 	 * Default app rating counter.
 	 */
 	public static final int DEFAULT_RATE_MY_APP_COUNTER = 0;
@@ -135,7 +130,6 @@ public class NacSharedPreferences
 	public void editAppFirstRun(boolean first, boolean commit)
 	{
 		String key = this.getKeys().getAppFirstRun();
-
 		this.saveBoolean(key, first, commit);
 	}
 
@@ -352,7 +346,6 @@ public class NacSharedPreferences
 	public void editRateMyAppCounter(int counter, boolean commit)
 	{
 		String key = this.getKeys().getRateMyAppCounter();
-
 		this.saveInt(key, counter, commit);
 	}
 
@@ -554,8 +547,8 @@ public class NacSharedPreferences
 	public boolean getAppFirstRun()
 	{
 		String key = this.getKeys().getAppFirstRun();
-
-		return this.getSharedPreferences().getBoolean(key, DEFAULT_APP_FIRST_RUN);
+		boolean value = this.getDefaults().getAppFirstRun();
+		return this.getSharedPreferences().getBoolean(key, value);
 	}
 
 	/**
@@ -563,8 +556,10 @@ public class NacSharedPreferences
 	 */
 	public String getAudioSource()
 	{
+		Context context = this.getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
 		String key = this.getKeys().getAudioSource();
-		String value = this.getDefaults().getAudioSources().get(1);
+		String value = cons.getAudioSources().get(1);
 		return this.getSharedPreferences().getString(key, value);
 	}
 
@@ -945,9 +940,8 @@ public class NacSharedPreferences
 	public int getRateMyAppCounter()
 	{
 		String key = this.getKeys().getRateMyAppCounter();
-
-		return this.getSharedPreferences().getInt(key,
-			DEFAULT_RATE_MY_APP_COUNTER);
+		int value = this.getDefaults().getRateMyAppCounter();
+		return this.getSharedPreferences().getInt(key, value);
 	}
 
 	/**
@@ -1090,8 +1084,8 @@ public class NacSharedPreferences
 		}
 		else
 		{
-			return cons.getFrequencyInterval() + " " + value +
-				((freq == 1) ? " minute" : " minutes");
+			return String.format("%1$s %2$s %3$s", cons.getFrequencyInterval(),
+				value, (freq == 1) ? " minute" : " minutes");
 		}
 	}
 
@@ -1176,6 +1170,44 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * Increment the rate my app counter.
+	 */
+	public void incrementRateMyApp()
+	{
+		int counter = this.getRateMyAppCounter();
+		this.editRateMyAppCounter(counter+1);
+	}
+
+	/**
+	 * @return True if app has reached the counter limit, and False otherwise.
+	 */
+	public boolean isRateMyAppLimit()
+	{
+		int counter = this.getRateMyAppCounter();
+		int limit = this.getDefaults().getRateMyAppLimit();
+		return counter == limit;
+	}
+
+	/**
+	 * @return True if app has been rated, and False otherwise.
+	 */
+	public boolean isRateMyAppRated()
+	{
+		int counter = this.getRateMyAppCounter();
+		int rated = this.getDefaults().getRateMyAppRated();
+		return counter == rated;
+	}
+
+	/**
+	 * Reset the rate my app counter.
+	 */
+	public void resetRateMyApp()
+	{
+		int reset = this.getDefaults().getRateMyAppCounter();
+		this.editRateMyAppCounter(reset);
+	}
+
+	/**
 	 * @see save
 	 */
 	public void save(SharedPreferences.Editor editor)
@@ -1253,6 +1285,24 @@ public class NacSharedPreferences
 			.putString(key, value);
 
 		this.save(editor, commit);
+	}
+
+	/**
+	 * Set rate my app to the postpone value.
+	 */
+	public void setRateMyAppPostpone()
+	{
+		int postpone = -2 * this.getDefaults().getRateMyAppLimit();
+		this.editRateMyAppCounter(postpone);
+	}
+
+	/**
+	 * Set rate my app to the rated value.
+	 */
+	public void setRateMyAppRated()
+	{
+		int rated = this.getDefaults().getRateMyAppRated();
+		this.editRateMyAppCounter(rated);
 	}
 
 }

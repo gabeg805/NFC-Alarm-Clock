@@ -567,7 +567,8 @@ public class NacCardHolder
 		if (shared.getPreventAppFromClosing() && (shared.getSnoozeCount(alarm.getId()) > 0))
 		{
 			Context context = this.getContext();
-			NacUtility.quickToast(context, "Unable to change days on a snoozed alarm");
+			NacSharedConstants cons = new NacSharedConstants(context);
+			NacUtility.quickToast(context, cons.getSnoozedDaysError());
 			return true;
 		}
 
@@ -694,7 +695,8 @@ public class NacCardHolder
 	private void toastNfcEnabled()
 	{
 		Context context = this.getContext();
-		NacUtility.quickToast(context, "NFC required to dismiss alarm");
+		NacSharedConstants cons = new NacSharedConstants(context);
+		NacUtility.quickToast(context, cons.getNfcRequired());
 	}
 
 	/**
@@ -704,7 +706,8 @@ public class NacCardHolder
 	private void toastDeleteSnoozedAlarmError()
 	{
 		Context context = this.getContext();
-		NacUtility.quickToast(context, "Unable to delete a snoozed alarm");
+		NacSharedConstants cons = new NacSharedConstants(context);
+		NacUtility.quickToast(context, cons.getSnoozedDeleteError());
 	}
 
 	/**
@@ -714,7 +717,8 @@ public class NacCardHolder
 	private void toastModifySnoozedAlarmError()
 	{
 		Context context = this.getContext();
-		NacUtility.quickToast(context, "Unable to modify a snoozed alarm");
+		NacSharedConstants cons = new NacSharedConstants(context);
+		NacUtility.quickToast(context, cons.getSnoozedModifyError());
 	}
 
 }

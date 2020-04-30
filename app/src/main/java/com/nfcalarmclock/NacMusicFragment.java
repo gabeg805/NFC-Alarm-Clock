@@ -79,7 +79,6 @@ public class NacMusicFragment
 		Bundle bundle = NacBundle.toBundle(alarm);
 
 		fragment.setArguments(bundle);
-
 		return fragment;
 	}
 
@@ -92,7 +91,6 @@ public class NacMusicFragment
 		Bundle bundle = NacBundle.toBundle(media);
 
 		fragment.setArguments(bundle);
-
 		return fragment;
 	}
 
@@ -101,10 +99,12 @@ public class NacMusicFragment
 	@Override
 	public void onBuildDialog(NacDialog dialog, AlertDialog.Builder builder)
 	{
-		builder.setTitle("You Selected a Folder");
+		Context context = dialog.getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
 
-		dialog.setPositiveButton("YES");
-		dialog.setNegativeButton("NO");
+		builder.setTitle(cons.getFolderSelected());
+		dialog.setPositiveButton(cons.getOk());
+		dialog.setNegativeButton(cons.getCancel());
 	}
 
 	/**
@@ -169,9 +169,10 @@ public class NacMusicFragment
 			{
 				if (this.safePlay(uri, true) < 0)
 				{
+					NacSharedConstants cons = new NacSharedConstants(context);
 					NacUtility.printf("Unable to play music : %d | %s",
 						metadata.getId(), metadata.getPath());
-					NacUtility.toast(context, "Unable to play music");
+					NacUtility.toast(context, cons.getPlayAudioError());
 				}
 			}
 			else
