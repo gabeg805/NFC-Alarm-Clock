@@ -107,7 +107,7 @@ public class NacFileBrowser
 		container.addView(entry);
 		imageView.setImageResource(R.mipmap.folder);
 		titleView.setText(name.equals("..")
-			? String.format(locale, "(%1$s)", cons.getPreviousFolder())
+			? String.format(locale, "(%1$s)", cons.getActionPreviousFolder())
 			: name);
 		entry.setTag(metadata);
 		entry.setOnClickListener(this);

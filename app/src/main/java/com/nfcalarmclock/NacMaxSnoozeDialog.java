@@ -27,8 +27,8 @@ public class NacMaxSnoozeDialog
 		NacSharedConstants cons = new NacSharedConstants(context);
 
 		builder.setTitle(cons.getMaxSnooze());
-		setPositiveButton(cons.getOk());
-		setNegativeButton(cons.getCancel());
+		setPositiveButton(cons.getActionOk());
+		setNegativeButton(cons.getActionCancel());
 	}
 
 	/**

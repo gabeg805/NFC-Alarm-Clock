@@ -27,8 +27,8 @@ public class NacSnoozeDurationDialog
 		NacSharedConstants cons = new NacSharedConstants(context);
 
 		builder.setTitle(cons.getSnoozeDuration());
-		setPositiveButton(cons.getOk());
-		setNegativeButton(cons.getCancel());
+		setPositiveButton(cons.getActionOk());
+		setNegativeButton(cons.getActionCancel());
 	}
 
 	/**

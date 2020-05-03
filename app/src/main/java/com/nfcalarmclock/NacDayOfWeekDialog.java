@@ -27,9 +27,9 @@ public class NacDayOfWeekDialog
 	{
 		NacSharedConstants cons = new NacSharedConstants(context);
 
-		builder.setTitle(cons.getSelectDays());
-		setPositiveButton(cons.getOk());
-		setNegativeButton(cons.getCancel());
+		builder.setTitle(cons.getTitleDays());
+		setPositiveButton(cons.getActionOk());
+		setNegativeButton(cons.getActionCancel());
 	}
 
 	/**

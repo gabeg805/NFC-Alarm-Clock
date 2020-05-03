@@ -61,10 +61,10 @@ public class NacRateMyAppDialog
 	{
 		NacSharedConstants cons = new NacSharedConstants(context);
 
-		builder.setTitle(cons.getRateTitle());
-		setPositiveButton(cons.getRateNow());
-		setNegativeButton(cons.getRateLater());
-		setNeutralButton(cons.getRateNever());
+		builder.setTitle(cons.getTitleRateMyApp());
+		setPositiveButton(cons.getActionRateNow());
+		setNegativeButton(cons.getActionRateLater());
+		setNeutralButton(cons.getActionRateNever());
 	}
 
 	/**

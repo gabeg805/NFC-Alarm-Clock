@@ -29,7 +29,7 @@
 		android:textColor="@color/white"
 		android:textSize="@dimen/tsz_icon"
 		android:textStyle="bold"
-		android:text="@string/copy_alarm"
+		android:text="@string/action_alarm_copy"
 		/>
 
 </RelativeLayout>

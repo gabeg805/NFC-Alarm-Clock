@@ -82,9 +82,9 @@ public class NacAudioSourceDialog
 	{
 		NacSharedConstants cons = new NacSharedConstants(context);
 
-		builder.setTitle(cons.getSelectAudioSource());
-		setPositiveButton(cons.getOk());
-		setNegativeButton(cons.getCancel());
+		builder.setTitle(cons.getTitleAudioSource());
+		setPositiveButton(cons.getActionOk());
+		setNegativeButton(cons.getActionCancel());
 	}
 
 	/**

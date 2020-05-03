@@ -118,7 +118,7 @@ public class NacColorPreference
 		dialog.addOnDismissListener(this);
 		dialog.addOnNeutralActionListener(this);
 		dialog.build(context);
-		dialog.setNeutralButton(cons.getDefault());
+		dialog.setNeutralButton(cons.getActionDefault());
 		dialog.show();
 		dialog.scale(0.75, 0.85, false, true);
 		dialog.setColor(this.mValue);

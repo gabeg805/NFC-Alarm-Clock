@@ -308,7 +308,8 @@ public class NacAlarmActivity
 			if (this.shouldUseNfc())
 			{
 				NacSharedConstants cons = new NacSharedConstants(this);
-				NacUtility.quickToast(this, cons.getNfcUnsupported());
+				NacUtility.quickToast(this,
+					cons.getErrorMessageNfcUnsupported());
 			}
 		}
 	}
@@ -380,7 +381,7 @@ public class NacAlarmActivity
 		if ((snoozeCount > maxSnoozeCount) && (maxSnoozeCount >= 0))
 		{
 			NacSharedConstants cons = new NacSharedConstants(this);
-			NacUtility.quickToast(this, cons.getSnoozeError());
+			NacUtility.quickToast(this, cons.getErrorMessageSnooze());
 			return;
 		}
 

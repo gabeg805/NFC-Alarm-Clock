@@ -185,10 +185,10 @@ public class NacMedia
 				MediaStore.Audio.Artists.ARTIST);
 			artist = c.getString(artistIndex);
 
-			if (artist.equals("<unknown>"))
+			if ((artist == null) || artist.equals("<unknown>"))
 			{
 				NacSharedConstants cons = new NacSharedConstants(context);
-				artist = cons.getUnknown();
+				artist = cons.getStateUnknown();
 			}
 		}
 		catch (IllegalArgumentException e)

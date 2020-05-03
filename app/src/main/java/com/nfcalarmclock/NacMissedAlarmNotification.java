@@ -73,7 +73,7 @@ public class NacMissedAlarmNotification
 		NotificationManager manager = context.getSystemService(
 			NotificationManager.class);
 
-		channel.setDescription(cons.getMissedNotificationDescription());
+		channel.setDescription(cons.getDescriptionMissedNotification());
 		channel.setShowBadge(true);
 		channel.enableLights(true);
 		channel.enableVibration(true);

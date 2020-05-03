@@ -543,7 +543,7 @@ public class NacSharedPreferences
 
 		if (index == 0)
 		{
-			return cons.getOff();
+			return cons.getStateOff();
 		}
 		else
 		{
@@ -738,9 +738,10 @@ public class NacSharedPreferences
 	 */
 	public static String getMediaMessage(Context context, String path)
 	{
+		NacSharedConstants cons = new NacSharedConstants(context);
 		return (path != null) && !path.isEmpty()
 			? NacMedia.getTitle(context, path)
-			: context.getResources().getString(R.string.media_hint);
+			: cons.getDescriptionMedia();
 	}
 
 	/**
@@ -758,8 +759,9 @@ public class NacSharedPreferences
 	 */
 	public static String getMediaSummary(Context context, String path)
 	{
+		NacSharedConstants cons = new NacSharedConstants(context);
 		String name = NacMedia.getTitle(context, path);
-		return !name.isEmpty() ? name : context.getResources().getString(R.string.none);
+		return !name.isEmpty() ? name : cons.getNone();
 	}
 
 	/**
@@ -816,8 +818,8 @@ public class NacSharedPreferences
 	 */
 	public static String getNameMessage(Context context, String name)
 	{
-		return !name.isEmpty() ? name
-			: context.getResources().getString(R.string.name_hint);
+		NacSharedConstants cons = new NacSharedConstants(context);
+		return !name.isEmpty() ? name : cons.getName();
 	}
 
 	/**
@@ -835,8 +837,10 @@ public class NacSharedPreferences
 	 */
 	public static String getNameSummary(Context context, String name)
 	{
-		return (name != null) && !name.isEmpty() ? name.replace("\n", " ")
-			: context.getResources().getString(R.string.none);
+		NacSharedConstants cons = new NacSharedConstants(context);
+		return (name != null) && !name.isEmpty()
+			? name.replace("\n", " ")
+			: cons.getNone();
 	}
 
 	/**

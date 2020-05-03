@@ -160,7 +160,7 @@ public class NacRingtoneFragment
 			{
 				NacSharedConstants cons = new NacSharedConstants(context);
 				NacUtility.printf("Unable to play ringtone : %s", path);
-				NacUtility.toast(context, cons.getPlayAudioError());
+				NacUtility.toast(context, cons.getErrorMessagePlayAudio());
 			}
 		}
 	}

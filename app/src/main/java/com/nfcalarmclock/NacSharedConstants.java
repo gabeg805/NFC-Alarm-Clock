@@ -31,19 +31,107 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Browse action.
+	 */
+	public String getActionBrowse()
+	{
+		return this.getString(R.string.action_browse);
+	}
+
+	/**
+	 * @return Cancel action.
+	 */
+	public String getActionCancel()
+	{
+		return this.getString(R.string.action_cancel);
+	}
+
+	/**
+	 * @return Clear action.
+	 */
+	public String getActionClear()
+	{
+		return this.getString(R.string.action_clear);
+	}
+
+	/**
+	 * @return Default action.
+	 */
+	public String getActionDefault()
+	{
+		return this.getString(R.string.action_default);
+	}
+
+	/**
+	 * @return Dismiss action.
+	 */
+	public String getActionDismiss()
+	{
+		return this.getString(R.string.action_alarm_dismiss);
+	}
+
+	/**
+	 * @return Ok action.
+	 */
+	public String getActionOk()
+	{
+		return this.getString(R.string.action_ok);
+	}
+
+	/**
+	 * @return Previous folder action.
+	 */
+	public String getActionPreviousFolder()
+	{
+		return this.getString(R.string.action_previous_folder);
+	}
+
+	/**
+	 * @return Rate later action.
+	 */
+	public String getActionRateLater()
+	{
+		return this.getString(R.string.action_rate_later);
+	}
+
+	/**
+	 * @return Rate never action.
+	 */
+	public String getActionRateNever()
+	{
+		return this.getString(R.string.action_rate_never);
+	}
+
+	/**
+	 * @return Rate now action.
+	 */
+	public String getActionRateNow()
+	{
+		return this.getString(R.string.action_rate_now);
+	}
+
+	/**
+	 * @return Snooze action.
+	 */
+	public String getActionSnooze()
+	{
+		return this.getString(R.string.action_alarm_snooze);
+	}
+
+	/**
+	 * @return Undo action.
+	 */
+	public String getActionUndo()
+	{
+		return this.getString(R.string.action_undo);
+	}
+
+	/**
 	 * @return Active notification.
 	 */
 	public String getActiveNotification()
 	{
-		return this.getString(R.string.active_alarm_other);
-	}
-
-	/**
-	 * @return Active notification description.
-	 */
-	public String getActiveNotificationDescription()
-	{
-		return this.getString(R.string.active_alarm_description);
+		return this.getString(R.string.active_alarm_plural);
 	}
 
 	/**
@@ -85,46 +173,6 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Browse.
-	 */
-	public String getBrowse()
-	{
-		return this.getString(R.string.browse);
-	}
-
-	/**
-	 * @return Cancel.
-	 */
-	public String getCancel()
-	{
-		return this.getString(R.string.prompt_cancel);
-	}
-
-	/**
-	 * @return Clear.
-	 */
-	public String getClear()
-	{
-		return this.getString(R.string.prompt_clear);
-	}
-
-	/**
-	 * @return The color hint.
-	 */
-	public String getColorHint()
-	{
-		return this.getString(R.string.color_hint);
-	}
-
-	/**
-	 * @return Copied alarm.
-	 */
-	public String getCopiedAlarm()
-	{
-		return this.getString(R.string.copied_alarm);
-	}
-
-	/**
 	 * @return The days of week.
 	 */
 	public List<String> getDaysOfWeek()
@@ -157,35 +205,107 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Default.
+	 * @return Active notification description.
 	 */
-	public String getDefault()
+	public String getDescriptionActiveNotification()
 	{
-		return this.getString(R.string.prompt_default);
+		return this.getString(R.string.description_active_alarm);
 	}
 
 	/**
-	 * @return Deleted alarm.
+	 * @return The media description.
 	 */
-	public String getDeletedAlarm()
+	public String getDescriptionMedia()
 	{
-		return this.getString(R.string.deleted_alarm);
+		return this.getString(R.string.description_media);
 	}
 
 	/**
-	 * @return Dismiss.
+	 * @return Missed notification description.
 	 */
-	public String getDismiss()
+	public String getDescriptionMissedNotification()
 	{
-		return this.getString(R.string.dismiss_alarm);
+		return this.getString(R.string.description_missed_alarm);
 	}
 
 	/**
-	 * @return Dismissed alarm.
+	 * @return Upcoming notification description.
 	 */
-	public String getDismissedAlarm()
+	public String getDescriptionUpcomingNotification()
 	{
-		return this.getString(R.string.dismissed_alarm);
+		return this.getString(R.string.description_upcoming_alarm);
+	}
+
+	/**
+	 * @return Max alarm error message.
+	 */
+	public String getErrorMessageMaxAlarms()
+	{
+		return this.getString(R.string.error_message_max_alarms);
+	}
+
+	/**
+	 * @return NFC is unsupported error message.
+	 */
+	public String getErrorMessageNfcUnsupported()
+	{
+		return this.getString(R.string.error_message_nfc_unsupported);
+	}
+
+	/**
+	 * @return Play audio error message.
+	 */
+	public String getErrorMessagePlayAudio()
+	{
+		return this.getString(R.string.error_message_play_audio);
+	}
+
+	/**
+	 * @return Play file error message.
+	 */
+	public String getErrorMessagePlayFile()
+	{
+		return this.getString(R.string.error_message_play_file);
+	}
+
+	/**
+	 * @return Select color error message.
+	 */
+	public String getErrorMessageSelectColor()
+	{
+		return this.getString(R.string.error_message_select_color);
+	}
+
+	/**
+	 * @return Snooze error message.
+	 */
+	public String getErrorMessageSnooze()
+	{
+		return this.getString(R.string.error_message_snooze);
+	}
+
+	/**
+	 * @return Error message when modifying days while snoozed.
+	 */
+	public String getErrorMessageSnoozedDays()
+	{
+		return this.getString(R.string.error_message_snoozed_days);
+	}
+
+	/**
+	 * @return Error message when trying to delete alarm while snoozed.
+	 */
+	public String getErrorMessageSnoozedDelete()
+	{
+		return this.getString(R.string.error_message_snoozed_delete);
+	}
+
+	/**
+	 * @return Error message when trying to modify alarm while snoozed.
+	 */
+	public String getErrorMessageSnoozedModify()
+	{
+		return this.getString(R.string.error_message_snoozed_modify);
 	}
 
 	/**
@@ -197,11 +317,11 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Folder selected.
+	 * @return The alarm name example.
 	 */
-	public String getFolderSelected()
+	public String getExampleName()
 	{
-		return this.getString(R.string.folder_selected);
+		return this.getString(R.string.example_name);
 	}
 
 	/**
@@ -237,19 +357,75 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Max alarm error.
-	 */
-	public String getMaxAlarmsError()
-	{
-		return this.getString(R.string.max_alarms_error);
-	}
-
-	/**
 	 * @return Max snooze.
 	 */
 	public String getMaxSnooze()
 	{
 		return this.getString(R.string.max_snooze);
+	}
+
+	/**
+	 * @return Message when an alarm is copied.
+	 */
+	public String getMessageAlarmCopy()
+	{
+		return this.getString(R.string.message_alarm_copy);
+	}
+
+	/**
+	 * @return Message when an alarm is deleted.
+	 */
+	public String getMessageAlarmDelete()
+	{
+		return this.getString(R.string.message_alarm_delete);
+	}
+
+	/**
+	 * @return Message when an alarm is dismissed.
+	 */
+	public String getMessageAlarmDismiss()
+	{
+		return this.getString(R.string.message_alarm_dismiss);
+	}
+
+	/**
+	 * @return Message when an alarm is restored.
+	 */
+	public String getMessageAlarmRestore()
+	{
+		return this.getString(R.string.message_alarm_restore);
+	}
+
+	/**
+	 * @return Message when an alarm is snoozed.
+	 */
+	public String getMessageAlarmSnooze()
+	{
+		return this.getString(R.string.message_alarm_snooze);
+	}
+
+	/**
+	 * @return Enable NFC request message.
+	 */
+	public String getMessageNfcRequest()
+	{
+		return this.getString(R.string.message_nfc_request);
+	}
+
+	/**
+	 * @return NFC is required message.
+	 */
+	public String getMessageNfcRequired()
+	{
+		return this.getString(R.string.message_nfc_required);
+	}
+
+	/**
+	 * @return No alarms scheduled message.
+	 */
+	public String getMessageNoAlarmsScheduled()
+	{
+		return this.getString(R.string.message_no_alarms_scheduled);
 	}
 
 	/**
@@ -273,23 +449,7 @@ public class NacSharedConstants
 	 */
 	public String getMissedNotification()
 	{
-		return this.getString(R.string.missed_alarm_other);
-	}
-
-	/**
-	 * @return Missed notification description.
-	 */
-	public String getMissedNotificationDescription()
-	{
-		return this.getString(R.string.missed_alarm_description);
-	}
-
-	/**
-	 * @return The media hint.
-	 */
-	public String getMediaHint()
-	{
-		return this.getString(R.string.media_hint);
+		return this.getString(R.string.missed_alarm_plural);
 	}
 
 	/**
@@ -301,59 +461,19 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return The alarm name example.
+	 * @return Name.
 	 */
-	public String getNameExample()
+	public String getName()
 	{
-		return this.getString(R.string.name_example);
+		return this.getString(R.string.alarm_name);
 	}
-
-	/**
-	 * @return The name hint.
-	 */
-	public String getNameHint()
-	{
-		return this.getString(R.string.name_hint);
-	}
-
+	
 	/**
 	 * @return Next alarm.
 	 */
 	public String getNextAlarm()
 	{
 		return this.getString(R.string.next_alarm);
-	}
-
-	/**
-	 * @return NFC request.
-	 */
-	public String getNfcRequest()
-	{
-		return this.getString(R.string.nfc_request);
-	}
-
-	/**
-	 * @return NFC required message.
-	 */
-	public String getNfcRequired()
-	{
-		return this.getString(R.string.nfc_required);
-	}
-
-	/**
-	 * @return NFC unsupported message.
-	 */
-	public String getNfcUnsupported()
-	{
-		return this.getString(R.string.nfc_unsupported);
-	}
-
-	/**
-	 * @return No alarms.
-	 */
-	public String getNoAlarms()
-	{
-		return this.getString(R.string.no_alarms);
 	}
 
 	/**
@@ -365,142 +485,6 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Off.
-	 */
-	public String getOff()
-	{
-		return this.getString(R.string.off);
-	}
-
-	/**
-	 * @return Ok.
-	 */
-	public String getOk()
-	{
-		return this.getString(R.string.prompt_ok);
-	}
-
-	/**
-	 * @return Play audio error.
-	 */
-	public String getPlayAudioError()
-	{
-		return this.getString(R.string.play_audio_error);
-	}
-
-	/**
-	 * @return Play file error.
-	 */
-	public String getPlayFileError()
-	{
-		return this.getString(R.string.play_file_error);
-	}
-
-	/**
-	 * @return Previous folder.
-	 */
-	public String getPreviousFolder()
-	{
-		return this.getString(R.string.previous_folder);
-	}
-
-	/**
-	 * @return Rate later.
-	 */
-	public String getRateLater()
-	{
-		return this.getString(R.string.rate_later);
-	}
-
-	/**
-	 * @return Rate never.
-	 */
-	public String getRateNever()
-	{
-		return this.getString(R.string.rate_never);
-	}
-
-	/**
-	 * @return Rate now.
-	 */
-	public String getRateNow()
-	{
-		return this.getString(R.string.rate_now);
-	}
-
-	/**
-	 * @return Rate title.
-	 */
-	public String getRateTitle()
-	{
-		return this.getString(R.string.rate_title);
-	}
-
-	/**
-	 * @return Restored alarm.
-	 */
-	public String getRestoredAlarm()
-	{
-		return this.getString(R.string.restored_alarm);
-	}
-
-	/**
-	 * @return Select audio source.
-	 */
-	public String getSelectAudioSource()
-	{
-		return this.getString(R.string.select_audio_source);
-	}
-
-	/**
-	 * @return Select color.
-	 */
-	public String getSelectColor()
-	{
-		return this.getString(R.string.select_color);
-	}
-
-	/**
-	 * @return Select color error message.
-	 */
-	public String getSelectColorError()
-	{
-		return this.getString(R.string.select_color_error);
-	}
-
-	/**
-	 * @return Select days.
-	 */
-	public String getSelectDays()
-	{
-		return this.getString(R.string.select_days);
-	}
-
-	/**
-	 * @return Select format.
-	 */
-	public String getSelectFormat()
-	{
-		return this.getString(R.string.select_format);
-	}
-
-	/**
-	 * @return Select speak frequency.
-	 */
-	public String getSelectSpeakFrequency()
-	{
-		return this.getString(R.string.select_speak_frequency);
-	}
-
-	/**
-	 * @return Set alarm name.
-	 */
-	public String getSetAlarmName()
-	{
-		return this.getString(R.string.set_alarm_name);
-	}
-
-	/**
 	 * @return Settings.
 	 */
 	public String getSettings()
@@ -509,59 +493,11 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Snooze.
-	 */
-	public String getSnooze()
-	{
-		return this.getString(R.string.snooze_alarm);
-	}
-
-	/**
-	 * @return Snoozed alarm.
-	 */
-	public String getSnoozedAlarm()
-	{
-		return this.getString(R.string.snoozed_alarm);
-	}
-
-	/**
 	 * @return Snooze duration.
 	 */
 	public String getSnoozeDuration()
 	{
 		return this.getString(R.string.snooze_duration);
-	}
-
-	/**
-	 * @return Snooze error message.
-	 */
-	public String getSnoozeError()
-	{
-		return this.getString(R.string.snooze_error);
-	}
-
-	/**
-	 * @return Snoozed days error message.
-	 */
-	public String getSnoozedDaysError()
-	{
-		return this.getString(R.string.snoozed_days_error);
-	}
-
-	/**
-	 * @return Snoozed delete error message.
-	 */
-	public String getSnoozedDeleteError()
-	{
-		return this.getString(R.string.snoozed_delete_error);
-	}
-
-	/**
-	 * @return Snoozed modify error message.
-	 */
-	public String getSnoozedModifyError()
-	{
-		return this.getString(R.string.snoozed_modify_error);
 	}
 
 	/**
@@ -648,6 +584,22 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Off state.
+	 */
+	public String getStateOff()
+	{
+		return this.getString(R.string.state_off);
+	}
+
+	/**
+	 * @return Unknown state.
+	 */
+	public String getStateUnknown()
+	{
+		return this.getString(R.string.state_unknown);
+	}
+
+	/**
 	 * @return Sunday.
 	 */
 	public String getSunday()
@@ -672,6 +624,70 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Select audio source title.
+	 */
+	public String getTitleAudioSource()
+	{
+		return this.getString(R.string.title_audio_source);
+	}
+
+	/**
+	 * @return Select color title.
+	 */
+	public String getTitleColor()
+	{
+		return this.getString(R.string.title_color);
+	}
+
+	/**
+	 * @return Select days title.
+	 */
+	public String getTitleDays()
+	{
+		return this.getString(R.string.title_days);
+	}
+
+	/**
+	 * @return Folder selected title.
+	 */
+	public String getTitleFolderSelected()
+	{
+		return this.getString(R.string.title_folder_selected);
+	}
+
+	/**
+	 * @return Set alarm name title.
+	 */
+	public String getTitleName()
+	{
+		return this.getString(R.string.title_name);
+	}
+
+	/**
+	 * @return Select next alarm format title.
+	 */
+	public String getTitleNextAlarmFormat()
+	{
+		return this.getString(R.string.title_next_alarm_format);
+	}
+
+	/**
+	 * @return Rate my app title.
+	 */
+	public String getTitleRateMyApp()
+	{
+		return this.getString(R.string.title_rate_my_app);
+	}
+
+	/**
+	 * @return Select speak frequency title.
+	 */
+	public String getTitleSpeakFrequency()
+	{
+		return this.getString(R.string.title_speak_frequency);
+	}
+
+	/**
 	 * @return Today.
 	 */
 	public String getToday()
@@ -685,14 +701,6 @@ public class NacSharedConstants
 	public String getTomorrow()
 	{
 		return this.getString(R.string.dow_tomorrow);
-	}
-
-	/**
-	 * @return Undo.
-	 */
-	public String getUndo()
-	{
-		return this.getString(R.string.undo);
 	}
 
 	/**
@@ -728,14 +736,6 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Unknown.
-	 */
-	public String getUnknown()
-	{
-		return this.getString(R.string.unknown);
-	}
-
-	/**
 	 * @return Upcoming alarm.
 	 */
 	public String getUpcomingAlarm(int quantity)
@@ -748,15 +748,7 @@ public class NacSharedConstants
 	 */
 	public String getUpcomingNotification()
 	{
-		return this.getString(R.string.upcoming_alarm_other);
-	}
-
-	/**
-	 * @return Upcoming notification description.
-	 */
-	public String getUpcomingNotificationDescription()
-	{
-		return this.getString(R.string.upcoming_alarm_description);
+		return this.getString(R.string.upcoming_alarm_plural);
 	}
 
 	/**

@@ -397,7 +397,7 @@
 						android:layout_height="wrap_content"
 						android:textColor="@color/white"
 						android:textSize="@dimen/tsz_main"
-						android:text="@string/delete_alarm"
+						android:text="@string/action_alarm_delete"
 						/>
 
 				</LinearLayout>

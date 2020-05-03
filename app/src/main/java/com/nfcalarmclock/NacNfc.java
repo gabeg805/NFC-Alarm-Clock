@@ -80,7 +80,7 @@ public class NacNfc
 				Intent settings = new Intent(Settings.ACTION_NFC_SETTINGS);
 				NacSharedConstants cons = new NacSharedConstants(context);
 
-				NacUtility.toast(context, cons.getNfcRequest());
+				NacUtility.toast(context, cons.getMessageNfcRequest());
 				context.startActivity(settings);
 			}
 

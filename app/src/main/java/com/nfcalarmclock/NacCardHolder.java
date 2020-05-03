@@ -568,7 +568,7 @@ public class NacCardHolder
 		{
 			Context context = this.getContext();
 			NacSharedConstants cons = new NacSharedConstants(context);
-			NacUtility.quickToast(context, cons.getSnoozedDaysError());
+			NacUtility.quickToast(context, cons.getErrorMessageSnoozedDays());
 			return true;
 		}
 
@@ -696,7 +696,7 @@ public class NacCardHolder
 	{
 		Context context = this.getContext();
 		NacSharedConstants cons = new NacSharedConstants(context);
-		NacUtility.quickToast(context, cons.getNfcRequired());
+		NacUtility.quickToast(context, cons.getMessageNfcRequired());
 	}
 
 	/**
@@ -707,7 +707,7 @@ public class NacCardHolder
 	{
 		Context context = this.getContext();
 		NacSharedConstants cons = new NacSharedConstants(context);
-		NacUtility.quickToast(context, cons.getSnoozedDeleteError());
+		NacUtility.quickToast(context, cons.getErrorMessageSnoozedDelete());
 	}
 
 	/**
@@ -718,7 +718,7 @@ public class NacCardHolder
 	{
 		Context context = this.getContext();
 		NacSharedConstants cons = new NacSharedConstants(context);
-		NacUtility.quickToast(context, cons.getSnoozedModifyError());
+		NacUtility.quickToast(context, cons.getErrorMessageSnoozedModify());
 	}
 
 }

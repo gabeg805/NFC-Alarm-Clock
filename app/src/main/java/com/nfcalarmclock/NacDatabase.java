@@ -375,7 +375,7 @@ public class NacDatabase
 		String mediaPath = shared.getMediaPath();
 		String mediaTitle = NacMedia.getTitle(context, mediaPath);
 		int mediaType = NacMedia.getType(context, mediaPath);
-		String name = cons.getNameExample();
+		String name = cons.getExampleName();
 		NacAlarm alarm = new NacAlarm.Builder(context)
 			.setId(1)
 			.setHour(8)

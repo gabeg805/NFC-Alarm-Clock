@@ -407,7 +407,7 @@ public class NacMediaPlayer
 		if(!NacAudio.requestAudioFocus(context, this, attrs))
 		{
 			NacUtility.printf("Unable to gain audio focus.");
-			NacUtility.quickToast(context, cons.getPlayAudioError());
+			NacUtility.quickToast(context, cons.getErrorMessagePlayAudio());
 			return;
 		}
 
@@ -427,7 +427,7 @@ public class NacMediaPlayer
 		catch (IllegalStateException | IOException | IllegalArgumentException | SecurityException e)
 		{
 			NacUtility.printf("NacMediaPlayer : play : %s", e.toString());
-			NacUtility.quickToast(context, cons.getPlayFileError());
+			NacUtility.quickToast(context, cons.getErrorMessagePlayFile());
 		}
 	}
 

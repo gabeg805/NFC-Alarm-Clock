@@ -103,9 +103,9 @@ public class NacMusicFragment
 		Context context = dialog.getContext();
 		NacSharedConstants cons = new NacSharedConstants(context);
 
-		builder.setTitle(cons.getFolderSelected());
-		dialog.setPositiveButton(cons.getOk());
-		dialog.setNegativeButton(cons.getCancel());
+		builder.setTitle(cons.getTitleFolderSelected());
+		dialog.setPositiveButton(cons.getActionOk());
+		dialog.setNegativeButton(cons.getActionCancel());
 	}
 
 	/**
@@ -175,7 +175,7 @@ public class NacMusicFragment
 					NacSharedConstants cons = new NacSharedConstants(context);
 					NacUtility.printf("Unable to play music : %d | %s",
 						metadata.getId(), metadata.getPath());
-					NacUtility.toast(context, cons.getPlayAudioError());
+					NacUtility.toast(context, cons.getErrorMessagePlayAudio());
 				}
 			}
 			else

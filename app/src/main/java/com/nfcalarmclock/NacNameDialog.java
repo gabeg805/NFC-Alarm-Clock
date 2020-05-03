@@ -44,9 +44,9 @@ public class NacNameDialog
 	{
 		NacSharedConstants cons = new NacSharedConstants(context);
 
-		builder.setTitle(cons.getSetAlarmName());
-		setPositiveButton(cons.getOk());
-		setNegativeButton(cons.getCancel());
+		builder.setTitle(cons.getTitleName());
+		setPositiveButton(cons.getActionOk());
+		setNegativeButton(cons.getActionCancel());
 	}
 
 	/**

@@ -144,7 +144,8 @@ public class NacCalendar
 
 		if ((shared == null) || (alarm == null) || (calendar == null))
 		{
-			return String.format(locale, "%1$s.", cons.getNoAlarms());
+			return String.format(locale, "%1$s.",
+				cons.getMessageNoAlarmsScheduled());
 		}
 		else if (!alarm.getEnabled())
 		{

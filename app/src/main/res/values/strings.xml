@@ -7,126 +7,91 @@
 	<string name="sys_previous_volume">sys_previous_volume</string>
 
 
+
 	<!-- Consolidate -->
 	<string name="none">None</string>
-	<string name="snooze_alarm">Snooze</string>
-	<string name="dismiss_alarm">Dismiss</string>
-	<string name="copy_alarm">Copy</string>
-	<string name="delete_alarm">Delete</string>
 	<string name="settings">Settings</string>
 	<string name="show_next_alarm">Show next alarm</string>
 
-	<string name="alarm_one">alarm</string>
-	<string name="alarm_other">alarms</string>
-	<plurals name="alarm">
-		<item quantity="one">@string/alarm_one</item>
-		<item quantity="other">@string/alarm_other</item>
-	</plurals>
-
-	<string name="upcoming_alarm_one">Upcoming alarm</string>
-	<string name="upcoming_alarm_other">Upcoming alarms</string>
-	<plurals name="upcoming_alarm">
-		<item quantity="one">@string/upcoming_alarm_one</item>
-		<item quantity="other">@string/upcoming_alarm_other</item>
-	</plurals>
-
-	<string name="missed_alarm_one">Missed alarm</string>
-	<string name="missed_alarm_other">Missed alarms</string>
-	<plurals name="missed_alarm">
-		<item quantity="one">@string/missed_alarm_one</item>
-		<item quantity="other">@string/missed_alarm_other</item>
-	</plurals>
-
-	<string name="active_alarm_one">Active alarm</string>
-	<string name="active_alarm_other">Active alarms</string>
-	<plurals name="active_alarm">
-		<item quantity="one">@string/active_alarm_one</item>
-		<item quantity="other">@string/active_alarm_other</item>
-	</plurals>
-
-	<!--<string name="upcoming_alarm">Upcoming alarms</string>-->
-	<!--<string name="missed_alarm">Missed alarms</string>-->
-	<!--<string name="active_alarm">Active alarms</string>-->
-
-	<string name="upcoming_alarm_description">Alarms that are scheduled.</string>
-	<string name="missed_alarm_description">Alarms that have been automatically dismissed.</string>
-	<string name="active_alarm_description">Alarms that are currently active.</string>
-	<string name="frequency_once">Once</string>
-	<string name="frequency_interval">Every</string>
-	<string name="nfc_unsupported">Your device does not support NFC</string>
-	<string name="snooze_error">Unable to snooze the alarm</string>
-	<string name="select_audio_source">Select an audio source</string>
-	<string name="select_days">Select days</string>
-	<string name="select_speak_frequency">Select speak frequency</string>
-	<string name="rate_title">Rate the app</string>
-	<string name="rate_now">Rate Now</string>
-	<string name="rate_later">Later</string>
-	<string name="rate_never">No, Thanks</string>
-	<string name="max_alarms_error">Max number of alarms created</string>
-	<string name="copied_alarm">Copied alarm</string>
-	<string name="deleted_alarm">Deleted alarm</string>
-	<string name="restored_alarm">Restored alarm</string>
-	<string name="dismissed_alarm">Dismissed alarm</string>
-	<string name="snoozed_alarm">Snoozed alarm</string>
-	<string name="will_run">Will run</string>
-	<string name="undo">Undo</string>
-	<string name="snoozed_days_error">Unable to change days on a snoozed alarm</string>
-	<string name="snoozed_delete_error">Unable to delete a snoozed alarm</string>
-	<string name="snoozed_modify_error">Unable to modify a snoozed alarm</string>
-	<string name="nfc_required">NFC required to dismiss the alarm</string>
-	<string name="set_alarm_name">Set alarm name</string>
-	<string name="select_color">Select a color</string>
-	<string name="select_color_error">Invalid hex color</string>
-	<string name="previous_folder">Previous folder</string>
-	<string name="browse">Browse</string>
-	<string name="unknown">Unknown</string>
-	<string name="play_audio_error">Unable to play audio</string>
-	<string name="play_file_error">Unable to play selected file</string>
-	<string name="select_format">Select a format</string>
-	<string name="folder_selected">You selected a folder</string>
-	<string name="nfc_request">Please enable NFC to dismiss the alarm</string>
-	<string name="no_alarms">No alarms scheduled</string>
-	<string name="next_alarm">Next alarm</string>
-	<string name="time_in">in</string>
-	<string name="time_on">on</string>
-	<string name="is_disabled">is disabled</string>
-	<string name="off">Off</string>
-
-	<string name="unit_day_one">day</string>
-	<string name="unit_day_other">days</string>
-	<plurals name="unit_day">
-		<item quantity="one">@string/unit_day_one</item>
-		<item quantity="other">@string/unit_day_other</item>
-	</plurals>
-
-	<string name="unit_hour_one">hour</string>
-	<string name="unit_hour_other">hours</string>
-	<plurals name="unit_hour">
-		<item quantity="one">@string/unit_hour_one</item>
-		<item quantity="other">@string/unit_hour_other</item>
-	</plurals>
-
-	<string name="unit_minute_one">minute</string>
-	<string name="unit_minute_other">minutes</string>
-	<plurals name="unit_minute">
-		<item quantity="one">@string/unit_minute_one</item>
-		<item quantity="other">@string/unit_minute_other</item>
-	</plurals>
-
-	<string name="unit_second_one">second</string>
-	<string name="unit_second_other">seconds</string>
-	<plurals name="unit_second">
-		<item quantity="one">@string/unit_second_one</item>
-		<item quantity="other">@string/unit_second_other</item>
-	</plurals>
 
 
-	<!-- Alarm Activity -->
-	<string name="act_alarm_title">Dismiss Alarm</string>
-	<string name="act_alarm_instructions">Scan NFC Tag to dismiss the alarm.</string>
+	<!-- States -->
+	<string name="state_unknown">Unknown</string>
+	<string name="state_off">Off</string>
 
 
-	<!-- Day of week -->
+
+	<!-- Actions -->
+	<string name="action_alarm_snooze">Snooze</string>
+	<string name="action_alarm_dismiss">Dismiss</string>
+	<string name="action_alarm_copy">Copy</string>
+	<string name="action_alarm_delete">Delete</string>
+	<string name="action_ok">OK</string>
+	<string name="action_cancel">Cancel</string>
+	<string name="action_clear">Clear</string>
+	<string name="action_default">Default</string>
+	<string name="action_rate_now">Rate Now</string>
+	<string name="action_rate_later">Later</string>
+	<string name="action_rate_never">No, Thanks</string>
+	<string name="action_undo">Undo</string>
+	<string name="action_browse">Browse</string>
+	<string name="action_previous_folder">Previous folder</string>
+
+
+
+	<!-- Messages -->
+	<string name="message_playlist">Do you want to play all the music in this folder?</string>
+	<string name="message_rate_my_app">If you have been enjoying the <b>NFC Alarm Clock</b> app, please take a moment to rate it. Thank you for your support!</string>
+	<string name="message_nfc_required">NFC required to dismiss the alarm</string>
+	<string name="message_nfc_request">Please enable NFC to dismiss the alarm</string>
+	<string name="message_no_alarms_scheduled">No alarms scheduled</string>
+	<string name="message_alarm_copy">Copied alarm</string>
+	<string name="message_alarm_delete">Deleted alarm</string>
+	<string name="message_alarm_restore">Restored alarm</string>
+	<string name="message_alarm_dismiss">Dismissed alarm</string>
+	<string name="message_alarm_snooze">Snoozed alarm</string>
+
+
+
+	<!-- Error messages -->
+	<string name="error_message_max_alarms">Max number of alarms created</string>
+	<string name="error_message_nfc_unsupported">Your device does not support NFC</string>
+	<string name="error_message_snooze">Unable to snooze the alarm</string>
+	<string name="error_message_snoozed_days">Unable to change days on a snoozed alarm</string>
+	<string name="error_message_snoozed_delete">Unable to delete a snoozed alarm</string>
+	<string name="error_message_snoozed_modify">Unable to modify a snoozed alarm</string>
+	<string name="error_message_select_color">Invalid hex color</string>
+	<string name="error_message_play_audio">Unable to play audio</string>
+	<string name="error_message_play_file">Unable to play selected file</string>
+
+
+
+	<!-- Titles -->
+	<string name="title_alarm_activity">Dismiss Alarm</string>
+	<string name="title_rate_my_app">Rate the app</string>
+	<string name="title_name">Set alarm name</string>
+	<string name="title_days">Select days</string>
+	<string name="title_color">Select a color</string>
+	<string name="title_audio_source">Select an audio source</string>
+	<string name="title_next_alarm_format">Select a format</string>
+	<string name="title_speak_frequency">Select speak frequency</string>
+	<string name="title_folder_selected">You selected a folder</string>
+
+
+
+	<!-- Descriptions -->
+	<string name="description_alarm_activity">Scan NFC tag to dismiss the alarm.</string>
+	<string name="description_no_notification">Do not show notifications.</string>
+	<string name="description_upcoming_alarm">Alarms that are scheduled.</string>
+	<string name="description_missed_alarm">Alarms that have been automatically dismissed.</string>
+	<string name="description_active_alarm">Alarms that are currently active.</string>
+	<string name="description_color">Hex color</string>
+	<string name="description_media">Music or ringtone</string>
+	<string name="example_name">Work</string>
+
+
+
+	<!-- Day of weeks -->
 	<string name="dow_sun">Sun</string>
 	<string name="dow_mon">Mon</string>
 	<string name="dow_tue">Tue</string>
@@ -148,18 +113,8 @@
 	<string name="dow_tomorrow">Tomorrow</string>
 
 
-	<!-- ******* -->
-	<!-- Dialogs -->
-	<!-- ******* -->
 
-	<string name="dlg_playlist_question">Do you want to play all the music in this folder?</string>
-
-
-	<!-- Rate my app dialog -->
-	<string name="dlg_rate_my_app">If you have been enjoying the <b>NFC Alarm Clock</b> app, please take a moment to rate it. Thank you for your support!</string>
-
-
-	<!-- Audio source dialog -->
+	<!-- Audio sources -->
 	<string name="audio_source_alarm">Alarm</string>
 	<string name="audio_source_media">Media</string>
 	<string name="audio_source_notification">Notification</string>
@@ -167,16 +122,94 @@
 	<string name="audio_source_system">System</string>
 
 
-	<!-- Start week on dialog -->
-	<string name="start_week_on_mon">Monday</string>
-	<string name="start_week_on_sun">Sunday</string>
+
+	<!-- Miscellaneous -->
+	<string name="frequency_once">Once</string>
+	<string name="frequency_interval">Every</string>
+	<string name="next_alarm">Next alarm</string>
+	<string name="will_run">Will run</string>
+	<string name="time_in">in</string>
+	<string name="time_on">on</string>
+	<string name="is_disabled">is disabled</string>
 
 
-	<!-- Prompt buttons -->
-	<string name="prompt_ok">OK</string>
-	<string name="prompt_cancel">Cancel</string>
-	<string name="prompt_clear">Clear</string>
-	<string name="prompt_default">Default</string>
+
+	<!-- Content descriptions -->
+	<string name="cd_ic_snoozed">Alarm has been snoozed.</string>
+	<string name="cd_btn_repeat">Select to repeat the alarm.</string>
+	<string name="cd_btn_vibrate">Select to vibrate the phone when the alarm goes off.</string>
+	<string name="cd_btn_nfc">Select to require NFC in order to dismiss the alarm.</string>
+	<string name="cd_ic_media">Select to change the media that plays when the alarm goes off.</string>
+	<string name="cd_ic_volume">Slide to change the volume of the alarm.</string>
+	<string name="cd_ic_volume_settings">Select to change the audio source the media plays out of.</string>
+	<string name="cd_ic_name">Select to change the name of the alarm.</string>
+	<string name="cd_btn_delete">Select to delete the alarm.</string>
+	<string name="cd_btn_collapse">Select to collapse the alarm card.</string>
+	<string name="cd_ic_color_example">Example of the selected color.</string>
+	<string name="cd_ic_file_entry">Type of entry being displayed, such as a file or directory.</string>
+	<string name="cd_ic_decrement">Decrement the value</string>
+	<string name="cd_ic_increment">Increment the value</string>
+	<string name="cd_ic_color_selector">Select a color for the color picker</string>
+	<string name="cd_ic_shader_selector">Select a shade for the color picker</string>
+
+
+
+	<!-- Plurals -->
+	<string name="alarm_singular">alarm</string>
+	<string name="alarm_plural">alarms</string>
+	<plurals name="alarm">
+		<item quantity="one">@string/alarm_singular</item>
+		<item quantity="other">@string/alarm_plural</item>
+	</plurals>
+
+	<string name="upcoming_alarm_singular">Upcoming alarm</string>
+	<string name="upcoming_alarm_plural">Upcoming alarms</string>
+	<plurals name="upcoming_alarm">
+		<item quantity="one">@string/upcoming_alarm_singular</item>
+		<item quantity="other">@string/upcoming_alarm_plural</item>
+	</plurals>
+
+	<string name="missed_alarm_singular">Missed alarm</string>
+	<string name="missed_alarm_plural">Missed alarms</string>
+	<plurals name="missed_alarm">
+		<item quantity="one">@string/missed_alarm_singular</item>
+		<item quantity="other">@string/missed_alarm_plural</item>
+	</plurals>
+
+	<string name="active_alarm_singular">Active alarm</string>
+	<string name="active_alarm_plural">Active alarms</string>
+	<plurals name="active_alarm">
+		<item quantity="one">@string/active_alarm_singular</item>
+		<item quantity="other">@string/active_alarm_plural</item>
+	</plurals>
+
+	<string name="unit_day_singular">day</string>
+	<string name="unit_day_plural">days</string>
+	<plurals name="unit_day">
+		<item quantity="one">@string/unit_day_singular</item>
+		<item quantity="other">@string/unit_day_plural</item>
+	</plurals>
+
+	<string name="unit_hour_singular">hour</string>
+	<string name="unit_hour_plural">hours</string>
+	<plurals name="unit_hour">
+		<item quantity="one">@string/unit_hour_singular</item>
+		<item quantity="other">@string/unit_hour_plural</item>
+	</plurals>
+
+	<string name="unit_minute_singular">minute</string>
+	<string name="unit_minute_plural">minutes</string>
+	<plurals name="unit_minute">
+		<item quantity="one">@string/unit_minute_singular</item>
+		<item quantity="other">@string/unit_minute_plural</item>
+	</plurals>
+
+	<string name="unit_second_singular">second</string>
+	<string name="unit_second_plural">seconds</string>
+	<plurals name="unit_second">
+		<item quantity="one">@string/unit_second_singular</item>
+		<item quantity="other">@string/unit_second_plural</item>
+	</plurals>
 
 
 
@@ -199,6 +232,7 @@
 	<string name="about_setting">About</string>
 	<string name="about_setting_key">pref_screen_about</string>
 	<string name="about_setting_summary">Information about the app</string>
+
 
 
 	<!-- **************** -->
@@ -274,13 +308,14 @@
 	<!-- Default alarm sound -->
 	<string name="alarm_sound">Sound</string>
 	<string name="alarm_sound_key">pref_sound</string>
-	<string name="alarm_sound_summary">None</string>
+	<string name="alarm_sound_summary">@string/none</string>
 
 
 	<!-- Default alarm volume and audio source -->
 	<string name="alarm_volume">Volume</string>
 	<string name="alarm_volume_key">pref_volume</string>
 	<string name="alarm_audio_source_key">pref_audio_source</string>
+
 
 
 	<!-- ******************* -->
@@ -300,15 +335,15 @@
 
 
 	<!-- Name color -->
-	<string name="name_color">Name</string>
+	<string name="name_color">@string/alarm_name</string>
 	<string name="name_color_key">pref_name_color</string>
 	<string name="name_color_summary">e.g. Work</string>
 
 
 	<!-- Days color -->
-	<string name="days_color">Days</string>
+	<string name="days_color">@string/alarm_days</string>
 	<string name="days_color_key">pref_days_color</string>
-	<string name="days_color_summary">e.g. Mon,Tue,Wed,Thu,Fri</string>
+	<string name="days_color_summary">e.g. Mon &#8231; Tue &#8231; Wed &#8231; Thu &#8231; Fri</string>
 
 
 	<!-- Time color -->
@@ -332,13 +367,13 @@
 	<!-- Missed alarm notifications -->
 	<string name="missed_alarm_key">pref_missed_alarm_notification</string>
 	<string name="missed_alarm_true">Show notifications for missed alarms.</string>
-	<string name="missed_alarm_false">Do not show notifications.</string>
+	<string name="missed_alarm_false">@string/description_no_notification</string>
 
 
 	<!-- Upcoming alarm notifications -->
 	<string name="upcoming_alarm_key">pref_upcoming_alarm_notification</string>
 	<string name="upcoming_alarm_true">Show notifications for upcoming alarms.</string>
-	<string name="upcoming_alarm_false">Do not show notifications.</string>
+	<string name="upcoming_alarm_false">@string/description_no_notification</string>
 
 
 	<!-- Expand new alarm card -->
@@ -365,6 +400,7 @@
 	<string name="show_alarm_info_key">pref_alarm_info</string>
 	<string name="show_alarm_info_true">Show the alarm name at the bottom of the screen when an alarm goes off.</string>
 	<string name="show_alarm_info_false">Do not show alarm information.\n</string>
+
 
 
 	<!-- ********************** -->
@@ -394,6 +430,7 @@
 	<!-- Speak frequency -->
 	<string name="speak_frequency">Speak frequency</string>
 	<string name="speak_frequency_key">pref_speak_frequency</string>
+
 
 
 	<!-- ************** -->
@@ -429,13 +466,13 @@
 
 
 	<!-- VIBRATE permission -->
-	<string name="about_vibrate">Vibrate</string>
+	<string name="about_vibrate">@string/alarm_vibrate</string>
 	<string name="about_vibrate_key">pref_about_vibrate</string>
 	<string name="about_vibrate_summary">(Optional) Allow the app to vibrate the phone.</string>
 
 
 	<!-- SET_ALARM permission -->
-	<string name="about_set_alarm">Set Alarm</string>
+	<string name="about_set_alarm">Set alarm</string>
 	<string name="about_set_alarm_key">pref_about_set_alarm</string>
 	<string name="about_set_alarm_summary">(Required) Allows the application to set an alarm.</string>
 
@@ -453,13 +490,13 @@
 
 
 	<!-- USE_FULL_SCREEN_INTENT permission -->
-	<string name="about_full_screen_intent">Full Screen</string>
+	<string name="about_full_screen_intent">Full screen</string>
 	<string name="about_full_screen_intent_key">pref_about_full_screen_intent</string>
 	<string name="about_full_screen_intent_summary">(Required) Allows the app to use the full screen when an alarm is activated.</string>
 
 
 	<!-- FOREGROUND_SERVICE permission -->
-	<string name="about_foreground_service">Foreground Service</string>
+	<string name="about_foreground_service">Foreground service</string>
 	<string name="about_foreground_service_key">pref_about_foreground_service</string>
 	<string name="about_foreground_service_summary">(Required) Allows the app to run a foreground service when an alarm is activated.</string>
 
@@ -472,37 +509,5 @@
 	<string name="frg_spotify_top_artists">Top Artists</string>
 	<string name="frg_spotify_top_tracks">Top Tracks</string>
 	-->
-
-
-	<!-- ***** -->
-	<!-- HINTS -->
-	<!-- ***** -->
-
-	<string name="color_hint">Hex Color</string>
-	<string name="media_hint">Music or Ringtone</string>
-	<string name="name_hint">Name</string>
-	<string name="name_example">Work</string>
-
-
-	<!-- ******************** -->
-	<!-- Content Descriptions -->
-	<!-- ******************** -->
-
-	<string name="cd_ic_snoozed">Alarm has been snoozed.</string>
-	<string name="cd_btn_repeat">Select to repeat the alarm.</string>
-	<string name="cd_btn_vibrate">Select to vibrate the phone when the alarm goes off.</string>
-	<string name="cd_btn_nfc">Select to require NFC in order to dismiss the alarm.</string>
-	<string name="cd_ic_media">Select to change the media that plays when the alarm goes off.</string>
-	<string name="cd_ic_volume">Slide to change the volume of the alarm.</string>
-	<string name="cd_ic_volume_settings">Select to change the audio source the media plays out of.</string>
-	<string name="cd_ic_name">Select to change the name of the alarm.</string>
-	<string name="cd_btn_delete">Select to delete the alarm.</string>
-	<string name="cd_btn_collapse">Select to collapse the alarm card.</string>
-	<string name="cd_ic_color_example">Example of the selected color.</string>
-	<string name="cd_ic_file_entry">Type of entry being displayed, such as a file or directory.</string>
-	<string name="cd_ic_decrement">Decrement the value</string>
-	<string name="cd_ic_increment">Increment the value</string>
-	<string name="cd_ic_color_selector">Select a color for the color picker</string>
-	<string name="cd_ic_shader_selector">Select a shade for the color picker</string>
 
 </resources>

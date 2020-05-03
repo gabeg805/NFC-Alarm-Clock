@@ -21,7 +21,7 @@
 			android:layout_marginBottom="@dimen/sp_row"
 			android:paddingStart="@dimen/sp_main"
 			android:textSize="@dimen/tsz_main"
-			android:text="@string/start_week_on_mon"
+			android:text="@string/dow_monday"
 			/>
 
 		<RadioButton
@@ -30,7 +30,7 @@
 			android:layout_height="wrap_content"
 			android:paddingStart="@dimen/sp_main"
 			android:textSize="@dimen/tsz_main"
-			android:text="@string/start_week_on_sun"
+			android:text="@string/dow_sunday"
 			android:checked="true"
 			/>
 

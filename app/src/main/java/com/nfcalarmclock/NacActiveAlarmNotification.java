@@ -96,8 +96,8 @@ public class NacActiveAlarmNotification
 			.setOngoing(true)
 			.setShowWhen(true)
 			.setTicker(cons.getAppName())
-			.addAction(R.mipmap.snooze, cons.getSnooze(), snoozePending)
-			.addAction(R.mipmap.dismiss, cons.getDismiss(), dismissPending);
+			.addAction(R.mipmap.snooze, cons.getActionSnooze(), snoozePending)
+			.addAction(R.mipmap.dismiss, cons.getActionDismiss(), dismissPending);
 
 		return builder.build();
 	}
@@ -120,7 +120,7 @@ public class NacActiveAlarmNotification
 		NotificationManager manager = context.getSystemService(
 			NotificationManager.class);
 
-		channel.setDescription(cons.getActiveNotificationDescription());
+		channel.setDescription(cons.getDescriptionActiveNotification());
 		channel.setShowBadge(true);
 		channel.enableLights(true);
 		channel.enableVibration(true);

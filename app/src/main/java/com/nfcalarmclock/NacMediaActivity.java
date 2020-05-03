@@ -240,7 +240,7 @@ public class NacMediaActivity
 		this.mMediaPath = NacIntent.getMedia(intent);
 		this.mPager = (ViewPager) findViewById(R.id.act_sound);
 		this.mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
-		this.mTitles[0] = cons.getBrowse();
+		this.mTitles[0] = cons.getActionBrowse();
 		this.mTitles[1] = cons.getAudioSources().get(3);
 		//this.mAdapter = new NacPagerAdapter(manager, this.mAlarm, this.mTitles);
 		this.mAdapter = new NacPagerAdapter(manager,

@@ -135,9 +135,9 @@ public class NacColorPickerDialog
 	{
 		NacSharedConstants cons = new NacSharedConstants(context);
 
-		builder.setTitle(cons.getSelectColor());
-		setPositiveButton(cons.getOk());
-		setNegativeButton(cons.getCancel());
+		builder.setTitle(cons.getTitleColor());
+		setPositiveButton(cons.getActionOk());
+		setNegativeButton(cons.getActionCancel());
 	}
 
 	/**
@@ -158,7 +158,7 @@ public class NacColorPickerDialog
 
 		if (!this.isHexString(name) || !this.canParseColor(name))
 		{
-			NacUtility.quickToast(context, cons.getSelectColorError());
+			NacUtility.quickToast(context, cons.getErrorMessageSelectColor());
 			return false;
 		}
 

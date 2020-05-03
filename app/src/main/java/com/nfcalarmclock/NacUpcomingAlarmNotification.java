@@ -74,7 +74,7 @@ public class NacUpcomingAlarmNotification
 		NotificationManager manager = context.getSystemService(
 			NotificationManager.class);
 
-		channel.setDescription(cons.getUpcomingNotificationDescription());
+		channel.setDescription(cons.getDescriptionUpcomingNotification());
 		channel.setShowBadge(false);
 		channel.enableLights(false);
 		channel.enableVibration(false);

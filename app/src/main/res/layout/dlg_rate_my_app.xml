@@ -21,7 +21,7 @@
 			android:layout_height="wrap_content"
 			android:textColor="@color/white"
 			android:textSize="@dimen/tsz_main"
-			android:text="@string/dlg_rate_my_app"
+			android:text="@string/message_rate_my_app"
 			/>
 
 	</LinearLayout>

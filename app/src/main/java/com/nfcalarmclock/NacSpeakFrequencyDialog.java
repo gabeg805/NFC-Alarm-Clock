@@ -26,9 +26,9 @@ public class NacSpeakFrequencyDialog
 	{
 		NacSharedConstants cons = new NacSharedConstants(context);
 
-		builder.setTitle(cons.getSelectSpeakFrequency());
-		setPositiveButton(cons.getOk());
-		setNegativeButton(cons.getCancel());
+		builder.setTitle(cons.getTitleSpeakFrequency());
+		setPositiveButton(cons.getActionOk());
+		setNegativeButton(cons.getActionCancel());
 	}
 
 	/**

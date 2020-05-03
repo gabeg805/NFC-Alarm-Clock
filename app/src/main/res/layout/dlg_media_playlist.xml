@@ -13,7 +13,7 @@
 		android:layout_marginBottom="@dimen/sp_main"
 		android:textColor="?android:attr/textColorPrimary"
 		android:textSize="@dimen/tsz_main"
-		android:text="@string/dlg_playlist_question"
+		android:text="@string/message_playlist"
 		/>
 
 </RelativeLayout>

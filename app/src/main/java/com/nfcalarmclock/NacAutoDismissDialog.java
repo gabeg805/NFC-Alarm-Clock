@@ -27,8 +27,8 @@ public class NacAutoDismissDialog
 		NacSharedConstants cons = new NacSharedConstants(context);
 
 		builder.setTitle(cons.getAutoDismiss());
-		setPositiveButton(cons.getOk());
-		setNegativeButton(cons.getCancel());
+		setPositiveButton(cons.getActionOk());
+		setNegativeButton(cons.getActionCancel());
 	}
 
 	/**

@@ -78,8 +78,8 @@ public class NacStartWeekOnPreference
 		NacSharedConstants cons = new NacSharedConstants(context);
 
 		builder.setTitle(cons.getStartWeekOnTitle());
-		dialog.setPositiveButton(cons.getOk());
-		dialog.setNegativeButton(cons.getCancel());
+		dialog.setPositiveButton(cons.getActionOk());
+		dialog.setNegativeButton(cons.getActionCancel());
 	}
 
 	/**

@@ -167,7 +167,7 @@ public class NacCardAdapter
 
 		if ((position+1) >= cons.getMaxAlarms())
 		{
-			NacUtility.quickToast(context, cons.getMaxAlarmsError());
+			NacUtility.quickToast(context, cons.getErrorMessageMaxAlarms());
 			return -1;
 		}
 
@@ -257,7 +257,7 @@ public class NacCardAdapter
 			NacSharedConstants cons = this.getSharedConstants();
 			Locale locale = Locale.getDefault();
 			String message = String.format(locale, "%1$s.",
-				cons.getCopiedAlarm());
+				cons.getMessageAlarmCopy());
 
 			this.undo(copy, position+1, Undo.Type.COPY);
 			this.snackbar(message);
@@ -282,7 +282,7 @@ public class NacCardAdapter
 		int id = alarm.getId();
 		Locale locale = Locale.getDefault();
 		String message = String.format(locale, "%1$s.",
-			cons.getDeletedAlarm());
+			cons.getMessageAlarmDelete());
 
 		NacScheduler.cancel(context, alarm);
 		this.setWasAddedWithFloatingButton(false);
@@ -826,7 +826,7 @@ public class NacCardAdapter
 			NacSharedConstants cons = this.getSharedConstants();
 			Locale locale = Locale.getDefault();
 			String message = String.format(locale, "%1$s.",
-				cons.getRestoredAlarm());
+				cons.getMessageAlarmRestore());
 
 			this.undo(alarm, position, Undo.Type.RESTORE);
 			this.snackbar(message);
@@ -870,7 +870,7 @@ public class NacCardAdapter
 		NacSharedPreferences shared = this.getSharedPreferences();
 		String message = NacCalendar.getMessageWillRun(shared, alarm);
 
-		this.snackbar(message, cons.getDismiss(), null, true);
+		this.snackbar(message, cons.getActionDismiss(), null, true);
 	}
 
 	/**
@@ -920,7 +920,7 @@ public class NacCardAdapter
 			this.mPreviousCalendar = null;
 		}
 
-		this.snackbar(message, cons.getDismiss(), null, true);
+		this.snackbar(message, cons.getActionDismiss(), null, true);
 	}
 
 	/**
@@ -937,7 +937,7 @@ public class NacCardAdapter
 	private void snackbar(String message)
 	{
 		NacSharedConstants cons = this.getSharedConstants();
-		this.snackbar(message, cons.getUndo(), this, true);
+		this.snackbar(message, cons.getActionUndo(), this, true);
 	}
 
 	/**

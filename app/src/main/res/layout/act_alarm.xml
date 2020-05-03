@@ -21,7 +21,7 @@
 			android:layout_height="wrap_content"
 			android:textColor="@color/white_dull"
 			android:textSize="@dimen/tsz_title"
-			android:text="@string/act_alarm_title"
+			android:text="@string/title_alarm_activity"
 			/>
 
 		<ImageView
@@ -40,7 +40,7 @@
 			android:layout_height="wrap_content"
 			android:textColor="@color/white_dull"
 			android:textSize="@dimen/tsz_support"
-			android:text="@string/act_alarm_instructions"
+			android:text="@string/description_alarm_activity"
 			/>
 
 		<LinearLayout
@@ -55,7 +55,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:background="?android:attr/selectableItemBackground"
-				android:text="@string/snooze_alarm"
+				android:text="@string/action_alarm_snooze"
 				/>
 
 			<Button
@@ -63,7 +63,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:background="?android:attr/selectableItemBackground"
-				android:text="@string/dismiss_alarm"
+				android:text="@string/action_alarm_dismiss"
 				/>
 
 		</LinearLayout>

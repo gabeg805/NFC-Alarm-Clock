@@ -75,9 +75,9 @@ public class NacNextAlarmFormatPreference
 		Context context = dialog.getContext();
 		NacSharedConstants cons = new NacSharedConstants(context);
 
-		builder.setTitle(cons.getSelectFormat());
-		dialog.setPositiveButton(cons.getOk());
-		dialog.setNegativeButton(cons.getCancel());
+		builder.setTitle(cons.getTitleNextAlarmFormat());
+		dialog.setPositiveButton(cons.getActionOk());
+		dialog.setNegativeButton(cons.getActionCancel());
 	}
 
 	/**

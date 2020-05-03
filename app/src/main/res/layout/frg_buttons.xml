@@ -13,7 +13,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:background="?android:attr/selectableItemBackground"
-		android:text="@string/prompt_clear"
+		android:text="@string/action_clear"
 		android:textSize="@dimen/tsz_support"
 		/>
 
@@ -28,7 +28,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:background="?android:attr/selectableItemBackground"
-		android:text="@string/prompt_cancel"
+		android:text="@string/action_cancel"
 		android:textSize="@dimen/tsz_support"
 		/>
 
@@ -37,7 +37,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:background="?android:attr/selectableItemBackground"
-		android:text="@string/prompt_ok"
+		android:text="@string/action_ok"
 		android:textSize="@dimen/tsz_support"
 		/>
 
