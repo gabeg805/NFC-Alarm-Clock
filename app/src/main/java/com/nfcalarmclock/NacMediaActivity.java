@@ -264,15 +264,17 @@ public class NacMediaActivity
 			{
 				Fragment fragment = this.getFragment(0);
 
-				getSupportFragmentManager().beginTransaction()
-					.detach(fragment)
-					.attach(fragment)
-					.commitAllowingStateLoss();
+				if (fragment != null)
+				{
+					getSupportFragmentManager().beginTransaction()
+						.detach(fragment)
+						.attach(fragment)
+						.commitAllowingStateLoss();
+					return;
+				}
 			}
-			else
-			{
-				this.selectTab(1);
-			}
+
+			this.selectTab(1);
 		}
 	}
 

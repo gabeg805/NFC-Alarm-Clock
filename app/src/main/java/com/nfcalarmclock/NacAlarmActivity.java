@@ -74,7 +74,10 @@ public class NacAlarmActivity
 	 */
 	private void cleanupNfc()
 	{
-		NacNfc.disable(this);
+		if (this.shouldUseNfc())
+		{
+			NacNfc.disable(this);
+		}
 	}
 
 	/**
@@ -299,18 +302,20 @@ public class NacAlarmActivity
 	 */
 	private void setupNfc()
 	{
+		if (!this.shouldUseNfc())
+		{
+			return;
+		}
+
 		if (NacNfc.exists(this))
 		{
 			NacNfc.enable(this);
 		}
 		else
 		{
-			if (this.shouldUseNfc())
-			{
-				NacSharedConstants cons = new NacSharedConstants(this);
-				NacUtility.quickToast(this,
+			NacSharedConstants cons = new NacSharedConstants(this);
+			NacUtility.quickToast(this,
 					cons.getErrorMessageNfcUnsupported());
-			}
 		}
 	}
 

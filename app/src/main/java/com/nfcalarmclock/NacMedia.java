@@ -171,33 +171,41 @@ public class NacMedia
 	 */
 	public static String getArtist(Context context, NacFile.Metadata metadata)
 	{
+		NacSharedConstants cons = new NacSharedConstants(context);
 		Uri contentUri = metadata.toExternalUri();
 		String[] columns = new String[] { MediaStore.Audio.Artists.ARTIST };
 		Cursor c = context.getContentResolver().query(contentUri, columns, null,
 			null, null);
+		String defaultArtist = cons.getStateUnknown();
 		String artist = "";
 
-		c.moveToFirst();
-
-		try
+		if (c == null)
 		{
-			int artistIndex = c.getColumnIndexOrThrow(
-				MediaStore.Audio.Artists.ARTIST);
-			artist = c.getString(artistIndex);
-
-			if ((artist == null) || artist.equals("<unknown>"))
+			return defaultArtist;
+		}
+		else if (!c.moveToFirst())
+		{
+		}
+		else
+		{
+			try
 			{
-				NacSharedConstants cons = new NacSharedConstants(context);
-				artist = cons.getStateUnknown();
+				int artistIndex = c.getColumnIndexOrThrow(
+					MediaStore.Audio.Artists.ARTIST);
+				artist = c.getString(artistIndex);
+			}
+			catch (IllegalArgumentException e)
+			{
+				NacUtility.printf("NacMedia : getArtist : IllegalArgumentException!");
 			}
 		}
-		catch (IllegalArgumentException e)
+
+		if ((artist == null) || artist.isEmpty() || artist.equals("<unknown>"))
 		{
-			NacUtility.printf("NacMedia : getArtist : IllegalArgumentException!");
+			artist = defaultArtist;
 		}
 
 		c.close();
-
 		return artist;
 	}
 
@@ -478,26 +486,40 @@ public class NacMedia
 			return NacFile.basename(contentPath);
 		}
 
+		NacSharedConstants cons = new NacSharedConstants(context);
 		String[] columns = new String[] { MediaStore.Audio.Media.TITLE };
 		Cursor c = context.getContentResolver().query(contentUri, columns, null,
 			null, null);
+		String defaultTitle = cons.getStateUnknown();
 		String title = "";
 
-		c.moveToFirst();
-
-		try
+		if (c == null)
 		{
-			int titleIndex = c.getColumnIndexOrThrow(
-				MediaStore.Audio.Media.TITLE);
-			title = c.getString(titleIndex);
+			return defaultTitle;
 		}
-		catch (IllegalArgumentException e)
+		else if (!c.moveToFirst())
 		{
-			NacUtility.printf("NacMedia : getTitle : IllegalArgumentException!");
+		}
+		else
+		{
+			try
+			{
+				int titleIndex = c.getColumnIndexOrThrow(
+					MediaStore.Audio.Media.TITLE);
+				title = c.getString(titleIndex);
+			}
+			catch (IllegalArgumentException e)
+			{
+				NacUtility.printf("NacMedia : getTitle : IllegalArgumentException!");
+			}
+		}
+
+		if ((title == null) || title.isEmpty() || title.equals("<unknown>"))
+		{
+			title = defaultTitle;
 		}
 
 		c.close();
-
 		return title;
 	}
 
