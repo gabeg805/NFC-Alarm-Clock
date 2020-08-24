@@ -19,10 +19,10 @@ public class NacAlarmBroadcastReceiver
 	public void onReceive(final Context context, Intent intent)
 	{
 		Bundle bundle = NacIntent.getAlarmBundle(intent);
-		Intent startIntent = new Intent(
-			NacForegroundService.ACTION_START_SERVICE, null, context,
-			NacForegroundService.class);
-		startIntent = NacIntent.addAlarm(startIntent, bundle);
+		Intent activityIntent = NacIntent.createAlarmActivity(context, bundle);
+		Intent startIntent = NacIntent.createForegroundService(context, bundle);
+
+		context.startActivity(activityIntent);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{

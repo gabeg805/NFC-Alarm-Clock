@@ -43,7 +43,6 @@ public class NacIntent
 		{
 			intent.putExtra(ALARM_BUNDLE_NAME, bundle);
 		}
-
 		return intent;
 	}
 
@@ -61,7 +60,6 @@ public class NacIntent
 	public static Intent createAlarmActivity(Context context, NacAlarm alarm)
 	{
 		Bundle bundle = NacBundle.toBundle(alarm);
-
 		return NacIntent.createAlarmActivity(context, bundle);
 	}
 
@@ -75,9 +73,27 @@ public class NacIntent
 			| Intent.FLAG_ACTIVITY_CLEAR_TASK;
 
 		intent.addFlags(flags);
-		intent.putExtra(ALARM_BUNDLE_NAME, bundle);
+		//intent.putExtra(ALARM_BUNDLE_NAME, bundle);
+		return NacIntent.addAlarm(intent, bundle);
+	}
 
-		return intent;
+	/**
+	 * @return The intent that will be used to start the foreground alarm service.
+	 */
+	public static Intent createForegroundService(Context context, NacAlarm alarm)
+	{
+		Bundle bundle = NacBundle.toBundle(alarm);
+		return NacIntent.createForegroundService(context, bundle);
+	}
+
+	/**
+	 * @return The intent that will be used to start the foreground alarm service.
+	 */
+	public static Intent createForegroundService(Context context, Bundle bundle)
+	{
+		Intent intent = new Intent(NacForegroundService.ACTION_START_SERVICE, null,
+			context, NacForegroundService.class);
+		return NacIntent.addAlarm(intent, bundle);
 	}
 
 	/**
