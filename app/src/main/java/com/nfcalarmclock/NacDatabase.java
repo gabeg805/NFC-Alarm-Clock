@@ -171,6 +171,23 @@ public class NacDatabase
 		return alarm;
 	}
 
+	/**
+	 * @see findAlarm
+	 */
+	public NacAlarm findAlarm(NacAlarm alarm)
+	{
+		if (alarm == null)
+		{
+			return null;
+		}
+
+		int id = alarm.getId();
+		return this.findAlarm(id);
+	}
+
+	/**
+	 * @see findAlarm
+	 */
 	public NacAlarm findAlarm(Calendar calendar)
 	{
 		this.setDatabase();
@@ -203,8 +220,41 @@ public class NacDatabase
 		}
 
 		cursor.close();
-
 		return alarm;
+	}
+
+	/**
+	 * @see findAlarm
+	 */
+	public static NacAlarm findAlarm(Context context, NacAlarm alarm)
+	{
+		if ((context == null) || (alarm == null))
+		{
+			return null;
+		}
+
+		NacDatabase db = new NacDatabase(context);
+		NacAlarm foundAlarm = db.findAlarm(alarm);
+
+		db.close();
+		return foundAlarm;
+	}
+
+	/**
+	 * @see findAlarm
+	 */
+	public static NacAlarm findAlarm(Context context, Calendar calendar)
+	{
+		if ((context == null) || (calendar == null))
+		{
+			return null;
+		}
+
+		NacDatabase db = new NacDatabase(context);
+		NacAlarm foundAlarm = db.findAlarm(calendar);
+
+		db.close();
+		return foundAlarm;
 	}
 
 	/**

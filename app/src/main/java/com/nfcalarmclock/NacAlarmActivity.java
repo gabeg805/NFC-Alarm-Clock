@@ -239,9 +239,7 @@ public class NacAlarmActivity
 
 		if (alarm == null)
 		{
-			NacDatabase db = new NacDatabase(this);
-			alarm = db.findAlarm(Calendar.getInstance());
-			db.close();
+			alarm = NacDatabase.findAlarm(this, Calendar.getInstance());
 		}
 
 		if (alarm == null)

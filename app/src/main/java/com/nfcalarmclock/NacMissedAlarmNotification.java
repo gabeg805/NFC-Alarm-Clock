@@ -103,8 +103,9 @@ public class NacMissedAlarmNotification
 	public String getText(NacAlarm alarm)
 	{
 		Context context = this.getContext();
-		String time = alarm.getFullTime(context);
-		String name = alarm.getName();
+		NacAlarm actualAlarm = NacDatabase.findAlarm(context, alarm);
+		String time = actualAlarm.getFullTime(context);
+		String name = actualAlarm.getName();
 		Locale locale = Locale.getDefault();
 
 		return (name.isEmpty()) ? time

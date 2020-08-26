@@ -118,33 +118,20 @@ public class NacForegroundService
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
+		NacAlarm actualAlarm = NacDatabase.findAlarm(this, alarm);
 
 		if (alarm != null)
 		{
-			NacDatabase db = new NacDatabase(this);
-			int id = alarm.getId();
-			NacAlarm actualAlarm = db.findAlarm(id);
-
 			if (!actualAlarm.getRepeat())
 			{
-				if (!actualAlarm.areDaysSelected())
-				{
-					actualAlarm.setEnabled(false);
-				}
-				else
-				{
-					actualAlarm.toggleToday();
-				}
-
-				db.update(actualAlarm);
+				NacScheduler.toggleAlarm(this, actualAlarm);
 			}
 			else
 			{
 				NacScheduler.scheduleNext(this, actualAlarm);
 			}
 
-			shared.editSnoozeCount(alarm.getId(), 0);
-			db.close();
+			shared.editSnoozeCount(actualAlarm.getId(), 0);
 		}
 
 		NacSharedConstants cons = new NacSharedConstants(this);
