@@ -2,6 +2,8 @@ package com.nfcalarmclock;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.widget.CheckBox;
@@ -121,7 +123,8 @@ public class NacCardHolder
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 
-		return (!alarm.isSnoozed(shared) || !shared.getPreventAppFromClosing());
+		return !alarm.isSnoozed(shared);
+		//return (!alarm.isSnoozed(shared) || !shared.getPreventAppFromClosing());
 	}
 
 	/**
@@ -130,185 +133,6 @@ public class NacCardHolder
 	public void delete()
 	{
 		this.mDelete.delete(getAdapterPosition());
-	}
-
-	/**
-	 * Respond to the collapse button being clicked.
-	 */
-	private void respondToCollapseButtonClick(View view)
-	{
-		this.mCard.collapse();
-		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-	}
-
-	/**
-	 * Perform the day button state change.
-	 */
-	public void respondToDayButtonClick(NacDayButton button, int index)
-	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-		NacAlarm alarm = this.getAlarm();
-
-		if (!this.canModifyAlarm())
-		{
-			this.toastModifySnoozedAlarmError();
-			button.cancelAnimator();
-			return;
-		}
-
-		button.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-		alarm.toggleIndex(index);
-
-		if (!alarm.areDaysSelected())
-		{
-			alarm.setRepeat(false);
-		}
-
-		alarm.changed();
-		this.mDays.set(shared);
-		this.mSummary.set(shared);
-	}
-
-	/**
-	 * Respond to the delete button being clicked.
-	 */
-	private void respondToDeleteButtonClick(View view)
-	{
-		if (!this.canModifyAlarm())
-		{
-			this.toastDeleteSnoozedAlarmError();
-			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-			return;
-		}
-
-		this.delete();
-	}
-
-	/**
-	 * Respond to the header being clicked.
-	 */
-	private void respondToHeaderClick(View view)
-	{
-		this.mCard.toggleState();
-		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-	}
-
-	/**
-	 * Respond to the name being clicked.
-	 */
-	private void respondToNameClick(View view)
-	{
-		this.mName.showDialog(this);
-	}
-
-	/**
-	 * Respond to the NFC button being clicked.
-	 */
-	private void respondToNfcButtonClick(View view)
-	{
-		NacAlarm alarm = this.getAlarm();
-
-		alarm.toggleUseNfc();
-		alarm.changed();
-		this.mUseNfc.set();
-		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-
-		if (alarm.getUseNfc())
-		{
-			this.toastNfcEnabled();
-		}
-	}
-
-	/**
-	 * Respond to the repeat button being clicked.
-	 */
-	private void respondToRepeatButtonClick(View view)
-	{
-		NacAlarm alarm = this.getAlarm();
-		alarm.toggleRepeat();
-		alarm.changed();
-		this.mDays.setRepeat();
-		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-	}
-
-	/**
-	 * Respond to the sound view being clicked.
-	 */
-	private void respondToSoundClick(View view)
-	{
-		this.mSound.startActivity();
-	}
-
-	/**
-	 * Respond to the summary being clicked.
-	 */
-	private void respondToSummaryClick(View view)
-	{
-		this.mCard.expand();
-		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-	}
-
-	/**
-	 * Perform the switch state change.
-	 */
-	public void respondToSwitchCheckedChanged(CompoundButton button,
-		boolean state)
-	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-		NacAlarm alarm = this.getAlarm();
-
-		if (!this.canModifyAlarm())
-		{
-			this.toastModifySnoozedAlarmError();
-			button.setChecked(!state);
-			return;
-		}
-
-		button.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-		alarm.setEnabled(state);
-		alarm.changed();
-		this.mSummary.set(shared);
-
-		if (!state)
-		{
-			shared.editSnoozeCount(alarm.getId(), 0);
-		}
-	}
-
-	/**
-	 * Respond to the time being clicked.
-	 */
-	private void respondToTimeClick(View view)
-	{
-		if (!this.canModifyAlarm())
-		{
-			this.toastModifySnoozedAlarmError();
-			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-			return;
-		}
-
-		this.mTime.showDialog(this);
-	}
-
-	/**
-	 * Respond to the vibrate button being clicked.
-	 */
-	private void respondToVibrateButtonClick(View view)
-	{
-		NacAlarm alarm = this.getAlarm();
-		alarm.toggleVibrate();
-		alarm.changed();
-		this.mVibrate.set();
-		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-	}
-
-	/**
-	 * Respond to the volume settings button being clicked.
-	 */
-	private void respondToVolumeSettingsButtonClick(View view)
-	{
-		this.mSound.showAudioSourceDialog(this);
-		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 	}
 
 	/**
@@ -628,6 +452,249 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Respond to the collapse button being clicked.
+	 */
+	private void respondToCollapseButtonClick(View view)
+	{
+		this.mCard.collapse();
+		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+	}
+
+	/**
+	 * Perform the day button state change.
+	 */
+	public void respondToDayButtonClick(NacDayButton button, int index)
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacAlarm alarm = this.getAlarm();
+
+		if (!this.canModifyAlarm())
+		{
+			this.toastModifySnoozedAlarmError();
+			button.cancelAnimator();
+			return;
+		}
+
+		button.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+		alarm.toggleIndex(index);
+
+		if (!alarm.areDaysSelected())
+		{
+			alarm.setRepeat(false);
+		}
+
+		alarm.changed();
+		this.mDays.set(shared);
+		this.mSummary.set(shared);
+	}
+
+	/**
+	 * Respond to the delete button being clicked.
+	 */
+	private void respondToDeleteButtonClick(View view)
+	{
+		if (this.canModifyAlarm())
+		{
+			this.delete();
+		}
+		else
+		{
+			this.toastDeleteSnoozedAlarmError();
+			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+		}
+	}
+
+	/**
+	 * Respond to the header being clicked.
+	 */
+	private void respondToHeaderClick(View view)
+	{
+		this.mCard.toggleState();
+		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+	}
+
+	/**
+	 * Respond to the name being clicked.
+	 */
+	private void respondToNameClick(View view)
+	{
+		if (this.canModifyAlarm())
+		{
+			this.mName.showDialog(this);
+		}
+		else
+		{
+			this.toastModifySnoozedAlarmError();
+			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+		}
+	}
+
+	/**
+	 * Respond to the NFC button being clicked.
+	 */
+	private void respondToNfcButtonClick(View view)
+	{
+		if (this.canModifyAlarm())
+		{
+			NacAlarm alarm = this.getAlarm();
+			alarm.toggleUseNfc();
+			alarm.changed();
+			this.mUseNfc.set();
+			this.toastNfc();
+		}
+		else
+		{
+			this.toastModifySnoozedAlarmError();
+		}
+
+		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+	}
+
+	/**
+	 * Respond to the repeat button being clicked.
+	 */
+	private void respondToRepeatButtonClick(View view)
+	{
+		if (this.canModifyAlarm())
+		{
+			NacAlarm alarm = this.getAlarm();
+			alarm.toggleRepeat();
+			alarm.changed();
+			this.mDays.setRepeat();
+			this.toastRepeat();
+		}
+		else
+		{
+			this.toastModifySnoozedAlarmError();
+		}
+
+		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+	}
+
+	/**
+	 * Respond to the sound view being clicked.
+	 */
+	private void respondToSoundClick(View view)
+	{
+		if (this.canModifyAlarm())
+		{
+			this.mSound.startActivity();
+		}
+		else
+		{
+			this.toastModifySnoozedAlarmError();
+			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+		}
+	}
+
+	/**
+	 * Respond to the summary being clicked.
+	 */
+	private void respondToSummaryClick(View view)
+	{
+		this.mCard.expand();
+		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+	}
+
+	/**
+	 * Perform the switch state change.
+	 */
+	public void respondToSwitchCheckedChanged(CompoundButton button,
+		boolean state)
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacAlarm alarm = this.getAlarm();
+
+		button.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+
+		//if (!this.canModifyAlarm())
+		if (shared.getPreventAppFromClosing())
+		{
+			this.toastModifySnoozedAlarmError();
+			button.setChecked(!state);
+			return;
+		}
+
+		if (!state)
+		{
+			Context context = this.getContext();
+			Intent intent = NacIntent.stopForegroundService(context, alarm);
+
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+			{
+				context.startForegroundService(intent);
+			}
+			else
+			{
+				context.startService(intent);
+			}
+		}
+
+		alarm.setEnabled(state);
+		alarm.changed();
+		this.mSummary.set(shared);
+
+		if (!state)
+		{
+			shared.editSnoozeCount(alarm.getId(), 0);
+		}
+	}
+
+	/**
+	 * Respond to the time being clicked.
+	 */
+	private void respondToTimeClick(View view)
+	{
+		if (this.canModifyAlarm())
+		{
+			this.mTime.showDialog(this);
+		}
+		else
+		{
+			this.toastModifySnoozedAlarmError();
+			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+		}
+	}
+
+	/**
+	 * Respond to the vibrate button being clicked.
+	 */
+	private void respondToVibrateButtonClick(View view)
+	{
+		if (this.canModifyAlarm())
+		{
+			NacAlarm alarm = this.getAlarm();
+			alarm.toggleVibrate();
+			alarm.changed();
+			this.mVibrate.set();
+			this.toastVibrate();
+		}
+		else
+		{
+			this.toastModifySnoozedAlarmError();
+		}
+
+		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+	}
+
+	/**
+	 * Respond to the volume settings button being clicked.
+	 */
+	private void respondToVolumeSettingsButtonClick(View view)
+	{
+		if (this.canModifyAlarm())
+		{
+			this.mSound.showAudioSourceDialog(this);
+		}
+		else
+		{
+			this.toastModifySnoozedAlarmError();
+		}
+
+		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+	}
+
+	/**
 	 * Set the colors of the various views.
 	 */
 	public void setColors()
@@ -690,16 +757,6 @@ public class NacCardHolder
 	}
 
 	/**
-	 * Show a toast when a user enables NFC for an alarm.
-	 */
-	private void toastNfcEnabled()
-	{
-		Context context = this.getContext();
-		NacSharedConstants cons = new NacSharedConstants(context);
-		NacUtility.quickToast(context, cons.getMessageNfcRequired());
-	}
-
-	/**
 	 * Show a toast when a user tries to modify an alarm when they are unable
 	 * to.
 	 */
@@ -719,6 +776,48 @@ public class NacCardHolder
 		Context context = this.getContext();
 		NacSharedConstants cons = new NacSharedConstants(context);
 		NacUtility.quickToast(context, cons.getErrorMessageSnoozedModify());
+	}
+
+	/**
+	 * Show a toast when a user clicks the NFC button.
+	 */
+	private void toastNfc()
+	{
+		NacAlarm alarm = this.getAlarm();
+		Context context = this.getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
+		String message = alarm.getUseNfc() ? cons.getMessageNfcRequired()
+			: cons.getMessageNfcOptional();
+
+		NacUtility.quickToast(context, message);
+	}
+
+	/**
+	 * Show a toast when a user clicks the repeat button.
+	 */
+	private void toastRepeat()
+	{
+		NacAlarm alarm = this.getAlarm();
+		Context context = this.getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
+		String message = alarm.getRepeat() ? cons.getMessageRepeatEnabled()
+			: cons.getMessageRepeatDisabled();
+
+		NacUtility.quickToast(context, message);
+	}
+
+	/**
+	 * Show a toast when a user clicks the vibrate button.
+	 */
+	private void toastVibrate()
+	{
+		NacAlarm alarm = this.getAlarm();
+		Context context = this.getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
+		String message = alarm.getVibrate() ? cons.getMessageVibrateEnabled()
+			: cons.getMessageVibrateDisabled();
+
+		NacUtility.quickToast(context, message);
 	}
 
 }

@@ -245,6 +245,7 @@ public class NacMainActivity
 		StatusBarNotification activeNotification =
 			this.getActiveAlarmNotification();
 
+		//if (activeNotification == null)
 		if (!shared.getPreventAppFromClosing() || (activeNotification == null))
 		{
 			return;

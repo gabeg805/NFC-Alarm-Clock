@@ -405,6 +405,14 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return NFC is optional message.
+	 */
+	public String getMessageNfcOptional()
+	{
+		return this.getString(R.string.message_nfc_optional);
+	}
+
+	/**
 	 * @return Enable NFC request message.
 	 */
 	public String getMessageNfcRequest()
@@ -426,6 +434,38 @@ public class NacSharedConstants
 	public String getMessageNoAlarmsScheduled()
 	{
 		return this.getString(R.string.message_no_alarms_scheduled);
+	}
+
+	/**
+	 * @return Repeat disabled message.
+	 */
+	public String getMessageRepeatDisabled()
+	{
+		return this.getString(R.string.message_repeat_disabled);
+	}
+
+	/**
+	 * @return Repeat enabled message.
+	 */
+	public String getMessageRepeatEnabled()
+	{
+		return this.getString(R.string.message_repeat_enabled);
+	}
+
+	/**
+	 * @return Vibrate disabled message.
+	 */
+	public String getMessageVibrateDisabled()
+	{
+		return this.getString(R.string.message_vibrate_disabled);
+	}
+
+	/**
+	 * @return Vibrate enabled message.
+	 */
+	public String getMessageVibrateEnabled()
+	{
+		return this.getString(R.string.message_vibrate_enabled);
 	}
 
 	/**

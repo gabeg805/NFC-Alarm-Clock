@@ -338,6 +338,25 @@ public class NacIntent
 	}
 
 	/**
+	 * @return An intent that allows you to stop the alarm activity.
+	 */
+	public static Intent stopAlarmActivity(Context context, NacAlarm alarm)
+	{
+		Intent intent = new Intent(NacAlarmActivity.ACTION_STOP_ACTIVITY);
+		return NacIntent.addAlarm(intent, alarm);
+	}
+
+	/**
+	 * @return An intent that will be used to stop the foreground alarm service.
+	 */
+	public static Intent stopForegroundService(Context context, NacAlarm alarm)
+	{
+		Intent intent = new Intent(NacForegroundService.ACTION_STOP_SERVICE, null,
+			context, NacForegroundService.class);
+		return NacIntent.addAlarm(intent, alarm);
+	}
+
+	/**
 	 * @return An intent with a sound.
 	 */
 	public static Intent toIntent(NacAlarm alarm)

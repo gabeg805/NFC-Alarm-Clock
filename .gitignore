@@ -7,5 +7,6 @@ app/my-new-release-key.jks
 keystore.properties
 local.properties
 *.iml
+*.swp
 .DS_Store
 .externalNativeBuild

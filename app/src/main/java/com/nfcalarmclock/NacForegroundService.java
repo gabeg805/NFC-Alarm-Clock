@@ -433,7 +433,6 @@ public class NacForegroundService
 		NacActiveAlarmNotification notification =
 			new NacActiveAlarmNotification(this, alarm);
 
-		//startForeground(notification.ID, notification.build());
 		startForeground(alarm.getId(), notification.build());
 	}
 
@@ -491,8 +490,7 @@ public class NacForegroundService
 	private void stopAlarmActivity()
 	{
 		NacAlarm alarm = this.getAlarm();
-		Intent intent = new Intent(NacAlarmActivity.ACTION_STOP_ACTIVITY);
-		intent = NacIntent.addAlarm(intent, alarm);
+		Intent intent = NacIntent.stopAlarmActivity(this, alarm);
 
 		sendBroadcast(intent);
 	}

@@ -494,14 +494,13 @@ public class NacFile
 		public String strip(String path)
 		{
 			String home = this.getHome();
-			String strippedPath = path.replace(home, "");
+			String reducedPath = path.replace(home, "");
+			String strippedPath = NacFile.strip(reducedPath);
 
 			if (strippedPath.isEmpty())
 			{
 				return "";
 			}
-
-			strippedPath = NacFile.strip(strippedPath);
 
 			if (strippedPath.charAt(0) == '/')
 			{

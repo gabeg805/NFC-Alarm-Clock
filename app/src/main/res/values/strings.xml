@@ -43,8 +43,13 @@
 	<string name="message_playlist">Do you want to play all the music in this folder?</string>
 	<string name="message_rate_my_app">If you have been enjoying the <b>NFC Alarm Clock</b> app, please take a moment to rate it. Thank you for your support!</string>
 	<string name="message_nfc_required">NFC required to dismiss the alarm</string>
+	<string name="message_nfc_optional">NFC optional to dismiss the alarm</string>
 	<string name="message_nfc_request">Please enable NFC to dismiss the alarm</string>
 	<string name="message_no_alarms_scheduled">No alarms scheduled</string>
+	<string name="message_repeat_disabled">Do not repeat alarm</string>
+	<string name="message_repeat_enabled">Repeat alarm</string>
+	<string name="message_vibrate_disabled">Vibrate off</string>
+	<string name="message_vibrate_enabled">Vibrate on</string>
 	<string name="message_alarm_copy">Copied alarm</string>
 	<string name="message_alarm_delete">Deleted alarm</string>
 	<string name="message_alarm_restore">Restored alarm</string>

@@ -37,10 +37,8 @@ public class NacAlarmActivity
 		{
 			String action = NacIntent.getAction(intent);
 			NacAlarm intentAlarm = NacIntent.getAlarm(intent);
-			NacAlarm alarm = getAlarm();
 
-			if (action.equals(NacAlarmActivity.ACTION_STOP_ACTIVITY)
-				&& (alarm.getId() == intentAlarm.getId()))
+			if (action.equals(NacAlarmActivity.ACTION_STOP_ACTIVITY))
 			{
 				finish();
 			}

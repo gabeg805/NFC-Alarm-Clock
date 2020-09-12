@@ -42,9 +42,14 @@
 	<!-- Messages -->
 	<string name="message_playlist">¿Quieres tocar toda la música de esta carpeta?</string>
 	<string name="message_rate_my_app">Si haz disfrutado la <b>NFC Despertador</b>, por favor tómate un momento para calificarla. ¡Gracias por su apoyo! </string>
-	<string name="message_nfc_required">NFC requerido para dscartar la alarma</string>
+	<string name="message_nfc_required">NFC requerido para descartar la alarma</string>
+	<string name="message_nfc_optional">NFC opcional para descartar la alarma</string>
 	<string name="message_nfc_request">Por favor, habilite la NFC para descartar la alarma</string>
 	<string name="message_no_alarms_scheduled">No hay alarmas programadas</string>
+	<string name="message_repeat_disabled">No repite la alarma</string>
+	<string name="message_repeat_enabled">Repite la alarma</string>
+	<string name="message_vibrate_disabled">Vibrar desactivado</string>
+	<string name="message_vibrate_enabled">Vibrar habilitado</string>
 	<string name="message_alarm_copy">Alarma copiada</string>
 	<string name="message_alarm_delete">Alarma borrada</string>
 	<string name="message_alarm_restore">Alarma restaurada</string>
