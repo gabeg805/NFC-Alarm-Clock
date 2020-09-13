@@ -26,85 +26,11 @@ public class NacNfc
 	}
 
 	/**
-	 * @see disable
-	 */
-	public void disable()
-	{
-		Context context = this.getContext();
-
-		NacNfc.disable(context);
-	}
-
-	/**
-	 * Disable NFC dispatch, so the app does not waste battery when it does not
-	 * need to discover NFC tags.
-	 */
-	public static void disable(Context context)
-	{
-		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
-
-		if (nfcAdapter == null)
-		{
-			return;
-		}
-
-		nfcAdapter.disableForegroundDispatch((Activity)context);
-	}
-
-	/**
-	 * @see enable
-	 */
-	public void enable()
-	{
-		Context context = this.getContext();
-
-		NacNfc.enable(context);
-	}
-
-	/**
-	 * Enable NFC dispatch, so that the app can discover NFC tags.
-	 */
-	public static void enable(Context context)
-	{
-		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
-		NacSharedPreferences shared = new NacSharedPreferences(context);
-
-		if (nfcAdapter == null)
-		{
-			return;
-		}
-		else
-		{
-			if (!nfcAdapter.isEnabled())
-			{
-				Intent settings = new Intent(Settings.ACTION_NFC_SETTINGS);
-				NacSharedConstants cons = new NacSharedConstants(context);
-
-				NacUtility.toast(context, cons.getMessageNfcRequest());
-				context.startActivity(settings);
-			}
-
-			Intent intent = new Intent(context, NacAlarmActivity.class)
-				.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
-			PendingIntent pending = PendingIntent.getActivity(context, 0,
-				intent, 0);
-			// Can I use null for the filter?
-			// https://stackoverflow.com/questions/16510140/android-nfc-intent-filter-to-show-my-application-when-nfc-discover-a-tag
-			// <action android:name="android.nfc.action.ACTION_NDEF_DISCOVERED />
-			IntentFilter[] filter = new IntentFilter[]{};
-
-			nfcAdapter.enableForegroundDispatch((Activity)context, pending,
-				filter, null);
-		}
-	}
-
-	/**
 	 * @see exists
 	 */
 	public boolean exists()
 	{
 		Context context = this.getContext();
-
 		return NacNfc.exists(context);
 	}
 
@@ -122,6 +48,92 @@ public class NacNfc
 	private Context getContext()
 	{
 		return this.mContext;
+	}
+
+	/**
+	 * @return True if the NFC adapter is enabled, and False otherwise.
+	 */
+	public static boolean isEnabled(Context context)
+	{
+		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
+		return (nfcAdapter != null) && nfcAdapter.isEnabled();
+	}
+
+	/**
+	 * Prompt the user to enable NFC.
+	 */
+	public static void prompt(Context context)
+	{
+		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
+
+		if (nfcAdapter == null)
+		{
+			return;
+		}
+
+		NacSharedConstants cons = new NacSharedConstants(context);
+		Intent settings = new Intent(Settings.ACTION_NFC_SETTINGS);
+
+		NacUtility.toast(context, cons.getMessageNfcRequest());
+		context.startActivity(settings);
+	}
+
+	/**
+	 * @see start
+	 */
+	public void start()
+	{
+		Context context = this.getContext();
+
+		NacNfc.start(context);
+	}
+
+	/**
+	 * Enable NFC dispatch, so that the app can discover NFC tags.
+	 */
+	public static void start(Context context)
+	{
+		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
+
+		if (nfcAdapter == null)
+		{
+			return;
+		}
+
+		Intent intent = new Intent(context, NacAlarmActivity.class)
+			.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+		PendingIntent pending = PendingIntent.getActivity(context, 0,
+			intent, 0);
+		// Can I use null for the filter?
+		IntentFilter[] filter = new IntentFilter[]{};
+
+		nfcAdapter.enableForegroundDispatch((Activity)context, pending,
+			filter, null);
+	}
+
+	/**
+	 * @see stop
+	 */
+	public void stop()
+	{
+		Context context = this.getContext();
+		NacNfc.stop(context);
+	}
+
+	/**
+	 * Stop NFC dispatch, so the app does not waste battery when it does not
+	 * need to discover NFC tags.
+	 */
+	public static void stop(Context context)
+	{
+		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
+
+		if (nfcAdapter == null)
+		{
+			return;
+		}
+
+		nfcAdapter.disableForegroundDispatch((Activity)context);
 	}
 
 }

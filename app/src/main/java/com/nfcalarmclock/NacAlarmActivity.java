@@ -72,10 +72,7 @@ public class NacAlarmActivity
 	 */
 	private void cleanupNfc()
 	{
-		if (this.shouldUseNfc())
-		{
-			NacNfc.disable(this);
-		}
+		NacNfc.stop(this);
 	}
 
 	/**
@@ -204,6 +201,7 @@ public class NacAlarmActivity
 	{
 		super.onResume();
 		this.setupNfc();
+		this.setupAlarmInstructions();
 		this.setupStopReceiver();
 	}
 
@@ -294,24 +292,44 @@ public class NacAlarmActivity
 	}
 
 	/**
+	 * Setup the instruction message that appears just above the Snooze and
+	 * Dismiss buttons.
+	 */
+	public void setupAlarmInstructions()
+	{
+		if (!NacNfc.isEnabled(this))
+		{
+			TextView instructions = (TextView) findViewById(R.id.instructions);
+			instructions.setVisibility(View.INVISIBLE);
+		}
+	}
+
+	/**
 	 * Setup NFC.
 	 */
 	private void setupNfc()
 	{
-		if (!this.shouldUseNfc())
+		if (!NacNfc.isEnabled(this))
 		{
-			return;
+			if (this.shouldUseNfc())
+			{
+				NacNfc.prompt(this);
+			}
+			else
+			{
+				return;
+			}
 		}
 
 		if (NacNfc.exists(this))
 		{
-			NacNfc.enable(this);
+			NacNfc.start(this);
 		}
 		else
 		{
 			NacSharedConstants cons = new NacSharedConstants(this);
 			NacUtility.quickToast(this,
-					cons.getErrorMessageNfcUnsupported());
+				cons.getErrorMessageNfcUnsupported());
 		}
 	}
 
@@ -364,8 +382,7 @@ public class NacAlarmActivity
 	public boolean shouldUseNfc()
 	{
 		NacAlarm alarm = this.getAlarm();
-
-		return ((alarm != null) && alarm.getUseNfc());
+		return (alarm != null) && alarm.getUseNfc();
 	}
 
 	/**

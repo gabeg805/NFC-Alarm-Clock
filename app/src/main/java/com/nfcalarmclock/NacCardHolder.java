@@ -619,15 +619,7 @@ public class NacCardHolder
 		{
 			Context context = this.getContext();
 			Intent intent = NacIntent.stopForegroundService(context, alarm);
-
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-			{
-				context.startForegroundService(intent);
-			}
-			else
-			{
-				context.startService(intent);
-			}
+			context.startService(intent);
 		}
 
 		alarm.setEnabled(state);
