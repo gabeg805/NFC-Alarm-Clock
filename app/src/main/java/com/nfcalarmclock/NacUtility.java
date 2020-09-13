@@ -192,7 +192,6 @@ public class NacUtility
 	public static Toast quickToast(View view, String message)
 	{
 		Context context = view.getContext();
-
 		return NacUtility.quickToast(context, message);
 	}
 
@@ -210,7 +209,6 @@ public class NacUtility
 	public static Toast toast(View view, String message)
 	{
 		Context context = view.getContext();
-
 		return NacUtility.toast(context, message);
 	}
 
@@ -228,9 +226,7 @@ public class NacUtility
 	public static Toast toast(Context context, String message, int duration)
 	{
 		Toast toast = Toast.makeText(context, message, duration);
-
 		toast.show();
-
 		return toast;
 	}
 

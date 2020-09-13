@@ -608,7 +608,7 @@ public class NacCardHolder
 		button.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 
 		//if (!this.canModifyAlarm())
-		if (shared.getPreventAppFromClosing())
+		if (!this.canModifyAlarm() && shared.getPreventAppFromClosing())
 		{
 			this.toastModifySnoozedAlarmError();
 			button.setChecked(!state);
