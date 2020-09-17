@@ -204,6 +204,15 @@ public class NacMainActivity
 	/**
 	 */
 	@Override
+	protected void onNewIntent(Intent intent)
+	{
+		NacUtility.quickToast(this, "NFC tag scanned!");
+		super.onNewIntent(intent);
+	}
+
+	/**
+	 */
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		int id = item.getItemId();
@@ -231,7 +240,7 @@ public class NacMainActivity
 	public void onPause()
 	{
 		super.onPause();
-		NacNfc.stop(this);
+		//NacNfc.stop(this);
 	}
 
 	/**
@@ -258,16 +267,15 @@ public class NacMainActivity
 		if ((notification == null) || (alarm == null))
 		{
 		}
-		else if (this.shouldShowAlarmActivity(alarm))
+		else
 		{
-			NacUtility.quickToast(this, "Showing alarm activity!");
 			this.showAlarmActivity(notification);
 		}
-		else if (this.shouldStartNfc(alarm))
-		{
-			NacUtility.quickToast(this, "Starting NFC dispatch!");
-			NacNfc.start(this);
-		}
+		//else if (this.shouldShowAlarmActivity(alarm))
+		//else if (this.shouldStartNfc(alarm))
+		//{
+		//	NacNfc.start(this);
+		//}
 	}
 
 	/**
@@ -360,8 +368,14 @@ public class NacMainActivity
 	/**
 	 * Show the alarm activity.
 	 */
-	private void showAlarmActivity(StatusBarNotification notification)
+	private void showAlarmActivity(StatusBarNotification statusBarNotification)
 	{
+		if (statusBarNotification == null)
+		{
+			return;
+		}
+
+		Notification notification = statusBarNotification.getNotification();
 		if (notification == null)
 		{
 			return;
@@ -369,7 +383,7 @@ public class NacMainActivity
 
 		try
 		{
-			PendingIntent pending = notification.getNotification().contentIntent;
+			PendingIntent pending = notification.contentIntent;
 			if (pending != null)
 			{
 				pending.send();
