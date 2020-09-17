@@ -84,7 +84,6 @@ public class NacNfc
 	public void start()
 	{
 		Context context = this.getContext();
-
 		NacNfc.start(context);
 	}
 
@@ -95,7 +94,7 @@ public class NacNfc
 	{
 		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
 
-		if (nfcAdapter == null)
+		if ((nfcAdapter == null) || !NacNfc.isEnabled(context))
 		{
 			return;
 		}
@@ -104,11 +103,8 @@ public class NacNfc
 			.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
 		PendingIntent pending = PendingIntent.getActivity(context, 0,
 			intent, 0);
-		// Can I use null for the filter?
-		IntentFilter[] filter = new IntentFilter[]{};
 
-		nfcAdapter.enableForegroundDispatch((Activity)context, pending,
-			filter, null);
+		nfcAdapter.enableForegroundDispatch((Activity)context, pending, null, null);
 	}
 
 	/**
@@ -128,12 +124,34 @@ public class NacNfc
 	{
 		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
 
-		if (nfcAdapter == null)
+		if ((nfcAdapter == null) || !NacNfc.isEnabled(context))
 		{
 			return;
 		}
 
 		nfcAdapter.disableForegroundDispatch((Activity)context);
+	}
+
+	/**
+	 * @return True if an NFC tag was scanned/discovered and False otherwise.
+	 */
+	public static boolean wasScanned(Context context, Intent intent)
+	{
+		if (intent == null)
+		{
+			return false;
+		}
+
+		String action = intent.getAction();
+
+		if ((action == null) || action.isEmpty())
+		{
+			return false;
+		}
+
+		return action.equals(NfcAdapter.ACTION_NDEF_DISCOVERED)
+			|| action.equals(NfcAdapter.ACTION_TECH_DISCOVERED)
+			|| action.equals(NfcAdapter.ACTION_TAG_DISCOVERED);
 	}
 
 }

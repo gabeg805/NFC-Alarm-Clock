@@ -162,9 +162,7 @@ public class NacDatabase
 		if (cursor != null)
 		{
 			cursor.moveToFirst();
-
 			alarm = this.toAlarm(cursor, version);
-
 			cursor.close();
 		}
 
@@ -176,13 +174,7 @@ public class NacDatabase
 	 */
 	public NacAlarm findAlarm(NacAlarm alarm)
 	{
-		if (alarm == null)
-		{
-			return null;
-		}
-
-		int id = alarm.getId();
-		return this.findAlarm(id);
+		return (alarm != null) ? this.findAlarm(alarm.getId()) : null;
 	}
 
 	/**
@@ -226,18 +218,26 @@ public class NacDatabase
 	/**
 	 * @see findAlarm
 	 */
-	public static NacAlarm findAlarm(Context context, NacAlarm alarm)
+	public static NacAlarm findAlarm(Context context, int id)
 	{
-		if ((context == null) || (alarm == null))
+		if (context == null)
 		{
 			return null;
 		}
 
 		NacDatabase db = new NacDatabase(context);
-		NacAlarm foundAlarm = db.findAlarm(alarm);
+		NacAlarm foundAlarm = db.findAlarm(id);
 
 		db.close();
 		return foundAlarm;
+	}
+
+	/**
+	 * @see findAlarm
+	 */
+	public static NacAlarm findAlarm(Context context, NacAlarm alarm)
+	{
+		return (alarm != null) ? NacDatabase.findAlarm(context, alarm.getId()) : null;
 	}
 
 	/**

@@ -48,9 +48,9 @@ public class NacMainActivity
 	private RecyclerView mRecyclerView;
 
 	/**
-	 * Floating button to add new alarms.
+	 * Floating action button to add new alarms.
 	 */
-	private FloatingActionButton mFloatingButton;
+	private FloatingActionButton mFloatingActionButton;
 
 	/**
 	 * Alarm card adapter.
@@ -63,23 +63,39 @@ public class NacMainActivity
 	private void addSetAlarmFromIntent()
 	{
 		Intent intent = getIntent();
-		NacCardAdapter adapter = this.getCardAdapter();
+		NacCardAdapter cardAdapter = this.getCardAdapter();
 		NacAlarm alarm = NacIntent.getSetAlarm(this, intent);
 
 		if (alarm != null)
 		{
-			alarm.setId(adapter.getUniqueId());
-			adapter.add(alarm);
-			adapter.setWasAddedWithFloatingButton(true);
+			int id = cardAdapter.getUniqueId();
+
+			alarm.setId(id);
+			cardAdapter.add(alarm);
+			cardAdapter.setWasAddedWithFloatingActionButton(true);
 		}
 	}
 
 	/**
-	 * @return The notification for the most recent (if more than 1) active
-	 *         alarm.
+	 * @return NacAlarm that is found by using the information in the currently
+	 *         active notification
+	 */
+	private NacAlarm findAlarmFromNotification(StatusBarNotification notification)
+	{
+		if (notification == null)
+		{
+			return null;
+		}
+
+		int id = notification.getId();
+		return NacDatabase.findAlarm(this, id);
+	}
+
+	/**
+	 * @return The notification for the current active alarm.
 	 */
 	@TargetApi(Build.VERSION_CODES.M)
-	private StatusBarNotification getActiveAlarmNotification()
+	private StatusBarNotification getActiveStatusBarNotification()
 	{
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
 		{
@@ -124,9 +140,9 @@ public class NacMainActivity
 	/**
 	 * @return The floating action button.
 	 */
-	private FloatingActionButton getFloatingButton()
+	private FloatingActionButton getFloatingActionButton()
 	{
-		return this.mFloatingButton;
+		return this.mFloatingActionButton;
 	}
 
 	/**
@@ -151,11 +167,11 @@ public class NacMainActivity
 	@Override
 	public void onClick(View view)
 	{
-		NacCardAdapter adapter = this.getCardAdapter();
+		NacCardAdapter cardAdapter = this.getCardAdapter();
 
+		cardAdapter.add();
+		cardAdapter.setWasAddedWithFloatingActionButton(true);
 		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-		adapter.add();
-		adapter.setWasAddedWithFloatingButton(true);
 	}
 
 	/**
@@ -166,29 +182,14 @@ public class NacMainActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_main);
 
-		NacSharedPreferences shared = new NacSharedPreferences(this);
-		DividerItemDecoration divider = new DividerItemDecoration(this,
-			LinearLayoutManager.VERTICAL);
-		NacLayoutManager layoutManager = new NacLayoutManager(this);
-		Drawable drawable = ContextCompat.getDrawable(this,
-			R.drawable.card_divider);
-		int padding = getResources().getDimensionPixelSize(R.dimen.sp_main);
-		InsetDrawable insetDrawable = new InsetDrawable(drawable, padding, 0,
-			padding, 0);
-
-		this.mSharedPreferences = shared;
+		this.mSharedPreferences = new NacSharedPreferences(this);
 		this.mAdapter = new NacCardAdapter(this);
-		this.mFloatingButton = (FloatingActionButton) findViewById(
+		this.mFloatingActionButton = (FloatingActionButton) findViewById(
 			R.id.fab_add_alarm);
 		this.mRecyclerView = (RecyclerView) findViewById(
 			R.id.content_alarm_list);
 
-		divider.setDrawable(insetDrawable);
-		//divider.setDrawable(drawable);
-		this.mFloatingButton.setOnClickListener(this);
-		this.mRecyclerView.addItemDecoration(divider);
-		this.mRecyclerView.setAdapter(this.mAdapter);
-		this.mRecyclerView.setLayoutManager(layoutManager);
+		this.setupRecyclerView();
 	}
 
 	/**
@@ -210,17 +211,27 @@ public class NacMainActivity
 		switch (id)
 		{
 			case R.id.menu_settings:
-				startActivity(new Intent(this, NacSettingsActivity.class));
+				Intent settingsIntent = new Intent(this, NacSettingsActivity.class);
+				startActivity(settingsIntent);
 				return true;
 			case R.id.menu_show_next_alarm:
-				NacCardAdapter adapter = this.getCardAdapter();
-				adapter.showNextAlarm();
+				NacCardAdapter cardAdapter = this.getCardAdapter();
+				cardAdapter.showNextAlarm();
 				return true;
 			default:
 				break;
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	/**
+	 */
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		NacNfc.stop(this);
 	}
 
 	/**
@@ -241,22 +252,21 @@ public class NacMainActivity
 	 */
 	private void setupActiveAlarmActivity()
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-		StatusBarNotification activeNotification =
-			this.getActiveAlarmNotification();
+		StatusBarNotification notification = this.getActiveStatusBarNotification();
+		NacAlarm alarm = this.findAlarmFromNotification(notification);
 
-		//if (activeNotification == null)
-		if (!shared.getPreventAppFromClosing() || (activeNotification == null))
+		if ((notification == null) || (alarm == null))
 		{
-			return;
 		}
-
-		long currentTime = System.currentTimeMillis();
-		long postTime = activeNotification.getPostTime();
-
-		if ((currentTime-postTime) >= ACTIVE_ALARM_POST_DURATION)
+		else if (this.shouldShowAlarmActivity(alarm))
 		{
-			this.showAlarmActivity(activeNotification);
+			NacUtility.quickToast(this, "Showing alarm activity!");
+			this.showAlarmActivity(notification);
+		}
+		else if (this.shouldStartNfc(alarm))
+		{
+			NacUtility.quickToast(this, "Starting NFC dispatch!");
+			NacNfc.start(this);
 		}
 	}
 
@@ -265,8 +275,8 @@ public class NacMainActivity
 	 */
 	private void setupAlarmCardAdapter()
 	{
-		NacCardAdapter adapter = this.getCardAdapter();
-		adapter.build();
+		NacCardAdapter cardAdapter = this.getCardAdapter();
+		cardAdapter.build();
 	}
 
 	/**
@@ -275,9 +285,10 @@ public class NacMainActivity
 	private void setupFloatingActionButton()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		FloatingActionButton floatingButton = this.getFloatingButton();
+		FloatingActionButton floatingButton = this.getFloatingActionButton();
 		ColorStateList color = ColorStateList.valueOf(shared.getThemeColor());
 
+		floatingButton.setOnClickListener(this);
 		floatingButton.setBackgroundTintList(color);
 	}
 
@@ -306,29 +317,67 @@ public class NacMainActivity
 	}
 
 	/**
+	 * Setup the recycler view.
+	 */
+	private void setupRecyclerView()
+	{
+		RecyclerView recyclerView = this.getRecyclerView();
+		NacCardAdapter cardAdapter = this.getCardAdapter();
+		int padding = getResources().getDimensionPixelSize(R.dimen.sp_main);
+
+		Drawable drawable = ContextCompat.getDrawable(this,
+			R.drawable.card_divider);
+		InsetDrawable insetDrawable = new InsetDrawable(drawable, padding, 0,
+			padding, 0);
+		DividerItemDecoration divider = new DividerItemDecoration(this,
+			LinearLayoutManager.VERTICAL);
+		NacLayoutManager layoutManager = new NacLayoutManager(this);
+
+		//divider.setDrawable(drawable);
+		divider.setDrawable(insetDrawable);
+		recyclerView.addItemDecoration(divider);
+		recyclerView.setAdapter(cardAdapter);
+		recyclerView.setLayoutManager(layoutManager);
+	}
+
+	/**
+	 * @return True if should start the alarm activity, and False otherwise.
+	 */
+	private boolean shouldShowAlarmActivity(NacAlarm alarm)
+	{
+		return (alarm != null) && !this.shouldStartNfc(alarm);
+	}
+
+	/**
+	 * @return True if should start NFC, and False otherwise.
+	 */
+	private boolean shouldStartNfc(NacAlarm alarm)
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		return (alarm != null) && alarm.getUseNfc() && shared.getPreventAppFromClosing();
+	}
+
+	/**
 	 * Show the alarm activity.
 	 */
-	private void showAlarmActivity(StatusBarNotification activeNotification)
+	private void showAlarmActivity(StatusBarNotification notification)
 	{
-		if (activeNotification == null)
+		if (notification == null)
 		{
 			return;
 		}
 
-		Notification noti = activeNotification.getNotification();
-
-		if (noti != null)
+		try
 		{
-			PendingIntent pending = noti.contentIntent;
-
-			try
+			PendingIntent pending = notification.getNotification().contentIntent;
+			if (pending != null)
 			{
 				pending.send();
 			}
-			catch (PendingIntent.CanceledException e)
-			{
-				NacUtility.printf("Caught canceled exception for pending intent!");
-			}
+		}
+		catch (PendingIntent.CanceledException e)
+		{
+			NacUtility.printf("Caught canceled exception for pending intent!");
 		}
 	}
 

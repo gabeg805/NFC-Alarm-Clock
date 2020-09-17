@@ -166,6 +166,12 @@ public class NacAlarmActivity
 		this.mSharedPreferences = new NacSharedPreferences(this);
 		this.mStopReceiver = new StopActivityReceiver();
 
+		if (NacNfc.wasScanned(this, getIntent()))
+		{
+			this.dismiss();
+			return;
+		}
+
 		this.setupShowWhenLocked();
 		this.setupAlarmButtons();
 		this.setupAlarmInfo();
@@ -181,7 +187,7 @@ public class NacAlarmActivity
 	protected void onNewIntent(Intent intent)
 	{
 		this.dismiss();
-		super.onNewIntent(intent);
+		//super.onNewIntent(intent);
 	}
 
 	/**
@@ -300,7 +306,7 @@ public class NacAlarmActivity
 		if (!NacNfc.isEnabled(this))
 		{
 			TextView instructions = (TextView) findViewById(R.id.instructions);
-			instructions.setVisibility(View.INVISIBLE);
+			instructions.setVisibility(View.GONE);
 		}
 	}
 

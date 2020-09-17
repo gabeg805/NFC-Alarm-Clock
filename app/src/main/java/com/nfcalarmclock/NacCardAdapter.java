@@ -82,7 +82,7 @@ public class NacCardAdapter
 	/**
 	 * Indicator that the alarm was added through the floating action button.
 	 */
-	private boolean mWasAddedWithFloatingButton;
+	private boolean mWasAddedWithFloatingActionButton;
 
 	/**
 	 * Alarm card measure.
@@ -113,7 +113,7 @@ public class NacCardAdapter
 		this.mSnackbar = new NacSnackbar(this.mRoot);
 		this.mAlarmList = null;
 		this.mPreviousCalendar = null;
-		this.mWasAddedWithFloatingButton = false;
+		this.mWasAddedWithFloatingActionButton = false;
 		this.mMeasure = new NacCardMeasure(context);
 		this.mLastCardClicked = null;
 
@@ -263,7 +263,7 @@ public class NacCardAdapter
 			this.snackbar(message);
 		}
 
-		this.setWasAddedWithFloatingButton(false);
+		this.setWasAddedWithFloatingActionButton(false);
 
 		return result;
 	}
@@ -285,7 +285,7 @@ public class NacCardAdapter
 			cons.getMessageAlarmDelete());
 
 		NacScheduler.cancel(context, alarm);
-		this.setWasAddedWithFloatingButton(false);
+		this.setWasAddedWithFloatingActionButton(false);
 		this.getSharedPreferences().editSnoozeCount(id, 0);
 		this.getAlarms().remove(position);
 		this.updateNotification();
@@ -569,12 +569,12 @@ public class NacCardAdapter
 		card.setOnCreateContextMenuListener(this);
 		card.setOnStateChangeListener(this);
 
-		if (this.wasAddedWithFloatingButton())
+		if (this.wasAddedWithFloatingActionButton())
 		{
 			card.interact();
 		}
 
-		this.setWasAddedWithFloatingButton(false);
+		this.setWasAddedWithFloatingActionButton(false);
 	}
 
 	/**
@@ -658,7 +658,7 @@ public class NacCardAdapter
 		}
 
 		NacScheduler.update(context, alarm);
-		this.setWasAddedWithFloatingButton(false);
+		this.setWasAddedWithFloatingActionButton(false);
 		this.updateNotification();
 		db.update(alarm);
 		db.close();
@@ -832,7 +832,7 @@ public class NacCardAdapter
 			this.snackbar(message);
 		}
 
-		this.setWasAddedWithFloatingButton(false);
+		this.setWasAddedWithFloatingActionButton(false);
 	}
 
 	/**
@@ -851,9 +851,9 @@ public class NacCardAdapter
 	/**
 	 * Set whether an alarm was added with the floating button.
 	 */
-	public void setWasAddedWithFloatingButton(boolean added)
+	public void setWasAddedWithFloatingActionButton(boolean added)
 	{
-		this.mWasAddedWithFloatingButton = added;
+		this.mWasAddedWithFloatingActionButton = added;
 	}
 
 	/**
@@ -1075,9 +1075,9 @@ public class NacCardAdapter
 	/**
 	 * @return True if the alarm was added, and False otherwise.
 	 */
-	public boolean wasAddedWithFloatingButton()
+	public boolean wasAddedWithFloatingActionButton()
 	{
-		return this.mWasAddedWithFloatingButton;
+		return this.mWasAddedWithFloatingActionButton;
 	}
 
 	/**
