@@ -143,7 +143,6 @@ public class NacNfc
 		}
 
 		String action = intent.getAction();
-
 		if ((action == null) || action.isEmpty())
 		{
 			return false;

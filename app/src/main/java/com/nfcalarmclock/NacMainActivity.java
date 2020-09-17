@@ -190,6 +190,7 @@ public class NacMainActivity
 			R.id.content_alarm_list);
 
 		this.setupRecyclerView();
+		this.setupNfcScanCheck();
 	}
 
 	/**
@@ -206,8 +207,8 @@ public class NacMainActivity
 	@Override
 	protected void onNewIntent(Intent intent)
 	{
-		NacUtility.quickToast(this, "NFC tag scanned!");
 		super.onNewIntent(intent);
+		this.setupNfcScanCheck();
 	}
 
 	/**
@@ -237,15 +238,6 @@ public class NacMainActivity
 	/**
 	 */
 	@Override
-	public void onPause()
-	{
-		super.onPause();
-		//NacNfc.stop(this);
-	}
-
-	/**
-	 */
-	@Override
 	protected void onResume()
 	{
 		super.onResume();
@@ -264,18 +256,10 @@ public class NacMainActivity
 		StatusBarNotification notification = this.getActiveStatusBarNotification();
 		NacAlarm alarm = this.findAlarmFromNotification(notification);
 
-		if ((notification == null) || (alarm == null))
-		{
-		}
-		else
+		if (this.shouldShowAlarmActivity(alarm))
 		{
 			this.showAlarmActivity(notification);
 		}
-		//else if (this.shouldShowAlarmActivity(alarm))
-		//else if (this.shouldStartNfc(alarm))
-		//{
-		//	NacNfc.start(this);
-		//}
 	}
 
 	/**
@@ -325,6 +309,21 @@ public class NacMainActivity
 	}
 
 	/**
+	 * Setup an NFC scan checker, which check if this activity was started by an
+	 * NFC tag being scanned.
+	 */
+	private void setupNfcScanCheck()
+	{
+		Intent intent = getIntent();
+		if (!NacNfc.wasScanned(this, intent))
+		{
+			return;
+		}
+
+		this.stopActiveAlarm();
+	}
+
+	/**
 	 * Setup the recycler view.
 	 */
 	private void setupRecyclerView()
@@ -353,16 +352,11 @@ public class NacMainActivity
 	 */
 	private boolean shouldShowAlarmActivity(NacAlarm alarm)
 	{
-		return (alarm != null) && !this.shouldStartNfc(alarm);
-	}
-
-	/**
-	 * @return True if should start NFC, and False otherwise.
-	 */
-	private boolean shouldStartNfc(NacAlarm alarm)
-	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-		return (alarm != null) && alarm.getUseNfc() && shared.getPreventAppFromClosing();
+		Intent intent = getIntent();
+		return (alarm != null) && !NacNfc.wasScanned(this, intent);
+		//return (alarm != null) && !this.shouldStartNfc(alarm);
+		//NacSharedPreferences shared = this.getSharedPreferences();
+		//return (alarm != null) && alarm.getUseNfc() && shared.getPreventAppFromClosing();
 	}
 
 	/**
@@ -392,6 +386,21 @@ public class NacMainActivity
 		catch (PendingIntent.CanceledException e)
 		{
 			NacUtility.printf("Caught canceled exception for pending intent!");
+		}
+	}
+
+	/**
+	 * Stop the currently active alarm.
+	 */
+	private void stopActiveAlarm()
+	{
+		StatusBarNotification notification = this.getActiveStatusBarNotification();
+		NacAlarm alarm = this.findAlarmFromNotification(notification);
+
+		if ((notification != null) && (alarm != null))
+		{
+			Intent intent = NacIntent.stopForegroundService(this, alarm);
+			startService(intent);
 		}
 	}
 
