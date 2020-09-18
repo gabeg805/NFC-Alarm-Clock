@@ -312,7 +312,7 @@ public class NacForegroundService
 		if (action.isEmpty() || action.equals(ACTION_STOP_SERVICE)
 			|| (this.getAlarm() == null))
 		{
-			this.finish();
+			this.dismiss();
 		}
 		else if (action.equals(ACTION_START_SERVICE))
 		{

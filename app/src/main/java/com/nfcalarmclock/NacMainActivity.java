@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.service.notification.StatusBarNotification;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
@@ -258,7 +259,14 @@ public class NacMainActivity
 
 		if (this.shouldShowAlarmActivity(alarm))
 		{
-			this.showAlarmActivity(notification);
+			if (this.shouldDelayAlarmActivity(alarm))
+			{
+				this.showAlarmActivityDelayed(5000);
+			}
+			else
+			{
+				this.showAlarmActivity(notification);
+			}
 		}
 	}
 
@@ -348,15 +356,41 @@ public class NacMainActivity
 	}
 
 	/**
+	 * @return True if should delay the start of the alarm activity, and False
+	 *         otherwise.
+	 */
+	private boolean shouldDelayAlarmActivity(StatusBarNotification notification)
+	{
+		NacAlarm alarm = this.findAlarmFromNotification(notification);
+		return this.shouldDelayAlarmActivity(alarm);
+	}
+
+	/**
+	 * @see shouldDelayAlarmActivity
+	 */
+	private boolean shouldDelayAlarmActivity(NacAlarm alarm)
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		return this.shouldShowAlarmActivity(alarm) && alarm.getUseNfc()
+			&& !shared.getPreventAppFromClosing();
+	}
+
+	/**
 	 * @return True if should start the alarm activity, and False otherwise.
+	 */
+	private boolean shouldShowAlarmActivity(StatusBarNotification notification)
+	{
+		NacAlarm alarm = this.findAlarmFromNotification(notification);
+		return this.shouldShowAlarmActivity(alarm);
+	}
+
+	/**
+	 * @see shouldShowAlarmActivity
 	 */
 	private boolean shouldShowAlarmActivity(NacAlarm alarm)
 	{
 		Intent intent = getIntent();
 		return (alarm != null) && !NacNfc.wasScanned(this, intent);
-		//return (alarm != null) && !this.shouldStartNfc(alarm);
-		//NacSharedPreferences shared = this.getSharedPreferences();
-		//return (alarm != null) && alarm.getUseNfc() && shared.getPreventAppFromClosing();
 	}
 
 	/**
@@ -387,6 +421,24 @@ public class NacMainActivity
 		{
 			NacUtility.printf("Caught canceled exception for pending intent!");
 		}
+	}
+
+	/**
+	 * Show the alarm activity after some delay.
+	 */
+	private void showAlarmActivityDelayed(long delay)
+	{
+		new Handler().postDelayed(new Runnable() {
+			@Override
+			public void run()
+			{
+				StatusBarNotification notification = getActiveStatusBarNotification();
+				if (shouldShowAlarmActivity(notification))
+				{
+					showAlarmActivity(notification);
+				}
+			}
+		}, delay);
 	}
 
 	/**
