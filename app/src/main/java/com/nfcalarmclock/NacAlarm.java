@@ -15,11 +15,11 @@ public class NacAlarm
 {
 
 	/**
-	 * Definition for the change listener object.
+	 * Definition for the change listener.
 	 */
-	public interface OnChangeListener
+	public interface OnAlarmChangeListener
 	{
-		public void onChange(NacAlarm alarm);
+		public void onAlarmChange(NacAlarm alarm);
 	}
 
 	/**
@@ -31,7 +31,7 @@ public class NacAlarm
 		/**
 		 * Listener for when the alarm is changed.
 		 */
-		private OnChangeListener mOnChangeListener;
+		private OnAlarmChangeListener mOnAlarmChangeListener;
 
 		/**
 		 * The alarm ID.
@@ -104,7 +104,12 @@ public class NacAlarm
 		private String mName;
 
 		/**
-		 * Tag.
+		 * NFC tag ID.
+		 */
+		private String mNfcTagId;
+
+		/**
+		 * Tag. (This was here before, not sure why)
 		 */
 		private Object mTag;
 
@@ -123,7 +128,7 @@ public class NacAlarm
 			int hour = calendar.get(Calendar.HOUR_OF_DAY);
 			int minute = calendar.get(Calendar.MINUTE);
 
-			this.mOnChangeListener = null;
+			this.mOnAlarmChangeListener = null;
 			this.mId = -1;
 			this.mHour = hour;
 			this.mMinute = minute;
@@ -212,11 +217,11 @@ public class NacAlarm
 		}
 
 		/**
-		 * @return The OnChangeListener.
+		 * @return The on alarm change listener.
 		 */
-		public OnChangeListener getOnChangeListener()
+		public OnAlarmChangeListener getOnAlarmChangeListener()
 		{
-			return this.mOnChangeListener;
+			return this.mOnAlarmChangeListener;
 		}
 
 		/**
@@ -250,6 +255,14 @@ public class NacAlarm
 		public int getMediaType()
 		{
 			return this.mMediaType;
+		}
+
+		/**
+		 * @return The ID of the NFC tag that will be used to dismiss the alarm.
+		 */
+		public String getNfcTagId()
+		{
+			return this.mNfcTagId;
 		}
 
 		/**
@@ -440,20 +453,32 @@ public class NacAlarm
 		public Builder setName(String name)
 		{
 			this.mName = (name != null) ? name : "";
+			return this;
+		}
 
+		/**
+		 * Set the NFC tag ID of the tag that will be used to dismiss the alarm.
+		 *
+		 * @param  tagId  The ID of the NFC tag.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setNfcTagId(String tagId)
+		{
+			this.mNfcTagId = (tagId != null) ? tagId : "";
 			return this;
 		}
 
 		/**
 		 * Set the listener for when the alarm is changed.
 		 *
-		 * @param  listener  The OnChangeListener.
+		 * @param  listener  The on alarm change listener.
 		 *
 		 * @return The Builder.
 		 */
-		public Builder setOnChangeListener(OnChangeListener listener)
+		public Builder setOnAlarmChangeListener(OnAlarmChangeListener listener)
 		{
-			this.mOnChangeListener = listener;
+			this.mOnAlarmChangeListener = listener;
 			return this;
 		}
 
@@ -533,13 +558,14 @@ public class NacAlarm
 		ENABLE,
 		TIME,
 		REPEAT,
-		DAY
+		DAY,
+		USE_NFC
 	}
 
 	/**
 	 * Listener for when the alarm is changed.
 	 */
-	private OnChangeListener mOnChangeListener;
+	private OnAlarmChangeListener mOnAlarmChangeListener;
 
 	/**
 	 * The alarm ID.
@@ -612,7 +638,12 @@ public class NacAlarm
 	private String mName;
 
 	/**
-	 * Tag.
+	 * NFC tag ID.
+	 */
+	private String mNfcTagId;
+
+	/**
+	 * Tag. (This was here before, not sure why. Is it a copy of the View Tag?)
 	 */
 	private Object mTag;
 
@@ -637,7 +668,7 @@ public class NacAlarm
 	 */
 	public NacAlarm(Builder builder)
 	{
-		this.setOnChangeListener(builder.getOnChangeListener());
+		this.setOnAlarmChangeListener(builder.getOnAlarmChangeListener());
 		this.setId(builder.getId());
 		this.setEnabled(builder.getEnabled());
 		this.setHour(builder.getHour());
@@ -652,6 +683,7 @@ public class NacAlarm
 		this.setMediaPath(builder.getMediaPath());
 		this.setMediaType(builder.getMediaType());
 		this.setName(builder.getName());
+		this.setNfcTagId(builder.getNfcTagId());
 		this.setTag(builder.getTag());
 		this.setChangeTracker(ChangeTracker.NONE);
 		this.unlatchChangeTracker();
@@ -665,7 +697,7 @@ public class NacAlarm
 	public NacAlarm(Parcel input)
 	{
 		this(new Builder()
-			.setOnChangeListener(null)
+			.setOnAlarmChangeListener(null)
 			.setId(input.readInt())
 			.setEnabled((input.readInt() != 0))
 			.setHour(input.readInt())
@@ -680,6 +712,7 @@ public class NacAlarm
 			.setMediaPath(input.readString())
 			.setMediaTitle(input.readString())
 			.setName(input.readString())
+			.setNfcTagId(input.readString())
 			.setTag(null));
 	}
 
@@ -698,7 +731,7 @@ public class NacAlarm
 	{
 		if (this.hasListener())
 		{
-			this.getOnChangeListener().onChange(this);
+			this.getOnAlarmChangeListener().onAlarmChange(this);
 		}
 
 		if (!this.isChangeTrackerLatched())
@@ -737,6 +770,7 @@ public class NacAlarm
 			.setMediaPath(this.getMediaPath())
 			.setMediaType(this.getMediaType())
 			.setName(this.getName())
+			.setNfcTagId(this.getNfcTagId())
 			.build();
 	}
 
@@ -769,7 +803,8 @@ public class NacAlarm
 			&& (this.getMediaType() == alarm.getMediaType())
 			&& (this.getMediaPath() == alarm.getMediaPath())
 			&& (this.getMediaTitle() == alarm.getMediaTitle())
-			&& (this.getName() == alarm.getName()));
+			&& (this.getName() == alarm.getName())
+			&& (this.getNfcTagId() == alarm.getNfcTagId()));
 	}
 
 	/**
@@ -899,11 +934,20 @@ public class NacAlarm
 	}
 
 	/**
-	 * @return The OnChangeListener.
+	 * @return The alarm name.
 	 */
-	protected OnChangeListener getOnChangeListener()
+	public String getNfcTagId()
 	{
-		return this.mOnChangeListener;
+		String tagId = this.mNfcTagId;
+		return (tagId != null) ? tagId : "";
+	}
+
+	/**
+	 * @return The on alarm change listener.
+	 */
+	protected OnAlarmChangeListener getOnAlarmChangeListener()
+	{
+		return this.mOnAlarmChangeListener;
 	}
 
 	/**
@@ -977,7 +1021,7 @@ public class NacAlarm
 	 */
 	public boolean hasListener()
 	{
-		return this.getOnChangeListener() != null;
+		return this.getOnAlarmChangeListener() != null;
 	}
 
 	/**
@@ -1005,8 +1049,6 @@ public class NacAlarm
 	{
 		int id = this.getId();
 		return (shared.getSnoozeCount(id) > 0);
-		//return (shared.getPreventAppFromClosing()
-		//	&& (shared.getSnoozeCount(id) > 0));
 	}
 
 	/**
@@ -1040,6 +1082,7 @@ public class NacAlarm
 		NacUtility.printf("Media Path   : %s", this.mMediaPath);
 		NacUtility.printf("Media Name   : %s", this.mMediaTitle);
 		NacUtility.printf("Name         : %s", this.mName);
+		NacUtility.printf("Nfc Tag Id   : %s", this.mNfcTagId);
 		NacUtility.printf("Change Track : %s", this.mTracker.toString());
 		NacUtility.printf("Latch        : %b", this.mLatch);
 	}
@@ -1122,6 +1165,53 @@ public class NacAlarm
 	}
 
 	/**
+	 * Set the sound to play when the alarm goes off.
+	 *
+	 * @param  context  The application context.
+	 * @param  path  The path to sound to play.
+	 */
+	public void setMedia(Context context, String path)
+	{
+		int type = NacMedia.getType(context, path);
+		String title = NacMedia.getTitle(context, path);
+
+		this.setMediaType(type);
+		this.setMediaPath(path);
+		this.setMediaTitle(title);
+	}
+
+	/**
+	 * Set the sound to play when the alarm goes off.
+	 *
+	 * @param  path  The path to the media file to play when the alarm goes
+	 *               off.
+	 */
+	public void setMediaPath(String path)
+	{
+		this.mMediaPath = (path != null) ? path : "";
+	}
+
+	/**
+	 * Set the media title.
+	 *
+	 * @param  title  The title of the media file to play.
+	 */
+	public void setMediaTitle(String title)
+	{
+		this.mMediaTitle = (title != null) ? title : "";
+	}
+
+	/**
+	 * Set the type of sound to play.
+	 *
+	 * @param  type  The type of media file to play.
+	 */
+	public void setMediaType(int type)
+	{
+		this.mMediaType = type;
+	}
+
+	/**
 	 * Set the minute.
 	 *
 	 * @param  minute  The minute at which to run the alarm.
@@ -1143,13 +1233,23 @@ public class NacAlarm
 	}
 
 	/**
+	 * Set the NFC tag ID of the tag that will be used to dismiss the alarm.
+	 *
+	 * @param  tagId  The ID of the NFC tag.
+	 */
+	public void setNfcTagId(String tagId)
+	{
+		this.mNfcTagId = (tagId != null) ? tagId : "";
+	}
+
+	/**
 	 * Set a listener for when the alarm is changed.
 	 * 
 	 * @param  listener  The change listener.
 	 */
-	public void setOnChangeListener(OnChangeListener listener)
+	public void setOnAlarmChangeListener(OnAlarmChangeListener listener)
 	{
-		this.mOnChangeListener = listener;
+		this.mOnAlarmChangeListener = listener;
 	}
 
 	/**
@@ -1162,53 +1262,6 @@ public class NacAlarm
 	{
 		this.mRepeat = repeat;
 		this.setChangeTracker(ChangeTracker.REPEAT);
-	}
-
-	/**
-	 * Set the sound to play when the alarm goes off.
-	 *
-	 * @param  context  The application context.
-	 * @param  path  The path to sound to play.
-	 */
-	public void setMedia(Context context, String path)
-	{
-		int type = NacMedia.getType(context, path);
-		String title = NacMedia.getTitle(context, path);
-
-		this.setMediaType(type);
-		this.setMediaPath(path);
-		this.setMediaTitle(title);
-	}
-
-	/**
-	 * Set the media title.
-	 *
-	 * @param  title  The title of the media file to play.
-	 */
-	public void setMediaTitle(String title)
-	{
-		this.mMediaTitle = (title != null) ? title : "";
-	}
-
-	/**
-	 * Set the sound to play when the alarm goes off.
-	 *
-	 * @param  path  The path to the media file to play when the alarm goes
-	 *               off.
-	 */
-	public void setMediaPath(String path)
-	{
-		this.mMediaPath = (path != null) ? path : "";
-	}
-
-	/**
-	 * Set the type of sound to play.
-	 *
-	 * @param  type  The type of media file to play.
-	 */
-	public void setMediaType(int type)
-	{
-		this.mMediaType = type;
 	}
 
 	/**
@@ -1228,6 +1281,7 @@ public class NacAlarm
 	public void setUseNfc(boolean nfc)
 	{
 		this.mNfc = nfc;
+		this.setChangeTracker(ChangeTracker.USE_NFC);
 	}
 
 	/**
@@ -1341,12 +1395,20 @@ public class NacAlarm
 	}
 
 	/**
-	 * @return True if the alarm was enabled before the changed listener was
+	 * @return True if the alarm was changed before the changed listener was
 	 *         called, and False otherwise.
 	 */
 	public boolean wasChanged()
 	{
 		return (this.getChangeTracker() != ChangeTracker.NONE);
+	}
+
+	/**
+	 * @return True if use NFC was changed, and False otherwise.
+	 */
+	public boolean wasUseNfcChanged()
+	{
+		return (this.getChangeTracker() == ChangeTracker.USE_NFC);
 	}
 
 	/**
@@ -1371,6 +1433,7 @@ public class NacAlarm
 		output.writeString(this.getMediaPath());
 		output.writeString(this.getMediaTitle());
 		output.writeString(this.getName());
+		output.writeString(this.getNfcTagId());
 	}
 
 	/**

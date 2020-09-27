@@ -28,11 +28,24 @@ public class NacCardAdapter
 		View.OnCreateContextMenuListener,
 		MenuItem.OnMenuItemClickListener,
 		RecyclerView.OnItemTouchListener,
-		NacAlarm.OnChangeListener,
+		NacAlarm.OnAlarmChangeListener,
 		NacCardDelete.OnDeleteListener,
 		NacCardTouchHelper.Adapter,
 		NacCardView.OnStateChangeListener
 {
+
+	/**
+	 * Definition for the use NFC change listener.
+	 */
+	public interface OnUseNfcChangeListener
+	{
+		public void onUseNfcChange(NacAlarm alarm);
+	}
+
+	/**
+	 * Listener for when use NFC is changed.
+	 */
+	private OnUseNfcChangeListener mOnUseNfcChangeListener;
 
 	/**
 	 * Main activity root view.
@@ -199,7 +212,7 @@ public class NacCardAdapter
 		{
 			for (NacAlarm a : this.getAlarms())
 			{
-				this.onChange(a);
+				this.onAlarmChange(a);
 			}
 
 			shared.editAppFirstRun(false);
@@ -398,6 +411,14 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * @return The on use NFC change listener.
+	 */
+	protected OnUseNfcChangeListener getOnUseNfcChangeListener()
+	{
+		return this.mOnUseNfcChangeListener;
+	}
+
+	/**
 	 * @return The previous calendar.
 	 */
 	private Calendar getPreviousCalendar()
@@ -523,6 +544,14 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * Check if there is a use NFC change listener.
+	 */
+	public boolean hasUseNfcChangeListener()
+	{
+		return this.getOnUseNfcChangeListener() != null;
+	}
+
+	/**
 	 * Highlight an alarm card.
 	 */
 	public void highlight(NacAlarm alarm)
@@ -563,7 +592,7 @@ public class NacCardAdapter
 	{
 		NacAlarm alarm = this.get(position);
 
-		alarm.setOnChangeListener(this);
+		alarm.setOnAlarmChangeListener(this);
 		card.init(alarm);
 		card.setOnDeleteListener(this);
 		card.setOnCreateContextMenuListener(this);
@@ -646,15 +675,22 @@ public class NacCardAdapter
 	 * @param  a  The alarm that was changed.
 	 */
 	@Override
-	public void onChange(NacAlarm alarm)
+	public void onAlarmChange(NacAlarm alarm)
 	{
 		Context context = this.getContext();
 		NacDatabase db = new NacDatabase(context);
 
-		if (alarm.wasChanged() && !alarm.isChangeTrackerLatched())
+		if (alarm.wasChanged())
 		{
-			this.showAlarmChange(alarm);
-			this.sortHighlight(alarm);
+			if (alarm.wasUseNfcChanged() && this.hasUseNfcChangeListener())
+			{
+				this.getOnUseNfcChangeListener().onUseNfcChange(alarm);
+			}
+			else if (!alarm.isChangeTrackerLatched())
+			{
+				this.showAlarmChange(alarm);
+				this.sortHighlight(alarm);
+			}
 		}
 
 		NacScheduler.update(context, alarm);
@@ -846,6 +882,14 @@ public class NacCardAdapter
 
 		db.update(alarms);
 		db.close();
+	}
+
+	/**
+	 * Set the on use NFC change listener.
+	 */
+	public void setOnUseNfcChangeListener(OnUseNfcChangeListener listener)
+	{
+		this.mOnUseNfcChangeListener = listener;
 	}
 
 	/**
@@ -1068,7 +1112,9 @@ public class NacCardAdapter
 
 		if (shared.getUpcomingAlarmNotification())
 		{
-			this.getNotification().update(alarms);
+			NacUpcomingAlarmNotification notification = this.getNotification();
+			notification.setAlarmList(alarms);
+			notification.show();
 		}
 	}
 

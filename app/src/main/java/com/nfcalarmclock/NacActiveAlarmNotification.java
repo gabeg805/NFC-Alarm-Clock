@@ -3,7 +3,6 @@ package com.nfcalarmclock;
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -11,9 +10,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.text.Html;
-import android.text.Spanned;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import java.lang.Float;
 import java.util.Calendar;
 import java.util.Locale;
@@ -22,27 +20,13 @@ import java.util.Locale;
  * Notification to display for active alarms.
  */
 public class NacActiveAlarmNotification
+	extends NacNotification
 {
 
 	/**
-	 * ID.
-	 */
-	public static final int ID = 79;
-
-	/**
-	 * Channel.
-	 */
-	public static final String CHANNEL = "NacNotiChannelActiveAlarm";
-
-	/**
-	 * Group.
+	 * Group key.
 	 */
 	public static final String GROUP = "NacNotiGroupActiveAlarm";
-
-	/**
-	 * Context.
-	 */
-	private Context mContext;
 
 	/**
 	 * Alarm.
@@ -53,44 +37,34 @@ public class NacActiveAlarmNotification
 	 */
 	public NacActiveAlarmNotification()
 	{
-		this.mContext = null;
+		super();
 		this.mAlarm = null;
 	}
 
 	/**
 	 */
-	public NacActiveAlarmNotification(Context context, NacAlarm alarm)
+	public NacActiveAlarmNotification(Context context)
 	{
-		this.mContext = context;
-		this.mAlarm = alarm;
-		this.createChannel();
+		super(context);
+		this.mAlarm = null;
 	}
 
 	/**
-	 * Build the notification.
+	 * @see builder
 	 */
-	public Notification build()
+	@Override
+	protected NotificationCompat.Builder builder()
 	{
 		Context context = this.getContext();
-		Spanned title = this.getTitle();
-		String text = this.getText();
 		Bitmap icon = this.getIcon();
-		PendingIntent activityPending = this.getActivityPendingIntent();
+		PendingIntent activityPending = this.getContentPendingIntent();
 		PendingIntent snoozePending = this.getSnoozePendingIntent();
 		PendingIntent dismissPending = this.getDismissPendingIntent(
 			activityPending);
 		NacSharedConstants cons = new NacSharedConstants(context);
 
-		NotificationCompat.Builder builder = new NotificationCompat.Builder(
-			context, CHANNEL)
-			.setGroup(GROUP)
-			.setContentIntent(activityPending)
-			.setContentTitle(title)
-			.setContentText(text)
+		return super.builder()
 			.setLargeIcon(icon)
-			.setSmallIcon(R.mipmap.notification)
-			.setCategory(NotificationCompat.CATEGORY_ALARM)
-			.setPriority(NotificationCompat.PRIORITY_MAX)
 			.setFullScreenIntent(activityPending, true)
 			.setAutoCancel(false)
 			.setOngoing(true)
@@ -98,40 +72,66 @@ public class NacActiveAlarmNotification
 			.setTicker(cons.getAppName())
 			.addAction(R.mipmap.snooze, cons.getActionSnooze(), snoozePending)
 			.addAction(R.mipmap.dismiss, cons.getActionDismiss(), dismissPending);
-
-		return builder.build();
 	}
 
 	/**
 	 */
 	@TargetApi(Build.VERSION_CODES.O)
-	public void createChannel()
+	@Override
+	protected NotificationChannel createChannel()
 	{
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+		NotificationChannel channel = super.createChannel();
+		if (channel == null)
 		{
-			return;
+			return null;
 		}
 
-		Context context = this.getContext();
-		NacSharedConstants cons = new NacSharedConstants(context);
-		NotificationChannel channel = new NotificationChannel(CHANNEL,
-			cons.getActiveNotification(),
-			NotificationManager.IMPORTANCE_HIGH);
-		NotificationManager manager = context.getSystemService(
-			NotificationManager.class);
-
-		channel.setDescription(cons.getDescriptionActiveNotification());
 		channel.setShowBadge(true);
 		channel.enableLights(true);
 		channel.enableVibration(true);
-		channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-		manager.createNotificationChannel(channel);
+		return channel;
 	}
 
 	/**
-	 * @return The pending intent to use to start the NacAlarmActivity.
+	 * @return The alarm.
 	 */
-	private PendingIntent getActivityPendingIntent()
+	public NacAlarm getAlarm()
+	{
+		return this.mAlarm;
+	}
+
+	/**
+	 * @return The notification description.
+	 */
+	protected String getChannelDescription()
+	{
+		Context context = this.getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
+		return cons.getDescriptionActiveNotification();
+	}
+
+	/**
+	 * @return The notification name.
+	 */
+	protected String getChannelName()
+	{
+		Context context = this.getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
+		return cons.getActiveNotification();
+	}
+
+	/**
+	 * @see getChannel
+	 */
+	protected String getChannelId()
+	{
+		return "NacNotiChannelActiveAlarm";
+	}
+
+	/**
+	 * @see getContentPendingIntent
+	 */
+	protected PendingIntent getContentPendingIntent()
 	{
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
@@ -143,19 +143,19 @@ public class NacActiveAlarmNotification
 	}
 
 	/**
-	 * @return The alarm.
+	 * @see getContentText
 	 */
-	private NacAlarm getAlarm()
+	public String getContentText()
 	{
-		return this.mAlarm;
-	}
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+		Calendar now = Calendar.getInstance();
+		String time = NacCalendar.Time.getFullTime(context, now);
+		String name = alarm.getName();
+		Locale locale = Locale.getDefault();
 
-	/**
-	 * @return The context.
-	 */
-	private Context getContext()
-	{
-		return this.mContext;
+		return name.isEmpty() ? time
+			: String.format(locale, "%1$s  —  %2$s", time, name);
 	}
 
 	/**
@@ -179,9 +179,17 @@ public class NacActiveAlarmNotification
 	}
 
 	/**
+	 * @see getGroup
+	 */
+	protected String getGroup()
+	{
+		return GROUP;
+	}
+
+	/**
 	 * @return The notification large icon.
 	 */
-	private Bitmap getIcon()
+	protected Bitmap getIcon()
 	{
 		Context context = this.getContext();
 		Resources res = context.getResources();
@@ -223,36 +231,39 @@ public class NacActiveAlarmNotification
 	}
 
 	/**
-	 * @return The notification text.
+	 * @see getId
 	 */
-	public String getText()
+	protected int getId()
 	{
-		Context context = this.getContext();
-		NacAlarm alarm = this.getAlarm();
-		Calendar now = Calendar.getInstance();
-		String time = NacCalendar.Time.getFullTime(context, now);
-		String name = alarm.getName();
-		Locale locale = Locale.getDefault();
+		return 79;
+	}
 
-		return name.isEmpty() ? time
-			: String.format(locale, "%1$s  —  %2$s", time, name);
+	/**
+	 * @see getImportance
+	 */
+	protected int getImportance()
+	{
+		return NotificationManagerCompat.IMPORTANCE_HIGH;
+	}
+
+	/**
+	 * @see getPriority
+	 */
+	protected int getPriority()
+	{
+		return NotificationCompat.PRIORITY_MAX;
 	}
 
 	/**
 	 * @return The notification title.
 	 */
-	@SuppressWarnings("deprecation")
-	@TargetApi(Build.VERSION_CODES.N)
-	public Spanned getTitle()
+	public String getTitle()
 	{
 		Context context = this.getContext();
-		NacSharedConstants cons = new NacSharedConstants(context);
 		Locale locale = Locale.getDefault();
-		String title = String.format(locale, "<b>%s</b>", cons.getAppName());
+		NacSharedConstants cons = new NacSharedConstants(context);
 
-		return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-			? Html.fromHtml(title, Html.FROM_HTML_MODE_LEGACY)
-			: Html.fromHtml(title);
+		return String.format(locale, "<b>%s</b>", cons.getAppName());
 	}
 
 	/**
@@ -265,6 +276,22 @@ public class NacActiveAlarmNotification
 			null, context, NacForegroundService.class);
 
 		return PendingIntent.getService(context, 0, intent, 0);
+	}
+
+	/**
+	 * @return True if the given group matches this notification group.
+	 */
+	public static boolean isActiveGroup(String groupKey)
+	{
+		return GROUP.equals(groupKey);
+	}
+
+	/**
+	 * Set the alarm.
+	 */
+	public void setAlarm(NacAlarm alarm)
+	{
+		this.mAlarm = alarm;
 	}
 
 }

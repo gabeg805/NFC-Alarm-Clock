@@ -3,19 +3,11 @@ package com.nfcalarmclock;
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Build;
-import android.service.notification.StatusBarNotification;
-import android.text.Html;
-import android.text.Spanned;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,22 +18,52 @@ public abstract class NacNotification
 {
 
 	/**
-	 * Create the notificaion channel.
+	 * @return Channel description.
 	 */
-	public abstract void createChannel();
+	protected abstract String getChannelDescription();
 
 	/**
-	 * @return The notification group.
+	 * @return Channel ID.
 	 */
-	public abstract String getGroup();
+	protected abstract String getChannelId();
 
 	/**
-	 * @return The notification text.
+	 * @return Channel name.
 	 */
-	public abstract String getText(NacAlarm alarm);
+	protected abstract String getChannelName();
 
 	/**
-	 * @return The notification title.
+	 * @return Content pending intent when building the notification.
+	 */
+	protected abstract PendingIntent getContentPendingIntent();
+
+	/**
+	 * @return Content text when building the notification.
+	 */
+	protected abstract String getContentText();
+
+	/**
+	 * @return Group name.
+	 */
+	protected abstract String getGroup();
+
+	/**
+	 * @return Notification ID.
+	 */
+	protected abstract int getId();
+
+	/**
+	 * @return Level of importance of the notification.
+	 */
+	protected abstract int getImportance();
+
+	/**
+	 * @return Level of priority of the notification.
+	 */
+	protected abstract int getPriority();
+
+	/**
+	 * @return Notification title.
 	 */
 	public abstract String getTitle();
 
@@ -51,12 +73,17 @@ public abstract class NacNotification
 	protected final Context mContext;
 
 	/**
+	 * Body text of the notification.
+	 */
+	protected List<CharSequence> mBody;
+
+	/**
 	 */
 	public NacNotification()
 	{
 		super();
-
 		this.mContext = null;
+		this.mBody = null;
 	}
 
 	/**
@@ -64,8 +91,8 @@ public abstract class NacNotification
 	public NacNotification(Context context)
 	{
 		this.mContext = context;
-
-		this.createChannel();
+		this.mBody = null;
+		this.setupChannel();
 	}
 
 	/**
@@ -73,34 +100,86 @@ public abstract class NacNotification
 	 */
 	@SuppressWarnings("deprecation")
 	@TargetApi(Build.VERSION_CODES.N)
-	protected NotificationCompat.Builder build(String channel)
+	protected NotificationCompat.Builder builder()
+	{
+		return new NotificationCompat.Builder(this.getContext(), this.getChannelId())
+			.setGroup(this.getGroup())
+			.setContentIntent(this.getContentPendingIntent())
+			.setContentTitle(NacUtility.toSpannedString(this.getTitle()))
+			.setContentText(this.getContentText())
+			.setSmallIcon(this.getSmallIcon())
+			.setPriority(this.getPriority())
+			.setCategory(this.getCategory());
+	}
+
+	/**
+	 * Cancel a previously shown notification.
+	 */
+	public void cancel()
+	{
+		NotificationManagerCompat manager = this.getNotificationManager();
+		int id = this.getId();
+		manager.cancel(id);
+	}
+
+	/**
+	 * Create the notification channel.
+	 */
+	@TargetApi(Build.VERSION_CODES.O)
+	protected NotificationChannel createChannel()
+	{
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+		{
+			return null;
+		}
+
+		NotificationChannel channel = new NotificationChannel(
+			this.getChannelId(),
+			this.getChannelName(),
+			this.getImportance());
+
+		channel.setDescription(this.getChannelDescription());
+		channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+		return channel;
+	}
+
+	/**
+	 * @return True if the given group key matches that of the notification, and
+	 *         False otherwise.
+	 */
+	protected boolean doesGroupMatch(String groupKey)
+	{
+		return this.getGroup().equals(groupKey);
+	}
+
+	/**
+	 * @return Body text of the notification.
+	 */
+	protected List<CharSequence> getBody()
+	{
+		return this.mBody;
+	}
+
+	/**
+	 * @return A line that can appear in the body text of the notification.
+	 */
+	protected String getBodyLine(NacAlarm alarm)
 	{
 		Context context = this.getContext();
-		PendingIntent pending = this.getMainActivityIntent(context);
+		String time = alarm.getFullTime(context);
+		String name = alarm.getName();
 		Locale locale = Locale.getDefault();
-		String title = String.format(locale, "<b>%1$s</b>", this.getTitle());
-		Spanned boldTitle;
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-		{
-			boldTitle = Html.fromHtml(title, Html.FROM_HTML_MODE_LEGACY);
-		}
-		else
-		{
-			boldTitle = Html.fromHtml(title);
-		}
+		return name.isEmpty() ? time
+			: String.format(locale, "%1$s  —  %2$s", time, name);
+	}
 
-		NotificationCompat.Builder builder = new NotificationCompat.Builder(
-			context, channel)
-			.setGroup(this.getGroup())
-			.setContentTitle(boldTitle)
-			.setSmallIcon(R.mipmap.notification)
-			.setPriority(NotificationCompat.PRIORITY_DEFAULT)
-			.setCategory(NotificationCompat.CATEGORY_ALARM)
-			.setContentIntent(pending)
-			.setGroupSummary(true);
-
-		return builder;
+	/**
+	 * @return The category of the notification.
+	 */
+	protected String getCategory()
+	{
+		return NotificationCompat.CATEGORY_ALARM;
 	}
 
 	/**
@@ -112,85 +191,74 @@ public abstract class NacNotification
 	}
 
 	/**
-	 * @return The pending intent for the main activity.
+	 * @return Number of lines in the body.
+	 * 
+	 * TODO: See if this can be 0 instead of 1.
 	 */
-	protected PendingIntent getMainActivityIntent(Context context)
+	protected int getLineCount()
 	{
-		Intent intent = new Intent(context, NacMainActivity.class);
-		int flags = Intent.FLAG_ACTIVITY_NEW_TASK
-			| Intent.FLAG_ACTIVITY_CLEAR_TASK;
-
-		intent.addFlags(flags);
-
-		return PendingIntent.getActivity(context, 0, intent, 0);
+		List<CharSequence> body = this.getBody();
+		return (body == null) ? 1 : body.size();
 	}
 
 	/**
 	 * @return The notification manager.
 	 */
-	protected NotificationManagerCompat getNotificationManager(Context context)
+	protected NotificationManagerCompat getNotificationManager()
 	{
+		Context context = this.getContext();
 		return NotificationManagerCompat.from(context);
 	}
 
 	/**
-	 * @return A list of notification lines.
+	 * @return The small icon of the notification.
 	 */
-	@TargetApi(Build.VERSION_CODES.M)
-	public List<CharSequence> getNotificationText(NotificationManager manager,
-		NacAlarm alarm)
+	protected int getSmallIcon()
 	{
-		List<CharSequence> lines = new ArrayList<>();
-		String text = this.getText(alarm);
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-		{
-			StatusBarNotification[] statusbar = manager
-				.getActiveNotifications();
-
-			for (StatusBarNotification sb : statusbar)
-			{
-				Notification notification = sb.getNotification();
-				String group = notification.getGroup();
-				CharSequence[] extraLines = (CharSequence[]) notification.extras
-					.get(NotificationCompat.EXTRA_TEXT_LINES);
-
-				if (group.equals(this.getGroup()))
-				{
-					for (CharSequence line : extraLines)
-					{
-						lines.add(line);
-					}
-				}
-
-			}
-		}
-
-		lines.add((CharSequence) text);
-
-		return lines;
+		return R.mipmap.notification;
 	}
 
 	/**
-	 * @return A list of notification lines.
+	 * @return True if there is text in the body, and False otherwise.
 	 */
-	public List<CharSequence> getNotificationText(List<NacAlarm> alarms)
+	protected boolean hasBody()
 	{
-		List<CharSequence> lines = new ArrayList<>();
+		List<CharSequence> body = this.getBody();
+		int size = (body != null) ? body.size() : 0;
+		return (size > 0);
+	}
 
-		for (NacAlarm a : alarms)
+	/**
+	 * Setup the notification body lines.
+	 */
+	protected void setupBody()
+	{
+	}
+
+	/**
+	 * Setup the notification channel.
+	 */
+	protected void setupChannel()
+	{
+		Context context = this.getContext();
+		NotificationChannel channel = this.createChannel();
+		if (channel != null)
 		{
-			if (!a.getEnabled())
-			{
-				continue;
-			}
-
-			String text = this.getText(a);
-
-			lines.add(text);
+			NotificationManagerCompat manager = this.getNotificationManager();
+			manager.createNotificationChannel(channel);
 		}
+	}
 
-		return lines;
+	/**
+	 * Show the notification.
+	 */
+	protected void show()
+	{
+		NotificationCompat.Builder builder = this.builder();
+		NotificationManagerCompat manager = this.getNotificationManager();
+		int id = this.getId();
+
+		manager.notify(id, builder.build());
 	}
 
 }

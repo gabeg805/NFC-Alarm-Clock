@@ -4,13 +4,12 @@ import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Build;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -21,30 +20,16 @@ public class NacMissedAlarmNotification
 {
 
 	/**
-	 * Channel.
+	 * Alarm.
 	 */
-	protected static final String MISSED_CHANNEL = "NacNotiChannelMissed";
-
-	/**
-	 * Group.
-	 */
-	protected static final String MISSED_GROUP = "NacNotiGroupMissed";
-
-	/**
-	 * Notification ID.
-	 */
-	protected static final int MISSED_ID = 222;
-
-	/**
-	 * List of lines to show in the notification.
-	 */
-	protected List<CharSequence> mLines;
+	private NacAlarm mAlarm;
 
 	/**
 	 */
 	public NacMissedAlarmNotification()
 	{
 		super();
+		this.mAlarm = null;
 	}
 
 	/**
@@ -52,64 +37,155 @@ public class NacMissedAlarmNotification
 	public NacMissedAlarmNotification(Context context)
 	{
 		super(context);
-		this.mLines = null;
+		this.mAlarm = null;
 	}
 
 	/**
+	 * @see builder
 	 */
 	@Override
-	public void createChannel()
+	protected NotificationCompat.Builder builder()
 	{
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+		NotificationCompat.InboxStyle inbox = new NotificationCompat
+			.InboxStyle();
+		List<CharSequence> body = this.getBody();
+
+		for (CharSequence line : body)
 		{
-			return;
+			inbox.addLine(line);
 		}
 
-		Context context = this.getContext();
-		NacSharedConstants cons = new NacSharedConstants(context);
-		NotificationChannel channel = new NotificationChannel(MISSED_CHANNEL,
-			cons.getMissedNotification(),
-			NotificationManager.IMPORTANCE_DEFAULT);
-		NotificationManager manager = context.getSystemService(
-			NotificationManager.class);
+		return super.builder()
+			.setGroupSummary(true)
+			.setAutoCancel(true)
+			.setShowWhen(true)
+			.setStyle(inbox);
+	}
 
-		channel.setDescription(cons.getDescriptionMissedNotification());
+	/**
+	 * @see createChannel
+	 */
+	@TargetApi(Build.VERSION_CODES.O)
+	@Override
+	protected NotificationChannel createChannel()
+	{
+		NotificationChannel channel = super.createChannel();
+		if (channel == null)
+		{
+			return null;
+		}
+
 		channel.setShowBadge(true);
 		channel.enableLights(true);
 		channel.enableVibration(true);
-		channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-		manager.createNotificationChannel(channel);
+		return channel;
 	}
 
 	/**
-	 * @return The notification group.
+	 * @return Alarm.
 	 */
-	public String getGroup()
+	public NacAlarm getAlarm()
 	{
-		return MISSED_GROUP;
+		return this.mAlarm;
 	}
 
 	/**
-	 * @return The list of lines in the notification.
+	 * @see getChannelDescription
 	 */
-	protected List<CharSequence> getLines()
+	protected String getChannelDescription()
 	{
-		return this.mLines;
+		Context context = this.getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
+		return cons.getDescriptionMissedNotification();
+	}
+
+	/**
+	 * @see getChannelName
+	 */
+	protected String getChannelName()
+	{
+		Context context = this.getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
+		return cons.getMissedNotification();
+	}
+
+	/**
+	 * @see getChannelId
+	 */
+	protected String getChannelId()
+	{
+		return "NacNotiChannelMissed";
+	}
+
+	/**
+	 * @see getContentPendingIntent
+	 */
+	protected PendingIntent getContentPendingIntent()
+	{
+		Context context = this.getContext();
+		Intent intent = new Intent(context, NacMainActivity.class);
+		int flags = Intent.FLAG_ACTIVITY_NEW_TASK
+			| Intent.FLAG_ACTIVITY_CLEAR_TASK;
+
+		intent.addFlags(flags);
+		return PendingIntent.getActivity(context, 0, intent, 0);
+	}
+
+	/**
+	 * @see getContentText
+	 */
+	protected String getContentText()
+	{
+		Context context = this.getContext();
+		Locale locale = Locale.getDefault();
+		NacSharedConstants cons = new NacSharedConstants(context);
+		int size = this.getBody().size();
+		String word = cons.getAlarm(size);
+
+		return (size > 0) ? String.format(locale, "%1$d %2$s", size, word) : "";
+	}
+
+	/**
+	 * @see getGroup
+	 */
+	protected String getGroup()
+	{
+		return "NacNotiGroupMissed";
+	}
+
+	/**
+	 * @see getId
+	 */
+	protected int getId()
+	{
+		return 222;
+	}
+
+	/**
+	 * @see getImportance
+	 */
+	protected int getImportance()
+	{
+		return NotificationManagerCompat.IMPORTANCE_DEFAULT;
+	}
+
+	/**
+	 * @see getPriority
+	 */
+	protected int getPriority()
+	{
+		return NotificationCompat.PRIORITY_DEFAULT;
 	}
 
 	/**
 	 * @return The notification text.
 	 */
-	public String getText(NacAlarm alarm)
+	public String getBodyLine(NacAlarm alarm)
 	{
+
 		Context context = this.getContext();
 		NacAlarm actualAlarm = NacDatabase.findAlarm(context, alarm);
-		String time = actualAlarm.getFullTime(context);
-		String name = actualAlarm.getName();
-		Locale locale = Locale.getDefault();
-
-		return (name.isEmpty()) ? time
-			: String.format(locale, "%1$s  —  %2$s", time, name);
+		return super.getBodyLine(actualAlarm);
 	}
 
 	/**
@@ -118,70 +194,53 @@ public class NacMissedAlarmNotification
 	public String getTitle()
 	{
 		Context context = this.getContext();
-		List<CharSequence> lines = this.getLines();
+		Locale locale = Locale.getDefault();
 		NacSharedConstants cons = new NacSharedConstants(context);
-		int count = (lines == null) ? 1 : lines.size();
+		int count = this.getLineCount();
 
-		return cons.getMissedAlarm(count);
+		return String.format(locale, "<b>%1$s</b>", cons.getMissedAlarm(count));
 	}
 
 	/**
-	 * @see hide
+	 * Set the alarm.
 	 */
-	public void hide()
+	public void setAlarm(NacAlarm alarm)
 	{
-		Context context = this.getContext();
-		NotificationManagerCompat manager = this.getNotificationManager(context);
-		manager.cancel(MISSED_ID);
+		this.mAlarm = alarm;
 	}
 
 	/**
-	 * Show the notification.
+	 * @see setupBody
 	 */
-	@TargetApi(Build.VERSION_CODES.M)
-	public void show(NacAlarm alarm)
+	protected void setupBody()
 	{
 		Context context = this.getContext();
-		NotificationManager manager = (NotificationManager)
-			context.getSystemService(Context.NOTIFICATION_SERVICE);
+		String groupKey = this.getGroup();
+		NacAlarm alarm = this.getAlarm();
+		String line = this.getBodyLine(alarm);
+		List<CharSequence> body = NacNotificationHelper.getExtraLines(context,
+			groupKey);
 
+		body.add(line);
+
+		this.mBody = body;
+	}
+
+	/**
+	 * @see show
+	 */
+	public void show()
+	{
+		NacAlarm alarm = this.getAlarm();
 		if (alarm == null)
 		{
-			//manager.cancel(MISSED_ID);
 			return;
 		}
 
-
-		this.mLines = this.getNotificationText(manager, alarm);
-		List<CharSequence> lines = this.mLines;
-		NotificationCompat.InboxStyle inbox = new NotificationCompat
-			.InboxStyle();
-		NotificationCompat.Builder builder = this.build(MISSED_CHANNEL)
-			.setAutoCancel(true)
-			.setShowWhen(true);
-		int size = lines.size();
-
-		for (CharSequence l : lines)
-		{
-			inbox.addLine(l);
-		}
-
-		if (size == 0)
-		{
-			manager.cancel(MISSED_ID);
-		}
-		else if (size > 0)
-		{
-			NacSharedConstants cons = new NacSharedConstants(context);
-			Locale locale = Locale.getDefault();
-			String word = cons.getAlarm(size);
-			String content = String.format(locale, "%1$d %2$s", size, word);
-
-			builder.setContentText(content);
-		}
-
-		builder.setStyle(inbox);
-		manager.notify(MISSED_ID, builder.build());
+		// Used to call cancel() if size was 0. Might not have to because
+		// show() should cancel it anyway
+		this.setupBody();
+		super.show();
 	}
 
 }

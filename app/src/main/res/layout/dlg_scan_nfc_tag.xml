@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	android:paddingStart="?dialogPreferredPadding"
+	android:paddingEnd="?dialogPreferredPadding"
+	tools:ignore="ContentDescription,UselessParent">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/sp_main"
+		android:paddingBottom="@dimen/sp_main"
+		android:orientation="vertical">
+
+		<ImageView
+			android:layout_width="@dimen/isz_focus"
+			android:layout_height="@dimen/isz_focus"
+			android:layout_marginTop="@dimen/sp_main"
+			android:layout_marginBottom="@dimen/sp_main"
+			android:layout_gravity="center"
+			android:contentDescription="Scan an NFC tag"
+			android:src="@mipmap/tap_and_play"
+			/>
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textColor="@color/white"
+			android:textSize="@dimen/tsz_main"
+			android:text="@string/message_scan_nfc_tag"
+			/>
+
+	</LinearLayout>
+
+</LinearLayout>

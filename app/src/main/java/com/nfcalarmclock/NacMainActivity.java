@@ -29,7 +29,10 @@ import java.lang.System;
  */
 public class NacMainActivity
 	extends AppCompatActivity
-	implements View.OnClickListener
+	implements View.OnClickListener,
+		NacCardAdapter.OnUseNfcChangeListener,
+		NacDialog.OnCancelListener,
+		NacDialog.OnDismissListener
 {
 
 	/**
@@ -75,59 +78,6 @@ public class NacMainActivity
 			cardAdapter.add(alarm);
 			cardAdapter.setWasAddedWithFloatingActionButton(true);
 		}
-	}
-
-	/**
-	 * @return NacAlarm that is found by using the information in the currently
-	 *         active notification
-	 */
-	private NacAlarm findAlarmFromNotification(StatusBarNotification notification)
-	{
-		if (notification == null)
-		{
-			return null;
-		}
-
-		int id = notification.getId();
-		return NacDatabase.findAlarm(this, id);
-	}
-
-	/**
-	 * @return The notification for the current active alarm.
-	 */
-	@TargetApi(Build.VERSION_CODES.M)
-	private StatusBarNotification getActiveStatusBarNotification()
-	{
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
-		{
-			return null;
-		}
-
-		NotificationManager manager = getSystemService(
-			NotificationManager.class);
-		StatusBarNotification[] statusbar = manager.getActiveNotifications();
-		StatusBarNotification activeNotification = null;
-
-		for (StatusBarNotification sb : statusbar)
-		{
-			Notification notification = sb.getNotification();
-			String group = notification.getGroup();
-			long posted = sb.getPostTime();
-
-			if (!group.equals(NacActiveAlarmNotification.GROUP))
-			{
-				continue;
-			}
-
-			if ((activeNotification == null)
-				|| (activeNotification.getPostTime() > posted))
-			{
-				activeNotification = sb;
-				continue;
-			}
-		}
-
-		return activeNotification;
 	}
 
 	/**
@@ -209,6 +159,15 @@ public class NacMainActivity
 	protected void onNewIntent(Intent intent)
 	{
 		super.onNewIntent(intent);
+		if (this.mScanNfcTagDialog != null)
+		{
+			String action = (intent != null) ? intent.getAction() : "No action";
+			NacUtility.quickToast(this, "Scanned the NFC tag with the dialog! "+action);
+		}
+		else
+		{
+			NacUtility.quickToast(this, "Scanned the NFC tag!");
+		}
 		this.setupNfcScanCheck();
 	}
 
@@ -249,13 +208,68 @@ public class NacMainActivity
 		this.addSetAlarmFromIntent();
 	}
 
+	NacScanNfcTagDialog mScanNfcTagDialog = null;
+
+	/**
+	 */
+	@Override
+	public boolean onCancelDialog(NacDialog dialog)
+	{
+		NacUtility.printf("NFC dialog canceled! So use any!");
+		NacAlarm alarm = (NacAlarm) dialog.getData();
+		alarm.setNfcTagId("");
+		alarm.changed();
+		//this.doNfcButtonClick();
+		NacNfc.stop(this);
+
+		this.mScanNfcTagDialog = null;
+		return true;
+	}
+
+	/**
+	 */
+	@Override
+	public boolean onDismissDialog(NacDialog dialog)
+	{
+		NacUtility.printf("Use any NFC tag!");
+		NacAlarm alarm = (NacAlarm) dialog.getData();
+		alarm.setNfcTagId("");
+		alarm.changed();
+		NacNfc.stop(this);
+
+		this.mScanNfcTagDialog = null;
+		return true;
+	}
+
+	/**
+	 */
+	@Override
+	public void onUseNfcChange(NacAlarm alarm)
+	{
+		NacUtility.printf("onUseNfcChange called! %b", alarm.getUseNfc());
+		if (alarm.getUseNfc())
+		{
+			NacScanNfcTagDialog dialog = new NacScanNfcTagDialog();
+
+			dialog.build(this);
+			dialog.saveData(alarm);
+			dialog.addOnCancelListener(this);
+			dialog.addOnDismissListener(this);
+			dialog.show();
+			NacNfc.start(this);
+
+			this.mScanNfcTagDialog = dialog;
+		}
+	}
+
 	/**
 	 * Setup the alarm activity for any active alarms.
 	 */
 	private void setupActiveAlarmActivity()
 	{
-		StatusBarNotification notification = this.getActiveStatusBarNotification();
-		NacAlarm alarm = this.findAlarmFromNotification(notification);
+		StatusBarNotification notification = NacNotificationHelper
+			.getActiveNotification(this);
+		NacAlarm alarm = NacNotificationHelper.findAlarm(this, notification);
 
 		if (this.shouldShowAlarmActivity(alarm))
 		{
@@ -277,6 +291,7 @@ public class NacMainActivity
 	{
 		NacCardAdapter cardAdapter = this.getCardAdapter();
 		cardAdapter.build();
+		cardAdapter.setOnUseNfcChangeListener(this);
 	}
 
 	/**
@@ -328,7 +343,7 @@ public class NacMainActivity
 			return;
 		}
 
-		this.stopActiveAlarm();
+		NacContext.stopActiveAlarm(this);
 	}
 
 	/**
@@ -361,7 +376,7 @@ public class NacMainActivity
 	 */
 	private boolean shouldDelayAlarmActivity(StatusBarNotification notification)
 	{
-		NacAlarm alarm = this.findAlarmFromNotification(notification);
+		NacAlarm alarm = NacNotificationHelper.findAlarm(this, notification);
 		return this.shouldDelayAlarmActivity(alarm);
 	}
 
@@ -380,7 +395,7 @@ public class NacMainActivity
 	 */
 	private boolean shouldShowAlarmActivity(StatusBarNotification notification)
 	{
-		NacAlarm alarm = this.findAlarmFromNotification(notification);
+		NacAlarm alarm = NacNotificationHelper.findAlarm(this, notification);
 		return this.shouldShowAlarmActivity(alarm);
 	}
 
@@ -432,28 +447,14 @@ public class NacMainActivity
 			@Override
 			public void run()
 			{
-				StatusBarNotification notification = getActiveStatusBarNotification();
+				StatusBarNotification notification = NacNotificationHelper
+					.getActiveNotification(NacMainActivity.this);
 				if (shouldShowAlarmActivity(notification))
 				{
 					showAlarmActivity(notification);
 				}
 			}
 		}, delay);
-	}
-
-	/**
-	 * Stop the currently active alarm.
-	 */
-	private void stopActiveAlarm()
-	{
-		StatusBarNotification notification = this.getActiveStatusBarNotification();
-		NacAlarm alarm = this.findAlarmFromNotification(notification);
-
-		if ((notification != null) && (alarm != null))
-		{
-			Intent intent = NacIntent.stopForegroundService(this, alarm);
-			startService(intent);
-		}
 	}
 
 }

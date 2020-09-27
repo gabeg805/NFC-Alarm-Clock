@@ -136,6 +136,153 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Act as if the collapse button was clicked.
+	 */
+	private void doCollapseButtonClick()
+	{
+		this.mCard.collapse();
+	}
+
+	/**
+	 * Act as if the day button was clicked.
+	 */
+	private void doDayButtonClick(int index)
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacAlarm alarm = this.getAlarm();
+
+		alarm.toggleIndex(index);
+
+		if (!alarm.areDaysSelected())
+		{
+			alarm.setRepeat(false);
+		}
+
+		alarm.changed();
+		this.mDays.set(shared);
+		this.mSummary.set(shared);
+	}
+
+	/**
+	 * Act as if the delete button was clicked.
+	 */
+	private void doDeleteButtonClick()
+	{
+		this.delete();
+	}
+
+	/**
+	 * Act as if the header was clicked.
+	 */
+	private void doHeaderClick()
+	{
+		this.mCard.toggleState();
+	}
+
+	/**
+	 * Act as if the name was clicked.
+	 */
+	private void doNameClick()
+	{
+		this.mName.showDialog(this);
+	}
+
+	/**
+	 * Act as if the NFC button was clicked.
+	 */
+	private void doNfcButtonClick()
+	{
+		NacAlarm alarm = this.getAlarm();
+
+		alarm.toggleUseNfc();
+		alarm.changed();
+		this.mUseNfc.set();
+		this.toastNfc();
+	}
+
+	/**
+	 * Act as if the repeat button was clicked.
+	 */
+	private void doRepeatButtonClick()
+	{
+		NacAlarm alarm = this.getAlarm();
+
+		alarm.toggleRepeat();
+		alarm.changed();
+		this.mDays.setRepeat();
+		this.toastRepeat();
+	}
+
+	/**
+	 * Act as if the sound was clicked.
+	 */
+	private void doSoundClick()
+	{
+		this.mSound.startActivity();
+	}
+
+	/**
+	 * Act as if the summary was clicked.
+	 */
+	private void doSummaryClick()
+	{
+		this.mCard.expand();
+	}
+
+	/**
+	 * Act as if the switch was changed.
+	 */
+	private void doSwitchCheckedChanged(boolean state)
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacAlarm alarm = this.getAlarm();
+
+		if (!state && alarm.isSnoozed(shared))
+		{
+			Context context = this.getContext();
+			NacContext.stopForegroundService(context, alarm);
+		}
+
+		alarm.setEnabled(state);
+		alarm.changed();
+		this.mSummary.set(shared);
+
+		if (!state)
+		{
+			shared.editSnoozeCount(alarm.getId(), 0);
+		}
+	}
+
+	/**
+	 * Act as if the time was clicked.
+	 */
+	private void doTimeClick()
+	{
+		this.mTime.showDialog(this);
+	}
+
+	/**
+	 * Act as if the vibrate button was clicked.
+	 */
+	private void doVibrateButtonClick()
+	{
+		NacAlarm alarm = this.getAlarm();
+
+		alarm.toggleVibrate();
+		alarm.changed();
+		this.mVibrate.set();
+		this.toastVibrate();
+	}
+
+	/**
+	 * Act as if the volume setting button was clicked.
+	 */
+	private void doVolumeSettingButtonClick()
+	{
+		this.mSound.showAudioSourceDialog(this);
+	}
+
+	/**
 	 * @return The alarm.
 	 */
 	public NacAlarm getAlarm()
@@ -360,7 +507,6 @@ public class NacCardHolder
 		if (id == R.layout.dlg_alarm_name)
 		{
 			String name = dialog.getDataString();
-
 			alarm.setName(name);
 			alarm.changed();
 			this.mName.set();
@@ -369,7 +515,6 @@ public class NacCardHolder
 		else if (id == R.layout.dlg_alarm_audio_source)
 		{
 			String source = dialog.getDataString();
-
 			alarm.setAudioSource(source);
 			alarm.changed();
 		}
@@ -456,7 +601,7 @@ public class NacCardHolder
 	 */
 	private void respondToCollapseButtonClick(View view)
 	{
-		this.mCard.collapse();
+		this.doCollapseButtonClick();
 		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 	}
 
@@ -465,9 +610,6 @@ public class NacCardHolder
 	 */
 	public void respondToDayButtonClick(NacDayButton button, int index)
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-		NacAlarm alarm = this.getAlarm();
-
 		if (!this.canModifyAlarm())
 		{
 			this.toastModifySnoozedAlarmError();
@@ -476,16 +618,7 @@ public class NacCardHolder
 		}
 
 		button.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-		alarm.toggleIndex(index);
-
-		if (!alarm.areDaysSelected())
-		{
-			alarm.setRepeat(false);
-		}
-
-		alarm.changed();
-		this.mDays.set(shared);
-		this.mSummary.set(shared);
+		this.doDayButtonClick(index);
 	}
 
 	/**
@@ -495,7 +628,7 @@ public class NacCardHolder
 	{
 		if (this.canModifyAlarm())
 		{
-			this.delete();
+			this.doDeleteButtonClick();
 		}
 		else
 		{
@@ -509,7 +642,7 @@ public class NacCardHolder
 	 */
 	private void respondToHeaderClick(View view)
 	{
-		this.mCard.toggleState();
+		this.doHeaderClick();
 		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 	}
 
@@ -520,7 +653,7 @@ public class NacCardHolder
 	{
 		if (this.canModifyAlarm())
 		{
-			this.mName.showDialog(this);
+			this.doNameClick();
 		}
 		else
 		{
@@ -536,11 +669,7 @@ public class NacCardHolder
 	{
 		if (this.canModifyAlarm())
 		{
-			NacAlarm alarm = this.getAlarm();
-			alarm.toggleUseNfc();
-			alarm.changed();
-			this.mUseNfc.set();
-			this.toastNfc();
+			this.doNfcButtonClick();
 		}
 		else
 		{
@@ -557,11 +686,7 @@ public class NacCardHolder
 	{
 		if (this.canModifyAlarm())
 		{
-			NacAlarm alarm = this.getAlarm();
-			alarm.toggleRepeat();
-			alarm.changed();
-			this.mDays.setRepeat();
-			this.toastRepeat();
+			this.doRepeatButtonClick();
 		}
 		else
 		{
@@ -578,7 +703,7 @@ public class NacCardHolder
 	{
 		if (this.canModifyAlarm())
 		{
-			this.mSound.startActivity();
+			this.doSoundClick();
 		}
 		else
 		{
@@ -592,7 +717,7 @@ public class NacCardHolder
 	 */
 	private void respondToSummaryClick(View view)
 	{
-		this.mCard.expand();
+		this.doSummaryClick();
 		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 	}
 
@@ -603,11 +728,7 @@ public class NacCardHolder
 		boolean state)
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		NacAlarm alarm = this.getAlarm();
 
-		button.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-
-		//if (!this.canModifyAlarm())
 		if (!this.canModifyAlarm() && shared.getPreventAppFromClosing())
 		{
 			this.toastModifySnoozedAlarmError();
@@ -615,21 +736,8 @@ public class NacCardHolder
 			return;
 		}
 
-		if (!state)
-		{
-			Context context = this.getContext();
-			Intent intent = NacIntent.stopForegroundService(context, alarm);
-			context.startService(intent);
-		}
-
-		alarm.setEnabled(state);
-		alarm.changed();
-		this.mSummary.set(shared);
-
-		if (!state)
-		{
-			shared.editSnoozeCount(alarm.getId(), 0);
-		}
+		button.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+		this.doSwitchCheckedChanged(state);
 	}
 
 	/**
@@ -639,7 +747,7 @@ public class NacCardHolder
 	{
 		if (this.canModifyAlarm())
 		{
-			this.mTime.showDialog(this);
+			this.doTimeClick();
 		}
 		else
 		{
@@ -655,11 +763,7 @@ public class NacCardHolder
 	{
 		if (this.canModifyAlarm())
 		{
-			NacAlarm alarm = this.getAlarm();
-			alarm.toggleVibrate();
-			alarm.changed();
-			this.mVibrate.set();
-			this.toastVibrate();
+			this.doVibrateButtonClick();
 		}
 		else
 		{
@@ -676,7 +780,7 @@ public class NacCardHolder
 	{
 		if (this.canModifyAlarm())
 		{
-			this.mSound.showAudioSourceDialog(this);
+			this.doVolumeSettingButtonClick();
 		}
 		else
 		{

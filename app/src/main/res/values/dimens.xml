@@ -19,6 +19,7 @@
 	<dimen name="sz_divider">1dp</dimen>
 
 	<!-- Image -->
+	<dimen name="isz_focus">72dp</dimen>
 	<dimen name="isz_attention">54dp</dimen>
 	<dimen name="isz_main">24dp</dimen>
 	<dimen name="isz_icon">32dp</dimen>

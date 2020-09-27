@@ -127,6 +127,14 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Use any action.
+	 */
+	public String getActionUseAny()
+	{
+		return this.getString(R.string.action_use_any);
+	}
+
+	/**
 	 * @return Active notification.
 	 */
 	public String getActiveNotification()
@@ -717,6 +725,14 @@ public class NacSharedConstants
 	public String getTitleRateMyApp()
 	{
 		return this.getString(R.string.title_rate_my_app);
+	}
+
+	/**
+	 * @return Scan a specific NFC tag title.
+	 */
+	public String getTitleScanNfcTag()
+	{
+		return this.getString(R.string.title_scan_nfc_tag);
 	}
 
 	/**

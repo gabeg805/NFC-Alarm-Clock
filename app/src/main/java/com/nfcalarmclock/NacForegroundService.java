@@ -144,7 +144,7 @@ public class NacForegroundService
 	public void finish()
 	{
 		this.cleanup();
-		this.stopAlarmActivity();
+		NacContext.stopAlarmActivity(this, this.getAlarm());
 		super.stopForeground(true);
 
 		NacWakeupProcess nextWakeup = this.getNextWakeup();
@@ -273,8 +273,8 @@ public class NacForegroundService
 		{
 			NacMissedAlarmNotification notification =
 				new NacMissedAlarmNotification(this);
-
-			notification.show(alarm);
+			notification.setAlarm(alarm);
+			notification.show();
 		}
 
 		this.dismiss();
@@ -431,9 +431,9 @@ public class NacForegroundService
 		}
 
 		NacActiveAlarmNotification notification =
-			new NacActiveAlarmNotification(this, alarm);
-
-		startForeground(alarm.getId(), notification.build());
+			new NacActiveAlarmNotification(this);
+		notification.setAlarm(alarm);
+		startForeground(alarm.getId(), notification.builder().build());
 	}
 
 	/**
@@ -473,26 +473,14 @@ public class NacForegroundService
 	{
 		List<NacWakeupProcess> allWakeups = this.getAllWakeups();
 		NacWakeupProcess wakeup = this.getWakeup();
+		NacAlarm alarm = this.getAlarm();
 
 		if (wakeup != null)
 		{
 			wakeup.stop();
 		}
 
-		this.stopAlarmActivity();
-
-		//this.mWakeup = null;
-	}
-
-	/**
-	 * Stop the alarm activity.
-	 */
-	private void stopAlarmActivity()
-	{
-		NacAlarm alarm = this.getAlarm();
-		Intent intent = NacIntent.stopAlarmActivity(this, alarm);
-
-		sendBroadcast(intent);
+		NacContext.stopAlarmActivity(this, alarm);
 	}
 
 }

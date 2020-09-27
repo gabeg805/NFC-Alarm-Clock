@@ -417,7 +417,7 @@ public class NacDatabase
 	@Override
 	public void onCreate(SQLiteDatabase db)
 	{
-		db.execSQL(Contract.AlarmTable.CREATE_TABLE_V4);
+		db.execSQL(Contract.AlarmTable.CREATE_TABLE_V5);
 
 		Context context = this.getContext();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
@@ -440,6 +440,7 @@ public class NacDatabase
 			.setMediaPath(mediaPath)
 			.setMediaType(mediaType)
 			.setName(name)
+			.setNfcTagId("")
 			.build();
 
 		this.add(db, alarm);
@@ -477,8 +478,11 @@ public class NacDatabase
 				db.execSQL(Contract.AlarmTable.CREATE_TABLE_V3);
 				break;
 			case 4:
-			default:
 				db.execSQL(Contract.AlarmTable.CREATE_TABLE_V4);
+				break;
+			case 5:
+			default:
+				db.execSQL(Contract.AlarmTable.CREATE_TABLE_V5);
 				break;
 		}
 
@@ -1021,6 +1025,30 @@ public class NacDatabase
 			public static final String CONTENT_ITEM_TYPE =
 				ContentResolver.CURSOR_ITEM_BASE_TYPE
 					+ "/vnd.com.nfcalarmclock";
+
+			/**
+			 * SQL Statement to create the table (version 5).
+			 */
+			public static final String CREATE_TABLE_V5 =
+				"CREATE TABLE " + TABLE_NAME
+				+ " ("
+				+ _ID + " INTEGER PRIMARY KEY,"
+				+ COLUMN_ID + " INTEGER,"
+				+ COLUMN_ENABLED + " INTEGER,"
+				+ COLUMN_HOUR + " INTEGER,"
+				+ COLUMN_MINUTE + " INTEGER,"
+				+ COLUMN_DAYS + " INTEGER,"
+				+ COLUMN_REPEAT + " INTEGER,"
+				+ COLUMN_USE_NFC + " INTEGER,"
+				+ COLUMN_VIBRATE + " INTEGER,"
+				+ COLUMN_VOLUME + " INTEGER,"
+				+ COLUMN_AUDIO_SOURCE + " TEXT,"
+				+ COLUMN_SOUND_TYPE + " INTEGER,"
+				+ COLUMN_SOUND_PATH + " TEXT,"
+				+ COLUMN_SOUND_NAME + " TEXT,"
+				+ COLUMN_NAME + " TEXT,"
+				+ COLUMN_NFCTAG + " TEXT"
+				+ ");";
 
 			/**
 			 * SQL Statement to create the table (version 4).

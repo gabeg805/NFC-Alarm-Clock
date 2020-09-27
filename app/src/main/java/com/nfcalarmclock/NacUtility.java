@@ -1,8 +1,12 @@
 package com.nfcalarmclock;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Build;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -122,6 +126,23 @@ public class NacUtility
 	}
 
 	/**
+	 * Create a toast that displays for a short period of time.
+	 */
+	public static Toast quickToast(View view, String message)
+	{
+		Context context = view.getContext();
+		return NacUtility.quickToast(context, message);
+	}
+
+	/**
+	 * Create a toast that displays for a short period of time.
+	 */
+	public static Toast quickToast(Context context, String message)
+	{
+		return NacUtility.toast(context, message, Toast.LENGTH_SHORT);
+	}
+
+	/**
 	 * Set background color of the view.
 	 */
 	public static void setBackground(View view, int id)
@@ -187,20 +208,15 @@ public class NacUtility
 	}
 
 	/**
-	 * Create a toast that displays for a short period of time.
+	 * Convert the given string to a spanned string.
 	 */
-	public static Toast quickToast(View view, String message)
+	@SuppressWarnings("deprecation")
+	@TargetApi(Build.VERSION_CODES.N)
+	public static Spanned toSpannedString(String message)
 	{
-		Context context = view.getContext();
-		return NacUtility.quickToast(context, message);
-	}
-
-	/**
-	 * Create a toast that displays for a short period of time.
-	 */
-	public static Toast quickToast(Context context, String message)
-	{
-		return NacUtility.toast(context, message, Toast.LENGTH_SHORT);
+		return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+			? Html.fromHtml(message, Html.FROM_HTML_MODE_LEGACY)
+			: Html.fromHtml(message);
 	}
 
 	/**

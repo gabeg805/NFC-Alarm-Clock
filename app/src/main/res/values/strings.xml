@@ -33,6 +33,7 @@
 	<string name="action_rate_now">Rate Now</string>
 	<string name="action_rate_later">Later</string>
 	<string name="action_rate_never">No, Thanks</string>
+	<string name="action_use_any">Use any</string>
 	<string name="action_undo">Undo</string>
 	<string name="action_browse">Browse</string>
 	<string name="action_previous_folder">Previous folder</string>
@@ -42,6 +43,7 @@
 	<!-- Messages -->
 	<string name="message_playlist">Do you want to play all the music in this folder?</string>
 	<string name="message_rate_my_app">If you have been enjoying the <b>NFC Alarm Clock</b> app, please take a moment to rate it. Thank you for your support!</string>
+	<string name="message_scan_nfc_tag">Use any NFC tag, or scan a particular NFC tag that will be used to dismiss this alarm.</string>
 	<string name="message_nfc_required">NFC required to dismiss the alarm</string>
 	<string name="message_nfc_optional">NFC optional to dismiss the alarm</string>
 	<string name="message_nfc_request">Please enable NFC to dismiss the alarm</string>
@@ -74,6 +76,7 @@
 	<!-- Titles -->
 	<string name="title_alarm_activity">Dismiss Alarm</string>
 	<string name="title_rate_my_app">Rate the app</string>
+	<string name="title_scan_nfc_tag">Scan an NFC tag</string>
 	<string name="title_name">Set alarm name</string>
 	<string name="title_days">Select days</string>
 	<string name="title_color">Select a color</string>

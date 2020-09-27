@@ -33,6 +33,7 @@
 	<string name="action_rate_now">Califica Ahora</string>
 	<string name="action_rate_later">Al Rato</string>
 	<string name="action_rate_never">No, Gracias</string>
+	<string name="action_use_any">Usa cualquier</string>
 	<string name="action_undo">Deshacer</string>
 	<string name="action_browse">Navegar</string>
 	<string name="action_previous_folder">Carpeta anterior</string>
@@ -42,6 +43,7 @@
 	<!-- Messages -->
 	<string name="message_playlist">¿Quieres tocar toda la música de esta carpeta?</string>
 	<string name="message_rate_my_app">Si haz disfrutado la <b>NFC Despertador</b>, por favor tómate un momento para calificarla. ¡Gracias por su apoyo! </string>
+	<string name="message_scan_nfc_tag">Usa cualquier etiqueta de NFC, o escanea una etiqueta de NFC particular que se usará para descartar esta alarma.</string>
 	<string name="message_nfc_required">NFC requerido para descartar la alarma</string>
 	<string name="message_nfc_optional">NFC opcional para descartar la alarma</string>
 	<string name="message_nfc_request">Por favor, habilite la NFC para descartar la alarma</string>
@@ -74,6 +76,7 @@
 	<!-- Titles -->
 	<string name="title_alarm_activity">Desactivar Alarma</string>
 	<string name="title_rate_my_app">Califica esta app</string>
+	<string name="title_scan_nfc_tag">Escanea una etiqueta de NFC</string>
 	<string name="title_name">Nombre de la alarma</string>
 	<string name="title_days">Seleccione los días</string>
 	<string name="title_color">Elige un color</string>
