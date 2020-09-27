@@ -88,22 +88,27 @@ public class NacNfc
 	}
 
 	/**
-	 * Enable NFC dispatch, so that the app can discover NFC tags.
+	 * @see start
 	 */
 	public static void start(Context context)
 	{
-		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
+		Intent intent = new Intent(context, NacAlarmActivity.class)
+			.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+		NacNfc.start(context, intent);
+	}
 
+	/**
+	 * Enable NFC dispatch, so that the app can discover NFC tags.
+	 */
+	public static void start(Context context, Intent intent)
+	{
+		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
 		if ((nfcAdapter == null) || !NacNfc.isEnabled(context))
 		{
 			return;
 		}
 
-		Intent intent = new Intent(context, NacAlarmActivity.class)
-			.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
-		PendingIntent pending = PendingIntent.getActivity(context, 0,
-			intent, 0);
-
+		PendingIntent pending = PendingIntent.getActivity(context, 0, intent, 0);
 		nfcAdapter.enableForegroundDispatch((Activity)context, pending, null, null);
 	}
 

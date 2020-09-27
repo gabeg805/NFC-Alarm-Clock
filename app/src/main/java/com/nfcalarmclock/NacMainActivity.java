@@ -62,6 +62,11 @@ public class NacMainActivity
 	private NacCardAdapter mAdapter;
 
 	/**
+	 * Scan an NFC tag dialog.
+	 */
+	private NacScanNfcTagDialog mScanNfcTagDialog;
+
+	/**
 	 * Add an alarm that was created from the SET_ALARM intent.
 	 */
 	private void addSetAlarmFromIntent()
@@ -139,9 +144,21 @@ public class NacMainActivity
 			R.id.fab_add_alarm);
 		this.mRecyclerView = (RecyclerView) findViewById(
 			R.id.content_alarm_list);
+		this.mScanNfcTagDialog = null;
 
 		this.setupRecyclerView();
-		this.setupNfcScanCheck();
+		//this.setupNfcScanCheck();
+		if (this.mScanNfcTagDialog != null)
+		{
+			Intent intent = getIntent();
+			String action = (intent != null) ? intent.getAction() : "No action";
+			NacUtility.quickToast(this, "Create: Scanned the NFC tag with the dialog! "+action);
+		}
+		else
+		{
+			NacUtility.quickToast(this, "Create: Scanned the NFC tag!");
+			this.setupNfcScanCheck();
+		}
 	}
 
 	/**
@@ -167,8 +184,8 @@ public class NacMainActivity
 		else
 		{
 			NacUtility.quickToast(this, "Scanned the NFC tag!");
+			this.setupNfcScanCheck();
 		}
-		this.setupNfcScanCheck();
 	}
 
 	/**
@@ -208,7 +225,14 @@ public class NacMainActivity
 		this.addSetAlarmFromIntent();
 	}
 
-	NacScanNfcTagDialog mScanNfcTagDialog = null;
+	/**
+	 */
+	@Override
+	protected void onPause()
+	{
+		super.onPause();
+		NacNfc.stop(this);
+	}
 
 	/**
 	 */
@@ -256,7 +280,7 @@ public class NacMainActivity
 			dialog.addOnCancelListener(this);
 			dialog.addOnDismissListener(this);
 			dialog.show();
-			NacNfc.start(this);
+			NacNfc.start(this, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP));
 
 			this.mScanNfcTagDialog = dialog;
 		}
