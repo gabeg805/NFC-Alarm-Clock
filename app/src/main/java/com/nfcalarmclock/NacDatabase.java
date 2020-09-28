@@ -89,7 +89,6 @@ public class NacDatabase
 		try
 		{
 			result = db.insert(table, null, cv);
-
 			db.setTransactionSuccessful();
 		}
 		finally
@@ -284,6 +283,8 @@ public class NacDatabase
 		switch (version)
 		{
 			case 0:
+			case 5:
+				cv.put(Contract.AlarmTable.COLUMN_NFC_TAG, alarm.getNfcTagId());
 			case 4:
 				cv.put(Contract.AlarmTable.COLUMN_VOLUME, alarm.getVolume());
 				cv.put(Contract.AlarmTable.COLUMN_AUDIO_SOURCE, alarm.getAudioSource());
@@ -880,7 +881,7 @@ public class NacDatabase
 		/**
 		 * Database version.
 		 */
-		public static final int DATABASE_VERSION = 5;
+		public static final int DATABASE_VERSION = 4;
 
 		/**
 		 * prevent someone from instantiating the contract class.
@@ -991,7 +992,7 @@ public class NacDatabase
 			/**
 			 * NFC tag.
 			 */
-			public static final String COLUMN_NFCTAG = "NfcTag";
+			public static final String COLUMN_NFC_TAG = "NfcTag";
 
 			/**
 			 * The content style URI
@@ -1046,7 +1047,7 @@ public class NacDatabase
 				+ COLUMN_SOUND_PATH + " TEXT,"
 				+ COLUMN_SOUND_NAME + " TEXT,"
 				+ COLUMN_NAME + " TEXT,"
-				+ COLUMN_NFCTAG + " TEXT"
+				+ COLUMN_NFC_TAG + " TEXT"
 				+ ");";
 
 			/**
@@ -1130,7 +1131,7 @@ public class NacDatabase
 				+ COLUMN_VIBRATE + " INTEGER,"
 				+ COLUMN_SOUND + " TEXT,"
 				+ COLUMN_NAME + " TEXT,"
-				+ COLUMN_NFCTAG + " TEXT"
+				+ COLUMN_NFC_TAG + " TEXT"
 				+ ");";
 
 			/**
