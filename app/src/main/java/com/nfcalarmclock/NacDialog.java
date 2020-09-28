@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.widget.Button;
 import java.util.ArrayList;
 import java.util.List;
@@ -152,7 +153,7 @@ public class NacDialog
 	/**
 	 * Alert dialog.
 	 */
-	private AlertDialog mDialog;
+	private AlertDialog mAlertDialog;
 
 	/**
 	 * Root view.
@@ -197,7 +198,7 @@ public class NacDialog
 	{
 		this.mBuilder = null;
 		this.mData = null;
-		this.mDialog = null;
+		this.mAlertDialog = null;
 		this.mRoot = null;
 		this.mBuildListener = null;
 		this.mCancelListener = new ArrayList<>();
@@ -293,17 +294,16 @@ public class NacDialog
 	 */
 	public AlertDialog.Builder build(Context context, View root)
 	{
-		this.mBuilder = new AlertDialog.Builder(context);
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		this.mBuilder = builder;
 		this.mRoot = root;
 
 		root.addOnLayoutChangeListener(this);
 
 		this.removeParent(root);
-		this.mBuilder.setView(root);
-		//this.mBuilder.setOnCancelListener(this);
-		this.onBuildDialog(context, this.mBuilder);
-
-		return this.mBuilder;
+		builder.setView(root);
+		this.onBuildDialog(context, builder);
+		return builder;
 	}
 
 	/**
@@ -444,13 +444,21 @@ public class NacDialog
 	 */
 	public void cancelDialog()
 	{
-		if ((this.mDialog == null) || this.wasCanceledOrDismissed())
+		if (!this.canCloseDialog())
 		{
 			return;
 		}
 
 		this.setCanceledOrDismissed(true);
-		this.mDialog.cancel();
+		this.getAlertDialog().cancel();
+	}
+
+	/**
+	 * @return True if can close the dialog, and False otherwise.
+	 */
+	public boolean canCloseDialog()
+	{
+		return (this.getAlertDialog() != null) && !this.wasCanceledOrDismissed();
 	}
 
 	/**
@@ -479,13 +487,29 @@ public class NacDialog
 	 */
 	public void dismissDialog()
 	{
-		if ((this.mDialog == null) || this.wasCanceledOrDismissed())
+		if (!this.canCloseDialog())
 		{
 			return;
 		}
 
 		this.setCanceledOrDismissed(true);
-		this.mDialog.dismiss();
+		this.getAlertDialog().dismiss();
+	}
+
+	/**
+	 * @return The alert dialog.
+	 */
+	public AlertDialog getAlertDialog()
+	{
+		return this.mAlertDialog;
+	}
+
+	/**
+	 * @return The alert dialog builder.
+	 */
+	protected AlertDialog.Builder getBuilder()
+	{
+		return this.mBuilder;
 	}
 
 	/**
@@ -509,7 +533,8 @@ public class NacDialog
 	 */
 	public boolean getDataBoolean()
 	{
-		return (this.mData != null) ? (boolean) this.mData : false;
+		Object data = this.getData();
+		return (data != null) ? (boolean) data : false;
 	}
 
 	/**
@@ -517,7 +542,8 @@ public class NacDialog
 	 */
 	public float getDataFloat()
 	{
-		return (this.mData != null) ? (float) this.mData : -1f;
+		Object data = this.getData();
+		return (data != null) ? (float) data : -1f;
 	}
 
 	/**
@@ -525,7 +551,8 @@ public class NacDialog
 	 */
 	public int getDataInt()
 	{
-		return (this.mData != null) ? (int) this.mData : -1;
+		Object data = this.getData();
+		return (data != null) ? (int) data : -1;
 	}
 
 	/**
@@ -533,7 +560,8 @@ public class NacDialog
 	 */
 	public String getDataString()
 	{
-		return (this.mData != null) ? (String) this.mData : "";
+		Object data = this.getData();
+		return (data != null) ? (String) data : "";
 	}
 
 	/**
@@ -561,11 +589,21 @@ public class NacDialog
 	}
 
 	/**
+	 * @return The dialog window.
+	 */
+	public Window getWindow()
+	{
+		AlertDialog dialog = this.getAlertDialog();
+		return (dialog != null) ? dialog.getWindow() : null;
+	}
+
+	/**
 	 * Hide the dialog and call the onHideDialog listener.
 	 */
 	public void hide()
 	{
-		if (this.mDialog == null)
+		AlertDialog dialog = this.getAlertDialog();
+		if (dialog == null)
 		{
 			return;
 		}
@@ -578,7 +616,7 @@ public class NacDialog
 			}
 		}
 
-		this.mDialog.hide();
+		dialog.hide();
 	}
 
 	/**
@@ -595,7 +633,11 @@ public class NacDialog
 	 */
 	public void neutralDismiss()
 	{
-		this.mDialog.dismiss();
+		AlertDialog dialog = this.getAlertDialog();
+		if (dialog != null)
+		{
+			dialog.dismiss();
+		}
 	}
 
 	/**
@@ -657,7 +699,8 @@ public class NacDialog
 			return;
 		}
 
-		Context context = this.mDialog.getContext();
+		//Context context = this.mAlertDialog.getContext();
+		Context context = this.getContext();
 		DisplayMetrics dm = context.getResources().getDisplayMetrics();
 		int dialogWidth = (int)(dm.widthPixels * this.mScaler.widthScale);
 		int dialogHeight = (int)(dm.heightPixels * this.mScaler.heightScale);
@@ -675,7 +718,7 @@ public class NacDialog
 			this.mScaler.isScaled = true;
 		}
 
-		this.mDialog.getWindow().setLayout(dialogWidth, dialogHeight);
+		this.getWindow().setLayout(dialogWidth, dialogHeight);
 	}
 	/**
 	 * Remove the parent from the view that will be attached to the dialog.
@@ -712,14 +755,18 @@ public class NacDialog
 	 */
 	public void scale(double width, double height, boolean wrapWidth, boolean wrapHeight)
 	{
-		if ((this.mBuilder == null) || (this.mDialog == null)
-			|| (width < 0) || (width > 1) || (height < 0) || (height > 1))
+		AlertDialog.Builder builder = this.getBuilder();
+		AlertDialog dialog = this.getAlertDialog();
+
+		if ((builder == null)
+			|| (dialog == null)
+			|| (width < 0) || (width > 1)
+			|| (height < 0) || (height > 1))
 		{
 			return;
 		}
 
 		this.mScaler = new Scaler();
-
 		this.mScaler.setWidthScale(width, wrapWidth);
 		this.mScaler.setHeightScale(height, wrapHeight);
 	}
@@ -767,12 +814,13 @@ public class NacDialog
 	 */
 	public void setNegativeButton(String title)
 	{
-		if (this.mBuilder == null)
+		AlertDialog.Builder builder = this.getBuilder();
+		if (builder == null)
 		{
 			return;
 		}
 
-		this.mBuilder.setNegativeButton(title, this);
+		builder.setNegativeButton(title, this);
 	}
 
 	/**
@@ -780,12 +828,13 @@ public class NacDialog
 	 */
 	public void setNeutralButton(String title)
 	{
-		if (this.mBuilder == null)
+		AlertDialog.Builder builder = this.getBuilder();
+		if (builder == null)
 		{
 			return;
 		}
 
-		this.mBuilder.setNeutralButton(title, this);
+		builder.setNeutralButton(title, this);
 	}
 
 	/**
@@ -801,12 +850,13 @@ public class NacDialog
 	 */
 	public void setPositiveButton(String title)
 	{
-		if (this.mBuilder == null)
+		AlertDialog.Builder builder = this.getBuilder();
+		if (builder == null)
 		{
 			return;
 		}
 
-		this.mBuilder.setPositiveButton(title, this);
+		builder.setPositiveButton(title, this);
 	}
 
 	/**
@@ -815,13 +865,21 @@ public class NacDialog
 	public void setupDialog()
 	{
 		Context context = this.getContext();
+		AlertDialog dialog = this.getAlertDialog();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
-		int[] buttonTypes = new int[] { AlertDialog.BUTTON_NEGATIVE,
-			AlertDialog.BUTTON_POSITIVE, AlertDialog.BUTTON_NEUTRAL };
+		int[] buttonTypes = new int[] {
+			AlertDialog.BUTTON_NEGATIVE,
+			AlertDialog.BUTTON_POSITIVE,
+			AlertDialog.BUTTON_NEUTRAL };
+
+		if (dialog == null)
+		{
+			return;
+		}
 
 		for (int i=0; i < 3; i++)
 		{
-			Button button = this.mDialog.getButton(buttonTypes[i]);
+			Button button = dialog.getButton(buttonTypes[i]);
 
 			if (button == null)
 			{
@@ -836,9 +894,8 @@ public class NacDialog
 			}
 		}
 
-		this.mDialog.getWindow().setBackgroundDrawableResource(R.color.gray);
-		this.mDialog.setOnCancelListener(this);
-		//this.mDialog.setOnDismissListener(this);
+		this.getWindow().setBackgroundDrawableResource(R.color.gray);
+		dialog.setOnCancelListener(this);
 	}
 
 	/**
@@ -846,24 +903,26 @@ public class NacDialog
 	 */
 	public AlertDialog show()
 	{
-		if (this.mDialog != null)
+		AlertDialog dialog = this.getAlertDialog();
+		if (dialog != null)
 		{
-			this.mDialog.show();
+			dialog.show();
 		}
 		else
 		{
-			this.mDialog = this.mBuilder.show();
+			dialog = this.getBuilder().show();
+			this.mAlertDialog = dialog;
 		}
 
+		View root = this.getRoot();
 		for (OnShowListener listener : this.mShowListener)
 		{
-			listener.onShowDialog(this, this.mRoot);
+			listener.onShowDialog(this, root);
 		}
 
 		this.setCanceledOrDismissed(false);
 		this.setupDialog();
-
-		return this.mDialog;
+		return dialog;
 	}
 
 	/**

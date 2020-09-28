@@ -355,14 +355,29 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * @return The NacCardHolder for a given alarm.
+	 */
+	public NacCardHolder getCardHolder(NacAlarm alarm)
+	{
+		RecyclerView rv = this.getRecyclerView();
+		int id = alarm.getId();
+
+		if ((alarm == null) || (rv == null) || (id <= 0))
+		{
+			return null;
+		}
+		else
+		{
+			return (NacCardHolder) rv.findViewHolderForItemId(id);
+		}
+	}
+
+	/**
 	 * @return The NacCardView for a given alarm.
 	 */
-	private NacCardView getCard(NacAlarm alarm)
+	public NacCardView getCardView(NacAlarm alarm)
 	{
-		int id = alarm.getId();
-		RecyclerView rv = this.getRecyclerView();
-		NacCardHolder holder = (NacCardHolder) rv.findViewHolderForItemId(id);
-
+		NacCardHolder holder = this.getCardHolder(alarm);
 		return (holder != null) ? holder.getNacCardView() : null;
 	}
 
@@ -556,8 +571,7 @@ public class NacCardAdapter
 	 */
 	public void highlight(NacAlarm alarm)
 	{
-		NacCardView card = this.getCard(alarm);
-
+		NacCardView card = this.getCardView(alarm);
 		if (card != null)
 		{
 			card.highlight();
@@ -1048,7 +1062,7 @@ public class NacCardAdapter
 	 */
 	public void sortHighlight(NacAlarm alarm)
 	{
-		NacCardView card = this.getCard(alarm);
+		NacCardView card = this.getCardView(alarm);
 
 		if (card == null)
 		{

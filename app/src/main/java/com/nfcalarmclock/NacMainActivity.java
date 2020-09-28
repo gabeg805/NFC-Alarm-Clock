@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
+import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +23,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import java.lang.StringBuilder;
 import java.lang.System;
 
 /**
@@ -110,6 +112,14 @@ public class NacMainActivity
 	}
 
 	/**
+	 * @return Scan NFC tag dialog.
+	 */
+	private NacScanNfcTagDialog getScanNfcTagDialog()
+	{
+		return this.mScanNfcTagDialog;
+	}
+
+	/**
 	 * @return The shared preferences.
 	 */
 	private NacSharedPreferences getSharedPreferences()
@@ -147,18 +157,7 @@ public class NacMainActivity
 		this.mScanNfcTagDialog = null;
 
 		this.setupRecyclerView();
-		//this.setupNfcScanCheck();
-		if (this.mScanNfcTagDialog != null)
-		{
-			Intent intent = getIntent();
-			String action = (intent != null) ? intent.getAction() : "No action";
-			NacUtility.quickToast(this, "Create: Scanned the NFC tag with the dialog! "+action);
-		}
-		else
-		{
-			NacUtility.quickToast(this, "Create: Scanned the NFC tag!");
-			this.setupNfcScanCheck();
-		}
+		this.setupNfcScanCheck();
 	}
 
 	/**
@@ -176,14 +175,14 @@ public class NacMainActivity
 	protected void onNewIntent(Intent intent)
 	{
 		super.onNewIntent(intent);
-		if (this.mScanNfcTagDialog != null)
+		NacScanNfcTagDialog dialog = this.getScanNfcTagDialog();
+
+		if (dialog != null)
 		{
-			String action = (intent != null) ? intent.getAction() : "No action";
-			NacUtility.quickToast(this, "Scanned the NFC tag with the dialog! "+action);
+			this.saveNfcTagId(intent);
 		}
 		else
 		{
-			NacUtility.quickToast(this, "Scanned the NFC tag!");
 			this.setupNfcScanCheck();
 		}
 	}
@@ -223,6 +222,7 @@ public class NacMainActivity
 		this.setupFloatingActionButton();
 		this.setupGoogleRatingDialog();
 		this.addSetAlarmFromIntent();
+		NacNfc.start(this);
 	}
 
 	/**
@@ -239,12 +239,14 @@ public class NacMainActivity
 	@Override
 	public boolean onCancelDialog(NacDialog dialog)
 	{
-		NacUtility.printf("NFC dialog canceled! So use any!");
 		NacAlarm alarm = (NacAlarm) dialog.getData();
-		alarm.setNfcTagId("");
-		alarm.changed();
-		//this.doNfcButtonClick();
-		NacNfc.stop(this);
+		NacCardAdapter cardAdapter = this.getCardAdapter();
+		NacCardHolder cardHolder = cardAdapter.getCardHolder(alarm);
+
+		if (cardHolder != null)
+		{
+			cardHolder.doNfcButtonClick();
+		}
 
 		this.mScanNfcTagDialog = null;
 		return true;
@@ -255,11 +257,9 @@ public class NacMainActivity
 	@Override
 	public boolean onDismissDialog(NacDialog dialog)
 	{
-		NacUtility.printf("Use any NFC tag!");
 		NacAlarm alarm = (NacAlarm) dialog.getData();
 		alarm.setNfcTagId("");
 		alarm.changed();
-		NacNfc.stop(this);
 
 		this.mScanNfcTagDialog = null;
 		return true;
@@ -270,20 +270,47 @@ public class NacMainActivity
 	@Override
 	public void onUseNfcChange(NacAlarm alarm)
 	{
-		NacUtility.printf("onUseNfcChange called! %b", alarm.getUseNfc());
-		if (alarm.getUseNfc())
+		if (!alarm.getUseNfc())
 		{
-			NacScanNfcTagDialog dialog = new NacScanNfcTagDialog();
-
-			dialog.build(this);
-			dialog.saveData(alarm);
-			dialog.addOnCancelListener(this);
-			dialog.addOnDismissListener(this);
-			dialog.show();
-			NacNfc.start(this, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP));
-
-			this.mScanNfcTagDialog = dialog;
+			return;
 		}
+
+		NacScanNfcTagDialog dialog = new NacScanNfcTagDialog();
+		//Intent intent = new Intent(this, getClass())
+		//	.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+		dialog.build(this);
+		dialog.saveData(alarm);
+		dialog.addOnCancelListener(this);
+		dialog.addOnDismissListener(this);
+		dialog.show();
+
+		this.mScanNfcTagDialog = dialog;
+	}
+
+	/**
+	 * Save the scanned NFC tag ID.
+	 */
+	private void saveNfcTagId(Intent intent)
+	{
+		NacScanNfcTagDialog dialog = this.getScanNfcTagDialog();
+		if ((dialog == null) || !NacNfc.wasScanned(this, intent))
+		{
+			return;
+		}
+
+		Tag nfcTag = NacNfc.getTag(intent);
+		if (nfcTag == null)
+		{
+			return;
+		}
+
+		String id = NacNfc.parseId(nfcTag);
+		NacAlarm alarm = (NacAlarm) dialog.getData();
+
+		alarm.setNfcTagId(id);
+		alarm.changed();
+		dialog.dismissDialog();
 	}
 
 	/**
@@ -362,7 +389,9 @@ public class NacMainActivity
 	private void setupNfcScanCheck()
 	{
 		Intent intent = getIntent();
-		if (!NacNfc.wasScanned(this, intent))
+		NacScanNfcTagDialog dialog = this.getScanNfcTagDialog();
+
+		if ((dialog != null) || !NacNfc.wasScanned(this, intent))
 		{
 			return;
 		}

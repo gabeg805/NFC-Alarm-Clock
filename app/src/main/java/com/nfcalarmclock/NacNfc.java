@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
+import android.nfc.Tag;
 import android.provider.Settings;
 
 /**
@@ -14,25 +15,11 @@ public class NacNfc
 {
 
 	/**
-	 * The context.
 	 */
-	private Context mContext;
-
-	/**
-	 */
-	public NacNfc(Context context)
-	{
-		this.mContext = context;
-	}
-
-	/**
-	 * @see exists
-	 */
-	public boolean exists()
-	{
-		Context context = this.getContext();
-		return NacNfc.exists(context);
-	}
+	//public NacNfc(Context context)
+	//{
+	//	this.mContext = context;
+	//}
 
 	/**
 	 * Check if NFC exists on this device.
@@ -43,11 +30,13 @@ public class NacNfc
 	}
 
 	/**
-	 * @return The context.
+	 * @return An NFC tag from the given Intent.
 	 */
-	private Context getContext()
+	public static Tag getTag(Intent intent)
 	{
-		return this.mContext;
+		return (intent != null)
+			? (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
+			: null;
 	}
 
 	/**
@@ -57,6 +46,30 @@ public class NacNfc
 	{
 		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
 		return (nfcAdapter != null) && nfcAdapter.isEnabled();
+	}
+
+	/**
+	 * Parse NFC tag ID to a readable format.
+	 */
+	public static String parseId(Tag nfcTag)
+	{
+		byte[] srcId = nfcTag.getId();
+		if (srcId == null)
+		{
+			return "";
+		}
+
+		StringBuilder id = new StringBuilder("");
+		char[] buffer = new char[2];
+
+		for (int i = 0; i < srcId.length; i++)
+		{
+			buffer[0] = Character.forDigit((srcId[i] >>> 4) & 0x0F, 16);
+			buffer[1] = Character.forDigit(srcId[i] & 0x0F, 16);
+			id.append(buffer);
+		}
+
+		return id.toString();
 	}
 
 	/**
@@ -81,27 +94,19 @@ public class NacNfc
 	/**
 	 * @see start
 	 */
-	public void start()
+	public static void start(Activity activity)
 	{
-		Context context = this.getContext();
-		NacNfc.start(context);
-	}
-
-	/**
-	 * @see start
-	 */
-	public static void start(Context context)
-	{
-		Intent intent = new Intent(context, NacAlarmActivity.class)
-			.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
-		NacNfc.start(context, intent);
+		Intent intent = new Intent((Context)activity, activity.getClass())
+			.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		NacNfc.start(activity, intent);
 	}
 
 	/**
 	 * Enable NFC dispatch, so that the app can discover NFC tags.
 	 */
-	public static void start(Context context, Intent intent)
+	public static void start(Activity activity, Intent intent)
 	{
+		Context context = (Context) activity;
 		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
 		if ((nfcAdapter == null) || !NacNfc.isEnabled(context))
 		{
@@ -109,16 +114,7 @@ public class NacNfc
 		}
 
 		PendingIntent pending = PendingIntent.getActivity(context, 0, intent, 0);
-		nfcAdapter.enableForegroundDispatch((Activity)context, pending, null, null);
-	}
-
-	/**
-	 * @see stop
-	 */
-	public void stop()
-	{
-		Context context = this.getContext();
-		NacNfc.stop(context);
+		nfcAdapter.enableForegroundDispatch(activity, pending, null, null);
 	}
 
 	/**

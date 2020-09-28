@@ -33,7 +33,7 @@ public class NacScanNfcTagDialog
 
 		builder.setTitle(cons.getTitleScanNfcTag());
 		setPositiveButton(cons.getActionUseAny());
-		//setNegativeButton(cons.getActionCancel());
+		setNegativeButton(cons.getActionCancel());
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class NacScanNfcTagDialog
 	@Override
 	public void onShowDialog(NacDialog dialog, View root)
 	{
-		scale(0.9, 0.7, false, true);
+		scale(0.8, 0.8, false, true);
 	}
 
 }

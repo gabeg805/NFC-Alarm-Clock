@@ -329,7 +329,9 @@ public class NacAlarmActivity
 
 		if (NacNfc.exists(this))
 		{
-			NacNfc.start(this);
+			Intent intent = new Intent(this, NacAlarmActivity.class)
+				.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+			NacNfc.start(this, intent);
 		}
 		else
 		{

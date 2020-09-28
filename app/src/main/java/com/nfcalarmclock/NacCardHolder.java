@@ -138,15 +138,18 @@ public class NacCardHolder
 	/**
 	 * Act as if the collapse button was clicked.
 	 */
-	private void doCollapseButtonClick()
+	public void doCollapseButtonClick()
 	{
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+		NacUtility.quickToast(context, "Collapse NFC Tag : "+alarm.getNfcTagId());
 		this.mCard.collapse();
 	}
 
 	/**
 	 * Act as if the day button was clicked.
 	 */
-	private void doDayButtonClick(int index)
+	public void doDayButtonClick(int index)
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
@@ -166,7 +169,7 @@ public class NacCardHolder
 	/**
 	 * Act as if the delete button was clicked.
 	 */
-	private void doDeleteButtonClick()
+	public void doDeleteButtonClick()
 	{
 		this.delete();
 	}
@@ -174,7 +177,7 @@ public class NacCardHolder
 	/**
 	 * Act as if the header was clicked.
 	 */
-	private void doHeaderClick()
+	public void doHeaderClick()
 	{
 		this.mCard.toggleState();
 	}
@@ -182,7 +185,7 @@ public class NacCardHolder
 	/**
 	 * Act as if the name was clicked.
 	 */
-	private void doNameClick()
+	public void doNameClick()
 	{
 		this.mName.showDialog(this);
 	}
@@ -190,11 +193,17 @@ public class NacCardHolder
 	/**
 	 * Act as if the NFC button was clicked.
 	 */
-	private void doNfcButtonClick()
+	public void doNfcButtonClick()
 	{
 		NacAlarm alarm = this.getAlarm();
 
 		alarm.toggleUseNfc();
+
+		if (!alarm.getUseNfc())
+		{
+			alarm.setNfcTagId("");
+		}
+
 		alarm.changed();
 		this.mUseNfc.set();
 		this.toastNfc();
@@ -203,7 +212,7 @@ public class NacCardHolder
 	/**
 	 * Act as if the repeat button was clicked.
 	 */
-	private void doRepeatButtonClick()
+	public void doRepeatButtonClick()
 	{
 		NacAlarm alarm = this.getAlarm();
 
@@ -216,7 +225,7 @@ public class NacCardHolder
 	/**
 	 * Act as if the sound was clicked.
 	 */
-	private void doSoundClick()
+	public void doSoundClick()
 	{
 		this.mSound.startActivity();
 	}
@@ -224,7 +233,7 @@ public class NacCardHolder
 	/**
 	 * Act as if the summary was clicked.
 	 */
-	private void doSummaryClick()
+	public void doSummaryClick()
 	{
 		this.mCard.expand();
 	}
@@ -232,7 +241,7 @@ public class NacCardHolder
 	/**
 	 * Act as if the switch was changed.
 	 */
-	private void doSwitchCheckedChanged(boolean state)
+	public void doSwitchCheckedChanged(boolean state)
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
@@ -256,7 +265,7 @@ public class NacCardHolder
 	/**
 	 * Act as if the time was clicked.
 	 */
-	private void doTimeClick()
+	public void doTimeClick()
 	{
 		this.mTime.showDialog(this);
 	}
@@ -264,7 +273,7 @@ public class NacCardHolder
 	/**
 	 * Act as if the vibrate button was clicked.
 	 */
-	private void doVibrateButtonClick()
+	public void doVibrateButtonClick()
 	{
 		NacAlarm alarm = this.getAlarm();
 
@@ -277,7 +286,7 @@ public class NacCardHolder
 	/**
 	 * Act as if the volume setting button was clicked.
 	 */
-	private void doVolumeSettingButtonClick()
+	public void doVolumeSettingButtonClick()
 	{
 		this.mSound.showAudioSourceDialog(this);
 	}
@@ -885,7 +894,7 @@ public class NacCardHolder
 		String message = alarm.getUseNfc() ? cons.getMessageNfcRequired()
 			: cons.getMessageNfcOptional();
 
-		NacUtility.quickToast(context, message);
+		//NacUtility.quickToast(context, message);
 	}
 
 	/**
