@@ -140,9 +140,6 @@ public class NacCardHolder
 	 */
 	public void doCollapseButtonClick()
 	{
-		Context context = this.getContext();
-		NacAlarm alarm = this.getAlarm();
-		NacUtility.quickToast(context, "Collapse NFC Tag : "+alarm.getNfcTagId());
 		this.mCard.collapse();
 	}
 
@@ -457,17 +454,22 @@ public class NacCardHolder
 	public void onClick(View view)
 	{
 		int id = view.getId();
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
 
 		if (id == R.id.nac_header)
 		{
+			NacUtility.quickToast(context, "Header NFC Tag : "+alarm.getNfcTagId());
 			this.respondToHeaderClick(view);
 		}
 		else if (id == R.id.nac_summary)
 		{
+			NacUtility.quickToast(context, "Summary NFC Tag : "+alarm.getNfcTagId());
 			this.respondToSummaryClick(view);
 		}
 		else if (id == R.id.nac_collapse)
 		{
+			NacUtility.quickToast(context, "Collapse NFC Tag : "+alarm.getNfcTagId());
 			this.respondToCollapseButtonClick(view);
 		}
 		else if (id == R.id.nac_time_parent)

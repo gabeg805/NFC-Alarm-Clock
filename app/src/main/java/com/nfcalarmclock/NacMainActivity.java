@@ -258,6 +258,7 @@ public class NacMainActivity
 	public boolean onDismissDialog(NacDialog dialog)
 	{
 		NacAlarm alarm = (NacAlarm) dialog.getData();
+		NacUtility.quickToast(this, "OnDismiss NFC Tag : "+alarm.getNfcTagId());
 		alarm.setNfcTagId("");
 		alarm.changed();
 
@@ -276,8 +277,6 @@ public class NacMainActivity
 		}
 
 		NacScanNfcTagDialog dialog = new NacScanNfcTagDialog();
-		//Intent intent = new Intent(this, getClass())
-		//	.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
 		dialog.build(this);
 		dialog.saveData(alarm);

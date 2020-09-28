@@ -707,6 +707,7 @@ public class NacCardAdapter
 			}
 		}
 
+		NacUtility.quickToast(context, "OnChange NFC Tag : "+alarm.getNfcTagId());
 		NacScheduler.update(context, alarm);
 		this.setWasAddedWithFloatingActionButton(false);
 		this.updateNotification();

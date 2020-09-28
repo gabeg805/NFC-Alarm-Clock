@@ -463,7 +463,6 @@ public class NacDatabase
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
 	{
 		List<NacAlarm> alarms = this.read(db, oldVersion);
-
 		db.execSQL(Contract.AlarmTable.DELETE_TABLE);
 
 		switch (newVersion)
@@ -881,7 +880,7 @@ public class NacDatabase
 		/**
 		 * Database version.
 		 */
-		public static final int DATABASE_VERSION = 4;
+		public static final int DATABASE_VERSION = 5;
 
 		/**
 		 * prevent someone from instantiating the contract class.
