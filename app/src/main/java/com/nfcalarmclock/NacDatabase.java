@@ -24,14 +24,19 @@ public class NacDatabase
 {
 
 	/**
+	 * Database version.
+	 */
+	public static final int DATABASE_VERSION = 5;
+
+	/**
+	 * Database name.
+	 */
+	public static final String DATABASE_NAME = "NFCAlarms.db";
+
+	/**
 	 * The context.
 	 */
 	private Context mContext;
-
-	/**
-	 * The database.
-	 */
-	private SQLiteDatabase mDatabase;
 
 	/**
 	 * Check if the database was upgraded.
@@ -42,11 +47,8 @@ public class NacDatabase
 	 */
 	public NacDatabase(Context context)
 	{
-		super(context, Contract.DATABASE_NAME, null,
-			Contract.DATABASE_VERSION);
-
+		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		this.mContext = context;
-		this.mDatabase = null;
 		this.mWasUpgraded = false;
 	}
 
@@ -55,10 +57,7 @@ public class NacDatabase
 	 */
 	public long add(NacAlarm alarm)
 	{
-		this.setDatabase();
-
-		SQLiteDatabase db = this.getDatabase();
-
+		SQLiteDatabase db = getWritableDatabase();
 		return this.add(db, alarm);
 	}
 
@@ -81,11 +80,10 @@ public class NacDatabase
 		}
 
 		ContentValues cv = this.getContentValues(version, alarm);
-		String table = this.getTable();
+		String table = this.getAlarmTable();
 		long result = 0;
 
 		db.beginTransaction();
-
 		try
 		{
 			result = db.insert(table, null, cv);
@@ -104,10 +102,7 @@ public class NacDatabase
 	 */
 	public long delete(NacAlarm alarm)
 	{
-		this.setDatabase();
-
-		SQLiteDatabase db = this.getDatabase();
-
+		SQLiteDatabase db = getWritableDatabase();
 		return this.delete(db, alarm);
 	}
 
@@ -121,17 +116,15 @@ public class NacDatabase
 			return -1;
 		}
 
-		String table = this.getTable();
+		String table = this.getAlarmTable();
 		String where = this.getWhereClause();
 		String[] args = this.getWhereArgs(alarm);
 		long result = 0;
 
 		db.beginTransaction();
-
 		try
 		{
 			result = db.delete(table, where, args);
-
 			db.setTransactionSuccessful();
 		}
 		finally
@@ -147,14 +140,11 @@ public class NacDatabase
 	 */
 	public NacAlarm findAlarm(int id)
 	{
-		this.setDatabase();
-
-		SQLiteDatabase db = this.getDatabase();
-		String table = this.getTable();
+		SQLiteDatabase db = getWritableDatabase();
+		String table = this.getAlarmTable();
 		String where = this.getWhereClause();
 		String[] whereArgs = this.getWhereArgs(id);
-		Cursor cursor = db.query(table, null, where, whereArgs, null, null,
-			null);
+		Cursor cursor = db.query(table, null, where, whereArgs, null, null, null);
 		int version = db.getVersion();
 		NacAlarm alarm = null;
 
@@ -181,8 +171,6 @@ public class NacDatabase
 	 */
 	public NacAlarm findAlarm(Calendar calendar)
 	{
-		this.setDatabase();
-
 		String hour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
 		String minute = String.valueOf(calendar.get(Calendar.MINUTE));
 		NacCalendar.Day day = NacCalendar.Days.toWeekDay(
@@ -193,17 +181,16 @@ public class NacDatabase
 		String whereClause = Contract.AlarmTable.COLUMN_HOUR + "=? AND "
 			+ Contract.AlarmTable.COLUMN_MINUTE + "=?";
 
-		SQLiteDatabase db = this.getDatabase();
+		SQLiteDatabase db = getWritableDatabase();
 		int version = db.getVersion();
-		String table = this.getTable();
-		Cursor cursor = db.query(table, null, whereClause, whereArgs, null,
-			null, null);
+		String table = this.getAlarmTable();
+		Cursor cursor = db.query(table, null, whereClause, whereArgs, null, null,
+			null);
 
 		while (cursor.moveToNext())
 		{
 			NacAlarm a = this.toAlarm(cursor, version);
-
-			if ((alarm != null) && alarm.getDays().contains(day))
+			if ((a != null) && a.getDays().contains(day))
 			{
 				alarm = a;
 				break;
@@ -226,7 +213,6 @@ public class NacDatabase
 
 		NacDatabase db = new NacDatabase(context);
 		NacAlarm foundAlarm = db.findAlarm(id);
-
 		db.close();
 		return foundAlarm;
 	}
@@ -251,9 +237,16 @@ public class NacDatabase
 
 		NacDatabase db = new NacDatabase(context);
 		NacAlarm foundAlarm = db.findAlarm(calendar);
-
 		db.close();
 		return foundAlarm;
+	}
+
+	/**
+	 * @return The alarm table name.
+	 */
+	private String getAlarmTable()
+	{
+		return Contract.AlarmTable.TABLE_NAME;
 	}
 
 	/**
@@ -270,34 +263,28 @@ public class NacDatabase
 
 		ContentValues cv = new ContentValues();
 
-		cv.put(Contract.AlarmTable.COLUMN_ID, alarm.getId());
-		cv.put(Contract.AlarmTable.COLUMN_ENABLED, alarm.getEnabled());
-		cv.put(Contract.AlarmTable.COLUMN_HOUR, alarm.getHour());
-		cv.put(Contract.AlarmTable.COLUMN_MINUTE, alarm.getMinute());
-		cv.put(Contract.AlarmTable.COLUMN_DAYS, NacCalendar.Days.daysToValue(alarm.getDays()));
-		cv.put(Contract.AlarmTable.COLUMN_REPEAT, alarm.getRepeat());
-		cv.put(Contract.AlarmTable.COLUMN_VIBRATE, alarm.getVibrate());
-		cv.put(Contract.AlarmTable.COLUMN_NAME, alarm.getName());
-		cv.put(Contract.AlarmTable.COLUMN_SOUND_PATH, alarm.getMediaPath());
-
 		switch (version)
 		{
-			case 0:
 			case 5:
 				cv.put(Contract.AlarmTable.COLUMN_NFC_TAG, alarm.getNfcTagId());
 			case 4:
+			default:
+				cv.put(Contract.AlarmTable.COLUMN_ID, alarm.getId());
+				cv.put(Contract.AlarmTable.COLUMN_ENABLED, alarm.getEnabled());
+				cv.put(Contract.AlarmTable.COLUMN_HOUR, alarm.getHour());
+				cv.put(Contract.AlarmTable.COLUMN_MINUTE, alarm.getMinute());
+				cv.put(Contract.AlarmTable.COLUMN_DAYS, NacCalendar.Days.daysToValue(alarm.getDays()));
+				cv.put(Contract.AlarmTable.COLUMN_REPEAT, alarm.getRepeat());
+				cv.put(Contract.AlarmTable.COLUMN_VIBRATE, alarm.getVibrate());
+				cv.put(Contract.AlarmTable.COLUMN_MEDIA_PATH, alarm.getMediaPath());
+				cv.put(Contract.AlarmTable.COLUMN_NAME, alarm.getName());
 				cv.put(Contract.AlarmTable.COLUMN_VOLUME, alarm.getVolume());
 				cv.put(Contract.AlarmTable.COLUMN_AUDIO_SOURCE, alarm.getAudioSource());
-			case 3:
 				cv.put(Contract.AlarmTable.COLUMN_USE_NFC, alarm.getUseNfc());
-			case 2:
-				cv.put(Contract.AlarmTable.COLUMN_SOUND_TYPE, alarm.getMediaType());
-				cv.put(Contract.AlarmTable.COLUMN_SOUND_NAME, alarm.getMediaTitle());
-			case 1:
-			default:
+				cv.put(Contract.AlarmTable.COLUMN_MEDIA_TYPE, alarm.getMediaType());
+				cv.put(Contract.AlarmTable.COLUMN_MEDIA_NAME, alarm.getMediaTitle());
 				break;
 		}
-
 
 		return cv;
 	}
@@ -311,22 +298,12 @@ public class NacDatabase
 	}
 
 	/**
-	 * @return The SQLiteDatabase.
-	 */
-	private SQLiteDatabase getDatabase()
-	{
-		return this.mDatabase;
-	}
-
-	/**
 	 * @return The row of the database corresponding to the alarm.
 	 */
 	private Cursor getRow(NacAlarm alarm)
 	{
-		this.setDatabase();
-
-		SQLiteDatabase db = this.getDatabase();
-		String table = this.getTable();
+		SQLiteDatabase db = getWritableDatabase();
+		String table = this.getAlarmTable();
 		int id = alarm.getId();
 		String where = this.getWhereClause();
 		String[] whereArgs = this.getWhereArgs(id);
@@ -345,21 +322,11 @@ public class NacDatabase
 		if ((cursor != null) && (cursor.getCount() == 1))
 		{
 			cursor.moveToFirst();
-
 			id = cursor.getInt(0);
-
 			cursor.close();
 		}
 
 		return id;
-	}
-
-	/**
-	 * @return The table name.
-	 */
-	private String getTable()
-	{
-		return Contract.AlarmTable.TABLE_NAME;
 	}
 
 	/**
@@ -370,7 +337,6 @@ public class NacDatabase
 	private String[] getWhereArgs(int value)
 	{
 		String id = String.valueOf(value);
-
 		return new String[] {id};
 	}
 
@@ -387,7 +353,6 @@ public class NacDatabase
 		}
 
 		String id = String.valueOf(alarm.getId());
-
 		return new String[] {id};
 	}
 
@@ -405,6 +370,25 @@ public class NacDatabase
 	private String getWhereClause()
 	{
 		return Contract.AlarmTable.COLUMN_ID + "=?";
+	}
+
+	/**
+	 * Refresh the cached database when an update occurs, otherwise, return the
+	 * database as you would normally.
+	 */
+	@Override
+	public SQLiteDatabase getWritableDatabase()
+	{
+		SQLiteDatabase db = super.getWritableDatabase();
+
+		if (this.wasUpgraded())
+		{
+			db.close();
+			db = super.getWritableDatabase();
+			this.mWasUpgraded = false;
+		}
+
+		return db;
 	}
 
 	/**
@@ -468,15 +452,6 @@ public class NacDatabase
 
 		switch (newVersion)
 		{
-			case 1:
-				db.execSQL(Contract.AlarmTable.CREATE_TABLE_V1);
-				break;
-			case 2:
-				db.execSQL(Contract.AlarmTable.CREATE_TABLE_V2);
-				break;
-			case 3:
-				db.execSQL(Contract.AlarmTable.CREATE_TABLE_V3);
-				break;
 			case 4:
 				db.execSQL(Contract.AlarmTable.CREATE_TABLE_V4);
 				break;
@@ -499,10 +474,7 @@ public class NacDatabase
 	 */
 	public void print()
 	{
-		this.setDatabase();
-
 		List<NacAlarm> list = this.read();
-
 		for (NacAlarm a : list)
 		{
 			a.print();
@@ -515,11 +487,8 @@ public class NacDatabase
 	 */
 	public List<NacAlarm> read()
 	{
-		this.setDatabase();
-
-		SQLiteDatabase db = this.getDatabase();
+		SQLiteDatabase db = getWritableDatabase();
 		int version = db.getVersion();
-
 		return this.read(db, version);
 	}
 
@@ -528,82 +497,28 @@ public class NacDatabase
 	 */
 	public List<NacAlarm> read(SQLiteDatabase db, int version)
 	{
-		String table = this.getTable();
+		String table = this.getAlarmTable();
 		Cursor cursor = db.query(table, null, null, null, null, null, null);
 		List<NacAlarm> list = new ArrayList<>();
 
 		while (cursor.moveToNext())
 		{
 			NacAlarm alarm = this.toAlarm(cursor, version);
-
 			list.add(alarm);
 		}
 
 		cursor.close();
-
 		return list;
 	}
 
 	/**
 	 * Sort the database.
 	 */
-	//public void sort(List<NacAlarm> current, List<NacAlarm> sorted)
 	public void sort(List<NacAlarm> sorted)
 	{
-		this.setDatabase();
-
-		//NacUtility.printf("SOOOOOOOOOOOOOOOOOOOOOOOOOOORT");
-		//SQLiteDatabase db = this.getDatabase();
-		//String table = this.getTable();
-		//Cursor cursor = db.query(table, null, null, null, null, null, null);
-
-		//while (cursor.moveToNext())
-		//{
-		//	NacUtility.printf("ID : %d", cursor.getInt(0));
-		//	NacAlarm alarm = this.toAlarm(cursor, 0);
-		//	alarm.print();
-		//}
-
-		//cursor.close();
-		//NacUtility.printf("SOOOOOOOOOOOOOOOOOOOOOOOOOOORT");
-
 		for (int i=0; i < sorted.size(); i++)
 		{
-			//sorted.get(i).print();
 			this.updateRow(i+1, sorted.get(i));
-		}
-
-		//NacUtility.printf("AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-
-		//SQLiteDatabase db = this.getDatabase();
-		//String table = this.getTable();
-		//Cursor cursor = db.query(table, null, null, null, null, null, null);
-
-		//while (cursor.moveToNext())
-		//{
-		//	NacUtility.printf("ID : %d", cursor.getInt(0));
-		//	NacAlarm alarm = this.toAlarm(cursor, 0);
-		//	alarm.print();
-		//}
-
-		//NacUtility.printf("ENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNND");
-	}
-
-	/**
-	 * Set the database if it is not currently set.
-	 */
-	public void setDatabase()
-	{
-		if (this.getDatabase() == null)
-		{
-			this.mDatabase = getWritableDatabase();
-
-			if (this.wasUpgraded())
-			{
-				this.mWasUpgraded = false;
-				this.mDatabase.close();
-				this.mDatabase = getWritableDatabase();
-			}
 		}
 	}
 
@@ -618,8 +533,6 @@ public class NacDatabase
 	 */
 	public long swap(NacAlarm fromAlarm, NacAlarm toAlarm)
 	{
-		this.setDatabase();
- 
 		if ((fromAlarm == null) || (toAlarm == null))
 		{
 			return -1;
@@ -628,9 +541,9 @@ public class NacDatabase
 		int fromId = this.getRowId(fromAlarm);
 		int toId = this.getRowId(toAlarm);
  
-		SQLiteDatabase db = this.getDatabase();
+		SQLiteDatabase db = getWritableDatabase();
 		int version = db.getVersion();
-		String table = this.getTable();
+		String table = this.getAlarmTable();
 		ContentValues fromCv = this.getContentValues(version, fromAlarm);
 		ContentValues toCv = this.getContentValues(version, toAlarm);
 		String where = this.getWhereIdClause();
@@ -639,7 +552,6 @@ public class NacDatabase
 		long result = 0;
 
 		db.beginTransaction();
-
 		try
 		{
 			long fromRows = db.update(table, fromCv, where, fromArgs);
@@ -672,8 +584,10 @@ public class NacDatabase
 
 		switch (version)
 		{
-			case 0:
+			case 5:
+				alarm.setNfcTagId(cursor.getString(15));
 			case 4:
+			default:
 				alarm.setId(cursor.getInt(1));
 				alarm.setEnabled((cursor.getInt(2) != 0));
 				alarm.setHour(cursor.getInt(3));
@@ -689,45 +603,9 @@ public class NacDatabase
 				alarm.setMediaTitle(cursor.getString(13));
 				alarm.setName(cursor.getString(14));
 				break;
-			case 3:
-				offset = 1;
-				alarm.setUseNfc((cursor.getInt(7) != 0));
-			case 2:
-				offset = (offset < 0) ? 0: offset;
-				alarm.setId(cursor.getInt(1));
-				alarm.setEnabled((cursor.getInt(2) != 0));
-				alarm.setHour(cursor.getInt(3));
-				alarm.setMinute(cursor.getInt(4));
-				alarm.setDays(cursor.getInt(5));
-				alarm.setRepeat((cursor.getInt(6) != 0));
-				alarm.setVibrate((cursor.getInt(7+offset) != 0));
-				alarm.setMediaType(cursor.getInt(8+offset));
-				alarm.setMediaPath(cursor.getString(9+offset));
-				alarm.setMediaTitle(cursor.getString(10+offset));
-				alarm.setName(cursor.getString(11+offset));
-				break;
-			case 1:
-			default:
-				alarm.setId(cursor.getInt(1));
-				alarm.setEnabled((cursor.getInt(2) != 0));
-				// Index 3: 24 hour format
-				alarm.setHour(cursor.getInt(4));
-				alarm.setMinute(cursor.getInt(5));
-				alarm.setDays(cursor.getInt(6));
-				alarm.setRepeat((cursor.getInt(7) != 0));
-				alarm.setVibrate((cursor.getInt(8) != 0));
-				alarm.setMediaPath(cursor.getString(9));
-				alarm.setName(cursor.getString(10));
-				// Index 11: NFC tag
-				alarm.setMediaType(NacMedia.getType(context,
-					alarm.getMediaPath()));
-				alarm.setMediaTitle(NacMedia.getTitle(context,
-					alarm.getMediaPath()));
-				break;
 		}
 
 		alarm.resetChangeTracker();
-
 		return alarm;
 	}
 
@@ -736,8 +614,6 @@ public class NacDatabase
 	 */
 	public long update(NacAlarm alarm)
 	{
-		this.setDatabase();
-
 		List<NacAlarm> list = new ArrayList<>();
 		list.add(alarm);
 		return this.update(list);
@@ -748,9 +624,7 @@ public class NacDatabase
 	 */
 	public long update(List<NacAlarm> alarms)
 	{
-		this.setDatabase();
-
-		SQLiteDatabase db = this.getDatabase();
+		SQLiteDatabase db = getWritableDatabase();
 		return this.update(db, alarms);
 	}
 
@@ -775,12 +649,11 @@ public class NacDatabase
 		}
 
 		int version = db.getVersion();
-		String table = this.getTable();
+		String table = this.getAlarmTable();
 		String where = this.getWhereClause();
 		long result = 0;
 
 		db.beginTransaction();
-
 		try
 		{
 			for (NacAlarm a : alarms)
@@ -810,9 +683,7 @@ public class NacDatabase
 	 */
 	public long updateRow(int row, NacAlarm alarm)
 	{
-		this.setDatabase();
-
-		SQLiteDatabase db = this.getDatabase();
+		SQLiteDatabase db = getWritableDatabase();
 		return this.updateRow(db, row, alarm);
 	}
 
@@ -827,18 +698,16 @@ public class NacDatabase
 		}
 
 		int version = db.getVersion();
-		String table = this.getTable();
+		String table = this.getAlarmTable();
 		ContentValues cv = this.getContentValues(version, alarm);
 		String where = this.getWhereIdClause();
 		String[] args = this.getWhereArgs(row);
 		long result = 0;
 
 		db.beginTransaction();
-
 		try
 		{
 			result = db.update(table, cv, where, args);
-
 			db.setTransactionSuccessful();
 		}
 		finally
@@ -872,16 +741,6 @@ public class NacDatabase
 		 * Scheme.
 		 */
 		public static final String SCHEME = "content://";
-
-		/**
-		 * Database name.
-		 */
-		public static final String DATABASE_NAME = "NFCAlarms.db";
-
-		/**
-		 * Database version.
-		 */
-		public static final int DATABASE_VERSION = 4;
 
 		/**
 		 * prevent someone from instantiating the contract class.
@@ -962,32 +821,22 @@ public class NacDatabase
 			/**
 			 * Type of media.
 			 */
-			public static final String COLUMN_SOUND_TYPE = "SoundType";
+			public static final String COLUMN_MEDIA_TYPE = "SoundType";
 
 			/**
 			 * Path to the media file.
 			 */
-			public static final String COLUMN_SOUND_PATH = "SoundPath";
+			public static final String COLUMN_MEDIA_PATH = "SoundPath";
 
 			/**
 			 * Title of the media.
 			 */
-			public static final String COLUMN_SOUND_NAME = "SoundName";
+			public static final String COLUMN_MEDIA_NAME = "SoundName";
 
 			/**
 			 * Name of the alarm.
 			 */
 			public static final String COLUMN_NAME = "Name";
-
-			/**
-			 * Hour format.
-			 */
-			public static final String COLUMN_24HOURFORMAT = "HourFormat";
-
-			/**
-			 * Path to the media file.
-			 */
-			public static final String COLUMN_SOUND = "Sound";
 
 			/**
 			 * NFC tag.
@@ -1043,9 +892,9 @@ public class NacDatabase
 				+ COLUMN_VIBRATE + " INTEGER,"
 				+ COLUMN_VOLUME + " INTEGER,"
 				+ COLUMN_AUDIO_SOURCE + " TEXT,"
-				+ COLUMN_SOUND_TYPE + " INTEGER,"
-				+ COLUMN_SOUND_PATH + " TEXT,"
-				+ COLUMN_SOUND_NAME + " TEXT,"
+				+ COLUMN_MEDIA_TYPE + " INTEGER,"
+				+ COLUMN_MEDIA_PATH + " TEXT,"
+				+ COLUMN_MEDIA_NAME + " TEXT,"
 				+ COLUMN_NAME + " TEXT,"
 				+ COLUMN_NFC_TAG + " TEXT"
 				+ ");";
@@ -1067,71 +916,10 @@ public class NacDatabase
 				+ COLUMN_VIBRATE + " INTEGER,"
 				+ COLUMN_VOLUME + " INTEGER,"
 				+ COLUMN_AUDIO_SOURCE + " TEXT,"
-				+ COLUMN_SOUND_TYPE + " INTEGER,"
-				+ COLUMN_SOUND_PATH + " TEXT,"
-				+ COLUMN_SOUND_NAME + " TEXT,"
+				+ COLUMN_MEDIA_TYPE + " INTEGER,"
+				+ COLUMN_MEDIA_PATH + " TEXT,"
+				+ COLUMN_MEDIA_NAME + " TEXT,"
 				+ COLUMN_NAME + " TEXT"
-				+ ");";
-
-			/**
-			 * SQL Statement to create the table (version 3).
-			 */
-			public static final String CREATE_TABLE_V3 =
-				"CREATE TABLE " + TABLE_NAME
-				+ " ("
-				+ _ID + " INTEGER PRIMARY KEY,"
-				+ COLUMN_ID + " INTEGER,"
-				+ COLUMN_ENABLED + " INTEGER,"
-				+ COLUMN_HOUR + " INTEGER,"
-				+ COLUMN_MINUTE + " INTEGER,"
-				+ COLUMN_DAYS + " INTEGER,"
-				+ COLUMN_REPEAT + " INTEGER,"
-				+ COLUMN_USE_NFC + " INTEGER,"
-				+ COLUMN_VIBRATE + " INTEGER,"
-				+ COLUMN_SOUND_TYPE + " INTEGER,"
-				+ COLUMN_SOUND_PATH + " TEXT,"
-				+ COLUMN_SOUND_NAME + " TEXT,"
-				+ COLUMN_NAME + " TEXT"
-				+ ");";
-
-			/**
-			 * SQL Statement to create the table (version 2).
-			 */
-			public static final String CREATE_TABLE_V2 =
-				"CREATE TABLE " + TABLE_NAME
-				+ " ("
-				+ _ID + " INTEGER PRIMARY KEY,"
-				+ COLUMN_ID + " INTEGER,"
-				+ COLUMN_ENABLED + " INTEGER,"
-				+ COLUMN_HOUR + " INTEGER,"
-				+ COLUMN_MINUTE + " INTEGER,"
-				+ COLUMN_DAYS + " INTEGER,"
-				+ COLUMN_REPEAT + " INTEGER,"
-				+ COLUMN_VIBRATE + " INTEGER,"
-				+ COLUMN_SOUND_TYPE + " INTEGER,"
-				+ COLUMN_SOUND_PATH + " TEXT,"
-				+ COLUMN_SOUND_NAME + " TEXT,"
-				+ COLUMN_NAME + " TEXT"
-				+ ");";
-
-			/**
-			 * SQL Statement to create the routes table.
-			 */
-			public static final String CREATE_TABLE_V1 =
-				"CREATE TABLE " + TABLE_NAME
-				+ " ("
-				+ _ID + " INTEGER PRIMARY KEY,"
-				+ COLUMN_ID + " INTEGER,"
-				+ COLUMN_ENABLED + " INTEGER,"
-				+ COLUMN_24HOURFORMAT + " INTEGER,"
-				+ COLUMN_HOUR + " INTEGER,"
-				+ COLUMN_MINUTE + " INTEGER,"
-				+ COLUMN_DAYS + " INTEGER,"
-				+ COLUMN_REPEAT + " INTEGER,"
-				+ COLUMN_VIBRATE + " INTEGER,"
-				+ COLUMN_SOUND + " TEXT,"
-				+ COLUMN_NAME + " TEXT,"
-				+ COLUMN_NFC_TAG + " TEXT"
 				+ ");";
 
 			/**
@@ -1154,10 +942,11 @@ public class NacDatabase
 				COLUMN_VIBRATE,
 				COLUMN_VOLUME,
 				COLUMN_AUDIO_SOURCE,
-				COLUMN_SOUND_TYPE,
-				COLUMN_SOUND_PATH,
-				COLUMN_SOUND_NAME,
+				COLUMN_MEDIA_TYPE,
+				COLUMN_MEDIA_PATH,
+				COLUMN_MEDIA_NAME,
 				COLUMN_NAME,
+				COLUMN_NFC_TAG
 			};
 
 		}
