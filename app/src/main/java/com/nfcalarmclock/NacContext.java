@@ -15,14 +15,7 @@ public class NacContext
 	 */
 	public static void stopActiveAlarm(Context context)
 	{
-		StatusBarNotification notification = NacNotificationHelper
-			.getActiveNotification(context);
-		if (notification == null)
-		{
-			return;
-		}
-
-		NacAlarm alarm = NacNotificationHelper.findAlarm(context, notification);
+		NacAlarm alarm = NacNotificationHelper.findAlarm(context);
 		if (alarm == null)
 		{
 			return;

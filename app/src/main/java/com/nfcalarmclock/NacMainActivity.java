@@ -399,7 +399,21 @@ public class NacMainActivity
 			return;
 		}
 
-		NacContext.stopActiveAlarm(this);
+		NacAlarm alarm = NacNotificationHelper.findAlarm(this);
+		if (alarm == null)
+		{
+			return;
+		}
+
+		if (NacNfc.doIdsMatch(alarm, intent))
+		{
+			NacContext.stopForegroundService(this, alarm);
+		}
+		else
+		{
+			NacSharedConstants cons = new NacSharedConstants(this);
+			NacUtility.quickToast(this, cons.getErrorMessageNfcMismatch());
+		}
 	}
 
 	/**

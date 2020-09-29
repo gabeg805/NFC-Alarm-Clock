@@ -21,6 +21,11 @@ public class NacNfc
 	 */
 	public static boolean doIdsMatch(NacAlarm alarm, Intent intent)
 	{
+		if ((alarm == null) || (intent == null))
+		{
+			return false;
+		}
+
 		Tag nfcTag = NacNfc.getTag(intent);
 		if (nfcTag == null)
 		{

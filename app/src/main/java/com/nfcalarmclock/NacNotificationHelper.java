@@ -25,6 +25,16 @@ public class NacNotificationHelper
 	}
 
 	/**
+	 * @see findAlarm
+	 */
+	public static NacAlarm findAlarm(Context context)
+	{
+		StatusBarNotification notification = NacNotificationHelper
+			.getActiveNotification(context);
+		return NacNotificationHelper.findAlarm(context, notification);
+	}
+
+	/**
 	 * @return NacAlarm that is found by using the information in the currently
 	 *         active notification
 	 */
