@@ -15,11 +15,22 @@ public class NacNfc
 {
 
 	/**
+	 * Check the saved NFC tag ID in the alarm against the one in the intent.
+	 * Return True if the alarm does not have a saved ID, or if the IDs match,
+	 * and False otherwise.
 	 */
-	//public NacNfc(Context context)
-	//{
-	//	this.mContext = context;
-	//}
+	public static boolean doIdsMatch(NacAlarm alarm, Intent intent)
+	{
+		Tag nfcTag = NacNfc.getTag(intent);
+		if (nfcTag == null)
+		{
+			return false;
+		}
+
+		String nfcId = NacNfc.parseId(nfcTag);
+		String alarmId = alarm.getNfcTagId();
+		return alarmId.isEmpty() || alarmId.equals(nfcId);
+	}
 
 	/**
 	 * Check if NFC exists on this device.

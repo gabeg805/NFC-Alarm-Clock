@@ -91,7 +91,7 @@ public class NacNameDialog
 		this.mEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
 		this.mEditText.setBackgroundTintList(ColorStateList.valueOf(shared.getThemeColor()));
 		showKeyboard();
-		scale(0.9, 0.5, false, true);
+		scale(0.85, 0.5, false, true);
 	}
 
 }

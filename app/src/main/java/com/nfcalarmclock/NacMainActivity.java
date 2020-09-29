@@ -179,7 +179,9 @@ public class NacMainActivity
 
 		if (dialog != null)
 		{
+			NacSharedConstants cons = new NacSharedConstants(this);
 			this.saveNfcTagId(intent);
+			NacUtility.quickToast(this, cons.getMessageNfcRequired());
 		}
 		else
 		{
@@ -257,10 +259,12 @@ public class NacMainActivity
 	@Override
 	public boolean onDismissDialog(NacDialog dialog)
 	{
+		NacSharedConstants cons = new NacSharedConstants(this);
 		NacAlarm alarm = (NacAlarm) dialog.getData();
-		NacUtility.quickToast(this, "OnDismiss NFC Tag : "+alarm.getNfcTagId());
+
 		alarm.setNfcTagId("");
 		alarm.changed();
+		NacUtility.quickToast(this, cons.getMessageNfcRequired());
 
 		this.mScanNfcTagDialog = null;
 		return true;
@@ -382,7 +386,7 @@ public class NacMainActivity
 	}
 
 	/**
-	 * Setup an NFC scan checker, which check if this activity was started by an
+	 * Setup an NFC scan checker, which checks if this activity was started by an
 	 * NFC tag being scanned.
 	 */
 	private void setupNfcScanCheck()

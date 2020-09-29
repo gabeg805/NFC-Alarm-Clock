@@ -19,8 +19,8 @@
 		<ImageView
 			android:layout_width="@dimen/isz_focus"
 			android:layout_height="@dimen/isz_focus"
-			android:layout_marginTop="@dimen/sp_main"
-			android:layout_marginBottom="@dimen/sp_main"
+			android:layout_marginTop="@dimen/sp_section"
+			android:layout_marginBottom="@dimen/sp_section"
 			android:layout_gravity="center"
 			android:contentDescription="Scan an NFC tag"
 			android:src="@mipmap/tap_and_play"

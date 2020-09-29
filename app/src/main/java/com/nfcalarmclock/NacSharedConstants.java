@@ -253,6 +253,14 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Mismatch between the scanned NFC tag and the saved tag.
+	 */
+	public String getErrorMessageNfcMismatch()
+	{
+		return this.getString(R.string.error_message_nfc_mismatch);
+	}
+
+	/**
 	 * @return NFC is unsupported error message.
 	 */
 	public String getErrorMessageNfcUnsupported()

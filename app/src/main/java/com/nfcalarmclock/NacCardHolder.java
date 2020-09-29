@@ -199,11 +199,11 @@ public class NacCardHolder
 		if (!alarm.getUseNfc())
 		{
 			alarm.setNfcTagId("");
+			this.toastNfc();
 		}
 
 		alarm.changed();
 		this.mUseNfc.set();
-		this.toastNfc();
 	}
 
 	/**
@@ -896,7 +896,7 @@ public class NacCardHolder
 		String message = alarm.getUseNfc() ? cons.getMessageNfcRequired()
 			: cons.getMessageNfcOptional();
 
-		//NacUtility.quickToast(context, message);
+		NacUtility.quickToast(context, message);
 	}
 
 	/**

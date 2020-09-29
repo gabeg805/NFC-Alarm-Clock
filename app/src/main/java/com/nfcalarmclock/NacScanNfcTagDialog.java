@@ -41,7 +41,7 @@ public class NacScanNfcTagDialog
 	@Override
 	public void onShowDialog(NacDialog dialog, View root)
 	{
-		scale(0.8, 0.8, false, true);
+		scale(0.85, 0.8, false, true);
 	}
 
 }

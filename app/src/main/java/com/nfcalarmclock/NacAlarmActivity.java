@@ -100,6 +100,28 @@ public class NacAlarmActivity
 	}
 
 	/**
+	 * Dismiss due to an NFC tag being scanned.
+	 */
+	private void dismissByNfcScan(Intent intent)
+	{
+		if (!NacNfc.wasScanned(this, intent))
+		{
+			return;
+		}
+
+		NacAlarm alarm = this.getAlarm();
+		if (NacNfc.doIdsMatch(alarm, intent))
+		{
+			this.dismiss();
+		}
+		else
+		{
+			NacSharedConstants cons = new NacSharedConstants(this);
+			NacUtility.quickToast(this, cons.getErrorMessageNfcMismatch());
+		}
+	}
+
+	/**
 	 * @return The alarm.
 	 */
 	private NacAlarm getAlarm()
@@ -143,7 +165,6 @@ public class NacAlarmActivity
 			&& shared.getEasySnooze()))
 		{
 			this.snooze();
-
 		}
 		else if (id == R.id.dismiss)
 		{
@@ -162,14 +183,13 @@ public class NacAlarmActivity
 		setContentView(R.layout.act_alarm);
 		this.setAlarm(savedInstanceState);
 
-		NacAlarm alarm = this.getAlarm();
+		Intent intent = getIntent();
 		this.mSharedPreferences = new NacSharedPreferences(this);
 		this.mStopReceiver = new StopActivityReceiver();
 
-		if (NacNfc.wasScanned(this, getIntent()))
+		if (NacNfc.wasScanned(this, intent))
 		{
-			this.dismiss();
-			return;
+			this.dismissByNfcScan(intent);
 		}
 
 		this.setupShowWhenLocked();
@@ -186,8 +206,7 @@ public class NacAlarmActivity
 	@Override
 	protected void onNewIntent(Intent intent)
 	{
-		this.dismiss();
-		//super.onNewIntent(intent);
+		this.dismissByNfcScan(intent);
 	}
 
 	/**
