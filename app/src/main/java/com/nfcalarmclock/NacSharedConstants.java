@@ -469,6 +469,14 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Show NFC tag ID message.
+	 */
+	public String getMessageShowNfcTagId()
+	{
+		return this.getString(R.string.message_show_nfc_tag_id);
+	}
+
+	/**
 	 * @return Vibrate disabled message.
 	 */
 	public String getMessageVibrateDisabled()

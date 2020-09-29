@@ -144,6 +144,16 @@ public class NacIntent
 	}
 
 	/**
+	 * @return An intent that will be used to dismiss the foreground alarm service.
+	 */
+	public static Intent dismissForegroundService(Context context, NacAlarm alarm)
+	{
+		Intent intent = new Intent(NacForegroundService.ACTION_DISMISS_ALARM, null,
+			context, NacForegroundService.class);
+		return NacIntent.addAlarm(intent, alarm);
+	}
+
+	/**
 	 * @return The intent action (never null).
 	 */
 	public static String getAction(Intent intent)
@@ -335,6 +345,16 @@ public class NacIntent
 
 		return (action != null) ? action.equals(AlarmClock.ACTION_SET_ALARM)
 			: false;
+	}
+
+	/**
+	 * @return An intent that will be used to snooze the foreground alarm service.
+	 */
+	public static Intent snoozeForegroundService(Context context, NacAlarm alarm)
+	{
+		Intent intent = new Intent(NacForegroundService.ACTION_SNOOZE_ALARM, null,
+			context, NacForegroundService.class);
+		return NacIntent.addAlarm(intent, alarm);
 	}
 
 	/**

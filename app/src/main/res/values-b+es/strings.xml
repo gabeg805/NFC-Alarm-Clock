@@ -33,6 +33,7 @@
 	<string name="action_rate_now">Califica Ahora</string>
 	<string name="action_rate_later">Al Rato</string>
 	<string name="action_rate_never">No, Gracias</string>
+	<string name="action_show_nfc_tag_id">Muestra etiqueta de NFC</string>
 	<string name="action_use_any">Usa cualquier</string>
 	<string name="action_undo">Deshacer</string>
 	<string name="action_browse">Navegar</string>
@@ -43,10 +44,11 @@
 	<!-- Messages -->
 	<string name="message_playlist">¿Quieres tocar toda la música de esta carpeta?</string>
 	<string name="message_rate_my_app">Si haz disfrutado la <b>NFC Despertador</b>, por favor tómate un momento para calificarla. ¡Gracias por su apoyo! </string>
-	<string name="message_scan_nfc_tag">Usa cualquier etiqueta de NFC, o escanea una etiqueta de NFC particular que se usará para descartar esta alarma.</string>
-	<string name="message_nfc_required">NFC requerido para descartar la alarma</string>
-	<string name="message_nfc_optional">NFC opcional para descartar la alarma</string>
 	<string name="message_nfc_request">Por favor, habilite la NFC para descartar la alarma</string>
+	<string name="message_nfc_required">NFC requerido</string>
+	<string name="message_nfc_optional">NFC opcional</string>
+	<string name="message_scan_nfc_tag">Escanee una etiqueta de NFC única (experimental), o usa cualquier etiqueta que descartará esta alarma.</string>
+	<string name="message_show_nfc_tag_id">ID:</string>
 	<string name="message_no_alarms_scheduled">No hay alarmas programadas</string>
 	<string name="message_repeat_disabled">No repite la alarma</string>
 	<string name="message_repeat_enabled">Repite la alarma</string>
@@ -148,6 +150,7 @@
 	<string name="cd_btn_repeat">Select to repeat the alarm.</string>
 	<string name="cd_btn_vibrate">Select to vibrate the phone when the alarm goes off.</string>
 	<string name="cd_btn_nfc">Select to require NFC in order to dismiss the alarm.</string>
+	<string name="cd_ic_scan_nfc_tag">Escanea una etiqueta de NFC</string>
 	<string name="cd_ic_media">Select to change the media that plays when the alarm goes off.</string>
 	<string name="cd_ic_volume">Slide to change the volume of the alarm.</string>
 	<string name="cd_ic_volume_settings">Select to change the audio source the media plays out of.</string>

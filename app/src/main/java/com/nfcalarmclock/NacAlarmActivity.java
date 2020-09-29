@@ -36,8 +36,6 @@ public class NacAlarmActivity
 		public void onReceive(Context context, Intent intent)
 		{
 			String action = NacIntent.getAction(intent);
-			NacAlarm intentAlarm = NacIntent.getAlarm(intent);
-
 			if (action.equals(NacAlarmActivity.ACTION_STOP_ACTIVITY))
 			{
 				finish();
@@ -90,35 +88,26 @@ public class NacAlarmActivity
 	public void dismiss()
 	{
 		NacAlarm alarm = this.getAlarm();
-		Intent dismissIntent =  new Intent(
-			NacForegroundService.ACTION_DISMISS_ALARM, null, this,
-			NacForegroundService.class);
-		dismissIntent = NacIntent.addAlarm(dismissIntent, alarm);
-
-		startService(dismissIntent);
+		NacContext.dismissForegroundService(this, alarm);
 		finish();
 	}
 
 	/**
-	 * Dismiss due to an NFC tag being scanned.
+	 * Dismiss due to an NFC tag being scanned, and only if the NFC tag ID
+	 * matches the saved alarm NFC tag ID. The exception to this is if the
+	 * saved alarm NFC tag ID is empty.
+	 * 
+	 * The finish() method is not called because if the ACTION_DISMISS_ALARM
+	 * intent is sent to the foreground service, then the foreground service will
+	 * finish this activity.
 	 */
-	private void dismissByNfcScan(Intent intent)
+	private void dismissFromNfcScan()
 	{
-		if (!NacNfc.wasScanned(this, intent))
-		{
-			return;
-		}
-
+		Intent intent = getIntent();
 		NacAlarm alarm = this.getAlarm();
-		if (NacNfc.doIdsMatch(alarm, intent))
-		{
-			this.dismiss();
-		}
-		else
-		{
-			NacSharedConstants cons = new NacSharedConstants(this);
-			NacUtility.quickToast(this, cons.getErrorMessageNfcMismatch());
-		}
+
+		//if (NacContext.canDismissFromNfcScan(this, intent, alarm))
+		NacContext.dismissForegroundServiceFromNfcScan(this, intent, alarm);
 	}
 
 	/**
@@ -183,13 +172,12 @@ public class NacAlarmActivity
 		setContentView(R.layout.act_alarm);
 		this.setAlarm(savedInstanceState);
 
-		Intent intent = getIntent();
 		this.mSharedPreferences = new NacSharedPreferences(this);
 		this.mStopReceiver = new StopActivityReceiver();
 
-		if (NacNfc.wasScanned(this, intent))
+		if (this.wasNfcScanned())
 		{
-			this.dismissByNfcScan(intent);
+			this.dismissFromNfcScan();
 		}
 
 		this.setupShowWhenLocked();
@@ -206,7 +194,8 @@ public class NacAlarmActivity
 	@Override
 	protected void onNewIntent(Intent intent)
 	{
-		this.dismissByNfcScan(intent);
+		setIntent(intent);
+		this.dismissFromNfcScan();
 	}
 
 	/**
@@ -430,13 +419,17 @@ public class NacAlarmActivity
 			return;
 		}
 
-		Intent snoozeIntent = new Intent(
-			NacForegroundService.ACTION_SNOOZE_ALARM, null, this,
-			NacForegroundService.class);
-		snoozeIntent = NacIntent.addAlarm(snoozeIntent, alarm);
-
-		startService(snoozeIntent);
+		NacContext.snoozeForegroundService(this, alarm);
 		finish();
+	}
+
+	/**
+	 * @return True if an NFC tag was scanned, and False otherwise.
+	 */
+	public boolean wasNfcScanned()
+	{
+		Intent intent = getIntent();
+		return NacNfc.wasScanned(this, intent);
 	}
 
 }

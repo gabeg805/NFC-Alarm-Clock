@@ -33,6 +33,7 @@
 	<string name="action_rate_now">Rate Now</string>
 	<string name="action_rate_later">Later</string>
 	<string name="action_rate_never">No, Thanks</string>
+	<string name="action_show_nfc_tag_id">Show NFC tag</string>
 	<string name="action_use_any">Use any</string>
 	<string name="action_undo">Undo</string>
 	<string name="action_browse">Browse</string>
@@ -43,10 +44,11 @@
 	<!-- Messages -->
 	<string name="message_playlist">Do you want to play all the music in this folder?</string>
 	<string name="message_rate_my_app">If you have been enjoying the <b>NFC Alarm Clock</b> app, please take a moment to rate it. Thank you for your support!</string>
-	<string name="message_scan_nfc_tag">Use any NFC tag, or scan a particular NFC tag that will be used to dismiss this alarm.</string>
-	<string name="message_nfc_required">NFC required to dismiss the alarm</string>
-	<string name="message_nfc_optional">NFC optional to dismiss the alarm</string>
 	<string name="message_nfc_request">Please enable NFC to dismiss the alarm</string>
+	<string name="message_nfc_required">NFC required</string>
+	<string name="message_nfc_optional">NFC optional</string>
+	<string name="message_scan_nfc_tag">Scan a unique NFC tag (experimental), or use any tag which will dismiss this alarm.</string>
+	<string name="message_show_nfc_tag_id">ID:</string>
 	<string name="message_no_alarms_scheduled">No alarms scheduled</string>
 	<string name="message_repeat_disabled">Do not repeat alarm</string>
 	<string name="message_repeat_enabled">Repeat alarm</string>
@@ -148,6 +150,7 @@
 	<string name="cd_btn_repeat">Select to repeat the alarm.</string>
 	<string name="cd_btn_vibrate">Select to vibrate the phone when the alarm goes off.</string>
 	<string name="cd_btn_nfc">Select to require NFC in order to dismiss the alarm.</string>
+	<string name="cd_ic_scan_nfc_tag">Scan an NFC tag</string>
 	<string name="cd_ic_media">Select to change the media that plays when the alarm goes off.</string>
 	<string name="cd_ic_volume">Slide to change the volume of the alarm.</string>
 	<string name="cd_ic_volume_settings">Select to change the audio source the media plays out of.</string>

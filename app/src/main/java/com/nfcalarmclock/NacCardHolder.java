@@ -220,6 +220,21 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Act as if the repeat button was long clicked.
+	 */
+	public void doRepeatButtonLongClick()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacAlarm alarm = this.getAlarm();
+
+		alarm.setRepeat(false);
+		alarm.setDays(0);
+		alarm.changed();
+		this.mDays.set(shared);
+		this.mSummary.set(shared);
+	}
+
+	/**
 	 * Act as if the sound was clicked.
 	 */
 	public void doSoundClick()
@@ -246,7 +261,7 @@ public class NacCardHolder
 		if (!state && alarm.isSnoozed(shared))
 		{
 			Context context = this.getContext();
-			NacContext.stopForegroundService(context, alarm);
+			NacContext.dismissForegroundService(context, alarm);
 		}
 
 		alarm.setEnabled(state);
@@ -459,17 +474,17 @@ public class NacCardHolder
 
 		if (id == R.id.nac_header)
 		{
-			NacUtility.quickToast(context, "Header NFC Tag : "+alarm.getNfcTagId());
+			//NacUtility.quickToast(context, "Header NFC Tag : "+alarm.getNfcTagId());
 			this.respondToHeaderClick(view);
 		}
 		else if (id == R.id.nac_summary)
 		{
-			NacUtility.quickToast(context, "Summary NFC Tag : "+alarm.getNfcTagId());
+			//NacUtility.quickToast(context, "Summary NFC Tag : "+alarm.getNfcTagId());
 			this.respondToSummaryClick(view);
 		}
 		else if (id == R.id.nac_collapse)
 		{
-			NacUtility.quickToast(context, "Collapse NFC Tag : "+alarm.getNfcTagId());
+			//NacUtility.quickToast(context, "Collapse NFC Tag : "+alarm.getNfcTagId());
 			this.respondToCollapseButtonClick(view);
 		}
 		else if (id == R.id.nac_time_parent)
@@ -541,23 +556,12 @@ public class NacCardHolder
 	@Override
 	public boolean onLongClick(View view)
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-		NacAlarm alarm = this.getAlarm();
+		int id = view.getId();
 
-		if (shared.getPreventAppFromClosing() && (shared.getSnoozeCount(alarm.getId()) > 0))
+		if (id == R.id.nac_repeat)
 		{
-			Context context = this.getContext();
-			NacSharedConstants cons = new NacSharedConstants(context);
-			NacUtility.quickToast(context, cons.getErrorMessageSnoozedDays());
-			return true;
+			this.respondToRepeatButtonLongClick();
 		}
-
-		alarm.setRepeat(false);
-		alarm.setDays(0);
-		alarm.changed();
-		this.mDays.set(shared);
-		this.mSummary.set(shared);
-
 		return true;
 	}
 
@@ -705,6 +709,24 @@ public class NacCardHolder
 		}
 
 		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+	}
+
+	/**
+	 * Perform the repeat button long click action.
+	 */
+	public void respondToRepeatButtonLongClick()
+	{
+		if (this.canModifyAlarm())
+		{
+			this.doRepeatButtonLongClick();
+		}
+		else
+		{
+			//Context context = this.getContext();
+			//NacSharedConstants cons = new NacSharedConstants(context);
+			//NacUtility.quickToast(context, cons.getErrorMessageSnoozedDays());
+			this.toastModifySnoozedAlarmError();
+		}
 	}
 
 	/**

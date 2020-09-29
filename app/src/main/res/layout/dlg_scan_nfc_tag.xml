@@ -22,7 +22,7 @@
 			android:layout_marginTop="@dimen/sp_section"
 			android:layout_marginBottom="@dimen/sp_section"
 			android:layout_gravity="center"
-			android:contentDescription="Scan an NFC tag"
+			android:contentDescription="@string/cd_ic_scan_nfc_tag"
 			android:src="@mipmap/tap_and_play"
 			/>
 

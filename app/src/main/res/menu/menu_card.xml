@@ -24,4 +24,11 @@
 		app:showAsAction="never"
 		/>
 
+	<item
+		android:id="@+id/menu_show_nfc_tag_id"
+		android:orderInCategory="400"
+		android:title="@string/action_show_nfc_tag_id"
+		app:showAsAction="never"
+		/>
+
 </menu>

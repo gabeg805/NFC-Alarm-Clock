@@ -673,6 +673,9 @@ public class NacCardAdapter
 				case R.id.menu_show_next_alarm:
 					this.showAlarm(alarm);
 					break;
+				case R.id.menu_show_nfc_tag_id:
+					this.showNfcTagId(alarm);
+					break;
 				default:
 					break;
 			}
@@ -957,9 +960,7 @@ public class NacCardAdapter
 	private void showAlarmRuntime(NacAlarm alarm)
 	{
 		Calendar alarmCalendar = NacCalendar.getNext(alarm);
-
 		this.showAlarm(alarm);
-
 		this.mPreviousCalendar = alarmCalendar;
 	}
 
@@ -979,6 +980,26 @@ public class NacCardAdapter
 		}
 
 		this.snackbar(message, cons.getActionDismiss(), null, true);
+	}
+
+	/**
+	 * Show the saved NFC tag ID of the given alarm.
+	 */
+	public void showNfcTagId(NacAlarm alarm)
+	{
+		if (alarm == null)
+		{
+			return;
+		}
+
+		Context context = this.getContext();
+		NacSharedConstants cons = this.getSharedConstants();
+		Locale locale = Locale.getDefault();
+		String id = alarm.getNfcTagId();
+		String message = String.format(locale, "%1$s %2$s",
+			cons.getMessageShowNfcTagId(), id);
+
+		NacUtility.quickToast(context, message);
 	}
 
 	/**

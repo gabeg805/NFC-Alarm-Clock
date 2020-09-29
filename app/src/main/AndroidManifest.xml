@@ -25,7 +25,7 @@
 		android:label="@string/app_name"
 		android:theme="@style/AppTheme"
 		android:icon="@mipmap/app"
-		android:allowBackup="false"
+		android:allowBackup="true"
 		android:supportsRtl="true">
 
 		<!-- Main activity -->
