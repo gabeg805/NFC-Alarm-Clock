@@ -187,8 +187,8 @@
 						android:layout_centerInParent="true"
 						android:contentDescription="@string/cd_btn_repeat"
 						android:background="?android:selectableItemBackgroundBorderless"
-						android:tint="@color/white"
 						android:src="@mipmap/repeat"
+						app:tint="@color/white"
 						/>
 
 				</RelativeLayout>
@@ -210,8 +210,8 @@
 						android:layout_centerInParent="true"
 						android:contentDescription="@string/cd_btn_vibrate"
 						android:background="?android:selectableItemBackgroundBorderless"
-						android:tint="@color/white"
 						android:src="@mipmap/vibrate"
+						app:tint="@color/white"
 						/>
 
 				</RelativeLayout>
@@ -233,8 +233,8 @@
 						android:layout_centerInParent="true"
 						android:contentDescription="@string/cd_btn_nfc"
 						android:background="?android:selectableItemBackgroundBorderless"
-						android:tint="@color/white"
 						android:src="@mipmap/tap_and_play"
+						app:tint="@color/white"
 						/>
 
 				</RelativeLayout>

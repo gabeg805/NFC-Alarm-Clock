@@ -68,6 +68,7 @@ public class NacForegroundService
 	 */
 	private void cleanup()
 	{
+		this.unmarkActiveAlarm();
 		this.cleanupWakeupProcess();
 		this.cleanupWakeLock();
 	}
@@ -122,6 +123,10 @@ public class NacForegroundService
 
 		if (alarm != null)
 		{
+			// Change this next line, and the else. THis is already done when you
+			// start the service.
+			actualAlarm.setIsActive(false);
+
 			if (!actualAlarm.getRepeat())
 			{
 				NacScheduler.toggleAlarm(this, actualAlarm);
@@ -147,6 +152,7 @@ public class NacForegroundService
 		NacContext.stopAlarmActivity(this, this.getAlarm());
 		super.stopForeground(true);
 
+		// Will this even work after stopForeground()?
 		NacWakeupProcess nextWakeup = this.getNextWakeup();
 
 		if (nextWakeup != null)
@@ -262,6 +268,23 @@ public class NacForegroundService
 	}
 
 	/**
+	 * Mark the active alarm in the database.
+	 */
+	public void markActiveAlarm()
+	{
+		NacAlarm alarm = this.getAlarm();
+		if (alarm == null)
+		{
+			return;
+		}
+
+		NacDatabase db = new NacDatabase(this);
+		alarm.setIsActive(true);
+		db.update(alarm);
+		db.close();
+	}
+
+	/**
 	 * Automatically dismiss the alarm.
 	 */
 	@Override
@@ -318,7 +341,9 @@ public class NacForegroundService
 		{
 			this.setupWakeLock();
 			this.showNotification();
-			this.setupActiveAlarm();
+			this.setupWakeupProcess();
+			this.scheduleNextAlarm();
+			this.markActiveAlarm();
 			return START_STICKY;
 		}
 		else if (action.equals(ACTION_SNOOZE_ALARM))
@@ -369,29 +394,17 @@ public class NacForegroundService
 	}
 
 	/**
-	 * Setup the active alarm.
+	 * Schedule the next alarm.
 	 */
-	public void setupActiveAlarm()
+	public void scheduleNextAlarm()
 	{
-		List<NacWakeupProcess> allWakeups = this.getAllWakeups();
 		NacAlarm alarm = this.getAlarm();
-
 		if (alarm == null)
 		{
 			return;
 		}
 
-		if (allWakeups == null)
-		{
-			allWakeups = new ArrayList<>();
-			this.mAllWakeups = allWakeups;
-		}
-
-		NacWakeupProcess wakeup = new NacWakeupProcess(this, alarm);
 		NacScheduler.scheduleNext(this, alarm);
-		wakeup.setOnAutoDismissListener(this);
-		wakeup.start();
-		allWakeups.add(0, wakeup);
 	}
 
 	/**
@@ -416,6 +429,31 @@ public class NacForegroundService
 		long timeout = shared.getAutoDismissTime() * 59 * 1000;
 
 		this.mWakeLock.acquire(timeout);
+	}
+
+	/**
+	 * Setup the wakeup process.
+	 */
+	public void setupWakeupProcess()
+	{
+		List<NacWakeupProcess> allWakeups = this.getAllWakeups();
+		NacAlarm alarm = this.getAlarm();
+
+		if (alarm == null)
+		{
+			return;
+		}
+
+		if (allWakeups == null)
+		{
+			allWakeups = new ArrayList<>();
+			this.mAllWakeups = allWakeups;
+		}
+
+		NacWakeupProcess wakeup = new NacWakeupProcess(this, alarm);
+		wakeup.setOnAutoDismissListener(this);
+		wakeup.start();
+		allWakeups.add(0, wakeup);
 	}
 
 	/**
@@ -444,23 +482,22 @@ public class NacForegroundService
 		NacSharedConstants cons = new NacSharedConstants(this);
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
-		int id = alarm.getId();
-		int snoozeCount = shared.getSnoozeCount(id) + 1;
-		int maxSnoozeCount = shared.getMaxSnoozeValue();
 
-		if ((snoozeCount > maxSnoozeCount) && (maxSnoozeCount >= 0))
+		if (!alarm.canSnooze(shared))
 		{
 			NacUtility.quickToast(this, cons.getErrorMessageSnooze());
 			return;
 		}
 
-		Calendar snooze = Calendar.getInstance();
+		Calendar cal = Calendar.getInstance();
+		int snoozeCount = alarm.getSnoozeCount(shared);
+		int id = alarm.getId();
 
-		snooze.add(Calendar.MINUTE, shared.getSnoozeDurationValue());
-		alarm.setHour(snooze.get(Calendar.HOUR_OF_DAY));
-		alarm.setMinute(snooze.get(Calendar.MINUTE));
-		NacScheduler.update(this, alarm, snooze);
-		shared.editSnoozeCount(id, snoozeCount);
+		cal.add(Calendar.MINUTE, shared.getSnoozeDurationValue());
+		alarm.setHour(cal.get(Calendar.HOUR_OF_DAY));
+		alarm.setMinute(cal.get(Calendar.MINUTE));
+		NacScheduler.update(this, alarm, cal);
+		shared.editSnoozeCount(id, snoozeCount+1);
 
 		NacUtility.quickToast(this, cons.getMessageAlarmSnooze());
 		this.finish();
@@ -481,6 +518,23 @@ public class NacForegroundService
 		}
 
 		NacContext.stopAlarmActivity(this, alarm);
+	}
+
+	/**
+	 * Unmark the active alarm in the database.
+	 */
+	public void unmarkActiveAlarm()
+	{
+		NacAlarm alarm = this.getAlarm();
+		if (alarm == null)
+		{
+			return;
+		}
+
+		NacDatabase db = new NacDatabase(this);
+		alarm.setIsActive(false);
+		db.update(alarm);
+		db.close();
 	}
 
 }

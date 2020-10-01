@@ -64,9 +64,9 @@ public class NacAlarm
 		private boolean mRepeat;
 
 		/**
-		 * Indicates whether the alarm should use NFC or not.
+		 * Flag indicating whether the alarm should use NFC or not.
 		 */
-		private boolean mNfc;
+		private boolean mUseNfc;
 
 		/**
 		 * Indicates whether the phone should vibrate when the alarm is run.
@@ -109,6 +109,11 @@ public class NacAlarm
 		private String mNfcTagId;
 
 		/**
+		 * Flag indicating whether alarm is active or not.
+		 */
+		private boolean mIsActive;
+
+		/**
 		 * Tag. (This was here before, not sure why)
 		 */
 		private Object mTag;
@@ -137,6 +142,8 @@ public class NacAlarm
 			this.mMediaPath = "";
 			this.mMediaTitle = "";
 			this.mName = "";
+			this.mNfcTagId = "";
+			this.mIsActive = false;
 			this.mTag = null;
 
 			if (context != null)
@@ -145,7 +152,7 @@ public class NacAlarm
 				NacSharedDefaults defaults = new NacSharedDefaults(context);
 				this.mDays = NacCalendar.Days.valueToDays(defaults.getDays());
 				this.mRepeat = defaults.getRepeat();
-				this.mNfc = defaults.getUseNfc();
+				this.mUseNfc = defaults.getUseNfc();
 				this.mVibrate = defaults.getVibrate();
 				this.mVolume = defaults.getVolume();
 				this.mAudioSource = cons.getAudioSources().get(1);
@@ -198,6 +205,14 @@ public class NacAlarm
 		public int getId()
 		{
 			return this.mId;
+		}
+
+		/**
+		 * @see isActive
+		 */
+		public boolean getIsActive()
+		{
+			return this.isActive();
 		}
 
 		/**
@@ -278,7 +293,7 @@ public class NacAlarm
 		 */
 		public boolean getUseNfc()
 		{
-			return this.mNfc;
+			return this.mUseNfc;
 		}
 
 		/**
@@ -296,6 +311,14 @@ public class NacAlarm
 		public int getVolume()
 		{
 			return this.mVolume;
+		}
+
+		/**
+		 * @return The flag indicating whther the alarm is active.
+		 */
+		public boolean isActive()
+		{
+			return this.mIsActive;
 		}
 
 		/**
@@ -368,6 +391,19 @@ public class NacAlarm
 		public Builder setId(int id)
 		{
 			this.mId = id;
+			return this;
+		}
+
+		/**
+		 * Set the flag indicating whether the alarm is active or not.
+		 *
+		 * @param  active  The flag indicating active or not.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setIsActive(boolean active)
+		{
+			this.mIsActive = active;
 			return this;
 		}
 
@@ -515,7 +551,7 @@ public class NacAlarm
 		 */
 		public Builder setUseNfc(boolean nfc)
 		{
-			this.mNfc = nfc;
+			this.mUseNfc = nfc;
 			return this;
 		}
 
@@ -598,9 +634,9 @@ public class NacAlarm
 	private boolean mRepeat;
 
 	/**
-	 * Indicates whether the alarm should use NFC or not.
+	 * Flag ndicating whether the alarm should use NFC or not.
 	 */
-	private boolean mNfc;
+	private boolean mUseNfc;
 
 	/**
 	 * Indicates whether the phone should vibrate when the alarm is run.
@@ -641,6 +677,11 @@ public class NacAlarm
 	 * NFC tag ID.
 	 */
 	private String mNfcTagId;
+
+	/**
+	 * Flag indicating whether alarm is active or not.
+	 */
+	private boolean mIsActive;
 
 	/**
 	 * Tag. (This was here before, not sure why. Is it a copy of the View Tag?)
@@ -684,6 +725,7 @@ public class NacAlarm
 		this.setMediaType(builder.getMediaType());
 		this.setName(builder.getName());
 		this.setNfcTagId(builder.getNfcTagId());
+		this.setIsActive(builder.isActive());
 		this.setTag(builder.getTag());
 		this.setChangeTracker(ChangeTracker.NONE);
 		this.unlatchChangeTracker();
@@ -713,7 +755,21 @@ public class NacAlarm
 			.setMediaTitle(input.readString())
 			.setName(input.readString())
 			.setNfcTagId(input.readString())
+			.setIsActive(input.readInt() != 0)
 			.setTag(null));
+	}
+
+	/**
+	 * @return True if the alarm can be snoozed, and False otherwise.
+	 */
+	public boolean canSnooze(NacSharedPreferences shared)
+	{
+		int id = this.getId();
+		int snoozeCount = this.getSnoozeCount(shared) + 1;
+		int maxSnoozeCount = shared.getMaxSnoozeValue();
+
+		return (snoozeCount <= maxSnoozeCount) || (maxSnoozeCount < 0);
+		//return (snoozeCount > maxSnoozeCount) && (maxSnoozeCount >= 0);
 	}
 
 	/**
@@ -771,6 +827,7 @@ public class NacAlarm
 			.setMediaType(this.getMediaType())
 			.setName(this.getName())
 			.setNfcTagId(this.getNfcTagId())
+			.setIsActive(this.isActive())
 			.build();
 	}
 
@@ -871,6 +928,14 @@ public class NacAlarm
 	public int getId()
 	{
 		return this.mId;
+	}
+
+	/**
+	 * @return The flag indicating whether the alarm is active or not.
+	 */
+	public boolean getIsActive()
+	{
+		return this.isActive();
 	}
 
 	/**
@@ -984,6 +1049,15 @@ public class NacAlarm
 	}
 
 	/**
+	 * @return The current snooze count.
+	 */
+	public int getSnoozeCount(NacSharedPreferences shared)
+	{
+		int id = this.getId();
+		return shared.getSnoozeCount(id);
+	}
+
+	/**
 	 * @return The tag.
 	 */
 	public Object getTag()
@@ -996,7 +1070,7 @@ public class NacAlarm
 	 */
 	public boolean getUseNfc()
 	{
-		return this.mNfc;
+		return this.mUseNfc;
 	}
 
 	/**
@@ -1035,6 +1109,14 @@ public class NacAlarm
 	}
 
 	/**
+	 * @return The flag indicating whether the alarm is active or not.
+	 */
+	public boolean isActive()
+	{
+		return this.mIsActive;
+	}
+
+	/**
 	 * @return True if the change tracker is latched, and False otherwise.
 	 */
 	public boolean isChangeTrackerLatched()
@@ -1067,24 +1149,24 @@ public class NacAlarm
 	public void print()
 	{
 		NacUtility.printf("Alarm Information");
-		NacUtility.printf("Id           : %d", this.mId);
-		NacUtility.printf("Enabled      : %b", this.mEnabled);
-		NacUtility.printf("Hour         : %d", this.mHour);
-		NacUtility.printf("Minute       : %d", this.mMinute);
-		//NacUtility.printf("Days         : %s", NacCalendar.Days.toString(this.getDays()));
+		NacUtility.printf("Id           : %d", this.getId());
+		NacUtility.printf("Enabled      : %b", this.getEnabled());
+		NacUtility.printf("Hour         : %d", this.getHour());
+		NacUtility.printf("Minute       : %d", this.getMinute());
 		NacUtility.printf("Days         : %s", this.getDays());
-		NacUtility.printf("Repeat       : %b", this.mRepeat);
-		NacUtility.printf("Use NFC      : %b", this.mNfc);
-		NacUtility.printf("Vibrate      : %b", this.mVibrate);
-		NacUtility.printf("Volume       : %d", this.mVolume);
-		NacUtility.printf("Audio Source : %s", this.mAudioSource);
-		NacUtility.printf("Media Type   : %s", this.mMediaType);
-		NacUtility.printf("Media Path   : %s", this.mMediaPath);
-		NacUtility.printf("Media Name   : %s", this.mMediaTitle);
-		NacUtility.printf("Name         : %s", this.mName);
-		NacUtility.printf("Nfc Tag Id   : %s", this.mNfcTagId);
-		NacUtility.printf("Change Track : %s", this.mTracker.toString());
-		NacUtility.printf("Latch        : %b", this.mLatch);
+		NacUtility.printf("Repeat       : %b", this.getRepeat());
+		NacUtility.printf("Use NFC      : %b", this.getUseNfc());
+		NacUtility.printf("Vibrate      : %b", this.getVibrate());
+		NacUtility.printf("Volume       : %d", this.getVolume());
+		NacUtility.printf("Audio Source : %s", this.getAudioSource());
+		NacUtility.printf("Media Type   : %s", this.getMediaType());
+		NacUtility.printf("Media Path   : %s", this.getMediaPath());
+		NacUtility.printf("Media Name   : %s", this.getMediaTitle());
+		NacUtility.printf("Name         : %s", this.getName());
+		NacUtility.printf("Nfc Tag Id   : %s", this.getNfcTagId());
+		NacUtility.printf("Is Active    : %b", this.isActive());
+		NacUtility.printf("Change Track : %s", this.getChangeTracker().toString());
+		NacUtility.printf("Latch        : %b", this.isChangeTrackerLatched());
 	}
 
 	/**
@@ -1162,6 +1244,14 @@ public class NacAlarm
 	public void setId(int id)
 	{
 		this.mId = id;
+	}
+
+	/**
+	 * Set the flag indicating whether the alarm is active or not.
+	 */
+	public void setIsActive(boolean active)
+	{
+		this.mIsActive = active;
 	}
 
 	/**
@@ -1278,9 +1368,9 @@ public class NacAlarm
 	 * @param  nfc  True if the phone should use NFC to dismiss, and False
 	 *              otherwise.
 	 */
-	public void setUseNfc(boolean nfc)
+	public void setUseNfc(boolean useNfc)
 	{
-		this.mNfc = nfc;
+		this.mUseNfc = useNfc;
 		this.setChangeTracker(ChangeTracker.USE_NFC);
 	}
 
@@ -1434,6 +1524,7 @@ public class NacAlarm
 		output.writeString(this.getMediaTitle());
 		output.writeString(this.getName());
 		output.writeString(this.getNfcTagId());
+		output.writeInt(this.isActive() ? 1 : 0);
 	}
 
 	/**

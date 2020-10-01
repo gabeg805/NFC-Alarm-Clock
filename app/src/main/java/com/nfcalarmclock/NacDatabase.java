@@ -136,6 +136,50 @@ public class NacDatabase
 	}
 
 	/**
+	 * @see findActiveAlarm
+	 */
+	public static NacAlarm findActiveAlarm(Context context)
+	{
+		NacDatabase db = new NacDatabase(context);
+		NacAlarm activeAlarm = db.findActiveAlarm();
+		db.close();
+		return activeAlarm;
+	}
+
+	/**
+	 * @see findActiveAlarm
+	 */
+	public NacAlarm findActiveAlarm()
+	{
+		SQLiteDatabase db = getWritableDatabase();
+		return this.findActiveAlarm(db);
+	}
+
+	/**
+	 * Find the currently active alarm.
+	 */
+	public NacAlarm findActiveAlarm(SQLiteDatabase db)
+	{
+		String table = this.getAlarmTable();
+		String where = this.getWhereClauseActive();
+		String[] whereArgs = this.getWhereArgsActive();
+		String limit = "1";
+		Cursor cursor = db.query(table, null, where, whereArgs, null, null, null,
+			limit);
+		int version = db.getVersion();
+		NacAlarm alarm = null;
+
+		if ((cursor != null) && (cursor.getCount() == 1))
+		{
+			cursor.moveToFirst();
+			alarm = this.toAlarm(cursor, version);
+			cursor.close();
+		}
+
+		return alarm;
+	}
+
+	/**
 	 * Find the alarm.
 	 */
 	public NacAlarm findAlarm(int id)
@@ -144,11 +188,13 @@ public class NacDatabase
 		String table = this.getAlarmTable();
 		String where = this.getWhereClause();
 		String[] whereArgs = this.getWhereArgs(id);
-		Cursor cursor = db.query(table, null, where, whereArgs, null, null, null);
+		String limit = "1";
+		Cursor cursor = db.query(table, null, where, whereArgs, null, null, null,
+			limit);
 		int version = db.getVersion();
 		NacAlarm alarm = null;
 
-		if (cursor != null)
+		if ((cursor != null) && (cursor.getCount() == 1))
 		{
 			cursor.moveToFirst();
 			alarm = this.toAlarm(cursor, version);
@@ -267,6 +313,7 @@ public class NacDatabase
 		{
 			case 5:
 				cv.put(Contract.AlarmTable.COLUMN_NFC_TAG, alarm.getNfcTagId());
+				cv.put(Contract.AlarmTable.COLUMN_IS_ACTIVE, alarm.isActive());
 			case 4:
 			default:
 				cv.put(Contract.AlarmTable.COLUMN_ID, alarm.getId());
@@ -302,13 +349,21 @@ public class NacDatabase
 	 */
 	private Cursor getRow(NacAlarm alarm)
 	{
+		return this.getRow(alarm, null);
+	}
+
+	/**
+	 * @return The row of the database corresponding to the alarm.
+	 */
+	private Cursor getRow(NacAlarm alarm, String limit)
+	{
 		SQLiteDatabase db = getWritableDatabase();
 		String table = this.getAlarmTable();
 		int id = alarm.getId();
 		String where = this.getWhereClause();
 		String[] whereArgs = this.getWhereArgs(id);
 
-		return db.query(table, null, where, whereArgs, null, null, null);
+		return db.query(table, null, where, whereArgs, null, null, null, limit);
 	}
 
 	/**
@@ -316,7 +371,7 @@ public class NacDatabase
 	 */
 	private int getRowId(NacAlarm alarm)
 	{
-		Cursor cursor = this.getRow(alarm);
+		Cursor cursor = this.getRow(alarm, "1");
 		int id = -1;
 
 		if ((cursor != null) && (cursor.getCount() == 1))
@@ -357,11 +412,11 @@ public class NacDatabase
 	}
 
 	/**
-	 * @return The where clause for matching with the row ID.
+	 * @return Where arguments for when the alarm is active.
 	 */
-	private String getWhereIdClause()
+	private String[] getWhereArgsActive()
 	{
-		return Contract.AlarmTable._ID + "=?";
+		return new String[] {"1"};
 	}
 
 	/**
@@ -370,6 +425,22 @@ public class NacDatabase
 	private String getWhereClause()
 	{
 		return Contract.AlarmTable.COLUMN_ID + "=?";
+	}
+
+	/**
+	 * @return The where clause for matching with the is active column.
+	 */
+	private String getWhereClauseActive()
+	{
+		return Contract.AlarmTable.COLUMN_IS_ACTIVE + "=?";
+	}
+
+	/**
+	 * @return The where clause for matching with the row ID.
+	 */
+	private String getWhereClauseId()
+	{
+		return Contract.AlarmTable._ID + "=?";
 	}
 
 	/**
@@ -426,6 +497,7 @@ public class NacDatabase
 			.setMediaType(mediaType)
 			.setName(name)
 			.setNfcTagId("")
+			.setIsActive(false)
 			.build();
 
 		this.add(db, alarm);
@@ -546,7 +618,7 @@ public class NacDatabase
 		String table = this.getAlarmTable();
 		ContentValues fromCv = this.getContentValues(version, fromAlarm);
 		ContentValues toCv = this.getContentValues(version, toAlarm);
-		String where = this.getWhereIdClause();
+		String where = this.getWhereClauseId();
 		String[] fromArgs = this.getWhereArgs(toId);
 		String[] toArgs = this.getWhereArgs(fromId);
 		long result = 0;
@@ -570,6 +642,8 @@ public class NacDatabase
 
 	/**
 	 * Convert a Cursor object to an alarm.
+	 *
+	 * This assumes the cursor object is already in position to retrieve data.
 	 */
 	public NacAlarm toAlarm(Cursor cursor, int version)
 	{
@@ -586,6 +660,7 @@ public class NacDatabase
 		{
 			case 5:
 				alarm.setNfcTagId(cursor.getString(15));
+				alarm.setIsActive(cursor.getInt(16) != 0);
 			case 4:
 			default:
 				alarm.setId(cursor.getInt(1));
@@ -614,6 +689,11 @@ public class NacDatabase
 	 */
 	public long update(NacAlarm alarm)
 	{
+		if (alarm == null)
+		{
+			return -1;
+		}
+
 		List<NacAlarm> list = new ArrayList<>();
 		list.add(alarm);
 		return this.update(list);
@@ -624,6 +704,11 @@ public class NacDatabase
 	 */
 	public long update(List<NacAlarm> alarms)
 	{
+		if (alarms == null)
+		{
+			return -1;
+		}
+
 		SQLiteDatabase db = getWritableDatabase();
 		return this.update(db, alarms);
 	}
@@ -633,6 +718,11 @@ public class NacDatabase
 	 */
 	public long update(SQLiteDatabase db, NacAlarm alarm)
 	{
+		if (alarm == null)
+		{
+			return -1;
+		}
+
 		List<NacAlarm> list = new ArrayList<>();
 		list.add(alarm);
 		return this.update(db, list);
@@ -683,6 +773,11 @@ public class NacDatabase
 	 */
 	public long updateRow(int row, NacAlarm alarm)
 	{
+		if (alarm == null)
+		{
+			return -1;
+		}
+
 		SQLiteDatabase db = getWritableDatabase();
 		return this.updateRow(db, row, alarm);
 	}
@@ -700,7 +795,7 @@ public class NacDatabase
 		int version = db.getVersion();
 		String table = this.getAlarmTable();
 		ContentValues cv = this.getContentValues(version, alarm);
-		String where = this.getWhereIdClause();
+		String where = this.getWhereClauseId();
 		String[] args = this.getWhereArgs(row);
 		long result = 0;
 
@@ -844,6 +939,11 @@ public class NacDatabase
 			public static final String COLUMN_NFC_TAG = "NfcTag";
 
 			/**
+			 * NFC tag.
+			 */
+			public static final String COLUMN_IS_ACTIVE = "IsActive";
+
+			/**
 			 * The content style URI
 			 */
 			public static final Uri CONTENT_URI = Uri.parse(SCHEME + AUTHORITY
@@ -896,7 +996,8 @@ public class NacDatabase
 				+ COLUMN_MEDIA_PATH + " TEXT,"
 				+ COLUMN_MEDIA_NAME + " TEXT,"
 				+ COLUMN_NAME + " TEXT,"
-				+ COLUMN_NFC_TAG + " TEXT"
+				+ COLUMN_NFC_TAG + " TEXT,"
+				+ COLUMN_IS_ACTIVE + " INTEGER"
 				+ ");";
 
 			/**
@@ -946,7 +1047,8 @@ public class NacDatabase
 				COLUMN_MEDIA_PATH,
 				COLUMN_MEDIA_NAME,
 				COLUMN_NAME,
-				COLUMN_NFC_TAG
+				COLUMN_NFC_TAG,
+				COLUMN_IS_ACTIVE
 			};
 
 		}
@@ -976,7 +1078,6 @@ public class NacDatabase
 
 			db.add(alarm);
 			db.close();
-			//scheduler.update(alarm);
 			NacScheduler.update(context, alarm);
 			shared.editSnoozeCount(id, 0);
 		}
@@ -992,7 +1093,6 @@ public class NacDatabase
 
 			db.delete(alarm);
 			db.close();
-			//scheduler.cancel(alarm);
 			NacScheduler.cancel(context, alarm);
 			shared.editSnoozeCount(id, 0);
 		}
@@ -1015,7 +1115,6 @@ public class NacDatabase
 			if (key.equals("swap"))
 			{
 				NacAlarm[] alarms = NacIntent.getAlarms(intent);
-
 				BackgroundService.swapAlarms(this, alarms[0], alarms[1]);
 			}
 			else
@@ -1050,14 +1149,10 @@ public class NacDatabase
 			int fromSnoozeCount = shared.getSnoozeCount(fromId);
 			int toSnoozeCount = shared.getSnoozeCount(toId);
 
-			//scheduler.cancel(fromAlarm);
-			//scheduler.cancel(toAlarm);
 			NacScheduler.cancel(context, fromAlarm);
 			NacScheduler.cancel(context, toAlarm);
 			db.swap(fromAlarm, toAlarm);
 			db.close();
-			//scheduler.add(fromAlarm);
-			//scheduler.add(toAlarm);
 			NacScheduler.add(context, fromAlarm);
 			NacScheduler.add(context, toAlarm);
 			shared.editSnoozeCount(fromId, toSnoozeCount);
@@ -1074,7 +1169,6 @@ public class NacDatabase
 			db.update(alarm);
 			db.close();
 			NacScheduler.update(context, alarm);
-			//scheduler.update(alarm);
 		}
 
 	}

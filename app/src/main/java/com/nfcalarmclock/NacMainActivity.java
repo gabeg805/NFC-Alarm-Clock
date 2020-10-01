@@ -112,6 +112,30 @@ public class NacMainActivity
 	}
 
 	/**
+	 * Setup an NFC scan checker, which checks if this activity was started by an
+	 * NFC tag being scanned.
+	 */
+	private void dismissActiveAlarm()
+	{
+		Intent intent = getIntent();
+		NacAlarm alarm = NacDatabase.findActiveAlarm(this);
+		//NacAlarm alarm = NacNotificationHelper.findActiveAlarm(this);
+
+		if (alarm == null)
+		{
+			return;
+		}
+
+		boolean success = NacContext.dismissForegroundServiceFromNfcScan(this,
+			intent, alarm);
+
+		if (!success)
+		{
+			this.showAlarmActivity(alarm);
+		}
+	}
+
+	/**
 	 * Show activity handler.
 	 */
 	private Handler getShowActivityDelayHandler()
@@ -361,19 +385,21 @@ public class NacMainActivity
 	 */
 	private void setupActiveAlarmActivity()
 	{
-		StatusBarNotification notification = NacNotificationHelper
-			.getActiveNotification(this);
-		NacAlarm alarm = NacNotificationHelper.findAlarm(this, notification);
+		//StatusBarNotification notification = NacNotificationHelper
+		//	.getActiveNotification(this);
+		//NacAlarm alarm = NacNotificationHelper.findAlarm(this, notification);
+		NacAlarm alarm = NacDatabase.findActiveAlarm(this);
 
 		if (this.shouldShowAlarmActivity(alarm))
 		{
-			if (this.shouldDelayAlarmActivity(alarm))
+			if (this.shouldShowAlarmActivityDelayed(alarm))
 			{
 				this.showAlarmActivityDelayed(SHOW_ALARM_ACTIVITY_DELAY);
 			}
 			else
 			{
-				this.showAlarmActivity(notification);
+				this.showAlarmActivity(alarm);
+				//this.showAlarmActivity(notification);
 			}
 		}
 	}
@@ -426,29 +452,6 @@ public class NacMainActivity
 	}
 
 	/**
-	 * Setup an NFC scan checker, which checks if this activity was started by an
-	 * NFC tag being scanned.
-	 */
-	private void dismissActiveAlarm()
-	{
-		Intent intent = getIntent();
-		NacAlarm alarm = NacNotificationHelper.findActiveAlarm(this);
-
-		if (alarm == null)
-		{
-			return;
-		}
-
-		boolean success = NacContext.dismissForegroundServiceFromNfcScan(this,
-			intent, alarm);
-
-		if (!success)
-		{
-			this.showAlarmActivity();
-		}
-	}
-
-	/**
 	 * Setup the recycler view.
 	 */
 	private void setupRecyclerView()
@@ -472,34 +475,24 @@ public class NacMainActivity
 		recyclerView.setLayoutManager(layoutManager);
 	}
 
-	/**
-	 * @return True if should delay the start of the alarm activity, and False
-	 *         otherwise.
-	 */
-	private boolean shouldDelayAlarmActivity(StatusBarNotification notification)
-	{
-		NacAlarm alarm = NacNotificationHelper.findAlarm(this, notification);
-		return this.shouldDelayAlarmActivity(alarm);
-	}
+	///**
+	// * @return True if should delay the start of the alarm activity, and False
+	// *         otherwise.
+	// */
+	//private boolean shouldDelayAlarmActivity(StatusBarNotification notification)
+	//{
+	//	NacAlarm alarm = NacNotificationHelper.findAlarm(this, notification);
+	//	return this.shouldDelayAlarmActivity(alarm);
+	//}
 
-	/**
-	 * @see shouldDelayAlarmActivity
-	 */
-	private boolean shouldDelayAlarmActivity(NacAlarm alarm)
-	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-		return this.shouldShowAlarmActivity(alarm) && alarm.getUseNfc();
-		//	&& !shared.getPreventAppFromClosing();
-	}
-
-	/**
-	 * @return True if should start the alarm activity, and False otherwise.
-	 */
-	private boolean shouldShowAlarmActivity(StatusBarNotification notification)
-	{
-		NacAlarm alarm = NacNotificationHelper.findAlarm(this, notification);
-		return this.shouldShowAlarmActivity(alarm);
-	}
+	///**
+	// * @return True if should start the alarm activity, and False otherwise.
+	// */
+	//private boolean shouldShowAlarmActivity(StatusBarNotification notification)
+	//{
+	//	NacAlarm alarm = NacNotificationHelper.findAlarm(this, notification);
+	//	return this.shouldShowAlarmActivity(alarm);
+	//}
 
 	/**
 	 * @see shouldShowAlarmActivity
@@ -511,44 +504,68 @@ public class NacMainActivity
 	}
 
 	/**
+	 * @return True if should delay the start of the alarm activity, and False
+	 *         otherwise.
+	 */
+	private boolean shouldShowAlarmActivityDelayed(NacAlarm alarm)
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		return this.shouldShowAlarmActivity(alarm) && alarm.getUseNfc();
+		//	&& !shared.getPreventAppFromClosing();
+	}
+
+	/**
 	 * @see showAlarmActivity
 	 */
 	private void showAlarmActivity()
 	{
-		StatusBarNotification notification = NacNotificationHelper
-			.getActiveNotification(this);
-		this.showAlarmActivity(notification);
+		NacAlarm activeAlarm = NacDatabase.findActiveAlarm(this);
+		this.showAlarmActivity(activeAlarm);
+		//StatusBarNotification notification = NacNotificationHelper
+		//	.getActiveNotification(this);
+		//this.showAlarmActivity(notification);
 	}
 
 	/**
 	 * Show the alarm activity.
 	 */
-	private void showAlarmActivity(StatusBarNotification statusBarNotification)
+	private void showAlarmActivity(NacAlarm alarm)
 	{
-		if (statusBarNotification == null)
+		if (alarm == null)
 		{
 			return;
 		}
 
-		Notification notification = statusBarNotification.getNotification();
-		if (notification == null)
-		{
-			return;
-		}
-
-		try
-		{
-			PendingIntent pending = notification.contentIntent;
-			if (pending != null)
-			{
-				pending.send();
-			}
-		}
-		catch (PendingIntent.CanceledException e)
-		{
-			NacUtility.printf("Caught canceled exception for pending intent!");
-		}
+		Intent intent = NacIntent.createAlarmActivity(this, alarm);
+		startActivity(intent);
 	}
+
+	//private void showAlarmActivity(StatusBarNotification statusBarNotification)
+	//{
+	//	if (statusBarNotification == null)
+	//	{
+	//		return;
+	//	}
+
+	//	Notification notification = statusBarNotification.getNotification();
+	//	if (notification == null)
+	//	{
+	//		return;
+	//	}
+
+	//	try
+	//	{
+	//		PendingIntent pending = notification.contentIntent;
+	//		if (pending != null)
+	//		{
+	//			pending.send();
+	//		}
+	//	}
+	//	catch (PendingIntent.CanceledException e)
+	//	{
+	//		NacUtility.printf("Caught canceled exception for pending intent!");
+	//	}
+	//}
 
 	/**
 	 * Show the alarm activity after some delay.
@@ -561,11 +578,14 @@ public class NacMainActivity
 			@Override
 			public void run()
 			{
-				StatusBarNotification notification = NacNotificationHelper
-					.getActiveNotification(NacMainActivity.this);
-				if (shouldShowAlarmActivity(notification))
+				//StatusBarNotification notification = NacNotificationHelper
+				//	.getActiveNotification(NacMainActivity.this);
+				//if (shouldShowAlarmActivity(notification))
+				NacAlarm activeAlarm = NacDatabase.findActiveAlarm(NacMainActivity.this);
+				if (shouldShowAlarmActivity(activeAlarm))
 				{
-					showAlarmActivity(notification);
+					showAlarmActivity(activeAlarm);
+					//showAlarmActivity(notification);
 				}
 			}
 		}, delay);

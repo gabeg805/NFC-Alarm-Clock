@@ -408,11 +408,8 @@ public class NacAlarmActivity
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
-		int id = alarm.getId();
-		int snoozeCount = shared.getSnoozeCount(id) + 1;
-		int maxSnoozeCount = shared.getMaxSnoozeValue();
 
-		if ((snoozeCount > maxSnoozeCount) && (maxSnoozeCount >= 0))
+		if (!alarm.canSnooze(shared))
 		{
 			NacSharedConstants cons = new NacSharedConstants(this);
 			NacUtility.quickToast(this, cons.getErrorMessageSnooze());

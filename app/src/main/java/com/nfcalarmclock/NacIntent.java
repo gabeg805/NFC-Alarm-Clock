@@ -73,7 +73,6 @@ public class NacIntent
 			| Intent.FLAG_ACTIVITY_CLEAR_TASK;
 
 		intent.addFlags(flags);
-		//intent.putExtra(ALARM_BUNDLE_NAME, bundle);
 		return NacIntent.addAlarm(intent, bundle);
 	}
 

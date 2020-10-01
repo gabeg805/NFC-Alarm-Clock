@@ -170,7 +170,6 @@ public class NacSharedPreferences
 	public void editEasySnooze(boolean easy, boolean commit)
 	{
 		String key = this.getKeys().getEasySnooze();
-
 		this.saveBoolean(key, easy, commit);
 	}
 
@@ -188,8 +187,6 @@ public class NacSharedPreferences
 	public void editMaxSnooze(int max, boolean commit)
 	{
 		String key = this.getKeys().getMaxSnooze();
-		NacUtility.printf("Edit Max Snooze : %d", max);
-
 		this.saveInt(key, max, commit);
 	}
 
@@ -207,7 +204,6 @@ public class NacSharedPreferences
 	public void editName(String name, boolean commit)
 	{
 		String key = this.getKeys().getName();
-
 		this.saveString(key, name, commit);
 	}
 
