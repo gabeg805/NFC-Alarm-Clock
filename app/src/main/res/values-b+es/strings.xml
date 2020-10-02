@@ -64,7 +64,7 @@
 
 	<!-- Error messages -->
 	<string name="error_message_max_alarms">Número máximo de alarmas creadas</string>
-	<string name="error_message_nfc_mismatch">La etiqueta de NFC escaneada no coincide con la etiqueta guardada.</string>
+	<string name="error_message_nfc_mismatch">Etiqueta no coincide con la etiqueta de NFC guardada.</string>
 	<string name="error_message_nfc_unsupported">Tu teléfono no soporta NFC</string>
 	<string name="error_message_snooze">Incapaz de posponer la alarma</string>
 	<string name="error_message_snoozed_days">Incapaz de cambiar el día de una alarma posponada</string>

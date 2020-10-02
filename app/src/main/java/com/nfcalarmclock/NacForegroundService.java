@@ -279,8 +279,10 @@ public class NacForegroundService
 		}
 
 		NacDatabase db = new NacDatabase(this);
-		alarm.setIsActive(true);
-		db.update(alarm);
+		NacAlarm actualAlarm = db.findAlarm(alarm);
+
+		actualAlarm.setIsActive(true);
+		db.update(actualAlarm);
 		db.close();
 	}
 
@@ -532,7 +534,9 @@ public class NacForegroundService
 		}
 
 		NacDatabase db = new NacDatabase(this);
-		alarm.setIsActive(false);
+		NacAlarm actualAlarm = db.findAlarm(alarm);
+
+		actualAlarm.setIsActive(false);
 		db.update(alarm);
 		db.close();
 	}

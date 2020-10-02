@@ -123,7 +123,7 @@ public class NacCardHolder
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 
-		return !alarm.isSnoozed(shared);
+		return !alarm.isSnoozed(shared) && !alarm.isActive();
 		//return (!alarm.isSnoozed(shared) || !shared.getPreventAppFromClosing());
 	}
 
@@ -258,10 +258,11 @@ public class NacCardHolder
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 
-		if (!state && alarm.isSnoozed(shared))
+		if (!state && (alarm.isSnoozed(shared) || alarm.isActive()))
 		{
 			Context context = this.getContext();
 			NacContext.dismissForegroundService(context, alarm);
+			alarm.setIsActive(false);
 		}
 
 		alarm.setEnabled(state);

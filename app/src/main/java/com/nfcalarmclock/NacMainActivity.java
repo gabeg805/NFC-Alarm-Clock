@@ -101,6 +101,24 @@ public class NacMainActivity
 	/**
 	 * Cleanup the show activity delay handler.
 	 */
+	private void cleanupScanNfcTagDialog()
+	{
+		NacScanNfcTagDialog dialog = this.getScanNfcTagDialog();
+		if (dialog != null)
+		{
+			NacUtility.quickToast(this, "Dialog is not null!");
+			dialog.getAlertDialog().dismiss();
+			this.mScanNfcTagDialog = null;
+		}
+		else
+		{
+			NacUtility.quickToast(this, "Dialog is NULL!");
+		}
+	}
+
+	/**
+	 * Cleanup the show activity delay handler.
+	 */
 	private void cleanupShowActivityDelayHandler()
 	{
 		Handler handler = this.getShowActivityDelayHandler();
@@ -115,11 +133,9 @@ public class NacMainActivity
 	 * Setup an NFC scan checker, which checks if this activity was started by an
 	 * NFC tag being scanned.
 	 */
-	private void dismissActiveAlarm()
+	private void dismissActiveAlarm(Intent intent)
 	{
-		Intent intent = getIntent();
 		NacAlarm alarm = NacDatabase.findActiveAlarm(this);
-		//NacAlarm alarm = NacNotificationHelper.findActiveAlarm(this);
 
 		if (alarm == null)
 		{
@@ -198,7 +214,8 @@ public class NacMainActivity
 			cardHolder.doNfcButtonClick();
 		}
 
-		this.mScanNfcTagDialog = null;
+		NacUtility.quickToast(this, "On cancel dialog!");
+		this.cleanupScanNfcTagDialog();
 		return true;
 	}
 
@@ -223,6 +240,7 @@ public class NacMainActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_main);
 
+		Intent intent = getIntent();
 		this.mSharedPreferences = new NacSharedPreferences(this);
 		this.mAdapter = new NacCardAdapter(this);
 		this.mFloatingActionButton = (FloatingActionButton) findViewById(
@@ -231,9 +249,9 @@ public class NacMainActivity
 			R.id.content_alarm_list);
 		this.mScanNfcTagDialog = null;
 
-		if (this.wasNfcScannedForAlarm())
+		if (this.wasNfcScannedForAlarm(intent))
 		{
-			this.dismissActiveAlarm();
+			this.dismissActiveAlarm(intent);
 		}
 
 		this.setupRecyclerView();
@@ -259,9 +277,9 @@ public class NacMainActivity
 
 		alarm.setNfcTagId("");
 		alarm.changed();
+		this.cleanupScanNfcTagDialog();
+		NacUtility.quickToast(this, "On dismiss dialog!");
 		NacUtility.quickToast(this, cons.getMessageNfcRequired());
-
-		this.mScanNfcTagDialog = null;
 		return true;
 	}
 
@@ -271,17 +289,18 @@ public class NacMainActivity
 	protected void onNewIntent(Intent intent)
 	{
 		super.onNewIntent(intent);
-		setIntent(intent);
 
-		if (this.wasNfcScannedForDialog())
+		if (this.wasNfcScannedForDialog(intent))
 		{
 			NacSharedConstants cons = new NacSharedConstants(this);
-			this.saveNfcTagId();
+			this.saveNfcTagId(intent);
+			this.cleanupScanNfcTagDialog();
 			NacUtility.quickToast(this, cons.getMessageNfcRequired());
 		}
-		else if (this.wasNfcScannedForAlarm())
+		else if (this.wasNfcScannedForAlarm(intent))
 		{
-			this.dismissActiveAlarm();
+			NacUtility.quickToast(this, "Trying to dismiss active alarm");
+			this.dismissActiveAlarm(intent);
 		}
 	}
 
@@ -329,8 +348,8 @@ public class NacMainActivity
 	protected void onPause()
 	{
 		super.onPause();
-		NacNfc.stop(this);
 		this.cleanupShowActivityDelayHandler();
+		NacNfc.stop(this);
 	}
 
 	/**
@@ -344,27 +363,25 @@ public class NacMainActivity
 		}
 
 		NacScanNfcTagDialog dialog = new NacScanNfcTagDialog();
+		this.mScanNfcTagDialog = dialog;
 
 		dialog.build(this);
 		dialog.saveData(alarm);
 		dialog.addOnCancelListener(this);
 		dialog.addOnDismissListener(this);
 		dialog.show();
-
-		this.mScanNfcTagDialog = dialog;
 	}
 
 	/**
 	 * Save the scanned NFC tag ID.
 	 */
-	private void saveNfcTagId()
+	private void saveNfcTagId(Intent intent)
 	{
-		if (!this.wasNfcScannedForDialog())
+		if (!this.wasNfcScannedForDialog(intent))
 		{
 			return;
 		}
 
-		Intent intent = getIntent();
 		Tag nfcTag = NacNfc.getTag(intent);
 		if (nfcTag == null)
 		{
@@ -377,7 +394,6 @@ public class NacMainActivity
 
 		alarm.setNfcTagId(id);
 		alarm.changed();
-		dialog.dismissDialog();
 	}
 
 	/**
@@ -385,9 +401,6 @@ public class NacMainActivity
 	 */
 	private void setupActiveAlarmActivity()
 	{
-		//StatusBarNotification notification = NacNotificationHelper
-		//	.getActiveNotification(this);
-		//NacAlarm alarm = NacNotificationHelper.findAlarm(this, notification);
 		NacAlarm alarm = NacDatabase.findActiveAlarm(this);
 
 		if (this.shouldShowAlarmActivity(alarm))
@@ -399,7 +412,6 @@ public class NacMainActivity
 			else
 			{
 				this.showAlarmActivity(alarm);
-				//this.showAlarmActivity(notification);
 			}
 		}
 	}
@@ -475,25 +487,6 @@ public class NacMainActivity
 		recyclerView.setLayoutManager(layoutManager);
 	}
 
-	///**
-	// * @return True if should delay the start of the alarm activity, and False
-	// *         otherwise.
-	// */
-	//private boolean shouldDelayAlarmActivity(StatusBarNotification notification)
-	//{
-	//	NacAlarm alarm = NacNotificationHelper.findAlarm(this, notification);
-	//	return this.shouldDelayAlarmActivity(alarm);
-	//}
-
-	///**
-	// * @return True if should start the alarm activity, and False otherwise.
-	// */
-	//private boolean shouldShowAlarmActivity(StatusBarNotification notification)
-	//{
-	//	NacAlarm alarm = NacNotificationHelper.findAlarm(this, notification);
-	//	return this.shouldShowAlarmActivity(alarm);
-	//}
-
 	/**
 	 * @see shouldShowAlarmActivity
 	 */
@@ -521,9 +514,6 @@ public class NacMainActivity
 	{
 		NacAlarm activeAlarm = NacDatabase.findActiveAlarm(this);
 		this.showAlarmActivity(activeAlarm);
-		//StatusBarNotification notification = NacNotificationHelper
-		//	.getActiveNotification(this);
-		//this.showAlarmActivity(notification);
 	}
 
 	/**
@@ -540,33 +530,6 @@ public class NacMainActivity
 		startActivity(intent);
 	}
 
-	//private void showAlarmActivity(StatusBarNotification statusBarNotification)
-	//{
-	//	if (statusBarNotification == null)
-	//	{
-	//		return;
-	//	}
-
-	//	Notification notification = statusBarNotification.getNotification();
-	//	if (notification == null)
-	//	{
-	//		return;
-	//	}
-
-	//	try
-	//	{
-	//		PendingIntent pending = notification.contentIntent;
-	//		if (pending != null)
-	//		{
-	//			pending.send();
-	//		}
-	//	}
-	//	catch (PendingIntent.CanceledException e)
-	//	{
-	//		NacUtility.printf("Caught canceled exception for pending intent!");
-	//	}
-	//}
-
 	/**
 	 * Show the alarm activity after some delay.
 	 */
@@ -578,14 +541,10 @@ public class NacMainActivity
 			@Override
 			public void run()
 			{
-				//StatusBarNotification notification = NacNotificationHelper
-				//	.getActiveNotification(NacMainActivity.this);
-				//if (shouldShowAlarmActivity(notification))
 				NacAlarm activeAlarm = NacDatabase.findActiveAlarm(NacMainActivity.this);
 				if (shouldShowAlarmActivity(activeAlarm))
 				{
 					showAlarmActivity(activeAlarm);
-					//showAlarmActivity(notification);
 				}
 			}
 		}, delay);
@@ -598,19 +557,18 @@ public class NacMainActivity
 	 *         otherwise. This is to say that if an NFC tag was scanned for the
 	 *         dialog, this would return False.
 	 */
-	private boolean wasNfcScannedForAlarm()
+	private boolean wasNfcScannedForAlarm(Intent intent)
 	{
-		Intent intent = getIntent();
-		return NacNfc.wasScanned(this, intent) && !this.wasNfcScannedForDialog();
+		return NacNfc.wasScanned(this, intent)
+			&& !this.wasNfcScannedForDialog(intent);
 	}
 
 	/**
 	 * @return True if an NFC tag was scanned while the Scan NFC Tag dialog was
 	 *         open, and False otherwise.
 	 */
-	private boolean wasNfcScannedForDialog()
+	private boolean wasNfcScannedForDialog(Intent intent)
 	{
-		Intent intent = getIntent();
 		NacScanNfcTagDialog dialog = this.getScanNfcTagDialog();
 		return (dialog != null) && NacNfc.wasScanned(this, intent);
 	}
