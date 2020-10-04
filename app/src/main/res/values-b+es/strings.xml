@@ -68,8 +68,8 @@
 	<string name="error_message_nfc_unsupported">Tu teléfono no soporta NFC</string>
 	<string name="error_message_snooze">Incapaz de posponer la alarma</string>
 	<string name="error_message_snoozed_days">Incapaz de cambiar el día de una alarma posponada</string>
-	<string name="error_message_snoozed_delete">Incapaz de borrar una alarma posponada</string>
-	<string name="error_message_snoozed_modify">Incapaz de modificar una alarma posponada</string>
+	<string name="error_message_snoozed_delete">Incapaz de borrar una alarma activa o posponada</string>
+	<string name="error_message_snoozed_modify">Incapaz de modificar una alarma active o posponada</string>
 	<string name="error_message_select_color">Color inválido</string>
 	<string name="error_message_play_audio">Incapaz de tocar audio</string>
 	<string name="error_message_play_file">Incapaz de tocar la canción seleccionada</string>

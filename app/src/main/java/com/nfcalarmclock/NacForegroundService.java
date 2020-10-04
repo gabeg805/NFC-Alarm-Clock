@@ -537,7 +537,7 @@ public class NacForegroundService
 		NacAlarm actualAlarm = db.findAlarm(alarm);
 
 		actualAlarm.setIsActive(false);
-		db.update(alarm);
+		db.update(actualAlarm);
 		db.close();
 	}
 

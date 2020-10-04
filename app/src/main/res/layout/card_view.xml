@@ -62,7 +62,7 @@
 				android:src="@mipmap/snooze"
 				/>
 
-			<Switch
+			<androidx.appcompat.widget.SwitchCompat
 				android:id="@+id/nac_switch"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
 				android:layout_alignBottom="@id/nac_time_parent"
 				android:paddingTop="@dimen/sz_extend"
 				android:paddingBottom="@dimen/sz_extend"
-				android:switchMinWidth="@dimen/isz_attention"
+				app:switchMinWidth="@dimen/isz_attention"
 				/>
 
 		</RelativeLayout>

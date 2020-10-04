@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+
+import java.util.Locale;
 
 /**
  * NFC Alarm Clock database.
@@ -57,7 +60,7 @@ public class NacDatabase
 	 */
 	public long add(NacAlarm alarm)
 	{
-		SQLiteDatabase db = getWritableDatabase();
+		SQLiteDatabase db = this.getWritableDatabase();
 		return this.add(db, alarm);
 	}
 
@@ -102,7 +105,7 @@ public class NacDatabase
 	 */
 	public long delete(NacAlarm alarm)
 	{
-		SQLiteDatabase db = getWritableDatabase();
+		SQLiteDatabase db = this.getWritableDatabase();
 		return this.delete(db, alarm);
 	}
 
@@ -151,7 +154,7 @@ public class NacDatabase
 	 */
 	public NacAlarm findActiveAlarm()
 	{
-		SQLiteDatabase db = getWritableDatabase();
+		SQLiteDatabase db = this.getWritableDatabase();
 		return this.findActiveAlarm(db);
 	}
 
@@ -164,15 +167,22 @@ public class NacDatabase
 		String where = this.getWhereClauseActive();
 		String[] whereArgs = this.getWhereArgsActive();
 		String limit = "1";
-		Cursor cursor = db.query(table, null, where, whereArgs, null, null, null,
-			limit);
-		int version = db.getVersion();
 		NacAlarm alarm = null;
+		Cursor cursor = null;
+
+		try
+		{
+			cursor = db.query(table, null, where, whereArgs, null, null, null, limit);
+		}
+		catch (SQLiteException e)
+		{
+			return null;
+		}
 
 		if ((cursor != null) && (cursor.getCount() == 1))
 		{
 			cursor.moveToFirst();
-			alarm = this.toAlarm(cursor, version);
+			alarm = this.toAlarm(cursor, db.getVersion());
 			cursor.close();
 		}
 
@@ -184,7 +194,7 @@ public class NacDatabase
 	 */
 	public NacAlarm findAlarm(int id)
 	{
-		SQLiteDatabase db = getWritableDatabase();
+		SQLiteDatabase db = this.getWritableDatabase();
 		String table = this.getAlarmTable();
 		String where = this.getWhereClause();
 		String[] whereArgs = this.getWhereArgs(id);
@@ -227,7 +237,7 @@ public class NacDatabase
 		String whereClause = Contract.AlarmTable.COLUMN_HOUR + "=? AND "
 			+ Contract.AlarmTable.COLUMN_MINUTE + "=?";
 
-		SQLiteDatabase db = getWritableDatabase();
+		SQLiteDatabase db = this.getWritableDatabase();
 		int version = db.getVersion();
 		String table = this.getAlarmTable();
 		Cursor cursor = db.query(table, null, whereClause, whereArgs, null, null,
@@ -357,7 +367,7 @@ public class NacDatabase
 	 */
 	private Cursor getRow(NacAlarm alarm, String limit)
 	{
-		SQLiteDatabase db = getWritableDatabase();
+		SQLiteDatabase db = this.getWritableDatabase();
 		String table = this.getAlarmTable();
 		int id = alarm.getId();
 		String where = this.getWhereClause();
@@ -559,7 +569,7 @@ public class NacDatabase
 	 */
 	public List<NacAlarm> read()
 	{
-		SQLiteDatabase db = getWritableDatabase();
+		SQLiteDatabase db = this.getWritableDatabase();
 		int version = db.getVersion();
 		return this.read(db, version);
 	}
@@ -613,7 +623,7 @@ public class NacDatabase
 		int fromId = this.getRowId(fromAlarm);
 		int toId = this.getRowId(toAlarm);
  
-		SQLiteDatabase db = getWritableDatabase();
+		SQLiteDatabase db = this.getWritableDatabase();
 		int version = db.getVersion();
 		String table = this.getAlarmTable();
 		ContentValues fromCv = this.getContentValues(version, fromAlarm);
@@ -709,7 +719,7 @@ public class NacDatabase
 			return -1;
 		}
 
-		SQLiteDatabase db = getWritableDatabase();
+		SQLiteDatabase db = this.getWritableDatabase();
 		return this.update(db, alarms);
 	}
 
@@ -778,7 +788,7 @@ public class NacDatabase
 			return -1;
 		}
 
-		SQLiteDatabase db = getWritableDatabase();
+		SQLiteDatabase db = this.getWritableDatabase();
 		return this.updateRow(db, row, alarm);
 	}
 

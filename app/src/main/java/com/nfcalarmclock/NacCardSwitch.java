@@ -4,7 +4,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.Switch;
+import androidx.appcompat.widget.SwitchCompat;
 
 /**
  * On/off switch on an alarm card.
@@ -20,14 +20,14 @@ public class NacCardSwitch
 	/**
 	 * On/off switch for an alarm.
 	 */
-	 private Switch mSwitch;
+	 private SwitchCompat mSwitch;
 
 	/**
 	 */
 	public NacCardSwitch(View root)
 	{
 		this.mAlarm = null;
-		this.mSwitch = (Switch) root.findViewById(R.id.nac_switch);
+		this.mSwitch = (SwitchCompat) root.findViewById(R.id.nac_switch);
 	}
 
 	/**
@@ -44,7 +44,6 @@ public class NacCardSwitch
 	public void init(NacAlarm alarm)
 	{
 		this.mAlarm = alarm;
-
 		this.set();
 	}
 
@@ -68,12 +67,9 @@ public class NacCardSwitch
 			new int[] { android.R.attr.state_checked},
 			new int[] {-android.R.attr.state_checked}};
 		int[] thumbColors = new int[] {shared.getThemeColor(), Color.LTGRAY};
-		int[] trackColors = new int[] {shared.getThemeColor(), Color.GRAY};
 		ColorStateList thumbStateList = new ColorStateList(states, thumbColors);
-		ColorStateList trackStateList = new ColorStateList(states, trackColors);
 
 		this.mSwitch.getThumbDrawable().setTintList(thumbStateList);
-		this.mSwitch.getTrackDrawable().setTintList(trackStateList);
 	}
 
 	/**

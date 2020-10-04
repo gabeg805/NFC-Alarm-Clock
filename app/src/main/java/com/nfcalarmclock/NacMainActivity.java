@@ -93,7 +93,7 @@ public class NacMainActivity
 			int id = cardAdapter.getUniqueId();
 
 			alarm.setId(id);
-			cardAdapter.add(alarm);
+			cardAdapter.addAlarm(alarm);
 			cardAdapter.setWasAddedWithFloatingActionButton(true);
 		}
 	}
@@ -106,13 +106,8 @@ public class NacMainActivity
 		NacScanNfcTagDialog dialog = this.getScanNfcTagDialog();
 		if (dialog != null)
 		{
-			NacUtility.quickToast(this, "Dialog is not null!");
 			dialog.getAlertDialog().dismiss();
 			this.mScanNfcTagDialog = null;
-		}
-		else
-		{
-			NacUtility.quickToast(this, "Dialog is NULL!");
 		}
 	}
 
@@ -136,7 +131,6 @@ public class NacMainActivity
 	private void dismissActiveAlarm(Intent intent)
 	{
 		NacAlarm alarm = NacDatabase.findActiveAlarm(this);
-
 		if (alarm == null)
 		{
 			return;
@@ -145,7 +139,11 @@ public class NacMainActivity
 		boolean success = NacContext.dismissForegroundServiceFromNfcScan(this,
 			intent, alarm);
 
-		if (!success)
+		if (success)
+		{
+			recreate();
+		}
+		else
 		{
 			this.showAlarmActivity(alarm);
 		}
@@ -214,7 +212,6 @@ public class NacMainActivity
 			cardHolder.doNfcButtonClick();
 		}
 
-		NacUtility.quickToast(this, "On cancel dialog!");
 		this.cleanupScanNfcTagDialog();
 		return true;
 	}
@@ -227,7 +224,7 @@ public class NacMainActivity
 	{
 		NacCardAdapter cardAdapter = this.getCardAdapter();
 
-		cardAdapter.add();
+		cardAdapter.addAlarm();
 		cardAdapter.setWasAddedWithFloatingActionButton(true);
 		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 	}
@@ -278,7 +275,6 @@ public class NacMainActivity
 		alarm.setNfcTagId("");
 		alarm.changed();
 		this.cleanupScanNfcTagDialog();
-		NacUtility.quickToast(this, "On dismiss dialog!");
 		NacUtility.quickToast(this, cons.getMessageNfcRequired());
 		return true;
 	}
@@ -292,14 +288,16 @@ public class NacMainActivity
 
 		if (this.wasNfcScannedForDialog(intent))
 		{
+			NacScanNfcTagDialog dialog = this.getScanNfcTagDialog();
 			NacSharedConstants cons = new NacSharedConstants(this);
+
 			this.saveNfcTagId(intent);
-			this.cleanupScanNfcTagDialog();
+			dialog.saveData(null);
+			dialog.cancel();
 			NacUtility.quickToast(this, cons.getMessageNfcRequired());
 		}
 		else if (this.wasNfcScannedForAlarm(intent))
 		{
-			NacUtility.quickToast(this, "Trying to dismiss active alarm");
 			this.dismissActiveAlarm(intent);
 		}
 	}
@@ -401,13 +399,16 @@ public class NacMainActivity
 	 */
 	private void setupActiveAlarmActivity()
 	{
+		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = NacDatabase.findActiveAlarm(this);
+		long delay = SHOW_ALARM_ACTIVITY_DELAY;
 
 		if (this.shouldShowAlarmActivity(alarm))
 		{
 			if (this.shouldShowAlarmActivityDelayed(alarm))
 			{
-				this.showAlarmActivityDelayed(SHOW_ALARM_ACTIVITY_DELAY);
+				delay = shared.getPreventAppFromClosing() ? delay/2 : delay;
+				this.showAlarmActivityDelayed(delay);
 			}
 			else
 			{
@@ -502,7 +503,7 @@ public class NacMainActivity
 	 */
 	private boolean shouldShowAlarmActivityDelayed(NacAlarm alarm)
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
+		//NacSharedPreferences shared = this.getSharedPreferences();
 		return this.shouldShowAlarmActivity(alarm) && alarm.getUseNfc();
 		//	&& !shared.getPreventAppFromClosing();
 	}
