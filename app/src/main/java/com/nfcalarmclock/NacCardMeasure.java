@@ -2,12 +2,10 @@ package com.nfcalarmclock;
 
 import android.app.Activity;
 import android.content.Context;
-//import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
@@ -62,11 +60,6 @@ public class NacCardMeasure
 	private int mDayButtonsHeight;
 
 	/**
-	 * Vibrate width.
-	 */
-	//private int mVibrateWidth;
-
-	/**
 	 * Check if card has been measured.
 	 */
 	private boolean mIsMeasured;
@@ -84,7 +77,6 @@ public class NacCardMeasure
 		this.mCardPadding = 0;
 		this.mDayButtons = null;
 		this.mDayButtonsHeight = 0;
-		//this.mVibrateWidth = 0;
 		this.mIsMeasured = false;
 	}
 
@@ -161,14 +153,6 @@ public class NacCardMeasure
 	}
 
 	/**
-	 * @return The vibrate width.
-	 */
-	//public int getVibrateWidth()
-	//{
-	//	return this.mVibrateWidth;
-	//}
-
-	/**
 	 * @return True if alarm card is measured, and False otherwise.
 	 */
 	public boolean isMeasured()
@@ -182,7 +166,6 @@ public class NacCardMeasure
 	public void measure(RecyclerView rv)
 	{
 		NacCardHolder holder = (NacCardHolder) rv.findViewHolderForAdapterPosition(0);
-
 		if (holder != null)
 		{
 			this.measure(holder);
@@ -201,7 +184,6 @@ public class NacCardMeasure
 		this.setCardPadding(root);
 		this.setDayButtons(root);
 		this.setDayButtonsHeight(root);
-		//this.setVibrateWidth(root);
 		this.setHeaderHeight(root);
 		this.setExpandHeight(root);
 		this.setCollapseHeight(root);
@@ -216,7 +198,6 @@ public class NacCardMeasure
 	{
 		RelativeLayout header = root.findViewById(R.id.nac_header);
 		this.mCardPadding = header.getPaddingStart() + header.getPaddingEnd();
-		//NacUtility.printf("CARD PADDING : %d", mCardPadding);
 	}
 
 	/**
@@ -224,7 +205,8 @@ public class NacCardMeasure
 	 */
 	private void setCollapseHeight(View root)
 	{
-		RelativeLayout summary = (RelativeLayout) root.findViewById(R.id.nac_summary);
+		View summary = (View) root.findViewById(R.id.nac_summary);
+		//RelativeLayout summary = (RelativeLayout) root.findViewById(R.id.nac_summary);
 		//LinearLayout extra = (LinearLayout) root.findViewById(R.id.nac_extra);
 		//summary.setVisibility(View.VISIBLE);
 		//extra.setVisibility(View.GONE);
@@ -235,7 +217,6 @@ public class NacCardMeasure
 		int headerHeight = this.getHeaderHeight();
 		int summaryHeight = NacUtility.getHeight(summary);
 		this.mCollapseHeight = headerHeight + summaryHeight;
-		//NacUtility.printf("COLLAPSE HEIGHT : %d", mCollapseHeight);
 	}
 
 	/**
@@ -255,7 +236,6 @@ public class NacCardMeasure
 		NacDayOfWeek dayButtons = (NacDayOfWeek)
 			root.findViewById(R.id.nac_days);
 		this.mDayButtonsHeight = NacUtility.getHeight(dayButtons);
-		//NacUtility.printf("DAY BUTTONS : %d", mDayButtonsHeight);
 	}
 
 	/**
@@ -264,7 +244,8 @@ public class NacCardMeasure
 	private void setExpandHeight(View root)
 	{
 		//RelativeLayout summary = (RelativeLayout) root.findViewById(R.id.nac_summary);
-		LinearLayout extra = (LinearLayout) root.findViewById(R.id.nac_extra);
+		View extra = (View) root.findViewById(R.id.nac_extra);
+		//LinearLayout extra = (LinearLayout) root.findViewById(R.id.nac_extra);
 		//summary.setVisibility(View.GONE);
 		//extra.setVisibility(View.VISIBLE);
 		//summary.setEnabled(false);
@@ -274,7 +255,6 @@ public class NacCardMeasure
 		int headerHeight = this.getHeaderHeight();
 		int extraHeight = NacUtility.getHeight(extra);
 		this.mExpandHeight = headerHeight + extraHeight;
-		//NacUtility.printf("EXPAND HEIGHT : %d", mExpandHeight);
 	}
 
 	/**
@@ -283,9 +263,7 @@ public class NacCardMeasure
 	private void setHeaderHeight(View root)
 	{
 		RelativeLayout header = (RelativeLayout) root.findViewById(R.id.nac_header);
-		//header.requestLayout();
 		this.mHeaderHeight = NacUtility.getHeight(header);
-		//NacUtility.printf("HEADER HEIGHT : %d", this.mHeaderHeight);
 	}
 
 	/**
@@ -300,7 +278,6 @@ public class NacCardMeasure
 			.getDimension(R.dimen.isz_icon);
 		int recyclerHeight = rv.getHeight();
 		this.mScreenHeight = recyclerHeight - fabHeight;
-		//NacUtility.printf("SCREEN HEIGHT : %d", mScreenHeight);
 	}
 
 	/**
@@ -310,17 +287,6 @@ public class NacCardMeasure
 	{
 		this.mScreenWidth = this.getContext().getResources()
 			.getDisplayMetrics().widthPixels;
-		//NacUtility.printf("SCREEN WIDTH : %d", mScreenWidth);
 	}
-
-	/**
-	 * Set the vibrate width.
-	 */
-	//private void setVibrateWidth(View root)
-	//{
-	//	CheckBox vibrate = (CheckBox) root.findViewById(R.id.nac_vibrate);
-	//	this.mVibrateWidth = NacUtility.getWidth(vibrate);
-	//	//NacUtility.printf("VIBRATE WIDTH : %d", mVibrateWidth);
-	//}
 
 }

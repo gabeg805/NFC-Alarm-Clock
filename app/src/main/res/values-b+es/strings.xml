@@ -157,6 +157,7 @@
 	<string name="cd_ic_name">Select to change the name of the alarm.</string>
 	<string name="cd_btn_delete">Select to delete the alarm.</string>
 	<string name="cd_btn_collapse">Select to collapse the alarm card.</string>
+	<string name="cd_btn_expand">Select to expand the alarm card.</string>
 	<string name="cd_ic_color_example">Example of the selected color.</string>
 	<string name="cd_ic_file_entry">Type of entry being displayed, such as a file or directory.</string>
 	<string name="cd_ic_decrement">Decrement the value</string>

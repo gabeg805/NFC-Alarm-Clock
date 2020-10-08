@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -59,7 +58,7 @@ public class NacCardSound
 	/**
 	 * Media source settings.
 	 */
-	private RelativeLayout mAudioSourceIcon;
+	private ImageView mAudioSourceIcon;
 
 	/**
 	 * Card measurement.
@@ -75,7 +74,7 @@ public class NacCardSound
 		this.mSound = (TextView) root.findViewById(R.id.sound_name);
 		this.mVolume = (SeekBar) root.findViewById(R.id.nac_volume_slider);
 		this.mVolumeIcon = (ImageView) root.findViewById(R.id.nac_volume_icon);
-		this.mAudioSourceIcon = (RelativeLayout) root.findViewById(R.id.nac_volume_settings);
+		this.mAudioSourceIcon = (ImageView) root.findViewById(R.id.nac_volume_settings);
 		this.mMeasure = measure;
 	}
 

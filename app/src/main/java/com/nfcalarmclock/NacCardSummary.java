@@ -169,8 +169,7 @@ public class NacCardSummary
 		String name = alarm.getNameNormalized();
 
 		this.mName.setText(name);
-		this.mName.setVisibility(name.isEmpty() ? View.GONE : View.VISIBLE);
-		//this.mName.setSelected(true); // For marquee
+		//this.mName.setVisibility(name.isEmpty() ? View.GONE : View.VISIBLE);
 	}
 
 }

@@ -6,11 +6,11 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.view.animation.Animation;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  */
@@ -46,11 +46,6 @@ public class NacCardView
 	private NacAlarm mAlarm;
 
 	/**
-	 * The recycler view.
-	 */
-	private RecyclerView mRecyclerView;
-
-	/**
 	 * Card view.
 	 */
 	private CardView mCardView;
@@ -63,7 +58,7 @@ public class NacCardView
 	/**
 	 * Summary region.
 	 */
-	private RelativeLayout mSummary;
+	private LinearLayout mSummary;
 
 	/**
 	 * Extra region.
@@ -93,7 +88,8 @@ public class NacCardView
 	/**
 	 * Icon indicating the alarm has been snoozed.
 	 */
-	private ImageView mSnoozeIcon;
+	//private Button mSnoozeIcon;
+	//private ImageView mSnoozeIcon;
 
 	/**
 	 * Card animation.
@@ -156,17 +152,16 @@ public class NacCardView
 	{
 		this.mContext = context;
 		this.mAlarm = null;
-		this.mRecyclerView = (RecyclerView) ((Activity)context).findViewById(
-			R.id.content_alarm_list);
 		this.mCardView = (CardView) root.findViewById(R.id.nac_card);
 		this.mHeader = (RelativeLayout) root.findViewById(R.id.nac_header);
-		this.mSummary = (RelativeLayout) root.findViewById(R.id.nac_summary);
+		this.mSummary = (LinearLayout) root.findViewById(R.id.nac_summary);
 		this.mExtra = (LinearLayout) root.findViewById(R.id.nac_extra);
 		this.mDivider1 = (View) root.findViewById(R.id.nac_divider1);
 		this.mDivider2 = (LinearLayout) root.findViewById(R.id.nac_divider2);
 		this.mCopy = (RelativeLayout) root.findViewById(R.id.nac_swipe_copy);
 		this.mDelete = (RelativeLayout) root.findViewById(R.id.nac_swipe_delete);
-		this.mSnoozeIcon = (ImageView) root.findViewById(R.id.nac_snooze);
+		//this.mSnoozeIcon = (Button) root.findViewById(R.id.nac_snooze);
+		//this.mSnoozeIcon = (ImageView) root.findViewById(R.id.nac_snooze);
 		this.mSlideAnimation = new NacCardSlideAnimation(this.mCardView,
 			this.mSummary, this.mExtra);
 		this.mHighlightAnimator = null;
@@ -647,9 +642,9 @@ public class NacCardView
 	 */
 	private void setupSnoozeIcon(NacSharedPreferences shared)
 	{
-		NacAlarm alarm = this.getAlarm();
-		this.mSnoozeIcon.setVisibility(alarm.isSnoozed(shared) ? View.VISIBLE
-			: View.GONE);
+		//NacAlarm alarm = this.getAlarm();
+		//this.mSnoozeIcon.setVisibility(!alarm.isSnoozed(shared) ? View.VISIBLE
+		//	: View.GONE);
 	}
 
 	/**

@@ -60,7 +60,6 @@ public class NacRingtoneFragment
 		RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
 			ViewGroup.LayoutParams.MATCH_PARENT,
 			ViewGroup.LayoutParams.WRAP_CONTENT);
-		String selectedPath = getMediaPath();
 		int[] padding = this.getPadding();
 		int textSize = this.getTextSize();
 
@@ -71,12 +70,6 @@ public class NacRingtoneFragment
 		button.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
 		button.setPadding(padding[0], padding[1], padding[2], padding[3]);
 		button.setOnClickListener(this);
-
-		if (!selectedPath.isEmpty() && selectedPath.equals(path))
-		{
-			button.setChecked(true);
-		}
-
 		return button;
 	}
 
@@ -120,7 +113,6 @@ public class NacRingtoneFragment
 		Bundle bundle = NacBundle.toBundle(alarm);
 
 		fragment.setArguments(bundle);
-
 		return fragment;
 	}
 
@@ -133,7 +125,6 @@ public class NacRingtoneFragment
 		Bundle bundle = NacBundle.toBundle(media);
 
 		fragment.setArguments(bundle);
-
 		return fragment;
 	}
 
@@ -191,10 +182,11 @@ public class NacRingtoneFragment
 	public void setRadioButtonColor(NacSharedPreferences shared,
 		RadioButton radioButton)
 	{
+		int[] colors = new int[] { shared.getThemeColor(), Color.GRAY };
+
 		int[][] states = new int[][] {
 			new int[] {  android.R.attr.state_checked },
 			new int[] { -android.R.attr.state_checked } };
-		int[] colors = new int[] { shared.getThemeColor(), Color.LTGRAY };
 		ColorStateList stateList = new ColorStateList(states, colors);
 
 		radioButton.setButtonTintList(stateList);
@@ -217,6 +209,11 @@ public class NacRingtoneFragment
 			RadioButton button = this.addRadioButton(title, path);
 
 			this.setRadioButtonColor(shared, button);
+
+			if (this.isSelectedPath(path))
+			{
+				button.setChecked(true);
+			}
 		}
 	}
 

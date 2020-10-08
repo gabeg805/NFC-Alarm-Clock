@@ -1,9 +1,8 @@
 package com.nfcalarmclock;
 
 import android.view.View;
-//import android.widget.CompoundButton;
-import android.widget.RelativeLayout;
-//import android.widget.CheckBox;
+import android.widget.ImageView;
+//import android.widget.RelativeLayout;
 
 /**
  * Vibrate view for an alarm card.
@@ -19,15 +18,15 @@ public class NacCardVibrate
 	/**
 	 * Vibrate checkbox.
 	 */
-	private RelativeLayout mVibrate;
-	//private CheckBox mVibrate;
+	private ImageView mVibrate;
+	//private RelativeLayout mVibrate;
 
 	/**
 	 */
 	public NacCardVibrate(View root)
 	{
-		this.mVibrate = (RelativeLayout) root.findViewById(R.id.nac_vibrate);
-		//this.mVibrate = (CheckBox) root.findViewById(R.id.nac_vibrate);
+		this.mVibrate = (ImageView) root.findViewById(R.id.nac_vibrate);
+		//this.mVibrate = (RelativeLayout) root.findViewById(R.id.nac_vibrate);
 	}
 
 	/**
@@ -41,7 +40,8 @@ public class NacCardVibrate
 	/**
 	 * @return The vibrate view.
 	 */
-	private RelativeLayout getVibrate()
+	//private RelativeLayout getVibrateView()
+	private ImageView getVibrateView()
 	{
 		return this.mVibrate;
 	}
@@ -62,22 +62,25 @@ public class NacCardVibrate
 	{
 		NacAlarm alarm = this.getAlarm();
 		boolean vibrate = alarm.getVibrate();
-		RelativeLayout view = this.getVibrate();
+		View view = this.getVibrateView();
+		//RelativeLayout view = this.getVibrateView();
 
-		view.setAlpha(vibrate ? 1.0f : 0.3f);
-		//view.setChecked(alarm.getVibrate());
+		if (view != null)
+		{
+			view.setAlpha(vibrate ? 1.0f : 0.3f);
+		}
 	}
 
 	/**
 	 * Set the on checked change listener.
 	 */
-	//public void setOnCheckedChangeListener(
-	//	CompoundButton.OnCheckedChangeListener listener)
 	public void setOnClickListener(View.OnClickListener listener)
 	{
-		this.mVibrate.setOnClickListener((View.OnClickListener)listener);
-		//this.mVibrate.setOnCheckedChangeListener(
-		//	(CompoundButton.OnCheckedChangeListener)listener);
+		View view = this.getVibrateView();
+		if (view != null)
+		{
+			view.setOnClickListener((View.OnClickListener)listener);
+		}
 	}
 
 }

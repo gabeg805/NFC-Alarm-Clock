@@ -309,7 +309,7 @@ public class NacDialog
 	/**
 	 * Build the dialog with a layout id.
 	 *
-	 * @see build.
+	 * @see build
 	 */
 	public AlertDialog.Builder build(Context context, int id)
 	{

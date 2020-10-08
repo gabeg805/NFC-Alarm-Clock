@@ -1,14 +1,30 @@
 <resources>
 
 	<!-- Base application theme. -->
+	<!--
 	<style name="AppTheme" parent="Theme.AppCompat">
-		<!-- <item name="android:windowActionBar">true</item> -->
-		<item name="android:colorBackground">@color/gray_dark</item>
+	-->
+	<style name="AppTheme" parent="Theme.MaterialComponents">
+		<!--
+		<item name="android:windowActionBar">true</item>
+
 		<item name="colorPrimary">@color/black</item>
 		<item name="colorPrimaryDark">@color/black</item>
+		<item name="android:colorBackground">@color/gray_dark</item>
+		<item name="colorCard">?android:attr/colorBackground</item>
+		-->
+
+		<item name="colorSurface">@color/black</item>
+		<item name="colorError">@color/red</item>
+		<item name="colorOnPrimary">@color/white</item>
+		<item name="colorOnSecondary">@color/black</item>
+		<item name="colorOnBackground">@color/white</item>
+		<item name="colorOnSurface">@color/white</item>
+		<item name="colorOnError">@color/white</item>
+
 		<item name="colorAccent">@color/orange</item>
 
-		<item name="colorCard">?android:attr/colorBackground</item>
+		<item name="colorCard">@color/gray_dark</item>
 		<item name="colorCardAccent">@color/orange</item>
 		<item name="colorCardExpanded">@color/gray</item>
 		<item name="colorCardDivider">@color/orange</item>

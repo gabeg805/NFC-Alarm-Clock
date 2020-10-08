@@ -3,6 +3,7 @@
 	<!-- Spacing -->
 	<dimen name="sp_section">24dp</dimen>
 	<dimen name="sp_main">16dp</dimen>
+	<dimen name="sp_normal">12dp</dimen>
 	<dimen name="sp_support">8dp</dimen>
 	<dimen name="sp_align">4dp</dimen>
 	<dimen name="sp_row_last">16dp</dimen>

@@ -6,7 +6,8 @@ import android.content.res.ColorStateList;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
+import com.google.android.material.textfield.TextInputEditText;
+//import android.widget.EditText;
 import android.widget.TextView;
 
 /**
@@ -22,7 +23,8 @@ public class NacNameDialog
 	/**
 	 * EditText in the dialog.
 	 */
-	private EditText mEditText;
+	private TextInputEditText mEditText;
+	//private EditText mEditText;
 
 	/**
 	 */
@@ -44,7 +46,7 @@ public class NacNameDialog
 	{
 		NacSharedConstants cons = new NacSharedConstants(context);
 
-		builder.setTitle(cons.getTitleName());
+		//builder.setTitle(cons.getTitleName());
 		setPositiveButton(cons.getActionOk());
 		setNegativeButton(cons.getActionCancel());
 	}
@@ -83,7 +85,8 @@ public class NacNameDialog
 		Context context = root.getContext();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
 		String name = this.getDataString();
-		this.mEditText = (EditText) root.findViewById(R.id.alarm_name);
+		this.mEditText = (TextInputEditText) root.findViewById(R.id.alarm_name);
+		//this.mEditText = (EditText) root.findViewById(R.id.alarm_name);
 
 		this.mEditText.setText(name);
 		this.mEditText.selectAll();

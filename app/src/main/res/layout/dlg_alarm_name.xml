@@ -1,26 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
+	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:orientation="vertical"
-	android:padding="@dimen/sp_main">
+	android:orientation="vertical">
 
-	<EditText
-		android:id="@+id/alarm_name"
+	<com.google.android.material.textfield.TextInputLayout
+		android:id="@+id/yoyoyo"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:maxLength="@integer/max_entry_length"
-		android:maxLines="10"
-		android:singleLine="false"
-		android:isScrollContainer="true"
-		android:textSize="@dimen/tsz_main"
-		android:inputType="textCapSentences|textMultiLine"
-		android:hint="@string/alarm_name"
-		android:importantForAutofill="no">
+		android:layout_marginTop="@dimen/sp_main"
+		android:layout_marginStart="@dimen/sp_main"
+		android:layout_marginEnd="@dimen/sp_main"
+		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-		<requestFocus />
+		<!--
+		<EditText
+	android:padding="@dimen/sp_main">
+		-->
 
-	</EditText>
+		<com.google.android.material.textfield.TextInputEditText
+			android:id="@+id/alarm_name"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:maxLength="@integer/max_entry_length"
+			android:maxLines="10"
+			android:singleLine="false"
+			android:isScrollContainer="true"
+			android:textSize="@dimen/tsz_main"
+			android:inputType="textCapSentences|textMultiLine"
+			android:hint="@string/alarm_name"
+			android:importantForAutofill="no">
+
+			<requestFocus />
+
+		<!--
+		</EditText>
+		-->
+		</com.google.android.material.textfield.TextInputEditText>
+
+	</com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>

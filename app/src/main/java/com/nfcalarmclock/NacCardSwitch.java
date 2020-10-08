@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.CompoundButton;
 import androidx.appcompat.widget.SwitchCompat;
 
+import androidx.core.graphics.ColorUtils;
+
 /**
  * On/off switch on an alarm card.
  */
@@ -63,13 +65,20 @@ public class NacCardSwitch
 	 */
 	public void setColor(NacSharedPreferences shared)
 	{
+
+		int theme = shared.getThemeColor();
+		int themeDark = ColorUtils.blendARGB(theme, Color.BLACK, 0.6f);
+		int[] thumbColors = new int[] {theme, Color.GRAY};
+		int[] trackColors = new int[] {themeDark, Color.DKGRAY};
+
 		int[][] states = new int[][] {
 			new int[] { android.R.attr.state_checked},
 			new int[] {-android.R.attr.state_checked}};
-		int[] thumbColors = new int[] {shared.getThemeColor(), Color.LTGRAY};
 		ColorStateList thumbStateList = new ColorStateList(states, thumbColors);
+		ColorStateList trackStateList = new ColorStateList(states, trackColors);
 
-		this.mSwitch.getThumbDrawable().setTintList(thumbStateList);
+		this.mSwitch.setThumbTintList(thumbStateList);
+		this.mSwitch.setTrackTintList(trackStateList);
 	}
 
 	/**

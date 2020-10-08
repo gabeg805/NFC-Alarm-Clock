@@ -52,6 +52,15 @@ public class NacMediaFragment
 	}
 
 	/**
+	 * @return True if the media path matches the given path, and False otherwise.
+	 */
+	protected boolean isSelectedPath(String path)
+	{
+		String selectedPath = getMediaPath();
+		return !selectedPath.isEmpty() && selectedPath.equals(path);
+	}
+
+	/**
 	 * @return The alarm.
 	 */
 	protected NacAlarm getAlarm()

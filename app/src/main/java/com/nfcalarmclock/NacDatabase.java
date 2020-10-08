@@ -17,8 +17,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-import java.util.Locale;
-
 /**
  * NFC Alarm Clock database.
  */

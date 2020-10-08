@@ -342,7 +342,6 @@ public class NacCalendar
 
 		if (alarm == null)
 		{
-			;
 		}
 		else if (!alarm.areDaysSelected())
 		{

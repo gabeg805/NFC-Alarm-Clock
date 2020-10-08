@@ -3,7 +3,8 @@ package com.nfcalarmclock;
 import android.view.animation.AccelerateInterpolator;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
+//import android.widget.RelativeLayout;
 import java.lang.Float;
 import java.util.EnumSet;
 
@@ -26,7 +27,8 @@ public class NacCardDays
 	/**
 	 * Repeat alarm view.
 	 */
-	private RelativeLayout mRepeat;
+	private ImageView mRepeat;
+	//private RelativeLayout mRepeat;
 
 	/**
 	 * Slide animation for the day buttons.
@@ -43,7 +45,8 @@ public class NacCardDays
 	public NacCardDays(View root, NacCardMeasure measure)
 	{
 		this.mDayButtons = (NacDayOfWeek) root.findViewById(R.id.nac_days);
-		this.mRepeat = (RelativeLayout) root.findViewById(R.id.nac_repeat);
+		this.mRepeat = (ImageView) root.findViewById(R.id.nac_repeat);
+		//this.mRepeat = (RelativeLayout) root.findViewById(R.id.nac_repeat);
 		this.mDaysAnimation = new NacSlideAnimation(this.mDayButtons);
 		this.mMeasure = measure;
 	}
@@ -75,7 +78,8 @@ public class NacCardDays
 	/**
 	 * @return The repeat view.
 	 */
-	public RelativeLayout getRepeat()
+	//public RelativeLayout getRepeatView()
+	public ImageView getRepeatView()
 	{
 		return this.mRepeat;
 	}
@@ -130,7 +134,8 @@ public class NacCardDays
 	{
 		NacAlarm alarm = this.getAlarm();
 		boolean repeat = alarm.getRepeat();
-		RelativeLayout view = this.getRepeat();
+		View view = this.getRepeatView();
+		//RelativeLayout view = this.getRepeatView();
 
 		if (!alarm.areDaysSelected())
 		{
@@ -149,9 +154,12 @@ public class NacCardDays
 	 */
 	public void setListeners(Object listener)
 	{
-		this.mDayButtons.setOnClickListener((NacDayOfWeek.OnClickListener)listener);
-		this.mRepeat.setOnClickListener((View.OnClickListener)listener);
-		this.mRepeat.setOnLongClickListener((View.OnLongClickListener)listener);
+		NacDayOfWeek dayButtons = this.getDayButtons();
+		View repeatView = this.getRepeatView();
+
+		dayButtons.setOnClickListener((NacDayOfWeek.OnClickListener)listener);
+		repeatView.setOnClickListener((View.OnClickListener)listener);
+		repeatView.setOnLongClickListener((View.OnLongClickListener)listener);
 	}
 
 }

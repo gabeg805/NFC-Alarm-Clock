@@ -241,11 +241,7 @@ public class NacCardAdapter
 		else if (insertEnabled == alarmEnabled)
 		{
 			Calendar cal = NacCalendar.getNext(alarmInList);
-
-			if (nextRun.before(cal))
-			{
-				return true;
-			}
+			return nextRun.before(cal);
 		}
 
 		return false;
