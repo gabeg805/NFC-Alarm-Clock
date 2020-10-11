@@ -1,8 +1,7 @@
 package com.nfcalarmclock;
 
 import android.view.View;
-import android.widget.ImageView;
-//import android.widget.RelativeLayout;
+import com.google.android.material.button.MaterialButton;
 
 /**
  * Vibrate view for an alarm card.
@@ -18,15 +17,13 @@ public class NacCardVibrate
 	/**
 	 * Vibrate checkbox.
 	 */
-	private ImageView mVibrate;
-	//private RelativeLayout mVibrate;
+	private MaterialButton mVibrate;
 
 	/**
 	 */
 	public NacCardVibrate(View root)
 	{
-		this.mVibrate = (ImageView) root.findViewById(R.id.nac_vibrate);
-		//this.mVibrate = (RelativeLayout) root.findViewById(R.id.nac_vibrate);
+		this.mVibrate = (MaterialButton) root.findViewById(R.id.nac_vibrate);
 	}
 
 	/**
@@ -40,8 +37,7 @@ public class NacCardVibrate
 	/**
 	 * @return The vibrate view.
 	 */
-	//private RelativeLayout getVibrateView()
-	private ImageView getVibrateView()
+	private MaterialButton getVibrateView()
 	{
 		return this.mVibrate;
 	}
@@ -63,7 +59,6 @@ public class NacCardVibrate
 		NacAlarm alarm = this.getAlarm();
 		boolean vibrate = alarm.getVibrate();
 		View view = this.getVibrateView();
-		//RelativeLayout view = this.getVibrateView();
 
 		if (view != null)
 		{

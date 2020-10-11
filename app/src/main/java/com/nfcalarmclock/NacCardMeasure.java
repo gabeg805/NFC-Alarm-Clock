@@ -8,6 +8,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+//import androidx.cardview.widget.CardView;
+
 /**
  * Measurements of an alarm card.
  */
@@ -178,6 +180,15 @@ public class NacCardMeasure
 	public void measure(NacCardHolder holder)
 	{
 		View root = holder.getRoot();
+		//NacCardView nac = holder.getNacCardView();
+		//CardView card = holder.getCardView();
+		//NacUtility.printf("Measure height              : %d", NacUtility.getHeight(card));
+		//nac.doCollapse();
+		//NacUtility.printf("Measure collapse height     : %d", NacUtility.getHeight(card));
+		//nac.doExpand();
+		//NacUtility.printf("Measure expand height       : %d", NacUtility.getHeight(card));
+		//nac.doCollapse();
+		//NacUtility.printf("Measure collapse (a) height : %d", NacUtility.getHeight(card));
 
 		this.setScreenWidth();
 		this.setScreenHeight();
@@ -196,7 +207,8 @@ public class NacCardMeasure
 	 */
 	private void setCardPadding(View root)
 	{
-		RelativeLayout header = root.findViewById(R.id.nac_header);
+		//RelativeLayout header = root.findViewById(R.id.nac_header);
+		View header = (View) root.findViewById(R.id.nac_header);
 		this.mCardPadding = header.getPaddingStart() + header.getPaddingEnd();
 	}
 
@@ -262,7 +274,8 @@ public class NacCardMeasure
 	 */
 	private void setHeaderHeight(View root)
 	{
-		RelativeLayout header = (RelativeLayout) root.findViewById(R.id.nac_header);
+		//RelativeLayout header = (RelativeLayout) root.findViewById(R.id.nac_header);
+		View header = (View) root.findViewById(R.id.nac_header);
 		this.mHeaderHeight = NacUtility.getHeight(header);
 	}
 
@@ -275,7 +288,7 @@ public class NacCardMeasure
 		RecyclerView rv = (RecyclerView) ((Activity)context).findViewById(
 			R.id.content_alarm_list);
 		int fabHeight = (int) context.getResources()
-			.getDimension(R.dimen.isz_icon);
+			.getDimension(R.dimen.isz_large);
 		int recyclerHeight = rv.getHeight();
 		this.mScreenHeight = recyclerHeight - fabHeight;
 	}

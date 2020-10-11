@@ -4,7 +4,6 @@
 	android:id="@+id/buttons"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:padding="@dimen/sp_align"
 	android:orientation="horizontal"
 	tools:ignore="ButtonOrder">
 
@@ -14,7 +13,7 @@
 		android:layout_height="wrap_content"
 		android:background="?android:attr/selectableItemBackground"
 		android:text="@string/action_clear"
-		android:textSize="@dimen/tsz_support"
+		android:textSize="@dimen/tsz_small"
 		/>
 
 	<View
@@ -29,7 +28,7 @@
 		android:layout_height="wrap_content"
 		android:background="?android:attr/selectableItemBackground"
 		android:text="@string/action_cancel"
-		android:textSize="@dimen/tsz_support"
+		android:textSize="@dimen/tsz_small"
 		/>
 
 	<Button
@@ -38,7 +37,7 @@
 		android:layout_height="wrap_content"
 		android:background="?android:attr/selectableItemBackground"
 		android:text="@string/action_ok"
-		android:textSize="@dimen/tsz_support"
+		android:textSize="@dimen/tsz_small"
 		/>
 
 </LinearLayout>

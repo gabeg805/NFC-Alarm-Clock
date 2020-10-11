@@ -19,6 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.google.android.material.button.MaterialButton;
+
 /**
  * Sound for an alarm card.
  */
@@ -38,12 +40,13 @@ public class NacCardSound
 	/**
 	 * Sound.
 	 */
-	private LinearLayout mSoundParent;
+	//private LinearLayout mSoundParent;
 
 	/**
 	 * Sound.
 	 */
-	private TextView mSound;
+	//private TextView mSound;
+	private MaterialButton mSoundButton;
 
 	/**
 	 * Volume.
@@ -58,7 +61,8 @@ public class NacCardSound
 	/**
 	 * Media source settings.
 	 */
-	private ImageView mAudioSourceIcon;
+	private MaterialButton mAudioSourceIcon;
+	//private ImageView mAudioSourceIcon;
 
 	/**
 	 * Card measurement.
@@ -70,11 +74,13 @@ public class NacCardSound
 	public NacCardSound(Context context, View root, NacCardMeasure measure)
 	{
 		this.mContext = context;
-		this.mSoundParent = (LinearLayout) root.findViewById(R.id.nac_sound);
-		this.mSound = (TextView) root.findViewById(R.id.sound_name);
+		//this.mSoundParent = (LinearLayout) root.findViewById(R.id.nac_sound);
+		//this.mSound = (TextView) root.findViewById(R.id.sound_name);
+		this.mSoundButton = (MaterialButton) root.findViewById(R.id.nac_sound);
 		this.mVolume = (SeekBar) root.findViewById(R.id.nac_volume_slider);
 		this.mVolumeIcon = (ImageView) root.findViewById(R.id.nac_volume_icon);
-		this.mAudioSourceIcon = (ImageView) root.findViewById(R.id.nac_volume_settings);
+		this.mAudioSourceIcon = (MaterialButton) root.findViewById(R.id.nac_volume_settings);
+		//this.mAudioSourceIcon = (ImageView) root.findViewById(R.id.nac_volume_settings);
 		this.mMeasure = measure;
 	}
 
@@ -103,14 +109,6 @@ public class NacCardSound
 	}
 
 	/**
-	 * @return The screen width.
-	 */
-	private int getScreenWidth()
-	{
-		return this.mMeasure.getScreenWidth();
-	}
-
-	/**
 	 * Initialize the sound.
 	 */
 	public void init(NacSharedPreferences shared, NacAlarm alarm)
@@ -136,7 +134,8 @@ public class NacCardSound
 	 */
 	public void setListener(Object listener)
 	{
-		this.mSoundParent.setOnClickListener((View.OnClickListener)listener);
+		//this.mSoundParent.setOnClickListener((View.OnClickListener)listener);
+		this.mSoundButton.setOnClickListener((View.OnClickListener)listener);
 		this.mVolume.setOnSeekBarChangeListener((SeekBar.OnSeekBarChangeListener)listener);
 		this.mAudioSourceIcon.setOnClickListener((View.OnClickListener)listener);
 	}
@@ -152,8 +151,10 @@ public class NacCardSound
 		String message = NacSharedPreferences.getMediaMessage(context, path);
 		float alpha = ((path != null) && !path.isEmpty()) ? 1.0f : 0.3f;
 
-		this.mSound.setText(message);
-		this.mSound.setAlpha(alpha);
+		this.mSoundButton.setText(message);
+		this.mSoundButton.setAlpha(alpha);
+		//this.mSound.setText(message);
+		//this.mSound.setAlpha(alpha);
 	}
 
 	/**

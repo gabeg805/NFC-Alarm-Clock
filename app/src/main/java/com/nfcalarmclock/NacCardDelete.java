@@ -3,6 +3,8 @@ package com.nfcalarmclock;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.google.android.material.button.MaterialButton;
+
 /**
  * Delete button for an alarm card.
  */
@@ -20,7 +22,8 @@ public class NacCardDelete
 	/**
 	 * Delete button.
 	 */
-	 private LinearLayout mDelete;
+	 private MaterialButton mDelete;
+	 //private LinearLayout mDelete;
 
 	/**
 	 * Delete listener.
@@ -31,7 +34,8 @@ public class NacCardDelete
 	 */
 	public NacCardDelete(View root)
 	{
-		this.mDelete = (LinearLayout) root.findViewById(R.id.nac_delete);
+		this.mDelete = (MaterialButton) root.findViewById(R.id.nac_delete);
+		//this.mDelete = (LinearLayout) root.findViewById(R.id.nac_delete);
 	}
 
 	/**

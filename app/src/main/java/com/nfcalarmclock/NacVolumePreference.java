@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
+import com.google.android.material.button.MaterialButton;
 
 /**
  * Preference to choose the default volume and audio source.
@@ -114,7 +115,8 @@ public class NacVolumePreference
 		super.onBindViewHolder(holder);
 
 		SeekBar seekbar = (SeekBar) holder.findViewById(R.id.volume_slider);
-		RelativeLayout image = (RelativeLayout) holder.findViewById(R.id.widget);
+		View image = (View) holder.findViewById(R.id.widget);
+		//RelativeLayout image = (RelativeLayout) holder.findViewById(R.id.widget);
 		this.mVolumeSeekBar = seekbar;
 
 		seekbar.setProgress(this.mValue);

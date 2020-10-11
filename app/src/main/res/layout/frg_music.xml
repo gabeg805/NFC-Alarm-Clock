@@ -10,21 +10,21 @@
 		android:id="@+id/path"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:paddingTop="@dimen/sp_align"
-		android:paddingBottom="@dimen/sp_align"
-		android:paddingStart="@dimen/sp_support"
-		android:paddingEnd="@dimen/sp_support"
+		android:paddingTop="@dimen/nudge"
+		android:paddingBottom="@dimen/nudge"
+		android:paddingStart="@dimen/tiny"
+		android:paddingEnd="@dimen/tiny"
 		android:singleLine="true"
 		android:ellipsize="start"
 		android:textStyle="italic"
-		android:textSize="@dimen/tsz_support"
+		android:textSize="@dimen/tsz_small"
 		android:text=""
 		/>
 
 	<View
 		android:layout_width="match_parent"
-		android:layout_height="@dimen/sz_divider"
-		android:layout_marginBottom="@dimen/sp_row"
+		android:layout_height="@dimen/line"
+		android:layout_marginBottom="@dimen/tiny"
 		android:background="@color/gray_light"
 		/>
 

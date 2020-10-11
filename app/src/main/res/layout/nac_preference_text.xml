@@ -6,26 +6,24 @@
 	android:layout_weight="1">
 
 	<TextView
+		style="@style/TextView.Primary"
 		android:id="@android:id/title"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:singleLine="true"
 		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:textColor="?android:attr/textColorPrimary"
-		android:textSize="@dimen/tsz_main"
 		android:ellipsize="marquee"
 		android:fadingEdge="horizontal"
 		/>
 
 	<TextView
+		style="@style/TextView.Secondary"
 		android:id="@android:id/summary"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_below="@android:id/title"
 		android:layout_alignStart="@android:id/title"
 		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:textColor="?android:attr/textColorSecondary"
-		android:textSize="@dimen/tsz_support"
 		android:maxLines="4"
 		/>
 

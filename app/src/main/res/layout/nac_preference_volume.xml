@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
@@ -16,45 +17,44 @@
 		android:layout_weight="1">
 
 		<TextView
+			style="@style/TextView.Primary"
 			android:id="@android:id/title"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:singleLine="true"
 			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:textColor="?android:attr/textColorPrimary"
-			android:textSize="@dimen/tsz_main"
 			android:ellipsize="marquee"
 			android:fadingEdge="horizontal"
 			/>
 
-		<RelativeLayout
-			android:id="@+id/widget"
-			android:layout_width="@dimen/sz_touch"
-			android:layout_height="@dimen/sz_touch"
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
 			android:layout_below="@android:id/title"
-			android:layout_alignParentEnd="true">
+			android:gravity="center_vertical"
+			android:orientation="horizontal">
 
-			<ImageView
-				android:layout_width="@dimen/isz_main"
-				android:layout_height="@dimen/isz_main"
-				android:layout_centerInParent="true"
-				android:src="@mipmap/settings"
+			<SeekBar
+				android:id="@+id/volume_slider"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:paddingTop="@dimen/tiny"
+				android:paddingBottom="@dimen/tiny"
+				android:paddingStart="@dimen/zero"
+				android:paddingEnd="@dimen/normal"
+				android:max="100"
+				android:progress="75"
 				/>
 
-		</RelativeLayout>
-
-		<SeekBar
-			android:id="@+id/volume_slider"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:layout_toStartOf="@id/widget"
-			android:layout_below="@android:id/title"
-			android:paddingTop="@dimen/sp_main"
-			android:paddingBottom="@dimen/sp_main"
-			android:paddingStart="@dimen/sz_none"
-			android:max="100"
-			android:progress="75"
-			/>
+			<com.google.android.material.button.MaterialButton
+				style="@style/TextButton.Icon"
+				android:id="@+id/widget"
+				android:layout_width="@dimen/touch"
+				android:layout_height="@dimen/touch"
+				app:icon="@mipmap/settings"
+				/>
+		</LinearLayout>
 
 	</RelativeLayout>
 

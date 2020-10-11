@@ -1,21 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:paddingTop="@dimen/sp_main"
-	android:paddingBottom="@dimen/sp_main"
-	android:paddingStart="@dimen/sp_section"
-	android:paddingEnd="@dimen/sp_section"
+	android:paddingTop="@dimen/normal"
+	android:paddingBottom="@dimen/normal"
+	android:paddingStart="@dimen/large"
+	android:paddingEnd="@dimen/large"
 	android:background="?android:attr/selectableItemBackground"
 	android:orientation="horizontal"
 	tools:ignore="RtlSymmetry">
 
 	<ImageView
 		android:id="@+id/image"
-		android:layout_width="@dimen/isz_icon"
-		android:layout_height="@dimen/isz_icon"
+		android:layout_width="@dimen/isz_large"
+		android:layout_height="@dimen/isz_large"
 		android:layout_alignParentStart="true"
 		android:layout_centerVertical="true"
 		android:contentDescription="@string/cd_ic_file_entry"
@@ -28,34 +29,33 @@
 		android:layout_toEndOf="@id/image"
 		android:layout_toStartOf="@id/annotation"
 		android:layout_centerVertical="true"
-		android:paddingStart="@dimen/sp_main"
-		android:paddingEnd="@dimen/sp_main"
+		android:paddingStart="@dimen/normal"
+		android:paddingEnd="@dimen/normal"
 		android:orientation="vertical">
 
 		<TextView
+			style="@style/TextView.Primary"
 			android:id="@+id/title"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textColor="@color/white"
-			android:textSize="@dimen/tsz_main"
 			/>
 
 		<TextView
+			style="@style/TextView.Secondary"
 			android:id="@+id/subtitle"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textSize="@dimen/tsz_support"
 			android:visibility="gone"
 			/>
 	</LinearLayout>
 
 	<TextView
+		style="@style/TextView.Secondary"
 		android:id="@+id/annotation"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentEnd="true"
 		android:layout_centerVertical="true"
-		android:textSize="@dimen/tsz_support"
 		/>
 
 </RelativeLayout>

@@ -2,11 +2,8 @@ package com.nfcalarmclock;
 
 import android.view.animation.AccelerateInterpolator;
 import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-//import android.widget.RelativeLayout;
-import java.lang.Float;
 import java.util.EnumSet;
+import com.google.android.material.button.MaterialButton;
 
 /**
  * Days and repeat button for an alarm card.
@@ -27,8 +24,7 @@ public class NacCardDays
 	/**
 	 * Repeat alarm view.
 	 */
-	private ImageView mRepeat;
-	//private RelativeLayout mRepeat;
+	private MaterialButton mRepeat;
 
 	/**
 	 * Slide animation for the day buttons.
@@ -45,8 +41,7 @@ public class NacCardDays
 	public NacCardDays(View root, NacCardMeasure measure)
 	{
 		this.mDayButtons = (NacDayOfWeek) root.findViewById(R.id.nac_days);
-		this.mRepeat = (ImageView) root.findViewById(R.id.nac_repeat);
-		//this.mRepeat = (RelativeLayout) root.findViewById(R.id.nac_repeat);
+		this.mRepeat = (MaterialButton) root.findViewById(R.id.nac_repeat);
 		this.mDaysAnimation = new NacSlideAnimation(this.mDayButtons);
 		this.mMeasure = measure;
 	}
@@ -78,8 +73,7 @@ public class NacCardDays
 	/**
 	 * @return The repeat view.
 	 */
-	//public RelativeLayout getRepeatView()
-	public ImageView getRepeatView()
+	public MaterialButton getRepeatView()
 	{
 		return this.mRepeat;
 	}
@@ -135,7 +129,6 @@ public class NacCardDays
 		NacAlarm alarm = this.getAlarm();
 		boolean repeat = alarm.getRepeat();
 		View view = this.getRepeatView();
-		//RelativeLayout view = this.getRepeatView();
 
 		if (!alarm.areDaysSelected())
 		{

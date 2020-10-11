@@ -2,8 +2,8 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.NumberPicker;
+import com.google.android.material.button.MaterialButton;
 
 /**
  * Create a spinner dialog.
@@ -74,7 +74,6 @@ public class NacSpinnerDialog
 	public int getMaxValue()
 	{
 		NumberPicker picker = this.getPicker();
-
 		return (picker != null) ? picker.getMaxValue() : -1;
 	}
 
@@ -84,7 +83,6 @@ public class NacSpinnerDialog
 	public int getMinValue()
 	{
 		NumberPicker picker = this.getPicker();
-
 		return (picker != null) ? picker.getMinValue() : -1;
 	}
 
@@ -102,7 +100,6 @@ public class NacSpinnerDialog
 	public int getValue()
 	{
 		NumberPicker picker = this.getPicker();
-
 		return (picker != null) ? picker.getValue() : -1;
 	}
 
@@ -119,11 +116,13 @@ public class NacSpinnerDialog
 
 		if (dir == Direction.INCREMENT)
 		{
-			value = ((value+1) < max) ? value+1 : max;
+			//value = ((value+1) < max) ? value+1 : max;
+			value = (value+1) % (max+1);
 		}
 		else if (dir == Direction.DECREMENT)
 		{
-			value = ((value-1) >= min) ? value-1 : min;
+			//value = ((value-1) >= min) ? value-1 : min;
+			value = (max+value-1) % (max+1);
 		}
 		else
 		{
@@ -140,14 +139,14 @@ public class NacSpinnerDialog
 	public void onShowDialog(NacDialog dialog, View root)
 	{
 		this.mPicker = root.findViewById(R.id.picker);
-		ImageButton increment = root.findViewById(R.id.increment);
-		ImageButton decrement = root.findViewById(R.id.decrement);
+		MaterialButton increment = (MaterialButton) root.findViewById(R.id.increment);
+		MaterialButton decrement = (MaterialButton) root.findViewById(R.id.decrement);
 
 		increment.setTag(Direction.INCREMENT);
 		decrement.setTag(Direction.DECREMENT);
 		increment.setOnClickListener(this);
 		decrement.setOnClickListener(this);
-		dialog.scale(0.8, 0.7, false, true);
+		dialog.scale(0.7, 0.7, false, true);
 	}
 
 	/**

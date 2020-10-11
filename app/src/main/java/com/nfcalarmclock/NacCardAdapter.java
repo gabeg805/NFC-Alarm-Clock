@@ -661,12 +661,6 @@ public class NacCardAdapter
 
 			switch (id)
 			{
-				case R.id.menu_copy_alarm:
-					this.copyAlarm(position);
-					break;
-				case R.id.menu_delete_alarm:
-					this.deleteAlarm(position);
-					break;
 				case R.id.menu_show_next_alarm:
 					this.showAlarm(alarm);
 					break;

@@ -7,12 +7,11 @@
 	android:paddingEnd="?dialogPreferredPadding">
 
 	<TextView
+		style="@style/TextView.Primary"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/sp_main"
-		android:layout_marginBottom="@dimen/sp_main"
-		android:textColor="?android:attr/textColorPrimary"
-		android:textSize="@dimen/tsz_main"
+		android:layout_marginTop="@dimen/normal"
+		android:layout_marginBottom="@dimen/normal"
 		android:text="@string/message_playlist"
 		/>
 

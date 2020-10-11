@@ -11,7 +11,7 @@
 		android:id="@+id/content_alarm_list"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:layout_marginBottom="@dimen/sp_main"
+		android:layout_marginBottom="@dimen/normal"
 		android:paddingBottom="@dimen/isz_attention"
 		android:clipToPadding="false"
 		android:scrollbars="vertical"
@@ -23,7 +23,7 @@
 		android:layout_width="@dimen/isz_attention"
 		android:layout_height="@dimen/isz_attention"
 		android:layout_gravity="bottom|center"
-		android:layout_marginBottom="@dimen/sp_main"
+		android:layout_marginBottom="@dimen/normal"
 		android:src="@mipmap/plus"
 		/>
 

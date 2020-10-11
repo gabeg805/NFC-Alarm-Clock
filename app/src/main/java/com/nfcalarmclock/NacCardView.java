@@ -53,7 +53,7 @@ public class NacCardView
 	/**
 	 * Header.
 	 */
-	private RelativeLayout mHeader;
+	private LinearLayout mHeader;
 
 	/**
 	 * Summary region.
@@ -153,11 +153,11 @@ public class NacCardView
 		this.mContext = context;
 		this.mAlarm = null;
 		this.mCardView = (CardView) root.findViewById(R.id.nac_card);
-		this.mHeader = (RelativeLayout) root.findViewById(R.id.nac_header);
+		this.mHeader = (LinearLayout) root.findViewById(R.id.nac_header);
 		this.mSummary = (LinearLayout) root.findViewById(R.id.nac_summary);
 		this.mExtra = (LinearLayout) root.findViewById(R.id.nac_extra);
-		this.mDivider1 = (View) root.findViewById(R.id.nac_divider1);
-		this.mDivider2 = (LinearLayout) root.findViewById(R.id.nac_divider2);
+		this.mDivider1 = (View) root.findViewById(R.id.nac_divider_delete);
+		this.mDivider2 = (LinearLayout) root.findViewById(R.id.nac_divider_header);
 		this.mCopy = (RelativeLayout) root.findViewById(R.id.nac_swipe_copy);
 		this.mDelete = (RelativeLayout) root.findViewById(R.id.nac_swipe_delete);
 		//this.mSnoozeIcon = (Button) root.findViewById(R.id.nac_snooze);
@@ -596,10 +596,10 @@ public class NacCardView
 	 */
 	public void setOnClickListener(View root, View.OnClickListener listener)
 	{
-		RelativeLayout collapse = (RelativeLayout)
-			root.findViewById(R.id.nac_collapse);
-		RelativeLayout time = (RelativeLayout)
-			root.findViewById(R.id.nac_time_parent);
+		//RelativeLayout collapse = (RelativeLayout) root.findViewById(R.id.nac_collapse);
+		//RelativeLayout time = (RelativeLayout) root.findViewById(R.id.nac_time_parent);
+		View collapse = (View) root.findViewById(R.id.nac_collapse);
+		View time = (View) root.findViewById(R.id.nac_time_parent);
 
 		collapse.setOnClickListener(listener);
 		time.setOnClickListener(listener);
@@ -613,8 +613,8 @@ public class NacCardView
 	public void setOnCreateContextMenuListener(View root,
 		View.OnCreateContextMenuListener listener)
 	{
-		RelativeLayout time = (RelativeLayout)
-			root.findViewById(R.id.nac_time_parent);
+		//RelativeLayout time = (RelativeLayout) root.findViewById(R.id.nac_time_parent);
+		View time = (View) root.findViewById(R.id.nac_time_parent);
 
 		time.setOnCreateContextMenuListener(listener);
 		this.mSummary.setOnCreateContextMenuListener(listener);

@@ -121,7 +121,7 @@ public class NacSettingsActivity
 		private BitmapDrawable createIconDrawable(int id)
 		{
 			Resources res = getResources();
-			int size = (int) res.getDimension(R.dimen.isz_icon);
+			int size = (int) res.getDimension(R.dimen.isz_large);
 			Bitmap bitmap = BitmapFactory.decodeResource(res, id);
 			Bitmap scaled = Bitmap.createScaledBitmap(bitmap, size, size, true);
 

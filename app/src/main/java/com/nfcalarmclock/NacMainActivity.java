@@ -471,7 +471,7 @@ public class NacMainActivity
 	{
 		RecyclerView recyclerView = this.getRecyclerView();
 		NacCardAdapter cardAdapter = this.getCardAdapter();
-		int padding = getResources().getDimensionPixelSize(R.dimen.sp_main);
+		int padding = getResources().getDimensionPixelSize(R.dimen.normal);
 
 		Drawable drawable = ContextCompat.getDrawable(this,
 			R.drawable.card_divider);

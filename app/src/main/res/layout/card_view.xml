@@ -6,47 +6,109 @@
 	android:id="@+id/nac_card"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	app:contentPaddingLeft="@dimen/sp_main"
-	app:contentPaddingRight="@dimen/sp_main"
+	app:contentPaddingLeft="@dimen/normal"
+	app:contentPaddingRight="@dimen/normal"
 	app:cardBackgroundColor="?attr/colorCard"
-	tools:ignore="RelativeOverlap,RtlSymmetry">
+	tools:ignore="RtlSymmetry">
+	<!--
+	tools:ignore="RelativeOverlap,RtlSymmetry"
+	-->
 
-	<RelativeLayout
+	<LinearLayout
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
+		android:layout_height="wrap_content"
+		android:orientation="vertical">
 
-		<RelativeLayout
+		<!-- Header -->
+		<LinearLayout
 			android:id="@+id/nac_header"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
+			android:layout_height="wrap_content"
+			android:paddingTop="@dimen/normal"
+			android:orientation="horizontal">
 
-			<RelativeLayout
+			<!-- Time -->
+			<LinearLayout
 				android:id="@+id/nac_time_parent"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:paddingTop="@dimen/sp_main"
-				android:paddingEnd="@dimen/sz_extend">
+				android:paddingStart="@dimen/zero"
+				android:paddingEnd="@dimen/large"
+				android:orientation="horizontal">
 
 				<TextView
+					style="@style/TextView.Primary"
 					android:id="@+id/nac_time"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:textColor="@color/white"
 					android:textSize="@dimen/tsz_attention"
 					/>
 
 				<TextView
+					style="@style/TextView.Primary"
 					android:id="@+id/nac_meridian"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_toEndOf="@id/nac_time"
-					android:layout_alignBaseline="@id/nac_time"
-					android:layout_marginStart="@dimen/sp_support"
-					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_icon"
+					android:layout_marginStart="@dimen/tiny"
+					android:textSize="@dimen/tsz_large"
 					/>
+			</LinearLayout> <!-- Time -->
 
-			</RelativeLayout>
+			<Space
+				android:layout_width="0dp"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				/>
+
+			<!-- Enable/disable switch -->
+			<androidx.appcompat.widget.SwitchCompat
+				android:id="@+id/nac_switch"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingTop="@dimen/normal"
+				android:paddingBottom="@dimen/normal"
+				app:switchMinWidth="@dimen/isz_attention"
+				/>
+		</LinearLayout> <!-- Header -->
+
+		<!-- Day/name summary -->
+		<LinearLayout
+			android:id="@+id/nac_summary"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingBottom="@dimen/tiny"
+			android:gravity="center_vertical"
+			android:orientation="horizontal">
+
+			<TextView
+				style="@style/TextView.Summary"
+				android:id="@+id/nac_summary_days"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="@dimen/nudge"
+				android:layout_marginEnd="@dimen/tiny"
+				android:textColor="?attr/colorAccent"
+				android:text=""
+				/>
+
+			<TextView
+				style="@style/TextView.Summary"
+				android:id="@+id/nac_summary_name"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginEnd="@dimen/nudge"
+				android:layout_weight="1"
+				android:ellipsize="end"
+				android:textColor="@color/sky_blue"
+				/>
+
+			<com.google.android.material.button.MaterialButton
+				style="@style/TextButton.Icon"
+				android:layout_width="@dimen/touch"
+				android:layout_height="@dimen/isz_large"
+				app:icon="@mipmap/expand"
+				/>
+		</LinearLayout> <!-- Day/name Summary -->
 
 			<!--
 			<Button
@@ -55,94 +117,30 @@
 				android:layout_height="wrap_content"
 				android:layout_toStartOf="@id/nac_switch"
 				android:layout_alignBaseline="@id/nac_switch"
-				android:layout_marginStart="@dimen/sp_section"
-				android:layout_marginEnd="@dimen/sp_section"
-				android:contentDescription="@string/cd_ic_snoozed"
-				android:textSize="@dimen/tsz_support"
+				android:layout_marginStart="@dimen/large"
+				android:layout_marginEnd="@dimen/large"
+				android:textSize="@dimen/tsz_small"
 				android:text="Dismiss"
 				android:visibility="gone"
 				/>
 				-->
 
 			<!--
-				android:layout_marginEnd="@dimen/sp_section"
-				android:layout_marginEnd="@dimen/sp_main"
-				android:layout_marginEnd="@dimen/sp_support"
+				android:layout_marginEnd="@dimen/large"
+				android:layout_marginEnd="@dimen/normal"
+				android:layout_marginEnd="@dimen/x_small"
 			<ImageView
 				android:id="@+id/nac_snooze"
-				android:layout_width="@dimen/isz_main"
-				android:layout_height="@dimen/isz_main"
+				android:layout_width="@dimen/isz_normal"
+				android:layout_height="@dimen/isz_normal"
 				android:layout_toStartOf="@id/nac_switch"
 				android:layout_alignBottom="@id/nac_switch"
-				android:layout_marginStart="@dimen/sp_support"
-				android:layout_marginBottom="@dimen/sp_snooze_icon"
-				android:contentDescription="@string/cd_ic_snoozed"
+				android:layout_marginStart="@dimen/tiny"
+				android:layout_marginBottom="@dimen/small"
 				android:visibility="gone"
 				android:src="@mipmap/snooze"
 				/>
 				-->
-
-			<androidx.appcompat.widget.SwitchCompat
-				android:id="@+id/nac_switch"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_alignParentEnd="true"
-				android:layout_alignBottom="@id/nac_time_parent"
-				android:paddingTop="@dimen/sz_extend"
-				android:paddingBottom="@dimen/sz_extend"
-				app:switchMinWidth="@dimen/isz_attention"
-				/>
-
-		</RelativeLayout>
-
-		<LinearLayout
-			android:id="@+id/nac_summary"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_below="@id/nac_header"
-			android:paddingTop="@dimen/sp_align"
-			android:paddingBottom="@dimen/sp_row_last"
-			android:gravity="center_vertical"
-			android:orientation="horizontal">
-
-			<TextView
-				android:id="@+id/nac_summary_days"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginStart="@dimen/sp_align"
-				android:layout_marginEnd="@dimen/sp_support"
-				android:maxLines="1"
-				android:textColor="?attr/colorAccent"
-				android:textSize="@dimen/tsz_support"
-				android:textStyle="bold"
-				android:text=""
-				/>
-
-			<TextView
-				android:id="@+id/nac_summary_name"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginStart="@dimen/sp_align"
-				android:layout_marginEnd="@dimen/sp_support"
-				android:layout_weight="1"
-				android:maxLength="@integer/max_entry_length"
-				android:maxLines="1"
-				android:ellipsize="end"
-				android:textColor="@color/sky_blue"
-				android:textSize="@dimen/tsz_support"
-				android:textStyle="bold"
-				/>
-
-			<ImageView
-				android:contentDescription="@string/cd_btn_expand"
-				android:layout_width="@dimen/isz_main"
-				android:layout_height="@dimen/isz_main"
-				android:layout_marginStart="@dimen/sp_support"
-				android:layout_marginEnd="@dimen/sp_normal"
-				android:src="@mipmap/expand"
-				/>
-
-		</LinearLayout>
 
 		<!--
 		<LinearLayout
@@ -151,7 +149,7 @@
 			android:layout_height="wrap_content"
 			android:layout_below="@id/nac_summary"
 			android:paddingTop="@dimen/sp_align"
-			android:paddingBottom="@dimen/sp_row_last"
+			android:paddingBottom="@dimen/normal"
 			android:orientation="horizontal"
 			android:gravity="center_vertical"
 			android:alpha="0.8"
@@ -159,11 +157,10 @@
 
 			<ImageView
 				android:id="@+id/snoozy_icon"
-				android:layout_width="@dimen/isz_main"
-				android:layout_height="@dimen/isz_main"
+				android:layout_width="@dimen/isz_normal"
+				android:layout_height="@dimen/isz_normal"
 				android:layout_marginStart="@dimen/sp_align"
-				android:layout_marginEnd="@dimen/sp_main"
-				android:contentDescription="@string/cd_ic_media"
+				android:layout_marginEnd="@dimen/normal"
 				android:src="@mipmap/dismiss"
 				/>
 
@@ -172,7 +169,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:textColor="@color/white"
-				android:textSize="@dimen/tsz_main"
+				android:textSize="@dimen/tsz_normal"
 				android:text="Dismiss"
 				/>
 
@@ -183,152 +180,130 @@
 				/>
 
 			<ImageView
-				android:layout_width="@dimen/isz_main"
-				android:layout_height="@dimen/isz_main"
-				android:layout_marginStart="@dimen/sp_support"
-				android:layout_marginEnd="@dimen/sp_support"
-				android:contentDescription="@string/cd_btn_expand"
+				android:layout_width="@dimen/isz_normal"
+				android:layout_height="@dimen/isz_normal"
+				android:layout_marginStart="@dimen/tiny"
+				android:layout_marginEnd="@dimen/tiny"
 				android:src="@mipmap/expand"
 				/>
 
 		</LinearLayout>
 		-->
 
-<!--
+			<!--
 			android:paddingTop="@dimen/sp_align"
-			android:paddingBottom="@dimen/sp_row_last">
+			android:paddingBottom="@dimen/normal">
 
 			android:layout_below="@id/nac_snoozy"
- -->
+			 -->
 
 		<LinearLayout
 			android:id="@+id/nac_extra"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_below="@id/nac_summary"
 			android:orientation="vertical"
 			android:visibility="gone">
 
+			<!-- Header divider -->
 			<LinearLayout
-				android:id="@+id/nac_divider2"
+				android:id="@+id/nac_divider_header"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:paddingTop="@dimen/sp_row"
-				android:paddingBottom="@dimen/sp_row"
+				android:paddingTop="@dimen/tiny"
+				android:paddingBottom="@dimen/tiny"
 				android:gravity="center"
 				android:orientation="horizontal">
 
 				<View
-					android:layout_width="@dimen/sz_divider2"
-					android:layout_height="@dimen/sz_divider2"
-					android:layout_marginEnd="@dimen/sp_support"
+					android:layout_width="@dimen/nudge"
+					android:layout_height="@dimen/nudge"
 					android:background="@drawable/color_selector"
 					/>
 
 				<View
-					android:layout_width="@dimen/sz_divider1"
-					android:layout_height="@dimen/sz_divider1"
+					android:layout_width="@dimen/tiny"
+					android:layout_height="@dimen/tiny"
+					android:layout_marginStart="@dimen/tiny"
+					android:layout_marginEnd="@dimen/tiny"
 					android:background="@drawable/color_selector"
 					/>
 
 				<View
-					android:layout_width="@dimen/sz_divider2"
-					android:layout_height="@dimen/sz_divider2"
-					android:layout_marginStart="@dimen/sp_support"
+					android:layout_width="@dimen/nudge"
+					android:layout_height="@dimen/nudge"
 					android:background="@drawable/color_selector"
 					/>
+			</LinearLayout> <!-- Header divider -->
 
-			</LinearLayout>
-
+			<!-- Days -->
+				<!--
+				android:paddingTop="@dimen/sp_align"
+				android:paddingBottom="@dimen/sp_align"
+				-->
 			<com.nfcalarmclock.NacDayOfWeek
 				android:id="@+id/nac_days"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:paddingTop="@dimen/sp_row"
-				android:paddingBottom="@dimen/sp_row"
 				android:gravity="center"
 				app:nacBackgroundColor="@color/gray_light"
 				/>
 
+			<!-- Repeat, Vibrate, NFC -->
 			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:paddingBottom="@dimen/sp_row"
+				android:paddingTop="@dimen/tiny"
+				android:paddingBottom="@dimen/tiny"
 				android:weightSum="4"
 				android:gravity="center"
 				android:orientation="horizontal">
 
-				<ImageView
+				<com.google.android.material.button.MaterialButton
+					style="@style/TextButton.Icon"
 					android:id="@+id/nac_repeat"
-					android:contentDescription="@string/cd_btn_repeat"
-					android:layout_width="@dimen/sz_touch"
-					android:layout_height="@dimen/sz_touch"
+					android:layout_width="@dimen/touch"
+					android:layout_height="@dimen/touch"
 					android:layout_weight="1"
-					android:padding="@dimen/sp_support"
-					android:background="?android:selectableItemBackground"
-					android:src="@mipmap/repeat"
-					app:tint="@color/white"
+					app:iconSize="@dimen/isz_large"
+					app:icon="@mipmap/repeat"
 					/>
 
-				<ImageView
+				<com.google.android.material.button.MaterialButton
+					style="@style/TextButton.Icon"
 					android:id="@+id/nac_vibrate"
-					android:contentDescription="@string/cd_btn_vibrate"
-					android:layout_width="@dimen/sz_touch"
-					android:layout_height="@dimen/sz_touch"
+					android:layout_width="@dimen/touch"
+					android:layout_height="@dimen/touch"
 					android:layout_weight="1"
-					android:padding="@dimen/sp_support"
-					android:background="?android:selectableItemBackground"
-					android:src="@mipmap/vibrate"
-					app:tint="@color/white"
+					app:iconSize="@dimen/isz_large"
+					app:icon="@mipmap/vibrate"
 					/>
 
-				<ImageView
+				<com.google.android.material.button.MaterialButton
+					style="@style/TextButton.Icon"
 					android:id="@+id/nac_nfc"
-					android:contentDescription="@string/cd_btn_nfc"
-					android:layout_width="@dimen/sz_touch"
-					android:layout_height="@dimen/sz_touch"
+					android:layout_width="@dimen/touch"
+					android:layout_height="@dimen/touch"
 					android:layout_weight="1"
-					android:padding="@dimen/sp_support"
-					android:background="?android:selectableItemBackground"
-					android:src="@mipmap/tap_and_play"
-					app:tint="@color/white"
+					app:iconSize="@dimen/isz_large"
+					app:icon="@mipmap/tap_and_play"
 					/>
+			</LinearLayout> <!-- Repeat, Vibrate, NFC -->
 
-			</LinearLayout>
-
-			<LinearLayout
+			<!-- Media -->
+			<com.google.android.material.button.MaterialButton
+				style="@style/TextButton.Ellipsize.Row"
 				android:id="@+id/nac_sound"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:paddingTop="@dimen/sp_row"
-				android:paddingBottom="@dimen/sp_row"
-				android:orientation="horizontal"
-				android:gravity="center_vertical"
-				tools:ignore="UseCompoundDrawables">
+				android:text=""
+				app:icon="@mipmap/music_note"
+				/>
 
-				<ImageView
-					android:id="@+id/sound_icon"
-					android:contentDescription="@string/cd_ic_media"
-					android:layout_width="@dimen/isz_main"
-					android:layout_height="@dimen/isz_main"
-					android:layout_marginEnd="@dimen/sp_main"
-					android:src="@mipmap/music_note"
-					/>
+			<!--
+				android:fontFamily="sans-serif-medium"
+			-->
 
-				<TextView
-					android:id="@+id/sound_name"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:maxLength="@integer/max_entry_length"
-					android:maxLines="1"
-					android:ellipsize="end"
-					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_main"
-					android:text=""
-					/>
-
-			</LinearLayout>
-
+			<!-- Volume -->
 			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -338,125 +313,90 @@
 				<ImageView
 					android:id="@+id/nac_volume_icon"
 					android:contentDescription="@string/cd_ic_volume"
-					android:layout_width="@dimen/isz_main"
-					android:layout_height="@dimen/isz_main"
-					android:layout_marginEnd="@dimen/sp_align"
+					android:layout_width="@dimen/isz_normal"
+					android:layout_height="@dimen/isz_normal"
 					android:src="@mipmap/volume_high"
 					/>
 
 				<SeekBar
 					android:id="@+id/nac_volume_slider"
-					android:layout_width="wrap_content"
+					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:paddingTop="@dimen/sp_row"
-					android:paddingBottom="@dimen/sp_row"
-					android:paddingStart="@dimen/sp_normal"
-					android:paddingEnd="@dimen/sp_normal"
+					android:paddingTop="@dimen/tiny"
+					android:paddingBottom="@dimen/tiny"
+					android:paddingStart="@dimen/normal"
+					android:paddingEnd="@dimen/normal"
 					android:max="100"
 					android:progress="75"
 					/>
 
-				<ImageView
+				<com.google.android.material.button.MaterialButton
+					style="@style/TextButton.Icon"
 					android:id="@+id/nac_volume_settings"
-					android:contentDescription="@string/cd_ic_volume_settings"
-					android:layout_width="@dimen/sz_touch"
-					android:layout_height="@dimen/sz_touch"
-					android:layout_marginStart="@dimen/sp_align"
-					android:padding="@dimen/sp_normal"
-					android:background="?android:selectableItemBackground"
-					android:src="@mipmap/settings"
+					android:layout_width="@dimen/touch"
+					android:layout_height="@dimen/touch"
+					app:icon="@mipmap/settings"
 					/>
+			</LinearLayout> <!-- Volume -->
 
-			</LinearLayout>
-
-			<LinearLayout
+			<!-- Name -->
+			<com.google.android.material.button.MaterialButton
+				style="@style/TextButton.Ellipsize.Row"
 				android:id="@+id/nac_name"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:paddingTop="@dimen/sp_row"
-				android:paddingBottom="@dimen/sp_row_last"
-				android:orientation="horizontal"
-				android:gravity="center_vertical"
-				tools:ignore="UseCompoundDrawables">
+				android:text=""
+				app:icon="@mipmap/label"
+				/>
 
-				<ImageView
-					android:contentDescription="@string/cd_ic_name"
-					android:layout_width="@dimen/isz_main"
-					android:layout_height="@dimen/isz_main"
-					android:layout_marginEnd="@dimen/sp_main"
-					android:src="@mipmap/label"
-					/>
-
-				<TextView
-					android:id="@+id/name"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_marginEnd="@dimen/sp_support"
-					android:maxLength="@integer/max_entry_length"
-					android:maxLines="1"
-					android:ellipsize="end"
-					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_main"
-					android:text=""
-					/>
-
-			</LinearLayout>
-
+			<!-- Divider -->
 			<View
-				android:id="@+id/nac_divider1"
+				android:id="@+id/nac_divider_delete"
 				android:layout_width="match_parent"
-				android:layout_height="@dimen/sz_divider"
+				android:layout_height="@dimen/line"
 				android:background="?attr/colorCardDivider"
 				/>
 
-			<RelativeLayout
+			<!-- Delete/collapse -->
+			<LinearLayout
 				android:id="@+id/nac_collapse"
 				android:layout_width="match_parent"
-				android:layout_height="wrap_content">
+				android:layout_height="wrap_content"
+				android:paddingTop="@dimen/tiny"
+				android:paddingBottom="@dimen/tiny"
+				android:orientation="horizontal">
 
-				<LinearLayout
+				<com.google.android.material.button.MaterialButton
+					style="@style/TextButton.Ellipsize.Row"
 					android:id="@+id/nac_delete"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:paddingTop="@dimen/sp_row_last"
-					android:paddingBottom="@dimen/sp_row_last"
-					android:paddingEnd="@dimen/sp_main"
-					android:orientation="horizontal"
-					tools:ignore="UseCompoundDrawables">
-
-					<ImageView
-						android:contentDescription="@string/cd_btn_delete"
-						android:layout_width="@dimen/isz_main"
-						android:layout_height="@dimen/isz_main"
-						android:layout_marginEnd="@dimen/sp_main"
-						android:src="@mipmap/delete"
-						/>
-
-					<TextView
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:textColor="@color/white"
-						android:textSize="@dimen/tsz_main"
-						android:text="@string/action_alarm_delete"
-						/>
-
-				</LinearLayout>
-
-				<ImageView
-					android:contentDescription="@string/cd_btn_collapse"
-					android:layout_width="@dimen/isz_main"
-					android:layout_height="@dimen/isz_main"
-					android:layout_marginEnd="@dimen/sp_normal"
-					android:layout_alignParentEnd="true"
-					android:layout_centerVertical="true"
-					android:src="@mipmap/collapse"
+					android:paddingTop="@dimen/zero"
+					android:paddingBottom="@dimen/zero"
+					android:paddingEnd="@dimen/large"
+					android:text="@string/action_alarm_delete"
+					app:icon="@mipmap/delete"
 					/>
 
-			</RelativeLayout>
 
-		</LinearLayout>
+				<Space
+					android:layout_width="0dp"
+					android:layout_height="0dp"
+					android:layout_weight="1"
+					/>
 
-	</RelativeLayout>
+				<com.google.android.material.button.MaterialButton
+					style="@style/TextButton.Icon"
+					android:layout_width="@dimen/touch"
+					android:layout_height="@dimen/touch"
+					android:layout_gravity="center_vertical"
+					app:icon="@mipmap/collapse"
+					/>
+			</LinearLayout> <!-- Delete/collapse -->
+
+		</LinearLayout> <!-- Extra -->
+
+	</LinearLayout> <!-- Content -->
 
 </androidx.cardview.widget.CardView>

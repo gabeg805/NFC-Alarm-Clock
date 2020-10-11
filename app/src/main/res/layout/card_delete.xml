@@ -10,9 +10,9 @@
 
 	<ImageView
 		android:id="@+id/delete_icon"
-		android:layout_width="@dimen/isz_icon"
-		android:layout_height="@dimen/isz_icon"
-		android:layout_marginEnd="@dimen/sp_main"
+		android:layout_width="@dimen/isz_large"
+		android:layout_height="@dimen/isz_large"
+		android:layout_marginEnd="@dimen/normal"
 		android:layout_alignParentEnd="true"
 		android:layout_centerVertical="true"
 		android:src="@mipmap/delete"
@@ -23,11 +23,11 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_toStartOf="@id/delete_icon"
-		android:layout_marginEnd="@dimen/sp_main"
+		android:layout_marginEnd="@dimen/normal"
 		android:layout_centerVertical="true"
 		android:textAllCaps="true"
 		android:textColor="@color/white"
-		android:textSize="@dimen/tsz_icon"
+		android:textSize="@dimen/tsz_large"
 		android:textStyle="bold"
 		android:text="@string/action_alarm_delete"
 		/>

@@ -86,34 +86,11 @@ public class NacCardSummary
 	}
 
 	/**
-	 * @return The max width of the summary name before it gets ellipsized.
-	 */
-	private int getNameMaxWidth()
-	{
-		int screenWidth = this.getScreenWidth();
-		int padding = this.getCardPadding();
-		int textsize = (int) this.mName.getTextSize();
-		int summaryDays = this.mDays.getText().length() * textsize / 2;
-		int expandImage = 3 * (int) this.getResources().getDimension(
-			R.dimen.isz_main);
-
-		return screenWidth - summaryDays - padding - expandImage;
-	}
-
-	/**
 	 * @return The context resources.
 	 */
 	public Resources getResources()
 	{
 		return this.getContext().getResources();
-	}
-
-	/**
-	 * @return The screen width.
-	 */
-	private int getScreenWidth()
-	{
-		return this.mMeasure.getScreenWidth();
 	}
 
 	/**

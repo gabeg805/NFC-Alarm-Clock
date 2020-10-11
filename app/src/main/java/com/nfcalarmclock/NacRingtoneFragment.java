@@ -30,24 +30,12 @@ public class NacRingtoneFragment
 	private RadioGroup mRadioGroup;
 
 	/**
-	 * Radio button padding.
-	 */
-	private int[] mPadding;
-
-	/**
-	 * Radio button text size.
-	 */
-	private int mTextSize;
-
-	/**
 	 */
 	public NacRingtoneFragment()
 	{
 		super();
 
 		this.mRadioGroup = null;
-		this.mPadding = new int[4];
-		this.mTextSize = 0;
 	}
 
 	/**
@@ -56,19 +44,15 @@ public class NacRingtoneFragment
 	private RadioButton addRadioButton(String title, String path)
 	{
 		Context context = getContext();
-		RadioButton button  = new RadioButton(context);
-		RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
-			ViewGroup.LayoutParams.MATCH_PARENT,
-			ViewGroup.LayoutParams.WRAP_CONTENT);
-		int[] padding = this.getPadding();
-		int textSize = this.getTextSize();
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(
+			Context.LAYOUT_INFLATER_SERVICE);
+		RadioGroup group = this.getRadioGroup();
+		View view = inflater.inflate(R.layout.radio_button_ringtone, group, true);
+		RadioButton button = view.findViewById(R.id.radio_button_ringtone);
 
-		this.mRadioGroup.addView(button);
+		button.setId(button.generateViewId());
 		button.setText(title);
 		button.setTag(path);
-		button.setLayoutParams(params);
-		button.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-		button.setPadding(padding[0], padding[1], padding[2], padding[3]);
 		button.setOnClickListener(this);
 		return button;
 	}
@@ -81,27 +65,11 @@ public class NacRingtoneFragment
 	}
 
 	/**
-	 * @return The radio button padding.
-	 */
-	private int[] getPadding()
-	{
-		return this.mPadding;
-	}
-
-	/**
 	 * @return The radio group.
 	 */
 	private RadioGroup getRadioGroup()
 	{
 		return this.mRadioGroup;
-	}
-
-	/**
-	 * @return The text size.
-	 */
-	private int getTextSize()
-	{
-		return this.mTextSize;
 	}
 
 	/**
@@ -170,10 +138,8 @@ public class NacRingtoneFragment
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState)
 	{
-		setupPadding();
-		setupTextSize();
 		setupActionButtons(view);
-		setupRadioButtons(view);
+		this.setupRadioButtons(view);
 	}
 
 	/**
@@ -215,30 +181,6 @@ public class NacRingtoneFragment
 				button.setChecked(true);
 			}
 		}
-	}
-
-	/**
-	 * Setup the padding (left, top, right, bottom).
-	 */
-	private void setupPadding()
-	{
-		Context context = getContext();
-		Resources res = context.getResources();
-		int main = (int) res.getDimension(R.dimen.sp_main);
-		this.mPadding[0] = main;
-		this.mPadding[1] = main;
-		this.mPadding[2] = 0;
-		this.mPadding[3] = main;
-	}
-
-	/**
-	 * Setup the text size.
-	 */
-	private void setupTextSize()
-	{
-		Context context = getContext();
-		Resources res = context.getResources();
-		this.mTextSize = (int) res.getDimension(R.dimen.tsz_main);
 	}
 
 }

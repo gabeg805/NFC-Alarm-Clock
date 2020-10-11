@@ -1,8 +1,7 @@
 package com.nfcalarmclock;
 
 import android.view.View;
-import android.widget.ImageView;
-//import android.widget.RelativeLayout;
+import com.google.android.material.button.MaterialButton;
 
 /**
  * NFC view for an alarm card.
@@ -18,15 +17,13 @@ public class NacCardNfc
 	/**
 	 * Use NFC checkbox.
 	 */
-	private ImageView mUseNfc;
-	//private RelativeLayout mUseNfc;
+	private MaterialButton mUseNfc;
 
 	/**
 	 */
 	public NacCardNfc(View root)
 	{
-		this.mUseNfc = (ImageView) root.findViewById(R.id.nac_nfc);
-		//this.mUseNfc = (RelativeLayout) root.findViewById(R.id.nac_nfc);
+		this.mUseNfc = (MaterialButton) root.findViewById(R.id.nac_nfc);
 	}
 
 	/**
@@ -40,8 +37,7 @@ public class NacCardNfc
 	/**
 	 * @return The NFC view.
 	 */
-	//private RelativeLayout getNfcView()
-	private ImageView getNfcView()
+	private MaterialButton getNfcView()
 	{
 		return this.mUseNfc;
 	}

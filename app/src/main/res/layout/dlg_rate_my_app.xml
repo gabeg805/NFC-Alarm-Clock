@@ -12,15 +12,14 @@
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:paddingTop="@dimen/sp_main"
-		android:paddingBottom="@dimen/sp_main"
+		android:paddingTop="@dimen/normal"
+		android:paddingBottom="@dimen/normal"
 		android:orientation="horizontal">
 
 		<TextView
+			style="@style/TextView.Primary"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:textColor="@color/white"
-			android:textSize="@dimen/tsz_main"
 			android:text="@string/message_rate_my_app"
 			/>
 

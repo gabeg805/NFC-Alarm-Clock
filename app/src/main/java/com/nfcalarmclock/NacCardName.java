@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.button.MaterialButton;
+
 /**
  * Name for the alarm card.
  */
@@ -19,12 +21,13 @@ public class NacCardName
 	/**
 	 * Parent view of the name view.
 	 */
-	 private LinearLayout mNameParent;
+	 //private LinearLayout mNameParent;
 
 	/**
 	 * Name view.
 	 */
-	 private TextView mName;
+	 private MaterialButton mName;
+	 //private TextView mName;
 
 	/**
 	 * Alarm.
@@ -37,8 +40,9 @@ public class NacCardName
 	{
 		this.mContext = context;
 		this.mAlarm = null;
-		this.mNameParent = (LinearLayout) root.findViewById(R.id.nac_name);
-		this.mName = (TextView) root.findViewById(R.id.name);
+		//this.mNameParent = (LinearLayout) root.findViewById(R.id.nac_name);
+		//this.mName = (TextView) root.findViewById(R.id.name);
+		this.mName = (MaterialButton) root.findViewById(R.id.nac_name);
 	}
 
 	/**
@@ -87,7 +91,8 @@ public class NacCardName
 	 */
 	public void setOnClickListener(View.OnClickListener listener)
 	{
-		this.mNameParent.setOnClickListener(listener);
+		this.mName.setOnClickListener(listener);
+		//this.mNameParent.setOnClickListener(listener);
 	}
 
 	/**

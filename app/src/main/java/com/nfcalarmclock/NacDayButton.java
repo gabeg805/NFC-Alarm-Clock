@@ -71,7 +71,7 @@ public class NacDayButton
 			try
 			{
 				Resources res = context.getResources();
-				int textsize = (int) res.getDimension(R.dimen.tsz_main);
+				int textsize = (int) res.getDimension(R.dimen.tsz_normal);
 				this.width = (int) ta.getDimension(R.styleable.NacDayButton_nacWidth, 2*textsize);
 				this.height = (int) ta.getDimension(R.styleable.NacDayButton_nacHeight, 2*textsize);
 				this.duration = ta.getInt(R.styleable.NacDayButton_nacDuration, 1000);

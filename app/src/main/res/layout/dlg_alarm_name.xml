@@ -9,17 +9,13 @@
 		android:id="@+id/yoyoyo"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/sp_main"
-		android:layout_marginStart="@dimen/sp_main"
-		android:layout_marginEnd="@dimen/sp_main"
+		android:layout_marginTop="@dimen/medium"
+		android:layout_marginStart="@dimen/medium"
+		android:layout_marginEnd="@dimen/medium"
 		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-		<!--
-		<EditText
-	android:padding="@dimen/sp_main">
-		-->
-
 		<com.google.android.material.textfield.TextInputEditText
+			style="@style/TextView.Primary"
 			android:id="@+id/alarm_name"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
@@ -27,16 +23,12 @@
 			android:maxLines="10"
 			android:singleLine="false"
 			android:isScrollContainer="true"
-			android:textSize="@dimen/tsz_main"
 			android:inputType="textCapSentences|textMultiLine"
 			android:hint="@string/alarm_name"
 			android:importantForAutofill="no">
 
 			<requestFocus />
 
-		<!--
-		</EditText>
-		-->
 		</com.google.android.material.textfield.TextInputEditText>
 
 	</com.google.android.material.textfield.TextInputLayout>

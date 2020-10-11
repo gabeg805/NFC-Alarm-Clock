@@ -19,7 +19,7 @@
 			android:id="@+id/title"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginBottom="@dimen/sp_section"
+			android:layout_marginBottom="@dimen/large"
 			android:textColor="@color/white_dull"
 			android:textSize="@dimen/tsz_title"
 			android:text="@string/title_alarm_activity"
@@ -37,17 +37,17 @@
 			android:id="@+id/instructions"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginTop="@dimen/sp_section"
+			android:layout_marginTop="@dimen/large"
 			android:textColor="@color/white_dull"
-			android:textSize="@dimen/tsz_support"
+			android:textSize="@dimen/tsz_small"
 			android:text="@string/description_alarm_activity"
 			/>
 
 		<LinearLayout
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginTop="@dimen/sp_section"
-			android:layout_marginBottom="@dimen/sp_section"
+			android:layout_marginTop="@dimen/large"
+			android:layout_marginBottom="@dimen/large"
 			android:orientation="horizontal">
 
 			<Button
@@ -74,14 +74,14 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_alignParentBottom="true"
-		android:layout_marginBottom="@dimen/sp_section">
+		android:layout_marginBottom="@dimen/large">
 
 		<TextView
 			android:id="@+id/name"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginStart="@dimen/sp_main"
-			android:layout_marginEnd="@dimen/sp_main"
+			android:layout_marginStart="@dimen/normal"
+			android:layout_marginEnd="@dimen/normal"
 			android:layout_centerHorizontal="true"
 			android:focusable="true"
 			android:focusableInTouchMode="true"
@@ -90,7 +90,7 @@
 			android:ellipsize="marquee"
 			android:marqueeRepeatLimit ="marquee_forever"
 			android:textColor="@color/white"
-			android:textSize="@dimen/tsz_main"
+			android:textSize="@dimen/tsz_normal"
 			/>
 
 	</RelativeLayout>

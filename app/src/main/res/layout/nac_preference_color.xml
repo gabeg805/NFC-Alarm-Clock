@@ -14,9 +14,9 @@
 
 	<ImageView
 		android:id="@+id/widget"
-		android:layout_width="@dimen/isz_icon"
-		android:layout_height="@dimen/isz_icon"
-		android:contentDescription="@null"
+		android:layout_width="@dimen/isz_large"
+		android:layout_height="@dimen/isz_large"
+		android:contentDescription="@string/cd_ic_color_example"
 		android:src="@drawable/color_example"
 		/>
 

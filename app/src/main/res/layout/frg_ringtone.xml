@@ -23,10 +23,12 @@
 			android:scrollbars="vertical">
 
 			<RadioGroup
+				style="@style/RadioGroup"
 				android:id="@+id/radio_group"
-				android:layout_width="wrap_content"
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:orientation="vertical">
+				android:layout_marginStart="@dimen/huge"
+				android:paddingStart="@dimen/huge">
 			</RadioGroup>
 
 		</LinearLayout>
