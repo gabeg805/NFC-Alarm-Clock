@@ -54,7 +54,7 @@ public class NacCardMeasure
 	/**
 	 * Day buttons.
 	 */
-	private NacDayOfWeek mDayButtons;
+	//private NacDayOfWeek mDayButtons;
 
 	/**
 	 * Day buttons height.
@@ -77,7 +77,7 @@ public class NacCardMeasure
 		this.mCollapseHeight = 0;
 		this.mExpandHeight = 0;
 		this.mCardPadding = 0;
-		this.mDayButtons = null;
+		//this.mDayButtons = null;
 		this.mDayButtonsHeight = 0;
 		this.mIsMeasured = false;
 	}
@@ -109,10 +109,10 @@ public class NacCardMeasure
 	/**
 	 * @return The day buttons.
 	 */
-	public NacDayOfWeek getDayButtons()
-	{
-		return this.mDayButtons;
-	}
+	//public NacDayOfWeek getDayButtons()
+	//{
+	//	return this.mDayButtons;
+	//}
 
 	/**
 	 * @return The height of the day buttons.
@@ -136,22 +136,6 @@ public class NacCardMeasure
 	public int getHeaderHeight()
 	{
 		return this.mHeaderHeight;
-	}
-
-	/**
-	 * @return The screen height.
-	 */
-	public int getScreenHeight()
-	{
-		return this.mScreenHeight;
-	}
-
-	/**
-	 * @return The screen width.
-	 */
-	public int getScreenWidth()
-	{
-		return this.mScreenWidth;
 	}
 
 	/**
@@ -193,7 +177,7 @@ public class NacCardMeasure
 		this.setScreenWidth();
 		this.setScreenHeight();
 		this.setCardPadding(root);
-		this.setDayButtons(root);
+		//this.setDayButtons(root);
 		this.setDayButtonsHeight(root);
 		this.setHeaderHeight(root);
 		this.setExpandHeight(root);
@@ -234,20 +218,24 @@ public class NacCardMeasure
 	/**
 	 * Set the day buttons.
 	 */
-	private void setDayButtons(View root)
-	{
-		this.mDayButtons = (NacDayOfWeek)
-			root.findViewById(R.id.nac_days);
-	}
+	//private void setDayButtons(View root)
+	//{
+	//	//this.mDayButtons = (NacDayOfWeek) root.findViewById(R.id.nac_days);
+	//	LinearLayout dowView = root.findViewById(R.id.nac_days);
+	//	NacDayOfWeek dow = new NacDayOfWeek(dowView);
+
+	//	this.mDayButtons = dow;
+	//}
 
 	/**
 	 * Set the height of the day buttons.
 	 */
 	private void setDayButtonsHeight(View root)
 	{
-		NacDayOfWeek dayButtons = (NacDayOfWeek)
-			root.findViewById(R.id.nac_days);
-		this.mDayButtonsHeight = NacUtility.getHeight(dayButtons);
+		//NacDayOfWeek dayButtons = (NacDayOfWeek) root.findViewById(R.id.nac_days);
+		//this.mDayButtonsHeight = NacUtility.getHeight(dayButtons);
+		LinearLayout dowView = root.findViewById(R.id.nac_days);
+		this.mDayButtonsHeight = NacUtility.getHeight(dowView);
 	}
 
 	/**

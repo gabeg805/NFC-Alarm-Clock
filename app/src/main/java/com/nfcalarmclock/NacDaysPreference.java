@@ -74,8 +74,7 @@ public class NacDaysPreference
 	@Override
 	public boolean onDismissDialog(NacDialog dialog)
 	{
-		View root = dialog.getRoot();
-		NacDayOfWeek dow = root.findViewById(R.id.days);
+		NacDayOfWeek dow = ((NacDayOfWeekDialog) dialog).getDayOfWeek();
 		this.mValue = NacCalendar.Days.daysToValue(dow.getDays());
 
 		setSummary(this.getSummary());
@@ -114,11 +113,9 @@ public class NacDaysPreference
 	@Override
 	public void onShowDialog(NacDialog dialog, View root)
 	{
-		NacDayOfWeek dow = root.findViewById(R.id.days);
-		int start = this.getShared().getStartWeekOn();
+		NacDayOfWeek dow = ((NacDayOfWeekDialog) dialog).getDayOfWeek();
 
 		dow.setDays(this.mValue);
-		dow.setStartWeekOn(start);
 	}
 
 	/**

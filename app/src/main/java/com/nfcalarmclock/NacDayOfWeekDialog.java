@@ -3,6 +3,7 @@ package com.nfcalarmclock;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.View;
+import android.widget.LinearLayout;
 
 /**
  */
@@ -10,6 +11,16 @@ public class NacDayOfWeekDialog
 	extends NacDialog
 	implements NacDialog.OnShowListener
 {
+
+	/**
+	 * Shared preferences.
+	 */
+	private NacSharedPreferences mShared;
+
+	/**
+	 * Day of week.
+	 */
+	private NacDayOfWeek mDayOfWeek;
 
 	/**
 	 */
@@ -20,16 +31,35 @@ public class NacDayOfWeekDialog
 	}
 
 	/**
+	 * @return The day of week object.
+	 */
+	public NacDayOfWeek getDayOfWeek()
+	{
+		return this.mDayOfWeek;
+	}
+
+	/**
+	 * @return The shared preferences.
+	 */
+	protected NacSharedPreferences getSharedPreferences()
+	{
+		return this.mShared;
+	}
+
+	/**
 	 * Build the dialog.
 	 */
 	@Override
 	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
 		NacSharedConstants cons = new NacSharedConstants(context);
+		NacSharedPreferences shared = new NacSharedPreferences(context);
 
 		builder.setTitle(cons.getTitleDays());
 		setPositiveButton(cons.getActionOk());
 		setNegativeButton(cons.getActionCancel());
+
+		this.mShared = shared;
 	}
 
 	/**
@@ -38,9 +68,15 @@ public class NacDayOfWeekDialog
 	@Override
 	public void onShowDialog(NacDialog dialog, View root)
 	{
-		NacDayOfWeek dow = root.findViewById(R.id.days);
+		NacSharedPreferences shared = this.getSharedPreferences();
+		LinearLayout dowView = root.findViewById(R.id.days);
+		NacDayOfWeek dow = new NacDayOfWeek(dowView);
 		int value = this.getDataInt();
+
 		dow.setDays(value);
+		dow.setStartWeekOn(shared.getStartWeekOn());
+
+		this.mDayOfWeek = dow;
 	}
 
 }

@@ -2,6 +2,7 @@ package com.nfcalarmclock;
 
 import android.view.animation.AccelerateInterpolator;
 import android.view.View;
+import android.widget.LinearLayout;
 import java.util.EnumSet;
 import com.google.android.material.button.MaterialButton;
 
@@ -19,7 +20,7 @@ public class NacCardDays
 	/**
 	 * Buttons to select which days to repeat the alarm on.
 	 */
-	private NacDayOfWeek mDayButtons;
+	private NacDayOfWeek mDayOfWeek;
 
 	/**
 	 * Repeat alarm view.
@@ -40,10 +41,14 @@ public class NacCardDays
 	 */
 	public NacCardDays(View root, NacCardMeasure measure)
 	{
-		this.mDayButtons = (NacDayOfWeek) root.findViewById(R.id.nac_days);
+		//this.mDayOfWeek = (NacDayOfWeek) root.findViewById(R.id.nac_days);
+		//this.mDaysAnimation = new NacSlideAnimation(this.mDayOfWeek);
+		LinearLayout dowView = root.findViewById(R.id.nac_days);
 		this.mRepeat = (MaterialButton) root.findViewById(R.id.nac_repeat);
-		this.mDaysAnimation = new NacSlideAnimation(this.mDayButtons);
+		this.mDaysAnimation = new NacSlideAnimation(dowView);
 		this.mMeasure = measure;
+
+		this.mDayOfWeek = new NacDayOfWeek(dowView);
 	}
 
 	/**
@@ -57,9 +62,9 @@ public class NacCardDays
 	/**
 	 * @return The day of week buttons.
 	 */
-	private NacDayOfWeek getDayButtons()
+	private NacDayOfWeek getDayOfWeek()
 	{
-		return this.mDayButtons;
+		return this.mDayOfWeek;
 	}
 
 	/**
@@ -115,10 +120,10 @@ public class NacCardDays
 	{
 		NacAlarm alarm = this.getAlarm();
 		EnumSet<NacCalendar.Day> days = alarm.getDays();
-		NacDayOfWeek dayButtons = this.getDayButtons();
+		NacDayOfWeek dow = this.getDayOfWeek();
 
-		dayButtons.setStartWeekOn(shared.getStartWeekOn());
-		dayButtons.setDays(days);
+		dow.setStartWeekOn(shared.getStartWeekOn());
+		dow.setDays(days);
 	}
 
 	/**
@@ -147,7 +152,7 @@ public class NacCardDays
 	 */
 	public void setListeners(Object listener)
 	{
-		NacDayOfWeek dayButtons = this.getDayButtons();
+		NacDayOfWeek dayButtons = this.getDayOfWeek();
 		View repeatView = this.getRepeatView();
 
 		dayButtons.setOnClickListener((NacDayOfWeek.OnClickListener)listener);

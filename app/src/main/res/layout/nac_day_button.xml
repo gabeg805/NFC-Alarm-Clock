@@ -1,16 +1,17 @@
 <merge
-	xmlns:android="http://schemas.android.com/apk/res/android">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
 
-	<Button
+		<!--
+		style="?android:attr/borderlessButtonStyle"
+		-->
+	<com.google.android.material.button.MaterialButton
+		style="@style/YoButton"
 		android:id="@+id/nac_day_button"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:gravity="center"
 		android:fontFamily="sans-serif-medium"
-		android:lines="1"
-		android:maxLength="1"
 		android:text=""
-		style="?android:attr/borderlessButtonStyle"
 		/>
 
 </merge>

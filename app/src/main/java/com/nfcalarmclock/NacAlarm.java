@@ -1413,17 +1413,6 @@ public class NacAlarm
 	}
 
 	/**
-	 * Toggle the day at the given index.
-	 *
-	 * @param  index  The index of the day.
-	 */
-	public void toggleIndex(int index)
-	{
-		NacCalendar.Day day = NacCalendar.Days.fromIndex(index);
-		this.toggleDay(day);
-	}
-
-	/**
 	 * Toggle repeat.
 	 */
 	public void toggleRepeat()

@@ -16,7 +16,6 @@ import java.util.EnumSet;
  * A button that consists of an image to the left, and text to the right of it.
  */
 public class NacDayOfWeek
-	extends LinearLayout
 	implements NacDayButton.OnClickListener
 {
 
@@ -25,13 +24,13 @@ public class NacDayOfWeek
 	 */
 	public interface OnClickListener
 	{
-		public void onClick(NacDayButton button, int index);
+		public void onClick(NacDayButton button, NacCalendar.Day day);
 	}
 
 	/**
-	 * Button for each day.
+	 * Day of week view.
 	 */
-	private NacDayButton[] mButtons;
+	private LinearLayout mDayOfWeekView;
 
 	/**
 	 * Click event listener.
@@ -39,32 +38,20 @@ public class NacDayOfWeek
 	private NacDayOfWeek.OnClickListener mListener;
 
 	/**
-	 * Number of days.
 	 */
-	private static final int mLength = 7;
-
-	/**
-	 */
-	public NacDayOfWeek(Context context)
+	public NacDayOfWeek(LinearLayout view)
 	{
-		super(context, null);
-		init((AttributeSet)null);
-	}
+		this.mDayOfWeekView = view;
+		this.mListener = null;
 
-	/**
-	 */
-	public NacDayOfWeek(Context context, AttributeSet attrs)
-	{
-		super(context, attrs, 0);
-		init(attrs);
-	}
+		int count = view.getChildCount();
 
-	/**
-	 */
-	public NacDayOfWeek(Context context, AttributeSet attrs, int defStyleAttr)
-	{
-		super(context, attrs, defStyleAttr);
-		init(attrs);
+		for (int i=0; i < count; i++)
+		{
+			NacDayButton button = (NacDayButton) view.getChildAt(i);
+			button.setOnClickListener(this);
+			//button.setTag(i);
+		}
 	}
 
 	/**
@@ -76,20 +63,48 @@ public class NacDayOfWeek
 	}
 
 	/**
-	 * Determine the spacing between buttons.
-	 * 
-	 * @return The spacing between the different buttons.
+	 * Convert a particular day to its corresponding view ID.
 	 */
-	private int getButtonSpacing()
+	private int dayToId(NacCalendar.Day day)
 	{
-		Resources r = getContext().getResources();
-		DisplayMetrics metrics = r.getDisplayMetrics();
-		float left = r.getDimension(R.dimen.normal) + getPaddingLeft();
-		float right = r.getDimension(R.dimen.normal) + getPaddingRight();
-		double spacing = (metrics.widthPixels - (left+right)
-			- 7*this.mButtons[0].getButtonWidth()) / 16.0;
+		switch (day)
+		{
+			case SUNDAY:
+				return R.id.dow_sun;
+			case MONDAY:
+				return R.id.dow_mon;
+			case TUESDAY:
+				return R.id.dow_tue;
+			case WEDNESDAY:
+				return R.id.dow_wed;
+			case THURSDAY:
+				return R.id.dow_thu;
+			case FRIDAY:
+				return R.id.dow_fri;
+			case SATURDAY:
+				return R.id.dow_sat;
+			default:
+				break;
+		}
+		return 0;
+	}
 
-		return (int) spacing;
+	/**
+	 * @return The day button given a particular day.
+	 */
+	private NacDayButton getDayButton(NacCalendar.Day day)
+	{
+		LinearLayout view = this.getDayOfWeekView();
+		int id = this.dayToId(day);
+		return (NacDayButton) view.findViewById(id);
+	}
+
+	/**
+	 * @return The day of week view.
+	 */
+	public LinearLayout getDayOfWeekView()
+	{
+		return this.mDayOfWeekView;
 	}
 
 	/**
@@ -98,61 +113,52 @@ public class NacDayOfWeek
 	public EnumSet<NacCalendar.Day> getDays()
 	{
 		EnumSet<NacCalendar.Day> days = EnumSet.noneOf(NacCalendar.Day.class);
-		int index = 0;
 
 		for (NacCalendar.Day d : NacCalendar.WEEK)
 		{
-			if (this.isDayEnabled(index))
+			if (this.isDayEnabled(d))
 			{
 				days.add(d);
 			}
-
-			index++;
 		}
 
 		return days;
 	}
 
 	/**
-	 * Initialize the view.
+	 * Convert an view ID to its corresponding day.
 	 */
-	public void init(AttributeSet attrs)
+	private NacCalendar.Day idToDay(int id)
 	{
-		Context context = getContext();
-
-		setOrientation(LinearLayout.HORIZONTAL);
-		LayoutInflater.from(context).inflate(R.layout.nac_day_of_week,
-			this, true);
-
-		this.mButtons = new NacDayButton[this.mLength];
-		this.mButtons[0] = (NacDayButton) findViewById(R.id.dow_sun);
-		this.mButtons[1] = (NacDayButton) findViewById(R.id.dow_mon);
-		this.mButtons[2] = (NacDayButton) findViewById(R.id.dow_tue);
-		this.mButtons[3] = (NacDayButton) findViewById(R.id.dow_wed);
-		this.mButtons[4] = (NacDayButton) findViewById(R.id.dow_thu);
-		this.mButtons[5] = (NacDayButton) findViewById(R.id.dow_fri);
-		this.mButtons[6] = (NacDayButton) findViewById(R.id.dow_sat);
-		this.mListener = null;
-
-		for (int i=0; i < this.mLength; i++)
+		switch (id)
 		{
-			if (this.mButtons[i] == null)
-			{
-				throw new RuntimeException("Unable to find NacDayButton ID for #"+String.valueOf(i)+".");
-			}
-
-			this.mButtons[i].setOnClickListener(this);
-			this.mButtons[i].mergeAttributes(context, attrs);
-			this.mButtons[i].setViewAttributes();
+			case R.id.dow_sun:
+				return NacCalendar.Day.SUNDAY;
+			case R.id.dow_mon:
+				return NacCalendar.Day.MONDAY;
+			case R.id.dow_tue:
+				return NacCalendar.Day.TUESDAY;
+			case R.id.dow_wed:
+				return NacCalendar.Day.WEDNESDAY;
+			case R.id.dow_thu:
+				return NacCalendar.Day.THURSDAY;
+			case R.id.dow_fri:
+				return NacCalendar.Day.FRIDAY;
+			case R.id.dow_sat:
+				return NacCalendar.Day.SATURDAY;
+			default:
+				break;
 		}
+		return null;
 	}
 
 	/**
 	 * @return True if the button is enabled and false if it is not.
 	 */
-	public boolean isDayEnabled(int index)
+	public boolean isDayEnabled(NacCalendar.Day day)
 	{
-		return this.mButtons[index].isEnabled();
+		NacDayButton button = this.getDayButton(day);
+		return button.isEnabled();
 	}
 
 	/**
@@ -161,66 +167,22 @@ public class NacDayOfWeek
 	public void onClick(NacDayButton button)
 	{
 		int id = button.getId();
-		int index = -1;
+		NacCalendar.Day day = this.idToDay(id);
 
-		switch (id)
+		if (day == null)
 		{
-			case R.id.dow_sun:
-				index = 0;
-				break;
-			case R.id.dow_mon:
-				index = 1;
-				break;
-			case R.id.dow_tue:
-				index = 2;
-				break;
-			case R.id.dow_wed:
-				index = 3;
-				break;
-			case R.id.dow_thu:
-				index = 4;
-				break;
-			case R.id.dow_fri:
-				index = 5;
-				break;
-			case R.id.dow_sat:
-				index = 6;
-				break;
-			default:
-				return;
+			return;
 		}
 
-		this.mButtons[index].animateToggle();
+		//this.mButtons[index].animateToggle();
+		button.animateToggle();
 
 		if (this.mListener == null)
 		{
 			return;
 		}
 
-		this.mListener.onClick(button, index);
-	}
-
-	/**
-	 */
-	@Override
-	protected void onFinishInflate()
-	{
-		super.onFinishInflate();
-
-		if (this.mButtons == null)
-		{
-			throw new RuntimeException("Unable to find button views.");
-		}
-
-		int spacing = this.getButtonSpacing();
-
-		for (int i=0; i < this.mLength; i++)
-		{
-			NacDayButton b = this.mButtons[i];
-
-			b.setPadding(spacing, spacing, spacing, spacing);
-			b.setTag(i);
-		}
+		this.mListener.onClick(button, day);
 	}
 
 	/**
@@ -230,20 +192,25 @@ public class NacDayOfWeek
 	 */
 	public void setDays(EnumSet<NacCalendar.Day> days)
 	{
-		int index = 0;
+		//int index = 0;
+		NacUtility.printf("Setting days!");
 
 		for (NacCalendar.Day d : NacCalendar.WEEK)
 		{
 			if (days.contains(d))
 			{
-				this.mButtons[index].enable();
+				NacUtility.printf("Enable day : %s", d.name());
+				this.getDayButton(d).enable();
+				//this.mButtons[index].enable();
 			}
 			else
 			{
-				this.mButtons[index].disable();
+				NacUtility.printf("Disable day : %s", d.name());
+				//this.mButtons[index].disable();
+				this.getDayButton(d).disable();
 			}
 
-			index++;
+			//index++;
 		}
 	}
 
@@ -253,7 +220,6 @@ public class NacDayOfWeek
 	public void setDays(int value)
 	{
 		EnumSet<NacCalendar.Day> days = NacCalendar.Days.valueToDays(value);
-
 		this.setDays(days);
 	}
 
@@ -262,25 +228,31 @@ public class NacDayOfWeek
 	 */
 	public void setStartWeekOn(int start)
 	{
-		NacDayButton sunday = this.mButtons[0];
-		NacDayButton monday = this.mButtons[1];
-		View firstChild = getChildAt(0);
-		View lastChild = getChildAt(6);
+		//NacDayButton sunday = this.mButtons[0];
+		//NacDayButton monday = this.mButtons[1];
+		//View firstChild = getChildAt(0);
+		//View lastChild = getChildAt(6);
+
+		LinearLayout view = this.getDayOfWeekView();
+		NacDayButton sunday = this.getDayButton(NacCalendar.Day.SUNDAY);
+		NacDayButton monday = this.getDayButton(NacCalendar.Day.MONDAY);
+		View firstChild = view.getChildAt(0);
+		View lastChild = view.getChildAt(6);
 
 		if (start == 1)
 		{
 			if (firstChild.getId() != monday.getId())
 			{
-				removeView(firstChild);
-				addView(firstChild, 6);
+				view.removeView(firstChild);
+				view.addView(firstChild, 6);
 			}
 		}
 		else
 		{
 			if (firstChild.getId() != sunday.getId())
 			{
-				removeView(lastChild);
-				addView(lastChild, 0);
+				view.removeView(lastChild);
+				view.addView(lastChild, 0);
 			}
 		}
 	}

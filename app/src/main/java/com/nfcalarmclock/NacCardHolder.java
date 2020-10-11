@@ -146,12 +146,12 @@ public class NacCardHolder
 	/**
 	 * Act as if the day button was clicked.
 	 */
-	public void doDayButtonClick(int index)
+	public void doDayButtonClick(NacCalendar.Day day)
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 
-		alarm.toggleIndex(index);
+		alarm.toggleDay(day);
 
 		if (!alarm.areDaysSelected())
 		{
@@ -459,9 +459,9 @@ public class NacCardHolder
 	 * not repeated.
 	 */
 	@Override
-	public void onClick(NacDayButton button, int index)
+	public void onClick(NacDayButton button, NacCalendar.Day day)
 	{
-		this.respondToDayButtonClick(button, index);
+		this.respondToDayButtonClick(button, day);
 	}
 
 	/**
@@ -473,15 +473,22 @@ public class NacCardHolder
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
 
+
 		if (id == R.id.nac_header)
 		{
 			//NacUtility.quickToast(context, "Header NFC Tag : "+alarm.getNfcTagId());
 			this.respondToHeaderClick(view);
+			//NacUtility.printf("Header was clicked!");
+			//NacSharedPreferences shared = this.getSharedPreferences();
+			//this.mDays.set(shared);
 		}
 		else if (id == R.id.nac_summary)
 		{
 			//NacUtility.quickToast(context, "Summary NFC Tag : "+alarm.getNfcTagId());
 			this.respondToSummaryClick(view);
+			//NacUtility.printf("Summary was clicked!");
+			//NacSharedPreferences shared = this.getSharedPreferences();
+			//this.mDays.set(shared);
 		}
 		else if (id == R.id.nac_collapse)
 		{
@@ -624,7 +631,7 @@ public class NacCardHolder
 	/**
 	 * Perform the day button state change.
 	 */
-	public void respondToDayButtonClick(NacDayButton button, int index)
+	public void respondToDayButtonClick(NacDayButton button, NacCalendar.Day day)
 	{
 		if (!this.canModifyAlarm())
 		{
@@ -634,7 +641,7 @@ public class NacCardHolder
 		}
 
 		button.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-		this.doDayButtonClick(index);
+		this.doDayButtonClick(day);
 	}
 
 	/**

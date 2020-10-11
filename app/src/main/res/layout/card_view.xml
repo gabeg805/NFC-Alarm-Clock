@@ -236,17 +236,17 @@
 			</LinearLayout> <!-- Header divider -->
 
 			<!-- Days -->
-				<!--
-				android:paddingTop="@dimen/sp_align"
-				android:paddingBottom="@dimen/sp_align"
-				-->
-			<com.nfcalarmclock.NacDayOfWeek
+			<LinearLayout
 				android:id="@+id/nac_days"
 				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
+				android:layout_height="@dimen/touch"
+				android:layout_marginStart="@dimen/small"
+				android:layout_marginEnd="@dimen/small"
 				android:gravity="center"
-				app:nacBackgroundColor="@color/gray_light"
-				/>
+				android:orientation="horizontal">
+
+				<include layout="@layout/nac_day_of_week" />
+			</LinearLayout>
 
 			<!-- Repeat, Vibrate, NFC -->
 			<LinearLayout

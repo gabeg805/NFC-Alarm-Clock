@@ -7,13 +7,16 @@
 	android:orientation="vertical"
 	android:padding="@dimen/normal">
 
-	<com.nfcalarmclock.NacDayOfWeek
+	<LinearLayout
 		android:id="@+id/days"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:gravity="center"
-		app:nacBackgroundColor="@color/gray_light"
-		/>
+		android:orientation="horizontal">
+
+		<include layout="@layout/nac_day_of_week" />
+
+	</LinearLayout>
 
 </LinearLayout>
 

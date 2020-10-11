@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import androidx.cardview.widget.CardView;
 
+import android.animation.LayoutTransition;
+
 /**
  */
 public class NacCardView
@@ -170,6 +172,10 @@ public class NacCardView
 		this.mState = State.COLLAPSED;
 
 		this.getSlideAnimation().setOnAnimationListener(this);
+
+		//this.mCardView.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+		//this.mSummary.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+		//this.mExtra.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
 	}
 
 	/**
@@ -317,7 +323,8 @@ public class NacCardView
 	 */
 	public void collapse()
 	{
-		this.animateCollapse();
+		//this.animateCollapse();
+		this.doCollapse();
 	}
 
 	/**
@@ -325,7 +332,8 @@ public class NacCardView
 	 */
 	public void expand()
 	{
-		this.animateExpand();
+		//this.animateExpand();
+		this.doExpand();
 	}
 
 	/**
@@ -391,13 +399,14 @@ public class NacCardView
 	 */
 	public int getExpandHeight()
 	{
-		NacAlarm alarm = this.getAlarm();
-		NacDayOfWeek dayButtons = this.mMeasure.getDayButtons();
-		int daysHeight = this.mMeasure.getDayButtonsHeight();
+		////NacAlarm alarm = this.getAlarm();
+		//NacDayOfWeek dayButtons = this.mMeasure.getDayButtons();
+		//int daysHeight = this.mMeasure.getDayButtonsHeight();
 		int expandHeight = this.mMeasure.getExpandHeight();
 
-		return (dayButtons.getVisibility() == View.VISIBLE) ? expandHeight
-			: expandHeight-daysHeight;
+		//return (dayButtons.getVisibility() == View.VISIBLE) ? expandHeight
+		//	: expandHeight-daysHeight;
+		return expandHeight;
 	}
 
 	/**
@@ -422,14 +431,6 @@ public class NacCardView
 	private OnStateChangeListener getListener()
 	{
 		return this.mListener;
-	}
-
-	/**
-	 * @return The screen height.
-	 */
-	private int getScreenHeight()
-	{
-		return this.mMeasure.getScreenHeight();
 	}
 
 	/**

@@ -43,34 +43,6 @@
 		<attr name="nacWidth" />
 		<attr name="nacHeight" />
 		<attr name="nacDuration" />
-		<attr name="nacTextColor" />
-		<attr name="nacTextSize" />
-		<attr name="nacText" />
-		<attr name="nacBackgroundColor" />
-		<attr name="nacDrawable" />
-		<attr name="nacPaddingTop" />
-		<attr name="nacPaddingBottom" />
-		<attr name="nacPaddingStart" />
-		<attr name="nacPaddingEnd" />
-		<attr name="nacPaddingLeft" />
-		<attr name="nacPaddingRight" />
-	</declare-styleable>
-
-	<declare-styleable name="NacDayOfWeek">
-		<attr name="nacWidth" />
-		<attr name="nacHeight" />
-		<attr name="nacDuration" />
-		<attr name="nacTextColor" />
-		<attr name="nacTextSize" />
-		<attr name="nacText" />
-		<attr name="nacBackgroundColor" />
-		<attr name="nacDrawable" />
-		<attr name="nacPaddingTop" />
-		<attr name="nacPaddingBottom" />
-		<attr name="nacPaddingStart" />
-		<attr name="nacPaddingEnd" />
-		<attr name="nacPaddingLeft" />
-		<attr name="nacPaddingRight" />
 	</declare-styleable>
 
 	<declare-styleable name="NacCoverImage">
@@ -82,48 +54,6 @@
 	<declare-styleable name="NacColorPicker">
 		<attr name="nacWidth" />
 		<attr name="nacHeight" />
-		<attr name="nacSpacing" />
-	</declare-styleable>
-
-	<declare-styleable name="NacImageSubTextButton">
-		<attr name="nacDrawableWidth" />
-		<attr name="nacDrawableHeight" />
-		<attr name="nacDrawableColor" />
-		<attr name="nacDrawable" />
-		<attr name="nacTextColor" />
-		<attr name="nacTextSize" />
-		<attr name="nacText" />
-		<attr name="nacSubTextColor" />
-		<attr name="nacSubText" />
-		<attr name="nacSpacing" />
-	</declare-styleable>
-
-	<declare-styleable name="NacImageTextButton">
-		<attr name="nacDrawableWidth" />
-		<attr name="nacDrawableHeight" />
-		<attr name="nacDrawableColor" />
-		<attr name="nacDrawable" />
-		<attr name="nacTextColor" />
-		<attr name="nacTextSize" />
-		<attr name="nacText" />
-		<attr name="nacSpacing" />
-	</declare-styleable>
-
-	<declare-styleable name="NacButtonGroup">
-		<attr name="android:background" />
-		<attr name="nacPaddingStart" />
-		<attr name="nacPaddingTop" />
-		<attr name="nacPaddingBottom" />
-		<attr name="nacPaddingEnd" />
-		<attr name="nacDrawableWidth" />
-		<attr name="nacDrawableHeight" />
-		<attr name="nacDrawableColor" />
-		<attr name="nacDrawable" />
-		<attr name="nacTextColor" />
-		<attr name="nacTextSize" />
-		<attr name="nacText" />
-		<attr name="nacSubTextColor" />
-		<attr name="nacSubText" />
 		<attr name="nacSpacing" />
 	</declare-styleable>
 
