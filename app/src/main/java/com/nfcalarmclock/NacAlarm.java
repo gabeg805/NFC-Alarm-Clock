@@ -953,6 +953,30 @@ public class NacAlarm
 	}
 
 	/**
+	 * @return The title of the media file.
+	 */
+	public String getMediaTitle()
+	{
+		return this.mMediaTitle;
+	}
+
+	/**
+	 * @return The path to the media file to play when the alarm goes off.
+	 */
+	public String getMediaPath()
+	{
+		return this.mMediaPath;
+	}
+
+	/**
+	 * @return The path to the media file to play when the alarm goes off.
+	 */
+	public int getMediaType()
+	{
+		return this.mMediaType;
+	}
+
+	/**
 	 * @return The meridian (AM or PM).
 	 */
 	public String getMeridian(Context context)
@@ -1022,30 +1046,6 @@ public class NacAlarm
 	public boolean getRepeat()
 	{
 		return this.mRepeat;
-	}
-
-	/**
-	 * @return The title of the media file.
-	 */
-	public String getMediaTitle()
-	{
-		return this.mMediaTitle;
-	}
-
-	/**
-	 * @return The path to the media file to play when the alarm goes off.
-	 */
-	public String getMediaPath()
-	{
-		return this.mMediaPath;
-	}
-
-	/**
-	 * @return The path to the media file to play when the alarm goes off.
-	 */
-	public int getMediaType()
-	{
-		return this.mMediaType;
 	}
 
 	/**

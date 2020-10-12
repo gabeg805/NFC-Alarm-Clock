@@ -29,7 +29,7 @@ public class NacCardAdapter
 		MenuItem.OnMenuItemClickListener,
 		RecyclerView.OnItemTouchListener,
 		NacAlarm.OnAlarmChangeListener,
-		NacCardDelete.OnDeleteListener,
+		NacCardHolder.OnDeleteClickedListener,
 		NacCardTouchHelper.Adapter,
 		NacCardView.OnStateChangeListener
 {
@@ -605,7 +605,7 @@ public class NacCardAdapter
 
 		alarm.setOnAlarmChangeListener(this);
 		card.init(alarm);
-		card.setOnDeleteListener(this);
+		card.setOnDeleteClickedListener(this);
 		card.setOnCreateContextMenuListener(this);
 		card.setOnStateChangeListener(this);
 
@@ -762,10 +762,10 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * Delete the alarm.
+	 * Delete button was clicked.
 	 */
 	@Override
-	public void onDelete(int position)
+	public void onDeleteClicked(int position)
 	{
 		this.deleteAlarm(position);
 	}

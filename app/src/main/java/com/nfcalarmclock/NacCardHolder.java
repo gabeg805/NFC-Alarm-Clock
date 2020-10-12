@@ -1,18 +1,34 @@
 package com.nfcalarmclock;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.BlendMode;
+import android.graphics.BlendModeColorFilter;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.PorterDuff;
 import android.os.Build;
+import android.text.TextUtils;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.TimePicker;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
+import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.button.MaterialButton;
+import java.util.EnumSet;
 
 /**
  * Card view holder.
@@ -27,6 +43,14 @@ public class NacCardHolder
 		NacDayOfWeek.OnClickListener,
 		SeekBar.OnSeekBarChangeListener
 {
+
+	/**
+	 * Listener for when the delete button is clicked.
+	 */
+	public interface OnDeleteClickedListener
+	{
+		public void onDeleteClicked(int pos);
+	}
 
 	/**
 	 * Shared preferences.
@@ -51,47 +75,82 @@ public class NacCardHolder
 	/**
 	 * On/off switch for an alarm.
 	 */
-	 private NacCardSwitch mSwitch;
+	 private SwitchCompat mSwitch;
 
 	/**
-	 * Time and meridian.
+	 * Time text.
 	 */
-	private NacCardTime mTime;
+	private TextView mTimeView;
 
 	/**
-	 * Summary information.
+	 * Meridian text (AM/PM).
 	 */
-	private NacCardSummary mSummary;
+	private TextView mMeridianView;
 
 	/**
-	 * Days and repeat.
+	 * Summary view containing the days to repeat.
 	 */
-	private NacCardDays mDays;
+	private TextView mSummaryDaysView;
 
 	/**
-	 * Use NFC.
+	 * Summary view containing the name of the alarm.
 	 */
-	private NacCardNfc mUseNfc;
+	private TextView mSummaryNameView;
 
 	/**
-	 * Sound.
+	 * Day of week.
 	 */
-	 private NacCardSound mSound;
+	private NacDayOfWeek mDayOfWeek;
 
 	/**
-	 * Vibrate checkbox.
+	 * Repeat button.
 	 */
-	private NacCardVibrate mVibrate;
+	private MaterialButton mRepeatButton;
 
 	/**
-	 * Name.
+	 * Vibrate button.
 	 */
-	 private NacCardName mName;
+	private MaterialButton mVibrateButton;
 
 	/**
-	 * Delete.
+	 * NFC button.
 	 */
-	private NacCardDelete mDelete;
+	private MaterialButton mNfcButton;
+
+	/**
+	 * Media button.
+	 */
+	private MaterialButton mMediaButton;
+
+	/**
+	 * Volume image view.
+	 */
+	private ImageView mVolumeImageView;
+
+	/**
+	 * Volume seekbar.
+	 */
+	private SeekBar mVolumeSeekBar;
+
+	/**
+	 * Audio source button.
+	 */
+	private MaterialButton mAudioSourceButton;
+
+	/**
+	 * Name button.
+	 */
+	 private MaterialButton mNameButton;
+
+	/**
+	 * Delete button.
+	 */
+	private MaterialButton mDeleteButton;
+
+	/**
+	 * Listener for when the delete button is clicked.
+	 */
+	private OnDeleteClickedListener mOnDeleteClickedListener;
 
 	/**
 	 */
@@ -100,19 +159,28 @@ public class NacCardHolder
 		super(root);
 
 		Context context = root.getContext();
+		LinearLayout dowView = root.findViewById(R.id.nac_days);
+
 		this.mSharedPreferences = new NacSharedPreferences(context);
 		this.mAlarm = null;
 		this.mRoot = root;
 		this.mCard = new NacCardView(context, root, measure);
-		this.mSwitch = new NacCardSwitch(root);
-		this.mTime = new NacCardTime(context, root);
-		this.mSummary = new NacCardSummary(context, root, measure);
-		this.mDays = new NacCardDays(root, measure);
-		this.mUseNfc = new NacCardNfc(root);
-		this.mSound = new NacCardSound(context, root, measure);
-		this.mVibrate = new NacCardVibrate(root);
-		this.mName = new NacCardName(context, root);
-		this.mDelete = new NacCardDelete(root);
+		this.mTimeView = root.findViewById(R.id.nac_time);
+		this.mMeridianView = root.findViewById(R.id.nac_meridian);
+		this.mSwitch = root.findViewById(R.id.nac_switch);
+		this.mSummaryDaysView = root.findViewById(R.id.nac_summary_days);
+		this.mSummaryNameView = root.findViewById(R.id.nac_summary_name);
+		this.mDayOfWeek = new NacDayOfWeek(dowView);
+		this.mRepeatButton = root.findViewById(R.id.nac_repeat);
+		this.mVibrateButton = root.findViewById(R.id.nac_vibrate);
+		this.mNfcButton = root.findViewById(R.id.nac_nfc);
+		this.mMediaButton = root.findViewById(R.id.nac_sound);
+		this.mVolumeImageView = root.findViewById(R.id.nac_volume_icon);
+		this.mVolumeSeekBar = root.findViewById(R.id.nac_volume_slider);
+		this.mAudioSourceButton = root.findViewById(R.id.nac_volume_settings);
+		this.mNameButton = root.findViewById(R.id.nac_name);
+		this.mDeleteButton = root.findViewById(R.id.nac_delete);
+		this.mOnDeleteClickedListener = null;
 	}
 
 	/**
@@ -124,7 +192,6 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 
 		return !alarm.isSnoozed(shared) && !alarm.isActive();
-		//return (!alarm.isSnoozed(shared) || !shared.getPreventAppFromClosing());
 	}
 
 	/**
@@ -132,7 +199,13 @@ public class NacCardHolder
 	 */
 	public void delete()
 	{
-		this.mDelete.delete(getAdapterPosition());
+		OnDeleteClickedListener listener = this.getOnDeleteClickedListener();
+		int pos = getAdapterPosition();
+
+		if (listener != null)
+		{
+			listener.onDeleteClicked(pos);
+		}
 	}
 
 	/**
@@ -159,8 +232,9 @@ public class NacCardHolder
 		}
 
 		alarm.changed();
-		this.mDays.set(shared);
-		this.mSummary.set(shared);
+		this.setDayOfWeek();
+		this.setRepeatButton();
+		this.setSummaryDaysView();
 	}
 
 	/**
@@ -184,7 +258,7 @@ public class NacCardHolder
 	 */
 	public void doNameClick()
 	{
-		this.mName.showDialog(this);
+		this.showNameDialog();
 	}
 
 	/**
@@ -203,7 +277,7 @@ public class NacCardHolder
 		}
 
 		alarm.changed();
-		this.mUseNfc.set();
+		this.setNfcButton();
 	}
 
 	/**
@@ -215,7 +289,7 @@ public class NacCardHolder
 
 		alarm.toggleRepeat();
 		alarm.changed();
-		this.mDays.setRepeat();
+		this.setRepeatButton();
 		this.toastRepeat();
 	}
 
@@ -230,8 +304,9 @@ public class NacCardHolder
 		alarm.setRepeat(false);
 		alarm.setDays(0);
 		alarm.changed();
-		this.mDays.set(shared);
-		this.mSummary.set(shared);
+		this.setDayOfWeek();
+		this.setRepeatButton();
+		this.setSummaryDaysView();
 	}
 
 	/**
@@ -239,7 +314,7 @@ public class NacCardHolder
 	 */
 	public void doSoundClick()
 	{
-		this.mSound.startActivity();
+		this.startMediaActivity();
 	}
 
 	/**
@@ -267,7 +342,7 @@ public class NacCardHolder
 
 		alarm.setEnabled(state);
 		alarm.changed();
-		this.mSummary.set(shared);
+		this.setSummaryDaysView();
 
 		if (!state)
 		{
@@ -280,7 +355,7 @@ public class NacCardHolder
 	 */
 	public void doTimeClick()
 	{
-		this.mTime.showDialog(this);
+		this.showTimeDialog();
 	}
 
 	/**
@@ -292,7 +367,7 @@ public class NacCardHolder
 
 		alarm.toggleVibrate();
 		alarm.changed();
-		this.mVibrate.set();
+		this.setVibrateButton();
 		this.toastVibrate();
 	}
 
@@ -301,7 +376,7 @@ public class NacCardHolder
 	 */
 	public void doVolumeSettingButtonClick()
 	{
-		this.mSound.showAudioSourceDialog(this);
+		this.showAudioSourceDialog();
 	}
 
 	/**
@@ -310,6 +385,14 @@ public class NacCardHolder
 	public NacAlarm getAlarm()
 	{
 		return this.mAlarm;
+	}
+
+	/**
+	 * @return The audio source button.
+	 */
+	private MaterialButton getAudioSourceButton()
+	{
+		return this.mAudioSourceButton;
 	}
 
 	/**
@@ -337,6 +420,22 @@ public class NacCardHolder
 	}
 
 	/**
+	 * @return The day of week buttons.
+	 */
+	private NacDayOfWeek getDayOfWeek()
+	{
+		return this.mDayOfWeek;
+	}
+
+	/**
+	 * @return The delete button.
+	 */
+	public MaterialButton getDeleteButton()
+	{
+		return this.mDeleteButton;
+	}
+
+	/**
 	 * @return The delete view, which resides in the background of the card
 	 *		   view.
 	 */
@@ -346,11 +445,59 @@ public class NacCardHolder
 	}
 
 	/**
+	 * @return The media button.
+	 */
+	private MaterialButton getMediaButton()
+	{
+		return this.mMediaButton;
+	}
+
+	/**
+	 * @return The meridian view.
+	 */
+	public TextView getMeridianView()
+	{
+		return this.mMeridianView;
+	}
+
+	/**
 	 * @return The NFC Alarm Clock card view.
 	 */
 	public NacCardView getNacCardView()
 	{
 		return this.mCard;
+	}
+
+	/**
+	 * @return The name button.
+	 */
+	public MaterialButton getNameButton()
+	{
+		return this.mNameButton;
+	}
+
+	/**
+	 * @return The NFC button.
+	 */
+	public MaterialButton getNfcButton()
+	{
+		return this.mNfcButton;
+	}
+
+	/**
+	 * @return The listener for when the delete button is clicked.
+	 */
+	public OnDeleteClickedListener getOnDeleteClickedListener()
+	{
+		return this.mOnDeleteClickedListener;
+	}
+
+	/**
+	 * @return The repeat button.
+	 */
+	public MaterialButton getRepeatButton()
+	{
+		return this.mRepeatButton;
 	}
 
 	/**
@@ -370,6 +517,62 @@ public class NacCardHolder
 	}
 
 	/**
+	 * @return The summary days view.
+	 */
+	public TextView getSummaryDaysView()
+	{
+		return this.mSummaryDaysView;
+	}
+
+	/**
+	 * @return The summary name view.
+	 */
+	public TextView getSummaryNameView()
+	{
+		return this.mSummaryNameView;
+	}
+
+	/**
+	 * @return The switch.
+	 */
+	public SwitchCompat getSwitch()
+	{
+		return this.mSwitch;
+	}
+
+	/**
+	 * @return The time view.
+	 */
+	public TextView getTimeView()
+	{
+		return this.mTimeView;
+	}
+
+	/**
+	 * @return The vibrate button.
+	 */
+	private MaterialButton getVibrateButton()
+	{
+		return this.mVibrateButton;
+	}
+
+	/**
+	 * @return The volume image view.
+	 */
+	private ImageView getVolumeImageView()
+	{
+		return this.mVolumeImageView;
+	}
+
+	/**
+	 * @return The volume seekbar.
+	 */
+	private SeekBar getVolumeSeekBar()
+	{
+		return this.mVolumeSeekBar;
+	}
+
+	/**
 	 * Initialize the alarm card.
 	 *
 	 * @param  alarm  The alarm to use to populate data in the alarm card.
@@ -383,14 +586,19 @@ public class NacCardHolder
 
 		this.setListeners(null);
 		this.mCard.init(shared, alarm);
-		this.mSwitch.init(alarm);
-		this.mTime.init(shared, alarm);
-		this.mSummary.init(shared, alarm);
-		this.mDays.init(shared, alarm);
-		this.mUseNfc.init(alarm);
-		this.mSound.init(shared, alarm);
-		this.mVibrate.init(alarm);
-		this.mName.init(alarm);
+		this.setTimeView();
+		this.setMeridianView();
+		this.setSwitchView();
+		this.setSummaryDaysView();
+		this.setSummaryNameView();
+		this.setDayOfWeek();
+		this.setRepeatButton();
+		this.setVibrateButton();
+		this.setNfcButton();
+		this.setMediaButton();
+		this.setVolumeSeekBar();
+		this.setVolumeImageView();
+		this.setNameButton();
 		this.setColors();
 		this.setListeners(this);
 	}
@@ -403,11 +611,10 @@ public class NacCardHolder
 	public void interact()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		boolean expandCard = shared.getExpandNewAlarm();
 
-		this.mTime.showDialog(this);
+		this.showTimeDialog();
 
-		if (expandCard)
+		if (shared.getExpandNewAlarm())
 		{
 			this.mCard.expand();
 		}
@@ -476,23 +683,16 @@ public class NacCardHolder
 
 		if (id == R.id.nac_header)
 		{
-			//NacUtility.quickToast(context, "Header NFC Tag : "+alarm.getNfcTagId());
 			this.respondToHeaderClick(view);
-			//NacUtility.printf("Header was clicked!");
-			//NacSharedPreferences shared = this.getSharedPreferences();
-			//this.mDays.set(shared);
+			this.setDayOfWeek();
 		}
 		else if (id == R.id.nac_summary)
 		{
-			//NacUtility.quickToast(context, "Summary NFC Tag : "+alarm.getNfcTagId());
 			this.respondToSummaryClick(view);
-			//NacUtility.printf("Summary was clicked!");
-			//NacSharedPreferences shared = this.getSharedPreferences();
-			//this.mDays.set(shared);
+			this.setDayOfWeek();
 		}
 		else if (id == R.id.nac_collapse)
 		{
-			//NacUtility.quickToast(context, "Collapse NFC Tag : "+alarm.getNfcTagId());
 			this.respondToCollapseButtonClick(view);
 		}
 		else if (id == R.id.nac_time_parent)
@@ -543,8 +743,8 @@ public class NacCardHolder
 			String name = dialog.getDataString();
 			alarm.setName(name);
 			alarm.changed();
-			this.mName.set();
-			this.mSummary.setName();
+			this.setNameButton();
+			this.setSummaryNameView();
 		}
 		else if (id == R.layout.dlg_alarm_audio_source)
 		{
@@ -582,7 +782,8 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 
 		alarm.setVolume(progress);
-		this.mSound.setVolumeIcon();
+		this.setVolumeImageView();
+		//this.mSound.setVolumeIcon();
 	}
 
 	/**
@@ -614,9 +815,10 @@ public class NacCardHolder
 		alarm.setMinute(min);
 		alarm.setEnabled(true);
 		alarm.changed();
-		this.mTime.set(shared);
-		this.mSwitch.set();
-		this.mSummary.set(shared);
+		this.setTimeView();
+		this.setMeridianView();
+		this.setSwitchView();
+		this.setSummaryDaysView();
 	}
 
 	/**
@@ -624,8 +826,8 @@ public class NacCardHolder
 	 */
 	private void respondToCollapseButtonClick(View view)
 	{
-		this.doCollapseButtonClick();
 		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+		this.doCollapseButtonClick();
 	}
 
 	/**
@@ -655,8 +857,8 @@ public class NacCardHolder
 		}
 		else
 		{
-			this.toastDeleteSnoozedAlarmError();
 			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+			this.toastDeleteSnoozedAlarmError();
 		}
 	}
 
@@ -665,8 +867,8 @@ public class NacCardHolder
 	 */
 	private void respondToHeaderClick(View view)
 	{
-		this.doHeaderClick();
 		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+		this.doHeaderClick();
 	}
 
 	/**
@@ -680,8 +882,8 @@ public class NacCardHolder
 		}
 		else
 		{
-			this.toastModifySnoozedAlarmError();
 			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+			this.toastModifySnoozedAlarmError();
 		}
 	}
 
@@ -839,9 +1041,26 @@ public class NacCardHolder
 		NacSharedPreferences shared = this.getSharedPreferences();
 
 		this.mCard.setColor(shared);
-		this.mSwitch.setColor(shared);
-		this.mTime.setColor(shared);
-		this.mSummary.setColor(shared);
+		this.setTimeColor();
+		this.setMeridianColor();
+		this.setSwitchColor();
+		this.setSummaryDaysColor();
+		this.setSummaryNameColor();
+		this.setVolumeSeekBarColor();
+	}
+
+	/**
+	 * Set the day of week to its proper setting.
+	 */
+	public void setDayOfWeek()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacDayOfWeek dow = this.getDayOfWeek();
+		NacAlarm alarm = this.getAlarm();
+		EnumSet<NacCalendar.Day> days = alarm.getDays();
+
+		dow.setStartWeekOn(shared.getStartWeekOn());
+		dow.setDays(days);
 	}
 
 	/**
@@ -850,17 +1069,97 @@ public class NacCardHolder
 	public void setListeners(Object listener)
 	{
 		View root = this.getRoot();
+		View.OnClickListener click = (View.OnClickListener) listener;
+		View.OnLongClickListener longClick = (View.OnLongClickListener) listener;
+		NacDayOfWeek.OnClickListener dow = (NacDayOfWeek.OnClickListener) listener;
+		CompoundButton.OnCheckedChangeListener compound =
+			(CompoundButton.OnCheckedChangeListener) listener;
+		SeekBar.OnSeekBarChangeListener seek =
+			(SeekBar.OnSeekBarChangeListener) listener;
 
 		this.mCard.setOnClickListener(root, (View.OnClickListener)listener);
-		this.mSwitch.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener)listener);
-		this.mDays.setListeners(listener);
-		this.mUseNfc.setOnClickListener((View.OnClickListener)listener);
-		//this.mUseNfc.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener)listener);
-		this.mSound.setListener(listener);
-		//this.mVibrate.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener)listener);
-		this.mVibrate.setOnClickListener((View.OnClickListener)listener);
-		this.mName.setOnClickListener((View.OnClickListener)listener);
-		this.mDelete.setOnClickListener((View.OnClickListener)listener);
+		this.getSwitch().setOnCheckedChangeListener(compound);
+		this.getDayOfWeek().setOnClickListener(dow);
+		this.getRepeatButton().setOnClickListener(click);
+		this.getRepeatButton().setOnLongClickListener(longClick);
+		this.getVibrateButton().setOnClickListener(click);
+		this.getNfcButton().setOnClickListener(click);
+		this.getMediaButton().setOnClickListener(click);
+		this.getVolumeSeekBar().setOnSeekBarChangeListener(seek);
+		this.getAudioSourceButton().setOnClickListener(click);
+		this.getNameButton().setOnClickListener(click);
+		this.getDeleteButton().setOnClickListener(click);
+	}
+
+	/**
+	 * Set the media button to its proper setting.
+	 */
+	public void setMediaButton()
+	{
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+		String path = alarm.getMediaPath();
+		String message = NacSharedPreferences.getMediaMessage(context, path);
+		float alpha = ((path != null) && !path.isEmpty()) ? 1.0f : 0.3f;
+
+		this.getMediaButton().setText(message);
+		this.getMediaButton().setAlpha(alpha);
+		//this.mSound.setText(message);
+		//this.mSound.setAlpha(alpha);
+	}
+
+	/**
+	 * Set the meridian color.
+	 */
+	public void setMeridianColor()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+		String meridian = alarm.getMeridian(context);
+		int meridianColor = (meridian == "AM") ? shared.getAmColor()
+			: shared.getPmColor();
+
+		this.getMeridianView().setTextColor(meridianColor);
+	}
+
+	/**
+	 * Set the meridian view to its proper setting.
+	 */
+	public void setMeridianView()
+	{
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+		String meridian = alarm.getMeridian(context);
+
+		this.getMeridianView().setText(meridian);
+	}
+
+	/**
+	 * Set the name button to its proper settings.
+	 */
+	private void setNameButton()
+	{
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+		MaterialButton button = this.getNameButton();
+		String name = alarm.getNameNormalized();
+		String message = NacSharedPreferences.getNameMessage(context, name);
+		float alpha = !name.isEmpty() ? 1.0f : 0.3f;
+
+		button.setText(message);
+		button.setAlpha(alpha);
+	}
+
+	/**
+	 * Set the NFC button to its proper settings.
+	 */
+	private void setNfcButton()
+	{
+		NacAlarm alarm = this.getAlarm();
+		View view = this.getNfcButton();
+
+		view.setAlpha(alarm.getUseNfc() ? 1.0f : 0.3f);
 	}
 
 	/**
@@ -868,9 +1167,9 @@ public class NacCardHolder
 	 *
 	 * @param  listener  The delete listener.
 	 */
-	public void setOnDeleteListener(NacCardDelete.OnDeleteListener listener)
+	public void setOnDeleteClickedListener(OnDeleteClickedListener listener)
 	{
-		this.mDelete.setOnDeleteListener(listener);
+		this.mOnDeleteClickedListener = listener;
 	}
 
 	/**
@@ -891,6 +1190,267 @@ public class NacCardHolder
 		NacCardView.OnStateChangeListener listener)
 	{
 		this.mCard.setOnStateChangeListener(listener);
+	}
+
+	/**
+	 * Set the repeat button to its proper setting.
+	 */
+	private void setRepeatButton()
+	{
+		View view = this.getRepeatButton();
+		NacAlarm alarm = this.getAlarm();
+		boolean repeat = alarm.getRepeat();
+
+		if (!alarm.areDaysSelected())
+		{
+			view.setEnabled(false);
+			view.setAlpha(0.3f);
+		}
+		else
+		{
+			view.setEnabled(true);
+			view.setAlpha(repeat ? 1.0f : 0.3f);
+		}
+	}
+
+	/**
+	 * Set the color of the summary days.
+	 */
+	public void setSummaryDaysColor()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		int daysColor = shared.getDaysColor();
+
+		this.getSummaryDaysView().setTextColor(daysColor);
+	}
+
+	/**
+	 * Set the summary days view to its proper setting.
+	 */
+	public void setSummaryDaysView()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+		int start = shared.getStartWeekOn();
+		String string = NacCalendar.Days.toString(context, alarm, start);
+
+		this.getSummaryDaysView().setText(string);
+		this.getSummaryDaysView().requestLayout();
+	}
+
+	/**
+	 * Set the color of the summary name.
+	 */
+	public void setSummaryNameColor()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		int nameColor = shared.getNameColor();
+
+		this.getSummaryNameView().setTextColor(nameColor);
+	}
+
+	/**
+	 * Set the summary name view to its proper setting.
+	 */
+	public void setSummaryNameView()
+	{
+		NacAlarm alarm = this.getAlarm();
+		String name = alarm.getNameNormalized();
+
+		this.getSummaryNameView().setText(name);
+		//this.mName.setVisibility(name.isEmpty() ? View.GONE : View.VISIBLE);
+	}
+
+	/**
+	 * Set the color of the switch.
+	 */
+	public void setSwitchColor()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		int theme = shared.getThemeColor();
+		int themeDark = ColorUtils.blendARGB(theme, Color.BLACK, 0.6f);
+		int[] thumbColors = new int[] {theme, Color.GRAY};
+		int[] trackColors = new int[] {themeDark, Color.DKGRAY};
+
+		int[][] states = new int[][] {
+			new int[] { android.R.attr.state_checked},
+			new int[] {-android.R.attr.state_checked}};
+		ColorStateList thumbStateList = new ColorStateList(states, thumbColors);
+		ColorStateList trackStateList = new ColorStateList(states, trackColors);
+
+		this.getSwitch().setThumbTintList(thumbStateList);
+		this.getSwitch().setTrackTintList(trackStateList);
+	}
+
+	/**
+	 * Set the switch to its proper setting.
+	 */
+	public void setSwitchView()
+	{
+		NacAlarm alarm = this.getAlarm();
+		boolean enabled = alarm.getEnabled();
+
+		this.getSwitch().setChecked(enabled);
+	}
+
+	/**
+	 * Set the time color.
+	 */
+	public void setTimeColor()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		int timeColor = shared.getTimeColor();
+
+		this.getTimeView().setTextColor(timeColor);
+	}
+
+	/**
+	 * Set the time view to its proper setting.
+	 */
+	public void setTimeView()
+	{
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+		String time = alarm.getClockTime(context);
+
+		this.getTimeView().setText(time);
+	}
+
+	/**
+	 * Set the vibrate button to its proper setting.
+	 */
+	public void setVibrateButton()
+	{
+		View view = this.getVibrateButton();
+		NacAlarm alarm = this.getAlarm();
+
+		view.setAlpha(alarm.getVibrate() ? 1.0f : 0.3f);
+	}
+
+	/**
+	 * Set the volume image view.
+	 */
+	public void setVolumeImageView()
+	{
+		ImageView image = this.getVolumeImageView();
+		NacAlarm alarm = this.getAlarm();
+		int progress = alarm.getVolume();
+
+		if (progress == 0)
+		{
+			image.setImageResource(R.mipmap.volume_off);
+		}
+		else if ((progress > 0) && (progress <= 33))
+		{
+			image.setImageResource(R.mipmap.volume_low);
+		}
+		else if ((progress > 33) && (progress <= 66))
+		{
+			image.setImageResource(R.mipmap.volume_med);
+		}
+		else
+		{
+			image.setImageResource(R.mipmap.volume_high);
+		}
+	}
+
+	/**
+	 * Set the volume seekbar.
+	 */
+	public void setVolumeSeekBar()
+	{
+		NacAlarm alarm = this.getAlarm();
+
+		//this.mVolume.incrementProgressBy(10);
+		this.getVolumeSeekBar().setProgress(alarm.getVolume());
+	}
+
+	/**
+	 * Set the volume seekbar color.
+	 */
+	@SuppressWarnings("deprecation")
+	@TargetApi(Build.VERSION_CODES.Q)
+	@SuppressLint("NewApi")
+	public void setVolumeSeekBarColor()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		SeekBar seekbar = this.getVolumeSeekBar();
+		int themeColor = shared.getThemeColor();
+		Drawable progressDrawable = seekbar.getProgressDrawable();
+		Drawable thumbDrawable = seekbar.getThumb();
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+		{
+			BlendModeColorFilter blendFilter = new BlendModeColorFilter(
+				themeColor, BlendMode.SRC_IN);
+
+			progressDrawable.setColorFilter(blendFilter);
+			thumbDrawable.setColorFilter(blendFilter);
+		}
+		else
+		{
+			progressDrawable.setColorFilter(themeColor, PorterDuff.Mode.SRC_IN);
+			thumbDrawable.setColorFilter(themeColor, PorterDuff.Mode.SRC_IN);
+		}
+	}
+
+	/**
+	 * Show the audio source dialog.
+	 */
+	public void showAudioSourceDialog()
+	{
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+		NacAudioSourceDialog dialog = new NacAudioSourceDialog();
+
+		dialog.build(context);
+		dialog.saveData(alarm.getAudioSource());
+		dialog.addOnDismissListener(this);
+		dialog.show();
+	}
+
+	/**
+	 * Show the name dialog.
+	 */
+	private void showNameDialog()
+	{
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+		NacNameDialog dialog = new NacNameDialog();
+
+		dialog.build(context);
+		dialog.saveData(alarm.getName());
+		dialog.addOnDismissListener(this);
+		dialog.show();
+	}
+
+	/**
+	 * Show the time picker dialog.
+	 */
+	private void showTimeDialog()
+	{
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+		int hour = alarm.getHour();
+		int minute = alarm.getMinute();
+		boolean format = NacCalendar.Time.is24HourFormat(context);
+		TimePickerDialog dialog = new TimePickerDialog(context, this, hour, minute,
+			format);
+
+		dialog.show();
+	}
+
+	/**
+	 * Start the media activity.
+	 */
+	public void startMediaActivity()
+	{
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+		Intent intent = NacIntent.toIntent(context, NacMediaActivity.class, alarm);
+
+		context.startActivity(intent);
 	}
 
 	/**
