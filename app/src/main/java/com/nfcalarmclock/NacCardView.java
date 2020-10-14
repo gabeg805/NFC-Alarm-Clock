@@ -33,7 +33,9 @@ public class NacCardView
 	 */
 	public enum State
 	{
+		COLLAPSING,
 		COLLAPSED,
+		EXPANDING,
 		EXPANDED
 	}
 
@@ -53,9 +55,9 @@ public class NacCardView
 	private CardView mCardView;
 
 	/**
-	 * Header.
+	 * Extra region.
 	 */
-	private LinearLayout mHeader;
+	private LinearLayout mExtra;
 
 	/**
 	 * Summary region.
@@ -63,35 +65,9 @@ public class NacCardView
 	private LinearLayout mSummary;
 
 	/**
-	 * Extra region.
+	 * Dismiss parent.
 	 */
-	private LinearLayout mExtra;
-
-	/**
-	 * First divider.
-	 */
-	private View mDivider1;
-
-	/**
-	 * Second divider.
-	 */
-	private LinearLayout mDivider2;
-
-	/**
-	 * Copy view.
-	 */
-	private RelativeLayout mCopy;
-
-	/**
-	 * Delete view.
-	 */
-	private RelativeLayout mDelete;
-
-	/**
-	 * Icon indicating the alarm has been snoozed.
-	 */
-	//private Button mSnoozeIcon;
-	//private ImageView mSnoozeIcon;
+	private LinearLayout mDismissParentView;
 
 	/**
 	 * Card animation.
@@ -154,16 +130,10 @@ public class NacCardView
 	{
 		this.mContext = context;
 		this.mAlarm = null;
-		this.mCardView = (CardView) root.findViewById(R.id.nac_card);
-		this.mHeader = (LinearLayout) root.findViewById(R.id.nac_header);
-		this.mSummary = (LinearLayout) root.findViewById(R.id.nac_summary);
-		this.mExtra = (LinearLayout) root.findViewById(R.id.nac_extra);
-		this.mDivider1 = (View) root.findViewById(R.id.nac_divider_delete);
-		this.mDivider2 = (LinearLayout) root.findViewById(R.id.nac_divider_header);
-		this.mCopy = (RelativeLayout) root.findViewById(R.id.nac_swipe_copy);
-		this.mDelete = (RelativeLayout) root.findViewById(R.id.nac_swipe_delete);
-		//this.mSnoozeIcon = (Button) root.findViewById(R.id.nac_snooze);
-		//this.mSnoozeIcon = (ImageView) root.findViewById(R.id.nac_snooze);
+		this.mCardView = root.findViewById(R.id.nac_card);
+		this.mSummary = root.findViewById(R.id.nac_summary);
+		this.mExtra = root.findViewById(R.id.nac_extra);
+		this.mDismissParentView = root.findViewById(R.id.nac_dismiss_parent);
 		this.mSlideAnimation = new NacCardSlideAnimation(this.mCardView,
 			this.mSummary, this.mExtra);
 		this.mHighlightAnimator = null;
@@ -187,6 +157,7 @@ public class NacCardView
 		NacCardSlideAnimation animation = this.getSlideAnimation();
 		int expandHeight = this.getExpandHeight();
 		int collapseHeight = this.getCollapseHeight();
+		NacUtility.printf("Animate collapse : %d | %d", collapseHeight, expandHeight);
 
 		this.setState(State.COLLAPSED);
 		this.resetHighlight();
@@ -206,6 +177,7 @@ public class NacCardView
 		NacCardSlideAnimation animation = this.getSlideAnimation();
 		int expandHeight = this.getExpandHeight();
 		int collapseHeight = this.getCollapseHeight();
+		NacUtility.printf("Animate expand : %d | %d", collapseHeight, expandHeight);
 
 		this.setState(State.EXPANDED);
 		this.resetHighlight();
@@ -301,6 +273,7 @@ public class NacCardView
 		this.mExtra.setVisibility(View.GONE);
 		this.mSummary.setEnabled(true);
 		this.mExtra.setEnabled(false);
+
 		this.callStateChangeListener();
 	}
 
@@ -323,8 +296,8 @@ public class NacCardView
 	 */
 	public void collapse()
 	{
-		//this.animateCollapse();
-		this.doCollapse();
+		this.animateCollapse();
+		//this.doCollapse();
 	}
 
 	/**
@@ -332,8 +305,8 @@ public class NacCardView
 	 */
 	public void expand()
 	{
-		//this.animateExpand();
-		this.doExpand();
+		this.animateExpand();
+		//this.doExpand();
 	}
 
 	/**
@@ -342,15 +315,6 @@ public class NacCardView
 	public NacAlarm getAlarm()
 	{
 		return this.mAlarm;
-	}
-
-	/**
-	 * @return The card height.
-	 */
-	private int getCardHeight()
-	{
-		return (this.isCollapsed()) ? this.getCollapseHeight()
-			: this.getExpandHeight();
 	}
 
 	/**
@@ -366,7 +330,14 @@ public class NacCardView
 	 */
 	public int getCollapseHeight()
 	{
-		return this.mMeasure.getCollapseHeight();
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
+
+		return alarm.getNameNormalized().contains("Work")
+			? shared.getCardHeightCollapsedDismiss()
+			: shared.getCardHeightCollapsed();
+		//return this.mMeasure.getCollapseHeight();
 	}
 
 	/**
@@ -378,43 +349,14 @@ public class NacCardView
 	}
 
 	/**
-	 * @return The copy view, which resides in the background of the card view.
-	 */
-	public View getCopyView()
-	{
-		return this.mCopy;
-	}
-
-	/**
-	 * @return The delete view, which resides in the background of the card
-	 *		   view.
-	 */
-	public View getDeleteView()
-	{
-		return this.mDelete;
-	}
-
-	/**
 	 * @return The height of the card when it is expanded.
 	 */
 	public int getExpandHeight()
 	{
-		////NacAlarm alarm = this.getAlarm();
-		//NacDayOfWeek dayButtons = this.mMeasure.getDayButtons();
-		//int daysHeight = this.mMeasure.getDayButtonsHeight();
-		int expandHeight = this.mMeasure.getExpandHeight();
-
-		//return (dayButtons.getVisibility() == View.VISIBLE) ? expandHeight
-		//	: expandHeight-daysHeight;
-		return expandHeight;
-	}
-
-	/**
-	 * @return The card height.
-	 */
-	public int getHeight()
-	{
-		return NacUtility.getHeight(this.getCardView());
+		Context context = this.getContext();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
+		return shared.getCardHeightExpanded();
+		//return this.mMeasure.getExpandHeight();
 	}
 
 	/**
@@ -450,15 +392,6 @@ public class NacCardView
 	}
 
 	/**
-	 * Hide the swipe views.
-	 */
-	private void hideSwipeViews()
-	{
-		this.getCopyView().setVisibility(View.GONE);
-		this.getDeleteView().setVisibility(View.GONE);
-	}
-
-	/**
 	 * Highlight card.
 	 */
 	public void highlight()
@@ -472,20 +405,9 @@ public class NacCardView
 	/**
 	 * Initialize the view state.
 	 */
-	public void init(NacSharedPreferences shared, NacAlarm alarm)
+	public void init(NacAlarm alarm)
 	{
 		this.mAlarm = alarm;
-
-		this.hideSwipeViews();
-		this.setupSnoozeIcon(shared);
-	}
-
-	/**
-	 * @return True if the alarm card is collapsed, and False otherwise.
-	 */
-	public boolean isCollapsed()
-	{
-		return !this.isExpanded();
 	}
 
 	/**
@@ -495,18 +417,6 @@ public class NacCardView
 	public boolean isCollapsedState()
 	{
 		return (this.getState() == State.COLLAPSED);
-	}
-
-	/**
-	 * @return True if the alarm card is expanded, and False otherwise.
-	 */
-	public boolean isExpanded()
-	{
-		int extraVisible = this.mExtra.getVisibility();
-		int collapseHeight = this.getCollapseHeight();
-		int height = this.getCardView().getMeasuredHeight();
-
-		return (extraVisible == View.VISIBLE) || (height > collapseHeight);
 	}
 
 	/**
@@ -576,53 +486,6 @@ public class NacCardView
 	}
 
 	/**
-	 * Set the color of the view.
-	 */
-	public void setColor(NacSharedPreferences shared)
-	{
-		int themeColor = shared.getThemeColor();
-		ColorStateList tint = ColorStateList.valueOf(themeColor);
-		int count = this.mDivider2.getChildCount();
-
-		this.mDivider1.setBackgroundTintList(tint);
-
-		for (int i=0; i < count; i++)
-		{
-			this.mDivider2.getChildAt(i).setBackgroundTintList(tint);
-		}
-	}
-
-	/**
-	 * Set the OnClick listeners.
-	 */
-	public void setOnClickListener(View root, View.OnClickListener listener)
-	{
-		//RelativeLayout collapse = (RelativeLayout) root.findViewById(R.id.nac_collapse);
-		//RelativeLayout time = (RelativeLayout) root.findViewById(R.id.nac_time_parent);
-		View collapse = (View) root.findViewById(R.id.nac_collapse);
-		View time = (View) root.findViewById(R.id.nac_time_parent);
-
-		collapse.setOnClickListener(listener);
-		time.setOnClickListener(listener);
-		this.mSummary.setOnClickListener(listener);
-		this.mHeader.setOnClickListener(listener);
-	}
-
-	/**
-	 * Set the OnCreateContextMenu listeners.
-	 */
-	public void setOnCreateContextMenuListener(View root,
-		View.OnCreateContextMenuListener listener)
-	{
-		//RelativeLayout time = (RelativeLayout) root.findViewById(R.id.nac_time_parent);
-		View time = (View) root.findViewById(R.id.nac_time_parent);
-
-		time.setOnCreateContextMenuListener(listener);
-		this.mSummary.setOnCreateContextMenuListener(listener);
-		this.mHeader.setOnCreateContextMenuListener(listener);
-	}
-
-	/**
 	 * Set the listener for when the alarm card expands or collapses.
 	 */
 	public void setOnStateChangeListener(OnStateChangeListener listener)
@@ -636,31 +499,6 @@ public class NacCardView
 	private void setState(State state)
 	{
 		this.mState = state;
-	}
-
-	/**
-	 * Setup the snooze icon.
-	 */
-	private void setupSnoozeIcon(NacSharedPreferences shared)
-	{
-		//NacAlarm alarm = this.getAlarm();
-		//this.mSnoozeIcon.setVisibility(!alarm.isSnoozed(shared) ? View.VISIBLE
-		//	: View.GONE);
-	}
-
-	/**
-	 * Toggle expand/collapse view state.
-	 */
-	public void toggleState()
-	{
-		if (this.isCollapsed())
-		{
-			this.expand();
-		}
-		else
-		{
-			this.collapse();
-		}
 	}
 
 }

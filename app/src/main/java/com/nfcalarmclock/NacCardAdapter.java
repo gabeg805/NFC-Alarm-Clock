@@ -217,6 +217,7 @@ public class NacCardAdapter
 			shared.editAppFirstRun(false);
 		}
 
+		shared.editCardIsMeasured(false);
 		this.getTouchHelper().setRecyclerView(this.getRecyclerView());
 		this.getTouchHelper().reset();
 		this.sort();
@@ -593,91 +594,6 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * Setup the alarm card.
-	 *
-	 * @param  card  The alarm card.
-	 * @param  position  The position of the alarm card.
-	 */
-	@Override
-	public void onBindViewHolder(final NacCardHolder card, int position)
-	{
-		NacAlarm alarm = this.getAlarm(position);
-
-		alarm.setOnAlarmChangeListener(this);
-		card.init(alarm);
-		card.setOnDeleteClickedListener(this);
-		card.setOnCreateContextMenuListener(this);
-		card.setOnStateChangeListener(this);
-
-		if (this.wasAddedWithFloatingActionButton())
-		{
-			card.interact();
-		}
-
-		this.setWasAddedWithFloatingActionButton(false);
-	}
-
-	/**
-	 * Create the context menu.
-	 */
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view,
-		ContextMenuInfo menuInfo)
-	{
-		if (menu.size() > 0)
-		{
-			return;
-		}
-
-		Context context = this.getContext();
-		AppCompatActivity activity = (AppCompatActivity) context;
-		this.mLastCardClicked = view;
-
-		activity.getMenuInflater().inflate(R.menu.menu_card, menu);
-
-		for (int i=0; i < menu.size(); i++)
-		{
-			MenuItem item = menu.getItem(i);
-
-			item.setOnMenuItemClickListener(this);
-		}
-	}
-
-	/**
-	 * Catch when a menu item is clicked.
-	 */
-	@Override
-	public boolean onMenuItemClick(MenuItem item)
-	{
-		RecyclerView rv = this.getRecyclerView();
-		View view = this.mLastCardClicked;
-		NacCardHolder holder = (NacCardHolder)rv.findContainingViewHolder(view);
-		int id = item.getItemId();
-
-		if (holder != null)
-		{
-			NacAlarm alarm = holder.getAlarm();
-			int position = holder.getAdapterPosition();
-
-			switch (id)
-			{
-				case R.id.menu_show_next_alarm:
-					this.showAlarm(alarm);
-					break;
-				case R.id.menu_show_nfc_tag_id:
-					this.showNfcTagId(alarm);
-					break;
-				default:
-					break;
-			}
-		}
-
-		this.mLastCardClicked = null;
-
-		return true;
-	}
-
-	/**
 	 * Update the database when alarm data is changed.
 	 *
 	 * @param  a  The alarm that was changed.
@@ -710,6 +626,31 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * Setup the alarm card.
+	 *
+	 * @param  card  The alarm card.
+	 * @param  position  The position of the alarm card.
+	 */
+	@Override
+	public void onBindViewHolder(final NacCardHolder card, int position)
+	{
+		NacAlarm alarm = this.getAlarm(position);
+
+		alarm.setOnAlarmChangeListener(this);
+		card.init(alarm);
+		card.setOnDeleteClickedListener(this);
+		card.setOnCreateContextMenuListener(this);
+		card.setOnStateChangeListener(this);
+
+		if (this.wasAddedWithFloatingActionButton())
+		{
+			card.interact();
+		}
+
+		this.setWasAddedWithFloatingActionButton(false);
+	}
+
+	/**
 	 * Capture the click event on the delete button, and delete the card it
 	 * belongs to.
 	 *
@@ -736,6 +677,32 @@ public class NacCardAdapter
 		else if (type == Undo.Type.RESTORE)
 		{
 			this.deleteAlarm(position);
+		}
+	}
+
+	/**
+	 * Create the context menu.
+	 */
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View view,
+		ContextMenuInfo menuInfo)
+	{
+		if (menu.size() > 0)
+		{
+			return;
+		}
+
+		Context context = this.getContext();
+		AppCompatActivity activity = (AppCompatActivity) context;
+		this.mLastCardClicked = view;
+
+		activity.getMenuInflater().inflate(R.menu.menu_card, menu);
+
+		for (int i=0; i < menu.size(); i++)
+		{
+			MenuItem item = menu.getItem(i);
+
+			item.setOnMenuItemClickListener(this);
 		}
 	}
 
@@ -810,6 +777,40 @@ public class NacCardAdapter
 	public void onItemDelete(int position)
 	{
 		this.deleteAlarm(position);
+	}
+
+	/**
+	 * Catch when a menu item is clicked.
+	 */
+	@Override
+	public boolean onMenuItemClick(MenuItem item)
+	{
+		RecyclerView rv = this.getRecyclerView();
+		View view = this.mLastCardClicked;
+		NacCardHolder holder = (NacCardHolder) rv.findContainingViewHolder(view);
+		int id = item.getItemId();
+
+		if (holder != null)
+		{
+			NacAlarm alarm = holder.getAlarm();
+			int position = holder.getAdapterPosition();
+
+			switch (id)
+			{
+				case R.id.menu_show_next_alarm:
+					this.showAlarm(alarm);
+					break;
+				case R.id.menu_show_nfc_tag_id:
+					this.showNfcTagId(alarm);
+					break;
+				default:
+					break;
+			}
+		}
+
+		this.mLastCardClicked = null;
+
+		return true;
 	}
 
 	/**

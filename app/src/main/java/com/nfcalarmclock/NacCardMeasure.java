@@ -22,16 +22,6 @@ public class NacCardMeasure
 	private Context mContext;
 
 	/**
-	 * Screen width.
-	 */
-	private int mScreenWidth;
-
-	/**
-	 * Screen height.
-	 */
-	private int mScreenHeight;
-
-	/**
 	 * Header height.
 	 */
 	private int mHeaderHeight;
@@ -47,21 +37,6 @@ public class NacCardMeasure
 	private int mExpandHeight;
 
 	/**
-	 * Alarm card padding.
-	 */
-	private int mCardPadding;
-
-	/**
-	 * Day buttons.
-	 */
-	//private NacDayOfWeek mDayButtons;
-
-	/**
-	 * Day buttons height.
-	 */
-	private int mDayButtonsHeight;
-
-	/**
 	 * Check if card has been measured.
 	 */
 	private boolean mIsMeasured;
@@ -71,23 +46,10 @@ public class NacCardMeasure
 	public NacCardMeasure(Context context)
 	{
 		this.mContext = context;
-		this.mScreenWidth = 0;
-		this.mScreenHeight= 0;
 		this.mHeaderHeight = 0;
 		this.mCollapseHeight = 0;
 		this.mExpandHeight = 0;
-		this.mCardPadding = 0;
-		//this.mDayButtons = null;
-		this.mDayButtonsHeight = 0;
 		this.mIsMeasured = false;
-	}
-
-	/**
-	 * @return The card padding.
-	 */
-	public int getCardPadding()
-	{
-		return this.mCardPadding;
 	}
 
 	/**
@@ -104,22 +66,6 @@ public class NacCardMeasure
 	private Context getContext()
 	{
 		return this.mContext;
-	}
-
-	/**
-	 * @return The day buttons.
-	 */
-	//public NacDayOfWeek getDayButtons()
-	//{
-	//	return this.mDayButtons;
-	//}
-
-	/**
-	 * @return The height of the day buttons.
-	 */
-	public int getDayButtonsHeight()
-	{
-		return this.mDayButtonsHeight;
 	}
 
 	/**
@@ -164,21 +110,7 @@ public class NacCardMeasure
 	public void measure(NacCardHolder holder)
 	{
 		View root = holder.getRoot();
-		//NacCardView nac = holder.getNacCardView();
-		//CardView card = holder.getCardView();
-		//NacUtility.printf("Measure height              : %d", NacUtility.getHeight(card));
-		//nac.doCollapse();
-		//NacUtility.printf("Measure collapse height     : %d", NacUtility.getHeight(card));
-		//nac.doExpand();
-		//NacUtility.printf("Measure expand height       : %d", NacUtility.getHeight(card));
-		//nac.doCollapse();
-		//NacUtility.printf("Measure collapse (a) height : %d", NacUtility.getHeight(card));
 
-		this.setScreenWidth();
-		this.setScreenHeight();
-		this.setCardPadding(root);
-		//this.setDayButtons(root);
-		this.setDayButtonsHeight(root);
 		this.setHeaderHeight(root);
 		this.setExpandHeight(root);
 		this.setCollapseHeight(root);
@@ -187,55 +119,16 @@ public class NacCardMeasure
 	}
 
 	/**
-	 * Set alarm card padding.
-	 */
-	private void setCardPadding(View root)
-	{
-		//RelativeLayout header = root.findViewById(R.id.nac_header);
-		View header = (View) root.findViewById(R.id.nac_header);
-		this.mCardPadding = header.getPaddingStart() + header.getPaddingEnd();
-	}
-
-	/**
 	 * Set the collapse height.
 	 */
 	private void setCollapseHeight(View root)
 	{
 		View summary = (View) root.findViewById(R.id.nac_summary);
-		//RelativeLayout summary = (RelativeLayout) root.findViewById(R.id.nac_summary);
-		//LinearLayout extra = (LinearLayout) root.findViewById(R.id.nac_extra);
-		//summary.setVisibility(View.VISIBLE);
-		//extra.setVisibility(View.GONE);
-		//summary.setEnabled(true);
-		//extra.setEnabled(false);
-		//summary.requestLayout();
 
 		int headerHeight = this.getHeaderHeight();
 		int summaryHeight = NacUtility.getHeight(summary);
 		this.mCollapseHeight = headerHeight + summaryHeight;
-	}
-
-	/**
-	 * Set the day buttons.
-	 */
-	//private void setDayButtons(View root)
-	//{
-	//	//this.mDayButtons = (NacDayOfWeek) root.findViewById(R.id.nac_days);
-	//	LinearLayout dowView = root.findViewById(R.id.nac_days);
-	//	NacDayOfWeek dow = new NacDayOfWeek(dowView);
-
-	//	this.mDayButtons = dow;
-	//}
-
-	/**
-	 * Set the height of the day buttons.
-	 */
-	private void setDayButtonsHeight(View root)
-	{
-		//NacDayOfWeek dayButtons = (NacDayOfWeek) root.findViewById(R.id.nac_days);
-		//this.mDayButtonsHeight = NacUtility.getHeight(dayButtons);
-		LinearLayout dowView = root.findViewById(R.id.nac_days);
-		this.mDayButtonsHeight = NacUtility.getHeight(dowView);
+		NacUtility.printf("Collapse height : %d", this.mCollapseHeight);
 	}
 
 	/**
@@ -243,18 +136,12 @@ public class NacCardMeasure
 	 */
 	private void setExpandHeight(View root)
 	{
-		//RelativeLayout summary = (RelativeLayout) root.findViewById(R.id.nac_summary);
 		View extra = (View) root.findViewById(R.id.nac_extra);
-		//LinearLayout extra = (LinearLayout) root.findViewById(R.id.nac_extra);
-		//summary.setVisibility(View.GONE);
-		//extra.setVisibility(View.VISIBLE);
-		//summary.setEnabled(false);
-		//extra.setEnabled(true);
-		//extra.requestLayout();
 
 		int headerHeight = this.getHeaderHeight();
 		int extraHeight = NacUtility.getHeight(extra);
 		this.mExpandHeight = headerHeight + extraHeight;
+		NacUtility.printf("Expand height : %d", this.mExpandHeight);
 	}
 
 	/**
@@ -262,32 +149,8 @@ public class NacCardMeasure
 	 */
 	private void setHeaderHeight(View root)
 	{
-		//RelativeLayout header = (RelativeLayout) root.findViewById(R.id.nac_header);
 		View header = (View) root.findViewById(R.id.nac_header);
 		this.mHeaderHeight = NacUtility.getHeight(header);
-	}
-
-	/**
-	 * Set the screen height.
-	 */
-	private void setScreenHeight()
-	{
-		Context context = this.getContext();
-		RecyclerView rv = (RecyclerView) ((Activity)context).findViewById(
-			R.id.content_alarm_list);
-		int fabHeight = (int) context.getResources()
-			.getDimension(R.dimen.isz_large);
-		int recyclerHeight = rv.getHeight();
-		this.mScreenHeight = recyclerHeight - fabHeight;
-	}
-
-	/**
-	 * Set the screen width.
-	 */
-	private void setScreenWidth()
-	{
-		this.mScreenWidth = this.getContext().getResources()
-			.getDisplayMetrics().widthPixels;
 	}
 
 }

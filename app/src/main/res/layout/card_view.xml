@@ -71,132 +71,97 @@
 				/>
 		</LinearLayout> <!-- Header -->
 
-		<!-- Day/name summary -->
+		<!-- Summary -->
 		<LinearLayout
 			android:id="@+id/nac_summary"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:paddingBottom="@dimen/tiny"
-			android:gravity="center_vertical"
-			android:orientation="horizontal">
+			android:orientation="vertical">
 
-			<TextView
-				style="@style/TextView.Summary"
-				android:id="@+id/nac_summary_days"
-				android:layout_width="wrap_content"
+			<!-- Day and name -->
+			<LinearLayout
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginStart="@dimen/nudge"
-				android:layout_marginEnd="@dimen/tiny"
-				android:textColor="?attr/colorAccent"
-				android:text=""
-				/>
+				android:gravity="center_vertical"
+				android:orientation="horizontal">
 
-			<TextView
-				style="@style/TextView.Summary"
-				android:id="@+id/nac_summary_name"
-				android:layout_width="0dp"
+				<TextView
+					style="@style/TextView.Summary"
+					android:id="@+id/nac_summary_days"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="@dimen/nudge"
+					android:layout_marginEnd="@dimen/tiny"
+					android:focusable="false"
+					android:textColor="?attr/colorAccent"
+					android:text=""
+					/>
+
+				<TextView
+					style="@style/TextView.Summary"
+					android:id="@+id/nac_summary_name"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginEnd="@dimen/nudge"
+					android:layout_weight="1"
+					android:ellipsize="end"
+					android:focusable="false"
+					android:textColor="@color/sky_blue"
+					/>
+
+				<com.google.android.material.button.MaterialButton
+					style="@style/TextButton.Icon"
+					android:id="@+id/nac_expand"
+					android:layout_width="@dimen/touch"
+					android:layout_height="@dimen/isz_large"
+					app:icon="@mipmap/expand"
+					/>
+			</LinearLayout> <!-- Day and name -->
+
+			<!-- Dismiss snoozed alarm -->
+			<LinearLayout
+				android:id="@+id/nac_dismiss_parent"
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginEnd="@dimen/nudge"
-				android:layout_weight="1"
-				android:ellipsize="end"
-				android:textColor="@color/sky_blue"
-				/>
+				android:orientation="horizontal"
+				android:gravity="center_vertical"
+				android:alpha="0.8">
 
-			<com.google.android.material.button.MaterialButton
-				style="@style/TextButton.Icon"
-				android:layout_width="@dimen/touch"
-				android:layout_height="@dimen/isz_large"
-				app:icon="@mipmap/expand"
-				/>
-		</LinearLayout> <!-- Day/name Summary -->
-
-			<!--
-			<Button
-				android:id="@+id/nac_snooze"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_toStartOf="@id/nac_switch"
-				android:layout_alignBaseline="@id/nac_switch"
-				android:layout_marginStart="@dimen/large"
-				android:layout_marginEnd="@dimen/large"
-				android:textSize="@dimen/tsz_small"
-				android:text="Dismiss"
-				android:visibility="gone"
-				/>
+				<!--
+					style="?android:attr/buttonBarButtonStyle"
 				-->
+				<com.google.android.material.button.MaterialButton
+					style="@style/TextButton.Ellipsize.Row"
+					android:id="@+id/nac_dismiss"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:minWidth="@dimen/zero"
+					android:minHeight="@dimen/zero"
+					android:layout_marginStart="@dimen/nudge"
+					android:textSize="@dimen/tsz_small"
+					android:text="@string/action_alarm_dismiss"
+					app:iconSize="@dimen/medium"
+					app:icon="@mipmap/dismiss"
+					/>
 
-			<!--
-				android:layout_marginEnd="@dimen/large"
-				android:layout_marginEnd="@dimen/normal"
-				android:layout_marginEnd="@dimen/x_small"
-			<ImageView
-				android:id="@+id/nac_snooze"
-				android:layout_width="@dimen/isz_normal"
-				android:layout_height="@dimen/isz_normal"
-				android:layout_toStartOf="@id/nac_switch"
-				android:layout_alignBottom="@id/nac_switch"
-				android:layout_marginStart="@dimen/tiny"
-				android:layout_marginBottom="@dimen/small"
-				android:visibility="gone"
-				android:src="@mipmap/snooze"
-				/>
-				-->
+				<Space
+					android:layout_width="0dp"
+					android:layout_height="0dp"
+					android:layout_weight="1"
+					/>
 
-		<!--
-		<LinearLayout
-			android:id="@+id/nac_snoozy"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_below="@id/nac_summary"
-			android:paddingTop="@dimen/sp_align"
-			android:paddingBottom="@dimen/normal"
-			android:orientation="horizontal"
-			android:gravity="center_vertical"
-			android:alpha="0.8"
-			tools:ignore="UseCompoundDrawables">
+				<com.google.android.material.button.MaterialButton
+					style="@style/TextButton.Icon"
+					android:id="@+id/nac_expand_other"
+					android:layout_width="@dimen/touch"
+					android:layout_height="@dimen/isz_large"
+					app:icon="@mipmap/expand"
+					/>
+			</LinearLayout> <!-- Dismiss snoozed alarm -->
+		</LinearLayout> <!-- Summary -->
 
-			<ImageView
-				android:id="@+id/snoozy_icon"
-				android:layout_width="@dimen/isz_normal"
-				android:layout_height="@dimen/isz_normal"
-				android:layout_marginStart="@dimen/sp_align"
-				android:layout_marginEnd="@dimen/normal"
-				android:src="@mipmap/dismiss"
-				/>
-
-			<TextView
-				android:id="@+id/snoozy_name"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:textColor="@color/white"
-				android:textSize="@dimen/tsz_normal"
-				android:text="Dismiss"
-				/>
-
-			<Space
-				android:layout_width="0dp"
-				android:layout_height="0dp"
-				android:layout_weight="1"
-				/>
-
-			<ImageView
-				android:layout_width="@dimen/isz_normal"
-				android:layout_height="@dimen/isz_normal"
-				android:layout_marginStart="@dimen/tiny"
-				android:layout_marginEnd="@dimen/tiny"
-				android:src="@mipmap/expand"
-				/>
-
-		</LinearLayout>
-		-->
-
-			<!--
-			android:paddingTop="@dimen/sp_align"
-			android:paddingBottom="@dimen/normal">
-
-			android:layout_below="@id/nac_snoozy"
-			 -->
-
+		<!-- Extra -->
 		<LinearLayout
 			android:id="@+id/nac_extra"
 			android:layout_width="match_parent"
@@ -292,7 +257,7 @@
 			<!-- Media -->
 			<com.google.android.material.button.MaterialButton
 				style="@style/TextButton.Ellipsize.Row"
-				android:id="@+id/nac_sound"
+				android:id="@+id/nac_media"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:text=""
@@ -333,7 +298,7 @@
 
 				<com.google.android.material.button.MaterialButton
 					style="@style/TextButton.Icon"
-					android:id="@+id/nac_volume_settings"
+					android:id="@+id/nac_audio_source"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/touch"
 					app:icon="@mipmap/settings"
@@ -360,7 +325,7 @@
 
 			<!-- Delete/collapse -->
 			<LinearLayout
-				android:id="@+id/nac_collapse"
+				android:id="@+id/nac_collapse_parent"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:paddingTop="@dimen/tiny"
@@ -388,8 +353,9 @@
 
 				<com.google.android.material.button.MaterialButton
 					style="@style/TextButton.Icon"
+					android:id="@+id/nac_collapse"
 					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
+					android:layout_height="@dimen/isz_large"
 					android:layout_gravity="center_vertical"
 					app:icon="@mipmap/collapse"
 					/>

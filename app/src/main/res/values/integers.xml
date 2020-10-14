@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+	<integer name="default_card_height_collapsed">0</integer>
+	<integer name="default_card_height_collapsed_dismiss">0</integer>
+	<integer name="default_card_height_expanded">0</integer>
 	<integer name="default_auto_dismiss_index">7</integer>
 	<integer name="default_max_snooze_index">11</integer>
 	<integer name="default_snooze_duration_index">4</integer>

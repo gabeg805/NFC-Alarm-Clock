@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+	<bool name="default_card_is_measured">false</bool>
 	<bool name="default_prevent_app_from_closing">false</bool>
 	<bool name="default_easy_snooze">false</bool>
 	<bool name="default_repeat">true</bool>

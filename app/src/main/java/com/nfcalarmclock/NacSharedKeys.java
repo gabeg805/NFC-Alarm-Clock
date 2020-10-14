@@ -89,6 +89,38 @@ public class NacSharedKeys
 	}
 
 	/**
+	 * @return The card height collapsed key.
+	 */
+	public String getCardHeightCollapsed()
+	{
+		return this.getString(R.string.card_height_collapsed);
+	}
+
+	/**
+	 * @return The card height collapsed (with dismiss showing) key.
+	 */
+	public String getCardHeightCollapsedDismiss()
+	{
+		return this.getString(R.string.card_height_collapsed_dismiss);
+	}
+
+	/**
+	 * @return The card height expanded key.
+	 */
+	public String getCardHeightExpanded()
+	{
+		return this.getString(R.string.card_height_expanded);
+	}
+
+	/**
+	 * @return The card is measured key.
+	 */
+	public String getCardIsMeasured()
+	{
+		return this.getString(R.string.card_is_measured);
+	}
+
+	/**
 	 * @return The days key.
 	 */
 	public String getDays()

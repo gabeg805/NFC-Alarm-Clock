@@ -116,8 +116,44 @@ public class NacSharedPreferences
 	public void editAutoDismiss(int index, boolean commit)
 	{
 		String key = this.getKeys().getAutoDismiss();
-
 		this.saveInt(key, index, commit);
+	}
+
+	/**
+	 * Edit the value of the alarm card height when it is collapsed.
+	 */
+	public void editCardHeightCollapsed(int height)
+	{
+		String key = this.getKeys().getCardHeightCollapsed();
+		this.saveInt(key, height, false);
+	}
+
+	/**
+	 * Edit the value of the alarm card height when it is collapsed, with dismiss
+	 * showing.
+	 */
+	public void editCardHeightCollapsedDismiss(int height)
+	{
+		String key = this.getKeys().getCardHeightCollapsedDismiss();
+		this.saveInt(key, height, false);
+	}
+
+	/**
+	 * Edit the value of the alarm card height when it is expanded.
+	 */
+	public void editCardHeightExpanded(int height)
+	{
+		String key = this.getKeys().getCardHeightExpanded();
+		this.saveInt(key, height, false);
+	}
+
+	/**
+	 * Edit the flag indicating if the alarm card has been measured or not.
+	 */
+	public void editCardIsMeasured(boolean isMeasured)
+	{
+		String key = this.getKeys().getCardIsMeasured();
+		this.saveBoolean(key, isMeasured, false);
 	}
 
 	/**
@@ -134,7 +170,6 @@ public class NacSharedPreferences
 	public void editDays(int days, boolean commit)
 	{
 		String key = this.getKeys().getDays();
-
 		this.saveInt(key, days, commit);
 	}
 
@@ -152,7 +187,6 @@ public class NacSharedPreferences
 	public void editDaysColor(int color, boolean commit)
 	{
 		String key = this.getKeys().getDaysColor();
-
 		this.saveInt(key, color, commit);
 	}
 
@@ -473,7 +507,6 @@ public class NacSharedPreferences
 	public void editVibrate(boolean vibrate, boolean commit)
 	{
 		String key = this.getKeys().getVibrate();
-
 		this.saveBoolean(key, vibrate, commit);
 
 	}
@@ -544,7 +577,8 @@ public class NacSharedPreferences
 		else
 		{
 			Locale locale = Locale.getDefault();
-			return String.format(locale, "%1$s %2$s", dismiss, cons.getUnitMinute(index));
+			return String.format(locale, "%1$s %2$s", dismiss,
+				cons.getUnitMinute(index));
 		}
 	}
 
@@ -564,6 +598,46 @@ public class NacSharedPreferences
 	public static int getAutoDismissTime(int index)
 	{
 		return (index < 5) ? index : (index-4)*5;
+	}
+
+	/**
+	 * @return The alarm card height when it is collapsed.
+	 */
+	public int getCardHeightCollapsed()
+	{
+		String key = this.getKeys().getCardHeightCollapsed();
+		int value = this.getDefaults().getCardHeightCollapsed();
+		return this.getInstance().getInt(key, value);
+	}
+
+	/**
+	 * @return The alarm card height when it is collapsed, with dismiss showing.
+	 */
+	public int getCardHeightCollapsedDismiss()
+	{
+		String key = this.getKeys().getCardHeightCollapsedDismiss();
+		int value = this.getDefaults().getCardHeightCollapsedDismiss();
+		return this.getInstance().getInt(key, value);
+	}
+
+	/**
+	 * @return The alarm card height when it is expanded.
+	 */
+	public int getCardHeightExpanded()
+	{
+		String key = this.getKeys().getCardHeightExpanded();
+		int value = this.getDefaults().getCardHeightExpanded();
+		return this.getInstance().getInt(key, value);
+	}
+
+	/**
+	 * @return True if the alarm card has been measured, and False otherwise.
+	 */
+	public boolean getCardIsMeasured()
+	{
+		String key = this.getKeys().getCardIsMeasured();
+		boolean value = this.getDefaults().getCardIsMeasured();
+		return this.getInstance().getBoolean(key, value);
 	}
 
 	/**

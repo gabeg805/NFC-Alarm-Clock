@@ -172,21 +172,19 @@ public class NacCardTouchHelper
 		 * @return The copy view, which resides in the background of the view
 		 *         holder.
 		 */
-		private View getCopyView()
+		private View getCopySwipeView()
 		{
 			NacCardHolder holder = this.getCardHolder();
-
-			return (holder != null) ? holder.getCopyView() : null;
+			return (holder != null) ? holder.getCopySwipeView() : null;
 		}
 
 		/**
 		 * @return The background delete view of the view holder.
 		 */
-		private View getDeleteView()
+		private View getDeleteSwipeView()
 		{
 			NacCardHolder holder = this.getCardHolder();
-
-			return (holder != null) ? holder.getDeleteView() : null;
+			return (holder != null) ? holder.getDeleteSwipeView() : null;
 		}
 
 		/**
@@ -298,8 +296,8 @@ public class NacCardTouchHelper
 			}
 
 			final View fg = this.getCardView(action);
-			final View copy = this.getCopyView();
-			final View delete = this.getDeleteView();
+			final View copy = this.getCopySwipeView();
+			final View delete = this.getDeleteSwipeView();
 
 			if (action == ItemTouchHelper.ACTION_STATE_SWIPE)
 			{

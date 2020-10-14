@@ -193,19 +193,19 @@ public class NacDayOfWeek
 	public void setDays(EnumSet<NacCalendar.Day> days)
 	{
 		//int index = 0;
-		NacUtility.printf("Setting days!");
+		//NacUtility.printf("Setting days!");
 
 		for (NacCalendar.Day d : NacCalendar.WEEK)
 		{
 			if (days.contains(d))
 			{
-				NacUtility.printf("Enable day : %s", d.name());
+				//NacUtility.printf("Enable day : %s", d.name());
 				this.getDayButton(d).enable();
 				//this.mButtons[index].enable();
 			}
 			else
 			{
-				NacUtility.printf("Disable day : %s", d.name());
+				//NacUtility.printf("Disable day : %s", d.name());
 				//this.mButtons[index].disable();
 				this.getDayButton(d).disable();
 			}

@@ -15,6 +15,7 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -73,9 +74,49 @@ public class NacCardHolder
 	private NacCardView mCard;
 
 	/**
+	 * Copy swipe view.
+	 */
+	private RelativeLayout mCopySwipeView;
+
+	/**
+	 * Delete swipe view.
+	 */
+	private RelativeLayout mDeleteSwipeView;
+
+	/**
+	 * Header view.
+	 */
+	private LinearLayout mHeaderView;
+
+	/**
+	 * Summary view.
+	 */
+	private LinearLayout mSummaryView;
+
+	/**
+	 * Dismiss snoozed alarm parent view.
+	 */
+	private LinearLayout mDismissParentView;
+
+	/**
+	 * Dismiss snoozed alarm button.
+	 */
+	private MaterialButton mDismissButton;
+
+	/**
+	 * Extra view.
+	 */
+	private LinearLayout mExtraView;
+
+	/**
 	 * On/off switch for an alarm.
 	 */
 	 private SwitchCompat mSwitch;
+
+	/**
+	 * Time parent view.
+	 */
+	private LinearLayout mTimeParentView;
 
 	/**
 	 * Time text.
@@ -165,6 +206,18 @@ public class NacCardHolder
 		this.mAlarm = null;
 		this.mRoot = root;
 		this.mCard = new NacCardView(context, root, measure);
+
+		this.mCopySwipeView = root.findViewById(R.id.nac_swipe_copy);
+		this.mDeleteSwipeView = root.findViewById(R.id.nac_swipe_delete);
+		this.mHeaderView = root.findViewById(R.id.nac_header);
+		this.mSummaryView = root.findViewById(R.id.nac_summary);
+		this.mDismissParentView = root.findViewById(R.id.nac_dismiss_parent);
+		this.mDismissButton = root.findViewById(R.id.nac_dismiss);
+		this.mExtraView = root.findViewById(R.id.nac_extra);
+
+		//this.mCardView = root.findViewById(R.id.nac_card);
+
+		this.mTimeParentView = root.findViewById(R.id.nac_time_parent);
 		this.mTimeView = root.findViewById(R.id.nac_time);
 		this.mMeridianView = root.findViewById(R.id.nac_meridian);
 		this.mSwitch = root.findViewById(R.id.nac_switch);
@@ -174,10 +227,10 @@ public class NacCardHolder
 		this.mRepeatButton = root.findViewById(R.id.nac_repeat);
 		this.mVibrateButton = root.findViewById(R.id.nac_vibrate);
 		this.mNfcButton = root.findViewById(R.id.nac_nfc);
-		this.mMediaButton = root.findViewById(R.id.nac_sound);
+		this.mMediaButton = root.findViewById(R.id.nac_media);
 		this.mVolumeImageView = root.findViewById(R.id.nac_volume_icon);
 		this.mVolumeSeekBar = root.findViewById(R.id.nac_volume_slider);
-		this.mAudioSourceButton = root.findViewById(R.id.nac_volume_settings);
+		this.mAudioSourceButton = root.findViewById(R.id.nac_audio_source);
 		this.mNameButton = root.findViewById(R.id.nac_name);
 		this.mDeleteButton = root.findViewById(R.id.nac_delete);
 		this.mOnDeleteClickedListener = null;
@@ -195,6 +248,14 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Collapse the alarm card.
+	 */
+	public void collapse()
+	{
+		this.mCard.collapse();
+	}
+
+	/**
 	 * Delete the alarm card.
 	 */
 	public void delete()
@@ -209,11 +270,61 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Act as if the alarm card was clicked.
+	 */
+	public void doCardClick()
+	{
+		if (this.isCollapsed())
+		{
+			NacUtility.printf("Is collapsed -> Expanding");
+			this.expand();
+		}
+		else if (this.isExpanded())
+		{
+			NacUtility.printf("Is expanded -> Collapsing");
+			this.collapse();
+		}
+		else
+		{
+			NacUtility.printf("Else -> Collapsing");
+			this.collapse();
+		}
+	}
+
+	/**
+	 * Collapse the alarm card without any animations.
+	 */
+	public void doCollapse()
+	{
+		//this.setState(State.COLLAPSED);
+		//this.setCollapseBackgroundColor();
+		View summary = this.getSummaryView();
+		View extra = this.getExtraView();
+
+		summary.setVisibility(View.VISIBLE);
+		summary.setEnabled(true);
+		extra.setVisibility(View.GONE);
+		extra.setEnabled(false);
+		this.setDismissView();
+
+		//this.callStateChangeListener();
+	}
+
+	/**
 	 * Act as if the collapse button was clicked.
 	 */
-	public void doCollapseButtonClick()
+	//public void doCollapseButtonClick()
+	//{
+	//	this.mCard.collapse();
+	//}
+
+	/**
+	 * Force the alarm card to be fully collapsed, without any animations.
+	 */
+	public void doCollapseForce()
 	{
-		this.mCard.collapse();
+		this.doCollapse();
+		this.getDismissParentView().setVisibility(View.GONE);
 	}
 
 	/**
@@ -246,11 +357,64 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Act as if the dismiss button was clicked.
+	 */
+	public void doDismissButtonClick()
+	{
+		NacUtility.printf("Dismiss button was clicked!");
+		//this.delete();
+	}
+
+	/**
+	 * Expand the alarm card without any animations.
+	 */
+	public void doExpand()
+	{
+		//this.setState(State.EXPANDED);
+		//this.setExpandBackgroundColor();
+		View summary = this.getSummaryView();
+		View extra = this.getExtraView();
+
+		summary.setVisibility(View.GONE);
+		summary.setEnabled(false);
+		extra.setVisibility(View.VISIBLE);
+		extra.setEnabled(true);
+		//this.callStateChangeListener();
+	}
+
+	/**
+	 * Act as if the expand button was clicked.
+	 */
+	//public void doExpandButtonClick()
+	//{
+	//	this.mCard.expand();
+	//}
+
+	/**
 	 * Act as if the header was clicked.
 	 */
-	public void doHeaderClick()
+	//public void doHeaderClick()
+	//{
+	//	if (this.isCollapsed())
+	//	{
+	//		this.expand();
+	//	}
+	//	else if (this.isExpanded())
+	//	{
+	//		this.collapse();
+	//	}
+	//	else
+	//	{
+	//		this.collapse();
+	//	}
+	//}
+
+	/**
+	 * Act as if the media button was clicked.
+	 */
+	public void doMediaButtonClick()
 	{
-		this.mCard.toggleState();
+		this.startMediaActivity();
 	}
 
 	/**
@@ -310,20 +474,12 @@ public class NacCardHolder
 	}
 
 	/**
-	 * Act as if the sound was clicked.
-	 */
-	public void doSoundClick()
-	{
-		this.startMediaActivity();
-	}
-
-	/**
 	 * Act as if the summary was clicked.
 	 */
-	public void doSummaryClick()
-	{
-		this.mCard.expand();
-	}
+	//public void doSummaryClick()
+	//{
+	//	this.mCard.expand();
+	//}
 
 	/**
 	 * Act as if the switch was changed.
@@ -380,6 +536,14 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Expand the alarm card.
+	 */
+	public void expand()
+	{
+		this.mCard.expand();
+	}
+
+	/**
 	 * @return The alarm.
 	 */
 	public NacAlarm getAlarm()
@@ -404,6 +568,24 @@ public class NacCardHolder
 	}
 
 	/**
+	 * @return The button to collapse the alarm card.
+	 */
+	private MaterialButton getCollapseButton()
+	{
+		View root = this.getRoot();
+		return root.findViewById(R.id.nac_collapse);
+	}
+
+	/**
+	 * @return The parent view that contains the collapse button.
+	 */
+	private LinearLayout getCollapseParentView()
+	{
+		View root = this.getRoot();
+		return root.findViewById(R.id.nac_collapse_parent);
+	}
+
+	/**
 	 * @return The context.
 	 */
 	public Context getContext()
@@ -412,11 +594,12 @@ public class NacCardHolder
 	}
 
 	/**
-	 * @return The copy view, which resides in the background of the card view.
+	 * @return The copy swipe view, which resides in the background of the card
+	 *         view.
 	 */
-	public View getCopyView()
+	public RelativeLayout getCopySwipeView()
 	{
-		return this.mCard.getCopyView();
+		return this.mCopySwipeView;
 	}
 
 	/**
@@ -436,12 +619,62 @@ public class NacCardHolder
 	}
 
 	/**
-	 * @return The delete view, which resides in the background of the card
+	 * @return The delete swipe view, which resides in the background of the card
 	 *		   view.
 	 */
-	public View getDeleteView()
+	public RelativeLayout getDeleteSwipeView()
 	{
-		return this.mCard.getDeleteView();
+		return this.mDeleteSwipeView;
+	}
+
+	/**
+	 * @return The dismiss button.
+	 */
+	public MaterialButton getDismissButton()
+	{
+		return this.mDismissButton;
+	}
+
+	/**
+	 * @return The dismiss parent view.
+	 */
+	public LinearLayout getDismissParentView()
+	{
+		return this.mDismissParentView;
+	}
+
+	/**
+	 * @return The button to expand the alarm card.
+	 */
+	private MaterialButton getExpandButton()
+	{
+		View root = this.getRoot();
+		return root.findViewById(R.id.nac_expand);
+	}
+
+	/**
+	 * @return The other button to expand the alarm card (there are 2).
+	 */
+	private MaterialButton getExpandOtherButton()
+	{
+		View root = this.getRoot();
+		return root.findViewById(R.id.nac_expand_other);
+	}
+
+	/**
+	 * @return The extra view.
+	 */
+	public LinearLayout getExtraView()
+	{
+		return this.mExtraView;
+	}
+
+	/**
+	 * @return The header view.
+	 */
+	private LinearLayout getHeaderView()
+	{
+		return this.mHeaderView;
 	}
 
 	/**
@@ -533,11 +766,27 @@ public class NacCardHolder
 	}
 
 	/**
+	 * @return The summary view.
+	 */
+	private LinearLayout getSummaryView()
+	{
+		return this.mSummaryView;
+	}
+
+	/**
 	 * @return The switch.
 	 */
 	public SwitchCompat getSwitch()
 	{
 		return this.mSwitch;
+	}
+
+	/**
+	 * @return The time parent view.
+	 */
+	public LinearLayout getTimeParentView()
+	{
+		return this.mTimeParentView;
 	}
 
 	/**
@@ -573,19 +822,91 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Hide the swipe views.
+	 */
+	private void hideSwipeViews()
+	{
+		this.getCopySwipeView().setVisibility(View.GONE);
+		this.getDeleteSwipeView().setVisibility(View.GONE);
+	}
+
+	/**
 	 * Initialize the alarm card.
-	 *
-	 * @param  alarm  The alarm to use to populate data in the alarm card.
-	 * @param  wasAdded  Indicator for whether or not the card should be
-	 *					 focused.
 	 */
 	public void init(NacAlarm alarm)
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
 		this.mAlarm = alarm;
 
-		this.setListeners(null);
-		this.mCard.init(shared, alarm);
+		this.initListeners(null);
+		this.measureCard();
+		this.initViews();
+		this.initColors();
+		this.initListeners(this);
+		this.measureCard();
+	}
+
+	/**
+	 * Initialize the colors of the various views.
+	 */
+	public void initColors()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+
+		this.setDividerColor();
+		this.setTimeColor();
+		this.setMeridianColor();
+		this.setSwitchColor();
+		this.setSummaryDaysColor();
+		this.setSummaryNameColor();
+		this.setVolumeSeekBarColor();
+	}
+
+	/**
+	 * Initialize the listeners of the various views.
+	 */
+	public void initListeners(Object listener)
+	{
+		View root = this.getRoot();
+		View.OnClickListener click = (View.OnClickListener) listener;
+		View.OnLongClickListener longClick = (View.OnLongClickListener) listener;
+		NacDayOfWeek.OnClickListener dow = (NacDayOfWeek.OnClickListener) listener;
+		CompoundButton.OnCheckedChangeListener compound =
+			(CompoundButton.OnCheckedChangeListener) listener;
+		SeekBar.OnSeekBarChangeListener seek =
+			(SeekBar.OnSeekBarChangeListener) listener;
+
+		this.hideSwipeViews();
+		this.getHeaderView().setOnClickListener(click);
+		this.getSummaryView().setOnClickListener(click);
+		this.getTimeParentView().setOnClickListener(click);
+		this.getSwitch().setOnCheckedChangeListener(compound);
+		this.getDismissParentView().setOnClickListener(click);
+		this.getDismissButton().setOnClickListener(click);
+		this.getExpandButton().setOnClickListener(click);
+		this.getExpandOtherButton().setOnClickListener(click);
+		this.getCollapseButton().setOnClickListener(click);
+		this.getCollapseParentView().setOnClickListener(click);
+		this.getDayOfWeek().setOnClickListener(dow);
+		this.getRepeatButton().setOnClickListener(click);
+		this.getRepeatButton().setOnLongClickListener(longClick);
+		this.getVibrateButton().setOnClickListener(click);
+		this.getNfcButton().setOnClickListener(click);
+		this.getMediaButton().setOnClickListener(click);
+		this.getVolumeSeekBar().setOnSeekBarChangeListener(seek);
+		this.getAudioSourceButton().setOnClickListener(click);
+		this.getNameButton().setOnClickListener(click);
+		this.getDeleteButton().setOnClickListener(click);
+	}
+
+	/**
+	 * Initialize the various views.
+	 */
+	public void initViews()
+	{
+		NacAlarm alarm = this.getAlarm();
+
+		this.mCard.init(alarm);
+		this.setDismissView();
 		this.setTimeView();
 		this.setMeridianView();
 		this.setSwitchView();
@@ -599,8 +920,6 @@ public class NacCardHolder
 		this.setVolumeSeekBar();
 		this.setVolumeImageView();
 		this.setNameButton();
-		this.setColors();
-		this.setListeners(this);
 	}
 
 	/**
@@ -625,7 +944,14 @@ public class NacCardHolder
 	 */
 	public boolean isCollapsed()
 	{
-		return !this.isExpanded();
+		NacSharedPreferences shared = this.getSharedPreferences();
+		View cardView = this.getCardView();
+		View extraView = this.getExtraView();
+		int currentHeight = cardView.getMeasuredHeight();
+
+		return (extraView.getVisibility() == View.GONE)
+			|| (currentHeight == shared.getCardHeightCollapsed())
+			|| (currentHeight == shared.getCardHeightCollapsedDismiss());
 	}
 
 	/**
@@ -633,7 +959,13 @@ public class NacCardHolder
 	 */
 	public boolean isExpanded()
 	{
-		return this.mCard.isExpanded();
+		NacSharedPreferences shared = this.getSharedPreferences();
+		View cardView = this.getCardView();
+		View extraView = this.getExtraView();
+		int currentHeight = cardView.getMeasuredHeight();
+
+		return (extraView.getVisibility() == View.VISIBLE)
+			|| (currentHeight == shared.getCardHeightExpanded());
 	}
 
 	/**
@@ -645,6 +977,37 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 
 		return alarm.isSnoozed(shared);
+	}
+
+	/**
+	 * Measure the alarm card.
+	 */
+	private void measureCard()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		CardView cardView = this.getCardView();
+
+		if (shared.getCardIsMeasured())
+		{
+			return;
+		}
+
+		this.doExpand();
+		int expandHeight = NacUtility.getHeight(cardView);
+
+		this.doCollapseForce();
+		int collapseHeight = NacUtility.getHeight(cardView);
+
+		this.getDismissParentView().setVisibility(View.VISIBLE);
+		int dismissHeight = NacUtility.getHeight(cardView);
+
+		NacUtility.printf("Eh : %d || Ch : %d || Dh : %d",
+			expandHeight, collapseHeight, dismissHeight);
+
+		shared.editCardHeightCollapsed(collapseHeight);
+		shared.editCardHeightCollapsedDismiss(dismissHeight);
+		shared.editCardHeightExpanded(expandHeight);
+		shared.editCardIsMeasured(true);
 	}
 
 	/**
@@ -680,25 +1043,38 @@ public class NacCardHolder
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
 
-
-		if (id == R.id.nac_header)
+		//if (id == R.id.nac_header)
+		if ((id == R.id.nac_header)
+			|| (id == R.id.nac_summary)
+			|| (id == R.id.nac_dismiss_parent)
+			|| (id == R.id.nac_expand) || (id == R.id.nac_expand_other)
+			|| (id == R.id.nac_collapse) || (id == R.id.nac_collapse_parent))
 		{
-			this.respondToHeaderClick(view);
-			this.setDayOfWeek();
+			this.respondToCardClick(view);
+			//this.respondToHeaderClick(view);
+			//this.setDayOfWeek();
 		}
-		else if (id == R.id.nac_summary)
-		{
-			this.respondToSummaryClick(view);
-			this.setDayOfWeek();
-		}
-		else if (id == R.id.nac_collapse)
-		{
-			this.respondToCollapseButtonClick(view);
-		}
+		//else if (id == R.id.nac_summary)
+		//{
+		//	this.respondToSummaryClick(view);
+		//	//this.setDayOfWeek();
+		//}
 		else if (id == R.id.nac_time_parent)
 		{
 			this.respondToTimeClick(view);
 		}
+		else if (id == R.id.nac_dismiss)
+		{
+			this.respondToDismissButtonClick(view);
+		}
+		//else if ((id == R.id.nac_expand) || (id == R.id.nac_expand_other))
+		//{
+		//	this.respondToExpandButtonClick(view);
+		//}
+		//else if ((id == R.id.nac_collapse) || (id == R.id.nac_collapse_parent))
+		//{
+		//	this.respondToCollapseButtonClick(view);
+		//}
 		else if (id == R.id.nac_repeat)
 		{
 			this.respondToRepeatButtonClick(view);
@@ -711,11 +1087,11 @@ public class NacCardHolder
 		{
 			this.respondToNfcButtonClick(view);
 		}
-		else if (id == R.id.nac_sound)
+		else if (id == R.id.nac_media)
 		{
-			this.respondToSoundClick(view);
+			this.respondToMediaButtonClick(view);
 		}
-		else if (id == R.id.nac_volume_settings)
+		else if (id == R.id.nac_audio_source)
 		{
 			this.respondToVolumeSettingsButtonClick(view);
 		}
@@ -783,7 +1159,6 @@ public class NacCardHolder
 
 		alarm.setVolume(progress);
 		this.setVolumeImageView();
-		//this.mSound.setVolumeIcon();
 	}
 
 	/**
@@ -822,13 +1197,22 @@ public class NacCardHolder
 	}
 
 	/**
-	 * Respond to the collapse button being clicked.
+	 * Respond to the alarm card being clicked.
 	 */
-	private void respondToCollapseButtonClick(View view)
+	private void respondToCardClick(View view)
 	{
 		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-		this.doCollapseButtonClick();
+		this.doCardClick();
 	}
+
+	/**
+	 * Respond to the collapse button being clicked.
+	 */
+	//private void respondToCollapseButtonClick(View view)
+	//{
+	//	view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+	//	this.doCollapseButtonClick();
+	//}
 
 	/**
 	 * Perform the day button state change.
@@ -863,13 +1247,31 @@ public class NacCardHolder
 	}
 
 	/**
-	 * Respond to the header being clicked.
+	 * Respond to the dismiss button being clicked.
 	 */
-	private void respondToHeaderClick(View view)
+	private void respondToDismissButtonClick(View view)
 	{
 		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-		this.doHeaderClick();
+		this.doDismissButtonClick();
 	}
+
+	/**
+	 * Respond to the expand button being clicked.
+	 */
+	//private void respondToExpandButtonClick(View view)
+	//{
+	//	view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+	//	this.doExpandButtonClick();
+	//}
+
+	/**
+	 * Respond to the header being clicked.
+	 */
+	//private void respondToHeaderClick(View view)
+	//{
+	//	view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+	//	this.doHeaderClick();
+	//}
 
 	/**
 	 * Respond to the name being clicked.
@@ -932,21 +1334,18 @@ public class NacCardHolder
 		}
 		else
 		{
-			//Context context = this.getContext();
-			//NacSharedConstants cons = new NacSharedConstants(context);
-			//NacUtility.quickToast(context, cons.getErrorMessageSnoozedDays());
 			this.toastModifySnoozedAlarmError();
 		}
 	}
 
 	/**
-	 * Respond to the sound view being clicked.
+	 * Respond to the media button being clicked.
 	 */
-	private void respondToSoundClick(View view)
+	private void respondToMediaButtonClick(View view)
 	{
 		if (this.canModifyAlarm())
 		{
-			this.doSoundClick();
+			this.doMediaButtonClick();
 		}
 		else
 		{
@@ -958,11 +1357,11 @@ public class NacCardHolder
 	/**
 	 * Respond to the summary being clicked.
 	 */
-	private void respondToSummaryClick(View view)
-	{
-		this.doSummaryClick();
-		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-	}
+	//private void respondToSummaryClick(View view)
+	//{
+	//	this.doSummaryClick();
+	//	view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+	//}
 
 	/**
 	 * Perform the switch state change.
@@ -1034,22 +1433,6 @@ public class NacCardHolder
 	}
 
 	/**
-	 * Set the colors of the various views.
-	 */
-	public void setColors()
-	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-
-		this.mCard.setColor(shared);
-		this.setTimeColor();
-		this.setMeridianColor();
-		this.setSwitchColor();
-		this.setSummaryDaysColor();
-		this.setSummaryNameColor();
-		this.setVolumeSeekBarColor();
-	}
-
-	/**
 	 * Set the day of week to its proper setting.
 	 */
 	public void setDayOfWeek()
@@ -1064,31 +1447,41 @@ public class NacCardHolder
 	}
 
 	/**
-	 * Set the listeners of the various views.
+	 * Set the dismiss view to its proper setting.
 	 */
-	public void setListeners(Object listener)
+	public void setDismissView()
 	{
-		View root = this.getRoot();
-		View.OnClickListener click = (View.OnClickListener) listener;
-		View.OnLongClickListener longClick = (View.OnLongClickListener) listener;
-		NacDayOfWeek.OnClickListener dow = (NacDayOfWeek.OnClickListener) listener;
-		CompoundButton.OnCheckedChangeListener compound =
-			(CompoundButton.OnCheckedChangeListener) listener;
-		SeekBar.OnSeekBarChangeListener seek =
-			(SeekBar.OnSeekBarChangeListener) listener;
+		NacAlarm alarm = this.getAlarm();
+		View dismissParent = this.getDismissParentView();
+		View expandButton = this.getExpandButton();
+		int dismissVisibility = alarm.getNameNormalized().contains("Work")
+			? View.VISIBLE : View.GONE;
+		int expandVisibility = (dismissVisibility == View.GONE)
+			? View.VISIBLE : View.INVISIBLE;
 
-		this.mCard.setOnClickListener(root, (View.OnClickListener)listener);
-		this.getSwitch().setOnCheckedChangeListener(compound);
-		this.getDayOfWeek().setOnClickListener(dow);
-		this.getRepeatButton().setOnClickListener(click);
-		this.getRepeatButton().setOnLongClickListener(longClick);
-		this.getVibrateButton().setOnClickListener(click);
-		this.getNfcButton().setOnClickListener(click);
-		this.getMediaButton().setOnClickListener(click);
-		this.getVolumeSeekBar().setOnSeekBarChangeListener(seek);
-		this.getAudioSourceButton().setOnClickListener(click);
-		this.getNameButton().setOnClickListener(click);
-		this.getDeleteButton().setOnClickListener(click);
+		dismissParent.setVisibility(dismissVisibility);
+		expandButton.setVisibility(expandVisibility);
+	}
+
+	/**
+	 * Set the divider color.
+	 */
+	public void setDividerColor()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		View root = this.getRoot();
+		ViewGroup headerDivider = root.findViewById(R.id.nac_divider_header);
+		View deleteDivider = root.findViewById(R.id.nac_divider_delete);
+		int count = headerDivider.getChildCount();
+		int themeColor = shared.getThemeColor();
+		ColorStateList tint = ColorStateList.valueOf(themeColor);
+
+		for (int i=0; i < count; i++)
+		{
+			headerDivider.getChildAt(i).setBackgroundTintList(tint);
+		}
+
+		deleteDivider.setBackgroundTintList(tint);
 	}
 
 	/**
@@ -1104,8 +1497,6 @@ public class NacCardHolder
 
 		this.getMediaButton().setText(message);
 		this.getMediaButton().setAlpha(alpha);
-		//this.mSound.setText(message);
-		//this.mSound.setAlpha(alpha);
 	}
 
 	/**
@@ -1178,9 +1569,9 @@ public class NacCardHolder
 	public void setOnCreateContextMenuListener(
 		View.OnCreateContextMenuListener listener)
 	{
-		View root = this.getRoot();
-
-		this.mCard.setOnCreateContextMenuListener(root, listener);
+		this.getHeaderView().setOnCreateContextMenuListener(listener);
+		this.getSummaryView().setOnCreateContextMenuListener(listener);
+		this.getTimeParentView().setOnCreateContextMenuListener(listener);
 	}
 
 	/**

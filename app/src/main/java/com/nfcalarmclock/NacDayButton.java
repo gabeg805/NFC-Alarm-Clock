@@ -149,7 +149,7 @@ public class NacDayButton
 	 */
 	public void animateButton()
 	{
-		NacUtility.printf("Animating button!");
+		//NacUtility.printf("Animating button!");
 		animateDay(NacDayViewType.BUTTON);
 	}
 
@@ -158,7 +158,7 @@ public class NacDayButton
 	 */
 	public void animateDay(NacDayViewType type)
 	{
-		NacUtility.printf("YOYOYO Animating!");
+		//NacUtility.printf("YOYOYO Animating!");
 		this.cancelAnimator();
 
 		ObjectAnimator animator = this.startAnimator(type);
@@ -191,7 +191,7 @@ public class NacDayButton
 	 */
 	public void animateText()
 	{
-		NacUtility.printf("Animating text!");
+		//NacUtility.printf("Animating text!");
 		animateDay(NacDayViewType.TEXT);
 	}
 
@@ -456,7 +456,7 @@ public class NacDayButton
 	 */
 	public void redraw()
 	{
-		NacUtility.printf("REDRAWING!");
+		//NacUtility.printf("REDRAWING!");
 		invalidate();
 		requestLayout();
 	}
@@ -522,7 +522,7 @@ public class NacDayButton
 			drawable.setColorFilter(color, PorterDuff.Mode.SRC);
 		}
 
-		NacUtility.printf("Setting button color : %d", color);
+		//NacUtility.printf("Setting button color : %d", color);
 		//this.mButton.setBackgroundColor(color);
 		this.mButton.setTag(color);
 		this.redraw();
@@ -605,7 +605,7 @@ public class NacDayButton
 	@Keep
 	public void setTextColor(int color)
 	{
-		NacUtility.printf("Setting text color : %d", color);
+		//NacUtility.printf("Setting text color : %d", color);
 		this.mButton.setTextColor(color);
 		this.redraw();
 	}

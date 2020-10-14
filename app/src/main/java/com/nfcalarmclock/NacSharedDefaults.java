@@ -34,7 +34,7 @@ public class NacSharedDefaults
 	}
 
 	/**
-	 * @return App first run
+	 * @return App first run.
 	 */
 	public boolean getAppFirstRun()
 	{
@@ -47,6 +47,38 @@ public class NacSharedDefaults
 	public int getAutoDismissIndex()
 	{
 		return this.getInteger(R.integer.default_auto_dismiss_index);
+	}
+
+	/**
+	 * @return Height of the card when it is collapsed.
+	 */
+	public int getCardHeightCollapsed()
+	{
+		return this.getInteger(R.integer.default_card_height_collapsed);
+	}
+
+	/**
+	 * @return Height of the card when it is collapsed (with dismiss showing).
+	 */
+	public int getCardHeightCollapsedDismiss()
+	{
+		return this.getInteger(R.integer.default_card_height_collapsed_dismiss);
+	}
+
+	/**
+	 * @return Height of the card when it is expanded.
+	 */
+	public int getCardHeightExpanded()
+	{
+		return this.getInteger(R.integer.default_card_height_expanded);
+	}
+
+	/**
+	 * @return Has the card been measured.
+	 */
+	public boolean getCardIsMeasured()
+	{
+		return this.getBoolean(R.bool.default_card_is_measured);
 	}
 
 	/**
