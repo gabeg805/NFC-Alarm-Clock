@@ -29,9 +29,9 @@ public class NacCardAdapter
 		MenuItem.OnMenuItemClickListener,
 		RecyclerView.OnItemTouchListener,
 		NacAlarm.OnAlarmChangeListener,
+		NacCardHolder.OnCardCollapsedListener,
 		NacCardHolder.OnDeleteClickedListener,
-		NacCardTouchHelper.Adapter,
-		NacCardView.OnStateChangeListener
+		NacCardTouchHelper.Adapter
 {
 
 	/**
@@ -98,11 +98,6 @@ public class NacCardAdapter
 	private boolean mWasAddedWithFloatingActionButton;
 
 	/**
-	 * Alarm card measure.
-	 */
-	private NacCardMeasure mMeasure;
-
-	/**
 	 * Card that was last clicked on to show a menu.
 	 */
 	private View mLastCardClicked;
@@ -127,7 +122,6 @@ public class NacCardAdapter
 		this.mAlarmList = null;
 		this.mPreviousCalendar = null;
 		this.mWasAddedWithFloatingActionButton = false;
-		this.mMeasure = new NacCardMeasure(context);
 		this.mLastCardClicked = null;
 
 		this.mRecyclerView.addOnItemTouchListener(this);
@@ -224,7 +218,6 @@ public class NacCardAdapter
 		this.updateNotification();
 		notifyDataSetChanged();
 		db.close();
-		this.mMeasure.measure(this.mRecyclerView);
 	}
 
 	/**
@@ -569,10 +562,10 @@ public class NacCardAdapter
 	 */
 	public void highlight(NacAlarm alarm)
 	{
-		NacCardView card = this.getCardView(alarm);
-		if (card != null)
+		NacCardHolder holder = this.getCardHolder(alarm);
+		if (holder != null)
 		{
-			card.highlight();
+			holder.highlight();
 		}
 	}
 
@@ -604,8 +597,11 @@ public class NacCardAdapter
 		Context context = this.getContext();
 		NacDatabase db = new NacDatabase(context);
 
+		NacUtility.printf("onAlarmChanged!");
+
 		if (alarm.wasChanged())
 		{
+			NacUtility.printf("Alarm was changed!");
 			if (alarm.wasUseNfcChanged() && this.hasUseNfcChangeListener())
 			{
 				this.getOnUseNfcChangeListener().onUseNfcChange(alarm);
@@ -613,11 +609,17 @@ public class NacCardAdapter
 			}
 			else if (!alarm.isChangeTrackerLatched())
 			{
+				NacUtility.printf("Alarm change tracker is not latched!");
 				this.showAlarmChange(alarm);
 				this.sortHighlight(alarm);
 			}
+			else
+			{
+				NacUtility.printf("Alarm change tracker IS latched!");
+			}
 		}
 
+		NacUtility.printf("Alarm HERE!");
 		NacScheduler.update(context, alarm);
 		this.setWasAddedWithFloatingActionButton(false);
 		this.updateNotification();
@@ -638,9 +640,10 @@ public class NacCardAdapter
 
 		alarm.setOnAlarmChangeListener(this);
 		card.init(alarm);
+		card.setOnCardCollapsedListener(this);
 		card.setOnDeleteClickedListener(this);
 		card.setOnCreateContextMenuListener(this);
-		card.setOnStateChangeListener(this);
+		//card.setOnStateChangeListener(this);
 
 		if (this.wasAddedWithFloatingActionButton())
 		{
@@ -718,14 +721,8 @@ public class NacCardAdapter
 		Context context = parent.getContext();
 		View root = LayoutInflater.from(context).inflate(R.layout.card_frame,
 			parent, false);
-		NacCardHolder holder = new NacCardHolder(root, this.mMeasure);
 
-		if (!this.mMeasure.isMeasured())
-		{
-			this.mMeasure.measure(holder);
-		}
-
-		return holder;
+		return new NacCardHolder(root);
 	}
 
 	/**
@@ -822,11 +819,11 @@ public class NacCardAdapter
 
 	/**
 	 */
-	public void onStateChange(NacCardView card, NacCardView.State state)
+	public void onCardCollapsed(NacCardHolder holder)
 	{
-		NacAlarm alarm = card.getAlarm();
+		NacAlarm alarm = holder.getAlarm();
 
-		if (alarm.isChangeTrackerLatched() && card.isCollapsedState())
+		if (alarm.isChangeTrackerLatched())
 		{
 			this.showAlarmChange(alarm);
 			this.sortHighlight(alarm);
@@ -1092,13 +1089,13 @@ public class NacCardAdapter
 	 */
 	public void sortHighlight(NacAlarm alarm)
 	{
-		NacCardView card = this.getCardView(alarm);
+		NacCardHolder holder = this.getCardHolder(alarm);
 
-		if (card == null)
+		if (holder == null)
 		{
 			return;
 		}
-		else if (card.isExpandedState())
+		else if (holder.isExpanded())
 		{
 			alarm.latchChangeTracker();
 		}
