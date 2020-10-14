@@ -155,7 +155,6 @@ public class NacCardTouchHelper
 		private View getCardView()
 		{
 			NacCardHolder holder = this.getCardHolder();
-
 			return (holder != null) ? holder.getCardView() : null;
 		}
 

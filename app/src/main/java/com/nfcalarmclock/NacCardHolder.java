@@ -83,7 +83,7 @@ public class NacCardHolder
 	/**
 	 * Card view.
 	 */
-	private NacCardView mCard;
+	private CardView mCardView;
 
 	/**
 	 * Copy swipe view.
@@ -201,6 +201,11 @@ public class NacCardHolder
 	private MaterialButton mDeleteButton;
 
 	/**
+	 * Card slide animation, for collapsing and expanding.
+	 */
+	private NacCardSlideAnimation mSlideAnimation;
+
+	/**
 	 * Color animator for highlighting the card.
 	 */
 	private ObjectAnimator mHighlightAnimator;
@@ -237,8 +242,8 @@ public class NacCardHolder
 		this.mSharedPreferences = new NacSharedPreferences(context);
 		this.mAlarm = null;
 		this.mRoot = root;
-		this.mCard = new NacCardView(root);
 
+		this.mCardView = root.findViewById(R.id.nac_card);
 		this.mCopySwipeView = root.findViewById(R.id.nac_swipe_copy);
 		this.mDeleteSwipeView = root.findViewById(R.id.nac_swipe_delete);
 		this.mHeaderView = root.findViewById(R.id.nac_header);
@@ -246,9 +251,6 @@ public class NacCardHolder
 		this.mDismissParentView = root.findViewById(R.id.nac_dismiss_parent);
 		this.mDismissButton = root.findViewById(R.id.nac_dismiss);
 		this.mExtraView = root.findViewById(R.id.nac_extra);
-
-		//this.mCardView = root.findViewById(R.id.nac_card);
-
 		this.mTimeParentView = root.findViewById(R.id.nac_time_parent);
 		this.mTimeView = root.findViewById(R.id.nac_time);
 		this.mMeridianView = root.findViewById(R.id.nac_meridian);
@@ -265,6 +267,9 @@ public class NacCardHolder
 		this.mAudioSourceButton = root.findViewById(R.id.nac_audio_source);
 		this.mNameButton = root.findViewById(R.id.nac_name);
 		this.mDeleteButton = root.findViewById(R.id.nac_delete);
+		this.mSlideAnimation = null;
+		this.mSlideAnimation = new NacCardSlideAnimation(this.mCardView,
+			this.mSummaryView, this.mExtraView);
 		this.mHighlightAnimator = null;
 		this.mOnCardCollapsedListener = null;
 		this.mOnDeleteClickedListener = null;
@@ -291,7 +296,8 @@ public class NacCardHolder
 
 		NacUtility.printf("Collapse! %d -> %d", fromHeight, toHeight);
 		this.resetHighlight();
-		this.mCard.animate(fromHeight, toHeight, COLLAPSE_DURATION);
+		this.slide(fromHeight, toHeight, COLLAPSE_DURATION);
+		//this.mCard.animate(fromHeight, toHeight, COLLAPSE_DURATION);
 	}
 
 	/**
@@ -538,7 +544,8 @@ public class NacCardHolder
 
 		NacUtility.printf("Expand ! %d -> %d", fromHeight, toHeight);
 		this.resetHighlight();
-		this.mCard.animate(fromHeight, toHeight, EXPAND_DURATION);
+		this.slide(fromHeight, toHeight, EXPAND_DURATION);
+		//this.mCard.animate(fromHeight, toHeight, EXPAND_DURATION);
 	}
 
 	/**
@@ -562,7 +569,8 @@ public class NacCardHolder
 	 */
 	public CardView getCardView()
 	{
-		return this.mCard.getCardView();
+		return this.mCardView;
+		//return this.mCard.getCardView();
 	}
 
 	/**
@@ -722,14 +730,6 @@ public class NacCardHolder
 	}
 
 	/**
-	 * @return The NFC Alarm Clock card view.
-	 */
-	public NacCardView getNacCardView()
-	{
-		return this.mCard;
-	}
-
-	/**
 	 * @return The name button.
 	 */
 	public MaterialButton getNameButton()
@@ -783,6 +783,14 @@ public class NacCardHolder
 	private NacSharedPreferences getSharedPreferences()
 	{
 		return this.mSharedPreferences;
+	}
+
+	/**
+	 * @return The card slide animation.
+	 */
+	private NacCardSlideAnimation getSlideAnimation()
+	{
+		return this.mSlideAnimation;
 	}
 
 	/**
@@ -924,11 +932,11 @@ public class NacCardHolder
 			(CompoundButton.OnCheckedChangeListener) listener;
 		SeekBar.OnSeekBarChangeListener seek =
 			(SeekBar.OnSeekBarChangeListener) listener;
-		NacCardSlideAnimation.OnAnimationListener anim =
+		NacCardSlideAnimation.OnAnimationListener slide =
 			(NacCardSlideAnimation.OnAnimationListener) listener;
 
 		this.hideSwipeViews();
-		this.getNacCardView().setOnAnimationListener(anim);
+		this.getSlideAnimation().setOnAnimationListener(slide);
 		this.getHeaderView().setOnClickListener(click);
 		this.getSummaryView().setOnClickListener(click);
 		this.getTimeParentView().setOnClickListener(click);
@@ -1904,6 +1912,22 @@ public class NacCardHolder
 			format);
 
 		dialog.show();
+	}
+
+	/**
+	 * Animate the card sliding.
+	 */
+	public void slide(int fromHeight, int toHeight, int duration)
+	{
+		CardView card = this.getCardView();
+		NacCardSlideAnimation animation = this.getSlideAnimation();
+		NacUtility.printf("Animate : %d -> %d", fromHeight, toHeight);
+
+		animation.setDuration(duration);
+		animation.setHeights(fromHeight, toHeight);
+		//animation.setupForClose();
+		//card.setAnimation(animation);
+		card.startAnimation(animation);
 	}
 
 	/**

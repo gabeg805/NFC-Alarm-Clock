@@ -364,15 +364,6 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * @return The NacCardView for a given alarm.
-	 */
-	public NacCardView getCardView(NacAlarm alarm)
-	{
-		NacCardHolder holder = this.getCardHolder(alarm);
-		return (holder != null) ? holder.getNacCardView() : null;
-	}
-
-	/**
 	 * @return The context.
 	 */
 	private Context getContext()
