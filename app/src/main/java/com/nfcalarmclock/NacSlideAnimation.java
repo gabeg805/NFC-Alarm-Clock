@@ -1,6 +1,7 @@
 package com.nfcalarmclock;
 
 import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.view.animation.Transformation;
 import android.view.View;
 
@@ -9,18 +10,7 @@ import android.view.View;
  */
 public class NacSlideAnimation
 	extends Animation
-	implements Animation.AnimationListener
 {
-
-	/**
-	 * Hide the view during the specified state.
-	 */
-	protected enum HideOnStatus
-	{
-		NEVER,
-		END,
-		START
-	}
 
 	/**
 	 * The view to slide.
@@ -38,21 +28,6 @@ public class NacSlideAnimation
 	protected int mToHeight;
 
 	/**
-	 * View visibility.
-	 */
-	protected int mVisibility;
-
-	/**
-	 * Hide on status.
-	 */
-	protected HideOnStatus mHideOnStatus;
-
-	/**
-	 * Skip the listener.
-	 */
-	protected boolean mSkipListener;
-
-	/**
 	 */
 	public NacSlideAnimation(View view)
 	{
@@ -66,9 +41,6 @@ public class NacSlideAnimation
 		this.mView = view;
 		this.mFromHeight = fromHeight;
 		this.mToHeight = toHeight;
-		this.mVisibility = view.getVisibility();
-		this.mHideOnStatus = HideOnStatus.NEVER;
-		this.mSkipListener = false;
 	}
 
 	/**
@@ -77,123 +49,60 @@ public class NacSlideAnimation
 	protected void applyTransformation(float interpolatedTime,
 		Transformation transformation)
 	{
-		if (this.mView.getHeight() != this.mToHeight)
+		View view = this.getView();
+		int fromHeight = this.getFromHeight();
+		int toHeight = this.getToHeight();
+
+		if (view.getHeight() != toHeight)
 		{
-			int newHeight = (int) (this.mFromHeight
-				+ ((this.mToHeight - this.mFromHeight) * interpolatedTime));
-			this.mView.getLayoutParams().height = newHeight;
-			this.mView.requestLayout();
+			int newHeight = (int) (fromHeight + ((toHeight - fromHeight) * interpolatedTime));
+			view.getLayoutParams().height = newHeight;
+			view.requestLayout();
 		}
 	}
 
 	/**
-	 * @return The hide on status.
+	 * @return The from height.
 	 */
-	private HideOnStatus getHideOnStatus()
+	public int getFromHeight()
 	{
-		return this.mHideOnStatus;
+		return this.mFromHeight;
 	}
 
 	/**
-	 * @return The height.
+	 * @return The to height.
 	 */
-	public int getHeight()
+	public int getToHeight()
 	{
-		int fromHeight = this.mFromHeight;
-		int toHeight = this.mToHeight;
-
-		return (fromHeight > toHeight) ? fromHeight : toHeight;
+		return this.mToHeight;
 	}
 
 	/**
 	 * @return The view.
 	 */
-	private View getView()
+	public View getView()
 	{
 		return this.mView;
 	}
 
 	/**
-	 * @return The view visibility.
+	 * @return True if the view is collapsing, and False otherwise.
 	 */
-	private int getVisibility()
+	public boolean isCollapsing()
 	{
-		return this.mVisibility;
+		int fromHeight = this.getFromHeight();
+		int toHeight = this.getToHeight();
+		return (fromHeight > toHeight);
 	}
 
 	/**
-	 * Hide the view.
+	 * @return True if the view is expanding, and False otherwise.
 	 */
-	public void hide()
+	public boolean isExpanding()
 	{
-		if (this.getVisibility() == View.VISIBLE)
-		{
-			this.getView().setVisibility(View.GONE);
-		}
-	}
-
-	/**
-	 */
-	@Override
-	public void initialize(int width, int height, int parentWidth,
-		int parentHeight)
-	{
-		super.initialize(width, height, parentWidth, parentHeight);
-	}
-
-	/**
-	 */
-	@Override
-	public void onAnimationEnd(Animation animation)
-	{
-		HideOnStatus status = this.getHideOnStatus();
-
-		switch (status)
-		{
-			case END:
-				this.hide();
-				break;
-
-			case START:
-				this.show();
-				break;
-
-			case NEVER:
-			default:
-				return;
-		}
-
-		this.mVisibility = this.getView().getVisibility();
-	}
-
-	/**
-	 */
-	@Override
-	public void onAnimationRepeat(Animation animation)
-	{
-	}
-
-	/**
-	 */
-	@Override
-	public void onAnimationStart(Animation animation)
-	{
-		HideOnStatus status = this.getHideOnStatus();
-
-		switch (status)
-		{
-			case END:
-				this.show();
-				break;
-
-			case START:
-				this.hide();
-				break;
-
-			case NEVER:
-			default:
-				break;
-		}
+		int fromHeight = this.getFromHeight();
+		int toHeight = this.getToHeight();
+		return (fromHeight < toHeight);
 	}
 
 	/**
@@ -203,109 +112,6 @@ public class NacSlideAnimation
 	{
 		this.mFromHeight = fromHeight;
 		this.mToHeight = toHeight;
-	}
-
-	/**
-	 * Set the flags to hide the view on animation end.
-	 */
-	public void setHideOnEnd()
-	{
-		this.mHideOnStatus = HideOnStatus.END;
-
-		setAnimationListener(this);
-	}
-
-	/**
-	 * Hide the view never.
-	 */
-	public void setHideOnNever()
-	{
-		this.mHideOnStatus = HideOnStatus.NEVER;
-
-		setAnimationListener(null);
-	}
-
-	/**
-	 * Hide the view on animation start.
-	 */
-	public void setHideOnStart()
-	{
-		this.mHideOnStatus = HideOnStatus.START;
-
-		setAnimationListener(this);
-	}
-
-	/**
-	 * Setup heights for closing the view.
-	 */
-	public void setupForClose()
-	{
-		View view = this.getView();
-		int viewHeight = view.getMeasuredHeight();
-		int fromHeight = this.mFromHeight;
-		int toHeight = this.mToHeight;
-		this.mSkipListener = false;
-		this.mVisibility = view.getVisibility();
-
-		if (fromHeight < toHeight)
-		{
-			this.mFromHeight = toHeight;
-			this.mToHeight = fromHeight;
-		}
-	}
-
-	/**
-	 * Setup heights for opening the view.
-	 */
-	public void setupForOpen()
-	{
-		View view = this.getView();
-		int viewHeight = view.getMeasuredHeight();
-		int fromHeight = this.mFromHeight;
-		int toHeight = this.mToHeight;
-		this.mSkipListener = false;
-		this.mVisibility = view.getVisibility();
-
-		if (fromHeight > toHeight)
-		{
-			this.mFromHeight = toHeight;
-			this.mToHeight = fromHeight;
-		}
-	}
-
-	/**
-	 * Skip the listener.
-	 */
-	public void setupForSkipListener()
-	{
-		this.mSkipListener = true;
-	}
-
-	/**
-	 * Set visibility.
-	 */
-	public void setVisibility(int visibility)
-	{
-		this.mVisibility = visibility;
-	}
-
-	/**
-	 * @return True if the listener should be skipped and False otherwise.
-	 */
-	public boolean skipListener()
-	{
-		return this.mSkipListener;
-	}
-
-	/**
-	 * Show the view.
-	 */
-	public void show()
-	{
-		if (this.getVisibility() == View.GONE)
-		{
-			this.getView().setVisibility(View.VISIBLE);
-		}
 	}
 
 	/**

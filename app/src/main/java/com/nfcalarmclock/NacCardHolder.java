@@ -34,6 +34,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import java.util.EnumSet;
 
+import android.view.animation.AccelerateInterpolator;
+
 /**
  * Card view holder.
  */
@@ -46,7 +48,7 @@ public class NacCardHolder
 		NacDialog.OnDismissListener,
 		NacDayOfWeek.OnClickListener,
 		SeekBar.OnSeekBarChangeListener,
-		NacCardSlideAnimation.OnAnimationListener
+		Animation.AnimationListener
 {
 
 	/**
@@ -203,7 +205,7 @@ public class NacCardHolder
 	/**
 	 * Card slide animation, for collapsing and expanding.
 	 */
-	private NacCardSlideAnimation mSlideAnimation;
+	private NacSlideAnimation mSlideAnimation;
 
 	/**
 	 * Color animator for highlighting the card.
@@ -267,12 +269,53 @@ public class NacCardHolder
 		this.mAudioSourceButton = root.findViewById(R.id.nac_audio_source);
 		this.mNameButton = root.findViewById(R.id.nac_name);
 		this.mDeleteButton = root.findViewById(R.id.nac_delete);
-		this.mSlideAnimation = null;
-		this.mSlideAnimation = new NacCardSlideAnimation(this.mCardView,
-			this.mSummaryView, this.mExtraView);
+		this.mSlideAnimation = new NacSlideAnimation(this.getCardView());
 		this.mHighlightAnimator = null;
 		this.mOnCardCollapsedListener = null;
 		this.mOnDeleteClickedListener = null;
+
+		this.mSlideAnimation.setInterpolator(new AccelerateInterpolator());
+	}
+
+	/**
+	 * Animate the background color of the card changing to the collapsed color.
+	 */
+	private void animateCollapsedBackgroundColor()
+	{
+		Context context = this.getContext();
+		CardView card = this.getCardView();
+		ObjectAnimator animator = (ObjectAnimator) AnimatorInflater.loadAnimator(
+			context, R.animator.card_color_collapse);
+
+		animator.setTarget(card);
+		animator.start();
+	}
+
+	/**
+	 * Animate the background color of the card changing to the expanded color.
+	 */
+	private void animateExpandedBackgroundColor()
+	{
+		Context context = this.getContext();
+		CardView card = this.getCardView();
+		ObjectAnimator animator = (ObjectAnimator) AnimatorInflater.loadAnimator(
+			context, R.animator.card_color_expand);
+
+		animator.setTarget(card);
+		animator.start();
+	}
+
+	/**
+	 * Call the card collapse listener.
+	 */
+	private void callOnCardCollapsedListener()
+	{
+		OnCardCollapsedListener listener = this.getOnCardCollapsedListener();
+		if ((listener != null) && this.isCollapsed())
+		{
+			NacUtility.printf("Calling card collapsed!");
+			listener.onCardCollapsed(this);
+		}
 	}
 
 	/**
@@ -349,8 +392,7 @@ public class NacCardHolder
 		extra.setVisibility(View.GONE);
 		extra.setEnabled(false);
 		this.setDismissView();
-		this.setCollapsedBackgroundColor();
-		//this.callStateChangeListener();
+		//this.setCollapsedBackgroundColor();
 	}
 
 	/**
@@ -412,8 +454,7 @@ public class NacCardHolder
 		summary.setEnabled(false);
 		extra.setVisibility(View.VISIBLE);
 		extra.setEnabled(true);
-		this.setExpandedBackgroundColor();
-		//this.callStateChangeListener();
+		//this.setExpandedBackgroundColor();
 	}
 
 	/**
@@ -788,7 +829,7 @@ public class NacCardHolder
 	/**
 	 * @return The card slide animation.
 	 */
-	private NacCardSlideAnimation getSlideAnimation()
+	private NacSlideAnimation getSlideAnimation()
 	{
 		return this.mSlideAnimation;
 	}
@@ -932,11 +973,10 @@ public class NacCardHolder
 			(CompoundButton.OnCheckedChangeListener) listener;
 		SeekBar.OnSeekBarChangeListener seek =
 			(SeekBar.OnSeekBarChangeListener) listener;
-		NacCardSlideAnimation.OnAnimationListener slide =
-			(NacCardSlideAnimation.OnAnimationListener) listener;
+		Animation.AnimationListener slide = (Animation.AnimationListener) listener;
 
 		this.hideSwipeViews();
-		this.getSlideAnimation().setOnAnimationListener(slide);
+		this.getSlideAnimation().setAnimationListener(slide);
 		this.getHeaderView().setOnClickListener(click);
 		this.getSummaryView().setOnClickListener(click);
 		this.getTimeParentView().setOnClickListener(click);
@@ -1076,21 +1116,24 @@ public class NacCardHolder
 	@Override
 	public void onAnimationEnd(Animation animation)
 	{
-		Context context = this.getContext();
-		CardView card = this.getCardView();
-		ObjectAnimator animator = (ObjectAnimator) AnimatorInflater.loadAnimator(
-			context, R.animator.card_color_collapse);
-
-		NacUtility.printf("On animation end!");
-		OnCardCollapsedListener listener = this.getOnCardCollapsedListener();
-		if ((listener != null) && this.isCollapsed())
+		NacSlideAnimation slide = (NacSlideAnimation) animation;
+		if (!slide.isCollapsing())
 		{
-			NacUtility.printf("Calling card collapsed!");
-			listener.onCardCollapsed(this);
+			return;
 		}
 
-		animator.setTarget(card);
-		animator.start();
+		NacUtility.printf("On animation end!");
+		this.doCollapse();
+		this.animateCollapsedBackgroundColor();
+		this.callOnCardCollapsedListener();
+	}
+
+	/**
+	 * Card slide animation has repeated.
+	 */
+	@Override
+	public void onAnimationRepeat(Animation animation)
+	{
 	}
 
 	/**
@@ -1099,15 +1142,15 @@ public class NacCardHolder
 	@Override
 	public void onAnimationStart(Animation animation)
 	{
-		Context context = this.getContext();
-		CardView card = this.getCardView();
-		ObjectAnimator animator = (ObjectAnimator) AnimatorInflater.loadAnimator(
-			context, R.animator.card_color_expand);
+		NacSlideAnimation slide = (NacSlideAnimation) animation;
+		if (!slide.isExpanding())
+		{
+			return;
+		}
 
 		NacUtility.printf("On animation start!");
-
-		animator.setTarget(card);
-		animator.start();
+		this.doExpand();
+		this.animateExpandedBackgroundColor();
 	}
 
 	/**
@@ -1920,13 +1963,11 @@ public class NacCardHolder
 	public void slide(int fromHeight, int toHeight, int duration)
 	{
 		CardView card = this.getCardView();
-		NacCardSlideAnimation animation = this.getSlideAnimation();
+		NacSlideAnimation animation = this.getSlideAnimation();
 		NacUtility.printf("Animate : %d -> %d", fromHeight, toHeight);
 
 		animation.setDuration(duration);
 		animation.setHeights(fromHeight, toHeight);
-		//animation.setupForClose();
-		//card.setAnimation(animation);
 		card.startAnimation(animation);
 	}
 
