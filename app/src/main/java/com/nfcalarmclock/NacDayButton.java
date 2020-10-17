@@ -1,9 +1,8 @@
 package com.nfcalarmclock;
 
 import android.animation.Animator;
+import android.animation.AnimatorInflater;
 import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -21,11 +20,12 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import androidx.annotation.Keep;
 import androidx.core.content.ContextCompat;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 
 /**
  * A button that consists of an image to the left, and text to the right
@@ -33,15 +33,16 @@ import androidx.core.content.ContextCompat;
  */
 public class NacDayButton
 	extends LinearLayout
-	implements View.OnClickListener
+	implements View.OnClickListener,
+		MaterialButtonToggleGroup.OnButtonCheckedListener
 {
 
 	/**
-	 * Listener for click events.
+	 * Listener for day change events.
 	 */
-	public interface OnClickListener
+	public interface OnDayChangedListener
 	{
-		public void onClick(NacDayButton button);
+		public void onDayChanged(NacDayButton button);
 	}
 
 	/**
@@ -51,7 +52,6 @@ public class NacDayButton
 	{
 		public int width;
 		public int height;
-		public int duration;
 		public String text;
 
 		/**
@@ -72,7 +72,6 @@ public class NacDayButton
 					ViewGroup.LayoutParams.WRAP_CONTENT);
 				this.height = (int) ta.getDimension(R.styleable.NacDayButton_nacHeight,
 					ViewGroup.LayoutParams.WRAP_CONTENT);
-				this.duration = ta.getInt(R.styleable.NacDayButton_nacDuration, 1000);
 				this.text = androidTa.getString(0);
 			}
 			finally
@@ -84,18 +83,14 @@ public class NacDayButton
 	}
 
 	/**
-	 * Types of views in the day layout.
+	 * Day button parent.
 	 */
-	public enum NacDayViewType
-	{
-		BUTTON,
-		TEXT
-	}
+	private MaterialButtonToggleGroup mButtonToggleGroup;
 
 	/**
 	 * Day button.
 	 */
-	private Button mButton;
+	private MaterialButton mButton;
 
 	/**
 	 * View attributes.
@@ -103,21 +98,9 @@ public class NacDayButton
 	private NacDayAttributes mAttributes;
 
 	/**
-	 * Button animator.
+	 * Day changed listener.
 	 */
-	//private ValueAnimator mButtonAnimator;
-	private ObjectAnimator mButtonAnimator;
-
-	/**
-	 * Text animator.
-	 */
-	//private ValueAnimator mTextAnimator;
-	private ObjectAnimator mTextAnimator;
-
-	/**
-	 * Click listener.
-	 */
-	private NacDayButton.OnClickListener mListener;
+	private NacDayButton.OnDayChangedListener mOnDayChangedListener;
 
 	/**
 	 */
@@ -145,242 +128,59 @@ public class NacDayButton
 	}
 
 	/**
-	 * Animate the button's change in color.
-	 */
-	public void animateButton()
-	{
-		//NacUtility.printf("Animating button!");
-		animateDay(NacDayViewType.BUTTON);
-	}
-
-	/**
-	 * Animate the button or text.
-	 */
-	public void animateDay(NacDayViewType type)
-	{
-		//NacUtility.printf("YOYOYO Animating!");
-		this.cancelAnimator();
-
-		ObjectAnimator animator = this.startAnimator(type);
-
-		this.setAnimator(animator, type);
-
-
-	}
-
-	/**
 	 * Disable and animate the view.
 	 */
-	public void animateDisable()
+	public void disable()
 	{
-		this.disable();
-		this.animateButton();
+		this.getButton().setChecked(false);
 	}
 
 	/**
 	 * Enable and animate the view.
 	 */
-	public void animateEnable()
-	{
-		this.enable();
-		this.animateButton();
-	}
-
-	/**
-	 * Animate the text's change in color.
-	 */
-	public void animateText()
-	{
-		//NacUtility.printf("Animating text!");
-		animateDay(NacDayViewType.TEXT);
-	}
-
-	/**
-	 * Toggle and animate the view.
-	 */
-	public void animateToggle()
-	{
-		this.toggle();
-		this.animateButton();
-	}
-
-	/**
-	 * Cancel the animator.
-	 */
-	public void cancelAnimator()
-	{
-		if (this.mButtonAnimator != null)
-		{
-			this.mButtonAnimator.cancel();
-			this.setEndValues();
-		}
-
-		if (this.mTextAnimator != null)
-		{
-			this.mTextAnimator.cancel();
-			this.setEndValues();
-		}
-	}
-
-	/**
-	 * Disable a button by setting the button color to its initial color, and
-	 * the same is true for the text.
-	 */
-	public void disable()
-	{
-		this.setButtonColor(this.getDefaultButtonColor());
-		this.setTextColor(this.getDefaultTextColor());
-	}
-
-	/**
-	 * Enable a button by setting the button color to the initial color of the
-	 * text, and the text is set to the initial color of the button.
-	 */
 	public void enable()
 	{
-		this.setButtonColor(this.getDefaultTextColor());
-		this.setTextColor(this.getDefaultButtonColor());
+		this.getButton().setChecked(true);
 	}
-
-	/**
-	 * @return The background drawable of the button.
-	 */
-	//public Drawable getBackground()
-	//{
-	//	return this.mButton.getBackground();
-	//}
-
-	/**
-	 * @return The background resource of the button.
-	 */
-	//public int getBackgroundResource()
-	//{
-	//	return this.mAttributes.drawable;
-	//}
 
 	/**
 	 * @return The button.
 	 */
-	public Button getButton()
+	public MaterialButton getButton()
 	{
 		return this.mButton;
 	}
 
 	/**
-	 * @return The button color.
+	 * @return The button toggle group.
 	 */
-	public int getButtonColor()
+	public MaterialButtonToggleGroup getButtonToggleGroup()
 	{
-		Object tag = this.mButton.getTag();
-		return (tag != null) ? (Integer) tag : this.getDefaultButtonColor();
+		return this.mButtonToggleGroup;
 	}
 
 	/**
-	 * @return The view height.
+	 * @return The day attributes object.
 	 */
-	public int getButtonHeight()
+	private NacDayAttributes getDayAttributes()
 	{
-		return this.mAttributes.height;
+		return this.mAttributes;
 	}
 
 	/**
-	 * @return The view width.
+	 * @return The day button on click listener.
 	 */
-	public int getButtonWidth()
+	public NacDayButton.OnDayChangedListener getOnDayChangedListener()
 	{
-		return this.mAttributes.width;
+		return this.mOnDayChangedListener;
 	}
-
-	/**
-	 * @return The default button color.
-	 */
-	public int getDefaultButtonColor()
-	{
-		Context context = getContext();
-		return ContextCompat.getColor(context, R.color.gray_light);
-	}
-
-	/**
-	 * @return The default text color.
-	 */
-	public int getDefaultTextColor()
-	{
-		Context context = getContext();
-		return ContextCompat.getColor(context, R.color.white);
-	}
-
-	/**
-	 * @return The animation duration.
-	 */
-	public int getDuration()
-	{
-		return (this.isEnabled()) ? this.mAttributes.duration
-			: this.mAttributes.duration * 2 / 3;
-	}
-
-	public int getFromValue(NacDayViewType type)
-	{
-		if (type == NacDayViewType.BUTTON)
-		{
-			return this.getTextColor();
-		}
-		else if (type == NacDayViewType.TEXT)
-		{
-			return this.getButtonColor();
-		}
-		else
-		{
-			return Color.WHITE;
-		}
-	}
-
-	public int getToValue(NacDayViewType type)
-	{
-		if (type == NacDayViewType.BUTTON)
-		{
-			return this.getButtonColor();
-		}
-		else if (type == NacDayViewType.TEXT)
-		{
-			return this.getTextColor();
-		}
-		else
-		{
-			return Color.WHITE;
-		}
-	}
-
-	//private void setAnimator(NacDayViewType type)
-	//{
-	//	if (type == NacDayViewType.BUTTON)
-	//	{
-
-	//		this.mButtonAnimator = animator;
-	//	}
-	//	else if (type == NacDayViewType.TEXT)
-	//	{
-
-	//		this.mTextAnimator = animator;
-	//	}
-	//}
 
 	/**
 	 * @return The text in the button.
 	 */
 	public String getText()
 	{
-		return this.mAttributes.text;
-	}
-
-	/**
-	 * @return The text color.
-	 */
-	public int getTextColor()
-	{
-		ColorStateList colorlist = this.mButton.getTextColors();
-		return (colorlist != null)
-			? colorlist.getDefaultColor()
-			: this.getDefaultTextColor();
+		return this.getButton().getText().toString();
 	}
 
 	/**
@@ -400,34 +200,26 @@ public class NacDayButton
 			this, true);
 
 		this.mAttributes = new NacDayAttributes(context, attrs);
-		this.mButton = (Button) findViewById(R.id.nac_day_button);
-		this.mButtonAnimator = null;
-		this.mTextAnimator = null;
-		this.mListener = null;
+		this.mButtonToggleGroup = findViewById(R.id.nac_day_button_group);
+		this.mButton = findViewById(R.id.nac_day_button);
+		this.mOnDayChangedListener = null;
 
-		this.mButton.setOnClickListener(this);
+		this.getButtonToggleGroup().addOnButtonCheckedListener(this);
 		setOnClickListener(this);
 	}
 
 	/**
-	 * Inverse the colors of the button and text.
 	 */
-	private void inverseColors()
+	@Override
+	public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId,
+		boolean isChecked)
 	{
-		int buttoncolor = this.getButtonColor();
-		int textcolor = this.getTextColor();
-
-		this.setButtonColor(textcolor);
-		this.setTextColor(buttoncolor);
-	}
-
-	/**
-	 * @return True if the button is enabled and false if it is not.
-	 */
-	public boolean isEnabled()
-	{
-		return (this.getButtonColor() == this.getDefaultTextColor())
-			&& (this.getTextColor() == this.getDefaultButtonColor());
+		NacDayButton.OnDayChangedListener listener = this.getOnDayChangedListener();
+		//NacUtility.printf("Day button checked : %s (%b)", this.getButton().getText(), isChecked);
+		if (listener != null)
+		{
+			listener.onDayChanged(this);
+		}
 	}
 
 	/**
@@ -435,10 +227,10 @@ public class NacDayButton
 	@Override
 	public void onClick(View view)
 	{
-		if (this.mListener != null)
-		{
-			this.mListener.onClick(this);
-		}
+		MaterialButton button = this.getButton();
+		boolean checked = button.isChecked();
+
+		button.setChecked(!checked);
 	}
 
 	/**
@@ -452,137 +244,24 @@ public class NacDayButton
 	}
 
 	/**
-	 * Redraw the view.
+	 * Set the listener for when the day is changed.
 	 */
-	public void redraw()
+	public void setOnDayChangedListener(NacDayButton.OnDayChangedListener listener)
 	{
-		//NacUtility.printf("REDRAWING!");
-		invalidate();
-		requestLayout();
+		this.mOnDayChangedListener = listener;
 	}
 
 	/**
-	 * Set the currently used animator for the give view type.
+	 * Set the width and height of the button.
 	 */
-	private void setAnimator(ObjectAnimator animator, NacDayViewType type)
+	public void setSize(int width, int height)
 	{
-		if (type == NacDayViewType.BUTTON)
-		{
-			this.mButtonAnimator = animator;
-		}
-		else if (type == NacDayViewType.TEXT)
-		{
-			this.mTextAnimator = animator;
-		}
-	}
+		MaterialButton button = this.getButton();
+		LayoutParams params = (LayoutParams) button.getLayoutParams();
+		params.width = width;
+		params.height = height;
 
-	/**
-	 * Set the background drawable.
-	 * 
-	 * @param  bg  The background.
-	 */
-	//public void setBackground(Drawable bg)
-	//{
-	//	this.mButton.setBackground(bg);
-	//}
-
-	/**
-	 * Set the background drawable.
-	 * 
-	 * @param  bg  The background.
-	 */
-	//public void setBackground(int resid)
-	//{
-	//	this.mAttributes.drawable = resid;
-	//	this.mButton.setBackgroundResource(resid);
-	//}
-
-	/**
-	 * Set the button color.
-	 *
-	 * @param  color  The button color.
-	 */
-	@SuppressWarnings("deprecation")
-	@SuppressLint("NewApi")
-	@Keep
-	@TargetApi(Build.VERSION_CODES.Q)
-	public void setButtonColor(int color)
-	{
-		Drawable drawable = this.getButton().getBackground();
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-		{
-			BlendModeColorFilter blendFilter = new BlendModeColorFilter(
-				color, BlendMode.SRC);
-
-			drawable.setColorFilter(blendFilter);
-		}
-		else
-		{
-			drawable.setColorFilter(color, PorterDuff.Mode.SRC);
-		}
-
-		//NacUtility.printf("Setting button color : %d", color);
-		//this.mButton.setBackgroundColor(color);
-		this.mButton.setTag(color);
-		this.redraw();
-	}
-
-	/**
-	 * Set the duration of the animation.
-	 *
-	 * @param  duration  The duration.
-	 */
-	public void setDuration(int duration)
-	{
-		this.mAttributes.duration = duration;
-	}
-
-	/**
-	 * Set the end values.
-	 */
-	private void setEndValues()
-	{
-		int textColor = this.getTextColor();
-		int buttonColor = this.getButtonColor();
-		int defTextColor = this.getDefaultTextColor();
-		int defButtonColor = this.getDefaultButtonColor();
-
-		if (buttonColor == defButtonColor)
-		{
-			textColor = defTextColor;
-		}
-		else if (buttonColor == defTextColor)
-		{
-			textColor = defButtonColor;
-		}
-		else
-		{
-			if (textColor == defTextColor)
-			{
-				buttonColor = defButtonColor;
-			}
-			else if (textColor == defButtonColor)
-			{
-				buttonColor = defTextColor;
-			}
-			else
-			{
-				buttonColor = defButtonColor;
-				textColor = defTextColor;
-			}
-		}
-
-		this.setButtonColor(buttonColor);
-		this.setTextColor(textColor);
-	}
-
-	/**
-	 * Set an onClick listener for each of the day of week buttons.
-	 */
-	public void setOnClickListener(NacDayButton.OnClickListener listener)
-	{
-		this.mListener = listener;
+		button.setLayoutParams(params);
 	}
 
 	/**
@@ -592,22 +271,7 @@ public class NacDayButton
 	 */
 	public void setText(String text)
 	{
-		this.mAttributes.text = text;
-		this.mButton.setText(text);
-		this.redraw();
-	}
-
-	/**
-	 * Set the text color.
-	 *
-	 * @param  color  The text color.
-	 */
-	@Keep
-	public void setTextColor(int color)
-	{
-		//NacUtility.printf("Setting text color : %d", color);
-		this.mButton.setTextColor(color);
-		this.redraw();
+		this.getButton().setText(text);
 	}
 
 	/**
@@ -615,68 +279,27 @@ public class NacDayButton
 	 */
 	public void setViewAttributes()
 	{
-		this.setWidthAndHeight(this.getButtonWidth(), this.getButtonHeight());
-		//this.setBackground(this.getBackgroundResource());
-		//this.setButtonColor(this.getDefaultButtonColor());
-		//this.setTextColor(this.getDefaultTextColor());
-		this.setText(this.getText());
+		int width = this.getDayAttributes().width;
+		int height = this.getDayAttributes().height;
+		String text = this.getDayAttributes().text;
+
+		this.setSize(width, height);
+		this.setText(text);
 	}
 
 	/**
-	 * Set the width and height of the button.
+	 * Toggle and animate the view.
 	 */
-	public void setWidthAndHeight(int width, int height)
+	public void toggle()
 	{
-		LayoutParams params = (LayoutParams) this.mButton.getLayoutParams();
-		params.width = width;
-		params.height = height;
-		this.mAttributes.width = width;
-		this.mAttributes.height = height;
-
-		this.mButton.setLayoutParams(params);
-		this.redraw();
-	}
-
-	/**
-	 * @return An ObjectAnimator to animate the day button.
-	 */
-	private ObjectAnimator startAnimator(NacDayViewType type)
-	{
-		int duration = this.getDuration();
-		int from = this.getFromValue(type);
-		int to = this.getToValue(type);
-		ObjectAnimator animator;
-
-		if (type == NacDayViewType.BUTTON)
+		if (this.isEnabled())
 		{
-			animator = ObjectAnimator.ofArgb(this, "buttonColor", from, to);
-		}
-		else if (type == NacDayViewType.TEXT)
-		{
-			animator = ObjectAnimator.ofArgb(this, "textColor", from, to);
+			this.disable();
 		}
 		else
 		{
-			return null;
+			this.enable();
 		}
-
-		animator.setDuration(duration);
-		animator.start();
-
-		return animator;
-	}
-
-	/**
-	 * Inverse the color of the drawable and text.
-	 * 
-	 * @return True when the button is enabled and False when the button is
-	 *		   disabled.
-	 */
-	public boolean toggle()
-	{
-		this.inverseColors();
-
-		return this.isEnabled();
 	}
 
 }

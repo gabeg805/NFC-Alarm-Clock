@@ -311,6 +311,8 @@
 				android:id="@+id/nac_name"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
+				android:checkable="true"
+				android:textColor="@color/card_text_button"
 				android:text=""
 				app:icon="@mipmap/label"
 				/>

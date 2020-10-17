@@ -48,33 +48,6 @@
 	</style>
 
 
-	<!-- Custom -->
-	<!--
-	<style name="TextButton.Day">
-		<item name="android:padding">0dp</item>
-		<item name="android:gravity">center</item>
-		<item name="android:background">@drawable/day_button</item>
-		<item name="android:fontFamily">sans-serif-medium</item>
-		<item name="android:maxLength">1</item>
-		<item name="backgroundTint">?attr/colorCard</item>
-	</style>
-	-->
-
-	<style name="YoButton" parent="Widget.AppCompat.Button">
-		<item name="android:padding">@dimen/zero</item>
-		<item name="android:insetTop">@dimen/zero</item>
-		<item name="android:insetBottom">@dimen/zero</item>
-		<item name="android:background">@drawable/day_button</item>
-		<item name="android:gravity">center</item>
-		<item name="android:fontFamily">sans-serif-medium</item>
-		<item name="android:maxLines">1</item>
-		<item name="android:maxLength">1</item>
-		<item name="android:textColor">@color/white</item>
-		<item name="android:textSize">@dimen/tsz_normal</item>
-		<item name="backgroundTint">@color/gray_light</item>
-	</style>
-
-
 	<!-- Text button -->
 	<style name="TextButton" parent="Widget.MaterialComponents.Button.TextButton.Icon">
 		<item name="android:maxLines">1</item>
@@ -136,8 +109,6 @@
 	<style name="NacDayButton">
 		<item name="nacWidth">@dimen/isz_large</item>
 		<item name="nacHeight">@dimen/isz_large</item>
-		<item name="nacDuration">500</item>
-		<item name="nacText"></item>
 	</style>
 
 	<style name="NacColorPicker">

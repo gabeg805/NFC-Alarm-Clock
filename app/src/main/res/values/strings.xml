@@ -53,6 +53,7 @@
 	<string name="message_nfc_optional">NFC optional</string>
 	<string name="message_scan_nfc_tag">Scan a unique NFC tag (experimental), or use any tag to dismiss this alarm when it goes off.</string>
 	<string name="message_show_nfc_tag_id">ID:</string>
+	<string name="message_any_nfc_tag_id">Any NFC tag accepted</string>
 	<string name="message_no_alarms_scheduled">No alarms scheduled</string>
 	<string name="message_repeat_disabled">Do not repeat alarm</string>
 	<string name="message_repeat_enabled">Repeat alarm</string>

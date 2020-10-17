@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector
+	xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<item
+		android:state_checked="true">
+		<set>
+			<objectAnimator
+				android:propertyName="textColor"
+				android:duration="300"
+				android:valueFrom="@color/gray_light"
+				android:valueTo="@color/white"
+				android:repeatCount="0"
+				/>
+		</set>
+	</item>
+
+	<item
+		android:state_checked="false">
+		<set>
+			<objectAnimator
+				android:propertyName="textColor"
+				android:duration="200"
+				android:valueFrom="@color/white"
+				android:valueTo="@color/gray_light"
+				android:repeatCount="0"
+				/>
+		</set>
+	</item>
+
+</selector>

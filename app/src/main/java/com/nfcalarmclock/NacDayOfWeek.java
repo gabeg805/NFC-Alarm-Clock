@@ -16,15 +16,19 @@ import java.util.EnumSet;
  * A button that consists of an image to the left, and text to the right of it.
  */
 public class NacDayOfWeek
-	implements NacDayButton.OnClickListener
+	implements NacDayButton.OnDayChangedListener
 {
 
 	/**
-	 * Listener for click events.
+	 * Listen for when the day of week is changed.
+	 *
+	 * Returning True means that the listener handled the event, and False means
+	 * that the NacDayOfWeek class will handle the click event, and execute the
+	 * default action.
 	 */
-	public interface OnClickListener
+	public interface OnWeekChangedListener
 	{
-		public void onClick(NacDayButton button, NacCalendar.Day day);
+		public boolean onWeekChanged(NacDayButton button, NacCalendar.Day day);
 	}
 
 	/**
@@ -33,24 +37,22 @@ public class NacDayOfWeek
 	private LinearLayout mDayOfWeekView;
 
 	/**
-	 * Click event listener.
+	 * Day of week changed listener.
 	 */
-	private NacDayOfWeek.OnClickListener mListener;
+	private NacDayOfWeek.OnWeekChangedListener mOnWeekChangedListener;
 
 	/**
 	 */
 	public NacDayOfWeek(LinearLayout view)
 	{
 		this.mDayOfWeekView = view;
-		this.mListener = null;
-
+		this.mOnWeekChangedListener = null;
 		int count = view.getChildCount();
 
 		for (int i=0; i < count; i++)
 		{
 			NacDayButton button = (NacDayButton) view.getChildAt(i);
-			button.setOnClickListener(this);
-			//button.setTag(i);
+			button.setOnDayChangedListener(this);
 		}
 	}
 
@@ -126,6 +128,14 @@ public class NacDayOfWeek
 	}
 
 	/**
+	 * @return The day of week on click listener.
+	 */
+	public NacDayOfWeek.OnWeekChangedListener getOnWeekChangedListener()
+	{
+		return this.mOnWeekChangedListener;
+	}
+
+	/**
 	 * Convert an view ID to its corresponding day.
 	 */
 	private NacCalendar.Day idToDay(int id)
@@ -164,53 +174,44 @@ public class NacDayOfWeek
 	/**
 	 */
 	@Override
-	public void onClick(NacDayButton button)
+	public void onDayChanged(NacDayButton button)
 	{
 		int id = button.getId();
 		NacCalendar.Day day = this.idToDay(id);
+		NacDayOfWeek.OnWeekChangedListener listener =
+			this.getOnWeekChangedListener();
 
-		if (day == null)
+		if (listener != null)
 		{
-			return;
+			listener.onWeekChanged(button, day);
 		}
-
-		//this.mButtons[index].animateToggle();
-		button.animateToggle();
-
-		if (this.mListener == null)
-		{
-			return;
-		}
-
-		this.mListener.onClick(button, day);
 	}
 
 	/**
 	 * Set the days that will be enabled/disabled.
 	 *
+	 * TODO This is doing more animating than necessary.
+	 *      Only enable/disable if needs to be done.
+	 *
 	 * @param  days  The button days that will be enabled.
 	 */
 	public void setDays(EnumSet<NacCalendar.Day> days)
 	{
-		//int index = 0;
-		//NacUtility.printf("Setting days!");
-
 		for (NacCalendar.Day d : NacCalendar.WEEK)
 		{
+			NacDayButton button = this.getDayButton(d);
+			button.setOnDayChangedListener(null);
+
 			if (days.contains(d))
 			{
-				//NacUtility.printf("Enable day : %s", d.name());
-				this.getDayButton(d).enable();
-				//this.mButtons[index].enable();
+				button.enable();
 			}
 			else
 			{
-				//NacUtility.printf("Disable day : %s", d.name());
-				//this.mButtons[index].disable();
-				this.getDayButton(d).disable();
+				button.disable();
 			}
 
-			//index++;
+			button.setOnDayChangedListener(this);
 		}
 	}
 
@@ -228,11 +229,6 @@ public class NacDayOfWeek
 	 */
 	public void setStartWeekOn(int start)
 	{
-		//NacDayButton sunday = this.mButtons[0];
-		//NacDayButton monday = this.mButtons[1];
-		//View firstChild = getChildAt(0);
-		//View lastChild = getChildAt(6);
-
 		LinearLayout view = this.getDayOfWeekView();
 		NacDayButton sunday = this.getDayButton(NacCalendar.Day.SUNDAY);
 		NacDayButton monday = this.getDayButton(NacCalendar.Day.MONDAY);
@@ -258,11 +254,12 @@ public class NacDayOfWeek
 	}
 
 	/**
-	 * Set an onClick listener for each of the day of week buttons.
+	 * Set the listener for the week is changed.
 	 */
-	public void setOnClickListener(NacDayOfWeek.OnClickListener listener)
+	public void setOnWeekChangedListener(
+		NacDayOfWeek.OnWeekChangedListener listener)
 	{
-		this.mListener = listener;
+		this.mOnWeekChangedListener = listener;
 	}
 
 }

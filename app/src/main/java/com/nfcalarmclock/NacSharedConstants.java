@@ -381,6 +381,14 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Any NFC tag ID message.
+	 */
+	public String getMessageAnyNfcTagId()
+	{
+		return this.getString(R.string.message_any_nfc_tag_id);
+	}
+
+	/**
 	 * @return Message when an alarm is copied.
 	 */
 	public String getMessageAlarmCopy()

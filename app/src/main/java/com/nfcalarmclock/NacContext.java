@@ -21,6 +21,17 @@ public class NacContext
 	}
 
 	/**
+	 * Dismiss the alarm activity for the given alarm.
+	 *
+	 * If alarm is null, it will stop the currently active alarm activity.
+	 */
+	public static void dismissAlarmActivity(Context context, NacAlarm alarm)
+	{
+		Intent intent = NacIntent.dismissAlarmActivity(context, alarm);
+		context.startActivity(intent);
+	}
+
+	/**
 	 * Dismiss the foreground service for the given alarm.
 	 *
 	 * If alarm is null, it will stop the currently active foreground service.

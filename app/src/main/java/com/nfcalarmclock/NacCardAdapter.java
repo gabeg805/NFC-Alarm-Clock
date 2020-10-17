@@ -588,11 +588,8 @@ public class NacCardAdapter
 		Context context = this.getContext();
 		NacDatabase db = new NacDatabase(context);
 
-		NacUtility.printf("onAlarmChanged!");
-
 		if (alarm.wasChanged())
 		{
-			NacUtility.printf("Alarm was changed!");
 			if (alarm.wasUseNfcChanged() && this.hasUseNfcChangeListener())
 			{
 				this.getOnUseNfcChangeListener().onUseNfcChange(alarm);
@@ -600,17 +597,11 @@ public class NacCardAdapter
 			}
 			else if (!alarm.isChangeTrackerLatched())
 			{
-				NacUtility.printf("Alarm change tracker is not latched!");
 				this.showAlarmChange(alarm);
 				this.sortHighlight(alarm);
 			}
-			else
-			{
-				NacUtility.printf("Alarm change tracker IS latched!");
-			}
 		}
 
-		NacUtility.printf("Alarm HERE!");
 		NacScheduler.update(context, alarm);
 		this.setWasAddedWithFloatingActionButton(false);
 		this.updateNotification();
@@ -818,7 +809,7 @@ public class NacCardAdapter
 		{
 			this.showAlarmChange(alarm);
 			this.sortHighlight(alarm);
-			alarm.unlatchChangeTracker();
+			//alarm.unlatchChangeTracker();
 		}
 	}
 
@@ -994,8 +985,17 @@ public class NacCardAdapter
 		NacSharedConstants cons = this.getSharedConstants();
 		Locale locale = Locale.getDefault();
 		String id = alarm.getNfcTagId();
-		String message = String.format(locale, "%1$s %2$s",
-			cons.getMessageShowNfcTagId(), id);
+		String message;
+		
+		if (!id.isEmpty())
+		{
+			message = String.format(locale, "%1$s %2$s",
+				cons.getMessageShowNfcTagId(), id);
+		}
+		else
+		{
+			message = String.format(locale, "%1$s", cons.getMessageAnyNfcTagId());
+		}
 
 		NacUtility.quickToast(context, message);
 	}
@@ -1088,7 +1088,7 @@ public class NacCardAdapter
 		}
 		else if (holder.isExpanded())
 		{
-			alarm.latchChangeTracker();
+			//alarm.latchChangeTracker();
 		}
 		else
 		{

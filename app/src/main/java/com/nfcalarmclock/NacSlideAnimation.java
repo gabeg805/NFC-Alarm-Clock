@@ -1,7 +1,6 @@
 package com.nfcalarmclock;
 
 import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 import android.view.animation.Transformation;
 import android.view.View;
 

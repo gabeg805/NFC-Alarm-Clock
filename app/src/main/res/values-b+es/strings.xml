@@ -52,7 +52,8 @@
 	<string name="message_nfc_required">NFC requerido</string>
 	<string name="message_nfc_optional">NFC opcional</string>
 	<string name="message_scan_nfc_tag">Escanee una etiqueta de NFC única (experimental), o usa cualquier etiqueta para descartar esta alarma cuando suena.</string>
-	<string name="message_show_nfc_tag_id">ID:</string>
+	<string name="message_show_nfc_tag_id">Id:</string>
+	<string name="message_any_nfc_tag_id">Cualquier etiqueta de NFC aceptada</string>
 	<string name="message_no_alarms_scheduled">No hay alarmas programadas</string>
 	<string name="message_repeat_disabled">No repite la alarma</string>
 	<string name="message_repeat_enabled">Repite la alarma</string>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set>
+
+	<!--
+	<objectAnimator
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:propertyName="backgroundColor"
+		android:duration="500"
+		android:valueFrom="@color/white"
+		android:valueTo="@color/gray_light"
+		android:repeatCount="0"
+		/>
+	-->
+
+	<objectAnimator
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:propertyName="textColor"
+		android:duration="200"
+		android:valueFrom="@color/white"
+		android:valueTo="@color/gray_light"
+		android:repeatCount="0"
+		/>
+
+</set>

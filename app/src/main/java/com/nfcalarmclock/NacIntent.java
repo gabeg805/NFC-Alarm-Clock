@@ -143,6 +143,16 @@ public class NacIntent
 	}
 
 	/**
+	 * @return An intent that will be used to dismiss the alarm activity.
+	 */
+	public static Intent dismissAlarmActivity(Context context, NacAlarm alarm)
+	{
+		Intent intent = NacIntent.createAlarmActivity(context, alarm);
+		intent.setAction(NacAlarmActivity.ACTION_DISMISS_ACTIVITY);
+		return intent;
+	}
+
+	/**
 	 * @return An intent that will be used to dismiss the foreground alarm service.
 	 */
 	public static Intent dismissForegroundService(Context context, NacAlarm alarm)
@@ -172,7 +182,6 @@ public class NacIntent
 		}
 
 		Bundle bundle = NacIntent.getAlarmBundle(intent);
-
 		return NacBundle.getAlarm(bundle);
 	}
 

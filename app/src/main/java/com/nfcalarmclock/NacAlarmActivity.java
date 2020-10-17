@@ -55,6 +55,12 @@ public class NacAlarmActivity
 	private NacAlarm mAlarm;
 
 	/**
+	 * Dismiss the activity action.
+	 */
+	public static final String ACTION_DISMISS_ACTIVITY =
+		"com.nfcalarmclock.ACTION_DISMISS_ALARM_ACTIVITY";
+
+	/**
 	 * Stop the activity action.
 	 */
 	public static final String ACTION_STOP_ACTIVITY =
@@ -106,7 +112,6 @@ public class NacAlarmActivity
 		Intent intent = getIntent();
 		NacAlarm alarm = this.getAlarm();
 
-		//if (NacContext.canDismissFromNfcScan(this, intent, alarm))
 		NacContext.dismissForegroundServiceFromNfcScan(this, intent, alarm);
 	}
 
@@ -180,6 +185,11 @@ public class NacAlarmActivity
 			this.dismissFromNfcScan();
 		}
 
+		if (this.shouldDismissAlarm())
+		{
+			this.dismiss();
+		}
+
 		this.setupShowWhenLocked();
 		this.setupAlarmButtons();
 		this.setupAlarmInfo();
@@ -228,7 +238,6 @@ public class NacAlarmActivity
 		super.onSaveInstanceState(outState);
 
 		NacAlarm alarm = this.getAlarm();
-
 		if (alarm != null)
 		{
 			outState.putParcelable(NacBundle.ALARM_PARCEL_NAME, alarm);
@@ -271,7 +280,7 @@ public class NacAlarmActivity
 		Button snoozeButton = (Button) findViewById(R.id.snooze);
 		Button dismissButton = (Button) findViewById(R.id.dismiss);
 
-		if ((alarm != null) && NacNfc.exists(this) && alarm.getUseNfc())
+		if (this.shouldUseNfc())
 		{
 			dismissButton.setVisibility(View.GONE);
 		}
@@ -393,12 +402,24 @@ public class NacAlarmActivity
 	}
 
 	/**
+	 * @return True if the alarm should be dismissed, and False otherwise.
+	 */
+	public boolean shouldDismissAlarm()
+	{
+		Intent intent = getIntent();
+		String action = NacIntent.getAction(intent);
+
+		return action.equals(NacAlarmActivity.ACTION_DISMISS_ACTIVITY)
+			&& !this.shouldUseNfc();
+	}
+
+	/**
 	 * @return True if should use NFC, and False otherwise.
 	 */
 	public boolean shouldUseNfc()
 	{
 		NacAlarm alarm = this.getAlarm();
-		return (alarm != null) && alarm.getUseNfc();
+		return (alarm != null) && NacNfc.exists(this) && alarm.getUseNfc();
 	}
 
 	/**
