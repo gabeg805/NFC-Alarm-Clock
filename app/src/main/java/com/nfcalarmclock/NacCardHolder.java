@@ -402,6 +402,18 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Create a ColorStateList object that is blended with the theme color.
+	 */
+	private ColorStateList createThemeColorStateList()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		int theme = shared.getThemeColor();
+		int blendedTheme = ColorUtils.blendARGB(theme, Color.TRANSPARENT, 0.6f);
+
+		return ColorStateList.valueOf(blendedTheme);
+	}
+
+	/**
 	 * Delete the alarm card.
 	 */
 	public void delete()
@@ -474,7 +486,6 @@ public class NacCardHolder
 			alarm.setRepeat(false);
 		}
 
-		//NacUtility.printf("Toggled day : %s (%b)", day.toString(), alarm.getDays().contains(day));
 		alarm.changed();
 		this.setRepeatButton();
 		this.setSummaryDaysView();
@@ -546,7 +557,6 @@ public class NacCardHolder
 		}
 
 		alarm.changed();
-		this.setNfcButton();
 	}
 
 	/**
@@ -558,7 +568,6 @@ public class NacCardHolder
 
 		alarm.toggleRepeat();
 		alarm.changed();
-		this.setRepeatButton();
 		this.toastRepeat();
 	}
 
@@ -620,7 +629,7 @@ public class NacCardHolder
 
 		alarm.toggleVibrate();
 		alarm.changed();
-		this.setVibrateButton();
+		//this.setVibrateButton();
 		this.toastVibrate();
 	}
 
@@ -1030,7 +1039,16 @@ public class NacCardHolder
 		this.setSwitchColor();
 		this.setSummaryDaysColor();
 		this.setSummaryNameColor();
+		this.setRepeatButtonRippleColor();
+		this.setVibrateButtonRippleColor();
+		this.setNfcButtonRippleColor();
+		this.setMediaButtonRippleColor();
 		this.setVolumeSeekBarColor();
+		this.setAudioSourceButtonRippleColor();
+		this.setNameButtonRippleColor();
+		this.setDeleteButtonRippleColor();
+		this.setCollapseButtonRippleColor();
+		this.setExpandButtonRippleColor();
 	}
 
 	/**
@@ -1614,6 +1632,24 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Set the ripple color of the audio source button.
+	 */
+	private void setAudioSourceButtonRippleColor()
+	{
+		ColorStateList ripple = this.createThemeColorStateList();
+		this.getAudioSourceButton().setRippleColor(ripple);
+	}
+
+	/**
+	 * Set the ripple color of the collapse button.
+	 */
+	private void setCollapseButtonRippleColor()
+	{
+		ColorStateList ripple = this.createThemeColorStateList();
+		this.getCollapseButton().setRippleColor(ripple);
+	}
+
+	/**
 	 * Set the day of week to its proper setting.
 	 */
 	public void setDayOfWeek()
@@ -1625,6 +1661,15 @@ public class NacCardHolder
 
 		dow.setStartWeekOn(shared.getStartWeekOn());
 		dow.setDays(days);
+	}
+
+	/**
+	 * Set the ripple color of the delete button.
+	 */
+	private void setDeleteButtonRippleColor()
+	{
+		ColorStateList ripple = this.createThemeColorStateList();
+		this.getDeleteButton().setRippleColor(ripple);
 	}
 
 	/**
@@ -1676,6 +1721,15 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Set the ripple color of the expand button.
+	 */
+	private void setExpandButtonRippleColor()
+	{
+		ColorStateList ripple = this.createThemeColorStateList();
+		this.getExpandButton().setRippleColor(ripple);
+	}
+
+	/**
 	 * Set the media button to its proper setting.
 	 */
 	public void setMediaButton()
@@ -1688,6 +1742,15 @@ public class NacCardHolder
 
 		this.getMediaButton().setText(message);
 		this.getMediaButton().setAlpha(alpha);
+	}
+
+	/**
+	 * Set the ripple color of the media button.
+	 */
+	public void setMediaButtonRippleColor()
+	{
+		ColorStateList ripple = this.createThemeColorStateList();
+		this.getMediaButton().setRippleColor(ripple);
 	}
 
 	/**
@@ -1727,11 +1790,19 @@ public class NacCardHolder
 		MaterialButton button = this.getNameButton();
 		String name = alarm.getNameNormalized();
 		String message = NacSharedPreferences.getNameMessage(context, name);
-		//float alpha = !name.isEmpty() ? 1.0f : 0.3f;
+		float alpha = !name.isEmpty() ? 1.0f : 0.3f;
 
 		button.setText(message);
-		button.setChecked(!name.isEmpty());
-		//button.setAlpha(alpha);
+		button.setAlpha(alpha);
+	}
+
+	/**
+	 * Set the ripple color of the name button.
+	 */
+	private void setNameButtonRippleColor()
+	{
+		ColorStateList ripple = this.createThemeColorStateList();
+		this.getNameButton().setRippleColor(ripple);
 	}
 
 	/**
@@ -1739,10 +1810,20 @@ public class NacCardHolder
 	 */
 	private void setNfcButton()
 	{
+		MaterialButton button = this.getNfcButton();
 		NacAlarm alarm = this.getAlarm();
-		View view = this.getNfcButton();
+		boolean useNfc = alarm.getUseNfc();
 
-		view.setAlpha(alarm.getUseNfc() ? 1.0f : 0.3f);
+		button.setChecked(useNfc);
+	}
+
+	/**
+	 * Set the ripple color of the NFC button.
+	 */
+	private void setNfcButtonRippleColor()
+	{
+		ColorStateList ripple = this.createThemeColorStateList();
+		this.getNfcButton().setRippleColor(ripple);
 	}
 
 	/**
@@ -1787,20 +1868,29 @@ public class NacCardHolder
 	 */
 	private void setRepeatButton()
 	{
-		View view = this.getRepeatButton();
+		MaterialButton button = this.getRepeatButton();
 		NacAlarm alarm = this.getAlarm();
 		boolean repeat = alarm.getRepeat();
 
 		if (!alarm.areDaysSelected())
 		{
-			view.setEnabled(false);
-			view.setAlpha(0.3f);
+			button.setChecked(false);
+			button.setEnabled(false);
 		}
 		else
 		{
-			view.setEnabled(true);
-			view.setAlpha(repeat ? 1.0f : 0.3f);
+			button.setEnabled(true);
+			button.setChecked(repeat);
 		}
+	}
+
+	/**
+	 * Set the ripple color of the repeat button.
+	 */
+	private void setRepeatButtonRippleColor()
+	{
+		ColorStateList ripple = this.createThemeColorStateList();
+		this.getRepeatButton().setRippleColor(ripple);
 	}
 
 	/**
@@ -1912,10 +2002,20 @@ public class NacCardHolder
 	 */
 	public void setVibrateButton()
 	{
-		View view = this.getVibrateButton();
+		MaterialButton button = this.getVibrateButton();
 		NacAlarm alarm = this.getAlarm();
+		boolean vibrate = alarm.getVibrate();
 
-		view.setAlpha(alarm.getVibrate() ? 1.0f : 0.3f);
+		button.setChecked(vibrate);
+	}
+
+	/**
+	 * Set the ripple color of the vibrate button.
+	 */
+	private void setVibrateButtonRippleColor()
+	{
+		ColorStateList ripple = this.createThemeColorStateList();
+		this.getVibrateButton().setRippleColor(ripple);
 	}
 
 	/**

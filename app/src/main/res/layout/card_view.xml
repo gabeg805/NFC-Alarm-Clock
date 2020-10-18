@@ -223,32 +223,44 @@
 				android:gravity="center"
 				android:orientation="horizontal">
 
+				<!-- Repeat -->
 				<com.google.android.material.button.MaterialButton
 					style="@style/TextButton.Icon"
 					android:id="@+id/nac_repeat"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/touch"
 					android:layout_weight="1"
+					android:checkable="true"
+					app:backgroundTint="@android:color/transparent"
+					app:iconTint="@color/card_toggle_button"
 					app:iconSize="@dimen/isz_large"
 					app:icon="@mipmap/repeat"
 					/>
 
+				<!-- Vibrate -->
 				<com.google.android.material.button.MaterialButton
 					style="@style/TextButton.Icon"
 					android:id="@+id/nac_vibrate"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/touch"
 					android:layout_weight="1"
+					android:checkable="true"
+					app:backgroundTint="@android:color/transparent"
+					app:iconTint="@color/card_toggle_button"
 					app:iconSize="@dimen/isz_large"
 					app:icon="@mipmap/vibrate"
 					/>
 
+				<!-- NFC -->
 				<com.google.android.material.button.MaterialButton
 					style="@style/TextButton.Icon"
 					android:id="@+id/nac_nfc"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/touch"
 					android:layout_weight="1"
+					android:checkable="true"
+					app:backgroundTint="@android:color/transparent"
+					app:iconTint="@color/card_toggle_button"
 					app:iconSize="@dimen/isz_large"
 					app:icon="@mipmap/tap_and_play"
 					/>
@@ -263,10 +275,6 @@
 				android:text=""
 				app:icon="@mipmap/music_note"
 				/>
-
-			<!--
-				android:fontFamily="sans-serif-medium"
-			-->
 
 			<!-- Volume -->
 			<LinearLayout
@@ -311,8 +319,6 @@
 				android:id="@+id/nac_name"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:checkable="true"
-				android:textColor="@color/card_text_button"
 				android:text=""
 				app:icon="@mipmap/label"
 				/>

@@ -2,8 +2,7 @@
 <selector
 	xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<item
-		android:state_checked="true">
+	<item android:state_checked="true">
 		<set>
 			<objectAnimator
 				android:propertyName="textColor"
@@ -15,8 +14,7 @@
 		</set>
 	</item>
 
-	<item
-		android:state_checked="false">
+	<item android:state_checked="false">
 		<set>
 			<objectAnimator
 				android:propertyName="textColor"
