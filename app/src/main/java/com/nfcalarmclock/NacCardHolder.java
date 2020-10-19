@@ -14,13 +14,10 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.PorterDuff;
 import android.os.Build;
-import android.text.TextUtils;
-import android.view.animation.Animation;
 import android.view.animation.AccelerateInterpolator;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,7 +44,8 @@ public class NacCardHolder
 		NacDialog.OnDismissListener,
 		NacDayOfWeek.OnWeekChangedListener,
 		SeekBar.OnSeekBarChangeListener,
-		Animation.AnimationListener
+		NacHeightAnimator.OnViewCollapseListener,
+		NacHeightAnimator.OnViewExpandListener
 {
 
 	/**
@@ -210,9 +208,9 @@ public class NacCardHolder
 	private MaterialButton mDeleteButton;
 
 	/**
-	 * Card slide animation, for collapsing and expanding.
+	 * Card animator for collapsing and expanding.
 	 */
-	private NacSlideAnimation mSlideAnimation;
+	private NacHeightAnimator mCardAnimator;
 
 	/**
 	 * Color animator for animating the background color of the card.
@@ -286,14 +284,14 @@ public class NacCardHolder
 		this.mAudioSourceButton = root.findViewById(R.id.nac_audio_source);
 		this.mNameButton = root.findViewById(R.id.nac_name);
 		this.mDeleteButton = root.findViewById(R.id.nac_delete);
-		this.mSlideAnimation = new NacSlideAnimation(this.getCardView());
+		this.mCardAnimator = new NacHeightAnimator(this.getCardView());
 		this.mBackgroundColorAnimator = null;
 		this.mHighlightAnimator = null;
 		this.mOnCardCollapsedListener = null;
 		this.mOnCardExpandedListener = null;
 		this.mOnDeleteClickedListener = null;
 
-		this.mSlideAnimation.setInterpolator(new AccelerateInterpolator());
+		this.mCardAnimator.setInterpolator(new AccelerateInterpolator());
 	}
 
 	/**
@@ -379,14 +377,57 @@ public class NacCardHolder
 	}
 
 	/**
-	 * @return True if alarm can be modified, and False otherwise.
+	 * @see checkCanModifyAlarm
+	 *
+	 * Same, but for deleting an alarm.
 	 */
-	public boolean canModifyAlarm()
+	public boolean checkCanDeleteAlarm()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 
-		return !alarm.isSnoozed(shared) && !alarm.isActive();
+		if (alarm.isActive())
+		{
+			this.toastDeleteActiveAlarmError();
+		}
+		else if (alarm.isSnoozed(shared))
+		{
+			this.toastDeleteSnoozedAlarmError();
+		}
+		else
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if the alarm can be modified, and if it cannot, display toasts to the
+	 * user indicating as such.
+	 *
+	 * @return True if the check passed successfully, and the alarm can be
+	 *         modified, and False otherwise.
+	 */
+	public boolean checkCanModifyAlarm()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacAlarm alarm = this.getAlarm();
+
+		if (alarm.isActive())
+		{
+			this.toastModifyActiveAlarmError();
+		}
+		else if (alarm.isSnoozed(shared))
+		{
+			this.toastModifySnoozedAlarmError();
+		}
+		else
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -394,11 +435,14 @@ public class NacCardHolder
 	 */
 	public void collapse()
 	{
+		NacHeightAnimator animator = this.getCardAnimator();
 		int fromHeight = this.getHeightExpanded();
 		int toHeight = this.getHeightCollapsed();
 
 		this.cancelHighlight();
-		this.slide(fromHeight, toHeight, COLLAPSE_DURATION);
+		animator.setHeights(fromHeight, toHeight);
+		animator.setDuration(COLLAPSE_DURATION);
+		animator.start();
 	}
 
 	/**
@@ -634,9 +678,9 @@ public class NacCardHolder
 	}
 
 	/**
-	 * Act as if the volume setting button was clicked.
+	 * Act as if the audio source button was clicked.
 	 */
-	public void doVolumeSettingButtonClick()
+	public void doAudioSourceButtonClick()
 	{
 		this.showAudioSourceDialog();
 	}
@@ -646,11 +690,14 @@ public class NacCardHolder
 	 */
 	public void expand()
 	{
+		NacHeightAnimator animator = this.getCardAnimator();
 		int fromHeight = this.getHeightCollapsed();
 		int toHeight = this.getHeightExpanded();
 
 		this.cancelHighlight();
-		this.slide(fromHeight, toHeight, EXPAND_DURATION);
+		animator.setHeights(fromHeight, toHeight);
+		animator.setDuration(EXPAND_DURATION);
+		animator.start();
 	}
 
 	/**
@@ -667,6 +714,14 @@ public class NacCardHolder
 	private MaterialButton getAudioSourceButton()
 	{
 		return this.mAudioSourceButton;
+	}
+
+	/**
+	 * @return The card expand/collapse animator.
+	 */
+	private NacHeightAnimator getCardAnimator()
+	{
+		return this.mCardAnimator;
 	}
 
 	/**
@@ -907,14 +962,6 @@ public class NacCardHolder
 	}
 
 	/**
-	 * @return The card slide animation.
-	 */
-	private NacSlideAnimation getSlideAnimation()
-	{
-		return this.mSlideAnimation;
-	}
-
-	/**
 	 * @return The summary days view.
 	 */
 	public TextView getSummaryDaysView()
@@ -1065,10 +1112,14 @@ public class NacCardHolder
 			(CompoundButton.OnCheckedChangeListener) listener;
 		SeekBar.OnSeekBarChangeListener seek =
 			(SeekBar.OnSeekBarChangeListener) listener;
-		Animation.AnimationListener slide = (Animation.AnimationListener) listener;
+		NacHeightAnimator.OnViewCollapseListener collapse =
+			(NacHeightAnimator.OnViewCollapseListener) listener;
+		NacHeightAnimator.OnViewExpandListener expand =
+			(NacHeightAnimator.OnViewExpandListener) listener;
 
 		this.hideSwipeViews();
-		this.getSlideAnimation().setAnimationListener(slide);
+		this.mCardAnimator.setOnViewCollapseListener(collapse);
+		this.mCardAnimator.setOnViewExpandListener(expand);
 		this.getHeaderView().setOnClickListener(click);
 		this.getSummaryView().setOnClickListener(click);
 		this.getTimeParentView().setOnClickListener(click);
@@ -1179,7 +1230,7 @@ public class NacCardHolder
 		NacSharedPreferences shared = this.getSharedPreferences();
 		CardView cardView = this.getCardView();
 
-		if (shared.getCardIsMeasured())
+		if (shared.getCardIsMeasured() || this.isExpanded())
 		{
 			return;
 		}
@@ -1200,53 +1251,38 @@ public class NacCardHolder
 	}
 
 	/**
-	 * Card slide animation has ended.
+	 * Called when the card is collapsing.
 	 *
-	 * Used for when the card is collapsing to set view visibility, animate the
-	 * background color, and call the card collapsed listener.
+	 * Used to set view visibility, animate the background color, and call the
+	 * card collapsed listener.
 	 */
-	@Override
-	public void onAnimationEnd(Animation animation)
+	public void onViewCollapse(NacHeightAnimator animator)
 	{
-		NacSlideAnimation slide = (NacSlideAnimation) animation;
-		if (!slide.isCollapsing())
+		if (animator.isLastUpdate())
 		{
-			return;
+			this.doCollapse();
+			this.animateCollapsedBackgroundColor();
+			this.callOnCardCollapsedListener();
+			//this.getAlarm().unlatchChangeTracker();
 		}
-
-		this.doCollapse();
-		this.animateCollapsedBackgroundColor();
-		this.callOnCardCollapsedListener();
-		this.getAlarm().unlatchChangeTracker();
 	}
 
 	/**
-	 * Card slide animation has repeated.
-	 */
-	@Override
-	public void onAnimationRepeat(Animation animation)
-	{
-	}
-
-	/**
-	 * Card slide animation has started.
+	 * Called when the card is expanding.
 	 *
-	 * Used for when the card is expanding to set view visibility, animate the
-	 * background color, and call the card collapsed listener.
+	 * Used to set view visibility, animate the background color, and call the
+	 * card collapsed listener.
 	 */
-	@Override
-	public void onAnimationStart(Animation animation)
+	public void onViewExpand(NacHeightAnimator animator)
 	{
-		NacSlideAnimation slide = (NacSlideAnimation) animation;
-		if (!slide.isExpanding())
+		if (animator.isFirstUpdate())
 		{
-			return;
+			NacUtility.printf("onViewExpanded! First update!");
+			this.doExpand();
+			this.animateExpandedBackgroundColor();
+			//this.getAlarm().latchChangeTracker();
+			this.callOnCardExpandedListener();
 		}
-
-		this.doExpand();
-		this.animateExpandedBackgroundColor();
-		this.getAlarm().latchChangeTracker();
-		this.callOnCardExpandedListener();
 	}
 
 	/**
@@ -1317,7 +1353,7 @@ public class NacCardHolder
 		}
 		else if (id == R.id.nac_audio_source)
 		{
-			this.respondToVolumeSettingsButtonClick(view);
+			this.respondToAudioSourceButtonClick(view);
 		}
 		else if (id == R.id.nac_name)
 		{
@@ -1421,12 +1457,33 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Perform haptic feedback on a view.
+	 */
+	private void performHapticFeedback(View view)
+	{
+		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+	}
+
+	/**
+	 * Respond to the audio source button being clicked.
+	 */
+	private void respondToAudioSourceButtonClick(View view)
+	{
+		if (this.checkCanModifyAlarm())
+		{
+			this.doAudioSourceButtonClick();
+		}
+
+		this.performHapticFeedback(view);
+	}
+
+	/**
 	 * Respond to the alarm card being clicked.
 	 */
 	private void respondToCardClick(View view)
 	{
-		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		this.doCardClick();
+		this.performHapticFeedback(view);
 	}
 
 	/**
@@ -1434,15 +1491,12 @@ public class NacCardHolder
 	 */
 	public void respondToDayButtonClick(NacDayButton button, NacCalendar.Day day)
 	{
-		if (!this.canModifyAlarm())
+		if (this.checkCanModifyAlarm())
 		{
-			this.toastModifySnoozedAlarmError();
-			return;
+			this.doDayButtonClick(day);
 		}
 
-		button.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-		this.doDayButtonClick(day);
-		return;
+		this.performHapticFeedback(button);
 	}
 
 	/**
@@ -1450,15 +1504,12 @@ public class NacCardHolder
 	 */
 	private void respondToDeleteButtonClick(View view)
 	{
-		if (this.canModifyAlarm())
+		if (this.checkCanDeleteAlarm())
 		{
 			this.doDeleteButtonClick();
 		}
-		else
-		{
-			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-			this.toastDeleteSnoozedAlarmError();
-		}
+
+		this.performHapticFeedback(view);
 	}
 
 	/**
@@ -1466,73 +1517,8 @@ public class NacCardHolder
 	 */
 	private void respondToDismissButtonClick(View view)
 	{
-		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		this.doDismissButtonClick();
-	}
-
-	/**
-	 * Respond to the name being clicked.
-	 */
-	private void respondToNameClick(View view)
-	{
-		if (this.canModifyAlarm())
-		{
-			this.doNameClick();
-		}
-		else
-		{
-			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-			this.toastModifySnoozedAlarmError();
-		}
-	}
-
-	/**
-	 * Respond to the NFC button being clicked.
-	 */
-	private void respondToNfcButtonClick(View view)
-	{
-		if (this.canModifyAlarm())
-		{
-			this.doNfcButtonClick();
-		}
-		else
-		{
-			this.toastModifySnoozedAlarmError();
-		}
-
-		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-	}
-
-	/**
-	 * Respond to the repeat button being clicked.
-	 */
-	private void respondToRepeatButtonClick(View view)
-	{
-		if (this.canModifyAlarm())
-		{
-			this.doRepeatButtonClick();
-		}
-		else
-		{
-			this.toastModifySnoozedAlarmError();
-		}
-
-		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-	}
-
-	/**
-	 * Perform the repeat button long click action.
-	 */
-	public void respondToRepeatButtonLongClick()
-	{
-		if (this.canModifyAlarm())
-		{
-			this.doRepeatButtonLongClick();
-		}
-		else
-		{
-			this.toastModifySnoozedAlarmError();
-		}
+		this.performHapticFeedback(view);
 	}
 
 	/**
@@ -1540,14 +1526,61 @@ public class NacCardHolder
 	 */
 	private void respondToMediaButtonClick(View view)
 	{
-		if (this.canModifyAlarm())
+		if (this.checkCanModifyAlarm())
 		{
 			this.doMediaButtonClick();
 		}
-		else
+
+		this.performHapticFeedback(view);
+	}
+
+	/**
+	 * Respond to the name being clicked.
+	 */
+	private void respondToNameClick(View view)
+	{
+		if (this.checkCanModifyAlarm())
 		{
-			this.toastModifySnoozedAlarmError();
-			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+			this.doNameClick();
+		}
+
+		this.performHapticFeedback(view);
+	}
+
+	/**
+	 * Respond to the NFC button being clicked.
+	 */
+	private void respondToNfcButtonClick(View view)
+	{
+		if (this.checkCanModifyAlarm())
+		{
+			this.doNfcButtonClick();
+		}
+
+		this.performHapticFeedback(view);
+	}
+
+	/**
+	 * Respond to the repeat button being clicked.
+	 */
+	private void respondToRepeatButtonClick(View view)
+	{
+		if (this.checkCanModifyAlarm())
+		{
+			this.doRepeatButtonClick();
+		}
+
+		this.performHapticFeedback(view);
+	}
+
+	/**
+	 * Perform the repeat button long click action.
+	 */
+	public void respondToRepeatButtonLongClick()
+	{
+		if (this.checkCanModifyAlarm())
+		{
+			this.doRepeatButtonLongClick();
 		}
 	}
 
@@ -1559,14 +1592,14 @@ public class NacCardHolder
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 
-		if (!this.canModifyAlarm() && shared.getPreventAppFromClosing())
+
+		if (shared.getPreventAppFromClosing() && !this.checkCanModifyAlarm())
 		{
-			this.toastModifySnoozedAlarmError();
 			button.setChecked(!state);
+			this.performHapticFeedback(button);
 			return;
 		}
 
-		button.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 		this.doSwitchCheckedChanged(state);
 	}
 
@@ -1575,15 +1608,13 @@ public class NacCardHolder
 	 */
 	private void respondToTimeClick(View view)
 	{
-		if (this.canModifyAlarm())
+		if (!this.checkCanModifyAlarm())
 		{
-			this.doTimeClick();
+			this.performHapticFeedback(view);
+			return;
 		}
-		else
-		{
-			this.toastModifySnoozedAlarmError();
-			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-		}
+
+		this.doTimeClick();
 	}
 
 	/**
@@ -1591,33 +1622,12 @@ public class NacCardHolder
 	 */
 	private void respondToVibrateButtonClick(View view)
 	{
-		if (this.canModifyAlarm())
+		if (this.checkCanModifyAlarm())
 		{
 			this.doVibrateButtonClick();
 		}
-		else
-		{
-			this.toastModifySnoozedAlarmError();
-		}
 
-		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-	}
-
-	/**
-	 * Respond to the volume settings button being clicked.
-	 */
-	private void respondToVolumeSettingsButtonClick(View view)
-	{
-		if (this.canModifyAlarm())
-		{
-			this.doVolumeSettingButtonClick();
-		}
-		else
-		{
-			this.toastModifySnoozedAlarmError();
-		}
-
-		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+		this.performHapticFeedback(view);
 	}
 
 	/**
@@ -1939,7 +1949,6 @@ public class NacCardHolder
 		String name = alarm.getNameNormalized();
 
 		this.getSummaryNameView().setText(name);
-		//this.mName.setVisibility(name.isEmpty() ? View.GONE : View.VISIBLE);
 	}
 
 	/**
@@ -2132,19 +2141,6 @@ public class NacCardHolder
 	}
 
 	/**
-	 * Animate the card sliding.
-	 */
-	public void slide(int fromHeight, int toHeight, int duration)
-	{
-		CardView card = this.getCardView();
-		NacSlideAnimation animation = this.getSlideAnimation();
-
-		animation.setDuration(duration);
-		animation.setHeights(fromHeight, toHeight);
-		card.startAnimation(animation);
-	}
-
-	/**
 	 * Start the media activity.
 	 */
 	public void startMediaActivity()
@@ -2157,8 +2153,17 @@ public class NacCardHolder
 	}
 
 	/**
-	 * Show a toast when a user tries to modify an alarm when they are unable
-	 * to.
+	 * Show a toast saying that a user cannot delete an active alarm.
+	 */
+	private void toastDeleteActiveAlarmError()
+	{
+		Context context = this.getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
+		NacUtility.quickToast(context, cons.getErrorMessageActiveDelete());
+	}
+
+	/**
+	 * Show a toast saying that a user cannot delete a snoozed alarm.
 	 */
 	private void toastDeleteSnoozedAlarmError()
 	{
@@ -2168,8 +2173,17 @@ public class NacCardHolder
 	}
 
 	/**
-	 * Show a toast when a user tries to modify an alarm when they are unable
-	 * to.
+	 * Show a toast saying that a user cannot modify an active alarm.
+	 */
+	private void toastModifyActiveAlarmError()
+	{
+		Context context = this.getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
+		NacUtility.quickToast(context, cons.getErrorMessageActiveModify());
+	}
+
+	/**
+	 * Show a toast saying that a user cannot modify a snoozed alarm.
 	 */
 	private void toastModifySnoozedAlarmError()
 	{

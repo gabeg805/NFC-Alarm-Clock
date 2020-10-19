@@ -59,8 +59,7 @@ public class NacActiveAlarmNotification
 		Bitmap icon = this.getIcon();
 		PendingIntent activityPending = this.getContentPendingIntent();
 		PendingIntent snoozePending = this.getSnoozePendingIntent();
-		PendingIntent dismissPending = this.getDismissPendingIntent(
-			activityPending);
+		PendingIntent dismissPending = this.getDismissPendingIntent(activityPending);
 		NacSharedConstants cons = new NacSharedConstants(context);
 
 		return super.builder()
@@ -164,17 +163,15 @@ public class NacActiveAlarmNotification
 	private PendingIntent getDismissPendingIntent(
 		PendingIntent activityPendingIntent)
 	{
+		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
 
-		if ((alarm == null) || alarm.getUseNfc())
+		if (NacNfc.shouldUseNfc(context, alarm))
 		{
 			return activityPendingIntent;
 		}
 
-		Context context = this.getContext();
-		Intent intent = new Intent(NacForegroundService.ACTION_DISMISS_ALARM,
-			null, context, NacForegroundService.class);
-
+		Intent intent = NacIntent.dismissForegroundService(context, alarm);
 		return PendingIntent.getService(context, 0, intent, 0);
 	}
 

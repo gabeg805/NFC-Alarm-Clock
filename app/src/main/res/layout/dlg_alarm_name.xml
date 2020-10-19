@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:orientation="vertical">
 
 	<com.google.android.material.textfield.TextInputLayout
+		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
 		android:id="@+id/yoyoyo"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="@dimen/medium"
 		android:layout_marginStart="@dimen/medium"
 		android:layout_marginEnd="@dimen/medium"
-		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+		app:counterEnabled="true"
+		app:counterMaxLength="@integer/max_entry_length">
 
 		<com.google.android.material.textfield.TextInputEditText
 			style="@style/TextView.Primary"

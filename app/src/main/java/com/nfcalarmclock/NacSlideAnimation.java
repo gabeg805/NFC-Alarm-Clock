@@ -51,10 +51,19 @@ public class NacSlideAnimation
 		View view = this.getView();
 		int fromHeight = this.getFromHeight();
 		int toHeight = this.getToHeight();
+		int newHeight = -1;
 
-		if (view.getHeight() != toHeight)
+		//if (view.getHeight() != toHeight)
+		//if (interpolatedTime == 1)
+		if ((view.getHeight() == toHeight) && (interpolatedTime == 1))
 		{
-			int newHeight = (int) (fromHeight + ((toHeight - fromHeight) * interpolatedTime));
+			NacUtility.printf("Apply INtransformation : %d -> %d || New : %d || Time : %f", fromHeight, toHeight, newHeight, interpolatedTime);
+		}
+		else
+		{
+			//int newHeight = (int) (fromHeight + ((toHeight - fromHeight) * interpolatedTime));
+			newHeight = (int) (fromHeight + ((toHeight - fromHeight) * interpolatedTime));
+			NacUtility.printf("Apply transformation : %d -> %d || New : %d || Time : %f", fromHeight, toHeight, newHeight, interpolatedTime);
 			view.getLayoutParams().height = newHeight;
 			view.requestLayout();
 		}
@@ -83,6 +92,13 @@ public class NacSlideAnimation
 	{
 		return this.mView;
 	}
+
+	//@Override
+	//public void initialize(int width, int height, int parentWidth,
+	//	int parentHeight)
+	//{
+	//	super.initialize(width, height, parentWidth, parentHeight);
+	//}
 
 	/**
 	 * @return True if the view is collapsing, and False otherwise.

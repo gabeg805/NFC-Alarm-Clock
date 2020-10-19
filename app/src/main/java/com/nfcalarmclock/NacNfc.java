@@ -108,6 +108,14 @@ public class NacNfc
 	}
 
 	/**
+	 * @return True if should use NFC, and False otherwise.
+	 */
+	public static boolean shouldUseNfc(Context context, NacAlarm alarm)
+	{
+		return (alarm != null) && NacNfc.exists(context) && alarm.getUseNfc();
+	}
+
+	/**
 	 * @see start
 	 */
 	public static void start(Activity activity)

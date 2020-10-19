@@ -30,6 +30,7 @@ public class NacCardAdapter
 		RecyclerView.OnItemTouchListener,
 		NacAlarm.OnAlarmChangeListener,
 		NacCardHolder.OnCardCollapsedListener,
+		NacCardHolder.OnCardExpandedListener,
 		NacCardHolder.OnDeleteClickedListener,
 		NacCardTouchHelper.Adapter
 {
@@ -623,9 +624,9 @@ public class NacCardAdapter
 		alarm.setOnAlarmChangeListener(this);
 		card.init(alarm);
 		card.setOnCardCollapsedListener(this);
+		card.setOnCardExpandedListener(this);
 		card.setOnDeleteClickedListener(this);
 		card.setOnCreateContextMenuListener(this);
-		//card.setOnStateChangeListener(this);
 
 		if (this.wasAddedWithFloatingActionButton())
 		{
@@ -633,6 +634,33 @@ public class NacCardAdapter
 		}
 
 		this.setWasAddedWithFloatingActionButton(false);
+	}
+
+	/**
+	 * Called when the alarm card is collapsed.
+	 */
+	public void onCardCollapsed(NacCardHolder holder)
+	{
+		NacUtility.printf("onCardCollapsed! Alarm will be UNlatched (most likely)");
+		NacAlarm alarm = holder.getAlarm();
+
+		if (alarm.isChangeTrackerLatched())
+		{
+			this.showAlarmChange(alarm);
+			this.sortHighlight(alarm);
+			NacUtility.printf("onCardCollapsed! Unlatching alarm");
+			alarm.unlatchChangeTracker();
+		}
+	}
+
+	/**
+	 * Called when the alarm card is expanded.
+	 */
+	public void onCardExpanded(NacCardHolder holder)
+	{
+		NacUtility.printf("onCardExpanded! Alarm will be latched");
+		NacAlarm alarm = holder.getAlarm();
+		alarm.latchChangeTracker();
 	}
 
 	/**
@@ -797,20 +825,6 @@ public class NacCardAdapter
 	 */
 	public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept)
 	{
-	}
-
-	/**
-	 */
-	public void onCardCollapsed(NacCardHolder holder)
-	{
-		NacAlarm alarm = holder.getAlarm();
-
-		if (alarm.isChangeTrackerLatched())
-		{
-			this.showAlarmChange(alarm);
-			this.sortHighlight(alarm);
-			//alarm.unlatchChangeTracker();
-		}
 	}
 
 	/**

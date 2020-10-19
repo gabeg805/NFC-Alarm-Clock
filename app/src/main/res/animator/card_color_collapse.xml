@@ -2,7 +2,7 @@
 <objectAnimator
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:propertyName="backgroundColor"
-	android:duration="200"
+	android:duration="150"
 	android:valueFrom="?attr/colorCardExpanded"
 	android:valueTo="?attr/colorCard"
 	android:repeatCount="0"

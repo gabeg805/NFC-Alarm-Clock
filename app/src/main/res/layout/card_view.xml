@@ -98,6 +98,18 @@
 					android:text=""
 					/>
 
+					<!--
+					android:focusable="true"
+					android:focusableInTouchMode="true"
+					android:singleLine="true"
+					android:scrollHorizontally="true"
+					android:ellipsize="marquee"
+					android:marqueeRepeatLimit ="marquee_forever"
+
+					android:ellipsize="end"
+					android:focusable="false"
+					-->
+
 				<TextView
 					style="@style/TextView.Summary"
 					android:id="@+id/nac_summary_name"
@@ -107,6 +119,7 @@
 					android:layout_weight="1"
 					android:ellipsize="end"
 					android:focusable="false"
+					android:singleLine="true"
 					android:textColor="@color/sky_blue"
 					/>
 
@@ -128,9 +141,6 @@
 				android:gravity="center_vertical"
 				android:alpha="0.8">
 
-				<!--
-					style="?android:attr/buttonBarButtonStyle"
-				-->
 				<com.google.android.material.button.MaterialButton
 					style="@style/TextButton.Ellipsize.Row"
 					android:id="@+id/nac_dismiss"

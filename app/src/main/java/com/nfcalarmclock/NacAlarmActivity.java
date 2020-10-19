@@ -280,7 +280,7 @@ public class NacAlarmActivity
 		Button snoozeButton = (Button) findViewById(R.id.snooze);
 		Button dismissButton = (Button) findViewById(R.id.dismiss);
 
-		if (this.shouldUseNfc())
+		if (NacNfc.shouldUseNfc(this, alarm))
 		{
 			dismissButton.setVisibility(View.GONE);
 		}
@@ -332,9 +332,11 @@ public class NacAlarmActivity
 	 */
 	private void setupNfc()
 	{
+		NacAlarm alarm = this.getAlarm();
+
 		if (!NacNfc.isEnabled(this))
 		{
-			if (this.shouldUseNfc())
+			if (NacNfc.shouldUseNfc(this, alarm))
 			{
 				NacNfc.prompt(this);
 			}
@@ -406,20 +408,12 @@ public class NacAlarmActivity
 	 */
 	public boolean shouldDismissAlarm()
 	{
+		NacAlarm alarm = this.getAlarm();
 		Intent intent = getIntent();
 		String action = NacIntent.getAction(intent);
 
 		return action.equals(NacAlarmActivity.ACTION_DISMISS_ACTIVITY)
-			&& !this.shouldUseNfc();
-	}
-
-	/**
-	 * @return True if should use NFC, and False otherwise.
-	 */
-	public boolean shouldUseNfc()
-	{
-		NacAlarm alarm = this.getAlarm();
-		return (alarm != null) && NacNfc.exists(this) && alarm.getUseNfc();
+			&& !NacNfc.shouldUseNfc(this, alarm);
 	}
 
 	/**

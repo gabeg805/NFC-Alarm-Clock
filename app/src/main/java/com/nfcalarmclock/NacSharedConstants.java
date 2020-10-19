@@ -245,6 +245,22 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Error message when trying to delete alarm while active.
+	 */
+	public String getErrorMessageActiveDelete()
+	{
+		return this.getString(R.string.error_message_active_delete);
+	}
+
+	/**
+	 * @return Error message when trying to modify alarm while active.
+	 */
+	public String getErrorMessageActiveModify()
+	{
+		return this.getString(R.string.error_message_active_modify);
+	}
+
+	/**
 	 * @return Max alarm error message.
 	 */
 	public String getErrorMessageMaxAlarms()
@@ -298,14 +314,6 @@ public class NacSharedConstants
 	public String getErrorMessageSnooze()
 	{
 		return this.getString(R.string.error_message_snooze);
-	}
-
-	/**
-	 * @return Error message when modifying days while snoozed.
-	 */
-	public String getErrorMessageSnoozedDays()
-	{
-		return this.getString(R.string.error_message_snoozed_days);
 	}
 
 	/**
