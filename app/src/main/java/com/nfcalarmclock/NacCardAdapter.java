@@ -158,7 +158,7 @@ public class NacCardAdapter
 	 */
 	public int addAlarm(NacAlarm alarm)
 	{
-		int index = this.whereToPutAlarm(alarm);
+		int index = this.whereToInsertAlarm(alarm);
 		return this.addAlarm(alarm, index);
 	}
 
@@ -179,16 +179,9 @@ public class NacCardAdapter
 			return -1;
 		}
 
-		NacDatabase db = new NacDatabase(context);
-		int id = alarm.getId();
-
-		NacScheduler.update(context, alarm);
-		this.getSharedPreferences().editSnoozeCount(id, 0);
-		this.getAlarms().add(position, alarm);
+		NacTaskWorker.addAlarm(context, alarm);
+		this.notifyInsertAlarm(alarm, position);
 		this.updateNotification();
-		notifyItemInserted(position);
-		db.add(alarm);
-		db.close();
 		return 0;
 	}
 
@@ -199,8 +192,7 @@ public class NacCardAdapter
 	{
 		Context context = this.getContext();
 		NacSharedPreferences shared = this.getSharedPreferences();
-		NacDatabase db = new NacDatabase(context);
-		this.mAlarmList = db.read();
+		this.mAlarmList = NacDatabase.read(context);
 
 		if (shared.getAppFirstRun())
 		{
@@ -218,10 +210,24 @@ public class NacCardAdapter
 		this.sort();
 		this.updateNotification();
 		notifyDataSetChanged();
-		db.close();
 	}
 
 	/**
+	 * Call the use NFC change listener.
+	 */
+	private void callOnUseNfcChangeListener(NacAlarm alarm)
+	{
+		OnUseNfcChangeListener listener = this.getOnUseNfcChangeListener();
+		if (listener != null)
+		{
+			listener.onUseNfcChange(alarm);
+			alarm.resetChangeTracker();
+		}
+	}
+
+	/**
+	 * @return True if the alarm can be inserted at the current state in the
+	 *         alarm list, or False otherwise.
 	 */
 	private boolean canInsertAlarm(NacAlarm alarmToInsert, NacAlarm alarmInList,
 		Calendar nextRun)
@@ -258,15 +264,11 @@ public class NacCardAdapter
 		if (result == 0)
 		{
 			NacSharedConstants cons = this.getSharedConstants();
-			Locale locale = Locale.getDefault();
-			String message = String.format(locale, "%1$s.",
-				cons.getMessageAlarmCopy());
+			String message = cons.getMessageAlarmCopy();
 
 			this.undo(copy, position+1, Undo.Type.COPY);
 			this.snackbar(message);
 		}
-
-		this.setWasAddedWithFloatingActionButton(false);
 
 		return result;
 	}
@@ -279,25 +281,15 @@ public class NacCardAdapter
 	public int deleteAlarm(int position)
 	{
 		Context context = this.getContext();
-		NacSharedConstants cons = this.getSharedConstants();
-		NacDatabase db = new NacDatabase(context);
 		NacAlarm alarm = this.getAlarm(position);
-		int id = alarm.getId();
-		Locale locale = Locale.getDefault();
-		String message = String.format(locale, "%1$s.",
-			cons.getMessageAlarmDelete());
+		NacSharedConstants cons = this.getSharedConstants();
+		String message = cons.getMessageAlarmDelete();
 
-		NacScheduler.cancel(context, alarm);
-		this.setWasAddedWithFloatingActionButton(false);
-		this.getSharedPreferences().editSnoozeCount(id, 0);
-		this.getAlarms().remove(position);
+		NacTaskWorker.deleteAlarm(context, alarm);
+		this.notifyDeleteAlarm(position);
 		this.updateNotification();
-		notifyItemRemoved(position);
-		db.delete(alarm);
-		db.close();
 		this.undo(alarm, position, Undo.Type.DELETE);
 		this.snackbar(message);
-
 		return 0;
 	}
 
@@ -503,6 +495,20 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * @return The index where the sorted alarm should be inserted.
+	 */
+	private int getSortInsertIndex(NacAlarm alarm, int index)
+	{
+		if (alarm == null)
+		{
+			return -1;
+		}
+
+		int whereIndex = this.whereToInsertAlarm(alarm);
+		return (whereIndex > index) ? whereIndex-1 : whereIndex;
+	}
+
+	/**
 	 * @return The touch helper.
 	 */
 	private NacCardTouchHelper getTouchHelper()
@@ -542,14 +548,6 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * Check if there is a use NFC change listener.
-	 */
-	public boolean hasUseNfcChangeListener()
-	{
-		return this.getOnUseNfcChangeListener() != null;
-	}
-
-	/**
 	 * Highlight an alarm card.
 	 */
 	public void highlight(NacAlarm alarm)
@@ -562,20 +560,45 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * Insert the alarm at the given location.
+	 * @return True if is a valid sort index, and False otherwise.
 	 */
-	public int insertAlarm(NacAlarm alarm, int index)
+	private boolean isValidSortIndex(int index, int insertIndex)
 	{
-		if (index >= 0)
-		{
-			List<NacAlarm> alarmList = this.getAlarms();
+		return (index >= 0) && (index != insertIndex);
+	}
 
-			alarmList.add(index, alarm);
-			notifyItemInserted(index);
-			return index;
+	/**
+	 * Delete an alarm and notify any registered observers.
+	 */
+	public int notifyDeleteAlarm(int index)
+	{
+		if (index < 0)
+		{
+			return -1;
 		}
 
-		return -1;
+		List<NacAlarm> alarmList = this.getAlarms();
+
+		alarmList.remove(index);
+		notifyItemRemoved(index);
+		return index;
+	}
+
+	/**
+	 * Insert an alarm and notify any registered observers.
+	 */
+	public int notifyInsertAlarm(NacAlarm alarm, int index)
+	{
+		if ((alarm == null) || (index < 0))
+		{
+			return -1;
+		}
+
+		List<NacAlarm> alarmList = this.getAlarms();
+
+		alarmList.add(index, alarm);
+		notifyItemInserted(index);
+		return index;
 	}
 
 	/**
@@ -587,14 +610,12 @@ public class NacCardAdapter
 	public void onAlarmChange(NacAlarm alarm)
 	{
 		Context context = this.getContext();
-		NacDatabase db = new NacDatabase(context);
 
 		if (alarm.wasChanged())
 		{
-			if (alarm.wasUseNfcChanged() && this.hasUseNfcChangeListener())
+			if (alarm.wasUseNfcChanged())
 			{
-				this.getOnUseNfcChangeListener().onUseNfcChange(alarm);
-				alarm.resetChangeTracker();
+				this.callOnUseNfcChangeListener(alarm);
 			}
 			else if (!alarm.isChangeTrackerLatched())
 			{
@@ -603,11 +624,8 @@ public class NacCardAdapter
 			}
 		}
 
-		NacScheduler.update(context, alarm);
-		this.setWasAddedWithFloatingActionButton(false);
+		NacTaskWorker.updateAlarm(context, alarm);
 		this.updateNotification();
-		db.update(alarm);
-		db.close();
 	}
 
 	/**
@@ -639,28 +657,20 @@ public class NacCardAdapter
 	/**
 	 * Called when the alarm card is collapsed.
 	 */
-	public void onCardCollapsed(NacCardHolder holder)
+	public void onCardCollapsed(NacCardHolder holder, NacAlarm alarm)
 	{
-		NacUtility.printf("onCardCollapsed! Alarm will be UNlatched (most likely)");
-		NacAlarm alarm = holder.getAlarm();
-
-		if (alarm.isChangeTrackerLatched())
+		if (alarm.wasChanged())
 		{
 			this.showAlarmChange(alarm);
 			this.sortHighlight(alarm);
-			NacUtility.printf("onCardCollapsed! Unlatching alarm");
-			alarm.unlatchChangeTracker();
 		}
 	}
 
 	/**
 	 * Called when the alarm card is expanded.
 	 */
-	public void onCardExpanded(NacCardHolder holder)
+	public void onCardExpanded(NacCardHolder holder, NacAlarm alarm)
 	{
-		NacUtility.printf("onCardExpanded! Alarm will be latched");
-		NacAlarm alarm = holder.getAlarm();
-		alarm.latchChangeTracker();
 	}
 
 	/**
@@ -835,39 +845,6 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * Remove the alarm at the given index.
-	 */
-	public int removeAlarm(int index)
-	{
-		if (index >= 0)
-		{
-			List<NacAlarm> alarmList = this.getAlarms();
-
-			alarmList.remove(index);
-			notifyItemRemoved(index);
-		}
-
-		return -1;
-	}
-
-	/**
-	 * Replace the alarm at the given index.
-	 */
-	public int replaceAlarm(NacAlarm alarm)
-	{
-		int index = this.findAlarm(alarm);
-		if (index < 0)
-		{
-			return -1;
-		}
-
-		List<NacAlarm> alarmList = this.getAlarms();
-		alarmList.set(index, alarm);
-		notifyItemChanged(index);
-		return index;
-	}
-
-	/**
 	 * Restore a previously deleted alarm.
 	 * 
 	 * @param  alarm  The alarm to restore.
@@ -887,21 +864,6 @@ public class NacCardAdapter
 			this.undo(alarm, position, Undo.Type.RESTORE);
 			this.snackbar(message);
 		}
-
-		this.setWasAddedWithFloatingActionButton(false);
-	}
-
-	/**
-	 * Save alarms to the database.
-	 */
-	public void saveAlarms()
-	{
-		Context context = this.getContext();
-		NacDatabase db = new NacDatabase(context);
-		List<NacAlarm> alarms = this.getAlarms();
-
-		db.update(alarms);
-		db.close();
 	}
 
 	/**
@@ -918,6 +880,15 @@ public class NacCardAdapter
 	public void setWasAddedWithFloatingActionButton(boolean added)
 	{
 		this.mWasAddedWithFloatingActionButton = added;
+	}
+
+	/**
+	 * @return True if the alarm should be sorted, and False otherwise.
+	 */
+	private boolean shouldSortAlarm(NacAlarm alarm)
+	{
+		NacCardHolder holder = this.getCardHolder(alarm);
+		return (holder != null) && holder.isCollapsed() && alarm.wasChanged();
 	}
 
 	/**
@@ -1048,36 +1019,7 @@ public class NacCardAdapter
 	public void sort()
 	{
 		this.mAlarmList = this.getSortedAlarms();
-
 		notifyDataSetChanged();
-	}
-
-	/**
-	 * Sort an alarm into the alarm list.
-	 */
-	public int sortAlarm(NacAlarm alarm, int index)
-	{
-		if (alarm == null)
-		{
-			return -1;
-		}
-
-		int whereIndex = this.whereToPutAlarm(alarm);
-		int insertIndex = whereIndex;
-
-		if (index < 0)
-		{
-			insertIndex = -1;
-		}
-		else if (index != whereIndex)
-		{
-			insertIndex = (whereIndex > index) ? whereIndex-1 : whereIndex;
-
-			this.removeAlarm(index);
-			this.insertAlarm(alarm, insertIndex);
-		}
-
-		return insertIndex;
 	}
 
 	/**
@@ -1085,8 +1027,21 @@ public class NacCardAdapter
 	 */
 	public int sortAlarm(NacAlarm alarm)
 	{
-		int index = this.findAlarm(alarm);
-		return this.sortAlarm(alarm, index);
+		if (!this.shouldSortAlarm(alarm))
+		{
+			return -1;
+		}
+
+		int findIndex = this.findAlarm(alarm);
+		int insertIndex = this.getSortInsertIndex(alarm, findIndex);
+
+		if (this.isValidSortIndex(findIndex, insertIndex))
+		{
+			this.notifyDeleteAlarm(findIndex);
+			this.notifyInsertAlarm(alarm, insertIndex);
+		}
+
+		return insertIndex;
 	}
 
 	/**
@@ -1094,50 +1049,17 @@ public class NacCardAdapter
 	 */
 	public void sortHighlight(NacAlarm alarm)
 	{
-		NacCardHolder holder = this.getCardHolder(alarm);
+		int sortIndex = this.sortAlarm(alarm);
 
-		if (holder == null)
+		//if (alarm.isChangeTrackerLatched() && (findIndex == sortIndex))
+		//{
+		//}
+		//else if (sortIndex >= 0)
+		if (sortIndex >= 0)
 		{
-			return;
+			this.getRecyclerView().scrollToPosition(sortIndex);
+			this.highlight(alarm);
 		}
-		else if (holder.isExpanded())
-		{
-			//alarm.latchChangeTracker();
-		}
-		else
-		{
-			int findIndex = this.findAlarm(alarm);
-			int sortIndex = this.sortAlarm(alarm, findIndex);
-
-			if (alarm.isChangeTrackerLatched() && (findIndex == sortIndex))
-			{
-			}
-			else if (sortIndex >= 0)
-			{
-				this.getRecyclerView().scrollToPosition(sortIndex);
-				this.highlight(alarm);
-			}
-		}
-	}
-
-	/**
-	 * Insert the alarm into the sorted list.
-	 */
-	private int sortInsertAlarm(NacAlarm alarm)
-	{
-		int index = this.whereToPutAlarm(alarm);
-
-		return this.insertAlarm(alarm, index);
-	}
-
-	/**
-	 * @see sortRemoveAlarm
-	 */
-	private int sortRemoveAlarm(NacAlarm alarm)
-	{
-		int index = this.findAlarm(alarm);
-
-		return this.removeAlarm(index);
 	}
 
 	/**
@@ -1176,7 +1098,7 @@ public class NacCardAdapter
 	 * @return Where to insert the alarm in the list (ignoring it's current
 	 *         position if it already exists in the list.
 	 */
-	private int whereToPutAlarm(NacAlarm alarm)
+	private int whereToInsertAlarm(NacAlarm alarm)
 	{
 		List<NacAlarm> alarmList = this.getAlarms();
 		Calendar next = NacCalendar.getNext(alarm);

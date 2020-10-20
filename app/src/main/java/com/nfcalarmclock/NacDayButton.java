@@ -215,7 +215,6 @@ public class NacDayButton
 		boolean isChecked)
 	{
 		NacDayButton.OnDayChangedListener listener = this.getOnDayChangedListener();
-		//NacUtility.printf("Day button checked : %s (%b)", this.getButton().getText(), isChecked);
 		if (listener != null)
 		{
 			listener.onDayChanged(this);

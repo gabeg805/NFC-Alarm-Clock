@@ -10,7 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 /**
  * A button that consists of an image to the left, and text to the right of it.
@@ -94,11 +96,29 @@ public class NacDayOfWeek
 	/**
 	 * @return The day button given a particular day.
 	 */
-	private NacDayButton getDayButton(NacCalendar.Day day)
+	public NacDayButton getDayButton(NacCalendar.Day day)
 	{
 		LinearLayout view = this.getDayOfWeekView();
 		int id = this.dayToId(day);
 		return (NacDayButton) view.findViewById(id);
+	}
+
+	/**
+	 * @return A list of all the day buttons.
+	 */
+	public List<NacDayButton> getDayButtons()
+	{
+		LinearLayout view = this.getDayOfWeekView();
+		int count = view.getChildCount();
+		List<NacDayButton> buttons = new ArrayList<>();
+
+		for (int i=0; i < count; i++)
+		{
+			NacDayButton b = (NacDayButton) view.getChildAt(i);
+			buttons.add(b);
+		}
+
+		return buttons;
 	}
 
 	/**

@@ -565,6 +565,18 @@ public class NacDatabase
 	/**
 	 * @see read
 	 */
+	public static List<NacAlarm> read(Context context)
+	{
+		NacDatabase db = new NacDatabase(context);
+		List<NacAlarm> alarms = db.read();
+
+		db.close();
+		return alarms;
+	}
+
+	/**
+	 * @see read
+	 */
 	public List<NacAlarm> read()
 	{
 		SQLiteDatabase db = this.getWritableDatabase();

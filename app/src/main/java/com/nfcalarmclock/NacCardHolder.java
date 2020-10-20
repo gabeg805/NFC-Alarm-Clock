@@ -44,8 +44,7 @@ public class NacCardHolder
 		NacDialog.OnDismissListener,
 		NacDayOfWeek.OnWeekChangedListener,
 		SeekBar.OnSeekBarChangeListener,
-		NacHeightAnimator.OnViewCollapseListener,
-		NacHeightAnimator.OnViewExpandListener
+		NacHeightAnimator.OnAnimateHeightListener
 {
 
 	/**
@@ -53,7 +52,7 @@ public class NacCardHolder
 	 */
 	public interface OnCardCollapsedListener
 	{
-		public void onCardCollapsed(NacCardHolder holder);
+		public void onCardCollapsed(NacCardHolder holder, NacAlarm alarm);
 	}
 
 	/**
@@ -61,7 +60,7 @@ public class NacCardHolder
 	 */
 	public interface OnCardExpandedListener
 	{
-		public void onCardExpanded(NacCardHolder holder);
+		public void onCardExpanded(NacCardHolder holder, NacAlarm alarm);
 	}
 
 	/**
@@ -330,9 +329,11 @@ public class NacCardHolder
 	private void callOnCardCollapsedListener()
 	{
 		OnCardCollapsedListener listener = this.getOnCardCollapsedListener();
+		NacAlarm alarm = this.getAlarm();
+
 		if ((listener != null) && this.isCollapsed())
 		{
-			listener.onCardCollapsed(this);
+			listener.onCardCollapsed(this, alarm);
 		}
 	}
 
@@ -342,9 +343,11 @@ public class NacCardHolder
 	private void callOnCardExpandedListener()
 	{
 		OnCardExpandedListener listener = this.getOnCardExpandedListener();
+		NacAlarm alarm = this.getAlarm();
+
 		if ((listener != null) && this.isExpanded())
 		{
-			listener.onCardExpanded(this);
+			listener.onCardExpanded(this, alarm);
 		}
 	}
 
@@ -1086,6 +1089,7 @@ public class NacCardHolder
 		this.setSwitchColor();
 		this.setSummaryDaysColor();
 		this.setSummaryNameColor();
+		this.setDayOfWeekRippleColor();
 		this.setRepeatButtonRippleColor();
 		this.setVibrateButtonRippleColor();
 		this.setNfcButtonRippleColor();
@@ -1112,14 +1116,11 @@ public class NacCardHolder
 			(CompoundButton.OnCheckedChangeListener) listener;
 		SeekBar.OnSeekBarChangeListener seek =
 			(SeekBar.OnSeekBarChangeListener) listener;
-		NacHeightAnimator.OnViewCollapseListener collapse =
-			(NacHeightAnimator.OnViewCollapseListener) listener;
-		NacHeightAnimator.OnViewExpandListener expand =
-			(NacHeightAnimator.OnViewExpandListener) listener;
+		NacHeightAnimator.OnAnimateHeightListener height =
+			(NacHeightAnimator.OnAnimateHeightListener) listener;
 
 		this.hideSwipeViews();
-		this.mCardAnimator.setOnViewCollapseListener(collapse);
-		this.mCardAnimator.setOnViewExpandListener(expand);
+		this.mCardAnimator.setOnAnimateHeightListener(height);
 		this.getHeaderView().setOnClickListener(click);
 		this.getSummaryView().setOnClickListener(click);
 		this.getTimeParentView().setOnClickListener(click);
@@ -1256,14 +1257,15 @@ public class NacCardHolder
 	 * Used to set view visibility, animate the background color, and call the
 	 * card collapsed listener.
 	 */
-	public void onViewCollapse(NacHeightAnimator animator)
+	public void onAnimateCollapse(NacHeightAnimator animator)
 	{
 		if (animator.isLastUpdate())
 		{
 			this.doCollapse();
 			this.animateCollapsedBackgroundColor();
 			this.callOnCardCollapsedListener();
-			//this.getAlarm().unlatchChangeTracker();
+			this.getAlarm().unlatchChangeTracker();
+			this.getAlarm().resetChangeTracker();
 		}
 	}
 
@@ -1273,14 +1275,13 @@ public class NacCardHolder
 	 * Used to set view visibility, animate the background color, and call the
 	 * card collapsed listener.
 	 */
-	public void onViewExpand(NacHeightAnimator animator)
+	public void onAnimateExpand(NacHeightAnimator animator)
 	{
 		if (animator.isFirstUpdate())
 		{
-			NacUtility.printf("onViewExpanded! First update!");
 			this.doExpand();
 			this.animateExpandedBackgroundColor();
-			//this.getAlarm().latchChangeTracker();
+			this.getAlarm().latchChangeTracker();
 			this.callOnCardExpandedListener();
 		}
 	}
@@ -1671,6 +1672,21 @@ public class NacCardHolder
 
 		dow.setStartWeekOn(shared.getStartWeekOn());
 		dow.setDays(days);
+	}
+
+	/**
+	 * Set the ripple color for each day in the day of week view.
+	 */
+	public void setDayOfWeekRippleColor()
+	{
+		ColorStateList ripple = this.createThemeColorStateList();
+		NacDayOfWeek dow = this.getDayOfWeek();
+
+		for (NacDayButton day : dow.getDayButtons())
+		{
+			MaterialButton button = day.getButton();
+			button.setRippleColor(ripple);
+		}
 	}
 
 	/**

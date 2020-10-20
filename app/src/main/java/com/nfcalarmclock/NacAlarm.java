@@ -1139,7 +1139,6 @@ public class NacAlarm
 	 */
 	public void latchChangeTracker()
 	{
-		NacUtility.printf("Something latched the change tracker T_T!");
 		this.mLatch = true;
 	}
 

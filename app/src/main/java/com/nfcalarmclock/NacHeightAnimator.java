@@ -14,19 +14,12 @@ public class NacHeightAnimator
 {
 
 	/**
-	 * Listener for when the view is collapsing.
+	 * Listener for when the view's height is changing.
 	 */
-	public interface OnViewCollapseListener
+	public interface OnAnimateHeightListener
 	{
-		public void onViewCollapse(NacHeightAnimator animator);
-	}
-
-	/**
-	 * Listener for when the view is expanding.
-	 */
-	public interface OnViewExpandListener
-	{
-		public void onViewExpand(NacHeightAnimator animator);
+		public void onAnimateCollapse(NacHeightAnimator animator);
+		public void onAnimateExpand(NacHeightAnimator animator);
 	}
 
 	/**
@@ -45,14 +38,14 @@ public class NacHeightAnimator
 	protected int mToHeight;
 
 	/**
-	 * Listener for when the view is collapsing.
+	 * Count the number of times the animation has updated.
 	 */
-	protected OnViewCollapseListener mOnViewCollapseListener;
+	protected int mUpdateCounter;
 
 	/**
-	 * Listener for when the view is expanding.
+	 * Listener for when the view's height is changing.
 	 */
-	protected OnViewExpandListener mOnViewExpandListener;
+	protected OnAnimateHeightListener mOnAnimateHeightListener;
 
 	/**
 	 */
@@ -68,6 +61,7 @@ public class NacHeightAnimator
 		this.mView = view;
 		this.mFromHeight = fromHeight;
 		this.mToHeight = toHeight;
+		this.mUpdateCounter = 0;
 
 		addUpdateListener(this);
 	}
@@ -75,24 +69,24 @@ public class NacHeightAnimator
 	/**
 	 * Call the listener for when the view is collapsing.
 	 */
-	public void callOnViewCollapseListener()
+	public void callOnAnimateCollapseListener()
 	{
-		OnViewCollapseListener listener = this.getOnViewCollapseListener();
+		OnAnimateHeightListener listener = this.getOnAnimateHeightListener();
 		if (listener != null)
 		{
-			listener.onViewCollapse(this);
+			listener.onAnimateCollapse(this);
 		}
 	}
 
 	/**
 	 * Call the listener for when the view is expanding.
 	 */
-	public void callOnViewExpandListener()
+	public void callOnAnimateExpandListener()
 	{
-		OnViewExpandListener listener = this.getOnViewExpandListener();
+		OnAnimateHeightListener listener = this.getOnAnimateHeightListener();
 		if (listener != null)
 		{
-			listener.onViewExpand(this);
+			listener.onAnimateExpand(this);
 		}
 	}
 
@@ -115,17 +109,9 @@ public class NacHeightAnimator
 	/**
 	 * @return The listener for when the view is collapsing.
 	 */
-	protected OnViewCollapseListener getOnViewCollapseListener()
+	protected OnAnimateHeightListener getOnAnimateHeightListener()
 	{
-		return this.mOnViewCollapseListener;
-	}
-
-	/**
-	 * @return The listener for when the view is expanding.
-	 */
-	protected OnViewExpandListener getOnViewExpandListener()
-	{
-		return this.mOnViewExpandListener;
+		return this.mOnAnimateHeightListener;
 	}
 
 	/**
@@ -134,6 +120,14 @@ public class NacHeightAnimator
 	public int getToHeight()
 	{
 		return this.mToHeight;
+	}
+
+	/**
+	 * @return The update counter.
+	 */
+	public int getUpdateCounter()
+	{
+		return this.mUpdateCounter;
 	}
 
 	/**
@@ -171,7 +165,7 @@ public class NacHeightAnimator
 	{
 		int fromHeight = this.getFromHeight();
 		int height = this.getAnimatedHeight();
-		return fromHeight == height;
+		return (fromHeight == height) && (this.getUpdateCounter() == 0);
 	}
 
 	/**
@@ -181,29 +175,30 @@ public class NacHeightAnimator
 	{
 		int toHeight = this.getToHeight();
 		int height = this.getAnimatedHeight();
-		return toHeight == height;
+		return (toHeight == height);
 	}
 
 	/**
 	 * Update the height of the view.
-	 * 
-	 * TODO The first iteration gets called twice for some reason?
 	 */
 	@Override
 	public void onAnimationUpdate(ValueAnimator animation)
 	{
 		View view = this.getView();
 		view.getLayoutParams().height = this.getAnimatedHeight();
+
 		view.requestLayout();
 
 		if (this.isCollapsing())
 		{
-			this.callOnViewCollapseListener();
+			this.callOnAnimateCollapseListener();
 		}
 		else if (this.isExpanding())
 		{
-			this.callOnViewExpandListener();
+			this.callOnAnimateExpandListener();
 		}
+
+		this.mUpdateCounter += 1;
 	}
 
 	/**
@@ -218,19 +213,21 @@ public class NacHeightAnimator
 	}
 
 	/**
-	 * Set the listener for when the view is collapsing.
+	 * Set the listener for when the view's height is changing.
 	 */
-	public void setOnViewCollapseListener(OnViewCollapseListener listener)
+	public void setOnAnimateHeightListener(OnAnimateHeightListener listener)
 	{
-		this.mOnViewCollapseListener = listener;
+		this.mOnAnimateHeightListener = listener;
 	}
 
 	/**
-	 * Set the listener for when the view is expanding.
+	 * Start the animation.
 	 */
-	public void setOnViewExpandListener(OnViewExpandListener listener)
+	@Override
+	public void start()
 	{
-		this.mOnViewExpandListener = listener;
+		this.mUpdateCounter = 0;
+		super.start();
 	}
 
 }

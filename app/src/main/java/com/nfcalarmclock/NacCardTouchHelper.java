@@ -30,11 +30,6 @@ public class NacCardTouchHelper
 		 */
 		public void onItemDelete(int pos);
 
-		///**
-		// * Called when an alarm card should be moved.
-		// */
-		//public void onItemMove(int from, int to);
-
 	}
 
 	/**
