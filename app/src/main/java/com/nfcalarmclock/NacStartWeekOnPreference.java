@@ -5,9 +5,12 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import androidx.preference.Preference;
+import java.util.List;
 
 /**
  * Preference that prompts the user what day to start the week on.
@@ -50,22 +53,83 @@ public class NacStartWeekOnPreference
 	}
 
 	/**
+	 * @return The index of the radio button that is currently checked.
+	 */
+	private int getCheckedIndex(View root)
+	{
+		RadioGroup group = this.getRadioGroup(root);
+		int count = group.getChildCount();
+
+		for (int i=0; i < count; i++)
+		{
+			RadioButton button = (RadioButton) group.getChildAt(i);
+			if (button.isChecked())
+			{
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
+	/**
+	 * @return The radio button at the given index.
+	 */
+	public RadioButton getRadioButton(View root, int index)
+	{
+		RadioGroup group = this.getRadioGroup(root);
+		return (RadioButton) group.getChildAt(index);
+	}
+
+	/**
+	 * @return The radio group.
+	 */
+	public RadioGroup getRadioGroup(View root)
+	{
+		return root.findViewById(R.id.start_week_on);
+	}
+
+	/**
 	 */
 	@Override
 	public CharSequence getSummary()
 	{
 		Context context = getContext();
 		NacSharedConstants cons = new NacSharedConstants(context);
+		List<String> week = cons.getDaysOfWeek();
+		int index = this.mValue;
 
-		switch (this.mValue)
+		switch (index)
 		{
+			default:
+				index = 0;
 			//case 6:
 			//	return "Saturday";
 			case 1:
-				return cons.getMonday();
 			case 0:
-			default:
-				return cons.getSunday();
+				return week.get(index);
+		}
+	}
+
+	/**
+	 * Inflate the radio buttons.
+	 */
+	private void inflateRadioButtons(View root, NacSharedConstants cons)
+	{
+		Context context = getContext();
+		RadioGroup group = this.getRadioGroup(root);
+		List<String> week = cons.getDaysOfWeek();
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(
+			Context.LAYOUT_INFLATER_SERVICE);
+
+		for (int i=0; i < 2; i++)
+		{
+			View view = inflater.inflate(R.layout.radio_button, group, true);
+			RadioButton button = view.findViewById(R.id.radio_button);
+			String day = week.get(i);
+
+			button.setId(button.generateViewId());
+			button.setText(day);
 		}
 	}
 
@@ -76,10 +140,12 @@ public class NacStartWeekOnPreference
 	{
 		Context context = getContext();
 		NacSharedConstants cons = new NacSharedConstants(context);
+		View root = dialog.getRoot();
 
 		builder.setTitle(cons.getStartWeekOnTitle());
 		dialog.setPositiveButton(cons.getActionOk());
 		dialog.setNegativeButton(cons.getActionCancel());
+		this.inflateRadioButtons(root, cons);
 	}
 
 	/**
@@ -89,22 +155,7 @@ public class NacStartWeekOnPreference
 	public boolean onDismissDialog(NacDialog dialog)
 	{
 		View root = dialog.getRoot();
-		RadioGroup days = (RadioGroup) root.findViewById(R.id.days);
-		int checkedId = days.getCheckedRadioButtonId();
-
-		switch (checkedId)
-		{
-			//case R.id.saturday:
-			//	this.mValue = 6;
-			//	break;
-			case R.id.monday:
-				this.mValue = 1;
-				break;
-			case R.id.sunday:
-			default:
-				this.mValue = 0;
-				break;
-		}
+		this.mValue = this.getCheckedIndex(root);
 
 		persistInt(this.mValue);
 		notifyChanged();
@@ -162,22 +213,19 @@ public class NacStartWeekOnPreference
 	 */
 	public void onShowDialog(NacDialog dialog, View root)
 	{
-		RadioGroup days = (RadioGroup) root.findViewById(R.id.days);
-
-		switch (this.mValue)
-		{
-			//case 6:
-			//	break;
-			case 1:
-				days.check(R.id.monday);
-				break;
-			case 0:
-			default:
-				days.check(R.id.sunday);
-				break;
-		}
-
+		this.setCheckedRadioButton(root);
 		dialog.scale(0.6, 0.7, false, true);
+	}
+
+	/**
+	 * Set checked radio button.
+	 */
+	protected void setCheckedRadioButton(View root)
+	{
+		int index = this.mValue;
+		RadioButton button = this.getRadioButton(root, index);
+
+		button.setChecked(true);
 	}
 
 }

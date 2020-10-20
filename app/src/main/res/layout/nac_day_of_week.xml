@@ -8,7 +8,7 @@
 		android:layout_height="@dimen/touch"
 		android:layout_weight="1"
 		android:gravity="center"
-		android:text="@string/dow_sun"
+		android:text=""
 		/>
 
 	<com.nfcalarmclock.NacDayButton
@@ -17,7 +17,7 @@
 		android:layout_height="@dimen/touch"
 		android:layout_weight="1"
 		android:gravity="center"
-		android:text="@string/dow_mon"
+		android:text=""
 		/>
 
 	<com.nfcalarmclock.NacDayButton
@@ -26,7 +26,7 @@
 		android:layout_height="@dimen/touch"
 		android:layout_weight="1"
 		android:gravity="center"
-		android:text="@string/dow_tue"
+		android:text=""
 		/>
 
 	<com.nfcalarmclock.NacDayButton
@@ -35,7 +35,7 @@
 		android:layout_height="@dimen/touch"
 		android:layout_weight="1"
 		android:gravity="center"
-		android:text="@string/dow_wed"
+		android:text=""
 		/>
 
 	<com.nfcalarmclock.NacDayButton
@@ -44,7 +44,7 @@
 		android:layout_height="@dimen/touch"
 		android:layout_weight="1"
 		android:gravity="center"
-		android:text="@string/dow_thu"
+		android:text=""
 		/>
 
 	<com.nfcalarmclock.NacDayButton
@@ -53,7 +53,7 @@
 		android:layout_height="@dimen/touch"
 		android:layout_weight="1"
 		android:gravity="center"
-		android:text="@string/dow_fri"
+		android:text=""
 		/>
 
 	<com.nfcalarmclock.NacDayButton
@@ -62,7 +62,7 @@
 		android:layout_height="@dimen/touch"
 		android:layout_weight="1"
 		android:gravity="center"
-		android:text="@string/dow_sat"
+		android:text=""
 		/>
 
 </merge>

@@ -10,27 +10,9 @@
 
 	<RadioGroup
 		style="@style/RadioGroup"
-		android:id="@+id/days"
+		android:id="@+id/start_week_on"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
-
-		<RadioButton
-			style="@style/RadioButton"
-			android:id="@+id/monday"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:text="@string/dow_monday"
-			/>
-
-		<RadioButton
-			style="@style/RadioButton"
-			android:id="@+id/sunday"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:text="@string/dow_sunday"
-			android:checked="true"
-			/>
-
 	</RadioGroup>
 
 </LinearLayout>

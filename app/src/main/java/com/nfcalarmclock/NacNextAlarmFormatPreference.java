@@ -88,17 +88,19 @@ public class NacNextAlarmFormatPreference
 	{
 		View root = dialog.getRoot();
 		RadioGroup days = (RadioGroup) root.findViewById(R.id.formats);
-		int checkedId = days.getCheckedRadioButtonId();
+		int id = days.getCheckedRadioButtonId();
 
-		switch (checkedId)
+		if (id == R.id.nexton)
 		{
-			case R.id.nexton:
-				this.mValue = 1;
-				break;
-			case R.id.nextin:
-			default:
-				this.mValue = 0;
-				break;
+			this.mValue = 1;
+		}
+		else if (id == R.id.nextin)
+		{
+			this.mValue = 0;
+		}
+		else
+		{
+			this.mValue = 0;
 		}
 
 		persistInt(this.mValue);

@@ -2,8 +2,6 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.res.Resources;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.EnumSet;
 import java.util.List;
@@ -139,7 +137,7 @@ public class NacSharedConstants
 	 */
 	public String getActiveNotification()
 	{
-		return this.getString(R.string.active_alarm_plural);
+		return this.getString(R.string.title_active_alarm);
 	}
 
 	/**
@@ -163,13 +161,7 @@ public class NacSharedConstants
 	 */
 	public List<String> getAudioSources()
 	{
-		List<String> sources = new ArrayList<>();
-		sources.add(this.getString(R.string.audio_source_alarm));
-		sources.add(this.getString(R.string.audio_source_media));
-		sources.add(this.getString(R.string.audio_source_notification));
-		sources.add(this.getString(R.string.audio_source_ringtone));
-		sources.add(this.getString(R.string.audio_source_system));
-		return sources;
+		return this.getStringList(R.array.audio_sources);
 	}
 
 	/**
@@ -185,15 +177,7 @@ public class NacSharedConstants
 	 */
 	public List<String> getDaysOfWeek()
 	{
-		String sun = this.getString(R.string.dow_sunday);
-		String mon = this.getString(R.string.dow_monday);
-		String tue = this.getString(R.string.dow_tuesday);
-		String wed = this.getString(R.string.dow_wednesday);
-		String thu = this.getString(R.string.dow_thursday);
-		String fri = this.getString(R.string.dow_friday);
-		String sat = this.getString(R.string.dow_saturday);
-
-		return Arrays.asList(sun, mon, tue, wed, thu, fri, sat);
+		return this.getStringList(R.array.days_of_week);
 	}
 
 	/**
@@ -201,15 +185,14 @@ public class NacSharedConstants
 	 */
 	public List<String> getDaysOfWeekAbbr()
 	{
-		String sun = this.getString(R.string.dow_sun);
-		String mon = this.getString(R.string.dow_mon);
-		String tue = this.getString(R.string.dow_tue);
-		String wed = this.getString(R.string.dow_wed);
-		String thu = this.getString(R.string.dow_thu);
-		String fri = this.getString(R.string.dow_fri);
-		String sat = this.getString(R.string.dow_sat);
+		List<String> dow = this.getDaysOfWeek();
 
-		return Arrays.asList(sun, mon, tue, wed, thu, fri, sat);
+		for (int i=0; i < dow.size(); i++)
+		{
+			dow.set(i, dow.get(i).substring(0, 3));
+		}
+
+		return dow;
 	}
 
 	/**
@@ -529,15 +512,7 @@ public class NacSharedConstants
 	 */
 	public String getMissedNotification()
 	{
-		return this.getString(R.string.missed_alarm_plural);
-	}
-
-	/**
-	 * @return Monday.
-	 */
-	public String getMonday()
-	{
-		return this.getString(R.string.dow_monday);
+		return this.getString(R.string.title_missed_alarm);
 	}
 
 	/**
@@ -677,14 +652,6 @@ public class NacSharedConstants
 	public String getStateUnknown()
 	{
 		return this.getString(R.string.state_unknown);
-	}
-
-	/**
-	 * @return Sunday.
-	 */
-	public String getSunday()
-	{
-		return this.getString(R.string.dow_sunday);
 	}
 
 	/**
@@ -836,7 +803,7 @@ public class NacSharedConstants
 	 */
 	public String getUpcomingNotification()
 	{
-		return this.getString(R.string.upcoming_alarm_plural);
+		return this.getString(R.string.title_upcoming_alarm);
 	}
 
 	/**

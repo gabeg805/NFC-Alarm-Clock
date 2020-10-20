@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string-array name="audio_sources">
+		<item>Alarm</item>
+		<item>Media</item>
+		<item>Notification</item>
+		<item>Ringtone</item>
+		<item>System</item>
+	</string-array>
+
+	<string-array name="days_of_week">
+		<item>Sunday</item>
+		<item>Monday</item>
+		<item>Tuesday</item>
+		<item>Wednesday</item>
+		<item>Thursday</item>
+		<item>Friday</item>
+		<item>Saturday</item>
+	</string-array>
+
+</resources>

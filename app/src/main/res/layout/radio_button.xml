@@ -2,10 +2,8 @@
 <RadioButton
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	style="@style/RadioButton"
-	android:id="@+id/radio_button_ringtone"
+	android:id="@+id/radio_button"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:paddingTop="@dimen/normal"
-	android:paddingBottom="@dimen/normal"
 	android:text=""
 	/>

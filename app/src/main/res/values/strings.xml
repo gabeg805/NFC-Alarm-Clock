@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
 	<!-- App -->
@@ -93,6 +94,9 @@
 	<string name="title_next_alarm_format">Select a format</string>
 	<string name="title_speak_frequency">Select speak frequency</string>
 	<string name="title_folder_selected">You selected a folder</string>
+	<string name="title_active_alarm">Active alarms</string>
+	<string name="title_missed_alarm">Missed alarms</string>
+	<string name="title_upcoming_alarm">Upcoming alarms</string>
 
 
 
@@ -108,35 +112,12 @@
 
 
 
-	<!-- Day of weeks -->
-	<string name="dow_sun">Sun</string>
-	<string name="dow_mon">Mon</string>
-	<string name="dow_tue">Tue</string>
-	<string name="dow_wed">Wed</string>
-	<string name="dow_thu">Thu</string>
-	<string name="dow_fri">Fri</string>
-	<string name="dow_sat">Sat</string>
-	<string name="dow_sunday">Sunday</string>
-	<string name="dow_monday">Monday</string>
-	<string name="dow_tuesday">Tuesday</string>
-	<string name="dow_wednesday">Wednesday</string>
-	<string name="dow_thursday">Thursday</string>
-	<string name="dow_friday">Friday</string>
-	<string name="dow_saturday">Saturday</string>
+	<!-- Summary day names -->
 	<string name="dow_everyday">Everyday</string>
 	<string name="dow_weekdays">Weekdays</string>
 	<string name="dow_weekend">Weekend</string>
 	<string name="dow_today">Today</string>
 	<string name="dow_tomorrow">Tomorrow</string>
-
-
-
-	<!-- Audio sources -->
-	<string name="audio_source_alarm">Alarm</string>
-	<string name="audio_source_media">Media</string>
-	<string name="audio_source_notification">Notification</string>
-	<string name="audio_source_ringtone">Ringtone</string>
-	<string name="audio_source_system">System</string>
 
 
 
@@ -152,6 +133,7 @@
 
 
 	<!-- Content descriptions -->
+	<string name="cd_ic_floating_action_button">Click to add a new alarm.</string>
 	<string name="cd_ic_volume">Slide to change the volume of the alarm.</string>
 	<string name="cd_ic_color_example">Example of the selected color.</string>
 	<string name="cd_ic_file_entry">Type of entry being displayed, such as a file or directory.</string>
@@ -161,60 +143,39 @@
 
 
 	<!-- Plurals -->
-	<string name="alarm_singular">alarm</string>
-	<string name="alarm_plural">alarms</string>
 	<plurals name="alarm">
-		<item quantity="one">@string/alarm_singular</item>
-		<item quantity="other">@string/alarm_plural</item>
+		<item quantity="one">alarm</item>
+		<item quantity="other">alarms</item>
 	</plurals>
 
-	<string name="upcoming_alarm_singular">Upcoming alarm</string>
-	<string name="upcoming_alarm_plural">Upcoming alarms</string>
-	<plurals name="upcoming_alarm">
-		<item quantity="one">@string/upcoming_alarm_singular</item>
-		<item quantity="other">@string/upcoming_alarm_plural</item>
-	</plurals>
-
-	<string name="missed_alarm_singular">Missed alarm</string>
-	<string name="missed_alarm_plural">Missed alarms</string>
 	<plurals name="missed_alarm">
-		<item quantity="one">@string/missed_alarm_singular</item>
-		<item quantity="other">@string/missed_alarm_plural</item>
+		<item quantity="one">Missed alarm</item>
+		<item quantity="other">@string/title_missed_alarm</item>
 	</plurals>
 
-	<string name="active_alarm_singular">Active alarm</string>
-	<string name="active_alarm_plural">Active alarms</string>
-	<plurals name="active_alarm">
-		<item quantity="one">@string/active_alarm_singular</item>
-		<item quantity="other">@string/active_alarm_plural</item>
+	<plurals name="upcoming_alarm">
+		<item quantity="one">Upcoming alarm</item>
+		<item quantity="other">@string/title_upcoming_alarm</item>
 	</plurals>
 
-	<string name="unit_day_singular">day</string>
-	<string name="unit_day_plural">days</string>
 	<plurals name="unit_day">
-		<item quantity="one">@string/unit_day_singular</item>
-		<item quantity="other">@string/unit_day_plural</item>
+		<item quantity="one">day</item>
+		<item quantity="other">days</item>
 	</plurals>
 
-	<string name="unit_hour_singular">hour</string>
-	<string name="unit_hour_plural">hours</string>
 	<plurals name="unit_hour">
-		<item quantity="one">@string/unit_hour_singular</item>
-		<item quantity="other">@string/unit_hour_plural</item>
+		<item quantity="one">hour</item>
+		<item quantity="other">hours</item>
 	</plurals>
 
-	<string name="unit_minute_singular">minute</string>
-	<string name="unit_minute_plural">minutes</string>
 	<plurals name="unit_minute">
-		<item quantity="one">@string/unit_minute_singular</item>
-		<item quantity="other">@string/unit_minute_plural</item>
+		<item quantity="one">minute</item>
+		<item quantity="other">minutes</item>
 	</plurals>
 
-	<string name="unit_second_singular">second</string>
-	<string name="unit_second_plural">seconds</string>
 	<plurals name="unit_second">
-		<item quantity="one">@string/unit_second_singular</item>
-		<item quantity="other">@string/unit_second_plural</item>
+		<item quantity="one">second</item>
+		<item quantity="other">seconds</item>
 	</plurals>
 
 
@@ -373,13 +334,11 @@
 	<!-- Missed alarm notifications -->
 	<string name="missed_alarm_key">pref_missed_alarm_notification</string>
 	<string name="missed_alarm_true">Show notifications for missed alarms.</string>
-	<string name="missed_alarm_false">@string/description_no_notification</string>
 
 
 	<!-- Upcoming alarm notifications -->
 	<string name="upcoming_alarm_key">pref_upcoming_alarm_notification</string>
 	<string name="upcoming_alarm_true">Show notifications for upcoming alarms.</string>
-	<string name="upcoming_alarm_false">@string/description_no_notification</string>
 
 
 	<!-- Expand new alarm card -->

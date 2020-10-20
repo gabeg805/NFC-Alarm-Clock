@@ -309,21 +309,22 @@ public class NacMainActivity
 	{
 		int id = item.getItemId();
 
-		switch (id)
+		if (id == R.id.menu_settings)
 		{
-			case R.id.menu_settings:
-				Intent settingsIntent = new Intent(this, NacSettingsActivity.class);
-				startActivity(settingsIntent);
-				return true;
-			case R.id.menu_show_next_alarm:
-				NacCardAdapter cardAdapter = this.getCardAdapter();
-				cardAdapter.showNextAlarm();
-				return true;
-			default:
-				break;
+			Intent settingsIntent = new Intent(this, NacSettingsActivity.class);
+			startActivity(settingsIntent);
+			return true;
 		}
-
-		return super.onOptionsItemSelected(item);
+		else if (id == R.id.menu_show_next_alarm)
+		{
+			NacCardAdapter cardAdapter = this.getCardAdapter();
+			cardAdapter.showNextAlarm();
+			return true;
+		}
+		else
+		{
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 	/**

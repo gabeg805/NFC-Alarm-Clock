@@ -812,16 +812,13 @@ public class NacCardAdapter
 			NacAlarm alarm = holder.getAlarm();
 			int position = holder.getAdapterPosition();
 
-			switch (id)
+			if (id == R.id.menu_show_next_alarm)
 			{
-				case R.id.menu_show_next_alarm:
-					this.showAlarm(alarm);
-					break;
-				case R.id.menu_show_nfc_tag_id:
-					this.showNfcTagId(alarm);
-					break;
-				default:
-					break;
+				this.showAlarm(alarm);
+			}
+			else if (id == R.id.menu_show_nfc_tag_id)
+			{
+				this.showNfcTagId(alarm);
 			}
 		}
 

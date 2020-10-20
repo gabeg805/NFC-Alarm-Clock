@@ -1593,15 +1593,16 @@ public class NacCardHolder
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 
-
 		if (shared.getPreventAppFromClosing() && !this.checkCanModifyAlarm())
 		{
 			button.setChecked(!state);
-			this.performHapticFeedback(button);
-			return;
+		}
+		else
+		{
+			this.doSwitchCheckedChanged(state);
 		}
 
-		this.doSwitchCheckedChanged(state);
+		this.performHapticFeedback(button);
 	}
 
 	/**

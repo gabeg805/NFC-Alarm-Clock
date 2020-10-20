@@ -32,7 +32,6 @@
 			</RadioGroup>
 
 		</LinearLayout>
-
 	</ScrollView>
 
 	<include layout="@layout/frg_buttons" />

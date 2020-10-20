@@ -49,13 +49,8 @@ public class NacDayOfWeek
 	{
 		this.mDayOfWeekView = view;
 		this.mOnWeekChangedListener = null;
-		int count = view.getChildCount();
 
-		for (int i=0; i < count; i++)
-		{
-			NacDayButton button = (NacDayButton) view.getChildAt(i);
-			button.setOnDayChangedListener(this);
-		}
+		this.setupDayButtons();
 	}
 
 	/**
@@ -160,26 +155,38 @@ public class NacDayOfWeek
 	 */
 	private NacCalendar.Day idToDay(int id)
 	{
-		switch (id)
+		if (id == R.id.dow_sun)
 		{
-			case R.id.dow_sun:
-				return NacCalendar.Day.SUNDAY;
-			case R.id.dow_mon:
-				return NacCalendar.Day.MONDAY;
-			case R.id.dow_tue:
-				return NacCalendar.Day.TUESDAY;
-			case R.id.dow_wed:
-				return NacCalendar.Day.WEDNESDAY;
-			case R.id.dow_thu:
-				return NacCalendar.Day.THURSDAY;
-			case R.id.dow_fri:
-				return NacCalendar.Day.FRIDAY;
-			case R.id.dow_sat:
-				return NacCalendar.Day.SATURDAY;
-			default:
-				break;
+			return NacCalendar.Day.SUNDAY;
 		}
-		return null;
+		else if (id == R.id.dow_mon)
+		{
+			return NacCalendar.Day.MONDAY;
+		}
+		else if (id == R.id.dow_tue)
+		{
+			return NacCalendar.Day.TUESDAY;
+		}
+		else if (id == R.id.dow_wed)
+		{
+			return NacCalendar.Day.WEDNESDAY;
+		}
+		else if (id == R.id.dow_thu)
+		{
+			return NacCalendar.Day.THURSDAY;
+		}
+		else if (id == R.id.dow_fri)
+		{
+			return NacCalendar.Day.FRIDAY;
+		}
+		else if (id == R.id.dow_sat)
+		{
+			return NacCalendar.Day.SATURDAY;
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	/**
@@ -280,6 +287,25 @@ public class NacDayOfWeek
 		NacDayOfWeek.OnWeekChangedListener listener)
 	{
 		this.mOnWeekChangedListener = listener;
+	}
+
+	/**
+	 * Setup the day buttons.
+	 */
+	protected void setupDayButtons()
+	{
+		LinearLayout view = this.getDayOfWeekView();
+		Context context = view.getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
+		List<String> week = cons.getDaysOfWeek();
+		int count = view.getChildCount();
+
+		for (int i=0; i < count; i++)
+		{
+			NacDayButton button = (NacDayButton) view.getChildAt(i);
+			button.setText(week.get(i));
+			button.setOnDayChangedListener(this);
+		}
 	}
 
 }

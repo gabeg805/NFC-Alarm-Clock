@@ -339,7 +339,7 @@ public class NacDialog
 			return dialogHeight;
 		}
 
-		int rootHeight = this.mRoot.getHeight();
+		int rootHeight = this.getRoot().getHeight();
 		int uncertainty = (int) (4.0f * screenHeight / 100.0f);
 		int diff = Math.abs(rootHeight - dialogHeight);
 
@@ -366,7 +366,7 @@ public class NacDialog
 			return dialogWidth;
 		}
 
-		int rootWidth = this.mRoot.getWidth();
+		int rootWidth = this.getRoot().getWidth();
 		int uncertainty = (int) (4.0f * screenWidth / 100.0f);
 		int diff = Math.abs(rootWidth - dialogWidth);
 
@@ -707,9 +707,9 @@ public class NacDialog
 
 		if (this.mScaler.wrapWidth || this.mScaler.wrapHeight)
 		{
-			this.mRoot.invalidate();
-			this.mRoot.requestLayout();
-			this.mRoot.measure(MeasureSpec.makeMeasureSpec(0,
+			this.getRoot().invalidate();
+			this.getRoot().requestLayout();
+			this.getRoot().measure(MeasureSpec.makeMeasureSpec(0,
 				MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0,
 				MeasureSpec.UNSPECIFIED));
 

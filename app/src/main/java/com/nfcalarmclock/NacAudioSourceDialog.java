@@ -2,6 +2,7 @@ package com.nfcalarmclock;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -49,6 +50,23 @@ public class NacAudioSourceDialog
 	}
 
 	/**
+	 * @return The list of audio sources.
+	 */
+	private List<String> getAudioSources()
+	{
+		return this.getConstants().getAudioSources();
+	}
+
+	/**
+	 * @return The radio button at the given index.
+	 */
+	public RadioButton getRadioButton(int index)
+	{
+		RadioGroup group = this.getRadioGroup();
+		return (RadioButton) group.getChildAt(index);
+	}
+
+	/**
 	 * @return The audio sources radio group.
 	 */
 	public RadioGroup getRadioGroup()
@@ -75,16 +93,40 @@ public class NacAudioSourceDialog
 	}
 
 	/**
+	 * Inflate audio source radio buttons.
+	 */
+	private void inflateRadioButtons()
+	{
+		Context context = this.getContext();
+		RadioGroup group = this.getRadioGroup();
+		List<String> sources = this.getAudioSources();
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(
+			Context.LAYOUT_INFLATER_SERVICE);
+
+		for (String s : sources)
+		{
+			View view = inflater.inflate(R.layout.radio_button, group, true);
+			RadioButton button = view.findViewById(R.id.radio_button);
+
+			button.setId(button.generateViewId());
+			button.setText(s);
+		}
+	}
+
+	/**
 	 * Build the dialog.
 	 */
 	@Override
 	public void onBuildDialog(Context context, AlertDialog.Builder builder)
 	{
-		NacSharedConstants cons = new NacSharedConstants(context);
+		View root = this.getRoot();
+		NacSharedConstants cons = this.getConstants();
+		this.mRadioGroup = root.findViewById(R.id.audio_sources);
 
 		builder.setTitle(cons.getTitleAudioSource());
 		setPositiveButton(cons.getActionOk());
 		setNegativeButton(cons.getActionCancel());
+		this.inflateRadioButtons();
 	}
 
 	/**
@@ -93,11 +135,10 @@ public class NacAudioSourceDialog
 	@Override
 	public boolean onDismissDialog(NacDialog dialog)
 	{
-		NacSharedConstants cons = this.getConstants();
 		RadioButton button = this.getCheckedButton();
 		String source = button.getText().toString();
 		String data = (source == null) || source.isEmpty()
-			? cons.getAudioSources().get(1) : source;
+			? this.getAudioSources().get(1) : source;
 
 		dialog.saveData(data);
 		return true;
@@ -109,39 +150,29 @@ public class NacAudioSourceDialog
 	@Override
 	public void onShowDialog(NacDialog dialog, View root)
 	{
-		Context context = root.getContext();
-		RadioGroup group = (RadioGroup) root.findViewById(R.id.audio_sources);
-		String data = this.getDataString();
-		NacSharedConstants cons = this.getConstants();
-		List<String> audioSources = cons.getAudioSources();
-
-		if (data.equals(audioSources.get(0)))
-		{
-			group.check(R.id.alarm);
-		}
-		else if (data.equals(audioSources.get(1)))
-		{
-			group.check(R.id.media);
-		}
-		else if (data.equals(audioSources.get(2)))
-		{
-			group.check(R.id.notification);
-		}
-		else if (data.equals(audioSources.get(3)))
-		{
-			group.check(R.id.ringtone);
-		}
-		else if (data.equals(audioSources.get(4)))
-		{
-			group.check(R.id.system);
-		}
-		else
-		{
-			group.check(R.id.media);
-		}
-
-		this.mRadioGroup = group;
+		this.setCheckedRadioButton();
 		scale(0.7, 0.7, false, true);
+	}
+
+	/**
+	 * Set the checked radio button.
+	 */
+	protected void setCheckedRadioButton()
+	{
+		Context context = this.getContext();
+		String data = this.getDataString();
+		List<String> sources = this.getAudioSources();
+
+		this.getRadioButton(1).setChecked(true);
+
+		for (int i=0; i < sources.size(); i++)
+		{
+			if (data.equals(sources.get(i)))
+			{
+				this.getRadioButton(i).setChecked(true);
+				break;
+			}
+		}
 	}
 
 }

@@ -2,6 +2,8 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.res.Resources;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Resource container.
@@ -66,6 +68,15 @@ public class NacSharedResource
 	public String getString(int id)
 	{
 		return this.getResources().getString(id);
+	}
+
+	/**
+	 * @return A string list.
+	 */
+	public List<String> getStringList(int id)
+	{
+		String[] array = this.getResources().getStringArray(id);
+		return Arrays.asList(array);
 	}
 
 }

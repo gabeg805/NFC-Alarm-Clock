@@ -14,47 +14,6 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
 
-		<RadioButton
-			style="@style/RadioButton"
-			android:id="@+id/alarm"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:text="@string/audio_source_alarm"
-			/>
-
-		<RadioButton
-			style="@style/RadioButton"
-			android:id="@+id/media"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:text="@string/audio_source_media"
-			android:checked="true"
-			/>
-
-		<RadioButton
-			style="@style/RadioButton"
-			android:id="@+id/notification"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:text="@string/audio_source_notification"
-			/>
-
-		<RadioButton
-			style="@style/RadioButton"
-			android:id="@+id/ringtone"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:text="@string/audio_source_ringtone"
-			/>
-
-		<RadioButton
-			style="@style/RadioButton"
-			android:id="@+id/system"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:text="@string/audio_source_system"
-			/>
-
 	</RadioGroup>
 
 </LinearLayout>

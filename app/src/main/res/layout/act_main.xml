@@ -19,6 +19,7 @@
 		/>
 
 	<com.google.android.material.floatingactionbutton.FloatingActionButton
+		android:contentDescription="@string/cd_ic_floating_action_button"
 		android:id="@+id/fab_add_alarm"
 		android:layout_width="@dimen/isz_attention"
 		android:layout_height="@dimen/isz_attention"
