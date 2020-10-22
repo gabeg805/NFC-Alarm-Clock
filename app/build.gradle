@@ -16,8 +16,8 @@ android {
 		applicationId "com.nfcalarmclock"
 		minSdkVersion 21
 		targetSdkVersion 29
-		versionCode 231
-		versionName "9.8.0.1"
+		versionCode 232
+		versionName "9.8.0.2"
 	}
 	signingConfigs {
 		release {

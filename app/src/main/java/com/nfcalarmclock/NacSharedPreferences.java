@@ -157,6 +157,23 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * @see editDayButtonStyle
+	 */
+	public void editDayButtonStyle(int style)
+	{
+		this.editDayButtonStyle(style, false);
+	}
+
+	/**
+	 * Edit the preference value indicating which day button style to use.
+	 */
+	public void editDayButtonStyle(int style, boolean commit)
+	{
+		String key = this.getKeys().getDayButtonStyle();
+		this.saveBoolean(key, (style == 1), commit);
+	}
+
+	/**
 	 * @see editDays
 	 */
 	public void editDays(int days)
@@ -654,6 +671,20 @@ public class NacSharedPreferences
 	public Context getContext()
 	{
 		return this.mContext;
+	}
+
+	/**
+	 * @return Which style to use for the day buttons.
+	 *
+	 *         1: Represents using the filled-in buttons (Default)
+	 *         2: Represents the outlined button style
+	 */
+	public int getDayButtonStyle()
+	{
+		String key = this.getKeys().getDayButtonStyle();
+		//int value = this.getDefaults().getDayButtonStyle();
+		boolean style = this.getInstance().getBoolean(key, true);
+		return style ? 1 : 2;
 	}
 
 	/**

@@ -265,9 +265,10 @@ public class NacCardAdapter
 		{
 			NacSharedConstants cons = this.getSharedConstants();
 			String message = cons.getMessageAlarmCopy();
+			String action = cons.getActionUndo();
 
 			this.undo(copy, position+1, Undo.Type.COPY);
-			this.snackbar(message);
+			this.showSnackbar(message, action, this);
 		}
 
 		return result;
@@ -284,12 +285,13 @@ public class NacCardAdapter
 		NacAlarm alarm = this.getAlarm(position);
 		NacSharedConstants cons = this.getSharedConstants();
 		String message = cons.getMessageAlarmDelete();
+		String action = cons.getActionUndo();
 
 		NacTaskWorker.deleteAlarm(context, alarm);
 		this.notifyDeleteAlarm(position);
 		this.updateNotification();
 		this.undo(alarm, position, Undo.Type.DELETE);
-		this.snackbar(message);
+		this.showSnackbar(message, action, this);
 		return 0;
 	}
 
@@ -857,9 +859,10 @@ public class NacCardAdapter
 			Locale locale = Locale.getDefault();
 			String message = String.format(locale, "%1$s.",
 				cons.getMessageAlarmRestore());
+			String action = cons.getActionUndo();
 
 			this.undo(alarm, position, Undo.Type.RESTORE);
-			this.snackbar(message);
+			this.showSnackbar(message, action, this);
 		}
 	}
 
@@ -901,8 +904,9 @@ public class NacCardAdapter
 		NacSharedConstants cons = this.getSharedConstants();
 		NacSharedPreferences shared = this.getSharedPreferences();
 		String message = NacCalendar.getMessageWillRun(shared, alarm);
+		String action = cons.getActionDismiss();
 
-		this.snackbar(message, cons.getActionDismiss(), null, true);
+		this.showSnackbar(message, action);
 	}
 
 	/**
@@ -944,13 +948,15 @@ public class NacCardAdapter
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getNextAlarm();
 		String message = NacCalendar.getMessageNextAlarm(shared, alarm);
+		String action = cons.getActionDismiss();
 
 		if (alarm == null)
 		{
 			this.mPreviousCalendar = null;
 		}
 
-		this.snackbar(message, cons.getActionDismiss(), null, true);
+		this.showSnackbar(message, action);
+		//this.snackbar(message, action, null, true);
 	}
 
 	/**
@@ -983,31 +989,29 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * @return The number of elements in the adapter.
+	 * @see showSnackbar
 	 */
-	public int size()
+	private void showSnackbar(String message, String action)
 	{
-		return this.getAlarms().size();
-	}
-
-	/**
-	 * @see snackbar
-	 */
-	private void snackbar(String message)
-	{
-		NacSharedConstants cons = this.getSharedConstants();
-		this.snackbar(message, cons.getActionUndo(), this, true);
+		this.showSnackbar(message, action, null);
 	}
 
 	/**
 	 * Create a snackbar message.
 	 */
-	private void snackbar(String message, String action,
-		View.OnClickListener listener, boolean dismiss)
+	private void showSnackbar(String message, String action,
+		View.OnClickListener listener)
 	{
 		NacSnackbar snackbar = this.getSnackbar();
+		snackbar.show(message, action, listener, true);
+	}
 
-		snackbar.show(message, action, listener, dismiss);
+	/**
+	 * @return The number of elements in the adapter.
+	 */
+	public int size()
+	{
+		return this.getAlarms().size();
 	}
 
 	/**

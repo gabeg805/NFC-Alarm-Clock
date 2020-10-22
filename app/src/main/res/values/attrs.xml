@@ -2,31 +2,14 @@
 <resources>
 
 	<attr name="colorCard" format="reference" />
-	<attr name="colorCardAccent" format="reference" />
 	<attr name="colorCardExpanded" format="reference" />
-	<attr name="colorCardHighlight" format="reference" />
-	<attr name="colorCardDivider" format="reference" />
-	<attr name="colorCardDrawable" format="reference" />
-	<attr name="colorCardText" format="reference" />
-	<attr name="colorCardFocus" format="reference" />
-	<attr name="colorCardFocusText" format="reference" />
 	<attr name="nacWidth" format="reference|dimension" />
 	<attr name="nacHeight" format="reference|dimension" />
-	<attr name="nacDrawable" format="reference" />
-	<attr name="nacDrawableWidth" format="reference|dimension" />
-	<attr name="nacDrawableHeight" format="reference|dimension" />
-	<attr name="nacDrawableColor" format="reference|color" />
 	<attr name="nacSpacing" format="reference|dimension" />
 
 	<declare-styleable name="NacDayButton">
 		<attr name="nacWidth" />
 		<attr name="nacHeight" />
-	</declare-styleable>
-
-	<declare-styleable name="NacCoverImage">
-		<attr name="nacDrawableWidth" />
-		<attr name="nacDrawableHeight" />
-		<attr name="nacSpacing" />
 	</declare-styleable>
 
 	<declare-styleable name="NacColorPicker">

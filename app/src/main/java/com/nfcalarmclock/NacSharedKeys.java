@@ -121,6 +121,14 @@ public class NacSharedKeys
 	}
 
 	/**
+	 * @return The day button style key.
+	 */
+	public String getDayButtonStyle()
+	{
+		return this.getString(R.string.day_button_style_key);
+	}
+
+	/**
 	 * @return The days key.
 	 */
 	public String getDays()
@@ -174,6 +182,14 @@ public class NacSharedKeys
 	public String getMaxSnooze()
 	{
 		return this.getString(R.string.max_snooze_key);
+	}
+
+	/**
+	 * @return The media path key.
+	 */
+	public String getMediaPath()
+	{
+		return this.getString(R.string.alarm_sound_key);
 	}
 
 	/**
@@ -295,14 +311,6 @@ public class NacSharedKeys
 	public String getSnoozeDuration()
 	{
 		return this.getString(R.string.snooze_duration_key);
-	}
-
-	/**
-	 * @return The media path key.
-	 */
-	public String getMediaPath()
-	{
-		return this.getString(R.string.alarm_sound_key);
 	}
 
 	/**

@@ -90,6 +90,17 @@ public class NacSharedDefaults
 	}
 
 	/**
+	 * @return The day button style.
+	 *
+	 * 1: Filled-in buttons (Default)
+	 * 2: Outlined buttons 
+	 */
+	public int getDayButtonStyle()
+	{
+		return this.getInteger(R.integer.default_day_button_style);
+	}
+
+	/**
 	 * @return The days.
 	 */
 	public int getDays()

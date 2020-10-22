@@ -176,6 +176,19 @@ public class NacDayButton
 	}
 
 	/**
+	 * @return The proper day button layout to use.
+	 */
+	protected int getLayout()
+	{
+		Context context = getContext();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
+
+		return (shared.getDayButtonStyle() == 1)
+			? R.layout.nac_day_button_filled
+			: R.layout.nac_day_button_outlined;
+	}
+
+	/**
 	 * @return The text in the button.
 	 */
 	public String getText()
@@ -194,10 +207,10 @@ public class NacDayButton
 		}
 
 		Context context = getContext();
+		int layout = this.getLayout();
 
 		setOrientation(LinearLayout.HORIZONTAL);
-		LayoutInflater.from(context).inflate(R.layout.nac_day_button,
-			this, true);
+		LayoutInflater.from(context).inflate(layout, this, true);
 
 		this.mAttributes = new NacDayAttributes(context, attrs);
 		this.mButtonToggleGroup = findViewById(R.id.nac_day_button_group);

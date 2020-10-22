@@ -15,23 +15,19 @@
 		-->
 
 		<!--<item name="colorSurface">@color/black</item>-->
+		<item name="colorAccent">@color/orange</item>
 		<item name="colorError">@color/red</item>
 		<item name="colorOnPrimary">@color/white</item>
 		<item name="colorOnSecondary">@color/black</item>
 		<item name="colorOnBackground">@color/white</item>
 		<item name="colorOnSurface">@color/white</item>
 		<item name="colorOnError">@color/white</item>
-
-		<item name="colorAccent">@color/orange</item>
+		<item name="snackbarStyle">@style/Widget.App.Snackbar</item>
+		<item name="snackbarTextViewStyle">@style/Widget.App.SnackbarText</item>
+		<item name="snackbarButtonStyle">@style/Widget.App.SnackbarButton</item>
 
 		<item name="colorCard">@color/gray_dark</item>
-		<item name="colorCardAccent">@color/orange</item>
 		<item name="colorCardExpanded">@color/gray</item>
-		<item name="colorCardDivider">@color/orange</item>
-		<item name="colorCardDrawable">@color/white</item>
-		<item name="colorCardText">@color/white</item>
-		<item name="colorCardFocus">@color/white</item>
-		<item name="colorCardFocusText">@color/black</item>
 	</style>
 
 
@@ -50,6 +46,7 @@
 
 	<!-- Text button -->
 	<style name="TextButton" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+
 		<item name="android:maxLines">1</item>
 		<item name="android:insetTop">@dimen/zero</item>
 		<item name="android:insetBottom">@dimen/zero</item>
@@ -105,12 +102,40 @@
 	</style>
 
 
-	<!-- Custom -->
+	<!-- Time picker dialog -->
+	<!--<style name="Widget.Nac.TimePicker" parent="Widget.MaterialComponents.TimePicker">-->
+	<style name="Widget.Nac.TimePicker" parent="@style/ThemeOverlay.MaterialComponents.Dialog">
+		<item name="colorAccent">@color/orange</item>
+		<!--
+		<item name="colorControlActivated">@color/red</item>
+		<item name="android:background">@color/gray</item>
+		-->
+	</style>
+
+
+	<!-- Snackbar -->
+	<style name="Widget.App.Snackbar" parent="Widget.MaterialComponents.Snackbar">
+		<item name="backgroundTint">@color/gray</item>
+		<item name="actionTextColorAlpha">1</item>
+	</style>
+
+	<style name="Widget.App.SnackbarText" parent="Widget.MaterialComponents.Snackbar.TextView">
+		<item name="android:textColor">@color/white</item>
+	</style>
+
+	<style name="Widget.App.SnackbarButton" parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
+		<item name="android:textColor">?attr/colorAccent</item>
+	</style>
+
+
+	<!-- Day buttons -->
 	<style name="NacDayButton">
 		<item name="nacWidth">@dimen/isz_large</item>
 		<item name="nacHeight">@dimen/isz_large</item>
 	</style>
 
+
+	<!-- Color picker -->
 	<style name="NacColorPicker">
 		<item name="nacSpacing">?dialogPreferredPadding</item>
 	</style>

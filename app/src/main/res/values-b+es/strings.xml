@@ -292,7 +292,20 @@
 	<!-- Categories -->
 	<string name="color_category">Colores</string>
 	<string name="notification_category">Notificaciónes</string>
+	<string name="style_category">Style</string>
 	<string name="tweaks_category">Modificaciónes</string>
+
+
+	<!-- Day button style -->
+	<string name="day_button_style">Day buttons</string>
+	<string name="day_button_style_key">pref_day_button_style</string>
+	<string name="day_button_style_true">Default filled-in buttons.</string>
+	<string name="day_button_style_false">Outlined buttons.</string>
+
+
+	<!-- Start Week On -->
+	<string name="start_week_on">Empieza la semana&#8230;</string>
+	<string name="start_week_on_key">pref_start_week_on</string>
 
 
 	<!-- Theme color -->
@@ -353,11 +366,6 @@
 	<string name="next_alarm_format_key">pref_time_remaining_format</string>
 	<string name="next_alarm_format_time_in">Próxima alarma en 7 horas 30 minutos</string>
 	<string name="next_alarm_format_time_on">Próxima alarma Lun 7:00 AM</string>
-
-
-	<!-- Start Week On -->
-	<string name="start_week_on">Empieza la semana&#8230;</string>
-	<string name="start_week_on_key">pref_start_week_on</string>
 
 
 	<!-- Show alarm information -->

@@ -143,18 +143,6 @@ public class NacUtility
 	}
 
 	/**
-	 * Set background color of the view.
-	 */
-	public static void setBackground(View view, int id)
-	{
-		Context context = view.getContext();
-		int bg = NacUtility.getThemeAttrColor(context, id);
-
-		view.setBackground(null);
-		view.setBackgroundColor(bg);
-	}
-
-	/**
 	 * Display a snackbar with the given message.
 	 *
 	 * @param  root  The root view.
@@ -162,35 +150,37 @@ public class NacUtility
 	 * @param  action  The action message.
 	 * @param  listener  The callback to run when the action is clicked.
 	 */
-	public static Snackbar snackbar(View root, String message, String action,
-		View.OnClickListener listener)
-	{
-		Context context = root.getContext();
-		int color = NacUtility.getThemeAttrColor(context,
-			R.attr.colorCardAccent);
-		Snackbar snackbar = Snackbar.make(root, message, Snackbar.LENGTH_LONG);
+	//public static Snackbar snackbar(View root, String message, String action,
+	//	View.OnClickListener listener)
+	//{
+	//	Context context = root.getContext();
+	//	//int color = NacUtility.getThemeAttrColor(context,
+	//	//	R.attr.colorCardAccent);
+	//	Snackbar snackbar = Snackbar.make(root, message, Snackbar.LENGTH_LONG);
 
-		if (!action.isEmpty())
-		{
-			if (listener == null)
-			{
-				listener = new View.OnClickListener()
-				{
-					@Override
-					public void onClick(View view)
-					{
-					}
-				};
-			}
+	//	if (!action.isEmpty())
+	//	{
+	//		if (listener == null)
+	//		{
+	//			listener = new View.OnClickListener()
+	//			{
+	//				@Override
+	//				public void onClick(View view)
+	//				{
+	//				}
+	//			};
+	//		}
 
-			snackbar.setAction(action, listener);
-		}
+	//		snackbar.setAction(action, listener);
+	//	}
 
-		snackbar.setActionTextColor(color);
-		snackbar.show();
+	//	//snackbar.setActionTextColor(color);
+	//	snackbar.setActionTextColor(themeColor);
+	//	snackbar.getView().setBackgroundColor(bgColor);
+	//	snackbar.show();
 
-		return snackbar;
-	}
+	//	return snackbar;
+	//}
 
 	/**
 	 * Display a snackbar with the given message.
@@ -200,12 +190,12 @@ public class NacUtility
 	 * @param  action  The action message.
 	 * @param  listener  The callback to run when the action is clicked.
 	 */
-	public static Snackbar snackbar(Activity activity, String message, String action,
-		View.OnClickListener listener)
-	{
-		CoordinatorLayout root = activity.findViewById(R.id.activity_main);
-		return NacUtility.snackbar(root, message, action, listener);
-	}
+	//public static Snackbar snackbar(Activity activity, String message, String action,
+	//	View.OnClickListener listener)
+	//{
+	//	CoordinatorLayout root = activity.findViewById(R.id.activity_main);
+	//	return NacUtility.snackbar(root, message, action, listener);
+	//}
 
 	/**
 	 * Convert the given string to a spanned string.

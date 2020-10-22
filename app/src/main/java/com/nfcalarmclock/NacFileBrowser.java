@@ -327,7 +327,6 @@ public class NacFileBrowser
 	public boolean isSelected(String path)
 	{
 		String selectedPath = this.getSelectedPath();
-
 		return (!path.isEmpty() && (path.equals(selectedPath)));
 	}
 

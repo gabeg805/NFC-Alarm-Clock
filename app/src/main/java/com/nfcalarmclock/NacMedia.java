@@ -228,17 +228,25 @@ public class NacMedia
 			null, null);
 		String millis = "";
 
-		c.moveToFirst();
-
-		try
+		if (c == null)
 		{
-			int durationIndex = c.getColumnIndexOrThrow(
-				MediaStore.Audio.Media.DURATION);
-			millis = c.getString(durationIndex);
+			return millis;
 		}
-		catch (IllegalArgumentException e)
+		else if (!c.moveToFirst())
 		{
-			NacUtility.printf("NacMedia : getDuration : IllegalArgumentException!");
+		}
+		else
+		{
+			try
+			{
+				int durationIndex = c.getColumnIndexOrThrow(
+					MediaStore.Audio.Media.DURATION);
+				millis = c.getString(durationIndex);
+			}
+			catch (IllegalArgumentException e)
+			{
+				NacUtility.printf("NacMedia : getDuration : IllegalArgumentException!");
+			}
 		}
 
 		c.close();
@@ -252,7 +260,6 @@ public class NacMedia
 	public static String getDuration(Context context, NacFile.Metadata metadata)
 	{
 		Uri contentUri = metadata.toExternalUri();
-
 		return NacMedia.getDuration(context, contentUri);
 	}
 
@@ -262,7 +269,6 @@ public class NacMedia
 	public static String getDuration(Context context, String path)
 	{
 		Uri contentUri = Uri.parse(path);
-
 		return NacMedia.getDuration(context, contentUri);
 	}
 
@@ -313,17 +319,25 @@ public class NacMedia
 			null, null);
 		String name = "";
 
-		c.moveToFirst();
-
-		try
+		if (c == null)
 		{
-			int nameIndex = c.getColumnIndexOrThrow(
-				MediaStore.Audio.Media.DISPLAY_NAME);
-			name = c.getString(nameIndex);
+			return name;
 		}
-		catch (IllegalArgumentException e)
+		else if (!c.moveToFirst())
 		{
-			NacUtility.printf("NacMedia : getName : IllegalArgumentException!");
+		}
+		else
+		{
+			try
+			{
+				int nameIndex = c.getColumnIndexOrThrow(
+					MediaStore.Audio.Media.DISPLAY_NAME);
+				name = c.getString(nameIndex);
+			}
+			catch (IllegalArgumentException e)
+			{
+				NacUtility.printf("NacMedia : getName : IllegalArgumentException!");
+			}
 		}
 
 		c.close();
@@ -337,7 +351,6 @@ public class NacMedia
 	public static String getName(Context context, NacFile.Metadata metadata)
 	{
 		Uri contentUri = metadata.toExternalUri();
-
 		return NacMedia.getName(context, contentUri);
 	}
 
@@ -347,7 +360,6 @@ public class NacMedia
 	public static String getName(Context context, String path)
 	{
 		Uri contentUri = Uri.parse(path);
-
 		return NacMedia.getName(context, contentUri);
 	}
 
@@ -409,21 +421,29 @@ public class NacMedia
 			null, null);
 		String path = "";
 
-		c.moveToFirst();
-
-		try
+		if (c == null)
 		{
-			int pathIndex = c.getColumnIndexOrThrow(columns[0]);
-			path = c.getString(pathIndex);
-
-			if (!canQueryRelativePath)
-			{
-				path = NacMedia.parseRelativePath(path);
-			}
+			return path;
 		}
-		catch (IllegalArgumentException e)
+		else if (!c.moveToFirst())
 		{
-			NacUtility.printf("NacMedia : getRelativePath : IllegalArgumentException!");
+		}
+		else
+		{
+			try
+			{
+				int pathIndex = c.getColumnIndexOrThrow(columns[0]);
+				path = c.getString(pathIndex);
+
+				if (!canQueryRelativePath)
+				{
+					path = NacMedia.parseRelativePath(path);
+				}
+			}
+			catch (IllegalArgumentException e)
+			{
+				NacUtility.printf("NacMedia : getRelativePath : IllegalArgumentException!");
+			}
 		}
 
 		c.close();
@@ -529,7 +549,6 @@ public class NacMedia
 	public static String getTitle(Context context, NacFile.Metadata metadata)
 	{
 		Uri contentUri = metadata.toExternalUri();
-
 		return NacMedia.getTitle(context, contentUri);
 	}
 
@@ -539,7 +558,6 @@ public class NacMedia
 	public static String getTitle(Context context, String path)
 	{
 		Uri contentUri = Uri.parse(path);
-
 		return NacMedia.getTitle(context, contentUri);
 	}
 
@@ -603,16 +621,24 @@ public class NacMedia
 			null, null);
 		String volume = "";
 
-		c.moveToFirst();
-
-		try
+		if (c == null)
 		{
-			int volumeIndex = c.getColumnIndexOrThrow(columns[0]);
-			volume = c.getString(volumeIndex);
+			return volume;
 		}
-		catch (IllegalArgumentException e)
+		else if (!c.moveToFirst())
 		{
-			NacUtility.printf("NacMedia : getVolumeName : IllegalArgumentException!");
+		}
+		else
+		{
+			try
+			{
+				int volumeIndex = c.getColumnIndexOrThrow(columns[0]);
+				volume = c.getString(volumeIndex);
+			}
+			catch (IllegalArgumentException e)
+			{
+				NacUtility.printf("NacMedia : getVolumeName : IllegalArgumentException!");
+			}
 		}
 
 		c.close();
@@ -626,7 +652,6 @@ public class NacMedia
 	public static String getVolumeName(Context context, String path)
 	{
 		Uri contentUri = Uri.parse(path);
-
 		return NacMedia.getVolumeName(context, contentUri);
 	}
 

@@ -1635,13 +1635,15 @@ public class NacCardHolder
 	/**
 	 * Set the background color for when the card is collapsed.
 	 */
-	public void setCollapsedBackgroundColor()
-	{
-		CardView card = this.getCardView();
-		int id = R.attr.colorCard;
+	//public void setCollapsedBackgroundColor()
+	//{
+	//	Context context = this.getContext();
+	//	CardView card = this.getCardView();
+	//	int color = NacUtility.getThemeAttrColor(context, R.attr.colorCard);
 
-		NacUtility.setBackground(card, id);
-	}
+	//	//NacUtility.setBackground(card, id);
+	//	card.setBackgroundColor(color);
+	//}
 
 	/**
 	 * Set the ripple color of the audio source button.
@@ -1739,13 +1741,20 @@ public class NacCardHolder
 	/**
 	 * Set the background color for when the card is expanded.
 	 */
-	public void setExpandedBackgroundColor()
-	{
-		CardView card = this.getCardView();
-		int id = R.attr.colorCardExpanded;
+	//public void setExpandedBackgroundColor()
+	//{
+	//	Context context = this.getContext();
+	//	CardView card = this.getCardView();
+	//	int color = NacUtility.getThemeAttrColor(context, R.attr.colorCardExpanded);
 
-		NacUtility.setBackground(card, id);
-	}
+	//	//Context context = view.getContext();
+	//	//int bg = NacUtility.getThemeAttrColor(context, id);
+
+	//	//view.setBackground(null);
+	//	//view.setBackgroundColor(bg);
+	//	//NacUtility.setBackground(card, id);
+	//	card.setBackgroundColor(color);
+	//}
 
 	/**
 	 * Set the ripple color of the expand button.
@@ -2151,8 +2160,11 @@ public class NacCardHolder
 		int hour = alarm.getHour();
 		int minute = alarm.getMinute();
 		boolean format = NacCalendar.Time.is24HourFormat(context);
-		TimePickerDialog dialog = new TimePickerDialog(context, this, hour, minute,
-			format);
+		TimePickerDialog dialog = new TimePickerDialog(context,
+			this, hour, minute, format);
+			//R.style.Widget_Nac_TimePicker, this, hour, minute, format);
+		//TimePickerDialog dialog = new TimePickerDialog(context, this, hour, minute,
+		//	format);
 
 		dialog.show();
 	}

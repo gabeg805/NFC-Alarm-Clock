@@ -338,7 +338,7 @@
 				android:id="@+id/nac_divider_delete"
 				android:layout_width="match_parent"
 				android:layout_height="@dimen/line"
-				android:background="?attr/colorCardDivider"
+				android:background="?attr/colorAccent"
 				/>
 
 			<!-- Delete/collapse -->

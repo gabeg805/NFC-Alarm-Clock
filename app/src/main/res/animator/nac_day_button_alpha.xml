@@ -5,10 +5,11 @@
 	<item android:state_checked="true">
 		<set>
 			<objectAnimator
-				android:propertyName="textColor"
-				android:duration="@integer/duration_day_button_text_on"
-				android:valueFrom="@color/gray_light"
-				android:valueTo="@color/white"
+				android:propertyName="alpha"
+				android:duration="@integer/duration_day_button_alpha_on"
+				android:valueFrom="0.11"
+				android:valueTo="1.0"
+				android:valueType="floatType"
 				android:repeatCount="0"
 				/>
 		</set>
@@ -17,10 +18,11 @@
 	<item android:state_checked="false">
 		<set>
 			<objectAnimator
-				android:propertyName="textColor"
+				android:propertyName="alpha"
 				android:duration="@integer/duration_day_button_off"
-				android:valueFrom="@color/white"
-				android:valueTo="@color/gray_light"
+				android:valueFrom="1.0"
+				android:valueTo="0.11"
+				android:valueType="floatType"
 				android:repeatCount="0"
 				/>
 		</set>

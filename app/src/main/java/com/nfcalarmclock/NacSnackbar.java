@@ -1,5 +1,6 @@
 package com.nfcalarmclock;
 
+import android.content.Context;
 import android.view.View;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -9,6 +10,7 @@ import com.google.android.material.snackbar.Snackbar;
 /**
  */
 public class NacSnackbar
+	implements View.OnClickListener
 {
 
 	/**
@@ -69,6 +71,37 @@ public class NacSnackbar
 	}
 
 	/**
+	 * Response to snackbar onDismissed and onShown callbacks.
+	 */
+	private class NacSnackbarCallback
+		extends BaseTransientBottomBar.BaseCallback<Snackbar>
+	{
+
+		@Override
+		public void onDismissed(Snackbar transientBottomBar, int event)
+		{
+			Queue<SnackHolder> queue = getQueue();
+			mSnackbar = null;
+
+			if (queue.size() > 0)
+			{
+				SnackHolder holder = queue.remove();
+				String message = holder.getMessage();
+				String action = holder.getAction();
+				View.OnClickListener listener = holder.getListener();
+
+				show(message, action, listener, false);
+			}
+		}
+
+		@Override
+		public void onShown(Snackbar transientBottomBar)
+		{
+		}
+
+	}
+
+	/**
 	 * Snackbar.
 	 */
 	private Snackbar mSnackbar;
@@ -120,6 +153,15 @@ public class NacSnackbar
 	}
 
 	/**
+	 * @return The context.
+	 */
+	public Context getContext()
+	{
+		View root = this.getRoot();
+		return (root != null) ? root.getContext() : null;
+	}
+
+	/**
 	 * @return The root view.
 	 */
 	public View getRoot()
@@ -136,7 +178,7 @@ public class NacSnackbar
 	}
 
 	/**
-	 * @return The snackbar or null otherwise.
+	 * @return The snackbar.
 	 */
 	public Snackbar getSnackbar()
 	{
@@ -144,13 +186,20 @@ public class NacSnackbar
 	}
 
 	/**
-	 * Check if the snackbar is shown.
+	 * @return True if the snackbar is shown, and False otherwise.
 	 */
 	public boolean isShown()
 	{
 		Snackbar snackbar = this.getSnackbar();
-
 		return ((snackbar != null) && snackbar.isShown());
+	}
+
+	/**
+	 * Default listener when the action button is clicked.
+	 */
+	@Override
+	public void onClick(View view)
+	{
 	}
 
 	/**
@@ -160,20 +209,63 @@ public class NacSnackbar
 		View.OnClickListener listener)
 	{
 		SnackHolder holder = new SnackHolder(message, action, listener);
-
 		this.mQueue.add(holder);
 	}
 
 	/**
-	 * Show snackbar.
+	 * Set the snackbar action listener.
 	 */
-	public void show(String message, String action)
+	public void setAction(String action, View.OnClickListener listener)
 	{
-		this.show(message, action, null, false);
+		if (action.isEmpty())
+		{
+			return;
+		}
+
+		if (listener == null)
+		{
+			listener = this;
+		}
+
+		Snackbar snackbar = this.getSnackbar();
+		snackbar.setAction(action, listener);
 	}
 
 	/**
-	 * Show snackbar.
+	 * Set the action text color to the theme color.
+	 */
+	public void setActionTextThemeColor()
+	{
+		Snackbar snackbar = this.getSnackbar();
+		Context context = this.getContext();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
+		int themeColor = shared.getThemeColor();
+
+		snackbar.setActionTextColor(themeColor);
+	}
+
+	/**
+	 * Set the snackbar.
+	 */
+	protected void setSnackbar(String message)
+	{
+		View root = this.getRoot();
+		Snackbar snackbar = Snackbar.make(root, message, Snackbar.LENGTH_LONG);
+		this.mSnackbar = snackbar;
+
+		snackbar.addCallback(new NacSnackbarCallback());
+	}
+
+	/**
+	 * @see show
+	 */
+	public void show()
+	{
+		this.getSnackbar().show();
+	}
+
+	/**
+	 * @see show
 	 */
 	public void show(String message, String action,
 		View.OnClickListener listener)
@@ -193,45 +285,13 @@ public class NacSnackbar
 		{
 			this.dismiss();
 			this.queue(message, action, listener);
-
 			return;
 		}
 
-		View root = this.getRoot();
-		this.mSnackbar = NacUtility.snackbar(root, message, action, listener);
-
-		this.mSnackbar.addCallback(new NacSnackbarCallback());
-	}
-
-	/**
-	 * Response to snackbar onDismissed and onShown callbacks.
-	 */
-	private class NacSnackbarCallback
-		extends BaseTransientBottomBar.BaseCallback<Snackbar>
-	{
-
-		@Override
-		public void onDismissed(Snackbar transientBottomBar, int event)
-		{
-			Queue<SnackHolder> queue = getQueue();
-			mSnackbar = null;
-
-			if (queue.size() > 0)
-			{
-				SnackHolder holder = queue.remove();
-				String message = holder.getMessage();
-				String action = holder.getAction();
-				View.OnClickListener listener = holder.getListener();
-
-				show(message, action, listener, false);
-			}
-		}
-
-		@Override
-		public void onShown(Snackbar transientBottomBar)
-		{
-		}
-
+		this.setSnackbar(message);
+		this.setAction(action, listener);
+		this.setActionTextThemeColor();
+		this.show();
 	}
 
 }

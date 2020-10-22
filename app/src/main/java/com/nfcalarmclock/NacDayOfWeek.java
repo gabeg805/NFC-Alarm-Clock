@@ -259,6 +259,7 @@ public class NacDayOfWeek
 		LinearLayout view = this.getDayOfWeekView();
 		NacDayButton sunday = this.getDayButton(NacCalendar.Day.SUNDAY);
 		NacDayButton monday = this.getDayButton(NacCalendar.Day.MONDAY);
+		int count = view.getChildCount();
 		View firstChild = view.getChildAt(0);
 		View lastChild = view.getChildAt(6);
 
@@ -268,6 +269,18 @@ public class NacDayOfWeek
 			{
 				view.removeView(firstChild);
 				view.addView(firstChild, 6);
+				//sunday.invalidate();
+				//monday.invalidate();
+				//firstChild.invalidate();
+				//lastChild.invalidate();
+				//view.invalidate();
+
+				//view.invalidate();
+
+				//for (int i=0; i < count; i++)
+				//{
+				//	view.getChildAt(i).invalidate();
+				//}
 			}
 		}
 		else
@@ -276,6 +289,13 @@ public class NacDayOfWeek
 			{
 				view.removeView(lastChild);
 				view.addView(lastChild, 0);
+
+				//view.invalidate();
+
+				//for (int i=0; i < count; i++)
+				//{
+				//	view.getChildAt(i).invalidate();
+				//}
 			}
 		}
 	}

@@ -209,6 +209,7 @@ public class NacMainActivity
 
 		if (cardHolder != null)
 		{
+			cardHolder.getNfcButton().setChecked(false);
 			cardHolder.doNfcButtonClick();
 		}
 
