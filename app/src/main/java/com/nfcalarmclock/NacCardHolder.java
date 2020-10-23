@@ -1090,6 +1090,7 @@ public class NacCardHolder
 		this.setSwitchColor();
 		this.setSummaryDaysColor();
 		this.setSummaryNameColor();
+		this.setDismissButtonRippleColor();
 		this.setDayOfWeekRippleColor();
 		this.setRepeatButtonRippleColor();
 		this.setVibrateButtonRippleColor();
@@ -1700,6 +1701,15 @@ public class NacCardHolder
 	{
 		ColorStateList ripple = this.createThemeColorStateList();
 		this.getDeleteButton().setRippleColor(ripple);
+	}
+
+	/**
+	 * Set the ripple color for the dismiss button.
+	 */
+	public void setDismissButtonRippleColor()
+	{
+		ColorStateList ripple = this.createThemeColorStateList();
+		this.getDismissButton().setRippleColor(ripple);
 	}
 
 	/**

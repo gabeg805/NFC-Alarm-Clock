@@ -1125,12 +1125,21 @@ public class NacAlarm
 	}
 
 	/**
-	 * @return True if the alarm is snoozed and False otherwise.
+	 * @return True if the alarm is snoozed, and False otherwise.
 	 */
 	public boolean isSnoozed(NacSharedPreferences shared)
 	{
 		int id = this.getId();
 		return (shared.getSnoozeCount(id) > 0);
+	}
+
+	/**
+	 * @return True if the alarm is being used, by being active or snoozed, and
+	 *         False otherwise.
+	 */
+	public boolean isInUse(NacSharedPreferences shared)
+	{
+		return this.isActive() || this.isSnoozed(shared);
 	}
 
 	/**

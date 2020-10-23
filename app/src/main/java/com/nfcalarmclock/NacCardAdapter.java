@@ -232,14 +232,27 @@ public class NacCardAdapter
 	private boolean canInsertAlarm(NacAlarm alarmToInsert, NacAlarm alarmInList,
 		Calendar nextRun)
 	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		boolean insertInUse = alarmToInsert.isInUse(shared);
+		boolean listInUse = alarmInList.isInUse(shared);
 		boolean insertEnabled = alarmToInsert.getEnabled();
-		boolean alarmEnabled = alarmInList.getEnabled();
+		boolean listEnabled = alarmInList.getEnabled();
 
-		if (insertEnabled && !alarmEnabled)
+		if (insertInUse && !listInUse)
 		{
 			return true;
 		}
-		else if (insertEnabled == alarmEnabled)
+		else if (insertInUse == listInUse)
+		{
+			Calendar cal = NacCalendar.getNext(alarmInList);
+			return nextRun.before(cal);
+		}
+
+		if (insertEnabled && !listEnabled)
+		{
+			return true;
+		}
+		else if (insertEnabled == listEnabled)
 		{
 			Calendar cal = NacCalendar.getNext(alarmInList);
 			return nextRun.before(cal);
@@ -464,14 +477,28 @@ public class NacCardAdapter
 	 */
 	public List<NacAlarm> getSortedAlarms()
 	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		List<NacAlarm> inUseAlarms = new ArrayList<>();
 		List<NacAlarm> enabledAlarms = new ArrayList<>();
 		List<NacAlarm> disabledAlarms = new ArrayList<>();
 		List<NacAlarm> sorted = new ArrayList<>();
 
 		for (NacAlarm a : this.getAlarms())
 		{
-			List<NacAlarm> list = (a.getEnabled()) ? enabledAlarms
-				: disabledAlarms;
+			List<NacAlarm> list;
+			if (a.isInUse(shared))
+			{
+				list = inUseAlarms;
+			}
+			else if (a.getEnabled())
+			{
+				list = enabledAlarms;
+			}
+			else
+			{
+				list = disabledAlarms;
+			}
+
 			Calendar next = NacCalendar.getNext(a);
 			int pos = 0;
 
@@ -490,9 +517,9 @@ public class NacCardAdapter
 			list.add(pos, a);
 		}
 
+		sorted.addAll(inUseAlarms);
 		sorted.addAll(enabledAlarms);
 		sorted.addAll(disabledAlarms);
-
 		return sorted;
 	}
 
