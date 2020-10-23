@@ -17,7 +17,7 @@
 		android:orientation="horizontal">
 
 		<TextView
-			style="@style/TextView.Primary"
+			style="@style/Widget.TextView.Primary"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:text="@string/message_rate_my_app"

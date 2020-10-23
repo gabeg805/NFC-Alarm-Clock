@@ -14,8 +14,6 @@ import java.util.Locale;
 
 /**
  * A file browser.
- *
- * TODO Selected file gets deselected when moving directories.
  */
 public class NacFileBrowser
 	implements View.OnClickListener
@@ -24,10 +22,10 @@ public class NacFileBrowser
 	/**
 	 * Click listener for the file browser.
 	 */
-	public interface OnClickListener
+	public interface OnBrowserClickedListener
 	{
-		public void onClick(NacFileBrowser browser, NacFile.Metadata metadata,
-			String path, String name);
+		public void onBrowserClicked(NacFileBrowser browser,
+			NacFile.Metadata metadata, String path, String name);
 	}
 
 	private Context mContext;
@@ -45,12 +43,12 @@ public class NacFileBrowser
 	/**
 	 * Currently selected view.
 	 */
-	private RelativeLayout mSelected;
+	private RelativeLayout mSelectedView;
 
 	/**
 	 * File browser click listener.
 	 */
-	private OnClickListener mListener;
+	private OnBrowserClickedListener mOnBrowserClickedListener;
 
 	/**
 	 * Layout inflater.
@@ -66,8 +64,8 @@ public class NacFileBrowser
 		this.mContext = context;
 		this.mFileTree = tree;
 		this.mContainer = (LinearLayout) root.findViewById(groupId);
-		this.mSelected = null;
-		this.mListener = null;
+		this.mSelectedView = null;
+		this.mOnBrowserClickedListener = null;
 		this.mInflater = (LayoutInflater) context.getSystemService(
 			Context.LAYOUT_INFLATER_SERVICE);
 
@@ -177,6 +175,19 @@ public class NacFileBrowser
 	}
 
 	/**
+	 * Call the on browser clicked listener.
+	 */
+	private void callOnBrowserClickedListener(NacFile.Metadata metadata,
+		String path, String name)
+	{
+		OnBrowserClickedListener listener = this.getOnBrowserClickedListener();
+		if (listener != null)
+		{
+			listener.onBrowserClicked(this, metadata, path, name);
+		}
+	}
+
+	/**
 	 * Clear the views out of the browser.
 	 */
 	private void clearEntries()
@@ -243,11 +254,11 @@ public class NacFileBrowser
 	}
 
 	/**
-	 * @return The OnClickListener.
+	 * @return The OnBrowserClickedListener.
 	 */
-	private OnClickListener getListener()
+	private OnBrowserClickedListener getOnBrowserClickedListener()
 	{
-		return this.mListener;
+		return this.mOnBrowserClickedListener;
 	}
 
 	/**
@@ -261,7 +272,6 @@ public class NacFileBrowser
 		}
 
 		NacFile.Metadata metadata = (NacFile.Metadata) view.getTag();
-
 		return metadata.getName();
 	}
 
@@ -276,32 +286,24 @@ public class NacFileBrowser
 		}
 
 		NacFile.Metadata metadata = (NacFile.Metadata) view.getTag();
-
 		return metadata.getPath();
+	}
+
+	/**
+	 * @return The file metadata of the currently selected view.
+	 */
+	public NacFile.Metadata getSelectedMetadata()
+	{
+		View view = this.getSelectedView();
+		return (view != null) ? (NacFile.Metadata) view.getTag() : null;
 	}
 
 	/**
 	 * @return The currently selected view.
 	 */
-	public RelativeLayout getSelected()
+	public RelativeLayout getSelectedView()
 	{
-		return this.mSelected;
-	}
-
-	/**
-	 * @return The currently selected name.
-	 */
-	public String getSelectedName()
-	{
-		return this.getName(this.getSelected());
-	}
-
-	/**
-	 * @return The path of the currently selected view.
-	 */
-	public String getSelectedPath()
-	{
-		return this.getPath(this.getSelected());
+		return this.mSelectedView;
 	}
 
 	/**
@@ -313,11 +315,21 @@ public class NacFileBrowser
 	}
 
 	/**
+	 * @return True if in the same directory as the selected view, and False
+	 *         otherwise.
+	 */
+	public boolean inSelectedDirectory(String directoryPath)
+	{
+		NacFile.Metadata metadata = this.getSelectedMetadata();
+		return (metadata != null) && metadata.getDirectory().equals(directoryPath);
+	}
+
+	/**
 	 * @return True if something is selected and False otherwise.
 	 */
 	public boolean isSelected()
 	{
-		return (this.getSelected() != null);
+		return (this.getSelectedView() != null);
 	}
 
 	/**
@@ -326,7 +338,13 @@ public class NacFileBrowser
 	 */
 	public boolean isSelected(String path)
 	{
-		String selectedPath = this.getSelectedPath();
+		NacFile.Metadata metadata = this.getSelectedMetadata();
+		if (metadata == null)
+		{
+			return false;
+		}
+
+		String selectedPath = metadata.getPath();
 		return (!path.isEmpty() && (path.equals(selectedPath)));
 	}
 
@@ -358,16 +376,11 @@ public class NacFileBrowser
 		else if (metadata.isDirectory())
 		{
 			NacMedia.Tree tree = this.getTree();
-
 			tree.cd(name);
-
 			path = name.equals("..") ? tree.getDirectoryPath() : path;
 		}
 
-		if (this.getListener() != null)
-		{
-			this.getListener().onClick(this, metadata, path, name);
-		}
+		this.callOnBrowserClickedListener(metadata, path, name);
 	}
 
 	/**
@@ -395,9 +408,7 @@ public class NacFileBrowser
 	public boolean previousDirectory()
 	{
 		NacMedia.Tree tree = this.getTree();
-
 		tree.cd("..");
-
 		String path = tree.getDirectoryPath();
 
 		this.show(path);
@@ -407,9 +418,9 @@ public class NacFileBrowser
 	/**
 	 * Set the file browser on click listener.
 	 */
-	public void setOnClickListener(OnClickListener listener)
+	public void setOnBrowserClickedListener(OnBrowserClickedListener listener)
 	{
-		this.mListener = listener;
+		this.mOnBrowserClickedListener = listener;
 	}
 
 	/**
@@ -417,7 +428,7 @@ public class NacFileBrowser
 	 */
 	public void select(String selectPath)
 	{
-		if (selectPath.isEmpty())
+		if ((selectPath == null) || selectPath.isEmpty())
 		{
 			return;
 		}
@@ -447,12 +458,12 @@ public class NacFileBrowser
 	 */
 	public void select(View view)
 	{
-		RelativeLayout selected = this.getSelected();
+		RelativeLayout selected = this.getSelectedView();
 
 		this.deselectView(selected);
 		this.selectView(view);
 
-		this.mSelected = (RelativeLayout) view;
+		this.mSelectedView = (RelativeLayout) view;
 	}
 
 	/**
@@ -479,11 +490,7 @@ public class NacFileBrowser
 		this.clearEntries();
 		this.populateEntries(directoryPath);
 		this.getTree().cd(directoryPath);
-
-		if ((filePath != null) && !filePath.isEmpty())
-		{
-			this.select(filePath);
-		}
+		this.select(filePath);
 	}
 
 	/**
@@ -491,7 +498,15 @@ public class NacFileBrowser
 	 */
 	public void show(String directoryPath)
 	{
-		this.show(directoryPath, null);
+		NacFile.Metadata metadata = this.getSelectedMetadata();
+		String filePath = null;
+		
+		if (this.inSelectedDirectory(directoryPath))
+		{
+			filePath = metadata.getPath();
+		}
+
+		this.show(directoryPath, filePath);
 	}
 
 	/**

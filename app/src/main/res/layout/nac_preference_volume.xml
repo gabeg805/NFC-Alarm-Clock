@@ -17,7 +17,7 @@
 		android:layout_weight="1">
 
 		<TextView
-			style="@style/TextView.Primary"
+			style="@style/Widget.TextView.Primary"
 			android:id="@android:id/title"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
 				/>
 
 			<com.google.android.material.button.MaterialButton
-				style="@style/TextButton.Icon"
+				style="@style/Widget.Button.Icon"
 				android:id="@+id/widget"
 				android:layout_width="@dimen/touch"
 				android:layout_height="@dimen/touch"

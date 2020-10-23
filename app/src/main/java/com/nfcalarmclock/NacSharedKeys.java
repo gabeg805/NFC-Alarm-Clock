@@ -282,6 +282,14 @@ public class NacSharedKeys
 	}
 
 	/**
+	 * @return The should refresh main activity key.
+	 */
+	public String getShouldRefreshMainActivity()
+	{
+		return this.getString(R.string.app_should_refresh_main_activity);
+	}
+
+	/**
 	 * @return The alarm information key.
 	 */
 	public String getShowAlarmInfo()

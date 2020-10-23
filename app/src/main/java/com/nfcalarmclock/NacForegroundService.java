@@ -137,6 +137,7 @@ public class NacForegroundService
 			}
 
 			shared.editSnoozeCount(actualAlarm.getId(), 0);
+			shared.editShouldRefreshMainActivity(true);
 		}
 
 		NacSharedConstants cons = new NacSharedConstants(this);
@@ -500,6 +501,7 @@ public class NacForegroundService
 		alarm.setMinute(cal.get(Calendar.MINUTE));
 		NacScheduler.update(this, alarm, cal);
 		shared.editSnoozeCount(id, snoozeCount+1);
+		shared.editShouldRefreshMainActivity(true);
 
 		NacUtility.quickToast(this, cons.getMessageAlarmSnooze());
 		this.finish();

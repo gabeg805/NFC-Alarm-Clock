@@ -1,5 +1,6 @@
 package com.nfcalarmclock;
 
+import android.content.Context;
 import android.os.Bundle;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
@@ -17,14 +18,14 @@ public class NacAppearanceSettingsFragment
 	 */
 	private void init()
 	{
+		Context context = getContext();
+
 		addPreferencesFromResource(R.xml.appearance_preferences);
-		PreferenceManager.setDefaultValues(getContext(),
-			R.xml.appearance_preferences, false);
+		PreferenceManager.setDefaultValues(context, R.xml.appearance_preferences,
+			false);
 
-		NacSharedKeys keys = this.getKeys();
-		Preference theme = findPreference(keys.getThemeColor());
-
-		theme.setOnPreferenceChangeListener(this);
+		this.setupThemeColorPreference();
+		this.setupDayButtonStylePreference();
 	}
 
 	/**
@@ -42,10 +43,47 @@ public class NacAppearanceSettingsFragment
 	@Override
 	public boolean onPreferenceChange(Preference pref, Object newVal)
 	{
-		setPreferenceScreen(null);
-		this.init();
+		NacSharedKeys keys = this.getKeys();
+		String prefKey = pref.getKey();
+		String themeKey = keys.getThemeColor();
+		String dayButtonStyleKey = keys.getDayButtonStyle();
+
+		if (prefKey.equals(themeKey))
+		{
+			setPreferenceScreen(null);
+			this.init();
+		}
+		else if (prefKey.equals(dayButtonStyleKey))
+		{
+			NacSharedPreferences shared = this.getSharedPreferences();
+			shared.editShouldRefreshMainActivity(true);
+		}
 
 		return true;
+	}
+
+	/**
+	 * Setup the day button style preference.
+	 */
+	private void setupDayButtonStylePreference()
+	{
+		NacSharedKeys keys = this.getKeys();
+		String dayButtonStyleKey = keys.getDayButtonStyle();
+		Preference dayButtonStylePref = findPreference(dayButtonStyleKey);
+
+		dayButtonStylePref.setOnPreferenceChangeListener(this);
+	}
+
+	/**
+	 * Setup the theme color preference.
+	 */
+	private void setupThemeColorPreference()
+	{
+		NacSharedKeys keys = this.getKeys();
+		String themeKey = keys.getThemeColor();
+		Preference themePref = findPreference(themeKey);
+
+		themePref.setOnPreferenceChangeListener(this);
 	}
 
 }

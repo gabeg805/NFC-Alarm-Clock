@@ -5,6 +5,7 @@
 	<string name="app_name">NFC Alarm Clock</string>
 	<string name="app_first_run">app_first_run</string>
 	<string name="app_rating_counter">app_rating_counter</string>
+	<string name="app_should_refresh_main_activity">app_should_refresh_main_activity</string>
 	<string name="card_is_measured">card_is_measured</string>
 	<string name="card_height_collapsed">card_height_collapsed</string>
 	<string name="card_height_collapsed_dismiss">card_height_collapsed_dismiss</string>

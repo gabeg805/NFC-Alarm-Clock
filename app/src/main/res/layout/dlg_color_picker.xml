@@ -38,7 +38,7 @@
 			/>
 
 		<EditText
-			style="@style/TextView.Primary"
+			style="@style/Widget.TextView.Primary"
 			android:id="@+id/color_value"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"

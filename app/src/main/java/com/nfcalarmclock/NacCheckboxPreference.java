@@ -155,6 +155,11 @@ public class NacCheckboxPreference
 	@Override
 	public void onCheckedChanged(CompoundButton button, boolean state)
 	{
+		if (!callChangeListener(state))
+		{
+			return;
+		}
+
 		this.mValue = state;
 
 		this.mCheckBox.setChecked(state);
@@ -179,7 +184,6 @@ public class NacCheckboxPreference
 	public boolean onPreferenceClick(Preference pref)
 	{
 		this.mCheckBox.performClick();
-
 		return true;
 	}
 

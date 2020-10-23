@@ -421,6 +421,23 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * @see editShouldRefreshMainActivity
+	 */
+	public void editShouldRefreshMainActivity(boolean shouldRefresh)
+	{
+		this.editShouldRefreshMainActivity(shouldRefresh, false);
+	}
+
+	/**
+	 * Edit the value indicating whether the main activity should be refreshed or not.
+	 */
+	public void editShouldRefreshMainActivity(boolean shouldRefresh, boolean commit)
+	{
+		String key = this.getKeys().getShouldRefreshMainActivity();
+		this.saveBoolean(key, shouldRefresh, commit);
+	}
+
+	/**
 	 * @see editSpeakFrequency
 	 */
 	public void editSpeakFrequency(int freq)
@@ -1003,6 +1020,16 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getRepeat();
 		boolean value = this.getDefaults().getRepeat();
+		return this.getInstance().getBoolean(key, value);
+	}
+
+	/**
+	 * @return Whether the main activity should be refreshed or not.
+	 */
+	public boolean getShouldRefreshMainActivity()
+	{
+		String key = this.getKeys().getShouldRefreshMainActivity();
+		boolean value = this.getDefaults().getShouldRefreshMainActivity();
 		return this.getInstance().getBoolean(key, value);
 	}
 

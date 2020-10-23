@@ -18,7 +18,7 @@
 		app:counterMaxLength="@integer/max_entry_length">
 
 		<com.google.android.material.textfield.TextInputEditText
-			style="@style/TextView.Primary"
+			style="@style/Widget.TextView.Primary"
 			android:id="@+id/alarm_name"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"

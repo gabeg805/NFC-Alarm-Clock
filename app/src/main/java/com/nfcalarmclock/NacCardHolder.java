@@ -30,6 +30,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
+//import com.google.android.material.timepicker.MaterialTimePicker;
 import java.util.EnumSet;
 
 /**
@@ -2160,11 +2161,8 @@ public class NacCardHolder
 		int hour = alarm.getHour();
 		int minute = alarm.getMinute();
 		boolean format = NacCalendar.Time.is24HourFormat(context);
-		TimePickerDialog dialog = new TimePickerDialog(context,
-			this, hour, minute, format);
-			//R.style.Widget_Nac_TimePicker, this, hour, minute, format);
-		//TimePickerDialog dialog = new TimePickerDialog(context, this, hour, minute,
-		//	format);
+		TimePickerDialog dialog = new TimePickerDialog(context, this, hour, minute,
+			format);
 
 		dialog.show();
 	}

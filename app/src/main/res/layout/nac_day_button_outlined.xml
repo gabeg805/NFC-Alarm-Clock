@@ -24,7 +24,7 @@
 			android:textSize="@dimen/tsz_normal"
 			android:text=""
 			app:backgroundTint="@android:color/transparent"
-			app:cornerRadius="12dp"
+			app:cornerRadius="@dimen/radius_day_outlined"
 			app:strokeColor="@color/nac_day_button_stroke"
 			/>
 	</com.google.android.material.button.MaterialButtonToggleGroup>

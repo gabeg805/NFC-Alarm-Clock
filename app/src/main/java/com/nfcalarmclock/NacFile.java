@@ -35,9 +35,9 @@ public class NacFile
 		 */
 		public Metadata(String directory, String name, long id)
 		{
-			this.mDirectory = directory;
-			this.mName = name;
-			this.mId = id;
+			this.setDirectory(directory);
+			this.setName(name);
+			this.setId(id);
 		}
 
 		/**
@@ -111,6 +111,30 @@ public class NacFile
 			NacUtility.printf("ID        : %d", this.getId());
 			NacUtility.printf("Is Dir?   : %b", this.isDirectory());
 			NacUtility.printf("Is File?  : %b", this.isFile());
+		}
+
+		/**
+		 * Set the directory.
+		 */
+		public void setDirectory(String directory)
+		{
+			this.mDirectory = directory;
+		}
+
+		/**
+		 * Set the file ID.
+		 */
+		public void setId(long id)
+		{
+			this.mId = id;
+		}
+
+		/**
+		 * Set the file name.
+		 */
+		public void setName(String name)
+		{
+			this.mName = name;
 		}
 
 		/**
@@ -271,7 +295,6 @@ public class NacFile
 		public String getDirectoryPath()
 		{
 			NacTreeNode<String> currentDir = this.getDirectory();
-
 			return this.getPath(currentDir);
 		}
 
@@ -426,8 +449,6 @@ public class NacFile
 			}
 
 			directories.addAll(files);
-
-
 			return directories;
 		}
 
@@ -472,8 +493,6 @@ public class NacFile
 			}
 
 			directories.addAll(files);
-
-
 			return directories;
 		}
 

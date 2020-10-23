@@ -26,7 +26,7 @@
 			android:textSize="@dimen/tsz_normal"
 			android:text=""
 			app:backgroundTint="@color/white"
-			app:cornerRadius="14dp"
+			app:cornerRadius="@dimen/radius_day_filled"
 			/>
 	</com.google.android.material.button.MaterialButtonToggleGroup>
 

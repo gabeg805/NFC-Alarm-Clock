@@ -236,6 +236,14 @@ public class NacSharedDefaults
 	}
 
 	/**
+	 * @return The should refresh main activity.
+	 */
+	public boolean getShouldRefreshMainActivity()
+	{
+		return this.getBoolean(R.bool.default_app_should_refresh_main_activity);
+	}
+
+	/**
 	 * @return The show alarm info.
 	 */
 	public boolean getShowAlarmInfo()

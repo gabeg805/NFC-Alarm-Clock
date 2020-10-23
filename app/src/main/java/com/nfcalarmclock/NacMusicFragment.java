@@ -16,7 +16,7 @@ import java.util.Locale;
  */
 public class NacMusicFragment
 	extends NacMediaFragment
-	implements NacFileBrowser.OnClickListener,
+	implements NacFileBrowser.OnBrowserClickedListener,
 		NacDialog.OnBuildListener,
 		NacDialog.OnDismissListener
 {
@@ -150,8 +150,8 @@ public class NacMusicFragment
 	/**
 	 */
 	@Override
-	public void onClick(NacFileBrowser browser, NacFile.Metadata metadata,
-		String path, String name)
+	public void onBrowserClicked(NacFileBrowser browser,
+		NacFile.Metadata metadata, String path, String name)
 	{
 		if (metadata.isDirectory())
 		{
@@ -200,9 +200,7 @@ public class NacMusicFragment
 	public boolean onDismissDialog(NacDialog dialog)
 	{
 		View view = (View) dialog.getData();
-
 		super.onClick(view);
-
 		return true;
 	}
 
@@ -254,7 +252,7 @@ public class NacMusicFragment
 			Locale locale = Locale.getDefault();
 			String name = NacMedia.getName(context, contentPath);
 			dirPath = NacMedia.getRelativePath(context, contentPath);
-			filePath = String.format(locale, "%1$s%2$s", dirPath, name);
+			filePath = String.format(locale, "%1$s/%2$s", dirPath, name);
 		}
 		else if (NacMedia.isDirectory(contentPath))
 		{
@@ -266,7 +264,7 @@ public class NacMusicFragment
 		}
 
 		this.getDirectoryTextView().setText(dirPath);
-		browser.setOnClickListener(this);
+		browser.setOnBrowserClickedListener(this);
 		browser.show(dirPath, filePath);
 	}
 

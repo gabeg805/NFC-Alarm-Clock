@@ -37,7 +37,7 @@
 				android:orientation="horizontal">
 
 				<TextView
-					style="@style/TextView.Primary"
+					style="@style/Widget.TextView.Primary"
 					android:id="@+id/nac_time"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
 					/>
 
 				<TextView
-					style="@style/TextView.Primary"
+					style="@style/Widget.TextView.Primary"
 					android:id="@+id/nac_meridian"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
 				android:orientation="horizontal">
 
 				<TextView
-					style="@style/TextView.Summary"
+					style="@style/Widget.TextView.Summary"
 					android:id="@+id/nac_summary_days"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
 					-->
 
 				<TextView
-					style="@style/TextView.Summary"
+					style="@style/Widget.TextView.Summary"
 					android:id="@+id/nac_summary_name"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
 					/>
 
 				<com.google.android.material.button.MaterialButton
-					style="@style/TextButton.Icon"
+					style="@style/Widget.Button.Icon"
 					android:id="@+id/nac_expand"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/isz_large"
@@ -142,7 +142,7 @@
 				android:alpha="0.8">
 
 				<com.google.android.material.button.MaterialButton
-					style="@style/TextButton.Ellipsize.Row"
+					style="@style/Widget.Button.Text.Row"
 					android:id="@+id/nac_dismiss"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
@@ -162,7 +162,7 @@
 					/>
 
 				<com.google.android.material.button.MaterialButton
-					style="@style/TextButton.Icon"
+					style="@style/Widget.Button.Icon"
 					android:id="@+id/nac_expand_other"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/isz_large"
@@ -235,7 +235,7 @@
 
 				<!-- Repeat -->
 				<com.google.android.material.button.MaterialButton
-					style="@style/TextButton.Icon"
+					style="@style/Widget.Button.Icon"
 					android:id="@+id/nac_repeat"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/touch"
@@ -249,7 +249,7 @@
 
 				<!-- Vibrate -->
 				<com.google.android.material.button.MaterialButton
-					style="@style/TextButton.Icon"
+					style="@style/Widget.Button.Icon"
 					android:id="@+id/nac_vibrate"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/touch"
@@ -263,7 +263,7 @@
 
 				<!-- NFC -->
 				<com.google.android.material.button.MaterialButton
-					style="@style/TextButton.Icon"
+					style="@style/Widget.Button.Icon"
 					android:id="@+id/nac_nfc"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/touch"
@@ -278,7 +278,7 @@
 
 			<!-- Media -->
 			<com.google.android.material.button.MaterialButton
-				style="@style/TextButton.Ellipsize.Row"
+				style="@style/Widget.Button.Text.Row"
 				android:id="@+id/nac_media"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -315,7 +315,7 @@
 					/>
 
 				<com.google.android.material.button.MaterialButton
-					style="@style/TextButton.Icon"
+					style="@style/Widget.Button.Icon"
 					android:id="@+id/nac_audio_source"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/touch"
@@ -325,7 +325,7 @@
 
 			<!-- Name -->
 			<com.google.android.material.button.MaterialButton
-				style="@style/TextButton.Ellipsize.Row"
+				style="@style/Widget.Button.Text.Row"
 				android:id="@+id/nac_name"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -351,7 +351,7 @@
 				android:orientation="horizontal">
 
 				<com.google.android.material.button.MaterialButton
-					style="@style/TextButton.Ellipsize.Row"
+					style="@style/Widget.Button.Text.Row"
 					android:id="@+id/nac_delete"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
@@ -370,7 +370,7 @@
 					/>
 
 				<com.google.android.material.button.MaterialButton
-					style="@style/TextButton.Icon"
+					style="@style/Widget.Button.Icon"
 					android:id="@+id/nac_collapse"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/isz_large"

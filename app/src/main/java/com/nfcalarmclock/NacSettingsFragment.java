@@ -15,22 +15,10 @@ public abstract class NacSettingsFragment
 {
 
 	/**
-	 * Application context.
-	 */
-	private Context mContext;
-
-	/**
 	 * Shared preference store.
 	 */
 	private NacSharedPreferences mShared;
-
-	/**
-	 * @return The context.
-	 */
-	public Context getContext()
-	{
-		return this.mContext;
-	}
+//}
 
 	/**
 	 * @return The shared preference keys.
@@ -56,7 +44,6 @@ public abstract class NacSettingsFragment
 	{
 		super.onAttach(context);
 
-		this.mContext = context;
 		this.mShared = new NacSharedPreferences(context);
 	}
 

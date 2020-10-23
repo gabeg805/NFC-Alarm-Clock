@@ -13,14 +13,23 @@
 	<color name="gray_light">#3c3c3c</color>
 	<color name="gray">#262626</color>
 	<color name="gray_dark">#101010</color>
-	<color name="green">#008000</color>
 	<color name="orange">#fb8c00</color>
 	<color name="red">#ff0000</color>
+	<color name="green">#008000</color>
 	<color name="sky_blue">#00c0fb</color>
 	<color name="white_dull">#b2b2b2</color>
 	<color name="white">#ffffff</color>
 
 	<!--
+	<color name="blue">#1d00fb</color>
+	<color name="maroon">#800000</color>
+	<color name="aqua">#00ffff</color>
+	<color name="teal">#008080</color>
+	<color name="navy">#000080</color>
+	<color name="fuchsia">#ff00ff</color>
+	<color name="pink">#ec407a</color>
+	<color name="purple">#800080</color>
+
 	<color name="blue">#1d00fb</color>
 	<color name="dark_orange">#fb4b00</color>
 	<color name="eggshell">#f0ead6</color>

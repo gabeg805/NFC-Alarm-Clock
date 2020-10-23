@@ -447,8 +447,7 @@ public class NacMedia
 		}
 
 		c.close();
-
-		return path;
+		return NacFile.strip(path);
 	}
 
 	/**
@@ -642,7 +641,6 @@ public class NacMedia
 		}
 
 		c.close();
-
 		return volume;
 	}
 
@@ -687,7 +685,8 @@ public class NacMedia
 		String volumeName = NacMedia.getVolumeName(context, path);
 		String relativePath = NacMedia.getRelativePath(context, path);
 
-		return ((volumeName != null) && volumeName.startsWith("external")
+		//return ((volumeName != null) && volumeName.startsWith("external")
+		return ((volumeName != null) && !volumeName.isEmpty()
 			&& (relativePath != null) && !relativePath.isEmpty());
 	}
 

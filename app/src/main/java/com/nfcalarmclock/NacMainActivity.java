@@ -334,6 +334,7 @@ public class NacMainActivity
 	protected void onResume()
 	{
 		super.onResume();
+		this.setupRefreshMainActivity();
 		this.setupActiveAlarmActivity();
 		this.setupAlarmCardAdapter();
 		this.setupFloatingActionButton();
@@ -488,6 +489,20 @@ public class NacMainActivity
 		recyclerView.addItemDecoration(divider);
 		recyclerView.setAdapter(cardAdapter);
 		recyclerView.setLayoutManager(layoutManager);
+	}
+
+	/**
+	 * Setup whether the main activity should be refreshed or not.
+	 */
+	private void setupRefreshMainActivity()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		if (shared.getShouldRefreshMainActivity())
+		{
+			NacUtility.quickToast(this, "Refreshing main activity!");
+			shared.editShouldRefreshMainActivity(false);
+			recreate();
+		}
 	}
 
 	/**

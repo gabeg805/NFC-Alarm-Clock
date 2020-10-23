@@ -13,6 +13,7 @@
 	<bool name="default_show_alarm_info">false</bool>
 	<bool name="default_shuffle_playlist">false</bool>
 	<bool name="default_speak_to_me">false</bool>
+	<bool name="default_app_should_refresh_main_activity">false</bool>
 	<bool name="default_app_first_run">true</bool>
 
 </resources>

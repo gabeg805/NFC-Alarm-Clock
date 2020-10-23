@@ -7,7 +7,7 @@
 	android:paddingEnd="?dialogPreferredPadding">
 
 	<TextView
-		style="@style/TextView.Primary"
+		style="@style/Widget.TextView.Primary"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="@dimen/normal"
