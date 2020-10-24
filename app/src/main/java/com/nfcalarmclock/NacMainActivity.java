@@ -499,7 +499,6 @@ public class NacMainActivity
 		NacSharedPreferences shared = this.getSharedPreferences();
 		if (shared.getShouldRefreshMainActivity())
 		{
-			NacUtility.quickToast(this, "Refreshing main activity!");
 			shared.editShouldRefreshMainActivity(false);
 			recreate();
 		}

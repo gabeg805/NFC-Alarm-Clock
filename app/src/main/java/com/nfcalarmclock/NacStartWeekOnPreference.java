@@ -154,10 +154,13 @@ public class NacStartWeekOnPreference
 	@Override
 	public boolean onDismissDialog(NacDialog dialog)
 	{
+		Context context = getContext();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
 		View root = dialog.getRoot();
 		this.mValue = this.getCheckedIndex(root);
 
 		persistInt(this.mValue);
+		shared.editShouldRefreshMainActivity(true);
 		notifyChanged();
 		return true;
 	}

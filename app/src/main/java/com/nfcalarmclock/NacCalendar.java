@@ -805,30 +805,23 @@ public class NacCalendar
 		}
 
 		/**
-		 * @see getMeridian
-		 */
-		public static String getMeridian(Context context, int hour)
-		{
-			boolean format = NacCalendar.Time.is24HourFormat(context);
-			return NacCalendar.Time.getMeridian(hour, format);
-		}
-
-		/**
-		 * @param  hour  The hour.
+		 * @param  hour    The hour.
 		 * @param  format  The 24 hour format to determine how to interpret the
 		 *                 hour.
 		 *
 		 * @return The time meridian.
 		 */
-		public static String getMeridian(int hour, boolean format)
+		public static String getMeridian(Context context, int hour)
 		{
+			NacSharedConstants cons = new NacSharedConstants(context);
+			boolean format = NacCalendar.Time.is24HourFormat(context);
 			if (format)
 			{
 				return "";
 			}
 			else
 			{
-				return (hour < 12) ? "AM" : "PM";
+				return (hour < 12) ? cons.getAm() : cons.getPm();
 			}
 		}
 

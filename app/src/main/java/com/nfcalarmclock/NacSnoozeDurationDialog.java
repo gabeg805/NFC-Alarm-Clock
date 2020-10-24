@@ -39,13 +39,14 @@ public class NacSnoozeDurationDialog
 	{
 		super.onShowDialog(dialog, root);
 
+		Context context = this.getContext();
 		int index = this.getDataInt();
 		int length = 22;
 		String[] values = new String[length];
 
 		for (int i=0; i < length; i++)
 		{
-			String summary = NacSharedPreferences.getSnoozeDurationSummary(i);
+			String summary = NacSharedPreferences.getSnoozeDurationSummary(context, i);
 			values[i] = summary.split("\\s+")[0];
 		}
 

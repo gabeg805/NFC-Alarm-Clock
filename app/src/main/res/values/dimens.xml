@@ -27,7 +27,7 @@
 	<!-- Sizing -->
 	<dimen name="touch">48dp</dimen>
 	<dimen name="radius">6dp</dimen>
-	<dimen name="radius_day_filled">14dp</dimen>
+	<dimen name="radius_day_filled">16dp</dimen>
 	<dimen name="radius_day_outlined">12dp</dimen>
 
 	<!-- Fragment sound -->

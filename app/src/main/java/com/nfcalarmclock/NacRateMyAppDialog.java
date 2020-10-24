@@ -87,7 +87,7 @@ public class NacRateMyAppDialog
 		Uri uri = Uri.parse("market://details?id=com.nfcalarmclock");
 		Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 
-		shared.setRateMyAppRated();
+		shared.ratedRateMyApp();
 		context.startActivity(intent);
 		return true;
 	}
@@ -98,7 +98,7 @@ public class NacRateMyAppDialog
 	public boolean onNeutralActionDialog(NacDialog dialog)
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		shared.setRateMyAppPostpone();
+		shared.postponeRateMyApp();
 		dialog.neutralDismiss();
 		return true;
 	}

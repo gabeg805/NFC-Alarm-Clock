@@ -149,6 +149,14 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return AM.
+	 */
+	public String getAm()
+	{
+		return this.getString(R.string.am);
+	}
+
+	/**
 	 * @return The app name.
 	 */
 	public String getAppName()
@@ -537,6 +545,14 @@ public class NacSharedConstants
 	public String getNone()
 	{
 		return this.getString(R.string.none);
+	}
+
+	/**
+	 * @return PM.
+	 */
+	public String getPm()
+	{
+		return this.getString(R.string.pm);
 	}
 
 	/**

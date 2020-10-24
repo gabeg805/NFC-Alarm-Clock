@@ -7,7 +7,7 @@
 			<objectAnimator
 				android:propertyName="alpha"
 				android:duration="@integer/duration_day_button_alpha_on"
-				android:valueFrom="0.11"
+				android:valueFrom="0.08"
 				android:valueTo="1.0"
 				android:valueType="floatType"
 				android:repeatCount="0"
@@ -21,7 +21,7 @@
 				android:propertyName="alpha"
 				android:duration="@integer/duration_day_button_off"
 				android:valueFrom="1.0"
-				android:valueTo="0.11"
+				android:valueTo="0.08"
 				android:valueType="floatType"
 				android:repeatCount="0"
 				/>

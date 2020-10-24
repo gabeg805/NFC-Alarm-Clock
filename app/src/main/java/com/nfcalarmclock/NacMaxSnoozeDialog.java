@@ -39,13 +39,14 @@ public class NacMaxSnoozeDialog
 	{
 		super.onShowDialog(dialog, root);
 
+		Context context = this.getContext();
 		int index = this.getDataInt();
 		int length = 12;
 		String[] values = new String[length];
 
 		for (int i=0; i < length; i++)
 		{
-			values[i] = NacSharedPreferences.getMaxSnoozeSummary(i);
+			values[i] = NacSharedPreferences.getMaxSnoozeSummary(context, i);
 		}
 
 		this.setDisplayedValues(values);

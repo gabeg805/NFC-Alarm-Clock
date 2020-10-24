@@ -50,7 +50,8 @@ public class NacSnoozeDurationPreference
 	@Override
 	public CharSequence getSummary()
 	{
-		return NacSharedPreferences.getSnoozeDurationSummary(this.mValue);
+		Context context = getContext();
+		return NacSharedPreferences.getSnoozeDurationSummary(context, this.mValue);
 	}
 
 	/**

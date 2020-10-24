@@ -50,77 +50,45 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @see editAmColor
+	 * Edit the AM color, in the time, of all alarm cards.
 	 */
 	public void editAmColor(int color)
 	{
-		this.editAmColor(color, false);
-	}
-
-	/**
-	 * Edit the AM preference color.
-	 */
-	public void editAmColor(int color, boolean commit)
-	{
 		String key = this.getKeys().getAmColor();
-
-		this.saveInt(key, color, commit);
+		this.saveInt(key, color, false);
 	}
 
 	/**
-	 * @see editAppFirstRun
+	 * Edit whether this is the app's first run or not.
 	 */
 	public void editAppFirstRun(boolean first)
 	{
-		this.editAppFirstRun(first, false);
-	}
-
-	/**
-	 * Edit the app first run value.
-	 */
-	public void editAppFirstRun(boolean first, boolean commit)
-	{
 		String key = this.getKeys().getAppFirstRun();
-		this.saveBoolean(key, first, commit);
+		this.saveBoolean(key, first, false);
 	}
 
 	/**
-	 * @see editAudioSource
+	 * Edit the default audio source to use when a new alarm card is created.
+	 *
+	 * This can be changed for an alarm by clicking the audio settings button.
 	 */
 	public void editAudioSource(String source)
 	{
-		this.editAudioSource(source, false);
-	}
-
-	/**
-	 * @return Edit the audio source.
-	 */
-	public void editAudioSource(String source, boolean commit)
-	{
 		String key = this.getKeys().getAudioSource();
-
-		this.saveString(key, source, commit);
+		this.saveString(key, source, false);
 	}
 
 	/**
-	 * @see editAutoDismiss
+	 * Edit the index corresponding to a time in which to auto dismiss the alarm.
 	 */
 	public void editAutoDismiss(int index)
 	{
-		this.editAutoDismiss(index, false);
-	}
-
-	/**
-	 * Edit the auto dismiss preference value.
-	 */
-	public void editAutoDismiss(int index, boolean commit)
-	{
 		String key = this.getKeys().getAutoDismiss();
-		this.saveInt(key, index, commit);
+		this.saveInt(key, index, false);
 	}
 
 	/**
-	 * Edit the value of the alarm card height when it is collapsed.
+	 * Edit the height of the alarm card when it is collapsed.
 	 */
 	public void editCardHeightCollapsed(int height)
 	{
@@ -129,8 +97,8 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * Edit the value of the alarm card height when it is collapsed, with dismiss
-	 * showing.
+	 * Edit the height of the alarm card height it is collapsed, but the dismiss
+	 * button is showing.
 	 */
 	public void editCardHeightCollapsedDismiss(int height)
 	{
@@ -139,7 +107,7 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * Edit the value of the alarm card height when it is expanded.
+	 * Edit the height of the alarm card when it is expanded.
 	 */
 	public void editCardHeightExpanded(int height)
 	{
@@ -157,392 +125,246 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @see editDayButtonStyle
+	 * Edit the value indicating which day button style to use.
 	 */
 	public void editDayButtonStyle(int style)
 	{
-		this.editDayButtonStyle(style, false);
-	}
-
-	/**
-	 * Edit the preference value indicating which day button style to use.
-	 */
-	public void editDayButtonStyle(int style, boolean commit)
-	{
 		String key = this.getKeys().getDayButtonStyle();
-		this.saveBoolean(key, (style == 1), commit);
+		this.saveBoolean(key, (style == 1), false);
 	}
 
 	/**
-	 * @see editDays
+	 * Edit the default days to use when a new alarm card is created.
 	 */
 	public void editDays(int days)
 	{
-		this.editDays(days, false);
-	}
-
-	/**
-	 * Edit the days preference value.
-	 */
-	public void editDays(int days, boolean commit)
-	{
 		String key = this.getKeys().getDays();
-		this.saveInt(key, days, commit);
+		this.saveInt(key, days, false);
 	}
 
 	/**
-	 * @see editDaysColor
+	 * Edit the color of the days an alarm will go off on.
+	 * 
+	 * This is displayed when an alarm card is collapsed.
 	 */
 	public void editDaysColor(int color)
 	{
-		this.editDaysColor(color, false);
-	}
-
-	/**
-	 * Edit the days preference color.
-	 */
-	public void editDaysColor(int color, boolean commit)
-	{
 		String key = this.getKeys().getDaysColor();
-		this.saveInt(key, color, commit);
+		this.saveInt(key, color, false);
 	}
 
 	/**
-	 * @see editEasySnooze
+	 * Edit the flag indicating whether the user wants to snooze easily or not.
 	 */
 	public void editEasySnooze(boolean easy)
 	{
-		this.editEasySnooze(easy, false);
-	}
-
-	/**
-	 * Edit the easy snooze preference value.
-	 */
-	public void editEasySnooze(boolean easy, boolean commit)
-	{
 		String key = this.getKeys().getEasySnooze();
-		this.saveBoolean(key, easy, commit);
+		this.saveBoolean(key, easy, false);
 	}
 
 	/**
-	 * @see editMaxSnooze
+	 * Edit the max number of times a user is able to snooze an alarm.
 	 */
 	public void editMaxSnooze(int max)
 	{
-		this.editMaxSnooze(max, false);
-	}
-
-	/**
-	 * Edit the max snooze preference value.
-	 */
-	public void editMaxSnooze(int max, boolean commit)
-	{
 		String key = this.getKeys().getMaxSnooze();
-		this.saveInt(key, max, commit);
+		this.saveInt(key, max, false);
 	}
 
 	/**
-	 * @see editName
+	 * Edit the default name to use when a new alarm card is created.
 	 */
 	public void editName(String name)
 	{
-		this.editName(name, false);
-	}
-
-	/**
-	 * Edit the alarm name preference value.
-	 */
-	public void editName(String name, boolean commit)
-	{
 		String key = this.getKeys().getName();
-		this.saveString(key, name, commit);
+		this.saveString(key, name, false);
 	}
 
 	/**
-	 * @see editNameColor
+	 * Edit the color of the name of an alarm.
+	 * 
+	 * This is displayed when an alarm card is collapsed.
 	 */
 	public void editNameColor(int color)
 	{
-		this.editNameColor(color, false);
-	}
-
-	/**
-	 * Edit the alarm name preference color.
-	 */
-	public void editNameColor(int color, boolean commit)
-	{
 		String key = this.getKeys().getNameColor();
-
-		this.saveInt(key, color, commit);
+		this.saveInt(key, color, false);
 	}
 
 	/**
-	 * @see editNextAlarmFormat
+	 * Edit the time format to display the next alarm in.
 	 */
 	public void editNextAlarmFormat(int format)
 	{
-		this.editNextAlarmFormat(format, false);
-	}
-
-	/**
-	 * Edit the display time remaining preference.
-	 */
-	public void editNextAlarmFormat(int format, boolean commit)
-	{
 		String key = this.getKeys().getNextAlarmFormat();
-
-		this.saveInt(key, format, commit);
+		this.saveInt(key, format, false);
 	}
 
 	/**
-	 * @see editPmColor
+	 * Edit the PM color, in the time, of all alarm cards.
 	 */
 	public void editPmColor(int color)
 	{
-		this.editPmColor(color, false);
-	}
-
-	/**
-	 * Edit the PM preference color.
-	 */
-	public void editPmColor(int color, boolean commit)
-	{
 		String key = this.getKeys().getPmColor();
-
-		this.saveInt(key, color, commit);
-	}
-
-	/**
-	 * @see editPreviousVolume
-	 */
-	public void editPreviousVolume(int previous)
-	{
-		this.editPreviousVolume(previous, false);
+		this.saveInt(key, color, false);
 	}
 
 	/**
 	 * Edit the previous system volume, before an alarm goes off.
 	 */
-	public void editPreviousVolume(int previous, boolean commit)
+	public void editPreviousVolume(int previous)
 	{
 		String key = this.getKeys().getPreviousVolume();
-
-		this.saveInt(key, previous, commit);
+		this.saveInt(key, previous, false);
 	}
 
 	/**
-	 * @see editRateMyAppCounter
+	 * Edit the counter that will indicate whether it is time to show dialog to
+	 * Rate My App.
 	 */
 	public void editRateMyAppCounter(int counter)
 	{
-		this.editRateMyAppCounter(counter, false);
-	}
-
-	/**
-	 * Edit the app rating counter.
-	 */
-	public void editRateMyAppCounter(int counter, boolean commit)
-	{
 		String key = this.getKeys().getRateMyAppCounter();
-		this.saveInt(key, counter, commit);
+		this.saveInt(key, counter, false);
 	}
 
 	/**
-	 * @see editRepeat
+	 * Edit the default repeat value when a new alarm card is created.
 	 */
 	public void editRepeat(boolean repeat)
 	{
-		this.editRepeat(repeat, false);
-	}
-
-	/**
-	 * Edit the repeat preference value.
-	 */
-	public void editRepeat(boolean repeat, boolean commit)
-	{
 		String key = this.getKeys().getRepeat();
-
-		this.saveBoolean(key, repeat, commit);
+		this.saveBoolean(key, repeat, false);
 	}
 
 	/**
-	 * @see editSnoozeCount
+	 * Edit the current snooze count for an alarm with the given ID.
 	 */
 	public void editSnoozeCount(int id, int count)
 	{
-		this.editSnoozeCount(id, count, false);
-	}
-
-	/**
-	 * Edit the snooze count value.
-	 */
-	public void editSnoozeCount(int id, int count, boolean commit)
-	{
 		String key = NacSharedKeys.getSnoozeCount(id);
-
-		this.saveInt(key, count, commit);
-	}
-
-	/**
-	 * @see editSnoozeDuration
-	 */
-	public void editSnoozeDuration(int duration)
-	{
-		this.editSnoozeDuration(duration, false);
+		this.saveInt(key, count, false);
 	}
 
 	/**
 	 * Edit the snooze duration preference value.
 	 */
-	public void editSnoozeDuration(int duration, boolean commit)
+	public void editSnoozeDuration(int duration)
 	{
 		String key = this.getKeys().getSnoozeDuration();
-		NacUtility.printf("Edit Snooze Duration : %d", duration);
-
-		this.saveInt(key, duration, commit);
+		this.saveInt(key, duration, false);
 	}
 
 	/**
-	 * @see editMediaPath
+	 * Edit the default media path to use when a new alarm card is created.
+	 *
+	 * This is the path to the media that should play when an alarm goes off.
 	 */
 	public void editMediaPath(String path)
 	{
-		this.editMediaPath(path, false);
-	}
-
-	/**
-	 * Edit the sound preference value.
-	 */
-	public void editMediaPath(String path, boolean commit)
-	{
 		String key = this.getKeys().getMediaPath();
-
-		this.saveString(key, path, commit);
+		this.saveString(key, path, false);
 	}
 
 	/**
-	 * @see editShouldRefreshMainActivity
+	 * Edit the value indicating whether the main activity should be refreshed or
+	 * not.
 	 */
 	public void editShouldRefreshMainActivity(boolean shouldRefresh)
 	{
-		this.editShouldRefreshMainActivity(shouldRefresh, false);
-	}
-
-	/**
-	 * Edit the value indicating whether the main activity should be refreshed or not.
-	 */
-	public void editShouldRefreshMainActivity(boolean shouldRefresh, boolean commit)
-	{
 		String key = this.getKeys().getShouldRefreshMainActivity();
-		this.saveBoolean(key, shouldRefresh, commit);
+		this.saveBoolean(key, shouldRefresh, false);
 	}
 
 	/**
-	 * @see editSpeakFrequency
+	 * Edit the frequency at which the text-to-speech should go off when an alarm
+	 * is going off.
 	 */
 	public void editSpeakFrequency(int freq)
 	{
-		this.editSpeakFrequency(freq, false);
-	}
-
-	/**
-	 * Edit the speak frequency preference value.
-	 */
-	public void editSpeakFrequency(int freq, boolean commit)
-	{
 		String key = this.getKeys().getSpeakFrequency();
-
-		this.saveInt(key, freq, commit);
+		this.saveInt(key, freq, false);
 	}
 
 	/**
-	 * @see editSpeakToMe
+	 * Edit the flag indicating whether text-to-speech should be used when an
+	 * alarm goes off.
 	 */
 	public void editSpeakToMe(boolean speak)
 	{
-		this.editSpeakToMe(speak, false);
-	}
-
-	/**
-	 * Edit the speak to me preference value.
-	 */
-	public void editSpeakToMe(boolean speak, boolean commit)
-	{
 		String key = this.getKeys().getSpeakToMe();
-
-		this.saveBoolean(key, speak, commit);
+		this.saveBoolean(key, speak, false);
 	}
 
 	/**
-	 * @see editStartWeekOn
+	 * Edit the index indicating which day to start the week on.
 	 */
 	public void editStartWeekOn(int start)
 	{
-		this.editStartWeekOn(start, false);
-	}
-
-	/**
-	 * Edit the preference value indicating which day to start on.
-	 */
-	public void editStartWeekOn(int start, boolean commit)
-	{
 		String key = this.getKeys().getStartWeekOn();
-
-		this.saveInt(key, start, commit);
+		this.saveInt(key, start, false);
 	}
 
 	/**
-	 * @see editThemeColor
+	 * Edit the theme color.
 	 */
 	public void editThemeColor(int color)
 	{
-		this.editThemeColor(color, false);
-	}
-
-	/**
-	 * Edit the theme color preference value.
-	 */
-	public void editThemeColor(int color, boolean commit)
-	{
 		String key = this.getKeys().getThemeColor();
-
-		this.saveInt(key, color, commit);
+		this.saveInt(key, color, false);
 	}
 
 	/**
-	 * @see editTimeColor
+	 * Edit the color of the time for all alarm cards.
 	 */
 	public void editTimeColor(int color)
 	{
-		this.editTimeColor(color, false);
-	}
-
-	/**
-	 * Edit the time color preference value.
-	 */
-	public void editTimeColor(int color, boolean commit)
-	{
 		String key = this.getKeys().getTimeColor();
-
-		this.saveInt(key, color, commit);
+		this.saveInt(key, color, false);
 	}
 
 	/**
-	 * @see editVibrate
+	 * Edit the default use NFC value when an alarm is created.
+	 */
+	public void editUseNfc(boolean useNfc)
+	{
+		String key = this.getKeys().getUseNfc();
+		this.saveBoolean(key, useNfc, false);
+
+	}
+
+	/**
+	 * Edit the default vibrate value when an alarm is created.
 	 */
 	public void editVibrate(boolean vibrate)
 	{
-		this.editVibrate(vibrate, false);
+		String key = this.getKeys().getVibrate();
+		this.saveBoolean(key, vibrate, false);
+
 	}
 
 	/**
-	 * Edit the vibrate preference value.
+	 * @return A boolean value from the SharedPreferences instance.
 	 */
-	public void editVibrate(boolean vibrate, boolean commit)
+	public boolean getBoolean(String key, boolean defValue)
 	{
-		String key = this.getKeys().getVibrate();
-		this.saveBoolean(key, vibrate, commit);
+		return this.getInstance().getBoolean(key, defValue);
+	}
 
+	/**
+	 * @return An integer value from the SharedPreferences instance.
+	 */
+	public int getInt(String key, int defValue)
+	{
+		return this.getInstance().getInt(key, defValue);
+	}
+
+	/**
+	 * @return A string value from the SharedPreferences instance.
+	 */
+	public String getString(String key, String defValue)
+	{
+		return this.getInstance().getString(key, defValue);
 	}
 
 	/**
@@ -552,7 +374,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getAmColor();
 		int value = this.getDefaults().getAmColor();
-		return this.getInstance().getInt(key, value);
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -562,7 +384,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getAppFirstRun();
 		boolean value = this.getDefaults().getAppFirstRun();
-		return this.getInstance().getBoolean(key, value);
+		return this.getBoolean(key, value);
 	}
 
 	/**
@@ -572,7 +394,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getAudioSource();
 		String value = this.getConstants().getAudioSources().get(1);
-		return this.getInstance().getString(key, value);
+		return this.getString(key, value);
 	}
 
 	/**
@@ -582,7 +404,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getAutoDismiss();
 		int value = this.getDefaults().getAutoDismissIndex();
-		return this.getInstance().getInt(key, value);
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -611,8 +433,8 @@ public class NacSharedPreferences
 		else
 		{
 			Locale locale = Locale.getDefault();
-			return String.format(locale, "%1$s %2$s", dismiss,
-				cons.getUnitMinute(index));
+			String unit = cons.getUnitMinute(index);
+			return String.format(locale, "%1$s %2$s", dismiss, unit);
 		}
 	}
 
@@ -641,7 +463,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getCardHeightCollapsed();
 		int value = this.getDefaults().getCardHeightCollapsed();
-		return this.getInstance().getInt(key, value);
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -651,7 +473,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getCardHeightCollapsedDismiss();
 		int value = this.getDefaults().getCardHeightCollapsedDismiss();
-		return this.getInstance().getInt(key, value);
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -661,7 +483,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getCardHeightExpanded();
 		int value = this.getDefaults().getCardHeightExpanded();
-		return this.getInstance().getInt(key, value);
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -671,7 +493,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getCardIsMeasured();
 		boolean value = this.getDefaults().getCardIsMeasured();
-		return this.getInstance().getBoolean(key, value);
+		return this.getBoolean(key, value);
 	}
 
 	/**
@@ -700,7 +522,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getDayButtonStyle();
 		//int value = this.getDefaults().getDayButtonStyle();
-		boolean style = this.getInstance().getBoolean(key, true);
+		boolean style = this.getBoolean(key, true);
 		return style ? 1 : 2;
 	}
 
@@ -711,7 +533,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getDays();
 		int value = this.getDefaults().getDays();
-		return this.getInstance().getInt(key, value);
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -721,7 +543,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getDaysColor();
 		int value = this.getDefaults().getDaysColor();
-		return this.getInstance().getInt(key, value);
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -751,9 +573,8 @@ public class NacSharedPreferences
 	public boolean getEasySnooze()
 	{
 		String key = this.getKeys().getEasySnooze();
-
-		return this.getInstance().getBoolean(key,
-			this.getDefaults().getEasySnooze());
+		boolean value = this.getDefaults().getEasySnooze();
+		return this.getBoolean(key, value);
 	}
 
 	/**
@@ -763,7 +584,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getExpandNewAlarm();
 		boolean value = this.getDefaults().getExpandNewAlarm();
-		return this.getInstance().getBoolean(key, value);
+		return this.getBoolean(key, value);
 	}
 
 	/**
@@ -788,8 +609,8 @@ public class NacSharedPreferences
 	public int getMaxSnooze()
 	{
 		String key = this.getKeys().getMaxSnooze();
-		return this.getInstance().getInt(key,
-			this.getDefaults().getMaxSnoozeIndex());
+		int value = this.getDefaults().getMaxSnoozeIndex();
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -797,20 +618,22 @@ public class NacSharedPreferences
 	 */
 	public String getMaxSnoozeSummary()
 	{
+		Context context = this.getContext();
 		int index = this.getMaxSnooze();
-		return NacSharedPreferences.getMaxSnoozeSummary(index);
+		return NacSharedPreferences.getMaxSnoozeSummary(context, index);
 	}
 
 	/**
 	 * @return The summary text to use when displaying the max snooze widget.
 	 */
-	public static String getMaxSnoozeSummary(int index)
+	public static String getMaxSnoozeSummary(Context context, int index)
 	{
+		NacSharedConstants cons = new NacSharedConstants(context);
 		int value = NacSharedPreferences.getMaxSnoozeValue(index);
 
 		if (index == 0)
 		{
-			return "None";
+			return cons.getNone();
 		}
 		else if (index == 11)
 		{
@@ -847,8 +670,7 @@ public class NacSharedPreferences
 	public String getMediaPath()
 	{
 		String key = this.getKeys().getMediaPath();
-		String defaultValue = "";
-		return this.getInstance().getString(key, defaultValue);
+		return this.getString(key, "");
 	}
 
 	/**
@@ -887,11 +709,13 @@ public class NacSharedPreferences
 	 */
 	public int getMeridianColor(String meridian)
 	{
-		if (meridian.equals("AM"))
+		NacSharedConstants cons = this.getConstants();
+
+		if (meridian.equals(cons.getAm()))
 		{
 			return this.getAmColor();
 		}
-		else if (meridian.equals("PM"))
+		else if (meridian.equals(cons.getPm()))
 		{
 			return this.getPmColor();
 		}
@@ -908,7 +732,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getMissedAlarmNotification();
 		boolean value = this.getDefaults().getMissedAlarm();
-		return this.getInstance().getBoolean(key, value);
+		return this.getBoolean(key, value);
 	}
 
 	/**
@@ -917,8 +741,7 @@ public class NacSharedPreferences
 	public String getName()
 	{
 		String key = this.getKeys().getName();
-		String defaultValue = "";
-		return this.getInstance().getString(key, defaultValue);
+		return this.getString(key, "");
 	}
 
 	/**
@@ -928,7 +751,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getNameColor();
 		int value = this.getDefaults().getNameColor();
-		return this.getInstance().getInt(key, value);
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -969,7 +792,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getNextAlarmFormat();
 		int value = this.getDefaults().getNextAlarmFormatIndex();
-		return this.getInstance().getInt(key, value);
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -979,7 +802,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getPmColor();
 		int value = this.getDefaults().getPmColor();
-		return this.getInstance().getInt(key, value);
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -990,7 +813,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getPreventAppFromClosing();
 		boolean value = this.getDefaults().getPreventAppFromClosing();
-		return this.getInstance().getBoolean(key, value);
+		return this.getBoolean(key, value);
 	}
 
 	/**
@@ -1000,7 +823,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getPreviousVolume();
 		int value = this.getDefaults().getPreviousVolume();
-		return this.getInstance().getInt(key, value);
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -1010,7 +833,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getRateMyAppCounter();
 		int value = this.getDefaults().getRateMyAppCounter();
-		return this.getInstance().getInt(key, value);
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -1020,7 +843,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getRepeat();
 		boolean value = this.getDefaults().getRepeat();
-		return this.getInstance().getBoolean(key, value);
+		return this.getBoolean(key, value);
 	}
 
 	/**
@@ -1030,7 +853,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getShouldRefreshMainActivity();
 		boolean value = this.getDefaults().getShouldRefreshMainActivity();
-		return this.getInstance().getBoolean(key, value);
+		return this.getBoolean(key, value);
 	}
 
 	/**
@@ -1040,7 +863,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getShowAlarmInfo();
 		boolean value = this.getDefaults().getShowAlarmInfo();
-		return this.getInstance().getBoolean(key, value);
+		return this.getBoolean(key, value);
 	}
 
 	/**
@@ -1050,7 +873,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getShuffle();
 		boolean value = this.getDefaults().getShufflePlaylist();
-		return this.getInstance().getBoolean(key, value);
+		return this.getBoolean(key, value);
 	}
 
 	/**
@@ -1060,7 +883,7 @@ public class NacSharedPreferences
 	{
 		String key = NacSharedKeys.getSnoozeCount(id);
 		int value = this.getDefaults().getSnoozeCount();
-		return this.getInstance().getInt(key, value);
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -1069,9 +892,8 @@ public class NacSharedPreferences
 	public int getSnoozeDuration()
 	{
 		String key = this.getKeys().getSnoozeDuration();
-
-		return this.getInstance().getInt(key,
-			this.getDefaults().getSnoozeDurationIndex());
+		int value = this.getDefaults().getSnoozeDurationIndex();
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -1079,26 +901,23 @@ public class NacSharedPreferences
 	 */
 	public String getSnoozeDurationSummary()
 	{
+		Context context = this.getContext();
 		int index = this.getSnoozeDuration();
-		return NacSharedPreferences.getSnoozeDurationSummary(index);
+
+		return NacSharedPreferences.getSnoozeDurationSummary(context, index);
 	}
 
 	/**
 	 * @return The summary text for the snooze duration widget.
 	 */
-	public static String getSnoozeDurationSummary(int index)
+	public static String getSnoozeDurationSummary(Context context, int index)
 	{
+		NacSharedConstants cons = new NacSharedConstants(context);
 		int value = NacSharedPreferences.getSnoozeDurationValue(index);
-		String snooze = String.valueOf(value);
+		Locale locale = Locale.getDefault();
+		String unit = cons.getUnitMinute(index+1);
 
-		if (index == 0)
-		{
-			return snooze + " minute";
-		}
-		else
-		{
-			return snooze + " minutes";
-		}
+		return String.format(locale, "%1$s %2$s", value, unit);
 	}
 
 	/**
@@ -1126,7 +945,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getSpeakFrequency();
 		int value = this.getDefaults().getSpeakFrequencyIndex();
-		return this.getInstance().getInt(key, value);
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -1146,7 +965,6 @@ public class NacSharedPreferences
 	public static String getSpeakFrequencySummary(Context context, int freq)
 	{
 		NacSharedConstants cons = new NacSharedConstants(context);
-		String value = String.valueOf(freq);
 
 		if (freq == 0)
 		{
@@ -1154,8 +972,10 @@ public class NacSharedPreferences
 		}
 		else
 		{
-			return String.format("%1$s %2$s %3$s", cons.getFrequencyInterval(),
-				value, (freq == 1) ? " minute" : " minutes");
+			Locale locale = Locale.getDefault();
+			String every = cons.getFrequencyInterval();
+			String unit = cons.getUnitMinute(freq);
+			return String.format(locale, "%1$s %2$s %3$s", every, freq, unit);
 		}
 	}
 
@@ -1166,7 +986,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getSpeakToMe();
 		boolean value = this.getDefaults().getSpeakToMe();
-		return this.getInstance().getBoolean(key, value);
+		return this.getBoolean(key, value);
 	}
 
 	/**
@@ -1176,7 +996,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getStartWeekOn();
 		int value = this.getDefaults().getStartWeekOnIndex();
-		return this.getInstance().getInt(key, value);
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -1186,7 +1006,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getThemeColor();
 		int value = this.getDefaults().getThemeColor();
-		return this.getInstance().getInt(key, value);
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -1196,7 +1016,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getTimeColor();
 		int value = this.getDefaults().getTimeColor();
-		return this.getInstance().getInt(key, value);
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -1206,7 +1026,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getUpcomingAlarmNotification();
 		boolean value = this.getDefaults().getUpcomingAlarm();
-		return this.getInstance().getBoolean(key, value);
+		return this.getBoolean(key, value);
 	}
 
 	/**
@@ -1216,7 +1036,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getUseNfc();
 		boolean value = this.getDefaults().getUseNfc();
-		return this.getInstance().getBoolean(key, value);
+		return this.getBoolean(key, value);
 	}
 
 	/**
@@ -1226,7 +1046,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getVibrate();
 		boolean value = this.getDefaults().getVibrate();
-		return this.getInstance().getBoolean(key, value);
+		return this.getBoolean(key, value);
 	}
 
 	/**
@@ -1236,7 +1056,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getVolume();
 		int value = this.getDefaults().getVolume();
-		return this.getInstance().getInt(key, value);
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -1266,6 +1086,24 @@ public class NacSharedPreferences
 		int counter = this.getRateMyAppCounter();
 		int rated = this.getDefaults().getRateMyAppRated();
 		return counter == rated;
+	}
+
+	/**
+	 * Set the rate my app counter to the postpone value.
+	 */
+	public void postponeRateMyApp()
+	{
+		int postpone = -2 * this.getDefaults().getRateMyAppLimit();
+		this.editRateMyAppCounter(postpone);
+	}
+
+	/**
+	 * Set the rate my app counter to the rated value.
+	 */
+	public void ratedRateMyApp()
+	{
+		int rated = this.getDefaults().getRateMyAppRated();
+		this.editRateMyAppCounter(rated);
 	}
 
 	/**
@@ -1301,14 +1139,6 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @see saveBoolean
-	 */
-	public void saveBoolean(String key, boolean value)
-	{
-		this.saveBoolean(key, value, false);
-	}
-
-	/**
 	 * Save a boolean to the shared preference.
 	 */
 	public void saveBoolean(String key, boolean value, boolean commit)
@@ -1317,14 +1147,6 @@ public class NacSharedPreferences
 			.putBoolean(key, value);
 
 		this.save(editor, commit);
-	}
-
-	/**
-	 * @see saveInt
-	 */
-	public void saveInt(String key, int value)
-	{
-		this.saveInt(key, value, false);
 	}
 
 	/**
@@ -1339,14 +1161,6 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @see saveString
-	 */
-	public void saveString(String key, String value)
-	{
-		this.saveString(key, value, false);
-	}
-
-	/**
 	 * Save a string to the shared preference.
 	 */
 	public void saveString(String key, String value, boolean commit)
@@ -1355,24 +1169,6 @@ public class NacSharedPreferences
 			.putString(key, value);
 
 		this.save(editor, commit);
-	}
-
-	/**
-	 * Set rate my app to the postpone value.
-	 */
-	public void setRateMyAppPostpone()
-	{
-		int postpone = -2 * this.getDefaults().getRateMyAppLimit();
-		this.editRateMyAppCounter(postpone);
-	}
-
-	/**
-	 * Set rate my app to the rated value.
-	 */
-	public void setRateMyAppRated()
-	{
-		int rated = this.getDefaults().getRateMyAppRated();
-		this.editRateMyAppCounter(rated);
 	}
 
 }

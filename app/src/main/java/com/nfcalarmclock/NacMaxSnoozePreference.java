@@ -48,7 +48,8 @@ public class NacMaxSnoozePreference
 	@Override
 	public CharSequence getSummary()
 	{
-		return NacSharedPreferences.getMaxSnoozeSummary(this.mValue);
+		Context context = getContext();
+		return NacSharedPreferences.getMaxSnoozeSummary(context, this.mValue);
 	}
 
 	/**

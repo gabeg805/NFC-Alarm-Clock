@@ -41,7 +41,7 @@
 			/>
 
 		<com.nfcalarmclock.NacColorPreference
-			android:title="@string/am_color"
+			android:title="@string/am"
 			android:key="@string/am_color_key"
 			android:summary="@string/am_color_summary"
 			android:defaultValue="@integer/default_am_color"
@@ -49,7 +49,7 @@
 			/>
 
 		<com.nfcalarmclock.NacColorPreference
-			android:title="@string/pm_color"
+			android:title="@string/pm"
 			android:key="@string/pm_color_key"
 			android:summary="@string/pm_color_summary"
 			android:defaultValue="@integer/default_pm_color"

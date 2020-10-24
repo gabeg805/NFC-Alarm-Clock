@@ -981,8 +981,8 @@ public class NacAlarm
 	 */
 	public String getMeridian(Context context)
 	{
-		return NacCalendar.Time.getMeridian(this.getHour(),
-			NacCalendar.Time.is24HourFormat(context));
+		int hour = this.getHour();
+		return NacCalendar.Time.getMeridian(context, hour);
 	}
 
 	/**
