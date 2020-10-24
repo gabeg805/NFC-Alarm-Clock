@@ -1809,10 +1809,9 @@ public class NacCardHolder
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
 		String meridian = alarm.getMeridian(context);
-		int meridianColor = (meridian == "AM") ? shared.getAmColor()
-			: shared.getPmColor();
+		int color = shared.getMeridianColor(meridian);
 
-		this.getMeridianView().setTextColor(meridianColor);
+		this.getMeridianView().setTextColor(color);
 	}
 
 	/**

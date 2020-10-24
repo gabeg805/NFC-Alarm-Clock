@@ -242,7 +242,7 @@ public class NacCardAdapter
 		{
 			return true;
 		}
-		else if (insertInUse == listInUse)
+		else if (insertInUse && listInUse)
 		{
 			Calendar cal = NacCalendar.getNext(alarmInList);
 			return nextRun.before(cal);
