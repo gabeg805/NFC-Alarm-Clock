@@ -130,7 +130,7 @@ public class NacSharedPreferences
 	public void editDayButtonStyle(int style)
 	{
 		String key = this.getKeys().getDayButtonStyle();
-		this.saveBoolean(key, (style == 1), false);
+		this.saveInt(key, style, false);
 	}
 
 	/**
@@ -521,9 +521,8 @@ public class NacSharedPreferences
 	public int getDayButtonStyle()
 	{
 		String key = this.getKeys().getDayButtonStyle();
-		//int value = this.getDefaults().getDayButtonStyle();
-		boolean style = this.getBoolean(key, true);
-		return style ? 1 : 2;
+		int value = this.getDefaults().getDayButtonStyle();
+		return this.getInt(key, value);
 	}
 
 	/**

@@ -1455,6 +1455,7 @@ public class NacCardHolder
 		alarm.changed();
 		this.setTimeView();
 		this.setMeridianView();
+		this.setMeridianColor();
 		this.setSwitchView();
 		this.setSummaryDaysView();
 	}

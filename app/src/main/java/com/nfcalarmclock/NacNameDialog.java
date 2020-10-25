@@ -3,12 +3,14 @@ package com.nfcalarmclock;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import com.google.android.material.textfield.TextInputEditText;
-//import android.widget.EditText;
 import android.widget.TextView;
+import androidx.core.graphics.ColorUtils;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textfield.TextInputEditText;
 
 /**
  * The dialog class that will handle saving the name of the alarm.
@@ -21,18 +23,10 @@ public class NacNameDialog
 {
 
 	/**
-	 * EditText in the dialog.
-	 */
-	private TextInputEditText mEditText;
-	//private EditText mEditText;
-
-	/**
 	 */
 	public NacNameDialog()
 	{
 		super(R.layout.dlg_alarm_name);
-
-		this.mEditText = null;
 
 		addOnDismissListener(this);
 		addOnShowListener(this);
@@ -57,7 +51,10 @@ public class NacNameDialog
 	@Override
 	public boolean onDismissDialog(NacDialog dialog)
 	{
-		String name = this.mEditText.getText().toString();
+		View root = dialog.getRoot();
+		TextInputEditText editText = root.findViewById(R.id.name_entry);
+		String name = editText.getText().toString();
+
 		dialog.saveData(name);
 		return true;
 	}
@@ -85,14 +82,19 @@ public class NacNameDialog
 		Context context = root.getContext();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
 		String name = this.getDataString();
-		this.mEditText = (TextInputEditText) root.findViewById(R.id.alarm_name);
-		//this.mEditText = (EditText) root.findViewById(R.id.alarm_name);
+		int theme = shared.getThemeColor();
+		int blendedTheme = ColorUtils.blendARGB(theme, Color.TRANSPARENT, 0.1f);
+		ColorStateList colorStateList = ColorStateList.valueOf(blendedTheme);
+		TextInputLayout editBox = root.findViewById(R.id.name_box);
+		TextInputEditText editText = root.findViewById(R.id.name_entry);
 
-		this.mEditText.setText(name);
-		this.mEditText.selectAll();
-		this.mEditText.setOnEditorActionListener(this);
-		this.mEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-		this.mEditText.setBackgroundTintList(ColorStateList.valueOf(shared.getThemeColor()));
+		editText.setText(name);
+		editText.selectAll();
+		editText.setOnEditorActionListener(this);
+		editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+		//editText.setBackgroundTintList(ColorStateList.valueOf(themeColor));
+		editBox.setBoxStrokeColor(blendedTheme);
+		editBox.setHintTextColor(colorStateList);
 		showKeyboard();
 		scale(0.85, 0.5, false, true);
 	}

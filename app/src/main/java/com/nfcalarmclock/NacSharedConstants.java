@@ -212,6 +212,22 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return The description for the filled-in day button style.
+	 */
+	public String getDescriptionDayButtonStyleFilled()
+	{
+		return this.getString(R.string.description_day_button_style_filled);
+	}
+
+	/**
+	 * @return The description for the outlined day button style.
+	 */
+	public String getDescriptionDayButtonStyleOutlined()
+	{
+		return this.getString(R.string.description_day_button_style_outlined);
+	}
+
+	/**
 	 * @return The media description.
 	 */
 	public String getDescriptionMedia()

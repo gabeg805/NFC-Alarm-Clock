@@ -86,12 +86,14 @@
 	<com.nfcalarmclock.NacPreferenceCategory
 		android:title="@string/style_category">
 
-		<com.nfcalarmclock.NacCheckboxPreference
+			<!--
+			android:summaryOff="@string/day_button_style_false"
+			-->
+		<com.nfcalarmclock.NacDayButtonPreference
 			android:title="@string/day_button_style"
 			android:key="@string/day_button_style_key"
-			android:summaryOn="@string/day_button_style_true"
-			android:summaryOff="@string/day_button_style_false"
-			android:defaultValue="true"
+			android:summary="@string/description_day_button_style_filled"
+			android:defaultValue="@integer/default_day_button_style"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
 			/>

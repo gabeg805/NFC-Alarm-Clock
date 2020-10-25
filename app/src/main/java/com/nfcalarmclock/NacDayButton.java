@@ -176,19 +176,6 @@ public class NacDayButton
 	}
 
 	/**
-	 * @return The proper day button layout to use.
-	 */
-	protected int getLayout()
-	{
-		Context context = getContext();
-		NacSharedPreferences shared = new NacSharedPreferences(context);
-
-		return (shared.getDayButtonStyle() == 1)
-			? R.layout.nac_day_button_filled
-			: R.layout.nac_day_button_outlined;
-	}
-
-	/**
 	 * @return The text in the button.
 	 */
 	public String getText()
@@ -206,15 +193,11 @@ public class NacDayButton
 			return;
 		}
 
-		Context context = getContext();
-		int layout = this.getLayout();
-
 		setOrientation(LinearLayout.HORIZONTAL);
-		LayoutInflater.from(context).inflate(layout, this, true);
+		this.setupStyle();
 
+		Context context = getContext();
 		this.mAttributes = new NacDayAttributes(context, attrs);
-		this.mButtonToggleGroup = findViewById(R.id.nac_day_button_group);
-		this.mButton = findViewById(R.id.nac_day_button);
 		this.mOnDayChangedListener = null;
 
 		this.getButtonToggleGroup().addOnButtonCheckedListener(this);
@@ -277,6 +260,23 @@ public class NacDayButton
 	}
 
 	/**
+	 * Set the day button style.
+	 */
+	public void setStyle(int style)
+	{
+		Context context = getContext();
+		int layout = (style == 1)
+			? R.layout.nac_day_button_filled
+			: R.layout.nac_day_button_outlined;
+
+		removeAllViews();
+		LayoutInflater.from(context).inflate(layout, this, true);
+
+		this.mButtonToggleGroup = findViewById(R.id.nac_day_button_group);
+		this.mButton = findViewById(R.id.nac_day_button);
+	}
+
+	/**
 	 * Set the text in the button.
 	 *
 	 * @param  text  The text to enter in the button.
@@ -284,6 +284,18 @@ public class NacDayButton
 	public void setText(String text)
 	{
 		this.getButton().setText(text);
+	}
+
+	/**
+	 * Setup the style of the day button.
+	 */
+	protected void setupStyle()
+	{
+		Context context = getContext();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
+		int style = shared.getDayButtonStyle();
+
+		this.setStyle(style);
 	}
 
 	/**

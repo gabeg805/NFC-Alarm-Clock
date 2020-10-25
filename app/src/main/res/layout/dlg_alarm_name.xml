@@ -8,18 +8,19 @@
 
 	<com.google.android.material.textfield.TextInputLayout
 		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-		android:id="@+id/yoyoyo"
+		android:id="@+id/name_box"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="@dimen/medium"
 		android:layout_marginStart="@dimen/medium"
 		android:layout_marginEnd="@dimen/medium"
+		android:hint="@string/alarm_name"
 		app:counterEnabled="true"
 		app:counterMaxLength="@integer/max_entry_length">
 
 		<com.google.android.material.textfield.TextInputEditText
 			style="@style/Widget.TextView.Primary"
-			android:id="@+id/alarm_name"
+			android:id="@+id/name_entry"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:maxLength="@integer/max_entry_length"
@@ -27,7 +28,6 @@
 			android:singleLine="false"
 			android:isScrollContainer="true"
 			android:inputType="textCapSentences|textMultiLine"
-			android:hint="@string/alarm_name"
 			android:importantForAutofill="no">
 
 			<requestFocus />
