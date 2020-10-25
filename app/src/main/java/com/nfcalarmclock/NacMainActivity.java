@@ -247,8 +247,6 @@ public class NacMainActivity
 			R.id.content_alarm_list);
 		this.mScanNfcTagDialog = null;
 
-		// Add this back when testing
-		this.mSharedPreferences.editDayButtonStyle(1);
 		if (this.wasNfcScannedForAlarm(intent))
 		{
 			this.dismissActiveAlarm(intent);
