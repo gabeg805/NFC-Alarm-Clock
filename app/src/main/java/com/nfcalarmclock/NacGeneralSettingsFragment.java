@@ -53,13 +53,13 @@ public class NacGeneralSettingsFragment
 	@Override
 	public void onCreatePreferences(Bundle savedInstanceState, String rootKey)
 	{
+		Context context = getContext();
+
 		addPreferencesFromResource(R.xml.general_preferences);
-		PreferenceManager.setDefaultValues(getContext(),
-			R.xml.general_preferences, false);
+		PreferenceManager.setDefaultValues(context, R.xml.general_preferences, false);
 
 		NacSharedKeys keys = this.getSharedPreferences().getKeys();
-		NacMediaPreference mediaPreference = (NacMediaPreference)
-			findPreference(keys.getMediaPath());
+		NacMediaPreference mediaPreference = findPreference(keys.getMediaPath());
 		this.mMediaPreference = mediaPreference;
 
 		mediaPreference.setOnPreferenceClickListener(this);

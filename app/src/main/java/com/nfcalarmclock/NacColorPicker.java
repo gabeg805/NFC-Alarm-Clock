@@ -14,7 +14,6 @@ import android.graphics.SweepGradient;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -32,9 +31,9 @@ public class NacColorPicker
 	 */
 	public static class Attributes
 	{
-		private int mHeight;
-		private int mWidth;
-		private int mSpacing;
+		private final int width;
+		private final int height;
+		private final int spacing;
 
 		/**
 		 */
@@ -46,38 +45,14 @@ public class NacColorPicker
 			try
 			{
 				Resources res = context.getResources();
-				this.mHeight = (int) ta.getDimension(R.styleable.NacColorPicker_nacHeight, -1);
-				this.mWidth = (int) ta.getDimension(R.styleable.NacColorPicker_nacWidth, -1);
-				this.mSpacing = (int) ta.getDimension(R.styleable.NacColorPicker_nacSpacing, -1);
+				this.width = (int) ta.getDimension(R.styleable.NacColorPicker_nacWidth, -1);
+				this.height = (int) ta.getDimension(R.styleable.NacColorPicker_nacHeight, -1);
+				this.spacing = (int) ta.getDimension(R.styleable.NacColorPicker_nacSpacing, -1);
 			}
 			finally
 			{
 				ta.recycle();
 			}
-		}
-
-		/**
-		 * @return The height.
-		 */
-		public int getHeight()
-		{
-			return this.mHeight;
-		}
-
-		/**
-		 * @return The width.
-		 */
-		public int getWidth()
-		{
-			return this.mWidth;
-		}
-
-		/**
-		 * @return The spacing.
-		 */
-		public int getSpacing()
-		{
-			return this.mSpacing;
 		}
 
 	}
@@ -474,10 +449,13 @@ public class NacColorPicker
 		setWillNotDraw(false);
 
 		Context context = getContext();
-		LayoutInflater.from(context).inflate(R.layout.nac_color_picker, this, true);
+		LayoutInflater inflater = LayoutInflater.from(context);
+
+		inflater.inflate(R.layout.nac_color_picker, this, true);
+
 		this.mAttributes = new Attributes(context, attrs);
-		this.mColorSelector = (ImageView) findViewById(R.id.color_selector);
-		this.mShaderSelector = (ImageView) findViewById(R.id.shader_selector);
+		this.mColorSelector = findViewById(R.id.color_selector);
+		this.mShaderSelector = findViewById(R.id.shader_selector);
         this.mHuePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.mSaturationPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.mValuePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -514,7 +492,7 @@ public class NacColorPicker
 	/**
 	 * Measure the height of the view.
 	 *
-	 * @see measureDimension
+	 * @see #measureDimension(int, int)
 	 */
 	private int measureHeight(int measureSpec)
 	{
@@ -527,7 +505,7 @@ public class NacColorPicker
 	/**
 	 * Measure the width of the view.
 	 *
-	 * @see measureDimension
+	 * @see #measureDimension(int, int)
 	 */
 	private int measureWidth(int measureSpec)
 	{
@@ -578,9 +556,9 @@ public class NacColorPicker
 
 		Attributes attr = this.getAttributes();
 		int shaderHeight = (int) this.getShaderHeight(size);
-		int width = (attr.getWidth() != -1) ? attr.getWidth() : size;
-		int height = (attr.getHeight() != -1) ? attr.getHeight() : size+shaderHeight;
-		int spacing = attr.getSpacing();
+		int width = (attr.width != -1) ? attr.width : size;
+		int height = (attr.height != -1) ? attr.height : size+shaderHeight;
+		int spacing = attr.spacing;
 
 		if (spacing != -1)
 		{
@@ -611,7 +589,7 @@ public class NacColorPicker
         this.mCenterY = paddingTop + this.getRadius();
 
 		ViewGroup.LayoutParams params = this.getShaderSelector().getLayoutParams();
-		params.height = (int) Math.round(this.getShaderHeight());
+		params.height = Math.round(this.getShaderHeight());
 
 		this.getShaderSelector().setLayoutParams(params);
         drawColorWheel();

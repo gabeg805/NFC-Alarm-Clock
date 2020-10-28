@@ -3,7 +3,6 @@ package com.nfcalarmclock;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import java.util.List;
 
 /**
  * Restore alarms on boot up.

@@ -1,7 +1,6 @@
 package com.nfcalarmclock;
 
 import android.annotation.TargetApi;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -39,7 +38,7 @@ public class NacUpcomingAlarmNotification
 	}
 
 	/**
-	 * @see builder
+	 * @see NacNotification#builder()
 	 */
 	@Override
 	protected NotificationCompat.Builder builder()
@@ -61,7 +60,7 @@ public class NacUpcomingAlarmNotification
 	}
 
 	/**
-	 * @see createChannel
+	 * @see NacNotification#createChannel()
 	 */
 	@TargetApi(Build.VERSION_CODES.O)
 	@Override
@@ -88,7 +87,7 @@ public class NacUpcomingAlarmNotification
 	}
 
 	/**
-	 * @see getChannelDescription
+	 * @see NacNotification#getChannelDescription()
 	 */
 	protected String getChannelDescription()
 	{
@@ -98,7 +97,7 @@ public class NacUpcomingAlarmNotification
 	}
 
 	/**
-	 * @see getChannelName
+	 * @see NacNotification#getChannelName()
 	 */
 	protected String getChannelName()
 	{
@@ -108,7 +107,7 @@ public class NacUpcomingAlarmNotification
 	}
 
 	/**
-	 * @see getChannelId
+	 * @see NacNotification#getChannelId()
 	 */
 	protected String getChannelId()
 	{
@@ -116,7 +115,7 @@ public class NacUpcomingAlarmNotification
 	}
 
 	/**
-	 * @see getContentPendingIntent
+	 * @see NacNotification#getContentPendingIntent()
 	 */
 	protected PendingIntent getContentPendingIntent()
 	{
@@ -130,7 +129,7 @@ public class NacUpcomingAlarmNotification
 	}
 
 	/**
-	 * @see getContentText
+	 * @see NacNotification#getContentText()
 	 */
 	protected String getContentText()
 	{
@@ -144,7 +143,7 @@ public class NacUpcomingAlarmNotification
 	}
 
 	/**
-	 * @see getGroup
+	 * @see NacNotification#getGroup()
 	 */
 	protected String getGroup()
 	{
@@ -152,7 +151,7 @@ public class NacUpcomingAlarmNotification
 	}
 
 	/**
-	 * @see getId
+	 * @see NacNotification#getId()
 	 */
 	protected int getId()
 	{
@@ -160,7 +159,7 @@ public class NacUpcomingAlarmNotification
 	}
 
 	/**
-	 * @see getImportance
+	 * @see NacNotification#getImportance()
 	 */
 	protected int getImportance()
 	{
@@ -168,7 +167,7 @@ public class NacUpcomingAlarmNotification
 	}
 
 	/**
-	 * @see getPriority
+	 * @see NacNotification#getPriority()
 	 */
 	protected int getPriority()
 	{
@@ -176,7 +175,7 @@ public class NacUpcomingAlarmNotification
 	}
 
 	/**
-	 * @see getTitle
+	 * @see NacNotification#getTitle()
 	 */
 	public String getTitle()
 	{
@@ -197,7 +196,7 @@ public class NacUpcomingAlarmNotification
 	}
 
 	/**
-	 * @see setupBody
+	 * @see NacNotification#setupBody()
 	 */
 	protected void setupBody()
 	{
@@ -219,7 +218,7 @@ public class NacUpcomingAlarmNotification
 	}
 
 	/**
-	 * @see show
+	 * @see NacNotification#show()
 	 */
 	public void show()
 	{

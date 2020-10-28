@@ -74,72 +74,13 @@ public class NacCalendar
 	public static final int WEEK_LENGTH = WEEK.size();
 
 	/**
-	 * @see getMessage
-	 */
-	public static String getMessageTimeOn(Context context, Calendar calendar,
-		String prefix)
-	{
-		NacSharedConstants cons = new NacSharedConstants(context);
-		String time = NacCalendar.Time.getFullTime(context, calendar);
-		Locale locale = Locale.getDefault();
-
-		return String.format(locale, "%1$s %2$s %3$s", prefix,
-			cons.getTimeOn(), time);
-	}
-
-	/**
-	 * @see getMessage
-	 */
-	public static String getMessageTimeIn(Context context, Calendar calendar,
-		String prefix)
-	{
-		NacSharedConstants cons = new NacSharedConstants(context);
-		long millis = calendar.getTimeInMillis();
-		long time = (millis - System.currentTimeMillis()) / 1000;
-		long day = (time / (60*60*24)) % 365;
-		long hr = (time / (60*60)) % 24;
-		long min = (time / 60) % 60;
-		long sec = time % 60;
-		String dayunit = cons.getUnitDay((int)day);
-		String hrunit  = cons.getUnitHour((int)hr);
-		String minunit = cons.getUnitMinute((int)min);
-		String secunit = cons.getUnitSecond((int)sec);
-		String timeRemaining;
-		String format = "%1$d %2$s %3$d %4$s";
-		Locale locale = Locale.getDefault();
-
-		if (day > 0)
-		{
-			timeRemaining = String.format(locale, format, day, dayunit, hr,
-				hrunit);
-		}
-		else
-		{
-			if (hr > 0)
-			{
-				timeRemaining = String.format(locale, format, hr, hrunit, min,
-					minunit);
-			}
-			else
-			{
-				format = (min > 0) ? format : format.substring(10, 19);
-				timeRemaining = String.format(locale, format, min, minunit,
-					sec, secunit);
-			}
-		}
-
-		return String.format(locale, "%1$s %2$s %3$s", prefix,
-			cons.getTimeIn(), timeRemaining);
-	}
-
-	/**
-	 * @see getMessage
+	 * @return A message to display.
 	 */
 	public static String getMessage(NacSharedPreferences shared,
 		NacAlarm alarm, String prefix)
 	{
 		NacSharedConstants cons = shared.getConstants();
-		Calendar calendar = NacCalendar.getNext(alarm);
+		Calendar calendar = NacCalendar.getNextAlarmDay(alarm);
 		Locale locale = Locale.getDefault();
 
 		if ((shared == null) || (alarm == null) || (calendar == null))
@@ -186,6 +127,67 @@ public class NacCalendar
 	}
 
 	/**
+	 * @return The message to display when an alarm will run IN some amount of
+	 * time.
+	 */
+	public static String getMessageTimeIn(Context context, Calendar calendar,
+		String prefix)
+	{
+		NacSharedConstants cons = new NacSharedConstants(context);
+		long millis = calendar.getTimeInMillis();
+		long time = (millis - System.currentTimeMillis()) / 1000;
+		long day = (time / (60*60*24)) % 365;
+		long hr = (time / (60*60)) % 24;
+		long min = (time / 60) % 60;
+		long sec = time % 60;
+		String dayunit = cons.getUnitDay((int)day);
+		String hrunit  = cons.getUnitHour((int)hr);
+		String minunit = cons.getUnitMinute((int)min);
+		String secunit = cons.getUnitSecond((int)sec);
+		String timeRemaining;
+		String format = "%1$d %2$s %3$d %4$s";
+		Locale locale = Locale.getDefault();
+
+		if (day > 0)
+		{
+			timeRemaining = String.format(locale, format, day, dayunit, hr,
+				hrunit);
+		}
+		else
+		{
+			if (hr > 0)
+			{
+				timeRemaining = String.format(locale, format, hr, hrunit, min,
+					minunit);
+			}
+			else
+			{
+				format = (min > 0) ? format : format.substring(10, 19);
+				timeRemaining = String.format(locale, format, min, minunit,
+					sec, secunit);
+			}
+		}
+
+		return String.format(locale, "%1$s %2$s %3$s", prefix,
+			cons.getTimeIn(), timeRemaining);
+	}
+
+	/**
+	 * @return The message to display when an alarm will run ON some date and
+	 * time.
+	 */
+	public static String getMessageTimeOn(Context context, Calendar calendar,
+		String prefix)
+	{
+		NacSharedConstants cons = new NacSharedConstants(context);
+		String time = NacCalendar.Time.getFullTime(context, calendar);
+		Locale locale = Locale.getDefault();
+
+		return String.format(locale, "%1$s %2$s %3$s", prefix,
+			cons.getTimeOn(), time);
+	}
+
+	/**
 	 * @return The message to display when the alarm will run.
 	 */
 	public static String getMessageWillRun(NacSharedPreferences shared,
@@ -204,32 +206,9 @@ public class NacCalendar
 	}
 
 	/**
-	 * @return The next calendar in the list.
-	 */
-	public static Calendar getNext(List<Calendar> calendars)
-	{
-		Calendar next = null;
-
-		for (Calendar c : calendars)
-		{
-			next = ((next == null) || !next.before(c)) ? c : next;
-		}
-
-		return next;
-	}
-
-	/**
-	 * @see getNext
-	 */
-	public static Calendar getNext(NacAlarm alarm)
-	{
-		List<Calendar> calendars = NacCalendar.toCalendars(alarm);
-
-		return NacCalendar.getNext(calendars);
-	}
-
-	/**
-	 * @return The next alarm from the given list of alarms.
+	 * @return The alarm that will run next.
+	 *
+	 * @param  alarms  List of alarms to check.
 	 */
 	public static NacAlarm getNextAlarm(List<NacAlarm> alarms)
 	{
@@ -243,11 +222,10 @@ public class NacCalendar
 				continue;
 			}
 
-			Calendar calendar = NacCalendar.getNext(a);
+			Calendar calendar = NacCalendar.getNextAlarmDay(a);
 
 			if (calendar == null)
 			{
-				continue;
 			}
 			else if ((nextCalendar == null) || calendar.before(nextCalendar))
 			{
@@ -260,7 +238,33 @@ public class NacCalendar
 	}
 
 	/**
-	 * @see getToday
+	 * @return The Calendar day on which the given alarm will run next.
+	 *
+	 * @param  alarm  The alarm who's days to check.
+	 */
+	public static Calendar getNextAlarmDay(NacAlarm alarm)
+	{
+		List<Calendar> calendars = NacCalendar.toCalendars(alarm);
+		return NacCalendar.getNextDay(calendars);
+	}
+
+	/**
+	 * @return The Calendary day that represents the next upcoming day.
+	 */
+	public static Calendar getNextDay(List<Calendar> calendars)
+	{
+		Calendar next = null;
+
+		for (Calendar c : calendars)
+		{
+			next = ((next == null) || !next.before(c)) ? c : next;
+		}
+
+		return next;
+	}
+
+	/**
+	 * @see #getToday(NacAlarm)
 	 */
 	public static Calendar getToday()
 	{
@@ -286,7 +290,7 @@ public class NacCalendar
 	}
 
 	/**
-	 * @see getTomorrow
+	 * @see #getTomorrow(NacAlarm)
 	 */
 	public static Calendar getTomorrow()
 	{
@@ -577,12 +581,11 @@ public class NacCalendar
 		}
 
 		/**
-		 * @see toIndex
+		 * @see #toIndex(Day)
 		 */
 		public static int toIndex(int day)
 		{
 			Day weekday = NacCalendar.Days.toWeekDay(day);
-
 			return NacCalendar.Days.toIndex(weekday);
 		}
 
@@ -613,10 +616,10 @@ public class NacCalendar
 		/**
 		 * Convert a set of days to a comma separate string of days.
 		 *
-		 * @param  convertDays  The set of days to convert.
-		 * @param  start  The day to start the week on.
-		 *
 		 * @return A string of the days.
+		 *
+		 * @param  daysToConvert  The set of days to convert.
+		 * @param  start          The day to start the week on.
 		 */
 		public static String toString(Context context,
 			EnumSet<Day> daysToConvert, int start)
@@ -648,9 +651,11 @@ public class NacCalendar
 				{
 					if (!string.isEmpty())
 					{
+						//string.concat(" \u2027 ");
 						string += " \u2027 ";
 					}
 
+					//string.concat(dow.get(i));
 					string += dow.get(i);
 				}
 			}
@@ -659,7 +664,7 @@ public class NacCalendar
 		}
 
 		/**
-		 * @see toString
+		 * @see #toString(Context, EnumSet, int)
 		 */
 		public static String toString(Context context, int value, int start)
 		{
@@ -743,7 +748,7 @@ public class NacCalendar
 	{
 
 		/**
-		 * @see getClockTime
+		 * @see #getClockTime(Context, int, int)
 		 */
 		public static String getClockTime(Context context)
 		{
@@ -768,12 +773,12 @@ public class NacCalendar
 		}
 
 		/**
-		 * @param  hour  The hour.
+		 * @return The time.
+		 *
+		 * @param  hour    The hour.
 		 * @param  minute  The minutes.
 		 * @param  format  The 24 hour format, to determine how to interpret the
 		 *                 hour.
-		 *
-		 * @return The time.
 		 */
 		public static String getClockTime(int hour, int minute, boolean format)
 		{
@@ -805,11 +810,9 @@ public class NacCalendar
 		}
 
 		/**
-		 * @param  hour    The hour.
-		 * @param  format  The 24 hour format to determine how to interpret the
-		 *                 hour.
-		 *
 		 * @return The time meridian.
+		 *
+		 * @param  hour  The hour.
 		 */
 		public static String getMeridian(Context context, int hour)
 		{
@@ -826,7 +829,7 @@ public class NacCalendar
 		}
 
 		/**
-		 * @see getTime
+		 * @see #getTime(Context, int, int)
 		 */
 		public static String getTime(Context context)
 		{

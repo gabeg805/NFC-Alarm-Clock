@@ -2,7 +2,7 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
+
 import androidx.preference.PreferenceManager;
 import java.util.Locale;
 
@@ -408,7 +408,7 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @see getAutoDismissSummary
+	 * @see #getAutoDismissSummary(Context, int)
 	 */
 	public String getAutoDismissSummary()
 	{
@@ -439,7 +439,7 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @see getAutoDismissTime
+	 * @see #getAutoDismissTime(int)
 	 */
 	public int getAutoDismissTime()
 	{
@@ -613,7 +613,7 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @see getMaxSnoozeSummary
+	 * @see #getMaxSnoozeSummary(Context, int)
 	 */
 	public String getMaxSnoozeSummary()
 	{
@@ -645,18 +645,17 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @see getMaxSnoozeValue
+	 * @see #getMaxSnoozeValue(int)
 	 */
 	public int getMaxSnoozeValue()
 	{
 		int index = this.getMaxSnooze();
-
 		return NacSharedPreferences.getMaxSnoozeValue(index);
 	}
 
 	/**
 	 * @return Calculate the max snooze duration from an index corresponding
-	 *         to a location in the spinner widget.
+	 *     to a location in the spinner widget.
 	 */
 	public static int getMaxSnoozeValue(int index)
 	{
@@ -684,7 +683,7 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @return The media summary.
+	 * @see #getMediaSummary(Context, String)
 	 */
 	public String getMediaSummary()
 	{
@@ -694,7 +693,7 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @see getMediaSummary
+	 * @return The media summary.
 	 */
 	public static String getMediaSummary(Context context, String path)
 	{
@@ -763,7 +762,7 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @return The name summary.
+	 * @see #getNameSummary(Context, String)
 	 */
 	public String getNameSummary()
 	{
@@ -773,7 +772,7 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @see getNameSummary
+	 * @return The name summary.
 	 */
 	public static String getNameSummary(Context context, String name)
 	{
@@ -896,7 +895,7 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @see getSnoozeDurationSummary
+	 * @see #getSnoozeDurationSummary(Context, int)
 	 */
 	public String getSnoozeDurationSummary()
 	{
@@ -920,7 +919,7 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @see getSnoozeDurationValue
+	 * @see #getSnoozeDurationValue(int)
 	 */
 	public int getSnoozeDurationValue()
 	{
@@ -930,7 +929,7 @@ public class NacSharedPreferences
 
 	/**
 	 * @return Calculate the snooze duration from an index value, corresponding
-	 *         to a location in the spainner widget.
+	 *     to a location in the spainner widget.
 	 */
 	public static int getSnoozeDurationValue(int index)
 	{
@@ -948,7 +947,7 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @see getSpeakFrequencySummary
+	 * @see #getSpeakFrequencySummary(Context, int)
 	 */
 	public String getSpeakFrequencySummary()
 	{
@@ -1115,7 +1114,7 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @see save
+	 * @see #save(SharedPreferences.Editor, boolean)
 	 */
 	public void save(SharedPreferences.Editor editor)
 	{

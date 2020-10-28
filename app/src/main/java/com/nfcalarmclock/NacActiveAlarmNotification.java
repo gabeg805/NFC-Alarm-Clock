@@ -1,7 +1,6 @@
 package com.nfcalarmclock;
 
 import android.annotation.TargetApi;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -50,7 +49,7 @@ public class NacActiveAlarmNotification
 	}
 
 	/**
-	 * @see builder
+	 * @see NacNotification#builder()
 	 */
 	@Override
 	protected NotificationCompat.Builder builder()
@@ -120,7 +119,7 @@ public class NacActiveAlarmNotification
 	}
 
 	/**
-	 * @see getChannel
+	 * @see NacNotification#getChannelId()
 	 */
 	protected String getChannelId()
 	{
@@ -128,7 +127,7 @@ public class NacActiveAlarmNotification
 	}
 
 	/**
-	 * @see getContentPendingIntent
+	 * @see NacNotification#getContentPendingIntent()
 	 */
 	protected PendingIntent getContentPendingIntent()
 	{
@@ -142,7 +141,7 @@ public class NacActiveAlarmNotification
 	}
 
 	/**
-	 * @see getContentText
+	 * @see NacNotification#getContentText()
 	 */
 	public String getContentText()
 	{
@@ -176,7 +175,7 @@ public class NacActiveAlarmNotification
 	}
 
 	/**
-	 * @see getGroup
+	 * @see NacNotification#getGroup()
 	 */
 	protected String getGroup()
 	{
@@ -228,7 +227,7 @@ public class NacActiveAlarmNotification
 	}
 
 	/**
-	 * @see getId
+	 * @see NacNotification#getId()
 	 */
 	protected int getId()
 	{
@@ -236,7 +235,7 @@ public class NacActiveAlarmNotification
 	}
 
 	/**
-	 * @see getImportance
+	 * @see NacNotification#getImportance()
 	 */
 	protected int getImportance()
 	{
@@ -244,7 +243,7 @@ public class NacActiveAlarmNotification
 	}
 
 	/**
-	 * @see getPriority
+	 * @see NacNotification#getPriority()
 	 */
 	protected int getPriority()
 	{

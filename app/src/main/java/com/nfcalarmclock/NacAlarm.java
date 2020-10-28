@@ -208,7 +208,7 @@ public class NacAlarm
 		}
 
 		/**
-		 * @see isActive
+		 * @see #isActive()
 		 */
 		public boolean getIsActive()
 		{
@@ -314,7 +314,7 @@ public class NacAlarm
 		}
 
 		/**
-		 * @return The flag indicating whther the alarm is active.
+		 * @return The flag indicating whether the alarm is active.
 		 */
 		public boolean isActive()
 		{
@@ -348,7 +348,7 @@ public class NacAlarm
 		}
 
 		/**
-		 * @see setDays
+		 * @see #setDays(EnumSet)
 		 */
 		public Builder setDays(int value)
 		{
@@ -544,14 +544,14 @@ public class NacAlarm
 		/**
 		 * Set whether the alarm should use NFC to dismiss or not.
 		 *
-		 * @param  nfc  True if the phone should use NFC to dismiss, and False
-		 *              otherwise.
+		 * @param  useNfc  True if the phone should use NFC to dismiss, and False
+		 *                 otherwise.
 		 *
 		 * @return The Builder.
 		 */
-		public Builder setUseNfc(boolean nfc)
+		public Builder setUseNfc(boolean useNfc)
 		{
-			this.mUseNfc = nfc;
+			this.mUseNfc = useNfc;
 			return this;
 		}
 
@@ -634,7 +634,7 @@ public class NacAlarm
 	private boolean mRepeat;
 
 	/**
-	 * Flag ndicating whether the alarm should use NFC or not.
+	 * Flag indicating whether the alarm should use NFC or not.
 	 */
 	private boolean mUseNfc;
 
@@ -807,7 +807,7 @@ public class NacAlarm
 	}
 
 	/**
-	 * @see copy
+	 * @see #copy()
 	 */
 	public NacAlarm copy(int id)
 	{
@@ -910,7 +910,7 @@ public class NacAlarm
 	 */
 	public String getFullTime(Context context)
 	{
-		Calendar next = NacCalendar.getNext(this);
+		Calendar next = NacCalendar.getNextAlarmDay(this);
 		return NacCalendar.Time.getFullTime(context, next);
 	}
 
@@ -1012,7 +1012,7 @@ public class NacAlarm
 	}
 
 	/**
-	 * @see getNameNormalized
+	 * @see #getNameNormalized()
 	 */
 	public String getNameNormalizedForMessage(int max)
 	{
@@ -1215,7 +1215,7 @@ public class NacAlarm
 	}
 
 	/**
-	 * @see setDays
+	 * @see #setDays(EnumSet)
 	 */
 	public void setDays(int value)
 	{
@@ -1373,8 +1373,8 @@ public class NacAlarm
 	/**
 	 * Set whether the alarm should use NFC to dismiss or not.
 	 *
-	 * @param  nfc  True if the phone should use NFC to dismiss, and False
-	 *              otherwise.
+	 * @param  useNfc  True if the phone should use NFC to dismiss, and False
+	 *                 otherwise.
 	 */
 	public void setUseNfc(boolean useNfc)
 	{

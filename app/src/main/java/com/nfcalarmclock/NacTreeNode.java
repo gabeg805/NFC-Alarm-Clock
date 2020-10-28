@@ -12,22 +12,22 @@ public class NacTreeNode<T>
 	/**
 	 * Root node of this node.
 	 */
-	private NacTreeNode<T> mRoot;
+	private final NacTreeNode<T> mRoot;
 
 	/**
 	 * Children of this node.
 	 */
-	private List<NacTreeNode<T>> mChildren;
+	private final List<NacTreeNode<T>> mChildren;
 
 	/**
 	 * Key.
 	 */
-	private T mKey;
+	private final T mKey;
 
 	/**
 	 * Value.
 	 */
-	private Object mValue;
+	private final Object mValue;
 
 	/**
 	 */
@@ -60,17 +60,16 @@ public class NacTreeNode<T>
 	}
 
 	/**
-	 * @see addChild
+	 * @see #addChild(NacTreeNode)
 	 */
 	public void addChild(T key, Object value)
 	{
 		NacTreeNode<T> child = new NacTreeNode<T>(this, key, value);
-
 		this.addChild(child);
 	}
 
 	/**
-	 * @see addChild
+	 * @see #addChild(NacTreeNode)
 	 */
 	public void addChild(T key)
 	{
@@ -94,7 +93,8 @@ public class NacTreeNode<T>
 	}
 
 	/**
-	 * @see exists
+	 * @return True if the child exists as a child of the node, and False
+	 *     otherwise.
 	 */
 	public boolean exists(NacTreeNode<T> child)
 	{
@@ -102,19 +102,7 @@ public class NacTreeNode<T>
 	}
 
 	/**
-	 * @see getChild
-	 */
-	public NacTreeNode<T> getChild(int index)
-	{
-		List<NacTreeNode<T>> children = this.getChildren();
-		int size = this.count();
-
-		return ((index >= 0) && (index < size)) ? children.get(index)
-			: null;
-	}
-
-	/**
-	 * @return The requested child with the given data.
+	 * @return The child with the key.
 	 */
 	public NacTreeNode<T> getChild(T key)
 	{
@@ -132,7 +120,19 @@ public class NacTreeNode<T>
 	}
 
 	/**
-	 * @see getChild
+	 * @return The child at the given index of the children list.
+	 */
+	public NacTreeNode<T> getChild(int index)
+	{
+		List<NacTreeNode<T>> children = this.getChildren();
+		int size = this.count();
+
+		return ((index >= 0) && (index < size)) ? children.get(index)
+			: null;
+	}
+
+	/**
+	 * @see #getChild(T)
 	 */
 	public NacTreeNode<T> getChild(NacTreeNode<T> child)
 	{
@@ -172,7 +172,7 @@ public class NacTreeNode<T>
 	}
 
 	/**
-	 * @see count
+	 * @see #count()
 	 */
 	public int size()
 	{

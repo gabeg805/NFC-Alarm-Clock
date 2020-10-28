@@ -2,11 +2,9 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,24 +42,17 @@ public class NacRingtoneFragment
 	private RadioButton addRadioButton(String title, String path)
 	{
 		Context context = getContext();
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(
-			Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = LayoutInflater.from(context);
 		RadioGroup group = this.getRadioGroup();
 		View view = inflater.inflate(R.layout.radio_button_ringtone, group, true);
 		RadioButton button = view.findViewById(R.id.radio_button_ringtone);
+		int id = View.generateViewId();
 
-		button.setId(button.generateViewId());
+		button.setId(id);
 		button.setText(title);
 		button.setTag(path);
 		button.setOnClickListener(this);
 		return button;
-	}
-
-	/**
-	 * @see addRadioButton
-	 */
-	private void addRandomRadioButton()
-	{
 	}
 
 	/**
@@ -115,7 +106,7 @@ public class NacRingtoneFragment
 			String path = (String) view.getTag();
 			Uri uri = NacMedia.toUri(path);
 
-			if (this.safePlay(uri, true) < 0)
+			if (this.safePlay(uri) < 0)
 			{
 				NacSharedConstants cons = new NacSharedConstants(context);
 				NacUtility.printf("Unable to play ringtone : %s", path);
@@ -163,7 +154,7 @@ public class NacRingtoneFragment
 	 */
 	private void setupRadioButtons(View root)
 	{
-		this.mRadioGroup = (RadioGroup) root.findViewById(R.id.radio_group);
+		this.mRadioGroup = root.findViewById(R.id.radio_group);
 		Context context = getContext();
 		TreeMap<String,String> ringtones = NacMedia.getRingtones(context);
 		NacSharedPreferences shared = new NacSharedPreferences(context);

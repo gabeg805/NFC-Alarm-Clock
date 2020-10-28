@@ -1,11 +1,9 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,7 +13,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -51,37 +48,37 @@ public class NacCardAdapter
 	/**
 	 * Main activity root view.
 	 */
-	private CoordinatorLayout mRoot;
+	private final CoordinatorLayout mRoot;
 
 	/**
 	 * RecyclerView containing list of alarm cards.
 	 */
-	private RecyclerView mRecyclerView;
+	private final RecyclerView mRecyclerView;
 
 	/**
 	 * Shared preferences.
 	 */
-	private NacSharedPreferences mSharedPreferences;
+	private final NacSharedPreferences mSharedPreferences;
 
 	/**
 	 * Handle card swipe events.
 	 */
-	private NacCardTouchHelper mTouchHelper;
+	private final NacCardTouchHelper mTouchHelper;
 
 	/**
 	 * The alarm to restore, when prompted after deletion.
 	 */
-	private Undo mUndo;
+	private final Undo mUndo;
 
 	/**
 	 * The snackbar.
 	 */
-	private NacSnackbar mSnackbar;
+	private final NacSnackbar mSnackbar;
 
 	/**
 	 * Upcoming notifications.
 	 */
-	private NacUpcomingAlarmNotification mNotification;
+	private final NacUpcomingAlarmNotification mNotification;
 
 	/**
 	 * List of alarms.
@@ -111,28 +108,30 @@ public class NacCardAdapter
 		NacCardTouchHelper.Callback callback =
 			new NacCardTouchHelper.Callback(this);
 
-		this.mRoot = (CoordinatorLayout) activity.findViewById(
-			R.id.activity_main);
-		this.mRecyclerView = (RecyclerView) this.getRoot().findViewById(
-			R.id.content_alarm_list);
+		CoordinatorLayout root = activity.findViewById(R.id.activity_main);
+		RecyclerView rv = root.findViewById(R.id.content_alarm_list);
+		this.mRoot = root;
+		this.mRecyclerView = rv;
 		this.mSharedPreferences = new NacSharedPreferences(context);
 		this.mTouchHelper = new NacCardTouchHelper(callback);
 		this.mUndo = new Undo();
 		this.mNotification = new NacUpcomingAlarmNotification(context);
-		this.mSnackbar = new NacSnackbar(this.mRoot);
+		this.mSnackbar = new NacSnackbar(root);
 		this.mAlarmList = null;
 		this.mPreviousCalendar = null;
 		this.mWasAddedWithFloatingActionButton = false;
 		this.mLastCardClicked = null;
 
-		this.mRecyclerView.addOnItemTouchListener(this);
+		rv.addOnItemTouchListener(this);
 		setHasStableIds(true);
 	}
 
 	/**
-	 * Add an alarm.
+	 * Create a new alarm and add it to the list.
+	 *
+	 * @see #addAlarm(NacAlarm)
 	 */
-	public int addAlarm()
+	public void addAlarm()
 	{
 		Context context = this.getContext();
 		NacSharedPreferences shared = this.getSharedPreferences();
@@ -148,41 +147,39 @@ public class NacCardAdapter
 			.setName(shared.getName())
 			.build();
 
-		return this.addAlarm(alarm);
+		this.addAlarm(alarm);
 	}
 
 	/**
-	 * @see add
+	 * @see #addAlarm(NacAlarm, int)
 	 *
 	 * @param  alarm  The alarm to add.
 	 */
-	public int addAlarm(NacAlarm alarm)
+	public void addAlarm(NacAlarm alarm)
 	{
 		int index = this.whereToInsertAlarm(alarm);
-		return this.addAlarm(alarm, index);
+		this.addAlarm(alarm, index);
 	}
 
 	/**
-	 * @see add
+	 * Add an alarm to the given index in the list.
 	 *
 	 * @param  alarm  The alarm to add.
-	 * @param  position  The position to add the alarm.
+	 * @param  index  The index to add the alarm.
 	 */
-	public int addAlarm(NacAlarm alarm, int position)
+	public void addAlarm(NacAlarm alarm, int index)
 	{
-		Context context = this.getContext();
-		NacSharedConstants cons = this.getSharedConstants();
-
-		if ((position+1) >= cons.getMaxAlarms())
+		if (!this.canAddAlarm())
 		{
-			NacUtility.quickToast(context, cons.getErrorMessageMaxAlarms());
-			return -1;
+			this.toastMaxAlarmsError();
+			return;
 		}
 
+		Context context = this.getContext();
+
 		NacTaskWorker.addAlarm(context, alarm);
-		this.notifyInsertAlarm(alarm, position);
+		this.notifyInsertAlarm(alarm, index);
 		this.updateNotification();
-		return 0;
 	}
 
 	/**
@@ -226,6 +223,17 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * @return True if an alarm can be added, and False otherwise.
+	 */
+	public boolean canAddAlarm()
+	{
+		NacSharedConstants cons = this.getSharedConstants();
+		int size = this.size();
+
+		return ((size+1) <= cons.getMaxAlarms());
+	}
+
+	/**
 	 * @return True if the alarm can be inserted at the current state in the
 	 *         alarm list, or False otherwise.
 	 */
@@ -244,7 +252,7 @@ public class NacCardAdapter
 		}
 		else if (insertInUse && listInUse)
 		{
-			Calendar cal = NacCalendar.getNext(alarmInList);
+			Calendar cal = NacCalendar.getNextAlarmDay(alarmInList);
 			return nextRun.before(cal);
 		}
 
@@ -254,7 +262,7 @@ public class NacCardAdapter
 		}
 		else if (insertEnabled == listEnabled)
 		{
-			Calendar cal = NacCalendar.getNext(alarmInList);
+			Calendar cal = NacCalendar.getNextAlarmDay(alarmInList);
 			return nextRun.before(cal);
 		}
 
@@ -262,50 +270,49 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * Copy the alarm.
+	 * Copy the alarm at the given index.
 	 *
-	 * @param  pos	The position of the alarm card to copy.
+	 * @param  index  The index of the alarm to copy.
 	 */
-	public int copyAlarm(int position)
+	public void copyAlarm(int index)
 	{
-		notifyItemChanged(position);
+		notifyItemChanged(index);
 
-		NacAlarm alarm = this.getAlarm(position);
-		NacAlarm copy = alarm.copy(this.getUniqueId());
-		int result = this.addAlarm(copy, position+1);
-
-		if (result == 0)
+		if (!this.canAddAlarm())
 		{
-			NacSharedConstants cons = this.getSharedConstants();
-			String message = cons.getMessageAlarmCopy();
-			String action = cons.getActionUndo();
-
-			this.undo(copy, position+1, Undo.Type.COPY);
-			this.showSnackbar(message, action, this);
+			this.toastMaxAlarmsError();
+			return;
 		}
 
-		return result;
+		NacSharedConstants cons = this.getSharedConstants();
+		NacAlarm alarm = this.getAlarm(index);
+		NacAlarm alarmCopy = alarm.copy(this.getUniqueId());
+		String message = cons.getMessageAlarmCopy();
+		String action = cons.getActionUndo();
+
+		this.addAlarm(alarmCopy, index+1);
+		this.undo(alarmCopy, index+1, Undo.Type.COPY);
+		this.showSnackbar(message, action, this);
 	}
 
 	/**
-	 * Delete the alarm at the given position.
+	 * Delete the alarm at the given index.
 	 *
-	 * @param  pos	The position of the alarm card to delete.
+	 * @param  index  The index of the alarm to delete.
 	 */
-	public int deleteAlarm(int position)
+	public void deleteAlarm(int index)
 	{
 		Context context = this.getContext();
-		NacAlarm alarm = this.getAlarm(position);
 		NacSharedConstants cons = this.getSharedConstants();
+		NacAlarm alarm = this.getAlarm(index);
 		String message = cons.getMessageAlarmDelete();
 		String action = cons.getActionUndo();
 
 		NacTaskWorker.deleteAlarm(context, alarm);
-		this.notifyDeleteAlarm(position);
+		this.notifyDeleteAlarm(index);
 		this.updateNotification();
-		this.undo(alarm, position, Undo.Type.DELETE);
+		this.undo(alarm, index, Undo.Type.DELETE);
 		this.showSnackbar(message, action, this);
-		return 0;
 	}
 
 	/**
@@ -319,7 +326,7 @@ public class NacCardAdapter
 		}
 
 		List<NacAlarm> alarmList = this.getAlarms();
-		int size = alarmList.size();
+		int size = this.size();
 		int id = alarm.getId();
 
 		for (int i=0; i < size; i++)
@@ -403,7 +410,6 @@ public class NacCardAdapter
 	public NacAlarm getNextAlarm()
 	{
 		List<NacAlarm> alarms = this.getAlarms();
-
 		return NacCalendar.getNextAlarm(alarms);
 	}
 
@@ -499,12 +505,12 @@ public class NacCardAdapter
 				list = disabledAlarms;
 			}
 
-			Calendar next = NacCalendar.getNext(a);
+			Calendar next = NacCalendar.getNextAlarmDay(a);
 			int pos = 0;
 
 			for (NacAlarm e : list)
 			{
-				Calendar cal = NacCalendar.getNext(e);
+				Calendar cal = NacCalendar.getNextAlarmDay(e);
 
 				if (next.before(cal))
 				{
@@ -631,9 +637,9 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * Update the database when alarm data is changed.
+	 * Called when the alarm has been changed.
 	 *
-	 * @param  a  The alarm that was changed.
+	 * @param  alarm  The alarm that was changed.
 	 */
 	@Override
 	public void onAlarmChange(NacAlarm alarm)
@@ -768,8 +774,8 @@ public class NacCardAdapter
 	public NacCardHolder onCreateViewHolder(ViewGroup parent, int viewType)
 	{
 		Context context = parent.getContext();
-		View root = LayoutInflater.from(context).inflate(R.layout.card_frame,
-			parent, false);
+		LayoutInflater inflater = LayoutInflater.from(context);
+		View root = inflater.inflate(R.layout.card_frame, parent, false);
 
 		return new NacCardHolder(root);
 	}
@@ -784,7 +790,7 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * @note Needed for RecyclerView.OnItemTouchListener
+	 * Needed for RecyclerView.OnItemTouchListener
 	 */
 	public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent ev)
 	{
@@ -804,25 +810,25 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * Copy the alarm.
+	 * Called when an alarm card was swiped to be copied.
 	 *
-	 * @param  pos	The position of the alarm to copy.
+	 * @param  index  The index of the alarm to copy.
 	 */
 	@Override
-	public void onItemCopy(int position)
+	public void onItemCopy(int index)
 	{
-		this.copyAlarm(position);
+		this.copyAlarm(index);
 	}
 
 	/**
-	 * Delete the alarm.
+	 * Called when an alarm card was swiped to be deleted.
 	 * 
-	 * @param  pos	The position of the alarm to delete.
+	 * @param  index  The index of the alarm to delete.
 	 */
 	@Override
-	public void onItemDelete(int position)
+	public void onItemDelete(int index)
 	{
-		this.deleteAlarm(position);
+		this.deleteAlarm(index);
 	}
 
 	/**
@@ -857,14 +863,14 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * @note Needed for RecyclerView.OnItemTouchListener
+	 * Note: Needed for RecyclerView.OnItemTouchListener
 	 */
 	public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept)
 	{
 	}
 
 	/**
-	 * @note Needed for RecyclerView.OnItemTouchListener
+	 * Note: Needed for RecyclerView.OnItemTouchListener
 	 */
 	public void onTouchEvent(RecyclerView rv, MotionEvent e)
 	{
@@ -878,19 +884,21 @@ public class NacCardAdapter
 	 */
 	public void restore(NacAlarm alarm, int position)
 	{
-		int result = this.addAlarm(alarm, position);
-
-		if (result == 0)
+		if (!this.canAddAlarm())
 		{
-			NacSharedConstants cons = this.getSharedConstants();
-			Locale locale = Locale.getDefault();
-			String message = String.format(locale, "%1$s.",
-				cons.getMessageAlarmRestore());
-			String action = cons.getActionUndo();
-
-			this.undo(alarm, position, Undo.Type.RESTORE);
-			this.showSnackbar(message, action, this);
+			this.toastMaxAlarmsError();
+			return;
 		}
+
+		NacSharedConstants cons = this.getSharedConstants();
+		Locale locale = Locale.getDefault();
+		String message = String.format(locale, "%1$s.",
+			cons.getMessageAlarmRestore());
+		String action = cons.getActionUndo();
+
+		this.addAlarm(alarm, position);
+		this.undo(alarm, position, Undo.Type.RESTORE);
+		this.showSnackbar(message, action, this);
 	}
 
 	/**
@@ -961,7 +969,7 @@ public class NacCardAdapter
 	 */
 	private void showAlarmRuntime(NacAlarm alarm)
 	{
-		Calendar alarmCalendar = NacCalendar.getNext(alarm);
+		Calendar alarmCalendar = NacCalendar.getNextAlarmDay(alarm);
 		this.showAlarm(alarm);
 		this.mPreviousCalendar = alarmCalendar;
 	}
@@ -1016,7 +1024,7 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * @see showSnackbar
+	 * @see #showSnackbar(String, String, View.OnClickListener)
 	 */
 	private void showSnackbar(String message, String action)
 	{
@@ -1091,6 +1099,17 @@ public class NacCardAdapter
 	}
 
 	/**
+	 * Toast for when the maximum number of alarms has been created.
+	 */
+	public void toastMaxAlarmsError()
+	{
+		Context context = this.getContext();
+		NacSharedConstants cons = this.getSharedConstants();
+
+		NacUtility.quickToast(context, cons.getErrorMessageMaxAlarms());
+	}
+
+	/**
 	 * Save undo parameters.
 	 */
 	public void undo(NacAlarm alarm, int position, Undo.Type type)
@@ -1129,9 +1148,9 @@ public class NacCardAdapter
 	private int whereToInsertAlarm(NacAlarm alarm)
 	{
 		List<NacAlarm> alarmList = this.getAlarms();
-		Calendar next = NacCalendar.getNext(alarm);
+		Calendar next = NacCalendar.getNextAlarmDay(alarm);
 		int id = alarm.getId();
-		int size = alarmList.size();
+		int size = this.size();
 
 		for (int index=0; index < size; index++)
 		{

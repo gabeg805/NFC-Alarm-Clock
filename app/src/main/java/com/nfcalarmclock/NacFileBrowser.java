@@ -1,7 +1,6 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,17 +27,20 @@ public class NacFileBrowser
 			NacFile.Metadata metadata, String path, String name);
 	}
 
-	private Context mContext;
+	/**
+	 * Context.
+	 */
+	private final Context mContext;
 
 	/**
 	 * File tree of media files.
 	 */
-	private NacMedia.Tree mFileTree;
+	private final NacMedia.Tree mFileTree;
 
 	/**
 	 * The container view for the directory/file buttons.
 	 */
-	private LinearLayout mContainer;
+	private final LinearLayout mContainer;
 
 	/**
 	 * Currently selected view.
@@ -51,11 +53,6 @@ public class NacFileBrowser
 	private OnBrowserClickedListener mOnBrowserClickedListener;
 
 	/**
-	 * Layout inflater.
-	 */
-	private LayoutInflater mInflater;
-
-	/**
 	 */
 	public NacFileBrowser(View root, int groupId)
 	{
@@ -63,11 +60,9 @@ public class NacFileBrowser
 		NacMedia.Tree tree = new NacMedia.Tree("");
 		this.mContext = context;
 		this.mFileTree = tree;
-		this.mContainer = (LinearLayout) root.findViewById(groupId);
+		this.mContainer = root.findViewById(groupId);
 		this.mSelectedView = null;
 		this.mOnBrowserClickedListener = null;
-		this.mInflater = (LayoutInflater) context.getSystemService(
-			Context.LAYOUT_INFLATER_SERVICE);
 
 		tree.scan(context);
 	}
@@ -75,21 +70,17 @@ public class NacFileBrowser
 	/**
 	 * Add a directory entry to the file browser.
 	 *
-	 * @TODO Count number of songs in subdirectories and make that the
-	 *       annotation.
+	 * TODO Count number of songs in subdirectories and make that the
+	 *      annotation.
 	 */
-	public void addDirectory(NacFile.Metadata metadata)
+	public void addDirectory(LayoutInflater inflater, NacFile.Metadata metadata)
 	{
 		Context context = this.getContext();
 		LinearLayout container = this.getContainer();
-		LayoutInflater inflater = this.getLayoutInflater();
 
-		if ((container == null) || (inflater == null))
+		if (container == null)
 		{
-			NacUtility.printf("NacFileBrowser : addDirectory : Container null? %b",
-				container == null);
-			NacUtility.printf("NacFileBrowser : addDirectory : Inflater null? %b",
-				inflater == null);
+			NacUtility.printf("NacFileBrowser : addDirectory : Container is null");
 			return;
 		}
 
@@ -112,40 +103,16 @@ public class NacFileBrowser
 	}
 
 	/**
-	 * Add an entry.
-	 */
-	public void addEntry(NacFile.Metadata metadata)
-	{
-		if (metadata.isDirectory())
-		{
-			this.addDirectory(metadata);
-		}
-		else if (metadata.isFile())
-		{
-			this.addFile(metadata);
-		}
-	}
-
-	/**
 	 * Add a music file entry to the file browser.
 	 */
-	public void addFile(NacFile.Metadata metadata)
+	public void addFile(LayoutInflater inflater, NacFile.Metadata metadata)
 	{
 		Context context = this.getContext();
 		LinearLayout container = this.getContainer();
-		LayoutInflater inflater = this.getLayoutInflater();
 
-		//if (file.length() == 0)
-		//{
-		//	return;
-		//}
-
-		if ((container == null) || (inflater == null))
+		if (container == null)
 		{
-			NacUtility.printf("NacFileBrowser : addFile : Container null? %b",
-				container == null);
-			NacUtility.printf("NacFileBrowser : addFile : Inflater null? %b",
-				inflater == null);
+			NacUtility.printf("NacFileBrowser : addFile : Container is null");
 			return;
 		}
 
@@ -243,14 +210,6 @@ public class NacFileBrowser
 	private Context getContext()
 	{
 		return this.mContext;
-	}
-
-	/**
-	 * @return The layout inflater.
-	 */
-	private LayoutInflater getLayoutInflater()
-	{
-		return this.mInflater;
 	}
 
 	/**
@@ -388,17 +347,26 @@ public class NacFileBrowser
 	 */
 	private void populateEntries(String path)
 	{
+		Context context = this.getContext();
 		NacMedia.Tree tree = this.getTree();
+		LayoutInflater inflater = LayoutInflater.from(context);
 
 		if (!path.isEmpty())
 		{
 			NacFile.Metadata metadata = new NacFile.Metadata(path, "..", -1);
-			this.addDirectory(metadata);
+			this.addDirectory(inflater, metadata);
 		}
 
 		for (NacFile.Metadata metadata : tree.lsSort(path))
 		{
-			this.addEntry(metadata);
+			if (metadata.isDirectory())
+			{
+				this.addDirectory(inflater, metadata);
+			}
+			else if (metadata.isFile())
+			{
+				this.addFile(inflater, metadata);
+			}
 		}
 	}
 
@@ -424,7 +392,7 @@ public class NacFileBrowser
 	}
 
 	/**
-	 * @see select
+	 * @see #select(View)
 	 */
 	public void select(String selectPath)
 	{
@@ -455,6 +423,8 @@ public class NacFileBrowser
 
 	/**
 	 * Set the currently selected file.
+	 *
+	 * @param  view  The view to highlight.
 	 */
 	public void select(View view)
 	{
@@ -483,18 +453,15 @@ public class NacFileBrowser
 	}
 
 	/**
-	 * Show the directory contents at the given path and select the file.
+	 * @see #show(String)
 	 */
-	public void show(String directoryPath, String filePath)
+	public void show()
 	{
-		this.clearEntries();
-		this.populateEntries(directoryPath);
-		this.getTree().cd(directoryPath);
-		this.select(filePath);
+		this.show("");
 	}
 
 	/**
-	 * @see show
+	 * @see #show(String, String)
 	 */
 	public void show(String directoryPath)
 	{
@@ -510,11 +477,17 @@ public class NacFileBrowser
 	}
 
 	/**
-	 * @see show
+	 * Show the directory contents at the given path and select the file.
+	 *
+	 * @param  directoryPath  The path of the directory to show.
+	 * @param  filePath       The path of the file to highlight.
 	 */
-	public void show()
+	public void show(String directoryPath, String filePath)
 	{
-		this.show("");
+		this.clearEntries();
+		this.populateEntries(directoryPath);
+		this.getTree().cd(directoryPath);
+		this.select(filePath);
 	}
 
 }

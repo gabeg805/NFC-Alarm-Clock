@@ -100,15 +100,15 @@ public class NacAudioSourceDialog
 		Context context = this.getContext();
 		RadioGroup group = this.getRadioGroup();
 		List<String> sources = this.getAudioSources();
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(
-			Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = LayoutInflater.from(context);
 
 		for (String s : sources)
 		{
 			View view = inflater.inflate(R.layout.radio_button, group, true);
 			RadioButton button = view.findViewById(R.id.radio_button);
+			int id = View.generateViewId();
 
-			button.setId(button.generateViewId());
+			button.setId(id);
 			button.setText(s);
 		}
 	}

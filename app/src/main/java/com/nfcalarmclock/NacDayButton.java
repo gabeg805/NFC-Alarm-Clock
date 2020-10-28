@@ -1,29 +1,15 @@
 package com.nfcalarmclock;
 
-import android.animation.Animator;
-import android.animation.AnimatorInflater;
-import android.animation.ArgbEvaluator;
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.BlendMode;
-import android.graphics.BlendModeColorFilter;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import androidx.annotation.Keep;
-import androidx.core.content.ContextCompat;
+
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 
@@ -48,16 +34,16 @@ public class NacDayButton
 	/**
 	 * Attributes for button and text.
 	 */
-	public class NacDayAttributes
+	public static class Attributes
 	{
-		public int width;
-		public int height;
-		public String text;
+		public final int width;
+		public final int height;
+		public final String text;
 
 		/**
 		 * Initialize the attributes.
 		 */
-		public NacDayAttributes(Context context, AttributeSet attrs)
+		public Attributes(Context context, AttributeSet attrs)
 		{
 			Resources.Theme theme = context.getTheme();
 			TypedArray ta = theme.obtainStyledAttributes(attrs,
@@ -95,7 +81,7 @@ public class NacDayButton
 	/**
 	 * View attributes.
 	 */
-	private NacDayAttributes mAttributes;
+	private Attributes mAttributes;
 
 	/**
 	 * Day changed listener.
@@ -162,7 +148,7 @@ public class NacDayButton
 	/**
 	 * @return The day attributes object.
 	 */
-	private NacDayAttributes getDayAttributes()
+	private Attributes getDayAttributes()
 	{
 		return this.mAttributes;
 	}
@@ -197,7 +183,7 @@ public class NacDayButton
 		this.setupStyle();
 
 		Context context = getContext();
-		this.mAttributes = new NacDayAttributes(context, attrs);
+		this.mAttributes = new Attributes(context, attrs);
 		this.mOnDayChangedListener = null;
 
 		this.getButtonToggleGroup().addOnButtonCheckedListener(this);
@@ -265,12 +251,13 @@ public class NacDayButton
 	public void setStyle(int style)
 	{
 		Context context = getContext();
+		LayoutInflater inflater = LayoutInflater.from(context);
 		int layout = (style == 1)
 			? R.layout.nac_day_button_filled
 			: R.layout.nac_day_button_outlined;
 
 		removeAllViews();
-		LayoutInflater.from(context).inflate(layout, this, true);
+		inflater.inflate(layout, this, true);
 
 		this.mButtonToggleGroup = findViewById(R.id.nac_day_button_group);
 		this.mButton = findViewById(R.id.nac_day_button);
@@ -303,12 +290,10 @@ public class NacDayButton
 	 */
 	public void setViewAttributes()
 	{
-		int width = this.getDayAttributes().width;
-		int height = this.getDayAttributes().height;
-		String text = this.getDayAttributes().text;
+		Attributes attrs = this.getDayAttributes();
 
-		this.setSize(width, height);
-		this.setText(text);
+		this.setSize(attrs.width, attrs.height);
+		this.setText(attrs.text);
 	}
 
 	/**

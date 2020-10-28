@@ -87,7 +87,7 @@ public class NacNextAlarmFormatPreference
 	public boolean onDismissDialog(NacDialog dialog)
 	{
 		View root = dialog.getRoot();
-		RadioGroup days = (RadioGroup) root.findViewById(R.id.formats);
+		RadioGroup days = root.findViewById(R.id.formats);
 		int id = days.getCheckedRadioButtonId();
 
 		if (id == R.id.nexton)
@@ -116,9 +116,9 @@ public class NacNextAlarmFormatPreference
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
 		Context context = getContext();
-		NacSharedDefaults defaults = new NacSharedDefaults(context);
-		return (Integer) a.getInteger(index,
-			defaults.getNextAlarmFormatIndex());
+		NacSharedDefaults defs = new NacSharedDefaults(context);
+
+		return a.getInteger(index, defs.getNextAlarmFormatIndex());
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class NacNextAlarmFormatPreference
 	 */
 	public void onShowDialog(NacDialog dialog, View root)
 	{
-		RadioGroup days = (RadioGroup) root.findViewById(R.id.formats);
+		RadioGroup days = root.findViewById(R.id.formats);
 
 		switch (this.mValue)
 		{

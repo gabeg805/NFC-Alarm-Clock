@@ -55,7 +55,7 @@ public class NacMediaPreference
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		return (String) a.getString(index);
+		return a.getString(index);
 	}
 
 	/**

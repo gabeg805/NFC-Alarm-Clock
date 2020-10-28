@@ -71,8 +71,10 @@ public class NacMaxSnoozePreference
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		NacSharedDefaults defaults = new NacSharedDefaults(getContext());
-		return (Integer) a.getInteger(index, defaults.getMaxSnoozeIndex());
+		Context context = getContext();
+		NacSharedDefaults defs = new NacSharedDefaults(context);
+
+		return a.getInteger(index, defs.getMaxSnoozeIndex());
 	}
 
 	/**

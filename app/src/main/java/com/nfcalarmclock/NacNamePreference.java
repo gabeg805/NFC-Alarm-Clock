@@ -3,9 +3,8 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.view.View;
+
 import androidx.preference.Preference;
-import androidx.preference.PreferenceViewHolder;
 
 /**
  * Preference that displays the name of the alarm.
@@ -74,7 +73,7 @@ public class NacNamePreference
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		return (String) a.getString(index);
+		return a.getString(index);
 	}
 
 	/**

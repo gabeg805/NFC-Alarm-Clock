@@ -2,11 +2,8 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.util.AttributeSet;
-import android.view.View;
-import android.widget.ImageView;
+
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 
@@ -29,9 +26,9 @@ public class NacDayButtonPreference
 	protected int mValue;
 
 	/**
-	 * Shared constants.
+	 * Shared preferences.
 	 */
-	protected NacSharedConstants mSharedConstants;
+	protected final NacSharedPreferences mSharedPreferences;
 
 	/**
 	 */
@@ -55,7 +52,7 @@ public class NacDayButtonPreference
 		setLayoutResource(R.layout.nac_preference_day_button);
 		setOnPreferenceClickListener(this);
 
-		this.mSharedConstants = new NacSharedConstants(context);
+		this.mSharedPreferences = new NacSharedPreferences(context);
 	}
 
 	/**
@@ -69,9 +66,9 @@ public class NacDayButtonPreference
 	/**
 	 * @return The shared constants.
 	 */
-	public NacSharedConstants getSharedConstants()
+	public NacSharedPreferences getNacSharedPreferences()
 	{
-		return this.mSharedConstants;
+		return this.mSharedPreferences;
 	}
 
 	/**
@@ -80,7 +77,8 @@ public class NacDayButtonPreference
 	@Override
 	public CharSequence getSummary()
 	{
-		NacSharedConstants cons = this.getSharedConstants();
+		NacSharedPreferences shared = this.getNacSharedPreferences();
+		NacSharedConstants cons = shared.getConstants();
 		int value = this.mValue;
 
 		if (value == 1)
@@ -116,7 +114,8 @@ public class NacDayButtonPreference
 	{
 		Context context = getContext();
 		NacSharedDefaults defs = new NacSharedDefaults(context);
-		return (Integer) a.getInteger(index, defs.getDayButtonStyle());
+
+		return a.getInteger(index, defs.getDayButtonStyle());
 	}
 
 	/**
@@ -127,7 +126,7 @@ public class NacDayButtonPreference
 	{
 		NacDayButton button = this.getDayButton();
 		Context context = getContext();
-		NacSharedPreferences shared = new NacSharedPreferences(context);
+		NacSharedPreferences shared = this.getNacSharedPreferences();
 		int style = shared.getDayButtonStyle();
 		this.mValue = (style % 2) + 1;
 
@@ -160,7 +159,8 @@ public class NacDayButtonPreference
 	 */
 	protected void setupDayButton()
 	{
-		NacSharedConstants cons = this.getSharedConstants();
+		NacSharedPreferences shared = this.getNacSharedPreferences();
+		NacSharedConstants cons = shared.getConstants();
 		NacDayButton button = this.getDayButton();
 
 		button.setText(cons.getDaysOfWeek().get(1));

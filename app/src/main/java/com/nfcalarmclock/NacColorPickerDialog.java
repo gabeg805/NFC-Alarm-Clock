@@ -53,7 +53,7 @@ public class NacColorPickerDialog
 	/**
 	 * Ensure the text always starts with "#".
 	 *
-	 * @note This is required to implement TextWatcher.
+	 * Note: This is required to implement TextWatcher.
 	 */
 	@Override
 	public void afterTextChanged(Editable s)
@@ -65,7 +65,7 @@ public class NacColorPickerDialog
 	}
 
 	/**
-	 * @note This is required to implement TextWatcher.
+	 * Note: This is required to implement TextWatcher.
 	 */
 	@Override
 	public void beforeTextChanged(CharSequence seq, int start, int count, int after)
@@ -177,9 +177,9 @@ public class NacColorPickerDialog
 	{
 		Context context = root.getContext();
 		NacSharedPreferences shared = new NacSharedPreferences(context);
-		this.mColorPicker = (NacColorPicker) root.findViewById(R.id.color_picker);
-		this.mColorExample = (ImageView) root.findViewById(R.id.color_example);
-		this.mEditText = (EditText) root.findViewById(R.id.color_value);
+		this.mColorPicker = root.findViewById(R.id.color_picker);
+		this.mColorExample = root.findViewById(R.id.color_example);
+		this.mEditText = root.findViewById(R.id.color_value);
 
 		this.mEditText.addTextChangedListener(this);
 		this.mEditText.setText(this.getHexColor());
@@ -192,7 +192,7 @@ public class NacColorPickerDialog
 	}
 
 	/**
-	 * @note This is required to implement TextWatcher.
+	 * Note: This is required to implement TextWatcher.
 	 */
 	@Override
 	public void onTextChanged(CharSequence seq, int start, int before, int count)

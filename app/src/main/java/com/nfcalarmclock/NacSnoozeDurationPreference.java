@@ -3,7 +3,7 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.view.View;
+
 import androidx.preference.Preference;
 
 /**
@@ -73,9 +73,10 @@ public class NacSnoozeDurationPreference
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		NacSharedDefaults defaults = new NacSharedDefaults(getContext());
-		return (Integer) a.getInteger(index,
-			defaults.getSnoozeDurationIndex());
+		Context context = getContext();
+		NacSharedDefaults defs = new NacSharedDefaults(context);
+
+		return a.getInteger(index, defs.getSnoozeDurationIndex());
 	}
 
 	/**

@@ -29,8 +29,8 @@ public class NacMiscellaneousSettingsFragment
 
 		Context context = getContext();
 		NacSharedKeys keys = new NacSharedKeys(context);
-		NacCheckboxPreference speak = (NacCheckboxPreference) findPreference(keys.getSpeakToMe());
-		NacSpeakFrequencyPreference speakFreq = (NacSpeakFrequencyPreference) findPreference(keys.getSpeakFrequency());
+		NacCheckboxPreference speak = findPreference(keys.getSpeakToMe());
+		NacSpeakFrequencyPreference speakFreq = findPreference(keys.getSpeakFrequency());
 		boolean state = speak.getChecked();
 
 		speak.notifyDependencyChange(!state);

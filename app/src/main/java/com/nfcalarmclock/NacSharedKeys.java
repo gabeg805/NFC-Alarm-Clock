@@ -310,7 +310,7 @@ public class NacSharedKeys
 	 */
 	public static String getSnoozeCount(int id)
 	{
-		return "snoozeCount" + String.valueOf(id);
+		return "snoozeCount" + id;
 	}
 
 	/**

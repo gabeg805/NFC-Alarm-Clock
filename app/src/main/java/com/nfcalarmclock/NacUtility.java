@@ -1,7 +1,6 @@
 package com.nfcalarmclock;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
@@ -13,15 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.MeasureSpec;
 import android.widget.Toast;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
 import androidx.core.content.ContextCompat;
-import com.google.android.material.snackbar.Snackbar;
+
 import java.util.Locale;
 
 /**
- * @brief NFC Alarm Clock Utility class.
+ * NFC Alarm Clock Utility class.
  * 
- * @details Composed of static methods that can be used for various things.
+ * Composed of static methods that can be used for various things.
  */
 public class NacUtility
 {
@@ -40,9 +39,9 @@ public class NacUtility
 	/**
 	 * Determine the height of the view.
 	 * 
-	 * @param  v  The view.
-	 * 
 	 * @return The height of the view.
+	 * 
+	 * @param  view  The view.
 	 */
 	public static int getHeight(View view)
 	{
@@ -76,9 +75,9 @@ public class NacUtility
 	/**
 	 * Determine the width of the view.
 	 * 
-	 * @param  v  The view.
-	 * 
 	 * @return The width of the view.
+	 * 
+	 * @param  view  The view.
 	 */
 	public static int getWidth(View view)
 	{
@@ -94,7 +93,7 @@ public class NacUtility
 	}
 
 	/**
-	 * @brief Wrapper for Log object to print to the logcat easily.
+	 * Wrapper for Log object to print to the logcat easily.
 	 */
 	public static void print(String name, String string)
 	{
@@ -141,61 +140,6 @@ public class NacUtility
 	{
 		return NacUtility.toast(context, message, Toast.LENGTH_SHORT);
 	}
-
-	/**
-	 * Display a snackbar with the given message.
-	 *
-	 * @param  root  The root view.
-	 * @param  message  The message to display.
-	 * @param  action  The action message.
-	 * @param  listener  The callback to run when the action is clicked.
-	 */
-	//public static Snackbar snackbar(View root, String message, String action,
-	//	View.OnClickListener listener)
-	//{
-	//	Context context = root.getContext();
-	//	//int color = NacUtility.getThemeAttrColor(context,
-	//	//	R.attr.colorCardAccent);
-	//	Snackbar snackbar = Snackbar.make(root, message, Snackbar.LENGTH_LONG);
-
-	//	if (!action.isEmpty())
-	//	{
-	//		if (listener == null)
-	//		{
-	//			listener = new View.OnClickListener()
-	//			{
-	//				@Override
-	//				public void onClick(View view)
-	//				{
-	//				}
-	//			};
-	//		}
-
-	//		snackbar.setAction(action, listener);
-	//	}
-
-	//	//snackbar.setActionTextColor(color);
-	//	snackbar.setActionTextColor(themeColor);
-	//	snackbar.getView().setBackgroundColor(bgColor);
-	//	snackbar.show();
-
-	//	return snackbar;
-	//}
-
-	/**
-	 * Display a snackbar with the given message.
-	 *
-	 * @param  activity  The main activity.
-	 * @param  message  The message to display.
-	 * @param  action  The action message.
-	 * @param  listener  The callback to run when the action is clicked.
-	 */
-	//public static Snackbar snackbar(Activity activity, String message, String action,
-	//	View.OnClickListener listener)
-	//{
-	//	CoordinatorLayout root = activity.findViewById(R.id.activity_main);
-	//	return NacUtility.snackbar(root, message, action, listener);
-	//}
 
 	/**
 	 * Convert the given string to a spanned string.

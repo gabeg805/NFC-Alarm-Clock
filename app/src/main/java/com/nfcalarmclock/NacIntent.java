@@ -205,7 +205,7 @@ public class NacIntent
 	}
 
 	/**
-	 * @see getBundle
+	 * @see #getBundle(Intent, String)
 	 */
 	public static Bundle getAlarmBundle(Intent intent)
 	{
@@ -213,7 +213,7 @@ public class NacIntent
 	}
 
 	/**
-	 * @see getBundle
+	 * @see #getBundle(Intent, String)
 	 */
 	public static Bundle getAlarmFromBundle(Intent intent)
 	{
@@ -221,7 +221,7 @@ public class NacIntent
 	}
 
 	/**
-	 * @see getBundle
+	 * @see #getBundle(Intent, String)
 	 */
 	public static Bundle getAlarmToBundle(Intent intent)
 	{
@@ -401,32 +401,41 @@ public class NacIntent
 	}
 
 	/**
-	 * @see toIntent
+	 * Create an intent with an alarm attached in the Extra part of the intent.
+	 *
+	 * @return An intent.
+	 *
+	 * @param  context  The application context.
+	 * @param  cls      The name of the class for the intent to run.
+	 * @param  alarm    The alarm to attach to the intent.
 	 */
-	public static Intent toIntent(Context packageContext, Class<?> cls,
-		NacAlarm alarm)
+	public static Intent toIntent(Context context, Class<?> cls, NacAlarm alarm)
 	{
-		Intent intent = (cls != null) ? new Intent(packageContext, cls)
+		Intent intent = (cls != null) ? new Intent(context, cls)
 			: new Intent();
 		Bundle bundle = NacBundle.toBundle(alarm);
 
 		intent.putExtra(ALARM_BUNDLE_NAME, bundle);
-
 		return intent;
 	}
 
 	/**
-	 * @see toIntent
+	 * Create an intent with a media path attached in the Extra part of the
+	 * intent.
+	 *
+	 * @return An intent.
+	 *
+	 * @param  context  The application context.
+	 * @param  cls      The name of the class for the intent to run.
+	 * @param  media    The media path to attach to the intent.
 	 */
-	public static Intent toIntent(Context packageContext, Class<?> cls,
-		String media)
+	public static Intent toIntent(Context context, Class<?> cls, String media)
 	{
-		Intent intent = (cls != null) ? new Intent(packageContext, cls)
+		Intent intent = (cls != null) ? new Intent(context, cls)
 			: new Intent();
 		Bundle bundle = NacBundle.toBundle(media);
 
 		intent.putExtra(MEDIA_BUNDLE_NAME, bundle);
-
 		return intent;
 	}
 

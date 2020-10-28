@@ -32,8 +32,7 @@ public class NacBundle
 	 */
 	public static String getMedia(Bundle bundle)
 	{
-		return (bundle != null)
-			? (String) bundle.getString(MEDIA_PARCEL_NAME) : null;
+		return (bundle != null) ? bundle.getString(MEDIA_PARCEL_NAME) : null;
 	}
 
 	/**

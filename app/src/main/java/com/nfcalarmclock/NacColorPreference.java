@@ -90,7 +90,8 @@ public class NacColorPreference
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		return (this.mDefault = (Integer) a.getInteger(index, Color.WHITE));
+		this.mDefault = a.getInteger(index, Color.WHITE);
+		return this.mDefault;
 	}
 
 	/**

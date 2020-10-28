@@ -22,50 +22,26 @@ public class NacSnackbar
 		/**
 		 * Message.
 		 */
-		private String mMessage;
+		private final String message;
 
 		/**
 		 * Action button text.
 		 */
-		private String mAction;
+		private final String action;
 
 		/**
 		 * Click listener.
 		 */
-		private View.OnClickListener mListener;
+		private final View.OnClickListener onClickListener;
 
 		/**
 		 */
 		public SnackHolder(String message, String action,
-			View.OnClickListener listener)
+			View.OnClickListener onClickListener)
 		{
-			this.mMessage = message;
-			this.mAction = action;
-			this.mListener = listener;
-		}
-
-		/**
-		 * @return The action button text.
-		 */
-		public String getAction()
-		{
-			return this.mAction;
-		}
-
-		/**
-		 * @return The OnClickListener.
-		 */
-		public View.OnClickListener getListener()
-		{
-			return this.mListener;
-		}
-
-		/**
-		 * @return The message.
-		 */
-		public String getMessage()
-		{
-			return this.mMessage;
+			this.message = message;
+			this.action = action;
+			this.onClickListener = onClickListener;
 		}
 
 	}
@@ -86,11 +62,11 @@ public class NacSnackbar
 			if (queue.size() > 0)
 			{
 				SnackHolder holder = queue.remove();
-				String message = holder.getMessage();
-				String action = holder.getAction();
-				View.OnClickListener listener = holder.getListener();
+				String message = holder.message;
+				String action = holder.action;
+				View.OnClickListener onClickListener = holder.onClickListener;
 
-				show(message, action, listener, false);
+				show(message, action, onClickListener, false);
 			}
 		}
 
@@ -109,12 +85,12 @@ public class NacSnackbar
 	/**
 	 * Root view.
 	 */
-	private View mRoot;
+	private final View mRoot;
 
 	/**
 	 * Message queue.
 	 */
-	private Queue<SnackHolder> mQueue;
+	private final Queue<SnackHolder> mQueue;
 
 	/**
 	 * Check if the snackbar can be dismissed early.
@@ -257,7 +233,7 @@ public class NacSnackbar
 	}
 
 	/**
-	 * @see show
+	 * Show the snackbar now.
 	 */
 	public void show()
 	{
@@ -265,7 +241,7 @@ public class NacSnackbar
 	}
 
 	/**
-	 * @see show
+	 * @see #show(String, String, View.OnClickListener, boolean)
 	 */
 	public void show(String message, String action,
 		View.OnClickListener listener)
@@ -274,7 +250,9 @@ public class NacSnackbar
 	}
 
 	/**
-	 * Show the snackbar.
+	 * Setup the snackbar and show it.
+	 *
+	 * @see #show()
 	 */
 	public void show(String message, String action,
 		View.OnClickListener listener, boolean dismiss)

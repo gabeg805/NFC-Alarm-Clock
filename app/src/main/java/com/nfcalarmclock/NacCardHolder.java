@@ -75,7 +75,7 @@ public class NacCardHolder
 	/**
 	 * Shared preferences.
 	 */
-	private NacSharedPreferences mSharedPreferences;
+	private final NacSharedPreferences mSharedPreferences;
 
 	/**
 	 * Alarm.
@@ -85,132 +85,132 @@ public class NacCardHolder
 	/**
 	 * The root view.
 	 */
-	private View mRoot;
+	private final View mRoot;
 
 	/**
 	 * Card view.
 	 */
-	private CardView mCardView;
+	private final CardView mCardView;
 
 	/**
 	 * Copy swipe view.
 	 */
-	private RelativeLayout mCopySwipeView;
+	private final RelativeLayout mCopySwipeView;
 
 	/**
 	 * Delete swipe view.
 	 */
-	private RelativeLayout mDeleteSwipeView;
+	private final RelativeLayout mDeleteSwipeView;
 
 	/**
 	 * Header view.
 	 */
-	private LinearLayout mHeaderView;
+	private final LinearLayout mHeaderView;
 
 	/**
 	 * Summary view.
 	 */
-	private LinearLayout mSummaryView;
+	private final LinearLayout mSummaryView;
 
 	/**
 	 * Dismiss snoozed alarm parent view.
 	 */
-	private LinearLayout mDismissParentView;
+	private final LinearLayout mDismissParentView;
 
 	/**
 	 * Dismiss snoozed alarm button.
 	 */
-	private MaterialButton mDismissButton;
+	private final MaterialButton mDismissButton;
 
 	/**
 	 * Extra view.
 	 */
-	private LinearLayout mExtraView;
+	private final LinearLayout mExtraView;
 
 	/**
 	 * On/off switch for an alarm.
 	 */
-	 private SwitchCompat mSwitch;
+	 private final SwitchCompat mSwitch;
 
 	/**
 	 * Time parent view.
 	 */
-	private LinearLayout mTimeParentView;
+	private final LinearLayout mTimeParentView;
 
 	/**
 	 * Time text.
 	 */
-	private TextView mTimeView;
+	private final TextView mTimeView;
 
 	/**
 	 * Meridian text (AM/PM).
 	 */
-	private TextView mMeridianView;
+	private final TextView mMeridianView;
 
 	/**
 	 * Summary view containing the days to repeat.
 	 */
-	private TextView mSummaryDaysView;
+	private final TextView mSummaryDaysView;
 
 	/**
 	 * Summary view containing the name of the alarm.
 	 */
-	private TextView mSummaryNameView;
+	private final TextView mSummaryNameView;
 
 	/**
 	 * Day of week.
 	 */
-	private NacDayOfWeek mDayOfWeek;
+	private final NacDayOfWeek mDayOfWeek;
 
 	/**
 	 * Repeat button.
 	 */
-	private MaterialButton mRepeatButton;
+	private final MaterialButton mRepeatButton;
 
 	/**
 	 * Vibrate button.
 	 */
-	private MaterialButton mVibrateButton;
+	private final MaterialButton mVibrateButton;
 
 	/**
 	 * NFC button.
 	 */
-	private MaterialButton mNfcButton;
+	private final MaterialButton mNfcButton;
 
 	/**
 	 * Media button.
 	 */
-	private MaterialButton mMediaButton;
+	private final MaterialButton mMediaButton;
 
 	/**
 	 * Volume image view.
 	 */
-	private ImageView mVolumeImageView;
+	private final ImageView mVolumeImageView;
 
 	/**
 	 * Volume seekbar.
 	 */
-	private SeekBar mVolumeSeekBar;
+	private final SeekBar mVolumeSeekBar;
 
 	/**
 	 * Audio source button.
 	 */
-	private MaterialButton mAudioSourceButton;
+	private final MaterialButton mAudioSourceButton;
 
 	/**
 	 * Name button.
 	 */
-	 private MaterialButton mNameButton;
+	 private final MaterialButton mNameButton;
 
 	/**
 	 * Delete button.
 	 */
-	private MaterialButton mDeleteButton;
+	private final MaterialButton mDeleteButton;
 
 	/**
 	 * Card animator for collapsing and expanding.
 	 */
-	private NacHeightAnimator mCardAnimator;
+	private final NacHeightAnimator mCardAnimator;
 
 	/**
 	 * Color animator for animating the background color of the card.
@@ -381,7 +381,7 @@ public class NacCardHolder
 	}
 
 	/**
-	 * @see checkCanModifyAlarm
+	 * @see #checkCanModifyAlarm()
 	 *
 	 * Same, but for deleting an alarm.
 	 */
@@ -643,7 +643,7 @@ public class NacCardHolder
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 
-		if (!state && (alarm.isSnoozed(shared) || alarm.isActive()))
+		if (!state && alarm.isInUse(shared))
 		{
 			Context context = this.getContext();
 			NacContext.dismissForegroundService(context, alarm);
@@ -1186,6 +1186,17 @@ public class NacCardHolder
 	}
 
 	/**
+	 * @return True if the alarm is in use, and False otherwise.
+	 */
+	public boolean isAlarmInUse()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacAlarm alarm = this.getAlarm();
+
+		return alarm.isInUse(shared);
+	}
+
+	/**
 	 * @return True if the alarm card is collapsed, and False otherwise.
 	 */
 	public boolean isCollapsed()
@@ -1212,17 +1223,6 @@ public class NacCardHolder
 
 		return (extraView.getVisibility() == View.VISIBLE)
 			|| (currentHeight == shared.getCardHeightExpanded());
-	}
-
-	/**
-	 * @return True if the alarm is snoozed and False otherwise.
-	 */
-	public boolean isSnoozed()
-	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-		NacAlarm alarm = this.getAlarm();
-
-		return alarm.isSnoozed(shared);
 	}
 
 	/**
@@ -1636,19 +1636,6 @@ public class NacCardHolder
 	}
 
 	/**
-	 * Set the background color for when the card is collapsed.
-	 */
-	//public void setCollapsedBackgroundColor()
-	//{
-	//	Context context = this.getContext();
-	//	CardView card = this.getCardView();
-	//	int color = NacUtility.getThemeAttrColor(context, R.attr.colorCard);
-
-	//	//NacUtility.setBackground(card, id);
-	//	card.setBackgroundColor(color);
-	//}
-
-	/**
 	 * Set the ripple color of the audio source button.
 	 */
 	private void setAudioSourceButtonRippleColor()
@@ -1749,24 +1736,6 @@ public class NacCardHolder
 
 		deleteDivider.setBackgroundTintList(tint);
 	}
-
-	/**
-	 * Set the background color for when the card is expanded.
-	 */
-	//public void setExpandedBackgroundColor()
-	//{
-	//	Context context = this.getContext();
-	//	CardView card = this.getCardView();
-	//	int color = NacUtility.getThemeAttrColor(context, R.attr.colorCardExpanded);
-
-	//	//Context context = view.getContext();
-	//	//int bg = NacUtility.getThemeAttrColor(context, id);
-
-	//	//view.setBackground(null);
-	//	//view.setBackgroundColor(bg);
-	//	//NacUtility.setBackground(card, id);
-	//	card.setBackgroundColor(color);
-	//}
 
 	/**
 	 * Set the ripple color of the expand button.
@@ -1874,7 +1843,7 @@ public class NacCardHolder
 	}
 
 	/**
-	 * @return The listener for when the alarm card is collapsed.
+	 * Set the listener for when the alarm card is collapsed.
 	 */
 	public void setOnCardCollapsedListener(OnCardCollapsedListener listener)
 	{
@@ -1882,7 +1851,7 @@ public class NacCardHolder
 	}
 
 	/**
-	 * @return The listener for when the alarm card is expanded.
+	 * Set the listener for when the alarm card is expanded.
 	 */
 	public void setOnCardExpandedListener(OnCardExpandedListener listener)
 	{

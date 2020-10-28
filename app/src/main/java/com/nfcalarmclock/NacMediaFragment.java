@@ -204,15 +204,6 @@ public class NacMediaFragment
 	}
 
 	/**
-	 */
-	@Override
-	public void onStop()
-	{
-		//this.releasePlayer();
-		super.onStop();
-	}
-
-	/**
 	 * Called when the fragment is selected by the user.
 	 */
 	protected void onSelected()
@@ -239,7 +230,19 @@ public class NacMediaFragment
 	}
 
 	/**
+	 * @see #safePlay(Uri, boolean)
+	 */
+	protected int safePlay(Uri contentUri)
+	{
+		return this.safePlay(contentUri, true);
+	}
+
+	/**
 	 * Play audio from the media player safely.
+	 *
+	 * @param  contentUri  The Uri of the content to play.
+	 * @param  repeat      Whether the media player should repeat the media or
+	 *     not.
 	 */
 	protected int safePlay(Uri contentUri, boolean repeat)
 	{
@@ -265,7 +268,6 @@ public class NacMediaFragment
 		}
 
 		player.play(contentUri, repeat);
-
 		return 0;
 	}
 
@@ -279,12 +281,10 @@ public class NacMediaFragment
 		if (player == null)
 		{
 			player = this.setupMediaPlayer();
-
 			return (player != null) ? 0 : -1;
 		}
 
 		player.reset();
-
 		return 0;
 	}
 
@@ -315,9 +315,9 @@ public class NacMediaFragment
 	protected void setupActionButtons(View root)
 	{
 		NacSharedPreferences shared = new NacSharedPreferences(getContext());
-		Button clear = (Button) root.findViewById(R.id.clear);
-		Button cancel = (Button) root.findViewById(R.id.cancel);
-		Button ok = (Button) root.findViewById(R.id.ok);
+		Button clear = root.findViewById(R.id.clear);
+		Button cancel = root.findViewById(R.id.cancel);
+		Button ok = root.findViewById(R.id.ok);
 
 		clear.setTextColor(shared.getThemeColor());
 		cancel.setTextColor(shared.getThemeColor());

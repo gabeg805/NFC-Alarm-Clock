@@ -14,7 +14,7 @@ public class NacSharedResource
 	/**
 	 * Resource.
 	 */
-	private Resources mResources;
+	private final Resources mResources;
 
 	/**
 	 */

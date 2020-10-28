@@ -20,14 +20,14 @@ public class NacAudio
 	{
 
 		/**
-		 * Shared preferences.
-		 */
-		private NacSharedPreferences mShared;
-
-		/**
 		 * Context.
 		 */
-		private Context mContext;
+		private final Context mContext;
+
+		/**
+		 * Shared preferences.
+		 */
+		private final NacSharedPreferences mShared;
 
 		/**
 		 * Stream.
@@ -383,7 +383,7 @@ public class NacAudio
 		}
 
 		/**
-		 * @see toStreamVolume
+		 * @see Attributes#toStreamVolume(int)
 		 */
 		public int toStreamVolume()
 		{
@@ -494,7 +494,8 @@ public class NacAudio
 	}
 
 	/**
-	 * @see requestAudioFocus
+	 * @see NacAudio#requestAudioFocus(Context,
+	 *  AudioManager.OnAudioFocusChangeListener, NacAudio.Attributes)
 	 */
 	public static boolean requestAudioFocusGain(Context context,
 		AudioManager.OnAudioFocusChangeListener listener,
@@ -506,7 +507,8 @@ public class NacAudio
 	}
 
 	/**
-	 * @see requestAudioFocus
+	 * @see NacAudio#requestAudioFocus(Context,
+	 *  AudioManager.OnAudioFocusChangeListener, NacAudio.Attributes)
 	 */
 	public static boolean requestAudioFocusTransient(Context context,
 		AudioManager.OnAudioFocusChangeListener listener,

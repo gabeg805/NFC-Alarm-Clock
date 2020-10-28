@@ -1,6 +1,5 @@
 package com.nfcalarmclock;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.NumberPicker;
 import com.google.android.material.button.MaterialButton;
@@ -139,8 +138,8 @@ public class NacSpinnerDialog
 	public void onShowDialog(NacDialog dialog, View root)
 	{
 		this.mPicker = root.findViewById(R.id.picker);
-		MaterialButton increment = (MaterialButton) root.findViewById(R.id.increment);
-		MaterialButton decrement = (MaterialButton) root.findViewById(R.id.decrement);
+		MaterialButton increment = root.findViewById(R.id.increment);
+		MaterialButton decrement = root.findViewById(R.id.decrement);
 
 		increment.setTag(Direction.INCREMENT);
 		decrement.setTag(Direction.DECREMENT);

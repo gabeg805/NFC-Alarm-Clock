@@ -8,6 +8,7 @@ import android.os.Build;
 import android.service.notification.StatusBarNotification;
 import androidx.core.app.NotificationCompat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -81,7 +82,6 @@ public class NacNotificationHelper
 				|| (activeNotification.getPostTime() > posted))
 			{
 				activeNotification = sb;
-				continue;
 			}
 		}
 
@@ -114,10 +114,8 @@ public class NacNotificationHelper
 			{
 				CharSequence[] extraLines = (CharSequence[]) notification.extras
 					.get(NotificationCompat.EXTRA_TEXT_LINES);
-				for (CharSequence line : extraLines)
-				{
-					lines.add(line);
-				}
+
+				lines.addAll(Arrays.asList(extraLines));
 			}
 		}
 

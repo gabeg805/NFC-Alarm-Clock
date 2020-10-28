@@ -174,7 +174,7 @@ public class NacCheckboxPreference
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		return (boolean) a.getBoolean(index, DEFAULT_VALUE);
+		return a.getBoolean(index, DEFAULT_VALUE);
 	}
 
 	/**

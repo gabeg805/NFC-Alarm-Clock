@@ -1,14 +1,12 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,7 +28,7 @@ public class NacMediaPlayer
 		/**
 		 * List of music files.
 		 */
-		private List<Uri> mPlaylist;
+		private final List<Uri> mPlaylist;
 
 		/**
 		 * Index corresponding to the current place in the playlist.
@@ -40,7 +38,7 @@ public class NacMediaPlayer
 		/**
 		 * Repeat the playlist.
 		 */
-		private boolean mRepeat;
+		private final boolean mRepeat;
 
 		/**
 		 */
@@ -114,7 +112,6 @@ public class NacMediaPlayer
 		public int getSize()
 		{
 			List<Uri> playlist = this.getPlaylist();
-
 			return (playlist == null) ? 0 : playlist.size();
 		}
 
@@ -146,7 +143,7 @@ public class NacMediaPlayer
 		}
 
 		/**
-		 * @return True if the playlist is shuffled and False otherwise.
+		 * Shuffle the playlist list.
 		 */
 		public void shuffle()
 		{
@@ -158,7 +155,7 @@ public class NacMediaPlayer
 	/**
 	 * Application context.
 	 */
-	private Context mContext;
+	private final Context mContext;
 
 	/**
 	 * Playlist container.
@@ -168,12 +165,12 @@ public class NacMediaPlayer
 	/**
 	 * Audio attributes.
 	 */
-	private NacAudio.Attributes mAttributes;
+	private final NacAudio.Attributes mAttributes;
 
 	/**
 	 * Handler to add some delay if looping media.
 	 */
-	private Handler mHandler;
+	private final Handler mHandler;
 
 	/**
 	 * Check if player was playing (caused by losing audio focus).
@@ -365,17 +362,24 @@ public class NacMediaPlayer
 		try
 		{
 			pause();
-			return this.RESULT_SUCCESS;
+			return RESULT_SUCCESS;
 		}
 		catch (IllegalStateException e)
 		{
 			NacUtility.printf("NacMediaPlayer : IllegalStateException : pause()");
-			return this.RESULT_ILLEGAL_STATE_EXCEPTION;
+			return RESULT_ILLEGAL_STATE_EXCEPTION;
 		}
 	}
 
 	/**
-	 * Play the media.
+	 * Play the media associated with the given alarm.
+	 *
+	 * This can play an entire directory (playlist) or a single media file.
+	 *
+	 * @param  alarm   The alarm to get the media path from.
+	 * @param  repeat  Whether the media should be repeated or not.
+	 * @param  shuffle  Whether the media should be shuffled or not. This only
+	 *     applies to directories (playlists).
 	 */
 	public void play(NacAlarm alarm, boolean repeat, boolean shuffle)
 	{
@@ -396,7 +400,10 @@ public class NacMediaPlayer
 	}
 
 	/**
-	 * @see play
+	 * Play the media with the given Uri.
+	 *
+	 * @param  contentUri  The Uri of the content to play.
+	 * @param  repeat      Whether the media should be repeated or not.
 	 */
 	public void play(Uri contentUri, boolean repeat)
 	{
@@ -477,17 +484,17 @@ public class NacMediaPlayer
 		try
 		{
 			prepare();
-			return this.RESULT_SUCCESS;
+			return RESULT_SUCCESS;
 		}
 		catch (IllegalStateException e)
 		{
 			NacUtility.printf("NacMediaPlayer : IllegalStateException : prepare()");
-			return this.RESULT_ILLEGAL_STATE_EXCEPTION;
+			return RESULT_ILLEGAL_STATE_EXCEPTION;
 		}
 		catch (IOException e)
 		{
 			NacUtility.printf("NacMediaPlayer : IOException : prepare()");
-			return this.RESULT_IO_EXCEPTION;
+			return RESULT_IO_EXCEPTION;
 		}
 	}
 
@@ -527,12 +534,12 @@ public class NacMediaPlayer
 			//this.getAudioAttributes().revertVolume();
 			this.cleanupHandler();
 			reset();
-			return this.RESULT_SUCCESS;
+			return RESULT_SUCCESS;
 		}
 		catch (IllegalStateException e)
 		{
 			NacUtility.printf("NacMediaPlayer : IllegalStateException : reset()");
-			return this.RESULT_ILLEGAL_STATE_EXCEPTION;
+			return RESULT_ILLEGAL_STATE_EXCEPTION;
 		}
 	}
 
@@ -552,12 +559,12 @@ public class NacMediaPlayer
 		try
 		{
 			seekTo(position);
-			return this.RESULT_SUCCESS;
+			return RESULT_SUCCESS;
 		}
 		catch (IllegalStateException e)
 		{
 			NacUtility.printf("NacMediaPlayer : IllegalStateException : seekToWrapper()");
-			return this.RESULT_ILLEGAL_STATE_EXCEPTION;
+			return RESULT_ILLEGAL_STATE_EXCEPTION;
 		}
 	}
 
@@ -579,12 +586,12 @@ public class NacMediaPlayer
 		try
 		{
 			start();
-			return this.RESULT_SUCCESS;
+			return RESULT_SUCCESS;
 		}
 		catch (IllegalStateException e)
 		{
 			NacUtility.printf("NacMediaPlayer : IllegalStateException : start()");
-			return this.RESULT_ILLEGAL_STATE_EXCEPTION;
+			return RESULT_ILLEGAL_STATE_EXCEPTION;
 		}
 	}
 
@@ -598,12 +605,12 @@ public class NacMediaPlayer
 			this.abandonAudioFocus();
 			this.cleanupHandler();
 			stop();
-			return this.RESULT_SUCCESS;
+			return RESULT_SUCCESS;
 		}
 		catch (IllegalStateException e)
 		{
 			NacUtility.printf("NacMediaPlayer : IllegalStateException : stop()");
-			return this.RESULT_ILLEGAL_STATE_EXCEPTION;
+			return RESULT_ILLEGAL_STATE_EXCEPTION;
 		}
 	}
 

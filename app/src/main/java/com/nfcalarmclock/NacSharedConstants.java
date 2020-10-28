@@ -3,7 +3,6 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.content.res.Resources;
 import java.util.Calendar;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
 
@@ -596,7 +595,7 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Speak to me words.
+	 * @return Speak to me words in the designated language.
 	 */
 	public String getSpeakToMe(Context context)
 	{
@@ -618,7 +617,7 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @see getSpeakToMe
+	 * @see #getSpeakToMe(Context)
 	 */
 	public String getSpeakToMeEn(int hour, int minute, String meridian)
 	{
@@ -637,7 +636,7 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @see getSpeakToMe
+	 * @see #getSpeakToMe(Context)
 	 */
 	public String getSpeakToMeEs(int hour, int minute, String meridian)
 	{

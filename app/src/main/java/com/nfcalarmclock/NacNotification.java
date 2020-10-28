@@ -98,7 +98,6 @@ public abstract class NacNotification
 	/**
 	 * Build the notification.
 	 */
-	@SuppressWarnings("deprecation")
 	@TargetApi(Build.VERSION_CODES.N)
 	protected NotificationCompat.Builder builder()
 	{

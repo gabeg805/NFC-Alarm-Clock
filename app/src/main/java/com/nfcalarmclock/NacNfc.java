@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.provider.Settings;
@@ -75,7 +74,7 @@ public class NacNfc
 			return "";
 		}
 
-		StringBuilder id = new StringBuilder("");
+		StringBuilder id = new StringBuilder();
 		char[] buffer = new char[2];
 
 		for (int i = 0; i < srcId.length; i++)
@@ -116,7 +115,7 @@ public class NacNfc
 	}
 
 	/**
-	 * @see start
+	 * @see #start(Activity, Intent)
 	 */
 	public static void start(Activity activity)
 	{

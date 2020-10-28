@@ -256,10 +256,10 @@ public class NacAlarmActivity
 			alarm = NacBundle.getAlarm(savedInstanceState);
 		}
 
-		if (alarm == null)
-		{
-			alarm = NacDatabase.findAlarm(this, Calendar.getInstance());
-		}
+		//if (alarm == null)
+		//{
+		//	alarm = NacDatabase.findAlarm(this, Calendar.getInstance());
+		//}
 
 		if (alarm == null)
 		{
@@ -276,9 +276,9 @@ public class NacAlarmActivity
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
-		RelativeLayout layout = (RelativeLayout) findViewById(R.id.act_alarm);
-		Button snoozeButton = (Button) findViewById(R.id.snooze);
-		Button dismissButton = (Button) findViewById(R.id.dismiss);
+		RelativeLayout layout = findViewById(R.id.act_alarm);
+		Button snoozeButton = findViewById(R.id.snooze);
+		Button dismissButton = findViewById(R.id.dismiss);
 
 		if (NacNfc.shouldUseNfc(this, alarm))
 		{
@@ -306,7 +306,7 @@ public class NacAlarmActivity
 
 		if ((alarm != null) && shared.getShowAlarmInfo())
 		{
-			TextView name = (TextView) findViewById(R.id.name);
+			TextView name = findViewById(R.id.name);
 			String alarmName = alarm.getNameNormalized();
 
 			name.setText(alarmName);
@@ -322,7 +322,7 @@ public class NacAlarmActivity
 	{
 		if (!NacNfc.isEnabled(this))
 		{
-			TextView instructions = (TextView) findViewById(R.id.instructions);
+			TextView instructions = findViewById(R.id.instructions);
 			instructions.setVisibility(View.GONE);
 		}
 	}
@@ -363,7 +363,7 @@ public class NacAlarmActivity
 	/**
 	 * Show the activity when the phone is locked.
 	 */
-	 @SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation")
 	 public void setupShowWhenLocked()
 	 {
 	 	NacAlarm alarm = this.getAlarm();

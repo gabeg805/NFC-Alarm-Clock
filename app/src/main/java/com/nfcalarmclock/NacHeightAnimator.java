@@ -1,7 +1,5 @@
 package com.nfcalarmclock;
 
-import android.animation.Animator;
-import android.animation.AnimatorInflater;
 import android.view.View;
 import android.animation.ValueAnimator;
 
@@ -58,11 +56,10 @@ public class NacHeightAnimator
 	 */
 	public NacHeightAnimator(View view, int fromHeight, int toHeight)
 	{
-		this.mView = view;
-		this.mFromHeight = fromHeight;
-		this.mToHeight = toHeight;
 		this.mUpdateCounter = 0;
 
+		this.setView(view);
+		this.setHeights(fromHeight, toHeight);
 		addUpdateListener(this);
 	}
 
@@ -218,6 +215,14 @@ public class NacHeightAnimator
 	public void setOnAnimateHeightListener(OnAnimateHeightListener listener)
 	{
 		this.mOnAnimateHeightListener = listener;
+	}
+
+	/**
+	 * Set the view.
+	 */
+	public void setView(View view)
+	{
+		this.mView = view;
 	}
 
 	/**

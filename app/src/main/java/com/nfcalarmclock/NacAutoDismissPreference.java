@@ -72,7 +72,7 @@ public class NacAutoDismissPreference
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
 		NacSharedDefaults defaults = new NacSharedDefaults(getContext());
-		return (Integer) a.getInteger(index, defaults.getAutoDismissIndex());
+		return a.getInteger(index, defaults.getAutoDismissIndex());
 	}
 
 	/**

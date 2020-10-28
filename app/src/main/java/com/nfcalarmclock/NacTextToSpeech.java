@@ -43,17 +43,17 @@ public class NacTextToSpeech
 		/**
 		 * Context.
 		 */
-		private Context mContext;
+		private final Context mContext;
 
 		/**
 		 * Text-to-speech engine.
 		 */
-		private NacTextToSpeech mTextToSpeech;
+		private final NacTextToSpeech mTextToSpeech;
 
 		/**
 		 * Audio focus change listener.
 		 */
-		private AudioManager.OnAudioFocusChangeListener
+		private final AudioManager.OnAudioFocusChangeListener
 			mOnAudioFocusChangeListener;
 
 		/**
@@ -149,6 +149,14 @@ public class NacTextToSpeech
 		}
 
 		/**
+		 */
+		@Override
+		public void onError(String utteranceId, int errorCode)
+		{
+			NacUtility.printf("onError! %s", utteranceId);
+		}
+
+		/**
 		 * Set on speaking listener.
 		 */
 		public void setOnSpeakingListener(OnSpeakingListener listener)
@@ -161,7 +169,7 @@ public class NacTextToSpeech
 	/**
 	 * The context.
 	 */
-	private Context mContext;
+	private final Context mContext;
 
 	/**
 	 * The speech engine.
@@ -181,7 +189,7 @@ public class NacTextToSpeech
 	/**
 	 * The utterance listener.
 	 */
-	private NacUtteranceListener mUtterance;
+	private final NacUtteranceListener mUtterance;
 
 	/**
 	 * Audio attributes.
@@ -357,7 +365,7 @@ public class NacTextToSpeech
 	}
 
 	/**
-	 * @see speak
+	 * @see #speak(String, NacAudio.Attributes)
 	 */
 	public void speak(String message)
 	{

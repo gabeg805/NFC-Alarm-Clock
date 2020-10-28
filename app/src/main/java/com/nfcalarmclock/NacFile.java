@@ -179,16 +179,23 @@ public class NacFile
 		}
 
 		/**
-		 * Add a file/folder to the given directory.
+		 * @see #add(String, long)
+		 */
+		public void add(String name)
+		{
+			this.add(name, -1);
+		}
+
+		/**
+		 * Add a file/folder to the given directory in the NacTree structure.
 		 *
-		 * @param  name  The name of the file or directory.
+		 * @param  name  The name of the file or directory to add.
 		 * @param  id    The content ID, used to create the content Uri.
 		 */
 		public void add(String name, long id)
 		{
 			NacTreeNode<String> dir = this.getDirectory();
 
-			//if (dir == null)
 			if ((dir == null) || (name == null) || name.isEmpty())
 			{
 				return;
@@ -198,15 +205,19 @@ public class NacFile
 		}
 
 		/**
-		 * @see add
+		 * @see #addToDirectory(String, String, long)
 		 */
-		public void add(String name)
+		public void addToDirectory(String toDirectory, String name)
 		{
-			this.add(name, -1);
+			this.addToDirectory(toDirectory, name, -1);
 		}
 
 		/**
-		 * Add item to the given directory.
+		 * Add a file/directory to the given directory in the NacTree structure.
+		 *
+		 * @param  toDirectory  The name of the directory to add to.
+		 * @param  name         The name of the file or directory to add.
+		 * @param  id           The content ID, used to create the content Uri.
 		 */
 		public void addToDirectory(String toDirectory, String name, long id)
 		{
@@ -223,15 +234,7 @@ public class NacFile
 		}
 
 		/**
-		 * @see addToDirectory
-		 */
-		public void addToDirectory(String toDirectory, String name)
-		{
-			this.addToDirectory(toDirectory, name, -1);
-		}
-
-		/**
-		 * Change directory.
+		 * @see #cd(NacTreeNode)
 		 */
 		public void cd(String path)
 		{
@@ -269,7 +272,7 @@ public class NacFile
 		}
 
 		/**
-		 * @see cd
+		 * Change directory to the given NacTree node.
 		 */
 		public void cd(NacTreeNode<String> dir)
 		{
@@ -340,7 +343,7 @@ public class NacFile
 		}
 
 		/**
-		 * List contents of the current directory.
+		 * @see #ls(String)
 		 */
 		public List<Metadata> ls()
 		{
@@ -366,7 +369,11 @@ public class NacFile
 		}
 
 		/**
-		 * @see ls
+		 * List the contents of the given path.
+		 *
+		 * @return The list of files/directories at the given path.
+		 *
+		 * @param  path  The path to list the contents of.
 		 */
 		public List<Metadata> ls(String path)
 		{
@@ -409,15 +416,15 @@ public class NacFile
 		}
 
 		/**
-		 * Sorted ls.
+		 * @see #lsSort(String)
 		 */
-		public List<Metadata> lsSort(String path)
+		public List<Metadata> lsSort()
 		{
 			List<Metadata> directories = new ArrayList<>();
 			List<Metadata> files = new ArrayList<>();
 			List<Metadata> list;
 
-			for (Metadata metadata : this.ls(path))
+			for (Metadata metadata : this.ls())
 			{
 				String name = metadata.getName();
 				int i = 0;
@@ -453,15 +460,19 @@ public class NacFile
 		}
 
 		/**
-		 * @see lsSort
+		 * List the contents of the given path and sort the output.
+		 *
+		 * @return The sorted list of files/directories at the given path.
+		 *
+		 * @param  path  The path to list the contents of.
 		 */
-		public List<Metadata> lsSort()
+		public List<Metadata> lsSort(String path)
 		{
 			List<Metadata> directories = new ArrayList<>();
 			List<Metadata> files = new ArrayList<>();
 			List<Metadata> list;
 
-			for (Metadata metadata : this.ls())
+			for (Metadata metadata : this.ls(path))
 			{
 				String name = metadata.getName();
 				int i = 0;

@@ -1,6 +1,5 @@
 package com.nfcalarmclock;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -174,11 +173,11 @@ public class NacDialog
 	 * The dialog listeners.
 	 */
 	private OnBuildListener mBuildListener;
-	private List<OnCancelListener> mCancelListener;
-	private List<OnDismissListener> mDismissListener;
-	private List<OnHideListener> mHideListener;
-	private List<OnNeutralActionListener> mNeutralActionListener;
-	private List<OnShowListener> mShowListener;
+	private final List<OnCancelListener> mCancelListener;
+	private final List<OnDismissListener> mDismissListener;
+	private final List<OnHideListener> mHideListener;
+	private final List<OnNeutralActionListener> mNeutralActionListener;
+	private final List<OnShowListener> mShowListener;
 
 	/**
 	 * Check if the dialog was canceled/dismissed.
@@ -276,7 +275,7 @@ public class NacDialog
 	}
 
 	/**
-	 * @see build
+	 * @see #build(Context, int)
 	 */
 	public AlertDialog.Builder build(Context context)
 	{
@@ -285,12 +284,33 @@ public class NacDialog
 	}
 
 	/**
-	 * Build the dialog.
-	 *
-	 * @param  title  The title of the dialog.
-	 * @param  root  The view to attach to the dialog.
+	 * Build the dialog with given layout ID.
 	 *
 	 * @return The dialog builder.
+	 *
+	 * @param  context  The context.
+	 * @param  id       The layout ID.
+	 */
+	public AlertDialog.Builder build(Context context, int id)
+	{
+		LayoutInflater inflater = LayoutInflater.from(context);
+		this.mRoot = inflater.inflate(id, null);
+
+		if (this.getId() == null)
+		{
+			this.setId(id);
+		}
+
+		return build(context, this.mRoot);
+	}
+
+	/**
+	 * Build the dialog with the given root view.
+	 *
+	 * @return The dialog builder.
+	 *
+	 * @param  context  The context.
+	 * @param  root     The view to attach to the dialog.
 	 */
 	public AlertDialog.Builder build(Context context, View root)
 	{
@@ -307,27 +327,9 @@ public class NacDialog
 	}
 
 	/**
-	 * Build the dialog with a layout id.
-	 *
-	 * @see build
-	 */
-	public AlertDialog.Builder build(Context context, int id)
-	{
-		LayoutInflater inflater = LayoutInflater.from(context);
-		this.mRoot = inflater.inflate(id, (ViewGroup)null);
-
-		if (this.getId() == null)
-		{
-			this.setId(id);
-		}
-
-		return build(context, this.mRoot);
-	}
-
-	/**
 	 * Calculate the dialog width.
 	 *
-	 * @param  screenWidth  The width of the phone screen.
+	 * @param  screenHeight  The height of the phone screen.
 	 */
 	public int calculateDialogHeight(int screenHeight)
 	{
@@ -529,7 +531,7 @@ public class NacDialog
 	}
 
 	/**
-	 * @see getData
+	 * @return The saved data as a boolean.
 	 */
 	public boolean getDataBoolean()
 	{
@@ -538,7 +540,7 @@ public class NacDialog
 	}
 
 	/**
-	 * @see getData
+	 * @return The saved data as a float.
 	 */
 	public float getDataFloat()
 	{
@@ -547,7 +549,7 @@ public class NacDialog
 	}
 
 	/**
-	 * @see getData
+	 * @return The saved data as an int.
 	 */
 	public int getDataInt()
 	{
@@ -556,7 +558,7 @@ public class NacDialog
 	}
 
 	/**
-	 * @see getData
+	 * @return The saved data as a string.
 	 */
 	public String getDataString()
 	{

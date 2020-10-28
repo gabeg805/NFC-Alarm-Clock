@@ -1,9 +1,7 @@
 package com.nfcalarmclock;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.Manifest;
 import androidx.core.app.ActivityCompat;
@@ -53,9 +51,9 @@ public class NacPermissions
 			Manifest.permission.READ_EXTERNAL_STORAGE, requestCode);
 	}
 
-	/**
-	 * Prompt the user to set the READ_EXTERNAL_STORAGE permissions.
-	 */
+	///**
+	// * Prompt the user to set the READ_EXTERNAL_STORAGE permissions.
+	// */
 	//public static int setRead(Activity activity)
 	//{
 	//	// Permission is not granted

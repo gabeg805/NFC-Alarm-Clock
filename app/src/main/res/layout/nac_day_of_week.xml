@@ -1,6 +1,5 @@
 <merge
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto">
+	xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<com.nfcalarmclock.NacDayButton
 		android:id="@+id/dow_sun"

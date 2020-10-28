@@ -3,7 +3,7 @@ package com.nfcalarmclock;
 import android.graphics.Canvas;
 import android.view.View;
 import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.ItemTouchUIUtil;
+//import androidx.recyclerview.widget.ItemTouchUIUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
@@ -73,7 +73,7 @@ public class NacCardTouchHelper
 		/**
 		 * The adapter that will implement the event methods.
 		 */
-		private Adapter mAdapter;
+		private final Adapter mAdapter;
 
 		/**
 		 * The current view holder.
@@ -236,7 +236,7 @@ public class NacCardTouchHelper
 
 			if (holder != null)
 			{
-				return (holder.isCollapsed() && !holder.isSnoozed());
+				return holder.isCollapsed() && !holder.isAlarmInUse();
 			}
 			else
 			{
@@ -247,8 +247,8 @@ public class NacCardTouchHelper
 		/**
 		 * Allow the card to be swiped.
 		 *
-		 * @bug When the app is opened up fresh and a card is expanded, swiping
-		 *		will work because the ViewHolder is null.
+		 * Note: When the app is opened up fresh and a card is expanded, swiping
+		 * will work because the ViewHolder is null.
 		 */
 		@Override
 		public boolean isItemViewSwipeEnabled()
@@ -257,13 +257,12 @@ public class NacCardTouchHelper
 		}
 
 		/**
-		 * Allow the card to be dragged.
+		 * Do not allow the card to be dragged.
 		 */
 		@Override
 		public boolean isLongPressDragEnabled()
 		{
 			return false;
-			//return true;
 		}
 
 		/**
@@ -273,7 +272,7 @@ public class NacCardTouchHelper
 		 * @param  rv  The recycler view.
 		 * @param  vh  The view holder.
 		 * @param  dx  The amount the card has been swiped in the x-direction.
-		 * @param  dy  The amount the card has been swiped in the y-direcdtion.
+		 * @param  dy  The amount the card has been swiped in the y-direction.
 		 * @param  action  The action that was done on the card.
 		 * @param  active  Whether the card is being used by the user or not.
 		 */
@@ -316,27 +315,7 @@ public class NacCardTouchHelper
 		}
 
 		/**
-		 * Called when onChildDraw is over.
-		 *
-		 * @param  c  The canvas.
-		 * @param  rv  The recycler view.
-		 * @param  vh  The view holder.
-		 * @param  dx  The amount the card has been swiped in the x-direction.
-		 * @param  dy  The amount the card has been swiped in the y-direcdtion.
-		 * @param  action  The action that was done on the card.
-		 * @param  active  Whether the card is being used by the user or not.
-		 */
-		//@Override
-		//public void onChildDrawOver(Canvas c, RecyclerView rv, ViewHolder vh,
-		//	float dx, float dy, int action, boolean active)
-		//{
-		//	final View view = this.getCardView(action);
-
-		//	getDefaultUIUtil().onDrawOver(c, rv, view, dx, dy, action, active);
-		//}
-
-		/**
-		 * Disallow movement of cards.
+		 * Do not allow movement of cards.
 		 *
 		 * @param  rv  The recycler view.
 		 * @param  vh  The view holder.
@@ -346,11 +325,6 @@ public class NacCardTouchHelper
 		public boolean onMove(RecyclerView rv, ViewHolder vh, ViewHolder target)
 		{
 			return false;
-
-			//this.mAdapter.onItemMove(vh.getAdapterPosition(),
-			//	target.getAdapterPosition());
-
-			//return true;
 		}
 
 		/**
@@ -392,11 +366,12 @@ public class NacCardTouchHelper
 			// This may be unnecessary
 			this.mViewHolder = vh;
 
-			if (!this.isCollapsed())
+			if (this.isCollapsed())
 			{
 				return;
 			}
-			else if (dir == ItemTouchHelper.LEFT)
+
+			if (dir == ItemTouchHelper.LEFT)
 			{
 				mAdapter.onItemDelete(vh.getAdapterPosition());
 			}

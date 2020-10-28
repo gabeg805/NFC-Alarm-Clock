@@ -24,7 +24,7 @@ public class NacDaysPreference
 	/**
 	 * Shared preferences.
 	 */
-	protected NacSharedPreferences mSharedPreferences;
+	protected final NacSharedPreferences mSharedPreferences;
 
 	/**
 	 */
@@ -88,7 +88,7 @@ public class NacDaysPreference
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		return (Integer) a.getInteger(index, NacSharedDefaults.getDaysValue());
+		return a.getInteger(index, NacSharedDefaults.getDaysValue());
 	}
 
 	/**

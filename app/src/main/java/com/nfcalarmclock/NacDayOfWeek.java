@@ -1,15 +1,9 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.content.res.TypedArray;
-import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
+
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -36,7 +30,7 @@ public class NacDayOfWeek
 	/**
 	 * Day of week view.
 	 */
-	private LinearLayout mDayOfWeekView;
+	private final LinearLayout mDayOfWeekView;
 
 	/**
 	 * Day of week changed listener.
@@ -243,7 +237,7 @@ public class NacDayOfWeek
 	}
 
 	/**
-	 * @see setDays
+	 * @see #setDays(EnumSet)
 	 */
 	public void setDays(int value)
 	{

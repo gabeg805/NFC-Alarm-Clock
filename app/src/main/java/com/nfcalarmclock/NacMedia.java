@@ -71,9 +71,21 @@ public class NacMedia
 		}
 
 		/**
+		 * @see #scan(Context, boolean)
+		 */
+		public void scan(Context context)
+		{
+			this.scan(context, false);
+		}
+
+		/**
 		 * Scan the media table for available media to play, filtering by the
 		 * current directory if specified, and create a file tree out of the
 		 * output.
+		 *
+		 * @param  context  The application context.
+		 * @param  filter   Whether the media files that are found should be filtered
+		 *     by comparing the media path with the current directory.
 		 */
 		@SuppressWarnings("deprecation")
 		@TargetApi(Build.VERSION_CODES.Q)
@@ -127,14 +139,6 @@ public class NacMedia
 			}
 
 			c.close();
-		}
-
-		/**
-		 * @see scan
-		 */
-		public void scan(Context context)
-		{
-			this.scan(context, false);
 		}
 
 	}
@@ -255,7 +259,7 @@ public class NacMedia
 	}
 
 	/**
-	 * @see getDuration
+	 * @see #getDuration(Context, Uri)
 	 */
 	public static String getDuration(Context context, NacFile.Metadata metadata)
 	{
@@ -264,7 +268,7 @@ public class NacMedia
 	}
 
 	/**
-	 * @see getDuration
+	 * @see #getDuration(Context, Uri)
 	 */
 	public static String getDuration(Context context, String path)
 	{
@@ -346,7 +350,7 @@ public class NacMedia
 	}
 
 	/**
-	 * @see getName
+	 * @see #getName(Context, Uri)
 	 */
 	public static String getName(Context context, NacFile.Metadata metadata)
 	{
@@ -355,7 +359,7 @@ public class NacMedia
 	}
 
 	/**
-	 * @see getName
+	 * @see #getName(Context, Uri)
 	 */
 	public static String getName(Context context, String path)
 	{
@@ -363,9 +367,9 @@ public class NacMedia
 		return NacMedia.getName(context, contentUri);
 	}
 
-	/**
-	 * Return the sound file filter.
-	 */
+	///**
+	// * Return the sound file filter.
+	// */
 	//public static FilenameFilter getFilter()
 	//{
 	//	return new FilenameFilter()
@@ -451,12 +455,11 @@ public class NacMedia
 	}
 
 	/**
-	 * @see getRelativePath
+	 * @see #getRelativePath(Context, Uri)
 	 */
 	public static String getRelativePath(Context context, String path)
 	{
 		Uri contentUri = Uri.parse(path);
-
 		return NacMedia.getRelativePath(context, contentUri);
 	}
 
@@ -543,7 +546,7 @@ public class NacMedia
 	}
 
 	/**
-	 * @see getTitle
+	 * @see #getTitle(Context, Uri)
 	 */
 	public static String getTitle(Context context, NacFile.Metadata metadata)
 	{
@@ -552,7 +555,7 @@ public class NacMedia
 	}
 
 	/**
-	 * @see getTitle
+	 * @see #getTitle(Context, Uri)
 	 */
 	public static String getTitle(Context context, String path)
 	{
@@ -598,7 +601,6 @@ public class NacMedia
 	/**
 	 * @return The volume name.
 	 */
-	@SuppressWarnings("deprecation")
 	@TargetApi(Build.VERSION_CODES.Q)
 	public static String getVolumeName(Context context, Uri contentUri)
 	{
@@ -645,7 +647,7 @@ public class NacMedia
 	}
 
 	/**
-	 * @see getVolumeName
+	 * @see #getVolumeName(Context, Uri)
 	 */
 	public static String getVolumeName(Context context, String path)
 	{
@@ -654,7 +656,9 @@ public class NacMedia
 	}
 
 	/**
-	 * Check if the given type is for a directory.
+	 * @return True if the given type represents a directory, and False otherwise.
+	 *
+	 * @param  type  The type to check
 	 */
 	public static boolean isDirectory(int type)
 	{
@@ -662,7 +666,9 @@ public class NacMedia
 	}
 
 	/**
-	 * @see isDirectory
+	 * @return True if the given path is a directory, and False otherwise.
+	 *
+	 * @param  path  The path to check.
 	 */
 	public static boolean isDirectory(String path)
 	{
@@ -670,7 +676,9 @@ public class NacMedia
 	}
 
 	/**
-	 * Check if the given type is for a music file.
+	 * @return True if the given type represents a file, and False otherwise.
+	 *
+	 * @param  type  The type to check
 	 */
 	public static boolean isFile(int type)
 	{
@@ -678,7 +686,10 @@ public class NacMedia
 	}
 
 	/**
-	 * @see isFile
+	 * @return True if the given path is a file, and False otherwise.
+	 *
+	 * @param  context  The application context.
+	 * @param  path     The path to check.
 	 */
 	public static boolean isFile(Context context, String path)
 	{
@@ -691,7 +702,10 @@ public class NacMedia
 	}
 
 	/**
-	 * Check if the given type corresponds to no type.
+	 * @return True if the given type represents an empty path, and False
+	 *     otherwise.
+	 *
+	 * @param  type  The type to check.
 	 */
 	public static boolean isNone(int type)
 	{
@@ -699,7 +713,9 @@ public class NacMedia
 	}
 
 	/**
-	 * @see isNone
+	 * @return True if the given path is empty, and False otherwise.
+	 *
+	 * @param  path  The path to check.
 	 */
 	public static boolean isNone(String path)
 	{
@@ -707,7 +723,10 @@ public class NacMedia
 	}
 
 	/**
-	 * Check if the given type corresponds to a random ringtone.
+	 * @return True if the given type represents a random ringtone, and False
+	 *     otherwise.
+	 *
+	 * @param  type  The type to check.
 	 */
 	public static boolean isRandomRingtone(int type)
 	{
@@ -715,7 +734,10 @@ public class NacMedia
 	}
 
 	/**
-	 * @see isRandomRingtone
+	 * @return True if the given path is for a random ringtone, and False
+	 *     otherwise.
+	 *
+	 * @param  path  The path to check.
 	 */
 	public static boolean isRandomRingtone(String path)
 	{
@@ -731,7 +753,10 @@ public class NacMedia
 	}
 
 	/**
-	 * @see isRingtone
+	 * @return True if the given path is to a ringtone, and False otherwise.
+	 *
+	 * @param  context  The application context.
+	 * @param  path     The path of the ringtone to check.
 	 */
 	public static boolean isRingtone(Context context, String path)
 	{
@@ -742,7 +767,9 @@ public class NacMedia
 	}
 
 	/**
-	 * Check if the given type corresponds to a spotify file.
+	 * @return True if the type corresponds to Spotify, and False otherwise.
+	 *
+	 * @param  type  The type to check.
 	 */
 	public static boolean isSpotify(int type)
 	{
@@ -750,7 +777,9 @@ public class NacMedia
 	}
 
 	/**
-	 * @see isSpotify
+	 * @return True if the given path is to a ringtone, and False otherwise.
+	 *
+	 * @param  path  The path of the ringtone to check.
 	 */
 	public static boolean isSpotify(String path)
 	{
@@ -836,7 +865,9 @@ public class NacMedia
 	}
 
 	/**
-	 * @see toUri
+	 * @return Convert a path to a Uri.
+	 *
+	 * @param  path  The path to convert.
 	 */
 	public static Uri toUri(String path)
 	{

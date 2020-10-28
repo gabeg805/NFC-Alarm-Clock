@@ -170,7 +170,7 @@ public class NacMusicFragment
 
 			if (browser.isSelected())
 			{
-				if (this.safePlay(uri, true) < 0)
+				if (this.safePlay(uri) < 0)
 				{
 					NacSharedConstants cons = new NacSharedConstants(context);
 					NacUtility.printf("Unable to play music : %d | %s",
@@ -240,7 +240,7 @@ public class NacMusicFragment
 	{
 		Context context = getContext();
 		NacFileBrowser browser = new NacFileBrowser(root, R.id.container);
-		TextView textview = (TextView) root.findViewById(R.id.path);
+		TextView textview = root.findViewById(R.id.path);
 		String contentPath = getMediaPath();
 		String dirPath = contentPath;
 		String filePath = "";

@@ -1,18 +1,12 @@
 package com.nfcalarmclock;
 
-import android.annotation.TargetApi;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.nfc.Tag;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.service.notification.StatusBarNotification;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,8 +17,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import java.lang.StringBuilder;
-import java.lang.System;
 
 /**
  * The application's main activity.
@@ -241,10 +233,8 @@ public class NacMainActivity
 		Intent intent = getIntent();
 		this.mSharedPreferences = new NacSharedPreferences(this);
 		this.mAdapter = new NacCardAdapter(this);
-		this.mFloatingActionButton = (FloatingActionButton) findViewById(
-			R.id.fab_add_alarm);
-		this.mRecyclerView = (RecyclerView) findViewById(
-			R.id.content_alarm_list);
+		this.mFloatingActionButton = findViewById(R.id.fab_add_alarm);
+		this.mRecyclerView = findViewById(R.id.content_alarm_list);
 		this.mScanNfcTagDialog = null;
 
 		if (this.wasNfcScannedForAlarm(intent))
@@ -449,13 +439,12 @@ public class NacMainActivity
 	private void setupGoogleRatingDialog()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		int counter = shared.getRateMyAppCounter();
-
 		if (shared.isRateMyAppRated())
 		{
 			return;
 		}
-		else if (shared.isRateMyAppLimit())
+
+		if (shared.isRateMyAppLimit())
 		{
 			NacRateMyAppDialog dialog = new NacRateMyAppDialog();
 			dialog.build(this);
@@ -505,7 +494,7 @@ public class NacMainActivity
 	}
 
 	/**
-	 * @see shouldShowAlarmActivity
+	 * @return True if the alarm activity should be shown, and False otherwise.
 	 */
 	private boolean shouldShowAlarmActivity(NacAlarm alarm)
 	{
@@ -515,17 +504,15 @@ public class NacMainActivity
 
 	/**
 	 * @return True if should delay the start of the alarm activity, and False
-	 *         otherwise.
+	 *     otherwise.
 	 */
 	private boolean shouldShowAlarmActivityDelayed(NacAlarm alarm)
 	{
-		//NacSharedPreferences shared = this.getSharedPreferences();
 		return this.shouldShowAlarmActivity(alarm) && alarm.getUseNfc();
-		//	&& !shared.getPreventAppFromClosing();
 	}
 
 	/**
-	 * @see showAlarmActivity
+	 * @see #showAlarmActivity(NacAlarm)
 	 */
 	private void showAlarmActivity()
 	{
@@ -535,6 +522,9 @@ public class NacMainActivity
 
 	/**
 	 * Show the alarm activity.
+	 *
+	 * @param  alarm  The alarm that should be attached to the intent when the
+	 *     alarm activity is started.
 	 */
 	private void showAlarmActivity(NacAlarm alarm)
 	{

@@ -238,8 +238,8 @@ public class NacMediaActivity
 		NacSharedConstants cons = new NacSharedConstants(this);
 		this.mAlarm = NacIntent.getAlarm(intent);
 		this.mMediaPath = NacIntent.getMedia(intent);
-		this.mPager = (ViewPager) findViewById(R.id.act_sound);
-		this.mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+		this.mPager = findViewById(R.id.act_sound);
+		this.mTabLayout = findViewById(R.id.tab_layout);
 		this.mTitles[0] = cons.getActionBrowse();
 		this.mTitles[1] = cons.getAudioSources().get(3);
 		//this.mAdapter = new NacPagerAdapter(manager, this.mAlarm, this.mTitles);

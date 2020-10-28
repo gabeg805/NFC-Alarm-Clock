@@ -2,7 +2,6 @@ package com.nfcalarmclock;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -119,16 +118,16 @@ public class NacStartWeekOnPreference
 		Context context = getContext();
 		RadioGroup group = this.getRadioGroup(root);
 		List<String> week = cons.getDaysOfWeek();
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(
-			Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = LayoutInflater.from(context);
 
 		for (int i=0; i < 2; i++)
 		{
 			View view = inflater.inflate(R.layout.radio_button, group, true);
 			RadioButton button = view.findViewById(R.id.radio_button);
 			String day = week.get(i);
+			int id = View.generateViewId();
 
-			button.setId(button.generateViewId());
+			button.setId(id);
 			button.setText(day);
 		}
 	}
@@ -172,9 +171,9 @@ public class NacStartWeekOnPreference
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
 		Context context = getContext();
-		NacSharedDefaults defaults = new NacSharedDefaults(context);
-		return (Integer) a.getInteger(index,
-			defaults.getStartWeekOnIndex());
+		NacSharedDefaults defs = new NacSharedDefaults(context);
+
+		return a.getInteger(index, defs.getStartWeekOnIndex());
 	}
 
 	/**

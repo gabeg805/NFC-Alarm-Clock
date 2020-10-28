@@ -1,9 +1,7 @@
 package com.nfcalarmclock;
 
 import android.annotation.TargetApi;
-import android.app.Notification;
 import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -41,7 +39,7 @@ public class NacMissedAlarmNotification
 	}
 
 	/**
-	 * @see builder
+	 * @see NacNotification#builder()
 	 */
 	@Override
 	protected NotificationCompat.Builder builder()
@@ -63,7 +61,7 @@ public class NacMissedAlarmNotification
 	}
 
 	/**
-	 * @see createChannel
+	 * @see NacNotification#createChannel()
 	 */
 	@TargetApi(Build.VERSION_CODES.O)
 	@Override
@@ -90,7 +88,18 @@ public class NacMissedAlarmNotification
 	}
 
 	/**
-	 * @see getChannelDescription
+	 * @see NacNotification#getBodyLine(NacAlarm)
+	 */
+	public String getBodyLine(NacAlarm alarm)
+	{
+
+		Context context = this.getContext();
+		NacAlarm actualAlarm = NacDatabase.findAlarm(context, alarm);
+		return super.getBodyLine(actualAlarm);
+	}
+
+	/**
+	 * @see NacNotification#getChannelDescription()
 	 */
 	protected String getChannelDescription()
 	{
@@ -100,7 +109,7 @@ public class NacMissedAlarmNotification
 	}
 
 	/**
-	 * @see getChannelName
+	 * @see NacNotification#getChannelName()
 	 */
 	protected String getChannelName()
 	{
@@ -110,7 +119,7 @@ public class NacMissedAlarmNotification
 	}
 
 	/**
-	 * @see getChannelId
+	 * @see NacNotification#getChannelId()
 	 */
 	protected String getChannelId()
 	{
@@ -118,7 +127,7 @@ public class NacMissedAlarmNotification
 	}
 
 	/**
-	 * @see getContentPendingIntent
+	 * @see NacNotification#getContentPendingIntent()
 	 */
 	protected PendingIntent getContentPendingIntent()
 	{
@@ -132,7 +141,7 @@ public class NacMissedAlarmNotification
 	}
 
 	/**
-	 * @see getContentText
+	 * @see NacNotification#getContentText()
 	 */
 	protected String getContentText()
 	{
@@ -146,7 +155,7 @@ public class NacMissedAlarmNotification
 	}
 
 	/**
-	 * @see getGroup
+	 * @see NacNotification#getGroup()
 	 */
 	protected String getGroup()
 	{
@@ -154,7 +163,7 @@ public class NacMissedAlarmNotification
 	}
 
 	/**
-	 * @see getId
+	 * @see NacNotification#getId()
 	 */
 	protected int getId()
 	{
@@ -162,7 +171,7 @@ public class NacMissedAlarmNotification
 	}
 
 	/**
-	 * @see getImportance
+	 * @see NacNotification#getImportance()
 	 */
 	protected int getImportance()
 	{
@@ -170,7 +179,7 @@ public class NacMissedAlarmNotification
 	}
 
 	/**
-	 * @see getPriority
+	 * @see NacNotification#getPriority()
 	 */
 	protected int getPriority()
 	{
@@ -178,18 +187,7 @@ public class NacMissedAlarmNotification
 	}
 
 	/**
-	 * @return The notification text.
-	 */
-	public String getBodyLine(NacAlarm alarm)
-	{
-
-		Context context = this.getContext();
-		NacAlarm actualAlarm = NacDatabase.findAlarm(context, alarm);
-		return super.getBodyLine(actualAlarm);
-	}
-
-	/**
-	 * @return The notification title.
+	 * @see NacNotification#getTitle()
 	 */
 	public String getTitle()
 	{
@@ -210,7 +208,7 @@ public class NacMissedAlarmNotification
 	}
 
 	/**
-	 * @see setupBody
+	 * @see NacNotification#setupBody()
 	 */
 	protected void setupBody()
 	{
@@ -227,7 +225,7 @@ public class NacMissedAlarmNotification
 	}
 
 	/**
-	 * @see show
+	 * @see NacNotification#show()
 	 */
 	public void show()
 	{

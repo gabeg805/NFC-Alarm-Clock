@@ -9,11 +9,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
-import android.os.Bundle;
 import android.provider.BaseColumns;
 import androidx.core.app.JobIntentService;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -37,7 +35,7 @@ public class NacDatabase
 	/**
 	 * The context.
 	 */
-	private Context mContext;
+	private final Context mContext;
 
 	/**
 	 * Check if the database was upgraded.
@@ -54,7 +52,7 @@ public class NacDatabase
 	}
 
 	/**
-	 * @see add
+	 * @see #add(SQLiteDatabase, int, NacAlarm)
 	 */
 	public long add(NacAlarm alarm)
 	{
@@ -63,7 +61,7 @@ public class NacDatabase
 	}
 
 	/**
-	 * @see add
+	 * @see #add(SQLiteDatabase, int, NacAlarm)
 	 */
 	public long add(SQLiteDatabase db, NacAlarm alarm)
 	{
@@ -71,7 +69,13 @@ public class NacDatabase
 	}
 
 	/**
-	 * Add to the database.
+	 * Add the alarm to the database with the given version.
+	 *
+	 * @return The number of rows added. Should normally be 1, if successful.
+	 *
+	 * @param  db       The SQLite database.
+	 * @param  version  The database version number.
+	 * @param  alarm    The alarm to add.
 	 */
 	public long add(SQLiteDatabase db, int version, NacAlarm alarm)
 	{
@@ -99,7 +103,7 @@ public class NacDatabase
 	}
 
 	/**
-	 * Delete a row from the database.
+	 * @see #delete(SQLiteDatabase, NacAlarm)
 	 */
 	public long delete(NacAlarm alarm)
 	{
@@ -108,7 +112,12 @@ public class NacDatabase
 	}
 
 	/**
-	 * @see delete
+	 * Delete the given alarm from the database.
+	 *
+	 * @return The number of rows deleted. Should normally be 1, if successful.
+	 *
+	 * @param  db     The SQLite database.
+	 * @param  alarm  The alarm to delete.
 	 */
 	public long delete(SQLiteDatabase db, NacAlarm alarm)
 	{
@@ -137,7 +146,7 @@ public class NacDatabase
 	}
 
 	/**
-	 * @see findActiveAlarm
+	 * @see #findActiveAlarm(SQLiteDatabase)
 	 */
 	public static NacAlarm findActiveAlarm(Context context)
 	{
@@ -148,7 +157,7 @@ public class NacDatabase
 	}
 
 	/**
-	 * @see findActiveAlarm
+	 * @see #findActiveAlarm(SQLiteDatabase)
 	 */
 	public NacAlarm findActiveAlarm()
 	{
@@ -157,7 +166,11 @@ public class NacDatabase
 	}
 
 	/**
-	 * Find the currently active alarm.
+	 * Find the alarm that is currently active.
+	 * 
+	 * @return The alarm that is active.
+	 *
+	 * @param  db  The SQLite database.
 	 */
 	public NacAlarm findActiveAlarm(SQLiteDatabase db)
 	{
@@ -188,7 +201,11 @@ public class NacDatabase
 	}
 
 	/**
-	 * Find the alarm.
+	 * Find the alarm with the given ID.
+	 *
+	 * @return The alarm that is found.
+	 *
+	 * @param  id  The alarm ID.
 	 */
 	public NacAlarm findAlarm(int id)
 	{
@@ -213,50 +230,50 @@ public class NacDatabase
 	}
 
 	/**
-	 * @see findAlarm
+	 * @see #findAlarm(int)
 	 */
 	public NacAlarm findAlarm(NacAlarm alarm)
 	{
 		return (alarm != null) ? this.findAlarm(alarm.getId()) : null;
 	}
 
+	///**
+	// * Find the alarm with the given hour and minute.
+	// */
+	//public NacAlarm findAlarm(Calendar calendar)
+	//{
+	//	String hour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
+	//	String minute = String.valueOf(calendar.get(Calendar.MINUTE));
+	//	NacCalendar.Day day = NacCalendar.Days.toWeekDay(
+	//		calendar.get(Calendar.DAY_OF_WEEK));
+	//	NacAlarm alarm = null;
+
+	//	String[] whereArgs = new String[] { hour, minute };
+	//	String whereClause = Contract.AlarmTable.COLUMN_HOUR + "=? AND "
+	//		+ Contract.AlarmTable.COLUMN_MINUTE + "=?";
+
+	//	SQLiteDatabase db = this.getWritableDatabase();
+	//	int version = db.getVersion();
+	//	String table = this.getAlarmTable();
+	//	Cursor cursor = db.query(table, null, whereClause, whereArgs, null, null,
+	//		null);
+
+	//	while (cursor.moveToNext())
+	//	{
+	//		NacAlarm a = this.toAlarm(cursor, version);
+	//		if ((a != null) && a.getDays().contains(day))
+	//		{
+	//			alarm = a;
+	//			break;
+	//		}
+	//	}
+
+	//	cursor.close();
+	//	return alarm;
+	//}
+
 	/**
-	 * @see findAlarm
-	 */
-	public NacAlarm findAlarm(Calendar calendar)
-	{
-		String hour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
-		String minute = String.valueOf(calendar.get(Calendar.MINUTE));
-		NacCalendar.Day day = NacCalendar.Days.toWeekDay(
-			calendar.get(Calendar.DAY_OF_WEEK));
-		NacAlarm alarm = null;
-
-		String[] whereArgs = new String[] { hour, minute };
-		String whereClause = Contract.AlarmTable.COLUMN_HOUR + "=? AND "
-			+ Contract.AlarmTable.COLUMN_MINUTE + "=?";
-
-		SQLiteDatabase db = this.getWritableDatabase();
-		int version = db.getVersion();
-		String table = this.getAlarmTable();
-		Cursor cursor = db.query(table, null, whereClause, whereArgs, null, null,
-			null);
-
-		while (cursor.moveToNext())
-		{
-			NacAlarm a = this.toAlarm(cursor, version);
-			if ((a != null) && a.getDays().contains(day))
-			{
-				alarm = a;
-				break;
-			}
-		}
-
-		cursor.close();
-		return alarm;
-	}
-
-	/**
-	 * @see findAlarm
+	 * @see #findAlarm(int)
 	 */
 	public static NacAlarm findAlarm(Context context, int id)
 	{
@@ -272,28 +289,28 @@ public class NacDatabase
 	}
 
 	/**
-	 * @see findAlarm
+	 * @see #findAlarm(Context, int)
 	 */
 	public static NacAlarm findAlarm(Context context, NacAlarm alarm)
 	{
 		return (alarm != null) ? NacDatabase.findAlarm(context, alarm.getId()) : null;
 	}
 
-	/**
-	 * @see findAlarm
-	 */
-	public static NacAlarm findAlarm(Context context, Calendar calendar)
-	{
-		if ((context == null) || (calendar == null))
-		{
-			return null;
-		}
+	///**
+	// * @see #findAlarm(Calendar)
+	// */
+	//public static NacAlarm findAlarm(Context context, Calendar calendar)
+	//{
+	//	if ((context == null) || (calendar == null))
+	//	{
+	//		return null;
+	//	}
 
-		NacDatabase db = new NacDatabase(context);
-		NacAlarm foundAlarm = db.findAlarm(calendar);
-		db.close();
-		return foundAlarm;
-	}
+	//	NacDatabase db = new NacDatabase(context);
+	//	NacAlarm foundAlarm = db.findAlarm(calendar);
+	//	db.close();
+	//	return foundAlarm;
+	//}
 
 	/**
 	 * @return The alarm table name.
@@ -563,7 +580,7 @@ public class NacDatabase
 	}
 
 	/**
-	 * @see read
+	 * @see #read(SQLiteDatabase, int)
 	 */
 	public static List<NacAlarm> read(Context context)
 	{
@@ -575,7 +592,7 @@ public class NacDatabase
 	}
 
 	/**
-	 * @see read
+	 * @see #read(SQLiteDatabase, int)
 	 */
 	public List<NacAlarm> read()
 	{
@@ -585,7 +602,12 @@ public class NacDatabase
 	}
 
 	/**
-	 * Read all alarms from the database.
+	 * Read the database and return all the alarms.
+	 *
+	 * @return All alarms in the database.
+	 *
+	 * @param  db       The SQLite database.
+	 * @param  version  The database version number.
 	 */
 	public List<NacAlarm> read(SQLiteDatabase db, int version)
 	{
@@ -705,7 +727,7 @@ public class NacDatabase
 	}
 
 	/**
-	 * Update the row in the database with the given alarm information.
+	 * @see #update(List)
 	 */
 	public long update(NacAlarm alarm)
 	{
@@ -720,7 +742,7 @@ public class NacDatabase
 	}
 
 	/**
-	 * @see update
+	 * @see #update(SQLiteDatabase, List)
 	 */
 	public long update(List<NacAlarm> alarms)
 	{
@@ -734,7 +756,7 @@ public class NacDatabase
 	}
 
 	/**
-	 * @see update
+	 * @see #update(SQLiteDatabase, List)
 	 */
 	public long update(SQLiteDatabase db, NacAlarm alarm)
 	{
@@ -749,7 +771,12 @@ public class NacDatabase
 	}
 
 	/**
-	 * @see update
+	 * Update the given list of alarms in the database.
+	 *
+	 * @return The number of alarms that were updated.
+	 *
+	 * @param  db      The SQLite database.
+	 * @param  alarms  The list of alarms to update.
 	 */
 	public long update(SQLiteDatabase db, List<NacAlarm> alarms)
 	{
@@ -789,9 +816,9 @@ public class NacDatabase
 	}
 
 	/**
-	 * Update a row in the database.
+	 * @see #updateRow(SQLiteDatabase, int, NacAlarm)
 	 */
-	public long updateRow(int row, NacAlarm alarm)
+	public long updateRow(int rowId, NacAlarm alarm)
 	{
 		if (alarm == null)
 		{
@@ -799,13 +826,19 @@ public class NacDatabase
 		}
 
 		SQLiteDatabase db = this.getWritableDatabase();
-		return this.updateRow(db, row, alarm);
+		return this.updateRow(db, rowId, alarm);
 	}
 
 	/**
-	 * @see updateRow
+	 * Update an alarm in the database matching the given row ID.
+	 *
+	 * @return The number of rows updated. Should normally be 1, if successful.
+	 *
+	 * @param  db     The SQLite database.
+	 * @param  rowId  The row ID.
+	 * @param  alarm  The alarm to update.
 	 */
-	public long updateRow(SQLiteDatabase db, int row, NacAlarm alarm)
+	public long updateRow(SQLiteDatabase db, int rowId, NacAlarm alarm)
 	{
 		if (alarm == null)
 		{
@@ -816,7 +849,7 @@ public class NacDatabase
 		String table = this.getAlarmTable();
 		ContentValues cv = this.getContentValues(version, alarm);
 		String where = this.getWhereClauseId();
-		String[] args = this.getWhereArgs(row);
+		String[] args = this.getWhereArgs(rowId);
 		long result = 0;
 
 		db.beginTransaction();

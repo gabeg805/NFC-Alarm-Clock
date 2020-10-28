@@ -2,12 +2,11 @@ package com.nfcalarmclock;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.media.AudioManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.os.VibrationEffect;
-import java.util.Calendar;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -29,17 +28,17 @@ public class NacWakeupProcess
 	/**
 	 * The application context.
 	 */
-	private Context mContext;
+	private final Context mContext;
 
 	/**
 	 * Alarm.
 	 */
-	private NacAlarm mAlarm;
+	private final NacAlarm mAlarm;
 
 	/**
 	 * Shared preferences.
 	 */
-	private NacSharedPreferences mSharedPreferences;
+	private final NacSharedPreferences mSharedPreferences;
 
 	/**
 	 * Media player.
@@ -59,7 +58,7 @@ public class NacWakeupProcess
 	/**
 	 * Automatically dismiss the alarm in case it does not get dismissed.
 	 */
-	private Handler mAutoDismissHandler;
+	private final Handler mAutoDismissHandler;
 
 	/**
 	 * Say the current time at user specified intervals.
