@@ -20,10 +20,12 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class com.nfcalarmclock.** { *; }
--keepattributes EnclosingMethod
+#-keep class com.nfcalarmclock.** { *; }
 -verbose
+-keepattributes EnclosingMethod
 -keepattributes SourceFile,LineNumberTable
+-dontshrink
+-dontoptimize
 
 #-dontusemixedcaseclassnames
 #-dontskipnonpubliclibraryclasses

@@ -634,6 +634,7 @@ public class NacCardAdapter
 	{
 		Context context = this.getContext();
 
+		alarm.print();
 		if (alarm.wasChanged())
 		{
 			if (alarm.wasUseNfcChanged())

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 /**
  * Touch helper.
  */
-@SuppressWarnings("UnnecessaryInterfaceModifier")
+@SuppressWarnings({"BooleanMethodIsAlwaysInverted", "UnnecessaryInterfaceModifier"})
 public class NacCardTouchHelper
 	extends ItemTouchHelper
 {
