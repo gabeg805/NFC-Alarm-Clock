@@ -19,7 +19,7 @@ public class NacAlarm
 	 */
 	public interface OnAlarmChangeListener
 	{
-		public void onAlarmChange(NacAlarm alarm);
+        public void onAlarmChange(NacAlarm alarm);
 	}
 
 	/**
@@ -114,15 +114,10 @@ public class NacAlarm
 		private boolean mIsActive;
 
 		/**
-		 * Tag. (This was here before, not sure why)
-		 */
-		private Object mTag;
-
-		/**
 		 */
 		public Builder()
 		{
-			this(null);
+			this((Context)null);
 		}
 
 		/**
@@ -144,7 +139,6 @@ public class NacAlarm
 			this.mName = "";
 			this.mNfcTagId = "";
 			this.mIsActive = false;
-			this.mTag = null;
 
 			if (context != null)
 			{
@@ -157,6 +151,31 @@ public class NacAlarm
 				this.mVolume = defaults.getVolume();
 				this.mAudioSource = cons.getAudioSources().get(1);
 			}
+		}
+
+		/**
+		 * Populate values with input parcel.
+		 */
+		public Builder(Parcel input)
+		{
+			this();
+			this.setOnAlarmChangeListener(null)
+				.setId(input.readInt())
+				.setEnabled((input.readInt() != 0))
+				.setHour(input.readInt())
+				.setMinute(input.readInt())
+				.setDays(input.readInt())
+				.setRepeat((input.readInt() != 0))
+				.setUseNfc((input.readInt() != 0))
+				.setVibrate((input.readInt() != 0))
+				.setVolume(input.readInt())
+				.setAudioSource(input.readString())
+				.setMediaType(input.readInt())
+				.setMediaPath(input.readString())
+				.setMediaTitle(input.readString())
+				.setName(input.readString())
+				.setNfcTagId(input.readString())
+				.setIsActive(input.readInt() != 0);
 		}
 
 		/**
@@ -205,14 +224,6 @@ public class NacAlarm
 		public int getId()
 		{
 			return this.mId;
-		}
-
-		/**
-		 * @see #isActive()
-		 */
-		public boolean getIsActive()
-		{
-			return this.isActive();
 		}
 
 		/**
@@ -278,14 +289,6 @@ public class NacAlarm
 		public String getNfcTagId()
 		{
 			return this.mNfcTagId;
-		}
-
-		/**
-		 * @return The tag.
-		 */
-		public Object getTag()
-		{
-			return this.mTag;
 		}
 
 		/**
@@ -533,15 +536,6 @@ public class NacAlarm
 		}
 
 		/**
-		 * Set the tag.
-		 */
-		public Builder setTag(Object tag)
-		{
-			this.mTag = tag;
-			return this;
-		}
-
-		/**
 		 * Set whether the alarm should use NFC to dismiss or not.
 		 *
 		 * @param  useNfc  True if the phone should use NFC to dismiss, and False
@@ -590,7 +584,6 @@ public class NacAlarm
 	public enum ChangeTracker
 	{
 		NONE,
-		STATE,
 		ENABLE,
 		TIME,
 		REPEAT,
@@ -684,11 +677,6 @@ public class NacAlarm
 	private boolean mIsActive;
 
 	/**
-	 * Tag. (This was here before, not sure why. Is it a copy of the View Tag?)
-	 */
-	private Object mTag;
-
-	/**
 	 * Was the alarm enabled.
 	 */
 	private ChangeTracker mTracker;
@@ -726,37 +714,8 @@ public class NacAlarm
 		this.setName(builder.getName());
 		this.setNfcTagId(builder.getNfcTagId());
 		this.setIsActive(builder.isActive());
-		this.setTag(builder.getTag());
-		this.setChangeTracker(ChangeTracker.NONE);
+		this.resetChangeTracker();
 		this.unlatchChangeTracker();
-	}
-
-	/**
-	 * Populate values with input parcel.
-	 *
-	 * Update this when adding/removing an element.
-	 */
-	public NacAlarm(Parcel input)
-	{
-		this(new Builder()
-			.setOnAlarmChangeListener(null)
-			.setId(input.readInt())
-			.setEnabled((input.readInt() != 0))
-			.setHour(input.readInt())
-			.setMinute(input.readInt())
-			.setDays(input.readInt())
-			.setRepeat((input.readInt() != 0))
-			.setUseNfc((input.readInt() != 0))
-			.setVibrate((input.readInt() != 0))
-			.setVolume(input.readInt())
-			.setAudioSource(input.readString())
-			.setMediaType(input.readInt())
-			.setMediaPath(input.readString())
-			.setMediaTitle(input.readString())
-			.setName(input.readString())
-			.setNfcTagId(input.readString())
-			.setIsActive(input.readInt() != 0)
-			.setTag(null));
 	}
 
 	/**
@@ -764,7 +723,6 @@ public class NacAlarm
 	 */
 	public boolean canSnooze(NacSharedPreferences shared)
 	{
-		int id = this.getId();
 		int snoozeCount = this.getSnoozeCount(shared) + 1;
 		int maxSnoozeCount = shared.getMaxSnoozeValue();
 
@@ -797,17 +755,11 @@ public class NacAlarm
 	}
 
 	/**
-	 * Copy this alarm.
+	 * Create a copy of this alarm with the given ID.
 	 *
 	 * @return A copy of this alarm.
-	 */
-	public NacAlarm copy()
-	{
-		return this.copy(this.getId());
-	}
-
-	/**
-	 * @see #copy()
+	 *
+	 * @param  id  The ID of the created alarm.
 	 */
 	public NacAlarm copy(int id)
 	{
@@ -858,10 +810,10 @@ public class NacAlarm
 			&& (this.getRepeat() == alarm.getRepeat())
 			&& (this.getVibrate() == alarm.getVibrate())
 			&& (this.getMediaType() == alarm.getMediaType())
-			&& (this.getMediaPath() == alarm.getMediaPath())
-			&& (this.getMediaTitle() == alarm.getMediaTitle())
-			&& (this.getName() == alarm.getName())
-			&& (this.getNfcTagId() == alarm.getNfcTagId()));
+			&& this.getMediaPath().equals(alarm.getMediaPath())
+			&& this.getMediaTitle().equals(alarm.getMediaTitle())
+			&& this.getName().equals(alarm.getName())
+			&& this.getNfcTagId().equals(alarm.getNfcTagId()));
 	}
 
 	/**
@@ -885,8 +837,9 @@ public class NacAlarm
 	 */
 	public String getClockTime(Context context)
 	{
-		return NacCalendar.Time.getClockTime(context, this.getHour(),
-			this.getMinute());
+		int hour = this.getHour();
+		int minute = this.getMinute();
+		return NacCalendar.Time.getClockTime(context, hour, minute);
 	}
 
 	/**
@@ -928,14 +881,6 @@ public class NacAlarm
 	public int getId()
 	{
 		return this.mId;
-	}
-
-	/**
-	 * @return The flag indicating whether the alarm is active or not.
-	 */
-	public boolean getIsActive()
-	{
-		return this.isActive();
 	}
 
 	/**
@@ -1058,14 +1003,6 @@ public class NacAlarm
 	}
 
 	/**
-	 * @return The tag.
-	 */
-	public Object getTag()
-	{
-		return this.mTag;
-	}
-
-	/**
 	 * @return True if using NFC, and False otherwise.
 	 */
 	public boolean getUseNfc()
@@ -1154,6 +1091,7 @@ public class NacAlarm
 	/**
 	 * Print all values in the alarm object.
 	 */
+	@SuppressWarnings("unused")
 	public void print()
 	{
 		NacUtility.printf("Alarm Information");
@@ -1363,14 +1301,6 @@ public class NacAlarm
 	}
 
 	/**
-	 * Set the tag.
-	 */
-	public void setTag(Object tag)
-	{
-		this.mTag = tag;
-	}
-
-	/**
 	 * Set whether the alarm should use NFC to dismiss or not.
 	 *
 	 * @param  useNfc  True if the phone should use NFC to dismiss, and False
@@ -1453,23 +1383,7 @@ public class NacAlarm
 	public void toggleToday()
 	{
 		NacCalendar.Day day = NacCalendar.Days.getToday();
-
 		this.toggleDay(day);
-	}
-
-	/**
-	 * Toggle the day(s) with the given value.
-	 *
-	 * @param  value  The value of a day or multiple days.
-	 */
-	public void toggleValue(int value)
-	{
-		EnumSet<NacCalendar.Day> days = NacCalendar.Days.valueToDays(value);
-
-		for (NacCalendar.Day d : days)
-		{
-			this.toggleDay(d);
-		}
 	}
 
 	/**
@@ -1532,7 +1446,7 @@ public class NacAlarm
 	{
 		public NacAlarm createFromParcel(Parcel input)
 		{
-			return new NacAlarm(input);
+			return new NacAlarm.Builder(input).build();
 		}
 
 		public NacAlarm[] newArray(int size)

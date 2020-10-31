@@ -45,11 +45,6 @@ public class NacCheckboxPreference
 	protected ColorStateList mColorStateList;
 
 	/**
-	 * Binding view holder flag.
-	 */
-	protected boolean mBindFlag;
-
-	/**
 	 * Default value.
 	 */
 	protected static final boolean DEFAULT_VALUE = true;
@@ -103,7 +98,6 @@ public class NacCheckboxPreference
 		setOnPreferenceClickListener(this);
 
 		this.mColorStateList = null;
-		this.mBindFlag = false;
 		int[] array = new int[] { android.R.attr.summaryOn,
 			android.R.attr.summaryOff };
 		TypedArray ta = context.obtainStyledAttributes(attrs, array);

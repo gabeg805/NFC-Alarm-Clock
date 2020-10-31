@@ -159,7 +159,6 @@ public class NacAudioSourceDialog
 	 */
 	protected void setCheckedRadioButton()
 	{
-		Context context = this.getContext();
 		String data = this.getDataString();
 		List<String> sources = this.getAudioSources();
 

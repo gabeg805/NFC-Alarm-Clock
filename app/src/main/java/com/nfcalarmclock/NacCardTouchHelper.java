@@ -2,6 +2,7 @@ package com.nfcalarmclock;
 
 import android.graphics.Canvas;
 import android.view.View;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 //import androidx.recyclerview.widget.ItemTouchUIUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -102,7 +103,7 @@ public class NacCardTouchHelper
 		 * @param  vh  The view holder.
 		 */
 		@Override
-		public void clearView(RecyclerView rv, ViewHolder vh)
+		public void clearView(@NonNull RecyclerView rv, @NonNull ViewHolder vh)
 		{
 			final View fg = this.getCardView(this.mAction);
 
@@ -131,7 +132,7 @@ public class NacCardTouchHelper
 		 */
 		private NacCardHolder getCardHolder()
 		{
-			return (NacCardHolder) this.mViewHolder;
+			return (NacCardHolder) this.getViewHolder();
 		}
 
 		/**
@@ -189,7 +190,7 @@ public class NacCardTouchHelper
 		 * @param  vh  The view holder.
 		 */
 		@Override
-		public int getMovementFlags(RecyclerView rv, ViewHolder vh)
+		public int getMovementFlags(@NonNull RecyclerView rv, @NonNull ViewHolder vh)
 		{
 			this.mViewHolder = vh;
 
@@ -214,7 +215,7 @@ public class NacCardTouchHelper
 		/**
 		 */
 		@Override
-		public float getSwipeThreshold(ViewHolder vh)
+		public float getSwipeThreshold(@NonNull ViewHolder vh)
 		{
 			return 0.5f;
 		}
@@ -277,8 +278,8 @@ public class NacCardTouchHelper
 		 * @param  active  Whether the card is being used by the user or not.
 		 */
 		@Override
-		public void onChildDraw(Canvas c, RecyclerView rv, ViewHolder vh,
-			float dx, float dy, int action, boolean active)
+		public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView rv,
+			@NonNull ViewHolder vh, float dx, float dy, int action, boolean active)
 		{
 			this.mViewHolder = vh;
 			this.mAction = action;
@@ -322,7 +323,8 @@ public class NacCardTouchHelper
 		 * @param  target  The target view holder.
 		 */
 		@Override
-		public boolean onMove(RecyclerView rv, ViewHolder vh, ViewHolder target)
+		public boolean onMove(@NonNull RecyclerView rv, @NonNull ViewHolder vh,
+			@NonNull ViewHolder target)
 		{
 			return false;
 		}
@@ -361,7 +363,7 @@ public class NacCardTouchHelper
 		 * @param  dir	The direction that the item was swiped.
 		 */
 		@Override
-		public void onSwiped(ViewHolder vh, int dir)
+		public void onSwiped(@NonNull ViewHolder vh, int dir)
 		{
 			// This may be unnecessary
 			this.mViewHolder = vh;

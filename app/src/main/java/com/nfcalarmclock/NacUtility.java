@@ -2,19 +2,14 @@ package com.nfcalarmclock;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.Build;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.MeasureSpec;
 import android.widget.Toast;
-
-import androidx.core.content.ContextCompat;
-
 import java.util.Locale;
 
 /**
@@ -57,42 +52,6 @@ public class NacUtility
 	}
 
 	/**
-	 * Convert the id to a theme attribute color.
-	 * 
-	 * @return A theme attribute color.
-	 */
-	public static int getThemeAttrColor(Context context, int id)
-	{
-		TypedValue tv = new TypedValue();
-		Resources.Theme theme = context.getTheme();
-		boolean success = theme.resolveAttribute(id, tv, true);
-
-		return (tv.resourceId == 0)
-			? tv.data
-			: ContextCompat.getColor(context, tv.resourceId);
-	}
-
-	/**
-	 * Determine the width of the view.
-	 * 
-	 * @return The width of the view.
-	 * 
-	 * @param  view  The view.
-	 */
-	public static int getWidth(View view)
-	{
-		view.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-			MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-
-		ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams)
-			view.getLayoutParams();
-		int margins = lp.leftMargin + lp.rightMargin;
-		int width = view.getMeasuredWidth();
-
-		return width+margins;
-	}
-
-	/**
 	 * Wrapper for Log object to print to the logcat easily.
 	 */
 	public static void print(String name, String string)
@@ -127,15 +86,6 @@ public class NacUtility
 	/**
 	 * Create a toast that displays for a short period of time.
 	 */
-	public static Toast quickToast(View view, String message)
-	{
-		Context context = view.getContext();
-		return NacUtility.quickToast(context, message);
-	}
-
-	/**
-	 * Create a toast that displays for a short period of time.
-	 */
 	public static Toast quickToast(Context context, String message)
 	{
 		return NacUtility.toast(context, message, Toast.LENGTH_SHORT);
@@ -151,15 +101,6 @@ public class NacUtility
 		return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
 			? Html.fromHtml(message, Html.FROM_HTML_MODE_LEGACY)
 			: Html.fromHtml(message);
-	}
-
-	/**
-	 * Create a toast.
-	 */
-	public static Toast toast(View view, String message)
-	{
-		Context context = view.getContext();
-		return NacUtility.toast(context, message);
 	}
 
 	/**

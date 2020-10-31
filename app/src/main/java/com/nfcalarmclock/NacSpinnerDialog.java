@@ -39,10 +39,10 @@ public class NacSpinnerDialog
 	/**
 	 * @return The displayed value.
 	 */
+	@SuppressWarnings("unused")
 	public String getCurrentDisplayedValue()
 	{
 		int index = this.getValue();
-
 		return this.getDisplayedValue(index);
 	}
 
@@ -109,18 +109,15 @@ public class NacSpinnerDialog
 	public void onClick(View view)
 	{
 		Direction dir = (Direction) view.getTag();
-		int min = this.getMinValue();
 		int max = this.getMaxValue();
 		int value = this.mPicker.getValue();
 
 		if (dir == Direction.INCREMENT)
 		{
-			//value = ((value+1) < max) ? value+1 : max;
 			value = (value+1) % (max+1);
 		}
 		else if (dir == Direction.DECREMENT)
 		{
-			//value = ((value-1) >= min) ? value-1 : min;
 			value = (max+value-1) % (max+1);
 		}
 		else
@@ -168,32 +165,6 @@ public class NacSpinnerDialog
 	}
 
 	/**
-	 * Set the max value.
-	 */
-	public void setMaxValue(int max)
-	{
-		NumberPicker picker = this.getPicker();
-
-		if (picker != null)
-		{
-			picker.setMaxValue(max);
-		}
-	}
-
-	/**
-	 * Set the min value.
-	 */
-	public void setMinValue(int min)
-	{
-		NumberPicker picker = this.getPicker();
-
-		if (picker != null)
-		{
-			picker.setMinValue(min);
-		}
-	}
-
-	/**
 	 * Set the value.
 	 */
 	public void setValue(int value)
@@ -211,19 +182,6 @@ public class NacSpinnerDialog
 		if ((value >= min) && (value <= max))
 		{
 			picker.setValue(value);
-		}
-	}
-
-	/**
-	 * Wrap the selector wheel.
-	 */
-	public void setWrapSelectorWheel(boolean wrap)
-	{
-		NumberPicker picker = this.getPicker();
-
-		if (picker != null)
-		{
-			picker.setWrapSelectorWheel(wrap);
 		}
 	}
 

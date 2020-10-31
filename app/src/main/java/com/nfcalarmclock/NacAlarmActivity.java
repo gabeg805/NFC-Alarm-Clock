@@ -13,7 +13,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import java.util.Calendar;
+import androidx.annotation.NonNull;
 
 /**
  * Activity to dismiss/snooze the alarm.
@@ -233,7 +233,7 @@ public class NacAlarmActivity
 	 * Save the alarm before the activity is killed.
 	 */
 	@Override
-	public void onSaveInstanceState(Bundle outState)
+	public void onSaveInstanceState(@NonNull Bundle outState)
 	{
 		super.onSaveInstanceState(outState);
 
@@ -441,7 +441,7 @@ public class NacAlarmActivity
 	public boolean wasNfcScanned()
 	{
 		Intent intent = getIntent();
-		return NacNfc.wasScanned(this, intent);
+		return NacNfc.wasScanned(intent);
 	}
 
 }

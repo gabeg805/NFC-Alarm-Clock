@@ -46,6 +46,7 @@ public class NacSharedConstants
 	/**
 	 * @return Clear action.
 	 */
+	@SuppressWarnings("unused")
 	public String getActionClear()
 	{
 		return this.getString(R.string.action_clear);
@@ -589,6 +590,7 @@ public class NacSharedConstants
 	/**
 	 * @return Speak frequency.
 	 */
+	@SuppressWarnings("unused")
 	public String getSpeakFrequency()
 	{
 		return this.getString(R.string.speak_frequency);
@@ -736,6 +738,7 @@ public class NacSharedConstants
 	/**
 	 * @return Set alarm name title.
 	 */
+	@SuppressWarnings("unused")
 	public String getTitleName()
 	{
 		return this.getString(R.string.title_name);

@@ -186,6 +186,7 @@ public class NacWakeupProcess
 	/**
 	 * Check if one wakeup process equals another.
 	 */
+	@SuppressWarnings("unused")
 	public boolean equals(NacWakeupProcess process)
 	{
 		NacAlarm thisAlarm = this.getAlarm();
@@ -264,9 +265,7 @@ public class NacWakeupProcess
 	{
 		Context context = this.getContext();
 		NacSharedConstants cons = new NacSharedConstants(context);
-		String say = cons.getSpeakToMe(context);
-
-		return say;
+		return cons.getSpeakToMe(context);
 	}
 
 	/**
@@ -295,14 +294,6 @@ public class NacWakeupProcess
 	}
 
 	/**
-	 * Pause the wake up process.
-	 */
-	public void pause()
-	{
-		this.getTextToSpeech().stop();
-	}
-
-	/**
 	 * Play music.
 	 */
 	private void playMusic()
@@ -324,19 +315,6 @@ public class NacWakeupProcess
 		else
 		{
 			player.startWrapper();
-		}
-	}
-
-	/**
-	 * Resume the wake up process.
-	 */
-	public void resume()
-	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-
-		if (shared.getSpeakToMe())
-		{
-			this.speak();
 		}
 	}
 
@@ -537,7 +515,6 @@ public class NacWakeupProcess
 	 */
 	public void waitForAutoDismiss()
 	{
-		Context context = this.getContext();
 		NacSharedPreferences shared = this.getSharedPreferences();
 		int autoDismiss = shared.getAutoDismissTime();
 		long delay = TimeUnit.MINUTES.toMillis(autoDismiss) - 2000;

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -177,7 +178,7 @@ public class NacMediaActivity
 	/**
 	 */
 	@Override
-	public void onAttachFragment(Fragment fragment)
+	public void onAttachFragment(@NonNull Fragment fragment)
 	{
 		super.onAttachFragment(fragment);
 
@@ -216,8 +217,9 @@ public class NacMediaActivity
 
 		if (position == 0)
 		{
-			if ((musicFragment != null) && musicFragment.backPressed())
+			if (musicFragment != null)
 			{
+				musicFragment.backPressed();
 				return;
 			}
 		}
@@ -255,7 +257,7 @@ public class NacMediaActivity
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode,
-		String[] permissions, int[] grantResults)
+		@NonNull String[] permissions, @NonNull int[] grantResults)
 	{
 		if (requestCode == NacMusicFragment.READ_REQUEST_CODE)
 		{
@@ -423,7 +425,8 @@ public class NacMediaActivity
 
 		/**
 		 */
-		@Override
+		@NonNull
+        @Override
 		public Fragment getItem(int position)
 		{
 			NacAlarm alarm = getAlarm();

@@ -103,7 +103,7 @@ public class NacSnackbar
 	{
 		this.mSnackbar = null;
 		this.mRoot = root;
-		this.mQueue = new LinkedList<SnackHolder>();
+		this.mQueue = new LinkedList<>();
 		this.mCanDismiss = false;
 	}
 
@@ -243,6 +243,7 @@ public class NacSnackbar
 	/**
 	 * @see #show(String, String, View.OnClickListener, boolean)
 	 */
+	@SuppressWarnings("unused")
 	public void show(String message, String action,
 		View.OnClickListener listener)
 	{

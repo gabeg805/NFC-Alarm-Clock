@@ -77,10 +77,10 @@ public class NacNfc
 		StringBuilder id = new StringBuilder();
 		char[] buffer = new char[2];
 
-		for (int i = 0; i < srcId.length; i++)
+		for (byte b : srcId)
 		{
-			buffer[0] = Character.forDigit((srcId[i] >>> 4) & 0x0F, 16);
-			buffer[1] = Character.forDigit(srcId[i] & 0x0F, 16);
+			buffer[0] = Character.forDigit((b >>> 4) & 0x0F, 16);
+			buffer[1] = Character.forDigit(b & 0x0F, 16);
 			id.append(buffer);
 		}
 
@@ -119,7 +119,7 @@ public class NacNfc
 	 */
 	public static void start(Activity activity)
 	{
-		Intent intent = new Intent((Context)activity, activity.getClass())
+		Intent intent = new Intent(activity, activity.getClass())
 			.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		NacNfc.start(activity, intent);
 	}
@@ -129,14 +129,13 @@ public class NacNfc
 	 */
 	public static void start(Activity activity, Intent intent)
 	{
-		Context context = (Context) activity;
-		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
-		if ((nfcAdapter == null) || !NacNfc.isEnabled(context))
+		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(activity);
+		if ((nfcAdapter == null) || !NacNfc.isEnabled(activity))
 		{
 			return;
 		}
 
-		PendingIntent pending = PendingIntent.getActivity(context, 0, intent, 0);
+		PendingIntent pending = PendingIntent.getActivity(activity, 0, intent, 0);
 		nfcAdapter.enableForegroundDispatch(activity, pending, null, null);
 	}
 
@@ -159,7 +158,7 @@ public class NacNfc
 	/**
 	 * @return True if an NFC tag was scanned/discovered and False otherwise.
 	 */
-	public static boolean wasScanned(Context context, Intent intent)
+	public static boolean wasScanned(Intent intent)
 	{
 		if (intent == null)
 		{

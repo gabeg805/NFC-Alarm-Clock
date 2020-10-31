@@ -33,12 +33,6 @@ public class NacMainActivity
 	 * Wait time between a notification posting and running the alarm activity
 	 * for that notification.
 	 */
-	private static final long ACTIVE_ALARM_POST_DURATION = 2000;
-
-	/**
-	 * Wait time between a notification posting and running the alarm activity
-	 * for that notification.
-	 */
 	private static final long SHOW_ALARM_ACTIVITY_DELAY = 2000;
 
 	/**
@@ -499,7 +493,7 @@ public class NacMainActivity
 	private boolean shouldShowAlarmActivity(NacAlarm alarm)
 	{
 		Intent intent = getIntent();
-		return (alarm != null) && !NacNfc.wasScanned(this, intent);
+		return (alarm != null) && !NacNfc.wasScanned(intent);
 	}
 
 	/**
@@ -509,15 +503,6 @@ public class NacMainActivity
 	private boolean shouldShowAlarmActivityDelayed(NacAlarm alarm)
 	{
 		return this.shouldShowAlarmActivity(alarm) && alarm.getUseNfc();
-	}
-
-	/**
-	 * @see #showAlarmActivity(NacAlarm)
-	 */
-	private void showAlarmActivity()
-	{
-		NacAlarm activeAlarm = NacDatabase.findActiveAlarm(this);
-		this.showAlarmActivity(activeAlarm);
 	}
 
 	/**
@@ -566,8 +551,7 @@ public class NacMainActivity
 	 */
 	private boolean wasNfcScannedForAlarm(Intent intent)
 	{
-		return NacNfc.wasScanned(this, intent)
-			&& !this.wasNfcScannedForDialog(intent);
+		return NacNfc.wasScanned(intent) && !this.wasNfcScannedForDialog(intent);
 	}
 
 	/**
@@ -577,7 +561,7 @@ public class NacMainActivity
 	private boolean wasNfcScannedForDialog(Intent intent)
 	{
 		NacScanNfcTagDialog dialog = this.getScanNfcTagDialog();
-		return (dialog != null) && NacNfc.wasScanned(this, intent);
+		return (dialog != null) && NacNfc.wasScanned(intent);
 	}
 
 }

@@ -44,7 +44,6 @@ public class NacColorPicker
 
 			try
 			{
-				Resources res = context.getResources();
 				this.width = (int) ta.getDimension(R.styleable.NacColorPicker_nacWidth, -1);
 				this.height = (int) ta.getDimension(R.styleable.NacColorPicker_nacHeight, -1);
 				this.spacing = (int) ta.getDimension(R.styleable.NacColorPicker_nacSpacing, -1);
@@ -657,10 +656,11 @@ public class NacColorPicker
 	 */
 	public void setColorSelectorPosition(float x, float y)
 	{
-		ViewGroup.LayoutParams params = this.mColorSelector.getLayoutParams();
+		ImageView selector = this.getColorSelector();
+		ViewGroup.LayoutParams params = selector.getLayoutParams();
 
-		this.mColorSelector.setX(x-(params.width/2.0f));
-		this.mColorSelector.setY(y-(params.height/2.0f));
+		selector.setX(x-(params.width/2.0f));
+		selector.setY(y-(params.height/2.0f));
 	}
 
 	/**

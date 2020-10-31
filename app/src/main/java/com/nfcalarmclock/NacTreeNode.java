@@ -64,13 +64,14 @@ public class NacTreeNode<T>
 	 */
 	public void addChild(T key, Object value)
 	{
-		NacTreeNode<T> child = new NacTreeNode<T>(this, key, value);
+		NacTreeNode<T> child = new NacTreeNode<>(this, key, value);
 		this.addChild(child);
 	}
 
 	/**
 	 * @see #addChild(NacTreeNode)
 	 */
+	@SuppressWarnings("unused")
 	public void addChild(T key)
 	{
 		this.addChild(key, null);
@@ -87,6 +88,7 @@ public class NacTreeNode<T>
 	/**
 	 * @return True if the child exists, and False otherwise.
 	 */
+	@SuppressWarnings("unused")
 	public boolean exists(T key)
 	{
 		return (this.getChild(key) != null);
@@ -122,6 +124,7 @@ public class NacTreeNode<T>
 	/**
 	 * @return The child at the given index of the children list.
 	 */
+	@SuppressWarnings("unused")
 	public NacTreeNode<T> getChild(int index)
 	{
 		List<NacTreeNode<T>> children = this.getChildren();
@@ -174,6 +177,7 @@ public class NacTreeNode<T>
 	/**
 	 * @see #count()
 	 */
+	@SuppressWarnings("unused")
 	public int size()
 	{
 		return this.count();

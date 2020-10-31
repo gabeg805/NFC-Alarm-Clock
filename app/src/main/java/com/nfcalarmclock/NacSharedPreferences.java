@@ -2,7 +2,6 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import androidx.preference.PreferenceManager;
 import java.util.Locale;
 
@@ -52,6 +51,7 @@ public class NacSharedPreferences
 	/**
 	 * Edit the AM color, in the time, of all alarm cards.
 	 */
+	@SuppressWarnings("unused")
 	public void editAmColor(int color)
 	{
 		String key = this.getKeys().getAmColor();
@@ -81,6 +81,7 @@ public class NacSharedPreferences
 	/**
 	 * Edit the index corresponding to a time in which to auto dismiss the alarm.
 	 */
+	@SuppressWarnings("unused")
 	public void editAutoDismiss(int index)
 	{
 		String key = this.getKeys().getAutoDismiss();
@@ -127,6 +128,7 @@ public class NacSharedPreferences
 	/**
 	 * Edit the value indicating which day button style to use.
 	 */
+	@SuppressWarnings("unused")
 	public void editDayButtonStyle(int style)
 	{
 		String key = this.getKeys().getDayButtonStyle();
@@ -136,6 +138,7 @@ public class NacSharedPreferences
 	/**
 	 * Edit the default days to use when a new alarm card is created.
 	 */
+	@SuppressWarnings("unused")
 	public void editDays(int days)
 	{
 		String key = this.getKeys().getDays();
@@ -147,6 +150,7 @@ public class NacSharedPreferences
 	 * 
 	 * This is displayed when an alarm card is collapsed.
 	 */
+	@SuppressWarnings("unused")
 	public void editDaysColor(int color)
 	{
 		String key = this.getKeys().getDaysColor();
@@ -156,6 +160,7 @@ public class NacSharedPreferences
 	/**
 	 * Edit the flag indicating whether the user wants to snooze easily or not.
 	 */
+	@SuppressWarnings("unused")
 	public void editEasySnooze(boolean easy)
 	{
 		String key = this.getKeys().getEasySnooze();
@@ -165,6 +170,7 @@ public class NacSharedPreferences
 	/**
 	 * Edit the max number of times a user is able to snooze an alarm.
 	 */
+	@SuppressWarnings("unused")
 	public void editMaxSnooze(int max)
 	{
 		String key = this.getKeys().getMaxSnooze();
@@ -172,8 +178,21 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * Edit the default media path to use when a new alarm card is created.
+	 *
+	 * This is the path to the media that should play when an alarm goes off.
+	 */
+	@SuppressWarnings("unused")
+	public void editMediaPath(String path)
+	{
+		String key = this.getKeys().getMediaPath();
+		this.saveString(key, path, false);
+	}
+
+	/**
 	 * Edit the default name to use when a new alarm card is created.
 	 */
+	@SuppressWarnings("unused")
 	public void editName(String name)
 	{
 		String key = this.getKeys().getName();
@@ -185,6 +204,7 @@ public class NacSharedPreferences
 	 * 
 	 * This is displayed when an alarm card is collapsed.
 	 */
+	@SuppressWarnings("unused")
 	public void editNameColor(int color)
 	{
 		String key = this.getKeys().getNameColor();
@@ -194,6 +214,7 @@ public class NacSharedPreferences
 	/**
 	 * Edit the time format to display the next alarm in.
 	 */
+	@SuppressWarnings("unused")
 	public void editNextAlarmFormat(int format)
 	{
 		String key = this.getKeys().getNextAlarmFormat();
@@ -203,6 +224,7 @@ public class NacSharedPreferences
 	/**
 	 * Edit the PM color, in the time, of all alarm cards.
 	 */
+	@SuppressWarnings("unused")
 	public void editPmColor(int color)
 	{
 		String key = this.getKeys().getPmColor();
@@ -231,6 +253,7 @@ public class NacSharedPreferences
 	/**
 	 * Edit the default repeat value when a new alarm card is created.
 	 */
+	@SuppressWarnings("unused")
 	public void editRepeat(boolean repeat)
 	{
 		String key = this.getKeys().getRepeat();
@@ -249,21 +272,11 @@ public class NacSharedPreferences
 	/**
 	 * Edit the snooze duration preference value.
 	 */
+	@SuppressWarnings("unused")
 	public void editSnoozeDuration(int duration)
 	{
 		String key = this.getKeys().getSnoozeDuration();
 		this.saveInt(key, duration, false);
-	}
-
-	/**
-	 * Edit the default media path to use when a new alarm card is created.
-	 *
-	 * This is the path to the media that should play when an alarm goes off.
-	 */
-	public void editMediaPath(String path)
-	{
-		String key = this.getKeys().getMediaPath();
-		this.saveString(key, path, false);
 	}
 
 	/**
@@ -280,6 +293,7 @@ public class NacSharedPreferences
 	 * Edit the frequency at which the text-to-speech should go off when an alarm
 	 * is going off.
 	 */
+	@SuppressWarnings("unused")
 	public void editSpeakFrequency(int freq)
 	{
 		String key = this.getKeys().getSpeakFrequency();
@@ -290,6 +304,7 @@ public class NacSharedPreferences
 	 * Edit the flag indicating whether text-to-speech should be used when an
 	 * alarm goes off.
 	 */
+	@SuppressWarnings("unused")
 	public void editSpeakToMe(boolean speak)
 	{
 		String key = this.getKeys().getSpeakToMe();
@@ -299,6 +314,7 @@ public class NacSharedPreferences
 	/**
 	 * Edit the index indicating which day to start the week on.
 	 */
+	@SuppressWarnings("unused")
 	public void editStartWeekOn(int start)
 	{
 		String key = this.getKeys().getStartWeekOn();
@@ -308,6 +324,7 @@ public class NacSharedPreferences
 	/**
 	 * Edit the theme color.
 	 */
+	@SuppressWarnings("unused")
 	public void editThemeColor(int color)
 	{
 		String key = this.getKeys().getThemeColor();
@@ -317,6 +334,7 @@ public class NacSharedPreferences
 	/**
 	 * Edit the color of the time for all alarm cards.
 	 */
+	@SuppressWarnings("unused")
 	public void editTimeColor(int color)
 	{
 		String key = this.getKeys().getTimeColor();
@@ -326,6 +344,7 @@ public class NacSharedPreferences
 	/**
 	 * Edit the default use NFC value when an alarm is created.
 	 */
+	@SuppressWarnings("unused")
 	public void editUseNfc(boolean useNfc)
 	{
 		String key = this.getKeys().getUseNfc();
@@ -336,6 +355,7 @@ public class NacSharedPreferences
 	/**
 	 * Edit the default vibrate value when an alarm is created.
 	 */
+	@SuppressWarnings("unused")
 	public void editVibrate(boolean vibrate)
 	{
 		String key = this.getKeys().getVibrate();
@@ -410,6 +430,7 @@ public class NacSharedPreferences
 	/**
 	 * @see #getAutoDismissSummary(Context, int)
 	 */
+	@SuppressWarnings("unused")
 	public String getAutoDismissSummary()
 	{
 		Context context = this.getContext();
@@ -615,6 +636,7 @@ public class NacSharedPreferences
 	/**
 	 * @see #getMaxSnoozeSummary(Context, int)
 	 */
+	@SuppressWarnings("unused")
 	public String getMaxSnoozeSummary()
 	{
 		Context context = this.getContext();
@@ -677,7 +699,8 @@ public class NacSharedPreferences
 	public static String getMediaMessage(Context context, String path)
 	{
 		NacSharedConstants cons = new NacSharedConstants(context);
-		return (path != null) && !path.isEmpty()
+		//return (path != null) && !path.isEmpty()
+		return !NacFile.isEmpty(path)
 			? NacMedia.getTitle(context, path)
 			: cons.getDescriptionMedia();
 	}
@@ -685,6 +708,7 @@ public class NacSharedPreferences
 	/**
 	 * @see #getMediaSummary(Context, String)
 	 */
+	@SuppressWarnings("unused")
 	public String getMediaSummary()
 	{
 		Context context = this.getContext();
@@ -764,6 +788,7 @@ public class NacSharedPreferences
 	/**
 	 * @see #getNameSummary(Context, String)
 	 */
+	@SuppressWarnings("unused")
 	public String getNameSummary()
 	{
 		Context context = getContext();
@@ -897,6 +922,7 @@ public class NacSharedPreferences
 	/**
 	 * @see #getSnoozeDurationSummary(Context, int)
 	 */
+	@SuppressWarnings("unused")
 	public String getSnoozeDurationSummary()
 	{
 		Context context = this.getContext();
@@ -949,6 +975,7 @@ public class NacSharedPreferences
 	/**
 	 * @see #getSpeakFrequencySummary(Context, int)
 	 */
+	@SuppressWarnings("unused")
 	public String getSpeakFrequencySummary()
 	{
 		Context context = this.getContext();
@@ -1116,6 +1143,7 @@ public class NacSharedPreferences
 	/**
 	 * @see #save(SharedPreferences.Editor, boolean)
 	 */
+	@SuppressWarnings("unused")
 	public void save(SharedPreferences.Editor editor)
 	{
 		this.save(editor, false);

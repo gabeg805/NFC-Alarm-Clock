@@ -1,6 +1,7 @@
 package com.nfcalarmclock;
 
 import android.annotation.TargetApi;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.media.RingtoneManager;
@@ -40,24 +41,9 @@ public class NacMedia
 	public static final int TYPE_SPOTIFY = 3;
 
 	/**
-	 * Type of sound for a ringtone.
-	 */
-	public static final int TYPE_RINGTONE_RANDOM = 4;
-
-	/**
 	 * Type of sound for a music file.
 	 */
 	public static final int TYPE_DIRECTORY = 5;
-
-	/**
-	 * Path for a random ringtone.
-	 */
-	public static final String RANDOM_RINGTONE_PATH = "TYPE_RINGTONE_RANDOM";
-
-	/**
-	 * Name for a random ringtone.
-	 */
-	public static final String RANDOM_RINGTONE_NAME = "Ringtone Playlist";
 
 	/**
 	 */
@@ -124,12 +110,9 @@ public class NacMedia
 					continue;
 				}
 
-				String[] items = path.replace(currentPath, "").split("/");
-
-				for (int i=0; i < items.length; i++)
+				String[] splitPath = path.replace(currentPath, "").split("/");
+				for (String dir : splitPath)
 				{
-					String dir = items[i];
-
 					this.add(dir);
 					this.cd(dir);
 				}
@@ -145,16 +128,17 @@ public class NacMedia
 
 	/**
 	 * @return True if the current build can query the media duration, and False
-	 *         otherwise.
+	 *     otherwise.
 	 */
-	public static boolean canQueryDuration()
+	public static boolean canQueryDuration(Uri uri)
 	{
-		return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q);
+		return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+			&& NacMedia.canQueryUri(uri);
 	}
 
 	/**
 	 * @return True if the current build can query the relative path, and False
-	 *         otherwise.
+	 *     otherwise.
 	 */
 	public static boolean canQueryRelativePath()
 	{
@@ -162,8 +146,17 @@ public class NacMedia
 	}
 
 	/**
+	 * @return True if can query the Uri, and False otherwise.
+	 */
+	public static boolean canQueryUri(Uri uri)
+	{
+		String path = uri.toString();
+		return path.startsWith("content://");
+	}
+
+	/**
 	 * @return True if the current build can query the volume name, and False
-	 *         otherwise.
+	 *     otherwise.
 	 */
 	public static boolean canQueryVolumeName()
 	{
@@ -171,91 +164,90 @@ public class NacMedia
 	}
 
 	/**
-	 * @return The name of the artist.
+	 * @return The requested column in the cursor object.
 	 */
-	public static String getArtist(Context context, NacFile.Metadata metadata)
+	public static String getColumnFromCursor(Context context, Uri uri,
+		String column)
 	{
-		NacSharedConstants cons = new NacSharedConstants(context);
-		Uri contentUri = metadata.toExternalUri();
-		String[] columns = new String[] { MediaStore.Audio.Artists.ARTIST };
-		Cursor c = context.getContentResolver().query(contentUri, columns, null,
-			null, null);
-		String defaultArtist = cons.getStateUnknown();
-		String artist = "";
+		String[] queryColumns = new String[] { column };
+		ContentResolver resolver = context.getContentResolver();
+		Cursor c = resolver.query(uri, queryColumns, null, null, null);
+		String value = "";
 
 		if (c == null)
 		{
-			return defaultArtist;
+			return value;
 		}
 		else if (!c.moveToFirst())
 		{
-		}
-		else
-		{
-			try
-			{
-				int artistIndex = c.getColumnIndexOrThrow(
-					MediaStore.Audio.Artists.ARTIST);
-				artist = c.getString(artistIndex);
-			}
-			catch (IllegalArgumentException e)
-			{
-				NacUtility.printf("NacMedia : getArtist : IllegalArgumentException!");
-			}
+			c.close();
+			return value;
 		}
 
-		if ((artist == null) || artist.isEmpty() || artist.equals("<unknown>"))
+		try
 		{
-			artist = defaultArtist;
+			int index = c.getColumnIndexOrThrow(column);
+			value = c.getString(index);
+		}
+		catch (IllegalArgumentException e)
+		{
+			NacUtility.printf("NacMedia : getColumnFromCursor : IllegalArgumentException!");
 		}
 
 		c.close();
+		return value;
+	}
+
+	/**
+	 * @return The name of the artist.
+	 */
+	public static String getArtist(Context context, Uri uri)
+	{
+		String column = MediaStore.Audio.Artists.ARTIST;
+		String artist = NacMedia.getColumnFromCursor(context, uri, column);
+
+		if (artist.isEmpty() || artist.equals("<unknown>"))
+		{
+			NacSharedConstants cons = new NacSharedConstants(context);
+			artist = cons.getStateUnknown();
+		}
+
 		return artist;
+	}
+
+	/**
+	 * @see #getArtist(Context, Uri)
+	 */
+	public static String getArtist(Context context, NacFile.Metadata metadata)
+	{
+		Uri uri = metadata.toExternalUri();
+		return NacMedia.getArtist(context, uri);
+	}
+
+	/**
+	 * @see #getArtist(Context, Uri)
+	 */
+	@SuppressWarnings("unused")
+	public static String getArtist(Context context, String path)
+	{
+		Uri uri = Uri.parse(path);
+		return NacMedia.getArtist(context, uri);
 	}
 
 	/**
 	 * @return The duration of the track.
 	 */
-	@TargetApi(Build.VERSION_CODES.Q)
-	public static String getDuration(Context context, Uri contentUri)
+	public static String getDuration(Context context, Uri uri)
 	{
-		String contentPath = contentUri.toString();
-
-		if (!NacMedia.canQueryDuration()
-			|| !contentPath.startsWith("content://"))
+		if (!NacMedia.canQueryDuration(uri))
 		{
 			return "";
 		}
 
-		String[] columns = new String[] { MediaStore.Audio.Media.DURATION };
-		Cursor c = context.getContentResolver().query(contentUri, columns, null,
-			null, null);
-		String millis = "";
+		String column = MediaStore.Audio.Media.DURATION;
+		String duration = NacMedia.getColumnFromCursor(context, uri, column);
 
-		if (c == null)
-		{
-			return millis;
-		}
-		else if (!c.moveToFirst())
-		{
-		}
-		else
-		{
-			try
-			{
-				int durationIndex = c.getColumnIndexOrThrow(
-					MediaStore.Audio.Media.DURATION);
-				millis = c.getString(durationIndex);
-			}
-			catch (IllegalArgumentException e)
-			{
-				NacUtility.printf("NacMedia : getDuration : IllegalArgumentException!");
-			}
-		}
-
-		c.close();
-
-		return NacMedia.parseDuration(millis);
+		return NacMedia.parseDuration(duration);
 	}
 
 	/**
@@ -263,17 +255,18 @@ public class NacMedia
 	 */
 	public static String getDuration(Context context, NacFile.Metadata metadata)
 	{
-		Uri contentUri = metadata.toExternalUri();
-		return NacMedia.getDuration(context, contentUri);
+		Uri uri = metadata.toExternalUri();
+		return NacMedia.getDuration(context, uri);
 	}
 
 	/**
 	 * @see #getDuration(Context, Uri)
 	 */
+	@SuppressWarnings("unused")
 	public static String getDuration(Context context, String path)
 	{
-		Uri contentUri = Uri.parse(path);
-		return NacMedia.getDuration(context, contentUri);
+		Uri uri = Uri.parse(path);
+		return NacMedia.getDuration(context, uri);
 	}
 
 	/**
@@ -309,158 +302,82 @@ public class NacMedia
 	/**
 	 * @return The name of the file.
 	 */
-	public static String getName(Context context, Uri contentUri)
+	public static String getName(Context context, Uri uri)
 	{
-		String contentPath = contentUri.toString();
-
-		if (!contentPath.startsWith("content://"))
+		if (!NacMedia.canQueryUri(uri))
 		{
-			return NacFile.basename(contentPath);
+			return NacFile.basename(uri);
 		}
 
-		String[] columns = new String[] { MediaStore.Audio.Media.DISPLAY_NAME };
-		Cursor c = context.getContentResolver().query(contentUri, columns, null,
-			null, null);
-		String name = "";
-
-		if (c == null)
-		{
-			return name;
-		}
-		else if (!c.moveToFirst())
-		{
-		}
-		else
-		{
-			try
-			{
-				int nameIndex = c.getColumnIndexOrThrow(
-					MediaStore.Audio.Media.DISPLAY_NAME);
-				name = c.getString(nameIndex);
-			}
-			catch (IllegalArgumentException e)
-			{
-				NacUtility.printf("NacMedia : getName : IllegalArgumentException!");
-			}
-		}
-
-		c.close();
-
-		return name;
+		String column = MediaStore.Audio.Media.DISPLAY_NAME;
+		return NacMedia.getColumnFromCursor(context, uri, column);
 	}
 
 	/**
 	 * @see #getName(Context, Uri)
 	 */
+	@SuppressWarnings("unused")
 	public static String getName(Context context, NacFile.Metadata metadata)
 	{
-		Uri contentUri = metadata.toExternalUri();
-		return NacMedia.getName(context, contentUri);
+		Uri uri = metadata.toExternalUri();
+		return NacMedia.getName(context, uri);
 	}
 
 	/**
 	 * @see #getName(Context, Uri)
 	 */
+	@SuppressWarnings("unused")
 	public static String getName(Context context, String path)
 	{
-		Uri contentUri = Uri.parse(path);
-		return NacMedia.getName(context, contentUri);
+		Uri uri = Uri.parse(path);
+		return NacMedia.getName(context, uri);
 	}
-
-	///**
-	// * Return the sound file filter.
-	// */
-	//public static FilenameFilter getFilter()
-	//{
-	//	return new FilenameFilter()
-	//	{
-	//		public boolean accept(File dir, String name)
-	//		{
-	//			Locale locale = Locale.getDefault();
-	//			String lower = name.toLowerCase(locale);
-	//			String[] extensions = { ".mp3", ".ogg" };
-	//			//String[] extensions = {".3gp", ".mp4", ".m4a", ".aac",
-	//			//	".ts", ".flac", ".mid", ".xmf", ".mxmf", ".rtttl",
-	//			//	".rtx", ".ota", ".imy", ".mp3", ".mkv", ".wav" };
-
-	//			if (dir.isDirectory())
-	//			{
-	//				return true;
-	//			}
-
-	//			for (String e : extensions)
-	//			{
-	//				if (lower.endsWith(e))
-	//				{
-	//					return true;
-	//				}
-	//			}
-
-	//			return false;
-	//		}
-	//	};
-	//}
 
 	/**
 	 * @return The relative path.
 	 */
 	@SuppressWarnings("deprecation")
 	@TargetApi(Build.VERSION_CODES.Q)
-	public static String getRelativePath(Context context, Uri contentUri)
+	public static String getRelativePath(Context context, Uri uri)
 	{
-		String contentPath = contentUri.toString();
+		if (!NacMedia.canQueryUri(uri))
+		{
+			return NacMedia.parseRelativePath(uri);
+		}
+
 		boolean canQueryRelativePath = NacMedia.canQueryRelativePath();
+		String column = canQueryRelativePath ?
+			MediaStore.Audio.Media.RELATIVE_PATH :
+			MediaStore.Audio.Media.DATA;
+		String path = NacMedia.getColumnFromCursor(context, uri, column);
 
-		if (!contentPath.startsWith("content://"))
+		if (!canQueryRelativePath)
 		{
-			return NacMedia.parseRelativePath(contentPath);
+			path = NacMedia.parseRelativePath(path);
 		}
 
-		String[] columns = new String[] {
-				canQueryRelativePath ?
-					MediaStore.Audio.Media.RELATIVE_PATH :
-					MediaStore.Audio.Media.DATA,
-				};
-		Cursor c = context.getContentResolver().query(contentUri, columns, null,
-			null, null);
-		String path = "";
-
-		if (c == null)
-		{
-			return path;
-		}
-		else if (!c.moveToFirst())
-		{
-		}
-		else
-		{
-			try
-			{
-				int pathIndex = c.getColumnIndexOrThrow(columns[0]);
-				path = c.getString(pathIndex);
-
-				if (!canQueryRelativePath)
-				{
-					path = NacMedia.parseRelativePath(path);
-				}
-			}
-			catch (IllegalArgumentException e)
-			{
-				NacUtility.printf("NacMedia : getRelativePath : IllegalArgumentException!");
-			}
-		}
-
-		c.close();
 		return NacFile.strip(path);
 	}
 
 	/**
 	 * @see #getRelativePath(Context, Uri)
 	 */
+	@SuppressWarnings("unused")
+	public static String getRelativePath(Context context,
+		NacFile.Metadata metadata)
+	{
+		Uri uri = metadata.toExternalUri();
+		return NacMedia.getRelativePath(context, uri);
+	}
+
+	/**
+	 * @see #getRelativePath(Context, Uri)
+	 */
+	@SuppressWarnings("unused")
 	public static String getRelativePath(Context context, String path)
 	{
-		Uri contentUri = Uri.parse(path);
-		return NacMedia.getRelativePath(context, contentUri);
+		Uri uri = Uri.parse(path);
+		return NacMedia.getRelativePath(context, uri);
 	}
 
 	/**
@@ -499,49 +416,22 @@ public class NacMedia
 	/**
 	 * @return The title of the track.
 	 */
-	public static String getTitle(Context context, Uri contentUri)
+	public static String getTitle(Context context, Uri uri)
 	{
-		String contentPath = contentUri.toString();
-
-		if (!contentPath.startsWith("content://"))
+		if (!NacMedia.canQueryUri(uri))
 		{
-			return NacFile.basename(contentPath);
+			return NacFile.basename(uri);
 		}
 
-		NacSharedConstants cons = new NacSharedConstants(context);
-		String[] columns = new String[] { MediaStore.Audio.Media.TITLE };
-		Cursor c = context.getContentResolver().query(contentUri, columns, null,
-			null, null);
-		String defaultTitle = cons.getStateUnknown();
-		String title = "";
+		String column = MediaStore.Audio.Media.TITLE;
+		String title = NacMedia.getColumnFromCursor(context, uri, column);
 
-		if (c == null)
+		if (title.isEmpty() || title.equals("<unknown>"))
 		{
-			return defaultTitle;
-		}
-		else if (!c.moveToFirst())
-		{
-		}
-		else
-		{
-			try
-			{
-				int titleIndex = c.getColumnIndexOrThrow(
-					MediaStore.Audio.Media.TITLE);
-				title = c.getString(titleIndex);
-			}
-			catch (IllegalArgumentException e)
-			{
-				NacUtility.printf("NacMedia : getTitle : IllegalArgumentException!");
-			}
+			NacSharedConstants cons = new NacSharedConstants(context);
+			title = cons.getStateUnknown();
 		}
 
-		if ((title == null) || title.isEmpty() || title.equals("<unknown>"))
-		{
-			title = defaultTitle;
-		}
-
-		c.close();
 		return title;
 	}
 
@@ -550,8 +440,8 @@ public class NacMedia
 	 */
 	public static String getTitle(Context context, NacFile.Metadata metadata)
 	{
-		Uri contentUri = metadata.toExternalUri();
-		return NacMedia.getTitle(context, contentUri);
+		Uri uri = metadata.toExternalUri();
+		return NacMedia.getTitle(context, uri);
 	}
 
 	/**
@@ -559,8 +449,8 @@ public class NacMedia
 	 */
 	public static String getTitle(Context context, String path)
 	{
-		Uri contentUri = Uri.parse(path);
-		return NacMedia.getTitle(context, contentUri);
+		Uri uri = Uri.parse(path);
+		return NacMedia.getTitle(context, uri);
 	}
 
 	/**
@@ -584,10 +474,6 @@ public class NacMedia
 		{
 			return TYPE_DIRECTORY;
 		}
-		else if (NacMedia.isRandomRingtone(path))
-		{
-			return TYPE_RINGTONE_RANDOM;
-		}
 		else if (NacMedia.isSpotify(path))
 		{
 			return TYPE_SPOTIFY;
@@ -602,48 +488,21 @@ public class NacMedia
 	 * @return The volume name.
 	 */
 	@TargetApi(Build.VERSION_CODES.Q)
-	public static String getVolumeName(Context context, Uri contentUri)
+	public static String getVolumeName(Context context, Uri uri)
 	{
-		String contentPrefix = "content://";
-		String contentPath = contentUri.toString();
-
-		if (!contentPath.startsWith(contentPrefix))
+		// Combine these two checks
+		if (!NacMedia.canQueryUri(uri))
 		{
 			return "";
 		}
 
 		if (!NacMedia.canQueryVolumeName())
 		{
-			return NacMedia.parseVolumeName(contentPath);
+			return NacMedia.parseVolumeName(uri);
 		}
 
-		String[] columns = new String[] { MediaStore.Audio.Media.VOLUME_NAME };
-		Cursor c = context.getContentResolver().query(contentUri, columns, null,
-			null, null);
-		String volume = "";
-
-		if (c == null)
-		{
-			return volume;
-		}
-		else if (!c.moveToFirst())
-		{
-		}
-		else
-		{
-			try
-			{
-				int volumeIndex = c.getColumnIndexOrThrow(columns[0]);
-				volume = c.getString(volumeIndex);
-			}
-			catch (IllegalArgumentException e)
-			{
-				NacUtility.printf("NacMedia : getVolumeName : IllegalArgumentException!");
-			}
-		}
-
-		c.close();
-		return volume;
+		String column = MediaStore.Audio.Media.VOLUME_NAME;
+		return NacMedia.getColumnFromCursor(context, uri, column);
 	}
 
 	/**
@@ -651,8 +510,8 @@ public class NacMedia
 	 */
 	public static String getVolumeName(Context context, String path)
 	{
-		Uri contentUri = Uri.parse(path);
-		return NacMedia.getVolumeName(context, contentUri);
+		Uri uri = Uri.parse(path);
+		return NacMedia.getVolumeName(context, uri);
 	}
 
 	/**
@@ -693,8 +552,9 @@ public class NacMedia
 	 */
 	public static boolean isFile(Context context, String path)
 	{
+		Uri uri = Uri.parse(path);
 		String volumeName = NacMedia.getVolumeName(context, path);
-		String relativePath = NacMedia.getRelativePath(context, path);
+		String relativePath = NacMedia.getRelativePath(context, uri);
 
 		//return ((volumeName != null) && volumeName.startsWith("external")
 		return ((volumeName != null) && !volumeName.isEmpty()
@@ -723,28 +583,6 @@ public class NacMedia
 	}
 
 	/**
-	 * @return True if the given type represents a random ringtone, and False
-	 *     otherwise.
-	 *
-	 * @param  type  The type to check.
-	 */
-	public static boolean isRandomRingtone(int type)
-	{
-		return (type == TYPE_RINGTONE_RANDOM);
-	}
-
-	/**
-	 * @return True if the given path is for a random ringtone, and False
-	 *     otherwise.
-	 *
-	 * @param  path  The path to check.
-	 */
-	public static boolean isRandomRingtone(String path)
-	{
-		return path.equals(RANDOM_RINGTONE_PATH);
-	}
-
-	/**
 	 * Check if the given type corresponds to a ringtone.
 	 */
 	public static boolean isRingtone(int type)
@@ -760,8 +598,9 @@ public class NacMedia
 	 */
 	public static boolean isRingtone(Context context, String path)
 	{
+		Uri uri = Uri.parse(path);
 		String volumeName = NacMedia.getVolumeName(context, path);
-		String relativePath = NacMedia.getRelativePath(context, path);
+		String relativePath = NacMedia.getRelativePath(context, uri);
 
 		return (volumeName.equals("internal") && (relativePath == null));
 	}
@@ -791,6 +630,11 @@ public class NacMedia
 	 */
 	public static String parseDuration(String millis)
 	{
+		if ((millis == null) || millis.isEmpty())
+		{
+			return "";
+		}
+
 		String duration = "";
 
 		try
@@ -822,17 +666,39 @@ public class NacMedia
 	}
 
 	/**
+	 * @see #parseRelativePath(String)
+	 */
+	public static String parseRelativePath(Uri uri)
+	{
+		String path = uri.toString();
+		return NacMedia.parseRelativePath(path);
+	}
+
+	/**
 	 * Parse the relative path from a path retrieved by querying for
-	 * MediaStore.Audio.Media.DATA
+	 * MediaStore.Audio.Media.DATA.
 	 *
-	 * This should only be done on any version before Q.
+	 * Note: This should only be done on any version before Q.
 	 */
 	public static String parseRelativePath(String filePath)
 	{
 		String relativeFilePath = NacFile.toRelativePath(filePath);
 		String relativePath = NacFile.dirname(relativeFilePath);
+		NacUtility.printf("File path         : %s", filePath);
+		NacUtility.printf("Relative fle path : %s", relativeFilePath);
+		NacUtility.printf("Relative path     : %s", relativePath);
+		NacUtility.printf("");
 
 		return NacFile.strip(relativePath);
+	}
+
+	/**
+	 * @see #parseVolumeName(String)
+	 */
+	public static String parseVolumeName(Uri uri)
+	{
+		String path = uri.toString();
+		return NacMedia.parseVolumeName(path);
 	}
 
 	/**

@@ -247,6 +247,7 @@ public class NacDialog
 	 * More than one can be added, and they will be run in the order that they
 	 * are added.
 	 */
+	@SuppressWarnings("unused")
 	public void addOnHideListener(OnHideListener listener)
 	{
 		this.mHideListener.add(listener);
@@ -533,15 +534,17 @@ public class NacDialog
 	/**
 	 * @return The saved data as a boolean.
 	 */
+	@SuppressWarnings("unused")
 	public boolean getDataBoolean()
 	{
 		Object data = this.getData();
-		return (data != null) ? (boolean) data : false;
+		return (data != null) && (boolean) data;
 	}
 
 	/**
 	 * @return The saved data as a float.
 	 */
+	@SuppressWarnings("unused")
 	public float getDataFloat()
 	{
 		Object data = this.getData();
@@ -602,6 +605,7 @@ public class NacDialog
 	/**
 	 * Hide the dialog and call the onHideDialog listener.
 	 */
+	@SuppressWarnings("unused")
 	public void hide()
 	{
 		AlertDialog dialog = this.getAlertDialog();
@@ -774,17 +778,6 @@ public class NacDialog
 	}
 
 	/**
-	 * Scale the dialog size.
-	 *
-	 * @param  w  Width. Value must be 0 <= w <= 1.
-	 * @param  h  Height. Value must be 0 <= h <= 1.
-	 */
-	public void scale(double w, double h)
-	{
-		this.scale(w, h, false, false);
-	}
-
-	/**
 	 * Set the status of whether the dialog was canceled or dismissed.
 	 *
 	 * @param  status  True means it was canceled or dismissed and false means
@@ -903,7 +896,7 @@ public class NacDialog
 	/**
 	 * Show the dialog.
 	 */
-	public AlertDialog show()
+	public void show()
 	{
 		AlertDialog dialog = this.getAlertDialog();
 		if (dialog != null)
@@ -912,11 +905,11 @@ public class NacDialog
 		}
 		else
 		{
-			dialog = this.getBuilder().show();
-			this.mAlertDialog = dialog;
+			this.mAlertDialog = this.getBuilder().show();
 		}
 
 		View root = this.getRoot();
+
 		for (OnShowListener listener : this.mShowListener)
 		{
 			listener.onShowDialog(this, root);
@@ -924,7 +917,6 @@ public class NacDialog
 
 		this.setCanceledOrDismissed(false);
 		this.setupDialog();
-		return dialog;
 	}
 
 	/**

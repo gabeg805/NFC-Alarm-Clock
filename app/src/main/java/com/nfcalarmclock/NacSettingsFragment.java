@@ -2,7 +2,7 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
+import androidx.annotation.NonNull;
 import androidx.preference.PreferenceFragmentCompat;
 
 /**
@@ -39,7 +39,7 @@ public abstract class NacSettingsFragment
 	/**
 	 */
 	@Override
-	public void onAttach(Context context)
+	public void onAttach(@NonNull Context context)
 	{
 		super.onAttach(context);
 

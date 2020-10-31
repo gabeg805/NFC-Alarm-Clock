@@ -1,13 +1,18 @@
 package com.nfcalarmclock;
 
 import android.annotation.TargetApi;
+import android.app.Notification;
 import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.service.notification.StatusBarNotification;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -155,6 +160,40 @@ public class NacMissedAlarmNotification
 	}
 
 	/**
+	 * @return A list of notification lines.
+	 */
+	@TargetApi(Build.VERSION_CODES.M)
+	public static List<CharSequence> getExtraLines(Context context, String groupKey)
+	{
+		List<CharSequence> lines = new ArrayList<>();
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+		{
+			return lines;
+		}
+
+		NotificationManager manager = (NotificationManager)
+			context.getSystemService(Context.NOTIFICATION_SERVICE);
+		StatusBarNotification[] statusbar = manager
+			.getActiveNotifications();
+
+		for (StatusBarNotification sb : statusbar)
+		{
+			Notification notification = sb.getNotification();
+			String sbGroup = notification.getGroup();
+
+			if ((groupKey != null) && groupKey.equals(sbGroup))
+			{
+				CharSequence[] extraLines = (CharSequence[]) notification.extras
+					.get(NotificationCompat.EXTRA_TEXT_LINES);
+
+				lines.addAll(Arrays.asList(extraLines));
+			}
+		}
+
+		return lines;
+	}
+
+	/**
 	 * @see NacNotification#getGroup()
 	 */
 	protected String getGroup()
@@ -216,7 +255,7 @@ public class NacMissedAlarmNotification
 		String groupKey = this.getGroup();
 		NacAlarm alarm = this.getAlarm();
 		String line = this.getBodyLine(alarm);
-		List<CharSequence> body = NacNotificationHelper.getExtraLines(context,
+		List<CharSequence> body = this.getExtraLines(context,
 			groupKey);
 
 		body.add(line);

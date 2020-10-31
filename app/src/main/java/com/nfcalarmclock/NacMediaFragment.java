@@ -274,18 +274,16 @@ public class NacMediaFragment
 	/**
 	 * Reset the media player safely.
 	 */
-	protected int safeReset()
+	protected void safeReset()
 	{
 		NacMediaPlayer player = this.getMediaPlayer();
 
 		if (player == null)
 		{
 			player = this.setupMediaPlayer();
-			return (player != null) ? 0 : -1;
 		}
 
 		player.reset();
-		return 0;
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ public class NacFileBrowser
 	 */
 	public interface OnBrowserClickedListener
 	{
+		@SuppressWarnings("unused")
 		public void onBrowserClicked(NacFileBrowser browser,
 			NacFile.Metadata metadata, String path, String name);
 	}
@@ -71,7 +73,7 @@ public class NacFileBrowser
 	 * Add a directory entry to the file browser.
 	 *
 	 * TODO Count number of songs in subdirectories and make that the
-	 *      annotation.
+	 *     annotation.
 	 */
 	public void addDirectory(LayoutInflater inflater, NacFile.Metadata metadata)
 	{
@@ -90,8 +92,7 @@ public class NacFileBrowser
 		String name = metadata.getName();
 		ImageView imageView = entry.findViewById(R.id.image);
 		TextView titleView = entry.findViewById(R.id.title);
-		TextView subtitleView = entry.findViewById(R.id.subtitle);
-		TextView annotationView = entry.findViewById(R.id.annotation);
+		//TextView annotationView = entry.findViewById(R.id.annotation);
 
 		container.addView(entry);
 		imageView.setImageResource(R.mipmap.folder);
@@ -183,8 +184,10 @@ public class NacFileBrowser
 
 		Context context = this.getContext();
 		TypedValue tv = new TypedValue();
-		boolean success = context.getTheme().resolveAttribute(
-			android.R.attr.selectableItemBackground, tv, true);
+		Resources.Theme theme = context.getTheme();
+
+		theme.resolveAttribute(android.R.attr.selectableItemBackground,
+			tv, true);
 
 		if (tv.resourceId != 0)
 		{
@@ -221,40 +224,16 @@ public class NacFileBrowser
 	}
 
 	/**
-	 * @return The name of the file represented by the view.
+	 * @return The file metadata object contained in the view.
 	 */
-	public String getName(View view)
+	public NacFile.Metadata getFileMetadata(View view)
 	{
 		if (view == null)
 		{
-			return "";
+			return null;
 		}
 
-		NacFile.Metadata metadata = (NacFile.Metadata) view.getTag();
-		return metadata.getName();
-	}
-
-	/**
-	 * @return The file path repesented by the view.
-	 */
-	public String getPath(View view)
-	{
-		if (view == null)
-		{
-			return "";
-		}
-
-		NacFile.Metadata metadata = (NacFile.Metadata) view.getTag();
-		return metadata.getPath();
-	}
-
-	/**
-	 * @return The file metadata of the currently selected view.
-	 */
-	public NacFile.Metadata getSelectedMetadata()
-	{
-		View view = this.getSelectedView();
-		return (view != null) ? (NacFile.Metadata) view.getTag() : null;
+		return (NacFile.Metadata) view.getTag();
 	}
 
 	/**
@@ -274,13 +253,16 @@ public class NacFileBrowser
 	}
 
 	/**
-	 * @return True if in the same directory as the selected view, and False
-	 *         otherwise.
+	 * @return true if in the same directory as the selected view, and false
+	 *     otherwise.
 	 */
-	public boolean inSelectedDirectory(String directoryPath)
+	@SuppressWarnings("unused")
+	public boolean inSelectedDirectory(String dir)
 	{
-		NacFile.Metadata metadata = this.getSelectedMetadata();
-		return (metadata != null) && metadata.getDirectory().equals(directoryPath);
+		View view = this.getSelectedView();
+		NacFile.Metadata metadata = this.getFileMetadata(view);
+
+		return (metadata != null) && metadata.getDirectory().equals(dir);
 	}
 
 	/**
@@ -297,14 +279,15 @@ public class NacFileBrowser
 	 */
 	public boolean isSelected(String path)
 	{
-		NacFile.Metadata metadata = this.getSelectedMetadata();
-		if (metadata == null)
+		View view = this.getSelectedView();
+		NacFile.Metadata metadata = this.getFileMetadata(view);
+
+		if ((metadata == null) || path.isEmpty())
 		{
 			return false;
 		}
 
-		String selectedPath = metadata.getPath();
-		return (!path.isEmpty() && (path.equals(selectedPath)));
+		return metadata.getPath().equals(path);
 	}
 
 	/**
@@ -373,14 +356,16 @@ public class NacFileBrowser
 	/**
 	 * Change directory to previous ("../") directory.
 	 */
-	public boolean previousDirectory()
+	public void previousDirectory()
 	{
-		NacMedia.Tree tree = this.getTree();
-		tree.cd("..");
-		String path = tree.getDirectoryPath();
+		LinearLayout container = this.getContainer();
+		View entry = container.getChildAt(0);
+		NacFile.Metadata metadata = this.getFileMetadata(entry);
 
-		this.show(path);
-		return true;
+		if ((entry != null) && metadata.getName().equals(".."))
+		{
+			this.onClick(entry);
+		}
 	}
 
 	/**
@@ -394,26 +379,23 @@ public class NacFileBrowser
 	/**
 	 * @see #select(View)
 	 */
-	public void select(String selectPath)
+	public void select(String name)
 	{
-		if ((selectPath == null) || selectPath.isEmpty())
+		//if ((selectPath == null) || selectPath.isEmpty())
+		if (NacFile.isEmpty(name))
 		{
 			return;
 		}
 
 		LinearLayout container = this.getContainer();
 		int count = container.getChildCount();
-		NacMedia.Tree tree = this.getTree();
-		String dir = NacFile.dirname(selectPath);
-		String name = NacFile.basename(selectPath);
-		String absolutePath = tree.relativeToAbsolutePath(dir, name);
 
 		for (int i=0; i < count; i++)
 		{
 			View view = container.getChildAt(i);
-			String viewPath = this.getPath(view);
+			NacFile.Metadata metadata = this.getFileMetadata(view);
 
-			if (absolutePath.equals(viewPath))
+			if (metadata.getName().equals(name))
 			{
 				this.select(view);
 				return;
@@ -453,41 +435,15 @@ public class NacFileBrowser
 	}
 
 	/**
-	 * @see #show(String)
-	 */
-	public void show()
-	{
-		this.show("");
-	}
-
-	/**
-	 * @see #show(String, String)
-	 */
-	public void show(String directoryPath)
-	{
-		NacFile.Metadata metadata = this.getSelectedMetadata();
-		String filePath = null;
-		
-		if (this.inSelectedDirectory(directoryPath))
-		{
-			filePath = metadata.getPath();
-		}
-
-		this.show(directoryPath, filePath);
-	}
-
-	/**
-	 * Show the directory contents at the given path and select the file.
+	 * Show the directory contents at the given path.
 	 *
-	 * @param  directoryPath  The path of the directory to show.
-	 * @param  filePath       The path of the file to highlight.
+	 * @param  dir  The path of the directory to show.
 	 */
-	public void show(String directoryPath, String filePath)
+	public void show(String dir)
 	{
 		this.clearEntries();
-		this.populateEntries(directoryPath);
-		this.getTree().cd(directoryPath);
-		this.select(filePath);
+		this.populateEntries(dir);
+		this.getTree().cd(dir);
 	}
 
 }

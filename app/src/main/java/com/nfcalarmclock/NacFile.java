@@ -102,18 +102,6 @@ public class NacFile
 		}
 
 		/**
-		 * Print information.
-		 */
-		public void print()
-		{
-			NacUtility.printf("Directory : %s", this.getDirectory());
-			NacUtility.printf("Filename  : %s", this.getName());
-			NacUtility.printf("ID        : %d", this.getId());
-			NacUtility.printf("Is Dir?   : %b", this.isDirectory());
-			NacUtility.printf("Is File?  : %b", this.isFile());
-		}
-
-		/**
 		 * Set the directory.
 		 */
 		public void setDirectory(String directory)
@@ -149,6 +137,7 @@ public class NacFile
 		/**
 		 * Convert the input to an internal Uri.
 		 */
+		@SuppressWarnings("unused")
 		public Uri toInternalUri()
 		{
 			return ContentUris.withAppendedId(
@@ -207,6 +196,7 @@ public class NacFile
 		/**
 		 * @see #addToDirectory(String, String, long)
 		 */
+		@SuppressWarnings("unused")
 		public void addToDirectory(String toDirectory, String name)
 		{
 			this.addToDirectory(toDirectory, name, -1);
@@ -249,18 +239,17 @@ public class NacFile
 			{
 				String currentDir = this.getDirectoryPath();
 				String newDir = path.replace(currentDir, "");
-				String[] items = this.strip(newDir).split("/");
+				String[] splitPath = this.strip(newDir).split("/");
 				NacTreeNode<String> toDir = fromDir;
 
-				for (int i=0; i < items.length; i++)
+				for (String sp : splitPath)
 				{
-					if (items[i].isEmpty())
+					if (sp.isEmpty())
 					{
 						continue;
 					}
 
-					toDir = toDir.getChild(items[i]);
-
+					toDir = toDir.getChild(sp);
 					if (toDir == null)
 					{
 						break;
@@ -388,18 +377,17 @@ public class NacFile
 			}
 			else
 			{
-				String[] items = this.strip(path).split("/");
+				String[] splitPath = this.strip(path).split("/");
 				NacTreeNode<String> newDir = dir;
 
-				for (int i=0; i < items.length; i++)
+				for (String sp : splitPath)
 				{
-					if (items[i].isEmpty())
+					if (sp.isEmpty())
 					{
 						continue;
 					}
 
-					newDir = newDir.getChild(items[i]);
-
+					newDir = newDir.getChild(sp);
 					if (newDir == null)
 					{
 						break;
@@ -426,9 +414,6 @@ public class NacFile
 
 			for (Metadata metadata : this.ls())
 			{
-				String name = metadata.getName();
-				int i = 0;
-
 				if (metadata.isDirectory())
 				{
 					list = directories;
@@ -441,6 +426,9 @@ public class NacFile
 				{
 					continue;
 				}
+
+				String name = metadata.getName();
+				int i;
 
 				for (i=0; i < list.size(); i++)
 				{
@@ -474,9 +462,6 @@ public class NacFile
 
 			for (Metadata metadata : this.ls(path))
 			{
-				String name = metadata.getName();
-				int i = 0;
-
 				if (metadata.isDirectory())
 				{
 					list = directories;
@@ -489,6 +474,9 @@ public class NacFile
 				{
 					continue;
 				}
+
+				String name = metadata.getName();
+				int i;
 
 				for (i=0; i < list.size(); i++)
 				{
@@ -510,6 +498,7 @@ public class NacFile
 		/**
 		 * Print the contents of the current directory.
 		 */
+		@SuppressWarnings("unused")
 		public void print()
 		{
 			for (Metadata metadata : this.ls())
@@ -548,22 +537,15 @@ public class NacFile
 			this.mDirectory = dir;
 		}
 
-		/**
-		 * Convert relative path to absolute path, given a file name.
-		 */
-		public String relativeToAbsolutePath(String relativePath, String name)
-		{
-			for (Metadata metadata : this.lsSort(relativePath))
-			{
-				if (metadata.getName().equals(name))
-				{
-					return metadata.getPath();
-				}
-			}
+	}
 
-			return relativePath;
-		}
-
+	/**
+	 * @see #basename(String)
+	 */
+	public static String basename(Uri uri)
+	{
+		String path = uri.toString();
+		return NacFile.basename(path);
 	}
 
 	/**
@@ -571,12 +553,11 @@ public class NacFile
 	 */
 	public static String basename(String path)
 	{
-		if ((path == null) || path.isEmpty())
+		if (NacFile.isEmpty(path))
 		{
 			return "";
 		}
 
-		//String[] items = this.strip(path).split("/");
 		String[] items = path.split("/");
 
 		return (items.length > 0) ? items[items.length-1] : "";
@@ -587,16 +568,34 @@ public class NacFile
 	 */
 	public static String dirname(String path)
 	{
-		String basename = NacFile.basename(path);
+		if (NacFile.isEmpty(path))
+		{
+			return "";
+		}
 
+		String basename = NacFile.basename(path);
 		return path.substring(0, path.length()-basename.length());
+	}
+
+	/**
+	 * @return True if the string is empty or null, and False otherwise.
+	 */
+	public static boolean isEmpty(String path)
+	{
+		return (path == null) || path.isEmpty();
 	}
 
 	/**
 	 * Remove extension from file name.
 	 */
+	@SuppressWarnings("unused")
 	public static String removeExtension(String name)
 	{
+		if (NacFile.isEmpty(name))
+		{
+			return "";
+		}
+
 		return (name.contains(".")) ?
 			name.substring(0, name.lastIndexOf('.')) : name;
 	}
@@ -606,19 +605,18 @@ public class NacFile
 	 */
 	public static String strip(String path)
 	{
-		if (path == null)
+		if (NacFile.isEmpty(path))
 		{
 			return "";
 		}
 
-		String normalPath = path;
 		int length = path.length();
-
 		if (length == 0)
 		{
 			return "";
 		}
 
+		String normalPath = path;
 		if (normalPath.charAt(length-1) == '/')
 		{
 			normalPath= normalPath.substring(0, length-1);
@@ -633,6 +631,11 @@ public class NacFile
 	@SuppressWarnings("SdCardPath")
 	public static String toRelativePath(String path)
 	{
+		if ((path == null) || path.isEmpty())
+		{
+			return "";
+		}
+
 		String emulated = "/storage/emulated/0";
 		String sdcard = "/sdcard";
 		String relativePath = path;

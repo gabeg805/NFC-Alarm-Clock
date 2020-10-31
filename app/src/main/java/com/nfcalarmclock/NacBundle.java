@@ -41,9 +41,7 @@ public class NacBundle
 	public static Bundle toBundle(NacAlarm alarm)
 	{
 		Bundle bundle = new Bundle();
-
 		bundle.putParcelable(ALARM_PARCEL_NAME, alarm);
-
 		return bundle;
 	}
 
@@ -53,9 +51,7 @@ public class NacBundle
 	public static Bundle toBundle(String media)
 	{
 		Bundle bundle = new Bundle();
-
 		bundle.putString(MEDIA_PARCEL_NAME, media);
-
 		return bundle;
 	}
 
@@ -66,12 +62,11 @@ public class NacBundle
 	public static Bundle toBundle(NacAudio.Attributes attrs)
 	{
 		Bundle bundle = new Bundle();
-		float value = attrs.getVolumeLevel() / 100.0f;
-
 		bundle.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, attrs.getStream());
-		//bundle.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, value);
-
 		return bundle;
+
+		//float value = attrs.getVolumeLevel() / 100.0f;
+		//bundle.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, value);
 	}
 
 }

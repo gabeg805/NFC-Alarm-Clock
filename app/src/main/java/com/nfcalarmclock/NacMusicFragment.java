@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import java.util.Locale;
 
@@ -48,11 +49,13 @@ public class NacMusicFragment
 	/**
 	 * Back button was been pressed.
 	 */
-	public boolean backPressed()
+	public void backPressed()
 	{
 		NacFileBrowser browser = this.getFileBrowser();
-
-		return (browser != null) ? browser.previousDirectory() : false;
+		if (browser != null)
+		{
+			browser.previousDirectory();
+		}
 	}
 
 	/**
@@ -221,7 +224,7 @@ public class NacMusicFragment
 	/**
 	 */
 	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState)
+	public void onViewCreated(@NonNull View view, Bundle savedInstanceState)
 	{
 		setupActionButtons(view);
 
@@ -241,31 +244,27 @@ public class NacMusicFragment
 		Context context = getContext();
 		NacFileBrowser browser = new NacFileBrowser(root, R.id.container);
 		TextView textview = root.findViewById(R.id.path);
-		String contentPath = getMediaPath();
-		String dirPath = contentPath;
-		String filePath = "";
+		String path = getMediaPath();
+		String dir = "";
+		String name = "";
 		this.mDirectoryTextView = textview;
 		this.mFileBrowser = browser;
 
-		if (NacMedia.isFile(context, contentPath))
+		if (NacMedia.isFile(context, path))
 		{
-			Locale locale = Locale.getDefault();
-			String name = NacMedia.getName(context, contentPath);
-			dirPath = NacMedia.getRelativePath(context, contentPath);
-			filePath = String.format(locale, "%1$s/%2$s", dirPath, name);
+			Uri uri = Uri.parse(path);
+			dir = NacMedia.getRelativePath(context, uri);
+			name = NacMedia.getName(context, uri);
 		}
-		else if (NacMedia.isDirectory(contentPath))
+		else if (NacMedia.isDirectory(path))
 		{
-			dirPath = contentPath;
-		}
-		else
-		{
-			dirPath = "";
+			dir = path;
 		}
 
-		this.getDirectoryTextView().setText(dirPath);
+		this.getDirectoryTextView().setText(dir);
 		browser.setOnBrowserClickedListener(this);
-		browser.show(dirPath, filePath);
+		browser.show(dir);
+		browser.select(name);
 	}
 
 }

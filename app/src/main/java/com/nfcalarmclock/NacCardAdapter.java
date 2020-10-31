@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,7 +38,7 @@ public class NacCardAdapter
 	 */
 	public interface OnUseNfcChangeListener
 	{
-		public void onUseNfcChange(NacAlarm alarm);
+        public void onUseNfcChange(NacAlarm alarm);
 	}
 
 	/**
@@ -86,11 +87,6 @@ public class NacCardAdapter
 	private List<NacAlarm> mAlarmList;
 
 	/**
-	 * Previous alarm to go off, in calendar form.
-	 */
-	private Calendar mPreviousCalendar;
-
-	/**
 	 * Indicator that the alarm was added through the floating action button.
 	 */
 	private boolean mWasAddedWithFloatingActionButton;
@@ -118,7 +114,6 @@ public class NacCardAdapter
 		this.mNotification = new NacUpcomingAlarmNotification(context);
 		this.mSnackbar = new NacSnackbar(root);
 		this.mAlarmList = null;
-		this.mPreviousCalendar = null;
 		this.mWasAddedWithFloatingActionButton = false;
 		this.mLastCardClicked = null;
 
@@ -430,14 +425,6 @@ public class NacCardAdapter
 	}
 
 	/**
-	 * @return The previous calendar.
-	 */
-	private Calendar getPreviousCalendar()
-	{
-		return this.mPreviousCalendar;
-	}
-
-	/**
 	 * @return The RecyclerView.
 	 */
 	private RecyclerView getRecyclerView()
@@ -605,35 +592,33 @@ public class NacCardAdapter
 	/**
 	 * Delete an alarm and notify any registered observers.
 	 */
-	public int notifyDeleteAlarm(int index)
+	public void notifyDeleteAlarm(int index)
 	{
 		if (index < 0)
 		{
-			return -1;
+			return;
 		}
 
 		List<NacAlarm> alarmList = this.getAlarms();
 
 		alarmList.remove(index);
 		notifyItemRemoved(index);
-		return index;
 	}
 
 	/**
 	 * Insert an alarm and notify any registered observers.
 	 */
-	public int notifyInsertAlarm(NacAlarm alarm, int index)
+	public void notifyInsertAlarm(NacAlarm alarm, int index)
 	{
 		if ((alarm == null) || (index < 0))
 		{
-			return -1;
+			return;
 		}
 
 		List<NacAlarm> alarmList = this.getAlarms();
 
 		alarmList.add(index, alarm);
 		notifyItemInserted(index);
-		return index;
 	}
 
 	/**
@@ -692,6 +677,7 @@ public class NacCardAdapter
 	/**
 	 * Called when the alarm card is collapsed.
 	 */
+	@Override
 	public void onCardCollapsed(NacCardHolder holder, NacAlarm alarm)
 	{
 		if (alarm.wasChanged())
@@ -704,6 +690,7 @@ public class NacCardAdapter
 	/**
 	 * Called when the alarm card is expanded.
 	 */
+	@Override
 	public void onCardExpanded(NacCardHolder holder, NacAlarm alarm)
 	{
 	}
@@ -770,7 +757,8 @@ public class NacCardAdapter
 	 * @param  parent  The parent view.
 	 * @param  viewType  The type of view.
 	 */
-	@Override
+	@NonNull
+    @Override
 	public NacCardHolder onCreateViewHolder(ViewGroup parent, int viewType)
 	{
 		Context context = parent.getContext();
@@ -792,7 +780,7 @@ public class NacCardAdapter
 	/**
 	 * Needed for RecyclerView.OnItemTouchListener
 	 */
-	public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent ev)
+	public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, MotionEvent ev)
 	{
 		int action = ev.getAction();
 
@@ -845,8 +833,6 @@ public class NacCardAdapter
 		if (holder != null)
 		{
 			NacAlarm alarm = holder.getAlarm();
-			int position = holder.getAdapterPosition();
-
 			if (id == R.id.menu_show_next_alarm)
 			{
 				this.showAlarm(alarm);
@@ -858,7 +844,6 @@ public class NacCardAdapter
 		}
 
 		this.mLastCardClicked = null;
-
 		return true;
 	}
 
@@ -872,7 +857,7 @@ public class NacCardAdapter
 	/**
 	 * Note: Needed for RecyclerView.OnItemTouchListener
 	 */
-	public void onTouchEvent(RecyclerView rv, MotionEvent e)
+	public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e)
 	{
 	}
 
@@ -956,22 +941,12 @@ public class NacCardAdapter
 
 		if (alarm.getEnabled())
 		{
-			this.showAlarmRuntime(alarm);
+			this.showAlarm(alarm);
 		}
 		else
 		{
 			this.showNextAlarm();
 		}
-	}
-
-	/**
-	 * Show when the alarm will next run.
-	 */
-	private void showAlarmRuntime(NacAlarm alarm)
-	{
-		Calendar alarmCalendar = NacCalendar.getNextAlarmDay(alarm);
-		this.showAlarm(alarm);
-		this.mPreviousCalendar = alarmCalendar;
 	}
 
 	/**
@@ -985,13 +960,7 @@ public class NacCardAdapter
 		String message = NacCalendar.getMessageNextAlarm(shared, alarm);
 		String action = cons.getActionDismiss();
 
-		if (alarm == null)
-		{
-			this.mPreviousCalendar = null;
-		}
-
 		this.showSnackbar(message, action);
-		//this.snackbar(message, action, null, true);
 	}
 
 	/**

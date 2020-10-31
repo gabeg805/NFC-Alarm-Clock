@@ -120,7 +120,7 @@ public class NacForegroundService
 		NacAlarm alarm = this.getAlarm();
 		NacAlarm actualAlarm = NacDatabase.findAlarm(this, alarm);
 
-		if (alarm != null)
+		if (actualAlarm != null)
 		{
 			// Change this next line, and the else. THis is already done when you
 			// start the service.
@@ -175,7 +175,7 @@ public class NacForegroundService
 	}
 
 	/**
-	 * @return All wakeup processes.
+	 * @return Al wakeup processes.
 	 */
 	private List<NacWakeupProcess> getAllWakeups()
 	{
@@ -225,15 +225,6 @@ public class NacForegroundService
 		}
 
 		return -2;
-	}
-
-	/**
-	 * @return The index of the corresponding wakeup process.
-	 */
-	private int indexOfWakeup(NacWakeupProcess wakeup)
-	{
-		NacAlarm alarm = (wakeup != null) ? wakeup.getAlarm() : null;
-		return this.indexOfWakeup(alarm);
 	}
 
 	/**
@@ -511,7 +502,6 @@ public class NacForegroundService
 	 */
 	private void stopCurrentWakeupProcess()
 	{
-		List<NacWakeupProcess> allWakeups = this.getAllWakeups();
 		NacWakeupProcess wakeup = this.getWakeup();
 		NacAlarm alarm = this.getAlarm();
 

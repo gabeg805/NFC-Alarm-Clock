@@ -125,7 +125,6 @@ public class NacDayButtonPreference
 	public boolean onPreferenceClick(Preference pref)
 	{
 		NacDayButton button = this.getDayButton();
-		Context context = getContext();
 		NacSharedPreferences shared = this.getNacSharedPreferences();
 		int style = shared.getDayButtonStyle();
 		this.mValue = (style % 2) + 1;

@@ -48,14 +48,6 @@ public class NacDayOfWeek
 	}
 
 	/**
-	 * @return True if any days are selected, and False otherwise.
-	 */
-	public boolean areDaysSelected()
-	{
-		return !this.getDays().isEmpty();
-	}
-
-	/**
 	 * Convert a particular day to its corresponding view ID.
 	 */
 	private int dayToId(NacCalendar.Day day)
@@ -253,7 +245,6 @@ public class NacDayOfWeek
 		LinearLayout view = this.getDayOfWeekView();
 		NacDayButton sunday = this.getDayButton(NacCalendar.Day.SUNDAY);
 		NacDayButton monday = this.getDayButton(NacCalendar.Day.MONDAY);
-		int count = view.getChildCount();
 		View firstChild = view.getChildAt(0);
 		View lastChild = view.getChildAt(6);
 

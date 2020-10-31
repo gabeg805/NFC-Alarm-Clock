@@ -14,14 +14,6 @@ public class NacPermissions
 {
 
 	/**
-	 * Result listener.
-	 */
-	public interface OnResultListener
-	{
-		public void onResult(int request, String[] permissions, int[] grant);
-	}
-
-	/**
 	 * @return True if the app has READ_EXTERNAL_STORAGE permissions, and False
 	 *         otherwise.
 	 */

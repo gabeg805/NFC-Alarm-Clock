@@ -97,7 +97,6 @@ public class NacSettingsActivity
 			addPreferencesFromResource(R.xml.main_preferences);
 
 			NacSharedKeys keys = this.getKeys();
-			Resources res = getResources();
 			Preference appearance = findPreference(keys.getAppearance());
 			Preference general = findPreference(keys.getGeneral());
 			Preference miscellaneous = findPreference(keys.getMiscellaneous());

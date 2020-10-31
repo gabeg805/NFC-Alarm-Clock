@@ -24,12 +24,14 @@ public class NacTextToSpeech
 		/**
 		 * Called when speech engine is done speaking.
 		 */
+		@SuppressWarnings("unused")
 		public void onDoneSpeaking(NacTextToSpeech tts,
 			NacAudio.Attributes attrs);
 
 		/**
 		 * Called when speech engine has started speaking.
 		 */
+		@SuppressWarnings("unused")
 		public void onStartSpeaking(NacTextToSpeech tts,
 			NacAudio.Attributes attrs);
 	}
@@ -293,24 +295,24 @@ public class NacTextToSpeech
 	@Override
 	public void onAudioFocusChange(int focusChange)
 	{
-		String change = "UNKOWN";
+		//String change = "UNKOWN";
 
-		if (focusChange == AudioManager.AUDIOFOCUS_GAIN)
-		{
-			change = "GAIN";
-		}
-		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS)
-		{
-			change = "LOSS";
-		}
-		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)
-		{
-			change = "LOSS_TRANSIENT";
-		}
-		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
-		{
-			change = "LOSS_TRANSIENT_CAN_DUCK";
-		}
+		//if (focusChange == AudioManager.AUDIOFOCUS_GAIN)
+		//{
+		//	change = "GAIN";
+		//}
+		//else if (focusChange == AudioManager.AUDIOFOCUS_LOSS)
+		//{
+		//	change = "LOSS";
+		//}
+		//else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)
+		//{
+		//	change = "LOSS_TRANSIENT";
+		//}
+		//else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
+		//{
+		//	change = "LOSS_TRANSIENT_CAN_DUCK";
+		//}
 	}
 
 	/**
@@ -404,19 +406,6 @@ public class NacTextToSpeech
 		else
 		{
 			this.setBuffer(message);
-		}
-	}
-
-	/**
-	 * Stop the speech engine.
-	 */
-	public void stop()
-	{
-		TextToSpeech speech = this.getTextToSpeech();
-
-		if (speech != null)
-		{
-			speech.stop();
 		}
 	}
 

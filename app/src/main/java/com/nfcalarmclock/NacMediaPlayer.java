@@ -181,10 +181,8 @@ public class NacMediaPlayer
 	 * Result values.
 	 */
 	public static final int RESULT_SUCCESS = 0;
-	public static final int RESULT_ILLEGAL_ARGUMENT_EXCEPTION = -1;
 	public static final int RESULT_ILLEGAL_STATE_EXCEPTION = -2;
 	public static final int RESULT_IO_EXCEPTION = -3;
-	public static final int RESULT_SECURITY_EXCEPTION = -4;
 
 	/**
 	 */
@@ -293,7 +291,6 @@ public class NacMediaPlayer
 	{
 		NacUtility.printf("NacMediaPlayer : onAudioFocusChange! %b %d",
 			this.mWasPlaying, focusChange);
-		Context context = this.getContext();
 		NacAudio.Attributes attrs = this.getAudioAttributes();
 
 		attrs.setFocus(focusChange);
@@ -544,16 +541,9 @@ public class NacMediaPlayer
 	}
 
 	/**
-	 * Go back to the beginning of the song.
+	 * Seek to a position in the song.
 	 */
-	public int seekToBeginningWrapper()
-	{
-		return this.seekToWrapper(0);
-	}
-
-	/**
-	 * Go back to the beginning of the song.
-	 */
+	@SuppressWarnings("unused")
 	public int seekToWrapper(int position)
 	{
 		try
@@ -574,8 +564,7 @@ public class NacMediaPlayer
 	public boolean shouldRepeat()
 	{
 		NacAudio.Attributes attrs = this.getAudioAttributes();
-
-		return (attrs != null) ? attrs.getRepeat() : false;
+		return (attrs != null) && attrs.getRepeat();
 	}
 
 	/**

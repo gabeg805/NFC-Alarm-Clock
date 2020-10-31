@@ -281,29 +281,33 @@ public class NacAudio
 			int stream = AudioManager.STREAM_MUSIC;
 			int usage = AudioAttributes.USAGE_MEDIA;
 
-			if ((source == null) || source.isEmpty()
-				|| source.equals(audioSources.get(1)))
+			if (source != null)
 			{
-			}
-			else if (source.equals(audioSources.get(0)))
-			{
-				stream = AudioManager.STREAM_ALARM;
-				usage = AudioAttributes.USAGE_ALARM;
-			}
-			else if (source.equals(audioSources.get(2)))
-			{
-				stream = AudioManager.STREAM_NOTIFICATION;
-				usage = AudioAttributes.USAGE_NOTIFICATION;
-			}
-			else if (source.equals(audioSources.get(3)))
-			{
-				stream = AudioManager.STREAM_RING;
-				usage = AudioAttributes.USAGE_MEDIA;
-			}
-			else if (source.equals(audioSources.get(4)))
-			{
-				stream = AudioManager.STREAM_SYSTEM;
-				usage = AudioAttributes.USAGE_MEDIA;
+				if (source.equals(audioSources.get(0)))
+				{
+					stream = AudioManager.STREAM_ALARM;
+					usage = AudioAttributes.USAGE_ALARM;
+				}
+				else if (source.equals(audioSources.get(1)))
+				{
+					stream = AudioManager.STREAM_MUSIC;
+					usage = AudioAttributes.USAGE_MEDIA;
+				}
+				else if (source.equals(audioSources.get(2)))
+				{
+					stream = AudioManager.STREAM_NOTIFICATION;
+					usage = AudioAttributes.USAGE_NOTIFICATION;
+				}
+				else if (source.equals(audioSources.get(3)))
+				{
+					stream = AudioManager.STREAM_RING;
+					usage = AudioAttributes.USAGE_MEDIA;
+				}
+				else if (source.equals(audioSources.get(4)))
+				{
+					stream = AudioManager.STREAM_SYSTEM;
+					usage = AudioAttributes.USAGE_MEDIA;
+				}
 			}
 
 			this.setStream(stream);
@@ -397,8 +401,7 @@ public class NacAudio
 		public int toStreamVolume(int volumeLevel)
 		{
 			int max = this.getStreamMaxVolume();
-			int volume = (int) (max * volumeLevel / 100.0f);
-			return volume;
+			return (int) (max * volumeLevel / 100.0f);
 		}
 
 		/**
@@ -419,7 +422,7 @@ public class NacAudio
 		AudioManager.OnAudioFocusChangeListener listener)
 	{
 		AudioManager am = NacAudio.getAudioManager(context);
-		int result = 0;
+		int result;
 
 		//if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		//{
@@ -475,7 +478,7 @@ public class NacAudio
 		NacAudio.Attributes attrs)
 	{
 		AudioManager am = NacAudio.getAudioManager(context);
-		int result = 0;
+		int result;
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{

@@ -144,8 +144,9 @@ public abstract class NacNotification
 
 	/**
 	 * @return True if the given group key matches that of the notification, and
-	 *         False otherwise.
+	 *     False otherwise.
 	 */
+	@SuppressWarnings("unused")
 	protected boolean doesGroupMatch(String groupKey)
 	{
 		return this.getGroup().equals(groupKey);
@@ -230,6 +231,7 @@ public abstract class NacNotification
 	/**
 	 * Setup the notification body lines.
 	 */
+	@SuppressWarnings("unused")
 	protected void setupBody()
 	{
 	}
@@ -239,7 +241,6 @@ public abstract class NacNotification
 	 */
 	protected void setupChannel()
 	{
-		Context context = this.getContext();
 		NotificationChannel channel = this.createChannel();
 		if (channel != null)
 		{

@@ -79,7 +79,7 @@ public class NacColorPickerDialog
 	{
 		try
 		{
-			int color = Color.parseColor(name);
+			Color.parseColor(name);
 			return true;
 		}
 		catch (IllegalArgumentException e)

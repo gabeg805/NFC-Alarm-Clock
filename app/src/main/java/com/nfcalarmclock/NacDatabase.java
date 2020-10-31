@@ -1,18 +1,15 @@
 package com.nfcalarmclock;
 
 import android.content.Context;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.net.Uri;
 import android.provider.BaseColumns;
 import androidx.core.app.JobIntentService;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -86,7 +83,7 @@ public class NacDatabase
 
 		ContentValues cv = this.getContentValues(version, alarm);
 		String table = this.getAlarmTable();
-		long result = 0;
+		long result;
 
 		db.beginTransaction();
 		try
@@ -129,7 +126,7 @@ public class NacDatabase
 		String table = this.getAlarmTable();
 		String where = this.getWhereClause();
 		String[] args = this.getWhereArgs(alarm);
-		long result = 0;
+		long result;
 
 		db.beginTransaction();
 		try
@@ -179,7 +176,7 @@ public class NacDatabase
 		String[] whereArgs = this.getWhereArgsActive();
 		String limit = "1";
 		NacAlarm alarm = null;
-		Cursor cursor = null;
+		Cursor cursor;
 
 		try
 		{
@@ -370,46 +367,6 @@ public class NacDatabase
 	}
 
 	/**
-	 * @return The row of the database corresponding to the alarm.
-	 */
-	private Cursor getRow(NacAlarm alarm)
-	{
-		return this.getRow(alarm, null);
-	}
-
-	/**
-	 * @return The row of the database corresponding to the alarm.
-	 */
-	private Cursor getRow(NacAlarm alarm, String limit)
-	{
-		SQLiteDatabase db = this.getWritableDatabase();
-		String table = this.getAlarmTable();
-		int id = alarm.getId();
-		String where = this.getWhereClause();
-		String[] whereArgs = this.getWhereArgs(id);
-
-		return db.query(table, null, where, whereArgs, null, null, null, limit);
-	}
-
-	/**
-	 * @return The row ID.
-	 */
-	private int getRowId(NacAlarm alarm)
-	{
-		Cursor cursor = this.getRow(alarm, "1");
-		int id = -1;
-
-		if ((cursor != null) && (cursor.getCount() == 1))
-		{
-			cursor.moveToFirst();
-			id = cursor.getInt(0);
-			cursor.close();
-		}
-
-		return id;
-	}
-
-	/**
 	 * @param  value  The value to convert to a where clause.
 	 *
 	 * @return Where arguments for the where clause.
@@ -458,14 +415,6 @@ public class NacDatabase
 	private String getWhereClauseActive()
 	{
 		return Contract.AlarmTable.COLUMN_IS_ACTIVE + "=?";
-	}
-
-	/**
-	 * @return The where clause for matching with the row ID.
-	 */
-	private String getWhereClauseId()
-	{
-		return Contract.AlarmTable._ID + "=?";
 	}
 
 	/**
@@ -567,19 +516,6 @@ public class NacDatabase
 	}
 
 	/**
-	 * Print all alarms in the database.
-	 */
-	public void print()
-	{
-		List<NacAlarm> list = this.read();
-		for (NacAlarm a : list)
-		{
-			a.print();
-			NacUtility.print("\n");
-		}
-	}
-
-	/**
 	 * @see #read(SQLiteDatabase, int)
 	 */
 	public static List<NacAlarm> read(Context context)
@@ -626,108 +562,49 @@ public class NacDatabase
 	}
 
 	/**
-	 * Sort the database.
-	 */
-	public void sort(List<NacAlarm> sorted)
-	{
-		for (int i=0; i < sorted.size(); i++)
-		{
-			this.updateRow(i+1, sorted.get(i));
-		}
-	}
-
-	/**
-	 * Swap the IDs of two alarms.
-	 *
-	 * IDs will dictate the order in which alarms are displayed when the app is
-	 * started.
-	 *
-	 * @param  fromAlarm  An alarm that was moved.
-	 * @param  toAlarm	An alarm that was moved.
-	 */
-	public long swap(NacAlarm fromAlarm, NacAlarm toAlarm)
-	{
-		if ((fromAlarm == null) || (toAlarm == null))
-		{
-			return -1;
-		}
-
-		int fromId = this.getRowId(fromAlarm);
-		int toId = this.getRowId(toAlarm);
- 
-		SQLiteDatabase db = this.getWritableDatabase();
-		int version = db.getVersion();
-		String table = this.getAlarmTable();
-		ContentValues fromCv = this.getContentValues(version, fromAlarm);
-		ContentValues toCv = this.getContentValues(version, toAlarm);
-		String where = this.getWhereClauseId();
-		String[] fromArgs = this.getWhereArgs(toId);
-		String[] toArgs = this.getWhereArgs(fromId);
-		long result = 0;
-
-		db.beginTransaction();
-		try
-		{
-			long fromRows = db.update(table, fromCv, where, fromArgs);
-			long toRows = db.update(table, toCv, where, toArgs);
-			result = fromRows + toRows; 
-
-			db.setTransactionSuccessful();
-		}
-		finally
-		{
-			db.endTransaction();
-		}
-
-		return result;
-	}
-
-	/**
 	 * Convert a Cursor object to an alarm.
 	 *
 	 * This assumes the cursor object is already in position to retrieve data.
 	 */
 	public NacAlarm toAlarm(Cursor cursor, int version)
 	{
-		Context context = this.getContext();
-		NacAlarm alarm = new NacAlarm();
-		int offset = -1;
-
 		if (cursor == null)
 		{
 			return null;
 		}
 
+		Context context = this.getContext();
+		NacAlarm.Builder builder = new NacAlarm.Builder(context);
+
 		switch (version)
 		{
 			case 5:
-				alarm.setNfcTagId(cursor.getString(15));
-				alarm.setIsActive(cursor.getInt(16) != 0);
+				builder.setNfcTagId(cursor.getString(15))
+					.setIsActive(cursor.getInt(16) != 0);
 			case 4:
 			default:
-				alarm.setId(cursor.getInt(1));
-				alarm.setEnabled((cursor.getInt(2) != 0));
-				alarm.setHour(cursor.getInt(3));
-				alarm.setMinute(cursor.getInt(4));
-				alarm.setDays(cursor.getInt(5));
-				alarm.setRepeat((cursor.getInt(6) != 0));
-				alarm.setUseNfc((cursor.getInt(7) != 0));
-				alarm.setVibrate((cursor.getInt(8) != 0));
-				alarm.setVolume(cursor.getInt(9));
-				alarm.setAudioSource(cursor.getString(10));
-				alarm.setMediaType(cursor.getInt(11));
-				alarm.setMediaPath(cursor.getString(12));
-				alarm.setMediaTitle(cursor.getString(13));
-				alarm.setName(cursor.getString(14));
+				builder.setId(cursor.getInt(1))
+					.setEnabled((cursor.getInt(2) != 0))
+					.setHour(cursor.getInt(3))
+					.setMinute(cursor.getInt(4))
+					.setDays(cursor.getInt(5))
+					.setRepeat((cursor.getInt(6) != 0))
+					.setUseNfc((cursor.getInt(7) != 0))
+					.setVibrate((cursor.getInt(8) != 0))
+					.setVolume(cursor.getInt(9))
+					.setAudioSource(cursor.getString(10))
+					.setMediaType(cursor.getInt(11))
+					.setMediaPath(cursor.getString(12))
+					.setMediaTitle(cursor.getString(13))
+					.setName(cursor.getString(14));
 				break;
 		}
 
-		alarm.resetChangeTracker();
-		return alarm;
+		return builder.build();
 	}
 
 	/**
-	 * @see #update(List)
+	 * @see #update(SQLiteDatabase, NacAlarm)
 	 */
 	public long update(NacAlarm alarm)
 	{
@@ -736,38 +613,8 @@ public class NacDatabase
 			return -1;
 		}
 
-		List<NacAlarm> list = new ArrayList<>();
-		list.add(alarm);
-		return this.update(list);
-	}
-
-	/**
-	 * @see #update(SQLiteDatabase, List)
-	 */
-	public long update(List<NacAlarm> alarms)
-	{
-		if (alarms == null)
-		{
-			return -1;
-		}
-
 		SQLiteDatabase db = this.getWritableDatabase();
-		return this.update(db, alarms);
-	}
-
-	/**
-	 * @see #update(SQLiteDatabase, List)
-	 */
-	public long update(SQLiteDatabase db, NacAlarm alarm)
-	{
-		if (alarm == null)
-		{
-			return -1;
-		}
-
-		List<NacAlarm> list = new ArrayList<>();
-		list.add(alarm);
-		return this.update(db, list);
+		return this.update(db, alarm);
 	}
 
 	/**
@@ -775,70 +622,10 @@ public class NacDatabase
 	 *
 	 * @return The number of alarms that were updated.
 	 *
-	 * @param  db      The SQLite database.
-	 * @param  alarms  The list of alarms to update.
-	 */
-	public long update(SQLiteDatabase db, List<NacAlarm> alarms)
-	{
-		if ((alarms == null) || (alarms.size() == 0))
-		{
-			return -1;
-		}
-
-		int version = db.getVersion();
-		String table = this.getAlarmTable();
-		String where = this.getWhereClause();
-		long result = 0;
-
-		db.beginTransaction();
-		try
-		{
-			for (NacAlarm a : alarms)
-			{
-				if (a == null)
-				{
-					return -1;
-				}
-
-				ContentValues cv = this.getContentValues(version, a);
-				String[] args = this.getWhereArgs(a);
-				result += db.update(table, cv, where, args);
-			}
-
-			db.setTransactionSuccessful();
-		}
-		finally
-		{
-			db.endTransaction();
-		}
-
-		return result;
-	}
-
-	/**
-	 * @see #updateRow(SQLiteDatabase, int, NacAlarm)
-	 */
-	public long updateRow(int rowId, NacAlarm alarm)
-	{
-		if (alarm == null)
-		{
-			return -1;
-		}
-
-		SQLiteDatabase db = this.getWritableDatabase();
-		return this.updateRow(db, rowId, alarm);
-	}
-
-	/**
-	 * Update an alarm in the database matching the given row ID.
-	 *
-	 * @return The number of rows updated. Should normally be 1, if successful.
-	 *
 	 * @param  db     The SQLite database.
-	 * @param  rowId  The row ID.
 	 * @param  alarm  The alarm to update.
 	 */
-	public long updateRow(SQLiteDatabase db, int rowId, NacAlarm alarm)
+	public long update(SQLiteDatabase db, NacAlarm alarm)
 	{
 		if (alarm == null)
 		{
@@ -848,14 +635,15 @@ public class NacDatabase
 		int version = db.getVersion();
 		String table = this.getAlarmTable();
 		ContentValues cv = this.getContentValues(version, alarm);
-		String where = this.getWhereClauseId();
-		String[] args = this.getWhereArgs(rowId);
-		long result = 0;
+		String where = this.getWhereClause();
+		String[] args = this.getWhereArgs(alarm);
+		long result;
 
 		db.beginTransaction();
 		try
 		{
 			result = db.update(table, cv, where, args);
+
 			db.setTransactionSuccessful();
 		}
 		finally
@@ -879,16 +667,6 @@ public class NacDatabase
 	 */
 	public static final class Contract
 	{
-
-		/**
-		 * Full app name.
-		 */
-		public static final String AUTHORITY = "com.nfcalarmclock";
-
-		/**
-		 * Scheme.
-		 */
-		public static final String SCHEME = "content://";
 
 		/**
 		 * prevent someone from instantiating the contract class.
@@ -997,38 +775,6 @@ public class NacDatabase
 			public static final String COLUMN_IS_ACTIVE = "IsActive";
 
 			/**
-			 * The content style URI
-			 */
-			public static final Uri CONTENT_URI = Uri.parse(SCHEME + AUTHORITY
-				+ "/" + TABLE_NAME);
-
-			/**
-			 * The content URI base for a single row. An ID must be appended.
-			 */
-			public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME
-				+ AUTHORITY + "/" + TABLE_NAME + "/");
-
-			/**
-			 * The default sort order for this table
-			 */
-			public static final String DEFAULT_SORT_ORDER = COLUMN_HOUR
-				+ " ASC";
-
-			/**
-			 * The MIME type of {@link #CONTENT_URI} providing rows
-			 */
-			public static final String CONTENT_TYPE =
-				ContentResolver.CURSOR_DIR_BASE_TYPE
-					+ "/vnd.com.nfcalarmclock";
-
-			/**
-			 * The MIME type of a {@link #CONTENT_URI} single row
-			 */
-			public static final String CONTENT_ITEM_TYPE =
-				ContentResolver.CURSOR_ITEM_BASE_TYPE
-					+ "/vnd.com.nfcalarmclock";
-
-			/**
 			 * SQL Statement to create the table (version 5).
 			 */
 			public static final String CREATE_TABLE_V5 =
@@ -1081,28 +827,6 @@ public class NacDatabase
 			 */
 			public static final String DELETE_TABLE =
 				"DROP TABLE IF EXISTS " + TABLE_NAME;
-
-			/**
-			 * Array of all the columns.
-			 */
-			public static final String[] KEY_ARRAY = {
-				COLUMN_ID,
-				COLUMN_ENABLED,
-				COLUMN_HOUR,
-				COLUMN_MINUTE,
-				COLUMN_DAYS,
-				COLUMN_REPEAT,
-				COLUMN_USE_NFC,
-				COLUMN_VIBRATE,
-				COLUMN_VOLUME,
-				COLUMN_AUDIO_SOURCE,
-				COLUMN_MEDIA_TYPE,
-				COLUMN_MEDIA_PATH,
-				COLUMN_MEDIA_NAME,
-				COLUMN_NAME,
-				COLUMN_NFC_TAG,
-				COLUMN_IS_ACTIVE
-			};
 
 		}
 
@@ -1165,51 +889,20 @@ public class NacDatabase
 		{
 			String key = intent.getDataString();
 
-			if (key.equals("swap"))
+			NacAlarm alarm = NacIntent.getAlarm(intent);
+
+			if (key.equals("add"))
 			{
-				NacAlarm[] alarms = NacIntent.getAlarms(intent);
-				BackgroundService.swapAlarms(this, alarms[0], alarms[1]);
+				BackgroundService.addAlarm(this, alarm);
 			}
-			else
+			else if (key.equals("delete"))
 			{
-				NacAlarm alarm = NacIntent.getAlarm(intent);
-
-				if (key.equals("add"))
-				{
-					BackgroundService.addAlarm(this, alarm);
-				}
-				else if (key.equals("delete"))
-				{
-					BackgroundService.deleteAlarm(this, alarm);
-				}
-				else if (key.equals("update"))
-				{
-					BackgroundService.updateAlarm(this, alarm);
-				}
+				BackgroundService.deleteAlarm(this, alarm);
 			}
-		}
-
-		/**
-		 * Swap two alarms.
-		 */
-		public static void swapAlarms(Context context, NacAlarm fromAlarm,
-			NacAlarm toAlarm)
-		{
-			NacDatabase db = new NacDatabase(context);
-			NacSharedPreferences shared = new NacSharedPreferences(context);
-			int fromId = fromAlarm.getId();
-			int toId = toAlarm.getId();
-			int fromSnoozeCount = shared.getSnoozeCount(fromId);
-			int toSnoozeCount = shared.getSnoozeCount(toId);
-
-			NacScheduler.cancel(context, fromAlarm);
-			NacScheduler.cancel(context, toAlarm);
-			db.swap(fromAlarm, toAlarm);
-			db.close();
-			NacScheduler.add(context, fromAlarm);
-			NacScheduler.add(context, toAlarm);
-			shared.editSnoozeCount(fromId, toSnoozeCount);
-			shared.editSnoozeCount(toId, fromSnoozeCount);
+			else if (key.equals("update"))
+			{
+				BackgroundService.updateAlarm(this, alarm);
+			}
 		}
 
 		/**

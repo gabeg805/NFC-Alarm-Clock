@@ -191,7 +191,7 @@ public class NacActiveAlarmNotification
 		Resources res = context.getResources();
 		Bitmap icon = BitmapFactory.decodeResource(res, R.mipmap.app);
 		float density = res.getDisplayMetrics().density;
-		float size = 0f;
+		float size;
 
 		if (Float.compare(density, 4.0f) >= 0)
 		{
@@ -272,14 +272,6 @@ public class NacActiveAlarmNotification
 			null, context, NacForegroundService.class);
 
 		return PendingIntent.getService(context, 0, intent, 0);
-	}
-
-	/**
-	 * @return True if the given group matches this notification group.
-	 */
-	public static boolean isActiveGroup(String groupKey)
-	{
-		return GROUP.equals(groupKey);
 	}
 
 	/**

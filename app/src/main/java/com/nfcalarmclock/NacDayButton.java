@@ -53,7 +53,6 @@ public class NacDayButton
 
 			try
 			{
-				Resources res = context.getResources();
 				this.width = (int) ta.getDimension(R.styleable.NacDayButton_nacWidth,
 					ViewGroup.LayoutParams.WRAP_CONTENT);
 				this.height = (int) ta.getDimension(R.styleable.NacDayButton_nacHeight,
@@ -159,14 +158,6 @@ public class NacDayButton
 	public NacDayButton.OnDayChangedListener getOnDayChangedListener()
 	{
 		return this.mOnDayChangedListener;
-	}
-
-	/**
-	 * @return The text in the button.
-	 */
-	public String getText()
-	{
-		return this.getButton().getText().toString();
 	}
 
 	/**
@@ -294,21 +285,6 @@ public class NacDayButton
 
 		this.setSize(attrs.width, attrs.height);
 		this.setText(attrs.text);
-	}
-
-	/**
-	 * Toggle and animate the view.
-	 */
-	public void toggle()
-	{
-		if (this.isEnabled())
-		{
-			this.disable();
-		}
-		else
-		{
-			this.enable();
-		}
 	}
 
 }

@@ -2,7 +2,6 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.AlarmClock;
 import java.util.ArrayList;
@@ -18,16 +17,6 @@ public class NacIntent
 	 * Tag name for retrieving a NacAlarm from a bundle.
 	 */
 	public static final String ALARM_BUNDLE_NAME = "NacAlarmBundle";
-
-	/**
-	 * Tag name for retrieving the "From" NacAlarm from a bundle.
-	 */
-	public static final String ALARM_FROM_BUNDLE_NAME = "NacAlarmFromBundle";
-
-	/**
-	 * Tag name for retrieving the "To" NacAlarm from a bundle.
-	 */
-	public static final String ALARM_TO_BUNDLE_NAME = "NacAlarmToBundle";
 
 	/**
 	 * Tag name for retrieving a media path from a bundle.
@@ -79,6 +68,7 @@ public class NacIntent
 	/**
 	 * @return The intent that will be used to start the foreground alarm service.
 	 */
+	@SuppressWarnings("unused")
 	public static Intent createForegroundService(Context context, NacAlarm alarm)
 	{
 		Bundle bundle = NacBundle.toBundle(alarm);
@@ -93,53 +83,6 @@ public class NacIntent
 		Intent intent = new Intent(NacForegroundService.ACTION_START_SERVICE, null,
 			context, NacForegroundService.class);
 		return NacIntent.addAlarm(intent, bundle);
-	}
-
-	/**
-	 * @return The intent that will be used when starting the service for
-	 *         excecuting schedule and database updates.
-	 */
-	public static Intent createService(Context context, String message,
-		NacAlarm alarm)
-	{
-		if (alarm == null)
-		{
-			return null;
-		}
-
-		Intent intent = new Intent(context,
-			NacDatabase.BackgroundService.class);
-		Bundle bundle = NacBundle.toBundle(alarm);
-		Uri uri = Uri.parse(message);
-
-		intent.putExtra(ALARM_BUNDLE_NAME, bundle);
-		intent.setData(uri);
-
-		return intent;
-	}
-
-	/**
-	 * @return An intent to swap two alarms.
-	 */
-	public static Intent createService(Context context, String message,
-		NacAlarm fromAlarm, NacAlarm toAlarm)
-	{
-		if ((fromAlarm == null) || (toAlarm == null))
-		{
-			return null;
-		}
-
-		Intent intent = new Intent(context,
-			NacDatabase.BackgroundService.class);
-		Bundle fromBundle = NacBundle.toBundle(fromAlarm);
-		Bundle toBundle = NacBundle.toBundle(toAlarm);
-		Uri uri = Uri.parse(message);
-
-		intent.putExtra(ALARM_FROM_BUNDLE_NAME, fromBundle);
-		intent.putExtra(ALARM_TO_BUNDLE_NAME, toBundle);
-		intent.setData(uri);
-
-		return intent;
 	}
 
 	/**
@@ -186,46 +129,11 @@ public class NacIntent
 	}
 
 	/**
-	 * @return The alarms that are associated with the given intent.
-	 */
-	public static NacAlarm[] getAlarms(Intent intent)
-	{
-		if (intent == null)
-		{
-			return null;
-		}
-
-		Bundle fromBundle = NacIntent.getAlarmFromBundle(intent);
-		Bundle toBundle = NacIntent.getAlarmToBundle(intent);
-		NacAlarm[] alarms = new NacAlarm[2];
-		alarms[0] = NacBundle.getAlarm(fromBundle);
-		alarms[1] = NacBundle.getAlarm(toBundle);
-
-		return alarms;
-	}
-
-	/**
 	 * @see #getBundle(Intent, String)
 	 */
 	public static Bundle getAlarmBundle(Intent intent)
 	{
 		return NacIntent.getBundle(intent, ALARM_BUNDLE_NAME);
-	}
-
-	/**
-	 * @see #getBundle(Intent, String)
-	 */
-	public static Bundle getAlarmFromBundle(Intent intent)
-	{
-		return NacIntent.getBundle(intent, ALARM_FROM_BUNDLE_NAME);
-	}
-
-	/**
-	 * @see #getBundle(Intent, String)
-	 */
-	public static Bundle getAlarmToBundle(Intent intent)
-	{
-		return NacIntent.getBundle(intent, ALARM_TO_BUNDLE_NAME);
 	}
 
 	/**
@@ -350,9 +258,7 @@ public class NacIntent
 		}
 
 		String action = intent.getAction();
-
-		return (action != null) ? action.equals(AlarmClock.ACTION_SET_ALARM)
-			: false;
+		return (action != null) && action.equals(AlarmClock.ACTION_SET_ALARM);
 	}
 
 	/**
@@ -368,7 +274,7 @@ public class NacIntent
 	/**
 	 * @return An intent that allows you to stop the alarm activity.
 	 */
-	public static Intent stopAlarmActivity(Context context, NacAlarm alarm)
+	public static Intent stopAlarmActivity(NacAlarm alarm)
 	{
 		Intent intent = new Intent(NacAlarmActivity.ACTION_STOP_ACTIVITY);
 		return NacIntent.addAlarm(intent, alarm);
@@ -377,19 +283,12 @@ public class NacIntent
 	/**
 	 * @return An intent that will be used to stop the foreground alarm service.
 	 */
+	@SuppressWarnings("unused")
 	public static Intent stopForegroundService(Context context, NacAlarm alarm)
 	{
 		Intent intent = new Intent(NacForegroundService.ACTION_STOP_SERVICE, null,
 			context, NacForegroundService.class);
 		return NacIntent.addAlarm(intent, alarm);
-	}
-
-	/**
-	 * @return An intent with a sound.
-	 */
-	public static Intent toIntent(NacAlarm alarm)
-	{
-		return NacIntent.toIntent(null, null, alarm);
 	}
 
 	/**

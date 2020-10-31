@@ -53,7 +53,8 @@ public class NacCardHolder
 	 */
 	public interface OnCardCollapsedListener
 	{
-		public void onCardCollapsed(NacCardHolder holder, NacAlarm alarm);
+		@SuppressWarnings("unused")
+        public void onCardCollapsed(NacCardHolder holder, NacAlarm alarm);
 	}
 
 	/**
@@ -61,6 +62,7 @@ public class NacCardHolder
 	 */
 	public interface OnCardExpandedListener
 	{
+		@SuppressWarnings("unused")
 		public void onCardExpanded(NacCardHolder holder, NacAlarm alarm);
 	}
 
@@ -69,7 +71,7 @@ public class NacCardHolder
 	 */
 	public interface OnDeleteClickedListener
 	{
-		public void onDeleteClicked(int pos);
+        public void onDeleteClicked(int pos);
 	}
 
 	/**
@@ -524,9 +526,7 @@ public class NacCardHolder
 	 */
 	public void doDayButtonClick(NacCalendar.Day day)
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
-
 		alarm.toggleDay(day);
 
 		if (!alarm.areDaysSelected())
@@ -624,7 +624,6 @@ public class NacCardHolder
 	 */
 	public void doRepeatButtonLongClick()
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 
 		alarm.setRepeat(false);
@@ -1082,8 +1081,6 @@ public class NacCardHolder
 	 */
 	public void initColors()
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-
 		this.setDividerColor();
 		this.setTimeColor();
 		this.setMeridianColor();
@@ -1109,7 +1106,6 @@ public class NacCardHolder
 	 */
 	public void initListeners(Object listener)
 	{
-		View root = this.getRoot();
 		View.OnClickListener click = (View.OnClickListener) listener;
 		View.OnLongClickListener longClick = (View.OnLongClickListener) listener;
 		NacDayOfWeek.OnWeekChangedListener dow =
@@ -1150,8 +1146,6 @@ public class NacCardHolder
 	 */
 	public void initViews()
 	{
-		NacAlarm alarm = this.getAlarm();
-
 		this.setDismissView();
 		this.setTimeView();
 		this.setMeridianView();
@@ -1319,9 +1313,6 @@ public class NacCardHolder
 	public void onClick(View view)
 	{
 		int id = view.getId();
-		Context context = this.getContext();
-		NacAlarm alarm = this.getAlarm();
-
 		if ((id == R.id.nac_header)
 			|| (id == R.id.nac_summary)
 			|| (id == R.id.nac_dismiss_parent)
@@ -1391,9 +1382,6 @@ public class NacCardHolder
 			alarm.setAudioSource(source);
 			alarm.changed();
 		}
-		else
-		{
-		}
 
 		return true;
 	}
@@ -1446,7 +1434,6 @@ public class NacCardHolder
 	@Override
 	public void onTimeSet(TimePicker tp, int hr, int min)
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 
 		alarm.setHour(hr);
@@ -1888,15 +1875,15 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 		boolean repeat = alarm.getRepeat();
 
-		if (!alarm.areDaysSelected())
-		{
-			button.setChecked(false);
-			button.setEnabled(false);
-		}
-		else
+		if (alarm.areDaysSelected())
 		{
 			button.setEnabled(true);
 			button.setChecked(repeat);
+		}
+		else
+		{
+			button.setChecked(false);
+			button.setEnabled(false);
 		}
 	}
 

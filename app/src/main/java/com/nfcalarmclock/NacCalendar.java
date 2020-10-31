@@ -224,10 +224,8 @@ public class NacCalendar
 
 			Calendar calendar = NacCalendar.getNextAlarmDay(a);
 
-			if (calendar == null)
-			{
-			}
-			else if ((nextCalendar == null) || calendar.before(nextCalendar))
+			if ((nextCalendar == null)
+				|| ((calendar != null) && calendar.before(nextCalendar)))
 			{
 				nextCalendar = calendar;
 				nextAlarm = a;
@@ -257,18 +255,10 @@ public class NacCalendar
 
 		for (Calendar c : calendars)
 		{
-			next = ((next == null) || !next.before(c)) ? c : next;
+			next = ((next == null) || next.after(c)) ? c : next;
 		}
 
 		return next;
-	}
-
-	/**
-	 * @see #getToday(NacAlarm)
-	 */
-	public static Calendar getToday()
-	{
-		return NacCalendar.getToday(null);
 	}
 
 	/**
@@ -287,26 +277,6 @@ public class NacCalendar
 		}
 
 		return today;
-	}
-
-	/**
-	 * @see #getTomorrow(NacAlarm)
-	 */
-	public static Calendar getTomorrow()
-	{
-		return NacCalendar.getTomorrow(null);
-	}
-
-	/**
-	 * @return Tomorrow's day, with the alarm hour and minute, if supplied.
-	 */
-	public static Calendar getTomorrow(NacAlarm alarm)
-	{
-		Calendar tomorrow = NacCalendar.getToday(alarm);
-
-		tomorrow.add(Calendar.DAY_OF_MONTH, 1);
-
-		return tomorrow;
 	}
 
 	/**
@@ -344,24 +314,22 @@ public class NacCalendar
 	{
 		List<Calendar> calendars = new ArrayList<>();
 
-		if (alarm == null)
+		if (alarm != null)
 		{
-		}
-		else if (!alarm.areDaysSelected())
-		{
-			Calendar c = NacCalendar.toNextOneTimeCalendar(alarm);
-
-			calendars.add(c);
-		}
-		else
-		{
-			EnumSet<Day> days = alarm.getDays();
-
-			for (Day d : days)
+			if (!alarm.areDaysSelected())
 			{
-				Calendar c = NacCalendar.toNextCalendar(alarm, d);
-
+				Calendar c = NacCalendar.toNextOneTimeCalendar(alarm);
 				calendars.add(c);
+			}
+			else
+			{
+				EnumSet<Day> days = alarm.getDays();
+
+				for (Day d : days)
+				{
+					Calendar c = NacCalendar.toNextCalendar(alarm, d);
+					calendars.add(c);
+				}
 			}
 		}
 
@@ -376,7 +344,13 @@ public class NacCalendar
 		Calendar today = NacCalendar.getToday(alarm);
 		Calendar now = Calendar.getInstance();
 
-		return (today.after(now)) ? today : NacCalendar.getTomorrow(alarm);
+		if (today.before(now))
+		{
+			today.add(Calendar.DAY_OF_MONTH, 1);
+		}
+
+		return today;
+		//return today.after(now) ? today : NacCalendar.getTomorrow(alarm);
 	}
 
 	/**
@@ -440,51 +414,12 @@ public class NacCalendar
 		}
 
 		/**
-		 * Convert from an index to a Day.
-		 *
-		 * @param  index  A day index from 0-6, corresponding to the days of the
-		 *                week, starting on Sunday.
-		 *
-		 * @return A Day.
-		 */
-		public static Day fromIndex(int index)
-		{
-			int i = 0;
-
-			for (Day d : WEEK)
-			{
-				if (i == index)
-				{
-					return d;
-				}
-
-				i++;
-			}
-
-			return Day.SUNDAY;
-		}
-
-		/**
 		 * @return The Day today.
 		 */
 		public static Day getToday()
 		{
 			Calendar today = Calendar.getInstance();
 			int dow = today.get(Calendar.DAY_OF_WEEK);
-
-			return NacCalendar.Days.toWeekDay(dow);
-		}
-
-		/**
-		 * @return The tomorrow Day.
-		 */
-		public static Day getTomorrow()
-		{
-			Calendar tomorrow = Calendar.getInstance();
-
-			tomorrow.add(Calendar.DAY_OF_MONTH, 1);
-
-			int dow = tomorrow.get(Calendar.DAY_OF_WEEK);
 
 			return NacCalendar.Days.toWeekDay(dow);
 		}
@@ -581,7 +516,7 @@ public class NacCalendar
 		}
 
 		/**
-		 * @see #toIndex(Day)
+		 * @see #toIndex(NacCalendar.Day)
 		 */
 		public static int toIndex(int day)
 		{
@@ -641,7 +576,7 @@ public class NacCalendar
 
 			List<String> dow = cons.getDaysOfWeekAbbr();
 			List<Day> days = Arrays.asList(Day.values());
-			String string = "";
+			StringBuilder summary = new StringBuilder(32);
 
 			for (int count=0, i=start;
 				count < WEEK_LENGTH;
@@ -649,18 +584,16 @@ public class NacCalendar
 			{
 				if (daysToConvert.contains(days.get(i)))
 				{
-					if (!string.isEmpty())
+					if (summary.length() != 0)
 					{
-						//string.concat(" \u2027 ");
-						string += " \u2027 ";
+						summary.append(" \u2027 ");
 					}
 
-					//string.concat(dow.get(i));
-					string += dow.get(i);
+					summary.append(dow.get(i));
 				}
 			}
 
-			return string;
+			return summary.toString();
 		}
 
 		/**
@@ -748,18 +681,6 @@ public class NacCalendar
 	{
 
 		/**
-		 * @see #getClockTime(Context, int, int)
-		 */
-		public static String getClockTime(Context context)
-		{
-			Calendar calendar = Calendar.getInstance();
-			int hour = calendar.get(Calendar.HOUR_OF_DAY);
-			int minute = calendar.get(Calendar.MINUTE);
-
-			return NacCalendar.Time.getClockTime(context, hour, minute);
-		}
-
-		/**
 		 * @param  context  The application context.
 		 * @param  hour  The hour.
 		 * @param  minute  The minutes.
@@ -826,31 +747,6 @@ public class NacCalendar
 			{
 				return (hour < 12) ? cons.getAm() : cons.getPm();
 			}
-		}
-
-		/**
-		 * @see #getTime(Context, int, int)
-		 */
-		public static String getTime(Context context)
-		{
-			Calendar calendar = Calendar.getInstance();
-			int hour = calendar.get(Calendar.HOUR_OF_DAY);
-			int minute = calendar.get(Calendar.MINUTE);
-
-			return NacCalendar.Time.getTime(context, hour, minute);
-		}
-
-		/**
-		 * @return The full time string, HH:MM AM/PM.
-		 */
-		public static String getTime(Context context, int hour, int minute)
-		{
-			String time = NacCalendar.Time.getClockTime(context, hour, minute);
-			String meridian = NacCalendar.Time.getMeridian(context, hour);
-			Locale locale = Locale.getDefault();
-
-			return meridian.isEmpty() ? time
-				: String.format(locale, "%1$s %2$s", time, meridian);
 		}
 
 		/**

@@ -122,13 +122,13 @@ public class NacScheduler
 	{
 		NacDatabase db = new NacDatabase(context);
 
-		if (!alarm.areDaysSelected())
+		if (alarm.areDaysSelected())
 		{
-			alarm.setEnabled(false);
+			alarm.toggleToday();
 		}
 		else
 		{
-			alarm.toggleToday();
+			alarm.setEnabled(false);
 		}
 
 		db.update(alarm);

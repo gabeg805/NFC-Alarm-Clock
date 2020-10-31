@@ -132,7 +132,7 @@
 	<string name="next_alarm">Próxima alarma</string>
 	<string name="will_run">Va sonar</string>
 	<string name="time_in">en</string>
-	<string name="time_on"></string>
+    <string name="time_on" />
 	<string name="is_disabled">está desactivada</string>
 
 
