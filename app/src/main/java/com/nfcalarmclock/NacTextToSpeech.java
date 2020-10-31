@@ -10,6 +10,7 @@ import java.util.Locale;
 /**
  * Text to speech.
  */
+@SuppressWarnings({"RedundantSuppression", "UnnecessaryInterfaceModifier"})
 public class NacTextToSpeech
 	implements TextToSpeech.OnInitListener,
 		AudioManager.OnAudioFocusChangeListener

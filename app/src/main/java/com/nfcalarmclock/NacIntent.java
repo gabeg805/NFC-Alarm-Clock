@@ -10,6 +10,7 @@ import java.util.EnumSet;
 
 /**
  */
+@SuppressWarnings("RedundantSuppression")
 public class NacIntent
 {
 

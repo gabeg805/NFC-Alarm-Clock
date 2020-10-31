@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 /**
  * Activity to dismiss/snooze the alarm.
  */
+@SuppressWarnings("RedundantSuppression")
 public class NacAlarmActivity
 	extends Activity
 	implements View.OnClickListener

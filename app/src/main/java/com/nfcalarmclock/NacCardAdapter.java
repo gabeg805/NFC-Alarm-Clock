@@ -20,6 +20,7 @@ import java.util.Locale;
 /**
  * Alarm card adapter.
  */
+@SuppressWarnings("UnnecessaryInterfaceModifier")
 public class NacCardAdapter
 	extends RecyclerView.Adapter<NacCardHolder>
 	implements View.OnClickListener,
@@ -36,7 +37,7 @@ public class NacCardAdapter
 	/**
 	 * Definition for the use NFC change listener.
 	 */
-	public interface OnUseNfcChangeListener
+    public interface OnUseNfcChangeListener
 	{
         public void onUseNfcChange(NacAlarm alarm);
 	}
@@ -164,7 +165,7 @@ public class NacCardAdapter
 	 */
 	public void addAlarm(NacAlarm alarm, int index)
 	{
-		if (!this.canAddAlarm())
+		if (this.atMaxAlarmCapacity())
 		{
 			this.toastMaxAlarmsError();
 			return;
@@ -175,6 +176,19 @@ public class NacCardAdapter
 		NacTaskWorker.addAlarm(context, alarm);
 		this.notifyInsertAlarm(alarm, index);
 		this.updateNotification();
+	}
+
+	/**
+	 * @return True if the maximum number of alarms has been created, and False
+	 *     otherwise.
+	 */
+	public boolean atMaxAlarmCapacity()
+	{
+		NacSharedConstants cons = this.getSharedConstants();
+		int size = this.size();
+
+		return ((size+1) > cons.getMaxAlarms());
+		//return ((size+1) <= cons.getMaxAlarms());
 	}
 
 	/**
@@ -215,17 +229,6 @@ public class NacCardAdapter
 			listener.onUseNfcChange(alarm);
 			alarm.resetChangeTracker();
 		}
-	}
-
-	/**
-	 * @return True if an alarm can be added, and False otherwise.
-	 */
-	public boolean canAddAlarm()
-	{
-		NacSharedConstants cons = this.getSharedConstants();
-		int size = this.size();
-
-		return ((size+1) <= cons.getMaxAlarms());
 	}
 
 	/**
@@ -273,7 +276,7 @@ public class NacCardAdapter
 	{
 		notifyItemChanged(index);
 
-		if (!this.canAddAlarm())
+		if (this.atMaxAlarmCapacity())
 		{
 			this.toastMaxAlarmsError();
 			return;
@@ -869,7 +872,7 @@ public class NacCardAdapter
 	 */
 	public void restore(NacAlarm alarm, int position)
 	{
-		if (!this.canAddAlarm())
+		if (this.atMaxAlarmCapacity())
 		{
 			this.toastMaxAlarmsError();
 			return;

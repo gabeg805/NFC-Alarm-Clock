@@ -15,6 +15,7 @@ import java.util.Locale;
 /**
  * A file browser.
  */
+@SuppressWarnings({"RedundantSuppression", "UnnecessaryInterfaceModifier"})
 public class NacFileBrowser
 	implements View.OnClickListener
 {

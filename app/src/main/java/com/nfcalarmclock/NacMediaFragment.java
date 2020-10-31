@@ -244,7 +244,8 @@ public class NacMediaFragment
 	 * @param  repeat      Whether the media player should repeat the media or
 	 *     not.
 	 */
-	protected int safePlay(Uri contentUri, boolean repeat)
+	@SuppressWarnings("SameParameterValue")
+    protected int safePlay(Uri contentUri, boolean repeat)
 	{
 		String path = contentUri.toString();
 

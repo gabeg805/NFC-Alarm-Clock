@@ -10,6 +10,7 @@ import android.provider.Settings;
 
 /**
  */
+@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public class NacNfc
 {
 

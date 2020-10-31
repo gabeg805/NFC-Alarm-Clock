@@ -10,6 +10,7 @@ import java.util.Locale;
 /**
  * Alarm object.
  */
+@SuppressWarnings({"BooleanMethodIsAlwaysInverted", "RedundantSuppression", "UnnecessaryInterfaceModifier"})
 public class NacAlarm
 	implements Parcelable
 {

@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * Audio container.
  */
+@SuppressWarnings({"BooleanMethodIsAlwaysInverted", "RedundantSuppression", "UnusedReturnValue"})
 public class NacAudio
 {
 

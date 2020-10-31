@@ -7,6 +7,7 @@ import com.google.android.material.button.MaterialButton;
 /**
  * Create a spinner dialog.
  */
+@SuppressWarnings("RedundantSuppression")
 public class NacSpinnerDialog
 	extends NacDialog
 	implements View.OnClickListener,

@@ -9,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 /**
  */
+@SuppressWarnings("RedundantSuppression")
 public class NacSnackbar
 	implements View.OnClickListener
 {

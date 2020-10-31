@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 
@@ -17,6 +16,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
  * A button that consists of an image to the left, and text to the right
  * of it.
  */
+@SuppressWarnings("UnnecessaryInterfaceModifier")
 public class NacDayButton
 	extends LinearLayout
 	implements View.OnClickListener,

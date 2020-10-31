@@ -15,6 +15,7 @@ import java.util.List;
 /**
  * NFC Alarm Clock database.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class NacDatabase
 	extends SQLiteOpenHelper
 {
@@ -312,7 +313,8 @@ public class NacDatabase
 	/**
 	 * @return The alarm table name.
 	 */
-	private String getAlarmTable()
+	@SuppressWarnings("SameReturnValue")
+    private String getAlarmTable()
 	{
 		return Contract.AlarmTable.TABLE_NAME;
 	}

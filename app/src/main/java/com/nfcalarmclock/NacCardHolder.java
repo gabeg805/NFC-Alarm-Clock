@@ -36,6 +36,7 @@ import java.util.EnumSet;
 /**
  * Card view holder.
  */
+@SuppressWarnings({"RedundantSuppression", "UnnecessaryInterfaceModifier"})
 public class NacCardHolder
 	extends RecyclerView.ViewHolder
 	implements View.OnClickListener,
@@ -62,7 +63,7 @@ public class NacCardHolder
 	 */
 	public interface OnCardExpandedListener
 	{
-		@SuppressWarnings("unused")
+		@SuppressWarnings({"unused", "EmptyMethod"})
 		public void onCardExpanded(NacCardHolder holder, NacAlarm alarm);
 	}
 

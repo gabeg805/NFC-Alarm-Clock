@@ -17,6 +17,7 @@ import java.util.Locale;
 
 /**
  */
+@SuppressWarnings("RedundantSuppression")
 public class NacMedia
 {
 

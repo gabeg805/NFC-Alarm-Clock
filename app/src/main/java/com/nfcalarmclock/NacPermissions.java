@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 /**
  * Permissions class handling checks, listeners, etc.
  */
+@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public class NacPermissions
 {
 

@@ -8,6 +8,7 @@ import java.util.Locale;
 /**
  * Container for the values of each preference.
  */
+@SuppressWarnings("RedundantSuppression")
 public class NacSharedPreferences
 {
 

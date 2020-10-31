@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 /**
  * Touch helper.
  */
+@SuppressWarnings("UnnecessaryInterfaceModifier")
 public class NacCardTouchHelper
 	extends ItemTouchHelper
 {
@@ -199,7 +200,6 @@ public class NacCardTouchHelper
 				return 0;
 			}
 
-			//return makeMovementFlags(ItemTouchHelper.UP|ItemTouchHelper.DOWN,
 			return makeMovementFlags(0,
 				ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT);
 		}
@@ -330,33 +330,6 @@ public class NacCardTouchHelper
 		}
 
 		/**
-		 * Called when the item that was selected has changed.
-		 * 
-		 * @param  vh  The view holder.
-		 * @param  action  The action that was taken.
-		 */
-		@Override
-		public void onSelectedChanged(ViewHolder vh, int action)
-		{
-			if (vh != null)
-			{
-				if (!this.isCollapsed())
-				{
-					return;
-				}
-
-				final View fg = this.getCardView(action);
-
-				//if (action == ItemTouchHelper.ACTION_STATE_DRAG)
-				//{
-				//	fg.setAlpha(0.75f);
-				//}
-
-				getDefaultUIUtil().onSelected(fg);
-			}
-		}
-
-		/**
 		 * Called when item is swiped.
 		 *
 		 * @param  vh  The view holder.
@@ -368,7 +341,7 @@ public class NacCardTouchHelper
 			// This may be unnecessary
 			this.mViewHolder = vh;
 
-			if (this.isCollapsed())
+			if (!this.isCollapsed())
 			{
 				return;
 			}

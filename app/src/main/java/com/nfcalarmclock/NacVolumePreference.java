@@ -18,6 +18,7 @@ import androidx.preference.PreferenceViewHolder;
 /**
  * Preference to choose the default volume and audio source.
  */
+@SuppressWarnings("RedundantSuppression")
 public class NacVolumePreference
 	extends Preference
 	implements View.OnClickListener,

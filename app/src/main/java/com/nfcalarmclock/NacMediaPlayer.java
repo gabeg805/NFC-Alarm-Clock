@@ -13,6 +13,7 @@ import java.util.List;
 /**
  * Wrapper for the MediaPlayer class.
  */
+@SuppressWarnings({"RedundantSuppression", "UnusedReturnValue"})
 public class NacMediaPlayer
 	extends MediaPlayer
 	implements MediaPlayer.OnCompletionListener,

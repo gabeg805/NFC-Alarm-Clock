@@ -3,7 +3,6 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
-
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -11,6 +10,7 @@ import java.util.List;
 /**
  * A button that consists of an image to the left, and text to the right of it.
  */
+@SuppressWarnings({"UnnecessaryInterfaceModifier", "UnusedReturnValue"})
 public class NacDayOfWeek
 	implements NacDayButton.OnDayChangedListener
 {
@@ -24,7 +24,8 @@ public class NacDayOfWeek
 	 */
 	public interface OnWeekChangedListener
 	{
-		public boolean onWeekChanged(NacDayButton button, NacCalendar.Day day);
+		@SuppressWarnings("SameReturnValue")
+        public boolean onWeekChanged(NacDayButton button, NacCalendar.Day day);
 	}
 
 	/**

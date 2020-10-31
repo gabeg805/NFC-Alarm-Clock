@@ -18,6 +18,7 @@ import java.util.List;
 /**
  * A generic dialog object.
  */
+@SuppressWarnings({"BooleanMethodIsAlwaysInverted", "RedundantSuppression", "UnnecessaryInterfaceModifier"})
 public class NacDialog
 	implements View.OnClickListener,
 		View.OnLayoutChangeListener,
@@ -38,7 +39,8 @@ public class NacDialog
 	 */
 	public interface OnCancelListener
 	{
-		public boolean onCancelDialog(NacDialog dialog);
+		@SuppressWarnings("SameReturnValue")
+        public boolean onCancelDialog(NacDialog dialog);
 	}
 
 	/**
@@ -46,6 +48,7 @@ public class NacDialog
 	 */
 	public interface OnDismissListener
 	{
+		@SuppressWarnings("SameReturnValue")
 		public boolean onDismissDialog(NacDialog dialog);
 	}
 
@@ -62,6 +65,7 @@ public class NacDialog
 	 */
 	public interface OnNeutralActionListener
 	{
+		@SuppressWarnings("SameReturnValue")
 		public boolean onNeutralActionDialog(NacDialog dialog);
 	}
 

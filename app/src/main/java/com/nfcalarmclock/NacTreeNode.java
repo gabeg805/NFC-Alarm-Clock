@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * Node in a tree.
  */
+@SuppressWarnings("RedundantSuppression")
 public class NacTreeNode<T>
 {
 

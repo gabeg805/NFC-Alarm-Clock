@@ -23,6 +23,7 @@ public class NacCalendar
 	/**
 	 * Day of week.
 	 */
+	@SuppressWarnings("UnnecessaryEnumModifier")
 	enum Day
 	{
 

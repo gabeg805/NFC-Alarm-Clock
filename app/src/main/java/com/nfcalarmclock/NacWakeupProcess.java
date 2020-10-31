@@ -6,12 +6,12 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.os.VibrationEffect;
-
 import java.util.concurrent.TimeUnit;
 
 /**
  * Actions to take upon waking up, such as enabling NFC, playing music, etc.
  */
+@SuppressWarnings({"RedundantSuppression", "UnnecessaryInterfaceModifier"})
 public class NacWakeupProcess
 	implements Runnable,
 		NacTextToSpeech.OnSpeakingListener

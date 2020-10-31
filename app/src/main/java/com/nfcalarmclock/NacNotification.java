@@ -3,17 +3,22 @@ package com.nfcalarmclock;
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.os.Build;
+import android.service.notification.StatusBarNotification;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
 /**
  * Notification for the app to keep it in memory.
  */
+@SuppressWarnings("RedundantSuppression")
 public abstract class NacNotification
 {
 
@@ -177,7 +182,8 @@ public abstract class NacNotification
 	/**
 	 * @return The category of the notification.
 	 */
-	protected String getCategory()
+	@SuppressWarnings("SameReturnValue")
+    protected String getCategory()
 	{
 		return NotificationCompat.CATEGORY_ALARM;
 	}
@@ -188,6 +194,40 @@ public abstract class NacNotification
 	protected Context getContext()
 	{
 		return this.mContext;
+	}
+
+	/**
+	 * @return A list of notification lines.
+	 */
+	@TargetApi(Build.VERSION_CODES.M)
+	public static List<CharSequence> getExtraLines(Context context, String groupKey)
+	{
+		List<CharSequence> lines = new ArrayList<>();
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+		{
+			return lines;
+		}
+
+		NotificationManager manager = (NotificationManager)
+			context.getSystemService(Context.NOTIFICATION_SERVICE);
+		StatusBarNotification[] statusbar = manager
+			.getActiveNotifications();
+
+		for (StatusBarNotification sb : statusbar)
+		{
+			Notification notification = sb.getNotification();
+			String sbGroup = notification.getGroup();
+
+			if ((groupKey != null) && groupKey.equals(sbGroup))
+			{
+				CharSequence[] extraLines = (CharSequence[]) notification.extras
+					.get(NotificationCompat.EXTRA_TEXT_LINES);
+
+				lines.addAll(Arrays.asList(extraLines));
+			}
+		}
+
+		return lines;
 	}
 
 	/**
@@ -213,6 +253,7 @@ public abstract class NacNotification
 	/**
 	 * @return The small icon of the notification.
 	 */
+	@SuppressWarnings("SameReturnValue")
 	protected int getSmallIcon()
 	{
 		return R.mipmap.notification;

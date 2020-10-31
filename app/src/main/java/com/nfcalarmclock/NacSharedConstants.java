@@ -9,6 +9,7 @@ import java.util.Locale;
 /**
  * Constants container.
  */
+@SuppressWarnings("RedundantSuppression")
 public class NacSharedConstants
 	extends NacSharedResource
 {

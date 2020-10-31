@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 /**
  * Animator to expand or collapse a view.
  */
+@SuppressWarnings("UnnecessaryInterfaceModifier")
 public class NacHeightAnimator
 	extends ValueAnimator
 	implements ValueAnimator.AnimatorUpdateListener

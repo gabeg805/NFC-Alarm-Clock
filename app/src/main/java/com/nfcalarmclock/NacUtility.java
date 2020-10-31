@@ -17,6 +17,7 @@ import java.util.Locale;
  * 
  * Composed of static methods that can be used for various things.
  */
+@SuppressWarnings({"RedundantSuppression", "UnusedReturnValue"})
 public class NacUtility
 {
 
