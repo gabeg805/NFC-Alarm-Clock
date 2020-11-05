@@ -238,6 +238,7 @@ public class NacMedia
 	/**
 	 * @return The duration of the track.
 	 */
+	@TargetApi(Build.VERSION_CODES.Q)
 	public static String getDuration(Context context, Uri uri)
 	{
 		if (!NacMedia.canQueryDuration(uri))

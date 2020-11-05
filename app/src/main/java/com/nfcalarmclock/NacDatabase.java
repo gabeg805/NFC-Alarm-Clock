@@ -217,13 +217,16 @@ public class NacDatabase
 		int version = db.getVersion();
 		NacAlarm alarm = null;
 
-		if ((cursor != null) && (cursor.getCount() == 1))
+		if (cursor == null)
 		{
-			cursor.moveToFirst();
+			return null;
+		}
+		else if (cursor.moveToFirst())
+		{
 			alarm = this.toAlarm(cursor, version);
-			cursor.close();
 		}
 
+		cursor.close();
 		return alarm;
 	}
 

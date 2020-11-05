@@ -3,7 +3,6 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 
@@ -130,6 +129,7 @@ public class NacDayButtonPreference
 		this.mValue = (style % 2) + 1;
 
 		button.setStyle(this.mValue);
+		this.setupDayButton();
 		persistInt(this.mValue);
 		notifyChanged();
 		callChangeListener(this.mValue);
@@ -160,10 +160,11 @@ public class NacDayButtonPreference
 	{
 		NacSharedPreferences shared = this.getNacSharedPreferences();
 		NacSharedConstants cons = shared.getConstants();
-		NacDayButton button = this.getDayButton();
+		NacDayButton day = this.getDayButton();
 
-		button.setText(cons.getDaysOfWeek().get(1));
-		button.enable();
+		day.setText(cons.getDaysOfWeek().get(1));
+		day.enable();
+		day.getButton().setEnabled(false);
 	}
 
 }

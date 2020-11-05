@@ -23,17 +23,17 @@ public class NacSharedPreferences
 	private final SharedPreferences mInstance;
 
 	/**
-	 * Shared preference keys.
+	 * Keys.
 	 */
 	private final NacSharedKeys mKeys;
 
 	/**
-	 * Shared defaults.
+	 * Defaults.
 	 */
 	private final NacSharedDefaults mDefaults;
 
 	/**
-	 * Shared constants.
+	 * Constants.
 	 */
 	private final NacSharedConstants mConstants;
 
@@ -42,8 +42,7 @@ public class NacSharedPreferences
 	public NacSharedPreferences(Context context)
 	{
 		this.mContext = context;
-		this.mInstance = PreferenceManager.getDefaultSharedPreferences(
-			context);
+		this.mInstance = PreferenceManager.getDefaultSharedPreferences(context);
 		this.mKeys = new NacSharedKeys(context);
 		this.mDefaults = new NacSharedDefaults(context);
 		this.mConstants = new NacSharedConstants(context);
@@ -365,30 +364,6 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @return A boolean value from the SharedPreferences instance.
-	 */
-	public boolean getBoolean(String key, boolean defValue)
-	{
-		return this.getInstance().getBoolean(key, defValue);
-	}
-
-	/**
-	 * @return An integer value from the SharedPreferences instance.
-	 */
-	public int getInt(String key, int defValue)
-	{
-		return this.getInstance().getInt(key, defValue);
-	}
-
-	/**
-	 * @return A string value from the SharedPreferences instance.
-	 */
-	public String getString(String key, String defValue)
-	{
-		return this.getInstance().getString(key, defValue);
-	}
-
-	/**
 	 * @return The AM color.
 	 */
 	public int getAmColor()
@@ -476,6 +451,14 @@ public class NacSharedPreferences
 	public static int getAutoDismissTime(int index)
 	{
 		return (index < 5) ? index : (index-4)*5;
+	}
+
+	/**
+	 * @return A boolean value from the SharedPreferences instance.
+	 */
+	public boolean getBoolean(String key, boolean defValue)
+	{
+		return this.getInstance().getBoolean(key, defValue);
 	}
 
 	/**
@@ -614,6 +597,14 @@ public class NacSharedPreferences
 	public SharedPreferences getInstance()
 	{
 		return this.mInstance;
+	}
+
+	/**
+	 * @return An integer value from the SharedPreferences instance.
+	 */
+	public int getInt(String key, int defValue)
+	{
+		return this.getInstance().getInt(key, defValue);
 	}
 
 	/**
@@ -1023,6 +1014,14 @@ public class NacSharedPreferences
 		String key = this.getKeys().getStartWeekOn();
 		int value = this.getDefaults().getStartWeekOnIndex();
 		return this.getInt(key, value);
+	}
+
+	/**
+	 * @return A string value from the SharedPreferences instance.
+	 */
+	public String getString(String key, String defValue)
+	{
+		return this.getInstance().getString(key, defValue);
 	}
 
 	/**

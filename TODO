@@ -13,10 +13,6 @@ TODO
   NacAlarmActivity is in the foreground, it will not be closed.
 
 
-* Add language translations.
-
-* Figure out out to consolidate NacNotifications
-
 * Change to the androix MediaPlayer
 
 ----
