@@ -120,8 +120,6 @@ public class NacForegroundService
 		NacAlarm alarm = this.getAlarm();
 		NacAlarm actualAlarm = NacDatabase.findAlarm(this, alarm);
 
-		NacUtility.quickToast(this, "Dismiss actual alarm! " + (actualAlarm != null));
-
 		if (actualAlarm != null)
 		{
 			// Change this next line, and the else. THis is already done when you
