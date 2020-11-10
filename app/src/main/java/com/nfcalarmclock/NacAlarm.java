@@ -155,31 +155,6 @@ public class NacAlarm
 		}
 
 		/**
-		 * Populate values with input parcel.
-		 */
-		public Builder(Parcel input)
-		{
-			this();
-			this.setOnAlarmChangeListener(null)
-				.setId(input.readInt())
-				.setEnabled((input.readInt() != 0))
-				.setHour(input.readInt())
-				.setMinute(input.readInt())
-				.setDays(input.readInt())
-				.setRepeat((input.readInt() != 0))
-				.setUseNfc((input.readInt() != 0))
-				.setVibrate((input.readInt() != 0))
-				.setVolume(input.readInt())
-				.setAudioSource(input.readString())
-				.setMediaType(input.readInt())
-				.setMediaPath(input.readString())
-				.setMediaTitle(input.readString())
-				.setName(input.readString())
-				.setNfcTagId(input.readString())
-				.setIsActive(input.readInt() != 0);
-		}
-
-		/**
 		 * Build the alarm.
 		 */
 		public NacAlarm build()
@@ -717,6 +692,31 @@ public class NacAlarm
 		this.setIsActive(builder.isActive());
 		this.resetChangeTracker();
 		this.unlatchChangeTracker();
+	}
+
+	/**
+	 * Populate values with input parcel.
+	 */
+	public NacAlarm(Parcel input)
+	{
+		this(new Builder()
+			.setOnAlarmChangeListener(null)
+			.setId(input.readInt())
+			.setEnabled((input.readInt() != 0))
+			.setHour(input.readInt())
+			.setMinute(input.readInt())
+			.setDays(input.readInt())
+			.setRepeat((input.readInt() != 0))
+			.setUseNfc((input.readInt() != 0))
+			.setVibrate((input.readInt() != 0))
+			.setVolume(input.readInt())
+			.setAudioSource(input.readString())
+			.setMediaType(input.readInt())
+			.setMediaPath(input.readString())
+			.setMediaTitle(input.readString())
+			.setName(input.readString())
+			.setNfcTagId(input.readString())
+			.setIsActive(input.readInt() != 0));
 	}
 
 	/**
@@ -1447,7 +1447,7 @@ public class NacAlarm
 	{
 		public NacAlarm createFromParcel(Parcel input)
 		{
-			return new NacAlarm.Builder(input).build();
+			return new NacAlarm(input);
 		}
 
 		public NacAlarm[] newArray(int size)
