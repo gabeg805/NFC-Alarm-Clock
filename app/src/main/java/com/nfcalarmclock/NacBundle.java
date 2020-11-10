@@ -23,8 +23,15 @@ public class NacBundle
 	 */
 	public static NacAlarm getAlarm(Bundle bundle)
 	{
-		return (bundle != null)
-			? (NacAlarm) bundle.getParcelable(ALARM_PARCEL_NAME) : null;
+		if (bundle != null)
+		{
+			bundle.setClassLoader(NacAlarm.class.getClassLoader());
+			return (NacAlarm) bundle.getParcelable(ALARM_PARCEL_NAME);
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	/**
