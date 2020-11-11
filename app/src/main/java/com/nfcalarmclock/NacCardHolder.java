@@ -470,9 +470,9 @@ public class NacCardHolder
 	public void delete()
 	{
 		OnDeleteClickedListener listener = this.getOnDeleteClickedListener();
-		int pos = getAdapterPosition();
+		int pos = getAbsoluteAdapterPosition();
 
-		if (listener != null)
+		if ((listener != null) && (pos >= 0))
 		{
 			listener.onDeleteClicked(pos);
 		}

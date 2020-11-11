@@ -345,7 +345,14 @@ public class NacCardAdapter
 	 */
 	public NacAlarm getAlarm(int index)
 	{
-		return this.getAlarms().get(index);
+		if (index < 0)
+		{
+			return null;
+		}
+		else
+		{
+			return this.getAlarms().get(index);
+		}
 	}
 
 	/**
