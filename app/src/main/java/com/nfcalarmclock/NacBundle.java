@@ -1,6 +1,7 @@
 package com.nfcalarmclock;
 
 import android.os.Bundle;
+import android.os.BadParcelableException;
 import android.speech.tts.TextToSpeech;
 
 /**
@@ -25,8 +26,16 @@ public class NacBundle
 	{
 		if (bundle != null)
 		{
-			bundle.setClassLoader(NacAlarm.class.getClassLoader());
-			return (NacAlarm) bundle.getParcelable(ALARM_PARCEL_NAME);
+			try
+			{
+				bundle.setClassLoader(NacAlarm.class.getClassLoader());
+				return (NacAlarm) bundle.getParcelable(ALARM_PARCEL_NAME);
+			}
+			catch (BadParcelableException e)
+			{
+				bundle.setClassLoader(NacAlarm.Builder.class.getClassLoader());
+				return (NacAlarm) bundle.getParcelable(ALARM_PARCEL_NAME);
+			}
 		}
 		else
 		{

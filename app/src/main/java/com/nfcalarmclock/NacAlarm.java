@@ -155,6 +155,31 @@ public class NacAlarm
 		}
 
 		/**
+		 * Populate values with input parcel.
+		 */
+		public Builder(Parcel input)
+		{
+			this();
+			this.setOnAlarmChangeListener(null)
+				.setId(input.readInt())
+				.setEnabled((input.readInt() != 0))
+				.setHour(input.readInt())
+				.setMinute(input.readInt())
+				.setDays(input.readInt())
+				.setRepeat((input.readInt() != 0))
+				.setUseNfc((input.readInt() != 0))
+				.setVibrate((input.readInt() != 0))
+				.setVolume(input.readInt())
+				.setAudioSource(input.readString())
+				.setMediaType(input.readInt())
+				.setMediaPath(input.readString())
+				.setMediaTitle(input.readString())
+				.setName(input.readString())
+				.setNfcTagId(input.readString())
+				.setIsActive(input.readInt() != 0);
+		}
+
+		/**
 		 * Build the alarm.
 		 */
 		public NacAlarm build()
