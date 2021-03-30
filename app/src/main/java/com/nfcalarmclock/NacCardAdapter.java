@@ -1026,7 +1026,8 @@ public class NacCardAdapter
 	 */
 	public int size()
 	{
-		return this.getAlarms().size();
+		List<NacAlarm> alarms = this.getAlarms();
+		return (alarms != null) ? alarms.size() : 0;
 	}
 
 	/**

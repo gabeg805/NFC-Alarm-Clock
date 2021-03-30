@@ -1,6 +1,8 @@
 package com.nfcalarmclock;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
@@ -33,7 +35,7 @@ public class NacMainActivity
 	 * Wait time between a notification posting and running the alarm activity
 	 * for that notification.
 	 */
-	private static final long SHOW_ALARM_ACTIVITY_DELAY = 2000;
+	private static final long SHOW_ALARM_ACTIVITY_DELAY = 1000;
 
 	/**
 	 * Shared preferences.
@@ -64,6 +66,11 @@ public class NacMainActivity
 	 * Alarm activity delay handler.
 	 */
 	private Handler mActivityDelayHandler;
+
+	/**
+	 * Shutdown broadcast receiver.
+	 */
+	private NacShutdownBroadcastReceiver mShutdownBroadcastReceiver;
 
 	/**
 	 * Add an alarm that was created from the SET_ALARM intent.
@@ -111,6 +118,15 @@ public class NacMainActivity
 	}
 
 	/**
+	 * Cleanup the shutdown broadcast receiver.
+	 */
+	private void cleanupShutdownBroadcastReceiver()
+	{
+		NacShutdownBroadcastReceiver receiver = this.getShutdownBroadcastReceiver();
+		unregisterReceiver(receiver);
+	}
+
+	/**
 	 * Setup an NFC scan checker, which checks if this activity was started by an
 	 * NFC tag being scanned.
 	 */
@@ -133,14 +149,6 @@ public class NacMainActivity
 		{
 			this.showAlarmActivity(alarm);
 		}
-	}
-
-	/**
-	 * Show activity handler.
-	 */
-	private Handler getShowActivityDelayHandler()
-	{
-		return mActivityDelayHandler;
 	}
 
 	/**
@@ -181,6 +189,23 @@ public class NacMainActivity
 	private NacSharedPreferences getSharedPreferences()
 	{
 		return this.mSharedPreferences;
+	}
+
+	/**
+	 * Show activity handler.
+	 */
+	private Handler getShowActivityDelayHandler()
+	{
+		return mActivityDelayHandler;
+	}
+
+
+	/**
+	 * Get the shutdown broadcast receiver.
+	 */
+	private NacShutdownBroadcastReceiver getShutdownBroadcastReceiver()
+	{
+		return this.mShutdownBroadcastReceiver;
 	}
 
 	/**
@@ -230,6 +255,7 @@ public class NacMainActivity
 		this.mFloatingActionButton = findViewById(R.id.fab_add_alarm);
 		this.mRecyclerView = findViewById(R.id.content_alarm_list);
 		this.mScanNfcTagDialog = null;
+		this.mShutdownBroadcastReceiver = new NacShutdownBroadcastReceiver();
 
 		if (this.wasNfcScannedForAlarm(intent))
 		{
@@ -324,6 +350,7 @@ public class NacMainActivity
 		this.setupFloatingActionButton();
 		this.setupGoogleRatingDialog();
 		this.addSetAlarmFromIntent();
+		this.setupShutdownBroadcastReceiver();
 		NacNfc.start(this);
 	}
 
@@ -334,6 +361,7 @@ public class NacMainActivity
 	{
 		super.onPause();
 		this.cleanupShowActivityDelayHandler();
+		this.cleanupShutdownBroadcastReceiver();
 		NacNfc.stop(this);
 	}
 
@@ -394,7 +422,7 @@ public class NacMainActivity
 		{
 			if (this.shouldShowAlarmActivityDelayed(alarm))
 			{
-				delay = shared.getPreventAppFromClosing() ? delay/2 : delay;
+				delay = shared.getPreventAppFromClosing() ? delay/4 : delay;
 				this.showAlarmActivityDelayed(delay);
 			}
 			else
@@ -410,7 +438,12 @@ public class NacMainActivity
 	private void setupAlarmCardAdapter()
 	{
 		NacCardAdapter cardAdapter = this.getCardAdapter();
-		cardAdapter.build();
+
+		if (cardAdapter.size() == 0)
+		{
+			cardAdapter.build();
+		}
+
 		cardAdapter.setOnUseNfcChangeListener(this);
 	}
 
@@ -485,6 +518,17 @@ public class NacMainActivity
 			shared.editShouldRefreshMainActivity(false);
 			recreate();
 		}
+	}
+
+	/**
+	 * Setup the shutdown broadcast receiver.
+	 */
+	private void setupShutdownBroadcastReceiver()
+	{
+		NacShutdownBroadcastReceiver receiver = this.getShutdownBroadcastReceiver();
+		IntentFilter filter = new IntentFilter(Intent.ACTION_SHUTDOWN);
+
+		registerReceiver(receiver, filter);
 	}
 
 	/**

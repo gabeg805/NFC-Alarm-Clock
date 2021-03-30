@@ -172,30 +172,60 @@ public class NacDatabase
 	 */
 	public NacAlarm findActiveAlarm(SQLiteDatabase db)
 	{
+		List<NacAlarm> alarms = this.findActiveAlarms(db);
+		return ((alarms != null) && (alarms.size() > 0)) ? alarms.get(0) : null;
+	}
+
+	/**
+	 * Find the list of alarms that are currently active.
+	 * 
+	 * @return The list of alarms that are currently active.
+	 *
+	 * @param  db  The SQLite database.
+	 */
+	public List<NacAlarm> findActiveAlarms()
+	{
+		SQLiteDatabase db = this.getWritableDatabase();
+		return this.findActiveAlarms(db);
+	}
+
+	/**
+	 * Find the list of alarms that are currently active.
+	 * 
+	 * @return The list of alarms that are currently active.
+	 *
+	 * @param  db  The SQLite database.
+	 */
+	public List<NacAlarm> findActiveAlarms(SQLiteDatabase db)
+	{
 		String table = this.getAlarmTable();
 		String where = this.getWhereClauseActive();
 		String[] whereArgs = this.getWhereArgsActive();
-		String limit = "1";
-		NacAlarm alarm = null;
+		List<NacAlarm> list = new ArrayList<>();
 		Cursor cursor;
 
 		try
 		{
-			cursor = db.query(table, null, where, whereArgs, null, null, null, limit);
+			cursor = db.query(table, null, where, whereArgs, null, null, null);
 		}
 		catch (SQLiteException e)
 		{
 			return null;
 		}
 
-		if ((cursor != null) && (cursor.getCount() == 1))
+		if (cursor == null)
 		{
-			cursor.moveToFirst();
-			alarm = this.toAlarm(cursor, db.getVersion());
-			cursor.close();
+			return list;
 		}
 
-		return alarm;
+		while (cursor.moveToNext())
+		{
+			NacAlarm alarm = this.toAlarm(cursor, db.getVersion());
+			list.add(alarm);
+		}
+
+		cursor.close();
+		return list;
 	}
 
 	/**
@@ -545,6 +575,8 @@ public class NacDatabase
 	/**
 	 * Read the database and return all the alarms.
 	 *
+	 * TODO: Add this to a method somewhere. Maybe get alarms from cursor?
+	 *
 	 * @return All alarms in the database.
 	 *
 	 * @param  db       The SQLite database.
@@ -553,8 +585,22 @@ public class NacDatabase
 	public List<NacAlarm> read(SQLiteDatabase db, int version)
 	{
 		String table = this.getAlarmTable();
-		Cursor cursor = db.query(table, null, null, null, null, null, null);
 		List<NacAlarm> list = new ArrayList<>();
+		Cursor cursor;
+
+		try
+		{
+			cursor = db.query(table, null, null, null, null, null, null);
+		}
+		catch (SQLiteException e)
+		{
+			return null;
+		}
+
+		if (cursor == null)
+		{
+			return list;
+		}
 
 		while (cursor.moveToNext())
 		{

@@ -137,6 +137,17 @@
 			-->
 		</receiver>
 
+		<!-- Shutdown active alarms on boot -->
+		<receiver
+			android:name=".NacShutdownBroadcastReceiver"
+			android:enabled="true"
+			android:exported="false">
+
+			<intent-filter>
+				<action android:name="android.intent.action.ACTION_SHUTDOWN" />
+			</intent-filter>
+		</receiver>
+
 		<!-- Change alarms when time changes. -->
 		<receiver
 			android:name=".NacTimeChangeBroadcastReceiver"

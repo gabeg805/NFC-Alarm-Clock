@@ -115,12 +115,12 @@ public class NacScheduler
 	}
 
 	/**
-	 * Toggle the the current day/enabled attribute of the alarm, and update it in
-	 * the database.
+	 * Toggle the the current day/enabled attribute of the alarm.
 	 */
-	public static void toggleAlarm(Context context, NacAlarm alarm)
+	//public static void toggleAlarm(Context context, NacAlarm alarm)
+	public static void toggleAlarm(NacAlarm alarm)
 	{
-		NacDatabase db = new NacDatabase(context);
+		//NacDatabase db = new NacDatabase(context);
 
 		if (alarm.areDaysSelected())
 		{
@@ -131,8 +131,9 @@ public class NacScheduler
 			alarm.setEnabled(false);
 		}
 
-		db.update(alarm);
-		db.close();
+		//NacScheduler.update(context, alarm);
+		//db.update(alarm);
+		//db.close();
 	}
 
 	/**

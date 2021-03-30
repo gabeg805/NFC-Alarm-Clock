@@ -113,12 +113,16 @@ public class NacForegroundService
 
 	/**
 	 * Dismiss the alarm.
+	 *
+	 * TODO: Add this somewhere in a method. Maybe to NacAlarm?
 	 */
 	private void dismiss()
 	{
+		NacDatabase db = new NacDatabase(this);
 		NacSharedPreferences shared = this.getSharedPreferences();
+		NacSharedConstants cons = shared.getConstants();
 		NacAlarm alarm = this.getAlarm();
-		NacAlarm actualAlarm = NacDatabase.findAlarm(this, alarm);
+		NacAlarm actualAlarm = db.findAlarm(alarm);
 
 		if (actualAlarm != null)
 		{
@@ -128,18 +132,19 @@ public class NacForegroundService
 
 			if (!actualAlarm.getRepeat())
 			{
-				NacScheduler.toggleAlarm(this, actualAlarm);
+				NacScheduler.toggleAlarm(actualAlarm);
 			}
 			else
 			{
 				NacScheduler.scheduleNext(this, actualAlarm);
 			}
 
+			db.update(actualAlarm);
 			shared.editSnoozeCount(actualAlarm.getId(), 0);
 			shared.editShouldRefreshMainActivity(true);
 		}
 
-		NacSharedConstants cons = new NacSharedConstants(this);
+		db.close();
 		NacUtility.quickToast(this, cons.getMessageAlarmDismiss());
 		this.finish();
 	}

@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 
 /**
- * Restore alarms on boot up.
+ * Restore alarms on startup.
  */
-public class NacBootBroadcastReceiver
+public class NacStartupBroadcastReceiver
 	extends BroadcastReceiver
 {
 
@@ -20,7 +20,9 @@ public class NacBootBroadcastReceiver
 	@Override
 	public void onReceive(final Context context, Intent intent)
 	{
-		if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED))
+		String action = intent.getAction();
+
+		if (action.equals(Intent.ACTION_BOOT_COMPLETED))
 		{
 			NacScheduler.updateAll(context);
 		}
