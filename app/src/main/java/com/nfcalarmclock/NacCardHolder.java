@@ -25,12 +25,15 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 import androidx.core.graphics.ColorUtils;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
-//import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
 import java.util.EnumSet;
 
 /**
@@ -226,6 +229,11 @@ public class NacCardHolder
 	private Animator mHighlightAnimator;
 
 	/**
+	 * Time picker dialog.
+	 */
+	private MaterialTimePicker mTimePicker;
+
+	/**
 	 * Listener for when the alarm card is collapsed.
 	 */
 	private OnCardCollapsedListener mOnCardCollapsedListener;
@@ -290,6 +298,7 @@ public class NacCardHolder
 		this.mCardAnimator = new NacHeightAnimator(this.getCardView());
 		this.mBackgroundColorAnimator = null;
 		this.mHighlightAnimator = null;
+		this.mTimePicker = null;
 		this.mOnCardCollapsedListener = null;
 		this.mOnCardExpandedListener = null;
 		this.mOnDeleteClickedListener = null;
@@ -470,7 +479,8 @@ public class NacCardHolder
 	public void delete()
 	{
 		OnDeleteClickedListener listener = this.getOnDeleteClickedListener();
-		int pos = getAbsoluteAdapterPosition();
+		//int pos = getAbsoluteAdapterPosition();
+		int pos = getAdapterPosition();
 
 		if ((listener != null) && (pos >= 0))
 		{
@@ -998,6 +1008,14 @@ public class NacCardHolder
 	}
 
 	/**
+	 * @return The time picker.
+	 */
+	public MaterialTimePicker getTimePicker()
+	{
+		return this.mTimePicker;
+	}
+
+	/**
 	 * @return The time parent view.
 	 */
 	public LinearLayout getTimeParentView()
@@ -1221,6 +1239,15 @@ public class NacCardHolder
 	}
 
 	/**
+	 * @return True if showing the time picker, and false otherwise.
+	 */
+	public boolean isShowingTimePicker()
+	{
+		MaterialTimePicker timepicker = this.getTimePicker();
+		return (timepicker != null);
+	}
+
+	/**
 	 * Measure the alarm card.
 	 */
 	private void measureCard()
@@ -1228,7 +1255,8 @@ public class NacCardHolder
 		NacSharedPreferences shared = this.getSharedPreferences();
 		CardView cardView = this.getCardView();
 
-		if (shared.getCardIsMeasured() || this.isExpanded())
+		//if (shared.getCardIsMeasured() || this.isExpanded())
+		if (shared.getCardIsMeasured())
 		{
 			return;
 		}
@@ -1314,6 +1342,7 @@ public class NacCardHolder
 	public void onClick(View view)
 	{
 		int id = view.getId();
+
 		if ((id == R.id.nac_header)
 			|| (id == R.id.nac_summary)
 			|| (id == R.id.nac_dismiss_parent)
@@ -1358,6 +1387,11 @@ public class NacCardHolder
 		{
 			this.respondToDeleteButtonClick(view);
 		}
+		//else if (this.isShowingTimePicker())
+		//{
+		//	this.setTime();
+		//	this.mTimePicker = null;
+		//}
 	}
 
 	/**
@@ -1433,7 +1467,7 @@ public class NacCardHolder
 	/**
 	 */
 	@Override
-	public void onTimeSet(TimePicker tp, int hr, int min)
+	public void onTimeSet(TimePicker timepicker, int hr, int min)
 	{
 		NacAlarm alarm = this.getAlarm();
 
@@ -1978,6 +2012,32 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Set the time.
+	 */
+	public void setTime()
+	{
+		if (!this.isShowingTimePicker())
+		{
+			return;
+		}
+
+		MaterialTimePicker timepicker = this.getTimePicker();
+		NacAlarm alarm = this.getAlarm();
+		int hr = timepicker.getHour();
+		int min = timepicker.getMinute();
+
+		alarm.setHour(hr);
+		alarm.setMinute(min);
+		alarm.setEnabled(true);
+		alarm.changed();
+		this.setTimeView();
+		this.setMeridianView();
+		this.setMeridianColor();
+		this.setSwitchView();
+		this.setSummaryDaysView();
+	}
+
+	/**
 	 * Set the time color.
 	 */
 	public void setTimeColor()
@@ -2127,10 +2187,23 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 		int hour = alarm.getHour();
 		int minute = alarm.getMinute();
-		boolean format = NacCalendar.Time.is24HourFormat(context);
-		TimePickerDialog dialog = new TimePickerDialog(context, this, hour, minute,
-			format);
+		boolean is24HourFormat = NacCalendar.Time.is24HourFormat(context);
 
+		//FragmentManager fragmentManager = ((AppCompatActivity)context)
+		//	.getSupportFragmentManager();
+		//MaterialTimePicker timepicker = new MaterialTimePicker.Builder()
+		//	.setHour(hour)
+		//	.setMinute(minute)
+		//	.setTimeFormat(is24HourFormat ? TimeFormat.CLOCK_24H : TimeFormat.CLOCK_12H)
+		//	.build();
+
+		//timepicker.addOnPositiveButtonClickListener(this);
+		//timepicker.show(fragmentManager, "TimePicker");
+
+		//this.mTimePicker = timepicker;
+
+		TimePickerDialog dialog = new TimePickerDialog(context, this, hour, minute,
+			is24HourFormat);
 		dialog.show();
 	}
 

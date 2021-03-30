@@ -12,6 +12,7 @@
 	<color name="black">#000000</color>
 	<color name="gray_light">#3c3c3c</color>
 	<color name="gray">#262626</color>
+	<color name="gray_dark2">#1a1a1a</color>
 	<color name="gray_dark">#101010</color>
 	<color name="orange">#fb8c00</color>
 	<color name="red">#ff0000</color>

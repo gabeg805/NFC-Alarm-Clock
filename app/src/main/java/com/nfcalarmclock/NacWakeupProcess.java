@@ -41,6 +41,16 @@ public class NacWakeupProcess
 	private final NacSharedPreferences mSharedPreferences;
 
 	/**
+	 * Automatically dismiss the alarm in case it does not get dismissed.
+	 */
+	private final Handler mAutoDismissHandler;
+
+	/**
+	 * On auto dismiss listener.
+	 */
+	private OnAutoDismissListener mAutoDismissListener;
+
+	/**
 	 * Media player.
 	 */
 	private NacMediaPlayer mPlayer;
@@ -56,19 +66,9 @@ public class NacWakeupProcess
 	private NacTextToSpeech mSpeech;
 
 	/**
-	 * Automatically dismiss the alarm in case it does not get dismissed.
-	 */
-	private final Handler mAutoDismissHandler;
-
-	/**
 	 * Say the current time at user specified intervals.
 	 */
 	private Handler mSpeakHandler;
-
-	/**
-	 * On auto dismiss listener.
-	 */
-	private OnAutoDismissListener mListener;
 
 	/**
 	 */
@@ -77,16 +77,31 @@ public class NacWakeupProcess
 		this.mContext = context;
 		this.mAlarm = alarm;
 		this.mSharedPreferences = new NacSharedPreferences(context);
-		//this.mPlayer = new NacMediaPlayer(context);
-		//this.mVibrator = (Vibrator) context.getSystemService(
-		//	Context.VIBRATOR_SERVICE);
-		//this.mSpeech = new NacTextToSpeech(context, this);
 		this.mAutoDismissHandler = new Handler();
-		//this.mSpeakHandler = new Handler();
-		this.mListener = null;
+		this.mAutoDismissListener = null;
 
-		//NacTextToSpeech speech = this.getTextToSpeech();
-		//speech.getAudioAttributes().merge(alarm);
+		// Setup vibrate
+		if (this.canVibrate())
+		{
+			this.mVibrator = (Vibrator) context.getSystemService(
+				Context.VIBRATOR_SERVICE);
+		}
+
+		// Setup music player
+		if (this.canPlayMusic())
+		{
+			this.mPlayer = new NacMediaPlayer(context);
+		}
+
+		// Setup TTS
+		if (this.canUseTts())
+		{
+			NacTextToSpeech speech = new NacTextToSpeech(context, this);
+			speech.getAudioAttributes().merge(alarm);
+
+			this.mSpeech = speech;
+			this.mSpeakHandler = new Handler();
+		}
 	}
 
 	/**
@@ -94,11 +109,8 @@ public class NacWakeupProcess
 	 */
 	private boolean canPlayMusic()
 	{
-		NacMediaPlayer player = this.getMediaPlayer();
 		NacAlarm alarm = this.getAlarm();
-
-		// Might want to override whats playing when waking up.
-		return ((alarm != null) && (player != null) && alarm.hasMedia());
+		return (alarm != null) && alarm.hasMedia();
 	}
 
 	/**
@@ -108,7 +120,16 @@ public class NacWakeupProcess
 	private boolean canUseTts()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		return ((shared != null) && shared.getSpeakToMe());
+		return (shared != null) && shared.getSpeakToMe();
+	}
+
+	/**
+	 * @return True if the phone can be vibrated, and False otherwise.
+	 */
+	private boolean canVibrate()
+	{
+		NacAlarm alarm = this.getAlarm();
+		return (alarm != null) && alarm.getVibrate();
 	}
 
 	/**
@@ -180,7 +201,12 @@ public class NacWakeupProcess
 	 */
 	private void cleanupVibrate()
 	{
-		this.setupVibrate();
+		Vibrator vibrator = this.getVibrator();
+
+		if (vibrator != null)
+		{
+			vibrator.cancel();
+		}
 	}
 
 	/**
@@ -223,7 +249,7 @@ public class NacWakeupProcess
 	 */
 	private OnAutoDismissListener getOnAutoDismissListener()
 	{
-		return this.mListener;
+		return this.mAutoDismissListener;
 	}
 
 	/**
@@ -281,8 +307,7 @@ public class NacWakeupProcess
 	@Override
 	public void onDoneSpeaking(NacTextToSpeech tts, NacAudio.Attributes attrs)
 	{
-		this.playMusic();
-		this.vibrate();
+		this.startNormal();
 	}
 
 	/**
@@ -298,15 +323,16 @@ public class NacWakeupProcess
 	 */
 	private void playMusic()
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-		NacMediaPlayer player = this.getMediaPlayer();
-		NacAlarm alarm = this.getAlarm();
-
 		if (!this.canPlayMusic())
 		{
 			return;
 		}
 
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacMediaPlayer player = this.getMediaPlayer();
+		NacAlarm alarm = this.getAlarm();
+
+		// TODO: Might want to override whats playing when waking up.
 		if (!player.wasPlaying())
 		{
 			player.reset();
@@ -338,74 +364,13 @@ public class NacWakeupProcess
 	 */
 	public void setOnAutoDismissListener(OnAutoDismissListener listener)
 	{
-		this.mListener = listener;
+		this.mAutoDismissListener = listener;
 	}
 
 	/**
-	 * Setup the media player.
+	 * Set the volume for the music player and text-to-speech engine.
 	 */
-	private void setupMediaPlayer()
-	{
-		Context context = this.getContext();
-		NacMediaPlayer player = this.getMediaPlayer();
-
-		if (player == null)
-		{
-			player = new NacMediaPlayer(context);
-			this.mPlayer = player;
-		}
-	}
-
-	/**
-	 * Setup the text-to-speech engine.
-	 */
-	private void setupTextToSpeech()
-	{
-		Context context = this.getContext();
-		NacAlarm alarm = this.getAlarm();
-		NacTextToSpeech speech = this.getTextToSpeech();
-		Handler speakHandler = this.getSpeakHandler();
-
-		if (speech == null)
-		{
-			speech = new NacTextToSpeech(context, this);
-			this.mSpeech = speech;
-		}
-
-		if (speakHandler == null)
-		{
-			speakHandler = new Handler();
-			this.mSpeakHandler = speakHandler;
-		}
-
-		speech.getAudioAttributes().merge(alarm);
-	}
-
-	/**
-	 * Setup the vibrator.
-	 */
-	private void setupVibrate()
-	{
-		Vibrator vibrator = this.getVibrator();
-
-		if (vibrator == null)
-		{
-			Context context = this.getContext();
-			vibrator = (Vibrator) context.getSystemService(
-				Context.VIBRATOR_SERVICE);
-			this.mVibrator = vibrator;
-		}
-
-		if (vibrator != null)
-		{
-			vibrator.cancel();
-		}
-	}
-
-	/**
-	 * Setup the volume for the music player and text-to-speech engine.
-	 */
-	private void setupVolume()
+	private void setVolume()
 	{
 		NacAlarm alarm = this.getAlarm();
 		NacMediaPlayer player = this.getMediaPlayer();
@@ -452,22 +417,44 @@ public class NacWakeupProcess
 	 */
 	public void start()
 	{
-		this.setupMediaPlayer();
-		this.setupTextToSpeech();
-		this.setupVibrate();
-		this.setupVolume();
+		if (this.canUseTts() || this.canPlayMusic())
+		{
+			this.setVolume();
+		}
 
+		this.startTts();
+		this.waitForAutoDismiss();
+	}
+
+	/**
+	 * Start the normal wake up process.
+	 */
+	public void startNormal()
+	{
+		if (this.canPlayMusic())
+		{
+			this.playMusic();
+		}
+
+		if (this.canVibrate())
+		{
+			this.vibrate();
+		}
+	}
+
+	/**
+	 * Start the wake up process with TTS, if possible.
+	 */
+	public void startTts()
+	{
 		if (this.canUseTts())
 		{
 			this.speak();
 		}
 		else
 		{
-			this.playMusic();
-			this.vibrate();
+			this.startNormal();
 		}
-
-		this.waitForAutoDismiss();
 	}
 
 	/**
@@ -487,14 +474,19 @@ public class NacWakeupProcess
 	@TargetApi(Build.VERSION_CODES.O)
 	public void vibrate()
 	{
-		//this.cleanupVibrate();
-		NacAlarm alarm = this.getAlarm();
+		if (!this.canVibrate())
+		{
+			return;
+		}
+
 		Vibrator vibrator = this.getVibrator();
 		long duration = 500;
 		long[] pattern = {0, duration, duration};
 
-		if ((vibrator != null) && (alarm != null) && alarm.getVibrate())
+		if (vibrator != null)
 		{
+			vibrator.cancel();
+
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 			{
 				vibrator.vibrate(VibrationEffect.createWaveform(pattern, 0));
