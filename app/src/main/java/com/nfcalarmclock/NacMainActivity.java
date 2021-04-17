@@ -55,7 +55,7 @@ public class NacMainActivity
 	/**
 	 * Alarm card adapter.
 	 */
-	private NacCardAdapter mAdapter;
+	private NacCardAdapter mCardAdapter;
 
 	/**
 	 * Scan an NFC tag dialog.
@@ -156,7 +156,7 @@ public class NacMainActivity
 	 */
 	private NacCardAdapter getCardAdapter()
 	{
-		return this.mAdapter;
+		return this.mCardAdapter;
 	}
 
 	/**
@@ -209,6 +209,21 @@ public class NacMainActivity
 	}
 
 	/**
+	 * Get the result from the NacMediaActivity.
+	 */
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if ((requestCode == 69) && (resultCode == AppCompatActivity.RESULT_OK))
+		{
+			NacAlarm alarm = NacIntent.getAlarm(data);
+
+			this.refreshCard(alarm);
+		}
+	}
+
+	/**
 	 * Uncheck the NFC button when the dialog is canceled.
 	 */
 	@Override
@@ -251,7 +266,7 @@ public class NacMainActivity
 
 		Intent intent = getIntent();
 		this.mSharedPreferences = new NacSharedPreferences(this);
-		this.mAdapter = new NacCardAdapter(this);
+		this.mCardAdapter = new NacCardAdapter(this);
 		this.mFloatingActionButton = findViewById(R.id.fab_add_alarm);
 		this.mRecyclerView = findViewById(R.id.content_alarm_list);
 		this.mScanNfcTagDialog = null;
@@ -383,6 +398,33 @@ public class NacMainActivity
 		dialog.addOnCancelListener(this);
 		dialog.addOnDismissListener(this);
 		dialog.show();
+	}
+
+	/**
+	 * Refresh the alarm data that is in the card.
+	 */
+	private void refreshCard(NacAlarm alarm)
+	{
+		if (alarm == null)
+		{
+			return;
+		}
+
+		RecyclerView rv = this.getRecyclerView();
+		NacCardAdapter cardAdapter = this.getCardAdapter();
+
+		int index = cardAdapter.findAlarm(alarm);
+		NacCardHolder card = (NacCardHolder)
+			rv.findViewHolderForAdapterPosition(index);
+
+		if (card == null)
+		{
+			return;
+		}
+
+		cardAdapter.getAlarms().set(index, alarm);
+		card.setAlarm(alarm);
+		card.setMediaButton();
 	}
 
 	/**

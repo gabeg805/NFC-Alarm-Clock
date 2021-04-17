@@ -108,13 +108,6 @@
 			android:exported="false"
 			/>
 
-		<!-- Execute schedule and database updates -->
-		<service
-			android:name=".NacDatabase$BackgroundService"
-			android:exported="false"
-			android:permission="android.permission.BIND_JOB_SERVICE"
-			/>
-
 		<!-- Alarm manager broadcasts this so that alarms can be started.
 		     Start the foreground service. -->
 		<receiver
@@ -123,7 +116,7 @@
 
 		<!-- Restore alarms on boot -->
 		<receiver
-			android:name=".NacBootBroadcastReceiver"
+			android:name=".NacStartupBroadcastReceiver"
 			android:enabled="true"
 			android:exported="false"
 			android:permission="android.permission.RECEIVE_BOOT_COMPLETED">

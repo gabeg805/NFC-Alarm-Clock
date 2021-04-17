@@ -374,9 +374,12 @@ public class NacWakeupProcess
 	{
 		NacAlarm alarm = this.getAlarm();
 		NacMediaPlayer player = this.getMediaPlayer();
-		NacAudio.Attributes attrs = player.getAudioAttributes();
 
-		attrs.merge(alarm).setVolume();
+		if (player != null)
+		{
+			NacAudio.Attributes attrs = player.getAudioAttributes();
+			attrs.merge(alarm).setVolume();
+		}
 	}
 
 	/**

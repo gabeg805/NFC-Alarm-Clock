@@ -159,11 +159,9 @@ public class NacScheduler
 	 */
 	public static void updateAll(Context context)
 	{
-		NacDatabase db = new NacDatabase(context);
-		List<NacAlarm> alarms = db.read();
+		List<NacAlarm> alarms = NacDatabase.read(context);
 
 		NacScheduler.updateAll(context, alarms);
-		db.close();
 	}
 
 	/**

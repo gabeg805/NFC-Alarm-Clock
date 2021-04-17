@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
-import androidx.core.app.JobIntentService;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -879,93 +878,6 @@ public class NacDatabase
 			public static final String DELETE_TABLE =
 				"DROP TABLE IF EXISTS " + TABLE_NAME;
 
-		}
-
-	}
-
-	/**
-	 * Execute database tasks in the background.
-	 */
-	public static class BackgroundService
-		extends JobIntentService
-	{
-
-		/**
-		 * Job ID.
-		 */
-		public static final int JOB_ID = 1000;
-
-		/**
-		 * Add an alarm.
-		 */
-		public static void addAlarm(Context context, NacAlarm alarm)
-		{
-			NacDatabase db = new NacDatabase(context);
-			NacSharedPreferences shared = new NacSharedPreferences(context);
-			int id = alarm.getId();
-
-			db.add(alarm);
-			db.close();
-			NacScheduler.update(context, alarm);
-			shared.editSnoozeCount(id, 0);
-		}
-
-		/**
-		 * Delete an alarm.
-		 */
-		public static void deleteAlarm(Context context, NacAlarm alarm)
-		{
-			NacDatabase db = new NacDatabase(context);
-			NacSharedPreferences shared = new NacSharedPreferences(context);
-			int id = alarm.getId();
-
-			db.delete(alarm);
-			db.close();
-			NacScheduler.cancel(context, alarm);
-			shared.editSnoozeCount(id, 0);
-		}
-
-		/**
-		 */
-		public static void enqueueWork(Context context, Intent work)
-		{
-			enqueueWork(context, NacDatabase.BackgroundService.class,
-				JOB_ID, work);
-		}
-
-		/**
-		 */
-		@Override
-		protected void onHandleWork(Intent intent)
-		{
-			String key = intent.getDataString();
-
-			NacAlarm alarm = NacIntent.getAlarm(intent);
-
-			if (key.equals("add"))
-			{
-				BackgroundService.addAlarm(this, alarm);
-			}
-			else if (key.equals("delete"))
-			{
-				BackgroundService.deleteAlarm(this, alarm);
-			}
-			else if (key.equals("update"))
-			{
-				BackgroundService.updateAlarm(this, alarm);
-			}
-		}
-
-		/**
-		 * Update an alarm.
-		 */
-		public static void updateAlarm(Context context, NacAlarm alarm)
-		{
-			NacDatabase db = new NacDatabase(context);
-
-			db.update(alarm);
-			db.close();
-			NacScheduler.update(context, alarm);
 		}
 
 	}

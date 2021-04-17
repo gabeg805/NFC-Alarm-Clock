@@ -1658,6 +1658,14 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Set the alarm.
+	 */
+	public void setAlarm(NacAlarm alarm)
+	{
+		this.mAlarm = alarm;
+	}
+
+	/**
 	 * Set the ripple color of the audio source button.
 	 */
 	private void setAudioSourceButtonRippleColor()
@@ -2216,7 +2224,14 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 		Intent intent = NacIntent.toIntent(context, NacMediaActivity.class, alarm);
 
-		context.startActivity(intent);
+		if (context instanceof NacMainActivity)
+		{
+			((NacMainActivity)context).startActivityForResult(intent, 69);
+		}
+		else
+		{
+			context.startActivity(intent);
+		}
 	}
 
 	/**

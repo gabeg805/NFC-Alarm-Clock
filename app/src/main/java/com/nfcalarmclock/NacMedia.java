@@ -207,7 +207,7 @@ public class NacMedia
 		String column = MediaStore.Audio.Artists.ARTIST;
 		String artist = NacMedia.getColumnFromCursor(context, uri, column);
 
-		if (artist.isEmpty() || artist.equals("<unknown>"))
+		if ((artist == null) || artist.isEmpty() || artist.equals("<unknown>"))
 		{
 			NacSharedConstants cons = new NacSharedConstants(context);
 			artist = cons.getStateUnknown();

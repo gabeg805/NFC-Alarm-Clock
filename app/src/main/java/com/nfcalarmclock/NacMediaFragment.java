@@ -165,11 +165,12 @@ public class NacMediaFragment
 
 			if (alarm != null)
 			{
-				NacDatabase.BackgroundService.updateAlarm(context, alarm);
-			}
-			else
-			{
-				Intent intent = NacIntent.toIntent(media);
+				Intent intent = NacIntent.toIntent(context, null, alarm);
+				NacDatabase db = new NacDatabase(context);
+
+				db.update(alarm);
+				db.close();
+				NacScheduler.update(context, alarm);
 				activity.setResult(Activity.RESULT_OK, intent);
 			}
 
