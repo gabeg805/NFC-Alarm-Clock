@@ -5,6 +5,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 //import androidx.recyclerview.widget.ItemTouchUIUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
@@ -16,28 +17,216 @@ public class NacCardTouchHelper
 	extends ItemTouchHelper
 {
 
+	///**
+	// * Adapter for when an alarm card swipe button is selected.
+	// */
+	//public interface Adapter
+	//{
+
+	//	/**
+	//	 * Called when an alarm card should be copied.
+	//	 */
+	//	public void onItemCopy(int pos);
+
+	//	/**
+	//	 * Called when an alarm card should be deleted.
+	//	 */
+	//	public void onItemDelete(int pos);
+
+	//}
+
 	/**
-	 * Adapter for when an alarm card swipe button is selected.
+	 * Listener for when an alarm card is swiped.
 	 */
-	public interface Adapter
+	public interface OnSwipedListener
 	{
 
 		/**
-		 * Called when an alarm card should be copied.
+		 * Called when an alarm card is swiped left.
 		 */
-		public void onItemCopy(int pos);
+		public void onSwipedLeft(NacAlarm alarm, int pos);
 
 		/**
-		 * Called when an alarm card should be deleted.
+		 * Called when an alarm card is swiped right.
 		 */
-		public void onItemDelete(int pos);
+		public void onSwipedRight(NacAlarm alarm, int pos);
 
 	}
 
 	/**
-	 * RecyclerView.
+	 * Track previous swipe activity.
 	 */
-	protected RecyclerView mRecyclerView;
+	public static class PreviousSwipe
+	{
+
+		/**
+		 * Type of swipe operation.
+		 */
+		public enum Type
+		{
+			NONE,
+			LEFT,
+			RIGHT,
+			OTHER
+		}
+
+		/**
+		 * Position of card.
+		 */
+		private int mPosition;
+
+		/**
+		 * Direction of swipe.
+		 */
+		private Type mDirection;
+
+		/**
+		 * Extra data.
+		 */
+		private Object mData;
+
+		/**
+		 */
+		public PreviousSwipe()
+		{
+			this(-1, Type.NONE);
+		}
+
+		/**
+		 */
+		public PreviousSwipe(int position, Type direction)
+		{
+			this.mPosition = position;
+			this.mDirection = direction;
+			this.mData = null;
+		}
+
+		/**
+		 * @return The extra data.
+		 */
+		public Object getData()
+		{
+			return this.mData;
+		}
+
+		/**
+		 * @return The direction that was swiped.
+		 */
+		public Type getDirection()
+		{
+			return this.mDirection;
+		}
+
+		/**
+		 * @return The position of the card that was swiped.
+		 */
+		public int getPosition()
+		{
+			return this.mPosition;
+		}
+
+		/**
+		 * Set the position and direction of the previous swipe..
+		 */
+		public void set(int position, Type direction)
+		{
+			Object data = this.getData();
+			this.set(position, direction, data);
+		}
+
+		/**
+		 * Set the position and direction of the previous swipe..
+		 */
+		public void set(int position, Type direction, Object data)
+		{
+			this.setPosition(position);
+			this.setDirection(direction);
+			this.setData(data);
+		}
+
+		/**
+		 * Set the extra data.
+		 */
+		public void setData(Object data)
+		{
+			this.mData = data;
+		}
+
+		/**
+		 * Set direction.
+		 */
+		public void setDirection(Type direction)
+		{
+			this.mDirection = direction;
+		}
+
+		/**
+		 * Set position.
+		 */
+		public void setPosition(int position)
+		{
+			this.mPosition = position;
+		}
+
+		/**
+		 * @return True if was not swiped (NONE), and False otherwise.
+		 */
+		public boolean wasNotSwiped()
+		{
+			return this.getDirection() == Type.NONE;
+		}
+
+		/**
+		 * @return True if was swiped to the LEFT, and False otherwise.
+		 */
+		public boolean wasSwipedLeft()
+		{
+			return this.getDirection() == Type.LEFT;
+		}
+
+		/**
+		 * @return True if was swiped OTHER, and False otherwise.
+		 */
+		public boolean wasSwipedOther()
+		{
+			return this.getDirection() == Type.OTHER;
+		}
+
+		/**
+		 * @return True if was swiped to the RIGHT, and False otherwise.
+		 */
+		public boolean wasSwipedRight()
+		{
+			return this.getDirection() == Type.RIGHT;
+		}
+
+	}
+
+	///**
+	// * RecyclerView.
+	// */
+	//protected RecyclerView mRecyclerView;
+
+	/**
+	 */
+	//public NacCardTouchHelper(Callback callback)
+	//{
+	//	super(callback);
+
+	//	this.mRecyclerView = null;
+	//}
+
+	/**
+	 * Callback.
+	 */
+	private Callback mCallback;
+
+	/**
+	 */
+	public NacCardTouchHelper(OnSwipedListener listener)
+	{
+		super(new Callback(listener));
+	}
 
 	/**
 	 */
@@ -45,25 +234,41 @@ public class NacCardTouchHelper
 	{
 		super(callback);
 
-		this.mRecyclerView = null;
+		this.mCallback = callback;
 	}
 
 	/**
-	 * Set the RecyclerView to help on.
+	 * @return The callback.
 	 */
-	public void setRecyclerView(RecyclerView rv)
+	public Callback getCallback()
 	{
-		this.mRecyclerView = rv;
+		return this.mCallback;
 	}
+
+	/**
+	 * @return The previous swipe.
+	 */
+	public PreviousSwipe getPreviousSwipe()
+	{
+		return this.getCallback().getPreviousSwipe();
+	}
+
+	///**
+	// * Set the RecyclerView to help on.
+	// */
+	//public void setRecyclerView(RecyclerView rv)
+	//{
+	//	this.mRecyclerView = rv;
+	//}
 
 	/**
 	 * Reset the touch helper.
 	 */
-	public void reset()
-	{
-		this.attachToRecyclerView(null);
-		this.attachToRecyclerView(this.mRecyclerView);
-	}
+	//public void reset()
+	//{
+	//	this.attachToRecyclerView(null);
+	//	this.attachToRecyclerView(this.mRecyclerView);
+	//}
 
 	/**
 	 * Handle callback events when swiping card.
@@ -75,7 +280,13 @@ public class NacCardTouchHelper
 		/**
 		 * The adapter that will implement the event methods.
 		 */
-		private final Adapter mAdapter;
+		private final OnSwipedListener mOnSwipedListener;
+		//private final Adapter mAdapter;
+
+		/**
+		 * Track previous swipe activity.
+		 */
+		private PreviousSwipe mPreviousSwipe;
 
 		/**
 		 * The current view holder.
@@ -90,9 +301,12 @@ public class NacCardTouchHelper
 		/**
 		 * @param  adapter	The object that overrides the event methods.
 		 */
-		public Callback(Adapter adapter)
+		//public Callback(Adapter adapter)
+		public Callback(OnSwipedListener listener)
 		{
-			this.mAdapter = adapter;
+			//this.mAdapter = adapter;
+			this.mOnSwipedListener = listener;
+			this.mPreviousSwipe = new PreviousSwipe();
 			this.mViewHolder = null;
 			this.mAction = -1;
 		}
@@ -202,6 +416,14 @@ public class NacCardTouchHelper
 
 			return makeMovementFlags(0,
 				ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT);
+		}
+
+		/**
+		 * @return The previous swipe activity.
+		 */
+		public PreviousSwipe getPreviousSwipe()
+		{
+			return this.mPreviousSwipe;
 		}
 
 		/**
@@ -333,10 +555,10 @@ public class NacCardTouchHelper
 		 * Called when item is swiped.
 		 *
 		 * @param  vh  The view holder.
-		 * @param  dir	The direction that the item was swiped.
+		 * @param  direction  The direction that the item was swiped.
 		 */
 		@Override
-		public void onSwiped(@NonNull ViewHolder vh, int dir)
+		public void onSwiped(@NonNull ViewHolder vh, int direction)
 		{
 			// This may be unnecessary
 			this.mViewHolder = vh;
@@ -346,13 +568,25 @@ public class NacCardTouchHelper
 				return;
 			}
 
-			if (dir == ItemTouchHelper.LEFT)
+
+			//ListAdapter<NacAlarm, NacCardHolder> adapter = (ListAdapter)
+			//	vh.getBindingAdapter();
+			NacAlarmCardAdapter adapter = (NacAlarmCardAdapter) vh.getBindingAdapter();
+			int position = vh.getBindingAdapterPosition();
+			NacAlarm alarm = adapter.getAlarmAt(position);
+			//int position = vh.getAdapterPosition();
+
+			if (direction == ItemTouchHelper.LEFT)
 			{
-				mAdapter.onItemDelete(vh.getAdapterPosition());
+				//mAdapter.onItemDelete(vh.getAdapterPosition());
+				mPreviousSwipe.set(position, PreviousSwipe.Type.LEFT, alarm);
+				mOnSwipedListener.onSwipedLeft(alarm, position);
 			}
-			else if (dir == ItemTouchHelper.RIGHT)
+			else if (direction == ItemTouchHelper.RIGHT)
 			{
-				mAdapter.onItemCopy(vh.getAdapterPosition());
+				//mAdapter.onItemCopy(vh.getAdapterPosition());
+				mPreviousSwipe.set(position, PreviousSwipe.Type.RIGHT, alarm);
+				mOnSwipedListener.onSwipedRight(alarm, position);
 			}
 		}
 

@@ -130,7 +130,7 @@ public class NacForegroundService
 			// start the service.
 			actualAlarm.setIsActive(false);
 
-			if (!actualAlarm.getRepeat())
+			if (!actualAlarm.shouldRepeat())
 			{
 				NacScheduler.toggleAlarm(actualAlarm);
 			}

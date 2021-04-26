@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,6 +141,15 @@ public class NacDatabase
 		}
 
 		return result;
+	}
+
+	/**
+	 * @return True if the database file exists, and False otherwise.
+	 */
+	public static boolean exists(Context context)
+	{
+		File file = context.getDatabasePath(DATABASE_NAME);
+		return file.exists();
 	}
 
 	/**
@@ -373,17 +383,17 @@ public class NacDatabase
 			case 4:
 			default:
 				cv.put(Contract.AlarmTable.COLUMN_ID, alarm.getId());
-				cv.put(Contract.AlarmTable.COLUMN_ENABLED, alarm.getEnabled());
+				cv.put(Contract.AlarmTable.COLUMN_ENABLED, alarm.isEnabled());
 				cv.put(Contract.AlarmTable.COLUMN_HOUR, alarm.getHour());
 				cv.put(Contract.AlarmTable.COLUMN_MINUTE, alarm.getMinute());
 				cv.put(Contract.AlarmTable.COLUMN_DAYS, NacCalendar.Days.daysToValue(alarm.getDays()));
-				cv.put(Contract.AlarmTable.COLUMN_REPEAT, alarm.getRepeat());
-				cv.put(Contract.AlarmTable.COLUMN_VIBRATE, alarm.getVibrate());
+				cv.put(Contract.AlarmTable.COLUMN_REPEAT, alarm.shouldRepeat());
+				cv.put(Contract.AlarmTable.COLUMN_VIBRATE, alarm.shouldVibrate());
 				cv.put(Contract.AlarmTable.COLUMN_MEDIA_PATH, alarm.getMediaPath());
 				cv.put(Contract.AlarmTable.COLUMN_NAME, alarm.getName());
 				cv.put(Contract.AlarmTable.COLUMN_VOLUME, alarm.getVolume());
 				cv.put(Contract.AlarmTable.COLUMN_AUDIO_SOURCE, alarm.getAudioSource());
-				cv.put(Contract.AlarmTable.COLUMN_USE_NFC, alarm.getUseNfc());
+				cv.put(Contract.AlarmTable.COLUMN_USE_NFC, alarm.shouldUseNfc());
 				cv.put(Contract.AlarmTable.COLUMN_MEDIA_TYPE, alarm.getMediaType());
 				cv.put(Contract.AlarmTable.COLUMN_MEDIA_NAME, alarm.getMediaTitle());
 				break;
@@ -490,7 +500,7 @@ public class NacDatabase
 		String mediaTitle = NacMedia.getTitle(context, mediaPath);
 		int mediaType = NacMedia.getType(context, mediaPath);
 		String name = cons.getExampleName();
-		NacAlarm alarm = new NacAlarm.Builder(context)
+		NacAlarm alarm = new NacAlarm.Builder(shared)
 			.setId(1)
 			.setHour(8)
 			.setMinute(0)
@@ -624,7 +634,8 @@ public class NacDatabase
 		}
 
 		Context context = this.getContext();
-		NacAlarm.Builder builder = new NacAlarm.Builder(context);
+		NacSharedPreferences shared = new NacSharedPreferences(context);
+		NacAlarm.Builder builder = new NacAlarm.Builder(shared);
 
 		switch (version)
 		{
@@ -634,7 +645,7 @@ public class NacDatabase
 			case 4:
 			default:
 				builder.setId(cursor.getInt(1))
-					.setEnabled((cursor.getInt(2) != 0))
+					.setIsEnabled((cursor.getInt(2) != 0))
 					.setHour(cursor.getInt(3))
 					.setMinute(cursor.getInt(4))
 					.setDays(cursor.getInt(5))

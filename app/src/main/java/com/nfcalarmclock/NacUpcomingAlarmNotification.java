@@ -205,7 +205,7 @@ public class NacUpcomingAlarmNotification
 
 		for (NacAlarm a : alarms)
 		{
-			if (!a.getEnabled())
+			if (!a.isEnabled())
 			{
 				continue;
 			}

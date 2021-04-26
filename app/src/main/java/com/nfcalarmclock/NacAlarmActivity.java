@@ -374,7 +374,7 @@ public class NacAlarmActivity
 		{
 			setTurnScreenOn(true);
 
-			if ((alarm != null) && !alarm.getUseNfc())
+			if ((alarm != null) && !alarm.shouldUseNfc())
 			{
 				setShowWhenLocked(true);
 			}
@@ -384,7 +384,7 @@ public class NacAlarmActivity
 
 			window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
-			if ((alarm != null) && !alarm.getUseNfc())
+			if ((alarm != null) && !alarm.shouldUseNfc())
 			{
 				window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 			}

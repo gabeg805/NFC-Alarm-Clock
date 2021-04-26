@@ -19,12 +19,13 @@ public class NacScheduler
 	 */
 	public static void add(Context context, NacAlarm alarm, Calendar day)
 	{
-		if (!alarm.getEnabled())
+		if (!alarm.isEnabled())
 		{
 			return;
 		}
 
-		int id = alarm.getId(day);
+		//int id = alarm.getId(day);
+		int id = alarm.getId();
 		long millis = day.getTimeInMillis();
 		Intent operationIntent = NacIntent.toIntent(context,
 			NacAlarmBroadcastReceiver.class, alarm);
@@ -44,17 +45,19 @@ public class NacScheduler
 	 */
 	public static void add(Context context, NacAlarm alarm)
 	{
-		if (!alarm.getEnabled())
+		if (!alarm.isEnabled())
 		{
 			return;
 		}
 
-		List<Calendar> days = NacCalendar.toCalendars(alarm);
+		Calendar day = NacCalendar.getNextAlarmDay(alarm);
+		NacScheduler.add(context, alarm, day);
+		//List<Calendar> days = NacCalendar.toCalendars(alarm);
 
-		for (Calendar d : days)
-		{
-			NacScheduler.add(context, alarm, d);
-		}
+		//for (Calendar d : days)
+		//{
+		//	NacScheduler.add(context, alarm, d);
+		//}
 	}
 
 	/**
@@ -62,7 +65,8 @@ public class NacScheduler
 	 */
 	public static void cancel(Context context, NacAlarm alarm, Calendar day)
 	{
-		int id = alarm.getId(day);
+		//int id = alarm.getId(day);
+		int id = alarm.getId();
 		Intent intent = new Intent(context, NacAlarmBroadcastReceiver.class);
 		PendingIntent pending = PendingIntent.getBroadcast(context, id, intent,
 			PendingIntent.FLAG_NO_CREATE);
@@ -100,7 +104,7 @@ public class NacScheduler
 	 */
 	public static void scheduleNext(Context context, NacAlarm alarm)
 	{
-		if (!alarm.getRepeat() || !alarm.areDaysSelected())
+		if (!alarm.shouldRepeat() || !alarm.areDaysSelected())
 		{
 			return;
 		}
@@ -128,7 +132,7 @@ public class NacScheduler
 		}
 		else
 		{
-			alarm.setEnabled(false);
+			alarm.setIsEnabled(false);
 		}
 
 		//NacScheduler.update(context, alarm);

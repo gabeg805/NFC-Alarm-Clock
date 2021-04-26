@@ -53,7 +53,7 @@ public class NacCardHolder
 {
 
 	/**
-	 * Card collapsed listener.
+	 * Listener for when a card is collapsed.
 	 */
 	public interface OnCardCollapsedListener
 	{
@@ -62,12 +62,28 @@ public class NacCardHolder
 	}
 
 	/**
-	 * Card expanded listener.
+	 * Listener for when a card is expanded.
 	 */
 	public interface OnCardExpandedListener
 	{
 		@SuppressWarnings({"unused", "EmptyMethod"})
 		public void onCardExpanded(NacCardHolder holder, NacAlarm alarm);
+	}
+
+	/**
+	 * Listener for when a card is updated.
+	 */
+	public interface OnCardUpdatedListener
+	{
+        public void onCardUpdated(NacCardHolder holder, NacAlarm alarm);
+	}
+
+	/**
+	 * Listener for when a card will use NFC or not is changed.
+	 */
+	public interface OnCardUseNfcChangedListener
+	{
+        public void onCardUseNfcChanged(NacCardHolder holder, NacAlarm alarm);
 	}
 
 	/**
@@ -244,6 +260,16 @@ public class NacCardHolder
 	private OnCardExpandedListener mOnCardExpandedListener;
 
 	/**
+	 * Listener for when the alarm card is updated.
+	 */
+	private OnCardUpdatedListener mOnCardUpdatedListener;
+
+	/**
+	 * Listener for when a card will use NFC or not is changed.
+	 */
+	private OnCardUseNfcChangedListener mOnCardUseNfcChangedListener;
+
+	/**
 	 * Listener for when the delete button is clicked.
 	 */
 	private OnDeleteClickedListener mOnDeleteClickedListener;
@@ -301,6 +327,8 @@ public class NacCardHolder
 		this.mTimePicker = null;
 		this.mOnCardCollapsedListener = null;
 		this.mOnCardExpandedListener = null;
+		this.mOnCardUpdatedListener = null;
+		this.mOnCardUseNfcChangedListener = null;
 		this.mOnDeleteClickedListener = null;
 
 		this.mCardAnimator.setInterpolator(new AccelerateInterpolator());
@@ -361,6 +389,49 @@ public class NacCardHolder
 		if ((listener != null) && this.isExpanded())
 		{
 			listener.onCardExpanded(this, alarm);
+		}
+	}
+
+	/**
+	 * Call the card updated listener.
+	 */
+	private void callOnCardUpdatedListener()
+	{
+		OnCardUpdatedListener listener = this.getOnCardUpdatedListener();
+		NacAlarm alarm = this.getAlarm();
+
+		if (listener != null)
+		{
+			listener.onCardUpdated(this, alarm);
+		}
+	}
+
+	/**
+	 * Call the card use NFC changed listener.
+	 */
+	private void callOnCardUseNfcChangedListener()
+	{
+		OnCardUseNfcChangedListener listener = this.getOnCardUseNfcChangedListener();
+		NacAlarm alarm = this.getAlarm();
+
+		if (listener != null)
+		{
+			listener.onCardUseNfcChanged(this, alarm);
+		}
+	}
+
+	/**
+	 * Call the delete clicked listener.
+	 */
+	private void callOnDeleteClickedListener()
+	{
+		OnDeleteClickedListener listener = this.getOnDeleteClickedListener();
+		//int pos = getAbsoluteAdapterPosition();
+		int pos = getBindingAdapterPosition();
+
+		if ((listener != null) && (pos >= 0))
+		{
+			listener.onDeleteClicked(pos);
 		}
 	}
 
@@ -478,14 +549,7 @@ public class NacCardHolder
 	 */
 	public void delete()
 	{
-		OnDeleteClickedListener listener = this.getOnDeleteClickedListener();
-		//int pos = getAbsoluteAdapterPosition();
-		int pos = getAdapterPosition();
-
-		if ((listener != null) && (pos >= 0))
-		{
-			listener.onDeleteClicked(pos);
-		}
+		this.callOnDeleteClickedListener();
 	}
 
 	/**
@@ -545,9 +609,10 @@ public class NacCardHolder
 			alarm.setRepeat(false);
 		}
 
-		alarm.changed();
+		//alarm.changed();
 		this.setRepeatButton();
 		this.setSummaryDaysView();
+		this.callOnCardUpdatedListener();
 	}
 
 	/**
@@ -609,13 +674,15 @@ public class NacCardHolder
 
 		alarm.toggleUseNfc();
 
-		if (!alarm.getUseNfc())
+		if (!alarm.shouldUseNfc())
 		{
 			alarm.setNfcTagId("");
 			this.toastNfc();
 		}
 
-		alarm.changed();
+		//alarm.changed();
+		this.callOnCardUpdatedListener();
+		this.callOnCardUseNfcChangedListener();
 	}
 
 	/**
@@ -626,7 +693,8 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 
 		alarm.toggleRepeat();
-		alarm.changed();
+		//alarm.changed();
+		this.callOnCardUpdatedListener();
 		this.toastRepeat();
 	}
 
@@ -639,10 +707,11 @@ public class NacCardHolder
 
 		alarm.setRepeat(false);
 		alarm.setDays(0);
-		alarm.changed();
+		//alarm.changed();
 		this.setDayOfWeek();
 		this.setRepeatButton();
 		this.setSummaryDaysView();
+		this.callOnCardUpdatedListener();
 	}
 
 	/**
@@ -660,9 +729,10 @@ public class NacCardHolder
 			alarm.setIsActive(false);
 		}
 
-		alarm.setEnabled(state);
-		alarm.changed();
+		alarm.setIsEnabled(state);
+		//alarm.changed();
 		this.setSummaryDaysView();
+		this.callOnCardUpdatedListener();
 
 		if (!state)
 		{
@@ -686,7 +756,8 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 
 		alarm.toggleVibrate();
-		alarm.changed();
+		//alarm.changed();
+		this.callOnCardUpdatedListener();
 		//this.setVibrateButton();
 		this.toastVibrate();
 	}
@@ -941,6 +1012,23 @@ public class NacCardHolder
 	private OnCardExpandedListener getOnCardExpandedListener()
 	{
 		return this.mOnCardExpandedListener;
+	}
+
+	/**
+	 * @return The listener for when the alarm card is updated.
+	 */
+	private OnCardUpdatedListener getOnCardUpdatedListener()
+	{
+		return this.mOnCardUpdatedListener;
+	}
+
+	/**
+	 * @return The listener for when the alarm card should use NFC or not is
+	 *     changed.
+	 */
+	private OnCardUseNfcChangedListener getOnCardUseNfcChangedListener()
+	{
+		return this.mOnCardUseNfcChangedListener;
 	}
 
 	/**
@@ -1289,8 +1377,8 @@ public class NacCardHolder
 			this.doCollapse();
 			this.animateCollapsedBackgroundColor();
 			this.callOnCardCollapsedListener();
-			this.getAlarm().unlatchChangeTracker();
-			this.getAlarm().resetChangeTracker();
+			//this.getAlarm().unlatchChangeTracker();
+			//this.getAlarm().resetChangeTracker();
 		}
 	}
 
@@ -1306,7 +1394,7 @@ public class NacCardHolder
 		{
 			this.doExpand();
 			this.animateExpandedBackgroundColor();
-			this.getAlarm().latchChangeTracker();
+			//this.getAlarm().latchChangeTracker();
 			this.callOnCardExpandedListener();
 		}
 	}
@@ -1407,15 +1495,17 @@ public class NacCardHolder
 		{
 			String name = dialog.getDataString();
 			alarm.setName(name);
-			alarm.changed();
+			//alarm.changed();
 			this.setNameButton();
 			this.setSummaryNameView();
+			this.callOnCardUpdatedListener();
 		}
 		else if (id == R.layout.dlg_alarm_audio_source)
 		{
 			String source = dialog.getDataString();
 			alarm.setAudioSource(source);
-			alarm.changed();
+			//alarm.changed();
+			this.callOnCardUpdatedListener();
 		}
 
 		return true;
@@ -1461,7 +1551,8 @@ public class NacCardHolder
 	{
 		NacAlarm alarm = this.getAlarm();
 
-		alarm.changed();
+		//alarm.changed();
+		this.callOnCardUpdatedListener();
 	}
 
 	/**
@@ -1473,13 +1564,14 @@ public class NacCardHolder
 
 		alarm.setHour(hr);
 		alarm.setMinute(min);
-		alarm.setEnabled(true);
-		alarm.changed();
+		alarm.setIsEnabled(true);
+		//alarm.changed();
 		this.setTimeView();
 		this.setMeridianView();
 		this.setMeridianColor();
 		this.setSwitchView();
 		this.setSummaryDaysView();
+		this.callOnCardUpdatedListener();
 	}
 
 	/**
@@ -1858,7 +1950,7 @@ public class NacCardHolder
 	{
 		MaterialButton button = this.getNfcButton();
 		NacAlarm alarm = this.getAlarm();
-		boolean useNfc = alarm.getUseNfc();
+		boolean useNfc = alarm.shouldUseNfc();
 
 		button.setChecked(useNfc);
 	}
@@ -1889,6 +1981,22 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Set the listener for when the alarm card is updated.
+	 */
+	public void setOnCardUpdatedListener(OnCardUpdatedListener listener)
+	{
+		this.mOnCardUpdatedListener = listener;
+	}
+
+	/**
+	 * Set the listener for when the alarm card should use NFC or not is changed.
+	 */
+	public void setOnCardUseNfcChangedListener(OnCardUseNfcChangedListener listener)
+	{
+		this.mOnCardUseNfcChangedListener = listener;
+	}
+
+	/**
 	 * Set listener for when a menu item is clicked.
 	 */
 	public void setOnCreateContextMenuListener(
@@ -1916,7 +2024,7 @@ public class NacCardHolder
 	{
 		MaterialButton button = this.getRepeatButton();
 		NacAlarm alarm = this.getAlarm();
-		boolean repeat = alarm.getRepeat();
+		boolean repeat = alarm.shouldRepeat();
 
 		if (alarm.areDaysSelected())
 		{
@@ -2014,7 +2122,7 @@ public class NacCardHolder
 	public void setSwitchView()
 	{
 		NacAlarm alarm = this.getAlarm();
-		boolean enabled = alarm.getEnabled();
+		boolean enabled = alarm.isEnabled();
 
 		this.getSwitch().setChecked(enabled);
 	}
@@ -2036,13 +2144,14 @@ public class NacCardHolder
 
 		alarm.setHour(hr);
 		alarm.setMinute(min);
-		alarm.setEnabled(true);
-		alarm.changed();
+		alarm.setIsEnabled(true);
+		//alarm.changed();
 		this.setTimeView();
 		this.setMeridianView();
 		this.setMeridianColor();
 		this.setSwitchView();
 		this.setSummaryDaysView();
+		this.callOnCardUpdatedListener();
 	}
 
 	/**
@@ -2075,7 +2184,7 @@ public class NacCardHolder
 	{
 		MaterialButton button = this.getVibrateButton();
 		NacAlarm alarm = this.getAlarm();
-		boolean vibrate = alarm.getVibrate();
+		boolean vibrate = alarm.shouldVibrate();
 
 		button.setChecked(vibrate);
 	}
@@ -2282,7 +2391,7 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 		Context context = this.getContext();
 		NacSharedConstants cons = new NacSharedConstants(context);
-		String message = alarm.getUseNfc() ? cons.getMessageNfcRequired()
+		String message = alarm.shouldUseNfc() ? cons.getMessageNfcRequired()
 			: cons.getMessageNfcOptional();
 
 		NacUtility.quickToast(context, message);
@@ -2296,7 +2405,7 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 		Context context = this.getContext();
 		NacSharedConstants cons = new NacSharedConstants(context);
-		String message = alarm.getRepeat() ? cons.getMessageRepeatEnabled()
+		String message = alarm.shouldRepeat() ? cons.getMessageRepeatEnabled()
 			: cons.getMessageRepeatDisabled();
 
 		NacUtility.quickToast(context, message);
@@ -2310,7 +2419,7 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 		Context context = this.getContext();
 		NacSharedConstants cons = new NacSharedConstants(context);
-		String message = alarm.getVibrate() ? cons.getMessageVibrateEnabled()
+		String message = alarm.shouldVibrate() ? cons.getMessageVibrateEnabled()
 			: cons.getMessageVibrateDisabled();
 
 		NacUtility.quickToast(context, message);

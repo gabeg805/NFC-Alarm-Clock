@@ -116,7 +116,7 @@ public class NacDayOfWeek
 	 */
 	public EnumSet<NacCalendar.Day> getDays()
 	{
-		EnumSet<NacCalendar.Day> days = EnumSet.noneOf(NacCalendar.Day.class);
+		EnumSet<NacCalendar.Day> days = NacCalendar.NO_DAYS;
 
 		for (NacCalendar.Day d : NacCalendar.WEEK)
 		{

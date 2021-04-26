@@ -70,6 +70,11 @@ public class NacCalendar
 		Day.SATURDAY);
 
 	/**
+	 * No days.
+	 */
+	public static final EnumSet<Day> NO_DAYS = EnumSet.noneOf(Day.class);
+
+	/**
 	 * Length of week.
 	 */
 	public static final int WEEK_LENGTH = WEEK.size();
@@ -89,7 +94,7 @@ public class NacCalendar
 			return String.format(locale, "%1$s.",
 				cons.getMessageNoAlarmsScheduled());
 		}
-		else if (!alarm.getEnabled())
+		else if (!alarm.isEnabled())
 		{
 			int length = cons.getMessageNameLength();
 			String name = alarm.getNameNormalizedForMessage(length);
@@ -218,7 +223,7 @@ public class NacCalendar
 
 		for (NacAlarm a : alarms)
 		{
-			if (!a.getEnabled())
+			if (!a.isEnabled())
 			{
 				continue;
 			}
@@ -366,7 +371,7 @@ public class NacCalendar
 	{
 		Calendar calendar = NacCalendar.toCalendar(alarm, day);
 		Calendar now = Calendar.getInstance();
-		//boolean repeat = alarm.getRepeat();
+		//boolean repeat = alarm.shouldRepeat();
 
 		if (calendar.before(now))
 		{
@@ -660,7 +665,7 @@ public class NacCalendar
 		 */
 		public static EnumSet<Day> valueToDays(int value)
 		{
-			EnumSet<Day> days = EnumSet.noneOf(Day.class);
+			EnumSet<Day> days = NO_DAYS;
 
 			for (Day d : WEEK)
 			{

@@ -33,7 +33,7 @@ public class NacShutdownBroadcastReceiver
 			{
 				a.setIsActive(false);
 
-				if (!a.getRepeat())
+				if (!a.shouldRepeat())
 				{
 					NacScheduler.toggleAlarm(a);
 				}

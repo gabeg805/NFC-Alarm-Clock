@@ -129,7 +129,7 @@ public class NacWakeupProcess
 	private boolean canVibrate()
 	{
 		NacAlarm alarm = this.getAlarm();
-		return (alarm != null) && alarm.getVibrate();
+		return (alarm != null) && alarm.shouldVibrate();
 	}
 
 	/**

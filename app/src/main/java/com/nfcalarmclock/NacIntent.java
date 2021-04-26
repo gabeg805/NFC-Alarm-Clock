@@ -155,8 +155,11 @@ public class NacIntent
 			return null;
 		}
 
-		NacSharedDefaults defaults = new NacSharedDefaults(context);
-		NacAlarm.Builder builder = new NacAlarm.Builder(context);
+		//NacSharedDefaults defaults = new NacSharedDefaults(context);
+		//NacAlarm.Builder builder = new NacAlarm.Builder(context);
+		NacSharedPreferences shared = new NacSharedPreferences(context);
+		NacSharedDefaults defaults = shared.getDefaults();
+		NacAlarm.Builder builder = new NacAlarm.Builder(shared);
 		Calendar calendar = Calendar.getInstance();
 		boolean isSet = false;
 
@@ -190,8 +193,7 @@ public class NacIntent
 		{
 			ArrayList<Integer> extraDays =
 				intent.getIntegerArrayListExtra(AlarmClock.EXTRA_DAYS);
-			EnumSet<NacCalendar.Day> days =
-				EnumSet.noneOf(NacCalendar.Day.class);
+			EnumSet<NacCalendar.Day> days = NacCalendar.NO_DAYS;
 			isSet = true;
 
 			for (int d : extraDays)
