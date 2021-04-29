@@ -93,9 +93,6 @@ public class NacRingtoneFragment
 	@Override
 	public void onClick(View view)
 	{
-		super.onClick(view);
-
-		Context context = getContext();
 		int id = view.getId();
 
 		if (id == R.id.clear)
@@ -109,11 +106,13 @@ public class NacRingtoneFragment
 
 			if (this.safePlay(uri) < 0)
 			{
-				NacSharedConstants cons = new NacSharedConstants(context);
-				NacUtility.printf("Unable to play ringtone : %s", path);
-				NacUtility.toast(context, cons.getErrorMessagePlayAudio());
+				this.showErrorPlayingAudio();
 			}
+
+			return;
 		}
+
+		super.onClick(view);
 	}
 
 	/**

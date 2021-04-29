@@ -96,7 +96,7 @@ public class NacSettingsActivity
 		{
 			addPreferencesFromResource(R.xml.main_preferences);
 
-			NacSharedKeys keys = this.getKeys();
+			NacSharedKeys keys = this.getSharedKeys();
 			Preference appearance = findPreference(keys.getAppearance());
 			Preference general = findPreference(keys.getGeneral());
 			Preference miscellaneous = findPreference(keys.getMiscellaneous());
@@ -130,7 +130,7 @@ public class NacSettingsActivity
 		@Override
 		public boolean onPreferenceClick(Preference preference)
 		{
-			NacSharedKeys keys = this.getKeys();
+			NacSharedKeys keys = this.getSharedKeys();
 			String preferenceKey = preference.getKey();
 			FragmentManager manager = getParentFragmentManager();
 			Fragment fragment;

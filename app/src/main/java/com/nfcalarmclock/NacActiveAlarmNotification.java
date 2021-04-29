@@ -133,10 +133,10 @@ public class NacActiveAlarmNotification
 	{
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
-		int id = (alarm == null) ? 0 : alarm.getId();
+		long id = (alarm == null) ? 0 : alarm.getId();
 		Intent intent = NacIntent.createAlarmActivity(context, alarm);
 
-		return PendingIntent.getActivity(context, id, intent,
+		return PendingIntent.getActivity(context, (int)id, intent,
 			PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 

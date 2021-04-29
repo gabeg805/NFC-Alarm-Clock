@@ -263,7 +263,7 @@ public class NacSharedPreferences
 	/**
 	 * Edit the current snooze count for an alarm with the given ID.
 	 */
-	public void editSnoozeCount(int id, int count)
+	public void editSnoozeCount(long id, int count)
 	{
 		String key = NacSharedKeys.getSnoozeCount(id);
 		this.saveInt(key, count, false);
@@ -894,7 +894,7 @@ public class NacSharedPreferences
 	/**
 	 * @return The snooze count.
 	 */
-	public int getSnoozeCount(int id)
+	public int getSnoozeCount(long id)
 	{
 		String key = NacSharedKeys.getSnoozeCount(id);
 		int value = this.getDefaults().getSnoozeCount();

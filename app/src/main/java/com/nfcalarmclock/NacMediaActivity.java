@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentOnAttachListener;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
@@ -18,7 +19,8 @@ import androidx.viewpager.widget.ViewPager;
  */
 public class NacMediaActivity
 	extends FragmentActivity
-	implements TabLayout.OnTabSelectedListener,
+	implements FragmentOnAttachListener,
+		TabLayout.OnTabSelectedListener,
 		ActivityCompat.OnRequestPermissionsResultCallback
 {
 
@@ -60,9 +62,17 @@ public class NacMediaActivity
 	/**
 	 * The tab titles.
 	 */
-	//private static final String[] mTitles = new String[] { "Browse",
-	//	"Ringtone", "Spotify" };
 	private final String[] mTitles = new String[2];
+
+	/**
+	 */
+	public NacMediaActivity()
+	{
+		super();
+
+		FragmentManager manager = getSupportFragmentManager();
+		manager.addFragmentOnAttachListener(this);
+	}
 
 	/**
 	 * Select a fragment.
@@ -178,10 +188,9 @@ public class NacMediaActivity
 	/**
 	 */
 	@Override
-	public void onAttachFragment(@NonNull Fragment fragment)
+	public void onAttachFragment(@NonNull FragmentManager manager,
+		@NonNull Fragment fragment)
 	{
-		super.onAttachFragment(fragment);
-
 		Fragment[] list = this.getFragments();
 
 		if (list == null)
@@ -238,6 +247,7 @@ public class NacMediaActivity
 		Intent intent = getIntent();
 		FragmentManager manager = getSupportFragmentManager();
 		NacSharedConstants cons = new NacSharedConstants(this);
+
 		this.mAlarm = NacIntent.getAlarm(intent);
 		this.mMediaPath = NacIntent.getMedia(intent);
 		this.mPager = findViewById(R.id.act_sound);

@@ -43,7 +43,7 @@ public class NacAppearanceSettingsFragment
 	@Override
 	public boolean onPreferenceChange(Preference pref, Object newVal)
 	{
-		NacSharedKeys keys = this.getKeys();
+		NacSharedKeys keys = this.getSharedKeys();
 		String prefKey = pref.getKey();
 		String themeKey = keys.getThemeColor();
 		String dayButtonStyleKey = keys.getDayButtonStyle();
@@ -67,7 +67,7 @@ public class NacAppearanceSettingsFragment
 	 */
 	private void setupDayButtonStylePreference()
 	{
-		NacSharedKeys keys = this.getKeys();
+		NacSharedKeys keys = this.getSharedKeys();
 		String dayButtonStyleKey = keys.getDayButtonStyle();
 		Preference dayButtonStylePref = findPreference(dayButtonStyleKey);
 
@@ -79,7 +79,7 @@ public class NacAppearanceSettingsFragment
 	 */
 	private void setupThemeColorPreference()
 	{
-		NacSharedKeys keys = this.getKeys();
+		NacSharedKeys keys = this.getSharedKeys();
 		String themeKey = keys.getThemeColor();
 		Preference themePref = findPreference(themeKey);
 

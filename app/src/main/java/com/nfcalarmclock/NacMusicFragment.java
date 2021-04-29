@@ -114,45 +114,6 @@ public class NacMusicFragment
 	/**
 	 */
 	@Override
-	public void onClick(View view)
-	{
-		int id = view.getId();
-
-		if (id == R.id.clear)
-		{
-			NacFileBrowser browser = this.getFileBrowser();
-
-			if (browser != null)
-			{
-				browser.deselect();
-			}
-		}
-		else if (id == R.id.ok)
-		{
-			String path = getMediaPath();
-
-			if (NacMedia.isDirectory(path))
-			{
-				Context context = getContext();
-				NacDialog dialog = new NacDialog();
-
-				dialog.saveData(view);
-				dialog.setOnBuildListener(this);
-				dialog.addOnDismissListener(this);
-				dialog.build(context, R.layout.dlg_media_playlist);
-				dialog.show();
-				dialog.scale(0.85, 1.0, false, true);
-
-				return;
-			}
-		}
-
-		super.onClick(view);
-	}
-
-	/**
-	 */
-	@Override
 	public void onBrowserClicked(NacFileBrowser browser,
 		NacFile.Metadata metadata, String path, String name)
 	{
@@ -175,10 +136,7 @@ public class NacMusicFragment
 			{
 				if (this.safePlay(uri) < 0)
 				{
-					NacSharedConstants cons = new NacSharedConstants(context);
-					NacUtility.printf("Unable to play music : %d | %s",
-						metadata.getId(), metadata.getPath());
-					NacUtility.toast(context, cons.getErrorMessagePlayAudio());
+					this.showErrorPlayingAudio();
 				}
 			}
 			else
@@ -186,6 +144,36 @@ public class NacMusicFragment
 				this.safeReset();
 			}
 		}
+	}
+
+	/**
+	 */
+	@Override
+	public void onClick(View view)
+	{
+		int id = view.getId();
+
+		if (id == R.id.clear)
+		{
+			NacFileBrowser browser = this.getFileBrowser();
+
+			if (browser != null)
+			{
+				browser.deselect();
+			}
+		}
+		else if (id == R.id.ok)
+		{
+			String path = getMediaPath();
+
+			if (NacMedia.isDirectory(path))
+			{
+				this.showWarningDirectorySelected(view);
+				return;
+			}
+		}
+
+		super.onClick(view);
 	}
 
 	/**
@@ -265,6 +253,22 @@ public class NacMusicFragment
 		browser.setOnBrowserClickedListener(this);
 		browser.show(dir);
 		browser.select(name);
+	}
+
+	/**
+	 * Show a warning indicating that a music directory was selected.
+	 */
+	public void showWarningDirectorySelected(View view)
+	{
+		Context context = getContext();
+		NacDialog dialog = new NacDialog();
+
+		dialog.saveData(view);
+		dialog.setOnBuildListener(this);
+		dialog.addOnDismissListener(this);
+		dialog.build(context, R.layout.dlg_media_playlist);
+		dialog.show();
+		dialog.scale(0.85, 1.0, false, true);
 	}
 
 }

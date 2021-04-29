@@ -308,7 +308,7 @@ public class NacSharedKeys
 	/**
 	 * @return The snooze counter.
 	 */
-	public static String getSnoozeCount(int id)
+	public static String getSnoozeCount(long id)
 	{
 		return "snoozeCount" + id;
 	}

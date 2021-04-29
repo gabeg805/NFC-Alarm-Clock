@@ -24,7 +24,7 @@ public class NacAlarm
 	//@PrimaryKey
 	@PrimaryKey(autoGenerate=true)
 	@ColumnInfo(name="id")
-	private int mId;
+	private long mId;
 
 	/**
 	 * Flag indicating whether the alarm is currently active or not.
@@ -256,7 +256,7 @@ public class NacAlarm
 		 *
 		 * @return The Builder.
 		 */
-		public Builder setId(int id)
+		public Builder setId(long id)
 		{
 			this.getAlarm().setId(id);
 			return this;
@@ -455,7 +455,7 @@ public class NacAlarm
 	private NacAlarm(Parcel input)
 	{
 		this();
-		this.setId(input.readInt());
+		this.setId(input.readLong());
 		this.setIsActive(input.readInt() != 0);
 		this.setIsEnabled((input.readInt() != 0));
 		this.setHour(input.readInt());
@@ -502,7 +502,7 @@ public class NacAlarm
 	 *
 	 * @param  id  The ID of the created alarm.
 	 */
-	public NacAlarm copy(int id)
+	public NacAlarm copy(long id)
 	{
 		return new NacAlarm.Builder()
 			.setId(id)
@@ -603,25 +603,9 @@ public class NacAlarm
 	/**
 	 * @return The alarm ID.
 	 */
-	public int getId()
+	public long getId()
 	{
 		return this.mId;
-	}
-
-	/**
-	 * TODO: Change name of this to offset or something.
-	 *
-	 * @param  c  The calendar instance.
-	 *
-	 * @return The alarm ID, offset by the given day to make it unique to that
-	 *         day.
-	 */
-	public int getId(Calendar c)
-	{
-		int day = c.get(Calendar.DAY_OF_WEEK);
-		int offset = NacCalendar.Days.toIndex(day);
-
-		return this.getId() + offset;
 	}
 
 	/**
@@ -716,7 +700,7 @@ public class NacAlarm
 	 */
 	public int getSnoozeCount(NacSharedPreferences shared)
 	{
-		int id = this.getId();
+		long id = this.getId();
 		return shared.getSnoozeCount(id);
 	}
 
@@ -792,7 +776,7 @@ public class NacAlarm
 	 */
 	public boolean isSnoozed(NacSharedPreferences shared)
 	{
-		int id = this.getId();
+		long id = this.getId();
 		return (shared.getSnoozeCount(id) > 0);
 	}
 
@@ -873,7 +857,7 @@ public class NacAlarm
 	 *
 	 * @param  id  The unique ID of the alarm.
 	 */
-	public void setId(int id)
+	public void setId(long id)
 	{
 		this.mId = id;
 	}
@@ -1127,7 +1111,7 @@ public class NacAlarm
 	@Override
 	public void writeToParcel(Parcel output, int flags)
 	{
-		output.writeInt(this.getId());
+		output.writeLong(this.getId());
 		output.writeInt(this.isActive() ? 1 : 0);
 		output.writeInt(this.isEnabled() ? 1 : 0);
 		output.writeInt(this.getHour());

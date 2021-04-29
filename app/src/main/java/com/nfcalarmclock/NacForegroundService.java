@@ -215,7 +215,7 @@ public class NacForegroundService
 			return -1;
 		}
 
-		int id = alarm.getId();
+		long id = alarm.getId();
 		int i = 0;
 
 		for (NacWakeupProcess p : allWakeups)
@@ -469,7 +469,7 @@ public class NacForegroundService
 		NacActiveAlarmNotification notification =
 			new NacActiveAlarmNotification(this);
 		notification.setAlarm(alarm);
-		startForeground(alarm.getId(), notification.builder().build());
+		startForeground((int)alarm.getId(), notification.builder().build());
 	}
 
 	/**
@@ -489,7 +489,7 @@ public class NacForegroundService
 
 		Calendar cal = Calendar.getInstance();
 		int snoozeCount = alarm.getSnoozeCount(shared);
-		int id = alarm.getId();
+		long id = alarm.getId();
 
 		cal.add(Calendar.MINUTE, shared.getSnoozeDurationValue());
 		alarm.setHour(cal.get(Calendar.HOUR_OF_DAY));

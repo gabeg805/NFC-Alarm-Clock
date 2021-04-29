@@ -25,15 +25,6 @@ import java.util.Locale;
 @SuppressWarnings("UnnecessaryInterfaceModifier")
 public class NacAlarmCardAdapter
 	extends ListAdapter<NacAlarm, NacCardHolder>
-	//implements View.OnClickListener,
-		//View.OnCreateContextMenuListener,
-		//MenuItem.OnMenuItemClickListener,
-		//RecyclerView.OnItemTouchListener,
-		//NacAlarm.OnAlarmChangeListener,
-		//NacCardHolder.OnCardCollapsedListener,
-		//NacCardHolder.OnCardExpandedListener,
-		//NacCardHolder.OnDeleteClickedListener
-		//NacCardTouchHelper.Adapter
 {
 
 	/**
@@ -44,23 +35,10 @@ public class NacAlarmCardAdapter
 		public void onViewHolderCreated(NacCardHolder holder);
 	}
 
-	///**
-	// * Definition for the use NFC change listener.
-	// */
-    //public interface OnUseNfcChangeListener
-	//{
-    //    public void onUseNfcChange(NacAlarm alarm);
-	//}
-
 	/**
 	 * Listener for when an alarm card is created.
 	 */
 	private OnViewHolderCreatedListener mOnViewHolderCreatedListener;
-
-	///**
-	// * Listener for when use NFC is changed.
-	// */
-	//private OnUseNfcChangeListener mOnUseNfcChangeListener;
 
 	/**
 	 * Main activity root view.
@@ -77,40 +55,10 @@ public class NacAlarmCardAdapter
 	 */
 	private final NacSharedPreferences mSharedPreferences;
 
-	///**
-	// * Handle card swipe events.
-	// */
-	//private final NacCardTouchHelper mTouchHelper;
-
-	///**
-	// * The alarm to restore, when prompted after deletion.
-	// */
-	//private final Undo mUndo;
-
-	///**
-	// * The snackbar.
-	// */
-	//private final NacSnackbar mSnackbar;
-
-	///**
-	// * Upcoming notifications.
-	// */
-	//private final NacUpcomingAlarmNotification mNotification;
-
-	///**
-	// * List of alarms.
-	// */
-	//private List<NacAlarm> mAlarmList;
-
 	/**
 	 * Indicator that the alarm was added through the floating action button.
 	 */
 	private boolean mWasAddedWithFloatingActionButton;
-
-	///**
-	// * Card that was last clicked on to show a menu.
-	// */
-	//private View mLastCardClicked;
 
 	/**
 	 */
@@ -145,23 +93,14 @@ public class NacAlarmCardAdapter
 		super(DIFF_CALLBACK);
 
 		AppCompatActivity activity = (AppCompatActivity) context;
-		//NacCardTouchHelper.Callback callback =
-		//	new NacCardTouchHelper.Callback(this);
 
 		CoordinatorLayout root = activity.findViewById(R.id.activity_main);
 		RecyclerView rv = root.findViewById(R.id.content_alarm_list);
 		this.mRoot = root;
 		this.mRecyclerView = rv;
 		this.mSharedPreferences = new NacSharedPreferences(context);
-		//this.mTouchHelper = new NacCardTouchHelper(callback);
-		//this.mUndo = new Undo();
-		//this.mNotification = new NacUpcomingAlarmNotification(context);
-		//this.mSnackbar = new NacSnackbar(root);
-		//this.mAlarmList = null;
 		this.mWasAddedWithFloatingActionButton = false;
-		//this.mLastCardClicked = null;
 
-		//rv.addOnItemTouchListener(this);
 		setHasStableIds(true);
 	}
 
@@ -264,19 +203,6 @@ public class NacAlarmCardAdapter
 		//this.updateNotification();
 		//notifyDataSetChanged();
 	}
-
-	///**
-	// * Call the use NFC change listener.
-	// */
-	//private void callOnUseNfcChangeListener(NacAlarm alarm)
-	//{
-	//	OnUseNfcChangeListener listener = this.getOnUseNfcChangeListener();
-	//	if (listener != null)
-	//	{
-	//		listener.onUseNfcChange(alarm);
-	//		alarm.resetChangeTracker();
-	//	}
-	//}
 
 	/**
 	 * @return True if the alarm can be inserted at the current state in the
@@ -387,7 +313,7 @@ public class NacAlarmCardAdapter
 		//int size = this.size();
 		List<NacAlarm> alarmList = getCurrentList();
 		int size = getItemCount();
-		int id = alarm.getId();
+		long id = alarm.getId();
 
 		for (int i=0; i < size; i++)
 		{
@@ -432,13 +358,13 @@ public class NacAlarmCardAdapter
 			return null;
 		}
 
-		int id = alarm.getId();
+		long id = alarm.getId();
 		if (id <= 0)
 		{
 			return null;
 		}
 
-		return (NacCardHolder) rv.findViewHolderForItemId(id);
+		return (NacCardHolder) rv.findViewHolderForItemId((int)id);
 	}
 
 	/**
@@ -467,14 +393,6 @@ public class NacAlarmCardAdapter
 	//	return NacCalendar.getNextAlarm(alarms);
 	//}
 
-	///**
-	// * @return The notification.
-	// */
-	//public NacUpcomingAlarmNotification getNotification()
-	//{
-	//	return this.mNotification;
-	//}
-
 	/**
 	 * @return The listener for when an alarm card is created.
 	 */
@@ -482,14 +400,6 @@ public class NacAlarmCardAdapter
 	{
 		return this.mOnViewHolderCreatedListener;
 	}
-
-	///**
-	// * @return The on use NFC change listener.
-	// */
-	//protected OnUseNfcChangeListener getOnUseNfcChangeListener()
-	//{
-	//	return this.mOnUseNfcChangeListener;
-	//}
 
 	/**
 	 * @return The RecyclerView.
@@ -522,14 +432,6 @@ public class NacAlarmCardAdapter
 	{
 		return this.mSharedPreferences;
 	}
-
-	///**
-	// * @return The snackbar.
-	// */
-	//private NacSnackbar getSnackbar()
-	//{
-	//	return this.mSnackbar;
-	//}
 
 	/**
 	 * @return The list of alarms, in sort order, from soonest to latest, with
@@ -727,12 +629,7 @@ public class NacAlarmCardAdapter
 	{
 		NacAlarm alarm = this.getAlarmAt(position);
 
-		//alarm.setOnAlarmChangeListener(this);
 		holder.init(alarm);
-		//holder.setOnCardCollapsedListener(this);
-		//holder.setOnCardExpandedListener(this);
-		//holder.setOnDeleteClickedListener(this);
-		//holder.setOnCreateContextMenuListener(this);
 
 		if (this.wasAddedWithFloatingActionButton())
 		{
@@ -840,99 +737,6 @@ public class NacAlarmCardAdapter
 	}
 
 	///**
-	// * Delete button was clicked.
-	// */
-	//@Override
-	//public void onDeleteClicked(int position)
-	//{
-	//	this.deleteAlarm(position);
-	//}
-
-	///**
-	// * Needed for RecyclerView.OnItemTouchListener
-	// */
-	//public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, MotionEvent ev)
-	//{
-	//	int action = ev.getAction();
-
-	//	if (action == MotionEvent.ACTION_UP)
-	//	{
-	//		NacSnackbar snackbar = this.getSnackbar();
-
-	//		if (snackbar.canDismiss())
-	//		{
-	//			snackbar.dismiss();
-	//		}
-	//	}
-
-	//	return false;
-	//}
-
-	///**
-	// * Called when an alarm card was swiped to be copied.
-	// *
-	// * @param  index  The index of the alarm to copy.
-	// */
-	//@Override
-	//public void onItemCopy(int index)
-	//{
-	//	this.copyAlarm(index);
-	//}
-
-	///**
-	// * Called when an alarm card was swiped to be deleted.
-	// * 
-	// * @param  index  The index of the alarm to delete.
-	// */
-	//@Override
-	//public void onItemDelete(int index)
-	//{
-	//	this.deleteAlarm(index);
-	//}
-
-	///**
-	// * Catch when a menu item is clicked.
-	// */
-	//@Override
-	//public boolean onMenuItemClick(MenuItem item)
-	//{
-	//	RecyclerView rv = this.getRecyclerView();
-	//	View view = this.mLastCardClicked;
-	//	NacCardHolder holder = (NacCardHolder) rv.findContainingViewHolder(view);
-	//	int id = item.getItemId();
-
-	//	if (holder != null)
-	//	{
-	//		NacAlarm alarm = holder.getAlarm();
-	//		if (id == R.id.menu_show_next_alarm)
-	//		{
-	//			this.showAlarm(alarm);
-	//		}
-	//		else if (id == R.id.menu_show_nfc_tag_id)
-	//		{
-	//			this.showNfcTagId(alarm);
-	//		}
-	//	}
-
-	//	this.mLastCardClicked = null;
-	//	return true;
-	//}
-
-	///**
-	// * Note: Needed for RecyclerView.OnItemTouchListener
-	// */
-	//public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept)
-	//{
-	//}
-
-	///**
-	// * Note: Needed for RecyclerView.OnItemTouchListener
-	// */
-	//public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e)
-	//{
-	//}
-
-	///**
 	// * Restore a previously deleted alarm.
 	// * 
 	// * @param  alarm  The alarm to restore.
@@ -964,14 +768,6 @@ public class NacAlarmCardAdapter
 	{
 		this.mOnViewHolderCreatedListener = listener;
 	}
-
-	///**
-	// * Set the on use NFC change listener.
-	// */
-	//public void setOnUseNfcChangeListener(OnUseNfcChangeListener listener)
-	//{
-	//	this.mOnUseNfcChangeListener = listener;
-	//}
 
 	/**
 	 * Set whether an alarm was added with the floating button.
@@ -1072,24 +868,6 @@ public class NacAlarmCardAdapter
 	//	NacUtility.quickToast(context, message);
 	//}
 
-	///**
-	// * @see #showSnackbar(String, String, View.OnClickListener)
-	// */
-	//private void showSnackbar(String message, String action)
-	//{
-	//	this.showSnackbar(message, action, null);
-	//}
-
-	///**
-	// * Create a snackbar message.
-	// */
-	//private void showSnackbar(String message, String action,
-	//	View.OnClickListener listener)
-	//{
-	//	NacSnackbar snackbar = this.getSnackbar();
-	//	snackbar.show(message, action, listener, true);
-	//}
-
 	/**
 	 * Sort the enabled alarms from soonest to latest.
 	 */
@@ -1151,30 +929,6 @@ public class NacAlarmCardAdapter
 		NacUtility.quickToast(context, cons.getErrorMessageMaxAlarms());
 	}
 
-	///**
-	// * Save undo parameters.
-	// */
-	//public void undo(NacAlarm alarm, int position, Undo.Type type)
-	//{
-	//	this.getUndo().set(alarm, position, type);
-	//}
-
-	///**
-	// * Update the notification.
-	// */
-	//public void updateNotification()
-	//{
-	//	NacSharedPreferences shared = this.getSharedPreferences();
-	//	List<NacAlarm> alarms = this.getAlarms();
-
-	//	if (shared.getUpcomingAlarmNotification())
-	//	{
-	//		NacUpcomingAlarmNotification notification = this.getNotification();
-	//		notification.setAlarmList(alarms);
-	//		notification.show();
-	//	}
-	//}
-
 	/**
 	 * @return True if the alarm was added, and False otherwise.
 	 */
@@ -1212,92 +966,5 @@ public class NacAlarmCardAdapter
 
 		//return size;
 	}
-
-	///**
-	// * Undo an alarm card.
-	// */
-	//public static class Undo
-	//{
-
-	//	/**
-	//	 * Type of undo operation.
-	//	 */
-	//	public enum Type
-	//	{
-	//		NONE,
-	//		COPY,
-	//		DELETE,
-	//		RESTORE
-	//	}
-
-	//	/**
-	//	 * Alarm.
-	//	 */
-	//	public NacAlarm mAlarm;
-
-	//	/**
-	//	 * Position of the alarm card in the RecyclerView.
-	//	 */
-	//	public int mPosition;
-
-	//	/**
-	//	 * Type of undo.
-	//	 */
-	//	public Type mType;
-
-	//	/**
-	//	 */
-	//	public Undo()
-	//	{
-	//		this.reset();
-	//	}
-
-	//	/**
-	//	 * Reset the member variables.
-	//	 */
-	//	public void reset()
-	//	{
-	//		this.set(null, -1, Type.NONE);
-	//	}
-
-	//	/**
-	//	 * Set the member variables.
-	//	 *
-	//	 * @param  alarm  The alarm info.
-	//	 * @param  position  Position of the alarm card.
-	//	 * @param  type  Type of undo.
-	//	 */
-	//	public void set(NacAlarm alarm, int position, Type type)
-	//	{
-	//		this.mAlarm = alarm;
-	//		this.mPosition = position;
-	//		this.mType = type;
-	//	}
-
-	//	/**
-	//	 * @return The alarm.
-	//	 */
-	//	public NacAlarm getAlarm()
-	//	{
-	//		return this.mAlarm;
-	//	}
-
-	//	/**
-	//	 * @return The position.
-	//	 */
-	//	public int getPosition()
-	//	{
-	//		return this.mPosition;
-	//	}
-
-	//	/**
-	//	 * @return The undo type.
-	//	 */
-	//	public Type getType()
-	//	{
-	//		return this.mType;
-	//	}
-
-	//}
 
 }

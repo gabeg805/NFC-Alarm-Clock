@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 /**
  * Media fragment for ringtones and music files.
@@ -133,11 +134,8 @@ public class NacMediaFragment
 
 		Bundle args = getArguments();
 
-		if (args != null)
-		{
-			this.mAlarm = NacBundle.getAlarm(args);
-			this.mMediaPath = NacBundle.getMedia(args);
-		}
+		this.mAlarm = NacBundle.getAlarm(args);
+		this.mMediaPath = NacBundle.getMedia(args);
 	}
 
 	/**
@@ -145,7 +143,7 @@ public class NacMediaFragment
 	@Override
 	public void onClick(View view)
 	{
-		FragmentActivity activity = getActivity();
+		FragmentActivity activity = requireActivity();
 		int id = view.getId();
 
 		if (id == R.id.clear)
@@ -159,18 +157,19 @@ public class NacMediaFragment
 		}
 		else if (id == R.id.ok)
 		{
-			Context context = getContext();
 			NacAlarm alarm = this.getAlarm();
 			String media = this.getMedia();
 
 			if (alarm != null)
 			{
-				Intent intent = NacIntent.toIntent(context, null, alarm);
-				NacDatabase db = new NacDatabase(context);
-
-				db.update(alarm);
-				db.close();
-				NacScheduler.update(context, alarm);
+				NacAlarmViewModel viewModel = new ViewModelProvider(activity)
+					.get(NacAlarmViewModel.class);
+				viewModel.update(activity, alarm);
+			}
+			else if (media != null)
+			{
+				//Intent intent = NacIntent.toIntent(activity, null, alarm);
+				Intent intent = NacIntent.toIntent(media);
 				activity.setResult(Activity.RESULT_OK, intent);
 			}
 
@@ -337,6 +336,21 @@ public class NacMediaFragment
 		this.mPlayer = new NacMediaPlayer(context, focus);
 
 		return this.mPlayer;
+	}
+
+	/**
+	 * Show an error indicating that audio was unable to be played.
+	 */
+	public void showErrorPlayingAudio()
+	{
+		Context context = getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
+
+		// Commented this because would have needed to add path as arg
+		//NacUtility.printf("Unable to play ringtone : %s", path);
+		//NacUtility.printf("Unable to play music : %d | %s",
+		//	metadata.getId(), metadata.getPath());
+		NacUtility.toast(context, cons.getErrorMessagePlayAudio());
 	}
 
 }

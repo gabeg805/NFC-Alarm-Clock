@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
+import java.util.concurrent.Future;
 import java.util.List;
 
 /**
@@ -38,23 +40,33 @@ public class NacAlarmViewModel
 	/**
 	 * Copy an alarm in the database using the repository.
 	 */
-	public void copy(NacAlarm alarm)
+	public Future<?> copy(NacAlarm alarm)
 	{
-		this.getRepository().copy(alarm);
+		if (alarm == null)
+		{
+			return null;
+		}
+
+		return this.getRepository().copy(alarm);
 		// TODO: What should I do with the scheduler here? Do nothing?
 	}
 
 	/**
 	 * Delete an alarm from the database using the repository.
 	 */
-	public void delete(Context context, NacAlarm alarm)
+	public Future<?> delete(Context context, NacAlarm alarm)
 	{
-		NacSharedPreferences shared = new NacSharedPreferences(context);
-		int id = alarm.getId();
+		if (alarm == null)
+		{
+			return null;
+		}
 
-		this.getRepository().delete(alarm);
+		NacSharedPreferences shared = new NacSharedPreferences(context);
+		long id = alarm.getId();
+
 		shared.editSnoozeCount(id, 0);
 		NacScheduler.cancel(context, alarm);
+		return this.getRepository().delete(alarm);
 	}
 
 	/**
@@ -64,6 +76,15 @@ public class NacAlarmViewModel
 	{
 		return this.mAllAlarms;
 	}
+
+	/**
+	 * @return The live data list of all alarms.
+	 */
+	//public LiveData<List<NacAlarm>> getAllAlarmsSorted()
+	//{
+	//	LiveData<List<NacAlarm>> alarms = this.getAllAlarms();
+	//	return Transformations.map(alarms, );
+	//}
 
 	/**
 	 * @return Repository of the alarms.
@@ -76,19 +97,29 @@ public class NacAlarmViewModel
 	/**
 	 * Insert an alarm into the database using the repository.
 	 */
-	public void insert(Context context, NacAlarm alarm)
+	public Future<?> insert(Context context, NacAlarm alarm)
 	{
-		this.getRepository().insert(alarm);
+		if (alarm == null)
+		{
+			return null;
+		}
+
 		NacScheduler.update(context, alarm);
+		return this.getRepository().insert(alarm);
 	}
 
 	/**
 	 * Update an alarm in the database using the repository.
 	 */
-	public void update(Context context, NacAlarm alarm)
+	public Future<?> update(Context context, NacAlarm alarm)
 	{
-		this.getRepository().update(alarm);
+		if (alarm == null)
+		{
+			return null;
+		}
+
 		NacScheduler.update(context, alarm);
+		return this.getRepository().update(alarm);
 	}
 
 }

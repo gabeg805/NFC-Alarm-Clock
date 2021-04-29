@@ -25,14 +25,14 @@ public class NacScheduler
 		}
 
 		//int id = alarm.getId(day);
-		int id = alarm.getId();
+		long id = alarm.getId();
 		long millis = day.getTimeInMillis();
 		Intent operationIntent = NacIntent.toIntent(context,
 			NacAlarmBroadcastReceiver.class, alarm);
 		PendingIntent operationPendingIntent = PendingIntent.getBroadcast(
-			context, id, operationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+			context, (int)id, operationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 		Intent showIntent = new Intent(context, NacMainActivity.class);
-		PendingIntent showPendingIntent = PendingIntent.getActivity(context, id,
+		PendingIntent showPendingIntent = PendingIntent.getActivity(context, (int)id,
 			showIntent, 0);
 		AlarmClockInfo clock = new AlarmClockInfo(millis, showPendingIntent);
 		AlarmManager manager = NacScheduler.getAlarmManager(context);
@@ -66,9 +66,9 @@ public class NacScheduler
 	public static void cancel(Context context, NacAlarm alarm, Calendar day)
 	{
 		//int id = alarm.getId(day);
-		int id = alarm.getId();
+		long id = alarm.getId();
 		Intent intent = new Intent(context, NacAlarmBroadcastReceiver.class);
-		PendingIntent pending = PendingIntent.getBroadcast(context, id, intent,
+		PendingIntent pending = PendingIntent.getBroadcast(context, (int)id, intent,
 			PendingIntent.FLAG_NO_CREATE);
 
 		if (pending != null)

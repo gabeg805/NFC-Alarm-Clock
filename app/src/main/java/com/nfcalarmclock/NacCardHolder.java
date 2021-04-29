@@ -62,12 +62,28 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Listener for when the delete button is clicked.
+	 */
+	public interface OnCardDeleteClickedListener
+	{
+        public void onCardDeleteClicked(NacCardHolder holder, NacAlarm alarm);
+	}
+
+	/**
 	 * Listener for when a card is expanded.
 	 */
 	public interface OnCardExpandedListener
 	{
 		@SuppressWarnings({"unused", "EmptyMethod"})
 		public void onCardExpanded(NacCardHolder holder, NacAlarm alarm);
+	}
+
+	/**
+	 * Listener for when the media button is clicked.
+	 */
+	public interface OnCardMediaClickedListener
+	{
+        public void onCardMediaClicked(NacCardHolder holder, NacAlarm alarm);
 	}
 
 	/**
@@ -84,14 +100,6 @@ public class NacCardHolder
 	public interface OnCardUseNfcChangedListener
 	{
         public void onCardUseNfcChanged(NacCardHolder holder, NacAlarm alarm);
-	}
-
-	/**
-	 * Listener for when the delete button is clicked.
-	 */
-	public interface OnDeleteClickedListener
-	{
-        public void onDeleteClicked(int pos);
 	}
 
 	/**
@@ -254,10 +262,20 @@ public class NacCardHolder
 	 */
 	private OnCardCollapsedListener mOnCardCollapsedListener;
 
+
+	/**
+	 * Listener for when the delete button is clicked.
+	 */
+	private OnCardDeleteClickedListener mOnCardDeleteClickedListener;
 	/**
 	 * Listener for when the alarm card is expanded.
 	 */
 	private OnCardExpandedListener mOnCardExpandedListener;
+
+	/**
+	 * Listener for when the media button is clicked.
+	 */
+	private OnCardMediaClickedListener mOnCardMediaClickedListener;
 
 	/**
 	 * Listener for when the alarm card is updated.
@@ -268,11 +286,6 @@ public class NacCardHolder
 	 * Listener for when a card will use NFC or not is changed.
 	 */
 	private OnCardUseNfcChangedListener mOnCardUseNfcChangedListener;
-
-	/**
-	 * Listener for when the delete button is clicked.
-	 */
-	private OnDeleteClickedListener mOnDeleteClickedListener;
 
 	/**
 	 * Collapse duration.
@@ -326,10 +339,11 @@ public class NacCardHolder
 		this.mHighlightAnimator = null;
 		this.mTimePicker = null;
 		this.mOnCardCollapsedListener = null;
+		this.mOnCardDeleteClickedListener = null;
 		this.mOnCardExpandedListener = null;
+		this.mOnCardMediaClickedListener = null;
 		this.mOnCardUpdatedListener = null;
 		this.mOnCardUseNfcChangedListener = null;
-		this.mOnDeleteClickedListener = null;
 
 		this.mCardAnimator.setInterpolator(new AccelerateInterpolator());
 	}
@@ -366,29 +380,73 @@ public class NacCardHolder
 
 	/**
 	 * Call the card collapsed listener.
+	 *
+	 * This listener will not get called if the card has not been measured yet.
 	 */
 	private void callOnCardCollapsedListener()
 	{
+		NacSharedPreferences shared = this.getSharedPreferences();
 		OnCardCollapsedListener listener = this.getOnCardCollapsedListener();
-		NacAlarm alarm = this.getAlarm();
+
+		if (!shared.getCardIsMeasured())
+		{
+			return;
+		}
 
 		if ((listener != null) && this.isCollapsed())
 		{
+			NacAlarm alarm = this.getAlarm();
 			listener.onCardCollapsed(this, alarm);
 		}
 	}
 
 	/**
+	 * Call the delete clicked listener.
+	 */
+	private void callOnCardDeleteClickedListener()
+	{
+		OnCardDeleteClickedListener listener = this.getOnCardDeleteClickedListener();
+		NacAlarm alarm = this.getAlarm();
+
+		if (listener != null)
+		{
+			listener.onCardDeleteClicked(this, alarm);
+		}
+	}
+
+	/**
 	 * Call the card expanded listener.
+	 *
+	 * This listener will not get called if the card has not been measured yet.
 	 */
 	private void callOnCardExpandedListener()
 	{
+		NacSharedPreferences shared = this.getSharedPreferences();
 		OnCardExpandedListener listener = this.getOnCardExpandedListener();
 		NacAlarm alarm = this.getAlarm();
+
+		if (!shared.getCardIsMeasured())
+		{
+			return;
+		}
 
 		if ((listener != null) && this.isExpanded())
 		{
 			listener.onCardExpanded(this, alarm);
+		}
+	}
+
+	/**
+	 * Call the media button clicked listener.
+	 */
+	private void callOnCardMediaClickedListener()
+	{
+		OnCardMediaClickedListener listener = this.getOnCardMediaClickedListener();
+		NacAlarm alarm = this.getAlarm();
+
+		if (listener != null)
+		{
+			listener.onCardMediaClicked(this, alarm);
 		}
 	}
 
@@ -417,21 +475,6 @@ public class NacCardHolder
 		if (listener != null)
 		{
 			listener.onCardUseNfcChanged(this, alarm);
-		}
-	}
-
-	/**
-	 * Call the delete clicked listener.
-	 */
-	private void callOnDeleteClickedListener()
-	{
-		OnDeleteClickedListener listener = this.getOnDeleteClickedListener();
-		//int pos = getAbsoluteAdapterPosition();
-		int pos = getBindingAdapterPosition();
-
-		if ((listener != null) && (pos >= 0))
-		{
-			listener.onDeleteClicked(pos);
 		}
 	}
 
@@ -549,7 +592,7 @@ public class NacCardHolder
 	 */
 	public void delete()
 	{
-		this.callOnDeleteClickedListener();
+		this.callOnCardDeleteClickedListener();
 	}
 
 	/**
@@ -654,7 +697,7 @@ public class NacCardHolder
 	 */
 	public void doMediaButtonClick()
 	{
-		this.startMediaActivity();
+		this.callOnCardMediaClickedListener();
 	}
 
 	/**
@@ -1007,11 +1050,27 @@ public class NacCardHolder
 	}
 
 	/**
+	 * @return The listener for when the delete button is clicked.
+	 */
+	public OnCardDeleteClickedListener getOnCardDeleteClickedListener()
+	{
+		return this.mOnCardDeleteClickedListener;
+	}
+
+	/**
 	 * @return The listener for when the alarm card is expanded.
 	 */
 	private OnCardExpandedListener getOnCardExpandedListener()
 	{
 		return this.mOnCardExpandedListener;
+	}
+
+	/**
+	 * @return The listener for when the media button is clicked.
+	 */
+	public OnCardMediaClickedListener getOnCardMediaClickedListener()
+	{
+		return this.mOnCardMediaClickedListener;
 	}
 
 	/**
@@ -1029,14 +1088,6 @@ public class NacCardHolder
 	private OnCardUseNfcChangedListener getOnCardUseNfcChangedListener()
 	{
 		return this.mOnCardUseNfcChangedListener;
-	}
-
-	/**
-	 * @return The listener for when the delete button is clicked.
-	 */
-	public OnDeleteClickedListener getOnDeleteClickedListener()
-	{
-		return this.mOnDeleteClickedListener;
 	}
 
 	/**
@@ -1973,11 +2024,31 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Set listener to delete the card.
+	 *
+	 * @param  listener  The delete listener.
+	 */
+	public void setOnCardDeleteClickedListener(OnCardDeleteClickedListener listener)
+	{
+		this.mOnCardDeleteClickedListener = listener;
+	}
+
+	/**
 	 * Set the listener for when the alarm card is expanded.
 	 */
 	public void setOnCardExpandedListener(OnCardExpandedListener listener)
 	{
 		this.mOnCardExpandedListener = listener;
+	}
+
+	/**
+	 * Set listener for when the media button in the alarm card is clicked.
+	 *
+	 * @param  listener  The media clicked listener.
+	 */
+	public void setOnCardMediaClickedListener(OnCardMediaClickedListener listener)
+	{
+		this.mOnCardMediaClickedListener = listener;
 	}
 
 	/**
@@ -2005,16 +2076,6 @@ public class NacCardHolder
 		this.getHeaderView().setOnCreateContextMenuListener(listener);
 		this.getSummaryView().setOnCreateContextMenuListener(listener);
 		this.getTimeParentView().setOnCreateContextMenuListener(listener);
-	}
-
-	/**
-	 * Set listener to delete the card.
-	 *
-	 * @param  listener  The delete listener.
-	 */
-	public void setOnDeleteClickedListener(OnDeleteClickedListener listener)
-	{
-		this.mOnDeleteClickedListener = listener;
 	}
 
 	/**
@@ -2322,25 +2383,6 @@ public class NacCardHolder
 		TimePickerDialog dialog = new TimePickerDialog(context, this, hour, minute,
 			is24HourFormat);
 		dialog.show();
-	}
-
-	/**
-	 * Start the media activity.
-	 */
-	public void startMediaActivity()
-	{
-		Context context = this.getContext();
-		NacAlarm alarm = this.getAlarm();
-		Intent intent = NacIntent.toIntent(context, NacMediaActivity.class, alarm);
-
-		if (context instanceof NacMainActivity)
-		{
-			((NacMainActivity)context).startActivityForResult(intent, 69);
-		}
-		else
-		{
-			context.startActivity(intent);
-		}
 	}
 
 	/**

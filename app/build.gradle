@@ -5,20 +5,27 @@ apply plugin: 'com.android.application'
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 
 // Initialize a new Properties() object called keystoreProperties.
-def keystoreProperties = new Properties()
-
 // Load your keystore.properties file into the keystoreProperties object.
+def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
 	compileSdkVersion 29
+
 	defaultConfig {
 		applicationId "com.nfcalarmclock"
 		minSdkVersion 21
 		targetSdkVersion 29
 		versionCode 247
 		versionName "9.9.1.0"
+
+		javaCompileOptions {
+			annotationProcessorOptions {
+				arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+			}
+		}
 	}
+
 	signingConfigs {
 		release {
 			keyAlias keystoreProperties['keyAlias']
@@ -27,6 +34,7 @@ android {
 			storePassword keystoreProperties['storePassword']
 		}
 	}
+
 	buildTypes {
 		release {
 			signingConfig signingConfigs.release
@@ -34,13 +42,28 @@ android {
 			shrinkResources true
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 		}
+
 		innerTest {
 			matchingFallbacks = ['debug', 'release']
 		}
 	}
+
+	compileOptions {
+		// Flag to enable support for the new language APIs
+		// Error: coreLibraryDesugaring configuration contains no dependencies.
+		// If you intend to enable core library desugaring, please add dependencies
+		// to coreLibraryDesugaring configuration
+		// coreLibraryDesugaringEnabled true
+
+		// Sets Java compatibility to Java 8
+		sourceCompatibility JavaVersion.VERSION_1_8
+		targetCompatibility JavaVersion.VERSION_1_8
+	}
+
 	applicationVariants.all { variant ->    
 		variant.resValue "string", "versionName", variant.versionName
 	}
+
 	lintOptions {
 		//enable 'ConvertToWebp', 'DalvikOverride',
 		enable 'ConvertToWebp', 'DalvikOverride', 'DuplicateStrings',
@@ -51,9 +74,11 @@ android {
 
 repositories {
 	mavenCentral()
+
 	maven {
 		url "https://jitpack.io"
 	}
+
 	flatDir {
 		dirs 'libs'
 	}

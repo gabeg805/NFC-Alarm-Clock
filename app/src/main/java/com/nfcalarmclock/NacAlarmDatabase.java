@@ -9,24 +9,18 @@ import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 import java.util.List;
 
 /**
  * Store alarms in a Room database.
  */
-@Database(entities={NacAlarm.class}, version=1, exportSchema=false)
+@Database(entities={NacAlarm.class}, version=1, exportSchema=true)
 @TypeConverters({NacAlarmTypeConverters.class})
 public abstract class NacAlarmDatabase
 	extends RoomDatabase
 {
-
-	/**
-	 * Listener for when the database is created.
-	 */
-	public interface OnDatabaseCreatedListener
-	{
-		public void onDatabaseCreated(NacAlarmDatabase db);
-	}
 
 	/**
 	 * Store alarms in the datbase.
@@ -44,39 +38,30 @@ public abstract class NacAlarmDatabase
 	private static final Object LOCK = new Object();
 
 	/**
+	 * Number of executor threads.
+	 */
+	//private static final int NUMBER_OF_THREADS = 4;
+
+	/**
+	 * Executor service.
+	 */
+	private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
+	//private static final ExecutorService EXECUTOR =
+	//	Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+
+	/**
 	 * Singleton instance of the database.
 	 */
 	private static NacAlarmDatabase sInstance;
 
 	/**
-	 * Flag indicating of the database was created for the first time or not.
+	 * Application context.
+	 *
+	 * This will only be used when the Room database is created, in order to
+	 * migrate from the old SQLite database to the Room database. Otherwise, this
+	 * will be null.
 	 */
-	private static boolean sWasCreated;
-
-	/**
-	 */
-	private static List<OnDatabaseCreatedListener> sOnDatabaseCreatedListeners;
-
-	/**
-	 */
-	public static void addOnDatabaseCreatedListener(OnDatabaseCreatedListener listener)
-	{
-		if (listener != null)
-		{
-			getOnDatabaseCreatedListeners().add(listener);
-		}
-	}
-
-	/**
-	 * Call the list of listeners when the database is created.
-	 */
-	public static void callOnDatabaseCreatedListeners()
-	{
-		for (OnDatabaseCreatedListener listener : getOnDatabaseCreatedListeners())
-		{
-			listener.onDatabaseCreated(getInstance());
-		}
-	}
+	private static Context sContext;
 
 	/**
 	 * @return True if the database file exists, and False otherwise.
@@ -85,6 +70,22 @@ public abstract class NacAlarmDatabase
 	{
 		File file = context.getDatabasePath(DB_NAME);
 		return file.exists();
+	}
+
+	/**
+	 * @return The application context.
+	 */
+	private static Context getContext()
+	{
+		return sContext;
+	}
+
+	/**
+	 * @return The application context.
+	 */
+	public static ExecutorService getExecutor()
+	{
+		return EXECUTOR;
 	}
 
 	/**
@@ -116,8 +117,7 @@ public abstract class NacAlarmDatabase
 					.addCallback(sDatabaseCallback)
 					.build();
 
-				sWasCreated = false;
-				sOnDatabaseCreatedListeners = new ArrayList<>();
+				sContext = appContext;
 			}
 
 			return sInstance;
@@ -125,50 +125,56 @@ public abstract class NacAlarmDatabase
 	}
 
 	/**
-	 * Create a static instance of the database.
-	 *
-	 * @param  context  Application context.
-	 *
-	 * @return A static instance of the database.
+	 * Insert the initial alarm into the database.
 	 */
-	public static NacAlarmDatabase getInstance(Context context, OnDatabaseCreatedListener listener)
+	protected static void insertInitialAlarm()
 	{
-		synchronized (LOCK)
+		NacAlarmDatabase db = getInstance();
+		NacAlarmDao dao = db.alarmDao();
+		NacAlarm alarm = new NacAlarm.Builder()
+			.setId(0)
+			.setIsActive(false)
+			.setIsEnabled(true)
+			.setHour(8)
+			.setMinute(0)
+			.setDays(NacCalendar.Days.valueToDays(62))
+			.setRepeat(true)
+			.setVibrate(true)
+			.setUseNfc(false)
+			.setNfcTagId("")
+			.setMediaType(NacMedia.TYPE_NONE)
+			.setMediaPath("")
+			.setMediaTitle("")
+			.setVolume(75)
+			.setAudioSource("Media")
+			.setName("Work")
+			.build();
+
+		getExecutor().execute(() -> { dao.insert(alarm); });
+		//new NacAlarmRepository.InsertAsyncTask(dao).execute(alarm);
+	}
+
+	/**
+	 * Migrate data from the old database into the new database
+	 */
+	protected static void migrateOldDatabase(Context context)
+	{
+		if (!NacDatabase.exists(context))
 		{
-			if (sInstance == null)
-			{
-				NacUtility.printf("Instantiating the new room database!");
-				Context appContext = context.getApplicationContext();
-				sInstance = Room.databaseBuilder(appContext, NacAlarmDatabase.class,
-					DB_NAME)
-					//.allowMainThreadQueries()
-					.addCallback(sDatabaseCallback)
-					.build();
-
-				sWasCreated = false;
-				sOnDatabaseCreatedListeners = new ArrayList<>();
-			}
-
-			addOnDatabaseCreatedListener(listener);
-			return sInstance;
+			return;
 		}
-	}
 
-	/**
-	 * @return A list of listeners to call when the database is created.
-	 */
-	protected static List<OnDatabaseCreatedListener> getOnDatabaseCreatedListeners()
-	{
-		return sOnDatabaseCreatedListeners;
-	}
+		NacAlarmDatabase db = getInstance();
+		NacAlarmDao dao = db.alarmDao();
+		List<NacAlarm> alarms = NacDatabase.read(context);
 
-	/**
-	 * @return True if the database was created for the first time, and False
-	 *     otherwise.
-	 */
-	public static boolean wasCreated()
-	{
-		return sWasCreated;
+		for (NacAlarm a : alarms)
+		{
+			NacUtility.printf("Inserting alarm : %d", a.getId());
+			a.setId(0);
+			getExecutor().execute(() -> { dao.insert(a); });
+			//new NacAlarmRepository.InsertAsyncTask(dao).execute(a);
+		}
 	}
 
 	/**
@@ -186,9 +192,31 @@ public abstract class NacAlarmDatabase
 			super.onCreate(db);
 
 			NacUtility.printf("New room database was created!");
-			sWasCreated = true;
+			Context context = getContext();
 
-			callOnDatabaseCreatedListeners();
+			if (NacDatabase.exists(context))
+			{
+				NacUtility.printf("Old database file exists! Copying over data");
+				migrateOldDatabase(context);
+			}
+			else
+			{
+				NacUtility.printf("Cannot find old database file! Adding new dummy entry to room");
+				insertInitialAlarm();
+			}
+
+			sContext = null;
+		}
+
+		/**
+		 */
+		@Override
+		public void onOpen(@NonNull SupportSQLiteDatabase db)
+		{
+			super.onOpen(db);
+
+			NacUtility.printf("Room database was opened!");
+			sContext = null;
 		}
 
 	};

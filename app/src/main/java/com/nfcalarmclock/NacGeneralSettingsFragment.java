@@ -1,8 +1,14 @@
 package com.nfcalarmclock;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 
@@ -11,18 +17,27 @@ import androidx.preference.PreferenceManager;
  */
 public class NacGeneralSettingsFragment
 	extends NacSettingsFragment
-	implements Preference.OnPreferenceClickListener
+	implements Preference.OnPreferenceClickListener,
+		ActivityResultCallback<ActivityResult>
 {
 
 	/**
-	 * Activity request code.
+	 * Activity result launcher, used to get results from a finished activity.
 	 */
-	private static final int MEDIA_REQUEST_CODE = 222;
+	private ActivityResultLauncher<Intent> mActivityLauncher;
 
 	/**
 	 * The sound preference.
 	 */
 	private NacMediaPreference mMediaPreference;
+
+	/**
+	 * @return The activity result launcher.
+	 */
+	private ActivityResultLauncher<Intent> getActivityLauncher()
+	{
+		return this.mActivityLauncher;
+	}
 
 	/**
 	 * @return The media preference.
@@ -33,19 +48,20 @@ public class NacGeneralSettingsFragment
 	}
 
 	/**
+	 * Called when the NacMediaActivity is finished is returns a result.
 	 */
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	public void onActivityResult(ActivityResult result)
 	{
-		super.onActivityResult(requestCode, resultCode, data);
+		Intent data = result.getData();
+		int code = result.getResultCode();
 
-		if (requestCode != MEDIA_REQUEST_CODE)
+		if (code == Activity.RESULT_OK)
 		{
-			return;
+			String media = NacIntent.getMedia(data);
+			this.setPreferenceMedia(media);
 		}
 
-		String media = NacIntent.getMedia(data);
-		this.setPreferenceMedia(media);
 	}
 
 	/**
@@ -53,16 +69,17 @@ public class NacGeneralSettingsFragment
 	@Override
 	public void onCreatePreferences(Bundle savedInstanceState, String rootKey)
 	{
-		Context context = getContext();
-
 		addPreferencesFromResource(R.xml.general_preferences);
-		PreferenceManager.setDefaultValues(context, R.xml.general_preferences, false);
+		PreferenceManager.setDefaultValues(getContext(), R.xml.general_preferences,
+			false);
 
-		NacSharedKeys keys = this.getSharedPreferences().getKeys();
-		NacMediaPreference mediaPreference = findPreference(keys.getMediaPath());
-		this.mMediaPreference = mediaPreference;
+		NacSharedKeys keys = this.getSharedKeys();
+		String path = keys.getMediaPath();
+		this.mMediaPreference = findPreference(path);
+		this.mActivityLauncher = registerForActivityResult(
+			new ActivityResultContracts.StartActivityForResult(), this);
 
-		mediaPreference.setOnPreferenceClickListener(this);
+		this.getMediaPreference().setOnPreferenceClickListener(this);
 	}
 
 	/**
@@ -71,11 +88,11 @@ public class NacGeneralSettingsFragment
 	public boolean onPreferenceClick(Preference preference)
 	{
 		Context context = getContext();
-		String media = this.getSharedPreferences().getMediaPath();
-		Intent intent = NacIntent.toIntent(context, NacMediaActivity.class,
-			media);
+		NacSharedPreferences shared = this.getSharedPreferences();
+		String media = shared.getMediaPath();
+		Intent intent = NacIntent.toIntent(context, NacMediaActivity.class, media);
 
-		startActivityForResult(intent, MEDIA_REQUEST_CODE);
+		this.getActivityLauncher().launch(intent);
 		return true;
 	}
 

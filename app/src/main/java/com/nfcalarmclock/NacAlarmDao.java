@@ -20,15 +20,19 @@ public interface NacAlarmDao
 	 * Delete an alarm.
 	 *
 	 * @param  alarm  An alarm.
+	 *
+	 * @return The number of rows deleted.
 	 */
 	@Delete
-	void delete(NacAlarm alarm);
+	int delete(NacAlarm alarm);
 
 	/**
-	 * @see SsProblemDao#deleteAll
+	 * Delete all alarms.
+	 *
+	 * @return The number of rows deleted.
 	 */
 	@Query("DELETE FROM alarm")
-	void deleteAll();
+	int deleteAll();
 
 	/**
 	 * @return All alarms.
@@ -40,16 +44,20 @@ public interface NacAlarmDao
 	 * Insert an alarm.
 	 *
 	 * @param  alarm  An alarm.
+	 *
+	 * @return The row ID of the alarm that was inserted.
 	 */
 	@Insert(onConflict=OnConflictStrategy.ABORT)
-	void insert(NacAlarm alarm);
+	long insert(NacAlarm alarm);
 
 	/**
 	 * Update an existing alarm
 	 *
 	 * @param  alarm  An alarm.
+	 *
+	 * @return The number of alarms updated.
 	 */
 	@Update
-	void update(NacAlarm alarm);
+	int update(NacAlarm alarm);
 
 }

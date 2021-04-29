@@ -244,7 +244,7 @@ public class NacDatabase
 	 *
 	 * @param  id  The alarm ID.
 	 */
-	public NacAlarm findAlarm(int id)
+	public NacAlarm findAlarm(long id)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
 		String table = this.getAlarmTable();
@@ -315,7 +315,7 @@ public class NacDatabase
 	/**
 	 * @see #findAlarm(int)
 	 */
-	public static NacAlarm findAlarm(Context context, int id)
+	public static NacAlarm findAlarm(Context context, long id)
 	{
 		if (context == null)
 		{
@@ -415,7 +415,7 @@ public class NacDatabase
 	 *
 	 * @return Where arguments for the where clause.
 	 */
-	private String[] getWhereArgs(int value)
+	private String[] getWhereArgs(long value)
 	{
 		String id = String.valueOf(value);
 		return new String[] {id};

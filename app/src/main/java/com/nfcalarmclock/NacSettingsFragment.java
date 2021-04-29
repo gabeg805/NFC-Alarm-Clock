@@ -17,12 +17,11 @@ public abstract class NacSettingsFragment
 	 * Shared preference store.
 	 */
 	private NacSharedPreferences mShared;
-//}
 
 	/**
 	 * @return The shared preference keys.
 	 */
-	protected NacSharedKeys getKeys()
+	protected NacSharedKeys getSharedKeys()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		return (shared != null) ? shared.getKeys() : null;
