@@ -6,16 +6,20 @@ import android.os.Parcelable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import java.lang.Comparable;
 import java.util.Calendar;
 import java.util.EnumSet;
 import java.util.Locale;
 
 /**
  * Aspects of a climbing problem that are saved.
+ *
+ * TODO: Should I put the snooze counter as part of the alarm, in the database?
  */
 @Entity(tableName="alarm")
 public class NacAlarm
-	implements Parcelable
+	implements Comparable<NacAlarm>,
+		Parcelable
 {
 
 	/**
@@ -25,6 +29,12 @@ public class NacAlarm
 	@PrimaryKey(autoGenerate=true)
 	@ColumnInfo(name="id")
 	private long mId;
+
+	/**
+	 * Number of times the alarm has been snoozed.
+	 */
+	@ColumnInfo(name="snooze_count")
+	private int mSnoozeCount;
 
 	/**
 	 * Flag indicating whether the alarm is currently active or not.
@@ -149,10 +159,11 @@ public class NacAlarm
 			Calendar calendar = Calendar.getInstance();
 
 			this.setIsActive(false)
+				.setSnoozeCount(0)
 				.setIsEnabled(true)
 				.setHour(calendar.get(Calendar.HOUR_OF_DAY))
 				.setMinute(calendar.get(Calendar.MINUTE))
-				.setDays(NacCalendar.NO_DAYS)
+				.setDays(NacCalendar.Day.none())
 				.setRepeat(false)
 				.setVibrate(false)
 				.setUseNfc(false)
@@ -401,6 +412,19 @@ public class NacAlarm
 		}
 
 		/**
+		 * Set the snooze count.
+		 *
+		 * @param  count  The snooze count.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setSnoozeCount(int count)
+		{
+			this.getAlarm().setSnoozeCount(count);
+			return this;
+		}
+
+		/**
 		 * Set whether the alarm should use NFC to dismiss or not.
 		 *
 		 * @param  useNfc  True if the phone should use NFC to dismiss, and False
@@ -457,6 +481,7 @@ public class NacAlarm
 		this();
 		this.setId(input.readLong());
 		this.setIsActive(input.readInt() != 0);
+		this.setSnoozeCount(input.readInt());
 		this.setIsEnabled((input.readInt() != 0));
 		this.setHour(input.readInt());
 		this.setMinute(input.readInt());
@@ -472,6 +497,20 @@ public class NacAlarm
 		this.setAudioSource(input.readString());
 		this.setName(input.readString());
 	}
+
+	///**
+	// * TODO: Change this. Maybe don't need this method if can be done manually?
+	// *
+	// * @return True if the alarm can be snoozed, and False otherwise.
+	// */
+	//public boolean canSnooze()
+	//{
+	//	int snoozeCount = this.getSnoozeCount() + 1;
+	//	int maxSnoozeCount = shared.getMaxSnoozeValue();
+
+	//	return (snoozeCount <= maxSnoozeCount) || (maxSnoozeCount < 0);
+	//	//return (snoozeCount > maxSnoozeCount) && (maxSnoozeCount >= 0);
+	//}
 
 	/**
 	 * @return True if the alarm can be snoozed, and False otherwise.
@@ -494,6 +533,136 @@ public class NacAlarm
 	}
 
 	/**
+	 * Compare the next day this alarm will run with another alarm.
+	 *
+	 * @param  alarm  An alarm.
+	 *
+	 * @return A negative integer, zero, or a positive integer as this object is
+	 *     less than, equal to, or greater than the specified object.
+	 */
+	public int compareDay(NacAlarm alarm)
+	{
+		Calendar cal = NacCalendar.getNextAlarmDay(this);
+		Calendar otherCal = NacCalendar.getNextAlarmDay(alarm);
+
+		return cal.compareTo(otherCal);
+	}
+
+	/**
+	 * Compare the in use value in this alarm with another alarm.
+	 *
+	 * At least one alarm should be in use, otherwise the comparison is
+	 * meaningless.
+	 *
+	 * @param  alarm  An alarm.
+	 *
+	 * @return A negative integer, zero, or a positive integer as this object is
+	 *     less than, equal to, or greater than the specified object.
+	 */
+	public int compareInUseValue(NacAlarm alarm)
+	{
+		int value = this.computeInUseValue();
+		int otherValue = alarm.computeInUseValue();
+
+		if (otherValue < 0)
+		{
+			return -1;
+		}
+		else if (value < 0)
+		{
+			return 1;
+		}
+		else if (value == otherValue)
+		{
+			return 0;
+		}
+		else
+		{
+			return (value < otherValue) ? -1 : 1;
+		}
+	}
+
+	/**
+	 * Compare the time of this alarm with another alarm.
+	 *
+	 * @param  alarm  An alarm.
+	 *
+	 * @return A negative integer, zero, or a positive integer as this object is
+	 *     less than, equal to, or greater than the specified object.
+	 */
+	public int compareTime(NacAlarm alarm)
+	{
+		Locale locale = Locale.getDefault();
+		String format = "%1$02d:%2$02d";
+		String time = String.format(locale, format, this.getHour(),
+			this.getMinute());
+		String otherTime = String.format(locale, format, alarm.getHour(),
+			alarm.getMinute());
+
+		return time.compareTo(otherTime);
+	}
+
+	/**
+	 * Compare this alarm with another alarm.
+	 *
+	 * @param  alarm  An alarm.
+	 *
+	 * @return A negative integer, zero, or a positive integer as this object is
+	 *     less than, equal to, or greater than the specified object.
+	 */
+	public int compareTo(NacAlarm alarm)
+	{
+		if (this.equals(alarm))
+		{
+			return 0;
+		}
+		else if (this.isInUse() || alarm.isInUse())
+		{
+			int value = this.compareInUseValue(alarm);
+
+			if (value == 0)
+			{
+				return this.compareTime(alarm);
+			}
+			else
+			{
+				return value;
+			}
+		}
+		else if (this.isEnabled() ^ alarm.isEnabled())
+		{
+			return this.isEnabled() ? -1 : 1;
+		}
+		else
+		{
+			return this.compareDay(alarm);
+		}
+	}
+
+	/**
+	 * @return A value corresponding to how in use an alarm is. This is used as a
+	 *     means to easily compare two alarms that are both in use.
+	 *
+	 *     If an alarm is NOT IN USE, return -1.
+	 *
+	 *     If an alarm is ACTIVE AND NOT SNOOZED, return 0.
+	 *
+	 *     If an alarm is ACTIVE AND SNOOZED, return snooze count.
+	 *
+	 *     If an alarm is NOT ACTIVE AND SNOOZED, return 1000 * snooze count.
+	 */
+	public int computeInUseValue()
+	{
+		if (!this.isInUse())
+		{
+			return -1;
+		}
+
+		int scale = this.isActive() ? 1 : 1000;
+		return scale*this.getSnoozeCount();
+	}
+
+	/**
 	 * Create a copy of this alarm with the given ID.
 	 *
 	 * TODO: Change ID to set to 0.
@@ -507,6 +676,7 @@ public class NacAlarm
 		return new NacAlarm.Builder()
 			.setId(id)
 			.setIsActive(this.isActive())
+			.setSnoozeCount(this.getSnoozeCount())
 			.setIsEnabled(this.isEnabled())
 			.setHour(this.getHour())
 			.setMinute(this.getMinute())
@@ -534,27 +704,43 @@ public class NacAlarm
 	}
 
 	/**
-	 * Check if this alarm equals the given alarm.
+	 * Check if this alarm equals another alarm.
 	 *
-	 * @param  alarm  The alarm to compare against.
+	 * @param  alarm  An alarm.
 	 *
 	 * @return True if both alarms are the same, and false otherwise.
 	 */
 	public boolean equals(NacAlarm alarm)
 	{
-		return ((alarm != null)
-			&& (this.getId() == alarm.getId())
+		return (alarm != null)
+			&& (this.equalsId(alarm))
+			&& (this.isActive() == alarm.isActive())
 			&& (this.isEnabled() == alarm.isEnabled())
 			&& (this.getHour() == alarm.getHour())
 			&& (this.getMinute() == alarm.getMinute())
-			&& (this.getDays() == alarm.getDays())
+			&& (this.getDays().equals(alarm.getDays()))
 			&& (this.shouldRepeat() == alarm.shouldRepeat())
 			&& (this.shouldVibrate() == alarm.shouldVibrate())
+			&& (this.shouldUseNfc() == alarm.shouldUseNfc())
+			&& (this.getNfcTagId().equals(alarm.getNfcTagId()))
 			&& (this.getMediaType() == alarm.getMediaType())
-			&& this.getMediaPath().equals(alarm.getMediaPath())
-			&& this.getMediaTitle().equals(alarm.getMediaTitle())
-			&& this.getName().equals(alarm.getName())
-			&& this.getNfcTagId().equals(alarm.getNfcTagId()));
+			&& (this.getMediaPath().equals(alarm.getMediaPath()))
+			&& (this.getMediaTitle().equals(alarm.getMediaTitle()))
+			&& (this.getVolume() == alarm.getVolume())
+			&& (this.getAudioSource().equals(alarm.getAudioSource()))
+			&& (this.getName().equals(alarm.getName()));
+	}
+
+	/**
+	 * Check if this alarm has the same ID as another alarm.
+	 *
+	 * @param  alarm  An alarm.
+	 *
+	 * @return True if both alarms are the same, and false otherwise.
+	 */
+	public boolean equalsId(NacAlarm alarm)
+	{
+		return this.getId() == alarm.getId();
 	}
 
 	/**
@@ -696,6 +882,14 @@ public class NacAlarm
 	}
 
 	/**
+	 * @return The snooze count.
+	 */
+	public int getSnoozeCount()
+	{
+		return this.mSnoozeCount;
+	}
+
+	/**
 	 * @return The current snooze count.
 	 */
 	public int getSnoozeCount(NacSharedPreferences shared)
@@ -774,6 +968,14 @@ public class NacAlarm
 	/**
 	 * @return True if the alarm is snoozed, and False otherwise.
 	 */
+	public boolean isSnoozed()
+	{
+		return (this.getSnoozeCount() > 0);
+	}
+
+	/**
+	 * @return True if the alarm is snoozed, and False otherwise.
+	 */
 	public boolean isSnoozed(NacSharedPreferences shared)
 	{
 		long id = this.getId();
@@ -782,7 +984,16 @@ public class NacAlarm
 
 	/**
 	 * @return True if the alarm is being used, by being active or snoozed, and
-	 *         False otherwise.
+	 *     False otherwise.
+	 */
+	public boolean isInUse()
+	{
+		return this.isActive() || this.isSnoozed();
+	}
+
+	/**
+	 * @return True if the alarm is being used, by being active or snoozed, and
+	 *     False otherwise.
 	 */
 	public boolean isInUse(NacSharedPreferences shared)
 	{
@@ -798,6 +1009,7 @@ public class NacAlarm
 		NacUtility.printf("Alarm Information");
 		NacUtility.printf("Id           : %d", this.getId());
 		NacUtility.printf("Is Active    : %b", this.isActive());
+		NacUtility.printf("Snooze Count : %b", this.getSnoozeCount());
 		NacUtility.printf("Is Enabled   : %b", this.isEnabled());
 		NacUtility.printf("Hour         : %d", this.getHour());
 		NacUtility.printf("Minute       : %d", this.getMinute());
@@ -969,6 +1181,14 @@ public class NacAlarm
 	}
 
 	/**
+	 * Set the snooze count.
+	 */
+	public void setSnoozeCount(int count)
+	{
+		this.mSnoozeCount = count;
+	}
+
+	/**
 	 * Set the frequency at which to use TTS, in units of min.
 	 *
 	 * @param  freq  The frequency.
@@ -1113,6 +1333,7 @@ public class NacAlarm
 	{
 		output.writeLong(this.getId());
 		output.writeInt(this.isActive() ? 1 : 0);
+		output.writeInt(this.getSnoozeCount());
 		output.writeInt(this.isEnabled() ? 1 : 0);
 		output.writeInt(this.getHour());
 		output.writeInt(this.getMinute());

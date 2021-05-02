@@ -61,10 +61,6 @@ public class NacAlarmViewModel
 			return null;
 		}
 
-		NacSharedPreferences shared = new NacSharedPreferences(context);
-		long id = alarm.getId();
-
-		shared.editSnoozeCount(id, 0);
 		NacScheduler.cancel(context, alarm);
 		return this.getRepository().delete(alarm);
 	}
@@ -76,15 +72,6 @@ public class NacAlarmViewModel
 	{
 		return this.mAllAlarms;
 	}
-
-	/**
-	 * @return The live data list of all alarms.
-	 */
-	//public LiveData<List<NacAlarm>> getAllAlarmsSorted()
-	//{
-	//	LiveData<List<NacAlarm>> alarms = this.getAllAlarms();
-	//	return Transformations.map(alarms, );
-	//}
 
 	/**
 	 * @return Repository of the alarms.

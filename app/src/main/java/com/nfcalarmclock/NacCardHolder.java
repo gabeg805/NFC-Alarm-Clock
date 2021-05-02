@@ -600,6 +600,8 @@ public class NacCardHolder
 	 */
 	public void doCardClick()
 	{
+		CardView cardView = this.getCardView();
+
 		if (this.isCollapsed())
 		{
 			this.expand();
@@ -987,7 +989,8 @@ public class NacCardHolder
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 
-		return alarm.isSnoozed(shared)
+		//return alarm.isSnoozed(shared)
+		return alarm.isSnoozed()
 			? shared.getCardHeightCollapsedDismiss()
 			: shared.getCardHeightCollapsed();
 	}
@@ -1228,7 +1231,7 @@ public class NacCardHolder
 		this.mAlarm = alarm;
 
 		this.initListeners(null);
-		this.measureCard();
+		//this.measureCard();
 		this.initViews();
 		this.initColors();
 		this.initListeners(this);
@@ -1304,6 +1307,7 @@ public class NacCardHolder
 	 */
 	public void initViews()
 	{
+		NacUtility.printf("INITIALIZING VIEWS!");
 		this.setDismissView();
 		this.setTimeView();
 		this.setMeridianView();
@@ -1387,32 +1391,42 @@ public class NacCardHolder
 	}
 
 	/**
-	 * Measure the alarm card.
+	 * Measure the different alarm card heights.
+	 *
+	 * This will populate the array that is passed in with the corresponding
+	 * heights:
+	 *
+	 *     i=0: Collapsed height.
+	 *     i=1: Collapsed height with the dismiss button shown.
+	 *     i=2: Expanded height.
+	 *
+	 * @param  heights  An integer array of 3 elements.
 	 */
-	private void measureCard()
+	public void measureCard(int[] heights)
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		CardView cardView = this.getCardView();
 
-		//if (shared.getCardIsMeasured() || this.isExpanded())
-		if (shared.getCardIsMeasured())
+		if ((heights == null) || (heights.length != 3))
 		{
 			return;
 		}
 
+		//if (shared.getCardIsMeasured() || this.isExpanded())
+		//if (shared.getCardIsMeasured())
+		//{
+		//	return;
+		//}
+
 		this.doExpand();
-		int expandHeight = NacUtility.getHeight(cardView);
+		heights[2] = NacUtility.getHeight(cardView);
 
 		this.doCollapseForce();
-		int collapseHeight = NacUtility.getHeight(cardView);
+		heights[0] = NacUtility.getHeight(cardView);
 
 		this.getDismissParentView().setVisibility(View.VISIBLE);
-		int dismissHeight = NacUtility.getHeight(cardView);
-
-		shared.editCardHeightCollapsed(collapseHeight);
-		shared.editCardHeightCollapsedDismiss(dismissHeight);
-		shared.editCardHeightExpanded(expandHeight);
-		shared.editCardIsMeasured(true);
+		heights[1] = NacUtility.getHeight(cardView);
+		this.getDismissParentView().setVisibility(View.GONE);
 	}
 
 	/**
@@ -1660,6 +1674,7 @@ public class NacCardHolder
 	 */
 	public void respondToDayButtonClick(NacDayButton button, NacCalendar.Day day)
 	{
+		NacUtility.printf("respondToDayButtonClick!");
 		if (this.checkCanModifyAlarm())
 		{
 			this.doDayButtonClick(day);
@@ -1836,8 +1851,11 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 		EnumSet<NacCalendar.Day> days = alarm.getDays();
 
-		dow.setStartWeekOn(shared.getStartWeekOn());
-		dow.setDays(days);
+		if (!dow.getDays().equals(days))
+		{
+			//dow.setStartWeekOn(shared.getStartWeekOn());
+			dow.setDays(days);
+		}
 	}
 
 	/**
@@ -1878,15 +1896,24 @@ public class NacCardHolder
 	 */
 	public void setDismissView()
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
+		//NacSharedPreferences shared = this.getSharedPreferences();
+		//int dismissVis = alarm.isSnoozed(shared) ? View.VISIBLE : View.GONE;
 		NacAlarm alarm = this.getAlarm();
+		View dismissView = this.getDismissParentView();
+		View expandView = this.getExpandButton();
 
-		int dismissVisibility = alarm.isSnoozed(shared) ? View.VISIBLE : View.GONE;
-		int expandVisibility = (dismissVisibility == View.GONE)
-			? View.VISIBLE : View.INVISIBLE;
+		int dismissVis = alarm.isSnoozed() ? View.VISIBLE : View.GONE;
+		int expandVis = (dismissVis == View.GONE) ? View.VISIBLE : View.INVISIBLE;
 
-		this.getDismissParentView().setVisibility(dismissVisibility);
-		this.getExpandButton().setVisibility(expandVisibility);
+		if (dismissView.getVisibility() != dismissVis)
+		{
+			dismissView.setVisibility(dismissVis);
+		}
+
+		if (expandView.getVisibility() != expandVis)
+		{
+			expandView.setVisibility(expandVis);
+		}
 	}
 
 	/**
@@ -1964,9 +1991,14 @@ public class NacCardHolder
 	{
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
+		TextView tv = this.getMeridianView();
 		String meridian = alarm.getMeridian(context);
+		String text = tv.getText().toString();
 
-		this.getMeridianView().setText(meridian);
+		if (!text.equals(meridian))
+		{
+			tv.setText(meridian);
+		}
 	}
 
 	/**
@@ -2127,11 +2159,17 @@ public class NacCardHolder
 		NacSharedPreferences shared = this.getSharedPreferences();
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
+		TextView tv = this.getSummaryDaysView();
+
 		int start = shared.getStartWeekOn();
 		String string = NacCalendar.Days.toString(context, alarm, start);
+		String text = tv.getText().toString();
 
-		this.getSummaryDaysView().setText(string);
-		this.getSummaryDaysView().requestLayout();
+		if (!text.equals(string))
+		{
+			tv.setText(string);
+			//tv.requestLayout();
+		}
 	}
 
 	/**
@@ -2151,9 +2189,14 @@ public class NacCardHolder
 	public void setSummaryNameView()
 	{
 		NacAlarm alarm = this.getAlarm();
+		TextView tv = this.getSummaryNameView();
 		String name = alarm.getNameNormalized();
+		String text = tv.getText().toString();
 
-		this.getSummaryNameView().setText(name);
+		if (!text.equals(name))
+		{
+			tv.setText(name);
+		}
 	}
 
 	/**
@@ -2183,9 +2226,13 @@ public class NacCardHolder
 	public void setSwitchView()
 	{
 		NacAlarm alarm = this.getAlarm();
+		SwitchCompat view = this.getSwitch();
 		boolean enabled = alarm.isEnabled();
 
-		this.getSwitch().setChecked(enabled);
+		if (view.isChecked() != enabled)
+		{
+			view.setChecked(enabled);
+		}
 	}
 
 	/**
@@ -2233,9 +2280,14 @@ public class NacCardHolder
 	{
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
+		TextView tv = this.getTimeView();
 		String time = alarm.getClockTime(context);
+		String text = tv.getText().toString();
 
-		this.getTimeView().setText(time);
+		if (!text.equals(time))
+		{
+			tv.setText(time);
+		}
 	}
 
 	/**

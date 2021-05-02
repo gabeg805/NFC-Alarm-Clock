@@ -51,7 +51,7 @@ public class NacAlarmRepository
 	public Future<?> delete(NacAlarm alarm)
 	{
 		NacAlarmDao dao = this.getDao();
-		return NacAlarmDatabase.getExecutor().submit(() -> { return dao.delete(alarm); });
+		return NacAlarmDatabase.getExecutor().submit(() -> dao.delete(alarm));
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class NacAlarmRepository
 	public Future<?> insert(NacAlarm alarm)
 	{
 		NacAlarmDao dao = this.getDao();
-		return NacAlarmDatabase.getExecutor().submit(() -> { return dao.insert(alarm); });
+		return NacAlarmDatabase.getExecutor().submit(() -> dao.insert(alarm));
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class NacAlarmRepository
 	public Future<?> update(NacAlarm alarm)
 	{
 		NacAlarmDao dao = this.getDao();
-		return NacAlarmDatabase.getExecutor().submit(() -> { return dao.update(alarm); });
+		return NacAlarmDatabase.getExecutor().submit(() -> dao.update(alarm));
 	}
 
 }

@@ -50,6 +50,14 @@ public class NacCalendar
 			return this.mValue;
 		}
 
+		/**
+		 * @return A set of no days.
+		 */
+		public static EnumSet<Day> none()
+		{
+			return EnumSet.noneOf(Day.class);
+		}
+
 	}
 
 	/**
@@ -68,11 +76,6 @@ public class NacCalendar
 	 */
 	public static final EnumSet<Day> WEEKEND = EnumSet.of(Day.SUNDAY,
 		Day.SATURDAY);
-
-	/**
-	 * No days.
-	 */
-	public static final EnumSet<Day> NO_DAYS = EnumSet.noneOf(Day.class);
 
 	/**
 	 * Length of week.
@@ -343,23 +346,6 @@ public class NacCalendar
 	}
 
 	/**
-	 * Convert the one time alarm to the next calendar.
-	 */
-	public static Calendar toNextOneTimeCalendar(NacAlarm alarm)
-	{
-		Calendar today = NacCalendar.getToday(alarm);
-		Calendar now = Calendar.getInstance();
-
-		if (today.before(now))
-		{
-			today.add(Calendar.DAY_OF_MONTH, 1);
-		}
-
-		return today;
-		//return today.after(now) ? today : NacCalendar.getTomorrow(alarm);
-	}
-
-	/**
 	 * Convert the alarm on the given day to a Calendar.
 	 *
 	 * @param  alarm  The alarm.
@@ -379,6 +365,23 @@ public class NacCalendar
 		}
 
 		return calendar;
+	}
+
+	/**
+	 * Convert the one time alarm to the next calendar.
+	 */
+	public static Calendar toNextOneTimeCalendar(NacAlarm alarm)
+	{
+		Calendar today = NacCalendar.getToday(alarm);
+		Calendar now = Calendar.getInstance();
+
+		if (today.before(now))
+		{
+			today.add(Calendar.DAY_OF_MONTH, 1);
+		}
+
+		return today;
+		//return today.after(now) ? today : NacCalendar.getTomorrow(alarm);
 	}
 
 	/**
@@ -508,7 +511,7 @@ public class NacCalendar
 		{
 			int index = 0;
 
-			for (Day d : WEEK)
+			for (Day d : NacCalendar.WEEK)
 			{
 				if (d == day)
 				{
@@ -665,9 +668,9 @@ public class NacCalendar
 		 */
 		public static EnumSet<Day> valueToDays(int value)
 		{
-			EnumSet<Day> days = NO_DAYS;
+			EnumSet<Day> days = NacCalendar.Day.none();
 
-			for (Day d : WEEK)
+			for (Day d : NacCalendar.WEEK)
 			{
 				if ((d.getValue() & value) != 0)
 				{

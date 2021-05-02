@@ -25,14 +25,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.HashSet;
 
 /**
  * The application's main activity.
@@ -45,6 +48,7 @@ public class NacMainActivity
 		MenuItem.OnMenuItemClickListener,
 		RecyclerView.OnItemTouchListener,
 		NacCardTouchHelper.OnSwipedListener,
+		NacAlarmCardAdapter.OnViewHolderBoundListener,
 		NacAlarmCardAdapter.OnViewHolderCreatedListener,
 		NacCardHolder.OnCardCollapsedListener,
 		NacCardHolder.OnCardDeleteClickedListener,
@@ -80,7 +84,7 @@ public class NacMainActivity
 	/**
 	 * Alarm card adapter.
 	 */
-	private NacAlarmCardAdapter mCardAdapter;
+	private NacAlarmCardAdapter mAlarmCardAdapter;
 
 	/**
 	 * Scan an NFC tag dialog.
@@ -103,9 +107,22 @@ public class NacMainActivity
 	private NacAlarmViewModel mAlarmViewModel;
 
 	/**
+	 * Mutable live data for the alarm card that can be sorted or not sorted,
+	 * depending on the circumstance.
+	 *
+	 * Live data from the view model cannot be sorted, hence the need for this.
+	 */
+	private MutableLiveData<List<NacAlarm>> mAlarmCardAdapterLiveData;
+
+	/**
 	 * Alarm card touch helper.
 	 */
 	private NacCardTouchHelper mAlarmCardTouchHelper;
+
+	/**
+	 * The IDs of the updated alarm cards that are expanded.
+	 */
+	private HashSet<Long> mUpdatedAlarmIds;
 
 	/**
 	 * Last action on an alarm card.
@@ -131,7 +148,7 @@ public class NacMainActivity
 			public void onClick(View view)
 			{
 				NacSharedPreferences shared = getSharedPreferences();
-				NacAlarmCardAdapter cardAdapter = getCardAdapter();
+				NacAlarmCardAdapter cardAdapter = getAlarmCardAdapter();
 
 				NacAlarm alarm = new NacAlarm.Builder(shared).build();
 				// Test how this should work
@@ -177,7 +194,7 @@ public class NacMainActivity
 	private void addSetAlarmFromIntent()
 	{
 		Intent intent = getIntent();
-		NacAlarmCardAdapter cardAdapter = this.getCardAdapter();
+		NacAlarmCardAdapter cardAdapter = this.getAlarmCardAdapter();
 		NacAlarm alarm = NacIntent.getSetAlarm(this, intent);
 
 		if (alarm != null)
@@ -223,6 +240,7 @@ public class NacMainActivity
 	}
 
 	/**
+	 * TODO: Catch exceptions properly
 	 */
 	public void copyAlarm(NacAlarm alarm)
 	{
@@ -290,6 +308,23 @@ public class NacMainActivity
 	}
 
 	/**
+	 * @return The alarm card adapter.
+	 */
+	private NacAlarmCardAdapter getAlarmCardAdapter()
+	{
+		return this.mAlarmCardAdapter;
+	}
+
+	/**
+	 * @return Mutable live data that is used to submit data to the alarm card
+	 *     adapter.
+	 */
+	private MutableLiveData<List<NacAlarm>> getAlarmCardAdapterLiveData()
+	{
+		return this.mAlarmCardAdapterLiveData;
+	}
+
+	/**
 	 * @return The alarm view model.
 	 */
 	private NacAlarmViewModel getAlarmViewModel()
@@ -298,11 +333,22 @@ public class NacMainActivity
 	}
 
 	/**
-	 * @return The alarm card adapter.
+	 * @return A list of all the alarm view holders.
 	 */
-	private NacAlarmCardAdapter getCardAdapter()
+	private List<NacCardHolder> getAllAlarmViewHolders()
 	{
-		return this.mCardAdapter;
+		RecyclerView rv = this.getRecyclerView();
+		NacAlarmCardAdapter adapter = this.getAlarmCardAdapter();
+		int size = adapter.getItemCount();
+		List<NacCardHolder> viewHolders = new ArrayList<>();
+
+		for (int i=0; i < size; i++)
+		{
+			NacCardHolder card = (NacCardHolder) rv.findViewHolderForAdapterPosition(i);
+			viewHolders.add(card);
+		}
+
+		return viewHolders;
 	}
 
 	/**
@@ -379,14 +425,107 @@ public class NacMainActivity
 	}
 
 	/**
+	 * @return The snackbar.
+	 */
+	private HashSet<Long> getUpdatedAlarmIds()
+	{
+		return this.mUpdatedAlarmIds;
+	}
+
+	public void mergeLiveDataWithAlarmCardAdapter(List<NacAlarm> alarms)
+	{
+		NacAlarmCardAdapter adapter = this.getAlarmCardAdapter();
+		List<NacAlarm> adapterAlarms = adapter.getCurrentList();
+		List<NacAlarm> newAlarms = new ArrayList<>(adapterAlarms);
+
+		int size = alarms.size();
+		int adapterSize = newAlarms.size();
+
+		if (adapterSize == 0)
+		{
+			NacUtility.printf("AHHHHHH! Will this be triggered if everything gets deleted?");
+			for (NacAlarm a : alarms)
+			{
+				NacUtility.printf("Adding alarm to adapter list: %d", a.getId());
+				newAlarms.add(a);
+			}
+		}
+		else
+		{
+			List<Integer> notFoundIndices = new ArrayList<>();
+			for (int j=0; j < adapterSize; j++)
+			{
+				notFoundIndices.add(j);
+			}
+
+			for (int i=0; i < size; i++)
+			{
+				NacAlarm a = alarms.get(i);
+				NacAlarm foundAlarm = null;
+
+				for (int j=0; j < adapterSize; j++)
+				{
+					NacAlarm b = newAlarms.get(j);
+					if (b.equalsId(a))
+					{
+						// Remove not found indices
+						notFoundIndices.remove(Integer.valueOf(j));
+
+						if (b.equals(a))
+						{
+							// NOMINAL: do nothing
+							NacUtility.printf("Do nothing to alarm: %d", b.getId());
+						}
+						else
+						{
+							// UPDATE
+							NacUtility.printf("Update alarm: %d", b.getId());
+							newAlarms.set(j, a);
+						}
+
+						foundAlarm = b;
+						break;
+					}
+				}
+
+				if (foundAlarm == null)
+				{
+					// ADD
+					NacUtility.printf("Add alarm: %d", a.getId());
+					newAlarms.add(a);
+				}
+			}
+
+			for (int i=notFoundIndices.size()-1; i >= 0; i--)
+			{
+				int index = notFoundIndices.get(i);
+				NacUtility.printf("Delete alarm: %d", newAlarms.get(index).getId());
+				newAlarms.remove(index);
+			}
+		}
+
+		RecyclerView rv = this.getRecyclerView();
+		if (adapter.getCardsExpandedCount(rv) == 0)
+		{
+			NacUtility.printf("Sorting alarms!");
+			Collections.sort(newAlarms);
+		}
+
+		//MutableLiveData<List<NacAlarm>> adapterLiveData = this.getAlarmCardAdapterLiveData();
+		//adapterLiveData.setValue(newAlarms);
+		this.getAlarmCardAdapterLiveData().setValue(newAlarms);
+	}
+
+	/**
 	 * Uncheck the NFC button when the dialog is canceled.
 	 */
 	@Override
 	public boolean onCancelDialog(NacDialog dialog)
 	{
+		RecyclerView rv = this.getRecyclerView();
 		NacAlarm alarm = (NacAlarm) dialog.getData();
-		NacAlarmCardAdapter cardAdapter = this.getCardAdapter();
-		NacCardHolder cardHolder = cardAdapter.getCardHolder(alarm);
+		long id = alarm.getId();
+		NacCardHolder cardHolder = (NacCardHolder) rv.findViewHolderForItemId(id);
 
 		if (cardHolder != null)
 		{
@@ -404,13 +543,30 @@ public class NacMainActivity
 	@Override
 	public void onCardCollapsed(NacCardHolder holder, NacAlarm alarm)
 	{
-		//if (alarm.wasChanged())
-		//{
-			NacUtility.printf("Show alarm collapse change!");
+		RecyclerView rv = this.getRecyclerView();
+		NacAlarmCardAdapter adapter = this.getAlarmCardAdapter();
+		HashSet<Long> set = this.getUpdatedAlarmIds();
+		long id = alarm.getId();
+
+		NacUtility.printf("ON COLLAPSE! %d", adapter.getCardsExpandedCount(rv));
+
+		if (adapter.getCardsExpandedCount(rv) == 0)
+		{
+			NacUtility.printf("Sorting cards on collapse!");
+			MutableLiveData<List<NacAlarm>> adapterLiveData = this.getAlarmCardAdapterLiveData();
+			List<NacAlarm> alarms = adapterLiveData.getValue();
+			List<NacAlarm> newAlarms = new ArrayList<>(alarms);
+
+			Collections.sort(newAlarms);
+			adapterLiveData.setValue(newAlarms);
+		}
+
+		if (set.contains(id))
+		{
 			//this.showAlarmChange(alarm);
-			//this.sortHighlight(alarm);
 			holder.highlight();
-		//}
+			set.remove(id);
+		}
 	}
 
 	/**
@@ -428,6 +584,7 @@ public class NacMainActivity
 	@Override
 	public void onCardExpanded(NacCardHolder holder, NacAlarm alarm)
 	{
+		NacUtility.printf("ON EXPAND!");
 	}
 
 	/**
@@ -449,15 +606,18 @@ public class NacMainActivity
 	@Override
 	public void onCardUpdated(NacCardHolder holder, NacAlarm alarm)
 	{
-		//Context context = this.getContext();
+		NacUtility.printf("ON CARD UPDATED!");
 
-		alarm.print();
 		if (holder.isCollapsed())
 		{
 			NacUtility.printf("Show alarm updated!");
 			//this.showAlarmChange(alarm);
-			//this.sortHighlight(alarm);
-			holder.highlight(); // I think this is only here in place of sortHighlight
+			holder.highlight();
+		}
+		else
+		{
+			long id = alarm.getId();
+			this.getUpdatedAlarmIds().add(id);
 		}
 
 		this.getAlarmViewModel().update(this, alarm);
@@ -490,55 +650,20 @@ public class NacMainActivity
 	@Override
 	public void onChanged(List<NacAlarm> alarms)
 	{
+		// TODO Will this be called when coming back to the activity from settings?
 		NacUtility.printf("CALLING ONCHANGED! %d", alarms.size());
-		NacAlarmCardAdapter cardAdapter = this.getCardAdapter();
 
-		//NacSharedPreferences shared = this.getSharedPreferences();
-		//List<NacAlarm> inUseAlarms = new ArrayList<>();
-		//List<NacAlarm> enabledAlarms = new ArrayList<>();
-		//List<NacAlarm> disabledAlarms = new ArrayList<>();
-		//List<NacAlarm> sorted = new ArrayList<>();
+		this.setupForAppFirstRun(alarms);
 
-		//for (NacAlarm a : alarms)
-		//{
-		//	List<NacAlarm> list;
-		//	if (a.isInUse(shared))
-		//	{
-		//		list = inUseAlarms;
-		//	}
-		//	else if (a.isEnabled())
-		//	{
-		//		list = enabledAlarms;
-		//	}
-		//	else
-		//	{
-		//		list = disabledAlarms;
-		//	}
+		for (NacAlarm a : alarms)
+		{
+			a.print();
+			NacUtility.printf("AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+		}
 
-		//	Calendar next = NacCalendar.getNextAlarmDay(a);
-		//	int pos = 0;
-
-		//	for (NacAlarm e : list)
-		//	{
-		//		Calendar cal = NacCalendar.getNextAlarmDay(e);
-
-		//		if (next.before(cal))
-		//		{
-		//			break;
-		//		}
-
-		//		pos++;
-		//	}
-
-		//	list.add(pos, a);
-		//}
-
-		//sorted.addAll(inUseAlarms);
-		//sorted.addAll(enabledAlarms);
-		//sorted.addAll(disabledAlarms);
-
-		//cardAdapter.submitList(sorted);
-		cardAdapter.submitList(alarms);
+		//NacAlarmCardAdapter adapter = this.getAlarmCardAdapter();
+		//adapter.submitList(alarms);
+		this.getAlarmCardAdapter().submitList(alarms);
 		this.updateUpcomingNotification();
 	}
 
@@ -550,7 +675,7 @@ public class NacMainActivity
 	@Override
 	public void onCopySwipe(NacAlarm alarm, int index)
 	{
-		NacAlarmCardAdapter adapter = this.getCardAdapter();
+		NacAlarmCardAdapter adapter = this.getAlarmCardAdapter();
 		RecyclerView rv = this.getRecyclerView();
 		NacCardHolder holder = (NacCardHolder) rv.findViewHolderForAdapterPosition(index);
 		//ViewHolder holder = rv.findViewHolderForAdapterPosition(index);
@@ -575,7 +700,7 @@ public class NacMainActivity
 
 		Intent intent = getIntent();
 		this.mSharedPreferences = new NacSharedPreferences(this);
-		this.mCardAdapter = new NacAlarmCardAdapter(this);
+		this.mAlarmCardAdapter = new NacAlarmCardAdapter();
 		this.mFloatingActionButton = findViewById(R.id.fab_add_alarm);
 		this.mRecyclerView = findViewById(R.id.content_alarm_list);
 		this.mScanNfcTagDialog = null;
@@ -583,19 +708,27 @@ public class NacMainActivity
 
 
 		// Testing view model
+		this.mUpdatedAlarmIds = new HashSet<>();
+		this.getSharedPreferences().editCardIsMeasured(false);
 		NacUtility.printf("Setting up the view model and everything!");
 		this.mLastAlarmCardAction = new NacLastAlarmCardAction();
 		this.mAlarmViewModel = new ViewModelProvider(this).get(NacAlarmViewModel.class);
 		NacUtility.printf("GETTING ALL ALARMS AND OBSERVING!");
-		this.getAlarmViewModel().getAllAlarms().observe(this, this);
+		//this.getAlarmViewModel().getAllAlarms().observe(this, this);
+		this.mAlarmCardAdapterLiveData = new MutableLiveData<List<NacAlarm>>();
+		this.getAlarmViewModel().getAllAlarms().observe(this,
+			alarms -> this.mergeLiveDataWithAlarmCardAdapter(alarms));
+		this.getAlarmCardAdapterLiveData().observe(this, this);
+		NacUtility.printf("AFTER OBSERVATION!");
 		this.mAlarmCardTouchHelper = new NacCardTouchHelper(this);
 		this.mAlarmCardTouchHelper.attachToRecyclerView(this.mRecyclerView);
 		View root = findViewById(R.id.activity_main);
 		this.mSnackbar = new NacSnackbar(root);
 		this.mRecyclerView.addOnItemTouchListener(this);
 		this.mRecyclerView.setHasFixedSize(true);
-		this.mCardAdapter.setOnViewHolderCreatedListener(this);
-		this.mCardAdapter.build();
+		this.mAlarmCardAdapter.setOnViewHolderBoundListener(this);
+		this.mAlarmCardAdapter.setOnViewHolderCreatedListener(this);
+		NacUtility.printf("Done setting up the view model!");
 
 
 
@@ -755,7 +888,7 @@ public class NacMainActivity
 		}
 		else if (id == R.id.menu_show_next_alarm)
 		{
-			NacAlarmCardAdapter cardAdapter = this.getCardAdapter();
+			NacAlarmCardAdapter cardAdapter = this.getAlarmCardAdapter();
 			this.showNextAlarm();
 			//cardAdapter.showNextAlarm();
 			return true;
@@ -795,15 +928,11 @@ public class NacMainActivity
 		super.onResume();
 		this.setupRefreshMainActivity();
 		this.setupActiveAlarmActivity();
-		this.setupAlarmCardAdapter();
 
-		NacAlarmCardAdapter cardAdapter = this.getCardAdapter();
-		List<NacAlarm> alarms = cardAdapter.getCurrentList();
-		if (this.mSharedPreferences.getAppFirstRun() && (alarms.size() > 0))
-		{
-			NacScheduler.updateAll(this, alarms);
-			this.mSharedPreferences.editAppFirstRun(false);
-		}
+		NacUtility.printf("onResume!");
+		// Will have to redraw colors here?
+
+
 
 		this.setupFloatingActionButton();
 		this.setupGoogleRatingDialog();
@@ -845,18 +974,27 @@ public class NacMainActivity
 	}
 
 	/**
+	 * Needed for NacAlarmCardAdapter.OnViewHolderBoundListener.
+	 */
+	@Override
+	public void onViewHolderBound(NacCardHolder card, int index)
+	{
+		this.verifyCardIsMeasured(card);
+	}
+
+	/**
 	 * Needed for NacAlarmCardAdapter.OnViewHolderCreatedListener.
 	 */
 	@Override
-	public void onViewHolderCreated(NacCardHolder holder)
+	public void onViewHolderCreated(NacCardHolder card)
 	{
-		holder.setOnCardCollapsedListener(this);
-		holder.setOnCardDeleteClickedListener(this);
-		holder.setOnCardExpandedListener(this);
-		holder.setOnCardMediaClickedListener(this);
-		holder.setOnCardUpdatedListener(this);
-		holder.setOnCardUseNfcChangedListener(this);
-		holder.setOnCreateContextMenuListener(this);
+		card.setOnCardCollapsedListener(this);
+		card.setOnCardDeleteClickedListener(this);
+		card.setOnCardExpandedListener(this);
+		card.setOnCardMediaClickedListener(this);
+		card.setOnCardUpdatedListener(this);
+		card.setOnCardUseNfcChangedListener(this);
+		card.setOnCreateContextMenuListener(this);
 	}
 
 	/**
@@ -920,19 +1058,6 @@ public class NacMainActivity
 	}
 
 	/**
-	 * Setup the alarm card adapter.
-	 */
-	private void setupAlarmCardAdapter()
-	{
-		NacAlarmCardAdapter cardAdapter = this.getCardAdapter();
-
-		//if (cardAdapter.size() == 0)
-		//{
-		//	cardAdapter.build();
-		//}
-	}
-
-	/**
 	 * Setup the floating action button.
 	 */
 	private void setupFloatingActionButton()
@@ -975,7 +1100,7 @@ public class NacMainActivity
 	private void setupRecyclerView()
 	{
 		RecyclerView recyclerView = this.getRecyclerView();
-		NacAlarmCardAdapter cardAdapter = this.getCardAdapter();
+		NacAlarmCardAdapter cardAdapter = this.getAlarmCardAdapter();
 		int padding = getResources().getDimensionPixelSize(R.dimen.normal);
 
 		Drawable drawable = ContextCompat.getDrawable(this,
@@ -1119,7 +1244,7 @@ public class NacMainActivity
 	{
 		NacSharedConstants cons = this.getSharedConstants();
 		NacSharedPreferences shared = this.getSharedPreferences();
-		NacAlarmCardAdapter cardAdapter = this.getCardAdapter();
+		NacAlarmCardAdapter cardAdapter = this.getAlarmCardAdapter();
 
 		List<NacAlarm> alarms = cardAdapter.getCurrentList();
 		NacAlarm alarm = NacCalendar.getNextAlarm(alarms);
@@ -1185,7 +1310,7 @@ public class NacMainActivity
 	public void updateUpcomingNotification()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		NacAlarmCardAdapter cardAdapter = this.getCardAdapter();
+		NacAlarmCardAdapter cardAdapter = this.getAlarmCardAdapter();
 
 		if (shared.getUpcomingAlarmNotification())
 		{
@@ -1196,6 +1321,50 @@ public class NacMainActivity
 			notification.setAlarmList(alarms);
 			notification.show();
 		}
+	}
+
+	/**
+	 * Run the setup when it is the app's first time running.
+	 *
+	 * If it is not the app's first time running, this does nothing.
+	 */
+	private void setupForAppFirstRun(List<NacAlarm> alarms)
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		int size = alarms.size();
+
+		if (!shared.getAppFirstRun() || (size == 0))
+		{
+			return;
+		}
+
+		NacScheduler.updateAll(this, alarms);
+		shared.editAppFirstRun(false);
+	}
+
+	/**
+	 * Verify that the card is measured.
+	 *
+	 * If a card has already been measured, this does nothing.
+	 */
+	private void verifyCardIsMeasured(NacCardHolder card)
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+
+		if (shared.getCardIsMeasured())
+		{
+			return;
+		}
+
+		int[] heights = new int[3];
+
+		card.measureCard(heights);
+		shared.editCardHeightCollapsed(heights[0]);
+		shared.editCardHeightCollapsedDismiss(heights[1]);
+		shared.editCardHeightExpanded(heights[2]);
+		shared.editCardIsMeasured(true);
+			//card.initColors();
+			//card.dow.setStartWeekOn(shared.getStartWeekOn());
 	}
 
 	/**

@@ -117,7 +117,12 @@ public class NacDayButton
 	 */
 	public void disable()
 	{
-		this.getButton().setChecked(false);
+		MaterialButton button = this.getButton();
+
+		if (button.isChecked())
+		{
+			this.toggle();
+		}
 	}
 
 	/**
@@ -125,7 +130,12 @@ public class NacDayButton
 	 */
 	public void enable()
 	{
-		this.getButton().setChecked(true);
+		MaterialButton button = this.getButton();
+
+		if (!button.isChecked())
+		{
+			this.toggle();
+		}
 	}
 
 	/**
@@ -187,7 +197,6 @@ public class NacDayButton
 	public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId,
 		boolean isChecked)
 	{
-		NacUtility.printf("onButtonChecked!");
 		NacDayButton.OnDayChangedListener listener = this.getOnDayChangedListener();
 		if (listener != null)
 		{
@@ -200,7 +209,6 @@ public class NacDayButton
 	@Override
 	public void onClick(View view)
 	{
-		NacUtility.printf("onClick!");
 		MaterialButton button = this.getButton();
 		boolean checked = button.isChecked();
 
@@ -287,6 +295,17 @@ public class NacDayButton
 
 		this.setSize(attrs.width, attrs.height);
 		this.setText(attrs.text);
+	}
+
+	/**
+	 * Toggle the day button.
+	 */
+	public void toggle()
+	{
+		MaterialButton button = this.getButton();
+		boolean status = button.isChecked();
+
+		button.setChecked(!status);
 	}
 
 }

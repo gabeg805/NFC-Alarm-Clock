@@ -193,7 +193,7 @@ public class NacIntent
 		{
 			ArrayList<Integer> extraDays =
 				intent.getIntegerArrayListExtra(AlarmClock.EXTRA_DAYS);
-			EnumSet<NacCalendar.Day> days = NacCalendar.NO_DAYS;
+			EnumSet<NacCalendar.Day> days = NacCalendar.Day.none();
 			isSet = true;
 
 			for (int d : extraDays)

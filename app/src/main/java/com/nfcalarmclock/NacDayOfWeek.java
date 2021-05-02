@@ -116,7 +116,7 @@ public class NacDayOfWeek
 	 */
 	public EnumSet<NacCalendar.Day> getDays()
 	{
-		EnumSet<NacCalendar.Day> days = NacCalendar.NO_DAYS;
+		EnumSet<NacCalendar.Day> days = NacCalendar.Day.none();
 
 		for (NacCalendar.Day d : NacCalendar.WEEK)
 		{
@@ -182,7 +182,9 @@ public class NacDayOfWeek
 	public boolean isDayEnabled(NacCalendar.Day day)
 	{
 		NacDayButton button = this.getDayButton(day);
-		return button.isEnabled();
+		return button.getButton().isChecked();
+		//Why was I using isEnabled()? That's a method from View.
+		//return button.isEnabled();
 	}
 
 	/**
@@ -255,18 +257,6 @@ public class NacDayOfWeek
 			{
 				view.removeView(firstChild);
 				view.addView(firstChild, 6);
-				//sunday.invalidate();
-				//monday.invalidate();
-				//firstChild.invalidate();
-				//lastChild.invalidate();
-				//view.invalidate();
-
-				//view.invalidate();
-
-				//for (int i=0; i < count; i++)
-				//{
-				//	view.getChildAt(i).invalidate();
-				//}
 			}
 		}
 		else
@@ -275,13 +265,6 @@ public class NacDayOfWeek
 			{
 				view.removeView(lastChild);
 				view.addView(lastChild, 0);
-
-				//view.invalidate();
-
-				//for (int i=0; i < count; i++)
-				//{
-				//	view.getChildAt(i).invalidate();
-				//}
 			}
 		}
 	}
