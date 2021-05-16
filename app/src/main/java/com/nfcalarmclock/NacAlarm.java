@@ -471,16 +471,21 @@ public class NacAlarm
 	{
 		this();
 		this.setId(input.readLong());
-		this.setIsActive(input.readBoolean());
+		this.setIsActive(input.readInt() != 0);
+		//this.setIsActive(input.readBoolean());
 		this.setTimeActive(input.readLong());
 		this.setSnoozeCount(input.readInt());
-		this.setIsEnabled(input.readBoolean());
+		this.setIsEnabled(input.readInt() != 0);
+		//this.setIsEnabled(input.readBoolean());
 		this.setHour(input.readInt());
 		this.setMinute(input.readInt());
 		this.setDays(input.readInt());
-		this.setRepeat(input.readBoolean());
-		this.setVibrate(input.readBoolean());
-		this.setUseNfc(input.readBoolean());
+		this.setRepeat(input.readInt() != 0);
+		//this.setRepeat(input.readBoolean());
+		this.setVibrate(input.readInt() != 0);
+		//this.setVibrate(input.readBoolean());
+		this.setUseNfc(input.readInt() != 0);
+		//this.setUseNfc(input.readBoolean());
 		this.setNfcTagId(input.readString());
 		this.setMediaType(input.readInt());
 		this.setMediaPath(input.readString());
@@ -1452,16 +1457,21 @@ public class NacAlarm
 	public void writeToParcel(Parcel output, int flags)
 	{
 		output.writeLong(this.getId());
-		output.writeBoolean(this.isActive());
+		output.writeInt(this.isActive() ? 1 : 0);
+		//output.writeBoolean(this.isActive());
 		output.writeLong(this.getTimeActive());
 		output.writeInt(this.getSnoozeCount());
-		output.writeBoolean(this.isEnabled());
+		output.writeInt(this.isEnabled() ? 1 : 0);
+		//output.writeBoolean(this.isEnabled());
 		output.writeInt(this.getHour());
 		output.writeInt(this.getMinute());
 		output.writeInt(NacCalendar.Days.daysToValue(this.getDays()));
-		output.writeBoolean(this.shouldRepeat());
-		output.writeBoolean(this.shouldVibrate());
-		output.writeBoolean(this.shouldUseNfc());
+		output.writeInt(this.shouldRepeat() ? 1 : 0);
+		//output.writeBoolean(this.shouldRepeat());
+		output.writeInt(this.shouldVibrate() ? 1 : 0);
+		//output.writeBoolean(this.shouldVibrate());
+		output.writeInt(this.shouldUseNfc() ? 1 : 0);
+		//output.writeBoolean(this.shouldUseNfc());
 		output.writeString(this.getNfcTagId());
 		output.writeInt(this.getMediaType());
 		output.writeString(this.getMediaPath());

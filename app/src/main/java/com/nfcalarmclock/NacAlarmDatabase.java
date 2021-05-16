@@ -77,6 +77,20 @@ public abstract class NacAlarmDatabase
 	}
 
 	/**
+	 * Delete the old database.
+	 */
+	protected static void deleteOldDatabase(Context context)
+	{
+		if (!NacDatabase.exists(context))
+		{
+			return;
+		}
+
+		File file = context.getDatabasePath(NacDatabase.DATABASE_NAME);
+		file.delete();
+	}
+
+	/**
 	 * Check if the Room database exists or not.
 	 *
 	 * @param  context  Application context.
@@ -169,7 +183,7 @@ public abstract class NacAlarmDatabase
 	}
 
 	/**
-	 * Migrate data from the old database into the new database
+	 * Migrate data from the old database into the new database.
 	 */
 	protected static void migrateOldDatabase(Context context)
 	{
@@ -209,6 +223,7 @@ public abstract class NacAlarmDatabase
 			{
 				cancelOldAlarms(context);
 				migrateOldDatabase(context);
+				deleteOldDatabase(context);
 			}
 			else
 			{

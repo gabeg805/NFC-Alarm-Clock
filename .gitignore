@@ -8,5 +8,7 @@ keystore.properties
 local.properties
 *.iml
 *.swp
+*.apk
+*.aab
 .DS_Store
 .externalNativeBuild

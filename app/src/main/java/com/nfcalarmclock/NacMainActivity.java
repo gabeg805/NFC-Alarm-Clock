@@ -143,10 +143,6 @@ public class NacMainActivity
 	private boolean mIsActivityShown = false;
 
 	/**
-	 */
-	private boolean mHasDeleted = false;
-
-	/**
 	 * Listener for when the floating action button is clicked.
 	 */
 	private final View.OnClickListener mFloatingActionButtonListener =
@@ -806,37 +802,6 @@ public class NacMainActivity
 		this.setIsActivityShown(false);
 		this.cleanupShutdownBroadcastReceiver();
 		NacNfc.stop(this);
-		this.ahhh();
-	}
-
-	/**
-	 */
-	@Override
-	protected void onDestroy()
-	{
-		super.onDestroy();
-		this.ahhh();
-	}
-
-	/**
-	 */
-	private void ahhh()
-	{
-		if (this.mHasDeleted)
-		{
-			return;
-		}
-
-		File file = getDatabasePath(NacAlarmDatabase.DB_NAME);
-		NacUtility.printf("Attempting to deleting the file : %s", file.getPath());
-
-		if (file.exists())
-		{
-			NacUtility.printf("Deleting the database file!");
-			file.delete();
-		}
-
-		this.mHasDeleted = true;
 	}
 
 	/**
