@@ -515,7 +515,6 @@ public class NacDatabase
 			.setMediaType(mediaType)
 			.setName(name)
 			.setNfcTagId("")
-			.setIsActive(false)
 			.build();
 
 		this.add(db, alarm);
@@ -640,8 +639,8 @@ public class NacDatabase
 		switch (version)
 		{
 			case 5:
-				builder.setNfcTagId(cursor.getString(15))
-					.setIsActive(cursor.getInt(16) != 0);
+				builder.setNfcTagId(cursor.getString(15));
+					//.setIsActive(cursor.getInt(16) != 0);
 			case 4:
 			default:
 				builder.setId(cursor.getInt(1))

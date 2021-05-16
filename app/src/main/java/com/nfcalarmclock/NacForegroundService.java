@@ -42,15 +42,14 @@ public class NacForegroundService
 		"com.nfcalarmclock.ACTION_DISMISS_ALARM";
 
 	/**
-	 * Wakelock.
+	 * Shared preferences.
 	 */
-	private WakeLock mWakeLock;
+	private NacSharedPreferences mSharedPreferences;
 
 	/**
-	 * Wake up processes (only has multiple if more than one alarms are running
-	 * at once).
+	 * Alarm repository.
 	 */
-	private List<NacWakeupProcess> mAllWakeups;
+	private NacAlarmRepository mAlarmRepository;
 
 	/**
 	 * Alarm.
@@ -58,18 +57,38 @@ public class NacForegroundService
 	private NacAlarm mAlarm;
 
 	/**
-	 * Shared preferences.
+	 * Wakeup process, that plays music, vibrates the phone, etc.
 	 */
-	private NacSharedPreferences mSharedPreferences;
+	private NacWakeupProcess mWakeupProcess;
+
+	/**
+	 * Wakelock.
+	 */
+	private WakeLock mWakeLock;
 
 	/**
 	 * Run cleanup.
 	 */
 	private void cleanup()
 	{
-		this.unmarkActiveAlarm();
+		this.writeIsAlarmActive(false);
+		this.cleanupAlarmActivity();
 		this.cleanupWakeupProcess();
 		this.cleanupWakeLock();
+	}
+
+	/**
+	 * Cleanup the alarm activity.
+	 */
+	private void cleanupAlarmActivity()
+	{
+		NacAlarm alarm = this.getAlarm();
+
+		if (alarm != null)
+		{
+			NacUtility.printf("Foreground service -- Stop alarm activity!");
+			NacContext.stopAlarmActivity(this, alarm);
+		}
 	}
 
 	/**
@@ -92,59 +111,39 @@ public class NacForegroundService
 	 */
 	private void cleanupWakeupProcess()
 	{
-		List<NacWakeupProcess> allWakeups = this.getAllWakeups();
-		NacAlarm alarm = this.getAlarm();
-		int index = this.indexOfWakeup(alarm);
-		NacWakeupProcess wakeup = this.getWakeup(index);
+		NacWakeupProcess wakeup = this.getWakeupProcess();
 
 		if (wakeup != null)
 		{
+			NacUtility.printf("Foreground service -- Stop wakeup process!");
 			wakeup.cleanup();
 		}
 
-		if (allWakeups != null)
-		{
-			if (index >= 0)
-			{
-				allWakeups.remove(index);
-			}
-		}
+		this.mWakeupProcess = null;
 	}
 
 	/**
 	 * Dismiss the alarm.
-	 *
-	 * TODO: Add this somewhere in a method. Maybe to NacAlarm?
 	 */
 	private void dismiss()
 	{
-		NacDatabase db = new NacDatabase(this);
 		NacSharedPreferences shared = this.getSharedPreferences();
-		NacSharedConstants cons = shared.getConstants();
+		NacSharedConstants cons = this.getSharedConstants();
 		NacAlarm alarm = this.getAlarm();
-		NacAlarm actualAlarm = db.findAlarm(alarm);
+		NacAlarmRepository repo = this.getAlarmRepository();
 
-		if (actualAlarm != null)
+		NacUtility.printf("Dismissing the alarm in the service? %b || %d", alarm != null, (alarm != null) ? alarm.getId() : -1);
+
+		if (alarm != null)
 		{
-			// Change this next line, and the else. THis is already done when you
-			// start the service.
-			actualAlarm.setIsActive(false);
-
-			if (!actualAlarm.shouldRepeat())
-			{
-				NacScheduler.toggleAlarm(actualAlarm);
-			}
-			else
-			{
-				NacScheduler.scheduleNext(this, actualAlarm);
-			}
-
-			db.update(actualAlarm);
-			shared.editSnoozeCount(actualAlarm.getId(), 0);
+			alarm.print();
+			NacUtility.printf("YOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+			alarm.dismiss();
+			repo.update(alarm);
+			NacScheduler.update(this, alarm);
 			shared.editShouldRefreshMainActivity(true);
 		}
 
-		db.close();
 		NacUtility.quickToast(this, cons.getMessageAlarmDismiss());
 		this.finish();
 	}
@@ -153,21 +152,10 @@ public class NacForegroundService
 	 */
 	public void finish()
 	{
+		NacUtility.printf("Finishing foreground service!");
 		this.cleanup();
-		NacContext.stopAlarmActivity(this, this.getAlarm());
+		// Should I call cleanupAlarmActivity() even if alarm is null?
 		super.stopForeground(true);
-
-		// Will this even work after stopForeground()?
-		NacWakeupProcess nextWakeup = this.getNextWakeup();
-
-		if (nextWakeup != null)
-		{
-			nextWakeup.start();
-			this.mAlarm = nextWakeup.getAlarm();
-			this.showNotification();
-			return;
-		}
-
 		super.stopSelf();
 	}
 
@@ -180,19 +168,19 @@ public class NacForegroundService
 	}
 
 	/**
-	 * @return Al wakeup processes.
+	 * @return The alarm repository.
 	 */
-	private List<NacWakeupProcess> getAllWakeups()
+	private NacAlarmRepository getAlarmRepository()
 	{
-		return this.mAllWakeups;
+		return this.mAlarmRepository;
 	}
 
 	/**
-	 * @return The next wakeup process.
+	 * @return The shared constants.
 	 */
-	private NacWakeupProcess getNextWakeup()
+	private NacSharedConstants getSharedConstants()
 	{
-		return this.getWakeup(0);
+		return this.getSharedPreferences().getConstants();
 	}
 
 	/**
@@ -204,55 +192,11 @@ public class NacForegroundService
 	}
 
 	/**
-	 * @return The index of the corresponding wakeup process.
-	 */
-	private int indexOfWakeup(NacAlarm alarm)
-	{
-		List<NacWakeupProcess> allWakeups = this.getAllWakeups();
-
-		if ((allWakeups == null) || (alarm == null))
-		{
-			return -1;
-		}
-
-		long id = alarm.getId();
-		int i = 0;
-
-		for (NacWakeupProcess p : allWakeups)
-		{
-			NacAlarm a = p.getAlarm();
-			if (a.getId() == id)
-			{
-				return i;
-			}
-
-			i++;
-		}
-
-		return -2;
-	}
-
-	/**
 	 * @return The wakeup process.
 	 */
-	private NacWakeupProcess getWakeup(NacAlarm alarm)
+	private NacWakeupProcess getWakeupProcess()
 	{
-		int index = this.indexOfWakeup(alarm);
-		return this.getWakeup(index);
-	}
-
-	private NacWakeupProcess getWakeup(int index)
-	{
-		List<NacWakeupProcess> allWakeups = this.getAllWakeups();
-		int size = (allWakeups != null) ? allWakeups.size() : 0;
-
-		return ((index >= 0) && (index < size)) ? allWakeups.get(index) : null;
-	}
-
-	private NacWakeupProcess getWakeup()
-	{
-		NacAlarm alarm = this.getAlarm();
-		return this.getWakeup(alarm);
+		return this.mWakeupProcess;
 	}
 
 	/**
@@ -264,22 +208,20 @@ public class NacForegroundService
 	}
 
 	/**
-	 * Mark the active alarm in the database.
+	 * Check if a new service, with a different alarm, was started.
+	 *
+	 * @param  intent An Intent.
+	 *
+	 * @return True if a new service was started, and False otherwise.
 	 */
-	public void markActiveAlarm()
+	private boolean isNewServiceStarted(Intent intent)
 	{
 		NacAlarm alarm = this.getAlarm();
-		if (alarm == null)
-		{
-			return;
-		}
+		NacAlarm intentAlarm = NacIntent.getAlarm(intent);
+		String action = NacIntent.getAction(intent);
 
-		NacDatabase db = new NacDatabase(this);
-		NacAlarm actualAlarm = db.findAlarm(alarm);
-
-		actualAlarm.setIsActive(true);
-		db.update(actualAlarm);
-		db.close();
+		return (intentAlarm != null) && !intentAlarm.equals(alarm)
+			&& action.equals(ACTION_START_SERVICE);
 	}
 
 	/**
@@ -304,13 +246,23 @@ public class NacForegroundService
 	/**
 	 */
 	@Override
+	public IBinder onBind(Intent intent)
+	{
+		return null;
+	}
+
+	/**
+	 */
+	@Override
 	public void onCreate()
 	{
 		super.onCreate();
-		this.mWakeLock = null;
-		this.mAllWakeups = null;
+
+		this.mSharedPreferences = new NacSharedPreferences(this);
+		this.mAlarmRepository = new NacAlarmRepository(getApplication());
 		this.mAlarm = null;
-		this.mSharedPreferences = null;
+		this.mWakeupProcess = null;
+		this.mWakeLock = null;
 	}
 
 	/**
@@ -327,82 +279,39 @@ public class NacForegroundService
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
-		this.prepareAlarm(intent);
-		String action = NacIntent.getAction(intent);
+		if (this.isNewServiceStarted(intent))
+		{
+			NacUtility.printf("Stopping the current process due to the intent alarm!");
+			this.cleanupWakeupProcess();
+			this.cleanupAlarmActivity();
+		}
 
-		if (action.isEmpty() || action.equals(ACTION_STOP_SERVICE)
-			|| (this.getAlarm() == null))
+		String action = NacIntent.getAction(intent);
+		NacAlarm alarm = NacIntent.getAlarm(intent);
+		this.mAlarm = alarm;
+
+		if ((alarm == null) || action.isEmpty()
+			|| action.equals(ACTION_STOP_SERVICE)
+			|| action.equals(ACTION_DISMISS_ALARM))
 		{
 			this.dismiss();
+		}
+		else if (action.equals(ACTION_SNOOZE_ALARM))
+		{
+			this.snooze();
 		}
 		else if (action.equals(ACTION_START_SERVICE))
 		{
 			this.setupWakeLock();
 			this.showNotification();
 			this.setupWakeupProcess();
-			this.scheduleNextAlarm();
-			this.markActiveAlarm();
+			// Might not need schedule next, since doing one day, per alarm, at a time.
+			//this.scheduleNextAlarm();
+			this.writeIsAlarmActive(true);
 			return START_STICKY;
-		}
-		else if (action.equals(ACTION_SNOOZE_ALARM))
-		{
-			this.snooze();
-		}
-		else if (action.equals(ACTION_DISMISS_ALARM))
-		{
-			this.dismiss();
 		}
 
 		return START_NOT_STICKY;
-	}
-
-	/**
-	 */
-	@Override
-	public IBinder onBind(Intent intent)
-	{
-		return null;
-	}
-
-	/**
-	 * Prepare the alarm information.
-	 */
-	private void prepareAlarm(Intent intent)
-	{
-		String action = NacIntent.getAction(intent);
-		NacAlarm intentAlarm = NacIntent.getAlarm(intent);
-		NacAlarm currentAlarm = this.getAlarm();
-
-		if (this.mSharedPreferences == null)
-		{
-			this.mSharedPreferences = new NacSharedPreferences(this);
-		}
-
-		if (intentAlarm != null)
-		{
-			if (!intentAlarm.equals(currentAlarm)
-				&& action.equals(ACTION_START_SERVICE))
-			{
-				//this.cleanup();
-				this.stopCurrentWakeupProcess();
-			}
-
-			this.mAlarm = intentAlarm;
-		}
-	}
-
-	/**
-	 * Schedule the next alarm.
-	 */
-	public void scheduleNextAlarm()
-	{
-		NacAlarm alarm = this.getAlarm();
-		if (alarm == null)
-		{
-			return;
-		}
-
-		NacScheduler.scheduleNext(this, alarm);
 	}
 
 	/**
@@ -410,13 +319,6 @@ public class NacForegroundService
 	 */
 	public void setupWakeLock()
 	{
-		NacAlarm alarm = this.getAlarm();
-
-		if (alarm == null)
-		{
-			return;
-		}
-
 		this.cleanupWakeLock();
 
 		NacSharedPreferences shared = this.getSharedPreferences();
@@ -434,24 +336,12 @@ public class NacForegroundService
 	 */
 	public void setupWakeupProcess()
 	{
-		List<NacWakeupProcess> allWakeups = this.getAllWakeups();
 		NacAlarm alarm = this.getAlarm();
-
-		if (alarm == null)
-		{
-			return;
-		}
-
-		if (allWakeups == null)
-		{
-			allWakeups = new ArrayList<>();
-			this.mAllWakeups = allWakeups;
-		}
-
 		NacWakeupProcess wakeup = new NacWakeupProcess(this, alarm);
+		this.mWakeupProcess = wakeup;
+
 		wakeup.setOnAutoDismissListener(this);
 		wakeup.start();
-		allWakeups.add(0, wakeup);
 	}
 
 	/**
@@ -460,14 +350,9 @@ public class NacForegroundService
 	public void showNotification()
 	{
 		NacAlarm alarm = this.getAlarm();
-
-		if (alarm == null)
-		{
-			return;
-		}
-
 		NacActiveAlarmNotification notification =
 			new NacActiveAlarmNotification(this);
+
 		notification.setAlarm(alarm);
 		startForeground((int)alarm.getId(), notification.builder().build());
 	}
@@ -477,64 +362,40 @@ public class NacForegroundService
 	 */
 	public void snooze()
 	{
-		NacSharedConstants cons = new NacSharedConstants(this);
 		NacSharedPreferences shared = this.getSharedPreferences();
+		NacSharedConstants cons = this.getSharedConstants();
+		NacAlarmRepository repo = this.getAlarmRepository();
 		NacAlarm alarm = this.getAlarm();
+		Calendar cal = alarm.snooze(shared);
 
-		if (!alarm.canSnooze(shared))
+		if (cal != null)
+		{
+			shared.editShouldRefreshMainActivity(true);
+			repo.update(alarm);
+			NacScheduler.update(this, alarm, cal);
+
+			NacUtility.quickToast(this, cons.getMessageAlarmSnooze());
+			this.finish();
+		}
+		else
 		{
 			NacUtility.quickToast(this, cons.getErrorMessageSnooze());
 			return;
 		}
-
-		Calendar cal = Calendar.getInstance();
-		int snoozeCount = alarm.getSnoozeCount(shared);
-		long id = alarm.getId();
-
-		cal.add(Calendar.MINUTE, shared.getSnoozeDurationValue());
-		alarm.setHour(cal.get(Calendar.HOUR_OF_DAY));
-		alarm.setMinute(cal.get(Calendar.MINUTE));
-		NacScheduler.update(this, alarm, cal);
-		shared.editSnoozeCount(id, snoozeCount+1);
-		shared.editShouldRefreshMainActivity(true);
-
-		NacUtility.quickToast(this, cons.getMessageAlarmSnooze());
-		this.finish();
 	}
 
 	/**
-	 * Stop the current wakeup process.
+	 * Write to the database whether the alarm is active or not.
+	 *
+	 * @param  isActive  Whether the alarm is active or not.
 	 */
-	private void stopCurrentWakeupProcess()
+	public void writeIsAlarmActive(boolean isActive)
 	{
-		NacWakeupProcess wakeup = this.getWakeup();
+		NacAlarmRepository repo = this.getAlarmRepository();
 		NacAlarm alarm = this.getAlarm();
 
-		if (wakeup != null)
-		{
-			wakeup.stop();
-		}
-
-		NacContext.stopAlarmActivity(this, alarm);
-	}
-
-	/**
-	 * Unmark the active alarm in the database.
-	 */
-	public void unmarkActiveAlarm()
-	{
-		NacAlarm alarm = this.getAlarm();
-		if (alarm == null)
-		{
-			return;
-		}
-
-		NacDatabase db = new NacDatabase(this);
-		NacAlarm actualAlarm = db.findAlarm(alarm);
-
-		actualAlarm.setIsActive(false);
-		db.update(actualAlarm);
-		db.close();
+		alarm.setIsActive(isActive);
+		repo.update(alarm);
 	}
 
 }

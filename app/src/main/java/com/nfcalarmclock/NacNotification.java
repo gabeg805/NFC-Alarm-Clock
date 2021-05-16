@@ -78,25 +78,23 @@ public abstract class NacNotification
 	protected final Context mContext;
 
 	/**
+	 * Shared constants.
+	 */
+	protected final NacSharedConstants mSharedConstants;
+
+	/**
 	 * Body text of the notification.
 	 */
 	protected List<CharSequence> mBody;
 
 	/**
 	 */
-	public NacNotification()
-	{
-		super();
-		this.mContext = null;
-		this.mBody = null;
-	}
-
-	/**
-	 */
 	public NacNotification(Context context)
 	{
 		this.mContext = context;
+		this.mSharedConstants = new NacSharedConstants(context);
 		this.mBody = null;
+
 		this.setupChannel();
 	}
 
@@ -257,6 +255,14 @@ public abstract class NacNotification
 	protected int getSmallIcon()
 	{
 		return R.mipmap.notification;
+	}
+
+	/**
+	 * @return Shared constants.
+	 */
+	protected NacSharedConstants getSharedConstants()
+	{
+		return this.mSharedConstants;
 	}
 
 	/**

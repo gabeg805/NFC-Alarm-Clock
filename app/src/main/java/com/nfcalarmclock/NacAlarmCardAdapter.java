@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,9 +46,9 @@ public class NacAlarmCardAdapter
 	private OnViewHolderCreatedListener mOnViewHolderCreatedListener;
 
 	/**
-	 * Indicator that the alarm was added through the floating action button.
+	 * Indices of the cards that are expanded.
 	 */
-	private boolean mWasAddedWithFloatingActionButton;
+	private List<Integer> mIndicesOfExpandedCards;
 
 	/**
 	 */
@@ -60,10 +61,9 @@ public class NacAlarmCardAdapter
 			public boolean areItemsTheSame(@NonNull NacAlarm oldAlarm,
 				@NonNull NacAlarm newAlarm)
 			{
-				NacUtility.printf("Are items same? %d | %d | %b",
-					oldAlarm.getId(), newAlarm.getId(), oldAlarm.getId() == newAlarm.getId());
+				//NacUtility.printf("Are items same? %d | %d | %b",
+				//	oldAlarm.getId(), newAlarm.getId(), oldAlarm.getId() == newAlarm.getId());
 				return oldAlarm.equalsId(newAlarm);
-				//return oldAlarm.getId() == newAlarm.getId();
 			}
 
 			/**
@@ -74,8 +74,8 @@ public class NacAlarmCardAdapter
 			{
 				// NOTE: if you use equals, your object must properly override Object#equals()
 				// Incorrectly returning false here will result in too many animations.
-				NacUtility.printf("Are contents same? %d | %d | %b",
-					oldAlarm.getId(), newAlarm.getId(), oldAlarm.equals(newAlarm));
+				//NacUtility.printf("Are contents same? %d | %d | %b",
+				//	oldAlarm.getId(), newAlarm.getId(), oldAlarm.equals(newAlarm));
 				return oldAlarm.equals(newAlarm);
 			}
 		};
@@ -85,8 +85,6 @@ public class NacAlarmCardAdapter
 	public NacAlarmCardAdapter()
 	{
 		super(DIFF_CALLBACK);
-
-		this.mWasAddedWithFloatingActionButton = false;
 
 		setHasStableIds(true);
 	}
@@ -172,19 +170,43 @@ public class NacAlarmCardAdapter
 	 */
 	public int getCardsExpandedCount(RecyclerView rv)
 	{
+		List<Integer> indices = this.getIndicesOfExpandedCards(rv);
+		return indices.size();
+	}
+
+	/**
+	 * Get a list of the stored indices of the cards that are expanded.
+	 *
+	 * @return A list of the stored indices of the cards that are expanded.
+	 */
+	public List<Integer> getIndicesOfExpandedCards()
+	{
+		return this.mIndicesOfExpandedCards;
+	}
+
+	/**
+	 * Get a list of the indices of the cards that are expanded.
+	 *
+	 * @param  rv  The recyclerview containing the view holders.
+	 *
+	 * @return A list of the indices of the cards that are expanded.
+	 */
+	public List<Integer> getIndicesOfExpandedCards(RecyclerView rv)
+	{
+		List<Integer> indices = new ArrayList<>();
 		int size = getItemCount();
-		int count = 0;
 
 		for (int i=0; i < size; i++)
 		{
 			NacCardHolder card = (NacCardHolder) rv.findViewHolderForAdapterPosition(i);
-			if (card.isExpanded())
+
+			if ((card != null) && card.isExpanded())
 			{
-				count++;
+				indices.add(i);
 			}
 		}
 
-		return count;
+		return indices;
 	}
 
 	/**
@@ -223,16 +245,14 @@ public class NacAlarmCardAdapter
 	public void onBindViewHolder(final NacCardHolder card, int index)
 	{
 		NacAlarm alarm = getItem(index);
-		NacUtility.printf("onBindViewHolder()! Id: %d | Index: %d", alarm.getId(), index);
+		List<Integer> expandedCards = this.getIndicesOfExpandedCards();
 
 		card.init(alarm);
 
-		if (this.wasAddedWithFloatingActionButton())
+		if (expandedCards.contains(index))
 		{
-			card.interact();
+			card.doExpandWithColor();
 		}
-
-		this.setWasAddedWithFloatingActionButton(false);
 
 		this.callOnViewHolderBoundListener(card, index);
 	}
@@ -273,14 +293,6 @@ public class NacAlarmCardAdapter
 		this.mOnViewHolderCreatedListener = listener;
 	}
 
-	/**
-	 * Set whether an alarm was added with the floating button.
-	 */
-	public void setWasAddedWithFloatingActionButton(boolean added)
-	{
-		this.mWasAddedWithFloatingActionButton = added;
-	}
-
 	///**
 	// * Toast for when the maximum number of alarms has been created.
 	// */
@@ -292,12 +304,9 @@ public class NacAlarmCardAdapter
 	//	NacUtility.quickToast(context, cons.getErrorMessageMaxAlarms());
 	//}
 
-	/**
-	 * @return True if the alarm was added, and False otherwise.
-	 */
-	public boolean wasAddedWithFloatingActionButton()
+	public void storeIndicesOfExpandedCards(RecyclerView rv)
 	{
-		return this.mWasAddedWithFloatingActionButton;
+		this.mIndicesOfExpandedCards = this.getIndicesOfExpandedCards(rv);
 	}
 
 }

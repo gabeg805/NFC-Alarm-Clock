@@ -2,6 +2,8 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
 
 /**
  * Context.
@@ -79,6 +81,42 @@ public class NacContext
 	{
 		Intent intent = NacIntent.stopAlarmActivity(alarm);
 		context.sendBroadcast(intent);
+	}
+
+	/**
+	 * Start the running the alarm activity and service.
+	 *
+	 * @param  context  A context.
+	 * @param  bundle  A bundle, typically with an alarm inside.
+	 */
+	public static void startAlarm(Context context, Bundle bundle)
+	{
+		NacUtility.printf("Finally showing alarm activity!");
+		Intent activityIntent = NacIntent.createAlarmActivity(context, bundle);
+		Intent serviceIntent = NacIntent.createForegroundService(context, bundle);
+
+		context.startActivity(activityIntent);
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			NacUtility.printf("Finally showing alarm service!");
+			context.startForegroundService(serviceIntent);
+		}
+		else
+		{
+			NacUtility.printf("Finally showing alarm service!");
+			context.startService(serviceIntent);
+		}
+	}
+
+	/**
+	 * @see NacContext#startAlarm(Context, Bundle)
+	 */
+	public static void startAlarm(Context context, NacAlarm alarm)
+	{
+		Bundle bundle = NacBundle.toBundle(alarm);
+
+		NacContext.startAlarm(context, bundle);
 	}
 
 }

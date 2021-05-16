@@ -29,15 +29,21 @@ public class NacIntent
 	 */
 	public static Intent addAlarm(Intent intent, Bundle bundle)
 	{
-		if (intent != null)
+		if ((intent != null) && (bundle != null))
 		{
 			intent.putExtra(ALARM_BUNDLE_NAME, bundle);
 		}
+
 		return intent;
 	}
 
 	/**
 	 * Add an alarm to an intent.
+	 *
+	 * @param  intent  An intent.
+	 * @param  alarm  An alarm.
+	 *
+	 * @return The passed in intent with the alarm.
 	 */
 	public static Intent addAlarm(Intent intent, NacAlarm alarm)
 	{
@@ -45,16 +51,12 @@ public class NacIntent
 	}
 
 	/**
-	 * @return The intent that will be used to start the Alarm activity.
-	 */
-	public static Intent createAlarmActivity(Context context, NacAlarm alarm)
-	{
-		Bundle bundle = NacBundle.toBundle(alarm);
-		return NacIntent.createAlarmActivity(context, bundle);
-	}
-
-	/**
-	 * @return The intent that will be used to start the Alarm activity.
+	 * Create an intent that will be used to start the Alarm activity.
+	 *
+	 * @param  context  A context.
+	 * @param  bundle  A bundle.
+	 *
+	 * @return The Alarm activity intent.
 	 */
 	public static Intent createAlarmActivity(Context context, Bundle bundle)
 	{
@@ -67,7 +69,32 @@ public class NacIntent
 	}
 
 	/**
-	 * @return The intent that will be used to start the foreground alarm service.
+	 * @see NacIntent#createAlarmActivity(context, Bundle)
+	 */
+	public static Intent createAlarmActivity(Context context, NacAlarm alarm)
+	{
+		Bundle bundle = NacBundle.toBundle(alarm);
+		return NacIntent.createAlarmActivity(context, bundle);
+	}
+
+	/**
+	 * Create an intent that will be used to start the foreground alarm service.
+	 *
+	 *
+	 * @param  context  A context.
+	 * @param  bundle  A bundle.
+	 *
+	 * @return The Foreground service intent.
+	 */
+	public static Intent createForegroundService(Context context, Bundle bundle)
+	{
+		Intent intent = new Intent(NacForegroundService.ACTION_START_SERVICE, null,
+			context, NacForegroundService.class);
+		return NacIntent.addAlarm(intent, bundle);
+	}
+
+	/**
+	 * @see NacIntent#createForegroundService(Context, Bundle)
 	 */
 	@SuppressWarnings("unused")
 	public static Intent createForegroundService(Context context, NacAlarm alarm)
@@ -77,13 +104,38 @@ public class NacIntent
 	}
 
 	/**
-	 * @return The intent that will be used to start the foreground alarm service.
+	 * Create an intent that will be used to start the Main activity.
+	 *
+	 * @param  context  A context.
+	 * @param  bundle  A bundle.
+	 *
+	 * @return The Main activity intent.
 	 */
-	public static Intent createForegroundService(Context context, Bundle bundle)
+	public static Intent createMainActivity(Context context, Bundle bundle)
 	{
-		Intent intent = new Intent(NacForegroundService.ACTION_START_SERVICE, null,
-			context, NacForegroundService.class);
+		Intent intent = new Intent(context, NacMainActivity.class);
+		int flags = Intent.FLAG_ACTIVITY_NEW_TASK
+			| Intent.FLAG_ACTIVITY_CLEAR_TASK;
+
+		intent.addFlags(flags);
 		return NacIntent.addAlarm(intent, bundle);
+	}
+
+	/**
+	 * @see NacIntent#createMainActivity(Context, Bundle)
+	 */
+	public static Intent createMainActivity(Context context)
+	{
+		return NacIntent.createMainActivity(context, (Bundle) null);
+	}
+
+	/**
+	 * @see NacIntent#createMainActivity(Context, Bundle)
+	 */
+	public static Intent createMainActivity(Context context, NacAlarm alarm)
+	{
+		Bundle bundle = NacBundle.toBundle(alarm);
+		return NacIntent.createMainActivity(context, bundle);
 	}
 
 	/**
@@ -103,6 +155,7 @@ public class NacIntent
 	{
 		Intent intent = new Intent(NacForegroundService.ACTION_DISMISS_ALARM, null,
 			context, NacForegroundService.class);
+
 		return NacIntent.addAlarm(intent, alarm);
 	}
 

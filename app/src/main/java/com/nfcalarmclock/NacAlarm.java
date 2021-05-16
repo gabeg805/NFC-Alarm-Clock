@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import java.lang.Comparable;
 import java.util.Calendar;
@@ -31,16 +32,22 @@ public class NacAlarm
 	private long mId;
 
 	/**
-	 * Number of times the alarm has been snoozed.
-	 */
-	@ColumnInfo(name="snooze_count")
-	private int mSnoozeCount;
-
-	/**
 	 * Flag indicating whether the alarm is currently active or not.
 	 */
 	@ColumnInfo(name="is_active")
 	private boolean mIsActive;
+
+	/**
+	 * Amount of time, in seconds, the alarm has been snoozed for.
+	 */
+	@ColumnInfo(name="time_active")
+	private long mTimeActive;
+
+	/**
+	 * Number of times the alarm has been snoozed.
+	 */
+	@ColumnInfo(name="snooze_count")
+	private int mSnoozeCount;
 
 	/**
 	 * Flag indicating whether the alarm is enabled or not.
@@ -59,6 +66,18 @@ public class NacAlarm
 	 */
 	@ColumnInfo(name="minute")
 	private int mMinute;
+
+	/**
+	 * Hour at which to run the alarm, when it is snoozed.
+	 */
+	@ColumnInfo(name="snooze_hour")
+	private int mSnoozeHour;
+
+	/**
+	 * Minute at which to run the alarm, when it is snoozed
+	 */
+	@ColumnInfo(name="snooze_minute")
+	private int mSnoozeMinute;
 
 	/**
 	 * Days on which to run the alarm.
@@ -158,9 +177,7 @@ public class NacAlarm
 			this.mAlarm = new NacAlarm();
 			Calendar calendar = Calendar.getInstance();
 
-			this.setIsActive(false)
-				.setSnoozeCount(0)
-				.setIsEnabled(true)
+			this.setIsEnabled(true)
 				.setHour(calendar.get(Calendar.HOUR_OF_DAY))
 				.setMinute(calendar.get(Calendar.MINUTE))
 				.setDays(NacCalendar.Day.none())
@@ -270,19 +287,6 @@ public class NacAlarm
 		public Builder setId(long id)
 		{
 			this.getAlarm().setId(id);
-			return this;
-		}
-
-		/**
-		 * Set whether the alarm is active or not.
-		 *
-		 * @param  active  The active flag.
-		 *
-		 * @return The Builder.
-		 */
-		public Builder setIsActive(boolean active)
-		{
-			this.getAlarm().setIsActive(active);
 			return this;
 		}
 
@@ -412,19 +416,6 @@ public class NacAlarm
 		}
 
 		/**
-		 * Set the snooze count.
-		 *
-		 * @param  count  The snooze count.
-		 *
-		 * @return The Builder.
-		 */
-		public Builder setSnoozeCount(int count)
-		{
-			this.getAlarm().setSnoozeCount(count);
-			return this;
-		}
-
-		/**
 		 * Set whether the alarm should use NFC to dismiss or not.
 		 *
 		 * @param  useNfc  True if the phone should use NFC to dismiss, and False
@@ -480,15 +471,16 @@ public class NacAlarm
 	{
 		this();
 		this.setId(input.readLong());
-		this.setIsActive(input.readInt() != 0);
+		this.setIsActive(input.readBoolean());
+		this.setTimeActive(input.readLong());
 		this.setSnoozeCount(input.readInt());
-		this.setIsEnabled((input.readInt() != 0));
+		this.setIsEnabled(input.readBoolean());
 		this.setHour(input.readInt());
 		this.setMinute(input.readInt());
 		this.setDays(input.readInt());
-		this.setRepeat((input.readInt() != 0));
-		this.setVibrate((input.readInt() != 0));
-		this.setUseNfc((input.readInt() != 0));
+		this.setRepeat(input.readBoolean());
+		this.setVibrate(input.readBoolean());
+		this.setUseNfc(input.readBoolean());
 		this.setNfcTagId(input.readString());
 		this.setMediaType(input.readInt());
 		this.setMediaPath(input.readString());
@@ -498,30 +490,28 @@ public class NacAlarm
 		this.setName(input.readString());
 	}
 
-	///**
-	// * TODO: Change this. Maybe don't need this method if can be done manually?
-	// *
-	// * @return True if the alarm can be snoozed, and False otherwise.
-	// */
-	//public boolean canSnooze()
-	//{
-	//	int snoozeCount = this.getSnoozeCount() + 1;
-	//	int maxSnoozeCount = shared.getMaxSnoozeValue();
+	/**
+	 * Add to the snooze count.
+	 *
+	 * @param  num  Number to add to the snooze count.
+	 */
+	public void addToSnoozeCount(int num)
+	{
+		int count = this.getSnoozeCount();
 
-	//	return (snoozeCount <= maxSnoozeCount) || (maxSnoozeCount < 0);
-	//	//return (snoozeCount > maxSnoozeCount) && (maxSnoozeCount >= 0);
-	//}
+		this.setSnoozeCount(count+num);
+	}
 
 	/**
-	 * @return True if the alarm can be snoozed, and False otherwise.
+	 * Add to the time, in seconds, that the alarm is active.
+	 *
+	 * @param  time  Time, in seconds, to add to the active time.
 	 */
-	public boolean canSnooze(NacSharedPreferences shared)
+	public void addToTimeActive(long time)
 	{
-		int snoozeCount = this.getSnoozeCount(shared) + 1;
-		int maxSnoozeCount = shared.getMaxSnoozeValue();
+		long timeActive = this.getTimeActive();
 
-		return (snoozeCount <= maxSnoozeCount) || (maxSnoozeCount < 0);
-		//return (snoozeCount > maxSnoozeCount) && (maxSnoozeCount >= 0);
+		this.setTimeActive(timeActive+time);
 	}
 
 	/**
@@ -530,6 +520,20 @@ public class NacAlarm
 	public boolean areDaysSelected()
 	{
 		return !this.getDays().isEmpty();
+	}
+
+	/**
+	 * @return True if the alarm can be snoozed, and False otherwise.
+	 */
+	public boolean canSnooze(NacSharedPreferences shared)
+	{
+		//int snoozeCount = this.getSnoozeCount(shared) + 1;
+		int snoozeCount = this.getSnoozeCount();
+		int maxSnoozeCount = shared.getMaxSnoozeValue();
+
+		return (snoozeCount < maxSnoozeCount) || (maxSnoozeCount < 0);
+		//return (snoozeCount <= maxSnoozeCount) || (maxSnoozeCount < 0);
+		//return (snoozeCount > maxSnoozeCount) && (maxSnoozeCount >= 0);
 	}
 
 	/**
@@ -663,20 +667,36 @@ public class NacAlarm
 	}
 
 	/**
-	 * Create a copy of this alarm with the given ID.
+	 * Dismiss an alarm.
 	 *
-	 * TODO: Change ID to set to 0.
+	 * This will not update the database, or schedule the next alarm. That
+	 * still needs to be done after calling this method.
+	 */
+	public void dismiss()
+	{
+		this.setIsActive(false);
+		this.setTimeActive(0);
+		this.setSnoozeCount(0);
+		this.setSnoozeHour(-1);
+		this.setSnoozeMinute(-1);
+
+		if (!this.shouldRepeat())
+		{
+			this.toggleAlarm();
+		}
+	}
+
+	/**
+	 * Create a copy of this alarm.
+	 *
+	 * The ID of the new alarm will be set to 0.
 	 *
 	 * @return A copy of this alarm.
-	 *
-	 * @param  id  The ID of the created alarm.
 	 */
-	public NacAlarm copy(long id)
+	public NacAlarm copy()
 	{
 		return new NacAlarm.Builder()
-			.setId(id)
-			.setIsActive(this.isActive())
-			.setSnoozeCount(this.getSnoozeCount())
+			.setId(0)
 			.setIsEnabled(this.isEnabled())
 			.setHour(this.getHour())
 			.setMinute(this.getMinute())
@@ -715,6 +735,7 @@ public class NacAlarm
 		return (alarm != null)
 			&& (this.equalsId(alarm))
 			&& (this.isActive() == alarm.isActive())
+			&& (this.getSnoozeCount() == alarm.getSnoozeCount())
 			&& (this.isEnabled() == alarm.isEnabled())
 			&& (this.getHour() == alarm.getHour())
 			&& (this.getMinute() == alarm.getMinute())
@@ -799,7 +820,8 @@ public class NacAlarm
 	 */
 	public String getMediaTitle()
 	{
-		return this.mMediaTitle;
+		String title = this.mMediaTitle;
+		return (title != null) ? title : "";
 	}
 
 	/**
@@ -807,7 +829,8 @@ public class NacAlarm
 	 */
 	public String getMediaPath()
 	{
-		return this.mMediaPath;
+		String path = this.mMediaPath;
+		return (path != null) ? path : "";
 	}
 
 	/**
@@ -896,6 +919,30 @@ public class NacAlarm
 	{
 		long id = this.getId();
 		return shared.getSnoozeCount(id);
+	}
+
+	/**
+	 * @return The snooze hour.
+	 */
+	public int getSnoozeHour()
+	{
+		return this.mSnoozeHour;
+	}
+
+	/**
+	 * @return The snooze minute.
+	 */
+	public int getSnoozeMinute()
+	{
+		return this.mSnoozeMinute;
+	}
+
+	/**
+	 * @return The amount of time, in seconds, the alarm has been active for.
+	 */
+	public long getTimeActive()
+	{
+		return this.mTimeActive;
 	}
 
 	/**
@@ -1009,7 +1056,8 @@ public class NacAlarm
 		NacUtility.printf("Alarm Information");
 		NacUtility.printf("Id           : %d", this.getId());
 		NacUtility.printf("Is Active    : %b", this.isActive());
-		NacUtility.printf("Snooze Count : %b", this.getSnoozeCount());
+		NacUtility.printf("Time Active  : %d", this.getTimeActive());
+		NacUtility.printf("Snooze Count : %d", this.getSnoozeCount());
 		NacUtility.printf("Is Enabled   : %b", this.isEnabled());
 		NacUtility.printf("Hour         : %d", this.getHour());
 		NacUtility.printf("Minute       : %d", this.getMinute());
@@ -1189,6 +1237,30 @@ public class NacAlarm
 	}
 
 	/**
+	 * Set the snooze hour.
+	 */
+	public void setSnoozeHour(int hour)
+	{
+		this.mSnoozeHour = hour;
+	}
+
+	/**
+	 * Set the snooze minute.
+	 */
+	public void setSnoozeMinute(int min)
+	{
+		this.mSnoozeMinute = min;
+	}
+
+	/**
+	 * Set the amount of time, in seconds, the alarm has been active for.
+	 */
+	public void setTimeActive(long time)
+	{
+		this.mTimeActive = time;
+	}
+
+	/**
 	 * Set the frequency at which to use TTS, in units of min.
 	 *
 	 * @param  freq  The frequency.
@@ -1273,6 +1345,54 @@ public class NacAlarm
 	}
 
 	/**
+	 * Snooze the alarm.
+	 *
+	 * @param  shared  Shared preferences.
+	 *
+	 * @return Calendar instance of when the snoozed alarm will go off, or null
+	 *     if the alarm is unable to be snoozed.
+	 */
+	public Calendar snooze(NacSharedPreferences shared)
+	{
+		if (!this.canSnooze(shared))
+		{
+			return null;
+		}
+
+		Calendar cal = Calendar.getInstance();
+		int snoozeCount = this.getSnoozeCount();
+
+		cal.add(Calendar.MINUTE, shared.getSnoozeDurationValue());
+		this.setSnoozeHour(cal.get(Calendar.HOUR_OF_DAY));
+		this.setSnoozeMinute(cal.get(Calendar.MINUTE));
+		this.addToSnoozeCount(1);
+
+		return cal;
+	}
+
+	/**
+	 * Toggle the the current day/enabled attribute of the alarm.
+	 *
+	 * An alarm can only be toggled if repeat is not enabled.
+	 */
+	public void toggleAlarm()
+	{
+		if (this.shouldRepeat())
+		{
+			return;
+		}
+
+		if (this.areDaysSelected())
+		{
+			this.toggleToday();
+		}
+		else
+		{
+			this.setIsEnabled(false);
+		}
+	}
+
+	/**
 	 * Toggle a day.
 	 */
 	public void toggleDay(NacCalendar.Day day)
@@ -1332,15 +1452,16 @@ public class NacAlarm
 	public void writeToParcel(Parcel output, int flags)
 	{
 		output.writeLong(this.getId());
-		output.writeInt(this.isActive() ? 1 : 0);
+		output.writeBoolean(this.isActive());
+		output.writeLong(this.getTimeActive());
 		output.writeInt(this.getSnoozeCount());
-		output.writeInt(this.isEnabled() ? 1 : 0);
+		output.writeBoolean(this.isEnabled());
 		output.writeInt(this.getHour());
 		output.writeInt(this.getMinute());
 		output.writeInt(NacCalendar.Days.daysToValue(this.getDays()));
-		output.writeInt(this.shouldRepeat() ? 1 : 0);
-		output.writeInt(this.shouldVibrate() ? 1 : 0);
-		output.writeInt(this.shouldUseNfc() ? 1 : 0);
+		output.writeBoolean(this.shouldRepeat());
+		output.writeBoolean(this.shouldVibrate());
+		output.writeBoolean(this.shouldUseNfc());
 		output.writeString(this.getNfcTagId());
 		output.writeInt(this.getMediaType());
 		output.writeString(this.getMediaPath());

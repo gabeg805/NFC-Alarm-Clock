@@ -19,12 +19,11 @@ public class NacScheduler
 	 */
 	public static void add(Context context, NacAlarm alarm, Calendar day)
 	{
-		if (!alarm.isEnabled())
+		if ((alarm == null) || !alarm.isEnabled())
 		{
 			return;
 		}
 
-		//int id = alarm.getId(day);
 		long id = alarm.getId();
 		long millis = day.getTimeInMillis();
 		Intent operationIntent = NacIntent.toIntent(context,
@@ -45,30 +44,25 @@ public class NacScheduler
 	 */
 	public static void add(Context context, NacAlarm alarm)
 	{
-		if (!alarm.isEnabled())
+		if ((alarm == null) || !alarm.isEnabled())
 		{
 			return;
 		}
 
 		Calendar day = NacCalendar.getNextAlarmDay(alarm);
 		NacScheduler.add(context, alarm, day);
-		//List<Calendar> days = NacCalendar.toCalendars(alarm);
-
-		//for (Calendar d : days)
-		//{
-		//	NacScheduler.add(context, alarm, d);
-		//}
 	}
 
 	/**
-	 * Cancel the alarm that was going to run on the given day.
+	 * Cancel the alarm with a given ID.
+	 *
+	 * @param  context  Context.
+	 * @param  id  Alarm ID.
 	 */
-	public static void cancel(Context context, NacAlarm alarm, Calendar day)
+	public static void cancel(Context context, int id)
 	{
-		//int id = alarm.getId(day);
-		long id = alarm.getId();
 		Intent intent = new Intent(context, NacAlarmBroadcastReceiver.class);
-		PendingIntent pending = PendingIntent.getBroadcast(context, (int)id, intent,
+		PendingIntent pending = PendingIntent.getBroadcast(context, id, intent,
 			PendingIntent.FLAG_NO_CREATE);
 
 		if (pending != null)
@@ -78,16 +72,31 @@ public class NacScheduler
 	}
 
 	/**
-	 * Cancel all days the given alarm was going to run on.
+	 * @see NacScheduler#cancel(Context, int)
 	 */
 	public static void cancel(Context context, NacAlarm alarm)
 	{
-		Calendar day = Calendar.getInstance();
-
-		for (NacCalendar.Day d : NacCalendar.WEEK)
+		if (alarm == null)
 		{
-			day.set(Calendar.DAY_OF_WEEK, NacCalendar.Days.toCalendarDay(d));
-			NacScheduler.cancel(context, alarm, day);
+			return;
+		}
+
+		NacScheduler.cancel(context, (int)alarm.getId());
+	}
+
+	/**
+	 * Cancel all active alarms.
+	 */
+	public static void cancelAllActive(Context context)
+	{
+		NacAlarmRepository repo = new NacAlarmRepository(context);
+		List<NacAlarm> activeAlarms = repo.getActiveAlarmsList();
+
+		for (NacAlarm a : activeAlarms)
+		{
+			a.dismiss();
+			repo.update(a);
+			NacScheduler.cancel(context, a);
 		}
 	}
 
@@ -97,47 +106,6 @@ public class NacScheduler
 	public static AlarmManager getAlarmManager(Context context)
 	{
 		return (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-	}
-
-	/**
-	 * Schedule the next alarm.
-	 */
-	public static void scheduleNext(Context context, NacAlarm alarm)
-	{
-		if (!alarm.shouldRepeat() || !alarm.areDaysSelected())
-		{
-			return;
-		}
-
-		Calendar next = Calendar.getInstance();
-		next.set(Calendar.HOUR_OF_DAY, alarm.getHour());
-		next.set(Calendar.MINUTE, alarm.getMinute());
-		next.set(Calendar.SECOND, 0);
-		next.set(Calendar.MILLISECOND, 0);
-		next.add(Calendar.DAY_OF_MONTH, 7);
-		NacScheduler.update(context, alarm, next);
-	}
-
-	/**
-	 * Toggle the the current day/enabled attribute of the alarm.
-	 */
-	//public static void toggleAlarm(Context context, NacAlarm alarm)
-	public static void toggleAlarm(NacAlarm alarm)
-	{
-		//NacDatabase db = new NacDatabase(context);
-
-		if (alarm.areDaysSelected())
-		{
-			alarm.toggleToday();
-		}
-		else
-		{
-			alarm.setIsEnabled(false);
-		}
-
-		//NacScheduler.update(context, alarm);
-		//db.update(alarm);
-		//db.close();
 	}
 
 	/**
@@ -154,7 +122,7 @@ public class NacScheduler
 	 */
 	public static void update(Context context, NacAlarm alarm, Calendar day)
 	{
-		NacScheduler.cancel(context, alarm, day);
+		NacScheduler.cancel(context, alarm);
 		NacScheduler.add(context, alarm, day);
 	}
 
@@ -163,7 +131,8 @@ public class NacScheduler
 	 */
 	public static void updateAll(Context context)
 	{
-		List<NacAlarm> alarms = NacDatabase.read(context);
+		NacAlarmRepository repo = new NacAlarmRepository(context);
+		List<NacAlarm> alarms = repo.getAllAlarms().getValue();
 
 		NacScheduler.updateAll(context, alarms);
 	}

@@ -1,6 +1,7 @@
 package com.nfcalarmclock;
 
 import android.annotation.TargetApi;
+import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.os.Build;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.lifecycle.ViewModelProvider;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,17 +26,10 @@ public class NacMissedAlarmNotification
 
 	/**
 	 */
-	public NacMissedAlarmNotification()
-	{
-		super();
-		this.mAlarm = null;
-	}
-
-	/**
-	 */
 	public NacMissedAlarmNotification(Context context)
 	{
 		super(context);
+
 		this.mAlarm = null;
 	}
 
@@ -87,24 +82,26 @@ public class NacMissedAlarmNotification
 		return this.mAlarm;
 	}
 
-	/**
-	 * @see NacNotification#getBodyLine(NacAlarm)
-	 */
-	public String getBodyLine(NacAlarm alarm)
-	{
+	///**
+	// * @see NacNotification#getBodyLine(NacAlarm)
+	// */
+	//public String getBodyLine(NacAlarm alarm)
+	//{
 
-		Context context = this.getContext();
-		NacAlarm actualAlarm = NacDatabase.findAlarm(context, alarm);
-		return super.getBodyLine(actualAlarm);
-	}
+	//	Context context = this.getContext();
+	//	//NacAlarmRepository repo = new NacAlarmRepository(context);
+	//	//NacAlarm actualAlarm = repo.findAlarm(alarm);
+
+	//	return super.getBodyLine(alarm);
+	//	//return super.getBodyLine(actualAlarm);
+	//}
 
 	/**
 	 * @see NacNotification#getChannelDescription()
 	 */
 	protected String getChannelDescription()
 	{
-		Context context = this.getContext();
-		NacSharedConstants cons = new NacSharedConstants(context);
+		NacSharedConstants cons = this.getSharedConstants();
 		return cons.getDescriptionMissedNotification();
 	}
 
@@ -113,8 +110,7 @@ public class NacMissedAlarmNotification
 	 */
 	protected String getChannelName()
 	{
-		Context context = this.getContext();
-		NacSharedConstants cons = new NacSharedConstants(context);
+		NacSharedConstants cons = this.getSharedConstants();
 		return cons.getMissedNotification();
 	}
 
@@ -132,11 +128,8 @@ public class NacMissedAlarmNotification
 	protected PendingIntent getContentPendingIntent()
 	{
 		Context context = this.getContext();
-		Intent intent = new Intent(context, NacMainActivity.class);
-		int flags = Intent.FLAG_ACTIVITY_NEW_TASK
-			| Intent.FLAG_ACTIVITY_CLEAR_TASK;
+		Intent intent = NacIntent.createMainActivity(context);
 
-		intent.addFlags(flags);
 		return PendingIntent.getActivity(context, 0, intent, 0);
 	}
 
@@ -145,9 +138,8 @@ public class NacMissedAlarmNotification
 	 */
 	protected String getContentText()
 	{
-		Context context = this.getContext();
 		Locale locale = Locale.getDefault();
-		NacSharedConstants cons = new NacSharedConstants(context);
+		NacSharedConstants cons = this.getSharedConstants();
 		int size = this.getBody().size();
 		String word = cons.getAlarm(size);
 
@@ -191,9 +183,8 @@ public class NacMissedAlarmNotification
 	 */
 	public String getTitle()
 	{
-		Context context = this.getContext();
 		Locale locale = Locale.getDefault();
-		NacSharedConstants cons = new NacSharedConstants(context);
+		NacSharedConstants cons = this.getSharedConstants();
 		int count = this.getLineCount();
 
 		return String.format(locale, "<b>%1$s</b>", cons.getMissedAlarm(count));

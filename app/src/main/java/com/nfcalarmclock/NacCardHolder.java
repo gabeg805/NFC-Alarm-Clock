@@ -11,8 +11,10 @@ import android.content.res.ColorStateList;
 import android.graphics.BlendMode;
 import android.graphics.BlendModeColorFilter;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.os.Build;
 import android.view.animation.AccelerateInterpolator;
 import android.view.HapticFeedbackConstants;
@@ -28,12 +30,15 @@ import android.widget.TimePicker;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.color.MaterialColors;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
+import java.lang.Float;
 import java.util.EnumSet;
 
 /**
@@ -541,14 +546,15 @@ public class NacCardHolder
 	 */
 	public boolean checkCanModifyAlarm()
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
+		//NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 
 		if (alarm.isActive())
 		{
 			this.toastModifyActiveAlarmError();
 		}
-		else if (alarm.isSnoozed(shared))
+		//else if (alarm.isSnoozed(shared))
+		else if (alarm.isSnoozed())
 		{
 			this.toastModifySnoozedAlarmError();
 		}
@@ -576,15 +582,58 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Compare the default color of two ColorStateList objects.
+	 *
+	 * @return True if the default color is the same, and False otherwise.
+	 */
+	public boolean compareColorStateList(ColorStateList oldColor,
+		ColorStateList newColor)
+	{
+		if ((oldColor == null) || (newColor == null))
+		{
+			return false;
+		}
+
+		return oldColor.getDefaultColor() == newColor.getDefaultColor();
+	}
+
+	/**
+	 * Compare the default color of a ColorStateList object with a color.
+	 *
+	 * @return True if the default color of the ColorStateList object is the same
+	 *     as the color, and False otherwise.
+	 */
+	public boolean compareColorStateList(ColorStateList oldColor, int newColor)
+	{
+		if (oldColor == null)
+		{
+			return false;
+		}
+
+		return oldColor.getDefaultColor() == newColor;
+	}
+
+	/**
 	 * Create a ColorStateList object that is blended with the theme color.
+	 */
+	private ColorStateList createBlendedThemeColorStateList()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		int themeColor = shared.getThemeColor();
+		int blendedColor = ColorUtils.blendARGB(themeColor, Color.TRANSPARENT, 0.6f);
+
+		return ColorStateList.valueOf(blendedColor);
+	}
+
+	/**
+	 * Create a ColorStateList object from the theme color.
 	 */
 	private ColorStateList createThemeColorStateList()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		int theme = shared.getThemeColor();
-		int blendedTheme = ColorUtils.blendARGB(theme, Color.TRANSPARENT, 0.6f);
+		int themeColor = shared.getThemeColor();
 
-		return ColorStateList.valueOf(blendedTheme);
+		return ColorStateList.valueOf(themeColor);
 	}
 
 	/**
@@ -629,16 +678,17 @@ public class NacCardHolder
 		extra.setVisibility(View.GONE);
 		extra.setEnabled(false);
 		this.setDismissView();
-		//this.setCollapsedBackgroundColor();
 	}
 
 	/**
-	 * Force the alarm card to be fully collapsed, without any animations.
+	 * Changes the color of the card, in addition to collapsing it.
+	 *
+	 * @see #doCollapse
 	 */
-	public void doCollapseForce()
+	public void doCollapseWithColor()
 	{
 		this.doCollapse();
-		this.getDismissParentView().setVisibility(View.GONE);
+		//this.setCollapsedBackgroundColor();
 	}
 
 	/**
@@ -691,7 +741,17 @@ public class NacCardHolder
 		summary.setEnabled(false);
 		extra.setVisibility(View.VISIBLE);
 		extra.setEnabled(true);
-		//this.setExpandedBackgroundColor();
+	}
+
+	/**
+	 * Changes the color of the card, in addition to expanding it.
+	 *
+	 * @see #doExpand
+	 */
+	public void doExpandWithColor()
+	{
+		this.doExpand();
+		this.setExpandedBackgroundColor();
 	}
 
 	/**
@@ -1228,10 +1288,8 @@ public class NacCardHolder
 	 */
 	public void init(NacAlarm alarm)
 	{
-		this.mAlarm = alarm;
-
+		this.setAlarm(alarm);
 		this.initListeners(null);
-		//this.measureCard();
 		this.initViews();
 		this.initColors();
 		this.initListeners(this);
@@ -1307,7 +1365,6 @@ public class NacCardHolder
 	 */
 	public void initViews()
 	{
-		NacUtility.printf("INITIALIZING VIEWS!");
 		this.setDismissView();
 		this.setTimeView();
 		this.setMeridianView();
@@ -1315,6 +1372,7 @@ public class NacCardHolder
 		this.setSummaryDaysView();
 		this.setSummaryNameView();
 		this.setDayOfWeek();
+		this.setStartWeekOn();
 		this.setRepeatButton();
 		this.setVibrateButton();
 		this.setNfcButton();
@@ -1421,7 +1479,8 @@ public class NacCardHolder
 		this.doExpand();
 		heights[2] = NacUtility.getHeight(cardView);
 
-		this.doCollapseForce();
+		this.doCollapse();
+		this.getDismissParentView().setVisibility(View.GONE);
 		heights[0] = NacUtility.getHeight(cardView);
 
 		this.getDismissParentView().setVisibility(View.VISIBLE);
@@ -1674,7 +1733,6 @@ public class NacCardHolder
 	 */
 	public void respondToDayButtonClick(NacDayButton button, NacCalendar.Day day)
 	{
-		NacUtility.printf("respondToDayButtonClick!");
 		if (this.checkCanModifyAlarm())
 		{
 			this.doDayButtonClick(day);
@@ -1828,8 +1886,8 @@ public class NacCardHolder
 	 */
 	private void setAudioSourceButtonRippleColor()
 	{
-		ColorStateList ripple = this.createThemeColorStateList();
-		this.getAudioSourceButton().setRippleColor(ripple);
+		MaterialButton button = this.getAudioSourceButton();
+		this.setMaterialButtonColor(button);
 	}
 
 	/**
@@ -1837,8 +1895,28 @@ public class NacCardHolder
 	 */
 	private void setCollapseButtonRippleColor()
 	{
-		ColorStateList ripple = this.createThemeColorStateList();
-		this.getCollapseButton().setRippleColor(ripple);
+		MaterialButton button = this.getCollapseButton();
+		this.setMaterialButtonColor(button);
+	}
+
+	/**
+	 * Set the background color for when the card is collapsed.
+	 */
+	public void setCollapsedBackgroundColor()
+	{
+		Context context = this.getContext();
+		CardView card = this.getCardView();
+		int grayDark = ContextCompat.getColor(context, R.color.gray_dark);
+		int color = MaterialColors.getColor(context, R.attr.colorCard, grayDark);
+		//int color = NacUtility.getThemeAttrColor(context, R.attr.colorCardExpanded);
+
+		//Context context = view.getContext();
+		//int bg = NacUtility.getThemeAttrColor(context, id);
+
+		//view.setBackground(null);
+		//view.setBackgroundColor(bg);
+		//NacUtility.setBackground(card, id);
+		card.setBackgroundColor(color);
 	}
 
 	/**
@@ -1846,7 +1924,7 @@ public class NacCardHolder
 	 */
 	public void setDayOfWeek()
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
+		//NacSharedPreferences shared = this.getSharedPreferences();
 		NacDayOfWeek dow = this.getDayOfWeek();
 		NacAlarm alarm = this.getAlarm();
 		EnumSet<NacCalendar.Day> days = alarm.getDays();
@@ -1859,17 +1937,28 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Set the day of week to start on.
+	 */
+	public void setStartWeekOn()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacDayOfWeek dow = this.getDayOfWeek();
+
+		dow.setStartWeekOn(shared.getStartWeekOn());
+	}
+
+	/**
 	 * Set the ripple color for each day in the day of week view.
 	 */
 	public void setDayOfWeekRippleColor()
 	{
-		ColorStateList ripple = this.createThemeColorStateList();
+		ColorStateList newColor = this.createBlendedThemeColorStateList();
 		NacDayOfWeek dow = this.getDayOfWeek();
 
 		for (NacDayButton day : dow.getDayButtons())
 		{
 			MaterialButton button = day.getButton();
-			button.setRippleColor(ripple);
+			this.setMaterialButtonColor(button, newColor);
 		}
 	}
 
@@ -1878,8 +1967,8 @@ public class NacCardHolder
 	 */
 	private void setDeleteButtonRippleColor()
 	{
-		ColorStateList ripple = this.createThemeColorStateList();
-		this.getDeleteButton().setRippleColor(ripple);
+		MaterialButton button = this.getDeleteButton();
+		this.setMaterialButtonColor(button);
 	}
 
 	/**
@@ -1887,8 +1976,8 @@ public class NacCardHolder
 	 */
 	public void setDismissButtonRippleColor()
 	{
-		ColorStateList ripple = this.createThemeColorStateList();
-		this.getDismissButton().setRippleColor(ripple);
+		MaterialButton button = this.getDismissButton();
+		this.setMaterialButtonColor(button);
 	}
 
 	/**
@@ -1902,7 +1991,8 @@ public class NacCardHolder
 		View dismissView = this.getDismissParentView();
 		View expandView = this.getExpandButton();
 
-		int dismissVis = alarm.isSnoozed() ? View.VISIBLE : View.GONE;
+		int dismissVis = (alarm.isActive() || alarm.isSnoozed()) ? View.VISIBLE
+			: View.GONE;
 		int expandVis = (dismissVis == View.GONE) ? View.VISIBLE : View.INVISIBLE;
 
 		if (dismissView.getVisibility() != dismissVis)
@@ -1925,16 +2015,27 @@ public class NacCardHolder
 		View root = this.getRoot();
 		ViewGroup headerDivider = root.findViewById(R.id.nac_divider_header);
 		View deleteDivider = root.findViewById(R.id.nac_divider_delete);
-		int count = headerDivider.getChildCount();
-		int themeColor = shared.getThemeColor();
-		ColorStateList tint = ColorStateList.valueOf(themeColor);
+		ColorStateList themeColor = ColorStateList.valueOf(shared.getThemeColor());
 
-		for (int i=0; i < count; i++)
+		// Header divider
+		for (int i=0; i < headerDivider.getChildCount(); i++)
 		{
-			headerDivider.getChildAt(i).setBackgroundTintList(tint);
+			View view = headerDivider.getChildAt(i);
+			ColorStateList color = view.getBackgroundTintList();
+
+			if (!this.compareColorStateList(color, themeColor))
+			{
+				view.setBackgroundTintList(themeColor);
+			}
 		}
 
-		deleteDivider.setBackgroundTintList(tint);
+		// Delete divider
+		ColorStateList color = deleteDivider.getBackgroundTintList();
+
+		if (!this.compareColorStateList(color, themeColor))
+		{
+			deleteDivider.setBackgroundTintList(themeColor);
+		}
 	}
 
 	/**
@@ -1942,8 +2043,63 @@ public class NacCardHolder
 	 */
 	private void setExpandButtonRippleColor()
 	{
-		ColorStateList ripple = this.createThemeColorStateList();
-		this.getExpandButton().setRippleColor(ripple);
+		MaterialButton button = this.getExpandButton();
+		this.setMaterialButtonColor(button);
+	}
+
+	/**
+	 * Set the background color for when the card is expanded.
+	 */
+	public void setExpandedBackgroundColor()
+	{
+		Context context = this.getContext();
+		CardView card = this.getCardView();
+		int gray = ContextCompat.getColor(context, R.color.gray);
+		int color = MaterialColors.getColor(context, R.attr.colorCardExpanded, gray);
+		//int color = NacUtility.getThemeAttrColor(context, R.attr.colorCardExpanded);
+
+		//Context context = view.getContext();
+		//int bg = NacUtility.getThemeAttrColor(context, id);
+
+		//view.setBackground(null);
+		//view.setBackgroundColor(bg);
+		//NacUtility.setBackground(card, id);
+		card.setBackgroundColor(color);
+	}
+
+	/**
+	 * Set the color of a MaterialButton.
+	 *
+	 * @param  button  The button to color.
+	 * @param  newColor  The new color of the button.
+	 */
+	protected void setMaterialButtonColor(MaterialButton button, ColorStateList newColor)
+	{
+		if (button == null)
+		{
+			return;
+		}
+
+		ColorStateList currentColor = button.getRippleColor();
+
+		if (!this.compareColorStateList(currentColor, newColor))
+		{
+			button.setRippleColor(newColor);
+		}
+	}
+
+	/**
+	 * @see #setMaterialButtonColor(MaterialButton, ColorStateList)
+	 */
+	protected void setMaterialButtonColor(MaterialButton button)
+	{
+		if (button == null)
+		{
+			return;
+		}
+
+		ColorStateList newColor = this.createBlendedThemeColorStateList();
+		this.setMaterialButtonColor(button, newColor);
 	}
 
 	/**
@@ -1953,12 +2109,22 @@ public class NacCardHolder
 	{
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
+		MaterialButton button = this.getMediaButton();
+
 		String path = alarm.getMediaPath();
 		String message = NacSharedPreferences.getMediaMessage(context, path);
-		float alpha = ((path != null) && !path.isEmpty()) ? 1.0f : 0.3f;
+		String text = button.getText().toString();
+		float alpha = !path.isEmpty() ? 1.0f : 0.3f;
 
-		this.getMediaButton().setText(message);
-		this.getMediaButton().setAlpha(alpha);
+		if (!text.equals(message))
+		{
+			button.setText(message);
+		}
+
+		if (Float.compare(button.getAlpha(), alpha) != 0)
+		{
+			button.setAlpha(alpha);
+		}
 	}
 
 	/**
@@ -1966,8 +2132,8 @@ public class NacCardHolder
 	 */
 	public void setMediaButtonRippleColor()
 	{
-		ColorStateList ripple = this.createThemeColorStateList();
-		this.getMediaButton().setRippleColor(ripple);
+		MaterialButton button = this.getMediaButton();
+		this.setMaterialButtonColor(button);
 	}
 
 	/**
@@ -1975,13 +2141,14 @@ public class NacCardHolder
 	 */
 	public void setMeridianColor()
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
 		Context context = this.getContext();
+		NacSharedPreferences shared = this.getSharedPreferences();
+		TextView tv = this.getMeridianView();
 		NacAlarm alarm = this.getAlarm();
 		String meridian = alarm.getMeridian(context);
 		int color = shared.getMeridianColor(meridian);
 
-		this.getMeridianView().setTextColor(color);
+		this.setTextViewColor(tv, color);
 	}
 
 	/**
@@ -2009,12 +2176,21 @@ public class NacCardHolder
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
 		MaterialButton button = this.getNameButton();
+
 		String name = alarm.getNameNormalized();
 		String message = NacSharedPreferences.getNameMessage(context, name);
+		String text = button.getText().toString();
 		float alpha = !name.isEmpty() ? 1.0f : 0.3f;
 
-		button.setText(message);
-		button.setAlpha(alpha);
+		if (!text.equals(message))
+		{
+			button.setText(message);
+		}
+
+		if (Float.compare(button.getAlpha(), alpha) != 0)
+		{
+			button.setAlpha(alpha);
+		}
 	}
 
 	/**
@@ -2022,8 +2198,8 @@ public class NacCardHolder
 	 */
 	private void setNameButtonRippleColor()
 	{
-		ColorStateList ripple = this.createThemeColorStateList();
-		this.getNameButton().setRippleColor(ripple);
+		MaterialButton button = this.getNameButton();
+		this.setMaterialButtonColor(button);
 	}
 
 	/**
@@ -2033,9 +2209,12 @@ public class NacCardHolder
 	{
 		MaterialButton button = this.getNfcButton();
 		NacAlarm alarm = this.getAlarm();
-		boolean useNfc = alarm.shouldUseNfc();
+		boolean shouldUseNfc = alarm.shouldUseNfc();
 
-		button.setChecked(useNfc);
+		if (button.isChecked() != shouldUseNfc)
+		{
+			button.setChecked(shouldUseNfc);
+		}
 	}
 
 	/**
@@ -2043,8 +2222,8 @@ public class NacCardHolder
 	 */
 	private void setNfcButtonRippleColor()
 	{
-		ColorStateList ripple = this.createThemeColorStateList();
-		this.getNfcButton().setRippleColor(ripple);
+		MaterialButton button = this.getNfcButton();
+		this.setMaterialButtonColor(button);
 	}
 
 	/**
@@ -2117,18 +2296,30 @@ public class NacCardHolder
 	{
 		MaterialButton button = this.getRepeatButton();
 		NacAlarm alarm = this.getAlarm();
-		boolean repeat = alarm.shouldRepeat();
+		boolean isEnabled = alarm.areDaysSelected() ? true : false;
+		boolean shouldRepeat = alarm.areDaysSelected() ? alarm.shouldRepeat()
+			: false;
 
-		if (alarm.areDaysSelected())
+		if (button.isEnabled() != isEnabled)
 		{
-			button.setEnabled(true);
-			button.setChecked(repeat);
+			button.setEnabled(isEnabled);
 		}
-		else
+
+		if (button.isChecked() != shouldRepeat)
 		{
-			button.setChecked(false);
-			button.setEnabled(false);
+			button.setChecked(shouldRepeat);
 		}
+
+		//if (alarm.areDaysSelected())
+		//{
+		//	button.setEnabled(true);
+		//	button.setChecked(alarm.shouldRepeat());
+		//}
+		//else
+		//{
+		//	button.setEnabled(false);
+		//	button.setChecked(false);
+		//}
 	}
 
 	/**
@@ -2136,8 +2327,35 @@ public class NacCardHolder
 	 */
 	private void setRepeatButtonRippleColor()
 	{
-		ColorStateList ripple = this.createThemeColorStateList();
-		this.getRepeatButton().setRippleColor(ripple);
+		MaterialButton button = this.getRepeatButton();
+		this.setMaterialButtonColor(button);
+	}
+
+	/**
+	 * Set the progress and thumb color of a seekbar.
+	 *
+	 * @param  seekbar  A seekbar.
+	 */
+	protected void setSeekBarColor(SeekBar seekbar)
+	{
+		if (seekbar == null)
+		{
+			return;
+		}
+
+		ColorStateList currentProgress = seekbar.getProgressTintList();
+		ColorStateList currentThumb = seekbar.getThumbTintList();
+		ColorStateList newColor = this.createThemeColorStateList();
+
+		if (!this.compareColorStateList(currentProgress, newColor))
+		{
+			seekbar.setProgressTintList(newColor);
+		}
+
+		if (!this.compareColorStateList(currentThumb, newColor))
+		{
+			seekbar.setThumbTintList(newColor);
+		}
 	}
 
 	/**
@@ -2146,9 +2364,10 @@ public class NacCardHolder
 	public void setSummaryDaysColor()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		int daysColor = shared.getDaysColor();
+		TextView tv = this.getSummaryDaysView();
+		int color = shared.getDaysColor();
 
-		this.getSummaryDaysView().setTextColor(daysColor);
+		this.setTextViewColor(tv, color);
 	}
 
 	/**
@@ -2178,9 +2397,10 @@ public class NacCardHolder
 	public void setSummaryNameColor()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		int nameColor = shared.getNameColor();
+		TextView tv = this.getSummaryNameView();
+		int color = shared.getNameColor();
 
-		this.getSummaryNameView().setTextColor(nameColor);
+		this.setTextViewColor(tv, color);
 	}
 
 	/**
@@ -2215,9 +2435,40 @@ public class NacCardHolder
 			new int[] {-android.R.attr.state_checked}};
 		ColorStateList thumbStateList = new ColorStateList(states, thumbColors);
 		ColorStateList trackStateList = new ColorStateList(states, trackColors);
+		SwitchCompat switchView = this.getSwitch();
 
-		this.getSwitch().setThumbTintList(thumbStateList);
-		this.getSwitch().setTrackTintList(trackStateList);
+		this.setSwitchColor(switchView, thumbStateList, trackStateList);
+	}
+
+	/**
+	 * Set the thumb and track color of a switch.
+	 *
+	 * @param  switch  The switch.
+	 * @param  thumbColor  The color of the thumb.
+	 * @param  trackColor  The color of the track.
+	 */
+	protected void setSwitchColor(SwitchCompat switchView,
+		ColorStateList thumbColor, ColorStateList trackColor)
+	{
+		if (switchView == null)
+		{
+			return;
+		}
+
+		ColorStateList currentThumb = switchView.getThumbTintList();
+		ColorStateList currentTrack = switchView.getTrackTintList();
+
+		// Thumb color
+		if (!this.compareColorStateList(currentThumb, thumbColor))
+		{
+			switchView.setThumbTintList(thumbColor);
+		}
+
+		// Track color
+		if (!this.compareColorStateList(currentTrack, trackColor))
+		{
+			switchView.setTrackTintList(trackColor);
+		}
 	}
 
 	/**
@@ -2232,6 +2483,25 @@ public class NacCardHolder
 		if (view.isChecked() != enabled)
 		{
 			view.setChecked(enabled);
+		}
+	}
+
+	/**
+	 * Set the color of a TextView.
+	 *
+	 * @param  tv  The text view to color.
+	 * @param  newColor  The new color of the text view.
+	 */
+	protected void setTextViewColor(TextView tv, int newColor)
+	{
+		if (tv == null)
+		{
+			return;
+		}
+
+		if (tv.getCurrentTextColor() != newColor)
+		{
+			tv.setTextColor(newColor);
 		}
 	}
 
@@ -2268,9 +2538,10 @@ public class NacCardHolder
 	public void setTimeColor()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		int timeColor = shared.getTimeColor();
+		TextView tv = this.getTimeView();
+		int color = shared.getTimeColor();
 
-		this.getTimeView().setTextColor(timeColor);
+		this.setTextViewColor(tv, color);
 	}
 
 	/**
@@ -2297,9 +2568,12 @@ public class NacCardHolder
 	{
 		MaterialButton button = this.getVibrateButton();
 		NacAlarm alarm = this.getAlarm();
-		boolean vibrate = alarm.shouldVibrate();
+		boolean shouldVibrate = alarm.shouldVibrate();
 
-		button.setChecked(vibrate);
+		if (button.isChecked() != shouldVibrate)
+		{
+			button.setChecked(shouldVibrate);
+		}
 	}
 
 	/**
@@ -2307,8 +2581,8 @@ public class NacCardHolder
 	 */
 	private void setVibrateButtonRippleColor()
 	{
-		ColorStateList ripple = this.createThemeColorStateList();
-		this.getVibrateButton().setRippleColor(ripple);
+		MaterialButton button = this.getVibrateButton();
+		this.setMaterialButtonColor(button);
 	}
 
 	/**
@@ -2319,22 +2593,31 @@ public class NacCardHolder
 		ImageView image = this.getVolumeImageView();
 		NacAlarm alarm = this.getAlarm();
 		int progress = alarm.getVolume();
+		int resId = -1;
 
 		if (progress == 0)
 		{
-			image.setImageResource(R.mipmap.volume_off);
+			resId = R.mipmap.volume_off;
 		}
 		else if ((progress > 0) && (progress <= 33))
 		{
-			image.setImageResource(R.mipmap.volume_low);
+			resId = R.mipmap.volume_low;
 		}
 		else if ((progress > 33) && (progress <= 66))
 		{
-			image.setImageResource(R.mipmap.volume_med);
+			resId = R.mipmap.volume_med;
 		}
 		else
 		{
-			image.setImageResource(R.mipmap.volume_high);
+			resId = R.mipmap.volume_high;
+		}
+
+		Object tag = image.getTag();
+
+		if ((tag == null) || (((int)tag) != resId))
+		{
+			image.setImageResource(resId);
+			image.setTag(resId);
 		}
 	}
 
@@ -2344,38 +2627,23 @@ public class NacCardHolder
 	public void setVolumeSeekBar()
 	{
 		NacAlarm alarm = this.getAlarm();
+		SeekBar bar = this.getVolumeSeekBar();
+		int volume = alarm.getVolume();
 
 		//this.mVolume.incrementProgressBy(10);
-		this.getVolumeSeekBar().setProgress(alarm.getVolume());
+		if (bar.getProgress() != volume)
+		{
+			bar.setProgress(volume);
+		}
 	}
 
 	/**
 	 * Set the volume seekbar color.
 	 */
-	@SuppressWarnings("deprecation")
-	@TargetApi(Build.VERSION_CODES.Q)
-	@SuppressLint("NewApi")
 	public void setVolumeSeekBarColor()
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
 		SeekBar seekbar = this.getVolumeSeekBar();
-		int themeColor = shared.getThemeColor();
-		Drawable progressDrawable = seekbar.getProgressDrawable();
-		Drawable thumbDrawable = seekbar.getThumb();
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-		{
-			BlendModeColorFilter blendFilter = new BlendModeColorFilter(
-				themeColor, BlendMode.SRC_IN);
-
-			progressDrawable.setColorFilter(blendFilter);
-			thumbDrawable.setColorFilter(blendFilter);
-		}
-		else
-		{
-			progressDrawable.setColorFilter(themeColor, PorterDuff.Mode.SRC_IN);
-			thumbDrawable.setColorFilter(themeColor, PorterDuff.Mode.SRC_IN);
-		}
+		this.setSeekBarColor(seekbar);
 	}
 
 	/**

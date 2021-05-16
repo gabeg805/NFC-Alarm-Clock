@@ -35,6 +35,24 @@ public interface NacAlarmDao
 	int deleteAll();
 
 	/**
+	 * @return The alarm with the ID.
+	 */
+	@Query("SELECT * FROM alarm WHERE id=:id")
+	NacAlarm findAlarm(long id);
+
+	/**
+	 * @return An active alarm.
+	 */
+	@Query("SELECT * FROM alarm WHERE is_active=1 LIMIT 1")
+	LiveData<NacAlarm> getActiveAlarm();
+
+	/**
+	 * @return List of active alarms.
+	 */
+	@Query("SELECT * FROM alarm WHERE is_active=1")
+	LiveData<List<NacAlarm>> getActiveAlarms();
+
+	/**
 	 * @return All alarms.
 	 */
 	@Query("SELECT * FROM alarm")

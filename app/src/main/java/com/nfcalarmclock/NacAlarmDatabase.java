@@ -64,7 +64,24 @@ public abstract class NacAlarmDatabase
 	private static Context sContext;
 
 	/**
-	 * @return True if the database file exists, and False otherwise.
+	 * Cancel old alarms.
+	 *
+	 * @param  context  Application context.
+	 */
+	public static void cancelOldAlarms(Context context)
+	{
+		for (int i=1; i < 400; i++)
+		{
+			NacScheduler.cancel(context, i);
+		}
+	}
+
+	/**
+	 * Check if the Room database exists or not.
+	 *
+	 * @param  context  Application context.
+	 *
+	 * @return True if the Room database file exists, and False otherwise.
 	 */
 	public static boolean exists(Context context)
 	{
@@ -133,7 +150,6 @@ public abstract class NacAlarmDatabase
 		NacAlarmDao dao = db.alarmDao();
 		NacAlarm alarm = new NacAlarm.Builder()
 			.setId(0)
-			.setIsActive(false)
 			.setIsEnabled(true)
 			.setHour(8)
 			.setMinute(0)
@@ -151,7 +167,6 @@ public abstract class NacAlarmDatabase
 			.build();
 
 		getExecutor().execute(() -> { dao.insert(alarm); });
-		//new NacAlarmRepository.InsertAsyncTask(dao).execute(alarm);
 	}
 
 	/**
@@ -171,6 +186,7 @@ public abstract class NacAlarmDatabase
 		for (NacAlarm a : alarms)
 		{
 			NacUtility.printf("Inserting alarm : %d", a.getId());
+			a.print();
 			a.setId(0);
 			getExecutor().execute(() -> { dao.insert(a); });
 			//new NacAlarmRepository.InsertAsyncTask(dao).execute(a);
@@ -197,6 +213,7 @@ public abstract class NacAlarmDatabase
 			if (NacDatabase.exists(context))
 			{
 				NacUtility.printf("Old database file exists! Copying over data");
+				cancelOldAlarms(context);
 				migrateOldDatabase(context);
 			}
 			else

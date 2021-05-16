@@ -110,6 +110,7 @@ public class NacWakeupProcess
 	private boolean canPlayMusic()
 	{
 		NacAlarm alarm = this.getAlarm();
+
 		return (alarm != null) && alarm.hasMedia();
 	}
 
@@ -323,13 +324,13 @@ public class NacWakeupProcess
 	 */
 	private void playMusic()
 	{
-		if (!this.canPlayMusic())
+		NacMediaPlayer player = this.getMediaPlayer();
+		if ((player == null) || !this.canPlayMusic())
 		{
 			return;
 		}
 
 		NacSharedPreferences shared = this.getSharedPreferences();
-		NacMediaPlayer player = this.getMediaPlayer();
 		NacAlarm alarm = this.getAlarm();
 
 		// TODO: Might want to override whats playing when waking up.
@@ -420,6 +421,7 @@ public class NacWakeupProcess
 	 */
 	public void start()
 	{
+		NacUtility.printf("Starting wakeup process FROM WITHIN!!!");
 		if (this.canUseTts() || this.canPlayMusic())
 		{
 			this.setVolume();
@@ -458,16 +460,6 @@ public class NacWakeupProcess
 		{
 			this.startNormal();
 		}
-	}
-
-	/**
-	 * Stop the wake up process.
-	 */
-	public void stop()
-	{
-		this.cleanupVibrate();
-		this.cleanupPlayer();
-		this.cleanupTextToSpeech();
 	}
 
 	/**

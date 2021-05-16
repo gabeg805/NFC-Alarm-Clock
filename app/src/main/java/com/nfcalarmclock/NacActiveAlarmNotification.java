@@ -34,17 +34,10 @@ public class NacActiveAlarmNotification
 
 	/**
 	 */
-	public NacActiveAlarmNotification()
-	{
-		super();
-		this.mAlarm = null;
-	}
-
-	/**
-	 */
 	public NacActiveAlarmNotification(Context context)
 	{
 		super(context);
+
 		this.mAlarm = null;
 	}
 
@@ -54,12 +47,11 @@ public class NacActiveAlarmNotification
 	@Override
 	protected NotificationCompat.Builder builder()
 	{
-		Context context = this.getContext();
 		Bitmap icon = this.getIcon();
 		PendingIntent activityPending = this.getContentPendingIntent();
 		PendingIntent snoozePending = this.getSnoozePendingIntent();
 		PendingIntent dismissPending = this.getDismissPendingIntent(activityPending);
-		NacSharedConstants cons = new NacSharedConstants(context);
+		NacSharedConstants cons = this.getSharedConstants();
 
 		return super.builder()
 			.setLargeIcon(icon)
@@ -103,8 +95,7 @@ public class NacActiveAlarmNotification
 	 */
 	protected String getChannelDescription()
 	{
-		Context context = this.getContext();
-		NacSharedConstants cons = new NacSharedConstants(context);
+		NacSharedConstants cons = this.getSharedConstants();
 		return cons.getDescriptionActiveNotification();
 	}
 
@@ -113,8 +104,7 @@ public class NacActiveAlarmNotification
 	 */
 	protected String getChannelName()
 	{
-		Context context = this.getContext();
-		NacSharedConstants cons = new NacSharedConstants(context);
+		NacSharedConstants cons = this.getSharedConstants();
 		return cons.getActiveNotification();
 	}
 
@@ -171,7 +161,8 @@ public class NacActiveAlarmNotification
 		}
 
 		Intent intent = NacIntent.dismissForegroundService(context, alarm);
-		return PendingIntent.getService(context, 0, intent, 0);
+		return PendingIntent.getService(context, 0, intent,
+			PendingIntent.FLAG_CANCEL_CURRENT);
 	}
 
 	/**
@@ -187,8 +178,8 @@ public class NacActiveAlarmNotification
 	 */
 	protected Bitmap getIcon()
 	{
-		Context context = this.getContext();
-		Resources res = context.getResources();
+		NacSharedConstants cons = this.getSharedConstants();
+		Resources res = cons.getResources();
 		Bitmap icon = BitmapFactory.decodeResource(res, R.mipmap.app);
 		float density = res.getDisplayMetrics().density;
 		float size;
@@ -255,9 +246,8 @@ public class NacActiveAlarmNotification
 	 */
 	public String getTitle()
 	{
-		Context context = this.getContext();
 		Locale locale = Locale.getDefault();
-		NacSharedConstants cons = new NacSharedConstants(context);
+		NacSharedConstants cons = this.getSharedConstants();
 
 		return String.format(locale, "<b>%s</b>", cons.getAppName());
 	}
@@ -271,7 +261,8 @@ public class NacActiveAlarmNotification
 		Intent intent = new Intent(NacForegroundService.ACTION_SNOOZE_ALARM,
 			null, context, NacForegroundService.class);
 
-		return PendingIntent.getService(context, 0, intent, 0);
+		return PendingIntent.getService(context, 0, intent,
+			PendingIntent.FLAG_CANCEL_CURRENT);
 	}
 
 	/**

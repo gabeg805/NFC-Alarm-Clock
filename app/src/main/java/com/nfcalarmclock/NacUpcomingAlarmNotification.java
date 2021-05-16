@@ -25,13 +25,6 @@ public class NacUpcomingAlarmNotification
 
 	/**
 	 */
-	public NacUpcomingAlarmNotification()
-	{
-		super();
-	}
-	
-	/**
-	 */
 	public NacUpcomingAlarmNotification(Context context)
 	{
 		super(context);
@@ -91,8 +84,7 @@ public class NacUpcomingAlarmNotification
 	 */
 	protected String getChannelDescription()
 	{
-		Context context = this.getContext();
-		NacSharedConstants cons = new NacSharedConstants(context);
+		NacSharedConstants cons = this.getSharedConstants();
 		return cons.getDescriptionUpcomingNotification();
 	}
 
@@ -101,8 +93,7 @@ public class NacUpcomingAlarmNotification
 	 */
 	protected String getChannelName()
 	{
-		Context context = this.getContext();
-		NacSharedConstants cons = new NacSharedConstants(context);
+		NacSharedConstants cons = this.getSharedConstants();
 		return cons.getUpcomingNotification();
 	}
 
@@ -120,11 +111,8 @@ public class NacUpcomingAlarmNotification
 	protected PendingIntent getContentPendingIntent()
 	{
 		Context context = this.getContext();
-		Intent intent = new Intent(context, NacMainActivity.class);
-		int flags = Intent.FLAG_ACTIVITY_NEW_TASK
-			| Intent.FLAG_ACTIVITY_CLEAR_TASK;
+		Intent intent = NacIntent.createMainActivity(context);
 
-		intent.addFlags(flags);
 		return PendingIntent.getActivity(context, 0, intent, 0);
 	}
 
@@ -133,9 +121,8 @@ public class NacUpcomingAlarmNotification
 	 */
 	protected String getContentText()
 	{
-		Context context = this.getContext();
 		Locale locale = Locale.getDefault();
-		NacSharedConstants cons = new NacSharedConstants(context);
+		NacSharedConstants cons = this.getSharedConstants();
 		int size = this.getBody().size();
 		String word = cons.getAlarm(size);
 
@@ -179,9 +166,8 @@ public class NacUpcomingAlarmNotification
 	 */
 	public String getTitle()
 	{
-		Context context = this.getContext();
 		Locale locale = Locale.getDefault();
-		NacSharedConstants cons = new NacSharedConstants(context);
+		NacSharedConstants cons = this.getSharedConstants();
 		int count = this.getLineCount();
 
 		return String.format(locale, "<b>%1$s</b>", cons.getUpcomingAlarm(count));

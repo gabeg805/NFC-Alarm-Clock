@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "126ffac5f7ae9d47a4e8dd185c5d6b69",
+    "identityHash": "f89a38751b7da059ab0b662ce6b3c7d1",
     "entities": [
       {
         "tableName": "alarm",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `snooze_count` INTEGER NOT NULL, `is_active` INTEGER NOT NULL, `is_enabled` INTEGER NOT NULL, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `days` INTEGER, `should_repeat` INTEGER NOT NULL, `should_vibrate` INTEGER NOT NULL, `should_use_nfc` INTEGER NOT NULL, `nfc_tag_id` TEXT, `media_type` INTEGER NOT NULL, `media_path` TEXT, `media_title` TEXT, `volume` INTEGER NOT NULL, `audio_source` TEXT, `name` TEXT, `should_use_tts` INTEGER NOT NULL, `tts_frequency` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_active` INTEGER NOT NULL, `time_active` INTEGER NOT NULL, `snooze_count` INTEGER NOT NULL, `is_enabled` INTEGER NOT NULL, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `snooze_hour` INTEGER NOT NULL, `snooze_minute` INTEGER NOT NULL, `days` INTEGER, `should_repeat` INTEGER NOT NULL, `should_vibrate` INTEGER NOT NULL, `should_use_nfc` INTEGER NOT NULL, `nfc_tag_id` TEXT, `media_type` INTEGER NOT NULL, `media_path` TEXT, `media_title` TEXT, `volume` INTEGER NOT NULL, `audio_source` TEXT, `name` TEXT, `should_use_tts` INTEGER NOT NULL, `tts_frequency` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "mId",
@@ -15,14 +15,20 @@
             "notNull": true
           },
           {
-            "fieldPath": "mSnoozeCount",
-            "columnName": "snooze_count",
+            "fieldPath": "mIsActive",
+            "columnName": "is_active",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mIsActive",
-            "columnName": "is_active",
+            "fieldPath": "mTimeActive",
+            "columnName": "time_active",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mSnoozeCount",
+            "columnName": "snooze_count",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -41,6 +47,18 @@
           {
             "fieldPath": "mMinute",
             "columnName": "minute",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mSnoozeHour",
+            "columnName": "snooze_hour",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mSnoozeMinute",
+            "columnName": "snooze_minute",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -136,7 +154,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '126ffac5f7ae9d47a4e8dd185c5d6b69')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f89a38751b7da059ab0b662ce6b3c7d1')"
     ]
   }
 }
