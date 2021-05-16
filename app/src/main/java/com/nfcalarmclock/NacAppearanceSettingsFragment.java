@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
+import java.util.List;
 
 /**
  * Appearance fragment.
@@ -24,7 +25,7 @@ public class NacAppearanceSettingsFragment
 		PreferenceManager.setDefaultValues(context, R.xml.appearance_preferences,
 			false);
 
-		this.setupThemeColorPreference();
+		this.setupColorPreferences();
 		this.setupDayButtonStylePreference();
 	}
 
@@ -43,23 +44,41 @@ public class NacAppearanceSettingsFragment
 	@Override
 	public boolean onPreferenceChange(Preference pref, Object newVal)
 	{
+		NacSharedPreferences shared = this.getSharedPreferences();
 		NacSharedKeys keys = this.getSharedKeys();
-		String prefKey = pref.getKey();
+
+		List<String> colorKeys = keys.getColorKeys();
 		String themeKey = keys.getThemeColor();
 		String dayButtonStyleKey = keys.getDayButtonStyle();
+		String prefKey = pref.getKey();
 
-		if (prefKey.equals(themeKey))
+		if (colorKeys.contains(prefKey) || prefKey.equals(dayButtonStyleKey))
 		{
-			setPreferenceScreen(null);
-			this.init();
-		}
-		else if (prefKey.equals(dayButtonStyleKey))
-		{
-			NacSharedPreferences shared = this.getSharedPreferences();
 			shared.editShouldRefreshMainActivity(true);
+
+			if (prefKey.equals(themeKey))
+			{
+				setPreferenceScreen(null);
+				this.init();
+			}
 		}
 
 		return true;
+	}
+
+	/**
+	 * Setup the color preferences.
+	 */
+	private void setupColorPreferences()
+	{
+		NacSharedKeys keys = this.getSharedKeys();
+		List<String> colorKeys = keys.getColorKeys();
+
+		for (String k : colorKeys)
+		{
+			Preference pref = findPreference(k);
+			pref.setOnPreferenceChangeListener(this);
+		}
 	}
 
 	/**

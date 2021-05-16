@@ -2,6 +2,8 @@ package com.nfcalarmclock;
 
 import android.content.Context;
 import android.content.res.Resources;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Keys of each preference.
@@ -118,6 +120,23 @@ public class NacSharedKeys
 	public String getCardIsMeasured()
 	{
 		return this.getString(R.string.card_is_measured);
+	}
+
+	/**
+	 * @return List of keys for color preferences.
+	 */
+	public List<String> getColorKeys()
+	{
+		List<String> keys = new ArrayList<>();
+
+		keys.add(this.getAmColor());
+		keys.add(this.getDaysColor());
+		keys.add(this.getNameColor());
+		keys.add(this.getPmColor());
+		keys.add(this.getThemeColor());
+		keys.add(this.getTimeColor());
+
+		return keys;
 	}
 
 	/**

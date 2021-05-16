@@ -157,7 +157,7 @@ public abstract class NacAlarmDatabase
 	/**
 	 * Insert the initial alarm into the database.
 	 */
-	protected static void insertInitialAlarm()
+	protected static void insertInitialAlarm(Context context)
 	{
 		NacAlarmDatabase db = getInstance();
 		NacAlarmDao dao = db.alarmDao();
@@ -180,6 +180,7 @@ public abstract class NacAlarmDatabase
 			.build();
 
 		getExecutor().execute(() -> dao.insert(alarm));
+		NacScheduler.update(context, alarm);
 	}
 
 	/**
@@ -199,7 +200,8 @@ public abstract class NacAlarmDatabase
 		for (NacAlarm a : alarms)
 		{
 			a.setId(0);
-			getExecutor().execute(() -> { dao.insert(a); });
+			getExecutor().execute(() -> dao.insert(a));
+			NacScheduler.update(context, a);
 		}
 	}
 
@@ -227,7 +229,7 @@ public abstract class NacAlarmDatabase
 			}
 			else
 			{
-				insertInitialAlarm();
+				insertInitialAlarm(context);
 			}
 
 			sContext = null;
