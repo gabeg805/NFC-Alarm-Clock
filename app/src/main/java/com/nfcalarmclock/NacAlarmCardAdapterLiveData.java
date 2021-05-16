@@ -33,10 +33,8 @@ public class NacAlarmCardAdapterLiveData
 
 		if (oldSize == 0)
 		{
-			NacUtility.printf("AHHHHHH! Will this be triggered if everything gets deleted?");
 			for (NacAlarm a : newAlarms)
 			{
-				NacUtility.printf("Adding alarm to adapter list: %d", a.getId());
 				mergedAlarms.add(a);
 			}
 		}
@@ -64,12 +62,10 @@ public class NacAlarmCardAdapterLiveData
 						if (b.equals(a))
 						{
 							// NOMINAL: do nothing
-							NacUtility.printf("Do nothing to alarm: %d", b.getId());
 						}
 						else
 						{
 							// UPDATE
-							NacUtility.printf("Update alarm: %d", b.getId());
 							mergedAlarms.set(j, a);
 						}
 
@@ -81,7 +77,6 @@ public class NacAlarmCardAdapterLiveData
 				if (foundAlarm == null)
 				{
 					// ADD
-					NacUtility.printf("Add alarm: %d", a.getId());
 					mergedAlarms.add(a);
 				}
 			}
@@ -89,7 +84,6 @@ public class NacAlarmCardAdapterLiveData
 			for (int i=notFoundIndices.size()-1; i >= 0; i--)
 			{
 				int index = notFoundIndices.get(i);
-				NacUtility.printf("Delete alarm: %d", mergedAlarms.get(index).getId());
 				mergedAlarms.remove(index);
 			}
 		}
@@ -102,7 +96,6 @@ public class NacAlarmCardAdapterLiveData
 	 */
 	public void merge(List<NacAlarm> alarms)
 	{
-		NacUtility.printf("Calling merge()");
 		List<NacAlarm> currentAlarms = getValue();
 		List<NacAlarm> mergedAlarms = this.calculateMerge(currentAlarms, alarms);
 
@@ -114,13 +107,10 @@ public class NacAlarmCardAdapterLiveData
 	 */
 	public void mergeSort(List<NacAlarm> alarms)
 	{
-		NacUtility.printf("Calling mergeSORT()");
 		List<NacAlarm> currentAlarms = getValue();
 		List<NacAlarm> mergedAlarms = this.calculateMerge(currentAlarms, alarms);
 
-		NacUtility.printf("Sorting alarms!");
 		Collections.sort(mergedAlarms);
-
 		setValue(mergedAlarms);
 	}
 

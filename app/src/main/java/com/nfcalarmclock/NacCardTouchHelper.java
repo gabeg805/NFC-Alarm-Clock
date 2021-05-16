@@ -103,7 +103,6 @@ public class NacCardTouchHelper
 			final View copy = this.getCopySwipeView();
 			final View delete = this.getDeleteSwipeView();
 
-			NacUtility.printf("CLEARING VIEW!");
 			copy.setVisibility(View.GONE);
 			delete.setVisibility(View.GONE);
 			getDefaultUIUtil().clearView(fg);
@@ -328,7 +327,6 @@ public class NacCardTouchHelper
 				return;
 			}
 
-			NacUtility.printf("View holder was swiped!");
 			NacAlarmCardAdapter adapter = (NacAlarmCardAdapter) vh.getBindingAdapter();
 			int index = vh.getBindingAdapterPosition();
 			NacAlarm alarm = adapter.getAlarmAt(index);

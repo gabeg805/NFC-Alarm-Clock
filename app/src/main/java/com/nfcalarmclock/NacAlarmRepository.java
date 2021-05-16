@@ -35,7 +35,7 @@ public class NacAlarmRepository
 		NacAlarmDao dao = db.alarmDao();
 
 		this.mAlarmDao = dao;
-		this.mAllAlarms = dao.getAll();
+		this.mAllAlarms = dao.getAllAlarms();
 	}
 
 	/**
@@ -153,6 +153,19 @@ public class NacAlarmRepository
 	}
 
 	/**
+	 * Get all alarms in the database.
+	 *
+	 * This will wait until all alarms are selected.
+	 *
+	 * @return A list of all alarms.
+	 */
+	public Future<?> doGetAllAlarmsNow()
+	{
+		NacAlarmDao dao = this.getDao();
+		return NacAlarmDatabase.getExecutor().submit(() -> dao.getAllAlarmsNow());
+	}
+
+	/**
 	 * Insert an alarm, asynchronously, into the database.
 	 */
 	public Future<?> doInsert(NacAlarm alarm)
@@ -241,11 +254,41 @@ public class NacAlarmRepository
 	}
 
 	/**
-	 * @return The live data list of all alarms.
+	 * Get all alarms in the database.
+	 *
+	 * This is an asynchronous call. The LiveData object will be populated with
+	 * alarms once all have been selected.
+	 *
+	 * @return A LiveData list of all alarms.
 	 */
 	public LiveData<List<NacAlarm>> getAllAlarms()
 	{
 		return this.mAllAlarms;
+	}
+
+	/**
+	 * Get all alarms in the database.
+	 *
+	 * This will wait until all alarms are selected.
+	 *
+	 * @return A list of all alarms.
+	 */
+	public List<NacAlarm> getAllAlarmsNow()
+	{
+		Future<?> future = this.doGetAllAlarmsNow();
+
+		try
+		{
+			return (List<NacAlarm>) future.get();
+		}
+		catch (CancellationException | ExecutionException | InterruptedException e)
+		{
+			NacUtility.printf("AHHHHHHHHHHHHHHHHHHHH Get All Alarms Now exception!");
+			NacUtility.printf("String  : %s!", e.toString());
+			NacUtility.printf("Message : %s!", e.getMessage());
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
 	}
 
 	/**

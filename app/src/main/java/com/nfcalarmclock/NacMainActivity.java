@@ -248,7 +248,6 @@ public class NacMainActivity
 		if (id >= 0)
 		{
 			alarm.setId(id);
-			NacUtility.printf("Id of copied row! %d", id);
 		}
 		else
 		{
@@ -515,7 +514,6 @@ public class NacMainActivity
 	@Override
 	public void onCardExpanded(NacCardHolder holder, NacAlarm alarm)
 	{
-		NacUtility.printf("ON EXPAND!");
 	}
 
 	/**
@@ -537,8 +535,6 @@ public class NacMainActivity
 	@Override
 	public void onCardUpdated(NacCardHolder holder, NacAlarm alarm)
 	{
-		NacUtility.printf("ON CARD UPDATED!");
-
 		if (holder.isCollapsed())
 		{
 			this.showUpdatedAlarmSnackbar(alarm);
@@ -580,13 +576,6 @@ public class NacMainActivity
 	@Override
 	public void onChanged(List<NacAlarm> alarms)
 	{
-		//NacUtility.printf("CALLING ONCHANGED! %d", alarms.size());
-		//for (NacAlarm a : alarms)
-		//{
-		//	a.print();
-		//	NacUtility.printf("AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-		//}
-
 		RecyclerView rv = this.getRecyclerView();
 
 		this.setupForAppFirstRun(alarms);
@@ -812,40 +801,12 @@ public class NacMainActivity
 	@Override
 	protected void onPause()
 	{
-		NacUtility.printf("onPause()!");
 		super.onPause();
 
 		this.setIsActivityShown(false);
 		this.cleanupShutdownBroadcastReceiver();
 		NacNfc.stop(this);
-		//this.ahhh();
-	}
-
-	/**
-	 * Note: Needed for RecyclerView.OnItemTouchListener
-	 */
-	public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept)
-	{
-	}
-
-	/**
-	 */
-	@Override
-	protected void onResume()
-	{
-		NacUtility.printf("onResume()!");
-		super.onResume();
-
-		this.setIsActivityShown(true);
-		this.setupRefreshMainActivity();
-
-		// Will have to redraw colors here?
-
-		this.setupFloatingActionButton();
-		this.setupGoogleRatingDialog();
-		this.addSetAlarmFromIntent();
-		this.setupShutdownBroadcastReceiver();
-		NacNfc.start(this);
+		this.ahhh();
 	}
 
 	/**
@@ -854,8 +815,7 @@ public class NacMainActivity
 	protected void onDestroy()
 	{
 		super.onDestroy();
-		NacUtility.printf("onDestroy!");
-		//this.ahhh();
+		this.ahhh();
 	}
 
 	/**
@@ -877,6 +837,32 @@ public class NacMainActivity
 		}
 
 		this.mHasDeleted = true;
+	}
+
+	/**
+	 * Note: Needed for RecyclerView.OnItemTouchListener
+	 */
+	public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept)
+	{
+	}
+
+	/**
+	 */
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+
+		this.setIsActivityShown(true);
+		this.setupRefreshMainActivity();
+
+		// Will have to redraw colors here?
+
+		this.setupFloatingActionButton();
+		this.setupGoogleRatingDialog();
+		this.addSetAlarmFromIntent();
+		this.setupShutdownBroadcastReceiver();
+		NacNfc.start(this);
 	}
 
 	/**
@@ -935,14 +921,12 @@ public class NacMainActivity
 			return;
 		}
 
-		NacUtility.printf("DOING SOMETHING! %b", alarm != null);
 		this.mActiveAlarm = alarm;
 
 		if (this.shouldShowAlarmActivity(alarm))
 		{
 			//NacSharedPreferences shared = this.getSharedPreferences();
 			//Remove this setting: shared.getPreventAppFromClosing()?
-			NacUtility.printf("SHOW Alarm Activity!");
 			this.showAlarmActivity(alarm);
 		}
 	}

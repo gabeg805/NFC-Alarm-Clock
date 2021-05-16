@@ -421,7 +421,6 @@ public class NacWakeupProcess
 	 */
 	public void start()
 	{
-		NacUtility.printf("Starting wakeup process FROM WITHIN!!!");
 		if (this.canUseTts() || this.canPlayMusic())
 		{
 			this.setVolume();

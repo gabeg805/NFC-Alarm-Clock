@@ -126,7 +126,6 @@ public abstract class NacAlarmDatabase
 		{
 			if (sInstance == null)
 			{
-				NacUtility.printf("Instantiating the new room database!");
 				Context appContext = context.getApplicationContext();
 				sInstance = Room.databaseBuilder(appContext, NacAlarmDatabase.class,
 					DB_NAME)
@@ -166,7 +165,7 @@ public abstract class NacAlarmDatabase
 			.setName("Work")
 			.build();
 
-		getExecutor().execute(() -> { dao.insert(alarm); });
+		getExecutor().execute(() -> dao.insert(alarm));
 	}
 
 	/**
@@ -185,11 +184,8 @@ public abstract class NacAlarmDatabase
 
 		for (NacAlarm a : alarms)
 		{
-			NacUtility.printf("Inserting alarm : %d", a.getId());
-			a.print();
 			a.setId(0);
 			getExecutor().execute(() -> { dao.insert(a); });
-			//new NacAlarmRepository.InsertAsyncTask(dao).execute(a);
 		}
 	}
 
@@ -207,18 +203,15 @@ public abstract class NacAlarmDatabase
 		{
 			super.onCreate(db);
 
-			NacUtility.printf("New room database was created!");
 			Context context = getContext();
 
 			if (NacDatabase.exists(context))
 			{
-				NacUtility.printf("Old database file exists! Copying over data");
 				cancelOldAlarms(context);
 				migrateOldDatabase(context);
 			}
 			else
 			{
-				NacUtility.printf("Cannot find old database file! Adding new dummy entry to room");
 				insertInitialAlarm();
 			}
 
@@ -232,7 +225,6 @@ public abstract class NacAlarmDatabase
 		{
 			super.onOpen(db);
 
-			NacUtility.printf("Room database was opened!");
 			sContext = null;
 		}
 

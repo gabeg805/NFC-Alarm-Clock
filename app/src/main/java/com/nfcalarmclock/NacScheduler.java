@@ -132,7 +132,7 @@ public class NacScheduler
 	public static void updateAll(Context context)
 	{
 		NacAlarmRepository repo = new NacAlarmRepository(context);
-		List<NacAlarm> alarms = repo.getAllAlarms().getValue();
+		List<NacAlarm> alarms = repo.getAllAlarmsNow();
 
 		NacScheduler.updateAll(context, alarms);
 	}

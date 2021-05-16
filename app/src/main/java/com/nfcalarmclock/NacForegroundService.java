@@ -86,7 +86,6 @@ public class NacForegroundService
 
 		if (alarm != null)
 		{
-			NacUtility.printf("Foreground service -- Stop alarm activity!");
 			NacContext.stopAlarmActivity(this, alarm);
 		}
 	}
@@ -115,7 +114,6 @@ public class NacForegroundService
 
 		if (wakeup != null)
 		{
-			NacUtility.printf("Foreground service -- Stop wakeup process!");
 			wakeup.cleanup();
 		}
 
@@ -132,12 +130,8 @@ public class NacForegroundService
 		NacAlarm alarm = this.getAlarm();
 		NacAlarmRepository repo = this.getAlarmRepository();
 
-		NacUtility.printf("Dismissing the alarm in the service? %b || %d", alarm != null, (alarm != null) ? alarm.getId() : -1);
-
 		if (alarm != null)
 		{
-			alarm.print();
-			NacUtility.printf("YOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
 			alarm.dismiss();
 			repo.update(alarm);
 			NacScheduler.update(this, alarm);
@@ -152,7 +146,6 @@ public class NacForegroundService
 	 */
 	public void finish()
 	{
-		NacUtility.printf("Finishing foreground service!");
 		this.cleanup();
 		// Should I call cleanupAlarmActivity() even if alarm is null?
 		super.stopForeground(true);
@@ -281,7 +274,6 @@ public class NacForegroundService
 	{
 		if (this.isNewServiceStarted(intent))
 		{
-			NacUtility.printf("Stopping the current process due to the intent alarm!");
 			this.cleanupWakeupProcess();
 			this.cleanupAlarmActivity();
 		}

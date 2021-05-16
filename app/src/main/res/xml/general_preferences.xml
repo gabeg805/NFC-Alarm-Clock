@@ -15,6 +15,7 @@
 			app:allowDividerBelow="false"
 			/>
 
+		<!--
 		<com.nfcalarmclock.NacCheckboxPreference
 			android:key="@string/prevent_app_from_closing_key"
 			android:title="@string/prevent_app_from_closing"
@@ -23,6 +24,7 @@
 			android:defaultValue="@bool/default_prevent_app_from_closing"
 			app:allowDividerBelow="true"
 			/>
+		-->
 
 	</com.nfcalarmclock.NacPreferenceCategory>
 

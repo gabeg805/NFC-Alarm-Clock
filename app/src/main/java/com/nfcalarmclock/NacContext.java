@@ -91,7 +91,6 @@ public class NacContext
 	 */
 	public static void startAlarm(Context context, Bundle bundle)
 	{
-		NacUtility.printf("Finally showing alarm activity!");
 		Intent activityIntent = NacIntent.createAlarmActivity(context, bundle);
 		Intent serviceIntent = NacIntent.createForegroundService(context, bundle);
 
@@ -99,12 +98,10 @@ public class NacContext
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{
-			NacUtility.printf("Finally showing alarm service!");
 			context.startForegroundService(serviceIntent);
 		}
 		else
 		{
-			NacUtility.printf("Finally showing alarm service!");
 			context.startService(serviceIntent);
 		}
 	}

@@ -56,7 +56,13 @@ public interface NacAlarmDao
 	 * @return All alarms.
 	 */
 	@Query("SELECT * FROM alarm")
-	LiveData<List<NacAlarm>> getAll();
+	LiveData<List<NacAlarm>> getAllAlarms();
+
+	/**
+	 * @return All alarms. This will wait until all alarms are selected.
+	 */
+	@Query("SELECT * FROM alarm")
+	List<NacAlarm> getAllAlarmsNow();
 
 	/**
 	 * Insert an alarm.
