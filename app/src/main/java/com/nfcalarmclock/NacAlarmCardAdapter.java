@@ -61,6 +61,7 @@ public class NacAlarmCardAdapter
 			public boolean areItemsTheSame(@NonNull NacAlarm oldAlarm,
 				@NonNull NacAlarm newAlarm)
 			{
+				//NacUtility.printf("areItemsTheSame? %d | %d", oldAlarm.getId(), newAlarm.getId());
 				return oldAlarm.equalsId(newAlarm);
 			}
 
@@ -72,6 +73,7 @@ public class NacAlarmCardAdapter
 			{
 				// NOTE: if you use equals, your object must properly override Object#equals()
 				// Incorrectly returning false here will result in too many animations.
+				//NacUtility.printf("areContentsTheSame? %d | %d", oldAlarm.getId(), newAlarm.getId());
 				return oldAlarm.equals(newAlarm);
 			}
 		};

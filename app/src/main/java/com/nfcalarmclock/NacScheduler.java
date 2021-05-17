@@ -90,7 +90,7 @@ public class NacScheduler
 	public static void cancelAllActive(Context context)
 	{
 		NacAlarmRepository repo = new NacAlarmRepository(context);
-		List<NacAlarm> activeAlarms = repo.getActiveAlarmsList();
+		List<NacAlarm> activeAlarms = repo.getActiveAlarmsNow();
 
 		for (NacAlarm a : activeAlarms)
 		{

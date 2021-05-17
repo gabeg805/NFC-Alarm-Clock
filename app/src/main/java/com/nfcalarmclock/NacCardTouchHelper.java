@@ -72,11 +72,6 @@ public class NacCardTouchHelper
 	{
 
 		/**
-		 * The current view holder.
-		 */
-		private ViewHolder mViewHolder;
-
-		/**
 		 * The listener to call when a swiped event occurs.
 		 */
 		private OnSwipedListener mOnSwipedListener;
@@ -87,7 +82,6 @@ public class NacCardTouchHelper
 		public Callback(OnSwipedListener listener)
 		{
 			this.mOnSwipedListener = listener;
-			this.mViewHolder = null;
 		}
 
 		/**
@@ -99,13 +93,13 @@ public class NacCardTouchHelper
 		@Override
 		public void clearView(@NonNull RecyclerView rv, @NonNull ViewHolder vh)
 		{
-			final View fg = this.getCardView();
-			final View copy = this.getCopySwipeView();
-			final View delete = this.getDeleteSwipeView();
+			final View fg = this.getCardView(vh);
+			final View copy = this.getCopySwipeView(vh);
+			final View delete = this.getDeleteSwipeView(vh);
 
+			getDefaultUIUtil().clearView(fg);
 			copy.setVisibility(View.GONE);
 			delete.setVisibility(View.GONE);
-			getDefaultUIUtil().clearView(fg);
 		}
 
 		/**
@@ -123,36 +117,36 @@ public class NacCardTouchHelper
 		/**
 		 * @return The card holder.
 		 */
-		private NacCardHolder getCardHolder()
+		private NacCardHolder getCardHolder(ViewHolder vh)
 		{
-			return (NacCardHolder) this.getViewHolder();
+			return (NacCardHolder) vh;
 		}
 
 		/**
 		 * @return The card view.
 		 */
-		private View getCardView()
+		private View getCardView(ViewHolder vh)
 		{
-			NacCardHolder holder = this.getCardHolder();
+			NacCardHolder holder = this.getCardHolder(vh);
 			return (holder != null) ? holder.getCardView() : null;
 		}
 
 		/**
 		 * @return The copy view, which resides in the background of the view
-		 *         holder.
+		 *     holder.
 		 */
-		private View getCopySwipeView()
+		private View getCopySwipeView(ViewHolder vh)
 		{
-			NacCardHolder holder = this.getCardHolder();
+			NacCardHolder holder = this.getCardHolder(vh);
 			return (holder != null) ? holder.getCopySwipeView() : null;
 		}
 
 		/**
 		 * @return The background delete view of the view holder.
 		 */
-		private View getDeleteSwipeView()
+		private View getDeleteSwipeView(ViewHolder vh)
 		{
-			NacCardHolder holder = this.getCardHolder();
+			NacCardHolder holder = this.getCardHolder(vh);
 			return (holder != null) ? holder.getDeleteSwipeView() : null;
 		}
 
@@ -166,9 +160,7 @@ public class NacCardTouchHelper
 		@Override
 		public int getMovementFlags(@NonNull RecyclerView rv, @NonNull ViewHolder vh)
 		{
-			this.mViewHolder = vh;
-
-			if (!this.isCollapsed())
+			if (!this.isCollapsed(vh))
 			{
 				return 0;
 			}
@@ -202,19 +194,11 @@ public class NacCardTouchHelper
 		}
 
 		/**
-		 * @return The view holder.
-		 */
-		private ViewHolder getViewHolder()
-		{
-			return this.mViewHolder;
-		}
-
-		/**
 		 * Check if card is collapsed.
 		 */
-		public boolean isCollapsed()
+		public boolean isCollapsed(ViewHolder vh)
 		{
-			NacCardHolder holder = this.getCardHolder();
+			NacCardHolder holder = this.getCardHolder(vh);
 
 			if (holder != null)
 			{
@@ -262,19 +246,17 @@ public class NacCardTouchHelper
 		public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView rv,
 			@NonNull ViewHolder vh, float dx, float dy, int action, boolean active)
 		{
-			this.mViewHolder = vh;
-
-			if (!this.isCollapsed())
+			if (!this.isCollapsed(vh))
 			{
 				return;
 			}
 
-			final View fg = this.getCardView();
+			final View fg = this.getCardView(vh);
 
 			if (action == ItemTouchHelper.ACTION_STATE_SWIPE)
 			{
-				final View copy = this.getCopySwipeView();
-				final View delete = this.getDeleteSwipeView();
+				final View copy = this.getCopySwipeView(vh);
+				final View delete = this.getDeleteSwipeView(vh);
 
 				if (dx > 0)
 				{
@@ -319,10 +301,7 @@ public class NacCardTouchHelper
 		@Override
 		public void onSwiped(@NonNull ViewHolder vh, int direction)
 		{
-			// This may be unnecessary
-			this.mViewHolder = vh;
-
-			if (!this.isCollapsed())
+			if (!this.isCollapsed(vh))
 			{
 				return;
 			}
@@ -337,7 +316,6 @@ public class NacCardTouchHelper
 			}
 			else if (direction == ItemTouchHelper.RIGHT)
 			{
-				this.getCardView().setX(0);
 				this.getOnSwipedListener().onCopySwipe(alarm, index);
 			}
 		}

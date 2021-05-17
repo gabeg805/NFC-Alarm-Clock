@@ -127,6 +127,7 @@ public class NacAlarmCardAdapterLiveData
 	}
 
 }
+
 //
 //	public void mergeLiveDataWithAlarmCardAdapter(List<NacAlarm> alarms)
 //	{

@@ -240,17 +240,11 @@ public class NacMainActivity
 		String message = cons.getMessageAlarmCopy();
 		String action = cons.getActionUndo();
 
-		long id = this.getAlarmViewModel().copy(alarm);
-		if (id >= 0)
-		{
-			alarm.setId(id);
-		}
-		else
-		{
-			NacUtility.printf("UNABLE TO get Id of copied row!");
-		}
+		NacAlarm copiedAlarm = alarm.copy();
+		long id = this.getAlarmViewModel().copy(copiedAlarm);
 
-		this.getLastAlarmCardAction().set(alarm, NacLastAlarmCardAction.Type.COPY);
+		this.getRecentlyAddedAlarmIds().add(id);
+		this.getLastAlarmCardAction().set(copiedAlarm, NacLastAlarmCardAction.Type.COPY);
 		this.showSnackbar(message, action, this.mOnSwipeSnackbarActionListener);
 	}
 
@@ -593,7 +587,7 @@ public class NacMainActivity
 		NacCardHolder holder = (NacCardHolder) rv.findViewHolderForAdapterPosition(index);
 		int size = adapter.getItemCount();
 
-		this.getAlarmCardTouchHelper().getCallback().clearView(rv, holder);
+		adapter.notifyItemChanged(index);
 		this.getLastAlarmCardAction().setIndex(size);
 		this.copyAlarm(alarm);
 	}

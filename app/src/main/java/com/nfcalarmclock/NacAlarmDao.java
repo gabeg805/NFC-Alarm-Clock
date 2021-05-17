@@ -19,7 +19,7 @@ public interface NacAlarmDao
 	/**
 	 * Delete an alarm.
 	 *
-	 * @param  alarm  An alarm.
+	 * @param  alarm  Alarm to delete.
 	 *
 	 * @return The number of rows deleted.
 	 */
@@ -35,31 +35,55 @@ public interface NacAlarmDao
 	int deleteAll();
 
 	/**
+	 * Find an alarm.
+	 *
+	 * @param  id  The ID of the alarm to find.
+	 *
 	 * @return The alarm with the ID.
 	 */
 	@Query("SELECT * FROM alarm WHERE id=:id")
 	NacAlarm findAlarm(long id);
 
 	/**
+	 * Get an active alarm.
+	 *
 	 * @return An active alarm.
 	 */
 	@Query("SELECT * FROM alarm WHERE is_active=1 LIMIT 1")
 	LiveData<NacAlarm> getActiveAlarm();
 
 	/**
-	 * @return List of active alarms.
+	 * Get a list of all active alarms.
+	 *
+	 * @return List of all active alarms.
 	 */
 	@Query("SELECT * FROM alarm WHERE is_active=1")
 	LiveData<List<NacAlarm>> getActiveAlarms();
 
 	/**
+	 * Get a list of all active alarms.
+	 *
+	 * This will wait until all alarms are selected.
+	 *
+	 * @return List of all active alarms.
+	 */
+	@Query("SELECT * FROM alarm WHERE is_active=1")
+	List<NacAlarm> getActiveAlarmsNow();
+
+	/**
+	 * Get all alarms.
+	 *
 	 * @return All alarms.
 	 */
 	@Query("SELECT * FROM alarm")
 	LiveData<List<NacAlarm>> getAllAlarms();
 
 	/**
-	 * @return All alarms. This will wait until all alarms are selected.
+	 * Get all alarms.
+	 *
+	 * This will wait until all alarms are selected.
+	 *
+	 * @return All alarms.
 	 */
 	@Query("SELECT * FROM alarm")
 	List<NacAlarm> getAllAlarmsNow();
@@ -67,7 +91,7 @@ public interface NacAlarmDao
 	/**
 	 * Insert an alarm.
 	 *
-	 * @param  alarm  An alarm.
+	 * @param  alarm  The alarm to insert.
 	 *
 	 * @return The row ID of the alarm that was inserted.
 	 */
@@ -77,7 +101,7 @@ public interface NacAlarmDao
 	/**
 	 * Update an existing alarm
 	 *
-	 * @param  alarm  An alarm.
+	 * @param  alarm  The alarm to update.
 	 *
 	 * @return The number of alarms updated.
 	 */

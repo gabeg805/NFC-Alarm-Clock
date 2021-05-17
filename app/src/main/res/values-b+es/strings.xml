@@ -358,7 +358,7 @@
 	<!-- Expand new alarm card -->
 	<string name="expand_new_alarm">Expandir alarmas nuevas</string>
 	<string name="expand_new_alarm_key">pref_expand_new_alarm</string>
-	<string name="expand_new_alarm_true">Alarmas creadas con el signo de &#8220;+&#8221; se expanden.</string>
+	<string name="expand_new_alarm_true">Alarmas copiadas o creadas con el signo de &#8220;+&#8221; se expanden.</string>
 	<string name="expand_new_alarm_false">Alarmas no se expanden.</string>
 
 

@@ -191,6 +191,7 @@ public class NacAlarm
 				.setVolume(0)
 				.setAudioSource("Media")
 				.setName("");
+				// TODO: Default name?
 		}
 
 		/**
@@ -201,16 +202,14 @@ public class NacAlarm
 
 			if (shared != null)
 			{
-				NacSharedConstants cons = shared.getConstants();
-				NacSharedDefaults defaults = shared.getDefaults();
-
-				this.setDays(NacCalendar.Days.valueToDays(defaults.getDays()))
-					.setRepeat(defaults.getRepeat())
-					.setVibrate(defaults.getVibrate())
-					.setUseNfc(defaults.getUseNfc())
-					.setVolume(defaults.getVolume())
-					.setAudioSource(cons.getAudioSources().get(1));
-				// TODO: Default name?
+				this.setDays(NacCalendar.Days.valueToDays(shared.getDays()))
+					.setRepeat(shared.getRepeat())
+					.setVibrate(shared.getVibrate())
+					.setUseNfc(shared.getUseNfc())
+					.setMediaPath(shared.getMediaPath())
+					.setVolume(shared.getVolume())
+					.setAudioSource(shared.getAudioSource())
+					.setName(shared.getName());
 			}
 		}
 

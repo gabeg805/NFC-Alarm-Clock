@@ -36,16 +36,25 @@ public class NacAlarmViewModel
 	}
 
 	/**
-	 * Copy an alarm in the database using the repository.
+	 * Copy an alarm into the database.
+	 *
+	 * @param  copiedAlarm  Alarm that has been copied.
+	 *
+	 * @return The row ID of the inserted alarm.
 	 */
-	public long copy(NacAlarm alarm)
+	public long copy(NacAlarm copiedAlarm)
 	{
 		// TODO: What should I do with the scheduler here? Do nothing?
-		return this.getRepository().copy(alarm);
+		return this.getRepository().copy(copiedAlarm);
 	}
 
 	/**
-	 * Delete an alarm from the database using the repository.
+	 * Delete an alarm from the database, and cancel its scheduled run time.
+	 *
+	 * @param  context  Context.
+	 * @param  alarm  Alarm to delete.
+	 *
+	 * @return The number of rows deleted.
 	 */
 	public int delete(Context context, NacAlarm alarm)
 	{
@@ -54,7 +63,11 @@ public class NacAlarmViewModel
 	}
 
 	/**
-	 * @return The alarm with the given ID.
+	 * Find an alarm.
+	 *
+	 * @param  id  The ID of the alarm to find.
+	 *
+	 * @return The alarm with the ID.
 	 */
 	public NacAlarm findAlarm(long id)
 	{
@@ -70,6 +83,8 @@ public class NacAlarmViewModel
 	}
 
 	/**
+	 * Get an active alarm.
+	 *
 	 * @return An active alarm.
 	 */
 	public LiveData<NacAlarm> getActiveAlarm()
@@ -78,7 +93,9 @@ public class NacAlarmViewModel
 	}
 
 	/**
-	 * @return The active alarms.
+	 * Get a list of all active alarms.
+	 *
+	 * @return List of all active alarms.
 	 */
 	public LiveData<List<NacAlarm>> getActiveAlarms()
 	{
@@ -86,15 +103,9 @@ public class NacAlarmViewModel
 	}
 
 	/**
-	 * @return The list of active alarms.
-	 */
-	public List<NacAlarm> getActiveAlarmsList()
-	{
-		return this.getRepository().getActiveAlarmsList();
-	}
-
-	/**
-	 * @return The live data list of all alarms.
+	 * Get all alarms.
+	 *
+	 * @return All alarms.
 	 */
 	public LiveData<List<NacAlarm>> getAllAlarms()
 	{
@@ -102,7 +113,9 @@ public class NacAlarmViewModel
 	}
 
 	/**
-	 * @return Repository of the alarms.
+	 * Get the database repository.
+	 *
+	 * @return The database repository.
 	 */
 	public NacAlarmRepository getRepository()
 	{
@@ -110,7 +123,13 @@ public class NacAlarmViewModel
 	}
 
 	/**
-	 * Insert an alarm into the database using the repository.
+	 * Insert an alarm into the database, and schedule the alarm to run.
+	 *
+	 * @param  context  Context.
+	 * @param  alarm  The alarm to insert.
+	 *
+	 * @return The row ID of the alarm that was inserted.
+	 *
 	 */
 	public long insert(Context context, NacAlarm alarm)
 	{
@@ -124,15 +143,12 @@ public class NacAlarmViewModel
 	}
 
 	/**
-	 * Update an alarm in the database using the repository.
-	 */
-	public int update(NacAlarm alarm)
-	{
-		return this.getRepository().update(alarm);
-	}
-
-	/**
-	 * Update an alarm in the database using the repository.
+	 * Update an alarm in the database, and schedule the alarm to run.
+	 *
+	 * @param  context  Context.
+	 * @param  alarm  The alarm to update.
+	 *
+	 * @return The number of alarms updated.
 	 */
 	public int update(Context context, NacAlarm alarm)
 	{
