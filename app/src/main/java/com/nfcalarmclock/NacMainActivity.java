@@ -562,6 +562,9 @@ public class NacMainActivity
 
 	/**
 	 * Alarm list has changed.
+	 *
+	 * TODO: There is a race condition between snoozing an alarm, writing to the
+	 *     database, and refreshing the main activity.
 	 */
 	@Override
 	public void onChanged(List<NacAlarm> alarms)

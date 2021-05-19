@@ -123,7 +123,7 @@ public class NacActiveAlarmNotification
 	{
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
-		long id = (alarm == null) ? 0 : alarm.getId();
+		long id = (alarm != null) ? alarm.getId() : 0;
 		Intent intent = NacIntent.createAlarmActivity(context, alarm);
 
 		return PendingIntent.getActivity(context, (int)id, intent,
@@ -161,6 +161,7 @@ public class NacActiveAlarmNotification
 		}
 
 		Intent intent = NacIntent.dismissForegroundService(context, alarm);
+
 		return PendingIntent.getService(context, 0, intent,
 			PendingIntent.FLAG_CANCEL_CURRENT);
 	}
@@ -258,8 +259,8 @@ public class NacActiveAlarmNotification
 	private PendingIntent getSnoozePendingIntent()
 	{
 		Context context = this.getContext();
-		Intent intent = new Intent(NacForegroundService.ACTION_SNOOZE_ALARM,
-			null, context, NacForegroundService.class);
+		NacAlarm alarm = this.getAlarm();
+		Intent intent = NacIntent.snoozeForegroundService(context, alarm);
 
 		return PendingIntent.getService(context, 0, intent,
 			PendingIntent.FLAG_CANCEL_CURRENT);

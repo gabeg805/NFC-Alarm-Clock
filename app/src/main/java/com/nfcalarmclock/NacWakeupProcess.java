@@ -13,17 +13,8 @@ import java.util.concurrent.TimeUnit;
  */
 @SuppressWarnings({"RedundantSuppression", "UnnecessaryInterfaceModifier"})
 public class NacWakeupProcess
-	implements Runnable,
-		NacTextToSpeech.OnSpeakingListener
+	implements NacTextToSpeech.OnSpeakingListener
 {
-
-	/**
-	 * Auto dismiss listener interface.
-	 */
-	public interface OnAutoDismissListener
-	{
-		public void onAutoDismiss(NacAlarm alarm);
-	}
 
 	/**
 	 * The application context.
@@ -39,16 +30,6 @@ public class NacWakeupProcess
 	 * Shared preferences.
 	 */
 	private final NacSharedPreferences mSharedPreferences;
-
-	/**
-	 * Automatically dismiss the alarm in case it does not get dismissed.
-	 */
-	private final Handler mAutoDismissHandler;
-
-	/**
-	 * On auto dismiss listener.
-	 */
-	private OnAutoDismissListener mAutoDismissListener;
 
 	/**
 	 * Media player.
@@ -77,8 +58,6 @@ public class NacWakeupProcess
 		this.mContext = context;
 		this.mAlarm = alarm;
 		this.mSharedPreferences = new NacSharedPreferences(context);
-		this.mAutoDismissHandler = new Handler();
-		this.mAutoDismissListener = null;
 
 		// Setup vibrate
 		if (this.canVibrate())
@@ -141,20 +120,6 @@ public class NacWakeupProcess
 		this.cleanupVibrate();
 		this.cleanupPlayer();
 		this.cleanupTextToSpeech();
-		this.cleanupAutoDismiss();
-	}
-
-	/**
-	 * Cleanup the auto dismiss handler.
-	 */
-	private void cleanupAutoDismiss()
-	{
-		Handler autoDismissHandler = this.getAutoDismissHandler();
-
-		if (autoDismissHandler != null)
-		{
-			autoDismissHandler.removeCallbacksAndMessages(null);
-		}
 	}
 
 	/**
@@ -230,27 +195,11 @@ public class NacWakeupProcess
 	}
 
 	/**
-	 * @return The auto dismiss handler.
-	 */
-	private Handler getAutoDismissHandler()
-	{
-		return this.mAutoDismissHandler;
-	}
-
-	/**
 	 * @return The context.
 	 */
 	private Context getContext()
 	{
 		return this.mContext;
-	}
-
-	/**
-	 * @return The auto dismiss listener.
-	 */
-	private OnAutoDismissListener getOnAutoDismissListener()
-	{
-		return this.mAutoDismissListener;
 	}
 
 	/**
@@ -346,29 +295,6 @@ public class NacWakeupProcess
 	}
 
 	/**
-	 * Automatically dismiss the alarm.
-	 */
-	@Override
-	public void run()
-	{
-		OnAutoDismissListener listener = this.getOnAutoDismissListener();
-		NacAlarm alarm = this.getAlarm();
-
-		if (listener != null)
-		{
-			listener.onAutoDismiss(alarm);
-		}
-	}
-
-	/**
-	 * Set the auto dismiss listener.
-	 */
-	public void setOnAutoDismissListener(OnAutoDismissListener listener)
-	{
-		this.mAutoDismissListener = listener;
-	}
-
-	/**
 	 * Set the volume for the music player and text-to-speech engine.
 	 */
 	private void setVolume()
@@ -427,7 +353,6 @@ public class NacWakeupProcess
 		}
 
 		this.startTts();
-		this.waitForAutoDismiss();
 	}
 
 	/**
@@ -489,25 +414,6 @@ public class NacWakeupProcess
 			{
 				vibrator.vibrate(pattern, 0);
 			}
-		}
-	}
-
-	/**
-	 * Wait in the background until the activity needs to auto dismiss the
-	 * alarm.
-	 *
-	 * Auto dismiss a bit early to avoid the race condition between a new alarm
-	 * starting at the same time that the alarm will auto-dismiss.
-	 */
-	public void waitForAutoDismiss()
-	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-		int autoDismiss = shared.getAutoDismissTime();
-		long delay = TimeUnit.MINUTES.toMillis(autoDismiss) - 2000;
-
-		if (autoDismiss != 0)
-		{
-			this.getAutoDismissHandler().postDelayed(this, delay);
 		}
 	}
 

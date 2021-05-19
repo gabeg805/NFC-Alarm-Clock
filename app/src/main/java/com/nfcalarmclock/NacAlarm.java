@@ -38,7 +38,9 @@ public class NacAlarm
 	private boolean mIsActive;
 
 	/**
-	 * Amount of time, in seconds, the alarm has been snoozed for.
+	 * Amount of time, in milliseconds, the alarm has been active for.
+	 *
+	 * This will typically only change when the alarm is snoozed.
 	 */
 	@ColumnInfo(name="time_active")
 	private long mTimeActive;
@@ -507,9 +509,9 @@ public class NacAlarm
 	}
 
 	/**
-	 * Add to the time, in seconds, that the alarm is active.
+	 * Add to the time, in milliseconds, that the alarm is active.
 	 *
-	 * @param  time  Time, in seconds, to add to the active time.
+	 * @param  time  Time, in milliseconds, to add to the active time.
 	 */
 	public void addToTimeActive(long time)
 	{
@@ -942,7 +944,7 @@ public class NacAlarm
 	}
 
 	/**
-	 * @return The amount of time, in seconds, the alarm has been active for.
+	 * @return The amount of time, in milliseconds, the alarm has been active for.
 	 */
 	public long getTimeActive()
 	{
@@ -1257,7 +1259,7 @@ public class NacAlarm
 	}
 
 	/**
-	 * Set the amount of time, in seconds, the alarm has been active for.
+	 * Set the amount of time, in milliseconds, the alarm has been active for.
 	 */
 	public void setTimeActive(long time)
 	{

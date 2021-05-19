@@ -3,18 +3,22 @@ package com.nfcalarmclock;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import java.lang.System;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 import java.util.List;
 
 /**
  */
 public class NacForegroundService
 	extends Service
-	implements NacWakeupProcess.OnAutoDismissListener
+	implements Runnable
+	//implements NacWakeupProcess.OnAutoDismissListener
 {
 
 	/**
@@ -67,6 +71,16 @@ public class NacForegroundService
 	private WakeLock mWakeLock;
 
 	/**
+	 * Automatically dismiss the alarm in case it does not get dismissed.
+	 */
+	private Handler mAutoDismissHandler;
+
+	/**
+	 * Time that the service was started, in milliseconds.
+	 */
+	private long mStartTime;
+
+	/**
 	 * Run cleanup.
 	 */
 	private void cleanup()
@@ -75,6 +89,7 @@ public class NacForegroundService
 		this.cleanupAlarmActivity();
 		this.cleanupWakeupProcess();
 		this.cleanupWakeLock();
+		this.cleanupAutoDismiss();
 	}
 
 	/**
@@ -87,6 +102,19 @@ public class NacForegroundService
 		if (alarm != null)
 		{
 			NacContext.stopAlarmActivity(this, alarm);
+		}
+	}
+
+	/**
+	 * Cleanup the auto dismiss handler.
+	 */
+	private void cleanupAutoDismiss()
+	{
+		Handler autoDismissHandler = this.getAutoDismissHandler();
+
+		if (autoDismissHandler != null)
+		{
+			autoDismissHandler.removeCallbacksAndMessages(null);
 		}
 	}
 
@@ -169,6 +197,14 @@ public class NacForegroundService
 	}
 
 	/**
+	 * @return The auto dismiss handler.
+	 */
+	private Handler getAutoDismissHandler()
+	{
+		return this.mAutoDismissHandler;
+	}
+
+	/**
 	 * @return The shared constants.
 	 */
 	private NacSharedConstants getSharedConstants()
@@ -182,6 +218,16 @@ public class NacForegroundService
 	private NacSharedPreferences getSharedPreferences()
 	{
 		return this.mSharedPreferences;
+	}
+
+	/**
+	 * Get the time the service was started, in milliseconds.
+	 *
+	 * @return The time the service was started.
+	 */
+	private long getStartTime()
+	{
+		return this.mStartTime;
 	}
 
 	/**
@@ -221,9 +267,10 @@ public class NacForegroundService
 	 * Automatically dismiss the alarm.
 	 */
 	@Override
-	public void onAutoDismiss(NacAlarm alarm)
+	public void run()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
+		NacAlarm alarm = this.getAlarm();
 
 		if (shared.getMissedAlarmNotification())
 		{
@@ -274,8 +321,9 @@ public class NacForegroundService
 	{
 		if (this.isNewServiceStarted(intent))
 		{
-			this.cleanupWakeupProcess();
 			this.cleanupAlarmActivity();
+			this.cleanupWakeupProcess();
+			this.cleanupAutoDismiss();
 		}
 
 		String action = NacIntent.getAction(intent);
@@ -300,6 +348,7 @@ public class NacForegroundService
 			// Might not need schedule next, since doing one day, per alarm, at a time.
 			//this.scheduleNextAlarm();
 			this.writeIsAlarmActive(true);
+			this.waitForAutoDismiss();
 			return START_STICKY;
 		}
 
@@ -318,7 +367,7 @@ public class NacForegroundService
 		PowerManager pm = (PowerManager) getSystemService(
 			Context.POWER_SERVICE);
 		this.mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, tag);
-		long timeout = shared.getAutoDismissTime() * 59 * 1000;
+		long timeout = shared.getAutoDismissTime() * 60 * 1000;
 
 		this.mWakeLock.acquire(timeout);
 	}
@@ -332,7 +381,6 @@ public class NacForegroundService
 		NacWakeupProcess wakeup = new NacWakeupProcess(this, alarm);
 		this.mWakeupProcess = wakeup;
 
-		wakeup.setOnAutoDismissListener(this);
 		wakeup.start();
 	}
 
@@ -363,6 +411,7 @@ public class NacForegroundService
 		if (cal != null)
 		{
 			shared.editShouldRefreshMainActivity(true);
+			alarm.addToTimeActive(System.currentTimeMillis()-this.getStartTime());
 			repo.update(alarm);
 			NacScheduler.update(this, alarm, cal);
 
@@ -374,6 +423,31 @@ public class NacForegroundService
 			NacUtility.quickToast(this, cons.getErrorMessageSnooze());
 			return;
 		}
+	}
+
+	/**
+	 * Wait in the background until the activity needs to auto dismiss the
+	 * alarm.
+	 *
+	 * Auto dismiss a bit early to avoid the race condition between a new alarm
+	 * starting at the same time that the alarm will auto-dismiss.
+	 */
+	public void waitForAutoDismiss()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacAlarm alarm = this.getAlarm();
+		Handler handler = null;
+		int autoDismiss = shared.getAutoDismissTime();
+		long delay = TimeUnit.MINUTES.toMillis(autoDismiss) - alarm.getTimeActive() - 2000;
+
+		if (autoDismiss != 0)
+		{
+			handler = new Handler();
+			handler.postDelayed(this, delay);
+		}
+
+		this.mAutoDismissHandler = handler;
+		this.mStartTime = System.currentTimeMillis();
 	}
 
 	/**

@@ -16,8 +16,8 @@ android {
 		applicationId "com.nfcalarmclock"
 		minSdkVersion 21
 		targetSdkVersion 29
-		versionCode 252
-		versionName "10.0.4"
+		versionCode 253
+		versionName "10.0.5"
 
 		javaCompileOptions {
 			annotationProcessorOptions {
