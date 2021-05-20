@@ -537,7 +537,7 @@ public class NacMainActivity
 		}
 
 		this.getAlarmViewModel().update(this, alarm);
-		this.updateUpcomingNotification();
+		//this.updateUpcomingNotification();
 	}
 
 	/**
@@ -572,9 +572,9 @@ public class NacMainActivity
 		RecyclerView rv = this.getRecyclerView();
 
 		this.setupForAppFirstRun(alarms);
+		this.updateUpcomingNotification(alarms);
 		this.getAlarmCardAdapter().storeIndicesOfExpandedCards(rv);
 		this.getAlarmCardAdapter().submitList(alarms);
-		this.updateUpcomingNotification();
 	}
 
 	/**
@@ -1211,20 +1211,29 @@ public class NacMainActivity
 	 * TODO: Check if race condition with this being called after submitList?
 	 * Should I just pass a list of alarms to this method?
 	 */
-	public void updateUpcomingNotification()
+	public void updateUpcomingNotification(List<NacAlarm> alarms)
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		NacAlarmCardAdapter cardAdapter = this.getAlarmCardAdapter();
 
 		if (shared.getUpcomingAlarmNotification())
 		{
-			List<NacAlarm> alarms = cardAdapter.getCurrentList();
 			NacUpcomingAlarmNotification notification =
 				new NacUpcomingAlarmNotification(this);
 
 			notification.setAlarmList(alarms);
 			notification.show();
 		}
+	}
+
+	/**
+	 * @see #updateNotification(List<NacAlarm>)
+	 */
+	public void updateUpcomingNotification()
+	{
+		NacAlarmCardAdapter cardAdapter = this.getAlarmCardAdapter();
+		List<NacAlarm> alarms = cardAdapter.getCurrentList();
+
+		this.updateUpcomingNotification(alarms);
 	}
 
 	/**

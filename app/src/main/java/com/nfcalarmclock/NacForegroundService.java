@@ -18,7 +18,6 @@ import java.util.List;
 public class NacForegroundService
 	extends Service
 	implements Runnable
-	//implements NacWakeupProcess.OnAutoDismissListener
 {
 
 	/**
@@ -460,8 +459,11 @@ public class NacForegroundService
 		NacAlarmRepository repo = this.getAlarmRepository();
 		NacAlarm alarm = this.getAlarm();
 
-		alarm.setIsActive(isActive);
-		repo.update(alarm);
+		if (alarm != null)
+		{
+			alarm.setIsActive(isActive);
+			repo.update(alarm);
+		}
 	}
 
 }
