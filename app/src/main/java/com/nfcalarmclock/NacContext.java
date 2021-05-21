@@ -112,8 +112,18 @@ public class NacContext
 	public static void startAlarm(Context context, NacAlarm alarm)
 	{
 		Bundle bundle = NacBundle.toBundle(alarm);
-
 		NacContext.startAlarm(context, bundle);
+	}
+
+	/**
+	 * Start the main activity.
+	 *
+	 * @param  context  A context.
+	 */
+	public static void startMainActivity(Context context)
+	{
+		Intent intent = NacIntent.createMainActivity(context);
+		context.startActivity(intent);
 	}
 
 }

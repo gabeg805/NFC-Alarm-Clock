@@ -333,7 +333,8 @@ public class NacIntent
 	public static Intent stopAlarmActivity(NacAlarm alarm)
 	{
 		Intent intent = new Intent(NacAlarmActivity.ACTION_STOP_ACTIVITY);
-		return NacIntent.addAlarm(intent, alarm);
+
+		return (alarm != null) ? NacIntent.addAlarm(intent, alarm) : intent;
 	}
 
 	/**

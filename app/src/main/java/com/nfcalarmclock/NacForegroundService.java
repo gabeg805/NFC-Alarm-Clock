@@ -84,7 +84,8 @@ public class NacForegroundService
 	 */
 	private void cleanup()
 	{
-		this.writeIsAlarmActive(false);
+		this.setIsAlarmActive(false);
+		this.updateAlarm();
 		this.cleanupAlarmActivity();
 		this.cleanupWakeupProcess();
 		this.cleanupWakeLock();
@@ -93,15 +94,15 @@ public class NacForegroundService
 
 	/**
 	 * Cleanup the alarm activity.
+	 *
+	 * The alarm activity is stopped even if the alarm is null because it needs to
+	 * be stopped, regardless.
 	 */
 	private void cleanupAlarmActivity()
 	{
 		NacAlarm alarm = this.getAlarm();
 
-		if (alarm != null)
-		{
-			NacContext.stopAlarmActivity(this, alarm);
-		}
+		NacContext.stopAlarmActivity(this, alarm);
 	}
 
 	/**
@@ -174,7 +175,7 @@ public class NacForegroundService
 	public void finish()
 	{
 		this.cleanup();
-		// Should I call cleanupAlarmActivity() even if alarm is null?
+		NacContext.startMainActivity(this);
 		super.stopForeground(true);
 		super.stopSelf();
 	}
@@ -302,6 +303,7 @@ public class NacForegroundService
 		this.mAlarm = null;
 		this.mWakeupProcess = null;
 		this.mWakeLock = null;
+		//this.mStartTime = System.currentTimeMillis();
 	}
 
 	/**
@@ -320,6 +322,8 @@ public class NacForegroundService
 	{
 		if (this.isNewServiceStarted(intent))
 		{
+			this.updateTimeActive();
+			this.updateAlarm();
 			this.cleanupAlarmActivity();
 			this.cleanupWakeupProcess();
 			this.cleanupAutoDismiss();
@@ -346,12 +350,28 @@ public class NacForegroundService
 			this.setupWakeupProcess();
 			// Might not need schedule next, since doing one day, per alarm, at a time.
 			//this.scheduleNextAlarm();
-			this.writeIsAlarmActive(true);
+			this.setIsAlarmActive(true);
+			this.updateAlarm();
 			this.waitForAutoDismiss();
 			return START_STICKY;
 		}
 
 		return START_NOT_STICKY;
+	}
+
+	/**
+	 * Set whether the alarm is active or not.
+	 *
+	 * @param  isActive  Whether the alarm is active or not.
+	 */
+	private void setIsAlarmActive(boolean isActive)
+	{
+		NacAlarm alarm = this.getAlarm();
+
+		if (alarm != null)
+		{
+			alarm.setIsActive(isActive);
+		}
 	}
 
 	/**
@@ -403,15 +423,14 @@ public class NacForegroundService
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacSharedConstants cons = this.getSharedConstants();
-		NacAlarmRepository repo = this.getAlarmRepository();
 		NacAlarm alarm = this.getAlarm();
 		Calendar cal = alarm.snooze(shared);
 
 		if (cal != null)
 		{
 			shared.editShouldRefreshMainActivity(true);
-			alarm.addToTimeActive(System.currentTimeMillis()-this.getStartTime());
-			repo.update(alarm);
+			this.updateTimeActive();
+			this.updateAlarm();
 			NacScheduler.update(this, alarm, cal);
 
 			NacUtility.quickToast(this, cons.getMessageAlarmSnooze());
@@ -421,6 +440,36 @@ public class NacForegroundService
 		{
 			NacUtility.quickToast(this, cons.getErrorMessageSnooze());
 			return;
+		}
+	}
+
+	/**
+	 * Update the alarm in the repository.
+	 */
+	private void updateAlarm()
+	{
+		NacAlarmRepository repo = this.getAlarmRepository();
+		NacAlarm alarm = this.getAlarm();
+
+		if (alarm != null)
+		{
+			repo.update(alarm);
+		}
+	}
+
+	/**
+	 * Update the time the alarm was active.
+	 */
+	private void updateTimeActive()
+	{
+		NacAlarm alarm = this.getAlarm();
+		long timeActive = System.currentTimeMillis() - this.getStartTime();
+
+		if (alarm != null)
+		{
+			NacUtility.quickToast(this, "Time active: "+String.valueOf(timeActive));
+			alarm.addToTimeActive(timeActive);
+			NacUtility.quickToast(this, "Total time: "+String.valueOf(alarm.getTimeActive()));
 		}
 	}
 
@@ -447,23 +496,6 @@ public class NacForegroundService
 
 		this.mAutoDismissHandler = handler;
 		this.mStartTime = System.currentTimeMillis();
-	}
-
-	/**
-	 * Write to the database whether the alarm is active or not.
-	 *
-	 * @param  isActive  Whether the alarm is active or not.
-	 */
-	public void writeIsAlarmActive(boolean isActive)
-	{
-		NacAlarmRepository repo = this.getAlarmRepository();
-		NacAlarm alarm = this.getAlarm();
-
-		if (alarm != null)
-		{
-			alarm.setIsActive(isActive);
-			repo.update(alarm);
-		}
 	}
 
 }

@@ -575,6 +575,7 @@ public class NacMainActivity
 		this.updateUpcomingNotification(alarms);
 		this.getAlarmCardAdapter().storeIndicesOfExpandedCards(rv);
 		this.getAlarmCardAdapter().submitList(alarms);
+		this.setupRefreshMainActivity();
 	}
 
 	/**
@@ -816,10 +817,7 @@ public class NacMainActivity
 		super.onResume();
 
 		this.setIsActivityShown(true);
-		this.setupRefreshMainActivity();
-
 		// Will have to redraw colors here?
-
 		this.setupFloatingActionButton();
 		this.setupGoogleRatingDialog();
 		this.addSetAlarmFromIntent();
