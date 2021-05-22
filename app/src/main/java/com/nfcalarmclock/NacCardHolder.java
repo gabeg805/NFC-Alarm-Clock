@@ -901,7 +901,7 @@ public class NacCardHolder
 	/**
 	 * @return The audio source button.
 	 */
-	private MaterialButton getAudioSourceButton()
+	public MaterialButton getAudioSourceButton()
 	{
 		return this.mAudioSourceButton;
 	}
@@ -1355,7 +1355,7 @@ public class NacCardHolder
 		this.getNfcButton().setOnClickListener(click);
 		this.getMediaButton().setOnClickListener(click);
 		this.getVolumeSeekBar().setOnSeekBarChangeListener(seek);
-		this.getAudioSourceButton().setOnClickListener(click);
+		//this.getAudioSourceButton().setOnClickListener(click);
 		this.getNameButton().setOnClickListener(click);
 		this.getDeleteButton().setOnClickListener(click);
 	}
@@ -1587,10 +1587,11 @@ public class NacCardHolder
 		{
 			this.respondToMediaButtonClick(view);
 		}
-		else if (id == R.id.nac_audio_source)
-		{
-			this.respondToAudioSourceButtonClick(view);
-		}
+		//getAudioSourceButton()
+		//else if (id == R.id.nac_audio_source)
+		//{
+		//	this.respondToAudioSourceButtonClick(view);
+		//}
 		else if (id == R.id.nac_name)
 		{
 			this.respondToNameClick(view);
@@ -1709,7 +1710,7 @@ public class NacCardHolder
 	/**
 	 * Respond to the audio source button being clicked.
 	 */
-	private void respondToAudioSourceButtonClick(View view)
+	public void respondToAudioSourceButtonClick(View view)
 	{
 		if (this.checkCanModifyAlarm())
 		{

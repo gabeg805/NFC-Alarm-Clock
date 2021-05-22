@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+	<string-array name="audio_options">
+		<item>Audio source</item>
+		<item>Text-to-speech</item>
+	</string-array>
+
 	<string-array name="audio_sources">
 		<item>Alarm</item>
 		<item>Media</item>

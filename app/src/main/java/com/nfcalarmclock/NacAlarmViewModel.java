@@ -138,8 +138,20 @@ public class NacAlarmViewModel
 			return -1;
 		}
 
-		NacScheduler.update(context, alarm);
-		return this.getRepository().insert(alarm);
+		long alarmId = alarm.getId();
+		long rowId = this.getRepository().insert(alarm);
+
+		if (rowId > 0)
+		{
+			if (alarmId == 0)
+			{
+				alarm.setId(rowId);
+			}
+
+			NacScheduler.update(context, alarm);
+		}
+
+		return rowId;
 	}
 
 	/**

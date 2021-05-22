@@ -537,7 +537,6 @@ public class NacMainActivity
 		}
 
 		this.getAlarmViewModel().update(this, alarm);
-		//this.updateUpcomingNotification();
 	}
 
 	/**
@@ -856,7 +855,7 @@ public class NacMainActivity
 	 * Needed for NacAlarmCardAdapter.OnViewHolderCreatedListener.
 	 */
 	@Override
-	public void onViewHolderCreated(NacCardHolder card)
+	public void onViewHolderCreated(final NacCardHolder card)
 	{
 		card.setOnCardCollapsedListener(this);
 		card.setOnCardDeleteClickedListener(this);
@@ -865,6 +864,20 @@ public class NacMainActivity
 		card.setOnCardUpdatedListener(this);
 		card.setOnCardUseNfcChangedListener(this);
 		card.setOnCreateContextMenuListener(this);
+		card.getAudioSourceButton().setOnClickListener(new View.OnClickListener()
+			{
+				@Override
+				public void onClick(View view)
+				{
+					//new NacAlarmAudioOptionsDialog().show(getChildFragmentManager(),
+					new NacAlarmAudioOptionsDialog().show(getSupportFragmentManager(),
+						NacAlarmAudioOptionsDialog.TAG);
+					//new NacAlarmAudioSourceDialog().show(getSupportFragmentManager(),
+					//	NacAlarmAudioSourceDialog.TAG);
+
+					//card.respondToAudioSourceButtonClick(view);
+				}
+			});
 	}
 
 	/**
