@@ -26,27 +26,4 @@
 
 	</com.nfcalarmclock.NacPreferenceCategory>
 
-	<!-- Text-to-Speech -->
-	<com.nfcalarmclock.NacPreferenceCategory
-		android:title="@string/tts_category">
-
-		<com.nfcalarmclock.NacCheckboxPreference
-			android:key="@string/speak_to_me_key"
-			android:title="@string/speak_to_me"
-			android:summaryOn="@string/speak_to_me_true"
-			android:summaryOff="@string/speak_to_me_false"
-			android:defaultValue="@bool/default_speak_to_me"
-			app:allowDividerAbove="false"
-			app:allowDividerBelow="false"
-			/>
-
-		<com.nfcalarmclock.NacSpeakFrequencyPreference
-			android:key="@string/speak_frequency_key"
-			android:title="@string/speak_frequency"
-			android:dependency="@string/speak_to_me_key"
-			android:defaultValue="@integer/default_speak_frequency_index"
-			/>
-
-	</com.nfcalarmclock.NacPreferenceCategory>
-
 </PreferenceScreen>

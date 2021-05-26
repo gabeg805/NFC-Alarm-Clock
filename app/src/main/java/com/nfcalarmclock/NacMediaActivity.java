@@ -1,7 +1,5 @@
 package com.nfcalarmclock;
 
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayout.Tab;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -14,6 +12,8 @@ import androidx.fragment.app.FragmentOnAttachListener;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayout.Tab;
 
 /**
  */

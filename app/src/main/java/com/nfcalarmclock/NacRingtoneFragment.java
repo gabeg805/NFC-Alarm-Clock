@@ -140,7 +140,6 @@ public class NacRingtoneFragment
 		RadioButton radioButton)
 	{
 		int[] colors = new int[] { shared.getThemeColor(), Color.GRAY };
-
 		int[][] states = new int[][] {
 			new int[] {  android.R.attr.state_checked },
 			new int[] { -android.R.attr.state_checked } };

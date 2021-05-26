@@ -228,9 +228,9 @@ public class NacCardHolder
 	private final SeekBar mVolumeSeekBar;
 
 	/**
-	 * Audio source button.
+	 * Audio options button.
 	 */
-	private final MaterialButton mAudioSourceButton;
+	private final MaterialButton mAudioOptionsButton;
 
 	/**
 	 * Name button.
@@ -336,7 +336,7 @@ public class NacCardHolder
 		this.mMediaButton = root.findViewById(R.id.nac_media);
 		this.mVolumeImageView = root.findViewById(R.id.nac_volume_icon);
 		this.mVolumeSeekBar = root.findViewById(R.id.nac_volume_slider);
-		this.mAudioSourceButton = root.findViewById(R.id.nac_audio_source);
+		this.mAudioOptionsButton = root.findViewById(R.id.nac_audio_options);
 		this.mNameButton = root.findViewById(R.id.nac_name);
 		this.mDeleteButton = root.findViewById(R.id.nac_delete);
 		this.mCardAnimator = new NacHeightAnimator(this.getCardView());
@@ -868,14 +868,6 @@ public class NacCardHolder
 	}
 
 	/**
-	 * Act as if the audio source button was clicked.
-	 */
-	public void doAudioSourceButtonClick()
-	{
-		this.showAudioSourceDialog();
-	}
-
-	/**
 	 * Expand the alarm card.
 	 */
 	public void expand()
@@ -899,11 +891,11 @@ public class NacCardHolder
 	}
 
 	/**
-	 * @return The audio source button.
+	 * @return The audio options button.
 	 */
-	public MaterialButton getAudioSourceButton()
+	public MaterialButton getAudioOptionsButton()
 	{
-		return this.mAudioSourceButton;
+		return this.mAudioOptionsButton;
 	}
 
 	/**
@@ -1313,7 +1305,7 @@ public class NacCardHolder
 		this.setNfcButtonRippleColor();
 		this.setMediaButtonRippleColor();
 		this.setVolumeSeekBarColor();
-		this.setAudioSourceButtonRippleColor();
+		this.setAudioOptionsButtonRippleColor();
 		this.setNameButtonRippleColor();
 		this.setDeleteButtonRippleColor();
 		this.setCollapseButtonRippleColor();
@@ -1355,7 +1347,6 @@ public class NacCardHolder
 		this.getNfcButton().setOnClickListener(click);
 		this.getMediaButton().setOnClickListener(click);
 		this.getVolumeSeekBar().setOnSeekBarChangeListener(seek);
-		//this.getAudioSourceButton().setOnClickListener(click);
 		this.getNameButton().setOnClickListener(click);
 		this.getDeleteButton().setOnClickListener(click);
 	}
@@ -1587,11 +1578,6 @@ public class NacCardHolder
 		{
 			this.respondToMediaButtonClick(view);
 		}
-		//getAudioSourceButton()
-		//else if (id == R.id.nac_audio_source)
-		//{
-		//	this.respondToAudioSourceButtonClick(view);
-		//}
 		else if (id == R.id.nac_name)
 		{
 			this.respondToNameClick(view);
@@ -1623,13 +1609,6 @@ public class NacCardHolder
 			//alarm.changed();
 			this.setNameButton();
 			this.setSummaryNameView();
-			this.callOnCardUpdatedListener();
-		}
-		else if (id == R.layout.dlg_alarm_audio_source)
-		{
-			String source = dialog.getDataString();
-			alarm.setAudioSource(source);
-			//alarm.changed();
 			this.callOnCardUpdatedListener();
 		}
 
@@ -1702,22 +1681,9 @@ public class NacCardHolder
 	/**
 	 * Perform haptic feedback on a view.
 	 */
-	private void performHapticFeedback(View view)
+	public void performHapticFeedback(View view)
 	{
 		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-	}
-
-	/**
-	 * Respond to the audio source button being clicked.
-	 */
-	public void respondToAudioSourceButtonClick(View view)
-	{
-		if (this.checkCanModifyAlarm())
-		{
-			this.doAudioSourceButtonClick();
-		}
-
-		this.performHapticFeedback(view);
 	}
 
 	/**
@@ -1883,11 +1849,11 @@ public class NacCardHolder
 	}
 
 	/**
-	 * Set the ripple color of the audio source button.
+	 * Set the ripple color of the audio options button.
 	 */
-	private void setAudioSourceButtonRippleColor()
+	private void setAudioOptionsButtonRippleColor()
 	{
-		MaterialButton button = this.getAudioSourceButton();
+		MaterialButton button = this.getAudioOptionsButton();
 		this.setMaterialButtonColor(button);
 	}
 
@@ -2645,21 +2611,6 @@ public class NacCardHolder
 	{
 		SeekBar seekbar = this.getVolumeSeekBar();
 		this.setSeekBarColor(seekbar);
-	}
-
-	/**
-	 * Show the audio source dialog.
-	 */
-	public void showAudioSourceDialog()
-	{
-		Context context = this.getContext();
-		NacAlarm alarm = this.getAlarm();
-		NacAudioSourceDialog dialog = new NacAudioSourceDialog();
-
-		dialog.build(context);
-		dialog.saveData(alarm.getAudioSource());
-		dialog.addOnDismissListener(this);
-		dialog.show();
 	}
 
 	/**

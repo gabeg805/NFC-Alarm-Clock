@@ -965,38 +965,6 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @see #getSpeakFrequencySummary(Context, int)
-	 */
-	@SuppressWarnings("unused")
-	public String getSpeakFrequencySummary()
-	{
-		Context context = this.getContext();
-		int freq = this.getSpeakFrequency();
-		return NacSharedPreferences.getSpeakFrequencySummary(context, freq);
-	}
-
-	/**
-	 * @return The summary text to use when displaying the speak frequency
-	 *         widget.
-	 */
-	public static String getSpeakFrequencySummary(Context context, int freq)
-	{
-		NacSharedConstants cons = new NacSharedConstants(context);
-
-		if (freq == 0)
-		{
-			return cons.getFrequencyOnce();
-		}
-		else
-		{
-			Locale locale = Locale.getDefault();
-			String every = cons.getFrequencyInterval();
-			String unit = cons.getUnitMinute(freq);
-			return String.format(locale, "%1$s %2$s %3$s", every, freq, unit);
-		}
-	}
-
-	/**
 	 * @return The speak to me value.
 	 */
 	public boolean getSpeakToMe()

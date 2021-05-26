@@ -14,6 +14,40 @@
 		<item>System</item>
 	</string-array>
 
+	<string-array name="tts_frequency">
+		<item>Once</item>
+		<item>Every 1 min</item>
+		<item>Every 2 min</item>
+		<item>Every 3 min</item>
+		<item>Every 4 min</item>
+		<item>Every 5 min</item>
+		<item>Every 6 min</item>
+		<item>Every 7 min</item>
+		<item>Every 8 min</item>
+		<item>Every 9 min</item>
+		<item>Every 10 min</item>
+		<item>Every 11 min</item>
+		<item>Every 12 min</item>
+		<item>Every 13 min</item>
+		<item>Every 14 min</item>
+		<item>Every 15 min</item>
+		<item>Every 16 min</item>
+		<item>Every 17 min</item>
+		<item>Every 18 min</item>
+		<item>Every 19 min</item>
+		<item>Every 20 min</item>
+		<item>Every 21 min</item>
+		<item>Every 22 min</item>
+		<item>Every 23 min</item>
+		<item>Every 24 min</item>
+		<item>Every 25 min</item>
+		<item>Every 26 min</item>
+		<item>Every 27 min</item>
+		<item>Every 28 min</item>
+		<item>Every 29 min</item>
+		<item>Every 30 min</item>
+	</string-array>
+
 	<string-array name="days_of_week">
 		<item>Sunday</item>
 		<item>Monday</item>

@@ -494,6 +494,8 @@ public class NacAlarm
 		this.setVolume(input.readInt());
 		this.setAudioSource(input.readString());
 		this.setName(input.readString());
+		this.setUseTts(input.readInt() != 0);
+		this.setTtsFrequency(input.readInt());
 	}
 
 	/**
@@ -741,6 +743,7 @@ public class NacAlarm
 		return (alarm != null)
 			&& (this.equalsId(alarm))
 			&& (this.isActive() == alarm.isActive())
+			&& (this.getTimeActive() == alarm.getTimeActive())
 			&& (this.getSnoozeCount() == alarm.getSnoozeCount())
 			&& (this.isEnabled() == alarm.isEnabled())
 			&& (this.getHour() == alarm.getHour())
@@ -755,7 +758,9 @@ public class NacAlarm
 			&& (this.getMediaTitle().equals(alarm.getMediaTitle()))
 			&& (this.getVolume() == alarm.getVolume())
 			&& (this.getAudioSource().equals(alarm.getAudioSource()))
-			&& (this.getName().equals(alarm.getName()));
+			&& (this.getName().equals(alarm.getName()))
+			&& (this.shouldUseTts() == alarm.shouldUseTts())
+			&& (this.getTtsFrequency() == alarm.getTtsFrequency());
 	}
 
 	/**
@@ -1078,6 +1083,8 @@ public class NacAlarm
 		NacUtility.printf("Volume       : %d", this.getVolume());
 		NacUtility.printf("Audio Source : %s", this.getAudioSource());
 		NacUtility.printf("Name         : %s", this.getName());
+		NacUtility.printf("Use Tts      : %b", this.shouldUseTts());
+		NacUtility.printf("Tts Freq     : %d", this.getTtsFrequency());
 	}
 
 	/**
@@ -1480,6 +1487,8 @@ public class NacAlarm
 		output.writeInt(this.getVolume());
 		output.writeString(this.getAudioSource());
 		output.writeString(this.getName());
+		output.writeInt(this.shouldUseTts() ? 1 : 0);
+		output.writeInt(this.getTtsFrequency());
 	}
 
 	/**

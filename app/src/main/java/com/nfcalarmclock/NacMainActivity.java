@@ -19,6 +19,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -32,6 +33,8 @@ import java.util.Locale;
 
 /**
  * The application's main activity.
+ *
+ * TODO: MAKE SURE YOU CAN MODIFY ALARM BEFORE CHANGING STUFF
  */
 public class NacMainActivity
 	extends AppCompatActivity
@@ -50,14 +53,11 @@ public class NacMainActivity
 		NacCardHolder.OnCardUpdatedListener,
 		NacCardHolder.OnCardUseNfcChangedListener,
 		NacDialog.OnCancelListener,
-		NacDialog.OnDismissListener
+		NacDialog.OnDismissListener,
+		NacAlarmAudioOptionsDialog.OnAudioOptionClickedListener,
+		NacAlarmAudioSourceDialog.OnAudioSourceSelectedListener,
+		NacAlarmTextToSpeechDialog.OnTextToSpeechOptionsSelectedListener
 {
-
-	/**
-	 * Wait time between a notification posting and running the alarm activity
-	 * for that notification.
-	 */
-	private static final long SHOW_ALARM_ACTIVITY_DELAY = 1000;
 
 	/**
 	 * Shared preferences.
@@ -121,6 +121,11 @@ public class NacMainActivity
 	 * The IDs of alarms that were recently updated.
 	 */
 	private List<Long> mRecentlyUpdatedAlarmIds;
+
+	/**
+	 * Alarm that is being used by an open audio options dialog.
+	 */
+	private NacAlarm mAudioOptionsAlarm;
 
 	/**
 	 * Last action on an alarm card.
@@ -348,6 +353,14 @@ public class NacMainActivity
 	}
 
 	/**
+	 * @return The alarm being used by an open audio options dialog.
+	 */
+	private NacAlarm getAudioOptionsAlarm()
+	{
+		return this.mAudioOptionsAlarm;
+	}
+
+	/**
 	 * @return The number of alarm cards that are expanded.
 	 */
 	private int getCardsExpandedCount()
@@ -444,6 +457,43 @@ public class NacMainActivity
 	private boolean isActivityShown()
 	{
 		return this.mIsActivityShown;
+	}
+
+	@Override
+	public void onAudioOptionClicked(long alarmId, int which)
+	{
+		this.mAudioOptionsAlarm = this.getAlarmViewModel().findAlarm(alarmId);
+
+		switch (which)
+		{
+			case 0:
+				this.showAudioSourceDialog();
+				break;
+			case 1:
+				this.showTextToSpeechDialog();
+				break;
+			default:
+				return;
+		}
+	}
+
+	@Override
+	public void onAudioSourceSelected(String audioSource)
+	{
+		NacAlarm alarm = this.getAudioOptionsAlarm();
+
+		alarm.setAudioSource(audioSource);
+		this.getAlarmViewModel().update(this, alarm);
+	}
+
+	@Override
+	public void onTextToSpeechOptionsSelected(boolean useTts, int freq)
+	{
+		NacAlarm alarm = this.getAudioOptionsAlarm();
+
+		alarm.setUseTts(useTts);
+		alarm.setTtsFrequency(freq);
+		this.getAlarmViewModel().update(this, alarm);
 	}
 
 	/**
@@ -864,18 +914,13 @@ public class NacMainActivity
 		card.setOnCardUpdatedListener(this);
 		card.setOnCardUseNfcChangedListener(this);
 		card.setOnCreateContextMenuListener(this);
-		card.getAudioSourceButton().setOnClickListener(new View.OnClickListener()
+		card.getAudioOptionsButton().setOnClickListener(new View.OnClickListener()
 			{
 				@Override
 				public void onClick(View view)
 				{
-					//new NacAlarmAudioOptionsDialog().show(getChildFragmentManager(),
-					new NacAlarmAudioOptionsDialog().show(getSupportFragmentManager(),
-						NacAlarmAudioOptionsDialog.TAG);
-					//new NacAlarmAudioSourceDialog().show(getSupportFragmentManager(),
-					//	NacAlarmAudioSourceDialog.TAG);
-
-					//card.respondToAudioSourceButtonClick(view);
+					showAudioOptionsDialog(card);
+					card.performHapticFeedback(view);
 				}
 			});
 	}
@@ -1137,6 +1182,33 @@ public class NacMainActivity
 	}
 
 	/**
+	 * Show the audio options dialog.
+	 */
+	public void showAudioOptionsDialog(NacCardHolder card)
+	{
+		NacAlarmAudioOptionsDialog dialog = new NacAlarmAudioOptionsDialog();
+		NacAlarm alarm = card.getAlarm();
+
+		dialog.setAlarmId(alarm.getId());
+		dialog.setOnAudioOptionClickedListener(NacMainActivity.this);
+		dialog.show(getSupportFragmentManager(), NacAlarmAudioOptionsDialog.TAG);
+	}
+
+	/**
+	 * Show the audio source dialog.
+	 */
+	public void showAudioSourceDialog()
+	{
+		NacAlarmAudioSourceDialog dialog = new NacAlarmAudioSourceDialog();
+		NacAlarm alarm = this.getAudioOptionsAlarm();
+		String audioSource = alarm.getAudioSource();
+
+		dialog.setDefaultAudioSource(audioSource);
+		dialog.setOnAudioSourceSelectedListener(this);
+		dialog.show(getSupportFragmentManager(), NacAlarmAudioSourceDialog.TAG);
+	}
+
+	/**
 	 * Show a snackbar for the next alarm that will run.
 	 */
 	public void showNextAlarmSnackbar()
@@ -1197,6 +1269,22 @@ public class NacMainActivity
 	{
 		NacSnackbar snackbar = this.getSnackbar();
 		snackbar.show(message, action, listener, true);
+	}
+
+	/**
+	 * Show the text-to-speech dialog.
+	 */
+	public void showTextToSpeechDialog()
+	{
+		NacAlarmTextToSpeechDialog dialog = new NacAlarmTextToSpeechDialog();
+		NacAlarm alarm = this.getAudioOptionsAlarm();
+		boolean useTts = alarm.shouldUseTts();
+		int freq = alarm.getTtsFrequency();
+
+		dialog.setDefaultUseTts(useTts);
+		dialog.setDefaultTtsFrequency(freq);
+		dialog.setOnTextToSpeechOptionsSelectedListener(this);
+		dialog.show(getSupportFragmentManager(), NacAlarmTextToSpeechDialog.TAG);
 	}
 
 	/**

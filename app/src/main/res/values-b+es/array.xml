@@ -1,12 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+	<!-- TODO: Translate this -->
+	<string-array name="audio_options">
+		<item>Audio source</item>
+		<item>Text-to-speech</item>
+	</string-array>
+
 	<string-array name="audio_sources">
 		<item>Alarma</item>
 		<item>Multimedia</item>
 		<item>Notificación</item>
 		<item>Tono de llamda</item>
 		<item>Sistema</item>
+	</string-array>
+
+	<string-array name="tts_frequency">
+		<item>Una vez</item>
+		<item>Cada 1 min</item>
+		<item>Cada 2 min</item>
+		<item>Cada 3 min</item>
+		<item>Cada 4 min</item>
+		<item>Cada 5 min</item>
+		<item>Cada 6 min</item>
+		<item>Cada 7 min</item>
+		<item>Cada 8 min</item>
+		<item>Cada 9 min</item>
+		<item>Cada 10 min</item>
+		<item>Cada 11 min</item>
+		<item>Cada 12 min</item>
+		<item>Cada 13 min</item>
+		<item>Cada 14 min</item>
+		<item>Cada 15 min</item>
+		<item>Cada 16 min</item>
+		<item>Cada 17 min</item>
+		<item>Cada 18 min</item>
+		<item>Cada 19 min</item>
+		<item>Cada 20 min</item>
+		<item>Cada 21 min</item>
+		<item>Cada 22 min</item>
+		<item>Cada 23 min</item>
+		<item>Cada 24 min</item>
+		<item>Cada 25 min</item>
+		<item>Cada 26 min</item>
+		<item>Cada 27 min</item>
+		<item>Cada 28 min</item>
+		<item>Cada 29 min</item>
+		<item>Cada 30 min</item>
 	</string-array>
 
 	<string-array name="days_of_week">

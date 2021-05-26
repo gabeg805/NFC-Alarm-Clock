@@ -357,22 +357,6 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Frequency interval.
-	 */
-	public String getFrequencyInterval()
-	{
-		return this.getString(R.string.frequency_interval);
-	}
-
-	/**
-	 * @return Frequency once.
-	 */
-	public String getFrequencyOnce()
-	{
-		return this.getString(R.string.frequency_once);
-	}
-
-	/**
 	 * @return Is disabled.
 	 */
 	public String getIsDisabled()
@@ -686,6 +670,14 @@ public class NacSharedConstants
 	public String getStateUnknown()
 	{
 		return this.getString(R.string.state_unknown);
+	}
+
+	/**
+	 * @return The different text-to-speech frequencies.
+	 */
+	public List<String> getTextToSpeechFrequency()
+	{
+		return this.getStringList(R.array.tts_frequency);
 	}
 
 	/**

@@ -95,7 +95,7 @@
 	<string name="title_color">Select a color</string>
 	<string name="title_audio_option">Select an audio option</string>
 	<string name="title_audio_source">Select an audio source</string>
-	<string name="title_audio_tts">Select a text-to-speech</string>
+	<string name="title_audio_tts">Select text-to-speech options</string>
 	<string name="title_next_alarm_format">Select a format</string>
 	<string name="title_speak_frequency">Select speak frequency</string>
 	<string name="title_folder_selected">You selected a folder</string>
@@ -129,8 +129,6 @@
 
 
 	<!-- Miscellaneous -->
-	<string name="frequency_once">Once</string>
-	<string name="frequency_interval">Every</string>
 	<string name="next_alarm">Next alarm</string>
 	<string name="will_run">Will run</string>
 	<string name="time_in">in</string>
@@ -399,7 +397,7 @@
 	<!-- Speak to me -->
 	<string name="speak_to_me">Speak to me</string>
 	<string name="speak_to_me_key">pref_speak_to_me</string>
-	<string name="speak_to_me_true">Say the current time when the alarm goes off. (Experimental)</string>
+	<string name="speak_to_me_true">Say the current time when the alarm goes off.</string>
 	<string name="speak_to_me_false">Do not say anything.</string>
 
 

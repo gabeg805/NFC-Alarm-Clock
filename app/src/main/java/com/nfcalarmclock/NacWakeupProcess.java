@@ -89,7 +89,6 @@ public class NacWakeupProcess
 	private boolean canPlayMusic()
 	{
 		NacAlarm alarm = this.getAlarm();
-
 		return (alarm != null) && alarm.hasMedia();
 	}
 
@@ -99,8 +98,10 @@ public class NacWakeupProcess
 	 */
 	private boolean canUseTts()
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-		return (shared != null) && shared.getSpeakToMe();
+		//NacSharedPreferences shared = this.getSharedPreferences();
+		//return (shared != null) && shared.getSpeakToMe();
+		NacAlarm alarm = this.getAlarm();
+		return (alarm != null) && alarm.shouldUseTts();
 	}
 
 	/**
@@ -127,16 +128,14 @@ public class NacWakeupProcess
 	 */
 	private void cleanupPlayer()
 	{
-		Context context = this.getContext();
 		NacMediaPlayer player = this.getMediaPlayer();
 
-		if (player == null)
+		if (player != null)
 		{
-			player = new NacMediaPlayer(context);
+			player.resetWrapper();
+			player.releaseWrapper();
 		}
 
-		player.resetWrapper();
-		player.releaseWrapper();
 		this.mPlayer = null;
 	}
 
@@ -173,6 +172,8 @@ public class NacWakeupProcess
 		{
 			vibrator.cancel();
 		}
+
+		this.mVibrator = null;
 	}
 
 	/**
@@ -240,7 +241,9 @@ public class NacWakeupProcess
 	private String getTimeToSay()
 	{
 		Context context = this.getContext();
-		NacSharedConstants cons = new NacSharedConstants(context);
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacSharedConstants cons = shared.getConstants();
+
 		return cons.getSpeakToMe(context);
 	}
 
@@ -314,8 +317,8 @@ public class NacWakeupProcess
 	 */
 	private void speak()
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-		final long freq = shared.getSpeakFrequency() * 60L * 1000L;
+		NacAlarm alarm = this.getAlarm();
+		final long freq = alarm.getTtsFrequency() * 60L * 1000L;
 		final Handler handler = this.getSpeakHandler();
 		final Runnable sayTime = new Runnable()
 			{

@@ -127,8 +127,6 @@
 
 
 	<!-- Miscellaneous -->
-	<string name="frequency_once">Una vez</string>
-	<string name="frequency_interval">Cada</string>
 	<string name="next_alarm">Próxima alarma</string>
 	<string name="will_run">Va sonar</string>
 	<string name="time_in">en</string>
@@ -397,7 +395,7 @@
 	<!-- Speak to me -->
 	<string name="speak_to_me">Habla me</string>
 	<string name="speak_to_me_key">pref_speak_to_me</string>
-	<string name="speak_to_me_true">Decir la hora cuando la alarma suena. (Experimental)</string>
+	<string name="speak_to_me_true">Decir la hora cuando la alarma suena.</string>
 	<string name="speak_to_me_false">No decir nada.</string>
 
 
