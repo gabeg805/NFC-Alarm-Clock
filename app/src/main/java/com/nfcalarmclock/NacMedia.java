@@ -428,7 +428,7 @@ public class NacMedia
 		String column = MediaStore.Audio.Media.TITLE;
 		String title = NacMedia.getColumnFromCursor(context, uri, column);
 
-		if (title.isEmpty() || title.equals("<unknown>"))
+		if ((title == null) || title.isEmpty() || title.equals("<unknown>"))
 		{
 			NacSharedConstants cons = new NacSharedConstants(context);
 			title = cons.getStateUnknown();

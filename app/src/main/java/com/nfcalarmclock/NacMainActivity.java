@@ -459,6 +459,9 @@ public class NacMainActivity
 		return this.mIsActivityShown;
 	}
 
+	/**
+	 * Called when an item in the audio options dialog is clicked.
+	 */
 	@Override
 	public void onAudioOptionClicked(long alarmId, int which)
 	{
@@ -477,6 +480,9 @@ public class NacMainActivity
 		}
 	}
 
+	/**
+	 * Called when an audio source is selected.
+	 */
 	@Override
 	public void onAudioSourceSelected(String audioSource)
 	{
@@ -486,6 +492,9 @@ public class NacMainActivity
 		this.getAlarmViewModel().update(this, alarm);
 	}
 
+	/**
+	 * Called when a text-to-speech option is selected.
+	 */
 	@Override
 	public void onTextToSpeechOptionsSelected(boolean useTts, int freq)
 	{
@@ -866,6 +875,7 @@ public class NacMainActivity
 		super.onResume();
 
 		this.setIsActivityShown(true);
+		this.setupRefreshMainActivity();
 		// Will have to redraw colors here?
 		this.setupFloatingActionButton();
 		this.setupGoogleRatingDialog();

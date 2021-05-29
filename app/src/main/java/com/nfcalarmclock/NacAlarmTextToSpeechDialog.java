@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -215,6 +217,7 @@ public class NacAlarmTextToSpeechDialog
 		this.setupShouldUseTts();
 		this.setupTtsFrequencyPicker();
 		this.setupTtsFrequencyEnabled();
+		this.setupShouldUseTtsColor();
 		this.setupDialogColor();
 	}
 
@@ -277,6 +280,22 @@ public class NacAlarmTextToSpeechDialog
 
 		this.getShouldUseTtsCheckBox().setChecked(useTts);
 		this.setupShouldUseTtsSummary();
+	}
+
+	/**
+	 * Setup the summary text for whether text-to-speech should be used or not.
+	 */
+	private void setupShouldUseTtsColor()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+
+		int[] colors = new int[] { shared.getThemeColor(), Color.GRAY };
+		int[][] states = new int[][] {
+			new int[] {  android.R.attr.state_checked },
+			new int[] { -android.R.attr.state_checked } };
+		ColorStateList colorStateList = new ColorStateList(states, colors);
+
+		this.getShouldUseTtsCheckBox().setButtonTintList(colorStateList);
 	}
 
 	/**

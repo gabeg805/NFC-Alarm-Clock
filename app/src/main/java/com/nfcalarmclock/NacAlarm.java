@@ -211,7 +211,9 @@ public class NacAlarm
 					.setMediaPath(shared.getMediaPath())
 					.setVolume(shared.getVolume())
 					.setAudioSource(shared.getAudioSource())
-					.setName(shared.getName());
+					.setName(shared.getName())
+					.setUseTts(shared.getSpeakToMe())
+					.setTtsFrequency(shared.getSpeakFrequency());
 			}
 		}
 
@@ -417,6 +419,19 @@ public class NacAlarm
 		}
 
 		/**
+		 * Set the frequency at which to use TTS, in units of min.
+		 *
+		 * @param  freq  The TTS frequency.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setTtsFrequency(int freq)
+		{
+			this.getAlarm().setTtsFrequency(freq);
+			return this;
+		}
+
+		/**
 		 * Set whether the alarm should use NFC to dismiss or not.
 		 *
 		 * @param  useNfc  True if the phone should use NFC to dismiss, and False
@@ -427,6 +442,19 @@ public class NacAlarm
 		public Builder setUseNfc(boolean useNfc)
 		{
 			this.getAlarm().setUseNfc(useNfc);
+			return this;
+		}
+
+		/**
+		 * Set whether the alarm should use TTS or not.
+		 *
+		 * @param  useTts  True if should use TTS, and False otherwise.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setUseTts(boolean useTts)
+		{
+			this.getAlarm().setUseTts(useTts);
 			return this;
 		}
 

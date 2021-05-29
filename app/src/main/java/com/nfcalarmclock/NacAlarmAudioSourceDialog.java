@@ -1,20 +1,24 @@
 package com.nfcalarmclock;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import java.util.List;
 
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 
 /**
  */
@@ -46,6 +50,11 @@ public class NacAlarmAudioSourceDialog
 	private NacSharedPreferences mSharedPreferences;
 
 	/**
+	 * Radio button group for each alarm source.
+	 */
+	private RadioGroup mRadioGroup;
+
+	/**
 	 * Listener for when an audio source is selected.
 	 */
 	private OnAudioSourceSelectedListener mOnAudioSourceSelectedListener;
@@ -67,17 +76,30 @@ public class NacAlarmAudioSourceDialog
 	}
 
 	/**
+	 * Get the list of all audio sources.
+	 *
+	 * @return The list of all audio sources.
+	 */
+	private List<String> getAllAudioSources()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacSharedConstants cons = shared.getConstants();
+
+		return cons.getAudioSources();
+	}
+
+	/**
 	 * Get the selected audio source.
 	 *
 	 * @return The selected audio source.
 	 */
 	public String getAudioSource()
 	{
-		ListView listview = ((AlertDialog) getDialog()).getListView();
-		ListAdapter adapter = listview.getAdapter();
-		int position = listview.getCheckedItemPosition();
+		RadioGroup group = this.getRadioGroup();
+		int checkedId = group.getCheckedRadioButtonId();
+		RadioButton button = (RadioButton) group.findViewById(checkedId);
 
-		return (String) adapter.getItem(position);
+		return button.getText().toString();
 	}
 
 	/**
@@ -88,6 +110,16 @@ public class NacAlarmAudioSourceDialog
 	public String getDefaultAudioSource()
 	{
 		return this.mDefaultAudioSource;
+	}
+
+	/**
+	 * Get the radio group for the audio sources.
+	 *
+	 * @return The audio sources radio group.
+	 */
+	public RadioGroup getRadioGroup()
+	{
+		return this.mRadioGroup;
 	}
 
 	/**
@@ -118,10 +150,11 @@ public class NacAlarmAudioSourceDialog
 	{
 		return new AlertDialog.Builder(requireContext())
 			.setTitle(getString(R.string.title_audio_source))
-			.setSingleChoiceItems(R.array.audio_sources, -1, (dialog, which) -> {})
+			//.setSingleChoiceItems(R.array.audio_sources, -1, (dialog, which) -> {})
 			.setPositiveButton(getString(R.string.action_ok), (dialog, which) ->
 				this.callOnAudioSourceSelectedListener())
 			.setNegativeButton(getString(R.string.action_cancel), (dialog, which) -> {})
+			.setView(R.layout.dlg_alarm_audio_source)
 			.create();
 	}
 
@@ -132,10 +165,13 @@ public class NacAlarmAudioSourceDialog
 	{
 		super.onResume();
 
+		AlertDialog dialog = (AlertDialog) getDialog();
 		Context context = getContext();
-		this.mSharedPreferences = new NacSharedPreferences(context);
 
-		this.setupAudioSource();
+		this.mSharedPreferences = new NacSharedPreferences(context);
+		this.mRadioGroup = dialog.findViewById(R.id.audio_sources);
+
+		this.setupAudioSources();
 		this.setupAudioSourceColor();
 		this.setupDialogColor();
 	}
@@ -167,21 +203,31 @@ public class NacAlarmAudioSourceDialog
 	/**
 	 * Setup the audio source.
 	 */
-	private void setupAudioSource()
+	private void setupAudioSources()
 	{
-		AlertDialog dialog = (AlertDialog) getDialog();
-		ListView listview = dialog.getListView();
-		ListAdapter adapter = listview.getAdapter();
-		String audioSource = this.getDefaultAudioSource();
+		RadioGroup group = this.getRadioGroup();
+		int count = group.getChildCount();
 
-		for (int i=0; i < adapter.getCount(); i++)
+		if (count > 0)
 		{
-			String item = (String) adapter.getItem(i);
+			return;
+		}
 
-			if (item.equals(audioSource))
+		LayoutInflater inflater = getLayoutInflater();
+		String defSource = this.getDefaultAudioSource();
+
+		for (String s : this.getAllAudioSources())
+		{
+			View view = inflater.inflate(R.layout.radio_button, group, true);
+			RadioButton button = view.findViewById(R.id.radio_button);
+			int id = View.generateViewId();
+
+			button.setId(id);
+			button.setText(s);
+
+			if (!defSource.isEmpty() && s.equals(defSource))
 			{
-				listview.setItemChecked(i, true);
-				return;
+				button.setChecked(true);
 			}
 		}
 	}
@@ -191,23 +237,20 @@ public class NacAlarmAudioSourceDialog
 	 */
 	private void setupAudioSourceColor()
 	{
-		//ListView listview = ((AlertDialog) getDialog()).getListView();
-		//ListAdapter adapter = listview.getAdapter();
+		NacSharedPreferences shared = this.getSharedPreferences();
+		RadioGroup group = this.getRadioGroup();
 
-		//NacUtility.printf("List view count : %d | %d", listview.getChildCount(), adapter.getCount());
+		int[] colors = new int[] { shared.getThemeColor(), Color.GRAY };
+		int[][] states = new int[][] {
+			new int[] {  android.R.attr.state_checked },
+			new int[] { -android.R.attr.state_checked } };
+		ColorStateList colorStateList = new ColorStateList(states, colors);
 
-		//for (int i=0; i < adapter.getCount(); i++)
-		//{
-		//	//RadioButton item = (RadioButton) adapter.getItem(i);
-		//}
-
-		//int[] colors = new int[] { themeColor, Color.GRAY };
-		//int[][] states = new int[][] {
-		//	new int[] {  android.R.attr.state_checked },
-		//	new int[] { -android.R.attr.state_checked } };
-		//ColorStateList stateList = new ColorStateList(states, colors);
-
-		////radioButton.setButtonTintList(stateList);
+		for (int i=0; i < group.getChildCount(); i++)
+		{
+			RadioButton button = (RadioButton) group.getChildAt(i);
+			button.setButtonTintList(colorStateList);
+		}
 	}
 
 	/**

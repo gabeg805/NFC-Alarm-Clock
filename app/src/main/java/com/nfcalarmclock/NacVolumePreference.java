@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.SeekBar;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
+import com.google.android.material.button.MaterialButton;
 
 /**
  * Preference to choose the default volume and audio source.
@@ -22,9 +23,16 @@ import androidx.preference.PreferenceViewHolder;
 public class NacVolumePreference
 	extends Preference
 	implements View.OnClickListener,
-		NacDialog.OnDismissListener,
 		SeekBar.OnSeekBarChangeListener
 {
+
+	/**
+	 * Listener for when the audio options button is clicked.
+	 */
+	public interface OnAudioOptionsClickedListener
+	{
+		public void onAudioOptionsClicked();
+	}
 
 	/**
 	 * Volume level.
@@ -32,19 +40,24 @@ public class NacVolumePreference
 	protected int mValue;
 
 	/**
-	 * Audio source.
-	 */
-	protected String mAudioSource;
-
-	/**
 	 * Seekbar.
 	 */
 	protected SeekBar mVolumeSeekBar;
 
 	/**
+	 * Audio options button.
+	 */
+	protected MaterialButton mAudioOptionsButton;
+
+	/**
 	 * Shared preferences.
 	 */
-	protected NacSharedPreferences mShared;
+	protected NacSharedPreferences mSharedPreferences;
+
+	/**
+	 * Audio options button clicked listner.
+	 */
+	protected OnAudioOptionsClickedListener mOnAudioOptionsClickedListener;
 
 	/**
 	 */
@@ -69,17 +82,38 @@ public class NacVolumePreference
 	}
 
 	/**
-	 * @return Audio source.
+	 * Call the listener to when the audio options button is clicked.
 	 */
-	private String getAudioSource()
+	public void callOnAudioOptionsClickedListener()
 	{
-		return this.mAudioSource;
+		OnAudioOptionsClickedListener listener = this.getOnAudioOptionsClickedListener();
+
+		if (listener != null)
+		{
+			listener.onAudioOptionsClicked();
+		}
+	}
+
+	/**
+	 * @return Audio options button.
+	 */
+	public MaterialButton getAudioOptionsButton()
+	{
+		return this.mAudioOptionsButton;
+	}
+
+	/**
+	 * @return Listener to call when the audio options button is clicked.
+	 */
+	public OnAudioOptionsClickedListener getOnAudioOptionsClickedListener()
+	{
+		return this.mOnAudioOptionsClickedListener;
 	}
 
 	/**
 	 * @return Volume seekbar.
 	 */
-	private SeekBar getVolumeSeekBar()
+	public SeekBar getVolumeSeekBar()
 	{
 		return this.mVolumeSeekBar;
 	}
@@ -87,9 +121,9 @@ public class NacVolumePreference
 	/**
 	 * @return Shared preferences.
 	 */
-	private NacSharedPreferences getShared()
+	private NacSharedPreferences getNacSharedPreferences()
 	{
-		return this.mShared;
+		return this.mSharedPreferences;
 	}
 
 	/**
@@ -100,9 +134,7 @@ public class NacVolumePreference
 		super.onAttached();
 
 		Context context = getContext();
-		NacSharedPreferences shared = new NacSharedPreferences(context);
-		this.mAudioSource = shared.getAudioSource();
-		this.mShared = shared;
+		this.mSharedPreferences = new NacSharedPreferences(context);
 	}
 
 	/**
@@ -113,12 +145,13 @@ public class NacVolumePreference
 		super.onBindViewHolder(holder);
 
 		SeekBar seekbar = (SeekBar) holder.findViewById(R.id.volume_slider);
-		View image = holder.findViewById(R.id.widget);
+		MaterialButton audioOptions = (MaterialButton) holder.findViewById(R.id.widget);
 		this.mVolumeSeekBar = seekbar;
+		this.mAudioOptionsButton = audioOptions;
 
 		seekbar.setProgress(this.mValue);
 		seekbar.setOnSeekBarChangeListener(this);
-		image.setOnClickListener(this);
+		audioOptions.setOnClickListener(this);
 		this.setSeekBarColor();
 	}
 
@@ -127,27 +160,7 @@ public class NacVolumePreference
 	@Override
 	public void onClick(View view)
 	{
-		Context context = getContext();
-		String audioSource = this.getAudioSource();
-		NacAudioSourceDialog dialog = new NacAudioSourceDialog();
-
-		dialog.build(context);
-		dialog.saveData(audioSource);
-		dialog.addOnDismissListener(this);
-		dialog.show();
-	}
-
-	/**
-	 */
-	@Override
-	public boolean onDismissDialog(NacDialog dialog)
-	{
-		NacSharedPreferences shared = this.getShared();
-		String audioSource = dialog.getDataString();
-		this.mAudioSource = audioSource;
-
-		shared.editAudioSource(audioSource);
-		return true;
+		this.callOnAudioOptionsClickedListener();
 	}
 
 	/**
@@ -200,6 +213,17 @@ public class NacVolumePreference
 	}
 
 	/**
+	 * Set the listener for when the audio options button is clicked.
+	 *
+	 * @param  listener  Listener for when the audio options button is clicked.
+	 */
+	public void setOnAudioOptionsClickedListener(
+		OnAudioOptionsClickedListener listener)
+	{
+		this.mOnAudioOptionsClickedListener = listener;
+	}
+
+	/**
 	 * Set the volume seekbar color.
 	 */
 	@SuppressWarnings("deprecation")
@@ -207,7 +231,7 @@ public class NacVolumePreference
 	@SuppressLint("NewApi")
 	public void setSeekBarColor()
 	{
-		NacSharedPreferences shared = this.getShared();
+		NacSharedPreferences shared = this.getNacSharedPreferences();
 		SeekBar seekbar = this.getVolumeSeekBar();
 		int themeColor = shared.getThemeColor();
 		Drawable progressDrawable = seekbar.getProgressDrawable();
