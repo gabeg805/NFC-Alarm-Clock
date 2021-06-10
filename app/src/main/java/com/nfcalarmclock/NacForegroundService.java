@@ -439,7 +439,6 @@ public class NacForegroundService
 		else
 		{
 			NacUtility.quickToast(this, cons.getErrorMessageSnooze());
-			return;
 		}
 	}
 
@@ -467,9 +466,7 @@ public class NacForegroundService
 
 		if (alarm != null)
 		{
-			NacUtility.quickToast(this, "Time active: "+String.valueOf(timeActive));
 			alarm.addToTimeActive(timeActive);
-			NacUtility.quickToast(this, "Total time: "+String.valueOf(alarm.getTimeActive()));
 		}
 	}
 

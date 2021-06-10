@@ -59,28 +59,9 @@ public class NacWakeupProcess
 		this.mAlarm = alarm;
 		this.mSharedPreferences = new NacSharedPreferences(context);
 
-		// Setup vibrate
-		if (this.canVibrate())
-		{
-			this.mVibrator = (Vibrator) context.getSystemService(
-				Context.VIBRATOR_SERVICE);
-		}
-
-		// Setup music player
-		if (this.canPlayMusic())
-		{
-			this.mPlayer = new NacMediaPlayer(context);
-		}
-
-		// Setup TTS
-		if (this.canUseTts())
-		{
-			NacTextToSpeech speech = new NacTextToSpeech(context, this);
-			speech.getAudioAttributes().merge(alarm);
-
-			this.mSpeech = speech;
-			this.mSpeakHandler = new Handler();
-		}
+		this.setupVibrator(context);
+		this.setupMusicPlayer(context);
+		this.setupTextToSpeech(context, alarm);
 	}
 
 	/**
@@ -268,7 +249,12 @@ public class NacWakeupProcess
 	@Override
 	public void onStartSpeaking(NacTextToSpeech tts, NacAudio.Attributes attrs)
 	{
-		this.cleanupVibrate();
+		Vibrator vibrator = this.getVibrator();
+
+		if (vibrator != null)
+		{
+			vibrator.cancel();
+		}
 	}
 
 	/**
@@ -294,6 +280,44 @@ public class NacWakeupProcess
 		else
 		{
 			player.startWrapper();
+		}
+	}
+
+	/**
+	 * Setup the music player.
+	 */
+	private void setupMusicPlayer(Context context)
+	{
+		if (this.canPlayMusic())
+		{
+			this.mPlayer = new NacMediaPlayer(context);
+		}
+	}
+
+	/**
+	 * Setup the text-to-speech engine.
+	 */
+	private void setupTextToSpeech(Context context, NacAlarm alarm)
+	{
+		if (this.canUseTts())
+		{
+			NacTextToSpeech speech = new NacTextToSpeech(context, this);
+			speech.getAudioAttributes().merge(alarm);
+
+			this.mSpeech = speech;
+			this.mSpeakHandler = new Handler();
+		}
+	}
+
+	/**
+	 * Setup the phone vibrator.
+	 */
+	private void setupVibrator(Context context)
+	{
+		if (this.canVibrate())
+		{
+			this.mVibrator = (Vibrator) context.getSystemService(
+				Context.VIBRATOR_SERVICE);
 		}
 	}
 

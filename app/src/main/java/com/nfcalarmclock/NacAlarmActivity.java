@@ -96,7 +96,7 @@ public class NacAlarmActivity
 	{
 		NacAlarm alarm = this.getAlarm();
 		NacContext.dismissForegroundService(this, alarm);
-		finish();
+		//finish();
 	}
 
 	/**
@@ -433,7 +433,7 @@ public class NacAlarmActivity
 		}
 
 		NacContext.snoozeForegroundService(this, alarm);
-		finish();
+		//finish();
 	}
 
 	/**
