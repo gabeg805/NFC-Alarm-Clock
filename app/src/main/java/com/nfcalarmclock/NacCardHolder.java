@@ -1476,7 +1476,9 @@ public class NacCardHolder
 
 		this.getDismissParentView().setVisibility(View.VISIBLE);
 		heights[1] = NacUtility.getHeight(cardView);
-		this.getDismissParentView().setVisibility(View.GONE);
+
+		this.setDismissView();
+		//this.getDismissParentView().setVisibility(View.GONE);
 	}
 
 	/**

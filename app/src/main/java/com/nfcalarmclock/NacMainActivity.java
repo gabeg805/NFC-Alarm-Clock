@@ -1132,6 +1132,7 @@ public class NacMainActivity
 	private void setupRefreshMainActivity()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
+
 		if (shared.getShouldRefreshMainActivity())
 		{
 			shared.editShouldRefreshMainActivity(false);
