@@ -3,6 +3,7 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -400,6 +401,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getAutoDismiss();
 		int value = this.getDefaults().getAutoDismissIndex();
+
 		return this.getInt(key, value);
 	}
 
@@ -409,30 +411,19 @@ public class NacSharedPreferences
 	@SuppressWarnings("unused")
 	public String getAutoDismissSummary()
 	{
-		Context context = this.getContext();
+		NacSharedConstants cons = this.getConstants();
 		int index = this.getAutoDismiss();
-		return NacSharedPreferences.getAutoDismissSummary(context, index);
+
+		return NacSharedPreferences.getAutoDismissSummary(cons, index);
 	}
 
 	/**
 	 * @return The summary text to use when displaying the auto dismiss widget.
 	 */
-	public static String getAutoDismissSummary(Context context, int index)
+	public static String getAutoDismissSummary(NacSharedConstants cons, int index)
 	{
-		NacSharedConstants cons = new NacSharedConstants(context);
-		int value = NacSharedPreferences.getAutoDismissTime(index);
-		String dismiss = String.valueOf(value);
-
-		if (index == 0)
-		{
-			return cons.getStateOff();
-		}
-		else
-		{
-			Locale locale = Locale.getDefault();
-			String unit = cons.getUnitMinute(index);
-			return String.format(locale, "%1$s %2$s", dismiss, unit);
-		}
+		List<String> summaries = cons.getAutoDismissSummaries();
+		return summaries.get(index);
 	}
 
 	/**
@@ -446,7 +437,7 @@ public class NacSharedPreferences
 
 	/**
 	 * @return Calculate the auto dismiss duration from an index value,
-	 *         corresponding to a location in the spainner widget.
+	 *     corresponding to a location in the spainner widget.
 	 */
 	public static int getAutoDismissTime(int index)
 	{
@@ -622,6 +613,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getMaxSnooze();
 		int value = this.getDefaults().getMaxSnoozeIndex();
+
 		return this.getInt(key, value);
 	}
 
@@ -631,31 +623,19 @@ public class NacSharedPreferences
 	@SuppressWarnings("unused")
 	public String getMaxSnoozeSummary()
 	{
-		Context context = this.getContext();
+		NacSharedConstants cons = this.getConstants();
 		int index = this.getMaxSnooze();
-		return NacSharedPreferences.getMaxSnoozeSummary(context, index);
+
+		return NacSharedPreferences.getMaxSnoozeSummary(cons, index);
 	}
 
 	/**
 	 * @return The summary text to use when displaying the max snooze widget.
 	 */
-	public static String getMaxSnoozeSummary(Context context, int index)
+	public static String getMaxSnoozeSummary(NacSharedConstants cons, int index)
 	{
-		NacSharedConstants cons = new NacSharedConstants(context);
-		int value = NacSharedPreferences.getMaxSnoozeValue(index);
-
-		if (index == 0)
-		{
-			return cons.getNone();
-		}
-		else if (index == 11)
-		{
-			return "Unlimited";
-		}
-		else
-		{
-			return String.valueOf(value);
-		}
+		List<String> summaries = cons.getMaxSnoozeSummaries();
+		return summaries.get(index);
 	}
 
 	/**
@@ -888,6 +868,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getShuffle();
 		boolean value = this.getDefaults().getShufflePlaylist();
+
 		return this.getBoolean(key, value);
 	}
 
@@ -898,6 +879,7 @@ public class NacSharedPreferences
 	{
 		String key = NacSharedKeys.getSnoozeCount(id);
 		int value = this.getDefaults().getSnoozeCount();
+
 		return this.getInt(key, value);
 	}
 
@@ -908,6 +890,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getSnoozeDuration();
 		int value = this.getDefaults().getSnoozeDurationIndex();
+
 		return this.getInt(key, value);
 	}
 
@@ -917,23 +900,19 @@ public class NacSharedPreferences
 	@SuppressWarnings("unused")
 	public String getSnoozeDurationSummary()
 	{
-		Context context = this.getContext();
+		NacSharedConstants cons = this.getConstants();
 		int index = this.getSnoozeDuration();
 
-		return NacSharedPreferences.getSnoozeDurationSummary(context, index);
+		return NacSharedPreferences.getSnoozeDurationSummary(cons, index);
 	}
 
 	/**
 	 * @return The summary text for the snooze duration widget.
 	 */
-	public static String getSnoozeDurationSummary(Context context, int index)
+	public static String getSnoozeDurationSummary(NacSharedConstants cons, int index)
 	{
-		NacSharedConstants cons = new NacSharedConstants(context);
-		int value = NacSharedPreferences.getSnoozeDurationValue(index);
-		Locale locale = Locale.getDefault();
-		String unit = cons.getUnitMinute(index+1);
-
-		return String.format(locale, "%1$s %2$s", value, unit);
+		List<String> summaries = cons.getSnoozeDurationSummaries();
+		return summaries.get(index);
 	}
 
 	/**

@@ -3,15 +3,15 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 
 /**
- * Preference that displays how long to snooze for.
+ * Preference that displays the max number of snoozes for an alarm.
  */
 public class NacMaxSnoozePreference
 	extends Preference
-	implements Preference.OnPreferenceClickListener,
-		NacDialog.OnDismissListener
+	implements NacScrollablePickerDialogFragment.OnScrollablePickerOptionSelectedListener
 {
 
 	/**
@@ -40,7 +40,6 @@ public class NacMaxSnoozePreference
 	{
 		super(context, attrs, style);
 		setLayoutResource(R.layout.nac_preference);
-		setOnPreferenceClickListener(this);
 	}
 
 	/**
@@ -48,21 +47,20 @@ public class NacMaxSnoozePreference
 	@Override
 	public CharSequence getSummary()
 	{
-		Context context = getContext();
-		return NacSharedPreferences.getMaxSnoozeSummary(context, this.mValue);
+		NacSharedConstants cons = new NacSharedConstants(getContext());
+		int value = this.getValue();
+
+		return NacSharedPreferences.getMaxSnoozeSummary(cons, value);
 	}
 
 	/**
-	 * Save the spinner index value.
+	 * Get the preference value.
+	 *
+	 * @return The preference value.
 	 */
-	@Override
-	public boolean onDismissDialog(NacDialog dialog)
+	public int getValue()
 	{
-		this.mValue = ((NacSpinnerDialog)dialog).getValue();
-
-		persistInt(this.mValue);
-		notifyChanged();
-		return true;
+		return this.mValue;
 	}
 
 	/**
@@ -71,25 +69,20 @@ public class NacMaxSnoozePreference
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		Context context = getContext();
-		NacSharedDefaults defs = new NacSharedDefaults(context);
-
+		NacSharedDefaults defs = new NacSharedDefaults(getContext());
 		return a.getInteger(index, defs.getMaxSnoozeIndex());
 	}
 
 	/**
+	 * Save the selected value from the scrollable picker.
 	 */
 	@Override
-	public boolean onPreferenceClick(Preference preference)
+	public void onScrollablePickerOptionSelected(int index)
 	{
-		Context context = getContext();
-		NacMaxSnoozeDialog dialog = new NacMaxSnoozeDialog();
+		this.mValue = index;
 
-		dialog.saveData(this.mValue);
-		dialog.build(context);
-		dialog.addOnDismissListener(this);
-		dialog.show();
-		return true;
+		persistInt(index);
+		notifyChanged();
 	}
 
 	/**
@@ -107,6 +100,19 @@ public class NacMaxSnoozePreference
 			this.mValue = (Integer) defaultValue;
 			persistInt(this.mValue);
 		}
+	}
+
+	/**
+	 * Show the auto dismiss dialog.
+	 */
+	public void showDialog(FragmentManager manager)
+	{
+		NacMaxSnoozeDialog dialog = new NacMaxSnoozeDialog();
+		int value = this.getValue();
+
+		dialog.setDefaultScrollablePickerIndex(value);
+		dialog.setOnScrollablePickerOptionSelectedListener(this);
+		dialog.show(manager, NacMaxSnoozeDialog.TAG);
 	}
 
 }

@@ -24,7 +24,7 @@ import java.util.Locale;
 /**
  */
 public class NacAlarmTextToSpeechDialog
-	extends DialogFragment
+	extends NacDialogFragment
 	implements View.OnClickListener
 {
 
@@ -50,11 +50,6 @@ public class NacAlarmTextToSpeechDialog
 	 * Default text-to-speech frequency.
 	 */
 	private int mDefaultTtsFrequency;
-
-	/**
-	 * Shared preferences.
-	 */
-	private NacSharedPreferences mSharedPreferences;
 
 	/**
 	 * Checkbox for setting whether text-to-speech should be used or not.
@@ -127,16 +122,6 @@ public class NacAlarmTextToSpeechDialog
 	}
 
 	/**
-	 * Get the shared preferences.
-	 *
-	 * @return The shared preferences.
-	 */
-	private NacSharedPreferences getSharedPreferences()
-	{
-		return this.mSharedPreferences;
-	}
-
-	/**
 	 * Get the checkbox for setting whether text-to-speech should be used or not.
 	 *
 	 * @return The checkbox for setting whether text-to-speech should be used or not.
@@ -172,11 +157,15 @@ public class NacAlarmTextToSpeechDialog
 	@Override
 	public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
 	{
+		this.setupSharedPreferences();
+
+		NacSharedConstants cons = this.getSharedConstants();
+
 		return new AlertDialog.Builder(requireContext())
-			.setTitle(getString(R.string.title_audio_tts))
-			.setPositiveButton(getString(R.string.action_ok), (dialog, which) ->
+			.setTitle(cons.getTitleTextToSpeech())
+			.setPositiveButton(cons.getActionOk(), (dialog, which) ->
 				this.callOnTextToSpeechOptionsSelectedListener())
-			.setNegativeButton(getString(R.string.action_cancel), (dialog, which) -> {})
+			.setNegativeButton(cons.getActionCancel(), (dialog, which) -> {})
 			.setView(R.layout.dlg_alarm_text_to_speech)
 			.create();
 	}
@@ -203,22 +192,17 @@ public class NacAlarmTextToSpeechDialog
 	{
 		super.onResume();
 
-		Context context = getContext();
 		AlertDialog dialog = (AlertDialog) getDialog();
-
-		this.mSharedPreferences = new NacSharedPreferences(context);
+		RelativeLayout useTtsContainer = dialog.findViewById(R.id.should_use_tts);
 		this.mShouldUseTtsCheckBox = dialog.findViewById(R.id.should_use_tts_checkbox);
 		this.mShouldUseTtsSummary = dialog.findViewById(R.id.should_use_tts_summary);
 		this.mTtsFrequencyPicker = dialog.findViewById(R.id.tts_frequency_picker);
-
-		RelativeLayout useTtsContainer = dialog.findViewById(R.id.should_use_tts);
 
 		useTtsContainer.setOnClickListener(this);
 		this.setupShouldUseTts();
 		this.setupTtsFrequencyPicker();
 		this.setupTtsFrequencyEnabled();
 		this.setupShouldUseTtsColor();
-		this.setupDialogColor();
 	}
 
 	/**
@@ -255,20 +239,6 @@ public class NacAlarmTextToSpeechDialog
 	{
 		this.mOnTextToSpeechOptionsSelectedListener = listener;
 		return this;
-	}
-
-	/**
-	 * Setup the dialog color.
-	 */
-	private void setupDialogColor()
-	{
-		AlertDialog dialog = (AlertDialog) getDialog();
-		Button okButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-		Button cancelButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-		int themeColor = this.getSharedPreferences().getThemeColor();
-
-		okButton.setTextColor(themeColor);
-		cancelButton.setTextColor(themeColor);
 	}
 
 	/**

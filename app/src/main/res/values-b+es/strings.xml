@@ -93,7 +93,9 @@
 	<string name="title_name">Nombre de la alarma</string>
 	<string name="title_days">Seleccione los días</string>
 	<string name="title_color">Elige un color</string>
+	<string name="title_audio_option">Seleccione una opci?n de audio</string>
 	<string name="title_audio_source">Seleccione una fuente de audio</string>
+	<string name="title_tts">Seleccione opciones de texto-a-voz</string>
 	<string name="title_next_alarm_format">Selecciona un estilo</string>
 	<string name="title_speak_frequency">Seleccione la frequencia de hablar</string>
 	<string name="title_folder_selected">Seleccionaste una carpeta</string>

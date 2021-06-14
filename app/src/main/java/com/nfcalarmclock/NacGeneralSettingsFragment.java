@@ -116,27 +116,52 @@ public class NacGeneralSettingsFragment
 			false);
 
 		NacSharedKeys keys = this.getSharedKeys();
-		NacVolumePreference volumePreference = (NacVolumePreference)
-			findPreference(keys.getVolume());
-		this.mMediaPreference = findPreference(keys.getMediaPath());
+
+		NacAutoDismissPreference autoDismissPref = findPreference(keys.getAutoDismiss());
+		NacMaxSnoozePreference maxSnoozePref = findPreference(keys.getMaxSnooze());
+		NacSnoozeDurationPreference snoozeDurationPref = findPreference(keys.getSnoozeDuration());
+		NacVolumePreference volumePref = findPreference(keys.getVolume());
+		NacMediaPreference mediaPref = findPreference(keys.getMediaPath());
+		this.mMediaPreference = mediaPref;
 		this.mActivityLauncher = registerForActivityResult(
 			new ActivityResultContracts.StartActivityForResult(), this);
 
-		volumePreference.setOnAudioOptionsClickedListener(this);
-		this.getMediaPreference().setOnPreferenceClickListener(this);
+		autoDismissPref.setOnPreferenceClickListener(this);
+		maxSnoozePref.setOnPreferenceClickListener(this);
+		snoozeDurationPref.setOnPreferenceClickListener(this);
+		volumePref.setOnAudioOptionsClickedListener(this);
+		mediaPref.setOnPreferenceClickListener(this);
 	}
 
 	/**
 	 */
 	@Override
-	public boolean onPreferenceClick(Preference preference)
+	public boolean onPreferenceClick(Preference pref)
 	{
-		Context context = getContext();
-		NacSharedPreferences shared = this.getSharedPreferences();
-		String media = shared.getMediaPath();
-		Intent intent = NacIntent.toIntent(context, NacMediaActivity.class, media);
+		NacSharedKeys keys = this.getSharedKeys();
+		String k = pref.getKey();
 
-		this.getActivityLauncher().launch(intent);
+		if (k.equals(keys.getAutoDismiss()))
+		{
+			((NacAutoDismissPreference)pref).showDialog(getChildFragmentManager());
+		}
+		else if (k.equals(keys.getMaxSnooze()))
+		{
+			((NacMaxSnoozePreference)pref).showDialog(getChildFragmentManager());
+		}
+		else if (k.equals(keys.getSnoozeDuration()))
+		{
+			((NacSnoozeDurationPreference)pref).showDialog(getChildFragmentManager());
+		}
+		else if (k.equals(keys.getMediaPath()))
+		{
+			String media = this.getSharedPreferences().getMediaPath();
+			Intent intent = NacIntent.toIntent(getContext(), NacMediaActivity.class,
+				media);
+
+			this.getActivityLauncher().launch(intent);
+		}
+
 		return true;
 	}
 

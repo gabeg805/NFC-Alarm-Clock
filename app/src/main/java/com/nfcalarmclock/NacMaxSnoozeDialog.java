@@ -1,56 +1,55 @@
 package com.nfcalarmclock;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import java.util.List;
 
 /**
+ * Select the max number of snoozes allowed for an alarm.
  */
 public class NacMaxSnoozeDialog
-	extends NacSpinnerDialog
-	implements NacDialog.OnShowListener
+	extends NacScrollablePickerDialogFragment
 {
 
 	/**
+	 * Tag for the class.
 	 */
-	public NacMaxSnoozeDialog()
+	public static final String TAG = "NacMaxSnoozeDialog";
+
+	/**
+	 * Get the list of values for the scrollable picker.
+	 *
+	 * @return The list of values for the scrollable picker for the scrollable
+	 *     picker.
+	 */
+	public List<String> getScrollablePickerValues()
 	{
-		this.addOnShowListener(this);
+		NacSharedConstants cons = this.getSharedConstants();
+		return cons.getMaxSnoozeSummaries();
 	}
 
 	/**
-	 * Build the dialog.
 	 */
+	@NonNull
 	@Override
-	public void onBuildDialog(Context context, AlertDialog.Builder builder)
+	public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
 	{
-		NacSharedConstants cons = new NacSharedConstants(context);
+		this.setupSharedPreferences();
 
-		builder.setTitle(cons.getMaxSnooze());
-		setPositiveButton(cons.getActionOk());
-		setNegativeButton(cons.getActionCancel());
-	}
+		NacSharedConstants cons = this.getSharedConstants();
 
-	/**
-	 * Show the dialog.
-	 */
-	@Override
-	public void onShowDialog(NacDialog dialog, View root)
-	{
-		super.onShowDialog(dialog, root);
-
-		Context context = this.getContext();
-		int index = this.getDataInt();
-		int length = 12;
-		String[] values = new String[length];
-
-		for (int i=0; i < length; i++)
-		{
-			values[i] = NacSharedPreferences.getMaxSnoozeSummary(context, i);
-		}
-
-		this.setDisplayedValues(values);
-		this.setValue(index);
+		return new AlertDialog.Builder(requireContext())
+			.setTitle(cons.getMaxSnooze())
+			.setPositiveButton(cons.getActionOk(), (dialog, which) ->
+				this.callOnScrollablePickerOptionSelectedListener())
+			.setNegativeButton(cons.getActionCancel(), (dialog, which) -> {})
+			.setView(R.layout.dlg_scrollable_picker)
+			.create();
 	}
 
 }

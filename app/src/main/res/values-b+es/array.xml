@@ -3,8 +3,8 @@
 
 	<!-- TODO: Translate this -->
 	<string-array name="audio_options">
-		<item>Audio source</item>
-		<item>Text-to-speech</item>
+		<item>Fuente de audio</item>
+		<item>Texto-a-voz</item>
 	</string-array>
 
 	<string-array name="audio_sources">
@@ -57,6 +57,66 @@
 		<item>Jueves</item>
 		<item>Viernes</item>
 		<item>Sabado</item>
+	</string-array>
+
+	<string-array name="auto_dismiss_summaries">
+		<item>Desactivada</item>
+		<item>1 minuto</item>
+		<item>2 minutos</item>
+		<item>3 minutos</item>
+		<item>4 minutos</item>
+		<item>5 minutos</item>
+		<item>10 minutos</item>
+		<item>15 minutos</item>
+		<item>20 minutos</item>
+		<item>25 minutos</item>
+		<item>30 minutos</item>
+		<item>35 minutos</item>
+		<item>40 minutos</item>
+		<item>45 minutos</item>
+		<item>50 minutos</item>
+		<item>55 minutos</item>
+		<item>60 minutos</item>
+	</string-array>
+
+	<string-array name="max_snooze_summaries">
+		<item>Ninguno</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+		<item>5</item>
+		<item>6</item>
+		<item>7</item>
+		<item>8</item>
+		<item>9</item>
+		<item>10</item>
+		<item>Ilimitado</item>
+	</string-array>
+
+	<string-array name="snooze_duration_summaries">
+		<item>1 minuto</item>
+		<item>2 minutos</item>
+		<item>3 minutos</item>
+		<item>4 minutos</item>
+		<item>5 minutos</item>
+		<item>10 minutos</item>
+		<item>15 minutos</item>
+		<item>20 minutos</item>
+		<item>25 minutos</item>
+		<item>30 minutos</item>
+		<item>35 minutos</item>
+		<item>40 minutos</item>
+		<item>45 minutos</item>
+		<item>50 minutos</item>
+		<item>55 minutos</item>
+		<item>60 minutos</item>
+		<item>65 minutos</item>
+		<item>70 minutos</item>
+		<item>75 minutos</item>
+		<item>80 minutos</item>
+		<item>85 minutos</item>
+		<item>90 minutos</item>
 	</string-array>
 
 </resources>

@@ -1,57 +1,55 @@
 package com.nfcalarmclock;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import java.util.List;
 
 /**
+ * Select how long snoozing an alarm should be.
  */
 public class NacSnoozeDurationDialog
-	extends NacSpinnerDialog
-	implements NacDialog.OnShowListener
+	extends NacScrollablePickerDialogFragment
 {
 
 	/**
+	 * Tag for the class.
 	 */
-	public NacSnoozeDurationDialog()
+	public static final String TAG = "NacSnoozeDurationDialog";
+
+	/**
+	 * Get the list of values for the scrollable picker.
+	 *
+	 * @return The list of values for the scrollable picker for the scrollable
+	 *     picker.
+	 */
+	public List<String> getScrollablePickerValues()
 	{
-		this.addOnShowListener(this);
+		NacSharedConstants cons = this.getSharedConstants();
+		return cons.getSnoozeDurationSummaries();
 	}
 
 	/**
-	 * Build the dialog.
 	 */
+	@NonNull
 	@Override
-	public void onBuildDialog(Context context, AlertDialog.Builder builder)
+	public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
 	{
-		NacSharedConstants cons = new NacSharedConstants(context);
+		this.setupSharedPreferences();
 
-		builder.setTitle(cons.getSnoozeDuration());
-		setPositiveButton(cons.getActionOk());
-		setNegativeButton(cons.getActionCancel());
-	}
+		NacSharedConstants cons = this.getSharedConstants();
 
-	/**
-	 * Show the dialog.
-	 */
-	@Override
-	public void onShowDialog(NacDialog dialog, View root)
-	{
-		super.onShowDialog(dialog, root);
-
-		Context context = this.getContext();
-		int index = this.getDataInt();
-		int length = 22;
-		String[] values = new String[length];
-
-		for (int i=0; i < length; i++)
-		{
-			String summary = NacSharedPreferences.getSnoozeDurationSummary(context, i);
-			values[i] = summary.split("\\s+")[0];
-		}
-
-		this.setDisplayedValues(values);
-		this.setValue(index);
+		return new AlertDialog.Builder(requireContext())
+			.setTitle(cons.getSnoozeDuration())
+			.setPositiveButton(cons.getActionOk(), (dialog, which) ->
+				this.callOnScrollablePickerOptionSelectedListener())
+			.setNegativeButton(cons.getActionCancel(), (dialog, which) -> {})
+			.setView(R.layout.dlg_scrollable_picker)
+			.create();
 	}
 
 }

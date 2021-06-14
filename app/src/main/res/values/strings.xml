@@ -95,7 +95,7 @@
 	<string name="title_color">Select a color</string>
 	<string name="title_audio_option">Select an audio option</string>
 	<string name="title_audio_source">Select an audio source</string>
-	<string name="title_audio_tts">Select text-to-speech options</string>
+	<string name="title_tts">Select text-to-speech options</string>
 	<string name="title_next_alarm_format">Select a format</string>
 	<string name="title_speak_frequency">Select speak frequency</string>
 	<string name="title_folder_selected">You selected a folder</string>

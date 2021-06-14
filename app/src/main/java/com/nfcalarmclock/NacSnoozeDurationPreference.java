@@ -3,7 +3,7 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 
 /**
@@ -11,8 +11,7 @@ import androidx.preference.Preference;
  */
 public class NacSnoozeDurationPreference
 	extends Preference
-	implements Preference.OnPreferenceClickListener,
-		NacDialog.OnDismissListener
+	implements NacScrollablePickerDialogFragment.OnScrollablePickerOptionSelectedListener
 {
 
 	/**
@@ -41,7 +40,6 @@ public class NacSnoozeDurationPreference
 	{
 		super(context, attrs, style);
 		setLayoutResource(R.layout.nac_preference);
-		setOnPreferenceClickListener(this);
 	}
 
 	/**
@@ -50,21 +48,20 @@ public class NacSnoozeDurationPreference
 	@Override
 	public CharSequence getSummary()
 	{
-		Context context = getContext();
-		return NacSharedPreferences.getSnoozeDurationSummary(context, this.mValue);
+		NacSharedConstants cons = new NacSharedConstants(getContext());
+		int value = this.getValue();
+
+		return NacSharedPreferences.getSnoozeDurationSummary(cons, value);
 	}
 
 	/**
-	 * Save the spinner index value.
+	 * Get the preference value.
+	 *
+	 * @return The preference value.
 	 */
-	@Override
-	public boolean onDismissDialog(NacDialog dialog)
+	public int getValue()
 	{
-		this.mValue = ((NacSpinnerDialog)dialog).getValue();
-
-		persistInt(this.mValue);
-		notifyChanged();
-		return true;
+		return this.mValue;
 	}
 
 	/**
@@ -73,25 +70,20 @@ public class NacSnoozeDurationPreference
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		Context context = getContext();
-		NacSharedDefaults defs = new NacSharedDefaults(context);
-
+		NacSharedDefaults defs = new NacSharedDefaults(getContext());
 		return a.getInteger(index, defs.getSnoozeDurationIndex());
 	}
 
 	/**
+	 * Save the selected value from the scrollable picker.
 	 */
 	@Override
-	public boolean onPreferenceClick(Preference preference)
+	public void onScrollablePickerOptionSelected(int index)
 	{
-		Context context = getContext();
-		NacSnoozeDurationDialog dialog = new NacSnoozeDurationDialog();
+		this.mValue = index;
 
-		dialog.saveData(this.mValue);
-		dialog.build(context);
-		dialog.addOnDismissListener(this);
-		dialog.show();
-		return true;
+		persistInt(index);
+		notifyChanged();
 	}
 
 	/**
@@ -109,6 +101,19 @@ public class NacSnoozeDurationPreference
 			this.mValue = (Integer) defaultValue;
 			persistInt(this.mValue);
 		}
+	}
+
+	/**
+	 * Show the auto dismiss dialog.
+	 */
+	public void showDialog(FragmentManager manager)
+	{
+		NacSnoozeDurationDialog dialog = new NacSnoozeDurationDialog();
+		int value = this.getValue();
+
+		dialog.setDefaultScrollablePickerIndex(value);
+		dialog.setOnScrollablePickerOptionSelectedListener(this);
+		dialog.show(manager, NacSnoozeDurationDialog.TAG);
 	}
 
 }

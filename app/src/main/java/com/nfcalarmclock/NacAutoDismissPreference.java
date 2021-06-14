@@ -3,15 +3,15 @@ package com.nfcalarmclock;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 
 /**
- * Preference that displays how long to snooze for.
+ * Preference that displays how long before an alarm is auto dismissed.
  */
 public class NacAutoDismissPreference
 	extends Preference
-	implements Preference.OnPreferenceClickListener,
-		NacDialog.OnDismissListener
+	implements NacScrollablePickerDialogFragment.OnScrollablePickerOptionSelectedListener
 {
 
 	/**
@@ -40,7 +40,6 @@ public class NacAutoDismissPreference
 	{
 		super(context, attrs, style);
 		setLayoutResource(R.layout.nac_preference);
-		setOnPreferenceClickListener(this);
 	}
 
 	/**
@@ -48,21 +47,20 @@ public class NacAutoDismissPreference
 	@Override
 	public CharSequence getSummary()
 	{
-		Context context = getContext();
-		return NacSharedPreferences.getAutoDismissSummary(context, this.mValue);
+		NacSharedConstants cons = new NacSharedConstants(getContext());
+		int value = this.getValue();
+
+		return NacSharedPreferences.getAutoDismissSummary(cons, value);
 	}
 
 	/**
-	 * Save the spinner index value.
+	 * Get the preference value.
+	 *
+	 * @return The preference value.
 	 */
-	@Override
-	public boolean onDismissDialog(NacDialog dialog)
+	public int getValue()
 	{
-		this.mValue = ((NacSpinnerDialog)dialog).getValue();
-
-		persistInt(this.mValue);
-		notifyChanged();
-		return true;
+		return this.mValue;
 	}
 
 	/**
@@ -71,23 +69,20 @@ public class NacAutoDismissPreference
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		NacSharedDefaults defaults = new NacSharedDefaults(getContext());
-		return a.getInteger(index, defaults.getAutoDismissIndex());
+		NacSharedDefaults defs = new NacSharedDefaults(getContext());
+		return a.getInteger(index, defs.getAutoDismissIndex());
 	}
 
 	/**
+	 * Save the selected value from the scrollable picker.
 	 */
 	@Override
-	public boolean onPreferenceClick(Preference preference)
+	public void onScrollablePickerOptionSelected(int index)
 	{
-		Context context = getContext();
-		NacAutoDismissDialog dialog = new NacAutoDismissDialog();
+		this.mValue = index;
 
-		dialog.saveData(this.mValue);
-		dialog.build(context);
-		dialog.addOnDismissListener(this);
-		dialog.show();
-		return true;
+		persistInt(index);
+		notifyChanged();
 	}
 
 	/**
@@ -105,6 +100,19 @@ public class NacAutoDismissPreference
 			this.mValue = (Integer) defaultValue;
 			persistInt(this.mValue);
 		}
+	}
+
+	/**
+	 * Show the auto dismiss dialog.
+	 */
+	public void showDialog(FragmentManager manager)
+	{
+		NacAutoDismissDialog dialog = new NacAutoDismissDialog();
+		int value = this.getValue();
+
+		dialog.setDefaultScrollablePickerIndex(value);
+		dialog.setOnScrollablePickerOptionSelectedListener(this);
+		dialog.show(manager, NacAutoDismissDialog.TAG);
 	}
 
 }

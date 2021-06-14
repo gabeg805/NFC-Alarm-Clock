@@ -26,7 +26,6 @@ public class NacAlarm
 	/**
 	 * Unique alarm ID.
 	 */
-	//@PrimaryKey
 	@PrimaryKey(autoGenerate=true)
 	@ColumnInfo(name="id")
 	private long mId;

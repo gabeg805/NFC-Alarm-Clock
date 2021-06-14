@@ -182,6 +182,14 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Auto dismiss summaries.
+	 */
+	public List<String> getAutoDismissSummaries()
+	{
+		return this.getStringList(R.array.auto_dismiss_summaries);
+	}
+
+	/**
 	 * @return The days of week.
 	 */
 	public List<String> getDaysOfWeek()
@@ -381,6 +389,14 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Max snooze summaries.
+	 */
+	public List<String> getMaxSnoozeSummaries()
+	{
+		return this.getStringList(R.array.max_snooze_summaries);
+	}
+
+	/**
 	 * @return Any NFC tag ID message.
 	 */
 	public String getMessageAnyNfcTagId()
@@ -573,6 +589,14 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Snooze duration summaries.
+	 */
+	public List<String> getSnoozeDurationSummaries()
+	{
+		return this.getStringList(R.array.snooze_duration_summaries);
+	}
+
+	/**
 	 * @return Speak frequency.
 	 */
 	@SuppressWarnings("unused")
@@ -697,7 +721,7 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Select audio source title.
+	 * @return Audio source title.
 	 */
 	public String getTitleAudioSource()
 	{
@@ -705,7 +729,7 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Select color title.
+	 * @return Color title.
 	 */
 	public String getTitleColor()
 	{
@@ -713,7 +737,7 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Select days title.
+	 * @return Days title.
 	 */
 	public String getTitleDays()
 	{
@@ -729,7 +753,7 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Set alarm name title.
+	 * @return Alarm name title.
 	 */
 	@SuppressWarnings("unused")
 	public String getTitleName()
@@ -738,7 +762,7 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Select next alarm format title.
+	 * @return Next alarm format title.
 	 */
 	public String getTitleNextAlarmFormat()
 	{
@@ -762,11 +786,19 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Select speak frequency title.
+	 * @return The speak frequency title.
 	 */
 	public String getTitleSpeakFrequency()
 	{
 		return this.getString(R.string.title_speak_frequency);
+	}
+
+	/**
+	 * @return Text-to-speech title.
+	 */
+	public String getTitleTextToSpeech()
+	{
+		return this.getString(R.string.title_tts);
 	}
 
 	/**
