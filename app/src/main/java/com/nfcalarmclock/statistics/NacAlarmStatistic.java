@@ -1,22 +1,13 @@
 package com.nfcalarmclock.statistics;
 
 import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 import java.util.Date;
 
 /**
  * Statistics for an alarm.
  */
-public abstract class NacAlarmStatistic
+public class NacAlarmStatistic
 {
-
-	/**
-	 * Unique ID.
-	 */
-	@PrimaryKey(autoGenerate=true)
-	@ColumnInfo(name="id")
-	private long mId;
 
 	/**
 	 * Timestamp of when an alarm was snoozed.
@@ -51,14 +42,6 @@ public abstract class NacAlarmStatistic
 	}
 
 	/**
-	 * @return The unique ID.
-	 */
-	public long getId()
-	{
-		return this.mId;
-	}
-
-	/**
 	 * @return The minute the alarm ran at.
 	 */
 	public int getMinute()
@@ -90,16 +73,6 @@ public abstract class NacAlarmStatistic
 	public void setHour(int hour)
 	{
 		this.mHour = hour;
-	}
-
-	/**
-	 * Set the unique ID.
-	 *
-	 * @param  id  The unique ID.
-	 */
-	public void setId(long id)
-	{
-		this.mId = id;
 	}
 
 	/**

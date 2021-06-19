@@ -1403,7 +1403,6 @@ public class NacAlarm
 		}
 
 		Calendar cal = Calendar.getInstance();
-		int snoozeCount = this.getSnoozeCount();
 
 		cal.add(Calendar.MINUTE, shared.getSnoozeDurationValue());
 		this.setSnoozeHour(cal.get(Calendar.HOUR_OF_DAY));

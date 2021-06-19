@@ -139,7 +139,6 @@ public class NacMusicFragment
 		}
 		else if (metadata.isFile())
 		{
-			Context context = getContext();
 			Uri uri = metadata.toExternalUri();
 
 			if (browser.isSelected())

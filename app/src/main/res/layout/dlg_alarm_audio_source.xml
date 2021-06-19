@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RadioGroup
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	style="@style/RadioGroup"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/RadioGroup"
 	android:id="@+id/audio_sources"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:paddingTop="@dimen/nudge"
 	android:paddingBottom="@dimen/nudge"
 	android:paddingStart="@dimen/medium"
-	/>
+    tools:ignore="RtlSymmetry" />

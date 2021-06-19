@@ -175,28 +175,21 @@ public class NacMainActivity
 	 * Listener for when the floating action button is clicked.
 	 */
 	private final View.OnClickListener mFloatingActionButtonListener =
-		new View.OnClickListener() {
-			@Override
-			public void onClick(View view)
-			{
+			view -> {
 				NacSharedPreferences shared = getSharedPreferences();
 				NacAlarm alarm = new NacAlarm.Builder(shared).build();
 				long id = getAlarmViewModel().insert(NacMainActivity.this, alarm);
 
 				getRecentlyAddedAlarmIds().add(id);
 				view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-			}
-		};
+			};
 
 
 	/**
 	 * Capture the click event on the Snackbar button.
 	 */
 	private final View.OnClickListener mOnSwipeSnackbarActionListener =
-		new View.OnClickListener() {
-			@Override
-			public void onClick(View view)
-			{
+			view -> {
 				NacLastAlarmCardAction lastAction = getLastAlarmCardAction();
 				NacAlarm alarm = lastAction.getAlarm();
 
@@ -215,8 +208,7 @@ public class NacMainActivity
 				else
 				{
 				}
-			}
-		};
+			};
 
 	/**
 	 * Add an alarm that was created from the SET_ALARM intent.
@@ -224,7 +216,6 @@ public class NacMainActivity
 	private void addSetAlarmFromIntent()
 	{
 		Intent intent = getIntent();
-		NacCardAdapter cardAdapter = this.getAlarmCardAdapter();
 		NacAlarm alarm = NacIntent.getSetAlarm(this, intent);
 
 		if (alarm != null)
@@ -355,25 +346,6 @@ public class NacMainActivity
 	private NacAlarmViewModel getAlarmViewModel()
 	{
 		return this.mAlarmViewModel;
-	}
-
-	/**
-	 * @return A list of all the alarm view holders.
-	 */
-	private List<NacCardHolder> getAllAlarmViewHolders()
-	{
-		RecyclerView rv = this.getRecyclerView();
-		NacCardAdapter adapter = this.getAlarmCardAdapter();
-		int size = adapter.getItemCount();
-		List<NacCardHolder> viewHolders = new ArrayList<>();
-
-		for (int i=0; i < size; i++)
-		{
-			NacCardHolder card = (NacCardHolder) rv.findViewHolderForAdapterPosition(i);
-			viewHolders.add(card);
-		}
-
-		return viewHolders;
 	}
 
 	/**
@@ -674,7 +646,6 @@ public class NacMainActivity
 	{
 		RecyclerView rv = this.getRecyclerView();
 		NacCardAdapter adapter = this.getAlarmCardAdapter();
-		NacCardHolder holder = (NacCardHolder) rv.findViewHolderForAdapterPosition(index);
 		int size = adapter.getItemCount();
 
 		adapter.notifyItemChanged(index);
@@ -866,7 +837,6 @@ public class NacMainActivity
 		}
 		else if (id == R.id.menu_show_next_alarm)
 		{
-			NacCardAdapter cardAdapter = this.getAlarmCardAdapter();
 			this.showNextAlarmSnackbar();
 			return true;
 		}
@@ -952,14 +922,10 @@ public class NacMainActivity
 		card.setOnCardUpdatedListener(this);
 		card.setOnCardUseNfcChangedListener(this);
 		card.setOnCreateContextMenuListener(this);
-		card.getAudioOptionsButton().setOnClickListener(new View.OnClickListener()
+		card.getAudioOptionsButton().setOnClickListener(view ->
 			{
-				@Override
-				public void onClick(View view)
-				{
-					showAudioOptionsDialog(card);
-					card.performHapticFeedback(view);
-				}
+				showAudioOptionsDialog(card);
+				card.performHapticFeedback(view);
 			});
 	}
 
@@ -1123,7 +1089,7 @@ public class NacMainActivity
 				});
 
 		this.getAlarmViewModel().getActiveAlarm().observe(this,
-			alarm -> this.prepareActiveAlarm(alarm));
+				this::prepareActiveAlarm);
 
 		this.getAlarmCardAdapterLiveData().observe(this, this);
 	}

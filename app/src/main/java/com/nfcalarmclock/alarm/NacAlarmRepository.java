@@ -133,7 +133,7 @@ public class NacAlarmRepository
 	public Future<?> doGetActiveAlarmsNow()
 	{
 		NacAlarmDao dao = this.getDao();
-		return NacAlarmDatabase.getExecutor().submit(() -> dao.getActiveAlarmsNow());
+		return NacAlarmDatabase.getExecutor().submit(dao::getActiveAlarmsNow);
 	}
 
 	/**
@@ -144,7 +144,7 @@ public class NacAlarmRepository
 	public Future<?> doGetAllAlarmsNow()
 	{
 		NacAlarmDao dao = this.getDao();
-		return NacAlarmDatabase.getExecutor().submit(() -> dao.getAllAlarmsNow());
+		return NacAlarmDatabase.getExecutor().submit(dao::getAllAlarmsNow);
 	}
 
 	/**

@@ -2274,9 +2274,8 @@ public class NacCardHolder
 	{
 		MaterialButton button = this.getRepeatButton();
 		NacAlarm alarm = this.getAlarm();
-		boolean isEnabled = alarm.areDaysSelected() ? true : false;
-		boolean shouldRepeat = alarm.areDaysSelected() ? alarm.shouldRepeat()
-			: false;
+		boolean isEnabled = alarm.areDaysSelected();
+		boolean shouldRepeat = alarm.areDaysSelected() && alarm.shouldRepeat();
 
 		if (button.isEnabled() != isEnabled)
 		{
@@ -2572,7 +2571,7 @@ public class NacCardHolder
 		ImageView image = this.getVolumeImageView();
 		NacAlarm alarm = this.getAlarm();
 		int progress = alarm.getVolume();
-		int resId = -1;
+		int resId;
 
 		if (progress == 0)
 		{

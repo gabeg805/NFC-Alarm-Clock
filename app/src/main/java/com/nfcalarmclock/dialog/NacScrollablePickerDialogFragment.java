@@ -3,12 +3,9 @@ package com.nfcalarmclock.dialog;
 import android.app.AlertDialog;
 import android.widget.NumberPicker;
 
-import androidx.fragment.app.DialogFragment;
-
 import com.nfcalarmclock.R;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  */
@@ -126,11 +123,10 @@ public abstract class NacScrollablePickerDialogFragment
 	 *
 	 * @return This class.
 	 */
-	public DialogFragment setOnScrollablePickerOptionSelectedListener(
+	public void setOnScrollablePickerOptionSelectedListener(
 		OnScrollablePickerOptionSelectedListener listener)
 	{
 		this.mOnScrollablePickerOptionSelectedListener = listener;
-		return this;
 	}
 
 	/**
@@ -138,7 +134,6 @@ public abstract class NacScrollablePickerDialogFragment
 	 */
 	private void setupScrollablePicker()
 	{
-		Locale locale = Locale.getDefault();
 		NumberPicker picker = this.getScrollablePicker();
 		List<String> values = this.getScrollablePickerValues();
 		int index = this.getDefaultScrollablePickerIndex();

@@ -35,18 +35,18 @@ import java.util.List;
 /**
  * Store alarms in a Room database.
  */
-@Database(version=1, exportSchema=true,
-	entities={NacAlarm.class})
-@TypeConverters({NacAlarmTypeConverters.class})
-//@Database(version=2, exportSchema=true,
-//	entities={NacAlarm.class, NacAlarmCreatedStatistic.class,
-//		NacAlarmDeletedStatistic.class, NacAlarmDismissedStatistic.class,
-//		NacAlarmMissedStatistic.class, NacAlarmSnoozedStatistic.class},
-//	autoMigrations={
-//			@AutoMigration(from=1, to=2)
-//		})
-//@TypeConverters({NacAlarmTypeConverters.class,
-//	NacStatisticTypeConverters.class})
+//@Database(version=1, exportSchema=true,
+//	entities={NacAlarm.class})
+//@TypeConverters({NacAlarmTypeConverters.class})
+@Database(version=2, exportSchema=true,
+	entities={NacAlarm.class, NacAlarmCreatedStatistic.class,
+		NacAlarmDeletedStatistic.class, NacAlarmDismissedStatistic.class,
+		NacAlarmMissedStatistic.class, NacAlarmSnoozedStatistic.class},
+	autoMigrations={
+			@AutoMigration(from=1, to=2)
+		})
+@TypeConverters({NacAlarmTypeConverters.class,
+	NacStatisticTypeConverters.class})
 public abstract class NacAlarmDatabase
 	extends RoomDatabase
 {
@@ -56,30 +56,30 @@ public abstract class NacAlarmDatabase
 	 */
 	public abstract NacAlarmDao alarmDao();
 
-	///**
-	// * Store created alarm statistics in the database.
-	// */
-	//public abstract NacAlarmCreatedStatisticDao alarmCreatedStatisticDao();
+	/**
+	 * Store created alarm statistics in the database.
+	 */
+	public abstract NacAlarmCreatedStatisticDao alarmCreatedStatisticDao();
 
-	///**
-	// * Store deleted alarm statistics in the database.
-	// */
-	//public abstract NacAlarmDeletedStatisticDao alarmDeletedStatisticDao();
+	/**
+	 * Store deleted alarm statistics in the database.
+	 */
+	public abstract NacAlarmDeletedStatisticDao alarmDeletedStatisticDao();
 
-	///**
-	// * Store dismissed alarm statistics in the database.
-	// */
-	//public abstract NacAlarmDismissedStatisticDao alarmDismissedStatisticDao();
+	/**
+	 * Store dismissed alarm statistics in the database.
+	 */
+	public abstract NacAlarmDismissedStatisticDao alarmDismissedStatisticDao();
 
-	///**
-	// * Store missed alarm statistics in the database.
-	// */
-	//public abstract NacAlarmMissedStatisticDao alarmMissedStatisticDao();
+	/**
+	 * Store missed alarm statistics in the database.
+	 */
+	public abstract NacAlarmMissedStatisticDao alarmMissedStatisticDao();
 
-	///**
-	// * Store snoozed alarm statistics in the database.
-	// */
-	//public abstract NacAlarmSnoozedStatisticDao alarmSnoozedStatisticDao();
+	/**
+	 * Store snoozed alarm statistics in the database.
+	 */
+	public abstract NacAlarmSnoozedStatisticDao alarmSnoozedStatisticDao();
 
 	/**
 	 * Name of the database.

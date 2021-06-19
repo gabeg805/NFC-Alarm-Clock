@@ -36,10 +36,7 @@ public class NacCardAdapterLiveData
 
 		if (oldSize == 0)
 		{
-			for (NacAlarm a : newAlarms)
-			{
-				mergedAlarms.add(a);
-			}
+			mergedAlarms.addAll(newAlarms);
 		}
 		else
 		{

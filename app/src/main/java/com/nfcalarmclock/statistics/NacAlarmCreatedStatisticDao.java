@@ -3,7 +3,6 @@ package com.nfcalarmclock.statistics;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import java.util.List;
 
@@ -32,14 +31,13 @@ public interface NacAlarmCreatedStatisticDao
 	@Query("SELECT * FROM alarm_created_statistic")
 	List<NacAlarmCreatedStatistic> getAllNow();
 
-	/**
-	 * Insert an instance of an alarm being created.
-	 *
-	 * @param  stat  Alarm created statistic.
-	 *
-	 * @return The row ID of the row that was inserted.
-	 */
-	@Insert(onConflict=OnConflictStrategy.ABORT)
-	long insert(NacAlarmCreatedStatistic stat);
+    /**
+     * Insert an instance of an alarm being created.
+     *
+     * @param stat Alarm created statistic.
+     * @return The row ID of the row that was inserted.
+     */
+    @Insert()
+    long insert(NacAlarmCreatedStatistic stat);
 
 }

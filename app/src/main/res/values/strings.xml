@@ -222,13 +222,6 @@
 	<string name="auto_dismiss_key">pref_auto_dismiss</string>
 
 
-	<!-- Prevent app from closing -->
-	<string name="prevent_app_from_closing">Prevent app from closing</string>
-	<string name="prevent_app_from_closing_key">pref_prevent_app_from_closing</string>
-	<string name="prevent_app_from_closing_true">Prevent the app from closing until the alarm has been dismissed. (Experimental)</string>
-	<string name="prevent_app_from_closing_false">Do not prevent the app from closing.\n</string>
-
-
 	<!-- Max number of snoozes -->
 	<string name="max_snooze">Max snoozes</string>
 	<string name="max_snooze_key">pref_max_snooze</string>
@@ -383,7 +376,6 @@
 
 	<!-- Categories -->
 	<string name="music_category">Music</string>
-	<string name="tts_category">Text-to-Speech</string>
 
 
 	<!-- Shuffle playlist -->

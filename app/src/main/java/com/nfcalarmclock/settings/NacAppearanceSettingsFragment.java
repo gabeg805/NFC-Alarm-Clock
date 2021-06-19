@@ -98,16 +98,4 @@ public class NacAppearanceSettingsFragment
 		dayButtonStylePref.setOnPreferenceChangeListener(this);
 	}
 
-	/**
-	 * Setup the theme color preference.
-	 */
-	private void setupThemeColorPreference()
-	{
-		NacSharedKeys keys = this.getSharedKeys();
-		String themeKey = keys.getThemeColor();
-		Preference themePref = findPreference(themeKey);
-
-		themePref.setOnPreferenceChangeListener(this);
-	}
-
 }

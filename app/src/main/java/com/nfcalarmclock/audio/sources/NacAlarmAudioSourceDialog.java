@@ -100,7 +100,7 @@ public class NacAlarmAudioSourceDialog
 	{
 		RadioGroup group = this.getRadioGroup();
 		int checkedId = group.getCheckedRadioButtonId();
-		RadioButton button = (RadioButton) group.findViewById(checkedId);
+		RadioButton button = group.findViewById(checkedId);
 
 		return button.getText().toString();
 	}
@@ -196,11 +196,10 @@ public class NacAlarmAudioSourceDialog
 	 *
 	 * @return This class.
 	 */
-	public DialogFragment setOnAudioSourceSelectedListener(
+	public void setOnAudioSourceSelectedListener(
 		OnAudioSourceSelectedListener listener)
 	{
 		this.mOnAudioSourceSelectedListener = listener;
-		return this;
 	}
 
 	/**

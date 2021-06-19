@@ -3,7 +3,6 @@ package com.nfcalarmclock.statistics;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import java.util.List;
 
@@ -39,7 +38,7 @@ public interface NacAlarmMissedStatisticDao
 	 *
 	 * @return The row ID of the row that was inserted.
 	 */
-	@Insert(onConflict=OnConflictStrategy.ABORT)
+	@Insert()
 	long insert(NacAlarmMissedStatistic stat);
 
 }

@@ -1,17 +1,27 @@
 package com.nfcalarmclock.statistics;
 
-import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-import java.util.Date;
 
 /**
  * Statistics for when an alarm is created.
  */
-@Entity(tableName="alarm_created_statistic",
-	ignoredColumns={"hour", "minute", "name"})
+@Entity(tableName="alarm_created_statistic")
 public class NacAlarmCreatedStatistic
-	extends NacAlarmStatistic
 {
+
+	/**
+	 * Embded the ID into this class.
+	 */
+	@PrimaryKey(autoGenerate=true)
+	@Embedded
+	NacAlarmStatisticId statisticId;
+
+	/**
+	 * Embded the columns from the statistic class into this class.
+	 */
+	@Embedded
+	NacAlarmStatistic statistic;
 
 }

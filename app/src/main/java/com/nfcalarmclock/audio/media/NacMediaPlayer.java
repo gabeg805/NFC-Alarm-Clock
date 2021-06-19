@@ -519,13 +519,7 @@ public class NacMediaPlayer
 	public void repeatTrack()
 	{
 		this.cleanupHandler();
-		this.getHandler().postDelayed(new Runnable() {
-				@Override
-				public void run()
-				{
-					startWrapper();
-				}
-			}, 500);
+		this.getHandler().postDelayed(() -> startWrapper(), 500);
 	}
 
 	/**

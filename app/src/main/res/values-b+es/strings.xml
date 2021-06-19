@@ -222,13 +222,6 @@
 	<string name="auto_dismiss_key">pref_auto_dismiss</string>
 
 
-	<!-- Prevent app from closing -->
-	<string name="prevent_app_from_closing">Previene que se ciere la app</string>
-	<string name="prevent_app_from_closing_key">pref_prevent_app_from_closing</string>
-	<string name="prevent_app_from_closing_true">Previene que se cierre la app asta que se desactiva la alarma. (Experimental)</string>
-	<string name="prevent_app_from_closing_false">No previene la app que se cierre.\n</string>
-
-
 	<!-- Max number of snoozes -->
 	<string name="max_snooze">Dormitar la máxima numero de veces</string>
 	<string name="max_snooze_key">pref_max_snooze</string>
@@ -383,7 +376,6 @@
 
 	<!-- Categories -->
 	<string name="music_category">Música</string>
-	<string name="tts_category">Texto a voz</string>
 
 
 	<!-- Shuffle playlist -->

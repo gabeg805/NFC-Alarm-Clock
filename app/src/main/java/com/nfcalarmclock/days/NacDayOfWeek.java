@@ -87,7 +87,7 @@ public class NacDayOfWeek
 	{
 		LinearLayout view = this.getDayOfWeekView();
 		int id = this.dayToId(day);
-		return (NacDayButton) view.findViewById(id);
+		return view.findViewById(id);
 	}
 
 	/**

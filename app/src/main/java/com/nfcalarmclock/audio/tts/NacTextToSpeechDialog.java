@@ -11,15 +11,15 @@ import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import androidx.fragment.app.DialogFragment;
+
 import com.google.android.material.checkbox.MaterialCheckBox;
+
 import com.nfcalarmclock.dialog.NacDialogFragment;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.R;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  */
@@ -234,11 +234,10 @@ public class NacTextToSpeechDialog
 	 *
 	 * @return This class.
 	 */
-	public DialogFragment setOnTextToSpeechOptionsSelectedListener(
+	public void setOnTextToSpeechOptionsSelectedListener(
 		OnTextToSpeechOptionsSelectedListener listener)
 	{
 		this.mOnTextToSpeechOptionsSelectedListener = listener;
-		return this;
 	}
 
 	/**
@@ -296,7 +295,6 @@ public class NacTextToSpeechDialog
 	 */
 	private void setupTtsFrequencyPicker()
 	{
-		Locale locale = Locale.getDefault();
 		NacSharedConstants cons = this.getSharedPreferences().getConstants();
 		NumberPicker picker = this.getTtsFrequencyPicker();
 		int freq = this.getDefaultTtsFrequency();
