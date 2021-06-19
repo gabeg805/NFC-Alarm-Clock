@@ -101,10 +101,10 @@ var activeTableTab = "activeTableTab";
 <li>androidx.fragment.app.Fragment</li>
 <li>
 <ul class="inheritance">
-<li><a href="../../com/nfcalarmclock/NacMediaFragment.html" title="class in com.nfcalarmclock">com.nfcalarmclock.NacMediaFragment</a></li>
+<li><a href="../../com/nfcalarmclock/NacMediaFragment.html" title="class in com.nfcalarmclock">com.nfcalarmclock.audio.media.NacMediaFragment</a></li>
 <li>
 <ul class="inheritance">
-<li>com.nfcalarmclock.NacMusicFragment</li>
+<li>com.nfcalarmclock.audio.media.NacMusicFragment</li>
 </ul>
 </li>
 </ul>
@@ -212,7 +212,7 @@ implements <a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListe
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static androidx.fragment.app.Fragment</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacMusicFragment.html#newInstance-com.nfcalarmclock.NacAlarm-">newInstance</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacMusicFragment.html#newInstance-com.nfcalarmclock.alarm.NacAlarm-">newInstance</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
 <div class="block">Create a new instance of this fragment.</div>
 </td>
 </tr>
@@ -224,14 +224,14 @@ implements <a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListe
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacMusicFragment.html#onBrowserClicked-com.nfcalarmclock.NacFileBrowser-com.nfcalarmclock.NacFile.Metadata-java.lang.String-java.lang.String-">onBrowserClicked</a></span>(<a href="../../com/nfcalarmclock/NacFileBrowser.html" title="class in com.nfcalarmclock">NacFileBrowser</a>&nbsp;browser,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacMusicFragment.html#onBrowserClicked-com.nfcalarmclock.file.NacFileBrowser-com.nfcalarmclock.file.NacFile.Metadata-java.lang.String-java.lang.String-">onBrowserClicked</a></span>(<a href="../../com/nfcalarmclock/NacFileBrowser.html" title="class in com.nfcalarmclock">NacFileBrowser</a>&nbsp;browser,
                 <a href="../../com/nfcalarmclock/NacFile.Metadata.html" title="class in com.nfcalarmclock">NacFile.Metadata</a>&nbsp;metadata,
                 java.lang.String&nbsp;path,
                 java.lang.String&nbsp;name)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacMusicFragment.html#onBuildDialog-com.nfcalarmclock.NacDialog-android.app.AlertDialog.Builder-">onBuildDialog</a></span>(<a href="../../com/nfcalarmclock/NacDialog.html" title="class in com.nfcalarmclock">NacDialog</a>&nbsp;dialog,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacMusicFragment.html#onBuildDialog-com.nfcalarmclock.dialog.NacDialog-android.app.AlertDialog.Builder-">onBuildDialog</a></span>(<a href="../../com/nfcalarmclock/NacDialog.html" title="class in com.nfcalarmclock">NacDialog</a>&nbsp;dialog,
              android.app.AlertDialog.Builder&nbsp;builder)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -246,7 +246,7 @@ implements <a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListe
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacMusicFragment.html#onDismissDialog-com.nfcalarmclock.NacDialog-">onDismissDialog</a></span>(<a href="../../com/nfcalarmclock/NacDialog.html" title="class in com.nfcalarmclock">NacDialog</a>&nbsp;dialog)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacMusicFragment.html#onDismissDialog-com.nfcalarmclock.dialog.NacDialog-">onDismissDialog</a></span>(<a href="../../com/nfcalarmclock/NacDialog.html" title="class in com.nfcalarmclock">NacDialog</a>&nbsp;dialog)</code>&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
@@ -261,7 +261,7 @@ implements <a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListe
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.com.nfcalarmclock.NacMediaFragment">
+<li class="blockList"><a name="methods.inherited.from.class.com.nfcalarmclock.audio.media.NacMediaFragment">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;com.nfcalarmclock.<a href="../../com/nfcalarmclock/NacMediaFragment.html" title="class in com.nfcalarmclock">NacMediaFragment</a></h3>
@@ -305,7 +305,7 @@ implements <a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListe
 <div class="block">Read request callback success result.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../constant-values.html#com.nfcalarmclock.NacMusicFragment.READ_REQUEST_CODE">Constant Field Values</a></dd>
+<dd><a href="../../constant-values.html#com.nfcalarmclock.audio.media.NacMusicFragment.READ_REQUEST_CODE">Constant Field Values</a></dd>
 </dl>
 </li>
 </ul>
@@ -370,7 +370,7 @@ implements <a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListe
 </dl>
 </li>
 </ul>
-<a name="newInstance-com.nfcalarmclock.NacAlarm-">
+<a name="newInstance-com.nfcalarmclock.alarm.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -390,7 +390,7 @@ implements <a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListe
 <div class="block">Create a new instance of this fragment.</div>
 </li>
 </ul>
-<a name="onBuildDialog-com.nfcalarmclock.NacDialog-android.app.AlertDialog.Builder-">
+<a name="onBuildDialog-com.nfcalarmclock.dialog.NacDialog-android.app.AlertDialog.Builder-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -400,7 +400,7 @@ implements <a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListe
                           android.app.AlertDialog.Builder&nbsp;builder)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../com/nfcalarmclock/NacDialog.OnBuildListener.html#onBuildDialog-com.nfcalarmclock.NacDialog-android.app.AlertDialog.Builder-">onBuildDialog</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacDialog.OnBuildListener.html" title="interface in com.nfcalarmclock">NacDialog.OnBuildListener</a></code></dd>
+<dd><code><a href="../../com/nfcalarmclock/NacDialog.OnBuildListener.html#onBuildDialog-com.nfcalarmclock.dialog.NacDialog-android.app.AlertDialog.Builder-">onBuildDialog</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacDialog.OnBuildListener.html" title="interface in com.nfcalarmclock">NacDialog.OnBuildListener</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -419,7 +419,7 @@ implements <a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListe
 </dl>
 </li>
 </ul>
-<a name="onBrowserClicked-com.nfcalarmclock.NacFileBrowser-com.nfcalarmclock.NacFile.Metadata-java.lang.String-java.lang.String-">
+<a name="onBrowserClicked-com.nfcalarmclock.file.NacFileBrowser-com.nfcalarmclock.file.NacFile.Metadata-java.lang.String-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -431,7 +431,7 @@ implements <a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListe
                              java.lang.String&nbsp;name)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListener.html#onBrowserClicked-com.nfcalarmclock.NacFileBrowser-com.nfcalarmclock.NacFile.Metadata-java.lang.String-java.lang.String-">onBrowserClicked</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListener.html" title="interface in com.nfcalarmclock">NacFileBrowser.OnBrowserClickedListener</a></code></dd>
+<dd><code><a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListener.html#onBrowserClicked-com.nfcalarmclock.file.NacFileBrowser-com.nfcalarmclock.file.NacFile.Metadata-java.lang.String-java.lang.String-">onBrowserClicked</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListener.html" title="interface in com.nfcalarmclock">NacFileBrowser.OnBrowserClickedListener</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -450,7 +450,7 @@ implements <a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListe
 </dl>
 </li>
 </ul>
-<a name="onDismissDialog-com.nfcalarmclock.NacDialog-">
+<a name="onDismissDialog-com.nfcalarmclock.dialog.NacDialog-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -459,7 +459,7 @@ implements <a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListe
 <pre>public&nbsp;boolean&nbsp;onDismissDialog(<a href="../../com/nfcalarmclock/NacDialog.html" title="class in com.nfcalarmclock">NacDialog</a>&nbsp;dialog)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../com/nfcalarmclock/NacDialog.OnDismissListener.html#onDismissDialog-com.nfcalarmclock.NacDialog-">onDismissDialog</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacDialog.OnDismissListener.html" title="interface in com.nfcalarmclock">NacDialog.OnDismissListener</a></code></dd>
+<dd><code><a href="../../com/nfcalarmclock/NacDialog.OnDismissListener.html#onDismissDialog-com.nfcalarmclock.dialog.NacDialog-">onDismissDialog</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacDialog.OnDismissListener.html" title="interface in com.nfcalarmclock">NacDialog.OnDismissListener</a></code></dd>
 </dl>
 </li>
 </ul>

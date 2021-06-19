@@ -4,7 +4,7 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
 	<!-- Music -->
-	<com.nfcalarmclock.NacPreferenceCategory
+	<com.nfcalarmclock.preference.NacPreferenceCategory
 		android:title="@string/music_category">
 
 		<Preference
@@ -14,7 +14,7 @@
 			app:iconSpaceReserved="false"
 			/>
 
-		<com.nfcalarmclock.NacCheckboxPreference
+		<com.nfcalarmclock.preference.NacCheckboxPreference
 			android:key="@string/shuffle_playlist_key"
 			android:title="@string/shuffle_playlist"
 			android:summaryOn="@string/shuffle_playlist_true"
@@ -24,6 +24,6 @@
 			app:allowDividerBelow="true"
 			/>
 
-	</com.nfcalarmclock.NacPreferenceCategory>
+	</com.nfcalarmclock.preference.NacPreferenceCategory>
 
 </PreferenceScreen>

@@ -4,10 +4,10 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
 	<!-- Dismiss -->
-	<com.nfcalarmclock.NacPreferenceCategory
+	<com.nfcalarmclock.preference.NacPreferenceCategory
 		android:title="@string/dismiss_options_category">
 
-		<com.nfcalarmclock.NacAutoDismissPreference
+		<com.nfcalarmclock.autodismiss.NacAutoDismissPreference
 			android:key="@string/auto_dismiss_key"
 			android:title="@string/auto_dismiss"
 			android:defaultValue="@integer/default_auto_dismiss_index"
@@ -16,7 +16,7 @@
 			/>
 
 		<!--
-		<com.nfcalarmclock.NacCheckboxPreference
+		<com.nfcalarmclock.preference.NacCheckboxPreference
 			android:key="@string/prevent_app_from_closing_key"
 			android:title="@string/prevent_app_from_closing"
 			android:summaryOn="@string/prevent_app_from_closing_true"
@@ -26,13 +26,13 @@
 			/>
 		-->
 
-	</com.nfcalarmclock.NacPreferenceCategory>
+	</com.nfcalarmclock.preference.NacPreferenceCategory>
 
 	<!-- Snooze -->
-	<com.nfcalarmclock.NacPreferenceCategory
+	<com.nfcalarmclock.preference.NacPreferenceCategory
 		android:title="@string/snooze_options_category">
 
-		<com.nfcalarmclock.NacMaxSnoozePreference
+		<com.nfcalarmclock.maxsnooze.NacMaxSnoozePreference
 			android:key="@string/max_snooze_key"
 			android:title="@string/max_snooze"
 			android:defaultValue="@integer/default_max_snooze_index"
@@ -40,14 +40,14 @@
 			app:allowDividerBelow="false"
 			/>
 
-		<com.nfcalarmclock.NacSnoozeDurationPreference
+		<com.nfcalarmclock.snoozeduration.NacSnoozeDurationPreference
 			android:key="@string/snooze_duration_key"
 			android:title="@string/snooze_duration"
 			android:defaultValue="@integer/default_snooze_duration_index"
 			app:allowDividerBelow="false"
 			/>
 
-		<com.nfcalarmclock.NacCheckboxPreference
+		<com.nfcalarmclock.preference.NacCheckboxPreference
 			android:key="@string/easy_snooze_key"
 			android:title="@string/easy_snooze"
 			android:summaryOn="@string/easy_snooze_true"
@@ -56,13 +56,13 @@
 			app:allowDividerBelow="true"
 			/>
 
-	</com.nfcalarmclock.NacPreferenceCategory>
+	</com.nfcalarmclock.preference.NacPreferenceCategory>
 
 	<!-- Default alarm -->
-	<com.nfcalarmclock.NacPreferenceCategory
+	<com.nfcalarmclock.preference.NacPreferenceCategory
 		android:title="@string/default_alarm_category">
 
-		<com.nfcalarmclock.NacNamePreference
+		<com.nfcalarmclock.name.NacNamePreference
 			android:key="@string/alarm_name_key"
 			android:title="@string/alarm_name"
 			android:defaultValue=""
@@ -70,14 +70,14 @@
 			app:allowDividerBelow="false"
 			/>
 
-		<com.nfcalarmclock.NacDaysPreference
+		<com.nfcalarmclock.days.NacDaysPreference
 			android:key="@string/alarm_days_key"
 			android:title="@string/alarm_days"
 			android:defaultValue="@integer/default_days"
 			app:allowDividerBelow="false"
 			/>
 
-		<com.nfcalarmclock.NacCheckboxPreference
+		<com.nfcalarmclock.preference.NacCheckboxPreference
 			android:key="@string/alarm_repeat_key"
 			android:title="@string/alarm_repeat"
 			android:summaryOn="@string/alarm_repeat_true"
@@ -86,7 +86,7 @@
 			app:allowDividerBelow="false"
 			/>
 
-		<com.nfcalarmclock.NacCheckboxPreference
+		<com.nfcalarmclock.preference.NacCheckboxPreference
 			android:key="@string/alarm_use_nfc_key"
 			android:title="@string/alarm_use_nfc"
 			android:summaryOn="@string/alarm_use_nfc_true"
@@ -95,7 +95,7 @@
 			app:allowDividerBelow="false"
 			/>
 
-		<com.nfcalarmclock.NacCheckboxPreference
+		<com.nfcalarmclock.preference.NacCheckboxPreference
 			android:key="@string/alarm_vibrate_key"
 			android:title="@string/alarm_vibrate"
 			android:summaryOn="@string/alarm_vibrate_true"
@@ -104,7 +104,7 @@
 			app:allowDividerBelow="false"
 			/>
 
-		<com.nfcalarmclock.NacMediaPreference
+		<com.nfcalarmclock.audio.media.NacMediaPreference
 			android:key="@string/alarm_sound_key"
 			android:title="@string/alarm_sound"
 			android:summary="@string/alarm_sound_summary"
@@ -112,7 +112,7 @@
 			app:allowDividerBelow="false"
 			/>
 
-		<com.nfcalarmclock.NacVolumePreference
+		<com.nfcalarmclock.volume.NacVolumePreference
 			android:key="@string/alarm_volume_key"
 			android:title="@string/alarm_volume"
 			android:defaultValue="@integer/default_volume"
@@ -120,6 +120,6 @@
 			app:allowDividerBelow="false"
 			/>
 
-	</com.nfcalarmclock.NacPreferenceCategory>
+	</com.nfcalarmclock.preference.NacPreferenceCategory>
 
 </PreferenceScreen>

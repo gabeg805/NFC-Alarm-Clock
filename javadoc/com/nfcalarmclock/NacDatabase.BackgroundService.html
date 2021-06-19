@@ -110,7 +110,7 @@ var activeTableTab = "activeTableTab";
 <li>androidx.core.app.JobIntentService</li>
 <li>
 <ul class="inheritance">
-<li>com.nfcalarmclock.NacDatabase.BackgroundService</li>
+<li>com.nfcalarmclock.db.NacOldDatabase.BackgroundService</li>
 </ul>
 </li>
 </ul>
@@ -217,14 +217,14 @@ extends androidx.core.app.JobIntentService</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.BackgroundService.html#addAlarm-android.content.Context-com.nfcalarmclock.NacAlarm-">addAlarm</a></span>(android.content.Context&nbsp;context,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.BackgroundService.html#addAlarm-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">addAlarm</a></span>(android.content.Context&nbsp;context,
         <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
 <div class="block">Add an alarm.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.BackgroundService.html#deleteAlarm-android.content.Context-com.nfcalarmclock.NacAlarm-">deleteAlarm</a></span>(android.content.Context&nbsp;context,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.BackgroundService.html#deleteAlarm-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">deleteAlarm</a></span>(android.content.Context&nbsp;context,
            <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
 <div class="block">Delete an alarm.</div>
 </td>
@@ -240,7 +240,7 @@ extends androidx.core.app.JobIntentService</pre>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.BackgroundService.html#updateAlarm-android.content.Context-com.nfcalarmclock.NacAlarm-">updateAlarm</a></span>(android.content.Context&nbsp;context,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.BackgroundService.html#updateAlarm-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">updateAlarm</a></span>(android.content.Context&nbsp;context,
            <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
 <div class="block">Update an alarm.</div>
 </td>
@@ -305,7 +305,7 @@ extends androidx.core.app.JobIntentService</pre>
 <div class="block">Job ID.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../constant-values.html#com.nfcalarmclock.NacDatabase.BackgroundService.JOB_ID">Constant Field Values</a></dd>
+<dd><a href="../../constant-values.html#com.nfcalarmclock.db.NacOldDatabase.BackgroundService.JOB_ID">Constant Field Values</a></dd>
 </dl>
 </li>
 </ul>
@@ -334,7 +334,7 @@ extends androidx.core.app.JobIntentService</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="addAlarm-android.content.Context-com.nfcalarmclock.NacAlarm-">
+<a name="addAlarm-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -345,7 +345,7 @@ extends androidx.core.app.JobIntentService</pre>
 <div class="block">Add an alarm.</div>
 </li>
 </ul>
-<a name="deleteAlarm-android.content.Context-com.nfcalarmclock.NacAlarm-">
+<a name="deleteAlarm-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -379,7 +379,7 @@ extends androidx.core.app.JobIntentService</pre>
 </dl>
 </li>
 </ul>
-<a name="updateAlarm-android.content.Context-com.nfcalarmclock.NacAlarm-">
+<a name="updateAlarm-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockListLast">
