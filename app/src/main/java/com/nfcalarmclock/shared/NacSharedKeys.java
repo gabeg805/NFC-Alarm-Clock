@@ -271,14 +271,6 @@ public class NacSharedKeys
 	}
 
 	/**
-	 * @return The prevent app from closing key.
-	 */
-	public String getPreventAppFromClosing()
-	{
-		return this.getString(R.string.prevent_app_from_closing_key);
-	}
-
-	/**
 	 * @return The previous system volume, before an alarm goes off.
 	 */
 	public String getPreviousVolume()

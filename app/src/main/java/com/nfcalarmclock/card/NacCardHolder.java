@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
-
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
@@ -26,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.timepicker.MaterialTimePicker;
+
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.system.NacCalendar;
 import com.nfcalarmclock.system.NacContext;
@@ -1812,7 +1812,8 @@ public class NacCardHolder
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 
-		if (shared.getPreventAppFromClosing() && !this.checkCanModifyAlarm())
+		//if (shared.getPreventAppFromClosing() && !this.checkCanModifyAlarm())
+		if (!this.checkCanModifyAlarm())
 		{
 			button.setChecked(!state);
 		}

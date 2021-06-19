@@ -809,17 +809,6 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @return Whether you should prevent app from closing during an alarm
-	 *         activity or not.
-	 */
-	public boolean getPreventAppFromClosing()
-	{
-		String key = this.getKeys().getPreventAppFromClosing();
-		boolean value = this.getDefaults().getPreventAppFromClosing();
-		return this.getBoolean(key, value);
-	}
-
-	/**
 	 * @return The previous system volume, before an alarm goes off.
 	 */
 	public int getPreviousVolume()
