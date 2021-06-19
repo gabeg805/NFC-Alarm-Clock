@@ -1,4 +1,4 @@
-package com.nfcalarmclock.alarm;
+package com.nfcalarmclock.statistics;
 
 import androidx.room.TypeConverter;
 import java.util.Date;
@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Type converters for when an object is retrieved from the database.
  */
-public class NacAlarmCreatedStatisticTypeConverters
+public class NacStatisticTypeConverters
 {
 
 	/**

@@ -2,6 +2,7 @@ package com.nfcalarmclock.db;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
+import androidx.room.AutoMigration;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -12,6 +13,17 @@ import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmDao;
 import com.nfcalarmclock.alarm.NacAlarmTypeConverters;
 import com.nfcalarmclock.audio.media.NacMedia;
+import com.nfcalarmclock.statistics.NacAlarmCreatedStatistic;
+import com.nfcalarmclock.statistics.NacAlarmCreatedStatisticDao;
+import com.nfcalarmclock.statistics.NacAlarmDeletedStatistic;
+import com.nfcalarmclock.statistics.NacAlarmDeletedStatisticDao;
+import com.nfcalarmclock.statistics.NacAlarmDismissedStatistic;
+import com.nfcalarmclock.statistics.NacAlarmDismissedStatisticDao;
+import com.nfcalarmclock.statistics.NacAlarmMissedStatistic;
+import com.nfcalarmclock.statistics.NacAlarmMissedStatisticDao;
+import com.nfcalarmclock.statistics.NacAlarmSnoozedStatistic;
+import com.nfcalarmclock.statistics.NacAlarmSnoozedStatisticDao;
+import com.nfcalarmclock.statistics.NacStatisticTypeConverters;
 import com.nfcalarmclock.system.NacCalendar;
 import com.nfcalarmclock.system.NacScheduler;
 
@@ -23,16 +35,51 @@ import java.util.List;
 /**
  * Store alarms in a Room database.
  */
-@Database(entities={NacAlarm.class}, version=1, exportSchema=true)
+@Database(version=1, exportSchema=true,
+	entities={NacAlarm.class})
 @TypeConverters({NacAlarmTypeConverters.class})
+//@Database(version=2, exportSchema=true,
+//	entities={NacAlarm.class, NacAlarmCreatedStatistic.class,
+//		NacAlarmDeletedStatistic.class, NacAlarmDismissedStatistic.class,
+//		NacAlarmMissedStatistic.class, NacAlarmSnoozedStatistic.class},
+//	autoMigrations={
+//			@AutoMigration(from=1, to=2)
+//		})
+//@TypeConverters({NacAlarmTypeConverters.class,
+//	NacStatisticTypeConverters.class})
 public abstract class NacAlarmDatabase
 	extends RoomDatabase
 {
 
 	/**
-	 * Store alarms in the datbase.
+	 * Store alarms in the database.
 	 */
 	public abstract NacAlarmDao alarmDao();
+
+	///**
+	// * Store created alarm statistics in the database.
+	// */
+	//public abstract NacAlarmCreatedStatisticDao alarmCreatedStatisticDao();
+
+	///**
+	// * Store deleted alarm statistics in the database.
+	// */
+	//public abstract NacAlarmDeletedStatisticDao alarmDeletedStatisticDao();
+
+	///**
+	// * Store dismissed alarm statistics in the database.
+	// */
+	//public abstract NacAlarmDismissedStatisticDao alarmDismissedStatisticDao();
+
+	///**
+	// * Store missed alarm statistics in the database.
+	// */
+	//public abstract NacAlarmMissedStatisticDao alarmMissedStatisticDao();
+
+	///**
+	// * Store snoozed alarm statistics in the database.
+	// */
+	//public abstract NacAlarmSnoozedStatisticDao alarmSnoozedStatisticDao();
 
 	/**
 	 * Name of the database.

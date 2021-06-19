@@ -354,8 +354,8 @@ public class NacActiveAlarmService
 		}
 		else if (action.equals(ACTION_START_SERVICE))
 		{
-			this.setupWakeLock();
 			this.showNotification();
+			this.setupWakeLock();
 			this.setupWakeupProcess();
 			// Might not need schedule next, since doing one day, per alarm, at a time.
 			//this.scheduleNextAlarm();

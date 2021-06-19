@@ -20,7 +20,7 @@ public interface NacAlarmCreatedStatisticDao
 	 * @return All instances when alarms were created.
 	 */
 	@Query("SELECT * FROM alarm_created_statistic")
-	LiveData<List<NacAlarmsCreated>> getAll();
+	LiveData<List<NacAlarmCreatedStatistic>> getAll();
 
 	/**
 	 * Get all instances when alarms were created.
@@ -30,14 +30,16 @@ public interface NacAlarmCreatedStatisticDao
 	 * @return All instances when alarms were created.
 	 */
 	@Query("SELECT * FROM alarm_created_statistic")
-	List<NacAlarmsCreated> getAllNow();
+	List<NacAlarmCreatedStatistic> getAllNow();
 
 	/**
 	 * Insert an instance of an alarm being created.
 	 *
+	 * @param  stat  Alarm created statistic.
+	 *
 	 * @return The row ID of the row that was inserted.
 	 */
 	@Insert(onConflict=OnConflictStrategy.ABORT)
-	long insert();
+	long insert(NacAlarmCreatedStatistic stat);
 
 }

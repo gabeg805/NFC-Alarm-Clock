@@ -6,11 +6,10 @@ import androidx.room.PrimaryKey;
 import java.util.Date;
 
 /**
- * Statistics for when an alarm is created.
+ * Statistics for when an alarm is deleted.
  */
-@Entity(tableName="alarm_created_statistic",
-	ignoredColumns={"hour", "minute", "name"})
-public class NacAlarmCreatedStatistic
+@Entity(tableName="alarm_deleted_statistic")
+public class NacAlarmDeletedStatistic
 	extends NacAlarmStatistic
 {
 

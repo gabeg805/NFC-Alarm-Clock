@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.audio.options.NacAlarmAudioOptionsDialog;
 import com.nfcalarmclock.audio.sources.NacAlarmAudioSourceDialog;
@@ -536,13 +537,17 @@ public class NacMainActivity
 	{
 		RecyclerView rv = this.getRecyclerView();
 		NacAlarm alarm = (NacAlarm) dialog.getData();
-		long id = alarm.getId();
-		NacCardHolder cardHolder = (NacCardHolder) rv.findViewHolderForItemId(id);
 
-		if (cardHolder != null)
+		if (alarm != null)
 		{
-			cardHolder.getNfcButton().setChecked(false);
-			cardHolder.doNfcButtonClick();
+			long id = alarm.getId();
+			NacCardHolder cardHolder = (NacCardHolder) rv.findViewHolderForItemId(id);
+
+			if (cardHolder != null)
+			{
+				cardHolder.getNfcButton().setChecked(false);
+				cardHolder.doNfcButtonClick();
+			}
 		}
 
 		this.cleanupScanNfcTagDialog();
