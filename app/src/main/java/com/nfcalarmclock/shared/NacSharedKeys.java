@@ -78,6 +78,14 @@ public class NacSharedKeys
 	}
 
 	/**
+	 * @return Start statistics key.
+	 */
+	public String getAppStartStatistics()
+	{
+		return this.getString(R.string.app_start_statistics);
+	}
+
+	/**
 	 * @return The audio source key.
 	 */
 	public String getAudioSource()
@@ -357,6 +365,22 @@ public class NacSharedKeys
 	public String getStartWeekOn()
 	{
 		return this.getString(R.string.start_week_on_key);
+	}
+
+	/**
+	 * @return The statistics setting.
+	 */
+	public String getStatistics()
+	{
+		return this.getString(R.string.stats_setting_key);
+	}
+
+	/**
+	 * @return The statistics setting title.
+	 */
+	public String getStatisticsTitle()
+	{
+		return this.getString(R.string.stats_setting);
 	}
 
 	/**

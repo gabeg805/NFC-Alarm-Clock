@@ -1,19 +1,36 @@
 package com.nfcalarmclock.statistics;
 
 import androidx.room.ColumnInfo;
+import androidx.room.PrimaryKey;
+
+import com.nfcalarmclock.alarm.NacAlarm;
+
 import java.util.Date;
 
 /**
  * Statistics for an alarm.
  */
-public class NacAlarmStatistic
+public abstract class NacAlarmStatistic
 {
+
+	/**
+	 * Unique ID.
+	 */
+	@PrimaryKey(autoGenerate=true)
+	@ColumnInfo(name="id")
+	private long mId;
 
 	/**
 	 * Timestamp of when an alarm was snoozed.
 	 */
 	@ColumnInfo(name="timestamp")
 	private Date mTimestamp;
+
+	/**
+	 * The ID of the alarm.
+	 */
+	@ColumnInfo(name="alarm_id")
+	private long mAlarmId;
 
 	/**
 	 * The hour the alarm ran at.
@@ -34,11 +51,51 @@ public class NacAlarmStatistic
 	private String mName;
 
 	/**
+	 */
+	public NacAlarmStatistic()
+	{
+		Date timestamp = new Date();
+
+		this.setTimestamp(timestamp);
+	}
+
+	/**
+	 */
+	public NacAlarmStatistic(NacAlarm alarm)
+	{
+		this();
+
+		if (alarm != null)
+		{
+			this.setAlarmId(alarm.getId());
+			this.setHour(alarm.getHour());
+			this.setMinute(alarm.getMinute());
+			this.setName(alarm.getName());
+		}
+	}
+
+	/**
+	 * @return The alarm ID.
+	 */
+	public long getAlarmId()
+	{
+		return this.mAlarmId;
+	}
+
+	/**
 	 * @return The hour the alarm ran at.
 	 */
 	public int getHour()
 	{
 		return this.mHour;
+	}
+
+	/**
+	 * @return The unique ID.
+	 */
+	public long getId()
+	{
+		return this.mId;
 	}
 
 	/**
@@ -66,6 +123,16 @@ public class NacAlarmStatistic
 	}
 
 	/**
+	 * Set the alarm ID.
+	 *
+	 * @param  id  The alarm ID.
+	 */
+	public void setAlarmId(long id)
+	{
+		this.mAlarmId = id;
+	}
+
+	/**
 	 * Set the hour the alarm ran at.
 	 *
 	 * @param  hour  The hour.
@@ -73,6 +140,16 @@ public class NacAlarmStatistic
 	public void setHour(int hour)
 	{
 		this.mHour = hour;
+	}
+
+	/**
+	 * Set the unique ID.
+	 *
+	 * @param  id  The unique ID.
+	 */
+	public void setId(long id)
+	{
+		this.mId = id;
 	}
 
 	/**

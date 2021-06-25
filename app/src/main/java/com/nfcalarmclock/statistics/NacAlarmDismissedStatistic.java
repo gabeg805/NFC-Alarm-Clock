@@ -1,35 +1,53 @@
 package com.nfcalarmclock.statistics;
 
 import androidx.room.ColumnInfo;
-import androidx.room.Embedded;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+import androidx.room.ForeignKey;
+
+import com.nfcalarmclock.alarm.NacAlarm;
 
 /**
  * Statistics for when an alarm is dismissed.
  */
-@Entity(tableName="alarm_dismissed_statistic")
+@Entity(tableName="alarm_dismissed_statistic",
+	foreignKeys={
+		@ForeignKey(entity=NacAlarm.class,
+			parentColumns={"id"},
+			childColumns={"alarm_id"},
+			onDelete=ForeignKey.SET_NULL)
+		})
 public class NacAlarmDismissedStatistic
+	extends NacAlarmStatistic
 {
-
-	/**
-	 * Embded the ID into this class.
-	 */
-	@PrimaryKey(autoGenerate=true)
-	@Embedded
-	NacAlarmStatisticId statisticId;
-
-	/**
-	 * Embded the columns from the statistic class into this class.
-	 */
-	@Embedded
-	NacAlarmStatistic statistic;
 
 	/**
 	 * Whether the alarm used NFC to dismiss or not.
 	 */
 	@ColumnInfo(name="used_nfc")
 	private boolean mUsedNfc;
+
+	/**
+	 */
+	public NacAlarmDismissedStatistic()
+	{
+		super();
+	}
+
+	/**
+	 */
+	public NacAlarmDismissedStatistic(NacAlarm alarm)
+	{
+		super(alarm);
+	}
+
+	/**
+	 */
+	public NacAlarmDismissedStatistic(NacAlarm alarm, boolean usedNfc)
+	{
+		this(alarm);
+
+		this.setUsedNfc(usedNfc);
+	}
 
 	/**
 	 * Set whether the alarm used NFC to dismiss or not.

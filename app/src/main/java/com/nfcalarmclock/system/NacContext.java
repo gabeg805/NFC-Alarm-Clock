@@ -39,6 +39,17 @@ public class NacContext
 	}
 
 	/**
+	 * Dismiss the foreground service for the given alarm with NFC.
+	 *
+	 * If alarm is null, it will stop the currently active foreground service.
+	 */
+	public static void dismissForegroundServiceWithNfc(Context context, NacAlarm alarm)
+	{
+		Intent intent = NacIntent.dismissForegroundServiceWithNfc(context, alarm);
+		context.startService(intent);
+	}
+
+	/**
 	 * Dismiss the foreground service for the given alarm due to an NFC tag being
 	 * scanned.
 	 *
@@ -55,7 +66,7 @@ public class NacContext
 
 		if (NacNfc.doIdsMatch(alarm, intent))
 		{
-			NacContext.dismissForegroundService(context, alarm);
+			NacContext.dismissForegroundServiceWithNfc(context, alarm);
 			return true;
 		}
 		else

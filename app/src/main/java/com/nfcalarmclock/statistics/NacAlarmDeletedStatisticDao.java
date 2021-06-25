@@ -11,6 +11,7 @@ import java.util.List;
  */
 @Dao
 public interface NacAlarmDeletedStatisticDao
+	extends NacAlarmStatisticDao<NacAlarmDeletedStatistic>
 {
 
 	/**
@@ -22,23 +23,11 @@ public interface NacAlarmDeletedStatisticDao
 	LiveData<List<NacAlarmDeletedStatistic>> getAll();
 
 	/**
-	 * Get all instances when alarms were deleted.
+	 * Count the number of deleted alarm statistics.
 	 *
-	 * This will wait until all alarms are selected.
-	 *
-	 * @return All instances when alarms were deleted.
+	 * @return The number of deleted alarm statistics.
 	 */
-	@Query("SELECT * FROM alarm_deleted_statistic")
-	List<NacAlarmDeletedStatistic> getAllNow();
-
-	/**
-	 * Insert an instance of an alarm being deleted.
-	 *
-	 * @param  stat  Alarm deleted statistic.
-	 *
-	 * @return The row ID of the row that was inserted.
-	 */
-	@Insert()
-	long insert(NacAlarmDeletedStatistic stat);
+	@Query("SELECT COUNT(id) FROM alarm_deleted_statistic")
+	long getCount();
 
 }

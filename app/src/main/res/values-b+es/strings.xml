@@ -190,19 +190,15 @@
 	<!-- ************* -->
 
 	<string name="general_setting">Generala</string>
-	<string name="general_setting_key">pref_screen_general</string>
 	<string name="general_setting_summary">Ajustas generales</string>
 
 	<string name="appearance_setting">Apariencia</string>
-	<string name="appearance_setting_key">pref_screen_appearance</string>
 	<string name="appearance_setting_summary">Personaliza la aplicacion</string>
 
 	<string name="misc_setting">Miscelaneo</string>
-	<string name="misc_setting_key">pref_screen_misc</string>
 	<string name="misc_setting_summary">Agrega caracteristicas geniales</string>
 
 	<string name="about_setting">Acerca</string>
-	<string name="about_setting_key">pref_screen_about</string>
 	<string name="about_setting_summary">Informacion acerca de esta aplicacion</string>
 
 
@@ -219,67 +215,55 @@
 
 	<!-- Auto dismiss duration -->
 	<string name="auto_dismiss">Desactivacion automatica</string>
-	<string name="auto_dismiss_key">pref_auto_dismiss</string>
 
 
 	<!-- Max number of snoozes -->
 	<string name="max_snooze">Dormitar la máxima numero de veces</string>
-	<string name="max_snooze_key">pref_max_snooze</string>
 
 
 	<!-- Snooze duration -->
 	<string name="snooze_duration">Duracion de dormitar</string>
-	<string name="snooze_duration_key">pref_snooze_duration</string>
 
 
 	<!-- Easy snooze -->
 	<string name="easy_snooze">Dormitar fácilmente</string>
-	<string name="easy_snooze_key">pref_easy_snooze</string>
 	<string name="easy_snooze_true">Dormitar tocando en cualquier lugar.</string>
 	<string name="easy_snooze_false">Dormitar normalmente.</string>
 
 
 	<!-- Default alarm name -->
 	<string name="alarm_name">Nombre</string>
-	<string name="alarm_name_key">pref_name</string>
 
 
 	<!-- Default alarm days -->
 	<string name="alarm_days">Días</string>
-	<string name="alarm_days_key">pref_deys</string>
 
 
 	<!-- Default alarm repeat -->
 	<string name="alarm_repeat">Repetir</string>
-	<string name="alarm_repeat_key">pref_repeat</string>
 	<string name="alarm_repeat_true">Repetir la alarma.</string>
 	<string name="alarm_repeat_false">Deshabilitar la alarma después de se ejecucion.</string>
 
 
 	<!-- Default alarm use NFC -->
 	<string name="alarm_use_nfc">Usa NFC</string>
-	<string name="alarm_use_nfc_key">pref_use_nfc</string>
 	<string name="alarm_use_nfc_true">NFC es requerido para desactivar la alarma.</string>
 	<string name="alarm_use_nfc_false">Desactivar la alarma normalmente.</string>
 
 
 	<!-- Default alarm vibrate -->
 	<string name="alarm_vibrate">Vibra</string>
-	<string name="alarm_vibrate_key">pref_vibrate</string>
 	<string name="alarm_vibrate_true">Vibra el telefono.</string>
 	<string name="alarm_vibrate_false">Que no vibre el telefono.</string>
 
 
 	<!-- Default alarm sound -->
 	<string name="alarm_sound">Sonido</string>
-	<string name="alarm_sound_key">pref_sound</string>
 	<string name="alarm_sound_summary">@string/none</string>
 
 
 	<!-- Default alarm volume and audio source -->
 	<string name="alarm_volume">Volumen</string>
-	<string name="alarm_volume_key">pref_volume</string>
-	<string name="alarm_audio_source_key">pref_audio_source</string>
 
 
 
@@ -296,75 +280,62 @@
 
 	<!-- Day button style -->
 	<string name="day_button_style">Day buttons</string>
-	<string name="day_button_style_key">pref_day_button_style</string>
 
 
 	<!-- Start Week On -->
 	<string name="start_week_on">Empieza la semana&#8230;</string>
-	<string name="start_week_on_key">pref_start_week_on</string>
 
 
 	<!-- Theme color -->
 	<string name="theme_color">Tema</string>
-	<string name="theme_color_key">pref_theme_color</string>
 	<string name="theme_color_summary">Color del tema.</string>
 
 
 	<!-- Name color -->
 	<string name="name_color">@string/alarm_name</string>
-	<string name="name_color_key">pref_name_color</string>
 	<string name="name_color_summary">p.ej. Trabajo</string>
 
 
 	<!-- Days color -->
 	<string name="days_color">@string/alarm_days</string>
-	<string name="days_color_key">pref_days_color</string>
 	<string name="days_color_summary">p.ej. Lun &#8231; Mar &#8231; Mie &#8231; Jue &#8231; Vie</string>
 
 
 	<!-- Time color -->
 	<string name="time_color">Tiempo</string>
-	<string name="time_color_key">pref_time_color</string>
 	<string name="time_color_summary">p.ej. 12:30</string>
 
 
 	<!-- AM color -->
-	<string name="am_color_key">pref_am_color</string>
 	<string name="am_color_summary">Coloriada si esta en la hora de alarma AM.</string>
 
 
 	<!-- PM color -->
-	<string name="pm_color_key">pref_pm_color</string>
 	<string name="pm_color_summary">Coloriada si esta en la hora de alarma PM.</string>
 
 
 	<!-- Missed alarm notifications -->
-	<string name="missed_alarm_key">pref_missed_alarm_notification</string>
 	<string name="missed_alarm_true">Muestra notificacions para alarmas perdidas.</string>
 
 
 	<!-- Upcoming alarm notifications -->
-	<string name="upcoming_alarm_key">pref_upcoming_alarm_notification</string>
 	<string name="upcoming_alarm_true">Muestra notificaciones para alarmas programadas.</string>
 
 
 	<!-- Expand new alarm card -->
 	<string name="expand_new_alarm">Expandir alarmas nuevas</string>
-	<string name="expand_new_alarm_key">pref_expand_new_alarm</string>
 	<string name="expand_new_alarm_true">Alarmas copiadas o creadas con el signo de &#8220;+&#8221; se expanden.</string>
 	<string name="expand_new_alarm_false">Alarmas no se expanden.</string>
 
 
 	<!-- Time remaining format -->
 	<string name="next_alarm_format">Estilo de la proxima alarma&#8230;</string>
-	<string name="next_alarm_format_key">pref_time_remaining_format</string>
 	<string name="next_alarm_format_time_in">Próxima alarma en 7 horas 30 minutos</string>
 	<string name="next_alarm_format_time_on">Próxima alarma Lun 7:00 AM</string>
 
 
 	<!-- Show alarm information -->
 	<string name="show_alarm_info">Muestra informacion de alarma</string>
-	<string name="show_alarm_info_key">pref_alarm_info</string>
 	<string name="show_alarm_info_true">Muestra el nombre de la alarma abajo de la pantalla cuando la alarma suena.</string>
 	<string name="show_alarm_info_false">No mostrar informacion de alarma.\n</string>
 
@@ -380,7 +351,6 @@
 
 	<!-- Shuffle playlist -->
 	<string name="shuffle_playlist">Toco la música aleatoriamente</string>
-	<string name="shuffle_playlist_key">pref_shuffle_playlist</string>
 	<string name="shuffle_playlist_true">Mezclar la música en la carpeta.</string>
 	<string name="shuffle_playlist_false">Toca la música en orden.</string>
 	<string name="shuffle_playlist_note">Solo aplicable para las alarmas con una carpeta de música seleccionada.</string>
@@ -388,14 +358,12 @@
 
 	<!-- Speak to me -->
 	<string name="speak_to_me">Habla me</string>
-	<string name="speak_to_me_key">pref_speak_to_me</string>
 	<string name="speak_to_me_true">Decir la hora cuando la alarma suena.</string>
 	<string name="speak_to_me_false">No decir nada.</string>
 
 
 	<!-- Speak frequency -->
 	<string name="speak_frequency">Frequencia de hablar</string>
-	<string name="speak_frequency_key">pref_speak_frequency</string>
 
 
 
@@ -410,60 +378,50 @@
 
 	<!-- App developer -->
 	<string name="author_title">Creador de la aplicacion</string>
-	<string name="author_key">pref_about_author</string>
 	<string name="author">Gabe Gonzalez</string>
 
 
 	<!-- App version -->
 	<string name="version_title">Version</string>
-	<string name="version_key">pref_about_version</string>
 
 
 	<!-- NFC permission -->
 	<string name="about_nfc">NFC</string>
-	<string name="about_nfc_key">pref_about_nfc</string>
 	<string name="about_nfc_summary">(Opcional) Permite a la app detectar las etiquetas de los compos de la communicacion cercana.</string>
 
 	
 	<!-- READ_EXTERNAL_STORAGE permission -->
 	<string name="about_storage">Almacenamiento</string>
-	<string name="about_storage_key">pref_about_storage</string>
 	<string name="about_storage_summary">(Opcional) Leer la música que esta en el telefono.</string>
 
 
 	<!-- VIBRATE permission -->
 	<string name="about_vibrate">@string/alarm_vibrate</string>
-	<string name="about_vibrate_key">pref_about_vibrate</string>
 	<string name="about_vibrate_summary">(Opcional) Permite que la app vibre el telefono.</string>
 
 
 	<!-- SET_ALARM permission -->
 	<string name="about_set_alarm">Ajustar alarma</string>
-	<string name="about_set_alarm_key">pref_about_set_alarm</string>
 	<string name="about_set_alarm_summary">(Requerido) Permite que la app establesqua una alarma.</string>
 
 
 	<!-- RECEIVE_BOOT_COMPLETED permission -->
 	<string name="about_boot">Ejecutarse al inicio</string>
-	<string name="about_boot_key">pref_about_boot</string>
 	<string name="about_boot_summary">(Requerido) Restaurar alarmas cuando el telefono este encendido. Android va eliminar alarmas cuando el telefono se apage.</string>
 
 
 	<!-- WAKE_LOCK -->
 	<string name="about_wakelock">Wakelock</string>
-	<string name="about_wakelock_key">pref_about_wakelock</string>
 	<string name="about_wakelock_summary">(Requerido) Evitar que el dispositivo entre en estado de inactividad para que las alarmas continúan de sonar.</string>
 
 
 	<!-- USE_FULL_SCREEN_INTENT permission -->
 	<string name="about_full_screen_intent">Pantalla completa</string>
-	<string name="about_full_screen_intent_key">pref_about_full_screen_intent</string>
 	<string name="about_full_screen_intent_summary">(Requerido) Permite que la app usa la pantalla completa cuando una alarma esta activada.</string>
 
 
 	<!-- FOREGROUND_SERVICE permission -->
 	<string name="about_foreground_service">Servicio en primer plano</string>
-	<string name="about_foreground_service_key">pref_about_foreground_service</string>
 	<string name="about_foreground_service_summary">(Requerido) Permite que la app esta en primer plano cuando una alarma esta activada.</string>
 
 

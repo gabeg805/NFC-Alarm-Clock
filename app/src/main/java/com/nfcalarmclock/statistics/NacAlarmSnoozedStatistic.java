@@ -1,27 +1,70 @@
 package com.nfcalarmclock.statistics;
 
-import androidx.room.Embedded;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+import androidx.room.ForeignKey;
+
+import com.nfcalarmclock.alarm.NacAlarm;
 
 /**
  * Statistics for when an alarm is snoozed.
  */
-@Entity(tableName="alarm_snoozed_statistic")
+@Entity(tableName="alarm_snoozed_statistic",
+	foreignKeys={
+		@ForeignKey(entity=NacAlarm.class,
+			parentColumns={"id"},
+			childColumns={"alarm_id"},
+			onDelete=ForeignKey.SET_NULL)
+		})
 public class NacAlarmSnoozedStatistic
+	extends NacAlarmStatistic
 {
 
 	/**
-	 * Embded the ID into this class.
+	 * Duration of the snooze.
 	 */
-	@PrimaryKey(autoGenerate=true)
-	@Embedded
-	NacAlarmStatisticId statisticId;
+	@ColumnInfo(name="duration")
+	private long mDuration;
 
 	/**
-	 * Embded the columns from the statistic class into this class.
 	 */
-	@Embedded
-	NacAlarmStatistic statistic;
+	public NacAlarmSnoozedStatistic()
+	{
+		super();
+	}
+
+	/**
+	 */
+	public NacAlarmSnoozedStatistic(NacAlarm alarm)
+	{
+		super(alarm);
+	}
+
+	/**
+	 */
+	public NacAlarmSnoozedStatistic(NacAlarm alarm, long duration)
+	{
+		this(alarm);
+
+		this.setDuration(duration);
+	}
+
+	/**
+	 * @return The duration of the snooze.
+	 */
+	public long getDuration()
+	{
+		return this.mDuration;
+	}
+
+	/**
+	 * Set the duration of the snooze.
+	 *
+	 * @param  duration  The duration of the snooze.
+	 */
+	public void setDuration(long duration)
+	{
+		this.mDuration = duration;
+	}
 
 }

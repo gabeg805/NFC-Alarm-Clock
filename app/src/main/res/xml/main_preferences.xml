@@ -24,6 +24,13 @@
 		/>
 
 	<Preference
+		android:key="@string/stats_setting_key"
+		android:title="@string/stats_setting"
+		android:summary="@string/stats_setting_summary"
+		android:fragment="com.nfcalarmclock.settings.NacAboutSettingsFragment"
+		/>
+
+	<Preference
 		android:key="@string/about_setting_key"
 		android:title="@string/about_setting"
 		android:summary="@string/about_setting_summary"

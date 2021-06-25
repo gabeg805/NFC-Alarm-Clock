@@ -11,6 +11,7 @@ import java.util.List;
  */
 @Dao
 public interface NacAlarmMissedStatisticDao
+	extends NacAlarmStatisticDao<NacAlarmMissedStatistic>
 {
 
 	/**
@@ -22,23 +23,11 @@ public interface NacAlarmMissedStatisticDao
 	LiveData<List<NacAlarmMissedStatistic>> getAll();
 
 	/**
-	 * Get all instances when alarms were missed.
+	 * Count the number of missed alarm statistics.
 	 *
-	 * This will wait until all alarms are selected.
-	 *
-	 * @return All instances when alarms were missed.
+	 * @return The number of missed alarm statistics.
 	 */
-	@Query("SELECT * FROM alarm_missed_statistic")
-	List<NacAlarmMissedStatistic> getAllNow();
-
-	/**
-	 * Insert an instance of an alarm being missed.
-	 *
-	 * @param  stat  Alarm missed statistic.
-	 *
-	 * @return The row ID of the row that was inserted.
-	 */
-	@Insert()
-	long insert(NacAlarmMissedStatistic stat);
+	@Query("SELECT COUNT(id) FROM alarm_missed_statistic")
+	long getCount();
 
 }

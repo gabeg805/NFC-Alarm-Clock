@@ -25,31 +25,32 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.nfcalarmclock.alarm.NacAlarm;
+import com.nfcalarmclock.alarm.NacAlarmViewModel;
+import com.nfcalarmclock.app.NacShutdownBroadcastReceiver;
+import com.nfcalarmclock.audio.media.NacMediaActivity;
 import com.nfcalarmclock.audio.options.NacAlarmAudioOptionsDialog;
 import com.nfcalarmclock.audio.sources.NacAlarmAudioSourceDialog;
-import com.nfcalarmclock.alarm.NacAlarmViewModel;
-import com.nfcalarmclock.system.NacCalendar;
-import com.nfcalarmclock.system.NacContext;
-import com.nfcalarmclock.dialog.NacDialog;
-import com.nfcalarmclock.system.NacIntent;
-import com.nfcalarmclock.audio.media.NacMediaActivity;
-import com.nfcalarmclock.ratemyapp.NacRateMyAppDialog;
-import com.nfcalarmclock.system.NacScheduler;
-import com.nfcalarmclock.settings.NacSettingsActivity;
-import com.nfcalarmclock.app.NacShutdownBroadcastReceiver;
-import com.nfcalarmclock.NacSnackbar;
-import com.nfcalarmclock.upcomingalarm.NacUpcomingAlarmNotification;
-import com.nfcalarmclock.NacUtility;
-import com.nfcalarmclock.R;
+import com.nfcalarmclock.audio.tts.NacTextToSpeechDialog;
 import com.nfcalarmclock.card.NacCardAdapter;
 import com.nfcalarmclock.card.NacCardAdapterLiveData;
 import com.nfcalarmclock.card.NacCardHolder;
 import com.nfcalarmclock.card.NacCardTouchHelper;
+import com.nfcalarmclock.dialog.NacDialog;
+import com.nfcalarmclock.NacUtility;
+import com.nfcalarmclock.NacSnackbar;
 import com.nfcalarmclock.nfc.NacNfc;
 import com.nfcalarmclock.nfc.NacScanNfcTagDialog;
+import com.nfcalarmclock.R;
+import com.nfcalarmclock.ratemyapp.NacRateMyAppDialog;
+import com.nfcalarmclock.settings.NacSettingsActivity;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
-import com.nfcalarmclock.audio.tts.NacTextToSpeechDialog;
+import com.nfcalarmclock.statistics.NacAlarmStatisticRepository;
+import com.nfcalarmclock.system.NacCalendar;
+import com.nfcalarmclock.system.NacContext;
+import com.nfcalarmclock.system.NacIntent;
+import com.nfcalarmclock.system.NacScheduler;
+import com.nfcalarmclock.upcomingalarm.NacUpcomingAlarmNotification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,6 +113,11 @@ public class NacMainActivity
 	 * Shutdown broadcast receiver.
 	 */
 	private NacShutdownBroadcastReceiver mShutdownBroadcastReceiver;
+
+	/**
+	 * Alarm statistic repository.
+	 */
+	private NacAlarmStatisticRepository mAlarmStatisticRepository;
 
 	/**
 	 * Alarm view model.
@@ -178,9 +184,8 @@ public class NacMainActivity
 			view -> {
 				NacSharedPreferences shared = getSharedPreferences();
 				NacAlarm alarm = new NacAlarm.Builder(shared).build();
-				long id = getAlarmViewModel().insert(NacMainActivity.this, alarm);
 
-				getRecentlyAddedAlarmIds().add(id);
+				addAlarm(alarm);
 				view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 			};
 
@@ -211,6 +216,24 @@ public class NacMainActivity
 			};
 
 	/**
+	 * Add an alarm to the database.
+	 *
+	 * @param  alarm  An alarm.
+	 */
+	private void addAlarm(NacAlarm alarm)
+	{
+		if (alarm == null)
+		{
+			return;
+		}
+
+		long id = this.getAlarmViewModel().insert(this, alarm);
+
+		this.getRecentlyAddedAlarmIds().add(id);
+		this.getAlarmStatisticRepository().insertCreated();
+	}
+
+	/**
 	 * Add an alarm that was created from the SET_ALARM intent.
 	 */
 	private void addSetAlarmFromIntent()
@@ -218,11 +241,7 @@ public class NacMainActivity
 		Intent intent = getIntent();
 		NacAlarm alarm = NacIntent.getSetAlarm(this, intent);
 
-		if (alarm != null)
-		{
-			long id = this.getAlarmViewModel().insert(this, alarm);
-			this.getRecentlyAddedAlarmIds().add(id);
-		}
+		this.addAlarm(alarm);
 	}
 
 	/**
@@ -269,14 +288,23 @@ public class NacMainActivity
 	}
 
 	/**
+	 * Delete an alarm from the database.
+	 *
+	 * @param  alarm  An alarm.
 	 */
 	public void deleteAlarm(NacAlarm alarm)
 	{
+		if (alarm == null)
+		{
+			return;
+		}
+
 		NacSharedConstants cons = this.getSharedConstants();
 		String message = cons.getMessageAlarmDelete();
 		String action = cons.getActionUndo();
 
 		this.getAlarmViewModel().delete(this, alarm);
+		this.getAlarmStatisticRepository().insertDeleted(alarm);
 		this.getLastAlarmCardAction().set(alarm, NacLastAlarmCardAction.Type.DELETE);
 		this.showSnackbar(message, action, this.mOnSwipeSnackbarActionListener);
 	}
@@ -338,6 +366,14 @@ public class NacMainActivity
 	private NacCardTouchHelper getAlarmCardTouchHelper()
 	{
 		return this.mAlarmCardTouchHelper;
+	}
+
+	/**
+	 * @return The alarm statistic repository.
+	 */
+	private NacAlarmStatisticRepository getAlarmStatisticRepository()
+	{
+		return this.mAlarmStatisticRepository;
 	}
 
 	/**
@@ -671,10 +707,11 @@ public class NacMainActivity
 		this.mFloatingActionButton = findViewById(R.id.fab_add_alarm);
 		this.mRecyclerView = findViewById(R.id.content_alarm_list);
 		this.mSharedPreferences = new NacSharedPreferences(this);
+		this.mAlarmStatisticRepository = new NacAlarmStatisticRepository(this);
+		this.mAlarmViewModel = new ViewModelProvider(this).get(NacAlarmViewModel.class);
+		this.mAlarmCardAdapterLiveData = new NacCardAdapterLiveData();
 		this.mAlarmCardAdapter = new NacCardAdapter();
 		this.mAlarmCardTouchHelper = new NacCardTouchHelper(this);
-		this.mAlarmCardAdapterLiveData = new NacCardAdapterLiveData();
-		this.mAlarmViewModel = new ViewModelProvider(this).get(NacAlarmViewModel.class);
 		this.mActiveAlarm = null;
 		this.mRecentlyAddedAlarmIds = new ArrayList<>();
 		this.mRecentlyUpdatedAlarmIds = new ArrayList<>();
@@ -808,13 +845,17 @@ public class NacMainActivity
 
 		if (this.wasNfcScannedForDialog(intent))
 		{
+			NacSharedConstants cons = this.getSharedConstants();
 			NacScanNfcTagDialog dialog = this.getScanNfcTagDialog();
-			NacSharedConstants cons = new NacSharedConstants(this);
 
 			this.saveNfcTagId(intent);
-			dialog.saveData(null);
-			dialog.cancel();
 			NacUtility.quickToast(this, cons.getMessageNfcRequired());
+
+			if (dialog != null)
+			{
+				dialog.saveData(null);
+				dialog.cancel();
+			}
 		}
 		else if (this.wasNfcScannedForAlarm(intent))
 		{
@@ -954,9 +995,17 @@ public class NacMainActivity
 	}
 
 	/**
+	 * Restore an alarm and add it back to the database.
+	 *
+	 * @param  alarm  An alarm.
 	 */
 	public void restoreAlarm(NacAlarm alarm)
 	{
+		if (alarm == null)
+		{
+			return;
+		}
+
 		NacSharedConstants cons = this.getSharedConstants();
 		String message = cons.getMessageAlarmRestore();
 		String action = cons.getActionUndo();
@@ -1078,6 +1127,8 @@ public class NacMainActivity
 		this.getAlarmViewModel().getAllAlarms().observe(this,
 			alarms -> 
 				{
+					this.setupStatistics(alarms);
+
 					if (this.getCardsExpandedCount() == 0)
 					{
 						this.getAlarmCardAdapterLiveData().mergeSort(alarms);
@@ -1145,6 +1196,35 @@ public class NacMainActivity
 		if (receiver != null)
 		{
 			registerReceiver(receiver, filter);
+		}
+	}
+
+	/**
+	 * Setup statistics, and start collecting the data.
+	 *
+	 * This is only done if this is not the app's first time running and
+	 * statistics should be started.
+	 *
+	 * @param  alarms  List of alarms.
+	 */
+	private void setupStatistics(List<NacAlarm> alarms)
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+
+		if (shared.getAppStartStatistics() && !shared.getAppFirstRun())
+		{
+			NacAlarmStatisticRepository repo = this.getAlarmStatisticRepository();
+			long numCreated = repo.getCreatedCount();
+
+			if (numCreated == 0)
+			{
+				for (NacAlarm a : alarms)
+				{
+					repo.insertCreated();
+				}
+			}
+
+			shared.editAppStartStatistics(false);
 		}
 	}
 

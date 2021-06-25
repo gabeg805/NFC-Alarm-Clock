@@ -3,15 +3,6 @@
 
 	<!-- App -->
 	<string name="app_name">NFC Alarm Clock</string>
-	<string name="app_first_run">app_first_run</string>
-	<string name="app_rating_counter">app_rating_counter</string>
-	<string name="app_should_refresh_main_activity">app_should_refresh_main_activity</string>
-	<string name="card_is_measured">card_is_measured</string>
-	<string name="card_height_collapsed">card_height_collapsed</string>
-	<string name="card_height_collapsed_dismiss">card_height_collapsed_dismiss</string>
-	<string name="card_height_expanded">card_height_expanded</string>
-	<string name="sys_previous_volume">sys_previous_volume</string>
-
 
 
 	<!-- Consolidate -->
@@ -190,19 +181,18 @@
 	<!-- ************* -->
 
 	<string name="general_setting">General</string>
-	<string name="general_setting_key">pref_screen_general</string>
 	<string name="general_setting_summary">General alarm settings</string>
 
 	<string name="appearance_setting">Appearance</string>
-	<string name="appearance_setting_key">pref_screen_appearance</string>
 	<string name="appearance_setting_summary">Customize how the app looks</string>
 
 	<string name="misc_setting">Miscellaneous</string>
-	<string name="misc_setting_key">pref_screen_misc</string>
 	<string name="misc_setting_summary">Some cool, extra features</string>
 
+	<string name="stats_setting">Statistics</string>
+	<string name="stats_setting_summary">See how long you have snoozed for and more</string>
+
 	<string name="about_setting">About</string>
-	<string name="about_setting_key">pref_screen_about</string>
 	<string name="about_setting_summary">Information about the app</string>
 
 
@@ -219,67 +209,55 @@
 
 	<!-- Auto dismiss duration -->
 	<string name="auto_dismiss">Auto-dismiss</string>
-	<string name="auto_dismiss_key">pref_auto_dismiss</string>
 
 
 	<!-- Max number of snoozes -->
 	<string name="max_snooze">Max snoozes</string>
-	<string name="max_snooze_key">pref_max_snooze</string>
 
 
 	<!-- Snooze duration -->
 	<string name="snooze_duration">Snooze duration</string>
-	<string name="snooze_duration_key">pref_snooze_duration</string>
 
 
 	<!-- Easy snooze -->
 	<string name="easy_snooze">Easy snooze</string>
-	<string name="easy_snooze_key">pref_easy_snooze</string>
 	<string name="easy_snooze_true">Snooze the alarm by touching anywhere.</string>
 	<string name="easy_snooze_false">Snooze the alarm normally.</string>
 
 
 	<!-- Default alarm name -->
 	<string name="alarm_name">Name</string>
-	<string name="alarm_name_key">pref_name</string>
 
 
 	<!-- Default alarm days -->
 	<string name="alarm_days">Days</string>
-	<string name="alarm_days_key">pref_deys</string>
 
 
 	<!-- Default alarm repeat -->
 	<string name="alarm_repeat">Repeat</string>
-	<string name="alarm_repeat_key">pref_repeat</string>
 	<string name="alarm_repeat_true">Repeat the alarm.</string>
 	<string name="alarm_repeat_false">Disable the alarm after it is run.</string>
 
 
 	<!-- Default alarm use NFC -->
 	<string name="alarm_use_nfc">Use NFC</string>
-	<string name="alarm_use_nfc_key">pref_use_nfc</string>
 	<string name="alarm_use_nfc_true">NFC is used to dismiss the alarm.</string>
 	<string name="alarm_use_nfc_false">Dismiss the alarm normally.</string>
 
 
 	<!-- Default alarm vibrate -->
 	<string name="alarm_vibrate">Vibrate</string>
-	<string name="alarm_vibrate_key">pref_vibrate</string>
 	<string name="alarm_vibrate_true">Vibrate the phone.</string>
 	<string name="alarm_vibrate_false">Do not vibrate the phone.</string>
 
 
 	<!-- Default alarm sound -->
 	<string name="alarm_sound">Sound</string>
-	<string name="alarm_sound_key">pref_sound</string>
 	<string name="alarm_sound_summary">@string/none</string>
 
 
 	<!-- Default alarm volume and audio source -->
 	<string name="alarm_volume">Volume</string>
-	<string name="alarm_volume_key">pref_volume</string>
-	<string name="alarm_audio_source_key">pref_audio_source</string>
 
 
 
@@ -296,75 +274,62 @@
 
 	<!-- Day button style -->
 	<string name="day_button_style">Day buttons</string>
-	<string name="day_button_style_key">pref_day_button_style</string>
 
 
 	<!-- Start Week On -->
 	<string name="start_week_on">Start week on&#8230;</string>
-	<string name="start_week_on_key">pref_start_week_on</string>
 
 
 	<!-- Theme color -->
 	<string name="theme_color">Theme</string>
-	<string name="theme_color_key">pref_theme_color</string>
 	<string name="theme_color_summary">The theme color.</string>
 
 
 	<!-- Name color -->
 	<string name="name_color">@string/alarm_name</string>
-	<string name="name_color_key">pref_name_color</string>
 	<string name="name_color_summary">e.g. Work</string>
 
 
 	<!-- Days color -->
 	<string name="days_color">@string/alarm_days</string>
-	<string name="days_color_key">pref_days_color</string>
 	<string name="days_color_summary">e.g. Mon &#8231; Tue &#8231; Wed &#8231; Thu &#8231; Fri</string>
 
 
 	<!-- Time color -->
 	<string name="time_color">Time</string>
-	<string name="time_color_key">pref_time_color</string>
 	<string name="time_color_summary">e.g. 12:30</string>
 
 
 	<!-- AM color -->
-	<string name="am_color_key">pref_am_color</string>
 	<string name="am_color_summary">Colored if AM is in the alarm time.</string>
 
 
 	<!-- PM color -->
-	<string name="pm_color_key">pref_pm_color</string>
 	<string name="pm_color_summary">Colored if PM is in the alarm time.</string>
 
 
 	<!-- Missed alarm notifications -->
-	<string name="missed_alarm_key">pref_missed_alarm_notification</string>
 	<string name="missed_alarm_true">Show notifications for missed alarms.</string>
 
 
 	<!-- Upcoming alarm notifications -->
-	<string name="upcoming_alarm_key">pref_upcoming_alarm_notification</string>
 	<string name="upcoming_alarm_true">Show notifications for upcoming alarms.</string>
 
 
 	<!-- Expand new alarm card -->
 	<string name="expand_new_alarm">Expand new alarms</string>
-	<string name="expand_new_alarm_key">pref_expand_new_alarm</string>
 	<string name="expand_new_alarm_true">Alarms that are copied or created with the &#8220;+&#8221; button are expanded.</string>
 	<string name="expand_new_alarm_false">Alarms are not expanded.</string>
 
 
 	<!-- Time remaining format -->
 	<string name="next_alarm_format">Next alarm format&#8230;</string>
-	<string name="next_alarm_format_key">pref_time_remaining_format</string>
 	<string name="next_alarm_format_time_in">Next alarm in 7 hours 30 minutes</string>
 	<string name="next_alarm_format_time_on">Next alarm on Mon 7:00 AM</string>
 
 
 	<!-- Show alarm information -->
 	<string name="show_alarm_info">Show alarm information</string>
-	<string name="show_alarm_info_key">pref_alarm_info</string>
 	<string name="show_alarm_info_true">Show the alarm name at the bottom of the screen when an alarm goes off.</string>
 	<string name="show_alarm_info_false">Do not show alarm information.\n</string>
 
@@ -380,7 +345,6 @@
 
 	<!-- Shuffle playlist -->
 	<string name="shuffle_playlist">Shuffle music folder</string>
-	<string name="shuffle_playlist_key">pref_shuffle_playlist</string>
 	<string name="shuffle_playlist_true">Shuffle the music in a folder.</string>
 	<string name="shuffle_playlist_false">Play the music in a folder sequentially.</string>
 	<string name="shuffle_playlist_note">Only applicable to alarms with a music folder selected.</string>
@@ -388,14 +352,12 @@
 
 	<!-- Speak to me -->
 	<string name="speak_to_me">Speak to me</string>
-	<string name="speak_to_me_key">pref_speak_to_me</string>
 	<string name="speak_to_me_true">Say the current time when the alarm goes off.</string>
 	<string name="speak_to_me_false">Do not say anything.</string>
 
 
 	<!-- Speak frequency -->
 	<string name="speak_frequency">Speak frequency</string>
-	<string name="speak_frequency_key">pref_speak_frequency</string>
 
 
 
@@ -410,60 +372,50 @@
 
 	<!-- App developer -->
 	<string name="author_title">Developer</string>
-	<string name="author_key">pref_about_author</string>
 	<string name="author">Gabe Gonzalez</string>
 
 
 	<!-- App version -->
 	<string name="version_title">Version</string>
-	<string name="version_key">pref_about_version</string>
 
 
 	<!-- NFC permission -->
 	<string name="about_nfc">NFC</string>
-	<string name="about_nfc_key">pref_about_nfc</string>
 	<string name="about_nfc_summary">(Optional) Allow the app to detect NFC tags.</string>
 
 	
 	<!-- READ_EXTERNAL_STORAGE permission -->
 	<string name="about_storage">Storage</string>
-	<string name="about_storage_key">pref_about_storage</string>
 	<string name="about_storage_summary">(Optional) Read music that is stored on the phone.</string>
 
 
 	<!-- VIBRATE permission -->
 	<string name="about_vibrate">@string/alarm_vibrate</string>
-	<string name="about_vibrate_key">pref_about_vibrate</string>
 	<string name="about_vibrate_summary">(Optional) Allow the app to vibrate the phone.</string>
 
 
 	<!-- SET_ALARM permission -->
 	<string name="about_set_alarm">Set alarm</string>
-	<string name="about_set_alarm_key">pref_about_set_alarm</string>
 	<string name="about_set_alarm_summary">(Required) Allows the application to set an alarm.</string>
 
 
 	<!-- RECEIVE_BOOT_COMPLETED permission -->
 	<string name="about_boot">Startup</string>
-	<string name="about_boot_key">pref_about_boot</string>
 	<string name="about_boot_summary">(Required) Restore alarms when the phone is turned on. Android will delete alarms when the phone is turned off.</string>
 
 
 	<!-- WAKE_LOCK -->
 	<string name="about_wakelock">Wakelock</string>
-	<string name="about_wakelock_key">pref_about_wakelock</string>
 	<string name="about_wakelock_summary">(Required) Prevent the phone from sleeping so that an activated alarm will continue to go off.</string>
 
 
 	<!-- USE_FULL_SCREEN_INTENT permission -->
 	<string name="about_full_screen_intent">Full screen</string>
-	<string name="about_full_screen_intent_key">pref_about_full_screen_intent</string>
 	<string name="about_full_screen_intent_summary">(Required) Allows the app to use the full screen when an alarm is activated.</string>
 
 
 	<!-- FOREGROUND_SERVICE permission -->
 	<string name="about_foreground_service">Foreground service</string>
-	<string name="about_foreground_service_key">pref_about_foreground_service</string>
 	<string name="about_foreground_service_summary">(Required) Allows the app to run a foreground service when an alarm is activated.</string>
 
 

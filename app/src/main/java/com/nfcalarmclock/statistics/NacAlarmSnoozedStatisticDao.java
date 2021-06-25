@@ -11,6 +11,7 @@ import java.util.List;
  */
 @Dao
 public interface NacAlarmSnoozedStatisticDao
+	extends NacAlarmStatisticDao<NacAlarmSnoozedStatistic>
 {
 
 	/**
@@ -22,23 +23,11 @@ public interface NacAlarmSnoozedStatisticDao
 	LiveData<List<NacAlarmSnoozedStatistic>> getAll();
 
 	/**
-	 * Get all instances when alarms were snoozed.
+	 * Count the number of snoozed alarm statistics.
 	 *
-	 * This will wait until all alarms are selected.
-	 *
-	 * @return All instances when alarms were snoozed.
+	 * @return The number of snoozed alarm statistics.
 	 */
-	@Query("SELECT * FROM alarm_snoozed_statistic")
-	List<NacAlarmSnoozedStatistic> getAllNow();
-
-	/**
-	 * Insert an instance of an alarm being snoozed.
-	 *
-	 * @param  stat  Alarm snoozed statistic.
-	 *
-	 * @return The row ID of the row that was inserted.
-	 */
-	@Insert()
-	long insert(NacAlarmSnoozedStatistic stat);
+	@Query("SELECT COUNT(id) FROM alarm_snoozed_statistic")
+	long getCount();
 
 }

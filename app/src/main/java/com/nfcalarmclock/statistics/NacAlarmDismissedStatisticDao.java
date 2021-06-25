@@ -2,7 +2,6 @@ package com.nfcalarmclock.statistics;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Insert;
 import androidx.room.Query;
 import java.util.List;
 
@@ -11,6 +10,7 @@ import java.util.List;
  */
 @Dao
 public interface NacAlarmDismissedStatisticDao
+	extends NacAlarmStatisticDao<NacAlarmDismissedStatistic>
 {
 
 	/**
@@ -22,23 +22,11 @@ public interface NacAlarmDismissedStatisticDao
 	LiveData<List<NacAlarmDismissedStatistic>> getAll();
 
 	/**
-	 * Get all instances when alarms were dismissed.
+	 * Count the number of dismissed alarm statistics.
 	 *
-	 * This will wait until all alarms are selected.
-	 *
-	 * @return All instances when alarms were dismissed.
+	 * @return The number of dismissed alarm statistics.
 	 */
-	@Query("SELECT * FROM alarm_dismissed_statistic")
-	List<NacAlarmDismissedStatistic> getAllNow();
-
-	/**
-	 * Insert an instance of an alarm being dismissed.
-	 *
-	 * @param  stat  Alarm dismissed statistic.
-	 *
-	 * @return The row ID of the row that was inserted.
-	 */
-	@Insert()
-	long insert(NacAlarmDismissedStatistic stat);
+	@Query("SELECT COUNT(id) FROM alarm_dismissed_statistic")
+	long getCount();
 
 }

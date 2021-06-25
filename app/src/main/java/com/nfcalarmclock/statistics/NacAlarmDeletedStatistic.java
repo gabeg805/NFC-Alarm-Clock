@@ -1,27 +1,30 @@
 package com.nfcalarmclock.statistics;
 
-import androidx.room.Embedded;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+
+import com.nfcalarmclock.alarm.NacAlarm;
 
 /**
  * Statistics for when an alarm is deleted.
  */
-@Entity(tableName="alarm_deleted_statistic")
+@Entity(tableName="alarm_deleted_statistic",
+	ignoredColumns={"alarm_id"})
 public class NacAlarmDeletedStatistic
+	extends NacAlarmStatistic
 {
 
 	/**
-	 * Embded the ID into this class.
 	 */
-	@PrimaryKey(autoGenerate=true)
-	@Embedded
-	NacAlarmStatisticId statisticId;
+	public NacAlarmDeletedStatistic()
+	{
+		super();
+	}
 
 	/**
-	 * Embded the columns from the statistic class into this class.
 	 */
-	@Embedded
-	NacAlarmStatistic statistic;
+	public NacAlarmDeletedStatistic(NacAlarm alarm)
+	{
+		super(alarm);
+	}
 
 }

@@ -14,18 +14,6 @@
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
 			/>
-
-		<!--
-		<com.nfcalarmclock.preference.NacCheckboxPreference
-			android:key="@string/prevent_app_from_closing_key"
-			android:title="@string/prevent_app_from_closing"
-			android:summaryOn="@string/prevent_app_from_closing_true"
-			android:summaryOff="@string/prevent_app_from_closing_false"
-			android:defaultValue="@bool/default_prevent_app_from_closing"
-			app:allowDividerBelow="true"
-			/>
-		-->
-
 	</com.nfcalarmclock.preference.NacPreferenceCategory>
 
 	<!-- Snooze -->

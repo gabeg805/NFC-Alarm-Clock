@@ -199,6 +199,7 @@ public abstract class NacAlarmDatabase
 					DB_NAME)
 					//.allowMainThreadQueries()
 					.addCallback(sDatabaseCallback)
+					//.fallbackToDestructiveMigration()
 					.build();
 
 				sContext = appContext;

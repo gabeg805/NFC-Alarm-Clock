@@ -2,11 +2,11 @@ package com.nfcalarmclock.alarm;
 
 import android.app.Application;
 import android.content.Context;
-
 import androidx.lifecycle.LiveData;
 
 import com.nfcalarmclock.NacUtility;
 import com.nfcalarmclock.db.NacAlarmDatabase;
+import com.nfcalarmclock.db.NacRepository;
 
 import java.lang.InterruptedException;
 import java.util.concurrent.CancellationException;
@@ -19,6 +19,7 @@ import java.util.List;
  * Alarm repository.
  */
 public class NacAlarmRepository
+	extends NacRepository
 {
 
 	/**
@@ -35,6 +36,8 @@ public class NacAlarmRepository
 	 */
 	public NacAlarmRepository(Application app)
 	{
+		super(app);
+
 		NacAlarmDatabase db = NacAlarmDatabase.getInstance(app);
 		NacAlarmDao dao = db.alarmDao();
 
@@ -85,7 +88,7 @@ public class NacAlarmRepository
 
 		Future<?> future = this.doDelete(alarm);
 
-		return NacAlarmRepository.getIntegerFromFuture(future);
+		return NacRepository.getIntegerFromFuture(future);
 	}
 
 	/**
@@ -98,7 +101,7 @@ public class NacAlarmRepository
 			return null;
 		}
 
-		NacAlarmDao dao = this.getDao();
+		NacAlarmDao dao = this.getAlarmDao();
 		return NacAlarmDatabase.getExecutor().submit(() -> dao.delete(alarm));
 	}
 
@@ -112,7 +115,7 @@ public class NacAlarmRepository
 			return null;
 		}
 
-		NacAlarmDao dao = this.getDao();
+		NacAlarmDao dao = this.getAlarmDao();
 		return NacAlarmDatabase.getExecutor().submit(() -> dao.findAlarm(id));
 	}
 
@@ -132,7 +135,7 @@ public class NacAlarmRepository
 	 */
 	public Future<?> doGetActiveAlarmsNow()
 	{
-		NacAlarmDao dao = this.getDao();
+		NacAlarmDao dao = this.getAlarmDao();
 		return NacAlarmDatabase.getExecutor().submit(dao::getActiveAlarmsNow);
 	}
 
@@ -143,7 +146,7 @@ public class NacAlarmRepository
 	 */
 	public Future<?> doGetAllAlarmsNow()
 	{
-		NacAlarmDao dao = this.getDao();
+		NacAlarmDao dao = this.getAlarmDao();
 		return NacAlarmDatabase.getExecutor().submit(dao::getAllAlarmsNow);
 	}
 
@@ -157,7 +160,7 @@ public class NacAlarmRepository
 			return null;
 		}
 
-		NacAlarmDao dao = this.getDao();
+		NacAlarmDao dao = this.getAlarmDao();
 		return NacAlarmDatabase.getExecutor().submit(() -> dao.insert(alarm));
 	}
 
@@ -171,7 +174,7 @@ public class NacAlarmRepository
 			return null;
 		}
 
-		NacAlarmDao dao = this.getDao();
+		NacAlarmDao dao = this.getAlarmDao();
 		return NacAlarmDatabase.getExecutor().submit(() -> dao.update(alarm));
 	}
 
@@ -187,7 +190,7 @@ public class NacAlarmRepository
 
 		Future<?> future = this.doFindAlarm(id);
 
-		return NacAlarmRepository.getAlarmFromFuture(future);
+		return NacRepository.getAlarmFromFuture(future);
 	}
 
 	/**
@@ -206,7 +209,7 @@ public class NacAlarmRepository
 	 */
 	public LiveData<NacAlarm> getActiveAlarm()
 	{
-		return this.getDao().getActiveAlarm();
+		return this.getAlarmDao().getActiveAlarm();
 	}
 
 	/**
@@ -216,7 +219,7 @@ public class NacAlarmRepository
 	 */
 	public LiveData<List<NacAlarm>> getActiveAlarms()
 	{
-		return this.getDao().getActiveAlarms();
+		return this.getAlarmDao().getActiveAlarms();
 	}
 
 	/**
@@ -228,53 +231,17 @@ public class NacAlarmRepository
 	{
 		Future<?> future = this.doGetActiveAlarmsNow();
 
-		return NacAlarmRepository.getAlarmListFromFuture(future);
+		return NacRepository.getAlarmListFromFuture(future);
 	}
 
 	/**
-	 * Get a NacAlarm from a Future object.
+	 * Get the data access object for the alarm.
 	 *
-	 * @param  future  Future object.
-	 *
-	 * @return A NacAlarm from a Future object.
+	 * @return The data access object for the alarm.
 	 */
-	public static NacAlarm getAlarmFromFuture(Future<?> future)
+	public NacAlarmDao getAlarmDao()
 	{
-		try
-		{
-			return (NacAlarm) future.get();
-		}
-		catch (CancellationException | ExecutionException | InterruptedException e)
-		{
-			NacUtility.printf("AHHHHHHHHHHHHHHHHHHHH GET_ALARM exception!");
-			NacUtility.printf("String  : %s!", e.toString());
-			NacUtility.printf("Message : %s!", e.getMessage());
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	/**
-	 * Get a list of NacAlarm from a Future object.
-	 *
-	 * @param  future  Future object.
-	 *
-	 * @return A list of NacAlarm from a Future object.
-	 */
-	public static List<NacAlarm> getAlarmListFromFuture(Future<?> future)
-	{
-		try
-		{
-			return (List<NacAlarm>) future.get();
-		}
-		catch (CancellationException | ExecutionException | InterruptedException e)
-		{
-			NacUtility.printf("AHHHHHHHHHHHHHHHHHHHH GET_ALARM_LIST exception!");
-			NacUtility.printf("String  : %s!", e.toString());
-			NacUtility.printf("Message : %s!", e.getMessage());
-			e.printStackTrace();
-			return new ArrayList<>();
-		}
+		return this.mAlarmDao;
 	}
 
 	/**
@@ -301,63 +268,7 @@ public class NacAlarmRepository
 	{
 		Future<?> future = this.doGetAllAlarmsNow();
 
-		return NacAlarmRepository.getAlarmListFromFuture(future);
-	}
-
-	/**
-	 * Get the data access object for the alarm.
-	 *
-	 * @return The data access object for the alarm.
-	 */
-	public NacAlarmDao getDao()
-	{
-		return this.mAlarmDao;
-	}
-
-	/**
-	 * Get an integer from a Future object.
-	 *
-	 * @param  future  Future object.
-	 *
-	 * @return An integer from a Future object.
-	 */
-	public static int getIntegerFromFuture(Future<?> future)
-	{
-		try
-		{
-			return (Integer) future.get();
-		}
-		catch (CancellationException | ExecutionException | InterruptedException e)
-		{
-			NacUtility.printf("AHHHHHHHHHHHHHHHHHHHH GET_INT exception!");
-			NacUtility.printf("String  : %s!", e.toString());
-			NacUtility.printf("Message : %s!", e.getMessage());
-			e.printStackTrace();
-			return -1;
-		}
-	}
-
-	/**
-	 * Get a long from a Future object.
-	 *
-	 * @param  future  Future object.
-	 *
-	 * @return A long from a Future object.
-	 */
-	public static long getLongFromFuture(Future<?> future)
-	{
-		try
-		{
-			return (Long) future.get();
-		}
-		catch (CancellationException | ExecutionException | InterruptedException e)
-		{
-			NacUtility.printf("AHHHHHHHHHHHHHHHHHHHH GET_LONG exception!");
-			NacUtility.printf("String  : %s!", e.toString());
-			NacUtility.printf("Message : %s!", e.getMessage());
-			e.printStackTrace();
-			return -1;
-		}
+		return NacRepository.getAlarmListFromFuture(future);
 	}
 
 	/**
@@ -376,7 +287,7 @@ public class NacAlarmRepository
 
 		Future<?> future = this.doInsert(alarm);
 
-		return NacAlarmRepository.getLongFromFuture(future);
+		return NacRepository.getLongFromFuture(future);
 	}
 
 	/**
@@ -395,7 +306,7 @@ public class NacAlarmRepository
 
 		Future<?> future = this.doUpdate(alarm);
 
-		return NacAlarmRepository.getIntegerFromFuture(future);
+		return NacRepository.getIntegerFromFuture(future);
 	}
 
 }

@@ -46,6 +46,14 @@ public class NacSharedDefaults
 	}
 
 	/**
+	 * @return Start statistics.
+	 */
+	public boolean getAppStartStatistics()
+	{
+		return this.getBoolean(R.bool.default_app_start_statistics);
+	}
+
+	/**
 	 * @return The auto dismiss index.
 	 */
 	public int getAutoDismissIndex()

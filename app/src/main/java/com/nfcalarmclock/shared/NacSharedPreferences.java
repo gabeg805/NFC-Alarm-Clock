@@ -73,6 +73,18 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * Edit whether statistics should start to be collected or not.
+	 *
+	 * @param  shouldStart  Whether statistics should start to be collected or
+	 *     not.
+	 */
+	public void editAppStartStatistics(boolean shouldStart)
+	{
+		String key = this.getKeys().getAppStartStatistics();
+		this.saveBoolean(key, shouldStart, false);
+	}
+
+	/**
 	 * Edit the default audio source to use when a new alarm card is created.
 	 *
 	 * This can be changed for an alarm by clicking the audio settings button.
@@ -385,6 +397,18 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getAppFirstRun();
 		boolean value = this.getDefaults().getAppFirstRun();
+		return this.getBoolean(key, value);
+	}
+
+	/**
+	 * Get whether statistics should start to be collected or not.
+	 *
+	 * @return Whether statistics should start to be collected or not.
+	 */
+	public boolean getAppStartStatistics()
+	{
+		String key = this.getKeys().getAppStartStatistics();
+		boolean value = this.getDefaults().getAppStartStatistics();
 		return this.getBoolean(key, value);
 	}
 

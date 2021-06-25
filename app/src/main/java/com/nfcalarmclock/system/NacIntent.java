@@ -168,6 +168,18 @@ public class NacIntent
 	}
 
 	/**
+	 * @return An intent that will be used to dismiss the foreground alarm service
+	 *     and indicates that NFC was used.
+	 */
+	public static Intent dismissForegroundServiceWithNfc(Context context, NacAlarm alarm)
+	{
+		Intent intent = new Intent(NacActiveAlarmService.ACTION_DISMISS_ALARM_WITH_NFC,
+			null, context, NacActiveAlarmService.class);
+
+		return NacIntent.addAlarm(intent, alarm);
+	}
+
+	/**
 	 * @return The intent action (never null).
 	 */
 	public static String getAction(Intent intent)

@@ -4,16 +4,9 @@ TODO
 
 * Save stream usage as an int in the database, instead of a string.
 
-* Can get rid of NacDatabaseBackgroundService.
-
-* Can use NacAlarm.Builder in NacDatabase.toAlarm.
-
-* Figure out how to close notification activity (NacAlarmActivity) from the
-  notification. The action just calls the NacForegroundService, but if the
-  NacAlarmActivity is in the foreground, it will not be closed.
-
-
 * Change to the androix MediaPlayer
+
+* Implement Spotify
 
 ----
 DONE

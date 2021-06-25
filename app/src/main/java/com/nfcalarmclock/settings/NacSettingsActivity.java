@@ -104,14 +104,17 @@ public class NacSettingsActivity
 			Preference general = findPreference(keys.getGeneral());
 			Preference miscellaneous = findPreference(keys.getMiscellaneous());
 			Preference about = findPreference(keys.getAbout());
+			Preference statistics = findPreference(keys.getStatistics());
 
 			appearance.setIcon(this.createIconDrawable(R.mipmap.palette));
 			general.setIcon(this.createIconDrawable(R.mipmap.settings));
 			miscellaneous.setIcon(this.createIconDrawable(R.mipmap.extension));
+			statistics.setIcon(this.createIconDrawable(R.mipmap.analytics));
 			about.setIcon(this.createIconDrawable(R.mipmap.about));
 			appearance.setOnPreferenceClickListener(this);
 			general.setOnPreferenceClickListener(this);
 			miscellaneous.setOnPreferenceClickListener(this);
+			statistics.setOnPreferenceClickListener(this);
 			about.setOnPreferenceClickListener(this);
 		}
 
@@ -154,6 +157,12 @@ public class NacSettingsActivity
 			{
 				fragment = new NacMiscellaneousSettingsFragment();
 				title = keys.getMiscellaneousTitle();
+			}
+			else if (preferenceKey.equals(keys.getStatistics()))
+			{
+				// TODO: Make this statistics
+				fragment = new NacStatisticsSettingsFragment();
+				title = keys.getStatisticsTitle();
 			}
 			else if (preferenceKey.equals(keys.getAbout()))
 			{

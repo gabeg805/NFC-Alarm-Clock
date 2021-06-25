@@ -1,27 +1,36 @@
 package com.nfcalarmclock.statistics;
 
-import androidx.room.Embedded;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+import androidx.room.ForeignKey;
+
+import com.nfcalarmclock.alarm.NacAlarm;
 
 /**
  * Statistics for when an alarm is missed.
  */
-@Entity(tableName="alarm_missed_statistic")
+@Entity(tableName="alarm_missed_statistic",
+	foreignKeys={
+		@ForeignKey(entity=NacAlarm.class,
+			parentColumns={"id"},
+			childColumns={"alarm_id"},
+			onDelete=ForeignKey.SET_NULL)
+		})
 public class NacAlarmMissedStatistic
+	extends NacAlarmStatistic
 {
 
 	/**
-	 * Embded the ID into this class.
 	 */
-	@PrimaryKey(autoGenerate=true)
-	@Embedded
-	NacAlarmStatisticId statisticId;
+	public NacAlarmMissedStatistic()
+	{
+		super();
+	}
 
 	/**
-	 * Embded the columns from the statistic class into this class.
 	 */
-	@Embedded
-	NacAlarmStatistic statistic;
+	public NacAlarmMissedStatistic(NacAlarm alarm)
+	{
+		super(alarm);
+	}
 
 }

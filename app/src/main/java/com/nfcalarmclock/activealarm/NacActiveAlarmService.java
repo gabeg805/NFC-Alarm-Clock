@@ -1,5 +1,6 @@
 package com.nfcalarmclock.activealarm;
 
+import android.app.Application;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -8,15 +9,16 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
+import com.nfcalarmclock.NacUtility;
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmRepository;
-import com.nfcalarmclock.system.NacContext;
-import com.nfcalarmclock.system.NacIntent;
 import com.nfcalarmclock.missedalarm.NacMissedAlarmNotification;
-import com.nfcalarmclock.system.NacScheduler;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
-import com.nfcalarmclock.NacUtility;
+import com.nfcalarmclock.statistics.NacAlarmStatisticRepository;
+import com.nfcalarmclock.system.NacContext;
+import com.nfcalarmclock.system.NacIntent;
+import com.nfcalarmclock.system.NacScheduler;
 
 import java.lang.System;
 import java.util.Calendar;
@@ -54,6 +56,12 @@ public class NacActiveAlarmService
 		"com.nfcalarmclock.ACTION_DISMISS_ALARM";
 
 	/**
+	 * Action to dismiss the alarm with NFC.
+	 */
+	public static final String ACTION_DISMISS_ALARM_WITH_NFC =
+		"com.nfcalarmclock.ACTION_DISMISS_ALARM_WITH_NFC";
+
+	/**
 	 * Shared preferences.
 	 */
 	private NacSharedPreferences mSharedPreferences;
@@ -87,6 +95,18 @@ public class NacActiveAlarmService
 	 * Time that the service was started, in milliseconds.
 	 */
 	private long mStartTime;
+
+	/**
+	 * Automatically dismiss the alarm.
+	 *
+	 * This will finish the service.
+	 */
+	private void autoDismiss()
+	{
+		this.doDismiss();
+		this.saveMissedStatistic();
+		this.finish();
+	}
 
 	/**
 	 * Run cleanup.
@@ -159,8 +179,34 @@ public class NacActiveAlarmService
 
 	/**
 	 * Dismiss the alarm.
+	 *
+	 * This will finish the service.
 	 */
 	private void dismiss()
+	{
+		this.doDismiss();
+		this.saveDismissedStatistic(false);
+		this.finish();
+	}
+
+	/**
+	 * Dismiss the alarm with NFC.
+	 *
+	 * This will finish the service.
+	 */
+	private void dismissWithNfc()
+	{
+		this.doDismiss();
+		this.saveDismissedStatistic(true);
+		this.finish();
+	}
+
+	/**
+	 * Dismiss the alarm.
+	 *
+	 * This does not finish the service.
+	 */
+	private void doDismiss()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacSharedConstants cons = this.getSharedConstants();
@@ -169,14 +215,13 @@ public class NacActiveAlarmService
 
 		if (alarm != null)
 		{
+			shared.editShouldRefreshMainActivity(true);
 			alarm.dismiss();
 			repo.update(alarm);
 			NacScheduler.update(this, alarm);
-			shared.editShouldRefreshMainActivity(true);
 		}
 
 		NacUtility.quickToast(this, cons.getMessageAlarmDismiss());
-		this.finish();
 	}
 
 	/**
@@ -289,7 +334,7 @@ public class NacActiveAlarmService
 			notification.show();
 		}
 
-		this.dismiss();
+		this.autoDismiss();
 	}
 
 	/**
@@ -307,8 +352,10 @@ public class NacActiveAlarmService
 	{
 		super.onCreate();
 
+		Application app = getApplication();
 		this.mSharedPreferences = new NacSharedPreferences(this);
-		this.mAlarmRepository = new NacAlarmRepository(getApplication());
+		// TODO: See if this needs to be in here or can be localized
+		this.mAlarmRepository = new NacAlarmRepository(app);
 		this.mAlarm = null;
 		this.mWakeupProcess = null;
 		this.mWakeLock = null;
@@ -348,6 +395,10 @@ public class NacActiveAlarmService
 		{
 			this.dismiss();
 		}
+		else if (action.equals(ACTION_DISMISS_ALARM_WITH_NFC))
+		{
+			this.dismissWithNfc();
+		}
 		else if (action.equals(ACTION_SNOOZE_ALARM))
 		{
 			this.snooze();
@@ -366,6 +417,46 @@ public class NacActiveAlarmService
 		}
 
 		return START_NOT_STICKY;
+	}
+
+	/**
+	 * Save the dismissed statistic to the database.
+	 *
+	 * @param  usedNfc  Whether NFC was used to dismiss the alarm or not.
+	 */
+	private void saveDismissedStatistic(boolean usedNfc)
+	{
+		Application app = getApplication();
+		NacAlarmStatisticRepository repo = new NacAlarmStatisticRepository(app);
+		NacAlarm alarm = this.getAlarm();
+
+		repo.insertDismissed(alarm, usedNfc);
+	}
+
+	/**
+	 * Save the missed statistic to the database.
+	 */
+	private void saveMissedStatistic()
+	{
+		Application app = getApplication();
+		NacAlarmStatisticRepository repo = new NacAlarmStatisticRepository(app);
+		NacAlarm alarm = this.getAlarm();
+
+		repo.insertMissed(alarm);
+	}
+
+	/**
+	 * Save the snoozed statistic to the database.
+	 */
+	private void saveSnoozedStatistic()
+	{
+		Application app = getApplication();
+		NacAlarmStatisticRepository repo = new NacAlarmStatisticRepository(app);
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacAlarm alarm = this.getAlarm();
+		long duration = 60L * shared.getSnoozeDurationValue();
+
+		repo.insertSnoozed(alarm, duration);
 	}
 
 	/**
@@ -427,6 +518,8 @@ public class NacActiveAlarmService
 
 	/**
 	 * Snooze the alarm.
+	 *
+	 * This will finish the service.
 	 */
 	public void snooze()
 	{
@@ -440,6 +533,7 @@ public class NacActiveAlarmService
 			shared.editShouldRefreshMainActivity(true);
 			this.updateTimeActive();
 			this.updateAlarm();
+			this.saveSnoozedStatistic();
 			NacScheduler.update(this, alarm, cal);
 
 			NacUtility.quickToast(this, cons.getMessageAlarmSnooze());

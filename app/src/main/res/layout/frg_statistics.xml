@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_margin="@dimen/medium">
+		<!--
+		android:orientation="vertical"
+		android:scrollbars="vertical">
+		-->
+
+		<!-- Current -->
+		<TextView
+			android:id="@+id/current_alarms_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/small"
+			android:layout_marginBottom="@dimen/small"
+			android:singleLine="true"
+			android:ellipsize="end"
+			android:textColor="@color/white"
+			android:textSize="@dimen/tsz_normal"
+			android:text="Current"
+			/>
+
+		<TextView
+			android:id="@+id/current_alarms_number"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignBaseline="@id/current_alarms_title"
+			android:layout_alignParentEnd="true"
+			android:singleLine="true"
+			android:ellipsize="end"
+			android:textSize="@dimen/tsz_normal"
+			android:text="12"
+			/>
+
+		<!-- Divider -->
+		<View
+			android:id="@+id/divider1"
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/line"
+			android:layout_below="@id/current_alarms_title"
+			android:layout_marginTop="@dimen/small"
+			android:layout_marginBottom="@dimen/small"
+			android:background="?attr/colorAccent"
+			/>
+
+		<!-- Created alarms-->
+		<TextView
+			android:id="@+id/created_alarms_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/divider1"
+			android:layout_marginTop="@dimen/small"
+			android:layout_marginBottom="@dimen/small"
+			android:singleLine="true"
+			android:ellipsize="end"
+			android:textColor="@color/white"
+			android:textSize="@dimen/tsz_normal"
+			android:text="Created alarms"
+			/>
+
+		<TextView
+			android:id="@+id/created_alarms_number"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignBaseline="@id/created_alarms_title"
+			android:layout_alignParentEnd="true"
+			android:singleLine="true"
+			android:ellipsize="end"
+			android:textSize="@dimen/tsz_normal"
+			android:text="81"
+			/>
+
+		<!-- Deleted alarms-->
+		<TextView
+			android:id="@+id/deleted_alarms_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/created_alarms_title"
+			android:layout_marginTop="@dimen/small"
+			android:layout_marginBottom="@dimen/small"
+			android:singleLine="true"
+			android:ellipsize="end"
+			android:textColor="@color/white"
+			android:textSize="@dimen/tsz_normal"
+			android:text="Deleted alarms"
+			/>
+
+		<TextView
+			android:id="@+id/deleted_alarms_number"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignBaseline="@id/deleted_alarms_title"
+			android:layout_alignParentEnd="true"
+			android:singleLine="true"
+			android:ellipsize="end"
+			android:textSize="@dimen/tsz_normal"
+			android:text="69"
+			/>
+
+        <!-- Divider -->
+		<View
+			android:id="@+id/divider2"
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/line"
+			android:layout_below="@id/deleted_alarms_title"
+			android:layout_marginTop="@dimen/small"
+			android:layout_marginBottom="@dimen/small"
+			android:background="?attr/colorAccent"
+			/>
+
+		<!-- Dismissed alarms-->
+		<TextView
+			android:id="@+id/dismissed_alarms_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/divider2"
+			android:layout_marginTop="@dimen/small"
+			android:layout_marginBottom="@dimen/small"
+			android:singleLine="true"
+			android:ellipsize="end"
+			android:textColor="@color/white"
+			android:textSize="@dimen/tsz_normal"
+			android:text="Dismissed alarms"
+			/>
+
+		<TextView
+			android:id="@+id/dismissed_alarms_number"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignBaseline="@id/dismissed_alarms_title"
+			android:layout_alignParentEnd="true"
+			android:singleLine="true"
+			android:ellipsize="end"
+			android:textSize="@dimen/tsz_normal"
+			android:text="35"
+			/>
+
+		<!-- Missed alarms-->
+		<TextView
+			android:id="@+id/missed_alarms_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/dismissed_alarms_title"
+			android:layout_marginTop="@dimen/small"
+			android:layout_marginBottom="@dimen/small"
+			android:singleLine="true"
+			android:ellipsize="end"
+			android:textColor="@color/white"
+			android:textSize="@dimen/tsz_normal"
+			android:text="Missed alarms"
+			/>
+
+		<TextView
+			android:id="@+id/missed_alarms_number"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignBaseline="@id/missed_alarms_title"
+			android:layout_alignParentEnd="true"
+			android:singleLine="true"
+			android:ellipsize="end"
+			android:textSize="@dimen/tsz_normal"
+			android:text="7"
+			/>
+
+		<!-- Snoozed alarms-->
+		<TextView
+			android:id="@+id/snoozed_alarms_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/missed_alarms_title"
+			android:layout_marginTop="@dimen/small"
+			android:layout_marginBottom="@dimen/small"
+			android:singleLine="true"
+			android:ellipsize="end"
+			android:textColor="@color/white"
+			android:textSize="@dimen/tsz_normal"
+			android:text="Snoozed alarms"
+			/>
+
+		<TextView
+			android:id="@+id/snoozed_alarms_number"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignBaseline="@id/snoozed_alarms_title"
+			android:layout_alignParentEnd="true"
+			android:singleLine="true"
+			android:ellipsize="end"
+			android:textSize="@dimen/tsz_normal"
+			android:text="94"
+			/>
+
+	</RelativeLayout>
+</ScrollView>
