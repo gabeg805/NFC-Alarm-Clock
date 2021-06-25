@@ -215,7 +215,10 @@ public abstract class NacAlarmDatabase
 	protected static void insertInitialAlarm(Context context)
 	{
 		NacAlarmDatabase db = getInstance();
-		NacAlarmDao dao = db.alarmDao();
+		NacAlarmDao alarmDao = db.alarmDao();
+		NacAlarmCreatedStatisticDao alarmCreatedStatisticDao =
+			db.alarmCreatedStatisticDao();
+
 		NacAlarm alarm = new NacAlarm.Builder()
 			.setId(0)
 			.setIsEnabled(true)
@@ -233,8 +236,10 @@ public abstract class NacAlarmDatabase
 			.setAudioSource("Media")
 			.setName("Work")
 			.build();
+		NacAlarmCreatedStatistic stat = new NacAlarmCreatedStatistic();
 
-		getExecutor().execute(() -> dao.insert(alarm));
+		getExecutor().execute(() -> alarmDao.insert(alarm));
+		getExecutor().execute(() -> alarmCreatedStatisticDao.insert(stat));
 		NacScheduler.update(context, alarm);
 	}
 

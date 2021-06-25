@@ -1092,8 +1092,10 @@ public class NacMainActivity
 			return;
 		}
 
+		// TODO: Do I even need to updateAll? This is done when the database is created.
 		NacScheduler.updateAll(this, alarms);
 		shared.editAppFirstRun(false);
+		shared.editAppStartStatistics(false);
 	}
 
 	/**
