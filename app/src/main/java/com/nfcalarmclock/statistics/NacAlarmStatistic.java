@@ -1,5 +1,7 @@
 package com.nfcalarmclock.statistics;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.PrimaryKey;
 
@@ -24,30 +26,34 @@ public abstract class NacAlarmStatistic
 	 * Timestamp of when an alarm was snoozed.
 	 */
 	@ColumnInfo(name="timestamp")
+	@NonNull
 	private Date mTimestamp;
 
 	/**
 	 * The ID of the alarm.
 	 */
 	@ColumnInfo(name="alarm_id")
-	private long mAlarmId;
+	@Nullable
+	private Long mAlarmId;
 
 	/**
 	 * The hour the alarm ran at.
 	 */
 	@ColumnInfo(name="hour")
+	@NonNull
 	private int mHour;
 
 	/**
 	 * The minute the alarm ran at.
 	 */
 	@ColumnInfo(name="minute")
+	@NonNull
 	private int mMinute;
 
 	/**
 	 * The name of the alarm.
 	 */
-	@ColumnInfo(name="name")
+	@ColumnInfo(name="name", defaultValue="")
 	private String mName;
 
 	/**
@@ -77,7 +83,7 @@ public abstract class NacAlarmStatistic
 	/**
 	 * @return The alarm ID.
 	 */
-	public long getAlarmId()
+	public Long getAlarmId()
 	{
 		return this.mAlarmId;
 	}
@@ -127,7 +133,7 @@ public abstract class NacAlarmStatistic
 	 *
 	 * @param  id  The alarm ID.
 	 */
-	public void setAlarmId(long id)
+	public void setAlarmId(Long id)
 	{
 		this.mAlarmId = id;
 	}

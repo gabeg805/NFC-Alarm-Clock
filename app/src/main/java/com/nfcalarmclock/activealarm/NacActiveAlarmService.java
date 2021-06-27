@@ -247,7 +247,17 @@ public class NacActiveAlarmService
 	 */
 	private NacAlarmRepository getAlarmRepository()
 	{
-		return this.mAlarmRepository;
+		// TODO: See if this needs to be in here or can be localized
+		NacAlarmRepository repo = this.mAlarmRepository;
+
+		if (repo == null)
+		{
+			Application app = getApplication();
+			repo = new NacAlarmRepository(app);
+			this.mAlarmRepository = repo;
+		}
+
+		return repo;
 	}
 
 	/**
@@ -318,26 +328,6 @@ public class NacActiveAlarmService
 	}
 
 	/**
-	 * Automatically dismiss the alarm.
-	 */
-	@Override
-	public void run()
-	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-		NacAlarm alarm = this.getAlarm();
-
-		if (shared.getMissedAlarmNotification())
-		{
-			NacMissedAlarmNotification notification =
-				new NacMissedAlarmNotification(this);
-			notification.setAlarm(alarm);
-			notification.show();
-		}
-
-		this.autoDismiss();
-	}
-
-	/**
 	 */
 	@Override
 	public IBinder onBind(Intent intent)
@@ -352,10 +342,8 @@ public class NacActiveAlarmService
 	{
 		super.onCreate();
 
-		Application app = getApplication();
 		this.mSharedPreferences = new NacSharedPreferences(this);
-		// TODO: See if this needs to be in here or can be localized
-		this.mAlarmRepository = new NacAlarmRepository(app);
+		this.mAlarmRepository = null;
 		this.mAlarm = null;
 		this.mWakeupProcess = null;
 		this.mWakeLock = null;
@@ -376,17 +364,19 @@ public class NacActiveAlarmService
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
-		if (this.isNewServiceStarted(intent))
-		{
-			this.updateTimeActive();
-			this.updateAlarm();
-			this.cleanupAlarmActivity();
-			this.cleanupWakeupProcess();
-			this.cleanupAutoDismiss();
-		}
-
 		String action = NacIntent.getAction(intent);
 		NacAlarm alarm = NacIntent.getAlarm(intent);
+
+		if (action.equals(ACTION_START_SERVICE))
+		{
+			this.showNotification(alarm);
+		}
+
+		if (this.isNewServiceStarted(intent))
+		{
+			this.prepareNewService();
+		}
+
 		this.mAlarm = alarm;
 
 		if ((alarm == null) || action.isEmpty()
@@ -405,7 +395,7 @@ public class NacActiveAlarmService
 		}
 		else if (action.equals(ACTION_START_SERVICE))
 		{
-			this.showNotification();
+			//this.showNotification();
 			this.setupWakeLock();
 			this.setupWakeupProcess();
 			// Might not need schedule next, since doing one day, per alarm, at a time.
@@ -417,6 +407,38 @@ public class NacActiveAlarmService
 		}
 
 		return START_NOT_STICKY;
+	}
+
+	/**
+	 * Prepare the new service that was started.
+	 */
+	public void prepareNewService()
+	{
+		this.updateTimeActive();
+		this.updateAlarm();
+		this.cleanupAlarmActivity();
+		this.cleanupWakeupProcess();
+		this.cleanupAutoDismiss();
+	}
+
+	/**
+	 * Automatically dismiss the alarm.
+	 */
+	@Override
+	public void run()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacAlarm alarm = this.getAlarm();
+
+		if (shared.getMissedAlarmNotification())
+		{
+			NacMissedAlarmNotification notification =
+				new NacMissedAlarmNotification(this);
+			notification.setAlarm(alarm);
+			notification.show();
+		}
+
+		this.autoDismiss();
 	}
 
 	/**
@@ -506,9 +528,10 @@ public class NacActiveAlarmService
 	/**
 	 * Show the notification.
 	 */
-	public void showNotification()
+	//public void showNotification()
+	public void showNotification(NacAlarm alarm)
 	{
-		NacAlarm alarm = this.getAlarm();
+		//NacAlarm alarm = this.getAlarm();
 		NacActiveAlarmNotification notification =
 			new NacActiveAlarmNotification(this);
 

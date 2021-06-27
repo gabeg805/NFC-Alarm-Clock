@@ -15,6 +15,12 @@ public interface NacAlarmSnoozedStatisticDao
 {
 
 	/**
+	 * Delete all rows from the table.
+	 */
+	@Query("DELETE FROM alarm_snoozed_statistic")
+	int deleteAll();
+
+	/**
 	 * Get all instances when alarms were snoozed.
 	 *
 	 * @return All instances when alarms were snoozed.

@@ -15,6 +15,12 @@ public interface NacAlarmCreatedStatisticDao
 {
 
 	/**
+	 * Delete all rows from the table.
+	 */
+	@Query("DELETE FROM alarm_created_statistic")
+	int deleteAll();
+
+	/**
 	 * Get all instances when alarms were created.
 	 *
 	 * @return All instances when alarms were created.

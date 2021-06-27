@@ -4,15 +4,19 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.room.AutoMigration;
 import androidx.room.Database;
+import androidx.room.migration.AutoMigrationSpec;
+import androidx.room.migration.Migration;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.nfcalarmclock.NacUtility;
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmDao;
 import com.nfcalarmclock.alarm.NacAlarmTypeConverters;
 import com.nfcalarmclock.audio.media.NacMedia;
+import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.statistics.NacAlarmCreatedStatistic;
 import com.nfcalarmclock.statistics.NacAlarmCreatedStatisticDao;
 import com.nfcalarmclock.statistics.NacAlarmDeletedStatistic;
@@ -38,12 +42,13 @@ import java.util.List;
 //@Database(version=1, exportSchema=true,
 //	entities={NacAlarm.class})
 //@TypeConverters({NacAlarmTypeConverters.class})
-@Database(version=2, exportSchema=true,
+@Database(version=3, exportSchema=true,
 	entities={NacAlarm.class, NacAlarmCreatedStatistic.class,
 		NacAlarmDeletedStatistic.class, NacAlarmDismissedStatistic.class,
 		NacAlarmMissedStatistic.class, NacAlarmSnoozedStatistic.class},
 	autoMigrations={
-			@AutoMigration(from=1, to=2)
+			@AutoMigration(from=1, to=2),
+			@AutoMigration(from=2, to=3, spec=NacAlarmDatabase.ClearAllStatisticsMigration.class)
 		})
 @TypeConverters({NacAlarmTypeConverters.class,
 	NacStatisticTypeConverters.class})
@@ -116,6 +121,79 @@ public abstract class NacAlarmDatabase
 	 * will be null.
 	 */
 	private static Context sContext;
+
+	/**
+	 * Callback for populating the database, for testing purposes.
+	 */
+	private static RoomDatabase.Callback sDatabaseCallback =
+		new RoomDatabase.Callback()
+	{
+
+		/**
+		 */
+		@Override
+		public void onCreate(@NonNull SupportSQLiteDatabase db)
+		{
+			super.onCreate(db);
+
+			Context context = getContext();
+
+			if (NacOldDatabase.exists(context))
+			{
+				cancelOldAlarms(context);
+				migrateOldDatabase(context);
+				deleteOldDatabase(context);
+			}
+			else
+			{
+				insertInitialAlarm(context);
+			}
+
+			sContext = null;
+		}
+
+		/**
+		 */
+		@Override
+		public void onOpen(@NonNull SupportSQLiteDatabase db)
+		{
+			super.onOpen(db);
+
+			sContext = null;
+		}
+
+	};
+
+	/**
+	 * Clear all statistics when auto-migrating.
+	 */
+	static class ClearAllStatisticsMigration
+		implements AutoMigrationSpec
+	{
+
+		/**
+		 */
+		@Override
+		public void onPostMigrate(@NonNull SupportSQLiteDatabase db)
+		{
+			Context context = getContext();
+			NacSharedPreferences shared = new NacSharedPreferences(context);
+
+			shared.editAppStartStatistics(true);
+			db.execSQL("DROP TABLE alarm_created_statistic");
+			db.execSQL("DROP TABLE alarm_deleted_statistic");
+			db.execSQL("DROP TABLE alarm_dismissed_statistic");
+			db.execSQL("DROP TABLE alarm_missed_statistic");
+			db.execSQL("DROP TABLE alarm_snoozed_statistic");
+
+			db.execSQL("CREATE TABLE IF NOT EXISTS alarm_created_statistic (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, timestamp INTEGER NOT NULL)");
+		   	db.execSQL("CREATE TABLE IF NOT EXISTS alarm_deleted_statistic (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, timestamp INTEGER NOT NULL, hour INTEGER NOT NULL, minute INTEGER NOT NULL, name TEXT DEFAULT '')");
+		  	db.execSQL("CREATE TABLE IF NOT EXISTS alarm_dismissed_statistic (used_nfc INTEGER NOT NULL, id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, timestamp INTEGER NOT NULL, alarm_id INTEGER, hour INTEGER NOT NULL, minute INTEGER NOT NULL, name TEXT DEFAULT '', FOREIGN KEY(alarm_id) REFERENCES alarm(id) ON UPDATE NO ACTION ON DELETE SET NULL )");
+			db.execSQL("CREATE TABLE IF NOT EXISTS alarm_missed_statistic (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, timestamp INTEGER NOT NULL, alarm_id INTEGER, hour INTEGER NOT NULL, minute INTEGER NOT NULL, name TEXT DEFAULT '', FOREIGN KEY(alarm_id) REFERENCES alarm(id) ON UPDATE NO ACTION ON DELETE SET NULL )");
+			db.execSQL("CREATE TABLE IF NOT EXISTS alarm_snoozed_statistic (duration INTEGER NOT NULL DEFAULT 0, id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, timestamp INTEGER NOT NULL, alarm_id INTEGER, hour INTEGER NOT NULL, minute INTEGER NOT NULL, name TEXT DEFAULT '', FOREIGN KEY(alarm_id) REFERENCES alarm(id) ON UPDATE NO ACTION ON DELETE SET NULL )");
+		}
+
+	}
 
 	/**
 	 * Cancel old alarms.
@@ -264,47 +342,5 @@ public abstract class NacAlarmDatabase
 			NacScheduler.update(context, a);
 		}
 	}
-
-	/**
-	 * Callback for populating the database, for testing purposes.
-	 */
-	private static RoomDatabase.Callback sDatabaseCallback =
-		new RoomDatabase.Callback()
-	{
-
-		/**
-		 */
-		@Override
-		public void onCreate(@NonNull SupportSQLiteDatabase db)
-		{
-			super.onCreate(db);
-
-			Context context = getContext();
-
-			if (NacOldDatabase.exists(context))
-			{
-				cancelOldAlarms(context);
-				migrateOldDatabase(context);
-				deleteOldDatabase(context);
-			}
-			else
-			{
-				insertInitialAlarm(context);
-			}
-
-			sContext = null;
-		}
-
-		/**
-		 */
-		@Override
-		public void onOpen(@NonNull SupportSQLiteDatabase db)
-		{
-			super.onOpen(db);
-
-			sContext = null;
-		}
-
-	};
 
 }

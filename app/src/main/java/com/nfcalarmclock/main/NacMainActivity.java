@@ -229,6 +229,11 @@ public class NacMainActivity
 
 		long id = this.getAlarmViewModel().insert(this, alarm);
 
+		if (alarm.getId() <= 0)
+		{
+			alarm.setId(id);
+		}
+
 		this.getRecentlyAddedAlarmIds().add(id);
 		this.getAlarmStatisticRepository().insertCreated();
 	}
@@ -280,9 +285,8 @@ public class NacMainActivity
 		String action = cons.getActionUndo();
 
 		NacAlarm copiedAlarm = alarm.copy();
-		long id = this.getAlarmViewModel().copy(copiedAlarm);
 
-		this.getRecentlyAddedAlarmIds().add(id);
+		this.addAlarm(copiedAlarm);
 		this.getLastAlarmCardAction().set(copiedAlarm, NacLastAlarmCardAction.Type.COPY);
 		this.showSnackbar(message, action, this.mOnSwipeSnackbarActionListener);
 	}
@@ -1213,7 +1217,7 @@ public class NacMainActivity
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 
-		if (shared.getAppStartStatistics() && !shared.getAppFirstRun())
+		if (shared.getAppStartStatistics())
 		{
 			NacAlarmStatisticRepository repo = this.getAlarmStatisticRepository();
 			long numCreated = repo.getCreatedCount();

@@ -1,5 +1,6 @@
 package com.nfcalarmclock.statistics;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -24,6 +25,7 @@ public class NacAlarmDismissedStatistic
 	 * Whether the alarm used NFC to dismiss or not.
 	 */
 	@ColumnInfo(name="used_nfc")
+	@NonNull
 	private boolean mUsedNfc;
 
 	/**

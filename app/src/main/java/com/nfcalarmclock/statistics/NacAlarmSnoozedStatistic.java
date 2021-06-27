@@ -23,7 +23,7 @@ public class NacAlarmSnoozedStatistic
 	/**
 	 * Duration of the snooze.
 	 */
-	@ColumnInfo(name="duration")
+	@ColumnInfo(name="duration", defaultValue="0")
 	private long mDuration;
 
 	/**

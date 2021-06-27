@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "14a47821b87a8458781fa5ad6f1ba0cd",
+    "identityHash": "c49aa86d803bbbf5faa03f0aa384ec84",
     "entities": [
       {
         "tableName": "alarm",
@@ -178,7 +178,7 @@
       },
       {
         "tableName": "alarm_deleted_statistic",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `name` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `name` TEXT DEFAULT '')",
         "fields": [
           {
             "fieldPath": "mId",
@@ -208,7 +208,8 @@
             "fieldPath": "mName",
             "columnName": "name",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": false,
+            "defaultValue": "''"
           }
         ],
         "primaryKey": {
@@ -222,7 +223,7 @@
       },
       {
         "tableName": "alarm_dismissed_statistic",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`used_nfc` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER, `alarm_id` INTEGER NOT NULL, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `name` TEXT, FOREIGN KEY(`alarm_id`) REFERENCES `alarm`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`used_nfc` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER, `alarm_id` INTEGER, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `name` TEXT DEFAULT '', FOREIGN KEY(`alarm_id`) REFERENCES `alarm`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
         "fields": [
           {
             "fieldPath": "mUsedNfc",
@@ -246,7 +247,7 @@
             "fieldPath": "mAlarmId",
             "columnName": "alarm_id",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "mHour",
@@ -264,7 +265,8 @@
             "fieldPath": "mName",
             "columnName": "name",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": false,
+            "defaultValue": "''"
           }
         ],
         "primaryKey": {
@@ -290,7 +292,7 @@
       },
       {
         "tableName": "alarm_missed_statistic",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER, `alarm_id` INTEGER NOT NULL, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `name` TEXT, FOREIGN KEY(`alarm_id`) REFERENCES `alarm`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER, `alarm_id` INTEGER, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `name` TEXT DEFAULT '', FOREIGN KEY(`alarm_id`) REFERENCES `alarm`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
         "fields": [
           {
             "fieldPath": "mId",
@@ -308,7 +310,7 @@
             "fieldPath": "mAlarmId",
             "columnName": "alarm_id",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "mHour",
@@ -326,7 +328,8 @@
             "fieldPath": "mName",
             "columnName": "name",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": false,
+            "defaultValue": "''"
           }
         ],
         "primaryKey": {
@@ -352,13 +355,14 @@
       },
       {
         "tableName": "alarm_snoozed_statistic",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`duration` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER, `alarm_id` INTEGER NOT NULL, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `name` TEXT, FOREIGN KEY(`alarm_id`) REFERENCES `alarm`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`duration` INTEGER NOT NULL DEFAULT 0, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER, `alarm_id` INTEGER, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `name` TEXT DEFAULT '', FOREIGN KEY(`alarm_id`) REFERENCES `alarm`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
         "fields": [
           {
             "fieldPath": "mDuration",
             "columnName": "duration",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "0"
           },
           {
             "fieldPath": "mId",
@@ -376,7 +380,7 @@
             "fieldPath": "mAlarmId",
             "columnName": "alarm_id",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "mHour",
@@ -394,7 +398,8 @@
             "fieldPath": "mName",
             "columnName": "name",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": false,
+            "defaultValue": "''"
           }
         ],
         "primaryKey": {
@@ -422,7 +427,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '14a47821b87a8458781fa5ad6f1ba0cd')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c49aa86d803bbbf5faa03f0aa384ec84')"
     ]
   }
 }

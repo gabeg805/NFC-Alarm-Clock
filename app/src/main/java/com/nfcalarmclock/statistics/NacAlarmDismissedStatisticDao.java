@@ -14,6 +14,12 @@ public interface NacAlarmDismissedStatisticDao
 {
 
 	/**
+	 * Delete all rows from the table.
+	 */
+	@Query("DELETE FROM alarm_dismissed_statistic")
+	int deleteAll();
+
+	/**
 	 * Get all instances when alarms were dismissed.
 	 *
 	 * @return All instances when alarms were dismissed.

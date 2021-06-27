@@ -65,6 +65,76 @@ public class NacAlarmStatisticRepository
 	}
 
 	/**
+	 * Delete all rows from the created alarm statistics table.
+	 *
+	 * @return The number of rows in the created alarm statistics table.
+	 */
+	public int deleteAllCreated()
+	{
+		NacAlarmCreatedStatisticDao dao = this.getAlarmCreatedStatisticDao();
+		Future<?> future = NacAlarmDatabase.getExecutor().submit(() ->
+			dao.deleteAll());
+
+		return NacRepository.getIntegerFromFuture(future);
+	}
+
+	/**
+	 * Delete all rows from the deleted alarm statistics table.
+	 *
+	 * @return The number of rows in the deleted alarm statistics table.
+	 */
+	public int deleteAllDeleted()
+	{
+		NacAlarmDeletedStatisticDao dao = this.getAlarmDeletedStatisticDao();
+		Future<?> future = NacAlarmDatabase.getExecutor().submit(() ->
+			dao.deleteAll());
+
+		return NacRepository.getIntegerFromFuture(future);
+	}
+
+	/**
+	 * Delete all rows from the dismissed alarm statistics table.
+	 *
+	 * @return The number of rows in the dismissed alarm statistics table.
+	 */
+	public int deleteAllDismissed()
+	{
+		NacAlarmDismissedStatisticDao dao = this.getAlarmDismissedStatisticDao();
+		Future<?> future = NacAlarmDatabase.getExecutor().submit(() ->
+			dao.deleteAll());
+
+		return NacRepository.getIntegerFromFuture(future);
+	}
+
+	/**
+	 * Delete all rows from the missed alarm statistics table.
+	 *
+	 * @return The number of rows in the missed alarm statistics table.
+	 */
+	public int deleteAllMissed()
+	{
+		NacAlarmMissedStatisticDao dao = this.getAlarmMissedStatisticDao();
+		Future<?> future = NacAlarmDatabase.getExecutor().submit(() ->
+			dao.deleteAll());
+
+		return NacRepository.getIntegerFromFuture(future);
+	}
+
+	/**
+	 * Delete all rows from the snoozed alarm statistics table.
+	 *
+	 * @return The number of rows in the snoozed alarm statistics table.
+	 */
+	public int deleteAllSnoozed()
+	{
+		NacAlarmSnoozedStatisticDao dao = this.getAlarmSnoozedStatisticDao();
+		Future<?> future = NacAlarmDatabase.getExecutor().submit(() ->
+			dao.deleteAll());
+
+		return NacRepository.getIntegerFromFuture(future);
+	}
+
+	/**
 	 * Get the data access object for a created alarm statistic.
 	 *
 	 * @return The data access object for a created alarm statistic.
