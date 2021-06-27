@@ -258,10 +258,10 @@ public class NacCardHolder
 	 */
 	private Animator mHighlightAnimator;
 
-	/**
-	 * Time picker dialog.
-	 */
-	private MaterialTimePicker mTimePicker;
+	///**
+	// * Time picker dialog.
+	// */
+	//private MaterialTimePicker mTimePicker;
 
 	/**
 	 * Listener for when the alarm card is collapsed.
@@ -343,7 +343,7 @@ public class NacCardHolder
 		this.mCardAnimator = new NacHeightAnimator(this.getCardView());
 		this.mBackgroundColorAnimator = null;
 		this.mHighlightAnimator = null;
-		this.mTimePicker = null;
+		//this.mTimePicker = null;
 		this.mOnCardCollapsedListener = null;
 		this.mOnCardDeleteClickedListener = null;
 		this.mOnCardExpandedListener = null;
@@ -650,8 +650,6 @@ public class NacCardHolder
 	 */
 	public void doCardClick()
 	{
-		CardView cardView = this.getCardView();
-
 		if (this.isCollapsed())
 		{
 			this.expand();
@@ -1210,13 +1208,13 @@ public class NacCardHolder
 		return this.mSwitch;
 	}
 
-	/**
-	 * @return The time picker.
-	 */
-	public MaterialTimePicker getTimePicker()
-	{
-		return this.mTimePicker;
-	}
+	///**
+	// * @return The time picker.
+	// */
+	//public MaterialTimePicker getTimePicker()
+	//{
+	//	return this.mTimePicker;
+	//}
 
 	/**
 	 * @return The time parent view.
@@ -1439,14 +1437,14 @@ public class NacCardHolder
 			|| (currentHeight == shared.getCardHeightExpanded());
 	}
 
-	/**
-	 * @return True if showing the time picker, and false otherwise.
-	 */
-	public boolean isShowingTimePicker()
-	{
-		MaterialTimePicker timepicker = this.getTimePicker();
-		return (timepicker != null);
-	}
+	///**
+	// * @return True if showing the time picker, and false otherwise.
+	// */
+	//public boolean isShowingTimePicker()
+	//{
+	//	MaterialTimePicker timepicker = this.getTimePicker();
+	//	return (timepicker != null);
+	//}
 
 	/**
 	 * Measure the different alarm card heights.
@@ -1462,19 +1460,12 @@ public class NacCardHolder
 	 */
 	public void measureCard(int[] heights)
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
 		CardView cardView = this.getCardView();
 
 		if ((heights == null) || (heights.length != 3))
 		{
 			return;
 		}
-
-		//if (shared.getCardIsMeasured() || this.isExpanded())
-		//if (shared.getCardIsMeasured())
-		//{
-		//	return;
-		//}
 
 		this.doExpand();
 		heights[2] = NacUtility.getHeight(cardView);
@@ -1664,9 +1655,6 @@ public class NacCardHolder
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar)
 	{
-		NacAlarm alarm = this.getAlarm();
-
-		//alarm.changed();
 		this.callOnCardUpdatedListener();
 	}
 
@@ -1680,7 +1668,6 @@ public class NacCardHolder
 		alarm.setHour(hr);
 		alarm.setMinute(min);
 		alarm.setIsEnabled(true);
-		//alarm.changed();
 		this.setTimeView();
 		this.setMeridianView();
 		this.setMeridianColor();
@@ -1810,9 +1797,6 @@ public class NacCardHolder
 	public void respondToSwitchCheckedChanged(CompoundButton button,
 		boolean state)
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-
-		//if (shared.getPreventAppFromClosing() && !this.checkCanModifyAlarm())
 		if (!this.checkCanModifyAlarm())
 		{
 			button.setChecked(!state);
@@ -2355,7 +2339,6 @@ public class NacCardHolder
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacSharedConstants cons = this.getSharedConstants();
-		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
 		TextView tv = this.getSummaryDaysView();
 
@@ -2422,7 +2405,7 @@ public class NacCardHolder
 	/**
 	 * Set the thumb and track color of a switch.
 	 *
-	 * @param  switch  The switch.
+	 * @param  switchView  The switch.
 	 * @param  thumbColor  The color of the thumb.
 	 * @param  trackColor  The color of the track.
 	 */
@@ -2484,32 +2467,32 @@ public class NacCardHolder
 		}
 	}
 
-	/**
-	 * Set the time.
-	 */
-	public void setTime()
-	{
-		if (!this.isShowingTimePicker())
-		{
-			return;
-		}
+	///**
+	// * Set the time.
+	// */
+	//public void setTime()
+	//{
+	//	//if (!this.isShowingTimePicker())
+	//	//{
+	//	//	return;
+	//	//}
 
-		MaterialTimePicker timepicker = this.getTimePicker();
-		NacAlarm alarm = this.getAlarm();
-		int hr = timepicker.getHour();
-		int min = timepicker.getMinute();
+	//	MaterialTimePicker timepicker = this.getTimePicker();
+	//	NacAlarm alarm = this.getAlarm();
+	//	int hr = timepicker.getHour();
+	//	int min = timepicker.getMinute();
 
-		alarm.setHour(hr);
-		alarm.setMinute(min);
-		alarm.setIsEnabled(true);
-		//alarm.changed();
-		this.setTimeView();
-		this.setMeridianView();
-		this.setMeridianColor();
-		this.setSwitchView();
-		this.setSummaryDaysView();
-		this.callOnCardUpdatedListener();
-	}
+	//	alarm.setHour(hr);
+	//	alarm.setMinute(min);
+	//	alarm.setIsEnabled(true);
+	//	//alarm.changed();
+	//	this.setTimeView();
+	//	this.setMeridianView();
+	//	this.setMeridianColor();
+	//	this.setSwitchView();
+	//	this.setSummaryDaysView();
+	//	this.callOnCardUpdatedListener();
+	//}
 
 	/**
 	 * Set the time color.

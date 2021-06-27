@@ -2,8 +2,6 @@ package com.nfcalarmclock.statistics;
 
 import androidx.room.Entity;
 
-import com.nfcalarmclock.alarm.NacAlarm;
-
 /**
  * Statistics for when an alarm is created.
  */

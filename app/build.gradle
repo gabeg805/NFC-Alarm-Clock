@@ -10,14 +10,14 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-	compileSdkVersion 29
+	compileSdkVersion 30
 
 	defaultConfig {
 		applicationId "com.nfcalarmclock"
 		minSdkVersion 21
 		targetSdkVersion 30
-		versionCode 267
-		versionName "10.4.0"
+		versionCode 268
+		versionName "10.4.1"
 
 		javaCompileOptions {
 			annotationProcessorOptions {

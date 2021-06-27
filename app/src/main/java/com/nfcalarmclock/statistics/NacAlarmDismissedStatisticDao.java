@@ -35,4 +35,12 @@ public interface NacAlarmDismissedStatisticDao
 	@Query("SELECT COUNT(id) FROM alarm_dismissed_statistic")
 	long getCount();
 
+	/**
+	 * Count the number of dismissed with NFC alarm statistics.
+	 *
+	 * @return The number of dismissed with NFC alarm statistics.
+	 */
+	@Query("SELECT COUNT(id) FROM alarm_dismissed_statistic WHERE used_nfc=1")
+	long getNfcCount();
+
 }

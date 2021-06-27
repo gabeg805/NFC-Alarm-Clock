@@ -1,8 +1,5 @@
 package com.nfcalarmclock.db;
 
-import android.app.Application;
-import android.content.Context;
-
 import com.nfcalarmclock.NacUtility;
 import com.nfcalarmclock.alarm.NacAlarm;
 
@@ -18,19 +15,6 @@ import java.util.List;
  */
 public abstract class NacRepository
 {
-
-	/**
-	 */
-	public NacRepository(Application app)
-	{
-	}
-
-	/**
-	 */
-	public NacRepository(Context context)
-	{
-		this((Application)context.getApplicationContext());
-	}
 
 	/**
 	 * Get a NacAlarm from a Future object.
@@ -72,7 +56,15 @@ public abstract class NacRepository
 		{
 			if (future != null)
 			{
-				return (List<NacAlarm>) future.get();
+				List<?> list = (List<?>) future.get();
+				List<NacAlarm> convlist = new ArrayList<>();
+
+				for (Object o : list)
+				{
+					convlist.add((NacAlarm)o);
+				}
+
+				return convlist;
 			}
 		}
 		catch (CancellationException | ExecutionException | InterruptedException e)

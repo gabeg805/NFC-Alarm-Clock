@@ -19,7 +19,7 @@ public class NacAlarmViewModel
 	/**
 	 * Repository of the alarms.
 	 */
-	private NacAlarmRepository mAlarmRepository;
+	private final NacAlarmRepository mAlarmRepository;
 
 	/**
 	 * Live data list of all alarms.

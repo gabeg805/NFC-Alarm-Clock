@@ -3,7 +3,6 @@ package com.nfcalarmclock.statistics;
 import android.app.Application;
 import android.content.Context;
 
-import com.nfcalarmclock.NacUtility;
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.db.NacAlarmDatabase;
 import com.nfcalarmclock.db.NacRepository;
@@ -20,34 +19,32 @@ public class NacAlarmStatisticRepository
 	/**
 	 * Data access object for a created alarm statistic.
 	 */
-	private NacAlarmCreatedStatisticDao mAlarmCreatedStatisticDao;
+	private final NacAlarmCreatedStatisticDao mAlarmCreatedStatisticDao;
 
 	/**
 	 * Data access object for deleted alarm statistic.
 	 */
-	private NacAlarmDeletedStatisticDao mAlarmDeletedStatisticDao;
+	private final NacAlarmDeletedStatisticDao mAlarmDeletedStatisticDao;
 
 	/**
 	 * Data access object for a dismissed alarm statistic.
 	 */
-	private NacAlarmDismissedStatisticDao mAlarmDismissedStatisticDao;
+	private final NacAlarmDismissedStatisticDao mAlarmDismissedStatisticDao;
 
 	/**
 	 * Data access object for a missed alarm statistic.
 	 */
-	private NacAlarmMissedStatisticDao mAlarmMissedStatisticDao;
+	private final NacAlarmMissedStatisticDao mAlarmMissedStatisticDao;
 
 	/**
 	 * Data access object for a snoozed alarm statistic.
 	 */
-	private NacAlarmSnoozedStatisticDao mAlarmSnoozedStatisticDao;
+	private final NacAlarmSnoozedStatisticDao mAlarmSnoozedStatisticDao;
 
 	/**
 	 */
 	public NacAlarmStatisticRepository(Application app)
 	{
-		super(app);
-
 		NacAlarmDatabase db = NacAlarmDatabase.getInstance(app);
 
 		this.mAlarmCreatedStatisticDao = db.alarmCreatedStatisticDao();
@@ -72,8 +69,7 @@ public class NacAlarmStatisticRepository
 	public int deleteAllCreated()
 	{
 		NacAlarmCreatedStatisticDao dao = this.getAlarmCreatedStatisticDao();
-		Future<?> future = NacAlarmDatabase.getExecutor().submit(() ->
-			dao.deleteAll());
+		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::deleteAll);
 
 		return NacRepository.getIntegerFromFuture(future);
 	}
@@ -86,8 +82,7 @@ public class NacAlarmStatisticRepository
 	public int deleteAllDeleted()
 	{
 		NacAlarmDeletedStatisticDao dao = this.getAlarmDeletedStatisticDao();
-		Future<?> future = NacAlarmDatabase.getExecutor().submit(() ->
-			dao.deleteAll());
+		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::deleteAll);
 
 		return NacRepository.getIntegerFromFuture(future);
 	}
@@ -100,8 +95,7 @@ public class NacAlarmStatisticRepository
 	public int deleteAllDismissed()
 	{
 		NacAlarmDismissedStatisticDao dao = this.getAlarmDismissedStatisticDao();
-		Future<?> future = NacAlarmDatabase.getExecutor().submit(() ->
-			dao.deleteAll());
+		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::deleteAll);
 
 		return NacRepository.getIntegerFromFuture(future);
 	}
@@ -114,8 +108,7 @@ public class NacAlarmStatisticRepository
 	public int deleteAllMissed()
 	{
 		NacAlarmMissedStatisticDao dao = this.getAlarmMissedStatisticDao();
-		Future<?> future = NacAlarmDatabase.getExecutor().submit(() ->
-			dao.deleteAll());
+		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::deleteAll);
 
 		return NacRepository.getIntegerFromFuture(future);
 	}
@@ -128,8 +121,7 @@ public class NacAlarmStatisticRepository
 	public int deleteAllSnoozed()
 	{
 		NacAlarmSnoozedStatisticDao dao = this.getAlarmSnoozedStatisticDao();
-		Future<?> future = NacAlarmDatabase.getExecutor().submit(() ->
-			dao.deleteAll());
+		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::deleteAll);
 
 		return NacRepository.getIntegerFromFuture(future);
 	}
@@ -192,8 +184,7 @@ public class NacAlarmStatisticRepository
 	public long getCreatedCount()
 	{
 		NacAlarmCreatedStatisticDao dao = this.getAlarmCreatedStatisticDao();
-		Future<?> future = NacAlarmDatabase.getExecutor().submit(() ->
-			dao.getCount());
+		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::getCount);
 
 		return NacRepository.getLongFromFuture(future);
 	}
@@ -206,8 +197,7 @@ public class NacAlarmStatisticRepository
 	public long getDeletedCount()
 	{
 		NacAlarmDeletedStatisticDao dao = this.getAlarmDeletedStatisticDao();
-		Future<?> future = NacAlarmDatabase.getExecutor().submit(() ->
-			dao.getCount());
+		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::getCount);
 
 		return NacRepository.getLongFromFuture(future);
 	}
@@ -220,8 +210,20 @@ public class NacAlarmStatisticRepository
 	public long getDismissedCount()
 	{
 		NacAlarmDismissedStatisticDao dao = this.getAlarmDismissedStatisticDao();
-		Future<?> future = NacAlarmDatabase.getExecutor().submit(() ->
-			dao.getCount());
+		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::getCount);
+
+		return NacRepository.getLongFromFuture(future);
+	}
+
+	/**
+	 * Get the number of dismissed with NFC alarm statistics.
+	 *
+	 * @return The number of dismissed with NFC alarm statistics.
+	 */
+	public long getDismissedWithNfcCount()
+	{
+		NacAlarmDismissedStatisticDao dao = this.getAlarmDismissedStatisticDao();
+		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::getNfcCount);
 
 		return NacRepository.getLongFromFuture(future);
 	}
@@ -234,8 +236,7 @@ public class NacAlarmStatisticRepository
 	public long getMissedCount()
 	{
 		NacAlarmMissedStatisticDao dao = this.getAlarmMissedStatisticDao();
-		Future<?> future = NacAlarmDatabase.getExecutor().submit(() ->
-			dao.getCount());
+		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::getCount);
 
 		return NacRepository.getLongFromFuture(future);
 	}
@@ -248,8 +249,20 @@ public class NacAlarmStatisticRepository
 	public long getSnoozedCount()
 	{
 		NacAlarmSnoozedStatisticDao dao = this.getAlarmSnoozedStatisticDao();
-		Future<?> future = NacAlarmDatabase.getExecutor().submit(() ->
-			dao.getCount());
+		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::getCount);
+
+		return NacRepository.getLongFromFuture(future);
+	}
+
+	/**
+	 * Get the total snooze duration.
+	 *
+	 * @return The total snooze duration.
+	 */
+	public long getSnoozedTotalDuration()
+	{
+		NacAlarmSnoozedStatisticDao dao = this.getAlarmSnoozedStatisticDao();
+		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::getTotalDuration);
 
 		return NacRepository.getLongFromFuture(future);
 	}

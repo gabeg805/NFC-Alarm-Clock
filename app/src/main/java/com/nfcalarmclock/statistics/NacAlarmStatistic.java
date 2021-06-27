@@ -32,7 +32,7 @@ public abstract class NacAlarmStatistic
 	/**
 	 * The ID of the alarm.
 	 */
-	@ColumnInfo(name="alarm_id")
+	@ColumnInfo(name="alarm_id", index=true)
 	@Nullable
 	private Long mAlarmId;
 

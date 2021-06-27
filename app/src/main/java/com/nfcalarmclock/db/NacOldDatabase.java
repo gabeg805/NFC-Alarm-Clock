@@ -195,8 +195,6 @@ public class NacOldDatabase
 	 * Find the list of alarms that are currently active.
 	 * 
 	 * @return The list of alarms that are currently active.
-	 *
-	 * @param  db  The SQLite database.
 	 */
 	public List<NacAlarm> findActiveAlarms()
 	{
@@ -276,7 +274,7 @@ public class NacOldDatabase
 	}
 
 	/**
-	 * @see #findAlarm(int)
+	 * @see #findAlarm(long)
 	 */
 	public NacAlarm findAlarm(NacAlarm alarm)
 	{
@@ -319,7 +317,7 @@ public class NacOldDatabase
 	//}
 
 	/**
-	 * @see #findAlarm(int)
+	 * @see #findAlarm(long)
 	 */
 	public static NacAlarm findAlarm(Context context, long id)
 	{
@@ -335,7 +333,7 @@ public class NacOldDatabase
 	}
 
 	/**
-	 * @see #findAlarm(Context, int)
+	 * @see #findAlarm(Context, long)
 	 */
 	public static NacAlarm findAlarm(Context context, NacAlarm alarm)
 	{

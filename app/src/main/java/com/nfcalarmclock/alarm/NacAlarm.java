@@ -174,7 +174,7 @@ public class NacAlarm
 		/**
 		 * Alarm object that will be built.
 		 */
-		private NacAlarm mAlarm;
+		private final NacAlarm mAlarm;
 
 		/**
 		 */
@@ -955,14 +955,16 @@ public class NacAlarm
 		return this.mSnoozeCount;
 	}
 
-	/**
-	 * @return The current snooze count.
-	 */
-	public int getSnoozeCount(NacSharedPreferences shared)
-	{
-		long id = this.getId();
-		return shared.getSnoozeCount(id);
-	}
+// --Commented out by Inspection START (6/26/21, 11:52 PM):
+//	/**
+//	 * @return The current snooze count.
+//	 */
+//	public int getSnoozeCount(NacSharedPreferences shared)
+//	{
+//		long id = this.getId();
+//		return shared.getSnoozeCount(id);
+//	}
+// --Commented out by Inspection STOP (6/26/21, 11:52 PM)
 
 	/**
 	 * @return The snooze hour.

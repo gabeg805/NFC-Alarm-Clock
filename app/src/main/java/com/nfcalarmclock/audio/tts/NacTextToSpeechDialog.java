@@ -231,8 +231,6 @@ public class NacTextToSpeechDialog
 	 * Set the OnTextToSpeechOptionsSelectedListener object.
 	 *
 	 * @param  listener  The OnTextToSpeechOptionsSelectedListener object.
-	 *
-	 * @return This class.
 	 */
 	public void setOnTextToSpeechOptionsSelectedListener(
 		OnTextToSpeechOptionsSelectedListener listener)

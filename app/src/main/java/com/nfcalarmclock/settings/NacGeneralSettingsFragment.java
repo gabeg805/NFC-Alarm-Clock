@@ -96,7 +96,7 @@ public class NacGeneralSettingsFragment
 				this.showTextToSpeechDialog();
 				break;
 			default:
-				return;
+				break;
 		}
 	}
 

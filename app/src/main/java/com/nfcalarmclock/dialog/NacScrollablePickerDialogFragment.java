@@ -120,8 +120,6 @@ public abstract class NacScrollablePickerDialogFragment
 	 * Set the OnScrollablePickerOptionSelectedListener object.
 	 *
 	 * @param  listener  The OnScrollablePickerOptionSelectedListener object.
-	 *
-	 * @return This class.
 	 */
 	public void setOnScrollablePickerOptionSelectedListener(
 		OnScrollablePickerOptionSelectedListener listener)

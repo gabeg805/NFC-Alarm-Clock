@@ -16,7 +16,8 @@ import com.nfcalarmclock.alarm.NacAlarm;
 			parentColumns={"id"},
 			childColumns={"alarm_id"},
 			onDelete=ForeignKey.SET_NULL)
-		})
+		},
+	inheritSuperIndices=true)
 public class NacAlarmDismissedStatistic
 	extends NacAlarmStatistic
 {

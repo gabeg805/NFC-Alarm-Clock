@@ -2,7 +2,6 @@ package com.nfcalarmclock.statistics;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Insert;
 import androidx.room.Query;
 import java.util.List;
 
@@ -35,5 +34,13 @@ public interface NacAlarmSnoozedStatisticDao
 	 */
 	@Query("SELECT COUNT(id) FROM alarm_snoozed_statistic")
 	long getCount();
+
+	/**
+	 * Get the total snooze duration.
+	 *
+	 * @return The total snooze duration.
+	 */
+	@Query("SELECT SUM(duration) FROM alarm_snoozed_statistic")
+	long getTotalDuration();
 
 }

@@ -77,7 +77,7 @@ public class NacIntent
 	}
 
 	/**
-	 * @see NacIntent#createAlarmActivity(context, Bundle)
+	 * @see NacIntent#createAlarmActivity(Context, Bundle)
 	 */
 	public static Intent createAlarmActivity(Context context, NacAlarm alarm)
 	{

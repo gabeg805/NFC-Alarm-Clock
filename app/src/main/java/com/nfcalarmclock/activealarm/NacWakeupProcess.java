@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Vibrator;
 import android.os.VibrationEffect;
 
@@ -311,7 +312,7 @@ public class NacWakeupProcess
 			speech.getAudioAttributes().merge(alarm);
 
 			this.mSpeech = speech;
-			this.mSpeakHandler = new Handler();
+			this.mSpeakHandler = new Handler(Looper.getMainLooper());
 		}
 	}
 

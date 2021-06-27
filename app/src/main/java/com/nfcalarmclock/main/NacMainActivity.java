@@ -210,10 +210,7 @@ public class NacMainActivity
 				{
 					deleteAlarm(alarm);
 				}
-				else
-				{
-				}
-			};
+            };
 
 	/**
 	 * Add an alarm to the database.
@@ -512,7 +509,7 @@ public class NacMainActivity
 				this.showTextToSpeechDialog();
 				break;
 			default:
-				return;
+				break;
 		}
 	}
 
@@ -1416,7 +1413,7 @@ public class NacMainActivity
 	}
 
 	/**
-	 * @see #updateNotification(List<NacAlarm>)
+	 * @see #updateUpcomingNotification(List<NacAlarm>)
 	 */
 	public void updateUpcomingNotification()
 	{

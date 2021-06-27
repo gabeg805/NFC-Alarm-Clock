@@ -4,15 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import androidx.lifecycle.LiveData;
 
-import com.nfcalarmclock.NacUtility;
 import com.nfcalarmclock.db.NacAlarmDatabase;
 import com.nfcalarmclock.db.NacRepository;
 
-import java.lang.InterruptedException;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +20,7 @@ public class NacAlarmRepository
 	/**
 	 * Data access object for an alarm.
 	 */
-	private NacAlarmDao mAlarmDao;
+	private final NacAlarmDao mAlarmDao;
 
 	/**
 	 * Live data list of all alarms.
@@ -36,8 +31,6 @@ public class NacAlarmRepository
 	 */
 	public NacAlarmRepository(Application app)
 	{
-		super(app);
-
 		NacAlarmDatabase db = NacAlarmDatabase.getInstance(app);
 		NacAlarmDao dao = db.alarmDao();
 

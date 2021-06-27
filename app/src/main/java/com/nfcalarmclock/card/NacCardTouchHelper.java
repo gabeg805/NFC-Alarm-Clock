@@ -39,7 +39,7 @@ public class NacCardTouchHelper
 	/**
 	 * Callback.
 	 */
-	private Callback mCallback;
+	private final Callback mCallback;
 
 	/**
 	 */
@@ -75,10 +75,10 @@ public class NacCardTouchHelper
 		/**
 		 * The listener to call when a swiped event occurs.
 		 */
-		private OnSwipedListener mOnSwipedListener;
+		private final OnSwipedListener mOnSwipedListener;
 
 		/**
-		 * @param  adapter	The object that overrides the event methods.
+		 * @param  listener  The listener for when a swipe occurs.
 		 */
 		public Callback(OnSwipedListener listener)
 		{

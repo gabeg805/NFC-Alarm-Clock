@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
@@ -613,7 +614,7 @@ public class NacActiveAlarmService
 
 		if (autoDismiss != 0)
 		{
-			handler = new Handler();
+			handler = new Handler(Looper.getMainLooper());
 			handler.postDelayed(this, delay);
 		}
 

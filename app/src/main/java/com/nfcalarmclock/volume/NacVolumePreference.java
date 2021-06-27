@@ -48,11 +48,6 @@ public class NacVolumePreference
 	protected SeekBar mVolumeSeekBar;
 
 	/**
-	 * Audio options button.
-	 */
-	protected MaterialButton mAudioOptionsButton;
-
-	/**
 	 * Shared preferences.
 	 */
 	protected NacSharedPreferences mSharedPreferences;
@@ -95,14 +90,6 @@ public class NacVolumePreference
 		{
 			listener.onAudioOptionsClicked();
 		}
-	}
-
-	/**
-	 * @return Audio options button.
-	 */
-	public MaterialButton getAudioOptionsButton()
-	{
-		return this.mAudioOptionsButton;
 	}
 
 	/**
@@ -150,7 +137,6 @@ public class NacVolumePreference
 		SeekBar seekbar = (SeekBar) holder.findViewById(R.id.volume_slider);
 		MaterialButton audioOptions = (MaterialButton) holder.findViewById(R.id.widget);
 		this.mVolumeSeekBar = seekbar;
-		this.mAudioOptionsButton = audioOptions;
 
 		seekbar.setProgress(this.mValue);
 		seekbar.setOnSeekBarChangeListener(this);

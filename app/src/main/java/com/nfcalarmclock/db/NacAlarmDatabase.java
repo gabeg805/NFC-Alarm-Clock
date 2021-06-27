@@ -5,13 +5,11 @@ import androidx.annotation.NonNull;
 import androidx.room.AutoMigration;
 import androidx.room.Database;
 import androidx.room.migration.AutoMigrationSpec;
-import androidx.room.migration.Migration;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.nfcalarmclock.NacUtility;
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmDao;
 import com.nfcalarmclock.alarm.NacAlarmTypeConverters;
@@ -42,13 +40,14 @@ import java.util.List;
 //@Database(version=1, exportSchema=true,
 //	entities={NacAlarm.class})
 //@TypeConverters({NacAlarmTypeConverters.class})
-@Database(version=3, exportSchema=true,
-	entities={NacAlarm.class, NacAlarmCreatedStatistic.class,
+@Database(version=4,
+		entities={NacAlarm.class, NacAlarmCreatedStatistic.class,
 		NacAlarmDeletedStatistic.class, NacAlarmDismissedStatistic.class,
 		NacAlarmMissedStatistic.class, NacAlarmSnoozedStatistic.class},
 	autoMigrations={
 			@AutoMigration(from=1, to=2),
-			@AutoMigration(from=2, to=3, spec=NacAlarmDatabase.ClearAllStatisticsMigration.class)
+			@AutoMigration(from=2, to=3, spec=NacAlarmDatabase.ClearAllStatisticsMigration.class),
+			@AutoMigration(from=3, to=4)
 		})
 @TypeConverters({NacAlarmTypeConverters.class,
 	NacStatisticTypeConverters.class})
@@ -97,11 +96,6 @@ public abstract class NacAlarmDatabase
 	private static final Object LOCK = new Object();
 
 	/**
-	 * Number of executor threads.
-	 */
-	//private static final int NUMBER_OF_THREADS = 4;
-
-	/**
 	 * Executor service.
 	 */
 	private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
@@ -125,7 +119,7 @@ public abstract class NacAlarmDatabase
 	/**
 	 * Callback for populating the database, for testing purposes.
 	 */
-	private static RoomDatabase.Callback sDatabaseCallback =
+	private static final RoomDatabase.Callback sDatabaseCallback =
 		new RoomDatabase.Callback()
 	{
 

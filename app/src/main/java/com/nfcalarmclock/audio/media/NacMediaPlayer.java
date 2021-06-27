@@ -6,6 +6,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Looper;
 
 import com.nfcalarmclock.audio.NacAudio;
 import com.nfcalarmclock.NacUtility;
@@ -200,7 +201,7 @@ public class NacMediaPlayer
 		this.mContext = context;
 		this.mPlaylist = null;
 		this.mAttributes = new NacAudio.Attributes(context);
-		this.mHandler = new Handler();
+		this.mHandler = new Handler(Looper.getMainLooper());
 		this.mWasPlaying = false;
 	}
 
@@ -519,7 +520,7 @@ public class NacMediaPlayer
 	public void repeatTrack()
 	{
 		this.cleanupHandler();
-		this.getHandler().postDelayed(() -> startWrapper(), 500);
+		this.getHandler().postDelayed(this::startWrapper, 500);
 	}
 
 	/**

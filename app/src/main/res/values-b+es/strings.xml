@@ -3,15 +3,6 @@
 
 	<!-- App -->
 	<string name="app_name">NFC Despertador</string>
-	<string name="app_first_run">app_first_run</string>
-	<string name="app_rating_counter">app_rating_counter</string>
-	<string name="app_should_refresh_main_activity">app_should_refresh_main_activity</string>
-	<string name="card_is_measured">card_is_measured</string>
-	<string name="card_height_collapsed">card_height_collapsed</string>
-	<string name="card_height_collapsed_dismiss">card_height_collapsed_dismiss</string>
-	<string name="card_height_expanded">card_height_expanded</string>
-	<string name="sys_previous_volume">sys_previous_volume</string>
-
 
 
 	<!-- Consolidate -->
@@ -102,6 +93,12 @@
 	<string name="title_active_alarm">Alarmas activas</string>
 	<string name="title_missed_alarm">Alarmas perdidas</string>
 	<string name="title_upcoming_alarm">Próximas alarmas</string>
+	<string name="title_dismissed_alarms">Alarmas descartadas</string>
+	<string name="title_missed_alarms">Alarmas perdidas</string>
+	<string name="title_snoozed_alarms">Alarmas posponadas</string>
+	<string name="title_created_alarms">Alarmas creadas</string>
+	<string name="title_deleted_alarms">Alarmas borradas</string>
+	<string name="title_current_alarms">Total</string>
 
 
 

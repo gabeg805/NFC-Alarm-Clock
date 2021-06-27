@@ -193,8 +193,6 @@ public class NacAlarmAudioSourceDialog
 	 * Set the OnAudioSourceSelectedListener object.
 	 *
 	 * @param  listener  The OnAudioSourceSelectedListener object.
-	 *
-	 * @return This class.
 	 */
 	public void setOnAudioSourceSelectedListener(
 		OnAudioSourceSelectedListener listener)
