@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -49,7 +48,7 @@ public class NacStatisticsSettingsFragment
 		long numDismissedWithNfc = repo.getDismissedWithNfcCount();
 		long numMissed = repo.getMissedCount();
 		long numSnoozed = repo.getSnoozedCount();
-		long snoozeDuration = repo.getSnoozedTotalDuration();
+		long snoozeDuration = repo.getSnoozedTotalDuration() / 60;
 
 		View divider1 = view.findViewById(R.id.divider1);
 		View divider2 = view.findViewById(R.id.divider2);

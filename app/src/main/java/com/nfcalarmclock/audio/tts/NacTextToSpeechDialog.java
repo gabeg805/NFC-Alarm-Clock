@@ -31,6 +31,7 @@ public class NacTextToSpeechDialog
 	/**
 	 * Listener for when text-to-speech options are selected.
 	 */
+	@SuppressWarnings("UnnecessaryInterfaceModifier")
 	public interface OnTextToSpeechOptionsSelectedListener
 	{
 		public void onTextToSpeechOptionsSelected(boolean useTts, int freq);
@@ -319,12 +320,11 @@ public class NacTextToSpeechDialog
 	 *
 	 * @return True if text-to-speech is being used, and False otherwise.
 	 */
-	private boolean toggleShouldUseTts()
+	private void toggleShouldUseTts()
 	{
 		boolean useTts = this.shouldUseTts();
 
 		this.getShouldUseTtsCheckBox().setChecked(!useTts);
-		return !useTts;
 	}
 
 }

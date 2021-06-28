@@ -9,11 +9,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentOnAttachListener;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentManager;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayout.Tab;
+import com.google.android.material.tabs.TabLayoutMediator;
+
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.shared.NacSharedConstants;
@@ -33,7 +35,7 @@ public class NacMediaActivity
 	/**
 	 * View pager.
 	 */
-	private ViewPager mPager;
+	private ViewPager2 mViewPager;
 
 	/**
 	 * Adapter for the view pager.
@@ -48,7 +50,7 @@ public class NacMediaActivity
 	/**
 	 * List of fragments.
 	 */
-	private Fragment[] mFragments;
+	private final Fragment[] mFragments;
 
 	/**
 	 * Alarm.
@@ -77,6 +79,10 @@ public class NacMediaActivity
 		super();
 
 		FragmentManager manager = getSupportFragmentManager();
+		int length = this.getTitles().length;
+
+		this.mFragments = new Fragment[length];
+
 		manager.addFragmentOnAttachListener(this);
 	}
 
@@ -86,10 +92,9 @@ public class NacMediaActivity
 	private void fragmentSelected(Fragment selectedFragment)
 	{
 		int position = this.getPosition();
-		Fragment tabFragment = this.getFragment(position);
+		Fragment tabFragment = this.getFragments()[position];
 
-		if ((tabFragment == null) || (selectedFragment == null)
-			|| (selectedFragment != tabFragment))
+		if ((selectedFragment == null) || (selectedFragment != tabFragment))
 		{
 			return;
 		}
@@ -103,14 +108,6 @@ public class NacMediaActivity
 	private NacAlarm getAlarm()
 	{
 		return this.mAlarm;
-	}
-
-	/**
-	 * @return The fragment at the given position.
-	 */
-	private Fragment getFragment(int position)
-	{
-		return this.getFragments()[position];
 	}
 
 	/**
@@ -186,9 +183,9 @@ public class NacMediaActivity
 	/**
 	 * @return The view pager.
 	 */
-	private ViewPager getViewPager()
+	private ViewPager2 getViewPager()
 	{
-		return this.mPager;
+		return this.mViewPager;
 	}
 
 	/**
@@ -199,11 +196,11 @@ public class NacMediaActivity
 	{
 		Fragment[] list = this.getFragments();
 
-		if (list == null)
-		{
-			this.mFragments = new Fragment[this.mTitles.length];
-			list = this.mFragments;
-		}
+		//if (list == null)
+		//{
+		//	this.mFragments = new Fragment[this.mTitles.length];
+		//	list = this.mFragments;
+		//}
 
 		if (fragment instanceof NacMusicFragment)
 		{
@@ -230,13 +227,10 @@ public class NacMediaActivity
 		NacMusicFragment musicFragment = (NacMusicFragment)
 			this.getFragments()[0];
 
-		if (position == 0)
+		if ((position == 0) && (musicFragment != null))
 		{
-			if (musicFragment != null)
-			{
-				musicFragment.backPressed();
-				return;
-			}
+			musicFragment.backPressed();
+			return;
 		}
 
 		super.onBackPressed();
@@ -256,19 +250,18 @@ public class NacMediaActivity
 
 		this.mAlarm = NacIntent.getAlarm(intent);
 		this.mMediaPath = NacIntent.getMedia(intent);
-		this.mPager = findViewById(R.id.act_sound);
+		this.mViewPager = findViewById(R.id.act_sound);
 		this.mTabLayout = findViewById(R.id.tab_layout);
 		this.mTitles[0] = cons.getActionBrowse();
 		this.mTitles[1] = cons.getAudioSources().get(3);
-		//this.mAdapter = new NacPagerAdapter(manager, this.mAlarm, this.mTitles);
-		this.mAdapter = new NacPagerAdapter(manager,
-			FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-		this.mFragments = new Fragment[this.mTitles.length];
+		this.mAdapter = new NacPagerAdapter(this);
 		this.mPosition = 0;
 
-		this.setupPager();
-		this.setTabColors();
-		this.selectTab();
+		int mediaType = this.getMediaType();
+
+		this.setupViewPager();
+		this.setupTabColors();
+		this.selectTabByMediaType(mediaType);
 	}
 
 	@Override
@@ -282,7 +275,7 @@ public class NacMediaActivity
 			if ((grantResults.length > 0)
 				&& (grantResults[0] == PackageManager.PERMISSION_GRANTED))
 			{
-				Fragment fragment = this.getFragment(0);
+				Fragment fragment = this.getFragments()[0];
 
 				if (fragment != null)
 				{
@@ -294,7 +287,7 @@ public class NacMediaActivity
 				}
 			}
 
-			this.selectTab(1);
+			this.selectTabByIndex(1);
 		}
 	}
 
@@ -311,7 +304,7 @@ public class NacMediaActivity
 	public void onTabSelected(Tab tab)
 	{
 		int position = tab.getPosition();
-		Fragment fragment = this.getFragment(position);
+		Fragment fragment = this.getFragments()[position];
 		this.mPosition = position;
 
 		this.fragmentSelected(fragment);
@@ -325,40 +318,17 @@ public class NacMediaActivity
 	}
 
 	/**
-	 * Select the tab that the fragment activity should start on.
-	 */
-	private void selectTab()
-	{
-		int type = this.getMediaType();
-
-		if (NacMedia.isNone(type))
-		{
-			this.selectTab(1);
-		}
-		else if (NacMedia.isFile(type) || NacMedia.isDirectory(type))
-		{
-			this.selectTab(0);
-		}
-		else if (NacMedia.isRingtone(type))
-		{
-			this.selectTab(1);
-		}
-		else if (NacMedia.isSpotify(type))
-		{
-			this.selectTab(2);
-		}
-	}
-
-	/**
 	 * Select the tab at the given index.
+	 *
+	 * @param  index  The index of the tab.
 	 */
-	private void selectTab(int position)
+	private void selectTabByIndex(int index)
 	{
 		TabLayout tabLayout = this.getTabLayout();
 
 		if (tabLayout != null)
 		{
-			Tab tab = tabLayout.getTabAt(position);
+			Tab tab = tabLayout.getTabAt(index);
 
 			if (tab != null)
 			{
@@ -369,12 +339,37 @@ public class NacMediaActivity
 	}
 
 	/**
-	 * Set the tab colors.
+	 * Select the tab that the fragment activity should start on.
+	 *
+	 * @param  mediaType  The media type for when the alarm goes off.
 	 */
-	private void setTabColors()
+	private void selectTabByMediaType(int mediaType)
+	{
+		if (NacMedia.isNone(mediaType))
+		{
+			this.selectTabByIndex(1);
+		}
+		else if (NacMedia.isFile(mediaType) || NacMedia.isDirectory(mediaType))
+		{
+			this.selectTabByIndex(0);
+		}
+		else if (NacMedia.isRingtone(mediaType))
+		{
+			this.selectTabByIndex(1);
+		}
+		else if (NacMedia.isSpotify(mediaType))
+		{
+			this.selectTabByIndex(2);
+		}
+	}
+
+	/**
+	 * Setup the tab colors.
+	 */
+	private void setupTabColors()
 	{
 		NacSharedPreferences shared = new NacSharedPreferences(this);
-		NacSharedDefaults defaults = new NacSharedDefaults(this);
+		NacSharedDefaults defaults = shared.getDefaults();
 		TabLayout tabLayout = this.getTabLayout();
 
 		tabLayout.setSelectedTabIndicatorColor(shared.getThemeColor());
@@ -383,17 +378,19 @@ public class NacMediaActivity
 	}
 
 	/**
-	 * Setup the pager.
+	 * Setup the view pager.
 	 */
 	@SuppressWarnings("deprecation")
-	private void setupPager()
+	private void setupViewPager()
 	{
-		ViewPager pager = this.getViewPager();
+		ViewPager2 viewPager = this.getViewPager();
 		NacPagerAdapter adapter = this.getPagerAdapter();
 		TabLayout tabLayout = this.getTabLayout();
 
-		pager.setAdapter(adapter);
-		tabLayout.setupWithViewPager(pager);
+		viewPager.setAdapter(adapter);
+
+		new TabLayoutMediator(tabLayout, viewPager, (tab, position) ->
+			tab.setText(this.getTitles()[position])).attach();
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{
@@ -409,7 +406,7 @@ public class NacMediaActivity
 	 */
 	//public static class NacPagerAdapter
 	public class NacPagerAdapter
-		extends FragmentPagerAdapter
+		extends FragmentStateAdapter
 	{
 
 		///**
@@ -424,28 +421,16 @@ public class NacMediaActivity
 
 		/**
 		 */
-		//public NacPagerAdapter(FragmentManager fragmentManager, NacAlarm alarm,
-		//	String[] titles)
-		public NacPagerAdapter(FragmentManager fragmentManager, int behavior)
+		public NacPagerAdapter(FragmentActivity fa)
 		{
-			super(fragmentManager, behavior);
-		}
-
-		/**
-		 * @return The number of items to swipe through.
-		 */
-		@Override
-		public int getCount()
-		{
-			//return this.getTitles().length;
-			return getTitles().length;
+			super(fa);
 		}
 
 		/**
 		 */
-		@NonNull
+		//@NonNull
         @Override
-		public Fragment getItem(int position)
+		public Fragment createFragment(int position)
 		{
 			NacAlarm alarm = getAlarm();
 			String media = getMedia();
@@ -488,21 +473,13 @@ public class NacMediaActivity
 		}
 
 		/**
+		 * @return The number of items to swipe through.
 		 */
 		@Override
-		public CharSequence getPageTitle(int position)
+		public int getItemCount()
 		{
-			//return this.getTitles()[position];
-			return getTitles()[position];
+			return getTitles().length;
 		}
-
-		///**
-		// * @return The tab titles.
-		// */
-		//private String[] getTitles()
-		//{
-		//	return this.mTitles;
-		//}
 
 	}
 

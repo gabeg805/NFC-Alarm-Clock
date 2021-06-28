@@ -195,6 +195,9 @@
 	<string name="misc_setting">Miscelaneo</string>
 	<string name="misc_setting_summary">Agrega caracteristicas geniales</string>
 
+	<string name="stats_setting">Estad?sticas</string>
+	<string name="stats_setting_summary">Mira cu?nto tiempo has posponada sus alarmas, y m?s</string>
+
 	<string name="about_setting">Acerca</string>
 	<string name="about_setting_summary">Informacion acerca de esta aplicacion</string>
 

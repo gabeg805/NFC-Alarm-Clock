@@ -32,6 +32,7 @@ public class NacVolumePreference
 	/**
 	 * Listener for when the audio options button is clicked.
 	 */
+	@SuppressWarnings("UnnecessaryInterfaceModifier")
 	public interface OnAudioOptionsClickedListener
 	{
 		public void onAudioOptionsClicked();

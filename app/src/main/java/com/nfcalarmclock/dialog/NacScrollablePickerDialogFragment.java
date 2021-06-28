@@ -16,6 +16,7 @@ public abstract class NacScrollablePickerDialogFragment
 	/**
 	 * Listener for when the scrollable picker option is selected.
 	 */
+	@SuppressWarnings("UnnecessaryInterfaceModifier")
 	public interface OnScrollablePickerOptionSelectedListener
 	{
 		public void onScrollablePickerOptionSelected(int index);

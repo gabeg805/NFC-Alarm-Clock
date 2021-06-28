@@ -12,6 +12,7 @@ import java.util.concurrent.Future;
 /**
  * Alarm statistic repository.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class NacAlarmStatisticRepository
 	extends NacRepository
 {

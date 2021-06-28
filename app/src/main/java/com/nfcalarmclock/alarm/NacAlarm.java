@@ -168,6 +168,7 @@ public class NacAlarm
 	/**
 	 * Helper to build an alarm.
 	 */
+	@SuppressWarnings("UnusedReturnValue")
 	public static class Builder
 	{
 
@@ -565,15 +566,13 @@ public class NacAlarm
 	/**
 	 * @return True if the alarm can be snoozed, and False otherwise.
 	 */
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public boolean canSnooze(NacSharedPreferences shared)
 	{
-		//int snoozeCount = this.getSnoozeCount(shared) + 1;
 		int snoozeCount = this.getSnoozeCount();
 		int maxSnoozeCount = shared.getMaxSnoozeValue();
 
 		return (snoozeCount < maxSnoozeCount) || (maxSnoozeCount < 0);
-		//return (snoozeCount <= maxSnoozeCount) || (maxSnoozeCount < 0);
-		//return (snoozeCount > maxSnoozeCount) && (maxSnoozeCount >= 0);
 	}
 
 	/**

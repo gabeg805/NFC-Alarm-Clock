@@ -18,6 +18,7 @@ public class NacAlarmAudioOptionsDialog
 	/**
 	 * Listener for when an audio option is clicked.
 	 */
+	@SuppressWarnings("UnnecessaryInterfaceModifier")
 	public interface OnAudioOptionClickedListener
 	{
 		public void onAudioOptionClicked(long alarmId, int which);

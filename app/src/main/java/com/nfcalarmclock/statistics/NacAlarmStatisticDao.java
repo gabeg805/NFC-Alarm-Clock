@@ -5,6 +5,7 @@ import androidx.room.Insert;
 /**
  * Data access object for storing when alarms were created.
  */
+@SuppressWarnings("UnnecessaryInterfaceModifier")
 public abstract interface NacAlarmStatisticDao<T>
 {
 

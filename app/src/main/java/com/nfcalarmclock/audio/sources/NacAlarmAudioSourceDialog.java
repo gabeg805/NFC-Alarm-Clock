@@ -32,6 +32,7 @@ public class NacAlarmAudioSourceDialog
 	/**
 	 * Listener for when an audio source is selected.
 	 */
+	@SuppressWarnings("UnnecessaryInterfaceModifier")
 	public interface OnAudioSourceSelectedListener
 	{
 		public void onAudioSourceSelected(String audioSource);

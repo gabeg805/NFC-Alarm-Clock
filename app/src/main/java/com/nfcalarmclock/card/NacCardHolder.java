@@ -24,7 +24,7 @@ import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.timepicker.MaterialTimePicker;
+//import com.google.android.material.timepicker.MaterialTimePicker;
 
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.system.NacCalendar;
@@ -587,6 +587,7 @@ public class NacCardHolder
 	 *
 	 * @return True if the default color is the same, and False otherwise.
 	 */
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public boolean compareColorStateList(ColorStateList oldColor,
 		ColorStateList newColor)
 	{

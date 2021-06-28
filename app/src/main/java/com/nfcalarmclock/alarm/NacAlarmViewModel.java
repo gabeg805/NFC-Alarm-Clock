@@ -12,6 +12,7 @@ import java.util.List;
 /**
  * Alarm view model.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class NacAlarmViewModel
 	extends AndroidViewModel
 {
