@@ -28,6 +28,14 @@ public interface NacAlarmCreatedStatisticDao
 	LiveData<List<NacAlarmCreatedStatistic>> getAll();
 
 	/**
+	 * Get the date when the first alarm was created.
+	 *
+	 * @return The date when the first alarm was created.
+	 */
+	@Query("SELECT MIN(timestamp) FROM alarm_created_statistic LIMIT 1")
+	long getFirstCreatedDate();
+
+	/**
 	 * Count the number of created alarm statistics.
 	 *
 	 * @return The number of created alarm statistics.

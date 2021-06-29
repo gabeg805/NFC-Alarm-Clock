@@ -59,6 +59,7 @@
 	<string name="message_alarm_restore">Alarma restaurada</string>
 	<string name="message_alarm_dismiss">Alarma descartada</string>
 	<string name="message_alarm_snooze">Alarma posponada</string>
+	<string name="message_statistics_started_on">Las estad?sticas empezaron en</string>
 
 
 
@@ -98,7 +99,7 @@
 	<string name="title_snoozed_alarms">Alarmas posponadas</string>
 	<string name="title_created_alarms">Alarmas creadas</string>
 	<string name="title_deleted_alarms">Alarmas borradas</string>
-	<string name="title_current_alarms">Total</string>
+	<string name="title_current_alarms">Actual</string>
 
 
 

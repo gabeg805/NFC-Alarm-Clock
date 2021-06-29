@@ -505,6 +505,14 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Statistics started on message.
+	 */
+	public String getMessageStatisticsStartedOn()
+	{
+		return this.getString(R.string.message_statistics_started_on);
+	}
+
+	/**
 	 * @return Vibrate disabled message.
 	 */
 	public String getMessageVibrateDisabled()

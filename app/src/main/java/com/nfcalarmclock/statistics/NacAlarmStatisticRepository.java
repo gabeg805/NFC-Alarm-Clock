@@ -8,6 +8,7 @@ import com.nfcalarmclock.db.NacAlarmDatabase;
 import com.nfcalarmclock.db.NacRepository;
 
 import java.util.concurrent.Future;
+import java.util.Date;
 
 /**
  * Alarm statistic repository.
@@ -188,6 +189,20 @@ public class NacAlarmStatisticRepository
 		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::getCount);
 
 		return NacRepository.getLongFromFuture(future);
+	}
+
+	/**
+	 * Get the date when the first alarm was created.
+	 *
+	 * @return The date when the first alarm was created.
+	 */
+	public Date getCreatedFirstDate()
+	{
+		NacAlarmCreatedStatisticDao dao = this.getAlarmCreatedStatisticDao();
+		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::getFirstCreatedDate);
+		long timestamp = NacRepository.getLongFromFuture(future);
+
+		return new Date(timestamp);
 	}
 
 	/**
