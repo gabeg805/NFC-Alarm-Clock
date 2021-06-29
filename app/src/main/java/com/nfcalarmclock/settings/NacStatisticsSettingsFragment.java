@@ -97,8 +97,9 @@ public class NacStatisticsSettingsFragment
 	 */
 	private void setupDismissedAlarms(NacAlarmStatisticRepository repo, View root)
 	{
-		long numDismissed = repo.getDismissedCount();
+		long numDismissedNormal = repo.getDismissedCount();
 		long numDismissedWithNfc = repo.getDismissedWithNfcCount();
+		long numDismissed = numDismissedNormal + numDismissedWithNfc;
 
 		Locale locale = Locale.getDefault();
 		String text = String.format(locale, "%1$s (%2$s NFC)", numDismissed,
