@@ -12,7 +12,7 @@
 
 	<include layout="@layout/nac_preference_text" />
 
-	<com.nfcalarmclock.days.NacDayButton
+	<com.nfcalarmclock.dayofweek.NacDayButton
 		android:id="@+id/widget"
 		android:layout_width="@dimen/isz_large"
 		android:layout_height="@dimen/isz_large"

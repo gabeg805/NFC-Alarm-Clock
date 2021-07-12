@@ -13,7 +13,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmDao;
 import com.nfcalarmclock.alarm.NacAlarmTypeConverters;
-import com.nfcalarmclock.audio.media.NacMedia;
+import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.statistics.NacAlarmCreatedStatistic;
 import com.nfcalarmclock.statistics.NacAlarmCreatedStatisticDao;
@@ -27,7 +27,7 @@ import com.nfcalarmclock.statistics.NacAlarmSnoozedStatistic;
 import com.nfcalarmclock.statistics.NacAlarmSnoozedStatisticDao;
 import com.nfcalarmclock.statistics.NacStatisticTypeConverters;
 import com.nfcalarmclock.system.NacCalendar;
-import com.nfcalarmclock.system.NacScheduler;
+import com.nfcalarmclock.scheduler.NacScheduler;
 
 import java.io.File;
 import java.util.concurrent.Executors;

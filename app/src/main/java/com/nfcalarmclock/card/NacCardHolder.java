@@ -29,14 +29,13 @@ import com.google.android.material.button.MaterialButton;
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.system.NacCalendar;
 import com.nfcalarmclock.system.NacContext;
-import com.nfcalarmclock.days.NacDayButton;
-import com.nfcalarmclock.days.NacDayOfWeek;
-import com.nfcalarmclock.dialog.NacDialog;
-import com.nfcalarmclock.animator.NacHeightAnimator;
+import com.nfcalarmclock.dayofweek.NacDayButton;
+import com.nfcalarmclock.dayofweek.NacDayOfWeek;
+import com.nfcalarmclock.util.dialog.NacDialog;
 import com.nfcalarmclock.name.NacNameDialog;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
-import com.nfcalarmclock.NacUtility;
+import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.R;
 
 import java.lang.Float;

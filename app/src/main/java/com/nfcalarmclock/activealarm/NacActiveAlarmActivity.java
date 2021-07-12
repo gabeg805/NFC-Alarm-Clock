@@ -21,7 +21,7 @@ import com.nfcalarmclock.system.NacContext;
 import com.nfcalarmclock.system.NacIntent;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
-import com.nfcalarmclock.NacUtility;
+import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.nfc.NacNfc;
 

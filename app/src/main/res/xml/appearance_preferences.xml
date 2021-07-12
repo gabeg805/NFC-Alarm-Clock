@@ -4,7 +4,7 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
 	<!-- Colors -->
-	<com.nfcalarmclock.preference.NacPreferenceCategory
+	<com.nfcalarmclock.util.preference.NacPreferenceCategory
 		android:title="@string/color_category">
 
 		<com.nfcalarmclock.colorpicker.NacColorPickerPreference
@@ -56,13 +56,13 @@
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="true"
 			/>
-	</com.nfcalarmclock.preference.NacPreferenceCategory>
+	</com.nfcalarmclock.util.preference.NacPreferenceCategory>
 
 	<!-- Notifications -->
-	<com.nfcalarmclock.preference.NacPreferenceCategory
+	<com.nfcalarmclock.util.preference.NacPreferenceCategory
 		android:title="@string/notification_category">
 
-		<com.nfcalarmclock.preference.NacCheckboxPreference
+		<com.nfcalarmclock.util.preference.NacCheckboxPreference
 			android:title="@string/title_missed_alarm"
 			android:key="@string/missed_alarm_key"
 			android:summaryOn="@string/missed_alarm_true"
@@ -72,7 +72,7 @@
 			app:allowDividerBelow="false"
 			/>
 
-		<com.nfcalarmclock.preference.NacCheckboxPreference
+		<com.nfcalarmclock.util.preference.NacCheckboxPreference
 			android:title="@string/title_upcoming_alarm"
 			android:key="@string/upcoming_alarm_key"
 			android:summaryOn="@string/upcoming_alarm_true"
@@ -80,16 +80,16 @@
 			android:defaultValue="@bool/default_upcoming_alarm"
 			app:allowDividerBelow="true"
 			/>
-	</com.nfcalarmclock.preference.NacPreferenceCategory>
+	</com.nfcalarmclock.util.preference.NacPreferenceCategory>
 
 	<!-- Styling -->
-	<com.nfcalarmclock.preference.NacPreferenceCategory
+	<com.nfcalarmclock.util.preference.NacPreferenceCategory
 		android:title="@string/style_category">
 
 			<!--
 			android:summaryOff="@string/day_button_style_false"
 			-->
-		<com.nfcalarmclock.days.NacDayButtonPreference
+		<com.nfcalarmclock.dayofweek.NacDayButtonStylePreference
 			android:title="@string/day_button_style"
 			android:key="@string/day_button_style_key"
 			android:summary="@string/description_day_button_style_filled"
@@ -104,13 +104,13 @@
 			android:defaultValue="@integer/default_start_week_on_index"
 			app:allowDividerBelow="true"
 			/>
-	</com.nfcalarmclock.preference.NacPreferenceCategory>
+	</com.nfcalarmclock.util.preference.NacPreferenceCategory>
 
 	<!-- Tweaks -->
-	<com.nfcalarmclock.preference.NacPreferenceCategory
+	<com.nfcalarmclock.util.preference.NacPreferenceCategory
 		android:title="@string/tweaks_category">
 
-		<com.nfcalarmclock.preference.NacCheckboxPreference
+		<com.nfcalarmclock.util.preference.NacCheckboxPreference
 			android:title="@string/expand_new_alarm"
 			android:key="@string/expand_new_alarm_key"
 			android:summaryOn="@string/expand_new_alarm_true"
@@ -126,13 +126,13 @@
 			app:allowDividerBelow="false"
 			/>
 
-		<com.nfcalarmclock.preference.NacCheckboxPreference
+		<com.nfcalarmclock.util.preference.NacCheckboxPreference
 			android:title="@string/show_alarm_info"
 			android:key="@string/show_alarm_info_key"
 			android:summaryOn="@string/show_alarm_info_true"
 			android:summaryOff="@string/show_alarm_info_false"
 			android:defaultValue="@bool/default_show_alarm_info"
 			/>
-	</com.nfcalarmclock.preference.NacPreferenceCategory>
+	</com.nfcalarmclock.util.preference.NacPreferenceCategory>
 
 </PreferenceScreen>

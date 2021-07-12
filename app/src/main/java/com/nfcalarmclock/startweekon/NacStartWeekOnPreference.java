@@ -11,7 +11,7 @@ import android.widget.RadioGroup;
 import androidx.preference.Preference;
 
 import com.nfcalarmclock.R;
-import com.nfcalarmclock.dialog.NacDialog;
+import com.nfcalarmclock.util.dialog.NacDialog;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedDefaults;
 import com.nfcalarmclock.shared.NacSharedPreferences;

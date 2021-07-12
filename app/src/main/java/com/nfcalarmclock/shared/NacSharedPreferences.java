@@ -5,8 +5,8 @@ import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 
 import com.nfcalarmclock.system.NacCalendar;
-import com.nfcalarmclock.file.NacFile;
-import com.nfcalarmclock.audio.media.NacMedia;
+import com.nfcalarmclock.util.file.NacFile;
+import com.nfcalarmclock.media.NacMedia;
 
 import java.util.List;
 

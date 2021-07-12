@@ -470,13 +470,13 @@ implements android.view.View.OnClickListener, android.view.View.OnLongClickListe
 </tr>
 <tr id="i52" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCardHolder.html#onAnimateCollapse-com.nfcalarmclock.animator.NacHeightAnimator-">onAnimateCollapse</a></span>(<a href="../../com/nfcalarmclock/NacHeightAnimator.html" title="class in com.nfcalarmclock">NacHeightAnimator</a>&nbsp;animator)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCardHolder.html#onAnimateCollapse-com.nfcalarmclock.card.NacHeightAnimator-">onAnimateCollapse</a></span>(<a href="../../com/nfcalarmclock/NacHeightAnimator.html" title="class in com.nfcalarmclock">NacHeightAnimator</a>&nbsp;animator)</code>
 <div class="block">Called when the card is collapsing.</div>
 </td>
 </tr>
 <tr id="i53" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCardHolder.html#onAnimateExpand-com.nfcalarmclock.animator.NacHeightAnimator-">onAnimateExpand</a></span>(<a href="../../com/nfcalarmclock/NacHeightAnimator.html" title="class in com.nfcalarmclock">NacHeightAnimator</a>&nbsp;animator)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCardHolder.html#onAnimateExpand-com.nfcalarmclock.card.NacHeightAnimator-">onAnimateExpand</a></span>(<a href="../../com/nfcalarmclock/NacHeightAnimator.html" title="class in com.nfcalarmclock">NacHeightAnimator</a>&nbsp;animator)</code>
 <div class="block">Called when the card is expanding.</div>
 </td>
 </tr>
@@ -493,7 +493,7 @@ implements android.view.View.OnClickListener, android.view.View.OnLongClickListe
 </tr>
 <tr id="i56" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCardHolder.html#onDismissDialog-com.nfcalarmclock.dialog.NacDialog-">onDismissDialog</a></span>(<a href="../../com/nfcalarmclock/NacDialog.html" title="class in com.nfcalarmclock">NacDialog</a>&nbsp;dialog)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCardHolder.html#onDismissDialog-com.nfcalarmclock.util.dialog.NacDialog-">onDismissDialog</a></span>(<a href="../../com/nfcalarmclock/NacDialog.html" title="class in com.nfcalarmclock">NacDialog</a>&nbsp;dialog)</code>
 <div class="block">Notify alarm listener that the alarm has been modified.</div>
 </td>
 </tr>
@@ -1359,7 +1359,7 @@ implements android.view.View.OnClickListener, android.view.View.OnLongClickListe
 </dl>
 </li>
 </ul>
-<a name="onAnimateCollapse-com.nfcalarmclock.animator.NacHeightAnimator-">
+<a name="onAnimateCollapse-com.nfcalarmclock.card.NacHeightAnimator-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -1372,11 +1372,11 @@ implements android.view.View.OnClickListener, android.view.View.OnLongClickListe
  card collapsed listener.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../com/nfcalarmclock/NacHeightAnimator.OnAnimateHeightListener.html#onAnimateCollapse-com.nfcalarmclock.animator.NacHeightAnimator-">onAnimateCollapse</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacHeightAnimator.OnAnimateHeightListener.html" title="interface in com.nfcalarmclock">NacHeightAnimator.OnAnimateHeightListener</a></code></dd>
+<dd><code><a href="../../com/nfcalarmclock/NacHeightAnimator.OnAnimateHeightListener.html#onAnimateCollapse-com.nfcalarmclock.card.NacHeightAnimator-">onAnimateCollapse</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacHeightAnimator.OnAnimateHeightListener.html" title="interface in com.nfcalarmclock">NacHeightAnimator.OnAnimateHeightListener</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="onAnimateExpand-com.nfcalarmclock.animator.NacHeightAnimator-">
+<a name="onAnimateExpand-com.nfcalarmclock.card.NacHeightAnimator-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -1389,7 +1389,7 @@ implements android.view.View.OnClickListener, android.view.View.OnLongClickListe
  card collapsed listener.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../com/nfcalarmclock/NacHeightAnimator.OnAnimateHeightListener.html#onAnimateExpand-com.nfcalarmclock.animator.NacHeightAnimator-">onAnimateExpand</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacHeightAnimator.OnAnimateHeightListener.html" title="interface in com.nfcalarmclock">NacHeightAnimator.OnAnimateHeightListener</a></code></dd>
+<dd><code><a href="../../com/nfcalarmclock/NacHeightAnimator.OnAnimateHeightListener.html#onAnimateExpand-com.nfcalarmclock.card.NacHeightAnimator-">onAnimateExpand</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacHeightAnimator.OnAnimateHeightListener.html" title="interface in com.nfcalarmclock">NacHeightAnimator.OnAnimateHeightListener</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -1408,7 +1408,7 @@ implements android.view.View.OnClickListener, android.view.View.OnLongClickListe
 </dl>
 </li>
 </ul>
-<a name="onWeekChanged-com.nfcalarmclock.days.NacDayButton-com.nfcalarmclock.system.NacCalendar.Day-">
+<a name="onWeekChanged-com.nfcalarmclock.dayofweek.NacDayButton-com.nfcalarmclock.system.NacCalendar.Day-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -1437,7 +1437,7 @@ implements android.view.View.OnClickListener, android.view.View.OnLongClickListe
 </dl>
 </li>
 </ul>
-<a name="onDismissDialog-com.nfcalarmclock.dialog.NacDialog-">
+<a name="onDismissDialog-com.nfcalarmclock.util.dialog.NacDialog-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -1447,7 +1447,7 @@ implements android.view.View.OnClickListener, android.view.View.OnLongClickListe
 <div class="block">Notify alarm listener that the alarm has been modified.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../com/nfcalarmclock/NacDialog.OnDismissListener.html#onDismissDialog-com.nfcalarmclock.dialog.NacDialog-">onDismissDialog</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacDialog.OnDismissListener.html" title="interface in com.nfcalarmclock">NacDialog.OnDismissListener</a></code></dd>
+<dd><code><a href="../../com/nfcalarmclock/NacDialog.OnDismissListener.html#onDismissDialog-com.nfcalarmclock.util.dialog.NacDialog-">onDismissDialog</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacDialog.OnDismissListener.html" title="interface in com.nfcalarmclock">NacDialog.OnDismissListener</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -1520,7 +1520,7 @@ implements android.view.View.OnClickListener, android.view.View.OnLongClickListe
 </dl>
 </li>
 </ul>
-<a name="respondToDayButtonClick-com.nfcalarmclock.days.NacDayButton-com.nfcalarmclock.system.NacCalendar.Day-">
+<a name="respondToDayButtonClick-com.nfcalarmclock.dayofweek.NacDayButton-com.nfcalarmclock.system.NacCalendar.Day-">
 <!--   -->
 </a>
 <ul class="blockList">

@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.core.graphics.ColorUtils;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textfield.TextInputEditText;
-import com.nfcalarmclock.dialog.NacDialog;
+import com.nfcalarmclock.util.dialog.NacDialog;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;

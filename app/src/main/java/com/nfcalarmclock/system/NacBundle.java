@@ -5,7 +5,7 @@ import android.os.BadParcelableException;
 import android.speech.tts.TextToSpeech;
 
 import com.nfcalarmclock.alarm.NacAlarm;
-import com.nfcalarmclock.audio.NacAudio;
+import com.nfcalarmclock.media.NacAudioAttributes;
 
 /**
  */
@@ -78,7 +78,7 @@ public class NacBundle
 	 * @return A bundle that contains the parameter to control the volume level
 	 *         of a Text-to-Speech engine.
 	 */
-	public static Bundle toBundle(NacAudio.Attributes attrs)
+	public static Bundle toBundle(NacAudioAttributes attrs)
 	{
 		Bundle bundle = new Bundle();
 		bundle.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, attrs.getStream());

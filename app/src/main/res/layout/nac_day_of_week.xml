@@ -1,7 +1,7 @@
 <merge
 	xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<com.nfcalarmclock.days.NacDayButton
+	<com.nfcalarmclock.dayofweek.NacDayButton
 		android:id="@+id/dow_sun"
 		android:layout_width="0dp"
 		android:layout_height="@dimen/touch"
@@ -10,7 +10,7 @@
 		android:text=""
 		/>
 
-	<com.nfcalarmclock.days.NacDayButton
+	<com.nfcalarmclock.dayofweek.NacDayButton
 		android:id="@+id/dow_mon"
 		android:layout_width="0dp"
 		android:layout_height="@dimen/touch"
@@ -19,7 +19,7 @@
 		android:text=""
 		/>
 
-	<com.nfcalarmclock.days.NacDayButton
+	<com.nfcalarmclock.dayofweek.NacDayButton
 		android:id="@+id/dow_tue"
 		android:layout_width="0dp"
 		android:layout_height="@dimen/touch"
@@ -28,7 +28,7 @@
 		android:text=""
 		/>
 
-	<com.nfcalarmclock.days.NacDayButton
+	<com.nfcalarmclock.dayofweek.NacDayButton
 		android:id="@+id/dow_wed"
 		android:layout_width="0dp"
 		android:layout_height="@dimen/touch"
@@ -37,7 +37,7 @@
 		android:text=""
 		/>
 
-	<com.nfcalarmclock.days.NacDayButton
+	<com.nfcalarmclock.dayofweek.NacDayButton
 		android:id="@+id/dow_thu"
 		android:layout_width="0dp"
 		android:layout_height="@dimen/touch"
@@ -46,7 +46,7 @@
 		android:text=""
 		/>
 
-	<com.nfcalarmclock.days.NacDayButton
+	<com.nfcalarmclock.dayofweek.NacDayButton
 		android:id="@+id/dow_fri"
 		android:layout_width="0dp"
 		android:layout_height="@dimen/touch"
@@ -55,7 +55,7 @@
 		android:text=""
 		/>
 
-	<com.nfcalarmclock.days.NacDayButton
+	<com.nfcalarmclock.dayofweek.NacDayButton
 		android:id="@+id/dow_sat"
 		android:layout_width="0dp"
 		android:layout_height="@dimen/touch"

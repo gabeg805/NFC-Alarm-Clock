@@ -6,7 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.nfcalarmclock.alarm.NacAlarm;
-import com.nfcalarmclock.NacUtility;
+import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.nfc.NacNfc;
 import com.nfcalarmclock.shared.NacSharedConstants;
 

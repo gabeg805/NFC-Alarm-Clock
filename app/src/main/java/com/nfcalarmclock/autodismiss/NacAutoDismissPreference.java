@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 
-import com.nfcalarmclock.dialog.NacScrollablePickerDialogFragment;
+import com.nfcalarmclock.util.dialog.NacScrollablePickerDialogFragment;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedDefaults;
 import com.nfcalarmclock.shared.NacSharedPreferences;

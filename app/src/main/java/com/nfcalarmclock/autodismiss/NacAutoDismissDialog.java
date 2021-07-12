@@ -7,7 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.nfcalarmclock.dialog.NacScrollablePickerDialogFragment;
+import com.nfcalarmclock.util.dialog.NacScrollablePickerDialogFragment;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.R;
 

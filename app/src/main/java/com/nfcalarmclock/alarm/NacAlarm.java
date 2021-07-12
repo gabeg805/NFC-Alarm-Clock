@@ -7,8 +7,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.nfcalarmclock.audio.media.NacMedia;
-import com.nfcalarmclock.NacUtility;
+import com.nfcalarmclock.media.NacMedia;
+import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.system.NacCalendar;
 

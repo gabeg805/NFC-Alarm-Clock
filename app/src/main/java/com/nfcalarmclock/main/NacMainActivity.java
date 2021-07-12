@@ -26,18 +26,18 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmViewModel;
-import com.nfcalarmclock.app.NacShutdownBroadcastReceiver;
-import com.nfcalarmclock.audio.media.NacMediaActivity;
-import com.nfcalarmclock.audio.options.NacAlarmAudioOptionsDialog;
-import com.nfcalarmclock.audio.sources.NacAlarmAudioSourceDialog;
-import com.nfcalarmclock.audio.tts.NacTextToSpeechDialog;
+import com.nfcalarmclock.shutdown.NacShutdownBroadcastReceiver;
+import com.nfcalarmclock.mediapicker.NacMediaActivity;
+import com.nfcalarmclock.audiooptions.NacAlarmAudioOptionsDialog;
+import com.nfcalarmclock.audiosource.NacAlarmAudioSourceDialog;
+import com.nfcalarmclock.tts.NacTextToSpeechDialog;
 import com.nfcalarmclock.card.NacCardAdapter;
 import com.nfcalarmclock.card.NacCardAdapterLiveData;
 import com.nfcalarmclock.card.NacCardHolder;
 import com.nfcalarmclock.card.NacCardTouchHelper;
-import com.nfcalarmclock.dialog.NacDialog;
-import com.nfcalarmclock.NacUtility;
-import com.nfcalarmclock.NacSnackbar;
+import com.nfcalarmclock.util.dialog.NacDialog;
+import com.nfcalarmclock.util.NacUtility;
+import com.nfcalarmclock.snackbar.NacSnackbar;
 import com.nfcalarmclock.nfc.NacNfc;
 import com.nfcalarmclock.nfc.NacScanNfcTagDialog;
 import com.nfcalarmclock.R;
@@ -49,7 +49,7 @@ import com.nfcalarmclock.statistics.NacAlarmStatisticRepository;
 import com.nfcalarmclock.system.NacCalendar;
 import com.nfcalarmclock.system.NacContext;
 import com.nfcalarmclock.system.NacIntent;
-import com.nfcalarmclock.system.NacScheduler;
+import com.nfcalarmclock.scheduler.NacScheduler;
 import com.nfcalarmclock.upcomingalarm.NacUpcomingAlarmNotification;
 
 import java.util.ArrayList;
@@ -268,7 +268,14 @@ public class NacMainActivity
 
 		if (receiver != null)
 		{
-			unregisterReceiver(receiver);
+			try
+			{
+				unregisterReceiver(receiver);
+			}
+			catch (IllegalArgumentException e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 

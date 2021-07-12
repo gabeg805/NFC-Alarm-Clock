@@ -9,11 +9,11 @@ import android.os.Vibrator;
 import android.os.VibrationEffect;
 
 import com.nfcalarmclock.alarm.NacAlarm;
-import com.nfcalarmclock.audio.NacAudio;
-import com.nfcalarmclock.audio.media.NacMediaPlayer;
+import com.nfcalarmclock.media.NacAudioAttributes;
+import com.nfcalarmclock.media.NacMediaPlayer;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
-import com.nfcalarmclock.audio.tts.NacTextToSpeech;
+import com.nfcalarmclock.tts.NacTextToSpeech;
 
 /**
  * Actions to take upon waking up, such as enabling NFC, playing music, etc.
@@ -246,7 +246,7 @@ public class NacWakeupProcess
 	/**
 	 */
 	@Override
-	public void onDoneSpeaking(NacTextToSpeech tts, NacAudio.Attributes attrs)
+	public void onDoneSpeaking(NacTextToSpeech tts, NacAudioAttributes attrs)
 	{
 		this.startNormal();
 	}
@@ -254,7 +254,7 @@ public class NacWakeupProcess
 	/**
 	 */
 	@Override
-	public void onStartSpeaking(NacTextToSpeech tts, NacAudio.Attributes attrs)
+	public void onStartSpeaking(NacTextToSpeech tts, NacAudioAttributes attrs)
 	{
 		Vibrator vibrator = this.getVibrator();
 
@@ -338,7 +338,7 @@ public class NacWakeupProcess
 
 		if (player != null)
 		{
-			NacAudio.Attributes attrs = player.getAudioAttributes();
+			NacAudioAttributes attrs = player.getAudioAttributes();
 			attrs.merge(alarm).setVolume();
 		}
 	}

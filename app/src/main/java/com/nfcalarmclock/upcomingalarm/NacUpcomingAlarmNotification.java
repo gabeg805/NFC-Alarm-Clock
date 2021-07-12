@@ -10,7 +10,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.nfcalarmclock.alarm.NacAlarm;
-import com.nfcalarmclock.app.NacNotification;
+import com.nfcalarmclock.util.notification.NacNotification;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.system.NacIntent;
 

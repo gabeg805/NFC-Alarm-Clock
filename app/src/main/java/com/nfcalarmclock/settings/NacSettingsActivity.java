@@ -14,6 +14,7 @@ import androidx.preference.Preference;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedKeys;
+import com.nfcalarmclock.statistics.NacStatisticsSettingsFragment;
 
 /**
  * Display all the configurable settings for the app.

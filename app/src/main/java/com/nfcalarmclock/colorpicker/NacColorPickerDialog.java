@@ -16,10 +16,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nfcalarmclock.dialog.NacDialog;
+import com.nfcalarmclock.util.dialog.NacDialog;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
-import com.nfcalarmclock.NacUtility;
+import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.R;
 
 /**

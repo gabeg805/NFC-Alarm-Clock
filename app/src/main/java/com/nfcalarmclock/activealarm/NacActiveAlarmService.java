@@ -10,7 +10,7 @@ import android.os.Looper;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
-import com.nfcalarmclock.NacUtility;
+import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmRepository;
 import com.nfcalarmclock.missedalarm.NacMissedAlarmNotification;
@@ -19,7 +19,7 @@ import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.statistics.NacAlarmStatisticRepository;
 import com.nfcalarmclock.system.NacContext;
 import com.nfcalarmclock.system.NacIntent;
-import com.nfcalarmclock.system.NacScheduler;
+import com.nfcalarmclock.scheduler.NacScheduler;
 
 import java.lang.System;
 import java.util.Calendar;
@@ -324,7 +324,8 @@ public class NacActiveAlarmService
 		NacAlarm intentAlarm = NacIntent.getAlarm(intent);
 		String action = NacIntent.getAction(intent);
 
-		return (intentAlarm != null) && !intentAlarm.equals(alarm)
+		return (alarm != null) && (intentAlarm != null)
+			&& !intentAlarm.equals(alarm)
 			&& action.equals(ACTION_START_SERVICE);
 	}
 

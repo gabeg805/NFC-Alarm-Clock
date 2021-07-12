@@ -88,7 +88,7 @@
 
 		<!-- Media activity -->
 		<activity
-			android:name=".audio.media.NacMediaActivity"
+			android:name=".mediapicker.NacMediaActivity"
 			android:launchMode="singleInstance">
 
 			<intent-filter>
@@ -116,7 +116,7 @@
 
 		<!-- Restore alarms on boot -->
 		<receiver
-			android:name=".app.NacStartupBroadcastReceiver"
+			android:name=".startup.NacStartupBroadcastReceiver"
 			android:enabled="true"
 			android:exported="false"
 			android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
@@ -132,7 +132,7 @@
 
 		<!-- Shutdown active alarms on boot -->
 		<receiver
-			android:name=".app.NacShutdownBroadcastReceiver"
+			android:name=".shutdown.NacShutdownBroadcastReceiver"
 			android:enabled="true"
 			android:exported="false">
 
@@ -143,7 +143,7 @@
 
 		<!-- Change alarms when time changes. -->
 		<receiver
-			android:name=".app.NacTimeChangeBroadcastReceiver"
+			android:name=".timechange.NacTimeChangeBroadcastReceiver"
 			android:enabled="true"
 			android:exported="false">
 

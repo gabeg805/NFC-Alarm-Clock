@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 
-import com.nfcalarmclock.dialog.NacDialog;
+import com.nfcalarmclock.util.dialog.NacDialog;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.R;
 

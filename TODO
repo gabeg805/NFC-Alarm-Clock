@@ -8,6 +8,12 @@ TODO
 
 * Implement Spotify
 
+------
+Issues
+------
+
+* When starting off at a music file. Trying to go up a directory does not work.
+
 ----
 DONE
 ----

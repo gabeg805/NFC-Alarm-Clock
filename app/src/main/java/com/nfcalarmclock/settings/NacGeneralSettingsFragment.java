@@ -11,10 +11,10 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 
-import com.nfcalarmclock.audio.options.NacAlarmAudioOptionsDialog;
-import com.nfcalarmclock.audio.sources.NacAlarmAudioSourceDialog;
-import com.nfcalarmclock.audio.media.NacMediaActivity;
-import com.nfcalarmclock.audio.media.NacMediaPreference;
+import com.nfcalarmclock.audiooptions.NacAlarmAudioOptionsDialog;
+import com.nfcalarmclock.audiosource.NacAlarmAudioSourceDialog;
+import com.nfcalarmclock.mediapicker.NacMediaActivity;
+import com.nfcalarmclock.mediapicker.NacMediaPreference;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.autodismiss.NacAutoDismissPreference;
 import com.nfcalarmclock.maxsnooze.NacMaxSnoozePreference;
@@ -22,7 +22,7 @@ import com.nfcalarmclock.shared.NacSharedKeys;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.snoozeduration.NacSnoozeDurationPreference;
 import com.nfcalarmclock.system.NacIntent;
-import com.nfcalarmclock.audio.tts.NacTextToSpeechDialog;
+import com.nfcalarmclock.tts.NacTextToSpeechDialog;
 import com.nfcalarmclock.volume.NacVolumePreference;
 
 /**
