@@ -1086,7 +1086,7 @@ public class NacSharedPreferences
 	 */
 	public void postponeRateMyApp()
 	{
-		int postpone = -2 * this.getDefaults().getRateMyAppLimit();
+		int postpone = -3 * this.getDefaults().getRateMyAppLimit();
 		this.editRateMyAppCounter(postpone);
 	}
 

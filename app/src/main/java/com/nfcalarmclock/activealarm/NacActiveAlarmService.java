@@ -400,8 +400,6 @@ public class NacActiveAlarmService
 			//this.showNotification();
 			this.setupWakeLock();
 			this.setupWakeupProcess();
-			// Might not need schedule next, since doing one day, per alarm, at a time.
-			//this.scheduleNextAlarm();
 			this.setIsAlarmActive(true);
 			this.updateAlarm();
 			this.waitForAutoDismiss();
@@ -536,9 +534,15 @@ public class NacActiveAlarmService
 		//NacAlarm alarm = this.getAlarm();
 		NacActiveAlarmNotification notification =
 			new NacActiveAlarmNotification(this);
+		int id = (int) alarm.getId();
+
+		if (id <= 0)
+		{
+			id = 59;
+		}
 
 		notification.setAlarm(alarm);
-		startForeground((int)alarm.getId(), notification.builder().build());
+		startForeground(id, notification.builder().build());
 	}
 
 	/**

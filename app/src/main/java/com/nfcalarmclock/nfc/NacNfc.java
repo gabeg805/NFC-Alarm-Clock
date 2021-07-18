@@ -12,6 +12,8 @@ import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.util.NacUtility;
 
+import java.lang.SecurityException;
+
 /**
  */
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")
@@ -141,7 +143,15 @@ public class NacNfc
 		}
 
 		PendingIntent pending = PendingIntent.getActivity(activity, 0, intent, 0);
-		nfcAdapter.enableForegroundDispatch(activity, pending, null, null);
+
+		try
+		{
+			nfcAdapter.enableForegroundDispatch(activity, pending, null, null);
+		}
+		catch (SecurityException e)
+		{
+			NacUtility.quickToast((Context)activity, "Unable to scan NFC tags");
+		}
 	}
 
 	/**
