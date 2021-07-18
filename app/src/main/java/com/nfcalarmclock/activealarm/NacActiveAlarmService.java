@@ -534,11 +534,11 @@ public class NacActiveAlarmService
 		//NacAlarm alarm = this.getAlarm();
 		NacActiveAlarmNotification notification =
 			new NacActiveAlarmNotification(this);
-		int id = (int) alarm.getId();
+		int id = 68;
 
-		if (id <= 0)
+		if (alarm != null)
 		{
-			id = 59;
+			id = (int) alarm.getId();
 		}
 
 		notification.setAlarm(alarm);
