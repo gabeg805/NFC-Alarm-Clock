@@ -148,8 +148,8 @@ public class NacActiveAlarmNotification
 		NacAlarm alarm = this.getAlarm();
 		Calendar now = Calendar.getInstance();
 		String time = NacCalendar.Time.getFullTime(context, now);
-		String name = alarm.getName();
 		Locale locale = Locale.getDefault();
+		String name = (alarm != null) ? alarm.getName() : "";
 
 		return name.isEmpty() ? time
 			: String.format(locale, "%1$s  —  %2$s", time, name);

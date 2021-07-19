@@ -344,8 +344,10 @@ public class NacActiveAlarmService
 	{
 		super.onCreate();
 
+		Application app = getApplication();
+
 		this.mSharedPreferences = new NacSharedPreferences(this);
-		this.mAlarmRepository = null;
+		this.mAlarmRepository = new NacAlarmRepository(app);
 		this.mAlarm = null;
 		this.mWakeupProcess = null;
 		this.mWakeLock = null;
@@ -367,24 +369,31 @@ public class NacActiveAlarmService
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
 		String action = NacIntent.getAction(intent);
-		NacAlarm alarm = NacIntent.getAlarm(intent);
+		//NacAlarm alarm = NacIntent.getAlarm(intent);
 
-		if (action.equals(ACTION_START_SERVICE))
-		{
-			this.showNotification(alarm);
-		}
+		//NacUtility.printf("onStartCommand()! Action start? %b | Alarm good? %b",
+		//	action.equals(ACTION_START_SERVICE), alarm != null);
 
-		if (this.isNewServiceStarted(intent))
-		{
-			this.prepareNewService();
-		}
+		//if (action.equals(ACTION_START_SERVICE))
+		//{
+		//	this.showNotification(alarm);
+		//}
 
-		this.mAlarm = alarm;
+		//if (this.isNewServiceStarted(intent))
+		//{
+		//	NacUtility.printf("Preparing new service!");
+		//	this.prepareNewService();
+		//}
 
-		if ((alarm == null) || action.isEmpty()
+		//this.mAlarm = alarm;
+
+		this.setupService(intent);
+
+		if ((this.getAlarm() == null) || action.isEmpty()
 			|| action.equals(ACTION_STOP_SERVICE)
 			|| action.equals(ACTION_DISMISS_ALARM))
 		{
+			//NacUtility.printf("Alarm is null OR Dismissing...");
 			this.dismiss();
 		}
 		else if (action.equals(ACTION_DISMISS_ALARM_WITH_NFC))
@@ -397,8 +406,9 @@ public class NacActiveAlarmService
 		}
 		else if (action.equals(ACTION_START_SERVICE))
 		{
-			//this.showNotification();
+			//NacUtility.printf("Starting service...");
 			this.setupWakeLock();
+			this.showNotification();
 			this.setupWakeupProcess();
 			this.setIsAlarmActive(true);
 			this.updateAlarm();
@@ -497,6 +507,26 @@ public class NacActiveAlarmService
 	}
 
 	/**
+	 * Setup the service.
+	 */
+	private void setupService(Intent intent)
+	{
+		NacAlarm intentAlarm = NacIntent.getAlarm(intent);
+		//NacAlarm alarm = this.getAlarm();
+
+		if (this.isNewServiceStarted(intent))
+		{
+			//NacUtility.printf("Preparing new service!");
+			this.prepareNewService();
+		}
+
+		if (intentAlarm != null)
+		{
+			this.mAlarm = intentAlarm;
+		}
+	}
+
+	/**
 	 * Setup the wake lock so that the screen remains on.
 	 */
 	public void setupWakeLock()
@@ -528,18 +558,19 @@ public class NacActiveAlarmService
 	/**
 	 * Show the notification.
 	 */
-	//public void showNotification()
-	public void showNotification(NacAlarm alarm)
+	//public void showNotification(NacAlarm alarm)
+	public void showNotification()
 	{
-		//NacAlarm alarm = this.getAlarm();
+		NacAlarm alarm = this.getAlarm();
 		NacActiveAlarmNotification notification =
 			new NacActiveAlarmNotification(this);
-		int id = 68;
+		int id = notification.getId();
+		//int id = 68;
 
-		if (alarm != null)
-		{
-			id = (int) alarm.getId();
-		}
+		//if (alarm != null)
+		//{
+		//	id = (int) alarm.getId();
+		//}
 
 		notification.setAlarm(alarm);
 		startForeground(id, notification.builder().build());

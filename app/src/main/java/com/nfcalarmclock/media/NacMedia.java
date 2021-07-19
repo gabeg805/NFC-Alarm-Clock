@@ -116,6 +116,7 @@ public class NacMedia
 			NacUtility.printf("NacMedia : getColumnFromCursor : IllegalArgumentException!");
 		}
 
+		// ANR could be due to having to load lots of files?
 		c.close();
 		return value;
 	}
