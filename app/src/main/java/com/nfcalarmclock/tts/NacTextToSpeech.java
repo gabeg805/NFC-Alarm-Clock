@@ -288,13 +288,21 @@ public class NacTextToSpeech
 	}
 
 	/**
-	 * @return True if the speech engine is running, and False otherwise.
+	 * @return True if the speech engine is running, and False otherwise. Will
+	 *     also return True if the IllegalArgumentException is raised.
 	 */
 	public boolean isSpeaking()
 	{
 		TextToSpeech speech = this.getTextToSpeech();
 
-		return (this.isInitialized() && speech.isSpeaking());
+		try
+		{
+			return this.isInitialized() && speech.isSpeaking();
+		}
+		catch (IllegalArgumentException e)
+		{
+			return true;
+		}
 	}
 
 	/**

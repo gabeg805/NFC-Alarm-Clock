@@ -201,7 +201,7 @@ public class NacActiveAlarmActivity
 			this.dismiss();
 		}
 
-		this.setupShowWhenLocked();
+		this.setupScreen();
 		this.setupAlarmButtons();
 		this.setupAlarmInfo();
 	}
@@ -372,36 +372,43 @@ public class NacActiveAlarmActivity
 	}
 
 	/**
-	 * Show the activity when the phone is locked.
+	 * Setup the screen and handle the case when the device is locked.
 	 */
 	@SuppressWarnings("deprecation")
-	 public void setupShowWhenLocked()
-	 {
-	 	NacAlarm alarm = this.getAlarm();
+	public void setupScreen()
+	{
+		NacAlarm alarm = this.getAlarm();
 		Window window = getWindow();
+		boolean showWhenLocked = (alarm != null) && !alarm.shouldUseNfc();
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)
 		{
 			setTurnScreenOn(true);
+			setShowWhenLocked(false);
+			//setShowWhenLocked(showWhenLocked);
 
-			if ((alarm != null) && !alarm.shouldUseNfc())
-			{
-				setShowWhenLocked(true);
-			}
+			//if ((alarm != null) && !alarm.shouldUseNfc())
+			//{
+			//	setShowWhenLocked(true);
+			//}
 		}
 		else
 		{
-
 			window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
-			if ((alarm != null) && !alarm.shouldUseNfc())
-			{
-				window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-			}
+			//if ((alarm != null) && !alarm.shouldUseNfc())
+			//if (showWhenLocked)
+			//{
+			//	window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+			//}
+			//else
+			//{
+				window.clearFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+			//}
 		}
 
 		window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-	 }
+	}
 
 	/**
 	 * Setup the receiver for the Stop signal.

@@ -212,12 +212,12 @@ public class NacMusicFragment
 	@Override
 	protected void onSelected()
 	{
-		Context context = getContext();
+		//Context context = getContext();
 
-		if (!NacPermissions.hasRead(context))
-		{
-			NacPermissions.requestRead(context, READ_REQUEST_CODE);
-		}
+		//if (!NacPermissions.hasRead(context))
+		//{
+		//	NacPermissions.requestRead(context, READ_REQUEST_CODE);
+		//}
 	}
 
 	/**

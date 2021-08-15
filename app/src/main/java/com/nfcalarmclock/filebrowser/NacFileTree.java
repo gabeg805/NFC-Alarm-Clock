@@ -1,6 +1,7 @@
 package com.nfcalarmclock.filebrowser;
 
 import android.annotation.TargetApi;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -26,6 +27,60 @@ public class NacFileTree
 	}
 
 	/**
+	 * Get the names of the columns that will be returned from the query.
+	 *
+	 * @return The names of the columns that will be returned from the query.
+	 */
+	@SuppressWarnings("deprecation")
+	@TargetApi(Build.VERSION_CODES.Q)
+	private String[] getQueryColumns()
+	{
+		String idColumn = MediaStore.Audio.Media._ID;
+		String pathColumn = MediaStore.Audio.Media.DATA;
+		String nameColumn = MediaStore.Audio.Media.DISPLAY_NAME;
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+		{
+			pathColumn = MediaStore.Audio.Media.RELATIVE_PATH;
+		}
+
+		return new String[] { idColumn, pathColumn,  nameColumn };
+	}
+
+	/**
+	 * Get the cursor that will be returned by the query.
+	 *
+	 * @param  context  The application context.
+	 * @param  columns  Array of columns to return from the query.
+	 *
+	 * @return The cursor that will be returned by the query.
+	 */
+	private Cursor getQueryCursor(Context context, String[] columns)
+	{
+		ContentResolver resolver = context.getContentResolver();
+		Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+		String sortOrder = "_display_name";
+		Cursor c = null;
+
+		try
+		{
+			c = resolver.query(uri, columns, null, null, sortOrder);
+		}
+		catch (IllegalArgumentException e)
+		{
+			try
+			{
+				c = resolver.query(uri, columns, null, null, null);
+			}
+			catch (IllegalArgumentException f)
+			{
+			}
+		}
+
+		return c;
+	}
+
+	/**
 	 * @see #scan(Context, boolean)
 	 */
 	public void scan(Context context)
@@ -46,21 +101,17 @@ public class NacFileTree
 	@TargetApi(Build.VERSION_CODES.Q)
 	public void scan(Context context, boolean filter)
 	{
+		String[] columns = this.getQueryColumns();
+		Cursor c = this.getQueryCursor(context, columns);
+
+		if (c == null)
+		{
+			return;
+		}
+
 		// TODO: Shouldn't this be a NacFile object?
 		NacTreeNode<String> currentDir = this.getDirectory();
 		String currentPath = NacFile.toRelativePath(this.getDirectoryPath());
-		boolean canQueryRelativePath =
-			(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q);
-		Uri baseUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-		String[] columns = new String[] {
-			MediaStore.Audio.Media._ID,
-				canQueryRelativePath ?
-					MediaStore.Audio.Media.RELATIVE_PATH :
-					MediaStore.Audio.Media.DATA,
-			MediaStore.Audio.Media.DISPLAY_NAME,
-			};
-		Cursor c = context.getContentResolver().query(baseUri, columns,
-			null, null, "_display_name");
 		int idIndex = c.getColumnIndex(columns[0]);
 		int pathIndex = c.getColumnIndex(columns[1]);
 		int nameIndex = c.getColumnIndex(columns[2]);
@@ -71,7 +122,7 @@ public class NacFileTree
 			String path = NacFile.strip(c.getString(pathIndex));
 			String name = c.getString(nameIndex);
 
-			if (!canQueryRelativePath)
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
 			{
 				path = NacFile.toRelativeDirname(path);
 			}

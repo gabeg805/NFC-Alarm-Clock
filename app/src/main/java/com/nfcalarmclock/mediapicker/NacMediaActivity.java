@@ -25,6 +25,7 @@ import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedDefaults;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.system.NacIntent;
+import com.nfcalarmclock.system.NacPermissions;
 
 /**
  */
@@ -100,6 +101,11 @@ public class NacMediaActivity
 		if ((selectedFragment == null) || (selectedFragment != tabFragment))
 		{
 			return;
+		}
+
+		if ((selectedFragment instanceof NacMusicFragment) && !NacPermissions.hasRead(this))
+		{
+			NacPermissions.requestRead(this, NacMusicFragment.READ_REQUEST_CODE);
 		}
 
 		((NacMediaFragment)selectedFragment).onSelected();
@@ -267,6 +273,8 @@ public class NacMediaActivity
 		this.selectTabByMediaType(mediaType);
 	}
 
+	/**
+	 */
 	@Override
 	public void onRequestPermissionsResult(int requestCode,
 		@NonNull String[] permissions, @NonNull int[] grantResults)
