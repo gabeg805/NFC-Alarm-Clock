@@ -123,7 +123,11 @@ public class NacActiveAlarmActivity
 		Intent intent = getIntent();
 		NacAlarm alarm = this.getAlarm();
 
-		NacContext.dismissForegroundServiceFromNfcScan(this, intent, alarm);
+		if (NacContext.checkNfcScan(this, intent, alarm))
+		{
+			NacContext.dismissForegroundServiceWithNfc(this, alarm);
+			//NacContext.dismissForegroundServiceFromNfcScan(this, intent, alarm);
+		}
 	}
 
 	/**

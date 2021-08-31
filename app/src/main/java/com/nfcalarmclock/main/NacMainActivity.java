@@ -325,21 +325,25 @@ public class NacMainActivity
 	private void dismissActiveAlarm(Intent intent)
 	{
 		NacAlarm alarm = this.getActiveAlarm();
+
 		if (alarm == null)
 		{
+			NacUtility.quickToast(this, "Active alarm is not set");
 			return;
 		}
 
-		boolean success = NacContext.dismissForegroundServiceFromNfcScan(this,
-			intent, alarm);
-
-		if (success)
+		if (NacContext.checkNfcScan(this, intent, alarm))
 		{
-			recreate();
+			NacUtility.quickToast(this, "Dismiss alarm activity with NFC");
+			NacContext.dismissAlarmActivityWithNfc(this, intent, alarm);
+			//NacContext.dismissForegroundServiceWithNfc(this, alarm);
+			//recreate();
 		}
 		else
 		{
-			this.showAlarmActivity(alarm);
+			NacUtility.quickToast(this, "Starting alarm activity");
+			NacContext.startAlarm(this, alarm);
+			//this.showAlarmActivity(alarm);
 		}
 	}
 
@@ -851,6 +855,12 @@ public class NacMainActivity
 	{
 		super.onNewIntent(intent);
 
+		String wasScanned = String.valueOf(this.wasNfcScannedForAlarm(intent));
+		String isActive = String.valueOf(this.getActiveAlarm() != null);
+		String msg = "Was NFC scanned for alarm? " + wasScanned + " " + isActive;
+
+		NacUtility.quickToast(this, msg);
+
 		if (this.wasNfcScannedForDialog(intent))
 		{
 			NacSharedConstants cons = this.getSharedConstants();
@@ -865,6 +875,7 @@ public class NacMainActivity
 				dialog.cancel();
 			}
 		}
+		// TODO: Might have to wait for active alarm to be set?
 		else if (this.wasNfcScannedForAlarm(intent))
 		{
 			this.dismissActiveAlarm(intent);

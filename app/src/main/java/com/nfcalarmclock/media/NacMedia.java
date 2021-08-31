@@ -241,19 +241,22 @@ public class NacMedia
 	}
 
 	/**
+	 * Get all alarm ringtones on the device.
+	 *
 	 * @param  context  The application context.
 	 *
-	 * @return A list of alarm ringtones.
+	 * @return All alarm ringtones on the device
 	 */
 	public static TreeMap<String,String> getRingtones(Context context)
 	{
-		RingtoneManager manager = new RingtoneManager(context);
 		TreeMap<String,String> ringtones = new TreeMap<>();
-
-		manager.setType(RingtoneManager.TYPE_ALARM);
-
-		Cursor c = manager.getCursor();
 		Locale locale = Locale.getDefault();
+		Cursor c = NacMedia.getRingtonesCursor(context);
+
+		if (c == null)
+		{
+			return ringtones;
+		}
 
 		while (c.moveToNext())
 		{
@@ -270,7 +273,30 @@ public class NacMedia
 			ringtones.put(title, path);
 		}
 
+		c.close();
+
 		return ringtones;
+	}
+
+	/**
+	 * Get the cursor for the alarm ringtones.
+	 */
+	public static Cursor getRingtonesCursor(Context context)
+	{
+		RingtoneManager manager = new RingtoneManager(context);
+		Cursor c = null;
+
+		manager.setType(RingtoneManager.TYPE_ALARM);
+
+		try
+		{
+			c = manager.getCursor();
+		}
+		catch (IllegalArgumentException e)
+		{
+		}
+
+		return c;
 	}
 
 	/**

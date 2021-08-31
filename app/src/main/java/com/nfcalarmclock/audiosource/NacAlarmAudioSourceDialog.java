@@ -70,8 +70,9 @@ public class NacAlarmAudioSourceDialog
 	{
 		OnAudioSourceSelectedListener listener =
 			this.getOnAudioSourceSelectedListener();
+		RadioGroup group = this.getRadioGroup();
 
-		if (listener != null)
+		if ((listener != null) && (group != null))
 		{
 			String audioSource = this.getAudioSource();
 

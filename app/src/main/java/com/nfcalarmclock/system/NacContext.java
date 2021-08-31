@@ -17,6 +17,37 @@ public class NacContext
 {
 
 	/**
+	 * Check that the NFC tag scanned matches the ID of the one required by the
+	 * alarm.
+	 *
+	 * @param  context  A context.
+	 * @param  intent  An intent.
+	 * @param  alarm  An alarm.
+	 *
+	 * @return True if the NFC tag scanned matches the one required by the alarm,
+	 *     and False otherwise.
+	 */
+	public static boolean checkNfcScan(Context context, Intent intent,
+		NacAlarm alarm)
+	{
+		if ((intent == null) || (alarm == null))
+		{
+			return false;
+		}
+
+		if (NacNfc.doIdsMatch(alarm, intent))
+		{
+			return true;
+		}
+		else
+		{
+			NacSharedConstants cons = new NacSharedConstants(context);
+			NacUtility.quickToast(context, cons.getErrorMessageNfcMismatch());
+			return false;
+		}
+	}
+
+	/**
 	 * Dismiss the alarm activity for the given alarm.
 	 *
 	 * If alarm is null, it will stop the currently active alarm activity.
@@ -24,6 +55,21 @@ public class NacContext
 	public static void dismissAlarmActivity(Context context, NacAlarm alarm)
 	{
 		Intent intent = NacIntent.dismissAlarmActivity(context, alarm);
+		context.startActivity(intent);
+	}
+
+	/**
+	 * Dismiss the alarm activity for the given alarm due with NFC.
+	 *
+	 * If alarm is null, it will stop the currently active alarm activity.
+	 */
+	public static void dismissAlarmActivityWithNfc(Context context,
+		Intent nfcIntent, NacAlarm alarm)
+	{
+		// TODO: Can I just have *WithNfc, instead of this method?
+		Intent intent = NacIntent.dismissAlarmActivity(context, alarm);
+
+		intent.setAction(nfcIntent.getAction());
 		context.startActivity(intent);
 	}
 
@@ -49,33 +95,24 @@ public class NacContext
 		context.startService(intent);
 	}
 
-	/**
-	 * Dismiss the foreground service for the given alarm due to an NFC tag being
-	 * scanned.
-	 *
-	 * @return True if decided to dismiss the foreground service, and False if
-	 *         unable to due to null values or NFC tag IDs not matching.
-	 */
-	public static boolean dismissForegroundServiceFromNfcScan(Context context,
-		Intent intent, NacAlarm alarm)
-	{
-		if ((intent == null) || (alarm == null))
-		{
-			return false;
-		}
+	///**
+	// * Dismiss the foreground service for the given alarm due to an NFC tag being
+	// * scanned.
+	// *
+	// * @return True if decided to dismiss the foreground service, and False if
+	// *         unable to due to null values or NFC tag IDs not matching.
+	// */
+	//public static boolean dismissForegroundServiceFromNfcScan(Context context,
+	//	Intent intent, NacAlarm alarm)
+	//{
+	//	if (NacContext.checkNfcScan(context, intent, alarm))
+	//	{
+	//		NacContext.dismissForegroundServiceWithNfc(context, alarm);
+	//		return false;
+	//	}
 
-		if (NacNfc.doIdsMatch(alarm, intent))
-		{
-			NacContext.dismissForegroundServiceWithNfc(context, alarm);
-			return true;
-		}
-		else
-		{
-			NacSharedConstants cons = new NacSharedConstants(context);
-			NacUtility.quickToast(context, cons.getErrorMessageNfcMismatch());
-			return false;
-		}
-	}
+	//	return true;
+	//}
 
 	/**
 	 * Snooze the foreground service for the given alarm.

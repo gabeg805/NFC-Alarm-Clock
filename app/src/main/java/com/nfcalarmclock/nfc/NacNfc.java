@@ -12,6 +12,7 @@ import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.util.NacUtility;
 
+import java.lang.IllegalStateException;
 import java.lang.SecurityException;
 
 /**
@@ -167,7 +168,14 @@ public class NacNfc
 			return;
 		}
 
-		nfcAdapter.disableForegroundDispatch((Activity)context);
+		try
+		{
+			nfcAdapter.disableForegroundDispatch((Activity)context);
+		}
+		catch (IllegalStateException e)
+		{
+			NacUtility.printf("Unable stop NFC dispatch.");
+		}
 	}
 
 	/**
