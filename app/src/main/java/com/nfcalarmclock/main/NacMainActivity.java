@@ -785,7 +785,7 @@ public class NacMainActivity
 		this.setupLiveDataObservers();
 		this.setupAlarmCardAdapter();
 		this.setupRecyclerView();
-		this.setIsActivityShown(true);
+		//this.setIsActivityShown(true);
 
 		//TODO: Do I need this?
 		Intent intent = getIntent();
