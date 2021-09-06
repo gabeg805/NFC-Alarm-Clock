@@ -1076,7 +1076,11 @@ public class NacMainActivity
 		//{
 		//}
 		//else
-		if ((tag == null) && !tag.isReady())
+		if ((tag != null) && tag.isReady())
+		{
+			this.dismissActiveAlarm();
+		}
+		else
 		{
 			if (this.shouldShowAlarmActivity(alarm))
 			{
