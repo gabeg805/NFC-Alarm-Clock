@@ -133,10 +133,10 @@ public class NacMainActivity
 	 */
 	private NacCardAdapterLiveData mAlarmCardAdapterLiveData;
 
-	/**
-	 * A currently active alarm.
-	 */
-	private NacAlarm mActiveAlarm;
+	///**
+	// * A currently active alarm.
+	// */
+	//private NacAlarm mActiveAlarm;
 
 	/**
 	 * Alarm card touch helper.
@@ -395,10 +395,10 @@ public class NacMainActivity
 	/**
 	 * @return A currently active alarm.
 	 */
-	private NacAlarm getActiveAlarm()
-	{
-		return this.mActiveAlarm;
-	}
+	//private NacAlarm getActiveAlarm()
+	//{
+	//	return this.mActiveAlarm;
+	//}
 
 	/**
 	 * @return The alarm card adapter.
@@ -773,7 +773,7 @@ public class NacMainActivity
 		this.mAlarmCardAdapterLiveData = new NacCardAdapterLiveData();
 		this.mAlarmCardAdapter = new NacCardAdapter();
 		this.mAlarmCardTouchHelper = new NacCardTouchHelper(this);
-		this.mActiveAlarm = null;
+		//this.mActiveAlarm = null;
 		this.mRecentlyAddedAlarmIds = new ArrayList<>();
 		this.mRecentlyUpdatedAlarmIds = new ArrayList<>();
 		this.mLastAlarmCardAction = new NacLastAlarmCardAction();
@@ -785,6 +785,7 @@ public class NacMainActivity
 		this.setupLiveDataObservers();
 		this.setupAlarmCardAdapter();
 		this.setupRecyclerView();
+		this.setIsActivityShown(true);
 
 		//TODO: Do I need this?
 		Intent intent = getIntent();
@@ -914,8 +915,7 @@ public class NacMainActivity
 		super.onNewIntent(intent);
 
 		String wasScanned = String.valueOf(this.wasNfcScannedForActiveAlarm(intent));
-		String isActive = String.valueOf(this.getActiveAlarm() != null);
-		String msg = "Was NFC scanned for alarm? " + intent.getAction() + " | " + wasScanned + " " + isActive;
+		String msg = "Was NFC scanned for alarm? " + intent.getAction() + " | " + wasScanned;
 
 		NacUtility.quickToast(this, msg);
 
@@ -1065,31 +1065,27 @@ public class NacMainActivity
 			this.setNfcTag(alarm);
 		}
 
+		NacNfcTag tag = this.getNfcTag();
+
+		if ((tag != null) && tag.isReady())
+		{
+			this.dismissActiveAlarm();
+			return;
+		}
+
 		if (!this.isActivityShown())
 		{
 			NacUtility.quickToast(this, "Quitting prepare active alarm because activity not shown");
 			return;
 		}
 
-		NacNfcTag tag = this.getNfcTag();
-		this.mActiveAlarm = alarm;
+		//this.mActiveAlarm = alarm;
 
-		//if (this.wasNfcScannedForActiveAlarm())
-		//{
-		//}
-		//else
-		if ((tag != null) && tag.isReady())
+		if (this.shouldShowAlarmActivity(alarm))
 		{
-			this.dismissActiveAlarm();
-		}
-		else
-		{
-			if (this.shouldShowAlarmActivity(alarm))
-			{
-				//NacSharedPreferences shared = this.getSharedPreferences();
-				//Remove this setting: shared.getPreventAppFromClosing()?
-				this.showAlarmActivity(alarm);
-			}
+			//NacSharedPreferences shared = this.getSharedPreferences();
+			//Remove this setting: shared.getPreventAppFromClosing()?
+			this.showAlarmActivity(alarm);
 		}
 	}
 

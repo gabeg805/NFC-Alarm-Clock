@@ -41,20 +41,25 @@ public class NacNfcTag
 
 	/**
 	 */
-	public NacNfcTag(NacAlarm activeAlarm)
+	public NacNfcTag(NacAlarm activeAlarm, Intent nfcIntent)
 	{
 		this.setActiveAlarm(activeAlarm);
-		this.setNfcId((String)null);
-		this.setNfcAction((String)null);
+		this.setNfcId(nfcIntent);
+		this.setNfcAction(nfcIntent);
+	}
+
+	/**
+	 */
+	public NacNfcTag(NacAlarm activeAlarm)
+	{
+		this(activeAlarm, null);
 	}
 
 	/**
 	 */
 	public NacNfcTag(Intent nfcIntent)
 	{
-		this.setActiveAlarm(null);
-		this.setNfcId(nfcIntent);
-		this.setNfcAction(nfcIntent);
+		this(null, nfcIntent);
 	}
 
 	/**

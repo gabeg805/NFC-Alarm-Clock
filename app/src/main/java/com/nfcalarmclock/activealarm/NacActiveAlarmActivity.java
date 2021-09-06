@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.nfcalarmclock.alarm.NacAlarm;
+import com.nfcalarmclock.nfc.NacNfcTag;
 import com.nfcalarmclock.system.NacBundle;
 import com.nfcalarmclock.system.NacContext;
 import com.nfcalarmclock.system.NacIntent;
@@ -122,8 +123,10 @@ public class NacActiveAlarmActivity
 	{
 		Intent intent = getIntent();
 		NacAlarm alarm = this.getAlarm();
+		NacNfcTag tag = new NacNfcTag(alarm, intent);
 
-		if (NacContext.checkNfcScan(this, intent, alarm))
+		//if (NacContext.checkNfcScan(this, intent, alarm))
+		if (tag.check(this))
 		{
 			NacContext.dismissForegroundServiceWithNfc(this, alarm);
 			//NacContext.dismissForegroundServiceFromNfcScan(this, intent, alarm);
