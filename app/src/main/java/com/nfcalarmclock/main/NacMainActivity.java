@@ -787,11 +787,13 @@ public class NacMainActivity
 		this.setupRecyclerView();
 
 		//TODO: Do I need this?
-		//Intent intent = getIntent();
-		//if (this.wasNfcScannedForActiveAlarm(intent))
-		//{
-		//	this.dismissActiveAlarm(intent);
-		//}
+		Intent intent = getIntent();
+		if (this.wasNfcScannedForActiveAlarm(intent))
+		{
+			this.setNfcTag(intent);
+			this.dismissActiveAlarm();
+			//this.dismissActiveAlarm(intent);
+		}
 	}
 
 	/**
