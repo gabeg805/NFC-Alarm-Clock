@@ -792,7 +792,7 @@ public class NacMainActivity
 		if (this.wasNfcScannedForActiveAlarm(intent))
 		{
 			this.setNfcTag(intent);
-			this.dismissActiveAlarm();
+			//this.dismissActiveAlarm();
 			//this.dismissActiveAlarm(intent);
 		}
 	}
