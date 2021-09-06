@@ -76,7 +76,13 @@ public class NacNfc
 	 */
 	public static String parseId(Tag nfcTag)
 	{
+		if (nfcTag == null)
+		{
+			return null;
+		}
+
 		byte[] srcId = nfcTag.getId();
+
 		if (srcId == null)
 		{
 			return "";
@@ -93,6 +99,16 @@ public class NacNfc
 		}
 
 		return id.toString();
+	}
+
+	/**
+	 * @see #parseId(Tag)
+	 */
+	public static String parseId(Intent intent)
+	{
+		Tag nfcTag = NacNfc.getTag(intent);
+
+		return (nfcTag != null) ? NacNfc.parseId(nfcTag) : null;
 	}
 
 	/**

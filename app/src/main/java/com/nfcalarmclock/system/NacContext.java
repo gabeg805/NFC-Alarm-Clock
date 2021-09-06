@@ -8,6 +8,7 @@ import android.os.Bundle;
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.nfc.NacNfc;
+import com.nfcalarmclock.nfc.NacNfcTag;
 import com.nfcalarmclock.shared.NacSharedConstants;
 
 /**
@@ -70,6 +71,23 @@ public class NacContext
 		Intent intent = NacIntent.dismissAlarmActivity(context, alarm);
 
 		intent.setAction(nfcIntent.getAction());
+		context.startActivity(intent);
+	}
+
+	/**
+	 * Dismiss the alarm activity for the given alarm due with NFC.
+	 *
+	 * If alarm is null, it will stop the currently active alarm activity.
+	 */
+	public static void dismissAlarmActivityWithNfc(Context context, NacNfcTag tag)
+	{
+		NacAlarm activeAlarm = tag.getActiveAlarm();
+		String action = tag.getNfcAction();
+
+		// TODO: Can I just have *WithNfc, instead of this method?
+		Intent intent = NacIntent.dismissAlarmActivity(context, activeAlarm);
+
+		intent.setAction(action);
 		context.startActivity(intent);
 	}
 
