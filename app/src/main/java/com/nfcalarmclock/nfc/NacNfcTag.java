@@ -40,12 +40,18 @@ public class NacNfcTag
 	private String mNfcAction;
 
 	/**
+	 * NFC tag object.
+	 */
+	private Tag mNfcTag;
+
+	/**
 	 */
 	public NacNfcTag(NacAlarm activeAlarm, Intent nfcIntent)
 	{
 		this.setActiveAlarm(activeAlarm);
 		this.setNfcId(nfcIntent);
 		this.setNfcAction(nfcIntent);
+		this.setNfcTag(nfcIntent);
 	}
 
 	/**
@@ -77,7 +83,11 @@ public class NacNfcTag
 	{
 		if (!this.isReady())
 		{
-			NacUtility.quickToast(context, "Tag is not ready");
+			NacAlarm alarm = this.getActiveAlarm();
+			String id = this.getNfcId();
+			String action = this.getNfcAction();
+
+			NacUtility.quickToast(context, "Tag is not ready" + " | " + (alarm != null) + " | " + (id != null) + " | " + (action != null));
 			return false;
 		}
 
@@ -145,6 +155,16 @@ public class NacNfcTag
 	}
 
 	/**
+	 * Get the NFC tag object.
+	 *
+	 * @return The NFC tag object.
+	 */
+	public Tag getNfcTag()
+	{
+		return this.mNfcTag;
+	}
+
+	/**
 	 * Check if the NFC tag is ready and has all attributes set.
 	 *
 	 * @return True if the NFC tag is ready and all attributes have been set, and
@@ -207,6 +227,26 @@ public class NacNfcTag
 		String id = NacNfc.parseId(nfcIntent);
 
 		this.setNfcId(id);
+	}
+
+	/**
+	 * Set the NFC tag object.
+	 *
+	 * @param  tag  The NFC tag object.
+	 */
+	public void setNfcTag(Tag tag)
+	{
+		this.mNfcTag = tag;
+	}
+
+	/**
+	 * @see #setNfcTag(Tag)
+	 */
+	public void setNfcTag(Intent nfcIntent)
+	{
+		Tag tag = NacNfc.getTag(nfcIntent);
+
+		this.setNfcTag(tag);
 	}
 
 }

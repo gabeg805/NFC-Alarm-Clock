@@ -81,13 +81,10 @@ public class NacContext
 	 */
 	public static void dismissAlarmActivityWithNfc(Context context, NacNfcTag tag)
 	{
-		NacAlarm activeAlarm = tag.getActiveAlarm();
-		String action = tag.getNfcAction();
-
 		// TODO: Can I just have *WithNfc, instead of this method?
-		Intent intent = NacIntent.dismissAlarmActivity(context, activeAlarm);
+		//Intent intent = NacIntent.dismissAlarmActivity(context, activeAlarm);
+		Intent intent = NacIntent.dismissAlarmActivityWithNfc(context, tag);
 
-		intent.setAction(action);
 		context.startActivity(intent);
 	}
 

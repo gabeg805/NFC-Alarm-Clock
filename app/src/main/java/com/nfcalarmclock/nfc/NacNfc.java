@@ -22,6 +22,19 @@ public class NacNfc
 {
 
 	/**
+	 * Add an NFC tag into an Intent.
+	 */
+	public static void addTagToIntent(Intent intent, Tag tag)
+	{
+		if ((intent == null) || (tag == null))
+		{
+			return;
+		}
+
+		intent.putExtra(NfcAdapter.EXTRA_TAG, tag);
+	}
+
+	/**
 	 * Check the saved NFC tag ID in the alarm against the one in the intent.
 	 * Return True if the alarm does not have a saved ID, or if the IDs match,
 	 * and False otherwise.

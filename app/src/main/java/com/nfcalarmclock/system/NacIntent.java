@@ -9,6 +9,8 @@ import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.activealarm.NacActiveAlarmActivity;
 import com.nfcalarmclock.activealarm.NacActiveAlarmService;
 import com.nfcalarmclock.main.NacMainActivity;
+import com.nfcalarmclock.nfc.NacNfc;
+import com.nfcalarmclock.nfc.NacNfcTag;
 import com.nfcalarmclock.shared.NacSharedDefaults;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 
@@ -152,7 +154,26 @@ public class NacIntent
 	public static Intent dismissAlarmActivity(Context context, NacAlarm alarm)
 	{
 		Intent intent = NacIntent.createAlarmActivity(context, alarm);
+
 		intent.setAction(NacActiveAlarmActivity.ACTION_DISMISS_ACTIVITY);
+
+		return intent;
+	}
+
+	/**
+	 * @return An intent that will be used to dismiss the alarm activity with NFC.
+	 */
+	public static Intent dismissAlarmActivityWithNfc(Context context,
+		NacNfcTag tag)
+	{
+		NacAlarm activeAlarm = tag.getActiveAlarm();
+		String action = tag.getNfcAction();
+		Intent intent = NacIntent.createAlarmActivity(context, activeAlarm);
+
+		//intent.setAction(NacActiveAlarmActivity.ACTION_DISMISS_ACTIVITY);
+		intent.setAction(action);
+		NacNfc.addTagToIntent(intent, tag.getNfcTag());
+
 		return intent;
 	}
 
