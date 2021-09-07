@@ -765,6 +765,7 @@ public class NacMainActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_main);
 
+		Intent intent = getIntent();
 		View root = findViewById(R.id.activity_main);
 		this.mFloatingActionButton = findViewById(R.id.fab_add_alarm);
 		this.mRecyclerView = findViewById(R.id.content_alarm_list);
@@ -786,7 +787,7 @@ public class NacMainActivity
 		this.setupAlarmCardAdapter();
 		this.setupRecyclerView();
 
-		if (this.wasNfcScannedForActiveAlarm(getIntent()))
+		if (this.wasNfcScannedForActiveAlarm(intent))
 		{
 			this.setNfcTagIntent(intent);
 		}
