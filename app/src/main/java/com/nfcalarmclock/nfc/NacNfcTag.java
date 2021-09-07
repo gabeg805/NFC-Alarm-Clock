@@ -77,6 +77,7 @@ public class NacNfcTag
 	{
 		if (!this.isReady())
 		{
+			NacUtility.quickToast(context, "Tag is not ready");
 			return false;
 		}
 

@@ -179,9 +179,8 @@ public class NacMainActivity
 	private boolean mIsActivityShown = false;
 
 	/**
-	 * Flag indicating if NFC tag was scanned for an active alarm or not.
+	 * The NFC tag that was scanned for an active alarm.
 	 */
-	//private boolean mWasNfcScannedForActiveAlarm = false;
 	private NacNfcTag mNfcTag = null;
 
 	/**
@@ -346,7 +345,6 @@ public class NacMainActivity
 			NacContext.dismissAlarmActivityWithNfc(this, tag);
 			//NacContext.dismissAlarmActivityWithNfc(this, intent, alarm);
 			//NacContext.dismissForegroundServiceWithNfc(this, alarm);
-			//recreate();
 		}
 		else
 		{
@@ -390,14 +388,6 @@ public class NacMainActivity
 	//	}
 
 	//	this.setWasNfcScannedForActiveAlarm(false);
-	//}
-
-	/**
-	 * @return A currently active alarm.
-	 */
-	//private NacAlarm getActiveAlarm()
-	//{
-	//	return this.mActiveAlarm;
 	//}
 
 	/**
@@ -556,6 +546,17 @@ public class NacMainActivity
 	private boolean isActivityShown()
 	{
 		return this.mIsActivityShown;
+	}
+
+	/**
+	 * @return True if an NFC tag was scanned to dismiss an alarm and is ready
+	 *     for the active alarm activity, and False otherwise.
+	 */
+	private boolean isNfcTagReady()
+	{
+		NacNfcTag tag = this.getNfcTag();
+
+		return (tag != null) && tag.isReady();
 	}
 
 	/**
@@ -773,7 +774,6 @@ public class NacMainActivity
 		this.mAlarmCardAdapterLiveData = new NacCardAdapterLiveData();
 		this.mAlarmCardAdapter = new NacCardAdapter();
 		this.mAlarmCardTouchHelper = new NacCardTouchHelper(this);
-		//this.mActiveAlarm = null;
 		this.mRecentlyAddedAlarmIds = new ArrayList<>();
 		this.mRecentlyUpdatedAlarmIds = new ArrayList<>();
 		this.mLastAlarmCardAction = new NacLastAlarmCardAction();
@@ -785,15 +785,10 @@ public class NacMainActivity
 		this.setupLiveDataObservers();
 		this.setupAlarmCardAdapter();
 		this.setupRecyclerView();
-		//this.setIsActivityShown(true);
 
-		//TODO: Do I need this?
-		Intent intent = getIntent();
-		if (this.wasNfcScannedForActiveAlarm(intent))
+		if (this.wasNfcScannedForActiveAlarm(getIntent()))
 		{
-			this.setNfcTag(intent);
-			//this.dismissActiveAlarm();
-			//this.dismissActiveAlarm(intent);
+			this.setNfcTagIntent(intent);
 		}
 	}
 
@@ -914,11 +909,6 @@ public class NacMainActivity
 	{
 		super.onNewIntent(intent);
 
-		String wasScanned = String.valueOf(this.wasNfcScannedForActiveAlarm(intent));
-		String msg = "Was NFC scanned for alarm? " + intent.getAction() + " | " + wasScanned;
-
-		NacUtility.quickToast(this, msg);
-
 		if (this.wasNfcScannedForDialog(intent))
 		{
 			NacSharedConstants cons = this.getSharedConstants();
@@ -933,13 +923,10 @@ public class NacMainActivity
 				dialog.cancel();
 			}
 		}
-		// TODO: Might have to wait for active alarm to be set?
 		else if (this.wasNfcScannedForActiveAlarm(intent))
 		{
-			this.setNfcTag(intent);
+			this.setNfcTagIntent(intent);
 			this.dismissActiveAlarm();
-			//this.setWasNfcScannedForActiveAlarm(true);
-			//this.dismissActiveAlarm(intent);
 		}
 	}
 
@@ -1059,29 +1046,16 @@ public class NacMainActivity
 	 */
 	private void prepareActiveAlarm(NacAlarm alarm)
 	{
-		NacUtility.quickToast(this, "Preparing active alarm");
 		if (alarm != null)
 		{
-			this.setNfcTag(alarm);
+			this.setNfcTagAlarm(alarm);
 		}
 
-		NacNfcTag tag = this.getNfcTag();
-
-		if ((tag != null) && tag.isReady())
+		if (this.isNfcTagReady())
 		{
 			this.dismissActiveAlarm();
-			return;
 		}
-
-		if (!this.isActivityShown())
-		{
-			NacUtility.quickToast(this, "Quitting prepare active alarm because activity not shown");
-			return;
-		}
-
-		//this.mActiveAlarm = alarm;
-
-		if (this.shouldShowAlarmActivity(alarm))
+		else if (this.isActivityShown() && this.shouldShowAlarmActivity(alarm))
 		{
 			//NacSharedPreferences shared = this.getSharedPreferences();
 			//Remove this setting: shared.getPreventAppFromClosing()?
@@ -1326,17 +1300,11 @@ public class NacMainActivity
 	}
 
 	/**
-	 * Set whether an NFC tag was scanned for an active alarm or not.
-	 * 
-	 * @param  wasScanned  Whether the NFC tag was scanned for an active alarm or
-	 *     not.
+	 * Set the NFC tag active alarm.
+	 *
+	 * @param  activeAlarm  The active alarm to use in conjunction with the NFC tag.
 	 */
-	//private void setWasNfcScannedForActiveAlarm(boolean wasScanned)
-	//{
-	//	this.mWasNfcScannedForActiveAlarm = wasScanned;
-	//}
-
-	private void setNfcTag(NacAlarm activeAlarm)
+	private void setNfcTagAlarm(NacAlarm activeAlarm)
 	{
 		NacNfcTag tag = this.getNfcTag();
 
@@ -1350,7 +1318,12 @@ public class NacMainActivity
 		}
 	}
 
-	private void setNfcTag(Intent nfcIntent)
+	/**
+	 * Set the NFC tag action and ID from an Intent.
+	 *
+	 * @param  nfcIntent  The intent received when scanning an NFC tag.
+	 */
+	private void setNfcTagIntent(Intent nfcIntent)
 	{
 		NacNfcTag tag = this.getNfcTag();
 
@@ -1579,16 +1552,6 @@ public class NacMainActivity
 		shared.editCardHeightExpanded(heights[2]);
 		shared.editCardIsMeasured(true);
 	}
-
-	/**
-	 * @return True if an NFC tag was scanned to dismiss an alarm, and False
-	 *         otherwise. This is to say that if an NFC tag was scanned for the
-	 *         dialog, this would return False.
-	 */
-	//private boolean wasNfcScannedForActiveAlarm()
-	//{
-	//	return this.mWasNfcScannedForActiveAlarm;
-	//}
 
 	/**
 	 * @return True if an NFC tag was scanned to dismiss an alarm, and False

@@ -394,19 +394,23 @@ public class NacActiveAlarmService
 			|| action.equals(ACTION_DISMISS_ALARM))
 		{
 			//NacUtility.printf("Alarm is null OR Dismissing...");
+			NacUtility.quickToast(this, "Service will dismiss");
 			this.dismiss();
 		}
 		else if (action.equals(ACTION_DISMISS_ALARM_WITH_NFC))
 		{
+			NacUtility.quickToast(this, "Service will dismiss w/ NFC");
 			this.dismissWithNfc();
 		}
 		else if (action.equals(ACTION_SNOOZE_ALARM))
 		{
+			NacUtility.quickToast(this, "Service will snooze");
 			this.snooze();
 		}
 		else if (action.equals(ACTION_START_SERVICE))
 		{
 			//NacUtility.printf("Starting service...");
+			NacUtility.quickToast(this, "Service will start");
 			this.setupWakeLock();
 			this.showNotification();
 			this.setupWakeupProcess();
@@ -414,6 +418,10 @@ public class NacActiveAlarmService
 			this.updateAlarm();
 			this.waitForAutoDismiss();
 			return START_STICKY;
+		}
+		else
+		{
+			NacUtility.quickToast(this, "Service will ELSE");
 		}
 
 		return START_NOT_STICKY;
