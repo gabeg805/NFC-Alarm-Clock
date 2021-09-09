@@ -128,7 +128,7 @@ public class NacActiveAlarmActivity
 		//if (NacContext.checkNfcScan(this, intent, alarm))
 		if (tag.check(this))
 		{
-			NacUtility.quickToast(this, "Dismiss service with NFC");
+			NacUtility.quickToast(this, "Dismiss service with NFC : " + alarm.getId());
 			NacContext.dismissForegroundServiceWithNfc(this, alarm);
 			//NacContext.dismissForegroundServiceFromNfcScan(this, intent, alarm);
 		}

@@ -216,10 +216,16 @@ public class NacActiveAlarmService
 
 		if (alarm != null)
 		{
+			NacUtility.quickToast(this, "Alarm is NOT null : " + alarm.getId());
 			shared.editShouldRefreshMainActivity(true);
 			alarm.dismiss();
 			repo.update(alarm);
+			// TODO: This could be updateAlarm()
 			NacScheduler.update(this, alarm);
+		}
+		else
+		{
+			NacUtility.quickToast(this, "Alarm IS null");
 		}
 
 		NacUtility.quickToast(this, cons.getMessageAlarmDismiss());
