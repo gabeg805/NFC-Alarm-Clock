@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class NacActiveAlarmService
 	extends Service
-	implements Runnable
+	//implements Runnable
 {
 
 	/**
@@ -91,6 +91,7 @@ public class NacActiveAlarmService
 	 * Automatically dismiss the alarm in case it does not get dismissed.
 	 */
 	private Handler mAutoDismissHandler;
+	private Runnable mAutoDismissRunnable;
 
 	/**
 	 * Time that the service was started, in milliseconds.
@@ -140,14 +141,28 @@ public class NacActiveAlarmService
 	 */
 	private void cleanupAutoDismiss()
 	{
-		Handler autoDismissHandler = this.getAutoDismissHandler();
+		Handler handler = this.getAutoDismissHandler();
+		Runnable runnable = this.getAutoDismissRunnable();
 
-		if (autoDismissHandler != null)
+		NacUtility.quickToast(this, "Cleanup the auto dismiss handler! " + (handler != null) + " | " + (runnable != null));
+
+		if (handler != null)
 		{
-			NacUtility.quickToast(this, "Cleanup the auto dismiss handler");
-			autoDismissHandler.removeCallbacks(this);
-			//autoDismissHandler.removeCallbacksAndMessages(null);
+			if (runnable != null)
+			{
+				handler.removeCallbacks(runnable);
+			}
+			else
+			{
+				handler.removeCallbacksAndMessages(null);
+			}
+
+			//handler.removeCallbacks(this);
+			//handler.removeCallbacksAndMessages(null);
 		}
+
+		this.mAutoDismissHandler = null;
+		this.mAutoDismissRunnable = null;
 	}
 
 	/**
@@ -278,6 +293,14 @@ public class NacActiveAlarmService
 	}
 
 	/**
+	 * @return The auto dismiss runnable.
+	 */
+	private Runnable getAutoDismissRunnable()
+	{
+		return this.mAutoDismissRunnable;
+	}
+
+	/**
 	 * @return The shared constants.
 	 */
 	private NacSharedConstants getSharedConstants()
@@ -368,6 +391,7 @@ public class NacActiveAlarmService
 	public void onDestroy()
 	{
 		super.onDestroy();
+		NacUtility.quickToast(this, "Destroying service");
 		this.cleanup();
 	}
 
@@ -450,22 +474,22 @@ public class NacActiveAlarmService
 	/**
 	 * Automatically dismiss the alarm.
 	 */
-	@Override
-	public void run()
-	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-		NacAlarm alarm = this.getAlarm();
+	//@Override
+	//public void run()
+	//{
+	//	NacSharedPreferences shared = this.getSharedPreferences();
+	//	NacAlarm alarm = this.getAlarm();
 
-		if (shared.getMissedAlarmNotification())
-		{
-			NacMissedAlarmNotification notification =
-				new NacMissedAlarmNotification(this);
-			notification.setAlarm(alarm);
-			notification.show();
-		}
+	//	if (shared.getMissedAlarmNotification())
+	//	{
+	//		NacMissedAlarmNotification notification =
+	//			new NacMissedAlarmNotification(this);
+	//		notification.setAlarm(alarm);
+	//		notification.show();
+	//	}
 
-		this.autoDismiss();
-	}
+	//	this.autoDismiss();
+	//}
 
 	/**
 	 * Save the dismissed statistic to the database.
@@ -659,16 +683,41 @@ public class NacActiveAlarmService
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 		Handler handler = null;
+		Runnable runnable = null;
+
 		int autoDismiss = shared.getAutoDismissTime();
 		long delay = TimeUnit.MINUTES.toMillis(autoDismiss) - alarm.getTimeActive() - 2000;
+		NacUtility.quickToast(this, "Preparing wait for auto dismiss");
 
 		if (autoDismiss != 0)
 		{
 			handler = new Handler(Looper.getMainLooper());
-			handler.postDelayed(this, delay);
+			runnable = new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						NacSharedPreferences shared = getSharedPreferences();
+						NacAlarm alarm = getAlarm();
+
+						if (shared.getMissedAlarmNotification())
+						{
+							NacMissedAlarmNotification notification =
+								new NacMissedAlarmNotification(NacActiveAlarmService.this);
+							notification.setAlarm(alarm);
+							notification.show();
+						}
+
+						autoDismiss();
+					}
+				};
+
+			handler.postDelayed(runnable, delay);
+			//handler.postDelayed(this, delay);
 		}
 
 		this.mAutoDismissHandler = handler;
+		this.mAutoDismissRunnable = runnable;
 		this.mStartTime = System.currentTimeMillis();
 	}
 

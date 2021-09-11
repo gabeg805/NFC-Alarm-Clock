@@ -87,7 +87,6 @@ public class NacNfcTag
 			String id = this.getNfcId();
 			String action = this.getNfcAction();
 
-			NacUtility.quickToast(context, "Tag is not ready" + " | " + (alarm != null) + " | " + (id != null) + " | " + (action != null));
 			return false;
 		}
 
