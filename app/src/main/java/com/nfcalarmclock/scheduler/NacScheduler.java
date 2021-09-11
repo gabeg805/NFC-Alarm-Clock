@@ -76,12 +76,7 @@ public class NacScheduler
 
 		if (pending != null)
 		{
-			NacUtility.quickToast(context, "Canceling prev alarm");
 			NacScheduler.getAlarmManager(context).cancel(pending);
-		}
-		else
-		{
-			NacUtility.quickToast(context, "Huh! Unable to cancel prev alarm");
 		}
 	}
 
@@ -92,7 +87,6 @@ public class NacScheduler
 	{
 		if (alarm == null)
 		{
-			NacUtility.quickToast(context, "Unable to cancel because alarm is null");
 			return;
 		}
 

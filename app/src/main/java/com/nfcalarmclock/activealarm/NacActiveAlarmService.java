@@ -144,7 +144,9 @@ public class NacActiveAlarmService
 
 		if (autoDismissHandler != null)
 		{
-			autoDismissHandler.removeCallbacksAndMessages(null);
+			NacUtility.quickToast(this, "Cleanup the auto dismiss handler");
+			autoDismissHandler.removeCallbacks(this);
+			//autoDismissHandler.removeCallbacksAndMessages(null);
 		}
 	}
 
@@ -526,11 +528,9 @@ public class NacActiveAlarmService
 	private void setupService(Intent intent)
 	{
 		NacAlarm intentAlarm = NacIntent.getAlarm(intent);
-		//NacAlarm alarm = this.getAlarm();
 
 		if (this.isNewServiceStarted(intent))
 		{
-			//NacUtility.printf("Preparing new service!");
 			this.prepareNewService();
 		}
 
