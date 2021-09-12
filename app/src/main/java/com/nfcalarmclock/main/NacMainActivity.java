@@ -334,61 +334,19 @@ public class NacMainActivity
 
 		if (tag == null)
 		{
-			NacUtility.quickToast(this, "Active tag is not set");
 			return;
 		}
-
-		//if (NacContext.checkNfcScan(this, intent, alarm))
-		if (tag.check(this))
+		else if (tag.check(this))
 		{
-			NacUtility.quickToast(this, "Dismiss alarm activity with NFC : " + tag.getActiveAlarm().getId());
 			NacContext.dismissAlarmActivityWithNfc(this, tag);
-			//NacContext.dismissAlarmActivityWithNfc(this, intent, alarm);
-			//NacContext.dismissForegroundServiceWithNfc(this, alarm);
 		}
 		else
 		{
-			NacUtility.quickToast(this, "Starting alarm activity");
 			NacContext.startAlarm(this, tag.getActiveAlarm());
-			//NacContext.startAlarm(this, alarm);
-			//this.showAlarmActivity(alarm);
 		}
 
-		//this.setWasNfcScannedForActiveAlarm(false);
 		this.mNfcTag = null;
 	}
-
-	///**
-	// * Attempt to dismiss the first active alarm found.
-	// *
-	// * If unable to dismiss the alarm, the alarm activity is shown.
-	// */
-	//private void dismissActiveAlarm(Intent intent)
-	//{
-	//	NacAlarm alarm = this.getActiveAlarm();
-
-	//	if (alarm == null)
-	//	{
-	//		NacUtility.quickToast(this, "Active alarm is not set");
-	//		return;
-	//	}
-
-	//	if (NacContext.checkNfcScan(this, intent, alarm))
-	//	{
-	//		NacUtility.quickToast(this, "Dismiss alarm activity with NFC");
-	//		NacContext.dismissAlarmActivityWithNfc(this, intent, alarm);
-	//		//NacContext.dismissForegroundServiceWithNfc(this, alarm);
-	//		//recreate();
-	//	}
-	//	else
-	//	{
-	//		NacUtility.quickToast(this, "Starting alarm activity");
-	//		NacContext.startAlarm(this, alarm);
-	//		//this.showAlarmActivity(alarm);
-	//	}
-
-	//	this.setWasNfcScannedForActiveAlarm(false);
-	//}
 
 	/**
 	 * @return The alarm card adapter.
@@ -1060,7 +1018,7 @@ public class NacMainActivity
 		{
 			//NacSharedPreferences shared = this.getSharedPreferences();
 			//Remove this setting: shared.getPreventAppFromClosing()?
-			this.showAlarmActivity(alarm);
+			NacContext.startAlarm(this, alarm);
 		}
 	}
 
@@ -1346,22 +1304,6 @@ public class NacMainActivity
 	{
 		Intent intent = getIntent();
 		return (alarm != null) && !NacNfc.wasScanned(intent);
-	}
-
-	/**
-	 * Show the alarm activity.
-	 *
-	 * @param  alarm  The alarm that should be attached to the intent when the
-	 *     alarm activity is started.
-	 */
-	private void showAlarmActivity(NacAlarm alarm)
-	{
-		if (alarm == null)
-		{
-			return;
-		}
-
-		NacContext.startAlarm(this, alarm);
 	}
 
 	/**

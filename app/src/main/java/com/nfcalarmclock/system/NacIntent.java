@@ -84,6 +84,7 @@ public class NacIntent
 	public static Intent createAlarmActivity(Context context, NacAlarm alarm)
 	{
 		Bundle bundle = NacBundle.toBundle(alarm);
+
 		return NacIntent.createAlarmActivity(context, bundle);
 	}
 
@@ -100,6 +101,7 @@ public class NacIntent
 	{
 		Intent intent = new Intent(NacActiveAlarmService.ACTION_START_SERVICE, null,
 			context, NacActiveAlarmService.class);
+
 		return NacIntent.addAlarm(intent, bundle);
 	}
 
@@ -110,6 +112,7 @@ public class NacIntent
 	public static Intent createForegroundService(Context context, NacAlarm alarm)
 	{
 		Bundle bundle = NacBundle.toBundle(alarm);
+
 		return NacIntent.createForegroundService(context, bundle);
 	}
 
@@ -156,7 +159,6 @@ public class NacIntent
 		Intent intent = NacIntent.createAlarmActivity(context, alarm);
 
 		intent.setAction(NacActiveAlarmActivity.ACTION_DISMISS_ACTIVITY);
-
 		return intent;
 	}
 
@@ -249,8 +251,6 @@ public class NacIntent
 			return null;
 		}
 
-		//NacSharedDefaults defaults = new NacSharedDefaults(context);
-		//NacAlarm.Builder builder = new NacAlarm.Builder(context);
 		NacSharedPreferences shared = new NacSharedPreferences(context);
 		NacSharedDefaults defaults = shared.getDefaults();
 		NacAlarm.Builder builder = new NacAlarm.Builder(shared);

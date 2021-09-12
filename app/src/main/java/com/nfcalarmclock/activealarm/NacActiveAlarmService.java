@@ -29,7 +29,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class NacActiveAlarmService
 	extends Service
-	//implements Runnable
 {
 
 	/**
@@ -91,6 +90,10 @@ public class NacActiveAlarmService
 	 * Automatically dismiss the alarm in case it does not get dismissed.
 	 */
 	private Handler mAutoDismissHandler;
+
+	/**
+	 * Automatically dismiss the alarm in case it does not get dismissed.
+	 */
 	private Runnable mAutoDismissRunnable;
 
 	/**
@@ -144,8 +147,6 @@ public class NacActiveAlarmService
 		Handler handler = this.getAutoDismissHandler();
 		Runnable runnable = this.getAutoDismissRunnable();
 
-		NacUtility.quickToast(this, "Cleanup the auto dismiss handler! " + (handler != null) + " | " + (runnable != null));
-
 		if (handler != null)
 		{
 			if (runnable != null)
@@ -156,9 +157,6 @@ public class NacActiveAlarmService
 			{
 				handler.removeCallbacksAndMessages(null);
 			}
-
-			//handler.removeCallbacks(this);
-			//handler.removeCallbacksAndMessages(null);
 		}
 
 		this.mAutoDismissHandler = null;
@@ -226,26 +224,47 @@ public class NacActiveAlarmService
 	 */
 	private void doDismiss()
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
 		NacSharedConstants cons = this.getSharedConstants();
 		NacAlarm alarm = this.getAlarm();
-		NacAlarmRepository repo = this.getAlarmRepository();
 
 		if (alarm != null)
 		{
-			NacUtility.quickToast(this, "Alarm is NOT null : " + alarm.getId());
-			shared.editShouldRefreshMainActivity(true);
 			alarm.dismiss();
-			repo.update(alarm);
-			// TODO: This could be updateAlarm()
+			this.updateAlarm();
+			this.setupRefreshMainActivity();
 			NacScheduler.update(this, alarm);
-		}
-		else
-		{
-			NacUtility.quickToast(this, "Alarm IS null");
 		}
 
 		NacUtility.quickToast(this, cons.getMessageAlarmDismiss());
+	}
+
+	/**
+	 * Snooze the alarm.
+	 *
+	 * This does not finish the service.
+	 */
+	private boolean doSnooze()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacSharedConstants cons = this.getSharedConstants();
+		NacAlarm alarm = this.getAlarm();
+		Calendar cal = alarm.snooze(shared);
+
+		if (cal != null)
+		{
+			this.updateTimeActive();
+			this.updateAlarm();
+			this.setupRefreshMainActivity();
+			NacScheduler.update(this, alarm, cal);
+
+			NacUtility.quickToast(this, cons.getMessageAlarmSnooze());
+			return true;
+		}
+		else
+		{
+			NacUtility.quickToast(this, cons.getErrorMessageSnooze());
+			return false;
+		}
 	}
 
 	/**
@@ -391,7 +410,6 @@ public class NacActiveAlarmService
 	public void onDestroy()
 	{
 		super.onDestroy();
-		NacUtility.quickToast(this, "Destroying service");
 		this.cleanup();
 	}
 
@@ -425,24 +443,18 @@ public class NacActiveAlarmService
 			|| action.equals(ACTION_STOP_SERVICE)
 			|| action.equals(ACTION_DISMISS_ALARM))
 		{
-			//NacUtility.printf("Alarm is null OR Dismissing...");
-			NacUtility.quickToast(this, "Service will dismiss");
 			this.dismiss();
 		}
 		else if (action.equals(ACTION_DISMISS_ALARM_WITH_NFC))
 		{
-			NacUtility.quickToast(this, "Service will dismiss w/ NFC");
 			this.dismissWithNfc();
 		}
 		else if (action.equals(ACTION_SNOOZE_ALARM))
 		{
-			NacUtility.quickToast(this, "Service will snooze");
 			this.snooze();
 		}
 		else if (action.equals(ACTION_START_SERVICE))
 		{
-			//NacUtility.printf("Starting service...");
-			NacUtility.quickToast(this, "Service will start");
 			this.setupWakeLock();
 			this.showNotification();
 			this.setupWakeupProcess();
@@ -450,10 +462,6 @@ public class NacActiveAlarmService
 			this.updateAlarm();
 			this.waitForAutoDismiss();
 			return START_STICKY;
-		}
-		else
-		{
-			NacUtility.quickToast(this, "Service will ELSE");
 		}
 
 		return START_NOT_STICKY;
@@ -470,26 +478,6 @@ public class NacActiveAlarmService
 		this.cleanupWakeupProcess();
 		this.cleanupAutoDismiss();
 	}
-
-	/**
-	 * Automatically dismiss the alarm.
-	 */
-	//@Override
-	//public void run()
-	//{
-	//	NacSharedPreferences shared = this.getSharedPreferences();
-	//	NacAlarm alarm = this.getAlarm();
-
-	//	if (shared.getMissedAlarmNotification())
-	//	{
-	//		NacMissedAlarmNotification notification =
-	//			new NacMissedAlarmNotification(this);
-	//		notification.setAlarm(alarm);
-	//		notification.show();
-	//	}
-
-	//	this.autoDismiss();
-	//}
 
 	/**
 	 * Save the dismissed statistic to the database.
@@ -544,6 +532,16 @@ public class NacActiveAlarmService
 		{
 			alarm.setIsActive(isActive);
 		}
+	}
+
+	/**
+	 * Setup refreshing the main activity.
+	 */
+	private void setupRefreshMainActivity()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+
+		shared.editShouldRefreshMainActivity(true);
 	}
 
 	/**
@@ -621,25 +619,10 @@ public class NacActiveAlarmService
 	 */
 	public void snooze()
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-		NacSharedConstants cons = this.getSharedConstants();
-		NacAlarm alarm = this.getAlarm();
-		Calendar cal = alarm.snooze(shared);
-
-		if (cal != null)
+		if (this.doSnooze())
 		{
-			shared.editShouldRefreshMainActivity(true);
-			this.updateTimeActive();
-			this.updateAlarm();
 			this.saveSnoozedStatistic();
-			NacScheduler.update(this, alarm, cal);
-
-			NacUtility.quickToast(this, cons.getMessageAlarmSnooze());
 			this.finish();
-		}
-		else
-		{
-			NacUtility.quickToast(this, cons.getErrorMessageSnooze());
 		}
 	}
 
@@ -687,13 +670,16 @@ public class NacActiveAlarmService
 
 		int autoDismiss = shared.getAutoDismissTime();
 		long delay = TimeUnit.MINUTES.toMillis(autoDismiss) - alarm.getTimeActive() - 2000;
-		NacUtility.quickToast(this, "Preparing wait for auto dismiss");
 
 		if (autoDismiss != 0)
 		{
 			handler = new Handler(Looper.getMainLooper());
 			runnable = new Runnable()
 				{
+
+					/**
+					 * Automatically dismiss the alarm.
+					 */
 					@Override
 					public void run()
 					{
@@ -710,10 +696,10 @@ public class NacActiveAlarmService
 
 						autoDismiss();
 					}
+
 				};
 
 			handler.postDelayed(runnable, delay);
-			//handler.postDelayed(this, delay);
 		}
 
 		this.mAutoDismissHandler = handler;

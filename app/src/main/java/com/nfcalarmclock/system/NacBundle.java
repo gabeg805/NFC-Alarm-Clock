@@ -60,6 +60,7 @@ public class NacBundle
 	public static Bundle toBundle(NacAlarm alarm)
 	{
 		Bundle bundle = new Bundle();
+
 		bundle.putParcelable(ALARM_PARCEL_NAME, alarm);
 		return bundle;
 	}
@@ -70,6 +71,7 @@ public class NacBundle
 	public static Bundle toBundle(String media)
 	{
 		Bundle bundle = new Bundle();
+
 		bundle.putString(MEDIA_PARCEL_NAME, media);
 		return bundle;
 	}
@@ -81,6 +83,7 @@ public class NacBundle
 	public static Bundle toBundle(NacAudioAttributes attrs)
 	{
 		Bundle bundle = new Bundle();
+
 		bundle.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, attrs.getStream());
 		return bundle;
 

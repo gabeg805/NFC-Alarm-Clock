@@ -107,7 +107,6 @@ public class NacActiveAlarmActivity
 	{
 		NacAlarm alarm = this.getAlarm();
 		NacContext.dismissForegroundService(this, alarm);
-		//finish();
 	}
 
 	/**
@@ -125,16 +124,9 @@ public class NacActiveAlarmActivity
 		NacAlarm alarm = this.getAlarm();
 		NacNfcTag tag = new NacNfcTag(alarm, intent);
 
-		//if (NacContext.checkNfcScan(this, intent, alarm))
 		if (tag.check(this))
 		{
-			NacUtility.quickToast(this, "Dismiss service with NFC : " + alarm.getId());
 			NacContext.dismissForegroundServiceWithNfc(this, alarm);
-			//NacContext.dismissForegroundServiceFromNfcScan(this, intent, alarm);
-		}
-		else
-		{
-			NacUtility.quickToast(this, "NOT dismiss service with NFC");
 		}
 	}
 
@@ -278,11 +270,6 @@ public class NacActiveAlarmActivity
 		{
 			alarm = NacBundle.getAlarm(savedInstanceState);
 		}
-
-		//if (alarm == null)
-		//{
-		//	alarm = NacDatabase.findAlarm(this, Calendar.getInstance());
-		//}
 
 		if (alarm == null)
 		{
@@ -462,7 +449,6 @@ public class NacActiveAlarmActivity
 		}
 
 		NacContext.snoozeForegroundService(this, alarm);
-		//finish();
 	}
 
 	/**
