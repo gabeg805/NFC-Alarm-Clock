@@ -21,7 +21,7 @@
 	<integer name="default_next_alarm_format_index">0</integer>
 	<integer name="default_speak_frequency_index">0</integer>
 	<integer name="default_rate_my_app_counter">0</integer>
-	<integer name="default_rate_my_app_limit">30</integer>
+	<integer name="default_rate_my_app_limit">3</integer>
 	<integer name="default_rate_my_app_rated">-999</integer>
 	<integer name="default_snooze_count">0</integer>
 	<integer name="default_previous_volume">-1</integer>

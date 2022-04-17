@@ -138,10 +138,6 @@ public abstract class NacAlarmDatabase
 				migrateOldDatabase(context);
 				deleteOldDatabase(context);
 			}
-			else
-			{
-				insertInitialAlarm(context);
-			}
 
 			sContext = null;
 		}
@@ -279,40 +275,6 @@ public abstract class NacAlarmDatabase
 
 			return sInstance;
 		}
-	}
-
-	/**
-	 * Insert the initial alarm into the database.
-	 */
-	protected static void insertInitialAlarm(Context context)
-	{
-		NacAlarmDatabase db = getInstance();
-		NacAlarmDao alarmDao = db.alarmDao();
-		NacAlarmCreatedStatisticDao alarmCreatedStatisticDao =
-			db.alarmCreatedStatisticDao();
-
-		NacAlarm alarm = new NacAlarm.Builder()
-			.setId(0)
-			.setIsEnabled(true)
-			.setHour(8)
-			.setMinute(0)
-			.setDays(NacCalendar.Days.valueToDays(62))
-			.setRepeat(true)
-			.setVibrate(true)
-			.setUseNfc(false)
-			.setNfcTagId("")
-			.setMediaType(NacMedia.TYPE_NONE)
-			.setMediaPath("")
-			.setMediaTitle("")
-			.setVolume(75)
-			.setAudioSource("Media")
-			.setName("Work")
-			.build();
-		NacAlarmCreatedStatistic stat = new NacAlarmCreatedStatistic();
-
-		getExecutor().execute(() -> alarmDao.insert(alarm));
-		getExecutor().execute(() -> alarmCreatedStatisticDao.insert(stat));
-		NacScheduler.update(context, alarm);
 	}
 
 	/**

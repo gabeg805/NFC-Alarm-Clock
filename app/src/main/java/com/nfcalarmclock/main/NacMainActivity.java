@@ -23,10 +23,15 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
+import com.google.android.play.core.tasks.Task;
 
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmViewModel;
 import com.nfcalarmclock.shutdown.NacShutdownBroadcastReceiver;
+import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.mediapicker.NacMediaActivity;
 import com.nfcalarmclock.audiooptions.NacAlarmAudioOptionsDialog;
 import com.nfcalarmclock.audiosource.NacAlarmAudioSourceDialog;
@@ -193,6 +198,15 @@ public class NacMainActivity
 
 				addAlarm(alarm);
 				view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+
+				int counter = shared.getRateMyAppCounter();
+
+				if (counter < 0)
+				{
+					shared.resetRateMyApp();
+				}
+
+				NacUtility.quickToast(NacMainActivity.this, "Rate my app counter! " + String.valueOf(counter));
 			};
 
 
@@ -239,6 +253,39 @@ public class NacMainActivity
 
 		this.getRecentlyAddedAlarmIds().add(id);
 		this.getAlarmStatisticRepository().insertCreated();
+	}
+
+	/**
+	 * Add the first alarm, when the app is first run.
+	 */
+	private void addFirstAlarm()
+	{
+		// Create the alarm
+		NacAlarm alarm = new NacAlarm.Builder()
+			.setId(0)
+			.setIsEnabled(true)
+			.setHour(8)
+			.setMinute(0)
+			.setDays(NacCalendar.Days.valueToDays(62))
+			.setRepeat(true)
+			.setVibrate(true)
+			.setUseNfc(false)
+			.setNfcTagId("")
+			.setMediaType(NacMedia.TYPE_NONE)
+			.setMediaPath("")
+			.setMediaTitle("")
+			.setVolume(75)
+			.setAudioSource("Media")
+			.setName("Work")
+			.build();
+
+		// Add the alarm
+		this.addAlarm(alarm);
+
+		// Avoid having interact() called for the alarm card, that way it does not
+		// get expanded and show the time dialog
+		long id = alarm.getId();
+		this.getRecentlyAddedAlarmIds().remove(id);
 	}
 
 	/**
@@ -547,19 +594,6 @@ public class NacMainActivity
 		NacAlarm alarm = this.getAudioOptionsAlarm();
 
 		alarm.setAudioSource(audioSource);
-		this.getAlarmViewModel().update(this, alarm);
-	}
-
-	/**
-	 * Called when a text-to-speech option is selected.
-	 */
-	@Override
-	public void onTextToSpeechOptionsSelected(boolean useTts, int freq)
-	{
-		NacAlarm alarm = this.getAudioOptionsAlarm();
-
-		alarm.setUseTts(useTts);
-		alarm.setTtsFrequency(freq);
 		this.getAlarmViewModel().update(this, alarm);
 	}
 
@@ -950,6 +984,19 @@ public class NacMainActivity
 	}
 
 	/**
+	 * Called when a text-to-speech option is selected.
+	 */
+	@Override
+	public void onTextToSpeechOptionsSelected(boolean useTts, int freq)
+	{
+		NacAlarm alarm = this.getAudioOptionsAlarm();
+
+		alarm.setUseTts(useTts);
+		alarm.setTtsFrequency(freq);
+		this.getAlarmViewModel().update(this, alarm);
+	}
+
+	/**
 	 * Note: Needed for RecyclerView.OnItemTouchListener
 	 */
 	public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e)
@@ -962,6 +1009,7 @@ public class NacMainActivity
 	@Override
 	public void onViewHolderBound(NacCardHolder card, int index)
 	{
+		// Verify that the alarm card is measured. If it is not, it will be measured
 		this.verifyCardIsMeasured(card);
 
 		NacCardAdapter adapter = this.getAlarmCardAdapter();
@@ -969,6 +1017,8 @@ public class NacMainActivity
 		List<Long> addedAlarms = this.getRecentlyAddedAlarmIds();
 		long id = alarm.getId();
 
+		// Interact with recently added alarms, expanding them and showing the time
+		// dialog
 		if (addedAlarms.contains(id))
 		{
 			card.interact();
@@ -1115,15 +1165,17 @@ public class NacMainActivity
 		NacSharedPreferences shared = this.getSharedPreferences();
 		int size = alarms.size();
 
-		if (!shared.getAppFirstRun() || (size == 0))
+		//if (!shared.getAppFirstRun() || (size == 0))
+		if (!shared.getAppFirstRun())
 		{
 			return;
 		}
 
 		// TODO: Do I even need to updateAll? This is done when the database is created.
-		NacScheduler.updateAll(this, alarms);
+		//NacScheduler.updateAll(this, alarms);
 		shared.editAppFirstRun(false);
 		shared.editAppStartStatistics(false);
+		this.addFirstAlarm();
 	}
 
 	/**
@@ -1132,17 +1184,43 @@ public class NacMainActivity
 	private void setupGoogleRatingDialog()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
+		NacUtility.printf("App counter : %d", shared.getRateMyAppCounter());
+
+		// App is already rated
 		if (shared.isRateMyAppRated())
 		{
 			return;
 		}
 
-		if (shared.isRateMyAppLimit())
+		// Time to show the Google rating dialog
+		else if (shared.isRateMyAppLimit())
 		{
-			NacRateMyAppDialog dialog = new NacRateMyAppDialog();
-			dialog.build(this);
-			dialog.show();
+			ReviewManager manager = ReviewManagerFactory.create(this);
+			Task<ReviewInfo> request = manager.requestReviewFlow();
+
+			// Launch the review flow
+			request.addOnCompleteListener(task -> {
+				if (task.isSuccessful())
+				{
+					ReviewInfo reviewInfo = task.getResult();
+					Task<Void> flow = manager.launchReviewFlow(this, reviewInfo);
+
+					// The flow has finished. The API does not indicate whether the user
+					// reviewed or not, or even whether the review dialog was shown.
+					// 
+					// No matter the result, just treat it as rated.
+					flow.addOnCompleteListener(newTask -> {
+						shared.ratedRateMyApp();
+					});
+				}
+			});
+
+			//NacRateMyAppDialog dialog = new NacRateMyAppDialog();
+			//dialog.build(this);
+			//dialog.show();
 		}
+
+		// Increment the counter until it is time to show the Google rating dialog
 		else
 		{
 			shared.incrementRateMyApp();

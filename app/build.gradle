@@ -18,8 +18,8 @@ android {
 		applicationId "com.nfcalarmclock"
 		minSdkVersion 21
 		targetSdkVersion 30
-		versionCode 291
-		versionName "10.4.24"
+		versionCode 292
+		versionName "10.5.0"
 
 		javaCompileOptions {
 			annotationProcessorOptions {
@@ -113,6 +113,8 @@ dependencies {
 	implementation 'com.google.firebase:firebase-analytics'
 	implementation 'com.google.firebase:firebase-crashlytics'
 
+	// For Google Play in-app review
+	implementation 'com.google.android.play:core:1.10.3'
 
 	//implementation 'com.spotify.sdk:spotify-auth-release:1.1.0@aar'
 	//implementation 'com.spotify.sdk:spotify-app-remote-release:0.6.1@aar'
