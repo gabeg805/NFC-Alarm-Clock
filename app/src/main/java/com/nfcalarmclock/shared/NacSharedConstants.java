@@ -369,6 +369,14 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Is the app updated.
+	 */
+	//public boolean getIsAppUpdated()
+	//{
+	//	return this.getBoolean(R.bool.is_app_updated);
+	//}
+
+	/**
 	 * @return Is disabled.
 	 */
 	public String getIsDisabled()

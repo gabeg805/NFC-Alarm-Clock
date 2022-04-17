@@ -1068,7 +1068,8 @@ public class NacSharedPreferences
 	{
 		int counter = this.getRateMyAppCounter();
 		int limit = this.getDefaults().getRateMyAppLimit();
-		return counter == limit;
+
+		return counter >= limit;
 	}
 
 	/**
@@ -1078,6 +1079,7 @@ public class NacSharedPreferences
 	{
 		int counter = this.getRateMyAppCounter();
 		int rated = this.getDefaults().getRateMyAppRated();
+
 		return counter == rated;
 	}
 

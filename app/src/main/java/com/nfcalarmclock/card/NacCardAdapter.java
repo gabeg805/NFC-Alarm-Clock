@@ -91,20 +91,6 @@ public class NacCardAdapter
 		setHasStableIds(true);
 	}
 
-	///**
-	// * @return True if the maximum number of alarms has been created, and False
-	// *     otherwise.
-	// */
-	//public boolean atMaxAlarmCapacity()
-	//{
-	//	NacSharedConstants cons = this.getSharedConstants();
-	//	int size = getItemCount();
-	//	//int size = this.size();
-
-	//	return ((size+1) > cons.getMaxAlarms());
-	//	//return ((size+1) <= cons.getMaxAlarms());
-	//}
-
 	/**
 	 * Call the listener for when an alarm card is bound.
 	 */
@@ -294,17 +280,6 @@ public class NacCardAdapter
 	{
 		this.mOnViewHolderCreatedListener = listener;
 	}
-
-	///**
-	// * Toast for when the maximum number of alarms has been created.
-	// */
-	//public void toastMaxAlarmsError()
-	//{
-	//	Context context = this.getContext();
-	//	NacSharedConstants cons = this.getSharedConstants();
-
-	//	NacUtility.quickToast(context, cons.getErrorMessageMaxAlarms());
-	//}
 
 	public void storeIndicesOfExpandedCards(RecyclerView rv)
 	{

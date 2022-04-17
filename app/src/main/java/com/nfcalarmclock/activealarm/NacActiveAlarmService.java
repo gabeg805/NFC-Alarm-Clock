@@ -10,7 +10,6 @@ import android.os.Looper;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
-import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmRepository;
 import com.nfcalarmclock.missedalarm.NacMissedAlarmNotification;
@@ -20,6 +19,7 @@ import com.nfcalarmclock.statistics.NacAlarmStatisticRepository;
 import com.nfcalarmclock.system.NacContext;
 import com.nfcalarmclock.system.NacIntent;
 import com.nfcalarmclock.scheduler.NacScheduler;
+import com.nfcalarmclock.util.NacUtility;
 
 import java.lang.System;
 import java.util.Calendar;
@@ -102,6 +102,11 @@ public class NacActiveAlarmService
 	private long mStartTime;
 
 	/**
+	 * Fixed volume controller.
+	 */
+	private NacFixedVolumeController mFixedVolumeController;
+
+	/**
 	 * Automatically dismiss the alarm.
 	 *
 	 * This will finish the service.
@@ -124,6 +129,7 @@ public class NacActiveAlarmService
 		this.cleanupWakeupProcess();
 		this.cleanupWakeLock();
 		this.cleanupAutoDismiss();
+		this.cleanupFixedVolumeController();
 	}
 
 	/**
@@ -161,6 +167,19 @@ public class NacActiveAlarmService
 
 		this.mAutoDismissHandler = null;
 		this.mAutoDismissRunnable = null;
+	}
+
+	/**
+	 * Cleanup the fixed volume controller.
+	 */
+	private void cleanupFixedVolumeController()
+	{
+		NacFixedVolumeController volumeController = this.getFixedVolumeController();
+
+		if (volumeController != null)
+		{
+			volumeController.release();
+		}
 	}
 
 	/**
@@ -320,6 +339,14 @@ public class NacActiveAlarmService
 	}
 
 	/**
+	 * @return The media session.
+	 */
+	private NacFixedVolumeController getFixedVolumeController()
+	{
+		return this.mFixedVolumeController;
+	}
+
+	/**
 	 * @return The shared constants.
 	 */
 	private NacSharedConstants getSharedConstants()
@@ -395,12 +422,14 @@ public class NacActiveAlarmService
 		super.onCreate();
 
 		Application app = getApplication();
+		Context context = getApplicationContext();
 
-		this.mSharedPreferences = new NacSharedPreferences(this);
+		this.mSharedPreferences = new NacSharedPreferences(context);
 		this.mAlarmRepository = new NacAlarmRepository(app);
 		this.mAlarm = null;
 		this.mWakeupProcess = null;
 		this.mWakeLock = null;
+		this.mFixedVolumeController = new NacFixedVolumeController(context);
 		//this.mStartTime = System.currentTimeMillis();
 	}
 
@@ -419,23 +448,6 @@ public class NacActiveAlarmService
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
 		String action = NacIntent.getAction(intent);
-		//NacAlarm alarm = NacIntent.getAlarm(intent);
-
-		//NacUtility.printf("onStartCommand()! Action start? %b | Alarm good? %b",
-		//	action.equals(ACTION_START_SERVICE), alarm != null);
-
-		//if (action.equals(ACTION_START_SERVICE))
-		//{
-		//	this.showNotification(alarm);
-		//}
-
-		//if (this.isNewServiceStarted(intent))
-		//{
-		//	NacUtility.printf("Preparing new service!");
-		//	this.prepareNewService();
-		//}
-
-		//this.mAlarm = alarm;
 
 		this.setupService(intent);
 

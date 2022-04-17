@@ -23,10 +23,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.play.core.review.ReviewInfo;
-import com.google.android.play.core.review.ReviewManager;
-import com.google.android.play.core.review.ReviewManagerFactory;
-import com.google.android.play.core.tasks.Task;
 
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmViewModel;
@@ -47,7 +43,7 @@ import com.nfcalarmclock.nfc.NacNfc;
 import com.nfcalarmclock.nfc.NacNfcTag;
 import com.nfcalarmclock.nfc.NacScanNfcTagDialog;
 import com.nfcalarmclock.R;
-import com.nfcalarmclock.ratemyapp.NacRateMyAppDialog;
+import com.nfcalarmclock.ratemyapp.NacRateMyApp;
 import com.nfcalarmclock.settings.NacSettingsActivity;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
@@ -194,11 +190,26 @@ public class NacMainActivity
 	private final View.OnClickListener mFloatingActionButtonListener =
 			view -> {
 				NacSharedPreferences shared = getSharedPreferences();
-				NacAlarm alarm = new NacAlarm.Builder(shared).build();
+				NacSharedConstants cons = getSharedConstants();
+				NacCardAdapter adapter = getAlarmCardAdapter();
+				int size = adapter.getItemCount();
 
-				addAlarm(alarm);
+				// Haptic feedback so that the user knows the action was received
 				view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 
+				// Max number of alarms reached
+				if ((size+1) > cons.getMaxAlarms())
+				{
+					NacUtility.quickToast(NacMainActivity.this,
+						cons.getErrorMessageMaxAlarms());
+					return;
+				}
+
+				// Create and add the alarm
+				NacAlarm alarm = new NacAlarm.Builder(shared).build();
+				addAlarm(alarm);
+
+				// Debug rate my app
 				int counter = shared.getRateMyAppCounter();
 
 				if (counter < 0)
@@ -410,6 +421,16 @@ public class NacMainActivity
 	private NacCardAdapterLiveData getAlarmCardAdapterLiveData()
 	{
 		return this.mAlarmCardAdapterLiveData;
+	}
+
+	/**
+	 * @return The alarm card at the given index.
+	 */
+	private NacCardHolder getAlarmCardAt(int index)
+	{
+		RecyclerView rv = this.getRecyclerView();
+
+		return (NacCardHolder) rv.findViewHolderForAdapterPosition(index);
 	}
 
 	/**
@@ -740,12 +761,29 @@ public class NacMainActivity
 	@Override
 	public void onCopySwipe(NacAlarm alarm, int index)
 	{
-		RecyclerView rv = this.getRecyclerView();
+		NacSharedConstants cons = this.getSharedConstants();
 		NacCardAdapter adapter = this.getAlarmCardAdapter();
+		NacCardHolder card = this.getAlarmCardAt(index);
 		int size = adapter.getItemCount();
 
+		// Haptic feedback so that the user knows the action was received
+		card.getRoot().performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+
+		// Reset the view on the alarm that was swiped
 		adapter.notifyItemChanged(index);
+
+		// Max number of alarms reached
+		if ((size+1) > cons.getMaxAlarms())
+		{
+			NacUtility.quickToast(this, cons.getErrorMessageMaxAlarms());
+			return;
+		}
+
+		// Set the index of the new alarm that will be created. This way, the
+		// the snackbar can undo any action on that alarm
 		this.getLastAlarmCardAction().setIndex(size);
+
+		// Copy the alarm
 		this.copyAlarm(alarm);
 	}
 
@@ -826,7 +864,16 @@ public class NacMainActivity
 	@Override
 	public void onDeleteSwipe(NacAlarm alarm, int index)
 	{
+		NacCardHolder card = this.getAlarmCardAt(index);
+
+		// Haptic feedback so that the user knows the action was received
+		card.getRoot().performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+
+		// Set the index of the new alarm that will be created. This way, the
+		// the snackbar can undo any action on that alarm
 		this.getLastAlarmCardAction().setIndex(index);
+
+		// Delete the alarm
 		this.deleteAlarm(alarm);
 	}
 
@@ -1066,6 +1113,8 @@ public class NacMainActivity
 		}
 		else if (this.isActivityShown() && this.shouldShowAlarmActivity(alarm))
 		{
+			// TODO: This caused the active alarm to show up a million times!
+			//
 			//NacSharedPreferences shared = this.getSharedPreferences();
 			//Remove this setting: shared.getPreventAppFromClosing()?
 			NacContext.startAlarm(this, alarm);
@@ -1184,47 +1233,8 @@ public class NacMainActivity
 	private void setupGoogleRatingDialog()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		NacUtility.printf("App counter : %d", shared.getRateMyAppCounter());
 
-		// App is already rated
-		if (shared.isRateMyAppRated())
-		{
-			return;
-		}
-
-		// Time to show the Google rating dialog
-		else if (shared.isRateMyAppLimit())
-		{
-			ReviewManager manager = ReviewManagerFactory.create(this);
-			Task<ReviewInfo> request = manager.requestReviewFlow();
-
-			// Launch the review flow
-			request.addOnCompleteListener(task -> {
-				if (task.isSuccessful())
-				{
-					ReviewInfo reviewInfo = task.getResult();
-					Task<Void> flow = manager.launchReviewFlow(this, reviewInfo);
-
-					// The flow has finished. The API does not indicate whether the user
-					// reviewed or not, or even whether the review dialog was shown.
-					// 
-					// No matter the result, just treat it as rated.
-					flow.addOnCompleteListener(newTask -> {
-						shared.ratedRateMyApp();
-					});
-				}
-			});
-
-			//NacRateMyAppDialog dialog = new NacRateMyAppDialog();
-			//dialog.build(this);
-			//dialog.show();
-		}
-
-		// Increment the counter until it is time to show the Google rating dialog
-		else
-		{
-			shared.incrementRateMyApp();
-		}
+		NacRateMyApp.request(shared);
 	}
 
 	/**

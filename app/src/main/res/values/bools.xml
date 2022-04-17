@@ -17,4 +17,8 @@
 	<bool name="default_shuffle_playlist">false</bool>
 	<bool name="default_speak_to_me">false</bool>
 
+	<!--
+	<bool name="is_app_updated">false</bool>
+	-->
+
 </resources>
