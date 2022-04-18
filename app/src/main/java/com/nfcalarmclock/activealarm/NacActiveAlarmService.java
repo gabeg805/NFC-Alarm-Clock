@@ -563,15 +563,20 @@ public class NacActiveAlarmService
 	{
 		NacAlarm intentAlarm = NacIntent.getAlarm(intent);
 
+		// Prepare a new service
 		if (this.isNewServiceStarted(intent))
 		{
 			this.prepareNewService();
 		}
 
+		// Define the new alarm for this service
 		if (intentAlarm != null)
 		{
 			this.mAlarm = intentAlarm;
 		}
+
+		// Handle any media buttons that were passed in
+		this.getFixedVolumeController().handleIntent(intent);
 	}
 
 	/**

@@ -208,16 +208,6 @@ public class NacMainActivity
 				// Create and add the alarm
 				NacAlarm alarm = new NacAlarm.Builder(shared).build();
 				addAlarm(alarm);
-
-				// Debug rate my app
-				int counter = shared.getRateMyAppCounter();
-
-				if (counter < 0)
-				{
-					shared.resetRateMyApp();
-				}
-
-				NacUtility.quickToast(NacMainActivity.this, "Rate my app counter! " + String.valueOf(counter));
 			};
 
 
@@ -1220,8 +1210,6 @@ public class NacMainActivity
 			return;
 		}
 
-		// TODO: Do I even need to updateAll? This is done when the database is created.
-		//NacScheduler.updateAll(this, alarms);
 		shared.editAppFirstRun(false);
 		shared.editAppStartStatistics(false);
 		this.addFirstAlarm();

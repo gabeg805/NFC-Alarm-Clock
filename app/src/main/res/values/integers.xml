@@ -32,7 +32,7 @@
 	<integer name="duration_card_color">150</integer>
 	<integer name="duration_card_color_highlight">400</integer>
 
-	<integer name="max_alarms">6</integer>
+	<integer name="max_alarms">50</integer>
 	<integer name="max_message_name_length">32</integer>
 	<integer name="max_entry_length">512</integer>
 	<integer name="max_hex_length">7</integer>
