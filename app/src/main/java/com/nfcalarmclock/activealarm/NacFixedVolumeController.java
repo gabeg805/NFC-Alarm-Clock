@@ -6,7 +6,6 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import androidx.media.session.MediaButtonReceiver;
 import androidx.media.VolumeProviderCompat;
 
 /**
@@ -18,7 +17,7 @@ public class NacFixedVolumeController
 	/**
 	 * Tag for the class.
 	 */
-	public static final String TAG = "NacVolumeButtonHandlerService";
+	public static final String TAG = "NacFixedVolumeController";
 
 	/**
 	 * Media session.
@@ -44,10 +43,7 @@ public class NacFixedVolumeController
 	 */
 	public NacFixedVolumeController(Context context)
 	{
-		ComponentName mediaButtonReceiver = new ComponentName(context,
-			MediaButtonReceiver.class);
-		MediaSessionCompat mediaSession = new MediaSessionCompat(context, TAG,
-			mediaButtonReceiver, null);
+		MediaSessionCompat mediaSession = new MediaSessionCompat(context, TAG);
 		PlaybackStateCompat playbackState = new PlaybackStateCompat.Builder()
 			.setState(PlaybackStateCompat.STATE_PLAYING, 0, 0)
 			.build();
@@ -75,16 +71,6 @@ public class NacFixedVolumeController
 	private MediaSessionCompat getMediaSession()
 	{
 		return this.mMediaSession;
-	}
-
-	/**
-	 * Handle any media button receiver intents.
-	 */
-	public void handleIntent(Intent intent)
-	{
-		MediaSessionCompat mediaSession = this.getMediaSession();
-
-		MediaButtonReceiver.handleIntent(mediaSession, intent);
 	}
 
 	/**

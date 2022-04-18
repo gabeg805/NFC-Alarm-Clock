@@ -429,7 +429,7 @@ public class NacActiveAlarmService
 		this.mAlarm = null;
 		this.mWakeupProcess = null;
 		this.mWakeLock = null;
-		this.mFixedVolumeController = new NacFixedVolumeController(context);
+		//this.mFixedVolumeController = new NacFixedVolumeController(context);
 		//this.mStartTime = System.currentTimeMillis();
 	}
 
@@ -473,6 +473,13 @@ public class NacActiveAlarmService
 			this.setIsAlarmActive(true);
 			this.updateAlarm();
 			this.waitForAutoDismiss();
+
+			// Handle any media buttons that were passed in
+			this.cleanupFixedVolumeController();
+
+			Context context = getApplicationContext();
+			this.mFixedVolumeController = new NacFixedVolumeController(context);
+
 			return START_STICKY;
 		}
 
@@ -574,9 +581,6 @@ public class NacActiveAlarmService
 		{
 			this.mAlarm = intentAlarm;
 		}
-
-		// Handle any media buttons that were passed in
-		this.getFixedVolumeController().handleIntent(intent);
 	}
 
 	/**

@@ -18,8 +18,8 @@ android {
 		applicationId "com.nfcalarmclock"
 		minSdkVersion 21
 		targetSdkVersion 30
-		versionCode 294
-		versionName "10.5.2"
+		versionCode 295
+		versionName "10.5.3"
 
 		javaCompileOptions {
 			annotationProcessorOptions {
@@ -61,19 +61,15 @@ android {
 		sourceCompatibility JavaVersion.VERSION_1_8
 		targetCompatibility JavaVersion.VERSION_1_8
 	}
+    lint {
+        disable 'UnnecessaryInterfaceModifier'
+        enable 'ConvertToWebp', 'DalvikOverride', 'DuplicateStrings', 'IconExpectedSize', 'MinSdkTooLow', 'MissingRegistered', 'NegativeMargin', 'Registered', 'TypographyQuotes'
+    }
 
-	applicationVariants.all { variant ->
+    applicationVariants.all { variant ->
 		variant.resValue "string", "versionName", variant.versionName
 	}
 
-	lintOptions {
-		disable 'UnnecessaryInterfaceModifier'
-
-		//enable 'ConvertToWebp', 'DalvikOverride',
-		enable 'ConvertToWebp', 'DalvikOverride', 'DuplicateStrings',
-			'IconExpectedSize', 'MinSdkTooLow', 'MissingRegistered',
-			'NegativeMargin', 'Registered', 'TypographyQuotes'
-	}
 }
 
 repositories {
