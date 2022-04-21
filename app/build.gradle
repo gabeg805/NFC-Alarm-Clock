@@ -18,8 +18,8 @@ android {
 		applicationId "com.nfcalarmclock"
 		minSdkVersion 21
 		targetSdkVersion 31
-		versionCode 300
-		versionName "10.5.8"
+		versionCode 301
+		versionName "10.5.9"
 
 		javaCompileOptions {
 			annotationProcessorOptions {
@@ -104,20 +104,20 @@ dependencies {
 	implementation "androidx.room:room-runtime:$room_version"
 	annotationProcessor "androidx.room:room-compiler:$room_version"
 
-	// Media controls (volume up/down)
-	implementation 'androidx.media:media:1.4.3'
-	implementation "androidx.mediarouter:mediarouter:1.2.6"
+	//// Media controls (volume up/down)
+	//implementation 'androidx.media:media:1.4.3'
+	//implementation "androidx.mediarouter:mediarouter:1.2.6"
 
-	// Interacting with MediaSessions
-	implementation "androidx.media2:media2-session:$media2_version"
-	// optional - UI widgets for VideoView and MediaControlView
-	implementation "androidx.media2:media2-widget:$media2_version"
-	// optional - Implementation of a SessionPlayer
-	implementation "androidx.media2:media2-player:$media2_version"
+	//// Interacting with MediaSessions
+	//implementation "androidx.media2:media2-session:$media2_version"
+	//// optional - UI widgets for VideoView and MediaControlView
+	//implementation "androidx.media2:media2-widget:$media2_version"
+	//// optional - Implementation of a SessionPlayer
+	//implementation "androidx.media2:media2-player:$media2_version"
 	implementation 'com.google.android.exoplayer:exoplayer:2.17.1'
 
-	// Listenable Future
-	implementation "com.google.guava:guava:31.0.1-android"
+	//// Listenable Future
+	//implementation "com.google.guava:guava:31.0.1-android"
 
 
 	// Import the Firebase BoM

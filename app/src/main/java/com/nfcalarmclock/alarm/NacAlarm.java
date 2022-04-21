@@ -816,7 +816,8 @@ public class NacAlarm
 			&& (this.getAudioSource().equals(alarm.getAudioSource()))
 			&& (this.getName().equals(alarm.getName()))
 			&& (this.shouldUseTts() == alarm.shouldUseTts())
-			&& (this.getTtsFrequency() == alarm.getTtsFrequency());
+			&& (this.getTtsFrequency() == alarm.getTtsFrequency())
+			&& (this.getShouldRestrictVolume() == alarm.getShouldRestrictVolume());
 	}
 
 	/**
