@@ -1,8 +1,10 @@
 package com.nfcalarmclock.media;
 
 import android.content.Context;
-import android.media.AudioAttributes;
 import android.media.AudioManager;
+
+import com.google.android.exoplayer2.audio.AudioAttributes;
+import com.google.android.exoplayer2.C;
 
 import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.alarm.NacAlarm;
@@ -29,19 +31,9 @@ public class NacAudioAttributes
 	private final NacSharedPreferences mShared;
 
 	/**
-	 * Stream.
-	 */
-	private int mStream;
-
-	/**
 	 * Usage.
 	 */
 	private int mUsage;
-
-	/**
-	 * Audio focus.
-	 */
-	private int mFocus;
 
 	/**
 	 * Volume level.
@@ -80,7 +72,6 @@ public class NacAudioAttributes
 		this.mContext = context;
 		this.mShared = new NacSharedPreferences(context);
 
-		this.setFocus(AudioManager.AUDIOFOCUS_GAIN);
 		this.setSource(source);
 		this.setVolumeLevel(-1);
 		this.setRepeat(false);
@@ -114,11 +105,10 @@ public class NacAudioAttributes
 	 */
 	public AudioAttributes getAudioAttributes()
 	{
-		int stream = this.getStream();
 		int usage = this.getUsage();
 
 		return new AudioAttributes.Builder()
-			.setLegacyStreamType(stream)
+			.setContentType(C.CONTENT_TYPE_MUSIC)
 			.setUsage(usage)
 			.build();
 	}
@@ -129,14 +119,6 @@ public class NacAudioAttributes
 	private Context getContext()
 	{
 		return this.mContext;
-	}
-
-	/**
-	 * @return The audio focus.
-	 */
-	public int getFocus()
-	{
-		return this.mFocus;
 	}
 
 	/**
@@ -160,7 +142,9 @@ public class NacAudioAttributes
 	 */
 	public int getStream()
 	{
-		return this.mStream;
+		AudioAttributes attr = this.getAudioAttributes();
+
+		return attr.getAudioAttributesV21().getVolumeControlStream();
 	}
 
 	/**
@@ -215,6 +199,7 @@ public class NacAudioAttributes
 	{
 		int previous = this.getStreamVolume();
 		int volume = this.toStreamVolume();
+
 		return (previous == volume);
 	}
 
@@ -260,14 +245,6 @@ public class NacAudioAttributes
 	}
 
 	/**
-	 * Set the audio focus.
-	 */
-	public void setFocus(int focus)
-	{
-		this.mFocus = focus;
-	}
-
-	/**
 	 * Set whether the audio should be repeated or not.
 	 */
 	public void setRepeat(boolean repeat)
@@ -281,50 +258,60 @@ public class NacAudioAttributes
 	public void setSource(String source)
 	{
 		Context context = this.getContext();
-		NacSharedConstants cons = new NacSharedConstants(context);
-		List<String> audioSources = cons.getAudioSources();
-		int stream = AudioManager.STREAM_MUSIC;
-		int usage = AudioAttributes.USAGE_MEDIA;
+		int usage = sourceToUsage(context, source);
 
-		if (source != null)
-		{
-			if (source.equals(audioSources.get(0)))
-			{
-				stream = AudioManager.STREAM_ALARM;
-				usage = AudioAttributes.USAGE_ALARM;
-			}
-			else if (source.equals(audioSources.get(1)))
-			{
-				stream = AudioManager.STREAM_MUSIC;
-				usage = AudioAttributes.USAGE_MEDIA;
-			}
-			else if (source.equals(audioSources.get(2)))
-			{
-				stream = AudioManager.STREAM_NOTIFICATION;
-				usage = AudioAttributes.USAGE_NOTIFICATION;
-			}
-			else if (source.equals(audioSources.get(3)))
-			{
-				stream = AudioManager.STREAM_RING;
-				usage = AudioAttributes.USAGE_MEDIA;
-			}
-			else if (source.equals(audioSources.get(4)))
-			{
-				stream = AudioManager.STREAM_SYSTEM;
-				usage = AudioAttributes.USAGE_MEDIA;
-			}
-		}
-
-		this.setStream(stream);
 		this.setUsage(usage);
 	}
 
 	/**
-	 * Set the audio stream.
+	 * Convert a source to a usage.
 	 */
-	public void setStream(int stream)
+	public static int sourceToUsage(Context context, String source)
 	{
-		this.mStream = stream;
+		if ((source == null) || source.isEmpty())
+		{
+			return 0;
+		}
+
+		NacSharedConstants cons = new NacSharedConstants(context);
+		List<String> audioSources = cons.getAudioSources();
+
+		// Alarm
+		if (source.equals(audioSources.get(0)))
+		{
+			return C.USAGE_ALARM;
+		}
+		// Media
+		else if (source.equals(audioSources.get(1)))
+		{
+			return C.USAGE_MEDIA;
+		}
+		// Notification
+		else if (source.equals(audioSources.get(2)))
+		{
+			return C.USAGE_NOTIFICATION;
+		}
+		// Ringtone
+		else if (source.equals(audioSources.get(3)))
+		{
+			return C.USAGE_NOTIFICATION_RINGTONE;
+		}
+		// Call
+		//else if (source.equals(audioSources.get(3)))
+		//{
+		//	stream = AudioManager.STREAM_RING;
+		//	usage = C.USAGE_VOICE_COMMUNICATION;
+		//	//usage = AudioAttributesCompat.USAGE_MEDIA;
+		//}
+		// System
+		else if (source.equals(audioSources.get(4)))
+		{
+			return C.USAGE_MEDIA;
+		}
+		else
+		{
+			return C.USAGE_MEDIA;
+		}
 	}
 
 	/**
@@ -399,6 +386,7 @@ public class NacAudioAttributes
 	public int toStreamVolume()
 	{
 		int level = this.getVolumeLevel();
+
 		return this.toStreamVolume(level);
 	}
 
@@ -408,6 +396,7 @@ public class NacAudioAttributes
 	public int toStreamVolume(int volumeLevel)
 	{
 		int max = this.getStreamMaxVolume();
+
 		return (int) (max * volumeLevel / 100.0f);
 	}
 

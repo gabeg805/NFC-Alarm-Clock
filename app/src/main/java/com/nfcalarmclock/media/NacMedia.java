@@ -9,14 +9,20 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.MediaMetadata;
+
+import com.nfcalarmclock.filebrowser.NacFileTree;
 import com.nfcalarmclock.util.file.NacFile;
 import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.shared.NacSharedConstants;
 
 import java.lang.Long;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-import java.util.TreeMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.TreeMap;
 
 /**
  */
@@ -48,6 +54,77 @@ public class NacMedia
 	 * Type of sound for a music file.
 	 */
 	public static final int TYPE_DIRECTORY = 5;
+
+	/**
+	 * Build a media item from a file.
+	 *
+	 * @param  context  Application context.
+	 * @param  uri  File URI.
+	 */
+	public static MediaItem buildMediaItemFromFile(Context context, Uri uri)
+	{
+		String path = uri.toString();
+
+		// Get media information
+		String artist = NacMedia.getArtist(context, uri);
+		long duration = NacMedia.getRawDuration(context, uri);
+		String displayName = NacMedia.getName(context, uri);
+		String title = NacMedia.getTitle(context, uri);
+
+		// Build metadata
+		MediaMetadata metadata = new MediaMetadata.Builder()
+			.setArtist(artist)
+			.setDisplayTitle(displayName)
+			.setIsPlayable(true)
+			.setMediaUri(uri)
+			.setTitle(title)
+			.build();
+			//.putLong(MediaMetadata.METADATA_KEY_DURATION, duration)
+			//.putLong(MediaMetadata.METADATA_KEY_NUM_TRACKS)
+
+		// Build the media item
+		return new MediaItem.Builder()
+			.setMediaId(path)
+			.setMediaMetadata(metadata)
+			.setUri(uri)
+			.build();
+	}
+
+	/**
+	 * Build a list of media items from a directory path.
+	 *
+	 * @param  context  Application context.
+	 * @param  path  Path of a directory.
+	 */
+	public static List<MediaItem> buildMediaItemsFromDirectory(Context context,
+		String path)
+	{
+		// Get all the files in the directory
+		List<Uri> files = NacFileTree.getFiles(context, path);
+
+		return NacMedia.buildMediaItemsFromFiles(context, files);
+	}
+
+	/**
+	 * Build media item from a list of files.
+	 *
+	 * @param  context  Application context.
+	 * @param  uris  List of files.
+	 */
+	public static List<MediaItem> buildMediaItemsFromFiles(Context context,
+		List<Uri> uris)
+	{
+		List<MediaItem> mediaItems = new ArrayList<>();
+
+		// Create a media item from each file
+		for (Uri u : uris)
+		{
+			MediaItem m = NacMedia.buildMediaItemFromFile(context, u);
+			mediaItems.add(m);
+		}
+
+		return mediaItems;
+	}
 
 	/**
 	 * @return The name of the artist.
@@ -190,6 +267,24 @@ public class NacMedia
 	{
 		Uri uri = Uri.parse(path);
 		return NacMedia.getName(context, uri);
+	}
+
+	/**
+	 * @return The duration of the track.
+	 */
+	@TargetApi(Build.VERSION_CODES.Q)
+	public static long getRawDuration(Context context, Uri uri)
+	{
+		if((Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) ||
+			!uri.toString().startsWith("content://"))
+		{
+			return -1;
+		}
+
+		String column = MediaStore.Audio.Media.DURATION;
+		String duration = NacMedia.getColumnFromCursor(context, uri, column);
+
+		return Long.parseLong(duration);
 	}
 
 	/**

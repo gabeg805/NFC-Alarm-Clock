@@ -589,6 +589,24 @@ public class NacMainActivity
 				this.showAudioSourceDialog();
 				break;
 			case 1:
+				NacAlarm alarm = this.getAudioOptionsAlarm();
+				boolean shouldRestrict = !alarm.getShouldRestrictVolume();
+
+				// Restrict the volume
+				if (shouldRestrict)
+				{
+					NacUtility.quickToast(this, "Volume will be restricted");
+				}
+				// Do NOT restrict the volume
+				else
+				{
+					NacUtility.quickToast(this, "Volume will be adjustable");
+				}
+
+				alarm.setShouldRestrictVolume(shouldRestrict);
+				this.getAlarmViewModel().update(this, alarm);
+				break;
+			case 2:
 				this.showTextToSpeechDialog();
 				break;
 			default:

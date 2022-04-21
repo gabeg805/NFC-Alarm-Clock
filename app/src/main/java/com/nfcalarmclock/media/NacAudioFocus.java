@@ -1,10 +1,11 @@
 package com.nfcalarmclock.media;
 
 import android.content.Context;
-import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.os.Build;
+
+import com.google.android.exoplayer2.audio.AudioAttributes;
 
 /**
  * Audio focus.
@@ -24,6 +25,11 @@ public class NacAudioFocus
 			Context.AUDIO_SERVICE);
 		int result;
 
+		// TODO: This is commented out because you need the original
+		// AudioFocusRequest object that was used when requesting audio focus.
+		// Unfortunately, that is a local variable in the functions below. Could
+		// probably save it to NacAudioAttributes when I create it?
+
 		//if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		//{
 		//	AudioFocusRequest request = this.getAudioFocusRequest();
@@ -38,35 +44,12 @@ public class NacAudioFocus
 	}
 
 	/**
-	 * @return The audio focus request.
-	 */
-	public static AudioFocusRequest getRequest(
-		AudioManager.OnAudioFocusChangeListener listener,
-		NacAudioAttributes attrs)
-	{
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-		{
-			AudioAttributes audioAttributes = attrs.getAudioAttributes();
-			int focus = attrs.getFocus();
-
-			return new AudioFocusRequest.Builder(focus)
-				.setAudioAttributes(audioAttributes)
-				.setOnAudioFocusChangeListener(listener)
-				.build();
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 * Request audio focus.
+	 * Request to generally gain audio focus.
 	 */
 	@SuppressWarnings("deprecation")
 	public static boolean request(Context context,
 		AudioManager.OnAudioFocusChangeListener listener,
-		NacAudioAttributes attrs)
+		NacAudioAttributes attrs, int focusGainType)
 	{
 		AudioManager am = (AudioManager) context.getSystemService(
 			Context.AUDIO_SERVICE);
@@ -74,43 +57,42 @@ public class NacAudioFocus
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{
-			AudioFocusRequest request = NacAudioFocus.getRequest(listener, attrs);
+			AudioAttributes audioAttributes = attrs.getAudioAttributes();
+			AudioFocusRequest request = new AudioFocusRequest.Builder(focusGainType)
+				.setAudioAttributes(audioAttributes.getAudioAttributesV21())
+				.setOnAudioFocusChangeListener(listener)
+				.build();
 			result = am.requestAudioFocus(request);
 		}
 		else
 		{
 			int stream = attrs.getStream();
-			int focus = attrs.getFocus();
-			result = am.requestAudioFocus(listener, stream, focus);
+			result = am.requestAudioFocus(listener, stream, focusGainType);
 		}
 
 		return (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
 	}
 
 	/**
-	 * @see NacAudioFocus#request(Context,
-	 *  AudioManager.OnAudioFocusChangeListener, NacAudioAttributes)
+	 * Request to gain audio focus.
 	 */
 	public static boolean requestGain(Context context,
 		AudioManager.OnAudioFocusChangeListener listener,
 		NacAudioAttributes attrs)
 	{
-		attrs.setFocus(AudioManager.AUDIOFOCUS_GAIN);
-
-		return NacAudioFocus.request(context, listener, attrs);
+		return NacAudioFocus.request(context, listener, attrs,
+			AudioManager.AUDIOFOCUS_GAIN);
 	}
 
 	/**
-	 * @see NacAudioFocus#request(Context,
-	 *  AudioManager.OnAudioFocusChangeListener, NacAudioAttributes)
+	 * Request to gain transient audio focus.
 	 */
-	public static boolean requestTransient(Context context,
+	public static boolean requestGainTransient(Context context,
 		AudioManager.OnAudioFocusChangeListener listener,
 		NacAudioAttributes attrs)
 	{
-		attrs.setFocus(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
-
-		return NacAudioFocus.request(context, listener, attrs);
+		return NacAudioFocus.request(context, listener, attrs,
+			AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
 	}
 
 }

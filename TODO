@@ -8,11 +8,22 @@ TODO
 
 * Targeting API 31 > requires to use Manifest.permission.SCHEDULE_EXACT_ALARM
 
-* Try not to start activity when starting foreground service. Just show the notification.
+* Try not to start activity when starting foreground service. Just show the
+  notification.
 
 * Have an Updates fragment or dialogfragment to quickly show what was updated.
 
-* Change to the androix MediaPlayer
+* There are a lot of classes like NacTextToSpeech that have a lot of setting an
+  object to null when cleaning up, and conversely, checking if it's null and
+  setting up.
+
+* Add "Call" audio source
+
+* Remove "System" audio source
+
+* Remove FixedVolumeController
+
+* Check stream value to make sure it's not the invalid value
 
 * Implement Spotify
 

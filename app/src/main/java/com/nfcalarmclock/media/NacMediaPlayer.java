@@ -1,21 +1,26 @@
 package com.nfcalarmclock.media;
 
 import android.content.Context;
-import android.media.AudioAttributes;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.audio.AudioAttributes;
 
 import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.alarm.NacAlarm;
 // TODO: This depenedency sort of makes it not a util/ but more a main
 // component of the app
 import com.nfcalarmclock.filebrowser.NacFileTree;
+import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.shared.NacSharedConstants;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,153 +29,69 @@ import java.util.List;
  */
 @SuppressWarnings({"RedundantSuppression", "UnusedReturnValue"})
 public class NacMediaPlayer
-	extends MediaPlayer
-	implements MediaPlayer.OnCompletionListener,
-		AudioManager.OnAudioFocusChangeListener
+	//extends MediaPlayer
+	implements AudioManager.OnAudioFocusChangeListener,
+		Player.Listener
 {
 
 	/**
-	 * Playlist object.
+	 * Called when the device volume is changed.
 	 */
-	public static class Playlist
+	@Override
+	public void onDeviceVolumeChanged(int volume, boolean muted)
 	{
+		NacUtility.printf("On Device Volume Changed! %d || %d", volume, this.getMediaPlayer().getDeviceVolume());
 
-		/**
-		 * List of music files.
-		 */
-		private final List<Uri> mPlaylist;
-
-		/**
-		 * Index corresponding to the current place in the playlist.
-		 */
-		private int mIndex;
-
-		/**
-		 * Repeat the playlist.
-		 */
-		private final boolean mRepeat;
-
-		/**
-		 */
-		public Playlist(Context context, String path)
+		// Maybe change this to AudioManager?
+		if (this.shouldRestrictVolume())
 		{
-			this(context, path, false, false);
+			this.getMediaPlayer().setDeviceVolume(this.getRestrictedVolumeLevel());
 		}
-
-		/**
-		 */
-		public Playlist(Context context, String path, boolean repeat,
-			boolean shuffle)
-		{
-			this.mPlaylist = NacFileTree.getFiles(context, path);
-			this.mIndex = 0;
-			this.mRepeat = repeat;
-
-			if (shuffle)
-			{
-				this.shuffle();
-			}
-		}
-
-		/**
-		 * @return The playlist index.
-		 */
-		public int getIndex()
-		{
-			return this.mIndex;
-		}
-
-		/**
-		 * @return The next playlist track.
-		 */
-		public Uri getNextTrack()
-		{
-			int size = this.getSize();
-			int index = this.getIndex();
-			boolean repeat = this.getRepeat();
-			int nextIndex = repeat ? (index+1) % size : index+1;
-
-			if ((size == 0) || (nextIndex >= size))
-			{
-				return null;
-			}
-
-			this.setIndex(nextIndex);
-
-			return this.getTrack();
-		}
-
-		/**
-		 * @return The playlist.
-		 */
-		public List<Uri> getPlaylist()
-		{
-			return this.mPlaylist;
-		}
-
-		/**
-		 * @return True if the playlist should be repeated, and False otherwise.
-		 */
-		public boolean getRepeat()
-		{
-			return this.mRepeat;
-		}
-
-		/**
-		 * @return The size of the playlist.
-		 */
-		public int getSize()
-		{
-			List<Uri> playlist = this.getPlaylist();
-			return (playlist == null) ? 0 : playlist.size();
-		}
-
-		/**
-		 * @return The current playlist track.
-		 */
-		public Uri getTrack()
-		{
-			return this.getTrack(this.getIndex());
-		}
-
-		/**
-		 * @return The playlist track.
-		 */
-		public Uri getTrack(int index)
-		{
-			List<Uri> playlist = this.getPlaylist();
-			int size = this.getSize();
-
-			return ((size > 0) && (index < size)) ? playlist.get(index) : null;
-		}
-
-		/**
-		 * Set the playlist index.
-		 */
-		public void setIndex(int index)
-		{
-			this.mIndex = index;
-		}
-
-		/**
-		 * Shuffle the playlist list.
-		 */
-		public void shuffle()
-		{
-			Collections.shuffle(this.mPlaylist);
-		}
-
 	}
+
+	//	/**
+	//	 * Called when the media item changes.
+	//	 *
+	//	 * This is primarily used with a playlist. When the next song automatically
+	//	 * starts up, pause, and delay 500 ms until playing.
+	//	 */
+	//	@Override
+	//	public void onCurrentMediaItemChanged(SessionPlayer mediaPlayer,
+	//		MediaItem mediaItem)
+	//	{
+	//		NacUtility.printf("onCurrentMediaItemChanged!");
+	//		mediaPlayer.pause();
+	//		getHandler().postDelayed(mediaPlayer::play, 500);
+	//	}
+
+	//	/**
+	//	 * Called when a single media item completes.
+	//	 *
+	//	 * This is primarily used with a regular song/ringtone. When it completes,
+	//	 * seek to the beginning and delay 500 ms until playing.
+	//	 */
+	//	@Override
+	//	public void onPlaybackCompleted(SessionPlayer mediaPlayer)
+	//	{
+	//		NacUtility.printf("onPlaybackCompleted!");
+	//		// Do nothing. Repeat is not set
+	//		if (mediaPlayer.getRepeatMode() == MediaPlayer.REPEAT_MODE_NONE)
+	//		{
+	//			return;
+	//		}
+
+	//		// Regular song
+	//		mediaPlayer.seekTo(0);
+	//		getHandler().postDelayed(mediaPlayer::play, 500);
+
+	//		//Context context = this.getContext();
+	//		//NacAudioFocus.abandon(context, this);
+	//	}
 
 	/**
 	 * Application context.
 	 */
 	private final Context mContext;
-
-	/**
-	 * Playlist container.
-	 */
-	private Playlist mPlaylist;
 
 	/**
 	 * Audio attributes.
@@ -183,16 +104,30 @@ public class NacMediaPlayer
 	private final Handler mHandler;
 
 	/**
+	 * Media player.
+	 */
+	private ExoPlayer mMediaPlayer;
+
+	/**
 	 * Check if player was playing (caused by losing audio focus).
 	 */
 	private boolean mWasPlaying;
 
 	/**
-	 * Result values.
+	 * Flag whether to restrict changing the volume or not.
 	 */
-	public static final int RESULT_SUCCESS = 0;
-	public static final int RESULT_ILLEGAL_STATE_EXCEPTION = -2;
-	public static final int RESULT_IO_EXCEPTION = -3;
+	private boolean mShouldRestrictVolume;
+
+	/**
+	 * The level to keep the volume restricted at.
+	 */
+	private int mRestrictedVolumeLevel;
+
+	/**
+	 * Flag indicating whether to gain transient audio focus, when requesting
+	 * audio focus, or to gain regular focus.
+	 */
+	private boolean mShouldGainTransientAudioFocus;
 
 	/**
 	 */
@@ -200,19 +135,19 @@ public class NacMediaPlayer
 	{
 		super();
 
+		Looper looper = context.getMainLooper();
 		this.mContext = context;
-		this.mPlaylist = null;
+		this.mMediaPlayer = new ExoPlayer.Builder(context)
+			.setLooper(looper)
+			.build();
 		this.mAttributes = new NacAudioAttributes(context);
-		this.mHandler = new Handler(Looper.getMainLooper());
+		this.mHandler = new Handler(looper);
 		this.mWasPlaying = false;
-	}
+		this.mShouldGainTransientAudioFocus = false;
+		this.mShouldRestrictVolume = false;
+		this.mRestrictedVolumeLevel = 0;
 
-	/**
-	 */
-	public NacMediaPlayer(Context context, int focus)
-	{
-		this(context);
-		this.getAudioAttributes().setFocus(focus);
+		this.setPlaybackListener();
 	}
 
 	/**
@@ -262,35 +197,19 @@ public class NacMediaPlayer
 	}
 
 	/**
-	 * @return The playlist.
+	 * @return The media player.
 	 */
-	private Playlist getPlaylist()
+	public ExoPlayer getMediaPlayer()
 	{
-		return this.mPlaylist;
+		return this.mMediaPlayer;
 	}
 
 	/**
-	 * @return True if a playlist has been created, and False otherwise.
+	 * @return The level to keep the volume restricted at.
 	 */
-	public boolean hasPlaylist()
+	public int getRestrictedVolumeLevel()
 	{
-		return (this.getPlaylist() != null);
-	}
-
-	/**
-	 * @return True if the media player is playing, and False otherwise.
-	 */
-	public boolean isPlayingWrapper()
-	{
-		try
-		{
-			return isPlaying();
-		}
-		catch (IllegalStateException e)
-		{
-			NacUtility.printf("NacMediaPlayer : IllegalStateException : isPlaying()");
-			return false;
-		}
+		return this.mRestrictedVolumeLevel;
 	}
 
 	/**
@@ -303,79 +222,98 @@ public class NacMediaPlayer
 			this.mWasPlaying, focusChange);
 		NacAudioAttributes attrs = this.getAudioAttributes();
 
-		attrs.setFocus(focusChange);
 		attrs.revertDucking();
 
 		if (focusChange == AudioManager.AUDIOFOCUS_GAIN)
 		{
-			//NacUtility.printf("NacMediaPlayer : GAIN!");
+			NacUtility.printf("NacMediaPlayer : GAIN!");
 			this.mWasPlaying = true;
 			if (!attrs.isStreamVolumeAlreadySet())
 			{
 				attrs.setVolume();
 			}
-			this.startWrapper();
+			this.play();
 		}
 		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS)
 		{
-			//NacUtility.printf("NacMediaPlayer : LOSS!");
+			NacUtility.printf("NacMediaPlayer : LOSS!");
 			this.mWasPlaying = false;
 			//attrs.revertVolume();
-			this.stopWrapper();
+
+			//this.stopWrapper(); Shown below
+			//this.abandonAudioFocus(); Do I even need to do this? Wouldn't it already be abandoned?
+			//this.cleanupHandler();
+			this.getMediaPlayer().stop();
+			this.getMediaPlayer().clearMediaItems();
+			//this.getMediaPlayer().reset();
 		}
 		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)
 		{
-			this.mWasPlaying = this.isPlayingWrapper();
-			//NacUtility.printf("NacMediaPlayer : LOSS TRANSIENT! %b", this.mWasPlaying);
+			this.mWasPlaying = this.getMediaPlayer().isPlaying();
+			NacUtility.printf("NacMediaPlayer : LOSS TRANSIENT! %b", this.mWasPlaying);
 			//attrs.revertVolume();
-			this.pauseWrapper();
+			this.getMediaPlayer().pause();
 		}
 		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
 		{
-			this.mWasPlaying = this.isPlayingWrapper();
-			//NacUtility.printf("NacMediaPlayer : LOSS TRANSIENT DUCK! %b", this.mWasPlaying);
+			this.mWasPlaying = this.getMediaPlayer().isPlaying();
+			NacUtility.printf("NacMediaPlayer : LOSS TRANSIENT DUCK! %b", this.mWasPlaying);
 			attrs.duckVolume();
 		}
 	}
 
 	/**
+	 * Request audio focus.
+	 *
+	 * @return True if the audio focus request was granted, and False otherwise.
 	 */
-	@Override
-	public void onCompletion(MediaPlayer mp)
+	protected boolean requestAudioFocus()
 	{
-		if (this.hasPlaylist())
+		Context context = this.getContext();
+		NacAudioAttributes attrs = this.getAudioAttributes();
+		boolean request;
+
+		// Gain transient audio focus
+		if (this.shouldGainTransientAudioFocus())
 		{
-			if (this.playNextTrack() == 0)
-			{
-				return;
-			}
+			request = NacAudioFocus.requestGainTransient(context, this, attrs);
 		}
-		else if (this.shouldRepeat())
+		// Gain regular audio focus
+		else
 		{
-			this.repeatTrack();
-			return;
+			request = NacAudioFocus.requestGain(context, this, attrs);
 		}
 
-		Context context = this.getContext();
-		this.resetWrapper();
-		NacAudioFocus.abandon(context, this);
+		// Unable to gain audio focus
+		if(!request)
+		{
+			NacSharedConstants cons = new NacSharedConstants(context);
+
+			NacUtility.printf("Unable to gain audio focus.");
+			NacUtility.quickToast(context, cons.getErrorMessagePlayAudio());
+		}
+
+		return request;
 	}
 
 	/**
-	 * Pause the media player.
+	 * Play the media item(s) that are already set.
 	 */
-	public int pauseWrapper()
+	public void play()
 	{
-		try
+		NacAudioAttributes attrs = this.getAudioAttributes();
+
+		// Unable to gain audio focus
+		if (!this.requestAudioFocus())
 		{
-			pause();
-			return RESULT_SUCCESS;
+			return;
 		}
-		catch (IllegalStateException e)
-		{
-			NacUtility.printf("NacMediaPlayer : IllegalStateException : pause()");
-			return RESULT_ILLEGAL_STATE_EXCEPTION;
-		}
+
+		// Prepare to play the media
+		this.getMediaPlayer().setAudioAttributes(attrs.getAudioAttributes(), false);
+		this.getMediaPlayer().setRepeatMode(Player.REPEAT_MODE_ALL);
+		this.getMediaPlayer().prepare();
+		this.getMediaPlayer().play();
 	}
 
 	/**
@@ -388,223 +326,175 @@ public class NacMediaPlayer
 	 * @param  shuffle  Whether the media should be shuffled or not. This only
 	 *     applies to directories (playlists).
 	 */
-	public void play(NacAlarm alarm, boolean repeat, boolean shuffle)
+	public void playAlarm(NacAlarm alarm)
 	{
+		NacAudioAttributes attr = this.getAudioAttributes();
 		int type = alarm.getMediaType();
 		String path = alarm.getMediaPath();
-		Uri track = Uri.parse(path);
+		Uri uri = Uri.parse(path);
 
-		this.getAudioAttributes().merge(alarm);
+		// Merge alarm with audio attributes
+		attr.merge(alarm);
+		NacUtility.printf("To stream volume : %d", attr.toStreamVolume());
 
+		// Determine whether to restrict volume when media is played
+		this.setShouldRestrictVolume(alarm.getShouldRestrictVolume());
+
+		// Set the level to keep the volume restricted at media is played
+		if (this.shouldRestrictVolume())
+		{
+			this.setRestrictedVolumeLevel(attr.toStreamVolume());
+		}
+
+		// Play the directory as a playlist
 		if (NacMedia.isDirectory(type))
 		{
-			this.playPlaylist(path, repeat, shuffle);
+			this.playDirectory(path);
 		}
+		// Play the media
 		else
 		{
-			this.play(track, repeat);
+			this.playUri(uri);
 		}
+	}
+
+	/**
+	 * Play a directory as a playlist.
+	 *
+	 * @param  path  Path to a directory.
+	 */
+	public void playDirectory(String path)
+	{
+		Context context = this.getContext();
+		List<MediaItem> items = NacMedia.buildMediaItemsFromDirectory(context, path);
+
+		this.playMediaItems(items);
+	}
+
+	/**
+	 * Play a media item.
+	 *
+	 * @param  item  A media item.
+	 */
+	public void playMediaItem(MediaItem item)
+	{
+		//this.getMediaPlayer().stop();
+		this.getMediaPlayer().setMediaItem(item);
+		this.play();
+	}
+
+	/**
+	 * Play a list of media items.
+	 *
+	 * @param  items  List of media items.
+	 */
+	public void playMediaItems(List<MediaItem> items)
+	{
+		//this.getMediaPlayer().stop();
+		this.getMediaPlayer().setMediaItems(items);
+		this.play();
 	}
 
 	/**
 	 * Play the media with the given Uri.
 	 *
-	 * @param  contentUri  The Uri of the content to play.
+	 * @param  uri  The Uri of the content to play.
 	 * @param  repeat      Whether the media should be repeated or not.
 	 */
-	public void play(Uri contentUri, boolean repeat)
+	public void playUri(Uri uri)
 	{
 		Context context = this.getContext();
-		NacAudioAttributes attrs = this.getAudioAttributes();
-		NacSharedConstants cons = new NacSharedConstants(context);
+		MediaItem item = NacMedia.buildMediaItemFromFile(context, uri);
 
-		if(!NacAudioFocus.request(context, this, attrs))
-		{
-			NacUtility.printf("Unable to gain audio focus.");
-			NacUtility.quickToast(context, cons.getErrorMessagePlayAudio());
-			return;
-		}
-
-		AudioAttributes audioAttributes = attrs.getAudioAttributes();
-
-		try
-		{
-			this.resetWrapper();
-			attrs.setRepeat(repeat);
-			setDataSource(context, contentUri);
-			setLooping(false);
-			setAudioAttributes(audioAttributes);
-			setOnCompletionListener(this);
-			this.prepareWrapper();
-			start();
-		}
-		catch (IllegalStateException | IOException | IllegalArgumentException | SecurityException e)
-		{
-			NacUtility.printf("NacMediaPlayer : play : %s", e.toString());
-			NacUtility.quickToast(context, cons.getErrorMessagePlayFile());
-		}
+		this.playMediaItem(item);
 	}
 
 	/**
-	 * Play the next track in a playlist.
+	 * Play a list of Uris as a playlist.
+	 *
+	 * @param  uris  List of files that are part of the playlist.
 	 */
-	public int playNextTrack()
-	{
-		Playlist playlist = this.getPlaylist();
-		Uri track = (playlist != null) ? playlist.getNextTrack() : null;
-		boolean repeat = playlist.getRepeat();
-
-		if (track != null)
-		{
-			this.resetWrapper();
-			this.play(track, repeat);
-			return 0;
-		}
-		else
-		{
-			this.mPlaylist = null;
-			return -1;
-		}
-	}
-
-	/**
-	 * Play a playlist.
-	 */
-	public void playPlaylist(String path, boolean repeat, boolean shuffle)
+	public void playUris(List<Uri> uris)
 	{
 		Context context = this.getContext();
-		Playlist playlist = new Playlist(context, path, repeat, shuffle);
-		Uri track = playlist.getTrack();
-		this.mPlaylist = playlist;
+		List<MediaItem> items = NacMedia.buildMediaItemsFromFiles(context, uris);
 
-		if (track != null)
-		{
-			this.play(track, repeat);
-		}
-	}
-
-	/**
-	 * Prepare the media player
-	 */
-	public int prepareWrapper()
-	{
-		try
-		{
-			prepare();
-			return RESULT_SUCCESS;
-		}
-		catch (IllegalStateException e)
-		{
-			NacUtility.printf("NacMediaPlayer : IllegalStateException : prepare()");
-			return RESULT_ILLEGAL_STATE_EXCEPTION;
-		}
-		catch (IOException e)
-		{
-			NacUtility.printf("NacMediaPlayer : IOException : prepare()");
-			return RESULT_IO_EXCEPTION;
-		}
+		this.playMediaItems(items);
 	}
 
 	/**
 	 * Release the media player.
 	 */
-	public void releaseWrapper()
+	public void release()
 	{
 		this.getAudioAttributes().revertVolume();
 		this.abandonAudioFocus();
 		this.cleanupHandler();
-		release();
+		this.getMediaPlayer().release();
 	}
 
 	/**
-	 * Repeat the currently playing track.
+	 * Remove the playback listener.
 	 */
-	public void repeatTrack()
+	public void removePlaybackListener()
 	{
-		this.cleanupHandler();
-		this.getHandler().postDelayed(this::startWrapper, 500);
+		this.getMediaPlayer().removeListener(this);
 	}
 
 	/**
-	 * Reset the media player.
+	 * Set the flag indicating whether to gain transient audio focus, when
+	 * requesting audio focus, or to gain regular focus.
+	 *
+	 * @param  shouldGainTransient  Whether to gain transient audio focus or not.
 	 */
-	public int resetWrapper()
+	public void setGainTransientAudioFocus(boolean shouldGainTransient)
 	{
-		try
-		{
-			//this.getAudioAttributes().revertVolume();
-			this.cleanupHandler();
-			reset();
-			return RESULT_SUCCESS;
-		}
-		catch (IllegalStateException e)
-		{
-			NacUtility.printf("NacMediaPlayer : IllegalStateException : reset()");
-			return RESULT_ILLEGAL_STATE_EXCEPTION;
-		}
+		this.mShouldGainTransientAudioFocus = shouldGainTransient;
 	}
 
 	/**
-	 * Seek to a position in the song.
+	 * Set the playback listener.
 	 */
-	@SuppressWarnings("unused")
-	public int seekToWrapper(int position)
+	public void setPlaybackListener()
 	{
-		try
-		{
-			seekTo(position);
-			return RESULT_SUCCESS;
-		}
-		catch (IllegalStateException e)
-		{
-			NacUtility.printf("NacMediaPlayer : IllegalStateException : seekToWrapper()");
-			return RESULT_ILLEGAL_STATE_EXCEPTION;
-		}
+		this.getMediaPlayer().addListener(this);
 	}
 
 	/**
-	 * @return True if the media player should repeat, and False otherwise.
+	 * Set the level to keep the volume restricted at.
+	 *
+	 * @param  volume  A volume level.
 	 */
-	public boolean shouldRepeat()
+	public void setRestrictedVolumeLevel(int volume)
 	{
-		NacAudioAttributes attrs = this.getAudioAttributes();
-		return (attrs != null) && attrs.getRepeat();
+		this.mRestrictedVolumeLevel = volume;
 	}
 
 	/**
-	 * Start the media player.
+	 * Set the flag whether to restrict changing the volume or not.
+	 *
+	 * @param  restrict  Whether to restrict the volume or not.
 	 */
-	public int startWrapper()
+	public void setShouldRestrictVolume(boolean restrict)
 	{
-		try
-		{
-			start();
-			return RESULT_SUCCESS;
-		}
-		catch (IllegalStateException e)
-		{
-			NacUtility.printf("NacMediaPlayer : IllegalStateException : start()");
-			return RESULT_ILLEGAL_STATE_EXCEPTION;
-		}
+		this.mShouldRestrictVolume = restrict;
 	}
 
 	/**
-	 * Stop the media player
+	 * @return Whether to gain transient audio focus, when requesting audio focus,
+	 * or to gain regular focus.
 	 */
-	public int stopWrapper()
+	public boolean shouldGainTransientAudioFocus()
 	{
-		try
-		{
-			this.abandonAudioFocus();
-			this.cleanupHandler();
-			stop();
-			return RESULT_SUCCESS;
-		}
-		catch (IllegalStateException e)
-		{
-			NacUtility.printf("NacMediaPlayer : IllegalStateException : stop()");
-			return RESULT_ILLEGAL_STATE_EXCEPTION;
-		}
+		return this.mShouldGainTransientAudioFocus;
+	}
+
+	/**
+	 * @return Whether to restrict changing the volume or not.
+	 */
+	public boolean shouldRestrictVolume()
+	{
+		return this.mShouldRestrictVolume;
 	}
 
 	/**

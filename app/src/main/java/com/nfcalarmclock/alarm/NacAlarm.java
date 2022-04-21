@@ -166,6 +166,13 @@ public class NacAlarm
 	private int mTtsFrequency;
 
 	/**
+	 * Flag indicating whether to restrict changing the volume or not, when an
+	 * alarm is active.
+	 */
+	@ColumnInfo(name="should_restrict_volume", defaultValue="false")
+	private boolean mShouldRestrictVolume;
+
+	/**
 	 * Helper to build an alarm.
 	 */
 	@SuppressWarnings("UnusedReturnValue")
@@ -197,8 +204,8 @@ public class NacAlarm
 				.setMediaTitle("")
 				.setVolume(0)
 				.setAudioSource("Media")
-				.setName("");
-				// TODO: Default name?
+				.setName("")
+				.setShouldRestrictVolume(false);
 		}
 
 		/**
@@ -424,6 +431,20 @@ public class NacAlarm
 		}
 
 		/**
+		 * Set whether the volume should be restricted when an alarm is active.
+		 *
+		 * @param  restrict  True if the volume should be restricted, and False
+		 *                 otherwise.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setShouldRestrictVolume(boolean restrict)
+		{
+			this.getAlarm().setShouldRestrictVolume(restrict);
+			return this;
+		}
+
+		/**
 		 * Set the frequency at which to use TTS, in units of min.
 		 *
 		 * @param  freq  The TTS frequency.
@@ -529,6 +550,7 @@ public class NacAlarm
 		this.setName(input.readString());
 		this.setUseTts(input.readInt() != 0);
 		this.setTtsFrequency(input.readInt());
+		this.setShouldRestrictVolume(input.readInt() != 0);
 	}
 
 	/**
@@ -750,6 +772,9 @@ public class NacAlarm
 			.setVolume(this.getVolume())
 			.setAudioSource(this.getAudioSource())
 			.setName(this.getName())
+			.setUseTts(this.shouldUseTts())
+			.setTtsFrequency(this.getTtsFrequency())
+			.setShouldRestrictVolume(this.getShouldRestrictVolume())
 			.build();
 	}
 
@@ -947,6 +972,15 @@ public class NacAlarm
 	}
 
 	/**
+	 * @return Whether to restrict changing the volume or not, when an alarm is
+	 * active.
+	 */
+	public boolean getShouldRestrictVolume()
+	{
+		return this.mShouldRestrictVolume;
+	}
+
+	/**
 	 * @return The snooze count.
 	 */
 	public int getSnoozeCount()
@@ -1118,6 +1152,7 @@ public class NacAlarm
 		NacUtility.printf("Name         : %s", this.getName());
 		NacUtility.printf("Use Tts      : %b", this.shouldUseTts());
 		NacUtility.printf("Tts Freq     : %d", this.getTtsFrequency());
+		NacUtility.printf("Restrict Vol : %b", this.getShouldRestrictVolume());
 	}
 
 	/**
@@ -1275,6 +1310,15 @@ public class NacAlarm
 	}
 
 	/**
+	 * Set whether to restrict changing the volume or not, when an alarm is
+	 * active.
+	 */
+	public void setShouldRestrictVolume(boolean restrict)
+	{
+		this.mShouldRestrictVolume = restrict;
+	}
+
+	/**
 	 * Set the snooze count.
 	 */
 	public void setSnoozeCount(int count)
@@ -1364,6 +1408,15 @@ public class NacAlarm
 	{
 		return this.mRepeat;
 	}
+
+	/**
+	 * @return Whether to restrict changing the volume or not, when an alarm is
+	 * active.
+	 */
+	//public boolean shouldRestrictVolume()
+	//{
+	//	return this.mShouldRestrictVolume;
+	//}
 
 	/**
 	 * @return True if should use NFC, and False otherwise.
@@ -1521,6 +1574,7 @@ public class NacAlarm
 		output.writeString(this.getName());
 		output.writeInt(this.shouldUseTts() ? 1 : 0);
 		output.writeInt(this.getTtsFrequency());
+		output.writeInt(this.getShouldRestrictVolume() ? 1 : 0);
 	}
 
 	/**

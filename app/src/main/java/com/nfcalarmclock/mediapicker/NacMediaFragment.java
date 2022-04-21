@@ -11,6 +11,7 @@ import android.widget.Button;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.media2.player.MediaPlayer;
 
 import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.R;
@@ -21,6 +22,11 @@ import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.system.NacBundle;
 import com.nfcalarmclock.system.NacIntent;
+
+import java.util.List;
+
+// TODO: Create the MediaPlayer object, and only call release (cleanup) in
+// onDestroy.
 
 /**
  * Media fragment for ringtones and music files.
@@ -43,7 +49,7 @@ public class NacMediaFragment
 	/**
 	 * Media player.
 	 */
-	private NacMediaPlayer mPlayer;
+	private NacMediaPlayer mMediaPlayer;
 
 	/**
 	 * The initial selection flag.
@@ -58,17 +64,23 @@ public class NacMediaFragment
 
 		this.mAlarm = null;
 		this.mMediaPath = null;
-		this.mPlayer = null;
+		this.mMediaPlayer = null;
 		this.mInitialSelection = true;
 	}
 
 	/**
-	 * @return True if the media path matches the given path, and False otherwise.
+	 * Cleanup the media player.
 	 */
-	protected boolean isSelectedPath(String path)
+	protected void cleanupMediaPlayer()
 	{
-		String selectedPath = getMediaPath();
-		return !selectedPath.isEmpty() && selectedPath.equals(path);
+		NacMediaPlayer player = this.getMediaPlayer();
+
+		if (player != null)
+		{
+			player.release();
+
+			this.mMediaPlayer = null;
+		}
 	}
 
 	/**
@@ -114,7 +126,7 @@ public class NacMediaFragment
 	 */
 	protected NacMediaPlayer getMediaPlayer()
 	{
-		return this.mPlayer;
+		return this.mMediaPlayer;
 	}
 
 	/**
@@ -133,6 +145,15 @@ public class NacMediaFragment
 	public boolean isInitialSelection()
 	{
 		return this.mInitialSelection;
+	}
+
+	/**
+	 * @return True if the media path matches the given path, and False otherwise.
+	 */
+	protected boolean isSelectedPath(String path)
+	{
+		String selectedPath = getMediaPath();
+		return !selectedPath.isEmpty() && selectedPath.equals(path);
 	}
 
 	/**
@@ -200,17 +221,8 @@ public class NacMediaFragment
 	@Override
 	public void onPause()
 	{
-		this.releasePlayer();
+		this.cleanupMediaPlayer();
 		super.onPause();
-	}
-
-	/**
-	 */
-	@Override
-	public void onStart()
-	{
-		super.onStart();
-		this.setupMediaPlayer();
 	}
 
 	/**
@@ -225,39 +237,23 @@ public class NacMediaFragment
 	}
 
 	/**
-	 * Release the player.
 	 */
-	protected void releasePlayer()
+	@Override
+	public void onStart()
 	{
-		NacMediaPlayer player = this.getMediaPlayer();
-
-		if (player != null)
-		{
-			player.releaseWrapper();
-
-			this.mPlayer = null;
-		}
-	}
-
-	/**
-	 * @see #safePlay(Uri, boolean)
-	 */
-	protected int safePlay(Uri contentUri)
-	{
-		return this.safePlay(contentUri, true);
+		super.onStart();
+		this.setupMediaPlayer();
 	}
 
 	/**
 	 * Play audio from the media player safely.
 	 *
-	 * @param  contentUri  The Uri of the content to play.
-	 * @param  repeat      Whether the media player should repeat the media or
-	 *     not.
+	 * @param  uri  The Uri of the content to play.
 	 */
 	@SuppressWarnings("SameParameterValue")
-    protected int safePlay(Uri contentUri, boolean repeat)
+    protected int safePlay(Uri uri)
 	{
-		String path = contentUri.toString();
+		String path = uri.toString();
 
 		if (path.isEmpty() || !path.startsWith("content://"))
 		{
@@ -278,7 +274,7 @@ public class NacMediaFragment
 			}
 		}
 
-		player.play(contentUri, repeat);
+		player.playUri(uri);
 		return 0;
 	}
 
@@ -294,7 +290,7 @@ public class NacMediaFragment
 			player = this.setupMediaPlayer();
 		}
 
-		player.reset();
+		player.getMediaPlayer().stop();
 	}
 
 	/**
@@ -328,9 +324,12 @@ public class NacMediaFragment
 		Button cancel = root.findViewById(R.id.cancel);
 		Button ok = root.findViewById(R.id.ok);
 
+		// Set the color of the buttons
 		clear.setTextColor(shared.getThemeColor());
 		cancel.setTextColor(shared.getThemeColor());
 		ok.setTextColor(shared.getThemeColor());
+
+		// Set the on-click listeners
 		clear.setOnClickListener(this);
 		cancel.setOnClickListener(this);
 		ok.setOnClickListener(this);
@@ -342,10 +341,13 @@ public class NacMediaFragment
 	protected NacMediaPlayer setupMediaPlayer()
 	{
 		Context context = getContext();
-		int focus = AudioManager.AUDIOFOCUS_GAIN_TRANSIENT;
-		this.mPlayer = new NacMediaPlayer(context, focus);
+		NacMediaPlayer player = new NacMediaPlayer(context);
 
-		return this.mPlayer;
+		player.setGainTransientAudioFocus(true);
+
+		this.mMediaPlayer = player;
+
+		return this.mMediaPlayer;
 	}
 
 	/**

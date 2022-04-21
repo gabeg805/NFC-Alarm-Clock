@@ -1,10 +1,13 @@
 package com.nfcalarmclock.tts;
 
 import android.content.Context;
+//import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
+
+import com.google.android.exoplayer2.audio.AudioAttributes;
 
 import com.nfcalarmclock.media.NacAudioAttributes;
 import com.nfcalarmclock.media.NacAudioFocus;
@@ -223,9 +226,7 @@ public class NacTextToSpeech
 		this.mUtterance = new NacUtteranceListener(context, this, this);
 		this.mAudioAttributes = new NacAudioAttributes(context,
 			shared.getAudioSource());
-		int defaultFocus = AudioManager.AUDIOFOCUS_GAIN_TRANSIENT;
 
-		this.getAudioAttributes().setFocus(defaultFocus);
 		this.setOnSpeakingListener(listener);
 	}
 
@@ -408,14 +409,14 @@ public class NacTextToSpeech
 
 		if (this.isInitialized())
 		{
-			if(!NacAudioFocus.request(context, this, attrs))
+			if(!NacAudioFocus.requestGainTransient(context, this, attrs))
 			{
 				NacUtility.printf("Audio Focus TRANSIENT NOT Granted!");
 				return;
 			}
 
 			Bundle bundle = NacBundle.toBundle(attrs);
-			speech.setAudioAttributes(attrs.getAudioAttributes());
+			speech.setAudioAttributes(attrs.getAudioAttributes().getAudioAttributesV21());
 			speech.speak(message, TextToSpeech.QUEUE_FLUSH, bundle,
 				UTTERANCE_ID);
 		}

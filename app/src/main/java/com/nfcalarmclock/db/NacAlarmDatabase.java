@@ -40,14 +40,15 @@ import java.util.List;
 //@Database(version=1, exportSchema=true,
 //	entities={NacAlarm.class})
 //@TypeConverters({NacAlarmTypeConverters.class})
-@Database(version=4,
+@Database(version=5,
 		entities={NacAlarm.class, NacAlarmCreatedStatistic.class,
 		NacAlarmDeletedStatistic.class, NacAlarmDismissedStatistic.class,
 		NacAlarmMissedStatistic.class, NacAlarmSnoozedStatistic.class},
 	autoMigrations={
 			@AutoMigration(from=1, to=2),
 			@AutoMigration(from=2, to=3, spec=NacAlarmDatabase.ClearAllStatisticsMigration.class),
-			@AutoMigration(from=3, to=4)
+			@AutoMigration(from=3, to=4),
+			@AutoMigration(from=4, to=5)
 		})
 @TypeConverters({NacAlarmTypeConverters.class,
 	NacStatisticTypeConverters.class})
@@ -295,7 +296,8 @@ public abstract class NacAlarmDatabase
 		{
 			a.setId(0);
 			getExecutor().execute(() -> dao.insert(a));
-			NacScheduler.update(context, a);
+			// TODO: Wouldn't this line cause the same issue as the 8am alarm?
+			//NacScheduler.update(context, a);
 		}
 	}
 

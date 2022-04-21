@@ -25,11 +25,23 @@ import java.lang.System;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
+import androidx.media2.common.SessionPlayer;
+import androidx.media2.player.MediaPlayer;
+import androidx.media2.session.MediaSession;
+import androidx.media2.session.MediaSessionService;
+
 /**
  */
 public class NacActiveAlarmService
-	extends Service
+	extends MediaSessionService
+	//extends Service
 {
+
+	@Override
+	public MediaSession onGetSession(MediaSession.ControllerInfo controllerInfo)
+	{
+		return this.getFixedVolumeController().getMediaSession();
+	}
 
 	/**
 	 * Action to start the service.
@@ -474,11 +486,11 @@ public class NacActiveAlarmService
 			this.updateAlarm();
 			this.waitForAutoDismiss();
 
-			// Handle any media buttons that were passed in
-			this.cleanupFixedVolumeController();
+			//// Handle any media buttons that were passed in
+			//this.cleanupFixedVolumeController();
 
-			Context context = getApplicationContext();
-			this.mFixedVolumeController = new NacFixedVolumeController(context);
+			//Context context = getApplicationContext();
+			//this.mFixedVolumeController = new NacFixedVolumeController(context);
 
 			return START_STICKY;
 		}
@@ -610,6 +622,21 @@ public class NacActiveAlarmService
 		this.mWakeupProcess = wakeup;
 
 		wakeup.start();
+
+		NacFixedVolumeController controller = this.getFixedVolumeController();
+		//SessionPlayer mediaPlayer = wakeup.getMediaPlayer().getMediaPlayer();
+		//MediaPlayer mediaPlayer = wakeup.getMediaPlayer().getMediaPlayer();
+
+		//if (controller == null)
+		//{
+		//	Context context = getApplicationContext();
+		//	this.mFixedVolumeController = new NacFixedVolumeController(context, mediaPlayer);
+		//}
+		//else
+		//{
+		//	controller.getMediaSession().updatePlayer(mediaPlayer);
+		//}
+
 	}
 
 	/**

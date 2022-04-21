@@ -12,14 +12,14 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-	compileSdkVersion 30
+	compileSdkVersion 31
 
 	defaultConfig {
 		applicationId "com.nfcalarmclock"
 		minSdkVersion 21
-		targetSdkVersion 30
-		versionCode 295
-		versionName "10.5.3"
+		targetSdkVersion 31
+		versionCode 296
+		versionName "10.5.4"
 
 		javaCompileOptions {
 			annotationProcessorOptions {
@@ -86,6 +86,7 @@ repositories {
 
 dependencies {
 	def room_version = "2.4.0-alpha01"
+	def media2_version = "1.2.1"
 
 	//implementation fileTree(dir: 'libs', include: ['*.jar'])
 	implementation 'androidx.annotation:annotation:1.2.0'
@@ -105,6 +106,19 @@ dependencies {
 
 	// Media controls (volume up/down)
 	implementation 'androidx.media:media:1.4.3'
+	implementation "androidx.mediarouter:mediarouter:1.2.6"
+
+	// Interacting with MediaSessions
+	implementation "androidx.media2:media2-session:$media2_version"
+	// optional - UI widgets for VideoView and MediaControlView
+	implementation "androidx.media2:media2-widget:$media2_version"
+	// optional - Implementation of a SessionPlayer
+	implementation "androidx.media2:media2-player:$media2_version"
+	implementation 'com.google.android.exoplayer:exoplayer:2.17.1'
+
+	// Listenable Future
+	implementation "com.google.guava:guava:31.0.1-android"
+
 
 	// Import the Firebase BoM
 	implementation platform('com.google.firebase:firebase-bom:28.2.0')

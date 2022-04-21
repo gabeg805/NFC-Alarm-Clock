@@ -3,6 +3,7 @@
 
 	<string-array name="audio_options">
 		<item>Audio source</item>
+		<item>Restrict volume</item>
 		<item>Text-to-speech</item>
 	</string-array>
 

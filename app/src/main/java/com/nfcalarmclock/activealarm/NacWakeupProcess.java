@@ -6,10 +6,12 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Vibrator;
+import android.os.VibratorManager;
 import android.os.VibrationEffect;
 
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.media.NacAudioAttributes;
+import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.media.NacMediaPlayer;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
@@ -120,8 +122,7 @@ public class NacWakeupProcess
 
 		if (player != null)
 		{
-			player.resetWrapper();
-			player.releaseWrapper();
+			player.release();
 		}
 
 		this.mPlayer = null;
@@ -172,6 +173,7 @@ public class NacWakeupProcess
 	{
 		NacAlarm thisAlarm = this.getAlarm();
 		NacAlarm procAlarm = process.getAlarm();
+
 		return thisAlarm.equals(procAlarm);
 	}
 
@@ -194,7 +196,7 @@ public class NacWakeupProcess
 	/**
 	 * @return The media player.
 	 */
-	private NacMediaPlayer getMediaPlayer()
+	public NacMediaPlayer getMediaPlayer()
 	{
 		return this.mPlayer;
 	}
@@ -248,7 +250,18 @@ public class NacWakeupProcess
 	@Override
 	public void onDoneSpeaking(NacTextToSpeech tts, NacAudioAttributes attrs)
 	{
-		this.startNormal();
+		Context context = this.getContext();
+		Looper looper = context.getMainLooper();
+		Handler handler = new Handler(looper);
+
+		// Need to execute media player operations on the main thread
+		handler.post(new Runnable() {
+			@Override
+			public void run()
+			{
+				startNormal();
+			}
+		});
 	}
 
 	/**
@@ -270,23 +283,33 @@ public class NacWakeupProcess
 	private void playMusic()
 	{
 		NacMediaPlayer player = this.getMediaPlayer();
+
+		// Unable to play music
 		if ((player == null) || !this.canPlayMusic())
 		{
 			return;
 		}
 
-		NacSharedPreferences shared = this.getSharedPreferences();
-		NacAlarm alarm = this.getAlarm();
-
-		// TODO: Might want to override whats playing when waking up.
-		if (!player.wasPlaying())
+		// Continue playing what was being played before
+		if (player.wasPlaying())
 		{
-			player.reset();
-			player.play(alarm, true, shared.getShuffle());
+			player.play();
 		}
+		// TODO: Might want to override whats playing when waking up.
 		else
 		{
-			player.startWrapper();
+			NacSharedPreferences shared = this.getSharedPreferences();
+			NacAlarm alarm = this.getAlarm();
+
+			// Set shuffle mode (can be set or not set) based on the preference
+			if (NacMedia.isDirectory(alarm.getMediaType()))
+			{
+				player.getMediaPlayer().setShuffleModeEnabled(shared.getShuffle());
+			}
+
+			// TODO: Maybe call reset by NOT default
+			//player.getMediaPlayer().stop();
+			player.playAlarm(alarm);
 		}
 	}
 
@@ -309,22 +332,34 @@ public class NacWakeupProcess
 		if (this.canUseTts())
 		{
 			NacTextToSpeech speech = new NacTextToSpeech(context, this);
+			Looper looper = context.getMainLooper();
+
 			speech.getAudioAttributes().merge(alarm);
 
 			this.mSpeech = speech;
-			this.mSpeakHandler = new Handler(Looper.getMainLooper());
+			this.mSpeakHandler = new Handler(looper);
 		}
 	}
 
 	/**
 	 * Setup the phone vibrator.
 	 */
+	@SuppressWarnings("deprecation")
 	private void setupVibrator(Context context)
 	{
 		if (this.canVibrate())
 		{
-			this.mVibrator = (Vibrator) context.getSystemService(
-				Context.VIBRATOR_SERVICE);
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+			{
+				VibratorManager manager = (VibratorManager) context.getSystemService(
+					Context.VIBRATOR_MANAGER_SERVICE);
+				this.mVibrator = manager.getDefaultVibrator();
+			}
+			else
+			{
+				this.mVibrator = (Vibrator) context.getSystemService(
+					Context.VIBRATOR_SERVICE);
+			}
 		}
 	}
 
@@ -339,7 +374,10 @@ public class NacWakeupProcess
 		if (player != null)
 		{
 			NacAudioAttributes attrs = player.getAudioAttributes();
+
+			player.removePlaybackListener();
 			attrs.merge(alarm).setVolume();
+			player.setPlaybackListener();
 		}
 	}
 
@@ -427,27 +465,29 @@ public class NacWakeupProcess
 	@TargetApi(Build.VERSION_CODES.O)
 	public void vibrate()
 	{
-		if (!this.canVibrate())
+		Vibrator vibrator = this.getVibrator();
+		long duration = 500;
+		long[] pattern = {0, duration, 2*duration};
+		//long[] pattern = {duration, duration, duration};
+		//long[] pattern = {0, duration, duration};
+
+		// Unable to vibrate
+		if (!this.canVibrate() || (vibrator == null))
 		{
 			return;
 		}
 
-		Vibrator vibrator = this.getVibrator();
-		long duration = 500;
-		long[] pattern = {0, duration, duration};
+		// Cancel the previous vibration, if any
+		vibrator.cancel();
 
-		if (vibrator != null)
+		// Vibrate
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{
-			vibrator.cancel();
-
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-			{
-				vibrator.vibrate(VibrationEffect.createWaveform(pattern, 0));
-			}
-			else
-			{
-				vibrator.vibrate(pattern, 0);
-			}
+			vibrator.vibrate(VibrationEffect.createWaveform(pattern, 0));
+		}
+		else
+		{
+			vibrator.vibrate(pattern, 0);
 		}
 	}
 
