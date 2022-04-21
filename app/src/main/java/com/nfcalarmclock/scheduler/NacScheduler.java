@@ -87,9 +87,16 @@ public class NacScheduler
 	 */
 	public static void cancel(Context context, int id)
 	{
+		// Determine the pending intent flags
+		int flags = PendingIntent.FLAG_NO_CREATE;
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		{
+			flags |= PendingIntent.FLAG_IMMUTABLE;
+		}
+
 		Intent intent = new Intent(context, NacActiveAlarmBroadcastReceiver.class);
-		PendingIntent pending = PendingIntent.getBroadcast(context, id, intent,
-			PendingIntent.FLAG_NO_CREATE);
+		PendingIntent pending = PendingIntent.getBroadcast(context, id, intent, flags);
 
 		if (pending != null)
 		{
