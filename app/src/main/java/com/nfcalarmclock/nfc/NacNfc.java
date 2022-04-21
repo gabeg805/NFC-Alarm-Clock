@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.os.Build;
 import android.provider.Settings;
 
 import com.nfcalarmclock.alarm.NacAlarm;
@@ -167,13 +168,25 @@ public class NacNfc
 	public static void start(Activity activity, Intent intent)
 	{
 		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(activity);
+
+		// NFC adapter is not present or not enabled
 		if ((nfcAdapter == null) || !NacNfc.isEnabled(activity))
 		{
 			return;
 		}
 
+		// Determine the pending intent flags
+		int flags = 0;
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		{
+			flags |= PendingIntent.FLAG_IMMUTABLE;
+		}
+
+		// Create the pending intent
 		PendingIntent pending = PendingIntent.getActivity(activity, 0, intent, 0);
 
+		// Enable NFC foreground dispatch
 		try
 		{
 			nfcAdapter.enableForegroundDispatch(activity, pending, null, null);

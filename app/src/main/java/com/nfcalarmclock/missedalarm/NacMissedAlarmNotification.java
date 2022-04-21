@@ -134,7 +134,15 @@ public class NacMissedAlarmNotification
 		Context context = this.getContext();
 		Intent intent = NacIntent.createMainActivity(context);
 
-		return PendingIntent.getActivity(context, 0, intent, 0);
+		// Determine the pending intent flags
+		int flags = 0;
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		{
+			flags |= PendingIntent.FLAG_IMMUTABLE;
+		}
+
+		return PendingIntent.getActivity(context, 0, intent, flags);
 	}
 
 	/**

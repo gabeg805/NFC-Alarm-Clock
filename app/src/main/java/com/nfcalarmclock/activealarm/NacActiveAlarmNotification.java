@@ -135,8 +135,15 @@ public class NacActiveAlarmNotification
 		long id = (alarm != null) ? alarm.getId() : 0;
 		Intent intent = NacIntent.createAlarmActivity(context, alarm);
 
-		return PendingIntent.getActivity(context, (int)id, intent,
-			PendingIntent.FLAG_UPDATE_CURRENT);
+		// Determine the pending intent flags
+		int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		{
+			flags |= PendingIntent.FLAG_IMMUTABLE;
+		}
+
+		return PendingIntent.getActivity(context, (int)id, intent, flags);
 	}
 
 	/**

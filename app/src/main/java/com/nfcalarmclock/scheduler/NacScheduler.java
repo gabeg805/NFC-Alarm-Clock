@@ -5,6 +5,7 @@ import android.app.AlarmManager.AlarmClockInfo;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmRepository;
@@ -35,13 +36,29 @@ public class NacScheduler
 
 		long id = alarm.getId();
 		long millis = day.getTimeInMillis();
+
+		// Determine the pending intent flags
+		int showFlags = 0;
+		int operationFlags = PendingIntent.FLAG_CANCEL_CURRENT;
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		{
+			showFlags |= PendingIntent.FLAG_IMMUTABLE;
+			operationFlags |= PendingIntent.FLAG_IMMUTABLE;
+		}
+
+		// Show details of the alarm clock
+		Intent showIntent = new Intent(context, NacMainActivity.class);
+		PendingIntent showPendingIntent = PendingIntent.getActivity(context, (int)id,
+			showIntent, showFlags);
+
+		// Operation to perform the alarm is active
 		Intent operationIntent = NacIntent.toIntent(context,
 			NacActiveAlarmBroadcastReceiver.class, alarm);
 		PendingIntent operationPendingIntent = PendingIntent.getBroadcast(
-			context, (int)id, operationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-		Intent showIntent = new Intent(context, NacMainActivity.class);
-		PendingIntent showPendingIntent = PendingIntent.getActivity(context, (int)id,
-			showIntent, 0);
+			context, (int)id, operationIntent, operationFlags);
+
+		// Set the alarm
 		AlarmClockInfo clock = new AlarmClockInfo(millis, showPendingIntent);
 		AlarmManager manager = NacScheduler.getAlarmManager(context);
 
