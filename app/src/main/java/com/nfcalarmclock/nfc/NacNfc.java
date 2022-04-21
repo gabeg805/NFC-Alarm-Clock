@@ -184,7 +184,7 @@ public class NacNfc
 		}
 
 		// Create the pending intent
-		PendingIntent pending = PendingIntent.getActivity(activity, 0, intent, 0);
+		PendingIntent pending = PendingIntent.getActivity(activity, 0, intent, flags);
 
 		// Enable NFC foreground dispatch
 		try
