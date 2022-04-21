@@ -171,15 +171,25 @@ public class NacActiveAlarmNotification
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
 
+		// NFC should be used so show the active alarm activity pending intent
 		if (NacNfc.shouldUseNfc(context, alarm))
 		{
 			return activityPendingIntent;
 		}
 
+		// Create an intent to dismiss the active alarm service
 		Intent intent = NacIntent.dismissForegroundService(context, alarm);
 
-		return PendingIntent.getService(context, 0, intent,
-			PendingIntent.FLAG_CANCEL_CURRENT);
+		// Determine the pending intent flags
+		int flags = PendingIntent.FLAG_CANCEL_CURRENT;
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		{
+			flags |= PendingIntent.FLAG_IMMUTABLE;
+		}
+
+		// Create the pending intent
+		return PendingIntent.getService(context, 0, intent, flags);
 	}
 
 	/**
@@ -278,8 +288,16 @@ public class NacActiveAlarmNotification
 		NacAlarm alarm = this.getAlarm();
 		Intent intent = NacIntent.snoozeForegroundService(context, alarm);
 
-		return PendingIntent.getService(context, 0, intent,
-			PendingIntent.FLAG_CANCEL_CURRENT);
+		// Determine the pending intent flags
+		int flags = PendingIntent.FLAG_CANCEL_CURRENT;
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		{
+			flags |= PendingIntent.FLAG_IMMUTABLE;
+		}
+
+		// Create the pending intent
+		return PendingIntent.getService(context, 0, intent, flags);
 	}
 
 	/**
