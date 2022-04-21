@@ -92,6 +92,7 @@ public class NacNfc
 	{
 		if (nfcTag == null)
 		{
+			NacUtility.printf("parseId! NFC tag is null");
 			return null;
 		}
 
@@ -99,6 +100,7 @@ public class NacNfc
 
 		if (srcId == null)
 		{
+			NacUtility.printf("parseId! Source id is null");
 			return "";
 		}
 
@@ -112,6 +114,7 @@ public class NacNfc
 			id.append(buffer);
 		}
 
+		NacUtility.printf("parseId! %s.", id.toString());
 		return id.toString();
 	}
 

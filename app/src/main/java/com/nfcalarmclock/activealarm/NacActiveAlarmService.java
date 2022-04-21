@@ -25,23 +25,11 @@ import java.lang.System;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
-//import androidx.media2.common.SessionPlayer;
-//import androidx.media2.player.MediaPlayer;
-//import androidx.media2.session.MediaSession;
-//import androidx.media2.session.MediaSessionService;
-
 /**
  */
 public class NacActiveAlarmService
-	//extends MediaSessionService
 	extends Service
 {
-
-	//@Override
-	//public MediaSession onGetSession(MediaSession.ControllerInfo controllerInfo)
-	//{
-	//	return this.getFixedVolumeController().getMediaSession();
-	//}
 
 	/**
 	 * Action to start the service.
@@ -114,11 +102,6 @@ public class NacActiveAlarmService
 	private long mStartTime;
 
 	/**
-	 * Fixed volume controller.
-	 */
-	//private NacFixedVolumeController mFixedVolumeController;
-
-	/**
 	 * Automatically dismiss the alarm.
 	 *
 	 * This will finish the service.
@@ -141,7 +124,6 @@ public class NacActiveAlarmService
 		this.cleanupWakeupProcess();
 		this.cleanupWakeLock();
 		this.cleanupAutoDismiss();
-		//this.cleanupFixedVolumeController();
 	}
 
 	/**
@@ -180,19 +162,6 @@ public class NacActiveAlarmService
 		this.mAutoDismissHandler = null;
 		this.mAutoDismissRunnable = null;
 	}
-
-	/**
-	 * Cleanup the fixed volume controller.
-	 */
-	//private void cleanupFixedVolumeController()
-	//{
-	//	NacFixedVolumeController volumeController = this.getFixedVolumeController();
-
-	//	if (volumeController != null)
-	//	{
-	//		volumeController.release();
-	//	}
-	//}
 
 	/**
 	 * Cleanup the wake lock.
@@ -351,14 +320,6 @@ public class NacActiveAlarmService
 	}
 
 	/**
-	 * @return The media session.
-	 */
-	//private NacFixedVolumeController getFixedVolumeController()
-	//{
-	//	return this.mFixedVolumeController;
-	//}
-
-	/**
 	 * @return The shared constants.
 	 */
 	private NacSharedConstants getSharedConstants()
@@ -441,7 +402,6 @@ public class NacActiveAlarmService
 		this.mAlarm = null;
 		this.mWakeupProcess = null;
 		this.mWakeLock = null;
-		//this.mFixedVolumeController = new NacFixedVolumeController(context);
 		//this.mStartTime = System.currentTimeMillis();
 	}
 
@@ -485,12 +445,6 @@ public class NacActiveAlarmService
 			this.setIsAlarmActive(true);
 			this.updateAlarm();
 			this.waitForAutoDismiss();
-
-			//// Handle any media buttons that were passed in
-			//this.cleanupFixedVolumeController();
-
-			//Context context = getApplicationContext();
-			//this.mFixedVolumeController = new NacFixedVolumeController(context);
 
 			return START_STICKY;
 		}
@@ -622,21 +576,6 @@ public class NacActiveAlarmService
 		this.mWakeupProcess = wakeup;
 
 		wakeup.start();
-
-		//NacFixedVolumeController controller = this.getFixedVolumeController();
-		//SessionPlayer mediaPlayer = wakeup.getMediaPlayer().getMediaPlayer();
-		//MediaPlayer mediaPlayer = wakeup.getMediaPlayer().getMediaPlayer();
-
-		//if (controller == null)
-		//{
-		//	Context context = getApplicationContext();
-		//	this.mFixedVolumeController = new NacFixedVolumeController(context, mediaPlayer);
-		//}
-		//else
-		//{
-		//	controller.getMediaSession().updatePlayer(mediaPlayer);
-		//}
-
 	}
 
 	/**
