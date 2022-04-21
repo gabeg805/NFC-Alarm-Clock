@@ -52,9 +52,7 @@ public final class NacRateMyApp
 					// reviewed or not, or even whether the review dialog was shown.
 					// 
 					// No matter the result, just treat it as rated.
-					flow.addOnCompleteListener(ignored -> {
-						shared.ratedRateMyApp();
-					});
+					flow.addOnCompleteListener(ignored -> shared.ratedRateMyApp());
 				}
 			});
 

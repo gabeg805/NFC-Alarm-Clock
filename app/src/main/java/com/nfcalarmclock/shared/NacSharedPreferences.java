@@ -278,6 +278,16 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * Edit the default should restrict volume value when an alarm is created.
+	 */
+	@SuppressWarnings("unused")
+	public void editShouldRestrictVolume(boolean shouldRestrict)
+	{
+		String key = this.getKeys().getShouldRestrictVolume();
+		this.saveBoolean(key, shouldRestrict, false);
+	}
+
+	/**
 	 * Edit the current snooze count for an alarm with the given ID.
 	 */
 	public void editSnoozeCount(long id, int count)
@@ -366,7 +376,6 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getUseNfc();
 		this.saveBoolean(key, useNfc, false);
-
 	}
 
 	/**
@@ -869,6 +878,17 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getShouldRefreshMainActivity();
 		boolean value = this.getDefaults().getShouldRefreshMainActivity();
+		return this.getBoolean(key, value);
+	}
+
+	/**
+	 * @return Whether volume should be restricted or not.
+	 */
+	public boolean getShouldRestrictVolume()
+	{
+		String key = this.getKeys().getShouldRestrictVolume();
+		boolean value = this.getDefaults().getShouldRestrictVolume();
+
 		return this.getBoolean(key, value);
 	}
 

@@ -29,6 +29,7 @@
 	<string name="alarm_audio_source_key">pref_audio_source</string>
 	<string name="speak_to_me_key">pref_speak_to_me</string>
 	<string name="speak_frequency_key">pref_speak_frequency</string>
+	<string name="alarm_should_restrict_volume_key">pref_should_restrict_volume</string>
 
 	<string name="appearance_setting_key">pref_screen_appearance</string>
 	<string name="theme_color_key">pref_theme_color</string>

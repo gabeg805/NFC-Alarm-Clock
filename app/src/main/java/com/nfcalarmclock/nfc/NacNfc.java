@@ -90,23 +90,24 @@ public class NacNfc
 	 */
 	public static String parseId(Tag nfcTag)
 	{
+		// NFC tag is not defined
 		if (nfcTag == null)
 		{
-			NacUtility.printf("parseId! NFC tag is null");
 			return null;
 		}
 
 		byte[] srcId = nfcTag.getId();
 
+		// Unable to find an ID on the NFC tag
 		if (srcId == null)
 		{
-			NacUtility.printf("parseId! Source id is null");
 			return "";
 		}
 
 		StringBuilder id = new StringBuilder();
 		char[] buffer = new char[2];
 
+		// Compile the NFC tag ID
 		for (byte b : srcId)
 		{
 			buffer[0] = Character.forDigit((b >>> 4) & 0x0F, 16);
@@ -114,7 +115,6 @@ public class NacNfc
 			id.append(buffer);
 		}
 
-		NacUtility.printf("parseId! %s.", id.toString());
 		return id.toString();
 	}
 

@@ -124,16 +124,9 @@ public class NacActiveAlarmActivity
 		NacAlarm alarm = this.getAlarm();
 		NacNfcTag tag = new NacNfcTag(alarm, intent);
 
-		NacUtility.printf("dismissFromNfcScan! %s || %s", intent.getAction(), NacNfc.parseId(intent));
-
 		if (tag.check(this))
 		{
-			NacUtility.printf("Check passed! Trying to dismiss");
 			NacContext.dismissForegroundServiceWithNfc(this, alarm);
-		}
-		else
-		{
-			NacUtility.printf("Check FAILED");
 		}
 	}
 
@@ -226,7 +219,6 @@ public class NacActiveAlarmActivity
 	@Override
 	protected void onNewIntent(Intent intent)
 	{
-		NacUtility.printf("onNewIntent! %s || %s", intent.getAction(), NacNfc.parseId(intent));
 		setIntent(intent);
 		this.dismissFromNfcScan();
 	}

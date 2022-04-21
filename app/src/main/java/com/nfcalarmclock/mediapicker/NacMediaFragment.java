@@ -3,7 +3,6 @@ package com.nfcalarmclock.mediapicker;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -22,8 +21,6 @@ import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.system.NacBundle;
 import com.nfcalarmclock.system.NacIntent;
-
-import java.util.List;
 
 // TODO: Create the MediaPlayer object, and only call release (cleanup) in
 // onDestroy.

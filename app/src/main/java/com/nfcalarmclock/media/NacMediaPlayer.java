@@ -15,13 +15,9 @@ import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.alarm.NacAlarm;
 // TODO: This depenedency sort of makes it not a util/ but more a main
 // component of the app
-import com.nfcalarmclock.filebrowser.NacFileTree;
 import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.shared.NacSharedConstants;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,7 +25,6 @@ import java.util.List;
  */
 @SuppressWarnings({"RedundantSuppression", "UnusedReturnValue"})
 public class NacMediaPlayer
-	//extends MediaPlayer
 	implements AudioManager.OnAudioFocusChangeListener,
 		Player.Listener
 {
@@ -40,9 +35,7 @@ public class NacMediaPlayer
 	@Override
 	public void onDeviceVolumeChanged(int volume, boolean muted)
 	{
-		NacUtility.printf("On Device Volume Changed! %d || %d", volume, this.getMediaPlayer().getDeviceVolume());
-
-		// Maybe change this to AudioManager?
+		// Restrict changing the volume, if that is desired
 		if (this.shouldRestrictVolume())
 		{
 			this.getMediaPlayer().setDeviceVolume(this.getRestrictedVolumeLevel());
@@ -62,30 +55,6 @@ public class NacMediaPlayer
 	//		NacUtility.printf("onCurrentMediaItemChanged!");
 	//		mediaPlayer.pause();
 	//		getHandler().postDelayed(mediaPlayer::play, 500);
-	//	}
-
-	//	/**
-	//	 * Called when a single media item completes.
-	//	 *
-	//	 * This is primarily used with a regular song/ringtone. When it completes,
-	//	 * seek to the beginning and delay 500 ms until playing.
-	//	 */
-	//	@Override
-	//	public void onPlaybackCompleted(SessionPlayer mediaPlayer)
-	//	{
-	//		NacUtility.printf("onPlaybackCompleted!");
-	//		// Do nothing. Repeat is not set
-	//		if (mediaPlayer.getRepeatMode() == MediaPlayer.REPEAT_MODE_NONE)
-	//		{
-	//			return;
-	//		}
-
-	//		// Regular song
-	//		mediaPlayer.seekTo(0);
-	//		getHandler().postDelayed(mediaPlayer::play, 500);
-
-	//		//Context context = this.getContext();
-	//		//NacAudioFocus.abandon(context, this);
 	//	}
 
 	/**
@@ -335,7 +304,6 @@ public class NacMediaPlayer
 
 		// Merge alarm with audio attributes
 		attr.merge(alarm);
-		NacUtility.printf("To stream volume : %d", attr.toStreamVolume());
 
 		// Determine whether to restrict volume when media is played
 		this.setShouldRestrictVolume(alarm.getShouldRestrictVolume());

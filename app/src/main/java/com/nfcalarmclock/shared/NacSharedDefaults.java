@@ -256,6 +256,14 @@ public class NacSharedDefaults
 	}
 
 	/**
+	 * @return Should restrict volume.
+	 */
+	public boolean getShouldRestrictVolume()
+	{
+		return this.getBoolean(R.bool.default_should_restrict_volume);
+	}
+
+	/**
 	 * @return The show alarm info.
 	 */
 	public boolean getShowAlarmInfo()

@@ -87,6 +87,7 @@
 	<string name="title_color">Elige un color</string>
 	<string name="title_audio_option">Seleccione una opci?n de audio</string>
 	<string name="title_audio_source">Seleccione una fuente de audio</string>
+	<string name="title_restrict_volume">Elige restringir el volumen</string>
 	<string name="title_tts">Seleccione opciones de texto-a-voz</string>
 	<string name="title_next_alarm_format">Selecciona un estilo</string>
 	<string name="title_speak_frequency">Seleccione la frequencia de hablar</string>
@@ -365,6 +366,11 @@
 
 	<!-- Speak frequency -->
 	<string name="speak_frequency">Frequencia de hablar</string>
+
+
+	<!-- Restrict volume -->
+	<string name="restrict_volume_true">No podrá cambiar el volumen cuando la alarma esté activa. (Experimental)</string>
+	<string name="restrict_volume_false">El volumen se puede cambiar libremente cuando la alarm está activa.</string>
 
 
 

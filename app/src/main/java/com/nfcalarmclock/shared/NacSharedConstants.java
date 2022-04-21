@@ -798,6 +798,14 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Restrict volume title.
+	 */
+	public String getTitleRestrictVolume()
+	{
+		return this.getString(R.string.title_restrict_volume);
+	}
+
+	/**
 	 * @return Scan a specific NFC tag title.
 	 */
 	public String getTitleScanNfcTag()

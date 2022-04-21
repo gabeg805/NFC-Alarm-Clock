@@ -1,20 +1,13 @@
 package com.nfcalarmclock.nfc;
 
-import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.nfc.NfcAdapter;
 import android.nfc.Tag;
-import android.provider.Settings;
 
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.nfc.NacNfc;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.util.NacUtility;
-
-import java.lang.IllegalStateException;
-import java.lang.SecurityException;
 
 /**
  */

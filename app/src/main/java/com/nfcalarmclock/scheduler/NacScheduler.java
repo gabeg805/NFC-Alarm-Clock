@@ -13,7 +13,6 @@ import com.nfcalarmclock.activealarm.NacActiveAlarmBroadcastReceiver;
 import com.nfcalarmclock.main.NacMainActivity;
 import com.nfcalarmclock.system.NacCalendar;
 import com.nfcalarmclock.system.NacIntent;
-import com.nfcalarmclock.util.NacUtility;
 
 import java.util.Calendar;
 import java.util.List;

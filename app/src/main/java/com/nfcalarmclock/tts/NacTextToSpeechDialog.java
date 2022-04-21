@@ -1,7 +1,5 @@
 package com.nfcalarmclock.tts;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.res.ColorStateList;
@@ -11,6 +9,8 @@ import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.material.checkbox.MaterialCheckBox;
 
@@ -153,6 +153,7 @@ public class NacTextToSpeechDialog
 	}
 
 	/**
+	 * Called when the dialog is created.
 	 */
 	@NonNull
 	@Override
@@ -172,6 +173,7 @@ public class NacTextToSpeechDialog
 	}
 
 	/**
+	 * Called when the check box is clicked.
 	 */
 	@Override
 	public void onClick(View view)

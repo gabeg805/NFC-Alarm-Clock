@@ -25,7 +25,7 @@ import java.util.List;
 
 /**
  */
-public class NacAlarmAudioSourceDialog
+public class NacAudioSourceDialog
 	extends DialogFragment
 {
 
@@ -41,7 +41,7 @@ public class NacAlarmAudioSourceDialog
 	/**
 	 * Tag for the class.
 	 */
-	public static final String TAG = "NacAlarmAudioSourceDialog";
+	public static final String TAG = "NacAudioSourceDialog";
 
 	/**
 	 * Default audio source.

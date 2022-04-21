@@ -312,6 +312,14 @@ public class NacSharedKeys
 	}
 
 	/**
+	 * @return The should restrict volume key.
+	 */
+	public String getShouldRestrictVolume()
+	{
+		return this.getString(R.string.alarm_should_restrict_volume_key);
+	}
+
+	/**
 	 * @return The alarm information key.
 	 */
 	public String getShowAlarmInfo()

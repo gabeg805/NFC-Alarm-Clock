@@ -26,33 +26,33 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmViewModel;
-import com.nfcalarmclock.shutdown.NacShutdownBroadcastReceiver;
-import com.nfcalarmclock.media.NacMedia;
-import com.nfcalarmclock.mediapicker.NacMediaActivity;
 import com.nfcalarmclock.audiooptions.NacAlarmAudioOptionsDialog;
-import com.nfcalarmclock.audiosource.NacAlarmAudioSourceDialog;
-import com.nfcalarmclock.tts.NacTextToSpeechDialog;
+import com.nfcalarmclock.audiosource.NacAudioSourceDialog;
 import com.nfcalarmclock.card.NacCardAdapter;
 import com.nfcalarmclock.card.NacCardAdapterLiveData;
 import com.nfcalarmclock.card.NacCardHolder;
 import com.nfcalarmclock.card.NacCardTouchHelper;
-import com.nfcalarmclock.util.dialog.NacDialog;
-import com.nfcalarmclock.util.NacUtility;
-import com.nfcalarmclock.snackbar.NacSnackbar;
+import com.nfcalarmclock.media.NacMedia;
+import com.nfcalarmclock.mediapicker.NacMediaActivity;
 import com.nfcalarmclock.nfc.NacNfc;
 import com.nfcalarmclock.nfc.NacNfcTag;
 import com.nfcalarmclock.nfc.NacScanNfcTagDialog;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.ratemyapp.NacRateMyApp;
+import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog;
 import com.nfcalarmclock.settings.NacSettingsActivity;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
+import com.nfcalarmclock.snackbar.NacSnackbar;
+import com.nfcalarmclock.shutdown.NacShutdownBroadcastReceiver;
 import com.nfcalarmclock.statistics.NacAlarmStatisticRepository;
 import com.nfcalarmclock.system.NacCalendar;
 import com.nfcalarmclock.system.NacContext;
 import com.nfcalarmclock.system.NacIntent;
-import com.nfcalarmclock.scheduler.NacScheduler;
+import com.nfcalarmclock.tts.NacTextToSpeechDialog;
 import com.nfcalarmclock.upcomingalarm.NacUpcomingAlarmNotification;
+import com.nfcalarmclock.util.dialog.NacDialog;
+import com.nfcalarmclock.util.NacUtility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +82,8 @@ public class NacMainActivity
         NacDialog.OnCancelListener,
 		NacDialog.OnDismissListener,
         NacAlarmAudioOptionsDialog.OnAudioOptionClickedListener,
-        NacAlarmAudioSourceDialog.OnAudioSourceSelectedListener,
+        NacAudioSourceDialog.OnAudioSourceSelectedListener,
+		NacRestrictVolumeDialog.OnRestrictVolumeListener,
 		NacTextToSpeechDialog.OnTextToSpeechOptionsSelectedListener
 {
 
@@ -589,22 +590,7 @@ public class NacMainActivity
 				this.showAudioSourceDialog();
 				break;
 			case 1:
-				NacAlarm alarm = this.getAudioOptionsAlarm();
-				boolean shouldRestrict = !alarm.getShouldRestrictVolume();
-
-				// Restrict the volume
-				if (shouldRestrict)
-				{
-					NacUtility.quickToast(this, "Volume will be restricted");
-				}
-				// Do NOT restrict the volume
-				else
-				{
-					NacUtility.quickToast(this, "Volume will be adjustable");
-				}
-
-				alarm.setShouldRestrictVolume(shouldRestrict);
-				this.getAlarmViewModel().update(this, alarm);
+				this.showRestrictVolumeDialog();
 				break;
 			case 2:
 				this.showTextToSpeechDialog();
@@ -1024,6 +1010,17 @@ public class NacMainActivity
 	/**
 	 */
 	@Override
+	public void onRestrictVolume(boolean shouldRestrict)
+	{
+		NacAlarm alarm = this.getAudioOptionsAlarm();
+
+		alarm.setShouldRestrictVolume(shouldRestrict);
+		this.getAlarmViewModel().update(this, alarm);
+	}
+
+	/**
+	 */
+	@Override
 	protected void onResume()
 	{
 		super.onResume();
@@ -1431,13 +1428,13 @@ public class NacMainActivity
 	 */
 	public void showAudioSourceDialog()
 	{
-		NacAlarmAudioSourceDialog dialog = new NacAlarmAudioSourceDialog();
+		NacAudioSourceDialog dialog = new NacAudioSourceDialog();
 		NacAlarm alarm = this.getAudioOptionsAlarm();
 		String audioSource = alarm.getAudioSource();
 
 		dialog.setDefaultAudioSource(audioSource);
 		dialog.setOnAudioSourceSelectedListener(this);
-		dialog.show(getSupportFragmentManager(), NacAlarmAudioSourceDialog.TAG);
+		dialog.show(getSupportFragmentManager(), NacAudioSourceDialog.TAG);
 	}
 
 	/**
@@ -1483,6 +1480,20 @@ public class NacMainActivity
 		}
 
 		NacUtility.quickToast(this, message);
+	}
+
+	/**
+	 * Show the restrict volume dialog.
+	 */
+	public void showRestrictVolumeDialog()
+	{
+		NacRestrictVolumeDialog dialog = new NacRestrictVolumeDialog();
+		NacAlarm alarm = this.getAudioOptionsAlarm();
+		boolean shouldRestrict = alarm.getShouldRestrictVolume();
+
+		dialog.setDefaultShouldRestrictVolume(shouldRestrict);
+		dialog.setOnRestrictVolumeListener(this);
+		dialog.show(getSupportFragmentManager(), NacRestrictVolumeDialog.TAG);
 	}
 
 	/**

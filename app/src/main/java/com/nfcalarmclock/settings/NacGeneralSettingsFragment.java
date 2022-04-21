@@ -12,12 +12,13 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 
 import com.nfcalarmclock.audiooptions.NacAlarmAudioOptionsDialog;
-import com.nfcalarmclock.audiosource.NacAlarmAudioSourceDialog;
+import com.nfcalarmclock.audiosource.NacAudioSourceDialog;
+import com.nfcalarmclock.autodismiss.NacAutoDismissPreference;
+import com.nfcalarmclock.R;
+import com.nfcalarmclock.maxsnooze.NacMaxSnoozePreference;
 import com.nfcalarmclock.mediapicker.NacMediaActivity;
 import com.nfcalarmclock.mediapicker.NacMediaPreference;
-import com.nfcalarmclock.R;
-import com.nfcalarmclock.autodismiss.NacAutoDismissPreference;
-import com.nfcalarmclock.maxsnooze.NacMaxSnoozePreference;
+import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog;
 import com.nfcalarmclock.shared.NacSharedKeys;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.snoozeduration.NacSnoozeDurationPreference;
@@ -34,7 +35,8 @@ public class NacGeneralSettingsFragment
 		ActivityResultCallback<ActivityResult>,
 		NacVolumePreference.OnAudioOptionsClickedListener,
 		NacAlarmAudioOptionsDialog.OnAudioOptionClickedListener,
-		NacAlarmAudioSourceDialog.OnAudioSourceSelectedListener,
+		NacAudioSourceDialog.OnAudioSourceSelectedListener,
+		NacRestrictVolumeDialog.OnRestrictVolumeListener,
 		NacTextToSpeechDialog.OnTextToSpeechOptionsSelectedListener
 {
 
@@ -93,6 +95,9 @@ public class NacGeneralSettingsFragment
 				this.showAudioSourceDialog();
 				break;
 			case 1:
+				this.showRestrictVolumeDialog();
+				break;
+			case 2:
 				this.showTextToSpeechDialog();
 				break;
 			default:
@@ -115,7 +120,18 @@ public class NacGeneralSettingsFragment
 	public void onAudioSourceSelected(String audioSource)
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
+
 		shared.editAudioSource(audioSource);
+	}
+
+	/**
+	 */
+	@Override
+	public void onRestrictVolume(boolean shouldRestrict)
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+
+		shared.editShouldRestrictVolume(shouldRestrict);
 	}
 
 	/**
@@ -215,11 +231,25 @@ public class NacGeneralSettingsFragment
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		String audioSource = shared.getAudioSource();
-		NacAlarmAudioSourceDialog dialog = new NacAlarmAudioSourceDialog();
+		NacAudioSourceDialog dialog = new NacAudioSourceDialog();
 
 		dialog.setDefaultAudioSource(audioSource);
 		dialog.setOnAudioSourceSelectedListener(this);
-		dialog.show(getChildFragmentManager(), NacAlarmAudioSourceDialog.TAG);
+		dialog.show(getChildFragmentManager(), NacAudioSourceDialog.TAG);
+	}
+
+	/**
+	 * Show the restrict volume dialog.
+	 */
+	public void showRestrictVolumeDialog()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacRestrictVolumeDialog dialog = new NacRestrictVolumeDialog();
+		boolean shouldRestrict = shared.getShouldRestrictVolume();
+
+		dialog.setDefaultShouldRestrictVolume(shouldRestrict);
+		dialog.setOnRestrictVolumeListener(this);
+		dialog.show(getChildFragmentManager(), NacRestrictVolumeDialog.TAG);
 	}
 
 	/**

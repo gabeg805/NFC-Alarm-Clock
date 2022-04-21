@@ -255,13 +255,7 @@ public class NacWakeupProcess
 		Handler handler = new Handler(looper);
 
 		// Need to execute media player operations on the main thread
-		handler.post(new Runnable() {
-			@Override
-			public void run()
-			{
-				startNormal();
-			}
-		});
+		handler.post(() -> startNormal());
 	}
 
 	/**

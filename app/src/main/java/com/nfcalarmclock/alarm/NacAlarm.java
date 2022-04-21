@@ -225,7 +225,8 @@ public class NacAlarm
 					.setAudioSource(shared.getAudioSource())
 					.setName(shared.getName())
 					.setUseTts(shared.getSpeakToMe())
-					.setTtsFrequency(shared.getSpeakFrequency());
+					.setTtsFrequency(shared.getSpeakFrequency())
+					.setShouldRestrictVolume(shared.getShouldRestrictVolume());
 			}
 		}
 
