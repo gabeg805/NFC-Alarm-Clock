@@ -181,9 +181,9 @@ public class NacNfc
 		// Determine the pending intent flags
 		int flags = 0;
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
 		{
-			flags |= PendingIntent.FLAG_IMMUTABLE;
+			flags |= PendingIntent.FLAG_MUTABLE;
 		}
 
 		// Create the pending intent
