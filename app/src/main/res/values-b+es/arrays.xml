@@ -10,10 +10,10 @@
 
 	<string-array name="audio_sources">
 		<item>Alarma</item>
+		<item>Llamda</item>
 		<item>Multimedia</item>
-		<item>Notificación</item>
-		<item>Tono de llamda</item>
-		<item>Sistema</item>
+		<item>Notificaciónes</item>
+		<item>Tono</item>
 	</string-array>
 
 	<string-array name="tts_frequency">

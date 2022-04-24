@@ -125,7 +125,7 @@ public class NacMediaPlayer
 	public void abandonAudioFocus()
 	{
 		Context context = this.getContext();
-		NacAudioFocus.abandon(context, this);
+		NacAudioManager.abandonFocus(context, this);
 	}
 
 	/**
@@ -245,12 +245,12 @@ public class NacMediaPlayer
 		// Gain transient audio focus
 		if (this.shouldGainTransientAudioFocus())
 		{
-			request = NacAudioFocus.requestGainTransient(context, this, attrs);
+			request = NacAudioManager.requestFocusGainTransient(context, this, attrs);
 		}
 		// Gain regular audio focus
 		else
 		{
-			request = NacAudioFocus.requestGain(context, this, attrs);
+			request = NacAudioManager.requestFocusGain(context, this, attrs);
 		}
 
 		// Unable to gain audio focus
@@ -297,13 +297,13 @@ public class NacMediaPlayer
 	 */
 	public void playAlarm(NacAlarm alarm)
 	{
-		NacAudioAttributes attr = this.getAudioAttributes();
+		NacAudioAttributes attrs = this.getAudioAttributes();
 		int type = alarm.getMediaType();
 		String path = alarm.getMediaPath();
 		Uri uri = Uri.parse(path);
 
 		// Merge alarm with audio attributes
-		attr.merge(alarm);
+		attrs.merge(alarm);
 
 		// Determine whether to restrict volume when media is played
 		this.setShouldRestrictVolume(alarm.getShouldRestrictVolume());
@@ -311,7 +311,7 @@ public class NacMediaPlayer
 		// Set the level to keep the volume restricted at media is played
 		if (this.shouldRestrictVolume())
 		{
-			this.setRestrictedVolumeLevel(attr.toStreamVolume());
+			this.setRestrictedVolumeLevel(attrs.toStreamVolume());
 		}
 
 		// Play the directory as a playlist

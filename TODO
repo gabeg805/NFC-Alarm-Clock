@@ -15,12 +15,6 @@ TODO
   object to null when cleaning up, and conversely, checking if it's null and
   setting up.
 
-* Add "Call" audio source
-
-* Remove "System" audio source
-
-* Check stream value to make sure it's not the invalid value
-
 * Implement Spotify
 
 ------

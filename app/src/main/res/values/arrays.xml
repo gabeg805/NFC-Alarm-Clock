@@ -9,10 +9,10 @@
 
 	<string-array name="audio_sources">
 		<item>Alarm</item>
+		<item>Call</item>
 		<item>Media</item>
 		<item>Notification</item>
 		<item>Ringtone</item>
-		<item>System</item>
 	</string-array>
 
 	<string-array name="tts_frequency">

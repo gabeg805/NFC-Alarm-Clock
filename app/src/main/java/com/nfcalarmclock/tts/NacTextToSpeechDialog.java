@@ -14,10 +14,10 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.checkbox.MaterialCheckBox;
 
-import com.nfcalarmclock.util.dialog.NacDialogFragment;
+import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
-import com.nfcalarmclock.R;
+import com.nfcalarmclock.util.dialog.NacDialogFragment;
 
 import java.util.List;
 
@@ -195,12 +195,14 @@ public class NacTextToSpeechDialog
 	{
 		super.onResume();
 
+		// Initialize the widgets
 		AlertDialog dialog = (AlertDialog) getDialog();
 		RelativeLayout useTtsContainer = dialog.findViewById(R.id.should_use_tts);
 		this.mShouldUseTtsCheckBox = dialog.findViewById(R.id.should_use_tts_checkbox);
 		this.mShouldUseTtsSummary = dialog.findViewById(R.id.should_use_tts_summary);
 		this.mTtsFrequencyPicker = dialog.findViewById(R.id.tts_frequency_picker);
 
+		// Setup the dialog and widgets
 		useTtsContainer.setOnClickListener(this);
 		this.setupShouldUseTts();
 		this.setupTtsFrequencyPicker();

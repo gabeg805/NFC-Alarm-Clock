@@ -2,23 +2,20 @@ package com.nfcalarmclock.audiosource;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
+import com.nfcalarmclock.util.dialog.NacDialogFragment;
 
 import java.util.List;
 
@@ -26,7 +23,7 @@ import java.util.List;
 /**
  */
 public class NacAudioSourceDialog
-	extends DialogFragment
+	extends NacDialogFragment
 {
 
 	/**
@@ -47,11 +44,6 @@ public class NacAudioSourceDialog
 	 * Default audio source.
 	 */
 	private String mDefaultAudioSource;
-
-	/**
-	 * Shared preferences.
-	 */
-	private NacSharedPreferences mSharedPreferences;
 
 	/**
 	 * Radio button group for each alarm source.
@@ -128,16 +120,6 @@ public class NacAudioSourceDialog
 	}
 
 	/**
-	 * Get the shared preferences.
-	 *
-	 * @return The shared preferences.
-	 */
-	private NacSharedPreferences getSharedPreferences()
-	{
-		return this.mSharedPreferences;
-	}
-
-	/**
 	 * Get the OnAudioSourceSelectedListener object.
 	 *
 	 * @return The OnAudioSourceSelectedListener object.
@@ -153,8 +135,12 @@ public class NacAudioSourceDialog
 	@Override
 	public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
 	{
+		this.setupSharedPreferences();
+
+		NacSharedConstants cons = this.getSharedConstants();
+
 		return new AlertDialog.Builder(requireContext())
-			.setTitle(getString(R.string.title_audio_source))
+			.setTitle(cons.getTitleAudioSource())
 			//.setSingleChoiceItems(R.array.audio_sources, -1, (dialog, which) -> {})
 			.setPositiveButton(getString(R.string.action_ok), (dialog, which) ->
 				this.callOnAudioSourceSelectedListener())
@@ -170,15 +156,13 @@ public class NacAudioSourceDialog
 	{
 		super.onResume();
 
+		// Initialize the widgets
 		AlertDialog dialog = (AlertDialog) getDialog();
-		Context context = getContext();
-
-		this.mSharedPreferences = new NacSharedPreferences(context);
 		this.mRadioGroup = dialog.findViewById(R.id.audio_sources);
 
+		// Setup the dialog and widgets
 		this.setupAudioSources();
 		this.setupAudioSourceColor();
-		this.setupDialogColor();
 	}
 
 	/**
@@ -253,20 +237,6 @@ public class NacAudioSourceDialog
 			RadioButton button = (RadioButton) group.getChildAt(i);
 			button.setButtonTintList(colorStateList);
 		}
-	}
-
-	/**
-	 * Setup the dialog color.
-	 */
-	private void setupDialogColor()
-	{
-		AlertDialog dialog = (AlertDialog) getDialog();
-		Button okButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-		Button cancelButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-		int themeColor = this.getSharedPreferences().getThemeColor();
-
-		okButton.setTextColor(themeColor);
-		cancelButton.setTextColor(themeColor);
 	}
 
 }

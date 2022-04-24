@@ -10,7 +10,7 @@ import android.speech.tts.UtteranceProgressListener;
 import com.google.android.exoplayer2.audio.AudioAttributes;
 
 import com.nfcalarmclock.media.NacAudioAttributes;
-import com.nfcalarmclock.media.NacAudioFocus;
+import com.nfcalarmclock.media.NacAudioManager;
 import com.nfcalarmclock.system.NacBundle;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.util.NacUtility;
@@ -132,7 +132,7 @@ public class NacTextToSpeech
 				listener.onDoneSpeaking(tts, attrs);
 			}
 
-			NacAudioFocus.abandon(this.getContext(),
+			NacAudioManager.abandonFocus(this.getContext(),
 				this.getOnAudioFocusChangeListener());
 		}
 
@@ -409,7 +409,7 @@ public class NacTextToSpeech
 
 		if (this.isInitialized())
 		{
-			if(!NacAudioFocus.requestGainTransient(context, this, attrs))
+			if(!NacAudioManager.requestFocusGainTransient(context, this, attrs))
 			{
 				NacUtility.printf("Audio Focus TRANSIENT NOT Granted!");
 				return;
