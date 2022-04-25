@@ -484,7 +484,7 @@ public class NacSharedPreferences
 	public String getAudioSource()
 	{
 		String key = this.getKeys().getAudioSource();
-		String value = this.getConstants().getAudioSources().get(1);
+		String value = this.getConstants().getAudioSources().get(2);
 
 		return this.getString(key, value);
 	}

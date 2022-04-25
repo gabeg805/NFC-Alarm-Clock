@@ -78,6 +78,7 @@ public class NacMainActivity
 		NacCardHolder.OnCardDeleteClickedListener,
 		NacCardHolder.OnCardExpandedListener,
 		NacCardHolder.OnCardMediaClickedListener,
+		NacCardHolder.OnCardAudioOptionsClickedListener,
 		NacCardHolder.OnCardUpdatedListener,
 		NacCardHolder.OnCardUseNfcChangedListener,
         NacDialog.OnCancelListener,
@@ -640,6 +641,15 @@ public class NacMainActivity
 	}
 
 	/**
+	 * Called when the audio options button is clicked in an alarm card.
+	 */
+	@Override
+	public void onCardAudioOptionsClicked(NacCardHolder holder, NacAlarm alarm)
+	{
+		this.showAudioOptionsDialog(alarm);
+	}
+
+	/**
 	 * Called when the alarm card is collapsed.
 	 */
 	@Override
@@ -1108,14 +1118,10 @@ public class NacMainActivity
 		card.setOnCardDeleteClickedListener(this);
 		card.setOnCardExpandedListener(this);
 		card.setOnCardMediaClickedListener(this);
+		card.setOnCardAudioOptionsClickedListener(this);
 		card.setOnCardUpdatedListener(this);
 		card.setOnCardUseNfcChangedListener(this);
 		card.setOnCreateContextMenuListener(this);
-		card.getAudioOptionsButton().setOnClickListener(view ->
-			{
-				showAudioOptionsDialog(card);
-				card.performHapticFeedback(view);
-			});
 	}
 
 	/**
@@ -1476,10 +1482,9 @@ public class NacMainActivity
 	/**
 	 * Show the audio options dialog.
 	 */
-	public void showAudioOptionsDialog(NacCardHolder card)
+	public void showAudioOptionsDialog(NacAlarm alarm)
 	{
 		NacAlarmAudioOptionsDialog dialog = new NacAlarmAudioOptionsDialog();
-		NacAlarm alarm = card.getAlarm();
 
 		dialog.setAlarmId(alarm.getId());
 		dialog.setOnAudioOptionClickedListener(NacMainActivity.this);

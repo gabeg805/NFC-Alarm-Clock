@@ -192,7 +192,7 @@ public class NacAudioAttributes
 		// Get the stream volume
 		if (stream != AudioManager.USE_DEFAULT_STREAM_TYPE)
 		{
-			return am.getStreamVolume(stream);
+			return am.getStreamMaxVolume(stream);
 		}
 		// Unable to get stream volume
 		else

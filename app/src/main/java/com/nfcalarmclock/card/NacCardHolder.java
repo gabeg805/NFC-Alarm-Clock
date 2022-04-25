@@ -58,6 +58,14 @@ public class NacCardHolder
 {
 
 	/**
+	 * Listener for when the audio options button is clicked.
+	 */
+	public interface OnCardAudioOptionsClickedListener
+	{
+        public void onCardAudioOptionsClicked(NacCardHolder holder, NacAlarm alarm);
+	}
+
+	/**
 	 * Listener for when a card is collapsed.
 	 */
 	public interface OnCardCollapsedListener
@@ -263,6 +271,11 @@ public class NacCardHolder
 	//private MaterialTimePicker mTimePicker;
 
 	/**
+	 * Listener for when the audio options button is clicked.
+	 */
+	private OnCardAudioOptionsClickedListener mOnCardAudioOptionsClickedListener;
+
+	/**
 	 * Listener for when the alarm card is collapsed.
 	 */
 	private OnCardCollapsedListener mOnCardCollapsedListener;
@@ -343,6 +356,7 @@ public class NacCardHolder
 		this.mBackgroundColorAnimator = null;
 		this.mHighlightAnimator = null;
 		//this.mTimePicker = null;
+		this.mOnCardAudioOptionsClickedListener = null;
 		this.mOnCardCollapsedListener = null;
 		this.mOnCardDeleteClickedListener = null;
 		this.mOnCardExpandedListener = null;
@@ -381,6 +395,20 @@ public class NacCardHolder
 
 		animator.setTarget(card);
 		animator.start();
+	}
+
+	/**
+	 * Call the audio options button clicked listener.
+	 */
+	private void callOnCardAudioOptionsClickedListener()
+	{
+		OnCardAudioOptionsClickedListener listener = this.getOnCardAudioOptionsClickedListener();
+		NacAlarm alarm = this.getAlarm();
+
+		if (listener != null)
+		{
+			listener.onCardAudioOptionsClicked(this, alarm);
+		}
 	}
 
 	/**
@@ -643,6 +671,14 @@ public class NacCardHolder
 	public void delete()
 	{
 		this.callOnCardDeleteClickedListener();
+	}
+
+	/**
+	 * Act as if the audio options button was clicked.
+	 */
+	public void doAudioOptionsButtonClick()
+	{
+		this.callOnCardAudioOptionsClickedListener();
 	}
 
 	/**
@@ -1096,6 +1132,14 @@ public class NacCardHolder
 	}
 
 	/**
+	 * @return The listener for when the media button is clicked.
+	 */
+	public OnCardAudioOptionsClickedListener getOnCardAudioOptionsClickedListener()
+	{
+		return this.mOnCardAudioOptionsClickedListener;
+	}
+
+	/**
 	 * @return The listener for when the alarm card is collapsed.
 	 */
 	private OnCardCollapsedListener getOnCardCollapsedListener()
@@ -1353,6 +1397,7 @@ public class NacCardHolder
 		this.getVibrateButton().setOnClickListener(click);
 		this.getNfcButton().setOnClickListener(click);
 		this.getMediaButton().setOnClickListener(click);
+		this.getAudioOptionsButton().setOnClickListener(click);
 		this.getVolumeSeekBar().setOnSeekBarChangeListener(seek);
 		this.getNameButton().setOnClickListener(click);
 		this.getDeleteButton().setOnClickListener(click);
@@ -1583,6 +1628,11 @@ public class NacCardHolder
 		{
 			this.respondToMediaButtonClick(view);
 		}
+		// Audio options
+		else if (id == R.id.nac_audio_options)
+		{
+			this.respondToAudioOptionsButtonClick(view);
+		}
 		// Name
 		else if (id == R.id.nac_name)
 		{
@@ -1696,6 +1746,20 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Respond to the audio options button being clicked.
+	 */
+	private void respondToAudioOptionsButtonClick(View view)
+	{
+		// Respond to the audio options button since the alarm can be modified
+		if (this.checkCanModifyAlarm())
+		{
+			this.doAudioOptionsButtonClick();
+		}
+
+		this.performHapticFeedback(view);
+	}
+
+	/**
 	 * Respond to the alarm card being clicked.
 	 */
 	private void respondToCardClick(View view)
@@ -1713,6 +1777,11 @@ public class NacCardHolder
 		if (this.checkCanModifyAlarm())
 		{
 			this.doDayButtonClick(day);
+		}
+		// Unable to change the day. Reset the state of the day
+		else
+		{
+			button.toggle();
 		}
 
 		this.performHapticFeedback(button);
@@ -1779,6 +1848,14 @@ public class NacCardHolder
 		{
 			this.doNfcButtonClick();
 		}
+		// Unable to modify the alarm. Reset the state of the button
+		else
+		{
+			MaterialButton nfcButton = (MaterialButton) view;
+			boolean state = nfcButton.isChecked();
+
+			nfcButton.setChecked(!state);
+		}
 
 		this.performHapticFeedback(view);
 	}
@@ -1792,6 +1869,14 @@ public class NacCardHolder
 		if (this.checkCanModifyAlarm())
 		{
 			this.doRepeatButtonClick();
+		}
+		// Unable to modify the alarm. Reset the state of the button
+		else
+		{
+			MaterialButton repeatButton = (MaterialButton) view;
+			boolean state = repeatButton.isChecked();
+
+			repeatButton.setChecked(!state);
 		}
 
 		this.performHapticFeedback(view);
@@ -1850,7 +1935,6 @@ public class NacCardHolder
 	 */
 	private void respondToVibrateButtonClick(View view)
 	{
-		NacUtility.printf("Before : %b %b", this.getVibrateButton().isChecked(), this.getAlarm().shouldVibrate());
 		// Vibrate can be clicked since the alarm can be modified
 		if (this.checkCanModifyAlarm())
 		{
@@ -1859,14 +1943,13 @@ public class NacCardHolder
 		// Unable to modify the alarm. Reset the state of the button
 		else
 		{
-			//MaterialButton vibrateButton = (MaterialButton) view;
-			//boolean state = vibrateButton.isChecked();
+			MaterialButton vibrateButton = (MaterialButton) view;
+			boolean state = vibrateButton.isChecked();
 
-			//vibrateButton.setChecked(!state);
+			vibrateButton.setChecked(!state);
 		}
 
 		this.performHapticFeedback(view);
-		NacUtility.printf("After : %b %b", this.getVibrateButton().isChecked(), this.getAlarm().shouldVibrate());
 	}
 
 	/**
@@ -2220,6 +2303,16 @@ public class NacCardHolder
 	{
 		MaterialButton button = this.getNfcButton();
 		this.setMaterialButtonColor(button);
+	}
+
+	/**
+	 * Set listener for when the audio options button in the alarm card is clicked.
+	 *
+	 * @param  listener  The media clicked listener.
+	 */
+	public void setOnCardAudioOptionsClickedListener(OnCardAudioOptionsClickedListener listener)
+	{
+		this.mOnCardAudioOptionsClickedListener = listener;
 	}
 
 	/**
