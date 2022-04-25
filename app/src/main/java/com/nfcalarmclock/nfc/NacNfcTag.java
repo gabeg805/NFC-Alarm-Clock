@@ -168,8 +168,6 @@ public class NacNfcTag
 		String id = this.getNfcId();
 		String action = this.getNfcAction();
 
-		NacUtility.printf("Is nfc tag ready? %b %b %b", alarm != null, id != null, action != null);
-
 		return (alarm != null) && (id != null) && (action != null);
 	}
 
