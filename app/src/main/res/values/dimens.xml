@@ -18,6 +18,7 @@
 	<dimen name="isz_focus">72dp</dimen>
 
 	<!-- Text -->
+	<dimen name="tsz_caption">12sp</dimen>
 	<dimen name="tsz_small">14sp</dimen>
 	<dimen name="tsz_normal">16sp</dimen>
 	<dimen name="tsz_large">18sp</dimen>

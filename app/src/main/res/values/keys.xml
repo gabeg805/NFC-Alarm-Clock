@@ -4,6 +4,7 @@
 	tools:ignore="MissingTranslation">
 
 	<string name="app_first_run">app_first_run</string>
+	<string name="previous_app_version">previous_app_version</string>
 	<string name="app_start_statistics">app_start_statistics</string>
 	<string name="app_rating_counter">app_rating_counter</string>
 	<string name="app_should_refresh_main_activity">app_should_refresh_main_activity</string>

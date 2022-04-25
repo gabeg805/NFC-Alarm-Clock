@@ -279,6 +279,14 @@ public class NacSharedKeys
 	}
 
 	/**
+	 * @return The previous version of the app key.
+	 */
+	public String getPreviousAppVersion()
+	{
+		return this.getString(R.string.previous_app_version);
+	}
+
+	/**
 	 * @return The previous system volume, before an alarm goes off.
 	 */
 	public String getPreviousVolume()
@@ -421,6 +429,14 @@ public class NacSharedKeys
 	public String getUseNfc()
 	{
 		return this.getString(R.string.alarm_use_nfc_key);
+	}
+
+	/**
+	 * @return The version preference key.
+	 */
+	public String getVersionPreference()
+	{
+		return this.getString(R.string.version_key);
 	}
 
 	/**

@@ -60,6 +60,7 @@ public class NacSharedPreferences
 	public void editAmColor(int color)
 	{
 		String key = this.getKeys().getAmColor();
+
 		this.saveInt(key, color, false);
 	}
 
@@ -69,6 +70,7 @@ public class NacSharedPreferences
 	public void editAppFirstRun(boolean first)
 	{
 		String key = this.getKeys().getAppFirstRun();
+
 		this.saveBoolean(key, first, false);
 	}
 
@@ -81,6 +83,7 @@ public class NacSharedPreferences
 	public void editAppStartStatistics(boolean shouldStart)
 	{
 		String key = this.getKeys().getAppStartStatistics();
+
 		this.saveBoolean(key, shouldStart, false);
 	}
 
@@ -92,6 +95,7 @@ public class NacSharedPreferences
 	public void editAudioSource(String source)
 	{
 		String key = this.getKeys().getAudioSource();
+
 		this.saveString(key, source, false);
 	}
 
@@ -102,6 +106,7 @@ public class NacSharedPreferences
 	public void editAutoDismiss(int index)
 	{
 		String key = this.getKeys().getAutoDismiss();
+
 		this.saveInt(key, index, false);
 	}
 
@@ -111,6 +116,7 @@ public class NacSharedPreferences
 	public void editCardHeightCollapsed(int height)
 	{
 		String key = this.getKeys().getCardHeightCollapsed();
+
 		this.saveInt(key, height, false);
 	}
 
@@ -121,6 +127,7 @@ public class NacSharedPreferences
 	public void editCardHeightCollapsedDismiss(int height)
 	{
 		String key = this.getKeys().getCardHeightCollapsedDismiss();
+
 		this.saveInt(key, height, false);
 	}
 
@@ -130,6 +137,7 @@ public class NacSharedPreferences
 	public void editCardHeightExpanded(int height)
 	{
 		String key = this.getKeys().getCardHeightExpanded();
+
 		this.saveInt(key, height, false);
 	}
 
@@ -139,6 +147,7 @@ public class NacSharedPreferences
 	public void editCardIsMeasured(boolean isMeasured)
 	{
 		String key = this.getKeys().getCardIsMeasured();
+
 		this.saveBoolean(key, isMeasured, false);
 	}
 
@@ -149,6 +158,7 @@ public class NacSharedPreferences
 	public void editDayButtonStyle(int style)
 	{
 		String key = this.getKeys().getDayButtonStyle();
+
 		this.saveInt(key, style, false);
 	}
 
@@ -171,6 +181,7 @@ public class NacSharedPreferences
 	public void editDaysColor(int color)
 	{
 		String key = this.getKeys().getDaysColor();
+
 		this.saveInt(key, color, false);
 	}
 
@@ -181,6 +192,7 @@ public class NacSharedPreferences
 	public void editEasySnooze(boolean easy)
 	{
 		String key = this.getKeys().getEasySnooze();
+
 		this.saveBoolean(key, easy, false);
 	}
 
@@ -191,6 +203,7 @@ public class NacSharedPreferences
 	public void editMaxSnooze(int max)
 	{
 		String key = this.getKeys().getMaxSnooze();
+
 		this.saveInt(key, max, false);
 	}
 
@@ -203,6 +216,7 @@ public class NacSharedPreferences
 	public void editMediaPath(String path)
 	{
 		String key = this.getKeys().getMediaPath();
+
 		this.saveString(key, path, false);
 	}
 
@@ -213,6 +227,7 @@ public class NacSharedPreferences
 	public void editName(String name)
 	{
 		String key = this.getKeys().getName();
+
 		this.saveString(key, name, false);
 	}
 
@@ -225,6 +240,7 @@ public class NacSharedPreferences
 	public void editNameColor(int color)
 	{
 		String key = this.getKeys().getNameColor();
+
 		this.saveInt(key, color, false);
 	}
 
@@ -235,6 +251,7 @@ public class NacSharedPreferences
 	public void editNextAlarmFormat(int format)
 	{
 		String key = this.getKeys().getNextAlarmFormat();
+
 		this.saveInt(key, format, false);
 	}
 
@@ -245,7 +262,21 @@ public class NacSharedPreferences
 	public void editPmColor(int color)
 	{
 		String key = this.getKeys().getPmColor();
+
 		this.saveInt(key, color, false);
+	}
+
+	/**
+	 * Edit the previous version that this app was using.
+	 *
+	 * Normally, this should be the same as the current version, but when an
+	 * install occurs, these values will differ.
+	 */
+	public void editPreviousAppVersion(String version)
+	{
+		String key = this.getKeys().getPreviousAppVersion();
+
+		this.saveString(key, version, false);
 	}
 
 	/**
@@ -254,6 +285,7 @@ public class NacSharedPreferences
 	public void editPreviousVolume(int previous)
 	{
 		String key = this.getKeys().getPreviousVolume();
+
 		this.saveInt(key, previous, false);
 	}
 
@@ -264,6 +296,7 @@ public class NacSharedPreferences
 	public void editRateMyAppCounter(int counter)
 	{
 		String key = this.getKeys().getRateMyAppCounter();
+
 		this.saveInt(key, counter, false);
 	}
 
@@ -274,6 +307,7 @@ public class NacSharedPreferences
 	public void editRepeat(boolean repeat)
 	{
 		String key = this.getKeys().getRepeat();
+
 		this.saveBoolean(key, repeat, false);
 	}
 
@@ -284,6 +318,7 @@ public class NacSharedPreferences
 	public void editShouldRestrictVolume(boolean shouldRestrict)
 	{
 		String key = this.getKeys().getShouldRestrictVolume();
+
 		this.saveBoolean(key, shouldRestrict, false);
 	}
 
@@ -293,6 +328,7 @@ public class NacSharedPreferences
 	public void editSnoozeCount(long id, int count)
 	{
 		String key = NacSharedKeys.getSnoozeCount(id);
+
 		this.saveInt(key, count, false);
 	}
 
@@ -303,6 +339,7 @@ public class NacSharedPreferences
 	public void editSnoozeDuration(int duration)
 	{
 		String key = this.getKeys().getSnoozeDuration();
+
 		this.saveInt(key, duration, false);
 	}
 
@@ -313,6 +350,7 @@ public class NacSharedPreferences
 	public void editShouldRefreshMainActivity(boolean shouldRefresh)
 	{
 		String key = this.getKeys().getShouldRefreshMainActivity();
+
 		this.saveBoolean(key, shouldRefresh, false);
 	}
 
@@ -324,6 +362,7 @@ public class NacSharedPreferences
 	public void editSpeakFrequency(int freq)
 	{
 		String key = this.getKeys().getSpeakFrequency();
+
 		this.saveInt(key, freq, false);
 	}
 
@@ -335,6 +374,7 @@ public class NacSharedPreferences
 	public void editSpeakToMe(boolean speak)
 	{
 		String key = this.getKeys().getSpeakToMe();
+
 		this.saveBoolean(key, speak, false);
 	}
 
@@ -345,6 +385,7 @@ public class NacSharedPreferences
 	public void editStartWeekOn(int start)
 	{
 		String key = this.getKeys().getStartWeekOn();
+
 		this.saveInt(key, start, false);
 	}
 
@@ -355,6 +396,7 @@ public class NacSharedPreferences
 	public void editThemeColor(int color)
 	{
 		String key = this.getKeys().getThemeColor();
+
 		this.saveInt(key, color, false);
 	}
 
@@ -365,6 +407,7 @@ public class NacSharedPreferences
 	public void editTimeColor(int color)
 	{
 		String key = this.getKeys().getTimeColor();
+
 		this.saveInt(key, color, false);
 	}
 
@@ -375,6 +418,7 @@ public class NacSharedPreferences
 	public void editUseNfc(boolean useNfc)
 	{
 		String key = this.getKeys().getUseNfc();
+
 		this.saveBoolean(key, useNfc, false);
 	}
 
@@ -385,6 +429,7 @@ public class NacSharedPreferences
 	public void editVibrate(boolean vibrate)
 	{
 		String key = this.getKeys().getVibrate();
+
 		this.saveBoolean(key, vibrate, false);
 
 	}
@@ -406,6 +451,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getAppFirstRun();
 		boolean value = this.getDefaults().getAppFirstRun();
+
 		return this.getBoolean(key, value);
 	}
 
@@ -418,8 +464,19 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getAppStartStatistics();
 		boolean value = this.getDefaults().getAppStartStatistics();
+
 		return this.getBoolean(key, value);
 	}
+
+	/**
+	 * @return The current app version.
+	 */
+	//public String getAppVersion()
+	//{
+	//	String key = this.getKeys().getAppVersion();
+
+	//	return this.getString(key, "");
+	//}
 
 	/**
 	 * @return The audio source.
@@ -428,6 +485,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getAudioSource();
 		String value = this.getConstants().getAudioSources().get(1);
+
 		return this.getString(key, value);
 	}
 
@@ -460,6 +518,7 @@ public class NacSharedPreferences
 	public static String getAutoDismissSummary(NacSharedConstants cons, int index)
 	{
 		List<String> summaries = cons.getAutoDismissSummaries();
+
 		return summaries.get(index);
 	}
 
@@ -469,6 +528,7 @@ public class NacSharedPreferences
 	public int getAutoDismissTime()
 	{
 		int index = this.getAutoDismiss();
+
 		return NacSharedPreferences.getAutoDismissTime(index);
 	}
 
@@ -496,6 +556,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getCardHeightCollapsed();
 		int value = this.getDefaults().getCardHeightCollapsed();
+
 		return this.getInt(key, value);
 	}
 
@@ -506,6 +567,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getCardHeightCollapsedDismiss();
 		int value = this.getDefaults().getCardHeightCollapsedDismiss();
+
 		return this.getInt(key, value);
 	}
 
@@ -516,6 +578,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getCardHeightExpanded();
 		int value = this.getDefaults().getCardHeightExpanded();
+
 		return this.getInt(key, value);
 	}
 
@@ -526,6 +589,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getCardIsMeasured();
 		boolean value = this.getDefaults().getCardIsMeasured();
+
 		return this.getBoolean(key, value);
 	}
 
@@ -555,6 +619,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getDayButtonStyle();
 		int value = this.getDefaults().getDayButtonStyle();
+
 		return this.getInt(key, value);
 	}
 
@@ -565,6 +630,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getDays();
 		int value = this.getDefaults().getDays();
+
 		return this.getInt(key, value);
 	}
 
@@ -575,6 +641,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getDaysColor();
 		int value = this.getDefaults().getDaysColor();
+
 		return this.getInt(key, value);
 	}
 
@@ -606,6 +673,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getEasySnooze();
 		boolean value = this.getDefaults().getEasySnooze();
+
 		return this.getBoolean(key, value);
 	}
 
@@ -616,6 +684,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getExpandNewAlarm();
 		boolean value = this.getDefaults().getExpandNewAlarm();
+
 		return this.getBoolean(key, value);
 	}
 
@@ -672,6 +741,7 @@ public class NacSharedPreferences
 	public static String getMaxSnoozeSummary(NacSharedConstants cons, int index)
 	{
 		List<String> summaries = cons.getMaxSnoozeSummaries();
+
 		return summaries.get(index);
 	}
 
@@ -681,6 +751,7 @@ public class NacSharedPreferences
 	public int getMaxSnoozeValue()
 	{
 		int index = this.getMaxSnooze();
+
 		return NacSharedPreferences.getMaxSnoozeValue(index);
 	}
 
@@ -699,6 +770,7 @@ public class NacSharedPreferences
 	public String getMediaPath()
 	{
 		String key = this.getKeys().getMediaPath();
+
 		return this.getString(key, "");
 	}
 
@@ -737,6 +809,7 @@ public class NacSharedPreferences
 		String path)
 	{
 		String name = NacMedia.getTitle(context, path);
+
 		return !name.isEmpty() ? name : cons.getNone();
 	}
 
@@ -768,6 +841,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getMissedAlarmNotification();
 		boolean value = this.getDefaults().getMissedAlarm();
+
 		return this.getBoolean(key, value);
 	}
 
@@ -777,6 +851,7 @@ public class NacSharedPreferences
 	public String getName()
 	{
 		String key = this.getKeys().getName();
+
 		return this.getString(key, "");
 	}
 
@@ -787,6 +862,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getNameColor();
 		int value = this.getDefaults().getNameColor();
+
 		return this.getInt(key, value);
 	}
 
@@ -828,6 +904,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getNextAlarmFormat();
 		int value = this.getDefaults().getNextAlarmFormatIndex();
+
 		return this.getInt(key, value);
 	}
 
@@ -838,7 +915,21 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getPmColor();
 		int value = this.getDefaults().getPmColor();
+
 		return this.getInt(key, value);
+	}
+
+	/**
+	 * @return The previous version of the app.
+	 *
+	 * Normally, this should be the same as the current version, but when an
+	 * install occurs, these values will differ.
+	 */
+	public String getPreviousAppVersion()
+	{
+		String key = this.getKeys().getPreviousAppVersion();
+
+		return this.getString(key, "");
 	}
 
 	/**
@@ -848,6 +939,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getPreviousVolume();
 		int value = this.getDefaults().getPreviousVolume();
+
 		return this.getInt(key, value);
 	}
 
@@ -858,6 +950,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getRateMyAppCounter();
 		int value = this.getDefaults().getRateMyAppCounter();
+
 		return this.getInt(key, value);
 	}
 
@@ -868,6 +961,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getRepeat();
 		boolean value = this.getDefaults().getRepeat();
+
 		return this.getBoolean(key, value);
 	}
 
@@ -878,6 +972,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getShouldRefreshMainActivity();
 		boolean value = this.getDefaults().getShouldRefreshMainActivity();
+
 		return this.getBoolean(key, value);
 	}
 
@@ -899,6 +994,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getShowAlarmInfo();
 		boolean value = this.getDefaults().getShowAlarmInfo();
+
 		return this.getBoolean(key, value);
 	}
 
@@ -953,6 +1049,7 @@ public class NacSharedPreferences
 	public static String getSnoozeDurationSummary(NacSharedConstants cons, int index)
 	{
 		List<String> summaries = cons.getSnoozeDurationSummaries();
+
 		return summaries.get(index);
 	}
 
@@ -962,6 +1059,7 @@ public class NacSharedPreferences
 	public int getSnoozeDurationValue()
 	{
 		int index = this.getSnoozeDuration();
+
 		return NacSharedPreferences.getSnoozeDurationValue(index);
 	}
 
@@ -981,6 +1079,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getSpeakFrequency();
 		int value = this.getDefaults().getSpeakFrequencyIndex();
+
 		return this.getInt(key, value);
 	}
 
@@ -991,6 +1090,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getSpeakToMe();
 		boolean value = this.getDefaults().getSpeakToMe();
+
 		return this.getBoolean(key, value);
 	}
 
@@ -1001,6 +1101,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getStartWeekOn();
 		int value = this.getDefaults().getStartWeekOnIndex();
+
 		return this.getInt(key, value);
 	}
 
@@ -1019,6 +1120,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getThemeColor();
 		int value = this.getDefaults().getThemeColor();
+
 		return this.getInt(key, value);
 	}
 
@@ -1029,6 +1131,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getTimeColor();
 		int value = this.getDefaults().getTimeColor();
+
 		return this.getInt(key, value);
 	}
 
@@ -1039,6 +1142,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getUpcomingAlarmNotification();
 		boolean value = this.getDefaults().getUpcomingAlarm();
+
 		return this.getBoolean(key, value);
 	}
 
@@ -1049,6 +1153,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getUseNfc();
 		boolean value = this.getDefaults().getUseNfc();
+
 		return this.getBoolean(key, value);
 	}
 
@@ -1059,6 +1164,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getVibrate();
 		boolean value = this.getDefaults().getVibrate();
+
 		return this.getBoolean(key, value);
 	}
 
@@ -1069,6 +1175,7 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getVolume();
 		int value = this.getDefaults().getVolume();
+
 		return this.getInt(key, value);
 	}
 

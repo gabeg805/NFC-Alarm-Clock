@@ -53,6 +53,7 @@ import com.nfcalarmclock.tts.NacTextToSpeechDialog;
 import com.nfcalarmclock.upcomingalarm.NacUpcomingAlarmNotification;
 import com.nfcalarmclock.util.dialog.NacDialog;
 import com.nfcalarmclock.util.NacUtility;
+import com.nfcalarmclock.whatsnew.NacWhatsNewDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +85,8 @@ public class NacMainActivity
         NacAlarmAudioOptionsDialog.OnAudioOptionClickedListener,
         NacAudioSourceDialog.OnAudioSourceSelectedListener,
 		NacRestrictVolumeDialog.OnRestrictVolumeListener,
-		NacTextToSpeechDialog.OnTextToSpeechOptionsSelectedListener
+		NacTextToSpeechDialog.OnTextToSpeechOptionsSelectedListener,
+		NacWhatsNewDialog.OnReadWhatsNewListener
 {
 
 	/**
@@ -646,11 +648,14 @@ public class NacMainActivity
 		List<Long> updatedAlarms = this.getRecentlyUpdatedAlarmIds();
 		long id = alarm.getId();
 
+		// Sort the list when no cards are expanded
 		if (this.getCardsExpandedCount() == 0)
 		{
 			this.getAlarmCardAdapterLiveData().sort();
 		}
 
+		// Show the next time the alarm will go off, as well as highlight the card
+		// that was just collapsed
 		if (updatedAlarms.contains(id))
 		{
 			this.showUpdatedAlarmSnackbar(alarm);
@@ -1001,6 +1006,21 @@ public class NacMainActivity
 	}
 
 	/**
+	 * Called when the What's New dialog has been read.
+	 */
+	@Override
+	public void onReadWhatsNew()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacSharedConstants cons = this.getSharedConstants();
+		String version = cons.getAppVersion();
+
+		// Set the previous app version as the current version. This way, the What's
+		// New dialog does not show again
+		shared.editPreviousAppVersion(version);
+	}
+
+	/**
 	 * Note: Needed for RecyclerView.OnItemTouchListener
 	 */
 	public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept)
@@ -1029,7 +1049,7 @@ public class NacMainActivity
 		this.setupRefreshMainActivity();
 		// Will have to redraw colors here?
 		this.setupFloatingActionButton();
-		this.setupGoogleRatingDialog();
+		this.setupInitialDialogToShow();
 		this.addSetAlarmFromIntent();
 		this.setupShutdownBroadcastReceiver();
 		NacNfc.start(this);
@@ -1233,11 +1253,54 @@ public class NacMainActivity
 	/**
 	 * Setup the Google rating dialog.
 	 */
-	private void setupGoogleRatingDialog()
+	private boolean setupGoogleRatingDialog()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 
-		NacRateMyApp.request(shared);
+		return NacRateMyApp.request(shared);
+	}
+
+	/**
+	 * Setup an initial dialog, if any, that need to be shown.
+	 */
+	private void setupInitialDialogToShow()
+	{
+		// Show the What's New dialog, but do not show anything else after it is
+		// shown
+		if (this.setupWhatsNewDialog())
+		{
+			return;
+		}
+		// Show the Google in-app rating dialog, but do not show anything else after
+		// it is shown
+		else if (this.setupGoogleRatingDialog())
+		{
+			return;
+		}
+	}
+
+	/**
+	 * Setup showing the What's New dialog.
+	 */
+	private boolean setupWhatsNewDialog()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacSharedConstants cons = this.getSharedConstants();
+		String version = cons.getAppVersion();
+		String prevVersion = shared.getPreviousAppVersion();
+
+		// The current version and previously saved version match. This means there
+		// is no update that has occurred. Alternatively, something is wrong with the
+		// current version (if it is empty)
+		if (version.isEmpty() || version.equals(prevVersion))
+		{
+			return false;
+		}
+
+		// Show the What's New dialog
+		this.showWhatsNewDialog();
+
+		return true;
 	}
 
 	/**
@@ -1545,6 +1608,17 @@ public class NacMainActivity
 		{
 			this.showNextAlarmSnackbar();
 		}
+	}
+
+	/**
+	 * Show the what's new dialog.
+	 */
+	public void showWhatsNewDialog()
+	{
+		NacWhatsNewDialog dialog = new NacWhatsNewDialog();
+
+		dialog.setOnReadWhatsNewListener(this);
+		dialog.show(getSupportFragmentManager(), NacWhatsNewDialog.TAG);
 	}
 
 	/**

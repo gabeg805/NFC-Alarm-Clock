@@ -170,6 +170,14 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return The current app version.
+	 */
+	public String getAppVersion()
+	{
+		return this.getString(R.string.versionName);
+	}
+
+	/**
 	 * @return The audio sources.
 	 */
 	public List<String> getAudioSources()
@@ -827,6 +835,14 @@ public class NacSharedConstants
 	public String getTitleTextToSpeech()
 	{
 		return this.getString(R.string.title_tts);
+	}
+
+	/**
+	 * @return What's new title.
+	 */
+	public String getTitleWhatsNew()
+	{
+		return this.getString(R.string.title_whats_new);
 	}
 
 	/**

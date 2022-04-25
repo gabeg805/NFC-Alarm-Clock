@@ -61,12 +61,20 @@ public class NacWakeupProcess
 	private Handler mSpeakHandler;
 
 	/**
+	 * Vibrate handler, to vibrate the phone at periodic intervals.
+	 */
+	private Handler mVibrateHandler;
+
+	/**
 	 */
 	public NacWakeupProcess(Context context, NacAlarm alarm)
 	{
 		this.mContext = context;
 		this.mAlarm = alarm;
 		this.mSharedPreferences = new NacSharedPreferences(context);
+		this.mVibrateHandler = new Handler(context.getMainLooper());
+		// TODO: Can the handler for the media player in onDoneSpeaking() be created
+		// here? This way it is only done once?
 
 		this.setupVibrator(context);
 		this.setupMusicPlayer(context);
@@ -156,10 +164,18 @@ public class NacWakeupProcess
 	private void cleanupVibrate()
 	{
 		Vibrator vibrator = this.getVibrator();
+		Handler vibrateHandler = this.getVibrateHandler();
 
+		// Stop any current vibrations
 		if (vibrator != null)
 		{
 			vibrator.cancel();
+		}
+
+		// Stop any future vibrations from occuring
+		if (vibrateHandler != null)
+		{
+			vibrateHandler.removeCallbacksAndMessages(null);
 		}
 
 		this.mVibrator = null;
@@ -196,7 +212,7 @@ public class NacWakeupProcess
 	/**
 	 * @return The media player.
 	 */
-	public NacMediaPlayer getMediaPlayer()
+	private NacMediaPlayer getMediaPlayer()
 	{
 		return this.mPlayer;
 	}
@@ -235,6 +251,14 @@ public class NacWakeupProcess
 		NacSharedConstants cons = shared.getConstants();
 
 		return cons.getSpeakToMe(context);
+	}
+
+	/**
+	 * @return The handler to vibrate the phone.
+	 */
+	private Handler getVibrateHandler()
+	{
+		return this.mVibrateHandler;
 	}
 
 	/**
@@ -477,12 +501,22 @@ public class NacWakeupProcess
 		// Vibrate
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{
-			vibrator.vibrate(VibrationEffect.createWaveform(pattern, 0));
+			VibrationEffect effect = VibrationEffect.createOneShot(duration,
+				VibrationEffect.DEFAULT_AMPLITUDE);
+			//VibrationEffect effect = VibrationEffect.createWaveform(pattern, 0);
+
+			vibrator.vibrate(effect);
+			//vibrator.vibrate(VibrationEffect.createWaveform(pattern, 0));
 		}
 		else
 		{
-			vibrator.vibrate(pattern, 0);
+			vibrator.vibrate(duration);
+			//vibrator.vibrate(pattern, 0);
 		}
+
+		// Vibrate the phone after 1 sec
+		//Handler handler = this.getVibrateHandler();
+		this.getVibrateHandler().postDelayed(() -> vibrate(), 2*duration);
 	}
 
 }

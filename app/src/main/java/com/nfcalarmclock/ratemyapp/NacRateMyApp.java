@@ -25,13 +25,15 @@ public final class NacRateMyApp
 	 *
 	 * If the app is already rated, or the counter has not reached the threshold
 	 * to launch the request, then nothing is shown to the user.
+	 *
+	 * @return True if the request was launched, and False otherwise.
 	 */
-	public static void request(NacSharedPreferences shared)
+	public static boolean request(NacSharedPreferences shared)
 	{
 		// App is already rated
 		if (shared.isRateMyAppRated())
 		{
-			return;
+			return false;
 		}
 
 		// Time to show the Google rating dialog
@@ -59,12 +61,15 @@ public final class NacRateMyApp
 			//NacRateMyAppDialog dialog = new NacRateMyAppDialog();
 			//dialog.build(this);
 			//dialog.show();
+
+			return true;
 		}
 
 		// Increment the counter until it is time to show the Google rating dialog
 		else
 		{
 			shared.incrementRateMyApp();
+			return false;
 		}
 	}
 

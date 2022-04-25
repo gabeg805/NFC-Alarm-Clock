@@ -103,6 +103,11 @@
 		<item name="android:textSize">@dimen/tsz_small</item>
 	</style>
 
+	<style name="Widget.TextView.Caption">
+		<item name="android:textColor">?android:attr/textColorSecondary</item>
+		<item name="android:textSize">@dimen/tsz_caption</item>
+	</style>
+
 	<style name="Widget.TextView.Summary" parent="Widget.TextView.Secondary">
 		<item name="android:maxLength">@integer/max_entry_length</item>
 		<item name="android:maxLines">1</item>

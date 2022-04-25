@@ -27,6 +27,7 @@ public abstract class NacSettingsFragment
 	protected NacSharedKeys getSharedKeys()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
+
 		return (shared != null) ? shared.getKeys() : null;
 	}
 

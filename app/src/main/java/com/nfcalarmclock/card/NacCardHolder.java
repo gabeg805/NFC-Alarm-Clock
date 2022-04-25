@@ -1517,13 +1517,14 @@ public class NacCardHolder
 	}
 
 	/**
-	 * Save the repeat state of the alarm.
+	 * A switch has changed state.
 	 */
 	@Override
 	public void onCheckedChanged(CompoundButton button, boolean state)
 	{
 		int id = button.getId();
 
+		// Switch that enables/disables an alarm
 		if (id == R.id.nac_switch)
 		{
 			this.respondToSwitchCheckedChanged(button, state);
@@ -1531,8 +1532,7 @@ public class NacCardHolder
 	}
 
 	/**
-	 * Save which day was selected to be repeated, or deselected so that it is
-	 * not repeated.
+	 * A day button was selected.
 	 */
 	@Override
 	public boolean onWeekChanged(NacDayButton button, NacCalendar.Day day)
@@ -1542,12 +1542,14 @@ public class NacCardHolder
 	}
 
 	/**
+	 * A view was clicked.
 	 */
 	@Override
 	public void onClick(View view)
 	{
 		int id = view.getId();
 
+		// Expand/collapse the alarm
 		if ((id == R.id.nac_header)
 			|| (id == R.id.nac_summary)
 			|| (id == R.id.nac_dismiss_parent)
@@ -1556,37 +1558,45 @@ public class NacCardHolder
 		{
 			this.respondToCardClick(view);
 		}
+		// Time
 		else if (id == R.id.nac_time_parent)
 		{
 			this.respondToTimeClick(view);
 		}
-		else if (id == R.id.nac_dismiss)
-		{
-			this.respondToDismissButtonClick(view);
-		}
+		// Repeat
 		else if (id == R.id.nac_repeat)
 		{
 			this.respondToRepeatButtonClick(view);
 		}
+		// Vibrate
 		else if (id == R.id.nac_vibrate)
 		{
 			this.respondToVibrateButtonClick(view);
 		}
+		// NFC
 		else if (id == R.id.nac_nfc)
 		{
 			this.respondToNfcButtonClick(view);
 		}
+		// Music/ringtone
 		else if (id == R.id.nac_media)
 		{
 			this.respondToMediaButtonClick(view);
 		}
+		// Name
 		else if (id == R.id.nac_name)
 		{
 			this.respondToNameClick(view);
 		}
+		// Delete
 		else if (id == R.id.nac_delete)
 		{
 			this.respondToDeleteButtonClick(view);
+		}
+		// Dismiss button
+		else if (id == R.id.nac_dismiss)
+		{
+			this.respondToDismissButtonClick(view);
 		}
 		//else if (this.isShowingTimePicker())
 		//{
@@ -1624,6 +1634,7 @@ public class NacCardHolder
 	{
 		int id = view.getId();
 
+		// Repeat button
 		if (id == R.id.nac_repeat)
 		{
 			this.respondToRepeatButtonLongClick();
@@ -1698,6 +1709,7 @@ public class NacCardHolder
 	 */
 	public void respondToDayButtonClick(NacDayButton button, NacCalendar.Day day)
 	{
+		// Change the state of the day button since the alarm can be modified
 		if (this.checkCanModifyAlarm())
 		{
 			this.doDayButtonClick(day);
@@ -1711,6 +1723,7 @@ public class NacCardHolder
 	 */
 	private void respondToDeleteButtonClick(View view)
 	{
+		// Delete the alarm, since the alarm can be deleted
 		if (this.checkCanDeleteAlarm())
 		{
 			this.doDeleteButtonClick();
@@ -1733,6 +1746,7 @@ public class NacCardHolder
 	 */
 	private void respondToMediaButtonClick(View view)
 	{
+		// Respond to the media button since the alarm can be modified
 		if (this.checkCanModifyAlarm())
 		{
 			this.doMediaButtonClick();
@@ -1746,6 +1760,7 @@ public class NacCardHolder
 	 */
 	private void respondToNameClick(View view)
 	{
+		// Name of an alarm can be clicked since the alarm can be modified
 		if (this.checkCanModifyAlarm())
 		{
 			this.doNameClick();
@@ -1759,6 +1774,7 @@ public class NacCardHolder
 	 */
 	private void respondToNfcButtonClick(View view)
 	{
+		// NFC button can be clicked since the alarm can be modified
 		if (this.checkCanModifyAlarm())
 		{
 			this.doNfcButtonClick();
@@ -1772,6 +1788,7 @@ public class NacCardHolder
 	 */
 	private void respondToRepeatButtonClick(View view)
 	{
+		// Repeat button can be clicked since the alarm can be modified
 		if (this.checkCanModifyAlarm())
 		{
 			this.doRepeatButtonClick();
@@ -1785,6 +1802,7 @@ public class NacCardHolder
 	 */
 	public void respondToRepeatButtonLongClick()
 	{
+		// Repeat button can be long clicked since the alarm can be modified
 		if (this.checkCanModifyAlarm())
 		{
 			this.doRepeatButtonLongClick();
@@ -1797,13 +1815,15 @@ public class NacCardHolder
 	public void respondToSwitchCheckedChanged(CompoundButton button,
 		boolean state)
 	{
-		if (!this.checkCanModifyAlarm())
-		{
-			button.setChecked(!state);
-		}
-		else
+		// Change the state of the switch since the alarm can be modified
+		if (this.checkCanModifyAlarm())
 		{
 			this.doSwitchCheckedChanged(state);
+		}
+		// Unable to modify the alarm. Reset the state of the switch
+		else
+		{
+			button.setChecked(!state);
 		}
 
 		this.performHapticFeedback(button);
@@ -1814,12 +1834,14 @@ public class NacCardHolder
 	 */
 	private void respondToTimeClick(View view)
 	{
+		// Unable to modify the alarm
 		if (!this.checkCanModifyAlarm())
 		{
 			this.performHapticFeedback(view);
 			return;
 		}
 
+		// Time can be clicked
 		this.doTimeClick();
 	}
 
@@ -1828,12 +1850,23 @@ public class NacCardHolder
 	 */
 	private void respondToVibrateButtonClick(View view)
 	{
+		NacUtility.printf("Before : %b %b", this.getVibrateButton().isChecked(), this.getAlarm().shouldVibrate());
+		// Vibrate can be clicked since the alarm can be modified
 		if (this.checkCanModifyAlarm())
 		{
 			this.doVibrateButtonClick();
 		}
+		// Unable to modify the alarm. Reset the state of the button
+		else
+		{
+			//MaterialButton vibrateButton = (MaterialButton) view;
+			//boolean state = vibrateButton.isChecked();
+
+			//vibrateButton.setChecked(!state);
+		}
 
 		this.performHapticFeedback(view);
+		NacUtility.printf("After : %b %b", this.getVibrateButton().isChecked(), this.getAlarm().shouldVibrate());
 	}
 
 	/**

@@ -3,6 +3,18 @@
 
 	<!-- App -->
 	<string name="app_name">NFC Alarm Clock</string>
+	<string name="app_version">@string/versionName</string>
+
+
+	<!-- What's new -->
+	<string name="item_1">Fixed the issue where an <b>8am alarm</b> that is not present in the list would go off.\n\nReboot your phone to make this alarm go away.</string>
+	<string name="item_2">Added <b>Restrict Volume</b> option which, if enabled, means that you will not be able to change the volume when your alarm goes off.\n\nCan be found by selecting the gear icon to the right of the volume slider.</string>
+	<string name="item_3">Updated the media player to <b>ExoPlayer</b>.\n\nThis should not impact you, but is mentioned in case there are any issues playing the selected music/ringtone.</string>
+	<string name="item_4">Added <b>Call</b> to available audio sources.</string>
+	<string name="item_5">Removed <b>System</b> from available audio sources.</string>
+	<string name="item_6">Updated to use the <b>in-app rating prompt</b> by Google.\n\nWhether you opt to rate or not, the prompt should only be shown once and then never be shown again.</string>
+	<string name="item_7">Various updates that needed to be made for phones that run <b>Android Version 12</b>.</string>
+
 
 
 	<!-- Consolidate -->
@@ -60,6 +72,7 @@
 	<string name="message_alarm_dismiss">Dismissed alarm</string>
 	<string name="message_alarm_snooze">Snoozed alarm</string>
 	<string name="message_statistics_started_on">Statistics started on</string>
+	<string name="message_bullet">\u25BA</string>
 
 
 
@@ -101,6 +114,7 @@
 	<string name="title_created_alarms">Created alarms</string>
 	<string name="title_deleted_alarms">Deleted alarms</string>
 	<string name="title_current_alarms">Current</string>
+	<string name="title_whats_new">What\'s New</string>
 
 
 
@@ -388,7 +402,7 @@
 	<string name="author">Gabe Gonzalez</string>
 
 
-	<!-- App version -->
+	<!-- App -->
 	<string name="version_title">Version</string>
 
 
