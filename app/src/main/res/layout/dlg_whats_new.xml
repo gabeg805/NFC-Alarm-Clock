@@ -12,7 +12,7 @@
 		style="@style/Widget.TextView.Caption"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="Version 10.5.15"
+		android:text="Version 10.5.16"
 		/>
 
 		<!--
@@ -182,6 +182,50 @@
 				android:layout_below="@id/item_6"
 				android:layout_toEndOf="@id/bullet_7"
 				android:text="@string/item_7"
+				/>
+
+			<!-- Item 8 -->
+			<TextView
+				style="@style/Widget.TextView.Primary"
+				android:id="@+id/bullet_8"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginEnd="@dimen/tiny"
+				android:layout_below="@id/item_7"
+				android:text="@string/message_bullet"
+				/>
+
+			<TextView
+				style="@style/Widget.TextView.Primary"
+				android:id="@+id/item_8"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/small"
+				android:layout_below="@id/item_7"
+				android:layout_toEndOf="@id/bullet_8"
+				android:text="@string/item_8"
+				/>
+
+			<!-- Item 9 -->
+			<TextView
+				style="@style/Widget.TextView.Primary"
+				android:id="@+id/bullet_9"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginEnd="@dimen/tiny"
+				android:layout_below="@id/item_8"
+				android:text="@string/message_bullet"
+				/>
+
+			<TextView
+				style="@style/Widget.TextView.Primary"
+				android:id="@+id/item_9"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/small"
+				android:layout_below="@id/item_8"
+				android:layout_toEndOf="@id/bullet_9"
+				android:text="@string/item_9"
 				/>
 
 		</RelativeLayout>

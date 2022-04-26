@@ -485,7 +485,8 @@ public class NacWakeupProcess
 	{
 		Vibrator vibrator = this.getVibrator();
 		long duration = 500;
-		long[] pattern = {0, duration, 2*duration};
+		long waitTime = 2000 + duration;
+		//long[] pattern = {0, duration, 2*duration};
 		//long[] pattern = {duration, duration, duration};
 		//long[] pattern = {0, duration, duration};
 
@@ -516,7 +517,7 @@ public class NacWakeupProcess
 
 		// Vibrate the phone after 1 sec
 		//Handler handler = this.getVibrateHandler();
-		this.getVibrateHandler().postDelayed(() -> vibrate(), 2*duration);
+		this.getVibrateHandler().postDelayed(() -> vibrate(), waitTime);
 	}
 
 }

@@ -14,6 +14,8 @@
 	<string name="item_5">Removed <b>System</b> from available audio sources.</string>
 	<string name="item_6">Updated to use the <b>in-app rating prompt</b> by Google.\n\nWhether you opt to rate or not, the prompt should only be shown once and then never be shown again.</string>
 	<string name="item_7">Various updates that needed to be made for phones that run <b>Android Version 12</b>.</string>
+	<string name="item_8">Increased the <b>vibrate wait time</b>. This is the time in-between when your phone vibrates during an active alarm.</string>
+	<string name="item_9">Added more checks to prevent modifying a snoozed alarm.</string>
 
 
 
