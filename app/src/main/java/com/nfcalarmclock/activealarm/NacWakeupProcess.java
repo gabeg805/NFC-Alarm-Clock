@@ -485,7 +485,7 @@ public class NacWakeupProcess
 	{
 		Vibrator vibrator = this.getVibrator();
 		long duration = 500;
-		long waitTime = 2000 + duration;
+		long waitTime = 1000 + duration;
 		//long[] pattern = {0, duration, 2*duration};
 		//long[] pattern = {duration, duration, duration};
 		//long[] pattern = {0, duration, duration};

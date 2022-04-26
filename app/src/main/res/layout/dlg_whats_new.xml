@@ -12,7 +12,7 @@
 		style="@style/Widget.TextView.Caption"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="Version 10.5.16"
+		android:text="Version 10.5.17"
 		/>
 
 		<!--
