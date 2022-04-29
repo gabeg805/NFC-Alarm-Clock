@@ -37,6 +37,11 @@ public class NacActiveAlarmNotification
 	public static final String GROUP = "NacNotiGroupActiveAlarm";
 
 	/**
+	 * Notification ID.
+	 */
+	public static final int ID = 79;
+
+	/**
 	 * Alarm.
 	 */
 	private NacAlarm mAlarm;
@@ -65,6 +70,7 @@ public class NacActiveAlarmNotification
 		return super.builder()
 			.setLargeIcon(icon)
 			.setFullScreenIntent(activityPending, true)
+			.setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
 			.setAutoCancel(false)
 			.setOngoing(true)
 			.setShowWhen(true)
@@ -245,11 +251,11 @@ public class NacActiveAlarmNotification
 	}
 
 	/**
-	 * @see NacNotification#getId()
+	 * @return Notification ID.
 	 */
 	protected int getId()
 	{
-		return 79;
+		return NacActiveAlarmNotification.ID;
 	}
 
 	/**

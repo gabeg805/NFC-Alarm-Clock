@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
@@ -92,11 +91,6 @@ public class NacActiveAlarmService
 	private Handler mAutoDismissHandler;
 
 	/**
-	 * Automatically dismiss the alarm in case it does not get dismissed.
-	 */
-	private Runnable mAutoDismissRunnable;
-
-	/**
 	 * Time that the service was started, in milliseconds.
 	 */
 	private long mStartTime;
@@ -145,22 +139,11 @@ public class NacActiveAlarmService
 	private void cleanupAutoDismiss()
 	{
 		Handler handler = this.getAutoDismissHandler();
-		Runnable runnable = this.getAutoDismissRunnable();
 
 		if (handler != null)
 		{
-			if (runnable != null)
-			{
-				handler.removeCallbacks(runnable);
-			}
-			else
-			{
-				handler.removeCallbacksAndMessages(null);
-			}
+			handler.removeCallbacksAndMessages(null);
 		}
-
-		this.mAutoDismissHandler = null;
-		this.mAutoDismissRunnable = null;
 	}
 
 	/**
@@ -189,8 +172,6 @@ public class NacActiveAlarmService
 		{
 			wakeup.cleanup();
 		}
-
-		this.mWakeupProcess = null;
 	}
 
 	/**
@@ -312,14 +293,6 @@ public class NacActiveAlarmService
 	}
 
 	/**
-	 * @return The auto dismiss runnable.
-	 */
-	private Runnable getAutoDismissRunnable()
-	{
-		return this.mAutoDismissRunnable;
-	}
-
-	/**
 	 * @return The shared constants.
 	 */
 	private NacSharedConstants getSharedConstants()
@@ -392,7 +365,7 @@ public class NacActiveAlarmService
 	@Override
 	public void onCreate()
 	{
-		super.onCreate();
+		//super.onCreate();
 
 		Application app = getApplication();
 		Context context = getApplicationContext();
@@ -400,8 +373,9 @@ public class NacActiveAlarmService
 		this.mSharedPreferences = new NacSharedPreferences(context);
 		this.mAlarmRepository = new NacAlarmRepository(app);
 		this.mAlarm = null;
-		this.mWakeupProcess = null;
+		this.mWakeupProcess = new NacWakeupProcess(this);
 		this.mWakeLock = null;
+		this.mAutoDismissHandler = new Handler(context.getMainLooper());
 		//this.mStartTime = System.currentTimeMillis();
 	}
 
@@ -410,7 +384,7 @@ public class NacActiveAlarmService
 	@Override
 	public void onDestroy()
 	{
-		super.onDestroy();
+		//super.onDestroy();
 		this.cleanup();
 	}
 
@@ -439,8 +413,8 @@ public class NacActiveAlarmService
 		}
 		else if (action.equals(ACTION_START_SERVICE))
 		{
-			this.setupWakeLock();
 			this.showNotification();
+			this.setupWakeLock();
 			this.setupWakeupProcess();
 			this.setIsAlarmActive(true);
 			this.updateAlarm();
@@ -571,32 +545,27 @@ public class NacActiveAlarmService
 	 */
 	public void setupWakeupProcess()
 	{
+		NacWakeupProcess wakeup = this.getWakeupProcess();
 		NacAlarm alarm = this.getAlarm();
-		NacWakeupProcess wakeup = new NacWakeupProcess(this, alarm);
-		this.mWakeupProcess = wakeup;
 
-		wakeup.start();
+		wakeup.start(alarm);
 	}
 
 	/**
 	 * Show the notification.
 	 */
-	//public void showNotification(NacAlarm alarm)
 	public void showNotification()
 	{
 		NacAlarm alarm = this.getAlarm();
 		NacActiveAlarmNotification notification =
 			new NacActiveAlarmNotification(this);
-		int id = notification.getId();
-		//int id = 68;
 
-		//if (alarm != null)
-		//{
-		//	id = (int) alarm.getId();
-		//}
-
+		// Set the alarm to be part of the notification
 		notification.setAlarm(alarm);
-		startForeground(id, notification.builder().build());
+
+		// Start the service in the foreground
+		startForeground(NacActiveAlarmNotification.ID,
+			notification.builder().build());
 	}
 
 	/**
@@ -652,45 +621,36 @@ public class NacActiveAlarmService
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
-		Handler handler = null;
-		Runnable runnable = null;
+		Handler handler = this.getAutoDismissHandler();
 
+		// Amount of time until the alarm is automatically dismissed
 		int autoDismiss = shared.getAutoDismissTime();
 		long delay = TimeUnit.MINUTES.toMillis(autoDismiss) - alarm.getTimeActive() - 2000;
 
+		// There is an auto dismiss time set
 		if (autoDismiss != 0)
 		{
-			handler = new Handler(Looper.getMainLooper());
-			runnable = new Runnable()
+			// Cleanup the auto dismiss handler, in case it is already set
+			this.cleanupAutoDismiss();
+
+			// Automatically dismiss the alarm.
+			handler.postDelayed(() -> {
+
+				// Show the missed alarm notification
+				if (shared.getMissedAlarmNotification())
 				{
+					NacMissedAlarmNotification notification =
+						new NacMissedAlarmNotification(NacActiveAlarmService.this);
+					notification.setAlarm(alarm);
+					notification.show();
+				}
 
-					/**
-					 * Automatically dismiss the alarm.
-					 */
-					@Override
-					public void run()
-					{
-						NacSharedPreferences shared = getSharedPreferences();
-						NacAlarm alarm = getAlarm();
+				// Auto dismiss
+				autoDismiss();
 
-						if (shared.getMissedAlarmNotification())
-						{
-							NacMissedAlarmNotification notification =
-								new NacMissedAlarmNotification(NacActiveAlarmService.this);
-							notification.setAlarm(alarm);
-							notification.show();
-						}
-
-						autoDismiss();
-					}
-
-				};
-
-			handler.postDelayed(runnable, delay);
+			}, delay);
 		}
 
-		this.mAutoDismissHandler = handler;
-		this.mAutoDismissRunnable = runnable;
 		this.mStartTime = System.currentTimeMillis();
 	}
 

@@ -205,6 +205,7 @@ public class NacAlarm
 				.setVolume(0)
 				.setAudioSource("Media")
 				.setName("")
+				.setUseTts(false)
 				.setShouldRestrictVolume(false);
 		}
 

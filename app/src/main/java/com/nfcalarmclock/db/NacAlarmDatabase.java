@@ -193,7 +193,7 @@ public abstract class NacAlarmDatabase
 	{
 		for (int i=1; i < 400; i++)
 		{
-			NacScheduler.cancel(context, i);
+			NacScheduler.cancelOld(context, i);
 		}
 	}
 

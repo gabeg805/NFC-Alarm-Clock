@@ -10,6 +10,7 @@ import android.os.Build;
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmRepository;
 import com.nfcalarmclock.activealarm.NacActiveAlarmBroadcastReceiver;
+import com.nfcalarmclock.activealarm.NacActiveAlarmService;
 import com.nfcalarmclock.main.NacMainActivity;
 import com.nfcalarmclock.system.NacCalendar;
 import com.nfcalarmclock.system.NacIntent;
@@ -33,29 +34,16 @@ public class NacScheduler
 			return;
 		}
 
-		long id = alarm.getId();
+		// Time at which the alarm should go off
 		long millis = day.getTimeInMillis();
 
-		// Determine the pending intent flags
-		int showFlags = 0;
-		int operationFlags = PendingIntent.FLAG_CANCEL_CURRENT;
+		// Show the main activity
+		PendingIntent showPendingIntent = NacScheduler.buildMainActivityPendingIntent(
+			context, alarm);
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-		{
-			showFlags |= PendingIntent.FLAG_IMMUTABLE;
-			operationFlags |= PendingIntent.FLAG_IMMUTABLE;
-		}
-
-		// Show details of the alarm clock
-		Intent showIntent = new Intent(context, NacMainActivity.class);
-		PendingIntent showPendingIntent = PendingIntent.getActivity(context, (int)id,
-			showIntent, showFlags);
-
-		// Operation to perform the alarm is active
-		Intent operationIntent = NacIntent.toIntent(context,
-			NacActiveAlarmBroadcastReceiver.class, alarm);
-		PendingIntent operationPendingIntent = PendingIntent.getBroadcast(
-			context, (int)id, operationIntent, operationFlags);
+		// Operation to perform when the alarm goes off
+		PendingIntent operationPendingIntent = NacScheduler.buildAlarmPendingIntent(
+			context, alarm, PendingIntent.FLAG_CANCEL_CURRENT);
 
 		// Set the alarm
 		AlarmClockInfo clock = new AlarmClockInfo(millis, showPendingIntent);
@@ -79,6 +67,81 @@ public class NacScheduler
 	}
 
 	/**
+	 * @return Build the pending intent for an alarm.
+	 */
+	public static PendingIntent buildAlarmPendingIntent(Context context, int id,
+		Intent intent, int flags)
+	{
+		// Prepare the flags
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		{
+			flags |= PendingIntent.FLAG_IMMUTABLE;
+		}
+
+		// Create the pending intent
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			return PendingIntent.getForegroundService(context, id, intent, flags);
+		}
+		else
+		{
+			return PendingIntent.getService(context, id, intent, flags);
+		}
+	}
+
+	/**
+	 * @return Build the pending intent for an alarm.
+	 */
+	public static PendingIntent buildAlarmPendingIntent(Context context,
+		NacAlarm alarm, int flags)
+	{
+		// Unable to build the pending intent because the alarm is null
+		if (alarm == null)
+		{
+			return null;
+		}
+
+		// Get the alarm ID
+		int id = (int) alarm.getId();
+
+		// Create the intent
+		Intent intent = NacIntent.createForegroundService(context, alarm);
+
+		// Build the pending intent
+		return NacScheduler.buildAlarmPendingIntent(context, id, intent, flags);
+	}
+
+	/**
+	 * @return Build the pending intent to launch the main activity.
+	 */
+	public static PendingIntent buildMainActivityPendingIntent(Context context,
+		NacAlarm alarm)
+	{
+		// Unable to build the pending intent because the alarm is null
+		if (alarm == null)
+		{
+			return null;
+		}
+
+		// Get the alarm ID
+		int id = (int) alarm.getId();
+
+		// Get the flags
+		int flags = 0;
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		{
+			flags |= PendingIntent.FLAG_IMMUTABLE;
+		}
+
+		// Create the intent
+		Intent intent = new Intent(context, NacMainActivity.class);
+
+		// Build the pending intent
+		return PendingIntent.getActivity(context, (int)id, intent , flags);
+	}
+
+	/**
 	 * Cancel the alarm with a given ID.
 	 *
 	 * @param  context  Context.
@@ -86,17 +149,12 @@ public class NacScheduler
 	 */
 	public static void cancel(Context context, int id)
 	{
-		// Determine the pending intent flags
-		int flags = PendingIntent.FLAG_NO_CREATE;
+		// Build the pending intent for the new type
+		Intent intent = NacIntent.createForegroundService(context, (NacAlarm)null);
+		PendingIntent pending = NacScheduler.buildAlarmPendingIntent(context, id,
+			intent, PendingIntent.FLAG_NO_CREATE);
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-		{
-			flags |= PendingIntent.FLAG_IMMUTABLE;
-		}
-
-		Intent intent = new Intent(context, NacActiveAlarmBroadcastReceiver.class);
-		PendingIntent pending = PendingIntent.getBroadcast(context, id, intent, flags);
-
+		// Cancel the alarm
 		if (pending != null)
 		{
 			NacScheduler.getAlarmManager(context).cancel(pending);
@@ -133,11 +191,61 @@ public class NacScheduler
 	}
 
 	/**
+	 * Cancel the old alarm type with a given ID.
+	 *
+	 * @param  context  Context.
+	 * @param  id  Alarm ID.
+	 */
+	public static void cancelOld(Context context, int id)
+	{
+		// Prepare the flags
+		int flags = PendingIntent.FLAG_NO_CREATE;
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		{
+			flags |= PendingIntent.FLAG_IMMUTABLE;
+		}
+
+		// Create the pending intent for the old type
+		Intent intent = new Intent(context, NacActiveAlarmBroadcastReceiver.class);
+		PendingIntent pending = PendingIntent.getBroadcast(context, id, intent, flags);
+
+		// Cancel the alarm
+		if (pending != null)
+		{
+			NacScheduler.getAlarmManager(context).cancel(pending);
+		}
+	}
+
+	/**
 	 * @return The AlarmManager.
 	 */
 	public static AlarmManager getAlarmManager(Context context)
 	{
 		return (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+	}
+
+	/**
+	 * Refresh all alarms.
+	 */
+	public static void refreshAll(Context context)
+	{
+		NacAlarmRepository repo = new NacAlarmRepository(context);
+		List<NacAlarm> alarms = repo.getAllAlarmsNow();
+
+		for (NacAlarm a : alarms)
+		{
+			int id = (int) a.getId();
+
+			// Clear out the old alarms
+			NacScheduler.cancelOld(context, id);
+
+			// Clear out any new alarms, just in case
+			NacScheduler.cancel(context, a);
+
+			// Add each alarm
+			NacScheduler.add(context, a);
+		}
 	}
 
 	/**

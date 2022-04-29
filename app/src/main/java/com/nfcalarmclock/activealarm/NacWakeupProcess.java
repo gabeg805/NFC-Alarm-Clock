@@ -33,7 +33,7 @@ public class NacWakeupProcess
 	/**
 	 * Alarm.
 	 */
-	private final NacAlarm mAlarm;
+	private NacAlarm mAlarm;
 
 	/**
 	 * Shared preferences.
@@ -56,29 +56,30 @@ public class NacWakeupProcess
 	private NacTextToSpeech mSpeech;
 
 	/**
-	 * Say the current time at user specified intervals.
-	 */
-	private Handler mSpeakHandler;
-
-	/**
 	 * Vibrate handler, to vibrate the phone at periodic intervals.
 	 */
-	private Handler mVibrateHandler;
+	private final Handler mVibrateHandler;
+
+	/**
+	 * Say the current time at user specified intervals.
+	 */
+	private final Handler mSpeakHandler;
 
 	/**
 	 */
-	public NacWakeupProcess(Context context, NacAlarm alarm)
+	//public NacWakeupProcess(Context context, NacAlarm alarm)
+	public NacWakeupProcess(Context context)
 	{
+		Looper looper = context.getMainLooper();
+
 		this.mContext = context;
-		this.mAlarm = alarm;
+		this.mAlarm = null;
+		//this.mAlarm = alarm;
 		this.mSharedPreferences = new NacSharedPreferences(context);
-		this.mVibrateHandler = new Handler(context.getMainLooper());
+		this.mVibrateHandler = new Handler(looper);
+		this.mSpeakHandler = new Handler(looper);
 		// TODO: Can the handler for the media player in onDoneSpeaking() be created
 		// here? This way it is only done once?
-
-		this.setupVibrator(context);
-		this.setupMusicPlayer(context);
-		this.setupTextToSpeech(context, alarm);
 	}
 
 	/**
@@ -87,6 +88,7 @@ public class NacWakeupProcess
 	private boolean canPlayMusic()
 	{
 		NacAlarm alarm = this.getAlarm();
+
 		return (alarm != null) && alarm.hasMedia();
 	}
 
@@ -99,6 +101,7 @@ public class NacWakeupProcess
 		//NacSharedPreferences shared = this.getSharedPreferences();
 		//return (shared != null) && shared.getSpeakToMe();
 		NacAlarm alarm = this.getAlarm();
+
 		return (alarm != null) && alarm.shouldUseTts();
 	}
 
@@ -108,6 +111,7 @@ public class NacWakeupProcess
 	private boolean canVibrate()
 	{
 		NacAlarm alarm = this.getAlarm();
+
 		return (alarm != null) && alarm.shouldVibrate();
 	}
 
@@ -133,7 +137,7 @@ public class NacWakeupProcess
 			player.release();
 		}
 
-		this.mPlayer = null;
+		//this.mPlayer = null;
 	}
 
 	/**
@@ -154,8 +158,8 @@ public class NacWakeupProcess
 			speech.shutdown();
 		}
 
-		this.mSpeech = null;
-		this.mSpeakHandler = null;
+		//this.mSpeech = null;
+		//this.mSpeakHandler = null;
 	}
 
 	/**
@@ -178,7 +182,7 @@ public class NacWakeupProcess
 			vibrateHandler.removeCallbacksAndMessages(null);
 		}
 
-		this.mVibrator = null;
+		//this.mVibrator = null;
 	}
 
 	/**
@@ -279,7 +283,7 @@ public class NacWakeupProcess
 		Handler handler = new Handler(looper);
 
 		// Need to execute media player operations on the main thread
-		handler.post(() -> startNormal());
+		handler.post(() -> start());
 	}
 
 	/**
@@ -350,12 +354,10 @@ public class NacWakeupProcess
 		if (this.canUseTts())
 		{
 			NacTextToSpeech speech = new NacTextToSpeech(context, this);
-			Looper looper = context.getMainLooper();
 
 			speech.getAudioAttributes().merge(alarm);
 
 			this.mSpeech = speech;
-			this.mSpeakHandler = new Handler(looper);
 		}
 	}
 
@@ -379,6 +381,16 @@ public class NacWakeupProcess
 					Context.VIBRATOR_SERVICE);
 			}
 		}
+	}
+
+	/**
+	 * Set the alarm to use during wakeup.
+	 *
+	 * @param  alarm  The alarm.
+	 */
+	private void setAlarm(NacAlarm alarm)
+	{
+		this.mAlarm = alarm;
 	}
 
 	/**
@@ -434,45 +446,54 @@ public class NacWakeupProcess
 
 	/**
 	 * Start the wake up process.
+	 *
+	 * @param  alarm  The alarm to use during wake up.
 	 */
-	public void start()
+	public void start(NacAlarm alarm)
 	{
+		// Set the alarm
+		this.setAlarm(alarm);
+
+		// Setup the different services needed during wakeup
+		Context context = this.getContext();
+
+		this.setupVibrator(context);
+		this.setupMusicPlayer(context);
+		this.setupTextToSpeech(context, alarm);
+
+		// Set the volume (if going to use text-to-speech or play music)
 		if (this.canUseTts() || this.canPlayMusic())
 		{
 			this.setVolume();
 		}
 
-		this.startTts();
+		// Start text-to-speech
+		if (this.canUseTts())
+		{
+			this.speak();
+		}
+		// Start the normal wake up process
+		else
+		{
+			this.start();
+		}
 	}
 
 	/**
 	 * Start the normal wake up process.
 	 */
-	public void startNormal()
+	public void start()
 	{
+		// Play music
 		if (this.canPlayMusic())
 		{
 			this.playMusic();
 		}
 
+		// Vibrate the phone
 		if (this.canVibrate())
 		{
 			this.vibrate();
-		}
-	}
-
-	/**
-	 * Start the wake up process with TTS, if possible.
-	 */
-	public void startTts()
-	{
-		if (this.canUseTts())
-		{
-			this.speak();
-		}
-		else
-		{
-			this.startNormal();
 		}
 	}
 

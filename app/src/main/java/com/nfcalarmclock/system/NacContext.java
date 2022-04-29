@@ -130,6 +130,49 @@ public class NacContext
 	}
 
 	/**
+	 * Start the alarm activity.
+	 */
+	public static void startAlarmActivity(Context context, NacAlarm alarm)
+	{
+		// Unable to start the activity because the alarm is null
+		if (alarm == null)
+		{
+			return;
+		}
+
+		// Create the intent
+		Intent intent = NacIntent.createAlarmActivity(context, alarm);
+
+		// Start the activity
+		context.startActivity(intent);
+	}
+
+	/**
+	 * Start the alarm service.
+	 */
+	public static void startAlarmService(Context context, NacAlarm alarm)
+	{
+		// Unable to start the service because the alarm is null
+		if (alarm == null)
+		{
+			return;
+		}
+
+		// Create the intent
+		Intent intent = NacIntent.createForegroundService(context, alarm);
+
+		// Start the service
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			context.startForegroundService(intent);
+		}
+		else
+		{
+			context.startService(intent);
+		}
+	}
+
+	/**
 	 * Start the main activity.
 	 *
 	 * @param  context  A context.

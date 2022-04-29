@@ -40,6 +40,7 @@ import com.nfcalarmclock.nfc.NacScanNfcTagDialog;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.ratemyapp.NacRateMyApp;
 import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog;
+import com.nfcalarmclock.scheduler.NacScheduler;
 import com.nfcalarmclock.settings.NacSettingsActivity;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
@@ -1028,6 +1029,9 @@ public class NacMainActivity
 		// Set the previous app version as the current version. This way, the What's
 		// New dialog does not show again
 		shared.editPreviousAppVersion(version);
+
+		// Refresh all the scheduled alarms
+		NacScheduler.refreshAll(this);
 	}
 
 	/**
@@ -1148,7 +1152,8 @@ public class NacMainActivity
 			//
 			//NacSharedPreferences shared = this.getSharedPreferences();
 			//Remove this setting: shared.getPreventAppFromClosing()?
-			NacContext.startAlarm(this, alarm);
+			NacContext.startAlarmActivity(this, alarm);
+			//NacContext.startAlarm(this, alarm);
 		}
 	}
 
@@ -1271,6 +1276,11 @@ public class NacMainActivity
 	 */
 	private void setupInitialDialogToShow()
 	{
+		// Show the dialog for scheduling exact alarms
+		//if (this.setupScheduleExactAlarmsDialog())
+		//{
+		//}
+
 		// Show the What's New dialog, but do not show anything else after it is
 		// shown
 		if (this.setupWhatsNewDialog())
@@ -1284,6 +1294,29 @@ public class NacMainActivity
 			return;
 		}
 	}
+
+	/**
+	 * Setup the Schedule Exact Alarms dialog.
+	 *
+	 * This ensures that the app has this permission so that alarms run properly.
+	 */
+	//private boolean setupScheduleExactAlarmsDialog()
+	//{
+	//	// Schedule Exact Alarms permission is only applicable to >= API 31.
+	//	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
+	//	{
+	//		return false;
+	//	}
+
+	//	// Get the alarm manager
+	//	AlarmManager alarmManager = (AlarmManager) getSystemService(
+	//		Context.ALARM_SERVICE);
+
+	//	// Check the permission
+	//	if (!alarmManager.canScheduleExactAlarms())
+	//	{
+	//	}
+	//}
 
 	/**
 	 * Setup showing the What's New dialog.
