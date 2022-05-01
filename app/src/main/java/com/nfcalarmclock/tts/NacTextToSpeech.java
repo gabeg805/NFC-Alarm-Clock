@@ -1,13 +1,11 @@
 package com.nfcalarmclock.tts;
 
 import android.content.Context;
-//import android.media.AudioAttributes;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
-
-import com.google.android.exoplayer2.audio.AudioAttributes;
 
 import com.nfcalarmclock.media.NacAudioAttributes;
 import com.nfcalarmclock.media.NacAudioManager;
@@ -22,8 +20,8 @@ import java.util.Locale;
  */
 @SuppressWarnings({"RedundantSuppression", "UnnecessaryInterfaceModifier"})
 public class NacTextToSpeech
-	implements TextToSpeech.OnInitListener,
-		AudioManager.OnAudioFocusChangeListener
+	implements TextToSpeech.OnInitListener
+		//AudioManager.OnAudioFocusChangeListener
 {
 
 	/**
@@ -36,15 +34,13 @@ public class NacTextToSpeech
 		 * Called when speech engine is done speaking.
 		 */
 		@SuppressWarnings("unused")
-		public void onDoneSpeaking(NacTextToSpeech tts,
-			NacAudioAttributes attrs);
+		public void onDoneSpeaking(NacTextToSpeech tts);
 
 		/**
 		 * Called when speech engine has started speaking.
 		 */
 		@SuppressWarnings("unused")
-		public void onStartSpeaking(NacTextToSpeech tts,
-			NacAudioAttributes attrs);
+		public void onStartSpeaking(NacTextToSpeech tts);
 	}
 
 	/**
@@ -82,6 +78,33 @@ public class NacTextToSpeech
 			this.mContext = context;
 			this.mTextToSpeech = tts;
 			this.mOnAudioFocusChangeListener = listener;
+		}
+
+		/** Call the OnSpeakingListener when speaking is done.
+		 */
+		private void callOnDoneSpeakingListener()
+		{
+			OnSpeakingListener listener = this.getOnSpeakingListener();
+			NacTextToSpeech tts = this.getTextToSpeech();
+
+			if (listener != null)
+			{
+				listener.onDoneSpeaking(tts);
+			}
+		}
+
+		/** Call the OnSpeakingListener when speaking starts.
+		 */
+		private void callOnStartSpeakingListener()
+		{
+			OnSpeakingListener listener = this.getOnSpeakingListener();
+			NacTextToSpeech tts = this.getTextToSpeech();
+
+			// Call the listener
+			if (listener != null)
+			{
+				listener.onStartSpeaking(tts);
+			}
 		}
 
 		/**
@@ -122,15 +145,7 @@ public class NacTextToSpeech
 		@Override
 		public void onDone(String utteranceId)
 		{
-			OnSpeakingListener listener = getOnSpeakingListener();
-			NacTextToSpeech tts = getTextToSpeech();
-			NacAudioAttributes attrs = (tts != null) ? tts.getAudioAttributes()
-				: null;
-
-			if (listener != null)
-			{
-				listener.onDoneSpeaking(tts, attrs);
-			}
+			this.callOnDoneSpeakingListener();
 
 			NacAudioManager.abandonFocus(this.getContext(),
 				this.getOnAudioFocusChangeListener());
@@ -141,15 +156,7 @@ public class NacTextToSpeech
 		@Override
 		public void onStart(String utteranceId)
 		{
-			OnSpeakingListener listener = getOnSpeakingListener();
-			NacTextToSpeech tts = getTextToSpeech();
-			NacAudioAttributes attrs = (tts != null) ? tts.getAudioAttributes()
-				: null;
-
-			if (listener != null)
-			{
-				listener.onStartSpeaking(tts, attrs);
-			}
+			this.callOnStartSpeakingListener();
 		}
 
 		/**
@@ -180,6 +187,11 @@ public class NacTextToSpeech
 	}
 
 	/**
+	 * Utterance ID when speaking through the TTS engine.
+	 */
+	public static final String UTTERANCE_ID = "NacAlarmTts";
+
+	/**
 	 * The context.
 	 */
 	private final Context mContext;
@@ -187,12 +199,17 @@ public class NacTextToSpeech
 	/**
 	 * The speech engine.
 	 */
-	private TextToSpeech mSpeech;
+	private final TextToSpeech mSpeech;
 
 	/**
-	 * Message buffer to speak.
+	 * Message to buffer and speak when ready.
 	 */
-	private String mBuffer;
+	private String mBufferMessage;
+
+	/**
+	 * Audio attributes to buffer and use when ready.
+	 */
+	private NacAudioAttributes mBufferAudioAttributes;
 
 	/**
 	 * Check if speech engine is initialized.
@@ -205,45 +222,46 @@ public class NacTextToSpeech
 	private final NacUtteranceListener mUtterance;
 
 	/**
-	 * Audio attributes.
-	 */
-	private NacAudioAttributes mAudioAttributes;
-
-	/**
-	 * Utterance ID when speaking through the TTS engine.
-	 */
-	public static final String UTTERANCE_ID = "NacAlarmTts";
-
-	/**
 	 */
 	public NacTextToSpeech(Context context, OnSpeakingListener listener)
 	{
 		NacSharedPreferences shared = new NacSharedPreferences(context);
 		this.mContext = context;
-		this.mSpeech = null;
-		this.mBuffer = "";
+		this.mSpeech = new TextToSpeech(context, this);
+		this.mBufferMessage = "";
 		this.mInitialized = false;
-		this.mUtterance = new NacUtteranceListener(context, this, this);
-		this.mAudioAttributes = new NacAudioAttributes(context,
-			shared.getAudioSource());
+		this.mUtterance = new NacUtteranceListener(context, this, null);
+		//this.mUtterance = new NacUtteranceListener(context, this, this);
+		this.mBufferAudioAttributes = null;
 
 		this.setOnSpeakingListener(listener);
+		this.getTextToSpeech().setLanguage(Locale.getDefault());
+		this.getTextToSpeech().setOnUtteranceProgressListener(this.getUtteranceListener());
+	}
+
+	/**
+	 * Clear the buffered message and audio attributes.
+	 */
+	public void clearBuffer()
+	{
+		this.setBufferMessage("");
+		this.setBufferAudioAttributes(null);
 	}
 
 	/**
 	 * @return The audio attributes.
 	 */
-	public NacAudioAttributes getAudioAttributes()
+	public NacAudioAttributes getBufferAudioAttributes()
 	{
-		return this.mAudioAttributes;
+		return this.mBufferAudioAttributes;
 	}
 
 	/**
 	 * @return The speech buffer.
 	 */
-	private String getBuffer()
+	private String getBufferMessage()
 	{
-		return this.mBuffer;
+		return this.mBufferMessage;
 	}
 
 	/**
@@ -275,9 +293,9 @@ public class NacTextToSpeech
 	 */
 	public boolean hasBuffer()
 	{
-		String buffer = this.getBuffer();
+		String msg = this.getBufferMessage();
 
-		return ((buffer != null) && (!buffer.isEmpty()));
+		return (msg != null) && !msg.isEmpty();
 	}
 
 	/**
@@ -309,28 +327,28 @@ public class NacTextToSpeech
 	/**
 	 * Change media state when audio focus changes.
 	 */
-	@Override
-	public void onAudioFocusChange(int focusChange)
-	{
-		//String change = "UNKOWN";
+	//@Override
+	//public void onAudioFocusChange(int focusChange)
+	//{
+	//	//String change = "UNKOWN";
 
-		//if (focusChange == AudioManager.AUDIOFOCUS_GAIN)
-		//{
-		//	change = "GAIN";
-		//}
-		//else if (focusChange == AudioManager.AUDIOFOCUS_LOSS)
-		//{
-		//	change = "LOSS";
-		//}
-		//else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)
-		//{
-		//	change = "LOSS_TRANSIENT";
-		//}
-		//else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
-		//{
-		//	change = "LOSS_TRANSIENT_CAN_DUCK";
-		//}
-	}
+	//	//if (focusChange == AudioManager.AUDIOFOCUS_GAIN)
+	//	//{
+	//	//	change = "GAIN";
+	//	//}
+	//	//else if (focusChange == AudioManager.AUDIOFOCUS_LOSS)
+	//	//{
+	//	//	change = "LOSS";
+	//	//}
+	//	//else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)
+	//	//{
+	//	//	change = "LOSS_TRANSIENT";
+	//	//}
+	//	//else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
+	//	//{
+	//	//	change = "LOSS_TRANSIENT_CAN_DUCK";
+	//	//}
+	//}
 
 	/**
 	 */
@@ -339,26 +357,33 @@ public class NacTextToSpeech
 	{
 		this.mInitialized = (status == TextToSpeech.SUCCESS);
 
-		if (this.isInitialized())
+		// Initialization was a succes and there is a message in the buffer
+		if (this.isInitialized() && this.hasBuffer())
 		{
-			TextToSpeech speech = this.getTextToSpeech();
-			speech.setLanguage(Locale.getDefault());
+			String msg = this.getBufferMessage();
+			NacAudioAttributes attrs = this.getBufferAudioAttributes();
 
-			if (this.hasBuffer())
-			{
-				String buffer = this.getBuffer();
-				this.speak(buffer);
-				this.setBuffer("");
-			}
+			// Say what is in the buffer
+			this.speak(msg, attrs);
 		}
+	}
+
+	/**
+	 * Set the audio attributes to buffer and use when ready.
+	 *
+	 * @param  attrs  The audio attributes.
+	 */
+	public void setBufferAudioAttributes(NacAudioAttributes attrs)
+	{
+		this.mBufferAudioAttributes = attrs;
 	}
 
 	/**
 	 * Set the speech message buffer.
 	 */
-	private void setBuffer(String buffer)
+	private void setBufferMessage(String buffer)
 	{
-		this.mBuffer = buffer;
+		this.mBufferMessage = buffer;
 	}
 
 	/**
@@ -379,16 +404,8 @@ public class NacTextToSpeech
 		if (speech != null)
 		{
 			speech.shutdown();
-			this.mSpeech = null;
+			//this.mSpeech = null;
 		}
-	}
-
-	/**
-	 * @see #speak(String, NacAudioAttributes)
-	 */
-	public void speak(String message)
-	{
-		this.speak(message, this.getAudioAttributes());
 	}
 
 	/**
@@ -398,31 +415,34 @@ public class NacTextToSpeech
 	{
 		Context context = this.getContext();
 		TextToSpeech speech = this.getTextToSpeech();
-		this.mAudioAttributes = attrs;
 
-		if (speech == null)
-		{
-			speech = new TextToSpeech(context, this);
-			this.mSpeech = speech;
-			speech.setOnUtteranceProgressListener(this.mUtterance);
-		}
-
+		// TTS object is already initialized
 		if (this.isInitialized())
 		{
-			if(!NacAudioManager.requestFocusGainTransient(context, this, attrs))
+			// Gain transient audio focus
+			if(!NacAudioManager.requestFocusGainTransient(context, null, attrs))
 			{
 				NacUtility.printf("Audio Focus TRANSIENT NOT Granted!");
 				return;
 			}
 
+			// Speak
+			AudioAttributes androidAttrs = attrs.getAudioAttributes().getAudioAttributesV21();
 			Bundle bundle = NacBundle.toBundle(attrs);
-			speech.setAudioAttributes(attrs.getAudioAttributes().getAudioAttributesV21());
+
+			speech.setAudioAttributes(androidAttrs);
 			speech.speak(message, TextToSpeech.QUEUE_FLUSH, bundle,
-				UTTERANCE_ID);
+				NacTextToSpeech.UTTERANCE_ID);
+
+			// Clear the buffer
+			this.clearBuffer();
 		}
+		// Buffer the message and audio attributes until the TTS object is
+		// initialized
 		else
 		{
-			this.setBuffer(message);
+			this.setBufferMessage(message);
+			this.setBufferAudioAttributes(attrs);
 		}
 	}
 

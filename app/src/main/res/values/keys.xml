@@ -5,6 +5,7 @@
 
 	<string name="app_first_run">app_first_run</string>
 	<string name="previous_app_version">previous_app_version</string>
+	<string name="key_permission_schedule_exact_alarm_requested">key_permission_schedule_exact_alarm_requested</string>
 	<string name="app_start_statistics">app_start_statistics</string>
 	<string name="app_rating_counter">app_rating_counter</string>
 	<string name="app_should_refresh_main_activity">app_should_refresh_main_activity</string>
@@ -30,6 +31,7 @@
 	<string name="alarm_audio_source_key">pref_audio_source</string>
 	<string name="speak_to_me_key">pref_speak_to_me</string>
 	<string name="speak_frequency_key">pref_speak_frequency</string>
+	<string name="alarm_should_gradually_increase_volume_key">pref_should_gradually_increase_volume</string>
 	<string name="alarm_should_restrict_volume_key">pref_should_restrict_volume</string>
 
 	<string name="appearance_setting_key">pref_screen_appearance</string>

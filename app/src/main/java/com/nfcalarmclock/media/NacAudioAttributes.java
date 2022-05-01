@@ -184,7 +184,7 @@ public class NacAudioAttributes
 	/**
 	 * @return The maximum stream volume.
 	 */
-	private int getStreamMaxVolume()
+	public int getStreamMaxVolume()
 	{
 		AudioManager am = this.getAudioManager();
 		int stream = this.getStream();

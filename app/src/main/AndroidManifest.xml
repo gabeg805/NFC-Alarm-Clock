@@ -157,6 +157,17 @@
 			</intent-filter>
 		</receiver>
 
+		<!-- Refresh alarms when the Schedule Exact Alarm permission is changed -->
+		<receiver
+			android:name=".permission.NacScheduleExactAlarmPermissionChangedBroadcastReceiver"
+			android:enabled="true"
+			android:exported="false">
+
+			<intent-filter>
+				<action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
+			</intent-filter>
+		</receiver>
+
 			<!-- An intent filter that will receive the response
 			     from the authentication service -->
 			<!--

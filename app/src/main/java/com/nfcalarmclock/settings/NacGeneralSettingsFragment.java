@@ -14,10 +14,11 @@ import androidx.preference.PreferenceManager;
 import com.nfcalarmclock.audiooptions.NacAlarmAudioOptionsDialog;
 import com.nfcalarmclock.audiosource.NacAudioSourceDialog;
 import com.nfcalarmclock.autodismiss.NacAutoDismissPreference;
-import com.nfcalarmclock.R;
+import com.nfcalarmclock.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog;
 import com.nfcalarmclock.maxsnooze.NacMaxSnoozePreference;
 import com.nfcalarmclock.mediapicker.NacMediaActivity;
 import com.nfcalarmclock.mediapicker.NacMediaPreference;
+import com.nfcalarmclock.R;
 import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog;
 import com.nfcalarmclock.shared.NacSharedKeys;
 import com.nfcalarmclock.shared.NacSharedPreferences;
@@ -36,6 +37,7 @@ public class NacGeneralSettingsFragment
 		NacVolumePreference.OnAudioOptionsClickedListener,
 		NacAlarmAudioOptionsDialog.OnAudioOptionClickedListener,
 		NacAudioSourceDialog.OnAudioSourceSelectedListener,
+		NacGraduallyIncreaseVolumeDialog.OnGraduallyIncreaseVolumeListener,
 		NacRestrictVolumeDialog.OnRestrictVolumeListener,
 		NacTextToSpeechDialog.OnTextToSpeechOptionsSelectedListener
 {
@@ -95,9 +97,12 @@ public class NacGeneralSettingsFragment
 				this.showAudioSourceDialog();
 				break;
 			case 1:
-				this.showRestrictVolumeDialog();
+				this.showGraduallyIncreaseVolumeDialog();
 				break;
 			case 2:
+				this.showRestrictVolumeDialog();
+				break;
+			case 3:
 				this.showTextToSpeechDialog();
 				break;
 			default:
@@ -122,6 +127,16 @@ public class NacGeneralSettingsFragment
 		NacSharedPreferences shared = this.getSharedPreferences();
 
 		shared.editAudioSource(audioSource);
+	}
+
+	/**
+	 */
+	@Override
+	public void onGraduallyIncreaseVolume(boolean shouldIncrease)
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+
+		shared.editShouldGraduallyIncreaseVolume(shouldIncrease);
 	}
 
 	/**
@@ -236,6 +251,20 @@ public class NacGeneralSettingsFragment
 		dialog.setDefaultAudioSource(audioSource);
 		dialog.setOnAudioSourceSelectedListener(this);
 		dialog.show(getChildFragmentManager(), NacAudioSourceDialog.TAG);
+	}
+
+	/**
+	 * Show the gradually increase volume dialog.
+	 */
+	public void showGraduallyIncreaseVolumeDialog()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacGraduallyIncreaseVolumeDialog dialog = new NacGraduallyIncreaseVolumeDialog();
+		boolean shouldIncrease = shared.getShouldGraduallyIncreaseVolume();
+
+		dialog.setDefaultShouldGraduallyIncreaseVolume(shouldIncrease);
+		dialog.setOnGraduallyIncreaseVolumeListener(this);
+		dialog.show(getChildFragmentManager(), NacGraduallyIncreaseVolumeDialog.TAG);
 	}
 
 	/**

@@ -38,7 +38,7 @@ import java.util.List;
 //@Database(version=1, exportSchema=true,
 //	entities={NacAlarm.class})
 //@TypeConverters({NacAlarmTypeConverters.class})
-@Database(version=5,
+@Database(version=6,
 		entities={NacAlarm.class, NacAlarmCreatedStatistic.class,
 		NacAlarmDeletedStatistic.class, NacAlarmDismissedStatistic.class,
 		NacAlarmMissedStatistic.class, NacAlarmSnoozedStatistic.class},
@@ -46,7 +46,8 @@ import java.util.List;
 			@AutoMigration(from=1, to=2),
 			@AutoMigration(from=2, to=3, spec=NacAlarmDatabase.ClearAllStatisticsMigration.class),
 			@AutoMigration(from=3, to=4),
-			@AutoMigration(from=4, to=5)
+			@AutoMigration(from=4, to=5),
+			@AutoMigration(from=5, to=6)
 		})
 @TypeConverters({NacAlarmTypeConverters.class,
 	NacStatisticTypeConverters.class})
@@ -194,6 +195,7 @@ public abstract class NacAlarmDatabase
 		for (int i=1; i < 400; i++)
 		{
 			NacScheduler.cancelOld(context, i);
+			NacScheduler.cancel(context, i);
 		}
 	}
 

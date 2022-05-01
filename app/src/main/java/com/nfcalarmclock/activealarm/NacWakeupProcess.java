@@ -9,6 +9,8 @@ import android.os.Vibrator;
 import android.os.VibratorManager;
 import android.os.VibrationEffect;
 
+import com.google.android.exoplayer2.Player;
+
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.media.NacAudioAttributes;
 import com.nfcalarmclock.media.NacMedia;
@@ -17,12 +19,15 @@ import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.tts.NacTextToSpeech;
 
+import com.nfcalarmclock.util.NacUtility;
+
 /**
  * Actions to take upon waking up, such as enabling NFC, playing music, etc.
  */
 @SuppressWarnings({"RedundantSuppression", "UnnecessaryInterfaceModifier"})
 public class NacWakeupProcess
-	implements NacTextToSpeech.OnSpeakingListener
+	implements NacTextToSpeech.OnSpeakingListener,
+		Player.Listener
 {
 
 	/**
@@ -31,14 +36,14 @@ public class NacWakeupProcess
 	private final Context mContext;
 
 	/**
-	 * Alarm.
-	 */
-	private NacAlarm mAlarm;
-
-	/**
 	 * Shared preferences.
 	 */
 	private final NacSharedPreferences mSharedPreferences;
+
+	/**
+	 * Alarm.
+	 */
+	private NacAlarm mAlarm;
 
 	/**
 	 * Media player.
@@ -56,6 +61,11 @@ public class NacWakeupProcess
 	private NacTextToSpeech mSpeech;
 
 	/**
+	 * Audio attributes.
+	 */
+	private NacAudioAttributes mAudioAttributes;
+
+	/**
 	 * Vibrate handler, to vibrate the phone at periodic intervals.
 	 */
 	private final Handler mVibrateHandler;
@@ -66,8 +76,26 @@ public class NacWakeupProcess
 	private final Handler mSpeakHandler;
 
 	/**
+	 * Gradually increase the volume.
 	 */
-	//public NacWakeupProcess(Context context, NacAlarm alarm)
+	private final Handler mGraduallyIncreaseVolumeHandler;
+
+	/**
+	 * Volume level to restrict any volume changes to.
+	 *
+	 * This is not just the alarm volume, since if the user wants to gradually
+	 * increase the volume, the restricted volume in that case should be lower
+	 * than the alarm volume.
+	 */
+	private int mVolumeToRestrictChangeTo;
+
+	/**
+	 * Flag indicating whether to ignore the next volume change or not.
+	 */
+	private boolean mIgnoreNextVolumeChange;
+
+	/**
+	 */
 	public NacWakeupProcess(Context context)
 	{
 		Looper looper = context.getMainLooper();
@@ -78,41 +106,12 @@ public class NacWakeupProcess
 		this.mSharedPreferences = new NacSharedPreferences(context);
 		this.mVibrateHandler = new Handler(looper);
 		this.mSpeakHandler = new Handler(looper);
+		this.mGraduallyIncreaseVolumeHandler = new Handler(looper);
+		this.mIgnoreNextVolumeChange = false;
+		this.mVolumeToRestrictChangeTo = -1;
+
 		// TODO: Can the handler for the media player in onDoneSpeaking() be created
 		// here? This way it is only done once?
-	}
-
-	/**
-	 * @return True if music can be played, and False otherwise.
-	 */
-	private boolean canPlayMusic()
-	{
-		NacAlarm alarm = this.getAlarm();
-
-		return (alarm != null) && alarm.hasMedia();
-	}
-
-	/**
-	 * @return True if the user wants to use to text-to-speech, and False
-	 *         otherwise.
-	 */
-	private boolean canUseTts()
-	{
-		//NacSharedPreferences shared = this.getSharedPreferences();
-		//return (shared != null) && shared.getSpeakToMe();
-		NacAlarm alarm = this.getAlarm();
-
-		return (alarm != null) && alarm.shouldUseTts();
-	}
-
-	/**
-	 * @return True if the phone can be vibrated, and False otherwise.
-	 */
-	private boolean canVibrate()
-	{
-		NacAlarm alarm = this.getAlarm();
-
-		return (alarm != null) && alarm.shouldVibrate();
 	}
 
 	/**
@@ -123,6 +122,21 @@ public class NacWakeupProcess
 		this.cleanupVibrate();
 		this.cleanupPlayer();
 		this.cleanupTextToSpeech();
+		this.cleanupGraduallyIncreaseVolume();
+	}
+
+	/**
+	 * Cleanup gradually increasing the volume.
+	 */
+	private void cleanupGraduallyIncreaseVolume()
+	{
+		Handler handler = this.getGraduallyIncreaseVolumeHandler();
+
+		// Stop the volume from gradually increasing
+		if (handler != null)
+		{
+			handler.removeCallbacksAndMessages(null);
+		}
 	}
 
 	/**
@@ -206,11 +220,27 @@ public class NacWakeupProcess
 	}
 
 	/**
+	 * @return The audio attributes.
+	 */
+	public NacAudioAttributes getAudioAttributes()
+	{
+		return this.mAudioAttributes;
+	}
+
+	/**
 	 * @return The context.
 	 */
 	private Context getContext()
 	{
 		return this.mContext;
+	}
+
+	/**
+	 * @return The handler to gradually increase the volume.
+	 */
+	private Handler getGraduallyIncreaseVolumeHandler()
+	{
+		return this.mGraduallyIncreaseVolumeHandler;
 	}
 
 	/**
@@ -274,9 +304,71 @@ public class NacWakeupProcess
 	}
 
 	/**
+	 * @return The volume to restrict any changes to.
+	 */
+	private int getVolumeToRestrictChangeTo()
+	{
+		return this.mVolumeToRestrictChangeTo;
+	}
+
+	/**
+	 * Gradually increase the volume.
+	 */
+	private void graduallyIncreaseVolume()
+	{
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+		NacAudioAttributes attrs = this.getAudioAttributes();
+
+		int currentVolume = attrs.getStreamVolume();
+		int alarmVolume = attrs.toStreamVolume();
+		int newVolume = currentVolume + 1;
+
+		// Do not change the volume. It is already at the alarm volume or greater
+		if (currentVolume >= alarmVolume)
+		{
+			return;
+		}
+
+		// Gradually increase the volume by one step
+		this.setIgnoreNextVolumeChange(true);
+		this.setVolumeToRestrictChangeTo(newVolume);
+		attrs.setStreamVolume(newVolume);
+
+		// Wait for a period of time before increasing the volume again
+		Handler handler = this.getGraduallyIncreaseVolumeHandler();
+		handler.postDelayed(() -> graduallyIncreaseVolume(), 5000);
+	}
+
+	/**
+	 * Called when the device volume is changed.
 	 */
 	@Override
-	public void onDoneSpeaking(NacTextToSpeech tts, NacAudioAttributes attrs)
+	public void onDeviceVolumeChanged(int volume, boolean muted)
+	{
+		NacAlarm alarm = this.getAlarm();
+
+		// Do not handle the volume change. Alarm is not set yet, or volume does not
+		// need to be restricted, or this volume change can be ignored.
+		if ((alarm == null) || !alarm.getShouldRestrictVolume()
+			|| this.shouldIgnoreNextVolumeChange())
+		{
+			this.setIgnoreNextVolumeChange(false);
+			return;
+		}
+
+		// Restrict changing the volume
+		// TODO: setDeviceMuted() in case muted=True?
+		NacMediaPlayer player = this.getMediaPlayer();
+		int restrictVolume = this.getVolumeToRestrictChangeTo();
+
+		player.getMediaPlayer().setDeviceVolume(restrictVolume);
+	}
+
+	/**
+	 */
+	@Override
+	public void onDoneSpeaking(NacTextToSpeech tts)
 	{
 		Context context = this.getContext();
 		Looper looper = context.getMainLooper();
@@ -287,12 +379,14 @@ public class NacWakeupProcess
 	}
 
 	/**
+	 * Called when the text-to-speech engine has started.
 	 */
 	@Override
-	public void onStartSpeaking(NacTextToSpeech tts, NacAudioAttributes attrs)
+	public void onStartSpeaking(NacTextToSpeech tts)
 	{
 		Vibrator vibrator = this.getVibrator();
 
+		// Stop any vibration when TTS is playing
 		if (vibrator != null)
 		{
 			vibrator.cancel();
@@ -305,9 +399,10 @@ public class NacWakeupProcess
 	private void playMusic()
 	{
 		NacMediaPlayer player = this.getMediaPlayer();
+		NacAlarm alarm = this.getAlarm();
 
 		// Unable to play music
-		if ((player == null) || !this.canPlayMusic())
+		if ((player == null) || (alarm == null) || !alarm.hasMedia())
 		{
 			return;
 		}
@@ -321,7 +416,6 @@ public class NacWakeupProcess
 		else
 		{
 			NacSharedPreferences shared = this.getSharedPreferences();
-			NacAlarm alarm = this.getAlarm();
 
 			// Set shuffle mode (can be set or not set) based on the preference
 			if (NacMedia.isDirectory(alarm.getMediaType()))
@@ -336,54 +430,6 @@ public class NacWakeupProcess
 	}
 
 	/**
-	 * Setup the music player.
-	 */
-	private void setupMusicPlayer(Context context)
-	{
-		if (this.canPlayMusic())
-		{
-			this.mPlayer = new NacMediaPlayer(context);
-		}
-	}
-
-	/**
-	 * Setup the text-to-speech engine.
-	 */
-	private void setupTextToSpeech(Context context, NacAlarm alarm)
-	{
-		if (this.canUseTts())
-		{
-			NacTextToSpeech speech = new NacTextToSpeech(context, this);
-
-			speech.getAudioAttributes().merge(alarm);
-
-			this.mSpeech = speech;
-		}
-	}
-
-	/**
-	 * Setup the phone vibrator.
-	 */
-	@SuppressWarnings("deprecation")
-	private void setupVibrator(Context context)
-	{
-		if (this.canVibrate())
-		{
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-			{
-				VibratorManager manager = (VibratorManager) context.getSystemService(
-					Context.VIBRATOR_MANAGER_SERVICE);
-				this.mVibrator = manager.getDefaultVibrator();
-			}
-			else
-			{
-				this.mVibrator = (Vibrator) context.getSystemService(
-					Context.VIBRATOR_SERVICE);
-			}
-		}
-	}
-
-	/**
 	 * Set the alarm to use during wakeup.
 	 *
 	 * @param  alarm  The alarm.
@@ -394,6 +440,16 @@ public class NacWakeupProcess
 	}
 
 	/**
+	 * Set whether the next volume change should be ignored or not.
+	 *
+	 * @param  ignore  Whether or not to ignore the next volume change.
+	 */
+	private void setIgnoreNextVolumeChange(boolean ignore)
+	{
+		this.mIgnoreNextVolumeChange = ignore;
+	}
+
+	/**
 	 * Set the volume for the music player and text-to-speech engine.
 	 */
 	private void setVolume()
@@ -401,14 +457,159 @@ public class NacWakeupProcess
 		NacAlarm alarm = this.getAlarm();
 		NacMediaPlayer player = this.getMediaPlayer();
 
-		if (player != null)
+		// Unable to set volume. Alarm is not set yet or player is not setup yet.
+		if ((alarm == null) || (player == null))
 		{
-			NacAudioAttributes attrs = player.getAudioAttributes();
-
-			player.removePlaybackListener();
-			attrs.merge(alarm).setVolume();
-			player.setPlaybackListener();
+			return;
 		}
+
+		// Get the audio attributes
+		// TODO: Update the player and its audio attributes
+		//NacAudioAttributes attrs = player.getAudioAttributes();
+		NacAudioAttributes attrs = this.getAudioAttributes();
+
+		// Set the volume to the alarm volume
+		this.setIgnoreNextVolumeChange(true);
+		attrs.setVolume();
+		//attrs.merge(alarm).setVolume();
+
+		// Set the volume to restrict to, if any changes occur
+		if (alarm.getShouldRestrictVolume())
+		{
+			this.setVolumeToRestrictChangeTo(attrs.getStreamVolume());
+		}
+	}
+
+	/**
+	 * Set the volume to restrict any changes to.
+	 *
+	 * @param  volume  The volume level.
+	 */
+	private void setVolumeToRestrictChangeTo(int volume)
+	{
+		this.mVolumeToRestrictChangeTo = volume;
+	}
+
+	/**
+	 * Setup the audio attributes.
+	 */
+	private void setupAudioAttributes()
+	{
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+
+		// Unablet to setup the audio attributes. The alarm is not set yet
+		if (alarm == null)
+		{
+			return;
+		}
+
+		// Create the audio attributes object
+		this.mAudioAttributes = new NacAudioAttributes(context, alarm);
+	}
+
+	/**
+	 * Setup gradually increasing the volume.
+	 */
+	private void setupGraduallyIncreaseVolume()
+	{
+		Handler handler = this.getGraduallyIncreaseVolumeHandler();
+		NacAudioAttributes attrs = this.getAudioAttributes();
+		long freq = 5000;
+
+		// Set the volume to 0 to start with
+		this.setIgnoreNextVolumeChange(true);
+		this.setVolumeToRestrictChangeTo(0);
+		attrs.setStreamVolume(0);
+
+		// Periodically increase the volume
+		handler.postDelayed(() -> graduallyIncreaseVolume(), freq);
+	}
+
+	/**
+	 * Setup the music player.
+	 */
+	private void setupMusicPlayer()
+	{
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+
+		// Alarm is not set yet or does not have media to play. Unable to setup music
+		// player
+		if ((alarm == null) || !alarm.hasMedia())
+		{
+			return;
+		}
+
+		// Create the media player
+		NacMediaPlayer player = new NacMediaPlayer(context);
+
+		// Set the listener for any changes. Only the volume change method is
+		// handled
+		player.getMediaPlayer().addListener(this);
+
+		// Set the member variable
+		this.mPlayer = player;
+	}
+
+	/**
+	 * Setup the text-to-speech engine.
+	 */
+	private void setupTextToSpeech()
+	{
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+
+		// Unable to setup the text-to-speech engine. Alarm is not set yet, or should
+		// not use TTS
+		if ((alarm == null) || !alarm.shouldUseTts())
+		{
+			return;
+		}
+
+		// Create the TTS engine
+		NacTextToSpeech speech = new NacTextToSpeech(context, this);
+
+		// Set the member variable
+		this.mSpeech = speech;
+	}
+
+	/**
+	 * Setup the phone vibrator.
+	 */
+	@SuppressWarnings("deprecation")
+	private void setupVibrator()
+	{
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+
+		// Unable to setup the vibrator. Alarm is not set yet or should not vibrate
+		if ((alarm == null) || !alarm.shouldVibrate())
+		{
+			return;
+		}
+
+		// Setup the vibrator
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+		{
+			VibratorManager manager = (VibratorManager) context.getSystemService(
+				Context.VIBRATOR_MANAGER_SERVICE);
+			this.mVibrator = manager.getDefaultVibrator();
+		}
+		else
+		{
+			this.mVibrator = (Vibrator) context.getSystemService(
+				Context.VIBRATOR_SERVICE);
+		}
+	}
+
+	/**
+	 * @return True if the next volume change should be ignored, and False
+	 *         otherwise.
+	 */
+	private boolean shouldIgnoreNextVolumeChange()
+	{
+		return this.mIgnoreNextVolumeChange;
 	}
 
 	/**
@@ -416,32 +617,32 @@ public class NacWakeupProcess
 	 */
 	private void speak()
 	{
+		NacTextToSpeech speech = this.getTextToSpeech();
 		NacAlarm alarm = this.getAlarm();
-		final long freq = alarm.getTtsFrequency() * 60L * 1000L;
-		final Handler handler = this.getSpeakHandler();
-		final Runnable sayTime = new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					NacTextToSpeech speech = getTextToSpeech();
 
-					if (speech.isSpeaking() || speech.hasBuffer())
-					{
-						return;
-					}
+		// Unable to speak via TTS. The engine is not set yet, or is already
+		// speaking, or there is something in the buffer, or the alarm is not set
+		// yet, or the alarm should not use TTS
+		if ((speech == null) || speech.isSpeaking() || speech.hasBuffer()
+			|| (alarm == null) || !alarm.shouldUseTts())
+		{
+			return;
+		}
 
-					String text = getTimeToSay();
-					speech.speak(text);
+		// Speak via TTS
+		NacAudioAttributes attrs = getAudioAttributes();
+		String text = getTimeToSay();
 
-					if (freq != 0)
-					{
-						handler.postDelayed(this, freq);
-					}
-				}
-			};
+		speech.speak(text, attrs);
 
-		handler.post(sayTime);
+		// Wait for some period of time before speaking through TTS again
+		Handler handler = this.getSpeakHandler();
+		long freq = alarm.getTtsFrequencyMillis();
+
+		if (freq != 0)
+		{
+			handler.postDelayed(() -> speak(), freq);
+		}
 	}
 
 	/**
@@ -451,24 +652,41 @@ public class NacWakeupProcess
 	 */
 	public void start(NacAlarm alarm)
 	{
+		// Unable to start the wakeup process. Alarm is not set
+		if (alarm == null)
+		{
+			return;
+		}
+
 		// Set the alarm
 		this.setAlarm(alarm);
 
 		// Setup the different services needed during wakeup
-		Context context = this.getContext();
-
-		this.setupVibrator(context);
-		this.setupMusicPlayer(context);
-		this.setupTextToSpeech(context, alarm);
+		this.setupAudioAttributes();
+		this.setupMusicPlayer();
+		this.setupTextToSpeech();
+		this.setupVibrator();
 
 		// Set the volume (if going to use text-to-speech or play music)
-		if (this.canUseTts() || this.canPlayMusic())
+		// TODO: Make this into a method?
+		if (alarm.shouldUseTts() || alarm.hasMedia())
 		{
-			this.setVolume();
+			// Start to gradually increase the alarm volume
+			if (alarm.getShouldGraduallyIncreaseVolume())
+			{
+				NacUtility.printf("Setup gradually increase volume!");
+				this.setupGraduallyIncreaseVolume();
+			}
+			// Set the alarm volume
+			else
+			{
+				NacUtility.printf("Set volume normally!");
+				this.setVolume();
+			}
 		}
 
 		// Start text-to-speech
-		if (this.canUseTts())
+		if (alarm.shouldUseTts())
 		{
 			this.speak();
 		}
@@ -484,14 +702,22 @@ public class NacWakeupProcess
 	 */
 	public void start()
 	{
+		NacAlarm alarm = this.getAlarm();
+
+		// Unable to start the wakeup process. Alarm is not set yet
+		if (alarm == null)
+		{
+			return;
+		}
+
 		// Play music
-		if (this.canPlayMusic())
+		if (alarm.hasMedia())
 		{
 			this.playMusic();
 		}
 
 		// Vibrate the phone
-		if (this.canVibrate())
+		if (alarm.shouldVibrate())
 		{
 			this.vibrate();
 		}
@@ -505,14 +731,16 @@ public class NacWakeupProcess
 	public void vibrate()
 	{
 		Vibrator vibrator = this.getVibrator();
+		NacAlarm alarm = this.getAlarm();
 		long duration = 500;
 		long waitTime = 1000 + duration;
 		//long[] pattern = {0, duration, 2*duration};
 		//long[] pattern = {duration, duration, duration};
 		//long[] pattern = {0, duration, duration};
 
-		// Unable to vibrate
-		if (!this.canVibrate() || (vibrator == null))
+		// Unable to vibrate. Vibrator is not set yet, or alarm is not set yet, or
+		// alarm should not vibrate
+		if ((vibrator == null) || (alarm == null) || !alarm.shouldVibrate())
 		{
 			return;
 		}
@@ -536,9 +764,9 @@ public class NacWakeupProcess
 			//vibrator.vibrate(pattern, 0);
 		}
 
-		// Vibrate the phone after 1 sec
-		//Handler handler = this.getVibrateHandler();
-		this.getVibrateHandler().postDelayed(() -> vibrate(), waitTime);
+		// Wait for a period of time before vibrating the phone again
+		Handler handler = this.getVibrateHandler();
+		handler.postDelayed(() -> vibrate(), waitTime);
 	}
 
 }

@@ -1699,9 +1699,25 @@ public class NacCardHolder
 		boolean fromUser)
 	{
 		NacAlarm alarm = this.getAlarm();
+		int alarmVolume = alarm.getVolume();
+		NacUtility.printf("onProgressChanged! %d %d", alarm.getVolume(), progress);
 
-		alarm.setVolume(progress);
-		this.setVolumeImageView();
+		// Do nothing if the volumes are already the same
+		if (alarmVolume == progress)
+		{
+			return;
+		}
+
+		// Volume can be changed since the alarm can be modified
+		if (this.checkCanModifyAlarm())
+		{
+			alarm.setVolume(progress);
+			this.setVolumeImageView();
+		}
+		else
+		{
+			seekBar.setProgress(alarm.getVolume());
+		}
 	}
 
 	/**

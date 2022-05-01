@@ -4,18 +4,14 @@
 	<!-- App -->
 	<string name="app_name">NFC Alarm Clock</string>
 	<string name="app_version">@string/versionName</string>
+	<string name="permission_schedule_exact_alarm_request">This app does not have the <b>Schedule Exact Alarm</b> permission enabled.\n\nWithout this, alarms will not be able to run if the app is not in focus, or recently in focus.\n\nWould you like to continue to the next screen to enable this permission?</string>
 
 
 	<!-- What's new -->
-	<string name="item_1">Fixed the issue where an <b>8am alarm</b> that is not present in the list would go off.\n\nReboot your phone to make this alarm go away.</string>
-	<string name="item_2">Added <b>Restrict Volume</b> option which, if enabled, means that you will not be able to change the volume when your alarm goes off.\n\nCan be found by selecting the gear icon to the right of the volume slider.</string>
-	<string name="item_3">Updated the media player to <b>ExoPlayer</b>.\n\nThis should not impact you, but is mentioned in case there are any issues playing the selected music/ringtone.</string>
-	<string name="item_4">Added <b>Call</b> to available audio sources.</string>
-	<string name="item_5">Removed <b>System</b> from available audio sources.</string>
-	<string name="item_6">Updated to use the <b>in-app rating prompt</b> by Google.\n\nWhether you opt to rate or not, the prompt should only be shown once and then never be shown again.</string>
-	<string name="item_7">Various updates that needed to be made for phones that run <b>Android Version 12</b>.</string>
-	<string name="item_8">Increased the <b>vibrate wait time</b>. This is the time in-between when your phone vibrates during an active alarm.</string>
-	<string name="item_9">Added more checks to prevent modifying a snoozed alarm.</string>
+	<string name="item_1">Added <b>Gradually Increase Volume</b> option which, if enabled, means that the volume will gradually increase, when an alarm goes off.\n\nCan be found by selecting the gear icon to the right of the volume slider.</string>
+	<string name="item_2">Fixed <b>Android 12</b> issue where alarm would not start due to the <b>Schedule Exact Alarm</b> permission not being enabled.\n\nYou are now prompted for this permission if it is not enabled.</string>
+	<string name="item_3">Fixed issue where the <b>volume slider</b> in an alarm card could be moved when the alarm was <b>snoozed</b>.</string>
+	<string name="item_4">Updated the <b>media player</b> and <b>text-to-speech</b>.\n\nThis should not impact you, but is mentioned in case there are any issues with either.</string>
 
 
 
@@ -102,6 +98,7 @@
 	<string name="title_color">Select a color</string>
 	<string name="title_audio_option">Select an audio option</string>
 	<string name="title_audio_source">Select an audio source</string>
+	<string name="title_gradually_increase_volume">Choose to gradually increase volume</string>
 	<string name="title_restrict_volume">Choose to restrict volume</string>
 	<string name="title_tts">Select text-to-speech options</string>
 	<string name="title_next_alarm_format">Select a format</string>
@@ -387,6 +384,11 @@
 	<!-- Restrict volume -->
 	<string name="restrict_volume_true">You will be unable to change the volume when the alarm is active. (Experimental)</string>
 	<string name="restrict_volume_false">Volume can be changed freely when the alarm is active.</string>
+
+
+	<!-- Restrict volume -->
+	<string name="gradually_increase_volume_true">Volume will gradually increase, when the alarm is active, until the alarm volume level is reached. (Experimental)</string>
+	<string name="gradually_increase_volume_false">Volume will be set to the alarm volume level, when the alarm becomes active.</string>
 
 
 

@@ -312,6 +312,14 @@ public class NacSharedKeys
 	}
 
 	/**
+	 * @return The should gradually increase volume key.
+	 */
+	public String getShouldGraduallyIncreaseVolume()
+	{
+		return this.getString(R.string.alarm_should_gradually_increase_volume_key);
+	}
+
+	/**
 	 * @return The should refresh main activity key.
 	 */
 	public String getShouldRefreshMainActivity()
@@ -453,6 +461,14 @@ public class NacSharedKeys
 	public String getVolume()
 	{
 		return this.getString(R.string.alarm_volume_key);
+	}
+
+	/**
+	 * @return The schedule exact alarm permission requested key.
+	 */
+	public String getWasScheduleExactAlarmPermissionRequested()
+	{
+		return this.getString(R.string.key_permission_schedule_exact_alarm_requested);
 	}
 
 }

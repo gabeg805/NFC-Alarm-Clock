@@ -166,6 +166,13 @@ public class NacAlarm
 	private int mTtsFrequency;
 
 	/**
+	 * Flag indicating whether to gradually increase the volume or not, when an
+	 * alarm is active.
+	 */
+	@ColumnInfo(name="should_gradually_increase_volume", defaultValue="false")
+	private boolean mShouldGraduallyIncreaseVolume;
+
+	/**
 	 * Flag indicating whether to restrict changing the volume or not, when an
 	 * alarm is active.
 	 */
@@ -206,6 +213,7 @@ public class NacAlarm
 				.setAudioSource("Media")
 				.setName("")
 				.setUseTts(false)
+				.setShouldGraduallyIncreaseVolume(false)
 				.setShouldRestrictVolume(false);
 		}
 
@@ -227,6 +235,7 @@ public class NacAlarm
 					.setName(shared.getName())
 					.setUseTts(shared.getSpeakToMe())
 					.setTtsFrequency(shared.getSpeakFrequency())
+					.setShouldGraduallyIncreaseVolume(shared.getShouldGraduallyIncreaseVolume())
 					.setShouldRestrictVolume(shared.getShouldRestrictVolume());
 			}
 		}
@@ -433,10 +442,24 @@ public class NacAlarm
 		}
 
 		/**
+		 * Set whether the volume should be gradually increased when an alarm is active.
+		 *
+		 * @param  shouldIncrease  True if the volume should be gradually
+		 *                         increased, and False otherwise.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setShouldGraduallyIncreaseVolume(boolean shouldIncrease)
+		{
+			this.getAlarm().setShouldGraduallyIncreaseVolume(shouldIncrease);
+			return this;
+		}
+
+		/**
 		 * Set whether the volume should be restricted when an alarm is active.
 		 *
 		 * @param  restrict  True if the volume should be restricted, and False
-		 *                 otherwise.
+		 *                   otherwise.
 		 *
 		 * @return The Builder.
 		 */
@@ -552,6 +575,7 @@ public class NacAlarm
 		this.setName(input.readString());
 		this.setUseTts(input.readInt() != 0);
 		this.setTtsFrequency(input.readInt());
+		this.setShouldGraduallyIncreaseVolume(input.readInt() != 0);
 		this.setShouldRestrictVolume(input.readInt() != 0);
 	}
 
@@ -776,6 +800,7 @@ public class NacAlarm
 			.setName(this.getName())
 			.setUseTts(this.shouldUseTts())
 			.setTtsFrequency(this.getTtsFrequency())
+			.setShouldGraduallyIncreaseVolume(this.getShouldGraduallyIncreaseVolume())
 			.setShouldRestrictVolume(this.getShouldRestrictVolume())
 			.build();
 	}
@@ -819,6 +844,7 @@ public class NacAlarm
 			&& (this.getName().equals(alarm.getName()))
 			&& (this.shouldUseTts() == alarm.shouldUseTts())
 			&& (this.getTtsFrequency() == alarm.getTtsFrequency())
+			&& (this.getShouldGraduallyIncreaseVolume() == alarm.getShouldGraduallyIncreaseVolume())
 			&& (this.getShouldRestrictVolume() == alarm.getShouldRestrictVolume());
 	}
 
@@ -975,6 +1001,15 @@ public class NacAlarm
 	}
 
 	/**
+	 * @return Whether to gradually increase the volume or not, when an alarm is
+	 * active.
+	 */
+	public boolean getShouldGraduallyIncreaseVolume()
+	{
+		return this.mShouldGraduallyIncreaseVolume;
+	}
+
+	/**
 	 * @return Whether to restrict changing the volume or not, when an alarm is
 	 * active.
 	 */
@@ -1032,6 +1067,14 @@ public class NacAlarm
 	public int getTtsFrequency()
 	{
 		return this.mTtsFrequency;
+	}
+
+	/**
+	 * @return The frequency at which to use TTS, in units of milliseconds.
+	 */
+	public long getTtsFrequencyMillis()
+	{
+		return this.getTtsFrequency() * 60L * 1000L;
 	}
 
 	/**
@@ -1155,6 +1198,7 @@ public class NacAlarm
 		NacUtility.printf("Name         : %s", this.getName());
 		NacUtility.printf("Use Tts      : %b", this.shouldUseTts());
 		NacUtility.printf("Tts Freq     : %d", this.getTtsFrequency());
+		NacUtility.printf("Grad Inc Vol : %b", this.getShouldGraduallyIncreaseVolume());
 		NacUtility.printf("Restrict Vol : %b", this.getShouldRestrictVolume());
 	}
 
@@ -1313,6 +1357,15 @@ public class NacAlarm
 	}
 
 	/**
+	 * Set whether to gradually increase the volume or not, when an alarm is
+	 * active.
+	 */
+	public void setShouldGraduallyIncreaseVolume(boolean shouldIncrease)
+	{
+		this.mShouldGraduallyIncreaseVolume = shouldIncrease;
+	}
+
+	/**
 	 * Set whether to restrict changing the volume or not, when an alarm is
 	 * active.
 	 */
@@ -1403,6 +1456,15 @@ public class NacAlarm
 	{
 		this.mVolume = volume;
 	}
+
+	/**
+	 * @return Whether to gradually increase the volume or not, when an alarm is
+	 * active.
+	 */
+	//public boolean shouldGraduallyIncreaseVolume()
+	//{
+	//	return this.mShouldGraduallyIncreaseVolume;
+	//}
 
 	/**
 	 * @return True if should repeat the alarm after it runs and false otherwise.
@@ -1577,6 +1639,7 @@ public class NacAlarm
 		output.writeString(this.getName());
 		output.writeInt(this.shouldUseTts() ? 1 : 0);
 		output.writeInt(this.getTtsFrequency());
+		output.writeInt(this.getShouldGraduallyIncreaseVolume() ? 1 : 0);
 		output.writeInt(this.getShouldRestrictVolume() ? 1 : 0);
 	}
 

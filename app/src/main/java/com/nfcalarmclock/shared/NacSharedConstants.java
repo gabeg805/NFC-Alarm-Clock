@@ -781,6 +781,14 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Gradually increase volume title.
+	 */
+	public String getTitleGraduallyIncreaseVolume()
+	{
+		return this.getString(R.string.title_gradually_increase_volume);
+	}
+
+	/**
 	 * @return Alarm name title.
 	 */
 	@SuppressWarnings("unused")

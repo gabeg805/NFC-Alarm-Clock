@@ -13,8 +13,6 @@ import com.google.android.exoplayer2.audio.AudioAttributes;
 
 import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.alarm.NacAlarm;
-// TODO: This depenedency sort of makes it not a util/ but more a main
-// component of the app
 import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.shared.NacSharedConstants;
 
@@ -25,37 +23,8 @@ import java.util.List;
  */
 @SuppressWarnings({"RedundantSuppression", "UnusedReturnValue"})
 public class NacMediaPlayer
-	implements AudioManager.OnAudioFocusChangeListener,
-		Player.Listener
+	implements AudioManager.OnAudioFocusChangeListener
 {
-
-	/**
-	 * Called when the device volume is changed.
-	 */
-	@Override
-	public void onDeviceVolumeChanged(int volume, boolean muted)
-	{
-		// Restrict changing the volume, if that is desired
-		if (this.shouldRestrictVolume())
-		{
-			this.getMediaPlayer().setDeviceVolume(this.getRestrictedVolumeLevel());
-		}
-	}
-
-	//	/**
-	//	 * Called when the media item changes.
-	//	 *
-	//	 * This is primarily used with a playlist. When the next song automatically
-	//	 * starts up, pause, and delay 500 ms until playing.
-	//	 */
-	//	@Override
-	//	public void onCurrentMediaItemChanged(SessionPlayer mediaPlayer,
-	//		MediaItem mediaItem)
-	//	{
-	//		NacUtility.printf("onCurrentMediaItemChanged!");
-	//		mediaPlayer.pause();
-	//		getHandler().postDelayed(mediaPlayer::play, 500);
-	//	}
 
 	/**
 	 * Application context.
@@ -83,16 +52,6 @@ public class NacMediaPlayer
 	private boolean mWasPlaying;
 
 	/**
-	 * Flag whether to restrict changing the volume or not.
-	 */
-	private boolean mShouldRestrictVolume;
-
-	/**
-	 * The level to keep the volume restricted at.
-	 */
-	private int mRestrictedVolumeLevel;
-
-	/**
 	 * Flag indicating whether to gain transient audio focus, when requesting
 	 * audio focus, or to gain regular focus.
 	 */
@@ -113,10 +72,6 @@ public class NacMediaPlayer
 		this.mHandler = new Handler(looper);
 		this.mWasPlaying = false;
 		this.mShouldGainTransientAudioFocus = false;
-		this.mShouldRestrictVolume = false;
-		this.mRestrictedVolumeLevel = 0;
-
-		this.setPlaybackListener();
 	}
 
 	/**
@@ -171,14 +126,6 @@ public class NacMediaPlayer
 	public ExoPlayer getMediaPlayer()
 	{
 		return this.mMediaPlayer;
-	}
-
-	/**
-	 * @return The level to keep the volume restricted at.
-	 */
-	public int getRestrictedVolumeLevel()
-	{
-		return this.mRestrictedVolumeLevel;
 	}
 
 	/**
@@ -305,15 +252,6 @@ public class NacMediaPlayer
 		// Merge alarm with audio attributes
 		attrs.merge(alarm);
 
-		// Determine whether to restrict volume when media is played
-		this.setShouldRestrictVolume(alarm.getShouldRestrictVolume());
-
-		// Set the level to keep the volume restricted at media is played
-		if (this.shouldRestrictVolume())
-		{
-			this.setRestrictedVolumeLevel(attrs.toStreamVolume());
-		}
-
 		// Play the directory as a playlist
 		if (NacMedia.isDirectory(type))
 		{
@@ -402,14 +340,6 @@ public class NacMediaPlayer
 	}
 
 	/**
-	 * Remove the playback listener.
-	 */
-	public void removePlaybackListener()
-	{
-		this.getMediaPlayer().removeListener(this);
-	}
-
-	/**
 	 * Set the flag indicating whether to gain transient audio focus, when
 	 * requesting audio focus, or to gain regular focus.
 	 *
@@ -421,48 +351,12 @@ public class NacMediaPlayer
 	}
 
 	/**
-	 * Set the playback listener.
-	 */
-	public void setPlaybackListener()
-	{
-		this.getMediaPlayer().addListener(this);
-	}
-
-	/**
-	 * Set the level to keep the volume restricted at.
-	 *
-	 * @param  volume  A volume level.
-	 */
-	public void setRestrictedVolumeLevel(int volume)
-	{
-		this.mRestrictedVolumeLevel = volume;
-	}
-
-	/**
-	 * Set the flag whether to restrict changing the volume or not.
-	 *
-	 * @param  restrict  Whether to restrict the volume or not.
-	 */
-	public void setShouldRestrictVolume(boolean restrict)
-	{
-		this.mShouldRestrictVolume = restrict;
-	}
-
-	/**
 	 * @return Whether to gain transient audio focus, when requesting audio focus,
 	 * or to gain regular focus.
 	 */
 	public boolean shouldGainTransientAudioFocus()
 	{
 		return this.mShouldGainTransientAudioFocus;
-	}
-
-	/**
-	 * @return Whether to restrict changing the volume or not.
-	 */
-	public boolean shouldRestrictVolume()
-	{
-		return this.mShouldRestrictVolume;
 	}
 
 	/**

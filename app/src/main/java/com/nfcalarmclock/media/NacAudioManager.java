@@ -56,20 +56,32 @@ public class NacAudioManager
 		AudioManager.OnAudioFocusChangeListener listener,
 		NacAudioAttributes attrs, int focusGainType)
 	{
+		// Get the audio manager object
 		AudioManager am = (AudioManager) context.getSystemService(
 			Context.AUDIO_SERVICE);
+
+		// Assume a result of FAILED
 		int result = AudioManager.AUDIOFOCUS_REQUEST_FAILED;
 
+		// Build the audio request
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{
-			AudioFocusRequest request = new AudioFocusRequest.Builder(focusGainType)
-				.setAudioAttributes(attrs.getAudioAttributesV21())
-				.setOnAudioFocusChangeListener(listener)
-				.build();
+			AudioFocusRequest.Builder builder = new AudioFocusRequest.Builder(focusGainType)
+				.setAudioAttributes(attrs.getAudioAttributesV21());
+
+			// Set the listener only if it is not null
+			if (listener != null)
+			{
+				builder = builder.setOnAudioFocusChangeListener(listener);
+			}
+
+			// Request audio focus and get the result
+			AudioFocusRequest request = builder.build();
 			result = am.requestAudioFocus(request);
 		}
 		else
 		{
+			// Get the stream the request is for
 			int stream = attrs.getStream();
 
 			// Request focus when the stream is NOT the default type
@@ -79,6 +91,7 @@ public class NacAudioManager
 			}
 		}
 
+		// Check the result
 		return (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
 	}
 

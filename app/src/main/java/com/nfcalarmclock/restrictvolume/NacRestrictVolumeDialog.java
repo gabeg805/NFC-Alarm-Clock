@@ -107,7 +107,7 @@ public class NacRestrictVolumeDialog
 	}
 
 	/**
-	 * Get the ummary text for whether volume should be restricted or not.
+	 * Get the summary text for whether volume should be restricted or not.
 	 *
 	 * @return The summary text for whether volume should be restricted or not.
 	 */
@@ -160,14 +160,15 @@ public class NacRestrictVolumeDialog
 		super.onResume();
 
 		AlertDialog dialog = (AlertDialog) getDialog();
-		RelativeLayout shouldRestrictVolumeContainer = dialog.findViewById(
-			R.id.should_restrict_volume);
-		this.mShouldRestrictVolumeCheckBox = dialog.findViewById(
-			R.id.should_restrict_volume_checkbox);
-		this.mShouldRestrictVolumeSummary = dialog.findViewById(
-			R.id.should_restrict_volume_summary);
+		RelativeLayout container = dialog.findViewById(R.id.should_restrict_volume);
 
-		shouldRestrictVolumeContainer.setOnClickListener(this);
+		// Set the member variable widgets
+		this.mShouldRestrictVolumeCheckBox =
+			dialog.findViewById(R.id.should_restrict_volume_checkbox);
+		this.mShouldRestrictVolumeSummary =
+			dialog.findViewById(R.id.should_restrict_volume_summary);
+
+		container.setOnClickListener(this);
 		this.setupShouldRestrictVolume();
 		this.setupShouldRestrictVolumeColor();
 	}
@@ -227,7 +228,8 @@ public class NacRestrictVolumeDialog
 	private void setupShouldRestrictVolumeSummary()
 	{
 		boolean shouldRestrict = this.shouldRestrictVolume();
-		int textId = shouldRestrict ? R.string.restrict_volume_true : R.string.restrict_volume_false;
+		int textId = shouldRestrict ? R.string.restrict_volume_true
+			: R.string.restrict_volume_false;
 
 		this.getShouldRestrictVolumeSummary().setText(textId);
 	}

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/request_schedule_exact_alarm_layout"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:paddingTop="@dimen/large"
+	android:paddingBottom="@dimen/zero"
+	android:paddingStart="@dimen/large"
+	android:paddingEnd="@dimen/large"
+	android:orientation="vertical">
+
+	<TextView
+		style="@style/Widget.TextView.Primary"
+		android:id="@+id/request_schedule_exact_alarm_summary"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:text="@string/permission_schedule_exact_alarm_request"
+		/>
+		<!--
+		android:layout_centerVertical="true"
+		android:maxLines="4"
+		-->
+
+</LinearLayout>

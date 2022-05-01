@@ -7,7 +7,6 @@ import android.os.Bundle;
 
 import com.nfcalarmclock.system.NacContext;
 import com.nfcalarmclock.system.NacIntent;
-import com.nfcalarmclock.util.NacUtility;
 
 /**
  * Receive this signal from AlarmManager and start the foreground service.

@@ -312,6 +312,18 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * Edit the default value of a newly created alarm for if the volume should
+	 * gradually be increased when an alarm is active.
+	 */
+	@SuppressWarnings("unused")
+	public void editShouldGraduallyIncreaseVolume(boolean shouldIncrease)
+	{
+		String key = this.getKeys().getShouldGraduallyIncreaseVolume();
+
+		this.saveBoolean(key, shouldIncrease, false);
+	}
+
+	/**
 	 * Edit the default should restrict volume value when an alarm is created.
 	 */
 	@SuppressWarnings("unused")
@@ -432,6 +444,16 @@ public class NacSharedPreferences
 
 		this.saveBoolean(key, vibrate, false);
 
+	}
+
+	/**
+	 * Edit whether the Schedule Exact Alarm permission was requested.
+	 */
+	public void editWasScheduleExactAlarmPermissionRequested(boolean requested)
+	{
+		String key = this.getKeys().getWasScheduleExactAlarmPermissionRequested();
+
+		this.saveBoolean(key, requested, false);
 	}
 
 	/**
@@ -966,6 +988,17 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * @return Whether volume should be gradually increased or not.
+	 */
+	public boolean getShouldGraduallyIncreaseVolume()
+	{
+		String key = this.getKeys().getShouldGraduallyIncreaseVolume();
+		boolean value = this.getDefaults().getShouldGraduallyIncreaseVolume();
+
+		return this.getBoolean(key, value);
+	}
+
+	/**
 	 * @return Whether the main activity should be refreshed or not.
 	 */
 	public boolean getShouldRefreshMainActivity()
@@ -1177,6 +1210,17 @@ public class NacSharedPreferences
 		int value = this.getDefaults().getVolume();
 
 		return this.getInt(key, value);
+	}
+
+	/**
+	 * @return Whether the Schedule Exact Alarm permission was requested.
+	 */
+	public boolean getWasScheduleExactAlarmPermissionRequested()
+	{
+		String key = this.getKeys().getWasScheduleExactAlarmPermissionRequested();
+		boolean value = this.getDefaults().getWasScheduleExactAlarmPermissionRequested();
+
+		return this.getBoolean(key, value);
 	}
 
 	/**

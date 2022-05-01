@@ -248,6 +248,14 @@ public class NacSharedDefaults
 	}
 
 	/**
+	 * @return Should gradually increase volume.
+	 */
+	public boolean getShouldGraduallyIncreaseVolume()
+	{
+		return this.getBoolean(R.bool.default_should_gradually_increase_volume);
+	}
+
+	/**
 	 * @return The should refresh main activity.
 	 */
 	public boolean getShouldRefreshMainActivity()
@@ -369,6 +377,14 @@ public class NacSharedDefaults
 	public int getVolume()
 	{
 		return this.getInteger(R.integer.default_volume);
+	}
+
+	/**
+	 * @return The schedule exact alarm permission requested key.
+	 */
+	public boolean getWasScheduleExactAlarmPermissionRequested()
+	{
+		return this.getBoolean(R.bool.default_was_schedule_exact_alarm_permission_requested);
 	}
 
 }
