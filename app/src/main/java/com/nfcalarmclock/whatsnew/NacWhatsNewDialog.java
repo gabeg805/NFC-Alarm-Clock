@@ -4,14 +4,13 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.util.dialog.NacDialogFragment;
-import com.nfcalarmclock.util.NacUtility;
 
 /**
  */

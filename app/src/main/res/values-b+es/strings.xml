@@ -3,6 +3,16 @@
 
 	<!-- App -->
 	<string name="app_name">NFC Despertador</string>
+	<string name="app_version">@string/versionName</string>
+	<string name="permission_schedule_exact_alarm_request">Esta app no tiene el permiso <b>Programar Alarma Exacta</b> activada.\n\nSin este permiso, las alarmas no podrán ejecutarse cuando la app no esté enfocada.\n\n¿Le gustaría continuar a la siguiente pantalla para habilitar este permiso?</string>
+
+
+	<!-- What's new -->
+	<string name="item_1">Se agregó la opción <b>Aumentar gradualmente el volumen</b> que, si está habilitada, significa que el volumen aumentará gradualmente cuando suene una alarma.\n\nSe puede encontrar seleccionando el ícono de ajustes a la derecha del control deslizante de volumen.</string>
+	<string name="item_2">Se solucionó el problema de <b>Android 12</b> en el que una alarma no se iniciaba debido a que el permiso <b>Programar Alarma Exacta</b> no estaba habilitado.\n\nAhora se le solicitará este permiso si no está activado.</string>
+	<string name="item_3">Se solucionó el problema por el cual el <b>control deslizante de volumen</b> en una tarjeta de alarma podía moverse cuando la alarma estaba <b>pospuesta</b>.</string>
+	<string name="item_4">Se actualizó el <b>reproductor de medios</b> y el servicio de <b>texto-a-voz</b>.\n\nEsto no debería afectarlo, pero se menciona en caso de que haya algún problema con cualquiera de ellos.</string>
+
 
 
 	<!-- Consolidate -->
@@ -60,6 +70,7 @@
 	<string name="message_alarm_dismiss">Alarma descartada</string>
 	<string name="message_alarm_snooze">Alarma posponada</string>
 	<string name="message_statistics_started_on">Las estad?sticas empezaron en</string>
+	<string name="message_bullet">\u25BA</string>
 
 
 
@@ -87,6 +98,7 @@
 	<string name="title_color">Elige un color</string>
 	<string name="title_audio_option">Seleccione una opci?n de audio</string>
 	<string name="title_audio_source">Seleccione una fuente de audio</string>
+	<string name="title_gradually_increase_volume">Elige aumentar gradualmente el volumen</string>
 	<string name="title_restrict_volume">Elige restringir el volumen</string>
 	<string name="title_tts">Seleccione opciones de texto-a-voz</string>
 	<string name="title_next_alarm_format">Selecciona un estilo</string>
@@ -371,7 +383,12 @@
 
 	<!-- Restrict volume -->
 	<string name="restrict_volume_true">No podrá cambiar el volumen cuando la alarma esté activa. (Experimental)</string>
-	<string name="restrict_volume_false">El volumen se puede cambiar libremente cuando la alarm está activa.</string>
+	<string name="restrict_volume_false">El volumen se puede cambiar libremente cuando la alarma está activa.</string>
+
+
+	<!-- Gradually increase volume -->
+	<string name="gradually_increase_volume_true">El volumen aumentará gradualmente hasta que se alcance el nivel de volumen de la alarma, cuando la alarma esté activa. (Experimental)</string>
+	<string name="gradually_increase_volume_false">El volumen se ajustará al nivel de volumen de la alarma, cuando la alarma esté activa.</string>
 
 
 

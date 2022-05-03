@@ -10,7 +10,6 @@ import android.os.Build;
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmRepository;
 import com.nfcalarmclock.activealarm.NacActiveAlarmBroadcastReceiver;
-import com.nfcalarmclock.activealarm.NacActiveAlarmService;
 import com.nfcalarmclock.main.NacMainActivity;
 import com.nfcalarmclock.system.NacCalendar;
 import com.nfcalarmclock.system.NacIntent;

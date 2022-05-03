@@ -535,7 +535,7 @@ public class NacActiveAlarmService
 		PowerManager pm = (PowerManager) getSystemService(
 			Context.POWER_SERVICE);
 		this.mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, tag);
-		long timeout = shared.getAutoDismissTime() * 60 * 1000;
+		long timeout = (long) shared.getAutoDismissTime() * 60L * 1000L;
 
 		this.mWakeLock.acquire(timeout);
 	}

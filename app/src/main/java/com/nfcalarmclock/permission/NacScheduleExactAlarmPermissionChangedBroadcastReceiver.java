@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 
 import com.nfcalarmclock.scheduler.NacScheduler;
 
@@ -26,6 +27,12 @@ public class NacScheduleExactAlarmPermissionChangedBroadcastReceiver
 	public void onReceive(final Context context, Intent intent)
 	{
 		String action = intent.getAction();
+
+		// Do not do anything if the Android version is not correct
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
+		{
+			return;
+		}
 
 		// Make sure the intent action corresponds to the permission being changed
 		if (action.equals(AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED))

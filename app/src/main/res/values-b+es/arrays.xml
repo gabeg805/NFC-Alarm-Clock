@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<!-- TODO: Translate this -->
 	<string-array name="audio_options">
 		<item>Fuente de audio</item>
+		<item>Aumentar gradualmente el volumen</item>
 		<item>Restringe el volumen</item>
 		<item>Texto-a-voz</item>
 	</string-array>

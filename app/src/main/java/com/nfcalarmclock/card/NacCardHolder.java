@@ -546,14 +546,15 @@ public class NacCardHolder
 	 */
 	public boolean checkCanDeleteAlarm()
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
+		//NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 
 		if (alarm.isActive())
 		{
 			this.toastDeleteActiveAlarmError();
 		}
-		else if (alarm.isSnoozed(shared))
+		//else if (alarm.isSnoozed(shared))
+		else if (alarm.isSnoozed())
 		{
 			this.toastDeleteSnoozedAlarmError();
 		}
@@ -581,7 +582,6 @@ public class NacCardHolder
 		{
 			this.toastModifyActiveAlarmError();
 		}
-		//else if (alarm.isSnoozed(shared))
 		else if (alarm.isSnoozed())
 		{
 			this.toastModifySnoozedAlarmError();
@@ -859,25 +859,29 @@ public class NacCardHolder
 	 */
 	public void doSwitchCheckedChanged(boolean state)
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
+		//NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 
-		if (!state && alarm.isInUse(shared))
+		// Dismiss the alarm if it is currently active
+		//if (!state && alarm.isInUse(shared))
+		if (!state && alarm.isInUse())
 		{
 			Context context = this.getContext();
 			NacContext.dismissForegroundService(context, alarm);
 			alarm.setIsActive(false);
 		}
 
+		// Reset the snooze counter
+		if (!state)
+		{
+			alarm.setSnoozeCount(0);
+			//shared.editSnoozeCount(alarm.getId(), 0);
+		}
+
 		alarm.setIsEnabled(state);
 		//alarm.changed();
 		this.setSummaryDaysView();
 		this.callOnCardUpdatedListener();
-
-		if (!state)
-		{
-			shared.editSnoozeCount(alarm.getId(), 0);
-		}
 	}
 
 	/**
@@ -1076,7 +1080,6 @@ public class NacCardHolder
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 
-		//return alarm.isSnoozed(shared)
 		return alarm.isSnoozed()
 			? shared.getCardHeightCollapsedDismiss()
 			: shared.getCardHeightCollapsed();
@@ -1447,10 +1450,11 @@ public class NacCardHolder
 	 */
 	public boolean isAlarmInUse()
 	{
-		NacSharedPreferences shared = this.getSharedPreferences();
+		//NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 
-		return alarm.isInUse(shared);
+		return alarm.isInUse();
+		//return alarm.isInUse(shared);
 	}
 
 	/**
@@ -1700,7 +1704,6 @@ public class NacCardHolder
 	{
 		NacAlarm alarm = this.getAlarm();
 		int alarmVolume = alarm.getVolume();
-		NacUtility.printf("onProgressChanged! %d %d", alarm.getVolume(), progress);
 
 		// Do nothing if the volumes are already the same
 		if (alarmVolume == progress)
@@ -1732,6 +1735,15 @@ public class NacCardHolder
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar)
 	{
+		NacAlarm alarm = this.getAlarm();
+
+		// Unable to update the alarm. It is currently in use (active or snoozed)
+		if (alarm.isInUse())
+		{
+			return;
+		}
+
+		// Update the card
 		this.callOnCardUpdatedListener();
 	}
 
@@ -2080,21 +2092,21 @@ public class NacCardHolder
 	 */
 	public void setDismissView()
 	{
-		//NacSharedPreferences shared = this.getSharedPreferences();
-		//int dismissVis = alarm.isSnoozed(shared) ? View.VISIBLE : View.GONE;
 		NacAlarm alarm = this.getAlarm();
 		View dismissView = this.getDismissParentView();
 		View expandView = this.getExpandButton();
 
-		int dismissVis = (alarm.isActive() || alarm.isSnoozed()) ? View.VISIBLE
+		int dismissVis = alarm.isInUse() ? View.VISIBLE
 			: View.GONE;
 		int expandVis = (dismissVis == View.GONE) ? View.VISIBLE : View.INVISIBLE;
 
+		// Set the "Dismiss" button visibility
 		if (dismissView.getVisibility() != dismissVis)
 		{
 			dismissView.setVisibility(dismissVis);
 		}
 
+		// Set the "Expand" down-arrow button visibility
 		if (expandView.getVisibility() != expandVis)
 		{
 			expandView.setVisibility(expandVis);

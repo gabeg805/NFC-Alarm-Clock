@@ -4,14 +4,14 @@
 	<!-- App -->
 	<string name="app_name">NFC Alarm Clock</string>
 	<string name="app_version">@string/versionName</string>
-	<string name="permission_schedule_exact_alarm_request">This app does not have the <b>Schedule Exact Alarm</b> permission enabled.\n\nWithout this, alarms will not be able to run if the app is not in focus, or recently in focus.\n\nWould you like to continue to the next screen to enable this permission?</string>
+	<string name="permission_schedule_exact_alarm_request">This app does not have the <b>Schedule Exact Alarm</b> permission enabled.\n\nWithout this, alarms will not be able to run when the app is not in focus.\n\nWould you like to continue to the next screen to enable this permission?</string>
 
 
 	<!-- What's new -->
-	<string name="item_1">Added <b>Gradually Increase Volume</b> option which, if enabled, means that the volume will gradually increase, when an alarm goes off.\n\nCan be found by selecting the gear icon to the right of the volume slider.</string>
-	<string name="item_2">Fixed <b>Android 12</b> issue where alarm would not start due to the <b>Schedule Exact Alarm</b> permission not being enabled.\n\nYou are now prompted for this permission if it is not enabled.</string>
-	<string name="item_3">Fixed issue where the <b>volume slider</b> in an alarm card could be moved when the alarm was <b>snoozed</b>.</string>
-	<string name="item_4">Updated the <b>media player</b> and <b>text-to-speech</b>.\n\nThis should not impact you, but is mentioned in case there are any issues with either.</string>
+	<string name="item_1">Added the <b>Gradually Increase Volume</b> option which, if enabled, means that the volume will gradually increase, when an alarm goes off.\n\nThis can be found by selecting the gear icon to the right of the volume slider.</string>
+	<string name="item_2">Fixed the <b>Android 12</b> issue where an alarm would not start due to the <b>Schedule Exact Alarm</b> permission not being enabled.\n\nYou are now prompted for this permission if it is not enabled.</string>
+	<string name="item_3">Fixed the issue where the <b>volume slider</b> in an alarm card could be moved when the alarm was <b>snoozed</b>.</string>
+	<string name="item_4">Updated the <b>media player</b> and <b>text-to-speech</b> service.\n\nThis should not impact you, but is mentioned in case there are any issues with either.</string>
 
 
 
@@ -386,9 +386,9 @@
 	<string name="restrict_volume_false">Volume can be changed freely when the alarm is active.</string>
 
 
-	<!-- Restrict volume -->
-	<string name="gradually_increase_volume_true">Volume will gradually increase, when the alarm is active, until the alarm volume level is reached. (Experimental)</string>
-	<string name="gradually_increase_volume_false">Volume will be set to the alarm volume level, when the alarm becomes active.</string>
+	<!-- Gradually increase volume -->
+	<string name="gradually_increase_volume_true">Volume will gradually increase until the alarm volume level is reached, when the alarm is active. (Experimental)</string>
+	<string name="gradually_increase_volume_false">Volume will be set to the alarm volume level, when the alarm is active.</string>
 
 
 

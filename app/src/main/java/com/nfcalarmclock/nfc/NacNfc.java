@@ -219,7 +219,6 @@ public class NacNfc
 		}
 		catch (IllegalStateException e)
 		{
-			NacUtility.printf("Unable stop NFC dispatch.");
 		}
 	}
 

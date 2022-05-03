@@ -165,7 +165,6 @@ public class NacTextToSpeech
 		@Override
 		public void onError(String utteranceId)
 		{
-			NacUtility.printf("onError! %s", utteranceId);
 		}
 
 		/**
@@ -173,7 +172,6 @@ public class NacTextToSpeech
 		@Override
 		public void onError(String utteranceId, int errorCode)
 		{
-			NacUtility.printf("onError! %s", utteranceId);
 		}
 
 		/**
@@ -422,7 +420,7 @@ public class NacTextToSpeech
 			// Gain transient audio focus
 			if(!NacAudioManager.requestFocusGainTransient(context, null, attrs))
 			{
-				NacUtility.printf("Audio Focus TRANSIENT NOT Granted!");
+				NacUtility.quickToast(context, "Unable to use text-to-speech");
 				return;
 			}
 

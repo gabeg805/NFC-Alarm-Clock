@@ -5,7 +5,6 @@ import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.os.Build;
 
-import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.C;
 
 import com.nfcalarmclock.shared.NacSharedConstants;

@@ -1068,6 +1068,12 @@ public class NacMainActivity
 	 */
 	public void onPermissionRequestDone(String permission)
 	{
+		// Do not do anything if the Android version is not correct
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
+		{
+			return;
+		}
+
 		// Set the shared preference indicating that the permission was requested
 		NacSharedPreferences shared = this.getSharedPreferences();
 		shared.editWasScheduleExactAlarmPermissionRequested(true);

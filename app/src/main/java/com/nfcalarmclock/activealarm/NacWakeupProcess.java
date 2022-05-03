@@ -19,8 +19,6 @@ import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.tts.NacTextToSpeech;
 
-import com.nfcalarmclock.util.NacUtility;
-
 /**
  * Actions to take upon waking up, such as enabling NFC, playing music, etc.
  */
@@ -337,7 +335,7 @@ public class NacWakeupProcess
 
 		// Wait for a period of time before increasing the volume again
 		Handler handler = this.getGraduallyIncreaseVolumeHandler();
-		handler.postDelayed(() -> graduallyIncreaseVolume(), 5000);
+		handler.postDelayed(this::graduallyIncreaseVolume, 5000);
 	}
 
 	/**
@@ -375,7 +373,7 @@ public class NacWakeupProcess
 		Handler handler = new Handler(looper);
 
 		// Need to execute media player operations on the main thread
-		handler.post(() -> start());
+		handler.post(this::start);
 	}
 
 	/**
@@ -523,7 +521,7 @@ public class NacWakeupProcess
 		attrs.setStreamVolume(0);
 
 		// Periodically increase the volume
-		handler.postDelayed(() -> graduallyIncreaseVolume(), freq);
+		handler.postDelayed(this::graduallyIncreaseVolume, freq);
 	}
 
 	/**
@@ -568,10 +566,7 @@ public class NacWakeupProcess
 		}
 
 		// Create the TTS engine
-		NacTextToSpeech speech = new NacTextToSpeech(context, this);
-
-		// Set the member variable
-		this.mSpeech = speech;
+		this.mSpeech = new NacTextToSpeech(context, this);
 	}
 
 	/**
@@ -641,7 +636,7 @@ public class NacWakeupProcess
 
 		if (freq != 0)
 		{
-			handler.postDelayed(() -> speak(), freq);
+			handler.postDelayed(this::speak, freq);
 		}
 	}
 
@@ -674,13 +669,11 @@ public class NacWakeupProcess
 			// Start to gradually increase the alarm volume
 			if (alarm.getShouldGraduallyIncreaseVolume())
 			{
-				NacUtility.printf("Setup gradually increase volume!");
 				this.setupGraduallyIncreaseVolume();
 			}
 			// Set the alarm volume
 			else
 			{
-				NacUtility.printf("Set volume normally!");
 				this.setVolume();
 			}
 		}
@@ -766,7 +759,7 @@ public class NacWakeupProcess
 
 		// Wait for a period of time before vibrating the phone again
 		Handler handler = this.getVibrateHandler();
-		handler.postDelayed(() -> vibrate(), waitTime);
+		handler.postDelayed(this::vibrate, waitTime);
 	}
 
 }

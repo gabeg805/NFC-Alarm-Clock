@@ -9,7 +9,6 @@ import android.os.Looper;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.audio.AudioAttributes;
 
 import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.alarm.NacAlarm;

@@ -9,10 +9,7 @@ import com.google.android.exoplayer2.C;
 
 import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.alarm.NacAlarm;
-import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
-
-import java.util.List;
 
 /**
  * Audio attributes.
