@@ -1,13 +1,17 @@
 package com.nfcalarmclock.activealarm;
 
+import android.app.ActivityManager;
 import android.app.Application;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmRepository;
@@ -23,6 +27,7 @@ import com.nfcalarmclock.util.NacUtility;
 import java.lang.System;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 /**
  */
@@ -187,6 +192,30 @@ public class NacActiveAlarmService
 	}
 
 	/**
+	 * Dismiss the foreground service for the given alarm.
+	 *
+	 * If alarm is null, it will stop the currently active foreground service.
+	 */
+	public static void dismissService(Context context, NacAlarm alarm)
+	{
+		Intent intent = NacIntent.dismissForegroundService(context, alarm);
+
+		context.startService(intent);
+	}
+
+	/**
+	 * Dismiss the foreground service for the given alarm with NFC.
+	 *
+	 * If alarm is null, it will stop the currently active foreground service.
+	 */
+	public static void dismissServiceWithNfc(Context context, NacAlarm alarm)
+	{
+		Intent intent = NacIntent.dismissForegroundServiceWithNfc(context, alarm);
+
+		context.startService(intent);
+	}
+
+	/**
 	 * Dismiss the alarm with NFC.
 	 *
 	 * This will finish the service.
@@ -335,6 +364,24 @@ public class NacActiveAlarmService
 	}
 
 	/**
+	 * Check if a duplicate service, with the same alarm, was started.
+	 *
+	 * @param  intent An Intent.
+	 *
+	 * @return True if a duplicate service was started, and False otherwise.
+	 */
+	public boolean isDuplicateServiceStarted(Intent intent)
+	{
+		NacAlarm alarm = this.getAlarm();
+		NacAlarm intentAlarm = NacIntent.getAlarm(intent);
+		String intentAction = NacIntent.getAction(intent);
+
+		return (alarm != null) && (intentAlarm != null)
+			&& intentAlarm.equals(alarm)
+			&& intentAction.equals(ACTION_START_SERVICE);
+	}
+
+	/**
 	 * Check if a new service, with a different alarm, was started.
 	 *
 	 * @param  intent An Intent.
@@ -345,11 +392,43 @@ public class NacActiveAlarmService
 	{
 		NacAlarm alarm = this.getAlarm();
 		NacAlarm intentAlarm = NacIntent.getAlarm(intent);
-		String action = NacIntent.getAction(intent);
+		String intentAction = NacIntent.getAction(intent);
 
 		return (alarm != null) && (intentAlarm != null)
 			&& !intentAlarm.equals(alarm)
-			&& action.equals(ACTION_START_SERVICE);
+			&& intentAction.equals(ACTION_START_SERVICE);
+	}
+
+	/**
+	 * @return True if the alarm service is already running, and False otherwise.
+	 */
+	@SuppressWarnings("deprecation")
+	public static boolean isRunning(Context context)
+	{
+		// Get the name of the class of the service
+		String className = NacActiveAlarmService.class.getName();
+
+		// Get the list of all running services
+		ActivityManager activityManager = (ActivityManager) context.getSystemService(
+			Context.ACTIVITY_SERVICE);
+		List<ActivityManager.RunningServiceInfo> allRunningServices =
+			activityManager.getRunningServices(Integer.MAX_VALUE);
+
+		// Iterate over each running service that was found
+		for (ActivityManager.RunningServiceInfo serviceInfo : allRunningServices)
+		{
+			String serviceName = serviceInfo.service.getClassName();
+
+			// Found an instance of the alarm service. The service name matches the
+			// alarm service class name
+			if (serviceName.equals(className))
+			{
+				return true;
+			}
+		}
+
+		// Unable to find a running instance of the alarm service
+		return false;
 	}
 
 	/**
@@ -367,16 +446,22 @@ public class NacActiveAlarmService
 	{
 		//super.onCreate();
 
-		Application app = getApplication();
-		Context context = getApplicationContext();
+		FirebaseCrashlytics.getInstance().log("Constructor start!");
 
-		this.mSharedPreferences = new NacSharedPreferences(context);
-		this.mAlarmRepository = new NacAlarmRepository(app);
+		//Application app = getApplication();
+		//Context context = getApplicationContext();
+
+		//this.mSharedPreferences = new NacSharedPreferences(context);
+		this.mSharedPreferences = new NacSharedPreferences(this);
+		this.mAlarmRepository = null;
 		this.mAlarm = null;
 		this.mWakeupProcess = new NacWakeupProcess(this);
 		this.mWakeLock = null;
-		this.mAutoDismissHandler = new Handler(context.getMainLooper());
+		this.mAutoDismissHandler = new Handler(getMainLooper());
+		//this.mAutoDismissHandler = new Handler(context.getMainLooper());
 		//this.mStartTime = System.currentTimeMillis();
+
+		FirebaseCrashlytics.getInstance().log("Constructor done!");
 	}
 
 	/**
@@ -393,32 +478,65 @@ public class NacActiveAlarmService
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
+		FirebaseCrashlytics.getInstance().log("onStartCommand!");
+
+		// A duplicate service was started. Do not start it again, just keep it going
+		//if (this.isDuplicateServiceStarted(intent))
+		//{
+		//	FirebaseCrashlytics.getInstance().log("Duplicate service was started! Just showing the alarm.");
+		//	this.showNotification();
+		//	return START_STICKY;
+		//}
+
+		// Get the action of the service
 		String action = NacIntent.getAction(intent);
 
+		// Setup the service
 		this.setupService(intent);
 
+		// Show the notification
+		FirebaseCrashlytics.getInstance().log("Showing the notification just in case. Never before tried.");
+		this.showNotification();
+
+		// The default case if things go wrong, or if the service should be
+		// dismissed.
+		//
+		// TODO: Maybe this should just be the else? Oh but it checks alarm is null,
+		// that is important.
 		if ((this.getAlarm() == null) || action.isEmpty()
 			|| action.equals(ACTION_STOP_SERVICE)
 			|| action.equals(ACTION_DISMISS_ALARM))
 		{
+			FirebaseCrashlytics.getInstance().log("Alarm null || Action Empty || Stop || Dismiss!");
 			this.dismiss();
 		}
+		// Dismiss the alarm with an NFC tag
 		else if (action.equals(ACTION_DISMISS_ALARM_WITH_NFC))
 		{
+			FirebaseCrashlytics.getInstance().log("Dismiss with NFC!");
 			this.dismissWithNfc();
 		}
+		// Snooze the alarm
 		else if (action.equals(ACTION_SNOOZE_ALARM))
 		{
+			FirebaseCrashlytics.getInstance().log("Snooze alarm!");
 			this.snooze();
 		}
+		// Start the servic
 		else if (action.equals(ACTION_START_SERVICE))
 		{
-			this.showNotification();
+			FirebaseCrashlytics.getInstance().log("Start service!");
+			//this.showNotification();
+			FirebaseCrashlytics.getInstance().log("Notification is shown! Setup wakelock");
 			this.setupWakeLock();
+			FirebaseCrashlytics.getInstance().log("Setup wakeup process");
 			this.setupWakeupProcess();
 			this.setIsAlarmActive(true);
+			FirebaseCrashlytics.getInstance().log("Update alarm");
 			this.updateAlarm();
+			FirebaseCrashlytics.getInstance().log("Wait for auto dismiss");
 			this.waitForAutoDismiss();
+			NacContext.startAlarmActivity(this, this.getAlarm());
 
 			return START_STICKY;
 		}
@@ -583,15 +701,54 @@ public class NacActiveAlarmService
 	}
 
 	/**
+	 * Snooze the foreground service for the given alarm.
+	 *
+	 * The alarm cannot be null, unlike the dismissService() method.
+	 */
+	public static void snoozeService(Context context, NacAlarm alarm)
+	{
+		Intent intent = NacIntent.snoozeForegroundService(context, alarm);
+
+		context.startService(intent);
+	}
+
+	/**
+	 * Start the service.
+	 */
+	public static void startService(Context context, NacAlarm alarm)
+	{
+		// Unable to start the service because the alarm is null
+		if (alarm == null)
+		{
+			return;
+		}
+
+		// Create the intent
+		Intent intent = NacIntent.createForegroundService(context, alarm);
+
+		// Start the service
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			context.startForegroundService(intent);
+		}
+		else
+		{
+			context.startService(intent);
+		}
+	}
+
+	/**
 	 * Update the alarm in the repository.
 	 */
 	private void updateAlarm()
 	{
-		NacAlarmRepository repo = this.getAlarmRepository();
 		NacAlarm alarm = this.getAlarm();
 
+		// Get the repository in the conditional so that the repo does not get
+		// created if the alarm is not set yet
 		if (alarm != null)
 		{
+			NacAlarmRepository repo = this.getAlarmRepository();
 			repo.update(alarm);
 		}
 	}

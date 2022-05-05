@@ -217,6 +217,33 @@ public class NacScheduler
 	}
 
 	/**
+	 * Cancel the older alarm type with a given ID.
+	 *
+	 * @param  context  Context.
+	 * @param  id  Alarm ID.
+	 */
+	public static void cancelOlder(Context context, int id)
+	{
+		// Prepare the flags
+		int flags = PendingIntent.FLAG_NO_CREATE;
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		{
+			flags |= PendingIntent.FLAG_MUTABLE;
+		}
+
+		// Create the pending intent for the old type
+		Intent intent = new Intent(context, NacActiveAlarmBroadcastReceiver.class);
+		PendingIntent pending = PendingIntent.getBroadcast(context, id, intent, flags);
+
+		// Cancel the alarm
+		if (pending != null)
+		{
+			NacScheduler.getAlarmManager(context).cancel(pending);
+		}
+	}
+
+	/**
 	 * @return The AlarmManager.
 	 */
 	public static AlarmManager getAlarmManager(Context context)
@@ -236,7 +263,10 @@ public class NacScheduler
 		{
 			int id = (int) a.getId();
 
-			// Clear out the old alarms
+			// Clear out the older alarms (Do not use IMMUTABLE flag)
+			NacScheduler.cancelOlder(context, id);
+
+			// Clear out the old alarms (Use IMMUTABLE flag)
 			NacScheduler.cancelOld(context, id);
 
 			// Clear out any new alarms, just in case

@@ -8,14 +8,12 @@
 
 
 	<!-- What's new -->
-	<string name="item_1">Se agregó la opción <b>Aumentar gradualmente el volumen</b> que, si está habilitada, significa que el volumen aumentará gradualmente cuando suene una alarma.\n\nSe puede encontrar seleccionando el ícono de ajustes a la derecha del control deslizante de volumen.</string>
-	<string name="item_2">Se solucionó el problema de <b>Android 12</b> en el que una alarma no se iniciaba debido a que el permiso <b>Programar Alarma Exacta</b> no estaba habilitado.\n\nAhora se le solicitará este permiso si no está activado.</string>
-	<string name="item_3">Se solucionó el problema por el cual el <b>control deslizante de volumen</b> en una tarjeta de alarma podía moverse cuando la alarma estaba <b>pospuesta</b>.</string>
-	<string name="item_4">Se actualizó el <b>reproductor de medios</b> y el servicio de <b>texto-a-voz</b>.\n\nEsto no debería afectarlo, pero se menciona en caso de que haya algún problema con cualquiera de ellos.</string>
+	<string name="item_1">(Intentado) Solución del problem en unos dispositivos <b>Android 12</b> donde no se activaba una alarma. Afectó a los siguientes teléfonos:\n\nGoogle Pixel 5, Samsung Galaxy S20, Samsung Galaxy S21, Samsung Galaxy Z Fold3, Redmi K40 Pro, POCO X3 Pro</string>
 
 
 
 	<!-- Consolidate -->
+	<string name="version">Versión</string>
 	<string name="am">AM</string>
 	<string name="pm">PM</string>
 	<string name="none">Ninguno</string>

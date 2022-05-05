@@ -10,14 +10,11 @@
 
 	<TextView
 		style="@style/Widget.TextView.Caption"
+		android:id="@+id/whats_new_version"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="Version 10.6.2"
+		android:text="@string/version"
 		/>
-
-		<!--
-		android:text="@string/versionName"
-		-->
 
 	<ScrollView
 		android:layout_width="match_parent"
@@ -53,6 +50,7 @@
 				/>
 
 			<!-- Item 2 -->
+			<!--
 			<TextView
 				style="@style/Widget.TextView.Primary"
 				android:id="@+id/bullet_2"
@@ -73,8 +71,10 @@
 				android:layout_toEndOf="@id/bullet_2"
 				android:text="@string/item_2"
 				/>
+			-->
 
 			<!-- Item 3 -->
+			<!--
 			<TextView
 				style="@style/Widget.TextView.Primary"
 				android:id="@+id/bullet_3"
@@ -95,8 +95,10 @@
 				android:layout_toEndOf="@id/bullet_3"
 				android:text="@string/item_3"
 				/>
+			-->
 
 			<!-- Item 4 -->
+			<!--
 			<TextView
 				style="@style/Widget.TextView.Primary"
 				android:id="@+id/bullet_4"
@@ -117,6 +119,7 @@
 				android:layout_toEndOf="@id/bullet_4"
 				android:text="@string/item_4"
 				/>
+			-->
 
 		</RelativeLayout>
 

@@ -8,14 +8,12 @@
 
 
 	<!-- What's new -->
-	<string name="item_1">Added the <b>Gradually Increase Volume</b> option which, if enabled, means that the volume will gradually increase, when an alarm goes off.\n\nThis can be found by selecting the gear icon to the right of the volume slider.</string>
-	<string name="item_2">Fixed the <b>Android 12</b> issue where an alarm would not start due to the <b>Schedule Exact Alarm</b> permission not being enabled.\n\nYou are now prompted for this permission if it is not enabled.</string>
-	<string name="item_3">Fixed the issue where the <b>volume slider</b> in an alarm card could be moved when the alarm was <b>snoozed</b>.</string>
-	<string name="item_4">Updated the <b>media player</b> and <b>text-to-speech</b> service.\n\nThis should not impact you, but is mentioned in case there are any issues with either.</string>
+	<string name="item_1">(Attempted) Fix of the issue on some <b>Android 12</b> devices where an alarm would not start. Affected the following phones:\n\nGoogle Pixel 5, Samsung Galaxy S20, Samsung Galaxy S21, Samsung Galaxy Z Fold3, Redmi K40 Pro, POCO X3 Pro</string>
 
 
 
 	<!-- Consolidate -->
+	<string name="version">Version</string>
 	<string name="am">AM</string>
 	<string name="pm">PM</string>
 	<string name="none">None</string>

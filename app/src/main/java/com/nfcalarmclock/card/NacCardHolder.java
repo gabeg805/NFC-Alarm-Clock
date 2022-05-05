@@ -26,6 +26,7 @@ import com.google.android.material.color.MaterialColors;
 import com.google.android.material.button.MaterialButton;
 //import com.google.android.material.timepicker.MaterialTimePicker;
 
+import com.nfcalarmclock.activealarm.NacActiveAlarmService;
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.system.NacCalendar;
 import com.nfcalarmclock.system.NacContext;
@@ -867,7 +868,8 @@ public class NacCardHolder
 		if (!state && alarm.isInUse())
 		{
 			Context context = this.getContext();
-			NacContext.dismissForegroundService(context, alarm);
+
+			NacActiveAlarmService.dismissService(context, alarm);
 			alarm.setIsActive(false);
 		}
 

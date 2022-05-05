@@ -39,42 +39,6 @@ public class NacContext
 	}
 
 	/**
-	 * Dismiss the foreground service for the given alarm.
-	 *
-	 * If alarm is null, it will stop the currently active foreground service.
-	 */
-	public static void dismissForegroundService(Context context, NacAlarm alarm)
-	{
-		Intent intent = NacIntent.dismissForegroundService(context, alarm);
-
-		context.startService(intent);
-	}
-
-	/**
-	 * Dismiss the foreground service for the given alarm with NFC.
-	 *
-	 * If alarm is null, it will stop the currently active foreground service.
-	 */
-	public static void dismissForegroundServiceWithNfc(Context context, NacAlarm alarm)
-	{
-		Intent intent = NacIntent.dismissForegroundServiceWithNfc(context, alarm);
-
-		context.startService(intent);
-	}
-
-	/**
-	 * Snooze the foreground service for the given alarm.
-	 *
-	 * The alarm cannot be null, unlike the dismissForegroundService() method.
-	 */
-	public static void snoozeForegroundService(Context context, NacAlarm alarm)
-	{
-		Intent intent = NacIntent.snoozeForegroundService(context, alarm);
-
-		context.startService(intent);
-	}
-
-	/**
 	 * Stop the alarm activity for the given alarm.
 	 *
 	 * If alarm is null, it will stop the currently active alarm activity.
@@ -145,31 +109,6 @@ public class NacContext
 
 		// Start the activity
 		context.startActivity(intent);
-	}
-
-	/**
-	 * Start the alarm service.
-	 */
-	public static void startAlarmService(Context context, NacAlarm alarm)
-	{
-		// Unable to start the service because the alarm is null
-		if (alarm == null)
-		{
-			return;
-		}
-
-		// Create the intent
-		Intent intent = NacIntent.createForegroundService(context, alarm);
-
-		// Start the service
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-		{
-			context.startForegroundService(intent);
-		}
-		else
-		{
-			context.startService(intent);
-		}
 	}
 
 	/**

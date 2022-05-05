@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -86,6 +87,26 @@ public class NacWhatsNewDialog
 				this.callOnReadWhatsNewListener())
 			.setView(R.layout.dlg_whats_new)
 			.create();
+	}
+
+	/**
+	 */
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+
+		// Initialize the widgets
+		AlertDialog dialog = (AlertDialog) getDialog();
+		TextView textview = dialog.findViewById(R.id.whats_new_version);
+
+		// Prepare the strings
+		NacSharedConstants cons = this.getSharedConstants();
+		String versionName = textview.getText().toString();
+		String versionNum = cons.getAppVersion();
+
+		// Set the version
+		textview.setText(versionName + " " + versionNum);
 	}
 
 	/**

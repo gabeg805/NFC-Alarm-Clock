@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import com.nfcalarmclock.activealarm.NacActiveAlarmService;
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmViewModel;
 import com.nfcalarmclock.audiooptions.NacAlarmAudioOptionsDialog;
@@ -1216,11 +1217,17 @@ public class NacMainActivity
 		else if (this.isActivityShown() && this.shouldShowAlarmActivity(alarm))
 		{
 			// TODO: This caused the active alarm to show up a million times!
-			//
 			//NacSharedPreferences shared = this.getSharedPreferences();
 			//Remove this setting: shared.getPreventAppFromClosing()?
+
+			// Run the service only if it is not already running
+			if (!NacActiveAlarmService.isRunning(this))
+			{
+				NacActiveAlarmService.startService(this, alarm);
+			}
+
+			// Start the alarm activity
 			NacContext.startAlarmActivity(this, alarm);
-			//NacContext.startAlarm(this, alarm);
 		}
 	}
 
@@ -1408,7 +1415,7 @@ public class NacMainActivity
 				});
 
 		this.getAlarmViewModel().getActiveAlarm().observe(this,
-				this::prepareActiveAlarm);
+			this::prepareActiveAlarm);
 
 		this.getAlarmCardAdapterLiveData().observe(this, this);
 	}

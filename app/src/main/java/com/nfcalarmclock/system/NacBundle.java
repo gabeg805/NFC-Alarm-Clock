@@ -36,8 +36,15 @@ public class NacBundle
 			}
 			catch (BadParcelableException e)
 			{
-				bundle.setClassLoader(NacAlarm.Builder.class.getClassLoader());
-				return bundle.getParcelable(ALARM_PARCEL_NAME);
+				try
+				{
+					bundle.setClassLoader(NacAlarm.Builder.class.getClassLoader());
+					return bundle.getParcelable(ALARM_PARCEL_NAME);
+				}
+				catch (RuntimeException)
+				{
+					return null;
+				}
 			}
 		}
 		else

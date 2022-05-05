@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 
+import com.nfcalarmclock.activealarm.NacActiveAlarmService;
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.nfc.NacNfcTag;
 import com.nfcalarmclock.system.NacBundle;
@@ -106,7 +107,7 @@ public class NacActiveAlarmActivity
 	public void dismiss()
 	{
 		NacAlarm alarm = this.getAlarm();
-		NacContext.dismissForegroundService(this, alarm);
+		NacActiveAlarmService.dismissService(this, alarm);
 	}
 
 	/**
@@ -126,7 +127,7 @@ public class NacActiveAlarmActivity
 
 		if (tag.check(this))
 		{
-			NacContext.dismissForegroundServiceWithNfc(this, alarm);
+			NacActiveAlarmService.dismissServiceWithNfc(this, alarm);
 		}
 	}
 
@@ -441,6 +442,7 @@ public class NacActiveAlarmActivity
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 
+		// Unable to snooze. Show a toast indicating this to the user
 		if (!alarm.canSnooze(shared))
 		{
 			NacSharedConstants cons = new NacSharedConstants(this);
@@ -448,7 +450,8 @@ public class NacActiveAlarmActivity
 			return;
 		}
 
-		NacContext.snoozeForegroundService(this, alarm);
+		// Snooze the alarm service
+		NacActiveAlarmService.snoozeService(this, alarm);
 	}
 
 	/**
