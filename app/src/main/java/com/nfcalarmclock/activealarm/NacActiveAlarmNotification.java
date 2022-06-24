@@ -217,6 +217,7 @@ public class NacActiveAlarmNotification
 		float density = res.getDisplayMetrics().density;
 		float size;
 
+		// Determine the size of the bitmap
 		if (Float.compare(density, 4.0f) >= 0)
 		{
 			size = 256f;
@@ -246,8 +247,13 @@ public class NacActiveAlarmNotification
 			return icon;
 		}
 
-		return Bitmap.createScaledBitmap(icon, (int)(size*density),
-			(int)(size*density), true);
+		// Determine the integer size
+		int actualSize = (int) (size * density);
+
+		// Create the bitmap
+		return (icon != null)
+			? Bitmap.createScaledBitmap(icon, actualSize, actualSize, true)
+			: null;
 	}
 
 	/**

@@ -284,7 +284,7 @@ public class NacMedia
 		String column = MediaStore.Audio.Media.DURATION;
 		String duration = NacMedia.getColumnFromCursor(context, uri, column);
 
-		return !duration.isEmpty() ? Long.parseLong(duration) : 0;
+		return (duration != null) && !duration.isEmpty() ? Long.parseLong(duration) : 0;
 	}
 
 	/**

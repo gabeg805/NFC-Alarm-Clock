@@ -8,9 +8,7 @@ import android.os.Looper;
 import android.os.Vibrator;
 import android.os.VibratorManager;
 import android.os.VibrationEffect;
-
 import com.google.android.exoplayer2.Player;
-
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.media.NacAudioAttributes;
 import com.nfcalarmclock.media.NacMedia;
@@ -18,6 +16,8 @@ import com.nfcalarmclock.media.NacMediaPlayer;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.tts.NacTextToSpeech;
+import com.nfcalarmclock.util.NacUtility;
+import java.lang.SecurityException;
 
 /**
  * Actions to take upon waking up, such as enabling NFC, playing music, etc.
@@ -169,9 +169,6 @@ public class NacWakeupProcess
 		{
 			speech.shutdown();
 		}
-
-		//this.mSpeech = null;
-		//this.mSpeakHandler = null;
 	}
 
 	/**
@@ -193,8 +190,6 @@ public class NacWakeupProcess
 		{
 			vibrateHandler.removeCallbacksAndMessages(null);
 		}
-
-		//this.mVibrator = null;
 	}
 
 	/**
@@ -360,7 +355,19 @@ public class NacWakeupProcess
 		NacMediaPlayer player = this.getMediaPlayer();
 		int restrictVolume = this.getVolumeToRestrictChangeTo();
 
-		player.getMediaPlayer().setDeviceVolume(restrictVolume);
+		try
+		{
+			player.getMediaPlayer().setDeviceVolume(restrictVolume);
+		}
+		catch (SecurityException e)
+		{
+			Context context = this.getContext();
+			NacSharedPreferences shared = this.getSharedPreferences();
+			NacSharedConstants cons = shared.getConstants();
+
+			// Show a toast indicating that the volume could not be restricted
+			NacUtility.quickToast(context, cons.getErrorMessageRestrictVolumeChange());
+		}
 	}
 
 	/**
@@ -382,13 +389,8 @@ public class NacWakeupProcess
 	@Override
 	public void onStartSpeaking(NacTextToSpeech tts)
 	{
-		Vibrator vibrator = this.getVibrator();
-
 		// Stop any vibration when TTS is playing
-		if (vibrator != null)
-		{
-			vibrator.cancel();
-		}
+		this.cleanupVibrate();
 	}
 
 	/**
@@ -727,9 +729,6 @@ public class NacWakeupProcess
 		NacAlarm alarm = this.getAlarm();
 		long duration = 500;
 		long waitTime = 1000 + duration;
-		//long[] pattern = {0, duration, 2*duration};
-		//long[] pattern = {duration, duration, duration};
-		//long[] pattern = {0, duration, duration};
 
 		// Unable to vibrate. Vibrator is not set yet, or alarm is not set yet, or
 		// alarm should not vibrate
@@ -739,22 +738,19 @@ public class NacWakeupProcess
 		}
 
 		// Cancel the previous vibration, if any
-		vibrator.cancel();
+		this.cleanupVibrate();
 
 		// Vibrate
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{
 			VibrationEffect effect = VibrationEffect.createOneShot(duration,
 				VibrationEffect.DEFAULT_AMPLITUDE);
-			//VibrationEffect effect = VibrationEffect.createWaveform(pattern, 0);
 
 			vibrator.vibrate(effect);
-			//vibrator.vibrate(VibrationEffect.createWaveform(pattern, 0));
 		}
 		else
 		{
 			vibrator.vibrate(duration);
-			//vibrator.vibrate(pattern, 0);
 		}
 
 		// Wait for a period of time before vibrating the phone again

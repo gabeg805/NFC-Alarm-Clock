@@ -8,7 +8,8 @@
 
 
 	<!-- What's new -->
-	<string name="item_1">(Intentado) Solución del problem en unos dispositivos <b>Android 12</b> donde no se activaba una alarma. Afectó a los siguientes teléfonos:\n\nGoogle Pixel 5, Samsung Galaxy S20, Samsung Galaxy S21, Samsung Galaxy Z Fold3, Redmi K40 Pro, POCO X3 Pro</string>
+	<string name="item_1">Solucionó el problema que afectaba a las alarmas con las opciones de texto-a-voz y vibración habilitadas.\n\nCuando se activaba la alarma, cada vez que finalizaba la conversión de texto-a-voz, las instancias de vibración se apilaban, lo que generaba una ruidero graznidero de vibraciones.</string>
+	<string name="item_2">Solucionó varios problemas menoras.</string>
 
 
 
@@ -78,6 +79,7 @@
 	<string name="error_message_max_alarms">Número máximo de alarmas creadas</string>
 	<string name="error_message_nfc_mismatch">Etiqueta no coincide con la etiqueta de NFC guardada.</string>
 	<string name="error_message_nfc_unsupported">Tu teléfono no soporta NFC</string>
+	<string name="error_message_restrict_volume_change">Incapaz de restringir el volumen</string>
 	<string name="error_message_snooze">Incapaz de posponer la alarma</string>
 	<string name="error_message_snoozed_delete">Incapaz de borrar una alarma posponada</string>
 	<string name="error_message_snoozed_modify">Incapaz de modificar una alarma posponada</string>

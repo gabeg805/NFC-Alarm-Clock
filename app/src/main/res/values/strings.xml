@@ -8,7 +8,8 @@
 
 
 	<!-- What's new -->
-	<string name="item_1">(Attempted) Fix of the issue on some <b>Android 12</b> devices where an alarm would not start. Affected the following phones:\n\nGoogle Pixel 5, Samsung Galaxy S20, Samsung Galaxy S21, Samsung Galaxy Z Fold3, Redmi K40 Pro, POCO X3 Pro</string>
+	<string name="item_1">Fixed issue that affects alarms with the text-to-speech and vibrate options enabled.\n\nWhen the alarm would activate, each time text-to-speech finished, the vibrate instances would stack, resulting in a cacophony of vibrations.</string>
+	<string name="item_2">Fixed various minor issues.</string>
 
 
 
@@ -78,6 +79,7 @@
 	<string name="error_message_max_alarms">Max number of alarms created</string>
 	<string name="error_message_nfc_mismatch">NFC tag does not match the saved tag.</string>
 	<string name="error_message_nfc_unsupported">Your device does not support NFC</string>
+	<string name="error_message_restrict_volume_change">Unable to restrict volume</string>
 	<string name="error_message_snooze">Unable to snooze the alarm</string>
 	<string name="error_message_snoozed_delete">Unable to delete a snoozed alarm</string>
 	<string name="error_message_snoozed_modify">Unable to modify a snoozed alarm</string>

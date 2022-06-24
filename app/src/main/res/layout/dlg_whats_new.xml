@@ -22,9 +22,6 @@
 		android:paddingTop="@dimen/small"
 		android:paddingBottom="@dimen/small">
 
-			<!--
-			android:orientation="vertical">
-			-->
 		<RelativeLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content">
@@ -50,7 +47,6 @@
 				/>
 
 			<!-- Item 2 -->
-			<!--
 			<TextView
 				style="@style/Widget.TextView.Primary"
 				android:id="@+id/bullet_2"
@@ -71,7 +67,6 @@
 				android:layout_toEndOf="@id/bullet_2"
 				android:text="@string/item_2"
 				/>
-			-->
 
 			<!-- Item 3 -->
 			<!--

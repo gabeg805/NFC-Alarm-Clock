@@ -329,6 +329,14 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Error message when the device volume cannot be restricted.
+	 */
+	public String getErrorMessageRestrictVolumeChange()
+	{
+		return this.getString(R.string.error_message_restrict_volume_change);
+	}
+
+	/**
 	 * @return Select color error message.
 	 */
 	public String getErrorMessageSelectColor()
