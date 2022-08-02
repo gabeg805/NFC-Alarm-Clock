@@ -15,6 +15,14 @@ TODO
 
 * Implement Spotify
 
+* See if I can save views to the tree. That way I can save views and easily reshow them to users
+
+* Have option to scroll alarm name instead of marquee it
+
+* Change AppCompatActivity to one that can use Material theme
+
+* Remove the following? isInUse, checkCanBeModified, checkCanBeDeleted
+
 ------
 Issues
 ------
