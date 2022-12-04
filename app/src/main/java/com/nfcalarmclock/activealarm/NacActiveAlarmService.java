@@ -3,8 +3,10 @@ package com.nfcalarmclock.activealarm;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -461,6 +463,17 @@ public class NacActiveAlarmService
 		//this.mAutoDismissHandler = new Handler(context.getMainLooper());
 		//this.mStartTime = System.currentTimeMillis();
 
+		// Enable the activity alias so that tapping an NFC tag will open the main
+		// activity
+		PackageManager pm = getPackageManager();
+		String packageName = getPackageName();
+		String aliasName = packageName + ".main.NacMainAliasActivity";
+		ComponentName componentName = new ComponentName(this, aliasName);
+
+		pm.setComponentEnabledSetting(componentName,
+			PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+			PackageManager.DONT_KILL_APP);
+
 		FirebaseCrashlytics.getInstance().log("Constructor done!");
 	}
 
@@ -469,6 +482,16 @@ public class NacActiveAlarmService
 	@Override
 	public void onDestroy()
 	{
+		// Disable the activity alias so that tapping an NFC tag will not do anything
+		PackageManager pm = getPackageManager();
+		String packageName = getPackageName();
+		String aliasName = packageName + ".main.NacMainAliasActivity";
+		ComponentName componentName = new ComponentName(this, aliasName);
+
+		pm.setComponentEnabledSetting(componentName,
+			PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+			PackageManager.DONT_KILL_APP);
+
 		//super.onDestroy();
 		this.cleanup();
 	}

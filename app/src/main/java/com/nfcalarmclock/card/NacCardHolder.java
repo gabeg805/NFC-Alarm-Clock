@@ -846,7 +846,6 @@ public class NacCardHolder
 	{
 		NacAlarm alarm = this.getAlarm();
 
-		NacUtility.printf("doRepeatButtonLongClick()");
 		alarm.setRepeat(false);
 		alarm.setDays(0);
 		//alarm.changed();
@@ -1600,7 +1599,6 @@ public class NacCardHolder
 	public void onClick(View view)
 	{
 		int id = view.getId();
-		NacUtility.quickToast(this.getContext(), "onClick!");
 
 		// Expand/collapse the alarm
 		if ((id == R.id.nac_header)
@@ -1919,8 +1917,6 @@ public class NacCardHolder
 	 */
 	public void respondToRepeatButtonLongClick()
 	{
-		NacUtility.printf("respondToRepeatButtonLongClick()");
-		NacUtility.printf("Can modify? %b", this.checkCanModifyAlarm());
 		// Repeat button can be long clicked since the alarm can be modified
 		if (this.checkCanModifyAlarm())
 		{
@@ -2422,18 +2418,14 @@ public class NacCardHolder
 		boolean isEnabled = alarm.areDaysSelected();
 		boolean shouldRepeat = alarm.areDaysSelected() && alarm.shouldRepeat();
 
-		NacUtility.printf("Is enabled? %b || %b", isEnabled, button.isEnabled());
-		NacUtility.printf("Is checked? %b || %b", shouldRepeat, button.isChecked());
-		NacUtility.printf("Alarm rept? %b || %b", alarm.areDaysSelected(), alarm.shouldRepeat());
+		if (button.isChecked() != shouldRepeat)
+		{
+			button.setChecked(shouldRepeat);
+		}
 
 		if (button.isEnabled() != isEnabled)
 		{
 			button.setEnabled(isEnabled);
-		}
-
-		if (button.isChecked() != shouldRepeat)
-		{
-			button.setChecked(shouldRepeat);
 		}
 
 		//if (alarm.areDaysSelected())

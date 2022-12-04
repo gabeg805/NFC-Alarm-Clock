@@ -75,6 +75,38 @@
 
 		</activity>
 
+		<!-- Alias on the main activity so that this NFC tag scanning only gets -->
+		<!-- enabled when an alarm is active -->
+		<activity-alias
+			android:name=".main.NacMainAliasActivity"
+			android:label="@string/app_name"
+			android:exported="true"
+			android:enabled="false"
+			android:targetActivity=".main.NacMainActivity">
+
+			<intent-filter>
+				<action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+				<data android:mimeType="text/plain" />
+			</intent-filter>
+
+			<intent-filter>
+				<action android:name="android.nfc.action.TECH_DISCOVERED" />
+				<category android:name="android.intent.category.DEFAULT"/>
+			</intent-filter>
+
+			<meta-data
+				android:name="android.nfc.action.TECH_DISCOVERED"
+				android:resource="@xml/nfc_tech_filter"
+				/>
+
+			<intent-filter>
+				<action android:name="android.nfc.action.TAG_DISCOVERED" />
+				<category android:name="android.intent.category.DEFAULT"/>
+			</intent-filter>
+
+		</activity-alias>
+
 		<!-- Alarm activity -->
 		<activity
 			android:name=".activealarm.NacActiveAlarmActivity"

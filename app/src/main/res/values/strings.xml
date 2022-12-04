@@ -8,8 +8,8 @@
 
 
 	<!-- What's new -->
-	<string name="item_1">Fixed issue that affects alarms with the text-to-speech and vibrate options enabled.\n\nWhen the alarm would activate, each time text-to-speech finished, the vibrate instances would stack, resulting in a cacophony of vibrations.</string>
-	<string name="item_2">Fixed various minor issues.</string>
+	<string name="item_1">Updated situations where an NFC tag can be tapped to open the app.\n\nBefore, you could tap an NFC tag at any point, and the app would open; however, if you have a wallet phone case, this results in the app opening up when it is not expected to. Now, tapping an NFC tag will only open the app when an alarm is active.</string>
+	<string name="item_2">Fixed issue where long pressing on the repeat button would uncheck all days, but the color of the button would not be grayed out.</string>
 
 
 

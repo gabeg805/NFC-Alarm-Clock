@@ -1,9 +1,11 @@
 package com.nfcalarmclock.main;
 
 import android.app.AlarmManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
@@ -848,6 +850,16 @@ public class NacMainActivity
 		{
 			this.showScheduleExactAlarmPermissionDialog();
 		}
+
+		// Disable the activity alias so that tapping an NFC tag will not do anything
+		PackageManager pm = getPackageManager();
+		String packageName = getPackageName();
+		String aliasName = packageName + ".main.NacMainAliasActivity";
+		ComponentName componentName = new ComponentName(this, aliasName);
+
+		pm.setComponentEnabledSetting(componentName,
+			PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+			PackageManager.DONT_KILL_APP);
 	}
 
 	/**
@@ -989,9 +1001,12 @@ public class NacMainActivity
 	{
 		super.onNewIntent(intent);
 
+		NacUtility.printf("onNewIntent!");
+
 		// NFC tag was scanned for the NFC dialog
 		if (this.wasNfcScannedForDialog(intent))
 		{
+			NacUtility.printf("Scanned for dialog!");
 			NacSharedConstants cons = this.getSharedConstants();
 			NacScanNfcTagDialog dialog = this.getScanNfcTagDialog();
 
@@ -1009,8 +1024,13 @@ public class NacMainActivity
 		// NFC tag was scanned for an active alarm
 		else if (this.wasNfcScannedForActiveAlarm(intent))
 		{
+			NacUtility.printf("Scanned for active alarm!");
 			this.setNfcTagIntent(intent);
 			this.dismissActiveAlarm();
+		}
+		else
+		{
+			NacUtility.printf("Scanned for NOTHING!");
 		}
 	}
 
