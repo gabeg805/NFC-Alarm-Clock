@@ -76,7 +76,6 @@ public class NacMedia
 			.setArtist(artist)
 			.setDisplayTitle(displayName)
 			.setIsPlayable(true)
-			.setMediaUri(uri)
 			.setTitle(title)
 			.build();
 			//.putLong(MediaMetadata.METADATA_KEY_DURATION, duration)

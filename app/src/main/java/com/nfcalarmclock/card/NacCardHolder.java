@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
@@ -165,6 +166,11 @@ public class NacCardHolder
 	 * Dismiss snoozed alarm button.
 	 */
 	private final MaterialButton mDismissButton;
+
+	/**
+	 * Dismiss early alarm button.
+	 */
+	private final MaterialButton mDismissEarlyButton;
 
 	/**
 	 * Extra view.
@@ -336,6 +342,7 @@ public class NacCardHolder
 		this.mSummaryView = root.findViewById(R.id.nac_summary);
 		this.mDismissParentView = root.findViewById(R.id.nac_dismiss_parent);
 		this.mDismissButton = root.findViewById(R.id.nac_dismiss);
+		this.mDismissEarlyButton = root.findViewById(R.id.nac_dismiss_early);
 		this.mExtraView = root.findViewById(R.id.nac_extra);
 		this.mTimeParentView = root.findViewById(R.id.nac_time_parent);
 		this.mTimeView = root.findViewById(R.id.nac_time);
@@ -713,7 +720,7 @@ public class NacCardHolder
 		summary.setEnabled(true);
 		extra.setVisibility(View.GONE);
 		extra.setEnabled(false);
-		this.setDismissView();
+		this.refreshDismissAndDismissEarlyButtons();
 	}
 
 	/**
@@ -1030,6 +1037,14 @@ public class NacCardHolder
 	public MaterialButton getDismissButton()
 	{
 		return this.mDismissButton;
+	}
+
+	/**
+	 * @return The dismiss early button.
+	 */
+	public MaterialButton getDismissEarlyButton()
+	{
+		return this.mDismissEarlyButton;
 	}
 
 	/**
@@ -1413,7 +1428,7 @@ public class NacCardHolder
 	 */
 	public void initViews()
 	{
-		this.setDismissView();
+		this.refreshDismissAndDismissEarlyButtons();
 		this.setTimeView();
 		this.setMeridianView();
 		this.setSwitchView();
@@ -1528,8 +1543,8 @@ public class NacCardHolder
 		this.getDismissParentView().setVisibility(View.VISIBLE);
 		heights[1] = NacUtility.getHeight(cardView);
 
-		this.setDismissView();
-		//this.getDismissParentView().setVisibility(View.GONE);
+		// Refresh the dismiss and dismiss early buttons
+		this.refreshDismissAndDismissEarlyButtons();
 	}
 
 	/**
@@ -1764,6 +1779,7 @@ public class NacCardHolder
 		this.setMeridianColor();
 		this.setSwitchView();
 		this.setSummaryDaysView();
+		this.refreshDismissAndDismissEarlyButtons();
 		this.callOnCardUpdatedListener();
 	}
 
@@ -1773,6 +1789,57 @@ public class NacCardHolder
 	public void performHapticFeedback(View view)
 	{
 		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+	}
+
+	/**
+	 * Set the dismiss view parent, which contains both "Dismiss" and
+	 * "Dismiss early" to its proper setting.
+	 */
+	public void refreshDismissAndDismissEarlyButtons()
+	{
+		NacAlarm alarm = this.getAlarm();
+		View dismissView = this.getDismissParentView();
+		View expandView = this.getExpandButton();
+
+		// Alarm is in use, or will alarm soon so the "Dismiss" or "Dismiss early"
+		// button should be shown
+		int dismissVis = alarm.isInUse() || alarm.willAlarmSoon() ? View.VISIBLE
+				: View.GONE;
+
+		// The dismiss view is being shown so do not show this view
+		int expandVis = (dismissVis == View.GONE) ? View.VISIBLE : View.INVISIBLE;
+
+		// Set the "Dismiss" button visibility
+		if (dismissView.getVisibility() != dismissVis)
+		{
+			dismissView.setVisibility(dismissVis);
+		}
+
+		// Set the "Expand" down-arrow button visibility
+		if (expandView.getVisibility() != expandVis)
+		{
+			expandView.setVisibility(expandVis);
+		}
+
+		// Set the "Dismiss" and "Dismiss early" visibilities
+		if (dismissVis == View.VISIBLE)
+		{
+			MaterialButton dismissButton = this.getDismissButton();
+			MaterialButton dismissEarlyButton = this.getDismissEarlyButton();
+
+			// Alarm is in use so "Dismiss" should be shown
+			if (alarm.isInUse())
+			{
+				dismissButton.setVisibility(View.VISIBLE);
+				dismissEarlyButton.setVisibility(View.GONE);
+			}
+			// Alarm will alarm soon so "Dismiss early" should be shown
+			else if (alarm.willAlarmSoon())
+			{
+				dismissButton.setVisibility(View.GONE);
+				dismissEarlyButton.setVisibility(View.VISIBLE);
+			}
+		}
 	}
 
 	/**
@@ -2087,32 +2154,6 @@ public class NacCardHolder
 	{
 		MaterialButton button = this.getDismissButton();
 		this.setMaterialButtonColor(button);
-	}
-
-	/**
-	 * Set the dismiss view to its proper setting.
-	 */
-	public void setDismissView()
-	{
-		NacAlarm alarm = this.getAlarm();
-		View dismissView = this.getDismissParentView();
-		View expandView = this.getExpandButton();
-
-		int dismissVis = alarm.isInUse() ? View.VISIBLE
-			: View.GONE;
-		int expandVis = (dismissVis == View.GONE) ? View.VISIBLE : View.INVISIBLE;
-
-		// Set the "Dismiss" button visibility
-		if (dismissView.getVisibility() != dismissVis)
-		{
-			dismissView.setVisibility(dismissVis);
-		}
-
-		// Set the "Expand" down-arrow button visibility
-		if (expandView.getVisibility() != expandVis)
-		{
-			expandView.setVisibility(expandVis);
-		}
 	}
 
 	/**

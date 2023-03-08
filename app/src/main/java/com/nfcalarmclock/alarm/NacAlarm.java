@@ -3,6 +3,8 @@ package com.nfcalarmclock.alarm;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -180,6 +182,18 @@ public class NacAlarm
 	private boolean mShouldRestrictVolume;
 
 	/**
+	 * Flag indicating whether or not to use dismiss early.
+	 **/
+	@ColumnInfo(name="should_dismiss_early", defaultValue="false")
+	private boolean mUseDismissEarly;
+
+	/**
+	 * Amount of time, in minutes, to allow a user to dismiss early by.
+	 **/
+	@ColumnInfo(name="dismiss_early_time", defaultValue="0")
+	private int mDismissEarlyTime;
+
+	/**
 	 * Helper to build an alarm.
 	 */
 	@SuppressWarnings("UnusedReturnValue")
@@ -214,7 +228,9 @@ public class NacAlarm
 				.setName("")
 				.setUseTts(false)
 				.setShouldGraduallyIncreaseVolume(false)
-				.setShouldRestrictVolume(false);
+				.setShouldRestrictVolume(false)
+				.setUseDismissEarly(false)
+				.setDismissEarlyTime(0);
 		}
 
 		/**
@@ -236,7 +252,9 @@ public class NacAlarm
 					.setUseTts(shared.getSpeakToMe())
 					.setTtsFrequency(shared.getSpeakFrequency())
 					.setShouldGraduallyIncreaseVolume(shared.getShouldGraduallyIncreaseVolume())
-					.setShouldRestrictVolume(shared.getShouldRestrictVolume());
+					.setShouldRestrictVolume(shared.getShouldRestrictVolume())
+					.setUseDismissEarly(shared.getUseDismissEarly())
+					.setDismissEarlyTime(shared.getDismissEarlyTime());
 			}
 		}
 
@@ -288,6 +306,19 @@ public class NacAlarm
 		public Builder setDays(int value)
 		{
 			return this.setDays(NacCalendar.Days.valueToDays(value));
+		}
+
+		/**
+		 * Set the time before an alarm goes off to show the dismiss early button.
+		 *
+		 * @param  dismissEarly  Amount of time, in minutes.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setDismissEarlyTime(int dismissEarly)
+		{
+			this.getAlarm().setDismissEarlyTime(dismissEarly);
+			return this;
 		}
 
 		/**
@@ -483,6 +514,19 @@ public class NacAlarm
 		}
 
 		/**
+		 * Set whether to use dismiss early.
+		 *
+		 * @param  useDismissEarly  Whether or not to use dismiss early.
+		 *
+		 * @return The Builder.
+		 */
+		public Builder setUseDismissEarly(boolean useDismissEarly)
+		{
+			this.getAlarm().setUseDismissEarly(useDismissEarly);
+			return this;
+		}
+
+		/**
 		 * Set whether the alarm should use NFC to dismiss or not.
 		 *
 		 * @param  useNfc  True if the phone should use NFC to dismiss, and False
@@ -577,6 +621,8 @@ public class NacAlarm
 		this.setTtsFrequency(input.readInt());
 		this.setShouldGraduallyIncreaseVolume(input.readInt() != 0);
 		this.setShouldRestrictVolume(input.readInt() != 0);
+		this.setUseDismissEarly(input.readInt() != 0);
+		this.setDismissEarlyTime(input.readInt());
 	}
 
 	/**
@@ -802,6 +848,8 @@ public class NacAlarm
 			.setTtsFrequency(this.getTtsFrequency())
 			.setShouldGraduallyIncreaseVolume(this.getShouldGraduallyIncreaseVolume())
 			.setShouldRestrictVolume(this.getShouldRestrictVolume())
+			.setUseDismissEarly(this.shouldUseDismissEarly())
+			.setDismissEarlyTime(this.getDismissEarlyTime())
 			.build();
 	}
 
@@ -845,7 +893,9 @@ public class NacAlarm
 			&& (this.shouldUseTts() == alarm.shouldUseTts())
 			&& (this.getTtsFrequency() == alarm.getTtsFrequency())
 			&& (this.getShouldGraduallyIncreaseVolume() == alarm.getShouldGraduallyIncreaseVolume())
-			&& (this.getShouldRestrictVolume() == alarm.getShouldRestrictVolume());
+			&& (this.getShouldRestrictVolume() == alarm.getShouldRestrictVolume())
+			&& (this.shouldUseDismissEarly() == alarm.shouldUseDismissEarly())
+			&& (this.getDismissEarlyTime() == alarm.getDismissEarlyTime());
 	}
 
 	/**
@@ -884,6 +934,27 @@ public class NacAlarm
 	public EnumSet<NacCalendar.Day> getDays()
 	{
 		return this.mDays;
+	}
+
+	/**
+	 * @return The index which corresponds to the amount of time, in minutes to allow a user to
+	 *         dismiss early by.
+	 */
+	public int getDismissEarlyIndex()
+	{
+		int time = this.getDismissEarlyTime();
+
+		return (time <= 5) ? time-1 : (time/5) + 3;
+
+	}
+
+	/**
+	 * @return The amount of time, in minutes to allow a user to dismiss early by.
+	 */
+	public int getDismissEarlyTime()
+	{
+		//return 0;
+		return this.mDismissEarlyTime;
 	}
 
 	/**
@@ -1078,6 +1149,15 @@ public class NacAlarm
 	}
 
 	/**
+	 * @return True if should use dismiss early, and False otherwise.
+	 */
+	public boolean getUseDismissEarly()
+	{
+		//return false;
+		return this.mUseDismissEarly;
+	}
+
+	/**
 	 * @return True if should use NFC, and False otherwise.
 	 */
 	public boolean getUseNfc()
@@ -1178,28 +1258,30 @@ public class NacAlarm
 	public void print()
 	{
 		NacUtility.printf("Alarm Information");
-		NacUtility.printf("Id           : %d", this.getId());
-		NacUtility.printf("Is Active    : %b", this.isActive());
-		NacUtility.printf("Time Active  : %d", this.getTimeActive());
-		NacUtility.printf("Snooze Count : %d", this.getSnoozeCount());
-		NacUtility.printf("Is Enabled   : %b", this.isEnabled());
-		NacUtility.printf("Hour         : %d", this.getHour());
-		NacUtility.printf("Minute       : %d", this.getMinute());
-		NacUtility.printf("Days         : %s", this.getDays());
-		NacUtility.printf("Repeat       : %b", this.shouldRepeat());
-		NacUtility.printf("Vibrate      : %b", this.shouldVibrate());
-		NacUtility.printf("Use NFC      : %b", this.shouldUseNfc());
-		NacUtility.printf("Nfc Tag Id   : %s", this.getNfcTagId());
-		NacUtility.printf("Media Type   : %s", this.getMediaType());
-		NacUtility.printf("Media Path   : %s", this.getMediaPath());
-		NacUtility.printf("Media Name   : %s", this.getMediaTitle());
-		NacUtility.printf("Volume       : %d", this.getVolume());
-		NacUtility.printf("Audio Source : %s", this.getAudioSource());
-		NacUtility.printf("Name         : %s", this.getName());
-		NacUtility.printf("Use Tts      : %b", this.shouldUseTts());
-		NacUtility.printf("Tts Freq     : %d", this.getTtsFrequency());
-		NacUtility.printf("Grad Inc Vol : %b", this.getShouldGraduallyIncreaseVolume());
-		NacUtility.printf("Restrict Vol : %b", this.getShouldRestrictVolume());
+		NacUtility.printf("Id                : %d", this.getId());
+		NacUtility.printf("Is Active         : %b", this.isActive());
+		NacUtility.printf("Time Active       : %d", this.getTimeActive());
+		NacUtility.printf("Snooze Count      : %d", this.getSnoozeCount());
+		NacUtility.printf("Is Enabled        : %b", this.isEnabled());
+		NacUtility.printf("Hour              : %d", this.getHour());
+		NacUtility.printf("Minute            : %d", this.getMinute());
+		NacUtility.printf("Days              : %s", this.getDays());
+		NacUtility.printf("Repeat            : %b", this.shouldRepeat());
+		NacUtility.printf("Vibrate           : %b", this.shouldVibrate());
+		NacUtility.printf("Use NFC           : %b", this.shouldUseNfc());
+		NacUtility.printf("Nfc Tag Id        : %s", this.getNfcTagId());
+		NacUtility.printf("Media Type        : %s", this.getMediaType());
+		NacUtility.printf("Media Path        : %s", this.getMediaPath());
+		NacUtility.printf("Media Name        : %s", this.getMediaTitle());
+		NacUtility.printf("Volume            : %d", this.getVolume());
+		NacUtility.printf("Audio Source      : %s", this.getAudioSource());
+		NacUtility.printf("Name              : %s", this.getName());
+		NacUtility.printf("Use Tts           : %b", this.shouldUseTts());
+		NacUtility.printf("Tts Freq          : %d", this.getTtsFrequency());
+		NacUtility.printf("Grad Inc Vol      : %b", this.getShouldGraduallyIncreaseVolume());
+		NacUtility.printf("Restrict Vol      : %b", this.getShouldRestrictVolume());
+		NacUtility.printf("Use Dismiss Early : %b", this.shouldUseDismissEarly());
+		NacUtility.printf("Dismiss Early     : %d", this.getDismissEarlyTime());
 	}
 
 	/**
@@ -1228,6 +1310,24 @@ public class NacAlarm
 	public void setDays(int value)
 	{
 		this.setDays(NacCalendar.Days.valueToDays(value));
+	}
+
+	/**
+	 * Set the amount of time, in minutes, to allow a user to dismiss early by.
+	 */
+	public void setDismissEarlyTime(int dismissEarly)
+	{
+		this.mDismissEarlyTime = dismissEarly;
+	}
+
+	/**
+	 * Set the amount of time, in minutes, to allow a user to dismiss early by.
+	 */
+	public void setDismissEarlyTimeFromIndex(int index)
+	{
+		int time = (index < 5) ? index+1 : (index-3)*5;
+
+		this.setDismissEarlyTime(time);
 	}
 
 	/**
@@ -1417,6 +1517,14 @@ public class NacAlarm
 	}
 
 	/**
+	 * Set whether dismiss early should be used or not.
+	 */
+	public void setUseDismissEarly(boolean useDismissEarly)
+	{
+		this.mUseDismissEarly = useDismissEarly;
+	}
+
+	/**
 	 * Set whether the alarm should use NFC to dismiss or not.
 	 *
 	 * @param  useNfc  Whether to use NFC to dismiss or not.
@@ -1482,6 +1590,15 @@ public class NacAlarm
 	//{
 	//	return this.mShouldRestrictVolume;
 	//}
+
+	/**
+	 * @return True if should use dismiss early, and False otherwise.
+	 */
+	public boolean shouldUseDismissEarly()
+	{
+		//return false;
+		return this.mUseDismissEarly;
+	}
 
 	/**
 	 * @return True if should use NFC, and False otherwise.
@@ -1606,6 +1723,31 @@ public class NacAlarm
 		this.setVibrate(!vibrate);
 	}
 
+	/** Whether or not the alarm will alarm soon.
+	 *
+	 * "Soon" is determined by the dismiss early time. If it will alarm within
+	 * that time, then it is soon.
+	 */
+	public boolean willAlarmSoon()
+	{
+		int dismissEarly = this.getDismissEarlyTime();
+		boolean useDismissEarly = this.shouldUseDismissEarly();
+
+		// Alarm is disabled or unable to use dismiss early
+		if (!this.isEnabled() || !useDismissEarly || (dismissEarly == 0))
+		{
+			return false;
+		}
+
+		// Determine the difference in time between the next alarm and today
+		Calendar today = Calendar.getInstance();
+		Calendar cal = NacCalendar.getNextAlarmDay(this);
+		long diff = (cal.getTimeInMillis() - today.getTimeInMillis()) / 1000 / 60;
+
+		// Compare the two amounts of time
+		return (diff < dismissEarly);
+	}
+
 	/**
 	 * Write data into parcel (required for Parcelable).
 	 *
@@ -1641,6 +1783,8 @@ public class NacAlarm
 		output.writeInt(this.getTtsFrequency());
 		output.writeInt(this.getShouldGraduallyIncreaseVolume() ? 1 : 0);
 		output.writeInt(this.getShouldRestrictVolume() ? 1 : 0);
+		output.writeInt(this.shouldUseDismissEarly() ? 1 : 0);
+		output.writeInt(this.getDismissEarlyTime());
 	}
 
 	/**

@@ -175,6 +175,14 @@ public class NacSharedKeys
 	}
 
 	/**
+	 * @return The dismiss early time key.
+	 */
+	public String getDismissEarlyTime()
+	{
+		return this.getString(R.string.alarm_dismiss_early_time_key);
+	}
+
+	/**
 	 * @return The easy snooze key.
 	 */
 	public String getEasySnooze()
@@ -429,6 +437,14 @@ public class NacSharedKeys
 	public String getUpcomingAlarmNotification()
 	{
 		return this.getString(R.string.upcoming_alarm_key);
+	}
+
+	/**
+	 * @return The use dismiss early key.
+	 */
+	public String getUseDismissEarly()
+	{
+		return this.getString(R.string.alarm_use_dismiss_early_key);
 	}
 
 	/**

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/small"
+    android:paddingBottom="@dimen/small"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/should_use_dismiss_early"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/small"
+        android:paddingBottom="@dimen/small"
+        android:paddingStart="@dimen/large"
+        android:paddingEnd="@dimen/large"
+        android:clickable="true"
+        android:background="?android:attr/selectableItemBackground">
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/should_use_dismiss_early_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/small"
+            android:clickable="false"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:focusable="false"
+            android:checked="@bool/default_speak_to_me"
+            />
+
+        <TextView
+            style="@style/Widget.TextView.Primary"
+            android:id="@+id/should_use_dismiss_early_summary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/should_use_dismiss_early_checkbox"
+            android:layout_centerVertical="true"
+            android:maxLines="4"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/speak_to_me_false"
+            />
+    </RelativeLayout>
+
+    <NumberPicker
+        android:id="@+id/dismiss_early_time_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/small"
+        android:layout_marginBottom="@dimen/small"
+        android:layout_marginStart="@dimen/large"
+        android:layout_marginEnd="@dimen/large"
+        />
+</LinearLayout>

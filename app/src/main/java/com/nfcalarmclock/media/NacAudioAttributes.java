@@ -112,7 +112,7 @@ public class NacAudioAttributes
 	{
 		AudioAttributes attrs = this.getAudioAttributes();
 
-		return attrs.getAudioAttributesV21();
+		return attrs.getAudioAttributesV21().audioAttributes;
 	}
 
 	/**

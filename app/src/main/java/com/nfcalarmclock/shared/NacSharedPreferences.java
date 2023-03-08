@@ -186,6 +186,17 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * Edit the default dismiss early time when an alarm is created.
+	 */
+	@SuppressWarnings("unused")
+	public void editDismissEarlyTime(int dismissEarly)
+	{
+		String key = this.getKeys().getDismissEarlyTime();
+
+		this.saveInt(key, dismissEarly, false);
+	}
+
+	/**
 	 * Edit the flag indicating whether the user wants to snooze easily or not.
 	 */
 	@SuppressWarnings("unused")
@@ -421,6 +432,17 @@ public class NacSharedPreferences
 		String key = this.getKeys().getTimeColor();
 
 		this.saveInt(key, color, false);
+	}
+
+	/**
+	 * Edit the default use dismiss early when an alarm is created.
+	 */
+	@SuppressWarnings("unused")
+	public void editUseDismissEarly(boolean useDismissEarly)
+	{
+		String key = this.getKeys().getUseDismissEarly();
+
+		this.saveBoolean(key, useDismissEarly, false);
 	}
 
 	/**
@@ -686,6 +708,18 @@ public class NacSharedPreferences
 	public NacSharedDefaults getDefaults()
 	{
 		return this.mDefaults;
+	}
+
+	/**
+	 * @return The time before an alarm goes off to start showing the dismiss
+	 *         early button by.
+	 */
+	public int getDismissEarlyTime()
+	{
+		String key = this.getKeys().getDismissEarlyTime();
+		int value = this.getDefaults().getDismissEarlyTime();
+
+		return this.getInt(key, value);
 	}
 
 	/**
@@ -1175,6 +1209,17 @@ public class NacSharedPreferences
 	{
 		String key = this.getKeys().getUpcomingAlarmNotification();
 		boolean value = this.getDefaults().getUpcomingAlarm();
+
+		return this.getBoolean(key, value);
+	}
+
+	/**
+	 * @return Whether dismiss early should be used or not.
+	 */
+	public boolean getUseDismissEarly()
+	{
+		String key = this.getKeys().getUseDismissEarly();
+		boolean value = this.getDefaults().getUseDismissEarly();
 
 		return this.getBoolean(key, value);
 	}

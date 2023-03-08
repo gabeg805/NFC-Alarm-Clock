@@ -141,6 +141,15 @@ public class NacSharedDefaults
 	}
 
 	/**
+	 * @return The time before an alarm goes off to start showing the dismiss
+	 *         early button by.
+	 */
+	public int getDismissEarlyTime()
+	{
+		return this.getInteger(R.integer.default_dismiss_early_time);
+	}
+
+	/**
 	 * @return The easy snooze option.
 	 */
 	public boolean getEasySnooze()
@@ -353,6 +362,14 @@ public class NacSharedDefaults
 	public boolean getUpcomingAlarm()
 	{
 		return this.getBoolean(R.bool.default_upcoming_alarm);
+	}
+
+	/**
+	 * @return Whether dismiss early should be used or not.
+	 */
+	public boolean getUseDismissEarly()
+	{
+		return this.getBoolean(R.bool.default_use_dismiss_early);
 	}
 
 	/**

@@ -425,7 +425,7 @@ public class NacTextToSpeech
 			}
 
 			// Speak
-			AudioAttributes androidAttrs = attrs.getAudioAttributes().getAudioAttributesV21();
+			AudioAttributes androidAttrs = attrs.getAudioAttributes().getAudioAttributesV21().audioAttributes;
 			Bundle bundle = NacBundle.toBundle(attrs);
 
 			speech.setAudioAttributes(androidAttrs);

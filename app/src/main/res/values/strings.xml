@@ -98,6 +98,7 @@
 	<string name="title_color">Select a color</string>
 	<string name="title_audio_option">Select an audio option</string>
 	<string name="title_audio_source">Select an audio source</string>
+	<string name="title_dismiss_early">Select dismiss early options</string>
 	<string name="title_gradually_increase_volume">Choose to gradually increase volume</string>
 	<string name="title_restrict_volume">Choose to restrict volume</string>
 	<string name="title_tts">Select text-to-speech options</string>
@@ -379,6 +380,11 @@
 
 	<!-- Speak frequency -->
 	<string name="speak_frequency">Speak frequency</string>
+
+
+	<!-- Dismiss early -->
+	<string name="dismiss_early_true">Alarm can be dismissed before it is active. (Experimental)</string>
+	<string name="dismiss_early_false">You will be unable to dismiss an alarm before it is active.</string>
 
 
 	<!-- Restrict volume -->

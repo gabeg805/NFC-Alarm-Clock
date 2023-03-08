@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.nfcalarmclock">
+	xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<!-- Permissions -->
 	<uses-permission android:name="android.permission.NFC" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.VIBRATE" />
-	<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+	<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" android:maxSdkVersion="32" />
+	<uses-permission android:name="android.permission.USE_EXACT_ALARM" />
 	<uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -31,7 +31,7 @@
 		<!-- Main activity -->
 		<activity
 			android:name=".main.NacMainActivity"
-			android:label="@string/app_name"
+			android:theme="@style/AppTheme.NoActionBar"
 			android:windowSoftInputMode="stateAlwaysHidden"
 			android:exported="true">
 

@@ -153,6 +153,22 @@ public class NacTextToSpeechDialog
 	}
 
 	/**
+	 * Called when the check box is clicked.
+	 */
+	@Override
+	public void onClick(View view)
+	{
+		int id = view.getId();
+
+		if (id == R.id.should_use_tts)
+		{
+			this.toggleShouldUseTts();
+			this.setupShouldUseTtsSummary();
+			this.setupTtsFrequencyEnabled();
+		}
+	}
+
+	/**
 	 * Called when the dialog is created.
 	 */
 	@NonNull
@@ -173,22 +189,6 @@ public class NacTextToSpeechDialog
 	}
 
 	/**
-	 * Called when the check box is clicked.
-	 */
-	@Override
-	public void onClick(View view)
-	{
-		int id = view.getId();
-
-		if (id == R.id.should_use_tts)
-		{
-			this.toggleShouldUseTts();
-			this.setupShouldUseTtsSummary();
-			this.setupTtsFrequencyEnabled();
-		}
-	}
-
-	/**
 	 */
 	@Override
 	public void onResume()
@@ -198,6 +198,8 @@ public class NacTextToSpeechDialog
 		// Initialize the widgets
 		AlertDialog dialog = (AlertDialog) getDialog();
 		RelativeLayout useTtsContainer = dialog.findViewById(R.id.should_use_tts);
+
+		// Set the member variable widgets
 		this.mShouldUseTtsCheckBox = dialog.findViewById(R.id.should_use_tts_checkbox);
 		this.mShouldUseTtsSummary = dialog.findViewById(R.id.should_use_tts_summary);
 		this.mTtsFrequencyPicker = dialog.findViewById(R.id.tts_frequency_picker);

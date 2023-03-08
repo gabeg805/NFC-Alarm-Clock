@@ -33,6 +33,8 @@
 	<string name="speak_frequency_key">pref_speak_frequency</string>
 	<string name="alarm_should_gradually_increase_volume_key">pref_should_gradually_increase_volume</string>
 	<string name="alarm_should_restrict_volume_key">pref_should_restrict_volume</string>
+	<string name="alarm_use_dismiss_early_key">pref_use_dismiss_early</string>
+	<string name="alarm_dismiss_early_time_key">pref_dismiss_early_time</string>
 
 	<string name="appearance_setting_key">pref_screen_appearance</string>
 	<string name="theme_color_key">pref_theme_color</string>

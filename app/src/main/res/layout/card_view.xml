@@ -155,6 +155,21 @@
 					app:icon="@mipmap/dismiss"
 					/>
 
+				<com.google.android.material.button.MaterialButton
+					style="@style/Widget.Button.Text.Row"
+					android:id="@+id/nac_dismiss_early"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:minWidth="@dimen/zero"
+					android:minHeight="@dimen/zero"
+					android:layout_marginStart="@dimen/nudge"
+					android:textSize="@dimen/tsz_small"
+					android:text="Dismiss early"
+					android:visibility="gone"
+					app:iconSize="@dimen/medium"
+					app:icon="@mipmap/dismiss"
+					/>
+
 				<Space
 					android:layout_width="0dp"
 					android:layout_height="0dp"

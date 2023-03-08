@@ -25,6 +25,7 @@
 	<integer name="default_rate_my_app_rated">-999</integer>
 	<integer name="default_snooze_count">0</integer>
 	<integer name="default_previous_volume">-1</integer>
+	<integer name="default_dismiss_early_time">30</integer>
 
 	<integer name="duration_day_button_off">200</integer>
 	<integer name="duration_day_button_alpha_on">280</integer>
@@ -32,7 +33,7 @@
 	<integer name="duration_card_color">150</integer>
 	<integer name="duration_card_color_highlight">400</integer>
 
-	<integer name="max_alarms">50</integer>
+	<integer name="max_alarms">150</integer>
 	<integer name="max_message_name_length">32</integer>
 	<integer name="max_entry_length">512</integer>
 	<integer name="max_hex_length">7</integer>

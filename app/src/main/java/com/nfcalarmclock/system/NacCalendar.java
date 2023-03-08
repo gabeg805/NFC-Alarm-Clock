@@ -98,11 +98,13 @@ public class NacCalendar
 		Calendar calendar = NacCalendar.getNextAlarmDay(alarm);
 		Locale locale = Locale.getDefault();
 
+		// No alarm scheduled
 		if ((shared == null) || (alarm == null) || (calendar == null))
 		{
 			return String.format(locale, "%1$s.",
 				cons.getMessageNoAlarmsScheduled());
 		}
+		// Alarm is disabled
 		else if (!alarm.isEnabled())
 		{
 			int length = cons.getMessageNameLength();
@@ -114,15 +116,18 @@ public class NacCalendar
 				? String.format(locale, "%1$s %2$s.", alarmWord, isDisabled)
 				: String.format(locale, "\"%1$s\" %2$s.", name, isDisabled);
 		}
+		// Show when alarm will occur
 		else
 		{
 			Context context = shared.getContext();
 			int messageFormat = shared.getNextAlarmFormat();
 
+			// e.g. Alarm in 12 hour 5 min
 			if (messageFormat == 0)
 			{
 				return NacCalendar.getMessageTimeIn(context, calendar, prefix);
 			}
+			// e.g. Alarm on Mon at 8:05 AM
 			else
 			{
 				return NacCalendar.getMessageTimeOn(context, calendar, prefix);
@@ -329,22 +334,30 @@ public class NacCalendar
 	{
 		List<Calendar> calendars = new ArrayList<>();
 
-		if (alarm != null)
+		// Alarm is null. Return an empty list
+		if (alarm == null)
 		{
-			if (!alarm.areDaysSelected())
-			{
-				Calendar c = NacCalendar.toNextOneTimeCalendar(alarm);
-				calendars.add(c);
-			}
-			else
-			{
-				EnumSet<Day> days = alarm.getDays();
+			return calendars;
+		}
 
-				for (Day d : days)
-				{
-					Calendar c = NacCalendar.toNextCalendar(alarm, d);
-					calendars.add(c);
-				}
+		// No days are selected. This alarm will occur either today or tomorrow and
+		// is a one-time alarm
+		if (!alarm.areDaysSelected())
+		{
+			Calendar c = NacCalendar.toNextOneTimeCalendar(alarm);
+			calendars.add(c);
+		}
+		// One or more days are selected. Add a calendar for each day that is
+		// selected
+		else
+		{
+			EnumSet<Day> days = alarm.getDays();
+
+			// Iterate over each selected day
+			for (Day d : days)
+			{
+				Calendar c = NacCalendar.toNextCalendar(alarm, d);
+				calendars.add(c);
 			}
 		}
 
@@ -365,6 +378,7 @@ public class NacCalendar
 		Calendar now = Calendar.getInstance();
 		//boolean repeat = alarm.shouldRepeat();
 
+		// Alarm will occur in one week
 		if (calendar.before(now))
 		{
 			calendar.add(Calendar.DAY_OF_MONTH, 7);

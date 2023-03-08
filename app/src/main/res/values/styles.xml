@@ -30,6 +30,18 @@
 	</style>
 
 
+	<!-- No action bar (largely for main activity) -->
+	<style name="AppTheme.NoActionBar">
+		<item name="windowActionBar">false</item>
+		<item name="windowNoTitle">true</item>
+	</style>
+
+
+	<!-- Toolbar -->
+	<style name="Toolbar" parent="@style/Widget.MaterialComponents.Toolbar.Primary">
+		<item name="android:background">@color/black</item>
+	</style>
+
 	<!-- Widget base style -->
 	<style name="Widget">
 	</style>

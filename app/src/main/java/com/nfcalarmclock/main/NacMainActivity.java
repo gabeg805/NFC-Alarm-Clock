@@ -1,6 +1,7 @@
 package com.nfcalarmclock.main;
 
 import android.app.AlarmManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.HapticFeedbackConstants;
@@ -20,16 +22,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import com.google.android.material.textview.MaterialTextView;
 import com.nfcalarmclock.activealarm.NacActiveAlarmService;
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmViewModel;
@@ -39,6 +46,7 @@ import com.nfcalarmclock.card.NacCardAdapter;
 import com.nfcalarmclock.card.NacCardAdapterLiveData;
 import com.nfcalarmclock.card.NacCardHolder;
 import com.nfcalarmclock.card.NacCardTouchHelper;
+import com.nfcalarmclock.dismissearly.NacDismissEarlyDialog;
 import com.nfcalarmclock.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog;
 import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.mediapicker.NacMediaActivity;
@@ -77,7 +85,7 @@ public class NacMainActivity
 	implements Observer<List<NacAlarm>>,
 		//View.OnClickListener,
 		View.OnCreateContextMenuListener,
-		MenuItem.OnMenuItemClickListener,
+		Toolbar.OnMenuItemClickListener,
 		RecyclerView.OnItemTouchListener,
 		NacCardTouchHelper.OnSwipedListener,
 		NacCardAdapter.OnViewHolderBoundListener,
@@ -93,6 +101,7 @@ public class NacMainActivity
 		NacDialog.OnDismissListener,
         NacAlarmAudioOptionsDialog.OnAudioOptionClickedListener,
         NacAudioSourceDialog.OnAudioSourceSelectedListener,
+		NacDismissEarlyDialog.OnDismissEarlyOptionSelectedListener,
 		NacGraduallyIncreaseVolumeDialog.OnGraduallyIncreaseVolumeListener,
 		NacRestrictVolumeDialog.OnRestrictVolumeListener,
 		NacTextToSpeechDialog.OnTextToSpeechOptionsSelectedListener,
@@ -104,6 +113,16 @@ public class NacMainActivity
 	 * Shared preferences.
 	 */
 	private NacSharedPreferences mSharedPreferences;
+
+	/**
+	 * Top toolbar.
+	 */
+	private MaterialToolbar mToolbar;
+
+	/**
+	 * Next alarm text view.
+	 */
+	private MaterialTextView mNextAlarmTextView;
 
 	/**
 	 * Recycler view containing the alarm cards.
@@ -248,6 +267,20 @@ public class NacMainActivity
             };
 
 	/**
+	 * Receiver for the time tick intent. This is called when the time increments
+	 * every minute.
+	 */
+	private final BroadcastReceiver mTimeTickReceiver = new BroadcastReceiver()
+	{
+		@Override
+		public void onReceive(Context context, Intent intent)
+		{
+			setNextAlarmMessage();
+			refreshAlarmsThatWillAlarmSoon();
+		}
+	};
+
+	/**
 	 * Add an alarm to the database.
 	 *
 	 * @param  alarm  An alarm.
@@ -348,6 +381,17 @@ public class NacMainActivity
 	}
 
 	/**
+	 * Cleanup the time tick receiver.
+	 */
+	private void cleanupTimeTickReceiver()
+	{
+		BroadcastReceiver receiver = this.getTimeTickReceiver();
+
+		unregisterReceiver(receiver);
+
+	}
+
+	/**
 	 * TODO: Catch exceptions properly
 	 */
 	public void copyAlarm(NacAlarm alarm)
@@ -359,7 +403,8 @@ public class NacMainActivity
 		NacAlarm copiedAlarm = alarm.copy();
 
 		this.addAlarm(copiedAlarm);
-		this.getLastAlarmCardAction().set(copiedAlarm, NacLastAlarmCardAction.Type.COPY);
+		this.getLastAlarmCardAction().set(copiedAlarm,
+			NacLastAlarmCardAction.Type.COPY);
 		this.showSnackbar(message, action, this.mOnSwipeSnackbarActionListener);
 	}
 
@@ -497,6 +542,32 @@ public class NacMainActivity
 	}
 
 	/**
+	 * Get the message to show for the next alarm.
+	 *
+	 * @return The message to show for the next alarm.
+	 */
+	public String getNextAlarmMessage()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacCardAdapter cardAdapter = this.getAlarmCardAdapter();
+
+		List<NacAlarm> alarms = cardAdapter.getCurrentList();
+		NacAlarm alarm = NacCalendar.getNextAlarm(alarms);
+
+		return NacCalendar.getMessageNextAlarm(shared, alarm);
+	}
+
+	/**
+	 * Get the next alarm text view.
+	 *
+	 * @return The next alarm text view.
+	 */
+	private MaterialTextView getNextAlarmTextView()
+	{
+		return this.mNextAlarmTextView;
+	}
+
+	/**
 	 * Get the NFC tag.
 	 *
 	 * @return The NFC tag.
@@ -571,6 +642,26 @@ public class NacMainActivity
 	}
 
 	/**
+	 * Get the time tick receiver.
+	 *
+	 * @return The time tick receiver
+	 */
+	private BroadcastReceiver getTimeTickReceiver()
+	{
+		return this.mTimeTickReceiver;
+	}
+
+	/**
+	 * Get the toolbar.
+	 *
+	 * @return The toolbar.
+	 */
+	private MaterialToolbar getToolbar()
+	{
+		return this.mToolbar;
+	}
+
+	/**
 	 * @return True if the activity is shown, and False otherwise.
 	 */
 	private boolean isActivityShown()
@@ -603,12 +694,15 @@ public class NacMainActivity
 				this.showAudioSourceDialog();
 				break;
 			case 1:
-				this.showGraduallyIncreaseVolumeDialog();
+				this.showDismissEarlyDialog();
 				break;
 			case 2:
-				this.showRestrictVolumeDialog();
+				this.showGraduallyIncreaseVolumeDialog();
 				break;
 			case 3:
+				this.showRestrictVolumeDialog();
+				break;
+			case 4:
 				this.showTextToSpeechDialog();
 				break;
 			default:
@@ -723,17 +817,23 @@ public class NacMainActivity
 	@Override
 	public void onCardUpdated(NacCardHolder holder, NacAlarm alarm)
 	{
+		// Set the next alarm message
+		this.setNextAlarmMessage();
+
+		// Card is collapsed
 		if (holder.isCollapsed())
 		{
 			this.showUpdatedAlarmSnackbar(alarm);
 			holder.highlight();
 		}
+		// Card is expanded
 		else
 		{
 			long id = alarm.getId();
 			this.getRecentlyUpdatedAlarmIds().add(id);
 		}
 
+		// Update the view model
 		this.getAlarmViewModel().update(this, alarm);
 	}
 
@@ -819,8 +919,10 @@ public class NacMainActivity
 
 		Intent intent = getIntent();
 		View root = findViewById(R.id.activity_main);
+		this.mToolbar = findViewById(R.id.tb_top_bar);
+		this.mNextAlarmTextView = findViewById(R.id.tv_next_alarm);
 		this.mFloatingActionButton = findViewById(R.id.fab_add_alarm);
-		this.mRecyclerView = findViewById(R.id.content_alarm_list);
+		this.mRecyclerView = findViewById(R.id.rv_alarm_list);
 		this.mSharedPreferences = new NacSharedPreferences(this);
 		this.mAlarmStatisticRepository = new NacAlarmStatisticRepository(this);
 		this.mAlarmViewModel = new ViewModelProvider(this).get(NacAlarmViewModel.class);
@@ -836,6 +938,7 @@ public class NacMainActivity
 
 		this.getSharedPreferences().editCardIsMeasured(false);
 		this.setupLiveDataObservers();
+		this.setupToolbar();
 		this.setupAlarmCardAdapter();
 		this.setupRecyclerView();
 
@@ -869,20 +972,46 @@ public class NacMainActivity
 	public void onCreateContextMenu(ContextMenu menu, View view,
 		ContextMenuInfo menuInfo)
 	{
-		// Hopefully don't need this anymore due to onViewHolderCreatedListener
-		//if (menu.size() > 0)
-		//{
-		//	return;
-		//}
-
+		// Set the last card that was clicked
 		this.mLastCardClicked = view;
 
+		// Inflate the context menu
 		getMenuInflater().inflate(R.menu.menu_card, menu);
 
+		// Iterate over each menu item
 		for (int i=0; i < menu.size(); i++)
 		{
 			MenuItem item = menu.getItem(i);
-			item.setOnMenuItemClickListener(this);
+
+			// Set the listener for a menu item
+			item.setOnMenuItemClickListener(menuItem ->
+			{
+				RecyclerView rv = getRecyclerView();
+				NacCardHolder holder = (NacCardHolder) rv.findContainingViewHolder(mLastCardClicked);
+				int id = menuItem.getItemId();
+
+				// Check to make sure the card holder is not null
+				if (holder != null)
+				{
+					NacAlarm alarm = holder.getAlarm();
+
+					// Show the next time the alarm is scheduled to go off
+					if (id == R.id.menu_show_next_alarm)
+					{
+						showAlarmSnackbar(alarm);
+					}
+					// Show the NFC tag ID
+					else if (id == R.id.menu_show_nfc_tag_id)
+					{
+						showNfcTagId(alarm);
+					}
+				}
+
+				// Reset the last clicked card to null
+				mLastCardClicked = null;
+
+				return true;
+			});
 		}
 	}
 
@@ -914,6 +1043,19 @@ public class NacMainActivity
 
 		// Delete the alarm
 		this.deleteAlarm(alarm);
+	}
+
+	/**
+	 * Called when the dismiss early alarm option is selected.
+	 */
+	@Override
+	public void onDismissEarlyOptionSelected(boolean useDismissEarly, int index)
+	{
+		NacAlarm alarm = this.getAudioOptionsAlarm();
+
+		alarm.setUseDismissEarly(useDismissEarly);
+		alarm.setDismissEarlyTimeFromIndex(index);
+		this.getAlarmViewModel().update(this, alarm);
 	}
 
 	/**
@@ -971,27 +1113,20 @@ public class NacMainActivity
 	@Override
 	public boolean onMenuItemClick(MenuItem item)
 	{
-		RecyclerView rv = this.getRecyclerView();
-		View view = this.mLastCardClicked;
-		NacCardHolder holder = (NacCardHolder) rv.findContainingViewHolder(view);
 		int id = item.getItemId();
 
-		if (holder != null)
+		// Settings clicked
+		if (id == R.id.menu_settings)
 		{
-			NacAlarm alarm = holder.getAlarm();
-
-			if (id == R.id.menu_show_next_alarm)
-			{
-				this.showAlarmSnackbar(alarm);
-			}
-			else if (id == R.id.menu_show_nfc_tag_id)
-			{
-				this.showNfcTagId(alarm);
-			}
+			Intent settingsIntent = new Intent(this, NacSettingsActivity.class);
+			startActivity(settingsIntent);
+			return true;
 		}
-
-		this.mLastCardClicked = null;
-		return true;
+		// Unknown
+		else
+		{
+			return false;
+		}
 	}
 
 	/**
@@ -1001,12 +1136,9 @@ public class NacMainActivity
 	{
 		super.onNewIntent(intent);
 
-		NacUtility.printf("onNewIntent!");
-
 		// NFC tag was scanned for the NFC dialog
 		if (this.wasNfcScannedForDialog(intent))
 		{
-			NacUtility.printf("Scanned for dialog!");
 			NacSharedConstants cons = this.getSharedConstants();
 			NacScanNfcTagDialog dialog = this.getScanNfcTagDialog();
 
@@ -1024,37 +1156,8 @@ public class NacMainActivity
 		// NFC tag was scanned for an active alarm
 		else if (this.wasNfcScannedForActiveAlarm(intent))
 		{
-			NacUtility.printf("Scanned for active alarm!");
 			this.setNfcTagIntent(intent);
 			this.dismissActiveAlarm();
-		}
-		else
-		{
-			NacUtility.printf("Scanned for NOTHING!");
-		}
-	}
-
-	/**
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
-	{
-		int id = item.getItemId();
-
-		if (id == R.id.menu_settings)
-		{
-			Intent settingsIntent = new Intent(this, NacSettingsActivity.class);
-			startActivity(settingsIntent);
-			return true;
-		}
-		else if (id == R.id.menu_show_next_alarm)
-		{
-			this.showNextAlarmSnackbar();
-			return true;
-		}
-		else
-		{
-			return super.onOptionsItemSelected(item);
 		}
 	}
 
@@ -1066,6 +1169,7 @@ public class NacMainActivity
 		super.onPause();
 
 		this.setIsActivityShown(false);
+		this.cleanupTimeTickReceiver();
 		this.cleanupShutdownBroadcastReceiver();
 		NacNfc.stop(this);
 	}
@@ -1090,7 +1194,8 @@ public class NacMainActivity
 	public void onPermissionRequestDone(String permission)
 	{
 		// Do not do anything if the Android version is not correct
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
+		if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
+				|| (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU))
 		{
 			return;
 		}
@@ -1148,6 +1253,9 @@ public class NacMainActivity
 		super.onResume();
 
 		this.setIsActivityShown(true);
+		this.setupTimeTickReceiver();
+		this.setNextAlarmMessage();
+		//this.refreshAlarmsThatWillAlarmSoon();
 		this.setupRefreshMainActivity();
 		// Will have to redraw colors here?
 		this.setupFloatingActionButton();
@@ -1252,6 +1360,28 @@ public class NacMainActivity
 	}
 
 	/**
+	 * Refresh alarms that will alarm soon.
+	 */
+	private void refreshAlarmsThatWillAlarmSoon()
+	{
+		NacCardAdapter adapter = this.getAlarmCardAdapter();
+		int length = adapter.getItemCount();
+
+		// Iterate over each alarm card in the adapter
+		for (int i=0; i < length; i++)
+		{
+			NacAlarm a = adapter.getAlarmAt(i);
+
+			// Alarm will alarm soon
+			if (a.willAlarmSoon())
+			{
+				// Refresh the alarm
+				adapter.notifyItemChanged(i);
+			}
+		}
+	}
+
+	/**
 	 * Restore an alarm and add it back to the database.
 	 *
 	 * @param  alarm  An alarm.
@@ -1304,6 +1434,56 @@ public class NacMainActivity
 	private void setIsActivityShown(boolean isShown)
 	{
 		this.mIsActivityShown = isShown;
+	}
+
+	/**
+	 * Set the next alarm message in the text view.
+	 */
+	private void setNextAlarmMessage()
+	{
+		MaterialTextView nextAlarm = this.getNextAlarmTextView();
+		String message = this.getNextAlarmMessage();
+
+		nextAlarm.setText(message);
+	}
+
+	/**
+	 * Set the NFC tag active alarm.
+	 *
+	 * @param  activeAlarm  The active alarm to use in conjunction with the NFC tag.
+	 */
+	private void setNfcTagAlarm(NacAlarm activeAlarm)
+	{
+		NacNfcTag tag = this.getNfcTag();
+
+		if (tag == null)
+		{
+			this.mNfcTag = new NacNfcTag(activeAlarm);
+		}
+		else
+		{
+			tag.setActiveAlarm(activeAlarm);
+		}
+	}
+
+	/**
+	 * Set the NFC tag action and ID from an Intent.
+	 *
+	 * @param  nfcIntent  The intent received when scanning an NFC tag.
+	 */
+	private void setNfcTagIntent(Intent nfcIntent)
+	{
+		NacNfcTag tag = this.getNfcTag();
+
+		if (tag == null)
+		{
+			this.mNfcTag = new NacNfcTag(nfcIntent);
+		}
+		else
+		{
+			tag.setNfcId(nfcIntent);
+			tag.setNfcAction(nfcIntent);
+		}
 	}
 
 	/**
@@ -1391,47 +1571,34 @@ public class NacMainActivity
 	}
 
 	/**
-	 * Setup showing the What's New dialog.
-	 */
-	private boolean setupWhatsNewDialog()
-	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-		NacSharedConstants cons = this.getSharedConstants();
-		String version = cons.getAppVersion();
-		String prevVersion = shared.getPreviousAppVersion();
-
-		// The current version and previously saved version match. This means there
-		// is no update that has occurred. Alternatively, something is wrong with the
-		// current version (if it is empty)
-		if (version.isEmpty() || version.equals(prevVersion))
-		{
-			return false;
-		}
-
-		// Show the What's New dialog
-		this.showWhatsNewDialog();
-
-		return true;
-	}
-
-	/**
 	 * Setup LiveData observers.
 	 */
 	private void setupLiveDataObservers()
 	{
+		// Observer is called when list of all alarms changes. Including when the app
+		// starts and the list is initially empty
 		this.getAlarmViewModel().getAllAlarms().observe(this,
 			alarms -> 
 				{
+					// Setup statistics
 					this.setupStatistics(alarms);
 
+					// Merge and sort the alarms if there are none expanded
 					if (this.getCardsExpandedCount() == 0)
 					{
 						this.getAlarmCardAdapterLiveData().mergeSort(alarms);
 					}
+					// Only merge the alarms when there is at least one alarm expanded
 					else
 					{
 						this.getAlarmCardAdapterLiveData().merge(alarms);
 					}
+
+					// Set the next alarm message
+					this.setNextAlarmMessage();
+
+					// Refresh any alarms that will alarm soon
+					//this.refreshAlarmsThatWillAlarmSoon();
 				});
 
 		this.getAlarmViewModel().getActiveAlarm().observe(this,
@@ -1524,42 +1691,49 @@ public class NacMainActivity
 	}
 
 	/**
-	 * Set the NFC tag active alarm.
-	 *
-	 * @param  activeAlarm  The active alarm to use in conjunction with the NFC tag.
+	 * Setup the time tick receiver.
 	 */
-	private void setNfcTagAlarm(NacAlarm activeAlarm)
+	private void setupTimeTickReceiver()
 	{
-		NacNfcTag tag = this.getNfcTag();
+		BroadcastReceiver receiver = this.getTimeTickReceiver();
+		IntentFilter filter = new IntentFilter(Intent.ACTION_TIME_TICK);
 
-		if (tag == null)
-		{
-			this.mNfcTag = new NacNfcTag(activeAlarm);
-		}
-		else
-		{
-			tag.setActiveAlarm(activeAlarm);
-		}
+		// Register the receiver
+		registerReceiver(receiver, filter);
 	}
 
 	/**
-	 * Set the NFC tag action and ID from an Intent.
-	 *
-	 * @param  nfcIntent  The intent received when scanning an NFC tag.
+	 * Setup the toolbar
 	 */
-	private void setNfcTagIntent(Intent nfcIntent)
+	private void setupToolbar()
 	{
-		NacNfcTag tag = this.getNfcTag();
+		MaterialToolbar toolbar = this.getToolbar();
 
-		if (tag == null)
+		toolbar.setOnMenuItemClickListener(this);
+	}
+
+	/**
+	 * Setup showing the What's New dialog.
+	 */
+	private boolean setupWhatsNewDialog()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacSharedConstants cons = this.getSharedConstants();
+		String version = cons.getAppVersion();
+		String prevVersion = shared.getPreviousAppVersion();
+
+		// The current version and previously saved version match. This means there
+		// is no update that has occurred. Alternatively, something is wrong with the
+		// current version (if it is empty)
+		if (version.isEmpty() || version.equals(prevVersion))
 		{
-			this.mNfcTag = new NacNfcTag(nfcIntent);
+			return false;
 		}
-		else
-		{
-			tag.setNfcId(nfcIntent);
-			tag.setNfcAction(nfcIntent);
-		}
+
+		// Show the What's New dialog
+		this.showWhatsNewDialog();
+
+		return true;
 	}
 
 	/**
@@ -1568,8 +1742,9 @@ public class NacMainActivity
 	 */
 	private boolean shouldRequestScheduleExactAlarmPermission()
 	{
-		// Schedule Exact Alarms permission is only applicable to >= API 31.
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
+		// Schedule Exact Alarms permission is only applicable to API 31 and 32.
+		if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
+			|| (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU))
 		{
 			return false;
 		}
@@ -1630,6 +1805,22 @@ public class NacMainActivity
 		dialog.setDefaultAudioSource(audioSource);
 		dialog.setOnAudioSourceSelectedListener(this);
 		dialog.show(getSupportFragmentManager(), NacAudioSourceDialog.TAG);
+	}
+
+	/**
+	 * Show the dismiss early dialog.
+	 */
+	public void showDismissEarlyDialog()
+	{
+		NacDismissEarlyDialog dialog = new NacDismissEarlyDialog();
+		NacAlarm alarm = this.getAudioOptionsAlarm();
+		boolean useDismissEarly = alarm.shouldUseDismissEarly();
+		int index = alarm.getDismissEarlyIndex();
+
+		dialog.setDefaultUseDismissEarly(useDismissEarly);
+		dialog.setDefaultDismissEarlyIndex(index);
+		dialog.setOnDismissEarlyOptionSelectedListener(this);
+		dialog.show(getSupportFragmentManager(), NacGraduallyIncreaseVolumeDialog.TAG);
 	}
 
 	/**
@@ -1710,7 +1901,8 @@ public class NacMainActivity
 	 */
 	public void showScheduleExactAlarmPermissionDialog()
 	{
-		NacScheduleExactAlarmPermissionDialog dialog = new NacScheduleExactAlarmPermissionDialog();
+		NacScheduleExactAlarmPermissionDialog dialog =
+			new NacScheduleExactAlarmPermissionDialog();
 
 		dialog.setOnPermissionRequestListener(this);
 		dialog.show(getSupportFragmentManager(),

@@ -273,6 +273,14 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return The different dismiss early times.
+	 */
+	public List<String> getDismissEarlyTimes()
+	{
+		return this.getStringList(R.array.dismiss_early_times);
+	}
+
+	/**
 	 * @return Error message when trying to delete alarm while active.
 	 */
 	public String getErrorMessageActiveDelete()
@@ -778,6 +786,14 @@ public class NacSharedConstants
 	public String getTitleDays()
 	{
 		return this.getString(R.string.title_days);
+	}
+
+	/**
+	 * @return Dismiss early title.
+	 */
+	public String getTitleDismissEarly()
+	{
+		return this.getString(R.string.title_dismiss_early);
 	}
 
 	/**

@@ -19,6 +19,7 @@
 	<bool name="default_should_gradually_increase_volume">false</bool>
 	<bool name="default_should_restrict_volume">false</bool>
 	<bool name="default_was_schedule_exact_alarm_permission_requested">false</bool>
+	<bool name="default_use_dismiss_early">false</bool>
 
 	<!--
 	<bool name="is_app_updated">false</bool>

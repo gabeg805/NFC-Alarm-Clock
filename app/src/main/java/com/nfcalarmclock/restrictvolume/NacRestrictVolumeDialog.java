@@ -176,7 +176,7 @@ public class NacRestrictVolumeDialog
 	/**
 	 * Set the default volume restriction.
 	 *
-	 * @param  shoudlRestrict  The default volume restriction.
+	 * @param  shouldRestrict  The default volume restriction.
 	 */
 	public void setDefaultShouldRestrictVolume(boolean shouldRestrict)
 	{
