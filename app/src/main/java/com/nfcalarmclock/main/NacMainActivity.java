@@ -1,5 +1,6 @@
 package com.nfcalarmclock.main;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -14,7 +15,6 @@ import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.HapticFeedbackConstants;
@@ -24,6 +24,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -544,17 +545,16 @@ public class NacMainActivity
 	/**
 	 * Get the message to show for the next alarm.
 	 *
+	 * @param  alarms  List of alarms.
+	 *
 	 * @return The message to show for the next alarm.
 	 */
-	public String getNextAlarmMessage()
+	public String getNextAlarmMessage(List<NacAlarm> alarms)
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		NacCardAdapter cardAdapter = this.getAlarmCardAdapter();
+		NacAlarm nextAlarm = NacCalendar.getNextAlarm(alarms);
 
-		List<NacAlarm> alarms = cardAdapter.getCurrentList();
-		NacAlarm alarm = NacCalendar.getNextAlarm(alarms);
-
-		return NacCalendar.getMessageNextAlarm(shared, alarm);
+		return NacCalendar.getMessageNextAlarm(shared, nextAlarm);
 	}
 
 	/**
@@ -911,6 +911,7 @@ public class NacMainActivity
 
 	/**
 	 */
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -1227,6 +1228,7 @@ public class NacMainActivity
 		NacScheduler.refreshAll(this);
 	}
 
+
 	/**
 	 * Note: Needed for RecyclerView.OnItemTouchListener
 	 */
@@ -1441,8 +1443,19 @@ public class NacMainActivity
 	 */
 	private void setNextAlarmMessage()
 	{
+		NacCardAdapter cardAdapter = this.getAlarmCardAdapter();
+		List<NacAlarm> alarms = cardAdapter.getCurrentList();
+
+		this.setNextAlarmMessage(alarms);
+	}
+
+	/**
+	 * Set the next alarm message in the text view.
+	 */
+	private void setNextAlarmMessage(List<NacAlarm> alarms)
+	{
 		MaterialTextView nextAlarm = this.getNextAlarmTextView();
-		String message = this.getNextAlarmMessage();
+		String message = this.getNextAlarmMessage(alarms);
 
 		nextAlarm.setText(message);
 	}
@@ -1595,7 +1608,7 @@ public class NacMainActivity
 					}
 
 					// Set the next alarm message
-					this.setNextAlarmMessage();
+					this.setNextAlarmMessage(alarms);
 
 					// Refresh any alarms that will alarm soon
 					//this.refreshAlarmsThatWillAlarmSoon();
@@ -1899,14 +1912,20 @@ public class NacMainActivity
 	/**
 	 * Show the dialog.
 	 */
+	@RequiresApi(api = Build.VERSION_CODES.S)
 	public void showScheduleExactAlarmPermissionDialog()
 	{
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
+		{
+			return;
+		}
+
 		NacScheduleExactAlarmPermissionDialog dialog =
 			new NacScheduleExactAlarmPermissionDialog();
 
 		dialog.setOnPermissionRequestListener(this);
 		dialog.show(getSupportFragmentManager(),
-			NacScheduleExactAlarmPermissionDialog .TAG);
+			NacScheduleExactAlarmPermissionDialog.TAG);
 	}
 
 	/**

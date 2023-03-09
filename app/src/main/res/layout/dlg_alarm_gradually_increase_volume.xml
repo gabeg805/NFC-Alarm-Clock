@@ -9,6 +9,7 @@
 	android:paddingStart="@dimen/large"
 	android:paddingEnd="@dimen/large"
 	android:clickable="true"
+	android:focusable="true"
 	android:background="?android:attr/selectableItemBackground">
 
 	<com.google.android.material.checkbox.MaterialCheckBox

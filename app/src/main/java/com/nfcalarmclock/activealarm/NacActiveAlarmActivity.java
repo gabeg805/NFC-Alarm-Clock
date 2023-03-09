@@ -19,7 +19,6 @@ import com.nfcalarmclock.activealarm.NacActiveAlarmService;
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.nfc.NacNfcTag;
 import com.nfcalarmclock.system.NacBundle;
-import com.nfcalarmclock.system.NacContext;
 import com.nfcalarmclock.system.NacIntent;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
@@ -171,11 +170,13 @@ public class NacActiveAlarmActivity
 		NacSharedPreferences shared = this.getSharedPreferences();
 		int id = view.getId();
 
+		// Snooze
 		if ((id == R.id.snooze) || ((id == R.id.act_alarm)
 			&& shared.getEasySnooze()))
 		{
 			this.snooze();
 		}
+		// Dismiss
 		else if (id == R.id.dismiss)
 		{
 			this.dismiss();
@@ -196,16 +197,19 @@ public class NacActiveAlarmActivity
 		this.mSharedPreferences = new NacSharedPreferences(this);
 		this.mStopReceiver = new StopActivityReceiver();
 
+		// NFC tag was scanned
 		if (this.wasNfcScanned())
 		{
 			this.dismissFromNfcScan();
 		}
 
+		// Check if alarm should be dismissed
 		if (this.shouldDismissAlarm())
 		{
 			this.dismiss();
 		}
 
+		// Setup
 		this.setupScreen();
 		this.setupAlarmButtons();
 		this.setupAlarmInfo();
@@ -230,6 +234,7 @@ public class NacActiveAlarmActivity
 	public void onPause()
 	{
 		super.onPause();
+
 		this.cleanupNfc();
 		this.cleanupStopReceiver();
 	}
@@ -240,6 +245,7 @@ public class NacActiveAlarmActivity
 	public void onResume()
 	{
 		super.onResume();
+
 		this.setupNfc();
 		this.setupAlarmInstructions();
 		this.setupStopReceiver();
@@ -254,6 +260,8 @@ public class NacActiveAlarmActivity
 		super.onSaveInstanceState(outState);
 
 		NacAlarm alarm = this.getAlarm();
+
+		// Save the alarm to the save instance state
 		if (alarm != null)
 		{
 			outState.putParcelable(NacBundle.ALARM_PARCEL_NAME, alarm);
@@ -267,16 +275,19 @@ public class NacActiveAlarmActivity
 	{
 		NacAlarm alarm = NacIntent.getAlarm(getIntent());
 
+		// Attempt to get the alarm from the saved instance state
 		if (alarm == null)
 		{
 			alarm = NacBundle.getAlarm(savedInstanceState);
 		}
 
+		// Alarm is still null, finish the activity
 		if (alarm == null)
 		{
 			finish();
 		}
 
+		// Set the alarm
 		this.mAlarm = alarm;
 	}
 
@@ -291,15 +302,18 @@ public class NacActiveAlarmActivity
 		Button snoozeButton = findViewById(R.id.snooze);
 		Button dismissButton = findViewById(R.id.dismiss);
 
+		// NFC should be used so remove the dismiss button
 		if (NacNfc.shouldUseNfc(this, alarm))
 		{
 			dismissButton.setVisibility(View.GONE);
 		}
+		// Show the dismiss button
 		else
 		{
 			dismissButton.setVisibility(View.VISIBLE);
 		}
 
+		// Setup the buttons
 		snoozeButton.setTextColor(shared.getThemeColor());
 		dismissButton.setTextColor(shared.getThemeColor());
 		layout.setOnClickListener(this);
@@ -315,11 +329,13 @@ public class NacActiveAlarmActivity
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 
+		// Alarm is present and the user wants to see alarm info
 		if ((alarm != null) && shared.getShowAlarmInfo())
 		{
 			TextView name = findViewById(R.id.name);
 			String alarmName = alarm.getNameNormalized();
 
+			// Show alarm info
 			name.setText(alarmName);
 			name.setSelected(true);
 		}
@@ -331,6 +347,7 @@ public class NacActiveAlarmActivity
 	 */
 	public void setupAlarmInstructions()
 	{
+		// Show NFC instructions
 		if (!NacNfc.isEnabled(this))
 		{
 			TextView instructions = findViewById(R.id.instructions);
@@ -345,27 +362,35 @@ public class NacActiveAlarmActivity
 	{
 		NacAlarm alarm = this.getAlarm();
 
+		// NFC is not enabled
 		if (!NacNfc.isEnabled(this))
 		{
+			// NFC should be used, so prompt the user
 			if (NacNfc.shouldUseNfc(this, alarm))
 			{
 				NacNfc.prompt(this);
 			}
+			// NFC does not need to be used. Return out of the method
 			else
 			{
 				return;
 			}
 		}
 
+		// NFC exists on the device. The device is NFC capable
 		if (NacNfc.exists(this))
 		{
 			Intent intent = new Intent(this, NacActiveAlarmActivity.class)
 				.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+
+			// Start NFC
 			NacNfc.start(this, intent);
 		}
+		// Unable to use NFC on the device
 		else
 		{
 			NacSharedConstants cons = new NacSharedConstants(this);
+
 			NacUtility.quickToast(this,
 				cons.getErrorMessageNfcUnsupported());
 		}
@@ -381,33 +406,34 @@ public class NacActiveAlarmActivity
 		Window window = getWindow();
 		boolean showWhenLocked = (alarm != null) && !alarm.shouldUseNfc();
 
+		// Use updated method calls to control screen for APK >= 27
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)
 		{
 			setTurnScreenOn(true);
-			setShowWhenLocked(false);
-			//setShowWhenLocked(showWhenLocked);
-
-			//if ((alarm != null) && !alarm.shouldUseNfc())
-			//{
-			//	setShowWhenLocked(true);
-			//}
+			setShowWhenLocked(showWhenLocked);
+			//setShowWhenLocked(false);
 		}
 		else
 		{
 			window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
-			//if ((alarm != null) && !alarm.shouldUseNfc())
-			//if (showWhenLocked)
-			//{
-			//	window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-			//}
-			//else
-			//{
+			// Add flag to show when locked
+			if (showWhenLocked)
+			{
+				window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+			}
+			// Clear flag so app is not shown when locked
+			else
+			{
 				window.clearFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-			//}
+			}
 		}
 
+		// Keep screen on
 		window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+		// Allow lock screen when screen is turned on
+		//window.addFlags(WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
 	}
 
 	/**
@@ -418,6 +444,8 @@ public class NacActiveAlarmActivity
 		StopActivityReceiver receiver = this.getStopReceiver();
 		IntentFilter filter = new IntentFilter(
 			NacActiveAlarmActivity.ACTION_STOP_ACTIVITY);
+
+		// Register to listen for the STOP broadcast for the activity
 		registerReceiver(receiver, filter);
 	}
 
@@ -430,6 +458,7 @@ public class NacActiveAlarmActivity
 		Intent intent = getIntent();
 		String action = NacIntent.getAction(intent);
 
+		// Check to see if the alarm should be dismissed and NFC does not need to be used
 		return action.equals(NacActiveAlarmActivity.ACTION_DISMISS_ACTIVITY)
 			&& !NacNfc.shouldUseNfc(this, alarm);
 	}

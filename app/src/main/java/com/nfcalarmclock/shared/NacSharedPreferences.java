@@ -512,8 +512,8 @@ public class NacSharedPreferences
 		return this.getBoolean(key, value);
 	}
 
-	/**
-	 * @return The current app version.
+	/*
+	  @return The current app version.
 	 */
 	//public String getAppVersion()
 	//{
@@ -711,6 +711,27 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * @return The index that corresponds to the time before an alarm goes off to start showing the
+	 *         dismiss early button by.
+	 */
+	public int getDismissEarlyIndex()
+	{
+		int time = this.getDismissEarlyTime();
+
+		return NacSharedPreferences.getDismissEarlyTimeToIndex(time);
+	}
+
+	/**
+	 * Get the time before an alarm goes off to start showing the dismiss early button by.
+	 *
+	 * @param  index  The index that corresponds to the time.
+	 */
+	public static int getDismissEarlyIndexToTime(int index)
+	{
+		return (index < 5) ? index+1 : (index-3)*5;
+	}
+
+	/**
 	 * @return The time before an alarm goes off to start showing the dismiss
 	 *         early button by.
 	 */
@@ -720,6 +741,15 @@ public class NacSharedPreferences
 		int value = this.getDefaults().getDismissEarlyTime();
 
 		return this.getInt(key, value);
+	}
+
+	/**
+	 * @return The index that corresponds to the time before an alarm goes off to start showing the
+	 *         dismiss early button by.
+	 */
+	public static int getDismissEarlyTimeToIndex(int time)
+	{
+		return (time <= 5) ? time-1 : (time/5) + 3;
 	}
 
 	/**

@@ -13,8 +13,6 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
-
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmRepository;
 import com.nfcalarmclock.missedalarm.NacMissedAlarmNotification;
@@ -404,7 +402,6 @@ public class NacActiveAlarmService
 	/**
 	 * @return True if the alarm service is already running, and False otherwise.
 	 */
-	@SuppressWarnings("deprecation")
 	public static boolean isRunning(Context context)
 	{
 		// Get the name of the class of the service
@@ -446,21 +443,12 @@ public class NacActiveAlarmService
 	@Override
 	public void onCreate()
 	{
-		//super.onCreate();
-
-		FirebaseCrashlytics.getInstance().log("Constructor start!");
-
-		//Application app = getApplication();
-		//Context context = getApplicationContext();
-
-		//this.mSharedPreferences = new NacSharedPreferences(context);
 		this.mSharedPreferences = new NacSharedPreferences(this);
 		this.mAlarmRepository = null;
 		this.mAlarm = null;
 		this.mWakeupProcess = new NacWakeupProcess(this);
 		this.mWakeLock = null;
 		this.mAutoDismissHandler = new Handler(getMainLooper());
-		//this.mAutoDismissHandler = new Handler(context.getMainLooper());
 		//this.mStartTime = System.currentTimeMillis();
 
 		// Enable the activity alias so that tapping an NFC tag will open the main
@@ -473,8 +461,6 @@ public class NacActiveAlarmService
 		pm.setComponentEnabledSetting(componentName,
 			PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
 			PackageManager.DONT_KILL_APP);
-
-		FirebaseCrashlytics.getInstance().log("Constructor done!");
 	}
 
 	/**
@@ -492,7 +478,7 @@ public class NacActiveAlarmService
 			PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
 			PackageManager.DONT_KILL_APP);
 
-		//super.onDestroy();
+		// Cleanup everything
 		this.cleanup();
 	}
 
@@ -501,16 +487,6 @@ public class NacActiveAlarmService
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
-		FirebaseCrashlytics.getInstance().log("onStartCommand!");
-
-		// A duplicate service was started. Do not start it again, just keep it going
-		//if (this.isDuplicateServiceStarted(intent))
-		//{
-		//	FirebaseCrashlytics.getInstance().log("Duplicate service was started! Just showing the alarm.");
-		//	this.showNotification();
-		//	return START_STICKY;
-		//}
-
 		// Get the action of the service
 		String action = NacIntent.getAction(intent);
 
@@ -518,7 +494,6 @@ public class NacActiveAlarmService
 		this.setupService(intent);
 
 		// Show the notification
-		FirebaseCrashlytics.getInstance().log("Showing the notification just in case. Never before tried.");
 		this.showNotification();
 
 		// The default case if things go wrong, or if the service should be
@@ -530,34 +505,25 @@ public class NacActiveAlarmService
 			|| action.equals(ACTION_STOP_SERVICE)
 			|| action.equals(ACTION_DISMISS_ALARM))
 		{
-			FirebaseCrashlytics.getInstance().log("Alarm null || Action Empty || Stop || Dismiss!");
 			this.dismiss();
 		}
 		// Dismiss the alarm with an NFC tag
 		else if (action.equals(ACTION_DISMISS_ALARM_WITH_NFC))
 		{
-			FirebaseCrashlytics.getInstance().log("Dismiss with NFC!");
 			this.dismissWithNfc();
 		}
 		// Snooze the alarm
 		else if (action.equals(ACTION_SNOOZE_ALARM))
 		{
-			FirebaseCrashlytics.getInstance().log("Snooze alarm!");
 			this.snooze();
 		}
 		// Start the servic
 		else if (action.equals(ACTION_START_SERVICE))
 		{
-			FirebaseCrashlytics.getInstance().log("Start service!");
-			//this.showNotification();
-			FirebaseCrashlytics.getInstance().log("Notification is shown! Setup wakelock");
 			this.setupWakeLock();
-			FirebaseCrashlytics.getInstance().log("Setup wakeup process");
 			this.setupWakeupProcess();
 			this.setIsAlarmActive(true);
-			FirebaseCrashlytics.getInstance().log("Update alarm");
 			this.updateAlarm();
-			FirebaseCrashlytics.getInstance().log("Wait for auto dismiss");
 			this.waitForAutoDismiss();
 			NacContext.startAlarmActivity(this, this.getAlarm());
 

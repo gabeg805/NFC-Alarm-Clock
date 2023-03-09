@@ -142,14 +142,14 @@ public class NacStatisticsSettingsFragment
 	private void setupStartedOnDate(NacAlarmStatisticRepository repo,
 		NacSharedPreferences shared, View root)
 	{
+		Locale locale = Locale.getDefault();
 		NacSharedConstants cons = shared.getConstants();
 		String startedOnText = cons.getMessageStatisticsStartedOn();
 
 		Date dateStarted = repo.getCreatedFirstDate();
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm z");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm z", locale);
 		String dateText = dateFormat.format(dateStarted);
 
-		Locale locale = Locale.getDefault();
 		String text = String.format(locale, "%1$s %2$s", startedOnText, dateText);
 
 		TextView textview = root.findViewById(R.id.statistics_started_on_date);

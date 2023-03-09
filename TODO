@@ -2,8 +2,6 @@
 TODO
 ----
 
-* Firebase
-
 * Prompt to ignore battery optimization?
 
 * PowerManager.isIgnoringBatteryOptimization()

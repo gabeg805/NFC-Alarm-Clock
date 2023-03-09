@@ -176,7 +176,7 @@ public class NacGraduallyIncreaseVolumeDialog
 	/**
 	 * Set the default gradually increase volume value.
 	 *
-	 * @param  shoudlIncrease  The default gradually increase volume value.
+	 * @param  shouldIncrease  The default gradually increase volume value.
 	 */
 	public void setDefaultShouldGraduallyIncreaseVolume(boolean shouldIncrease)
 	{
@@ -246,8 +246,6 @@ public class NacGraduallyIncreaseVolumeDialog
 
 	/**
 	 * Toggle whether volume should be gradually increased or not.
-	 *
-	 * @return True if volume should be gradually increased, and False otherwise.
 	 */
 	private void toggleShouldGraduallyIncreaseVolume()
 	{

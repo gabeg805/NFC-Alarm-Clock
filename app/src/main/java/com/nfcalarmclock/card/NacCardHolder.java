@@ -6,7 +6,6 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
 import android.view.HapticFeedbackConstants;
 import android.view.View;

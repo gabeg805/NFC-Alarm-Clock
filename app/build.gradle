@@ -1,6 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
 
 // Create a variable called keystorePropertiesFile, and initialize it to your
 // keystore.properties file, in the rootProject folder.
@@ -18,8 +16,8 @@ android {
 		applicationId "com.nfcalarmclock"
 		minSdkVersion 21
 		targetSdkVersion 33
-		versionCode 315
-		versionName "10.6.5"
+		versionCode 316
+		versionName "10.7.0"
 
 		javaCompileOptions {
 			annotationProcessorOptions {
@@ -110,14 +108,6 @@ dependencies {
 
 	// Google Play in-app review
 	implementation 'com.google.android.play:core:1.10.3'
-
-	// Import the Firebase BoM
-	implementation platform('com.google.firebase:firebase-bom:28.2.0')
-
-	// Add the dependency for the Firebase SDK for Google Analytics
-	// When using the BoM, don't specify versions in Firebase dependencies
-	implementation 'com.google.firebase:firebase-analytics'
-	implementation 'com.google.firebase:firebase-crashlytics'
 
 	//implementation 'com.spotify.sdk:spotify-auth-release:1.1.0@aar'
 	//implementation 'com.spotify.sdk:spotify-app-remote-release:0.6.1@aar'

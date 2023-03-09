@@ -246,8 +246,6 @@ public class NacRestrictVolumeDialog
 
 	/**
 	 * Toggle whether volume should be restricted or not.
-	 *
-	 * @return True if volume should be restricted, and False otherwise.
 	 */
 	private void toggleShouldRestrictVolume()
 	{

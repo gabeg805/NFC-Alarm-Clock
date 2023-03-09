@@ -4,10 +4,12 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.Manifest;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedConstants;
@@ -15,6 +17,7 @@ import com.nfcalarmclock.util.dialog.NacDialogFragment;
 
 /**
  */
+@RequiresApi(api=Build.VERSION_CODES.S)
 public class NacScheduleExactAlarmPermissionDialog
 	extends NacDialogFragment
 {
@@ -81,7 +84,7 @@ public class NacScheduleExactAlarmPermissionDialog
 	 * Called when the dialog is canceled.
 	 */
 	@Override
-	public void onCancel(DialogInterface dialog)
+	public void onCancel(@NonNull DialogInterface dialog)
 	{
 		this.callOnPermissionRequestCancelListener();
 	}

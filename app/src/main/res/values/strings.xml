@@ -8,8 +8,11 @@
 
 
 	<!-- What's new -->
-	<string name="item_1">Updated situations where an NFC tag can be tapped to open the app.\n\nBefore, you could tap an NFC tag at any point, and the app would open; however, if you have a wallet phone case, this results in the app opening up when it is not expected to. Now, tapping an NFC tag will only open the app when an alarm is active.</string>
-	<string name="item_2">Fixed issue where long pressing on the repeat button would uncheck all days, but the color of the button would not be grayed out.</string>
+	<string name="item_1">Always <b>Show Next Alarm</b> at the top of the alarm list, without needing to click on anything extra.</string>
+	<string name="item_2">Added <b>Dismiss Early</b> option for each alarm. Click on the icon next to the volume slider to access.</string>
+	<string name="item_3">Increased maximum number of alarms to 150.</string>
+	<string name="item_4">Removed dependencies on Google Mobile Services (GMS) and Firebase.</string>
+	<string name="item_5">Miscellaneous updates for Android SDK >= 33.</string>
 
 
 
@@ -96,7 +99,7 @@
 	<string name="title_name">Set alarm name</string>
 	<string name="title_days">Select days</string>
 	<string name="title_color">Select a color</string>
-	<string name="title_audio_option">Select an audio option</string>
+	<string name="title_audio_option">Select an alarm option</string>
 	<string name="title_audio_source">Select an audio source</string>
 	<string name="title_dismiss_early">Select dismiss early options</string>
 	<string name="title_gradually_increase_volume">Choose to gradually increase volume</string>

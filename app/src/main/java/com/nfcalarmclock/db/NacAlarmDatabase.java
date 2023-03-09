@@ -1,5 +1,6 @@
 package com.nfcalarmclock.db;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.room.AutoMigration;
@@ -100,12 +101,11 @@ public abstract class NacAlarmDatabase
 	 * Executor service.
 	 */
 	private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
-	//private static final ExecutorService EXECUTOR =
-	//	Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
 	/**
 	 * Singleton instance of the database.
 	 */
+	@SuppressLint("StaticFieldLeak")
 	private static NacAlarmDatabase sInstance;
 
 	/**
@@ -115,6 +115,7 @@ public abstract class NacAlarmDatabase
 	 * migrate from the old SQLite database to the Room database. Otherwise, this
 	 * will be null.
 	 */
+	@SuppressLint("StaticFieldLeak")
 	private static Context sContext;
 
 	/**
@@ -178,8 +179,8 @@ public abstract class NacAlarmDatabase
 			db.execSQL("DROP TABLE alarm_snoozed_statistic");
 
 			db.execSQL("CREATE TABLE IF NOT EXISTS alarm_created_statistic (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, timestamp INTEGER NOT NULL)");
-		   	db.execSQL("CREATE TABLE IF NOT EXISTS alarm_deleted_statistic (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, timestamp INTEGER NOT NULL, hour INTEGER NOT NULL, minute INTEGER NOT NULL, name TEXT DEFAULT '')");
-		  	db.execSQL("CREATE TABLE IF NOT EXISTS alarm_dismissed_statistic (used_nfc INTEGER NOT NULL, id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, timestamp INTEGER NOT NULL, alarm_id INTEGER, hour INTEGER NOT NULL, minute INTEGER NOT NULL, name TEXT DEFAULT '', FOREIGN KEY(alarm_id) REFERENCES alarm(id) ON UPDATE NO ACTION ON DELETE SET NULL )");
+			db.execSQL("CREATE TABLE IF NOT EXISTS alarm_deleted_statistic (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, timestamp INTEGER NOT NULL, hour INTEGER NOT NULL, minute INTEGER NOT NULL, name TEXT DEFAULT '')");
+			db.execSQL("CREATE TABLE IF NOT EXISTS alarm_dismissed_statistic (used_nfc INTEGER NOT NULL, id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, timestamp INTEGER NOT NULL, alarm_id INTEGER, hour INTEGER NOT NULL, minute INTEGER NOT NULL, name TEXT DEFAULT '', FOREIGN KEY(alarm_id) REFERENCES alarm(id) ON UPDATE NO ACTION ON DELETE SET NULL )");
 			db.execSQL("CREATE TABLE IF NOT EXISTS alarm_missed_statistic (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, timestamp INTEGER NOT NULL, alarm_id INTEGER, hour INTEGER NOT NULL, minute INTEGER NOT NULL, name TEXT DEFAULT '', FOREIGN KEY(alarm_id) REFERENCES alarm(id) ON UPDATE NO ACTION ON DELETE SET NULL )");
 			db.execSQL("CREATE TABLE IF NOT EXISTS alarm_snoozed_statistic (duration INTEGER NOT NULL DEFAULT 0, id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, timestamp INTEGER NOT NULL, alarm_id INTEGER, hour INTEGER NOT NULL, minute INTEGER NOT NULL, name TEXT DEFAULT '', FOREIGN KEY(alarm_id) REFERENCES alarm(id) ON UPDATE NO ACTION ON DELETE SET NULL )");
 		}

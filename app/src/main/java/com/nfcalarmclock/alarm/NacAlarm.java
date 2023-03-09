@@ -3,7 +3,6 @@ package com.nfcalarmclock.alarm;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -190,7 +189,7 @@ public class NacAlarm
 	/**
 	 * Amount of time, in minutes, to allow a user to dismiss early by.
 	 **/
-	@ColumnInfo(name="dismiss_early_time", defaultValue="0")
+	@ColumnInfo(name="dismiss_early_time", defaultValue="30")
 	private int mDismissEarlyTime;
 
 	/**
@@ -944,7 +943,7 @@ public class NacAlarm
 	{
 		int time = this.getDismissEarlyTime();
 
-		return (time <= 5) ? time-1 : (time/5) + 3;
+		return NacSharedPreferences.getDismissEarlyTimeToIndex(time);
 
 	}
 
@@ -1325,7 +1324,7 @@ public class NacAlarm
 	 */
 	public void setDismissEarlyTimeFromIndex(int index)
 	{
-		int time = (index < 5) ? index+1 : (index-3)*5;
+		int time = NacSharedPreferences.getDismissEarlyIndexToTime(index);
 
 		this.setDismissEarlyTime(time);
 	}

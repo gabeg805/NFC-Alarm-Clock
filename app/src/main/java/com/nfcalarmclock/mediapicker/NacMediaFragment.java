@@ -355,10 +355,6 @@ public class NacMediaFragment
 		Context context = getContext();
 		NacSharedConstants cons = new NacSharedConstants(context);
 
-		// Commented this because would have needed to add path as arg
-		//NacUtility.printf("Unable to play ringtone : %s", path);
-		//NacUtility.printf("Unable to play music : %d | %s",
-		//	metadata.getId(), metadata.getPath());
 		NacUtility.toast(context, cons.getErrorMessagePlayAudio());
 	}
 

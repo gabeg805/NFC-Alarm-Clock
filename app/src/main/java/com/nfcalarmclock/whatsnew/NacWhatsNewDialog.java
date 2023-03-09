@@ -65,7 +65,7 @@ public class NacWhatsNewDialog
 	 * Called when the dialog is canceled.
 	 */
 	@Override
-	public void onCancel(DialogInterface dialog)
+	public void onCancel(@NonNull DialogInterface dialog)
 	{
 		this.callOnReadWhatsNewListener();
 	}
@@ -104,9 +104,10 @@ public class NacWhatsNewDialog
 		NacSharedConstants cons = this.getSharedConstants();
 		String versionName = textview.getText().toString();
 		String versionNum = cons.getAppVersion();
+		String versionNameAndNum = String.format("%s %s", versionName, versionNum);
 
 		// Set the version
-		textview.setText(versionName + " " + versionNum);
+		textview.setText(versionNameAndNum);
 	}
 
 	/**

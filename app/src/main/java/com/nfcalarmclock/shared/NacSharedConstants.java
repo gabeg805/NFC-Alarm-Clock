@@ -392,8 +392,8 @@ public class NacSharedConstants
 		return this.getString(R.string.example_name);
 	}
 
-	/**
-	 * @return Is the app updated.
+	/*
+	  @return Is the app updated.
 	 */
 	//public boolean getIsAppUpdated()
 	//{

@@ -8,8 +8,11 @@
 
 
 	<!-- What's new -->
-	<string name="item_1">Situaciones actualizadas en las que se puede tocar una etiqueta NFC para abrir la aplicación. Antes, podía tocar una etiqueta NFC en cualquier punto y la aplicación se abría; sin embargo, si tiene una funda de teléfono con billetera, esto hace que la aplicación se abra cuando no se espera que lo haga. Ahora, tocar una etiqueta NFC solo abrirá la aplicación cuando una alarma esté activa.</string>
-	<string name="item_2">Se solucionó el problema por el cual, al presionar prolongadamente el botón de repetición, se desmarcaba todos los días, pero el color del botón no aparecía atenuado.</string>
+	<string name="item_1">Siempre <b>Mostrar la Siguiente Alarma</b> en la parte superior de la lista de alarmas, sin necesidad de oprimir en nada adicional.</string>
+	<string name="item_2">Se agregó la opción <b>Descartar Temprano</b> para cada alarma. Oprime el icono junto al control deslizante de volumen para acceder.</string>
+	<string name="item_3">Aumentó el número máximo de alarmas a 150.</string>
+	<string name="item_4">Se eliminaron las dependencias de Google Mobile Services (GMS) y Firebase.</string>
+	<string name="item_5">Actualizaciones diversas para Android SDK >= 33.</string>
 
 
 
@@ -96,8 +99,9 @@
 	<string name="title_name">Nombre de la alarma</string>
 	<string name="title_days">Seleccione los días</string>
 	<string name="title_color">Elige un color</string>
-	<string name="title_audio_option">Seleccione una opci?n de audio</string>
+	<string name="title_audio_option">Seleccione una opci?n de alarma</string>
 	<string name="title_audio_source">Seleccione una fuente de audio</string>
+	<string name="title_dismiss_early">Seleccione opciones pare descartar temprano</string>
 	<string name="title_gradually_increase_volume">Elige aumentar gradualmente el volumen</string>
 	<string name="title_restrict_volume">Elige restringir el volumen</string>
 	<string name="title_tts">Seleccione opciones de texto-a-voz</string>
@@ -379,6 +383,11 @@
 
 	<!-- Speak frequency -->
 	<string name="speak_frequency">Frequencia de hablar</string>
+
+
+	<!-- Dismiss early -->
+	<string name="dismiss_early_true">La alarma se puede descartar antes de que se activa. (Experimental)</string>
+	<string name="dismiss_early_false">No se puede descartar una alarma antes de que se activa.</string>
 
 
 	<!-- Restrict volume -->

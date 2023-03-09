@@ -58,10 +58,6 @@ public final class NacRateMyApp
 				}
 			});
 
-			//NacRateMyAppDialog dialog = new NacRateMyAppDialog();
-			//dialog.build(this);
-			//dialog.show();
-
 			return true;
 		}
 

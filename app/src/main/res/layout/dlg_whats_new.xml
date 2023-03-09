@@ -69,7 +69,6 @@
 				/>
 
 			<!-- Item 3 -->
-			<!--
 			<TextView
 				style="@style/Widget.TextView.Primary"
 				android:id="@+id/bullet_3"
@@ -90,10 +89,8 @@
 				android:layout_toEndOf="@id/bullet_3"
 				android:text="@string/item_3"
 				/>
-			-->
 
 			<!-- Item 4 -->
-			<!--
 			<TextView
 				style="@style/Widget.TextView.Primary"
 				android:id="@+id/bullet_4"
@@ -114,7 +111,28 @@
 				android:layout_toEndOf="@id/bullet_4"
 				android:text="@string/item_4"
 				/>
-			-->
+
+			<!-- Item 5 -->
+			<TextView
+				style="@style/Widget.TextView.Primary"
+				android:id="@+id/bullet_5"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginEnd="@dimen/tiny"
+				android:layout_below="@id/item_4"
+				android:text="@string/message_bullet"
+				/>
+
+			<TextView
+				style="@style/Widget.TextView.Primary"
+				android:id="@+id/item_5"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/small"
+				android:layout_below="@id/item_4"
+				android:layout_toEndOf="@id/bullet_5"
+				android:text="@string/item_5"
+				/>
 
 		</RelativeLayout>
 

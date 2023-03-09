@@ -11,14 +11,15 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 
+import com.nfcalarmclock.R;
 import com.nfcalarmclock.audiooptions.NacAlarmAudioOptionsDialog;
 import com.nfcalarmclock.audiosource.NacAudioSourceDialog;
 import com.nfcalarmclock.autodismiss.NacAutoDismissPreference;
+import com.nfcalarmclock.dismissearly.NacDismissEarlyDialog;
 import com.nfcalarmclock.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog;
 import com.nfcalarmclock.maxsnooze.NacMaxSnoozePreference;
 import com.nfcalarmclock.mediapicker.NacMediaActivity;
 import com.nfcalarmclock.mediapicker.NacMediaPreference;
-import com.nfcalarmclock.R;
 import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog;
 import com.nfcalarmclock.shared.NacSharedKeys;
 import com.nfcalarmclock.shared.NacSharedPreferences;
@@ -37,6 +38,7 @@ public class NacGeneralSettingsFragment
 		NacVolumePreference.OnAudioOptionsClickedListener,
 		NacAlarmAudioOptionsDialog.OnAudioOptionClickedListener,
 		NacAudioSourceDialog.OnAudioSourceSelectedListener,
+		NacDismissEarlyDialog.OnDismissEarlyOptionSelectedListener,
 		NacGraduallyIncreaseVolumeDialog.OnGraduallyIncreaseVolumeListener,
 		NacRestrictVolumeDialog.OnRestrictVolumeListener,
 		NacTextToSpeechDialog.OnTextToSpeechOptionsSelectedListener
@@ -97,12 +99,15 @@ public class NacGeneralSettingsFragment
 				this.showAudioSourceDialog();
 				break;
 			case 1:
-				this.showGraduallyIncreaseVolumeDialog();
+				this.showDismissEarlyDialog();
 				break;
 			case 2:
-				this.showRestrictVolumeDialog();
+				this.showGraduallyIncreaseVolumeDialog();
 				break;
 			case 3:
+				this.showRestrictVolumeDialog();
+				break;
+			case 4:
 				this.showTextToSpeechDialog();
 				break;
 			default:
@@ -132,6 +137,46 @@ public class NacGeneralSettingsFragment
 	/**
 	 */
 	@Override
+	public void onCreatePreferences(Bundle savedInstanceState, String rootKey)
+	{
+		addPreferencesFromResource(R.xml.general_preferences);
+		PreferenceManager.setDefaultValues(requireContext(), R.xml.general_preferences,
+				false);
+
+		NacSharedKeys keys = this.getSharedKeys();
+
+		NacAutoDismissPreference autoDismissPref = findPreference(keys.getAutoDismiss());
+		NacMaxSnoozePreference maxSnoozePref = findPreference(keys.getMaxSnooze());
+		NacSnoozeDurationPreference snoozeDurationPref = findPreference(keys.getSnoozeDuration());
+		NacVolumePreference volumePref = findPreference(keys.getVolume());
+		NacMediaPreference mediaPref = findPreference(keys.getMediaPath());
+		this.mMediaPreference = mediaPref;
+		this.mActivityLauncher = registerForActivityResult(
+				new ActivityResultContracts.StartActivityForResult(), this);
+
+		autoDismissPref.setOnPreferenceClickListener(this);
+		maxSnoozePref.setOnPreferenceClickListener(this);
+		snoozeDurationPref.setOnPreferenceClickListener(this);
+		volumePref.setOnAudioOptionsClickedListener(this);
+		mediaPref.setOnPreferenceClickListener(this);
+	}
+
+	/**
+	 * Called when the dismiss early alarm option is selected.
+	 */
+	@Override
+	public void onDismissEarlyOptionSelected(boolean useDismissEarly, int index)
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		int time = NacSharedPreferences.getDismissEarlyIndexToTime(index);
+
+		shared.editUseDismissEarly(useDismissEarly);
+		shared.editDismissEarlyTime(time);
+	}
+
+	/**
+	 */
+	@Override
 	public void onGraduallyIncreaseVolume(boolean shouldIncrease)
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
@@ -152,50 +197,27 @@ public class NacGeneralSettingsFragment
 	/**
 	 */
 	@Override
-	public void onCreatePreferences(Bundle savedInstanceState, String rootKey)
-	{
-		addPreferencesFromResource(R.xml.general_preferences);
-		PreferenceManager.setDefaultValues(getContext(), R.xml.general_preferences,
-			false);
-
-		NacSharedKeys keys = this.getSharedKeys();
-
-		NacAutoDismissPreference autoDismissPref = findPreference(keys.getAutoDismiss());
-		NacMaxSnoozePreference maxSnoozePref = findPreference(keys.getMaxSnooze());
-		NacSnoozeDurationPreference snoozeDurationPref = findPreference(keys.getSnoozeDuration());
-		NacVolumePreference volumePref = findPreference(keys.getVolume());
-		NacMediaPreference mediaPref = findPreference(keys.getMediaPath());
-		this.mMediaPreference = mediaPref;
-		this.mActivityLauncher = registerForActivityResult(
-			new ActivityResultContracts.StartActivityForResult(), this);
-
-		autoDismissPref.setOnPreferenceClickListener(this);
-		maxSnoozePref.setOnPreferenceClickListener(this);
-		snoozeDurationPref.setOnPreferenceClickListener(this);
-		volumePref.setOnAudioOptionsClickedListener(this);
-		mediaPref.setOnPreferenceClickListener(this);
-	}
-
-	/**
-	 */
-	@Override
 	public boolean onPreferenceClick(Preference pref)
 	{
 		NacSharedKeys keys = this.getSharedKeys();
 		String k = pref.getKey();
 
+		// Auto dismiss
 		if (k.equals(keys.getAutoDismiss()))
 		{
 			((NacAutoDismissPreference)pref).showDialog(getChildFragmentManager());
 		}
+		// Max snooze
 		else if (k.equals(keys.getMaxSnooze()))
 		{
 			((NacMaxSnoozePreference)pref).showDialog(getChildFragmentManager());
 		}
+		// Snooze duration
 		else if (k.equals(keys.getSnoozeDuration()))
 		{
 			((NacSnoozeDurationPreference)pref).showDialog(getChildFragmentManager());
 		}
+		// Media
 		else if (k.equals(keys.getMediaPath()))
 		{
 			String media = this.getSharedPreferences().getMediaPath();
@@ -251,6 +273,22 @@ public class NacGeneralSettingsFragment
 		dialog.setDefaultAudioSource(audioSource);
 		dialog.setOnAudioSourceSelectedListener(this);
 		dialog.show(getChildFragmentManager(), NacAudioSourceDialog.TAG);
+	}
+
+	/**
+	 * Show the dismiss early dialog.
+	 */
+	public void showDismissEarlyDialog()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		NacDismissEarlyDialog dialog = new NacDismissEarlyDialog();
+		boolean useDismissEarly = shared.getUseDismissEarly();
+		int index = shared.getDismissEarlyIndex();
+
+		dialog.setDefaultUseDismissEarly(useDismissEarly);
+		dialog.setDefaultDismissEarlyIndex(index);
+		dialog.setOnDismissEarlyOptionSelectedListener(this);
+		dialog.show(getChildFragmentManager(), NacGraduallyIncreaseVolumeDialog.TAG);
 	}
 
 	/**

@@ -227,7 +227,7 @@ public class NacScheduler
 		// Prepare the flags
 		int flags = PendingIntent.FLAG_NO_CREATE;
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
 		{
 			flags |= PendingIntent.FLAG_MUTABLE;
 		}

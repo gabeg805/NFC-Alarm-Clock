@@ -66,8 +66,6 @@ public class NacNfcTag
 	 * alarm.
 	 *
 	 * @param  context  A context.
-	 * @param  intent  An intent.
-	 * @param  alarm  An alarm.
 	 *
 	 * @return True if the NFC tag scanned matches the one required by the alarm,
 	 *     and False otherwise.

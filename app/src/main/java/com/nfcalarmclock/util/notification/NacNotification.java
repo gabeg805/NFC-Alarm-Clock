@@ -1,13 +1,17 @@
 package com.nfcalarmclock.util.notification;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.service.notification.StatusBarNotification;
+
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -111,13 +115,13 @@ public abstract class NacNotification
 	protected NotificationCompat.Builder builder()
 	{
 		return new NotificationCompat.Builder(this.getContext(), this.getChannelId())
-			.setGroup(this.getGroup())
-			.setContentIntent(this.getContentPendingIntent())
-			.setContentTitle(NacUtility.toSpannedString(this.getTitle()))
-			.setContentText(this.getContentText())
-			.setSmallIcon(this.getSmallIcon())
-			.setPriority(this.getPriority())
-			.setCategory(this.getCategory());
+				.setGroup(this.getGroup())
+				.setContentIntent(this.getContentPendingIntent())
+				.setContentTitle(NacUtility.toSpannedString(this.getTitle()))
+				.setContentText(this.getContentText())
+				.setSmallIcon(this.getSmallIcon())
+				.setPriority(this.getPriority())
+				.setCategory(this.getCategory());
 	}
 
 	/**
@@ -142,9 +146,9 @@ public abstract class NacNotification
 		}
 
 		NotificationChannel channel = new NotificationChannel(
-			this.getChannelId(),
-			this.getChannelName(),
-			this.getImportance());
+				this.getChannelId(),
+				this.getChannelName(),
+				this.getImportance());
 
 		channel.setDescription(this.getChannelDescription());
 		channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
@@ -180,14 +184,14 @@ public abstract class NacNotification
 		Locale locale = Locale.getDefault();
 
 		return name.isEmpty() ? time
-			: String.format(locale, "%1$s  —  %2$s", time, name);
+				: String.format(locale, "%1$s  —  %2$s", time, name);
 	}
 
 	/**
 	 * @return The category of the notification.
 	 */
 	@SuppressWarnings("SameReturnValue")
-    protected String getCategory()
+	protected String getCategory()
 	{
 		return NotificationCompat.CATEGORY_ALARM;
 	}
@@ -213,9 +217,9 @@ public abstract class NacNotification
 		}
 
 		NotificationManager manager = (NotificationManager)
-			context.getSystemService(Context.NOTIFICATION_SERVICE);
+				context.getSystemService(Context.NOTIFICATION_SERVICE);
 		StatusBarNotification[] statusbar = manager
-			.getActiveNotifications();
+				.getActiveNotifications();
 
 		for (StatusBarNotification sb : statusbar)
 		{
@@ -224,8 +228,8 @@ public abstract class NacNotification
 
 			if ((groupKey != null) && groupKey.equals(sbGroup))
 			{
-				CharSequence[] extraLines = (CharSequence[]) notification.extras
-					.get(NotificationCompat.EXTRA_TEXT_LINES);
+				CharSequence[] extraLines = notification.extras.getCharSequenceArray(
+					NotificationCompat.EXTRA_TEXT_LINES);
 
 				lines.addAll(Arrays.asList(extraLines));
 			}
@@ -236,7 +240,7 @@ public abstract class NacNotification
 
 	/**
 	 * @return Number of lines in the body.
-	 * 
+	 *
 	 * TODO: See if this can be 0 instead of 1.
 	 */
 	protected int getLineCount()
@@ -307,10 +311,29 @@ public abstract class NacNotification
 	 */
 	protected void show()
 	{
+		Context context = this.getContext();
 		NotificationCompat.Builder builder = this.builder();
 		NotificationManagerCompat manager = this.getNotificationManager();
 		int id = this.getId();
 
+		// Check that the app is able to post notification on APK >= 33
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+		{
+			if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
+					!= PackageManager.PERMISSION_GRANTED)
+			{
+				// TODO: Consider calling
+				//    ActivityCompat#requestPermissions
+				// here to request the missing permissions, and then overriding
+				//   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+				//                                          int[] grantResults)
+				// to handle the case where the user grants the permission. See the documentation
+				// for ActivityCompat#requestPermissions for more details.
+				return;
+			}
+		}
+
+		// Show the notification
 		manager.notify(id, builder.build());
 	}
 

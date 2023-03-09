@@ -297,9 +297,6 @@ public class NacDismissEarlyDialog
 
     /**
      * Toggle whether an alarm should be able to be dismissed early or not.
-     *
-     * @return True if an alarm should be able to be dismissed early, and False
-     *         otherwise.
      */
     private void toggleShouldUseDismissEarly()
     {

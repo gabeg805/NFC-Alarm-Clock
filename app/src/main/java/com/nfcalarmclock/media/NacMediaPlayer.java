@@ -237,9 +237,6 @@ public class NacMediaPlayer
 	 * This can play an entire directory (playlist) or a single media file.
 	 *
 	 * @param  alarm   The alarm to get the media path from.
-	 * @param  repeat  Whether the media should be repeated or not.
-	 * @param  shuffle  Whether the media should be shuffled or not. This only
-	 *     applies to directories (playlists).
 	 */
 	public void playAlarm(NacAlarm alarm)
 	{
@@ -304,7 +301,6 @@ public class NacMediaPlayer
 	 * Play the media with the given Uri.
 	 *
 	 * @param  uri  The Uri of the content to play.
-	 * @param  repeat      Whether the media should be repeated or not.
 	 */
 	public void playUri(Uri uri)
 	{

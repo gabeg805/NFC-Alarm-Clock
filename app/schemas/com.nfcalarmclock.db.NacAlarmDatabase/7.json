@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "da6474ab5dfeb262480d17a8ea9f91a3",
+    "identityHash": "75b5574cf9d609b205e62f605aa54579",
     "entities": [
       {
         "tableName": "alarm",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_active` INTEGER NOT NULL, `time_active` INTEGER NOT NULL, `snooze_count` INTEGER NOT NULL, `is_enabled` INTEGER NOT NULL, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `snooze_hour` INTEGER NOT NULL, `snooze_minute` INTEGER NOT NULL, `days` INTEGER, `should_repeat` INTEGER NOT NULL, `should_vibrate` INTEGER NOT NULL, `should_use_nfc` INTEGER NOT NULL, `nfc_tag_id` TEXT, `media_type` INTEGER NOT NULL, `media_path` TEXT, `media_title` TEXT, `volume` INTEGER NOT NULL, `audio_source` TEXT, `name` TEXT, `should_use_tts` INTEGER NOT NULL, `tts_frequency` INTEGER NOT NULL, `should_gradually_increase_volume` INTEGER NOT NULL DEFAULT false, `should_restrict_volume` INTEGER NOT NULL DEFAULT false, `should_dismiss_early` INTEGER NOT NULL DEFAULT false, `dismiss_early_time` INTEGER NOT NULL DEFAULT 0)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_active` INTEGER NOT NULL, `time_active` INTEGER NOT NULL, `snooze_count` INTEGER NOT NULL, `is_enabled` INTEGER NOT NULL, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `snooze_hour` INTEGER NOT NULL, `snooze_minute` INTEGER NOT NULL, `days` INTEGER, `should_repeat` INTEGER NOT NULL, `should_vibrate` INTEGER NOT NULL, `should_use_nfc` INTEGER NOT NULL, `nfc_tag_id` TEXT, `media_type` INTEGER NOT NULL, `media_path` TEXT, `media_title` TEXT, `volume` INTEGER NOT NULL, `audio_source` TEXT, `name` TEXT, `should_use_tts` INTEGER NOT NULL, `tts_frequency` INTEGER NOT NULL, `should_gradually_increase_volume` INTEGER NOT NULL DEFAULT false, `should_restrict_volume` INTEGER NOT NULL DEFAULT false, `should_dismiss_early` INTEGER NOT NULL DEFAULT false, `dismiss_early_time` INTEGER NOT NULL DEFAULT 30)",
         "fields": [
           {
             "fieldPath": "mId",
@@ -166,7 +166,7 @@
             "columnName": "dismiss_early_time",
             "affinity": "INTEGER",
             "notNull": true,
-            "defaultValue": "0"
+            "defaultValue": "30"
           }
         ],
         "primaryKey": {
@@ -485,7 +485,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'da6474ab5dfeb262480d17a8ea9f91a3')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '75b5574cf9d609b205e62f605aa54579')"
     ]
   }
 }

@@ -322,8 +322,8 @@ public class NacTextToSpeech
 		}
 	}
 
-	/**
-	 * Change media state when audio focus changes.
+	/*
+	  Change media state when audio focus changes.
 	 */
 	//@Override
 	//public void onAudioFocusChange(int focusChange)

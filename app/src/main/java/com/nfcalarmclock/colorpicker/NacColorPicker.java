@@ -66,17 +66,17 @@ public class NacColorPicker
 	/**
 	 * Center x-coordinate.
 	 */
-    private float mCenterX;
+	private float mCenterX;
 
 	/**
 	 * Center y-coordinate.
 	 */
-    private float mCenterY;
+	private float mCenterY;
 
 	/**
 	 * Radius of the color picker.
 	 */
-    private float mRadius;
+	private float mRadius;
 
 	/**
 	 * Color selector.
@@ -91,17 +91,17 @@ public class NacColorPicker
 	/**
 	 * Hue of the colors (solid color).
 	 */
-    private Paint mHuePaint;
+	private Paint mHuePaint;
 
 	/**
 	 * Color saturation (gradient from white to the actual color).
 	 */
-    private Paint mSaturationPaint;
+	private Paint mSaturationPaint;
 
 	/**
 	 * Value of the color.
 	 */
-    private Paint mValuePaint;
+	private Paint mValuePaint;
 
 	/**
 	 * Rectangle showing shades of the selected color.
@@ -115,28 +115,28 @@ public class NacColorPicker
 
 	/**
 	 */
-    public NacColorPicker(Context context)
+	public NacColorPicker(Context context)
 	{
-        super(context);
+		super(context);
 		init(null);
-    }
+	}
 
 	/**
 	 */
-    public NacColorPicker(Context context, @Nullable AttributeSet attrs)
+	public NacColorPicker(Context context, @Nullable AttributeSet attrs)
 	{
-        super(context, attrs);
+		super(context, attrs);
 		init(attrs);
-    }
+	}
 
 	/**
 	 */
-    public NacColorPicker(Context context, @Nullable AttributeSet attrs,
+	public NacColorPicker(Context context, @Nullable AttributeSet attrs,
 		int defStyleAttr)
 	{
-        super(context, attrs, defStyleAttr);
+		super(context, attrs, defStyleAttr);
 		init(attrs);
-    }
+	}
 
 	/**
 	 * Calculate the color wheel selection.
@@ -187,26 +187,26 @@ public class NacColorPicker
 	/**
 	 * Draw the color wheel gradient.
 	 */
-    private void drawColorWheel()
+	private void drawColorWheel()
 	{
 		int[] colors = new int[] {Color.RED, Color.MAGENTA, Color.BLUE,
 			Color.CYAN, Color.GREEN, Color.YELLOW, Color.RED};
 		int centerColor = Color.WHITE;
 		int edgeColor = 0x00FFFFFF;
 		float[] positions = new float[] {0.0000f, 0.1667f, 0.3333f, 0.5000f,
-                0.6667f, 0.8333f, 1.0000f};
+			0.6667f, 0.8333f, 1.0000f};
 		float centerX = this.getCenterX();
 		float centerY = this.getCenterY();
 		float radius = this.getRadius();
 
-        Shader hueShader = new SweepGradient(centerX, centerY, colors,
+		Shader hueShader = new SweepGradient(centerX, centerY, colors,
 			positions);
-        Shader satShader = new RadialGradient(centerX, centerY, radius,
+		Shader satShader = new RadialGradient(centerX, centerY, radius,
 			centerColor, edgeColor, Shader.TileMode.CLAMP);
 
-        this.mHuePaint.setShader(hueShader);
-        this.mSaturationPaint.setShader(satShader);
-    }
+		this.mHuePaint.setShader(hueShader);
+		this.mSaturationPaint.setShader(satShader);
+	}
 
 	/**
 	 * Draw the color shading gradient.
@@ -441,7 +441,7 @@ public class NacColorPicker
 	 * @param  attrs  Attribute set.
 	 */
 	public void init(AttributeSet attrs)
-    {
+	{
 		if (attrs == null)
 		{
 			return;
@@ -457,11 +457,11 @@ public class NacColorPicker
 		this.mAttributes = new Attributes(context, attrs);
 		this.mColorSelector = findViewById(R.id.color_selector);
 		this.mShaderSelector = findViewById(R.id.shader_selector);
-        this.mHuePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        this.mSaturationPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        this.mValuePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		this.mHuePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		this.mSaturationPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		this.mValuePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		this.mHsv = new float[] {0.0f, 0.0f, 1.0f};
-    }
+	}
 
 	/**
 	 * Measure dimensions of the view.
@@ -518,7 +518,7 @@ public class NacColorPicker
 
 	/**
 	 */
-    @Override
+	@Override
 	protected void onDraw(Canvas canvas)
 	{
 		Context context = getContext();
@@ -532,12 +532,12 @@ public class NacColorPicker
 		Paint valPaint = this.getValuePaint();
 		RectF valRect = this.getValueRect();
 
-        canvas.drawCircle(centerX, centerY, radius, huePaint);
-        canvas.drawCircle(centerX, centerY, radius, satPaint);
+		canvas.drawCircle(centerX, centerY, radius, huePaint);
+		canvas.drawCircle(centerX, centerY, radius, satPaint);
 		canvas.drawRoundRect(valRect, curve, curve, valPaint);
 		this.setColorSelectorPosition();
 		this.setShaderSelectorPosition();
-    }
+	}
 
 	/**
 	 */
@@ -571,12 +571,12 @@ public class NacColorPicker
 
 	/**
 	 */
-    @Override
+	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh)
 	{
 		int min = Math.min(w, h);
 
-        super.onSizeChanged(min, min, oldw, oldh);
+		super.onSizeChanged(min, min, oldw, oldh);
 
 		int paddingLeft = getPaddingLeft();
 		int paddingRight = getPaddingRight();
@@ -585,17 +585,17 @@ public class NacColorPicker
 		int size = min - ((min == w) ? paddingLeft+paddingRight :
 			paddingTop+paddingBottom);
 
-        this.mRadius = size * 0.5f;
-        this.mCenterX = paddingLeft + this.getRadius();
-        this.mCenterY = paddingTop + this.getRadius();
+		this.mRadius = size * 0.5f;
+		this.mCenterX = paddingLeft + this.getRadius();
+		this.mCenterY = paddingTop + this.getRadius();
 
 		ViewGroup.LayoutParams params = this.getShaderSelector().getLayoutParams();
 		params.height = Math.round(this.getShaderHeight());
 
 		this.getShaderSelector().setLayoutParams(params);
-        drawColorWheel();
-        drawColorShader();
-    }
+		drawColorWheel();
+		drawColorShader();
+	}
 
 	/**
 	 */

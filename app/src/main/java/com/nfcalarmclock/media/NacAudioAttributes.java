@@ -1,5 +1,6 @@
 package com.nfcalarmclock.media;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Build;
@@ -95,12 +96,13 @@ public class NacAudioAttributes
 	/**
 	 * @return The audio attributes.
 	 */
+	@SuppressLint("WrongConstant")
 	public AudioAttributes getAudioAttributes()
 	{
 		int usage = this.getUsage();
 
 		return new AudioAttributes.Builder()
-			.setContentType(C.CONTENT_TYPE_MUSIC)
+			.setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
 			.setUsage(usage)
 			.build();
 	}
@@ -347,7 +349,7 @@ public class NacAudioAttributes
 	}
 
 	/**
-	 * @see Attributes#toStreamVolume(int)
+	 * @see NacAudioAttributes#toStreamVolume(int)
 	 */
 	public int toStreamVolume()
 	{

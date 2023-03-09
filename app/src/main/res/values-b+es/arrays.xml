@@ -3,6 +3,7 @@
 
 	<string-array name="audio_options">
 		<item>Fuente de audio</item>
+		<item>Descartar temprano</item>
 		<item>Aumentar gradualmente el volumen</item>
 		<item>Restringe el volumen</item>
 		<item>Texto-a-voz</item>
@@ -118,6 +119,37 @@
 		<item>80 minutos</item>
 		<item>85 minutos</item>
 		<item>90 minutos</item>
+	</string-array>
+
+	<string-array name="dismiss_early_times">
+		<item>1 minuto</item>
+		<item>2 minutos</item>
+		<item>3 minutos</item>
+		<item>4 minutos</item>
+		<item>5 minutos</item>
+		<item>10 minutos</item>
+		<item>15 minutos</item>
+		<item>20 minutos</item>
+		<item>25 minutos</item>
+		<item>30 minutos</item>
+		<item>35 minutos</item>
+		<item>40 minutos</item>
+		<item>45 minutos</item>
+		<item>50 minutos</item>
+		<item>55 minutos</item>
+		<item>60 minutos</item>
+		<item>65 minutos</item>
+		<item>70 minutos</item>
+		<item>75 minutos</item>
+		<item>80 minutos</item>
+		<item>85 minutos</item>
+		<item>90 minutos</item>
+		<item>95 minutos</item>
+		<item>100 minutos</item>
+		<item>105 minutos</item>
+		<item>110 minutos</item>
+		<item>115 minutos</item>
+		<item>120 minutos</item>
 	</string-array>
 
 </resources>

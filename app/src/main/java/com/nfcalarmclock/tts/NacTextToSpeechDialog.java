@@ -323,8 +323,6 @@ public class NacTextToSpeechDialog
 
 	/**
 	 * Toggle whether text-to-speech is being used or not.
-	 *
-	 * @return True if text-to-speech is being used, and False otherwise.
 	 */
 	private void toggleShouldUseTts()
 	{

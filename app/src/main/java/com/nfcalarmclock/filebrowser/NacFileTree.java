@@ -31,7 +31,6 @@ public class NacFileTree
 	 *
 	 * @return The names of the columns that will be returned from the query.
 	 */
-	@SuppressWarnings("deprecation")
 	@TargetApi(Build.VERSION_CODES.Q)
 	private String[] getQueryColumns()
 	{
@@ -97,7 +96,6 @@ public class NacFileTree
 	 * @param  filter   Whether the media files that are found should be filtered
 	 *     by comparing the media path with the current directory.
 	 */
-	@SuppressWarnings("deprecation")
 	@TargetApi(Build.VERSION_CODES.Q)
 	public void scan(Context context, boolean filter)
 	{
