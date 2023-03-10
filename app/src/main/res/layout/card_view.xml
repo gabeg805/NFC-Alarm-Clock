@@ -126,6 +126,7 @@
 				<com.google.android.material.button.MaterialButton
 					style="@style/Widget.Button.Icon"
 					android:id="@+id/nac_expand"
+					android:contentDescription="@string/cd_expand_alarm"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/isz_large"
 					app:icon="@mipmap/expand"
@@ -164,7 +165,7 @@
 					android:minHeight="@dimen/zero"
 					android:layout_marginStart="@dimen/nudge"
 					android:textSize="@dimen/tsz_small"
-					android:text="Dismiss early"
+					android:text="@string/action_alarm_dismiss_early"
 					android:visibility="gone"
 					app:iconSize="@dimen/medium"
 					app:icon="@mipmap/dismiss"
@@ -310,7 +311,7 @@
 
 				<ImageView
 					android:id="@+id/nac_volume_icon"
-					android:contentDescription="@string/cd_ic_volume"
+					android:contentDescription="@string/cd_volume_icon"
 					android:layout_width="@dimen/isz_normal"
 					android:layout_height="@dimen/isz_normal"
 					android:src="@mipmap/volume_high"
@@ -318,6 +319,7 @@
 
 				<SeekBar
 					android:id="@+id/nac_volume_slider"
+					android:contentDescription="@string/cd_volume_slider"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
@@ -332,6 +334,7 @@
 				<com.google.android.material.button.MaterialButton
 					style="@style/Widget.Button.Icon"
 					android:id="@+id/nac_audio_options"
+					android:contentDescription="@string/cd_alarm_options"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/touch"
 					app:icon="@mipmap/settings"
@@ -387,6 +390,7 @@
 				<com.google.android.material.button.MaterialButton
 					style="@style/Widget.Button.Icon"
 					android:id="@+id/nac_collapse"
+					android:contentDescription="@string/cd_collapse_alarm"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/isz_large"
 					android:layout_gravity="center_vertical"

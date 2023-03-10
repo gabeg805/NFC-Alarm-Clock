@@ -263,6 +263,7 @@ public class NacCalendar
 	public static Calendar getNextAlarmDay(NacAlarm alarm)
 	{
 		List<Calendar> calendars = NacCalendar.toCalendars(alarm);
+
 		return NacCalendar.getNextDay(calendars);
 	}
 
@@ -352,11 +353,23 @@ public class NacCalendar
 		else
 		{
 			EnumSet<Day> days = alarm.getDays();
+			long timeOfDismissEarlyAlarm = alarm.getTimeOfDismissEarlyAlarm();
 
 			// Iterate over each selected day
 			for (Day d : days)
 			{
+				// Get calendar and time of calendar
 				Calendar c = NacCalendar.toNextCalendar(alarm, d);
+				long t = c.getTimeInMillis();
+
+				// Time matches the alarm that was dismissed early. Add a week to
+				// this calendar
+				if ((timeOfDismissEarlyAlarm > 0) && (t == timeOfDismissEarlyAlarm))
+				{
+					c.add(Calendar.DAY_OF_MONTH, 7);
+				}
+
+				// Add calendar to list of calendars
 				calendars.add(c);
 			}
 		}

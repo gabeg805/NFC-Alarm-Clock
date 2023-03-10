@@ -538,11 +538,15 @@ public class NacCardHolder
 	public void cancelHighlight()
 	{
 		Animator animator = this.getHighlightAnimator();
+
+		// Animator is currently running
 		if ((animator != null) && animator.isRunning())
 		{
+			// Cancel the animation
 			animator.cancel();
 		}
 
+		// Reset the highlight animator to null
 		this.mHighlightAnimator = null;
 	}
 
@@ -611,6 +615,46 @@ public class NacCardHolder
 		int toHeight = this.getHeightCollapsed();
 
 		this.cancelHighlight();
+		animator.setAnimationType(NacHeightAnimator.AnimationType.COLLAPSE);
+		animator.setHeights(fromHeight, toHeight);
+		animator.setDuration(COLLAPSE_DURATION);
+		animator.start();
+	}
+
+	/**
+	 * Collapse the alarm card after a refresh.
+	 */
+	public void collapseRefresh()
+	{
+		// Card is not collapsed
+		if (!this.isCollapsed())
+		{
+			return;
+		}
+
+		NacSharedPreferences shared = this.getSharedPreferences();
+		View dismissView = this.getDismissParentView();
+		int visibility = dismissView.getVisibility();
+		int fromHeight;
+		int toHeight;
+
+		// Set the from/to heights that the collapse will act on
+		if (visibility == View.VISIBLE)
+		{
+			fromHeight = shared.getCardHeightCollapsed();
+			toHeight = shared.getCardHeightCollapsedDismiss();
+		}
+		else
+		{
+			fromHeight = shared.getCardHeightCollapsedDismiss();
+			toHeight = shared.getCardHeightCollapsed();
+		}
+
+		// Animate the collapse
+		NacHeightAnimator animator = this.getCardAnimator();
+
+		this.cancelHighlight();
+		animator.setAnimationType(NacHeightAnimator.AnimationType.COLLAPSE);
 		animator.setHeights(fromHeight, toHeight);
 		animator.setDuration(COLLAPSE_DURATION);
 		animator.start();
@@ -772,6 +816,19 @@ public class NacCardHolder
 	}
 
 	/**
+	 * Act as if the dismiss early button was clicked.
+	 */
+	public void doDismissEarlyButtonClick()
+	{
+		Context context = this.getContext();
+		NacAlarm alarm = this.getAlarm();
+
+		alarm.dismissEarly();
+		this.refreshDismissAndDismissEarlyButtons();
+		this.callOnCardUpdatedListener();
+	}
+
+	/**
 	 * Expand the alarm card without any animations.
 	 */
 	public void doExpand()
@@ -924,6 +981,7 @@ public class NacCardHolder
 		int toHeight = this.getHeightExpanded();
 
 		this.cancelHighlight();
+		animator.setAnimationType(NacHeightAnimator.AnimationType.EXPAND);
 		animator.setHeights(fromHeight, toHeight);
 		animator.setDuration(EXPAND_DURATION);
 		animator.start();
@@ -1096,7 +1154,7 @@ public class NacCardHolder
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacAlarm alarm = this.getAlarm();
 
-		return alarm.isSnoozed()
+		return alarm.isSnoozed() || alarm.willAlarmSoon()
 			? shared.getCardHeightCollapsedDismiss()
 			: shared.getCardHeightCollapsed();
 	}
@@ -1406,6 +1464,7 @@ public class NacCardHolder
 		this.getSwitch().setOnCheckedChangeListener(compound);
 		this.getDismissParentView().setOnClickListener(click);
 		this.getDismissButton().setOnClickListener(click);
+		this.getDismissEarlyButton().setOnClickListener(click);
 		this.getExpandButton().setOnClickListener(click);
 		this.getExpandOtherButton().setOnClickListener(click);
 		this.getCollapseButton().setOnClickListener(click);
@@ -1556,11 +1615,23 @@ public class NacCardHolder
 	{
 		if (animator.isLastUpdate())
 		{
+			// Quickly change view visibility, no animations
 			this.doCollapse();
-			this.animateCollapsedBackgroundColor();
+
+			// Check if the card was already collapsed, in which this would not need
+			// to be run
+			NacSharedPreferences shared = this.getSharedPreferences();
+			int fromHeight = animator.getFromHeight();
+
+			if ((fromHeight != shared.getCardHeightCollapsed())
+				&& (fromHeight != shared.getCardHeightCollapsedDismiss()))
+			{
+				// Card was not already collapsed. Animate the background color
+				this.animateCollapsedBackgroundColor();
+			}
+
+			// Call the listener
 			this.callOnCardCollapsedListener();
-			//this.getAlarm().unlatchChangeTracker();
-			//this.getAlarm().resetChangeTracker();
 		}
 	}
 
@@ -1576,7 +1647,6 @@ public class NacCardHolder
 		{
 			this.doExpand();
 			this.animateExpandedBackgroundColor();
-			//this.getAlarm().latchChangeTracker();
 			this.callOnCardExpandedListener();
 		}
 	}
@@ -1667,6 +1737,11 @@ public class NacCardHolder
 		else if (id == R.id.nac_dismiss)
 		{
 			this.respondToDismissButtonClick(view);
+		}
+		// Dismiss early button
+		else if (id == R.id.nac_dismiss_early)
+		{
+			this.respondToDismissEarlyButtonClick(view);
 		}
 		//else if (this.isShowingTimePicker())
 		//{
@@ -1778,7 +1853,27 @@ public class NacCardHolder
 		this.setMeridianColor();
 		this.setSwitchView();
 		this.setSummaryDaysView();
+
+		// Get the visiblity before refreshing the dismiss buttons
+		View dismissView = this.getDismissParentView();
+		int beforeVisibility = dismissView.getVisibility();
+
+		// Refresh dismiss buttons
 		this.refreshDismissAndDismissEarlyButtons();
+
+		// Get the visiblity after refreshing the dismiss buttons
+		int afterVisibility = dismissView.getVisibility();
+
+		// Determine if the card is already collapsed and the visibility of the
+		// dismiss buttons has changed after the new time was set. If so, there
+		// is or should be new space because of the dismiss buttons, so do a collapse
+		// due to the refresh
+		if (this.isCollapsed() && (beforeVisibility != afterVisibility))
+		{
+			this.collapseRefresh();
+		}
+
+		// Call the card updated listener
 		this.callOnCardUpdatedListener();
 	}
 
@@ -1788,6 +1883,31 @@ public class NacCardHolder
 	public void performHapticFeedback(View view)
 	{
 		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+	}
+
+	/**
+	 * Check if the dismiss view should be refreshed or not.
+	 *
+	 * @return True if the dismiss view should be refreshed, and False otherwise.
+	 */
+	public boolean shouldRefreshDismissView()
+	{
+		NacAlarm alarm = this.getAlarm();
+		View dismissView = this.getDismissParentView();
+		View expandView = this.getExpandButton();
+
+		// Alarm is in use, or will alarm soon so the "Dismiss" or "Dismiss early"
+		// button should be shown
+		int dismissVis = alarm.isInUse() || alarm.willAlarmSoon() ? View.VISIBLE
+				: View.GONE;
+
+		// The dismiss view is being shown so do not show this view
+		int expandVis = (dismissVis == View.GONE) ? View.VISIBLE : View.INVISIBLE;
+
+		// The "Dismiss"/"Dismiss early" button OR the "Expand" down-arrow button
+		// are NOT the correct and expected visibilities
+		return (dismissView.getVisibility() != dismissVis)
+			|| (expandView.getVisibility() != expandVis);
 	}
 
 	/**
@@ -1903,6 +2023,15 @@ public class NacCardHolder
 	private void respondToDismissButtonClick(View view)
 	{
 		this.doDismissButtonClick();
+		this.performHapticFeedback(view);
+	}
+
+	/**
+	 * Respond to the dismiss early button being clicked.
+	 */
+	private void respondToDismissEarlyButtonClick(View view)
+	{
+		this.doDismissEarlyButtonClick();
 		this.performHapticFeedback(view);
 	}
 

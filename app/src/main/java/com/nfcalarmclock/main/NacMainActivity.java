@@ -868,7 +868,7 @@ public class NacMainActivity
 	{
 		RecyclerView rv = this.getRecyclerView();
 
-		this.setupForAppFirstRun(alarms);
+		this.setupForAppFirstRun();
 		this.updateUpcomingNotification(alarms);
 		this.getAlarmCardAdapter().storeIndicesOfExpandedCards(rv);
 		this.getAlarmCardAdapter().submitList(alarms);
@@ -1372,10 +1372,11 @@ public class NacMainActivity
 		// Iterate over each alarm card in the adapter
 		for (int i=0; i < length; i++)
 		{
+			NacCardHolder card = this.getAlarmCardAt(i);
 			NacAlarm a = adapter.getAlarmAt(i);
 
-			// Alarm will alarm soon
-			if (a.willAlarmSoon())
+			// Alarm will alarm soon and the card needs to be updated
+			if (a.willAlarmSoon() && card.shouldRefreshDismissView())
 			{
 				// Refresh the alarm
 				adapter.notifyItemChanged(i);
@@ -1532,12 +1533,10 @@ public class NacMainActivity
 	 *
 	 * If it is not the app's first time running, this does nothing.
 	 */
-	private void setupForAppFirstRun(List<NacAlarm> alarms)
+	private void setupForAppFirstRun()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		int size = alarms.size();
 
-		//if (!shared.getAppFirstRun() || (size == 0))
 		if (!shared.getAppFirstRun())
 		{
 			return;

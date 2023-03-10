@@ -50,6 +50,7 @@
 		<!-- Alarm list -->
 		<androidx.recyclerview.widget.RecyclerView
 			android:id="@+id/rv_alarm_list"
+			android:contentDescription="@string/cd_alarm_list"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:layout_marginBottom="@dimen/normal"
@@ -62,7 +63,7 @@
 
 	<!-- Floating action button -->
 	<com.google.android.material.floatingactionbutton.FloatingActionButton
-		android:contentDescription="@string/cd_ic_floating_action_button"
+		android:contentDescription="@string/cd_floating_action_button"
 		android:id="@+id/fab_add_alarm"
 		android:layout_width="@dimen/isz_attention"
 		android:layout_height="@dimen/isz_attention"

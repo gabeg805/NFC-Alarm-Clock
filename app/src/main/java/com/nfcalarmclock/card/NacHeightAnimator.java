@@ -22,6 +22,15 @@ public class NacHeightAnimator
 	}
 
 	/**
+	 * Type of animation.
+	 */
+	public enum AnimationType
+	{
+		COLLAPSE,
+		EXPAND
+	}
+
+	/**
 	 * The view to slide.
 	 */
 	protected View mView;
@@ -35,6 +44,11 @@ public class NacHeightAnimator
 	 * The height to end with.
 	 */
 	protected int mToHeight;
+
+	/**
+	 * Type of animation.
+	 */
+	protected AnimationType mAnimationType;
 
 	/**
 	 * Count the number of times the animation has updated.
@@ -61,6 +75,7 @@ public class NacHeightAnimator
 
 		this.setView(view);
 		this.setHeights(fromHeight, toHeight);
+		this.setAnimationType(AnimationType.COLLAPSE);
 		addUpdateListener(this);
 	}
 
@@ -70,6 +85,8 @@ public class NacHeightAnimator
 	public void callOnAnimateCollapseListener()
 	{
 		OnAnimateHeightListener listener = this.getOnAnimateHeightListener();
+
+		// Listener is not null
 		if (listener != null)
 		{
 			listener.onAnimateCollapse(this);
@@ -82,6 +99,8 @@ public class NacHeightAnimator
 	public void callOnAnimateExpandListener()
 	{
 		OnAnimateHeightListener listener = this.getOnAnimateHeightListener();
+
+		// Listener is not null
 		if (listener != null)
 		{
 			listener.onAnimateExpand(this);
@@ -94,6 +113,14 @@ public class NacHeightAnimator
 	public int getAnimatedHeight()
 	{
 		return (int) getAnimatedValue();
+	}
+
+	/**
+	 * @return The animation type.
+	 */
+	public AnimationType getAnimationType()
+	{
+		return this.mAnimationType;
 	}
 
 	/**
@@ -141,9 +168,11 @@ public class NacHeightAnimator
 	 */
 	public boolean isCollapsing()
 	{
-		int fromHeight = this.getFromHeight();
-		int toHeight = this.getToHeight();
-		return (fromHeight > toHeight);
+		//int fromHeight = this.getFromHeight();
+		//int toHeight = this.getToHeight();
+
+		//return (fromHeight > toHeight);
+		return this.getAnimationType() == AnimationType.COLLAPSE;
 	}
 
 	/**
@@ -151,9 +180,11 @@ public class NacHeightAnimator
 	 */
 	public boolean isExpanding()
 	{
-		int fromHeight = this.getFromHeight();
-		int toHeight = this.getToHeight();
-		return (fromHeight < toHeight);
+		//int fromHeight = this.getFromHeight();
+		//int toHeight = this.getToHeight();
+
+		//return (fromHeight < toHeight);
+		return this.getAnimationType() == AnimationType.EXPAND;
 	}
 
 	/**
@@ -163,6 +194,7 @@ public class NacHeightAnimator
 	{
 		int fromHeight = this.getFromHeight();
 		int height = this.getAnimatedHeight();
+
 		return (fromHeight == height) && (this.getUpdateCounter() == 0);
 	}
 
@@ -173,7 +205,8 @@ public class NacHeightAnimator
 	{
 		int toHeight = this.getToHeight();
 		int height = this.getAnimatedHeight();
-		return (toHeight == height);
+
+		return (height == toHeight);
 	}
 
 	/**
@@ -185,18 +218,32 @@ public class NacHeightAnimator
 		View view = this.getView();
 		view.getLayoutParams().height = this.getAnimatedHeight();
 
+		// Change the view's bounds
 		view.requestLayout();
 
+		// Collapse
 		if (this.isCollapsing())
 		{
 			this.callOnAnimateCollapseListener();
 		}
+		// Expand
 		else if (this.isExpanding())
 		{
 			this.callOnAnimateExpandListener();
 		}
 
+		// Count number of updates
 		this.mUpdateCounter += 1;
+	}
+
+	/**
+	 * Set the animation type.
+	 *
+	 * @param  type  Animation type.
+	 */
+	public void setAnimationType(AnimationType type)
+	{
+		this.mAnimationType = type;
 	}
 
 	/**
@@ -232,7 +279,10 @@ public class NacHeightAnimator
 	@Override
 	public void start()
 	{
+		// Reset the update counter
 		this.mUpdateCounter = 0;
+
+		// Start the animation
 		super.start();
 	}
 

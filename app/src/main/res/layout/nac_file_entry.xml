@@ -19,7 +19,7 @@
 		android:layout_height="@dimen/isz_large"
 		android:layout_alignParentStart="true"
 		android:layout_centerVertical="true"
-		android:contentDescription="@string/cd_ic_file_entry"
+		android:contentDescription="@string/cd_file_entry"
 		app:tint="@color/white"
 		/>
 

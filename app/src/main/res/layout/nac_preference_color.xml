@@ -16,7 +16,7 @@
 		android:id="@+id/widget"
 		android:layout_width="@dimen/isz_large"
 		android:layout_height="@dimen/isz_large"
-		android:contentDescription="@string/cd_ic_color_example"
+		android:contentDescription="@string/cd_color_example"
 		android:src="@drawable/color_example"
 		/>
 

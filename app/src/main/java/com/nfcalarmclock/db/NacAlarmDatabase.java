@@ -39,7 +39,7 @@ import java.util.List;
 //@Database(version=1, exportSchema=true,
 //	entities={NacAlarm.class})
 //@TypeConverters({NacAlarmTypeConverters.class})
-@Database(version=7,
+@Database(version=8,
 		entities={NacAlarm.class, NacAlarmCreatedStatistic.class,
 		NacAlarmDeletedStatistic.class, NacAlarmDismissedStatistic.class,
 		NacAlarmMissedStatistic.class, NacAlarmSnoozedStatistic.class},
@@ -49,7 +49,8 @@ import java.util.List;
 			@AutoMigration(from=3, to=4),
 			@AutoMigration(from=4, to=5),
 			@AutoMigration(from=5, to=6),
-			@AutoMigration(from=6, to=7)
+			@AutoMigration(from=6, to=7),
+			@AutoMigration(from=7, to=8)
 		})
 @TypeConverters({NacAlarmTypeConverters.class,
 	NacStatisticTypeConverters.class})
