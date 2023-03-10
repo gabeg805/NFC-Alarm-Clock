@@ -825,6 +825,7 @@ public class NacCardHolder
 
 		alarm.dismissEarly();
 		this.refreshDismissAndDismissEarlyButtons();
+		this.collapseRefresh();
 		this.callOnCardUpdatedListener();
 	}
 
