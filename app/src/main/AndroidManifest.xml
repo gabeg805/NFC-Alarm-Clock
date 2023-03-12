@@ -203,6 +203,17 @@
 			</intent-filter>
 		</receiver>
 
+		<!-- Restore alarms after the app is updated. Alarms are lost after an update -->
+		<receiver
+			android:name=".appupdate.NacAppUpdatedBroadcastReceiver"
+			android:enabled="true"
+			android:exported="false">
+
+			<intent-filter>
+				<action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+			</intent-filter>
+		</receiver>
+
 			<!-- An intent filter that will receive the response
 			     from the authentication service -->
 			<!--
@@ -227,7 +238,5 @@
 			/>
 			-->
 
-
 	</application>
-
 </manifest>
