@@ -200,10 +200,24 @@ public class NacDayButton
 		boolean isChecked)
 	{
 		NacDayButton.OnDayChangedListener listener = this.getOnDayChangedListener();
-		if (listener != null)
+
+		// No listeners set
+		if (listener == null)
 		{
-			listener.onDayChanged(this);
+			return;
 		}
+
+		// Remove the toggle group listener that was set when this view is
+		// initialized so that this onButtonChecked() method does not potentially get
+		// called recursively
+		this.getButtonToggleGroup().removeOnButtonCheckedListener(this);
+
+		// Call the listener
+		listener.onDayChanged(this);
+
+		// Add the toggle group listener that was set when this view is
+		// initialized back
+		this.getButtonToggleGroup().addOnButtonCheckedListener(this);
 	}
 
 	/**

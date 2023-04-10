@@ -2,6 +2,8 @@
 TODO
 ----
 
+* Look into music directory navigation. It looks weird on my phone.
+
 * Prompt to ignore battery optimization?
 
 * PowerManager.isIgnoringBatteryOptimization()

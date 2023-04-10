@@ -194,6 +194,7 @@ public class NacAudioSourceDialog
 		RadioGroup group = this.getRadioGroup();
 		int count = group.getChildCount();
 
+		// No audio sources to setup
 		if (count > 0)
 		{
 			return;
@@ -202,16 +203,20 @@ public class NacAudioSourceDialog
 		LayoutInflater inflater = getLayoutInflater();
 		String defSource = this.getDefaultAudioSource();
 
+		// Iterate over each audio source
 		for (String s : this.getAllAudioSources())
 		{
 			View view = inflater.inflate(R.layout.radio_button, group, true);
 			RadioButton button = view.findViewById(R.id.radio_button);
 			int id = View.generateViewId();
 
+			// Set the view ID and text for the radio button
 			button.setId(id);
 			button.setText(s);
 
-			if (!defSource.isEmpty() && s.equals(defSource))
+			// Ensure the default audio source is checked. If none is set, then nothing
+			// will be checked
+			if (defSource != null && !defSource.isEmpty() && s.equals(defSource))
 			{
 				button.setChecked(true);
 			}

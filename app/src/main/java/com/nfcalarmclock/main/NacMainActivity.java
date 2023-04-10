@@ -388,7 +388,14 @@ public class NacMainActivity
 	{
 		BroadcastReceiver receiver = this.getTimeTickReceiver();
 
-		unregisterReceiver(receiver);
+		try
+		{
+			unregisterReceiver(receiver);
+		}
+		catch (IllegalArgumentException e)
+		{
+			e.printStackTrace();
+		}
 
 	}
 

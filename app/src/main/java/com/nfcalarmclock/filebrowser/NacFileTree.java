@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 
 import com.nfcalarmclock.util.file.NacFile;
 import com.nfcalarmclock.util.file.NacTreeNode;
+import com.nfcalarmclock.util.NacUtility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,25 +58,43 @@ public class NacFileTree
 	private Cursor getQueryCursor(Context context, String[] columns)
 	{
 		ContentResolver resolver = context.getContentResolver();
-		Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 		String sortOrder = "_display_name";
 		Cursor c = null;
+		Uri collection;
 
+		// TODO: Iterate over all volumes? This would go into getContentUri() below
+		//for (String v : MediaStore.getExternalVolumeNames(context))
+		//{
+		//	NacUtility.printf("Volume : %s", v);
+		//}
+
+		// Define which table, containing the collection of media, to query
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+		{
+			collection = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
+		}
+		else
+		{
+			collection = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+		}
+
+		// Query the table and get the cursor
 		try
 		{
-			c = resolver.query(uri, columns, null, null, sortOrder);
+			c = resolver.query(collection, columns, null, null, sortOrder);
 		}
 		catch (IllegalArgumentException e)
 		{
 			try
 			{
-				c = resolver.query(uri, columns, null, null, null);
+				c = resolver.query(collection, columns, null, null, null);
 			}
 			catch (IllegalArgumentException f)
 			{
 			}
 		}
 
+		// Return the cursor
 		return c;
 	}
 
@@ -102,6 +121,7 @@ public class NacFileTree
 		String[] columns = this.getQueryColumns();
 		Cursor c = this.getQueryCursor(context, columns);
 
+		// Unable to get the query cursor
 		if (c == null)
 		{
 			return;
@@ -114,29 +134,36 @@ public class NacFileTree
 		int pathIndex = c.getColumnIndex(columns[1]);
 		int nameIndex = c.getColumnIndex(columns[2]);
 
+		// Iterate over each scanned media file
 		while (c.moveToNext())
 		{
 			long id = c.getLong(idIndex);
 			String path = NacFile.strip(c.getString(pathIndex));
 			String name = c.getString(nameIndex);
 
+			// Get the directory name from the path?
 			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
 			{
 				path = NacFile.toRelativeDirname(path);
 			}
 
+			// Filter out media that is not from the current path
 			if (filter && !currentPath.equals(path))
 			{
 				continue;
 			}
 
+			// Split up the path by directory
 			String[] splitPath = path.replace(currentPath, "").split("/");
+
+			// Iterate over each directory and add it to the file tree
 			for (String dir : splitPath)
 			{
 				this.add(dir);
 				this.cd(dir);
 			}
 
+			// Add the current name and change to the current directory
 			this.add(name, id);
 			this.cd(currentDir);
 		}

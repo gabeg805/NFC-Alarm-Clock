@@ -169,27 +169,45 @@ public class NacMedia
 	{
 		String[] queryColumns = new String[] { column };
 		ContentResolver resolver = context.getContentResolver();
-		Cursor c = resolver.query(uri, queryColumns, null, null, null);
+		Cursor c = null;
 		String value = "";
 
+		// Attempt to get the content resolver and cursor
+		try
+		{
+			c = resolver.query(uri, queryColumns, null, null, null);
+		}
+		// Something happened. Last time this occured, it said
+		// "Volume external_primary not found"
+		catch (IllegalArgumentException e)
+		{
+			e.printStackTrace();
+			return value;
+		}
+
+		// Null cursor
 		if (c == null)
 		{
 			return value;
 		}
+		// Empty cursor
 		else if (!c.moveToFirst())
 		{
 			c.close();
 			return value;
 		}
 
+		// Find the index of the string and get the string from the cursor
 		try
 		{
 			int index = c.getColumnIndexOrThrow(column);
 			value = c.getString(index);
 		}
+		// Something happened, unable to get the string
 		catch (IllegalArgumentException e)
 		{
 			NacUtility.printf("NacMedia : getColumnFromCursor : IllegalArgumentException!");
+			e.printStackTrace();
 		}
 
 		// ANR could be due to having to load lots of files?
