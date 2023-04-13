@@ -18,14 +18,15 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.alarm.NacAlarm;
+import com.nfcalarmclock.file.browser.NacFileBrowser;
 import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.mediapicker.music.NacMusicFragment;
 import com.nfcalarmclock.mediapicker.ringtone.NacRingtoneFragment;
+import com.nfcalarmclock.permission.readmediaaudio.NacReadMediaAudioPermission;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedDefaults;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.system.NacIntent;
-import com.nfcalarmclock.system.NacPermissions;
 
 /**
  */
@@ -82,12 +83,12 @@ public class NacMediaActivity
 	{
 		super();
 
-		FragmentManager manager = getSupportFragmentManager();
+		// Setup the fragment list
 		int length = this.getTitles().length;
-
 		this.mFragments = new Fragment[length];
 
-		manager.addFragmentOnAttachListener(this);
+		// Add a listener for when a fragment is attached
+		getSupportFragmentManager().addFragmentOnAttachListener(this);
 	}
 
 	/**
@@ -98,16 +99,24 @@ public class NacMediaActivity
 		int position = this.getPosition();
 		Fragment tabFragment = this.getFragments()[position];
 
+		// The selected fragment is undefined or does not match the position of
+		// the fragment that the user should be on
 		if ((selectedFragment == null) || (selectedFragment != tabFragment))
 		{
 			return;
 		}
 
-		if ((selectedFragment instanceof NacMusicFragment) && !NacPermissions.hasRead(this))
+		// The user is on the music fragment (where they can select from their
+		// own music to set as the media for an alarm), but the app has not
+		// been given the permission to read audio files on the phone
+		if ((selectedFragment instanceof NacMusicFragment)
+				&& !NacReadMediaAudioPermission.hasPermission(this))
 		{
-			NacPermissions.requestRead(this, NacMusicFragment.READ_REQUEST_CODE);
+			// Request permission to read audio files
+			NacReadMediaAudioPermission.requestPermission(this, NacMusicFragment.READ_REQUEST_CODE);
 		}
 
+		// Select the fragment
 		((NacMediaFragment)selectedFragment).onSelected();
 	}
 
@@ -232,16 +241,35 @@ public class NacMediaActivity
 	@Override
 	public void onBackPressed()
 	{
+		// Get the current position and the music fragment
 		int position = this.getPosition();
 		NacMusicFragment musicFragment = (NacMusicFragment)
 			this.getFragments()[0];
 
+		// Check if at position 0 and that the music fragment is defined. The
+		// music fragment (where the user can browse for music to play for
+		// an alarm, instead of a ringtone) is at position 0. Do custom stuff
+		// if back is pressed for this fragment
 		if ((position == 0) && (musicFragment != null))
 		{
-			musicFragment.backPressed();
-			return;
+			NacFileBrowser fileBrowser = musicFragment.getFileBrowser();
+
+			// Browser is undefined. Do nothing
+			if (fileBrowser == null)
+			{
+				return;
+			}
+
+			// Go to previous directory if not already at root level,
+			// otherwise, do a normal back press which will exit the activity
+			if (!fileBrowser.isAtRoot())
+			{
+				fileBrowser.previousDirectory();
+				return;
+			}
 		}
 
+		// Normal back press which should exit the activity
 		super.onBackPressed();
 	}
 
@@ -254,7 +282,6 @@ public class NacMediaActivity
 		setContentView(R.layout.act_sound);
 
 		Intent intent = getIntent();
-		FragmentManager manager = getSupportFragmentManager();
 		NacSharedConstants cons = new NacSharedConstants(this);
 
 		this.mAlarm = NacIntent.getAlarm(intent);
@@ -281,23 +308,36 @@ public class NacMediaActivity
 	{
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-		if (requestCode == NacMusicFragment.READ_REQUEST_CODE)
+		// Request code does not match the one that this activity sent
+		if (requestCode != NacMusicFragment.READ_REQUEST_CODE)
 		{
-			if ((grantResults.length > 0)
-				&& (grantResults[0] == PackageManager.PERMISSION_GRANTED))
-			{
-				Fragment fragment = this.getFragments()[0];
+			return;
+		}
 
-				if (fragment != null)
-				{
-					getSupportFragmentManager().beginTransaction()
-						.detach(fragment)
-						.attach(fragment)
-						.commitAllowingStateLoss();
-					return;
-				}
-			}
+		// Get the music fragment
+		Fragment fragment = this.getFragments()[0];
 
+		// Permission was granted
+		if ((fragment != null) && (grantResults.length > 0)
+			&& (grantResults[0] == PackageManager.PERMISSION_GRANTED))
+		{
+
+			// Create a new pager adapter in order to refresh the fragments
+			// in the view pager. Not sure if this is the way to do it, but
+			// this is the only way that I found works
+			ViewPager2 viewPager = this.getViewPager();
+			NacPagerAdapter adapter = new NacPagerAdapter(this);
+
+			// Set pager adapter on the view pager
+			viewPager.setAdapter(adapter);
+
+			// Set the new pager adapter member variable
+			this.mAdapter = adapter;
+		}
+		// Either permission was not granted, or the fragment was null for some
+		// reason. Whatever the case, just show the ringtone fragment instead
+		else
+		{
 			this.selectTabByIndex(1);
 		}
 	}
@@ -398,11 +438,14 @@ public class NacMediaActivity
 		NacPagerAdapter adapter = this.getPagerAdapter();
 		TabLayout tabLayout = this.getTabLayout();
 
+		// Set the pager adapter
 		viewPager.setAdapter(adapter);
 
+		// Set the tab layout mediator
 		new TabLayoutMediator(tabLayout, viewPager, (tab, position) ->
 			tab.setText(this.getTitles()[position])).attach();
 
+		// Set the tab selected listener based on the Android API level
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{
 			tabLayout.addOnTabSelectedListener(this);
@@ -484,6 +527,8 @@ public class NacMediaActivity
 		}
 
 		/**
+		 * Get the number of items to swipe through.
+		 *
 		 * @return The number of items to swipe through.
 		 */
 		@Override

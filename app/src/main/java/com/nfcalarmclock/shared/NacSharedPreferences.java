@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 
 import com.nfcalarmclock.system.NacCalendar;
-import com.nfcalarmclock.util.file.NacFile;
+import com.nfcalarmclock.file.NacFile;
 import com.nfcalarmclock.media.NacMedia;
 
 import java.util.List;
@@ -469,7 +469,17 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * Edit whether the Schedule Exact Alarm permission was requested.
+	 * Edit whether the POST_NOTIFICATIONS permission was requested.
+	 */
+	public void editWasPostNotificationsPermissionRequested(boolean requested)
+	{
+		String key = this.getKeys().getWasPostNotificationsPermissionRequested();
+
+		this.saveBoolean(key, requested, false);
+	}
+
+	/**
+	 * Edit whether the SCHEDULE_EXACT_ALARM permission was requested.
 	 */
 	public void editWasScheduleExactAlarmPermissionRequested(boolean requested)
 	{
@@ -1288,7 +1298,22 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @return Whether the Schedule Exact Alarm permission was requested.
+	 * Get whether the POST_NOTIFICATIONS permission was requested.
+	 *
+	 * @return Whether the POST_NOTIFICATIONS permission was requested.
+	 */
+	public boolean getWasPostNotificationsPermissionRequested()
+	{
+		String key = this.getKeys().getWasPostNotificationsPermissionRequested();
+		boolean value = this.getDefaults().getWasPostNotificationsPermissionRequested();
+
+		return this.getBoolean(key, value);
+	}
+
+	/**
+	 * Get whether the SCHEDULE_EXACT_ALARM permission was requested.
+	 *
+	 * @return Whether the SCHEDULE_EXACT_ALARM permission was requested.
 	 */
 	public boolean getWasScheduleExactAlarmPermissionRequested()
 	{

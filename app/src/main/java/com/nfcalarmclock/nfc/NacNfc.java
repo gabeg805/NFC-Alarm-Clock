@@ -71,9 +71,20 @@ public class NacNfc
 	 */
 	public static Tag getTag(Intent intent)
 	{
-		return (intent != null)
-			? (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
-			: null;
+		// Use the updated form of Intent.getParecelableExtra() if API >= 33
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+		{
+			return (intent != null)
+				? intent.getParcelableExtra(NfcAdapter.EXTRA_TAG, Tag.class)
+				: null;
+		}
+		// Use the deprecated form of Intent.getParecelableExtra() for API < 33
+		else
+		{
+			return (intent != null)
+				? (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
+				: null;
+		}
 	}
 
 	/**

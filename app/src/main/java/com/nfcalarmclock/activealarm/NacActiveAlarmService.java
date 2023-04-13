@@ -281,9 +281,26 @@ public class NacActiveAlarmService
 	 */
 	public void finish()
 	{
+		// Cleanup everything
 		this.cleanup();
+
+		// Start the main activity
 		NacContext.startMainActivity(this);
-		super.stopForeground(true);
+
+		// Stop the foreground service using the updated form of
+		// stopForeground() for API >= 33
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+		{
+			super.stopForeground(Service.STOP_FOREGROUND_REMOVE);
+		}
+		// Stop the foreground service using the deprecated form of
+		// stopForeground() for API > 33
+		else
+		{
+			super.stopForeground(true);
+		}
+
+		// Stop the service
 		super.stopSelf();
 	}
 

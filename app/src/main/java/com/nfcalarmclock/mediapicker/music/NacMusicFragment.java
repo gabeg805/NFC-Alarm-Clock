@@ -12,10 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.nfcalarmclock.media.NacMedia;
+import com.nfcalarmclock.permission.readmediaaudio.NacReadMediaAudioPermission;
 import com.nfcalarmclock.util.dialog.NacDialog;
-import com.nfcalarmclock.util.file.NacFile;
-import com.nfcalarmclock.filebrowser.NacFileBrowser;
-import com.nfcalarmclock.system.NacPermissions;
+import com.nfcalarmclock.file.NacFile;
+import com.nfcalarmclock.file.browser.NacFileBrowser;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.mediapicker.NacMediaFragment;
@@ -56,18 +56,6 @@ public class NacMusicFragment
 		super();
 
 		this.mFileBrowser = null;
-	}
-
-	/**
-	 * Back button was been pressed.
-	 */
-	public void backPressed()
-	{
-		NacFileBrowser browser = this.getFileBrowser();
-		if (browser != null)
-		{
-			browser.previousDirectory();
-		}
 	}
 
 	/**
@@ -129,27 +117,35 @@ public class NacMusicFragment
 	public void onBrowserClicked(NacFileBrowser browser,
                                  NacFile.Metadata metadata, String path, String name)
 	{
+		// Directory was clicked
 		if (metadata.isDirectory())
 		{
 			Locale locale = Locale.getDefault();
 			String textPath = path.isEmpty() ? ""
 				: String.format(locale, "%1$s/", path);
 
+			// Set the alarm media path to the directory
 			this.setMedia(path);
 			this.getDirectoryTextView().setText(textPath);
+
+			// Show the contents of the directory
 			browser.show(path);
 		}
+		// File was clicked
 		else if (metadata.isFile())
 		{
 			Uri uri = metadata.toExternalUri();
 
+			// Play the media file
 			if (browser.isSelected())
 			{
 				if (this.safePlay(uri) < 0)
 				{
+					// There was an error playing the media
 					this.showErrorPlayingAudio();
 				}
 			}
+			// Stop playing the media file
 			else
 			{
 				this.safeReset();
@@ -164,19 +160,25 @@ public class NacMusicFragment
 	{
 		int id = view.getId();
 
+		// Clear button was clicked
 		if (id == R.id.clear)
 		{
 			NacFileBrowser browser = this.getFileBrowser();
 
+			// De-select whatever is selected
 			if (browser != null)
 			{
 				browser.deselect();
 			}
 		}
+		// OK button was clicked
 		else if (id == R.id.ok)
 		{
 			String path = getMediaPath();
 
+			// Check if the a directory was selected. If so, show a warning.
+			// The path has already been set in onBrowserClicked() so nothing
+			// further needs to be done
 			if (NacMedia.isDirectory(path))
 			{
 				this.showWarningDirectorySelected(view);
@@ -184,6 +186,7 @@ public class NacMusicFragment
 			}
 		}
 
+		// Default onClick() method
 		super.onClick(view);
 	}
 
@@ -227,7 +230,7 @@ public class NacMusicFragment
 	{
 		setupActionButtons(view);
 
-		if (!NacPermissions.hasRead(getContext()))
+		if (!NacReadMediaAudioPermission.hasPermission(getContext()))
 		{
 			return;
 		}

@@ -480,7 +480,15 @@ public class NacSharedKeys
 	}
 
 	/**
-	 * @return The schedule exact alarm permission requested key.
+	 * @return The POST_NOTIFICATIONS permission requested key.
+	 */
+	public String getWasPostNotificationsPermissionRequested()
+	{
+		return this.getString(R.string.key_permission_post_notifications_requested);
+	}
+
+	/**
+	 * @return The SCHEDULE_EXACT_ALARM permission requested key.
 	 */
 	public String getWasScheduleExactAlarmPermissionRequested()
 	{

@@ -12,8 +12,8 @@ import android.provider.MediaStore;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.MediaMetadata;
 
-import com.nfcalarmclock.filebrowser.NacFileTree;
-import com.nfcalarmclock.util.file.NacFile;
+import com.nfcalarmclock.file.NacFileTree;
+import com.nfcalarmclock.file.NacFile;
 import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.shared.NacSharedConstants;
 

@@ -1,4 +1,4 @@
-package com.nfcalarmclock.filebrowser;
+package com.nfcalarmclock.file;
 
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
@@ -7,10 +7,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-
-import com.nfcalarmclock.util.file.NacFile;
-import com.nfcalarmclock.util.file.NacTreeNode;
-import com.nfcalarmclock.util.NacUtility;
 
 import java.util.ArrayList;
 import java.util.List;

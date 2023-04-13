@@ -4,19 +4,17 @@
 	<!-- App -->
 	<string name="app_name">NFC Alarm Clock</string>
 	<string name="app_version">@string/versionName</string>
-	<string name="permission_schedule_exact_alarm_request">This app does not have the <b>Schedule Exact Alarm</b> permission enabled.\n\nWithout this, alarms will not be able to run when the app is not in focus.\n\nWould you like to continue to the next screen to enable this permission?</string>
+	<string name="permission_schedule_exact_alarm_request">This app does not have the <b>Schedule Exact Alarm</b> permission enabled.\n\nAlarms will not be able to run if the app is not in focus.\n\nWould you like to continue to the next screen to enable this permission?</string>
+	<string name="permission_post_notifications_request">This app does not have the <b>Notifications</b> permission enabled.\n\nAlarms will not be able to run if the app is not in focus.  This is a side effect of the security policies introduced in <b>Android 13</b>, which are for the benefit of users, but can restrict apps in instances like this.\n\nWould you like to continue to enable this permission?</string>
 
 
 	<!-- What's new -->
 	<!--
 	<string name="item_X"></string>
 	-->
-	<string name="item_1">Fixed issue where alarms would not trigger after an update.\n\nThis would happen if auto-update is enabled, and the app is not opened before the alarm is scheduled to be triggered.\n\nNow, the update signal is captured and alarms are automatically reestablished so that opening the app after an update is not necessary.</string>
-	<string name="item_2">Always <b>Show Next Alarm</b> at the top of the alarm list, without needing to click on anything extra.</string>
-	<string name="item_3">Added <b>Dismiss Early</b> option for each alarm. Click on the icon next to the volume slider to access.</string>
-	<string name="item_4">Increased maximum number of alarms to 150.</string>
-	<string name="item_5">Removed dependencies on Google Mobile Services (GMS) and Firebase.</string>
-	<string name="item_6">Miscellaneous updates for Android SDK >= 33.</string>
+	<string name="item_1">Update for <b>Android 13</b> which fixes issue where alarms would not run, and music files would not show when browsing for music to play for an alarm.</string>
+	<string name="item_2">Fixed crash that would occur when attempting to toggle a day on an alarm that is snoozed.</string>
+	<string name="item_3">Fixed other miscellaneous crashes that would occur rarely.</string>
 
 
 

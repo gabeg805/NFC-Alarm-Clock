@@ -1,4 +1,4 @@
-package com.nfcalarmclock.filebrowser;
+package com.nfcalarmclock.file.browser;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -11,11 +11,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 
+import com.nfcalarmclock.file.NacFileTree;
 import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.shared.NacSharedConstants;
-import com.nfcalarmclock.util.file.NacFile;
+import com.nfcalarmclock.file.NacFile;
 
 import java.util.Locale;
 
@@ -236,11 +237,13 @@ public class NacFileBrowser
 	 */
 	public NacFile.Metadata getFileMetadata(View view)
 	{
+		// Unable to get the metadata object from the view
 		if (view == null)
 		{
 			return null;
 		}
 
+		// Get the metadata object via the tag of the view
 		return (NacFile.Metadata) view.getTag();
 	}
 
@@ -274,6 +277,32 @@ public class NacFileBrowser
 	}
 
 	/**
+	 * Check if at the root level of the file tree or not.
+	 *
+	 * @return True if at the root level of the file tree, and False otherwise.
+	 */
+	public boolean isAtRoot()
+	{
+		// Get the first child view in this container
+		LinearLayout container = this.getContainer();
+		View entry = container.getChildAt(0);
+
+		// Unable to get the first child at this level, so cannot determine if
+		// at the root level or not
+		if (entry == null)
+		{
+			return false;
+		}
+
+		// Get the metadata of the first child
+		NacFile.Metadata metadata = this.getFileMetadata(entry);
+
+		// Ensure that metadata is in fact an object and it does not equal the
+		// previous directory string ".."
+		return (metadata != null) && !metadata.getName().equals("..");
+	}
+
+	/**
 	 * @return True if something is selected and False otherwise.
 	 */
 	public boolean isSelected()
@@ -290,11 +319,15 @@ public class NacFileBrowser
 		View view = this.getSelectedView();
 		NacFile.Metadata metadata = this.getFileMetadata(view);
 
+		// Unable to determine if the file at the path is selected or not
+		// because the metadata object was unable to be resolved or the path was empty
 		if ((metadata == null) || path.isEmpty())
 		{
 			return false;
 		}
 
+		// Check if the path of the metadata object of the selected view is
+		// equal to the path that was passed in
 		return metadata.getPath().equals(path);
 	}
 
@@ -303,33 +336,51 @@ public class NacFileBrowser
 	@Override
 	public void onClick(View view)
 	{
-		NacFile.Metadata metadata = (NacFile.Metadata) view.getTag();
+		NacFile.Metadata metadata = this.getFileMetadata(view);
+
+		// Unable to get the metadata object from the view. Do not continue
+		if (metadata == null)
+		{
+			return;
+		}
+
+		// Get the name and filepath of the file that is represented by the view
 		String name = metadata.getName();
 		String path = metadata.getPath();
 
+		// Unable to get a path from the view. Do not continue
 		if (path.isEmpty())
 		{
 			return;
 		}
 
+		// A file was clicked
 		if (metadata.isFile())
 		{
+			// The file is already selected, so deselect it
 			if (this.isSelected(path))
 			{
 				this.deselect();
 			}
+			// The file has not been selected yet, so select it
 			else
 			{
 				this.select(view);
 			}
 		}
+		// A directory was clicked
 		else if (metadata.isDirectory())
 		{
+			// Change directory to the directory that was clicked
 			NacFileTree tree = this.getTree();
+
 			tree.cd(name);
+
+			// Determine the path of the directory that was clicked
 			path = name.equals("..") ? tree.getDirectoryPath() : path;
 		}
 
+		// Call the listener for when an item is clicked in the file browser
 		this.callOnBrowserClickedListener(metadata, path, name);
 	}
 
@@ -342,22 +393,29 @@ public class NacFileBrowser
 		NacFileTree tree = this.getTree();
 		LayoutInflater inflater = LayoutInflater.from(context);
 
+		// An empty path indicates the root level. If not at the root level,
+		// add the previous directory view to the file browser
 		if (!path.isEmpty())
 		{
 			NacFile.Metadata metadata = new NacFile.Metadata(path, "..", -1);
 			this.addDirectory(inflater, metadata);
 		}
 
+		// Iterate over each file at the given path
 		for (NacFile.Metadata metadata : tree.lsSort(path))
 		{
+
+			// Add a directory
 			if (metadata.isDirectory())
 			{
 				this.addDirectory(inflater, metadata);
 			}
+			// Add a file
 			else if (metadata.isFile())
 			{
 				this.addFile(inflater, metadata);
 			}
+
 		}
 	}
 
@@ -366,11 +424,23 @@ public class NacFileBrowser
 	 */
 	public void previousDirectory()
 	{
+		// Get the first child view in this container
 		LinearLayout container = this.getContainer();
 		View entry = container.getChildAt(0);
+
+		// Unable to get the first child at this level, so cannot determine if
+		// at the root level or not
+		if (entry == null)
+		{
+			return;
+		}
+
+		// Get the metadata of the first child
 		NacFile.Metadata metadata = this.getFileMetadata(entry);
 
-		if ((entry != null) && metadata.getName().equals(".."))
+		// Go to the previous directory if metadata equals the previous
+		// directory string ".."
+		if ((metadata != null) && metadata.getName().equals(".."))
 		{
 			this.onClick(entry);
 		}

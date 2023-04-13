@@ -1,4 +1,4 @@
-package com.nfcalarmclock.permission;
+package com.nfcalarmclock.permission.scheduleexactalarm;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi;
 
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedConstants;
+import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.util.dialog.NacDialogFragment;
 
 /**
@@ -28,8 +29,8 @@ public class NacScheduleExactAlarmPermissionDialog
 	@SuppressWarnings("UnnecessaryInterfaceModifier")
 	public interface OnPermissionRequestListener
 	{
-		public void onPermissionRequestDone(String permission);
-		public void onPermissionRequestCancel(String permission);
+		public void onPermissionRequestAccepted(String permission);
+		public void onPermissionRequestCanceled(String permission);
 	}
 
 	/**
@@ -43,31 +44,61 @@ public class NacScheduleExactAlarmPermissionDialog
 	private OnPermissionRequestListener mOnPermissionRequestListener;
 
 	/**
-	 * Call the *Cancel() method for the OnPermissionRequestListener object, if it
+	 * Call the *Done() method for the OnPermissionRequestListener object, if it
 	 * has been set.
 	 */
-	public void callOnPermissionRequestCancelListener()
+	public void callOnPermissionRequestAcceptedListener()
 	{
 		OnPermissionRequestListener listener = this.getOnPermissionRequestListener();
 
 		if (listener != null)
 		{
-			listener.onPermissionRequestCancel(Manifest.permission.SCHEDULE_EXACT_ALARM);
+			listener.onPermissionRequestAccepted(
+				Manifest.permission.SCHEDULE_EXACT_ALARM);
 		}
 	}
 
 	/**
-	 * Call the *Done() method for the OnPermissionRequestListener object, if it
+	 * Call the *Cancel() method for the OnPermissionRequestListener object, if it
 	 * has been set.
 	 */
-	public void callOnPermissionRequestDoneListener()
+	public void callOnPermissionRequestCanceledListener()
 	{
 		OnPermissionRequestListener listener = this.getOnPermissionRequestListener();
 
 		if (listener != null)
 		{
-			listener.onPermissionRequestDone(Manifest.permission.SCHEDULE_EXACT_ALARM);
+			listener.onPermissionRequestCanceled(
+				Manifest.permission.SCHEDULE_EXACT_ALARM);
 		}
+	}
+
+	/**
+	 * The actions to execute when the permission request is accepted.
+	 */
+	private void doPermissionRequestAccepted()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+
+		// Set the flag that the permission was requested
+		shared.editWasScheduleExactAlarmPermissionRequested(true);
+
+		// Call the accepeted listeners
+		this.callOnPermissionRequestAcceptedListener();
+	}
+
+	/**
+	 * The actions to execute when the permission request is canceled.
+	 */
+	private void doPermissionRequestCanceled()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+
+		// Set the flag that the permission was requested
+		shared.editWasScheduleExactAlarmPermissionRequested(true);
+
+		// Call the accepeted listeners
+		this.callOnPermissionRequestCanceledListener();
 	}
 
 	/**
@@ -86,7 +117,7 @@ public class NacScheduleExactAlarmPermissionDialog
 	@Override
 	public void onCancel(@NonNull DialogInterface dialog)
 	{
-		this.callOnPermissionRequestCancelListener();
+		this.doPermissionRequestCanceled();
 	}
 
 	/**
@@ -102,9 +133,9 @@ public class NacScheduleExactAlarmPermissionDialog
 
 		return new AlertDialog.Builder(requireContext())
 			.setPositiveButton(cons.getActionOk(), (dialog, which) ->
-				this.callOnPermissionRequestDoneListener())
+				this.doPermissionRequestAccepted())
 			.setNegativeButton(cons.getActionCancel(), (dialog, which) ->
-				this.callOnPermissionRequestCancelListener())
+				this.doPermissionRequestCanceled())
 			.setView(R.layout.dlg_request_schedule_exact_alarm_permission)
 			.create();
 	}
@@ -120,4 +151,3 @@ public class NacScheduleExactAlarmPermissionDialog
 	}
 
 }
-

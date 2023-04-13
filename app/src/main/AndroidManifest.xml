@@ -195,7 +195,7 @@
 
 		<!-- Refresh alarms when the Schedule Exact Alarm permission is changed -->
 		<receiver
-			android:name=".permission.NacScheduleExactAlarmPermissionChangedBroadcastReceiver"
+			android:name=".permission.scheduleexactalarm.NacScheduleExactAlarmPermissionChangedBroadcastReceiver"
 			android:enabled="true"
 			android:exported="false">
 

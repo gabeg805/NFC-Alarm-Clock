@@ -1,6 +1,7 @@
 package com.nfcalarmclock.main;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -22,7 +23,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,10 +33,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import com.google.android.material.textview.MaterialTextView;
 import com.nfcalarmclock.activealarm.NacActiveAlarmService;
 import com.nfcalarmclock.alarm.NacAlarm;
@@ -54,7 +52,10 @@ import com.nfcalarmclock.mediapicker.NacMediaActivity;
 import com.nfcalarmclock.nfc.NacNfc;
 import com.nfcalarmclock.nfc.NacNfcTag;
 import com.nfcalarmclock.nfc.NacScanNfcTagDialog;
-import com.nfcalarmclock.permission.NacScheduleExactAlarmPermissionDialog;
+import com.nfcalarmclock.permission.postnotifications.NacPostNotificationsPermission;
+import com.nfcalarmclock.permission.postnotifications.NacPostNotificationsPermissionDialog;
+import com.nfcalarmclock.permission.scheduleexactalarm.NacScheduleExactAlarmPermission;
+import com.nfcalarmclock.permission.scheduleexactalarm.NacScheduleExactAlarmPermissionDialog;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.ratemyapp.NacRateMyApp;
 import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog;
@@ -73,7 +74,6 @@ import com.nfcalarmclock.upcomingalarm.NacUpcomingAlarmNotification;
 import com.nfcalarmclock.util.dialog.NacDialog;
 import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -84,7 +84,6 @@ import java.util.Locale;
 public class NacMainActivity
 	extends AppCompatActivity
 	implements Observer<List<NacAlarm>>,
-		//View.OnClickListener,
 		View.OnCreateContextMenuListener,
 		Toolbar.OnMenuItemClickListener,
 		RecyclerView.OnItemTouchListener,
@@ -106,8 +105,7 @@ public class NacMainActivity
 		NacGraduallyIncreaseVolumeDialog.OnGraduallyIncreaseVolumeListener,
 		NacRestrictVolumeDialog.OnRestrictVolumeListener,
 		NacTextToSpeechDialog.OnTextToSpeechOptionsSelectedListener,
-		NacWhatsNewDialog.OnReadWhatsNewListener,
-		NacScheduleExactAlarmPermissionDialog.OnPermissionRequestListener
+		NacWhatsNewDialog.OnReadWhatsNewListener
 {
 
 	/**
@@ -927,11 +925,12 @@ public class NacMainActivity
 
 		Intent intent = getIntent();
 		View root = findViewById(R.id.activity_main);
+		NacSharedPreferences shared = new NacSharedPreferences(this);
 		this.mToolbar = findViewById(R.id.tb_top_bar);
 		this.mNextAlarmTextView = findViewById(R.id.tv_next_alarm);
 		this.mFloatingActionButton = findViewById(R.id.fab_add_alarm);
 		this.mRecyclerView = findViewById(R.id.rv_alarm_list);
-		this.mSharedPreferences = new NacSharedPreferences(this);
+		this.mSharedPreferences = shared;
 		this.mAlarmStatisticRepository = new NacAlarmStatisticRepository(this);
 		this.mAlarmViewModel = new ViewModelProvider(this).get(NacAlarmViewModel.class);
 		this.mAlarmCardAdapterLiveData = new NacCardAdapterLiveData();
@@ -944,6 +943,7 @@ public class NacMainActivity
 		this.mSnackbar = new NacSnackbar(root);
 		this.mScanNfcTagDialog = null;
 
+		// Setup
 		this.getSharedPreferences().editCardIsMeasured(false);
 		this.setupLiveDataObservers();
 		this.setupToolbar();
@@ -956,8 +956,14 @@ public class NacMainActivity
 			this.setNfcTagIntent(intent);
 		}
 
-		// Show the dialog to schedule an exact alarm
-		if (this.shouldRequestScheduleExactAlarmPermission())
+		// Show the dialog to request the permission to post notifications
+		if (NacPostNotificationsPermission.shouldRequestPermission(this, shared))
+		{
+			this.showPostNotificationPermissionDialog();
+		}
+
+		// Show the dialog to request the permission schedule an exact alarm
+		if (NacScheduleExactAlarmPermission.shouldRequestPermission(this, shared))
 		{
 			this.showScheduleExactAlarmPermissionDialog();
 		}
@@ -1180,41 +1186,6 @@ public class NacMainActivity
 		this.cleanupTimeTickReceiver();
 		this.cleanupShutdownBroadcastReceiver();
 		NacNfc.stop(this);
-	}
-
-	/**
-	 * Called when a permission request was canceled.
-	 */
-	public void onPermissionRequestCancel(String permission)
-	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-
-		// Set the shared preference indicating that the permission was requested
-		shared.editWasScheduleExactAlarmPermissionRequested(true);
-
-		// Setup the initial dialogs, if any, that need to be shown
-		this.setupInitialDialogToShow();
-	}
-
-	/**
-	 * Called when a permission request is done.
-	 */
-	public void onPermissionRequestDone(String permission)
-	{
-		// Do not do anything if the Android version is not correct
-		if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
-				|| (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU))
-		{
-			return;
-		}
-
-		// Set the shared preference indicating that the permission was requested
-		NacSharedPreferences shared = this.getSharedPreferences();
-		shared.editWasScheduleExactAlarmPermissionRequested(true);
-
-		// Start the intent to facilitate the user enabling the permission
-		Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
-		startActivity(intent);
 	}
 
 	/**
@@ -1569,8 +1540,17 @@ public class NacMainActivity
 	 */
 	private void setupInitialDialogToShow()
 	{
+		// Get the shared preferences
+		NacSharedPreferences shared = this.getSharedPreferences();
+
 		// Do not show any of these dialogs if requesting a permission
-		if (this.shouldRequestScheduleExactAlarmPermission())
+		if (NacPostNotificationsPermission.shouldRequestPermission(this, shared))
+		{
+			return;
+		}
+
+		// Do not show any of these dialogs if requesting a permission
+		if (NacScheduleExactAlarmPermission.shouldRequestPermission(this, shared))
 		{
 			return;
 		}
@@ -1756,29 +1736,6 @@ public class NacMainActivity
 	}
 
 	/**
-	 * @return True if the app should request the permission to be able to
-	 *         schedule exact alarms, and False otherwise.
-	 */
-	private boolean shouldRequestScheduleExactAlarmPermission()
-	{
-		// Schedule Exact Alarms permission is only applicable to API 31 and 32.
-		if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
-			|| (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU))
-		{
-			return false;
-		}
-
-		AlarmManager alarmManager = (AlarmManager) getSystemService(
-			Context.ALARM_SERVICE);
-		NacSharedPreferences shared = this.getSharedPreferences();
-
-		// Request permission when unable to schedule exact alarms, and this
-		// permission has not been requested yet
-		return !alarmManager.canScheduleExactAlarms()
-			&& !shared.getWasScheduleExactAlarmPermissionRequested();
-	}
-
-	/**
 	 * @return True if the alarm activity should be shown, and False otherwise.
 	 */
 	private boolean shouldShowAlarmActivity(NacAlarm alarm)
@@ -1902,6 +1859,47 @@ public class NacMainActivity
 	}
 
 	/**
+	 * Show the POST_NOTIFICATIONS permission dialog.
+	 */
+	@RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+	private void showPostNotificationPermissionDialog()
+	{
+		// Create the dialog
+		NacPostNotificationsPermissionDialog dialog =
+			new NacPostNotificationsPermissionDialog();
+
+		// Handle the cases where the permission request is accepted/canceled
+		dialog.setOnPermissionRequestListener(
+			new NacPostNotificationsPermissionDialog.OnPermissionRequestListener()
+		{
+
+			/**
+			 * Called when the permission request is accepted.
+			 */
+			@Override
+			public void onPermissionRequestAccepted(String permission)
+			{
+				NacPostNotificationsPermission.requestPermission(NacMainActivity.this, 69);
+			}
+
+			/**
+			 * Called when the permission request is canceled.
+			 */
+			@Override
+			public void onPermissionRequestCanceled(String permission)
+			{
+				// Setup the initial dialogs, if any, that need to be shown
+				setupInitialDialogToShow();
+			}
+
+		});
+
+		// Show the dialog
+		dialog.show(getSupportFragmentManager(),
+			NacPostNotificationsPermissionDialog.TAG);
+	}
+
+	/**
 	 * Show the restrict volume dialog.
 	 */
 	public void showRestrictVolumeDialog()
@@ -1921,15 +1919,35 @@ public class NacMainActivity
 	@RequiresApi(api = Build.VERSION_CODES.S)
 	public void showScheduleExactAlarmPermissionDialog()
 	{
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
-		{
-			return;
-		}
-
+		// Create the dialog
 		NacScheduleExactAlarmPermissionDialog dialog =
 			new NacScheduleExactAlarmPermissionDialog();
 
-		dialog.setOnPermissionRequestListener(this);
+		// Handle the cases where the permission request is accepted/canceled
+		dialog.setOnPermissionRequestListener(
+			new NacScheduleExactAlarmPermissionDialog.OnPermissionRequestListener()
+		{
+
+			/**
+			 * Called when the permission request is accepted.
+			 */
+			public void onPermissionRequestAccepted(String permission)
+			{
+				NacScheduleExactAlarmPermission.requestPermission(NacMainActivity.this);
+			}
+
+			/**
+			 * Called when the permission request was canceled.
+			 */
+			public void onPermissionRequestCanceled(String permission)
+			{
+				// Setup the initial dialogs, if any, that need to be shown
+				setupInitialDialogToShow();
+			}
+
+		});
+
+		// Show the dialog
 		dialog.show(getSupportFragmentManager(),
 			NacScheduleExactAlarmPermissionDialog.TAG);
 	}

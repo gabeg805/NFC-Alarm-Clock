@@ -2,14 +2,7 @@
 TODO
 ----
 
-* Look into music directory navigation. It looks weird on my phone.
-
-* Prompt to ignore battery optimization?
-
-* PowerManager.isIgnoringBatteryOptimization()
-
-* Try not to start activity when starting foreground service. Just show the
-  notification.
+* Reorganize some of the packages like media. See if I can make a media player package?
 
 * There are a lot of classes like NacTextToSpeech that have a lot of setting an
   object to null when cleaning up, and conversely, checking if it's null and

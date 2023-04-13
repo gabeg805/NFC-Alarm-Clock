@@ -1,4 +1,4 @@
-package com.nfcalarmclock.util.file;
+package com.nfcalarmclock.file;
 
 import java.util.ArrayList;
 import java.util.List;

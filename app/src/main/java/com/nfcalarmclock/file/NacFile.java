@@ -1,4 +1,4 @@
-package com.nfcalarmclock.util.file;
+package com.nfcalarmclock.file;
 
 import android.content.ContentUris;
 import android.net.Uri;
@@ -638,10 +638,6 @@ public class NacFile
 	{
 		String relativePath = NacFile.toRelativePath(path);
 		String relativeDirname = NacFile.dirname(relativePath);
-		NacUtility.printf("File path          : %s", path);
-		NacUtility.printf("Relative file path : %s", relativePath);
-		NacUtility.printf("Relative dirname   : %s", relativeDirname);
-		NacUtility.printf("");
 
 		return NacFile.strip(relativeDirname);
 	}

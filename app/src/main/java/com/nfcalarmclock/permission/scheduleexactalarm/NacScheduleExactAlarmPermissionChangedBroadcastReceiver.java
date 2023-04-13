@@ -1,4 +1,4 @@
-package com.nfcalarmclock.permission;
+package com.nfcalarmclock.permission.scheduleexactalarm;
 
 import android.app.AlarmManager;
 import android.content.BroadcastReceiver;

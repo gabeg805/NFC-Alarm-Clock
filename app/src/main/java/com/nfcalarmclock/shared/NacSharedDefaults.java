@@ -397,7 +397,15 @@ public class NacSharedDefaults
 	}
 
 	/**
-	 * @return The schedule exact alarm permission requested key.
+	 * @return The POST_NOTIFICATIONS permission requested key.
+	 */
+	public boolean getWasPostNotificationsPermissionRequested()
+	{
+		return this.getBoolean(R.bool.default_was_post_notifications_permission_requested);
+	}
+
+	/**
+	 * @return The SCHEDULE_EXACT_ALARM permission requested key.
 	 */
 	public boolean getWasScheduleExactAlarmPermissionRequested()
 	{
