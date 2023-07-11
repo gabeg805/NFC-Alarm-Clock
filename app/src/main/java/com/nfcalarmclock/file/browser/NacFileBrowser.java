@@ -2,6 +2,8 @@ package com.nfcalarmclock.file.browser;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
-
 import com.nfcalarmclock.file.NacFileTree;
 import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.R;
@@ -517,11 +518,22 @@ public class NacFileBrowser
 	 *
 	 * @param  dir  The path of the directory to show.
 	 */
-	public void show(String dir)
+	public void show(final String dir)
 	{
-		this.clearEntries();
-		this.populateEntries(dir);
-		this.getTree().cd(dir);
+		Context context = this.getContext();
+		Looper looper = context.getMainLooper();
+		Handler handler = new Handler(looper);
+
+		// Show the directory contents, but do it in a handler so that it is
+		// offloaded from the main thread. It technically will still run on the main
+		// thread, but it is at the back of the message queue so it does not hang
+		// cause an ANR
+		handler.post(() ->
+		{
+			clearEntries();
+			populateEntries(dir);
+			getTree().cd(dir);
+		});
 	}
 
 }

@@ -12,9 +12,9 @@
 	<!--
 	<string name="item_X"></string>
 	-->
-	<string name="item_1">Actualización para <b>Android 13</b> que soluciona el problema por el que las alarmas no se ejecutaban y los archivos de música no se mostraban al buscar música para reproducir una alarma.</string>
-	<string name="item_2">Se corrigió el bloqueo que ocurriría al intentar alternar un día en una alarma que está pospuesta.</string>
-	<string name="item_3">Se corrigieron otros bloqueos diversos que ocurrirían raramente.</string>
+	<string name="item_1">Actualización para <b>Android 12</b> y superior que soluciona el problema por el cual el teclado no aparecía automáticamente después de hacer clic en el nombre de la alarma.</string>
+	<string name="item_2">Se corrigió que la aplicación no respondiera (ANR) al buscar música donde, si había demasiadas canciones para mostrar, la aplicación tardaría demasiado en consultar todas las canciones y Android consideraría que la aplicación es ANR.</string>
+	<string name="item_3">Se solucionó el problema por el cual la aplicación olvidaba que se había pospuesto una alarma.  Esto <u>solo</u> sucedería si la aplicación se actualizó, se activó una alarma antes de que se abriera la aplicación y esa alarma se pospuso.  Esto haría que el usuario volviera a la pantalla principal, donde vería la ventana emergente <b>Qué hay de Nuevo</b>.  Interactuar con esta ventana emergente mientras la alarma se pospuso haría que la aplicación olvidara que la alarma se pospuso.</string>
 
 
 
@@ -163,6 +163,7 @@
 	<string name="cd_expand_alarm">Ampliar una alarma.</string>
 	<string name="cd_volume_icon">Cambiar el volumen de una alarma.</string>
 	<string name="cd_volume_slider">Desliza para cambiar el volumen de una alarma.</string>
+	<string name="cd_alarm_options">Cambie las opciones específicas de la alarma.</string>
 	<string name="cd_color_example">Ejemplo del seleccionada actualmente.</string>
 	<string name="cd_file_entry">Tipo de entrada que se muestra, como un archivo o una carpeta.</string>
 	<string name="cd_color_selector">Seleccione un color para el selector de color.</string>

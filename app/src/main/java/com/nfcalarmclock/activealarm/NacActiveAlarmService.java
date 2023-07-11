@@ -279,6 +279,7 @@ public class NacActiveAlarmService
 
 	/**
 	 */
+	@SuppressWarnings("deprecation")
 	public void finish()
 	{
 		// Cleanup everything
@@ -534,7 +535,7 @@ public class NacActiveAlarmService
 		{
 			this.snooze();
 		}
-		// Start the servic
+		// Start the service
 		else if (action.equals(ACTION_START_SERVICE))
 		{
 			this.setupWakeLock();

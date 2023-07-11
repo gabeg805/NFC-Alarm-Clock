@@ -43,7 +43,7 @@ public class NacMediaPlayer
 	/**
 	 * Media player.
 	 */
-	private ExoPlayer mMediaPlayer;
+	private final ExoPlayer mMediaPlayer;
 
 	/**
 	 * Check if player was playing (caused by losing audio focus).
@@ -200,7 +200,7 @@ public class NacMediaPlayer
 		}
 
 		// Unable to gain audio focus
-		if(!request)
+		if (!request)
 		{
 			NacSharedConstants cons = new NacSharedConstants(context);
 

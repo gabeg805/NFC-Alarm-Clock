@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -92,6 +94,7 @@ public class NacNameDialog
 		TextInputLayout editBox = root.findViewById(R.id.name_box);
 		TextInputEditText editText = root.findViewById(R.id.name_entry);
 
+		// Setup the text box
 		editText.setText(name);
 		editText.selectAll();
 		editText.setOnEditorActionListener(this);
@@ -99,7 +102,18 @@ public class NacNameDialog
 		//editText.setBackgroundTintList(ColorStateList.valueOf(themeColor));
 		editBox.setBoxStrokeColor(blendedTheme);
 		editBox.setHintTextColor(colorStateList);
-		showKeyboard();
+
+		// Request focus on the edit text so that the keyboard can show up
+		editText.requestFocus();
+
+		// Show the keyboard. This occurs on a delay so that the window has time to
+		// be in focus
+		Looper looper = context.getMainLooper();
+		Handler handler = new Handler(looper);
+
+		handler.postDelayed(() -> showKeyboard(editText),  250);
+
+		// Scale the window size
 		scale(0.85, 0.5, false, true);
 	}
 

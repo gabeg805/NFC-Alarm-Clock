@@ -8,11 +8,9 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Build;
 import android.provider.Settings;
-
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.util.NacUtility;
-
 import java.lang.IllegalStateException;
 import java.lang.SecurityException;
 
@@ -69,6 +67,7 @@ public class NacNfc
 	/**
 	 * @return An NFC tag from the given Intent.
 	 */
+	@SuppressWarnings("deprecation")
 	public static Tag getTag(Intent intent)
 	{
 		// Use the updated form of Intent.getParecelableExtra() if API >= 33
@@ -207,7 +206,7 @@ public class NacNfc
 		}
 		catch (SecurityException e)
 		{
-			NacUtility.quickToast((Context)activity, "Unable to scan NFC tags");
+			NacUtility.quickToast(activity, "Unable to scan NFC tags");
 		}
 	}
 

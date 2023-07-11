@@ -418,7 +418,7 @@ public class NacTextToSpeech
 		if (this.isInitialized())
 		{
 			// Gain transient audio focus
-			if(!NacAudioManager.requestFocusGainTransient(context, null, attrs))
+			if (!NacAudioManager.requestFocusGainTransient(context, null, attrs))
 			{
 				NacUtility.quickToast(context, "Unable to use text-to-speech");
 				return;

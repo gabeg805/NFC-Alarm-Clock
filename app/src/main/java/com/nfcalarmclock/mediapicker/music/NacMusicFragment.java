@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
 import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.permission.readmediaaudio.NacReadMediaAudioPermission;
 import com.nfcalarmclock.util.dialog.NacDialog;
@@ -21,7 +20,6 @@ import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.mediapicker.NacMediaFragment;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.system.NacBundle;
-
 import java.util.Locale;
 
 /**

@@ -1,8 +1,6 @@
 package com.nfcalarmclock.main;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlarmManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -15,7 +13,6 @@ import android.graphics.drawable.InsetDrawable;
 import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.HapticFeedbackConstants;
@@ -145,6 +142,8 @@ public class NacMainActivity
 
 	/**
 	 * Shutdown broadcast receiver.
+	 *
+	 * TODO: Should this be final like mTimeTickReceiver?
 	 */
 	private NacShutdownBroadcastReceiver mShutdownBroadcastReceiver;
 
@@ -268,6 +267,8 @@ public class NacMainActivity
 	/**
 	 * Receiver for the time tick intent. This is called when the time increments
 	 * every minute.
+	 *
+	 * TODO: Should this be its own class like NacShutdownBroadcastReceiver?
 	 */
 	private final BroadcastReceiver mTimeTickReceiver = new BroadcastReceiver()
 	{
@@ -374,7 +375,7 @@ public class NacMainActivity
 			}
 			catch (IllegalArgumentException e)
 			{
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 	}
@@ -392,7 +393,7 @@ public class NacMainActivity
 		}
 		catch (IllegalArgumentException e)
 		{
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 
 	}
@@ -866,18 +867,33 @@ public class NacMainActivity
 	 * Alarm list has changed.
 	 *
 	 * TODO: There is a race condition between snoozing an alarm, writing to the
-	 *     database, and refreshing the main activity.
+	 *       database, and refreshing the main activity.
 	 */
 	@Override
 	public void onChanged(List<NacAlarm> alarms)
 	{
+		NacSharedPreferences shared = this.getSharedPreferences();
 		RecyclerView rv = this.getRecyclerView();
 
-		this.setupForAppFirstRun();
+		// If this is the first time the app is running, set the flags accordingly
+		if (shared.getAppFirstRun())
+		{
+			this.setupForAppFirstRun();
+		}
+
+		// Update the notification if a user uses upcoming alarm notifications
 		this.updateUpcomingNotification(alarms);
+
+		// Update the alarm adapter
 		this.getAlarmCardAdapter().storeIndicesOfExpandedCards(rv);
 		this.getAlarmCardAdapter().submitList(alarms);
-		this.setupRefreshMainActivity();
+
+		// Check if the main activity should be refreshed and if so, refresh it
+		// TODO: Why is this here?
+		if (shared.getShouldRefreshMainActivity())
+		{
+			this.refreshMainActivity();
+		}
 	}
 
 	/**
@@ -1201,9 +1217,6 @@ public class NacMainActivity
 		// Set the previous app version as the current version. This way, the What's
 		// New dialog does not show again
 		shared.editPreviousAppVersion(version);
-
-		// Refresh all the scheduled alarms
-		NacScheduler.refreshAll(this);
 	}
 
 
@@ -1232,17 +1245,34 @@ public class NacMainActivity
 	{
 		super.onResume();
 
+		NacSharedPreferences shared = this.getSharedPreferences();
+
+		// Check if the main activity should be refreshed and if so, refresh it
+		if (shared.getShouldRefreshMainActivity())
+		{
+			this.refreshMainActivity();
+			return;
+		}
+
+		// Set flag that the activity is being shown
 		this.setIsActivityShown(true);
-		this.setupTimeTickReceiver();
+
+		// Set the next alarm text
 		this.setNextAlarmMessage();
-		//this.refreshAlarmsThatWillAlarmSoon();
-		this.setupRefreshMainActivity();
-		// Will have to redraw colors here?
+
+		// Setup UI
 		this.setupFloatingActionButton();
 		this.setupInitialDialogToShow();
-		this.addSetAlarmFromIntent();
+
+		// Setup broadcast receivers
+		this.setupTimeTickReceiver();
 		this.setupShutdownBroadcastReceiver();
+
+		// Setup NFC scanning detection
 		NacNfc.start(this);
+
+		// Add alarm from SET_ALARM intent (if it is present in intent)
+		this.addSetAlarmFromIntent();
 	}
 
 	/**
@@ -1360,6 +1390,17 @@ public class NacMainActivity
 				adapter.notifyItemChanged(i);
 			}
 		}
+	}
+
+	/**
+	 * Refresh the main activity.
+	 */
+	private void refreshMainActivity()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+
+		shared.editShouldRefreshMainActivity(false);
+		recreate();
 	}
 
 	/**
@@ -1515,11 +1556,6 @@ public class NacMainActivity
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 
-		if (!shared.getAppFirstRun())
-		{
-			return;
-		}
-
 		shared.editAppFirstRun(false);
 		shared.editAppStartStatistics(false);
 		this.addFirstAlarm();
@@ -1630,20 +1666,6 @@ public class NacMainActivity
 		rv.setLayoutManager(layoutManager);
 		rv.addOnItemTouchListener(this);
 		rv.setHasFixedSize(true);
-	}
-
-	/**
-	 * Setup whether the main activity should be refreshed or not.
-	 */
-	private void setupRefreshMainActivity()
-	{
-		NacSharedPreferences shared = this.getSharedPreferences();
-
-		if (shared.getShouldRefreshMainActivity())
-		{
-			shared.editShouldRefreshMainActivity(false);
-			recreate();
-		}
 	}
 
 	/**

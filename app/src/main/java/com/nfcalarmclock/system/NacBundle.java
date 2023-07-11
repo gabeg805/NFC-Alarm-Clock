@@ -26,6 +26,7 @@ public class NacBundle
 	/**
 	 * @return The alarm contained in the bundle.
 	 */
+	@SuppressWarnings("deprecation")
 	public static NacAlarm getAlarm(Bundle bundle)
 	{
 		if (bundle != null)

@@ -12,9 +12,9 @@
 	<!--
 	<string name="item_X"></string>
 	-->
-	<string name="item_1">Update for <b>Android 13</b> which fixes issue where alarms would not run, and music files would not show when browsing for music to play for an alarm.</string>
-	<string name="item_2">Fixed crash that would occur when attempting to toggle a day on an alarm that is snoozed.</string>
-	<string name="item_3">Fixed other miscellaneous crashes that would occur rarely.</string>
+	<string name="item_1">Update for <b>Android 12</b> and above which fixes issue where the keyboard would not show up automatically after clicking on the alarm name.</string>
+	<string name="item_2">Fixed App Not Responding (ANR) when browsing for music where, if there was too many songs to show, the app would take too long query all the songs and Android would consider the app to be ANR.</string>
+	<string name="item_3">Fixed issue where the app would forget an alarm was snoozed.  This would <u>only</u> happen if the app was updated, an alarm was triggered before the app was opened, and that alarm was snoozed.  This would bring the user back to main screen where they would see the <b>What\'s New</b> popup.  Interacting with this popup while the alarm was snoozed would make the app forget that the alarm was snoozed.</string>
 
 
 

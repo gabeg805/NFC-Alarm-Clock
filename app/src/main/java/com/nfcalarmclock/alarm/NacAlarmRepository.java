@@ -25,7 +25,7 @@ public class NacAlarmRepository
 	/**
 	 * Live data list of all alarms.
 	 */
-	private LiveData<List<NacAlarm>> mAllAlarms;
+	private final LiveData<List<NacAlarm>> mAllAlarms;
 
 	/**
 	 */

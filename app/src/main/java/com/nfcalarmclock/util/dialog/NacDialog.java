@@ -3,6 +3,8 @@ package com.nfcalarmclock.util.dialog;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
+import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.view.inputmethod.InputMethodManager;
 import android.view.LayoutInflater;
@@ -12,10 +14,8 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.Button;
-
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedPreferences;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -475,13 +475,29 @@ public class NacDialog
 	/**
 	 * Close the keyboard.
 	 */
+	@SuppressWarnings("deprecation")
 	protected void closeKeyboard()
 	{
 		Context context = this.getContext();
 		InputMethodManager inputManager = (InputMethodManager)
 			context.getSystemService(Context.INPUT_METHOD_SERVICE);
+		int flags = InputMethodManager.HIDE_IMPLICIT_ONLY;
 
-		inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+		// Check the Android version. It needs to be done differently depending on
+		// the version due to deprecation
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+		{
+			View root = this.getRoot();
+			IBinder token = root.getWindowToken();
+
+			// Hide the keyboard
+			inputManager.hideSoftInputFromWindow(token, flags);
+		}
+		else
+		{
+			// Hide the keyboard
+			inputManager.toggleSoftInput(flags, 0);
+		}
 	}
 
 	/**
@@ -907,6 +923,9 @@ public class NacDialog
 	public void show()
 	{
 		AlertDialog dialog = this.getAlertDialog();
+		View root = this.getRoot();
+
+		// Show the dialog
 		if (dialog != null)
 		{
 			dialog.show();
@@ -916,13 +935,13 @@ public class NacDialog
 			this.mAlertDialog = this.getBuilder().show();
 		}
 
-		View root = this.getRoot();
-
+		// Iterate over each listener and call each one
 		for (OnShowListener listener : this.mShowListener)
 		{
 			listener.onShowDialog(this, root);
 		}
 
+		// Setup the dialog
 		this.setCanceledOrDismissed(false);
 		this.setupDialog();
 	}
@@ -930,13 +949,25 @@ public class NacDialog
 	/**
 	 * Show the keyboard.
 	 */
-	protected void showKeyboard()
+	@SuppressWarnings("deprecation")
+	protected void showKeyboard(View view)
 	{
 		Context context = this.getContext();
 		InputMethodManager inputManager = (InputMethodManager)
 			context.getSystemService(Context.INPUT_METHOD_SERVICE);
 
-		inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+		// Check the Android version. It needs to be done differently depending on
+		// the version due to deprecation
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+		{
+			// Show the keyboard
+			inputManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+		}
+		else
+		{
+			// Show the keyboard
+			inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+		}
 	}
 
 	/**

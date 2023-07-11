@@ -137,7 +137,7 @@ public class NacScheduler
 		Intent intent = new Intent(context, NacMainActivity.class);
 
 		// Build the pending intent
-		return PendingIntent.getActivity(context, (int)id, intent , flags);
+		return PendingIntent.getActivity(context, id, intent , flags);
 	}
 
 	/**

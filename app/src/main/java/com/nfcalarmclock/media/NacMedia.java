@@ -8,15 +8,12 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.MediaMetadata;
-
 import com.nfcalarmclock.file.NacFileTree;
 import com.nfcalarmclock.file.NacFile;
 import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.shared.NacSharedConstants;
-
 import java.lang.Long;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -221,7 +218,7 @@ public class NacMedia
 	@TargetApi(Build.VERSION_CODES.Q)
 	public static String getDuration(Context context, Uri uri)
 	{
-		if((Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) ||
+		if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) ||
 			!uri.toString().startsWith("content://"))
 		{
 			return "";
@@ -292,7 +289,7 @@ public class NacMedia
 	@TargetApi(Build.VERSION_CODES.Q)
 	public static long getRawDuration(Context context, Uri uri)
 	{
-		if((Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) ||
+		if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) ||
 			!uri.toString().startsWith("content://"))
 		{
 			return -1;
