@@ -26,6 +26,8 @@ import com.nfcalarmclock.util.NacUtility;
 
 import java.lang.System;
 import java.util.Calendar;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
 
@@ -278,6 +280,22 @@ public class NacActiveAlarmService
 	}
 
 	/**
+	 * Enable alias for the main activity so that tapping an NFC tag will open
+	 * the main activity.
+	 */
+	private void enableActivityAlias()
+	{
+		PackageManager pm = getPackageManager();
+		String packageName = getPackageName();
+		String aliasName = packageName + ".main.NacMainAliasActivity";
+		ComponentName componentName = new ComponentName(this, aliasName);
+
+		pm.setComponentEnabledSetting(componentName,
+			PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+			PackageManager.DONT_KILL_APP);
+	}
+
+	/**
 	 */
 	@SuppressWarnings("deprecation")
 	public void finish()
@@ -306,6 +324,8 @@ public class NacActiveAlarmService
 	}
 
 	/**
+	 * Get the alarm
+	 *
 	 * @return The alarm.
 	 */
 	private NacAlarm getAlarm()
@@ -314,21 +334,26 @@ public class NacActiveAlarmService
 	}
 
 	/**
+	 * Get the alarm repository
+	 *
 	 * @return The alarm repository.
 	 */
 	private NacAlarmRepository getAlarmRepository()
 	{
-		// TODO: See if this needs to be in here or can be localized
-		NacAlarmRepository repo = this.mAlarmRepository;
-
-		if (repo == null)
+		// Wait until the alarm repository is finally setup
+		while (this.mAlarmRepository == null)
 		{
-			Application app = getApplication();
-			repo = new NacAlarmRepository(app);
-			this.mAlarmRepository = repo;
+			try
+			{
+				TimeUnit.MILLISECONDS.sleep(100);
+			}
+			catch (InterruptedException e)
+			{
+			}
 		}
 
-		return repo;
+		// Return the repo
+		return this.mAlarmRepository;
 	}
 
 	/**
@@ -471,14 +496,10 @@ public class NacActiveAlarmService
 
 		// Enable the activity alias so that tapping an NFC tag will open the main
 		// activity
-		PackageManager pm = getPackageManager();
-		String packageName = getPackageName();
-		String aliasName = packageName + ".main.NacMainAliasActivity";
-		ComponentName componentName = new ComponentName(this, aliasName);
+		this.enableActivityAlias();
 
-		pm.setComponentEnabledSetting(componentName,
-			PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-			PackageManager.DONT_KILL_APP);
+		// Setup the alarm repository
+		this.setupAlarmRepositoryInBackground();
 	}
 
 	/**
@@ -619,6 +640,25 @@ public class NacActiveAlarmService
 	}
 
 	/**
+	 * Setup the alarm repository.
+	 */
+	private void setupAlarmRepository()
+	{
+		Application app = getApplication();
+		this.mAlarmRepository = new NacAlarmRepository(app);
+	}
+
+	/**
+	 * Setup the alarm repository in the background.
+	 */
+	private void setupAlarmRepositoryInBackground()
+	{
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+
+		executor.submit(this::setupAlarmRepository);
+	}
+
+	/**
 	 * Setup refreshing the main activity.
 	 */
 	private void setupRefreshMainActivity()
@@ -756,7 +796,7 @@ public class NacActiveAlarmService
 		if (alarm != null)
 		{
 			NacAlarmRepository repo = this.getAlarmRepository();
-			repo.update(alarm);
+			repo.doUpdate(alarm);
 		}
 	}
 

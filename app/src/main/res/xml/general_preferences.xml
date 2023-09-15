@@ -12,7 +12,7 @@
 			android:title="@string/auto_dismiss"
 			android:defaultValue="@integer/default_auto_dismiss_index"
 			app:allowDividerAbove="false"
-			app:allowDividerBelow="false"
+			app:allowDividerBelow="true"
 			/>
 	</com.nfcalarmclock.util.preference.NacPreferenceCategory>
 
@@ -41,6 +41,29 @@
 			android:summaryOn="@string/easy_snooze_true"
 			android:summaryOff="@string/easy_snooze_false"
 			android:defaultValue="@bool/default_easy_snooze"
+			app:allowDividerBelow="true"
+			/>
+
+	</com.nfcalarmclock.util.preference.NacPreferenceCategory>
+
+	<!-- Music -->
+	<com.nfcalarmclock.util.preference.NacPreferenceCategory
+		android:title="@string/music_category">
+
+		<Preference
+			android:summary="@string/shuffle_playlist_note"
+			android:selectable="false"
+			android:enabled="false"
+			app:iconSpaceReserved="false"
+			/>
+
+		<com.nfcalarmclock.util.preference.NacCheckboxPreference
+			android:key="@string/shuffle_playlist_key"
+			android:title="@string/shuffle_playlist"
+			android:summaryOn="@string/shuffle_playlist_true"
+			android:summaryOff="@string/shuffle_playlist_false"
+			android:defaultValue="@bool/default_shuffle_playlist"
+			app:allowDividerAbove="false"
 			app:allowDividerBelow="true"
 			/>
 

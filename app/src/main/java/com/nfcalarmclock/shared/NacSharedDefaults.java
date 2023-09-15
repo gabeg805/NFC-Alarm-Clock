@@ -397,6 +397,14 @@ public class NacSharedDefaults
 	}
 
 	/**
+	 * @return The permission to ignore battery optimization requested key.
+	 */
+	public boolean getWasIgnoreBatteryOptimizationPermissionRequested()
+	{
+		return this.getBoolean(R.bool.default_was_ignore_battery_optimization_permission_requested);
+	}
+
+	/**
 	 * @return The POST_NOTIFICATIONS permission requested key.
 	 */
 	public boolean getWasPostNotificationsPermissionRequested()

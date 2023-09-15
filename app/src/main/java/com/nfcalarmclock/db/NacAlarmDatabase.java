@@ -36,9 +36,6 @@ import java.util.List;
 /**
  * Store alarms in a Room database.
  */
-//@Database(version=1, exportSchema=true,
-//	entities={NacAlarm.class})
-//@TypeConverters({NacAlarmTypeConverters.class})
 @Database(version=8,
 		entities={NacAlarm.class, NacAlarmCreatedStatistic.class,
 		NacAlarmDeletedStatistic.class, NacAlarmDismissedStatistic.class,

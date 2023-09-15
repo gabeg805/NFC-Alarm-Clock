@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.Button;
 import androidx.fragment.app.DialogFragment;
-
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 

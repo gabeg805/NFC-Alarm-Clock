@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import com.nfcalarmclock.shared.NacSharedPreferences;
 
 /**
@@ -42,7 +41,7 @@ public class NacPostNotificationsPermission
 	{
 		// Permission not required for API level < 33, so indicate that the app
 		// already has the permission, for simplicity
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+		if (!isCorrectAndroidVersion())
 		{
 			return true;
 		}
@@ -57,12 +56,24 @@ public class NacPostNotificationsPermission
 	}
 
 	/**
+	 * Check if the correct Android version is being used.
+	 *
+	 * @return True if the correct Android version is being used, and False
+	 *         otherwise.
+	 */
+	public static boolean isCorrectAndroidVersion()
+	{
+		// Permission only required for API level >= 33
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU;
+	}
+
+	/**
 	 * Request the POST_NOTIFICATIONS permission.
 	 */
 	public static void requestPermission(Activity activity, int requestCode)
 	{
 		// Permission not required for API level < 33
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+		if (!isCorrectAndroidVersion())
 		{
 			return;
 		}
@@ -84,14 +95,11 @@ public class NacPostNotificationsPermission
 	public static boolean shouldRequestPermission(@NonNull Context context,
 		NacSharedPreferences shared)
 	{
-		// No need to request permission for API level < 33
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+		// Permission not required for API level < 33
+		if (!isCorrectAndroidVersion())
 		{
 			return false;
 		}
-
-		// Get the name of the permission
-		String permission = getPermissionName();
 
 		// The app does not already have the permission.
 		// The permission has not been requested yet.

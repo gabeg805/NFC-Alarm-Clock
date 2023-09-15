@@ -106,17 +106,20 @@
 	</style>
 
 	<style name="Widget.TextView.Primary">
-		<item name="android:textColor">?android:attr/textColorPrimary</item>
+		<!-- <item name="android:textColor">?android:attr/textColorPrimary</item> -->
+		<item name="android:textColor">@color/white</item>
 		<item name="android:textSize">@dimen/tsz_normal</item>
 	</style>
 
 	<style name="Widget.TextView.Secondary">
-		<item name="android:textColor">?android:attr/textColorSecondary</item>
+		<!-- <item name="android:textColor">?android:attr/textColorSecondary</item> -->
+		<item name="android:textColor">@color/white_dull</item>
 		<item name="android:textSize">@dimen/tsz_small</item>
 	</style>
 
 	<style name="Widget.TextView.Caption">
-		<item name="android:textColor">?android:attr/textColorSecondary</item>
+		<!-- <item name="android:textColor">?android:attr/textColorSecondary</item> -->
+		<item name="android:textColor">@color/white_dull</item>
 		<item name="android:textSize">@dimen/tsz_caption</item>
 	</style>
 

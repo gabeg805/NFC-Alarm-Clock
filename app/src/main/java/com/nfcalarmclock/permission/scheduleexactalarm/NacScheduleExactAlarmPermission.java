@@ -7,11 +7,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
-
 import com.nfcalarmclock.shared.NacSharedPreferences;
 
 /**
@@ -32,14 +30,13 @@ public class NacScheduleExactAlarmPermission
 	}
 
 	/**
-	 * Check if the app has the SCHEDULE_
+	 * Check if the app has the SCHEDULE_EXACT_ALARM permission.
 	 */
 	public static boolean hasPermission(@NonNull Context context)
 	{
-		// Permission not required for API level < 33, so indicate that the app
-		// already has the permission, for simplicity
-		if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
-			|| (Build.VERSION.SDK_INT > Build.VERSION_CODES.S_V2))
+		// Android version not correct so indicate it already has the
+		// permission, for simplicity
+		if (!isCorrectAndroidVersion())
 		{
 			return true;
 		}
@@ -54,12 +51,26 @@ public class NacScheduleExactAlarmPermission
 	}
 
 	/**
+	 * Check if the correct Android version is being used.
+	 *
+	 * @return True if the correct Android version is being used, and False
+	 *         otherwise.
+	 */
+	public static boolean isCorrectAndroidVersion()
+	{
+		// Permission only required for API level 31 <= x < 33
+		return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+			&& (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU);
+	}
+
+	/**
 	 * Request the SCHEDULE_EXACT_ALARM permission.
 	 */
 	public static void requestPermission(@NonNull Activity activity)
 	{
-		// Permission not required for API level < 31
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
+		// Android version not correct so indicate it should not request
+		// the permission, for simplicity
+		if (!isCorrectAndroidVersion())
 		{
 			return;
 		}
@@ -79,15 +90,12 @@ public class NacScheduleExactAlarmPermission
 	public static boolean shouldRequestPermission(@NonNull Context context,
 		NacSharedPreferences shared)
 	{
-		// Schedule Exact Alarms permission is only applicable to API 31 and 32.
-		if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
-			|| (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU))
+		// Android version not correct so indicate it should not request
+		// the permission, for simplicity
+		if (!isCorrectAndroidVersion())
 		{
 			return false;
 		}
-
-		// Get the name of the permission
-		String permission = getPermissionName();
 
 		// The app does not already have the permission.
 		// The permission has not been requested yet.

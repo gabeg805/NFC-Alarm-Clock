@@ -11,7 +11,6 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.nfc.Tag;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -21,7 +20,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -49,14 +47,10 @@ import com.nfcalarmclock.mediapicker.NacMediaActivity;
 import com.nfcalarmclock.nfc.NacNfc;
 import com.nfcalarmclock.nfc.NacNfcTag;
 import com.nfcalarmclock.nfc.NacScanNfcTagDialog;
-import com.nfcalarmclock.permission.postnotifications.NacPostNotificationsPermission;
-import com.nfcalarmclock.permission.postnotifications.NacPostNotificationsPermissionDialog;
-import com.nfcalarmclock.permission.scheduleexactalarm.NacScheduleExactAlarmPermission;
-import com.nfcalarmclock.permission.scheduleexactalarm.NacScheduleExactAlarmPermissionDialog;
+import com.nfcalarmclock.permission.NacPermissionRequestManager;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.ratemyapp.NacRateMyApp;
 import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog;
-import com.nfcalarmclock.scheduler.NacScheduler;
 import com.nfcalarmclock.settings.NacSettingsActivity;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
@@ -216,6 +210,11 @@ public class NacMainActivity
 	private NacNfcTag mNfcTag = null;
 
 	/**
+	 * Permission request manager, handles requesting permissions from the user.
+	 */
+	private NacPermissionRequestManager mPermissionRequestManager;
+
+	/**
 	 * Listener for when the floating action button is clicked.
 	 */
 	private final View.OnClickListener mFloatingActionButtonListener =
@@ -250,14 +249,17 @@ public class NacMainActivity
 				NacLastAlarmCardAction lastAction = getLastAlarmCardAction();
 				NacAlarm alarm = lastAction.getAlarm();
 
+				// Delete alarm (undo copy)
 				if (lastAction.wasCopy())
 				{
 					deleteAlarm(alarm);
 				}
+				// Restore alarm (undo delete)
 				else if (lastAction.wasDelete())
 				{
 					restoreAlarm(alarm);
 				}
+				// Delete alarm (undo restore)
 				else if (lastAction.wasRestore())
 				{
 					deleteAlarm(alarm);
@@ -292,14 +294,19 @@ public class NacMainActivity
 			return;
 		}
 
+		// Insert alarm
 		long id = this.getAlarmViewModel().insert(this, alarm);
 
+		// Set the ID of the alarm
 		if (alarm.getId() <= 0)
 		{
 			alarm.setId(id);
 		}
 
+		// Save the recently added alarm ID
 		this.getRecentlyAddedAlarmIds().add(id);
+
+		// Save the statistics
 		this.getAlarmStatisticRepository().insertCreated();
 	}
 
@@ -353,9 +360,13 @@ public class NacMainActivity
 	private void cleanupScanNfcTagDialog()
 	{
 		NacScanNfcTagDialog dialog = this.getScanNfcTagDialog();
+
 		if (dialog != null)
 		{
+			// Dismiss the alarm
 			dialog.getAlertDialog().dismiss();
+
+			// Cleanup the dialog
 			this.mScanNfcTagDialog = null;
 		}
 	}
@@ -371,6 +382,7 @@ public class NacMainActivity
 		{
 			try
 			{
+				// Unregister the receiver
 				unregisterReceiver(receiver);
 			}
 			catch (IllegalArgumentException e)
@@ -389,6 +401,7 @@ public class NacMainActivity
 
 		try
 		{
+			// Unregister the receiver
 			unregisterReceiver(receiver);
 		}
 		catch (IllegalArgumentException e)
@@ -435,6 +448,22 @@ public class NacMainActivity
 		this.getAlarmStatisticRepository().insertDeleted(alarm);
 		this.getLastAlarmCardAction().set(alarm, NacLastAlarmCardAction.Type.DELETE);
 		this.showSnackbar(message, action, this.mOnSwipeSnackbarActionListener);
+	}
+
+	/**
+	 * Disable the alias for the main activity so that tapping an NFC tag
+	 * DOES NOT open the main activity.
+	 */
+	private void disableActivityAlias()
+	{
+		PackageManager packageManager = getPackageManager();
+		String packageName = getPackageName();
+		String aliasName = packageName + ".main.NacMainAliasActivity";
+		ComponentName componentName = new ComponentName(this, aliasName);
+
+		packageManager.setComponentEnabledSetting(componentName,
+			PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+			PackageManager.DONT_KILL_APP);
 	}
 
 	/**
@@ -581,6 +610,16 @@ public class NacMainActivity
 	private NacNfcTag getNfcTag()
 	{
 		return this.mNfcTag;
+	}
+
+	/**
+	 * Get the permission request manager.
+	 *
+	 * @return The permission request manager.
+	 */
+	private NacPermissionRequestManager getPermissionRequestManager()
+	{
+		return this.mPermissionRequestManager;
 	}
 
 	/**
@@ -910,7 +949,10 @@ public class NacMainActivity
 		int size = adapter.getItemCount();
 
 		// Haptic feedback so that the user knows the action was received
-		card.getRoot().performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+		if (card != null)
+		{
+			card.getRoot().performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+		}
 
 		// Reset the view on the alarm that was swiped
 		adapter.notifyItemChanged(index);
@@ -939,7 +981,10 @@ public class NacMainActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_main);
 
+		// Get the intent passed into the app
 		Intent intent = getIntent();
+
+		// Set member variables
 		View root = findViewById(R.id.activity_main);
 		NacSharedPreferences shared = new NacSharedPreferences(this);
 		this.mToolbar = findViewById(R.id.tb_top_bar);
@@ -958,6 +1003,7 @@ public class NacMainActivity
 		this.mShutdownBroadcastReceiver = new NacShutdownBroadcastReceiver();
 		this.mSnackbar = new NacSnackbar(root);
 		this.mScanNfcTagDialog = null;
+		this.mPermissionRequestManager = new NacPermissionRequestManager(this);
 
 		// Setup
 		this.getSharedPreferences().editCardIsMeasured(false);
@@ -972,27 +1018,9 @@ public class NacMainActivity
 			this.setNfcTagIntent(intent);
 		}
 
-		// Show the dialog to request the permission to post notifications
-		if (NacPostNotificationsPermission.shouldRequestPermission(this, shared))
-		{
-			this.showPostNotificationPermissionDialog();
-		}
-
-		// Show the dialog to request the permission schedule an exact alarm
-		if (NacScheduleExactAlarmPermission.shouldRequestPermission(this, shared))
-		{
-			this.showScheduleExactAlarmPermissionDialog();
-		}
-
-		// Disable the activity alias so that tapping an NFC tag will not do anything
-		PackageManager pm = getPackageManager();
-		String packageName = getPackageName();
-		String aliasName = packageName + ".main.NacMainAliasActivity";
-		ComponentName componentName = new ComponentName(this, aliasName);
-
-		pm.setComponentEnabledSetting(componentName,
-			PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-			PackageManager.DONT_KILL_APP);
+		// Disable the activity alias so that tapping an NFC tag will NOT open
+		// the main activity
+		this.disableActivityAlias();
 	}
 
 	/**
@@ -1065,7 +1093,10 @@ public class NacMainActivity
 		NacCardHolder card = this.getAlarmCardAt(index);
 
 		// Haptic feedback so that the user knows the action was received
-		card.getRoot().performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+		if (card != null)
+		{
+			card.getRoot().performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+		}
 
 		// Set the index of the new alarm that will be created. This way, the
 		// the snackbar can undo any action on that alarm
@@ -1384,7 +1415,8 @@ public class NacMainActivity
 			NacAlarm a = adapter.getAlarmAt(i);
 
 			// Alarm will alarm soon and the card needs to be updated
-			if (a.willAlarmSoon() && card.shouldRefreshDismissView())
+			if ((a != null) && (card != null) && a.willAlarmSoon()
+				&& card.shouldRefreshDismissView())
 			{
 				// Refresh the alarm
 				adapter.notifyItemChanged(i);
@@ -1577,31 +1609,22 @@ public class NacMainActivity
 	private void setupInitialDialogToShow()
 	{
 		// Get the shared preferences
-		NacSharedPreferences shared = this.getSharedPreferences();
+		NacPermissionRequestManager manager = this.getPermissionRequestManager();
 
-		// Do not show any of these dialogs if requesting a permission
-		if (NacPostNotificationsPermission.shouldRequestPermission(this, shared))
+		// Request permissions
+		if (manager.count() > 0)
 		{
-			return;
+			manager.requestPermissions(this);
 		}
-
-		// Do not show any of these dialogs if requesting a permission
-		if (NacScheduleExactAlarmPermission.shouldRequestPermission(this, shared))
-		{
-			return;
-		}
-
 		// Show the What's New dialog, but do not show anything else after it is
 		// shown
-		if (this.setupWhatsNewDialog())
+		else if (this.setupWhatsNewDialog())
 		{
-			return;
 		}
 		// Show the Google in-app rating dialog, but do not show anything else after
 		// it is shown
 		else if (this.setupGoogleRatingDialog())
 		{
-			return;
 		}
 	}
 
@@ -1835,6 +1858,44 @@ public class NacMainActivity
 		dialog.show(getSupportFragmentManager(), NacGraduallyIncreaseVolumeDialog.TAG);
 	}
 
+	///**
+	// * Show the dialog to ignore battery optimizations.
+	// */
+	//public void showIgnoreBatteryOptimizationPermissionDialog()
+	//{
+	//	// Create the dialog
+	//	NacIgnoreBatteryOptimizationPermissionDialog dialog =
+	//		new NacIgnoreBatteryOptimizationPermissionDialog();
+
+	//	// Handle the cases where the permission request is accepted/canceled
+	//	dialog.setOnPermissionRequestListener(
+	//		new NacIgnoreBatteryOptimizationPermissionDialog.OnPermissionRequestListener()
+	//		{
+
+	//			/**
+	//			 * Called when the permission request is accepted.
+	//			 */
+	//			public void onPermissionRequestAccepted(String permission)
+	//			{
+	//				NacIgnoreBatteryOptimizationPermission.requestPermission(NacMainActivity.this);
+	//			}
+
+	//			/**
+	//			 * Called when the permission request was canceled.
+	//			 */
+	//			public void onPermissionRequestCanceled(String permission)
+	//			{
+	//				// Setup the initial dialogs, if any, that need to be shown
+	//				setupInitialDialogToShow();
+	//			}
+
+	//		});
+
+	//	// Show the dialog
+	//	dialog.show(getSupportFragmentManager(),
+	//		NacIgnoreBatteryOptimizationPermissionDialog.TAG);
+	//}
+
 	/**
 	 * Show a snackbar for the next alarm that will run.
 	 */
@@ -1880,46 +1941,46 @@ public class NacMainActivity
 		NacUtility.quickToast(this, message);
 	}
 
-	/**
-	 * Show the POST_NOTIFICATIONS permission dialog.
-	 */
-	@RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-	private void showPostNotificationPermissionDialog()
-	{
-		// Create the dialog
-		NacPostNotificationsPermissionDialog dialog =
-			new NacPostNotificationsPermissionDialog();
+	///**
+	// * Show the POST_NOTIFICATIONS permission dialog.
+	// */
+	//@RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+	//private void showPostNotificationPermissionDialog()
+	//{
+	//	// Create the dialog
+	//	NacPostNotificationsPermissionDialog dialog =
+	//		new NacPostNotificationsPermissionDialog();
 
-		// Handle the cases where the permission request is accepted/canceled
-		dialog.setOnPermissionRequestListener(
-			new NacPostNotificationsPermissionDialog.OnPermissionRequestListener()
-		{
+	//	// Handle the cases where the permission request is accepted/canceled
+	//	dialog.setOnPermissionRequestListener(
+	//		new NacPostNotificationsPermissionDialog.OnPermissionRequestListener()
+	//	{
 
-			/**
-			 * Called when the permission request is accepted.
-			 */
-			@Override
-			public void onPermissionRequestAccepted(String permission)
-			{
-				NacPostNotificationsPermission.requestPermission(NacMainActivity.this, 69);
-			}
+	//		/**
+	//		 * Called when the permission request is accepted.
+	//		 */
+	//		@Override
+	//		public void onPermissionRequestAccepted(String permission)
+	//		{
+	//			NacPostNotificationsPermission.requestPermission(NacMainActivity.this, 69);
+	//		}
 
-			/**
-			 * Called when the permission request is canceled.
-			 */
-			@Override
-			public void onPermissionRequestCanceled(String permission)
-			{
-				// Setup the initial dialogs, if any, that need to be shown
-				setupInitialDialogToShow();
-			}
+	//		/**
+	//		 * Called when the permission request is canceled.
+	//		 */
+	//		@Override
+	//		public void onPermissionRequestCanceled(String permission)
+	//		{
+	//			// Setup the initial dialogs, if any, that need to be shown
+	//			setupInitialDialogToShow();
+	//		}
 
-		});
+	//	});
 
-		// Show the dialog
-		dialog.show(getSupportFragmentManager(),
-			NacPostNotificationsPermissionDialog.TAG);
-	}
+	//	// Show the dialog
+	//	dialog.show(getSupportFragmentManager(),
+	//		NacPostNotificationsPermissionDialog.TAG);
+	//}
 
 	/**
 	 * Show the restrict volume dialog.
@@ -1935,44 +1996,44 @@ public class NacMainActivity
 		dialog.show(getSupportFragmentManager(), NacRestrictVolumeDialog.TAG);
 	}
 
-	/**
-	 * Show the dialog.
-	 */
-	@RequiresApi(api = Build.VERSION_CODES.S)
-	public void showScheduleExactAlarmPermissionDialog()
-	{
-		// Create the dialog
-		NacScheduleExactAlarmPermissionDialog dialog =
-			new NacScheduleExactAlarmPermissionDialog();
+	///**
+	// * Show the dialog to request the schedule exact alarm permission.
+	// */
+	//@RequiresApi(api = Build.VERSION_CODES.S)
+	//public void showScheduleExactAlarmPermissionDialog()
+	//{
+	//	// Create the dialog
+	//	NacScheduleExactAlarmPermissionDialog dialog =
+	//		new NacScheduleExactAlarmPermissionDialog();
 
-		// Handle the cases where the permission request is accepted/canceled
-		dialog.setOnPermissionRequestListener(
-			new NacScheduleExactAlarmPermissionDialog.OnPermissionRequestListener()
-		{
+	//	// Handle the cases where the permission request is accepted/canceled
+	//	dialog.setOnPermissionRequestListener(
+	//		new NacScheduleExactAlarmPermissionDialog.OnPermissionRequestListener()
+	//	{
 
-			/**
-			 * Called when the permission request is accepted.
-			 */
-			public void onPermissionRequestAccepted(String permission)
-			{
-				NacScheduleExactAlarmPermission.requestPermission(NacMainActivity.this);
-			}
+	//		/**
+	//		 * Called when the permission request is accepted.
+	//		 */
+	//		public void onPermissionRequestAccepted(String permission)
+	//		{
+	//			NacScheduleExactAlarmPermission.requestPermission(NacMainActivity.this);
+	//		}
 
-			/**
-			 * Called when the permission request was canceled.
-			 */
-			public void onPermissionRequestCanceled(String permission)
-			{
-				// Setup the initial dialogs, if any, that need to be shown
-				setupInitialDialogToShow();
-			}
+	//		/**
+	//		 * Called when the permission request was canceled.
+	//		 */
+	//		public void onPermissionRequestCanceled(String permission)
+	//		{
+	//			// Setup the initial dialogs, if any, that need to be shown
+	//			setupInitialDialogToShow();
+	//		}
 
-		});
+	//	});
 
-		// Show the dialog
-		dialog.show(getSupportFragmentManager(),
-			NacScheduleExactAlarmPermissionDialog.TAG);
-	}
+	//	// Show the dialog
+	//	dialog.show(getSupportFragmentManager(),
+	//		NacScheduleExactAlarmPermissionDialog.TAG);
+	//}
 
 	/**
 	 * @see #showSnackbar(String, String, View.OnClickListener)

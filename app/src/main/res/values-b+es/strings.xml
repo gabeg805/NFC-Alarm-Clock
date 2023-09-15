@@ -4,8 +4,9 @@
 	<!-- App -->
 	<string name="app_name">NFC Despertador</string>
 	<string name="app_version">@string/versionName</string>
-	<string name="permission_schedule_exact_alarm_request">Esta app no tiene el permiso <b>Programar Alarma Exacta</b> activada.\n\nSin este permiso, las alarmas no podrán ejecutarse cuando la app no esté enfocada.\n\n¿Le gustaría continuar a la siguiente pantalla para habilitar este permiso?</string>
-	<string name="permission_post_notifications_request">Esta aplicación no tiene habilitado el permiso <b>Notificaciones</b>.\n\nLas alarmas no podrán ejecutarse si la aplicación no está activa. Este es un efecto secundario de las políticas de seguridad introducidas en <b>Android 13</b>, que benefician a los usuarios, pero pueden restringir aplicaciones en instancias como esta.\n\n¿Desea continuar habilitando este permiso?</string>
+	<string name="permission_ignore_battery_optimization_request">Es posible que las alarmas no se ejecuten si la aplicación no se ha utilizado durante un tiempo.\n\n<b>Nota:</b> Esto depende del dispositivo que tengas y es posible que en realidad no sea necesario.\n\n¿Quieres desactivar la optimización de la batería?</string>
+	<string name="permission_post_notifications_request">Las alarmas no podrán ejecutarse cuando la aplicación no esté enfocada.\n\n<b>Nota:</b> Este es un efecto secundario de las políticas de seguridad introducidas en <b>Android 13</b>, que benefician a los usuarios, pero pueden restringir aplicaciones en instancias como esta.\n\n¿Desea continuar habilitando este permiso?</string>
+	<string name="permission_schedule_exact_alarm_request">Las alarmas no podrán ejecutarse cuando la aplicación no esté enfocada.\n\n¿Le gustaría continuar a la siguiente pantalla para habilitar este permiso?</string>
 
 
 	<!-- What's new -->
@@ -40,6 +41,8 @@
 	<string name="action_alarm_dismiss_early">Descartar temprano</string>
 	<string name="action_alarm_copy">Copear</string>
 	<string name="action_alarm_delete">Borrar</string>
+	<string name="action_yes">Si</string>
+	<string name="action_no">No</string>
 	<string name="action_ok">OK</string>
 	<string name="action_cancel">Cancelar</string>
 	<string name="action_clear">Despejar</string>
@@ -52,6 +55,7 @@
 	<string name="action_undo">Deshacer</string>
 	<string name="action_browse">Navegar</string>
 	<string name="action_previous_folder">Carpeta anterior</string>
+	<string name="action_reset">Reiniciar</string>
 
 
 
@@ -61,7 +65,7 @@
 	<string name="message_nfc_request">Por favor, habilite la NFC para descartar la alarma</string>
 	<string name="message_nfc_required">NFC requerido</string>
 	<string name="message_nfc_optional">NFC opcional</string>
-	<string name="message_scan_nfc_tag">Escanee una etiqueta de NFC única (experimental), o usa cualquier etiqueta para descartar esta alarma cuando suena.</string>
+	<string name="message_scan_nfc_tag">Escanee una etiqueta de NFC única, o usa cualquier etiqueta para descartar esta alarma cuando suena.</string>
 	<string name="message_show_nfc_tag_id">Id:</string>
 	<string name="message_any_nfc_tag_id">Cualquier etiqueta de NFC aceptada</string>
 	<string name="message_no_alarms_scheduled">No hay alarmas programadas</string>
@@ -74,8 +78,10 @@
 	<string name="message_alarm_restore">Alarma restaurada</string>
 	<string name="message_alarm_dismiss">Alarma descartada</string>
 	<string name="message_alarm_snooze">Alarma posponada</string>
-	<string name="message_statistics_started_on">Las estad?sticas empezaron en</string>
+	<string name="message_statistics_started_on">Las estadísticas empezaron en</string>
 	<string name="message_bullet">\u25BA</string>
+	<string name="message_required">Requerido</string>
+	<string name="message_optional">Opcional</string>
 
 
 
@@ -95,6 +101,11 @@
 
 
 
+	<!-- Words -->
+	<string name="word_of">de</string>
+
+
+
 	<!-- Titles -->
 	<string name="title_alarm_activity">Desactivar Alarma</string>
 	<string name="title_rate_my_app">Califica esta app</string>
@@ -102,7 +113,7 @@
 	<string name="title_name">Nombre de la alarma</string>
 	<string name="title_days">Seleccione los días</string>
 	<string name="title_color">Elige un color</string>
-	<string name="title_audio_option">Seleccione una opci?n de alarma</string>
+	<string name="title_audio_option">Seleccione una opción de alarma</string>
 	<string name="title_audio_source">Seleccione una fuente de audio</string>
 	<string name="title_dismiss_early">Seleccione opciones pare descartar temprano</string>
 	<string name="title_gradually_increase_volume">Elige aumentar gradualmente el volumen</string>
@@ -121,6 +132,9 @@
 	<string name="title_deleted_alarms">Alarmas borradas</string>
 	<string name="title_current_alarms">Actual</string>
 	<string name="title_whats_new">Qué hay de Nuevo</string>
+	<string name="title_request_permission_ignore_battery_optimization">¿Desactivar la optimización de la batería?</string>
+	<string name="title_request_permission_post_notifications">¿Permitir notificaciones?</string>
+	<string name="title_request_permission_schedule_exact_alarm">¿Permitir programar alarmas?</string>
 
 
 
@@ -168,6 +182,9 @@
 	<string name="cd_file_entry">Tipo de entrada que se muestra, como un archivo o una carpeta.</string>
 	<string name="cd_color_selector">Seleccione un color para el selector de color.</string>
 	<string name="cd_shader_selector">Seleccione un tono para el selector de color.</string>
+	<string name="cd_request_permission_ignore_battery_optimization">Solicitud para desactivar la optimización de la batería.</string>
+	<string name="cd_request_permission_post_notifications">Solicitud para publicar notificaciones.</string>
+	<string name="cd_request_permission_schedule_exact_alarm">Solicitud para programar alarmas exactas.</string>
 
 
 
@@ -222,11 +239,14 @@
 	<string name="misc_setting">Miscelaneo</string>
 	<string name="misc_setting_summary">Agrega caracteristicas geniales</string>
 
-	<string name="stats_setting">Estad?sticas</string>
-	<string name="stats_setting_summary">Mira cu?nto tiempo has posponada sus alarmas, y m?s</string>
-
 	<string name="about_setting">Acerca</string>
 	<string name="about_setting_summary">Informacion acerca de esta aplicacion</string>
+
+	<string name="stats_setting">Estadísticas</string>
+	<string name="stats_setting_summary">Mira cuanto tiempo has posponada sus alarmas, y más</string>
+
+	<string name="support_setting">Apoyo</string>
+	<string name="support_setting_summary">Apoyar el desarrollo de la aplicación</string>
 
 
 
@@ -373,7 +393,7 @@
 	<!-- ********************** -->
 
 	<!-- Categories -->
-	<string name="music_category">Música</string>
+	<string name="music_category">Opciones de música</string>
 
 
 	<!-- Shuffle playlist -->
@@ -429,42 +449,52 @@
 
 	<!-- NFC permission -->
 	<string name="about_nfc">NFC</string>
-	<string name="about_nfc_summary">(Opcional) Permite a la app detectar las etiquetas de los compos de la communicacion cercana.</string>
+	<string name="about_nfc_summary">Detectar las etiquetas NFC para descartar una alarma.</string>
 
 	
 	<!-- READ_EXTERNAL_STORAGE permission -->
 	<string name="about_storage">Almacenamiento</string>
-	<string name="about_storage_summary">(Opcional) Leer la música que esta en el telefono.</string>
+	<string name="about_storage_summary">Lea la música almacenada en su dispositivo.</string>
 
 
 	<!-- VIBRATE permission -->
 	<string name="about_vibrate">@string/alarm_vibrate</string>
-	<string name="about_vibrate_summary">(Opcional) Permite que la app vibre el telefono.</string>
-
-
-	<!-- SET_ALARM permission -->
-	<string name="about_set_alarm">Ajustar alarma</string>
-	<string name="about_set_alarm_summary">(Requerido) Permite que la app establesqua una alarma.</string>
-
-
-	<!-- RECEIVE_BOOT_COMPLETED permission -->
-	<string name="about_boot">Ejecutarse al inicio</string>
-	<string name="about_boot_summary">(Requerido) Restaurar alarmas cuando el telefono este encendido. Android va eliminar alarmas cuando el telefono se apage.</string>
-
-
-	<!-- WAKE_LOCK -->
-	<string name="about_wakelock">Wakelock</string>
-	<string name="about_wakelock_summary">(Requerido) Evitar que el dispositivo entre en estado de inactividad para que las alarmas continúan de sonar.</string>
-
-
-	<!-- USE_FULL_SCREEN_INTENT permission -->
-	<string name="about_full_screen_intent">Pantalla completa</string>
-	<string name="about_full_screen_intent_summary">(Requerido) Permite que la app usa la pantalla completa cuando una alarma esta activada.</string>
+	<string name="about_vibrate_summary">Haga vibrar su dispositivo cuando se active una alarma.</string>
 
 
 	<!-- FOREGROUND_SERVICE permission -->
 	<string name="about_foreground_service">Servicio en primer plano</string>
-	<string name="about_foreground_service_summary">(Requerido) Permite que la app esta en primer plano cuando una alarma esta activada.</string>
+	<string name="about_foreground_service_summary">Ejecute un servicio en primer plano que reproducirá audio, hará vibrar su dispositivo, etc. cuando se active una alarma.</string>
+
+
+	<!-- USE_FULL_SCREEN_INTENT permission -->
+	<string name="about_full_screen_intent">Pantalla completa</string>
+	<string name="about_full_screen_intent_summary">Utilice la pantalla completa cuando se active una alarma.</string>
+
+
+	<!-- Schedule/use exact alarm permission -->
+	<string name="about_schedule_alarm">Programe alarmas exactas</string>
+	<string name="about_schedule_alarm_summary">Programe alarmas exactas.</string>
+
+
+	<!-- SET_ALARM permission -->
+	<string name="about_set_alarm">Programar una alarma</string>
+	<string name="about_set_alarm_summary">Configure una alarma desde una fuente externa, como el Asistente de Google.</string>
+
+
+	<!-- RECEIVE_BOOT_COMPLETED permission -->
+	<string name="about_boot">Ejecutarse al inicio</string>
+	<string name="about_boot_summary">Restaurar alarmas cuando el telefono este encendido. Android va eliminar alarmas cuando el dispositivo se apage.</string>
+
+
+	<!-- Post notifications permission -->
+	<string name="about_post_notifications">Mostrar notificaciones</string>
+	<string name="about_post_notifications_summary">Muestra una notificación cuando se activa una alarma que evitará que tu dispositivo ponga la aplicación en suspensión y apague la alarma por sí solo.</string>
+
+
+	<!-- WAKE_LOCK -->
+	<string name="about_wakelock">Wakelock</string>
+	<string name="about_wakelock_summary">Evitar que el dispositivo entre en estado de inactividad para que las alarmas continúan de sonar.</string>
 
 
 	<!-- Spotify -->

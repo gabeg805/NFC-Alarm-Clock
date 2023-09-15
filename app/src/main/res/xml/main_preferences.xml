@@ -1,40 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
-	xmlns:android="http://schemas.android.com/apk/res/android">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
 
+	<!-- General -->
 	<Preference
 		android:key="@string/general_setting_key"
 		android:title="@string/general_setting"
 		android:summary="@string/general_setting_summary"
-		android:fragment="com.nfcalarmclock.settings.NacGeneralSettingsFragment"
 		/>
 
+	<!-- Appearance -->
 	<Preference
 		android:key="@string/appearance_setting_key"
 		android:title="@string/appearance_setting"
 		android:summary="@string/appearance_setting_summary"
-		android:fragment="com.nfcalarmclock.settings.NacAppearanceSettingsFragment"
 		/>
 
-	<Preference
-		android:key="@string/misc_setting_key"
-		android:title="@string/misc_setting"
-		android:summary="@string/misc_setting_summary"
-		android:fragment="com.nfcalarmclock.settings.NacMiscellaneousSettingsFragment"
-		/>
-
+	<!-- Statistics -->
 	<Preference
 		android:key="@string/stats_setting_key"
 		android:title="@string/stats_setting"
 		android:summary="@string/stats_setting_summary"
-		android:fragment="com.nfcalarmclock.settings.NacAboutSettingsFragment"
 		/>
 
+	<!-- About -->
 	<Preference
 		android:key="@string/about_setting_key"
 		android:title="@string/about_setting"
 		android:summary="@string/about_setting_summary"
-		android:fragment="com.nfcalarmclock.settings.NacAboutSettingsFragment"
+		app:allowDividerAbove="true"
+		/>
+
+	<!-- Support -->
+	<Preference
+		android:key="@string/support_setting_key"
+		android:title="@string/support_setting"
+		android:summary="@string/support_setting_summary"
 		/>
 
 </PreferenceScreen>

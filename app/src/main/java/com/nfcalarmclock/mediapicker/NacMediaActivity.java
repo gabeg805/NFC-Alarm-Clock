@@ -113,6 +113,7 @@ public class NacMediaActivity
 				&& !NacReadMediaAudioPermission.hasPermission(this))
 		{
 			// Request permission to read audio files
+			// TODO: Stack overflow error here
 			NacReadMediaAudioPermission.requestPermission(this, NacMusicFragment.READ_REQUEST_CODE);
 		}
 

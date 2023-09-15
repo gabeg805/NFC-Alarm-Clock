@@ -7,10 +7,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.button.MaterialButton;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.statistics.NacAlarmStatisticRepository;
+import com.nfcalarmclock.util.NacUtility;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -27,10 +29,17 @@ public class NacStatisticsSettingsFragment
 {
 
 	/**
+	 * Alarm statistics repository.
+	 */
+	private NacAlarmStatisticRepository mAlarmStatisticsRepository;
+
+	/**
 	 */
 	public NacStatisticsSettingsFragment()
 	{
 		super(R.layout.frg_statistics);
+
+		this.mAlarmStatisticsRepository = null;
 	}
 
 	/**
@@ -42,16 +51,51 @@ public class NacStatisticsSettingsFragment
 
 		Context context = getContext();
 		NacAlarmStatisticRepository repo = new NacAlarmStatisticRepository(context);
-		NacSharedPreferences shared = new NacSharedPreferences(context);
+		this.mAlarmStatisticsRepository = repo;
 
+		// Setup all the statistics
 		this.setupDismissedAlarms(repo, root);
 		this.setupSnoozedAlarms(repo, root);
 		this.setupMissedAlarms(repo, root);
 		this.setupCreatedAlarms(repo, root);
 		this.setupDeletedAlarms(repo, root);
 		this.setupCurrentAlarms(repo, root);
-		this.setupStartedOnDate(repo, shared, root);
-		this.setupThemeColor(shared, root);
+		this.setupStartedOnDate(repo, root);
+
+		// Setup the reset button
+		this.setupResetButton(root);
+
+		// Setup all the views that need to use the theme color
+		this.setupViewsWithThemeColor(root);
+	}
+
+	/**
+	 * Get the alarm statistics repository.
+	 *
+	 * @return The alarm statistics repository.
+	 */
+	private NacAlarmStatisticRepository getAlarmStatisticsRepository()
+	{
+		return this.mAlarmStatisticsRepository;
+	}
+
+	/**
+	 * Reset statistics.
+	 */
+	private void resetStatistics(View view)
+	{
+		View root = getView();
+		NacAlarmStatisticRepository repo = this.getAlarmStatisticsRepository();
+
+		// Delete all statistics
+		repo.doDeleteAllCreated();
+		repo.doDeleteAllDeleted();
+		repo.doDeleteAllDismissed();
+		repo.doDeleteAllMissed();
+		repo.doDeleteAllSnoozed();
+
+		// Change the text of when statistics started
+		this.setupStartedOnDate(repo, root);
 	}
 
 	/**
@@ -121,6 +165,16 @@ public class NacStatisticsSettingsFragment
 	}
 
 	/**
+	 * Setup the reset button.
+	 */
+	private void setupResetButton(View root)
+	{
+		MaterialButton resetButton = root.findViewById(R.id.reset_button);
+
+		resetButton.setOnClickListener(this::resetStatistics);
+	}
+
+	/**
 	 * Setup the snoozed alarm statistics.
 	 */
 	private void setupSnoozedAlarms(NacAlarmStatisticRepository repo, View root)
@@ -140,33 +194,63 @@ public class NacStatisticsSettingsFragment
 	 * Setup the date that statistics started on.
 	 */
 	private void setupStartedOnDate(NacAlarmStatisticRepository repo,
-		NacSharedPreferences shared, View root)
+		View root)
 	{
-		Locale locale = Locale.getDefault();
-		NacSharedConstants cons = shared.getConstants();
-		String startedOnText = cons.getMessageStatisticsStartedOn();
+		Context context = getContext();
+		NacSharedConstants cons = new NacSharedConstants(context);
+		long timestamp = repo.getCreatedFirstTimestamp();
+		String text;
 
-		Date dateStarted = repo.getCreatedFirstDate();
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm z", locale);
-		String dateText = dateFormat.format(dateStarted);
+		// Timestamp is a valid date
+		if (timestamp > 0)
+		{
+			Locale locale = Locale.getDefault();
+			String startedOnMessage = cons.getMessageStatisticsStartedOn();
 
-		String text = String.format(locale, "%1$s %2$s", startedOnText, dateText);
+			// Determine the format the date should be shown in
+			Date dateStarted = new Date(timestamp);
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm z", locale);
+			String dateText = dateFormat.format(dateStarted);
 
+			// Set the text that will be shown in the textview
+			text = String.format(locale, "%1$s %2$s", startedOnMessage, dateText);
+		}
+		// Empty or invalid timestamp, probably because statistics were reset
+		else
+		{
+			// Set the text that will be shown in the textview
+			text = "";
+		}
+
+		// Setup the textview that will show the date statistics were started
+		// on, or that there were none found
 		TextView textview = root.findViewById(R.id.statistics_started_on_date);
+
 		textview.setText(text);
 	}
 
 	/**
-	 * Setup theme color.
+	 * Setup views in the fragment so that they are using the correct theme color.
 	 */
-	private void setupThemeColor(NacSharedPreferences shared, View root)
+	private void setupViewsWithThemeColor(View root)
 	{
-		int themeColor = shared.getThemeColor();
+		Context context = getContext();
+		NacSharedPreferences shared = new NacSharedPreferences(context);
+
+		// Get the views
 		View divider1 = root.findViewById(R.id.divider1);
 		View divider2 = root.findViewById(R.id.divider2);
+		MaterialButton resetButton = root.findViewById(R.id.reset_button);
 
+		// Get the theme color
+		int themeColor = shared.getThemeColor();
+
+		// Set the color of the dividers to the theme color
 		divider1.setBackgroundColor(themeColor);
 		divider2.setBackgroundColor(themeColor);
+
+		// Set the color of the reset button to the theme color
+		resetButton.setBackgroundColor(themeColor);
 	}
 
 }

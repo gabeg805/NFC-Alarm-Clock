@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:fillViewport="true">
@@ -212,12 +213,25 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="@dimen/normal"
-			android:layout_alignParentBottom="true"
+			android:layout_marginBottom="@dimen/normal"
+			android:layout_above="@id/reset_button"
 			android:gravity="center_horizontal"
 			android:layout_centerHorizontal="true"
 			android:textSize="@dimen/tsz_small"
 			android:textStyle="italic"
 			android:text=""
+			/>
+
+		<!-- Reset button -->
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/reset_button"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentBottom="true"
+			android:layout_centerHorizontal="true"
+			android:backgroundTint="?attr/colorAccent"
+			app:cornerRadius="@dimen/tiny"
+			android:text="@string/action_reset"
 			/>
 
 	</RelativeLayout>

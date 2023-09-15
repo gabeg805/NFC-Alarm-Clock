@@ -30,7 +30,7 @@
 	<com.nfcalarmclock.util.preference.NacPreferenceCategory
 		android:title="@string/permissions_category">
 
-		<Preference
+		<com.nfcalarmclock.permission.NacOptionalPermissionPreference
 			android:key="@string/about_nfc_key"
 			android:title="@string/about_nfc"
 			android:summary="@string/about_nfc_summary"
@@ -39,7 +39,7 @@
 			app:allowDividerBelow="false"
 			/>
 
-		<Preference
+		<com.nfcalarmclock.permission.NacOptionalPermissionPreference
 			android:key="@string/about_storage_key"
 			android:title="@string/about_storage"
 			android:summary="@string/about_storage_summary"
@@ -47,7 +47,7 @@
 			app:allowDividerBelow="false"
 			/>
 
-		<Preference
+		<com.nfcalarmclock.permission.NacOptionalPermissionPreference
 			android:key="@string/about_vibrate_key"
 			android:title="@string/about_vibrate"
 			android:summary="@string/about_vibrate_summary"
@@ -55,31 +55,15 @@
 			app:allowDividerBelow="false"
 			/>
 
-		<Preference
-			android:key="@string/about_set_alarm_key"
-			android:title="@string/about_set_alarm"
-			android:summary="@string/about_set_alarm_summary"
+		<com.nfcalarmclock.permission.NacRequiredPermissionPreference
+			android:key="@string/about_foreground_service_key"
+			android:title="@string/about_foreground_service"
+			android:summary="@string/about_foreground_service_summary"
 			app:iconSpaceReserved="false"
 			app:allowDividerBelow="false"
 			/>
 
-		<Preference
-			android:key="@string/about_boot_key"
-			android:title="@string/about_boot"
-			android:summary="@string/about_boot_summary"
-			app:iconSpaceReserved="false"
-			app:allowDividerBelow="false"
-			/>
-
-		<Preference
-			android:key="@string/about_wakelock_key"
-			android:title="@string/about_wakelock"
-			android:summary="@string/about_wakelock_summary"
-			app:iconSpaceReserved="false"
-			app:allowDividerBelow="false"
-			/>
-
-		<Preference
+		<com.nfcalarmclock.permission.NacRequiredPermissionPreference
 			android:key="@string/about_full_screen_intent_key"
 			android:title="@string/about_full_screen_intent"
 			android:summary="@string/about_full_screen_intent_summary"
@@ -87,10 +71,42 @@
 			app:allowDividerBelow="false"
 			/>
 
-		<Preference
-			android:key="@string/about_foreground_service_key"
-			android:title="@string/about_foreground_service"
-			android:summary="@string/about_foreground_service_summary"
+		<com.nfcalarmclock.permission.NacRequiredPermissionPreference
+			android:key="@string/about_schedule_alarm_key"
+			android:title="@string/about_schedule_alarm"
+			android:summary="@string/about_schedule_alarm_summary"
+			app:iconSpaceReserved="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.permission.NacRequiredPermissionPreference
+			android:key="@string/about_set_alarm_key"
+			android:title="@string/about_set_alarm"
+			android:summary="@string/about_set_alarm_summary"
+			app:iconSpaceReserved="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.permission.NacRequiredPermissionPreference
+			android:key="@string/about_post_notifications_key"
+			android:title="@string/about_post_notifications"
+			android:summary="@string/about_post_notifications_summary"
+			app:iconSpaceReserved="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.permission.NacRequiredPermissionPreference
+			android:key="@string/about_boot_key"
+			android:title="@string/about_boot"
+			android:summary="@string/about_boot_summary"
+			app:iconSpaceReserved="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.permission.NacRequiredPermissionPreference
+			android:key="@string/about_wakelock_key"
+			android:title="@string/about_wakelock"
+			android:summary="@string/about_wakelock_summary"
 			app:iconSpaceReserved="false"
 			app:allowDividerBelow="true"
 			/>

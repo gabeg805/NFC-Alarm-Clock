@@ -176,7 +176,7 @@ public class NacMedia
 		}
 		// Something happened. Last time this occured, it said
 		// "Volume external_primary not found"
-		catch (IllegalArgumentException e)
+		catch (IllegalArgumentException | SecurityException e)
 		{
 			e.printStackTrace();
 			return value;

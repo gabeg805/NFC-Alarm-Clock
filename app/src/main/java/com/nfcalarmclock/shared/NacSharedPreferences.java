@@ -469,6 +469,16 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * Edit whether the permission to ignore battery optimization was requested.
+	 */
+	public void editWasIgnoreBatteryOptimizationPermissionRequested(boolean requested)
+	{
+		String key = this.getKeys().getWasIgnoreBatteryOptimizationPermissionRequested();
+
+		this.saveBoolean(key, requested, false);
+	}
+
+	/**
 	 * Edit whether the POST_NOTIFICATIONS permission was requested.
 	 */
 	public void editWasPostNotificationsPermissionRequested(boolean requested)
@@ -1295,6 +1305,20 @@ public class NacSharedPreferences
 		int value = this.getDefaults().getVolume();
 
 		return this.getInt(key, value);
+	}
+
+	/**
+	 * Get whether the permission to ignore battery optimization was requested.
+	 *
+	 * @return Whether the permission to ignore battery optimization was
+	 *         requested.
+	 */
+	public boolean getWasIgnoreBatteryOptimizationPermissionRequested()
+	{
+		String key = this.getKeys().getWasIgnoreBatteryOptimizationPermissionRequested();
+		boolean value = this.getDefaults().getWasIgnoreBatteryOptimizationPermissionRequested();
+
+		return this.getBoolean(key, value);
 	}
 
 	/**

@@ -15,6 +15,7 @@ import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedKeys;
 import com.nfcalarmclock.statistics.NacStatisticsSettingsFragment;
+import com.nfcalarmclock.util.NacUtility;
 
 /**
  * Display all the configurable settings for the app.
@@ -103,20 +104,23 @@ public class NacSettingsActivity
 			NacSharedKeys keys = this.getSharedKeys();
 			Preference appearance = findPreference(keys.getAppearance());
 			Preference general = findPreference(keys.getGeneral());
-			Preference miscellaneous = findPreference(keys.getMiscellaneous());
-			Preference about = findPreference(keys.getAbout());
 			Preference statistics = findPreference(keys.getStatistics());
+			Preference about = findPreference(keys.getAbout());
+			Preference support = findPreference(keys.getSupport());
 
+			// Set icons
 			appearance.setIcon(this.createIconDrawable(R.mipmap.palette));
 			general.setIcon(this.createIconDrawable(R.mipmap.settings));
-			miscellaneous.setIcon(this.createIconDrawable(R.mipmap.extension));
 			statistics.setIcon(this.createIconDrawable(R.mipmap.analytics));
 			about.setIcon(this.createIconDrawable(R.mipmap.about));
+			support.setIcon(this.createIconDrawable(R.mipmap.favorite));
+
+			// Set on click listeners
 			appearance.setOnPreferenceClickListener(this);
 			general.setOnPreferenceClickListener(this);
-			miscellaneous.setOnPreferenceClickListener(this);
 			statistics.setOnPreferenceClickListener(this);
 			about.setOnPreferenceClickListener(this);
+			support.setOnPreferenceClickListener(this);
 		}
 
 		/**
@@ -133,6 +137,7 @@ public class NacSettingsActivity
 		}
 
 		/**
+		 * Called when a preference is slicked
 		 */
 		@Override
 		public boolean onPreferenceClick(Preference preference)
@@ -143,32 +148,36 @@ public class NacSettingsActivity
 			Fragment fragment;
 			String title;
 
+			// General
 			if (preferenceKey.equals(keys.getGeneral()))
 			{
 				fragment = new NacGeneralSettingsFragment();
 				title = keys.getGeneralTitle();
 
 			}
+			// Appearance
 			else if (preferenceKey.equals(keys.getAppearance()))
 			{
 				fragment = new NacAppearanceSettingsFragment();
 				title = keys.getAppearanceTitle();
 			}
-			else if (preferenceKey.equals(keys.getMiscellaneous()))
-			{
-				fragment = new NacMiscellaneousSettingsFragment();
-				title = keys.getMiscellaneousTitle();
-			}
+			// Statistics
 			else if (preferenceKey.equals(keys.getStatistics()))
 			{
-				// TODO: Make this statistics
 				fragment = new NacStatisticsSettingsFragment();
 				title = keys.getStatisticsTitle();
 			}
+			// About
 			else if (preferenceKey.equals(keys.getAbout()))
 			{
 				fragment = new NacAboutSettingsFragment();
 				title = keys.getAboutTitle();
+			}
+			// Support
+			else if (preferenceKey.equals(keys.getSupport()))
+			{
+				NacUtility.printf("SUPPORT CLICKED!");
+				return false;
 			}
 			else
 			{

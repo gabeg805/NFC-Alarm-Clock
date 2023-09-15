@@ -113,7 +113,7 @@ public class NacMusicFragment
 	 */
 	@Override
 	public void onBrowserClicked(NacFileBrowser browser,
-                                 NacFile.Metadata metadata, String path, String name)
+		NacFile.Metadata metadata, String path, String name)
 	{
 		// Directory was clicked
 		if (metadata.isDirectory())
@@ -242,7 +242,7 @@ public class NacMusicFragment
 	private void setupFileBrowser(View root)
 	{
 		Context context = getContext();
-		NacFileBrowser browser = new NacFileBrowser(root, R.id.container);
+		NacFileBrowser browser = new NacFileBrowser(this, root, R.id.container);
 		TextView textview = root.findViewById(R.id.path);
 		String path = getMediaPath();
 		String dir = "";

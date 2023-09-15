@@ -4,8 +4,9 @@
 	<!-- App -->
 	<string name="app_name">NFC Alarm Clock</string>
 	<string name="app_version">@string/versionName</string>
-	<string name="permission_schedule_exact_alarm_request">This app does not have the <b>Schedule Exact Alarm</b> permission enabled.\n\nAlarms will not be able to run if the app is not in focus.\n\nWould you like to continue to the next screen to enable this permission?</string>
-	<string name="permission_post_notifications_request">This app does not have the <b>Notifications</b> permission enabled.\n\nAlarms will not be able to run if the app is not in focus.  This is a side effect of the security policies introduced in <b>Android 13</b>, which are for the benefit of users, but can restrict apps in instances like this.\n\nWould you like to continue to enable this permission?</string>
+	<string name="permission_ignore_battery_optimization_request">Alarms may not run if the app has not been used for a while.\n\n<b>Note:</b>  This depends on what device you have and may not actually be needed.\n\nWould you like to disable battery optimization?</string>
+	<string name="permission_post_notifications_request">Alarms will not be able to run if the app is not in focus.\n\n<b>Note:</b>  This is a side effect of the security policies introduced in <b>Android 13</b>, which are for the benefit of users, but can restrict apps in instances like this.\n\nWould you like to enable notifications?</string>
+	<string name="permission_schedule_exact_alarm_request">Alarms will not be able to run if the app is not in focus.\n\nWould you like to enable scheduling alarms?</string>
 
 
 	<!-- What's new -->
@@ -40,6 +41,8 @@
 	<string name="action_alarm_dismiss_early">Dismiss early</string>
 	<string name="action_alarm_copy">Copy</string>
 	<string name="action_alarm_delete">Delete</string>
+	<string name="action_yes">Yes</string>
+	<string name="action_no">No</string>
 	<string name="action_ok">OK</string>
 	<string name="action_cancel">Cancel</string>
 	<string name="action_clear">Clear</string>
@@ -52,6 +55,7 @@
 	<string name="action_undo">Undo</string>
 	<string name="action_browse">Browse</string>
 	<string name="action_previous_folder">Previous folder</string>
+	<string name="action_reset">Reset</string>
 
 
 
@@ -61,7 +65,7 @@
 	<string name="message_nfc_request">Please enable NFC to dismiss the alarm</string>
 	<string name="message_nfc_required">NFC required</string>
 	<string name="message_nfc_optional">NFC optional</string>
-	<string name="message_scan_nfc_tag">Scan a unique NFC tag (experimental), or use any tag to dismiss this alarm when it goes off.</string>
+	<string name="message_scan_nfc_tag">Scan a unique NFC tag, or use any tag to dismiss this alarm when it goes off.</string>
 	<string name="message_show_nfc_tag_id">ID:</string>
 	<string name="message_any_nfc_tag_id">Any NFC tag accepted</string>
 	<string name="message_no_alarms_scheduled">No alarms scheduled</string>
@@ -76,6 +80,8 @@
 	<string name="message_alarm_snooze">Snoozed alarm</string>
 	<string name="message_statistics_started_on">Statistics started on</string>
 	<string name="message_bullet">\u25BA</string>
+	<string name="message_required">Required</string>
+	<string name="message_optional">Optional</string>
 
 
 
@@ -92,6 +98,11 @@
 	<string name="error_message_select_color">Invalid hex color</string>
 	<string name="error_message_play_audio">Unable to play audio</string>
 	<string name="error_message_play_file">Unable to play selected file</string>
+
+
+
+	<!-- Words -->
+	<string name="word_of">of</string>
 
 
 
@@ -121,6 +132,9 @@
 	<string name="title_deleted_alarms">Deleted alarms</string>
 	<string name="title_current_alarms">Current</string>
 	<string name="title_whats_new">What\'s New</string>
+	<string name="title_request_permission_ignore_battery_optimization">Disable battery optimization?</string>
+	<string name="title_request_permission_post_notifications">Enable notifications?</string>
+	<string name="title_request_permission_schedule_exact_alarm">Allow scheduling alarms?</string>
 
 
 
@@ -168,6 +182,9 @@
 	<string name="cd_file_entry">Type of entry being displayed, such as a file or directory.</string>
 	<string name="cd_color_selector">Select a color for the color picker.</string>
 	<string name="cd_shader_selector">Select a shade for the color picker.</string>
+	<string name="cd_request_permission_ignore_battery_optimization">Request to disable battery optimization.</string>
+	<string name="cd_request_permission_post_notifications">Request to post notifications.</string>
+	<string name="cd_request_permission_schedule_exact_alarm">Request to schedule exact alarms.</string>
 
 
 
@@ -222,11 +239,14 @@
 	<string name="misc_setting">Miscellaneous</string>
 	<string name="misc_setting_summary">Some cool, extra features</string>
 
+	<string name="about_setting">About</string>
+	<string name="about_setting_summary">Information about the app</string>
+
 	<string name="stats_setting">Statistics</string>
 	<string name="stats_setting_summary">See how long you have snoozed for, and more</string>
 
-	<string name="about_setting">About</string>
-	<string name="about_setting_summary">Information about the app</string>
+	<string name="support_setting">Support</string>
+	<string name="support_setting_summary">Support the development of the app</string>
 
 
 
@@ -373,7 +393,7 @@
 	<!-- ********************** -->
 
 	<!-- Categories -->
-	<string name="music_category">Music</string>
+	<string name="music_category">Music options</string>
 
 
 	<!-- Shuffle playlist -->
@@ -423,48 +443,58 @@
 	<string name="author">Gabe Gonzalez</string>
 
 
-	<!-- App -->
+	<!-- App version -->
 	<string name="version_title">Version</string>
 
 
 	<!-- NFC permission -->
 	<string name="about_nfc">NFC</string>
-	<string name="about_nfc_summary">(Optional) Allow the app to detect NFC tags.</string>
+	<string name="about_nfc_summary">Detect NFC tags to dismiss an alarm.</string>
 
 	
 	<!-- READ_EXTERNAL_STORAGE permission -->
 	<string name="about_storage">Storage</string>
-	<string name="about_storage_summary">(Optional) Read music that is stored on the phone.</string>
+	<string name="about_storage_summary">Read music that is stored on your device.</string>
 
 
 	<!-- VIBRATE permission -->
 	<string name="about_vibrate">@string/alarm_vibrate</string>
-	<string name="about_vibrate_summary">(Optional) Allow the app to vibrate the phone.</string>
-
-
-	<!-- SET_ALARM permission -->
-	<string name="about_set_alarm">Set alarm</string>
-	<string name="about_set_alarm_summary">(Required) Allows the application to set an alarm.</string>
-
-
-	<!-- RECEIVE_BOOT_COMPLETED permission -->
-	<string name="about_boot">Startup</string>
-	<string name="about_boot_summary">(Required) Restore alarms when the phone is turned on. Android will delete alarms when the phone is turned off.</string>
-
-
-	<!-- WAKE_LOCK -->
-	<string name="about_wakelock">Wakelock</string>
-	<string name="about_wakelock_summary">(Required) Prevent the phone from sleeping so that an activated alarm will continue to go off.</string>
-
-
-	<!-- USE_FULL_SCREEN_INTENT permission -->
-	<string name="about_full_screen_intent">Full screen</string>
-	<string name="about_full_screen_intent_summary">(Required) Allows the app to use the full screen when an alarm is activated.</string>
+	<string name="about_vibrate_summary">Vibrate your device when an alarm is activated.</string>
 
 
 	<!-- FOREGROUND_SERVICE permission -->
 	<string name="about_foreground_service">Foreground service</string>
-	<string name="about_foreground_service_summary">(Required) Allows the app to run a foreground service when an alarm is activated.</string>
+	<string name="about_foreground_service_summary">Run a foreground service that will play audio, vibrate your device, etc. when an alarm is activated.</string>
+
+
+	<!-- USE_FULL_SCREEN_INTENT permission -->
+	<string name="about_full_screen_intent">Full screen</string>
+	<string name="about_full_screen_intent_summary">Use the full screen when an alarm is activated.</string>
+
+
+	<!-- Schedule/use exact alarm permission -->
+	<string name="about_schedule_alarm">Schedule exact alarms</string>
+	<string name="about_schedule_alarm_summary">Schedule exact alarms.</string>
+
+
+	<!-- SET_ALARM permission -->
+	<string name="about_set_alarm">Set alarm</string>
+	<string name="about_set_alarm_summary">Set an alarm from an external source, such as the Google Assistant.</string>
+
+
+	<!-- Post notifications permission -->
+	<string name="about_post_notifications">Show notifications</string>
+	<string name="about_post_notifications_summary">Show a notification when an alarm is activated that will keep your device from putting the app to sleep and turning the alarm off by itself.</string>
+
+
+	<!-- RECEIVE_BOOT_COMPLETED permission -->
+	<string name="about_boot">Startup</string>
+	<string name="about_boot_summary">Restore alarms when your device is turned on.  Android will delete alarms when your device is turned off.</string>
+
+
+	<!-- WAKE_LOCK -->
+	<string name="about_wakelock">Wakelock</string>
+	<string name="about_wakelock_summary">Prevent your device from sleeping so that an activated alarm will continue to go off.</string>
 
 
 	<!-- Spotify -->

@@ -416,6 +416,14 @@ public class NacSharedKeys
 	}
 
 	/**
+	 * @return The support setting.
+	 */
+	public String getSupport()
+	{
+		return this.getString(R.string.support_setting_key);
+	}
+
+	/**
 	 * @return The theme color key.
 	 */
 	public String getThemeColor()
@@ -477,6 +485,14 @@ public class NacSharedKeys
 	public String getVolume()
 	{
 		return this.getString(R.string.alarm_volume_key);
+	}
+
+	/**
+	 * @return The permission to ignore battery optimization requested key.
+	 */
+	public String getWasIgnoreBatteryOptimizationPermissionRequested()
+	{
+		return this.getString(R.string.key_permission_ignore_battery_optimization_requested);
 	}
 
 	/**

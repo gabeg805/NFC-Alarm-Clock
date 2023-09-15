@@ -2,24 +2,21 @@ package com.nfcalarmclock.file.browser;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
+import com.nfcalarmclock.R;
+import com.nfcalarmclock.file.NacFile;
 import com.nfcalarmclock.file.NacFileTree;
 import com.nfcalarmclock.util.NacUtility;
-import com.nfcalarmclock.R;
-import com.nfcalarmclock.media.NacMedia;
-import com.nfcalarmclock.shared.NacSharedConstants;
-import com.nfcalarmclock.file.NacFile;
 
-import java.util.Locale;
+import java.util.List;
 
 /**
  * A file browser.
@@ -45,11 +42,6 @@ public class NacFileBrowser
 	private final Context mContext;
 
 	/**
-	 * File tree of media files.
-	 */
-	private final NacFileTree mFileTree;
-
-	/**
 	 * The container view for the directory/file buttons.
 	 */
 	private final LinearLayout mContainer;
@@ -65,91 +57,24 @@ public class NacFileBrowser
 	private OnBrowserClickedListener mOnBrowserClickedListener;
 
 	/**
+	 * View model for the file browser.
 	 */
-	public NacFileBrowser(View root, int groupId)
+	private final NacFileBrowserViewModel mViewModel;
+
+	/**
+	 */
+	public NacFileBrowser(LifecycleOwner lifecycleOwner, View root, int groupId)
 	{
 		Context context = root.getContext();
-		NacFileTree tree = new NacFileTree("");
 		this.mContext = context;
-		this.mFileTree = tree;
 		this.mContainer = root.findViewById(groupId);
 		this.mSelectedView = null;
 		this.mOnBrowserClickedListener = null;
+		this.mViewModel = new ViewModelProvider((ViewModelStoreOwner) context).get(
+			NacFileBrowserViewModel.class);
 
-		tree.scan(context);
-	}
-
-	/**
-	 * Add a directory entry to the file browser.
-	 *
-	 * TODO Count number of songs in subdirectories and make that the
-	 *     annotation.
-	 */
-	public void addDirectory(LayoutInflater inflater, NacFile.Metadata metadata)
-	{
-		Context context = this.getContext();
-		LinearLayout container = this.getContainer();
-
-		if (container == null)
-		{
-			NacUtility.printf("NacFileBrowser : addDirectory : Container is null");
-			return;
-		}
-
-		NacSharedConstants cons = new NacSharedConstants(context);
-		Locale locale = Locale.getDefault();
-		View entry = inflater.inflate(R.layout.nac_file_entry, container, false);
-		String name = metadata.getName();
-		ImageView imageView = entry.findViewById(R.id.image);
-		TextView titleView = entry.findViewById(R.id.title);
-		//TextView annotationView = entry.findViewById(R.id.annotation);
-
-		container.addView(entry);
-		imageView.setImageResource(R.mipmap.folder);
-		titleView.setText(name.equals("..")
-			? String.format(locale, "(%1$s)", cons.getActionPreviousFolder())
-			: name);
-		entry.setTag(metadata);
-		entry.setOnClickListener(this);
-	}
-
-	/**
-	 * Add a music file entry to the file browser.
-	 */
-	public void addFile(LayoutInflater inflater, NacFile.Metadata metadata)
-	{
-		Context context = this.getContext();
-		LinearLayout container = this.getContainer();
-
-		if (container == null)
-		{
-			NacUtility.printf("NacFileBrowser : addFile : Container is null");
-			return;
-		}
-
-		View entry = inflater.inflate(R.layout.nac_file_entry, container, false);
-		String title = NacMedia.getTitle(context, metadata);
-		String artist = NacMedia.getArtist(context, metadata);
-		String duration = NacMedia.getDuration(context, metadata);
-
-		if (title.isEmpty())
-		{
-			return;
-		}
-
-		ImageView imageView = entry.findViewById(R.id.image);
-		TextView titleView = entry.findViewById(R.id.title);
-		TextView subtitleView = entry.findViewById(R.id.subtitle);
-		TextView annotationView = entry.findViewById(R.id.annotation);
-
-		container.addView(entry);
-		imageView.setImageResource(R.mipmap.play);
-		titleView.setText(title);
-		subtitleView.setText(artist);
-		subtitleView.setVisibility(View.VISIBLE);
-		annotationView.setText(duration);
-		entry.setTag(metadata);
-		entry.setOnClickListener(this);
+		// Setup the view model observeR
+		this.setupViewModelObserver(lifecycleOwner);
 	}
 
 	/**
@@ -163,15 +88,6 @@ public class NacFileBrowser
 		{
 			listener.onBrowserClicked(this, metadata, path, name);
 		}
-	}
-
-	/**
-	 * Clear the views out of the browser.
-	 */
-	private void clearEntries()
-	{
-		LinearLayout container = this.getContainer();
-		container.removeAllViews();
 	}
 
 	/**
@@ -257,11 +173,13 @@ public class NacFileBrowser
 	}
 
 	/**
-	 * @return The file tree.
+	 * Get the file browser view model.
+	 *
+	 * @return The file browser view model.
 	 */
-	public NacFileTree getTree()
+	private NacFileBrowserViewModel getViewModel()
 	{
-		return this.mFileTree;
+		return this.mViewModel;
 	}
 
 	/**
@@ -373,7 +291,8 @@ public class NacFileBrowser
 		else if (metadata.isDirectory())
 		{
 			// Change directory to the directory that was clicked
-			NacFileTree tree = this.getTree();
+			//NacFileTree tree = this.getTree();
+			NacFileTree tree = this.getViewModel().getRepository().getFileTree();
 
 			tree.cd(name);
 
@@ -383,41 +302,6 @@ public class NacFileBrowser
 
 		// Call the listener for when an item is clicked in the file browser
 		this.callOnBrowserClickedListener(metadata, path, name);
-	}
-
-	/**
-	 * Populate views into the browser.
-	 */
-	private void populateEntries(String path)
-	{
-		Context context = this.getContext();
-		NacFileTree tree = this.getTree();
-		LayoutInflater inflater = LayoutInflater.from(context);
-
-		// An empty path indicates the root level. If not at the root level,
-		// add the previous directory view to the file browser
-		if (!path.isEmpty())
-		{
-			NacFile.Metadata metadata = new NacFile.Metadata(path, "..", -1);
-			this.addDirectory(inflater, metadata);
-		}
-
-		// Iterate over each file at the given path
-		for (NacFile.Metadata metadata : tree.lsSort(path))
-		{
-
-			// Add a directory
-			if (metadata.isDirectory())
-			{
-				this.addDirectory(inflater, metadata);
-			}
-			// Add a file
-			else if (metadata.isFile())
-			{
-				this.addFile(inflater, metadata);
-			}
-
-		}
 	}
 
 	/**
@@ -514,26 +398,32 @@ public class NacFileBrowser
 	}
 
 	/**
+	 * Setup the view model observer.
+	 */
+	public void setupViewModelObserver(LifecycleOwner lifecycleOwner)
+	{
+		NacFileBrowserViewModel viewModel = this.getViewModel();
+
+		// Observe the view model data
+		viewModel.getListingLiveData().observe(lifecycleOwner,
+			listing ->
+				{
+					// Get the container
+					LinearLayout container = getContainer();
+
+					// Repopulate the list of views
+					viewModel.repopulate(container, listing, NacFileBrowser.this);
+				});
+	}
+
+	/**
 	 * Show the directory contents at the given path.
 	 *
 	 * @param  dir  The path of the directory to show.
 	 */
-	public void show(final String dir)
+	public void show(String dir)
 	{
-		Context context = this.getContext();
-		Looper looper = context.getMainLooper();
-		Handler handler = new Handler(looper);
-
-		// Show the directory contents, but do it in a handler so that it is
-		// offloaded from the main thread. It technically will still run on the main
-		// thread, but it is at the back of the message queue so it does not hang
-		// cause an ANR
-		handler.post(() ->
-		{
-			clearEntries();
-			populateEntries(dir);
-			getTree().cd(dir);
-		});
+		this.getViewModel().show(dir);
 	}
 
 }

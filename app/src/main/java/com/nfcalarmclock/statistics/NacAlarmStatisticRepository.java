@@ -70,8 +70,7 @@ public class NacAlarmStatisticRepository
 	 */
 	public int deleteAllCreated()
 	{
-		NacAlarmCreatedStatisticDao dao = this.getAlarmCreatedStatisticDao();
-		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::deleteAll);
+		Future<?> future = this.doDeleteAllCreated();
 
 		return NacRepository.getIntegerFromFuture(future);
 	}
@@ -83,8 +82,7 @@ public class NacAlarmStatisticRepository
 	 */
 	public int deleteAllDeleted()
 	{
-		NacAlarmDeletedStatisticDao dao = this.getAlarmDeletedStatisticDao();
-		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::deleteAll);
+		Future<?> future = this.doDeleteAllDeleted();
 
 		return NacRepository.getIntegerFromFuture(future);
 	}
@@ -96,8 +94,7 @@ public class NacAlarmStatisticRepository
 	 */
 	public int deleteAllDismissed()
 	{
-		NacAlarmDismissedStatisticDao dao = this.getAlarmDismissedStatisticDao();
-		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::deleteAll);
+		Future<?> future = this.doDeleteAllDismissed();
 
 		return NacRepository.getIntegerFromFuture(future);
 	}
@@ -109,8 +106,7 @@ public class NacAlarmStatisticRepository
 	 */
 	public int deleteAllMissed()
 	{
-		NacAlarmMissedStatisticDao dao = this.getAlarmMissedStatisticDao();
-		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::deleteAll);
+		Future<?> future = this.doDeleteAllMissed();
 
 		return NacRepository.getIntegerFromFuture(future);
 	}
@@ -122,10 +118,59 @@ public class NacAlarmStatisticRepository
 	 */
 	public int deleteAllSnoozed()
 	{
-		NacAlarmSnoozedStatisticDao dao = this.getAlarmSnoozedStatisticDao();
-		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::deleteAll);
+		Future<?> future = this.doDeleteAllSnoozed();
 
 		return NacRepository.getIntegerFromFuture(future);
+	}
+
+	/**
+	 * Delete all rows from the created alarm statistics table, asynchronously.
+	 */
+	public Future<?> doDeleteAllCreated()
+	{
+		NacAlarmCreatedStatisticDao dao = this.getAlarmCreatedStatisticDao();
+
+		return NacAlarmDatabase.getExecutor().submit(dao::deleteAll);
+	}
+
+	/**
+	 * Delete all rows from the deleted alarm statistics table, asynchronously.
+	 */
+	public Future<?> doDeleteAllDeleted()
+	{
+		NacAlarmDeletedStatisticDao dao = this.getAlarmDeletedStatisticDao();
+
+		return NacAlarmDatabase.getExecutor().submit(dao::deleteAll);
+	}
+
+	/**
+	 * Delete all rows from the dismissed alarm statistics table, asynchronously.
+	 */
+	public Future<?> doDeleteAllDismissed()
+	{
+		NacAlarmDismissedStatisticDao dao = this.getAlarmDismissedStatisticDao();
+
+		return NacAlarmDatabase.getExecutor().submit(dao::deleteAll);
+	}
+
+	/**
+	 * Delete all rows from the missed alarm statistics table, asynchronously.
+	 */
+	public Future<?> doDeleteAllMissed()
+	{
+		NacAlarmMissedStatisticDao dao = this.getAlarmMissedStatisticDao();
+
+		return NacAlarmDatabase.getExecutor().submit(dao::deleteAll);
+	}
+
+	/**
+	 * Delete all rows from the snoozed alarm statistics table, asynchronously.
+	 */
+	public Future<?> doDeleteAllSnoozed()
+	{
+		NacAlarmSnoozedStatisticDao dao = this.getAlarmSnoozedStatisticDao();
+
+		return NacAlarmDatabase.getExecutor().submit(dao::deleteAll);
 	}
 
 	/**
@@ -198,11 +243,22 @@ public class NacAlarmStatisticRepository
 	 */
 	public Date getCreatedFirstDate()
 	{
-		NacAlarmCreatedStatisticDao dao = this.getAlarmCreatedStatisticDao();
-		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::getFirstCreatedDate);
-		long timestamp = NacRepository.getLongFromFuture(future);
+		long timestamp = this.getCreatedFirstTimestamp();
 
 		return new Date(timestamp);
+	}
+
+	/**
+	 * Get the timestamp when the first alarm was created as a long type.
+	 *
+	 * @return The timestamp when the first alarm was created as a long type.
+	 */
+	public long getCreatedFirstTimestamp()
+	{
+		NacAlarmCreatedStatisticDao dao = this.getAlarmCreatedStatisticDao();
+		Future<?> future = NacAlarmDatabase.getExecutor().submit(dao::getFirstCreatedTimestamp);
+
+		return NacRepository.getLongFromFuture(future);
 	}
 
 	/**

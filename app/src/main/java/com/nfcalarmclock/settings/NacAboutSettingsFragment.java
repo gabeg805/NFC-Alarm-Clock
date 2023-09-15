@@ -8,7 +8,7 @@ import com.nfcalarmclock.shared.NacSharedKeys;
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog;
 
 /**
- * About fragment.
+ * Fragment to show the About preferences.
  */
 public class NacAboutSettingsFragment
 	extends NacSettingsFragment
@@ -30,13 +30,16 @@ public class NacAboutSettingsFragment
 		NacSharedKeys keys = this.getSharedKeys();
 		String preferenceKey = preference.getKey();
 
+		// Version preference was clicked
 		if (preferenceKey.equals(keys.getVersionPreference()))
 		{
+			// Show the What's New dialog
 			NacWhatsNewDialog dialog = new NacWhatsNewDialog();
 
 			dialog.show(getChildFragmentManager(), NacWhatsNewDialog.TAG);
 		}
 
+		// Default return
 		return super.onPreferenceTreeClick(preference);
 	}
 

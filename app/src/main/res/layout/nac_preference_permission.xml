@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:gravity="center_vertical"
+	android:padding="?android:attr/listPreferredItemPaddingLeft"
+	android:minHeight="?android:attr/listPreferredItemHeight"
+	android:baselineAligned="false"
+	tools:ignore="UselessParent">
+
+	<RelativeLayout
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight="1">
+
+		<TextView
+			style="@style/Widget.TextView.Primary"
+			android:id="@android:id/title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:ellipsize="marquee"
+			android:fadingEdge="horizontal"
+			/>
+
+		<TextView
+			style="@style/Widget.TextView.Caption"
+			android:id="@+id/permission_type"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_toEndOf="@android:id/title"
+			android:layout_alignTop="@android:id/title"
+			android:layout_alignBottom="@android:id/title"
+			android:layout_marginStart="@dimen/tiny"
+			android:gravity="center_vertical"
+			android:singleLine="true"
+			android:ellipsize="marquee"
+			android:fadingEdge="horizontal"
+			android:text=""
+			/>
+
+		<TextView
+			style="@style/Widget.TextView.Secondary"
+			android:id="@android:id/summary"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@android:id/title"
+			android:layout_alignStart="@android:id/title"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:maxLines="4"
+			/>
+
+	</RelativeLayout>
+
+</LinearLayout>

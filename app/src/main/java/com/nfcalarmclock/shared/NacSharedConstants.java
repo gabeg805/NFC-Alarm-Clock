@@ -74,6 +74,14 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return No action.
+	 */
+	public String getActionNo()
+	{
+		return this.getString(R.string.action_no);
+	}
+
+	/**
 	 * @return Ok action.
 	 */
 	public String getActionOk()
@@ -114,6 +122,14 @@ public class NacSharedConstants
 	}
 
 	/**
+	 * @return Reset action.
+	 */
+	public String getActionReset()
+	{
+		return this.getString(R.string.action_reset);
+	}
+
+	/**
 	 * @return Snooze action.
 	 */
 	public String getActionSnooze()
@@ -135,6 +151,14 @@ public class NacSharedConstants
 	public String getActionUseAny()
 	{
 		return this.getString(R.string.action_use_any);
+	}
+
+	/**
+	 * @return Yes action.
+	 */
+	public String getActionYes()
+	{
+		return this.getString(R.string.action_yes);
 	}
 
 	/**

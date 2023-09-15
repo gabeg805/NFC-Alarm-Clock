@@ -33,7 +33,7 @@ public interface NacAlarmCreatedStatisticDao
 	 * @return The date when the first alarm was created.
 	 */
 	@Query("SELECT MIN(timestamp) FROM alarm_created_statistic LIMIT 1")
-	long getFirstCreatedDate();
+	long getFirstCreatedTimestamp();
 
 	/**
 	 * Count the number of created alarm statistics.

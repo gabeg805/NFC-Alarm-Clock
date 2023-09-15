@@ -36,6 +36,11 @@ public class NacFile
 		private long mId;
 
 		/**
+		 * Extra object.
+		 */
+		private Object mExtra;
+
+		/**
 		 */
 		public Metadata(String directory, String name, long id)
 		{
@@ -57,6 +62,14 @@ public class NacFile
 		public String getDirectory()
 		{
 			return this.mDirectory;
+		}
+
+		/**
+		 * @return The extra object.
+		 */
+		public Object getExtra()
+		{
+			return this.mExtra;
 		}
 
 		/**
@@ -111,6 +124,14 @@ public class NacFile
 		public void setDirectory(String directory)
 		{
 			this.mDirectory = directory;
+		}
+
+		/**
+		 * Set the extra object.
+		 */
+		public void setExtra(Object object)
+		{
+			this.mExtra = object;
 		}
 
 		/**
