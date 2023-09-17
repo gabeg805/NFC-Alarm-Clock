@@ -52,7 +52,7 @@ import com.nfcalarmclock.permission.NacPermissionRequestManager;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.ratemyapp.NacRateMyApp;
 import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog;
-import com.nfcalarmclock.settings.NacSettingsActivity;
+import com.nfcalarmclock.settings.NacMainSettingActivity;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.snackbar.NacSnackbar;
@@ -1175,7 +1175,7 @@ public class NacMainActivity
 		// Settings clicked
 		if (id == R.id.menu_settings)
 		{
-			Intent settingsIntent = new Intent(this, NacSettingsActivity.class);
+			Intent settingsIntent = new Intent(this, NacMainSettingActivity.class);
 			startActivity(settingsIntent);
 			return true;
 		}

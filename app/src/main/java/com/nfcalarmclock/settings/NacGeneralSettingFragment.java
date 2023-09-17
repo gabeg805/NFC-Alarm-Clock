@@ -31,8 +31,8 @@ import com.nfcalarmclock.volume.NacVolumePreference;
 /**
  * General settings fragment.
  */
-public class NacGeneralSettingsFragment
-	extends NacSettingsFragment
+public class NacGeneralSettingFragment
+	extends NacGenericSettingFragment
 	implements Preference.OnPreferenceClickListener,
 		ActivityResultCallback<ActivityResult>,
 		NacVolumePreference.OnAudioOptionsClickedListener,

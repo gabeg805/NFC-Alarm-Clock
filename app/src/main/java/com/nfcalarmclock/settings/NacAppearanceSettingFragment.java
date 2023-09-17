@@ -14,8 +14,8 @@ import java.util.List;
 /**
  * Appearance fragment.
  */
-public class NacAppearanceSettingsFragment
-	extends NacSettingsFragment
+public class NacAppearanceSettingFragment
+	extends NacGenericSettingFragment
 	implements Preference.OnPreferenceChangeListener
 {
 

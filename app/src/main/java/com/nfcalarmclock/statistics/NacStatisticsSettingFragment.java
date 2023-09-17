@@ -20,7 +20,7 @@ import java.util.Locale;
  * <p>
  * TODO: Highlighting the weekends in the dismiss/miss/snooze plot would be dope
  */
-public class NacStatisticsSettingsFragment
+public class NacStatisticsSettingFragment
 	extends Fragment
 {
 
@@ -31,7 +31,7 @@ public class NacStatisticsSettingsFragment
 
 	/**
 	 */
-	public NacStatisticsSettingsFragment()
+	public NacStatisticsSettingFragment()
 	{
 		super(R.layout.frg_statistics);
 

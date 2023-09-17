@@ -2,7 +2,6 @@ package com.nfcalarmclock.settings;
 
 import android.os.Bundle;
 import androidx.preference.Preference;
-
 import com.nfcalarmclock.BuildConfig;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedKeys;
@@ -11,8 +10,8 @@ import com.nfcalarmclock.whatsnew.NacWhatsNewDialog;
 /**
  * Fragment to show the About preferences.
  */
-public class NacAboutSettingsFragment
-	extends NacSettingsFragment
+public class NacAboutSettingFragment
+	extends NacGenericSettingFragment
 {
 
 	/**

@@ -120,7 +120,7 @@
 
 		<!-- Settings activity -->
 		<activity
-			android:name=".settings.NacSettingsActivity"
+			android:name=".settings.NacMainSettingActivity"
 			android:label="@string/settings"
 			android:parentActivityName=".main.NacMainActivity"
 			android:windowSoftInputMode="stateAlwaysHidden">

@@ -4,14 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceFragmentCompat;
-
 import com.nfcalarmclock.shared.NacSharedKeys;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 
 /**
  * Settings fragment.
  */
-public abstract class NacSettingsFragment
+public abstract class NacGenericSettingFragment
 	extends PreferenceFragmentCompat
 	implements SharedPreferences.OnSharedPreferenceChangeListener
 {
