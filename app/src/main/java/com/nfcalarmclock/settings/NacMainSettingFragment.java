@@ -12,6 +12,7 @@ import androidx.preference.Preference;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedKeys;
 import com.nfcalarmclock.statistics.NacStatisticsSettingFragment;
+import com.nfcalarmclock.util.NacUtility;
 
 /**
  * Main setting fragment.
@@ -114,6 +115,7 @@ public class NacMainSettingFragment
 		// Support
 		else if (preferenceKey.equals(keys.getSupport()))
 		{
+			NacUtility.printf("SUPPORT CLICKED!");
 			FragmentActivity fragmentActivity = requireActivity();
 			NacSupportSetting support = new NacSupportSetting(fragmentActivity);
 
