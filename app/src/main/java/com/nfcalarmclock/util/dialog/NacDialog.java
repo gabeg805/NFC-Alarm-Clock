@@ -99,14 +99,14 @@ public class NacDialog
 
 		/**
 		 * Wrap height content.
-		 *
+		 * <p>
 		 * True if it should be wrapped, and false otherwise.
 		 */
 		public boolean wrapHeight;
 
 		/**
 		 * Wrap width content.
-		 *
+		 * <p>
 		 * True if it should be wrapped, and false otherwise.
 		 */
 		public boolean wrapWidth;
@@ -189,7 +189,7 @@ public class NacDialog
 
 	/**
 	 * Check if the dialog was canceled/dismissed.
-	 *
+	 * <p>
 	 * This is mainly to catch a user clicking outside of the dialog.
 	 */
 	private boolean mWasCanceledOrDismissed;
@@ -229,7 +229,7 @@ public class NacDialog
 
 	/**
 	 * Add an OnCancelListener.
-	 *
+	 * <p>
 	 * More than one can be added, and they will be run in the order that they
 	 * are added.
 	 */
@@ -240,7 +240,7 @@ public class NacDialog
 
 	/**
 	 * Add an OnDismissListener.
-	 *
+	 * <p>
 	 * More than one can be added, and they will be run in the order that they
 	 * are added.
 	 */
@@ -251,7 +251,7 @@ public class NacDialog
 
 	/**
 	 * Add an OnHideListener.
-	 *
+	 * <p>
 	 * More than one can be added, and they will be run in the order that they
 	 * are added.
 	 */
@@ -263,7 +263,7 @@ public class NacDialog
 
 	/**
 	 * Add an OnNeutralActionListener.
-	 *
+	 * <p>
 	 * More than one can be added, and they will be run in the order that they
 	 * are added.
 	 */
@@ -274,7 +274,7 @@ public class NacDialog
 
 	/**
 	 * Add an OnShowListener.
-	 *
+	 * <p>
 	 * More than one can be added, and they will be run in the order that they
 	 * are added.
 	 */
@@ -672,7 +672,7 @@ public class NacDialog
 
 	/**
 	 * Called when the dialog is being built.
-	 *
+	 * <p>
 	 * This will typically be overriden by the user.
 	 */
 	public void onBuildDialog(Context context, AlertDialog.Builder builder)

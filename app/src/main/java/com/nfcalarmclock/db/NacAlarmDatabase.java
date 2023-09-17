@@ -108,7 +108,7 @@ public abstract class NacAlarmDatabase
 
 	/**
 	 * Application context.
-	 *
+	 * <p>
 	 * This will only be used when the Room database is created, in order to
 	 * migrate from the old SQLite database to the Room database. Otherwise, this
 	 * will be null.

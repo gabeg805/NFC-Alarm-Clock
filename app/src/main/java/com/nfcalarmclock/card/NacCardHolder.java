@@ -420,7 +420,7 @@ public class NacCardHolder
 
 	/**
 	 * Call the card collapsed listener.
-	 *
+	 * <p>
 	 * This listener will not get called if the card has not been measured yet.
 	 */
 	private void callOnCardCollapsedListener()
@@ -456,7 +456,7 @@ public class NacCardHolder
 
 	/**
 	 * Call the card expanded listener.
-	 *
+	 * <p>
 	 * This listener will not get called if the card has not been measured yet.
 	 */
 	private void callOnCardExpandedListener()
@@ -1506,7 +1506,7 @@ public class NacCardHolder
 
 	/**
 	 * Interact with an alarm.
-	 *
+	 * <p>
 	 * Should be called when an alarm has been newly added.
 	 */
 	public void interact()
@@ -1573,10 +1573,10 @@ public class NacCardHolder
 
 	/**
 	 * Measure the different alarm card heights.
-	 *
+	 * <p>
 	 * This will populate the array that is passed in with the corresponding
 	 * heights:
-	 *
+	 * <p>
 	 *     i=0: Collapsed height.
 	 *     i=1: Collapsed height with the dismiss button shown.
 	 *     i=2: Expanded height.
@@ -1608,7 +1608,7 @@ public class NacCardHolder
 
 	/**
 	 * Called when the card is collapsing.
-	 *
+	 * <p>
 	 * Used to set view visibility, animate the background color, and call the
 	 * card collapsed listener.
 	 */
@@ -1638,7 +1638,7 @@ public class NacCardHolder
 
 	/**
 	 * Called when the card is expanding.
-	 *
+	 * <p>
 	 * Used to set view visibility, animate the background color, and call the
 	 * card collapsed listener.
 	 */
@@ -2597,17 +2597,6 @@ public class NacCardHolder
 		{
 			button.setEnabled(isEnabled);
 		}
-
-		//if (alarm.areDaysSelected())
-		//{
-		//	button.setEnabled(true);
-		//	button.setChecked(alarm.shouldRepeat());
-		//}
-		//else
-		//{
-		//	button.setEnabled(false);
-		//	button.setChecked(false);
-		//}
 	}
 
 	/**

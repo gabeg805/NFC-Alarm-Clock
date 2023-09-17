@@ -3,9 +3,8 @@ package com.nfcalarmclock.name;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-
+import androidx.annotation.NonNull;
 import androidx.preference.Preference;
-
 import com.nfcalarmclock.util.dialog.NacDialog;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedConstants;
@@ -97,7 +96,7 @@ public class NacNamePreference
 	 * Display the dialog when the preference is clicked.
 	 */
 	@Override
-	public boolean onPreferenceClick(Preference pref)
+	public boolean onPreferenceClick(@NonNull Preference pref)
 	{
 		Context context = getContext();
 		NacNameDialog dialog = new NacNameDialog();

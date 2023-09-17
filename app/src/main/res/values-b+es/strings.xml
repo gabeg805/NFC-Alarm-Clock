@@ -3,7 +3,6 @@
 
 	<!-- App -->
 	<string name="app_name">NFC Despertador</string>
-	<string name="app_version">@string/versionName</string>
 	<string name="permission_ignore_battery_optimization_request">Es posible que las alarmas no se ejecuten si la aplicación no se ha utilizado durante un tiempo.\n\n<b>Nota:</b> Esto depende del dispositivo que tengas y es posible que en realidad no sea necesario.\n\n¿Quieres desactivar la optimización de la batería?</string>
 	<string name="permission_post_notifications_request">Las alarmas no podrán ejecutarse cuando la aplicación no esté enfocada.\n\n<b>Nota:</b> Este es un efecto secundario de las políticas de seguridad introducidas en <b>Android 13</b>, que benefician a los usuarios, pero pueden restringir aplicaciones en instancias como esta.\n\n¿Desea continuar habilitando este permiso?</string>
 	<string name="permission_schedule_exact_alarm_request">Las alarmas no podrán ejecutarse cuando la aplicación no esté enfocada.\n\n¿Le gustaría continuar a la siguiente pantalla para habilitar este permiso?</string>
@@ -13,9 +12,12 @@
 	<!--
 	<string name="item_X"></string>
 	-->
-	<string name="item_1">Actualización para <b>Android 12</b> y superior que soluciona el problema por el cual el teclado no aparecía automáticamente después de hacer clic en el nombre de la alarma.</string>
-	<string name="item_2">Se corrigió que la aplicación no respondiera (ANR) al buscar música donde, si había demasiadas canciones para mostrar, la aplicación tardaría demasiado en consultar todas las canciones y Android consideraría que la aplicación es ANR.</string>
-	<string name="item_3">Se solucionó el problema por el cual la aplicación olvidaba que se había pospuesto una alarma.  Esto <u>solo</u> sucedería si la aplicación se actualizó, se activó una alarma antes de que se abriera la aplicación y esa alarma se pospuso.  Esto haría que el usuario volviera a la pantalla principal, donde vería la ventana emergente <b>Qué hay de Nuevo</b>.  Interactuar con esta ventana emergente mientras la alarma se pospuso haría que la aplicación olvidara que la alarma se pospuso.</string>
+	<string name="item_1">Se actualizó cómo se solicitan los permisos para que (con suerte) sea más fácil de usar.</string>
+	<string name="item_2">Descripciones actualizadas en <b>Configuración  >  Acerca  >  Permisos</b>.</string>
+	<string name="item_3">Se corrigió la <b>Aplicación No Responde</b> (ANR) al buscar canciones en una carpeta con muchas canciones.</string>
+	<string name="item_4">Se corrigió un fallo poco frecuente al deslizar el dedo para copiar una alarma.</string>
+	<string name="item_5">Se eliminó <b>Configuración -> Miscelaneo</b>, y se movieron todas esas configuraciones a <b>General</b>.</string>
+	<string name="item_6">Se agrego <b>Configuración -> Apoyo</b> para que pueda respaldar el desarrollo de la aplicación si así lo desea.</string>
 
 
 
@@ -191,36 +193,43 @@
 	<!-- Plurals -->
 	<plurals name="alarm">
 		<item quantity="one">alarma</item>
+		<item quantity="many">alarmas</item>
 		<item quantity="other">alarmas</item>
 	</plurals>
 
 	<plurals name="missed_alarm">
 		<item quantity="one">Alarma perdida</item>
+		<item quantity="many">@string/title_missed_alarm</item>
 		<item quantity="other">@string/title_missed_alarm</item>
 	</plurals>
 
 	<plurals name="upcoming_alarm">
 		<item quantity="one">@string/next_alarm</item>
+		<item quantity="many">@string/title_upcoming_alarm</item>
 		<item quantity="other">@string/title_upcoming_alarm</item>
 	</plurals>
 
 	<plurals name="unit_day">
 		<item quantity="one">día</item>
+		<item quantity="many">días</item>
 		<item quantity="other">días</item>
 	</plurals>
 
 	<plurals name="unit_hour">
 		<item quantity="one">hora</item>
+		<item quantity="many">horas</item>
 		<item quantity="other">horas</item>
 	</plurals>
 
 	<plurals name="unit_minute">
 		<item quantity="one">minuto</item>
+		<item quantity="many">minutos</item>
 		<item quantity="other">minutos</item>
 	</plurals>
 
 	<plurals name="unit_second">
 		<item quantity="one">segundo</item>
+		<item quantity="many">segundos</item>
 		<item quantity="other">segundos</item>
 	</plurals>
 
@@ -237,7 +246,6 @@
 	<string name="appearance_setting_summary">Personaliza la aplicacion</string>
 
 	<string name="misc_setting">Miscelaneo</string>
-	<string name="misc_setting_summary">Agrega caracteristicas geniales</string>
 
 	<string name="about_setting">Acerca</string>
 	<string name="about_setting_summary">Informacion acerca de esta aplicacion</string>
@@ -404,7 +412,6 @@
 
 
 	<!-- Speak to me -->
-	<string name="speak_to_me">Habla me</string>
 	<string name="speak_to_me_true">Decir la hora cuando la alarma suena.</string>
 	<string name="speak_to_me_false">No decir nada.</string>
 

@@ -3,7 +3,6 @@
 
 	<!-- App -->
 	<string name="app_name">NFC Alarm Clock</string>
-	<string name="app_version">@string/versionName</string>
 	<string name="permission_ignore_battery_optimization_request">Alarms may not run if the app has not been used for a while.\n\n<b>Note:</b>  This depends on what device you have and may not actually be needed.\n\nWould you like to disable battery optimization?</string>
 	<string name="permission_post_notifications_request">Alarms will not be able to run if the app is not in focus.\n\n<b>Note:</b>  This is a side effect of the security policies introduced in <b>Android 13</b>, which are for the benefit of users, but can restrict apps in instances like this.\n\nWould you like to enable notifications?</string>
 	<string name="permission_schedule_exact_alarm_request">Alarms will not be able to run if the app is not in focus.\n\nWould you like to enable scheduling alarms?</string>
@@ -13,9 +12,12 @@
 	<!--
 	<string name="item_X"></string>
 	-->
-	<string name="item_1">Update for <b>Android 12</b> and above which fixes issue where the keyboard would not show up automatically after clicking on the alarm name.</string>
-	<string name="item_2">Fixed App Not Responding (ANR) when browsing for music where, if there was too many songs to show, the app would take too long query all the songs and Android would consider the app to be ANR.</string>
-	<string name="item_3">Fixed issue where the app would forget an alarm was snoozed.  This would <u>only</u> happen if the app was updated, an alarm was triggered before the app was opened, and that alarm was snoozed.  This would bring the user back to main screen where they would see the <b>What\'s New</b> popup.  Interacting with this popup while the alarm was snoozed would make the app forget that the alarm was snoozed.</string>
+	<string name="item_1">Updated how permissions are requested to be (hopefully) more user-friendly.</string>
+	<string name="item_2">Updated descriptions in <b>Settings  >  About  >  Permissions</b>.</string>
+	<string name="item_3">Fixed <b>App Not Responding</b> (ANR) when browsing for songs in a folder with a lot of songs.</string>
+	<string name="item_4">Fixed rare crash when swiping to copy an alarm.</string>
+	<string name="item_5">Removed <b>Settings  >  Miscellaneous</b>, and moved all those settings into <b>General</b>.</string>
+	<string name="item_6">Added <b>Settings  >  Support</b> so that you can support deveopment of the app if you so choose.</string>
 
 
 
@@ -237,7 +239,6 @@
 	<string name="appearance_setting_summary">Customize how the app looks</string>
 
 	<string name="misc_setting">Miscellaneous</string>
-	<string name="misc_setting_summary">Some cool, extra features</string>
 
 	<string name="about_setting">About</string>
 	<string name="about_setting_summary">Information about the app</string>
@@ -404,7 +405,6 @@
 
 
 	<!-- Speak to me -->
-	<string name="speak_to_me">Speak to me</string>
 	<string name="speak_to_me_true">Say the current time when the alarm goes off.</string>
 	<string name="speak_to_me_false">Do not say anything.</string>
 

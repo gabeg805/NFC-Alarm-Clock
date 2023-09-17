@@ -19,7 +19,7 @@
 		<Preference
 			android:key="@string/version_key"
 			android:title="@string/version_title"
-			android:summary="@string/versionName"
+			android:summary=""
 			app:iconSpaceReserved="false"
 			app:allowDividerAbove="true"
 			/>

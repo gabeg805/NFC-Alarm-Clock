@@ -16,7 +16,7 @@ public class NacContext
 
 	/**
 	 * Dismiss the alarm activity for the given alarm.
-	 *
+	 * <p>
 	 * If alarm is null, it will stop the currently active alarm activity.
 	 */
 	public static void dismissAlarmActivity(Context context, NacAlarm alarm)
@@ -28,7 +28,7 @@ public class NacContext
 
 	/**
 	 * Dismiss the alarm activity for the given alarm due with NFC.
-	 *
+	 * <p>
 	 * If alarm is null, it will stop the currently active alarm activity.
 	 */
 	public static void dismissAlarmActivityWithNfc(Context context, NacNfcTag tag)
@@ -40,7 +40,7 @@ public class NacContext
 
 	/**
 	 * Stop the alarm activity for the given alarm.
-	 *
+	 * <p>
 	 * If alarm is null, it will stop the currently active alarm activity.
 	 */
 	public static void stopAlarmActivity(Context context, NacAlarm alarm)

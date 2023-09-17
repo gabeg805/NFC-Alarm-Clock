@@ -80,7 +80,7 @@ public class NacWakeupProcess
 
 	/**
 	 * Volume level to restrict any volume changes to.
-	 *
+	 * <p>
 	 * This is not just the alarm volume, since if the user wants to gradually
 	 * increase the volume, the restricted volume in that case should be lower
 	 * than the alarm volume.

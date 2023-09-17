@@ -10,7 +10,7 @@ import com.nfcalarmclock.scheduler.NacScheduler;
 
 /**
  * Refresh all alarms when the Schedule Exact Alarm Permission is granted.
- *
+ * <p>
  * TODO: Test this
  */
 public class NacScheduleExactAlarmPermissionChangedBroadcastReceiver

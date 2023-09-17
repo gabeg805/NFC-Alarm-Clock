@@ -168,10 +168,6 @@ public class NacHeightAnimator
 	 */
 	public boolean isCollapsing()
 	{
-		//int fromHeight = this.getFromHeight();
-		//int toHeight = this.getToHeight();
-
-		//return (fromHeight > toHeight);
 		return this.getAnimationType() == AnimationType.COLLAPSE;
 	}
 
@@ -180,10 +176,6 @@ public class NacHeightAnimator
 	 */
 	public boolean isExpanding()
 	{
-		//int fromHeight = this.getFromHeight();
-		//int toHeight = this.getToHeight();
-
-		//return (fromHeight < toHeight);
 		return this.getAnimationType() == AnimationType.EXPAND;
 	}
 

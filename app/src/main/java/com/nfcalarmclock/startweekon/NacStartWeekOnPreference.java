@@ -8,14 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import androidx.annotation.NonNull;
 import androidx.preference.Preference;
-
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.util.dialog.NacDialog;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedDefaults;
 import com.nfcalarmclock.shared.NacSharedPreferences;
-
 import java.util.List;
 
 /**
@@ -109,8 +108,6 @@ public class NacStartWeekOnPreference
 		{
 			default:
 				index = 0;
-			//case 6:
-			//	return "Saturday";
 			case 1:
 			case 0:
 				return week.get(index);
@@ -186,7 +183,7 @@ public class NacStartWeekOnPreference
 	/**
 	 */
 	@Override
-	public boolean onPreferenceClick(Preference preference)
+	public boolean onPreferenceClick(@NonNull Preference preference)
 	{
 		Context context = getContext();
 		NacDialog dialog = new NacDialog();

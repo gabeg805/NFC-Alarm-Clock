@@ -8,7 +8,6 @@ import com.nfcalarmclock.file.NacFile;
 import com.nfcalarmclock.file.NacFileTree;
 import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.shared.NacSharedConstants;
-import com.nfcalarmclock.util.NacUtility;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
@@ -54,7 +53,7 @@ public class NacFileBrowserRepository
 
 	/**
 	 * Add a directory entry to the file listing.
-	 *
+	 * <p>
 	 * TODO Count number of songs in subdirectories and make that the
 	 *     annotation.
 	 */
@@ -156,7 +155,7 @@ public class NacFileBrowserRepository
 			{
 				TimeUnit.MILLISECONDS.sleep(50);
 			}
-			catch (InterruptedException e)
+			catch (InterruptedException ignored)
 			{
 			}
 		}

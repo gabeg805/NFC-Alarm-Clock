@@ -48,7 +48,7 @@ public class NacPermissionRequestManager
 
 	/**
 	 * Check if analysis has been completed or not.
-	 *
+	 * <p>
 	 * This way it does not need to keep getting repeated if the app goes through
 	 * its onStop/onResume lifecycle.
 	 */
@@ -115,7 +115,6 @@ public class NacPermissionRequestManager
 	public int count()
 	{
 		return this.mTotalNumberOfPermissions;
-		//return this.getPermissionRequestSet().size();
 	}
 
 	/**

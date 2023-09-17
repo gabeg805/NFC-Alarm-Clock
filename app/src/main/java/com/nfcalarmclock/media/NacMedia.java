@@ -166,8 +166,8 @@ public class NacMedia
 	{
 		String[] queryColumns = new String[] { column };
 		ContentResolver resolver = context.getContentResolver();
-		Cursor c = null;
 		String value = "";
+		Cursor c;
 
 		// Attempt to get the content resolver and cursor
 		try
@@ -401,7 +401,7 @@ public class NacMedia
 		{
 			c = manager.getCursor();
 		}
-		catch (IllegalArgumentException e)
+		catch (IllegalArgumentException ignored)
 		{
 		}
 
@@ -671,7 +671,7 @@ public class NacMedia
 
 	/**
 	 * Parse the volume name from a path.
-	 *
+	 * <p>
 	 * This should only be done on any version before Q.
 	 */
 	public static String parseVolumeName(String contentPath)

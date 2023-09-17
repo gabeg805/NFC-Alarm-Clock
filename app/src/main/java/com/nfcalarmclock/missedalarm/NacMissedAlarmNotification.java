@@ -86,20 +86,6 @@ public class NacMissedAlarmNotification
 		return this.mAlarm;
 	}
 
-	///**
-	// * @see NacNotification#getBodyLine(NacAlarm)
-	// */
-	//public String getBodyLine(NacAlarm alarm)
-	//{
-
-	//	Context context = this.getContext();
-	//	//NacAlarmRepository repo = new NacAlarmRepository(context);
-	//	//NacAlarm actualAlarm = repo.findAlarm(alarm);
-
-	//	return super.getBodyLine(alarm);
-	//	//return super.getBodyLine(actualAlarm);
-	//}
-
 	/**
 	 * @see NacNotification#getChannelDescription()
 	 */

@@ -233,7 +233,7 @@ public class NacMediaPlayer
 
 	/**
 	 * Play the media associated with the given alarm.
-	 *
+	 * <p>
 	 * This can play an entire directory (playlist) or a single media file.
 	 *
 	 * @param  alarm   The alarm to get the media path from.

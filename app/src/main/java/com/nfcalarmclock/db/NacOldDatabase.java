@@ -281,41 +281,6 @@ public class NacOldDatabase
 		return (alarm != null) ? this.findAlarm(alarm.getId()) : null;
 	}
 
-	///**
-	// * Find the alarm with the given hour and minute.
-	// */
-	//public NacAlarm findAlarm(Calendar calendar)
-	//{
-	//	String hour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
-	//	String minute = String.valueOf(calendar.get(Calendar.MINUTE));
-	//	NacCalendar.Day day = NacCalendar.Days.toWeekDay(
-	//		calendar.get(Calendar.DAY_OF_WEEK));
-	//	NacAlarm alarm = null;
-
-	//	String[] whereArgs = new String[] { hour, minute };
-	//	String whereClause = Contract.AlarmTable.COLUMN_HOUR + "=? AND "
-	//		+ Contract.AlarmTable.COLUMN_MINUTE + "=?";
-
-	//	SQLiteDatabase db = this.getWritableDatabase();
-	//	int version = db.getVersion();
-	//	String table = this.getAlarmTable();
-	//	Cursor cursor = db.query(table, null, whereClause, whereArgs, null, null,
-	//		null);
-
-	//	while (cursor.moveToNext())
-	//	{
-	//		NacAlarm a = this.toAlarm(cursor, version);
-	//		if ((a != null) && a.getDays().contains(day))
-	//		{
-	//			alarm = a;
-	//			break;
-	//		}
-	//	}
-
-	//	cursor.close();
-	//	return alarm;
-	//}
-
 	/**
 	 * @see #findAlarm(long)
 	 */
@@ -339,22 +304,6 @@ public class NacOldDatabase
 	{
 		return (alarm != null) ? NacOldDatabase.findAlarm(context, alarm.getId()) : null;
 	}
-
-	///**
-	// * @see #findAlarm(Calendar)
-	// */
-	//public static NacAlarm findAlarm(Context context, Calendar calendar)
-	//{
-	//	if ((context == null) || (calendar == null))
-	//	{
-	//		return null;
-	//	}
-
-	//	NacDatabase db = new NacDatabase(context);
-	//	NacAlarm foundAlarm = db.findAlarm(calendar);
-	//	db.close();
-	//	return foundAlarm;
-	//}
 
 	/**
 	 * @return The alarm table name.
@@ -486,10 +435,10 @@ public class NacOldDatabase
 
 	/**
 	 * Create the database for the first time.
-	 *
+	 * <p>
 	 * Add an example alarm when the app is first installed (this is presumed by
 	 * the database being created).
-	 *
+	 * <p>
 	 * Change this every new database version.
 	 */
 	@Override
@@ -534,7 +483,7 @@ public class NacOldDatabase
 
 	/**
 	 * Upgrade the database to the most up-to-date version.
-	 *
+	 * <p>
 	 * Change this every new database version.
 	 */
 	@Override
@@ -586,7 +535,7 @@ public class NacOldDatabase
 
 	/**
 	 * Read the database and return all the alarms.
-	 *
+	 * <p>
 	 * TODO: Add this to a method somewhere. Maybe get alarms from cursor?
 	 *
 	 * @return All alarms in the database.
@@ -626,7 +575,7 @@ public class NacOldDatabase
 
 	/**
 	 * Convert a Cursor object to an alarm.
-	 *
+	 * <p>
 	 * This assumes the cursor object is already in position to retrieve data.
 	 */
 	public NacAlarm toAlarm(Cursor cursor, int version)

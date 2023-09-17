@@ -3,9 +3,9 @@ package com.nfcalarmclock.util.preference;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceViewHolder;
-
 import com.nfcalarmclock.shared.NacSharedPreferences;
 
 /**
@@ -66,7 +66,7 @@ public class NacPreferenceCategory
 	/**
 	 */
 	@Override
-	public void onBindViewHolder(PreferenceViewHolder holder)
+	public void onBindViewHolder(@NonNull PreferenceViewHolder holder)
 	{
 		super.onBindViewHolder(holder);
 

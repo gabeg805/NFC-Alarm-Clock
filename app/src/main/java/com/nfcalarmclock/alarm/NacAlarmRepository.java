@@ -47,7 +47,7 @@ public class NacAlarmRepository
 
 	/**
 	 * Copy an alarm, asynchronously, into the database.
-	 *
+	 * <p>
 	 * TODO: Be sure to test this when swiping.
 	 *
 	 * @param  copiedAlarm  Alarm that has been copied.
@@ -239,7 +239,7 @@ public class NacAlarmRepository
 
 	/**
 	 * Get all alarms in the database.
-	 *
+	 * <p>
 	 * This is an asynchronous call. The LiveData object will be populated with
 	 * alarms once all have been selected.
 	 *
@@ -252,7 +252,7 @@ public class NacAlarmRepository
 
 	/**
 	 * Get all alarms in the database.
-	 *
+	 * <p>
 	 * This will wait until all alarms are selected.
 	 *
 	 * @return A list of all alarms.

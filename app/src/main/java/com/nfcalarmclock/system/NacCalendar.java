@@ -20,7 +20,7 @@ import java.util.Locale;
 
 /**
  * A list of possible days the alarm can run on.
- *
+ * <p>
  * TODO Fix getNextMessage and getMessage so that they're language compliant.
  */
 public class NacCalendar
@@ -92,14 +92,14 @@ public class NacCalendar
 	 * @return A message to display.
 	 */
 	public static String getMessage(NacSharedPreferences shared,
-                                    NacAlarm alarm, String prefix)
+		NacAlarm alarm, String prefix)
 	{
 		NacSharedConstants cons = shared.getConstants();
 		Calendar calendar = NacCalendar.getNextAlarmDay(alarm);
 		Locale locale = Locale.getDefault();
 
 		// No alarm scheduled
-		if ((shared == null) || (alarm == null) || (calendar == null))
+		if ((alarm == null) || (calendar == null))
 		{
 			return String.format(locale, "%1$s.",
 				cons.getMessageNoAlarmsScheduled());
@@ -568,7 +568,7 @@ public class NacCalendar
 
 		/**
 		 * Convert an alarm to a string of days.
-		 *
+		 * <p>
 		 * If no days are specified and the alarm is enable.
 		 */
 		public static String toString(NacSharedConstants cons, NacAlarm alarm,

@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
+import androidx.annotation.NonNull;
 import androidx.preference.Preference;
-
 import com.nfcalarmclock.util.dialog.NacDialog;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedDefaults;
@@ -101,7 +101,7 @@ public class NacDayOfWeekPreference
 	 * Display the dialog when the preference is selected.
 	 */
 	@Override
-	public boolean onPreferenceClick(Preference preference)
+	public boolean onPreferenceClick(@NonNull Preference preference)
 	{
 		Context context = getContext();
 		NacDayOfWeekDialog dialog = new NacDayOfWeekDialog();

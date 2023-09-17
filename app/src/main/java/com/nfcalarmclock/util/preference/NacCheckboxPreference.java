@@ -7,9 +7,9 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import androidx.annotation.NonNull;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
-
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 
@@ -134,7 +134,7 @@ public class NacCheckboxPreference
 	/**
 	 */
 	@Override
-	public void onBindViewHolder(PreferenceViewHolder holder)
+	public void onBindViewHolder(@NonNull PreferenceViewHolder holder)
 	{
 		super.onBindViewHolder(holder);
 
@@ -178,7 +178,7 @@ public class NacCheckboxPreference
 	 * Allow users to select the whole preference to change the checkbox.
 	 */
 	@Override
-	public boolean onPreferenceClick(Preference pref)
+	public boolean onPreferenceClick(@NonNull Preference pref)
 	{
 		this.mCheckBox.performClick();
 		return true;

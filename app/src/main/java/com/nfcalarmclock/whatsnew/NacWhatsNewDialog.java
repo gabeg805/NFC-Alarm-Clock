@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.nfcalarmclock.BuildConfig;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.util.dialog.NacDialogFragment;
@@ -100,11 +101,16 @@ public class NacWhatsNewDialog
 		AlertDialog dialog = (AlertDialog) getDialog();
 		TextView textview = dialog.findViewById(R.id.whats_new_version);
 
+		// Check to make sure view is not null
+		if (textview == null)
+		{
+			return;
+		}
+
 		// Prepare the strings
-		NacSharedConstants cons = this.getSharedConstants();
-		String versionName = textview.getText().toString();
-		String versionNum = cons.getAppVersion();
-		String versionNameAndNum = String.format("%s %s", versionName, versionNum);
+		String versionWord = textview.getText().toString();
+		String versionName = BuildConfig.VERSION_NAME;
+		String versionNameAndNum = String.format("%s %s", versionWord, versionName);
 
 		// Set the version
 		textview.setText(versionNameAndNum);

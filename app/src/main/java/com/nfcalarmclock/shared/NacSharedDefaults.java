@@ -103,7 +103,7 @@ public class NacSharedDefaults
 
 	/**
 	 * @return The day button style.
-	 *
+	 * <p>
 	 * 1: Filled-in buttons (Default)
 	 * 2: Outlined buttons 
 	 */
@@ -191,7 +191,7 @@ public class NacSharedDefaults
 
 	/**
 	 * @return The next alarm format index.
-	 *
+	 * <p>
 	 * 0 = Next alarm in 7 hours 30 minutes
 	 * 1 = Next alarm on Mon, 7:00 AM
 	 */
@@ -330,7 +330,7 @@ public class NacSharedDefaults
 
 	/**
 	 * @return The start week on index.
-	 *
+	 * <p>
 	 * 0 = Sunday
 	 * 1 = Monday
 	 * 6 = Saturday

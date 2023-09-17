@@ -1,5 +1,6 @@
 package com.nfcalarmclock.activealarm;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,17 +15,15 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-
-import com.nfcalarmclock.activealarm.NacActiveAlarmService;
+import com.nfcalarmclock.R;
 import com.nfcalarmclock.alarm.NacAlarm;
+import com.nfcalarmclock.nfc.NacNfc;
 import com.nfcalarmclock.nfc.NacNfcTag;
-import com.nfcalarmclock.system.NacBundle;
-import com.nfcalarmclock.system.NacIntent;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
+import com.nfcalarmclock.system.NacBundle;
+import com.nfcalarmclock.system.NacIntent;
 import com.nfcalarmclock.util.NacUtility;
-import com.nfcalarmclock.R;
-import com.nfcalarmclock.nfc.NacNfc;
 
 /**
  * Activity to dismiss/snooze the alarm.
@@ -113,7 +112,7 @@ public class NacActiveAlarmActivity
 	 * Dismiss due to an NFC tag being scanned, and only if the NFC tag ID
 	 * matches the saved alarm NFC tag ID. The exception to this is if the
 	 * saved alarm NFC tag ID is empty.
-	 * 
+	 * <p>
 	 * The finish() method is not called because if the ACTION_DISMISS_ALARM
 	 * intent is sent to the foreground service, then the foreground service will
 	 * finish this activity.
@@ -217,7 +216,7 @@ public class NacActiveAlarmActivity
 
 	/**
 	 * NFC tag discovered so dismiss the dialog.
-	 *
+	 * <p>
 	 * Note: Parent method must be called last. Causes issues with
 	 * setSnoozeCount.
 	 */
@@ -439,14 +438,28 @@ public class NacActiveAlarmActivity
 	/**
 	 * Setup the receiver for the Stop signal.
 	 */
+	@SuppressLint("UnspecifiedRegisterReceiverFlag")
 	private void setupStopReceiver()
 	{
 		StopActivityReceiver receiver = this.getStopReceiver();
 		IntentFilter filter = new IntentFilter(
 			NacActiveAlarmActivity.ACTION_STOP_ACTIVITY);
 
-		// Register to listen for the STOP broadcast for the activity
-		registerReceiver(receiver, filter);
+		// Check if app needs to set the exported flag in order to indicate
+		// that this app does not expect broadcasts from other apps on the
+		// device
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+		{
+			int flags = Context.RECEIVER_NOT_EXPORTED;
+
+			// Register to listen for the STOP broadcast for the activity
+			registerReceiver(receiver, filter, flags);
+		}
+		else
+		{
+			// Register to listen for the STOP broadcast for the activity
+			registerReceiver(receiver, filter);
+		}
 	}
 
 	/**

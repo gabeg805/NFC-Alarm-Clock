@@ -62,7 +62,7 @@ public interface NacAlarmDao
 
 	/**
 	 * Get a list of all active alarms.
-	 *
+	 * <p>
 	 * This will wait until all alarms are selected.
 	 *
 	 * @return List of all active alarms.
@@ -80,7 +80,7 @@ public interface NacAlarmDao
 
 	/**
 	 * Get all alarms.
-	 *
+	 * <p>
 	 * This will wait until all alarms are selected.
 	 *
 	 * @return All alarms.

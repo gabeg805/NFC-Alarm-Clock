@@ -27,7 +27,7 @@ public class NacNfcTag
 
 	/**
 	 * NFC scan action.
-	 *
+	 * <p>
 	 * This is acquired from the Intent.
 	 */
 	private String mNfcAction;
@@ -124,7 +124,7 @@ public class NacNfcTag
 
 	/**
 	 * Get the NFC scan action.
-	 *
+	 * <p>
 	 * This is acquired from the Intent.
 	 *
 	 * @return The NFC scan action.

@@ -227,7 +227,7 @@ public class NacNfc
 		{
 			nfcAdapter.disableForegroundDispatch((Activity)context);
 		}
-		catch (IllegalStateException e)
+		catch (IllegalStateException ignored)
 		{
 		}
 	}

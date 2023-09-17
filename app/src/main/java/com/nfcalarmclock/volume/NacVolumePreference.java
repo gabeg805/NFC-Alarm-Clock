@@ -12,6 +12,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.SeekBar;
+import androidx.annotation.NonNull;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 import com.google.android.material.button.MaterialButton;
@@ -131,7 +132,7 @@ public class NacVolumePreference
 	/**
 	 */
 	@Override
-	public void onBindViewHolder(PreferenceViewHolder holder)
+	public void onBindViewHolder(@NonNull PreferenceViewHolder holder)
 	{
 		super.onBindViewHolder(holder);
 

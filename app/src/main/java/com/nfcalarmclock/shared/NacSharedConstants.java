@@ -194,14 +194,6 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return The current app version.
-	 */
-	public String getAppVersion()
-	{
-		return this.getString(R.string.versionName);
-	}
-
-	/**
 	 * @return The audio sources.
 	 */
 	public List<String> getAudioSources()
@@ -415,14 +407,6 @@ public class NacSharedConstants
 	{
 		return this.getString(R.string.example_name);
 	}
-
-	/*
-	  @return Is the app updated.
-	 */
-	//public boolean getIsAppUpdated()
-	//{
-	//	return this.getBoolean(R.bool.is_app_updated);
-	//}
 
 	/**
 	 * @return Is disabled.

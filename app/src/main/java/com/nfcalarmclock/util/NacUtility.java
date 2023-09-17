@@ -14,7 +14,7 @@ import java.util.Locale;
 
 /**
  * NFC Alarm Clock Utility class.
- * 
+ * <p>
  * Composed of static methods that can be used for various things.
  */
 @SuppressWarnings({"RedundantSuppression", "UnusedReturnValue"})

@@ -90,7 +90,7 @@ public class NacIntent
 
 	/**
 	 * Create an intent that will be used to start the foreground alarm service.
-	 *
+	 * <p>
 	 *
 	 * @param  context  A context.
 	 * @param  bundle  A bundle.

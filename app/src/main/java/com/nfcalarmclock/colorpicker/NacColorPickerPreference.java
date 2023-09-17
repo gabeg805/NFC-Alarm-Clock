@@ -6,9 +6,9 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+import androidx.annotation.NonNull;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
-
 import com.nfcalarmclock.util.dialog.NacDialog;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.R;
@@ -65,7 +65,7 @@ public class NacColorPickerPreference
 	 * Setup the checkbox and summary text.
 	 */
 	@Override
-	public void onBindViewHolder(PreferenceViewHolder holder)
+	public void onBindViewHolder(@NonNull PreferenceViewHolder holder)
 	{
 		super.onBindViewHolder(holder);
 
@@ -113,7 +113,7 @@ public class NacColorPickerPreference
 	 * Allow users to select the whole preference to change the checkbox.
 	 */
 	@Override
-	public boolean onPreferenceClick(Preference pref)
+	public boolean onPreferenceClick(@NonNull Preference pref)
 	{
 		Context context = this.mImageView.getContext();
 		NacSharedConstants cons = new NacSharedConstants(context);

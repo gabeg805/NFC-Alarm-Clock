@@ -22,7 +22,7 @@ public class NacDayOfWeek
 
 	/**
 	 * Listen for when the day of week is changed.
-	 *
+	 * <p>
 	 * Returning True means that the listener handled the event, and False means
 	 * that the NacDayOfWeek class will handle the click event, and execute the
 	 * default action.
@@ -210,7 +210,7 @@ public class NacDayOfWeek
 
 	/**
 	 * Set the days that will be enabled/disabled.
-	 *
+	 * <p>
 	 * TODO This is doing more animating than necessary.
 	 *      Only enable/disable if needs to be done.
 	 *

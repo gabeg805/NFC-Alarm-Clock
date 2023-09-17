@@ -252,7 +252,7 @@ public class NacMediaFragment
 	{
 		String path = uri.toString();
 
-		if (path.isEmpty() || !path.startsWith("content://"))
+		if (!path.startsWith("content://"))
 		{
 			return -1;
 		}
@@ -292,7 +292,7 @@ public class NacMediaFragment
 
 	/**
 	 * Set the alarm sound.
-	 *
+	 * <p>
 	 * Use Alarm when editing an alarm card, and use media path when editing a
 	 * preference.
 	 */

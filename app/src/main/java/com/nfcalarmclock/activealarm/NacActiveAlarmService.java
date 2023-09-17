@@ -104,7 +104,7 @@ public class NacActiveAlarmService
 
 	/**
 	 * Automatically dismiss the alarm.
-	 *
+	 * <p>
 	 * This will finish the service.
 	 */
 	private void autoDismiss()
@@ -129,7 +129,7 @@ public class NacActiveAlarmService
 
 	/**
 	 * Cleanup the alarm activity.
-	 *
+	 * <p>
 	 * The alarm activity is stopped even if the alarm is null because it needs to
 	 * be stopped, regardless.
 	 */
@@ -183,7 +183,7 @@ public class NacActiveAlarmService
 
 	/**
 	 * Dismiss the alarm.
-	 *
+	 * <p>
 	 * This will finish the service.
 	 */
 	private void dismiss()
@@ -195,7 +195,7 @@ public class NacActiveAlarmService
 
 	/**
 	 * Dismiss the foreground service for the given alarm.
-	 *
+	 * <p>
 	 * If alarm is null, it will stop the currently active foreground service.
 	 */
 	public static void dismissService(Context context, NacAlarm alarm)
@@ -207,7 +207,7 @@ public class NacActiveAlarmService
 
 	/**
 	 * Dismiss the foreground service for the given alarm with NFC.
-	 *
+	 * <p>
 	 * If alarm is null, it will stop the currently active foreground service.
 	 */
 	public static void dismissServiceWithNfc(Context context, NacAlarm alarm)
@@ -219,7 +219,7 @@ public class NacActiveAlarmService
 
 	/**
 	 * Dismiss the alarm with NFC.
-	 *
+	 * <p>
 	 * This will finish the service.
 	 */
 	private void dismissWithNfc()
@@ -231,7 +231,7 @@ public class NacActiveAlarmService
 
 	/**
 	 * Dismiss the alarm.
-	 *
+	 * <p>
 	 * This does not finish the service.
 	 */
 	private void doDismiss()
@@ -252,7 +252,7 @@ public class NacActiveAlarmService
 
 	/**
 	 * Snooze the alarm.
-	 *
+	 * <p>
 	 * This does not finish the service.
 	 */
 	private boolean doSnooze()
@@ -297,7 +297,6 @@ public class NacActiveAlarmService
 
 	/**
 	 */
-	@SuppressWarnings("deprecation")
 	public void finish()
 	{
 		// Cleanup everything
@@ -347,7 +346,7 @@ public class NacActiveAlarmService
 			{
 				TimeUnit.MILLISECONDS.sleep(100);
 			}
-			catch (InterruptedException e)
+			catch (InterruptedException ignored)
 			{
 			}
 		}
@@ -735,7 +734,7 @@ public class NacActiveAlarmService
 
 	/**
 	 * Snooze the alarm.
-	 *
+	 * <p>
 	 * This will finish the service.
 	 */
 	public void snooze()
@@ -749,7 +748,7 @@ public class NacActiveAlarmService
 
 	/**
 	 * Snooze the foreground service for the given alarm.
-	 *
+	 * <p>
 	 * The alarm cannot be null, unlike the dismissService() method.
 	 */
 	public static void snoozeService(Context context, NacAlarm alarm)
@@ -817,7 +816,7 @@ public class NacActiveAlarmService
 	/**
 	 * Wait in the background until the activity needs to auto dismiss the
 	 * alarm.
-	 *
+	 * <p>
 	 * Auto dismiss a bit early to avoid the race condition between a new alarm
 	 * starting at the same time that the alarm will auto-dismiss.
 	 */

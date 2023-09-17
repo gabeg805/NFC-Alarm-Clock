@@ -8,7 +8,7 @@ import com.nfcalarmclock.scheduler.NacScheduler;
 
 /**
  * After the app is updated, reapply the alarms.
- *
+ * <p>
  * When the app is updated, any alarms that were set are lost. This will attempt to restore those
  * alarms.
  */

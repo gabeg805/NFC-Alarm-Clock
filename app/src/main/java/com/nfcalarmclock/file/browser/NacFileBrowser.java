@@ -8,15 +8,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.file.NacFile;
 import com.nfcalarmclock.file.NacFileTree;
-import com.nfcalarmclock.util.NacUtility;
-
-import java.util.List;
 
 /**
  * A file browser.
@@ -291,7 +287,6 @@ public class NacFileBrowser
 		else if (metadata.isDirectory())
 		{
 			// Change directory to the directory that was clicked
-			//NacFileTree tree = this.getTree();
 			NacFileTree tree = this.getViewModel().getRepository().getFileTree();
 
 			tree.cd(name);

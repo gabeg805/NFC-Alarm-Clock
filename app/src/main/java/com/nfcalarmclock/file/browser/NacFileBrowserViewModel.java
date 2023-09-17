@@ -9,12 +9,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.file.NacFile;
-import com.nfcalarmclock.util.NacUtility;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -42,7 +39,7 @@ public class NacFileBrowserViewModel
 
 	/**
 	 * Add a directory entry to the file browser.
-	 *
+	 * <p>
 	 * TODO Count number of songs in subdirectories and make that the
 	 *     annotation.
 	 */

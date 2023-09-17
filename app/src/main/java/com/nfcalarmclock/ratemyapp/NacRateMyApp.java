@@ -22,7 +22,7 @@ public final class NacRateMyApp
 
 	/**
 	 * Request to rate my app.
-	 *
+	 * <p>
 	 * If the app is already rated, or the counter has not reached the threshold
 	 * to launch the request, then nothing is shown to the user.
 	 *

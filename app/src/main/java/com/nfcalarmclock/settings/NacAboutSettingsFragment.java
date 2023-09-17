@@ -3,6 +3,7 @@ package com.nfcalarmclock.settings;
 import android.os.Bundle;
 import androidx.preference.Preference;
 
+import com.nfcalarmclock.BuildConfig;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedKeys;
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog;
@@ -20,6 +21,13 @@ public class NacAboutSettingsFragment
 	public void onCreatePreferences(Bundle savedInstanceState, String rootKey)
 	{
 		addPreferencesFromResource(R.xml.about_preferences);
+
+		// Get the version preference
+		NacSharedKeys keys = this.getSharedKeys();
+		Preference version = findPreference(keys.getVersionPreference());
+
+		// Set the version name as the summary
+		version.setSummary(BuildConfig.VERSION_NAME);
 	}
 
 	/**

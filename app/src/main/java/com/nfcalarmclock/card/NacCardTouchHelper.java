@@ -213,7 +213,7 @@ public class NacCardTouchHelper
 
 		/**
 		 * Allow the card to be swiped.
-		 *
+		 * <p>
 		 * Note: When the app is opened up fresh and a card is expanded, swiping
 		 * will work because the ViewHolder is null.
 		 */

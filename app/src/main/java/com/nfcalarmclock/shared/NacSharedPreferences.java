@@ -89,7 +89,7 @@ public class NacSharedPreferences
 
 	/**
 	 * Edit the default audio source to use when a new alarm card is created.
-	 *
+	 * <p>
 	 * This can be changed for an alarm by clicking the audio settings button.
 	 */
 	public void editAudioSource(String source)
@@ -174,7 +174,7 @@ public class NacSharedPreferences
 
 	/**
 	 * Edit the color of the days an alarm will go off on.
-	 * 
+	 * <p>
 	 * This is displayed when an alarm card is collapsed.
 	 */
 	@SuppressWarnings("unused")
@@ -220,7 +220,7 @@ public class NacSharedPreferences
 
 	/**
 	 * Edit the default media path to use when a new alarm card is created.
-	 *
+	 * <p>
 	 * This is the path to the media that should play when an alarm goes off.
 	 */
 	@SuppressWarnings("unused")
@@ -244,7 +244,7 @@ public class NacSharedPreferences
 
 	/**
 	 * Edit the color of the name of an alarm.
-	 * 
+	 * <p>
 	 * This is displayed when an alarm card is collapsed.
 	 */
 	@SuppressWarnings("unused")
@@ -279,7 +279,7 @@ public class NacSharedPreferences
 
 	/**
 	 * Edit the previous version that this app was using.
-	 *
+	 * <p>
 	 * Normally, this should be the same as the current version, but when an
 	 * install occurs, these values will differ.
 	 */
@@ -532,16 +532,6 @@ public class NacSharedPreferences
 		return this.getBoolean(key, value);
 	}
 
-	/*
-	  @return The current app version.
-	 */
-	//public String getAppVersion()
-	//{
-	//	String key = this.getKeys().getAppVersion();
-
-	//	return this.getString(key, "");
-	//}
-
 	/**
 	 * @return The audio source.
 	 */
@@ -675,7 +665,7 @@ public class NacSharedPreferences
 
 	/**
 	 * @return Which style to use for the day buttons.
-	 *
+	 * <p>
 	 *         1: Represents using the filled-in buttons (Default)
 	 *         2: Represents the outlined button style
 	 */
@@ -1027,7 +1017,7 @@ public class NacSharedPreferences
 
 	/**
 	 * @return The previous version of the app.
-	 *
+	 * <p>
 	 * Normally, this should be the same as the current version, but when an
 	 * install occurs, these values will differ.
 	 */

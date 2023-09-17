@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import com.nfcalarmclock.util.NacUtility;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,7 +84,7 @@ public class NacFileTree
 			{
 				c = resolver.query(collection, columns, null, null, null);
 			}
-			catch (IllegalArgumentException f)
+			catch (IllegalArgumentException ignored)
 			{
 			}
 		}

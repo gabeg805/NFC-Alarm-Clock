@@ -7,8 +7,8 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RadioGroup;
+import androidx.annotation.NonNull;
 import androidx.preference.Preference;
-
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.util.dialog.NacDialog;
 import com.nfcalarmclock.shared.NacSharedConstants;
@@ -129,7 +129,7 @@ public class NacNextAlarmFormatPreference
 	/**
 	 */
 	@Override
-	public boolean onPreferenceClick(Preference preference)
+	public boolean onPreferenceClick(@NonNull Preference preference)
 	{
 		Context context = getContext();
 		NacDialog dialog = new NacDialog();

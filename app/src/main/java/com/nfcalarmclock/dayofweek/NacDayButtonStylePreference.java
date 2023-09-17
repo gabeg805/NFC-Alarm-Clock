@@ -3,9 +3,9 @@ package com.nfcalarmclock.dayofweek;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import androidx.annotation.NonNull;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
-
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedDefaults;
@@ -103,7 +103,7 @@ public class NacDayButtonStylePreference
 	 * Setup the checkbox and summary text.
 	 */
 	@Override
-	public void onBindViewHolder(PreferenceViewHolder holder)
+	public void onBindViewHolder(@NonNull PreferenceViewHolder holder)
 	{
 		super.onBindViewHolder(holder);
 		this.mDayButton = (NacDayButton) holder.findViewById(R.id.widget);
@@ -126,7 +126,7 @@ public class NacDayButtonStylePreference
 	 * Allow users to select the whole preference to change the checkbox.
 	 */
 	@Override
-	public boolean onPreferenceClick(Preference pref)
+	public boolean onPreferenceClick(@NonNull Preference pref)
 	{
 		NacDayButton button = this.getDayButton();
 		NacSharedPreferences shared = this.getNacSharedPreferences();

@@ -6,14 +6,10 @@ import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
 import com.google.android.material.button.MaterialButton;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
-import com.nfcalarmclock.statistics.NacAlarmStatisticRepository;
-import com.nfcalarmclock.util.NacUtility;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,7 +17,7 @@ import java.util.Locale;
 
 /**
  * Statistics fragment.
- *
+ * <p>
  * TODO: Highlighting the weekends in the dismiss/miss/snooze plot would be dope
  */
 public class NacStatisticsSettingsFragment

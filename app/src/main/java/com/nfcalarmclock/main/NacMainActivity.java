@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textview.MaterialTextView;
+import com.nfcalarmclock.BuildConfig;
 import com.nfcalarmclock.activealarm.NacActiveAlarmService;
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmViewModel;
@@ -136,7 +137,7 @@ public class NacMainActivity
 
 	/**
 	 * Shutdown broadcast receiver.
-	 *
+	 * <p>
 	 * TODO: Should this be final like mTimeTickReceiver?
 	 */
 	private NacShutdownBroadcastReceiver mShutdownBroadcastReceiver;
@@ -154,15 +155,10 @@ public class NacMainActivity
 	/**
 	 * Mutable live data for the alarm card that can be modified and sorted, or
 	 * not sorted, depending on the circumstance.
-	 *
+	 * <p>
 	 * Live data from the view model cannot be sorted, hence the need for this.
 	 */
 	private NacCardAdapterLiveData mAlarmCardAdapterLiveData;
-
-	///**
-	// * A currently active alarm.
-	// */
-	//private NacAlarm mActiveAlarm;
 
 	/**
 	 * Alarm card touch helper.
@@ -269,7 +265,7 @@ public class NacMainActivity
 	/**
 	 * Receiver for the time tick intent. This is called when the time increments
 	 * every minute.
-	 *
+	 * <p>
 	 * TODO: Should this be its own class like NacShutdownBroadcastReceiver?
 	 */
 	private final BroadcastReceiver mTimeTickReceiver = new BroadcastReceiver()
@@ -468,7 +464,7 @@ public class NacMainActivity
 
 	/**
 	 * Attempt to dismiss the first active alarm found.
-	 *
+	 * <p>
 	 * If unable to dismiss the alarm, the alarm activity is shown.
 	 */
 	private void dismissActiveAlarm()
@@ -904,7 +900,7 @@ public class NacMainActivity
 
 	/**
 	 * Alarm list has changed.
-	 *
+	 * <p>
 	 * TODO: There is a race condition between snoozing an alarm, writing to the
 	 *       database, and refreshing the main activity.
 	 */
@@ -1242,8 +1238,7 @@ public class NacMainActivity
 	public void onReadWhatsNew()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		NacSharedConstants cons = this.getSharedConstants();
-		String version = cons.getAppVersion();
+		String version = BuildConfig.VERSION_NAME;
 
 		// Set the previous app version as the current version. This way, the What's
 		// New dialog does not show again
@@ -1367,7 +1362,7 @@ public class NacMainActivity
 
 	/**
 	 * Prepare an active alarm to be shown to the user.
-	 *
+	 * <p>
 	 * If the alarm is null, or the activity is not shown, it will not be run.
 	 *
 	 * @param  alarm  An active alarm.
@@ -1581,7 +1576,7 @@ public class NacMainActivity
 
 	/**
 	 * Run the setup when it is the app's first time running.
-	 *
+	 * <p>
 	 * If it is not the app's first time running, this does nothing.
 	 */
 	private void setupForAppFirstRun()
@@ -1707,7 +1702,7 @@ public class NacMainActivity
 
 	/**
 	 * Setup statistics, and start collecting the data.
-	 *
+	 * <p>
 	 * This is only done if this is not the app's first time running and
 	 * statistics should be started.
 	 *
@@ -1762,14 +1757,13 @@ public class NacMainActivity
 	private boolean setupWhatsNewDialog()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		NacSharedConstants cons = this.getSharedConstants();
-		String version = cons.getAppVersion();
+		String version = BuildConfig.VERSION_NAME;
 		String prevVersion = shared.getPreviousAppVersion();
 
 		// The current version and previously saved version match. This means there
 		// is no update that has occurred. Alternatively, something is wrong with the
 		// current version (if it is empty)
-		if (version.isEmpty() || version.equals(prevVersion))
+		if (version.equals(prevVersion))
 		{
 			return false;
 		}
@@ -1858,44 +1852,6 @@ public class NacMainActivity
 		dialog.show(getSupportFragmentManager(), NacGraduallyIncreaseVolumeDialog.TAG);
 	}
 
-	///**
-	// * Show the dialog to ignore battery optimizations.
-	// */
-	//public void showIgnoreBatteryOptimizationPermissionDialog()
-	//{
-	//	// Create the dialog
-	//	NacIgnoreBatteryOptimizationPermissionDialog dialog =
-	//		new NacIgnoreBatteryOptimizationPermissionDialog();
-
-	//	// Handle the cases where the permission request is accepted/canceled
-	//	dialog.setOnPermissionRequestListener(
-	//		new NacIgnoreBatteryOptimizationPermissionDialog.OnPermissionRequestListener()
-	//		{
-
-	//			/**
-	//			 * Called when the permission request is accepted.
-	//			 */
-	//			public void onPermissionRequestAccepted(String permission)
-	//			{
-	//				NacIgnoreBatteryOptimizationPermission.requestPermission(NacMainActivity.this);
-	//			}
-
-	//			/**
-	//			 * Called when the permission request was canceled.
-	//			 */
-	//			public void onPermissionRequestCanceled(String permission)
-	//			{
-	//				// Setup the initial dialogs, if any, that need to be shown
-	//				setupInitialDialogToShow();
-	//			}
-
-	//		});
-
-	//	// Show the dialog
-	//	dialog.show(getSupportFragmentManager(),
-	//		NacIgnoreBatteryOptimizationPermissionDialog.TAG);
-	//}
-
 	/**
 	 * Show a snackbar for the next alarm that will run.
 	 */
@@ -1941,47 +1897,6 @@ public class NacMainActivity
 		NacUtility.quickToast(this, message);
 	}
 
-	///**
-	// * Show the POST_NOTIFICATIONS permission dialog.
-	// */
-	//@RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-	//private void showPostNotificationPermissionDialog()
-	//{
-	//	// Create the dialog
-	//	NacPostNotificationsPermissionDialog dialog =
-	//		new NacPostNotificationsPermissionDialog();
-
-	//	// Handle the cases where the permission request is accepted/canceled
-	//	dialog.setOnPermissionRequestListener(
-	//		new NacPostNotificationsPermissionDialog.OnPermissionRequestListener()
-	//	{
-
-	//		/**
-	//		 * Called when the permission request is accepted.
-	//		 */
-	//		@Override
-	//		public void onPermissionRequestAccepted(String permission)
-	//		{
-	//			NacPostNotificationsPermission.requestPermission(NacMainActivity.this, 69);
-	//		}
-
-	//		/**
-	//		 * Called when the permission request is canceled.
-	//		 */
-	//		@Override
-	//		public void onPermissionRequestCanceled(String permission)
-	//		{
-	//			// Setup the initial dialogs, if any, that need to be shown
-	//			setupInitialDialogToShow();
-	//		}
-
-	//	});
-
-	//	// Show the dialog
-	//	dialog.show(getSupportFragmentManager(),
-	//		NacPostNotificationsPermissionDialog.TAG);
-	//}
-
 	/**
 	 * Show the restrict volume dialog.
 	 */
@@ -1995,45 +1910,6 @@ public class NacMainActivity
 		dialog.setOnRestrictVolumeListener(this);
 		dialog.show(getSupportFragmentManager(), NacRestrictVolumeDialog.TAG);
 	}
-
-	///**
-	// * Show the dialog to request the schedule exact alarm permission.
-	// */
-	//@RequiresApi(api = Build.VERSION_CODES.S)
-	//public void showScheduleExactAlarmPermissionDialog()
-	//{
-	//	// Create the dialog
-	//	NacScheduleExactAlarmPermissionDialog dialog =
-	//		new NacScheduleExactAlarmPermissionDialog();
-
-	//	// Handle the cases where the permission request is accepted/canceled
-	//	dialog.setOnPermissionRequestListener(
-	//		new NacScheduleExactAlarmPermissionDialog.OnPermissionRequestListener()
-	//	{
-
-	//		/**
-	//		 * Called when the permission request is accepted.
-	//		 */
-	//		public void onPermissionRequestAccepted(String permission)
-	//		{
-	//			NacScheduleExactAlarmPermission.requestPermission(NacMainActivity.this);
-	//		}
-
-	//		/**
-	//		 * Called when the permission request was canceled.
-	//		 */
-	//		public void onPermissionRequestCanceled(String permission)
-	//		{
-	//			// Setup the initial dialogs, if any, that need to be shown
-	//			setupInitialDialogToShow();
-	//		}
-
-	//	});
-
-	//	// Show the dialog
-	//	dialog.show(getSupportFragmentManager(),
-	//		NacScheduleExactAlarmPermissionDialog.TAG);
-	//}
 
 	/**
 	 * @see #showSnackbar(String, String, View.OnClickListener)
@@ -2071,7 +1947,7 @@ public class NacMainActivity
 
 	/**
 	 * Show a snackbar for the updated alarm.
-	 *
+	 * <p>
 	 * If this alarm is disabled, a snackbar for the next alarm will be shown.
 	 */
 	public void showUpdatedAlarmSnackbar(NacAlarm alarm)
@@ -2099,7 +1975,7 @@ public class NacMainActivity
 
 	/**
 	 * Update the notification.
-	 *
+	 * <p>
 	 * TODO: Check if race condition with this being called after submitList?
 	 * Should I just pass a list of alarms to this method?
 	 */
@@ -2118,7 +1994,7 @@ public class NacMainActivity
 	}
 
 	/**
-	 * @see #updateUpcomingNotification(List<NacAlarm>)
+	 * @see #updateUpcomingNotification(List)
 	 */
 	public void updateUpcomingNotification()
 	{
@@ -2130,7 +2006,7 @@ public class NacMainActivity
 
 	/**
 	 * Verify that the card is measured.
-	 *
+	 * <p>
 	 * If a card has already been measured, this does nothing.
 	 */
 	private void verifyCardIsMeasured(NacCardHolder card)

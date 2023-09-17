@@ -30,7 +30,7 @@ public class NacPostNotificationsPermission
 
 	/**
 	 * Check if the app has the POST_NOTIFICATIONS permission or not.
-	 *
+	 * <p>
 	 * If the phone is not at the required API level, this counts as having the
 	 * permission, for simplicity.
 	 *

@@ -15,7 +15,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayout.Tab;
 import com.google.android.material.tabs.TabLayoutMediator;
-
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.alarm.NacAlarm;
 import com.nfcalarmclock.file.browser.NacFileBrowser;
@@ -483,7 +482,7 @@ public class NacMediaActivity
 
 		/**
 		 */
-		//@NonNull
+		@NonNull
         @Override
 		public Fragment createFragment(int position)
 		{

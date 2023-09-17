@@ -190,10 +190,9 @@ public abstract class NacPermissionRequestDialog
 
 	/**
 	 * Called when the view is created.
-	 *
+	 * <p>
 	 * This is called right after onCreateDialog().
 	 */
-	//public void onStart(@NonNull View view, @Nullable Bundle savedInstanceState)
 	@Override
 	public void onStart()
 	{
@@ -216,7 +215,7 @@ public abstract class NacPermissionRequestDialog
 	/**
 	 * Set the position of the dialog in the permission request manager.
 	 *
-	 * @param position
+	 * @param position Position of the dialog.
 	 */
 	public void setPosition(int position)
 	{
@@ -226,7 +225,7 @@ public abstract class NacPermissionRequestDialog
 	/**
 	 * Set the total number of pages in the permission request manager.
 	 *
-	 * @param numberOfPages
+	 * @param numberOfPages Total number of pages.
 	 */
 	public void setTotalNumberOfPages(int numberOfPages)
 	{

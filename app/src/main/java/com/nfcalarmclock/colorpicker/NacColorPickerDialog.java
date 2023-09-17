@@ -58,7 +58,7 @@ public class NacColorPickerDialog
 
 	/**
 	 * Ensure the text always starts with "#".
-	 *
+	 * <p>
 	 * Note: This is required to implement TextWatcher.
 	 */
 	@Override
