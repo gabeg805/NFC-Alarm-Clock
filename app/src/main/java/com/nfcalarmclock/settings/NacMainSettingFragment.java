@@ -132,8 +132,11 @@ public class NacMainSettingFragment
 				{
 					String message = getString(R.string.error_message_google_play_billing);
 
-					// Show a toast indicating there was an error
-					NacUtility.quickToast(fragmentActivity, message);
+					// Show a toast indicating there was an error. Make sure this is done
+					// on the UI thread
+					fragmentActivity.runOnUiThread(() ->
+						NacUtility.quickToast(fragmentActivity, message)
+					);
 				}
 
 				/**
@@ -142,8 +145,11 @@ public class NacMainSettingFragment
 				@Override
 				public void onPrepareToLaunchBillingFlow(ProductDetails productDetails)
 				{
-					// Launch billing flow, passing in the activity
-					support.launchBillingFlow(fragmentActivity, productDetails);
+					// Launch billing flow, passing in the activity. Make sure this is
+					// done on the UI thread
+					fragmentActivity.runOnUiThread(() ->
+						support.launchBillingFlow(fragmentActivity, productDetails)
+					);
 				}
 
 				/**
