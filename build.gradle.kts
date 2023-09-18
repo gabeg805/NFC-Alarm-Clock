@@ -14,6 +14,13 @@ allprojects {
 	}
 }
 
+configurations {
+	all {
+		exclude(group = "com.google.firebase", module = "firebase-core")
+		exclude(group = "com.google.firebase", module = "firebase-iid")
+	}
+}
+
 //task clean(type: Delete) {
 //	delete rootProject.buildDir
 //}

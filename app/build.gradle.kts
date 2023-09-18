@@ -72,13 +72,6 @@ android {
 				"TypographyQuotes"
     }
 
-	configurations {
-		all {
-			exclude(group = "com.google.firebase", module = "firebase-core")
-			exclude(group = "com.google.firebase", module = "firebase-iid")
-		}
-	}
-
 	namespace = "com.nfcalarmclock"
 	dataBinding.enable = true
 
