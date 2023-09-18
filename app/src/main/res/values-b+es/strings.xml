@@ -84,6 +84,7 @@
 	<string name="message_bullet">\u25BA</string>
 	<string name="message_required">Requerido</string>
 	<string name="message_optional">Opcional</string>
+	<string name="message_support_thank_you">¡Gracias por su apoyo!</string>
 
 
 
@@ -100,6 +101,7 @@
 	<string name="error_message_select_color">Color inválido</string>
 	<string name="error_message_play_audio">Incapaz de tocar audio</string>
 	<string name="error_message_play_file">Incapaz de tocar la canción seleccionada</string>
+	<string name="error_message_google_play_billing">Error al conectarse a Google Play Store</string>
 
 
 

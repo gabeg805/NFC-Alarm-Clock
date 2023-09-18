@@ -16,8 +16,9 @@ allprojects {
 
 configurations {
 	all {
-		exclude(group = "com.google.firebase", module = "firebase-core")
-		exclude(group = "com.google.firebase", module = "firebase-iid")
+		exclude(group = "com.google.firebase")
+		//exclude(group = "com.google.firebase", module = "firebase-core")
+		//exclude(group = "com.google.firebase", module = "firebase-iid")
 	}
 }
 

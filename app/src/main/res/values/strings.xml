@@ -84,6 +84,7 @@
 	<string name="message_bullet">\u25BA</string>
 	<string name="message_required">Required</string>
 	<string name="message_optional">Optional</string>
+	<string name="message_support_thank_you">Thank you for your support!</string>
 
 
 
@@ -100,6 +101,7 @@
 	<string name="error_message_select_color">Invalid hex color</string>
 	<string name="error_message_play_audio">Unable to play audio</string>
 	<string name="error_message_play_file">Unable to play selected file</string>
+	<string name="error_message_google_play_billing">Error when connecting to the Google Play Store</string>
 
 
 

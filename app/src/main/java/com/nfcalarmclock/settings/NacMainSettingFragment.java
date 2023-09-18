@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
-
 import com.android.billingclient.api.ProductDetails;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedKeys;
@@ -121,21 +120,46 @@ public class NacMainSettingFragment
 			FragmentActivity fragmentActivity = requireActivity();
 			NacSupportSetting support = new NacSupportSetting(fragmentActivity);
 
+			// Set the billing event listener
 			support.setOnBillingEventListener(new NacSupportSetting.OnBillingEventListener()
 			{
+
+				/**
+				 * There was a billing error.
+				 */
+				@Override
+				public void onBillingError()
+				{
+					String message = getString(R.string.error_message_google_play_billing);
+
+					// Show a toast indicating there was an error
+					NacUtility.quickToast(fragmentActivity, message);
+				}
+
+				/**
+				 * The billing flow is ready to be launched.
+				 */
 				@Override
 				public void onPrepareToLaunchBillingFlow(ProductDetails productDetails)
 				{
+					// Launch billing flow, passing in the activity
 					support.launchBillingFlow(fragmentActivity, productDetails);
 				}
 
+				/**
+				 * Support has been purchased.
+				 */
 				@Override
 				public void onSupportPurchased()
 				{
-					NacUtility.quickToast(fragmentActivity, "Thank you for your support!");
+					String message = getString(R.string.message_support_thank_you);
+
+					// Show a toast saying thank you
+					NacUtility.quickToast(fragmentActivity, message);
 				}
 			});
 
+			// Connect to Google Play
 			support.connect();
 			return false;
 		}
@@ -144,6 +168,7 @@ public class NacMainSettingFragment
 			return false;
 		}
 
+		// Show the fragment that was selected above
 		manager.beginTransaction()
 			.replace(android.R.id.content, fragment)
 			.addToBackStack(title)

@@ -19,7 +19,6 @@ import com.android.billingclient.api.Purchase.PurchaseState;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.QueryProductDetailsParams;
 import com.google.common.collect.ImmutableList;
-import com.nfcalarmclock.util.NacUtility;
 import java.util.List;
 
 /**
@@ -48,8 +47,9 @@ public class NacSupportSetting
 	 */
 	public interface OnBillingEventListener
 	{
-		public void onPrepareToLaunchBillingFlow(ProductDetails productDetails);
-		public void onSupportPurchased();
+		void onBillingError();
+		void onPrepareToLaunchBillingFlow(ProductDetails productDetails);
+		void onSupportPurchased();
 	}
 
 	/**
@@ -73,7 +73,6 @@ public class NacSupportSetting
 	public NacSupportSetting(Context context)
 	{
 		// Build the billing client
-		NacUtility.printf("Building billing client!");
 		this.mBillingClient = BillingClient.newBuilder(context)
 			.setListener(this)
 			.enablePendingPurchases()
@@ -81,6 +80,52 @@ public class NacSupportSetting
 
 		// Set the billing event listener
 		this.mOnBillingEventListener = null;
+	}
+
+	/**
+	 * Call the listener when there is a billing error.
+	 */
+	private void callOnBillingError()
+	{
+		OnBillingEventListener listener = this.getOnBillingEventListener();
+
+		// Make sure the listener has been set
+		if (listener != null)
+		{
+			listener.onBillingError();
+		}
+	}
+
+	/**
+	 * Call the listener when preparing to launch billing flow.
+	 *
+	 * @param productDetails Product details.
+	 */
+	private void callOnPrepareToLaunchBillingFlow(ProductDetails productDetails)
+	{
+		OnBillingEventListener listener = this.getOnBillingEventListener();
+
+		// Make sure the listener has been set
+		if (listener != null)
+		{
+			listener.onPrepareToLaunchBillingFlow(productDetails);
+		}
+
+	}
+
+	/**
+	 * Call the listener to indicate that the purchase was successfully consumed.
+	 */
+	private void callOnSupportPurchased()
+	{
+
+		OnBillingEventListener listener = this.getOnBillingEventListener();
+
+		// Make sure the listener has been set
+		if (listener != null)
+		{
+			listener.onSupportPurchased();
+		}
 	}
 
 	/**
@@ -104,7 +149,6 @@ public class NacSupportSetting
 		BillingClient billingClient = this.getBillingClient();
 
 		// Connect to Google Play
-		NacUtility.printf("Connect to Google Play!");
 		billingClient.startConnection(this);
 	}
 
@@ -118,13 +162,12 @@ public class NacSupportSetting
 	 */
 	private void consumePurchase(Purchase purchase)
 	{
-		NacUtility.printf("consumePurchase!");
 		int purchaseState = purchase.getPurchaseState();
 
 		// The purchase did not go through
 		if (purchaseState != PurchaseState.PURCHASED)
 		{
-			NacUtility.printf("consumePurchase! Purchase state not purchased : %d", purchaseState);
+			// Cleanup the billing client
 			this.cleanup();
 			return;
 		}
@@ -137,7 +180,6 @@ public class NacSupportSetting
 		// Consume the purchase asynchronously
 		BillingClient billingClient = this.getBillingClient();
 
-		NacUtility.printf("consumePurchase! Officially consuming the purchase");
 		billingClient.consumeAsync(consumeParams, this);
 	}
 
@@ -168,8 +210,6 @@ public class NacSupportSetting
 	 */
 	public void launchBillingFlow(Activity activity, ProductDetails productDetails)
 	{
-		NacUtility.printf("launchBillingFlow!");
-
 		// Create the params that describe the product to be purchased
 		ImmutableList<ProductDetailsParams> productDetailsParamsList = ImmutableList.of(
 			BillingFlowParams.ProductDetailsParams.newBuilder()
@@ -186,7 +226,6 @@ public class NacSupportSetting
 		// necessary
 		BillingClient billingClient = this.getBillingClient();
 
-		NacUtility.printf("launchBillingFlow! Officially launching the billing flow");
 		billingClient.launchBillingFlow(activity, billingFlowParams);
 	}
 
@@ -198,7 +237,6 @@ public class NacSupportSetting
 	@Override
 	public void onBillingServiceDisconnected()
 	{
-		NacUtility.printf("Billing service disconnected!");
 		// Cleanup the billing client
 		this.cleanup();
 	}
@@ -211,19 +249,19 @@ public class NacSupportSetting
 	@Override
 	public void onBillingSetupFinished(@NonNull BillingResult billingResult)
 	{
-		NacUtility.printf("onBillingSetupFinished! Billing setup finished");
 		// Unable to finish setup of the billing service
 		if (billingResult.getResponseCode() != BillingResponseCode.OK)
 		{
-			NacUtility.printf("onBillingSetupFinished! Billing result is not ok! %d", billingResult.getResponseCode());
+			// Call the listener to indicate that there was a billing error
+			this.callOnBillingError();
 
 			// Cleanup the billing client
 			this.cleanup();
+
 			return;
 		}
 
 		// Query for products to sell
-		NacUtility.printf("onBillingSetupFinished! Querying for products");
 		this.queryForProducts();
 	}
 
@@ -236,18 +274,10 @@ public class NacSupportSetting
 	@Override
 	public void onConsumeResponse(BillingResult billingResult, String purchaseToken)
 	{
-		NacUtility.printf("onConsumeResponse!");
-
-		// Consume the purchase
-		if (billingResult.getResponseCode() != BillingResponseCode.OK)
+		// Call the listener to indicate that the purchase was successfully consumed
+		if (billingResult.getResponseCode() == BillingResponseCode.OK)
 		{
-			NacUtility.printf("onConsumeResponse! Thank you for your support!");
-			//NacUtility.quickToast(this.getActivity(), "Thank you for your support!");
-			this.getOnBillingEventListener().onSupportPurchased();
-		}
-		else
-		{
-			NacUtility.printf("onConsumeResponse! Billing result is not ok! %d", billingResult.getResponseCode());
+			this.callOnSupportPurchased();
 		}
 
 		// Cleanup the billing client
@@ -266,26 +296,24 @@ public class NacSupportSetting
 	public void onProductDetailsResponse(@NonNull BillingResult billingResult,
 		@NonNull List<ProductDetails> productDetailsList)
 	{
-		NacUtility.printf("onProductDetailsResponse! Product list size : %d", productDetailsList.size());
-
 		// Unable to get a list of product details
 		if ((billingResult.getResponseCode() != BillingResponseCode.OK)
 			|| productDetailsList.isEmpty())
 		{
-			NacUtility.printf("onProductDetailsResponse! Billing result is not ok! %d", billingResult.getResponseCode());
+			// Call the listener to indicate that there was a billing error
+			this.callOnBillingError();
 
 			// Cleanup the billing client
 			this.cleanup();
+
 			return;
 		}
 
 		// Get the product details of the first item
 		ProductDetails productDetails = productDetailsList.get(0);
 
-		// Launch the billing flow
-		NacUtility.printf("onProductDetailsResponse! Launching the billing flow");
-		this.getOnBillingEventListener().onPrepareToLaunchBillingFlow(productDetails);
-		//this.launchBillingFlow(productDetails);
+		// Call the listener indicating that the app is ready to launch the billing flow
+		this.callOnPrepareToLaunchBillingFlow(productDetails);
 	}
 
 	/**
@@ -300,14 +328,10 @@ public class NacSupportSetting
 	public void onPurchasesUpdated(@NonNull BillingResult billingResult,
 		@Nullable List<Purchase> purchaseList)
 	{
-		NacUtility.printf("onPurchasesUpdated! Purchase list size : %d", ((purchaseList != null) ? purchaseList.size() : -1));
-
 		// Unable to complete purchase
 		if ((billingResult.getResponseCode() != BillingResponseCode.OK)
 			|| (purchaseList == null))
 		{
-			NacUtility.printf("onPurchasesUpdated! Billing result is not ok! %d", billingResult.getResponseCode());
-
 			// Cleanup the billing client
 			this.cleanup();
 			return;
@@ -317,7 +341,6 @@ public class NacSupportSetting
 		Purchase purchase = purchaseList.get(0);
 
 		// Consume the purchase
-		NacUtility.printf("onPurchasesUpdated! Consume the purchase");
 		this.consumePurchase(purchase);
 	}
 
@@ -328,8 +351,6 @@ public class NacSupportSetting
 	 */
 	private void queryForProducts()
 	{
-		NacUtility.printf("queryForProducts!");
-
 		// Parameters used to query for a list of product details
 		QueryProductDetailsParams queryProductDetailsParams =
 			QueryProductDetailsParams.newBuilder()
@@ -344,7 +365,6 @@ public class NacSupportSetting
 		// Perform a network query of the products available for sale, asynchronously
 		BillingClient billingClient = this.getBillingClient();
 
-		NacUtility.printf("queryForProducts! Query async");
 		billingClient.queryProductDetailsAsync(queryProductDetailsParams, this);
 	}
 
