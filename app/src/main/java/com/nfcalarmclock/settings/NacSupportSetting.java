@@ -1,6 +1,7 @@
 package com.nfcalarmclock.settings;
 
 import android.app.Activity;
+import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.android.billingclient.api.BillingClient;
@@ -43,6 +44,15 @@ public class NacSupportSetting
 {
 
 	/**
+	 * Listener for when billing events occur.
+	 */
+	public interface OnBillingEventListener
+	{
+		public void onPrepareToLaunchBillingFlow(ProductDetails productDetails);
+		public void onSupportPurchased();
+	}
+
+	/**
 	 * Product ID.
 	 */
 	public static String PRODUCT_ID_SUPPORT = "com.nfcalarmclock.support1";
@@ -53,24 +63,24 @@ public class NacSupportSetting
 	private BillingClient mBillingClient;
 
 	/**
-	 * Activity.
+	 * Listener for billing events.
 	 */
-	private Activity mActivity;
+	private OnBillingEventListener mOnBillingEventListener;
 
 	/**
 	 * Constructor.
 	 */
-	public NacSupportSetting(Activity activity)
+	public NacSupportSetting(Context context)
 	{
 		// Build the billing client
 		NacUtility.printf("Building billing client!");
-		this.mBillingClient = BillingClient.newBuilder(activity)
+		this.mBillingClient = BillingClient.newBuilder(context)
 			.setListener(this)
 			.enablePendingPurchases()
 			.build();
 
-		// Set the activity
-		this.mActivity = activity;
+		// Set the billing event listener
+		this.mOnBillingEventListener = null;
 	}
 
 	/**
@@ -83,7 +93,7 @@ public class NacSupportSetting
 
 		// Cleanup the member variables
 		this.mBillingClient = null;
-		this.mActivity = null;
+		this.mOnBillingEventListener = null;
 	}
 
 	/**
@@ -132,16 +142,6 @@ public class NacSupportSetting
 	}
 
 	/**
-	 * Get the activity.
-	 *
-	 * @return The activity.
-	 */
-	private Activity getActivity()
-	{
-		return this.mActivity;
-	}
-
-	/**
 	 * Get the billing client.
 	 *
 	 * @return The billing client.
@@ -152,11 +152,21 @@ public class NacSupportSetting
 	}
 
 	/**
+	 * Get the billing event listener.
+	 *
+	 * @return The billing event listener.
+	 */
+	private OnBillingEventListener getOnBillingEventListener()
+	{
+		return this.mOnBillingEventListener;
+	}
+
+	/**
 	 * Launch the billing flow so that the user can make the purchase.
 	 *
 	 * @param productDetails Product details.
 	 */
-	private void launchBillingFlow(ProductDetails productDetails)
+	public void launchBillingFlow(Activity activity, ProductDetails productDetails)
 	{
 		NacUtility.printf("launchBillingFlow!");
 
@@ -174,7 +184,6 @@ public class NacSupportSetting
 
 		// Launch the billing flow (ignoring the result because I do not think it is
 		// necessary
-		Activity activity = this.getActivity();
 		BillingClient billingClient = this.getBillingClient();
 
 		NacUtility.printf("launchBillingFlow! Officially launching the billing flow");
@@ -229,18 +238,20 @@ public class NacSupportSetting
 	{
 		NacUtility.printf("onConsumeResponse!");
 
-		// Unable to consume the purchase
+		// Consume the purchase
 		if (billingResult.getResponseCode() != BillingResponseCode.OK)
 		{
+			NacUtility.printf("onConsumeResponse! Thank you for your support!");
+			//NacUtility.quickToast(this.getActivity(), "Thank you for your support!");
+			this.getOnBillingEventListener().onSupportPurchased();
+		}
+		else
+		{
 			NacUtility.printf("onConsumeResponse! Billing result is not ok! %d", billingResult.getResponseCode());
-			// Cleanup the billing client
-			this.cleanup();
-			return;
 		}
 
-		// Toast to show thanks
-		NacUtility.printf("onConsumeResponse! Thank you for your support!");
-		NacUtility.quickToast(this.getActivity(), "Thank you for your support!");
+		// Cleanup the billing client
+		this.cleanup();
 	}
 
 	/**
@@ -273,8 +284,8 @@ public class NacSupportSetting
 
 		// Launch the billing flow
 		NacUtility.printf("onProductDetailsResponse! Launching the billing flow");
-		this.launchBillingFlow(productDetails);
-
+		this.getOnBillingEventListener().onPrepareToLaunchBillingFlow(productDetails);
+		//this.launchBillingFlow(productDetails);
 	}
 
 	/**
@@ -335,6 +346,16 @@ public class NacSupportSetting
 
 		NacUtility.printf("queryForProducts! Query async");
 		billingClient.queryProductDetailsAsync(queryProductDetailsParams, this);
+	}
+
+	/**
+	 * Set the billing event listener
+	 *
+	 * @param listener The billing event listener.
+	 */
+	public void setOnBillingEventListener(OnBillingEventListener listener)
+	{
+		this.mOnBillingEventListener = listener;
 	}
 
 }

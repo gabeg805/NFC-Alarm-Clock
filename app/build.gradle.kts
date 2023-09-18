@@ -23,8 +23,8 @@ android {
 		applicationId = "com.nfcalarmclock"
 		minSdk = 21
 		targetSdk = 33
-		versionCode = 327
-		versionName = "11.0.0-beta3"
+		versionCode = 328
+		versionName = "11.0.0-beta4"
 
 		javaCompileOptions {
 			annotationProcessorOptions {
@@ -71,6 +71,13 @@ android {
 				"MinSdkTooLow" + "MissingRegistered" + "NegativeMargin" + "Registered" +
 				"TypographyQuotes"
     }
+
+	configurations {
+		all {
+			exclude(group = "com.google.firebase", module = "firebase-core")
+			exclude(group = "com.google.firebase", module = "firebase-iid")
+		}
+	}
 
 	namespace = "com.nfcalarmclock"
 	dataBinding.enable = true

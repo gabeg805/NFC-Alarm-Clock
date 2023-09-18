@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
+
+import com.android.billingclient.api.ProductDetails;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedKeys;
 import com.nfcalarmclock.statistics.NacStatisticsSettingFragment;
@@ -118,6 +120,21 @@ public class NacMainSettingFragment
 			NacUtility.printf("SUPPORT CLICKED!");
 			FragmentActivity fragmentActivity = requireActivity();
 			NacSupportSetting support = new NacSupportSetting(fragmentActivity);
+
+			support.setOnBillingEventListener(new NacSupportSetting.OnBillingEventListener()
+			{
+				@Override
+				public void onPrepareToLaunchBillingFlow(ProductDetails productDetails)
+				{
+					support.launchBillingFlow(fragmentActivity, productDetails);
+				}
+
+				@Override
+				public void onSupportPurchased()
+				{
+					NacUtility.quickToast(fragmentActivity, "Thank you for your support!");
+				}
+			});
 
 			support.connect();
 			return false;

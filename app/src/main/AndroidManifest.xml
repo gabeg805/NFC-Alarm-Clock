@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-	xmlns:android="http://schemas.android.com/apk/res/android">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools">
 
 	<!-- Permissions -->
 	<uses-permission android:name="android.permission.NFC" />
@@ -17,6 +18,12 @@
 	<uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+	<!-- Remove permissions that are appearing in merged manifest -->
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"
+		tools:node="remove" />
+	<uses-permission android:name="android.permission.INTERNET"
+		tools:node="remove" />
 
 	<!-- Hardware restrictions (NFC is optional) -->
 	<uses-feature
