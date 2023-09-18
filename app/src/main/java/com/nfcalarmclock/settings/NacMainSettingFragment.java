@@ -116,7 +116,6 @@ public class NacMainSettingFragment
 		// Support
 		else if (preferenceKey.equals(keys.getSupport()))
 		{
-			NacUtility.printf("SUPPORT CLICKED!");
 			FragmentActivity fragmentActivity = requireActivity();
 			NacSupportSetting support = new NacSupportSetting(fragmentActivity);
 
@@ -132,7 +131,7 @@ public class NacMainSettingFragment
 				{
 					String message = getString(R.string.error_message_google_play_billing);
 
-					// Show a toast indicating there was an error. Make sure this is done
+					// Show a toast indicating there was an error. Make sure this is run
 					// on the UI thread
 					fragmentActivity.runOnUiThread(() ->
 						NacUtility.quickToast(fragmentActivity, message)
@@ -145,11 +144,8 @@ public class NacMainSettingFragment
 				@Override
 				public void onPrepareToLaunchBillingFlow(ProductDetails productDetails)
 				{
-					// Launch billing flow, passing in the activity. Make sure this is
-					// done on the UI thread
-					fragmentActivity.runOnUiThread(() ->
-						support.launchBillingFlow(fragmentActivity, productDetails)
-					);
+					// Launch billing flow, passing in the activity
+					support.launchBillingFlow(fragmentActivity, productDetails);
 				}
 
 				/**
@@ -160,13 +156,17 @@ public class NacMainSettingFragment
 				{
 					String message = getString(R.string.message_support_thank_you);
 
-					// Show a toast saying thank you
-					NacUtility.quickToast(fragmentActivity, message);
+					// Show a toast saying thank you. Make sure this is run on the UI
+					// thread
+					fragmentActivity.runOnUiThread(() ->
+						NacUtility.quickToast(fragmentActivity, message)
+					);
 				}
 			});
 
 			// Connect to Google Play
 			support.connect();
+
 			return false;
 		}
 		else
