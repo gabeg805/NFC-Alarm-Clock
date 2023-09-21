@@ -16,13 +16,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.nfcalarmclock.R;
-import com.nfcalarmclock.alarm.NacAlarm;
+import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.nfc.NacNfc;
 import com.nfcalarmclock.nfc.NacNfcTag;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
-import com.nfcalarmclock.system.NacBundle;
-import com.nfcalarmclock.system.NacIntent;
+import com.nfcalarmclock.util.NacBundle;
+import com.nfcalarmclock.util.NacIntent;
 import com.nfcalarmclock.util.NacUtility;
 
 /**

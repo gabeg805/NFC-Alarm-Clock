@@ -98,7 +98,7 @@ var activeTableTab = "activeTableTab";
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li>com.nfcalarmclock.system.NacCalendar</li>
+<li>com.nfcalarmclock.util.NacCalendar</li>
 </ul>
 </li>
 </ul>
@@ -158,7 +158,7 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static java.util.EnumSet&lt;com.nfcalarmclock.system.NacCalendar.Day&gt;</code></td>
+<td class="colFirst"><code>static java.util.EnumSet&lt;com.nfcalarmclock.util.NacCalendar.Day&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#WEEK">WEEK</a></span></code>
 <div class="block">Every day of week.</div>
 </td>
@@ -170,13 +170,13 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static java.util.EnumSet&lt;com.nfcalarmclock.system.NacCalendar.Day&gt;</code></td>
+<td class="colFirst"><code>static java.util.EnumSet&lt;com.nfcalarmclock.util.NacCalendar.Day&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#WEEKDAY">WEEKDAY</a></span></code>
 <div class="block">All weekday days.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static java.util.EnumSet&lt;com.nfcalarmclock.system.NacCalendar.Day&gt;</code></td>
+<td class="colFirst"><code>static java.util.EnumSet&lt;com.nfcalarmclock.util.NacCalendar.Day&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#WEEKEND">WEEKEND</a></span></code>
 <div class="block">All weekend days.</div>
 </td>
@@ -215,13 +215,13 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#getMessage-com.nfcalarmclock.shared.NacSharedPreferences-com.nfcalarmclock.alarm.NacAlarm-java.lang.String-">getMessage</a></span>(<a href="../../com/nfcalarmclock/NacSharedPreferences.html" title="class in com.nfcalarmclock">NacSharedPreferences</a>&nbsp;shared,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#getMessage-com.nfcalarmclock.shared.NacSharedPreferences-com.nfcalarmclock.alarm.db.NacAlarm-java.lang.String-">getMessage</a></span>(<a href="../../com/nfcalarmclock/NacSharedPreferences.html" title="class in com.nfcalarmclock">NacSharedPreferences</a>&nbsp;shared,
           <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm,
           java.lang.String&nbsp;prefix)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#getMessageNextAlarm-com.nfcalarmclock.shared.NacSharedPreferences-com.nfcalarmclock.alarm.NacAlarm-">getMessageNextAlarm</a></span>(<a href="../../com/nfcalarmclock/NacSharedPreferences.html" title="class in com.nfcalarmclock">NacSharedPreferences</a>&nbsp;shared,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#getMessageNextAlarm-com.nfcalarmclock.shared.NacSharedPreferences-com.nfcalarmclock.alarm.db.NacAlarm-">getMessageNextAlarm</a></span>(<a href="../../com/nfcalarmclock/NacSharedPreferences.html" title="class in com.nfcalarmclock">NacSharedPreferences</a>&nbsp;shared,
                    <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
@@ -238,7 +238,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#getMessageWillRun-com.nfcalarmclock.shared.NacSharedPreferences-com.nfcalarmclock.alarm.NacAlarm-">getMessageWillRun</a></span>(<a href="../../com/nfcalarmclock/NacSharedPreferences.html" title="class in com.nfcalarmclock">NacSharedPreferences</a>&nbsp;shared,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#getMessageWillRun-com.nfcalarmclock.shared.NacSharedPreferences-com.nfcalarmclock.alarm.db.NacAlarm-">getMessageWillRun</a></span>(<a href="../../com/nfcalarmclock/NacSharedPreferences.html" title="class in com.nfcalarmclock">NacSharedPreferences</a>&nbsp;shared,
                  <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -247,7 +247,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>static java.util.Calendar</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#getNextAlarmDay-com.nfcalarmclock.alarm.NacAlarm-">getNextAlarmDay</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#getNextAlarmDay-com.nfcalarmclock.alarm.db.NacAlarm-">getNextAlarmDay</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>static java.util.Calendar</code></td>
@@ -255,31 +255,31 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>static java.util.Calendar</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#getToday-com.nfcalarmclock.alarm.NacAlarm-">getToday</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#getToday-com.nfcalarmclock.alarm.db.NacAlarm-">getToday</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>static java.util.Calendar</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#toCalendar-com.nfcalarmclock.alarm.NacAlarm-com.nfcalarmclock.system.NacCalendar.Day-">toCalendar</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm,
-          com.nfcalarmclock.system.NacCalendar.Day&nbsp;day)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#toCalendar-com.nfcalarmclock.alarm.db.NacAlarm-com.nfcalarmclock.util.NacCalendar.Day-">toCalendar</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm,
+          com.nfcalarmclock.util.NacCalendar.Day&nbsp;day)</code>
 <div class="block">Convert the alarm on the given day to a Calendar.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>static java.util.List&lt;java.util.Calendar&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#toCalendars-com.nfcalarmclock.alarm.NacAlarm-">toCalendars</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#toCalendars-com.nfcalarmclock.alarm.db.NacAlarm-">toCalendars</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
 <div class="block">Convert all the days an alarm is scheduled to go off, to Calendars.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>static java.util.Calendar</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#toNextCalendar-com.nfcalarmclock.alarm.NacAlarm-com.nfcalarmclock.system.NacCalendar.Day-">toNextCalendar</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm,
-              com.nfcalarmclock.system.NacCalendar.Day&nbsp;day)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#toNextCalendar-com.nfcalarmclock.alarm.db.NacAlarm-com.nfcalarmclock.util.NacCalendar.Day-">toNextCalendar</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm,
+              com.nfcalarmclock.util.NacCalendar.Day&nbsp;day)</code>
 <div class="block">Convert the alarm on the given day to a Calendar.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>static java.util.Calendar</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#toNextOneTimeCalendar-com.nfcalarmclock.alarm.NacAlarm-">toNextOneTimeCalendar</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCalendar.html#toNextOneTimeCalendar-com.nfcalarmclock.alarm.db.NacAlarm-">toNextOneTimeCalendar</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
 <div class="block">Convert the one time alarm to the next calendar.</div>
 </td>
 </tr>
@@ -318,7 +318,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>WEEK</h4>
-<pre>public static final&nbsp;java.util.EnumSet&lt;com.nfcalarmclock.system.NacCalendar.Day&gt; WEEK</pre>
+<pre>public static final&nbsp;java.util.EnumSet&lt;com.nfcalarmclock.util.NacCalendar.Day&gt; WEEK</pre>
 <div class="block">Every day of week.</div>
 </li>
 </ul>
@@ -328,7 +328,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>WEEKDAY</h4>
-<pre>public static final&nbsp;java.util.EnumSet&lt;com.nfcalarmclock.system.NacCalendar.Day&gt; WEEKDAY</pre>
+<pre>public static final&nbsp;java.util.EnumSet&lt;com.nfcalarmclock.util.NacCalendar.Day&gt; WEEKDAY</pre>
 <div class="block">All weekday days.</div>
 </li>
 </ul>
@@ -338,7 +338,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>WEEKEND</h4>
-<pre>public static final&nbsp;java.util.EnumSet&lt;com.nfcalarmclock.system.NacCalendar.Day&gt; WEEKEND</pre>
+<pre>public static final&nbsp;java.util.EnumSet&lt;com.nfcalarmclock.util.NacCalendar.Day&gt; WEEKEND</pre>
 <div class="block">All weekend days.</div>
 </li>
 </ul>
@@ -377,7 +377,7 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getMessage-com.nfcalarmclock.shared.NacSharedPreferences-com.nfcalarmclock.alarm.NacAlarm-java.lang.String-">
+<a name="getMessage-com.nfcalarmclock.shared.NacSharedPreferences-com.nfcalarmclock.alarm.db.NacAlarm-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -392,7 +392,7 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="getMessageNextAlarm-com.nfcalarmclock.shared.NacSharedPreferences-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="getMessageNextAlarm-com.nfcalarmclock.shared.NacSharedPreferences-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -438,7 +438,7 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="getMessageWillRun-com.nfcalarmclock.shared.NacSharedPreferences-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="getMessageWillRun-com.nfcalarmclock.shared.NacSharedPreferences-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -467,7 +467,7 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="getNextAlarmDay-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="getNextAlarmDay-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -495,7 +495,7 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="getToday-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="getToday-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -508,14 +508,14 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="toCalendar-com.nfcalarmclock.alarm.NacAlarm-com.nfcalarmclock.system.NacCalendar.Day-">
+<a name="toCalendar-com.nfcalarmclock.alarm.db.NacAlarm-com.nfcalarmclock.util.NacCalendar.Day-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>toCalendar</h4>
 <pre>public static&nbsp;java.util.Calendar&nbsp;toCalendar(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm,
-                                            com.nfcalarmclock.system.NacCalendar.Day&nbsp;day)</pre>
+                                            com.nfcalarmclock.util.NacCalendar.Day&nbsp;day)</pre>
 <div class="block">Convert the alarm on the given day to a Calendar.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -526,7 +526,7 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="toCalendars-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="toCalendars-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -542,7 +542,7 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="toNextOneTimeCalendar-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="toNextOneTimeCalendar-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -552,14 +552,14 @@ extends java.lang.Object</pre>
 <div class="block">Convert the one time alarm to the next calendar.</div>
 </li>
 </ul>
-<a name="toNextCalendar-com.nfcalarmclock.alarm.NacAlarm-com.nfcalarmclock.system.NacCalendar.Day-">
+<a name="toNextCalendar-com.nfcalarmclock.alarm.db.NacAlarm-com.nfcalarmclock.util.NacCalendar.Day-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>toNextCalendar</h4>
 <pre>public static&nbsp;java.util.Calendar&nbsp;toNextCalendar(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm,
-                                                com.nfcalarmclock.system.NacCalendar.Day&nbsp;day)</pre>
+                                                com.nfcalarmclock.util.NacCalendar.Day&nbsp;day)</pre>
 <div class="block">Convert the alarm on the given day to a Calendar.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

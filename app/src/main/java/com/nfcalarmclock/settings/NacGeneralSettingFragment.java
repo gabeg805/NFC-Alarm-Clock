@@ -12,21 +12,21 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 
 import com.nfcalarmclock.R;
-import com.nfcalarmclock.audiooptions.NacAlarmAudioOptionsDialog;
-import com.nfcalarmclock.audiosource.NacAudioSourceDialog;
-import com.nfcalarmclock.autodismiss.NacAutoDismissPreference;
-import com.nfcalarmclock.dismissearly.NacDismissEarlyDialog;
-import com.nfcalarmclock.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog;
-import com.nfcalarmclock.maxsnooze.NacMaxSnoozePreference;
+import com.nfcalarmclock.alarm.options.audiooptions.NacAlarmAudioOptionsDialog;
+import com.nfcalarmclock.alarm.options.audiosource.NacAudioSourceDialog;
+import com.nfcalarmclock.alarm.options.autodismiss.NacAutoDismissPreference;
+import com.nfcalarmclock.alarm.options.dismissearly.NacDismissEarlyDialog;
+import com.nfcalarmclock.alarm.options.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog;
+import com.nfcalarmclock.alarm.options.maxsnooze.NacMaxSnoozePreference;
 import com.nfcalarmclock.mediapicker.NacMediaActivity;
 import com.nfcalarmclock.mediapicker.NacMediaPreference;
-import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog;
+import com.nfcalarmclock.alarm.options.restrictvolume.NacRestrictVolumeDialog;
 import com.nfcalarmclock.shared.NacSharedKeys;
 import com.nfcalarmclock.shared.NacSharedPreferences;
-import com.nfcalarmclock.snoozeduration.NacSnoozeDurationPreference;
-import com.nfcalarmclock.system.NacIntent;
-import com.nfcalarmclock.tts.NacTextToSpeechDialog;
-import com.nfcalarmclock.volume.NacVolumePreference;
+import com.nfcalarmclock.alarm.options.snoozeduration.NacSnoozeDurationPreference;
+import com.nfcalarmclock.util.NacIntent;
+import com.nfcalarmclock.alarm.options.tts.NacTextToSpeechDialog;
+import com.nfcalarmclock.alarm.options.volume.NacVolumePreference;
 
 /**
  * General settings fragment.

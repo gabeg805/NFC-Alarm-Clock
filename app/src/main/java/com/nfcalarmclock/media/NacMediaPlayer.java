@@ -11,8 +11,7 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.MediaItem;
 
 import com.nfcalarmclock.util.NacUtility;
-import com.nfcalarmclock.alarm.NacAlarm;
-import com.nfcalarmclock.media.NacMedia;
+import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.shared.NacSharedConstants;
 
 import java.util.List;

@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import androidx.lifecycle.LiveData;
 
+import com.nfcalarmclock.alarm.db.NacAlarm;
+import com.nfcalarmclock.alarm.db.NacAlarmDao;
 import com.nfcalarmclock.db.NacAlarmDatabase;
 import com.nfcalarmclock.db.NacRepository;
 

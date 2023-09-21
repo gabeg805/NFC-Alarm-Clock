@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
-import com.nfcalarmclock.alarm.NacAlarm;
+import com.nfcalarmclock.alarm.db.NacAlarm;
 
 /**
  * Touch helper.

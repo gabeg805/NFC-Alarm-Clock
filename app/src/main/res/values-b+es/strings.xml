@@ -3,7 +3,7 @@
 
 	<!-- App -->
 	<string name="app_name">NFC Despertador</string>
-	<string name="permission_ignore_battery_optimization_request">Es posible que las alarmas no se ejecuten si la aplicación no se ha utilizado durante un tiempo.\n\n<b>Nota:</b> Esto depende del dispositivo que tengas y es posible que en realidad no sea necesario.\n\n¿Quieres desactivar la optimización de la batería?</string>
+	<string name="permission_ignore_battery_optimization_request">Es posible que las alarmas no se ejecuten si la aplicación no se ha utilizado durante un tiempo.\n\n<b>Nota:</b> Esto depende del dispositivo que tengas y <b>es posible</b> que en realidad <b>no sea necesario</b>.\n\n¿Quieres desactivar la optimización de la batería?</string>
 	<string name="permission_post_notifications_request">Las alarmas no podrán ejecutarse cuando la aplicación no esté enfocada.\n\n<b>Nota:</b> Este es un efecto secundario de las políticas de seguridad introducidas en <b>Android 13</b>, que benefician a los usuarios, pero pueden restringir aplicaciones en instancias como esta.\n\n¿Desea continuar habilitando este permiso?</string>
 	<string name="permission_schedule_exact_alarm_request">Las alarmas no podrán ejecutarse cuando la aplicación no esté enfocada.\n\n¿Le gustaría continuar a la siguiente pantalla para habilitar este permiso?</string>
 
@@ -17,7 +17,7 @@
 	<string name="item_3">Se corrigió la <b>Aplicación No Responde</b> (ANR) al buscar canciones en una carpeta con muchas canciones.</string>
 	<string name="item_4">Se corrigió un fallo poco frecuente al deslizar el dedo para copiar una alarma.</string>
 	<string name="item_5">Se eliminó <b>Configuración -> Miscelaneo</b>, y se movieron todas esas configuraciones a <b>General</b>.</string>
-	<string name="item_6">Se agrego <b>Configuración -> Apoyo</b> para que pueda respaldar el desarrollo de la aplicación si así lo desea.</string>
+	<string name="item_6">Se agrego <b>Configuración -> Apoyo</b> para que pueda respaldar el desarrollo de la aplicación, si así lo desea.</string>
 
 
 
@@ -84,6 +84,7 @@
 	<string name="message_bullet">\u25BA</string>
 	<string name="message_required">Requerido</string>
 	<string name="message_optional">Opcional</string>
+	<string name="message_already_have_permission">Ya tienes este permiso</string>
 	<string name="message_support_thank_you">¡Gracias por su apoyo!</string>
 
 
@@ -175,7 +176,7 @@
 
 
 	<!-- Content descriptions -->
-	<string name="cd_alarm_list">List of alarms will be shown here.</string>
+	<string name="cd_alarm_list">Lista de alarmas que se mostrarán aquí.</string>
 	<string name="cd_floating_action_button">Crear una nueva alarma.</string>
 	<string name="cd_collapse_alarm">Colapsar una alarma.</string>
 	<string name="cd_expand_alarm">Ampliar una alarma.</string>
@@ -255,8 +256,8 @@
 	<string name="stats_setting">Estadísticas</string>
 	<string name="stats_setting_summary">Mira cuanto tiempo has posponada sus alarmas, y más</string>
 
-	<string name="support_setting">Apoyo</string>
-	<string name="support_setting_summary">Apoyar el desarrollo de la aplicación</string>
+	<string name="support_setting">Apoyar el desarrollo</string>
+	<string name="support_setting_summary">Se agradecería mucho el apoyo, ¡pero no hay presión! Esta aplicación siempre será gratis</string>
 
 
 
@@ -454,6 +455,11 @@
 
 	<!-- App version -->
 	<string name="version_title">Version</string>
+
+
+	<!-- Ignore battery optimization -->
+	<string name="about_ignore_battery_optimization">Desactivar la optimización de la batería</string>
+	<string name="about_ignore_battery_optimization_summary">La aplicación no se pondrá en suspensión, lo que permitirá que las alarmas se activen con normalidad.</string>
 
 
 	<!-- NFC permission -->

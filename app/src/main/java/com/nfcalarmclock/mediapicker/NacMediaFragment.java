@@ -14,13 +14,13 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.R;
-import com.nfcalarmclock.alarm.NacAlarm;
+import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmViewModel;
 import com.nfcalarmclock.media.NacMediaPlayer;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
-import com.nfcalarmclock.system.NacBundle;
-import com.nfcalarmclock.system.NacIntent;
+import com.nfcalarmclock.util.NacBundle;
+import com.nfcalarmclock.util.NacIntent;
 
 // TODO: Create the MediaPlayer object, and only call release (cleanup) in
 // onDestroy.

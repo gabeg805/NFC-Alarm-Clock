@@ -2,10 +2,19 @@ package com.nfcalarmclock.statistics;
 
 import android.app.Application;
 import android.content.Context;
-
-import com.nfcalarmclock.alarm.NacAlarm;
+import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.db.NacAlarmDatabase;
 import com.nfcalarmclock.db.NacRepository;
+import com.nfcalarmclock.statistics.db.NacAlarmCreatedStatistic;
+import com.nfcalarmclock.statistics.db.NacAlarmCreatedStatisticDao;
+import com.nfcalarmclock.statistics.db.NacAlarmDeletedStatistic;
+import com.nfcalarmclock.statistics.db.NacAlarmDeletedStatisticDao;
+import com.nfcalarmclock.statistics.db.NacAlarmDismissedStatistic;
+import com.nfcalarmclock.statistics.db.NacAlarmDismissedStatisticDao;
+import com.nfcalarmclock.statistics.db.NacAlarmMissedStatistic;
+import com.nfcalarmclock.statistics.db.NacAlarmMissedStatisticDao;
+import com.nfcalarmclock.statistics.db.NacAlarmSnoozedStatistic;
+import com.nfcalarmclock.statistics.db.NacAlarmSnoozedStatisticDao;
 
 import java.util.concurrent.Future;
 import java.util.Date;

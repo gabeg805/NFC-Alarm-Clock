@@ -16,7 +16,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayout.Tab;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.nfcalarmclock.R;
-import com.nfcalarmclock.alarm.NacAlarm;
+import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.file.browser.NacFileBrowser;
 import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.mediapicker.music.NacMusicFragment;
@@ -25,7 +25,7 @@ import com.nfcalarmclock.permission.readmediaaudio.NacReadMediaAudioPermission;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedDefaults;
 import com.nfcalarmclock.shared.NacSharedPreferences;
-import com.nfcalarmclock.system.NacIntent;
+import com.nfcalarmclock.util.NacIntent;
 
 /**
  */

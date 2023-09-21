@@ -73,7 +73,7 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#fields.inherited.from.class.com.nfcalarmclock.util.notification.NacNotification">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.com.nfcalarmclock.view.notification.NacNotification">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -98,7 +98,7 @@ var activeTableTab = "activeTableTab";
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li><a href="../../com/nfcalarmclock/NacNotification.html" title="class in com.nfcalarmclock">com.nfcalarmclock.util.notification.NacNotification</a></li>
+<li><a href="../../com/nfcalarmclock/NacNotification.html" title="class in com.nfcalarmclock">com.nfcalarmclock.view.notification.NacNotification</a></li>
 <li>
 <ul class="inheritance">
 <li>com.nfcalarmclock.missedalarm.NacMissedAlarmNotification</li>
@@ -127,7 +127,7 @@ extends <a href="../../com/nfcalarmclock/NacNotification.html" title="class in c
 </a>
 <h3>Field Summary</h3>
 <ul class="blockList">
-<li class="blockList"><a name="fields.inherited.from.class.com.nfcalarmclock.util.notification.NacNotification">
+<li class="blockList"><a name="fields.inherited.from.class.com.nfcalarmclock.view.notification.NacNotification">
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;com.nfcalarmclock.<a href="../../com/nfcalarmclock/NacNotification.html" title="class in com.nfcalarmclock">NacNotification</a></h3>
@@ -185,7 +185,7 @@ extends <a href="../../com/nfcalarmclock/NacNotification.html" title="class in c
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacMissedAlarmNotification.html#getBodyLine-com.nfcalarmclock.alarm.NacAlarm-">getBodyLine</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacMissedAlarmNotification.html#getBodyLine-com.nfcalarmclock.alarm.db.NacAlarm-">getBodyLine</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>protected java.lang.String</code></td>
@@ -229,7 +229,7 @@ extends <a href="../../com/nfcalarmclock/NacNotification.html" title="class in c
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacMissedAlarmNotification.html#setAlarm-com.nfcalarmclock.alarm.NacAlarm-">setAlarm</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacMissedAlarmNotification.html#setAlarm-com.nfcalarmclock.alarm.db.NacAlarm-">setAlarm</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
 <div class="block">Set the alarm.</div>
 </td>
 </tr>
@@ -247,7 +247,7 @@ extends <a href="../../com/nfcalarmclock/NacNotification.html" title="class in c
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.com.nfcalarmclock.util.notification.NacNotification">
+<li class="blockList"><a name="methods.inherited.from.class.com.nfcalarmclock.view.notification.NacNotification">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;com.nfcalarmclock.<a href="../../com/nfcalarmclock/NacNotification.html" title="class in com.nfcalarmclock">NacNotification</a></h3>
@@ -347,7 +347,7 @@ extends <a href="../../com/nfcalarmclock/NacNotification.html" title="class in c
 </dl>
 </li>
 </ul>
-<a name="getBodyLine-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="getBodyLine-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -356,11 +356,11 @@ extends <a href="../../com/nfcalarmclock/NacNotification.html" title="class in c
 <pre>public&nbsp;java.lang.String&nbsp;getBodyLine(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../com/nfcalarmclock/NacNotification.html#getBodyLine-com.nfcalarmclock.alarm.NacAlarm-">getBodyLine</a></code>&nbsp;in class&nbsp;<code><a href="../../com/nfcalarmclock/NacNotification.html" title="class in com.nfcalarmclock">NacNotification</a></code></dd>
+<dd><code><a href="../../com/nfcalarmclock/NacNotification.html#getBodyLine-com.nfcalarmclock.alarm.db.NacAlarm-">getBodyLine</a></code>&nbsp;in class&nbsp;<code><a href="../../com/nfcalarmclock/NacNotification.html" title="class in com.nfcalarmclock">NacNotification</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A line that can appear in the body text of the notification.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../com/nfcalarmclock/NacNotification.html#getBodyLine-com.nfcalarmclock.alarm.NacAlarm-"><code>NacNotification.getBodyLine(NacAlarm)</code></a></dd>
+<dd><a href="../../com/nfcalarmclock/NacNotification.html#getBodyLine-com.nfcalarmclock.alarm.db.NacAlarm-"><code>NacNotification.getBodyLine(NacAlarm)</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -534,7 +534,7 @@ extends <a href="../../com/nfcalarmclock/NacNotification.html" title="class in c
 </dl>
 </li>
 </ul>
-<a name="setAlarm-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="setAlarm-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -630,7 +630,7 @@ extends <a href="../../com/nfcalarmclock/NacNotification.html" title="class in c
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#fields.inherited.from.class.com.nfcalarmclock.util.notification.NacNotification">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.com.nfcalarmclock.view.notification.NacNotification">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>

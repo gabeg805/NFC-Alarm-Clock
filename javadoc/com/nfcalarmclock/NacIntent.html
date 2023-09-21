@@ -98,7 +98,7 @@ var activeTableTab = "activeTableTab";
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li>com.nfcalarmclock.system.NacIntent</li>
+<li>com.nfcalarmclock.util.NacIntent</li>
 </ul>
 </li>
 </ul>
@@ -180,7 +180,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static android.content.Intent</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacIntent.html#addAlarm-android.content.Intent-com.nfcalarmclock.alarm.NacAlarm-">addAlarm</a></span>(android.content.Intent&nbsp;intent,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacIntent.html#addAlarm-android.content.Intent-com.nfcalarmclock.alarm.db.NacAlarm-">addAlarm</a></span>(android.content.Intent&nbsp;intent,
         <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
 <div class="block">Add an alarm to an intent.</div>
 </td>
@@ -192,7 +192,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static android.content.Intent</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacIntent.html#createAlarmActivity-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">createAlarmActivity</a></span>(android.content.Context&nbsp;context,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacIntent.html#createAlarmActivity-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">createAlarmActivity</a></span>(android.content.Context&nbsp;context,
                    <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
@@ -202,17 +202,17 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>static android.content.Intent</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacIntent.html#createForegroundService-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">createForegroundService</a></span>(android.content.Context&nbsp;context,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacIntent.html#createForegroundService-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">createForegroundService</a></span>(android.content.Context&nbsp;context,
                        <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>static android.content.Intent</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacIntent.html#dismissAlarmActivity-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">dismissAlarmActivity</a></span>(android.content.Context&nbsp;context,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacIntent.html#dismissAlarmActivity-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">dismissAlarmActivity</a></span>(android.content.Context&nbsp;context,
                     <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>static android.content.Intent</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacIntent.html#dismissForegroundService-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">dismissForegroundService</a></span>(android.content.Context&nbsp;context,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacIntent.html#dismissForegroundService-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">dismissForegroundService</a></span>(android.content.Context&nbsp;context,
                         <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
@@ -251,21 +251,21 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i16" class="altColor">
 <td class="colFirst"><code>static android.content.Intent</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacIntent.html#snoozeForegroundService-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">snoozeForegroundService</a></span>(android.content.Context&nbsp;context,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacIntent.html#snoozeForegroundService-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">snoozeForegroundService</a></span>(android.content.Context&nbsp;context,
                        <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
 </tr>
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>static android.content.Intent</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacIntent.html#stopAlarmActivity-com.nfcalarmclock.alarm.NacAlarm-">stopAlarmActivity</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacIntent.html#stopAlarmActivity-com.nfcalarmclock.alarm.db.NacAlarm-">stopAlarmActivity</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
 </tr>
 <tr id="i18" class="altColor">
 <td class="colFirst"><code>static android.content.Intent</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacIntent.html#stopForegroundService-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">stopForegroundService</a></span>(android.content.Context&nbsp;context,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacIntent.html#stopForegroundService-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">stopForegroundService</a></span>(android.content.Context&nbsp;context,
                      <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
 </tr>
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code>static android.content.Intent</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacIntent.html#toIntent-android.content.Context-java.lang.Class-com.nfcalarmclock.alarm.NacAlarm-">toIntent</a></span>(android.content.Context&nbsp;context,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacIntent.html#toIntent-android.content.Context-java.lang.Class-com.nfcalarmclock.alarm.db.NacAlarm-">toIntent</a></span>(android.content.Context&nbsp;context,
         java.lang.Class&lt;?&gt;&nbsp;cls,
         <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
 <div class="block">Create an intent with an alarm attached in the Extra part of the intent.</div>
@@ -316,7 +316,7 @@ extends java.lang.Object</pre>
 <div class="block">Tag name for retrieving a NacAlarm from a bundle.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../constant-values.html#com.nfcalarmclock.system.NacIntent.ALARM_BUNDLE_NAME">Constant Field Values</a></dd>
+<dd><a href="../../constant-values.html#com.nfcalarmclock.util.NacIntent.ALARM_BUNDLE_NAME">Constant Field Values</a></dd>
 </dl>
 </li>
 </ul>
@@ -330,7 +330,7 @@ extends java.lang.Object</pre>
 <div class="block">Tag name for retrieving a media path from a bundle.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../constant-values.html#com.nfcalarmclock.system.NacIntent.MEDIA_BUNDLE_NAME">Constant Field Values</a></dd>
+<dd><a href="../../constant-values.html#com.nfcalarmclock.util.NacIntent.MEDIA_BUNDLE_NAME">Constant Field Values</a></dd>
 </dl>
 </li>
 </ul>
@@ -370,7 +370,7 @@ extends java.lang.Object</pre>
 <div class="block">Add an alarm to an intent.</div>
 </li>
 </ul>
-<a name="addAlarm-android.content.Intent-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="addAlarm-android.content.Intent-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -381,7 +381,7 @@ extends java.lang.Object</pre>
 <div class="block">Add an alarm to an intent.</div>
 </li>
 </ul>
-<a name="createAlarmActivity-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="createAlarmActivity-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -409,7 +409,7 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="createForegroundService-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="createForegroundService-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -437,7 +437,7 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="dismissAlarmActivity-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="dismissAlarmActivity-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -451,7 +451,7 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="dismissForegroundService-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="dismissForegroundService-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -572,7 +572,7 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="snoozeForegroundService-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="snoozeForegroundService-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -586,7 +586,7 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="stopAlarmActivity-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="stopAlarmActivity-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -599,7 +599,7 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="stopForegroundService-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="stopForegroundService-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -626,7 +626,7 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="toIntent-android.content.Context-java.lang.Class-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="toIntent-android.content.Context-java.lang.Class-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">

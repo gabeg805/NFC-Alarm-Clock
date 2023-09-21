@@ -27,12 +27,12 @@ import com.google.android.material.button.MaterialButton;
 //import com.google.android.material.timepicker.MaterialTimePicker;
 
 import com.nfcalarmclock.activealarm.NacActiveAlarmService;
-import com.nfcalarmclock.alarm.NacAlarm;
-import com.nfcalarmclock.system.NacCalendar;
-import com.nfcalarmclock.system.NacContext;
-import com.nfcalarmclock.dayofweek.NacDayButton;
-import com.nfcalarmclock.dayofweek.NacDayOfWeek;
-import com.nfcalarmclock.util.dialog.NacDialog;
+import com.nfcalarmclock.alarm.db.NacAlarm;
+import com.nfcalarmclock.util.NacCalendar;
+import com.nfcalarmclock.util.NacContext;
+import com.nfcalarmclock.view.dayofweek.NacDayButton;
+import com.nfcalarmclock.view.dayofweek.NacDayOfWeek;
+import com.nfcalarmclock.view.dialog.NacDialog;
 import com.nfcalarmclock.name.NacNameDialog;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;

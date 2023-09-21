@@ -8,11 +8,11 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
-import com.nfcalarmclock.alarm.NacAlarm;
+import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
-import com.nfcalarmclock.system.NacCalendar;
+import com.nfcalarmclock.util.NacCalendar;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -264,7 +264,7 @@ implements android.view.View.OnClickListener, android.view.View.OnLongClickListe
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCardHolder.html#doDayButtonClick-com.nfcalarmclock.system.NacCalendar.Day-">doDayButtonClick</a></span>(com.nfcalarmclock.system.NacCalendar.Day&nbsp;day)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCardHolder.html#doDayButtonClick-com.nfcalarmclock.util.NacCalendar.Day-">doDayButtonClick</a></span>(com.nfcalarmclock.util.NacCalendar.Day&nbsp;day)</code>
 <div class="block">Act as if the day button was clicked.</div>
 </td>
 </tr>
@@ -428,7 +428,7 @@ implements android.view.View.OnClickListener, android.view.View.OnLongClickListe
 </tr>
 <tr id="i44" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCardHolder.html#init-com.nfcalarmclock.alarm.NacAlarm-">init</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCardHolder.html#init-com.nfcalarmclock.alarm.db.NacAlarm-">init</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
 <div class="block">Initialize the alarm card.</div>
 </td>
 </tr>
@@ -493,7 +493,7 @@ implements android.view.View.OnClickListener, android.view.View.OnLongClickListe
 </tr>
 <tr id="i56" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCardHolder.html#onDismissDialog-com.nfcalarmclock.util.dialog.NacDialog-">onDismissDialog</a></span>(<a href="../../com/nfcalarmclock/NacDialog.html" title="class in com.nfcalarmclock">NacDialog</a>&nbsp;dialog)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCardHolder.html#onDismissDialog-com.nfcalarmclock.view.dialog.NacDialog-">onDismissDialog</a></span>(<a href="../../com/nfcalarmclock/NacDialog.html" title="class in com.nfcalarmclock">NacDialog</a>&nbsp;dialog)</code>
 <div class="block">Notify alarm listener that the alarm has been modified.</div>
 </td>
 </tr>
@@ -523,16 +523,16 @@ implements android.view.View.OnClickListener, android.view.View.OnLongClickListe
 </tr>
 <tr id="i62" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCardHolder.html#onWeekChanged-com.nfcalarmclock.days.NacDayButton-com.nfcalarmclock.system.NacCalendar.Day-">onWeekChanged</a></span>(<a href="../../com/nfcalarmclock/NacDayButton.html" title="class in com.nfcalarmclock">NacDayButton</a>&nbsp;button,
-             com.nfcalarmclock.system.NacCalendar.Day&nbsp;day)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCardHolder.html#onWeekChanged-com.nfcalarmclock.days.NacDayButton-com.nfcalarmclock.util.NacCalendar.Day-">onWeekChanged</a></span>(<a href="../../com/nfcalarmclock/NacDayButton.html" title="class in com.nfcalarmclock">NacDayButton</a>&nbsp;button,
+             com.nfcalarmclock.util.NacCalendar.Day&nbsp;day)</code>
 <div class="block">Save which day was selected to be repeated, or deselected so that it is
  not repeated.</div>
 </td>
 </tr>
 <tr id="i63" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCardHolder.html#respondToDayButtonClick-com.nfcalarmclock.days.NacDayButton-com.nfcalarmclock.system.NacCalendar.Day-">respondToDayButtonClick</a></span>(<a href="../../com/nfcalarmclock/NacDayButton.html" title="class in com.nfcalarmclock">NacDayButton</a>&nbsp;button,
-                       com.nfcalarmclock.system.NacCalendar.Day&nbsp;day)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacCardHolder.html#respondToDayButtonClick-com.nfcalarmclock.days.NacDayButton-com.nfcalarmclock.util.NacCalendar.Day-">respondToDayButtonClick</a></span>(<a href="../../com/nfcalarmclock/NacDayButton.html" title="class in com.nfcalarmclock">NacDayButton</a>&nbsp;button,
+                       com.nfcalarmclock.util.NacCalendar.Day&nbsp;day)</code>
 <div class="block">Perform the day button state change.</div>
 </td>
 </tr>
@@ -856,13 +856,13 @@ implements android.view.View.OnClickListener, android.view.View.OnLongClickListe
 <div class="block">Force the alarm card to be fully collapsed, without any animations.</div>
 </li>
 </ul>
-<a name="doDayButtonClick-com.nfcalarmclock.system.NacCalendar.Day-">
+<a name="doDayButtonClick-com.nfcalarmclock.util.NacCalendar.Day-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>doDayButtonClick</h4>
-<pre>public&nbsp;void&nbsp;doDayButtonClick(com.nfcalarmclock.system.NacCalendar.Day&nbsp;day)</pre>
+<pre>public&nbsp;void&nbsp;doDayButtonClick(com.nfcalarmclock.util.NacCalendar.Day&nbsp;day)</pre>
 <div class="block">Act as if the day button was clicked.</div>
 </li>
 </ul>
@@ -1268,7 +1268,7 @@ implements android.view.View.OnClickListener, android.view.View.OnLongClickListe
 <div class="block">Highlight the alarm card.</div>
 </li>
 </ul>
-<a name="init-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="init-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -1408,19 +1408,19 @@ implements android.view.View.OnClickListener, android.view.View.OnLongClickListe
 </dl>
 </li>
 </ul>
-<a name="onWeekChanged-com.nfcalarmclock.dayofweek.NacDayButton-com.nfcalarmclock.system.NacCalendar.Day-">
+<a name="onWeekChanged-com.nfcalarmclock.view.dayofweek.NacDayButton-com.nfcalarmclock.util.NacCalendar.Day-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>onWeekChanged</h4>
 <pre>public&nbsp;boolean&nbsp;onWeekChanged(<a href="../../com/nfcalarmclock/NacDayButton.html" title="class in com.nfcalarmclock">NacDayButton</a>&nbsp;button,
-                             com.nfcalarmclock.system.NacCalendar.Day&nbsp;day)</pre>
+                             com.nfcalarmclock.util.NacCalendar.Day&nbsp;day)</pre>
 <div class="block">Save which day was selected to be repeated, or deselected so that it is
  not repeated.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../com/nfcalarmclock/NacDayOfWeek.OnWeekChangedListener.html#onWeekChanged-com.nfcalarmclock.days.NacDayButton-com.nfcalarmclock.system.NacCalendar.Day-">onWeekChanged</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacDayOfWeek.OnWeekChangedListener.html" title="interface in com.nfcalarmclock">NacDayOfWeek.OnWeekChangedListener</a></code></dd>
+<dd><code><a href="../../com/nfcalarmclock/NacDayOfWeek.OnWeekChangedListener.html#onWeekChanged-com.nfcalarmclock.days.NacDayButton-com.nfcalarmclock.util.NacCalendar.Day-">onWeekChanged</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacDayOfWeek.OnWeekChangedListener.html" title="interface in com.nfcalarmclock">NacDayOfWeek.OnWeekChangedListener</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -1437,7 +1437,7 @@ implements android.view.View.OnClickListener, android.view.View.OnLongClickListe
 </dl>
 </li>
 </ul>
-<a name="onDismissDialog-com.nfcalarmclock.util.dialog.NacDialog-">
+<a name="onDismissDialog-com.nfcalarmclock.view.dialog.NacDialog-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -1447,7 +1447,7 @@ implements android.view.View.OnClickListener, android.view.View.OnLongClickListe
 <div class="block">Notify alarm listener that the alarm has been modified.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../com/nfcalarmclock/NacDialog.OnDismissListener.html#onDismissDialog-com.nfcalarmclock.util.dialog.NacDialog-">onDismissDialog</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacDialog.OnDismissListener.html" title="interface in com.nfcalarmclock">NacDialog.OnDismissListener</a></code></dd>
+<dd><code><a href="../../com/nfcalarmclock/NacDialog.OnDismissListener.html#onDismissDialog-com.nfcalarmclock.view.dialog.NacDialog-">onDismissDialog</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacDialog.OnDismissListener.html" title="interface in com.nfcalarmclock">NacDialog.OnDismissListener</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -1520,14 +1520,14 @@ implements android.view.View.OnClickListener, android.view.View.OnLongClickListe
 </dl>
 </li>
 </ul>
-<a name="respondToDayButtonClick-com.nfcalarmclock.dayofweek.NacDayButton-com.nfcalarmclock.system.NacCalendar.Day-">
+<a name="respondToDayButtonClick-com.nfcalarmclock.view.dayofweek.NacDayButton-com.nfcalarmclock.util.NacCalendar.Day-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>respondToDayButtonClick</h4>
 <pre>public&nbsp;void&nbsp;respondToDayButtonClick(<a href="../../com/nfcalarmclock/NacDayButton.html" title="class in com.nfcalarmclock">NacDayButton</a>&nbsp;button,
-                                    com.nfcalarmclock.system.NacCalendar.Day&nbsp;day)</pre>
+                                    com.nfcalarmclock.util.NacCalendar.Day&nbsp;day)</pre>
 <div class="block">Perform the day button state change.</div>
 </li>
 </ul>

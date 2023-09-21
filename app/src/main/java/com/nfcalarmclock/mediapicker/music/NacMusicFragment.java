@@ -12,14 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.permission.readmediaaudio.NacReadMediaAudioPermission;
-import com.nfcalarmclock.util.dialog.NacDialog;
+import com.nfcalarmclock.view.dialog.NacDialog;
 import com.nfcalarmclock.file.NacFile;
 import com.nfcalarmclock.file.browser.NacFileBrowser;
 import com.nfcalarmclock.R;
-import com.nfcalarmclock.alarm.NacAlarm;
+import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.mediapicker.NacMediaFragment;
 import com.nfcalarmclock.shared.NacSharedConstants;
-import com.nfcalarmclock.system.NacBundle;
+import com.nfcalarmclock.util.NacBundle;
 import java.util.Locale;
 
 /**

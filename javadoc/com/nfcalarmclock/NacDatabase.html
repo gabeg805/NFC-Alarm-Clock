@@ -210,11 +210,11 @@ extends android.database.sqlite.SQLiteOpenHelper</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.html#add-com.nfcalarmclock.alarm.NacAlarm-">add</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.html#add-com.nfcalarmclock.alarm.db.NacAlarm-">add</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.html#add-android.database.sqlite.SQLiteDatabase-int-com.nfcalarmclock.alarm.NacAlarm-">add</a></span>(android.database.sqlite.SQLiteDatabase&nbsp;db,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.html#add-android.database.sqlite.SQLiteDatabase-int-com.nfcalarmclock.alarm.db.NacAlarm-">add</a></span>(android.database.sqlite.SQLiteDatabase&nbsp;db,
    int&nbsp;version,
    <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
 <div class="block">Add the alarm to the database with the given version.</div>
@@ -222,16 +222,16 @@ extends android.database.sqlite.SQLiteOpenHelper</pre>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.html#add-android.database.sqlite.SQLiteDatabase-com.nfcalarmclock.alarm.NacAlarm-">add</a></span>(android.database.sqlite.SQLiteDatabase&nbsp;db,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.html#add-android.database.sqlite.SQLiteDatabase-com.nfcalarmclock.alarm.db.NacAlarm-">add</a></span>(android.database.sqlite.SQLiteDatabase&nbsp;db,
    <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.html#delete-com.nfcalarmclock.alarm.NacAlarm-">delete</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.html#delete-com.nfcalarmclock.alarm.db.NacAlarm-">delete</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.html#delete-android.database.sqlite.SQLiteDatabase-com.nfcalarmclock.alarm.NacAlarm-">delete</a></span>(android.database.sqlite.SQLiteDatabase&nbsp;db,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.html#delete-android.database.sqlite.SQLiteDatabase-com.nfcalarmclock.alarm.db.NacAlarm-">delete</a></span>(android.database.sqlite.SQLiteDatabase&nbsp;db,
       <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
 <div class="block">Delete the given alarm from the database.</div>
 </td>
@@ -257,7 +257,7 @@ extends android.database.sqlite.SQLiteOpenHelper</pre>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>static <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.html#findAlarm-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">findAlarm</a></span>(android.content.Context&nbsp;context,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.html#findAlarm-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">findAlarm</a></span>(android.content.Context&nbsp;context,
          <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
@@ -268,7 +268,7 @@ extends android.database.sqlite.SQLiteOpenHelper</pre>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.html#findAlarm-com.nfcalarmclock.alarm.NacAlarm-">findAlarm</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.html#findAlarm-com.nfcalarmclock.alarm.db.NacAlarm-">findAlarm</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>android.database.sqlite.SQLiteDatabase</code></td>
@@ -323,11 +323,11 @@ extends android.database.sqlite.SQLiteOpenHelper</pre>
 </tr>
 <tr id="i20" class="altColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.html#update-com.nfcalarmclock.alarm.NacAlarm-">update</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.html#update-com.nfcalarmclock.alarm.db.NacAlarm-">update</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
 </tr>
 <tr id="i21" class="rowColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.html#update-android.database.sqlite.SQLiteDatabase-com.nfcalarmclock.alarm.NacAlarm-">update</a></span>(android.database.sqlite.SQLiteDatabase&nbsp;db,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacDatabase.html#update-android.database.sqlite.SQLiteDatabase-com.nfcalarmclock.alarm.db.NacAlarm-">update</a></span>(android.database.sqlite.SQLiteDatabase&nbsp;db,
       <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
 <div class="block">Update the given list of alarms in the database.</div>
 </td>
@@ -418,7 +418,7 @@ extends android.database.sqlite.SQLiteOpenHelper</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="add-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="add-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -427,11 +427,11 @@ extends android.database.sqlite.SQLiteOpenHelper</pre>
 <pre>public&nbsp;long&nbsp;add(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../com/nfcalarmclock/NacDatabase.html#add-android.database.sqlite.SQLiteDatabase-int-com.nfcalarmclock.alarm.NacAlarm-"><code>add(SQLiteDatabase, int, NacAlarm)</code></a></dd>
+<dd><a href="../../com/nfcalarmclock/NacDatabase.html#add-android.database.sqlite.SQLiteDatabase-int-com.nfcalarmclock.alarm.db.NacAlarm-"><code>add(SQLiteDatabase, int, NacAlarm)</code></a></dd>
 </dl>
 </li>
 </ul>
-<a name="add-android.database.sqlite.SQLiteDatabase-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="add-android.database.sqlite.SQLiteDatabase-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -441,11 +441,11 @@ extends android.database.sqlite.SQLiteOpenHelper</pre>
                 <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../com/nfcalarmclock/NacDatabase.html#add-android.database.sqlite.SQLiteDatabase-int-com.nfcalarmclock.alarm.NacAlarm-"><code>add(SQLiteDatabase, int, NacAlarm)</code></a></dd>
+<dd><a href="../../com/nfcalarmclock/NacDatabase.html#add-android.database.sqlite.SQLiteDatabase-int-com.nfcalarmclock.alarm.db.NacAlarm-"><code>add(SQLiteDatabase, int, NacAlarm)</code></a></dd>
 </dl>
 </li>
 </ul>
-<a name="add-android.database.sqlite.SQLiteDatabase-int-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="add-android.database.sqlite.SQLiteDatabase-int-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -465,7 +465,7 @@ extends android.database.sqlite.SQLiteOpenHelper</pre>
 </dl>
 </li>
 </ul>
-<a name="delete-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="delete-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -474,11 +474,11 @@ extends android.database.sqlite.SQLiteOpenHelper</pre>
 <pre>public&nbsp;long&nbsp;delete(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../com/nfcalarmclock/NacDatabase.html#delete-android.database.sqlite.SQLiteDatabase-com.nfcalarmclock.alarm.NacAlarm-"><code>delete(SQLiteDatabase, NacAlarm)</code></a></dd>
+<dd><a href="../../com/nfcalarmclock/NacDatabase.html#delete-android.database.sqlite.SQLiteDatabase-com.nfcalarmclock.alarm.db.NacAlarm-"><code>delete(SQLiteDatabase, NacAlarm)</code></a></dd>
 </dl>
 </li>
 </ul>
-<a name="delete-android.database.sqlite.SQLiteDatabase-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="delete-android.database.sqlite.SQLiteDatabase-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -554,7 +554,7 @@ extends android.database.sqlite.SQLiteOpenHelper</pre>
 </dl>
 </li>
 </ul>
-<a name="findAlarm-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="findAlarm-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -581,7 +581,7 @@ extends android.database.sqlite.SQLiteOpenHelper</pre>
 </dl>
 </li>
 </ul>
-<a name="findAlarm-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="findAlarm-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -720,7 +720,7 @@ extends android.database.sqlite.SQLiteOpenHelper</pre>
  This assumes the cursor object is already in position to retrieve data.</div>
 </li>
 </ul>
-<a name="update-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="update-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -729,11 +729,11 @@ extends android.database.sqlite.SQLiteOpenHelper</pre>
 <pre>public&nbsp;long&nbsp;update(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../com/nfcalarmclock/NacDatabase.html#update-android.database.sqlite.SQLiteDatabase-com.nfcalarmclock.alarm.NacAlarm-"><code>update(SQLiteDatabase, NacAlarm)</code></a></dd>
+<dd><a href="../../com/nfcalarmclock/NacDatabase.html#update-android.database.sqlite.SQLiteDatabase-com.nfcalarmclock.alarm.db.NacAlarm-"><code>update(SQLiteDatabase, NacAlarm)</code></a></dd>
 </dl>
 </li>
 </ul>
-<a name="update-android.database.sqlite.SQLiteDatabase-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="update-android.database.sqlite.SQLiteDatabase-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">

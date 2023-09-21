@@ -98,7 +98,7 @@ var activeTableTab = "activeTableTab";
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li>com.nfcalarmclock.system.NacContext</li>
+<li>com.nfcalarmclock.util.NacContext</li>
 </ul>
 </li>
 </ul>
@@ -147,21 +147,21 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacContext.html#dismissAlarmActivity-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">dismissAlarmActivity</a></span>(android.content.Context&nbsp;context,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacContext.html#dismissAlarmActivity-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">dismissAlarmActivity</a></span>(android.content.Context&nbsp;context,
                     <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
 <div class="block">Dismiss the alarm activity for the given alarm.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacContext.html#dismissForegroundService-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">dismissForegroundService</a></span>(android.content.Context&nbsp;context,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacContext.html#dismissForegroundService-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">dismissForegroundService</a></span>(android.content.Context&nbsp;context,
                         <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
 <div class="block">Dismiss the foreground service for the given alarm.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacContext.html#dismissForegroundServiceFromNfcScan-android.content.Context-android.content.Intent-com.nfcalarmclock.alarm.NacAlarm-">dismissForegroundServiceFromNfcScan</a></span>(android.content.Context&nbsp;context,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacContext.html#dismissForegroundServiceFromNfcScan-android.content.Context-android.content.Intent-com.nfcalarmclock.alarm.db.NacAlarm-">dismissForegroundServiceFromNfcScan</a></span>(android.content.Context&nbsp;context,
                                    android.content.Intent&nbsp;intent,
                                    <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
 <div class="block">Dismiss the foreground service for the given alarm due to an NFC tag being
@@ -170,14 +170,14 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacContext.html#snoozeForegroundService-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">snoozeForegroundService</a></span>(android.content.Context&nbsp;context,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacContext.html#snoozeForegroundService-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">snoozeForegroundService</a></span>(android.content.Context&nbsp;context,
                        <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
 <div class="block">Snooze the foreground service for the given alarm.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacContext.html#stopAlarmActivity-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">stopAlarmActivity</a></span>(android.content.Context&nbsp;context,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacContext.html#stopAlarmActivity-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">stopAlarmActivity</a></span>(android.content.Context&nbsp;context,
                  <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
 <div class="block">Stop the alarm activity for the given alarm.</div>
 </td>
@@ -221,7 +221,7 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="dismissAlarmActivity-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="dismissAlarmActivity-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -234,7 +234,7 @@ extends java.lang.Object</pre>
  If alarm is null, it will stop the currently active alarm activity.</div>
 </li>
 </ul>
-<a name="dismissForegroundService-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="dismissForegroundService-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -247,7 +247,7 @@ extends java.lang.Object</pre>
  If alarm is null, it will stop the currently active foreground service.</div>
 </li>
 </ul>
-<a name="dismissForegroundServiceFromNfcScan-android.content.Context-android.content.Intent-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="dismissForegroundServiceFromNfcScan-android.content.Context-android.content.Intent-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -265,7 +265,7 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="snoozeForegroundService-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="snoozeForegroundService-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -278,7 +278,7 @@ extends java.lang.Object</pre>
  The alarm cannot be null, unlike the dismissForegroundService() method.</div>
 </li>
 </ul>
-<a name="stopAlarmActivity-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="stopAlarmActivity-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockListLast">

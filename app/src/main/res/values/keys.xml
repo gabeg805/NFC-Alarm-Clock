@@ -5,6 +5,7 @@
 
 	<string name="app_first_run">app_first_run</string>
 	<string name="previous_app_version">previous_app_version</string>
+	<string name="key_app_supported">key_app_supported</string>
 	<string name="key_permission_ignore_battery_optimization_requested">key_permission_ignore_battery_optimization_requested</string>
 	<string name="key_permission_post_notifications_requested">key_permission_post_notifications_requested</string>
 	<string name="key_permission_schedule_exact_alarm_requested">key_permission_schedule_exact_alarm_requested</string>
@@ -63,6 +64,7 @@
 	<string name="about_setting_key">pref_screen_about</string>
 	<string name="author_key">pref_about_author</string>
 	<string name="version_key">pref_about_version</string>
+	<string name="about_ignore_battery_optimization_key">pref_about_ignore_battery_optimization</string>
 	<string name="about_nfc_key">pref_about_nfc</string>
 	<string name="about_storage_key">pref_about_storage</string>
 	<string name="about_vibrate_key">pref_about_vibrate</string>

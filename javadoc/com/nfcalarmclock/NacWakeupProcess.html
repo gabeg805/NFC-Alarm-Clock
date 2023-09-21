@@ -154,7 +154,7 @@ implements java.lang.Runnable, <a href="../../com/nfcalarmclock/NacTextToSpeech.
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacWakeupProcess.html#NacWakeupProcess-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">NacWakeupProcess</a></span>(android.content.Context&nbsp;context,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacWakeupProcess.html#NacWakeupProcess-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">NacWakeupProcess</a></span>(android.content.Context&nbsp;context,
                 <a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>&nbsp;</td>
 </tr>
 </table>
@@ -190,14 +190,14 @@ implements java.lang.Runnable, <a href="../../com/nfcalarmclock/NacTextToSpeech.
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacWakeupProcess.html#onDoneSpeaking-com.nfcalarmclock.tts.NacTextToSpeech-com.nfcalarmclock.media.NacAudio.Attributes-">onDoneSpeaking</a></span>(<a href="../../com/nfcalarmclock/NacTextToSpeech.html" title="class in com.nfcalarmclock">NacTextToSpeech</a>&nbsp;tts,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacWakeupProcess.html#onDoneSpeaking-com.nfcalarmclock.alarm.options.tts.NacTextToSpeech-com.nfcalarmclock.media.NacAudio.Attributes-">onDoneSpeaking</a></span>(<a href="../../com/nfcalarmclock/NacTextToSpeech.html" title="class in com.nfcalarmclock">NacTextToSpeech</a>&nbsp;tts,
               <a href="../../com/nfcalarmclock/NacAudio.Attributes.html" title="class in com.nfcalarmclock">NacAudio.Attributes</a>&nbsp;attrs)</code>
 <div class="block">Called when speech engine is done speaking.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacWakeupProcess.html#onStartSpeaking-com.nfcalarmclock.tts.NacTextToSpeech-com.nfcalarmclock.media.NacAudio.Attributes-">onStartSpeaking</a></span>(<a href="../../com/nfcalarmclock/NacTextToSpeech.html" title="class in com.nfcalarmclock">NacTextToSpeech</a>&nbsp;tts,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacWakeupProcess.html#onStartSpeaking-com.nfcalarmclock.alarm.options.tts.NacTextToSpeech-com.nfcalarmclock.media.NacAudio.Attributes-">onStartSpeaking</a></span>(<a href="../../com/nfcalarmclock/NacTextToSpeech.html" title="class in com.nfcalarmclock">NacTextToSpeech</a>&nbsp;tts,
                <a href="../../com/nfcalarmclock/NacAudio.Attributes.html" title="class in com.nfcalarmclock">NacAudio.Attributes</a>&nbsp;attrs)</code>
 <div class="block">Called when speech engine has started speaking.</div>
 </td>
@@ -261,7 +261,7 @@ implements java.lang.Runnable, <a href="../../com/nfcalarmclock/NacTextToSpeech.
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="NacWakeupProcess-android.content.Context-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="NacWakeupProcess-android.content.Context-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -312,7 +312,7 @@ implements java.lang.Runnable, <a href="../../com/nfcalarmclock/NacTextToSpeech.
 </dl>
 </li>
 </ul>
-<a name="onDoneSpeaking-com.nfcalarmclock.tts.NacTextToSpeech-com.nfcalarmclock.media.NacAudio.Attributes-">
+<a name="onDoneSpeaking-com.nfcalarmclock.alarm.options.tts.NacTextToSpeech-com.nfcalarmclock.media.NacAudio.Attributes-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -320,15 +320,15 @@ implements java.lang.Runnable, <a href="../../com/nfcalarmclock/NacTextToSpeech.
 <h4>onDoneSpeaking</h4>
 <pre>public&nbsp;void&nbsp;onDoneSpeaking(<a href="../../com/nfcalarmclock/NacTextToSpeech.html" title="class in com.nfcalarmclock">NacTextToSpeech</a>&nbsp;tts,
                            <a href="../../com/nfcalarmclock/NacAudio.Attributes.html" title="class in com.nfcalarmclock">NacAudio.Attributes</a>&nbsp;attrs)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../com/nfcalarmclock/NacTextToSpeech.OnSpeakingListener.html#onDoneSpeaking-com.nfcalarmclock.tts.NacTextToSpeech-com.nfcalarmclock.media.NacAudio.Attributes-">NacTextToSpeech.OnSpeakingListener</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../com/nfcalarmclock/NacTextToSpeech.OnSpeakingListener.html#onDoneSpeaking-com.nfcalarmclock.alarm.options.tts.NacTextToSpeech-com.nfcalarmclock.media.NacAudio.Attributes-">NacTextToSpeech.OnSpeakingListener</a></code></span></div>
 <div class="block">Called when speech engine is done speaking.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../com/nfcalarmclock/NacTextToSpeech.OnSpeakingListener.html#onDoneSpeaking-com.nfcalarmclock.tts.NacTextToSpeech-com.nfcalarmclock.media.NacAudio.Attributes-">onDoneSpeaking</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacTextToSpeech.OnSpeakingListener.html" title="interface in com.nfcalarmclock">NacTextToSpeech.OnSpeakingListener</a></code></dd>
+<dd><code><a href="../../com/nfcalarmclock/NacTextToSpeech.OnSpeakingListener.html#onDoneSpeaking-com.nfcalarmclock.alarm.options.tts.NacTextToSpeech-com.nfcalarmclock.media.NacAudio.Attributes-">onDoneSpeaking</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacTextToSpeech.OnSpeakingListener.html" title="interface in com.nfcalarmclock">NacTextToSpeech.OnSpeakingListener</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="onStartSpeaking-com.nfcalarmclock.tts.NacTextToSpeech-com.nfcalarmclock.media.NacAudio.Attributes-">
+<a name="onStartSpeaking-com.nfcalarmclock.alarm.options.tts.NacTextToSpeech-com.nfcalarmclock.media.NacAudio.Attributes-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -336,11 +336,11 @@ implements java.lang.Runnable, <a href="../../com/nfcalarmclock/NacTextToSpeech.
 <h4>onStartSpeaking</h4>
 <pre>public&nbsp;void&nbsp;onStartSpeaking(<a href="../../com/nfcalarmclock/NacTextToSpeech.html" title="class in com.nfcalarmclock">NacTextToSpeech</a>&nbsp;tts,
                             <a href="../../com/nfcalarmclock/NacAudio.Attributes.html" title="class in com.nfcalarmclock">NacAudio.Attributes</a>&nbsp;attrs)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../com/nfcalarmclock/NacTextToSpeech.OnSpeakingListener.html#onStartSpeaking-com.nfcalarmclock.tts.NacTextToSpeech-com.nfcalarmclock.media.NacAudio.Attributes-">NacTextToSpeech.OnSpeakingListener</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../com/nfcalarmclock/NacTextToSpeech.OnSpeakingListener.html#onStartSpeaking-com.nfcalarmclock.alarm.options.tts.NacTextToSpeech-com.nfcalarmclock.media.NacAudio.Attributes-">NacTextToSpeech.OnSpeakingListener</a></code></span></div>
 <div class="block">Called when speech engine has started speaking.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../com/nfcalarmclock/NacTextToSpeech.OnSpeakingListener.html#onStartSpeaking-com.nfcalarmclock.tts.NacTextToSpeech-com.nfcalarmclock.media.NacAudio.Attributes-">onStartSpeaking</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacTextToSpeech.OnSpeakingListener.html" title="interface in com.nfcalarmclock">NacTextToSpeech.OnSpeakingListener</a></code></dd>
+<dd><code><a href="../../com/nfcalarmclock/NacTextToSpeech.OnSpeakingListener.html#onStartSpeaking-com.nfcalarmclock.alarm.options.tts.NacTextToSpeech-com.nfcalarmclock.media.NacAudio.Attributes-">onStartSpeaking</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacTextToSpeech.OnSpeakingListener.html" title="interface in com.nfcalarmclock">NacTextToSpeech.OnSpeakingListener</a></code></dd>
 </dl>
 </li>
 </ul>

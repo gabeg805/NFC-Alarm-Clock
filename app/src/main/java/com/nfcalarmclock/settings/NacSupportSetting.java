@@ -55,7 +55,7 @@ public class NacSupportSetting
 	/**
 	 * Product ID.
 	 */
-	public static String PRODUCT_ID_SUPPORT = "com.nfcalarmclock.support1";
+	public static final String PRODUCT_ID_SUPPORT = "com.nfcalarmclock.support1";
 
 	/**
 	 * Billing client.

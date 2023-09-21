@@ -4,9 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-
+import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.scheduler.NacScheduler;
-
 import java.util.List;
 
 /**

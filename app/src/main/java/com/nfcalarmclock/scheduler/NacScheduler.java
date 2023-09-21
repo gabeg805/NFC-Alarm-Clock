@@ -7,12 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
-import com.nfcalarmclock.alarm.NacAlarm;
+import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmRepository;
 import com.nfcalarmclock.activealarm.NacActiveAlarmBroadcastReceiver;
 import com.nfcalarmclock.main.NacMainActivity;
-import com.nfcalarmclock.system.NacCalendar;
-import com.nfcalarmclock.system.NacIntent;
+import com.nfcalarmclock.util.NacCalendar;
+import com.nfcalarmclock.util.NacIntent;
 
 import java.util.Calendar;
 import java.util.List;

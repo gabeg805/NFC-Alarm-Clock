@@ -98,7 +98,7 @@ var activeTableTab = "activeTableTab";
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li>com.nfcalarmclock.alarm.NacAlarm.Builder</li>
+<li>com.nfcalarmclock.alarm.db.NacAlarm.Builder</li>
 </ul>
 </li>
 </ul>
@@ -168,7 +168,7 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.Builder.html#getAudioSource--">getAudioSource</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>java.util.EnumSet&lt;com.nfcalarmclock.system.NacCalendar.Day&gt;</code></td>
+<td class="colFirst"><code>java.util.EnumSet&lt;com.nfcalarmclock.util.NacCalendar.Day&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.Builder.html#getDays--">getDays</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -239,7 +239,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code><a href="../../com/nfcalarmclock/NacAlarm.Builder.html" title="class in com.nfcalarmclock">NacAlarm.Builder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.Builder.html#setDays-java.util.EnumSet-">setDays</a></span>(java.util.EnumSet&lt;com.nfcalarmclock.system.NacCalendar.Day&gt;&nbsp;days)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.Builder.html#setDays-java.util.EnumSet-">setDays</a></span>(java.util.EnumSet&lt;com.nfcalarmclock.util.NacCalendar.Day&gt;&nbsp;days)</code>
 <div class="block">Set the days to the run the alarm.</div>
 </td>
 </tr>
@@ -316,7 +316,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i32" class="altColor">
 <td class="colFirst"><code><a href="../../com/nfcalarmclock/NacAlarm.Builder.html" title="class in com.nfcalarmclock">NacAlarm.Builder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.Builder.html#setOnAlarmChangeListener-com.nfcalarmclock.alarm.NacAlarm.OnAlarmChangeListener-">setOnAlarmChangeListener</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.OnAlarmChangeListener.html" title="interface in com.nfcalarmclock">NacAlarm.OnAlarmChangeListener</a>&nbsp;listener)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.Builder.html#setOnAlarmChangeListener-com.nfcalarmclock.alarm.db.NacAlarm.OnAlarmChangeListener-">setOnAlarmChangeListener</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.OnAlarmChangeListener.html" title="interface in com.nfcalarmclock">NacAlarm.OnAlarmChangeListener</a>&nbsp;listener)</code>
 <div class="block">Set the listener for when the alarm is changed.</div>
 </td>
 </tr>
@@ -418,7 +418,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getDays</h4>
-<pre>public&nbsp;java.util.EnumSet&lt;com.nfcalarmclock.system.NacCalendar.Day&gt;&nbsp;getDays()</pre>
+<pre>public&nbsp;java.util.EnumSet&lt;com.nfcalarmclock.util.NacCalendar.Day&gt;&nbsp;getDays()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The days on which to run the alarm.</dd>
@@ -657,7 +657,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setDays</h4>
-<pre>public&nbsp;<a href="../../com/nfcalarmclock/NacAlarm.Builder.html" title="class in com.nfcalarmclock">NacAlarm.Builder</a>&nbsp;setDays(java.util.EnumSet&lt;com.nfcalarmclock.system.NacCalendar.Day&gt;&nbsp;days)</pre>
+<pre>public&nbsp;<a href="../../com/nfcalarmclock/NacAlarm.Builder.html" title="class in com.nfcalarmclock">NacAlarm.Builder</a>&nbsp;setDays(java.util.EnumSet&lt;com.nfcalarmclock.util.NacCalendar.Day&gt;&nbsp;days)</pre>
 <div class="block">Set the days to the run the alarm.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -859,7 +859,7 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="setOnAlarmChangeListener-com.nfcalarmclock.alarm.NacAlarm.OnAlarmChangeListener-">
+<a name="setOnAlarmChangeListener-com.nfcalarmclock.alarm.db.NacAlarm.OnAlarmChangeListener-">
 <!--   -->
 </a>
 <ul class="blockList">

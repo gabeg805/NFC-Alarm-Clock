@@ -1,6 +1,6 @@
 package com.nfcalarmclock.main;
 
-import com.nfcalarmclock.alarm.NacAlarm;
+import com.nfcalarmclock.alarm.db.NacAlarm;
 
 /**
  * The last action (Copy, Delete, Restore) that was executed.

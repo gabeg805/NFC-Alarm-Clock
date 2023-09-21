@@ -98,7 +98,7 @@ var activeTableTab = "activeTableTab";
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li>com.nfcalarmclock.alarm.NacAlarm</li>
+<li>com.nfcalarmclock.alarm.db.NacAlarm</li>
 </ul>
 </li>
 </ul>
@@ -204,7 +204,7 @@ implements android.os.Parcelable</pre>
 <td class="colOne"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.html#NacAlarm--">NacAlarm</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.html#NacAlarm-com.nfcalarmclock.alarm.NacAlarm.Builder-">NacAlarm</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.Builder.html" title="class in com.nfcalarmclock">NacAlarm.Builder</a>&nbsp;builder)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.html#NacAlarm-com.nfcalarmclock.alarm.db.NacAlarm.Builder-">NacAlarm</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.Builder.html" title="class in com.nfcalarmclock">NacAlarm.Builder</a>&nbsp;builder)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -249,7 +249,7 @@ implements android.os.Parcelable</pre>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.html#equals-com.nfcalarmclock.alarm.NacAlarm-">equals</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.html#equals-com.nfcalarmclock.alarm.db.NacAlarm-">equals</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
 <div class="block">Check if this alarm equals the given alarm.</div>
 </td>
 </tr>
@@ -266,7 +266,7 @@ implements android.os.Parcelable</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.html#getClockTime-android.content.Context-">getClockTime</a></span>(android.content.Context&nbsp;context)</code>&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
-<td class="colFirst"><code>java.util.EnumSet&lt;com.nfcalarmclock.system.NacCalendar.Day&gt;</code></td>
+<td class="colFirst"><code>java.util.EnumSet&lt;com.nfcalarmclock.util.NacCalendar.Day&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.html#getDays--">getDays</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
@@ -402,13 +402,13 @@ implements android.os.Parcelable</pre>
 </tr>
 <tr id="i40" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.html#setChangeTracker-com.nfcalarmclock.alarm.NacAlarm.ChangeTracker-">setChangeTracker</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.ChangeTracker.html" title="enum in com.nfcalarmclock">NacAlarm.ChangeTracker</a>&nbsp;change)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.html#setChangeTracker-com.nfcalarmclock.alarm.db.NacAlarm.ChangeTracker-">setChangeTracker</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.ChangeTracker.html" title="enum in com.nfcalarmclock">NacAlarm.ChangeTracker</a>&nbsp;change)</code>
 <div class="block">Set the change tracker.</div>
 </td>
 </tr>
 <tr id="i41" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.html#setDays-java.util.EnumSet-">setDays</a></span>(java.util.EnumSet&lt;com.nfcalarmclock.system.NacCalendar.Day&gt;&nbsp;days)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.html#setDays-java.util.EnumSet-">setDays</a></span>(java.util.EnumSet&lt;com.nfcalarmclock.util.NacCalendar.Day&gt;&nbsp;days)</code>
 <div class="block">Set the days to the run the alarm.</div>
 </td>
 </tr>
@@ -485,7 +485,7 @@ implements android.os.Parcelable</pre>
 </tr>
 <tr id="i54" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.html#setOnAlarmChangeListener-com.nfcalarmclock.alarm.NacAlarm.OnAlarmChangeListener-">setOnAlarmChangeListener</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.OnAlarmChangeListener.html" title="interface in com.nfcalarmclock">NacAlarm.OnAlarmChangeListener</a>&nbsp;listener)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.html#setOnAlarmChangeListener-com.nfcalarmclock.alarm.db.NacAlarm.OnAlarmChangeListener-">setOnAlarmChangeListener</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.OnAlarmChangeListener.html" title="interface in com.nfcalarmclock">NacAlarm.OnAlarmChangeListener</a>&nbsp;listener)</code>
 <div class="block">Set a listener for when the alarm is changed.</div>
 </td>
 </tr>
@@ -515,7 +515,7 @@ implements android.os.Parcelable</pre>
 </tr>
 <tr id="i59" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.html#toggleDay-com.nfcalarmclock.system.NacCalendar.Day-">toggleDay</a></span>(com.nfcalarmclock.system.NacCalendar.Day&nbsp;day)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacAlarm.html#toggleDay-com.nfcalarmclock.util.NacCalendar.Day-">toggleDay</a></span>(com.nfcalarmclock.util.NacCalendar.Day&nbsp;day)</code>
 <div class="block">Toggle a day.</div>
 </td>
 </tr>
@@ -614,7 +614,7 @@ implements android.os.Parcelable</pre>
 <pre>public&nbsp;NacAlarm()</pre>
 </li>
 </ul>
-<a name="NacAlarm-com.nfcalarmclock.alarm.NacAlarm.Builder-">
+<a name="NacAlarm-com.nfcalarmclock.alarm.db.NacAlarm.Builder-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -697,7 +697,7 @@ implements android.os.Parcelable</pre>
 </dl>
 </li>
 </ul>
-<a name="equals-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="equals-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -758,7 +758,7 @@ implements android.os.Parcelable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getDays</h4>
-<pre>public&nbsp;java.util.EnumSet&lt;com.nfcalarmclock.system.NacCalendar.Day&gt;&nbsp;getDays()</pre>
+<pre>public&nbsp;java.util.EnumSet&lt;com.nfcalarmclock.util.NacCalendar.Day&gt;&nbsp;getDays()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The days on which to run the alarm.</dd>
@@ -1152,7 +1152,7 @@ implements android.os.Parcelable</pre>
 </dl>
 </li>
 </ul>
-<a name="setChangeTracker-com.nfcalarmclock.alarm.NacAlarm.ChangeTracker-">
+<a name="setChangeTracker-com.nfcalarmclock.alarm.db.NacAlarm.ChangeTracker-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -1168,7 +1168,7 @@ implements android.os.Parcelable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setDays</h4>
-<pre>public&nbsp;void&nbsp;setDays(java.util.EnumSet&lt;com.nfcalarmclock.system.NacCalendar.Day&gt;&nbsp;days)</pre>
+<pre>public&nbsp;void&nbsp;setDays(java.util.EnumSet&lt;com.nfcalarmclock.util.NacCalendar.Day&gt;&nbsp;days)</pre>
 <div class="block">Set the days to the run the alarm.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1342,7 +1342,7 @@ implements android.os.Parcelable</pre>
 </dl>
 </li>
 </ul>
-<a name="setOnAlarmChangeListener-com.nfcalarmclock.alarm.NacAlarm.OnAlarmChangeListener-">
+<a name="setOnAlarmChangeListener-com.nfcalarmclock.alarm.db.NacAlarm.OnAlarmChangeListener-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -1415,13 +1415,13 @@ implements android.os.Parcelable</pre>
 </dl>
 </li>
 </ul>
-<a name="toggleDay-com.nfcalarmclock.system.NacCalendar.Day-">
+<a name="toggleDay-com.nfcalarmclock.util.NacCalendar.Day-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>toggleDay</h4>
-<pre>public&nbsp;void&nbsp;toggleDay(com.nfcalarmclock.system.NacCalendar.Day&nbsp;day)</pre>
+<pre>public&nbsp;void&nbsp;toggleDay(com.nfcalarmclock.util.NacCalendar.Day&nbsp;day)</pre>
 <div class="block">Toggle a day.</div>
 </li>
 </ul>

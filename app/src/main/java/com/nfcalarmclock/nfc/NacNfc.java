@@ -8,7 +8,7 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Build;
 import android.provider.Settings;
-import com.nfcalarmclock.alarm.NacAlarm;
+import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.util.NacUtility;
 import java.lang.IllegalStateException;

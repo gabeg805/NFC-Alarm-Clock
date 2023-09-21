@@ -3,7 +3,7 @@
 
 	<!-- App -->
 	<string name="app_name">NFC Alarm Clock</string>
-	<string name="permission_ignore_battery_optimization_request">Alarms may not run if the app has not been used for a while.\n\n<b>Note:</b>  This depends on what device you have and may not actually be needed.\n\nWould you like to disable battery optimization?</string>
+	<string name="permission_ignore_battery_optimization_request">Alarms may not run if the app has not been used for a while.\n\n<b>Note:</b>  This depends on what device you have and <b>may not actually be needed</b>.\n\nWould you like to disable battery optimization?</string>
 	<string name="permission_post_notifications_request">Alarms will not be able to run if the app is not in focus.\n\n<b>Note:</b>  This is a side effect of the security policies introduced in <b>Android 13</b>, which are for the benefit of users, but can restrict apps in instances like this.\n\nWould you like to enable notifications?</string>
 	<string name="permission_schedule_exact_alarm_request">Alarms will not be able to run if the app is not in focus.\n\nWould you like to enable scheduling alarms?</string>
 
@@ -17,7 +17,7 @@
 	<string name="item_3">Fixed <b>App Not Responding</b> (ANR) when browsing for songs in a folder with a lot of songs.</string>
 	<string name="item_4">Fixed rare crash when swiping to copy an alarm.</string>
 	<string name="item_5">Removed <b>Settings  >  Miscellaneous</b>, and moved all those settings into <b>General</b>.</string>
-	<string name="item_6">Added <b>Settings  >  Support</b> so that you can support deveopment of the app if you so choose.</string>
+	<string name="item_6">Added <b>Settings  >  Support</b> so that you can support development of the app, if you so choose.</string>
 
 
 
@@ -84,6 +84,7 @@
 	<string name="message_bullet">\u25BA</string>
 	<string name="message_required">Required</string>
 	<string name="message_optional">Optional</string>
+	<string name="message_already_have_permission">You already have this permission</string>
 	<string name="message_support_thank_you">Thank you for your support!</string>
 
 
@@ -248,8 +249,8 @@
 	<string name="stats_setting">Statistics</string>
 	<string name="stats_setting_summary">See how long you have snoozed for, and more</string>
 
-	<string name="support_setting">Support</string>
-	<string name="support_setting_summary">Support the development of the app</string>
+	<string name="support_setting">Support development</string>
+	<string name="support_setting_summary">Support would be greatly appreciated, but no pressure! This app will always be free</string>
 
 
 
@@ -447,6 +448,11 @@
 
 	<!-- App version -->
 	<string name="version_title">Version</string>
+
+
+	<!-- Ignore battery optimization -->
+	<string name="about_ignore_battery_optimization">Disable battery optimization</string>
+	<string name="about_ignore_battery_optimization_summary">The app will not be put to sleep, allowing alarms to be activated as normal.</string>
 
 
 	<!-- NFC permission -->

@@ -9,13 +9,13 @@ import android.os.Vibrator;
 import android.os.VibratorManager;
 import android.os.VibrationEffect;
 import com.google.android.exoplayer2.Player;
-import com.nfcalarmclock.alarm.NacAlarm;
+import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.media.NacAudioAttributes;
 import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.media.NacMediaPlayer;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
-import com.nfcalarmclock.tts.NacTextToSpeech;
+import com.nfcalarmclock.alarm.options.tts.NacTextToSpeech;
 import com.nfcalarmclock.util.NacUtility;
 import java.lang.SecurityException;
 

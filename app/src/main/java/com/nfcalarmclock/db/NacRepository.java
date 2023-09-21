@@ -1,8 +1,7 @@
 package com.nfcalarmclock.db;
 
 import com.nfcalarmclock.util.NacUtility;
-import com.nfcalarmclock.alarm.NacAlarm;
-
+import com.nfcalarmclock.alarm.db.NacAlarm;
 import java.lang.InterruptedException;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;

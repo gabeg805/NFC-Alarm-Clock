@@ -4,7 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.view.View;
 
-import com.nfcalarmclock.util.dialog.NacDialog;
+import com.nfcalarmclock.view.dialog.NacDialog;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.R;
 

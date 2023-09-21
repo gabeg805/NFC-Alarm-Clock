@@ -13,14 +13,14 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
-import com.nfcalarmclock.alarm.NacAlarm;
+import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmRepository;
 import com.nfcalarmclock.missedalarm.NacMissedAlarmNotification;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.statistics.NacAlarmStatisticRepository;
-import com.nfcalarmclock.system.NacContext;
-import com.nfcalarmclock.system.NacIntent;
+import com.nfcalarmclock.util.NacContext;
+import com.nfcalarmclock.util.NacIntent;
 import com.nfcalarmclock.scheduler.NacScheduler;
 import com.nfcalarmclock.util.NacUtility;
 

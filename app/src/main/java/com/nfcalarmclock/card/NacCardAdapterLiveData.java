@@ -2,7 +2,7 @@ package com.nfcalarmclock.card;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.nfcalarmclock.alarm.NacAlarm;
+import com.nfcalarmclock.alarm.db.NacAlarm;
 
 import java.util.ArrayList;
 import java.util.Collections;

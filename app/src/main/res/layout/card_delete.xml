@@ -5,7 +5,7 @@
 	android:id="@+id/nac_swipe_delete"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@color/red"
+	android:background="@color/red_dull"
 	tools:ignore="Overdraw">
 
 	<ImageView

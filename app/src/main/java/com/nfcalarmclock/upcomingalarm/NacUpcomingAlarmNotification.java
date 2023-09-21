@@ -9,10 +9,10 @@ import android.os.Build;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.nfcalarmclock.alarm.NacAlarm;
-import com.nfcalarmclock.util.notification.NacNotification;
+import com.nfcalarmclock.alarm.db.NacAlarm;
+import com.nfcalarmclock.view.notification.NacNotification;
 import com.nfcalarmclock.shared.NacSharedConstants;
-import com.nfcalarmclock.system.NacIntent;
+import com.nfcalarmclock.util.NacIntent;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -212,7 +212,7 @@ implements <a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListe
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static androidx.fragment.app.Fragment</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacMusicFragment.html#newInstance-com.nfcalarmclock.alarm.NacAlarm-">newInstance</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacMusicFragment.html#newInstance-com.nfcalarmclock.alarm.db.NacAlarm-">newInstance</a></span>(<a href="../../com/nfcalarmclock/NacAlarm.html" title="class in com.nfcalarmclock">NacAlarm</a>&nbsp;alarm)</code>
 <div class="block">Create a new instance of this fragment.</div>
 </td>
 </tr>
@@ -231,7 +231,7 @@ implements <a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListe
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacMusicFragment.html#onBuildDialog-com.nfcalarmclock.util.dialog.NacDialog-android.app.AlertDialog.Builder-">onBuildDialog</a></span>(<a href="../../com/nfcalarmclock/NacDialog.html" title="class in com.nfcalarmclock">NacDialog</a>&nbsp;dialog,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacMusicFragment.html#onBuildDialog-com.nfcalarmclock.view.dialog.NacDialog-android.app.AlertDialog.Builder-">onBuildDialog</a></span>(<a href="../../com/nfcalarmclock/NacDialog.html" title="class in com.nfcalarmclock">NacDialog</a>&nbsp;dialog,
              android.app.AlertDialog.Builder&nbsp;builder)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -246,7 +246,7 @@ implements <a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListe
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacMusicFragment.html#onDismissDialog-com.nfcalarmclock.util.dialog.NacDialog-">onDismissDialog</a></span>(<a href="../../com/nfcalarmclock/NacDialog.html" title="class in com.nfcalarmclock">NacDialog</a>&nbsp;dialog)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../com/nfcalarmclock/NacMusicFragment.html#onDismissDialog-com.nfcalarmclock.view.dialog.NacDialog-">onDismissDialog</a></span>(<a href="../../com/nfcalarmclock/NacDialog.html" title="class in com.nfcalarmclock">NacDialog</a>&nbsp;dialog)</code>&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
@@ -370,7 +370,7 @@ implements <a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListe
 </dl>
 </li>
 </ul>
-<a name="newInstance-com.nfcalarmclock.alarm.NacAlarm-">
+<a name="newInstance-com.nfcalarmclock.alarm.db.NacAlarm-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -390,7 +390,7 @@ implements <a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListe
 <div class="block">Create a new instance of this fragment.</div>
 </li>
 </ul>
-<a name="onBuildDialog-com.nfcalarmclock.util.dialog.NacDialog-android.app.AlertDialog.Builder-">
+<a name="onBuildDialog-com.nfcalarmclock.view.dialog.NacDialog-android.app.AlertDialog.Builder-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -400,7 +400,7 @@ implements <a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListe
                           android.app.AlertDialog.Builder&nbsp;builder)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../com/nfcalarmclock/NacDialog.OnBuildListener.html#onBuildDialog-com.nfcalarmclock.util.dialog.NacDialog-android.app.AlertDialog.Builder-">onBuildDialog</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacDialog.OnBuildListener.html" title="interface in com.nfcalarmclock">NacDialog.OnBuildListener</a></code></dd>
+<dd><code><a href="../../com/nfcalarmclock/NacDialog.OnBuildListener.html#onBuildDialog-com.nfcalarmclock.view.dialog.NacDialog-android.app.AlertDialog.Builder-">onBuildDialog</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacDialog.OnBuildListener.html" title="interface in com.nfcalarmclock">NacDialog.OnBuildListener</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -450,7 +450,7 @@ implements <a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListe
 </dl>
 </li>
 </ul>
-<a name="onDismissDialog-com.nfcalarmclock.util.dialog.NacDialog-">
+<a name="onDismissDialog-com.nfcalarmclock.view.dialog.NacDialog-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -459,7 +459,7 @@ implements <a href="../../com/nfcalarmclock/NacFileBrowser.OnBrowserClickedListe
 <pre>public&nbsp;boolean&nbsp;onDismissDialog(<a href="../../com/nfcalarmclock/NacDialog.html" title="class in com.nfcalarmclock">NacDialog</a>&nbsp;dialog)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../com/nfcalarmclock/NacDialog.OnDismissListener.html#onDismissDialog-com.nfcalarmclock.util.dialog.NacDialog-">onDismissDialog</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacDialog.OnDismissListener.html" title="interface in com.nfcalarmclock">NacDialog.OnDismissListener</a></code></dd>
+<dd><code><a href="../../com/nfcalarmclock/NacDialog.OnDismissListener.html#onDismissDialog-com.nfcalarmclock.view.dialog.NacDialog-">onDismissDialog</a></code>&nbsp;in interface&nbsp;<code><a href="../../com/nfcalarmclock/NacDialog.OnDismissListener.html" title="interface in com.nfcalarmclock">NacDialog.OnDismissListener</a></code></dd>
 </dl>
 </li>
 </ul>

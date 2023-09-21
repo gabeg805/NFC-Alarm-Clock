@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedConstants;
-import com.nfcalarmclock.util.dialog.NacDialogFragment;
+import com.nfcalarmclock.view.dialog.NacDialogFragment;
 import java.util.Locale;
 
 /**

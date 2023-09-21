@@ -5,7 +5,7 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import androidx.annotation.NonNull;
 import androidx.preference.Preference;
-import com.nfcalarmclock.util.dialog.NacDialog;
+import com.nfcalarmclock.view.dialog.NacDialog;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;

@@ -5,7 +5,7 @@
 	android:id="@+id/nac_swipe_copy"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@color/green"
+	android:background="@color/green_dull"
 	tools:ignore="Overdraw">
 
 	<ImageView
