@@ -3,11 +3,9 @@ package com.nfcalarmclock.shared;
 import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
-
-import com.nfcalarmclock.system.NacCalendar;
+import com.nfcalarmclock.util.NacCalendar;
 import com.nfcalarmclock.file.NacFile;
 import com.nfcalarmclock.media.NacMedia;
-
 import java.util.List;
 
 /**
@@ -466,6 +464,16 @@ public class NacSharedPreferences
 
 		this.saveBoolean(key, vibrate, false);
 
+	}
+
+	/**
+	 * Edit whether the app was supported or not.
+	 */
+	public void editWasAppSupported(boolean wasSupported)
+	{
+		String key = this.getKeys().getWasAppSupported();
+
+		this.saveBoolean(key, wasSupported, false);
 	}
 
 	/**
@@ -1295,6 +1303,19 @@ public class NacSharedPreferences
 		int value = this.getDefaults().getVolume();
 
 		return this.getInt(key, value);
+	}
+
+	/**
+	 * Get whether the app was supported or not.
+	 *
+	 * @return Whether the app was supported or not.
+	 */
+	public boolean getWasAppSupported()
+	{
+		String key = this.getKeys().getWasAppSupported();
+		boolean value = this.getDefaults().getWasAppSupported();
+
+		return this.getBoolean(key, value);
 	}
 
 	/**

@@ -2,10 +2,8 @@ package com.nfcalarmclock.shared;
 
 import android.content.Context;
 import android.content.res.Resources;
-
-import com.nfcalarmclock.system.NacCalendar;
+import com.nfcalarmclock.util.NacCalendar;
 import com.nfcalarmclock.R;
-
 import java.util.EnumSet;
 
 /**
@@ -394,6 +392,14 @@ public class NacSharedDefaults
 	public int getVolume()
 	{
 		return this.getInteger(R.integer.default_volume);
+	}
+
+	/**
+	 * @return The app supported.
+	 */
+	public boolean getWasAppSupported()
+	{
+		return this.getBoolean(R.bool.default_was_app_supported);
 	}
 
 	/**

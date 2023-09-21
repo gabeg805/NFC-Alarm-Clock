@@ -2,9 +2,7 @@ package com.nfcalarmclock.shared;
 
 import android.content.Context;
 import android.content.res.Resources;
-
 import com.nfcalarmclock.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -485,6 +483,16 @@ public class NacSharedKeys
 	public String getVolume()
 	{
 		return this.getString(R.string.alarm_volume_key);
+	}
+
+	/**
+	 * Get the app supported key.
+	 *
+	 * @return The app supported key.
+	 */
+	public String getWasAppSupported()
+	{
+		return this.getString(R.string.key_app_supported);
 	}
 
 	/**

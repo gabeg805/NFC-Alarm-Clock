@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -12,6 +13,7 @@ import androidx.preference.Preference;
 import com.android.billingclient.api.ProductDetails;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedKeys;
+import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.statistics.NacStatisticsSettingFragment;
 import com.nfcalarmclock.util.NacUtility;
 
@@ -20,47 +22,33 @@ import com.nfcalarmclock.util.NacUtility;
  */
 public class NacMainSettingFragment
 	extends NacGenericSettingFragment
-	implements Preference.OnPreferenceClickListener
 {
 
 	/**
-	 * Get the title of the fragment.
-	 *
-	 * @return The title of the fragment.
+	 * Setup the Support preference icon.
 	 */
-	public String getTitle()
+	private void animateSupportIcon()
 	{
-		return getString(R.string.settings);
-	}
+		Resources res = getResources();
+		Preference preference = findPreference(getString(R.string.support_setting_key));
 
-	/**
-	 */
-	@Override
-	public void onCreatePreferences(Bundle savedInstanceState,
-		String rootKey)
-	{
-		addPreferencesFromResource(R.xml.main_preferences);
+		// Create the icons
+		BitmapDrawable whiteDrawable = this.createIconDrawable(R.mipmap.favorite);
+		BitmapDrawable redDrawable = this.createIconDrawable(R.mipmap.favorite);
 
-		NacSharedKeys keys = this.getSharedKeys();
-		Preference appearance = findPreference(keys.getAppearance());
-		Preference general = findPreference(keys.getGeneral());
-		Preference statistics = findPreference(keys.getStatistics());
-		Preference about = findPreference(keys.getAbout());
-		Preference support = findPreference(keys.getSupport());
+		// Create the transition icon
+		TransitionDrawable transitionDrawable = new TransitionDrawable(
+			new BitmapDrawable[]{whiteDrawable, redDrawable});
+		int color = res.getColor(R.color.red);
 
-		// Set icons
-		appearance.setIcon(this.createIconDrawable(R.mipmap.palette));
-		general.setIcon(this.createIconDrawable(R.mipmap.settings));
-		statistics.setIcon(this.createIconDrawable(R.mipmap.analytics));
-		about.setIcon(this.createIconDrawable(R.mipmap.about));
-		support.setIcon(this.createIconDrawable(R.mipmap.favorite));
+		// Color the icon that will be transitioned to
+		redDrawable.setTint(color);
 
-		// Set on click listeners
-		appearance.setOnPreferenceClickListener(this);
-		general.setOnPreferenceClickListener(this);
-		statistics.setOnPreferenceClickListener(this);
-		about.setOnPreferenceClickListener(this);
-		support.setOnPreferenceClickListener(this);
+		// Set the icon
+		preference.setIcon(transitionDrawable);
+
+		// Start the transition
+		transitionDrawable.startTransition(1000);
 	}
 
 	/**
@@ -77,10 +65,26 @@ public class NacMainSettingFragment
 	}
 
 	/**
-	 * Called when a preference is slicked
 	 */
 	@Override
-	public boolean onPreferenceClick(Preference preference)
+	public void onCreatePreferences(Bundle savedInstanceState,
+		String rootKey)
+	{
+		addPreferencesFromResource(R.xml.main_preferences);
+
+		// Set icons
+		this.setupAppearanceIcon();
+		this.setupGeneralIcon();
+		this.setupStatisticsIcon();
+		this.setupAboutIcon();
+		this.setupSupportIcon();
+	}
+
+	/**
+	 * A preference in the tree was clicked.
+	 */
+	@Override
+	public boolean onPreferenceTreeClick(Preference preference)
 	{
 		NacSharedKeys keys = this.getSharedKeys();
 		String preferenceKey = preference.getKey();
@@ -113,65 +117,17 @@ public class NacMainSettingFragment
 			fragment = new NacAboutSettingFragment();
 			title = keys.getAboutTitle();
 		}
-		// Support
-		else if (preferenceKey.equals(keys.getSupport()))
-		{
-			FragmentActivity fragmentActivity = requireActivity();
-			NacSupportSetting support = new NacSupportSetting(fragmentActivity);
-
-			// Set the billing event listener
-			support.setOnBillingEventListener(new NacSupportSetting.OnBillingEventListener()
-			{
-
-				/**
-				 * There was a billing error.
-				 */
-				@Override
-				public void onBillingError()
-				{
-					String message = getString(R.string.error_message_google_play_billing);
-
-					// Show a toast indicating there was an error. Make sure this is run
-					// on the UI thread
-					fragmentActivity.runOnUiThread(() ->
-						NacUtility.quickToast(fragmentActivity, message)
-					);
-				}
-
-				/**
-				 * The billing flow is ready to be launched.
-				 */
-				@Override
-				public void onPrepareToLaunchBillingFlow(ProductDetails productDetails)
-				{
-					// Launch billing flow, passing in the activity
-					support.launchBillingFlow(fragmentActivity, productDetails);
-				}
-
-				/**
-				 * Support has been purchased.
-				 */
-				@Override
-				public void onSupportPurchased()
-				{
-					String message = getString(R.string.message_support_thank_you);
-
-					// Show a toast saying thank you. Make sure this is run on the UI
-					// thread
-					fragmentActivity.runOnUiThread(() ->
-						NacUtility.quickToast(fragmentActivity, message)
-					);
-				}
-			});
-
-			// Connect to Google Play
-			support.connect();
-
-			return false;
-		}
 		else
 		{
-			return false;
+			// Support
+			if (preferenceKey.equals(keys.getSupport()))
+			{
+				// Start the billing flow
+				this.startBillingFlow();
+			}
+
+			// Default return
+			return super.onPreferenceTreeClick(preference);
 		}
 
 		// Show the fragment that was selected above
@@ -180,7 +136,145 @@ public class NacMainSettingFragment
 			.addToBackStack(title)
 			.commit();
 
-		return true;
+		// Default return
+		return super.onPreferenceTreeClick(preference);
+	}
+
+	/**
+	 * Setup the About preference icon.
+	 */
+	private void setupAboutIcon()
+	{
+		Preference preference = findPreference(getString(R.string.about_setting_key));
+		BitmapDrawable drawable = this.createIconDrawable(R.mipmap.about);
+
+		preference.setIcon(drawable);
+	}
+
+	/**
+	 * Setup the Appearance preference icon.
+	 */
+	private void setupAppearanceIcon()
+	{
+		Preference preference = findPreference(getString(R.string.appearance_setting_key));
+		BitmapDrawable drawable = this.createIconDrawable(R.mipmap.palette);
+
+		preference.setIcon(drawable);
+	}
+
+	/**
+	 * Setup the General preference icon.
+	 */
+	private void setupGeneralIcon()
+	{
+		Preference preference = findPreference(getString(R.string.general_setting_key));
+		BitmapDrawable drawable = this.createIconDrawable(R.mipmap.settings);
+
+		preference.setIcon(drawable);
+	}
+
+	/**
+	 * Setup the Statistics preference icon.
+	 */
+	private void setupStatisticsIcon()
+	{
+		Preference preference = findPreference(getString(R.string.stats_setting_key));
+		BitmapDrawable drawable = this.createIconDrawable(R.mipmap.analytics);
+
+		preference.setIcon(drawable);
+	}
+
+	/**
+	 * Setup the Support preference icon.
+	 */
+	private void setupSupportIcon()
+	{
+		NacSharedPreferences shared = this.getSharedPreferences();
+		Preference preference = findPreference(getString(R.string.support_setting_key));
+
+		// Create the icon
+		BitmapDrawable drawable = this.createIconDrawable(R.mipmap.favorite);
+
+		// Check if the user has shown their support
+		if (shared.getWasAppSupported())
+		{
+			Resources res = getResources();
+			int color = res.getColor(R.color.red);
+
+			// Change the color of the heart to show that the user has shown their
+			// support
+			drawable.setTint(color);
+		}
+
+		// Set the icon
+		preference.setIcon(drawable);
+	}
+
+	/**
+	 * Start the billing flow.
+	 */
+	private void startBillingFlow()
+	{
+		FragmentActivity fragmentActivity = requireActivity();
+		NacSupportSetting support = new NacSupportSetting(fragmentActivity);
+
+		// Set the billing event listener
+		support.setOnBillingEventListener(new NacSupportSetting.OnBillingEventListener()
+		{
+
+			/**
+			 * There was a billing error.
+			 */
+			@Override
+			public void onBillingError()
+			{
+				String message = getString(R.string.error_message_google_play_billing);
+
+				// Show a toast indicating there was an error. Make sure this is run
+				// on the UI thread
+				fragmentActivity.runOnUiThread(() ->
+					NacUtility.quickToast(fragmentActivity, message)
+				);
+			}
+
+			/**
+			 * The billing flow is ready to be launched.
+			 */
+			@Override
+			public void onPrepareToLaunchBillingFlow(ProductDetails productDetails)
+			{
+				// Launch billing flow, passing in the activity
+				support.launchBillingFlow(fragmentActivity, productDetails);
+			}
+
+			/**
+			 * Support has been purchased.
+			 */
+			@Override
+			public void onSupportPurchased()
+			{
+				NacSharedPreferences shared = getSharedPreferences();
+				NacSharedKeys keys = getSharedKeys();
+				String message = getString(R.string.message_support_thank_you);
+
+				// Make sure the following things are run on the UI thread
+				fragmentActivity.runOnUiThread(() ->
+					{
+						// Show a toast saying thank you
+						NacUtility.quickToast(fragmentActivity, message);
+
+						// Save that the app was supported in shared preferences
+						shared.editWasAppSupported(true);
+
+						// Re-draw the support icon
+						animateSupportIcon();
+					}
+				);
+			}
+		});
+
+		// Connect to Google Play
+		support.connect();
 	}
 
 }

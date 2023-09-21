@@ -4,7 +4,7 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
 	<!-- App -->
-	<com.nfcalarmclock.util.preference.NacPreferenceCategory
+	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
 		android:title="@string/app_category">
 
 		<Preference
@@ -24,11 +24,20 @@
 			app:allowDividerAbove="true"
 			/>
 
-	</com.nfcalarmclock.util.preference.NacPreferenceCategory>
+	</com.nfcalarmclock.settings.preference.NacPreferenceCategory>
 
 	<!-- Permissions -->
-	<com.nfcalarmclock.util.preference.NacPreferenceCategory
+	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
 		android:title="@string/permissions_category">
+
+		<com.nfcalarmclock.permission.NacOptionalPermissionPreference
+			android:key="@string/about_ignore_battery_optimization_key"
+			android:title="@string/about_ignore_battery_optimization"
+			android:summary="@string/about_ignore_battery_optimization_summary"
+			app:iconSpaceReserved="false"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="false"
+			/>
 
 		<com.nfcalarmclock.permission.NacOptionalPermissionPreference
 			android:key="@string/about_nfc_key"
@@ -111,6 +120,6 @@
 			app:allowDividerBelow="true"
 			/>
 
-	</com.nfcalarmclock.util.preference.NacPreferenceCategory>
+	</com.nfcalarmclock.settings.preference.NacPreferenceCategory>
 
 </PreferenceScreen>

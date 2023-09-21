@@ -3,7 +3,7 @@ package com.nfcalarmclock.shared;
 import android.content.Context;
 import android.content.res.Resources;
 
-import com.nfcalarmclock.system.NacCalendar;
+import com.nfcalarmclock.util.NacCalendar;
 import com.nfcalarmclock.R;
 
 import java.util.Calendar;
