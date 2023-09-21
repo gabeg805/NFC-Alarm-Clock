@@ -35,14 +35,14 @@ import com.nfcalarmclock.BuildConfig;
 import com.nfcalarmclock.activealarm.NacActiveAlarmService;
 import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmViewModel;
-import com.nfcalarmclock.alarm.options.audiooptions.NacAlarmAudioOptionsDialog;
-import com.nfcalarmclock.alarm.options.audiosource.NacAudioSourceDialog;
+import com.nfcalarmclock.audiooptions.NacAlarmAudioOptionsDialog;
+import com.nfcalarmclock.audiosource.NacAudioSourceDialog;
 import com.nfcalarmclock.card.NacCardAdapter;
 import com.nfcalarmclock.card.NacCardAdapterLiveData;
 import com.nfcalarmclock.card.NacCardHolder;
 import com.nfcalarmclock.card.NacCardTouchHelper;
-import com.nfcalarmclock.alarm.options.dismissearly.NacDismissEarlyDialog;
-import com.nfcalarmclock.alarm.options.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog;
+import com.nfcalarmclock.dismissearly.NacDismissEarlyDialog;
+import com.nfcalarmclock.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog;
 import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.mediapicker.NacMediaActivity;
 import com.nfcalarmclock.nfc.NacNfc;
@@ -51,7 +51,7 @@ import com.nfcalarmclock.nfc.NacScanNfcTagDialog;
 import com.nfcalarmclock.permission.NacPermissionRequestManager;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.ratemyapp.NacRateMyApp;
-import com.nfcalarmclock.alarm.options.restrictvolume.NacRestrictVolumeDialog;
+import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog;
 import com.nfcalarmclock.settings.NacMainSettingActivity;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
@@ -61,7 +61,7 @@ import com.nfcalarmclock.statistics.NacAlarmStatisticRepository;
 import com.nfcalarmclock.util.NacCalendar;
 import com.nfcalarmclock.util.NacContext;
 import com.nfcalarmclock.util.NacIntent;
-import com.nfcalarmclock.alarm.options.tts.NacTextToSpeechDialog;
+import com.nfcalarmclock.tts.NacTextToSpeechDialog;
 import com.nfcalarmclock.upcomingalarm.NacUpcomingAlarmNotification;
 import com.nfcalarmclock.view.dialog.NacDialog;
 import com.nfcalarmclock.util.NacUtility;
@@ -444,11 +444,6 @@ public class NacMainActivity
 		this.getAlarmStatisticRepository().insertDeleted(alarm);
 		this.getLastAlarmCardAction().set(alarm, NacLastAlarmCardAction.Type.DELETE);
 		this.showSnackbar(message, action, this.mOnSwipeSnackbarActionListener);
-
-		// TODO: Delete once done testing transition color
-		NacSharedPreferences shared = this.getSharedPreferences();
-
-		shared.editWasAppSupported(false);
 	}
 
 	/**

@@ -1,4 +1,4 @@
-package com.nfcalarmclock.alarm.options.snoozeduration;
+package com.nfcalarmclock.snoozeduration;
 
 import android.content.Context;
 import android.content.res.TypedArray;

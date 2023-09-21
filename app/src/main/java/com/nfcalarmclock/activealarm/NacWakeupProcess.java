@@ -12,10 +12,10 @@ import com.google.android.exoplayer2.Player;
 import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.media.NacAudioAttributes;
 import com.nfcalarmclock.media.NacMedia;
-import com.nfcalarmclock.media.NacMediaPlayer;
+import com.nfcalarmclock.mediaplayer.NacMediaPlayer;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
-import com.nfcalarmclock.alarm.options.tts.NacTextToSpeech;
+import com.nfcalarmclock.tts.NacTextToSpeech;
 import com.nfcalarmclock.util.NacUtility;
 import java.lang.SecurityException;
 

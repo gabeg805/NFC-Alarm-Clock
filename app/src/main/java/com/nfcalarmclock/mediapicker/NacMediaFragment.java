@@ -16,7 +16,7 @@ import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmViewModel;
-import com.nfcalarmclock.media.NacMediaPlayer;
+import com.nfcalarmclock.mediaplayer.NacMediaPlayer;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.util.NacBundle;

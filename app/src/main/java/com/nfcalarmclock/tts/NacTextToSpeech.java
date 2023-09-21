@@ -1,4 +1,4 @@
-package com.nfcalarmclock.alarm.options.tts;
+package com.nfcalarmclock.tts;
 
 import android.content.Context;
 import android.media.AudioAttributes;

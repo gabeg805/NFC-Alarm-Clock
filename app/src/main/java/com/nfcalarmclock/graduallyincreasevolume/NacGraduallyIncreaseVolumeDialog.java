@@ -1,4 +1,4 @@
-package com.nfcalarmclock.alarm.options.graduallyincreasevolume;
+package com.nfcalarmclock.graduallyincreasevolume;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

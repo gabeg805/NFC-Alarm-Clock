@@ -1,4 +1,4 @@
-package com.nfcalarmclock.alarm.options.maxsnooze;
+package com.nfcalarmclock.snoozeduration;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -14,16 +14,16 @@ import com.nfcalarmclock.R;
 import java.util.List;
 
 /**
- * Select the max number of snoozes allowed for an alarm.
+ * Select how long snoozing an alarm should be.
  */
-public class NacMaxSnoozeDialog
+public class NacSnoozeDurationDialog
 	extends NacScrollablePickerDialogFragment
 {
 
 	/**
 	 * Tag for the class.
 	 */
-	public static final String TAG = "NacMaxSnoozeDialog";
+	public static final String TAG = "NacSnoozeDurationDialog";
 
 	/**
 	 * Get the list of values for the scrollable picker.
@@ -34,7 +34,7 @@ public class NacMaxSnoozeDialog
 	public List<String> getScrollablePickerValues()
 	{
 		NacSharedConstants cons = this.getSharedConstants();
-		return cons.getMaxSnoozeSummaries();
+		return cons.getSnoozeDurationSummaries();
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class NacMaxSnoozeDialog
 		NacSharedConstants cons = this.getSharedConstants();
 
 		return new AlertDialog.Builder(requireContext())
-			.setTitle(cons.getMaxSnooze())
+			.setTitle(cons.getSnoozeDuration())
 			.setPositiveButton(cons.getActionOk(), (dialog, which) ->
 				this.callOnScrollablePickerOptionSelectedListener())
 			.setNegativeButton(cons.getActionCancel(), (dialog, which) -> {})

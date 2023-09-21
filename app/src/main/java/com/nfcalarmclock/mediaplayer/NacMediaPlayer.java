@@ -1,19 +1,19 @@
-package com.nfcalarmclock.media;
+package com.nfcalarmclock.mediaplayer;
 
 import android.content.Context;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
-
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.MediaItem;
-
+import com.nfcalarmclock.media.NacAudioAttributes;
+import com.nfcalarmclock.media.NacAudioManager;
+import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.shared.NacSharedConstants;
-
 import java.util.List;
 
 /**

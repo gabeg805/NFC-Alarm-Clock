@@ -5,10 +5,8 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.nfcalarmclock.BuildConfig;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedConstants;

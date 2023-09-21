@@ -1,4 +1,4 @@
-package com.nfcalarmclock.file.browser;
+package com.nfcalarmclock.filebrowser;
 
 import android.app.Application;
 import android.content.Context;

@@ -15,6 +15,7 @@ import com.nfcalarmclock.R;
 import com.nfcalarmclock.shared.NacSharedKeys;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.statistics.NacStatisticsSettingFragment;
+import com.nfcalarmclock.support.NacSupportSetting;
 import com.nfcalarmclock.util.NacUtility;
 
 /**

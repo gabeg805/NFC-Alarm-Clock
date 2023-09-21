@@ -1,4 +1,4 @@
-package com.nfcalarmclock.alarm.options.audiosource;
+package com.nfcalarmclock.audiosource;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

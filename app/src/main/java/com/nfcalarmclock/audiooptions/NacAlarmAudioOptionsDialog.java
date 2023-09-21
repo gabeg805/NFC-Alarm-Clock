@@ -1,4 +1,4 @@
-package com.nfcalarmclock.alarm.options.audiooptions;
+package com.nfcalarmclock.audiooptions;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

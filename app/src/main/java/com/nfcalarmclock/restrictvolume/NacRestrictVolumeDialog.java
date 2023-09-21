@@ -1,4 +1,4 @@
-package com.nfcalarmclock.alarm.options.restrictvolume;
+package com.nfcalarmclock.restrictvolume;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

@@ -7,7 +7,7 @@
 	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
 		android:title="@string/dismiss_options_category">
 
-		<com.nfcalarmclock.alarm.options.autodismiss.NacAutoDismissPreference
+		<com.nfcalarmclock.autodismiss.NacAutoDismissPreference
 			android:key="@string/auto_dismiss_key"
 			android:title="@string/auto_dismiss"
 			android:defaultValue="@integer/default_auto_dismiss_index"
@@ -20,7 +20,7 @@
 	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
 		android:title="@string/snooze_options_category">
 
-		<com.nfcalarmclock.alarm.options.maxsnooze.NacMaxSnoozePreference
+		<com.nfcalarmclock.maxsnooze.NacMaxSnoozePreference
 			android:key="@string/max_snooze_key"
 			android:title="@string/max_snooze"
 			android:defaultValue="@integer/default_max_snooze_index"
@@ -28,7 +28,7 @@
 			app:allowDividerBelow="false"
 			/>
 
-		<com.nfcalarmclock.alarm.options.snoozeduration.NacSnoozeDurationPreference
+		<com.nfcalarmclock.snoozeduration.NacSnoozeDurationPreference
 			android:key="@string/snooze_duration_key"
 			android:title="@string/snooze_duration"
 			android:defaultValue="@integer/default_snooze_duration_index"
@@ -123,7 +123,7 @@
 			app:allowDividerBelow="false"
 			/>
 
-		<com.nfcalarmclock.alarm.options.volume.NacVolumePreference
+		<com.nfcalarmclock.volume.NacVolumePreference
 			android:key="@string/alarm_volume_key"
 			android:title="@string/alarm_volume"
 			android:defaultValue="@integer/default_volume"

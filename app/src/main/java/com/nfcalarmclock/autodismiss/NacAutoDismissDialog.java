@@ -1,4 +1,4 @@
-package com.nfcalarmclock.alarm.options.snoozeduration;
+package com.nfcalarmclock.autodismiss;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -14,16 +14,16 @@ import com.nfcalarmclock.R;
 import java.util.List;
 
 /**
- * Select how long snoozing an alarm should be.
+ * Select an amount of time to auto dismiss an alarm.
  */
-public class NacSnoozeDurationDialog
+public class NacAutoDismissDialog
 	extends NacScrollablePickerDialogFragment
 {
 
 	/**
 	 * Tag for the class.
 	 */
-	public static final String TAG = "NacSnoozeDurationDialog";
+	public static final String TAG = "NacAutoDismissDialog";
 
 	/**
 	 * Get the list of values for the scrollable picker.
@@ -34,7 +34,7 @@ public class NacSnoozeDurationDialog
 	public List<String> getScrollablePickerValues()
 	{
 		NacSharedConstants cons = this.getSharedConstants();
-		return cons.getSnoozeDurationSummaries();
+		return cons.getAutoDismissSummaries();
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class NacSnoozeDurationDialog
 		NacSharedConstants cons = this.getSharedConstants();
 
 		return new AlertDialog.Builder(requireContext())
-			.setTitle(cons.getSnoozeDuration())
+			.setTitle(cons.getAutoDismiss())
 			.setPositiveButton(cons.getActionOk(), (dialog, which) ->
 				this.callOnScrollablePickerOptionSelectedListener())
 			.setNegativeButton(cons.getActionCancel(), (dialog, which) -> {})

@@ -3,7 +3,6 @@ package com.nfcalarmclock.nfc;
 import android.content.Context;
 import android.content.Intent;
 import android.nfc.Tag;
-
 import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.util.NacUtility;

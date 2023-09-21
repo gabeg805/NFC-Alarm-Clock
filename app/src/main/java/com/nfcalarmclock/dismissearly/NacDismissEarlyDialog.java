@@ -1,4 +1,4 @@
-package com.nfcalarmclock.alarm.options.dismissearly;
+package com.nfcalarmclock.dismissearly;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

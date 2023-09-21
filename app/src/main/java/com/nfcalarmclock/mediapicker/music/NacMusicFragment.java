@@ -14,7 +14,7 @@ import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.permission.readmediaaudio.NacReadMediaAudioPermission;
 import com.nfcalarmclock.view.dialog.NacDialog;
 import com.nfcalarmclock.file.NacFile;
-import com.nfcalarmclock.file.browser.NacFileBrowser;
+import com.nfcalarmclock.filebrowser.NacFileBrowser;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.mediapicker.NacMediaFragment;

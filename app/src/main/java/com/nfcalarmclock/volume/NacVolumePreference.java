@@ -1,4 +1,4 @@
-package com.nfcalarmclock.alarm.options.volume;
+package com.nfcalarmclock.volume;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;

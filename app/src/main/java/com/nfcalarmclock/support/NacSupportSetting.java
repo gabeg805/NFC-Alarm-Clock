@@ -1,4 +1,4 @@
-package com.nfcalarmclock.settings;
+package com.nfcalarmclock.support;
 
 import android.app.Activity;
 import android.content.Context;
