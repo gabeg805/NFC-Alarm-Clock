@@ -17,7 +17,7 @@
 	<string name="item_3">Fixed <b>App Not Responding</b> (ANR) when browsing for songs in a folder with a lot of songs.</string>
 	<string name="item_4">Fixed rare crash when swiping to copy an alarm.</string>
 	<string name="item_5">Removed <b>Settings  >  Miscellaneous</b>, and moved all those settings into <b>General</b>.</string>
-	<string name="item_6">Added <b>Settings  >  Support</b> so that you can support development of the app, if you so choose.</string>
+	<string name="item_6">Added <b>Settings  >  Support</b> so that you can support development of the app, if you want.</string>
 
 
 

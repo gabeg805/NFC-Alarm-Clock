@@ -17,7 +17,7 @@
 	<string name="item_3">Se corrigió la <b>Aplicación No Responde</b> (ANR) al buscar canciones en una carpeta con muchas canciones.</string>
 	<string name="item_4">Se corrigió un fallo poco frecuente al deslizar el dedo para copiar una alarma.</string>
 	<string name="item_5">Se eliminó <b>Configuración -> Miscelaneo</b>, y se movieron todas esas configuraciones a <b>General</b>.</string>
-	<string name="item_6">Se agrego <b>Configuración -> Apoyo</b> para que pueda respaldar el desarrollo de la aplicación, si así lo desea.</string>
+	<string name="item_6">Se agrego <b>Configuración -> Apoyo</b> para que pueda respaldar el desarrollo de la aplicación, si quieres.</string>
 
 
 
