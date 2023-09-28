@@ -3,6 +3,8 @@ package com.nfcalarmclock.shared;
 import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
+
+import com.nfcalarmclock.R;
 import com.nfcalarmclock.util.NacCalendar;
 import com.nfcalarmclock.file.NacFile;
 import com.nfcalarmclock.media.NacMedia;
@@ -65,9 +67,9 @@ public class NacSharedPreferences
 	/**
 	 * Edit whether this is the app's first run or not.
 	 */
-	public void editAppFirstRun(boolean first)
+	public void editAppFirstRun(Context context, boolean first)
 	{
-		String key = this.getKeys().getAppFirstRun();
+		String key = context.getString(R.string.app_first_run);
 
 		this.saveBoolean(key, first, false);
 	}
@@ -517,14 +519,16 @@ public class NacSharedPreferences
 	}
 
 	/**
+	 * Get the app's first run value.
+	 *
 	 * @return The app's first run value.
 	 */
-	public boolean getAppFirstRun()
+	public boolean getAppFirstRun(Context context)
 	{
-		String key = this.getKeys().getAppFirstRun();
-		boolean value = this.getDefaults().getAppFirstRun();
+		String key = context.getString(R.string.app_first_run);
+		boolean defaultValue = true;
 
-		return this.getBoolean(key, value);
+		return this.getBoolean(key, defaultValue);
 	}
 
 	/**

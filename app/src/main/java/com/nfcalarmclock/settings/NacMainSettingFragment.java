@@ -87,41 +87,47 @@ public class NacMainSettingFragment
 	@Override
 	public boolean onPreferenceTreeClick(Preference preference)
 	{
-		NacSharedKeys keys = this.getSharedKeys();
 		String preferenceKey = preference.getKey();
 		FragmentManager manager = getParentFragmentManager();
 		Fragment fragment;
 		String title;
 
+		// Keys for all settings
+		String generalKey = getString(R.string.general_setting_key);
+		String appearanceKey = getString(R.string.appearance_setting_key);
+		String statisticsKey = getString(R.string.stats_setting_key);
+		String aboutKey = getString(R.string.about_setting_key);
+		String supportKey = getString(R.string.support_setting_key);
+
 		// General
-		if (preferenceKey.equals(keys.getGeneral()))
+		if (preferenceKey.equals(generalKey))
 		{
 			fragment = new NacGeneralSettingFragment();
-			title = keys.getGeneralTitle();
+			title = getString(R.string.general_setting);
 
 		}
 		// Appearance
-		else if (preferenceKey.equals(keys.getAppearance()))
+		else if (preferenceKey.equals(appearanceKey))
 		{
 			fragment = new NacAppearanceSettingFragment();
-			title = keys.getAppearanceTitle();
+			title = getString(R.string.appearance_setting);
 		}
 		// Statistics
-		else if (preferenceKey.equals(keys.getStatistics()))
+		else if (preferenceKey.equals(statisticsKey))
 		{
 			fragment = new NacStatisticsSettingFragment();
-			title = keys.getStatisticsTitle();
+			title = getString(R.string.stats_setting);
 		}
 		// About
-		else if (preferenceKey.equals(keys.getAbout()))
+		else if (preferenceKey.equals(aboutKey))
 		{
 			fragment = new NacAboutSettingFragment();
-			title = keys.getAboutTitle();
+			title = getString(R.string.about_setting);
 		}
 		else
 		{
 			// Support
-			if (preferenceKey.equals(keys.getSupport()))
+			if (preferenceKey.equals(supportKey))
 			{
 				// Start the billing flow
 				this.startBillingFlow();

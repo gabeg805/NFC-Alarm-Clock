@@ -911,7 +911,7 @@ public class NacMainActivity
 		RecyclerView rv = this.getRecyclerView();
 
 		// If this is the first time the app is running, set the flags accordingly
-		if (shared.getAppFirstRun())
+		if (shared.getAppFirstRun(this))
 		{
 			this.setupForAppFirstRun();
 		}
@@ -1583,7 +1583,7 @@ public class NacMainActivity
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 
-		shared.editAppFirstRun(false);
+		shared.editAppFirstRun(this, false);
 		shared.editAppStartStatistics(false);
 		this.addFirstAlarm();
 	}

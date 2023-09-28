@@ -36,14 +36,6 @@ public class NacSharedDefaults
 	}
 
 	/**
-	 * @return App first run.
-	 */
-	public boolean getAppFirstRun()
-	{
-		return this.getBoolean(R.bool.default_app_first_run);
-	}
-
-	/**
 	 * @return Start statistics.
 	 */
 	public boolean getAppStartStatistics()

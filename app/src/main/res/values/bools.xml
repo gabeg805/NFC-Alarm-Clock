@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<bool name="default_app_first_run">true</bool>
 	<bool name="default_app_start_statistics">true</bool>
 	<bool name="default_app_should_refresh_main_activity">false</bool>
 	<bool name="default_card_is_measured">false</bool>

@@ -28,51 +28,11 @@ public class NacSharedKeys
 	}
 
 	/**
-	 * @return The about setting.
-	 */
-	public String getAbout()
-	{
-		return this.getString(R.string.about_setting_key);
-	}
-
-	/**
-	 * @return The about setting title.
-	 */
-	public String getAboutTitle()
-	{
-		return this.getString(R.string.about_setting);
-	}
-
-	/**
 	 * @return The AM color key.
 	 */
 	public String getAmColor()
 	{
 		return this.getString(R.string.am_color_key);
-	}
-
-	/**
-	 * @return The appearance setting key.
-	 */
-	public String getAppearance()
-	{
-		return this.getString(R.string.appearance_setting_key);
-	}
-
-	/**
-	 * @return The appearance setting title.
-	 */
-	public String getAppearanceTitle()
-	{
-		return this.getString(R.string.appearance_setting);
-	}
-
-	/**
-	 * @return The post install, first run key.
-	 */
-	public String getAppFirstRun()
-	{
-		return this.getString(R.string.app_first_run);
 	}
 
 	/**
@@ -194,22 +154,6 @@ public class NacSharedKeys
 	public String getExpandNewAlarm()
 	{
 		return this.getString(R.string.expand_new_alarm_key);
-	}
-
-	/**
-	 * @return The general setting key.
-	 */
-	public String getGeneral()
-	{
-		return this.getString(R.string.general_setting_key);
-	}
-
-	/**
-	 * @return The general setting title.
-	 */
-	public String getGeneralTitle()
-	{
-		return this.getString(R.string.general_setting);
 	}
 
 	/**
@@ -395,30 +339,6 @@ public class NacSharedKeys
 	public String getStartWeekOn()
 	{
 		return this.getString(R.string.start_week_on_key);
-	}
-
-	/**
-	 * @return The statistics setting.
-	 */
-	public String getStatistics()
-	{
-		return this.getString(R.string.stats_setting_key);
-	}
-
-	/**
-	 * @return The statistics setting title.
-	 */
-	public String getStatisticsTitle()
-	{
-		return this.getString(R.string.stats_setting);
-	}
-
-	/**
-	 * @return The support setting.
-	 */
-	public String getSupport()
-	{
-		return this.getString(R.string.support_setting_key);
 	}
 
 	/**
