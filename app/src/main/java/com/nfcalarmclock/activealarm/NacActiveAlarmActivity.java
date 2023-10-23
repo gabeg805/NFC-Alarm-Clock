@@ -403,7 +403,7 @@ public class NacActiveAlarmActivity
 	{
 		NacAlarm alarm = this.getAlarm();
 		Window window = getWindow();
-		boolean showWhenLocked = (alarm != null) && !alarm.shouldUseNfc();
+		boolean showWhenLocked = (alarm != null) && !alarm.getShouldUseNfc();
 
 		// Use updated method calls to control screen for APK >= 27
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)

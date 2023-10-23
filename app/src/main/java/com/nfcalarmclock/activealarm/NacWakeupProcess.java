@@ -402,7 +402,7 @@ public class NacWakeupProcess
 		NacAlarm alarm = this.getAlarm();
 
 		// Unable to play music
-		if ((player == null) || (alarm == null) || !alarm.hasMedia())
+		if ((player == null) || (alarm == null) || !alarm.getHasMedia())
 		{
 			return;
 		}
@@ -536,7 +536,7 @@ public class NacWakeupProcess
 
 		// Alarm is not set yet or does not have media to play. Unable to setup music
 		// player
-		if ((alarm == null) || !alarm.hasMedia())
+		if ((alarm == null) || !alarm.getHasMedia())
 		{
 			return;
 		}
@@ -562,7 +562,7 @@ public class NacWakeupProcess
 
 		// Unable to setup the text-to-speech engine. Alarm is not set yet, or should
 		// not use TTS
-		if ((alarm == null) || !alarm.shouldUseTts())
+		if ((alarm == null) || !alarm.getShouldUseTts())
 		{
 			return;
 		}
@@ -581,7 +581,7 @@ public class NacWakeupProcess
 		NacAlarm alarm = this.getAlarm();
 
 		// Unable to setup the vibrator. Alarm is not set yet or should not vibrate
-		if ((alarm == null) || !alarm.shouldVibrate())
+		if ((alarm == null) || !alarm.getShouldVibrate())
 		{
 			return;
 		}
@@ -621,7 +621,7 @@ public class NacWakeupProcess
 		// speaking, or there is something in the buffer, or the alarm is not set
 		// yet, or the alarm should not use TTS
 		if ((speech == null) || speech.isSpeaking() || speech.hasBuffer()
-			|| (alarm == null) || !alarm.shouldUseTts())
+			|| (alarm == null) || !alarm.getShouldUseTts())
 		{
 			return;
 		}
@@ -666,7 +666,7 @@ public class NacWakeupProcess
 
 		// Set the volume (if going to use text-to-speech or play music)
 		// TODO: Make this into a method?
-		if (alarm.shouldUseTts() || alarm.hasMedia())
+		if (alarm.getShouldUseTts() || alarm.getHasMedia())
 		{
 			// Start to gradually increase the alarm volume
 			if (alarm.getShouldGraduallyIncreaseVolume())
@@ -681,7 +681,7 @@ public class NacWakeupProcess
 		}
 
 		// Start text-to-speech
-		if (alarm.shouldUseTts())
+		if (alarm.getShouldUseTts())
 		{
 			this.speak();
 		}
@@ -706,13 +706,13 @@ public class NacWakeupProcess
 		}
 
 		// Play music
-		if (alarm.hasMedia())
+		if (alarm.getHasMedia())
 		{
 			this.playMusic();
 		}
 
 		// Vibrate the phone
-		if (alarm.shouldVibrate())
+		if (alarm.getShouldVibrate())
 		{
 			this.vibrate();
 		}
@@ -732,7 +732,7 @@ public class NacWakeupProcess
 
 		// Unable to vibrate. Vibrator is not set yet, or alarm is not set yet, or
 		// alarm should not vibrate
-		if ((vibrator == null) || (alarm == null) || !alarm.shouldVibrate())
+		if ((vibrator == null) || (alarm == null) || !alarm.getShouldVibrate())
 		{
 			return;
 		}

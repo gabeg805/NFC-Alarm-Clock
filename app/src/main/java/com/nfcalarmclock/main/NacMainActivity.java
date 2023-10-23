@@ -883,7 +883,7 @@ public class NacMainActivity
 	@Override
 	public void onCardUseNfcChanged(NacCardHolder holder, NacAlarm alarm)
 	{
-		if (!alarm.shouldUseNfc())
+		if (!alarm.getShouldUseNfc())
 		{
 			return;
 		}
@@ -1829,7 +1829,7 @@ public class NacMainActivity
 	{
 		NacDismissEarlyDialog dialog = new NacDismissEarlyDialog();
 		NacAlarm alarm = this.getAudioOptionsAlarm();
-		boolean useDismissEarly = alarm.shouldUseDismissEarly();
+		boolean useDismissEarly = alarm.getShouldUseDismissEarly();
 		int index = alarm.getDismissEarlyIndex();
 
 		dialog.setDefaultUseDismissEarly(useDismissEarly);
@@ -1936,7 +1936,7 @@ public class NacMainActivity
 	{
 		NacTextToSpeechDialog dialog = new NacTextToSpeechDialog();
 		NacAlarm alarm = this.getAudioOptionsAlarm();
-		boolean useTts = alarm.shouldUseTts();
+		boolean useTts = alarm.getShouldUseTts();
 		int freq = alarm.getTtsFrequency();
 
 		dialog.setDefaultUseTts(useTts);

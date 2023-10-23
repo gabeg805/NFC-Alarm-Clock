@@ -401,7 +401,7 @@ public class NacMedia
 		{
 			c = manager.getCursor();
 		}
-		catch (IllegalArgumentException ignored)
+		catch (IllegalArgumentException | NullPointerException ignored)
 		{
 		}
 

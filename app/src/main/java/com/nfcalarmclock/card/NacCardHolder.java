@@ -785,7 +785,7 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 		alarm.toggleDay(day);
 
-		if (!alarm.areDaysSelected())
+		if (!alarm.getAreDaysSelected())
 		{
 			alarm.setRepeat(false);
 		}
@@ -879,7 +879,7 @@ public class NacCardHolder
 
 		alarm.toggleUseNfc();
 
-		if (!alarm.shouldUseNfc())
+		if (!alarm.getShouldUseNfc())
 		{
 			alarm.setNfcTagId("");
 			this.toastNfc();
@@ -934,7 +934,7 @@ public class NacCardHolder
 			Context context = this.getContext();
 
 			NacActiveAlarmService.dismissService(context, alarm);
-			alarm.setIsActive(false);
+			alarm.setActive(false);
 		}
 
 		// Reset the snooze counter
@@ -944,7 +944,7 @@ public class NacCardHolder
 			//shared.editSnoozeCount(alarm.getId(), 0);
 		}
 
-		alarm.setIsEnabled(state);
+		alarm.setEnabled(state);
 		//alarm.changed();
 		this.setSummaryDaysView();
 		this.callOnCardUpdatedListener();
@@ -1848,7 +1848,7 @@ public class NacCardHolder
 
 		alarm.setHour(hr);
 		alarm.setMinute(min);
-		alarm.setIsEnabled(true);
+		alarm.setEnabled(true);
 		this.setTimeView();
 		this.setMeridianView();
 		this.setMeridianColor();
@@ -2488,7 +2488,7 @@ public class NacCardHolder
 	{
 		MaterialButton button = this.getNfcButton();
 		NacAlarm alarm = this.getAlarm();
-		boolean shouldUseNfc = alarm.shouldUseNfc();
+		boolean shouldUseNfc = alarm.getShouldUseNfc();
 
 		if (button.isChecked() != shouldUseNfc)
 		{
@@ -2585,8 +2585,8 @@ public class NacCardHolder
 	{
 		MaterialButton button = this.getRepeatButton();
 		NacAlarm alarm = this.getAlarm();
-		boolean isEnabled = alarm.areDaysSelected();
-		boolean shouldRepeat = alarm.areDaysSelected() && alarm.shouldRepeat();
+		boolean isEnabled = alarm.getAreDaysSelected();
+		boolean shouldRepeat = alarm.getAreDaysSelected() && alarm.getShouldRepeat();
 
 		if (button.isChecked() != shouldRepeat)
 		{
@@ -2845,7 +2845,7 @@ public class NacCardHolder
 	{
 		MaterialButton button = this.getVibrateButton();
 		NacAlarm alarm = this.getAlarm();
-		boolean shouldVibrate = alarm.shouldVibrate();
+		boolean shouldVibrate = alarm.getShouldVibrate();
 
 		if (button.isChecked() != shouldVibrate)
 		{
@@ -3015,7 +3015,7 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 		Context context = this.getContext();
 		NacSharedConstants cons = new NacSharedConstants(context);
-		String message = alarm.shouldUseNfc() ? cons.getMessageNfcRequired()
+		String message = alarm.getShouldUseNfc() ? cons.getMessageNfcRequired()
 			: cons.getMessageNfcOptional();
 
 		NacUtility.quickToast(context, message);
@@ -3029,7 +3029,7 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 		Context context = this.getContext();
 		NacSharedConstants cons = new NacSharedConstants(context);
-		String message = alarm.shouldRepeat() ? cons.getMessageRepeatEnabled()
+		String message = alarm.getShouldRepeat() ? cons.getMessageRepeatEnabled()
 			: cons.getMessageRepeatDisabled();
 
 		NacUtility.quickToast(context, message);
@@ -3043,7 +3043,7 @@ public class NacCardHolder
 		NacAlarm alarm = this.getAlarm();
 		Context context = this.getContext();
 		NacSharedConstants cons = new NacSharedConstants(context);
-		String message = alarm.shouldVibrate() ? cons.getMessageVibrateEnabled()
+		String message = alarm.getShouldVibrate() ? cons.getMessageVibrateEnabled()
 			: cons.getMessageVibrateDisabled();
 
 		NacUtility.quickToast(context, message);

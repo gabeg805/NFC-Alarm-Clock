@@ -101,6 +101,17 @@ public class NacFileBrowserViewModel
 			return;
 		}
 
+		// Get the repository
+		NacFileBrowserRepository repo = this.getRepository();
+
+		// Check if the repo is busy scanning or showing a new file listing
+		// in which this this method will just be called again via the observer
+		if (repo.isBusy())
+		{
+			return;
+		}
+
+		// Get stuff needed to inflate the views
 		Context context = getApplication();
 		LayoutInflater inflater = LayoutInflater.from(context);
 		View entry = null;
@@ -108,7 +119,6 @@ public class NacFileBrowserViewModel
 		// Iterate over each file at the given path
 		for (NacFile.Metadata metadata : listing)
 		{
-
 			// Add a directory
 			if (metadata.isDirectory())
 			{
@@ -132,6 +142,12 @@ public class NacFileBrowserViewModel
 
 			// Add the entry to the file browser
 			container.addView(entry);
+
+			// Same repo busy check as above
+			if (repo.isBusy())
+			{
+				return;
+			}
 		}
 	}
 

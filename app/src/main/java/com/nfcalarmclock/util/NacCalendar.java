@@ -342,7 +342,7 @@ public class NacCalendar
 
 		// No days are selected. This alarm will occur either today or tomorrow and
 		// is a one-time alarm
-		if (!alarm.areDaysSelected())
+		if (!alarm.getAreDaysSelected())
 		{
 			Calendar c = NacCalendar.toNextOneTimeCalendar(alarm);
 			calendars.add(c);
@@ -576,7 +576,7 @@ public class NacCalendar
 			EnumSet<Day> days = alarm.getDays();
 			String string = NacCalendar.Days.toString(cons, days, start);
 
-			if (string.isEmpty() || !alarm.areDaysSelected())
+			if (string.isEmpty() || !alarm.getAreDaysSelected())
 			{
 				int now = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 				int next = NacCalendar.toNextOneTimeCalendar(alarm)

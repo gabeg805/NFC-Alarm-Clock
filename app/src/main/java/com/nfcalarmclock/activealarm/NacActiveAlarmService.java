@@ -634,7 +634,7 @@ public class NacActiveAlarmService
 
 		if (alarm != null)
 		{
-			alarm.setIsActive(isActive);
+			alarm.setActive(isActive);
 		}
 	}
 

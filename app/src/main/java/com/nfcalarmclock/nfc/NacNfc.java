@@ -162,7 +162,7 @@ public class NacNfc
 	 */
 	public static boolean shouldUseNfc(Context context, NacAlarm alarm)
 	{
-		return (alarm != null) && NacNfc.exists(context) && alarm.shouldUseNfc();
+		return (alarm != null) && NacNfc.exists(context) && alarm.getShouldUseNfc();
 	}
 
 	/**
