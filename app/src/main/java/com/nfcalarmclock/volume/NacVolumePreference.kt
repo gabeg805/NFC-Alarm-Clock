@@ -25,13 +25,14 @@ class NacVolumePreference @JvmOverloads constructor(
 	context: Context,
 	attrs: AttributeSet? = null,
 	style: Int = 0
-) : Preference(context, attrs, style), OnSeekBarChangeListener
+) : Preference(context, attrs, style),
+	OnSeekBarChangeListener
 {
 
 	/**
 	 * Listener for when the audio options button is clicked.
 	 */
-	interface OnAudioOptionsClickedListener
+	fun interface OnAudioOptionsClickedListener
 	{
 		fun onAudioOptionsClicked()
 	}
@@ -121,6 +122,15 @@ class NacVolumePreference @JvmOverloads constructor(
 	}
 
 	/**
+	 * Called when the progress bar is changed.
+	 */
+	override fun onProgressChanged(seekBar: SeekBar, progress: Int,
+		fromUser: Boolean)
+	{
+		volumeValue = progress
+	}
+
+	/**
 	 * Set the initial preference value.
 	 */
 	override fun onSetInitialValue(defaultValue: Any?)
@@ -136,15 +146,6 @@ class NacVolumePreference @JvmOverloads constructor(
 			volumeValue = defaultValue as Int
 			persistInt(volumeValue)
 		}
-	}
-
-	/**
-	 * Called when the progress bar is changed.
-	 */
-	override fun onProgressChanged(seekBar: SeekBar, progress: Int,
-		fromUser: Boolean)
-	{
-		volumeValue = progress
 	}
 
 	/**

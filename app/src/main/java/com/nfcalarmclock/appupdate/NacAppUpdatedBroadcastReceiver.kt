@@ -1,4 +1,4 @@
-package com.nfcalarmclock.startup
+package com.nfcalarmclock.appupdate
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -6,9 +6,12 @@ import android.content.Intent
 import com.nfcalarmclock.scheduler.NacScheduler
 
 /**
- * Restore alarms on startup.
+ * After the app is updated, reapply the alarms.
+ *
+ * When the app is updated, any alarms that were set are lost. This will attempt to restore those
+ * alarms.
  */
-class NacStartupBroadcastReceiver : BroadcastReceiver()
+class NacAppUpdatedBroadcastReceiver : BroadcastReceiver()
 {
 
 	/**
@@ -20,7 +23,7 @@ class NacStartupBroadcastReceiver : BroadcastReceiver()
 	override fun onReceive(context: Context, intent: Intent)
 	{
 		// Check that the action is correct
-		if (intent.action == Intent.ACTION_BOOT_COMPLETED)
+		if (intent.action == Intent.ACTION_MY_PACKAGE_REPLACED)
 		{
 			NacScheduler.updateAll(context)
 		}
