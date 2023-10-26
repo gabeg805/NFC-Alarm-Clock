@@ -1,6 +1,7 @@
 plugins {
 	id("com.android.application")
 	id("org.jetbrains.kotlin.android")
+	id("com.google.devtools.ksp")
 }
 
 import java.util.Properties
@@ -26,10 +27,8 @@ android {
 		versionCode = 335
 		versionName = "11.0.0"
 
-		javaCompileOptions {
-			annotationProcessorOptions {
-				arguments += mapOf("room.schemaLocation" to "${projectDir}/schemas")
-			}
+		ksp {
+			arg("room.schemaLocation", "${projectDir}/schemas")
 		}
 	}
 
@@ -60,9 +59,17 @@ android {
 		// to coreLibraryDesugaring configuration
 		// coreLibraryDesugaringEnabled true
 
-		// Sets Java compatibility to Java 8
-		sourceCompatibility = JavaVersion.VERSION_1_8
-		targetCompatibility = JavaVersion.VERSION_1_8
+		// Sets Java version the same as the Kotlin version
+		sourceCompatibility = JavaVersion.VERSION_17
+		targetCompatibility = JavaVersion.VERSION_17
+
+		//// Sets Java compatibility to Java 8
+		//sourceCompatibility = JavaVersion.VERSION_1_8
+		//targetCompatibility = JavaVersion.VERSION_1_8
+	}
+
+	kotlinOptions {
+		jvmTarget = "17"
 	}
 
     lint {
@@ -94,12 +101,18 @@ dependencies {
 	// Material
 	implementation("com.google.android.material:material:1.9.0")
 
-	// Room database
-	implementation("androidx.room:room-runtime:2.5.2")
-	annotationProcessor("androidx.room:room-compiler:2.5.2")
+	// Room database (Any later requires API > 34
+	//implementation("androidx.room:room-runtime:2.5.2")
+	//annotationProcessor("androidx.room:room-compiler:2.5.2")
+
+	// Room kotlin extensions and coroutines
+	implementation("androidx.room:room-ktx:2.5.2")
+	ksp("androidx.room:room-compiler:2.5.2")
 
 	// Media player
+	// TODO: Check media3 to see when things are more stable
 	implementation("com.google.android.exoplayer:exoplayer:2.19.1")
+	//implementation("androidx.media3:media3-exoplayer:1.1.1")
 
 	// Google Play in-app review
 	implementation("com.google.android.play:core:1.10.3")

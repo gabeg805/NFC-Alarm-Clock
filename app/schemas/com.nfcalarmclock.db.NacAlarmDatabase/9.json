@@ -1,175 +1,175 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 8,
-    "identityHash": "c0bf993584bef506fe48af04b65248ca",
+    "version": 9,
+    "identityHash": "0c7fec62e3f092dc62cf599a76b64f11",
     "entities": [
       {
         "tableName": "alarm",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_active` INTEGER NOT NULL, `time_active` INTEGER NOT NULL, `snooze_count` INTEGER NOT NULL, `is_enabled` INTEGER NOT NULL, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `snooze_hour` INTEGER NOT NULL, `snooze_minute` INTEGER NOT NULL, `days` INTEGER, `should_repeat` INTEGER NOT NULL, `should_vibrate` INTEGER NOT NULL, `should_use_nfc` INTEGER NOT NULL, `nfc_tag_id` TEXT, `media_type` INTEGER NOT NULL, `media_path` TEXT, `media_title` TEXT, `volume` INTEGER NOT NULL, `audio_source` TEXT, `name` TEXT, `should_use_tts` INTEGER NOT NULL, `tts_frequency` INTEGER NOT NULL, `should_gradually_increase_volume` INTEGER NOT NULL DEFAULT false, `should_restrict_volume` INTEGER NOT NULL DEFAULT false, `should_dismiss_early` INTEGER NOT NULL DEFAULT false, `dismiss_early_time` INTEGER NOT NULL DEFAULT 30, `time_of_dismiss_early_alarm` INTEGER NOT NULL DEFAULT 0)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_active` INTEGER NOT NULL, `time_active` INTEGER NOT NULL, `snooze_count` INTEGER NOT NULL, `is_enabled` INTEGER NOT NULL, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `snooze_hour` INTEGER NOT NULL, `snooze_minute` INTEGER NOT NULL, `days` INTEGER NOT NULL, `should_repeat` INTEGER NOT NULL, `should_vibrate` INTEGER NOT NULL, `should_use_nfc` INTEGER NOT NULL, `nfc_tag_id` TEXT NOT NULL, `media_type` INTEGER NOT NULL, `media_path` TEXT NOT NULL, `media_title` TEXT NOT NULL, `volume` INTEGER NOT NULL, `audio_source` TEXT NOT NULL, `name` TEXT NOT NULL, `should_use_tts` INTEGER NOT NULL, `tts_frequency` INTEGER NOT NULL, `should_gradually_increase_volume` INTEGER NOT NULL DEFAULT false, `should_restrict_volume` INTEGER NOT NULL DEFAULT false, `should_dismiss_early` INTEGER NOT NULL DEFAULT false, `dismiss_early_time` INTEGER NOT NULL DEFAULT 30, `time_of_dismiss_early_alarm` INTEGER NOT NULL DEFAULT 0)",
         "fields": [
           {
-            "fieldPath": "mId",
+            "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mIsActive",
+            "fieldPath": "isActive",
             "columnName": "is_active",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mTimeActive",
+            "fieldPath": "timeActive",
             "columnName": "time_active",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mSnoozeCount",
+            "fieldPath": "snoozeCount",
             "columnName": "snooze_count",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mIsEnabled",
+            "fieldPath": "isEnabled",
             "columnName": "is_enabled",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mHour",
+            "fieldPath": "hour",
             "columnName": "hour",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mMinute",
+            "fieldPath": "minute",
             "columnName": "minute",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mSnoozeHour",
+            "fieldPath": "snoozeHour",
             "columnName": "snooze_hour",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mSnoozeMinute",
+            "fieldPath": "snoozeMinute",
             "columnName": "snooze_minute",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mDays",
+            "fieldPath": "days",
             "columnName": "days",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
-            "fieldPath": "mRepeat",
+            "fieldPath": "repeat",
             "columnName": "should_repeat",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mVibrate",
+            "fieldPath": "vibrate",
             "columnName": "should_vibrate",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mUseNfc",
+            "fieldPath": "useNfc",
             "columnName": "should_use_nfc",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mNfcTagId",
+            "fieldPath": "nfcTagId",
             "columnName": "nfc_tag_id",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
-            "fieldPath": "mMediaType",
+            "fieldPath": "mediaType",
             "columnName": "media_type",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mMediaPath",
+            "fieldPath": "mediaPath",
             "columnName": "media_path",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
-            "fieldPath": "mMediaTitle",
+            "fieldPath": "mediaTitle",
             "columnName": "media_title",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
-            "fieldPath": "mVolume",
+            "fieldPath": "volume",
             "columnName": "volume",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mAudioSource",
+            "fieldPath": "audioSource",
             "columnName": "audio_source",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
-            "fieldPath": "mName",
+            "fieldPath": "name",
             "columnName": "name",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
-            "fieldPath": "mUseTts",
+            "fieldPath": "useTts",
             "columnName": "should_use_tts",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mTtsFrequency",
+            "fieldPath": "ttsFrequency",
             "columnName": "tts_frequency",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mShouldGraduallyIncreaseVolume",
+            "fieldPath": "shouldGraduallyIncreaseVolume",
             "columnName": "should_gradually_increase_volume",
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "false"
           },
           {
-            "fieldPath": "mShouldRestrictVolume",
+            "fieldPath": "shouldRestrictVolume",
             "columnName": "should_restrict_volume",
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "false"
           },
           {
-            "fieldPath": "mUseDismissEarly",
+            "fieldPath": "useDismissEarly",
             "columnName": "should_dismiss_early",
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "false"
           },
           {
-            "fieldPath": "mDismissEarlyTime",
+            "fieldPath": "dismissEarlyTime",
             "columnName": "dismiss_early_time",
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "30"
           },
           {
-            "fieldPath": "mTimeOfDismissEarlyAlarm",
+            "fieldPath": "timeOfDismissEarlyAlarm",
             "columnName": "time_of_dismiss_early_alarm",
             "affinity": "INTEGER",
             "notNull": true,
@@ -213,7 +213,7 @@
       },
       {
         "tableName": "alarm_deleted_statistic",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `name` TEXT NOT NULL DEFAULT '')",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `name` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -243,8 +243,7 @@
             "fieldPath": "name",
             "columnName": "name",
             "affinity": "TEXT",
-            "notNull": true,
-            "defaultValue": "''"
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -258,7 +257,7 @@
       },
       {
         "tableName": "alarm_dismissed_statistic",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`used_nfc` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `alarm_id` INTEGER, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `name` TEXT NOT NULL DEFAULT '', FOREIGN KEY(`alarm_id`) REFERENCES `alarm`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`used_nfc` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `alarm_id` INTEGER, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `name` TEXT NOT NULL, FOREIGN KEY(`alarm_id`) REFERENCES `alarm`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
         "fields": [
           {
             "fieldPath": "usedNfc",
@@ -300,8 +299,7 @@
             "fieldPath": "name",
             "columnName": "name",
             "affinity": "TEXT",
-            "notNull": true,
-            "defaultValue": "''"
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -337,7 +335,7 @@
       },
       {
         "tableName": "alarm_missed_statistic",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `alarm_id` INTEGER, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `name` TEXT NOT NULL DEFAULT '', FOREIGN KEY(`alarm_id`) REFERENCES `alarm`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `alarm_id` INTEGER, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `name` TEXT NOT NULL, FOREIGN KEY(`alarm_id`) REFERENCES `alarm`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
         "fields": [
           {
             "fieldPath": "id",
@@ -373,8 +371,7 @@
             "fieldPath": "name",
             "columnName": "name",
             "affinity": "TEXT",
-            "notNull": true,
-            "defaultValue": "''"
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -410,7 +407,7 @@
       },
       {
         "tableName": "alarm_snoozed_statistic",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`duration` INTEGER NOT NULL DEFAULT 0, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `alarm_id` INTEGER, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `name` TEXT NOT NULL DEFAULT '', FOREIGN KEY(`alarm_id`) REFERENCES `alarm`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`duration` INTEGER NOT NULL DEFAULT 0, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `alarm_id` INTEGER, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `name` TEXT NOT NULL, FOREIGN KEY(`alarm_id`) REFERENCES `alarm`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
         "fields": [
           {
             "fieldPath": "duration",
@@ -453,8 +450,7 @@
             "fieldPath": "name",
             "columnName": "name",
             "affinity": "TEXT",
-            "notNull": true,
-            "defaultValue": "''"
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -492,7 +488,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c0bf993584bef506fe48af04b65248ca')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0c7fec62e3f092dc62cf599a76b64f11')"
     ]
   }
 }

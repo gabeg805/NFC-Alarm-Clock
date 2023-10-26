@@ -103,6 +103,7 @@
 	<string name="error_message_play_audio">Incapaz de tocar audio</string>
 	<string name="error_message_play_file">Incapaz de tocar la canción seleccionada</string>
 	<string name="error_message_google_play_billing">Error al conectarse a Google Play Store</string>
+	<string name="error_message_text_to_speech_audio_focus">Incapaz de usar texto-a-voz</string>
 
 
 

@@ -35,6 +35,11 @@ public class NacFileBrowserRepository
 	private boolean mIsScanning;
 
 	/**
+	 * Flag to check if is show a file listing or not.
+	 */
+	private boolean mIsShowing;
+
+	/**
 	 */
 	public NacFileBrowserRepository(Context context)
 	{
@@ -42,6 +47,7 @@ public class NacFileBrowserRepository
 		this.mFileTree = new NacFileTree("");
 		this.mListingLiveData = new MutableLiveData<>(new ArrayList<>());
 		this.mIsScanning = true;
+		this.mIsShowing = true;
 
 		// Prepare a handler
 		Looper looper = context.getMainLooper();
@@ -121,11 +127,33 @@ public class NacFileBrowserRepository
 	}
 
 	/**
+	 * Check if the repository is busy scanning or showing a file listing.
+	 *
+	 * @return True if the repository is busy, and False otherwise.
+	 */
+	public boolean isBusy()
+	{
+		return this.isScanning() || this.isShowing();
+	}
+
+	/**
 	 * Check if the file tree is being scanned or not.
+	 *
+	 * @return True if the repository is being scanned, and False otherwise.
 	 */
 	public boolean isScanning()
 	{
 		return this.mIsScanning;
+	}
+
+	/**
+	 * Check if a file listing is being shown.
+	 *
+	 * @return True if a file listing is being shown, and False otherwise.
+	 */
+	public boolean isShowing()
+	{
+		return this.mIsShowing;
 	}
 
 	/**
@@ -148,6 +176,9 @@ public class NacFileBrowserRepository
 	 */
 	public void show(Context context, String path)
 	{
+		// Set the showing flag
+		this.mIsShowing = true;
+
 		// Wait until scanning is complete
 		while (this.isScanning())
 		{
@@ -162,7 +193,6 @@ public class NacFileBrowserRepository
 
 		NacFileTree tree = this.getFileTree();
 		List<NacFile.Metadata> listing = this.getListingLiveData().getValue();
-		List<NacFile.Metadata> newListing = new ArrayList<>();
 
 		// Clear the file listing
 		listing.clear();
@@ -198,6 +228,9 @@ public class NacFileBrowserRepository
 
 		// Notify observers of change
 		this.getListingLiveData().postValue(listing);
+
+		// Disable the showing flag
+		this.mIsShowing = false;
 	}
 
 }

@@ -103,6 +103,7 @@
 	<string name="error_message_play_audio">Unable to play audio</string>
 	<string name="error_message_play_file">Unable to play selected file</string>
 	<string name="error_message_google_play_billing">Error when connecting to the Google Play Store</string>
+	<string name="error_message_text_to_speech_audio_focus">Unable to use text-to-speech</string>
 
 
 
