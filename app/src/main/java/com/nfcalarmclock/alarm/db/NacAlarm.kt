@@ -19,8 +19,7 @@ import java.util.Locale
  * Alarm.
  */
 @Entity(tableName = "alarm")
-class NacAlarm
-	() : Comparable<NacAlarm>, Parcelable
+class NacAlarm() : Comparable<NacAlarm>, Parcelable
 {
 
 	/**
@@ -166,32 +165,32 @@ class NacAlarm
 	 * Flag indicating whether to gradually increase the volume or not, when an
 	 * alarm is active.
 	 */
-	@ColumnInfo(name = "should_gradually_increase_volume", defaultValue = "false")
+	@ColumnInfo(name = "should_gradually_increase_volume")
 	var shouldGraduallyIncreaseVolume = false
 
 	/**
 	 * Flag indicating whether to restrict changing the volume or not, when an
 	 * alarm is active.
 	 */
-	@ColumnInfo(name = "should_restrict_volume", defaultValue = "false")
+	@ColumnInfo(name = "should_restrict_volume")
 	var shouldRestrictVolume = false
 
 	/**
 	 * Flag indicating whether or not to use dismiss early.
 	 */
-	@ColumnInfo(name = "should_dismiss_early", defaultValue = "false")
+	@ColumnInfo(name = "should_dismiss_early")
 	var useDismissEarly = false
 
 	/**
 	 * Amount of time, in minutes, to allow a user to dismiss early by.
 	 */
-	@ColumnInfo(name = "dismiss_early_time", defaultValue = "30")
-	var dismissEarlyTime = 0
+	@ColumnInfo(name = "dismiss_early_time")
+	var dismissEarlyTime = 30
 
 	/**
 	 * Time of alarm that would have been next but was dismissed early.
 	 */
-	@ColumnInfo(name = "time_of_dismiss_early_alarm", defaultValue = "0")
+	@ColumnInfo(name = "time_of_dismiss_early_alarm")
 	var timeOfDismissEarlyAlarm: Long = 0
 
 	/**
@@ -943,6 +942,8 @@ class NacAlarm
 		get()
 		{
 			val time = dismissEarlyTime
+			NacUtility.printf("Time : %d", time)
+
 			return NacSharedPreferences.getDismissEarlyTimeToIndex(time)
 		}
 

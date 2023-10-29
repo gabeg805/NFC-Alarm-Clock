@@ -27,11 +27,10 @@ class NacAboutSettingFragment : NacGenericSettingFragment()
 		addPreferencesFromResource(R.xml.about_preferences)
 
 		// Get the version preference
-		val keys = this.sharedKeys
-		val version = findPreference<Preference>(keys.versionPreference)
+		val versionPref = findPreference<Preference>(sharedKeys!!.versionPreference)
 
 		// Set the version name as the summary
-		version!!.summary = BuildConfig.VERSION_NAME
+		versionPref!!.summary = BuildConfig.VERSION_NAME
 	}
 
 	/**
@@ -40,11 +39,10 @@ class NacAboutSettingFragment : NacGenericSettingFragment()
 	override fun onPreferenceTreeClick(preference: Preference): Boolean
 	{
 		val context = requireContext()
-		val keys = this.sharedKeys
 		val preferenceKey = preference.key
 
 		// Keys to compare against
-		val versionKey = keys.versionPreference
+		val versionKey = sharedKeys!!.versionPreference
 		val disableBatteryOptimizationKey =
 			getString(R.string.about_ignore_battery_optimization_key)
 		val nfcKey = getString(R.string.about_nfc_key)

@@ -14,8 +14,19 @@ import java.util.Locale
 /**
  * Text to speech.
  */
-class NacTextToSpeech(context: Context, listener: OnSpeakingListener?) :
-	TextToSpeech.OnInitListener
+class NacTextToSpeech(
+
+	/**
+	 * Context.
+	 */
+	context: Context,
+
+	/**
+	 * Listener for when TTS is speaking.
+	 */
+	listener: OnSpeakingListener?
+
+) : TextToSpeech.OnInitListener
 {
 
 	companion object
@@ -66,9 +77,9 @@ class NacTextToSpeech(context: Context, listener: OnSpeakingListener?) :
 		/**
 		 * Audio focus change listener.
 		 */
-		private val onAudioFocusChangeListener: OnAudioFocusChangeListener?) :
+		private val onAudioFocusChangeListener: OnAudioFocusChangeListener?
 
-		UtteranceProgressListener()
+	) : UtteranceProgressListener()
 	{
 
 		/**

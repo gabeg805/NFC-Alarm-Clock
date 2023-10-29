@@ -311,22 +311,14 @@ public class NacMainActivity
 	 */
 	private void addFirstAlarm()
 	{
+		// Get the shared prefereneces
+		NacSharedPreferences shared = this.getSharedPreferences();
+
 		// Create the alarm
-		NacAlarm alarm = new NacAlarm.Builder()
+		NacAlarm alarm = new NacAlarm.Builder(shared)
 			.setId(0)
-			.setIsEnabled(true)
 			.setHour(8)
 			.setMinute(0)
-			.setDays(NacCalendar.Days.valueToDays(62))
-			.setRepeat(true)
-			.setVibrate(true)
-			.setUseNfc(false)
-			.setNfcTagId("")
-			.setMediaType(NacMedia.TYPE_NONE)
-			.setMediaPath("")
-			.setMediaTitle("")
-			.setVolume(75)
-			.setAudioSource("Media")
 			.setName("Work")
 			.build();
 
@@ -1595,7 +1587,7 @@ public class NacMainActivity
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
 
-		return NacRateMyApp.request(shared);
+		return NacRateMyApp.request(this, shared);
 	}
 
 	/**
@@ -1832,8 +1824,9 @@ public class NacMainActivity
 		boolean useDismissEarly = alarm.getShouldUseDismissEarly();
 		int index = alarm.getDismissEarlyIndex();
 
-		dialog.setDefaultUseDismissEarly(useDismissEarly);
-		dialog.setDefaultDismissEarlyIndex(index);
+		NacUtility.printf("Index : %d", index);
+		dialog.setDefaultShouldDismissEarly(useDismissEarly);
+		dialog.setDefaultShouldDismissEarlyIndex(index);
 		dialog.setOnDismissEarlyOptionSelectedListener(this);
 		dialog.show(getSupportFragmentManager(), NacGraduallyIncreaseVolumeDialog.TAG);
 	}

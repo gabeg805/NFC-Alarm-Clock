@@ -20,10 +20,26 @@ import com.nfcalarmclock.view.dialog.NacDialog.OnBuildListener
  * Preference that prompts the user what day to start the week on.
  */
 class NacStartWeekOnPreference @JvmOverloads constructor(
+
+	/**
+	 * Context.
+	 */
 	context: Context,
+
+	/**
+	 * Attribute set.
+	 */
 	attrs: AttributeSet? = null,
+
+	/**
+	 * Default style.
+	 */
 	style: Int = 0
+
+	// Constructor
 ) : Preference(context, attrs, style),
+
+	// Interfaces
 	Preference.OnPreferenceClickListener,
 	OnBuildListener,
 	NacDialog.OnShowListener,
@@ -39,7 +55,10 @@ class NacStartWeekOnPreference @JvmOverloads constructor(
 	 */
 	init
 	{
+		// Set the layout
 		layoutResource = R.layout.nac_preference
+
+		// Set the on click listener
 		onPreferenceClickListener = this
 	}
 

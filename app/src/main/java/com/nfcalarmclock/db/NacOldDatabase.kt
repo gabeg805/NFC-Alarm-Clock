@@ -47,7 +47,7 @@ class NacOldDatabase(
 	 * The where clause for matching with the alarm ID.
 	 */
 	private val whereClause: String
-		private get() = Contract.AlarmTable.COLUMN_ID + "=?"
+		get() = Contract.AlarmTable.COLUMN_ID + "=?"
 
 	/**
 	 * The where clause for matching with the is active column.

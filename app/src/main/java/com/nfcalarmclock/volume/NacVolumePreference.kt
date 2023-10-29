@@ -144,6 +144,7 @@ class NacVolumePreference @JvmOverloads constructor(
 		else
 		{
 			volumeValue = defaultValue as Int
+
 			persistInt(volumeValue)
 		}
 	}

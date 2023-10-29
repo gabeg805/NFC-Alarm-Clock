@@ -35,7 +35,8 @@ import com.nfcalarmclock.volume.NacVolumePreference.OnAudioOptionsClickedListene
 /**
  * General settings fragment.
  */
-class NacGeneralSettingFragment : NacGenericSettingFragment(),
+class NacGeneralSettingFragment
+	: NacGenericSettingFragment(),
 	ActivityResultCallback<ActivityResult>
 {
 
@@ -79,11 +80,11 @@ class NacGeneralSettingFragment : NacGenericSettingFragment(),
 			false)
 
 		// Get each preference that will be used in this fragment
-		val autoDismissPref = findPreference<NacAutoDismissPreference>(sharedKeys.autoDismiss)
-		val maxSnoozePref = findPreference<NacMaxSnoozePreference>(sharedKeys.maxSnooze)
-		val snoozeDurationPref = findPreference<NacSnoozeDurationPreference>(sharedKeys.snoozeDuration)
-		val volumePref = findPreference<NacVolumePreference>(sharedKeys.volume)
-		val mediaPref = findPreference<NacMediaPreference>(sharedKeys.mediaPath)
+		val autoDismissPref = findPreference<NacAutoDismissPreference>(sharedKeys!!.autoDismiss)
+		val maxSnoozePref = findPreference<NacMaxSnoozePreference>(sharedKeys!!.maxSnooze)
+		val snoozeDurationPref = findPreference<NacSnoozeDurationPreference>(sharedKeys!!.snoozeDuration)
+		val volumePref = findPreference<NacVolumePreference>(sharedKeys!!.volume)
+		val mediaPref = findPreference<NacMediaPreference>(sharedKeys!!.mediaPath)
 
 		// Set the member variables
 		mediaPreference = mediaPref
@@ -136,7 +137,7 @@ class NacGeneralSettingFragment : NacGenericSettingFragment(),
 
 			// Create the intent
 			val intent = NacIntent.toIntent(context, NacMediaActivity::class.java,
-				sharedPreferences.mediaPath)
+				sharedPreferences!!.mediaPath)
 
 			// Launch the intent
 			activityLauncher!!.launch(intent)
@@ -186,13 +187,13 @@ class NacGeneralSettingFragment : NacGenericSettingFragment(),
 		val dialog = NacAudioSourceDialog()
 
 		// Set the default setting
-		dialog.defaultAudioSource = sharedPreferences.audioSource
+		dialog.defaultAudioSource = sharedPreferences!!.audioSource
 
 		// Set the listener for when the user is done
 		dialog.onAudioSourceSelectedListener = OnAudioSourceSelectedListener { audioSource ->
 
 			// Save the audio source that was selected
-			this.sharedPreferences.editAudioSource(audioSource)
+			sharedPreferences!!.editAudioSource(audioSource)
 
 		}
 
@@ -209,8 +210,8 @@ class NacGeneralSettingFragment : NacGenericSettingFragment(),
 		val dialog = NacDismissEarlyDialog()
 
 		// Set the default settings
-		dialog.defaultUseDismissEarly = sharedPreferences.useDismissEarly
-		dialog.defaultDismissEarlyIndex = sharedPreferences.dismissEarlyIndex
+		dialog.defaultShouldDismissEarly = sharedPreferences!!.useDismissEarly
+		dialog.defaultShouldDismissEarlyIndex = sharedPreferences!!.dismissEarlyIndex
 
 		// Set the listener for when the user is done
 		dialog.onDismissEarlyOptionSelectedListener = OnDismissEarlyOptionSelectedListener { useDismissEarly, index ->
@@ -219,8 +220,8 @@ class NacGeneralSettingFragment : NacGenericSettingFragment(),
 			val time = NacSharedPreferences.getDismissEarlyIndexToTime(index)
 
 			// Save the settings that were selected for dismiss early
-			sharedPreferences.editUseDismissEarly(useDismissEarly)
-			sharedPreferences.editDismissEarlyTime(time)
+			sharedPreferences!!.editUseDismissEarly(useDismissEarly)
+			sharedPreferences!!.editDismissEarlyTime(time)
 
 		}
 
@@ -237,13 +238,13 @@ class NacGeneralSettingFragment : NacGenericSettingFragment(),
 		val dialog = NacGraduallyIncreaseVolumeDialog()
 
 		// Set the default setting
-		dialog.defaultShouldGraduallyIncreaseVolume = sharedPreferences.shouldGraduallyIncreaseVolume
+		dialog.defaultShouldGraduallyIncreaseVolume = sharedPreferences!!.shouldGraduallyIncreaseVolume
 
 		// Set the listener for when the user is done
 		dialog.onGraduallyIncreaseVolumeListener = OnGraduallyIncreaseVolumeListener { shouldIncrease ->
 
 			// Save the setting for gradually increasing volume
-			sharedPreferences.editShouldGraduallyIncreaseVolume(shouldIncrease)
+			sharedPreferences!!.editShouldGraduallyIncreaseVolume(shouldIncrease)
 
 		}
 
@@ -260,13 +261,13 @@ class NacGeneralSettingFragment : NacGenericSettingFragment(),
 		val dialog = NacRestrictVolumeDialog()
 
 		// Set the default setting
-		dialog.defaultShouldRestrictVolume = sharedPreferences.shouldRestrictVolume
+		dialog.defaultShouldRestrictVolume = sharedPreferences!!.shouldRestrictVolume
 
 		// Set the listener for when the user is done
 		dialog.onRestrictVolumeListener = OnRestrictVolumeListener { shouldRestrict ->
 
 			// Save the setting for restricting volume
-			sharedPreferences.editShouldRestrictVolume(shouldRestrict)
+			sharedPreferences!!.editShouldRestrictVolume(shouldRestrict)
 
 		}
 
@@ -283,15 +284,15 @@ class NacGeneralSettingFragment : NacGenericSettingFragment(),
 		val dialog = NacTextToSpeechDialog()
 
 		// Set the default settings
-		dialog.defaultUseTts = sharedPreferences.speakToMe
-		dialog.defaultTtsFrequency = sharedPreferences.speakFrequency
+		dialog.defaultUseTts = sharedPreferences!!.speakToMe
+		dialog.defaultTtsFrequency = sharedPreferences!!.speakFrequency
 
 		// Set the listener for when the user is done
 		dialog.onTextToSpeechOptionsSelectedListener = OnTextToSpeechOptionsSelectedListener { useTts, freq ->
 
 			// Save the text to speech settings
-			sharedPreferences.editSpeakToMe(useTts)
-			sharedPreferences.editSpeakFrequency(freq)
+			sharedPreferences!!.editSpeakToMe(useTts)
+			sharedPreferences!!.editSpeakFrequency(freq)
 
 		}
 

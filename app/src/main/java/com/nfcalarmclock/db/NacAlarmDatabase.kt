@@ -33,7 +33,7 @@ import java.util.concurrent.Executors
 /**
  * Store alarms in a Room database.
  */
-@Database(version = 9,
+@Database(version = 10,
 	entities = [NacAlarm::class, NacAlarmCreatedStatistic::class,
 		NacAlarmDeletedStatistic::class, NacAlarmDismissedStatistic::class,
 		NacAlarmMissedStatistic::class, NacAlarmSnoozedStatistic::class],
@@ -45,10 +45,11 @@ import java.util.concurrent.Executors
 		AutoMigration(from = 5, to = 6),
 		AutoMigration(from = 6, to = 7),
 		AutoMigration(from = 7, to = 8),
-		AutoMigration(from = 8, to = 9)]
+		AutoMigration(from = 8, to = 9),
+		AutoMigration(from = 9, to = 10)]
 )
 @TypeConverters(NacAlarmTypeConverters::class, NacStatisticTypeConverters::class)
-public abstract class NacAlarmDatabase : RoomDatabase()
+abstract class NacAlarmDatabase : RoomDatabase()
 {
 
 	/**
