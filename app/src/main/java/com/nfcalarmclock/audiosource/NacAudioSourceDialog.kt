@@ -75,16 +75,23 @@ class NacAudioSourceDialog
 		// Setup the shared preferences
 		setupSharedPreferences()
 
+		// Get the name of the title
+		val title = getString(R.string.title_audio_source)
+
+		// Get the names of the actions
+		val ok = getString(R.string.action_ok)
+		val cancel = getString(R.string.action_cancel)
+
 		// Create the dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(sharedConstants.titleAudioSource)
-			.setPositiveButton(getString(R.string.action_ok)) { _, _ ->
+			.setTitle(title)
+			.setPositiveButton(ok) { _, _ ->
 
 				// Call the listener
 				callOnAudioSourceSelectedListener()
 
 			}
-			.setNegativeButton(getString(R.string.action_cancel)) { _, _ ->
+			.setNegativeButton(cancel) { _, _ ->
 			}
 			.setView(R.layout.dlg_alarm_audio_source)
 			.create()
@@ -150,7 +157,7 @@ class NacAudioSourceDialog
 	private fun setupAudioSourceColor()
 	{
 		// Get the colors for the boolean states
-		val colors = intArrayOf(sharedPreferences.themeColor, Color.GRAY)
+		val colors = intArrayOf(sharedPreferences!!.themeColor, Color.GRAY)
 
 		// Get the IDs of the two states
 		val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))

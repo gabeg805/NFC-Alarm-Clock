@@ -17,10 +17,13 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.button.MaterialButton;
@@ -52,7 +55,7 @@ public class NacCardHolder
 		View.OnLongClickListener,
 		CompoundButton.OnCheckedChangeListener,
 		TimePickerDialog.OnTimeSetListener,
-        NacDialog.OnDismissListener,
+        NacNameDialog.OnNameEnteredListener,
         NacDayOfWeek.OnWeekChangedListener,
 		SeekBar.OnSeekBarChangeListener,
         NacHeightAnimator.OnAnimateHeightListener
@@ -1755,22 +1758,15 @@ public class NacCardHolder
 	 * Notify alarm listener that the alarm has been modified.
 	 */
 	@Override
-	public boolean onDismissDialog(NacDialog dialog)
+	public void onNameEntered(String name)
 	{
 		NacAlarm alarm = this.getAlarm();
-		int id = (int) dialog.getId();
 
-		if (id == R.layout.dlg_alarm_name)
-		{
-			String name = dialog.getDataString();
-			alarm.setName(name);
-			//alarm.changed();
-			this.setNameButton();
-			this.setSummaryNameView();
-			this.callOnCardUpdatedListener();
-		}
-
-		return true;
+		alarm.setName(name);
+		//alarm.changed();
+		this.setNameButton();
+		this.setSummaryNameView();
+		this.callOnCardUpdatedListener();
 	}
 
 	/**
@@ -2930,12 +2926,17 @@ public class NacCardHolder
 	{
 		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
+
+		// Get the fragment manager
+		FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
+
+		// Create the dialog
 		NacNameDialog dialog = new NacNameDialog();
 
-		dialog.build(context);
-		dialog.saveData(alarm.getName());
-		dialog.addOnDismissListener(this);
-		dialog.show();
+		// Setup the dialog
+		dialog.setDefaultName(alarm.getName());
+		dialog.setOnNameEnteredListener(this);
+		dialog.show(manager, NacNameDialog.TAG);
 	}
 
 	/**
@@ -3014,10 +3015,14 @@ public class NacCardHolder
 	{
 		NacAlarm alarm = this.getAlarm();
 		Context context = this.getContext();
-		NacSharedConstants cons = new NacSharedConstants(context);
-		String message = alarm.getShouldUseNfc() ? cons.getMessageNfcRequired()
-			: cons.getMessageNfcOptional();
 
+		// Determine which message to show
+		String requiredMessage = context.getString(R.string.message_nfc_required);
+		String optionalMessage = context.getString(R.string.message_nfc_optional);
+		String message = alarm.getShouldUseNfc() ? requiredMessage
+			: optionalMessage;
+
+		// Toast
 		NacUtility.quickToast(context, message);
 	}
 

@@ -13,7 +13,8 @@ import java.util.Locale
 /**
  * Generic dialog for requesting permissions.
  */
-abstract class NacPermissionRequestDialog : NacDialogFragment()
+abstract class NacPermissionRequestDialog
+	: NacDialogFragment()
 {
 
 	/**
@@ -21,9 +22,25 @@ abstract class NacPermissionRequestDialog : NacDialogFragment()
 	 */
 	interface OnPermissionRequestListener
 	{
-		fun onPermissionRequestAccepted(permission: String?)
-		fun onPermissionRequestCanceled(permission: String?)
+		fun onPermissionRequestAccepted(permission: String)
+		fun onPermissionRequestCanceled(permission: String)
 	}
+
+	/**
+	 * The ID of the layout.
+	 */
+	abstract val layoutId: Int
+
+	/**
+	 * The name of the permission.
+	 */
+	open val permission: String
+		get() = ""
+
+	/**
+	 * The ID of the title string.
+	 */
+	abstract val titleId: Int
 
 	/**
 	 * Position of this dialog in the permission request manager.
@@ -73,22 +90,6 @@ abstract class NacPermissionRequestDialog : NacDialogFragment()
 	{
 		callOnPermissionRequestCanceledListener()
 	}
-
-	/**
-	 * The ID of the layout.
-	 */
-	abstract val layoutId: Int
-
-	/**
-	 * The name of the permission.
-	 */
-	open val permission: String
-		get() = ""
-
-	/**
-	 * The ID of the title string.
-	 */
-	abstract val titleId: Int
 
 	/**
 	 * Called when the dialog is canceled.

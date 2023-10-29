@@ -86,16 +86,23 @@ class NacTextToSpeechDialog
 		// Setup the shared preferences
 		setupSharedPreferences()
 
+		// Get the name of the title
+		val title = getString(R.string.title_tts)
+
+		// Get the name of the actions
+		val ok = getString(R.string.action_ok)
+		val cancel = getString(R.string.action_cancel)
+
 		// Create the dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(sharedConstants.titleTextToSpeech)
-			.setPositiveButton(sharedConstants.actionOk) { _, _ ->
+			.setTitle(title)
+			.setPositiveButton(ok) { _, _ ->
 
 				// Call the listener
 				callOnTextToSpeechOptionsSelectedListener()
 
 			}
-			.setNegativeButton(sharedConstants.actionCancel) { _, _ ->
+			.setNegativeButton(cancel) { _, _ ->
 			}
 			.setView(R.layout.dlg_alarm_text_to_speech)
 			.create()
@@ -150,7 +157,7 @@ class NacTextToSpeechDialog
 	private fun setupShouldUseTtsColor()
 	{
 		// Get the colors for the boolean states
-		val colors = intArrayOf(sharedPreferences.themeColor, Color.GRAY)
+		val colors = intArrayOf(sharedPreferences!!.themeColor, Color.GRAY)
 
 		// Get the IDs of the two states
 		val states = arrayOf(intArrayOf(android.R.attr.state_checked),
@@ -204,7 +211,7 @@ class NacTextToSpeechDialog
 	private fun setupTtsFrequencyPicker()
 	{
 		// Get the max frequency size
-		val cons = sharedPreferences.constants
+		val cons = sharedConstants
 		val values = cons.textToSpeechFrequency
 
 		// Setup the frequency picker

@@ -81,16 +81,23 @@ class NacDismissEarlyDialog
 		// Setup the shared preferences
 		setupSharedPreferences()
 
+		// Get the name of the title
+		val title = getString(R.string.title_dismiss_early)
+
+		// Get the name of the actions
+		val ok = getString(R.string.action_ok)
+		val cancel = getString(R.string.action_cancel)
+
 		// Create the dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(sharedConstants.titleDismissEarly)
-			.setPositiveButton(sharedConstants.actionOk) { _, _ ->
+			.setTitle(title)
+			.setPositiveButton(ok) { _, _ ->
 
 				// Call the listener
 				callOnDismissEarlyOptionSelectedListener()
 
 			}
-			.setNegativeButton(sharedConstants.actionCancel) { _, _ ->
+			.setNegativeButton(cancel) { _, _ ->
 			}
 			.setView(R.layout.dlg_alarm_dismiss_early)
 			.create()
@@ -139,7 +146,7 @@ class NacDismissEarlyDialog
 	private fun setupDismissEarlyColor()
 	{
 		// Get the colors for the boolean states
-		val colors = intArrayOf(sharedPreferences.themeColor, Color.GRAY)
+		val colors = intArrayOf(sharedPreferences!!.themeColor, Color.GRAY)
 
 		// Get the IDs of the two states
 		val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
@@ -187,7 +194,7 @@ class NacDismissEarlyDialog
 	private fun setupDismissEarlyTimePicker()
 	{
 		// Get the dismiss early times
-		val values = sharedPreferences.constants.dismissEarlyTimes
+		val values = sharedConstants.dismissEarlyTimes
 
 		// Setup the time picker
 		dismissEarlyTimePicker!!.minValue = 0

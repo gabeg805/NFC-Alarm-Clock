@@ -19,7 +19,7 @@ class NacPostNotificationsPermissionRequestDialog
 	override fun doPermissionRequestAccepted()
 	{
 		// Set the flag that the permission was requested
-		sharedPreferences.editWasPostNotificationsPermissionRequested(true)
+		sharedPreferences!!.editWasPostNotificationsPermissionRequested(true)
 
 		// Call the accepeted listeners
 		super.doPermissionRequestAccepted()
@@ -31,7 +31,7 @@ class NacPostNotificationsPermissionRequestDialog
 	override fun doPermissionRequestCanceled()
 	{
 		// Set the flag that the permission was requested
-		sharedPreferences.editWasPostNotificationsPermissionRequested(true)
+		sharedPreferences!!.editWasPostNotificationsPermissionRequested(true)
 
 		// Call the canceled listeners
 		super.doPermissionRequestCanceled()

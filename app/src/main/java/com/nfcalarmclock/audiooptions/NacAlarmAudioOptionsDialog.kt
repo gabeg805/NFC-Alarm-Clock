@@ -46,9 +46,12 @@ class NacAlarmAudioOptionsDialog
 	 */
 	override fun onCreateDialog(savedInstanceState: Bundle?): Dialog
 	{
+		// Get the title
+		val title = getString(R.string.title_audio_option)
+
 		// Create the dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(getString(R.string.title_audio_option))
+			.setTitle(title)
 			.setItems(R.array.audio_options) { _, which: Int ->
 				callOnAudioOptionClickedListener(which)
 			}

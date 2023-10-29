@@ -3,28 +3,43 @@ package com.nfcalarmclock.name
 import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
+import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedConstants
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.view.dialog.NacDialog
 
 /**
  * Preference that displays the name of the alarm.
  */
 class NacNamePreference @JvmOverloads constructor(
+
+	/**
+	 * Context.
+	 */
 	context: Context,
+
+	/**
+	 * Attribute set.
+	 */
 	attrs: AttributeSet? = null,
+
+	/**
+	 * Default style.
+	 */
 	style: Int = 0
+
+	// Constructor
 ) : Preference(context, attrs, style),
-	Preference.OnPreferenceClickListener,
-	NacDialog.OnDismissListener
+
+	// Interface
+	NacNameDialog.OnNameEnteredListener
 {
 
 	/**
 	 * Name of the alarm.
 	 */
-	private var alarmName: String? = null
+	private var alarmName: String = ""
 
 	/**
 	 * Constructor.
@@ -32,7 +47,6 @@ class NacNamePreference @JvmOverloads constructor(
 	init
 	{
 		layoutResource = R.layout.nac_preference
-		onPreferenceClickListener = this
 	}
 
 	/**
@@ -51,17 +65,16 @@ class NacNamePreference @JvmOverloads constructor(
 	 * Persist the summary string and set the new summary when the dialog is
 	 * dismissed.
 	 */
-	override fun onDismissDialog(dialog: NacDialog): Boolean
+	override fun onNameEntered(name: String)
 	{
 		// Set the new alarm name
-		alarmName = dialog.dataString
+		alarmName = name
 
 		// Set the new summary (calls set/get summary)
 		summary = this.summary
 
 		// Persist the alarm name
 		persistString(alarmName)
-		return true
 	}
 
 	/**
@@ -72,26 +85,6 @@ class NacNamePreference @JvmOverloads constructor(
 	override fun onGetDefaultValue(a: TypedArray, index: Int): Any?
 	{
 		return a.getString(index)
-	}
-
-	/**
-	 * Display the dialog when the preference is clicked.
-	 */
-	override fun onPreferenceClick(pref: Preference): Boolean
-	{
-		// Create the dialog
-		val dialog = NacNameDialog()
-
-		// Build the dialog
-		dialog.build(context)
-
-		// Setup the dialog
-		dialog.addOnDismissListener(this)
-		dialog.saveData(alarmName)
-
-		// Show the dialog
-		dialog.show()
-		return true
 	}
 
 	/**
@@ -107,9 +100,26 @@ class NacNamePreference @JvmOverloads constructor(
 		// Convert the default value
 		else
 		{
-			alarmName = defaultValue as String?
+			alarmName = defaultValue as String
+
 			persistString(alarmName)
 		}
+	}
+
+	/**
+	 * Show the name dialog.
+	 */
+	fun showDialog(manager: FragmentManager)
+	{
+		// Create the dialog
+		val dialog = NacNameDialog()
+
+		// Setup the dialog
+		dialog.defaultName = alarmName
+		dialog.onNameEnteredListener = this
+
+		// Show the dialog
+		dialog.show(manager, NacNameDialog.TAG)
 	}
 
 }

@@ -297,6 +297,7 @@ public class NacActiveAlarmService
 
 	/**
 	 */
+	@SuppressWarnings("deprecation")
 	public void finish()
 	{
 		// Cleanup everything

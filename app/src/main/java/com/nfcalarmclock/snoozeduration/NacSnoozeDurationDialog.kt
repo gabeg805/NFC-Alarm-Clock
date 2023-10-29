@@ -14,15 +14,15 @@ class NacSnoozeDurationDialog
 {
 
 	/**
-	 * Get the list of values for the scrollable picker.
-	 *
-	 * @return The list of values for the scrollable picker for the scrollable
-	 *         picker.
+	 * The list of values for the scrollable picker.
 	 */
-	override fun getScrollablePickerValues(): List<String>
-	{
-		return sharedConstants.snoozeDurationSummaries
-	}
+	override val scrollablePickerValues: List<String>
+		get()
+		{
+			val array = resources.getStringArray(R.array.snooze_duration_summaries)
+
+			return array.asList()
+		}
 
 	/**
 	 * Called when the dialog is created.
@@ -32,16 +32,23 @@ class NacSnoozeDurationDialog
 		// Setup the shared preferences.
 		setupSharedPreferences()
 
+		// Get the name of the title
+		val title = getString(R.string.snooze_duration)
+
+		// Get the name of the actions
+		val ok = getString(R.string.action_ok)
+		val cancel = getString(R.string.action_cancel)
+
 		// Created the dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(sharedConstants.snoozeDuration)
-			.setPositiveButton(sharedConstants.actionOk) { _, _ ->
+			.setTitle(title)
+			.setPositiveButton(ok) { _, _ ->
 
 				// Call the listener
 				callOnScrollablePickerOptionSelectedListener()
 
 			}
-			.setNegativeButton(sharedConstants.actionCancel) { _, _ ->
+			.setNegativeButton(cancel) { _, _ ->
 			}
 			.setView(R.layout.dlg_scrollable_picker)
 			.create()

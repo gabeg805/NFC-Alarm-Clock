@@ -74,14 +74,6 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return No action.
-	 */
-	public String getActionNo()
-	{
-		return this.getString(R.string.action_no);
-	}
-
-	/**
 	 * @return Ok action.
 	 */
 	public String getActionOk()
@@ -98,38 +90,6 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Rate later action.
-	 */
-	public String getActionRateLater()
-	{
-		return this.getString(R.string.action_rate_later);
-	}
-
-	/**
-	 * @return Rate never action.
-	 */
-	public String getActionRateNever()
-	{
-		return this.getString(R.string.action_rate_never);
-	}
-
-	/**
-	 * @return Rate now action.
-	 */
-	public String getActionRateNow()
-	{
-		return this.getString(R.string.action_rate_now);
-	}
-
-	/**
-	 * @return Reset action.
-	 */
-	public String getActionReset()
-	{
-		return this.getString(R.string.action_reset);
-	}
-
-	/**
 	 * @return Snooze action.
 	 */
 	public String getActionSnooze()
@@ -143,22 +103,6 @@ public class NacSharedConstants
 	public String getActionUndo()
 	{
 		return this.getString(R.string.action_undo);
-	}
-
-	/**
-	 * @return Use any action.
-	 */
-	public String getActionUseAny()
-	{
-		return this.getString(R.string.action_use_any);
-	}
-
-	/**
-	 * @return Yes action.
-	 */
-	public String getActionYes()
-	{
-		return this.getString(R.string.action_yes);
 	}
 
 	/**
@@ -199,14 +143,6 @@ public class NacSharedConstants
 	public List<String> getAudioSources()
 	{
 		return this.getStringList(R.array.audio_sources);
-	}
-
-	/**
-	 * @return Auto dismiss.
-	 */
-	public String getAutoDismiss()
-	{
-		return this.getString(R.string.auto_dismiss);
 	}
 
 	/**
@@ -425,14 +361,6 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Max snooze.
-	 */
-	public String getMaxSnooze()
-	{
-		return this.getString(R.string.max_snooze);
-	}
-
-	/**
 	 * @return Max snooze summaries.
 	 */
 	public List<String> getMaxSnoozeSummaries()
@@ -489,27 +417,11 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return NFC is optional message.
-	 */
-	public String getMessageNfcOptional()
-	{
-		return this.getString(R.string.message_nfc_optional);
-	}
-
-	/**
 	 * @return Enable NFC request message.
 	 */
 	public String getMessageNfcRequest()
 	{
 		return this.getString(R.string.message_nfc_request);
-	}
-
-	/**
-	 * @return NFC is required message.
-	 */
-	public String getMessageNfcRequired()
-	{
-		return this.getString(R.string.message_nfc_required);
 	}
 
 	/**
@@ -633,14 +545,6 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Snooze duration.
-	 */
-	public String getSnoozeDuration()
-	{
-		return this.getString(R.string.snooze_duration);
-	}
-
-	/**
 	 * @return Snooze duration summaries.
 	 */
 	public List<String> getSnoozeDurationSummaries()
@@ -733,14 +637,6 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Off state.
-	 */
-	public String getStateOff()
-	{
-		return this.getString(R.string.state_off);
-	}
-
-	/**
 	 * @return Unknown state.
 	 */
 	public String getStateUnknown()
@@ -773,14 +669,6 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Audio source title.
-	 */
-	public String getTitleAudioSource()
-	{
-		return this.getString(R.string.title_audio_source);
-	}
-
-	/**
 	 * @return Color title.
 	 */
 	public String getTitleColor()
@@ -797,27 +685,11 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Dismiss early title.
-	 */
-	public String getTitleDismissEarly()
-	{
-		return this.getString(R.string.title_dismiss_early);
-	}
-
-	/**
 	 * @return Folder selected title.
 	 */
 	public String getTitleFolderSelected()
 	{
 		return this.getString(R.string.title_folder_selected);
-	}
-
-	/**
-	 * @return Gradually increase volume title.
-	 */
-	public String getTitleGraduallyIncreaseVolume()
-	{
-		return this.getString(R.string.title_gradually_increase_volume);
 	}
 
 	/**
@@ -835,54 +707,6 @@ public class NacSharedConstants
 	public String getTitleNextAlarmFormat()
 	{
 		return this.getString(R.string.title_next_alarm_format);
-	}
-
-	/**
-	 * @return Rate my app title.
-	 */
-	public String getTitleRateMyApp()
-	{
-		return this.getString(R.string.title_rate_my_app);
-	}
-
-	/**
-	 * @return Restrict volume title.
-	 */
-	public String getTitleRestrictVolume()
-	{
-		return this.getString(R.string.title_restrict_volume);
-	}
-
-	/**
-	 * @return Scan a specific NFC tag title.
-	 */
-	public String getTitleScanNfcTag()
-	{
-		return this.getString(R.string.title_scan_nfc_tag);
-	}
-
-	/**
-	 * @return The speak frequency title.
-	 */
-	public String getTitleSpeakFrequency()
-	{
-		return this.getString(R.string.title_speak_frequency);
-	}
-
-	/**
-	 * @return Text-to-speech title.
-	 */
-	public String getTitleTextToSpeech()
-	{
-		return this.getString(R.string.title_tts);
-	}
-
-	/**
-	 * @return What's new title.
-	 */
-	public String getTitleWhatsNew()
-	{
-		return this.getString(R.string.title_whats_new);
 	}
 
 	/**

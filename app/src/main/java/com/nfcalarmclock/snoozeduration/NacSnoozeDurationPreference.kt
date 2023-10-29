@@ -15,10 +15,26 @@ import com.nfcalarmclock.view.dialog.NacScrollablePickerDialogFragment.OnScrolla
  * Preference that displays how long to snooze for.
  */
 class NacSnoozeDurationPreference @JvmOverloads constructor(
+
+	/**
+	 * Context.
+	 */
 	context: Context,
+
+	/**
+	 * Attribute set.
+	 */
 	attrs: AttributeSet? = null,
+
+	/**
+	 * Default style.
+	 */
 	style: Int = 0
+
+	// Constructor
 ) : Preference(context, attrs, style),
+
+	// Interface
 	OnScrollablePickerOptionSelectedListener
 {
 

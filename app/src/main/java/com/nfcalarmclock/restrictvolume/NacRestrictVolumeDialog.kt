@@ -54,18 +54,6 @@ class NacRestrictVolumeDialog
 	var onRestrictVolumeListener: OnRestrictVolumeListener? = null
 
 	/**
-	 * Call the OnRestrictVolumeListener object, if it has been set.
-	 */
-	private fun callOnRestrictVolumeListener()
-	{
-		// Get the checked status
-		val isChecked = restrictVolumeCheckBox?.isChecked
-
-		 // Call the listener
-		 onRestrictVolumeListener?.onRestrictVolume(isChecked!!)
-	}
-
-	/**
 	 * Called when the dialog is created.
 	 */
 	override fun onCreateDialog(savedInstanceState: Bundle?): Dialog
@@ -73,16 +61,26 @@ class NacRestrictVolumeDialog
 		// Setup the shared preferences
 		setupSharedPreferences()
 
+		// Get the name of the title
+		val title = getString(R.string.title_restrict_volume)
+
+		// Get the name of the actions
+		val ok = getString(R.string.action_ok)
+		val cancel = getString(R.string.action_cancel)
+
 		// Create the dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(sharedConstants.titleRestrictVolume)
-			.setPositiveButton(sharedConstants.actionOk) { _, _ ->
+			.setTitle(title)
+			.setPositiveButton(ok) { _, _ ->
+
+				// Get the checked status
+				val isChecked = restrictVolumeCheckBox?.isChecked
 
 				// Call the listener
-				callOnRestrictVolumeListener()
+				onRestrictVolumeListener?.onRestrictVolume(isChecked!!)
 
 			}
-			.setNegativeButton(sharedConstants.actionCancel) { _, _ ->
+			.setNegativeButton(cancel) { _, _ ->
 			}
 			.setView(R.layout.dlg_alarm_restrict_volume)
 			.create()
@@ -138,7 +136,7 @@ class NacRestrictVolumeDialog
 	private fun setupShouldRestrictVolumeColor()
 	{
 		// Get the colors for the boolean states
-		val colors = intArrayOf(sharedPreferences.themeColor, Color.GRAY)
+		val colors = intArrayOf(sharedPreferences!!.themeColor, Color.GRAY)
 
 		// Get the IDs of the two states
 		val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))

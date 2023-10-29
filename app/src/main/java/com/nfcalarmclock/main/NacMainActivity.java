@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -89,8 +90,7 @@ public class NacMainActivity
 		NacCardHolder.OnCardAudioOptionsClickedListener,
 		NacCardHolder.OnCardUpdatedListener,
 		NacCardHolder.OnCardUseNfcChangedListener,
-        NacDialog.OnCancelListener,
-		NacDialog.OnDismissListener,
+        NacScanNfcTagDialog.OnScanNfcTagListener,
         NacAlarmAudioOptionsDialog.OnAudioOptionClickedListener,
         NacAudioSourceDialog.OnAudioSourceSelectedListener,
 		NacDismissEarlyDialog.OnDismissEarlyOptionSelectedListener,
@@ -349,10 +349,11 @@ public class NacMainActivity
 	{
 		NacScanNfcTagDialog dialog = this.getScanNfcTagDialog();
 
+		// Check that the dialog is not null
 		if (dialog != null)
 		{
-			// Dismiss the alarm
-			dialog.getAlertDialog().dismiss();
+			// Dismiss the dialog
+			dialog.dismissAllowingStateLoss();
 
 			// Cleanup the dialog
 			this.mScanNfcTagDialog = null;
@@ -756,28 +757,32 @@ public class NacMainActivity
 	}
 
 	/**
-	 * Uncheck the NFC button when the dialog is canceled.
+	 * Called when the user cancels the scan NFC tag dialog.
 	 */
 	@Override
-	public boolean onCancelDialog(NacDialog dialog)
+	public void onCancelNfcTagScan(NacAlarm alarm)
 	{
 		RecyclerView rv = this.getRecyclerView();
-		NacAlarm alarm = (NacAlarm) dialog.getData();
 
+		// Check that the alarm is not null
 		if (alarm != null)
 		{
+
+			// Get the card that corresponds to the alarm
 			long id = alarm.getId();
 			NacCardHolder cardHolder = (NacCardHolder) rv.findViewHolderForItemId(id);
 
+			// Check that the card is not null
 			if (cardHolder != null)
 			{
+				// Uncheck the NFC button when the dialog is canceled.
 				cardHolder.getNfcButton().setChecked(false);
 				cardHolder.doNfcButtonClick();
 			}
 		}
 
+		// Cleanup the dialog
 		this.cleanupScanNfcTagDialog();
-		return true;
 	}
 
 	/**
@@ -880,14 +885,19 @@ public class NacMainActivity
 			return;
 		}
 
+		// Get the fragment manager
+		FragmentManager manager = getSupportFragmentManager();
+
+		// Create the dialog
 		NacScanNfcTagDialog dialog = new NacScanNfcTagDialog();
 		this.mScanNfcTagDialog = dialog;
 
-		dialog.build(this);
-		dialog.saveData(alarm);
-		dialog.addOnCancelListener(this);
-		dialog.addOnDismissListener(this);
-		dialog.show();
+		// Setup the dialog
+		dialog.setAlarm(alarm);
+		dialog.setOnScanNfcTagListener(this);
+
+		// Show the dialog
+		dialog.show(manager, NacScanNfcTagDialog.TAG);
 	}
 
 	/**
@@ -1108,22 +1118,6 @@ public class NacMainActivity
 	}
 
 	/**
-	 * Set the default (empty) NFC tag ID.
-	 */
-	@Override
-	public boolean onDismissDialog(NacDialog dialog)
-	{
-		NacSharedConstants cons = this.getSharedConstants();
-		NacAlarm alarm = (NacAlarm) dialog.getData();
-
-		alarm.setNfcTagId("");
-		this.getAlarmViewModel().update(this, alarm);
-		this.cleanupScanNfcTagDialog();
-		NacUtility.quickToast(this, cons.getMessageNfcRequired());
-		return true;
-	}
-
-	/**
 	 * Called when the alarm volume should/should not be gradually increased when
 	 * an alarm goes off.
 	 */
@@ -1188,18 +1182,21 @@ public class NacMainActivity
 		// NFC tag was scanned for the NFC dialog
 		if (this.wasNfcScannedForDialog(intent))
 		{
-			NacSharedConstants cons = this.getSharedConstants();
 			NacScanNfcTagDialog dialog = this.getScanNfcTagDialog();
+			String message = getString(R.string.message_nfc_required);
 
 			// Save the NFC tag ID and show a toast
 			this.saveNfcTagId(intent);
-			NacUtility.quickToast(this, cons.getMessageNfcRequired());
+			NacUtility.quickToast(this, message);
 
 			// Close the dialog
 			if (dialog != null)
 			{
-				dialog.saveData(null);
-				dialog.cancel();
+				// Set the listener to null so that it does not get called
+				dialog.setOnScanNfcTagListener(null);
+
+				// Dismiss the dialog
+				dialog.dismiss();
 			}
 		}
 		// NFC tag was scanned for an active alarm
@@ -1311,6 +1308,33 @@ public class NacMainActivity
 	 */
 	public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e)
 	{
+	}
+
+	/**
+	 * Called when theh user wants to use any NFC tag.
+	 */
+	@Override
+	public void onUseAnyNfcTag(NacAlarm alarm)
+	{
+		// Check that the alarm is null
+		if (alarm == null)
+		{
+			return;
+		}
+
+		// Set the default (empty) NFC tag ID.
+		alarm.setNfcTagId("");
+
+		// Update the alarm
+		this.getAlarmViewModel().update(this, alarm);
+
+		// Cleanup the dialog
+		this.cleanupScanNfcTagDialog();
+
+		// Toast to the user
+		String message = getString(R.string.message_nfc_required);
+
+		NacUtility.quickToast(this, message);
 	}
 
 	/**
@@ -1448,22 +1472,31 @@ public class NacMainActivity
 	 */
 	private void saveNfcTagId(Intent intent)
 	{
+		// Check if the intent corresponds with the scan NFC tag dialog
 		if (!this.wasNfcScannedForDialog(intent))
 		{
 			return;
 		}
 
 		Tag nfcTag = NacNfc.getTag(intent);
+
+		// Check that the intent tag is null
 		if (nfcTag == null)
 		{
 			return;
 		}
 
+		// Get the dialog
 		NacScanNfcTagDialog dialog = this.getScanNfcTagDialog();
-		NacAlarm alarm = (NacAlarm) dialog.getData();
+
+		// Get the alarm and NFC tag ID
+		NacAlarm alarm = dialog.getAlarm();
 		String id = NacNfc.parseId(nfcTag);
 
+		// Set the NFC tag ID
 		alarm.setNfcTagId(id);
+
+		// Update the alarm
 		this.getAlarmViewModel().update(this, alarm);
 	}
 

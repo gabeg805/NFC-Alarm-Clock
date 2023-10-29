@@ -75,16 +75,23 @@ class NacGraduallyIncreaseVolumeDialog
 		// Setup the shared preferences
 		setupSharedPreferences()
 
+		// Get the name of the title
+		val title = getString(R.string.title_gradually_increase_volume)
+
+		// Get the name of the actions
+		val ok = getString(R.string.action_ok)
+		val cancel = getString(R.string.action_cancel)
+
 		// Creat ethe dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(sharedConstants.titleGraduallyIncreaseVolume)
-			.setPositiveButton(sharedConstants.actionOk) { _, _ ->
+			.setTitle(title)
+			.setPositiveButton(ok) { _, _ ->
 
 				// Call the listener
 				callOnGraduallyIncreaseVolumeListener()
 
 			}
-			.setNegativeButton(sharedConstants.actionCancel) { _, _ ->
+			.setNegativeButton(cancel) { _, _ ->
 			}
 			.setView(R.layout.dlg_alarm_gradually_increase_volume)
 			.create()
@@ -141,7 +148,7 @@ class NacGraduallyIncreaseVolumeDialog
 	private fun setupShouldGraduallyIncreaseVolumeColor()
 	{
 		// Get the colors for the boolean states
-		val colors = intArrayOf(sharedPreferences.themeColor, Color.GRAY)
+		val colors = intArrayOf(sharedPreferences!!.themeColor, Color.GRAY)
 
 		// Get the IDs of the two states
 		val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
