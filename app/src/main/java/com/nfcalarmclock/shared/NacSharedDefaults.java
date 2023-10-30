@@ -2,9 +2,8 @@ package com.nfcalarmclock.shared;
 
 import android.content.Context;
 import android.content.res.Resources;
-import com.nfcalarmclock.util.NacCalendar;
+
 import com.nfcalarmclock.R;
-import java.util.EnumSet;
 
 /**
  * Default values.
@@ -116,18 +115,6 @@ public class NacSharedDefaults
 	public int getDaysColor()
 	{
 		return this.getInteger(R.integer.default_days_color);
-	}
-
-	/**
-	 * @return The days.
-	 */
-	public static int getDaysValue()
-	{
-		return NacCalendar.Days.daysToValue(
-			EnumSet.of(NacCalendar.Day.MONDAY, NacCalendar.Day.TUESDAY,
-				NacCalendar.Day.WEDNESDAY, NacCalendar.Day.THURSDAY,
-				NacCalendar.Day.FRIDAY)
-			);
 	}
 
 	/**

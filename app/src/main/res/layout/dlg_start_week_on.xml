@@ -13,6 +13,12 @@
 		android:id="@+id/start_week_on"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
+
+		<RadioButton
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			/>
+
 	</RadioGroup>
 
 </LinearLayout>

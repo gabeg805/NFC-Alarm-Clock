@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
+import com.nfcalarmclock.nextalarmformat.NacNextAlarmFormatDialog
+import com.nfcalarmclock.nextalarmformat.NacNextAlarmFormatPreference
+import com.nfcalarmclock.startweekon.NacStartWeekOnPreference
 
 /**
  * Appearance fragment.
@@ -28,6 +31,10 @@ class NacAppearanceSettingFragment
 		// Setup color and styles
 		setupColorPreferences()
 		setupDayButtonStylePreference()
+
+		// Setup on click listeners
+		setupStartWeekOnClickListener()
+		setupNexAlarmFormatOnClickListener()
 	}
 
 	/**
@@ -98,6 +105,45 @@ class NacAppearanceSettingFragment
 
 		// Set the listener for when the preference is changed
 		dayButtonStylePref!!.onPreferenceChangeListener = this
+	}
+
+	/**
+	 * Setup the listener for when the next alarm format preference is clicked.
+	 */
+	private fun setupNexAlarmFormatOnClickListener()
+	{
+		// Get the preference
+		val nextAlarmFormatPref = findPreference<NacNextAlarmFormatPreference>(sharedKeys!!.nextAlarmFormat)
+
+		// Set the on click listener
+		nextAlarmFormatPref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { pref ->
+
+			// Show the dialog
+			(pref as NacNextAlarmFormatPreference).showDialog(childFragmentManager)
+
+			// Return
+			true
+
+		}
+	}
+
+	/**
+	 * Setup the listener for when the start week on preference is clicked.
+	 */
+	private fun setupStartWeekOnClickListener()
+	{
+		// Get the preference
+		val startWeekOnPref = findPreference<NacStartWeekOnPreference>(sharedKeys!!.startWeekOn)
+
+		// Set the on click listener
+		startWeekOnPref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { pref ->
+
+			// Show the dialog
+			(pref as NacStartWeekOnPreference).showDialog(childFragmentManager)
+
+			// Return
+			true
+		}
 	}
 
 }

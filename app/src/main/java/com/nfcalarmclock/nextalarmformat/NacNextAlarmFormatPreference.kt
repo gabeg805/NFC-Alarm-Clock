@@ -1,31 +1,40 @@
 package com.nfcalarmclock.nextalarmformat
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
-import android.view.View
-import android.widget.RadioGroup
+import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import com.nfcalarmclock.R
-import com.nfcalarmclock.shared.NacSharedConstants
+import com.nfcalarmclock.autodismiss.NacAutoDismissDialog
 import com.nfcalarmclock.shared.NacSharedDefaults
-import com.nfcalarmclock.view.dialog.NacDialog
-import com.nfcalarmclock.view.dialog.NacDialog.OnBuildListener
 
 /**
  * Preference that prompts the user what format they want to display the next
  * alarm.
  */
 class NacNextAlarmFormatPreference @JvmOverloads constructor(
+
+	/**
+	 * Context.
+	 */
 	context: Context,
+
+	/**
+	 * Attribute set.
+	 */
 	attrs: AttributeSet? = null,
+
+	/**
+	 * Default style.
+	 */
 	style: Int = 0
+
+	// Constructor
 ) : Preference(context, attrs, style),
-	Preference.OnPreferenceClickListener,
-	OnBuildListener,
-	NacDialog.OnShowListener,
-	NacDialog.OnDismissListener
+
+	// Interface
+	NacNextAlarmFormatDialog.OnNextAlarmFormatSelectedListener
 {
 
 	/**
@@ -39,7 +48,6 @@ class NacNextAlarmFormatPreference @JvmOverloads constructor(
 	init
 	{
 		layoutResource = R.layout.nac_preference
-		onPreferenceClickListener = this
 	}
 
 	/**
@@ -58,52 +66,6 @@ class NacNextAlarmFormatPreference @JvmOverloads constructor(
 	}
 
 	/**
-	 * Build the dialog.
-	 */
-	override fun onBuildDialog(dialog: NacDialog, builder: AlertDialog.Builder)
-	{
-		val context = dialog.context
-		val cons = NacSharedConstants(context)
-
-		// Set the title of the dialog
-		builder.setTitle(cons.titleNextAlarmFormat)
-
-		// Set the text of the buttons
-		dialog.setPositiveButton(cons.actionOk)
-		dialog.setNegativeButton(cons.actionCancel)
-	}
-
-	/**
-	 * Save the spinner index value.
-	 */
-	override fun onDismissDialog(dialog: NacDialog): Boolean
-	{
-		val days = dialog.root.findViewById<RadioGroup>(R.id.formats)
-		val id = days.checkedRadioButtonId
-
-		// Set the value of the next alarm format
-		nextAlarmFormatIndex = if (id == R.id.nexton)
-			{
-				1
-			}
-			else if (id == R.id.nextin)
-			{
-				0
-			}
-			else
-			{
-				0
-			}
-
-		// Persist the index
-		persistInt(nextAlarmFormatIndex)
-
-		// Notify of the change
-		notifyChanged()
-		return true
-	}
-
-	/**
 	 * Get the default value.
 	 *
 	 * @return The default value.
@@ -116,24 +78,18 @@ class NacNextAlarmFormatPreference @JvmOverloads constructor(
 	}
 
 	/**
-	 * Called when the preference is clicked.
+	 * Save the spinner index value.
 	 */
-	override fun onPreferenceClick(preference: Preference): Boolean
+	override fun onNextAlarmFormatSelected(which: Int)
 	{
-		val dialog = NacDialog()
+		// Set the value of the next alarm format
+		nextAlarmFormatIndex = which
 
-		// Set the value
-		dialog.saveData(nextAlarmFormatIndex)
+		// Persist the index
+		persistInt(nextAlarmFormatIndex)
 
-		// Set the listeners
-		dialog.setOnBuildListener(this)
-		dialog.addOnDismissListener(this)
-		dialog.addOnShowListener(this)
-
-		// Build and show the dialog
-		dialog.build(context, R.layout.dlg_next_alarm_format)
-		dialog.show()
-		return true
+		// Notify of the change
+		notifyChanged()
 	}
 
 	/**
@@ -150,28 +106,25 @@ class NacNextAlarmFormatPreference @JvmOverloads constructor(
 		else
 		{
 			nextAlarmFormatIndex = defaultValue as Int
+
 			persistInt(nextAlarmFormatIndex)
 		}
 	}
 
 	/**
-	 * Show the dialog.
+	 * Show the next alarm format dialog.
 	 */
-	override fun onShowDialog(dialog: NacDialog, root: View)
+	fun showDialog(manager: FragmentManager)
 	{
-		// Get the radio group
-		val days = root.findViewById<RadioGroup>(R.id.formats)
+		// Create the dialog
+		val dialog = NacNextAlarmFormatDialog()
 
-		// Determine which day to have checked
-		when (nextAlarmFormatIndex)
-		{
-			1 -> days.check(R.id.nexton)
-			0 -> days.check(R.id.nextin)
-			else -> days.check(R.id.nextin)
-		}
+		// Setup the dialog
+		dialog.defaultNextAlarmFormatIndex = nextAlarmFormatIndex
+		dialog.onNextAlarmFormatListener = this
 
-		// Scale the dialog
-		dialog.scale(0.9, 0.7, false, true)
+		// Show the dialog
+		dialog.show(manager, NacAutoDismissDialog.TAG)
 	}
 
 }

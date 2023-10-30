@@ -30,7 +30,6 @@ import com.nfcalarmclock.snoozeduration.NacSnoozeDurationPreference
 import com.nfcalarmclock.tts.NacTextToSpeechDialog
 import com.nfcalarmclock.tts.NacTextToSpeechDialog.OnTextToSpeechOptionsSelectedListener
 import com.nfcalarmclock.util.NacIntent
-import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.volume.NacVolumePreference
 import com.nfcalarmclock.volume.NacVolumePreference.OnAudioOptionsClickedListener
 
@@ -81,20 +80,62 @@ class NacGeneralSettingFragment
 		PreferenceManager.setDefaultValues(requireContext(), R.xml.general_preferences,
 			false)
 
-		// Get each preference that will be used in this fragment
-		val autoDismissPref = findPreference<NacAutoDismissPreference>(sharedKeys!!.autoDismiss)
-		val maxSnoozePref = findPreference<NacMaxSnoozePreference>(sharedKeys!!.maxSnooze)
-		val snoozeDurationPref = findPreference<NacSnoozeDurationPreference>(sharedKeys!!.snoozeDuration)
+		// Setup the media preference
+		setupMediaPreference()
+
+		// Setup the on click listeners
+		setupAutoDismissOnClickListener()
+		setupMaxSnoozeOnClickListener()
+		setupSnoozeDurationOnClickListener()
+		setupAlarmNameOnClickListener()
+		setupAudioOptionsOnClickListener()
+	}
+
+	/**
+	 * Setup the alarm name on click listener.
+	 */
+	private fun setupAlarmNameOnClickListener()
+	{
+		// Get the preference
 		val namePref = findPreference<NacNamePreference>(sharedKeys!!.name)
+
+		// Setup the listener
+		namePref!!.onPreferenceClickListener  = Preference.OnPreferenceClickListener { pref ->
+
+			// Show the dialog
+			(pref as NacNamePreference).showDialog(childFragmentManager)
+
+			// Return
+			true
+		}
+	}
+
+	/**
+	 * Setup the audio options on click listener.
+	 */
+	private fun setupAudioOptionsOnClickListener()
+	{
+		// Get the preference
 		val volumePref = findPreference<NacVolumePreference>(sharedKeys!!.volume)
-		val mediaPref = findPreference<NacMediaPreference>(sharedKeys!!.mediaPath)
 
-		// Set the member variables
-		mediaPreference = mediaPref
-		activityLauncher = registerForActivityResult(
-			ActivityResultContracts.StartActivityForResult(), this)
+		// Setup the listener
+		volumePref!!.onAudioOptionsClickedListener = OnAudioOptionsClickedListener {
 
-		// Auto dismiss
+			// Show the dialog showing all the audio options
+			showAudioOptionsDialog()
+
+		}
+	}
+
+	/**
+	 * Setup the auto dismiss on click listener.
+	 */
+	private fun setupAutoDismissOnClickListener()
+	{
+		// Get the preference
+		val autoDismissPref = findPreference<NacAutoDismissPreference>(sharedKeys!!.autoDismiss)
+
+		// Setup the listener
 		autoDismissPref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { pref ->
 
 			// Show the dialog
@@ -104,8 +145,17 @@ class NacGeneralSettingFragment
 			true
 
 		}
+	}
 
-		// Max snooze
+	/**
+	 * Setup the max snooze on click listener.
+	 */
+	private fun setupMaxSnoozeOnClickListener()
+	{
+		// Get the preference
+		val maxSnoozePref = findPreference<NacMaxSnoozePreference>(sharedKeys!!.maxSnooze)
+
+		// Setup the listener
 		maxSnoozePref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { pref ->
 
 			// Show the dialog
@@ -115,37 +165,22 @@ class NacGeneralSettingFragment
 			true
 
 		}
+	}
 
-		// Snooze duration
-		snoozeDurationPref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { pref ->
+	/**
+	 * Setup the media preference.
+	 */
+	private fun setupMediaPreference()
+	{
+		// Get the preference
+		val mediaPref = findPreference<NacMediaPreference>(sharedKeys!!.mediaPath)
 
-			// Show the dialog
-			(pref as NacSnoozeDurationPreference).showDialog(childFragmentManager)
+		// Set the member variables
+		mediaPreference = mediaPref
+		activityLauncher = registerForActivityResult(
+			ActivityResultContracts.StartActivityForResult(), this)
 
-			// Return
-			true
-
-		}
-
-		// Name
-		namePref!!.onPreferenceClickListener  = Preference.OnPreferenceClickListener { pref ->
-
-			// Show the dialog
-			(pref as NacNamePreference).showDialog(childFragmentManager)
-
-			// Return
-			true
-		}
-
-		// Volume
-		volumePref!!.onAudioOptionsClickedListener = OnAudioOptionsClickedListener {
-
-			// Show the dialog showing all the audio options
-			showAudioOptionsDialog()
-
-		}
-
-		// Media preference
+		// Setup the on click listener
 		mediaPref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
 
 			// Create the intent
@@ -154,6 +189,26 @@ class NacGeneralSettingFragment
 
 			// Launch the intent
 			activityLauncher!!.launch(intent)
+
+			// Return
+			true
+
+		}
+	}
+
+	/**
+	 * Setup the snooze duration on click listener.
+	 */
+	private fun setupSnoozeDurationOnClickListener()
+	{
+		// Get the preference
+		val snoozeDurationPref = findPreference<NacSnoozeDurationPreference>(sharedKeys!!.snoozeDuration)
+
+		// Setup the listener
+		snoozeDurationPref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { pref ->
+
+			// Show the dialog
+			(pref as NacSnoozeDurationPreference).showDialog(childFragmentManager)
 
 			// Return
 			true

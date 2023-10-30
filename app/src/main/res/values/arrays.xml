@@ -61,6 +61,14 @@
 		<item>Saturday</item>
 	</string-array>
 
+	<string-array name="start_week_on">
+		<item>Sunday</item>
+		<item>Monday</item>
+		<!--
+		<item>Saturday</item>
+		-->
+	</string-array>
+
 	<string-array name="auto_dismiss_summaries">
 		<item>Off</item>
 		<item>1 minute</item>

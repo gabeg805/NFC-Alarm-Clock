@@ -116,6 +116,8 @@
 			android:summaryOn="@string/expand_new_alarm_true"
 			android:summaryOff="@string/expand_new_alarm_false"
 			android:defaultValue="@bool/default_expand_new_alarm"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="false"
 			/>
 
 		<com.nfcalarmclock.nextalarmformat.NacNextAlarmFormatPreference

@@ -15,10 +15,26 @@ import com.nfcalarmclock.view.dialog.NacScrollablePickerDialogFragment.OnScrolla
  * Preference that displays how long before an alarm is auto dismissed.
  */
 class NacAutoDismissPreference @JvmOverloads constructor(
+
+	/**
+	 * Context.
+	 */
 	context: Context,
+
+	/**
+	 * Attribute set.
+	 */
 	attrs: AttributeSet? = null,
+
+	/**
+	 * Default style.
+	 */
 	style: Int = 0
+
+	// Constructor
 ) : Preference(context, attrs, style),
+
+	// Interface
 	OnScrollablePickerOptionSelectedListener
 {
 
@@ -44,6 +60,7 @@ class NacAutoDismissPreference @JvmOverloads constructor(
 	{
 		val cons = NacSharedConstants(context)
 		val value = autoDismissIndex
+
 		return NacSharedPreferences.getAutoDismissSummary(cons, value)
 	}
 

@@ -185,22 +185,6 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return The description for the filled-in day button style.
-	 */
-	public String getDescriptionDayButtonStyleFilled()
-	{
-		return this.getString(R.string.description_day_button_style_filled);
-	}
-
-	/**
-	 * @return The description for the outlined day button style.
-	 */
-	public String getDescriptionDayButtonStyleOutlined()
-	{
-		return this.getString(R.string.description_day_button_style_outlined);
-	}
-
-	/**
 	 * @return The media description.
 	 */
 	public String getDescriptionMedia()
@@ -629,14 +613,6 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Start week on title.
-	 */
-	public String getStartWeekOnTitle()
-	{
-		return this.getString(R.string.start_week_on);
-	}
-
-	/**
 	 * @return Unknown state.
 	 */
 	public String getStateUnknown()
@@ -699,14 +675,6 @@ public class NacSharedConstants
 	public String getTitleName()
 	{
 		return this.getString(R.string.title_name);
-	}
-
-	/**
-	 * @return Next alarm format title.
-	 */
-	public String getTitleNextAlarmFormat()
-	{
-		return this.getString(R.string.title_next_alarm_format);
 	}
 
 	/**

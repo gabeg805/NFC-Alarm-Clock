@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -29,13 +30,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textview.MaterialTextView;
 import com.nfcalarmclock.BuildConfig;
+import com.nfcalarmclock.R;
 import com.nfcalarmclock.activealarm.NacActiveAlarmService;
-import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmViewModel;
+import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.audiooptions.NacAlarmAudioOptionsDialog;
 import com.nfcalarmclock.audiosource.NacAudioSourceDialog;
 import com.nfcalarmclock.card.NacCardAdapter;
@@ -44,28 +47,25 @@ import com.nfcalarmclock.card.NacCardHolder;
 import com.nfcalarmclock.card.NacCardTouchHelper;
 import com.nfcalarmclock.dismissearly.NacDismissEarlyDialog;
 import com.nfcalarmclock.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog;
-import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.mediapicker.NacMediaActivity;
 import com.nfcalarmclock.nfc.NacNfc;
 import com.nfcalarmclock.nfc.NacNfcTag;
 import com.nfcalarmclock.nfc.NacScanNfcTagDialog;
 import com.nfcalarmclock.permission.NacPermissionRequestManager;
-import com.nfcalarmclock.R;
 import com.nfcalarmclock.ratemyapp.NacRateMyApp;
 import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog;
 import com.nfcalarmclock.settings.NacMainSettingActivity;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
-import com.nfcalarmclock.view.snackbar.NacSnackbar;
 import com.nfcalarmclock.shutdown.NacShutdownBroadcastReceiver;
 import com.nfcalarmclock.statistics.NacAlarmStatisticRepository;
+import com.nfcalarmclock.tts.NacTextToSpeechDialog;
+import com.nfcalarmclock.upcomingalarm.NacUpcomingAlarmNotification;
 import com.nfcalarmclock.util.NacCalendar;
 import com.nfcalarmclock.util.NacContext;
 import com.nfcalarmclock.util.NacIntent;
-import com.nfcalarmclock.tts.NacTextToSpeechDialog;
-import com.nfcalarmclock.upcomingalarm.NacUpcomingAlarmNotification;
-import com.nfcalarmclock.view.dialog.NacDialog;
 import com.nfcalarmclock.util.NacUtility;
+import com.nfcalarmclock.view.snackbar.NacSnackbar;
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog;
 import java.util.ArrayList;
 import java.util.List;
@@ -1141,7 +1141,7 @@ public class NacMainActivity
 		{
 			NacSnackbar snackbar = this.getSnackbar();
 
-			if (snackbar.canDismiss())
+			if (snackbar.getCanDismiss())
 			{
 				snackbar.dismiss();
 			}
