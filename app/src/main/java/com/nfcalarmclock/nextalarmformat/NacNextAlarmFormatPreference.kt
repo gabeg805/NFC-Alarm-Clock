@@ -7,7 +7,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import com.nfcalarmclock.R
 import com.nfcalarmclock.autodismiss.NacAutoDismissDialog
-import com.nfcalarmclock.shared.NacSharedDefaults
 
 /**
  * Preference that prompts the user what format they want to display the next
@@ -72,9 +71,9 @@ class NacNextAlarmFormatPreference @JvmOverloads constructor(
 	 */
 	override fun onGetDefaultValue(a: TypedArray, index: Int): Any
 	{
-		val defs = NacSharedDefaults(context)
+		val defaultValue = context.resources.getInteger(R.integer.default_next_alarm_format_index)
 
-		return a.getInteger(index, defs.nextAlarmFormatIndex)
+		return a.getInteger(index, defaultValue)
 	}
 
 	/**

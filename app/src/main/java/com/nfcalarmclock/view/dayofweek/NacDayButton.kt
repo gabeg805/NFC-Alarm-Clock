@@ -27,7 +27,7 @@ class NacDayButton
 	 */
 	interface OnDayChangedListener
 	{
-		fun onDayChanged(button: NacDayButton?)
+		fun onDayChanged(button: NacDayButton)
 	}
 
 	/**
@@ -280,7 +280,7 @@ class NacDayButton
 	/**
 	 * Setup the style of the day button.
 	 */
-	protected fun setupStyle()
+	private fun setupStyle()
 	{
 		// Get the style
 		val shared = NacSharedPreferences(context)
@@ -293,7 +293,7 @@ class NacDayButton
 	/**
 	 * Set view attributes.
 	 */
-	fun setViewAttributes()
+	private fun setViewAttributes()
 	{
 		// Set size
 		setSize(dayAttributes!!.width, dayAttributes!!.height)

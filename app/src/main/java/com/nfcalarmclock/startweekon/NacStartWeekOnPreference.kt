@@ -53,12 +53,13 @@ class NacStartWeekOnPreference @JvmOverloads constructor(
 	/**
 	 * Get the summary text which is the name of the day to start on.
 	 *
+	 * TODO: Update this for when start week is more flexible.
+	 *
 	 * @return The summary text which is the name of the day to start on.
 	 */
 	override fun getSummary(): CharSequence?
 	{
-		val cons = NacSharedConstants(context)
-		val week = cons.daysOfWeek
+		val week = context.resources.getStringArray(R.array.days_of_week)
 		var index = startWeekOnIndex
 
 		// Get the name of the day by the index
@@ -81,9 +82,9 @@ class NacStartWeekOnPreference @JvmOverloads constructor(
 	 */
 	override fun onGetDefaultValue(a: TypedArray, index: Int): Any
 	{
-		val defs = NacSharedDefaults(context)
+		val defaultValue = context.resources.getInteger(R.integer.default_start_week_on_index)
 
-		return a.getInteger(index, defs.startWeekOnIndex)
+		return a.getInteger(index, defaultValue)
 	}
 
 	/**

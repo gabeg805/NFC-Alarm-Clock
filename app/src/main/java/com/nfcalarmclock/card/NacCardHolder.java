@@ -28,20 +28,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.button.MaterialButton;
 //import com.google.android.material.timepicker.MaterialTimePicker;
-
 import com.nfcalarmclock.activealarm.NacActiveAlarmService;
 import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.util.NacCalendar;
 import com.nfcalarmclock.util.NacContext;
 import com.nfcalarmclock.view.dayofweek.NacDayButton;
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek;
-import com.nfcalarmclock.view.dialog.NacDialog;
 import com.nfcalarmclock.name.NacNameDialog;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.R;
-
 import java.lang.Float;
 import java.util.EnumSet;
 
@@ -1674,10 +1671,9 @@ public class NacCardHolder
 	 * A day button was selected.
 	 */
 	@Override
-	public boolean onWeekChanged(NacDayButton button, NacCalendar.Day day)
+	public void onWeekChanged(NacDayButton button, NacCalendar.Day day)
 	{
 		this.respondToDayButtonClick(button, day);
-		return true;
 	}
 
 	/**

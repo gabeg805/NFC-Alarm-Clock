@@ -32,23 +32,16 @@ class NacAutoDismissDialog
 		// Setup the shared preferences
 		setupSharedPreferences()
 
-		// Get the names of the title
-		val title = getString(R.string.auto_dismiss)
-
-		// Get the names of the actions
-		val ok = getString(R.string.action_ok)
-		val cancel = getString(R.string.action_cancel)
-
 		// Create the dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(title)
-			.setPositiveButton(ok) { _, _ ->
+			.setTitle(R.string.auto_dismiss)
+			.setPositiveButton(R.string.action_ok) { _, _ ->
 
 				// Call the listener
 				callOnScrollablePickerOptionSelectedListener()
 
 			}
-			.setNegativeButton(cancel) { _, _ ->
+			.setNegativeButton(R.string.action_cancel) { _, _ ->
 			}
 			.setView(R.layout.dlg_scrollable_picker)
 			.create()

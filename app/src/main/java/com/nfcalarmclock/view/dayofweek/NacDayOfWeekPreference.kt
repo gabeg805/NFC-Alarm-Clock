@@ -8,7 +8,6 @@ import androidx.preference.Preference
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar
-import com.nfcalarmclock.util.NacCalendar.Day
 import java.util.EnumSet
 
 /**
@@ -32,9 +31,10 @@ class NacDayOfWeekPreference @JvmOverloads constructor(
 	style: Int = 0
 
 	// Constructor
-) : Preference(context, attrs, style)
+) : Preference(context, attrs, style),
 
 	// Interface
+	NacDayOfWeekDialog.OnDaysOfWeekSelectedListener
 {
 
 	/**
@@ -66,22 +66,19 @@ class NacDayOfWeekPreference @JvmOverloads constructor(
 	}
 
 	/**
-	 * Save the selected days when the dialog is dismissed.
+	 * Called when the days of week are selected.
 	 */
-	//override fun onDismissDialog(dialog: NacDialog): Boolean
-	//{
-	//	// Get the day of week
-	//	val dow = (dialog as NacDayOfWeekDialog).dayOfWeek
+	override fun onDaysOfWeekSelected(selectedDays: EnumSet<NacCalendar.Day>)
+	{
+		// Set the day of week value
+		dayOfWeekValue = NacCalendar.Days.daysToValue(selectedDays)
 
-	//	// Set the day of week value
-	//	mValue = NacCalendar.Days.daysToValue(dow.days)
+		// Reevaluate the summary
+		summary = this.summary
 
-	//	// Reevaluate the summary
-	//	summary = this.summary
-
-	//	// Persist the value
-	//	persistInt(mValue)
-	//}
+		// Persist the value
+		persistInt(dayOfWeekValue)
+	}
 
 	/**
 	 * Get the default value.
@@ -92,41 +89,13 @@ class NacDayOfWeekPreference @JvmOverloads constructor(
 	{
 		// Calculate the default value
 		val default = NacCalendar.Days.daysToValue(
-			EnumSet.of(Day.MONDAY, Day.TUESDAY,
-				Day.WEDNESDAY, Day.THURSDAY,
-				Day.FRIDAY))
+			EnumSet.of(NacCalendar.Day.MONDAY, NacCalendar.Day.TUESDAY,
+				NacCalendar.Day.WEDNESDAY, NacCalendar.Day.THURSDAY,
+				NacCalendar.Day.FRIDAY))
 
 		// Get the default value
 		return a.getInteger(index, default)
 	}
-
-	/**
-	 * Display the dialog when the preference is selected.
-	 */
-	//override fun onPreferenceClick(preference: Preference): Boolean
-	//{
-	//	// Create the dialog
-	//	val dialog = NacDayOfWeekDialog()
-
-	//	// Setup the dialog
-	//	dialog.build(context)
-	//	dialog.addOnShowListener(this)
-	//	dialog.addOnDismissListener(this)
-
-	//	// Show the dialog
-	//	dialog.show()
-	//	return true
-	//}
-
-	/**
-	 * Set the days in the dialog.
-	 */
-	//override fun onShowDialog(dialog: NacDialog, root: View)
-	//{
-	//	val dow = (dialog as NacDayOfWeekDialog).dayOfWeek
-
-	//	dow.setDays(mValue)
-	//}
 
 	/**
 	 * Set the initial preference value.
@@ -155,11 +124,11 @@ class NacDayOfWeekPreference @JvmOverloads constructor(
 		val dialog = NacDayOfWeekDialog()
 
 		// Setup the dialog
-		//dialog.defaultStartWeekOnIndex = startWeekOnIndex
-		//dialog.onStartWeekSelectedListener = this
+		dialog.defaultDayOfWeekValues = dayOfWeekValue
+		dialog.onDaysOfWeekSelectedListener = this
 
 		// Show the dialog
-		//dialog.show(manager, NacAutoDismissDialog.TAG)
+		dialog.show(manager, NacDayOfWeekDialog.TAG)
 	}
 
 }

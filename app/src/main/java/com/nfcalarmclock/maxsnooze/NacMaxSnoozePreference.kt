@@ -7,7 +7,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedConstants
-import com.nfcalarmclock.shared.NacSharedDefaults
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.view.dialog.NacScrollablePickerDialogFragment.OnScrollablePickerOptionSelectedListener
 
@@ -15,10 +14,26 @@ import com.nfcalarmclock.view.dialog.NacScrollablePickerDialogFragment.OnScrolla
  * Preference that displays the max number of snoozes for an alarm.
  */
 class NacMaxSnoozePreference @JvmOverloads constructor(
+
+	/**
+	 * Context.
+	 */
 	context: Context,
+
+	/**
+	 * Attribute set.
+	 */
 	attrs: AttributeSet? = null,
+
+	/**
+	 * Default style.
+	 */
 	style: Int = 0
+
+	// Constructor
 ) : Preference(context, attrs, style),
+
+	// Interface
 	OnScrollablePickerOptionSelectedListener
 {
 
@@ -54,9 +69,9 @@ class NacMaxSnoozePreference @JvmOverloads constructor(
 	 */
 	override fun onGetDefaultValue(a: TypedArray, index: Int): Any
 	{
-		val defs = NacSharedDefaults(context)
+		val defaultValue = context.resources.getInteger(R.integer.default_max_snooze_index)
 
-		return a.getInteger(index, defs.maxSnoozeIndex)
+		return a.getInteger(index, defaultValue)
 	}
 
 	/**

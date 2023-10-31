@@ -3,14 +3,14 @@ package com.nfcalarmclock.audiooptions
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import com.nfcalarmclock.R
+import com.nfcalarmclock.view.dialog.NacDialogFragment
 
 /**
  * Show the audio options of the alarm.
  */
 class NacAlarmAudioOptionsDialog
-	: DialogFragment()
+	: NacDialogFragment()
 {
 
 	/**
@@ -32,28 +32,21 @@ class NacAlarmAudioOptionsDialog
 	var onAudioOptionClickedListener: OnAudioOptionClickedListener? = null
 
 	/**
-	 * Call the OnAudioOptionClickedListener object, if it has been set.
-	 *
-	 * @param  which  Which item was clicked.
-	 */
-	private fun callOnAudioOptionClickedListener(which: Int)
-	{
-		onAudioOptionClickedListener?.onAudioOptionClicked(alarmId, which)
-	}
-
-	/**
 	 * Called when the dialog is created.
 	 */
 	override fun onCreateDialog(savedInstanceState: Bundle?): Dialog
 	{
-		// Get the title
-		val title = getString(R.string.title_audio_option)
+		// Setup the shared preferences
+		setupSharedPreferences()
 
 		// Create the dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(title)
+			.setTitle(R.string.title_audio_option)
 			.setItems(R.array.audio_options) { _, which: Int ->
-				callOnAudioOptionClickedListener(which)
+
+				// Call the listener
+				onAudioOptionClickedListener?.onAudioOptionClicked(alarmId, which)
+
 			}
 			.create()
 	}

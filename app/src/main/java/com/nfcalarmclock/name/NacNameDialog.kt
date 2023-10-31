@@ -51,13 +51,9 @@ class NacNameDialog
 		// Setup the shared preferences
 		setupSharedPreferences()
 
-		// Get the name of the actions
-		val ok = getString(R.string.action_ok)
-		val cancel = getString(R.string.action_cancel)
-
 		// Create the dialog
 		return AlertDialog.Builder(requireContext())
-			.setPositiveButton(ok) { _, _ ->
+			.setPositiveButton(R.string.action_ok) { _, _ ->
 
 				// Get the name that is in the edit text
 				val editText = dialog!!.findViewById<TextInputEditText>(R.id.name_entry)
@@ -67,7 +63,7 @@ class NacNameDialog
 				onNameEnteredListener?.onNameEntered(name)
 
 			}
-			.setNegativeButton(cancel) { _, _ ->
+			.setNegativeButton(R.string.action_cancel) { _, _ ->
 			}
 			.setView(R.layout.dlg_alarm_name)
 			.create()

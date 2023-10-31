@@ -30,6 +30,7 @@ import com.nfcalarmclock.snoozeduration.NacSnoozeDurationPreference
 import com.nfcalarmclock.tts.NacTextToSpeechDialog
 import com.nfcalarmclock.tts.NacTextToSpeechDialog.OnTextToSpeechOptionsSelectedListener
 import com.nfcalarmclock.util.NacIntent
+import com.nfcalarmclock.view.dayofweek.NacDayOfWeekPreference
 import com.nfcalarmclock.volume.NacVolumePreference
 import com.nfcalarmclock.volume.NacVolumePreference.OnAudioOptionsClickedListener
 
@@ -87,8 +88,29 @@ class NacGeneralSettingFragment
 		setupAutoDismissOnClickListener()
 		setupMaxSnoozeOnClickListener()
 		setupSnoozeDurationOnClickListener()
+		setupAlarmDaysOnClickListener()
 		setupAlarmNameOnClickListener()
 		setupAudioOptionsOnClickListener()
+	}
+
+	/**
+	 * Setup the alarm days on click listener.
+	 */
+	private fun setupAlarmDaysOnClickListener()
+	{
+		// Get the preference
+		val key = getString(R.string.alarm_days_key)
+		val daysPref = findPreference<NacDayOfWeekPreference>(key)
+
+		// Setup the listener
+		daysPref!!.onPreferenceClickListener  = Preference.OnPreferenceClickListener { pref ->
+
+			// Show the dialog
+			(pref as NacDayOfWeekPreference).showDialog(childFragmentManager)
+
+			// Return
+			true
+		}
 	}
 
 	/**
@@ -97,7 +119,8 @@ class NacGeneralSettingFragment
 	private fun setupAlarmNameOnClickListener()
 	{
 		// Get the preference
-		val namePref = findPreference<NacNamePreference>(sharedKeys!!.name)
+		val key = getString(R.string.alarm_name_key)
+		val namePref = findPreference<NacNamePreference>(key)
 
 		// Setup the listener
 		namePref!!.onPreferenceClickListener  = Preference.OnPreferenceClickListener { pref ->

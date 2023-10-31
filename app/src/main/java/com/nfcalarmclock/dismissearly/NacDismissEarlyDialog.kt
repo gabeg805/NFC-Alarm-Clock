@@ -38,40 +38,22 @@ class NacDismissEarlyDialog
 	 * Whether an alarm should be able to be dismissed early or not.
 	 */
 	private val shouldDismissEarly: Boolean
-		get() = dismissEarlyCheckBox!!.isChecked
+		get() = checkBox!!.isChecked
 
 	/**
 	 * Check box to dismiss early or not.
 	 */
-	private var dismissEarlyCheckBox: MaterialCheckBox? = null
-
-	/**
-	 * Summary text for whether dismiss early should be used or not.
-	 */
-	private var dismissEarlySummary: TextView? = null
+	private var checkBox: MaterialCheckBox? = null
 
 	/**
 	 * Scrollable picker to choose the dismiss early time.
 	 */
-	private var dismissEarlyTimePicker: NumberPicker? = null
+	private var timePicker: NumberPicker? = null
 
 	/**
 	 * Listener for when the dismiss early option is clicked.
 	 */
 	var onDismissEarlyOptionSelectedListener: OnDismissEarlyOptionSelectedListener? = null
-
-	/**
-	 * Call the OnDismissEarlyListener object, if it has been set.
-	 */
-	private fun callOnDismissEarlyOptionSelectedListener()
-	{
-		// Get the index value
-		val index = dismissEarlyTimePicker!!.value
-
-		// Call the listener
-		onDismissEarlyOptionSelectedListener?.onDismissEarlyOptionSelected(
-			shouldDismissEarly, index)
-	}
 
 	/**
 	 * Called when the dialog is created.
@@ -81,23 +63,20 @@ class NacDismissEarlyDialog
 		// Setup the shared preferences
 		setupSharedPreferences()
 
-		// Get the name of the title
-		val title = getString(R.string.title_dismiss_early)
-
-		// Get the name of the actions
-		val ok = getString(R.string.action_ok)
-		val cancel = getString(R.string.action_cancel)
-
 		// Create the dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(title)
-			.setPositiveButton(ok) { _, _ ->
+			.setTitle(R.string.title_dismiss_early)
+			.setPositiveButton(R.string.action_ok) { _, _ ->
+
+				// Get the index value
+				val index = timePicker!!.value
 
 				// Call the listener
-				callOnDismissEarlyOptionSelectedListener()
+				onDismissEarlyOptionSelectedListener?.onDismissEarlyOptionSelected(
+					shouldDismissEarly, index)
 
 			}
-			.setNegativeButton(cancel) { _, _ ->
+			.setNegativeButton(R.string.action_cancel) { _, _ ->
 			}
 			.setView(R.layout.dlg_alarm_dismiss_early)
 			.create()
@@ -111,39 +90,29 @@ class NacDismissEarlyDialog
 		// Super
 		super.onResume()
 
-		// Get the container of the dialog
+		// Get the container of the dialog and the text view
 		val container = dialog!!.findViewById<RelativeLayout>(R.id.should_use_dismiss_early)
+		val textView: TextView = dialog!!.findViewById(R.id.should_use_dismiss_early_summary)
 
 		// Set the views
-		dismissEarlyCheckBox = dialog!!.findViewById(R.id.should_use_dismiss_early_checkbox)
-		dismissEarlySummary = dialog!!.findViewById(R.id.should_use_dismiss_early_summary)
-		dismissEarlyTimePicker = dialog!!.findViewById(R.id.dismiss_early_time_picker)
+		checkBox = dialog!!.findViewById(R.id.should_use_dismiss_early_checkbox)
+		timePicker = dialog!!.findViewById(R.id.dismiss_early_time_picker)
 
-		// Setup the widgets
-		container.setOnClickListener {
+		// Set the status of the checkbox
+		checkBox!!.isChecked = defaultShouldDismissEarly
 
-			// Toggle the checkbox
-			toggleShouldDismissEarly()
-
-			// Setup the summary
-			setupDismissEarlySummary()
-
-			// Not sure
-			setupDismissEarlyTimeEnabled()
-
-		}
-
-		// Setup
-		setupShouldDismissEarly()
-		setupDismissEarlyTimePicker()
-		setupDismissEarlyTimeEnabled()
-		setupDismissEarlyColor()
+		// Setup the views
+		setupOnClickListener(container, textView)
+		setupCheckBoxColor()
+		setupTextView(textView)
+		setupTimePickerValues()
+		setupTimePickerUsable()
 	}
 
 	/**
 	 * Setup the color of the dismiss early check box.
 	 */
-	private fun setupDismissEarlyColor()
+	private fun setupCheckBoxColor()
 	{
 		// Get the colors for the boolean states
 		val colors = intArrayOf(sharedPreferences!!.themeColor, Color.GRAY)
@@ -152,14 +121,32 @@ class NacDismissEarlyDialog
 		val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
 
 		// Set the state list of the checkbox
-		dismissEarlyCheckBox!!.buttonTintList = ColorStateList(states, colors)
+		checkBox!!.buttonTintList = ColorStateList(states, colors)
+	}
+
+	/**
+	 * Setup the on click listener for when the container is clicked.
+	 */
+	private fun setupOnClickListener(container: RelativeLayout, textView: TextView)
+	{
+		// Setup the listener
+		container.setOnClickListener {
+
+			// Toggle the checkbox
+			checkBox!!.isChecked = !shouldDismissEarly
+
+			// Setup the views
+			setupTextView(textView)
+			setupTimePickerUsable()
+
+		}
 	}
 
 	/**
 	 * Setup the summary text for whether a user should be able to dismiss an
 	 * alarm early or not.
 	 */
-	private fun setupDismissEarlySummary()
+	private fun setupTextView(textView: TextView)
 	{
 		// Determine the text ID to use based on whether restrict volume will
 		// be used or not
@@ -173,55 +160,34 @@ class NacDismissEarlyDialog
 		}
 
 		// Set the text
-		dismissEarlySummary!!.setText(textId)
+		textView.setText(textId)
 	}
 
 	/**
 	 * Setup whether the dismiss early time container can be used or not.
 	 */
-	private fun setupDismissEarlyTimeEnabled()
+	private fun setupTimePickerUsable()
 	{
 		// Set the alpha
-		dismissEarlyTimePicker!!.alpha = if (shouldDismissEarly) 1.0f else 0.25f
+		timePicker!!.alpha = if (shouldDismissEarly) 1.0f else 0.25f
 
 		// Set whether it can be used or not
-		dismissEarlyTimePicker!!.isEnabled = shouldDismissEarly
+		timePicker!!.isEnabled = shouldDismissEarly
 	}
 
 	/**
 	 * Setup scrollable picker for the dismiss early time.
 	 */
-	private fun setupDismissEarlyTimePicker()
+	private fun setupTimePickerValues()
 	{
 		// Get the dismiss early times
 		val values = sharedConstants.dismissEarlyTimes
 
 		// Setup the time picker
-		dismissEarlyTimePicker!!.minValue = 0
-		dismissEarlyTimePicker!!.maxValue = values.size - 1
-		dismissEarlyTimePicker!!.displayedValues = values.toTypedArray()
-		dismissEarlyTimePicker!!.value = defaultShouldDismissEarlyIndex
-	}
-
-	/**
-	 * Setup the check box and summary text for whether a user should be able
-	 * to dismiss an alarm early or not.
-	 */
-	private fun setupShouldDismissEarly()
-	{
-		// Set the status of the checkbox
-		dismissEarlyCheckBox!!.isChecked = defaultShouldDismissEarly
-
-		// Setup the summary
-		setupDismissEarlySummary()
-	}
-
-	/**
-	 * Toggle whether an alarm should be able to be dismissed early or not.
-	 */
-	private fun toggleShouldDismissEarly()
-	{
-		dismissEarlyCheckBox!!.isChecked = !shouldDismissEarly
+		timePicker!!.minValue = 0
+		timePicker!!.maxValue = values.size - 1
+		timePicker!!.displayedValues = values.toTypedArray()
+		timePicker!!.value = defaultShouldDismissEarlyIndex
 	}
 
 	companion object

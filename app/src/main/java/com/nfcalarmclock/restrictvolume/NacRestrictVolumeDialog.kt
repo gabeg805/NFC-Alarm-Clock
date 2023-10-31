@@ -36,17 +36,12 @@ class NacRestrictVolumeDialog
 	 * Whether volume should be restricted or not.
 	 */
 	private val shouldRestrictVolume: Boolean
-		get() = restrictVolumeCheckBox!!.isChecked
+		get() = checkBox!!.isChecked
 
 	/**
 	 * Check box to restrict/unrestrict the volume.
 	 */
-	private var restrictVolumeCheckBox: MaterialCheckBox? = null
-
-	/**
-	 * Summary text for whether volume should be restricted or not.
-	 */
-	private var restrictVolumeSummary: TextView? = null
+	private var checkBox: MaterialCheckBox? = null
 
 	/**
 	 * Listener for when the volume is restricted/unrestricted.
@@ -61,26 +56,19 @@ class NacRestrictVolumeDialog
 		// Setup the shared preferences
 		setupSharedPreferences()
 
-		// Get the name of the title
-		val title = getString(R.string.title_restrict_volume)
-
-		// Get the name of the actions
-		val ok = getString(R.string.action_ok)
-		val cancel = getString(R.string.action_cancel)
-
 		// Create the dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(title)
-			.setPositiveButton(ok) { _, _ ->
+			.setTitle(R.string.title_restrict_volume)
+			.setPositiveButton(R.string.action_ok) { _, _ ->
 
 				// Get the checked status
-				val isChecked = restrictVolumeCheckBox?.isChecked
+				val isChecked = checkBox?.isChecked
 
 				// Call the listener
 				onRestrictVolumeListener?.onRestrictVolume(isChecked!!)
 
 			}
-			.setNegativeButton(cancel) { _, _ ->
+			.setNegativeButton(R.string.action_cancel) { _, _ ->
 			}
 			.setView(R.layout.dlg_alarm_restrict_volume)
 			.create()
@@ -94,46 +82,26 @@ class NacRestrictVolumeDialog
 		// Super
 		super.onResume()
 
-		// Get the dialog container
+		// Get the dialog container and text view
 		val container = dialog!!.findViewById<RelativeLayout>(R.id.should_restrict_volume)
+		val textView: TextView = dialog!!.findViewById(R.id.should_restrict_volume_summary)
 
-		// Set the checkbox and summary views
-		restrictVolumeCheckBox = dialog!!.findViewById(R.id.should_restrict_volume_checkbox)
-		restrictVolumeSummary = dialog!!.findViewById(R.id.should_restrict_volume_summary)
+		// Set the member variable
+		checkBox = dialog!!.findViewById(R.id.should_restrict_volume_checkbox)
 
-		// Set the listener
-		container.setOnClickListener {
-
-			// Toggle the checkbox
-			toggleShouldRestrictVolume()
-
-			// Setup the summary
-			setupShouldRestrictVolumeSummary()
-
-		}
+		// Set the default checked status
+		checkBox!!.isChecked = defaultShouldRestrictVolume
 
 		// Setup the views
-		setupShouldRestrictVolume()
-		setupShouldRestrictVolumeColor()
-	}
-
-	/**
-	 * Setup the check box and summary text for whether volume should be
-	 * restricted or not.
-	 */
-	private fun setupShouldRestrictVolume()
-	{
-		// Set the checked status
-		restrictVolumeCheckBox!!.isChecked = defaultShouldRestrictVolume
-
-		// Setup the summary
-		setupShouldRestrictVolumeSummary()
+		setupOnClickListener(container, textView)
+		setupCheckBoxColor()
+		setupTextView(textView)
 	}
 
 	/**
 	 * Setup the color of the restrict volume check box.
 	 */
-	private fun setupShouldRestrictVolumeColor()
+	private fun setupCheckBoxColor()
 	{
 		// Get the colors for the boolean states
 		val colors = intArrayOf(sharedPreferences!!.themeColor, Color.GRAY)
@@ -142,13 +110,30 @@ class NacRestrictVolumeDialog
 		val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
 
 		// Set the state list of the checkbox
-		restrictVolumeCheckBox!!.buttonTintList = ColorStateList(states, colors)
+		checkBox!!.buttonTintList = ColorStateList(states, colors)
 	}
 
 	/**
-	 * Setup the summary text for whether volume should be restricted or not.
+	 * Setup the on click listener for the restrict volume.
 	 */
-	private fun setupShouldRestrictVolumeSummary()
+	private fun setupOnClickListener(container: RelativeLayout, textView: TextView)
+	{
+		// Set the listener
+		container.setOnClickListener {
+
+			// Toggle the checkbox
+			checkBox!!.isChecked = !shouldRestrictVolume
+
+			// Setup the summary
+			setupTextView(textView)
+
+		}
+	}
+
+	/**
+	 * Setup the text view for whether volume should be restricted or not.
+	 */
+	private fun setupTextView(textView: TextView)
 	{
 		// Determine the text ID to use based on whether restrict volume will
 		// be used or not
@@ -162,15 +147,7 @@ class NacRestrictVolumeDialog
 		}
 
 		// Set the text
-		restrictVolumeSummary!!.setText(textId)
-	}
-
-	/**
-	 * Toggle whether volume should be restricted or not.
-	 */
-	private fun toggleShouldRestrictVolume()
-	{
-		restrictVolumeCheckBox!!.isChecked = !shouldRestrictVolume
+		textView.setText(textId)
 	}
 
 	companion object

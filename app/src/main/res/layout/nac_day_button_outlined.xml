@@ -23,6 +23,7 @@
 			android:textColor="@color/gray_light"
 			android:textSize="@dimen/tsz_normal"
 			android:text=""
+			android:enabled="false"
 			app:backgroundTint="@android:color/transparent"
 			app:cornerRadius="@dimen/radius_day_outlined"
 			app:strokeColor="@color/nac_day_button_stroke"

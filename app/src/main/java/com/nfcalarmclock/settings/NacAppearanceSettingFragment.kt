@@ -4,9 +4,9 @@ import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
-import com.nfcalarmclock.nextalarmformat.NacNextAlarmFormatDialog
 import com.nfcalarmclock.nextalarmformat.NacNextAlarmFormatPreference
 import com.nfcalarmclock.startweekon.NacStartWeekOnPreference
+import com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 
 /**
  * Appearance fragment.
@@ -33,6 +33,7 @@ class NacAppearanceSettingFragment
 		setupDayButtonStylePreference()
 
 		// Setup on click listeners
+		setupColorPickerOnClickListeners()
 		setupStartWeekOnClickListener()
 		setupNexAlarmFormatOnClickListener()
 	}
@@ -76,6 +77,38 @@ class NacAppearanceSettingFragment
 		}
 
 		return true
+	}
+
+	/**
+	 * Setup the listeners for when a color picker preference is clicked.
+	 */
+	private fun setupColorPickerOnClickListeners()
+	{
+		// Get the color preferences
+		val themePref = findPreference<NacColorPickerPreference>(sharedKeys!!.themeColor)
+		val namePref = findPreference<NacColorPickerPreference>(sharedKeys!!.nameColor)
+		val daysPref = findPreference<NacColorPickerPreference>(sharedKeys!!.daysColor)
+		val timePref = findPreference<NacColorPickerPreference>(sharedKeys!!.timeColor)
+		val amPref = findPreference<NacColorPickerPreference>(sharedKeys!!.amColor)
+		val pmPref = findPreference<NacColorPickerPreference>(sharedKeys!!.pmColor)
+
+		// Create list of all color preferences
+		val allPrefs = listOf(themePref, namePref, daysPref, timePref, amPref, pmPref)
+
+		// Iterate over each color preference
+		for (p in allPrefs)
+		{
+			// Set the on click listener
+			p!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { pref ->
+
+				// Show the dialog
+				(pref as NacColorPickerPreference).showDialog(childFragmentManager)
+
+				// Return
+				true
+
+			}
+		}
 	}
 
 	/**

@@ -38,34 +38,17 @@ class NacGraduallyIncreaseVolumeDialog
 	 * Whether volume should be gradually increased or not.
 	 */
 	private val shouldGraduallyIncreaseVolume: Boolean
-		get() = graduallyIncreaseVolumeCheckBox!!.isChecked
+		get() = checkBox!!.isChecked
 
 	/**
 	 * Check box for whether the volume should be gradually increased or not.
 	 */
-	private var graduallyIncreaseVolumeCheckBox: MaterialCheckBox? = null
-
-	/**
-	 * Summary text for whether volume should be gradually increase or not.
-	 */
-	private var graduallyIncreaseVolumeSummary: TextView? = null
+	private var checkBox: MaterialCheckBox? = null
 
 	/**
 	 * Listener for when the volume is gradually increased or not.
 	 */
 	var onGraduallyIncreaseVolumeListener: OnGraduallyIncreaseVolumeListener? = null
-
-	/**
-	 * Call the OnGraduallyIncreaseVolumeListener object, if it has been set.
-	 */
-	private fun callOnGraduallyIncreaseVolumeListener()
-	{
-		// Get the checked status
-		val isChecked = graduallyIncreaseVolumeCheckBox?.isChecked
-
-		// Call the listener
-		onGraduallyIncreaseVolumeListener?.onGraduallyIncreaseVolume(isChecked!!)
-	}
 
 	/**
 	 * Called when the dialog is created.
@@ -75,23 +58,19 @@ class NacGraduallyIncreaseVolumeDialog
 		// Setup the shared preferences
 		setupSharedPreferences()
 
-		// Get the name of the title
-		val title = getString(R.string.title_gradually_increase_volume)
-
-		// Get the name of the actions
-		val ok = getString(R.string.action_ok)
-		val cancel = getString(R.string.action_cancel)
-
 		// Creat ethe dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(title)
-			.setPositiveButton(ok) { _, _ ->
+			.setTitle(R.string.title_gradually_increase_volume)
+			.setPositiveButton(R.string.action_ok) { _, _ ->
+
+				// Get the checked status
+				val isChecked = checkBox?.isChecked
 
 				// Call the listener
-				callOnGraduallyIncreaseVolumeListener()
+				onGraduallyIncreaseVolumeListener?.onGraduallyIncreaseVolume(isChecked!!)
 
 			}
-			.setNegativeButton(cancel) { _, _ ->
+			.setNegativeButton(R.string.action_cancel) { _, _ ->
 			}
 			.setView(R.layout.dlg_alarm_gradually_increase_volume)
 			.create()
@@ -105,47 +84,26 @@ class NacGraduallyIncreaseVolumeDialog
 		// Super
 		super.onResume()
 
-		// Get the container of the dialog
+		// Get the container of the dialog and the text view
 		val container = dialog!!.findViewById<RelativeLayout>(R.id.should_gradually_increase_volume)
+		val textView: TextView = dialog!!.findViewById(R.id.should_gradually_increase_volume_summary)
 
-		// Set the checkbox and summary views
-		graduallyIncreaseVolumeCheckBox = dialog!!.findViewById(R.id.should_gradually_increase_volume_checkbox)
-		graduallyIncreaseVolumeSummary = dialog!!.findViewById(R.id.should_gradually_increase_volume_summary)
+		// Set the member variable
+		checkBox = dialog!!.findViewById(R.id.should_gradually_increase_volume_checkbox)
 
-		// Set the listener
-		container.setOnClickListener {
-
-			// Toggle the checkbox
-			toggleShouldGraduallyIncreaseVolume()
-
-			// Setup the summary
-			setupShouldGraduallyIncreaseVolumeSummary()
-
-		}
+		// Set the status of the checkbox
+		checkBox!!.isChecked = defaultShouldGraduallyIncreaseVolume
 
 		// Setup the views
-		setupShouldGraduallyIncreaseVolume()
-		setupShouldGraduallyIncreaseVolumeColor()
-	}
-
-	/**
-	 * Setup the check box and summary text for whether volume should be
-	 * gradually increased or not.
-	 */
-	private fun setupShouldGraduallyIncreaseVolume()
-	{
-		// Set the status of the checkbox
-		graduallyIncreaseVolumeCheckBox!!.isChecked =
-			defaultShouldGraduallyIncreaseVolume
-
-		// Setup the summary
-		setupShouldGraduallyIncreaseVolumeSummary()
+		setupOnClickListener(container, textView)
+		setupCheckBoxColor()
+		setupTextView(textView)
 	}
 
 	/**
 	 * Setup the color of the gradually increase volume check box.
 	 */
-	private fun setupShouldGraduallyIncreaseVolumeColor()
+	private fun setupCheckBoxColor()
 	{
 		// Get the colors for the boolean states
 		val colors = intArrayOf(sharedPreferences!!.themeColor, Color.GRAY)
@@ -154,13 +112,30 @@ class NacGraduallyIncreaseVolumeDialog
 		val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
 
 		// Set the state list of the checkbox
-		graduallyIncreaseVolumeCheckBox!!.buttonTintList = ColorStateList(states, colors)
+		checkBox!!.buttonTintList = ColorStateList(states, colors)
+	}
+
+	/**
+	 * Setup the on click listener of the container.
+	 */
+	private fun setupOnClickListener(container: RelativeLayout, textView: TextView)
+	{
+		// Set the listener
+		container.setOnClickListener {
+
+			// Toggle the checkbox
+			checkBox!!.isChecked = !shouldGraduallyIncreaseVolume
+
+			// Setup the summary
+			setupTextView(textView)
+
+		}
 	}
 
 	/**
 	 * Setup the summary text for whether volume should be gradually increased or not.
 	 */
-	private fun setupShouldGraduallyIncreaseVolumeSummary()
+	private fun setupTextView(textView: TextView)
 	{
 		// Determine the text ID to use based on whether restrict volume will
 		// be used or not
@@ -174,16 +149,7 @@ class NacGraduallyIncreaseVolumeDialog
 		}
 
 		// Set the text
-		graduallyIncreaseVolumeSummary!!.setText(textId)
-	}
-
-	/**
-	 * Toggle whether volume should be gradually increased or not.
-	 */
-	private fun toggleShouldGraduallyIncreaseVolume()
-	{
-		graduallyIncreaseVolumeCheckBox!!.isChecked =
-			!shouldGraduallyIncreaseVolume
+		textView.setText(textId)
 	}
 
 	companion object

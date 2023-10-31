@@ -2,7 +2,6 @@ package com.nfcalarmclock.view.dayofweek
 
 import android.widget.LinearLayout
 import com.nfcalarmclock.R
-import com.nfcalarmclock.shared.NacSharedConstants
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacCalendar.Day
 import com.nfcalarmclock.view.dayofweek.NacDayButton.OnDayChangedListener
@@ -28,9 +27,9 @@ class NacDayOfWeek(
 	 * that the NacDayOfWeek class will handle the click event, and execute the
 	 * default action.
 	 */
-	interface OnWeekChangedListener
+	fun interface OnWeekChangedListener
 	{
-		fun onWeekChanged(button: NacDayButton?, day: Day?): Boolean
+		fun onWeekChanged(button: NacDayButton, day: Day)
 	}
 
 	/**
@@ -70,8 +69,11 @@ class NacDayOfWeek(
 			// Iterate over each day in the week
 			for (d in NacCalendar.WEEK)
 			{
+				// Get the button
+				val button = getDayButton(d)
+
 				// Check if the day is enabled
-				if (isDayEnabled(d))
+				if (button.button!!.isChecked)
 				{
 					// Add the day
 					days.add(d)
@@ -118,7 +120,7 @@ class NacDayOfWeek(
 	 *
 	 * @return The day button given a particular day.
 	 */
-	fun getDayButton(day: Day): NacDayButton
+	private fun getDayButton(day: Day): NacDayButton
 	{
 		// Get the ID
 		val id = dayToId(day)
@@ -146,28 +148,12 @@ class NacDayOfWeek(
 	}
 
 	/**
-	 * Check if the button is enabled.
-	 *
-	 * @return True if the button is enabled and false if it is not.
-	 */
-	fun isDayEnabled(day: Day): Boolean
-	{
-		// Get the button
-		val button = getDayButton(day)
-
-		// Check the button's state
-		return button.button!!.isChecked
-		//Why was I using isEnabled()? That's a method from View.
-		//return button.isEnabled();
-	}
-
-	/**
 	 * Called when a day is changed
 	 */
-	override fun onDayChanged(button: NacDayButton?)
+	override fun onDayChanged(button: NacDayButton)
 	{
-		// Get the day
-		val day = idToDay(button!!.id)
+		// Get the day or return if it is null
+		val day = idToDay(button.id) ?: return
 
 		// Call the listener
 		onWeekChangedListener?.onWeekChanged(button, day)
@@ -256,7 +242,7 @@ class NacDayOfWeek(
 	/**
 	 * Setup the day buttons.
 	 */
-	protected fun setupDayButtons()
+	private fun setupDayButtons()
 	{
 		val context = dayOfWeekView.context
 

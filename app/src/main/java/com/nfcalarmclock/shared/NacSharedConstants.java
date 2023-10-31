@@ -281,14 +281,6 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Select color error message.
-	 */
-	public String getErrorMessageSelectColor()
-	{
-		return this.getString(R.string.error_message_select_color);
-	}
-
-	/**
 	 * @return Snooze error message.
 	 */
 	public String getErrorMessageSnooze()
@@ -621,14 +613,6 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return The different text-to-speech frequencies.
-	 */
-	public List<String> getTextToSpeechFrequency()
-	{
-		return this.getStringList(R.array.tts_frequency);
-	}
-
-	/**
 	 * @return Time in.
 	 */
 	public String getTimeIn()
@@ -642,22 +626,6 @@ public class NacSharedConstants
 	public String getTimeOn()
 	{
 		return this.getString(R.string.time_on);
-	}
-
-	/**
-	 * @return Color title.
-	 */
-	public String getTitleColor()
-	{
-		return this.getString(R.string.title_color);
-	}
-
-	/**
-	 * @return Days title.
-	 */
-	public String getTitleDays()
-	{
-		return this.getString(R.string.title_days);
 	}
 
 	/**

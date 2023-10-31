@@ -10,7 +10,6 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import com.nfcalarmclock.R
 import com.nfcalarmclock.view.dialog.NacDialogFragment
-import java.util.Arrays
 
 /**
  * A way for users to select the audio source that the alarm media should
@@ -60,14 +59,6 @@ class NacAudioSourceDialog
 	var onAudioSourceSelectedListener: OnAudioSourceSelectedListener? = null
 
 	/**
-	 * Call the OnAudioSourceSelectedListener object, if it has been set.
-	 */
-	private fun callOnAudioSourceSelectedListener()
-	{
-		onAudioSourceSelectedListener?.onAudioSourceSelected(audioSource)
-	}
-
-	/**
 	 * Called when the dialog is created.
 	 */
 	override fun onCreateDialog(savedInstanceState: Bundle?): Dialog
@@ -75,23 +66,16 @@ class NacAudioSourceDialog
 		// Setup the shared preferences
 		setupSharedPreferences()
 
-		// Get the name of the title
-		val title = getString(R.string.title_audio_source)
-
-		// Get the names of the actions
-		val ok = getString(R.string.action_ok)
-		val cancel = getString(R.string.action_cancel)
-
 		// Create the dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(title)
-			.setPositiveButton(ok) { _, _ ->
+			.setTitle(R.string.title_audio_source)
+			.setPositiveButton(R.string.action_ok) { _, _ ->
 
 				// Call the listener
-				callOnAudioSourceSelectedListener()
+				onAudioSourceSelectedListener?.onAudioSourceSelected(audioSource)
 
 			}
-			.setNegativeButton(cancel) { _, _ ->
+			.setNegativeButton(R.string.action_cancel) { _, _ ->
 			}
 			.setView(R.layout.dlg_alarm_audio_source)
 			.create()

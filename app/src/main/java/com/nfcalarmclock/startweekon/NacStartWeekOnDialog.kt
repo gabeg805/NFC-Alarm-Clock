@@ -10,6 +10,7 @@ import com.nfcalarmclock.view.dialog.NacDialogFragment
  * Show a dialog asking the user which day they want to start the week on.
  *
  * TODO: When changing start week on, will also have to change in shared
+ *
  * preferences. See NacDayOfWeekPreference
  */
 class NacStartWeekOnDialog

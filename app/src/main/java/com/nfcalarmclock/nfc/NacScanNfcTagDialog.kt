@@ -42,23 +42,16 @@ class NacScanNfcTagDialog
 		// Setup the shared preferences
 		setupSharedPreferences()
 
-		// Get the title
-		val title = getString(R.string.title_scan_nfc_tag)
-
-		// Get the name of the actions
-		val useAny = getString(R.string.action_use_any)
-		val cancel = getString(R.string.action_cancel)
-
 		// Create the dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(title)
-			.setPositiveButton(useAny) { _, _ ->
+			.setTitle(R.string.title_scan_nfc_tag)
+			.setPositiveButton(R.string.action_use_any) { _, _ ->
 
 				// Call the listener
 				onScanNfcTagListener?.onUseAnyNfcTag(alarm)
 
 			}
-			.setNegativeButton(cancel) { _, _ ->
+			.setNegativeButton(R.string.action_cancel) { _, _ ->
 
 				// Call the listener
 				onScanNfcTagListener?.onCancelNfcTagScan(alarm)

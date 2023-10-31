@@ -7,7 +7,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedConstants
-import com.nfcalarmclock.shared.NacSharedDefaults
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.view.dialog.NacScrollablePickerDialogFragment.OnScrollablePickerOptionSelectedListener
 
@@ -70,9 +69,9 @@ class NacSnoozeDurationPreference @JvmOverloads constructor(
 	 */
 	override fun onGetDefaultValue(a: TypedArray, index: Int): Any
 	{
-		val defs = NacSharedDefaults(context)
+		val defaultValue = context.resources.getInteger(R.integer.default_snooze_duration_index)
 
-		return a.getInteger(index, defs.snoozeDurationIndex)
+		return a.getInteger(index, defaultValue)
 	}
 
 	/**

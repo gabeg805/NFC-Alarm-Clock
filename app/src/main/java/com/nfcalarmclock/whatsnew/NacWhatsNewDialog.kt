@@ -46,16 +46,10 @@ class NacWhatsNewDialog
 		// Setup the shared preferences
 		setupSharedPreferences()
 
-		// Get the title
-		val title = getString(R.string.title_whats_new)
-
-		// Get the action button
-		val ok = getString(R.string.action_ok)
-
 		// Create the dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(title)
-			.setPositiveButton(ok) { _, _ ->
+			.setTitle(R.string.title_whats_new)
+			.setPositiveButton(R.string.action_ok) { _, _ ->
 
 				// Call the listener
 				onReadWhatsNewListener?.onReadWhatsNew()
@@ -101,6 +95,7 @@ class NacWhatsNewDialog
 		 * Tag for the class.
 		 */
 		const val TAG = "NacWhatsNewDialog"
+
 	}
 
 }

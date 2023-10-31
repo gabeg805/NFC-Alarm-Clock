@@ -46,13 +46,15 @@ abstract class NacDialogFragment
 		val alertDialog = dialog as AlertDialog?
 		val okButton = alertDialog!!.getButton(DialogInterface.BUTTON_POSITIVE)
 		val cancelButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+		val neutralButton = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
 
 		// Get the theme color
 		val themeColor = sharedPreferences!!.themeColor
 
 		// Set the colors
 		okButton.setTextColor(themeColor)
-		cancelButton.setTextColor(themeColor)
+		cancelButton?.setTextColor(themeColor)
+		neutralButton?.setTextColor(themeColor)
 	}
 
 	/**

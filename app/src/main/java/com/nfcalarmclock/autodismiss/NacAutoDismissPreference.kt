@@ -7,7 +7,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedConstants
-import com.nfcalarmclock.shared.NacSharedDefaults
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.view.dialog.NacScrollablePickerDialogFragment.OnScrollablePickerOptionSelectedListener
 
@@ -59,9 +58,8 @@ class NacAutoDismissPreference @JvmOverloads constructor(
 	override fun getSummary(): CharSequence?
 	{
 		val cons = NacSharedConstants(context)
-		val value = autoDismissIndex
 
-		return NacSharedPreferences.getAutoDismissSummary(cons, value)
+		return NacSharedPreferences.getAutoDismissSummary(cons, autoDismissIndex)
 	}
 
 	/**
@@ -71,9 +69,9 @@ class NacAutoDismissPreference @JvmOverloads constructor(
 	 */
 	override fun onGetDefaultValue(a: TypedArray, index: Int): Any
 	{
-		val defs = NacSharedDefaults(context)
+		val defaultValue = context.resources.getInteger(R.integer.default_auto_dismiss_index)
 
-		return a.getInteger(index, defs.autoDismissIndex)
+		return a.getInteger(index, defaultValue)
 	}
 
 	/**

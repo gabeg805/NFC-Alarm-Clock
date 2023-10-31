@@ -8,9 +8,6 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content">
 
-		<!--
-			app:backgroundTint="@color/card_toggle_button"
-		-->
 		<com.google.android.material.button.MaterialButton
 			android:id="@+id/nac_day_button"
 			android:layout_width="wrap_content"
@@ -25,6 +22,7 @@
 			android:textColor="@color/gray"
 			android:textSize="@dimen/tsz_normal"
 			android:text=""
+			android:enabled="false"
 			app:backgroundTint="@color/white"
 			app:cornerRadius="@dimen/radius_day_filled"
 			/>

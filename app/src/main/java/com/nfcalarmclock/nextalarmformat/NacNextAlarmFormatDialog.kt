@@ -24,11 +24,18 @@ class NacNextAlarmFormatDialog
 	 * This will be changed externally.
 	 */
 	var defaultNextAlarmFormatIndex: Int = 0
+		set(value) {
+			// Set the current index
+			currentSelectedNextAlarmFormatIndex = value
+
+			// Set the backing field
+			field = value
+		}
 
 	/**
 	 * The current next alarm format index.
 	 */
-	private var currentSelectedNextAlarmFormatIndex: Int = defaultNextAlarmFormatIndex
+	private var currentSelectedNextAlarmFormatIndex: Int = 0
 
 	/**
 	 * Listener for when an audio option is clicked.
