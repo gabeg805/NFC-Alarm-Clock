@@ -15,7 +15,6 @@ import android.view.MotionEvent
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import com.nfcalarmclock.R
-import com.nfcalarmclock.util.NacUtility
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.roundToInt
@@ -107,32 +106,27 @@ class NacColorPicker : RelativeLayout
 	/**
 	 * Hue of the colors (solid color).
 	 */
-	//private var huePaint: Paint? = null
 	private var huePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
 	/**
 	 * Color saturation (gradient from white to the actual color).
 	 */
-	//private var saturationPaint: Paint? = null
 	private var saturationPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
 	/**
 	 * Value of the color.
 	 */
-	//private var valuePaint: Paint? = null
 	private var valuePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
 	/**
 	 * Rectangle showing shades of the selected color.
 	 */
-	//private var valueRect: RectF? = null
 	private var valueRect: RectF = RectF()
 
 	/**
 	 * Hue, saturation, and value of the selected color.
 	 */
-	var hsv: FloatArray = floatArrayOf(0.0f, 0.0f, 1.0f)
-		private set
+	private var hsv: FloatArray = floatArrayOf(0.0f, 0.0f, 1.0f)
 
 	/**
 	 * The color that was selected.
@@ -148,10 +142,6 @@ class NacColorPicker : RelativeLayout
 
 			// Convert RGB to HSV
 			Color.RGBToHSV(red, green, blue, hsv)
-
-			// Set the position of the color selector
-			//this.setColorSelectorPosition()
-			//this.setShaderSelectorPosition()
 		}
 
 	/**
@@ -236,9 +226,6 @@ class NacColorPicker : RelativeLayout
 		setHsv(hue, sat, value)
 
 		// Set the new color selector position
-		//this.setColorSelectorPosition()
-
-		// Set the new color selector position
 		this.setColorSelectorPosition(eventX, eventY)
 
 		// Redraw everything
@@ -253,7 +240,7 @@ class NacColorPicker : RelativeLayout
 	private fun calculateShaderSelection(eventX: Float, eventY: Float)
 	{
 		// Touch event was not in the color picker rectangle
-		if (!valueRect!!.contains(eventX, eventY))
+		if (!valueRect.contains(eventX, eventY))
 		{
 			return
 		}
@@ -265,9 +252,6 @@ class NacColorPicker : RelativeLayout
 
 		// Set the new HSV
 		setHsv(hue, sat, value)
-
-		// Set the new color selector position
-		//this.setColorSelectorPosition()
 
 		// Set the new shader position
 		this.setShaderSelectorPosition(eventX)
@@ -297,8 +281,8 @@ class NacColorPicker : RelativeLayout
 			centerColor, edgeColor, Shader.TileMode.CLAMP)
 
 		// Set the shaders
-		huePaint!!.shader = hueShader
-		saturationPaint!!.shader = satShader
+		huePaint.shader = hueShader
+		saturationPaint.shader = satShader
 	}
 
 	/**
@@ -312,21 +296,14 @@ class NacColorPicker : RelativeLayout
 		val top = measuredHeight - paddingTop - shaderHeight
 		val bottom = (measuredHeight - paddingBottom).toFloat()
 
-		// Initialize the rectangle if it has not been initialized
-		//if (valueRect == null)
-		//{
-		//	valueRect = RectF()
-		//}
-
 		// Set the rectangle
-		//valueRect!![left, top, right] = bottom
-		valueRect!!.set(left, top, right, bottom)
+		valueRect.set(left, top, right, bottom)
 	}
 
 	/**
 	 * Draw the color shading gradient.
 	 */
-	fun drawColorShader()
+	private fun drawColorShader()
 	{
 		// Define the colors and shader
 		val colorStart = Color.HSVToColor(floatArrayOf(hsv[0], hsv[1], 0.0f))
@@ -335,7 +312,7 @@ class NacColorPicker : RelativeLayout
 			colorEnd, Shader.TileMode.CLAMP)
 
 		// Set the shader
-		valuePaint!!.shader = valueShader
+		valuePaint.shader = valueShader
 	}
 
 	/**
@@ -448,10 +425,6 @@ class NacColorPicker : RelativeLayout
 		attributes = Attributes(context, attrs)
 		colorSelector = findViewById(R.id.color_selector)
 		shaderSelector = findViewById(R.id.shader_selector)
-		//huePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-		//saturationPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-		//valuePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-		//hsv = floatArrayOf(0.0f, 0.0f, 1.0f)
 	}
 
 	/**
@@ -508,9 +481,9 @@ class NacColorPicker : RelativeLayout
 		val curve = context.resources.getDimension(R.dimen.radius)
 
 		// Draw the circle
-		canvas.drawCircle(centerX, centerY, radius, huePaint!!)
-		canvas.drawCircle(centerX, centerY, radius, saturationPaint!!)
-		canvas.drawRoundRect(valueRect!!, curve, curve, valuePaint!!)
+		canvas.drawCircle(centerX, centerY, radius, huePaint)
+		canvas.drawCircle(centerX, centerY, radius, saturationPaint)
+		canvas.drawRoundRect(valueRect, curve, curve, valuePaint)
 
 		// Set the color and shader selector positions
 		this.setColorSelectorPosition()
@@ -644,6 +617,24 @@ class NacColorPicker : RelativeLayout
 	}
 
 	/**
+	 * Select a color
+	 *
+	 * @param color The color to select.
+	 */
+	fun selectColor(color: Int)
+	{
+		// Set the color of the color picker, example color, and edit text
+		this.color = color
+
+		// Set the position of the color selector
+		setColorSelectorPosition()
+
+		// Redraw the color shader for the new color
+		drawColorShader()
+		invalidate()
+	}
+
+	/**
 	 * Set the hue, saturation, and value.
 	 */
 	private fun setHsv(hue: Float, sat: Float, value: Float)
@@ -670,7 +661,7 @@ class NacColorPicker : RelativeLayout
 	/**
 	 * Set the color selector position to the current color.
 	 */
-	fun setColorSelectorPosition()
+	private fun setColorSelectorPosition()
 	{
 		// Get the X and Y positions
 		val x = this.getColorSelectionX(hsv)
@@ -699,7 +690,7 @@ class NacColorPicker : RelativeLayout
 	/**
 	 * Set shader selector position to the current color.
 	 */
-	fun setShaderSelectorPosition()
+	private fun setShaderSelectorPosition()
 	{
 		// Get the shader selector position in the X direction
 		val x = getShaderSelectionX(hsv)
@@ -756,4 +747,5 @@ class NacColorPicker : RelativeLayout
 		}
 
 	}
+
 }

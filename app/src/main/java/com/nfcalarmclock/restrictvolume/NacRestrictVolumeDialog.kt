@@ -12,6 +12,8 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.view.dialog.NacDialogFragment
 
 /**
+ * Enable or disable the option to restrict the volume of an alarm that goes
+ * off.
  */
 class NacRestrictVolumeDialog
 	: NacDialogFragment()

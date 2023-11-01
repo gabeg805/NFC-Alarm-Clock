@@ -27,6 +27,8 @@ import com.nfcalarmclock.view.dialog.NacDialogFragment
 
 /**
  * Handle displaying the color picker dialog.
+ *
+ * TODO: Have a fixed "#" in front of the edit text.
  */
 class NacColorPickerDialog
 	: NacDialogFragment(),
@@ -59,7 +61,7 @@ class NacColorPickerDialog
 	/**
 	 * Color picker.
 	 */
-	var colorPicker: NacColorPicker? = null
+	private var colorPicker: NacColorPicker? = null
 
 	/**
 	 * Example of the color.
@@ -78,27 +80,22 @@ class NacColorPickerDialog
 		get() = colorPicker!!.color
 		set(value)
 		{
-			// Set the color picker color
-			colorPicker!!.color = value
+			// Select the color of the color picker. This will set the HSV,
+			// move the color selector, and redraw the shader
+			colorPicker!!.selectColor(value)
 
 			// Set the example color
 			exampleColor!!.setColorFilter(value, PorterDuff.Mode.SRC)
 
 			// Set the hex color in the edit text
-			editText!!.setText(hexColor)
+			editText!!.setText(colorPicker!!.hexColor)
 		}
 
 	/**
 	 * The EditText color.
 	 */
-	val editTextColor: String
+	private val editTextColor: String
 		get() = editText!!.text.toString()
-
-	/**
-	 * The last chosen color of the dialog.
-	 */
-	val hexColor: String
-		get() = colorPicker!!.hexColor
 
 	/**
 	 * Listener for when the color is selected.
@@ -137,27 +134,26 @@ class NacColorPickerDialog
 	private fun closeKeyboard()
 	{
 		val context = requireContext()
-		val flags = InputMethodManager.HIDE_IMPLICIT_ONLY
 
 		// Check the Android version. It needs to be done differently depending on
 		// the version due to deprecation
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
 		{
 			val inputManager = context.getSystemService(InputMethodManager::class.java)
-			//val token = dialog!!.currentFocus?.windowToken
-			val token = dialog!!.window!!.attributes.token
+			val token = dialog!!.currentFocus?.windowToken
 
 			// Hide the keyboard
-			// TODO: Get this to hide
-			inputManager.hideSoftInputFromWindow(token, flags)
+			inputManager.hideSoftInputFromWindow(token, 0)
 		}
 		// API < 31
 		else
 		{
 			val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+			//val flags = InputMethodManager.HIDE_IMPLICIT_ONLY
 
 			// Hide the keyboard
-			inputManager.toggleSoftInput(flags, 0)
+			//inputManager.toggleSoftInput(flags, 0)
+			inputManager.toggleSoftInput(0, 0)
 		}
 	}
 

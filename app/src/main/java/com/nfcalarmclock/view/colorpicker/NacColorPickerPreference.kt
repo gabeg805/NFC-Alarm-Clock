@@ -10,7 +10,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
 import com.nfcalarmclock.R
-import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.view.colorpicker.NacColorPickerDialog.OnColorSelectedListener
 import com.nfcalarmclock.view.colorpicker.NacColorPickerDialog.OnDefaultColorSelectedListener
 
@@ -106,13 +105,6 @@ class NacColorPickerPreference @JvmOverloads constructor(
 	{
 		// Set the color of the color picker, example color, and edit text
 		dialog.color = defaultColorValue
-
-		// Set the position of the color selector
-		dialog.colorPicker!!.setColorSelectorPosition()
-
-		// Redraw the color shader for the new color
-		dialog.colorPicker!!.drawColorShader()
-		dialog.colorPicker!!.invalidate()
 	}
 
 	/**

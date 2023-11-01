@@ -41,14 +41,6 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Cancel action.
-	 */
-	public String getActionCancel()
-	{
-		return this.getString(R.string.action_cancel);
-	}
-
-	/**
 	 * @return Clear action.
 	 */
 	@SuppressWarnings("unused")
@@ -58,27 +50,11 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Default action.
-	 */
-	public String getActionDefault()
-	{
-		return this.getString(R.string.action_default);
-	}
-
-	/**
 	 * @return Dismiss action.
 	 */
 	public String getActionDismiss()
 	{
 		return this.getString(R.string.action_alarm_dismiss);
-	}
-
-	/**
-	 * @return Ok action.
-	 */
-	public String getActionOk()
-	{
-		return this.getString(R.string.action_ok);
 	}
 
 	/**
@@ -262,14 +238,6 @@ public class NacSharedConstants
 	public String getErrorMessagePlayAudio()
 	{
 		return this.getString(R.string.error_message_play_audio);
-	}
-
-	/**
-	 * @return Play file error message.
-	 */
-	public String getErrorMessagePlayFile()
-	{
-		return this.getString(R.string.error_message_play_file);
 	}
 
 	/**
@@ -626,14 +594,6 @@ public class NacSharedConstants
 	public String getTimeOn()
 	{
 		return this.getString(R.string.time_on);
-	}
-
-	/**
-	 * @return Folder selected title.
-	 */
-	public String getTitleFolderSelected()
-	{
-		return this.getString(R.string.title_folder_selected);
 	}
 
 	/**
