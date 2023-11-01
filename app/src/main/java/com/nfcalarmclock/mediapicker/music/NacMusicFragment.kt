@@ -200,7 +200,7 @@ class NacMusicFragment
 	/**
 	 * Show a warning indicating that a music directory was selected.
 	 */
-	fun showWarningDirectorySelected(view: View?)
+	private fun showWarningDirectorySelected(view: View?)
 	{
 		// Create the dialog
 		val dialog = NacDirectorySelectedWarningDialog()

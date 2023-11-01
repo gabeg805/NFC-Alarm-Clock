@@ -820,7 +820,6 @@ public class NacCardHolder
 	 */
 	public void doDismissEarlyButtonClick()
 	{
-		Context context = this.getContext();
 		NacAlarm alarm = this.getAlarm();
 
 		alarm.dismissEarly();
@@ -2644,13 +2643,13 @@ public class NacCardHolder
 	 */
 	public void setSummaryDaysView()
 	{
+		Context context = this.getContext();
 		NacSharedPreferences shared = this.getSharedPreferences();
-		NacSharedConstants cons = this.getSharedConstants();
 		NacAlarm alarm = this.getAlarm();
 		TextView tv = this.getSummaryDaysView();
 
 		int start = shared.getStartWeekOn();
-		String string = NacCalendar.Days.toString(cons, alarm, start);
+		String string = NacCalendar.Days.toString(context, alarm, start);
 		String text = tv.getText().toString();
 
 		if (!text.equals(string))

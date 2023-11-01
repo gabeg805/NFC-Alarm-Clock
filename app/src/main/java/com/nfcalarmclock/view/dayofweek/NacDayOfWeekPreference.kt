@@ -62,7 +62,17 @@ class NacDayOfWeekPreference @JvmOverloads constructor(
 	 */
 	override fun getSummary(): CharSequence?
 	{
-		return sharedPreferences.daysSummary
+		// Get the default days
+		val value = sharedPreferences.days
+
+		// Get the day to start the week on
+		val start = sharedPreferences.startWeekOn
+
+		// Convert the default days to a string
+		val days = NacCalendar.Days.toString(context, value, start)
+
+		// Return the days string, otherwise return the "None" string
+		return days.ifEmpty { context.getString(R.string.none) }
 	}
 
 	/**

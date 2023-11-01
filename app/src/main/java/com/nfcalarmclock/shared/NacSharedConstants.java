@@ -41,15 +41,6 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Clear action.
-	 */
-	@SuppressWarnings("unused")
-	public String getActionClear()
-	{
-		return this.getString(R.string.action_clear);
-	}
-
-	/**
 	 * @return Dismiss action.
 	 */
 	public String getActionDismiss()
@@ -127,29 +118,6 @@ public class NacSharedConstants
 	public List<String> getAutoDismissSummaries()
 	{
 		return this.getStringList(R.array.auto_dismiss_summaries);
-	}
-
-	/**
-	 * @return The days of week.
-	 */
-	public List<String> getDaysOfWeek()
-	{
-		return this.getStringList(R.array.days_of_week);
-	}
-
-	/**
-	 * @return The days of week abbreviated.
-	 */
-	public List<String> getDaysOfWeekAbbr()
-	{
-		List<String> dow = this.getDaysOfWeek();
-
-		for (int i=0; i < dow.size(); i++)
-		{
-			dow.set(i, dow.get(i).substring(0, 3));
-		}
-
-		return dow;
 	}
 
 	/**
@@ -270,14 +238,6 @@ public class NacSharedConstants
 	public String getErrorMessageSnoozedModify()
 	{
 		return this.getString(R.string.error_message_snoozed_modify);
-	}
-
-	/**
-	 * @return Everyday.
-	 */
-	public String getEveryday()
-	{
-		return this.getString(R.string.dow_everyday);
 	}
 
 	/**
@@ -497,15 +457,6 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Speak frequency.
-	 */
-	@SuppressWarnings("unused")
-	public String getSpeakFrequency()
-	{
-		return this.getString(R.string.speak_frequency);
-	}
-
-	/**
 	 * @return Speak to me words in the designated language.
 	 */
 	public String getSpeakToMe(Context context)
@@ -597,31 +548,6 @@ public class NacSharedConstants
 	}
 
 	/**
-	 * @return Alarm name title.
-	 */
-	@SuppressWarnings("unused")
-	public String getTitleName()
-	{
-		return this.getString(R.string.title_name);
-	}
-
-	/**
-	 * @return Today.
-	 */
-	public String getToday()
-	{
-		return this.getString(R.string.dow_today);
-	}
-
-	/**
-	 * @return Tomorrow.
-	 */
-	public String getTomorrow()
-	{
-		return this.getString(R.string.dow_tomorrow);
-	}
-
-	/**
 	 * @return Unit day.
 	 */
 	public String getUnitDay(int quantity)
@@ -667,22 +593,6 @@ public class NacSharedConstants
 	public String getUpcomingNotification()
 	{
 		return this.getString(R.string.title_upcoming_alarm);
-	}
-
-	/**
-	 * @return Weekdays.
-	 */
-	public String getWeekdays()
-	{
-		return this.getString(R.string.dow_weekdays);
-	}
-
-	/**
-	 * @return Weekend.
-	 */
-	public String getWeekend()
-	{
-		return this.getString(R.string.dow_weekend);
 	}
 
 	/**

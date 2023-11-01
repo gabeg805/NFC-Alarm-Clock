@@ -2,12 +2,13 @@ package com.nfcalarmclock.shared;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import androidx.preference.PreferenceManager;
 
 import com.nfcalarmclock.R;
-import com.nfcalarmclock.util.NacCalendar;
 import com.nfcalarmclock.file.NacFile;
 import com.nfcalarmclock.media.NacMedia;
+
 import java.util.List;
 
 /**
@@ -343,16 +344,6 @@ public class NacSharedPreferences
 		String key = this.getKeys().getShouldRestrictVolume();
 
 		this.saveBoolean(key, shouldRestrict, false);
-	}
-
-	/**
-	 * Edit the current snooze count for an alarm with the given ID.
-	 */
-	public void editSnoozeCount(long id, int count)
-	{
-		String key = NacSharedKeys.getSnoozeCount(id);
-
-		this.saveInt(key, count, false);
 	}
 
 	/**
@@ -712,19 +703,6 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @return The days summary.
-	 */
-	public String getDaysSummary()
-	{
-		NacSharedConstants cons = this.getConstants();
-		int value = this.getDays();
-		int start = this.getStartWeekOn();
-		String days = NacCalendar.Days.toString(cons, value, start);
-
-		return !days.isEmpty() ? days : cons.getNone();
-	}
-
-	/**
 	 * @return The shared defaults.
 	 */
 	public NacSharedDefaults getDefaults()
@@ -898,30 +876,6 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @see #getMediaSummary(Context, NacSharedConstants, String)
-	 */
-	@SuppressWarnings("unused")
-	public String getMediaSummary()
-	{
-		Context context = this.getContext();
-		NacSharedConstants cons = this.getConstants();
-		String path = this.getMediaPath();
-
-		return NacSharedPreferences.getMediaSummary(context, cons, path);
-	}
-
-	/**
-	 * @return The media summary.
-	 */
-	public static String getMediaSummary(Context context, NacSharedConstants cons,
-		String path)
-	{
-		String name = NacMedia.getTitle(context, path);
-
-		return !name.isEmpty() ? name : cons.getNone();
-	}
-
-	/**
 	 * @return The meridian color.
 	 */
 	public int getMeridianColor(String meridian)
@@ -980,28 +934,6 @@ public class NacSharedPreferences
 	public static String getNameMessage(NacSharedConstants cons, String name)
 	{
 		return !name.isEmpty() ? name : cons.getName();
-	}
-
-	/**
-	 * @see #getNameSummary(NacSharedConstants, String)
-	 */
-	@SuppressWarnings("unused")
-	public String getNameSummary()
-	{
-		NacSharedConstants cons = this.getConstants();
-		String name = this.getName();
-
-		return NacSharedPreferences.getNameSummary(cons, name);
-	}
-
-	/**
-	 * @return The name summary.
-	 */
-	public static String getNameSummary(NacSharedConstants cons, String name)
-	{
-		return (name != null) && !name.isEmpty()
-			? name.replace("\n", " ")
-			: cons.getNone();
 	}
 
 	/**
@@ -1126,17 +1058,6 @@ public class NacSharedPreferences
 		boolean value = this.getDefaults().getShufflePlaylist();
 
 		return this.getBoolean(key, value);
-	}
-
-	/**
-	 * @return The snooze count.
-	 */
-	public int getSnoozeCount(long id)
-	{
-		String key = NacSharedKeys.getSnoozeCount(id);
-		int value = this.getDefaults().getSnoozeCount();
-
-		return this.getInt(key, value);
 	}
 
 	/**
@@ -1394,30 +1315,12 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * Set the rate my app counter to the postpone value.
-	 */
-	public void postponeRateMyApp()
-	{
-		int postpone = -3 * this.getDefaults().getRateMyAppLimit();
-		this.editRateMyAppCounter(postpone);
-	}
-
-	/**
 	 * Set the rate my app counter to the rated value.
 	 */
 	public void ratedRateMyApp()
 	{
 		int rated = this.getDefaults().getRateMyAppRated();
 		this.editRateMyAppCounter(rated);
-	}
-
-	/**
-	 * Reset the rate my app counter.
-	 */
-	public void resetRateMyApp()
-	{
-		int reset = this.getDefaults().getRateMyAppCounter();
-		this.editRateMyAppCounter(reset);
 	}
 
 	/**

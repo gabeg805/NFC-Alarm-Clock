@@ -45,8 +45,7 @@ open class NacMediaFragment
 	/**
 	 * The initial selection flag, if this is the first time the fragment is being selected.
 	 */
-	var isInitialSelection = true
-		private set
+	private var isInitialSelection = true
 
 	/**
 	 * Cleanup the media player.
@@ -100,7 +99,7 @@ open class NacMediaFragment
 	 */
 	protected fun isSelectedPath(path: String): Boolean
 	{
-		return !mediaPath.isEmpty() && mediaPath == path
+		return mediaPath.isNotEmpty() && (mediaPath == path)
 	}
 
 	/**
@@ -134,14 +133,6 @@ open class NacMediaFragment
 
 		// Reset the media player
 		safeReset()
-	}
-
-	/**
-	 * Called when the fragment is first selected by the user.
-	 */
-	protected fun onInitialSelection()
-	{
-		isInitialSelection = false
 	}
 
 	/**
@@ -193,9 +184,10 @@ open class NacMediaFragment
 	 */
 	open fun onSelected()
 	{
+		// Toggle the flag if this is the initial selection
 		if (isInitialSelection)
 		{
-			onInitialSelection()
+			isInitialSelection = false
 		}
 	}
 

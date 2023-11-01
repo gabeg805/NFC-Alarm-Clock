@@ -3,6 +3,7 @@ package com.nfcalarmclock.util;
 import android.content.Context;
 import android.text.format.DateFormat;
 
+import com.nfcalarmclock.R;
 import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
@@ -533,58 +534,35 @@ public class NacCalendar
 		}
 
 		/**
-		 * Convert from a Calendar day to an index.
-		 *
-		 * @param  day  A Calendar day.
-		 *
-		 * @return The index corresponding to the given day.
-		 */
-		public static int toIndex(Day day)
-		{
-			int index = 0;
-
-			for (Day d : NacCalendar.WEEK)
-			{
-				if (d == day)
-				{
-					return index;
-				}
-
-				index++;
-			}
-
-			return index;
-		}
-
-		/**
-		 * @see #toIndex(NacCalendar.Day)
-		 */
-		public static int toIndex(int day)
-		{
-			Day weekday = NacCalendar.Days.toWeekDay(day);
-			return NacCalendar.Days.toIndex(weekday);
-		}
-
-		/**
 		 * Convert an alarm to a string of days.
 		 * <p>
 		 * If no days are specified and the alarm is enable.
 		 */
-		public static String toString(NacSharedConstants cons, NacAlarm alarm,
+		public static String toString(Context context, NacAlarm alarm,
 			int start)
 		{
+			// Get the days
 			EnumSet<Day> days = alarm.getDays();
-			String string = NacCalendar.Days.toString(cons, days, start);
+			String string = NacCalendar.Days.toString(context, days, start);
 
+			// Check if unable to convert the days to a string or if there are no days selected
 			if (string.isEmpty() || !alarm.getAreDaysSelected())
 			{
+				// Get the current day
 				int now = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+
+				// Get the next time the alarm will ring
 				int next = NacCalendar.toNextOneTimeCalendar(alarm)
 					.get(Calendar.DAY_OF_MONTH);
 
-				return (now == next) ? cons.getToday() : cons.getTomorrow();
+				// Check if the two days are the same, that means that the name
+				// should be today. Otherwise, it should show tomorrow
+				return (now == next)
+					? context.getString(R.string.dow_today)
+					: context.getString(R.string.dow_tomorrow);
 			}
 
+			//
 			return string;
 		}
 
@@ -593,55 +571,82 @@ public class NacCalendar
 		 *
 		 * @return A string of the days.
 		 *
-		 * @param  cons  Shared constants.
+		 * @param  context  Context.
 		 * @param  daysToConvert  The set of days to convert.
 		 * @param  start  The day to start the week on.
 		 */
-		public static String toString(NacSharedConstants cons,
+		public static String toString(Context context,
 			EnumSet<Day> daysToConvert, int start)
 		{
+
+			// Every day
 			if (NacCalendar.Days.isEveryday(daysToConvert))
 			{
-				return cons.getEveryday();
+				return context.getString(R.string.dow_everyday);
 			}
+			// Weekdays
 			else if (NacCalendar.Days.isWeekday(daysToConvert))
 			{
-				return cons.getWeekdays();
+				return context.getString(R.string.dow_weekdays);
 			}
+			// Weekends
 			else if (NacCalendar.Days.isWeekend(daysToConvert))
 			{
-				return cons.getWeekend();
+				return context.getString(R.string.dow_weekend);
 			}
 
-			List<String> dow = cons.getDaysOfWeekAbbr();
+			// Get the days of week
+			String[] daysOfWeek = context.getResources().getStringArray(R.array.days_of_week);
+			List<String> dow = new ArrayList<>();
+
+			// Abbreviate the days of week
+			for (String s : daysOfWeek)
+			{
+				// Get the first 3 characters in the day of week
+				String abbrv = s.substring(0, 3);
+
+				// Add it to the list
+				dow.add(abbrv);
+			}
+
+			//List<String> dow = cons.getDaysOfWeekAbbr();
 			List<Day> days = Arrays.asList(Day.values());
 			StringBuilder summary = new StringBuilder(32);
 
+			// Iterate over each day in the week
 			for (int count=0, i=start;
 				count < WEEK_LENGTH;
 				count++, i=(i+1) % WEEK_LENGTH)
 			{
+
+				// Check if the day is in the enum set
 				if (daysToConvert.contains(days.get(i)))
 				{
+					// Add a dot in between each day
 					if (summary.length() != 0)
 					{
 						summary.append(" \u2027 ");
 					}
 
+					// Append the day
 					summary.append(dow.get(i));
 				}
+
 			}
 
+			// Convert the string builder to a string
 			return summary.toString();
 		}
 
 		/**
-		 * @see #toString(NacSharedConstants, EnumSet, int)
+		 * @see #toString(Context, EnumSet, int)
 		 */
-		public static String toString(NacSharedConstants cons, int value, int start)
+		public static String toString(Context context, int value, int start)
 		{
+			// Convert value of days to enum set
 			EnumSet<Day> days = NacCalendar.Days.valueToDays(value);
-			return NacCalendar.Days.toString(cons, days, start);
+
+			return NacCalendar.Days.toString(context, days, start);
 		}
 
 		/**

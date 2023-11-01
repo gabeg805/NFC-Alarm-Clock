@@ -6,8 +6,6 @@ import android.util.AttributeSet
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import com.nfcalarmclock.R
-import com.nfcalarmclock.shared.NacSharedConstants
-import com.nfcalarmclock.shared.NacSharedPreferences
 
 /**
  * Preference that displays the name of the alarm.
@@ -54,11 +52,19 @@ class NacNamePreference @JvmOverloads constructor(
 	 *
 	 * @return The summary text.
 	 */
-	override fun getSummary(): CharSequence?
+	override fun getSummary(): CharSequence
 	{
-		val cons = NacSharedConstants(context)
-
-		return NacSharedPreferences.getNameSummary(cons, alarmName)
+		// Alarm name is not empty
+		return if (alarmName.isNotEmpty())
+			{
+				// Replace newlines with spaces
+				alarmName.replace("\n", " ")
+			}
+			else
+			{
+				// Return the "None" string
+				context.getString(R.string.none)
+			}
 	}
 
 	/**

@@ -61,10 +61,10 @@ class NacGeneralSettingFragment
 		if (result.resultCode == Activity.RESULT_OK)
 		{
 			// Get the media from the activity result data
-			val media = NacIntent.getMedia(result.data)
+			val mediaPath = NacIntent.getMedia(result.data)
 
 			// Set the media for this preference
-			mediaPreference!!.setMedia(media)
+			mediaPreference!!.setAndPersistMediaPath(mediaPath)
 		}
 	}
 
