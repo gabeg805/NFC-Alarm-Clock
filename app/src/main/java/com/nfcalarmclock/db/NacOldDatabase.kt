@@ -7,9 +7,9 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
+import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.media.NacMedia
-import com.nfcalarmclock.shared.NacSharedConstants
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar
 
@@ -430,11 +430,10 @@ class NacOldDatabase(
 		db.execSQL(Contract.AlarmTable.CREATE_TABLE_V5)
 
 		val shared = NacSharedPreferences(context)
-		val cons = NacSharedConstants(context)
 		val mediaPath = shared.mediaPath
 		val mediaTitle = NacMedia.getTitle(context, mediaPath)
 		val mediaType = NacMedia.getType(context, mediaPath)
-		val name = cons.exampleName
+		val name = context.getString(R.string.example_name)
 
 		// Build an alarm
 		val alarm = NacAlarm.Builder(shared)

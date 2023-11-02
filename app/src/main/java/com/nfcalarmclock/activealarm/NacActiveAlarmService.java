@@ -12,18 +12,16 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-
+import com.nfcalarmclock.R;
 import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.alarm.NacAlarmRepository;
 import com.nfcalarmclock.missedalarm.NacMissedAlarmNotification;
-import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.statistics.NacAlarmStatisticRepository;
 import com.nfcalarmclock.util.NacContext;
 import com.nfcalarmclock.util.NacIntent;
 import com.nfcalarmclock.scheduler.NacScheduler;
 import com.nfcalarmclock.util.NacUtility;
-
 import java.lang.System;
 import java.util.Calendar;
 import java.util.concurrent.ExecutorService;
@@ -236,8 +234,8 @@ public class NacActiveAlarmService
 	 */
 	private void doDismiss()
 	{
-		NacSharedConstants cons = this.getSharedConstants();
 		NacAlarm alarm = this.getAlarm();
+		String message = getString(R.string.message_alarm_dismiss);
 
 		if (alarm != null)
 		{
@@ -247,7 +245,7 @@ public class NacActiveAlarmService
 			NacScheduler.update(this, alarm);
 		}
 
-		NacUtility.quickToast(this, cons.getMessageAlarmDismiss());
+		NacUtility.quickToast(this, message);
 	}
 
 	/**
@@ -258,7 +256,6 @@ public class NacActiveAlarmService
 	private boolean doSnooze()
 	{
 		NacSharedPreferences shared = this.getSharedPreferences();
-		NacSharedConstants cons = this.getSharedConstants();
 		NacAlarm alarm = this.getAlarm();
 		Calendar cal = alarm.snooze(shared);
 
@@ -269,12 +266,15 @@ public class NacActiveAlarmService
 			this.setupRefreshMainActivity();
 			NacScheduler.update(this, alarm, cal);
 
-			NacUtility.quickToast(this, cons.getMessageAlarmSnooze());
+			String message = getString(R.string.message_alarm_snooze);
+			NacUtility.quickToast(this, message);
 			return true;
 		}
 		else
 		{
-			NacUtility.quickToast(this, cons.getErrorMessageSnooze());
+			String message = getString(R.string.error_message_snooze);
+
+			NacUtility.quickToast(this, message);
 			return false;
 		}
 	}
@@ -297,7 +297,6 @@ public class NacActiveAlarmService
 
 	/**
 	 */
-	@SuppressWarnings("deprecation")
 	public void finish()
 	{
 		// Cleanup everything
@@ -365,14 +364,6 @@ public class NacActiveAlarmService
 	}
 
 	/**
-	 * @return The shared constants.
-	 */
-	private NacSharedConstants getSharedConstants()
-	{
-		return this.getSharedPreferences().getConstants();
-	}
-
-	/**
 	 * @return The shared preferences.
 	 */
 	private NacSharedPreferences getSharedPreferences()
@@ -404,24 +395,6 @@ public class NacActiveAlarmService
 	private WakeLock getWakeLock()
 	{
 		return this.mWakeLock;
-	}
-
-	/**
-	 * Check if a duplicate service, with the same alarm, was started.
-	 *
-	 * @param  intent An Intent.
-	 *
-	 * @return True if a duplicate service was started, and False otherwise.
-	 */
-	public boolean isDuplicateServiceStarted(Intent intent)
-	{
-		NacAlarm alarm = this.getAlarm();
-		NacAlarm intentAlarm = NacIntent.getAlarm(intent);
-		String intentAction = NacIntent.getAction(intent);
-
-		return (alarm != null) && (intentAlarm != null)
-			&& intentAlarm.equals(alarm)
-			&& intentAction.equals(ACTION_START_SERVICE);
 	}
 
 	/**

@@ -9,15 +9,18 @@ import android.os.Vibrator;
 import android.os.VibratorManager;
 import android.os.VibrationEffect;
 import com.google.android.exoplayer2.Player;
+import com.nfcalarmclock.R;
 import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.media.NacAudioAttributes;
 import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.mediaplayer.NacMediaPlayer;
-import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.tts.NacTextToSpeech;
+import com.nfcalarmclock.util.NacCalendar;
 import com.nfcalarmclock.util.NacUtility;
 import java.lang.SecurityException;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Actions to take upon waking up, such as enabling NFC, playing music, etc.
@@ -260,6 +263,7 @@ public class NacWakeupProcess
 		return this.mSpeakHandler;
 	}
 
+
 	/**
 	 * @return Text-to-speech engine.
 	 */
@@ -269,15 +273,102 @@ public class NacWakeupProcess
 	}
 
 	/**
-	 * @return The time to say.
+	 * Get the words that should be said when stating the time, in the designated language.
+	 *
+	 * @return The words that should be said when stating the time, in the designated
+	 *         language.
 	 */
 	private String getTimeToSay()
 	{
 		Context context = this.getContext();
-		NacSharedPreferences shared = this.getSharedPreferences();
-		NacSharedConstants cons = shared.getConstants();
+		NacAlarm alarm = this.getAlarm();
+		String name = alarm.getName();
 
-		return cons.getSpeakToMe(context);
+		// TODO: Say the name of the alarm after the time.
+
+		// Get the locale and language
+		Locale locale = Locale.getDefault();
+		String lang = locale.getLanguage();
+
+		// Get the current hour and minute
+		Calendar calendar = Calendar.getInstance();
+		int hour = calendar.get(Calendar.HOUR_OF_DAY);
+		int minute = calendar.get(Calendar.MINUTE);
+
+		// Get the meridian (if it should be used based on the user's preferences
+		String meridian = NacCalendar.Time.getMeridian(context, hour);
+
+		// Check if the language is Spanish
+		if (lang.equals("es"))
+		{
+			return this.getTimeToSayEs(hour, minute, meridian);
+		}
+		// English
+		else
+		{
+			return this.getTimeToSayEn(hour, minute, meridian);
+		}
+	}
+
+	/**
+	 * @see #getTimeToSay()
+	 */
+	public String getTimeToSayEn(int hour, int minute, String meridian)
+	{
+		// Get the locale
+		Locale locale = Locale.getDefault();
+
+		// Check if the minute should be said as "oh" e.g. 8:05 would be eight oh five
+		String oh = (minute > 0) && (minute < 10) ? "O" : "";
+		String showMinute = minute == 0 ? "" : String.valueOf(minute);
+
+		// Check if the meridian is set. This means the time is in 12 hour format
+		if ((meridian != null) && !meridian.isEmpty())
+		{
+			// Convert the hour to 12 hour format
+			hour = NacCalendar.Time.to12HourFormat(hour);
+		}
+
+		// Return the statement that should be said
+		return String.format(locale,
+			", , The time, is, %1$d, %2$s, %3$s, %4$s",
+			hour, oh, showMinute, meridian);
+	}
+
+	/**
+	 * @see #getTimeToSay()
+	 */
+	public String getTimeToSayEs(int hour, int minute, String meridian)
+	{
+		// Get the locale
+		Locale locale = Locale.getDefault();
+
+		// Check if the meridian is null or empty. This means the time is in
+		// 24 hour format
+		if ((meridian == null) || meridian.isEmpty())
+		{
+			// Pluralize the minutes if not equal to 1
+			String plural = minute != 1 ? "s" : "";
+
+			// Return the statement that should be said
+			return String.format(locale,
+				", , Es, la hora, %1$d, con, %2$d, minuto%3$s",
+				hour, minute, plural);
+		}
+		else
+		{
+			// Convert the hour to 12 hour format
+			hour = NacCalendar.Time.to12HourFormat(hour);
+
+			// Get how the time should be said based on the hour and minute
+			String theTimeIs = (hour == 1) ? "Es, la," : "Son, las,";
+			String showMinute = minute == 0 ? "" : String.valueOf(minute);
+
+			// Return the statement that should be said
+			return String.format(locale,
+				", , %1$s %2$d, %3$s, %4$s",
+				theTimeIs, hour, showMinute, meridian);
+		}
 	}
 
 	/**
@@ -309,8 +400,6 @@ public class NacWakeupProcess
 	 */
 	private void graduallyIncreaseVolume()
 	{
-		Context context = this.getContext();
-		NacAlarm alarm = this.getAlarm();
 		NacAudioAttributes attrs = this.getAudioAttributes();
 
 		int currentVolume = attrs.getStreamVolume();
@@ -362,11 +451,10 @@ public class NacWakeupProcess
 		catch (SecurityException e)
 		{
 			Context context = this.getContext();
-			NacSharedPreferences shared = this.getSharedPreferences();
-			NacSharedConstants cons = shared.getConstants();
+			String message = context.getString(R.string.error_message_restrict_volume_change);
 
 			// Show a toast indicating that the volume could not be restricted
-			NacUtility.quickToast(context, cons.getErrorMessageRestrictVolumeChange());
+			NacUtility.quickToast(context, message);
 		}
 	}
 

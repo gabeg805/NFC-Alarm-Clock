@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.AlarmClock
+import com.nfcalarmclock.R
 import com.nfcalarmclock.activealarm.NacActiveAlarmActivity
 import com.nfcalarmclock.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
@@ -366,8 +367,9 @@ object NacIntent
 		// Check if the VIBRATE is in the intent
 		if (intent.hasExtra(AlarmClock.EXTRA_VIBRATE))
 		{
+			val defaultVibrate = context.resources.getBoolean(R.bool.default_vibrate)
 			val vibrate = intent.getBooleanExtra(AlarmClock.EXTRA_VIBRATE,
-				shared.defaults.vibrate)
+				defaultVibrate)
 			isSet = true
 
 			// Add to the alarm builder

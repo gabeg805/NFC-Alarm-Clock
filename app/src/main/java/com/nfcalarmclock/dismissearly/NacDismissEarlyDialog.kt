@@ -181,7 +181,7 @@ class NacDismissEarlyDialog
 	private fun setupTimePickerValues()
 	{
 		// Get the dismiss early times
-		val values = sharedConstants.dismissEarlyTimes
+		val values = requireContext().resources.getStringArray(R.array.dismiss_early_times).toList()
 
 		// Setup the time picker
 		timePicker!!.minValue = 0

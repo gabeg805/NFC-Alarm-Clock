@@ -4,12 +4,8 @@ import android.content.Context;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.os.Build;
-
 import com.google.android.exoplayer2.C;
-
-import com.nfcalarmclock.shared.NacSharedConstants;
-
-import java.util.List;
+import com.nfcalarmclock.R;
 
 /**
  * Audio manager.
@@ -121,36 +117,37 @@ public class NacAudioManager
 	 */
 	public static int sourceToUsage(Context context, String source)
 	{
+		// Check if the source is not set
 		if ((source == null) || source.isEmpty())
 		{
 			return C.USAGE_UNKNOWN;
 		}
 
-		NacSharedConstants cons = new NacSharedConstants(context);
-		List<String> audioSources = cons.getAudioSources();
+		// Get all the audio sources
+		String[] audioSources = context.getResources().getStringArray(R.array.audio_sources);
 
 		// Alarm
-		if (source.equals(audioSources.get(0)))
+		if (source.equals(audioSources[0]))
 		{
 			return C.USAGE_ALARM;
 		}
 		// Call
-		else if (source.equals(audioSources.get(1)))
+		else if (source.equals(audioSources[1]))
 		{
 			return C.USAGE_VOICE_COMMUNICATION;
 		}
 		// Media
-		else if (source.equals(audioSources.get(2)))
+		else if (source.equals(audioSources[2]))
 		{
 			return C.USAGE_MEDIA;
 		}
 		// Notification
-		else if (source.equals(audioSources.get(3)))
+		else if (source.equals(audioSources[3]))
 		{
 			return C.USAGE_NOTIFICATION;
 		}
 		// Ringtone
-		else if (source.equals(audioSources.get(4)))
+		else if (source.equals(audioSources[4]))
 		{
 			return C.USAGE_NOTIFICATION_RINGTONE;
 		}

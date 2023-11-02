@@ -15,7 +15,6 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
-import com.nfcalarmclock.shared.NacSharedDefaults
 import com.nfcalarmclock.shared.NacSharedPreferences
 
 /**
@@ -116,9 +115,9 @@ class NacVolumePreference @JvmOverloads constructor(
 	 */
 	override fun onGetDefaultValue(a: TypedArray, index: Int): Any
 	{
-		val defs = NacSharedDefaults(context)
+		val defaultValue = context.resources.getInteger(R.integer.default_volume)
 
-		return a.getInteger(index, defs.volume)
+		return a.getInteger(index, defaultValue)
 	}
 
 	/**

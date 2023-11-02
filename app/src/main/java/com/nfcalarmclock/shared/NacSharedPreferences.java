@@ -2,14 +2,11 @@ package com.nfcalarmclock.shared;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
+import android.content.res.Resources;
 import androidx.preference.PreferenceManager;
-
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.file.NacFile;
 import com.nfcalarmclock.media.NacMedia;
-
-import java.util.List;
 
 /**
  * Container for the values of each preference.
@@ -34,14 +31,9 @@ public class NacSharedPreferences
 	private final NacSharedKeys mKeys;
 
 	/**
-	 * Defaults.
+	 * Resources.
 	 */
-	private final NacSharedDefaults mDefaults;
-
-	/**
-	 * Constants.
-	 */
-	private final NacSharedConstants mConstants;
+	public final Resources resources;
 
 	/**
 	 */
@@ -50,19 +42,7 @@ public class NacSharedPreferences
 		this.mContext = context;
 		this.mInstance = PreferenceManager.getDefaultSharedPreferences(context);
 		this.mKeys = new NacSharedKeys(context);
-		this.mDefaults = new NacSharedDefaults(context);
-		this.mConstants = new NacSharedConstants(context);
-	}
-
-	/**
-	 * Edit the AM color, in the time, of all alarm cards.
-	 */
-	@SuppressWarnings("unused")
-	public void editAmColor(int color)
-	{
-		String key = this.getKeys().getAmColor();
-
-		this.saveInt(key, color, false);
+		this.resources = context.getResources();
 	}
 
 	/**
@@ -98,17 +78,6 @@ public class NacSharedPreferences
 		String key = this.getKeys().getAudioSource();
 
 		this.saveString(key, source, false);
-	}
-
-	/**
-	 * Edit the index corresponding to a time in which to auto dismiss the alarm.
-	 */
-	@SuppressWarnings("unused")
-	public void editAutoDismiss(int index)
-	{
-		String key = this.getKeys().getAutoDismiss();
-
-		this.saveInt(key, index, false);
 	}
 
 	/**
@@ -153,129 +122,13 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * Edit the value indicating which day button style to use.
-	 */
-	@SuppressWarnings("unused")
-	public void editDayButtonStyle(int style)
-	{
-		String key = this.getKeys().getDayButtonStyle();
-
-		this.saveInt(key, style, false);
-	}
-
-	/**
-	 * Edit the default days to use when a new alarm card is created.
-	 */
-	@SuppressWarnings("unused")
-	public void editDays(int days)
-	{
-		String key = this.getKeys().getDays();
-		this.saveInt(key, days, false);
-	}
-
-	/**
-	 * Edit the color of the days an alarm will go off on.
-	 * <p>
-	 * This is displayed when an alarm card is collapsed.
-	 */
-	@SuppressWarnings("unused")
-	public void editDaysColor(int color)
-	{
-		String key = this.getKeys().getDaysColor();
-
-		this.saveInt(key, color, false);
-	}
-
-	/**
 	 * Edit the default dismiss early time when an alarm is created.
 	 */
-	@SuppressWarnings("unused")
 	public void editDismissEarlyTime(int dismissEarly)
 	{
 		String key = this.getKeys().getDismissEarlyTime();
 
 		this.saveInt(key, dismissEarly, false);
-	}
-
-	/**
-	 * Edit the flag indicating whether the user wants to snooze easily or not.
-	 */
-	@SuppressWarnings("unused")
-	public void editEasySnooze(boolean easy)
-	{
-		String key = this.getKeys().getEasySnooze();
-
-		this.saveBoolean(key, easy, false);
-	}
-
-	/**
-	 * Edit the max number of times a user is able to snooze an alarm.
-	 */
-	@SuppressWarnings("unused")
-	public void editMaxSnooze(int max)
-	{
-		String key = this.getKeys().getMaxSnooze();
-
-		this.saveInt(key, max, false);
-	}
-
-	/**
-	 * Edit the default media path to use when a new alarm card is created.
-	 * <p>
-	 * This is the path to the media that should play when an alarm goes off.
-	 */
-	@SuppressWarnings("unused")
-	public void editMediaPath(String path)
-	{
-		String key = this.getKeys().getMediaPath();
-
-		this.saveString(key, path, false);
-	}
-
-	/**
-	 * Edit the default name to use when a new alarm card is created.
-	 */
-	@SuppressWarnings("unused")
-	public void editName(String name)
-	{
-		String key = this.getKeys().getName();
-
-		this.saveString(key, name, false);
-	}
-
-	/**
-	 * Edit the color of the name of an alarm.
-	 * <p>
-	 * This is displayed when an alarm card is collapsed.
-	 */
-	@SuppressWarnings("unused")
-	public void editNameColor(int color)
-	{
-		String key = this.getKeys().getNameColor();
-
-		this.saveInt(key, color, false);
-	}
-
-	/**
-	 * Edit the time format to display the next alarm in.
-	 */
-	@SuppressWarnings("unused")
-	public void editNextAlarmFormat(int format)
-	{
-		String key = this.getKeys().getNextAlarmFormat();
-
-		this.saveInt(key, format, false);
-	}
-
-	/**
-	 * Edit the PM color, in the time, of all alarm cards.
-	 */
-	@SuppressWarnings("unused")
-	public void editPmColor(int color)
-	{
-		String key = this.getKeys().getPmColor();
-
-		this.saveInt(key, color, false);
 	}
 
 	/**
@@ -313,21 +166,9 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * Edit the default repeat value when a new alarm card is created.
-	 */
-	@SuppressWarnings("unused")
-	public void editRepeat(boolean repeat)
-	{
-		String key = this.getKeys().getRepeat();
-
-		this.saveBoolean(key, repeat, false);
-	}
-
-	/**
 	 * Edit the default value of a newly created alarm for if the volume should
 	 * gradually be increased when an alarm is active.
 	 */
-	@SuppressWarnings("unused")
 	public void editShouldGraduallyIncreaseVolume(boolean shouldIncrease)
 	{
 		String key = this.getKeys().getShouldGraduallyIncreaseVolume();
@@ -338,23 +179,11 @@ public class NacSharedPreferences
 	/**
 	 * Edit the default should restrict volume value when an alarm is created.
 	 */
-	@SuppressWarnings("unused")
 	public void editShouldRestrictVolume(boolean shouldRestrict)
 	{
 		String key = this.getKeys().getShouldRestrictVolume();
 
 		this.saveBoolean(key, shouldRestrict, false);
-	}
-
-	/**
-	 * Edit the snooze duration preference value.
-	 */
-	@SuppressWarnings("unused")
-	public void editSnoozeDuration(int duration)
-	{
-		String key = this.getKeys().getSnoozeDuration();
-
-		this.saveInt(key, duration, false);
 	}
 
 	/**
@@ -372,7 +201,6 @@ public class NacSharedPreferences
 	 * Edit the frequency at which the text-to-speech should go off when an alarm
 	 * is going off.
 	 */
-	@SuppressWarnings("unused")
 	public void editSpeakFrequency(int freq)
 	{
 		String key = this.getKeys().getSpeakFrequency();
@@ -384,7 +212,6 @@ public class NacSharedPreferences
 	 * Edit the flag indicating whether text-to-speech should be used when an
 	 * alarm goes off.
 	 */
-	@SuppressWarnings("unused")
 	public void editSpeakToMe(boolean speak)
 	{
 		String key = this.getKeys().getSpeakToMe();
@@ -393,70 +220,13 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * Edit the index indicating which day to start the week on.
-	 */
-	@SuppressWarnings("unused")
-	public void editStartWeekOn(int start)
-	{
-		String key = this.getKeys().getStartWeekOn();
-
-		this.saveInt(key, start, false);
-	}
-
-	/**
-	 * Edit the theme color.
-	 */
-	@SuppressWarnings("unused")
-	public void editThemeColor(int color)
-	{
-		String key = this.getKeys().getThemeColor();
-
-		this.saveInt(key, color, false);
-	}
-
-	/**
-	 * Edit the color of the time for all alarm cards.
-	 */
-	@SuppressWarnings("unused")
-	public void editTimeColor(int color)
-	{
-		String key = this.getKeys().getTimeColor();
-
-		this.saveInt(key, color, false);
-	}
-
-	/**
 	 * Edit the default use dismiss early when an alarm is created.
 	 */
-	@SuppressWarnings("unused")
 	public void editUseDismissEarly(boolean useDismissEarly)
 	{
 		String key = this.getKeys().getUseDismissEarly();
 
 		this.saveBoolean(key, useDismissEarly, false);
-	}
-
-	/**
-	 * Edit the default use NFC value when an alarm is created.
-	 */
-	@SuppressWarnings("unused")
-	public void editUseNfc(boolean useNfc)
-	{
-		String key = this.getKeys().getUseNfc();
-
-		this.saveBoolean(key, useNfc, false);
-	}
-
-	/**
-	 * Edit the default vibrate value when an alarm is created.
-	 */
-	@SuppressWarnings("unused")
-	public void editVibrate(boolean vibrate)
-	{
-		String key = this.getKeys().getVibrate();
-
-		this.saveBoolean(key, vibrate, false);
-
 	}
 
 	/**
@@ -505,7 +275,8 @@ public class NacSharedPreferences
 	public int getAmColor()
 	{
 		String key = this.getKeys().getAmColor();
-		int value = this.getDefaults().getAmColor();
+		int value = this.resources.getInteger(R.integer.default_am_color);
+
 		return this.getInt(key, value);
 	}
 
@@ -530,7 +301,7 @@ public class NacSharedPreferences
 	public boolean getAppStartStatistics()
 	{
 		String key = this.getKeys().getAppStartStatistics();
-		boolean value = this.getDefaults().getAppStartStatistics();
+		boolean value = this.resources.getBoolean(R.bool.default_app_start_statistics);
 
 		return this.getBoolean(key, value);
 	}
@@ -541,7 +312,8 @@ public class NacSharedPreferences
 	public String getAudioSource()
 	{
 		String key = this.getKeys().getAudioSource();
-		String value = this.getConstants().getAudioSources().get(2);
+		String[] audioSources = this.resources.getStringArray(R.array.audio_sources);
+		String value = audioSources[2];
 
 		return this.getString(key, value);
 	}
@@ -552,31 +324,19 @@ public class NacSharedPreferences
 	public int getAutoDismiss()
 	{
 		String key = this.getKeys().getAutoDismiss();
-		int value = this.getDefaults().getAutoDismissIndex();
+		int value = this.resources.getInteger(R.integer.default_auto_dismiss_index);
 
 		return this.getInt(key, value);
 	}
 
 	/**
-	 * @see #getAutoDismissSummary(NacSharedConstants, int)
-	 */
-	@SuppressWarnings("unused")
-	public String getAutoDismissSummary()
-	{
-		NacSharedConstants cons = this.getConstants();
-		int index = this.getAutoDismiss();
-
-		return NacSharedPreferences.getAutoDismissSummary(cons, index);
-	}
-
-	/**
 	 * @return The summary text to use when displaying the auto dismiss widget.
 	 */
-	public static String getAutoDismissSummary(NacSharedConstants cons, int index)
+	public static String getAutoDismissSummary(Resources res, int index)
 	{
-		List<String> summaries = cons.getAutoDismissSummaries();
+		String[] summaries = res.getStringArray(R.array.auto_dismiss_summaries);
 
-		return summaries.get(index);
+		return summaries[index];
 	}
 
 	/**
@@ -612,7 +372,7 @@ public class NacSharedPreferences
 	public int getCardHeightCollapsed()
 	{
 		String key = this.getKeys().getCardHeightCollapsed();
-		int value = this.getDefaults().getCardHeightCollapsed();
+		int value = this.resources.getInteger(R.integer.default_card_height_collapsed);
 
 		return this.getInt(key, value);
 	}
@@ -623,7 +383,7 @@ public class NacSharedPreferences
 	public int getCardHeightCollapsedDismiss()
 	{
 		String key = this.getKeys().getCardHeightCollapsedDismiss();
-		int value = this.getDefaults().getCardHeightCollapsedDismiss();
+		int value = this.resources.getInteger(R.integer.default_card_height_collapsed_dismiss);
 
 		return this.getInt(key, value);
 	}
@@ -634,7 +394,7 @@ public class NacSharedPreferences
 	public int getCardHeightExpanded()
 	{
 		String key = this.getKeys().getCardHeightExpanded();
-		int value = this.getDefaults().getCardHeightExpanded();
+		int value = this.resources.getInteger(R.integer.default_card_height_expanded);
 
 		return this.getInt(key, value);
 	}
@@ -645,17 +405,9 @@ public class NacSharedPreferences
 	public boolean getCardIsMeasured()
 	{
 		String key = this.getKeys().getCardIsMeasured();
-		boolean value = this.getDefaults().getCardIsMeasured();
+		boolean value = this.resources.getBoolean(R.bool.default_card_is_measured);
 
 		return this.getBoolean(key, value);
-	}
-
-	/**
-	 * @return The shared constants.
-	 */
-	public NacSharedConstants getConstants()
-	{
-		return this.mConstants;
 	}
 
 	/**
@@ -675,7 +427,7 @@ public class NacSharedPreferences
 	public int getDayButtonStyle()
 	{
 		String key = this.getKeys().getDayButtonStyle();
-		int value = this.getDefaults().getDayButtonStyle();
+		int value = this.resources.getInteger(R.integer.default_day_button_style);
 
 		return this.getInt(key, value);
 	}
@@ -686,7 +438,7 @@ public class NacSharedPreferences
 	public int getDays()
 	{
 		String key = this.getKeys().getDays();
-		int value = this.getDefaults().getDays();
+		int value = this.resources.getInteger(R.integer.default_days);
 
 		return this.getInt(key, value);
 	}
@@ -697,17 +449,9 @@ public class NacSharedPreferences
 	public int getDaysColor()
 	{
 		String key = this.getKeys().getDaysColor();
-		int value = this.getDefaults().getDaysColor();
+		int value = this.resources.getInteger(R.integer.default_days_color);
 
 		return this.getInt(key, value);
-	}
-
-	/**
-	 * @return The shared defaults.
-	 */
-	public NacSharedDefaults getDefaults()
-	{
-		return this.mDefaults;
 	}
 
 	/**
@@ -738,7 +482,7 @@ public class NacSharedPreferences
 	public int getDismissEarlyTime()
 	{
 		String key = this.getKeys().getDismissEarlyTime();
-		int value = this.getDefaults().getDismissEarlyTime();
+		int value = this.resources.getInteger(R.integer.default_dismiss_early_time);
 
 		return this.getInt(key, value);
 	}
@@ -758,7 +502,7 @@ public class NacSharedPreferences
 	public boolean getEasySnooze()
 	{
 		String key = this.getKeys().getEasySnooze();
-		boolean value = this.getDefaults().getEasySnooze();
+		boolean value = this.resources.getBoolean(R.bool.default_easy_snooze);
 
 		return this.getBoolean(key, value);
 	}
@@ -769,7 +513,7 @@ public class NacSharedPreferences
 	public boolean getExpandNewAlarm()
 	{
 		String key = this.getKeys().getExpandNewAlarm();
-		boolean value = this.getDefaults().getExpandNewAlarm();
+		boolean value = this.resources.getBoolean(R.bool.default_expand_new_alarm);
 
 		return this.getBoolean(key, value);
 	}
@@ -804,31 +548,21 @@ public class NacSharedPreferences
 	public int getMaxSnooze()
 	{
 		String key = this.getKeys().getMaxSnooze();
-		int value = this.getDefaults().getMaxSnoozeIndex();
+		int value = this.resources.getInteger(R.integer.default_max_snooze_index);
 
 		return this.getInt(key, value);
 	}
 
 	/**
-	 * @see #getMaxSnoozeSummary(NacSharedConstants, int)
-	 */
-	@SuppressWarnings("unused")
-	public String getMaxSnoozeSummary()
-	{
-		NacSharedConstants cons = this.getConstants();
-		int index = this.getMaxSnooze();
-
-		return NacSharedPreferences.getMaxSnoozeSummary(cons, index);
-	}
-
-	/**
+	 * Get the summary text to use when displaying the max snooze widget.
+	 *
 	 * @return The summary text to use when displaying the max snooze widget.
 	 */
-	public static String getMaxSnoozeSummary(NacSharedConstants cons, int index)
+	public static String getMaxSnoozeSummary(Resources res, int index)
 	{
-		List<String> summaries = cons.getMaxSnoozeSummaries();
+		String[] summaries = res.getStringArray(R.array.max_snooze_summaries);
 
-		return summaries.get(index);
+		return summaries[index];
 	}
 
 	/**
@@ -865,35 +599,9 @@ public class NacSharedPreferences
 	 */
 	public static String getMediaMessage(Context context, String path)
 	{
-		// TODO: NacMedia.getTitle() calls a contentResolver, hence why Context is
-		// needed
-		NacSharedConstants cons = new NacSharedConstants(context);
-
-		//return (path != null) && !path.isEmpty()
 		return !NacFile.isEmpty(path)
 			? NacMedia.getTitle(context, path)
-			: cons.getDescriptionMedia();
-	}
-
-	/**
-	 * @return The meridian color.
-	 */
-	public int getMeridianColor(String meridian)
-	{
-		NacSharedConstants cons = this.getConstants();
-
-		if (meridian.equals(cons.getAm()))
-		{
-			return this.getAmColor();
-		}
-		else if (meridian.equals(cons.getPm()))
-		{
-			return this.getPmColor();
-		}
-		else
-		{
-			return this.getDefaults().getColor();
-		}
+			: context.getResources().getString(R.string.description_media);
 	}
 
 	/**
@@ -902,7 +610,7 @@ public class NacSharedPreferences
 	public boolean getMissedAlarmNotification()
 	{
 		String key = this.getKeys().getMissedAlarmNotification();
-		boolean value = this.getDefaults().getMissedAlarm();
+		boolean value = this.resources.getBoolean(R.bool.default_missed_alarm);
 
 		return this.getBoolean(key, value);
 	}
@@ -923,17 +631,22 @@ public class NacSharedPreferences
 	public int getNameColor()
 	{
 		String key = this.getKeys().getNameColor();
-		int value = this.getDefaults().getNameColor();
+		int value = this.resources.getInteger(R.integer.default_name_color);
 
 		return this.getInt(key, value);
 	}
 
 	/**
+	 * Get the name message.
+	 *
 	 * @return The name message.
 	 */
-	public static String getNameMessage(NacSharedConstants cons, String name)
+	public static String getNameMessage(Resources res, String name)
 	{
-		return !name.isEmpty() ? name : cons.getName();
+		// Get the empty alarm name
+		String emptyName = res.getString(R.string.alarm_name);
+
+		return !name.isEmpty() ? name : emptyName;
 	}
 
 	/**
@@ -943,7 +656,7 @@ public class NacSharedPreferences
 	public int getNextAlarmFormat()
 	{
 		String key = this.getKeys().getNextAlarmFormat();
-		int value = this.getDefaults().getNextAlarmFormatIndex();
+		int value = this.resources.getInteger(R.integer.default_next_alarm_format_index);
 
 		return this.getInt(key, value);
 	}
@@ -954,7 +667,7 @@ public class NacSharedPreferences
 	public int getPmColor()
 	{
 		String key = this.getKeys().getPmColor();
-		int value = this.getDefaults().getPmColor();
+		int value = this.resources.getInteger(R.integer.default_pm_color);
 
 		return this.getInt(key, value);
 	}
@@ -978,7 +691,7 @@ public class NacSharedPreferences
 	public int getPreviousVolume()
 	{
 		String key = this.getKeys().getPreviousVolume();
-		int value = this.getDefaults().getPreviousVolume();
+		int value = this.resources.getInteger(R.integer.default_previous_volume);
 
 		return this.getInt(key, value);
 	}
@@ -989,7 +702,7 @@ public class NacSharedPreferences
 	public int getRateMyAppCounter()
 	{
 		String key = this.getKeys().getRateMyAppCounter();
-		int value = this.getDefaults().getRateMyAppCounter();
+		int value = this.resources.getInteger(R.integer.default_rate_my_app_counter);
 
 		return this.getInt(key, value);
 	}
@@ -1000,7 +713,7 @@ public class NacSharedPreferences
 	public boolean getRepeat()
 	{
 		String key = this.getKeys().getRepeat();
-		boolean value = this.getDefaults().getRepeat();
+		boolean value = this.resources.getBoolean(R.bool.default_repeat);
 
 		return this.getBoolean(key, value);
 	}
@@ -1011,7 +724,7 @@ public class NacSharedPreferences
 	public boolean getShouldGraduallyIncreaseVolume()
 	{
 		String key = this.getKeys().getShouldGraduallyIncreaseVolume();
-		boolean value = this.getDefaults().getShouldGraduallyIncreaseVolume();
+		boolean value = this.resources.getBoolean(R.bool.default_should_gradually_increase_volume);
 
 		return this.getBoolean(key, value);
 	}
@@ -1022,7 +735,7 @@ public class NacSharedPreferences
 	public boolean getShouldRefreshMainActivity()
 	{
 		String key = this.getKeys().getShouldRefreshMainActivity();
-		boolean value = this.getDefaults().getShouldRefreshMainActivity();
+		boolean value = this.resources.getBoolean(R.bool.default_app_should_refresh_main_activity);
 
 		return this.getBoolean(key, value);
 	}
@@ -1033,7 +746,7 @@ public class NacSharedPreferences
 	public boolean getShouldRestrictVolume()
 	{
 		String key = this.getKeys().getShouldRestrictVolume();
-		boolean value = this.getDefaults().getShouldRestrictVolume();
+		boolean value = this.resources.getBoolean(R.bool.default_should_restrict_volume);
 
 		return this.getBoolean(key, value);
 	}
@@ -1044,7 +757,7 @@ public class NacSharedPreferences
 	public boolean getShowAlarmInfo()
 	{
 		String key = this.getKeys().getShowAlarmInfo();
-		boolean value = this.getDefaults().getShowAlarmInfo();
+		boolean value = this.resources.getBoolean(R.bool.default_show_alarm_info);
 
 		return this.getBoolean(key, value);
 	}
@@ -1055,7 +768,7 @@ public class NacSharedPreferences
 	public boolean getShuffle()
 	{
 		String key = this.getKeys().getShuffle();
-		boolean value = this.getDefaults().getShufflePlaylist();
+		boolean value = this.resources.getBoolean(R.bool.default_shuffle_playlist);
 
 		return this.getBoolean(key, value);
 	}
@@ -1066,31 +779,21 @@ public class NacSharedPreferences
 	public int getSnoozeDuration()
 	{
 		String key = this.getKeys().getSnoozeDuration();
-		int value = this.getDefaults().getSnoozeDurationIndex();
+		int value = this.resources.getInteger(R.integer.default_snooze_duration_index);
 
 		return this.getInt(key, value);
 	}
 
 	/**
-	 * @see #getSnoozeDurationSummary(NacSharedConstants, int)
-	 */
-	@SuppressWarnings("unused")
-	public String getSnoozeDurationSummary()
-	{
-		NacSharedConstants cons = this.getConstants();
-		int index = this.getSnoozeDuration();
-
-		return NacSharedPreferences.getSnoozeDurationSummary(cons, index);
-	}
-
-	/**
+	 * Get the summary text for the snooze duration widget.
+	 *
 	 * @return The summary text for the snooze duration widget.
 	 */
-	public static String getSnoozeDurationSummary(NacSharedConstants cons, int index)
+	public static String getSnoozeDurationSummary(Resources res, int index)
 	{
-		List<String> summaries = cons.getSnoozeDurationSummaries();
+		String[] summaries = res.getStringArray(R.array.snooze_duration_summaries);
 
-		return summaries.get(index);
+		return summaries[index];
 	}
 
 	/**
@@ -1118,7 +821,7 @@ public class NacSharedPreferences
 	public int getSpeakFrequency()
 	{
 		String key = this.getKeys().getSpeakFrequency();
-		int value = this.getDefaults().getSpeakFrequencyIndex();
+		int value = this.resources.getInteger(R.integer.default_speak_frequency_index);
 
 		return this.getInt(key, value);
 	}
@@ -1129,7 +832,7 @@ public class NacSharedPreferences
 	public boolean getSpeakToMe()
 	{
 		String key = this.getKeys().getSpeakToMe();
-		boolean value = this.getDefaults().getSpeakToMe();
+		boolean value = this.resources.getBoolean(R.bool.default_speak_to_me);
 
 		return this.getBoolean(key, value);
 	}
@@ -1140,7 +843,7 @@ public class NacSharedPreferences
 	public int getStartWeekOn()
 	{
 		String key = this.getKeys().getStartWeekOn();
-		int value = this.getDefaults().getStartWeekOnIndex();
+		int value = this.resources.getInteger(R.integer.default_start_week_on_index);
 
 		return this.getInt(key, value);
 	}
@@ -1159,7 +862,7 @@ public class NacSharedPreferences
 	public int getThemeColor()
 	{
 		String key = this.getKeys().getThemeColor();
-		int value = this.getDefaults().getThemeColor();
+		int value = this.resources.getInteger(R.integer.default_theme_color);
 
 		return this.getInt(key, value);
 	}
@@ -1170,7 +873,7 @@ public class NacSharedPreferences
 	public int getTimeColor()
 	{
 		String key = this.getKeys().getTimeColor();
-		int value = this.getDefaults().getTimeColor();
+		int value = this.resources.getInteger(R.integer.default_time_color);
 
 		return this.getInt(key, value);
 	}
@@ -1181,7 +884,7 @@ public class NacSharedPreferences
 	public boolean getUpcomingAlarmNotification()
 	{
 		String key = this.getKeys().getUpcomingAlarmNotification();
-		boolean value = this.getDefaults().getUpcomingAlarm();
+		boolean value = this.resources.getBoolean(R.bool.default_upcoming_alarm);
 
 		return this.getBoolean(key, value);
 	}
@@ -1192,7 +895,7 @@ public class NacSharedPreferences
 	public boolean getUseDismissEarly()
 	{
 		String key = this.getKeys().getUseDismissEarly();
-		boolean value = this.getDefaults().getUseDismissEarly();
+		boolean value = this.resources.getBoolean(R.bool.default_use_dismiss_early);
 
 		return this.getBoolean(key, value);
 	}
@@ -1203,7 +906,7 @@ public class NacSharedPreferences
 	public boolean getUseNfc()
 	{
 		String key = this.getKeys().getUseNfc();
-		boolean value = this.getDefaults().getUseNfc();
+		boolean value = this.resources.getBoolean(R.bool.default_use_nfc);
 
 		return this.getBoolean(key, value);
 	}
@@ -1214,7 +917,7 @@ public class NacSharedPreferences
 	public boolean getVibrate()
 	{
 		String key = this.getKeys().getVibrate();
-		boolean value = this.getDefaults().getVibrate();
+		boolean value = this.resources.getBoolean(R.bool.default_vibrate);
 
 		return this.getBoolean(key, value);
 	}
@@ -1225,7 +928,7 @@ public class NacSharedPreferences
 	public int getVolume()
 	{
 		String key = this.getKeys().getVolume();
-		int value = this.getDefaults().getVolume();
+		int value = this.resources.getInteger(R.integer.default_volume);
 
 		return this.getInt(key, value);
 	}
@@ -1238,7 +941,7 @@ public class NacSharedPreferences
 	public boolean getWasAppSupported()
 	{
 		String key = this.getKeys().getWasAppSupported();
-		boolean value = this.getDefaults().getWasAppSupported();
+		boolean value = this.resources.getBoolean(R.bool.default_was_app_supported);
 
 		return this.getBoolean(key, value);
 	}
@@ -1252,7 +955,7 @@ public class NacSharedPreferences
 	public boolean getWasIgnoreBatteryOptimizationPermissionRequested()
 	{
 		String key = this.getKeys().getWasIgnoreBatteryOptimizationPermissionRequested();
-		boolean value = this.getDefaults().getWasIgnoreBatteryOptimizationPermissionRequested();
+		boolean value = this.resources.getBoolean(R.bool.default_was_ignore_battery_optimization_permission_requested);
 
 		return this.getBoolean(key, value);
 	}
@@ -1265,7 +968,7 @@ public class NacSharedPreferences
 	public boolean getWasPostNotificationsPermissionRequested()
 	{
 		String key = this.getKeys().getWasPostNotificationsPermissionRequested();
-		boolean value = this.getDefaults().getWasPostNotificationsPermissionRequested();
+		boolean value = this.resources.getBoolean(R.bool.default_was_post_notifications_permission_requested);
 
 		return this.getBoolean(key, value);
 	}
@@ -1278,7 +981,7 @@ public class NacSharedPreferences
 	public boolean getWasScheduleExactAlarmPermissionRequested()
 	{
 		String key = this.getKeys().getWasScheduleExactAlarmPermissionRequested();
-		boolean value = this.getDefaults().getWasScheduleExactAlarmPermissionRequested();
+		boolean value = this.resources.getBoolean(R.bool.default_was_schedule_exact_alarm_permission_requested);
 
 		return this.getBoolean(key, value);
 	}
@@ -1298,7 +1001,7 @@ public class NacSharedPreferences
 	public boolean isRateMyAppLimit()
 	{
 		int counter = this.getRateMyAppCounter();
-		int limit = this.getDefaults().getRateMyAppLimit();
+		int limit = this.resources.getInteger(R.integer.default_rate_my_app_limit);
 
 		return counter >= limit;
 	}
@@ -1309,7 +1012,7 @@ public class NacSharedPreferences
 	public boolean isRateMyAppRated()
 	{
 		int counter = this.getRateMyAppCounter();
-		int rated = this.getDefaults().getRateMyAppRated();
+		int rated = this.resources.getInteger(R.integer.default_rate_my_app_rated);
 
 		return counter == rated;
 	}
@@ -1319,14 +1022,14 @@ public class NacSharedPreferences
 	 */
 	public void ratedRateMyApp()
 	{
-		int rated = this.getDefaults().getRateMyAppRated();
+		int rated = this.resources.getInteger(R.integer.default_rate_my_app_rated);
+
 		this.editRateMyAppCounter(rated);
 	}
 
 	/**
 	 * @see #save(SharedPreferences.Editor, boolean)
 	 */
-	@SuppressWarnings("unused")
 	public void save(SharedPreferences.Editor editor)
 	{
 		this.save(editor, false);

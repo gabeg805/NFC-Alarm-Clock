@@ -8,12 +8,12 @@ import android.os.Looper;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.MediaItem;
+import com.nfcalarmclock.R;
 import com.nfcalarmclock.media.NacAudioAttributes;
 import com.nfcalarmclock.media.NacAudioManager;
 import com.nfcalarmclock.media.NacMedia;
 import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.alarm.db.NacAlarm;
-import com.nfcalarmclock.shared.NacSharedConstants;
 import java.util.List;
 
 /**
@@ -201,10 +201,10 @@ public class NacMediaPlayer
 		// Unable to gain audio focus
 		if (!request)
 		{
-			NacSharedConstants cons = new NacSharedConstants(context);
+			String message = context.getString(R.string.error_message_play_audio);
 
 			NacUtility.printf("Unable to gain audio focus.");
-			NacUtility.quickToast(context, cons.getErrorMessagePlayAudio());
+			NacUtility.quickToast(context, message);
 		}
 
 		return request;

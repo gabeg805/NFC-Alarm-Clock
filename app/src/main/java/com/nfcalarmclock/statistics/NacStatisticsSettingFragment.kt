@@ -6,7 +6,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
-import com.nfcalarmclock.shared.NacSharedConstants
 import com.nfcalarmclock.shared.NacSharedPreferences
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -36,7 +35,7 @@ class NacStatisticsSettingFragment
 		super.onViewCreated(root, savedInstanceState)
 
 		// Create the repository
-		val context = requireContext();
+		val context = requireContext()
 		val repo = NacAlarmStatisticRepository(context)
 		alarmStatisticsRepository = repo
 
@@ -181,7 +180,6 @@ class NacStatisticsSettingFragment
 	 */
 	private fun setupStartedOnDate(repo: NacAlarmStatisticRepository, root: View)
 	{
-		val cons = NacSharedConstants(context)
 		val timestamp = repo.createdFirstTimestamp
 
 		// Determine the text to show as the date the statistics started on
@@ -190,7 +188,7 @@ class NacStatisticsSettingFragment
 			if (timestamp > 0)
 			{
 				val locale = Locale.getDefault()
-				val startedOnMessage = cons.messageStatisticsStartedOn
+				val startedOnMessage = getString(R.string.message_statistics_started_on)
 
 				// Determine the format the date should be shown in
 				val dateStarted = Date(timestamp)

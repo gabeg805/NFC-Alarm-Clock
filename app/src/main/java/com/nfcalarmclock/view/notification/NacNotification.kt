@@ -14,7 +14,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.shared.NacSharedConstants
 import com.nfcalarmclock.util.NacUtility.toSpannedString
 import java.util.Arrays
 import java.util.Locale
@@ -86,11 +85,6 @@ abstract class NacNotification(
 	 */
 	protected val notificationManager: NotificationManagerCompat
 		get() = NotificationManagerCompat.from(context)
-
-	/**
-	 * Shared constants.
-	 */
-	protected val sharedConstants: NacSharedConstants = NacSharedConstants(context)
 
 	/**
 	 * Category of the notification.

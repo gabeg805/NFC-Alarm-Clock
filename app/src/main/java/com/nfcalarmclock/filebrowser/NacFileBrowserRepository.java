@@ -4,10 +4,10 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import androidx.lifecycle.MutableLiveData;
+import com.nfcalarmclock.R;
 import com.nfcalarmclock.file.NacFile;
 import com.nfcalarmclock.file.NacFileTree;
 import com.nfcalarmclock.media.NacMedia;
-import com.nfcalarmclock.shared.NacSharedConstants;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
@@ -66,14 +66,14 @@ public class NacFileBrowserRepository
 	public void addDirectory(Context context, NacFile.Metadata metadata)
 	{
 		List<NacFile.Metadata> listing = this.getListingLiveData().getValue();
-		NacSharedConstants cons = new NacSharedConstants(context);
 		Locale locale = Locale.getDefault();
 		String name = metadata.getName();
+		String previousFolder = context.getString(R.string.action_previous_folder);
 
 		// Determine what the extra data will be. This will be the name shown to the
 		// user
 		String extra = name.equals("..")
-			? String.format(locale, "(%1$s)", cons.getActionPreviousFolder())
+			? String.format(locale, "(%1$s)", previousFolder)
 			: name;
 
 		// Set the extra data

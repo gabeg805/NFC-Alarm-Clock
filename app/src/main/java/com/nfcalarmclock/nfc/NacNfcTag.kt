@@ -3,8 +3,8 @@ package com.nfcalarmclock.nfc
 import android.content.Context
 import android.content.Intent
 import android.nfc.Tag
+import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.shared.NacSharedConstants
 import com.nfcalarmclock.util.NacUtility.quickToast
 
 /**
@@ -88,10 +88,10 @@ class NacNfcTag @JvmOverloads constructor(alarm: NacAlarm?, nfcIntent: Intent? =
 			// IDs do not match
 			else
 			{
-				val cons = NacSharedConstants(context)
+				val message = context.getString(R.string.error_message_nfc_mismatch)
 
 				// Show toast
-				quickToast(context, cons.errorMessageNfcMismatch)
+				quickToast(context, message)
 				false
 			}
 	}
@@ -101,7 +101,7 @@ class NacNfcTag @JvmOverloads constructor(alarm: NacAlarm?, nfcIntent: Intent? =
 	 * Return True if the alarm does not have a saved ID, or if the IDs match,
 	 * and False otherwise.
 	 */
-	fun compareIds(): Boolean
+	private fun compareIds(): Boolean
 	{
 		// NFC tag is not ready
 		if (!isReady)

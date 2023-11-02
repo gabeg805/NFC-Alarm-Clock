@@ -5,6 +5,7 @@ import android.animation.AnimatorInflater;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.view.animation.AccelerateInterpolator;
 import android.view.HapticFeedbackConstants;
@@ -35,7 +36,6 @@ import com.nfcalarmclock.util.NacContext;
 import com.nfcalarmclock.view.dayofweek.NacDayButton;
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek;
 import com.nfcalarmclock.name.NacNameDialog;
-import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.util.NacUtility;
 import com.nfcalarmclock.R;
@@ -1185,6 +1185,35 @@ public class NacCardHolder
 	}
 
 	/**
+	 * @return The meridian color.
+	 */
+	private int getMeridianColor(String meridian)
+	{
+		Context context = this.getContext();
+		NacSharedPreferences shared = this.getSharedPreferences();
+
+		// Get the AM and PM strings
+		String am = context.getString(R.string.am);
+		String pm = context.getString(R.string.pm);
+
+		// AM color
+		if (meridian.equals(am))
+		{
+			return shared.getAmColor();
+		}
+		// PM color
+		else if (meridian.equals(pm))
+		{
+			return shared.getPmColor();
+		}
+		// Default color
+		else
+		{
+			return context.getResources().getInteger(R.integer.default_color);
+		}
+	}
+
+	/**
 	 * @return The meridian view.
 	 */
 	public TextView getMeridianView()
@@ -1279,14 +1308,6 @@ public class NacCardHolder
 	public View getRoot()
 	{
 		return this.mRoot;
-	}
-
-	/**
-	 * @return The shared constants.
-	 */
-	private NacSharedConstants getSharedConstants()
-	{
-		return this.getSharedPreferences().getConstants();
 	}
 
 	/**
@@ -2412,11 +2433,10 @@ public class NacCardHolder
 	public void setMeridianColor()
 	{
 		Context context = this.getContext();
-		NacSharedPreferences shared = this.getSharedPreferences();
 		TextView tv = this.getMeridianView();
 		NacAlarm alarm = this.getAlarm();
 		String meridian = alarm.getMeridian(context);
-		int color = shared.getMeridianColor(meridian);
+		int color = this.getMeridianColor(meridian);
 
 		this.setTextViewColor(tv, color);
 	}
@@ -2443,12 +2463,12 @@ public class NacCardHolder
 	 */
 	private void setNameButton()
 	{
-		NacSharedConstants cons = this.getSharedConstants();
+		Resources res = this.getContext().getResources();
 		NacAlarm alarm = this.getAlarm();
 		MaterialButton button = this.getNameButton();
 
 		String name = alarm.getNameNormalized();
-		String message = NacSharedPreferences.getNameMessage(cons, name);
+		String message = NacSharedPreferences.getNameMessage(res, name);
 		String text = button.getText().toString();
 		float alpha = !name.isEmpty() ? 1.0f : 0.3f;
 
@@ -2969,8 +2989,9 @@ public class NacCardHolder
 	private void toastDeleteActiveAlarmError()
 	{
 		Context context = this.getContext();
-		NacSharedConstants cons = new NacSharedConstants(context);
-		NacUtility.quickToast(context, cons.getErrorMessageActiveDelete());
+		String message = context.getString(R.string.error_message_active_delete);
+
+		NacUtility.quickToast(context, message);
 	}
 
 	/**
@@ -2979,8 +3000,9 @@ public class NacCardHolder
 	private void toastDeleteSnoozedAlarmError()
 	{
 		Context context = this.getContext();
-		NacSharedConstants cons = new NacSharedConstants(context);
-		NacUtility.quickToast(context, cons.getErrorMessageSnoozedDelete());
+		String message = context.getString(R.string.error_message_snoozed_delete);
+
+		NacUtility.quickToast(context, message);
 	}
 
 	/**
@@ -2989,8 +3011,9 @@ public class NacCardHolder
 	private void toastModifyActiveAlarmError()
 	{
 		Context context = this.getContext();
-		NacSharedConstants cons = new NacSharedConstants(context);
-		NacUtility.quickToast(context, cons.getErrorMessageActiveModify());
+		String message = context.getString(R.string.error_message_active_modify);
+
+		NacUtility.quickToast(context, message);
 	}
 
 	/**
@@ -2999,8 +3022,9 @@ public class NacCardHolder
 	private void toastModifySnoozedAlarmError()
 	{
 		Context context = this.getContext();
-		NacSharedConstants cons = new NacSharedConstants(context);
-		NacUtility.quickToast(context, cons.getErrorMessageSnoozedModify());
+		String message = context.getString(R.string.error_message_snoozed_modify);
+
+		NacUtility.quickToast(context, message);
 	}
 
 	/**
@@ -3028,9 +3052,9 @@ public class NacCardHolder
 	{
 		NacAlarm alarm = this.getAlarm();
 		Context context = this.getContext();
-		NacSharedConstants cons = new NacSharedConstants(context);
-		String message = alarm.getShouldRepeat() ? cons.getMessageRepeatEnabled()
-			: cons.getMessageRepeatDisabled();
+		String repeatEnabled = context.getString(R.string.message_repeat_enabled);
+		String repeatDisabled = context.getString(R.string.message_repeat_disabled);
+		String message = alarm.getShouldRepeat() ? repeatEnabled : repeatDisabled;
 
 		NacUtility.quickToast(context, message);
 	}
@@ -3042,9 +3066,9 @@ public class NacCardHolder
 	{
 		NacAlarm alarm = this.getAlarm();
 		Context context = this.getContext();
-		NacSharedConstants cons = new NacSharedConstants(context);
-		String message = alarm.getShouldVibrate() ? cons.getMessageVibrateEnabled()
-			: cons.getMessageVibrateDisabled();
+		String vibrateEnabled = context.getString(R.string.message_vibrate_enabled);
+		String vibrateDisabled = context.getString(R.string.message_vibrate_disabled);
+		String message = alarm.getShouldVibrate() ? vibrateEnabled : vibrateDisabled;
 
 		NacUtility.quickToast(context, message);
 	}

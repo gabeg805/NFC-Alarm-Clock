@@ -10,10 +10,10 @@ import android.os.Build;
 import android.provider.MediaStore;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.MediaMetadata;
+import com.nfcalarmclock.R;
 import com.nfcalarmclock.file.NacFileTree;
 import com.nfcalarmclock.file.NacFile;
 import com.nfcalarmclock.util.NacUtility;
-import com.nfcalarmclock.shared.NacSharedConstants;
 import java.lang.Long;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -130,10 +130,11 @@ public class NacMedia
 		String column = MediaStore.Audio.Artists.ARTIST;
 		String artist = NacMedia.getColumnFromCursor(context, uri, column);
 
+		// Unable to determine artist
 		if ((artist == null) || artist.isEmpty() || artist.equals("<unknown>"))
 		{
-			NacSharedConstants cons = new NacSharedConstants(context);
-			artist = cons.getStateUnknown();
+			// Get string to show that the artist is unknown
+			artist = context.getString(R.string.state_unknown);
 		}
 
 		return artist;
@@ -421,10 +422,11 @@ public class NacMedia
 		String column = MediaStore.Audio.Media.TITLE;
 		String title = NacMedia.getColumnFromCursor(context, uri, column);
 
+		// Unable to determine the title
 		if ((title == null) || title.isEmpty() || title.equals("<unknown>"))
 		{
-			NacSharedConstants cons = new NacSharedConstants(context);
-			title = cons.getStateUnknown();
+			// Get string to show that the title is unknown
+			title = context.getString(R.string.state_unknown);
 		}
 
 		return title;

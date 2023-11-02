@@ -3,7 +3,6 @@ package com.nfcalarmclock.view.dialog
 import android.app.AlertDialog
 import android.content.DialogInterface
 import androidx.fragment.app.DialogFragment
-import com.nfcalarmclock.shared.NacSharedConstants
 import com.nfcalarmclock.shared.NacSharedPreferences
 
 /**
@@ -18,12 +17,6 @@ abstract class NacDialogFragment
 	 */
 	protected var sharedPreferences: NacSharedPreferences? = null
 		private set
-
-	/**
-	 * Shared constants.
-	 */
-	protected val sharedConstants: NacSharedConstants
-		get() = sharedPreferences!!.constants
 
 	/**
 	 * Called when the fragment is resumed.

@@ -23,7 +23,8 @@ import java.util.Locale
 /**
  * Notification to display for active alarms.
  */
-class NacActiveAlarmNotification(context: Context) : NacNotification(context)
+class NacActiveAlarmNotification(context: Context)
+	: NacNotification(context)
 {
 
 	/**
@@ -47,13 +48,13 @@ class NacActiveAlarmNotification(context: Context) : NacNotification(context)
 	 * @see NacNotification.channelName
 	 */
 	override val channelName: String
-		get() = sharedConstants.activeNotification
+		get() = context.getString(R.string.title_active_alarm)
 
 	/**
 	 * @see NacNotification.channelDescription
 	 */
 	override val channelDescription: String
-		get() = sharedConstants.descriptionActiveNotification
+		get() = context.getString(R.string.description_active_alarm)
 
 	/**
 	 * @see NacNotification.title
@@ -63,7 +64,7 @@ class NacActiveAlarmNotification(context: Context) : NacNotification(context)
 		{
 			val locale = Locale.getDefault()
 
-			return String.format(locale, "<b>%s</b>", sharedConstants.appName)
+			return String.format(locale, "<b>%s</b>", appName)
 		}
 
 	/**
@@ -146,7 +147,7 @@ class NacActiveAlarmNotification(context: Context) : NacNotification(context)
 	protected val largeIcon: Bitmap?
 		get()
 		{
-			val res = sharedConstants.resources
+			val res = context.resources
 			val icon = BitmapFactory.decodeResource(res, R.mipmap.app)
 			val density = res.displayMetrics.density
 
@@ -195,12 +196,21 @@ class NacActiveAlarmNotification(context: Context) : NacNotification(context)
 		}
 
 	/**
+	 * Name of the app.
+	 */
+	private val appName = context.getString(R.string.app_name)
+
+	/**
 	 * @see NacNotification.builder
 	 */
 	public override fun builder(): NotificationCompat.Builder
 	{
 		// Create the dismiss pending intent
 		val dismissPending = getDismissPendingIntent(contentPendingIntent)
+
+		// Notification actions
+		val dismiss = context.getString(R.string.action_alarm_dismiss)
+		val snooze = context.getString(R.string.action_alarm_snooze)
 
 		// Build the notification
 		return super.builder()
@@ -210,9 +220,9 @@ class NacActiveAlarmNotification(context: Context) : NacNotification(context)
 			.setAutoCancel(false)
 			.setOngoing(true)
 			.setShowWhen(true)
-			.setTicker(sharedConstants.appName)
-			.addAction(R.mipmap.snooze, sharedConstants.actionSnooze, snoozePendingIntent)
-			.addAction(R.mipmap.dismiss, sharedConstants.actionDismiss, dismissPending)
+			.setTicker(appName)
+			.addAction(R.mipmap.snooze, snooze, snoozePendingIntent)
+			.addAction(R.mipmap.dismiss, dismiss, dismissPending)
 	}
 
 	/**

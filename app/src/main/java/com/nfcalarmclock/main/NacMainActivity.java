@@ -55,7 +55,6 @@ import com.nfcalarmclock.permission.NacPermissionRequestManager;
 import com.nfcalarmclock.ratemyapp.NacRateMyApp;
 import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog;
 import com.nfcalarmclock.settings.NacMainSettingActivity;
-import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.shutdown.NacShutdownBroadcastReceiver;
 import com.nfcalarmclock.statistics.NacAlarmStatisticRepository;
@@ -216,18 +215,19 @@ public class NacMainActivity
 	private final View.OnClickListener mFloatingActionButtonListener =
 			view -> {
 				NacSharedPreferences shared = getSharedPreferences();
-				NacSharedConstants cons = getSharedConstants();
 				NacCardAdapter adapter = getAlarmCardAdapter();
 				int size = adapter.getItemCount();
+				int maxAlarms = getResources().getInteger(R.integer.max_alarms);
 
 				// Haptic feedback so that the user knows the action was received
 				view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 
 				// Max number of alarms reached
-				if ((size+1) > cons.getMaxAlarms())
+				if ((size+1) > maxAlarms)
 				{
-					NacUtility.quickToast(NacMainActivity.this,
-						cons.getErrorMessageMaxAlarms());
+					String message = getString(R.string.error_message_max_alarms);
+
+					NacUtility.quickToast(NacMainActivity.this, message);
 					return;
 				}
 
@@ -405,9 +405,8 @@ public class NacMainActivity
 	 */
 	public void copyAlarm(NacAlarm alarm)
 	{
-		NacSharedConstants cons = this.getSharedConstants();
-		String message = cons.getMessageAlarmCopy();
-		String action = cons.getActionUndo();
+		String message = getString(R.string.message_alarm_copy);
+		String action = getString(R.string.action_undo);
 
 		NacAlarm copiedAlarm = alarm.copy();
 
@@ -429,9 +428,8 @@ public class NacMainActivity
 			return;
 		}
 
-		NacSharedConstants cons = this.getSharedConstants();
-		String message = cons.getMessageAlarmDelete();
-		String action = cons.getActionUndo();
+		String message = getString(R.string.message_alarm_delete);
+		String action = getString(R.string.action_undo);
 
 		this.getAlarmViewModel().delete(this, alarm);
 		this.getAlarmStatisticRepository().insertDeleted(alarm);
@@ -641,14 +639,6 @@ public class NacMainActivity
 	private NacScanNfcTagDialog getScanNfcTagDialog()
 	{
 		return this.mScanNfcTagDialog;
-	}
-
-	/**
-	 * @return The shared constants.
-	 */
-	private NacSharedConstants getSharedConstants()
-	{
-		return this.getSharedPreferences().getConstants();
 	}
 
 	/**
@@ -941,10 +931,10 @@ public class NacMainActivity
 	@Override
 	public void onCopySwipe(NacAlarm alarm, int index)
 	{
-		NacSharedConstants cons = this.getSharedConstants();
 		NacCardAdapter adapter = this.getAlarmCardAdapter();
 		NacCardHolder card = this.getAlarmCardAt(index);
 		int size = adapter.getItemCount();
+		int maxAlarms = getResources().getInteger(R.integer.max_alarms);
 
 		// Haptic feedback so that the user knows the action was received
 		if (card != null)
@@ -956,9 +946,11 @@ public class NacMainActivity
 		adapter.notifyItemChanged(index);
 
 		// Max number of alarms reached
-		if ((size+1) > cons.getMaxAlarms())
+		if ((size+1) > maxAlarms)
 		{
-			NacUtility.quickToast(this, cons.getErrorMessageMaxAlarms());
+			String message = getString(R.string.error_message_max_alarms);
+
+			NacUtility.quickToast(this, message);
 			return;
 		}
 
@@ -1458,9 +1450,8 @@ public class NacMainActivity
 			return;
 		}
 
-		NacSharedConstants cons = this.getSharedConstants();
-		String message = cons.getMessageAlarmRestore();
-		String action = cons.getActionUndo();
+		String message = getString(R.string.message_alarm_restore);
+		String action = getString(R.string.action_undo);
 
 		this.getLastAlarmCardAction().set(alarm, NacLastAlarmCardAction.Type.RESTORE);
 		this.getAlarmViewModel().insert(this, alarm);
@@ -1492,6 +1483,12 @@ public class NacMainActivity
 		// Get the alarm and NFC tag ID
 		NacAlarm alarm = dialog.getAlarm();
 		String id = NacNfc.parseId(nfcTag);
+
+		// Check to make sure the alarm is not null before proceeding
+		if (alarm == null)
+		{
+			return;
+		}
 
 		// Set the NFC tag ID
 		alarm.setNfcTagId(id);
@@ -1813,10 +1810,9 @@ public class NacMainActivity
 	 */
 	public void showAlarmSnackbar(NacAlarm alarm)
 	{
-		NacSharedConstants cons = this.getSharedConstants();
 		NacSharedPreferences shared = this.getSharedPreferences();
 		String message = NacCalendar.getMessageWillRun(shared, alarm);
-		String action = cons.getActionDismiss();
+		String action = getString(R.string.action_alarm_dismiss);
 
 		this.showSnackbar(message, action);
 	}
@@ -1883,14 +1879,13 @@ public class NacMainActivity
 	 */
 	public void showNextAlarmSnackbar()
 	{
-		NacSharedConstants cons = this.getSharedConstants();
 		NacSharedPreferences shared = this.getSharedPreferences();
 		NacCardAdapter cardAdapter = this.getAlarmCardAdapter();
 
 		List<NacAlarm> alarms = cardAdapter.getCurrentList();
 		NacAlarm alarm = NacCalendar.getNextAlarm(alarms);
 		String message = NacCalendar.getMessageNextAlarm(shared, alarm);
-		String action = cons.getActionDismiss();
+		String action = getString(R.string.action_alarm_dismiss);
 
 		this.showSnackbar(message, action);
 	}
@@ -1905,19 +1900,19 @@ public class NacMainActivity
 			return;
 		}
 
-		NacSharedConstants cons = this.getSharedConstants();
 		Locale locale = Locale.getDefault();
 		String id = alarm.getNfcTagId();
 		String message;
 		
 		if (!id.isEmpty())
 		{
-			message = String.format(locale, "%1$s %2$s", cons.getMessageShowNfcTagId(),
-				id);
+			String nfcId = getString(R.string.message_show_nfc_tag_id);
+			message = String.format(locale, "%1$s %2$s", nfcId, id);
 		}
 		else
 		{
-			message = String.format(locale, "%1$s", cons.getMessageAnyNfcTagId());
+			String anyNfc = getString(R.string.message_any_nfc_tag_id);
+			message = String.format(locale, "%1$s", anyNfc);
 		}
 
 		NacUtility.quickToast(this, message);

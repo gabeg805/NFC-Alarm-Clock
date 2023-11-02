@@ -9,8 +9,8 @@ import android.nfc.Tag
 import android.os.Build
 import android.os.Parcelable
 import android.provider.Settings
+import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.shared.NacSharedConstants
 import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.util.NacUtility.toast
 
@@ -33,33 +33,6 @@ object NacNfc
 
 		// Add the tag to the intent
 		intent.putExtra(NfcAdapter.EXTRA_TAG, tag)
-	}
-
-	/**
-	 * Check the saved NFC tag ID in the alarm against the one in the intent.
-	 *
-	 * @return True if the alarm does not have a saved ID, or if the IDs match,
-	 *         and False otherwise.
-	 */
-	fun doIdsMatch(alarm: NacAlarm?, intent: Intent?): Boolean
-	{
-		// Check if the alarm or intent are null
-		if ((alarm == null) || (intent == null))
-		{
-			return false
-		}
-
-		// Get the NFC tag from the intent
-		val nfcTag = getTag(intent) ?: return false
-
-		// Determine the ID of the NFC tag
-		val nfcId = parseId(nfcTag)
-
-		// Get the alarm's NFC tag ID
-		val alarmNfcId = alarm.nfcTagId
-
-		// Compare the NFC IDs
-		return alarmNfcId.isEmpty() || alarmNfcId == nfcId
 	}
 
 	/**
@@ -169,16 +142,16 @@ object NacNfc
 	fun prompt(context: Context)
 	{
 		// NFC adapter does not exist
-		if (!NacNfc.exists(context))
+		if (!exists(context))
 		{
 			return
 		}
 
-		val cons = NacSharedConstants(context)
 		val settings = Intent(Settings.ACTION_NFC_SETTINGS)
+		val message = context.getString(R.string.message_nfc_request)
 
 		// Prompt the user to enable NFC
-		toast(context, cons.messageNfcRequest)
+		toast(context, message)
 		context.startActivity(settings)
 	}
 

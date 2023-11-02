@@ -7,6 +7,7 @@ import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.util.NacIntent.createMainActivity
 import com.nfcalarmclock.view.notification.NacNotification
@@ -33,13 +34,13 @@ class NacMissedAlarmNotification(context: Context) : NacNotification(context)
 	 * @see NacNotification.channelName
 	 */
 	override val channelName: String
-		get() = sharedConstants.missedNotification
+		get() = context.getString(R.string.title_missed_alarm)
 
 	/**
 	 * @see NacNotification.channelDescription
 	 */
 	override val channelDescription: String
-		get() = sharedConstants.descriptionMissedNotification
+		get() = context.getString(R.string.description_missed_alarm)
 
 	/**
 	 * @see NacNotification.title
@@ -47,9 +48,12 @@ class NacMissedAlarmNotification(context: Context) : NacNotification(context)
 	override val title: String
 		get()
 		{
+			// Get the title
 			val locale = Locale.getDefault()
+			val missedAlarm = context.resources.getQuantityString(R.plurals.missed_alarm, lineCount);
 
-			return String.format(locale, "<b>%1\$s</b>", sharedConstants.getMissedAlarm(lineCount))
+			// Format the title
+			return String.format(locale, "<b>%1\$s</b>", missedAlarm)
 		}
 
 	/**
@@ -77,12 +81,12 @@ class NacMissedAlarmNotification(context: Context) : NacNotification(context)
 		get()
 		{
 			val locale = Locale.getDefault()
-			val word = sharedConstants.getAlarm(body.size)
+			val alarmPlural = context.resources.getQuantityString(R.plurals.alarm, body.size)
 
 			// Check if the body has stuff present
 			return if (body.isNotEmpty())
 			{
-				String.format(locale, "%1\$d %2\$s", body.size, word)
+				String.format(locale, "%1\$d %2\$s", body.size, alarmPlural)
 			}
 			else
 			{

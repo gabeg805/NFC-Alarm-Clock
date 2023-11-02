@@ -19,7 +19,6 @@ import com.nfcalarmclock.R;
 import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.nfc.NacNfc;
 import com.nfcalarmclock.nfc.NacNfcTag;
-import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
 import com.nfcalarmclock.util.NacBundle;
 import com.nfcalarmclock.util.NacIntent;
@@ -388,10 +387,9 @@ public class NacActiveAlarmActivity
 		// Unable to use NFC on the device
 		else
 		{
-			NacSharedConstants cons = new NacSharedConstants(this);
+			String message = getString(R.string.error_message_nfc_unsupported);
 
-			NacUtility.quickToast(this,
-				cons.getErrorMessageNfcUnsupported());
+			NacUtility.quickToast(this, message);
 		}
 	}
 
@@ -450,10 +448,8 @@ public class NacActiveAlarmActivity
 		// device
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
 		{
-			int flags = Context.RECEIVER_NOT_EXPORTED;
-
 			// Register to listen for the STOP broadcast for the activity
-			registerReceiver(receiver, filter, flags);
+			registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED);
 		}
 		else
 		{
@@ -487,8 +483,9 @@ public class NacActiveAlarmActivity
 		// Unable to snooze. Show a toast indicating this to the user
 		if (!alarm.canSnooze(shared))
 		{
-			NacSharedConstants cons = new NacSharedConstants(this);
-			NacUtility.quickToast(this, cons.getErrorMessageSnooze());
+			String message = getString(R.string.error_message_snooze);
+
+			NacUtility.quickToast(this, message);
 			return;
 		}
 

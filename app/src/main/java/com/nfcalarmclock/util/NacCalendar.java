@@ -1,13 +1,11 @@
 package com.nfcalarmclock.util;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.text.format.DateFormat;
-
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.alarm.db.NacAlarm;
-import com.nfcalarmclock.shared.NacSharedConstants;
 import com.nfcalarmclock.shared.NacSharedPreferences;
-
 import java.lang.System;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -94,23 +92,25 @@ public class NacCalendar
 	public static String getMessage(NacSharedPreferences shared,
 		NacAlarm alarm, String prefix)
 	{
-		NacSharedConstants cons = shared.getConstants();
+		Resources res = shared.resources;
 		Calendar calendar = NacCalendar.getNextAlarmDay(alarm);
 		Locale locale = Locale.getDefault();
 
 		// No alarm scheduled
 		if ((alarm == null) || (calendar == null))
 		{
-			return String.format(locale, "%1$s.",
-				cons.getMessageNoAlarmsScheduled());
+			String noAlarmsScheduled = res.getString(R.string.message_no_alarms_scheduled);
+
+			return String.format(locale, "%1$s.", noAlarmsScheduled);
 		}
 		// Alarm is disabled
 		else if (!alarm.isEnabled())
 		{
-			int length = cons.getMessageNameLength();
+			int length = res.getInteger(R.integer.max_message_name_length);
 			String name = alarm.getNameNormalizedForMessage(length);
-			String isDisabled = cons.getIsDisabled();
-			String alarmWord = NacUtility.capitalize(cons.getAlarm(1));
+			String isDisabled = res.getString(R.string.is_disabled);
+			String alarmPlural = res.getQuantityString(R.plurals.alarm, 1);
+			String alarmWord = NacUtility.capitalize(alarmPlural);
 
 			return name.isEmpty()
 				? String.format(locale, "%1$s %2$s.", alarmWord, isDisabled)
@@ -138,11 +138,12 @@ public class NacCalendar
 	/**
 	 * @return The message to display when the next alarm will occur.
 	 */
-	public static String getMessageNextAlarm(NacSharedPreferences shared,
-                                             NacAlarm alarm)
+	public static String getMessageNextAlarm(NacSharedPreferences shared, NacAlarm alarm)
 	{
-		NacSharedConstants cons = shared.getConstants();
-		String prefix = cons.getNextAlarm();
+		// Get the prefix
+		String prefix = shared.resources.getString(R.string.next_alarm);
+
+		// Create the message
 		return NacCalendar.getMessage(shared, alarm, prefix);
 	}
 
@@ -153,20 +154,21 @@ public class NacCalendar
 	public static String getMessageTimeIn(Context context, Calendar calendar,
 		String prefix)
 	{
-		NacSharedConstants cons = new NacSharedConstants(context);
+		Resources res = context.getResources();
 		long millis = calendar.getTimeInMillis();
 		long time = (millis - System.currentTimeMillis()) / 1000;
 		long day = (time / (60*60*24)) % 365;
 		long hr = (time / (60*60)) % 24;
 		long min = (time / 60) % 60;
 		long sec = time % 60;
-		String dayunit = cons.getUnitDay((int)day);
-		String hrunit  = cons.getUnitHour((int)hr);
-		String minunit = cons.getUnitMinute((int)min);
-		String secunit = cons.getUnitSecond((int)sec);
+		String dayunit = res.getQuantityString(R.plurals.unit_day, (int)day);
+		String hrunit  = res.getQuantityString(R.plurals.unit_hour, (int)hr);
+		String minunit = res.getQuantityString(R.plurals.unit_minute, (int)min);
+		String secunit = res.getQuantityString(R.plurals.unit_second, (int)sec);
 		String timeRemaining;
 		String format = "%1$d %2$s %3$d %4$s";
 		Locale locale = Locale.getDefault();
+		String timeIn = context.getString(R.string.time_in);
 
 		if (day > 0)
 		{
@@ -188,8 +190,8 @@ public class NacCalendar
 			}
 		}
 
-		return String.format(locale, "%1$s %2$s %3$s", prefix,
-			cons.getTimeIn(), timeRemaining);
+		// Build the message
+		return String.format(locale, "%1$s %2$s %3$s", prefix, timeIn, timeRemaining);
 	}
 
 	/**
@@ -199,12 +201,11 @@ public class NacCalendar
 	public static String getMessageTimeOn(Context context, Calendar calendar,
 		String prefix)
 	{
-		NacSharedConstants cons = new NacSharedConstants(context);
 		String time = NacCalendar.Time.getFullTime(context, calendar);
 		Locale locale = Locale.getDefault();
+		String timeOn = context.getString(R.string.time_on);
 
-		return String.format(locale, "%1$s %2$s %3$s", prefix,
-			cons.getTimeOn(), time);
+		return String.format(locale, "%1$s %2$s %3$s", prefix, timeOn, time);
 	}
 
 	/**
@@ -213,10 +214,10 @@ public class NacCalendar
 	public static String getMessageWillRun(NacSharedPreferences shared,
 		NacAlarm alarm)
 	{
-		NacSharedConstants cons = shared.getConstants();
-		int length = cons.getMessageNameLength();
 		Locale locale = Locale.getDefault();
-		String willRun = cons.getWillRun();
+		Resources res = shared.resources;
+		int length = res.getInteger(R.integer.max_message_name_length);
+		String willRun = res.getString(R.string.will_run);
 		String name = alarm.getNameNormalizedForMessage(length);
 		String prefix = name.isEmpty() ? willRun
 			: String.format(locale, "\"%1$s\" %2$s", name,
@@ -781,15 +782,19 @@ public class NacCalendar
 		 */
 		public static String getMeridian(Context context, int hour)
 		{
-			NacSharedConstants cons = new NacSharedConstants(context);
+			// Check if time is in 24 hour format
 			boolean format = NacCalendar.Time.is24HourFormat(context);
+
+			// Check the format
 			if (format)
 			{
 				return "";
 			}
 			else
 			{
-				return (hour < 12) ? cons.getAm() : cons.getPm();
+				return (hour < 12)
+					? context.getString(R.string.am)
+					: context.getString(R.string.pm);
 			}
 		}
 
