@@ -26,11 +26,6 @@ public class NacSharedPreferences
 	private final SharedPreferences mInstance;
 
 	/**
-	 * Keys.
-	 */
-	private final NacSharedKeys mKeys;
-
-	/**
 	 * Resources.
 	 */
 	public final Resources resources;
@@ -41,7 +36,6 @@ public class NacSharedPreferences
 	{
 		this.mContext = context;
 		this.mInstance = PreferenceManager.getDefaultSharedPreferences(context);
-		this.mKeys = new NacSharedKeys(context);
 		this.resources = context.getResources();
 	}
 
@@ -63,7 +57,7 @@ public class NacSharedPreferences
 	 */
 	public void editAppStartStatistics(boolean shouldStart)
 	{
-		String key = this.getKeys().getAppStartStatistics();
+		String key = this.resources.getString(R.string.app_start_statistics);
 
 		this.saveBoolean(key, shouldStart, false);
 	}
@@ -75,7 +69,7 @@ public class NacSharedPreferences
 	 */
 	public void editAudioSource(String source)
 	{
-		String key = this.getKeys().getAudioSource();
+		String key = this.resources.getString(R.string.alarm_audio_source_key);
 
 		this.saveString(key, source, false);
 	}
@@ -85,7 +79,7 @@ public class NacSharedPreferences
 	 */
 	public void editCardHeightCollapsed(int height)
 	{
-		String key = this.getKeys().getCardHeightCollapsed();
+		String key = this.resources.getString(R.string.card_height_collapsed);
 
 		this.saveInt(key, height, false);
 	}
@@ -96,7 +90,7 @@ public class NacSharedPreferences
 	 */
 	public void editCardHeightCollapsedDismiss(int height)
 	{
-		String key = this.getKeys().getCardHeightCollapsedDismiss();
+		String key = this.resources.getString(R.string.card_height_collapsed_dismiss);
 
 		this.saveInt(key, height, false);
 	}
@@ -106,7 +100,7 @@ public class NacSharedPreferences
 	 */
 	public void editCardHeightExpanded(int height)
 	{
-		String key = this.getKeys().getCardHeightExpanded();
+		String key = this.resources.getString(R.string.card_height_expanded);
 
 		this.saveInt(key, height, false);
 	}
@@ -116,7 +110,7 @@ public class NacSharedPreferences
 	 */
 	public void editCardIsMeasured(boolean isMeasured)
 	{
-		String key = this.getKeys().getCardIsMeasured();
+		String key = this.resources.getString(R.string.card_is_measured);
 
 		this.saveBoolean(key, isMeasured, false);
 	}
@@ -126,7 +120,7 @@ public class NacSharedPreferences
 	 */
 	public void editDismissEarlyTime(int dismissEarly)
 	{
-		String key = this.getKeys().getDismissEarlyTime();
+		String key = this.resources.getString(R.string.alarm_dismiss_early_time_key);
 
 		this.saveInt(key, dismissEarly, false);
 	}
@@ -139,7 +133,7 @@ public class NacSharedPreferences
 	 */
 	public void editPreviousAppVersion(String version)
 	{
-		String key = this.getKeys().getPreviousAppVersion();
+		String key = this.resources.getString(R.string.previous_app_version);
 
 		this.saveString(key, version, false);
 	}
@@ -149,7 +143,7 @@ public class NacSharedPreferences
 	 */
 	public void editPreviousVolume(int previous)
 	{
-		String key = this.getKeys().getPreviousVolume();
+		String key = this.resources.getString(R.string.sys_previous_volume);
 
 		this.saveInt(key, previous, false);
 	}
@@ -160,7 +154,7 @@ public class NacSharedPreferences
 	 */
 	public void editRateMyAppCounter(int counter)
 	{
-		String key = this.getKeys().getRateMyAppCounter();
+		String key = this.resources.getString(R.string.app_rating_counter);
 
 		this.saveInt(key, counter, false);
 	}
@@ -171,7 +165,7 @@ public class NacSharedPreferences
 	 */
 	public void editShouldGraduallyIncreaseVolume(boolean shouldIncrease)
 	{
-		String key = this.getKeys().getShouldGraduallyIncreaseVolume();
+		String key = this.resources.getString(R.string.alarm_should_gradually_increase_volume_key);
 
 		this.saveBoolean(key, shouldIncrease, false);
 	}
@@ -181,7 +175,7 @@ public class NacSharedPreferences
 	 */
 	public void editShouldRestrictVolume(boolean shouldRestrict)
 	{
-		String key = this.getKeys().getShouldRestrictVolume();
+		String key = this.resources.getString(R.string.alarm_should_restrict_volume_key);
 
 		this.saveBoolean(key, shouldRestrict, false);
 	}
@@ -192,7 +186,7 @@ public class NacSharedPreferences
 	 */
 	public void editShouldRefreshMainActivity(boolean shouldRefresh)
 	{
-		String key = this.getKeys().getShouldRefreshMainActivity();
+		String key = this.resources.getString(R.string.app_should_refresh_main_activity);
 
 		this.saveBoolean(key, shouldRefresh, false);
 	}
@@ -203,7 +197,7 @@ public class NacSharedPreferences
 	 */
 	public void editSpeakFrequency(int freq)
 	{
-		String key = this.getKeys().getSpeakFrequency();
+		String key = this.resources.getString(R.string.speak_frequency_key);
 
 		this.saveInt(key, freq, false);
 	}
@@ -214,7 +208,7 @@ public class NacSharedPreferences
 	 */
 	public void editSpeakToMe(boolean speak)
 	{
-		String key = this.getKeys().getSpeakToMe();
+		String key = this.resources.getString(R.string.speak_to_me_key);
 
 		this.saveBoolean(key, speak, false);
 	}
@@ -224,7 +218,7 @@ public class NacSharedPreferences
 	 */
 	public void editUseDismissEarly(boolean useDismissEarly)
 	{
-		String key = this.getKeys().getUseDismissEarly();
+		String key = this.resources.getString(R.string.alarm_use_dismiss_early_key);
 
 		this.saveBoolean(key, useDismissEarly, false);
 	}
@@ -234,7 +228,7 @@ public class NacSharedPreferences
 	 */
 	public void editWasAppSupported(boolean wasSupported)
 	{
-		String key = this.getKeys().getWasAppSupported();
+		String key = this.resources.getString(R.string.key_app_supported);
 
 		this.saveBoolean(key, wasSupported, false);
 	}
@@ -244,7 +238,7 @@ public class NacSharedPreferences
 	 */
 	public void editWasIgnoreBatteryOptimizationPermissionRequested(boolean requested)
 	{
-		String key = this.getKeys().getWasIgnoreBatteryOptimizationPermissionRequested();
+		String key = this.resources.getString(R.string.key_permission_ignore_battery_optimization_requested);
 
 		this.saveBoolean(key, requested, false);
 	}
@@ -254,7 +248,7 @@ public class NacSharedPreferences
 	 */
 	public void editWasPostNotificationsPermissionRequested(boolean requested)
 	{
-		String key = this.getKeys().getWasPostNotificationsPermissionRequested();
+		String key = this.resources.getString(R.string.key_permission_post_notifications_requested);
 
 		this.saveBoolean(key, requested, false);
 	}
@@ -264,7 +258,7 @@ public class NacSharedPreferences
 	 */
 	public void editWasScheduleExactAlarmPermissionRequested(boolean requested)
 	{
-		String key = this.getKeys().getWasScheduleExactAlarmPermissionRequested();
+		String key = this.resources.getString(R.string.key_permission_schedule_exact_alarm_requested);
 
 		this.saveBoolean(key, requested, false);
 	}
@@ -274,7 +268,7 @@ public class NacSharedPreferences
 	 */
 	public int getAmColor()
 	{
-		String key = this.getKeys().getAmColor();
+		String key = this.resources.getString(R.string.am_color_key);
 		int value = this.resources.getInteger(R.integer.default_am_color);
 
 		return this.getInt(key, value);
@@ -300,7 +294,7 @@ public class NacSharedPreferences
 	 */
 	public boolean getAppStartStatistics()
 	{
-		String key = this.getKeys().getAppStartStatistics();
+		String key = this.resources.getString(R.string.app_start_statistics);
 		boolean value = this.resources.getBoolean(R.bool.default_app_start_statistics);
 
 		return this.getBoolean(key, value);
@@ -311,7 +305,7 @@ public class NacSharedPreferences
 	 */
 	public String getAudioSource()
 	{
-		String key = this.getKeys().getAudioSource();
+		String key = this.resources.getString(R.string.alarm_audio_source_key);
 		String[] audioSources = this.resources.getStringArray(R.array.audio_sources);
 		String value = audioSources[2];
 
@@ -323,7 +317,7 @@ public class NacSharedPreferences
 	 */
 	public int getAutoDismiss()
 	{
-		String key = this.getKeys().getAutoDismiss();
+		String key = this.resources.getString(R.string.auto_dismiss_key);
 		int value = this.resources.getInteger(R.integer.default_auto_dismiss_index);
 
 		return this.getInt(key, value);
@@ -371,7 +365,7 @@ public class NacSharedPreferences
 	 */
 	public int getCardHeightCollapsed()
 	{
-		String key = this.getKeys().getCardHeightCollapsed();
+		String key = this.resources.getString(R.string.card_height_collapsed);
 		int value = this.resources.getInteger(R.integer.default_card_height_collapsed);
 
 		return this.getInt(key, value);
@@ -382,7 +376,7 @@ public class NacSharedPreferences
 	 */
 	public int getCardHeightCollapsedDismiss()
 	{
-		String key = this.getKeys().getCardHeightCollapsedDismiss();
+		String key = this.resources.getString(R.string.card_height_collapsed_dismiss);
 		int value = this.resources.getInteger(R.integer.default_card_height_collapsed_dismiss);
 
 		return this.getInt(key, value);
@@ -393,7 +387,7 @@ public class NacSharedPreferences
 	 */
 	public int getCardHeightExpanded()
 	{
-		String key = this.getKeys().getCardHeightExpanded();
+		String key = this.resources.getString(R.string.card_height_expanded);
 		int value = this.resources.getInteger(R.integer.default_card_height_expanded);
 
 		return this.getInt(key, value);
@@ -404,13 +398,15 @@ public class NacSharedPreferences
 	 */
 	public boolean getCardIsMeasured()
 	{
-		String key = this.getKeys().getCardIsMeasured();
+		String key = this.resources.getString(R.string.card_is_measured);
 		boolean value = this.resources.getBoolean(R.bool.default_card_is_measured);
 
 		return this.getBoolean(key, value);
 	}
 
 	/**
+	 * TODO: This is used in NacCalendar. Delete that and you're golden.
+	 *
 	 * @return The application context.
 	 */
 	public Context getContext()
@@ -426,7 +422,7 @@ public class NacSharedPreferences
 	 */
 	public int getDayButtonStyle()
 	{
-		String key = this.getKeys().getDayButtonStyle();
+		String key = this.resources.getString(R.string.day_button_style_key);
 		int value = this.resources.getInteger(R.integer.default_day_button_style);
 
 		return this.getInt(key, value);
@@ -437,7 +433,7 @@ public class NacSharedPreferences
 	 */
 	public int getDays()
 	{
-		String key = this.getKeys().getDays();
+		String key = this.resources.getString(R.string.alarm_days_key);
 		int value = this.resources.getInteger(R.integer.default_days);
 
 		return this.getInt(key, value);
@@ -448,7 +444,7 @@ public class NacSharedPreferences
 	 */
 	public int getDaysColor()
 	{
-		String key = this.getKeys().getDaysColor();
+		String key = this.resources.getString(R.string.days_color_key);
 		int value = this.resources.getInteger(R.integer.default_days_color);
 
 		return this.getInt(key, value);
@@ -481,7 +477,7 @@ public class NacSharedPreferences
 	 */
 	public int getDismissEarlyTime()
 	{
-		String key = this.getKeys().getDismissEarlyTime();
+		String key = this.resources.getString(R.string.alarm_dismiss_early_time_key);
 		int value = this.resources.getInteger(R.integer.default_dismiss_early_time);
 
 		return this.getInt(key, value);
@@ -501,7 +497,7 @@ public class NacSharedPreferences
 	 */
 	public boolean getEasySnooze()
 	{
-		String key = this.getKeys().getEasySnooze();
+		String key = this.resources.getString(R.string.easy_snooze_key);
 		boolean value = this.resources.getBoolean(R.bool.default_easy_snooze);
 
 		return this.getBoolean(key, value);
@@ -512,7 +508,7 @@ public class NacSharedPreferences
 	 */
 	public boolean getExpandNewAlarm()
 	{
-		String key = this.getKeys().getExpandNewAlarm();
+		String key = this.resources.getString(R.string.expand_new_alarm_key);
 		boolean value = this.resources.getBoolean(R.bool.default_expand_new_alarm);
 
 		return this.getBoolean(key, value);
@@ -535,19 +531,11 @@ public class NacSharedPreferences
 	}
 
 	/**
-	 * @return The preference keys.
-	 */
-	public NacSharedKeys getKeys()
-	{
-		return this.mKeys;
-	}
-
-	/**
 	 * @return The max number of snoozes.
 	 */
 	public int getMaxSnooze()
 	{
-		String key = this.getKeys().getMaxSnooze();
+		String key = this.resources.getString(R.string.max_snooze_key);
 		int value = this.resources.getInteger(R.integer.default_max_snooze_index);
 
 		return this.getInt(key, value);
@@ -589,7 +577,7 @@ public class NacSharedPreferences
 	 */
 	public String getMediaPath()
 	{
-		String key = this.getKeys().getMediaPath();
+		String key = this.resources.getString(R.string.alarm_sound_key);
 
 		return this.getString(key, "");
 	}
@@ -599,7 +587,8 @@ public class NacSharedPreferences
 	 */
 	public static String getMediaMessage(Context context, String path)
 	{
-		return !NacFile.isEmpty(path)
+		//return !NacFile.isEmpty(path)
+		return ((path != null) && (path.length() > 0))
 			? NacMedia.getTitle(context, path)
 			: context.getResources().getString(R.string.description_media);
 	}
@@ -609,7 +598,7 @@ public class NacSharedPreferences
 	 */
 	public boolean getMissedAlarmNotification()
 	{
-		String key = this.getKeys().getMissedAlarmNotification();
+		String key = this.resources.getString(R.string.missed_alarm_key);
 		boolean value = this.resources.getBoolean(R.bool.default_missed_alarm);
 
 		return this.getBoolean(key, value);
@@ -620,7 +609,7 @@ public class NacSharedPreferences
 	 */
 	public String getName()
 	{
-		String key = this.getKeys().getName();
+		String key = this.resources.getString(R.string.alarm_name_key);
 
 		return this.getString(key, "");
 	}
@@ -630,7 +619,7 @@ public class NacSharedPreferences
 	 */
 	public int getNameColor()
 	{
-		String key = this.getKeys().getNameColor();
+		String key = this.resources.getString(R.string.name_color_key);
 		int value = this.resources.getInteger(R.integer.default_name_color);
 
 		return this.getInt(key, value);
@@ -655,7 +644,7 @@ public class NacSharedPreferences
 	 */
 	public int getNextAlarmFormat()
 	{
-		String key = this.getKeys().getNextAlarmFormat();
+		String key = this.resources.getString(R.string.next_alarm_format_key);
 		int value = this.resources.getInteger(R.integer.default_next_alarm_format_index);
 
 		return this.getInt(key, value);
@@ -666,7 +655,7 @@ public class NacSharedPreferences
 	 */
 	public int getPmColor()
 	{
-		String key = this.getKeys().getPmColor();
+		String key = this.resources.getString(R.string.pm_color_key);
 		int value = this.resources.getInteger(R.integer.default_pm_color);
 
 		return this.getInt(key, value);
@@ -680,7 +669,7 @@ public class NacSharedPreferences
 	 */
 	public String getPreviousAppVersion()
 	{
-		String key = this.getKeys().getPreviousAppVersion();
+		String key = this.resources.getString(R.string.previous_app_version);
 
 		return this.getString(key, "");
 	}
@@ -690,7 +679,7 @@ public class NacSharedPreferences
 	 */
 	public int getPreviousVolume()
 	{
-		String key = this.getKeys().getPreviousVolume();
+		String key = this.resources.getString(R.string.sys_previous_volume);
 		int value = this.resources.getInteger(R.integer.default_previous_volume);
 
 		return this.getInt(key, value);
@@ -701,7 +690,7 @@ public class NacSharedPreferences
 	 */
 	public int getRateMyAppCounter()
 	{
-		String key = this.getKeys().getRateMyAppCounter();
+		String key = this.resources.getString(R.string.app_rating_counter);
 		int value = this.resources.getInteger(R.integer.default_rate_my_app_counter);
 
 		return this.getInt(key, value);
@@ -712,7 +701,7 @@ public class NacSharedPreferences
 	 */
 	public boolean getRepeat()
 	{
-		String key = this.getKeys().getRepeat();
+		String key = this.resources.getString(R.string.alarm_repeat_key);
 		boolean value = this.resources.getBoolean(R.bool.default_repeat);
 
 		return this.getBoolean(key, value);
@@ -723,7 +712,7 @@ public class NacSharedPreferences
 	 */
 	public boolean getShouldGraduallyIncreaseVolume()
 	{
-		String key = this.getKeys().getShouldGraduallyIncreaseVolume();
+		String key = this.resources.getString(R.string.alarm_should_gradually_increase_volume_key);
 		boolean value = this.resources.getBoolean(R.bool.default_should_gradually_increase_volume);
 
 		return this.getBoolean(key, value);
@@ -734,7 +723,7 @@ public class NacSharedPreferences
 	 */
 	public boolean getShouldRefreshMainActivity()
 	{
-		String key = this.getKeys().getShouldRefreshMainActivity();
+		String key = this.resources.getString(R.string.app_should_refresh_main_activity);
 		boolean value = this.resources.getBoolean(R.bool.default_app_should_refresh_main_activity);
 
 		return this.getBoolean(key, value);
@@ -745,7 +734,7 @@ public class NacSharedPreferences
 	 */
 	public boolean getShouldRestrictVolume()
 	{
-		String key = this.getKeys().getShouldRestrictVolume();
+		String key = this.resources.getString(R.string.alarm_should_restrict_volume_key);
 		boolean value = this.resources.getBoolean(R.bool.default_should_restrict_volume);
 
 		return this.getBoolean(key, value);
@@ -756,7 +745,7 @@ public class NacSharedPreferences
 	 */
 	public boolean getShowAlarmInfo()
 	{
-		String key = this.getKeys().getShowAlarmInfo();
+		String key = this.resources.getString(R.string.show_alarm_info_key);
 		boolean value = this.resources.getBoolean(R.bool.default_show_alarm_info);
 
 		return this.getBoolean(key, value);
@@ -767,7 +756,7 @@ public class NacSharedPreferences
 	 */
 	public boolean getShuffle()
 	{
-		String key = this.getKeys().getShuffle();
+		String key = this.resources.getString(R.string.shuffle_playlist_key);
 		boolean value = this.resources.getBoolean(R.bool.default_shuffle_playlist);
 
 		return this.getBoolean(key, value);
@@ -778,7 +767,7 @@ public class NacSharedPreferences
 	 */
 	public int getSnoozeDuration()
 	{
-		String key = this.getKeys().getSnoozeDuration();
+		String key = this.resources.getString(R.string.snooze_duration_key);
 		int value = this.resources.getInteger(R.integer.default_snooze_duration_index);
 
 		return this.getInt(key, value);
@@ -820,7 +809,7 @@ public class NacSharedPreferences
 	 */
 	public int getSpeakFrequency()
 	{
-		String key = this.getKeys().getSpeakFrequency();
+		String key = this.resources.getString(R.string.speak_frequency_key);
 		int value = this.resources.getInteger(R.integer.default_speak_frequency_index);
 
 		return this.getInt(key, value);
@@ -831,7 +820,7 @@ public class NacSharedPreferences
 	 */
 	public boolean getSpeakToMe()
 	{
-		String key = this.getKeys().getSpeakToMe();
+		String key = this.resources.getString(R.string.speak_to_me_key);
 		boolean value = this.resources.getBoolean(R.bool.default_speak_to_me);
 
 		return this.getBoolean(key, value);
@@ -842,7 +831,7 @@ public class NacSharedPreferences
 	 */
 	public int getStartWeekOn()
 	{
-		String key = this.getKeys().getStartWeekOn();
+		String key = this.resources.getString(R.string.start_week_on_key);
 		int value = this.resources.getInteger(R.integer.default_start_week_on_index);
 
 		return this.getInt(key, value);
@@ -861,7 +850,7 @@ public class NacSharedPreferences
 	 */
 	public int getThemeColor()
 	{
-		String key = this.getKeys().getThemeColor();
+		String key = this.resources.getString(R.string.theme_color_key);
 		int value = this.resources.getInteger(R.integer.default_theme_color);
 
 		return this.getInt(key, value);
@@ -872,7 +861,7 @@ public class NacSharedPreferences
 	 */
 	public int getTimeColor()
 	{
-		String key = this.getKeys().getTimeColor();
+		String key = this.resources.getString(R.string.time_color_key);
 		int value = this.resources.getInteger(R.integer.default_time_color);
 
 		return this.getInt(key, value);
@@ -883,7 +872,7 @@ public class NacSharedPreferences
 	 */
 	public boolean getUpcomingAlarmNotification()
 	{
-		String key = this.getKeys().getUpcomingAlarmNotification();
+		String key = this.resources.getString(R.string.upcoming_alarm_key);
 		boolean value = this.resources.getBoolean(R.bool.default_upcoming_alarm);
 
 		return this.getBoolean(key, value);
@@ -894,7 +883,7 @@ public class NacSharedPreferences
 	 */
 	public boolean getUseDismissEarly()
 	{
-		String key = this.getKeys().getUseDismissEarly();
+		String key = this.resources.getString(R.string.alarm_use_dismiss_early_key);
 		boolean value = this.resources.getBoolean(R.bool.default_use_dismiss_early);
 
 		return this.getBoolean(key, value);
@@ -905,7 +894,7 @@ public class NacSharedPreferences
 	 */
 	public boolean getUseNfc()
 	{
-		String key = this.getKeys().getUseNfc();
+		String key = this.resources.getString(R.string.alarm_use_nfc_key);
 		boolean value = this.resources.getBoolean(R.bool.default_use_nfc);
 
 		return this.getBoolean(key, value);
@@ -916,7 +905,7 @@ public class NacSharedPreferences
 	 */
 	public boolean getVibrate()
 	{
-		String key = this.getKeys().getVibrate();
+		String key = this.resources.getString(R.string.alarm_vibrate_key);
 		boolean value = this.resources.getBoolean(R.bool.default_vibrate);
 
 		return this.getBoolean(key, value);
@@ -927,7 +916,7 @@ public class NacSharedPreferences
 	 */
 	public int getVolume()
 	{
-		String key = this.getKeys().getVolume();
+		String key = this.resources.getString(R.string.alarm_volume_key);
 		int value = this.resources.getInteger(R.integer.default_volume);
 
 		return this.getInt(key, value);
@@ -940,7 +929,7 @@ public class NacSharedPreferences
 	 */
 	public boolean getWasAppSupported()
 	{
-		String key = this.getKeys().getWasAppSupported();
+		String key = this.resources.getString(R.string.key_app_supported);
 		boolean value = this.resources.getBoolean(R.bool.default_was_app_supported);
 
 		return this.getBoolean(key, value);
@@ -954,7 +943,7 @@ public class NacSharedPreferences
 	 */
 	public boolean getWasIgnoreBatteryOptimizationPermissionRequested()
 	{
-		String key = this.getKeys().getWasIgnoreBatteryOptimizationPermissionRequested();
+		String key = this.resources.getString(R.string.key_permission_ignore_battery_optimization_requested);
 		boolean value = this.resources.getBoolean(R.bool.default_was_ignore_battery_optimization_permission_requested);
 
 		return this.getBoolean(key, value);
@@ -967,7 +956,7 @@ public class NacSharedPreferences
 	 */
 	public boolean getWasPostNotificationsPermissionRequested()
 	{
-		String key = this.getKeys().getWasPostNotificationsPermissionRequested();
+		String key = this.resources.getString(R.string.key_permission_post_notifications_requested);
 		boolean value = this.resources.getBoolean(R.bool.default_was_post_notifications_permission_requested);
 
 		return this.getBoolean(key, value);
@@ -980,7 +969,7 @@ public class NacSharedPreferences
 	 */
 	public boolean getWasScheduleExactAlarmPermissionRequested()
 	{
-		String key = this.getKeys().getWasScheduleExactAlarmPermissionRequested();
+		String key = this.resources.getString(R.string.key_permission_schedule_exact_alarm_requested);
 		boolean value = this.resources.getBoolean(R.bool.default_was_schedule_exact_alarm_permission_requested);
 
 		return this.getBoolean(key, value);

@@ -53,20 +53,29 @@ class NacAppearanceSettingFragment
 	 */
 	override fun onPreferenceChange(pref: Preference, newVal: Any): Boolean
 	{
-		val colorKeys = sharedKeys!!.colorKeys
-		val themeKey = sharedKeys!!.themeColor
-		val dayButtonStyleKey = sharedKeys!!.dayButtonStyle
-		val prefKey = pref.key
+		// Get the keys
+		val themeKey = getString(R.string.theme_color_key)
+		val nameKey = getString(R.string.name_color_key)
+		val dayKey = getString(R.string.days_color_key)
+		val timeKey = getString(R.string.time_color_key)
+		val amKey = getString(R.string.am_color_key)
+		val pmKey = getString(R.string.pm_color_key)
+
+		// Put the color keys in a list
+		val colorKeys = arrayOf(themeKey, nameKey, dayKey, timeKey, amKey, pmKey)
+
+		// Get the day button style key
+		val dayButtonStyleKey = getString(R.string.day_button_style_key)
 
 		// Check if the color keys match the prefernece key or that the preference is
 		// for day button styles
-		if (colorKeys.contains(prefKey) || (prefKey == dayButtonStyleKey))
+		if (colorKeys.contains(pref.key) || (pref.key == dayButtonStyleKey))
 		{
 			// Set flag to refresh the main activity
 			sharedPreferences!!.editShouldRefreshMainActivity(true)
 
 			// Preference key is for the theme
-			if (prefKey == themeKey)
+			if (pref.key == themeKey)
 			{
 				// Reset the screen
 				preferenceScreen = null
@@ -84,13 +93,21 @@ class NacAppearanceSettingFragment
 	 */
 	private fun setupColorPickerOnClickListeners()
 	{
+		// Get the keys
+		val themeKey = getString(R.string.theme_color_key)
+		val nameKey = getString(R.string.name_color_key)
+		val dayKey = getString(R.string.days_color_key)
+		val timeKey = getString(R.string.time_color_key)
+		val amKey = getString(R.string.am_color_key)
+		val pmKey = getString(R.string.pm_color_key)
+
 		// Get the color preferences
-		val themePref = findPreference<NacColorPickerPreference>(sharedKeys!!.themeColor)
-		val namePref = findPreference<NacColorPickerPreference>(sharedKeys!!.nameColor)
-		val daysPref = findPreference<NacColorPickerPreference>(sharedKeys!!.daysColor)
-		val timePref = findPreference<NacColorPickerPreference>(sharedKeys!!.timeColor)
-		val amPref = findPreference<NacColorPickerPreference>(sharedKeys!!.amColor)
-		val pmPref = findPreference<NacColorPickerPreference>(sharedKeys!!.pmColor)
+		val themePref = findPreference<NacColorPickerPreference>(themeKey)
+		val namePref = findPreference<NacColorPickerPreference>(nameKey)
+		val daysPref = findPreference<NacColorPickerPreference>(dayKey)
+		val timePref = findPreference<NacColorPickerPreference>(timeKey)
+		val amPref = findPreference<NacColorPickerPreference>(amKey)
+		val pmPref = findPreference<NacColorPickerPreference>(pmKey)
 
 		// Create list of all color preferences
 		val allPrefs = listOf(themePref, namePref, daysPref, timePref, amPref, pmPref)
@@ -116,8 +133,19 @@ class NacAppearanceSettingFragment
 	 */
 	private fun setupColorPreferences()
 	{
+		// Get the keys
+		val themeKey = getString(R.string.theme_color_key)
+		val nameKey = getString(R.string.name_color_key)
+		val dayKey = getString(R.string.days_color_key)
+		val timeKey = getString(R.string.time_color_key)
+		val amKey = getString(R.string.am_color_key)
+		val pmKey = getString(R.string.pm_color_key)
+
+		// Put the color keys in a list
+		val colorKeys = arrayOf(themeKey, nameKey, dayKey, timeKey, amKey, pmKey)
+
 		// Iterate over each color key
-		for (k in sharedKeys!!.colorKeys)
+		for (k in colorKeys)
 		{
 			// Get the preference
 			val pref = findPreference<Preference>(k)
@@ -133,7 +161,7 @@ class NacAppearanceSettingFragment
 	private fun setupDayButtonStylePreference()
 	{
 		// Get the preference
-		val dayButtonStyleKey = sharedKeys!!.dayButtonStyle
+		val dayButtonStyleKey = getString(R.string.day_button_style_key)
 		val dayButtonStylePref = findPreference<Preference>(dayButtonStyleKey)
 
 		// Set the listener for when the preference is changed
@@ -146,13 +174,14 @@ class NacAppearanceSettingFragment
 	private fun setupNexAlarmFormatOnClickListener()
 	{
 		// Get the preference
-		val nextAlarmFormatPref = findPreference<NacNextAlarmFormatPreference>(sharedKeys!!.nextAlarmFormat)
+		val key = getString(R.string.next_alarm_format_key);
+		val pref = findPreference<NacNextAlarmFormatPreference>(key)
 
 		// Set the on click listener
-		nextAlarmFormatPref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { pref ->
+		pref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { p ->
 
 			// Show the dialog
-			(pref as NacNextAlarmFormatPreference).showDialog(childFragmentManager)
+			(p as NacNextAlarmFormatPreference).showDialog(childFragmentManager)
 
 			// Return
 			true
@@ -166,13 +195,14 @@ class NacAppearanceSettingFragment
 	private fun setupStartWeekOnClickListener()
 	{
 		// Get the preference
-		val startWeekOnPref = findPreference<NacStartWeekOnPreference>(sharedKeys!!.startWeekOn)
+		val key = getString(R.string.start_week_on_key)
+		val pref = findPreference<NacStartWeekOnPreference>(key)
 
 		// Set the on click listener
-		startWeekOnPref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { pref ->
+		pref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { p ->
 
 			// Show the dialog
-			(pref as NacStartWeekOnPreference).showDialog(childFragmentManager)
+			(p as NacStartWeekOnPreference).showDialog(childFragmentManager)
 
 			// Return
 			true

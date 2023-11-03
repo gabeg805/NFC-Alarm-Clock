@@ -200,6 +200,13 @@ public class NacMedia
 		{
 			int index = c.getColumnIndexOrThrow(column);
 			value = c.getString(index);
+
+			// Check if the returned string is null
+			if (value == null)
+			{
+				// Set it to an empty string for simplicity
+				value = "";
+			}
 		}
 		// Something happened, unable to get the string
 		catch (IllegalArgumentException e)

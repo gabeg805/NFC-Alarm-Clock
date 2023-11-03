@@ -27,7 +27,8 @@ class NacAboutSettingFragment : NacGenericSettingFragment()
 		addPreferencesFromResource(R.xml.about_preferences)
 
 		// Get the version preference
-		val versionPref = findPreference<Preference>(sharedKeys!!.versionPreference)
+		val versionKey = getString(R.string.version_key)
+		val versionPref = findPreference<Preference>(versionKey)
 
 		// Set the version name as the summary
 		versionPref!!.summary = BuildConfig.VERSION_NAME
@@ -42,7 +43,7 @@ class NacAboutSettingFragment : NacGenericSettingFragment()
 		val preferenceKey = preference.key
 
 		// Keys to compare against
-		val versionKey = sharedKeys!!.versionPreference
+		val versionKey = getString(R.string.version_key)
 		val disableBatteryOptimizationKey =
 			getString(R.string.about_ignore_battery_optimization_key)
 		val nfcKey = getString(R.string.about_nfc_key)

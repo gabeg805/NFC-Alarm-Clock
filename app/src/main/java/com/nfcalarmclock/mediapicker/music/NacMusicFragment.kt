@@ -38,46 +38,88 @@ class NacMusicFragment
 	 */
 	private var directoryTextView: TextView? = null
 
+	///**
+	// * Called when the file browser is clicked.
+	// */
+	//override fun onBrowserClicked(browser: NacFileBrowser,
+	//	metadata: NacFile.Metadata, path: String, name: String)
+	//{
+	//	// Directory was clicked
+	//	if (metadata.isDirectory)
+	//	{
+	//		val locale = Locale.getDefault()
+	//		val textPath = if (path.isEmpty()) "" else String.format(locale, "%1\$s/", path)
+
+	//		// Set the alarm media path to the directory
+	//		media = path
+	//		directoryTextView!!.text = textPath
+
+	//		// Show the contents of the directory
+	//		browser.show(path)
+	//	}
+	//	// File was clicked
+	//	else if (metadata.isFile)
+	//	{
+	//		val uri = metadata.toExternalUri()
+
+	//		// Play the media file
+	//		if (browser.isSelected)
+	//		{
+	//			// Unable to play the media
+	//			if (!safePlay(uri))
+	//			{
+	//				// Show an error toast
+	//				showErrorPlayingAudio()
+	//			}
+	//		}
+	//		// File was deselected
+	//		else
+	//		{
+	//			// Reset the media player
+	//			safeReset()
+	//		}
+	//	}
+	//}
+
 	/**
-	 * Called when the file browser is clicked.
+	 * Called when a directory is clicked in the file browser.
 	 */
-	override fun onBrowserClicked(browser: NacFileBrowser,
-		metadata: NacFile.Metadata, path: String, name: String)
+	override fun onDirectoryClicked(browser: NacFileBrowser,
+		metadata: NacFile.Metadata, path: String)
 	{
-		// Directory was clicked
-		if (metadata.isDirectory)
+		val locale = Locale.getDefault()
+		val textPath = if (path.isEmpty()) "" else String.format(locale, "%1\$s/", path)
+
+		// Set the alarm media path to the directory
+		media = path
+		directoryTextView!!.text = textPath
+
+		// Show the contents of the directory
+		browser.show(path)
+	}
+
+	/**
+	 * Called when a file is clicked in the file browser.
+	 */
+	override fun onFileClicked(browser: NacFileBrowser, metadata: NacFile.Metadata)
+	{
+		val uri = metadata.toExternalUri()
+
+		// Play the media file
+		if (browser.isSelected)
 		{
-			val locale = Locale.getDefault()
-			val textPath = if (path.isEmpty()) "" else String.format(locale, "%1\$s/", path)
-
-			// Set the alarm media path to the directory
-			this.media = path
-			directoryTextView!!.text = textPath
-
-			// Show the contents of the directory
-			browser.show(path)
+			 // Unable to play the media
+			 if (!safePlay(uri))
+			 {
+				  // Show an error toast
+				  showErrorPlayingAudio()
+			 }
 		}
-		// File was clicked
-		else if (metadata.isFile)
+		// File was deselected
+		else
 		{
-			val uri = metadata.toExternalUri()
-
-			// Play the media file
-			if (browser.isSelected)
-			{
-				// Unable to play the media
-				if (!safePlay(uri))
-				{
-					// Show an error toast
-					showErrorPlayingAudio()
-				}
-			}
-			// File was deselected
-			else
-			{
-				// Reset the media player
-				safeReset()
-			}
+			 // Reset the media player
+			 safeReset()
 		}
 	}
 
@@ -167,10 +209,10 @@ class NacMusicFragment
 		directoryTextView = root.findViewById(R.id.path)
 
 		// Directory to show in the textview
-		var dir: String? = ""
+		var dir = ""
 
 		// Name of the file to select in the file browser
-		var name: String? = ""
+		var name = ""
 
 		// Check if the media is a file
 		if (NacMedia.isFile(context, mediaPath))
@@ -192,7 +234,7 @@ class NacMusicFragment
 		directoryTextView!!.text = dir
 
 		// Setup the file browser
-		fileBrowser!!.setOnBrowserClickedListener(this)
+		fileBrowser!!.onBrowserClickedListener = this
 		fileBrowser!!.show(dir)
 		fileBrowser!!.select(name)
 	}

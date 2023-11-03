@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import androidx.preference.PreferenceFragmentCompat
-import com.nfcalarmclock.shared.NacSharedKeys
 import com.nfcalarmclock.shared.NacSharedPreferences
 
 /**
@@ -19,12 +18,6 @@ abstract class NacGenericSettingFragment
 	 * Shared preference store.
 	 */
 	protected var sharedPreferences: NacSharedPreferences? = null
-
-	/**
-	 * Shared preference keys.
-	 */
-	protected var sharedKeys: NacSharedKeys? = null
-		get() = sharedPreferences?.keys
 
 	/**
 	 * Called when the fragment is attached.
