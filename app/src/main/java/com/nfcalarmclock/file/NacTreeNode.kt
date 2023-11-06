@@ -2,8 +2,6 @@ package com.nfcalarmclock.file
 
 /**
  * Node in a tree.
- *
- * TODO: Can probably change parameters.
  */
 open class NacTreeNode<T> @JvmOverloads constructor(
 

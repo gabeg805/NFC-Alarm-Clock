@@ -1,19 +1,19 @@
 package com.nfcalarmclock.filebrowser
 
 import android.content.Context
-import android.os.Handler
-import androidx.lifecycle.MutableLiveData
 import com.nfcalarmclock.R
 import com.nfcalarmclock.file.NacFile
 import com.nfcalarmclock.file.NacFileTree
 import com.nfcalarmclock.media.NacMedia
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 /**
  * File browser repository.
  */
-class NacFileBrowserRepository(context: Context)
+class NacFileBrowserRepository()
 {
 
 	/**
@@ -22,41 +22,18 @@ class NacFileBrowserRepository(context: Context)
 	val fileTree: NacFileTree = NacFileTree("")
 
 	/**
-	 * Listing of file metadata.
+	 * Current metadata.
 	 */
-	val listingLiveData: MutableLiveData<MutableList<NacFile.Metadata>> =
-		MutableLiveData(ArrayList())
+	private val _currentMetadata: MutableSharedFlow<NacFile.Metadata?> =
+		MutableSharedFlow(replay = 1)
+
+	// Public metadata that is not modifiable
+	val currentMetadata: SharedFlow<NacFile.Metadata?> = _currentMetadata
 
 	/**
 	 * Flag to check if is scanning the file tree or not.
 	 */
-	var isScanning: Boolean = true
-		private set
-
-	/**
-	 * Flag to check if is show a file listing or not.
-	 */
-	var isShowing: Boolean = true
-		private set
-
-	/**
-	 * Check if the repository is busy scanning or showing a file listing.
-	 */
-	val isBusy: Boolean
-		get() = isScanning || isShowing
-
-	/**
-	 * Constructor.
-	 */
-	init
-	{
-		// Prepare a handler
-		val looper = context.mainLooper
-		val handler = Handler(looper)
-
-		// Scan the file tree in the background
-		handler.post { this.scan(context) }
-	}
+	private var isScanning: Boolean = true
 
 	/**
 	 * Add a directory entry to the file listing.
@@ -64,7 +41,7 @@ class NacFileBrowserRepository(context: Context)
 	 * TODO Count number of songs in subdirectories and make that the
 	 * annotation.
 	 */
-	fun addDirectory(context: Context, metadata: NacFile.Metadata)
+	private suspend fun addDirectory(context: Context, metadata: NacFile.Metadata)
 	{
 		// Determine what the extra data will be. This will be the name shown to the
 		// user
@@ -86,13 +63,13 @@ class NacFileBrowserRepository(context: Context)
 		metadata.extra = extra
 
 		// Add to the listing
-		listingLiveData.value!!.add(metadata)
+		_currentMetadata.emit(metadata)
 	}
 
 	/**
 	 * Add a music file entry to the file listing.
 	 */
-	fun addFile(context: Context, metadata: NacFile.Metadata)
+	private suspend fun addFile(context: Context, metadata: NacFile.Metadata)
 	{
 		// Determine the extra data. This will be shown to the user
 		val title = NacMedia.getTitle(context, metadata)
@@ -109,7 +86,7 @@ class NacFileBrowserRepository(context: Context)
 		metadata.extra = arrayOf(title, artist, duration)
 
 		// Add to the listing
-		listingLiveData.value!!.add(metadata)
+		_currentMetadata.emit(metadata)
 	}
 
 	/**
@@ -128,13 +105,19 @@ class NacFileBrowserRepository(context: Context)
 	}
 
 	/**
+	 * Clear the file listing.
+	 */
+	suspend fun clear()
+	{
+		// Clear the file listing
+		_currentMetadata.emit(null)
+	}
+
+	/**
 	 * Show the contents of the file listing and tree.
 	 */
-	fun show(context: Context, path: String)
+	suspend fun show(context: Context, path: String)
 	{
-		// Set the showing flag
-		isShowing = true
-
 		// Wait until scanning is complete
 		while (isScanning)
 		{
@@ -147,16 +130,11 @@ class NacFileBrowserRepository(context: Context)
 			}
 		}
 
-		val listing = listingLiveData.value!!
-
-		// Clear the file listing
-		listing.clear()
-
 		// Not at the root level so add the previous directory to the listing.
 		// Note: An empty path indicates the root level
-		if (!path.isEmpty())
+		if (path.isNotEmpty())
 		{
-			val metadata = NacFile.Metadata(path, "..", -1)
+			val metadata = NacFile.Metadata(path, NacFile.Metadata.PREVIOUS_DIRECTORY)
 
 			addDirectory(context, metadata)
 		}
@@ -179,12 +157,6 @@ class NacFileBrowserRepository(context: Context)
 
 		// Change directory to the new path
 		fileTree.cd(path)
-
-		// Notify observers of change
-		listingLiveData.postValue(listing)
-
-		// Disable the showing flag
-		isShowing = false
 	}
 
 }

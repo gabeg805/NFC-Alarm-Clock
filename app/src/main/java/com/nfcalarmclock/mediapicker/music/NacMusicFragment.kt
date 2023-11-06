@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.nfcalarmclock.R
@@ -84,8 +85,7 @@ class NacMusicFragment
 	/**
 	 * Called when a directory is clicked in the file browser.
 	 */
-	override fun onDirectoryClicked(browser: NacFileBrowser,
-		metadata: NacFile.Metadata, path: String)
+	override fun onDirectoryClicked(browser: NacFileBrowser, path: String)
 	{
 		val locale = Locale.getDefault()
 		val textPath = if (path.isEmpty()) "" else String.format(locale, "%1\$s/", path)
@@ -132,7 +132,7 @@ class NacMusicFragment
 		super.onClearClicked()
 
 		// De-select whatever is selected
-		fileBrowser?.deselect()
+		fileBrowser?.deselect(requireContext())
 	}
 
 	/**
@@ -203,7 +203,9 @@ class NacMusicFragment
 	private fun setupFileBrowser(root: View)
 	{
 		// Create and set the file browser
-		fileBrowser = NacFileBrowser(this, root, R.id.container)
+		val context = requireContext()
+		val container: LinearLayout = root.findViewById(R.id.container)
+		fileBrowser = NacFileBrowser(context, container)
 
 		// Set the textview with the directory path
 		directoryTextView = root.findViewById(R.id.path)
@@ -215,6 +217,7 @@ class NacMusicFragment
 		var name = ""
 
 		// Check if the media is a file
+		// TODO: Move this into NacFileBrowser
 		if (NacMedia.isFile(context, mediaPath))
 		{
 			// Get the URI
@@ -236,7 +239,7 @@ class NacMusicFragment
 		// Setup the file browser
 		fileBrowser!!.onBrowserClickedListener = this
 		fileBrowser!!.show(dir)
-		fileBrowser!!.select(name)
+		fileBrowser!!.select(context, name)
 	}
 
 	/**

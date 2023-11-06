@@ -177,8 +177,18 @@ object NacFile
 	 * TODO: Add fullPath attribute for ".." so that you can still have full
 	 * path and onDirectoryClicked() will not need the path variable passed in
 	 */
-	class Metadata(directory: String, name: String, id: Long)
+	class Metadata(directory: String, name: String, id: Long = -1)
 	{
+
+		companion object
+		{
+
+			/**
+			 * Name for previous directory.
+			 */
+			const val PREVIOUS_DIRECTORY = ".."
+
+		}
 
 		/**
 		 * Directory the file resides in.
@@ -244,6 +254,14 @@ object NacFile
 			this.id = id
 		}
 
+		fun equals(metadata: Metadata) : Boolean
+		{
+			return (directory == metadata.directory)
+				&& (name == metadata.name)
+				&& (id == metadata.id)
+				&& (extra == metadata.extra)
+		}
+
 		/**
 		 * Convert the input to an external Uri.
 		 */
@@ -253,14 +271,14 @@ object NacFile
 				MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id)
 		}
 
-		/**
-		 * Convert the input to an internal Uri.
-		 */
-		fun toInternalUri(): Uri
-		{
-			return ContentUris.withAppendedId(
-				MediaStore.Audio.Media.INTERNAL_CONTENT_URI, id)
-		}
+		///**
+		// * Convert the input to an internal Uri.
+		// */
+		//fun toInternalUri(): Uri
+		//{
+		//	return ContentUris.withAppendedId(
+		//		MediaStore.Audio.Media.INTERNAL_CONTENT_URI, id)
+		//}
 
 	}
 

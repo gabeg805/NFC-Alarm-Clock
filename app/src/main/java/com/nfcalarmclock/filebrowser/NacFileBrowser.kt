@@ -2,15 +2,22 @@ package com.nfcalarmclock.filebrowser
 
 import android.content.Context
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.nfcalarmclock.R
 import com.nfcalarmclock.file.NacFile
+import kotlinx.coroutines.launch
 
 /**
  * A file browser.
@@ -18,19 +25,14 @@ import com.nfcalarmclock.file.NacFile
 class NacFileBrowser(
 
 	/**
-	 * Life cycle owner.
+	 * Context.
 	 */
-	lifecycleOwner: LifecycleOwner,
+	context: Context,
 
 	/**
-	 * Root view.
+	 * File browser container.
 	 */
-	root: View,
-
-	/**
-	 * Group ID.
-	 */
-	groupId: Int
+	private val container: LinearLayout
 
 	// Interface
 ) : View.OnClickListener
@@ -41,20 +43,16 @@ class NacFileBrowser(
 	 */
 	interface OnBrowserClickedListener
 	{
-		fun onDirectoryClicked(browser: NacFileBrowser, metadata: NacFile.Metadata,
-			path: String)
+		fun onDirectoryClicked(browser: NacFileBrowser, path: String)
 		fun onFileClicked(browser: NacFileBrowser, metadata: NacFile.Metadata)
 	}
 
 	/**
-	 * Context.
+	 * View model for the file browser.
 	 */
-	private val context: Context = root.context
-
-	/**
-	 * The container view for the directory/file buttons.
-	 */
-	private val container: LinearLayout = root.findViewById(groupId)
+	private val viewModel: NacFileBrowserViewModel =
+		ViewModelProvider((context as ViewModelStoreOwner))
+			.get(NacFileBrowserViewModel::class.java)
 
 	/**
 	 * Currently selected view.
@@ -65,13 +63,6 @@ class NacFileBrowser(
 	 * File browser on click listener.
 	 */
 	var onBrowserClickedListener: OnBrowserClickedListener? = null
-
-	/**
-	 * View model for the file browser.
-	 */
-	private val viewModel: NacFileBrowserViewModel =
-		ViewModelProvider((context as ViewModelStoreOwner))
-			.get(NacFileBrowserViewModel::class.java)
 
 	/**
 	 * Check if at the root level of the file tree or not.
@@ -103,7 +94,58 @@ class NacFileBrowser(
 	 */
 	init
 	{
-		setupViewModelObserver(lifecycleOwner)
+		setupViewModelObserver(context as LifecycleOwner)
+	}
+
+	/**
+	 * Add a directory entry to the file browser.
+	 *
+	 * TODO Count number of songs in subdirectories and make that the
+	 * annotation.
+	 */
+	private fun addDirectory(inflater: LayoutInflater, container: LinearLayout?,
+		metadata: NacFile.Metadata): View
+	{
+		// Create the file entry view
+		val entry = inflater.inflate(R.layout.nac_file_entry, container, false)
+		val imageView = entry.findViewById<ImageView>(R.id.image)
+		val titleView = entry.findViewById<TextView>(R.id.title)
+		//TextView annotationView = entry.findViewById(R.id.annotation);
+
+		// Set the image and text of the file entry
+		imageView.setImageResource(R.mipmap.folder)
+		titleView.text = metadata.extra as String
+
+		return entry
+	}
+
+	/**
+	 * Add a music file entry to the file browser.
+	 */
+	private fun addFile(inflater: LayoutInflater, container: LinearLayout?,
+		metadata: NacFile.Metadata): View
+	{
+		// Get the extra data (title, artist, duration)
+		val extra = metadata.extra as Array<String>
+		val title = extra[0]
+		val artist = extra[1]
+		val duration = extra[2]
+
+		// Create the file entry view
+		val entry = inflater.inflate(R.layout.nac_file_entry, container, false)
+		val imageView = entry.findViewById<ImageView>(R.id.image)
+		val titleView = entry.findViewById<TextView>(R.id.title)
+		val subtitleView = entry.findViewById<TextView>(R.id.subtitle)
+		val annotationView = entry.findViewById<TextView>(R.id.annotation)
+
+		// Set the image and text of the file entry
+		imageView.setImageResource(R.mipmap.play)
+		titleView.text = title
+		subtitleView.text = artist
+		subtitleView.visibility = View.VISIBLE
+		annotationView.text = duration
+
+		return entry
 	}
 
 	/**
@@ -111,38 +153,34 @@ class NacFileBrowser(
 	 */
 	private fun changeDirectory(metadata: NacFile.Metadata)
 	{
-		val tree = viewModel.repository.fileTree
-		var path = metadata.path
-
-		// Change directory to the directory that was clicked
-		tree.cd(metadata.name)
-
-		// Determine the path of the directory that was clicked
-		path = if (metadata.name == "..")
-		{
-			tree.directoryPath
-		}
-		else
-		{
-			path
-		}
+		// Change directory
+		val path = viewModel.cd(metadata)
 
 		// Call the listener for when an item is clicked in the file browser
-		onBrowserClickedListener?.onDirectoryClicked(this, metadata, path)
+		onBrowserClickedListener?.onDirectoryClicked(this, path)
+	}
+
+	/**
+	 * Clear all views in the file browser.
+	 */
+	fun clear()
+	{
+		// Clear all views from the file browser
+		container.removeAllViews()
 	}
 
 	/**
 	 * Deselect the currently selected item from the file browser.
 	 */
-	fun deselect()
+	fun deselect(context: Context)
 	{
-		this.select(null as View?)
+		this.select(context, null as View?)
 	}
 
 	/**
 	 * Deselect the desired view.
 	 */
-	private fun deselectView(view: View?)
+	private fun deselectView(context: Context, view: View?)
 	{
 		// Check if view is null
 		if (view == null)
@@ -252,7 +290,7 @@ class NacFileBrowser(
 
 		// Go to the previous directory if metadata equals the previous
 		// directory string ".."
-		if (metadata.name == "..")
+		if (metadata.name == NacFile.Metadata.PREVIOUS_DIRECTORY)
 		{
 			// Simulate a click
 			onClick(entry)
@@ -262,7 +300,7 @@ class NacFileBrowser(
 	/**
 	 * @see .select
 	 */
-	fun select(name: String)
+	fun select(context: Context, name: String)
 	{
 		// Check if name is empty
 		if (name.isEmpty())
@@ -283,7 +321,7 @@ class NacFileBrowser(
 			if (metadata.name == name)
 			{
 				// Select the view
-				select(view)
+				select(context, view)
 				return
 			}
 		}
@@ -294,13 +332,13 @@ class NacFileBrowser(
 	 *
 	 * @param  view  The view to highlight.
 	 */
-	fun select(view: View?)
+	fun select(context: Context, view: View?)
 	{
 		// Deselect the currently selected view
-		deselectView(selectedView)
+		deselectView(context, selectedView)
 
 		// Select the specified file
-		selectView(view)
+		selectView(context, view)
 
 		// Set the new view as the currently selected view
 		selectedView = view as RelativeLayout?
@@ -309,7 +347,7 @@ class NacFileBrowser(
 	/**
 	 * Select the desired view.
 	 */
-	private fun selectView(view: View?)
+	private fun selectView(context: Context, view: View?)
 	{
 		// Get the color that represents a file is selected
 		val color = ContextCompat.getColor(context, R.color.gray_light)
@@ -323,11 +361,51 @@ class NacFileBrowser(
 	 */
 	private fun setupViewModelObserver(lifecycleOwner: LifecycleOwner)
 	{
-		// Observe the view model data
-		viewModel.listingLiveData.observe(lifecycleOwner) { listing: List<NacFile.Metadata> ->
+		val context = container.context
+		val inflater = LayoutInflater.from(context)
 
-			// Repopulate the list of views
-			viewModel.repopulate(container, listing, this@NacFileBrowser)
+		// Observe the view model data
+		lifecycleOwner.lifecycleScope.launch {
+
+			lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+				viewModel.currentMetadata.collect { metadata ->
+
+					// Check if metadata is null
+					if (metadata == null)
+					{
+						// Clear the listing and then stop
+						clear()
+						return@collect
+					}
+
+					// Define an entry
+					val entry: View = if (metadata.isDirectory)
+					{
+						// Add a directory
+						addDirectory(inflater, container, metadata)
+					}
+					else if (metadata.isFile)
+					{
+						// Add a file
+						addFile(inflater, container, metadata)
+					}
+					else
+					{
+						// Entry is not defined so skip to the next item in the listing
+						return@collect
+					}
+
+					// Add metadata to the view and set the click listener
+					entry.tag = metadata
+					entry.setOnClickListener(this@NacFileBrowser)
+
+					// Add the entry to the file browser
+					container.addView(entry)
+
+				}
+
+			}
 
 		}
 	}
@@ -337,8 +415,12 @@ class NacFileBrowser(
 	 *
 	 * @param  dir  The path of the directory to show.
 	 */
-	fun show(dir: String?)
+	fun show(dir: String)
 	{
+		// Clear the listing
+		viewModel.clear()
+
+		// Show the listing at the new directory
 		viewModel.show(dir)
 	}
 
@@ -348,16 +430,19 @@ class NacFileBrowser(
 	 */
 	private fun toggleFile(view: View, metadata: NacFile.Metadata)
 	{
+		// Get the context
+		val context = view.context
+
 		// The file is already selected
 		if (isSelected(metadata.path))
 		{
 			// Deselect it
-			deselect()
+			deselect(context)
 		}
 		// Select the file
 		else
 		{
-			select(view)
+			select(context, view)
 		}
 
 		// Call the listener for when an item is clicked in the file browser

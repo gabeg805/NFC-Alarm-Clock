@@ -123,6 +123,10 @@ dependencies {
 	// Kotlin due to "Duplicate class found" issue
 	implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
 
+	// Kotline coroutines
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+	implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+
 	//implementation "com.spotify.sdk:spotify-auth-release:1.1.0@aar"
 	//implementation "com.spotify.sdk:spotify-app-remote-release:0.6.1@aar"
 	//implementation "com.google.code.gson:gson:2.8.5"
