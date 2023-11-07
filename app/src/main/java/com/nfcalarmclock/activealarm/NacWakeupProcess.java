@@ -8,7 +8,11 @@ import android.os.Looper;
 import android.os.Vibrator;
 import android.os.VibratorManager;
 import android.os.VibrationEffect;
-import com.google.android.exoplayer2.Player;
+
+import androidx.media3.common.Player;
+import androidx.media3.common.util.UnstableApi;
+
+//import com.google.android.exoplayer2.Player;
 import com.nfcalarmclock.R;
 import com.nfcalarmclock.alarm.db.NacAlarm;
 import com.nfcalarmclock.media.NacAudioAttributes;
@@ -25,6 +29,7 @@ import java.util.Locale;
 /**
  * Actions to take upon waking up, such as enabling NFC, playing music, etc.
  */
+@UnstableApi
 @SuppressWarnings({"RedundantSuppression", "UnnecessaryInterfaceModifier"})
 public class NacWakeupProcess
 	implements NacTextToSpeech.OnSpeakingListener,
@@ -496,7 +501,7 @@ public class NacWakeupProcess
 		}
 
 		// Continue playing what was being played before
-		if (player.wasPlaying())
+		if (player.getWasPlaying())
 		{
 			player.play();
 		}

@@ -19,13 +19,14 @@ class NacTextToSpeech(
 	/**
 	 * Context.
 	 */
-	context: Context,
+	private val context: Context,
 
 	/**
 	 * Listener for when TTS is speaking.
 	 */
 	listener: OnSpeakingListener?
 
+	// Interface
 ) : TextToSpeech.OnInitListener
 {
 
@@ -79,6 +80,7 @@ class NacTextToSpeech(
 		 */
 		private val onAudioFocusChangeListener: OnAudioFocusChangeListener?
 
+		// Constructor
 	) : UtteranceProgressListener()
 	{
 
@@ -140,47 +142,36 @@ class NacTextToSpeech(
 	}
 
 	/**
-	 * The context.
-	 */
-	private val context: Context
-
-	/**
 	 * The speech engine.
 	 */
-	private val textToSpeech: TextToSpeech
+	private val textToSpeech: TextToSpeech = TextToSpeech(context, this)
 
 	/**
 	 * Message to buffer and speak when ready.
 	 */
-	private var bufferMessage: String
+	private var bufferMessage: String = ""
 
 	/**
 	 * Audio attributes to buffer and use when ready.
 	 */
-	private var bufferAudioAttributes: NacAudioAttributes?
+	private var bufferAudioAttributes: NacAudioAttributes? = null
 
 	/**
 	 * Check if speech engine is initialized.
 	 */
-	private var isInitialized: Boolean
+	private var isInitialized: Boolean = false
 
 	/**
 	 * The utterance listener.
 	 */
-	private val utteranceListener: NacUtteranceListener
+	private val utteranceListener: NacUtteranceListener =
+		NacUtteranceListener(context, this, null)
 
 	/**
 	 * Constructor.
 	 */
 	init
 	{
-		this.context = context
-		textToSpeech = TextToSpeech(context, this)
-		bufferMessage = ""
-		isInitialized = false
-		utteranceListener = NacUtteranceListener(context, this, null)
-		bufferAudioAttributes = null
-
 		// Set the speaking listener
 		utteranceListener.onSpeakingListener = listener
 
@@ -265,7 +256,7 @@ class NacTextToSpeech(
 		if (isInitialized && hasBuffer())
 		{
 			// Say what is in the buffer
-			speak(bufferMessage, bufferAudioAttributes)
+			speak(bufferMessage, bufferAudioAttributes!!)
 		}
 	}
 
@@ -280,7 +271,7 @@ class NacTextToSpeech(
 	/**
 	 * Speak the given text.
 	 */
-	fun speak(message: String, attrs: NacAudioAttributes?)
+	fun speak(message: String, attrs: NacAudioAttributes)
 	{
 		// TTS object is already initialized
 		if (this.isInitialized)
@@ -295,7 +286,7 @@ class NacTextToSpeech(
 			}
 
 			// Speak the message
-			val androidAttrs = attrs!!.audioAttributes.audioAttributesV21.audioAttributes
+			val androidAttrs = attrs.audioAttributes.audioAttributesV21.audioAttributes
 			val bundle = NacBundle.toBundle(attrs)
 			textToSpeech.setAudioAttributes(androidAttrs)
 			textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, bundle,

@@ -173,9 +173,6 @@ object NacFile
 
 	/**
 	 * Metadata of a file.
-	 *
-	 * TODO: Add fullPath attribute for ".." so that you can still have full
-	 * path and onDirectoryClicked() will not need the path variable passed in
 	 */
 	class Metadata(directory: String, name: String, id: Long = -1)
 	{

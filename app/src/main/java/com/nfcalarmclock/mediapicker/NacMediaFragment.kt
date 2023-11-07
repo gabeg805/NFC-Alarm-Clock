@@ -22,6 +22,8 @@ import com.nfcalarmclock.util.NacUtility.toast
 // onDestroy.
 /**
  * Media fragment for ringtones and music files.
+ *
+ * TODO: Make this class better
  */
 open class NacMediaFragment
 	: Fragment()
@@ -289,11 +291,14 @@ open class NacMediaFragment
 	 */
 	private fun setupMediaPlayer()
 	{
+		// Get the context
+		val context = requireContext()
+
 		// Create the media player
 		mediaPlayer = NacMediaPlayer(context)
 
 		// Gain transient audio focus
-		mediaPlayer!!.setGainTransientAudioFocus(true)
+		mediaPlayer!!.shouldGainTransientAudioFocus = true
 	}
 
 	/**

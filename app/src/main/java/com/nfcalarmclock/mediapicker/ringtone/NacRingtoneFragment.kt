@@ -126,6 +126,7 @@ class NacRingtoneFragment
 	private fun setupRadioButtons()
 	{
 		// Get all the ringtones
+		val context = requireContext()
 		val ringtones = NacMedia.getRingtones(context)
 		val shared = NacSharedPreferences(context)
 

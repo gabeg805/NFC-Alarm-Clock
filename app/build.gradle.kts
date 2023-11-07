@@ -112,7 +112,7 @@ dependencies {
 	// Media player
 	// TODO: Check media3 to see when things are more stable
 	implementation("com.google.android.exoplayer:exoplayer:2.19.1")
-	//implementation("androidx.media3:media3-exoplayer:1.1.1")
+	implementation("androidx.media3:media3-exoplayer:1.1.1")
 
 	// Google Play in-app review
 	implementation("com.google.android.play:core:1.10.3")

@@ -39,48 +39,33 @@ class NacMusicFragment
 	 */
 	private var directoryTextView: TextView? = null
 
-	///**
-	// * Called when the file browser is clicked.
-	// */
-	//override fun onBrowserClicked(browser: NacFileBrowser,
-	//	metadata: NacFile.Metadata, path: String, name: String)
-	//{
-	//	// Directory was clicked
-	//	if (metadata.isDirectory)
-	//	{
-	//		val locale = Locale.getDefault()
-	//		val textPath = if (path.isEmpty()) "" else String.format(locale, "%1\$s/", path)
+	/**
+	 * Determine the starting directory and file name that should be selected.
+	 */
+	private fun getInitialFileBrowserLocation(): Pair<String, String>
+	{
+		val context = requireContext()
+		var dir = ""
+		var name = ""
 
-	//		// Set the alarm media path to the directory
-	//		media = path
-	//		directoryTextView!!.text = textPath
+		// Check if the media is a file
+		if (NacMedia.isFile(context, mediaPath))
+		{
+			// Get the URI
+			val uri = Uri.parse(mediaPath)
 
-	//		// Show the contents of the directory
-	//		browser.show(path)
-	//	}
-	//	// File was clicked
-	//	else if (metadata.isFile)
-	//	{
-	//		val uri = metadata.toExternalUri()
+			// Set the directory and name
+			dir = NacMedia.getRelativePath(context, uri)
+			name = NacMedia.getName(context, uri)
+		}
+		// Check if the media is a directory
+		else if (NacMedia.isDirectory(mediaPath))
+		{
+			dir = mediaPath
+		}
 
-	//		// Play the media file
-	//		if (browser.isSelected)
-	//		{
-	//			// Unable to play the media
-	//			if (!safePlay(uri))
-	//			{
-	//				// Show an error toast
-	//				showErrorPlayingAudio()
-	//			}
-	//		}
-	//		// File was deselected
-	//		else
-	//		{
-	//			// Reset the media player
-	//			safeReset()
-	//		}
-	//	}
-	//}
+		return Pair(dir, name)
+	}
 
 	/**
 	 * Called when a directory is clicked in the file browser.
@@ -210,28 +195,9 @@ class NacMusicFragment
 		// Set the textview with the directory path
 		directoryTextView = root.findViewById(R.id.path)
 
-		// Directory to show in the textview
-		var dir = ""
-
-		// Name of the file to select in the file browser
-		var name = ""
-
-		// Check if the media is a file
-		// TODO: Move this into NacFileBrowser
-		if (NacMedia.isFile(context, mediaPath))
-		{
-			// Get the URI
-			val uri = Uri.parse(mediaPath)
-
-			// Set the directory and name
-			dir = NacMedia.getRelativePath(context, uri)
-			name = NacMedia.getName(context, uri)
-		}
-		// Check if the media is a directory
-		else if (NacMedia.isDirectory(mediaPath))
-		{
-			dir = mediaPath
-		}
+		// Directory to show in the textview and the ame of the file to select
+		// in the file browser
+		val (dir, name) = getInitialFileBrowserLocation()
 
 		// Set the text with the path to the directory
 		directoryTextView!!.text = dir

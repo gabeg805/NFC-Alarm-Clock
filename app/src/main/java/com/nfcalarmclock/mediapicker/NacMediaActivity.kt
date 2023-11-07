@@ -83,7 +83,7 @@ class NacMediaActivity
 			return alarm?.mediaType
 				?: if (media != null)
 					{
-						NacMedia.getType(this, media)
+						NacMedia.getType(this, media!!)
 					}
 					else
 					{

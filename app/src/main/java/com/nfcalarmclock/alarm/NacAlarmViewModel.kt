@@ -54,7 +54,7 @@ class NacAlarmViewModel(app: Application) : AndroidViewModel(app)
 	 *
 	 * @return The number of rows deleted.
 	 */
-	fun delete(context: Context?, alarm: NacAlarm?): Int
+	fun delete(context: Context, alarm: NacAlarm?): Int
 	{
 		NacScheduler.cancel(context, alarm)
 
@@ -101,7 +101,7 @@ class NacAlarmViewModel(app: Application) : AndroidViewModel(app)
 	 *
 	 * @return The row ID of the alarm that was inserted.
 	 */
-	fun insert(context: Context?, alarm: NacAlarm?): Long
+	fun insert(context: Context, alarm: NacAlarm?): Long
 	{
 		// Check if the alarm is null
 		if (alarm == null)
@@ -136,7 +136,7 @@ class NacAlarmViewModel(app: Application) : AndroidViewModel(app)
 	 *
 	 * @return The number of alarms updated.
 	 */
-	fun update(context: Context?, alarm: NacAlarm?): Int
+	fun update(context: Context, alarm: NacAlarm?): Int
 	{
 		// Check if alarm is null
 		if (alarm == null)
