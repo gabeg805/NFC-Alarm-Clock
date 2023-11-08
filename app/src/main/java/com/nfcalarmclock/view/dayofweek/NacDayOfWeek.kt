@@ -167,7 +167,7 @@ class NacDayOfWeek(
 	 *
 	 * @param  days  The button days that will be enabled.
 	 */
-	fun setDays(days: EnumSet<Day?>)
+	fun setDays(days: EnumSet<Day>)
 	{
 		// Iterate over each day in the week
 		for (d in NacCalendar.WEEK)
