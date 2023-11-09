@@ -146,7 +146,7 @@ class NacAudioSourceDialog
 		// Get the IDs of the two states
 		val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
 
-		// Generate the color state list of the radio buttono
+		// Generate the color state list of the radio button
 		val colorStateList = ColorStateList(states, colors)
 
 		// Iterate over each radio button

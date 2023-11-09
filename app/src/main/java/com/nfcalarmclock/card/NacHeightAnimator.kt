@@ -32,11 +32,18 @@ class NacHeightAnimator @JvmOverloads constructor(
 {
 
 	/**
-	 * Listener for when the view's height is changing.
+	 * Listener for when the view's height is collapsing.
 	 */
-	interface OnAnimateHeightListener
+	fun interface OnAnimateCollapseListener
 	{
 		fun onAnimateCollapse(animator: NacHeightAnimator)
+	}
+
+	/**
+	 * Listener for when the view's height is expanding.
+	 */
+	fun interface OnAnimateExpandListener
+	{
 		fun onAnimateExpand(animator: NacHeightAnimator)
 	}
 
@@ -65,9 +72,14 @@ class NacHeightAnimator @JvmOverloads constructor(
 	var animationType: AnimationType = AnimationType.COLLAPSE
 
 	/**
-	 * Listener for when the view's height is changing.
+	 * Listener for when the view's height is collapsing.
 	 */
-	var onAnimateHeightListener: OnAnimateHeightListener? = null
+	var onAnimateCollapseListener: OnAnimateCollapseListener? = null
+
+	/**
+	 * Listener for when the view's height is expanding.
+	 */
+	var onAnimateExpandListener: OnAnimateExpandListener? = null
 
 	/**
 	 * The animated height.
@@ -127,12 +139,12 @@ class NacHeightAnimator @JvmOverloads constructor(
 		// Collapse
 		if (isCollapsing)
 		{
-			onAnimateHeightListener?.onAnimateCollapse(this)
+			onAnimateCollapseListener?.onAnimateCollapse(this)
 		}
 		//Expand
 		else if (isExpanding)
 		{
-			onAnimateHeightListener?.onAnimateExpand(this)
+			onAnimateExpandListener?.onAnimateExpand(this)
 		}
 
 		// Count number of updates
