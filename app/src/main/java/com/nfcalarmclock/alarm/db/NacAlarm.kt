@@ -11,6 +11,10 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacCalendar.Day
 import com.nfcalarmclock.util.NacUtility
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import java.util.Calendar
 import java.util.EnumSet
 import java.util.Locale
@@ -1136,17 +1140,10 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	 *
 	 * @param  shared  Shared preferences.
 	 *
-	 * @return Calendar instance of when the snoozed alarm will go off, or null
-	 * if the alarm is unable to be snoozed.
+	 * @return Calendar instance of when the snoozed alarm will go off.
 	 */
-	fun snooze(shared: NacSharedPreferences): Calendar?
+	fun snooze(shared: NacSharedPreferences): Calendar
 	{
-		// Check if the alarm cannot be snoozed
-		if (!canSnooze(shared))
-		{
-			return null
-		}
-
 		// Add the snooze duration value to the current time
 		val cal = Calendar.getInstance()
 		cal.add(Calendar.MINUTE, shared.snoozeDurationValue)
@@ -1316,6 +1313,25 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 			}
 		}
 
+	}
+
+}
+
+/**
+ * Hilt module to provide an instance of an alarm.
+ */
+@InstallIn(SingletonComponent::class)
+@Module
+class NacAlarmModule
+{
+
+	/**
+	 * Provide an instance of an alarm.
+	 */
+	@Provides
+	fun provideAlarm() : NacAlarm
+	{
+		return NacAlarm.Builder().build()
 	}
 
 }

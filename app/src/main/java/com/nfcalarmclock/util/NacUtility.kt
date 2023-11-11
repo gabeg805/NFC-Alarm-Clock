@@ -99,6 +99,19 @@ object NacUtility
 	}
 
 	/**
+	 * Create a toast that displays for a short period of time.
+	 */
+	@JvmStatic
+	fun quickToast(context: Context, resId: Int): Toast
+	{
+		// Get the message
+		val message = context.getString(resId)
+
+		// Show the toast
+		return toast(context, message, Toast.LENGTH_SHORT)
+	}
+
+	/**
 	 * Convert the given string to a spanned string.
 	 */
 	@JvmStatic

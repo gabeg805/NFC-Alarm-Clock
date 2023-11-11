@@ -27,8 +27,18 @@ import com.nfcalarmclock.statistics.db.NacAlarmMissedStatisticDao
 import com.nfcalarmclock.statistics.db.NacAlarmSnoozedStatistic
 import com.nfcalarmclock.statistics.db.NacAlarmSnoozedStatisticDao
 import com.nfcalarmclock.statistics.db.NacStatisticTypeConverters
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import javax.inject.Singleton
 
 /**
  * Store alarms in a Room database.
@@ -49,7 +59,8 @@ import java.util.concurrent.Executors
 		AutoMigration(from = 9, to = 10)]
 )
 @TypeConverters(NacAlarmTypeConverters::class, NacStatisticTypeConverters::class)
-abstract class NacAlarmDatabase : RoomDatabase()
+abstract class NacAlarmDatabase
+	: RoomDatabase()
 {
 
 	/**
@@ -122,11 +133,6 @@ abstract class NacAlarmDatabase : RoomDatabase()
 		private const val DB_NAME = "NfcAlarmClock.db"
 
 		/**
-		 * Executor service.
-		 */
-		val executor: ExecutorService = Executors.newSingleThreadExecutor()
-
-		/**
 		 * Singleton instance of the database.
 		 */
 		@SuppressLint("StaticFieldLeak")
@@ -159,10 +165,15 @@ abstract class NacAlarmDatabase : RoomDatabase()
 				// Check if the old database exists
 				if (NacOldDatabase.exists(context!!))
 				{
+					val coroutineScope = CoroutineScope(Dispatchers.IO)
+
 					// Start process to delete the old database
 					cancelOldAlarms(context!!)
-					migrateOldDatabase(context!!)
+					migrateOldDatabase(context!!, coroutineScope)
 					deleteOldDatabase(context!!)
+
+					// Cancel the coroutine scope
+					coroutineScope.cancel()
 				}
 
 				// Done with context object. Set it to null
@@ -261,7 +272,7 @@ abstract class NacAlarmDatabase : RoomDatabase()
 		/**
 		 * Migrate data from the old database into the new database.
 		 */
-		protected fun migrateOldDatabase(context: Context)
+		protected fun migrateOldDatabase(context: Context, coroutineScope: CoroutineScope)
 		{
 			// Check if the old database exists
 			if (!NacOldDatabase.exists(context))
@@ -280,13 +291,86 @@ abstract class NacAlarmDatabase : RoomDatabase()
 				a!!.id = 0
 
 				// Execute the stuff
-				executor.execute { dao.insert(a) }
-
-				// TODO: Wouldn't this line cause the same issue as the 8am alarm?
-				//NacScheduler.update(context, a);
+				coroutineScope.launch {
+					dao.insert(a)
+				}
 			}
 		}
 
+	}
+
+}
+
+/**
+ * Hilt module to provide attributes from the database.
+ */
+@InstallIn(SingletonComponent::class)
+@Module
+class NacAlarmDatabaseModule
+{
+
+	/**
+	 * Provide the database.
+	 */
+	@Singleton
+	@Provides
+	fun provideDatabase(@ApplicationContext context: Context) : NacAlarmDatabase
+	{
+		return NacAlarmDatabase.getInstance(context)
+	}
+
+	/**
+	 * Provide the alarm DAO.
+	 */
+	@Provides
+	fun provideAlarmDao(db: NacAlarmDatabase) : NacAlarmDao
+	{
+		return db.alarmDao()
+	}
+
+	/**
+	 * Provide the created statistic DAO.
+	 */
+	@Provides
+	fun provideCreatedStatisticDao(db: NacAlarmDatabase) : NacAlarmCreatedStatisticDao
+	{
+		return db.alarmCreatedStatisticDao()
+	}
+
+	/**
+	 * Provide the deleted statistic DAO.
+	 */
+	@Provides
+	fun provideDeletedStatisticDao(db: NacAlarmDatabase) : NacAlarmDeletedStatisticDao
+	{
+		return db.alarmDeletedStatisticDao()
+	}
+
+	/**
+	 * Provide the dismissed statistic DAO.
+	 */
+	@Provides
+	fun provideDismissedStatisticDao(db: NacAlarmDatabase) : NacAlarmDismissedStatisticDao
+	{
+		return db.alarmDismissedStatisticDao()
+	}
+
+	/**
+	 * Provide the missed statistic DAO.
+	 */
+	@Provides
+	fun provideMissedStatisticDao(db: NacAlarmDatabase) : NacAlarmMissedStatisticDao
+	{
+		return db.alarmMissedStatisticDao()
+	}
+
+	/**
+	 * Provide the snoozed statistic DAO.
+	 */
+	@Provides
+	fun provideSnoozedStatisticDao(db: NacAlarmDatabase) : NacAlarmSnoozedStatisticDao
+	{
+		return db.alarmSnoozedStatisticDao()
 	}
 
 }

@@ -4,9 +4,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -17,14 +21,15 @@ import java.util.Locale
  * <p>
  * TODO: Highlighting the weekends in the dismiss/miss/snooze plot would be dope
  */
+@AndroidEntryPoint
 class NacStatisticsSettingFragment
 	: Fragment(R.layout.frg_statistics)
 {
 
 	/**
-	 * Alarm statistics repository.
+	 * Statistic view model.
 	 */
-	private var alarmStatisticsRepository: NacAlarmStatisticRepository? = null
+	private val statisticViewModel: NacAlarmStatisticViewModel by viewModels()
 
 	/**
 	 * Called when the view is created.
@@ -34,19 +39,16 @@ class NacStatisticsSettingFragment
 		// Super
 		super.onViewCreated(root, savedInstanceState)
 
-		// Create the repository
-		val context = requireContext()
-		val repo = NacAlarmStatisticRepository(context)
-		alarmStatisticsRepository = repo
-
 		// Setup all the statistics
-		setupDismissedAlarms(repo, root)
-		setupSnoozedAlarms(repo, root)
-		setupMissedAlarms(repo, root)
-		setupCreatedAlarms(repo, root)
-		setupDeletedAlarms(repo, root)
-		setupCurrentAlarms(repo, root)
-		setupStartedOnDate(repo, root)
+		lifecycleScope.launch {
+			setupDismissedAlarms(root)
+			setupSnoozedAlarms(root)
+			setupMissedAlarms(root)
+			setupCreatedAlarms(root)
+			setupDeletedAlarms(root)
+			setupCurrentAlarms(root)
+			setupStartedOnDate(root)
+		}
 
 		// Setup the reset button
 		setupResetButton(root)
@@ -60,30 +62,31 @@ class NacStatisticsSettingFragment
 	 */
 	private fun resetStatistics()
 	{
-		// Get the repo or return if it is null
-		val repo = alarmStatisticsRepository
-			?: return
-
 		// Delete all statistics
-		repo.doDeleteAllCreated()
-		repo.doDeleteAllDeleted()
-		repo.doDeleteAllDismissed()
-		repo.doDeleteAllMissed()
-		repo.doDeleteAllSnoozed()
+		statisticViewModel.deleteAllCreated()
+		statisticViewModel.deleteAllDeleted()
+		statisticViewModel.deleteAllDismissed()
+		statisticViewModel.deleteAllMissed()
+		statisticViewModel.deleteAllSnoozed()
 
 		// Change the text of when statistics started
-		val root = requireView()
+		lifecycleScope.launch {
+			val root = requireView()
 
-		setupStartedOnDate(repo, root)
+			setupStartedOnDate(root)
+		}
 	}
 
 	/**
 	 * Setup the created alarm statistics.
 	 */
-	private fun setupCreatedAlarms(repo: NacAlarmStatisticRepository, root: View)
+	private suspend fun setupCreatedAlarms(root: View)
 	{
+		// Get the text view
 		val textview = root.findViewById<TextView>(R.id.created_alarms_number)
-		val numCreated = repo.createdCount
+
+		// Determine how many alarms were created
+		val numCreated = statisticViewModel.createdCount()
 
 		// Set the text in the textview
 		textview.text = numCreated.toString()
@@ -92,11 +95,14 @@ class NacStatisticsSettingFragment
 	/**
 	 * Setup the current alarm statistics.
 	 */
-	private fun setupCurrentAlarms(repo: NacAlarmStatisticRepository, root: View)
+	private suspend fun setupCurrentAlarms(root: View)
 	{
+		// Get the text view
 		val textview = root.findViewById<TextView>(R.id.current_alarms_number)
-		val numCreated = repo.createdCount
-		val numDeleted = repo.deletedCount
+
+		// Determine the current number of alarms
+		val numCreated = statisticViewModel.createdCount()
+		val numDeleted = statisticViewModel.deletedCount()
 		val numCurrent = numCreated - numDeleted
 
 		// Set the text in the textview
@@ -106,10 +112,13 @@ class NacStatisticsSettingFragment
 	/**
 	 * Setup the deleted alarm statistics.
 	 */
-	private fun setupDeletedAlarms(repo: NacAlarmStatisticRepository, root: View)
+	private suspend fun setupDeletedAlarms(root: View)
 	{
+		// Get the text view
 		val textview = root.findViewById<TextView>(R.id.deleted_alarms_number)
-		val numDeleted = repo.deletedCount
+
+		// Determine how many alarms were deleted
+		val numDeleted = statisticViewModel.deletedCount()
 
 		// Set the text in the textview
 		textview.text = numDeleted.toString()
@@ -118,12 +127,15 @@ class NacStatisticsSettingFragment
 	/**
 	 * Setup the dismissed alarm statistics.
 	 */
-	private fun setupDismissedAlarms(repo: NacAlarmStatisticRepository, root: View)
+	private suspend fun setupDismissedAlarms(root: View)
 	{
-		val textview = root.findViewById<TextView>(R.id.dismissed_alarms_number)
-		val numDismissedTotal = repo.dismissedCount
-		val numDismissedWithNfc = repo.dismissedWithNfcCount
+		// Get the text view
 		val locale = Locale.getDefault()
+		val textview = root.findViewById<TextView>(R.id.dismissed_alarms_number)
+
+		// Determine how many alarms were dismissed and how many with NFC
+		val numDismissedTotal = statisticViewModel.dismissedCount()
+		val numDismissedWithNfc = statisticViewModel.dismissedWithNfcCount()
 
 		// Determine the text to show in the textview
 		val text = String.format(locale, "%1\$s (%2\$s NFC)", numDismissedTotal,
@@ -136,10 +148,13 @@ class NacStatisticsSettingFragment
 	/**
 	 * Setup the missed alarm statistics.
 	 */
-	private fun setupMissedAlarms(repo: NacAlarmStatisticRepository, root: View)
+	private suspend fun setupMissedAlarms(root: View)
 	{
+		// Get the text view
 		val textview = root.findViewById<TextView>(R.id.missed_alarms_number)
-		val numMissed = repo.missedCount
+
+		// Determine how many alarms were missed
+		val numMissed = statisticViewModel.missedCount()
 
 		// Set the text in the textview
 		textview.text = numMissed.toString()
@@ -150,9 +165,10 @@ class NacStatisticsSettingFragment
 	 */
 	private fun setupResetButton(root: View)
 	{
+		// Get the button
 		val resetButton = root.findViewById<MaterialButton>(R.id.reset_button)
 
-		// Set the on click listener on the reset button
+		// Set the listener
 		// TODO: Show an "Are you sure?" dialog
 		resetButton.setOnClickListener { resetStatistics() }
 	}
@@ -160,12 +176,15 @@ class NacStatisticsSettingFragment
 	/**
 	 * Setup the snoozed alarm statistics.
 	 */
-	private fun setupSnoozedAlarms(repo: NacAlarmStatisticRepository, root: View)
+	private suspend fun setupSnoozedAlarms(root: View)
 	{
-		val textview = root.findViewById<TextView>(R.id.snoozed_alarms_number)
-		val numSnoozed = repo.snoozedCount
-		val snoozeDuration = repo.snoozedTotalDuration / 60
+		// Get the text view
 		val locale = Locale.getDefault()
+		val textview = root.findViewById<TextView>(R.id.snoozed_alarms_number)
+
+		// Determine how many alarms were snoozed and how much time that was
+		val numSnoozed = statisticViewModel.snoozedCount()
+		val snoozeDuration = statisticViewModel.snoozedTotalDuration() / 60
 
 		// Determine the text to show in the textview
 		val text = String.format(locale, "%1\$s (%2\$s min)", numSnoozed,
@@ -178,9 +197,10 @@ class NacStatisticsSettingFragment
 	/**
 	 * Setup the date that statistics started on.
 	 */
-	private fun setupStartedOnDate(repo: NacAlarmStatisticRepository, root: View)
+	private suspend fun setupStartedOnDate(root: View)
 	{
-		val timestamp = repo.createdFirstTimestamp
+		// Get the created first timestamp
+		val timestamp = statisticViewModel.createdFirstTimestamp()
 
 		// Determine the text to show as the date the statistics started on
 		val text: String =
@@ -217,7 +237,6 @@ class NacStatisticsSettingFragment
 	 */
 	private fun setupViewsWithThemeColor(root: View)
 	{
-		val context = context
 		val shared = NacSharedPreferences(context)
 
 		// Get the views

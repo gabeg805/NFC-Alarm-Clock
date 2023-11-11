@@ -9,8 +9,10 @@ import com.nfcalarmclock.util.NacUtility.quickToast
 
 /**
  */
-//@SuppressWarnings("BooleanMethodIsAlwaysInverted")
-class NacNfcTag @JvmOverloads constructor(alarm: NacAlarm?, nfcIntent: Intent? = null)
+class NacNfcTag @JvmOverloads constructor(
+	alarm: NacAlarm?,
+	nfcIntent: Intent? = null
+)
 {
 
 	/**

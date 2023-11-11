@@ -12,7 +12,6 @@ interface NacAlarmStatisticDao<T>
 	 * Insert an instance of an alarm statistic.
 	 */
 	@Insert
-	fun insert(stat: T): Long
-	//TODO suspend fun insert(stat: T): Long
+	suspend fun insert(stat: T): Long
 
 }

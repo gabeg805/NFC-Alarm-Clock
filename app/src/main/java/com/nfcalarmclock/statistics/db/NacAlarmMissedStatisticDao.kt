@@ -8,15 +8,9 @@ import androidx.room.Query
  * Data access object for storing when alarms were missed.
  */
 @Dao
-interface NacAlarmMissedStatisticDao : NacAlarmStatisticDao<NacAlarmMissedStatistic>
+interface NacAlarmMissedStatisticDao
+	: NacAlarmStatisticDao<NacAlarmMissedStatistic>
 {
-
-	/**
-	 * Delete all rows from the table.
-	 */
-	@Query("DELETE FROM alarm_missed_statistic")
-	fun deleteAll(): Int
-	//TODO suspend fun deleteAll(): Int
 
 	/**
 	 * Get all instances when alarms were missed.
@@ -31,7 +25,13 @@ interface NacAlarmMissedStatisticDao : NacAlarmStatisticDao<NacAlarmMissedStatis
 	 *
 	 * @return The number of missed alarm statistics.
 	 */
-	@get:Query("SELECT COUNT(id) FROM alarm_missed_statistic")
-	val count: Long
+	@Query("SELECT COUNT(id) FROM alarm_missed_statistic")
+	suspend fun count(): Long
+
+	/**
+	 * Delete all rows from the table.
+	 */
+	@Query("DELETE FROM alarm_missed_statistic")
+	suspend fun deleteAll(): Int
 
 }

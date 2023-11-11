@@ -20,8 +20,8 @@ class NacScanNfcTagDialog
 	 */
 	interface OnScanNfcTagListener
 	{
-		fun onUseAnyNfcTag(alarm: NacAlarm?)
-		fun onCancelNfcTagScan(alarm: NacAlarm?)
+		fun onUseAnyNfcTag(alarm: NacAlarm)
+		fun onCancelNfcTagScan(alarm: NacAlarm)
 	}
 
 	/**
@@ -48,13 +48,13 @@ class NacScanNfcTagDialog
 			.setPositiveButton(R.string.action_use_any) { _, _ ->
 
 				// Call the listener
-				onScanNfcTagListener?.onUseAnyNfcTag(alarm)
+				onScanNfcTagListener?.onUseAnyNfcTag(alarm!!)
 
 			}
 			.setNegativeButton(R.string.action_cancel) { _, _ ->
 
 				// Call the listener
-				onScanNfcTagListener?.onCancelNfcTagScan(alarm)
+				onScanNfcTagListener?.onCancelNfcTagScan(alarm!!)
 
 			}
 			.setView(R.layout.dlg_scan_nfc_tag)

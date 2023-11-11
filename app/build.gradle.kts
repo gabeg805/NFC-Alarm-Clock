@@ -2,6 +2,7 @@ plugins {
 	id("com.android.application")
 	id("org.jetbrains.kotlin.android")
 	id("com.google.devtools.ksp")
+	id("com.google.dagger.hilt.android")
 }
 
 import java.util.Properties
@@ -91,7 +92,7 @@ dependencies {
 	implementation("androidx.appcompat:appcompat:1.6.1")
 	implementation("androidx.cardview:cardview:1.0.0")
 	implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
-	implementation("androidx.core:core:1.10.0") // 1.12.0 is only for compile API >= 34
+	implementation("androidx.core:core:1.10.0") // 1.12.0 is only for compile API >= 34 TODO: get ktx
 	implementation("androidx.fragment:fragment:1.6.1")
 	implementation("androidx.lifecycle:lifecycle-process:2.6.2")
 	implementation("androidx.preference:preference:1.2.1")
@@ -102,16 +103,20 @@ dependencies {
 	implementation("com.google.android.material:material:1.9.0")
 
 	// Room database (Any later requires API > 34
-	//implementation("androidx.room:room-runtime:2.5.2")
-	//annotationProcessor("androidx.room:room-compiler:2.5.2")
+	implementation("androidx.room:room-runtime:2.5.2")
+	annotationProcessor("androidx.room:room-compiler:2.5.2")
 
 	// Room kotlin extensions and coroutines
-	implementation("androidx.room:room-ktx:2.5.2")
 	ksp("androidx.room:room-compiler:2.5.2")
+	implementation("androidx.room:room-ktx:2.5.2")
+
+	// Dependency injection with Hilt
+	implementation("com.google.dagger:hilt-android:2.48")
+	ksp("com.google.dagger:hilt-android-compiler:2.48")
 
 	// Media player
 	// TODO: Check media3 to see when things are more stable
-	implementation("com.google.android.exoplayer:exoplayer:2.19.1")
+	//implementation("com.google.android.exoplayer:exoplayer:2.19.1")
 	implementation("androidx.media3:media3-exoplayer:1.1.1")
 
 	// Google Play in-app review
@@ -126,13 +131,4 @@ dependencies {
 	// Kotline coroutines
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 	implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-
-	//implementation "com.spotify.sdk:spotify-auth-release:1.1.0@aar"
-	//implementation "com.spotify.sdk:spotify-app-remote-release:0.6.1@aar"
-	//implementation "com.google.code.gson:gson:2.8.5"
-	//implementation "com.github.kaaes:spotify-web-api-android:0.4.1@aar"
-	//implementation "com.squareup.retrofit:retrofit:1.9.0"
-	//implementation "com.squareup.retrofit2:retrofit:2.5.0"
-	//implementation "com.squareup.okhttp3:okhttp:3.14.1"
-	//implementation "com.squareup.okhttp:okhttp:2.2.0"
 }

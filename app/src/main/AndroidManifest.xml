@@ -34,6 +34,7 @@
 	<!-- Application -->
 	<application
 		android:label="@string/app_name"
+		android:name=".NacNfcAlarmClockApplication"
 		android:theme="@style/AppTheme"
 		android:icon="@mipmap/app"
 		android:allowBackup="true"

@@ -1,5 +1,6 @@
 package com.nfcalarmclock.util
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
@@ -10,6 +11,12 @@ import com.nfcalarmclock.util.NacIntent.createAlarmActivity
 import com.nfcalarmclock.util.NacIntent.createForegroundService
 import com.nfcalarmclock.util.NacIntent.createMainActivity
 import com.nfcalarmclock.util.NacIntent.stopAlarmActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * Context helper object.
@@ -22,7 +29,18 @@ object NacContext
 	 * <p>
 	 * If alarm is null, it will stop the currently active alarm activity.
 	 */
-	@JvmStatic
+	fun autoDismissAlarmActivity(context: Context, alarm: NacAlarm?)
+	{
+		val intent = NacIntent.autoDismissAlarmActivity(context, alarm)
+
+		context.startActivity(intent)
+	}
+
+	/**
+	 * Dismiss the alarm activity for the given alarm.
+	 * <p>
+	 * If alarm is null, it will stop the currently active alarm activity.
+	 */
 	fun dismissAlarmActivity(context: Context, alarm: NacAlarm?)
 	{
 		val intent = NacIntent.dismissAlarmActivity(context, alarm)
@@ -35,7 +53,6 @@ object NacContext
 	 * <p>
 	 * If alarm is null, it will stop the currently active alarm activity.
 	 */
-	@JvmStatic
 	fun dismissAlarmActivityWithNfc(context: Context, tag: NacNfcTag)
 	{
 		val intent = NacIntent.dismissAlarmActivityWithNfc(context, tag)
@@ -48,7 +65,6 @@ object NacContext
 	 * <p>
 	 * If alarm is null, it will stop the currently active alarm activity.
 	 */
-	@JvmStatic
 	fun stopAlarmActivity(context: Context, alarm: NacAlarm?)
 	{
 		val intent = stopAlarmActivity(alarm)
@@ -62,7 +78,6 @@ object NacContext
 	 * @param  context  A context.
 	 * @param  bundle  A bundle, typically with an alarm inside.
 	 */
-	@JvmStatic
 	fun startAlarm(context: Context, bundle: Bundle?)
 	{
 		// Check if bundle is null
@@ -94,7 +109,6 @@ object NacContext
 	/**
 	 * @see NacContext.startAlarm
 	 */
-	@JvmStatic
 	fun startAlarm(context: Context, alarm: NacAlarm?)
 	{
 		// Check if the alarm is null
@@ -113,7 +127,6 @@ object NacContext
 	/**
 	 * Start the alarm activity.
 	 */
-	@JvmStatic
 	fun startAlarmActivity(context: Context, alarm: NacAlarm?)
 	{
 		// Unable to start the activity because the alarm is null
@@ -134,12 +147,36 @@ object NacContext
 	 *
 	 * @param  context  A context.
 	 */
-	@JvmStatic
 	fun startMainActivity(context: Context)
 	{
 		val intent = createMainActivity(context)
 
 		context.startActivity(intent)
+	}
+
+}
+
+/**
+ * Extension function to have a broadcast receiver execute something asynchronously.
+ */
+fun BroadcastReceiver.goAsync(
+	context: CoroutineContext = EmptyCoroutineContext,
+	block: suspend CoroutineScope.() -> Unit
+)
+{
+	val pendingResult = goAsync()
+
+	// Must run globally; there's no teardown callback.
+	@OptIn(DelicateCoroutinesApi::class)
+	GlobalScope.launch(context) {
+		try
+		{
+			block()
+		}
+		finally
+		{
+			pendingResult.finish()
+		}
 	}
 
 }

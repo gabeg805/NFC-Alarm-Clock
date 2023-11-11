@@ -1,206 +1,26 @@
 package com.nfcalarmclock.alarm
 
-import android.app.Application
-import android.content.Context
 import androidx.lifecycle.LiveData
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.db.NacAlarmDao
-import com.nfcalarmclock.db.NacAlarmDatabase
-import com.nfcalarmclock.db.NacRepository
-import java.util.concurrent.Future
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Inject
 
 /**
  * Alarm repository.
  */
-class NacAlarmRepository(app: Application) : NacRepository()
-{
+class NacAlarmRepository @Inject constructor(
 
 	/**
 	 * Data access object for an alarm.
 	 */
 	private val alarmDao: NacAlarmDao
 
-	/**
-	 * Live data list of all alarms.
-	 */
-	val allAlarms: LiveData<List<NacAlarm>>
-
-	/**
-	 * Constructor.
-	 */
-	init
-	{
-		val db = NacAlarmDatabase.getInstance(app)
-		val dao = db.alarmDao()
-		alarmDao = dao
-		allAlarms = dao.allAlarms
-	}
-
-	/**
-	 * Constructor.
-	 */
-	constructor(context: Context) : this(context.applicationContext as Application)
-
-	/**
-	 * Copy an alarm, asynchronously, into the database.
-	 *
-	 * TODO: Be sure to test this when swiping.
-	 *
-	 * @param  copiedAlarm  Alarm that has been copied.
-	 *
-	 * @return The row ID of the inserted alarm.
-	 */
-	fun copy(copiedAlarm: NacAlarm?): Long
-	{
-		// Check if the copied alarm is null
-		if (copiedAlarm == null)
-		{
-			return -1
-		}
-
-		// Insert the copcied alarm into the database
-		val id = insert(copiedAlarm)
-
-		// Set the alarm ID of the copied alarm
-		copiedAlarm.id = id
-
-		return id
-	}
-
-	/**
-	 * Delete an alarm, asynchronously, from the database.
-	 *
-	 * @return The number of rows deleted.
-	 */
-	fun delete(alarm: NacAlarm?): Int
-	{
-		// Check if the alarm is null
-		if (alarm == null)
-		{
-			return -1
-		}
-
-		// Delete the alarm
-		val future = doDelete(alarm)
-
-		return getIntegerFromFuture(future)
-	}
-
-	/**
-	 * Delete an alarm, asynchronously, from the database.
-	 */
-	private fun doDelete(alarm: NacAlarm?): Future<*>?
-	{
-		// Check if the alarm is null
-		if (alarm == null)
-		{
-			return null
-		}
-
-		return NacAlarmDatabase.executor.submit<Int> { alarmDao.delete(alarm) }
-	}
-
-	/**
-	 * Find an alarm with the given ID.
-	 */
-	private fun doFindAlarm(id: Long): Future<*>?
-	{
-		// Check if the ID if valid
-		if (id < 0)
-		{
-			return null
-		}
-
-		return NacAlarmDatabase.executor.submit<NacAlarm> { alarmDao.findAlarm(id) }
-	}
-
-	/**
-	 * @see .doFindAlarm
-	 */
-	fun doFindAlarm(alarm: NacAlarm?): Future<*>?
-	{
-		val id = alarm?.id ?: -1
-
-		return this.doFindAlarm(id)
-	}
-
-	/**
-	 * Get all active alarms in the database.
-	 *
-	 * @return A list of all active alarms.
-	 */
-	private fun doGetActiveAlarmsNow(): Future<*>
-	{
-		return NacAlarmDatabase.executor.submit<List<NacAlarm>> { alarmDao.activeAlarmsNow }
-	}
-
-	/**
-	 * Get all alarms in the database.
-	 *
-	 * @return A list of all alarms.
-	 */
-	private fun doGetAllAlarmsNow(): Future<*>
-	{
-		return NacAlarmDatabase.executor.submit<List<NacAlarm>> { alarmDao.allAlarmsNow }
-	}
-
-	/**
-	 * Insert an alarm, asynchronously, into the database.
-	 */
-	private fun doInsert(alarm: NacAlarm?): Future<*>?
-	{
-		// Check if the alarm is null
-		if (alarm == null)
-		{
-			return null
-		}
-
-		return NacAlarmDatabase.executor.submit<Long> { alarmDao.insert(alarm) }
-	}
-
-	/**
-	 * Update an alarm, asynchronously, in the database.
-	 */
-	fun doUpdate(alarm: NacAlarm?): Future<*>?
-	{
-		// Check if the alarm is null
-		if (alarm == null)
-		{
-			return null
-		}
-
-		return NacAlarmDatabase.executor.submit<Int> { alarmDao.update(alarm) }
-	}
-
-	/**
-	 * Get an alarm with the given ID.
-	 *
-	 * @return An alarm with the given ID.
-	 */
-	fun findAlarm(id: Long): NacAlarm?
-	{
-		// Check if the ID is valid
-		if (id < 0)
-		{
-			return null
-		}
-
-		// Find the alarm future
-		val future = this.doFindAlarm(id)
-
-		// Get the alarm from the future
-		return getAlarmFromFuture(future)
-	}
-
-	/**
-	 * @see .findAlarm
-	 */
-	fun findAlarm(alarm: NacAlarm?): NacAlarm?
-	{
-		val id = alarm?.id ?: -1
-
-		return this.findAlarm(id)
-	}
+)
+{
 
 	/**
 	 * An active alarm.
@@ -209,32 +29,34 @@ class NacAlarmRepository(app: Application) : NacRepository()
 		get() = alarmDao.activeAlarm
 
 	/**
-	 * The list of active alarms.
+	 * Live data list of all alarms.
 	 */
-	val activeAlarms: LiveData<List<NacAlarm>>
-		get() = alarmDao.activeAlarms
-
-	/**
-	 * The list of active alarms.
-	 */
-	val activeAlarmsNow: List<NacAlarm>
-		get()
-		{
-			val future = doGetActiveAlarmsNow()
-
-			return getAlarmListFromFuture(future)
-		}
+	val allAlarms: LiveData<List<NacAlarm>>
+		get() = alarmDao.allAlarms
 
 	/**
 	 * All alarms in the database.
 	 */
-	val allAlarmsNow: List<NacAlarm>
-		get()
-		{
-			val future = doGetAllAlarmsNow()
+	suspend fun getAllAlarms(): List<NacAlarm> = alarmDao.getAllAlarms()
 
-			return getAlarmListFromFuture(future)
-		}
+	/**
+	 * The list of active alarms.
+	 */
+	suspend fun getActiveAlarms(): List<NacAlarm> = alarmDao.getActiveAlarms()
+
+	/**
+	 * Delete an alarm, asynchronously, from the database.
+	 *
+	 * @return The number of rows deleted.
+	 */
+	suspend fun delete(alarm: NacAlarm): Int = alarmDao.delete(alarm)
+
+	/**
+	 * Get an alarm with the given ID.
+	 *
+	 * @return An alarm with the given ID.
+	 */
+	suspend fun findAlarm(id: Long): NacAlarm? = alarmDao.findAlarm(id)
 
 	/**
 	 * Insert an alarm, asynchronously, into the database.
@@ -243,18 +65,7 @@ class NacAlarmRepository(app: Application) : NacRepository()
 	 *
 	 * @return The row ID of the inserted alarm.
 	 */
-	fun insert(alarm: NacAlarm?): Long
-	{
-		// Check if the alarm is null
-		if (alarm == null)
-		{
-			return -1
-		}
-
-		val future = doInsert(alarm)
-
-		return getLongFromFuture(future)
-	}
+	suspend fun insert(alarm: NacAlarm): Long = alarmDao.insert(alarm)
 
 	/**
 	 * Update an alarm, asynchronously, in the database.
@@ -263,16 +74,25 @@ class NacAlarmRepository(app: Application) : NacRepository()
 	 *
 	 * @return The number of alarms updated.
 	 */
-	fun update(alarm: NacAlarm?): Int
+	suspend fun update(alarm: NacAlarm): Int = alarmDao.update(alarm)
+
+}
+
+/**
+ * Hilt module to provide an instance of the repository.
+ */
+@InstallIn(SingletonComponent::class)
+@Module
+class NacAlarmRepositoryModule
+{
+
+	/**
+	 * Provide an instance of the repository.
+	 */
+	@Provides
+	fun provideAlarmRepository(alarmDao: NacAlarmDao) : NacAlarmRepository
 	{
-		// Check if the alarm is null
-		if (alarm == null)
-		{
-			return -1
-		}
-
-		val future = doUpdate(alarm)
-
-		return getIntegerFromFuture(future)
+		return NacAlarmRepository(alarmDao)
 	}
+
 }

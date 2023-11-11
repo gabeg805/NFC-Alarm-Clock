@@ -5,6 +5,10 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.Companion.SET_NULL
 import com.nfcalarmclock.alarm.db.NacAlarm
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
 /**
  * Statistics for when an alarm is dismissed.
@@ -40,6 +44,25 @@ class NacAlarmDismissedStatistic : NacAlarmStatistic
 	constructor(alarm: NacAlarm?, usedNfc: Boolean) : this(alarm)
 	{
 		this.usedNfc = usedNfc
+	}
+
+}
+
+/**
+ * Hilt module to provide an instance of a dismissed statistic.
+ */
+@InstallIn(SingletonComponent::class)
+@Module
+class NacAlarmDismissedStatisticModule
+{
+
+	/**
+	 * Provide an instance of a dismissed statistic.
+	 */
+	@Provides
+	fun provideDismissedStatistic() : NacAlarmDismissedStatistic
+	{
+		return NacAlarmDismissedStatistic()
 	}
 
 }

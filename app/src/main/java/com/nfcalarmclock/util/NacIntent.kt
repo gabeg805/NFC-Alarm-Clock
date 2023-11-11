@@ -24,17 +24,17 @@ object NacIntent
 	/**
 	 * Tag name for retrieving a NacAlarm from a bundle.
 	 */
-	const val ALARM_BUNDLE_NAME = "NacAlarmBundle"
+	private const val ALARM_BUNDLE_NAME = "NacAlarmBundle"
 
 	/**
 	 * Tag name for retrieving a media path from a bundle.
 	 */
-	const val MEDIA_BUNDLE_NAME = "NacMediaBundle"
+	private const val MEDIA_BUNDLE_NAME = "NacMediaBundle"
 
 	/**
 	 * Add an alarm to an intent.
 	 */
-	fun addAlarm(intent: Intent, bundle: Bundle?): Intent
+	private fun addAlarm(intent: Intent, bundle: Bundle?): Intent
 	{
 		// Make sure intent and bundle are not null
 		if (bundle != null)
@@ -53,9 +53,25 @@ object NacIntent
 	 *
 	 * @return The passed in intent with the alarm.
 	 */
-	fun addAlarm(intent: Intent, alarm: NacAlarm?): Intent
+	private fun addAlarm(intent: Intent, alarm: NacAlarm?): Intent
 	{
 		return addAlarm(intent, NacBundle.toBundle(alarm))
+	}
+
+	/**
+	 * Get an intent that will be used to dismiss the alarm activity.
+	 *
+	 * @return An intent that will be used to dismiss the alarm activity.
+	 */
+	fun autoDismissAlarmActivity(context: Context, alarm: NacAlarm?): Intent
+	{
+		// Create an intent with the alarm activity
+		val intent = createAlarmActivity(context, alarm)
+
+		// Set the intent's action
+		intent.action = NacActiveAlarmActivity.ACTION_AUTO_DISMISS_ACTIVITY
+
+		return intent
 	}
 
 	/**
@@ -66,7 +82,6 @@ object NacIntent
 	 *
 	 * @return The Alarm activity intent.
 	 */
-	@JvmStatic
 	fun createAlarmActivity(context: Context, bundle: Bundle?): Intent
 	{
 		// Create the intent and its flags
@@ -83,7 +98,6 @@ object NacIntent
 	/**
 	 * @see NacIntent.createAlarmActivity
 	 */
-	@JvmStatic
 	fun createAlarmActivity(context: Context, alarm: NacAlarm?): Intent
 	{
 		// Create a bundle with an alarm
@@ -103,7 +117,6 @@ object NacIntent
 	 *
 	 * @return The Foreground service intent.
 	 */
-	@JvmStatic
 	fun createForegroundService(context: Context, bundle: Bundle?): Intent
 	{
 		// Create an intent with the alarm service
@@ -117,8 +130,6 @@ object NacIntent
 	/**
 	 * @see NacIntent.createForegroundService
 	 */
-	@JvmStatic
-	@Suppress("unused")
 	fun createForegroundService(context: Context, alarm: NacAlarm?): Intent
 	{
 		// Create a bundle with an alarm
@@ -153,7 +164,6 @@ object NacIntent
 	/**
 	 * @see NacIntent.createMainActivity
 	 */
-	@JvmStatic
 	fun createMainActivity(context: Context): Intent
 	{
 		return createMainActivity(context, null as Bundle?)
@@ -174,7 +184,6 @@ object NacIntent
 	/**
 	 * @return An intent that will be used to dismiss the alarm activity.
 	 */
-	@JvmStatic
 	fun dismissAlarmActivity(context: Context, alarm: NacAlarm?): Intent
 	{
 		// Create an intent with the alarm activity
@@ -189,7 +198,6 @@ object NacIntent
 	/**
 	 * @return An intent that will be used to dismiss the alarm activity with NFC.
 	 */
-	@JvmStatic
 	fun dismissAlarmActivityWithNfc(context: Context, tag: NacNfcTag): Intent
 	{
 		// Create the intent with the alarm activity
@@ -206,7 +214,6 @@ object NacIntent
 	/**
 	 * @return An intent that will be used to dismiss the foreground alarm service.
 	 */
-	@JvmStatic
 	fun dismissForegroundService(context: Context, alarm: NacAlarm?): Intent
 	{
 		// Create the intent with the alarm service
@@ -221,7 +228,6 @@ object NacIntent
 	 * @return An intent that will be used to dismiss the foreground alarm service
 	 * and indicates that NFC was used.
 	 */
-	@JvmStatic
 	fun dismissForegroundServiceWithNfc(context: Context, alarm: NacAlarm?): Intent
 	{
 		// Create the intent with the alarm service
@@ -233,22 +239,10 @@ object NacIntent
 	}
 
 	/**
-	 * Get an intent's action.
-	 *
-	 * @return An intent action or an empty string.
-	 */
-	@JvmStatic
-	fun getAction(intent: Intent?): String
-	{
-		return intent?.action ?: ""
-	}
-
-	/**
 	 * Get the alarm associated with the given Intent.
 	 *
 	 * @return The alarm associated with the given Intent.
 	 */
-	@JvmStatic
 	fun getAlarm(intent: Intent?): NacAlarm?
 	{
 		// Check if the intent is null
@@ -267,7 +261,6 @@ object NacIntent
 	/**
 	 * @see .getBundle
 	 */
-	@JvmStatic
 	fun getAlarmBundle(intent: Intent?): Bundle?
 	{
 		return getBundle(intent, ALARM_BUNDLE_NAME)
@@ -278,7 +271,7 @@ object NacIntent
 	 *
 	 * @return The extra data bundle that is part of the intent.
 	 */
-	fun getBundle(intent: Intent?, name: String): Bundle?
+	private fun getBundle(intent: Intent?, name: String): Bundle?
 	{
 		return intent?.getBundleExtra(name)
 	}
@@ -288,7 +281,6 @@ object NacIntent
 	 *
 	 * @return The alarm that was specified using the SET_ALARM action.
 	 */
-	@JvmStatic
 	fun getSetAlarm(context: Context, intent: Intent): NacAlarm?
 	{
 		// Check if this is a SET_ALARM intent
@@ -391,7 +383,6 @@ object NacIntent
 	/**
 	 * @return The sound associated with the given intent.
 	 */
-	@JvmStatic
 	fun getMedia(intent: Intent?): String?
 	{
 		// Check if the intent is null
@@ -410,7 +401,7 @@ object NacIntent
 	/**
 	 * @return The sound bundle.
 	 */
-	fun getMediaBundle(intent: Intent?): Bundle?
+	private fun getMediaBundle(intent: Intent?): Bundle?
 	{
 		return getBundle(intent, MEDIA_BUNDLE_NAME)
 	}
@@ -419,7 +410,7 @@ object NacIntent
 	 * @return True if the intent was called from the SET_ALARM action, and
 	 * False otherwise.
 	 */
-	fun isSetAlarmAction(intent: Intent?): Boolean
+	private fun isSetAlarmAction(intent: Intent?): Boolean
 	{
 		// Check if the intent is null
 		if (intent == null)
@@ -434,7 +425,6 @@ object NacIntent
 	/**
 	 * @return An intent that will be used to snooze the foreground alarm service.
 	 */
-	@JvmStatic
 	fun snoozeForegroundService(context: Context?, alarm: NacAlarm?): Intent
 	{
 		// Create the intent with the alarm service
@@ -448,7 +438,6 @@ object NacIntent
 	/**
 	 * @return An intent that allows you to stop the alarm activity.
 	 */
-	@JvmStatic
 	fun stopAlarmActivity(alarm: NacAlarm?): Intent
 	{
 		// Create the intent with the alarm activity
@@ -468,23 +457,8 @@ object NacIntent
 	}
 
 	/**
-	 * @return An intent that will be used to stop the foreground alarm service.
-	 */
-	@Suppress("unused")
-	fun stopForegroundService(context: Context, alarm: NacAlarm?): Intent
-	{
-		// Create the intent with the alarm service
-		val intent = Intent(NacActiveAlarmService.ACTION_STOP_SERVICE, null,
-			context, NacActiveAlarmService::class.java)
-
-		// Add the alarm to the intent
-		return addAlarm(intent, alarm)
-	}
-
-	/**
 	 * @return An intent with a sound.
 	 */
-	@JvmStatic
 	fun toIntent(media: String?): Intent
 	{
 		return toIntent(null, null, media)
@@ -499,7 +473,6 @@ object NacIntent
 	 * @param  cls      The name of the class for the intent to run.
 	 * @param  alarm    The alarm to attach to the intent.
 	 */
-	@JvmStatic
 	fun toIntent(context: Context?, cls: Class<*>?, alarm: NacAlarm?): Intent
 	{
 		// Create an intent with the given class
@@ -524,7 +497,6 @@ object NacIntent
 	 * @param  cls      The name of the class for the intent to run.
 	 * @param  media    The media path to attach to the intent.
 	 */
-	@JvmStatic
 	fun toIntent(context: Context?, cls: Class<*>?, media: String?): Intent
 	{
 		// Create an intent with the given class

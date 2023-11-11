@@ -24,7 +24,7 @@ class NacAudioSourceDialog
 	 */
 	fun interface OnAudioSourceSelectedListener
 	{
-		fun onAudioSourceSelected(audioSource: String?)
+		fun onAudioSourceSelected(audioSource: String)
 	}
 
 	/**

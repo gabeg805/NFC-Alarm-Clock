@@ -12,7 +12,6 @@ import android.view.View
 import android.view.View.OnCreateContextMenuListener
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
-import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
@@ -59,9 +58,9 @@ class NacCardHolder(
 	/**
 	 * Listener for when the audio options button is clicked.
 	 */
-	interface OnCardAudioOptionsClickedListener
+	fun interface OnCardAudioOptionsClickedListener
 	{
-		fun onCardAudioOptionsClicked(holder: NacCardHolder?, alarm: NacAlarm?)
+		fun onCardAudioOptionsClicked(holder: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -69,15 +68,15 @@ class NacCardHolder(
 	 */
 	interface OnCardCollapsedListener
 	{
-		fun onCardCollapsed(holder: NacCardHolder?, alarm: NacAlarm?)
+		fun onCardCollapsed(holder: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
 	 * Listener for when the delete button is clicked.
 	 */
-	interface OnCardDeleteClickedListener
+	fun interface OnCardDeleteClickedListener
 	{
-		fun onCardDeleteClicked(holder: NacCardHolder?, alarm: NacAlarm?)
+		fun onCardDeleteClicked(holder: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -85,15 +84,15 @@ class NacCardHolder(
 	 */
 	interface OnCardExpandedListener
 	{
-		fun onCardExpanded(holder: NacCardHolder?, alarm: NacAlarm?)
+		fun onCardExpanded(holder: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
 	 * Listener for when the media button is clicked.
 	 */
-	interface OnCardMediaClickedListener
+	fun interface OnCardMediaClickedListener
 	{
-		fun onCardMediaClicked(holder: NacCardHolder?, alarm: NacAlarm?)
+		fun onCardMediaClicked(holder: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -101,7 +100,7 @@ class NacCardHolder(
 	 */
 	interface OnCardUpdatedListener
 	{
-		fun onCardUpdated(holder: NacCardHolder?, alarm: NacAlarm?)
+		fun onCardUpdated(holder: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -109,7 +108,7 @@ class NacCardHolder(
 	 */
 	interface OnCardUseNfcChangedListener
 	{
-		fun onCardUseNfcChanged(holder: NacCardHolder?, alarm: NacAlarm?)
+		fun onCardUseNfcChanged(holder: NacCardHolder, alarm: NacAlarm)
 	}
 
 	companion object
@@ -445,7 +444,7 @@ class NacCardHolder(
 		if (sharedPreferences.cardIsMeasured && isCollapsed)
 		{
 			// Call the listener
-			onCardCollapsedListener?.onCardCollapsed(this, alarm)
+			onCardCollapsedListener?.onCardCollapsed(this, alarm!!)
 		}
 	}
 
@@ -461,7 +460,7 @@ class NacCardHolder(
 		if (sharedPreferences.cardIsMeasured && isExpanded)
 		{
 			// Call the listener
-			onCardExpandedListener?.onCardExpanded(this, alarm)
+			onCardExpandedListener?.onCardExpanded(this, alarm!!)
 		}
 	}
 
@@ -470,7 +469,7 @@ class NacCardHolder(
 	 */
 	private fun callOnCardUpdatedListener()
 	{
-		onCardUpdatedListener?.onCardUpdated(this, alarm)
+		onCardUpdatedListener?.onCardUpdated(this, alarm!!)
 	}
 
 	/**
@@ -668,7 +667,7 @@ class NacCardHolder(
 	fun delete()
 	{
 		// Call the listener
-		onCardDeleteClickedListener?.onCardDeleteClicked(this, alarm)
+		onCardDeleteClickedListener?.onCardDeleteClicked(this, alarm!!)
 	}
 
 	/**
@@ -676,7 +675,7 @@ class NacCardHolder(
 	 */
 	private fun doAudioOptionsButtonClick()
 	{
-		onCardAudioOptionsClickedListener?.onCardAudioOptionsClicked(this, alarm)
+		onCardAudioOptionsClickedListener?.onCardAudioOptionsClicked(this, alarm!!)
 	}
 
 	/**
@@ -804,7 +803,7 @@ class NacCardHolder(
 	 */
 	private fun doMediaButtonClick()
 	{
-		onCardMediaClickedListener?.onCardMediaClicked(this, alarm)
+		onCardMediaClickedListener?.onCardMediaClicked(this, alarm!!)
 	}
 
 	/**
@@ -840,7 +839,7 @@ class NacCardHolder(
 
 		// Call the listeners
 		callOnCardUpdatedListener()
-		onCardUseNfcChangedListener?.onCardUseNfcChanged(this, alarm)
+		onCardUseNfcChangedListener?.onCardUseNfcChanged(this, alarm!!)
 	}
 
 	/**

@@ -15,60 +15,12 @@ interface NacAlarmDao
 {
 
 	/**
-	 * Delete an alarm.
-	 *
-	 * @param  alarm  Alarm to delete.
-	 *
-	 * @return The number of rows deleted.
-	 */
-	@Delete
-	fun delete(alarm: NacAlarm?): Int
-	//TODO suspend fun delete(alarm: NacAlarm?): Int
-
-	/**
-	 * Delete all alarms.
-	 *
-	 * @return The number of rows deleted.
-	 */
-	@Query("DELETE FROM alarm")
-	fun deleteAll(): Int
-	//TODO suspend fun deleteAll(): Int
-
-	/**
-	 * Find an alarm.
-	 *
-	 * @param  id  The ID of the alarm to find.
-	 *
-	 * @return The alarm with the ID.
-	 */
-	@Query("SELECT * FROM alarm WHERE id=:id")
-	fun findAlarm(id: Long): NacAlarm?
-
-	/**
 	 * Get an active alarm.
 	 *
 	 * @return An active alarm.
 	 */
 	@get:Query("SELECT * FROM alarm WHERE is_active=1 LIMIT 1")
 	val activeAlarm: LiveData<NacAlarm>
-
-	/**
-	 * Get a list of all active alarms.
-	 *
-	 * @return List of all active alarms.
-	 */
-	@get:Query("SELECT * FROM alarm WHERE is_active=1")
-	val activeAlarms: LiveData<List<NacAlarm>>
-
-	/**
-	 * Get a list of all active alarms.
-	 * <p>
-	 * This will wait until all alarms are selected.
-	 *
-	 * @return List of all active alarms.
-	 */
-	@get:Query("SELECT * FROM alarm WHERE is_active=1")
-	val activeAlarmsNow: List<NacAlarm>
 
 	/**
 	 * Get all alarms.
@@ -79,14 +31,52 @@ interface NacAlarmDao
 	val allAlarms: LiveData<List<NacAlarm>>
 
 	/**
+	 * Delete an alarm.
+	 *
+	 * @param  alarm  Alarm to delete.
+	 *
+	 * @return The number of rows deleted.
+	 */
+	@Delete
+	suspend fun delete(alarm: NacAlarm): Int
+
+	/**
+	 * Delete all alarms.
+	 *
+	 * @return The number of rows deleted.
+	 */
+	@Query("DELETE FROM alarm")
+	suspend fun deleteAll(): Int
+
+	/**
+	 * Find an alarm.
+	 *
+	 * @param  id  The ID of the alarm to find.
+	 *
+	 * @return The alarm with the ID.
+	 */
+	@Query("SELECT * FROM alarm WHERE id=:id")
+	suspend fun findAlarm(id: Long): NacAlarm?
+
+	/**
+	 * Get a list of all active alarms.
+	 * <p>
+	 * This will wait until all alarms are selected.
+	 *
+	 * @return List of all active alarms.
+	 */
+	@Query("SELECT * FROM alarm WHERE is_active=1")
+	suspend fun getActiveAlarms(): List<NacAlarm>
+
+	/**
 	 * Get all alarms.
 	 * <p>
 	 * This will wait until all alarms are selected.
 	 *
 	 * @return All alarms.
 	 */
-	@get:Query("SELECT * FROM alarm")
-	val allAlarmsNow: List<NacAlarm>
+	@Query("SELECT * FROM alarm")
+	suspend fun getAllAlarms(): List<NacAlarm>
 
 	/**
 	 * Insert an alarm.
@@ -96,8 +86,7 @@ interface NacAlarmDao
 	 * @return The row ID of the alarm that was inserted.
 	 */
 	@Insert
-	fun insert(alarm: NacAlarm?): Long
-	//TODO suspend fun insert(alarm: NacAlarm?): Long
+	suspend fun insert(alarm: NacAlarm): Long
 
 	/**
 	 * Update an existing alarm
@@ -107,7 +96,6 @@ interface NacAlarmDao
 	 * @return The number of alarms updated.
 	 */
 	@Update
-	fun update(alarm: NacAlarm?): Int
-	//TODO suspend fun update(alarm: NacAlarm?): Int
+	suspend fun update(alarm: NacAlarm): Int
 
 }

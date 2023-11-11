@@ -8,15 +8,9 @@ import androidx.room.Query
  * Data access object for storing when alarms were snoozed.
  */
 @Dao
-interface NacAlarmSnoozedStatisticDao : NacAlarmStatisticDao<NacAlarmSnoozedStatistic>
+interface NacAlarmSnoozedStatisticDao
+	: NacAlarmStatisticDao<NacAlarmSnoozedStatistic>
 {
-
-	/**
-	 * Delete all rows from the table.
-	 */
-	@Query("DELETE FROM alarm_snoozed_statistic")
-	fun deleteAll(): Int
-	//TODO suspend fun deleteAll(): Int
 
 	/**
 	 * Get all instances when alarms were snoozed.
@@ -31,15 +25,21 @@ interface NacAlarmSnoozedStatisticDao : NacAlarmStatisticDao<NacAlarmSnoozedStat
 	 *
 	 * @return The number of snoozed alarm statistics.
 	 */
-	@get:Query("SELECT COUNT(id) FROM alarm_snoozed_statistic")
-	val count: Long
+	@Query("SELECT COUNT(id) FROM alarm_snoozed_statistic")
+	suspend fun count(): Long
+
+	/**
+	 * Delete all rows from the table.
+	 */
+	@Query("DELETE FROM alarm_snoozed_statistic")
+	suspend fun deleteAll(): Int
 
 	/**
 	 * Get the total snooze duration.
 	 *
 	 * @return The total snooze duration.
 	 */
-	@get:Query("SELECT SUM(duration) FROM alarm_snoozed_statistic")
-	val totalDuration: Long
+	@Query("SELECT SUM(duration) FROM alarm_snoozed_statistic")
+	suspend fun totalDuration(): Long
 
 }

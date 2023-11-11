@@ -5,6 +5,10 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.Companion.SET_NULL
 import com.nfcalarmclock.alarm.db.NacAlarm
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
 /**
  * Statistics for when an alarm is snoozed.
@@ -40,6 +44,25 @@ class NacAlarmSnoozedStatistic : NacAlarmStatistic
 	constructor(alarm: NacAlarm?, duration: Long) : this(alarm)
 	{
 		this.duration = duration
+	}
+
+}
+
+/**
+ * Hilt module to provide an instance of a snoozed statistic.
+ */
+@InstallIn(SingletonComponent::class)
+@Module
+class NacAlarmSnoozedStatisticModule
+{
+
+	/**
+	 * Provide an instance of a snoozed statistic.
+	 */
+	@Provides
+	fun provideSnoozedStatistic() : NacAlarmSnoozedStatistic
+	{
+		return NacAlarmSnoozedStatistic()
 	}
 
 }

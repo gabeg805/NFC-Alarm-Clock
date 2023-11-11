@@ -6,28 +6,36 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.mediaplayer.NacMediaPlayer
+import com.nfcalarmclock.scheduler.NacScheduler
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacBundle.getAlarm
 import com.nfcalarmclock.util.NacBundle.getMedia
 import com.nfcalarmclock.util.NacIntent.toIntent
 import com.nfcalarmclock.util.NacUtility.toast
+import dagger.hilt.android.AndroidEntryPoint
 
-//import androidx.media2.player.MediaPlayer;
-// TODO: Create the MediaPlayer object, and only call release (cleanup) in
-// onDestroy.
 /**
  * Media fragment for ringtones and music files.
  *
  * TODO: Make this class better
+ * TODO: Create the MediaPlayer object, and only call release (cleanup) in onDestroy.
  */
+@AndroidEntryPoint
+@UnstableApi
 open class NacMediaFragment
 	: Fragment()
 {
+
+	/**
+	 * Alarm view model.
+	 */
+	private val alarmViewModel: NacAlarmViewModel by viewModels()
 
 	/**
 	 * Alarm.
@@ -147,12 +155,11 @@ open class NacMediaFragment
 		// Check if alarm is set
 		if (alarm != null)
 		{
-			// Get the view model
-			val viewModel = ViewModelProvider(activity)
-				.get(NacAlarmViewModel::class.java)
-
 			// Update the alarm for the activity
-			viewModel.update(activity, alarm)
+			alarmViewModel.update(alarm!!)
+
+			// Reschedule the alarm
+			NacScheduler.update(activity, alarm!!)
 		}
 		// Check if the media is set
 		else if (media != null)

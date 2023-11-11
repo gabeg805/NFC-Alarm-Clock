@@ -38,7 +38,6 @@ object NacNfc
 	/**
 	 * Check if NFC exists on this device.
 	 */
-	@JvmStatic
 	fun exists(context: Context): Boolean
 	{
 		return NfcAdapter.getDefaultAdapter(context) != null
@@ -49,7 +48,6 @@ object NacNfc
 	 *
 	 * @return An NFC tag from the given Intent.
 	 */
-	@JvmStatic
 	@Suppress("deprecation")
 	fun getTag(intent: Intent?): Tag?
 	{
@@ -78,7 +76,6 @@ object NacNfc
 	 *
 	 * @return True if the NFC adapter is enabled, and False otherwise.
 	 */
-	@JvmStatic
 	fun isEnabled(context: Context?): Boolean
 	{
 		val nfcAdapter = NfcAdapter.getDefaultAdapter(context)
@@ -89,7 +86,6 @@ object NacNfc
 	/**
 	 * Parse NFC tag ID to a readable format.
 	 */
-	@JvmStatic
 	fun parseId(nfcTag: Tag?): String?
 	{
 		// NFC tag is not defined
@@ -138,7 +134,6 @@ object NacNfc
 	/**
 	 * Prompt the user to enable NFC.
 	 */
-	@JvmStatic
 	fun prompt(context: Context)
 	{
 		// NFC adapter does not exist
@@ -160,7 +155,6 @@ object NacNfc
 	 *
 	 * @return True if should use NFC, and False otherwise.
 	 */
-	@JvmStatic
 	fun shouldUseNfc(context: Context, alarm: NacAlarm?): Boolean
 	{
 		return (alarm != null) && exists(context) && alarm.shouldUseNfc
@@ -169,7 +163,6 @@ object NacNfc
 	/**
 	 * @see .start
 	 */
-	@JvmStatic
 	fun start(activity: Activity)
 	{
 		// Create an intent for an activity
@@ -183,7 +176,6 @@ object NacNfc
 	/**
 	 * Enable NFC dispatch, so that the app can discover NFC tags.
 	 */
-	@JvmStatic
 	fun start(activity: Activity, intent: Intent?)
 	{
 		val nfcAdapter = NfcAdapter.getDefaultAdapter(activity)
@@ -221,7 +213,6 @@ object NacNfc
 	 * Stop NFC dispatch, so the app does not waste battery when it does not
 	 * need to discover NFC tags.
 	 */
-	@JvmStatic
 	fun stop(context: Context)
 	{
 		val nfcAdapter = NfcAdapter.getDefaultAdapter(context)
@@ -247,7 +238,6 @@ object NacNfc
 	 *
 	 * @return True if an NFC tag was scanned/discovered and False otherwise.
 	 */
-	@JvmStatic
 	fun wasScanned(intent: Intent?): Boolean
 	{
 		// Check if intent is null

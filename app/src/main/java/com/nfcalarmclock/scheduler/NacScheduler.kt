@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import com.nfcalarmclock.activealarm.NacActiveAlarmBroadcastReceiver
-import com.nfcalarmclock.alarm.NacAlarmRepository
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.util.NacCalendar
@@ -137,7 +136,7 @@ object NacScheduler
 		val id = alarm.id.toInt()
 
 		// Get the flags
-		var flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 		{
 			PendingIntent.FLAG_IMMUTABLE
 		}
@@ -187,29 +186,6 @@ object NacScheduler
 
 		// Cancel the alarm
 		cancel(context, alarm.id.toInt())
-	}
-
-	/**
-	 * Cancel all active alarms.
-	 */
-	fun cancelAllActive(context: Context)
-	{
-		// Get the active alarms from the repository
-		val repo = NacAlarmRepository(context)
-		val activeAlarms = repo.activeAlarmsNow
-
-		// Iterate over each active alarm
-		for (a in activeAlarms)
-		{
-			// Dismiss the alarm
-			a.dismiss()
-
-			// Update the repo now that the alarm is no longer active
-			repo.update(a)
-
-			// Cancel the alarm
-			cancel(context, a)
-		}
 	}
 
 	/**
@@ -279,12 +255,8 @@ object NacScheduler
 	/**
 	 * Refresh all alarms.
 	 */
-	fun refreshAll(context: Context)
+	fun refreshAll(context: Context, alarms: List<NacAlarm>)
 	{
-		// Get all alarms from the repository
-		val repo = NacAlarmRepository(context)
-		val alarms = repo.allAlarmsNow
-
 		// Iterate over each alarm
 		for (a in alarms)
 		{
@@ -307,7 +279,6 @@ object NacScheduler
 	/**
 	 * Update all days in a given alarm.
 	 */
-	@JvmStatic
 	fun update(context: Context, alarm: NacAlarm?)
 	{
 		// Cancel the alarm
@@ -320,7 +291,6 @@ object NacScheduler
 	/**
 	 * Update a single day in a given alarm.
 	 */
-	@JvmStatic
 	fun update(context: Context, alarm: NacAlarm?, day: Calendar)
 	{
 		// Cancel the alarm
@@ -331,22 +301,9 @@ object NacScheduler
 	}
 
 	/**
-	 * Update all alarms.
-	 */
-	fun updateAll(context: Context)
-	{
-		// Get all alarms from the repository
-		val repo = NacAlarmRepository(context)
-		val alarms: List<NacAlarm?> = repo.allAlarmsNow
-
-		// Update all alarms
-		updateAll(context, alarms)
-	}
-
-	/**
 	 * Update a list of alarms.
 	 */
-	private fun updateAll(context: Context, alarms: List<NacAlarm?>)
+	fun updateAll(context: Context, alarms: List<NacAlarm>)
 	{
 		// Iterate over each alarm
 		for (a in alarms)

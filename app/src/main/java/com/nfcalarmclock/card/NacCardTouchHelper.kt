@@ -29,12 +29,12 @@ class NacCardTouchHelper(
 		/**
 		 * Called when an alarm card is swiped left.
 		 */
-		fun onCopySwipe(alarm: NacAlarm?, index: Int)
+		fun onCopySwipe(alarm: NacAlarm, index: Int)
 
 		/**
 		 * Called when an alarm card is swiped right.
 		 */
-		fun onDeleteSwipe(alarm: NacAlarm?, index: Int)
+		fun onDeleteSwipe(alarm: NacAlarm, index: Int)
 
 	}
 

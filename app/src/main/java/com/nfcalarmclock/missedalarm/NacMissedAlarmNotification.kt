@@ -15,7 +15,19 @@ import java.util.Locale
 
 /**
  */
-class NacMissedAlarmNotification(context: Context) : NacNotification(context)
+class NacMissedAlarmNotification(
+
+	/**
+	 * Context.
+	 */
+	context: Context,
+
+	/**
+	 * The alarm to show the notification about.
+	 */
+	private val alarm: NacAlarm
+
+) : NacNotification(context)
 {
 
 	/**
@@ -50,7 +62,7 @@ class NacMissedAlarmNotification(context: Context) : NacNotification(context)
 		{
 			// Get the title
 			val locale = Locale.getDefault()
-			val missedAlarm = context.resources.getQuantityString(R.plurals.missed_alarm, lineCount);
+			val missedAlarm = context.resources.getQuantityString(R.plurals.missed_alarm, lineCount)
 
 			// Format the title
 			return String.format(locale, "<b>%1\$s</b>", missedAlarm)
@@ -116,11 +128,6 @@ class NacMissedAlarmNotification(context: Context) : NacNotification(context)
 		}
 
 	/**
-	 * The alarm to show the notification about.
-	 */
-	var alarm: NacAlarm? = null
-
-	/**
 	 * @see NacNotification.builder
 	 */
 	override fun builder(): NotificationCompat.Builder
@@ -165,10 +172,10 @@ class NacMissedAlarmNotification(context: Context) : NacNotification(context)
 	override fun setupBody()
 	{
 		// Get the lines from the notification
-		val newBody = NacNotification.getExtraLines(context, group)
+		val newBody = getExtraLines(context, group)
 
 		// Determine the new line to add
-		val line = this.getBodyLine(alarm!!)
+		val line = this.getBodyLine(alarm)
 
 		// Add new line to notification
 		newBody.add(line)
@@ -182,12 +189,6 @@ class NacMissedAlarmNotification(context: Context) : NacNotification(context)
 	 */
 	public override fun show()
 	{
-		// Check if alarm is null
-		if (alarm == null)
-		{
-			return
-		}
-
 		// Used to call cancel() if size was 0. Might not have to because
 		// show() should cancel it anyway
 		setupBody()
