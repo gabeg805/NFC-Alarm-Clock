@@ -5,7 +5,6 @@ import android.content.res.Resources
 import android.text.format.DateFormat
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacUtility.capitalize
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -136,7 +135,7 @@ object NacCalendar
 	/**
 	 * Convert the calendar to a string in the given format.
 	 */
-	fun calendarToString(calendar: Calendar, format: String?): String
+	private fun calendarToString(calendar: Calendar, format: String?): String
 	{
 		// Create the date format
 		val locale = Locale.getDefault()
@@ -173,7 +172,7 @@ object NacCalendar
 	 *
 	 * @return The time.
 	 */
-	fun getClockTime(hour: Int, minute: Int, format: Boolean): String
+	private fun getClockTime(hour: Int, minute: Int, format: Boolean): String
 	{
 		val locale = Locale.getDefault()
 		var hour = hour
@@ -194,13 +193,13 @@ object NacCalendar
 	 *
 	 * @return The full time string, EEE, HH:MM AM/PM.
 	 */
-	fun getFullTime(context: Context, calendar: Calendar): String
+	fun getFullTime(calendar: Calendar, is24HourFormat: Boolean): String
 	{
 		val hour = calendar[Calendar.HOUR_OF_DAY]
 		val convertedHour = to12HourFormat(hour)
 
 		// Get the time format
-		var format = if (DateFormat.is24HourFormat(context))
+		var format = if (is24HourFormat)
 		{
 			"EEE HH:mm"
 		}
@@ -229,10 +228,7 @@ object NacCalendar
 	fun getMeridian(context: Context, hour: Int): String
 	{
 		// Check if time is in 24 hour format
-		val format = DateFormat.is24HourFormat(context)
-
-		// Check the format
-		return if (format)
+		return if (DateFormat.is24HourFormat(context))
 		{
 			""
 		}
@@ -677,43 +673,48 @@ object NacCalendar
 	{
 
 		/**
+		 * Maximum message length.
+		 */
+		private const val MAXIMUM_LENGTH = 32
+
+		/**
 		 * Build a message to display.
 		 *
 		 * @return Build a message to display.
 		 */
 		private fun build(
-			shared: NacSharedPreferences,
+			context: Context,
 			alarm: NacAlarm?,
-			prefix: String?
+			prefix: String,
+			nextAlarmFormat: Int
 		): String
 		{
-			val res = shared.resources
-
 			// No alarm provided
 			return if (alarm == null)
 			{
-				getNoAlarmsScheduled(res)
+				getNoAlarmsScheduled(context.resources)
 			}
 			// Alarm is not enabled
 			else if (!alarm.isEnabled)
 			{
-				getAlarmDisabled(res, alarm)
+				getAlarmDisabled(context.resources, alarm)
 			}
 			else
 			{
 				// Get the next alarm day
-				val context = shared.context
 				val calendar = getNextAlarmDay(alarm)
 
 				// e.g. Alarm in 12 hour 5 min
-				if (shared.nextAlarmFormat == 0)
+				if (nextAlarmFormat == 0)
 				{
-					getTimeIn(context, calendar, prefix)
+					getTimeIn(context.resources, calendar, prefix)
 				}
 				// e.g. Alarm on ...
 				else
 				{
-					getTimeOn(context, calendar, prefix)
+					val is24HourFormat = DateFormat.is24HourFormat(context)
+
+					getTimeOn(context.resources, calendar, prefix, is24HourFormat)
 				}
 			}
 		}
@@ -726,9 +727,8 @@ object NacCalendar
 		private fun getAlarmDisabled(resources: Resources, alarm: NacAlarm) : String
 		{
 			val locale = Locale.getDefault()
-			val length = resources.getInteger(R.integer.max_message_name_length)
 			val isDisabled = resources.getString(R.string.is_disabled)
-			val name = alarm.getNameNormalizedForMessage(length)
+			val name = alarm.getNameNormalizedForMessage(MAXIMUM_LENGTH)
 
 			// No alarm name
 			if (name.isEmpty())
@@ -752,13 +752,17 @@ object NacCalendar
 		 *
 		 * @return The message to display when the next alarm will occur.
 		 */
-		fun getNextAlarm(shared: NacSharedPreferences, alarm: NacAlarm?): String
+		fun getNextAlarm(
+			context: Context,
+			alarm: NacAlarm?,
+			nextAlarmFormat: Int
+		): String
 		{
 			// Get the prefix
-			val prefix = shared.resources.getString(R.string.next_alarm)
+			val prefix = context.getString(R.string.next_alarm)
 
 			// Create the message
-			return build(shared, alarm, prefix)
+			return build(context, alarm, prefix, nextAlarmFormat)
 		}
 
 		/**
@@ -781,13 +785,12 @@ object NacCalendar
 		 *         time.
 		 */
 		private fun getTimeIn(
-			context: Context,
+			resources: Resources,
 			calendar: Calendar,
-			prefix: String?
+			prefix: String
 		): String
 		{
 			val locale = Locale.getDefault()
-			val res = context.resources
 			val time = (calendar.timeInMillis - System.currentTimeMillis()) / 1000
 			var format = "%1\$d %2\$s %3\$d %4\$s"
 
@@ -798,11 +801,11 @@ object NacCalendar
 			val sec = time % 60
 
 			// Get the units of time
-			val dayunit = res.getQuantityString(R.plurals.unit_day, day.toInt())
-			val hrunit = res.getQuantityString(R.plurals.unit_hour, hr.toInt())
-			val minunit = res.getQuantityString(R.plurals.unit_minute, min.toInt())
-			val secunit = res.getQuantityString(R.plurals.unit_second, sec.toInt())
-			val timeIn = context.getString(R.string.time_in)
+			val dayunit = resources.getQuantityString(R.plurals.unit_day, day.toInt())
+			val hrunit = resources.getQuantityString(R.plurals.unit_hour, hr.toInt())
+			val minunit = resources.getQuantityString(R.plurals.unit_minute, min.toInt())
+			val secunit = resources.getQuantityString(R.plurals.unit_second, sec.toInt())
+			val timeIn = resources.getString(R.string.time_in)
 
 
 			val timeRemaining = if (day > 0)
@@ -841,15 +844,16 @@ object NacCalendar
 		 *         time.
 		 */
 		private fun getTimeOn(
-			context: Context,
+			resources: Resources,
 			calendar: Calendar,
-			prefix: String?
+			prefix: String,
+			is24HourFormat: Boolean
 		): String
 		{
 			// Get the message contents
 			val locale = Locale.getDefault()
-			val timeOn = context.getString(R.string.time_on)
-			val time = getFullTime(context, calendar)
+			val timeOn = resources.getString(R.string.time_on)
+			val time = getFullTime(calendar, is24HourFormat)
 
 			// Format the message
 			return String.format(locale, "%1\$s %2\$s %3\$s", prefix, timeOn, time)
@@ -860,17 +864,19 @@ object NacCalendar
 		 *
 		 * @return The message to display when the alarm will run.
 		 */
-		fun getWillRun(shared: NacSharedPreferences, alarm: NacAlarm): String
+		fun getWillRun(
+			context: Context,
+			alarm: NacAlarm,
+			nextAlarmFormat: Int
+		): String
 		{
 			val locale = Locale.getDefault()
-			val res = shared.resources
 
 			// Get the resources
-			val length = res.getInteger(R.integer.max_message_name_length)
-			val willRun = res.getString(R.string.will_run)
+			val willRun = context.getString(R.string.will_run)
 
 			// Get the name of the alarm
-			val name = alarm.getNameNormalizedForMessage(length)
+			val name = alarm.getNameNormalizedForMessage(MAXIMUM_LENGTH)
 
 			// Determine the prefix to use for the message
 			val prefix = if (name.isEmpty())
@@ -883,7 +889,7 @@ object NacCalendar
 			}
 
 			// Get the message
-			return build(shared, alarm, prefix)
+			return build(context, alarm, prefix, nextAlarmFormat)
 		}
 
 	}

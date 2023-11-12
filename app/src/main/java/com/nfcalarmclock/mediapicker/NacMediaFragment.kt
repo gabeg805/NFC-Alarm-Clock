@@ -267,7 +267,7 @@ open class NacMediaFragment
 	 */
 	protected fun setupActionButtons(root: View)
 	{
-		val shared = NacSharedPreferences(context)
+		val shared = NacSharedPreferences(requireContext())
 		val clear = root.findViewById<Button>(R.id.clear)
 		val cancel = root.findViewById<Button>(R.id.cancel)
 		val ok = root.findViewById<Button>(R.id.ok)

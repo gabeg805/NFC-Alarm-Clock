@@ -7,6 +7,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
+import android.text.format.DateFormat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.nfcalarmclock.R
@@ -91,13 +92,25 @@ class NacActiveAlarmNotification(context: Context)
 	override val contentText: String
 		get()
 		{
+			// Get the full time
 			val now = Calendar.getInstance()
-			val time = NacCalendar.getFullTime(context, now)
-			val locale = Locale.getDefault()
+			val is24HourFormat = DateFormat.is24HourFormat(context)
+			val time = NacCalendar.getFullTime(now, is24HourFormat)
+
+			// Get the alarm name
 			val name = alarm?.name ?: ""
 
-			return if (name.isEmpty()) time else String.format(locale,
-				"%1\$s  —  %2\$s", time, name)
+			return if (name.isEmpty())
+			{
+				time
+			}
+			else
+			{
+				val locale = Locale.getDefault()
+
+				// Format the string
+				String.format(locale, "%1\$s  —  %2\$s", time, name)
+			}
 		}
 
 	/**

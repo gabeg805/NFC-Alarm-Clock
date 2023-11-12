@@ -55,7 +55,7 @@ abstract class NacDialogFragment
 	 */
 	protected fun setupSharedPreferences()
 	{
-		sharedPreferences = NacSharedPreferences(context)
+		sharedPreferences = NacSharedPreferences(requireContext())
 	}
 
 }

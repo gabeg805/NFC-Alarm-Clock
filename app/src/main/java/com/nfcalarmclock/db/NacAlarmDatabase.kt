@@ -104,7 +104,7 @@ abstract class NacAlarmDatabase
 		 */
 		override fun onPostMigrate(db: SupportSQLiteDatabase)
 		{
-			val shared = NacSharedPreferences(context)
+			val shared = NacSharedPreferences(context!!)
 
 			shared.editAppStartStatistics(true)
 			db.execSQL("DROP TABLE alarm_created_statistic")

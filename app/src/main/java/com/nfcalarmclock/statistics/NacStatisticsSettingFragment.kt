@@ -237,7 +237,7 @@ class NacStatisticsSettingFragment
 	 */
 	private fun setupViewsWithThemeColor(root: View)
 	{
-		val shared = NacSharedPreferences(context)
+		val shared = NacSharedPreferences(requireContext())
 
 		// Get the views
 		val divider1 = root.findViewById<View>(R.id.divider1)

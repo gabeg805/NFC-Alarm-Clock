@@ -3,6 +3,7 @@ package com.nfcalarmclock.alarm.db
 import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
+import android.text.format.DateFormat
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -958,9 +959,10 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	 */
 	fun getFullTime(context: Context): String
 	{
-		val next = NacCalendar.getNextAlarmDay(this)
+		val nextCalendar = NacCalendar.getNextAlarmDay(this)
+		val is24HourFormat = DateFormat.is24HourFormat(context)
 
-		return NacCalendar.getFullTime(context, next)
+		return NacCalendar.getFullTime(nextCalendar, is24HourFormat)
 	}
 
 	/**

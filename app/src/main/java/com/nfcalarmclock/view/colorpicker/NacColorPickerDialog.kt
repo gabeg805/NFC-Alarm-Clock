@@ -263,7 +263,7 @@ class NacColorPickerDialog
 	 */
 	private fun setupEditText()
 	{
-		val shared = NacSharedPreferences(context)
+		val shared = NacSharedPreferences(requireContext())
 
 		// Set the listeners
 		editText!!.addTextChangedListener(this)
