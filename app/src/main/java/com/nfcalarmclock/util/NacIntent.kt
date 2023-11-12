@@ -330,7 +330,7 @@ object NacIntent
 		if (intent.hasExtra(AlarmClock.EXTRA_DAYS))
 		{
 			val extraDays = intent.getIntegerArrayListExtra(AlarmClock.EXTRA_DAYS)
-			val days = Day.none()
+			val days = Day.NONE
 			isSet = true
 
 			// Iterate over each day
@@ -338,7 +338,7 @@ object NacIntent
 			{
 				for (d in extraDays)
 				{
-					days.add(NacCalendar.Days.toWeekDay(d))
+					days.add(NacCalendar.Day.calendarDayToDay(d))
 				}
 			}
 

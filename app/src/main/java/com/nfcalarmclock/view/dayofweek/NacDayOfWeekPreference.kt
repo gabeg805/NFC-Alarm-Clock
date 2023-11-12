@@ -8,6 +8,7 @@ import androidx.preference.Preference
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar
+import com.nfcalarmclock.util.NacCalendar.Day
 import java.util.EnumSet
 
 /**
@@ -69,7 +70,7 @@ class NacDayOfWeekPreference @JvmOverloads constructor(
 		val start = sharedPreferences.startWeekOn
 
 		// Convert the default days to a string
-		val days = NacCalendar.Days.toString(context, value, start)
+		val days = NacCalendar.Day.valueToDayString(context, value, start)
 
 		// Return the days string, otherwise return the "None" string
 		return days.ifEmpty { context.getString(R.string.none) }
@@ -78,10 +79,10 @@ class NacDayOfWeekPreference @JvmOverloads constructor(
 	/**
 	 * Called when the days of week are selected.
 	 */
-	override fun onDaysOfWeekSelected(selectedDays: EnumSet<NacCalendar.Day>)
+	override fun onDaysOfWeekSelected(selectedDays: EnumSet<Day>)
 	{
 		// Set the day of week value
-		dayOfWeekValue = NacCalendar.Days.daysToValue(selectedDays)
+		dayOfWeekValue = NacCalendar.Day.daysToValue(selectedDays)
 
 		// Reevaluate the summary
 		summary = this.summary
@@ -98,10 +99,7 @@ class NacDayOfWeekPreference @JvmOverloads constructor(
 	override fun onGetDefaultValue(a: TypedArray, index: Int): Any
 	{
 		// Calculate the default value
-		val default = NacCalendar.Days.daysToValue(
-			EnumSet.of(NacCalendar.Day.MONDAY, NacCalendar.Day.TUESDAY,
-				NacCalendar.Day.WEDNESDAY, NacCalendar.Day.THURSDAY,
-				NacCalendar.Day.FRIDAY))
+		val default = NacCalendar.Day.daysToValue(Day.WEEKDAY)
 
 		// Get the default value
 		return a.getInteger(index, default)

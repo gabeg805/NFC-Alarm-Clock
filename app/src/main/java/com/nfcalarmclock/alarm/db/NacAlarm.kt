@@ -218,7 +218,7 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 			this.setIsEnabled(true)
 				.setHour(calendar[Calendar.HOUR_OF_DAY])
 				.setMinute(calendar[Calendar.MINUTE])
-				.setDays(Day.none())
+				.setDays(Day.NONE)
 				.setRepeat(false)
 				.setVibrate(false)
 				.setUseNfc(false)
@@ -244,7 +244,7 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 		{
 			if (shared != null)
 			{
-				this.setDays(NacCalendar.Days.valueToDays(shared.days))
+				this.setDays(NacCalendar.Day.valueToDays(shared.days))
 					.setRepeat(shared.repeat)
 					.setVibrate(shared.vibrate)
 					.setUseNfc(shared.useNfc)
@@ -300,7 +300,7 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 		 */
 		fun setDays(value: Int): Builder
 		{
-			return this.setDays(NacCalendar.Days.valueToDays(value))
+			return this.setDays(NacCalendar.Day.valueToDays(value))
 		}
 
 		/**
@@ -670,7 +670,7 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	 * @return A negative integer, zero, or a positive integer as this object is
 	 * less than, equal to, or greater than the specified object.
 	 */
-	private fun compareDay(alarm: NacAlarm?): Int
+	private fun compareDay(alarm: NacAlarm): Int
 	{
 		val cal = NacCalendar.getNextAlarmDay(this)
 		val otherCal = NacCalendar.getNextAlarmDay(alarm)
@@ -935,7 +935,7 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 		val hour = hour
 		val minute = minute
 
-		return NacCalendar.Time.getClockTime(context, hour, minute)
+		return NacCalendar.getClockTime(context, hour, minute)
 	}
 
 	/**
@@ -960,7 +960,7 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	{
 		val next = NacCalendar.getNextAlarmDay(this)
 
-		return NacCalendar.Time.getFullTime(context, next)
+		return NacCalendar.getFullTime(context, next)
 	}
 
 	/**
@@ -972,7 +972,7 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	{
 		val hour = hour
 
-		return NacCalendar.Time.getMeridian(context, hour)
+		return NacCalendar.getMeridian(context, hour)
 	}
 
 	/**
@@ -1078,7 +1078,7 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	 */
 	fun setDays(value: Int)
 	{
-		days = NacCalendar.Days.valueToDays(value)
+		days = NacCalendar.Day.valueToDays(value)
 	}
 
 	/**
@@ -1214,7 +1214,7 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	private fun toggleToday()
 	{
 		// Get today's day
-		val day = NacCalendar.Days.getToday()
+		val day = NacCalendar.Day.TODAY
 
 		// Toggle today
 		toggleDay(day)
@@ -1274,7 +1274,7 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 		output.writeInt(if (isEnabled) 1 else 0)
 		output.writeInt(hour)
 		output.writeInt(minute)
-		output.writeInt(NacCalendar.Days.daysToValue(days))
+		output.writeInt(NacCalendar.Day.daysToValue(days))
 		output.writeInt(if (shouldRepeat) 1 else 0)
 		output.writeInt(if (shouldVibrate) 1 else 0)
 		output.writeInt(if (shouldUseNfc) 1 else 0)

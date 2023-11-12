@@ -92,7 +92,7 @@ class NacActiveAlarmNotification(context: Context)
 		get()
 		{
 			val now = Calendar.getInstance()
-			val time = NacCalendar.Time.getFullTime(context, now)
+			val time = NacCalendar.getFullTime(context, now)
 			val locale = Locale.getDefault()
 			val name = alarm?.name ?: ""
 

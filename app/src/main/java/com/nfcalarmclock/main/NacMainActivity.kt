@@ -565,7 +565,7 @@ class NacMainActivity
 		val nextAlarm = NacCalendar.getNextAlarm(alarms)
 
 		// Get a message for the next alarm
-		return NacCalendar.getMessageNextAlarm(sharedPreferences, nextAlarm)
+		return NacCalendar.Message.getNextAlarm(sharedPreferences!!, nextAlarm)
 	}
 
 	/**
@@ -1466,7 +1466,7 @@ class NacMainActivity
 	private fun showAlarmSnackbar(alarm: NacAlarm)
 	{
 		// Get the message and action for the snackbar
-		val message = NacCalendar.getMessageWillRun(sharedPreferences, alarm)
+		val message = NacCalendar.Message.getWillRun(sharedPreferences!!, alarm)
 		val action = getString(R.string.action_alarm_dismiss)
 
 		// Show the snackbar
@@ -1609,7 +1609,7 @@ class NacMainActivity
 		val nextAlarm = NacCalendar.getNextAlarm(alarmCardAdapter!!.currentList)
 
 		// Get the message and action for the snackbar
-		val message = NacCalendar.getMessageNextAlarm(sharedPreferences, nextAlarm)
+		val message = NacCalendar.Message.getNextAlarm(sharedPreferences!!, nextAlarm)
 		val action = getString(R.string.action_alarm_dismiss)
 
 		// Show the snackbar

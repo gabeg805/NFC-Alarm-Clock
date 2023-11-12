@@ -44,7 +44,7 @@ class NacShutdownBroadcastReceiver
 				a.dismiss()
 
 				// Update the repo now that the alarm is no longer active
-				alarmRepository.update(context, a)
+				alarmRepository.update(a)
 
 				// Cancel the alarm
 				NacScheduler.cancel(context, a)

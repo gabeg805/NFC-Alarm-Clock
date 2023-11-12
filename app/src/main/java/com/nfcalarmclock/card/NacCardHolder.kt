@@ -7,6 +7,7 @@ import android.app.TimePickerDialog.OnTimeSetListener
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.text.format.DateFormat
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.View.OnCreateContextMenuListener
@@ -1593,7 +1594,7 @@ class NacCardHolder(
 	private fun setSummaryDaysView()
 	{
 		// Get the string from the alarm
-		val string = NacCalendar.Days.toString(context, alarm, sharedPreferences.startWeekOn)
+		val string = NacCalendar.Day.alarmToDayString(context, alarm!!, sharedPreferences.startWeekOn)
 
 		// Check if the alarm string and the string in the view are different
 		if (summaryDaysView.text != string)
@@ -2328,7 +2329,7 @@ class NacCardHolder(
 		}
 
 		// Get whether 24 hour format should be used
-		val is24HourFormat = NacCalendar.Time.is24HourFormat(context)
+		val is24HourFormat = DateFormat.is24HourFormat(context)
 
 		// Create the dialog
 		val dialog = TimePickerDialog(context, listener, alarm!!.hour, alarm!!.minute,

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.LinearLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.util.NacCalendar
+import com.nfcalarmclock.util.NacCalendar.Day
 import com.nfcalarmclock.view.dialog.NacDialogFragment
 import java.util.EnumSet
 
@@ -32,7 +33,7 @@ class NacDayOfWeekDialog
 		set(value) {
 
 			// Set the current selected days
-			currentDayOfWeekSelected = NacCalendar.Days.valueToDays(value)
+			currentDayOfWeekSelected = NacCalendar.Day.valueToDays(value)
 
 			// Set the backing field
 			field = value
@@ -41,7 +42,7 @@ class NacDayOfWeekDialog
 	/**
 	 * Current selected days.
 	 */
-	private var currentDayOfWeekSelected: EnumSet<NacCalendar.Day> = EnumSet.noneOf(NacCalendar.Day::class.java)
+	private var currentDayOfWeekSelected: EnumSet<Day> = NacCalendar.Day.NONE
 
 	/**
 	 * Listener for when the volume is restricted/unrestricted.

@@ -259,7 +259,7 @@ open class NacMediaFragment
 		}
 
 		// Stop any media that is already playing
-		mediaPlayer!!.mediaPlayer.stop()
+		mediaPlayer!!.exoPlayer.stop()
 	}
 
 	/**

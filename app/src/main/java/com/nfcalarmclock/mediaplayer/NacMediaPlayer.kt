@@ -27,7 +27,12 @@ class NacMediaPlayer(
 	/**
 	 * Application context.
 	 */
-	private val context: Context
+	private val context: Context,
+
+	/**
+	 * Exo player listener.
+	 */
+	listener: Player.Listener? = null
 
 ) : OnAudioFocusChangeListener
 {
@@ -46,7 +51,7 @@ class NacMediaPlayer(
 	 * Media player.
 	 */
 	// TODO: setWakeMode, setDevicVolumeControlEnabled
-	val mediaPlayer: ExoPlayer = ExoPlayer.Builder(context)
+	val exoPlayer: ExoPlayer = ExoPlayer.Builder(context)
 		.setLooper(context.mainLooper)
 		.build()
 
@@ -62,6 +67,18 @@ class NacMediaPlayer(
 	 */
 	var shouldGainTransientAudioFocus: Boolean = false
 
+	/**
+	 * Constructor.
+	 */
+	init
+	{
+		// Check if the listener is not null
+		if (listener != null)
+		{
+			// Set the listener
+			exoPlayer.addListener(listener)
+		}
+	}
 	/**
 	 * Abandon audio focus.
 	 */
@@ -115,29 +132,29 @@ class NacMediaPlayer(
 			//this.cleanupHandler();
 
 			// Stop the media player
-			mediaPlayer.stop()
+			exoPlayer.stop()
 
 			// Clear all media items
-			mediaPlayer.clearMediaItems()
+			exoPlayer.clearMediaItems()
 
 			//this.getMediaPlayer().reset();
 		}
 		// Transient lose audio focus
 		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)
 		{
-			wasPlaying = mediaPlayer.isPlaying
+			wasPlaying = exoPlayer.isPlaying
 
 			printf("NacMediaPlayer : LOSS TRANSIENT! %b", wasPlaying)
 
 			//attrs.revertVolume();
 
 			// Pause the media player
-			mediaPlayer.pause()
+			exoPlayer.pause()
 		}
 		// Transient lose audio focus but can duck audio
 		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
 		{
-			wasPlaying = mediaPlayer.isPlaying
+			wasPlaying = exoPlayer.isPlaying
 
 			printf("NacMediaPlayer : LOSS TRANSIENT DUCK! %b", wasPlaying)
 
@@ -168,10 +185,8 @@ class NacMediaPlayer(
 		// Unable to gain audio focus
 		if (!request)
 		{
-			val message = context.getString(R.string.error_message_play_audio)
-
 			// Show toast with error message
-			quickToast(context, message)
+			quickToast(context, R.string.error_message_play_audio)
 		}
 
 		return request
@@ -189,15 +204,15 @@ class NacMediaPlayer(
 		}
 
 		// Set the repeat mode if the command is available
-		if (mediaPlayer.isCommandAvailable(COMMAND_SET_REPEAT_MODE))
+		if (exoPlayer.isCommandAvailable(COMMAND_SET_REPEAT_MODE))
 		{
-			mediaPlayer.repeatMode = Player.REPEAT_MODE_ALL
+			exoPlayer.repeatMode = Player.REPEAT_MODE_ALL
 		}
 
 		// Prepare to play the media
-		mediaPlayer.setAudioAttributes(audioAttributes.audioAttributes, false)
-		mediaPlayer.prepare()
-		mediaPlayer.play()
+		exoPlayer.setAudioAttributes(audioAttributes.audioAttributes, false)
+		exoPlayer.prepare()
+		exoPlayer.play()
 	}
 
 	/**
@@ -255,7 +270,7 @@ class NacMediaPlayer(
 		//this.getMediaPlayer().stop();
 
 		// Set the media item
-		mediaPlayer.setMediaItem(item)
+		exoPlayer.setMediaItem(item)
 
 		// Play the media item
 		play()
@@ -271,7 +286,7 @@ class NacMediaPlayer(
 		//this.getMediaPlayer().stop();
 
 		// Set the media items
-		mediaPlayer.setMediaItems(items)
+		exoPlayer.setMediaItems(items)
 
 		// Play the media items
 		play()
@@ -306,7 +321,7 @@ class NacMediaPlayer(
 		cleanupHandler()
 
 		// Release the media player resources
-		mediaPlayer.release()
+		exoPlayer.release()
 	}
 
 }

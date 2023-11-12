@@ -60,7 +60,7 @@ object NacScheduler
 		}
 
 		// Get the next alarm day
-		val day = NacCalendar.getNextAlarmDay(alarm)
+		val day = NacCalendar.getNextAlarmDay(alarm!!)
 
 		// Add the alarm for that day
 		add(context, alarm, day)

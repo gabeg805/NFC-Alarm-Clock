@@ -17,7 +17,7 @@ object NacAlarmTypeConverters
 	@TypeConverter
 	fun dayValueToDays(value: Int): EnumSet<Day>
 	{
-		return NacCalendar.Days.valueToDays(value)
+		return NacCalendar.Day.valueToDays(value)
 	}
 
 	/**
@@ -26,7 +26,7 @@ object NacAlarmTypeConverters
 	@TypeConverter
 	fun daysToDayValue(days: EnumSet<Day>): Int
 	{
-		return NacCalendar.Days.daysToValue(days)
+		return NacCalendar.Day.daysToValue(days)
 	}
 
 }

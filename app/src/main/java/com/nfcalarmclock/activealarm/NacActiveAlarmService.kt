@@ -331,7 +331,7 @@ class NacActiveAlarmService
 		sharedPreferences = NacSharedPreferences(this)
 		wakeLock = null
 		alarm = null
-		wakeupProcess = NacWakeupProcess(this)
+		//wakeupProcess = NacWakeupProcess(this)
 		autoDismissHandler = Handler(mainLooper)
 
 		// Enable the activity alias so that tapping an NFC tag will open the main
@@ -399,7 +399,9 @@ class NacActiveAlarmService
 			setupWakeLock()
 
 			// Start the wakeup process
-			wakeupProcess!!.start(alarm)
+			wakeupProcess = NacWakeupProcess(this, alarm!!)
+			wakeupProcess!!.start()
+			//wakeupProcess!!.start(alarm)
 
 			waitForAutoDismiss()
 			startAlarmActivity(this, alarm)
@@ -422,12 +424,15 @@ class NacActiveAlarmService
 		// Prepare a new service
 		if (isNewServiceStarted(intent))
 		{
+			println("NEW SERVICE STARTED")
 			cleanup()
 		}
 
 		// Define the new alarm for this service
+		// TODO: When does this happen if it is not a new service started?
 		if (intentAlarm != null)
 		{
+			println("NEW ALARM SET FOR THE SERVICE : " + intentAlarm.equals(alarm))
 			alarm = intentAlarm
 		}
 	}
