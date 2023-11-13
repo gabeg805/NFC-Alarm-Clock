@@ -302,7 +302,7 @@ class NacActiveAlarmService
 	 *
 	 * @return True if a new service was started, and False otherwise.
 	 */
-	private fun isNewServiceStarted(intent: Intent): Boolean
+	private fun isNewServiceStarted(intent: Intent?): Boolean
 	{
 		// Get the alarm from the intent
 		val intentAlarm = getAlarm(intent)
@@ -311,7 +311,7 @@ class NacActiveAlarmService
 		return ((alarm != null)
 			&& (intentAlarm != null)
 			&& !intentAlarm.equals(alarm)
-			&& (intent.action == ACTION_START_SERVICE))
+			&& (intent?.action == ACTION_START_SERVICE))
 	}
 
 	/**
@@ -361,7 +361,7 @@ class NacActiveAlarmService
 	 * Called when the service is started.
 	 */
 	@UnstableApi
-	override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int
+	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
 	{
 		// Setup the service
 		// TODO: This was updating the previous alarm with the active time when a new intent came in. Did that do anything?
@@ -376,24 +376,24 @@ class NacActiveAlarmService
 		// TODO: Maybe this should just be the else? Oh but it checks alarm is null,
 		// that is important.
 		if ((alarm == null)
-			|| intent.action.isNullOrEmpty()
-			|| (intent.action == ACTION_STOP_SERVICE)
-			|| (intent.action == ACTION_DISMISS_ALARM))
+			|| intent?.action.isNullOrEmpty()
+			|| (intent?.action == ACTION_STOP_SERVICE)
+			|| (intent?.action == ACTION_DISMISS_ALARM))
 		{
 			dismiss()
 		}
 		// Dismiss with NFC
-		else if (intent.action == ACTION_DISMISS_ALARM_WITH_NFC)
+		else if (intent?.action == ACTION_DISMISS_ALARM_WITH_NFC)
 		{
 			dismissWithNfc()
 		}
 		// Snooze
-		else if (intent.action == ACTION_SNOOZE_ALARM)
+		else if (intent?.action == ACTION_SNOOZE_ALARM)
 		{
 			snooze()
 		}
 		// Start the service
-		else if (intent.action == ACTION_START_SERVICE)
+		else if (intent?.action == ACTION_START_SERVICE)
 		{
 			// Setup the wake lock
 			setupWakeLock()
@@ -416,7 +416,7 @@ class NacActiveAlarmService
 	 * Setup the service.
 	 */
 	@UnstableApi
-	private fun setupService(intent: Intent)
+	private fun setupService(intent: Intent?)
 	{
 		// Attempt to get the alarm from the intent
 		val intentAlarm = getAlarm(intent)
@@ -460,12 +460,14 @@ class NacActiveAlarmService
 	private fun showActiveAlarmNotification()
 	{
 		// Create the active alarm notification
+		println("show Active alarm notification")
 		val notification = NacActiveAlarmNotification(this)
 
 		// Set the alarm to be part of the notification
 		notification.alarm = alarm
 
 		// Start the service in the foreground
+		println("Start foreground notification")
 		startForeground(NacActiveAlarmNotification.ID,
 			notification.builder().build())
 	}

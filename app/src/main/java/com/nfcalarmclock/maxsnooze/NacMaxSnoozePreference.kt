@@ -54,10 +54,11 @@ class NacMaxSnoozePreference @JvmOverloads constructor(
 	 *
 	 * @return The summary text.
 	 */
-	override fun getSummary(): CharSequence?
+	override fun getSummary(): CharSequence
 	{
-		return NacSharedPreferences.getMaxSnoozeSummary(context.resources,
-			maxSnoozeIndex)
+		val summaries = context.resources.getStringArray(R.array.max_snooze_summaries)
+
+		return summaries[maxSnoozeIndex]
 	}
 
 	/**

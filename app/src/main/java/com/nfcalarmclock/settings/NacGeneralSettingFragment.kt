@@ -307,13 +307,10 @@ class NacGeneralSettingFragment
 
 		// Set the default settings
 		dialog.defaultShouldDismissEarly = sharedPreferences!!.useDismissEarly
-		dialog.defaultShouldDismissEarlyIndex = sharedPreferences!!.dismissEarlyIndex
+		dialog.setDefaultDismissEarlyIndexFromTime(sharedPreferences!!.dismissEarlyTime)
 
 		// Set the listener for when the user is done
-		dialog.onDismissEarlyOptionSelectedListener = OnDismissEarlyOptionSelectedListener { useDismissEarly, index ->
-
-			// Convert the dismiss early index to a time value
-			val time = NacSharedPreferences.getDismissEarlyIndexToTime(index)
+		dialog.onDismissEarlyOptionSelectedListener = OnDismissEarlyOptionSelectedListener { useDismissEarly, _, time ->
 
 			// Save the settings that were selected for dismiss early
 			sharedPreferences!!.editUseDismissEarly(useDismissEarly)

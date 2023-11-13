@@ -199,6 +199,82 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	var timeOfDismissEarlyAlarm: Long = 0
 
 	/**
+	 * Check if any days are selected.
+	 */
+	val areDaysSelected: Boolean
+		get() = days.isNotEmpty()
+
+	/**
+	 * Check if the alarm has a sound that will be played when it goes off.
+	 */
+	val hasMedia: Boolean
+		get() = mediaPath.isNotEmpty()
+
+	/**
+	 * Check if the alarm is snoozed.
+	 */
+	val isSnoozed: Boolean
+		get() = snoozeCount > 0
+
+	/**
+	 * Check if the alarm is being used, by being active or snoozed.
+	 */
+	val isInUse: Boolean
+		get() = isActive || isSnoozed
+
+	/**
+	 * The normalized alarm name (with newlines replaced with spaces).
+	 */
+	val nameNormalized: String
+		get()
+		{
+			return if (name.isNotEmpty())
+			{
+				name.replace("\n", " ")
+			}
+			else
+			{
+				name
+			}
+		}
+
+	/**
+	 * Check if should repeat the alarm after it runs or not.
+	 */
+	val shouldRepeat: Boolean
+		get() = repeat
+
+	/**
+	 * Check if should use dismiss early or not.
+	 */
+	val shouldUseDismissEarly: Boolean
+		get() = useDismissEarly
+
+	/**
+	 * Check if should use NFC or not.
+	 */
+	val shouldUseNfc: Boolean
+		get() = useNfc
+
+	/**
+	 * Check if should use TTS or not.
+	 */
+	val shouldUseTts: Boolean
+		get() = useTts
+
+	/**
+	 * Check if the phone should vibrate when the alarm is run.
+	 */
+	val shouldVibrate: Boolean
+		get() = vibrate
+
+	/**
+	 * The frequency at which to use TTS, in units of milliseconds.
+	 */
+	val ttsFrequencyMillis: Long
+		get() = ttsFrequency * 60L * 1000L
+
+	/**
 	 * Helper to build an alarm.
 	 */
 	class Builder()
@@ -646,21 +722,13 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	}
 
 	/**
-	 * Check if any days are selected.
-	 */
-	val areDaysSelected: Boolean
-		get() = days.isNotEmpty()
-
-	/**
 	 * Check if the alarm can be snoozed.
 	 *
 	 * @return True if the alarm can be snoozed, and False otherwise.
 	 */
 	fun canSnooze(shared: NacSharedPreferences): Boolean
 	{
-		val maxSnoozeCount = shared.maxSnoozeValue
-
-		return snoozeCount < maxSnoozeCount || maxSnoozeCount < 0
+		return (snoozeCount < shared.maxSnoozeValue) || (shared.maxSnoozeValue < 0)
 	}
 
 	/**
@@ -933,24 +1001,8 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	 */
 	fun getClockTime(context: Context): String
 	{
-		val hour = hour
-		val minute = minute
-
 		return NacCalendar.getClockTime(context, hour, minute)
 	}
-
-	/**
-	 * The index which corresponds to the amount of time, in minutes to allow a user to
-	 * dismiss early by.
-	 */
-	val dismissEarlyIndex: Int
-		get()
-		{
-			val time = dismissEarlyTime
-			NacUtility.printf("Time : %d", time)
-
-			return NacSharedPreferences.getDismissEarlyTimeToIndex(time)
-		}
 
 	/**
 	 * Get the full time string.
@@ -972,74 +1024,26 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	 */
 	fun getMeridian(context: Context): String
 	{
-		val hour = hour
-
 		return NacCalendar.getMeridian(context, hour)
 	}
-
-	/**
-	 * The normalized alarm name (with newlines replaced with spaces).
-	 */
-	val nameNormalized: String
-		get()
-		{
-			return if (name.isNotEmpty())
-			{
-				name.replace("\n", " ")
-			}
-			else
-			{
-				name
-			}
-		}
 
 	/**
 	 * @see .getNameNormalized
 	 */
 	fun getNameNormalizedForMessage(max: Int): String
 	{
-		val name = nameNormalized
 		val locale = Locale.getDefault()
+		val name = nameNormalized
 
-		return if (name.length > max) String.format(locale,
-			"%1\$s...",
-			name.substring(0, max - 3)) else name
+		return if (name.length > max)
+		{
+			String.format(locale, "%1\$s...", name.substring(0, max - 3))
+		}
+		else
+		{
+			name
+		}
 	}
-
-	// --Commented out by Inspection START (6/26/21, 11:52 PM):
-	//	/**
-	//	 * @return The current snooze count.
-	//	 */
-	//	public int getSnoozeCount(NacSharedPreferences shared)
-	//	{
-	//		long id = this.getId();
-	//		return shared.getSnoozeCount(id);
-	//	}
-	// --Commented out by Inspection STOP (6/26/21, 11:52 PM)
-
-	/**
-	 * The frequency at which to use TTS, in units of milliseconds.
-	 */
-	val ttsFrequencyMillis: Long
-		get() = ttsFrequency * 60L * 1000L
-
-	/**
-	 * Check if the alarm has a sound that will be played when it goes off.
-	 */
-	val hasMedia: Boolean
-		get() = mediaPath.isNotEmpty()
-
-	/**
-	 * Check if the alarm is snoozed.
-	 */
-	val isSnoozed: Boolean
-		get() = snoozeCount > 0
-
-	/**
-	 * Check if the alarm is being used, by being active or snoozed.
-	 */
-	val isInUse: Boolean
-		get() = isActive || isSnoozed
 
 	/**
 	 * Print all values in the alarm object.
@@ -1084,14 +1088,6 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	}
 
 	/**
-	 * Set the amount of time, in minutes, to allow a user to dismiss early by.
-	 */
-	fun setDismissEarlyTimeFromIndex(index: Int)
-	{
-		dismissEarlyTime = NacSharedPreferences.getDismissEarlyIndexToTime(index)
-	}
-
-	/**
 	 * Set the sound to play when the alarm goes off.
 	 *
 	 * @param  context  The application context.
@@ -1106,36 +1102,6 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 		mediaPath = path
 		mediaTitle = title
 	}
-
-	/**
-	 * Check if should repeat the alarm after it runs or not.
-	 */
-	val shouldRepeat: Boolean
-		get() = repeat
-
-	/**
-	 * Check if should use dismiss early or not.
-	 */
-	val shouldUseDismissEarly: Boolean
-		get() = useDismissEarly
-
-	/**
-	 * Check if should use NFC or not.
-	 */
-	val shouldUseNfc: Boolean
-		get() = useNfc
-
-	/**
-	 * Check if should use TTS or not.
-	 */
-	val shouldUseTts: Boolean
-		get() = useTts
-
-	/**
-	 * Check if the phone should vibrate when the alarm is run.
-	 */
-	val shouldVibrate: Boolean
-		get() = vibrate
 
 	/**
 	 * Snooze the alarm.

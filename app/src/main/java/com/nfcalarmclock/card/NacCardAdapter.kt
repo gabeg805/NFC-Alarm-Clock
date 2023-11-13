@@ -174,7 +174,7 @@ class NacCardAdapter
 		val alarm = getItem(index)
 
 		// Initialize the card
-		card.init(alarm)
+		card.bind(alarm)
 
 		// Check if the index is part of the expanded cards
 		if (indicesOfExpandedCards.contains(index))

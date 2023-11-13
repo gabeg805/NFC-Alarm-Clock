@@ -23,10 +23,12 @@ import com.nfcalarmclock.permission.readmediaaudio.NacReadMediaAudioPermission.r
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacIntent.getAlarm
 import com.nfcalarmclock.util.NacIntent.getMedia
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Media activity.
  */
+@AndroidEntryPoint
 class NacMediaActivity
 	: FragmentActivity(),
 	FragmentOnAttachListener,

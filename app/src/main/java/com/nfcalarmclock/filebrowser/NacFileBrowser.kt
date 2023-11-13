@@ -9,10 +9,10 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.nfcalarmclock.R
@@ -25,9 +25,9 @@ import kotlinx.coroutines.launch
 class NacFileBrowser(
 
 	/**
-	 * Context.
+	 * Fragment.
 	 */
-	context: Context,
+	fragment: Fragment,
 
 	/**
 	 * File browser container.
@@ -51,7 +51,7 @@ class NacFileBrowser(
 	 * View model for the file browser.
 	 */
 	private val viewModel: NacFileBrowserViewModel =
-		ViewModelProvider((context as ViewModelStoreOwner))
+		ViewModelProvider(fragment)
 			.get(NacFileBrowserViewModel::class.java)
 
 	/**
@@ -94,7 +94,7 @@ class NacFileBrowser(
 	 */
 	init
 	{
-		setupViewModelObserver(context as LifecycleOwner)
+		setupViewModelObserver(fragment)
 	}
 
 	/**

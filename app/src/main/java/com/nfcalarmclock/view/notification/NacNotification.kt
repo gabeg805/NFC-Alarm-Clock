@@ -83,13 +83,13 @@ abstract class NacNotification(
 	/**
 	 * The notification manager.
 	 */
-	protected val notificationManager: NotificationManagerCompat
+	private val notificationManager: NotificationManagerCompat
 		get() = NotificationManagerCompat.from(context)
 
 	/**
 	 * Category of the notification.
 	 */
-	protected val category: String = NotificationCompat.CATEGORY_ALARM
+	private val category: String = NotificationCompat.CATEGORY_ALARM
 
 	/**
 	 * Body text of the notification.
@@ -99,7 +99,7 @@ abstract class NacNotification(
 	/**
 	 * The small icon of the notification.
 	 */
-	protected val smallIcon: Int
+	private val smallIcon: Int
 		get() = R.mipmap.notification
 
 	/**
@@ -115,8 +115,8 @@ abstract class NacNotification(
 	/**
 	 * Check if should create channel by checkin if the API level < 26.
 	 */
-	val shouldCreateChannel: Boolean
-		get() = Build.VERSION.SDK_INT < Build.VERSION_CODES.O
+	private val shouldCreateChannel: Boolean
+		get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
 	/**
 	 * Constructor.
@@ -219,10 +219,12 @@ abstract class NacNotification(
 		// Check if should create channel
 		if (!shouldCreateChannel)
 		{
+			println("Will not create channel")
 			return
 		}
 
 		// Create the channel
+		println("Create channel")
 		val channel = createChannel()
 
 		// Tell the notification manager to create the channel

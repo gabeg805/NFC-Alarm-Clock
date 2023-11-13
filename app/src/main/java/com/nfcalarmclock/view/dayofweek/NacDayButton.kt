@@ -84,8 +84,7 @@ class NacDayButton
 	/**
 	 * Day button parent.
 	 */
-	var buttonToggleGroup: MaterialButtonToggleGroup? = null
-		private set
+	private var buttonToggleGroup: MaterialButtonToggleGroup? = null
 
 	/**
 	 * Day button.

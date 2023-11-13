@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
-import com.nfcalarmclock.media.NacMedia.getTitle
 
 /**
  * Container for the values of each preference.
@@ -39,7 +38,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.am_color_key)
 			val defaultValue = resources.getInteger(R.integer.default_am_color)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
@@ -51,7 +50,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.app_first_run)
 			val defaultValue = true
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
@@ -63,7 +62,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.app_start_statistics)
 			val defaultValue = resources.getBoolean(R.bool.default_app_start_statistics)
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
@@ -76,26 +75,36 @@ class NacSharedPreferences(
 			val audioSources = resources.getStringArray(R.array.audio_sources)
 			val defaultValue = audioSources[2]
 
-			return getString(key, defaultValue) ?: ""
+			return instance.getString(key, defaultValue) ?: ""
 		}
 
 	/**
 	 * Auto dismiss duration.
 	 */
-	val autoDismiss: Int
+	private val autoDismissIndex: Int
 		get()
 		{
 			val key = resources.getString(R.string.auto_dismiss_key)
 			val defaultValue = resources.getInteger(R.integer.default_auto_dismiss_index)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
 	 * @see .getAutoDismissTime
 	 */
 	val autoDismissTime: Int
-		get() = getAutoDismissTime(autoDismiss)
+		get()
+		{
+			return if (autoDismissIndex < 5)
+			{
+				autoDismissIndex
+			}
+			else
+			{
+				(autoDismissIndex - 4) * 5
+			}
+		}
 
 	/**
 	 * Alarm card height when it is collapsed.
@@ -106,7 +115,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.card_height_collapsed)
 			val defaultValue = resources.getInteger(R.integer.default_card_height_collapsed)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
@@ -118,7 +127,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.card_height_collapsed_dismiss)
 			val defaultValue = resources.getInteger(R.integer.default_card_height_collapsed_dismiss)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
@@ -130,7 +139,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.card_height_expanded)
 			val defaultValue = resources.getInteger(R.integer.default_card_height_expanded)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
@@ -142,7 +151,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.card_is_measured)
 			val defaultValue = resources.getBoolean(R.bool.default_card_is_measured)
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
@@ -157,7 +166,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.day_button_style_key)
 			val defaultValue = resources.getInteger(R.integer.default_day_button_style)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
@@ -169,7 +178,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.alarm_days_key)
 			val defaultValue = resources.getInteger(R.integer.default_days)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
@@ -181,15 +190,8 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.days_color_key)
 			val defaultValue = resources.getInteger(R.integer.default_days_color)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
-
-	/**
-	 * The index that corresponds to the time before an alarm goes off to start showing
-	 * the dismiss early button by.
-	 */
-	val dismissEarlyIndex: Int
-		get() = getDismissEarlyTimeToIndex(dismissEarlyTime)
 
 	/**
 	 * The time before an alarm goes off to start showing the dismiss early button by.
@@ -200,7 +202,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.alarm_dismiss_early_time_key)
 			val defaultValue = resources.getInteger(R.integer.default_dismiss_early_time)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
@@ -212,7 +214,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.easy_snooze_key)
 			val defaultValue = resources.getBoolean(R.bool.default_easy_snooze)
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
@@ -224,7 +226,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.expand_new_alarm_key)
 			val defaultValue = resources.getBoolean(R.bool.default_expand_new_alarm)
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
@@ -250,22 +252,32 @@ class NacSharedPreferences(
 		}
 
 	/**
-	 * Max number of snoozes.
+	 * The index for the max number of snoozes.
 	 */
-	val maxSnooze: Int
+	private val maxSnoozeIndex: Int
 		get()
 		{
 			val key = resources.getString(R.string.max_snooze_key)
 			val defaultValue = resources.getInteger(R.integer.default_max_snooze_index)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
-	 * @see .getMaxSnoozeValue
+	 * Max number of snoozes.
 	 */
 	val maxSnoozeValue: Int
-		get() = getMaxSnoozeValue(maxSnooze)
+		get()
+		{
+			return if (maxSnoozeIndex == 11)
+			{
+				-1
+			}
+			else
+			{
+				maxSnoozeIndex
+			}
+		}
 
 	/**
 	 * Media path.
@@ -275,7 +287,7 @@ class NacSharedPreferences(
 		{
 			val key = resources.getString(R.string.alarm_sound_key)
 
-			return getString(key, "") ?: ""
+			return instance.getString(key, "") ?: ""
 		}
 
 	/**
@@ -287,7 +299,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.missed_alarm_key)
 			val defaultValue = resources.getBoolean(R.bool.default_missed_alarm)
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
@@ -298,7 +310,7 @@ class NacSharedPreferences(
 		{
 			val key = resources.getString(R.string.alarm_name_key)
 
-			return getString(key, "") ?: ""
+			return instance.getString(key, "") ?: ""
 		}
 
 	/**
@@ -310,7 +322,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.name_color_key)
 			val defaultValue = resources.getInteger(R.integer.default_name_color)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
@@ -322,7 +334,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.next_alarm_format_key)
 			val defaultValue = resources.getInteger(R.integer.default_next_alarm_format_index)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
@@ -334,7 +346,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.pm_color_key)
 			val defaultValue = resources.getInteger(R.integer.default_pm_color)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
@@ -348,7 +360,7 @@ class NacSharedPreferences(
 		{
 			val key = resources.getString(R.string.previous_app_version)
 
-			return getString(key, "") ?: ""
+			return instance.getString(key, "") ?: ""
 		}
 
 	/**
@@ -360,7 +372,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.sys_previous_volume)
 			val defaultValue = resources.getInteger(R.integer.default_previous_volume)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
@@ -372,7 +384,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.app_rating_counter)
 			val defaultValue = resources.getInteger(R.integer.default_rate_my_app_counter)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
@@ -384,7 +396,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.alarm_repeat_key)
 			val defaultValue = resources.getBoolean(R.bool.default_repeat)
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
@@ -396,7 +408,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.alarm_should_gradually_increase_volume_key)
 			val defaultValue = resources.getBoolean(R.bool.default_should_gradually_increase_volume)
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
@@ -408,7 +420,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.app_should_refresh_main_activity)
 			val defaultValue = resources.getBoolean(R.bool.default_app_should_refresh_main_activity)
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
@@ -420,7 +432,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.alarm_should_restrict_volume_key)
 			val defaultValue = resources.getBoolean(R.bool.default_should_restrict_volume)
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
@@ -432,7 +444,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.show_alarm_info_key)
 			val defaultValue = resources.getBoolean(R.bool.default_show_alarm_info)
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
@@ -444,26 +456,36 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.shuffle_playlist_key)
 			val defaultValue = resources.getBoolean(R.bool.default_shuffle_playlist)
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
-	 * Nnooze duration.
+	 * Index for the snooze duration.
 	 */
-	val snoozeDuration: Int
+	private val snoozeDurationIndex: Int
 		get()
 		{
 			val key = resources.getString(R.string.snooze_duration_key)
 			val defaultValue = resources.getInteger(R.integer.default_snooze_duration_index)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
-	 * @see .getSnoozeDurationValue
+	 * Snooze duration.
 	 */
 	val snoozeDurationValue: Int
-		get() = getSnoozeDurationValue(snoozeDuration)
+		get()
+		{
+			return if (snoozeDurationIndex < 4)
+			{
+				snoozeDurationIndex + 1
+			}
+			else
+			{
+				(snoozeDurationIndex - 3) * 5
+			}
+		}
 
 	/**
 	 * The speak frequency value.
@@ -474,7 +496,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.speak_frequency_key)
 			val defaultValue = resources.getInteger(R.integer.default_speak_frequency_index)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
@@ -486,7 +508,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.speak_to_me_key)
 			val defaultValue = resources.getBoolean(R.bool.default_speak_to_me)
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
@@ -498,7 +520,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.start_week_on_key)
 			val defaultValue = resources.getInteger(R.integer.default_start_week_on_index)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
@@ -510,7 +532,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.theme_color_key)
 			val defaultValue = resources.getInteger(R.integer.default_theme_color)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
@@ -522,7 +544,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.time_color_key)
 			val defaultValue = resources.getInteger(R.integer.default_time_color)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
@@ -534,7 +556,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.upcoming_alarm_key)
 			val defaultValue = resources.getBoolean(R.bool.default_upcoming_alarm)
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
@@ -546,7 +568,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.alarm_use_dismiss_early_key)
 			val defaultValue = resources.getBoolean(R.bool.default_use_dismiss_early)
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
@@ -558,7 +580,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.alarm_use_nfc_key)
 			val defaultValue = resources.getBoolean(R.bool.default_use_nfc)
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
@@ -570,7 +592,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.alarm_vibrate_key)
 			val defaultValue = resources.getBoolean(R.bool.default_vibrate)
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
@@ -582,7 +604,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.alarm_volume_key)
 			val defaultValue = resources.getInteger(R.integer.default_volume)
 
-			return getInt(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
@@ -594,7 +616,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.key_app_supported)
 			val defaultValue = resources.getBoolean(R.bool.default_was_app_supported)
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
@@ -606,7 +628,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.key_permission_ignore_battery_optimization_requested)
 			val defaultValue = resources.getBoolean(R.bool.default_was_ignore_battery_optimization_permission_requested)
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
@@ -618,7 +640,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.key_permission_post_notifications_requested)
 			val defaultValue = resources.getBoolean(R.bool.default_was_post_notifications_permission_requested)
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
@@ -630,7 +652,7 @@ class NacSharedPreferences(
 			val key = resources.getString(R.string.key_permission_schedule_exact_alarm_requested)
 			val defaultValue = resources.getBoolean(R.bool.default_was_schedule_exact_alarm_permission_requested)
 
-			return getBoolean(key, defaultValue)
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**
@@ -639,7 +661,8 @@ class NacSharedPreferences(
 	fun editAppFirstRun(context: Context, first: Boolean)
 	{
 		val key = context.getString(R.string.app_first_run)
-		saveBoolean(key, first, false)
+
+		saveBoolean(key, first)
 	}
 
 	/**
@@ -651,7 +674,8 @@ class NacSharedPreferences(
 	fun editAppStartStatistics(shouldStart: Boolean)
 	{
 		val key = resources.getString(R.string.app_start_statistics)
-		saveBoolean(key, shouldStart, false)
+
+		saveBoolean(key, shouldStart)
 	}
 
 	/**
@@ -663,7 +687,8 @@ class NacSharedPreferences(
 	fun editAudioSource(source: String?)
 	{
 		val key = resources.getString(R.string.alarm_audio_source_key)
-		saveString(key, source, false)
+
+		saveString(key, source)
 	}
 
 	/**
@@ -672,7 +697,8 @@ class NacSharedPreferences(
 	fun editCardHeightCollapsed(height: Int)
 	{
 		val key = resources.getString(R.string.card_height_collapsed)
-		saveInt(key, height, false)
+
+		saveInt(key, height)
 	}
 
 	/**
@@ -682,7 +708,8 @@ class NacSharedPreferences(
 	fun editCardHeightCollapsedDismiss(height: Int)
 	{
 		val key = resources.getString(R.string.card_height_collapsed_dismiss)
-		saveInt(key, height, false)
+
+		saveInt(key, height)
 	}
 
 	/**
@@ -691,7 +718,8 @@ class NacSharedPreferences(
 	fun editCardHeightExpanded(height: Int)
 	{
 		val key = resources.getString(R.string.card_height_expanded)
-		saveInt(key, height, false)
+
+		saveInt(key, height)
 	}
 
 	/**
@@ -700,7 +728,8 @@ class NacSharedPreferences(
 	fun editCardIsMeasured(isMeasured: Boolean)
 	{
 		val key = resources.getString(R.string.card_is_measured)
-		saveBoolean(key, isMeasured, false)
+
+		saveBoolean(key, isMeasured)
 	}
 
 	/**
@@ -709,7 +738,8 @@ class NacSharedPreferences(
 	fun editDismissEarlyTime(dismissEarly: Int)
 	{
 		val key = resources.getString(R.string.alarm_dismiss_early_time_key)
-		saveInt(key, dismissEarly, false)
+
+		saveInt(key, dismissEarly)
 	}
 
 	/**
@@ -722,7 +752,8 @@ class NacSharedPreferences(
 	fun editPreviousAppVersion(version: String?)
 	{
 		val key = resources.getString(R.string.previous_app_version)
-		saveString(key, version, false)
+
+		saveString(key, version)
 	}
 
 	/**
@@ -731,7 +762,8 @@ class NacSharedPreferences(
 	fun editPreviousVolume(previous: Int)
 	{
 		val key = resources.getString(R.string.sys_previous_volume)
-		saveInt(key, previous, false)
+
+		saveInt(key, previous)
 	}
 
 	/**
@@ -741,7 +773,8 @@ class NacSharedPreferences(
 	fun editRateMyAppCounter(counter: Int)
 	{
 		val key = resources.getString(R.string.app_rating_counter)
-		saveInt(key, counter, false)
+
+		saveInt(key, counter)
 	}
 
 	/**
@@ -751,7 +784,8 @@ class NacSharedPreferences(
 	fun editShouldGraduallyIncreaseVolume(shouldIncrease: Boolean)
 	{
 		val key = resources.getString(R.string.alarm_should_gradually_increase_volume_key)
-		saveBoolean(key, shouldIncrease, false)
+
+		saveBoolean(key, shouldIncrease)
 	}
 
 	/**
@@ -760,7 +794,8 @@ class NacSharedPreferences(
 	fun editShouldRestrictVolume(shouldRestrict: Boolean)
 	{
 		val key = resources.getString(R.string.alarm_should_restrict_volume_key)
-		saveBoolean(key, shouldRestrict, false)
+
+		saveBoolean(key, shouldRestrict)
 	}
 
 	/**
@@ -770,7 +805,8 @@ class NacSharedPreferences(
 	fun editShouldRefreshMainActivity(shouldRefresh: Boolean)
 	{
 		val key = resources.getString(R.string.app_should_refresh_main_activity)
-		saveBoolean(key, shouldRefresh, false)
+
+		saveBoolean(key, shouldRefresh)
 	}
 
 	/**
@@ -780,7 +816,8 @@ class NacSharedPreferences(
 	fun editSpeakFrequency(freq: Int)
 	{
 		val key = resources.getString(R.string.speak_frequency_key)
-		saveInt(key, freq, false)
+
+		saveInt(key, freq)
 	}
 
 	/**
@@ -790,7 +827,8 @@ class NacSharedPreferences(
 	fun editSpeakToMe(speak: Boolean)
 	{
 		val key = resources.getString(R.string.speak_to_me_key)
-		saveBoolean(key, speak, false)
+
+		saveBoolean(key, speak)
 	}
 
 	/**
@@ -799,7 +837,8 @@ class NacSharedPreferences(
 	fun editUseDismissEarly(useDismissEarly: Boolean)
 	{
 		val key = resources.getString(R.string.alarm_use_dismiss_early_key)
-		saveBoolean(key, useDismissEarly, false)
+
+		saveBoolean(key, useDismissEarly)
 	}
 
 	/**
@@ -808,7 +847,8 @@ class NacSharedPreferences(
 	fun editWasAppSupported(wasSupported: Boolean)
 	{
 		val key = resources.getString(R.string.key_app_supported)
-		saveBoolean(key, wasSupported, false)
+
+		saveBoolean(key, wasSupported)
 	}
 
 	/**
@@ -817,7 +857,8 @@ class NacSharedPreferences(
 	fun editWasIgnoreBatteryOptimizationPermissionRequested(requested: Boolean)
 	{
 		val key = resources.getString(R.string.key_permission_ignore_battery_optimization_requested)
-		saveBoolean(key, requested, false)
+
+		saveBoolean(key, requested)
 	}
 
 	/**
@@ -826,7 +867,8 @@ class NacSharedPreferences(
 	fun editWasPostNotificationsPermissionRequested(requested: Boolean)
 	{
 		val key = resources.getString(R.string.key_permission_post_notifications_requested)
-		saveBoolean(key, requested, false)
+
+		saveBoolean(key, requested)
 	}
 
 	/**
@@ -835,38 +877,8 @@ class NacSharedPreferences(
 	fun editWasScheduleExactAlarmPermissionRequested(requested: Boolean)
 	{
 		val key = resources.getString(R.string.key_permission_schedule_exact_alarm_requested)
-		saveBoolean(key, requested, false)
-	}
 
-
-	/**
-	 * Get a boolean value from the SharedPreferences instance.
-	 *
-	 * @return A boolean value from the SharedPreferences instance.
-	 */
-	private fun getBoolean(key: String?, defValue: Boolean): Boolean
-	{
-		return instance.getBoolean(key, defValue)
-	}
-
-	/**
-	 * Get an integer value from the SharedPreferences instance.
-	 *
-	 * @return An integer value from the SharedPreferences instance.
-	 */
-	private fun getInt(key: String?, defValue: Int): Int
-	{
-		return instance.getInt(key, defValue)
-	}
-
-	/**
-	 * Get a string value from the SharedPreferences instance.
-	 *
-	 * @return A string value from the SharedPreferences instance.
-	 */
-	fun getString(key: String?, defValue: String?): String?
-	{
-		return instance.getString(key, defValue)
+		saveBoolean(key, requested)
 	}
 
 	/**
@@ -883,184 +895,38 @@ class NacSharedPreferences(
 	fun ratedRateMyApp()
 	{
 		val rated = resources.getInteger(R.integer.default_rate_my_app_rated)
-		editRateMyAppCounter(rated)
-	}
 
-	/**
-	 * Save the changes that were made to the shared preference.
-	 */
-	fun save(editor: SharedPreferences.Editor, commit: Boolean = false)
-	{
-		if (commit)
-		{
-			editor.commit()
-		}
-		else
-		{
-			editor.apply()
-		}
+		editRateMyAppCounter(rated)
 	}
 
 	/**
 	 * Save a boolean to the shared preference.
 	 */
-	private fun saveBoolean(key: String?, value: Boolean, commit: Boolean)
+	private fun saveBoolean(key: String, value: Boolean)
 	{
-		val editor = instance.edit()
+		instance.edit()
 			.putBoolean(key, value)
-
-		save(editor, commit)
+			.apply()
 	}
 
 	/**
 	 * Save an int to the shared preference.
 	 */
-	private fun saveInt(key: String?, value: Int, commit: Boolean)
+	private fun saveInt(key: String, value: Int)
 	{
-		val editor = instance.edit()
+		instance.edit()
 			.putInt(key, value)
-
-		save(editor, commit)
+			.apply()
 	}
 
 	/**
 	 * Save a string to the shared preference.
 	 */
-	private fun saveString(key: String?, value: String?, commit: Boolean)
+	private fun saveString(key: String, value: String?)
 	{
-		val editor = instance.edit()
+		instance.edit()
 			.putString(key, value)
-
-		save(editor, commit)
-	}
-
-	companion object
-	{
-
-		/**
-		 * Get the summary text to use when displaying the auto dismiss widget.
-		 *
-		 * @return The summary text to use when displaying the auto dismiss widget.
-		 */
-		fun getAutoDismissSummary(res: Resources, index: Int): String
-		{
-			val summaries = res.getStringArray(R.array.auto_dismiss_summaries)
-
-			return summaries[index]
-		}
-
-		/**
-		 * Calculate the auto dismiss duration from an index value, corresponding to a
-		 * location in the spainner widget.
-		 *
-		 * @return Calculate the auto dismiss duration from an index value, corresponding
-		 *         to a location in the spainner widget.
-		 */
-		fun getAutoDismissTime(index: Int): Int
-		{
-			return if (index < 5) index else (index - 4) * 5
-		}
-
-		/**
-		 * Get the time before an alarm goes off to start showing the dismiss early button by.
-		 *
-		 * @param  index  The index that corresponds to the time.
-		 */
-		fun getDismissEarlyIndexToTime(index: Int): Int
-		{
-			return if (index < 5) index + 1 else (index - 3) * 5
-		}
-
-		/**
-		 * Get the index that corresponds to the time before an alarm goes off to start
-		 * showing the dismiss early button by.
-		 *
-		 * @return The index that corresponds to the time before an alarm goes off to
-		 *         start showing the dismiss early button by.
-		 */
-		fun getDismissEarlyTimeToIndex(time: Int): Int
-		{
-			return if (time <= 5) time - 1 else time / 5 + 3
-		}
-
-		/**
-		 * Get the summary text to use when displaying the max snooze widget.
-		 *
-		 * @return The summary text to use when displaying the max snooze widget.
-		 */
-		fun getMaxSnoozeSummary(res: Resources, index: Int): String
-		{
-			val summaries = res.getStringArray(R.array.max_snooze_summaries)
-
-			return summaries[index]
-		}
-
-		/**
-		 * Calculate the max snooze duration from an index corresponding to a location
-		 * in the spinner widget.
-		 *
-		 * @return Calculate the max snooze duration from an index corresponding to a
-		 *         location in the spinner widget.
-		 */
-		fun getMaxSnoozeValue(index: Int): Int
-		{
-			return if (index == 11) -1 else index
-		}
-
-		/**
-		 * Get the sound message.
-		 *
-		 * @return The sound message.
-		 */
-		fun getMediaMessage(context: Context, path: String?): String
-		{
-			return if (!path.isNullOrEmpty())
-			{
-				getTitle(context, path)
-			}
-			else
-			{
-				context.resources.getString(R.string.description_media)
-			}
-		}
-
-		/**
-		 * Get the name message.
-		 *
-		 * @return The name message.
-		 */
-		fun getNameMessage(res: Resources, name: String): String
-		{
-			// Get the empty alarm name
-			val emptyName = res.getString(R.string.alarm_name)
-
-			return name.ifEmpty { emptyName }
-		}
-
-		/**
-		 * Get the summary text for the snooze duration widget.
-		 *
-		 * @return The summary text for the snooze duration widget.
-		 */
-		fun getSnoozeDurationSummary(res: Resources, index: Int): String
-		{
-			val summaries = res.getStringArray(R.array.snooze_duration_summaries)
-
-			return summaries[index]
-		}
-
-		/**
-		 * Calculate the snooze duration from an index value, corresponding to a location
-		 * location in the spainner widget.
-		 *
-		 * @return Calculate the snooze duration from an index value, corresponding to a
-		 *         location in the spainner widget.
-		 */
-		fun getSnoozeDurationValue(index: Int): Int
-		{
-			return if (index < 4) index + 1 else (index - 3) * 5
-		}
-
+			.apply()
 	}
 
 }

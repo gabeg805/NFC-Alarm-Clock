@@ -348,15 +348,15 @@ class NacMainActivity
 		lifecycleScope.launch {
 
 			// Insert alarm
-			alarmViewModel.insert(alarm)
+			alarmViewModel.insert(alarm) {
 
-			println("THIS IS THE ALARM ID : " + alarm.id)
+				// Schedule the alarm
+				NacScheduler.update(this@NacMainActivity, alarm)
 
-			// Schedule the alarm
-			NacScheduler.update(this@NacMainActivity, alarm)
+				// Save the recently added alarm ID
+				recentlyAddedAlarmIds.add(alarm.id)
 
-			// Save the recently added alarm ID
-			recentlyAddedAlarmIds.add(alarm.id)
+			}
 
 		}
 
@@ -1552,14 +1552,14 @@ class NacMainActivity
 
 		// Set the default values
 		dialog.defaultShouldDismissEarly = audioOptionsAlarm!!.shouldUseDismissEarly
-		dialog.defaultShouldDismissEarlyIndex = audioOptionsAlarm!!.dismissEarlyIndex
+		dialog.setDefaultDismissEarlyIndexFromTime(audioOptionsAlarm!!.dismissEarlyTime)
 
 		// Setup the listener
-		dialog.onDismissEarlyOptionSelectedListener = OnDismissEarlyOptionSelectedListener { useDismissEarly, index ->
+		dialog.onDismissEarlyOptionSelectedListener = OnDismissEarlyOptionSelectedListener { useDismissEarly, _, time ->
 
 			// Set the new dismiss early values
 			audioOptionsAlarm!!.useDismissEarly = useDismissEarly
-			audioOptionsAlarm!!.setDismissEarlyTimeFromIndex(index)
+			audioOptionsAlarm!!.dismissEarlyTime = time
 
 			// Update the alarm
 			alarmViewModel.update(audioOptionsAlarm!!)

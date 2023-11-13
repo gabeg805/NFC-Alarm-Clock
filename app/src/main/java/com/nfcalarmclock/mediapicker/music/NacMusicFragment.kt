@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.file.NacFile
@@ -22,6 +23,7 @@ import java.util.Locale
 /**
  * Display a browser for the user to browse for music files.
  */
+@UnstableApi
 class NacMusicFragment
 	: NacMediaFragment(),
 	OnBrowserClickedListener,
@@ -188,9 +190,8 @@ class NacMusicFragment
 	private fun setupFileBrowser(root: View)
 	{
 		// Create and set the file browser
-		val context = requireContext()
 		val container: LinearLayout = root.findViewById(R.id.container)
-		fileBrowser = NacFileBrowser(context, container)
+		fileBrowser = NacFileBrowser(this, container)
 
 		// Set the textview with the directory path
 		directoryTextView = root.findViewById(R.id.path)
@@ -205,7 +206,7 @@ class NacMusicFragment
 		// Setup the file browser
 		fileBrowser!!.onBrowserClickedListener = this
 		fileBrowser!!.show(dir)
-		fileBrowser!!.select(context, name)
+		fileBrowser!!.select(requireContext(), name)
 	}
 
 	/**

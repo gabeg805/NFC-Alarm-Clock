@@ -181,11 +181,11 @@ open class NacMediaFragment
 	 */
 	override fun onPause()
 	{
-		// Cleanup the media player
-		cleanupMediaPlayer()
-
 		// Super
 		super.onPause()
+
+		// Cleanup the media player
+		cleanupMediaPlayer()
 	}
 
 	/**

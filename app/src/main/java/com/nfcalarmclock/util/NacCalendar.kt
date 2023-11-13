@@ -377,7 +377,8 @@ object NacCalendar
 			/**
 			 * A set of no days.
 			 */
-			val NONE: EnumSet<Day> = EnumSet.noneOf(Day::class.java)
+			val NONE: EnumSet<Day>
+				get() = EnumSet.noneOf(Day::class.java)
 
 			/**
 			 * The Day today.
@@ -396,17 +397,20 @@ object NacCalendar
 			/**
 			 * Every day of week.
 			 */
-			val WEEK: EnumSet<Day> = EnumSet.allOf(Day::class.java)
+			val WEEK: EnumSet<Day>
+				get() = EnumSet.allOf(Day::class.java)
 
 			/**
 			 * All weekday days.
 			 */
-			val WEEKDAY: EnumSet<Day> = EnumSet.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY)
+			val WEEKDAY: EnumSet<Day>
+				get() = EnumSet.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY)
 
 			/**
 			 * All weekend days.
 			 */
-			val WEEKEND: EnumSet<Day> = EnumSet.of(SUNDAY, SATURDAY)
+			val WEEKEND: EnumSet<Day>
+				get() = EnumSet.of(SUNDAY, SATURDAY)
 
 			/**
 			 * Length of week.

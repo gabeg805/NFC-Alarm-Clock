@@ -26,12 +26,14 @@ import com.nfcalarmclock.statistics.NacAlarmStatisticViewModel
 import com.nfcalarmclock.util.NacBundle
 import com.nfcalarmclock.util.NacIntent
 import com.nfcalarmclock.util.NacUtility.quickToast
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Activity to dismiss/snooze the alarm.
  *
  * TODO: Change to AppCompatActivity? This way AndroidEntryPoint can be used
  */
+@AndroidEntryPoint
 class NacActiveAlarmActivity
 	: AppCompatActivity()
 {

@@ -30,6 +30,7 @@ import com.google.android.material.color.MaterialColors
 import com.nfcalarmclock.R
 import com.nfcalarmclock.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.media.NacMedia
 import com.nfcalarmclock.name.NacNameDialog
 import com.nfcalarmclock.name.NacNameDialog.OnNameEnteredListener
 import com.nfcalarmclock.shared.NacSharedPreferences
@@ -165,52 +166,52 @@ class NacCardHolder(
 	/**
 	 * Dismiss snoozed alarm parent view.
 	 */
-	val dismissParentView: LinearLayout = root.findViewById(R.id.nac_dismiss_parent)
+	private val dismissParentView: LinearLayout = root.findViewById(R.id.nac_dismiss_parent)
 
 	/**
 	 * Dismiss snoozed alarm button.
 	 */
-	val dismissButton: MaterialButton = root.findViewById(R.id.nac_dismiss)
+	private val dismissButton: MaterialButton = root.findViewById(R.id.nac_dismiss)
 
 	/**
 	 * Dismiss early alarm button.
 	 */
-	val dismissEarlyButton: MaterialButton = root.findViewById(R.id.nac_dismiss_early)
+	private val dismissEarlyButton: MaterialButton = root.findViewById(R.id.nac_dismiss_early)
 
 	/**
 	 * Extra view.
 	 */
-	val extraView: LinearLayout = root.findViewById(R.id.nac_extra)
+	private val extraView: LinearLayout = root.findViewById(R.id.nac_extra)
 
 	/**
 	 * On/off switch for an alarm.
 	 */
-	val switch: SwitchCompat = root.findViewById(R.id.nac_switch)
+	private val switch: SwitchCompat = root.findViewById(R.id.nac_switch)
 
 	/**
 	 * Time parent view.
 	 */
-	val timeParentView: LinearLayout = root.findViewById(R.id.nac_time_parent)
+	private val timeParentView: LinearLayout = root.findViewById(R.id.nac_time_parent)
 
 	/**
 	 * Time text.
 	 */
-	val timeView: TextView = root.findViewById(R.id.nac_time)
+	private val timeView: TextView = root.findViewById(R.id.nac_time)
 
 	/**
 	 * Meridian text (AM/PM).
 	 */
-	val meridianView: TextView = root.findViewById(R.id.nac_meridian)
+	private val meridianView: TextView = root.findViewById(R.id.nac_meridian)
 
 	/**
 	 * Summary view containing the days to repeat.
 	 */
-	val summaryDaysView: TextView = root.findViewById(R.id.nac_summary_days)
+	private val summaryDaysView: TextView = root.findViewById(R.id.nac_summary_days)
 
 	/**
 	 * Summary view containing the name of the alarm.
 	 */
-	val summaryNameView: TextView = root.findViewById(R.id.nac_summary_name)
+	private val summaryNameView: TextView = root.findViewById(R.id.nac_summary_name)
 
 	/**
 	 * Day of week.
@@ -220,7 +221,7 @@ class NacCardHolder(
 	/**
 	 * Repeat button.
 	 */
-	val repeatButton: MaterialButton = root.findViewById(R.id.nac_repeat)
+	private val repeatButton: MaterialButton = root.findViewById(R.id.nac_repeat)
 
 	/**
 	 * Vibrate button.
@@ -250,17 +251,17 @@ class NacCardHolder(
 	/**
 	 * Audio options button.
 	 */
-	val audioOptionsButton: MaterialButton = root.findViewById(R.id.nac_audio_options)
+	private val audioOptionsButton: MaterialButton = root.findViewById(R.id.nac_audio_options)
 
 	/**
 	 * Name button.
 	 */
-	val nameButton: MaterialButton = root.findViewById(R.id.nac_name)
+	private val nameButton: MaterialButton = root.findViewById(R.id.nac_name)
 
 	/**
 	 * Delete button.
 	 */
-	val deleteButton: MaterialButton = root.findViewById(R.id.nac_delete)
+	private val deleteButton: MaterialButton = root.findViewById(R.id.nac_delete)
 
 	/**
 	 * Card animator for collapsing and expanding.
@@ -392,12 +393,19 @@ class NacCardHolder(
 			|| (cardView.measuredHeight == sharedPreferences.cardHeightExpanded)
 
 	/**
+	 * Flag indicating that the card view is being bound to an alarm.
+	 */
+	private var isBinding: Boolean = false
+
+	/**
 	 * Constructor.
 	 */
 	init
 	{
 		// Set the interpolator for the animator
 		cardAnimator.interpolator = AccelerateInterpolator()
+
+		// Initialize the listeners
 		initListeners()
 	}
 
@@ -431,6 +439,26 @@ class NacCardHolder(
 
 		// Start the animator
 		backgroundColorAnimator!!.start()
+	}
+
+	/**
+	 * Bind the alarm to the card view.
+	 */
+	fun bind(alarm: NacAlarm)
+	{
+		// Set the alarm and binding flag
+		this.alarm = alarm
+		isBinding = true
+
+		// Hide the swipe views
+		hideSwipeViews()
+
+		// Setup the views and colors
+		initViews()
+		initColors()
+
+		// Unset the binding flag
+		isBinding = false
 	}
 
 	/**
@@ -470,7 +498,12 @@ class NacCardHolder(
 	 */
 	private fun callOnCardUpdatedListener()
 	{
-		onCardUpdatedListener?.onCardUpdated(this, alarm!!)
+		// Check if the card view is not being bound
+		if (!isBinding)
+		{
+			// Call the listener
+			onCardUpdatedListener?.onCardUpdated(this, alarm!!)
+		}
 	}
 
 	/**
@@ -721,10 +754,10 @@ class NacCardHolder(
 	/**
 	 * Act as if the day button was clicked.
 	 */
-	private fun doDayButtonClick(day: Day?)
+	private fun doDayButtonClick(day: Day)
 	{
 		// Toggle the day
-		alarm!!.toggleDay(day!!)
+		alarm!!.toggleDay(day)
 
 		// Check if no days are selected
 		if (!alarm!!.areDaysSelected)
@@ -1011,27 +1044,6 @@ class NacCardHolder(
 
 		// Start the animator
 		highlightAnimator!!.start()
-	}
-
-	/**
-	 * Initialize the alarm card.
-	 */
-	fun init(alarm: NacAlarm)
-	{
-		this.alarm = alarm
-
-		// Hide the swipe views
-		hideSwipeViews()
-
-		// Unset the listeners
-		//initListeners(null)
-
-		// Setup the views and colors
-		initViews()
-		initColors()
-
-		// Set the listeners again
-		//initListeners(this)
 	}
 
 	/**
@@ -1457,11 +1469,23 @@ class NacCardHolder(
 	 */
 	private fun setMediaButton()
 	{
-		// Get the message of the alarm
-		val message = NacSharedPreferences.getMediaMessage(context, alarm!!.mediaPath)
+		val mediaPath = alarm!!.mediaPath
+		val message : String
+		val alpha : Float
 
-		// Get the alpha that the view should be
-		val alpha = if (alarm!!.mediaPath.isNotEmpty()) 1.0f else 0.3f
+		// Check if the media path is not empty
+		if (mediaPath.isNotEmpty())
+		{
+			// Get the message and alpha of the alarm
+			message = NacMedia.getTitle(context, mediaPath)
+			alpha = 1.0f
+		}
+		else
+		{
+			// Get the message and alpha of the alarm
+			message = context.resources.getString(R.string.description_media)
+			alpha = 0.3f
+		}
 
 		// Check if the media button text and the alarm message are different
 		if (mediaButton.text != message)
@@ -1515,8 +1539,9 @@ class NacCardHolder(
 	private fun setNameButton()
 	{
 		// Get the name message
-		val res = context.resources
-		val message = NacSharedPreferences.getNameMessage(res, alarm!!.nameNormalized)
+		val message = alarm!!.nameNormalized.ifEmpty {
+			context.resources.getString(R.string.alarm_name)
+		}
 
 		// Get the alpha that the view should be
 		val alpha = if (alarm!!.nameNormalized.isNotEmpty()) 1.0f else 0.3f

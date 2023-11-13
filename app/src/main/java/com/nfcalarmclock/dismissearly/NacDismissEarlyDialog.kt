@@ -21,7 +21,7 @@ class NacDismissEarlyDialog
 	 */
 	fun interface OnDismissEarlyOptionSelectedListener
 	{
-		fun onDismissEarlyOptionSelected(useDismissEarly: Boolean, index: Int)
+		fun onDismissEarlyOptionSelected(useDismissEarly: Boolean, index: Int, time: Int)
 	}
 
 	/**
@@ -71,9 +71,19 @@ class NacDismissEarlyDialog
 				// Get the index value
 				val index = timePicker!!.value
 
+				// Calculate the time based on the index
+				val time = if (index < 5)
+				{
+					index + 1
+				}
+				else
+				{
+					(index - 3) * 5
+				}
+
 				// Call the listener
 				onDismissEarlyOptionSelectedListener?.onDismissEarlyOptionSelected(
-					shouldDismissEarly, index)
+					shouldDismissEarly, index, time)
 
 			}
 			.setNegativeButton(R.string.action_cancel) { _, _ ->
@@ -107,6 +117,21 @@ class NacDismissEarlyDialog
 		setupTextView(textView)
 		setupTimePickerValues()
 		setupTimePickerUsable()
+	}
+
+	/**
+	 * Set the default dismiss early index from a time.
+	 */
+	fun setDefaultDismissEarlyIndexFromTime(time: Int)
+	{
+		defaultShouldDismissEarlyIndex = if (time <= 5)
+		{
+			time - 1
+		}
+		else
+		{
+			time / 5 + 3
+		}
 	}
 
 	/**

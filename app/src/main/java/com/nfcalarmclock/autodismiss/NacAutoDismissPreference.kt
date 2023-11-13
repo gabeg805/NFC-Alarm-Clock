@@ -54,10 +54,11 @@ class NacAutoDismissPreference @JvmOverloads constructor(
 	 *
 	 * @return The summary text.
 	 */
-	override fun getSummary(): CharSequence?
+	override fun getSummary(): CharSequence
 	{
-		return NacSharedPreferences.getAutoDismissSummary(context.resources,
-			autoDismissIndex)
+		val summaries = context.resources.getStringArray(R.array.auto_dismiss_summaries)
+
+		return summaries[autoDismissIndex]
 	}
 
 	/**

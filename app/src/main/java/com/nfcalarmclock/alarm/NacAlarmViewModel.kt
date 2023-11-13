@@ -65,7 +65,7 @@ class NacAlarmViewModel @Inject constructor(
 	 *
 	 * @return The row ID of the alarm that was inserted.
 	 */
-	fun insert(alarm: NacAlarm)
+	fun insert(alarm: NacAlarm, unit: () -> Unit = {})
 	{
 		viewModelScope.launch {
 
@@ -81,6 +81,9 @@ class NacAlarmViewModel @Inject constructor(
 					alarm.id = rowId
 				}
 			}
+
+			// Call unit
+			unit()
 
 		}
 	}

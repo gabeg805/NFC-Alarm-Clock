@@ -56,8 +56,9 @@ class NacSnoozeDurationPreference @JvmOverloads constructor(
 	 */
 	override fun getSummary(): CharSequence
 	{
-		return NacSharedPreferences.getSnoozeDurationSummary(context.resources,
-			snoozeDurationIndex)
+		val summaries = context.resources.getStringArray(R.array.snooze_duration_summaries)
+
+		return summaries[snoozeDurationIndex]
 	}
 
 	/**
