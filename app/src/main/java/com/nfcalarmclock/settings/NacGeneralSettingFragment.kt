@@ -25,7 +25,6 @@ import com.nfcalarmclock.mediapicker.NacMediaPreference
 import com.nfcalarmclock.name.NacNamePreference
 import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog
 import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog.OnRestrictVolumeListener
-import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.snoozeduration.NacSnoozeDurationPreference
 import com.nfcalarmclock.tts.NacTextToSpeechDialog
 import com.nfcalarmclock.tts.NacTextToSpeechDialog.OnTextToSpeechOptionsSelectedListener
@@ -199,7 +198,7 @@ class NacGeneralSettingFragment
 	private fun setupMediaPreference()
 	{
 		// Get the preference
-		val key = resources.getString(R.string.alarm_sound_key);
+		val key = resources.getString(R.string.alarm_sound_key)
 		val pref = findPreference<NacMediaPreference>(key)
 
 		// Set the member variables

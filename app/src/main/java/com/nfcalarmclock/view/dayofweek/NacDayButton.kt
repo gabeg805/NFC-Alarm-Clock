@@ -224,7 +224,7 @@ class NacDayButton
 	/**
 	 * Set the width and height of the button.
 	 */
-	fun setSize(width: Int, height: Int)
+	private fun setSize(width: Int, height: Int)
 	{
 		// Get the button's current layout parameters
 		val params = button!!.layoutParams as LayoutParams

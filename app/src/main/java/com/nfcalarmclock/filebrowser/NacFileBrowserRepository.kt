@@ -5,15 +5,17 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.file.NacFile
 import com.nfcalarmclock.file.NacFileTree
 import com.nfcalarmclock.media.NacMedia
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.withContext
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 /**
  * File browser repository.
  */
-class NacFileBrowserRepository()
+class NacFileBrowserRepository
 {
 
 	/**
@@ -123,7 +125,9 @@ class NacFileBrowserRepository()
 		{
 			try
 			{
-				TimeUnit.MILLISECONDS.sleep(50)
+				withContext(Dispatchers.IO) {
+					TimeUnit.MILLISECONDS.sleep(50)
+				}
 			}
 			catch (ignored: InterruptedException)
 			{

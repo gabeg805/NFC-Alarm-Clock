@@ -11,7 +11,7 @@ class NacCardAdapterLiveData : MutableLiveData<List<NacAlarm>>()
 	 *
 	 * @return The merged alarm list.
 	 */
-	fun calculateMerge(
+	private fun calculateMerge(
 		oldAlarms: List<NacAlarm>?,
 		newAlarms: List<NacAlarm>?
 	): List<NacAlarm>

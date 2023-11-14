@@ -1097,7 +1097,7 @@ class NacCardHolder(
 	/**
 	 * Initialize the various views.
 	 */
-	fun initViews()
+	private fun initViews()
 	{
 		refreshDismissAndDismissEarlyButtons()
 		setTimeView()
@@ -1619,7 +1619,7 @@ class NacCardHolder(
 	private fun setSummaryDaysView()
 	{
 		// Get the string from the alarm
-		val string = NacCalendar.Day.alarmToDayString(context, alarm!!, sharedPreferences.startWeekOn)
+		val string = Day.alarmToDayString(context, alarm!!, sharedPreferences.startWeekOn)
 
 		// Check if the alarm string and the string in the view are different
 		if (summaryDaysView.text != string)
@@ -1802,21 +1802,29 @@ class NacCardHolder(
 		val volumeLevel = alarm!!.volume
 
 		// Set the resource ID depending on the volume level
-		val resId: Int = if (volumeLevel == 0)
+		val resId: Int = when (volumeLevel)
 		{
-			R.mipmap.volume_off
-		}
-		else if (volumeLevel in 1..33)
-		{
-			R.mipmap.volume_low
-		}
-		else if (volumeLevel in 34..66)
-		{
-			R.mipmap.volume_med
-		}
-		else
-		{
-			R.mipmap.volume_high
+
+			0 ->
+			{
+				R.mipmap.volume_off
+			}
+
+			in 1..33 ->
+			{
+				R.mipmap.volume_low
+			}
+
+			in 34..66 ->
+			{
+				R.mipmap.volume_med
+			}
+
+			else ->
+			{
+				R.mipmap.volume_high
+			}
+
 		}
 
 		// Check if the view tag is not set or not equal to the resource ID

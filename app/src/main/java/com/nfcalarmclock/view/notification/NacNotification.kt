@@ -206,7 +206,6 @@ abstract class NacNotification(
 	/**
 	 * Setup the notification body lines.
 	 */
-	@Suppress("unused")
 	protected open fun setupBody()
 	{
 	}
@@ -302,7 +301,7 @@ abstract class NacNotification(
 					// Check that the extra lines are not null
 					if (extraLines != null)
 					{
-						lines.addAll(Arrays.asList(*extraLines))
+						lines.addAll(listOf(*extraLines))
 					}
 				}
 			}

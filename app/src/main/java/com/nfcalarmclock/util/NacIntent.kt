@@ -338,7 +338,7 @@ object NacIntent
 			{
 				for (d in extraDays)
 				{
-					days.add(NacCalendar.Day.calendarDayToDay(d))
+					days.add(Day.calendarDayToDay(d))
 				}
 			}
 

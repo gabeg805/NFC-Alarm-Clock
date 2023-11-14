@@ -735,7 +735,7 @@ object NacCalendar
 			val name = alarm.getNameNormalizedForMessage(MAXIMUM_LENGTH)
 
 			// No alarm name
-			if (name.isEmpty())
+			return if (name.isEmpty())
 			{
 				// Get the word
 				val alarmPlural = resources.getQuantityString(R.plurals.alarm, 1)
@@ -748,7 +748,6 @@ object NacCalendar
 			{
 				String.format(locale, "\"%1\$s\" %2\$s.", name, isDisabled)
 			}
-			return ""
 		}
 
 		/**

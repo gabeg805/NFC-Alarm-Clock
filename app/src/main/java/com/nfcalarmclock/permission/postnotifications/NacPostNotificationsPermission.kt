@@ -19,7 +19,7 @@ object NacPostNotificationsPermission
 	/**
 	 * Check if the correct Android version is being used.
 	 */
-	val isCorrectAndroidVersion: Boolean
+	private val isCorrectAndroidVersion: Boolean
 		get() {
 			// Permission only required for API level >= 33
 			return Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU

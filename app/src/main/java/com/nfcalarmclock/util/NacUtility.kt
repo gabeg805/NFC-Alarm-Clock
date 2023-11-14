@@ -23,7 +23,6 @@ object NacUtility
 	/**
 	 * Capitalize the first letter in the string.
 	 */
-	@JvmStatic
 	fun capitalize(word: String): String
 	{
 		val locale = Locale.getDefault()
@@ -40,7 +39,6 @@ object NacUtility
 	 *
 	 * @return The height of the view.
 	 */
-	@JvmStatic
 	fun getHeight(view: View): Int
 	{
 		// Meaure the view
@@ -74,7 +72,6 @@ object NacUtility
 	/**
 	 * Format a print statement to logcat.
 	 */
-	@JvmStatic
 	fun printf(format: String?, vararg args: Any?)
 	{
 		print(String.format(format!!, *args))
@@ -83,7 +80,6 @@ object NacUtility
 	/**
 	 * Print to logcat with default string formatting.
 	 */
-	@JvmStatic
 	fun printf(string: String?)
 	{
 		printf("%s", string)
@@ -92,7 +88,6 @@ object NacUtility
 	/**
 	 * Create a toast that displays for a short period of time.
 	 */
-	@JvmStatic
 	fun quickToast(context: Context, message: String): Toast
 	{
 		return toast(context, message, Toast.LENGTH_SHORT)
@@ -101,7 +96,6 @@ object NacUtility
 	/**
 	 * Create a toast that displays for a short period of time.
 	 */
-	@JvmStatic
 	fun quickToast(context: Context, resId: Int): Toast
 	{
 		// Get the message
@@ -114,7 +108,6 @@ object NacUtility
 	/**
 	 * Convert the given string to a spanned string.
 	 */
-	@JvmStatic
 	@Suppress("deprecation")
 	@TargetApi(Build.VERSION_CODES.N)
 	fun toSpannedString(message: String): Spanned
@@ -132,7 +125,6 @@ object NacUtility
 	/**
 	 * Create a toast.
 	 */
-	@JvmStatic
 	fun toast(context: Context, message: String): Toast
 	{
 		return toast(context, message, Toast.LENGTH_LONG)

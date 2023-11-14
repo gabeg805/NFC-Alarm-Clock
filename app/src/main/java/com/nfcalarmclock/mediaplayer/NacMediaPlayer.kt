@@ -40,7 +40,7 @@ class NacMediaPlayer(
 	/**
 	 * Audio attributes.
 	 */
-	private val audioAttributes: NacAudioAttributes = NacAudioAttributes(context)
+	val audioAttributes: NacAudioAttributes = NacAudioAttributes(context)
 
 	/**
 	 * Handler to add some delay if looping media.
@@ -79,6 +79,7 @@ class NacMediaPlayer(
 			exoPlayer.addListener(listener)
 		}
 	}
+
 	/**
 	 * Abandon audio focus.
 	 */
@@ -110,12 +111,6 @@ class NacMediaPlayer(
 		{
 			printf("NacMediaPlayer : GAIN!")
 			wasPlaying = true
-
-			// Set the volume if not already set
-			if (!audioAttributes.isStreamVolumeAlreadySet)
-			{
-				audioAttributes.setVolume()
-			}
 
 			// Play
 			play()
@@ -311,9 +306,6 @@ class NacMediaPlayer(
 	 */
 	fun release()
 	{
-		// Revert the volume
-		audioAttributes.revertVolume()
-
 		// Abandon audio focus
 		abandonAudioFocus()
 

@@ -401,9 +401,11 @@ class NacActiveAlarmService
 			// Start the wakeup process
 			wakeupProcess = NacWakeupProcess(this, alarm!!)
 			wakeupProcess!!.start()
-			//wakeupProcess!!.start(alarm)
 
+			// Wait for auto dismiss
 			waitForAutoDismiss()
+
+			// Start the alarm activity
 			startAlarmActivity(this, alarm)
 
 			return START_STICKY
@@ -447,7 +449,7 @@ class NacActiveAlarmService
 
 		// Get the power manager and timeout for the wakelock
 		val powerManager = getSystemService(POWER_SERVICE) as PowerManager
-		val timeout = sharedPreferences!!.autoDismissTime.toLong() * 60L * 1000L
+		val timeout = sharedPreferences!!.autoDismissTime * 60L * 1000L
 
 		// Acquire the wakelock
 		wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_TAG)
@@ -460,14 +462,12 @@ class NacActiveAlarmService
 	private fun showActiveAlarmNotification()
 	{
 		// Create the active alarm notification
-		println("show Active alarm notification")
 		val notification = NacActiveAlarmNotification(this)
 
 		// Set the alarm to be part of the notification
 		notification.alarm = alarm
 
 		// Start the service in the foreground
-		println("Start foreground notification")
 		startForeground(NacActiveAlarmNotification.ID,
 			notification.builder().build())
 	}
@@ -521,10 +521,10 @@ class NacActiveAlarmService
 	{
 		// Amount of time until the alarm is automatically dismissed
 		val autoDismiss = sharedPreferences!!.autoDismissTime
-		val delay = TimeUnit.MINUTES.toMillis(autoDismiss.toLong()) - alarm!!.timeActive - 2000
+		val delay = TimeUnit.MINUTES.toMillis(autoDismiss) - alarm!!.timeActive - 2000
 
 		// There is an auto dismiss time set
-		if (autoDismiss != 0)
+		if (autoDismiss != 0L)
 		{
 			// Cleanup the auto dismiss handler, in case it is already set
 			autoDismissHandler?.removeCallbacksAndMessages(null)

@@ -17,7 +17,6 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacBundle.getAlarm
 import com.nfcalarmclock.util.NacBundle.getMedia
 import com.nfcalarmclock.util.NacIntent.toIntent
-import com.nfcalarmclock.util.NacUtility.toast
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -27,7 +26,6 @@ import dagger.hilt.android.AndroidEntryPoint
  * TODO: Create the MediaPlayer object, and only call release (cleanup) in onDestroy.
  */
 @AndroidEntryPoint
-@UnstableApi
 open class NacMediaFragment
 	: Fragment()
 {
@@ -60,6 +58,7 @@ open class NacMediaFragment
 	/**
 	 * Cleanup the media player.
 	 */
+	@UnstableApi
 	private fun cleanupMediaPlayer()
 	{
 		// Release the media player resources
@@ -136,6 +135,7 @@ open class NacMediaFragment
 	/**
 	 * Called when the Clear button is clicked.
 	 */
+	@UnstableApi
 	open fun onClearClicked()
 	{
 		// Clear the media that is being used
@@ -179,6 +179,7 @@ open class NacMediaFragment
 	/**
 	 * Called when the fragment is paused.
 	 */
+	@UnstableApi
 	override fun onPause()
 	{
 		// Super
@@ -203,6 +204,7 @@ open class NacMediaFragment
 	/**
 	 * Called when the fragment is started.
 	 */
+	@UnstableApi
 	override fun onStart()
 	{
 		// Super
@@ -217,6 +219,7 @@ open class NacMediaFragment
 	 *
 	 * @param  uri  The Uri of the content to play.
 	 */
+	@UnstableApi
 	protected fun safePlay(uri: Uri): Boolean
 	{
 		val path = uri.toString()
@@ -240,6 +243,9 @@ open class NacMediaFragment
 			setupMediaPlayer()
 		}
 
+		// Save the current volume
+		mediaPlayer!!.audioAttributes.saveCurrentVolume()
+
 		// Play the media
 		mediaPlayer!!.playUri(uri)
 
@@ -249,6 +255,7 @@ open class NacMediaFragment
 	/**
 	 * Reset the media player safely.
 	 */
+	@UnstableApi
 	protected fun safeReset()
 	{
 		// Check if the media player is null
@@ -265,6 +272,7 @@ open class NacMediaFragment
 	/**
 	 * Setup action buttons.
 	 */
+	@UnstableApi
 	protected fun setupActionButtons(root: View)
 	{
 		val shared = NacSharedPreferences(requireContext())
@@ -296,6 +304,7 @@ open class NacMediaFragment
 	/**
 	 * Setup the media player.
 	 */
+	@UnstableApi
 	private fun setupMediaPlayer()
 	{
 		// Get the context
@@ -306,17 +315,6 @@ open class NacMediaFragment
 
 		// Gain transient audio focus
 		mediaPlayer!!.shouldGainTransientAudioFocus = true
-	}
-
-	/**
-	 * Show an error message in a Toast indicating that audio was unable to be
-	 * played.
-	 */
-	fun showErrorPlayingAudio()
-	{
-		val message = getString(R.string.error_message_play_audio)
-
-		toast(requireContext(), message)
 	}
 
 }

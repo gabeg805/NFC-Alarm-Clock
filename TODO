@@ -2,6 +2,8 @@
 TODO
 ----
 
+* Get rid of stuff like NacSnackbar and NacLastCardSwiped or whatever
+
 * Early notification in alarm options
 	- have an incremental countdown to alarm
 

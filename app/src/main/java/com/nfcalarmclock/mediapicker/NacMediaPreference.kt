@@ -49,7 +49,7 @@ class NacMediaPreference @JvmOverloads constructor(
 	 *
 	 * @return The summary text.
 	 */
-	override fun getSummary(): CharSequence?
+	override fun getSummary(): CharSequence
 	{
 		// Get the name of the media
 		val name = NacMedia.getTitle(context, mediaPath)

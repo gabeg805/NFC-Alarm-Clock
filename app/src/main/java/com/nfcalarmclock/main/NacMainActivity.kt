@@ -761,8 +761,11 @@ class NacMainActivity
 	/**
 	 * Create the context menu.
 	 */
-	override fun onCreateContextMenu(menu: ContextMenu, view: View,
-		menuInfo: ContextMenuInfo)
+	override fun onCreateContextMenu(
+		menu: ContextMenu,
+		view: View,
+		menuInfo: ContextMenuInfo?
+	)
 	{
 		// Inflate the context menu
 		menuInflater.inflate(R.menu.menu_card, menu)

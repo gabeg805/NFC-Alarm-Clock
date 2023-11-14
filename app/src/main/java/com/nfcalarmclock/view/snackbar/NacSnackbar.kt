@@ -166,7 +166,7 @@ class NacSnackbar(
 	/**
 	 * Set the snackbar.
 	 */
-	protected fun setSnackbar(message: String?)
+	private fun setSnackbar(message: String?)
 	{
 		// Set the snackbar
 		snackbar = Snackbar.make(root, message!!, Snackbar.LENGTH_LONG)
@@ -186,7 +186,6 @@ class NacSnackbar(
 	/**
 	 * @see .show
 	 */
-	@Suppress("unused")
 	fun show(message: String, action: String,
 		listener: View.OnClickListener?)
 	{

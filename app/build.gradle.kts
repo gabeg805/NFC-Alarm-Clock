@@ -92,10 +92,10 @@ dependencies {
 	implementation("androidx.appcompat:appcompat:1.6.1")
 	implementation("androidx.cardview:cardview:1.0.0")
 	implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
-	implementation("androidx.core:core:1.10.0") // 1.12.0 is only for compile API >= 34 TODO: get ktx
-	implementation("androidx.fragment:fragment:1.6.1")
+	implementation("androidx.core:core-ktx:1.10.0") // 1.12.0 is only for compile API >= 34
+	implementation("androidx.fragment:fragment-ktx:1.6.1")
 	implementation("androidx.lifecycle:lifecycle-process:2.6.2")
-	implementation("androidx.preference:preference:1.2.1")
+	implementation("androidx.preference:preference-ktx:1.2.1")
 	implementation("androidx.recyclerview:recyclerview:1.3.1")
 	implementation("androidx.viewpager:viewpager:1.0.0")
 
@@ -115,9 +115,8 @@ dependencies {
 	ksp("com.google.dagger:hilt-android-compiler:2.48")
 
 	// Media player
-	// TODO: Check media3 to see when things are more stable
-	//implementation("com.google.android.exoplayer:exoplayer:2.19.1")
 	implementation("androidx.media3:media3-exoplayer:1.1.1")
+	implementation("androidx.media3:media3-common:1.1.1")
 
 	// Google Play in-app review
 	implementation("com.google.android.play:core:1.10.3")

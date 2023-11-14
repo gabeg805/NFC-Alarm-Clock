@@ -21,7 +21,7 @@ class NacDayOfWeekDialog
 	 */
 	fun interface OnDaysOfWeekSelectedListener
 	{
-		fun onDaysOfWeekSelected(selectedDays: EnumSet<NacCalendar.Day>)
+		fun onDaysOfWeekSelected(selectedDays: EnumSet<Day>)
 	}
 
 	/**
@@ -33,7 +33,7 @@ class NacDayOfWeekDialog
 		set(value) {
 
 			// Set the current selected days
-			currentDayOfWeekSelected = NacCalendar.Day.valueToDays(value)
+			currentDayOfWeekSelected = Day.valueToDays(value)
 
 			// Set the backing field
 			field = value
@@ -42,7 +42,7 @@ class NacDayOfWeekDialog
 	/**
 	 * Current selected days.
 	 */
-	private var currentDayOfWeekSelected: EnumSet<Day> = NacCalendar.Day.NONE
+	private var currentDayOfWeekSelected: EnumSet<Day> = Day.NONE
 
 	/**
 	 * Listener for when the volume is restricted/unrestricted.

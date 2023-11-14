@@ -54,7 +54,6 @@
 	<string name="next_alarm_format_key">pref_time_remaining_format</string>
 	<string name="show_alarm_info_key">pref_alarm_info</string>
 
-	<string name="misc_setting_key">pref_screen_misc</string>
 	<string name="shuffle_playlist_key">pref_shuffle_playlist</string>
 
 	<string name="stats_setting_key">pref_screen_statistics</string>

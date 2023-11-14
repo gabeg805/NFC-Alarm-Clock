@@ -67,7 +67,7 @@ class NacDayOfWeek(
 			val days = Day.NONE
 
 			// Iterate over each day in the week
-			for (d in NacCalendar.Day.WEEK)
+			for (d in Day.WEEK)
 			{
 				// Get the button
 				val button = getDayButton(d)
@@ -170,7 +170,7 @@ class NacDayOfWeek(
 	fun setDays(days: EnumSet<Day>)
 	{
 		// Iterate over each day in the week
-		for (d in NacCalendar.Day.WEEK)
+		for (d in Day.WEEK)
 		{
 			// Get the button
 			val button = getDayButton(d)
@@ -199,7 +199,7 @@ class NacDayOfWeek(
 	fun setDays(value: Int)
 	{
 		// Determine the days
-		val days = NacCalendar.Day.valueToDays(value)
+		val days = Day.valueToDays(value)
 
 		// Set the days
 		this.setDays(days)

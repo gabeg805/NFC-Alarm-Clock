@@ -1,6 +1,5 @@
 package com.nfcalarmclock.permission.scheduleexactalarm
 
-import android.Manifest
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.nfcalarmclock.R

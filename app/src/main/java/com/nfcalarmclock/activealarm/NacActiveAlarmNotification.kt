@@ -37,7 +37,7 @@ class NacActiveAlarmNotification(context: Context)
 	 * @see NacNotification.id
 	 */
 	override val id: Int
-		get() = Companion.ID
+		get() = ID
 
 	/**
 	 * @see NacNotification.channelId
@@ -157,7 +157,7 @@ class NacActiveAlarmNotification(context: Context)
 	/**
 	 * @return The notification large icon.
 	 */
-	protected val largeIcon: Bitmap?
+	private val largeIcon: Bitmap?
 		get()
 		{
 			val res = context.resources

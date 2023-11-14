@@ -87,7 +87,7 @@ class NacCardTouchHelper(
 		 *
 		 * @return The card view.
 		 */
-		private fun getCardView(vh: RecyclerView.ViewHolder): View?
+		private fun getCardView(vh: RecyclerView.ViewHolder): View
 		{
 			// Get the card holder
 			val holder = getCardHolder(vh)
@@ -100,7 +100,7 @@ class NacCardTouchHelper(
 		 * @return The copy view, which resides in the background of the view
 		 * holder.
 		 */
-		private fun getCopySwipeView(vh: RecyclerView.ViewHolder): View?
+		private fun getCopySwipeView(vh: RecyclerView.ViewHolder): View
 		{
 			// Get the card holder
 			val holder = getCardHolder(vh)
@@ -112,7 +112,7 @@ class NacCardTouchHelper(
 		/**
 		 * @return The background delete view of the view holder.
 		 */
-		private fun getDeleteSwipeView(vh: RecyclerView.ViewHolder): View?
+		private fun getDeleteSwipeView(vh: RecyclerView.ViewHolder): View
 		{
 			// Get the card holder
 			val holder = getCardHolder(vh)

@@ -61,7 +61,7 @@ class NacDayOfWeekPreference @JvmOverloads constructor(
 	 *
 	 * @return The summary text.
 	 */
-	override fun getSummary(): CharSequence?
+	override fun getSummary(): CharSequence
 	{
 		// Get the default days
 		val value = sharedPreferences.days
@@ -70,7 +70,7 @@ class NacDayOfWeekPreference @JvmOverloads constructor(
 		val start = sharedPreferences.startWeekOn
 
 		// Convert the default days to a string
-		val days = NacCalendar.Day.valueToDayString(context, value, start)
+		val days = Day.valueToDayString(context, value, start)
 
 		// Return the days string, otherwise return the "None" string
 		return days.ifEmpty { context.getString(R.string.none) }
@@ -82,7 +82,7 @@ class NacDayOfWeekPreference @JvmOverloads constructor(
 	override fun onDaysOfWeekSelected(selectedDays: EnumSet<Day>)
 	{
 		// Set the day of week value
-		dayOfWeekValue = NacCalendar.Day.daysToValue(selectedDays)
+		dayOfWeekValue = Day.daysToValue(selectedDays)
 
 		// Reevaluate the summary
 		summary = this.summary
@@ -99,7 +99,7 @@ class NacDayOfWeekPreference @JvmOverloads constructor(
 	override fun onGetDefaultValue(a: TypedArray, index: Int): Any
 	{
 		// Calculate the default value
-		val default = NacCalendar.Day.daysToValue(Day.WEEKDAY)
+		val default = Day.daysToValue(Day.WEEKDAY)
 
 		// Get the default value
 		return a.getInteger(index, default)

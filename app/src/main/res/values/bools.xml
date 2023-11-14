@@ -4,7 +4,6 @@
 	<bool name="default_app_start_statistics">true</bool>
 	<bool name="default_app_should_refresh_main_activity">false</bool>
 	<bool name="default_card_is_measured">false</bool>
-	<bool name="default_prevent_app_from_closing">false</bool>
 	<bool name="default_easy_snooze">false</bool>
 	<bool name="default_repeat">true</bool>
 	<bool name="default_use_nfc">false</bool>

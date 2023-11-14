@@ -10,16 +10,19 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
+import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.media.NacMedia
 import com.nfcalarmclock.mediapicker.NacMediaFragment
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacBundle.toBundle
+import com.nfcalarmclock.util.NacUtility
 
 /**
  * Display a dialog that shows a list of alarm ringtones.
  */
+@UnstableApi
 class NacRingtoneFragment
 	: NacMediaFragment()
 {
@@ -59,7 +62,7 @@ class NacRingtoneFragment
 			if (!safePlay(uri))
 			{
 				// There was an error playing the media
-				showErrorPlayingAudio()
+				NacUtility.quickToast(requireContext(), R.string.error_message_play_audio)
 			}
 
 		}

@@ -1,11 +1,9 @@
 package com.nfcalarmclock.alarm
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.scheduler.NacScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

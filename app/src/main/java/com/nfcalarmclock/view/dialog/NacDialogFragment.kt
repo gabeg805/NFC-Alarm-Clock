@@ -33,7 +33,7 @@ abstract class NacDialogFragment
 	/**
 	 * Setup the dialog color.
 	 */
-	protected fun setupDialogColor()
+	private fun setupDialogColor()
 	{
 		// Get the buttons
 		val alertDialog = dialog as AlertDialog?

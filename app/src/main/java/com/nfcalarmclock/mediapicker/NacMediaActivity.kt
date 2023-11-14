@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentOnAttachListener
+import androidx.media3.common.util.UnstableApi
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -388,21 +389,31 @@ class NacMediaActivity
 		/**
 		 * Create the fragment.
 		 */
+		@UnstableApi
 		override fun createFragment(position: Int): Fragment
 		{
-			// Music fragment
-			return if (position == 0)
+			return when (position)
+			{
+
+				// Music fragment
+				0 ->
 				{
 					createMusicFragment()
 				}
+
 				// Ringtone fragment
-				else if (position == 1)
-				{
-					createRingtoneFragment()
-				} else
+				1 ->
 				{
 					createRingtoneFragment()
 				}
+
+				// Unknown
+				else ->
+				{
+					createRingtoneFragment()
+				}
+
+			}
 
 			//else if (position == 2)
 			//{
@@ -423,41 +434,42 @@ class NacMediaActivity
 		private fun createMusicFragment(): Fragment
 		{
 			// Check that alarm is not null
-			if (alarm != null)
+			return if (alarm != null)
 			{
-				return NacMusicFragment.newInstance(alarm)
+				NacMusicFragment.newInstance(alarm)
 			}
 			// Check that media is not null
 			else if (media != null)
 			{
-				return NacMusicFragment.newInstance(media)
+				NacMusicFragment.newInstance(media)
 			}
 			// Return an empty music fragment
 			else
 			{
-				return NacMusicFragment()
+				NacMusicFragment()
 			}
 		}
 
 		/**
 		 * Create a ringtone fragment.
 		 */
+		@UnstableApi
 		private fun createRingtoneFragment(): Fragment
 		{
 			// Check that alarm is not null
-			if (alarm != null)
+			return if (alarm != null)
 			{
-				return NacRingtoneFragment.newInstance(alarm)
+				NacRingtoneFragment.newInstance(alarm)
 			}
 			// Check that media is not null
 			else if (media != null)
 			{
-				return NacRingtoneFragment.newInstance(media)
+				NacRingtoneFragment.newInstance(media)
 			}
 			// Return an empty music fragment
 			else
 			{
-				return NacRingtoneFragment()
+				NacRingtoneFragment()
 			}
 		}
 

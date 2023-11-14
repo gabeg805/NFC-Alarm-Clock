@@ -174,7 +174,7 @@ class NacAppearanceSettingFragment
 	private fun setupNexAlarmFormatOnClickListener()
 	{
 		// Get the preference
-		val key = getString(R.string.next_alarm_format_key);
+		val key = getString(R.string.next_alarm_format_key)
 		val pref = findPreference<NacNextAlarmFormatPreference>(key)
 
 		// Set the on click listener

@@ -49,16 +49,15 @@ class NacTextToSpeech(
 		/**
 		 * Called when speech engine is done speaking.
 		 */
-		@Suppress("unused")
 		fun onDoneSpeaking(tts: NacTextToSpeech)
 
 		/**
 		 * Called when speech engine has started speaking.
 		 */
-		@Suppress("unused")
 		fun onStartSpeaking(tts: NacTextToSpeech)
 
 	}
+
 
 	/**
 	 * Utterance listener.
@@ -90,28 +89,12 @@ class NacTextToSpeech(
 		var onSpeakingListener: OnSpeakingListener? = null
 
 		/**
-		 *  Call the OnSpeakingListener when speaking is done.
-		 */
-		private fun callOnDoneSpeakingListener()
-		{
-			onSpeakingListener?.onDoneSpeaking(textToSpeech)
-		}
-
-		/**
-		 *  Call the OnSpeakingListener when speaking starts.
-		 */
-		private fun callOnStartSpeakingListener()
-		{
-			onSpeakingListener?.onStartSpeaking(textToSpeech)
-		}
-
-		/**
 		 * Called when done speaking.
 		 */
 		override fun onDone(utteranceId: String)
 		{
 			// Call done speaking listener
-			callOnDoneSpeakingListener()
+			onSpeakingListener?.onDoneSpeaking(textToSpeech)
 
 			// Abandon audio focus
 			NacAudioManager.abandonFocus(context, onAudioFocusChangeListener)
@@ -123,7 +106,7 @@ class NacTextToSpeech(
 		override fun onStart(utteranceId: String)
 		{
 			// Call the start speaking listener
-			callOnStartSpeakingListener()
+			onSpeakingListener?.onStartSpeaking(textToSpeech)
 		}
 
 		/**
@@ -196,9 +179,7 @@ class NacTextToSpeech(
 	 */
 	fun hasBuffer() : Boolean
 	{
-		val msg = bufferMessage
-
-		return msg.isNotEmpty()
+		return bufferMessage.isNotEmpty()
 	}
 
 	/**
@@ -218,31 +199,6 @@ class NacTextToSpeech(
 			true
 		}
 	}
-
-	/*
-	  Change media state when audio focus changes.
-	 */
-	//@Override
-	//public void onAudioFocusChange(int focusChange)
-	//{
-	//	//String change = "UNKOWN";
-	//	//if (focusChange == AudioManager.AUDIOFOCUS_GAIN)
-	//	//{
-	//	//	change = "GAIN";
-	//	//}
-	//	//else if (focusChange == AudioManager.AUDIOFOCUS_LOSS)
-	//	//{
-	//	//	change = "LOSS";
-	//	//}
-	//	//else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)
-	//	//{
-	//	//	change = "LOSS_TRANSIENT";
-	//	//}
-	//	//else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
-	//	//{
-	//	//	change = "LOSS_TRANSIENT_CAN_DUCK";
-	//	//}
-	//}
 
 	/**
 	 * The TextToSpeech engine is done being initialized.
@@ -279,15 +235,14 @@ class NacTextToSpeech(
 			// Gain transient audio focus
 			if (!NacAudioManager.requestFocusGainTransient(context, null, attrs))
 			{
-				val errorMsg = context.getString(R.string.error_message_text_to_speech_audio_focus)
-
-				NacUtility.quickToast(context, errorMsg)
+				NacUtility.quickToast(context, R.string.error_message_text_to_speech_audio_focus)
 				return
 			}
 
 			// Speak the message
 			val androidAttrs = attrs.audioAttributes.audioAttributesV21.audioAttributes
 			val bundle = NacBundle.toBundle(attrs)
+
 			textToSpeech.setAudioAttributes(androidAttrs)
 			textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, bundle,
 				UTTERANCE_ID)

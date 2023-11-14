@@ -155,7 +155,7 @@ class NacDayButtonStylePreference @JvmOverloads constructor(
 	/**
 	 * Setup the day button.
 	 */
-	protected fun setupDayButton()
+	private fun setupDayButton()
 	{
 		// Get an example day
 		val daysOfWeek = context.resources.getStringArray(R.array.days_of_week)

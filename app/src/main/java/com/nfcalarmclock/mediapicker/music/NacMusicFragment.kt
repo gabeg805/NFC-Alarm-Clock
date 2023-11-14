@@ -18,12 +18,12 @@ import com.nfcalarmclock.media.NacMedia
 import com.nfcalarmclock.mediapicker.NacMediaFragment
 import com.nfcalarmclock.permission.readmediaaudio.NacReadMediaAudioPermission
 import com.nfcalarmclock.util.NacBundle
+import com.nfcalarmclock.util.NacUtility
 import java.util.Locale
 
 /**
  * Display a browser for the user to browse for music files.
  */
-@UnstableApi
 class NacMusicFragment
 	: NacMediaFragment(),
 	OnBrowserClickedListener,
@@ -72,6 +72,7 @@ class NacMusicFragment
 	/**
 	 * Called when a directory is clicked in the file browser.
 	 */
+	@UnstableApi
 	override fun onDirectoryClicked(browser: NacFileBrowser, path: String)
 	{
 		val locale = Locale.getDefault()
@@ -88,6 +89,7 @@ class NacMusicFragment
 	/**
 	 * Called when a file is clicked in the file browser.
 	 */
+	@UnstableApi
 	override fun onFileClicked(browser: NacFileBrowser, metadata: NacFile.Metadata)
 	{
 		val uri = metadata.toExternalUri()
@@ -99,7 +101,7 @@ class NacMusicFragment
 			 if (!safePlay(uri))
 			 {
 				  // Show an error toast
-				  showErrorPlayingAudio()
+				 NacUtility.quickToast(requireContext(), R.string.error_message_play_audio)
 			 }
 		}
 		// File was deselected
@@ -113,6 +115,7 @@ class NacMusicFragment
 	/**
 	 * Called when the Clear button is clicked.
 	 */
+	@UnstableApi
 	override fun onClearClicked()
 	{
 		// Super
@@ -154,9 +157,8 @@ class NacMusicFragment
 	 */
 	override fun onDirectoryConfirmed(view: View)
 	{
-		// Super
+		// Emulate OK click
 		super.onOkClicked()
-		//super.onClick(view)
 	}
 
 	/**
@@ -169,6 +171,7 @@ class NacMusicFragment
 	/**
 	 * Called after the view is created.
 	 */
+	@UnstableApi
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
 		// Setup the action buttons

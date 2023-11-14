@@ -99,7 +99,7 @@ class NacSupportSetting(
 	/**
 	 * Cleanup the billing client.
 	 */
-	fun cleanup()
+	private fun cleanup()
 	{
 		// End the connection to the billing client
 		billingClient.endConnection()

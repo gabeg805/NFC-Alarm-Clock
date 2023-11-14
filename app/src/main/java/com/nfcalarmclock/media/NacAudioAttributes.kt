@@ -12,7 +12,7 @@ import com.nfcalarmclock.util.NacUtility.printf
 /**
  * Audio attributes.
  */
-class NacAudioAttributes @JvmOverloads constructor(
+class NacAudioAttributes constructor(
 
 	/**
 	 * Context.
@@ -22,7 +22,9 @@ class NacAudioAttributes @JvmOverloads constructor(
 	/**
 	 * Source.
 	 */
-	source: String? = "")
+	source: String = ""
+
+)
 {
 
 	/**
@@ -38,18 +40,12 @@ class NacAudioAttributes @JvmOverloads constructor(
 	/**
 	 * Volume level.
 	 */
-	var volumeLevel = 0
+	private var volumeLevel = 0
 
 	/**
 	 * Flag indicating if was ducking or not.
 	 */
 	private var wasDucking = false
-
-	/**
-	 * Check if volume can be changed or not
-	 */
-	val canVolumeChange: Boolean
-		get() = volumeLevel >= 0
 
 	/**
 	 * Audio attributes.
@@ -95,20 +91,24 @@ class NacAudioAttributes @JvmOverloads constructor(
 		}
 		else
 		{
+			println("BIG FAT 0 when getting steream volume")
 			0
 		}
 		set(volume)
 		{
+			println("BIG SET VOLUME")
 			// Unable to change the volume because the volume is fixed or because the
 			// stream is invalid
 			if (audioManager.isVolumeFixed || stream == AudioManager.USE_DEFAULT_STREAM_TYPE)
 			{
+				println("Unable to because volume is fixed or stream is default : ${audioManager.isVolumeFixed} | $stream")
 				return
 			}
 
 			// Set the stream volume
 			try
 			{
+				println("Set stream ($stream) volume : $volume")
 				audioManager.setStreamVolume(stream, volume, 0)
 			}
 			catch (e: SecurityException)
@@ -120,7 +120,7 @@ class NacAudioAttributes @JvmOverloads constructor(
 	/**
 	 * Maximum stream volume.
 	 */
-	val streamMaxVolume: Int
+	private val streamMaxVolume: Int
 		get() = if (stream != AudioManager.USE_DEFAULT_STREAM_TYPE)
 		{
 			audioManager.getStreamMaxVolume(stream)
@@ -131,20 +131,9 @@ class NacAudioAttributes @JvmOverloads constructor(
 		}
 
 	/**
-	 * Check if the stream volume is already set to the desired volume level.
-	 */
-	val isStreamVolumeAlreadySet: Boolean
-		get()
-		{
-			val previous = streamVolume
-			val volume = this.toStreamVolume()
-			return previous == volume
-		}
-
-	/**
 	 * Constructor.
 	 */
-	constructor(context: Context, alarm: NacAlarm?) : this(context, "")
+	constructor(context: Context, alarm: NacAlarm) : this(context, "")
 	{
 		merge(alarm)
 	}
@@ -154,14 +143,16 @@ class NacAudioAttributes @JvmOverloads constructor(
 	 */
 	init
 	{
-		// Set usage volume source
+		// Set usage from audio source
 		setUsageFromSource(source)
+	}
 
-		// Not sure why setting volume level to -1
-		volumeLevel = -1
-
-		// Set ducking flag
-		wasDucking = false
+	/**
+	 * Convert the alarm volume to a stream volume.
+	 */
+	fun alarmToStreamVolume(): Int
+	{
+		return (streamMaxVolume * volumeLevel / 100.0f).toInt()
 	}
 
 	/**
@@ -182,17 +173,16 @@ class NacAudioAttributes @JvmOverloads constructor(
 	/**
 	 * Merge the current audio attributes with that of the alarm.
 	 */
-	fun merge(alarm: NacAlarm?): NacAudioAttributes
+	fun merge(alarm: NacAlarm): NacAudioAttributes
 	{
-		// Check if the alarm is not null
-		if (alarm != null)
-		{
-			// Set audio usage from audio source
-			setUsageFromSource(alarm.audioSource)
+		println("MERGE ALARM")
+		// Set audio usage from audio source
+		println("Set usage from source : ${alarm.audioSource}")
+		setUsageFromSource(alarm.audioSource)
 
-			// Set the volume level
-			volumeLevel = alarm.volume
-		}
+		// Set the volume level
+		println("Set volume level : ${alarm.volume}")
+		volumeLevel = alarm.volume
 
 		return this
 	}
@@ -205,6 +195,9 @@ class NacAudioAttributes @JvmOverloads constructor(
 		if (wasDucking)
 		{
 			wasDucking = false
+
+			// TODO: Check if this new addition is ok
+			revertVolume()
 		}
 	}
 
@@ -213,60 +206,36 @@ class NacAudioAttributes @JvmOverloads constructor(
 	 */
 	fun revertVolume()
 	{
-		// Check if the volume cannot be changed
-		if (!canVolumeChange)
-		{
-			return
-		}
-
 		// Set the volume to the previous volume
+		println("Reverting volume : ${sharedPreferences.previousVolume}")
 		streamVolume = sharedPreferences.previousVolume
 	}
 
 	/**
+	 * Save the current volume.
+	 */
+	fun saveCurrentVolume()
+	{
+		println("Save current volume : $streamVolume")
+		sharedPreferences.editPreviousVolume(streamVolume)
+	}
+
+		/**
 	 * Set the audio usage from the source name.
 	 */
-	private fun setUsageFromSource(source: String?)
+	private fun setUsageFromSource(source: String)
 	{
 		audioUsage = NacAudioManager.sourceToUsage(context, source)
 	}
 
 	/**
-	 * Set the volume.
+	 * Set the stream volume.
 	 */
-	fun setVolume()
+	fun setStreamVolume()
 	{
-		// Check if the volume cannot be changed
-		if (!canVolumeChange)
-		{
-			return
-		}
-
-		// Get the previous and current volumes
-		val previous = streamVolume
-		val volume = this.toStreamVolume()
-
 		// Set the stream volume
-		streamVolume = volume
-
-		// Save the previous volume
-		sharedPreferences.editPreviousVolume(previous)
-	}
-
-	/**
-	 * @see NacAudioAttributes.toStreamVolume
-	 */
-	fun toStreamVolume(): Int
-	{
-		return this.toStreamVolume(volumeLevel)
-	}
-
-	/**
-	 * Convert the volume level to the stream volume format.
-	 */
-	fun toStreamVolume(volumeLevel: Int): Int
-	{
-		return (streamMaxVolume * volumeLevel / 100.0f).toInt()
+		streamVolume = alarmToStreamVolume()
+		println("Set volume : $streamVolume")
 	}
 
 }

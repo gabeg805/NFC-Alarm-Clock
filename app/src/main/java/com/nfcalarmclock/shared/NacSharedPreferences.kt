@@ -93,16 +93,16 @@ class NacSharedPreferences(
 	/**
 	 * @see .getAutoDismissTime
 	 */
-	val autoDismissTime: Int
+	val autoDismissTime: Long
 		get()
 		{
 			return if (autoDismissIndex < 5)
 			{
-				autoDismissIndex
+				autoDismissIndex.toLong()
 			}
 			else
 			{
-				(autoDismissIndex - 4) * 5
+				(autoDismissIndex - 4) * 5L
 			}
 		}
 
