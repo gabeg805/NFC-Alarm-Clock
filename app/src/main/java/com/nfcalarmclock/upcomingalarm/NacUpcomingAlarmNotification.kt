@@ -9,7 +9,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.util.NacIntent.createMainActivity
+import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.view.notification.NacNotification
 import java.util.Locale
 
@@ -99,7 +99,7 @@ class NacUpcomingAlarmNotification(context: Context) : NacNotification(context)
 	override val contentPendingIntent: PendingIntent
 		get()
 		{
-			val intent = createMainActivity(context)
+			val intent = NacMainActivity.getStartIntent(context)
 
 			// Determine the pending intent flags
 			var flags = 0

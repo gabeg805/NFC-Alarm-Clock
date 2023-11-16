@@ -3,8 +3,7 @@ package com.nfcalarmclock.activealarm
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.nfcalarmclock.util.NacContext.startAlarm
-import com.nfcalarmclock.util.NacIntent.getAlarmBundle
+import com.nfcalarmclock.util.NacIntent
 
 /**
  * Receive this signal from AlarmManager and start the foreground service.
@@ -21,11 +20,12 @@ class NacActiveAlarmBroadcastReceiver
 	 */
 	override fun onReceive(context: Context, intent: Intent)
 	{
-		// Get the alarm bundle from the intent
-		val bundle = getAlarmBundle(intent)
+		// Get the alarm
+		val alarm = NacIntent.getAlarm(intent)
 
-		// Start the alarm
-		startAlarm(context, bundle)
+		// Start the alarm activity and service
+		NacActiveAlarmActivity.startAlarmActivity(context, alarm)
+		NacActiveAlarmService.startAlarmService(context, alarm)
 	}
 
 }

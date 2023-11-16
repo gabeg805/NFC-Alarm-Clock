@@ -178,6 +178,37 @@ class NacWakeupProcess(
 	}
 
 	/**
+	 * The words that should be said when stating the time, in the designated language.
+	 */
+	private val timeToSay: String
+		get()
+		{
+			//val name = alarm!!.name
+			// TODO: Say the name of the alarm after the time.
+
+			// Get the default locale
+			val locale = Locale.getDefault()
+
+			// Get the current hour and minute
+			val calendar = Calendar.getInstance()
+			val hour = calendar[Calendar.HOUR_OF_DAY]
+			val minute = calendar[Calendar.MINUTE]
+
+			// Get the meridian (if it should be used based on the user's preferences
+			val meridian = NacCalendar.getMeridian(context, hour)
+
+			// Check if the language is Spanish
+			return if (locale.language == "es")
+			{
+				getTimeToSayEs(hour, minute, meridian)
+			}
+			else
+			{
+				getTimeToSayEn(hour, minute, meridian)
+			}
+		}
+
+	/**
 	 * Cleanup various alarm objects.
 	 */
 	fun cleanup()
@@ -216,37 +247,6 @@ class NacWakeupProcess(
 		// Stop any future vibrations from occuring
 		vibrateHandler.removeCallbacksAndMessages(null)
 	}
-
-	/**
-	 * The words that should be said when stating the time, in the designated language.
-	 */
-	private val timeToSay: String
-		get()
-		{
-			//val name = alarm!!.name
-			// TODO: Say the name of the alarm after the time.
-
-			// Get the default locale
-			val locale = Locale.getDefault()
-
-			// Get the current hour and minute
-			val calendar = Calendar.getInstance()
-			val hour = calendar[Calendar.HOUR_OF_DAY]
-			val minute = calendar[Calendar.MINUTE]
-
-			// Get the meridian (if it should be used based on the user's preferences
-			val meridian = NacCalendar.getMeridian(context, hour)
-
-			// Check if the language is Spanish
-			return if (locale.language == "es")
-			{
-				getTimeToSayEs(hour, minute, meridian)
-			}
-			else
-			{
-				getTimeToSayEn(hour, minute, meridian)
-			}
-		}
 
 	/**
 	 * @see .getTimeToSay

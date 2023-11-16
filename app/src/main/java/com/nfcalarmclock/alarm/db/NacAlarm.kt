@@ -1120,7 +1120,8 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 		snoozeHour = cal[Calendar.HOUR_OF_DAY]
 		snoozeMinute = cal[Calendar.MINUTE]
 
-		// Increment the snooze count
+		// Increment the snooze count. The "isSnoozed" variable checks the
+		// snooze count so this basically makes "isSnoozed" true
 		addToSnoozeCount(1)
 
 		return cal

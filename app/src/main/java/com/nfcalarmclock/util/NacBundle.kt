@@ -24,11 +24,26 @@ object NacBundle
 	const val MEDIA_PARCEL_NAME = "NacMediaParcel"
 
 	/**
+	 * Get a bundle that contains the alarm.
+	 *
+	 * @return A bundle that contains the alarm.
+	 */
+	fun alarmToBundle(alarm: NacAlarm?): Bundle
+	{
+		// Create the bundle
+		val bundle = Bundle()
+
+		// Put the alarm in the bundle
+		bundle.putParcelable(ALARM_PARCEL_NAME, alarm)
+
+		return bundle
+	}
+
+	/**
 	 * Get the alarm contained in the bundle.
 	 *
 	 * @return The alarm contained in the bundle.
 	 */
-	@JvmStatic
 	@Suppress("deprecation")
 	fun getAlarm(bundle: Bundle?): NacAlarm?
 	{
@@ -83,35 +98,16 @@ object NacBundle
 	 *
 	 * @return The media contained in the bundle.
 	 */
-	@JvmStatic
 	fun getMedia(bundle: Bundle?): String?
 	{
 		return bundle?.getString(MEDIA_PARCEL_NAME)
 	}
 
 	/**
-	 * Get a  bundle that contains the alarm.
-	 *
-	 * @return A bundle that contains the alarm.
-	 */
-	@JvmStatic
-	fun toBundle(alarm: NacAlarm?): Bundle
-	{
-		// Create the bundle
-		val bundle = Bundle()
-
-		// Put the alarm in the bundle
-		bundle.putParcelable(ALARM_PARCEL_NAME, alarm)
-
-		return bundle
-	}
-
-	/**
-	 * Get a  bundle that contains the sound.
+	 * Get a bundle that contains the sound.
 	 *
 	 * @return A bundle that contains the sound.
 	 */
-	@JvmStatic
 	fun toBundle(media: String?): Bundle
 	{
 		// Create the bundle
@@ -132,7 +128,7 @@ object NacBundle
 		// Create the bundle
 		val bundle = Bundle()
 
-		// Put the audio attributes  in the bundle
+		// Put the audio attributes in the bundle
 		bundle.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, attrs.stream)
 
 		return bundle

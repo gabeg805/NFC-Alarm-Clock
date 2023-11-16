@@ -17,6 +17,7 @@ import com.nfcalarmclock.media.NacMedia
 import com.nfcalarmclock.mediapicker.NacMediaFragment
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacBundle.toBundle
+import com.nfcalarmclock.util.NacBundle.alarmToBundle
 import com.nfcalarmclock.util.NacUtility
 
 /**
@@ -160,7 +161,7 @@ class NacRingtoneFragment
 		fun newInstance(alarm: NacAlarm?): Fragment
 		{
 			val fragment: Fragment = NacRingtoneFragment()
-			val bundle = toBundle(alarm)
+			val bundle = alarmToBundle(alarm)
 			fragment.arguments = bundle
 
 			return fragment

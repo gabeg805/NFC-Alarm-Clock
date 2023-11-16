@@ -7,10 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import com.nfcalarmclock.activealarm.NacActiveAlarmBroadcastReceiver
+import com.nfcalarmclock.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.util.NacCalendar
-import com.nfcalarmclock.util.NacIntent.createForegroundService
 import java.util.Calendar
 
 /**
@@ -113,7 +113,7 @@ object NacScheduler
 		val id = alarm.id.toInt()
 
 		// Create the intent
-		val intent = createForegroundService(context, alarm)
+		val intent = NacActiveAlarmService.getStartIntent(context, alarm)
 
 		// Build the pending intent
 		return buildAlarmPendingIntent(context, id, intent, flags)
@@ -161,7 +161,7 @@ object NacScheduler
 	fun cancel(context: Context, id: Int)
 	{
 		// Build the pending intent for the new type
-		val intent = createForegroundService(context, null as NacAlarm?)
+		val intent = NacActiveAlarmService.getStartIntent(context, null)
 		val pending = buildAlarmPendingIntent(context, id, intent,
 			PendingIntent.FLAG_NO_CREATE)
 

@@ -14,9 +14,7 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.mediaplayer.NacMediaPlayer
 import com.nfcalarmclock.scheduler.NacScheduler
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.util.NacBundle.getAlarm
-import com.nfcalarmclock.util.NacBundle.getMedia
-import com.nfcalarmclock.util.NacIntent.toIntent
+import com.nfcalarmclock.util.NacBundle
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -120,8 +118,8 @@ open class NacMediaFragment
 		super.onCreate(savedInstanceState)
 
 		// Set the member variables
-		alarm = getAlarm(arguments)
-		mMediaPath = getMedia(arguments)
+		alarm = NacBundle.getAlarm(arguments)
+		mMediaPath = NacBundle.getMedia(arguments)
 	}
 
 	/**
@@ -165,7 +163,7 @@ open class NacMediaFragment
 		else if (media != null)
 		{
 			// Create an intent with the media
-			val intent = toIntent(media)
+			val intent = NacMediaActivity.getStartIntentWithMedia(media = media)
 
 			// Set the result of the activity with the media path as part of
 			// the intent

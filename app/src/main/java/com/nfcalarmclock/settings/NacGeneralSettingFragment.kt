@@ -52,7 +52,7 @@ class NacGeneralSettingFragment
 	private var mediaPreference: NacMediaPreference? = null
 
 	/**
-	 * Called when the NacMediaActivity is finished is returns a result.
+	 * Called when the media activity is finished and returns a result.
 	 */
 	override fun onActivityResult(result: ActivityResult)
 	{
@@ -210,7 +210,7 @@ class NacGeneralSettingFragment
 		pref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
 
 			// Create the intent
-			val intent = NacIntent.toIntent(context, NacMediaActivity::class.java,
+			val intent = NacMediaActivity.getStartIntentWithMedia(context,
 				sharedPreferences!!.mediaPath)
 
 			// Launch the intent

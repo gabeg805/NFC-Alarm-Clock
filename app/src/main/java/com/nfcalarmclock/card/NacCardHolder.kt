@@ -28,15 +28,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
 import com.nfcalarmclock.R
-import com.nfcalarmclock.activealarm.NacActiveAlarmService
+import com.nfcalarmclock.activealarm.NacActiveAlarmService.Companion.dismissAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.media.NacMedia
 import com.nfcalarmclock.name.NacNameDialog
 import com.nfcalarmclock.name.NacNameDialog.OnNameEnteredListener
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacCalendar.Day
-import com.nfcalarmclock.util.NacContext.dismissAlarmActivity
 import com.nfcalarmclock.util.NacUtility.getHeight
 import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek
@@ -539,7 +537,7 @@ class NacCardHolder(
 	}
 
 	/**
-	 * @see .checkCanModifyAlarm
+	 * Check if the alarm can be deleted.
 	 */
 	private fun checkCanDeleteAlarm(): Boolean
 	{
@@ -578,8 +576,13 @@ class NacCardHolder(
 	 */
 	private fun checkCanModifyAlarm(): Boolean
 	{
+		// Card holder is binding
+		if (isBinding)
+		{
+			return true
+		}
 		// Alarm is active
-		if (alarm!!.isActive)
+		else if (alarm!!.isActive)
 		{
 			val message = context.getString(R.string.error_message_active_modify)
 
@@ -788,7 +791,7 @@ class NacCardHolder(
 	private fun doDismissButtonClick()
 	{
 		// Dismiss the alarm activity
-		dismissAlarmActivity(context, alarm)
+		dismissAlarmService(context, alarm)
 	}
 
 	/**
@@ -921,16 +924,6 @@ class NacCardHolder(
 	 */
 	private fun doSwitchCheckedChanged(state: Boolean)
 	{
-		// Check if the alarm is disabled and the alarm is in use
-		if (!state && alarm!!.isInUse)
-		{
-			// Dismiss the alarm service
-			NacActiveAlarmService.dismissService(context, alarm)
-
-			// Set the alarm as NOT active
-			alarm!!.isActive = false
-		}
-
 		// Reset the snooze counter
 		if (!state)
 		{
@@ -1123,12 +1116,12 @@ class NacCardHolder(
 	 */
 	fun interact()
 	{
-		// Show the time dialog
-		showTimeDialog()
-
 		// Check if the alarm should be expanded
 		if (sharedPreferences.expandNewAlarm)
 		{
+			// Show the time dialog
+			showTimeDialog()
+
 			// Expand the alarm
 			expand()
 		}
@@ -1798,11 +1791,8 @@ class NacCardHolder(
 	 */
 	private fun setVolumeImageView()
 	{
-		// Get the current volume level
-		val volumeLevel = alarm!!.volume
-
 		// Set the resource ID depending on the volume level
-		val resId: Int = when (volumeLevel)
+		val resId: Int = when (alarm!!.volume)
 		{
 
 			0 ->

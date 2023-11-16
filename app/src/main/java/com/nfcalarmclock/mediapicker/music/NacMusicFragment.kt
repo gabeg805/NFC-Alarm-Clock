@@ -243,7 +243,7 @@ class NacMusicFragment
 		fun newInstance(alarm: NacAlarm?): Fragment
 		{
 			val fragment: Fragment = NacMusicFragment()
-			val bundle = NacBundle.toBundle(alarm)
+			val bundle = NacBundle.alarmToBundle(alarm)
 			fragment.arguments = bundle
 
 			return fragment

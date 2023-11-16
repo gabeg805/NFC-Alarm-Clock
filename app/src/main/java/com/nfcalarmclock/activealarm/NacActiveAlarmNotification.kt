@@ -14,9 +14,6 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.util.NacCalendar
-import com.nfcalarmclock.util.NacIntent.createAlarmActivity
-import com.nfcalarmclock.util.NacIntent.dismissForegroundService
-import com.nfcalarmclock.util.NacIntent.snoozeForegroundService
 import com.nfcalarmclock.view.notification.NacNotification
 import java.util.Calendar
 import java.util.Locale
@@ -27,6 +24,16 @@ import java.util.Locale
 class NacActiveAlarmNotification(context: Context)
 	: NacNotification(context)
 {
+
+	companion object
+	{
+
+		/**
+		 * Notification ID.
+		 */
+		const val ID = 79
+
+	}
 
 	/**
 	 * The alarm to show the notification about.
@@ -120,7 +127,7 @@ class NacActiveAlarmNotification(context: Context)
 		get()
 		{
 			val id = alarm?.id ?: 0
-			val intent = createAlarmActivity(context, alarm)
+			val intent = NacActiveAlarmActivity.getStartIntent(context, alarm)
 
 			// Determine the pending intent flags
 			var flags = PendingIntent.FLAG_UPDATE_CURRENT
@@ -140,7 +147,7 @@ class NacActiveAlarmNotification(context: Context)
 	private val snoozePendingIntent: PendingIntent
 		get()
 		{
-			val intent = snoozeForegroundService(context, alarm)
+			val intent = NacActiveAlarmService.getSnoozeIntent(context, alarm)
 
 			// Determine the pending intent flags
 			var flags = PendingIntent.FLAG_CANCEL_CURRENT
@@ -270,7 +277,7 @@ class NacActiveAlarmNotification(context: Context)
 		}
 
 		// Create an intent to dismiss the active alarm service
-		val intent = dismissForegroundService(context, alarm)
+		val intent = NacActiveAlarmService.getDismissIntent(context, alarm)
 
 		// Determine the pending intent flags
 		var flags = PendingIntent.FLAG_CANCEL_CURRENT
@@ -282,16 +289,6 @@ class NacActiveAlarmNotification(context: Context)
 
 		// Create the pending intent
 		return PendingIntent.getService(context, 0, intent, flags)
-	}
-
-	companion object
-	{
-
-		/**
-		 * Notification ID.
-		 */
-		const val ID = 79
-
 	}
 
 }

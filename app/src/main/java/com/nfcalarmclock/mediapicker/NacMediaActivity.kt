@@ -1,8 +1,11 @@
 package com.nfcalarmclock.mediapicker
 
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -22,8 +25,7 @@ import com.nfcalarmclock.mediapicker.ringtone.NacRingtoneFragment
 import com.nfcalarmclock.permission.readmediaaudio.NacReadMediaAudioPermission.hasPermission
 import com.nfcalarmclock.permission.readmediaaudio.NacReadMediaAudioPermission.requestPermission
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.util.NacIntent.getAlarm
-import com.nfcalarmclock.util.NacIntent.getMedia
+import com.nfcalarmclock.util.NacIntent
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -31,11 +33,66 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 @AndroidEntryPoint
 class NacMediaActivity
+
+	// Constructor
 	: FragmentActivity(),
+
+	// Interfaces
 	FragmentOnAttachListener,
 	OnTabSelectedListener,
 	OnRequestPermissionsResultCallback
 {
+
+	companion object
+	{
+
+		/**
+		 * Create an intent that will be used to start the media activity with
+		 * an alarm attached.
+		 *
+		 * @param context A context.
+		 * @param alarm   An alarm.
+		 *
+		 * @return An intent that will be used to start the media activity with
+		 *         an alarm attached.
+		 */
+		fun getStartIntentWithAlarm(
+			context: Context,
+			alarm: NacAlarm
+		): Intent
+		{
+			// Create an intent
+			val intent = Intent(context, NacMediaActivity::class.java)
+
+			// Add the alarm to the intent
+			return NacIntent.addAlarm(intent, alarm)
+		}
+
+		/**
+		 * Create an intent that will be used to start the media activity with
+		 * a media path attached.
+		 *
+		 * @param context The application context.
+		 * @param media   The media path to attach to the intent.
+		 *
+		 * @return An intent that will be used to start the media activity with
+		 *         a media path attached.
+		 */
+		fun getStartIntentWithMedia(
+			context: Context? = null,
+			media: String?
+		): Intent
+		{
+			// Create an intent with the media activity or an empty intent
+			val intent = context?.let {
+				Intent(context, NacMediaActivity::class.java)
+			} ?: Intent()
+
+			// Add the media to the intent
+			return NacIntent.addMedia(intent, media)
+		}
+
+	}
 
 	/**
 	 * View pager.
@@ -202,8 +259,8 @@ class NacMediaActivity
 		val audioSources = resources.getStringArray(R.array.audio_sources)
 
 		// Set the member variables
-		alarm = getAlarm(intent)
-		media = getMedia(intent)
+		alarm = NacIntent.getAlarm(intent)
+		media = NacIntent.getMedia(intent)
 		viewPager = findViewById(R.id.act_sound)
 		tabLayout = findViewById(R.id.tab_layout)
 		titles[0] = getString(R.string.action_browse)
@@ -215,6 +272,14 @@ class NacMediaActivity
 		setupViewPager()
 		setupTabColors()
 		selectTabByMediaType(mediaType)
+
+		//// TODO: Handle when the back button is pressed
+		//onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true)
+		//{
+		//	override fun handleOnBackPressed()
+		//	{
+		//	}
+		//})
 	}
 
 	/**

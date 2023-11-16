@@ -93,10 +93,16 @@ class NacAlarmViewModel @Inject constructor(
 	 *
 	 * @return The number of alarms updated.
 	 */
-	fun update(alarm: NacAlarm)
+	fun update(alarm: NacAlarm, unit: () -> Unit = {})
 	{
 		viewModelScope.launch {
+
+			// Update the alarm
 			alarmRepository.update(alarm)
+
+			// Call the unit
+			unit()
+
 		}
 	}
 

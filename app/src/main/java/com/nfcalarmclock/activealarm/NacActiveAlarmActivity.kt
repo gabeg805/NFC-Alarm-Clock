@@ -1,10 +1,7 @@
 package com.nfcalarmclock.activealarm
 
-import android.annotation.SuppressLint
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -13,16 +10,13 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.activity.viewModels
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.nfcalarmclock.R
-import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.nfc.NacNfcTag
-import com.nfcalarmclock.scheduler.NacScheduler
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.statistics.NacAlarmStatisticViewModel
 import com.nfcalarmclock.util.NacBundle
 import com.nfcalarmclock.util.NacIntent
 import com.nfcalarmclock.util.NacUtility.quickToast
@@ -42,31 +36,62 @@ class NacActiveAlarmActivity
 	{
 
 		/**
-		 * Automatically dismiss the activity action.
-		 */
-		const val ACTION_AUTO_DISMISS_ACTIVITY = "com.nfcalarmclock.ACTION_AUTO_DISMISS_ALARM_ACTIVITY"
-
-		/**
-		 * Dismiss the activity action.
-		 */
-		const val ACTION_DISMISS_ACTIVITY = "com.nfcalarmclock.ACTION_DISMISS_ALARM_ACTIVITY"
-
-		/**
 		 * Stop the activity action.
 		 */
-		const val ACTION_STOP_ACTIVITY = "com.nfcalarmclock.ACTION_STOP_ALARM_ACTIVITY"
+		private const val ACTION_STOP_ACTIVITY = "com.nfcalarmclock.ACTION_STOP_ALARM_ACTIVITY"
+
+		/**
+		 * Create an intent that will be used to start the Alarm activity.
+		 *
+		 * @param context A context.
+		 * @param alarm   An alarm.
+		 *
+		 * @return The Alarm activity intent.
+		 */
+		fun getStartIntent(context: Context, alarm: NacAlarm?): Intent
+		{
+			// Create the intent and its flags
+			val intent = Intent(context, NacActiveAlarmActivity::class.java)
+			val flags = (Intent.FLAG_ACTIVITY_NEW_TASK
+				or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+
+			// Add the flags to the intent
+			intent.addFlags(flags)
+
+			return NacIntent.addAlarm(intent, alarm)
+		}
+
+		/**
+		 * Start the alarm activity with the given alarm.
+		 */
+		fun startAlarmActivity(context: Context, alarm: NacAlarm?)
+		{
+			// Create the intent
+			val intent = getStartIntent(context, alarm)
+
+			// Start the activity
+			context.startActivity(intent)
+		}
+
+		/**
+		 * Stop the alarm activity
+		 */
+		fun stopAlarmActivity(context: Context)
+		{
+			// Create the intent and its flags
+			val intent = Intent(context, NacActiveAlarmActivity::class.java)
+			val flags = (Intent.FLAG_ACTIVITY_NEW_TASK
+				or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+
+			// Add the flags to the intent
+			intent.addFlags(flags)
+			intent.action = ACTION_STOP_ACTIVITY
+
+			// Start the activity
+			context.startActivity(intent)
+		}
 
 	}
-
-	/**
-	 * Alarm repository.
-	 */
-	private val alarmViewModel : NacAlarmViewModel by viewModels()
-
-	/**
-	 * Statistic view model.
-	 */
-	private val statisticViewModel: NacAlarmStatisticViewModel by viewModels()
 
 	/**
 	 * Shared preferences.
@@ -77,106 +102,6 @@ class NacActiveAlarmActivity
 	 * Alarm.
 	 */
 	private var alarm: NacAlarm? = null
-
-	/**
-	 * Time that the service was started, in milliseconds.
-	 */
-	private var startTime: Long = 0
-
-	/**
-	 * Receiver to dismiss or stop the activity when the foreground service is done.
-	 */
-	private val activeAlarmActivityReceiver = object : BroadcastReceiver()
-	{
-
-		/**
-		 * Called when the intent is received.
-		 */
-		override fun onReceive(context: Context, intent: Intent)
-		{
-			// Check the action of the intent
-			when (intent.action)
-			{
-				// Stop the activity
-				ACTION_AUTO_DISMISS_ACTIVITY ->
-				{
-					// Auto dismiss the alarm
-					autoDismiss()
-
-					// Finish the activity
-					finish()
-				}
-
-				// Stop the activity
-				ACTION_STOP_ACTIVITY -> finish()
-
-				else -> {}
-			}
-		}
-
-	}
-
-	/**
-	 * Auto dismiss the alarm.
-	 */
-	private fun autoDismiss()
-	{
-		// Dismiss the alarm
-		dismiss()
-
-		// Save the missed alarm into the statistics table
-		statisticViewModel.insertMissed(alarm)
-	}
-
-	/**
-	 * Check if the alarm can be snoozed and show a toast if it cannot.
-	 *
-	 * @return True if the alarm can be snoozed, and False otherwise.
-	 */
-	private fun checkCanSnooze(): Boolean
-	{
-		// Check if the alarm can be snoozed
-		return if (alarm!!.canSnooze(sharedPreferences!!))
-		{
-			true
-		}
-		// Unable to snooze the alarm
-		else
-		{
-			// Show a toast saying the alarm could not be snoozed
-			quickToast(this, R.string.error_message_snooze)
-			false
-		}
-	}
-
-	/**
-	 * Dismiss the alarm.
-	 */
-	fun dismiss(usedNfc: Boolean = false)
-	{
-		// TODO: Remove null alarm check here. Will this cause crashes for people?
-
-		// Dismiss the alarm
-		alarm!!.dismiss()
-
-		// Update the alarm
-		alarmViewModel.update(alarm!!)
-
-		// Reschedule the alarm
-		NacScheduler.update(this, alarm!!)
-
-		// Save the dismissed alarm to the statistics table (used NFC)
-		statisticViewModel.insertDismissed(alarm!!, usedNfc)
-
-		// Set flag that the main activity needs to be refreshed
-		sharedPreferences!!.editShouldRefreshMainActivity(true)
-
-		// Show toast that the alarm was dismissed
-		quickToast(this, R.string.message_alarm_dismiss)
-
-		// Dismiss the service
-		NacActiveAlarmService.dismissService(this, alarm)
-	}
 
 	/**
 	 * Check if an alarm can be dismissed with NFC.
@@ -193,71 +118,13 @@ class NacActiveAlarmActivity
 	}
 
 	/**
-	 * Dismiss due to an NFC tag being scanned, and only if the NFC tag ID
-	 * matches the saved alarm NFC tag ID. The exception to this is if the
-	 * saved alarm NFC tag ID is empty.
-	 *
-	 * The finish() method is not called because if the ACTION_DISMISS_ALARM
-	 * intent is sent to the foreground service, then the foreground service will
-	 * finish this activity.
-	 */
-	private fun dismissWithNfc()
-	{
-		// Dismiss the alarm
-		dismiss(usedNfc = true)
-
-		// Dismiss the service with NFC
-		NacActiveAlarmService.dismissServiceWithNfc(this, alarm)
-	}
-
-	/**
-	 * Finish the activity.
-	 */
-	override fun finish()
-	{
-		// Set the alarm as no longer active
-		alarm?.isActive = false
-
-		// Check if the alarm is not null
-		if (alarm != null)
-		{
-			println("Startime = $startTime")
-
-			// Update the time that the alarm was active
-			if (startTime > 0)
-			{
-				alarm!!.addToTimeActive(System.currentTimeMillis() - startTime)
-			}
-			else
-			{
-				println("HOW DID THIS HAPPEN? Startime = $startTime")
-			}
-
-			// Update the alarm
-			alarmViewModel.update(alarm!!)
-
-			// Reschedule the alarm
-			NacScheduler.update(this, alarm!!)
-		}
-
-		// Finish
-		super.finish()
-	}
-
-	/**
-	 * Do not let the user back out of the activity.
-	 */
-	override fun onBackPressed()
-	{
-	}
-
-	/**
 	 * Create the activity.
 	 */
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
 		// Super
 		super.onCreate(savedInstanceState)
+		println("onCreate() ALARM ACTIVITY : ${intent.action}")
 
 		// Setup the window
 		requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -269,48 +136,18 @@ class NacActiveAlarmActivity
 		// Set the shared preferences
 		sharedPreferences = NacSharedPreferences(this)
 
-		// NFC tag was scanned. Check if can dismiss
-		if (NacNfc.wasScanned(intent) && checkCanDismissWithNfc())
-		{
-			// Dismiss the alarm with NFC
-			dismissWithNfc()
-
-			// Finish the service
-			// TODO: This is from the service
-			finish()
-		}
-
-		// Check if alarm should be dismissed
-		if (shouldDismissAlarm())
-		{
-			// Dismiss the alarm
-			dismiss()
-
-			// Finish the service
-			// TODO: This is from the service
-			finish()
-		}
-
 		// Setup
 		setupScreenOn()
 		setupAlarmButtons()
 		setupAlarmInfo()
 
-		// Setup the alarm
-		if (alarm?.isActive == false)
+		// Handle when the back button is pressed
+		onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true)
 		{
-			// Set the active flag
-			alarm!!.isActive = true
-
-			// Update the alarm
-			alarmViewModel.update(alarm!!)
-
-			// Reschedule the alarm
-			NacScheduler.update(this, alarm!!)
-		}
-
-		// Set the start time
-		startTime = System.currentTimeMillis()
+			override fun handleOnBackPressed()
+			{
+			}
+		})
 	}
 
 	/**
@@ -324,6 +161,7 @@ class NacActiveAlarmActivity
 		// Super
 		// TODO: Test this because this needed to be added for AppCompatActivity (which is a new change)
 		super.onNewIntent(intent)
+		println("ALARM ACTIVITY on new intent son")
 
 		// Set the intent
 		setIntent(intent)
@@ -331,12 +169,9 @@ class NacActiveAlarmActivity
 		// Check if the alarm can be dismissed with NFC
 		if (checkCanDismissWithNfc())
 		{
-			// Dismiss the alarm with NFC
-			dismissWithNfc()
-
-			// Finish the service
-			// TODO: This is from the service
-			finish()
+			println("ALARM ACTIVITY check can dismiss with NFC")
+			// Dismiss the alarm service with NFC
+			NacActiveAlarmService.dismissAlarmServiceWithNfc(this, alarm!!)
 		}
 	}
 
@@ -347,12 +182,10 @@ class NacActiveAlarmActivity
 	{
 		// Super
 		super.onPause()
+		println("ALARM ACTIVITY onPause()")
 
 		// Stop scanning for NFC
 		NacNfc.stop(this)
-
-		// Unregister the receiver
-		unregisterReceiver(activeAlarmActivityReceiver)
 	}
 
 	/**
@@ -362,11 +195,19 @@ class NacActiveAlarmActivity
 	{
 		// Super
 		super.onResume()
+		println("onResume() ALARM ACTIVITY : ${intent.action}")
+
+		// NFC tag was scanned. Check if can dismiss
+		if (NacNfc.wasScanned(intent) && checkCanDismissWithNfc())
+		{
+			println("ALARM ACTIVITY was scanned and can dismiss with NFC")
+			// Dismiss the alarm service with NFC
+			NacActiveAlarmService.dismissAlarmServiceWithNfc(this, alarm!!)
+		}
 
 		// Setup
 		setupNfc()
 		setupAlarmInstructions()
-		setupStopReceiver()
 	}
 
 	/**
@@ -374,7 +215,9 @@ class NacActiveAlarmActivity
 	 */
 	public override fun onSaveInstanceState(outState: Bundle)
 	{
+		// Super
 		super.onSaveInstanceState(outState)
+		println("ALARM ACTIVITY onSaveInstanceState()")
 
 		// Save the alarm to the save instance state
 		if (alarm != null)
@@ -439,19 +282,13 @@ class NacActiveAlarmActivity
 		// Setup the layout listener
 		layout.setOnClickListener {
 
-			// Check if easy snooze is allowed
-			if (sharedPreferences!!.easySnooze)
+			// Check if easy snooze is allowed and the alarm can be snoozed
+			if (sharedPreferences!!.easySnooze
+				&& alarm!!.canSnooze(sharedPreferences!!))
 			{
-				// Check if the alarm can be snoozed
-				if (checkCanSnooze())
-				{
-					// Snooze the alarm
-					snooze()
-
-					// Finish the service
-					// TODO: This is from the service
-					finish()
-				}
+				// Snooze the alarm service
+				println("SNOOZE/STOP active activitiy service")
+				NacActiveAlarmService.snoozeAlarmService(this, alarm!!)
 			}
 
 		}
@@ -460,14 +297,11 @@ class NacActiveAlarmActivity
 		snoozeButton.setOnClickListener {
 
 			// Check if the alarm can be snoozed
-			if (checkCanSnooze())
+			if (alarm!!.canSnooze(sharedPreferences!!))
 			{
-				// Snooze the alarm
-				snooze()
-
-				// Finish the service
-				// TODO: This is from the service
-				finish()
+				// Snooze the alarm service
+				println("SNOOZE/STOP active activitiy service")
+				NacActiveAlarmService.snoozeAlarmService(this, alarm!!)
 			}
 
 		}
@@ -475,12 +309,9 @@ class NacActiveAlarmActivity
 		// Setup the dismiss button listener
 		dismissButton.setOnClickListener {
 
-			// Dismiss the alarm
-			dismiss()
-
-			// Finish the service
-			// TODO: This is from the service
-			finish()
+			// Dismiss the alarm service
+			println("Dismiss/STOP active activitiy service")
+			NacActiveAlarmService.dismissAlarmService(this, alarm!!)
 
 		}
 	}
@@ -598,71 +429,6 @@ class NacActiveAlarmActivity
 
 		// Allow lock screen when screen is turned on
 		//window.addFlags(WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
-	}
-
-	/**
-	 * Setup the receiver for the Stop signal.
-	 */
-	@SuppressLint("UnspecifiedRegisterReceiverFlag")
-	private fun setupStopReceiver()
-	{
-		// Create the intent filter
-		val filter = IntentFilter(ACTION_STOP_ACTIVITY)
-
-		// Check if app needs to set the exported flag in order to indicate
-		// that this app does not expect broadcasts from other apps on the
-		// device
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-		{
-			// Register to listen for the STOP broadcast for the activity
-			registerReceiver(activeAlarmActivityReceiver, filter, RECEIVER_NOT_EXPORTED)
-		}
-		else
-		{
-			// Register to listen for the STOP broadcast for the activity
-			registerReceiver(activeAlarmActivityReceiver, filter)
-		}
-	}
-
-	/**
-	 * Check if the alarm should be dismissed.
-	 *
-	 * @return True if the alarm should be dismissed, and False otherwise.
-	 */
-	private fun shouldDismissAlarm(): Boolean
-	{
-		// Check to see if the alarm should be dismissed and NFC does not need to be used
-		return intent.action == ACTION_DISMISS_ACTIVITY && !NacNfc.shouldUseNfc(this, alarm)
-	}
-
-	/**
-	 * Snooze the alarm.
-	 */
-	fun snooze()
-	{
-		// Snooze the alarm and get the next time to run the alarm again
-		val cal = alarm!!.snooze(sharedPreferences!!)
-
-		// Update the time the alarm was active
-		alarm!!.addToTimeActive(System.currentTimeMillis() - startTime)
-
-		// Update the alarm
-		alarmViewModel.update(alarm!!)
-
-		// Reschedule the alarm
-		NacScheduler.update(this, alarm!!, cal)
-
-		// Set the flag that the main activity will need to be refreshed
-		sharedPreferences!!.editShouldRefreshMainActivity(true)
-
-		// Save this snooze duration to the statistics table
-		statisticViewModel.insertSnoozed(alarm!!, 60L * sharedPreferences!!.snoozeDurationValue)
-
-		// Show a toast saying the alarm was snoozed
-		quickToast(this, R.string.message_alarm_snooze)
-
-		// Snooze the alarm service
-		NacActiveAlarmService.snoozeService(this, alarm)
 	}
 
 }
