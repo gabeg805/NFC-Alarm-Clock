@@ -10,11 +10,9 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.nfcalarmclock.R
 import com.nfcalarmclock.file.NacFile
 import kotlinx.coroutines.launch
@@ -361,51 +359,47 @@ class NacFileBrowser(
 	 */
 	private fun setupViewModelObserver(lifecycleOwner: LifecycleOwner)
 	{
-		val context = container.context
-		val inflater = LayoutInflater.from(context)
+		// Get the layout inflater
+		val inflater = LayoutInflater.from(container.context)
 
 		// Observe the view model data
 		lifecycleOwner.lifecycleScope.launch {
 
-			lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+			 viewModel.currentMetadata.collect { metadata ->
 
-				viewModel.currentMetadata.collect { metadata ->
+				  // Check if metadata is null
+				  if (metadata == null)
+				  {
+					  // Clear the listing and then stop
+					  clear()
+					  return@collect
+				  }
 
-					// Check if metadata is null
-					if (metadata == null)
-					{
-						// Clear the listing and then stop
-						clear()
-						return@collect
-					}
+				  // Define an entry
+				  val entry: View = if (metadata.isDirectory)
+				  {
+					  // Add a directory
+					  addDirectory(inflater, container, metadata)
+				  }
+				  else if (metadata.isFile)
+				  {
+					  // Add a file
+					  addFile(inflater, container, metadata)
+				  }
+				  else
+				  {
+					  // Entry is not defined so skip to the next item in the listing
+					  return@collect
+				  }
 
-					// Define an entry
-					val entry: View = if (metadata.isDirectory)
-					{
-						// Add a directory
-						addDirectory(inflater, container, metadata)
-					}
-					else if (metadata.isFile)
-					{
-						// Add a file
-						addFile(inflater, container, metadata)
-					}
-					else
-					{
-						// Entry is not defined so skip to the next item in the listing
-						return@collect
-					}
+				  // Add metadata to the view and set the click listener
+				  entry.tag = metadata
+				  entry.setOnClickListener(this@NacFileBrowser)
 
-					// Add metadata to the view and set the click listener
-					entry.tag = metadata
-					entry.setOnClickListener(this@NacFileBrowser)
+				  // Add the entry to the file browser
+				  container.addView(entry)
 
-					// Add the entry to the file browser
-					container.addView(entry)
-
-				}
-
-			}
+			 }
 
 		}
 	}

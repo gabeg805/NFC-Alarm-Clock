@@ -23,12 +23,6 @@ class NacAlarmViewModel @Inject constructor(
 {
 
 	/**
-	 * An active alarm.
-	 */
-	val activeAlarm: LiveData<NacAlarm>
-		get() = alarmRepository.activeAlarm
-
-	/**
 	 * Live data list of all alarms.
 	 */
 	val allAlarms: LiveData<List<NacAlarm>> = alarmRepository.allAlarms
@@ -55,6 +49,18 @@ class NacAlarmViewModel @Inject constructor(
 	 * @return The alarm with the ID.
 	 */
 	suspend fun findAlarm(id: Long): NacAlarm? = alarmRepository.findAlarm(id)
+
+	/**
+	 * Get an active alarm.
+	 *
+	 * @return An active alarm.
+	 */
+	suspend fun getActiveAlarm(): NacAlarm? = alarmRepository.getActiveAlarm()
+
+	/**
+	 * All alarms in the database.
+	 */
+	suspend fun getAllAlarms(): List<NacAlarm> = alarmRepository.getAllAlarms()
 
 	/**
 	 * Insert an alarm into the database, and schedule the alarm to run.

@@ -58,7 +58,7 @@ class NacAboutSettingFragment : NacGenericSettingFragment()
 		val wakelockKey = getString(R.string.about_wakelock_key)
 
 		// Message if already have this permission
-		val message = getString(R.string.message_already_have_permission)
+		val messageId = R.string.message_already_have_permission
 
 		// Version
 		if (preferenceKey == versionKey)
@@ -76,7 +76,7 @@ class NacAboutSettingFragment : NacGenericSettingFragment()
 			// Show toast to the user saying that the app already has the permission
 			if (NacIgnoreBatteryOptimizationPermission.hasPermission(context))
 			{
-				quickToast(context, message)
+				quickToast(context, messageId)
 			}
 			// Request the permission
 			else
@@ -90,7 +90,7 @@ class NacAboutSettingFragment : NacGenericSettingFragment()
 		// NFC
 		else if (preferenceKey == nfcKey)
 		{
-			quickToast(context, message)
+			quickToast(context, messageId)
 		}
 		// Storage
 		else if (preferenceKey == storageKey)
@@ -99,7 +99,7 @@ class NacAboutSettingFragment : NacGenericSettingFragment()
 			// Show toast to the user saying that the app already has the permission
 			if (NacReadMediaAudioPermission.hasPermission(context))
 			{
-				quickToast(context, message)
+				quickToast(context, messageId)
 			}
 			// Request the permission
 			else
@@ -113,17 +113,17 @@ class NacAboutSettingFragment : NacGenericSettingFragment()
 		// Vibrate
 		else if (preferenceKey == vibrateKey)
 		{
-			quickToast(context, message)
+			quickToast(context, messageId)
 		}
 		// Foreground service
 		else if (preferenceKey == foregroundServiceKey)
 		{
-			quickToast(context, message)
+			quickToast(context, messageId)
 		}
 		// Full screen
 		else if (preferenceKey == fullScreenKey)
 		{
-			quickToast(context, message)
+			quickToast(context, messageId)
 		}
 		// Schedule exact alarms
 		else if (preferenceKey == scheduleAlarmsKey)
@@ -132,7 +132,7 @@ class NacAboutSettingFragment : NacGenericSettingFragment()
 			// Show toast to the user saying that the app already has the permission
 			if (NacScheduleExactAlarmPermission.hasPermission(context))
 			{
-				quickToast(context, message)
+				quickToast(context, messageId)
 			}
 			// Request the permission
 			else
@@ -144,7 +144,7 @@ class NacAboutSettingFragment : NacGenericSettingFragment()
 		// Set alarm
 		else if (preferenceKey == setAlarmKey)
 		{
-			quickToast(context, message)
+			quickToast(context, messageId)
 		}
 		// Show notifications
 		else if (preferenceKey == showNotificationsKey)
@@ -153,7 +153,7 @@ class NacAboutSettingFragment : NacGenericSettingFragment()
 			// Show toast to the user saying that the app already has the permission
 			if (NacPostNotificationsPermission.hasPermission(context))
 			{
-				quickToast(context, message)
+				quickToast(context, messageId)
 			}
 			// Request the permission
 			else
@@ -167,12 +167,12 @@ class NacAboutSettingFragment : NacGenericSettingFragment()
 		// Startup
 		else if (preferenceKey == startupKey)
 		{
-			quickToast(context, message)
+			quickToast(context, messageId)
 		}
 		// Wakelock
 		else if (preferenceKey == wakelockKey)
 		{
-			quickToast(context, message)
+			quickToast(context, messageId)
 		}
 
 		// Default return

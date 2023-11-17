@@ -7,7 +7,6 @@ import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.util.NacUtility.printf
 
 /**
  * Audio attributes.
@@ -113,7 +112,7 @@ class NacAudioAttributes constructor(
 			}
 			catch (e: SecurityException)
 			{
-				printf("NacAudioAttributes : SecurityException : setStreamVolume")
+				println("NacAudioAttributes : SecurityException : setStreamVolume")
 			}
 		}
 

@@ -4,6 +4,8 @@ captures
 .idea
 
 app/my-new-release-key.jks
+app/debug
+app/release
 keystore.properties
 local.properties
 *.iml

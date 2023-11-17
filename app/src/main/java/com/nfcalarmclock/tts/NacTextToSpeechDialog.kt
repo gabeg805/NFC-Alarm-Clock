@@ -19,6 +19,16 @@ class NacTextToSpeechDialog
 	: NacDialogFragment()
 {
 
+	companion object
+	{
+
+		/**
+		 * Tag for the class.
+		 */
+		const val TAG = "NacAlarmTextToSpeechDialog"
+
+	}
+
 	/**
 	 * Listener for when text-to-speech options are selected.
 	 */
@@ -201,16 +211,6 @@ class NacTextToSpeechDialog
 
 		// Set the text
 		textView.setText(textId)
-	}
-
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacAlarmTextToSpeechDialog"
-
 	}
 
 }

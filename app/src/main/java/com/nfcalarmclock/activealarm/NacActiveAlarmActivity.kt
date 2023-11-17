@@ -15,17 +15,15 @@ import androidx.appcompat.app.AppCompatActivity
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.nfc.NacNfc
-import com.nfcalarmclock.nfc.NacNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacBundle
 import com.nfcalarmclock.util.NacIntent
 import com.nfcalarmclock.util.NacUtility.quickToast
+import com.nfcalarmclock.util.enableActivityAlias
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Activity to dismiss/snooze the alarm.
- *
- * TODO: Change to AppCompatActivity? This way AndroidEntryPoint can be used
  */
 @AndroidEntryPoint
 class NacActiveAlarmActivity
@@ -110,11 +108,26 @@ class NacActiveAlarmActivity
 	 */
 	private fun checkCanDismissWithNfc() : Boolean
 	{
-		// Build the NFC tag
-		val tag = NacNfcTag(alarm, intent)
+		// Get the NFC ID of the alarm and the intent
+		val alarmNfcId = alarm!!.nfcTagId
+		val intentNfcId = NacNfc.parseId(intent)
 
-		// Compare the NFC tag ID between the alarm and the intent
-		return tag.check(this)
+		// Compare the two NFC IDs. As long as nothing is null,
+		// if the alarm NFC ID is empty, this is good, or
+		// if the two NFC IDs are equal, this is also good
+		return if ((alarm != null)
+			&& (intentNfcId != null)
+			&& (alarmNfcId.isEmpty() || (alarmNfcId == intentNfcId)))
+		{
+			true
+		}
+		// Something went wrong when comparing the NFC IDs
+		else
+		{
+			// Show toast
+			quickToast(this, R.string.error_message_nfc_mismatch)
+			false
+		}
 	}
 
 	/**
@@ -124,7 +137,6 @@ class NacActiveAlarmActivity
 	{
 		// Super
 		super.onCreate(savedInstanceState)
-		println("onCreate() ALARM ACTIVITY : ${intent.action}")
 
 		// Setup the window
 		requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -159,9 +171,7 @@ class NacActiveAlarmActivity
 	override fun onNewIntent(intent: Intent)
 	{
 		// Super
-		// TODO: Test this because this needed to be added for AppCompatActivity (which is a new change)
 		super.onNewIntent(intent)
-		println("ALARM ACTIVITY on new intent son")
 
 		// Set the intent
 		setIntent(intent)
@@ -169,7 +179,6 @@ class NacActiveAlarmActivity
 		// Check if the alarm can be dismissed with NFC
 		if (checkCanDismissWithNfc())
 		{
-			println("ALARM ACTIVITY check can dismiss with NFC")
 			// Dismiss the alarm service with NFC
 			NacActiveAlarmService.dismissAlarmServiceWithNfc(this, alarm!!)
 		}
@@ -182,10 +191,12 @@ class NacActiveAlarmActivity
 	{
 		// Super
 		super.onPause()
-		println("ALARM ACTIVITY onPause()")
 
 		// Stop scanning for NFC
 		NacNfc.stop(this)
+
+		// Reenable the activity alias
+		enableActivityAlias(this)
 	}
 
 	/**
@@ -195,12 +206,10 @@ class NacActiveAlarmActivity
 	{
 		// Super
 		super.onResume()
-		println("onResume() ALARM ACTIVITY : ${intent.action}")
 
 		// NFC tag was scanned. Check if can dismiss
 		if (NacNfc.wasScanned(intent) && checkCanDismissWithNfc())
 		{
-			println("ALARM ACTIVITY was scanned and can dismiss with NFC")
 			// Dismiss the alarm service with NFC
 			NacActiveAlarmService.dismissAlarmServiceWithNfc(this, alarm!!)
 		}
@@ -217,7 +226,6 @@ class NacActiveAlarmActivity
 	{
 		// Super
 		super.onSaveInstanceState(outState)
-		println("ALARM ACTIVITY onSaveInstanceState()")
 
 		// Save the alarm to the save instance state
 		if (alarm != null)
@@ -287,7 +295,6 @@ class NacActiveAlarmActivity
 				&& alarm!!.canSnooze(sharedPreferences!!))
 			{
 				// Snooze the alarm service
-				println("SNOOZE/STOP active activitiy service")
 				NacActiveAlarmService.snoozeAlarmService(this, alarm!!)
 			}
 
@@ -300,7 +307,6 @@ class NacActiveAlarmActivity
 			if (alarm!!.canSnooze(sharedPreferences!!))
 			{
 				// Snooze the alarm service
-				println("SNOOZE/STOP active activitiy service")
 				NacActiveAlarmService.snoozeAlarmService(this, alarm!!)
 			}
 
@@ -310,7 +316,6 @@ class NacActiveAlarmActivity
 		dismissButton.setOnClickListener {
 
 			// Dismiss the alarm service
-			println("Dismiss/STOP active activitiy service")
 			NacActiveAlarmService.dismissAlarmService(this, alarm!!)
 
 		}
@@ -384,10 +389,8 @@ class NacActiveAlarmActivity
 		// Unable to use NFC on this device
 		else
 		{
-			val message = getString(R.string.error_message_nfc_unsupported)
-
 			// Show a toast
-			quickToast(this, message)
+			quickToast(this, R.string.error_message_nfc_unsupported)
 		}
 	}
 

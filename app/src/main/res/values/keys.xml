@@ -17,6 +17,7 @@
 	<string name="card_height_collapsed_dismiss">card_height_collapsed_dismiss</string>
 	<string name="card_height_expanded">card_height_expanded</string>
 	<string name="sys_previous_volume">sys_previous_volume</string>
+	<string name="key_delay_showing_whats_new_dialog_counter">key_delay_showing_whats_new_dialog_counter</string>
 
 	<string name="general_setting_key">pref_screen_general</string>
 	<string name="auto_dismiss_key">pref_auto_dismiss</string>
@@ -24,7 +25,6 @@
 	<string name="snooze_duration_key">pref_snooze_duration</string>
 	<string name="easy_snooze_key">pref_easy_snooze</string>
 	<string name="alarm_name_key">pref_name</string>
-	<!-- TODO: Rename this key -->
 	<string name="alarm_days_key">pref_deys</string>
 	<string name="alarm_repeat_key">pref_repeat</string>
 	<string name="alarm_use_nfc_key">pref_use_nfc</string>

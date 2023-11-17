@@ -58,29 +58,11 @@ abstract class NacPermissionRequestDialog
 	var onPermissionRequestListener: OnPermissionRequestListener? = null
 
 	/**
-	 * Call the *Done() method for the OnPermissionRequestListener object, if it
-	 * has been set.
-	 */
-	private fun callOnPermissionRequestAcceptedListener()
-	{
-		onPermissionRequestListener?.onPermissionRequestAccepted(permission)
-	}
-
-	/**
-	 * Call the *Cancel() method for the OnPermissionRequestListener object, if it
-	 * has been set.
-	 */
-	private fun callOnPermissionRequestCanceledListener()
-	{
-		onPermissionRequestListener?.onPermissionRequestCanceled(permission)
-	}
-
-	/**
 	 * The actions to execute when the permission request is accepted.
 	 */
 	protected open fun doPermissionRequestAccepted()
 	{
-		callOnPermissionRequestAcceptedListener()
+		onPermissionRequestListener?.onPermissionRequestAccepted(permission)
 	}
 
 	/**
@@ -88,7 +70,7 @@ abstract class NacPermissionRequestDialog
 	 */
 	protected open fun doPermissionRequestCanceled()
 	{
-		callOnPermissionRequestCanceledListener()
+		onPermissionRequestListener?.onPermissionRequestCanceled(permission)
 	}
 
 	/**
@@ -107,16 +89,12 @@ abstract class NacPermissionRequestDialog
 		// Setup the shared preferences
 		setupSharedPreferences()
 
-		// Get the names of the action buttons
-		val ok = getString(R.string.action_ok)
-		val cancel = getString(R.string.action_cancel)
-
 		// Build the dialog
 		return AlertDialog.Builder(requireContext())
-			.setPositiveButton(ok) { _, _ ->
+			.setPositiveButton(R.string.action_ok) { _, _ ->
 				doPermissionRequestAccepted()
 			}
-			.setNegativeButton(cancel) { _, _ ->
+			.setNegativeButton(R.string.action_cancel) { _, _ ->
 				doPermissionRequestCanceled()
 			}
 			.setTitle(titleId)

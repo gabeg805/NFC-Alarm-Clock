@@ -1,10 +1,8 @@
 package com.nfcalarmclock.activealarm
 
 import android.app.Service
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
@@ -21,6 +19,8 @@ import com.nfcalarmclock.statistics.NacAlarmStatisticRepository
 import com.nfcalarmclock.util.NacIntent
 import com.nfcalarmclock.util.NacIntent.getAlarm
 import com.nfcalarmclock.util.NacUtility
+import com.nfcalarmclock.util.disableActivityAlias
+import com.nfcalarmclock.util.enableActivityAlias
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -85,21 +85,12 @@ class NacActiveAlarmService
 		}
 
 		/**
-		 * Dismiss the alarm activity for the given alarm due with NFC.
-		 *
-		 * TODO: Test this one!
+		 * Dismiss the alarm activity for the given alarm with NFC.
 		 */
-		//fun dismissAlarmServiceWithNfc(context: Context, tag: NacNfcTag)
 		fun dismissAlarmServiceWithNfc(context: Context, alarm: NacAlarm?)
 		{
 			// Create the intent with the alarm activity
 			val intent = getDismissIntentWithNfc(context, alarm)
-
-			//// Setup the intent's action and NFC tag
-			////intent.setAction(NacActiveAlarmActivity.ACTION_DISMISS_ACTIVITY);
-			//intent.action = tag.nfcAction
-			//NacNfc.addTagToIntent(intent, tag.nfcTag)
-			println("Creating dismiss alarm service with NFC intent : ${intent.action}")
 
 			// Start the service. This will not be a foreground service so do
 			// not need to call startForegroundService()
@@ -273,12 +264,10 @@ class NacActiveAlarmService
 	@UnstableApi
 	private fun autoDismiss()
 	{
-		println("Alarm service auto dismiss")
 		// Dismiss the alarm
 		dismiss(wasMissed = true)
 
 		// Stop the service
-		println("Finish the service")
 		stopActiveAlarmService()
 	}
 
@@ -334,20 +323,6 @@ class NacActiveAlarmService
 	}
 
 	/**
-	 * Disable the alias for the main activity so that tapping an NFC tag
-	 * DOES NOT open the main activity.
-	 */
-	private fun disableActivityAlias()
-	{
-		val aliasName = "$packageName.main.NacMainAliasActivity"
-		val componentName = ComponentName(this, aliasName)
-
-		packageManager.setComponentEnabledSetting(componentName,
-			PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-			PackageManager.DONT_KILL_APP)
-	}
-
-	/**
 	 * Dismiss the alarm.
 	 *
 	 * This will finish the service.
@@ -356,7 +331,6 @@ class NacActiveAlarmService
 	fun dismiss(usedNfc: Boolean = false, wasMissed: Boolean = false)
 	{
 		// TODO: Remove null alarm check here. Will this cause crashes for people?
-		println("Dismiss active service")
 
 		// Update the alarm
 		scope.launch {
@@ -382,7 +356,6 @@ class NacActiveAlarmService
 			}
 
 			// Reschedule the alarm
-			println("Scheduler active service")
 			NacScheduler.update(this@NacActiveAlarmService, alarm!!)
 
 			// Set flag that the main activity needs to be refreshed
@@ -392,7 +365,6 @@ class NacActiveAlarmService
 			withContext(Dispatchers.Main) {
 
 				// Show toast that the alarm was dismissed
-				println("Toast dismiss active service")
 				NacUtility.quickToast(this@NacActiveAlarmService, R.string.message_alarm_dismiss)
 
 				// Stop the service
@@ -401,20 +373,6 @@ class NacActiveAlarmService
 			}
 
 		}
-	}
-
-	/**
-	 * Enable alias for the main activity so that tapping an NFC tag will open
-	 * the main activity.
-	 */
-	private fun enableActivityAlias()
-	{
-		val aliasName = "$packageName.main.NacMainAliasActivity"
-		val componentName = ComponentName(this, aliasName)
-
-		packageManager.setComponentEnabledSetting(componentName,
-			PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-			PackageManager.DONT_KILL_APP)
 	}
 
 	/**
@@ -461,7 +419,7 @@ class NacActiveAlarmService
 
 		// Enable the activity alias so that tapping an NFC tag will open the main
 		// activity
-		enableActivityAlias()
+		enableActivityAlias(this)
 	}
 
 	/**
@@ -481,7 +439,7 @@ class NacActiveAlarmService
 		NacActiveAlarmActivity.stopAlarmActivity(this)
 
 		// Disable the activity alias so that tapping an NFC tag will not do anything
-		disableActivityAlias()
+		disableActivityAlias(this)
 
 		// Cleanup everything
 		cleanup()
@@ -501,14 +459,12 @@ class NacActiveAlarmService
 		showActiveAlarmNotification()
 
 		// Check the intent action
-		println("onStartCommand() : ${intent?.action}")
 		when (intent?.action)
 		{
 			// Start the service
 			ACTION_START_SERVICE ->
 			{
 				startActiveAlarmService()
-				println("START STICKY")
 				return START_STICKY
 			}
 
@@ -535,7 +491,6 @@ class NacActiveAlarmService
 			else -> stopActiveAlarmService()
 		}
 
-		println("Start not sticky")
 		return START_NOT_STICKY
 	}
 
@@ -551,7 +506,6 @@ class NacActiveAlarmService
 		// Prepare a new service
 		if (isNewServiceStarted(intent))
 		{
-			println("NEW SERVICE STARTED")
 			scope.launch {
 
 				// Check if the service has started
@@ -571,10 +525,9 @@ class NacActiveAlarmService
 		}
 
 		// Define the new alarm for this service
-		// TODO: When does this happen if it is not a new service started?
+		// TODO: When does this happen if it is not a new service started? When the alarm has been updated?
 		if (intentAlarm != null)
 		{
-			println("NEW ALARM SET FOR THE SERVICE. Equals previous alarm? " + intentAlarm.equals(alarm))
 			alarm = intentAlarm
 		}
 	}
@@ -605,8 +558,6 @@ class NacActiveAlarmService
 	@UnstableApi
 	fun snooze()
 	{
-		println("ALARM ACTIVITY snooze this son")
-
 		scope.launch {
 
 			// Snooze the alarm and get the next time to run the alarm again
@@ -671,7 +622,6 @@ class NacActiveAlarmService
 
 		scope.launch {
 
-			 println("ALARM service alarm is not active, set it to active")
 			 // Set the active flag
 			 alarm!!.isActive = true
 

@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
+import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.shared.NacSharedPreferences
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -25,6 +26,11 @@ import java.util.Locale
 class NacStatisticsSettingFragment
 	: Fragment(R.layout.frg_statistics)
 {
+
+	/**
+	 * Alarm view model.
+	 */
+	private val alarmViewModel: NacAlarmViewModel by viewModels()
 
 	/**
 	 * Statistic view model.
@@ -71,9 +77,30 @@ class NacStatisticsSettingFragment
 
 		// Change the text of when statistics started
 		lifecycleScope.launch {
+
+			// Get all the current alarms
+			val allAlarms = alarmViewModel.getAllAlarms()
+
+			// Iterate over each alarm
+			for (alarm in allAlarms)
+			{
+				// Add a created statistic. Use the repository so that
+				// everything is sequential
+				statisticViewModel.statisticRepository.insertCreated()
+			}
+
+			// Get the root view
 			val root = requireView()
 
+			// Setup the date that statistics started on
+			setupDismissedAlarms(root)
+			setupSnoozedAlarms(root)
+			setupMissedAlarms(root)
+			setupCreatedAlarms(root)
+			setupDeletedAlarms(root)
+			setupCurrentAlarms(root)
 			setupStartedOnDate(root)
+
 		}
 	}
 
@@ -169,8 +196,22 @@ class NacStatisticsSettingFragment
 		val resetButton = root.findViewById<MaterialButton>(R.id.reset_button)
 
 		// Set the listener
-		// TODO: Show an "Are you sure?" dialog
-		resetButton.setOnClickListener { resetStatistics() }
+		resetButton.setOnClickListener {
+
+			// Create the dialog
+			val dialog = AreYouSureResetStatisticsDialog()
+
+			// Setup the dialog
+			dialog.onResetStatisticsListener = AreYouSureResetStatisticsDialog.OnResetStatisticsListener {
+
+				// Reset statistics
+				resetStatistics()
+
+			}
+
+			// Show the dialog
+			dialog.show(childFragmentManager, AreYouSureResetStatisticsDialog.TAG)
+		}
 	}
 
 	/**

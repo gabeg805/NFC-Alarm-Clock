@@ -11,7 +11,6 @@ import com.nfcalarmclock.media.NacMedia
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacCalendar.Day
-import com.nfcalarmclock.util.NacUtility
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -702,16 +701,6 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	}
 
 	/**
-	 * Add to the snooze count.
-	 *
-	 * @param  num  Number to add to the snooze count.
-	 */
-	private fun addToSnoozeCount(num: Int)
-	{
-		snoozeCount += num
-	}
-
-	/**
 	 * Add to the time, in milliseconds, that the alarm is active.
 	 *
 	 * @param  time  Time, in milliseconds, to add to the active time.
@@ -1046,37 +1035,45 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	}
 
 	/**
+	 * Increment the snooze count by 1.
+	 */
+	private fun incrementSnoozeCount()
+	{
+		snoozeCount += 1
+	}
+
+	/**
 	 * Print all values in the alarm object.
 	 */
 	@Suppress("unused")
 	fun print()
 	{
-		NacUtility.printf("Alarm Information")
-		NacUtility.printf("Id                  : %d", id)
-		NacUtility.printf("Is Active           : %b", isActive)
-		NacUtility.printf("Time Active         : %d", timeActive)
-		NacUtility.printf("Snooze Count        : %d", snoozeCount)
-		NacUtility.printf("Is Enabled          : %b", isEnabled)
-		NacUtility.printf("Hour                : %d", hour)
-		NacUtility.printf("Minute              : %d", minute)
-		NacUtility.printf("Days                : %s", days)
-		NacUtility.printf("Repeat              : %b", shouldRepeat)
-		NacUtility.printf("Vibrate             : %b", shouldVibrate)
-		NacUtility.printf("Use NFC             : %b", shouldUseNfc)
-		NacUtility.printf("Nfc Tag Id          : %s", nfcTagId)
-		NacUtility.printf("Media Type          : %s", mediaType)
-		NacUtility.printf("Media Path          : %s", mediaPath)
-		NacUtility.printf("Media Name          : %s", mediaTitle)
-		NacUtility.printf("Volume              : %d", volume)
-		NacUtility.printf("Audio Source        : %s", audioSource)
-		NacUtility.printf("Name                : %s", name)
-		NacUtility.printf("Use Tts             : %b", shouldUseTts)
-		NacUtility.printf("Tts Freq            : %d", ttsFrequency)
-		NacUtility.printf("Grad Inc Vol        : %b", shouldGraduallyIncreaseVolume)
-		NacUtility.printf("Restrict Vol        : %b", shouldRestrictVolume)
-		NacUtility.printf("Use Dismiss Early   : %b", shouldUseDismissEarly)
-		NacUtility.printf("Dismiss Early       : %d", dismissEarlyTime)
-		NacUtility.printf("Time of Early Alarm : %d", timeOfDismissEarlyAlarm)
+		println("Alarm Information")
+		println("Id                  : $id")
+		println("Is Active           : $isActive")
+		println("Time Active         : $timeActive")
+		println("Snooze Count        : $snoozeCount")
+		println("Is Enabled          : $isEnabled")
+		println("Hour                : $hour")
+		println("Minute              : $minute")
+		println("Days                : $days")
+		println("Repeat              : $shouldRepeat")
+		println("Vibrate             : $shouldVibrate")
+		println("Use NFC             : $shouldUseNfc")
+		println("Nfc Tag Id          : $nfcTagId")
+		println("Media Type          : $mediaType")
+		println("Media Path          : $mediaPath")
+		println("Media Name          : $mediaTitle")
+		println("Volume              : $volume")
+		println("Audio Source        : $audioSource")
+		println("Name                : $name")
+		println("Use Tts             : $shouldUseTts")
+		println("Tts Freq            : $ttsFrequency")
+		println("Grad Inc Vol        : $shouldGraduallyIncreaseVolume")
+		println("Restrict Vol        : $shouldRestrictVolume")
+		println("Use Dismiss Early   : $shouldUseDismissEarly")
+		println("Dismiss Early       : $dismissEarlyTime")
+		println("Time of Early Alarm : $timeOfDismissEarlyAlarm")
 	}
 
 	/**
@@ -1122,7 +1119,7 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 
 		// Increment the snooze count. The "isSnoozed" variable checks the
 		// snooze count so this basically makes "isSnoozed" true
-		addToSnoozeCount(1)
+		incrementSnoozeCount()
 
 		return cal
 	}

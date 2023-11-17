@@ -25,8 +25,8 @@ android {
 		applicationId = "com.nfcalarmclock"
 		minSdk = 21
 		targetSdk = 33
-		versionCode = 335
-		versionName = "11.0.0"
+		versionCode = 337
+		versionName = "12.0.0-beta002"
 
 		ksp {
 			arg("room.schemaLocation", "${projectDir}/schemas")

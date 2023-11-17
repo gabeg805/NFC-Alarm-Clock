@@ -2,9 +2,7 @@
 TODO
 ----
 
-* For some reason, showing the file browser when a media file has already been chosen only shows one file. Not sure why but need to look into this
-
-* Get rid of stuff like NacSnackbar and NacLastCardSwiped or whatever
+* Reorganize some of the packages like media. See if I can make a media player package?
 
 * Early notification in alarm options
 	- have an incremental countdown to alarm
@@ -13,24 +11,10 @@ TODO
 
 * Add creole and vietnamese
 
-* Add prompt to reset statistics
-
-* Crash java.util.ConcurrentModificationException in
-  com.nfcalarmclock.filebrowser.NacFileBrowserViewModel.addToFileBrowser line
-  109
-
-* Reorganize some of the packages like media. See if I can make a media player package?
-
-* See if I can save views to the tree. That way I can save views and easily reshow them to users
-
 * Have option to scroll alarm name instead of marquee it
-
-* Change AppCompatActivity to one that can use Material theme
-
-* Remove the following? isInUse, checkCanBeModified, checkCanBeDeleted
 
 ------
 Issues
 ------
 
-* When starting off at a music file. Trying to go up a directory does not work.
+TBD

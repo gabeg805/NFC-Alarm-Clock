@@ -15,7 +15,6 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.media.NacAudioAttributes
 import com.nfcalarmclock.media.NacAudioManager
 import com.nfcalarmclock.media.NacMedia
-import com.nfcalarmclock.util.NacUtility.printf
 import com.nfcalarmclock.util.NacUtility.quickToast
 
 /**
@@ -101,7 +100,7 @@ class NacMediaPlayer(
 	 */
 	override fun onAudioFocusChange(focusChange: Int)
 	{
-		printf("NacMediaPlayer : onAudioFocusChange! %b %d", wasPlaying, focusChange)
+		println("NacMediaPlayer : onAudioFocusChange! $wasPlaying | $focusChange")
 
 		// Revert ducking
 		audioAttributes.revertDucking()
@@ -109,7 +108,7 @@ class NacMediaPlayer(
 		// Gain audio focus
 		if (focusChange == AudioManager.AUDIOFOCUS_GAIN)
 		{
-			printf("NacMediaPlayer : GAIN!")
+			println("NacMediaPlayer : GAIN!")
 			wasPlaying = true
 
 			// Play
@@ -118,7 +117,7 @@ class NacMediaPlayer(
 		// Lose audio focus
 		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS)
 		{
-			printf("NacMediaPlayer : LOSS!")
+			println("NacMediaPlayer : LOSS!")
 
 			wasPlaying = false
 			//attrs.revertVolume();
@@ -139,7 +138,7 @@ class NacMediaPlayer(
 		{
 			wasPlaying = exoPlayer.isPlaying
 
-			printf("NacMediaPlayer : LOSS TRANSIENT! %b", wasPlaying)
+			println("NacMediaPlayer : LOSS TRANSIENT! $wasPlaying")
 
 			//attrs.revertVolume();
 
@@ -151,7 +150,7 @@ class NacMediaPlayer(
 		{
 			wasPlaying = exoPlayer.isPlaying
 
-			printf("NacMediaPlayer : LOSS TRANSIENT DUCK! %b", wasPlaying)
+			println("NacMediaPlayer : LOSS TRANSIENT DUCK! $wasPlaying")
 
 			// Duck the volume
 			audioAttributes.duckVolume()

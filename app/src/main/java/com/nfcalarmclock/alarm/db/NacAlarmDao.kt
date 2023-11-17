@@ -15,14 +15,6 @@ interface NacAlarmDao
 {
 
 	/**
-	 * Get an active alarm.
-	 *
-	 * @return An active alarm.
-	 */
-	@get:Query("SELECT * FROM alarm WHERE is_active=1 LIMIT 1")
-	val activeAlarm: LiveData<NacAlarm>
-
-	/**
 	 * Get all alarms.
 	 *
 	 * @return All alarms.
@@ -57,6 +49,14 @@ interface NacAlarmDao
 	 */
 	@Query("SELECT * FROM alarm WHERE id=:id")
 	suspend fun findAlarm(id: Long): NacAlarm?
+
+	/**
+	 * Get an active alarm.
+	 *
+	 * @return An active alarm.
+	 */
+	@Query("SELECT * FROM alarm WHERE is_active=1 LIMIT 1")
+	suspend fun getActiveAlarm(): NacAlarm?
 
 	/**
 	 * Get a list of all active alarms.

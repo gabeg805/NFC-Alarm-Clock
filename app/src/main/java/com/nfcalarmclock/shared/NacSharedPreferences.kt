@@ -9,14 +9,7 @@ import com.nfcalarmclock.R
 /**
  * Container for the values of each preference.
  */
-class NacSharedPreferences(
-
-	/**
-	 * The context application.
-	 */
-	context: Context
-
-)
+class NacSharedPreferences(context: Context)
 {
 
 	/**
@@ -194,6 +187,18 @@ class NacSharedPreferences(
 		}
 
 	/**
+	 * Counter to delay showing the What's New dialog.
+	 */
+	val delayShowingWhatsNewDialogCounter: Int
+		get()
+		{
+			val key = resources.getString(R.string.key_delay_showing_whats_new_dialog_counter)
+			val defaultValue = 0
+
+			return instance.getInt(key, defaultValue)
+		}
+
+	/**
 	 * The time before an alarm goes off to start showing the dismiss early button by.
 	 */
 	val dismissEarlyTime: Int
@@ -235,9 +240,7 @@ class NacSharedPreferences(
 	val isRateMyAppLimit: Boolean
 		get()
 		{
-			val limit = resources.getInteger(R.integer.default_rate_my_app_limit)
-
-			return rateMyAppCounter >= limit
+			return rateMyAppCounter >= 30
 		}
 
 	/**
@@ -382,7 +385,7 @@ class NacSharedPreferences(
 		get()
 		{
 			val key = resources.getString(R.string.app_rating_counter)
-			val defaultValue = resources.getInteger(R.integer.default_rate_my_app_counter)
+			val defaultValue = 0
 
 			return instance.getInt(key, defaultValue)
 		}
@@ -733,6 +736,16 @@ class NacSharedPreferences(
 	}
 
 	/**
+	 * Edit the counter to delay showing the What's New dialog.
+	 */
+	fun editDelayShowingWhatsNewDialogCounter(count: Int)
+	{
+		val key = resources.getString(R.string.key_delay_showing_whats_new_dialog_counter)
+
+		saveInt(key, count)
+	}
+
+	/**
 	 * Edit the default dismiss early time when an alarm is created.
 	 */
 	fun editDismissEarlyTime(dismissEarly: Int)
@@ -879,24 +892,6 @@ class NacSharedPreferences(
 		val key = resources.getString(R.string.key_permission_schedule_exact_alarm_requested)
 
 		saveBoolean(key, requested)
-	}
-
-	/**
-	 * Increment the rate my app counter.
-	 */
-	fun incrementRateMyApp()
-	{
-		editRateMyAppCounter(rateMyAppCounter + 1)
-	}
-
-	/**
-	 * Set the rate my app counter to the rated value.
-	 */
-	fun ratedRateMyApp()
-	{
-		val rated = resources.getInteger(R.integer.default_rate_my_app_rated)
-
-		editRateMyAppCounter(rated)
 	}
 
 	/**

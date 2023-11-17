@@ -15,7 +15,6 @@ import com.nfcalarmclock.file.NacFile.basename
 import com.nfcalarmclock.file.NacFile.strip
 import com.nfcalarmclock.file.NacFile.toRelativeDirname
 import com.nfcalarmclock.file.NacFileTree.Companion.getFiles
-import com.nfcalarmclock.util.NacUtility.printf
 import java.util.Locale
 import java.util.TreeMap
 import java.util.concurrent.TimeUnit
@@ -214,7 +213,7 @@ object NacMedia
 		// Something happened, unable to get the string
 		catch (e: IllegalArgumentException)
 		{
-			printf("NacMedia : getColumnFromCursor : IllegalArgumentException!")
+			println("NacMedia : getColumnFromCursor : IllegalArgumentException!")
 			e.printStackTrace()
 		}
 
@@ -681,7 +680,7 @@ object NacMedia
 		}
 		catch (e: NumberFormatException)
 		{
-			printf("NacMedia : getDuration : NumberFormatException!")
+			println("NacMedia : getDuration : NumberFormatException!")
 			""
 		}
 	}

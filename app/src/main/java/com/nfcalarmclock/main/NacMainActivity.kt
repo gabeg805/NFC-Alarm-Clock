@@ -2,11 +2,9 @@ package com.nfcalarmclock.main
 
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
@@ -15,7 +13,6 @@ import android.view.ContextMenu.ContextMenuInfo
 import android.view.HapticFeedbackConstants
 import android.view.Menu
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnCreateContextMenuListener
 import androidx.activity.viewModels
@@ -26,15 +23,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
 import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
 import com.nfcalarmclock.activealarm.NacActiveAlarmActivity
-import com.nfcalarmclock.activealarm.NacActiveAlarmService
-import com.nfcalarmclock.activealarm.NacActiveAlarmService.Companion.dismissAlarmServiceWithNfc
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.audiooptions.NacAlarmAudioOptionsDialog
@@ -60,10 +55,6 @@ import com.nfcalarmclock.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialo
 import com.nfcalarmclock.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog.OnGraduallyIncreaseVolumeListener
 import com.nfcalarmclock.mediapicker.NacMediaActivity
 import com.nfcalarmclock.nfc.NacNfc
-import com.nfcalarmclock.nfc.NacNfc.getTag
-import com.nfcalarmclock.nfc.NacNfc.parseId
-import com.nfcalarmclock.nfc.NacNfc.wasScanned
-import com.nfcalarmclock.nfc.NacNfcTag
 import com.nfcalarmclock.nfc.NacScanNfcTagDialog
 import com.nfcalarmclock.nfc.NacScanNfcTagDialog.OnScanNfcTagListener
 import com.nfcalarmclock.permission.NacPermissionRequestManager
@@ -81,15 +72,18 @@ import com.nfcalarmclock.upcomingalarm.NacUpcomingAlarmNotification
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacIntent
 import com.nfcalarmclock.util.NacUtility.quickToast
-import com.nfcalarmclock.view.snackbar.NacSnackbar
+import com.nfcalarmclock.util.disableActivityAlias
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog.OnReadWhatsNewListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Locale
 
 /**
  * The application's main activity.
+ *
+ * TODO: Doubled up menu items. How did that happen? Fix this.
  */
 @AndroidEntryPoint
 class NacMainActivity
@@ -100,7 +94,6 @@ class NacMainActivity
 	// Interface
 	OnCreateContextMenuListener,
 	Toolbar.OnMenuItemClickListener,
-	OnItemTouchListener,
 	OnSwipedListener,
 	OnViewHolderBoundListener,
 	OnViewHolderCreatedListener,
@@ -171,11 +164,6 @@ class NacMainActivity
 	private var alarmCardAdapter: NacCardAdapter? = null
 
 	/**
-	 * The snackbar.
-	 */
-	private var snackbar: NacSnackbar? = null
-
-	/**
 	 * Alarm view model.
 	 */
 	private val alarmViewModel: NacAlarmViewModel by viewModels()
@@ -204,67 +192,6 @@ class NacMainActivity
 	private var shutdownBroadcastReceiver: NacShutdownBroadcastReceiver = NacShutdownBroadcastReceiver()
 
 	/**
-	 * The IDs of alarms that were recently added.
-	 */
-	private var recentlyAddedAlarmIds: MutableList<Long> = ArrayList()
-
-	/**
-	 * The IDs of alarms that were recently updated.
-	 */
-	private var recentlyUpdatedAlarmIds: MutableList<Long> = ArrayList()
-
-	/**
-	 * Permission request manager, handles requesting permissions from the user.
-	 */
-	private var permissionRequestManager: NacPermissionRequestManager? = null
-
-	/**
-	 * Indicator of whether the activity is shown or not.
-	 */
-	private var isActivityShown = false
-
-	/**
-	 * Scan an NFC tag dialog.
-	 */
-	private var scanNfcTagDialog: NacScanNfcTagDialog? = null
-
-	/**
-	 * Alarm that is being used by an open audio options dialog.
-	 */
-	private var audioOptionsAlarm: NacAlarm? = null
-
-	/**
-	 * The NFC tag that was scanned for an active alarm.
-	 */
-	private var nfcTag: NacNfcTag? = null
-
-	/**
-	 * Listener for when the floating action button is clicked.
-	 */
-	private val mFloatingActionButtonListener = View.OnClickListener { view: View ->
-
-		// Haptic feedback so that the user knows the action was received
-		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-
-		// Max number of alarms reached
-		if (hasCreatedMaxAlarms)
-		{
-			val message = getString(R.string.error_message_max_alarms)
-
-			// Show a toast that the max number of alarms was created
-			quickToast(this@NacMainActivity, message)
-			return@OnClickListener
-		}
-
-		// Create the alarm
-		val alarm = NacAlarm.Builder(sharedPreferences)
-			.build()
-
-		// Add the alarm
-		addAlarm(alarm)
-	}
-
-	/**
 	 * Receiver for the time tick intent. This is called when the time increments
 	 * every minute.
 	 *
@@ -283,17 +210,30 @@ class NacMainActivity
 	}
 
 	/**
+	 * Permission request manager, handles requesting permissions from the user.
+	 */
+	private var permissionRequestManager: NacPermissionRequestManager? = null
+
+	/**
+	 * The IDs of alarms that were recently added.
+	 */
+	private var recentlyAddedAlarmIds: MutableList<Long> = ArrayList()
+
+	/**
+	 * The IDs of alarms that were recently updated.
+	 */
+	private var recentlyUpdatedAlarmIds: MutableList<Long> = ArrayList()
+
+	/**
+	 * Alarm that is being used by an open audio options dialog.
+	 */
+	private var audioOptionsAlarm: NacAlarm? = null
+
+	/**
 	 * Get the number of alarm cards that are expanded.
 	 */
 	private val cardsExpandedCount: Int
 		get() = alarmCardAdapter!!.getCardsExpandedCount(recyclerView!!)
-
-	/**
-	 * Check if an NFC tag was scanned to dismiss an alarm and is ready for the
-	 * active alarm activity.
-	 */
-	private val isNfcTagReady: Boolean
-		get() = (nfcTag != null) && nfcTag!!.isReady
 
 	/**
 	 * Check if the user has created the maximum number of alarms.
@@ -327,11 +267,11 @@ class NacMainActivity
 	/**
 	 * Add an alarm to the database.
 	 *
-	 * TODO: Test that this sequence is legit because this is new
-	 *
-	 * @param  alarm  An alarm.
+	 * @param alarm    An alarm.
+	 * @param interact Whether the alarm should be interacted with by the card
+	 *                 holder via interact() or not.
 	 */
-	private fun addAlarm(alarm: NacAlarm)
+	private fun addAlarm(alarm: NacAlarm, interact: Boolean=true)
 	{
 		lifecycleScope.launch {
 
@@ -341,8 +281,13 @@ class NacMainActivity
 				// Schedule the alarm
 				NacScheduler.update(this@NacMainActivity, alarm)
 
-				// Save the recently added alarm ID
-				recentlyAddedAlarmIds.add(alarm.id)
+				// Check if the alarm card should be interacted with. This
+				// would essentially mean calling interact() on the alarm card
+				if (interact)
+				{
+					// Save the recently added alarm ID
+					recentlyAddedAlarmIds.add(alarm.id)
+				}
 
 			}
 
@@ -365,12 +310,9 @@ class NacMainActivity
 			.setName("Work")
 			.build()
 
-		// Add the alarm
-		addAlarm(alarm)
-
-		// Avoid having interact() called for the alarm card, that way it does not
-		// get expanded and show the time dialog
-		recentlyAddedAlarmIds.remove(alarm.id)
+		// Add the alarm and avoid having interact() called for the alarm card,
+		// that way it does not get expanded and show the time dialog
+		addAlarm(alarm, interact = false)
 	}
 
 	/**
@@ -387,21 +329,6 @@ class NacMainActivity
 			// Add the alarm
 			addAlarm(alarm)
 		}
-	}
-
-	/**
-	 * Cleanup the show activity delay handler.
-	 *
-	 * TODO: I don't think I need to do this? See if this can be removed after
-	 * stabilizing changed.
-	 */
-	private fun cleanupScanNfcTagDialog()
-	{
-		// Dismiss the dialog
-		scanNfcTagDialog?.dismissAllowingStateLoss()
-
-		// Cleanup the dialog
-		scanNfcTagDialog = null
 	}
 
 	/**
@@ -443,10 +370,6 @@ class NacMainActivity
 	 */
 	private fun copyAlarm(alarm: NacAlarm)
 	{
-		// Get the message and action for the snackbar
-		val message = getString(R.string.message_alarm_copy)
-		val action = getString(R.string.action_undo)
-
 		// Create a copy of the alarm
 		val copiedAlarm = alarm.copy()
 
@@ -454,6 +377,9 @@ class NacMainActivity
 		addAlarm(copiedAlarm)
 
 		// Show the snackbar
+		val message = getString(R.string.message_alarm_copy)
+		val action = getString(R.string.action_undo)
+
 		showSnackbar(message, action) {
 
 			// Undo the copy, so delete the alarm
@@ -469,72 +395,25 @@ class NacMainActivity
 	 */
 	private fun deleteAlarm(alarm: NacAlarm)
 	{
-		// Get the message and action for the snackbar
-		val message = getString(R.string.message_alarm_delete)
-		val action = getString(R.string.action_undo)
-
 		// Delete the alarm
 		alarmViewModel.delete(alarm)
+
+		// Save the statistics
 		statisticViewModel.insertDeleted(alarm)
 
 		// Cancel the alarm
 		NacScheduler.cancel(this, alarm)
 
 		// Show the snackbar
+		val message = getString(R.string.message_alarm_delete)
+		val action = getString(R.string.action_undo)
+
 		showSnackbar(message, action) {
 
 			// Undo the delete, so restore the alarm
 			restoreAlarm(alarm)
 
 		}
-	}
-
-	/**
-	 * Disable the alias for the main activity so that tapping an NFC tag
-	 * DOES NOT open the main activity.
-	 */
-	private fun disableActivityAlias()
-	{
-		// Get the alias and component name
-		val aliasName = "$packageName.main.NacMainAliasActivity"
-		val componentName = ComponentName(this, aliasName)
-
-		// Disable the alias
-		packageManager.setComponentEnabledSetting(componentName,
-			PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-			PackageManager.DONT_KILL_APP)
-	}
-
-	/**
-	 * Attempt to dismiss the first active alarm found.
-	 *
-	 * If unable to dismiss the alarm, the alarm activity is shown.
-	 */
-	private fun dismissActiveAlarm()
-	{
-		// Do nothing if the NFC tag is null
-		// TODO: This should never happen?
-		if (nfcTag == null)
-		{
-			println("NFC tag is null")
-			return
-		}
-		// Check if the NFC tag of the alarm matches the tag ID
-		else if (nfcTag!!.check(this))
-		{
-			println("Dismiss alarm activity with NFC")
-			dismissAlarmServiceWithNfc(this, nfcTag!!.activeAlarm)
-		}
-		// Start the alarm
-		else
-		{
-			println("Start alarm yo")
-			NacActiveAlarmActivity.startAlarmActivity(this, nfcTag!!.activeAlarm)
-			NacActiveAlarmService.startAlarmService(this, nfcTag!!.activeAlarm)
-		}
-
-		// Set the NFC tag to null
-		nfcTag = null
 	}
 
 	/**
@@ -593,9 +472,6 @@ class NacMainActivity
 		// Uncheck the NFC button when the dialog is canceled.
 		cardHolder.nfcButton.isChecked = false
 		cardHolder.doNfcButtonClick()
-
-		// Cleanup the dialog
-		cleanupScanNfcTagDialog()
 	}
 
 	/**
@@ -630,8 +506,6 @@ class NacMainActivity
 	 */
 	override fun onCardUpdated(holder: NacCardHolder, alarm: NacAlarm)
 	{
-		println("onCardUpdated()")
-
 		// Set the next alarm message
 		this.setNextAlarmMessage()
 
@@ -658,21 +532,14 @@ class NacMainActivity
 	 */
 	override fun onCardUseNfcChanged(holder: NacCardHolder, alarm: NacAlarm)
 	{
-		// Check if the alarm should not use NFC
+		// Check if the alarm had use NFC disabled
 		if (!alarm.shouldUseNfc)
 		{
 			return
 		}
 
-		// Create and set the dialog
-		scanNfcTagDialog = NacScanNfcTagDialog()
-
-		// Setup the dialog
-		scanNfcTagDialog!!.alarm = alarm
-		scanNfcTagDialog!!.onScanNfcTagListener = this
-
-		// Show the dialog
-		scanNfcTagDialog!!.show(supportFragmentManager, NacScanNfcTagDialog.TAG)
+		// Show the scan NFC tag dialog
+		showScanNfcTagDialog(alarm)
 	}
 
 	/**
@@ -694,10 +561,8 @@ class NacMainActivity
 		// Check if the max number of alarms was created
 		if (hasCreatedMaxAlarms)
 		{
-			val message = getString(R.string.error_message_max_alarms)
-
 			// Show toast that the max number of alarms were created
-			quickToast(this, message)
+			quickToast(this, R.string.error_message_max_alarms)
 			return
 		}
 
@@ -713,7 +578,6 @@ class NacMainActivity
 	{
 		// Setup
 		super.onCreate(savedInstanceState)
-		println("onCreate() : ${intent.action}")
 
 		// Set the content view
 		setContentView(R.layout.act_main)
@@ -726,7 +590,6 @@ class NacMainActivity
 		recyclerView = findViewById(R.id.rv_alarm_list)
 		floatingActionButton = findViewById(R.id.fab_add_alarm)
 		alarmCardAdapter = NacCardAdapter()
-		snackbar = NacSnackbar(root!!)
 		alarmCardAdapterLiveData = NacCardAdapterLiveData()
 		alarmCardTouchHelper = NacCardTouchHelper(this)
 		permissionRequestManager = NacPermissionRequestManager(this)
@@ -742,15 +605,9 @@ class NacMainActivity
 		setupAlarmCardAdapter()
 		setupRecyclerView()
 
-		// NFC tag was scanned for an active alarm
-		if (wasNfcScannedForActiveAlarm(intent))
-		{
-			setNfcTagIntent(intent)
-		}
-
 		// Disable the activity alias so that tapping an NFC tag will NOT open
 		// the main activity
-		disableActivityAlias()
+		disableActivityAlias(this)
 	}
 
 	/**
@@ -832,18 +689,15 @@ class NacMainActivity
 	}
 
 	/**
-	 * Needed for RecyclerView.OnItemTouchListener
+	 * Called when the user cancels the scan NFC tag dialog.
 	 */
-	override fun onInterceptTouchEvent(rv: RecyclerView, ev: MotionEvent): Boolean
+	override fun onDoneScanningNfcTag(alarm: NacAlarm)
 	{
-		if (ev.action == MotionEvent.ACTION_UP)
-		{
-			if (snackbar!!.canDismiss)
-			{
-				snackbar!!.dismiss()
-			}
-		}
-		return false
+		// Start NFC. This is here so that if an NFC tag accidentally gets
+		// scanned multiple times after this dialog is closed, it will not
+		// popup some unwanted NFC Entry intent. Instead, it will keep the
+		// focus on this app
+		NacNfc.start(this)
 	}
 
 	/**
@@ -871,40 +725,12 @@ class NacMainActivity
 	}
 
 	/**
-	 * Called when a new intent is received.
+	 * Called when an NFC tag is scanned from the Scan NFC Tag dialog.
 	 */
-	override fun onNewIntent(intent: Intent)
+	override fun onNfcTagScanned(alarm: NacAlarm, tagId: String)
 	{
-		// Super
-		super.onNewIntent(intent)
-		println("onNewIntent()")
-
-		// NFC tag was scanned for the NFC dialog
-		if (wasNfcScannedForDialog(intent))
-		{
-			// Save the NFC tag ID
-			saveNfcTagId(intent)
-
-			// Show a toast that NFC is required
-			val message = getString(R.string.message_nfc_required)
-
-			quickToast(this, message)
-
-			// Set the listener to null so that it does not get called
-			scanNfcTagDialog?.onScanNfcTagListener = null
-
-			// Dismiss the dialog
-			scanNfcTagDialog?.dismiss()
-		}
-		// NFC was scanned for the active alarm
-		else if (wasNfcScannedForActiveAlarm(intent))
-		{
-			// Set the intent
-			setNfcTagIntent(intent)
-
-			// Dismiss the active alarm
-			dismissActiveAlarm()
-		}
+		// Save the NFC tag ID that was scanned
+		saveNfcTagId(alarm, tagId)
 	}
 
 	/**
@@ -914,24 +740,13 @@ class NacMainActivity
 	{
 		// Super
 		super.onPause()
-		println("onPause()")
-
-		// Set the flag that the activity is not shown
-		isActivityShown = false
 
 		// Cleanup
 		cleanupTimeTickReceiver()
 		cleanupShutdownBroadcastReceiver()
 
-		// Stop scanning for NFC
+		// Stop NFC
 		NacNfc.stop(this)
-	}
-
-	/**
-	 * Note: Needed for RecyclerView.OnItemTouchListener
-	 */
-	override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean)
-	{
 	}
 
 	/**
@@ -941,7 +756,6 @@ class NacMainActivity
 	{
 		// Super
 		super.onResume()
-		println("onResume() : ${intent.action}")
 
 		// Check if the main activity should be refreshed
 		if (sharedPreferences!!.shouldRefreshMainActivity)
@@ -953,25 +767,20 @@ class NacMainActivity
 
 		lifecycleScope.launch {
 
-			// Get all the alarms
-			val allAlarms = alarmViewModel.alarmRepository.getAllAlarms()
+			// Get the active alarm
+			val activeAlarm = alarmViewModel.getActiveAlarm()
 
-			// Start the active alarm service
-			for (alarm in allAlarms)
+			// Check if the active alarm is not null
+			if (activeAlarm != null)
 			{
-				if (alarm.isActive)
-				{
-					println("FOUND ALARM THAT IS ACTIVE")
-					alarm.print()
-					NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, alarm)
-					finish()
-					return@launch
-				}
-			}
-		}
+				// Start the alarm activity for this alarm
+				NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, activeAlarm)
 
-		// Set flag that the activity is being shown
-		isActivityShown = true
+				// Finish the main activity
+				finish()
+			}
+
+		}
 
 		// Set the next alarm text
 		setNextAlarmMessage()
@@ -986,18 +795,11 @@ class NacMainActivity
 		// Register the shutdown receiver
 		registerReceiver(shutdownBroadcastReceiver, IntentFilter(Intent.ACTION_SHUTDOWN))
 
-		// Start scanning for NFC
-		NacNfc.start(this)
-
 		// Add alarm from SET_ALARM intent (if it is present in intent)
 		addSetAlarmFromIntent()
-	}
 
-	/**
-	 * Note: Needed for RecyclerView.OnItemTouchListener
-	 */
-	override fun onTouchEvent(rv: RecyclerView, e: MotionEvent)
-	{
+		// Start NFC
+		NacNfc.start(this)
 	}
 
 	/**
@@ -1005,20 +807,9 @@ class NacMainActivity
 	 */
 	override fun onUseAnyNfcTag(alarm: NacAlarm)
 	{
-		// Set the default (empty) NFC tag ID.
-		alarm.nfcTagId = ""
-
-		// Update the alarm
-		alarmViewModel.update(alarm)
-
-		// Reschedule the alarm
-		NacScheduler.update(this, alarm)
-
-		// Toast to the that NFC is required
-		quickToast(this, R.string.message_nfc_required)
-
-		// Cleanup the dialog
-		cleanupScanNfcTagDialog()
+		// Save the default (empty) NFC tag ID, indicating that any NFC tag can
+		// be used to dismiss this alarm
+		saveNfcTagId(alarm, "")
 	}
 
 	/**
@@ -1026,8 +817,6 @@ class NacMainActivity
 	 */
 	override fun onViewHolderBound(holder: NacCardHolder, index: Int)
 	{
-		println("onViewHolderBound()")
-
 		// Check if the alarm card has not been measured
 		if (!sharedPreferences!!.cardIsMeasured)
 		{
@@ -1055,8 +844,7 @@ class NacMainActivity
 	 */
 	override fun onViewHolderCreated(holder: NacCardHolder)
 	{
-		println("onViewHolderCreated()")
-
+		// Set the card collapsed listener
 		holder.onCardCollapsedListener = this
 
 		// Set the listener for when the delete button is clicked
@@ -1091,44 +879,6 @@ class NacMainActivity
 		holder.setOnCreateContextMenuListener(this)
 	}
 
-	///**
-	// * Prepare an active alarm to be shown to the user.
-	// *
-	// *
-	// * If the alarm is null, or the activity is not shown, it will not be run.
-	// *
-	// * @param  alarm  An active alarm.
-	// */
-	//private fun prepareActiveAlarm(alarm: NacAlarm?)
-	//{
-	//	//// Check if the alarm is not null
-	//	if (alarm != null)
-	//	{
-	//		setNfcTagAlarm(alarm)
-	//	}
-
-	//	// Check if NFC tag is ready
-	//	if (isNfcTagReady)
-	//	{
-	//		println("NFC tag is ready")
-	//		// Dismiss the active alarm
-	//		dismissActiveAlarm()
-	//	}
-	//	// Check if the main activity is shown and should show the alarm activity
-	//	else if (isActivityShown && shouldShowAlarmActivity(alarm))
-	//	{
-	//		println("Activity is shown and should show alarm activity")
-	//		// TODO: This caused the active alarm to show up a million times!
-	//		//NacSharedPreferences shared = this.getSharedPreferences();
-	//		//Remove this setting: shared.getPreventAppFromClosing()?
-
-	//		println("Start active alarm activity")
-	//		// Start the alarm activity
-	//		startAlarmActivity(this, alarm)
-	//	}
-	//	println("HERE")
-	//}
-
 	/**
 	 * Refresh alarms that will alarm soon.
 	 */
@@ -1142,7 +892,9 @@ class NacMainActivity
 			val alarm = alarmCardAdapter!!.getAlarmAt(i)
 
 			// Check if the alarm will alarm soon and the card needs to be updated
-			if (card != null && alarm.willAlarmSoon() && card.shouldRefreshDismissView())
+			if ((card != null)
+				&& alarm.willAlarmSoon()
+				&& card.shouldRefreshDismissView())
 			{
 				// Refresh the alarm
 				alarmCardAdapter!!.notifyItemChanged(i)
@@ -1171,17 +923,19 @@ class NacMainActivity
 	{
 		lifecycleScope.launch {
 
-			// Get the message and action for the snackbar
-			val message = getString(R.string.message_alarm_restore)
-			val action = getString(R.string.action_undo)
-
 			// Insert the alarm
 			alarmViewModel.insert(alarm)
+
+			// Save the statistics
+			statisticViewModel.insertCreated()
 
 			// Reschedule the alarm
 			NacScheduler.update(this@NacMainActivity, alarm)
 
 			// Show the snackbar
+			val message = getString(R.string.message_alarm_restore)
+			val action = getString(R.string.action_undo)
+
 			showSnackbar(message, action) {
 
 				// Undo the restore, so delete the alarm
@@ -1193,30 +947,25 @@ class NacMainActivity
 	}
 
 	/**
-	 * Save the scanned NFC tag ID.
+	 * Save the NFC tag ID to the alarm.
 	 */
-	private fun saveNfcTagId(intent: Intent)
+	private fun saveNfcTagId(alarm: NacAlarm, tagId: String)
 	{
-		// Check if the intent corresponds with the scan NFC tag dialog
-		if (!wasNfcScannedForDialog(intent))
-		{
-			return
-		}
-
-		// Get the NFC tag or return if it is null
-		val nfcTag = getTag(intent) ?: return
-
-		// Get the alarm from the dialog or return if it is null
-		val alarm = scanNfcTagDialog!!.alarm ?: return
-
 		// Set the NFC tag ID
-		alarm.nfcTagId = parseId(nfcTag).toString()
+		alarm.nfcTagId = tagId
 
 		// Update the alarm
 		alarmViewModel.update(alarm)
 
 		// Reschedule the alarm
 		NacScheduler.update(this, alarm)
+
+		lifecycleScope.launch(Dispatchers.Main) {
+
+			// Toast to the that NFC is required
+			quickToast(this@NacMainActivity, R.string.message_nfc_required)
+
+		}
 	}
 
 	/**
@@ -1241,43 +990,6 @@ class NacMainActivity
 	}
 
 	/**
-	 * Set the NFC tag active alarm.
-	 *
-	 * @param  activeAlarm  The active alarm to use in conjunction with the NFC tag.
-	 */
-	private fun setNfcTagAlarm(activeAlarm: NacAlarm)
-	{
-		if (nfcTag == null)
-		{
-			println("Create NFC tag")
-			nfcTag = NacNfcTag(activeAlarm)
-		}
-		else
-		{
-			println("Set active alarm for NFC tag")
-			nfcTag!!.activeAlarm = activeAlarm
-		}
-	}
-
-	/**
-	 * Set the NFC tag action and ID from an Intent.
-	 *
-	 * @param  nfcIntent  The intent received when scanning an NFC tag.
-	 */
-	private fun setNfcTagIntent(nfcIntent: Intent)
-	{
-		if (nfcTag == null)
-		{
-			nfcTag = NacNfcTag(nfcIntent)
-		}
-		else
-		{
-			nfcTag!!.setNfcId(nfcIntent)
-			nfcTag!!.setNfcAction(nfcIntent)
-		}
-	}
-
-	/**
 	 * Setup the alarm card adapter.
 	 */
 	private fun setupAlarmCardAdapter()
@@ -1299,7 +1011,26 @@ class NacMainActivity
 		val color = ColorStateList.valueOf(sharedPreferences!!.themeColor)
 
 		// Set the listener
-		floatingActionButton!!.setOnClickListener(mFloatingActionButtonListener)
+		floatingActionButton!!.setOnClickListener { view: View ->
+
+			// Haptic feedback so that the user knows the action was received
+			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+
+			// Max number of alarms reached
+			if (hasCreatedMaxAlarms)
+			{
+				// Show a toast that the max number of alarms was created
+				quickToast(this@NacMainActivity, R.string.error_message_max_alarms)
+				return@setOnClickListener
+			}
+
+			// Create the alarm
+			val alarm = NacAlarm.Builder(sharedPreferences)
+				.build()
+
+			// Add the alarm
+			addAlarm(alarm)
+		}
 
 		// Set the color
 		floatingActionButton!!.backgroundTintList = color
@@ -1324,21 +1055,51 @@ class NacMainActivity
 	 */
 	private fun setupInitialDialogToShow()
 	{
+		// Get the delay counter for showing the what's new dialog
+		val delayCounter = sharedPreferences!!.delayShowingWhatsNewDialogCounter
+
 		// Check if there are any permissions that need to be requested
 		if (permissionRequestManager!!.count() > 0)
 		{
+			// Check if the what's new dialog should be shown
+			if (shouldShowWhatsNewDialog)
+			{
+				// Set the delay counter for showing the what's new dialog.
+				// Do not want to show the what's new dialog immediately after
+				// all the permissions are requested
+				sharedPreferences!!.editDelayShowingWhatsNewDialogCounter(1)
+			}
+
 			// Request permissions
 			permissionRequestManager!!.requestPermissions(this)
 		}
 		// Attempt to show the What's new dialog
-		else if (shouldShowWhatsNewDialog)
+		else if (shouldShowWhatsNewDialog && delayCounter == 0)
 		{
 			// Show the What's New dialog
 			showWhatsNewDialog()
 		}
-		// Attempt to request to show the Google Play Store rate my app thing
-		else if (NacRateMyApp.request(this, sharedPreferences!!))
+		// Check if the delay counter has been set
+		else if (delayCounter > 0)
 		{
+			// Check if the delay counter has exceeded the max count
+			if (delayCounter >= 4)
+			{
+				// Reset the delay counter
+				sharedPreferences!!.editDelayShowingWhatsNewDialogCounter(0)
+			}
+			// The delay counter has not been exceeded yet
+			else
+			{
+				// Increment the delay counter
+				sharedPreferences!!.editDelayShowingWhatsNewDialogCounter(delayCounter + 1)
+			}
+		}
+		// Check if should request to show the Google Play rate my app flow
+		else if (NacRateMyApp.shouldRequest(sharedPreferences!!))
+		{
+			// Request for the user to rate my app on the Google Play store
+			NacRateMyApp.request(this, sharedPreferences!!)
 		}
 	}
 
@@ -1351,7 +1112,6 @@ class NacMainActivity
 		// starts and the list is initially empty
 		alarmViewModel.allAlarms.observe(this) { alarms: List<NacAlarm> ->
 
-			println("All alarms changed")
 			// Check if statitistics have not started yet
 			if (!sharedPreferences!!.appStartStatistics)
 			{
@@ -1376,16 +1136,6 @@ class NacMainActivity
 			this.setNextAlarmMessage(alarms)
 		}
 
-		// Observe when the active alarm changes
-		//alarmViewModel.activeAlarm.observe(this) { alarm: NacAlarm? ->
-
-		//	println("Active alarm changed!")
-
-		//	// Prepare the active alarm
-		//	prepareActiveAlarm(alarm)
-
-		//}
-
 		// Observe any changes to the alarms in the adapter
 		alarmCardAdapterLiveData!!.observe(this) { alarms ->
 
@@ -1403,7 +1153,7 @@ class NacMainActivity
 			if (sharedPreferences!!.upcomingAlarmNotification)
 			{
 				// Update the upcoming alarm notification
-				this.updateUpcomingNotification(alarms)
+				updateUpcomingNotification(alarms)
 			}
 
 			// Update the alarm adapter
@@ -1443,7 +1193,6 @@ class NacMainActivity
 		// Setup everything else
 		recyclerView!!.adapter = alarmCardAdapter
 		recyclerView!!.layoutManager = NacLayoutManager(this)
-		recyclerView!!.addOnItemTouchListener(this)
 		recyclerView!!.setHasFixedSize(true)
 	}
 
@@ -1475,16 +1224,6 @@ class NacMainActivity
 			sharedPreferences!!.editAppStartStatistics(false)
 
 		}
-	}
-
-	/**
-	 * Check if the alarm activity should be shown.
-	 *
-	 * @return True if the alarm activity should be shown, and False otherwise.
-	 */
-	private fun shouldShowAlarmActivity(alarm: NacAlarm?): Boolean
-	{
-		return (alarm != null) && !wasScanned(intent)
 	}
 
 	/**
@@ -1697,13 +1436,40 @@ class NacMainActivity
 		// Show the dialog
 		dialog.show(supportFragmentManager, NacRestrictVolumeDialog.TAG)
 	}
+
 	/**
-	 * Create a snackbar message.
+	 * Show the scan NFC tag dialog.
 	 */
-	private fun showSnackbar(message: String, action: String,
+	private fun showScanNfcTagDialog(alarm: NacAlarm)
+	{
+		// Create and set the dialog
+		val scanNfcTagDialog = NacScanNfcTagDialog()
+
+		// Setup the dialog
+		scanNfcTagDialog.alarm = alarm
+		scanNfcTagDialog.onScanNfcTagListener = this
+
+		// Show the dialog
+		scanNfcTagDialog.show(supportFragmentManager, NacScanNfcTagDialog.TAG)
+	}
+
+	/**
+	 * Show a snackbar.
+	 */
+	private fun showSnackbar(
+		message: String,
+		action: String,
 		listener: View.OnClickListener? = null)
 	{
-		snackbar!!.show(message, action, listener, true)
+		// Create the snackbar
+		val snackbar = Snackbar.make(root!!, message, Snackbar.LENGTH_LONG)
+
+		// Setup the snackbar
+		snackbar.setActionTextColor(sharedPreferences!!.themeColor)
+		snackbar.setAction(action, listener ?: View.OnClickListener { })
+
+		// Show the snackbar
+		snackbar.show()
 	}
 
 	/**
@@ -1738,7 +1504,7 @@ class NacMainActivity
 	}
 
 	/**
-	 * Show a snackbar for the updated alarm.
+	 * Show a nackbar for the updated alarm.
 	 *
 	 *
 	 * If this alarm is disabled, a snackbar for the next alarm will be shown.
@@ -1795,25 +1561,6 @@ class NacMainActivity
 
 		// Show the notification
 		notification.show()
-	}
-
-	/**
-	 * @return True if an NFC tag was scanned to dismiss an alarm, and False
-	 * otherwise. This is to say that if an NFC tag was scanned for the
-	 * dialog, this would return False.
-	 */
-	private fun wasNfcScannedForActiveAlarm(intent: Intent): Boolean
-	{
-		return wasScanned(intent) && !wasNfcScannedForDialog(intent)
-	}
-
-	/**
-	 * @return True if an NFC tag was scanned while the Scan NFC Tag dialog was
-	 * open, and False otherwise.
-	 */
-	private fun wasNfcScannedForDialog(intent: Intent): Boolean
-	{
-		return (scanNfcTagDialog != null) && wasScanned(intent)
 	}
 
 }

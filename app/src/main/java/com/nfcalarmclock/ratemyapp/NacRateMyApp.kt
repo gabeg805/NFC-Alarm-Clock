@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.android.play.core.tasks.Task
+import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
 
 /**
@@ -13,13 +14,41 @@ object NacRateMyApp
 {
 
 	/**
+	 * Check if the rate my app Google Play flow should be shown or not.
+	 *
+	 * Note: If the flow should not be shown and the user has never been shown
+	 *       the flow before, then the rate my app counter will be incremented.
+	 *
+	 * @return True if the rate my app Google Play flow should be shown, and
+	 *         False otherwise.
+	 */
+	fun shouldRequest(shared: NacSharedPreferences): Boolean
+	{
+		// App is already rated
+		return if (shared.isRateMyAppRated)
+		{
+			false
+		}
+		// Reached the counter limit so it is time to ask again
+		else if (shared.isRateMyAppLimit)
+		{
+			true
+		}
+		// Increment the counter
+		else
+		{
+			shared.editRateMyAppCounter(shared.rateMyAppCounter + 1)
+			false
+		}
+	}
+
+	/**
 	 * Request to rate my app.
 	 *
 	 * This will NOT check if the review flow should be launched or not. It
 	 * will simply launch it.
 	 */
-	@JvmStatic
-	fun doRequest(activity:AppCompatActivity, shared: NacSharedPreferences)
+	fun request(activity:AppCompatActivity, shared: NacSharedPreferences)
 	{
 		// Create a review manager
 		val manager = ReviewManagerFactory.create(activity)
@@ -44,40 +73,16 @@ object NacRateMyApp
 			//
 			// No matter the result, just treat it as rated.
 			flow.addOnCompleteListener { _ ->
-				shared.ratedRateMyApp()
+
+				// Get the value indicating that it has been rated
+				val rated = shared.resources.getInteger(R.integer.default_rate_my_app_rated)
+
+				// Set the rated counter
+				shared.editRateMyAppCounter(rated)
+
 			}
 
 		}
-	}
-
-	/**
-	 * Request to rate my app.
-	 *
-	 * If the app is already rated, or the counter has not reached the threshold
-	 * to launch the request, then nothing is shown to the user.
-	 *
-	 * @return True if the request was launched, and False otherwise.
-	 */
-	@JvmStatic
-	fun request(activity:AppCompatActivity, shared: NacSharedPreferences): Boolean
-	{
-		// App is already rated
-		return if (shared.isRateMyAppRated)
-			{
-				false
-			}
-			// Reached the counter limit so it is time to ask again
-			else if (shared.isRateMyAppLimit)
-			{
-				doRequest(activity, shared)
-				true
-			}
-			// Increment the counter
-			else
-			{
-				shared.incrementRateMyApp()
-				false
-			}
 	}
 
 }

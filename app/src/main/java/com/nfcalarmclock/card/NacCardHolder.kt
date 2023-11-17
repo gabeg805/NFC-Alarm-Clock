@@ -544,18 +544,14 @@ class NacCardHolder(
 		// Alarm is active
 		if (alarm!!.isActive)
 		{
-			val message = context.getString(R.string.error_message_active_delete)
-
 			// Show toast that unable to delete an active alarm
-			quickToast(context, message)
+			quickToast(context, R.string.error_message_active_delete)
 		}
 		// Alarm is snoozed
 		else if (alarm!!.isSnoozed)
 		{
-			val message = context.getString(R.string.error_message_snoozed_delete)
-
 			// Show a toast that unable to delete a snoozed alarm
-			quickToast(context, message)
+			quickToast(context, R.string.error_message_snoozed_delete)
 		}
 		// Alarm can be deleted
 		else
@@ -584,18 +580,14 @@ class NacCardHolder(
 		// Alarm is active
 		else if (alarm!!.isActive)
 		{
-			val message = context.getString(R.string.error_message_active_modify)
-
 			// Show a toast that unable to modify an active alarm
-			quickToast(context, message)
+			quickToast(context, R.string.error_message_active_modify)
 		}
 		// Alarm is snoozed
 		else if (alarm!!.isSnoozed)
 		{
-			val message = context.getString(R.string.error_message_snoozed_modify)
-
 			// Show a toast that unable to modify a snoozed alarm
-			quickToast(context, message)
+			quickToast(context, R.string.error_message_snoozed_modify)
 		}
 		// Alarm can be modified
 		else
@@ -866,12 +858,17 @@ class NacCardHolder(
 			alarm!!.nfcTagId = ""
 
 			// Determine which message to show
-			val requiredMessage = context.getString(R.string.message_nfc_required)
-			val optionalMessage = context.getString(R.string.message_nfc_optional)
-			val message = if (alarm!!.shouldUseNfc) requiredMessage else optionalMessage
+			val messageId = if (alarm!!.shouldUseNfc)
+			{
+				R.string.message_nfc_required
+			}
+			else
+			{
+				R.string.message_nfc_optional
+			}
 
 			// Toast the NFC message
-			quickToast(context, message)
+			quickToast(context, messageId)
 		}
 
 		// Call the listeners
@@ -891,12 +888,17 @@ class NacCardHolder(
 		callOnCardUpdatedListener()
 
 		// Determine which message to show
-		val repeatEnabled = context.getString(R.string.message_repeat_enabled)
-		val repeatDisabled = context.getString(R.string.message_repeat_disabled)
-		val message = if (alarm!!.shouldRepeat) repeatEnabled else repeatDisabled
+		val messageId = if (alarm!!.shouldRepeat)
+		{
+			R.string.message_repeat_enabled
+		}
+		else
+		{
+			R.string.message_repeat_disabled
+		}
 
 		// Toast the repeat message
-		quickToast(context, message)
+		quickToast(context, messageId)
 	}
 
 	/**
@@ -960,9 +962,14 @@ class NacCardHolder(
 		callOnCardUpdatedListener()
 
 		// Determine which message to show
-		val vibrateEnabled = context.getString(R.string.message_vibrate_enabled)
-		val vibrateDisabled = context.getString(R.string.message_vibrate_disabled)
-		val message = if (alarm!!.shouldVibrate) vibrateEnabled else vibrateDisabled
+		val message = if (alarm!!.shouldVibrate)
+		{
+			R.string.message_vibrate_enabled
+		}
+		else
+		{
+			R.string.message_vibrate_disabled
+		}
 
 		// Toast the vibrate message
 		quickToast(context, message)

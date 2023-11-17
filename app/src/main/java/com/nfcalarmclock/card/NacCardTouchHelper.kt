@@ -68,8 +68,8 @@ class NacCardTouchHelper(
 			val copy = getCopySwipeView(vh)
 			val delete = getDeleteSwipeView(vh)
 			getDefaultUIUtil().clearView(fg)
-			copy!!.visibility = View.GONE
-			delete!!.visibility = View.GONE
+			copy.visibility = View.GONE
+			delete.visibility = View.GONE
 		}
 
 		/**
@@ -227,20 +227,20 @@ class NacCardTouchHelper(
 				// Moved to the right
 				if (dx > 0)
 				{
-					copy!!.visibility = View.VISIBLE
-					delete!!.visibility = View.GONE
+					copy.visibility = View.VISIBLE
+					delete.visibility = View.GONE
 				}
 				// Moved to the left
 				else if (dx < 0)
 				{
-					copy!!.visibility = View.GONE
-					delete!!.visibility = View.VISIBLE
+					copy.visibility = View.GONE
+					delete.visibility = View.VISIBLE
 				}
 				// No movement
 				else
 				{
-					copy!!.visibility = View.GONE
-					delete!!.visibility = View.GONE
+					copy.visibility = View.GONE
+					delete.visibility = View.GONE
 				}
 			}
 

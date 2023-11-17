@@ -15,7 +15,6 @@ import androidx.core.app.NotificationManagerCompat
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.util.NacUtility.toSpannedString
-import java.util.Arrays
 import java.util.Locale
 
 /**

@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.os.Bundle
 import android.widget.LinearLayout
 import com.nfcalarmclock.R
-import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacCalendar.Day
 import com.nfcalarmclock.view.dialog.NacDialogFragment
 import java.util.EnumSet

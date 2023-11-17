@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Build
 import android.text.Html
 import android.text.Spanned
-import android.util.Log
 import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewGroup.MarginLayoutParams
@@ -51,38 +50,6 @@ object NacUtility
 		val height = view.measuredHeight
 
 		return height + margins
-	}
-
-	/**
-	 * Wrapper for Log object to print to the logcat easily.
-	 */
-	fun print(name: String?, string: String?)
-	{
-		Log.i(name, string!!)
-	}
-
-	/**
-	 * Print the string to logcat using this class' name.
-	 */
-	fun print(string: String?)
-	{
-		print("NacUtility", string)
-	}
-
-	/**
-	 * Format a print statement to logcat.
-	 */
-	fun printf(format: String?, vararg args: Any?)
-	{
-		print(String.format(format!!, *args))
-	}
-
-	/**
-	 * Print to logcat with default string formatting.
-	 */
-	fun printf(string: String?)
-	{
-		printf("%s", string)
 	}
 
 	/**

@@ -251,6 +251,11 @@ object NacFile
 			this.id = id
 		}
 
+		/**
+		 * Check if two Metadata objects are equal.
+		 *
+		 * @return True if the two objects are equal, and False otherwise.
+		 */
 		fun equals(metadata: Metadata) : Boolean
 		{
 			return (directory == metadata.directory)

@@ -21,21 +21,6 @@ object NacNfc
 {
 
 	/**
-	 * Add an NFC tag into an Intent.
-	 */
-	fun addTagToIntent(intent: Intent?, tag: Tag?)
-	{
-		// Check if the intent or tag are null
-		if ((intent == null) || (tag == null))
-		{
-			return
-		}
-
-		// Add the tag to the intent
-		intent.putExtra(NfcAdapter.EXTRA_TAG, tag)
-	}
-
-	/**
 	 * Check if NFC exists on this device.
 	 */
 	fun exists(context: Context): Boolean
@@ -49,7 +34,7 @@ object NacNfc
 	 * @return An NFC tag from the given Intent.
 	 */
 	@Suppress("deprecation")
-	fun getTag(intent: Intent?): Tag?
+	private fun getTag(intent: Intent?): Tag?
 	{
 		// Use the updated form of Intent.getParecelableExtra() if API >= 33
 		return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)

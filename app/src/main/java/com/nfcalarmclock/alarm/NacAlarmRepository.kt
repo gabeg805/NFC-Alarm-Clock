@@ -23,26 +23,10 @@ class NacAlarmRepository @Inject constructor(
 {
 
 	/**
-	 * An active alarm.
-	 */
-	val activeAlarm: LiveData<NacAlarm>
-		get() = alarmDao.activeAlarm
-
-	/**
 	 * Live data list of all alarms.
 	 */
 	val allAlarms: LiveData<List<NacAlarm>>
 		get() = alarmDao.allAlarms
-
-	/**
-	 * All alarms in the database.
-	 */
-	suspend fun getAllAlarms(): List<NacAlarm> = alarmDao.getAllAlarms()
-
-	/**
-	 * The list of active alarms.
-	 */
-	suspend fun getActiveAlarms(): List<NacAlarm> = alarmDao.getActiveAlarms()
 
 	/**
 	 * Delete an alarm, asynchronously, from the database.
@@ -57,6 +41,21 @@ class NacAlarmRepository @Inject constructor(
 	 * @return An alarm with the given ID.
 	 */
 	suspend fun findAlarm(id: Long): NacAlarm? = alarmDao.findAlarm(id)
+
+	/**
+	 * The an active alarm.
+	 */
+	suspend fun getActiveAlarm(): NacAlarm? = alarmDao.getActiveAlarm()
+
+	/**
+	 * The list of active alarms.
+	 */
+	suspend fun getActiveAlarms(): List<NacAlarm> = alarmDao.getActiveAlarms()
+
+	/**
+	 * All alarms in the database.
+	 */
+	suspend fun getAllAlarms(): List<NacAlarm> = alarmDao.getAllAlarms()
 
 	/**
 	 * Insert an alarm, asynchronously, into the database.

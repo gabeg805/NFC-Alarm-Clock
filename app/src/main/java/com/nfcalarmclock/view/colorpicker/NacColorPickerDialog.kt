@@ -195,9 +195,7 @@ class NacColorPickerDialog
 		if (!NacColorPicker.isHexString(editTextColor) || !NacColorPicker.canParseColor(editTextColor))
 		{
 			// Toast an error message
-			val message = getString(R.string.error_message_select_color)
-
-			quickToast(requireContext(), message)
+			quickToast(requireContext(), R.string.error_message_select_color)
 			return false
 		}
 

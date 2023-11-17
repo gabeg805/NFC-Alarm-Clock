@@ -1,7 +1,6 @@
 package com.nfcalarmclock.alarm.db
 
 import androidx.room.TypeConverter
-import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacCalendar.Day
 import java.util.EnumSet
 
