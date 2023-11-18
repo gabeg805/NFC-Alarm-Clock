@@ -54,7 +54,7 @@ class NacFileBrowserRepository
 			val previousFolder = context.getString(R.string.action_previous_folder)
 
 			// Format the string
-			String.format(locale, "(%1\$s)", previousFolder)
+			String.format(locale, "($previousFolder)")
 		}
 		else
 		{

@@ -48,8 +48,6 @@ object NacCalendar
 	/**
 	 * Get today's day, with the alarm hour and minute, if supplied.
 	 *
-	 * TODO: Maybe rename this to something better like toCalendar() or something
-	 *
 	 * @return Today's day, with the alarm hour and minute, if supplied.
 	 */
 	private fun alarmToCalendar(alarm: NacAlarm): Calendar
@@ -175,17 +173,17 @@ object NacCalendar
 	private fun getClockTime(hour: Int, minute: Int, format: Boolean): String
 	{
 		val locale = Locale.getDefault()
-		var hour = hour
+		var clockHour = hour
 
 		// Check if not using 24 hour format
 		if (!format)
 		{
 			// Convert the 12 hour format
-			hour = to12HourFormat(hour)
+			clockHour = to12HourFormat(clockHour)
 		}
 
 		// Format the time
-		return String.format(locale, "%1\$d:%2$02d", hour, minute)
+		return String.format(locale, "%1\$d:%2$02d", clockHour, minute)
 	}
 
 	/**

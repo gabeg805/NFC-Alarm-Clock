@@ -17,12 +17,14 @@
 		/>
 
 	<ScrollView
+		android:id="@+id/whats_new_scrollview"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:paddingTop="@dimen/small"
 		android:paddingBottom="@dimen/small">
 
 		<RelativeLayout
+			android:id="@+id/whats_new_bullet_container"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content">
 
@@ -154,6 +156,50 @@
 				android:layout_below="@id/item_5"
 				android:layout_toEndOf="@id/bullet_6"
 				android:text="@string/item_6"
+				/>
+
+			<!-- Item 7 -->
+			<TextView
+				style="@style/Widget.TextView.Primary"
+				android:id="@+id/bullet_7"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginEnd="@dimen/tiny"
+				android:layout_below="@id/item_6"
+				android:text="@string/message_bullet"
+				/>
+
+			<TextView
+				style="@style/Widget.TextView.Primary"
+				android:id="@+id/item_7"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/small"
+				android:layout_below="@id/item_6"
+				android:layout_toEndOf="@id/bullet_7"
+				android:text="@string/item_7"
+				/>
+
+			<!-- Item 8 -->
+			<TextView
+				style="@style/Widget.TextView.Primary"
+				android:id="@+id/bullet_8"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginEnd="@dimen/tiny"
+				android:layout_below="@id/item_7"
+				android:text="@string/message_bullet"
+				/>
+
+			<TextView
+				style="@style/Widget.TextView.Primary"
+				android:id="@+id/item_8"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/small"
+				android:layout_below="@id/item_7"
+				android:layout_toEndOf="@id/bullet_8"
+				android:text="@string/item_8"
 				/>
 
 		</RelativeLayout>

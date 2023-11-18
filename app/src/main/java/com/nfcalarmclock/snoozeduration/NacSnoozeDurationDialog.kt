@@ -13,6 +13,16 @@ class NacSnoozeDurationDialog
 	: NacScrollablePickerDialogFragment()
 {
 
+	companion object
+	{
+
+		/**
+		 * Tag for the class.
+		 */
+		const val TAG = "NacSnoozeDurationDialog"
+
+	}
+
 	/**
 	 * The list of values for the scrollable picker.
 	 */
@@ -41,20 +51,9 @@ class NacSnoozeDurationDialog
 				callOnScrollablePickerOptionSelectedListener()
 
 			}
-			.setNegativeButton(R.string.action_cancel) { _, _ ->
-			}
+			.setNegativeButton(R.string.action_cancel, null)
 			.setView(R.layout.dlg_scrollable_picker)
 			.create()
-	}
-
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacSnoozeDurationDialog"
-
 	}
 
 }

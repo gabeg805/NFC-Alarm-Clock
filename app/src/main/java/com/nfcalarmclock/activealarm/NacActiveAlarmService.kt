@@ -552,8 +552,6 @@ class NacActiveAlarmService
 	 * Snooze the alarm.
 	 *
 	 * This will finish the service.
-	 *
-	 * TODO: Should I mark this as not active? How does card holder know how to show Dismiss button?
 	 */
 	@UnstableApi
 	fun snooze()

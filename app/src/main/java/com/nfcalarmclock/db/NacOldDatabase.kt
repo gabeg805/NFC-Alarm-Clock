@@ -436,22 +436,15 @@ class NacOldDatabase(
 		val name = context.getString(R.string.example_name)
 
 		// Build an alarm
-		val alarm = NacAlarm.Builder(shared)
-			.setId(1)
-			.setHour(8)
-			.setMinute(0)
-			.setDays(shared.days)
-			.setRepeat(shared.repeat)
-			.setUseNfc(shared.useNfc)
-			.setVibrate(shared.vibrate)
-			.setVolume(shared.volume)
-			.setAudioSource(shared.audioSource)
-			.setMediaTitle(mediaTitle)
-			.setMediaPath(mediaPath)
-			.setMediaType(mediaType)
-			.setName(name)
-			.setNfcTagId("")
-			.build()
+		val alarm = NacAlarm.build(shared)
+
+		alarm.id = 1
+		alarm.hour = 8
+		alarm.minute = 0
+		alarm.mediaTitle = mediaTitle
+		alarm.mediaPath = mediaPath
+		alarm.mediaType = mediaType
+		alarm.name = name
 
 		// Add the alarm to the database
 		this.add(db, alarm)
@@ -511,13 +504,10 @@ class NacOldDatabase(
 	/**
 	 * Read the database and return all the alarms.
 	 *
-	 *
-	 * TODO: Add this to a method somewhere. Maybe get alarms from cursor?
-	 *
-	 * @return All alarms in the database.
-	 *
 	 * @param  db       The SQLite database.
 	 * @param  version  The database version number.
+	 *
+	 * @return All alarms in the database.
 	 */
 	fun read(db: SQLiteDatabase, version: Int): List<NacAlarm?>?
 	{
@@ -573,62 +563,68 @@ class NacOldDatabase(
 
 		// Build an alarm
 		val shared = NacSharedPreferences(context)
-		val builder = NacAlarm.Builder(shared)
+		val alarm = NacAlarm.build(shared)
 
 		// Determine which version to use
 		when (version)
 		{
 			5 ->
 			{
-				builder.setNfcTagId(cursor.getString(15))
-				builder.setId(cursor.getInt(1).toLong())
-					.setIsEnabled(cursor.getInt(2) != 0)
-					.setHour(cursor.getInt(3))
-					.setMinute(cursor.getInt(4))
-					.setDays(cursor.getInt(5))
-					.setRepeat(cursor.getInt(6) != 0)
-					.setUseNfc(cursor.getInt(7) != 0)
-					.setVibrate(cursor.getInt(8) != 0)
-					.setVolume(cursor.getInt(9))
-					.setAudioSource(cursor.getString(10))
-					.setMediaType(cursor.getInt(11))
-					.setMediaPath(cursor.getString(12))
-					.setMediaTitle(cursor.getString(13))
-					.setName(cursor.getString(14))
+				alarm.nfcTagId = cursor.getString(15)
+				alarm.id = cursor.getInt(1).toLong()
+				alarm.isEnabled = cursor.getInt(2) != 0
+				alarm.hour = cursor.getInt(3)
+				alarm.minute = cursor.getInt(4)
+				alarm.days = NacCalendar.Day.valueToDays(cursor.getInt(5))
+				alarm.repeat = cursor.getInt(6) != 0
+				alarm.useNfc = cursor.getInt(7) != 0
+				alarm.vibrate = cursor.getInt(8) != 0
+				alarm.volume = cursor.getInt(9)
+				alarm.audioSource = cursor.getString(10)
+				alarm.mediaType = cursor.getInt(11)
+				alarm.mediaPath = cursor.getString(12)
+				alarm.mediaTitle = cursor.getString(13)
+				alarm.name = cursor.getString(14)
 			}
 
-			4 -> builder.setId(cursor.getInt(1).toLong())
-				.setIsEnabled(cursor.getInt(2) != 0)
-				.setHour(cursor.getInt(3))
-				.setMinute(cursor.getInt(4))
-				.setDays(cursor.getInt(5))
-				.setRepeat(cursor.getInt(6) != 0)
-				.setUseNfc(cursor.getInt(7) != 0)
-				.setVibrate(cursor.getInt(8) != 0)
-				.setVolume(cursor.getInt(9))
-				.setAudioSource(cursor.getString(10))
-				.setMediaType(cursor.getInt(11))
-				.setMediaPath(cursor.getString(12))
-				.setMediaTitle(cursor.getString(13))
-				.setName(cursor.getString(14))
+			4 ->
+			{
+				alarm.id = cursor.getInt(1).toLong()
+				alarm.isEnabled = cursor.getInt(2) != 0
+				alarm.hour = cursor.getInt(3)
+				alarm.minute = cursor.getInt(4)
+				alarm.days = NacCalendar.Day.valueToDays(cursor.getInt(5))
+				alarm.repeat = cursor.getInt(6) != 0
+				alarm.useNfc = cursor.getInt(7) != 0
+				alarm.vibrate = cursor.getInt(8) != 0
+				alarm.volume = cursor.getInt(9)
+				alarm.audioSource = cursor.getString(10)
+				alarm.mediaType = cursor.getInt(11)
+				alarm.mediaPath = cursor.getString(12)
+				alarm.mediaTitle = cursor.getString(13)
+				alarm.name = cursor.getString(14)
+			}
 
-			else -> builder.setId(cursor.getInt(1).toLong())
-				.setIsEnabled(cursor.getInt(2) != 0)
-				.setHour(cursor.getInt(3))
-				.setMinute(cursor.getInt(4))
-				.setDays(cursor.getInt(5))
-				.setRepeat(cursor.getInt(6) != 0)
-				.setUseNfc(cursor.getInt(7) != 0)
-				.setVibrate(cursor.getInt(8) != 0)
-				.setVolume(cursor.getInt(9))
-				.setAudioSource(cursor.getString(10))
-				.setMediaType(cursor.getInt(11))
-				.setMediaPath(cursor.getString(12))
-				.setMediaTitle(cursor.getString(13))
-				.setName(cursor.getString(14))
+			else ->
+			{
+				alarm.id = cursor.getInt(1).toLong()
+				alarm.isEnabled = cursor.getInt(2) != 0
+				alarm.hour = cursor.getInt(3)
+				alarm.minute = cursor.getInt(4)
+				alarm.days = NacCalendar.Day.valueToDays(cursor.getInt(5))
+				alarm.repeat = cursor.getInt(6) != 0
+				alarm.useNfc = cursor.getInt(7) != 0
+				alarm.vibrate = cursor.getInt(8) != 0
+				alarm.volume = cursor.getInt(9)
+				alarm.audioSource = cursor.getString(10)
+				alarm.mediaType = cursor.getInt(11)
+				alarm.mediaPath = cursor.getString(12)
+				alarm.mediaTitle = cursor.getString(13)
+				alarm.name = cursor.getString(14)
+			}
 		}
 
-		return builder.build()
+		return alarm
 	}
 
 	/**

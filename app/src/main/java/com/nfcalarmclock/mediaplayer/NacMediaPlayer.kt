@@ -49,7 +49,6 @@ class NacMediaPlayer(
 	/**
 	 * Media player.
 	 */
-	// TODO: setWakeMode, setDevicVolumeControlEnabled
 	val exoPlayer: ExoPlayer = ExoPlayer.Builder(context)
 		.setLooper(context.mainLooper)
 		.build()

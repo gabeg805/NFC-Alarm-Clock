@@ -19,6 +19,16 @@ class NacGraduallyIncreaseVolumeDialog
 	: NacDialogFragment()
 {
 
+	companion object
+	{
+
+		/**
+		 * Tag for the class.
+		 */
+		const val TAG = "NacGraduallyIncreaseVolumeDialog"
+
+	}
+
 	/**
 	 * Listener for when an audio source is selected.
 	 */
@@ -70,8 +80,7 @@ class NacGraduallyIncreaseVolumeDialog
 				onGraduallyIncreaseVolumeListener?.onGraduallyIncreaseVolume(isChecked!!)
 
 			}
-			.setNegativeButton(R.string.action_cancel) { _, _ ->
-			}
+			.setNegativeButton(R.string.action_cancel, null)
 			.setView(R.layout.dlg_alarm_gradually_increase_volume)
 			.create()
 	}
@@ -150,16 +159,6 @@ class NacGraduallyIncreaseVolumeDialog
 
 		// Set the text
 		textView.setText(textId)
-	}
-
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacGraduallyIncreaseVolumeDialog"
-
 	}
 
 }

@@ -30,7 +30,6 @@
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:focusable="false"
-            android:checked="@bool/default_speak_to_me"
             />
 
         <TextView

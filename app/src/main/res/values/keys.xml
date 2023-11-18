@@ -3,22 +3,30 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	tools:ignore="MissingTranslation">
 
+	<!-- App -->
 	<string name="app_first_run">app_first_run</string>
 	<string name="previous_app_version">previous_app_version</string>
 	<string name="key_app_supported">key_app_supported</string>
+	<string name="app_rating_counter">app_rating_counter</string>
+	<string name="app_start_statistics">app_start_statistics</string>
+	<string name="sys_previous_volume">sys_previous_volume</string>
+
+	<!-- Permissions -->
 	<string name="key_permission_ignore_battery_optimization_requested">key_permission_ignore_battery_optimization_requested</string>
 	<string name="key_permission_post_notifications_requested">key_permission_post_notifications_requested</string>
 	<string name="key_permission_schedule_exact_alarm_requested">key_permission_schedule_exact_alarm_requested</string>
-	<string name="app_start_statistics">app_start_statistics</string>
-	<string name="app_rating_counter">app_rating_counter</string>
+
+	<!-- Main activity -->
 	<string name="app_should_refresh_main_activity">app_should_refresh_main_activity</string>
+
+	<!-- Card -->
 	<string name="card_is_measured">card_is_measured</string>
 	<string name="card_height_collapsed">card_height_collapsed</string>
 	<string name="card_height_collapsed_dismiss">card_height_collapsed_dismiss</string>
 	<string name="card_height_expanded">card_height_expanded</string>
-	<string name="sys_previous_volume">sys_previous_volume</string>
 	<string name="key_delay_showing_whats_new_dialog_counter">key_delay_showing_whats_new_dialog_counter</string>
 
+	<!-- General -->
 	<string name="general_setting_key">pref_screen_general</string>
 	<string name="auto_dismiss_key">pref_auto_dismiss</string>
 	<string name="max_snooze_key">pref_max_snooze</string>
@@ -32,13 +40,19 @@
 	<string name="alarm_sound_key">pref_sound</string>
 	<string name="alarm_volume_key">pref_volume</string>
 	<string name="alarm_audio_source_key">pref_audio_source</string>
-	<string name="speak_to_me_key">pref_speak_to_me</string>
+	<string name="shuffle_playlist_key">pref_shuffle_playlist</string>
+	<string name="should_say_current_time_key">pref_should_say_current_time</string>
+	<string name="should_say_alarm_name_key">pref_should_say_alarm_name</string>
 	<string name="speak_frequency_key">pref_speak_frequency</string>
 	<string name="alarm_should_gradually_increase_volume_key">pref_should_gradually_increase_volume</string>
 	<string name="alarm_should_restrict_volume_key">pref_should_restrict_volume</string>
 	<string name="alarm_use_dismiss_early_key">pref_use_dismiss_early</string>
 	<string name="alarm_dismiss_early_time_key">pref_dismiss_early_time</string>
+	<string name="should_show_reminder_key">pref_should_show_reminder</string>
+	<string name="time_to_show_reminder_key">pref_time_to_show_reminder</string>
+	<string name="reminder_frequency_key">pref_reminder_frequency</string>
 
+	<!-- Appearance -->
 	<string name="appearance_setting_key">pref_screen_appearance</string>
 	<string name="theme_color_key">pref_theme_color</string>
 	<string name="name_color_key">pref_name_color</string>
@@ -54,12 +68,10 @@
 	<string name="next_alarm_format_key">pref_time_remaining_format</string>
 	<string name="show_alarm_info_key">pref_alarm_info</string>
 
-	<string name="shuffle_playlist_key">pref_shuffle_playlist</string>
-
+	<!-- Statistics -->
 	<string name="stats_setting_key">pref_screen_statistics</string>
-	<string name="support_setting_key">pref_screen_support</string>
-	<!-- <string name="start_stats_key">pref_about_author</string> -->
 
+	<!-- About -->
 	<string name="about_setting_key">pref_screen_about</string>
 	<string name="author_key">pref_about_author</string>
 	<string name="version_key">pref_about_version</string>
@@ -74,5 +86,8 @@
 	<string name="about_wakelock_key">pref_about_wakelock</string>
 	<string name="about_full_screen_intent_key">pref_about_full_screen_intent</string>
 	<string name="about_foreground_service_key">pref_about_foreground_service</string>
+
+	<!-- Support -->
+	<string name="support_setting_key">pref_screen_support</string>
 
 </resources>

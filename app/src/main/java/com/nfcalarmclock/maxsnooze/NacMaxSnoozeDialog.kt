@@ -9,8 +9,19 @@ import com.nfcalarmclock.view.dialog.NacScrollablePickerDialogFragment
 /**
  * Select the max number of snoozes allowed for an alarm.
  */
-class NacMaxSnoozeDialog : NacScrollablePickerDialogFragment()
+class NacMaxSnoozeDialog
+	: NacScrollablePickerDialogFragment()
 {
+
+	companion object
+	{
+
+		/**
+		 * Tag for the class.
+		 */
+		const val TAG = "NacMaxSnoozeDialog"
+
+	}
 
 	/**
 	 * The list of values for the scrollable picker.
@@ -40,20 +51,9 @@ class NacMaxSnoozeDialog : NacScrollablePickerDialogFragment()
 				callOnScrollablePickerOptionSelectedListener()
 
 			}
-			.setNegativeButton(R.string.action_cancel) { _, _ ->
-			}
+			.setNegativeButton(R.string.action_cancel, null)
 			.setView(R.layout.dlg_scrollable_picker)
 			.create()
-	}
-
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacMaxSnoozeDialog"
-
 	}
 
 }

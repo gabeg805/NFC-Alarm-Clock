@@ -217,7 +217,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.easy_snooze_key)
-			val defaultValue = resources.getBoolean(R.bool.default_easy_snooze)
+			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
@@ -240,7 +240,7 @@ class NacSharedPreferences(context: Context)
 	val isRateMyAppLimit: Boolean
 		get()
 		{
-			return rateMyAppCounter >= 30
+			return rateMyAppCounter >= 50
 		}
 
 	/**
@@ -391,6 +391,18 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Frequency at which to show the reminder, in units of minutes.
+	 */
+	val reminderFrequency: Int
+		get()
+		{
+			val key = resources.getString(R.string.reminder_frequency_key)
+			val defaultValue = 0
+
+			return instance.getInt(key, defaultValue)
+		}
+
+	/**
 	 * Whether the alarm should be repeated or not.
 	 */
 	val repeat: Boolean
@@ -409,7 +421,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.alarm_should_gradually_increase_volume_key)
-			val defaultValue = resources.getBoolean(R.bool.default_should_gradually_increase_volume)
+			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
@@ -433,7 +445,43 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.alarm_should_restrict_volume_key)
-			val defaultValue = resources.getBoolean(R.bool.default_should_restrict_volume)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+
+	/**
+	 * Whether to say the alarm name or not via text-to-speech.
+	 */
+	val shouldSayAlarmName: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.should_say_alarm_name_key)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+
+	/**
+	 * Whether to say the current time or not via text-to-speech.
+	 */
+	val shouldSayCurrentTime: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.should_say_current_time_key)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+
+	/**
+	 * Whether to show a reminder or not.
+	 */
+	val shouldShowReminder: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.should_show_reminder_key)
+			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
@@ -445,7 +493,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.show_alarm_info_key)
-			val defaultValue = resources.getBoolean(R.bool.default_show_alarm_info)
+			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
@@ -457,7 +505,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.shuffle_playlist_key)
-			val defaultValue = resources.getBoolean(R.bool.default_shuffle_playlist)
+			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
@@ -503,18 +551,6 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * The speak to me value.
-	 */
-	val speakToMe: Boolean
-		get()
-		{
-			val key = resources.getString(R.string.speak_to_me_key)
-			val defaultValue = resources.getBoolean(R.bool.default_speak_to_me)
-
-			return instance.getBoolean(key, defaultValue)
-		}
-
-	/**
 	 * Value indicating which day to start on.
 	 */
 	val startWeekOn: Int
@@ -551,6 +587,18 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * The time to start showing a reminder.
+	 */
+	val timeToShowReminder: Long
+		get()
+		{
+			val key = resources.getString(R.string.time_to_show_reminder_key)
+			val defaultValue = 0L
+
+			return instance.getLong(key, defaultValue)
+		}
+
+	/**
 	 * Whether the upcoming alarm notifications should be displayed.
 	 */
 	val upcomingAlarmNotification: Boolean
@@ -569,7 +617,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.alarm_use_dismiss_early_key)
-			val defaultValue = resources.getBoolean(R.bool.default_use_dismiss_early)
+			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
@@ -823,6 +871,26 @@ class NacSharedPreferences(context: Context)
 	}
 
 	/**
+	 * Edit whether the alarm name will be said or not via text-to-speech.
+	 */
+	fun editShouldSayAlarmName(speak: Boolean)
+	{
+		val key = resources.getString(R.string.should_say_alarm_name_key)
+
+		saveBoolean(key, speak)
+	}
+
+	/**
+	 * Edit whether the current time will be said or not via text-to-speech.
+	 */
+	fun editShouldSayCurrentTime(speak: Boolean)
+	{
+		val key = resources.getString(R.string.should_say_current_time_key)
+
+		saveBoolean(key, speak)
+	}
+
+	/**
 	 * Edit the frequency at which the text-to-speech should go off when an alarm
 	 * is going off.
 	 */
@@ -831,17 +899,6 @@ class NacSharedPreferences(context: Context)
 		val key = resources.getString(R.string.speak_frequency_key)
 
 		saveInt(key, freq)
-	}
-
-	/**
-	 * Edit the flag indicating whether text-to-speech should be used when an
-	 * alarm goes off.
-	 */
-	fun editSpeakToMe(speak: Boolean)
-	{
-		val key = resources.getString(R.string.speak_to_me_key)
-
-		saveBoolean(key, speak)
 	}
 
 	/**

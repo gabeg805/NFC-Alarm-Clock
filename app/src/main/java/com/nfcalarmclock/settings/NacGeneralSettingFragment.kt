@@ -75,8 +75,8 @@ class NacGeneralSettingFragment
 		// Inflate the XML file and add the hierarchy to the current preference
 		addPreferencesFromResource(R.xml.general_preferences)
 
-		// Set the default values on this preference
-		// TODO: What does this do? Is it needed?
+		// Set the default values on this preference that are in the
+		// android:defaultValue attribute
 		PreferenceManager.setDefaultValues(requireContext(), R.xml.general_preferences,
 			false)
 
@@ -376,15 +376,17 @@ class NacGeneralSettingFragment
 		val dialog = NacTextToSpeechDialog()
 
 		// Set the default settings
-		dialog.defaultUseTts = sharedPreferences!!.speakToMe
+		dialog.defaultSayCurrentTime = sharedPreferences!!.shouldSayCurrentTime
+		dialog.defaultSayAlarmName = sharedPreferences!!.shouldSayAlarmName
 		dialog.defaultTtsFrequency = sharedPreferences!!.speakFrequency
 
 		// Set the listener for when the user is done
-		dialog.onTextToSpeechOptionsSelectedListener = OnTextToSpeechOptionsSelectedListener { useTts, freq ->
+		dialog.onTextToSpeechOptionsSelectedListener = OnTextToSpeechOptionsSelectedListener { shouldSayCurrentTime, shouldSayAlarmName, ttsFreq ->
 
 			// Save the text to speech settings
-			sharedPreferences!!.editSpeakToMe(useTts)
-			sharedPreferences!!.editSpeakFrequency(freq)
+			sharedPreferences!!.editShouldSayCurrentTime(shouldSayCurrentTime)
+			sharedPreferences!!.editShouldSayAlarmName(shouldSayAlarmName)
+			sharedPreferences!!.editSpeakFrequency(ttsFreq)
 
 		}
 

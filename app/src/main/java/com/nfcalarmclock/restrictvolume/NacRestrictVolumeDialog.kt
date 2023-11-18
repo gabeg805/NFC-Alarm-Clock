@@ -19,6 +19,16 @@ class NacRestrictVolumeDialog
 	: NacDialogFragment()
 {
 
+	companion object
+	{
+
+		/**
+		 * Tag for the class.
+		 */
+		const val TAG = "NacRestrictVolumeDialog"
+
+	}
+
 	/**
 	 * Listener for when an audio source is selected.
 	 */
@@ -70,8 +80,7 @@ class NacRestrictVolumeDialog
 				onRestrictVolumeListener?.onRestrictVolume(isChecked!!)
 
 			}
-			.setNegativeButton(R.string.action_cancel) { _, _ ->
-			}
+			.setNegativeButton(R.string.action_cancel, null)
 			.setView(R.layout.dlg_alarm_restrict_volume)
 			.create()
 	}
@@ -150,16 +159,6 @@ class NacRestrictVolumeDialog
 
 		// Set the text
 		textView.setText(textId)
-	}
-
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacRestrictVolumeDialog"
-
 	}
 
 }

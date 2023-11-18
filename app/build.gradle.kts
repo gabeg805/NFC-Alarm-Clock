@@ -1,8 +1,8 @@
 plugins {
 	id("com.android.application")
 	id("org.jetbrains.kotlin.android")
-	id("com.google.devtools.ksp")
 	id("com.google.dagger.hilt.android")
+	id("com.google.devtools.ksp")
 }
 
 import java.util.Properties
@@ -25,8 +25,8 @@ android {
 		applicationId = "com.nfcalarmclock"
 		minSdk = 21
 		targetSdk = 33
-		versionCode = 337
-		versionName = "12.0.0-beta002"
+		versionCode = 338
+		versionName = "12.0.0-beta003"
 
 		ksp {
 			arg("room.schemaLocation", "${projectDir}/schemas")

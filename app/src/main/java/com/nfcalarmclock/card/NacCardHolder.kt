@@ -49,10 +49,7 @@ class NacCardHolder(
 	val root: View
 
 	// Constructor
-) : RecyclerView.ViewHolder(root),
-
-	// Interfaces
-	OnSeekBarChangeListener
+) : RecyclerView.ViewHolder(root)
 {
 
 	/**
@@ -1189,54 +1186,6 @@ class NacCardHolder(
 	}
 
 	/**
-	 */
-	override fun onProgressChanged(seekBar: SeekBar, progress: Int,
-		fromUser: Boolean)
-	{
-		// Do nothing if the volumes are already the same
-		if (alarm!!.volume == progress)
-		{
-			return
-		}
-
-		// Alarm can be changed
-		if (checkCanModifyAlarm())
-		{
-			// Set the new volume
-			alarm!!.volume = progress
-
-			// Change the volume icon, if needed
-			setVolumeImageView()
-		}
-		// Alarm cannot be changed
-		else
-		{
-			// Revert the volume back to what it was before
-			seekBar.progress = alarm!!.volume
-		}
-	}
-
-	/**
-	 */
-	override fun onStartTrackingTouch(seekBar: SeekBar)
-	{
-	}
-
-	/**
-	 */
-	override fun onStopTrackingTouch(seekBar: SeekBar)
-	{
-		// Unable to update the alarm. It is currently in use (active or snoozed)
-		if (alarm!!.isInUse)
-		{
-			return
-		}
-
-		// Update the card
-		callOnCardUpdatedListener()
-	}
-
-	/**
 	 * Perform haptic feedback on a view.
 	 */
 	private fun performHapticFeedback(view: View)
@@ -1285,7 +1234,6 @@ class NacCardHolder(
 	private fun refreshDismissAndDismissEarlyButtons()
 	{
 
-		// TODO: Make these two into functions?
 		// Alarm is in use, or will alarm soon so the "Dismiss" or "Dismiss early"
 		// button should be shown
 		val dismissVis = if (alarm!!.isInUse || alarm!!.willAlarmSoon())
@@ -2263,25 +2211,60 @@ class NacCardHolder(
 	private fun setupVolumeSeekBarListener()
 	{
 		// Set the listener
-		volumeSeekBar.setOnSeekBarChangeListener(this)
+		volumeSeekBar.setOnSeekBarChangeListener(object: OnSeekBarChangeListener {
 
-		//volumeSeekBar.setOnSeekBarChangeListener(object: OnSeekBarChangeListener {
+			/**
+			 * Called when the progress is changed.
+			 */
+			override fun onProgressChanged(seekBar: SeekBar, progress: Int,
+				fromUser: Boolean)
+			{
+				// Do nothing if the volumes are already the same
+				if (alarm!!.volume == progress)
+				{
+					return
+				}
 
-		//	override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean)
-		//	{
-		//		TODO("Not yet implemented")
-		//	}
+				// Alarm can be changed
+				if (checkCanModifyAlarm())
+				{
+					// Set the new volume
+					alarm!!.volume = progress
 
-		//	override fun onStartTrackingTouch(p0: SeekBar?)
-		//	{
-		//		TODO("Not yet implemented")
-		//	}
+					// Change the volume icon, if needed
+					setVolumeImageView()
+				}
+				// Alarm cannot be changed
+				else
+				{
+					// Revert the volume back to what it was before
+					seekBar.progress = alarm!!.volume
+				}
+			}
 
-		//	override fun onStopTrackingTouch(p0: SeekBar?)
-		//	{
-		//		TODO("Not yet implemented")
-		//	}
-		//})
+			/**
+			 * Called when the seekbar is touched.
+			 */
+			override fun onStartTrackingTouch(seekBar: SeekBar)
+			{
+			}
+
+			/**
+			 * Called when the seekbar is no longer touched.
+			 */
+			override fun onStopTrackingTouch(seekBar: SeekBar)
+			{
+				// Unable to update the alarm. It is currently in use (active or snoozed)
+				if (alarm!!.isInUse)
+				{
+					return
+				}
+
+				// Update the card
+				callOnCardUpdatedListener()
+			}
+
+		})
 	}
 
 	/**

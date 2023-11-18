@@ -43,6 +43,7 @@ class NacFileBrowser(
 	{
 		fun onDirectoryClicked(browser: NacFileBrowser, path: String)
 		fun onFileClicked(browser: NacFileBrowser, metadata: NacFile.Metadata)
+		fun onDoneShowing(browser: NacFileBrowser)
 	}
 
 	/**
@@ -415,7 +416,12 @@ class NacFileBrowser(
 		viewModel.clear()
 
 		// Show the listing at the new directory
-		viewModel.show(dir)
+		viewModel.show(dir) {
+
+			// Call the listener
+			onBrowserClickedListener?.onDoneShowing(this)
+
+		}
 	}
 
 	/**

@@ -69,12 +69,18 @@ class NacFileBrowserViewModel(app: Application)
 	/**
 	 * Show the listing at the given path.
 	 */
-	fun show(path: String)
+	fun show(path: String, unit: () -> Unit = {})
 	{
 		val context: Context = getApplication()
 
 		viewModelScope.launch {
+
+			// Show the listing
 			repository.show(context, path)
+
+			// Call the unit
+			unit()
+
 		}
 	}
 

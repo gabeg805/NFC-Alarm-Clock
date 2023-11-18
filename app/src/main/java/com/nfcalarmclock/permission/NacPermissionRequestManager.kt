@@ -17,7 +17,7 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 import java.util.EnumSet
 
 /**
- * TODO: Should I have request code?
+ * Manage permission requests.
  */
 class NacPermissionRequestManager(activity: AppCompatActivity)
 {

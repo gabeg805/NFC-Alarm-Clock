@@ -12,12 +12,14 @@
 	<!--
 	<string name="item_X"></string>
 	-->
-	<string name="item_1">Se actualizó cómo se solicitan los permisos para que (con suerte) sea más fácil de usar.</string>
-	<string name="item_2">Descripciones actualizadas en <b>Configuración  >  Acerca  >  Permisos</b>.</string>
-	<string name="item_3">Se corrigió la <b>Aplicación No Responde</b> (ANR) al buscar canciones en una carpeta con muchas canciones.</string>
-	<string name="item_4">Se corrigió un fallo poco frecuente al deslizar el dedo para copiar una alarma.</string>
-	<string name="item_5">Se eliminó <b>Configuración -> Miscelaneo</b>, y se movieron todas esas configuraciones a <b>General</b>.</string>
-	<string name="item_6">Se agrego <b>Configuración -> Apoyo</b> para que pueda respaldar el desarrollo de la aplicación, si quieres.</string>
+	<string name="item_1">Convirtió <b>todo el código</b> de Java a Kotlin.  Esto significa que es posible que determinadas funciones de la aplicación no funcionen como se esperaba.  Si esto sucede, envíame un correo electrónico o escribe una reseña y lo veré.</string>
+	<string name="item_2">Se redujo el tamaño de la aplicación eliminando/recortando el código innecesario.</string>
+	<string name="item_3">Se solucionó el problema por el cual la aplicación te pedía que revisaras increíblemente rápido.  Cada vez que la aplicación se enfoca, el contador aumenta.  Se cambió el umbral del contador de 3 a 50.</string>
+	<string name="item_4">Se solucionó el problema con <b>Restringir volumen</b> donde antes no restringía correctamente el volumen.</string>
+	<string name="item_5">Se solucionó el problema al buscar música con la pestaña <b>Examinar</b>.  Si hubiera mucha música para buscar, se produciría una <b>La aplicación no responde</b> (ANR) y se bloquearía.</string>
+	<string name="item_6">Se agregó una opción a <b>Texto a voz</b> .  Cuando suena una alarma, ahora se puede decir el <b>nombre de la alarma</b>, además de la <b>hora actual</b>.</string>
+	<string name="item_7">Se agregó un mensaje <i>¿Está seguro...</i> al hacer clic en <b>Restablecer estadísticas</b> antes de continuar con el reinicio?</string>
+	<string name="item_8">Se actualizó el reproductor multimedia, <b>Exoplayer</b>, que se utiliza para reproducir música/tonos de llamada cuando suena una alarma.</string>
 
 
 
@@ -87,6 +89,8 @@
 	<string name="message_already_have_permission">Ya tienes este permiso</string>
 	<string name="message_support_thank_you">¡Gracias por su apoyo!</string>
 	<string name="message_reset_statistics">¿Estás seguro de que quieres restablecer todas las estadísticas?</string>
+	<string name="message_tts_current_time">Tiempo actual</string>
+	<string name="message_tts_alarm_name">Nombre de la alarma</string>
 
 
 
@@ -96,6 +100,7 @@
 	<string name="error_message_max_alarms">Número máximo de alarmas creadas</string>
 	<string name="error_message_nfc_mismatch">Etiqueta no coincide con la etiqueta de NFC guardada.</string>
 	<string name="error_message_nfc_unsupported">Tu teléfono no soporta NFC</string>
+	<string name="error_message_unable_to_scan_nfc">No se pueden escanear etiquetas NFC</string>
 	<string name="error_message_restrict_volume_change">Incapaz de restringir el volumen</string>
 	<string name="error_message_snooze">Incapaz de posponer la alarma</string>
 	<string name="error_message_snoozed_delete">Incapaz de borrar una alarma posponada</string>
@@ -126,6 +131,8 @@
 	<string name="title_gradually_increase_volume">Elige aumentar gradualmente el volumen</string>
 	<string name="title_restrict_volume">Elige restringir el volumen</string>
 	<string name="title_tts">Seleccione opciones de texto-a-voz</string>
+	<string name="title_tts_what_to_say">What to say...</string>
+	<string name="title_tts_how_often_to_say">How often to say it...</string>
 	<string name="title_next_alarm_format">Selecciona un estilo</string>
 	<string name="title_speak_frequency">Seleccione la frequencia de hablar</string>
 	<string name="title_folder_selected">Seleccionaste una carpeta</string>

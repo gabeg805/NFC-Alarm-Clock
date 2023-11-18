@@ -12,12 +12,12 @@ class NacCardAdapterLiveData : MutableLiveData<List<NacAlarm>>()
 	 * @return The merged alarm list.
 	 */
 	private fun calculateMerge(
-		oldAlarms: List<NacAlarm>?,
-		newAlarms: List<NacAlarm>?
+		oAlarms: List<NacAlarm>?,
+		nAlarms: List<NacAlarm>?
 	): List<NacAlarm>
 	{
-		val oldAlarms = oldAlarms ?: ArrayList()
-		val newAlarms = newAlarms ?: ArrayList()
+		val oldAlarms = oAlarms ?: ArrayList()
+		val newAlarms = nAlarms ?: ArrayList()
 
 		// Initialize list of merged alarms
 		val mergedAlarms: MutableList<NacAlarm> = ArrayList(oldAlarms)

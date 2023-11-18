@@ -1,26 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+	<!-- App -->
 	<bool name="default_app_start_statistics">true</bool>
 	<bool name="default_app_should_refresh_main_activity">false</bool>
-	<bool name="default_card_is_measured">false</bool>
-	<bool name="default_easy_snooze">false</bool>
-	<bool name="default_repeat">true</bool>
-	<bool name="default_use_nfc">false</bool>
-	<bool name="default_vibrate">true</bool>
-	<bool name="default_missed_alarm">true</bool>
-	<bool name="default_upcoming_alarm">false</bool>
-	<bool name="default_expand_new_alarm">true</bool>
-	<bool name="default_show_alarm_info">false</bool>
-	<bool name="default_shuffle_playlist">false</bool>
-	<bool name="default_speak_to_me">false</bool>
-	<bool name="default_should_gradually_increase_volume">false</bool>
-	<bool name="default_should_restrict_volume">false</bool>
 	<bool name="default_was_app_supported">false</bool>
+
+	<!-- Permissions -->
 	<bool name="default_was_ignore_battery_optimization_permission_requested">false</bool>
 	<bool name="default_was_post_notifications_permission_requested">false</bool>
 	<bool name="default_was_schedule_exact_alarm_permission_requested">false</bool>
-	<bool name="default_use_dismiss_early">false</bool>
+
+	<!-- Card -->
+	<bool name="default_card_is_measured">false</bool>
+	<bool name="default_expand_new_alarm">true</bool>
+
+	<!-- Alarm -->
+	<bool name="default_repeat">true</bool>
+	<bool name="default_use_nfc">false</bool>
+	<bool name="default_vibrate">true</bool>
+
+	<!-- Notifications -->
+	<bool name="default_missed_alarm">true</bool>
+	<bool name="default_upcoming_alarm">false</bool>
+
+	<!-- Miscellaneous -->
+	<bool name="default_easy_snooze">false</bool>
+	<bool name="default_show_alarm_info">false</bool>
+	<bool name="default_shuffle_playlist">false</bool>
 
 	<!--
 	<bool name="is_app_updated">false</bool>

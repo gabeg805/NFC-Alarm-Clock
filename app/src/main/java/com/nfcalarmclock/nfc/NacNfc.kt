@@ -189,8 +189,7 @@ object NacNfc
 		}
 		catch (e: SecurityException)
 		{
-			// TODO: Create string for error message
-			quickToast(activity, "Unable to scan NFC tags")
+			quickToast(activity, R.string.error_message_unable_to_scan_nfc)
 		}
 	}
 

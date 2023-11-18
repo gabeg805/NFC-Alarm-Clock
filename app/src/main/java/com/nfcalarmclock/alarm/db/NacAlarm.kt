@@ -23,7 +23,9 @@ import java.util.Locale
  * Alarm.
  */
 @Entity(tableName = "alarm")
-class NacAlarm() : Comparable<NacAlarm>, Parcelable
+class NacAlarm()
+	: Comparable<NacAlarm>,
+	Parcelable
 {
 
 	/**
@@ -116,14 +118,6 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	var nfcTagId: String = ""
 
 	/**
-	 * Type of media.
-	 *
-	 * TODO: Do I need this? Might need it for Spotify.
-	 */
-	@ColumnInfo(name = "media_type")
-	var mediaType = 0
-
-	/**
 	 * Path to the media that will play when the alarm is run.
 	 */
 	@ColumnInfo(name = "media_path")
@@ -134,6 +128,12 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	 */
 	@ColumnInfo(name = "media_title")
 	var mediaTitle: String = ""
+
+	/**
+	 * Type of media.
+	 */
+	@ColumnInfo(name = "media_type")
+	var mediaType = 0
 
 	/**
 	 * Volume level to set when the alarm is run.
@@ -154,13 +154,21 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	var name: String = ""
 
 	/**
-	 * Flag indicating whether text-to-speech should be used or not.
+	 * Flag indicating whether to say the current time via text-to-speech when
+	 * the alarm goes off.
 	 */
-	@ColumnInfo(name = "should_use_tts")
-	var useTts = false
+	@ColumnInfo(name = "should_say_current_time", defaultValue = "0")
+	var sayCurrentTime = false
 
 	/**
-	 * Frequency at which to play text-to-speech, in units of min.
+	 * Flag indicating whether to say the alarm name via text-to-speech when
+	 * the alarm goes off.
+	 */
+	@ColumnInfo(name = "should_say_alarm_name", defaultValue = "0")
+	var sayAlarmName = false
+
+	/**
+	 * Frequency at which to play text-to-speech, in units of minutes.
 	 */
 	@ColumnInfo(name = "tts_frequency")
 	var ttsFrequency = 0
@@ -196,6 +204,24 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	 */
 	@ColumnInfo(name = "time_of_dismiss_early_alarm")
 	var timeOfDismissEarlyAlarm: Long = 0
+
+	/**
+	 * Whether to show a reminder or not.
+	 */
+	@ColumnInfo(name = "should_show_reminder", defaultValue = "0")
+	var showReminder = false
+
+	/**
+	 * The time to start showing a reminder.
+	 */
+	@ColumnInfo(name = "time_to_show_reminder", defaultValue = "0")
+	var timeToShowReminder: Long = 0
+
+	/**
+	 * Frequency at which to show the reminder, in units of minutes.
+	 */
+	@ColumnInfo(name = "reminder_frequency", defaultValue = "0")
+	var reminderFrequency = 0
 
 	/**
 	 * Check if any days are selected.
@@ -244,10 +270,10 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 		get() = repeat
 
 	/**
-	 * Check if should use dismiss early or not.
+	 * Check if the phone should vibrate when the alarm is run.
 	 */
-	val shouldUseDismissEarly: Boolean
-		get() = useDismissEarly
+	val shouldVibrate: Boolean
+		get() = vibrate
 
 	/**
 	 * Check if should use NFC or not.
@@ -259,13 +285,19 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	 * Check if should use TTS or not.
 	 */
 	val shouldUseTts: Boolean
-		get() = useTts
+		get() = sayCurrentTime || sayAlarmName
 
 	/**
-	 * Check if the phone should vibrate when the alarm is run.
+	 * Check if should say the current time when an alarm goes off.
 	 */
-	val shouldVibrate: Boolean
-		get() = vibrate
+	val shouldSayCurrentTime: Boolean
+		get() = sayCurrentTime
+
+	/**
+	 * Check if should say the alarm name when an alarm goes off.
+	 */
+	val shouldSayAlarmName: Boolean
+		get() = sayAlarmName
 
 	/**
 	 * The frequency at which to use TTS, in units of milliseconds.
@@ -274,409 +306,37 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 		get() = ttsFrequency * 60L * 1000L
 
 	/**
-	 * Helper to build an alarm.
+	 * Check if should use dismiss early or not.
 	 */
-	class Builder()
-	{
+	val shouldUseDismissEarly: Boolean
+		get() = useDismissEarly
 
-		/**
-		 * Alarm object that will be built.
-		 */
-		private val alarm: NacAlarm = NacAlarm()
+	/**
+	 * Check if should show a reminder or not.
+	 */
+	val shouldShowReminder: Boolean
+		get() = showReminder
 
-		/**
-		 * Constructor.
-		 */
-		init
-		{
-			val calendar = Calendar.getInstance()
-
-			this.setIsEnabled(true)
-				.setHour(calendar[Calendar.HOUR_OF_DAY])
-				.setMinute(calendar[Calendar.MINUTE])
-				.setDays(Day.NONE)
-				.setRepeat(false)
-				.setVibrate(false)
-				.setUseNfc(false)
-				.setNfcTagId("")
-				.setMediaType(NacMedia.TYPE_NONE)
-				.setMediaPath("")
-				.setMediaTitle("")
-				.setVolume(0)
-				.setAudioSource("Media")
-				.setName("")
-				.setUseTts(false)
-				.setShouldGraduallyIncreaseVolume(false)
-				.setShouldRestrictVolume(false)
-				.setUseDismissEarly(false)
-				.setDismissEarlyTime(0)
-				.setTimeOfDismissEarlyAlarm(0)
-		}
-
-		/**
-		 * Constructor.
-		 */
-		constructor(shared: NacSharedPreferences?) : this()
-		{
-			if (shared != null)
-			{
-				this.setDays(Day.valueToDays(shared.days))
-					.setRepeat(shared.repeat)
-					.setVibrate(shared.vibrate)
-					.setUseNfc(shared.useNfc)
-					.setMediaPath(shared.mediaPath)
-					.setVolume(shared.volume)
-					.setAudioSource(shared.audioSource)
-					.setName(shared.name)
-					.setUseTts(shared.speakToMe)
-					.setTtsFrequency(shared.speakFrequency)
-					.setShouldGraduallyIncreaseVolume(shared.shouldGraduallyIncreaseVolume)
-					.setShouldRestrictVolume(shared.shouldRestrictVolume)
-					.setUseDismissEarly(shared.useDismissEarly)
-					.setDismissEarlyTime(shared.dismissEarlyTime)
-			}
-		}
-
-		/**
-		 * Build the alarm.
-		 */
-		fun build(): NacAlarm
-		{
-			return alarm
-		}
-
-		/**
-		 * Set the audio source.
-		 *
-		 * @param  source  The audio source.
-		 *
-		 * @return The Builder.
-		 */
-		fun setAudioSource(source: String): Builder
-		{
-			alarm.audioSource = source
-			return this
-		}
-
-		/**
-		 * Set the days to the run the alarm.
-		 *
-		 * @param  days  The set of days to run the alarm on.
-		 *
-		 * @return The Builder.
-		 */
-		fun setDays(days: EnumSet<Day>): Builder
-		{
-			alarm.days = days
-			return this
-		}
-
-		/**
-		 * @see .setDays
-		 */
-		fun setDays(value: Int): Builder
-		{
-			return this.setDays(Day.valueToDays(value))
-		}
-
-		/**
-		 * Set the time before an alarm goes off to show the dismiss early button.
-		 *
-		 * @param  dismissEarly  Amount of time, in minutes.
-		 *
-		 * @return The Builder.
-		 */
-		fun setDismissEarlyTime(dismissEarly: Int): Builder
-		{
-			alarm.dismissEarlyTime = dismissEarly
-			return this
-		}
-
-		/**
-		 * Set the hour.
-		 *
-		 * @param  hour  The hour at which to run the alarm.
-		 *
-		 * @return The Builder.
-		 */
-		fun setHour(hour: Int): Builder
-		{
-			alarm.hour = hour
-			return this
-		}
-
-		/**
-		 * Set the alarm ID.
-		 *
-		 * @param  id  The alarm id.
-		 *
-		 * @return The Builder.
-		 */
-		fun setId(id: Long): Builder
-		{
-			alarm.id = id
-			return this
-		}
-
-		/**
-		 * Set whether the alarm is enabled or not.
-		 *
-		 * @param  enabled  True if the alarm is enabled and False otherwise.
-		 *
-		 * @return The Builder.
-		 */
-		fun setIsEnabled(enabled: Boolean): Builder
-		{
-			alarm.isEnabled = enabled
-			return this
-		}
-
-		/**
-		 * Set the path, name, and type of the sound to play.
-		 *
-		 * @param  context  The application context.
-		 * @param  path  The path to the sound to play.
-		 *
-		 * @return The Builder.
-		 */
-		fun setMedia(context: Context, path: String): Builder
-		{
-			// Get media information
-			val type = NacMedia.getType(context, path)
-			val title = NacMedia.getTitle(context, path)
-
-			// Set media information
-			setMediaType(type)
-			setMediaPath(path)
-			setMediaTitle(title)
-
-			return this
-		}
-
-		/**
-		 * Set the media title.
-		 *
-		 * @param  title  The title of the media file to play.
-		 *
-		 * @return The Builder.
-		 */
-		fun setMediaTitle(title: String): Builder
-		{
-			alarm.mediaTitle = title
-			return this
-		}
-
-		/**
-		 * Set the sound to play when the alarm goes off.
-		 *
-		 * @param  path  The path to the media file to play when the alarm goes
-		 * off.
-		 *
-		 * @return The Builder.
-		 */
-		fun setMediaPath(path: String): Builder
-		{
-			alarm.mediaPath = path
-			return this
-		}
-
-		/**
-		 * Set the type of sound to play.
-		 *
-		 * @param  type  The type of media file to play.
-		 *
-		 * @return The Builder.
-		 */
-		fun setMediaType(type: Int): Builder
-		{
-			alarm.mediaType = type
-			return this
-		}
-
-		/**
-		 * Set the minute.
-		 *
-		 * @param  minute  The minute at which to run the alarm.
-		 *
-		 * @return The Builder.
-		 */
-		fun setMinute(minute: Int): Builder
-		{
-			alarm.minute = minute
-			return this
-		}
-
-		/**
-		 * Set the name of the alarm.
-		 *
-		 * @param  name  The alarm name.
-		 *
-		 * @return The Builder.
-		 */
-		fun setName(name: String): Builder
-		{
-			alarm.name = name
-			return this
-		}
-
-		/**
-		 * Set the NFC tag ID of the tag that will be used to dismiss the alarm.
-		 *
-		 * @param  tagId  The ID of the NFC tag.
-		 *
-		 * @return The Builder.
-		 */
-		fun setNfcTagId(tagId: String): Builder
-		{
-			alarm.nfcTagId = tagId
-			return this
-		}
-
-		/**
-		 * Set whether the alarm should repeat every week or not.
-		 *
-		 * @param  repeat  True if repeating the alarm after it runs, and False
-		 * otherwise.
-		 *
-		 * @return The Builder.
-		 */
-		fun setRepeat(repeat: Boolean): Builder
-		{
-			alarm.repeat = repeat
-			return this
-		}
-
-		/**
-		 * Set whether the volume should be gradually increased when an alarm is active.
-		 *
-		 * @param  shouldIncrease  True if the volume should be gradually
-		 * increased, and False otherwise.
-		 *
-		 * @return The Builder.
-		 */
-		fun setShouldGraduallyIncreaseVolume(shouldIncrease: Boolean): Builder
-		{
-			alarm.shouldGraduallyIncreaseVolume = shouldIncrease
-			return this
-		}
-
-		/**
-		 * Set whether the volume should be restricted when an alarm is active.
-		 *
-		 * @param  restrict  True if the volume should be restricted, and False
-		 * otherwise.
-		 *
-		 * @return The Builder.
-		 */
-		fun setShouldRestrictVolume(restrict: Boolean): Builder
-		{
-			alarm.shouldRestrictVolume = restrict
-			return this
-		}
-
-		/**
-		 * Set the time of the alarm that was dismissed early.
-		 *
-		 * @param  time  Time of the alarm that was dismissed early (milliseonds).
-		 *
-		 * @return The Builder.
-		 */
-		fun setTimeOfDismissEarlyAlarm(time: Long): Builder
-		{
-			alarm.timeOfDismissEarlyAlarm = time
-			return this
-		}
-
-		/**
-		 * Set the frequency at which to use TTS, in units of min.
-		 *
-		 * @param  freq  The TTS frequency.
-		 *
-		 * @return The Builder.
-		 */
-		fun setTtsFrequency(freq: Int): Builder
-		{
-			alarm.ttsFrequency = freq
-			return this
-		}
-
-		/**
-		 * Set whether to use dismiss early.
-		 *
-		 * @param  useDismissEarly  Whether or not to use dismiss early.
-		 *
-		 * @return The Builder.
-		 */
-		fun setUseDismissEarly(useDismissEarly: Boolean): Builder
-		{
-			alarm.useDismissEarly = useDismissEarly
-			return this
-		}
-
-		/**
-		 * Set whether the alarm should use NFC to dismiss or not.
-		 *
-		 * @param  useNfc  True if the phone should use NFC to dismiss, and False
-		 * otherwise.
-		 *
-		 * @return The Builder.
-		 */
-		fun setUseNfc(useNfc: Boolean): Builder
-		{
-			alarm.useNfc = useNfc
-			return this
-		}
-
-		/**
-		 * Set whether the alarm should use TTS or not.
-		 *
-		 * @param  useTts  True if should use TTS, and False otherwise.
-		 *
-		 * @return The Builder.
-		 */
-		fun setUseTts(useTts: Boolean): Builder
-		{
-			alarm.useTts = useTts
-			return this
-		}
-
-		/**
-		 * Set whether the alarm should vibrate the phone or not.
-		 *
-		 * @param  vibrate  True if the phone should vibrate when the alarm is
-		 * going off and false otherwise.
-		 *
-		 * @return The Builder.
-		 */
-		fun setVibrate(vibrate: Boolean): Builder
-		{
-			alarm.vibrate = vibrate
-			return this
-		}
-
-		/**
-		 * Set the volume level.
-		 *
-		 * @param  volume  The volume level.
-		 *
-		 * @return The Builder.
-		 */
-		fun setVolume(volume: Int): Builder
-		{
-			alarm.volume = volume
-			return this
-		}
-	}
+	/**
+	 * The frequency at which to show a reminder, in units of milliseconds.
+	 */
+	val reminderFrequencyMillis: Long
+		get() = reminderFrequency * 60L * 1000L
 
 	/**
 	 * Populate values with input parcel.
 	 */
 	private constructor(input: Parcel) : this()
 	{
+		// ID
 		id = input.readLong()
+
+		// Active alarm flags
 		isActive = input.readInt() != 0
 		timeActive = input.readLong()
 		snoozeCount = input.readInt()
+
+		// Normal stuff
 		isEnabled = input.readInt() != 0
 		hour = input.readInt()
 		minute = input.readInt()
@@ -685,19 +345,31 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 		vibrate = input.readInt() != 0
 		useNfc = input.readInt() != 0
 		nfcTagId = input.readString() ?: ""
-		mediaType = input.readInt()
 		mediaPath = input.readString() ?: ""
 		mediaTitle = input.readString() ?: ""
+		mediaType = input.readInt()
 		volume = input.readInt()
 		audioSource = input.readString() ?: ""
 		name = input.readString() ?: ""
-		useTts = input.readInt() != 0
+
+		// Text-to-speech
+		sayCurrentTime = input.readInt() != 0
+		sayAlarmName = input.readInt() != 0
 		ttsFrequency = input.readInt()
+
+		// Volume features
 		shouldGraduallyIncreaseVolume = input.readInt() != 0
 		shouldRestrictVolume = input.readInt() != 0
+
+		// Dismiss early
 		useDismissEarly = input.readInt() != 0
 		dismissEarlyTime = input.readInt()
 		timeOfDismissEarlyAlarm = input.readLong()
+
+		// Reminder
+		showReminder = input.readInt() != 0
+		timeToShowReminder = input.readLong()
+		reminderFrequency = input.readInt()
 	}
 
 	/**
@@ -859,30 +531,47 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	 */
 	fun copy(): NacAlarm
 	{
-		return Builder()
-			.setId(0)
-			.setIsEnabled(isEnabled)
-			.setHour(hour)
-			.setMinute(minute)
-			.setDays(days)
-			.setRepeat(shouldRepeat)
-			.setVibrate(shouldVibrate)
-			.setUseNfc(shouldUseNfc)
-			.setNfcTagId(nfcTagId)
-			.setMediaType(mediaType)
-			.setMediaPath(mediaPath)
-			.setMediaTitle(mediaTitle)
-			.setVolume(volume)
-			.setAudioSource(audioSource)
-			.setName(name)
-			.setUseTts(shouldUseTts)
-			.setTtsFrequency(ttsFrequency)
-			.setShouldGraduallyIncreaseVolume(shouldGraduallyIncreaseVolume)
-			.setShouldRestrictVolume(shouldRestrictVolume)
-			.setUseDismissEarly(shouldUseDismissEarly)
-			.setDismissEarlyTime(dismissEarlyTime)
-			.setTimeOfDismissEarlyAlarm(timeOfDismissEarlyAlarm)
-			.build()
+		val alarm = build()
+
+		// ID
+		alarm.id = 0
+
+		// Normal stuff
+		alarm.isEnabled = isEnabled
+		alarm.hour = hour
+		alarm.minute = minute
+		alarm.days = days
+		alarm.repeat = shouldRepeat
+		alarm.vibrate = shouldVibrate
+		alarm.useNfc = shouldUseNfc
+		alarm.nfcTagId = nfcTagId
+		alarm.mediaPath = mediaPath
+		alarm.mediaTitle = mediaTitle
+		alarm.mediaType = mediaType
+		alarm.volume = volume
+		alarm.audioSource = audioSource
+		alarm.name = name
+
+		// Text-to-speech
+		alarm.sayCurrentTime = shouldSayCurrentTime
+		alarm.sayAlarmName = shouldSayAlarmName
+		alarm.ttsFrequency = ttsFrequency
+
+		// Volume features
+		alarm.shouldGraduallyIncreaseVolume = shouldGraduallyIncreaseVolume
+		alarm.shouldRestrictVolume = shouldRestrictVolume
+
+		// Dismiss early
+		alarm.useDismissEarly = shouldUseDismissEarly
+		alarm.dismissEarlyTime = dismissEarlyTime
+		alarm.timeOfDismissEarlyAlarm = timeOfDismissEarlyAlarm
+
+		// Reminder
+		alarm.showReminder = showReminder
+		alarm.timeToShowReminder = timeToShowReminder
+		alarm.reminderFrequency = reminderFrequency
+
+		return alarm
 	}
 
 	/**
@@ -964,7 +653,8 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 			&& (volume == alarm.volume)
 			&& (audioSource == alarm.audioSource)
 			&& (name == alarm.name)
-			&& (shouldUseTts == alarm.shouldUseTts)
+			&& (shouldSayCurrentTime == alarm.shouldSayCurrentTime)
+			&& (shouldSayAlarmName == alarm.shouldSayAlarmName)
 			&& (ttsFrequency == alarm.ttsFrequency)
 			&& (shouldGraduallyIncreaseVolume == alarm.shouldGraduallyIncreaseVolume)
 			&& (shouldRestrictVolume == alarm.shouldRestrictVolume)
@@ -1067,7 +757,8 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 		println("Volume              : $volume")
 		println("Audio Source        : $audioSource")
 		println("Name                : $name")
-		println("Use Tts             : $shouldUseTts")
+		println("Tts say time        : $shouldSayCurrentTime")
+		println("Tts say name        : $shouldSayAlarmName")
 		println("Tts Freq            : $ttsFrequency")
 		println("Grad Inc Vol        : $shouldGraduallyIncreaseVolume")
 		println("Restrict Vol        : $shouldRestrictVolume")
@@ -1228,15 +919,19 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 	/**
 	 * Write data into parcel (required for Parcelable).
 	 *
-	 *
 	 * Update this when adding/removing an element.
 	 */
 	override fun writeToParcel(output: Parcel, flags: Int)
 	{
+		// ID
 		output.writeLong(id)
+
+		// Active alarm flags
 		output.writeInt(if (isActive) 1 else 0)
 		output.writeLong(timeActive)
 		output.writeInt(snoozeCount)
+
+		// Normal stuff
 		output.writeInt(if (isEnabled) 1 else 0)
 		output.writeInt(hour)
 		output.writeInt(minute)
@@ -1245,18 +940,31 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 		output.writeInt(if (shouldVibrate) 1 else 0)
 		output.writeInt(if (shouldUseNfc) 1 else 0)
 		output.writeString(nfcTagId)
-		output.writeInt(mediaType)
 		output.writeString(mediaPath)
 		output.writeString(mediaTitle)
+		output.writeInt(mediaType)
 		output.writeInt(volume)
 		output.writeString(audioSource)
 		output.writeString(name)
-		output.writeInt(if (shouldUseTts) 1 else 0)
+
+		// Text-to-speech
+		output.writeInt(if (shouldSayCurrentTime) 1 else 0)
+		output.writeInt(if (shouldSayAlarmName) 1 else 0)
 		output.writeInt(ttsFrequency)
+
+		// Volume features
 		output.writeInt(if (shouldGraduallyIncreaseVolume) 1 else 0)
 		output.writeInt(if (shouldRestrictVolume) 1 else 0)
+
+		// Dismiss early
 		output.writeInt(if (shouldUseDismissEarly) 1 else 0)
 		output.writeInt(dismissEarlyTime)
+		output.writeLong(timeOfDismissEarlyAlarm)
+
+		// Reminder
+		output.writeInt(if (shouldShowReminder) 1 else 0)
+		output.writeLong(timeToShowReminder)
+		output.writeInt(reminderFrequency)
 	}
 
 	companion object
@@ -1279,6 +987,52 @@ class NacAlarm() : Comparable<NacAlarm>, Parcelable
 			}
 		}
 
+		/**
+		 * Build an alarm.
+		 */
+		fun build(shared: NacSharedPreferences? = null): NacAlarm
+		{
+			val alarm = NacAlarm()
+			val calendar = Calendar.getInstance()
+
+			// Normal stuff
+			alarm.isEnabled = true
+			alarm.hour = calendar[Calendar.HOUR_OF_DAY]
+			alarm.minute = calendar[Calendar.MINUTE]
+			alarm.days = if (shared != null) Day.valueToDays(shared.days) else Day.NONE
+			alarm.repeat = shared?.repeat ?: false
+			alarm.vibrate = shared?.vibrate ?: false
+			alarm.useNfc = shared?.useNfc ?: false
+			alarm.nfcTagId = ""
+			alarm.mediaPath = shared?.mediaPath ?: ""
+			alarm.mediaTitle = ""
+			alarm.mediaType = NacMedia.TYPE_NONE
+			alarm.volume = shared?.volume ?: 0
+			alarm.audioSource = shared?.audioSource ?: ""
+			alarm.name = shared?.name ?: ""
+
+			// Text-to-speech
+			alarm.sayCurrentTime = shared?.shouldSayCurrentTime ?: false
+			alarm.sayAlarmName = shared?.shouldSayAlarmName ?: false
+			alarm.ttsFrequency = shared?.speakFrequency ?: 0
+
+			// Volume features
+			alarm.shouldGraduallyIncreaseVolume = shared?.shouldGraduallyIncreaseVolume ?: false
+			alarm.shouldRestrictVolume = shared?.shouldRestrictVolume ?: false
+
+			// Dismiss early
+			alarm.useDismissEarly = shared?.useDismissEarly ?: false
+			alarm.dismissEarlyTime = shared?.dismissEarlyTime ?: 0
+			alarm.timeOfDismissEarlyAlarm = 0
+
+			// Reminder
+			//alarm.showReminder = shared?. ?: false
+			//alarm.timeToShowReminder = shared?. ?: 0
+			//alarm.reminderFrequency = shared?. ?: 0
+
+			return alarm
+		}
+
 	}
 
 }
@@ -1297,7 +1051,7 @@ class NacAlarmModule
 	@Provides
 	fun provideAlarm() : NacAlarm
 	{
-		return NacAlarm.Builder().build()
+		return NacAlarm.build()
 	}
 
 }

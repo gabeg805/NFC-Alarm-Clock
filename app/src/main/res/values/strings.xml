@@ -12,12 +12,14 @@
 	<!--
 	<string name="item_X"></string>
 	-->
-	<string name="item_1">Updated how permissions are requested to be (hopefully) more user-friendly.</string>
-	<string name="item_2">Updated descriptions in <b>Settings  >  About  >  Permissions</b>.</string>
-	<string name="item_3">Fixed <b>App Not Responding</b> (ANR) when browsing for songs in a folder with a lot of songs.</string>
-	<string name="item_4">Fixed rare crash when swiping to copy an alarm.</string>
-	<string name="item_5">Removed <b>Settings  >  Miscellaneous</b>, and moved all those settings into <b>General</b>.</string>
-	<string name="item_6">Added <b>Settings  >  Support</b> so that you can support development of the app, if you want.</string>
+	<string name="item_1">Converted <b>all code</b> from Java to Kotlin.  This means that certain features of the app might not work as expected.  If this happens, send me an email or right a review and I will see it.</string>
+	<string name="item_2">Reduced the size of the app by removing/trimming down unneeded code.</string>
+	<string name="item_3">Fixed issue where the app was asking you to review insanely quickly.  Every time the app gets focus, the counter increments.  Changed the counter threshold from 3 to 50.</string>
+	<string name="item_4">Fixed issue with <b>Restrict volume</b> where it was not properly restricting volume before.</string>
+	<string name="item_5">Fixed issue when searching for music with the <b>Browse</b> tab.  If there was a lot of music to search, it would cause an <b>App Not Responding</b> (ANR) and crash.</string>
+	<string name="item_6">Added an option to <b>Text-to-speech</b>.  When an alarm goes off, the <b>alarm name</b> can now be said, in addition to the <b>current time</b>.</string>
+	<string name="item_7">Added an <i>Are you sure...</i> prompt when clicking to <b>Reset statistics</b> before proceeding with the reset.</string>
+	<string name="item_8">Updated the media player, <b>Exoplayer</b>, that is used to play music/ringtones when an alarm goes off.</string>
 
 
 
@@ -87,6 +89,8 @@
 	<string name="message_already_have_permission">You already have this permission</string>
 	<string name="message_support_thank_you">Thank you for your support!</string>
 	<string name="message_reset_statistics">Are you sure you want to reset all the statistics?</string>
+	<string name="message_tts_current_time">Current time</string>
+	<string name="message_tts_alarm_name">Name of the alarm</string>
 
 
 
@@ -96,6 +100,7 @@
 	<string name="error_message_max_alarms">Max number of alarms created</string>
 	<string name="error_message_nfc_mismatch">NFC tag does not match the saved tag.</string>
 	<string name="error_message_nfc_unsupported">Your device does not support NFC</string>
+	<string name="error_message_unable_to_scan_nfc">Unable to scan NFC tags</string>
 	<string name="error_message_restrict_volume_change">Unable to restrict volume</string>
 	<string name="error_message_snooze">Unable to snooze the alarm</string>
 	<string name="error_message_snoozed_delete">Unable to delete a snoozed alarm</string>
@@ -126,6 +131,8 @@
 	<string name="title_gradually_increase_volume">Choose to gradually increase volume</string>
 	<string name="title_restrict_volume">Choose to restrict volume</string>
 	<string name="title_tts">Select text-to-speech options</string>
+	<string name="title_tts_what_to_say">What to say...</string>
+	<string name="title_tts_how_often_to_say">How often to say it...</string>
 	<string name="title_next_alarm_format">Select a format</string>
 	<string name="title_speak_frequency">Select speak frequency</string>
 	<string name="title_folder_selected">You selected a folder</string>

@@ -2,14 +2,14 @@
 TODO
 ----
 
-* Reorganize some of the packages like media. See if I can make a media player package?
+* The alarm was resized/colored incorrectly, I believe after the media activity.
 
 * Early notification in alarm options
 	- have an incremental countdown to alarm
 
-* Have option to say alarm name
-
 * Add creole and vietnamese
+
+* Reorganize some of the packages like media. See if I can make a media player package?
 
 * Have option to scroll alarm name instead of marquee it
 

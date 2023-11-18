@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.room.AutoMigration
 import androidx.room.Database
+import androidx.room.DeleteColumn
 import androidx.room.Room.databaseBuilder
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -13,6 +14,7 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.db.NacAlarmDao
 import com.nfcalarmclock.alarm.db.NacAlarmTypeConverters
 import com.nfcalarmclock.db.NacAlarmDatabase.ClearAllStatisticsMigration
+import com.nfcalarmclock.db.NacAlarmDatabase.RemoveUseTtsColumnMigration
 import com.nfcalarmclock.db.NacOldDatabase.Companion.read
 import com.nfcalarmclock.scheduler.NacScheduler
 import com.nfcalarmclock.shared.NacSharedPreferences
@@ -41,20 +43,21 @@ import javax.inject.Singleton
 /**
  * Store alarms in a Room database.
  */
-@Database(version = 10,
+@Database(version = 11,
 	entities = [NacAlarm::class, NacAlarmCreatedStatistic::class,
 		NacAlarmDeletedStatistic::class, NacAlarmDismissedStatistic::class,
 		NacAlarmMissedStatistic::class, NacAlarmSnoozedStatistic::class],
 	autoMigrations = [
-		AutoMigration(from = 1, to = 2),
-		AutoMigration(from = 2, to = 3, spec = ClearAllStatisticsMigration::class),
-		AutoMigration(from = 3, to = 4),
-		AutoMigration(from = 4, to = 5),
-		AutoMigration(from = 5, to = 6),
-		AutoMigration(from = 6, to = 7),
-		AutoMigration(from = 7, to = 8),
-		AutoMigration(from = 8, to = 9),
-		AutoMigration(from = 9, to = 10)]
+		AutoMigration(from = 1,  to = 2),
+		AutoMigration(from = 2,  to = 3, spec = ClearAllStatisticsMigration::class),
+		AutoMigration(from = 3,  to = 4),
+		AutoMigration(from = 4,  to = 5),
+		AutoMigration(from = 5,  to = 6),
+		AutoMigration(from = 6,  to = 7),
+		AutoMigration(from = 7,  to = 8),
+		AutoMigration(from = 8,  to = 9),
+		AutoMigration(from = 9,  to = 10),
+		AutoMigration(from = 10, to = 11, spec = RemoveUseTtsColumnMigration::class)]
 )
 @TypeConverters(NacAlarmTypeConverters::class, NacStatisticTypeConverters::class)
 abstract class NacAlarmDatabase
@@ -118,6 +121,12 @@ abstract class NacAlarmDatabase
 		}
 
 	}
+
+	/**
+	 * Remove the "Use TTS" column when auto-migrating.
+	 */
+	@DeleteColumn(tableName = "alarm", columnName = "should_use_tts")
+	internal class RemoveUseTtsColumnMigration : AutoMigrationSpec
 
 	/**
 	 * Static stuff.

@@ -68,8 +68,6 @@ object NacBundle
 				{
 					try
 					{
-						bundle.classLoader = NacAlarm.Builder::class.java.classLoader
-
 						// Use the updated form of Bundle.getParcelable() for API >= 33
 						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
 						{

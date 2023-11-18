@@ -51,11 +51,11 @@ interface NacAlarmDao
 	suspend fun findAlarm(id: Long): NacAlarm?
 
 	/**
-	 * Get an active alarm.
+	 * Get an active alarm, the alarm that has been active the longest.
 	 *
-	 * @return An active alarm.
+	 * @return An active alarm, the alarm that has been active the longest.
 	 */
-	@Query("SELECT * FROM alarm WHERE is_active=1 LIMIT 1")
+	@Query("SELECT * FROM alarm WHERE is_active=1 ORDER BY time_active DESC LIMIT 1")
 	suspend fun getActiveAlarm(): NacAlarm?
 
 	/**

@@ -303,12 +303,12 @@ class NacMainActivity
 	private fun addFirstAlarm()
 	{
 		// Create the alarm
-		val alarm = NacAlarm.Builder(sharedPreferences)
-			.setId(0)
-			.setHour(8)
-			.setMinute(0)
-			.setName("Work")
-			.build()
+		val alarm = NacAlarm.build(sharedPreferences)
+
+		alarm.id = 0
+		alarm.hour = 8
+		alarm.minute = 0
+		alarm.name = getString(R.string.example_name)
 
 		// Add the alarm and avoid having interact() called for the alarm card,
 		// that way it does not get expanded and show the time dialog
@@ -621,6 +621,14 @@ class NacMainActivity
 		menuInfo: ContextMenuInfo?
 	)
 	{
+		// Check if it has already been created. Saw double the menu items one
+		// time, but cannot seem to replicate it. Adding a check just to avoid
+		// this happening in production
+		if (menu.size() > 0)
+		{
+			return
+		}
+
 		// Inflate the context menu
 		menuInflater.inflate(R.menu.menu_card, menu)
 
@@ -631,7 +639,6 @@ class NacMainActivity
 			val item = menu.getItem(i)
 
 			// Set the listener for a menu item
-			// TODO: Can change this to a method?
 			item.setOnMenuItemClickListener { menuItem: MenuItem ->
 
 				// Get the card holder
@@ -640,17 +647,16 @@ class NacMainActivity
 				// Check to make sure the card holder is not null
 				if (holder != null)
 				{
-					// Check if the show next alarm item was clicked
-					if (menuItem.itemId == R.id.menu_show_next_alarm)
+					when (menuItem.itemId)
 					{
 						// Show the next time the alarm will run
-						showAlarmSnackbar(holder.alarm!!)
-					}
-					// Check if the NFC tag item was clicked
-					else if (menuItem.itemId == R.id.menu_show_nfc_tag_id)
-					{
+						R.id.menu_show_next_alarm -> showAlarmSnackbar(holder.alarm!!)
+
 						// Show the NFC tag ID that was set for this alarm
-						showNfcTagId(holder.alarm!!)
+						R.id.menu_show_nfc_tag_id -> showNfcTagId(holder.alarm!!)
+
+						// Unknown
+						else -> {}
 					}
 				}
 
@@ -1025,8 +1031,7 @@ class NacMainActivity
 			}
 
 			// Create the alarm
-			val alarm = NacAlarm.Builder(sharedPreferences)
-				.build()
+			val alarm = NacAlarm.build(sharedPreferences)
 
 			// Add the alarm
 			addAlarm(alarm)
@@ -1481,15 +1486,17 @@ class NacMainActivity
 		val dialog = NacTextToSpeechDialog()
 
 		// Set the default values
-		dialog.defaultUseTts = audioOptionsAlarm!!.shouldUseTts
+		dialog.defaultSayCurrentTime = audioOptionsAlarm!!.shouldSayCurrentTime
+		dialog.defaultSayAlarmName = audioOptionsAlarm!!.shouldSayAlarmName
 		dialog.defaultTtsFrequency = audioOptionsAlarm!!.ttsFrequency
 
 		// Setup the listener
-		dialog.onTextToSpeechOptionsSelectedListener = OnTextToSpeechOptionsSelectedListener { useTts, freq ->
+		dialog.onTextToSpeechOptionsSelectedListener = OnTextToSpeechOptionsSelectedListener { shouldSayCurrentTime, shouldSayAlarmName, ttsFreq ->
 
 			// Set the new text to speech values
-			audioOptionsAlarm!!.useTts = useTts
-			audioOptionsAlarm!!.ttsFrequency = freq
+			audioOptionsAlarm!!.sayCurrentTime = shouldSayCurrentTime
+			audioOptionsAlarm!!.sayAlarmName = shouldSayAlarmName
+			audioOptionsAlarm!!.ttsFrequency = ttsFreq
 
 			// Update the alarm
 			alarmViewModel.update(audioOptionsAlarm!!)
@@ -1547,9 +1554,6 @@ class NacMainActivity
 
 	/**
 	 * Update the notification.
-	 *
-	 * TODO: Check if race condition with this being called after submitList?
-	 * Should I just pass a list of alarms to this method?
 	 */
 	private fun updateUpcomingNotification(alarms: List<NacAlarm>)
 	{

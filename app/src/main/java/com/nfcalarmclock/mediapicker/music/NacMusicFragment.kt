@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
@@ -19,6 +21,8 @@ import com.nfcalarmclock.mediapicker.NacMediaFragment
 import com.nfcalarmclock.permission.readmediaaudio.NacReadMediaAudioPermission
 import com.nfcalarmclock.util.NacBundle
 import com.nfcalarmclock.util.NacUtility
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 /**
@@ -31,15 +35,20 @@ class NacMusicFragment
 {
 
 	/**
-	 * File browser.
+	 * Scroll view containing all the file browser contents.
 	 */
-	var fileBrowser: NacFileBrowser? = null
-		private set
+	private var scrollView: ScrollView? = null
 
 	/**
 	 * Text view showing the current directory.
 	 */
 	private var directoryTextView: TextView? = null
+
+	/**
+	 * File browser.
+	 */
+	var fileBrowser: NacFileBrowser? = null
+		private set
 
 	/**
 	 * Determine the starting directory and file name that should be selected.
@@ -84,6 +93,22 @@ class NacMusicFragment
 
 		// Show the contents of the directory
 		browser.show(path)
+	}
+
+	/**
+	 * Called when a directory is done being shown in the file browser.
+	 */
+	override fun onDoneShowing(browser: NacFileBrowser)
+	{
+		lifecycleScope.launch {
+
+			// Delay a little bit
+			delay(100)
+
+			// Scroll to the top
+			scrollView?.fullScroll(View.FOCUS_UP)
+
+		}
 	}
 
 	/**
@@ -183,6 +208,12 @@ class NacMusicFragment
 			return
 		}
 
+		// Set the scrollview
+		scrollView = view.findViewById(R.id.scrollview)
+
+		// Set the textview with the directory path
+		directoryTextView = view.findViewById(R.id.path)
+
 		// Setup the file browser
 		setupFileBrowser(view)
 	}
@@ -195,9 +226,6 @@ class NacMusicFragment
 		// Create and set the file browser
 		val container: LinearLayout = root.findViewById(R.id.container)
 		fileBrowser = NacFileBrowser(this, container)
-
-		// Set the textview with the directory path
-		directoryTextView = root.findViewById(R.id.path)
 
 		// Directory to show in the textview and the ame of the file to select
 		// in the file browser

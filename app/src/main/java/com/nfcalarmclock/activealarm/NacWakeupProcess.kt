@@ -178,14 +178,47 @@ class NacWakeupProcess(
 	}
 
 	/**
-	 * The words that should be said when stating the time, in the designated language.
+	 * The text-to-speech phrase to say.
 	 */
-	private val timeToSay: String
+	private val ttsPhrase: String
 		get()
 		{
-			//val name = alarm!!.name
-			// TODO: Say the name of the alarm after the time.
+			// Initialize the phrase
+			var phrase = ""
 
+			// Check if should say the current time
+			if (alarm.shouldSayCurrentTime)
+			{
+				phrase += sayCurrentTime
+			}
+
+			// Check if should say the alarm name
+			if (alarm.shouldSayAlarmName)
+			{
+				phrase += sayAlarmName
+			}
+
+			println(phrase)
+			return phrase
+		}
+
+	/**
+	 * The words that should be said when stating the alarm name, in the
+	 * designated language.
+	 */
+	private val sayAlarmName: String
+		get()
+		{
+			return alarm.name
+		}
+
+	/**
+	 * The words that should be said when stating the time, in the
+	 * designated language.
+	 */
+	private val sayCurrentTime: String
+		get()
+		{
 			// Get the default locale
 			val locale = Locale.getDefault()
 
@@ -200,11 +233,11 @@ class NacWakeupProcess(
 			// Check if the language is Spanish
 			return if (locale.language == "es")
 			{
-				getTimeToSayEs(hour, minute, meridian)
+				getSayCurrentTimeEs(hour, minute, meridian)
 			}
 			else
 			{
-				getTimeToSayEn(hour, minute, meridian)
+				getSayCurrentTimeEn(hour, minute, meridian)
 			}
 		}
 
@@ -249,9 +282,9 @@ class NacWakeupProcess(
 	}
 
 	/**
-	 * @see .getTimeToSay
+	 * Get how to say the current time in English.
 	 */
-	private fun getTimeToSayEn(hour: Int, minute: Int, meridian: String?): String
+	private fun getSayCurrentTimeEn(hour: Int, minute: Int, meridian: String?): String
 	{
 		val locale = Locale.getDefault()
 
@@ -269,14 +302,17 @@ class NacWakeupProcess(
 
 		// Return the statement that should be said
 		return String.format(locale,
-			", , The time, is, %1\$d, %2\$s, %3\$s, %4\$s",
-			showHour, oh, showMinute, meridian)
+			"The time, is, $showHour, $oh, $showMinute, $meridian. ")
 	}
 
 	/**
-	 * @see .getTimeToSay
+	 * Get how to say the current time in Spanish.
 	 */
-	private fun getTimeToSayEs(hour: Int, minute: Int, meridian: String?): String
+	private fun getSayCurrentTimeEs(
+		hour: Int,
+		minute: Int,
+		meridian: String?
+	): String
 	{
 		val locale = Locale.getDefault()
 		var showHour = hour
@@ -290,8 +326,7 @@ class NacWakeupProcess(
 
 			// Return the statement that should be said
 			String.format(locale,
-				", , Es, la hora, %1\$d, con, %2\$d, minuto%3\$s",
-				showHour, minute, plural)
+				"Es, la hora, $showHour, con, $minute, minuto$plural. ")
 		}
 		else
 		{
@@ -304,8 +339,7 @@ class NacWakeupProcess(
 
 			// Return the statement that should be said
 			String.format(locale,
-				", , %1\$s %2\$d, %3\$s, %4\$s",
-				theTimeIs, showHour, showMinute, meridian)
+				"$theTimeIs $showHour, $showMinute, $meridian. ")
 		}
 	}
 
@@ -392,8 +426,7 @@ class NacWakeupProcess(
 				mediaPlayer.exoPlayer.shuffleModeEnabled = sharedPreferences.shuffle
 			}
 
-			// TODO: Maybe call reset by NOT default
-			//player.getMediaPlayer().stop();
+			// Play the alarm
 			mediaPlayer.playAlarm(alarm)
 		}
 	}
@@ -482,7 +515,7 @@ class NacWakeupProcess(
 		}
 
 		// Speak via TTS
-		textToSpeech.speak(timeToSay, audioAttributes)
+		textToSpeech.speak(ttsPhrase, audioAttributes)
 
 		// Check if text to speech should be run at a certain frequency
 		if (alarm.ttsFrequencyMillis != 0L)

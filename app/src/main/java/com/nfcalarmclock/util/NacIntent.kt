@@ -121,7 +121,7 @@ object NacIntent
 		}
 
 		val shared = NacSharedPreferences(context)
-		val builder = NacAlarm.Builder(shared)
+		val alarm = NacAlarm.build(shared)
 		val calendar = Calendar.getInstance()
 		var isSet = false
 
@@ -132,8 +132,8 @@ object NacIntent
 				calendar[Calendar.HOUR_OF_DAY])
 			isSet = true
 
-			// Add to the alarm builder
-			builder.setHour(hour)
+			// Add to the alarm
+			alarm.hour = hour
 		}
 
 		// Check if the MINUTES is in the intent
@@ -143,8 +143,8 @@ object NacIntent
 				calendar[Calendar.MINUTE])
 			isSet = true
 
-			// Add to the alarm builder
-			builder.setMinute(minute)
+			// Add to the alarm
+			alarm.minute = minute
 		}
 
 		// Check if the MESSAGE (Name) is in the intent
@@ -153,8 +153,8 @@ object NacIntent
 			val name = intent.getStringExtra(AlarmClock.EXTRA_MESSAGE)
 			isSet = true
 
-			// Add to the alarm builder
-			builder.setName(name ?: "")
+			// Add to the alarm
+			alarm.name = name ?: ""
 		}
 
 		// Check if the DAYS is in the intent
@@ -173,8 +173,8 @@ object NacIntent
 				}
 			}
 
-			// Add to the alarm builder
-			builder.setDays(days)
+			// Add to the alarm
+			alarm.days = days
 		}
 
 		// Check if the RINGTONE is in the intent
@@ -183,8 +183,8 @@ object NacIntent
 			val ringtone = intent.getStringExtra(AlarmClock.EXTRA_RINGTONE)
 			isSet = true
 
-			// Add to the alarm builder
-			builder.setMedia(context, ringtone ?: "")
+			// Add to the alarm
+			alarm.setMedia(context, ringtone ?: "")
 		}
 
 		// Check if the VIBRATE is in the intent
@@ -195,15 +195,15 @@ object NacIntent
 				defaultVibrate)
 			isSet = true
 
-			// Add to the alarm builder
-			builder.setVibrate(vibrate)
+			// Add to the alarm
+			alarm.vibrate = vibrate
 		}
 
 		//getBooleanExtra(AlarmClock.EXTRA_SKIP_UI);
 		// Check if one or more alarm attributes were set
 		return if (isSet)
 			{
-				builder.build()
+				alarm
 			}
 			else
 			{

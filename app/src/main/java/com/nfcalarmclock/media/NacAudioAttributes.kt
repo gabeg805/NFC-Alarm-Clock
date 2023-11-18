@@ -90,29 +90,24 @@ class NacAudioAttributes constructor(
 		}
 		else
 		{
-			println("BIG FAT 0 when getting steream volume")
 			0
 		}
 		set(volume)
 		{
-			println("BIG SET VOLUME")
 			// Unable to change the volume because the volume is fixed or because the
 			// stream is invalid
 			if (audioManager.isVolumeFixed || stream == AudioManager.USE_DEFAULT_STREAM_TYPE)
 			{
-				println("Unable to because volume is fixed or stream is default : ${audioManager.isVolumeFixed} | $stream")
 				return
 			}
 
 			// Set the stream volume
 			try
 			{
-				println("Set stream ($stream) volume : $volume")
 				audioManager.setStreamVolume(stream, volume, 0)
 			}
 			catch (e: SecurityException)
 			{
-				println("NacAudioAttributes : SecurityException : setStreamVolume")
 			}
 		}
 
@@ -174,13 +169,10 @@ class NacAudioAttributes constructor(
 	 */
 	fun merge(alarm: NacAlarm): NacAudioAttributes
 	{
-		println("MERGE ALARM")
 		// Set audio usage from audio source
-		println("Set usage from source : ${alarm.audioSource}")
 		setUsageFromSource(alarm.audioSource)
 
 		// Set the volume level
-		println("Set volume level : ${alarm.volume}")
 		volumeLevel = alarm.volume
 
 		return this
@@ -206,7 +198,6 @@ class NacAudioAttributes constructor(
 	fun revertVolume()
 	{
 		// Set the volume to the previous volume
-		println("Reverting volume : ${sharedPreferences.previousVolume}")
 		streamVolume = sharedPreferences.previousVolume
 	}
 
@@ -215,7 +206,6 @@ class NacAudioAttributes constructor(
 	 */
 	fun saveCurrentVolume()
 	{
-		println("Save current volume : $streamVolume")
 		sharedPreferences.editPreviousVolume(streamVolume)
 	}
 
@@ -234,7 +224,6 @@ class NacAudioAttributes constructor(
 	{
 		// Set the stream volume
 		streamVolume = alarmToStreamVolume()
-		println("Set volume : $streamVolume")
 	}
 
 }

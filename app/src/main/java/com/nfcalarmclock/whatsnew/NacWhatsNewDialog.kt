@@ -4,6 +4,11 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
@@ -15,6 +20,16 @@ import com.nfcalarmclock.view.dialog.NacDialogFragment
 class NacWhatsNewDialog
 	: NacDialogFragment()
 {
+
+	companion object
+	{
+
+		/**
+		 * Tag for the class.
+		 */
+		const val TAG = "NacWhatsNewDialog"
+
+	}
 
 	/**
 	 * Listener for when what's new dialog has been read.
@@ -67,11 +82,33 @@ class NacWhatsNewDialog
 		// Super
 		super.onResume()
 
-		// Get the text view
+		// Get the views
 		val textView = dialog!!.findViewById<TextView>(R.id.whats_new_version)
+		val scrollView = dialog!!.findViewById<ScrollView>(R.id.whats_new_scrollview)
+		val bulletContainer = dialog!!.findViewById<RelativeLayout>(R.id.whats_new_bullet_container)
 
-		// Setup the version
+		// Setup the views
 		setupVersion(textView)
+		setupScrollView(scrollView, bulletContainer)
+	}
+
+	/**
+	 * Setup the scrollview.
+	 */
+	private fun setupScrollView(scrollView: ScrollView, viewGroup: ViewGroup)
+	{
+		// Do nothing if there are not that many children. Each bullet counts
+		// for two since you have the bullet and then the text next to it
+		if (viewGroup.childCount < 10)
+		{
+			return
+		}
+
+		// Set the height of the scrollview
+		val height = resources.displayMetrics.heightPixels / 2
+		val layoutParams = LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, height)
+
+		scrollView.layoutParams = layoutParams
 	}
 
 	/**
@@ -86,16 +123,6 @@ class NacWhatsNewDialog
 
 		// Set the version
 		textView.text = versionNameAndNum
-	}
-
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacWhatsNewDialog"
-
 	}
 
 }

@@ -8,14 +8,20 @@ import com.nfcalarmclock.view.dialog.NacDialogFragment
 
 /**
  * Show a dialog asking the user which day they want to start the week on.
- *
- * TODO: When changing start week on, will also have to change in shared
- *
- * preferences. See NacDayOfWeekPreference
  */
 class NacStartWeekOnDialog
 	: NacDialogFragment()
 {
+
+	companion object
+	{
+
+		/**
+		 * Tag for the class.
+		 */
+		const val TAG = "NacStartWeekOnDialog"
+
+	}
 
 	/**
 	 * Listener for when a start week is selected.
@@ -59,8 +65,7 @@ class NacStartWeekOnDialog
 				onStartWeekSelectedListener?.onStartWeekSelected(currentSelectedStartWeekOnIndex)
 
 			}
-			.setNegativeButton(R.string.action_cancel) { _, _ ->
-			}
+			.setNegativeButton(R.string.action_cancel, null)
 			.setSingleChoiceItems(R.array.start_week_on, defaultStartWeekOnIndex) { _, which: Int ->
 
 				// Set the current selected index
@@ -68,16 +73,6 @@ class NacStartWeekOnDialog
 
 			}
 			.create()
-	}
-
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacStartWeekOnDialog"
-
 	}
 
 }

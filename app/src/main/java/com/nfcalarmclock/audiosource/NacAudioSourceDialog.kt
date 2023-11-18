@@ -19,6 +19,16 @@ class NacAudioSourceDialog
 	: NacDialogFragment()
 {
 
+	companion object
+	{
+
+		/**
+		 * Tag for the class.
+		 */
+		const val TAG = "NacAudioSourceDialog"
+
+	}
+
 	/**
 	 * Listener for when an audio source is selected.
 	 */
@@ -75,8 +85,7 @@ class NacAudioSourceDialog
 				onAudioSourceSelectedListener?.onAudioSourceSelected(audioSource)
 
 			}
-			.setNegativeButton(R.string.action_cancel) { _, _ ->
-			}
+			.setNegativeButton(R.string.action_cancel, null)
 			.setView(R.layout.dlg_alarm_audio_source)
 			.create()
 	}
@@ -158,16 +167,6 @@ class NacAudioSourceDialog
 			// Set the color state list
 			button.buttonTintList = colorStateList
 		}
-	}
-
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacAudioSourceDialog"
-
 	}
 
 }

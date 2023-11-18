@@ -10,6 +10,16 @@ class NacNextAlarmFormatDialog
 	: NacDialogFragment()
 {
 
+	companion object
+	{
+
+		/**
+		 * Tag for the class.
+		 */
+		const val TAG = "NacNextAlarmFormatDialog"
+
+	}
+
 	/**
 	 * Listener for when a next alarm format is selected.
 	 */
@@ -64,8 +74,7 @@ class NacNextAlarmFormatDialog
 				onNextAlarmFormatListener?.onNextAlarmFormatSelected(currentSelectedNextAlarmFormatIndex)
 
 			}
-			.setNegativeButton(R.string.action_cancel) { _, _ ->
-			}
+			.setNegativeButton(R.string.action_cancel, null)
 			.setSingleChoiceItems(timeFormats, defaultNextAlarmFormatIndex) { _, which: Int ->
 
 				// Set the current selected index
@@ -73,16 +82,6 @@ class NacNextAlarmFormatDialog
 
 			}
 			.create()
-	}
-
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacNextAlarmFormatDialog"
-
 	}
 
 }

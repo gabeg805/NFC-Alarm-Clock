@@ -13,6 +13,16 @@ class NacAlarmAudioOptionsDialog
 	: NacDialogFragment()
 {
 
+	companion object
+	{
+
+		/**
+		 * Tag for the class.
+		 */
+		const val TAG = "NacAlarmAudioOptionsDialog"
+
+	}
+
 	/**
 	 * Listener for when an audio option is clicked.
 	 */
@@ -49,16 +59,6 @@ class NacAlarmAudioOptionsDialog
 
 			}
 			.create()
-	}
-
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacAlarmAudioOptionsDialog"
-
 	}
 
 }
