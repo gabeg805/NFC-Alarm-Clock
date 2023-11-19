@@ -1100,10 +1100,10 @@ class NacMainActivity
 				sharedPreferences!!.editDelayShowingWhatsNewDialogCounter(delayCounter + 1)
 			}
 		}
-		// Check if should request to show the Google Play rate my app flow
+		// Check if should request to show the rate my app flow
 		else if (NacRateMyApp.shouldRequest(sharedPreferences!!))
 		{
-			// Request for the user to rate my app on the Google Play store
+			// Request for the user to rate my app
 			NacRateMyApp.request(this, sharedPreferences!!)
 		}
 	}
@@ -1399,14 +1399,14 @@ class NacMainActivity
 			// Get the string to show a specific NFC tag
 			val nfcId = getString(R.string.message_show_nfc_tag_id)
 
-			String.format(locale, "%1\$s %2\$s", nfcId, alarm.nfcTagId)
+			String.format(locale, "$nfcId ${alarm.nfcTagId}")
 		}
 		else
 		{
 			// Get the string to show any NFC tag
 			val anyNfc = getString(R.string.message_any_nfc_tag_id)
 
-			String.format(locale, "%1\$s", anyNfc)
+			String.format(locale, anyNfc)
 		}
 
 		// Toast the message

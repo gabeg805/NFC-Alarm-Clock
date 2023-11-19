@@ -7,13 +7,13 @@ import android.graphics.drawable.TransitionDrawable
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
-import com.android.billingclient.api.ProductDetails
 import com.nfcalarmclock.R
 import com.nfcalarmclock.statistics.NacStatisticsSettingFragment
 import com.nfcalarmclock.support.NacSupportSetting
-import com.nfcalarmclock.support.NacSupportSetting.OnBillingEventListener
 import com.nfcalarmclock.util.NacUtility.quickToast
+import kotlinx.coroutines.launch
 
 /**
  * Main setting fragment.
@@ -148,8 +148,8 @@ class NacMainSettingFragment
 				// Support
 				if (preferenceKey == supportKey)
 				{
-					// Start the billing flow
-					startBillingFlow()
+					// Show the support flow
+					showSupportFlow()
 				}
 
 				// Default return
@@ -246,51 +246,24 @@ class NacMainSettingFragment
 	}
 
 	/**
-	 * Start the billing flow.
+	 * Show the support flow.
 	 */
-	private fun startBillingFlow()
+	private fun showSupportFlow()
 	{
 		val fragmentActivity = requireActivity()
 		val support = NacSupportSetting(fragmentActivity)
 
-		// Set the billing event listener
-		support.onBillingEventListener = object : OnBillingEventListener
-		{
-			/**
-			 * There was a billing error.
-			 */
-			override fun onBillingError()
-			{
-				val message = getString(R.string.error_message_google_play_billing)
+		support.onSupportEventListener = NacSupportSetting.OnSupportEventListener {
 
-				// Show a toast indicating there was an error. Make sure this is run
-				// on the UI thread
-				fragmentActivity.runOnUiThread {
-					quickToast(fragmentActivity, message)
-				}
-			}
+			// Make sure the following things are run on the UI thread
+			lifecycleScope.launch {
 
-			/**
-			 * The billing flow is ready to be launched.
-			 */
-			override fun onPrepareToLaunchBillingFlow(productDetails: ProductDetails)
-			{
-				// Launch billing flow, passing in the activity
-				support.launchBillingFlow(fragmentActivity, productDetails)
-			}
+				// Check if app has not been supported yet
+				if (!sharedPreferences!!.wasAppSupported)
+				{
 
-			/**
-			 * Support has been purchased.
-			 */
-			override fun onSupportPurchased()
-			{
-				val message = getString(R.string.message_support_thank_you)
-
-				// Make sure the following things are run on the UI thread
-				fragmentActivity.runOnUiThread {
-
-					// Show a toast saying thank you
-					quickToast(fragmentActivity, message)
+					 // Show a toast saying thank you
+					 quickToast(fragmentActivity, R.string.message_support_thank_you)
 
 					// Save that the app was supported in shared preferences
 					sharedPreferences!!.editWasAppSupported(true)
@@ -298,10 +271,12 @@ class NacMainSettingFragment
 					// Re-draw the support icon
 					animateSupportIcon()
 				}
+
 			}
+
 		}
 
-		// Connect to Google Play
-		support.connect()
+		// Start the support flow
+		support.start()
 	}
 }

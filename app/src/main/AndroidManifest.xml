@@ -225,29 +225,5 @@
 			</intent-filter>
 		</receiver>
 
-			<!-- An intent filter that will receive the response
-			     from the authentication service -->
-			<!--
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-
-				<category android:name="android.intent.category.DEFAULT" />
-				<category android:name="android.intent.category.BROWSABLE" />
-
-				<data
-					android:host="callback"
-					android:scheme="nfcalarmclock"
-					/>
-			</intent-filter>
-			-->
-
-		<!-- Login to spotify -->
-		<!--
-		<activity
-			android:name="com.spotify.sdk.android.authentication.LoginActivity"
-			android:theme="@android:style/Theme.Translucent.NoTitleBar"
-			/>
-			-->
-
 	</application>
 </manifest>

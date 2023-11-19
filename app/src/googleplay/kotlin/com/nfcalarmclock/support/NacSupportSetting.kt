@@ -1,7 +1,8 @@
 package com.nfcalarmclock.support
 
 import android.app.Activity
-import android.content.Context
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClient.BillingResponseCode
 import com.android.billingclient.api.BillingClientStateListener
@@ -17,10 +18,12 @@ import com.android.billingclient.api.Purchase.PurchaseState
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.google.common.collect.ImmutableList
+import com.nfcalarmclock.R
+import com.nfcalarmclock.util.NacUtility
+import kotlinx.coroutines.launch
 
 /**
- * Support setting.
- *
+ * Support setting that launches a Google billing flow.
  *
  * The flow of events is as follows:
  *
@@ -37,9 +40,9 @@ import com.google.common.collect.ImmutableList
 class NacSupportSetting(
 
 	/**
-	 * Context.
+	 * Fragment activity.
 	 */
-	context: Context
+	private val fragmentActivity: FragmentActivity
 
 ) : PurchasesUpdatedListener,
 	BillingClientStateListener,
@@ -47,71 +50,36 @@ class NacSupportSetting(
 	ConsumeResponseListener
 {
 
-	/**
-	 * Listener for when billing events occur.
-	 */
-	interface OnBillingEventListener
+	companion object
 	{
-		fun onBillingError()
-		fun onPrepareToLaunchBillingFlow(productDetails: ProductDetails)
-		fun onSupportPurchased()
+
+		/**
+		 * Product ID.
+		 */
+		const val PRODUCT_ID_SUPPORT = "com.nfcalarmclock.support1"
+
+	}
+
+	/**
+	 * Listener for when a support event occurs.
+	 */
+	fun interface OnSupportEventListener
+	{
+		fun onSupported()
 	}
 
 	/**
 	 * Billing client.
 	 */
-	private val billingClient: BillingClient = BillingClient.newBuilder(context)
+	private val billingClient: BillingClient = BillingClient.newBuilder(fragmentActivity)
 		.setListener(this)
 		.enablePendingPurchases()
 		.build()
 
 	/**
-	 * Listener for billing events.
+	 * Listener for when a support events occurs.
 	 */
-	var onBillingEventListener: OnBillingEventListener? = null
-
-	/**
-	 * Call the listener when there is a billing error.
-	 */
-	private fun callOnBillingError()
-	{
-		onBillingEventListener?.onBillingError()
-	}
-
-	/**
-	 * Call the listener when preparing to launch billing flow.
-	 *
-	 * @param productDetails Product details.
-	 */
-	private fun callOnPrepareToLaunchBillingFlow(productDetails: ProductDetails)
-	{
-		onBillingEventListener?.onPrepareToLaunchBillingFlow(productDetails)
-	}
-
-	/**
-	 * Call the listener to indicate that the purchase was successfully consumed.
-	 */
-	private fun callOnSupportPurchased()
-	{
-		onBillingEventListener?.onSupportPurchased()
-	}
-
-	/**
-	 * Cleanup the billing client.
-	 */
-	private fun cleanup()
-	{
-		// End the connection to the billing client
-		billingClient.endConnection()
-	}
-
-	/**
-	 * Connect to Google play.
-	 */
-	fun connect()
-	{
-		billingClient.startConnection(this)
-	}
+	var onSupportEventListener: OnSupportEventListener? = null
 
 	/**
 	 * Consume a purchase.
@@ -127,8 +95,8 @@ class NacSupportSetting(
 		// The purchase did not go through
 		if (purchase.purchaseState != PurchaseState.PURCHASED)
 		{
-			// Cleanup the billing client
-			cleanup()
+			// End the connection to the billing client
+			billingClient.endConnection()
 			return
 		}
 
@@ -146,7 +114,7 @@ class NacSupportSetting(
 	 *
 	 * @param productDetails Product details.
 	 */
-	fun launchBillingFlow(activity: Activity, productDetails: ProductDetails)
+	private fun launchBillingFlow(activity: Activity, productDetails: ProductDetails)
 	{
 		// Create the params that describe the product to be purchased
 		val productDetailsParamsList = ImmutableList.of(
@@ -168,13 +136,12 @@ class NacSupportSetting(
 	/**
 	 * The connection to the billing service was disconnected.
 	 *
-	 *
 	 * Note: This is part of BillingClientStateListener.
 	 */
 	override fun onBillingServiceDisconnected()
 	{
-		// Cleanup the billing client
-		cleanup()
+		// End the connection to the billing client
+		billingClient.endConnection()
 	}
 
 	/**
@@ -188,11 +155,11 @@ class NacSupportSetting(
 		// Unable to finish setup of the billing service
 		if (billingResult.responseCode != BillingResponseCode.OK)
 		{
-			// Call the listener to indicate that there was a billing error
-			callOnBillingError()
+			// Show a toast indicating there was an error
+			showBillingErrorMessage()
 
-			// Cleanup the billing client
-			cleanup()
+			// End the connection to the billing client
+			billingClient.endConnection()
 			return
 		}
 
@@ -211,11 +178,12 @@ class NacSupportSetting(
 		// Call the listener to indicate that the purchase was successfully consumed
 		if (billingResult.responseCode == BillingResponseCode.OK)
 		{
-			callOnSupportPurchased()
+			// Call the support listener
+			onSupportEventListener?.onSupported()
 		}
 
-		// Cleanup the billing client
-		cleanup()
+		// End the connection to the billing client
+		billingClient.endConnection()
 	}
 
 	/**
@@ -234,19 +202,19 @@ class NacSupportSetting(
 		if (billingResult.responseCode != BillingResponseCode.OK
 			|| productDetailsList.isEmpty())
 		{
-			// Call the listener to indicate that there was a billing error
-			callOnBillingError()
+			// Show a toast indicating there was an error
+			showBillingErrorMessage()
 
-			// Cleanup the billing client
-			cleanup()
+			// End the connection to the billing client
+			billingClient.endConnection()
 			return
 		}
 
 		// Get the product details of the first item
 		val productDetails = productDetailsList[0]
 
-		// Call the listener indicating that the app is ready to launch the billing flow
-		callOnPrepareToLaunchBillingFlow(productDetails)
+		// Launch billing flow, passing in the activity
+		launchBillingFlow(fragmentActivity, productDetails)
 	}
 
 	/**
@@ -265,8 +233,8 @@ class NacSupportSetting(
 		if ((billingResult.responseCode != BillingResponseCode.OK)
 			|| (purchaseList == null))
 		{
-			// Cleanup the billing client
-			cleanup()
+			// End the connection to the billing client
+			billingClient.endConnection()
 			return
 		}
 
@@ -298,14 +266,26 @@ class NacSupportSetting(
 		billingClient.queryProductDetailsAsync(queryProductDetailsParams, this)
 	}
 
-	companion object
+	/**
+	 * Show a toast when a billing error occurs.
+	 */
+	private fun showBillingErrorMessage()
 	{
+		// Make sure the following things are run on the UI thread
+		fragmentActivity.lifecycleScope.launch {
 
-		/**
-		 * Product ID.
-		 */
-		const val PRODUCT_ID_SUPPORT = "com.nfcalarmclock.support1"
+			// Show a toast indicating there was an error
+			NacUtility.quickToast(fragmentActivity, R.string.error_message_google_play_billing)
 
+		}
+	}
+
+	/**
+	 * Start the connection to the Google play billing client.
+	 */
+	fun start()
+	{
+		billingClient.startConnection(this)
 	}
 
 }
