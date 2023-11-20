@@ -434,17 +434,17 @@
 
 
 	<!-- Dismiss early -->
-	<string name="dismiss_early_true">La alarma se puede descartar antes de que se activa. (Experimental)</string>
+	<string name="dismiss_early_true">La alarma se puede descartar antes de que se activa.</string>
 	<string name="dismiss_early_false">No se puede descartar una alarma antes de que se activa.</string>
 
 
 	<!-- Restrict volume -->
-	<string name="restrict_volume_true">No podrá cambiar el volumen cuando la alarma esté activa. (Experimental)</string>
+	<string name="restrict_volume_true">No podrá cambiar el volumen cuando la alarma esté activa.</string>
 	<string name="restrict_volume_false">El volumen se puede cambiar libremente cuando la alarma está activa.</string>
 
 
 	<!-- Gradually increase volume -->
-	<string name="gradually_increase_volume_true">El volumen aumentará gradualmente hasta que se alcance el nivel de volumen de la alarma, cuando la alarma esté activa. (Experimental)</string>
+	<string name="gradually_increase_volume_true">El volumen aumentará gradualmente hasta que se alcance el nivel de volumen de la alarma, cuando la alarma esté activa.</string>
 	<string name="gradually_increase_volume_false">El volumen se ajustará al nivel de volumen de la alarma, cuando la alarma esté activa.</string>
 
 

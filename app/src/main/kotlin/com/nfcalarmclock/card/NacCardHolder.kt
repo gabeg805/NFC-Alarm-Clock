@@ -729,7 +729,7 @@ class NacCardHolder(
 	/**
 	 * Collapse the alarm card without any animations.
 	 */
-	private fun doCollapse()
+	fun doCollapse()
 	{
 		// Setup the summary
 		summaryView.visibility = View.VISIBLE
@@ -741,6 +741,24 @@ class NacCardHolder(
 
 		// Refresh dismiss buttons
 		refreshDismissAndDismissEarlyButtons()
+	}
+
+	/**
+	 * Changes the color of the card, in addition to collapsing it.
+	 *
+	 * @see .doCollapse
+	 */
+	fun doCollapseWithColor()
+	{
+		doCollapse()
+		setCollapsedBackgroundColor()
+
+		// Reset the height because it wasa showing up as expanded for some
+		// reason
+		if (sharedPreferences.cardIsMeasured && (heightCollapsed > 0))
+		{
+			cardView.layoutParams.height = heightCollapsed
+		}
 	}
 
 	/**
@@ -822,6 +840,13 @@ class NacCardHolder(
 	{
 		doExpand()
 		setExpandedBackgroundColor()
+
+		// Reset the height because it wasa showing up as expanded for some
+		// reason
+		if (sharedPreferences.cardIsMeasured && (heightExpanded > 0))
+		{
+			cardView.layoutParams.height = heightExpanded
+		}
 	}
 
 	/**
@@ -1304,6 +1329,19 @@ class NacCardHolder(
 	}
 
 	/**
+	 * Set the background color for when the card is collapsed.
+	 */
+	private fun setCollapsedBackgroundColor()
+	{
+		// Get the colors
+		val grayDark = ContextCompat.getColor(context, R.color.gray_dark)
+		val color = MaterialColors.getColor(context, R.attr.colorCard, grayDark)
+
+		// Set the color
+		cardView.setBackgroundColor(color)
+	}
+
+	/**
 	 * Set the day of week to its proper setting.
 	 */
 	private fun setDayOfWeek()
@@ -1360,8 +1398,6 @@ class NacCardHolder(
 
 	/**
 	 * Set the background color for when the card is expanded.
-	 *
-	 * TODO: Where is this used?
 	 */
 	private fun setExpandedBackgroundColor()
 	{

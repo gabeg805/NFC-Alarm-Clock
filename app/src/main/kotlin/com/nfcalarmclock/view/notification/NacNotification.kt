@@ -217,12 +217,10 @@ abstract class NacNotification(
 		// Check if should create channel
 		if (!shouldCreateChannel)
 		{
-			println("Will not create channel")
 			return
 		}
 
 		// Create the channel
-		println("Create channel")
 		val channel = createChannel()
 
 		// Tell the notification manager to create the channel

@@ -33,7 +33,6 @@ class NacCardAdapter
 					newAlarm: NacAlarm
 				): Boolean
 				{
-					//NacUtility.printf("areItemsTheSame? %d | %d", oldAlarm.getId(), newAlarm.getId());
 					return oldAlarm.equalsId(newAlarm)
 				}
 
@@ -47,7 +46,6 @@ class NacCardAdapter
 				{
 					// NOTE: if you use equals, your object must properly override Object#equals()
 					// Incorrectly returning false here will result in too many animations.
-					//NacUtility.printf("areContentsTheSame? %d | %d", oldAlarm.getId(), newAlarm.getId());
 					return oldAlarm.equals(newAlarm)
 				}
 
@@ -181,6 +179,18 @@ class NacCardAdapter
 		{
 			// Expand the card and change its color
 			card.doExpandWithColor()
+		}
+		// Index is not part of the expanded cards, but the card is expanded.
+		// A card should not be in this state, however, it has been seen to
+		// happen after a new install. Expand an alarm, click on the media
+		// button, select a ringtone, (maybe) change some other component of an
+		// alarm such as an audio option, click on the card to collapse it, and
+		// then copy the alarm. For some reason, the card will act as if it is
+		// expanded
+		else if (card.isExpanded)
+		{
+			// Collapse the card
+			card.doCollapseWithColor()
 		}
 
 		// Call the listener

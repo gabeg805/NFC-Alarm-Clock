@@ -150,7 +150,6 @@ class NacWakeupProcess(
 	 */
 	private val textToSpeech: NacTextToSpeech? = if (alarm.shouldUseTts)
 	{
-		println("Creating text to speech")
 		NacTextToSpeech(context, object: OnSpeakingListener {
 
 			/**
@@ -198,7 +197,6 @@ class NacWakeupProcess(
 				phrase += sayAlarmName
 			}
 
-			println(phrase)
 			return phrase
 		}
 
