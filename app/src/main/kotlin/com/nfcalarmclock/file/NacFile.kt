@@ -12,6 +12,11 @@ object NacFile
 {
 
 	/**
+	 * Name for the previous directory.
+	 */
+	const val PREVIOUS_DIRECTORY = ".."
+
+	/**
 	 * Get the basename of a file path.
 	 *
 	 * @return The basename of a file path.
@@ -44,7 +49,6 @@ object NacFile
 	/**
 	 * @see .basename
 	 */
-	@JvmStatic
 	fun basename(uri: Uri): String
 	{
 		val path = uri.toString()
@@ -75,7 +79,6 @@ object NacFile
 	/**
 	 * Strip away any trailing '/' characters.
 	 */
-	@JvmStatic
 	fun strip(path: String): String
 	{
 		// Check if path is empty
@@ -100,7 +103,6 @@ object NacFile
 	 *
 	 * @param  path  Path to a file or directory.
 	 */
-	@JvmStatic
 	fun toRelativeDirname(path: String?): String
 	{
 		// Get the relative path
@@ -116,7 +118,6 @@ object NacFile
 	/**
 	 * @see .toRelativeDirname
 	 */
-	@JvmStatic
 	fun toRelativeDirname(uri: Uri): String
 	{
 		// Get the path
@@ -176,16 +177,6 @@ object NacFile
 	 */
 	class Metadata(directory: String, name: String, id: Long = -1)
 	{
-
-		companion object
-		{
-
-			/**
-			 * Name for previous directory.
-			 */
-			const val PREVIOUS_DIRECTORY = ".."
-
-		}
 
 		/**
 		 * Directory the file resides in.
@@ -349,10 +340,10 @@ object NacFile
 			val name = basename(path)
 
 			// Previous directory
-			if (name == "..")
+			if (name == PREVIOUS_DIRECTORY)
 			{
 				// cd to the previous directory
-				this.cd(fromDir.root)
+				cd(fromDir.root)
 			}
 			// Subdirectory
 			else
@@ -362,7 +353,7 @@ object NacFile
 				val newDir = path.replace(directoryPath, "")
 
 				// Split the path on slash character(s)
-				val splitPath = this.strip(newDir)
+				val splitPath = stripHome(newDir)
 					.split("/".toRegex())
 					.dropLastWhile { it.isEmpty() }
 					.toTypedArray()
@@ -384,7 +375,7 @@ object NacFile
 					toDir = toDir?.getChild(d) ?: break
 
 					// cd to the new directory, which corresponds to the child
-					this.cd(toDir)
+					cd(toDir)
 				}
 
 			}
@@ -467,45 +458,22 @@ object NacFile
 			return if (pathKey == directory.key || path == home)
 			{
 				// ls current directory and return it
-				this.ls()
+				ls()
 			}
 			// Path corresponds to different directory
 			else
 			{
+				// Save the original directory
+				val origDir = directory
 
-				val dir = directory
-				var newDir: NacTreeNode<String>? = dir
+				// Change directory to the new path
+				cd(path)
 
-				// TODO: Can't I just cd() to the path and then cd back to the orig directory?
+				// Create a new listing of the current directory
+				val listing = ls()
 
-				// Split the path on slash character(s)
-				val splitPath = this.strip(path)
-					.split("/".toRegex())
-					.dropLastWhile { it.isEmpty() }
-					.toTypedArray()
-
-				// Iterate over the path
-				for (d in splitPath)
-				{
-					// Directory is empty
-					if (d.isEmpty())
-					{
-						continue
-					}
-
-					// Get the child of the directory
-					// Break out of the loop if unable to get a child
-					newDir = newDir?.getChild(d) ?: break
-
-					// Set the new directory
-					directory = newDir
-				}
-
-				// Create a new listing of the cuurrent directory
-				val listing = this.ls()
-
-				// Set the directory
-				directory = dir
+				// Reset the directory back to the original
+				directory = origDir
 
 				// Return the listing
 				listing
@@ -518,75 +486,42 @@ object NacFile
 		 */
 		fun lsSort(): List<Metadata>
 		{
-
-			val directories: MutableList<Metadata> = ArrayList()
-			val files: MutableList<Metadata> = ArrayList()
-			var list: MutableList<Metadata>
-
-			// Iterate over the listing at the current path
-			for (metadata in this.ls())
-			{
-				// Check the type of metadata
-				list = if (metadata.isDirectory)
-				{
-					// Directory
-					directories
-				}
-				else if (metadata.isFile)
-				{
-					// File
-					files
-				}
-				else
-				{
-					// Unknown so skip it
-					continue
-				}
-
-				val name = metadata.name
-				var i = 0
-
-				// Iterate over the file/directory list
-				while (i < list.size)
-				{
-					// Check if the current name should be inserted before the
-					// item at the current index
-					if (name <= list[i].name)
-					{
-						break
-					}
-
-					i++
-				}
-
-				// Add the metadata of this file/directory to the list.
-				// The list is generic and could be the file or the directory
-				// but either way, it will be added to the correct onee
-				list.add(i, metadata)
-			}
-
-			// Add all the files after the directories
-			directories.addAll(files)
+			// Get the listing
+			val listing = ls()
 
 			// Return the sorted listing
-			return directories
+			return sortListing(listing)
 		}
 
 		/**
 		 * List the contents of the given path and sort the output.
 		 *
-		 * @return The sorted list of files/directories at the given path.
-		 *
 		 * @param  path  The path to list the contents of.
+		 *
+		 * @return The sorted list of files/directories at the given path.
 		 */
 		fun lsSort(path: String): List<Metadata>
+		{
+			// Get the listing
+			val listing = ls(path)
+
+			// Return the sorted listing
+			return sortListing(listing)
+		}
+
+		/**
+		 * Sort a listing of files.
+		 *
+		 * @param listing Listing of files.
+		 */
+		private fun sortListing(listing: List<Metadata>): List<Metadata>
 		{
 			val directories: MutableList<Metadata> = ArrayList()
 			val files: MutableList<Metadata> = ArrayList()
 			var list: MutableList<Metadata>
 
-			// Iterate over the listing at the path
-			for (metadata in this.ls(path))
+			// Iterate over the listing at the current path
+			for (metadata in listing)
 			{
 				// Check the type of metadata
 				list = if (metadata.isDirectory)
@@ -639,7 +574,7 @@ object NacFile
 		 *
 		 * TODO: This method seems like I'm already doing it somewhere else
 		 */
-		private fun strip(path: String): String
+		private fun stripHome(path: String): String
 		{
 			val reducedPath = path.replace(home, "")
 			var strippedPath = NacFile.strip(reducedPath)

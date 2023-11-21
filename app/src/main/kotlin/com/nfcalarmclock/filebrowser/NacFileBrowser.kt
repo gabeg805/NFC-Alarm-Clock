@@ -289,7 +289,7 @@ class NacFileBrowser(
 
 		// Go to the previous directory if metadata equals the previous
 		// directory string ".."
-		if (metadata.name == NacFile.Metadata.PREVIOUS_DIRECTORY)
+		if (metadata.name == NacFile.PREVIOUS_DIRECTORY)
 		{
 			// Simulate a click
 			onClick(entry)

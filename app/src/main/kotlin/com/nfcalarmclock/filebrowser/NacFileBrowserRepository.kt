@@ -138,7 +138,7 @@ class NacFileBrowserRepository
 		// Note: An empty path indicates the root level
 		if (path.isNotEmpty())
 		{
-			val metadata = NacFile.Metadata(path, NacFile.Metadata.PREVIOUS_DIRECTORY)
+			val metadata = NacFile.Metadata(path, NacFile.PREVIOUS_DIRECTORY)
 
 			addDirectory(context, metadata)
 		}

@@ -528,13 +528,13 @@ class NacSharedPreferences(context: Context)
 	val snoozeDurationValue: Int
 		get()
 		{
-			return if (snoozeDurationIndex < 4)
+			return if (snoozeDurationIndex < 9)
 			{
 				snoozeDurationIndex + 1
 			}
 			else
 			{
-				(snoozeDurationIndex - 3) * 5
+				(snoozeDurationIndex - 7) * 5
 			}
 		}
 

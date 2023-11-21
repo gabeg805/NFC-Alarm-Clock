@@ -33,17 +33,17 @@
 
 	<!-- Application -->
 	<application
+		android:theme="@style/AppTheme"
 		android:label="@string/app_name"
 		android:name=".NacNfcAlarmClockApplication"
-		android:theme="@style/AppTheme"
 		android:icon="@mipmap/app"
 		android:allowBackup="true"
 		android:supportsRtl="true">
 
 		<!-- Main activity -->
 		<activity
-			android:name=".main.NacMainActivity"
 			android:theme="@style/AppTheme.NoActionBar"
+			android:name=".main.NacMainActivity"
 			android:windowSoftInputMode="stateAlwaysHidden"
 			android:exported="true">
 
@@ -121,6 +121,7 @@
 
 		<!-- Alarm activity -->
 		<activity
+			android:theme="@style/AppTheme.NoActionBar"
 			android:name=".activealarm.NacActiveAlarmActivity"
 			android:taskAffinity=""
 			android:excludeFromRecents="true">

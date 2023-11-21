@@ -29,7 +29,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
 import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
-import com.nfcalarmclock.activealarm.NacActiveAlarmActivity
+import com.nfcalarmclock.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.audiooptions.NacAlarmAudioOptionsDialog
@@ -124,6 +124,18 @@ class NacMainActivity
 			intent.addFlags(flags)
 
 			return intent
+		}
+
+		/**
+		 * Start the main activity.
+		 */
+		fun startMainActivity(context: Context)
+		{
+			// Create the intent
+			val intent = getStartIntent(context)
+
+			// Start the activity
+			context.startActivity(intent)
 		}
 
 	}
@@ -780,7 +792,7 @@ class NacMainActivity
 			if (activeAlarm != null)
 			{
 				// Start the alarm activity for this alarm
-				NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, activeAlarm)
+				NacActiveAlarmService.startAlarmService(this@NacMainActivity, activeAlarm)
 
 				// Finish the main activity
 				finish()

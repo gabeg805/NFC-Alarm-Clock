@@ -44,7 +44,7 @@ class NacFileBrowserViewModel(app: Application)
 		repository.fileTree.cd(metadata.name)
 
 		// Determine the path of the directory that was clicked
-		return if (metadata.name == NacFile.Metadata.PREVIOUS_DIRECTORY)
+		return if (metadata.name == NacFile.PREVIOUS_DIRECTORY)
 		{
 			// Previous directory
 			repository.fileTree.directoryPath

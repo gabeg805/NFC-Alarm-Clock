@@ -10,6 +10,7 @@
 	<dimen name="medium">20dp</dimen>
 	<dimen name="large">24dp</dimen>
 	<dimen name="huge">28dp</dimen>
+	<dimen name="xlarge">32dp</dimen>
 
 	<!-- Image -->
 	<dimen name="isz_normal">24dp</dimen>

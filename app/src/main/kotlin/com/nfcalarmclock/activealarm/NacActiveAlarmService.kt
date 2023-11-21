@@ -12,6 +12,7 @@ import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmRepository
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.main.NacMainActivity.Companion.startMainActivity
 import com.nfcalarmclock.missedalarm.NacMissedAlarmNotification
 import com.nfcalarmclock.scheduler.NacScheduler
 import com.nfcalarmclock.shared.NacSharedPreferences
@@ -298,16 +299,6 @@ class NacActiveAlarmService
 	@UnstableApi
 	private fun cleanup()
 	{
-		scope.launch {
-
-			// Set the alarm as not active
-			alarm!!.isActive = false
-
-			// Update the alarm
-			alarmRepository.update(alarm!!)
-
-		}
-
 		// Clean the wakeup process
 		wakeupProcess?.cleanup()
 
@@ -424,6 +415,10 @@ class NacActiveAlarmService
 
 	/**
 	 * Called when the service is destroyed.
+	 *
+	 * TODO: Figure out how to more effectively startup an alarm that was interrupted.
+	 * TODO: Maybe when dismiss() is called, check if there are any other active suckers and start them?
+	 * TODO: Check if the started alarm is already started and if so, do not restart it. This replays the music but it might also affect the active time.
 	 */
 	@UnstableApi
 	override fun onDestroy()
@@ -431,15 +426,25 @@ class NacActiveAlarmService
 		// Super
 		super.onDestroy()
 
-		// Start the main activity
-		// TODO: If I auto dismiss, should I be starting the main activity? Should this be in the alarm activity?
-		//startMainActivity(this)
-
 		// Stop the alarm activity
 		NacActiveAlarmActivity.stopAlarmActivity(this)
 
 		// Disable the activity alias so that tapping an NFC tag will not do anything
 		disableActivityAlias(this)
+
+		// Start the main activity so that if there are any other alarms that
+		// need to run, this will kick them off
+		startMainActivity(this)
+
+		scope.launch {
+
+			// Set the alarm as not active
+			alarm!!.isActive = false
+
+			// Update the alarm
+			alarmRepository.update(alarm!!)
+
+		}
 
 		// Cleanup everything
 		cleanup()
@@ -506,20 +511,23 @@ class NacActiveAlarmService
 		// Prepare a new service
 		if (isNewServiceStarted(intent))
 		{
+			val currentStartTime = startTime
+			val currentAlarm = alarm!!
+
 			scope.launch {
 
 				// Check if the service has started
-				if (startTime != 0L)
+				if (currentStartTime != 0L)
 				{
-					// Set the time active
-					alarm!!.addToTimeActive(System.currentTimeMillis() - startTime)
+					// Set the time that the alarm was active. Do not set the
+					// alarm as inactive though because then it will not go off
+					// again. It should go off again because the alarm has not
+					// been finished being interacted with
+					currentAlarm.addToTimeActive(System.currentTimeMillis() - currentStartTime)
 
 					// Update the alarm
-					alarmRepository.update(alarm!!)
+					alarmRepository.update(currentAlarm)
 				}
-
-				// Cleanup the resources
-				cleanup()
 
 			}
 		}

@@ -290,11 +290,11 @@ class NacActiveAlarmActivity
 		// Setup the layout listener
 		layout.setOnClickListener {
 
-			// Check if easy snooze is allowed and the alarm can be snoozed
-			if (sharedPreferences!!.easySnooze
-				&& alarm!!.canSnooze(sharedPreferences!!))
+			// Check if easy snooze is allowed
+			if (sharedPreferences!!.easySnooze)
 			{
-				// Snooze the alarm service
+				// Snooze the alarm service. Whether the alarm is actually
+				// snoozed is determined in the service
 				NacActiveAlarmService.snoozeAlarmService(this, alarm!!)
 			}
 
@@ -303,12 +303,9 @@ class NacActiveAlarmActivity
 		// Setup the snooze button listener
 		snoozeButton.setOnClickListener {
 
-			// Check if the alarm can be snoozed
-			if (alarm!!.canSnooze(sharedPreferences!!))
-			{
-				// Snooze the alarm service
-				NacActiveAlarmService.snoozeAlarmService(this, alarm!!)
-			}
+			// Snooze the alarm service. Whether the alarm is actually
+			// snoozed is determined in the service
+			NacActiveAlarmService.snoozeAlarmService(this, alarm!!)
 
 		}
 
@@ -344,14 +341,19 @@ class NacActiveAlarmActivity
 	 */
 	private fun setupAlarmInstructions()
 	{
-		// Show NFC instructions
-		if (!NacNfc.isEnabled(this))
-		{
-			// Get the text view
-			val instructionsTextView = findViewById<TextView>(R.id.instructions)
+		// Get the instructions
+		val instructionsTextView = findViewById<TextView>(R.id.instructions)
 
+		// Set the visibility of the instructions based on if the alarm uses NFC
+		instructionsTextView.visibility = if (alarm!!.shouldUseNfc)
+		{
+			// Show NFC instructions
+			View.VISIBLE
+		}
+		else
+		{
 			// Do not show the instructions
-			instructionsTextView.visibility = View.GONE
+			View.GONE
 		}
 	}
 
