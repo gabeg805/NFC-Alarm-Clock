@@ -43,6 +43,12 @@ class NacActiveAlarmService
 	{
 
 		/**
+		 * Action to do when alarms are equal. This is to say when the service
+		 * is started with the same alarm.
+		 */
+		private const val ACTION_EQUAL_ALARMS = "com.nfcalarmclock.ACTION_EQUAL_ALARMS"
+
+		/**
 		 * Action to start the service.
 		 */
 		const val ACTION_START_SERVICE = "com.nfcalarmclock.ACTION_START_SERVICE"
@@ -258,21 +264,6 @@ class NacActiveAlarmService
 	private var startTime: Long = 0
 
 	/**
-	 * Automatically dismiss the alarm.
-	 *
-	 * This will finish the service.
-	 */
-	@UnstableApi
-	private fun autoDismiss()
-	{
-		// Dismiss the alarm
-		dismiss(wasMissed = true)
-
-		// Stop the service
-		stopActiveAlarmService()
-	}
-
-	/**
 	 * Check if the alarm can be snoozed and show a toast if it cannot.
 	 *
 	 * @return True if the alarm can be snoozed, and False otherwise.
@@ -367,23 +358,28 @@ class NacActiveAlarmService
 	}
 
 	/**
-	 * Check if a new service, with a different alarm, was started.
+	 * Check if a new service was started.
 	 *
-	 * @param  intent An Intent.
+	 * @param  intentAlarm An alarm from an intent.
+	 * @param  action The action from an intent.
 	 *
 	 * @return True if a new service was started, and False otherwise.
 	 */
-	private fun isNewServiceStarted(intent: Intent?): Boolean
+	private fun isNewServiceStarted(
+		intentAlarm: NacAlarm?,
+		action: String?
+	): Boolean
 	{
-		// Get the alarm from the intent
-		val intentAlarm = getAlarm(intent)
-
-		// Check to make sure that a new intent was started with a different alarm
 		return ((alarm != null)
 			&& (intentAlarm != null)
-			&& !intentAlarm.equals(alarm)
-			&& (intent?.action == ACTION_START_SERVICE))
+			&& (action == ACTION_START_SERVICE))
 	}
+
+	/**
+	 * Check if the same service was started.
+	 *
+	 * @return True if the same service was started, and False otherwise.
+	 */
 
 	/**
 	 * Called when the service is bound.
@@ -415,10 +411,6 @@ class NacActiveAlarmService
 
 	/**
 	 * Called when the service is destroyed.
-	 *
-	 * TODO: Figure out how to more effectively startup an alarm that was interrupted.
-	 * TODO: Maybe when dismiss() is called, check if there are any other active suckers and start them?
-	 * TODO: Check if the started alarm is already started and if so, do not restart it. This replays the music but it might also affect the active time.
 	 */
 	@UnstableApi
 	override fun onDestroy()
@@ -444,6 +436,9 @@ class NacActiveAlarmService
 			// Update the alarm
 			alarmRepository.update(alarm!!)
 
+			// Restart any active alarms
+			restartAnyActiveAlarms()
+
 		}
 
 		// Cleanup everything
@@ -457,7 +452,6 @@ class NacActiveAlarmService
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
 	{
 		// Setup the service
-		// TODO: This was updating the previous alarm with the active time when a new intent came in. Did that do anything?
 		setupActiveAlarmService(intent)
 
 		// Show the notification
@@ -466,6 +460,15 @@ class NacActiveAlarmService
 		// Check the intent action
 		when (intent?.action)
 		{
+			// Alarms are equal
+			ACTION_EQUAL_ALARMS -> {
+
+				// Start the alarm activity
+				NacActiveAlarmActivity.startAlarmActivity(this, alarm!!)
+				return START_STICKY
+
+			}
+
 			// Start the service
 			ACTION_START_SERVICE ->
 			{
@@ -474,7 +477,10 @@ class NacActiveAlarmService
 			}
 
 			// Stop the service
-			ACTION_STOP_SERVICE -> stopActiveAlarmService()
+			ACTION_STOP_SERVICE ->
+			{
+				stopActiveAlarmService()
+			}
 
 			// Dismiss
 			ACTION_DISMISS_ALARM -> dismiss()
@@ -500,6 +506,22 @@ class NacActiveAlarmService
 	}
 
 	/**
+	 * Restart any active alarms.
+	 */
+	private suspend fun restartAnyActiveAlarms()
+	{
+		// Try and find any active alarms
+		val activeAlarm = alarmRepository.getActiveAlarm()
+
+		// Check if an active alarm was found
+		if (activeAlarm != null)
+		{
+			// Start the alarm service for this alarm
+			startAlarmService(this, activeAlarm)
+		}
+	}
+
+	/**
 	 * Setup the service.
 	 */
 	@UnstableApi
@@ -508,36 +530,25 @@ class NacActiveAlarmService
 		// Attempt to get the alarm from the intent
 		val intentAlarm = getAlarm(intent)
 
-		// Prepare a new service
-		if (isNewServiceStarted(intent))
+		// Check if a new service was started
+		if (isNewServiceStarted(intentAlarm, intent?.action))
 		{
-			val currentStartTime = startTime
-			val currentAlarm = alarm!!
-
-			scope.launch {
-
-				// Check if the service has started
-				if (currentStartTime != 0L)
-				{
-					// Set the time that the alarm was active. Do not set the
-					// alarm as inactive though because then it will not go off
-					// again. It should go off again because the alarm has not
-					// been finished being interacted with
-					currentAlarm.addToTimeActive(System.currentTimeMillis() - currentStartTime)
-
-					// Update the alarm
-					alarmRepository.update(currentAlarm)
-				}
-
+			// Check if the alarms are equal
+			if (intentAlarm!!.equals(alarm))
+			{
+				// Set the action indicating that the alarms are equal
+				intent?.action = ACTION_EQUAL_ALARMS
+				return
+			}
+			else
+			{
+				// Update the active time of the current alarm
+				updateTimeActiveOfCurrentAlarm()
 			}
 		}
 
-		// Define the new alarm for this service
-		// TODO: When does this happen if it is not a new service started? When the alarm has been updated?
-		if (intentAlarm != null)
-		{
-			alarm = intentAlarm
-		}
+		// Set the new alarm for this service or do nothing
+		alarm = intentAlarm ?: return
 	}
 
 	/**
@@ -662,6 +673,32 @@ class NacActiveAlarmService
 	}
 
 	/**
+	 * Update the active time of the current alarm.
+	 */
+	private fun updateTimeActiveOfCurrentAlarm()
+	{
+		val currentStartTime = startTime
+		val currentAlarm = alarm!!
+
+		scope.launch {
+
+			// Check if the service has started
+			if (currentStartTime != 0L)
+			{
+				// Set the time that the alarm was active. Do not set the
+				// alarm as inactive though because then it will not go off
+				// again. It should go off again because the alarm has not
+				// been finished being interacted with
+				currentAlarm.addToTimeActive(System.currentTimeMillis() - currentStartTime)
+
+				// Update the alarm
+				alarmRepository.update(currentAlarm)
+			}
+
+		}
+	}
+
+	/**
 	 * Wait in the background until the activity needs to auto dismiss the
 	 * alarm.
 	 *
@@ -692,8 +729,8 @@ class NacActiveAlarmService
 					notification.show()
 				}
 
-				// Auto dismiss
-				autoDismiss()
+				// Auto dismiss the alarm. This will stop the service
+				dismiss(wasMissed = true)
 
 			}, delay)
 		}

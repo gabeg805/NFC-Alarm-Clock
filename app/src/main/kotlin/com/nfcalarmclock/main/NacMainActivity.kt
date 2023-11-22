@@ -791,7 +791,7 @@ class NacMainActivity
 			// Check if the active alarm is not null
 			if (activeAlarm != null)
 			{
-				// Start the alarm activity for this alarm
+				// Start the alarm service for this alarm
 				NacActiveAlarmService.startAlarmService(this@NacMainActivity, activeAlarm)
 
 				// Finish the main activity

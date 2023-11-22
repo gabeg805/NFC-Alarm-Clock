@@ -6,6 +6,8 @@ captures
 app/my-new-release-key.jks
 app/debug
 app/release
+app/googleplay
+app/foss
 keystore.properties
 local.properties
 *.iml
