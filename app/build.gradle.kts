@@ -32,8 +32,8 @@ android {
 		applicationId = "com.nfcalarmclock"
 		minSdk = 21
 		targetSdk = 33
-		versionCode = 342
-		versionName = "12.0.0"
+		versionCode = 343
+		versionName = "12.0.1"
 
 		// Set output filename
 		setProperty("archivesBaseName", "nfc_alarm_clock_v${versionName}")

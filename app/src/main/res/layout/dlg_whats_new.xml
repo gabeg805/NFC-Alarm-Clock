@@ -202,6 +202,28 @@
 				android:text="@string/item_8"
 				/>
 
+			<!-- Item 9 -->
+			<TextView
+				style="@style/Widget.TextView.Primary"
+				android:id="@+id/bullet_9"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginEnd="@dimen/tiny"
+				android:layout_below="@id/item_8"
+				android:text="@string/message_bullet"
+				/>
+
+			<TextView
+				style="@style/Widget.TextView.Primary"
+				android:id="@+id/item_9"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/small"
+				android:layout_below="@id/item_8"
+				android:layout_toEndOf="@id/bullet_9"
+				android:text="@string/item_9"
+				/>
+
 		</RelativeLayout>
 
 	</ScrollView>

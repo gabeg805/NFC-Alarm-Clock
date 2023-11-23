@@ -43,12 +43,6 @@ class NacActiveAlarmService
 	{
 
 		/**
-		 * Action to do when alarms are equal. This is to say when the service
-		 * is started with the same alarm.
-		 */
-		private const val ACTION_EQUAL_ALARMS = "com.nfcalarmclock.ACTION_EQUAL_ALARMS"
-
-		/**
 		 * Action to start the service.
 		 */
 		const val ACTION_START_SERVICE = "com.nfcalarmclock.ACTION_START_SERVICE"
@@ -72,6 +66,12 @@ class NacActiveAlarmService
 		 * Action to snooze the alarm.
 		 */
 		const val ACTION_SNOOZE_ALARM = "com.nfcalarmclock.ACTION_SNOOZE_ALARM"
+
+		/**
+		 * Action to do when alarms are equal. This is to say when the service
+		 * is started with the same alarm.
+		 */
+		private const val ACTION_EQUAL_ALARMS = "com.nfcalarmclock.ACTION_EQUAL_ALARMS"
 
 		/**
 		 * Tag for the wakelock.
@@ -430,11 +430,15 @@ class NacActiveAlarmService
 
 		scope.launch {
 
-			// Set the alarm as not active
-			alarm!!.isActive = false
+			// Check if the alarm is not null
+			if (alarm != null)
+			{
+				// Set the alarm as not active
+				alarm!!.isActive = false
 
-			// Update the alarm
-			alarmRepository.update(alarm!!)
+				// Update the alarm
+				alarmRepository.update(alarm!!)
+			}
 
 			// Restart any active alarms
 			restartAnyActiveAlarms()
@@ -460,10 +464,10 @@ class NacActiveAlarmService
 		// Check the intent action
 		when (intent?.action)
 		{
-			// Alarms are equal
-			ACTION_EQUAL_ALARMS -> {
 
-				// Start the alarm activity
+			// Alarms are equal. Start the alarm activity
+			ACTION_EQUAL_ALARMS ->
+			{
 				NacActiveAlarmActivity.startAlarmActivity(this, alarm!!)
 				return START_STICKY
 
@@ -477,10 +481,7 @@ class NacActiveAlarmService
 			}
 
 			// Stop the service
-			ACTION_STOP_SERVICE ->
-			{
-				stopActiveAlarmService()
-			}
+			ACTION_STOP_SERVICE -> stopActiveAlarmService()
 
 			// Dismiss
 			ACTION_DISMISS_ALARM -> dismiss()
@@ -500,6 +501,7 @@ class NacActiveAlarmService
 
 			// The default case if things go wrong
 			else -> stopActiveAlarmService()
+
 		}
 
 		return START_NOT_STICKY
@@ -537,7 +539,7 @@ class NacActiveAlarmService
 			if (intentAlarm!!.equals(alarm))
 			{
 				// Set the action indicating that the alarms are equal
-				intent?.action = ACTION_EQUAL_ALARMS
+				intent!!.action = ACTION_EQUAL_ALARMS
 				return
 			}
 			else
@@ -547,12 +549,25 @@ class NacActiveAlarmService
 			}
 		}
 
-		// Set the new alarm for this service or do nothing
-		alarm = intentAlarm ?: return
+		// Check if the intent alarm is not null
+		if (intentAlarm != null)
+		{
+			// Set the new alarm for this service
+			alarm = intentAlarm
+		}
+
+		// Check if the service alarm is null
+		if (alarm == null)
+		{
+			// Set the action indicating to stop the service
+			intent?.action = ACTION_STOP_SERVICE
+		}
 	}
 
 	/**
 	 * Show the notification.
+	 *
+	 * Note: This can still be run with a null alarm.
 	 */
 	private fun showActiveAlarmNotification()
 	{
