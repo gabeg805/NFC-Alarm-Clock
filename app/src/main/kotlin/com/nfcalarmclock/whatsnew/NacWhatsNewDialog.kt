@@ -4,15 +4,15 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.ScrollView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
 import com.nfcalarmclock.view.dialog.NacDialogFragment
+import java.util.Locale
 
 /**
  * Show what is new with the app after an update.
@@ -20,16 +20,6 @@ import com.nfcalarmclock.view.dialog.NacDialogFragment
 class NacWhatsNewDialog
 	: NacDialogFragment()
 {
-
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacWhatsNewDialog"
-
-	}
 
 	/**
 	 * Listener for when what's new dialog has been read.
@@ -84,31 +74,43 @@ class NacWhatsNewDialog
 
 		// Get the views
 		val textView = dialog!!.findViewById<TextView>(R.id.whats_new_version)
-		val scrollView = dialog!!.findViewById<ScrollView>(R.id.whats_new_scrollview)
-		val bulletContainer = dialog!!.findViewById<RelativeLayout>(R.id.whats_new_bullet_container)
+		val recyclerView = dialog!!.findViewById<RecyclerView>(R.id.whats_new_bullet_container)
 
 		// Setup the views
 		setupVersion(textView)
-		setupScrollView(scrollView, bulletContainer)
+		setupRecyclerView(recyclerView)
 	}
 
 	/**
-	 * Setup the scrollview.
+	 * Setup the recycler view.
 	 */
-	private fun setupScrollView(scrollView: ScrollView, viewGroup: ViewGroup)
+	private fun setupRecyclerView(recyclerView: RecyclerView)
 	{
-		// Do nothing if there are not that many children. Each bullet counts
-		// for two since you have the bullet and then the text next to it
-		if (viewGroup.childCount < 10)
+		// Get all the whats new items
+		val allMessages = resources.getTextArray(R.array.whats_new_items)
+			.map { it.toString() }
+			.toList()
+
+		// Setup the list adapter
+		val listAdapter = NacWhatsNewListAdapter()
+
+		listAdapter.submitList(allMessages)
+
+		// Setup the recycler view
+		recyclerView.adapter = listAdapter
+		recyclerView.layoutManager = LinearLayoutManager(context)
+
+		// Do nothing if there are not that many children
+		if (allMessages.size < 5)
 		{
 			return
 		}
 
-		// Set the height of the scrollview
+		// Set the height of the recycler view
 		val height = resources.displayMetrics.heightPixels / 2
 		val layoutParams = LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, height)
 
-		scrollView.layoutParams = layoutParams
+		recyclerView.layoutParams = layoutParams
 	}
 
 	/**
@@ -116,13 +118,26 @@ class NacWhatsNewDialog
 	 */
 	private fun setupVersion(textView: TextView)
 	{
-		// Prepare the strings
-		val versionWord = textView.text.toString()
-		val versionName = BuildConfig.VERSION_NAME
-		val versionNameAndNum = String.format("%s %s", versionWord, versionName)
+		// Prepare the version name and number
+		val versionName = getString(R.string.version)
+		val versionNum = BuildConfig.VERSION_NAME
 
-		// Set the version
-		textView.text = versionNameAndNum
+		// Build the text
+		val locale = Locale.getDefault()
+		val text = String.format(locale, "$versionName $versionNum")
+
+		// Set the text
+		textView.text = text
+	}
+
+	companion object
+	{
+
+		/**
+		 * Tag for the class.
+		 */
+		const val TAG = "NacWhatsNewDialog"
+
 	}
 
 }

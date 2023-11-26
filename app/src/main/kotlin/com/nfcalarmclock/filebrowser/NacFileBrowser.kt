@@ -56,7 +56,15 @@ class NacFileBrowser(
 	/**
 	 * Currently selected view.
 	 */
-	private var selectedView: RelativeLayout? = null
+	var selectedView: RelativeLayout? = null
+		private set
+
+	/**
+	 * The previous directory that was clicked. This is only populated when the
+	 * (Previous directory) button is clicked, otherwise it will be an empty
+	 * string.
+	 */
+	var previousDirectory: String = ""
 
 	/**
 	 * File browser on click listener.
@@ -79,7 +87,7 @@ class NacFileBrowser(
 
 			// Ensure that metadata is in fact an object and it does not equal the
 			// previous directory string ".."
-			return (metadata != null) && (metadata.name != "..")
+			return (metadata != null) && (metadata.name != NacFile.PREVIOUS_DIRECTORY)
 		}
 
 	/**
@@ -99,8 +107,7 @@ class NacFileBrowser(
 	/**
 	 * Add a directory entry to the file browser.
 	 *
-	 * TODO Count number of songs in subdirectories and make that the
-	 * annotation.
+	 * TODO Count number of songs in subdirectories and make that the annotation.
 	 */
 	private fun addDirectory(inflater: LayoutInflater, container: LinearLayout?,
 		metadata: NacFile.Metadata): View
@@ -152,6 +159,21 @@ class NacFileBrowser(
 	 */
 	private fun changeDirectory(metadata: NacFile.Metadata)
 	{
+		// Check if the previous directory button was clicked
+		previousDirectory = if (metadata.name == NacFile.PREVIOUS_DIRECTORY)
+		{
+			val removeDots = metadata.path.replace(NacFile.PREVIOUS_DIRECTORY, "")
+			val stripDots = NacFile.strip(removeDots)
+
+			// Get the name of the directory
+			NacFile.basename(stripDots)
+		}
+		else
+		{
+			// Empty string
+			""
+		}
+
 		// Change directory
 		val path = viewModel.cd(metadata)
 
@@ -410,13 +432,16 @@ class NacFileBrowser(
 	 *
 	 * @param  dir  The path of the directory to show.
 	 */
-	fun show(dir: String)
+	fun show(dir: String, unit: () -> Unit = {})
 	{
 		// Clear the listing
 		viewModel.clear()
 
 		// Show the listing at the new directory
 		viewModel.show(dir) {
+
+			// Call the unit
+			unit()
 
 			// Call the listener
 			onBrowserClickedListener?.onDoneShowing(this)

@@ -47,6 +47,7 @@ import com.nfcalarmclock.card.NacCardHolder.OnCardDeleteClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardMediaClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardUpdatedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardUseNfcChangedListener
+import com.nfcalarmclock.card.NacCardLayoutManager
 import com.nfcalarmclock.card.NacCardTouchHelper
 import com.nfcalarmclock.card.NacCardTouchHelper.OnSwipedListener
 import com.nfcalarmclock.dismissearly.NacDismissEarlyDialog
@@ -1209,7 +1210,7 @@ class NacMainActivity
 
 		// Setup everything else
 		recyclerView!!.adapter = alarmCardAdapter
-		recyclerView!!.layoutManager = NacLayoutManager(this)
+		recyclerView!!.layoutManager = NacCardLayoutManager(this)
 		recyclerView!!.setHasFixedSize(true)
 	}
 

@@ -8,21 +8,6 @@
 	<string name="permission_schedule_exact_alarm_request">Las alarmas no podrán ejecutarse cuando la aplicación no esté enfocada.\n\n¿Le gustaría continuar a la siguiente pantalla para habilitar este permiso?</string>
 
 
-	<!-- What's new -->
-	<!--
-	<string name="item_X"></string>
-	-->
-	<string name="item_1">Convirtió <b>todo el código</b> de Java a Kotlin.  Esto significa que es posible que determinadas funciones de la aplicación no funcionen como se esperaba.  Si esto sucede, envíame un correo electrónico o escribe una reseña y lo veré.</string>
-	<string name="item_2">Se redujo el tamaño de la aplicación eliminando/recortando el código innecesario.</string>
-	<string name="item_3">Se solucionó el problema por el cual la alarma no se detenía correctamente.</string>
-	<string name="item_4">Se solucionó el problema por el cual la aplicación te pedía que revisaras increíblemente rápido.  Cada vez que la aplicación se enfoca, el contador aumenta.  Se cambió el umbral del contador de 3 a 50.</string>
-	<string name="item_5">Se solucionó el problema con <b>Restringir volumen</b> donde antes no restringía correctamente el volumen.</string>
-	<string name="item_6">Se solucionó el problema al buscar música con la pestaña <b>Examinar</b>.  Si hubiera mucha música para buscar, se produciría una <b>La aplicación no responde</b> (ANR) y se bloquearía.</string>
-	<string name="item_7">Se agregó una opción a <b>Texto a voz</b> .  Cuando suena una alarma, ahora se puede decir el <b>nombre de la alarma</b>, además de la <b>hora actual</b>.</string>
-	<string name="item_8">Se agregó un mensaje <i>¿Está seguro...</i> al hacer clic en <b>Restablecer estadísticas</b> antes de continuar con el reinicio?</string>
-	<string name="item_9">Se actualizó el reproductor multimedia, <b>Exoplayer</b>, que se utiliza para reproducir música/tonos de llamada cuando suena una alarma.</string>
-
-
 
 	<!-- Consolidate -->
 	<string name="version">Versión</string>
@@ -201,6 +186,7 @@
 	<string name="cd_request_permission_ignore_battery_optimization">Solicitud para desactivar la optimización de la batería.</string>
 	<string name="cd_request_permission_post_notifications">Solicitud para publicar notificaciones.</string>
 	<string name="cd_request_permission_schedule_exact_alarm">Solicitud para programar alarmas exactas.</string>
+	<string name="cd_whats_new">Lista de elementos nuevos en esta versión de la aplicación.</string>
 
 
 

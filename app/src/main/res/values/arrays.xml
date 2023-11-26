@@ -164,4 +164,16 @@
 		<item>120 minutes</item>
 	</string-array>
 
+	<string-array name="whats_new_items">
+		<item>Converted &lt;b\>all code&lt;\/b\> from Java to Kotlin.  This means that certain features of the app might not work as expected.  If this happens, send me an email or right a review and I will see it.</item>
+		<item>Reduced the size of the app by removing/trimming down unneeded code.</item>
+		<item>Fixed issue where the app was not stopping the alarm correctly.</item>
+		<item>Fixed issue where the app was asking you to review insanely quickly.  Every time the app gets focus, the counter increments.  Changed the counter threshold from 3 to 50.</item>
+		<item>Fixed issue with &lt;b>Restrict volume&lt;/b> where it was not properly restricting volume before.</item>
+		<item>Fixed issue when searching for music with the &lt;b>Browse&lt;/b> tab.  If there was a lot of music to search, it would cause an &lt;b>App Not Responding&lt;/b> (ANR) and crash.</item>
+		<item>Added an option to &lt;b>Text-to-speech&lt;/b>.  When an alarm goes off, the &lt;b>alarm name&lt;/b> can now be said, in addition to the &lt;b>current time&lt;/b>.</item>
+		<item>Added an &lt;i>Are you sure...&lt;/i> prompt when clicking to &lt;b>Reset statistics&lt;/b> before proceeding with the reset.</item>
+		<item>Updated the media player, &lt;b>Exoplayer&lt;/b>, that is used to play music/ringtones when an alarm goes off.</item>
+	</string-array>
+
 </resources>

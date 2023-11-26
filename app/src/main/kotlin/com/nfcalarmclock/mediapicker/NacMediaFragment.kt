@@ -15,13 +15,11 @@ import com.nfcalarmclock.mediaplayer.NacMediaPlayer
 import com.nfcalarmclock.scheduler.NacScheduler
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacBundle
+import com.nfcalarmclock.util.NacUtility
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Media fragment for ringtones and music files.
- *
- * TODO: Make this class better
- * TODO: Create the MediaPlayer object, and only call release (cleanup) in onDestroy.
  */
 @AndroidEntryPoint
 open class NacMediaFragment
@@ -39,88 +37,34 @@ open class NacMediaFragment
 	private var alarm: NacAlarm? = null
 
 	/**
-	 * Media path.
-	 */
-	private var mMediaPath: String? = null
-
-	/**
-	 * Media player.
-	 */
-	private var mediaPlayer: NacMediaPlayer? = null
-
-	/**
 	 * The initial selection flag, if this is the first time the fragment is being selected.
 	 */
 	private var isInitialSelection = true
 
 	/**
-	 * Cleanup the media player.
+	 * Media player.
 	 */
-	@UnstableApi
-	private fun cleanupMediaPlayer()
-	{
-		// Release the media player resources
-		if (mediaPlayer != null)
-		{
-			mediaPlayer!!.release()
-		}
-
-		// Null the media player
-		mediaPlayer = null
-	}
-
-	/**
-	 * The alarm media.
-	 *
-	 * Use the NacAlarm when editing an alarm card, and use the media path when
-	 * editing a preference.
-	 */
-	protected var media: String?
-		get() = mMediaPath
-		set(media)
-		{
-			if (alarm != null)
-			{
-				alarm!!.setMedia(requireContext(), media!!)
-			}
-			else
-			{
-				mMediaPath = media
-			}
-		}
+	var mediaPlayer: NacMediaPlayer? = null
 
 	/**
 	 * The media path.
 	 */
-	protected val mediaPath: String
+	var mediaPath: String = ""
 		get()
 		{
-			return alarm?.mediaPath ?: (media ?: "")
+			return alarm?.mediaPath ?: field
 		}
-
-	/**
-	 * Check if the media path matches the given path.
-	 *
-	 * @return True if the media path matches the given path, and False
-	 *         otherwise.
-	 */
-	protected fun isSelectedPath(path: String): Boolean
-	{
-		return mediaPath.isNotEmpty() && (mediaPath == path)
-	}
-
-	/**
-	 * Called when the fragment is created.
-	 */
-	override fun onCreate(savedInstanceState: Bundle?)
-	{
-		// Super
-		super.onCreate(savedInstanceState)
-
-		// Set the member variables
-		alarm = NacBundle.getAlarm(arguments)
-		mMediaPath = NacBundle.getMedia(arguments)
-	}
+		set(value)
+		{
+			if (alarm != null)
+			{
+				alarm!!.setMedia(requireContext(), value)
+			}
+			else
+			{
+				field = value
+			}
+		}
 
 	/**
 	 * Called when the Cancel button is clicked.
@@ -137,10 +81,37 @@ open class NacMediaFragment
 	open fun onClearClicked()
 	{
 		// Clear the media that is being used
-		media = ""
+		mediaPath = ""
 
-		// Reset the media player
-		safeReset()
+		// Stop any media that is already playing
+		mediaPlayer?.exoPlayer?.stop()
+	}
+
+	/**
+	 * Called when the fragment is created.
+	 */
+	@UnstableApi
+	override fun onCreate(savedInstanceState: Bundle?)
+	{
+		// Super
+		super.onCreate(savedInstanceState)
+
+		// Set the alarm
+		alarm = NacBundle.getAlarm(arguments)
+
+		// Check if the alarm was not set
+		if (alarm == null)
+		{
+			// Set the media path
+			mediaPath = NacBundle.getMedia(arguments) ?: ""
+		}
+
+		// Create the media player
+		val context = requireContext()
+		mediaPlayer = NacMediaPlayer(context)
+
+		// Gain transient audio focus
+		mediaPlayer!!.shouldGainTransientAudioFocus = true
 	}
 
 	/**
@@ -159,11 +130,12 @@ open class NacMediaFragment
 			// Reschedule the alarm
 			NacScheduler.update(activity, alarm!!)
 		}
-		// Check if the media is set
-		else if (media != null)
+		// The media must be set
+		else
 		{
 			// Create an intent with the media
-			val intent = NacMediaActivity.getStartIntentWithMedia(media = media)
+			val intent = NacMediaActivity.getStartIntentWithMedia(
+				media = mediaPath)
 
 			// Set the result of the activity with the media path as part of
 			// the intent
@@ -175,16 +147,16 @@ open class NacMediaFragment
 	}
 
 	/**
-	 * Called when the fragment is paused.
+	 * Called when the fragment is destroyed.
 	 */
 	@UnstableApi
-	override fun onPause()
+	override fun onDestroy()
 	{
 		// Super
-		super.onPause()
+		super.onDestroy()
 
 		// Cleanup the media player
-		cleanupMediaPlayer()
+		mediaPlayer?.release()
 	}
 
 	/**
@@ -200,71 +172,34 @@ open class NacMediaFragment
 	}
 
 	/**
-	 * Called when the fragment is started.
-	 */
-	@UnstableApi
-	override fun onStart()
-	{
-		// Super
-		super.onStart()
-
-		// Setup the media player
-		setupMediaPlayer()
-	}
-
-	/**
-	 * Play audio from the media player safely.
+	 * Play audio from the media player.
 	 *
 	 * @param  uri  The Uri of the content to play.
 	 */
 	@UnstableApi
-	protected fun safePlay(uri: Uri): Boolean
+	protected fun play(uri: Uri)
 	{
 		val path = uri.toString()
 
 		// Invalid URI path since it does not start with "content://"
 		if (!path.startsWith("content://"))
 		{
-			return false
+			// Show an error toast
+			NacUtility.quickToast(requireContext(), R.string.error_message_play_audio)
+			return
 		}
 
 		// Set the path of the media that is going to play
-		media = path
+		mediaPath = path
 
-		// Reset the media player
-		safeReset()
-
-		// Check if the media player is null
-		if (mediaPlayer == null)
-		{
-			// Setup the media player
-			setupMediaPlayer()
-		}
+		// Stop any media that is already playing
+		mediaPlayer?.exoPlayer?.stop()
 
 		// Save the current volume
 		mediaPlayer!!.audioAttributes.saveCurrentVolume()
 
 		// Play the media
 		mediaPlayer!!.playUri(uri)
-
-		return true
-	}
-
-	/**
-	 * Reset the media player safely.
-	 */
-	@UnstableApi
-	protected fun safeReset()
-	{
-		// Check if the media player is null
-		if (mediaPlayer == null)
-		{
-			// Setup the media player
-			setupMediaPlayer()
-		}
-
-		// Stop any media that is already playing
-		mediaPlayer!!.exoPlayer.stop()
 	}
 
 	/**
@@ -299,20 +234,20 @@ open class NacMediaFragment
 		}
 	}
 
-	/**
-	 * Setup the media player.
-	 */
-	@UnstableApi
-	private fun setupMediaPlayer()
-	{
-		// Get the context
-		val context = requireContext()
+	///**
+	// * Setup the media player.
+	// */
+	//@UnstableApi
+	//private fun setupMediaPlayer()
+	//{
+	//	// Get the context
+	//	val context = requireContext()
 
-		// Create the media player
-		mediaPlayer = NacMediaPlayer(context)
+	//	// Create the media player
+	//	mediaPlayer = NacMediaPlayer(context)
 
-		// Gain transient audio focus
-		mediaPlayer!!.shouldGainTransientAudioFocus = true
-	}
+	//	// Gain transient audio focus
+	//	mediaPlayer!!.shouldGainTransientAudioFocus = true
+	//}
 
 }

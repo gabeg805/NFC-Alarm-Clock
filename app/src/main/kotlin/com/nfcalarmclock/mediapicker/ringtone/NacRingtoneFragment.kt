@@ -18,7 +18,6 @@ import com.nfcalarmclock.mediapicker.NacMediaFragment
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacBundle.toBundle
 import com.nfcalarmclock.util.NacBundle.alarmToBundle
-import com.nfcalarmclock.util.NacUtility
 
 /**
  * Display a dialog that shows a list of alarm ringtones.
@@ -60,11 +59,7 @@ class NacRingtoneFragment
 			val uri = Uri.parse(path)
 
 			// Play the media at the URI
-			if (!safePlay(uri))
-			{
-				// There was an error playing the media
-				NacUtility.quickToast(requireContext(), R.string.error_message_play_audio)
-			}
+			play(uri)
 
 		}
 
@@ -137,15 +132,22 @@ class NacRingtoneFragment
 		// Iterate over each ringtone
 		for ((title, path) in ringtones)
 		{
+			// Skip if path is empty
+			if (path.isEmpty())
+			{
+				continue
+			}
+
 			// Create a button for each ringtone
 			val button = createRadioButton(title, path)
 
 			// Set the radio button color
 			setRadioButtonColor(shared, button)
 
-			// Check the radio button if it is selected
-			if (isSelectedPath(path))
+			// Check if the paths match
+			if (path == mediaPath)
 			{
+				// Set the radio button as selected
 				button.isChecked = true
 			}
 		}
@@ -157,7 +159,6 @@ class NacRingtoneFragment
 		/**
 		 * Create a new instance of this fragment.
 		 */
-		@JvmStatic
 		fun newInstance(alarm: NacAlarm?): Fragment
 		{
 			val fragment: Fragment = NacRingtoneFragment()
@@ -170,7 +171,6 @@ class NacRingtoneFragment
 		/**
 		 * Create a new instance of this fragment.
 		 */
-		@JvmStatic
 		fun newInstance(media: String?): Fragment
 		{
 			val fragment: Fragment = NacRingtoneFragment()

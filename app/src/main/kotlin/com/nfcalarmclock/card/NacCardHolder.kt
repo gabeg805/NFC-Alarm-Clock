@@ -46,6 +46,9 @@ import com.nfcalarmclock.view.dayofweek.NacDayOfWeek.OnWeekChangedListener
  */
 class NacCardHolder(
 
+	/**
+	 * Root view.
+	 */
 	val root: View
 
 	// Constructor

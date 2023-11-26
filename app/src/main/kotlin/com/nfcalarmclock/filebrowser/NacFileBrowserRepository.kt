@@ -40,14 +40,13 @@ class NacFileBrowserRepository
 	/**
 	 * Add a directory entry to the file listing.
 	 *
-	 * TODO Count number of songs in subdirectories and make that the
-	 * annotation.
+	 * TODO Count number of songs in subdirectories and make that the annotation.
 	 */
 	private suspend fun addDirectory(context: Context, metadata: NacFile.Metadata)
 	{
 		// Determine what the extra data will be. This will be the name shown to the
 		// user
-		val extra = if (metadata.name == "..")
+		val extra = if (metadata.name == NacFile.PREVIOUS_DIRECTORY)
 		{
 			// Get the name of the previous folder
 			val locale = Locale.getDefault()
@@ -73,22 +72,26 @@ class NacFileBrowserRepository
 	 */
 	private suspend fun addFile(context: Context, metadata: NacFile.Metadata)
 	{
-		// Determine the extra data. This will be shown to the user
-		val title = NacMedia.getTitle(context, metadata)
-		val artist = NacMedia.getArtist(context, metadata)
-		val duration = NacMedia.getDuration(context, metadata)
+		withContext(Dispatchers.IO) {
 
-		// No title so there is nothing to show the user. Exit here
-		if (title.isEmpty())
-		{
-			return
+			// Determine the extra data. This will be shown to the user
+			val title = NacMedia.getTitle(context, metadata)
+			val artist = NacMedia.getArtist(context, metadata)
+			val duration = NacMedia.getDuration(context, metadata)
+
+			// No title so there is nothing to show the user. Exit here
+			if (title.isEmpty())
+			{
+				return@withContext
+			}
+
+			// Set the extra data
+			metadata.extra = arrayOf(title, artist, duration)
+
+			// Add to the listing
+			_currentMetadata.emit(metadata)
+
 		}
-
-		// Set the extra data
-		metadata.extra = arrayOf(title, artist, duration)
-
-		// Add to the listing
-		_currentMetadata.emit(metadata)
 	}
 
 	/**

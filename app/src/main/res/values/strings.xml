@@ -8,21 +8,6 @@
 	<string name="permission_schedule_exact_alarm_request">Alarms will not be able to run if the app is not in focus.\n\nWould you like to enable scheduling alarms?</string>
 
 
-	<!-- What's new -->
-	<!--
-	<string name="item_X"></string>
-	-->
-	<string name="item_1">Converted <b>all code</b> from Java to Kotlin.  This means that certain features of the app might not work as expected.  If this happens, send me an email or right a review and I will see it.</string>
-	<string name="item_2">Reduced the size of the app by removing/trimming down unneeded code.</string>
-	<string name="item_3">Fixed issue where the app was not stopping the alarm correctly.</string>
-	<string name="item_4">Fixed issue where the app was asking you to review insanely quickly.  Every time the app gets focus, the counter increments.  Changed the counter threshold from 3 to 50.</string>
-	<string name="item_5">Fixed issue with <b>Restrict volume</b> where it was not properly restricting volume before.</string>
-	<string name="item_6">Fixed issue when searching for music with the <b>Browse</b> tab.  If there was a lot of music to search, it would cause an <b>App Not Responding</b> (ANR) and crash.</string>
-	<string name="item_7">Added an option to <b>Text-to-speech</b>.  When an alarm goes off, the <b>alarm name</b> can now be said, in addition to the <b>current time</b>.</string>
-	<string name="item_8">Added an <i>Are you sure...</i> prompt when clicking to <b>Reset statistics</b> before proceeding with the reset.</string>
-	<string name="item_9">Updated the media player, <b>Exoplayer</b>, that is used to play music/ringtones when an alarm goes off.</string>
-
-
 
 	<!-- Consolidate -->
 	<string name="version">Version</string>
@@ -201,6 +186,7 @@
 	<string name="cd_request_permission_ignore_battery_optimization">Request to disable battery optimization.</string>
 	<string name="cd_request_permission_post_notifications">Request to post notifications.</string>
 	<string name="cd_request_permission_schedule_exact_alarm">Request to schedule exact alarms.</string>
+	<string name="cd_whats_new">List of items that are new in this version of the app.</string>
 
 
 

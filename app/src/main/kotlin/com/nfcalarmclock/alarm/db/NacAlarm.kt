@@ -647,9 +647,9 @@ class NacAlarm()
 			&& (shouldVibrate == alarm.shouldVibrate)
 			&& (shouldUseNfc == alarm.shouldUseNfc)
 			&& (nfcTagId == alarm.nfcTagId)
-			&& (mediaType == alarm.mediaType)
 			&& (mediaPath == alarm.mediaPath)
 			&& (mediaTitle == alarm.mediaTitle)
+			&& (mediaType == alarm.mediaType)
 			&& (volume == alarm.volume)
 			&& (audioSource == alarm.audioSource)
 			&& (name == alarm.name)
@@ -783,12 +783,12 @@ class NacAlarm()
 	 */
 	fun setMedia(context: Context, path: String)
 	{
-		val type = NacMedia.getType(context, path)
 		val title = NacMedia.getTitle(context, path)
+		val type = NacMedia.getType(context, path)
 
-		mediaType = type
 		mediaPath = path
 		mediaTitle = title
+		mediaType = type
 	}
 
 	/**
@@ -800,6 +800,9 @@ class NacAlarm()
 	 */
 	fun snooze(shared: NacSharedPreferences): Calendar
 	{
+		// Reset the active flag
+		isActive = false
+
 		// Add the snooze duration value to the current time
 		val cal = Calendar.getInstance()
 		cal.add(Calendar.MINUTE, shared.snoozeDurationValue)

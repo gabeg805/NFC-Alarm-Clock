@@ -20,7 +20,6 @@ import com.nfcalarmclock.media.NacMedia
 import com.nfcalarmclock.mediapicker.NacMediaFragment
 import com.nfcalarmclock.permission.readmediaaudio.NacReadMediaAudioPermission
 import com.nfcalarmclock.util.NacBundle
-import com.nfcalarmclock.util.NacUtility
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -85,10 +84,28 @@ class NacMusicFragment
 	override fun onDirectoryClicked(browser: NacFileBrowser, path: String)
 	{
 		val locale = Locale.getDefault()
-		val textPath = if (path.isEmpty()) "" else String.format(locale, "%1\$s/", path)
 
-		// Set the alarm media path to the directory
-		media = path
+		// Build the path to show in the directory text view
+		val textPath = if (path.isNotEmpty())
+		{
+			String.format(locale, "${path}/")
+		}
+		else
+		{
+			""
+		}
+
+		// Set the alarm media path
+		mediaPath = if(browser.previousDirectory.isNotEmpty())
+		{
+			String.format(locale, "${textPath}${browser.previousDirectory}")
+		}
+		else
+		{
+			path
+		}
+
+		// Set the text path
 		directoryTextView!!.text = textPath
 
 		// Show the contents of the directory
@@ -103,10 +120,37 @@ class NacMusicFragment
 		lifecycleScope.launch {
 
 			// Delay a little bit
-			delay(100)
+			delay(50)
 
-			// Scroll to the top
-			scrollView?.fullScroll(View.FOCUS_UP)
+			// Check if the previous directory was clicked
+			if (browser.previousDirectory.isNotEmpty())
+			{
+				val context = requireContext()
+
+				// Select the view
+				browser.select(context, browser.previousDirectory)
+
+				// Make sure the selected view has been set
+				if (browser.selectedView != null)
+				{
+					// Get the location and offset of the view
+					val loc = IntArray(2)
+					val offset = 4 * directoryTextView!!.height
+
+					browser.selectedView!!.getLocationOnScreen(loc)
+
+					// Calculate the Y location
+					val y = if (offset <= loc[1]) loc[1] - offset else 0
+
+					// Scroll to the view's location
+					scrollView?.scrollTo(0, y)
+				}
+			}
+			else
+			{
+				// Scroll to the top
+				scrollView?.fullScroll(View.FOCUS_UP)
+			}
 
 		}
 	}
@@ -119,21 +163,17 @@ class NacMusicFragment
 	{
 		val uri = metadata.toExternalUri()
 
-		// Play the media file
+		// File was selected
 		if (browser.isSelected)
 		{
-			 // Unable to play the media
-			 if (!safePlay(uri))
-			 {
-				  // Show an error toast
-				 NacUtility.quickToast(requireContext(), R.string.error_message_play_audio)
-			 }
+			 // Play the file
+			 play(uri)
 		}
 		// File was deselected
 		else
 		{
-			 // Reset the media player
-			 safeReset()
+			// Stop any media that is already playing
+			mediaPlayer?.exoPlayer?.stop()
 		}
 	}
 
@@ -236,8 +276,12 @@ class NacMusicFragment
 
 		// Setup the file browser
 		fileBrowser!!.onBrowserClickedListener = this
-		fileBrowser!!.show(dir)
-		fileBrowser!!.select(requireContext(), name)
+		fileBrowser!!.show(dir) {
+
+			// Select the item once it is done being shown
+			fileBrowser!!.select(requireContext(), name)
+
+		}
 	}
 
 	/**
@@ -267,7 +311,6 @@ class NacMusicFragment
 		/**
 		 * Create a new instance of this fragment.
 		 */
-		@JvmStatic
 		fun newInstance(alarm: NacAlarm?): Fragment
 		{
 			val fragment: Fragment = NacMusicFragment()
@@ -280,7 +323,6 @@ class NacMusicFragment
 		/**
 		 * Create a new instance of this fragment.
 		 */
-		@JvmStatic
 		fun newInstance(media: String?): Fragment
 		{
 			val fragment: Fragment = NacMusicFragment()

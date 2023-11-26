@@ -191,6 +191,9 @@ object NacNfc
 		{
 			quickToast(activity, R.string.error_message_unable_to_scan_nfc)
 		}
+		catch (_: IllegalStateException)
+		{
+		}
 	}
 
 	/**
@@ -212,7 +215,7 @@ object NacNfc
 		{
 			nfcAdapter.disableForegroundDispatch(context as Activity)
 		}
-		catch (ignored: IllegalStateException)
+		catch (_: IllegalStateException)
 		{
 		}
 	}

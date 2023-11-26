@@ -265,24 +265,23 @@ class NacActiveAlarmService
 
 	/**
 	 * Check if the alarm can be snoozed and show a toast if it cannot.
-	 *
-	 * @return True if the alarm can be snoozed, and False otherwise.
 	 */
-	private fun checkCanSnooze(): Boolean
-	{
-		// Check if the alarm can be snoozed
-		return if (alarm!!.canSnooze(sharedPreferences!!))
+	private val canSnooze: Boolean
+		get()
 		{
-			true
+			// Check if the alarm can be snoozed
+			return if (alarm!!.canSnooze(sharedPreferences!!))
+			{
+				true
+			}
+			// Unable to snooze the alarm
+			else
+			{
+				// Show a toast saying the alarm could not be snoozed
+				NacUtility.quickToast(this, R.string.error_message_snooze)
+				false
+			}
 		}
-		// Unable to snooze the alarm
-		else
-		{
-			// Show a toast saying the alarm could not be snoozed
-			NacUtility.quickToast(this, R.string.error_message_snooze)
-			false
-		}
-	}
 
 	/**
 	 * Run cleanup.
@@ -343,18 +342,39 @@ class NacActiveAlarmService
 			// Set flag that the main activity needs to be refreshed
 			sharedPreferences!!.editShouldRefreshMainActivity(true)
 
+			// Check if there are any other active alarms that need to run
+			if (hasAnyOtherActiveAlarms())
+			{
+				// Restart another active alarm
+				restartOtherActiveAlarm()
+			}
+			// No other active alarms
+			else
+			{
+				withContext(Dispatchers.Main) {
 
-			withContext(Dispatchers.Main) {
+					// Show toast that the alarm was dismissed
+					NacUtility.quickToast(this@NacActiveAlarmService, R.string.message_alarm_dismiss)
 
-				// Show toast that the alarm was dismissed
-				NacUtility.quickToast(this@NacActiveAlarmService, R.string.message_alarm_dismiss)
+					// Stop the service
+					stopActiveAlarmService()
 
-				// Stop the service
-				stopActiveAlarmService()
-
+				}
 			}
 
 		}
+	}
+
+	/**
+	 * Check if there are any other active alarms.
+	 */
+	private suspend fun hasAnyOtherActiveAlarms(): Boolean
+	{
+		// Try and find any active alarms
+		val activeAlarm = alarmRepository.getActiveAlarm()
+
+		// Check if the alarm is not null
+		return (activeAlarm != null)
 	}
 
 	/**
@@ -440,9 +460,6 @@ class NacActiveAlarmService
 				alarmRepository.update(alarm!!)
 			}
 
-			// Restart any active alarms
-			restartAnyActiveAlarms()
-
 		}
 
 		// Cleanup everything
@@ -493,7 +510,7 @@ class NacActiveAlarmService
 			ACTION_SNOOZE_ALARM ->
 			{
 				// Check if can snooze
-				if (checkCanSnooze())
+				if (canSnooze)
 				{
 					snooze()
 				}
@@ -508,19 +525,29 @@ class NacActiveAlarmService
 	}
 
 	/**
-	 * Restart any active alarms.
+	 * Restart any other active alarm.
 	 */
-	private suspend fun restartAnyActiveAlarms()
+	private suspend fun restartOtherActiveAlarm()
 	{
+		// Restart alarms
+		// Get output from restart
+		// startAlarmService
+		// recreate notification
+
 		// Try and find any active alarms
 		val activeAlarm = alarmRepository.getActiveAlarm()
 
-		// Check if an active alarm was found
-		if (activeAlarm != null)
-		{
-			// Start the alarm service for this alarm
-			startAlarmService(this, activeAlarm)
-		}
+		// Start the alarm service for this alarm
+		startAlarmService(this, activeAlarm)
+
+		// Creaete the notification
+		val notification = NacActiveAlarmNotification(this)
+
+		// Set the alarm to be part of the notification
+		notification.alarm = activeAlarm
+
+		// Show the notification
+		notification.show()
 	}
 
 	/**
@@ -610,15 +637,24 @@ class NacActiveAlarmService
 			// Set the flag that the main activity will need to be refreshed
 			sharedPreferences!!.editShouldRefreshMainActivity(true)
 
+			// Check if there are any other active alarms that need to run
+			if (hasAnyOtherActiveAlarms())
+			{
+				// Restart another active alarm
+				restartOtherActiveAlarm()
+			}
+			// No other active alarms
+			else
+			{
+				withContext(Dispatchers.Main) {
 
-			withContext(Dispatchers.Main) {
+					// Show a toast saying the alarm was snoozed
+					NacUtility.quickToast(this@NacActiveAlarmService, R.string.message_alarm_snooze)
 
-				// Show a toast saying the alarm was snoozed
-				NacUtility.quickToast(this@NacActiveAlarmService, R.string.message_alarm_snooze)
+					// Stop the service
+					stopActiveAlarmService()
 
-				// Stop the service
-				stopActiveAlarmService()
-
+				}
 			}
 
 		}

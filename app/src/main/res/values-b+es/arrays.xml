@@ -164,4 +164,16 @@
 		<item>120 minutos</item>
 	</string-array>
 
+	<string-array name="whats_new_items">
+		<item>Convirtió &lt;b>todo el código&lt;/b> de Java a Kotlin.  Esto significa que es posible que determinadas funciones de la aplicación no funcionen como se esperaba.  Si esto sucede, envíame un correo electrónico o escribe una reseña y lo veré.</item>
+		<item>Se redujo el tamaño de la aplicación eliminando/recortando el código innecesario.</item>
+		<item>Se solucionó el problema por el cual la alarma no se detenía correctamente.</item>
+		<item>Se solucionó el problema por el cual la aplicación te pedía que revisaras increíblemente rápido.  Cada vez que la aplicación se enfoca, el contador aumenta.  Se cambió el umbral del contador de 3 a 50.</item>
+		<item>Se solucionó el problema con &lt;b>Restringir volumen&lt;/b> donde antes no restringía correctamente el volumen.</item>
+		<item>Se solucionó el problema al buscar música con la pestaña &lt;b>Examinar&lt;/b>.  Si hubiera mucha música para buscar, se produciría una &lt;b>La aplicación no responde&lt;/b> (ANR) y se bloquearía.</item>
+		<item>Se agregó una opción a &lt;b>Texto a voz&lt;/b> .  Cuando suena una alarma, ahora se puede decir el &lt;b>nombre de la alarma&lt;/b>, además de la &lt;b>hora actual&lt;/b>.</item>
+		<item>Se agregó un mensaje &lt;i>¿Está seguro...&lt;/i> al hacer clic en &lt;b>Restablecer estadísticas&lt;/b> antes de continuar con el reinicio?</item>
+		<item>Se actualizó el reproductor multimedia, &lt;b>Exoplayer&lt;/b>, que se utiliza para reproducir música/tonos de llamada cuando suena una alarma.</item>
+	</string-array>
+
 </resources>

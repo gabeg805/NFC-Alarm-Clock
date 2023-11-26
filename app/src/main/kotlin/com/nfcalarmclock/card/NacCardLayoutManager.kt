@@ -1,4 +1,4 @@
-package com.nfcalarmclock.main
+package com.nfcalarmclock.card
 
 import android.content.Context
 import android.util.DisplayMetrics
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
  * Linear layout manager for a recyclerview that is primarily used because it
  * handles the smooth scrolling.
  */
-class NacLayoutManager(context: Context)
+class NacCardLayoutManager(context: Context)
 	: LinearLayoutManager(context)
 {
 

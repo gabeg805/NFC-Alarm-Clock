@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
+
+	<!-- Bullet -->
+	<TextView
+		style="@style/Widget.TextView.Primary"
+		android:id="@+id/whats_new_bullet"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="@dimen/tiny"
+		android:text="@string/message_bullet"
+		/>
+
+	<!-- Message -->
+	<TextView
+		style="@style/Widget.TextView.Primary"
+		android:id="@+id/whats_new_message"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="@dimen/small"
+		android:layout_toEndOf="@id/whats_new_bullet"
+		android:text=""
+		/>
+
+</RelativeLayout>

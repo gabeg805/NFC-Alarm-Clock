@@ -291,4 +291,13 @@ class NacActiveAlarmNotification(context: Context)
 		return PendingIntent.getService(context, 0, intent, flags)
 	}
 
+	/**
+	 * @see NacNotification.show
+	 */
+	public override fun show()
+	{
+		// Super
+		super.show()
+	}
+
 }

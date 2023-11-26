@@ -57,7 +57,8 @@
 			android:clipToPadding="false"
 			android:descendantFocusability="blocksDescendants"
 			android:paddingBottom="@dimen/isz_attention"
-			android:scrollbars="vertical" />
+			android:scrollbars="vertical"
+			/>
 
 	</LinearLayout>
 
