@@ -2,12 +2,19 @@
 TODO
 ----
 
-* The alarm was resized/colored incorrectly, I believe after the media activity.
+* Investigate how day abbreviation is being done and change it so that they
+  are in string resources instead. Vietnamese and probably Creole do it differently
+  than English so need to account for that.
+
+* Add recursive ls() for playing all music in folders and, when this is done,
+  playing music in subfolders as well.
+
+* Add option in Statistics to export to csv.
+
+* Add option to change step time when gradually increasing volume.
 
 * Early notification in alarm options
 	- have an incremental countdown to alarm
-
-* Add creole and vietnamese
 
 * Reorganize some of the packages like media. See if I can make a media player package?
 
@@ -17,4 +24,4 @@ TODO
 Issues
 ------
 
-TBD
+* The alarm was resized/colored incorrectly, I believe after the media activity.
