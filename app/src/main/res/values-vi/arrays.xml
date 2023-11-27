@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string-array name="audio_options">
+		<item>Nguồn âm thanh</item>
+		<item>Sa thải sớm</item>
+		<item>Tăng dần âm lượng</item>
+		<item>Hạn chế âm lượng</item>
+		<item>Chuyển văn bản thành giọng nói</item>
+	</string-array>
+
+	<string-array name="audio_sources">
+		<item>Báo thức</item>
+		<item>Gọi</item>
+		<item>Phương tiện truyền thông</item>
+		<item>Thông báo</item>
+		<item>Nhạc chuông</item>
+	</string-array>
+
+	<string-array name="tts_frequency">
+		<item>Một lần</item>
+		<item>Cứ sau 1 phút</item>
+		<item>Cứ sau 2 phút</item>
+		<item>Cứ sau 3 phút</item>
+		<item>Cứ sau 4 phút</item>
+		<item>Cứ sau 5 phút</item>
+		<item>Cứ sau 6 phút</item>
+		<item>Cứ sau 7 phút</item>
+		<item>Cứ sau 8 phút</item>
+		<item>Cứ 9 phút một lần</item>
+		<item>Cứ sau 10 phút</item>
+		<item>Cứ sau 11 phút</item>
+		<item>Cứ sau 12 phút</item>
+		<item>Cứ sau 13 phút</item>
+		<item>Cứ sau 14 phút</item>
+		<item>Cứ sau 15 phút</item>
+		<item>Cứ sau 16 phút</item>
+		<item>Cứ sau 17 phút</item>
+		<item>Cứ sau 18 phút</item>
+		<item>Cứ sau 19 phút</item>
+		<item>Cứ sau 20 phút</item>
+		<item>Cứ sau 21 phút</item>
+		<item>Cứ sau 22 phút</item>
+		<item>Cứ sau 23 phút</item>
+		<item>Cứ sau 24 phút</item>
+		<item>Cứ sau 25 phút</item>
+		<item>Cứ sau 26 phút</item>
+		<item>Cứ sau 27 phút</item>
+		<item>Cứ sau 28 phút</item>
+		<item>Cứ sau 29 phút</item>
+		<item>Cứ sau 30 phút</item>
+	</string-array>
+
+	<string-array name="days_of_week">
+		<item>Chủ nhật</item>
+		<item>Thứ hai</item>
+		<item>Thứ ba</item>
+		<item>Thứ Tư</item>
+		<item>Thứ năm</item>
+		<item>Thứ sáu</item>
+		<item>Thứ bảy</item>
+	</string-array>
+
+	<string-array name="start_week_on">
+		<item>Chủ nhật</item>
+		<item>Thứ hai</item>
+	</string-array>
+
+	<string-array name="auto_dismiss_summaries">
+		<item>Tắt</item>
+		<item>1 phút</item>
+		<item>2 phút</item>
+		<item>3 phút</item>
+		<item>4 phút</item>
+		<item>5 phút</item>
+		<item>10 phút</item>
+		<item>15 phút</item>
+		<item>20 phút</item>
+		<item>25 phút</item>
+		<item>30 phút</item>
+		<item>35 phút</item>
+		<item>40 phút</item>
+		<item>45 phút</item>
+		<item>50 phút</item>
+		<item>55 phút</item>
+		<item>60 phút</item>
+	</string-array>
+
+	<string-array name="max_snooze_summaries">
+		<item>Không có</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+		<item>5</item>
+		<item>6</item>
+		<item>7</item>
+		<item>số 8</item>
+		<item>9</item>
+		<item>10</item>
+		<item>Vô hạn</item>
+	</string-array>
+
+	<string-array name="snooze_duration_summaries">
+		<item>1 phút</item>
+		<item>2 phút</item>
+		<item>3 phút</item>
+		<item>4 phút</item>
+		<item>5 phút</item>
+		<item>6 phút</item>
+		<item>7 phút</item>
+		<item>8 phút</item>
+		<item>9 phút</item>
+		<item>10 phút</item>
+		<item>15 phút</item>
+		<item>20 phút</item>
+		<item>25 phút</item>
+		<item>30 phút</item>
+		<item>35 phút</item>
+		<item>40 phút</item>
+		<item>45 phút</item>
+		<item>50 phút</item>
+		<item>55 phút</item>
+		<item>60 phút</item>
+		<item>65 phút</item>
+		<item>70 phút</item>
+		<item>75 phút</item>
+		<item>80 phút</item>
+		<item>85 phút</item>
+		<item>90 phút</item>
+	</string-array>
+
+	<string-array name="dismiss_early_times">
+		<item>1 phút</item>
+		<item>2 phút</item>
+		<item>3 phút</item>
+		<item>4 phút</item>
+		<item>5 phút</item>
+		<item>10 phút</item>
+		<item>15 phút</item>
+		<item>20 phút</item>
+		<item>25 phút</item>
+		<item>30 phút</item>
+		<item>35 phút</item>
+		<item>40 phút</item>
+		<item>45 phút</item>
+		<item>50 phút</item>
+		<item>55 phút</item>
+		<item>60 phút</item>
+		<item>65 phút</item>
+		<item>70 phút</item>
+		<item>75 phút</item>
+		<item>80 phút</item>
+		<item>85 phút</item>
+		<item>90 phút</item>
+		<item>95 phút</item>
+		<item>100 phút</item>
+		<item>105 phút</item>
+		<item>110 phút</item>
+		<item>115 phút</item>
+		<item>120 phút</item>
+	</string-array>
+
+	<string-array name="whats_new_items">
+		<item>Đã chuyển đổi &lt;b>tất cả mã&lt;/b> từ Java sang Kotlin. Điều này có nghĩa là một số tính năng nhất định của ứng dụng có thể không hoạt động như mong đợi. Nếu điều này xảy ra, hãy gửi email cho tôi hoặc đánh giá ngay và tôi sẽ xem nó.</item>
+		<item>Giảm kích thước của ứng dụng bằng cách xóa/cắt bớt mã không cần thiết.</item>
+		<item>Đã khắc phục sự cố trong đó ứng dụng không dừng báo thức chính xác.</item>
+		<item>Đã khắc phục sự cố trong đó ứng dụng yêu cầu bạn xem xét cực kỳ nhanh chóng. Mỗi khi ứng dụng được lấy nét, bộ đếm sẽ tăng lên. Đã thay đổi ngưỡng truy cập từ 3 thành 50.</item>
+		<item>Đã khắc phục sự cố với &lt;b>Hạn chế âm lượng&lt;/b> trong đó trước đây nó không giới hạn âm lượng đúng cách.</item>
+		<item>Đã khắc phục sự cố khi tìm kiếm nhạc bằng tab &lt;b>Duyệt&lt;/b>. Nếu có nhiều nhạc để tìm kiếm, điều đó sẽ gây ra lỗi &lt;b>Ứng dụng không phản hồi&lt;/b> (ANR) và lỗi.</item>
+		<item>Đã thêm tùy chọn vào &lt;b>Chuyển văn bản thành giọng nói&lt;/b>. Khi chuông báo kêu, giờ đây bạn có thể nói &lt;b>tên báo thức&lt;/b> ngoài &lt;b>thời gian hiện tại&lt;/b>.</item>
+		<item>Đã thêm lời nhắc &lt;i>Bạn có chắc chắn...&lt;/i> khi nhấp vào &lt;b>Đặt lại số liệu thống kê&lt;/b> trước khi tiếp tục đặt lại.</item>
+		<item>Đã cập nhật trình phát đa phương tiện, &lt;b>Exoplayer&lt;/b>, được sử dụng để phát nhạc/nhạc chuông khi báo thức kêu.</item>
+	</string-array>
+
+</resources>

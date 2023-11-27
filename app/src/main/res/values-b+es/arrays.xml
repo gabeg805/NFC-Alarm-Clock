@@ -64,9 +64,6 @@
 	<string-array name="start_week_on">
 		<item>Domingo</item>
 		<item>Lunes</item>
-		<!--
-		<item>Sabado</item>
-		-->
 	</string-array>
 
 	<string-array name="auto_dismiss_summaries">

@@ -190,44 +190,6 @@
 
 
 
-	<!-- Plurals -->
-	<plurals name="alarm">
-		<item quantity="one">alarm</item>
-		<item quantity="other">alarms</item>
-	</plurals>
-
-	<plurals name="missed_alarm">
-		<item quantity="one">Missed alarm</item>
-		<item quantity="other">@string/title_missed_alarm</item>
-	</plurals>
-
-	<plurals name="upcoming_alarm">
-		<item quantity="one">Upcoming alarm</item>
-		<item quantity="other">@string/title_upcoming_alarm</item>
-	</plurals>
-
-	<plurals name="unit_day">
-		<item quantity="one">day</item>
-		<item quantity="other">days</item>
-	</plurals>
-
-	<plurals name="unit_hour">
-		<item quantity="one">hour</item>
-		<item quantity="other">hours</item>
-	</plurals>
-
-	<plurals name="unit_minute">
-		<item quantity="one">minute</item>
-		<item quantity="other">minutes</item>
-	</plurals>
-
-	<plurals name="unit_second">
-		<item quantity="one">second</item>
-		<item quantity="other">seconds</item>
-	</plurals>
-
-
-
 	<!-- ************* -->
 	<!-- Main Settings -->
 	<!-- ************* -->
@@ -504,11 +466,46 @@
 
 	<!-- Spotify -->
 	<string name="frg_spotify_search_hint">Search spotify&#8230;</string>
-	<!--
-	<string name="frg_spotify_albums">Albums</string>
-	<string name="frg_spotify_playlists">Playlists</string>
-	<string name="frg_spotify_top_artists">Top Artists</string>
-	<string name="frg_spotify_top_tracks">Top Tracks</string>
-	-->
+
+
+
+	<!-- ******* -->
+	<!-- Plurals -->
+	<!-- ******* -->
+
+	<plurals name="alarm">
+		<item quantity="one">alarm</item>
+		<item quantity="other">alarms</item>
+	</plurals>
+
+	<plurals name="missed_alarm">
+		<item quantity="one">Missed alarm</item>
+		<item quantity="other">@string/title_missed_alarm</item>
+	</plurals>
+
+	<plurals name="upcoming_alarm">
+		<item quantity="one">Upcoming alarm</item>
+		<item quantity="other">@string/title_upcoming_alarm</item>
+	</plurals>
+
+	<plurals name="unit_day">
+		<item quantity="one">day</item>
+		<item quantity="other">days</item>
+	</plurals>
+
+	<plurals name="unit_hour">
+		<item quantity="one">hour</item>
+		<item quantity="other">hours</item>
+	</plurals>
+
+	<plurals name="unit_minute">
+		<item quantity="one">minute</item>
+		<item quantity="other">minutes</item>
+	</plurals>
+
+	<plurals name="unit_second">
+		<item quantity="one">second</item>
+		<item quantity="other">seconds</item>
+	</plurals>
 
 </resources>
