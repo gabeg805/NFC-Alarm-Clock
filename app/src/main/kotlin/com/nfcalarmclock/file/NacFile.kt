@@ -216,7 +216,7 @@ object NacFile
 				else
 				{
 					// Return the path with the directory and name
-					String.format(locale, "%1\$s/%2\$s", directory, name)
+					String.format(locale, "$directory/$name")
 				}
 			}
 
@@ -422,6 +422,21 @@ object NacFile
 		}
 
 		/**
+		 * Check if the path corresponds to the current directory.
+		 *
+		 * @return True if the path corresponds to the current directory, and
+		 *         False otherwise.
+		 */
+		private fun isCurrentPath(path: String): Boolean
+		{
+			// Get the key of the path
+			val pathKey = basename(path)
+
+			// Check if path corresponds to the current directory
+			return (pathKey == directory.key || path == home)
+		}
+
+		/**
 		 * @see .ls
 		 */
 		private fun ls(): List<Metadata>
@@ -451,91 +466,8 @@ object NacFile
 		 */
 		private fun ls(path: String): List<Metadata>
 		{
-			// Get the key of the path
-			val pathKey = basename(path)
-
 			// Path corresponds to the current directory
-			return if (pathKey == directory.key || path == home)
-			{
-				// ls current directory and return it
-				ls()
-			}
-			// Path corresponds to different directory
-			else
-			{
-				// Save the original directory
-				val origDir = directory
-
-				// Change directory to the new path
-				cd(path)
-
-				// Create a new listing of the current directory
-				val listing = ls()
-
-				// Reset the directory back to the original
-				directory = origDir
-
-				// Return the listing
-				listing
-
-			}
-		}
-
-		/**
-		 * List the contents of the given path recursively so that
-		 * subdirectories and their contents will also be included.
-		 *
-		 * @param  path  The path to list the contents of.
-		 *
-		 * @return The list of files/directories at the given path.
-		 */
-		private fun recursiveLs(path: String): List<Metadata>
-		{
-			// Get the key of the path
-			val pathKey = basename(path)
-
-			// Path corresponds to the current directory
-			return if (pathKey == directory.key || path == home)
-			{
-				// ls current directory and return it
-				ls()
-			}
-			// Path corresponds to different directory
-			else
-			{
-				// Save the original directory
-				val origDir = directory
-
-				// Change directory to the new path
-				cd(path)
-
-				// Create a new listing of the current directory
-				val listing = ls()
-
-				// Reset the directory back to the original
-				directory = origDir
-
-				// Return the listing
-				listing
-
-			}
-		}
-
-		/**
-		 * List the contents of the given path recursively so that
-		 * subdirectories and their contents will also be included.
-		 *
-		 * @param  path  The path to list the contents of.
-		 *
-		 * @return The list of files/directories at the given path.
-		 */
-		private fun recursiveLs(path: String, listing: List<Metadata>): List<Metadata>
-		{
-			// Get the key of the path
-			val pathKey = basename(path)
-
-			// Path corresponds to the current directory
-			return if (pathKey == directory.key || path == home)
+			return if (isCurrentPath(path))
 			{
 				// ls current directory and return it
 				ls()
@@ -587,6 +519,65 @@ object NacFile
 
 			// Return the sorted listing
 			return sortListing(listing)
+		}
+
+		/**
+		 * List the contents of the given path recursively so that
+		 * subdirectories and their contents will also be included.
+		 *
+		 * @param  path  The path to list the contents of.
+		 *
+		 * @return The list of files/directories at the given path.
+		 */
+		fun recursiveLs(path: String): List<Metadata>
+		{
+			val listing = lsSort(path).toMutableList()
+
+			return recursiveLs(listing)
+		}
+
+		/**
+		 * List the contents of the given path recursively so that
+		 * subdirectories and their contents will also be included.
+		 *
+		 * @param  path  The path to list the contents of.
+		 *
+		 * @return The list of files/directories at the given path.
+		 */
+		private fun recursiveLs(listing: MutableList<Metadata>): List<Metadata>
+		{
+			// The offset of where to insert child listings into the main
+			// listing
+			var offset = 0
+
+			// Iterate over each item in the listing
+			for (index in listing.indices)
+			{
+				// Get the current metadata item
+				val metadata = listing[index+offset]
+
+				// Metadata is not a directory, so skip it
+				if (!metadata.isDirectory)
+				{
+					continue
+				}
+
+				// Get the listing of the child
+				val childListing = lsSort(metadata.path).toMutableList()
+
+				// Recurse the listing of the child
+				recursiveLs(childListing)
+
+				// Add it to the listing
+				listing.addAll(index+offset+1, childListing)
+
+				// Calculate the new offset
+				offset += childListing.size
+
+			}
+
+			return listing
+
 		}
 
 		/**
