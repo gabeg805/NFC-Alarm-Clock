@@ -445,11 +445,91 @@ object NacFile
 		/**
 		 * List the contents of the given path.
 		 *
-		 * @return The list of files/directories at the given path.
-		 *
 		 * @param  path  The path to list the contents of.
+		 *
+		 * @return The list of files/directories at the given path.
 		 */
 		private fun ls(path: String): List<Metadata>
+		{
+			// Get the key of the path
+			val pathKey = basename(path)
+
+			// Path corresponds to the current directory
+			return if (pathKey == directory.key || path == home)
+			{
+				// ls current directory and return it
+				ls()
+			}
+			// Path corresponds to different directory
+			else
+			{
+				// Save the original directory
+				val origDir = directory
+
+				// Change directory to the new path
+				cd(path)
+
+				// Create a new listing of the current directory
+				val listing = ls()
+
+				// Reset the directory back to the original
+				directory = origDir
+
+				// Return the listing
+				listing
+
+			}
+		}
+
+		/**
+		 * List the contents of the given path recursively so that
+		 * subdirectories and their contents will also be included.
+		 *
+		 * @param  path  The path to list the contents of.
+		 *
+		 * @return The list of files/directories at the given path.
+		 */
+		private fun recursiveLs(path: String): List<Metadata>
+		{
+			// Get the key of the path
+			val pathKey = basename(path)
+
+			// Path corresponds to the current directory
+			return if (pathKey == directory.key || path == home)
+			{
+				// ls current directory and return it
+				ls()
+			}
+			// Path corresponds to different directory
+			else
+			{
+				// Save the original directory
+				val origDir = directory
+
+				// Change directory to the new path
+				cd(path)
+
+				// Create a new listing of the current directory
+				val listing = ls()
+
+				// Reset the directory back to the original
+				directory = origDir
+
+				// Return the listing
+				listing
+
+			}
+		}
+
+		/**
+		 * List the contents of the given path recursively so that
+		 * subdirectories and their contents will also be included.
+		 *
+		 * @param  path  The path to list the contents of.
+		 *
+		 * @return The list of files/directories at the given path.
+		 */
+		private fun recursiveLs(path: String, listing: List<Metadata>): List<Metadata>
 		{
 			// Get the key of the path
 			val pathKey = basename(path)

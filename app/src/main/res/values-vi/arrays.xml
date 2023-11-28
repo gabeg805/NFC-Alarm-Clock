@@ -61,6 +61,26 @@
 		<item>Thứ bảy</item>
 	</string-array>
 
+	<string-array name="days_of_week_abbr">
+		<item>CN</item>
+		<item>T2</item>
+		<item>T3</item>
+		<item>T4</item>
+		<item>T5</item>
+		<item>T6</item>
+		<item>T7</item>
+	</string-array>
+
+	<string-array name="days_of_week_one_letter">
+		<item>C</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+		<item>5</item>
+		<item>6</item>
+		<item>7</item>
+	</string-array>
+
 	<string-array name="start_week_on">
 		<item>Chủ nhật</item>
 		<item>Thứ hai</item>

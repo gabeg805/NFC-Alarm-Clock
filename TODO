@@ -2,10 +2,6 @@
 TODO
 ----
 
-* Investigate how day abbreviation is being done and change it so that they
-  are in string resources instead. Vietnamese and probably Creole do it differently
-  than English so need to account for that.
-
 * Add recursive ls() for playing all music in folders and, when this is done,
   playing music in subfolders as well.
 

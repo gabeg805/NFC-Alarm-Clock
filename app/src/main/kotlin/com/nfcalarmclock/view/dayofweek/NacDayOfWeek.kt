@@ -246,7 +246,7 @@ class NacDayOfWeek(
 		val context = dayOfWeekView.context
 
 		// Get the days of week
-		val week = context.resources.getStringArray(R.array.days_of_week)
+		val daysOfWeek = context.resources.getStringArray(R.array.days_of_week_one_letter)
 
 		// Count the number of children (should equate to the number of days
 		// in the week)
@@ -259,7 +259,7 @@ class NacDayOfWeek(
 			val button = dayOfWeekView.getChildAt(i) as NacDayButton
 
 			// Set the day
-			button.setText(week[i])
+			button.setText(daysOfWeek[i])
 
 			// Set the listener
 			button.onDayChangedListener = this

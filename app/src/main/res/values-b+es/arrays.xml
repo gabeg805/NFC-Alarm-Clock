@@ -52,13 +52,33 @@
 	</string-array>
 
 	<string-array name="days_of_week">
-		<item>Domingo</item>
-		<item>Lunes</item>
-		<item>Martes</item>
-		<item>Miercoles</item>
-		<item>Jueves</item>
-		<item>Viernes</item>
-		<item>Sabado</item>
+		<item>domingo</item>
+		<item>lunes</item>
+		<item>martes</item>
+		<item>miercoles</item>
+		<item>jueves</item>
+		<item>viernes</item>
+		<item>sabado</item>
+	</string-array>
+
+	<string-array name="days_of_week_abbr">
+		<item>dom</item>
+		<item>lun</item>
+		<item>mar</item>
+		<item>mie</item>
+		<item>jue</item>
+		<item>vie</item>
+		<item>sab</item>
+	</string-array>
+
+	<string-array name="days_of_week_one_letter">
+		<item>D</item>
+		<item>L</item>
+		<item>M</item>
+		<item>M</item>
+		<item>J</item>
+		<item>V</item>
+		<item>S</item>
 	</string-array>
 
 	<string-array name="start_week_on">

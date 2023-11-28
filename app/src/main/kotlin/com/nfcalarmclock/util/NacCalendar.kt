@@ -173,17 +173,24 @@ object NacCalendar
 	private fun getClockTime(hour: Int, minute: Int, format: Boolean): String
 	{
 		val locale = Locale.getDefault()
-		var clockHour = hour
 
-		// Check if not using 24 hour format
-		if (!format)
+		// Check if using 24 hour format
+		val clockHour = if (format)
+		{
+			// Use 24 hour format
+			hour
+		}
+		else
 		{
 			// Convert the 12 hour format
-			clockHour = to12HourFormat(clockHour)
+			to12HourFormat(hour)
 		}
 
+		// Zero pad the minutes and make it 2 digits long
+		val clockMinute = minute.toString().padStart(2, '0')
+
 		// Format the time
-		return String.format(locale, "%1\$d:%2$02d", clockHour, minute)
+		return String.format(locale, "$clockHour:$clockMinute")
 	}
 
 	/**
@@ -527,25 +534,12 @@ object NacCalendar
 					return context.getString(R.string.dow_weekend)
 				}
 
-				// Get the days of week
-				val daysOfWeek = context.resources.getStringArray(R.array.days_of_week)
-				val dow: MutableList<String> = ArrayList()
-
-				// Abbreviate the days of week
-				for (s in daysOfWeek)
-				{
-					// Get the first 3 characters in the day of week
-					val abbrv = s.substring(0, 3)
-
-					// Add it to the list
-					dow.add(abbrv)
-				}
-
-				//List<String> dow = cons.getDaysOfWeekAbbr();
-				val days = listOf(*Day.values())
-				val summary = StringBuilder(32)
+				// Get the abbreviated days of week
+				val daysOfWeek = context.resources.getStringArray(R.array.days_of_week_abbr)
 
 				// Iterate over each day in the week
+				val days = listOf(*Day.values())
+				val summary = StringBuilder(32)
 				var count = 0
 				var i = start
 
@@ -562,7 +556,7 @@ object NacCalendar
 						}
 
 						// Append the day
-						summary.append(dow[i])
+						summary.append(daysOfWeek[i])
 					}
 
 					count++
@@ -739,12 +733,12 @@ object NacCalendar
 				val alarmPlural = resources.getQuantityString(R.plurals.alarm, 1)
 				val alarmWord = capitalize(alarmPlural)
 
-				String.format(locale, "%1\$s %2\$s.", alarmWord, isDisabled)
+				String.format(locale, "$alarmWord $isDisabled.")
 			}
 			// Show alarm name
 			else
 			{
-				String.format(locale, "\"%1\$s\" %2\$s.", name, isDisabled)
+				String.format(locale, "\"$name\" $isDisabled.")
 			}
 		}
 
@@ -776,7 +770,7 @@ object NacCalendar
 			val locale = Locale.getDefault()
 			val noAlarmsScheduled = resources.getString(R.string.message_no_alarms_scheduled)
 
-			return String.format(locale, "%1\$s.", noAlarmsScheduled)
+			return String.format(locale, "$noAlarmsScheduled.")
 		}
 
 		/**
@@ -793,7 +787,6 @@ object NacCalendar
 		{
 			val locale = Locale.getDefault()
 			val time = (calendar.timeInMillis - System.currentTimeMillis()) / 1000
-			var format = "%1\$d %2\$s %3\$d %4\$s"
 
 			// Get the time components
 			val day = time / (60 * 60 * 24) % 365
@@ -812,30 +805,33 @@ object NacCalendar
 			val timeRemaining = if (day > 0)
 			{
 				// Days
-				String.format(locale, format, day, dayunit, hr, hrunit)
+				String.format(locale, "$day $dayunit $hr $hrunit")
 			}
 			else
 			{
 				if (hr > 0)
 				{
 					// Hours
-					String.format(locale, format, hr, hrunit, min, minunit)
+					String.format(locale, "$hr $hrunit $min $minunit")
 				}
 				else
 				{
-					// Seconds
+					// Check if minutes is 0
 					if (min == 0L)
 					{
-						format = format.substring(10, 19)
+						// Only show seconds since there are no minutes
+						String.format(locale, "$sec $secunit")
 					}
-
-					// Minutes and/or seconds, depending on above conditional
-					String.format(locale, format, min, minunit, sec, secunit)
+					else
+					{
+						// Minutes and seconds
+						String.format(locale, "$min $minunit $sec $secunit")
+					}
 				}
 			}
 
 			// Build the message
-			return String.format(locale, "%1\$s %2\$s %3\$s", prefix, timeIn, timeRemaining)
+			return String.format(locale, "$prefix $timeIn $timeRemaining")
 		}
 
 		/**
@@ -857,7 +853,7 @@ object NacCalendar
 			val time = getFullTime(calendar, is24HourFormat)
 
 			// Format the message
-			return String.format(locale, "%1\$s %2\$s %3\$s", prefix, timeOn, time)
+			return String.format(locale, "$prefix $timeOn $time")
 		}
 
 		/**
@@ -886,7 +882,9 @@ object NacCalendar
 			}
 			else
 			{
-				String.format(locale, "\"%1\$s\" %2\$s", name, willRun.lowercase(locale))
+				val willRunLowercase = willRun.lowercase(locale)
+
+				String.format(locale, "\"$name\" $willRunLowercase")
 			}
 
 			// Get the message

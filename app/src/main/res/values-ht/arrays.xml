@@ -61,6 +61,26 @@
 		<item>samdi</item>
 	</string-array>
 
+	<string-array name="days_of_week_abbr">
+		<item>dim</item>
+		<item>len</item>
+		<item>mad</item>
+		<item>mèk</item>
+		<item>jed</item>
+		<item>van</item>
+		<item>sam</item>
+	</string-array>
+
+	<string-array name="days_of_week_one_letter">
+		<item>D</item>
+		<item>L</item>
+		<item>M</item>
+		<item>M</item>
+		<item>J</item>
+		<item>V</item>
+		<item>S</item>
+	</string-array>
+
 	<string-array name="start_week_on">
 		<item>dimanch</item>
 		<item>lendi</item>
