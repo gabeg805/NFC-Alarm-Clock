@@ -67,6 +67,46 @@ open class NacMediaFragment
 		}
 
 	/**
+	 * Whether to shuffle the media.
+	 */
+	var shuffleMedia: Boolean = false
+		get()
+		{
+			return alarm?.shuffleMedia ?: field
+		}
+		set(value)
+		{
+			if (alarm != null)
+			{
+				alarm!!.shuffleMedia = value
+			}
+			else
+			{
+				field = value
+			}
+		}
+
+	/**
+	 * Whether to recursively play the media in a directory.
+	 */
+	var recursivelyPlayMedia: Boolean = false
+		get()
+		{
+			return alarm?.recursivelyPlayMedia ?: field
+		}
+		set(value)
+		{
+			if (alarm != null)
+			{
+				alarm!!.recursivelyPlayMedia = value
+			}
+			else
+			{
+				field = value
+			}
+		}
+
+	/**
 	 * Called when the Cancel button is clicked.
 	 */
 	open fun onCancelClicked()
@@ -133,6 +173,7 @@ open class NacMediaFragment
 		// The media must be set
 		else
 		{
+			// TODO: Find a way to put shuffle and recursive options in intent
 			// Create an intent with the media
 			val intent = NacMediaActivity.getStartIntentWithMedia(
 				media = mediaPath)

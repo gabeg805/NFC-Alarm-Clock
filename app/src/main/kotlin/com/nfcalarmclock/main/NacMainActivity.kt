@@ -1366,12 +1366,14 @@ class NacMainActivity
 
 		// Set the default value
 		dialog.defaultShouldGraduallyIncreaseVolume = audioOptionsAlarm!!.shouldGraduallyIncreaseVolume
+		dialog.setDefaultIndexFromWaitTime(audioOptionsAlarm!!.graduallyIncreaseVolumeWaitTime)
 
 		// Setup the listener
-		dialog.onGraduallyIncreaseVolumeListener = OnGraduallyIncreaseVolumeListener { shouldIncrease ->
+		dialog.onGraduallyIncreaseVolumeListener = OnGraduallyIncreaseVolumeListener { shouldIncrease, _, waitTime ->
 
 			// Set the new gradually increase value
 			audioOptionsAlarm!!.shouldGraduallyIncreaseVolume = shouldIncrease
+			audioOptionsAlarm!!.graduallyIncreaseVolumeWaitTime = waitTime
 
 			// Update the alarm
 			alarmViewModel.update(audioOptionsAlarm!!)

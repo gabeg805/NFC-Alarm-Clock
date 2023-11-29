@@ -38,13 +38,15 @@
 	<string name="alarm_use_nfc_key">pref_use_nfc</string>
 	<string name="alarm_vibrate_key">pref_vibrate</string>
 	<string name="alarm_sound_key">pref_sound</string>
+	<string name="shuffle_playlist_key">pref_shuffle_playlist</string>
+	<string name="alarm_recursively_play_media_key">pref_recursively_play_media</string>
 	<string name="alarm_volume_key">pref_volume</string>
 	<string name="alarm_audio_source_key">pref_audio_source</string>
-	<string name="shuffle_playlist_key">pref_shuffle_playlist</string>
 	<string name="should_say_current_time_key">pref_should_say_current_time</string>
 	<string name="should_say_alarm_name_key">pref_should_say_alarm_name</string>
 	<string name="speak_frequency_key">pref_speak_frequency</string>
 	<string name="alarm_should_gradually_increase_volume_key">pref_should_gradually_increase_volume</string>
+	<string name="alarm_gradually_increase_volume_wait_time_key">pref_gradually_increase_volume_wait_time</string>
 	<string name="alarm_should_restrict_volume_key">pref_should_restrict_volume</string>
 	<string name="alarm_use_dismiss_early_key">pref_use_dismiss_early</string>
 	<string name="alarm_dismiss_early_time_key">pref_dismiss_early_time</string>

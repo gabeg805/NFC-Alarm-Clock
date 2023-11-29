@@ -331,12 +331,14 @@ class NacGeneralSettingFragment
 
 		// Set the default setting
 		dialog.defaultShouldGraduallyIncreaseVolume = sharedPreferences!!.shouldGraduallyIncreaseVolume
+		dialog.setDefaultIndexFromWaitTime(sharedPreferences!!.graduallyIncreaseVolumeWaitTime)
 
 		// Set the listener for when the user is done
-		dialog.onGraduallyIncreaseVolumeListener = OnGraduallyIncreaseVolumeListener { shouldIncrease ->
+		dialog.onGraduallyIncreaseVolumeListener = OnGraduallyIncreaseVolumeListener { shouldIncrease, _, waitTime ->
 
 			// Save the setting for gradually increasing volume
 			sharedPreferences!!.editShouldGraduallyIncreaseVolume(shouldIncrease)
+			sharedPreferences!!.editGraduallyIncreaseVolumeWaitTime(waitTime)
 
 		}
 

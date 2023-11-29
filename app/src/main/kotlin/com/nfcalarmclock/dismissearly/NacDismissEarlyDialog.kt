@@ -16,16 +16,6 @@ class NacDismissEarlyDialog
 	: NacDialogFragment()
 {
 
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacDismissEarlyDialog"
-
-	}
-
 	/**
 	 * Listener for when an audio source is selected.
 	 */
@@ -222,6 +212,16 @@ class NacDismissEarlyDialog
 		timePicker!!.maxValue = values.size - 1
 		timePicker!!.displayedValues = values.toTypedArray()
 		timePicker!!.value = defaultShouldDismissEarlyIndex
+	}
+
+	companion object
+	{
+
+		/**
+		 * Tag for the class.
+		 */
+		const val TAG = "NacDismissEarlyDialog"
+
 	}
 
 }

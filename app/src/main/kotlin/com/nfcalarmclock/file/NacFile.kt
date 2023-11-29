@@ -525,6 +525,17 @@ object NacFile
 		 * List the contents of the given path recursively so that
 		 * subdirectories and their contents will also be included.
 		 *
+		 * @return The list of files/directories at the given path.
+		 */
+		fun recursiveLs(): List<Metadata>
+		{
+			return recursiveLs(directoryPath)
+		}
+
+		/**
+		 * List the contents of the given path recursively so that
+		 * subdirectories and their contents will also be included.
+		 *
 		 * @param  path  The path to list the contents of.
 		 *
 		 * @return The list of files/directories at the given path.
@@ -540,7 +551,7 @@ object NacFile
 		 * List the contents of the given path recursively so that
 		 * subdirectories and their contents will also be included.
 		 *
-		 * @param  path  The path to list the contents of.
+		 * @param listing A directory listing.
 		 *
 		 * @return The list of files/directories at the given path.
 		 */
@@ -648,7 +659,7 @@ object NacFile
 		private fun stripHome(path: String): String
 		{
 			val reducedPath = path.replace(home, "")
-			var strippedPath = NacFile.strip(reducedPath)
+			var strippedPath = strip(reducedPath)
 
 			// Check if the stripped path is empty
 			if (strippedPath.isEmpty())

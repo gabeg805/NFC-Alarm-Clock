@@ -28,9 +28,12 @@ import java.util.Locale
  * Display a browser for the user to browse for music files.
  */
 class NacMusicFragment
+
+	// Constructor
 	: NacMediaFragment(),
-	OnBrowserClickedListener,
-	NacDirectorySelectedWarningDialog.OnDirectoryConfirmedListener
+
+	// Interfaces
+	OnBrowserClickedListener
 {
 
 	/**
@@ -75,6 +78,28 @@ class NacMusicFragment
 		}
 
 		return Pair(dir, name)
+	}
+
+	/**
+	 * Called when the Clear button is clicked.
+	 */
+	@UnstableApi
+	override fun onClearClicked()
+	{
+		// Super
+		super.onClearClicked()
+
+		// De-select whatever is selected
+		fileBrowser?.deselect(requireContext())
+	}
+
+	/**
+	 * Called when the view is being created.
+	 */
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+		savedInstanceState: Bundle?): View?
+	{
+		return inflater.inflate(R.layout.frg_music, container, false)
 	}
 
 	/**
@@ -178,19 +203,6 @@ class NacMusicFragment
 	}
 
 	/**
-	 * Called when the Clear button is clicked.
-	 */
-	@UnstableApi
-	override fun onClearClicked()
-	{
-		// Super
-		super.onClearClicked()
-
-		// De-select whatever is selected
-		fileBrowser?.deselect(requireContext())
-	}
-
-	/**
 	 * Called when the Ok button is clicked.
 	 */
 	override fun onOkClicked()
@@ -205,24 +217,6 @@ class NacMusicFragment
 		}
 
 		// Super
-		super.onOkClicked()
-	}
-
-	/**
-	 * Called when the view is being created.
-	 */
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-		savedInstanceState: Bundle?): View?
-	{
-		return inflater.inflate(R.layout.frg_music, container, false)
-	}
-
-	/**
-	 * Called when the user has confirmed that they want to select a directory.
-	 */
-	override fun onDirectoryConfirmed(view: View)
-	{
-		// Emulate OK click
 		super.onOkClicked()
 	}
 
@@ -293,8 +287,16 @@ class NacMusicFragment
 		val dialog = NacDirectorySelectedWarningDialog()
 
 		// Setup the dialog
-		dialog.selectedView = view
-		dialog.onDirectoryConfirmedListener = this
+		dialog.defaultShouldShuffleMedia = shuffleMedia
+		dialog.defaultShouldRecursivelyPlayMedia = recursivelyPlayMedia
+
+		// Listener for when the user has confirmed that they want to select a directory
+		dialog.onDirectoryConfirmedListener = NacDirectorySelectedWarningDialog.OnDirectoryConfirmedListener { shuffleMedia, recursivelyPlayMedia ->
+
+			// Emulate OK click
+			super.onOkClicked()
+
+		}
 
 		// Show the dialog
 		dialog.show(childFragmentManager, NacDirectorySelectedWarningDialog.TAG)

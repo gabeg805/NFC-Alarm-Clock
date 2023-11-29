@@ -181,6 +181,29 @@
 		<item>120 minutos</item>
 	</string-array>
 
+	<string-array name="gradually_increase_volume_wait_times">
+		<item>1 segundo</item>
+		<item>2 segundos</item>
+		<item>3 segundos</item>
+		<item>4 segundos</item>
+		<item>5 segundos</item>
+		<item>6 segundos</item>
+		<item>7 segundos</item>
+		<item>8 segundos</item>
+		<item>9 segundos</item>
+		<item>10 segundos</item>
+		<item>15 segundos</item>
+		<item>20 segundos</item>
+		<item>25 segundos</item>
+		<item>30 segundos</item>
+		<item>35 segundos</item>
+		<item>40 segundos</item>
+		<item>45 segundos</item>
+		<item>50 segundos</item>
+		<item>55 segundos</item>
+		<item>60 segundos</item>
+	</string-array>
+
 	<string-array name="whats_new_items">
 		<item>Convirtió &lt;b>todo el código&lt;/b> de Java a Kotlin.  Esto significa que es posible que determinadas funciones de la aplicación no funcionen como se esperaba.  Si esto sucede, envíame un correo electrónico o escribe una reseña y lo veré.</item>
 		<item>Se redujo el tamaño de la aplicación eliminando/recortando el código innecesario.</item>

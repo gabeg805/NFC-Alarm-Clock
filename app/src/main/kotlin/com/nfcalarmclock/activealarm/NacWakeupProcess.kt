@@ -44,11 +44,6 @@ class NacWakeupProcess(
 	{
 
 		/**
-		 * Period at which to gradually increase volume.
-		 */
-		private const val PERIOD_GRADUALLY_INCREASE_VOLUME = 5000L
-
-		/**
 		 * Period at which to ensure the volume is restricted.
 		 */
 		private const val PERIOD_RESTRICT_VOLUME = 1000L
@@ -376,7 +371,7 @@ class NacWakeupProcess(
 		// case the user tries to lower then volume after the alarm volume
 		// level has been reached
 		graduallyIncreaseVolumeHandler.postDelayed({ graduallyIncreaseVolume() },
-			PERIOD_GRADUALLY_INCREASE_VOLUME)
+			alarm.graduallyIncreaseVolumeWaitTime * 1000L)
 	}
 
 	/**
@@ -418,10 +413,11 @@ class NacWakeupProcess(
 		}
 		else
 		{
-			// Set shuffle mode (can be set or not set) based on the preference
+			// Check if the media being played is a directory
 			if (NacMedia.isDirectory(alarm.mediaType))
 			{
-				mediaPlayer.exoPlayer.shuffleModeEnabled = sharedPreferences.shuffle
+				// Set shuffle mode (can be set or not set) based on the preference
+				mediaPlayer.exoPlayer.shuffleModeEnabled = alarm.shuffleMedia
 			}
 
 			// Play the alarm
@@ -448,7 +444,7 @@ class NacWakeupProcess(
 			// started
 			hasGraduallyIncreaseVolumeStarted = true
 
-		}, PERIOD_GRADUALLY_INCREASE_VOLUME)
+		}, alarm.graduallyIncreaseVolumeWaitTime * 1000L)
 	}
 
 	/**

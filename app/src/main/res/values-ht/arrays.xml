@@ -181,6 +181,29 @@
 		<item>120 minit</item>
 	</string-array>
 
+	<string-array name="gradually_increase_volume_wait_times">
+		<item>1 segonn</item>
+		<item>2 segonn</item>
+		<item>3 segonn</item>
+		<item>4 segonn</item>
+		<item>5 segonn</item>
+		<item>6 segonn</item>
+		<item>7 segonn</item>
+		<item>8 segonn</item>
+		<item>9 segonn</item>
+		<item>10 segonn</item>
+		<item>15 segonn</item>
+		<item>20 segonn</item>
+		<item>25 segonn</item>
+		<item>30 segonn</item>
+		<item>35 segonn</item>
+		<item>40 segonn</item>
+		<item>45 segonn</item>
+		<item>50 segonn</item>
+		<item>55 segonn</item>
+		<item>60 segonn</item>
+	</string-array>
+
 	<string-array name="whats_new_items">
 		<item>Konvèti &lt;b>tout kòd&lt;/b> soti nan Java nan Kotlin. Sa vle di ke sèten karakteristik nan app a ta ka pa travay jan yo espere. Si sa rive, voye yon imèl pou mwen oswa dwa yon revizyon epi mwen pral wè li.</item>
 		<item>Diminye gwosè app a lè w retire/taye kòd ki pa nesesè.</item>

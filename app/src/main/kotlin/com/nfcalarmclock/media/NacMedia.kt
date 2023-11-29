@@ -82,13 +82,18 @@ object NacMedia
 	/**
 	 * Build a list of media items from a directory path.
 	 *
-	 * @param  context  Application context.
-	 * @param  path  Path of a directory.
+	 * @param context Application context.
+	 * @param path Path of a directory.
+	 * @param recursive Whether to recursively search a directory or not.
 	 */
-	fun buildMediaItemsFromDirectory(context: Context, path: String): List<MediaItem>
+	fun buildMediaItemsFromDirectory(
+		context: Context,
+		path: String,
+		recursive: Boolean = false
+	): List<MediaItem>
 	{
 		// Get all the files in the directory
-		val files = getFiles(context, path)
+		val files = getFiles(context, path, recursive = recursive)
 
 		// Build list of media items and return it
 		return buildMediaItemsFromFiles(context, files)

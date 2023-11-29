@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	android:paddingStart="?dialogPreferredPadding"
-	android:paddingEnd="?dialogPreferredPadding">
+	android:paddingEnd="?dialogPreferredPadding"
+	android:orientation="vertical">
 
 	<TextView
 		style="@style/Widget.TextView.Primary"
@@ -15,4 +16,18 @@
 		android:text="@string/message_playlist"
 		/>
 
-</RelativeLayout>
+	<com.google.android.material.checkbox.MaterialCheckBox
+		android:id="@+id/shuffle_media_checkbox"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Shuffle music"
+		/>
+
+	<com.google.android.material.checkbox.MaterialCheckBox
+		android:id="@+id/recursively_play_media_checkbox"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Play subfolders"
+		/>
+
+</LinearLayout>

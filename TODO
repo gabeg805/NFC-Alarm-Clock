@@ -2,12 +2,7 @@
 TODO
 ----
 
-* Add recursive ls() for playing all music in folders and, when this is done,
-  playing music in subfolders as well.
-
 * Add option in Statistics to export to csv.
-
-* Add option to change step time when gradually increasing volume.
 
 * Early notification in alarm options
 	- have an incremental countdown to alarm

@@ -181,6 +181,29 @@
 		<item>120 phút</item>
 	</string-array>
 
+	<string-array name="gradually_increase_volume_wait_times">
+		<item>1 giây</item>
+		<item>2 giây</item>
+		<item>3 giây</item>
+		<item>4 giây</item>
+		<item>5 giây</item>
+		<item>6 giây</item>
+		<item>7 giây</item>
+		<item>8 giây</item>
+		<item>9 giây</item>
+		<item>10 giây</item>
+		<item>15 giây</item>
+		<item>20 giây</item>
+		<item>25 giây</item>
+		<item>30 giây</item>
+		<item>35 giây</item>
+		<item>40 giây</item>
+		<item>45 giây</item>
+		<item>50 giây</item>
+		<item>55 giây</item>
+		<item>60 giây</item>
+	</string-array>
+
 	<string-array name="whats_new_items">
 		<item>Đã chuyển đổi &lt;b>tất cả mã&lt;/b> từ Java sang Kotlin. Điều này có nghĩa là một số tính năng nhất định của ứng dụng có thể không hoạt động như mong đợi. Nếu điều này xảy ra, hãy gửi email cho tôi hoặc đánh giá ngay và tôi sẽ xem nó.</item>
 		<item>Giảm kích thước của ứng dụng bằng cách xóa/cắt bớt mã không cần thiết.</item>

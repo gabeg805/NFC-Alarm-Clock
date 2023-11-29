@@ -33,6 +33,7 @@ class NacMediaPlayer(
 	 */
 	listener: Player.Listener? = null
 
+	// Interface
 ) : OnAudioFocusChangeListener
 {
 
@@ -228,8 +229,10 @@ class NacMediaPlayer(
 		// Check if the media is a directory
 		if (NacMedia.isDirectory(alarm.mediaType))
 		{
-			// Play the directory as a playlist
-			playDirectory(path)
+			// Play the directory as a playlist and if the recursive flag is
+			// set, it will also include the media in its subdirectories as
+			// part of the playlist
+			playDirectory(path, recursive = alarm.recursivelyPlayMedia)
 		}
 		// Media is a file
 		else
@@ -240,14 +243,15 @@ class NacMediaPlayer(
 	}
 
 	/**
-	 * Play a directory as a playlist.
+	 * Play the media in a directory as a playlist.
 	 *
-	 * @param  path  Path to a directory.
+	 * @param path Path to a directory.
+	 * @param recursive Whether to recursively search a directory or not.
 	 */
-	private fun playDirectory(path: String)
+	private fun playDirectory(path: String, recursive: Boolean = false)
 	{
 		// Convert the path to media items
-		val items = NacMedia.buildMediaItemsFromDirectory(context, path)
+		val items = NacMedia.buildMediaItemsFromDirectory(context, path, recursive = recursive)
 
 		// Play the media items
 		playMediaItems(items)
@@ -260,8 +264,6 @@ class NacMediaPlayer(
 	 */
 	private fun playMediaItem(item: MediaItem)
 	{
-		//this.getMediaPlayer().stop();
-
 		// Set the media item
 		exoPlayer.setMediaItem(item)
 
@@ -276,8 +278,6 @@ class NacMediaPlayer(
 	 */
 	private fun playMediaItems(items: List<MediaItem>)
 	{
-		//this.getMediaPlayer().stop();
-
 		// Set the media items
 		exoPlayer.setMediaItems(items)
 

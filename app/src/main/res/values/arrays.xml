@@ -181,6 +181,29 @@
 		<item>120 minutes</item>
 	</string-array>
 
+	<string-array name="gradually_increase_volume_wait_times">
+		<item>1 second</item>
+		<item>2 seconds</item>
+		<item>3 seconds</item>
+		<item>4 seconds</item>
+		<item>5 seconds</item>
+		<item>6 seconds</item>
+		<item>7 seconds</item>
+		<item>8 seconds</item>
+		<item>9 seconds</item>
+		<item>10 seconds</item>
+		<item>15 seconds</item>
+		<item>20 seconds</item>
+		<item>25 seconds</item>
+		<item>30 seconds</item>
+		<item>35 seconds</item>
+		<item>40 seconds</item>
+		<item>45 seconds</item>
+		<item>50 seconds</item>
+		<item>55 seconds</item>
+		<item>60 seconds</item>
+	</string-array>
+
 	<string-array name="whats_new_items">
 		<item>Converted &lt;b\>all code&lt;\/b\> from Java to Kotlin.  This means that certain features of the app might not work as expected.  If this happens, send me an email or right a review and I will see it.</item>
 		<item>Reduced the size of the app by removing/trimming down unneeded code.</item>

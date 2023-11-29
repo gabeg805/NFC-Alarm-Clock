@@ -41,7 +41,7 @@ class NacAlarm()
 	 * Flag indicating whether the alarm is currently active or not.
 	 */
 	@ColumnInfo(name = "is_active")
-	var isActive = false
+	var isActive: Boolean = false
 
 	/**
 	 * Amount of time, in milliseconds, the alarm has been active for.
@@ -55,37 +55,37 @@ class NacAlarm()
 	 * Number of times the alarm has been snoozed.
 	 */
 	@ColumnInfo(name = "snooze_count")
-	var snoozeCount = 0
+	var snoozeCount: Int = 0
 
 	/**
 	 * Flag indicating whether the alarm is enabled or not.
 	 */
 	@ColumnInfo(name = "is_enabled")
-	var isEnabled = false
+	var isEnabled: Boolean = false
 
 	/**
 	 * Hour at which to run the alarm.
 	 */
 	@ColumnInfo(name = "hour")
-	var hour = 0
+	var hour: Int = 0
 
 	/**
 	 * Minute at which to run the alarm.
 	 */
 	@ColumnInfo(name = "minute")
-	var minute = 0
+	var minute: Int = 0
 
 	/**
 	 * Hour at which to run the alarm, when it is snoozed.
 	 */
 	@ColumnInfo(name = "snooze_hour")
-	var snoozeHour = 0
+	var snoozeHour: Int = 0
 
 	/**
 	 * Minute at which to run the alarm, when it is snoozed
 	 */
 	@ColumnInfo(name = "snooze_minute")
-	var snoozeMinute = 0
+	var snoozeMinute: Int = 0
 
 	/**
 	 * Days on which to run the alarm.
@@ -97,19 +97,19 @@ class NacAlarm()
 	 * Flag indicating whether the alarm should be repeated or not.
 	 */
 	@ColumnInfo(name = "should_repeat")
-	var repeat = false
+	var repeat: Boolean = false
 
 	/**
 	 * Flag indicating whether the alarm should vibrate the phone or not.
 	 */
 	@ColumnInfo(name = "should_vibrate")
-	var vibrate = false
+	var vibrate: Boolean = false
 
 	/**
 	 * Flag indicating whether the alarm should use NFC or not.
 	 */
 	@ColumnInfo(name = "should_use_nfc")
-	var useNfc = false
+	var useNfc: Boolean = false
 
 	/**
 	 * ID of the NFC tag that needs to be used to dismiss the alarm.
@@ -133,13 +133,31 @@ class NacAlarm()
 	 * Type of media.
 	 */
 	@ColumnInfo(name = "media_type")
-	var mediaType = 0
+	var mediaType: Int = 0
+
+	/**
+	 * Whether to shuffle the media.
+	 *
+	 * Note: This is only applicable if playing a directory, otherwise it will
+	 *       be ignored.
+	 */
+	@ColumnInfo(name = "should_shuffle_media", defaultValue = "0")
+	var shuffleMedia: Boolean = false
+
+	/**
+	 * Whether to recursively play the media in a directory.
+	 *
+	 * Note: This is only applicable if playing a directory, otherwise it will
+	 *       be ignored.
+	 */
+	@ColumnInfo(name = "should_recursively_play_media", defaultValue = "0")
+	var recursivelyPlayMedia: Boolean = false
 
 	/**
 	 * Volume level to set when the alarm is run.
 	 */
 	@ColumnInfo(name = "volume")
-	var volume = 0
+	var volume: Int = 0
 
 	/**
 	 * Audio source to use for the media that will play when the alarm is run.
@@ -158,46 +176,53 @@ class NacAlarm()
 	 * the alarm goes off.
 	 */
 	@ColumnInfo(name = "should_say_current_time", defaultValue = "0")
-	var sayCurrentTime = false
+	var sayCurrentTime: Boolean = false
 
 	/**
 	 * Flag indicating whether to say the alarm name via text-to-speech when
 	 * the alarm goes off.
 	 */
 	@ColumnInfo(name = "should_say_alarm_name", defaultValue = "0")
-	var sayAlarmName = false
+	var sayAlarmName: Boolean = false
 
 	/**
 	 * Frequency at which to play text-to-speech, in units of minutes.
 	 */
 	@ColumnInfo(name = "tts_frequency")
-	var ttsFrequency = 0
+	var ttsFrequency: Int = 0
 
 	/**
 	 * Flag indicating whether to gradually increase the volume or not, when an
 	 * alarm is active.
 	 */
 	@ColumnInfo(name = "should_gradually_increase_volume")
-	var shouldGraduallyIncreaseVolume = false
+	var shouldGraduallyIncreaseVolume: Boolean = false
+
+	/**
+	 * Amount of time, in seconds, to wait before gradually increasing the
+	 * volume another step.
+	 */
+	@ColumnInfo(name = "gradually_increase_volume_wait_time", defaultValue = "5")
+	var graduallyIncreaseVolumeWaitTime: Int = 5
 
 	/**
 	 * Flag indicating whether to restrict changing the volume or not, when an
 	 * alarm is active.
 	 */
 	@ColumnInfo(name = "should_restrict_volume")
-	var shouldRestrictVolume = false
+	var shouldRestrictVolume: Boolean = false
 
 	/**
 	 * Flag indicating whether or not to use dismiss early.
 	 */
 	@ColumnInfo(name = "should_dismiss_early")
-	var useDismissEarly = false
+	var useDismissEarly: Boolean = false
 
 	/**
 	 * Amount of time, in minutes, to allow a user to dismiss early by.
 	 */
 	@ColumnInfo(name = "dismiss_early_time")
-	var dismissEarlyTime = 30
+	var dismissEarlyTime: Int = 30
 
 	/**
 	 * Time of alarm that would have been next but was dismissed early.
@@ -209,7 +234,7 @@ class NacAlarm()
 	 * Whether to show a reminder or not.
 	 */
 	@ColumnInfo(name = "should_show_reminder", defaultValue = "0")
-	var showReminder = false
+	var showReminder: Boolean = false
 
 	/**
 	 * The time to start showing a reminder.
@@ -221,7 +246,7 @@ class NacAlarm()
 	 * Frequency at which to show the reminder, in units of minutes.
 	 */
 	@ColumnInfo(name = "reminder_frequency", defaultValue = "0")
-	var reminderFrequency = 0
+	var reminderFrequency: Int = 0
 
 	/**
 	 * Check if any days are selected.
@@ -345,9 +370,15 @@ class NacAlarm()
 		vibrate = input.readInt() != 0
 		useNfc = input.readInt() != 0
 		nfcTagId = input.readString() ?: ""
+
+		// Media
 		mediaPath = input.readString() ?: ""
 		mediaTitle = input.readString() ?: ""
 		mediaType = input.readInt()
+		shuffleMedia = input.readInt() != 0
+		recursivelyPlayMedia = input.readInt() != 0
+
+		// Other normal stuff
 		volume = input.readInt()
 		audioSource = input.readString() ?: ""
 		name = input.readString() ?: ""
@@ -359,6 +390,7 @@ class NacAlarm()
 
 		// Volume features
 		shouldGraduallyIncreaseVolume = input.readInt() != 0
+		graduallyIncreaseVolumeWaitTime = input.readInt()
 		shouldRestrictVolume = input.readInt() != 0
 
 		// Dismiss early
@@ -545,9 +577,15 @@ class NacAlarm()
 		alarm.vibrate = shouldVibrate
 		alarm.useNfc = shouldUseNfc
 		alarm.nfcTagId = nfcTagId
+
+		// Media
 		alarm.mediaPath = mediaPath
 		alarm.mediaTitle = mediaTitle
 		alarm.mediaType = mediaType
+		alarm.shuffleMedia = shuffleMedia
+		alarm.recursivelyPlayMedia = recursivelyPlayMedia
+
+		// Other normal stuff
 		alarm.volume = volume
 		alarm.audioSource = audioSource
 		alarm.name = name
@@ -559,6 +597,7 @@ class NacAlarm()
 
 		// Volume features
 		alarm.shouldGraduallyIncreaseVolume = shouldGraduallyIncreaseVolume
+		alarm.graduallyIncreaseVolumeWaitTime = graduallyIncreaseVolumeWaitTime
 		alarm.shouldRestrictVolume = shouldRestrictVolume
 
 		// Dismiss early
@@ -650,6 +689,8 @@ class NacAlarm()
 			&& (mediaPath == alarm.mediaPath)
 			&& (mediaTitle == alarm.mediaTitle)
 			&& (mediaType == alarm.mediaType)
+			&& (shuffleMedia == alarm.shuffleMedia)
+			&& (recursivelyPlayMedia == alarm.recursivelyPlayMedia)
 			&& (volume == alarm.volume)
 			&& (audioSource == alarm.audioSource)
 			&& (name == alarm.name)
@@ -657,10 +698,14 @@ class NacAlarm()
 			&& (shouldSayAlarmName == alarm.shouldSayAlarmName)
 			&& (ttsFrequency == alarm.ttsFrequency)
 			&& (shouldGraduallyIncreaseVolume == alarm.shouldGraduallyIncreaseVolume)
+			&& (graduallyIncreaseVolumeWaitTime == alarm.graduallyIncreaseVolumeWaitTime)
 			&& (shouldRestrictVolume == alarm.shouldRestrictVolume)
 			&& (shouldUseDismissEarly == alarm.shouldUseDismissEarly)
 			&& (dismissEarlyTime == alarm.dismissEarlyTime)
 			&& (timeOfDismissEarlyAlarm == alarm.timeOfDismissEarlyAlarm)
+			&& (shouldShowReminder == alarm.shouldShowReminder)
+			&& (timeToShowReminder == alarm.timeToShowReminder)
+			&& (reminderFrequency == alarm.reminderFrequency)
 	}
 
 	/**
@@ -751,9 +796,11 @@ class NacAlarm()
 		println("Vibrate             : $shouldVibrate")
 		println("Use NFC             : $shouldUseNfc")
 		println("Nfc Tag Id          : $nfcTagId")
-		println("Media Type          : $mediaType")
 		println("Media Path          : $mediaPath")
 		println("Media Name          : $mediaTitle")
+		println("Media Type          : $mediaType")
+		println("Shuffle media       : $shuffleMedia")
+		println("Recusively Play     : $recursivelyPlayMedia")
 		println("Volume              : $volume")
 		println("Audio Source        : $audioSource")
 		println("Name                : $name")
@@ -761,10 +808,14 @@ class NacAlarm()
 		println("Tts say name        : $shouldSayAlarmName")
 		println("Tts Freq            : $ttsFrequency")
 		println("Grad Inc Vol        : $shouldGraduallyIncreaseVolume")
+		println("Grad Inc Vol Wait T : $graduallyIncreaseVolumeWaitTime")
 		println("Restrict Vol        : $shouldRestrictVolume")
 		println("Use Dismiss Early   : $shouldUseDismissEarly")
 		println("Dismiss Early       : $dismissEarlyTime")
 		println("Time of Early Alarm : $timeOfDismissEarlyAlarm")
+		println("Show Reminder       : $shouldShowReminder")
+		println("Time to show remind : $timeToShowReminder")
+		println("Reminder freq       : $reminderFrequency")
 	}
 
 	/**
@@ -783,6 +834,7 @@ class NacAlarm()
 	 */
 	fun setMedia(context: Context, path: String)
 	{
+		// TODO: Set shuffle and recurse here?
 		val title = NacMedia.getTitle(context, path)
 		val type = NacMedia.getType(context, path)
 
@@ -943,9 +995,15 @@ class NacAlarm()
 		output.writeInt(if (shouldVibrate) 1 else 0)
 		output.writeInt(if (shouldUseNfc) 1 else 0)
 		output.writeString(nfcTagId)
+
+		// Media
 		output.writeString(mediaPath)
 		output.writeString(mediaTitle)
 		output.writeInt(mediaType)
+		output.writeInt(if (shuffleMedia) 1 else 0)
+		output.writeInt(if (recursivelyPlayMedia) 1 else 0)
+
+		// Other normal stuff
 		output.writeInt(volume)
 		output.writeString(audioSource)
 		output.writeString(name)
@@ -957,6 +1015,7 @@ class NacAlarm()
 
 		// Volume features
 		output.writeInt(if (shouldGraduallyIncreaseVolume) 1 else 0)
+		output.writeInt(graduallyIncreaseVolumeWaitTime)
 		output.writeInt(if (shouldRestrictVolume) 1 else 0)
 
 		// Dismiss early
@@ -1007,9 +1066,15 @@ class NacAlarm()
 			alarm.vibrate = shared?.vibrate ?: false
 			alarm.useNfc = shared?.useNfc ?: false
 			alarm.nfcTagId = ""
+
+			// Media
 			alarm.mediaPath = shared?.mediaPath ?: ""
 			alarm.mediaTitle = ""
 			alarm.mediaType = NacMedia.TYPE_NONE
+			alarm.shuffleMedia = shared?.shuffleMedia ?: false
+			alarm.recursivelyPlayMedia = shared?.recursivelyPlayMedia ?: false
+
+			// Other normal stuff
 			alarm.volume = shared?.volume ?: 0
 			alarm.audioSource = shared?.audioSource ?: ""
 			alarm.name = shared?.name ?: ""
@@ -1021,6 +1086,7 @@ class NacAlarm()
 
 			// Volume features
 			alarm.shouldGraduallyIncreaseVolume = shared?.shouldGraduallyIncreaseVolume ?: false
+			alarm.graduallyIncreaseVolumeWaitTime = shared?.graduallyIncreaseVolumeWaitTime ?: 5
 			alarm.shouldRestrictVolume = shared?.shouldRestrictVolume ?: false
 
 			// Dismiss early
@@ -1029,9 +1095,9 @@ class NacAlarm()
 			alarm.timeOfDismissEarlyAlarm = 0
 
 			// Reminder
-			//alarm.showReminder = shared?. ?: false
-			//alarm.timeToShowReminder = shared?. ?: 0
-			//alarm.reminderFrequency = shared?. ?: 0
+			alarm.showReminder = shared?.shouldShowReminder ?: false
+			alarm.timeToShowReminder = shared?.timeToShowReminder ?: 0
+			alarm.reminderFrequency = shared?.reminderFrequency ?: 0
 
 			return alarm
 		}

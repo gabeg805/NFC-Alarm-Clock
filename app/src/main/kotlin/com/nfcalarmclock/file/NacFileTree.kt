@@ -175,8 +175,11 @@ class NacFileTree(path: String)
 		 *
 		 * @return A list of content Uris under the given path.
 		 */
-		@JvmStatic
-		fun getFiles(context: Context, filePath: String?): List<Uri>?
+		fun getFiles(
+			context: Context,
+			filePath: String?,
+			recursive: Boolean = false
+		): List<Uri>?
 		{
 			// File path is empty
 			if (filePath.isNullOrEmpty())
@@ -191,8 +194,18 @@ class NacFileTree(path: String)
 			// Scan the tree
 			tree.scan(context, true)
 
+			// Get the files
+			val allFiles = if (recursive)
+			{
+				tree.recursiveLs()
+			}
+			else
+			{
+				tree.lsSort()
+			}
+
 			// Iterate over each item found
-			for (metadata in tree.lsSort())
+			for (metadata in allFiles)
 			{
 				// Skip directories
 				if (metadata.isDirectory)

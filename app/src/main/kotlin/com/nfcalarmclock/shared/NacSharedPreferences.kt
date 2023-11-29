@@ -235,6 +235,18 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Whether volume should be gradually increased or not.
+	 */
+	val graduallyIncreaseVolumeWaitTime: Int
+		get()
+		{
+			val key = resources.getString(R.string.alarm_gradually_increase_volume_wait_time_key)
+			val defaultValue = 5
+
+			return instance.getInt(key, defaultValue)
+		}
+
+	/**
 	 * Check if the app has reached the counter limit.
 	 */
 	val isRateMyAppLimit: Boolean
@@ -391,6 +403,18 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Whether to recursively play the media in a directory.
+	 */
+	val recursivelyPlayMedia: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.alarm_recursively_play_media_key)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+
+	/**
 	 * Frequency at which to show the reminder, in units of minutes.
 	 */
 	val reminderFrequency: Int
@@ -499,9 +523,9 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * The shuffle status.
+	 * Whether to shuffle media.
 	 */
-	val shuffle: Boolean
+	val shuffleMedia: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.shuffle_playlist_key)
@@ -804,6 +828,17 @@ class NacSharedPreferences(context: Context)
 	}
 
 	/**
+	 * Edit the default value of a newly created alarm for wait time between
+	 * gradually increasing the volume another step when an alarm is active.
+	 */
+	fun editGraduallyIncreaseVolumeWaitTime(waitTime: Int)
+	{
+		val key = resources.getString(R.string.alarm_gradually_increase_volume_wait_time_key)
+
+		saveInt(key, waitTime)
+	}
+
+	/**
 	 * Edit the previous version that this app was using.
 	 *
 	 *
@@ -828,18 +863,7 @@ class NacSharedPreferences(context: Context)
 	}
 
 	/**
-	 * Edit the counter that will indicate whether it is time to show dialog to
-	 * Rate My App.
-	 */
-	fun editRateMyAppCounter(counter: Int)
-	{
-		val key = resources.getString(R.string.app_rating_counter)
-
-		saveInt(key, counter)
-	}
-
-	/**
-	 * Edit the default value of a newly created alarm for if the volume should
+	 * Edit the default value of a newly created alarm for whether the volume should
 	 * gradually be increased when an alarm is active.
 	 */
 	fun editShouldGraduallyIncreaseVolume(shouldIncrease: Boolean)
