@@ -34,7 +34,7 @@ class NacMediaPreference @JvmOverloads constructor(
 	/**
 	 * Path of the sound.
 	 */
-	var mediaPath: String? = null
+	var mediaPath: String = ""
 
 	/**
 	 * Constructor.
@@ -83,7 +83,7 @@ class NacMediaPreference @JvmOverloads constructor(
 		// Convert the default value
 		else
 		{
-			mediaPath = defaultValue as String?
+			mediaPath = defaultValue as String
 
 			persistString(mediaPath)
 		}
@@ -92,19 +92,13 @@ class NacMediaPreference @JvmOverloads constructor(
 	/**
 	 * Set the persist the media path.
 	 */
-	fun setAndPersistMediaPath(path: String?)
+	fun setAndPersistMediaPath(mediaPath: String)
 	{
-		// Check if media path is null
-		if (path == null)
-		{
-			return
-		}
-
 		// Set the media path
-		mediaPath = path
+		this.mediaPath = mediaPath
 
 		// Persist the value
-		persistString(mediaPath)
+		persistString(this.mediaPath)
 
 		// Notify of change
 		notifyChanged()

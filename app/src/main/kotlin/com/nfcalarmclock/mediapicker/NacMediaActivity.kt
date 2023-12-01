@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -72,14 +73,18 @@ class NacMediaActivity
 		 * a media path attached.
 		 *
 		 * @param context The application context.
-		 * @param media   The media path to attach to the intent.
+		 * @param mediaPath A media path.
+		 * @param shuffleMedia Whether to shuffle media or not.
+		 * @param recursivelyPlayMedia Whether to recursively play media or not.
 		 *
 		 * @return An intent that will be used to start the media activity with
 		 *         a media path attached.
 		 */
 		fun getStartIntentWithMedia(
 			context: Context? = null,
-			media: String?
+			mediaPath: String,
+			shuffleMedia: Boolean,
+			recursivelyPlayMedia: Boolean
 		): Intent
 		{
 			// Create an intent with the media activity or an empty intent
@@ -88,7 +93,8 @@ class NacMediaActivity
 			} ?: Intent()
 
 			// Add the media to the intent
-			return NacIntent.addMedia(intent, media)
+			return NacIntent.addMediaInfo(intent, mediaPath, shuffleMedia,
+				recursivelyPlayMedia)
 		}
 
 	}
@@ -121,12 +127,22 @@ class NacMediaActivity
 	/**
 	 * Media path.
 	 */
-	private var media: String? = null
+	private var mediaPath: String = ""
+
+	/**
+	 * Whether to shuffle the media.
+	 */
+	private var shuffleMedia: Boolean = false
+
+	/**
+	 * Whether to recursively play the media in a directory.
+	 */
+	private var recursivelyPlayMedia: Boolean = false
 
 	/**
 	 * Current tab position.
 	 */
-	private var position = 0
+	private var position: Int = 0
 
 	/**
 	 * The tab titles.
@@ -139,15 +155,7 @@ class NacMediaActivity
 	private val mediaType: Int
 		get()
 		{
-			return alarm?.mediaType
-				?: if (media != null)
-					{
-						NacMedia.getType(this, media!!)
-					}
-					else
-					{
-						NacMedia.TYPE_NONE
-					}
+			return alarm?.mediaType ?: NacMedia.getType(this, mediaPath)
 		}
 
 	/**
@@ -213,37 +221,6 @@ class NacMediaActivity
 	}
 
 	/**
-	 * Called when the back button is pressed
-	 */
-	override fun onBackPressed()
-	{
-		// Get the current position and the music fragment
-		val musicFragment = fragments[0] as NacMusicFragment?
-
-		// Check if at position 0 and that the music fragment is defined. The
-		// music fragment (where the user can browse for music to play for
-		// an alarm, instead of a ringtone) is at position 0. Do custom stuff
-		// if back is pressed for this fragment
-		if (position == 0 && musicFragment != null)
-		{
-			val fileBrowser = musicFragment.fileBrowser ?: return
-
-			// Browser is undefined. Do nothing
-
-			// Go to previous directory if not already at root level,
-			// otherwise, do a normal back press which will exit the activity
-			if (!fileBrowser.isAtRoot)
-			{
-				fileBrowser.previousDirectory()
-				return
-			}
-		}
-
-		// Normal back press which should exit the activity
-		super.onBackPressed()
-	}
-
-	/**
 	 * Called when the activity is created.
 	 */
 	override fun onCreate(savedInstanceState: Bundle?)
@@ -259,11 +236,13 @@ class NacMediaActivity
 
 		// Set the member variables
 		alarm = NacIntent.getAlarm(intent)
-		media = NacIntent.getMedia(intent)
+		mediaPath = NacIntent.getMediaPath(intent)
+		shuffleMedia = NacIntent.getShuffleMedia(intent)
+		recursivelyPlayMedia = NacIntent.getRecursivelyPlayMedia(intent)
 		viewPager = findViewById(R.id.act_sound)
 		tabLayout = findViewById(R.id.tab_layout)
 		titles[0] = getString(R.string.action_browse)
-		titles[1] = audioSources[3]
+		titles[1] = audioSources[4]
 		pagerAdapter = NacPagerAdapter(this)
 		position = 0
 
@@ -272,13 +251,46 @@ class NacMediaActivity
 		setupTabColors()
 		selectTabByMediaType(mediaType)
 
-		//// TODO: Handle when the back button is pressed
-		//onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true)
-		//{
-		//	override fun handleOnBackPressed()
-		//	{
-		//	}
-		//})
+		// Set the listener when the back button is pressed
+		onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true)
+		{
+			override fun handleOnBackPressed()
+			{
+				// Get the current position and the music fragment
+				val musicFragment = fragments[0] as NacMusicFragment?
+
+				// Check if at position 0 and that the music fragment is defined. The
+				// music fragment (where the user can browse for music to play for
+				// an alarm, instead of a ringtone) is at position 0. Do custom stuff
+				// if back is pressed for this fragment
+				if (position == 0 && musicFragment != null)
+				{
+					val fileBrowser = musicFragment.fileBrowser ?: return
+
+					// Browser is undefined. Do nothing
+
+					// Go to previous directory if not already at root level,
+					// otherwise, do a normal back press which will exit the activity
+					if (!fileBrowser.isAtRoot)
+					{
+						fileBrowser.previousDirectory()
+						return
+					}
+				}
+
+				// Check the number of items in the back stack is greater than 0
+				if (supportFragmentManager.backStackEntryCount > 0)
+				{
+					// Pop the back stack
+					supportFragmentManager.popBackStack()
+				}
+				else
+				{
+					// Finish the activity
+					finish()
+				}
+			}
+		})
 	}
 
 	/**
@@ -478,18 +490,6 @@ class NacMediaActivity
 				}
 
 			}
-
-			//else if (position == 2)
-			//{
-			//	if (alarm != null)
-			//	{
-			//		return NacSpotifyFragment.newInstance(alarm);
-			//	}
-			//	else if (media!= null)
-			//	{
-			//		return NacSpotifyFragment.newInstance(media);
-			//	}
-			//}
 		}
 
 		/**
@@ -502,15 +502,11 @@ class NacMediaActivity
 			{
 				NacMusicFragment.newInstance(alarm)
 			}
-			// Check that media is not null
-			else if (media != null)
-			{
-				NacMusicFragment.newInstance(media)
-			}
-			// Return an empty music fragment
+			// Use the media path
 			else
 			{
-				NacMusicFragment()
+				NacMusicFragment.newInstance(mediaPath, shuffleMedia,
+					recursivelyPlayMedia)
 			}
 		}
 
@@ -525,15 +521,11 @@ class NacMediaActivity
 			{
 				NacRingtoneFragment.newInstance(alarm)
 			}
-			// Check that media is not null
-			else if (media != null)
-			{
-				NacRingtoneFragment.newInstance(media)
-			}
-			// Return an empty music fragment
+			// Use the media path
 			else
 			{
-				NacRingtoneFragment()
+				NacRingtoneFragment.newInstance(mediaPath, shuffleMedia,
+					recursivelyPlayMedia)
 			}
 		}
 

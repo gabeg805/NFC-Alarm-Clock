@@ -227,11 +227,30 @@
 			android:id="@+id/reset_button"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_alignParentBottom="true"
+			android:layout_above="@id/email_button"
 			android:layout_centerHorizontal="true"
+			android:backgroundTint="@color/gray"
+			app:cornerRadius="@dimen/tiny"
+			app:iconGravity="textStart"
+			app:icon="@drawable/reset"
+			android:text="@string/action_reset"
+			/>
+
+		<!-- Email button -->
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/email_button"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentBottom="true"
+			android:layout_alignParentEnd="true"
+			android:layout_centerHorizontal="true"
+			android:layout_marginTop="@dimen/tiny"
+			android:layout_marginBottom="@dimen/tiny"
 			android:backgroundTint="?attr/colorAccent"
 			app:cornerRadius="@dimen/tiny"
-			android:text="@string/action_reset"
+			app:icon="@drawable/send"
+			app:iconGravity="textStart"
+			android:text="@string/action_email"
 			/>
 
 	</RelativeLayout>

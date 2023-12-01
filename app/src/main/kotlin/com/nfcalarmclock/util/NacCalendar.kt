@@ -334,6 +334,22 @@ object NacCalendar
 	}
 
 	/**
+	 * Get the current timestamp in a desired format.
+	 */
+	fun getTimestamp(format: String): String
+	{
+		// Get the current time
+		val locale = Locale.getDefault()
+		val now = Calendar.getInstance().time
+
+		// Create a date formatter
+		val dateTimeFormat = SimpleDateFormat(format, locale)
+
+		// Format the time
+		return dateTimeFormat.format(now)
+	}
+
+	/**
 	 * Convert an hour to 12 hour format.
 	 */
 	fun to12HourFormat(hour: Int): Int

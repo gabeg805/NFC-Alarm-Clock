@@ -126,6 +126,41 @@ class NacAlarmStatisticRepository @Inject constructor(
 	suspend fun deleteAllSnoozed(): Int = alarmSnoozedStatisticDao.deleteAll()
 
 	/**
+	 * Get all created statistics.
+	 *
+	 * @return All created statistics.
+	 */
+	suspend fun getAllCreatedStatistics() = alarmCreatedStatisticDao.getAll()
+
+	/**
+	 * Get all deleted statistics.
+	 *
+	 * @return All deleted statistics.
+	 */
+	suspend fun getAllDeletedStatistics() = alarmDeletedStatisticDao.getAll()
+
+	/**
+	 * Get all dismissed statistics.
+	 *
+	 * @return All dismissed statistics.
+	 */
+	suspend fun getAllDismissedStatistics() = alarmDismissedStatisticDao.getAll()
+
+	/**
+	 * Get all missed statistics.
+	 *
+	 * @return All missed statistics.
+	 */
+	suspend fun getAllMissedStatistics() = alarmMissedStatisticDao.getAll()
+
+	/**
+	 * Get all snoozed statistics.
+	 *
+	 * @return All snoozed statistics.
+	 */
+	suspend fun getAllSnoozedStatistics() = alarmSnoozedStatisticDao.getAll()
+
+	/**
 	 * Insert a created alarm statistic, asynchronously, into the database.
 	 *
 	 * @return The row ID of the inserted statistic.

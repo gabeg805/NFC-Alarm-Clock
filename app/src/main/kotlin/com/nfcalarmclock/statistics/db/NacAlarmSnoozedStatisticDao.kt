@@ -1,6 +1,5 @@
 package com.nfcalarmclock.statistics.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 
@@ -11,14 +10,6 @@ import androidx.room.Query
 interface NacAlarmSnoozedStatisticDao
 	: NacAlarmStatisticDao<NacAlarmSnoozedStatistic>
 {
-
-	/**
-	 * Get all instances when alarms were snoozed.
-	 *
-	 * @return All instances when alarms were snoozed.
-	 */
-	@get:Query("SELECT * FROM alarm_snoozed_statistic")
-	val all: LiveData<List<NacAlarmSnoozedStatistic>>
 
 	/**
 	 * Count the number of snoozed alarm statistics.
@@ -41,5 +32,13 @@ interface NacAlarmSnoozedStatisticDao
 	 */
 	@Query("SELECT SUM(duration) FROM alarm_snoozed_statistic")
 	suspend fun totalDuration(): Long
+
+	/**
+	 * Get all instances when alarms were snoozed.
+	 *
+	 * @return All instances when alarms were snoozed.
+	 */
+	@Query("SELECT * FROM alarm_snoozed_statistic")
+	suspend fun getAll(): List<NacAlarmSnoozedStatistic>
 
 }

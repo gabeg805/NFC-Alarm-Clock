@@ -48,6 +48,41 @@ class NacAlarmStatisticViewModel @Inject constructor(
 	suspend fun dismissedWithNfcCount(): Long = statisticRepository.dismissedWithNfcCount()
 
 	/**
+	 * Get all created statistics.
+	 *
+	 * @return All created statistics.
+	 */
+	suspend fun getAllCreatedStatistics() = statisticRepository.getAllCreatedStatistics()
+
+	/**
+	 * Get all deleted statistics.
+	 *
+	 * @return All deleted statistics.
+	 */
+	suspend fun getAllDeletedStatistics() = statisticRepository.getAllDeletedStatistics()
+
+	/**
+	 * Get all dismissed statistics.
+	 *
+	 * @return All dismissed statistics.
+	 */
+	suspend fun getAllDismissedStatistics() = statisticRepository.getAllDismissedStatistics()
+
+	/**
+	 * Get all missed statistics.
+	 *
+	 * @return All missed statistics.
+	 */
+	suspend fun getAllMissedStatistics() = statisticRepository.getAllMissedStatistics()
+
+	/**
+	 * Get all snoozed statistics.
+	 *
+	 * @return All snoozed statistics.
+	 */
+	suspend fun getAllSnoozedStatistics() = statisticRepository.getAllSnoozedStatistics()
+
+	/**
 	 * The number of missed alarm statistics.
 	 */
 	suspend fun missedCount(): Long = statisticRepository.missedCount()

@@ -16,8 +16,7 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.media.NacMedia
 import com.nfcalarmclock.mediapicker.NacMediaFragment
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.util.NacBundle.toBundle
-import com.nfcalarmclock.util.NacBundle.alarmToBundle
+import com.nfcalarmclock.util.NacBundle
 
 /**
  * Display a dialog that shows a list of alarm ringtones.
@@ -162,7 +161,7 @@ class NacRingtoneFragment
 		fun newInstance(alarm: NacAlarm?): Fragment
 		{
 			val fragment: Fragment = NacRingtoneFragment()
-			val bundle = alarmToBundle(alarm)
+			val bundle = NacBundle.alarmToBundle(alarm)
 			fragment.arguments = bundle
 
 			return fragment
@@ -171,10 +170,15 @@ class NacRingtoneFragment
 		/**
 		 * Create a new instance of this fragment.
 		 */
-		fun newInstance(media: String?): Fragment
+		fun newInstance(
+			mediaPath: String,
+			shuffleMedia: Boolean,
+			recursivelyPlayMedia: Boolean
+		): Fragment
 		{
 			val fragment: Fragment = NacRingtoneFragment()
-			val bundle = toBundle(media)
+			val bundle = NacBundle.mediaInfoToBundle(mediaPath, shuffleMedia,
+				recursivelyPlayMedia)
 			fragment.arguments = bundle
 
 			return fragment

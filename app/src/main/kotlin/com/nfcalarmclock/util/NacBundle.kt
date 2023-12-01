@@ -19,9 +19,19 @@ object NacBundle
 	const val ALARM_PARCEL_NAME = "NacAlarmParcel"
 
 	/**
-	 * Tag name associated with a media path.
+	 * Key associated with a media path.
 	 */
-	const val MEDIA_PARCEL_NAME = "NacMediaParcel"
+	const val MEDIA_PATH_KEY = "NacMediaKey"
+
+	/**
+	 * Key associated with whether media should be shuffled.
+	 */
+	const val SHUFFLE_MEDIA_KEY = "NacShuffleMediaKey"
+
+	/**
+	 * Key associated with whether media should be recursively played.
+	 */
+	const val RECURSIVELY_PLAY_MEDIA_KEY = "NacRecursivelyPlayMediaKey"
 
 	/**
 	 * Get a bundle that contains the alarm.
@@ -92,27 +102,61 @@ object NacBundle
 	}
 
 	/**
-	 * Get the media contained in the bundle.
+	 * Get the media path from a bundle.
 	 *
-	 * @return The media contained in the bundle.
+	 * @return The media path from a bundle.
 	 */
-	fun getMedia(bundle: Bundle?): String?
+	fun getMediaPath(bundle: Bundle?): String
 	{
-		return bundle?.getString(MEDIA_PARCEL_NAME)
+		return bundle?.getString(MEDIA_PATH_KEY) ?: ""
 	}
 
 	/**
-	 * Get a bundle that contains the sound.
+	 * Get whether media should be played recursively from a bundle.
 	 *
-	 * @return A bundle that contains the sound.
+	 * @return Whether media should be played recursively from a bundle.
 	 */
-	fun toBundle(media: String?): Bundle
+	fun getRecursivelyPlayMedia(bundle: Bundle?): Boolean
+	{
+		return bundle?.getBoolean(RECURSIVELY_PLAY_MEDIA_KEY) ?: false
+	}
+
+	/**
+	 * Get whether media should be shuffled from a bundle.
+	 *
+	 * @return Whether media should be shuffled from a bundle.
+	 */
+	fun getShuffleMedia(bundle: Bundle?): Boolean
+	{
+		return bundle?.getBoolean(SHUFFLE_MEDIA_KEY) ?: false
+	}
+
+	/**
+	 * Get a bundle that contains a media path and how to play that media.
+	 *
+	 * @param mediaPath A media path.
+	 * @param shuffleMedia Whether to shuffle media or not.
+	 * @param recursivelyPlayMedia Whether to recursively play media or not.
+	 *
+	 * @return A bundle that contains a media path and how to play that media.
+	 */
+	fun mediaInfoToBundle(
+		mediaPath: String?,
+		shuffleMedia: Boolean,
+		recursivelyPlayMedia: Boolean
+	): Bundle
 	{
 		// Create the bundle
 		val bundle = Bundle()
 
-		// Put the media in the bundle
-		bundle.putString(MEDIA_PARCEL_NAME, media)
+		// Media path
+		bundle.putString(MEDIA_PATH_KEY, mediaPath)
+
+		// Shuffle media
+		bundle.putBoolean(SHUFFLE_MEDIA_KEY, shuffleMedia)
+
+		// Recursively play media
+		bundle.putBoolean(RECURSIVELY_PLAY_MEDIA_KEY, recursivelyPlayMedia)
 
 		return bundle
 	}

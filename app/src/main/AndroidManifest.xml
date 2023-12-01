@@ -31,6 +31,15 @@
 		android:required="false"
 		/>
 
+	<!-- Indicate that the app should be able to query apps that provide the
+	     ACTION_SEND intent -->
+	<queries>
+		<intent>
+			<action android:name="android.intent.action.SEND" />
+			<data android:scheme="mailto" />
+		</intent>
+	</queries>
+
 	<!-- Application -->
 	<application
 		android:theme="@style/AppTheme"

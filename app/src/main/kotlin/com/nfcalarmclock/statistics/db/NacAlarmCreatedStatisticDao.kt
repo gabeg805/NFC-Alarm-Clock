@@ -1,6 +1,5 @@
 package com.nfcalarmclock.statistics.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 
@@ -11,14 +10,6 @@ import androidx.room.Query
 interface NacAlarmCreatedStatisticDao
 	: NacAlarmStatisticDao<NacAlarmCreatedStatistic>
 {
-
-	/**
-	 * Get all instances when alarms were created.
-	 *
-	 * @return All instances when alarms were created.
-	 */
-	@get:Query("SELECT * FROM alarm_created_statistic")
-	val all: LiveData<List<NacAlarmCreatedStatistic>>
 
 	/**
 	 * Count the number of created alarm statistics.
@@ -41,5 +32,13 @@ interface NacAlarmCreatedStatisticDao
 	 */
 	@Query("SELECT MIN(timestamp) FROM alarm_created_statistic LIMIT 1")
 	suspend fun firstCreatedTimestamp(): Long
+
+	/**
+	 * Get all instances when alarms were created.
+	 *
+	 * @return All instances when alarms were created.
+	 */
+	@Query("SELECT * FROM alarm_created_statistic")
+	suspend fun getAll(): List<NacAlarmCreatedStatistic>
 
 }

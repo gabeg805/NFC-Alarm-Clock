@@ -46,6 +46,23 @@
 	<string name="action_browse">Navegar</string>
 	<string name="action_previous_folder">Carpeta anterior</string>
 	<string name="action_reset">Reiniciar</string>
+	<string name="action_email">Correo electrónico</string>
+	<string name="action_shuffle_music">Música aleatoria</string>
+	<string name="action_recursively_play_media">Incluir subcarpétas</string>
+
+
+
+	<!-- Labels -->
+	<string name="label_created_statistic">creasdo</string>
+	<string name="label_deleted_statistic">eliminado</string>
+	<string name="label_dismissed_statistic">despedido</string>
+	<string name="label_missed_statistic">perdido</string>
+	<string name="label_snoozed_statistic">pospuso</string>
+	<string name="label_created_statistic_header">Tiempo creado, Nombre, Hora de alarma</string>
+	<string name="label_deleted_statistic_header">Tiempo eliminado, Nombre, Hora de alarma</string>
+	<string name="label_dismissed_statistic_header">Tiempo despedido, Nombre, Hora de alarma,NFC usado</string>
+	<string name="label_missed_statistic_header">Tiempo perdido, Nombre, Hora de alarma</string>
+	<string name="label_snoozed_statistic_header">Tiempo se pospuso,Nombre,Hora de alarma,Duración de dormitar</string>
 
 
 
@@ -77,6 +94,7 @@
 	<string name="message_reset_statistics">¿Estás seguro de que quieres restablecer todas las estadísticas?</string>
 	<string name="message_tts_current_time">Tiempo actual</string>
 	<string name="message_tts_alarm_name">Nombre de la alarma</string>
+	<string name="message_statistics_email_subject">Estadísticas del Despertador NFC</string>
 
 
 

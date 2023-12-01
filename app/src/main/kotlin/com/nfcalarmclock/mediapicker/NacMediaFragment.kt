@@ -142,8 +142,10 @@ open class NacMediaFragment
 		// Check if the alarm was not set
 		if (alarm == null)
 		{
-			// Set the media path
-			mediaPath = NacBundle.getMedia(arguments) ?: ""
+			// Set the media info
+			mediaPath = NacBundle.getMediaPath(arguments)
+			shuffleMedia = NacBundle.getShuffleMedia(arguments)
+			recursivelyPlayMedia = NacBundle.getRecursivelyPlayMedia(arguments)
 		}
 
 		// Create the media player
@@ -152,6 +154,19 @@ open class NacMediaFragment
 
 		// Gain transient audio focus
 		mediaPlayer!!.shouldGainTransientAudioFocus = true
+	}
+
+	/**
+	 * Called when the fragment is destroyed.
+	 */
+	@UnstableApi
+	override fun onDestroy()
+	{
+		// Super
+		super.onDestroy()
+
+		// Cleanup the media player
+		mediaPlayer?.release()
 	}
 
 	/**
@@ -173,10 +188,11 @@ open class NacMediaFragment
 		// The media must be set
 		else
 		{
-			// TODO: Find a way to put shuffle and recursive options in intent
 			// Create an intent with the media
 			val intent = NacMediaActivity.getStartIntentWithMedia(
-				media = mediaPath)
+				mediaPath = mediaPath,
+				shuffleMedia = shuffleMedia,
+				recursivelyPlayMedia = recursivelyPlayMedia)
 
 			// Set the result of the activity with the media path as part of
 			// the intent
@@ -185,19 +201,6 @@ open class NacMediaFragment
 
 		// Finish the activity
 		activity.finish()
-	}
-
-	/**
-	 * Called when the fragment is destroyed.
-	 */
-	@UnstableApi
-	override fun onDestroy()
-	{
-		// Super
-		super.onDestroy()
-
-		// Cleanup the media player
-		mediaPlayer?.release()
 	}
 
 	/**

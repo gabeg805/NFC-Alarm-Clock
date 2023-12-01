@@ -293,6 +293,10 @@ class NacMusicFragment
 		// Listener for when the user has confirmed that they want to select a directory
 		dialog.onDirectoryConfirmedListener = NacDirectorySelectedWarningDialog.OnDirectoryConfirmedListener { shuffleMedia, recursivelyPlayMedia ->
 
+			// Set the shuffle and recursive play media attributes
+			this.shuffleMedia = shuffleMedia
+			this.recursivelyPlayMedia = recursivelyPlayMedia
+
 			// Emulate OK click
 			super.onOkClicked()
 
@@ -325,10 +329,15 @@ class NacMusicFragment
 		/**
 		 * Create a new instance of this fragment.
 		 */
-		fun newInstance(media: String?): Fragment
+		fun newInstance(
+			mediaPath: String,
+			shuffleMedia: Boolean,
+			recursivelyPlayMedia: Boolean
+		): Fragment
 		{
 			val fragment: Fragment = NacMusicFragment()
-			val bundle = NacBundle.toBundle(media)
+			val bundle = NacBundle.mediaInfoToBundle(mediaPath, shuffleMedia,
+				recursivelyPlayMedia)
 			fragment.arguments = bundle
 
 			return fragment

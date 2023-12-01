@@ -59,11 +59,15 @@ class NacGeneralSettingFragment
 		// Check that the result was OK
 		if (result.resultCode == Activity.RESULT_OK)
 		{
-			// Get the media from the activity result data
-			val mediaPath = NacIntent.getMedia(result.data)
+			// Get the media info from the activity result data
+			val mediaPath = NacIntent.getMediaPath(result.data)
+			val shuffleMedia = NacIntent.getShuffleMedia(result.data)
+			val recursivelyPlayMedia = NacIntent.getRecursivelyPlayMedia(result.data)
 
-			// Set the media for this preference
+			// Save the media info for this preference
 			mediaPreference!!.setAndPersistMediaPath(mediaPath)
+			sharedPreferences!!.editShuffleMedia(shuffleMedia)
+			sharedPreferences!!.editRecursivelyPlayMedia(recursivelyPlayMedia)
 		}
 	}
 
@@ -210,8 +214,11 @@ class NacGeneralSettingFragment
 		pref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
 
 			// Create the intent
-			val intent = NacMediaActivity.getStartIntentWithMedia(context,
-				sharedPreferences!!.mediaPath)
+			val intent = NacMediaActivity.getStartIntentWithMedia(
+				context,
+				sharedPreferences!!.mediaPath,
+				sharedPreferences!!.shuffleMedia,
+				sharedPreferences!!.recursivelyPlayMedia)
 
 			// Launch the intent
 			activityLauncher!!.launch(intent)

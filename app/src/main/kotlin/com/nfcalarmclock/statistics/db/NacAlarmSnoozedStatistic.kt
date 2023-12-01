@@ -19,7 +19,8 @@ import dagger.hilt.components.SingletonComponent
 		childColumns = ["alarm_id"],
 		onDelete = SET_NULL)],
 	inheritSuperIndices = true)
-class NacAlarmSnoozedStatistic : NacAlarmStatistic
+class NacAlarmSnoozedStatistic
+	: NacAlarmStatistic
 {
 
 	/**
@@ -44,6 +45,17 @@ class NacAlarmSnoozedStatistic : NacAlarmStatistic
 	constructor(alarm: NacAlarm?, duration: Long) : this(alarm)
 	{
 		this.duration = duration
+	}
+
+	/**
+	 * Convert the data to a csv format so that it can be used to write to an
+	 * output file.
+	 */
+	override fun toCsvFormat(): String
+	{
+		val csv = super.toCsvFormat()
+
+		return "${csv},${duration}"
 	}
 
 }

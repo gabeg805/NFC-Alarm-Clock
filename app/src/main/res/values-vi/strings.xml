@@ -46,6 +46,23 @@
 	<string name="action_browse">Duyệt qua</string>
 	<string name="action_previous_folder">Thư mục trước</string>
 	<string name="action_reset">Cài lại</string>
+	<string name="action_email">Email</string>
+	<string name="action_shuffle_music">Trộn nhạc</string>
+	<string name="action_recursively_play_media">Bao gồm các thư mục con</string>
+
+
+
+	<!-- Labels -->
+	<string name="label_created_statistic">tạo</string>
+	<string name="label_deleted_statistic">đã xóa</string>
+	<string name="label_dismissed_statistic">bị sa thải</string>
+	<string name="label_missed_statistic">bỏ lỡ</string>
+	<string name="label_snoozed_statistic">đã tạm ẩn</string>
+	<string name="label_created_statistic_header">Thời gian được tạo,Tên,Tên cảnh báo</string>
+	<string name="label_deleted_statistic_header">Đã xóa thời gian,Tên,Tên cảnh báo</string>
+	<string name="label_dismissed_statistic_header">Thời gian bị loại bỏ,Tên,Tên cảnh báo,NFC đã qua sử dụng</string>
+	<string name="label_missed_statistic_header">Thời gian bị bỏ lỡ,Tên,Tên cảnh báo</string>
+	<string name="label_snoozed_statistic_header">Đã tạm ẩn thời gian,Tên,Tên cảnh báo,Thời gian báo lại</string>
 
 
 
@@ -77,6 +94,7 @@
 	<string name="message_reset_statistics">Bạn có chắc chắn muốn đặt lại tất cả số liệu thống kê không?</string>
 	<string name="message_tts_current_time">Thời điểm hiện tại</string>
 	<string name="message_tts_alarm_name">Tên báo động</string>
+	<string name="message_statistics_email_subject">Thống kê đồng hồ báo thức NFC</string>
 
 
 

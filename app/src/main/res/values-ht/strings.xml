@@ -46,6 +46,23 @@
 	<string name="action_browse">Browse</string>
 	<string name="action_previous_folder">Katab anvan an</string>
 	<string name="action_reset">Reyajiste</string>
+	<string name="action_email">Imèl</string>
+	<string name="action_shuffle_music">Shuffle mizik</string>
+	<string name="action_recursively_play_media">Mete sousdosye yo</string>
+
+
+
+	<!-- Labels -->
+	<string name="label_created_statistic">kreye</string>
+	<string name="label_deleted_statistic">efase</string>
+	<string name="label_dismissed_statistic">ranvwaye</string>
+	<string name="label_missed_statistic">rate</string>
+	<string name="label_snoozed_statistic">snoozed</string>
+	<string name="label_created_statistic_header">Tan kreye,Non,Tan alam</string>
+	<string name="label_deleted_statistic_header">Tan efase,Non,Tan alam</string>
+	<string name="label_dismissed_statistic_header">Tan ranvwaye,Non,Tan alam,Itilize NFC</string>
+	<string name="label_missed_statistic_header">Tan rate,Non,Tan alam</string>
+	<string name="label_snoozed_statistic_header">Tan snoozed,Non,Tan alam,Dire snooze</string>
 
 
 
@@ -77,6 +94,7 @@
 	<string name="message_reset_statistics">Èske ou sèten ou vle reyajiste tout estatistik yo?</string>
 	<string name="message_tts_current_time">Tan aktyèl la</string>
 	<string name="message_tts_alarm_name">Non alam la</string>
+	<string name="message_statistics_email_subject">Estatistik Revèy Alam NFC</string>
 
 
 

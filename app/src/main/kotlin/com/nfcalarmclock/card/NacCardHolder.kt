@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
 import com.nfcalarmclock.R
+import com.nfcalarmclock.activealarm.NacActiveAlarmActivity.Companion.startAlarmActivity
 import com.nfcalarmclock.activealarm.NacActiveAlarmService.Companion.dismissAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.media.NacMedia
@@ -800,8 +801,18 @@ class NacCardHolder(
 	 */
 	private fun doDismissButtonClick()
 	{
-		// Dismiss the alarm activity
-		dismissAlarmService(context, alarm)
+		// Check if alarm uses NFC
+		if (alarm!!.shouldUseNfc)
+		{
+			// Start the alarm activity
+			startAlarmActivity(context, alarm)
+		}
+		// Alarm does not require NFC to dismiss the alarm
+		else
+		{
+			// Dismiss the alarm service
+			dismissAlarmService(context, alarm)
+		}
 	}
 
 	/**

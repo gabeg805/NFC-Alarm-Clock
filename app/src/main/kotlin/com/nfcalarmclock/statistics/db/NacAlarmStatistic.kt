@@ -71,4 +71,17 @@ abstract class NacAlarmStatistic()
 		}
 	}
 
+	/**
+	 * Convert the data to a csv format so that it can be used to write to an
+	 * output file.
+	 */
+	open fun toCsvFormat(): String
+	{
+		// Zero pad the hour and minute so that the time looks more uniform
+		val clockHour = hour.toString().padStart(2, '0')
+		val clockMinute = minute.toString().padStart(2, '0')
+
+		return "${timestamp},${name},${clockHour}:${clockMinute}"
+	}
+
 }

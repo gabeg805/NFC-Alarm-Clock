@@ -20,14 +20,14 @@
 		android:id="@+id/shuffle_media_checkbox"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="Shuffle music"
+		android:text="@string/action_shuffle_music"
 		/>
 
 	<com.google.android.material.checkbox.MaterialCheckBox
 		android:id="@+id/recursively_play_media_checkbox"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="Play subfolders"
+		android:text="@string/action_recursively_play_media"
 		/>
 
 </LinearLayout>

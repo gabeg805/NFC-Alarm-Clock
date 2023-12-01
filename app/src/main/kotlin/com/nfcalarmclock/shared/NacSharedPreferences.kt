@@ -863,6 +863,27 @@ class NacSharedPreferences(context: Context)
 	}
 
 	/**
+	 * Edit the counter that will indicate whether it is time to show the
+	 * dialog to Rate My App.
+	 */
+	fun editRateMyAppCounter(counter: Int)
+	{
+		val key = resources.getString(R.string.app_rating_counter)
+
+		saveInt(key, counter)
+	}
+
+	/**
+	 * Whether to recursively play the media in a directory.
+	 */
+	fun editRecursivelyPlayMedia(recurse: Boolean)
+	{
+		val key = resources.getString(R.string.alarm_recursively_play_media_key)
+
+		saveBoolean(key, recurse)
+	}
+
+	/**
 	 * Edit the default value of a newly created alarm for whether the volume should
 	 * gradually be increased when an alarm is active.
 	 */
@@ -912,6 +933,16 @@ class NacSharedPreferences(context: Context)
 		val key = resources.getString(R.string.should_say_current_time_key)
 
 		saveBoolean(key, speak)
+	}
+
+	/**
+	 * Whether to shuffle media.
+	 */
+	fun editShuffleMedia(shuffle: Boolean)
+	{
+		val key = resources.getString(R.string.shuffle_playlist_key)
+
+		saveBoolean(key, shuffle)
 	}
 
 	/**

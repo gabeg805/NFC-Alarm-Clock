@@ -10,8 +10,10 @@ import dagger.hilt.components.SingletonComponent
 /**
  * Statistics for when an alarm is deleted.
  */
-@Entity(tableName = "alarm_deleted_statistic", ignoredColumns = ["alarm_id"])
-class NacAlarmDeletedStatistic : NacAlarmStatistic
+@Entity(tableName = "alarm_deleted_statistic",
+	ignoredColumns = ["alarm_id"])
+class NacAlarmDeletedStatistic
+	: NacAlarmStatistic
 {
 
 	/**

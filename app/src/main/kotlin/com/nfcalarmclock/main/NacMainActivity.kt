@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.res.ColorStateList
 import android.graphics.drawable.InsetDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.view.ContextMenu
 import android.view.ContextMenu.ContextMenuInfo
@@ -79,6 +80,8 @@ import com.nfcalarmclock.whatsnew.NacWhatsNewDialog.OnReadWhatsNewListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
+import java.security.Security
 import java.util.Locale
 
 /**
@@ -271,10 +274,14 @@ class NacMainActivity
 			// Get the previous version
 			val previousVersion = sharedPreferences!!.previousAppVersion
 
-			// The current version and previously saved version match. This means there
-			// is no update that has occurred. Alternatively, something is wrong with the
-			// current version (if it is empty)
-			return (BuildConfig.VERSION_NAME != previousVersion)
+			// Only show the dialog if the current version and the previously
+			// saved version do not match.
+			//
+			// This does not apply to a newly installed app, in which case the
+			// previously saved version is empty. Do not show the What's New
+			// dialog to a person that just installed the app because they
+			// probably do not care
+			return previousVersion.isNotEmpty() && (BuildConfig.VERSION_NAME != previousVersion)
 		}
 
 	/**
@@ -345,6 +352,35 @@ class NacMainActivity
 	}
 
 	/**
+	 * Cleanup any zip files from emailing statistics.
+	 */
+	private fun cleanupEmailZipFiles()
+	{
+		// Get the file listing in the app-specific directory
+		val appFileListing = filesDir.listFiles() ?: emptyArray()
+
+		// Iterate over each file
+		for (file in appFileListing)
+		{
+			// Check if file does not end in zip. Only care about zip files
+			if (file.extension != "zip")
+			{
+				// Skip this file
+				continue
+			}
+
+			try
+			{
+				// Delete the file
+				file.delete()
+			}
+			catch (_: SecurityException)
+			{
+			}
+		}
+	}
+
+	/**
 	 * Cleanup the shutdown broadcast receiver.
 	 */
 	private fun cleanupShutdownBroadcastReceiver()
@@ -354,9 +390,8 @@ class NacMainActivity
 			// Unregister the receiver
 			unregisterReceiver(shutdownBroadcastReceiver)
 		}
-		catch (e: IllegalArgumentException)
+		catch (_: IllegalArgumentException)
 		{
-			//e.printStackTrace();
 		}
 	}
 
@@ -370,9 +405,8 @@ class NacMainActivity
 			// Unregister the receiver
 			unregisterReceiver(timeTickReceiver)
 		}
-		catch (e: IllegalArgumentException)
+		catch (_: IllegalArgumentException)
 		{
-			//e.printStackTrace();
 		}
 	}
 
@@ -621,6 +655,10 @@ class NacMainActivity
 		// Disable the activity alias so that tapping an NFC tag will NOT open
 		// the main activity
 		disableActivityAlias(this)
+
+		// Cleanup any old zip files that were created when sending a
+		// statistics email
+		cleanupEmailZipFiles()
 	}
 
 	/**

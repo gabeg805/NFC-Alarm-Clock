@@ -18,7 +18,8 @@ import dagger.hilt.components.SingletonComponent
 		childColumns = ["alarm_id"],
 		onDelete = SET_NULL)],
 	inheritSuperIndices = true)
-class NacAlarmMissedStatistic : NacAlarmStatistic
+class NacAlarmMissedStatistic
+	: NacAlarmStatistic
 {
 
 	/**

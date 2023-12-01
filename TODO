@@ -2,7 +2,10 @@
 TODO
 ----
 
-* Add option in Statistics to export to csv.
+* Fix how Created statistics are saving the name, hour, and minute of an alarm,
+  but these never get set.
+
+* Update the Statistic fragment so that the error toast is not only in English.
 
 * Early notification in alarm options
 	- have an incremental countdown to alarm

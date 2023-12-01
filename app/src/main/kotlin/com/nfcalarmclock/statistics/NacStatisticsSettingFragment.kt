@@ -1,5 +1,8 @@
 package com.nfcalarmclock.statistics
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -10,12 +13,21 @@ import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.shared.NacSharedPreferences
+import com.nfcalarmclock.statistics.db.NacAlarmStatistic
+import com.nfcalarmclock.util.NacCalendar
+import com.nfcalarmclock.util.NacUtility.quickToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
+import java.io.File
+import java.io.FileInputStream
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 /**
  * Statistics fragment.
@@ -38,6 +50,78 @@ class NacStatisticsSettingFragment
 	private val statisticViewModel: NacAlarmStatisticViewModel by viewModels()
 
 	/**
+	 * Cleanup the CSV files.
+	 */
+	private fun cleanupCsvFiles(allFiles: List<String>)
+	{
+		// Get the directory where files are created
+		val directory = requireContext().filesDir
+
+		// Iterate over each file
+		for (filename in allFiles)
+		{
+			// Build the path to the file name
+			val path = "${directory}/${filename}"
+			val file = File(path)
+
+			// Delete the file
+			file.delete()
+		}
+	}
+
+	/**
+	 * Export all statistics to files.
+	 */
+	private suspend fun exportAllStatistics(timestamp: String): List<String>
+	{
+		// Get all the statistics
+		val allCreated = statisticViewModel.getAllCreatedStatistics()
+		val allDeleted = statisticViewModel.getAllDeletedStatistics()
+		val allDismissed = statisticViewModel.getAllDismissedStatistics()
+		val allMissed = statisticViewModel.getAllMissedStatistics()
+		val allSnoozed = statisticViewModel.getAllSnoozedStatistics()
+
+		// Created
+		val createdFilename = writeToFile(
+			R.string.label_created_statistic,
+			R.string.label_created_statistic_header,
+			timestamp,
+			allCreated)
+
+		// Deleted
+		val deletedFilename = writeToFile(
+			R.string.label_deleted_statistic,
+			R.string.label_deleted_statistic_header,
+			timestamp,
+			allDeleted)
+
+		// Dismissed
+		val dismissedFilename = writeToFile(
+			R.string.label_dismissed_statistic,
+			R.string.label_dismissed_statistic_header,
+			timestamp,
+			allDismissed)
+
+		// Missed
+		val missedFilename = writeToFile(
+			R.string.label_missed_statistic,
+			R.string.label_missed_statistic_header,
+			timestamp,
+			allMissed)
+
+		// Snoozed
+		val snoozedFilename = writeToFile(
+			R.string.label_snoozed_statistic,
+			R.string.label_snoozed_statistic_header,
+			timestamp,
+			allSnoozed)
+
+		// Return the list of all files that were created
+		return listOf(createdFilename, deletedFilename, dismissedFilename,
+			missedFilename, snoozedFilename)
+	}
+
+	/**
 	 * Called when the view is created.
 	 */
 	override fun onViewCreated(root: View, savedInstanceState: Bundle?)
@@ -56,8 +140,9 @@ class NacStatisticsSettingFragment
 			setupStartedOnDate(root)
 		}
 
-		// Setup the reset button
+		// Setup the buttons
 		setupResetButton(root)
+		setupEmailButton(root)
 
 		// Setup all the views that need to use the theme color
 		setupViewsWithThemeColor(root)
@@ -188,6 +273,39 @@ class NacStatisticsSettingFragment
 	}
 
 	/**
+	 * Setup the email button.
+	 */
+	private fun setupEmailButton(root: View)
+	{
+		// Get the button
+		val emailButton = root.findViewById<MaterialButton>(R.id.email_button)
+
+		// Set the listener
+		emailButton.setOnClickListener {
+
+			lifecycleScope.launch {
+
+				// Get the current timestamp
+				val timestamp = NacCalendar.getTimestamp("yyyy-MM-dd_HHmmSS")
+
+				// Export all files
+				val allFiles = exportAllStatistics(timestamp)
+
+				// Zip all files into a nice email attachment
+				val attachment = zipFiles(timestamp, allFiles)
+
+				// Cleanup the CSV files
+				cleanupCsvFiles(allFiles)
+
+				// Send the email
+				sendEmail(attachment)
+
+			}
+
+		}
+	}
+
+	/**
 	 * Setup the reset button.
 	 */
 	private fun setupResetButton(root: View)
@@ -211,6 +329,7 @@ class NacStatisticsSettingFragment
 
 			// Show the dialog
 			dialog.show(childFragmentManager, AreYouSureResetStatisticsDialog.TAG)
+
 		}
 	}
 
@@ -283,7 +402,7 @@ class NacStatisticsSettingFragment
 		// Get the views
 		val divider1 = root.findViewById<View>(R.id.divider1)
 		val divider2 = root.findViewById<View>(R.id.divider2)
-		val resetButton = root.findViewById<MaterialButton>(R.id.reset_button)
+		val emailButton = root.findViewById<MaterialButton>(R.id.email_button)
 
 		// Get the theme color
 		val themeColor = shared.themeColor
@@ -293,7 +412,142 @@ class NacStatisticsSettingFragment
 		divider2.setBackgroundColor(themeColor)
 
 		// Set the color of the reset button to the theme color
-		resetButton.setBackgroundColor(themeColor)
+		emailButton.setBackgroundColor(themeColor)
+	}
+
+	/**
+	 * Send an email.
+	 */
+	private fun sendEmail(attachment: Uri)
+	{
+		// TODO: To allow other apps to access files stored in this
+		//  directory within internal storage, use a FileProvider
+		//  with the FLAG_GRANT_READ_URI_PERMISSION attribute.
+
+		val packageManager = requireContext().packageManager
+		val subject = getString(R.string.message_statistics_email_subject)
+
+		// Build the intent
+		val intent = Intent(Intent.ACTION_SEND).apply {
+
+			data = Uri.parse("mailto:")
+			putExtra(Intent.EXTRA_SUBJECT, subject)
+			putExtra(Intent.EXTRA_STREAM, attachment)
+			addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+		}
+
+		// Check if can resolve the package manager? Not sure what this really does
+		if (intent.resolveActivity(packageManager) != null)
+		{
+			// Start the activity
+			startActivity(intent)
+		}
+		else
+		{
+			// Show toast error message
+			quickToast(requireContext(), "Unable to start email app")
+		}
+	}
+
+	/**
+	 * Write data to a file.
+	 */
+	private fun <T: NacAlarmStatistic> writeToFile(
+		nameId: Int,
+		headerId: Int,
+		timestamp: String,
+		rows: List<T>
+	): String
+	{
+		// Build the filename
+		val name = getString(nameId)
+		val filename = "${name}_${timestamp}.csv"
+
+		// Creating the python file
+		requireContext().openFileOutput(filename, Context.MODE_PRIVATE).use { output ->
+
+			// Get the header
+			val header = getString(headerId)
+
+			// Check if there are rows of data
+			if (rows.isNotEmpty())
+			{
+				// Get the header line
+				val line = "${header}\n"
+
+				// Write the header to the file
+				output.write(line.toByteArray())
+			}
+
+			// Iterate over each statistic
+			for (stat in rows)
+			{
+				// Convert the statistic to a CSV format and add a newline to
+				// the end
+				val line = "${stat.toCsvFormat()}\n"
+
+				// Write to the file
+				output.write(line.toByteArray())
+			}
+
+		}
+
+		// Return the file name
+		return filename
+	}
+
+	/**
+	 * Zip files.
+	 */
+	private fun zipFiles(timestamp: String, allFiles: List<String>): Uri
+	{
+		// Get the directory for app specific files
+		val directory = requireContext().filesDir
+
+		// Build the zip file name
+		val subject = getString(R.string.message_statistics_email_subject)
+		val name = subject.lowercase().replace(" ", "_")
+		val zipFileName = "${name}_${timestamp}.zip"
+
+		// Create the zip file
+		requireContext().openFileOutput(zipFileName, Context.MODE_PRIVATE).use { fileOutput ->
+
+			// Start the zip process
+			ZipOutputStream(BufferedOutputStream(fileOutput)).use { zipOutput ->
+
+				// Iterate over each file
+				for (filename in allFiles)
+				{
+					// Build the path to the file name
+					val path = "${directory}/${filename}"
+					val file = File(path)
+
+					// Check if the path exists
+					if (!file.exists())
+					{
+						continue
+					}
+
+					// Create a zip entry for a file
+					val zipEntry = ZipEntry(filename)
+
+					// Add the zip entry to the zip file
+					zipOutput.putNextEntry(zipEntry)
+
+					// Copy the contents of the file to the zip file, which I
+					// believe will be written to the previously set zip entry
+					BufferedInputStream(FileInputStream(file)).use { inputStream ->
+						inputStream.copyTo(zipOutput, 1024)
+					}
+				}
+
+			}
+
+		}
+
+		// Create the URI to the path
+		return Uri.parse("${directory}/${zipFileName}")
 	}
 
 }

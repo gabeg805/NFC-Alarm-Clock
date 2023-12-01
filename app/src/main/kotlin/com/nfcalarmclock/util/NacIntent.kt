@@ -45,17 +45,25 @@ object NacIntent
 	}
 
 	/**
-	 * Add a media to an intent.
+	 * Add a media information to an intent.
 	 *
 	 * @param intent An intent.
-	 * @param media  A media string.
+	 * @param mediaPath A media path.
+	 * @param shuffleMedia Whether to shuffle media or not.
+	 * @param recursivelyPlayMedia Whether to recursively play media or not.
 	 *
-	 * @return The passed in intent with the media.
+	 * @return The intent that was passed in with the media path and how to
+	 *         play the media inside a bundle in that intent.
 	 */
-	fun addMedia(intent: Intent, media: String?): Intent
+	fun addMediaInfo(
+		intent: Intent,
+		mediaPath: String?,
+		shuffleMedia: Boolean,
+		recursivelyPlayMedia: Boolean
+	): Intent
 	{
 		// Create a bundle with the media
-		val bundle = NacBundle.toBundle(media)
+		val bundle = NacBundle.mediaInfoToBundle(mediaPath, shuffleMedia, recursivelyPlayMedia)
 
 		// Add the bundle to the intent
 		intent.putExtra(MEDIA_BUNDLE_NAME, bundle)
@@ -86,25 +94,33 @@ object NacIntent
 	}
 
 	/**
-	 * Get the media associated with the given intent.
+	 * Get the media path from an intent.
 	 *
 	 * @param intent An intent.
 	 *
-	 * @return The media associated with the given intent.
+	 * @return The media path from an intent.
 	 */
-	fun getMedia(intent: Intent?): String?
+	fun getMediaPath(intent: Intent?): String
 	{
-		// Check if the intent is null
-		if (intent == null)
-		{
-			return null
-		}
-
 		// Get the bundle from the intent
-		val bundle = intent.getBundleExtra(MEDIA_BUNDLE_NAME)
+		val bundle = intent?.getBundleExtra(MEDIA_BUNDLE_NAME)
 
-		// Get the media from the bundle
-		return NacBundle.getMedia(bundle)
+		return NacBundle.getMediaPath(bundle)
+	}
+
+	/**
+	 * Get whether media should be played recursively from an intent.
+	 *
+	 * @param intent An intent.
+	 *
+	 * @return Whether media should be played recursively from an intent.
+	 */
+	fun getRecursivelyPlayMedia(intent: Intent?): Boolean
+	{
+		// Get the bundle from the intent
+		val bundle = intent?.getBundleExtra(MEDIA_BUNDLE_NAME)
+
+		return NacBundle.getRecursivelyPlayMedia(bundle)
 	}
 
 	/**
@@ -209,6 +225,21 @@ object NacIntent
 			{
 				null
 			}
+	}
+
+	/**
+	 * Get whether media should be shuffled from an intent.
+	 *
+	 * @param intent An intent.
+	 *
+	 * @return Whether media should be shuffled from an intent.
+	 */
+	fun getShuffleMedia(intent: Intent?): Boolean
+	{
+		// Get the bundle from the intent
+		val bundle = intent?.getBundleExtra(MEDIA_BUNDLE_NAME)
+
+		return NacBundle.getShuffleMedia(bundle)
 	}
 
 }

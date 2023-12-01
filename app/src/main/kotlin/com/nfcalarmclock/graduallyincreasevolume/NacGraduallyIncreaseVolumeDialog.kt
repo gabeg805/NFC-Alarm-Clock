@@ -87,8 +87,6 @@ class NacGraduallyIncreaseVolumeDialog
 					(index - 7) * 5
 				}
 
-				println("New index : $index | Wait time : $waitTime")
-
 				// Call the listener
 				onGraduallyIncreaseVolumeListener?.onGraduallyIncreaseVolume(
 					shouldGraduallyIncreaseVolume, index, waitTime)
