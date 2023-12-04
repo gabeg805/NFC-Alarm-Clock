@@ -44,22 +44,34 @@ class NacGraduallyIncreaseVolumeDialog
 	 * Whether volume should be gradually increased or not.
 	 */
 	private val shouldGraduallyIncreaseVolume: Boolean
-		get() = checkBox!!.isChecked
+		get() = checkBox.isChecked
 
 	/**
 	 * Check box for whether the volume should be gradually increased or not.
 	 */
-	private var checkBox: MaterialCheckBox? = null
+	private lateinit var checkBox: MaterialCheckBox
+
+	/**
+	 * Title above the picker to choose the gradually increase volume wait time.
+	 */
+	private lateinit var pickerTitle: TextView
 
 	/**
 	 * Scrollable picker to choose the gradually increase volume wait time.
 	 */
-	private var timePicker: NumberPicker? = null
+	private lateinit var picker: NumberPicker
 
 	/**
 	 * Listener for when the volume is gradually increased or not.
 	 */
 	var onGraduallyIncreaseVolumeListener: OnGraduallyIncreaseVolumeListener? = null
+
+	/**
+	 * The alpha that views should have based on the should use text-to-speech
+	 * flag.
+	 */
+	private val alpha: Float
+		get() = if (shouldGraduallyIncreaseVolume) 1.0f else 0.25f
 
 	/**
 	 * Called when the dialog is created.
@@ -71,11 +83,10 @@ class NacGraduallyIncreaseVolumeDialog
 
 		// Creat ethe dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(R.string.title_gradually_increase_volume)
 			.setPositiveButton(R.string.action_ok) { _, _ ->
 
 				// Get the index value
-				val index = timePicker!!.value
+				val index = picker.value
 
 				// Calculate the time based on the index
 				val waitTime = if (index < 10)
@@ -111,10 +122,11 @@ class NacGraduallyIncreaseVolumeDialog
 
 		// Set the member variable
 		checkBox = dialog!!.findViewById(R.id.should_gradually_increase_volume_checkbox)
-		timePicker = dialog!!.findViewById(R.id.gradually_increase_volume_wait_time_picker)
+		pickerTitle = dialog!!.findViewById(R.id.title_gradually_increase_volume_wait_time)
+		picker = dialog!!.findViewById(R.id.gradually_increase_volume_wait_time_picker)
 
 		// Set the status of the checkbox
-		checkBox!!.isChecked = defaultShouldGraduallyIncreaseVolume
+		checkBox.isChecked = defaultShouldGraduallyIncreaseVolume
 
 		// Setup the views
 		setupOnClickListener(container, textView)
@@ -151,7 +163,7 @@ class NacGraduallyIncreaseVolumeDialog
 		val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
 
 		// Set the state list of the checkbox
-		checkBox!!.buttonTintList = ColorStateList(states, colors)
+		checkBox.buttonTintList = ColorStateList(states, colors)
 	}
 
 	/**
@@ -163,7 +175,7 @@ class NacGraduallyIncreaseVolumeDialog
 		container.setOnClickListener {
 
 			// Toggle the checkbox
-			checkBox!!.isChecked = !shouldGraduallyIncreaseVolume
+			checkBox.isChecked = !shouldGraduallyIncreaseVolume
 
 			// Setup the views
 			setupTextView(textView)
@@ -198,11 +210,12 @@ class NacGraduallyIncreaseVolumeDialog
 	 */
 	private fun setupTimePickerUsable()
 	{
-		// Set the alpha
-		timePicker!!.alpha = if (shouldGraduallyIncreaseVolume) 1.0f else 0.25f
+		// Set the alpha for the views
+		pickerTitle.alpha = alpha
+		picker.alpha = alpha
 
 		// Set whether it can be used or not
-		timePicker!!.isEnabled = shouldGraduallyIncreaseVolume
+		picker.isEnabled = shouldGraduallyIncreaseVolume
 	}
 
 	/**
@@ -214,10 +227,10 @@ class NacGraduallyIncreaseVolumeDialog
 		val values = requireContext().resources.getStringArray(R.array.gradually_increase_volume_wait_times).toList()
 
 		// Setup the time picker
-		timePicker!!.minValue = 0
-		timePicker!!.maxValue = values.size - 1
-		timePicker!!.displayedValues = values.toTypedArray()
-		timePicker!!.value = defaultShouldGraduallyIncreaseVolumeIndex
+		picker.minValue = 0
+		picker.maxValue = values.size - 1
+		picker.displayedValues = values.toTypedArray()
+		picker.value = defaultShouldGraduallyIncreaseVolumeIndex
 	}
 
 	companion object

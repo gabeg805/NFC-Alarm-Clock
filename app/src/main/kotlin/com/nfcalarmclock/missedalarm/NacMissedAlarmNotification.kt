@@ -65,7 +65,7 @@ class NacMissedAlarmNotification(
 			val missedAlarm = context.resources.getQuantityString(R.plurals.missed_alarm, lineCount)
 
 			// Format the title
-			return String.format(locale, "<b>%1\$s</b>", missedAlarm)
+			return String.format(locale, "<b>$missedAlarm</b>")
 		}
 
 	/**
@@ -98,7 +98,7 @@ class NacMissedAlarmNotification(
 			// Check if the body has stuff present
 			return if (body.isNotEmpty())
 			{
-				String.format(locale, "%1\$d %2\$s", body.size, alarmPlural)
+				String.format(locale, "${body.size} $alarmPlural")
 			}
 			else
 			{

@@ -71,15 +71,6 @@
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
 			/>
-
-		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
-			android:title="@string/title_upcoming_alarm"
-			android:key="@string/upcoming_alarm_key"
-			android:summaryOn="@string/upcoming_alarm_true"
-			android:summaryOff="@string/description_no_notification"
-			android:defaultValue="@bool/default_upcoming_alarm"
-			app:allowDividerBelow="true"
-			/>
 	</com.nfcalarmclock.settings.preference.NacPreferenceCategory>
 
 	<!-- Styling -->

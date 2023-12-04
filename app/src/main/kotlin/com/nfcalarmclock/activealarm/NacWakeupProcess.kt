@@ -13,7 +13,6 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.media.NacAudioAttributes
 import com.nfcalarmclock.media.NacMedia
 import com.nfcalarmclock.mediaplayer.NacMediaPlayer
-import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.tts.NacTextToSpeech
 import com.nfcalarmclock.tts.NacTextToSpeech.OnSpeakingListener
 import com.nfcalarmclock.util.NacCalendar
@@ -49,11 +48,6 @@ class NacWakeupProcess(
 		private const val PERIOD_RESTRICT_VOLUME = 1000L
 
 	}
-
-	/**
-	 * Shared preferences.
-	 */
-	private val sharedPreferences: NacSharedPreferences = NacSharedPreferences(context)
 
 	/**
 	 * Audio attributes.
@@ -224,6 +218,7 @@ class NacWakeupProcess(
 			val meridian = NacCalendar.getMeridian(context, hour)
 
 			// Check if the language is Spanish
+			// TODO: Do something for other languages
 			return if (locale.language == "es")
 			{
 				getSayCurrentTimeEs(hour, minute, meridian)
@@ -495,7 +490,7 @@ class NacWakeupProcess(
 	}
 
 	/**
-	 * Speak at the desired frequency, specified in the shared preference.
+	 * Speak at the desired frequency.
 	 */
 	private fun speak()
 	{

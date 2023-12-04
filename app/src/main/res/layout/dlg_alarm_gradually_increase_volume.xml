@@ -5,7 +5,22 @@
 	android:layout_height="wrap_content"
 	android:paddingTop="@dimen/small"
 	android:paddingBottom="@dimen/small"
+	android:paddingStart="@dimen/large"
+	android:paddingEnd="@dimen/large"
 	android:orientation="vertical">
+
+	<TextView
+		style="@style/Widget.TextView.Primary"
+		android:id="@+id/title_tts_wha_to_say"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/normal"
+		android:paddingBottom="@dimen/normal"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:text="@string/title_gradually_increase_volume_checkbox"
+		android:textSize="@dimen/tsz_normal"
+		android:textStyle="bold"
+		/>
 
 	<RelativeLayout
 		android:id="@+id/should_gradually_increase_volume"
@@ -47,15 +62,13 @@
 
 	<TextView
 		style="@style/Widget.TextView.Primary"
-		android:id="@+id/title_tts_what_to_say"
+		android:id="@+id/title_gradually_increase_volume_wait_time"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:paddingTop="@dimen/huge"
 		android:paddingBottom="@dimen/small"
-		android:paddingStart="@dimen/huge"
-		android:paddingEnd="@dimen/huge"
 		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:text="Wait time between each volume increase?"
+		android:text="@string/title_gradually_increase_volume_picker"
 		android:textSize="@dimen/tsz_normal"
 		android:textStyle="bold"
 		/>

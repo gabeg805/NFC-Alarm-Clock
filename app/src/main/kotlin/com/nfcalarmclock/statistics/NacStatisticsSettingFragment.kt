@@ -2,10 +2,10 @@ package com.nfcalarmclock.statistics
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -250,8 +250,7 @@ class NacStatisticsSettingFragment
 		val numDismissedWithNfc = statisticViewModel.dismissedWithNfcCount()
 
 		// Determine the text to show in the textview
-		val text = String.format(locale, "%1\$s (%2\$s NFC)", numDismissedTotal,
-			numDismissedWithNfc)
+		val text = String.format(locale, "$numDismissedTotal ($numDismissedWithNfc NFC)")
 
 		// Set the text in the textview
 		textview.text = text
@@ -286,7 +285,8 @@ class NacStatisticsSettingFragment
 			lifecycleScope.launch {
 
 				// Get the current timestamp
-				val timestamp = NacCalendar.getTimestamp("yyyy-MM-dd_HHmmSS")
+				val emailTimestamp = NacCalendar.getTimestamp("yyyy-MM-dd HH:mm:SS")
+				val timestamp = emailTimestamp.replace(" ", "_").replace(":", "")
 
 				// Export all files
 				val allFiles = exportAllStatistics(timestamp)
@@ -298,7 +298,7 @@ class NacStatisticsSettingFragment
 				cleanupCsvFiles(allFiles)
 
 				// Send the email
-				sendEmail(attachment)
+				sendEmail(attachment, emailTimestamp)
 
 			}
 
@@ -347,8 +347,7 @@ class NacStatisticsSettingFragment
 		val snoozeDuration = statisticViewModel.snoozedTotalDuration() / 60
 
 		// Determine the text to show in the textview
-		val text = String.format(locale, "%1\$s (%2\$s min)", numSnoozed,
-			snoozeDuration)
+		val text = String.format(locale, "$numSnoozed ($snoozeDuration min)")
 
 		// Set the text in the textview
 		textview.text = text
@@ -377,7 +376,7 @@ class NacStatisticsSettingFragment
 				val dateText = dateFormat.format(dateStarted)
 
 				// Set the text that will be shown in the textview
-				String.format(locale, "%1\$s %2\$s", startedOnMessage, dateText)
+				String.format(locale, "$startedOnMessage $dateText")
 			}
 			else
 			{
@@ -418,26 +417,32 @@ class NacStatisticsSettingFragment
 	/**
 	 * Send an email.
 	 */
-	private fun sendEmail(attachment: Uri)
+	private fun sendEmail(attachmentPath: String, timestamp: String)
 	{
-		// TODO: To allow other apps to access files stored in this
-		//  directory within internal storage, use a FileProvider
-		//  with the FLAG_GRANT_READ_URI_PERMISSION attribute.
+		// Get the subject of the email
+		val title = getString(R.string.message_statistics_email_subject)
+		val subject = "$title $timestamp"
 
-		val packageManager = requireContext().packageManager
-		val subject = getString(R.string.message_statistics_email_subject)
+		// Create the attachment URI
+		val attachmentUri = FileProvider.getUriForFile(
+			requireContext(),
+			"com.nfcalarmclock.fileprovider",
+			File(attachmentPath))
 
 		// Build the intent
+		println(attachmentUri)
 		val intent = Intent(Intent.ACTION_SEND).apply {
 
-			data = Uri.parse("mailto:")
+			type = "application/zip"
 			putExtra(Intent.EXTRA_SUBJECT, subject)
-			putExtra(Intent.EXTRA_STREAM, attachment)
+			putExtra(Intent.EXTRA_STREAM, attachmentUri)
 			addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
 		}
 
 		// Check if can resolve the package manager? Not sure what this really does
+		val packageManager = requireContext().packageManager
+
 		if (intent.resolveActivity(packageManager) != null)
 		{
 			// Start the activity
@@ -446,7 +451,7 @@ class NacStatisticsSettingFragment
 		else
 		{
 			// Show toast error message
-			quickToast(requireContext(), "Unable to start email app")
+			quickToast(requireContext(), R.string.error_message_unable_to_email_statistics)
 		}
 	}
 
@@ -500,7 +505,7 @@ class NacStatisticsSettingFragment
 	/**
 	 * Zip files.
 	 */
-	private fun zipFiles(timestamp: String, allFiles: List<String>): Uri
+	private fun zipFiles(timestamp: String, allFiles: List<String>): String
 	{
 		// Get the directory for app specific files
 		val directory = requireContext().filesDir
@@ -546,8 +551,8 @@ class NacStatisticsSettingFragment
 
 		}
 
-		// Create the URI to the path
-		return Uri.parse("${directory}/${zipFileName}")
+		// Path to the zip file
+		return "${directory}/${zipFileName}"
 	}
 
 }

@@ -10,8 +10,10 @@ import com.nfcalarmclock.activealarm.NacActiveAlarmBroadcastReceiver
 import com.nfcalarmclock.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.main.NacMainActivity
+import com.nfcalarmclock.upcomingreminder.NacUpcomingReminderService
 import com.nfcalarmclock.util.NacCalendar
 import java.util.Calendar
+import kotlin.random.Random
 
 /**
  * The alarm scheduler.
@@ -20,25 +22,91 @@ object NacScheduler
 {
 
 	/**
-	 * Add an alarm day to the scheduler.
+	 * Add all alarm days to the scheduler.
 	 */
-	fun add(context: Context, alarm: NacAlarm?, day: Calendar)
+	fun add(context: Context, alarm: NacAlarm?)
 	{
 		// Check if the alarm is null or not enabled
-		if (alarm?.isEnabled == false)
+		if (alarm?.isEnabled != true)
 		{
 			return
 		}
 
-		// Time at which the alarm should go off
-		val millis = day.timeInMillis
+		// Get the calendar for the next alarm
+		val nextCal = NacCalendar.getNextAlarmDay(alarm)
 
-		// Show the main activity
-		val showPendingIntent = buildMainActivityPendingIntent(context, alarm)
+		// Add the alarm
+		addAlarm(context, alarm, nextCal)
+
+		// Check if should show an upcoming reminder
+		if (alarm.shouldShowReminder)
+		{
+			// Add the upcoming reminder
+			addUpcomingReminder(context, alarm, nextCal)
+		}
+	}
+
+	/**
+	 * Add an alarm to the scheduler.
+	 */
+	private fun addAlarm(
+		context: Context,
+		alarm: NacAlarm,
+		cal: Calendar)
+	{
+		// Operation to perform when the alarm goes off
+		val pendingIntent = buildAddAlarmPendingIntent(context, alarm)
+
+		// Add to the alarm manager
+		addToAlarmManager(context, cal, pendingIntent)
+	}
+
+	/**
+	 * Add an upcoming reminder to the scheduler.
+	 */
+	private fun addUpcomingReminder(
+		context: Context,
+		alarm: NacAlarm,
+		alarmCal: Calendar)
+	{
+		// Get the current calendar and make a copy of the alarm calendar
+		val now = Calendar.getInstance()
+		val cal = alarmCal.clone() as Calendar
+
+		// Compute the number of minutes to subtract to show the upcoming
+		// reminder at the correct time
+		val minutes = -1 * alarm.timeToShowReminder.toInt()
+
+		// Subtract the number of minutes from when the alarm will run
+		cal.add(Calendar.MINUTE, minutes)
+
+		// Check if the calendar for the upcoming reminder has already passed
+		if (cal.before(now))
+		{
+			// Do not schedule the upcoming reminder
+			return
+		}
 
 		// Operation to perform when the alarm goes off
-		val operationPendingIntent = buildAlarmPendingIntent(context, alarm,
-			PendingIntent.FLAG_CANCEL_CURRENT)
+		val pendingIntent = buildAddUpcomingReminderPendingIntent(context, alarm)
+
+		// Add to the alarm manager
+		addToAlarmManager(context, cal, pendingIntent)
+	}
+
+	/**
+	 * Add an alarm calendar to the scheduler.
+	 */
+	private fun addToAlarmManager(
+		context: Context,
+		cal: Calendar,
+		operationPendingIntent: PendingIntent)
+	{
+		// Time at which the alarm should go off
+		val millis = cal.timeInMillis
+
+		// Show the main activity
+		val showPendingIntent = buildMainActivityPendingIntent(context)
 
 		// Get the clock info and manager
 		val clockInfo = AlarmClockInfo(millis, showPendingIntent)
@@ -49,21 +117,102 @@ object NacScheduler
 	}
 
 	/**
-	 * Add all alarm days to the scheduler.
+	 * Build the pending intent for adding an alarm.
+	 *
+	 * @return The pending intent for adding an alarm.
 	 */
-	fun add(context: Context, alarm: NacAlarm?)
+	private fun buildAddAlarmPendingIntent(
+		context: Context,
+		alarm: NacAlarm
+	): PendingIntent
 	{
-		// Check if the alarm is null or not enabled
-		if (alarm?.isEnabled == false)
+		// Create the intent
+		val intent = NacActiveAlarmService.getStartIntent(context, alarm)
+		val flags = PendingIntent.FLAG_CANCEL_CURRENT
+
+		// Build the pending intent
+		return buildServicePendingIntent(context, alarm, intent, flags)!!
+	}
+
+	/**
+	 * Build the pending intent for adding an upcoming reminder.
+	 *
+	 * @return The pending intent for adding an upcoming reminder.
+	 */
+	private fun buildAddUpcomingReminderPendingIntent(
+		context: Context,
+		alarm: NacAlarm
+	): PendingIntent
+	{
+		// Create the intent
+		val intent = NacUpcomingReminderService.getStartIntent(context, alarm)
+		val flags = PendingIntent.FLAG_CANCEL_CURRENT
+
+		// Build the pending intent
+		return buildServicePendingIntent(context, alarm, intent, flags)!!
+	}
+
+	/**
+	 * Build the pending intent for canceling an alarm.
+	 *
+	 * @return The pending intent for canceling an alarm.
+	 */
+	private fun buildCancelAlarmPendingIntent(
+		context: Context,
+		alarm: NacAlarm
+	): PendingIntent?
+	{
+		// Create the intent
+		val intent = NacActiveAlarmService.getStartIntent(context, null)
+		val flags = PendingIntent.FLAG_NO_CREATE
+
+		// Build the pending intent
+		return buildServicePendingIntent(context, alarm, intent, flags)
+	}
+
+	/**
+	 * Build the pending intent for canceling an upcoming reminder.
+	 *
+	 * @return The pending intent for canceling an upcoming reminder.
+	 */
+	private fun buildCancelUpcomingReminderPendingIntent(
+		context: Context,
+		alarm: NacAlarm
+	): PendingIntent?
+	{
+		// Create the intent
+		val intent = NacUpcomingReminderService.getStartIntent(context, null)
+		val flags = PendingIntent.FLAG_NO_CREATE
+
+		// Build the pending intent
+		return buildServicePendingIntent(context, alarm, intent, flags)
+	}
+
+	/**
+	 * Build the pending intent to launch the main activity.
+	 *
+	 * @return The pending intent to launch the main activity.
+	 */
+	private fun buildMainActivityPendingIntent(context: Context): PendingIntent?
+	{
+		// Get a random number to use for the ID
+		val id = Random.nextInt(1, 500)
+
+		// Get the flags
+		val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 		{
-			return
+			PendingIntent.FLAG_IMMUTABLE
+		}
+		else
+		{
+			0
 		}
 
-		// Get the next alarm day
-		val day = NacCalendar.getNextAlarmDay(alarm!!)
+		// Create the intent
+		val intent = Intent(context, NacMainActivity::class.java)
 
-		// Add the alarm for that day
-		add(context, alarm, day)
+		// Build the pending intent
+		return PendingIntent.getActivity(context, id, intent, flags)
 	}
 
 	/**
@@ -71,9 +220,12 @@ object NacScheduler
 	 *
 	 * @return The pending intent for an alarm.
 	 */
-	private fun buildAlarmPendingIntent(context: Context, id: Int, intent: Intent,
+	private fun buildServicePendingIntent(context: Context, alarm: NacAlarm, intent: Intent,
 		flags: Int): PendingIntent?
 	{
+		// Get the alarm ID
+		val id = alarm.id.toInt()
+
 		// Prepare the flags
 		val intentFlags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 		{
@@ -96,84 +248,6 @@ object NacScheduler
 	}
 
 	/**
-	 * Build the pending intent for an alarm.
-	 *
-	 * @return The pending intent for an alarm.
-	 */
-	private fun buildAlarmPendingIntent(context: Context, alarm: NacAlarm?,
-		flags: Int): PendingIntent?
-	{
-		// Unable to build the pending intent because the alarm is null
-		if (alarm == null)
-		{
-			return null
-		}
-
-		// Get the alarm ID
-		val id = alarm.id.toInt()
-
-		// Create the intent
-		val intent = NacActiveAlarmService.getStartIntent(context, alarm)
-
-		// Build the pending intent
-		return buildAlarmPendingIntent(context, id, intent, flags)
-	}
-
-	/**
-	 * Build the pending intent to launch the main activity.
-	 *
-	 * @return The pending intent to launch the main activity.
-	 */
-	private fun buildMainActivityPendingIntent(context: Context, alarm: NacAlarm?): PendingIntent?
-	{
-		// Unable to build the pending intent because the alarm is null
-		if (alarm == null)
-		{
-			return null
-		}
-
-		// Get the alarm ID
-		val id = alarm.id.toInt()
-
-		// Get the flags
-		val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-		{
-			PendingIntent.FLAG_IMMUTABLE
-		}
-		else
-		{
-			0
-		}
-
-		// Create the intent
-		val intent = Intent(context, NacMainActivity::class.java)
-
-		// Build the pending intent
-		return PendingIntent.getActivity(context, id, intent, flags)
-	}
-
-	/**
-	 * Cancel the alarm with a given ID.
-	 *
-	 * @param  context  Context.
-	 * @param  id  Alarm ID.
-	 */
-	fun cancel(context: Context, id: Int)
-	{
-		// Build the pending intent for the new type
-		val intent = NacActiveAlarmService.getStartIntent(context, null)
-		val pending = buildAlarmPendingIntent(context, id, intent,
-			PendingIntent.FLAG_NO_CREATE)
-
-		// Check if the pending intent is not null
-		if (pending != null)
-		{
-			// Cancel the alarm
-			getAlarmManager(context).cancel(pending)
-		}
-	}
-
-	/**
 	 * @see NacScheduler.cancel
 	 */
 	fun cancel(context: Context, alarm: NacAlarm?)
@@ -185,7 +259,26 @@ object NacScheduler
 		}
 
 		// Cancel the alarm
-		cancel(context, alarm.id.toInt())
+		cancelAlarm(context, alarm)
+
+		// Cancel the upcoming reminder
+		cancelUpcomingReminder(context, alarm)
+	}
+
+	/**
+	 * Cancel an alarm.
+	 */
+	private fun cancelAlarm(context: Context, alarm: NacAlarm)
+	{
+		// Build the pending intent for the alarm
+		val pendingIntent = buildCancelAlarmPendingIntent(context, alarm)
+
+		// Check if the pending intent for the alarm is not null
+		if (pendingIntent != null)
+		{
+			// Cancel the alarm
+			getAlarmManager(context).cancel(pendingIntent)
+		}
 	}
 
 	/**
@@ -243,6 +336,22 @@ object NacScheduler
 	}
 
 	/**
+	 * Cancel an upcoming reminder.
+	 */
+	private fun cancelUpcomingReminder(context: Context, alarm: NacAlarm)
+	{
+		// Build the pending intent for the upcoming reminder
+		val pendingIntent = buildCancelUpcomingReminderPendingIntent(context, alarm)
+
+		// Check if the pending intent for the upcoming reminder is not null
+		if (pendingIntent != null)
+		{
+			// Cancel the alarm
+			getAlarmManager(context).cancel(pendingIntent)
+		}
+	}
+
+	/**
 	 * Get the AlarmManager.
 	 *
 	 * @return The AlarmManager.
@@ -289,15 +398,15 @@ object NacScheduler
 	}
 
 	/**
-	 * Update a single day in a given alarm.
+	 * Update a single calendar in a given alarm.
 	 */
-	fun update(context: Context, alarm: NacAlarm?, day: Calendar)
+	fun update(context: Context, alarm: NacAlarm, cal: Calendar)
 	{
 		// Cancel the alarm
 		cancel(context, alarm)
 
-		// Add the alarm
-		add(context, alarm, day)
+		// Add the alarm. This will not add the reminder, but that is OK
+		addAlarm(context, alarm, cal)
 	}
 
 	/**

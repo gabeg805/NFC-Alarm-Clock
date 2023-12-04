@@ -511,6 +511,18 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Whether to use text-to-speech for the reminder or not.
+	 */
+	val shouldUseTtsForReminder: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.should_use_tts_for_reminder_key)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+
+	/**
 	 * Whether the alarm information should be shown or not.
 	 */
 	val showAlarmInfo: Boolean
@@ -613,25 +625,13 @@ class NacSharedPreferences(context: Context)
 	/**
 	 * The time to start showing a reminder.
 	 */
-	val timeToShowReminder: Long
+	val timeToShowReminder: Int
 		get()
 		{
 			val key = resources.getString(R.string.time_to_show_reminder_key)
-			val defaultValue = 0L
+			val defaultValue = 5
 
-			return instance.getLong(key, defaultValue)
-		}
-
-	/**
-	 * Whether the upcoming alarm notifications should be displayed.
-	 */
-	val upcomingAlarmNotification: Boolean
-		get()
-		{
-			val key = resources.getString(R.string.upcoming_alarm_key)
-			val defaultValue = resources.getBoolean(R.bool.default_upcoming_alarm)
-
-			return instance.getBoolean(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
@@ -884,6 +884,16 @@ class NacSharedPreferences(context: Context)
 	}
 
 	/**
+	 * Frequency at which to show the reminder, in units of minutes.
+	 */
+	fun editReminderFrequency(freq: Int)
+	{
+		val key = resources.getString(R.string.reminder_frequency_key)
+
+		return saveInt(key, freq)
+	}
+
+	/**
 	 * Edit the default value of a newly created alarm for whether the volume should
 	 * gradually be increased when an alarm is active.
 	 */
@@ -936,6 +946,26 @@ class NacSharedPreferences(context: Context)
 	}
 
 	/**
+	 * Whether to show a reminder or not.
+	 */
+	fun editShouldShowReminder(showReminder: Boolean)
+	{
+		val key = resources.getString(R.string.should_show_reminder_key)
+
+		return saveBoolean(key, showReminder)
+	}
+
+	/**
+	 * Whether to use text-to-speech for the reminder or not.
+	 */
+	fun editShouldUseTtsForReminder(shouldUseTts: Boolean)
+	{
+		val key = resources.getString(R.string.should_use_tts_for_reminder_key)
+
+		return saveBoolean(key, shouldUseTts)
+	}
+
+	/**
 	 * Whether to shuffle media.
 	 */
 	fun editShuffleMedia(shuffle: Boolean)
@@ -954,6 +984,16 @@ class NacSharedPreferences(context: Context)
 		val key = resources.getString(R.string.speak_frequency_key)
 
 		saveInt(key, freq)
+	}
+
+	/**
+	 * The time to start showing a reminder.
+	 */
+	fun editTimeToShowReminder(timeToShow: Int)
+	{
+		val key = resources.getString(R.string.time_to_show_reminder_key)
+
+		return saveInt(key, timeToShow)
 	}
 
 	/**

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/all_alarm_options"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:paddingTop="@dimen/small"
+	android:paddingBottom="@dimen/small"
+	android:paddingStart="@dimen/large"
+	android:paddingEnd="@dimen/large"
+	android:orientation="vertical">
+
+	<TextView
+		android:id="@+id/alarm_option_audio_source"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/small"
+		android:paddingBottom="@dimen/small"
+		android:gravity="center_horizontal"
+		android:clickable="true"
+		android:focusable="true"
+		android:textColor="@color/white"
+		android:textSize="@dimen/tsz_normal"
+		android:text="@string/action_alarm_option_audio_source"
+		android:background="?attr/selectableItemBackground"
+		/>
+
+	<TextView
+		android:id="@+id/alarm_option_gradually_increase_volume"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/small"
+		android:paddingBottom="@dimen/small"
+		android:gravity="center_horizontal"
+		android:clickable="true"
+		android:focusable="true"
+		android:textColor="@color/white"
+		android:textSize="@dimen/tsz_normal"
+		android:text="@string/action_alarm_option_gradually_increase_volume"
+		android:background="?attr/selectableItemBackground"
+		/>
+
+	<TextView
+		android:id="@+id/alarm_option_restrict_volume"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/small"
+		android:paddingBottom="@dimen/small"
+		android:gravity="center_horizontal"
+		android:clickable="true"
+		android:focusable="true"
+		android:textColor="@color/white"
+		android:textSize="@dimen/tsz_normal"
+		android:text="@string/action_alarm_option_restrict_volume"
+		android:background="?attr/selectableItemBackground"
+		/>
+
+	<TextView
+		android:id="@+id/alarm_option_text_to_speech"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/small"
+		android:paddingBottom="@dimen/small"
+		android:gravity="center_horizontal"
+		android:clickable="true"
+		android:focusable="true"
+		android:textColor="@color/white"
+		android:textSize="@dimen/tsz_normal"
+		android:text="@string/action_alarm_option_text_to_speech"
+		android:background="?attr/selectableItemBackground"
+		/>
+
+	<View
+		android:id="@+id/alarm_option_divider"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/line"
+		android:layout_marginTop="@dimen/small"
+		android:layout_marginBottom="@dimen/small"
+		android:background="@color/orange"
+		/>
+
+	<TextView
+		android:id="@+id/alarm_option_dismiss_early"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/small"
+		android:paddingBottom="@dimen/small"
+		android:gravity="center_horizontal"
+		android:clickable="true"
+		android:focusable="true"
+		android:textColor="@color/white"
+		android:textSize="@dimen/tsz_normal"
+		android:text="@string/action_alarm_option_dismiss_early"
+		android:background="?attr/selectableItemBackground"
+		/>
+
+	<TextView
+		android:id="@+id/alarm_option_upcoming_reminder"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/small"
+		android:paddingBottom="@dimen/small"
+		android:gravity="center_horizontal"
+		android:clickable="true"
+		android:focusable="true"
+		android:textColor="@color/white"
+		android:textSize="@dimen/tsz_normal"
+		android:text="@string/action_alarm_option_upcoming_reminder"
+		android:background="?attr/selectableItemBackground"
+		/>
+
+</LinearLayout>

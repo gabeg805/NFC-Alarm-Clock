@@ -9,6 +9,7 @@ import android.os.IBinder
 import android.os.PowerManager
 import android.os.PowerManager.WakeLock
 import androidx.media3.common.util.UnstableApi
+import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmRepository
 import com.nfcalarmclock.alarm.db.NacAlarm
@@ -430,6 +431,15 @@ class NacActiveAlarmService
 	}
 
 	/**
+	 * Setup the app version.
+	 */
+	private fun setupAppVersion()
+	{
+		// Set the previous app version as the current version
+		sharedPreferences!!.editPreviousAppVersion(BuildConfig.VERSION_NAME)
+	}
+
+	/**
 	 * Called when the service is destroyed.
 	 */
 	@UnstableApi
@@ -437,6 +447,13 @@ class NacActiveAlarmService
 	{
 		// Super
 		super.onDestroy()
+
+		// Check if the app version is not set
+		if (sharedPreferences!!.previousAppVersion.isEmpty())
+		{
+			// Setup the app version
+			setupAppVersion()
+		}
 
 		// Stop the alarm activity
 		NacActiveAlarmActivity.stopAlarmActivity(this)

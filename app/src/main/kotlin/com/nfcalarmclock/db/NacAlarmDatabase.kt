@@ -43,7 +43,7 @@ import javax.inject.Singleton
 /**
  * Store alarms in a Room database.
  */
-@Database(version = 12,
+@Database(version = 13,
 	entities = [NacAlarm::class, NacAlarmCreatedStatistic::class,
 		NacAlarmDeletedStatistic::class, NacAlarmDismissedStatistic::class,
 		NacAlarmMissedStatistic::class, NacAlarmSnoozedStatistic::class],
@@ -58,7 +58,8 @@ import javax.inject.Singleton
 		AutoMigration(from = 8,  to = 9),
 		AutoMigration(from = 9,  to = 10),
 		AutoMigration(from = 10, to = 11, spec = RemoveUseTtsColumnMigration::class),
-		AutoMigration(from = 11, to = 12)]
+		AutoMigration(from = 11, to = 12),
+		AutoMigration(from = 12, to = 13)]
 )
 @TypeConverters(NacAlarmTypeConverters::class, NacStatisticTypeConverters::class)
 abstract class NacAlarmDatabase
@@ -215,7 +216,10 @@ abstract class NacAlarmDatabase
 				NacScheduler.cancelOld(context, i)
 
 				// Cancel current type of alarm
-				NacScheduler.cancel(context, i)
+				val alarm = NacAlarm.build()
+				alarm.id = i.toLong()
+
+				NacScheduler.cancel(context, alarm)
 			}
 		}
 

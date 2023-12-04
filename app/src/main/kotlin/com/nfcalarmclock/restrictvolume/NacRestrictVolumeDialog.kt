@@ -19,16 +19,6 @@ class NacRestrictVolumeDialog
 	: NacDialogFragment()
 {
 
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacRestrictVolumeDialog"
-
-	}
-
 	/**
 	 * Listener for when an audio source is selected.
 	 */
@@ -48,12 +38,12 @@ class NacRestrictVolumeDialog
 	 * Whether volume should be restricted or not.
 	 */
 	private val shouldRestrictVolume: Boolean
-		get() = checkBox!!.isChecked
+		get() = checkBox.isChecked
 
 	/**
 	 * Check box to restrict/unrestrict the volume.
 	 */
-	private var checkBox: MaterialCheckBox? = null
+	private lateinit var checkBox: MaterialCheckBox
 
 	/**
 	 * Listener for when the volume is restricted/unrestricted.
@@ -70,14 +60,13 @@ class NacRestrictVolumeDialog
 
 		// Create the dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(R.string.title_restrict_volume)
 			.setPositiveButton(R.string.action_ok) { _, _ ->
 
 				// Get the checked status
-				val isChecked = checkBox?.isChecked
+				val isChecked = checkBox.isChecked
 
 				// Call the listener
-				onRestrictVolumeListener?.onRestrictVolume(isChecked!!)
+				onRestrictVolumeListener?.onRestrictVolume(isChecked)
 
 			}
 			.setNegativeButton(R.string.action_cancel, null)
@@ -101,7 +90,7 @@ class NacRestrictVolumeDialog
 		checkBox = dialog!!.findViewById(R.id.should_restrict_volume_checkbox)
 
 		// Set the default checked status
-		checkBox!!.isChecked = defaultShouldRestrictVolume
+		checkBox.isChecked = defaultShouldRestrictVolume
 
 		// Setup the views
 		setupOnClickListener(container, textView)
@@ -121,7 +110,7 @@ class NacRestrictVolumeDialog
 		val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
 
 		// Set the state list of the checkbox
-		checkBox!!.buttonTintList = ColorStateList(states, colors)
+		checkBox.buttonTintList = ColorStateList(states, colors)
 	}
 
 	/**
@@ -133,7 +122,7 @@ class NacRestrictVolumeDialog
 		container.setOnClickListener {
 
 			// Toggle the checkbox
-			checkBox!!.isChecked = !shouldRestrictVolume
+			checkBox.isChecked = !shouldRestrictVolume
 
 			// Setup the summary
 			setupTextView(textView)
@@ -159,6 +148,16 @@ class NacRestrictVolumeDialog
 
 		// Set the text
 		textView.setText(textId)
+	}
+
+	companion object
+	{
+
+		/**
+		 * Tag for the class.
+		 */
+		const val TAG = "NacRestrictVolumeDialog"
+
 	}
 
 }

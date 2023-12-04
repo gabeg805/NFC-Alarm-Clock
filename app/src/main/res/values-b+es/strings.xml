@@ -49,6 +49,12 @@
 	<string name="action_email">Correo electrónico</string>
 	<string name="action_shuffle_music">Música aleatoria</string>
 	<string name="action_recursively_play_media">Incluir subcarpétas</string>
+	<string name="action_alarm_option_audio_source">Fuente de audio</string>
+	<string name="action_alarm_option_gradually_increase_volume">Aumentar gradualmente el volumen</string>
+	<string name="action_alarm_option_restrict_volume">Restringe el volumen</string>
+	<string name="action_alarm_option_text_to_speech">Texto-a-voz</string>
+	<string name="action_alarm_option_dismiss_early">Descartar temprano</string>
+	<string name="action_alarm_option_upcoming_reminder">Próximo recordatorio</string>
 
 
 
@@ -58,7 +64,7 @@
 	<string name="label_dismissed_statistic">despedido</string>
 	<string name="label_missed_statistic">perdido</string>
 	<string name="label_snoozed_statistic">pospuso</string>
-	<string name="label_created_statistic_header">Tiempo creado, Nombre, Hora de alarma</string>
+	<string name="label_created_statistic_header">Tiempo creado</string>
 	<string name="label_deleted_statistic_header">Tiempo eliminado, Nombre, Hora de alarma</string>
 	<string name="label_dismissed_statistic_header">Tiempo despedido, Nombre, Hora de alarma,NFC usado</string>
 	<string name="label_missed_statistic_header">Tiempo perdido, Nombre, Hora de alarma</string>
@@ -114,6 +120,7 @@
 	<string name="error_message_play_file">Incapaz de tocar la canción seleccionada</string>
 	<string name="error_message_google_play_billing">Error al conectarse a Google Play Store</string>
 	<string name="error_message_text_to_speech_audio_focus">Incapaz de usar texto-a-voz</string>
+	<string name="error_message_unable_to_email_statistics">No se pueden enviar estadísticas por correo electrónico</string>
 
 
 
@@ -132,17 +139,24 @@
 	<string name="title_audio_option">Seleccione una opción de alarma</string>
 	<string name="title_audio_source">Seleccione una fuente de audio</string>
 	<string name="title_dismiss_early">Seleccione opciones pare descartar temprano</string>
+	<string name="title_dismiss_early_checkbox">Descartar la alarma temprano, antes de que se active...</string>
+	<string name="title_dismiss_early_how_early">¿Con qué antelación se puede desactivar la alarma...?</string>
+	<string name="title_upcoming_reminder_should_show">Mostrar una notificación de recordatorio antes de que suene la alarma...</string>
+	<string name="title_upcoming_reminder_time_to_show">¿Con qué antelación se debe mostrar la notificación...?</string>
 	<string name="title_gradually_increase_volume">Elige aumentar gradualmente el volumen</string>
+	<string name="title_gradually_increase_volume_checkbox">Aumente gradualmente el volumen cuando la alarma esté activa...</string>
+	<string name="title_gradually_increase_volume_picker">Tiempo de espera entre cada aumento de volumen...</string>
 	<string name="title_restrict_volume">Elige restringir el volumen</string>
+	<string name="title_restrict_volume_checkbox">Restringir el volumen cuando la alarma esté activa...</string>
 	<string name="title_tts">Seleccione opciones de texto-a-voz</string>
-	<string name="title_tts_what_to_say">What to say...</string>
-	<string name="title_tts_how_often_to_say">How often to say it...</string>
+	<string name="title_tts_what_to_say">Qué decir cuando la alarma está activa...</string>
+	<string name="title_tts_how_often_to_say">Cuantas veces decirlo...</string>
 	<string name="title_next_alarm_format">Selecciona un estilo</string>
 	<string name="title_speak_frequency">Seleccione la frequencia de hablar</string>
 	<string name="title_folder_selected">Seleccionaste una carpeta</string>
 	<string name="title_active_alarm">Alarmas activas</string>
 	<string name="title_missed_alarm">Alarmas perdidas</string>
-	<string name="title_upcoming_alarm">Próximas alarmas</string>
+	<string name="title_upcoming_reminder">Próximos recordatorios</string>
 	<string name="title_dismissed_alarms">Alarmas descartadas</string>
 	<string name="title_missed_alarms">Alarmas perdidas</string>
 	<string name="title_snoozed_alarms">Alarmas posponadas</string>
@@ -160,7 +174,7 @@
 	<!-- Descriptions -->
 	<string name="description_alarm_activity">Escanea una etiqueta de NFC para descartar la alarma.</string>
 	<string name="description_no_notification">No mostrar notificaciones.</string>
-	<string name="description_upcoming_alarm">Alarmas programadas.</string>
+	<string name="description_upcoming_reminder">Recordatorio de próximas alarmas que están por activarse.</string>
 	<string name="description_missed_alarm">Alarmas desactivadas automaticamente.</string>
 	<string name="description_active_alarm">Alarmas que están activas.</string>
 	<string name="description_color">Color</string>
@@ -394,18 +408,23 @@
 
 
 	<!-- Dismiss early -->
-	<string name="dismiss_early_true">La alarma se puede descartar antes de que se activa.</string>
-	<string name="dismiss_early_false">No se puede descartar una alarma antes de que se activa.</string>
+	<string name="dismiss_early_true">Sí, puede descartar la alarma antes de tiempo.</string>
+	<string name="dismiss_early_false">No, la alarma no se puede desactivar antes de tiempo.</string>
+
+
+	<!-- Upcoming reminder -->
+	<string name="upcoming_reminder_true">Sí, mostrar una notificación.</string>
+	<string name="upcoming_reminder_false">No, no muestres nada.</string>
 
 
 	<!-- Restrict volume -->
-	<string name="restrict_volume_true">No podrá cambiar el volumen cuando la alarma esté activa.</string>
-	<string name="restrict_volume_false">El volumen se puede cambiar libremente cuando la alarma está activa.</string>
+	<string name="restrict_volume_true">Sí, el volumen estará restringido y no se podrá cambiar.</string>
+	<string name="restrict_volume_false">No, el volumen se puede cambiar libremente.</string>
 
 
 	<!-- Gradually increase volume -->
-	<string name="gradually_increase_volume_true">El volumen aumentará gradualmente hasta que se alcance el nivel de volumen de la alarma, cuando la alarma esté activa.</string>
-	<string name="gradually_increase_volume_false">El volumen se ajustará al nivel de volumen de la alarma, cuando la alarma esté activa.</string>
+	<string name="gradually_increase_volume_true">Sí, el volumen aumentará gradualmente hasta alcanzar el volumen de la alarma.</string>
+	<string name="gradually_increase_volume_false">No, el volumen se ajustará al volumen de la alarma.</string>
 
 
 
@@ -503,10 +522,10 @@
 		<item quantity="other">@string/title_missed_alarm</item>
 	</plurals>
 
-	<plurals name="upcoming_alarm">
+	<plurals name="upcoming_reminder">
 		<item quantity="one">@string/next_alarm</item>
-		<item quantity="many">@string/title_upcoming_alarm</item>
-		<item quantity="other">@string/title_upcoming_alarm</item>
+		<item quantity="many">@string/title_upcoming_reminder</item>
+		<item quantity="other">@string/title_upcoming_reminder</item>
 	</plurals>
 
 	<plurals name="unit_day">

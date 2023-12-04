@@ -49,6 +49,12 @@
 	<string name="action_email">Imèl</string>
 	<string name="action_shuffle_music">Shuffle mizik</string>
 	<string name="action_recursively_play_media">Mete sousdosye yo</string>
+	<string name="action_alarm_option_audio_source">Sous odyo</string>
+	<string name="action_alarm_option_gradually_increase_volume">Piti piti ogmante volim</string>
+	<string name="action_alarm_option_restrict_volume">Limite volim</string>
+	<string name="action_alarm_option_text_to_speech">Tèks-a-lapawòl</string>
+	<string name="action_alarm_option_dismiss_early">Ranvwaye bonè</string>
+	<string name="action_alarm_option_upcoming_reminder">Rapèl kap vini</string>
 
 
 
@@ -58,7 +64,7 @@
 	<string name="label_dismissed_statistic">ranvwaye</string>
 	<string name="label_missed_statistic">rate</string>
 	<string name="label_snoozed_statistic">snoozed</string>
-	<string name="label_created_statistic_header">Tan kreye,Non,Tan alam</string>
+	<string name="label_created_statistic_header">Tan kreye</string>
 	<string name="label_deleted_statistic_header">Tan efase,Non,Tan alam</string>
 	<string name="label_dismissed_statistic_header">Tan ranvwaye,Non,Tan alam,Itilize NFC</string>
 	<string name="label_missed_statistic_header">Tan rate,Non,Tan alam</string>
@@ -114,6 +120,7 @@
 	<string name="error_message_play_file">Pa kapab jwe dosye chwazi</string>
 	<string name="error_message_google_play_billing">Erè lè w konekte ak Google Play Store la</string>
 	<string name="error_message_text_to_speech_audio_focus">Pa kapab itilize tèks-a-lapawòl</string>
+	<string name="error_message_unable_to_email_statistics">Pa kapab voye imèl estatistik</string>
 
 
 
@@ -132,17 +139,24 @@
 	<string name="title_audio_option">Chwazi yon opsyon alam</string>
 	<string name="title_audio_source">Chwazi yon sous odyo</string>
 	<string name="title_dismiss_early">Chwazi ranvwaye opsyon bonè</string>
+	<string name="title_dismiss_early_checkbox">Ranvwaye alam la bonè, anvan li aktif...</string>
+	<string name="title_dismiss_early_how_early">Konbyen bonè alam la ka ranvwaye...</string>
+	<string name="title_upcoming_reminder_should_show">Montre yon notifikasyon rapèl anvan alam la sonnen...</string>
+	<string name="title_upcoming_reminder_time_to_show">Konbyen bonè anvan yo ta dwe montre notifikasyon an...</string>
 	<string name="title_gradually_increase_volume">Chwazi pou ogmante volim piti piti</string>
+	<string name="title_gradually_increase_volume_checkbox">Piti piti ogmante volim lè alam la aktif...</string>
+	<string name="title_gradually_increase_volume_picker">Tann tan ant chak ogmantasyon volim...</string>
 	<string name="title_restrict_volume">Chwazi limite volim</string>
+	<string name="title_restrict_volume_checkbox">Limite volim lè alam la aktif...</string>
 	<string name="title_tts">Chwazi opsyon tèks-a-lapawòl</string>
-	<string name="title_tts_what_to_say">Kisa pou di...</string>
+	<string name="title_tts_what_to_say">Kisa pou w di lè alam la aktif...</string>
 	<string name="title_tts_how_often_to_say">Konbyen fwa pou di li...</string>
 	<string name="title_next_alarm_format">Chwazi yon fòma</string>
 	<string name="title_speak_frequency">Chwazi frekans pale</string>
 	<string name="title_folder_selected">Ou chwazi yon katab</string>
 	<string name="title_active_alarm">Alam aktif</string>
 	<string name="title_missed_alarm">Rate alam yo</string>
-	<string name="title_upcoming_alarm">Alam kap vini yo</string>
+	<string name="title_upcoming_reminder">Rapèl kap vini yo</string>
 	<string name="title_dismissed_alarms">Alam ranvwaye</string>
 	<string name="title_missed_alarms">Rate alam yo</string>
 	<string name="title_snoozed_alarms">Alam snoozed</string>
@@ -160,7 +174,7 @@
 	<!-- Descriptions -->
 	<string name="description_alarm_activity">Eskane tag NFC pou ranvwaye alam la.</string>
 	<string name="description_no_notification">Pa montre notifikasyon.</string>
-	<string name="description_upcoming_alarm">Alam ki pwograme.</string>
+	<string name="description_upcoming_reminder">Rapèl pou alam k ap vini yo ki pral aktif.</string>
 	<string name="description_missed_alarm">Alam ki te ranvwaye otomatikman.</string>
 	<string name="description_active_alarm">Alam ki aktif kounye a.</string>
 	<string name="description_color">Hex koulè</string>
@@ -394,18 +408,23 @@
 
 
 	<!-- Dismiss early -->
-	<string name="dismiss_early_true">Alam ka ranvwaye anvan li aktif.</string>
-	<string name="dismiss_early_false">Ou p ap kapab anile yon alam anvan li aktif.</string>
+	<string name="dismiss_early_true">Wi, ka ranvwaye alam la byen bonè.</string>
+	<string name="dismiss_early_false">Non, alam la pa ka ranvwaye bonè.</string>
+
+
+	<!-- Upcoming reminder -->
+	<string name="upcoming_reminder_true">Wi, montre yon notifikasyon.</string>
+	<string name="upcoming_reminder_false">Non, pa montre anyen.</string>
 
 
 	<!-- Restrict volume -->
-	<string name="restrict_volume_true">Ou p ap kapab chanje volim lè alam la aktif.</string>
-	<string name="restrict_volume_false">Volim ka chanje lib lè alam la aktif.</string>
+	<string name="restrict_volume_true">Wi, volim ap gen restriksyon epi yo p ap ka chanje.</string>
+	<string name="restrict_volume_false">Non, volim ka chanje lib.</string>
 
 
 	<!-- Gradually increase volume -->
-	<string name="gradually_increase_volume_true">Volim ap ogmante piti piti jiskaske nivo volim alam la rive, lè alam la aktif.</string>
-	<string name="gradually_increase_volume_false">Volim yo pral mete nan nivo volim alam, lè alam la aktif.</string>
+	<string name="gradually_increase_volume_true">Wi, volim ap ogmante piti piti jiskaske volim alam la rive.</string>
+	<string name="gradually_increase_volume_false">Non, volim yo pral mete sou volim alam la.</string>
 
 
 
@@ -501,9 +520,9 @@
 		<item quantity="other">@string/title_missed_alarm</item>
 	</plurals>
 
-	<plurals name="upcoming_alarm">
+	<plurals name="upcoming_reminder">
 		<item quantity="one">Alam kap vini</item>
-		<item quantity="other">@string/title_upcoming_alarm</item>
+		<item quantity="other">@string/title_upcoming_reminder</item>
 	</plurals>
 
 	<plurals name="unit_day">

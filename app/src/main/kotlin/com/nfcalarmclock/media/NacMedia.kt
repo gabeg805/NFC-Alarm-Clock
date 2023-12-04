@@ -93,7 +93,9 @@ object NacMedia
 	): List<MediaItem>
 	{
 		// Get all the files in the directory
+		println("Build media item : $recursive")
 		val files = getFiles(context, path, recursive = recursive)
+		println("DONE")
 
 		// Build list of media items and return it
 		return buildMediaItemsFromFiles(context, files)
@@ -105,17 +107,10 @@ object NacMedia
 	 * @param  context  Application context.
 	 * @param  uris  List of files.
 	 */
-	fun buildMediaItemsFromFiles(context: Context, uris: List<Uri>?): List<MediaItem>
+	private fun buildMediaItemsFromFiles(context: Context, uris: List<Uri>): List<MediaItem>
 	{
 		// Create empty list of media items
 		val mediaItems: MutableList<MediaItem> = ArrayList()
-
-		// Check if the list of URIs is null
-		if (uris == null)
-		{
-			// Return empty list
-			return mediaItems
-		}
 
 		// Create a media item from each file
 		for (u in uris)

@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string-array name="audio_options">
-		<item>Audio source</item>
-		<item>Dismiss early</item>
-		<item>Gradually increase volume</item>
-		<item>Restrict volume</item>
-		<item>Text-to-speech</item>
-	</string-array>
-
 	<string-array name="audio_sources">
 		<item>Alarm</item>
 		<item>Call</item>
@@ -181,6 +173,75 @@
 		<item>120 minutes</item>
 	</string-array>
 
+	<string-array name="upcoming_reminder_times_to_show">
+		<item>1 minute</item>
+		<item>2 minutes</item>
+		<item>3 minutes</item>
+		<item>4 minutes</item>
+		<item>5 minutes</item>
+		<item>6 minutes</item>
+		<item>7 minutes</item>
+		<item>8 minutes</item>
+		<item>9 minutes</item>
+		<item>10 minutes</item>
+		<item>15 minutes</item>
+		<item>20 minutes</item>
+		<item>25 minutes</item>
+		<item>30 minutes</item>
+		<item>35 minutes</item>
+		<item>40 minutes</item>
+		<item>45 minutes</item>
+		<item>50 minutes</item>
+		<item>55 minutes</item>
+		<item>60 minutes</item>
+		<item>65 minutes</item>
+		<item>70 minutes</item>
+		<item>75 minutes</item>
+		<item>80 minutes</item>
+		<item>85 minutes</item>
+		<item>90 minutes</item>
+		<item>95 minutes</item>
+		<item>100 minutes</item>
+		<item>105 minutes</item>
+		<item>110 minutes</item>
+		<item>115 minutes</item>
+		<item>120 minutes</item>
+	</string-array>
+
+	<string-array name="upcoming_reminder_frequency">
+		<item>Once</item>
+		<item>Every 1 min</item>
+		<item>Every 2 min</item>
+		<item>Every 3 min</item>
+		<item>Every 4 min</item>
+		<item>Every 5 min</item>
+		<item>Every 6 min</item>
+		<item>Every 7 min</item>
+		<item>Every 8 min</item>
+		<item>Every 9 min</item>
+		<item>Every 10 min</item>
+		<item>Every 11 min</item>
+		<item>Every 12 min</item>
+		<item>Every 13 min</item>
+		<item>Every 14 min</item>
+		<item>Every 15 min</item>
+		<item>Every 16 min</item>
+		<item>Every 17 min</item>
+		<item>Every 18 min</item>
+		<item>Every 19 min</item>
+		<item>Every 20 min</item>
+		<item>Every 21 min</item>
+		<item>Every 22 min</item>
+		<item>Every 23 min</item>
+		<item>Every 24 min</item>
+		<item>Every 25 min</item>
+		<item>Every 26 min</item>
+		<item>Every 27 min</item>
+		<item>Every 28 min</item>
+		<item>Every 29 min</item>
+		<item>Every 30 min</item>
+	</string-array>
+
 	<string-array name="gradually_increase_volume_wait_times">
 		<item>1 second</item>
 		<item>2 seconds</item>
@@ -204,16 +265,18 @@
 		<item>60 seconds</item>
 	</string-array>
 
+<!--
+&lt;b>
+&lt;/b>
+-->
+
 	<string-array name="whats_new_items">
-		<item>Converted &lt;b\>all code&lt;\/b\> from Java to Kotlin.  This means that certain features of the app might not work as expected.  If this happens, send me an email or right a review and I will see it.</item>
-		<item>Reduced the size of the app by removing/trimming down unneeded code.</item>
-		<item>Fixed issue where the app was not stopping the alarm correctly.</item>
-		<item>Fixed issue where the app was asking you to review insanely quickly.  Every time the app gets focus, the counter increments.  Changed the counter threshold from 3 to 50.</item>
-		<item>Fixed issue with &lt;b>Restrict volume&lt;/b> where it was not properly restricting volume before.</item>
-		<item>Fixed issue when searching for music with the &lt;b>Browse&lt;/b> tab.  If there was a lot of music to search, it would cause an &lt;b>App Not Responding&lt;/b> (ANR) and crash.</item>
+		<item>Changed how the &lt;b>alarm options&lt;/b> dialog looks.</item>
+		<item>Added the &lt;b>Upcoming reminder&lt;/b> alarm option.</item>
+		<item>Added an &lt;b>Email statistics&lt;/b> to email statistics.</item>
+		<item>Added a &lt;b>Shuffle&lt;/b> and &lt;b>Include subfolders&lt;/b> option if a folder is selected when choosing music for an alarm.</item>
 		<item>Added an option to &lt;b>Text-to-speech&lt;/b>.  When an alarm goes off, the &lt;b>alarm name&lt;/b> can now be said, in addition to the &lt;b>current time&lt;/b>.</item>
-		<item>Added an &lt;i>Are you sure...&lt;/i> prompt when clicking to &lt;b>Reset statistics&lt;/b> before proceeding with the reset.</item>
-		<item>Updated the media player, &lt;b>Exoplayer&lt;/b>, that is used to play music/ringtones when an alarm goes off.</item>
+		<item>Fixed issue with &lt;b>Restrict volume&lt;/b> where it was not properly restricting volume before.</item>
 	</string-array>
 
 </resources>

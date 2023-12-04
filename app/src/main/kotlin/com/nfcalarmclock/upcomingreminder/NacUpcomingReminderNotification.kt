@@ -1,4 +1,4 @@
-package com.nfcalarmclock.activealarm
+package com.nfcalarmclock.upcomingreminder
 
 import android.annotation.TargetApi
 import android.app.NotificationChannel
@@ -12,47 +12,52 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.nfc.NacNfc
+import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.view.notification.NacNotification
 import java.util.Calendar
 import java.util.Locale
 
 /**
- * Notification to display for active alarms.
  */
-class NacActiveAlarmNotification(context: Context)
-	: NacNotification(context)
-{
+class NacUpcomingReminderNotification(
 
 	/**
-	 * The alarm to show the notification about.
+	 * Context.
 	 */
-	var alarm: NacAlarm? = null
+	context: Context,
+
+	/**
+	 * Alarm.
+	 */
+	private val alarm: NacAlarm?
+
+) : NacNotification(context)
+{
 
 	/**
 	 * @see NacNotification.id
 	 */
-	override val id: Int
-		get() = ID
+	public override val id: Int
+		get() = 111 + (alarm?.id?.toInt() ?: 0)
 
 	/**
 	 * @see NacNotification.channelId
 	 */
 	override val channelId: String
-		get() = "NacNotiChannelActiveAlarm"
+		get() = "NacNotiChannelUpcoming"
 
 	/**
 	 * @see NacNotification.channelName
 	 */
 	override val channelName: String
-		get() = context.getString(R.string.title_active_alarm)
+		get() = context.getString(R.string.title_upcoming_reminder)
 
 	/**
 	 * @see NacNotification.channelDescription
 	 */
 	override val channelDescription: String
-		get() = context.getString(R.string.description_active_alarm)
+		get() = context.getString(R.string.description_upcoming_reminder)
 
 	/**
 	 * @see NacNotification.title
@@ -81,7 +86,7 @@ class NacActiveAlarmNotification(context: Context)
 	 * @see NacNotification.group
 	 */
 	override val group: String
-		get() = "NacNotiGroupActiveAlarm"
+		get() = "NacNotiGroupUpcomingReminder"
 
 	/**
 	 * @see NacNotification.contentText
@@ -89,10 +94,19 @@ class NacActiveAlarmNotification(context: Context)
 	override val contentText: String
 		get()
 		{
-			// Get the full time
-			val now = Calendar.getInstance()
+			// Get the calendar of the alarm
+			val cal = if (alarm != null)
+			{
+				NacCalendar.getNextAlarmDay(alarm)
+			}
+			else
+			{
+				Calendar.getInstance()
+			}
+
+			// Get the full time from the calendar
 			val is24HourFormat = DateFormat.is24HourFormat(context)
-			val time = NacCalendar.getFullTime(now, is24HourFormat)
+			val time = NacCalendar.getFullTime(cal, is24HourFormat)
 
 			// Get the alarm name
 			val name = alarm?.name ?: ""
@@ -116,11 +130,10 @@ class NacActiveAlarmNotification(context: Context)
 	override val contentPendingIntent: PendingIntent
 		get()
 		{
-			val id = alarm?.id ?: 0
-			val intent = NacActiveAlarmActivity.getStartIntent(context, alarm)
+			val intent = NacMainActivity.getStartIntent(context)
 
 			// Determine the pending intent flags
-			var flags = PendingIntent.FLAG_UPDATE_CURRENT
+			var flags = 0
 
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 			{
@@ -128,27 +141,7 @@ class NacActiveAlarmNotification(context: Context)
 			}
 
 			// Return the pending intent for the activity
-			return PendingIntent.getActivity(context, id.toInt(), intent, flags)
-		}
-
-	/**
-	 * The pending intent to use when snoozing.
-	 */
-	private val snoozePendingIntent: PendingIntent
-		get()
-		{
-			val intent = NacActiveAlarmService.getSnoozeIntent(context, alarm)
-
-			// Determine the pending intent flags
-			var flags = PendingIntent.FLAG_CANCEL_CURRENT
-
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-			{
-				flags = flags or PendingIntent.FLAG_IMMUTABLE
-			}
-
-			// Create the pending intent
-			return PendingIntent.getService(context, 0, intent, flags)
+			return PendingIntent.getActivity(context, 0, intent, flags)
 		}
 
 	/**
@@ -215,24 +208,14 @@ class NacActiveAlarmNotification(context: Context)
 	 */
 	public override fun builder(): NotificationCompat.Builder
 	{
-		// Create the dismiss pending intent
-		val dismissPending = getDismissPendingIntent(contentPendingIntent)
-
-		// Notification actions
-		val dismiss = context.getString(R.string.action_alarm_dismiss)
-		val snooze = context.getString(R.string.action_alarm_snooze)
-
 		// Build the notification
 		return super.builder()
 			.setLargeIcon(largeIcon)
-			.setFullScreenIntent(contentPendingIntent, true)
 			.setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
-			.setAutoCancel(false)
-			.setOngoing(true)
+			.setAutoCancel(true)
+			.setOngoing(false)
 			.setShowWhen(true)
 			.setTicker(appName)
-			.addAction(R.mipmap.snooze, snooze, snoozePendingIntent)
-			.addAction(R.mipmap.dismiss, dismiss, dismissPending)
 	}
 
 	/**
@@ -253,51 +236,12 @@ class NacActiveAlarmNotification(context: Context)
 	}
 
 	/**
-	 * Get the pending intent to use when dismissing the alarm.
-	 *
-	 * @return The pending intent to use when dismissing the alarm.
-	 */
-	private fun getDismissPendingIntent(activityPendingIntent: PendingIntent)
-		: PendingIntent
-	{
-		// NFC should be used so show the active alarm activity pending intent
-		if (NacNfc.shouldUseNfc(context, alarm))
-		{
-			return activityPendingIntent
-		}
-
-		// Create an intent to dismiss the active alarm service
-		val intent = NacActiveAlarmService.getDismissIntent(context, alarm)
-
-		// Determine the pending intent flags
-		var flags = PendingIntent.FLAG_CANCEL_CURRENT
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-		{
-			flags = flags or PendingIntent.FLAG_IMMUTABLE
-		}
-
-		// Create the pending intent
-		return PendingIntent.getService(context, 0, intent, flags)
-	}
-
-	/**
 	 * @see NacNotification.show
 	 */
 	public override fun show()
 	{
 		// Super
 		super.show()
-	}
-
-	companion object
-	{
-
-		/**
-		 * Notification ID.
-		 */
-		const val ID = 79
-
 	}
 
 }

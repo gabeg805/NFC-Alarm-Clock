@@ -36,7 +36,7 @@
 	<queries>
 		<intent>
 			<action android:name="android.intent.action.SEND" />
-			<data android:scheme="mailto" />
+			<data android:mimeType="application/zip" />
 		</intent>
 	</queries>
 
@@ -166,6 +166,12 @@
 			android:exported="false">
 		</service>
 
+		<!-- Start an upcoming reminder -->
+		<service
+			android:name=".upcomingreminder.NacUpcomingReminderService"
+			android:exported="false">
+		</service>
+
 		<!-- Alarm manager broadcasts this so that alarms can be started.
 		     Start the foreground service. -->
 		<receiver
@@ -234,6 +240,20 @@
 				<action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
 			</intent-filter>
 		</receiver>
+
+		<!-- File provider to email statistics files -->
+		<provider
+			android:name="androidx.core.content.FileProvider"
+			android:authorities="com.nfcalarmclock.fileprovider"
+			android:grantUriPermissions="true"
+			android:exported="false">
+
+			<meta-data
+				android:name="android.support.FILE_PROVIDER_PATHS"
+				android:resource="@xml/provider_filepaths"
+				/>
+
+		</provider>
 
 	</application>
 </manifest>

@@ -32,15 +32,4 @@
 	<dimen name="radius_day_filled">16dp</dimen>
 	<dimen name="radius_day_outlined">16dp</dimen>
 
-	<!-- Fragment sound -->
-	<!--
-	<dimen name="tsz_spotify_titles">20sp</dimen>
-	<dimen name="pt_spotify_titles">10dp</dimen>
-	<dimen name="pb_spotify_titles">10dp</dimen>
-	<dimen name="ml_spotify_search">-14dp</dimen>
-	<dimen name="isz_frg_spotify_image">130dp</dimen>
-	<dimen name="sp_frg_spotify_cover_text">10dp</dimen>
-	<dimen name="p_frg_spotify_cover">20dp</dimen>
-	-->
-
 </resources>

@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string-array name="audio_options">
-		<item>Fuente de audio</item>
-		<item>Descartar temprano</item>
-		<item>Aumentar gradualmente el volumen</item>
-		<item>Restringe el volumen</item>
-		<item>Texto-a-voz</item>
-	</string-array>
-
 	<string-array name="audio_sources">
 		<item>Alarma</item>
 		<item>Llamda</item>
@@ -181,6 +173,75 @@
 		<item>120 minutos</item>
 	</string-array>
 
+	<string-array name="upcoming_reminder_times_to_show">
+		<item>1 minuto</item>
+		<item>2 minutos</item>
+		<item>3 minutos</item>
+		<item>4 minutos</item>
+		<item>5 minutos</item>
+		<item>6 minutos</item>
+		<item>7 minutos</item>
+		<item>8 minutos</item>
+		<item>9 minutos</item>
+		<item>10 minutos</item>
+		<item>15 minutos</item>
+		<item>20 minutos</item>
+		<item>25 minutos</item>
+		<item>30 minutos</item>
+		<item>35 minutos</item>
+		<item>40 minutos</item>
+		<item>45 minutos</item>
+		<item>50 minutos</item>
+		<item>55 minutos</item>
+		<item>60 minutos</item>
+		<item>65 minutos</item>
+		<item>70 minutos</item>
+		<item>75 minutos</item>
+		<item>80 minutos</item>
+		<item>85 minutos</item>
+		<item>90 minutos</item>
+		<item>95 minutos</item>
+		<item>100 minutos</item>
+		<item>105 minutos</item>
+		<item>110 minutos</item>
+		<item>115 minutos</item>
+		<item>120 minutos</item>
+	</string-array>
+
+	<string-array name="upcoming_reminder_frequency">
+		<item>Una vez</item>
+		<item>Cada 1 min</item>
+		<item>Cada 2 min</item>
+		<item>Cada 3 min</item>
+		<item>Cada 4 min</item>
+		<item>Cada 5 min</item>
+		<item>Cada 6 min</item>
+		<item>Cada 7 min</item>
+		<item>Cada 8 min</item>
+		<item>Cada 9 min</item>
+		<item>Cada 10 min</item>
+		<item>Cada 11 min</item>
+		<item>Cada 12 min</item>
+		<item>Cada 13 min</item>
+		<item>Cada 14 min</item>
+		<item>Cada 15 min</item>
+		<item>Cada 16 min</item>
+		<item>Cada 17 min</item>
+		<item>Cada 18 min</item>
+		<item>Cada 19 min</item>
+		<item>Cada 20 min</item>
+		<item>Cada 21 min</item>
+		<item>Cada 22 min</item>
+		<item>Cada 23 min</item>
+		<item>Cada 24 min</item>
+		<item>Cada 25 min</item>
+		<item>Cada 26 min</item>
+		<item>Cada 27 min</item>
+		<item>Cada 28 min</item>
+		<item>Cada 29 min</item>
+		<item>Cada 30 min</item>
+	</string-array>
+
 	<string-array name="gradually_increase_volume_wait_times">
 		<item>1 segundo</item>
 		<item>2 segundos</item>
@@ -205,15 +266,12 @@
 	</string-array>
 
 	<string-array name="whats_new_items">
-		<item>Convirtió &lt;b>todo el código&lt;/b> de Java a Kotlin.  Esto significa que es posible que determinadas funciones de la aplicación no funcionen como se esperaba.  Si esto sucede, envíame un correo electrónico o escribe una reseña y lo veré.</item>
-		<item>Se redujo el tamaño de la aplicación eliminando/recortando el código innecesario.</item>
-		<item>Se solucionó el problema por el cual la alarma no se detenía correctamente.</item>
-		<item>Se solucionó el problema por el cual la aplicación te pedía que revisaras increíblemente rápido.  Cada vez que la aplicación se enfoca, el contador aumenta.  Se cambió el umbral del contador de 3 a 50.</item>
-		<item>Se solucionó el problema con &lt;b>Restringir volumen&lt;/b> donde antes no restringía correctamente el volumen.</item>
-		<item>Se solucionó el problema al buscar música con la pestaña &lt;b>Examinar&lt;/b>.  Si hubiera mucha música para buscar, se produciría una &lt;b>La aplicación no responde&lt;/b> (ANR) y se bloquearía.</item>
+		<item>Se modificó la apariencia del cuadro de diálogo &lt;b>opciones de alarma&lt;/b>.</item>
+		<item>Se agregó la opción de alarma &lt;b>Próximo recordatorio&lt;/b>.</item>
+		<item>Se agregó un botón &lt;b>Estadísticas de correo electrónico&lt;/b> a las estadísticas de correo electrónico.</item>
+		<item>Se agregó la opción &lt;b>Aleatorio&lt;/b> e &lt;b>Incluir subcarpetas&lt;/b> si se selecciona una carpeta al elegir música para una alarma.</item>
 		<item>Se agregó una opción a &lt;b>Texto a voz&lt;/b> .  Cuando suena una alarma, ahora se puede decir el &lt;b>nombre de la alarma&lt;/b>, además de la &lt;b>hora actual&lt;/b>.</item>
-		<item>Se agregó un mensaje &lt;i>¿Está seguro...&lt;/i> al hacer clic en &lt;b>Restablecer estadísticas&lt;/b> antes de continuar con el reinicio?</item>
-		<item>Se actualizó el reproductor multimedia, &lt;b>Exoplayer&lt;/b>, que se utiliza para reproducir música/tonos de llamada cuando suena una alarma.</item>
+		<item>Se solucionó el problema con &lt;b>Restringir volumen&lt;/b> donde antes no restringía correctamente el volumen.</item>
 	</string-array>
 
 </resources>

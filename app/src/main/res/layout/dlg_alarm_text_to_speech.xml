@@ -5,8 +5,8 @@
 	android:layout_height="wrap_content"
 	android:paddingTop="@dimen/small"
 	android:paddingBottom="@dimen/small"
-	android:paddingStart="@dimen/small"
-	android:paddingEnd="@dimen/small"
+	android:paddingStart="@dimen/large"
+	android:paddingEnd="@dimen/large"
 	android:orientation="vertical">
 
 	<TextView
@@ -16,8 +16,6 @@
 		android:layout_height="wrap_content"
 		android:paddingTop="@dimen/normal"
 		android:paddingBottom="@dimen/normal"
-		android:paddingStart="@dimen/small"
-		android:paddingEnd="@dimen/small"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:text="@string/title_tts_what_to_say"
 		android:textSize="@dimen/tsz_normal"
@@ -54,8 +52,6 @@
 		android:layout_height="wrap_content"
 		android:paddingTop="@dimen/small"
 		android:paddingBottom="@dimen/small"
-		android:paddingStart="@dimen/small"
-		android:paddingEnd="@dimen/small"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:text="@string/title_tts_how_often_to_say"
 		android:textSize="@dimen/tsz_normal"
@@ -69,8 +65,6 @@
 		android:layout_gravity="center_horizontal"
 		android:layout_marginTop="@dimen/small"
 		android:layout_marginBottom="@dimen/small"
-		android:layout_marginStart="@dimen/large"
-		android:layout_marginEnd="@dimen/large"
 		/>
 
 </LinearLayout>

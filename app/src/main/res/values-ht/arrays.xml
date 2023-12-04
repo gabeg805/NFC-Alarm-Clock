@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string-array name="audio_options">
-		<item>Sous odyo</item>
-		<item>Ranvwaye bonè</item>
-		<item>Piti piti ogmante volim</item>
-		<item>Limite volim</item>
-		<item>Tèks-a-lapawòl</item>
-	</string-array>
-
 	<string-array name="audio_sources">
 		<item>Alam</item>
 		<item>Rele</item>
@@ -181,6 +173,75 @@
 		<item>120 minit</item>
 	</string-array>
 
+	<string-array name="upcoming_reminder_times_to_show">
+		<item>1 minit</item>
+		<item>2 minit</item>
+		<item>3 minit</item>
+		<item>4 minit</item>
+		<item>5 minit</item>
+		<item>6 minit</item>
+		<item>7 minit</item>
+		<item>8 minit</item>
+		<item>9 minit</item>
+		<item>10 minit</item>
+		<item>15 minit</item>
+		<item>20 minit</item>
+		<item>25 minit</item>
+		<item>30 minit</item>
+		<item>35 minit</item>
+		<item>40 minit</item>
+		<item>45 minit</item>
+		<item>50 minit</item>
+		<item>55 minit</item>
+		<item>60 minit</item>
+		<item>65 minit</item>
+		<item>70 minit</item>
+		<item>75 minit</item>
+		<item>80 minit</item>
+		<item>85 minit</item>
+		<item>90 minit</item>
+		<item>95 minit</item>
+		<item>100 minit</item>
+		<item>105 minit</item>
+		<item>110 minit</item>
+		<item>115 minit</item>
+		<item>120 minit</item>
+	</string-array>
+
+	<string-array name="upcoming_reminder_frequency">
+		<item>Yon fwa</item>
+		<item>Chak 1 min</item>
+		<item>Chak 2 min</item>
+		<item>Chak 3 min</item>
+		<item>Chak 4 min</item>
+		<item>Chak 5 min</item>
+		<item>Chak 6 min</item>
+		<item>Chak 7 min</item>
+		<item>Chak 8 min</item>
+		<item>Chak 9 min</item>
+		<item>Chak 10 min</item>
+		<item>Chak 11 min</item>
+		<item>Chak 12 min</item>
+		<item>Chak 13 min</item>
+		<item>Chak 14 min</item>
+		<item>Chak 15 min</item>
+		<item>Chak 16 min</item>
+		<item>Chak 17 min</item>
+		<item>Chak 18 min</item>
+		<item>Chak 19 min</item>
+		<item>Chak 20 min</item>
+		<item>Chak 21 min</item>
+		<item>Chak 22 min</item>
+		<item>Chak 23 min</item>
+		<item>Chak 24 min</item>
+		<item>Chak 25 min</item>
+		<item>Chak 26 min</item>
+		<item>Chak 27 min</item>
+		<item>Chak 28 min</item>
+		<item>Chak 29 min</item>
+		<item>Chak 30 min</item>
+	</string-array>
+
 	<string-array name="gradually_increase_volume_wait_times">
 		<item>1 segonn</item>
 		<item>2 segonn</item>
@@ -205,15 +266,12 @@
 	</string-array>
 
 	<string-array name="whats_new_items">
-		<item>Konvèti &lt;b>tout kòd&lt;/b> soti nan Java nan Kotlin. Sa vle di ke sèten karakteristik nan app a ta ka pa travay jan yo espere. Si sa rive, voye yon imèl pou mwen oswa dwa yon revizyon epi mwen pral wè li.</item>
-		<item>Diminye gwosè app a lè w retire/taye kòd ki pa nesesè.</item>
-		<item>Pwoblèm fiks kote aplikasyon an pa t sispann alam la kòrèkteman.</item>
-		<item>Fiks pwoblèm kote aplikasyon an te mande ou revize ensanèi rapid. Chak fwa aplikasyon an vin konsantre, kontwa an ogmante. Chanje papòt kontwa an soti nan 3 a 50.</item>
-		<item>Pwoblèm fiks ak &lt;b>Limiter volim&lt;/b> kote li pa t \'byen restriksyon anvan.Pwoblèm ranje ak &lt;b>Restriksyon volim&lt;/b> kote li pa t \'byen restriksyon volim anvan.</item>
-		<item>Pwoblèm ranje lè w ap chèche mizik ak onglet &lt;b>Browse&lt;/b>. Si te gen anpil mizik pou chèche, sa t ap lakòz yon &lt;b>Aplikasyon ki pa reponn&lt;/b> (ANR) ak aksidan.</item>
+		<item>Chanje fason dyalòg &lt;b>opsyon alam yo&lt;/b> sanble.</item>
+		<item>Te ajoute opsyon alam &lt;b>Rappel k ap vini an&lt;/b>.</item>
+		<item>Te ajoute yon bouton &lt;b>Imèl estatistik&lt;/b> pou imèl estatistik.</item>
+		<item>Te ajoute opsyon &lt;b>Shuffle&lt;/b> ak &lt;b>Enkli subfolders&lt;/b> si yo chwazi yon katab lè w ap chwazi mizik pou yon alam.</item>
 		<item>Te ajoute yon opsyon nan &lt;b>Tèks-a-lapawòl&lt;/b>. Lè yon alam sonnen, kounye a ka di &lt;b>non alam&lt;/b>, anplis de &lt;b>tan aktyèl&lt;/b>.</item>
-		<item>Te ajoute yon &lt;i>Èske w sèten...&lt;/i> lè w klike sou &lt;b>Reyajiste estatistik&lt;/b> anvan ou kontinye ak reset la.</item>
-		<item>Mete ajou jwè medya a, &lt;b>Exoplayer&lt;/b>, ki itilize pou jwe mizik/sonri lè yon alam sonnen.</item>
+		<item>Pwoblèm fiks ak &lt;b>Limiter volim&lt;/b> kote li pa t \'byen restriksyon anvan.Pwoblèm ranje ak &lt;b>Restriksyon volim&lt;/b> kote li pa t \'byen restriksyon volim anvan.</item>
 	</string-array>
 
 </resources>

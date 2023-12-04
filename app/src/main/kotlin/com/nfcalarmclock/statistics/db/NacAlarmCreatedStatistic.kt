@@ -13,6 +13,18 @@ import dagger.hilt.components.SingletonComponent
 	ignoredColumns = ["alarm_id", "hour", "minute", "name"])
 class NacAlarmCreatedStatistic
 	: NacAlarmStatistic()
+{
+
+	/**
+	 * Convert the data to a csv format so that it can be used to write to an
+	 * output file.
+	 */
+	override fun toCsvFormat(): String
+	{
+		return "$timestamp"
+	}
+
+}
 
 /**
  * Hilt module to provide an instance of a created statistic.

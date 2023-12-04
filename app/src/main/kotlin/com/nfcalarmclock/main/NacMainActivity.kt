@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.res.ColorStateList
 import android.graphics.drawable.InsetDrawable
-import android.net.Uri
 import android.os.Bundle
 import android.view.ContextMenu
 import android.view.ContextMenu.ContextMenuInfo
@@ -33,8 +32,8 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.audiooptions.NacAlarmAudioOptionsDialog
-import com.nfcalarmclock.audiooptions.NacAlarmAudioOptionsDialog.OnAudioOptionClickedListener
+import com.nfcalarmclock.alarmoptions.NacAlarmOptionsDialog
+import com.nfcalarmclock.alarmoptions.NacAlarmOptionsDialog.OnAlarmOptionClickedListener
 import com.nfcalarmclock.audiosource.NacAudioSourceDialog
 import com.nfcalarmclock.audiosource.NacAudioSourceDialog.OnAudioSourceSelectedListener
 import com.nfcalarmclock.card.NacCardAdapter
@@ -70,7 +69,7 @@ import com.nfcalarmclock.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.statistics.NacAlarmStatisticViewModel
 import com.nfcalarmclock.tts.NacTextToSpeechDialog
 import com.nfcalarmclock.tts.NacTextToSpeechDialog.OnTextToSpeechOptionsSelectedListener
-import com.nfcalarmclock.upcomingalarm.NacUpcomingAlarmNotification
+import com.nfcalarmclock.upcomingreminder.NacUpcomingReminderDialog
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacIntent
 import com.nfcalarmclock.util.NacUtility.quickToast
@@ -80,8 +79,6 @@ import com.nfcalarmclock.whatsnew.NacWhatsNewDialog.OnReadWhatsNewListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
-import java.security.Security
 import java.util.Locale
 
 /**
@@ -317,6 +314,9 @@ class NacMainActivity
 		statisticViewModel.insertCreated()
 	}
 
+	/**
+	 * Setup the app version if it is not already setup.
+	 */
 	/**
 	 * Add the first alarm, when the app is first run.
 	 */
@@ -1205,13 +1205,6 @@ class NacMainActivity
 				setupForAppFirstRun()
 			}
 
-			// Check if upcoming alarm notifications should be shown
-			if (sharedPreferences!!.upcomingAlarmNotification)
-			{
-				// Update the upcoming alarm notification
-				updateUpcomingNotification(alarms)
-			}
-
 			// Update the alarm adapter
 			alarmCardAdapter!!.storeIndicesOfExpandedCards(recyclerView!!)
 			alarmCardAdapter!!.submitList(alarms)
@@ -1302,11 +1295,11 @@ class NacMainActivity
 	private fun showAudioOptionsDialog(alarm: NacAlarm)
 	{
 		// Create the dialog
-		val dialog = NacAlarmAudioOptionsDialog()
+		val dialog = NacAlarmOptionsDialog()
 
 		// Setup the dialog
 		dialog.alarmId = alarm.id
-		dialog.onAudioOptionClickedListener = OnAudioOptionClickedListener { alarmId, which ->
+		dialog.onAlarmOptionClickedListener = OnAlarmOptionClickedListener { alarmId, id ->
 
 			lifecycleScope.launch {
 
@@ -1314,16 +1307,15 @@ class NacMainActivity
 				audioOptionsAlarm = alarmViewModel.findAlarm(alarmId)
 
 				// Determine which option to do
-				when (which)
+				when (id)
 				{
-					0 -> showAudioSourceDialog()
-					1 -> showDismissEarlyDialog()
-					2 -> showGraduallyIncreaseVolumeDialog()
-					3 -> showRestrictVolumeDialog()
-					4 -> showTextToSpeechDialog()
-					else ->
-					{
-					}
+					R.id.alarm_option_audio_source -> showAudioSourceDialog()
+					R.id.alarm_option_gradually_increase_volume -> showGraduallyIncreaseVolumeDialog()
+					R.id.alarm_option_restrict_volume -> showRestrictVolumeDialog()
+					R.id.alarm_option_text_to_speech -> showTextToSpeechDialog()
+					R.id.alarm_option_dismiss_early -> showDismissEarlyDialog()
+					R.id.alarm_option_upcoming_reminder -> showUpcomingReminderDialog()
+					else -> {}
 				}
 
 			}
@@ -1331,7 +1323,7 @@ class NacMainActivity
 		}
 
 		// Show the dialog
-		dialog.show(supportFragmentManager, NacAlarmAudioOptionsDialog.TAG)
+		dialog.show(supportFragmentManager, NacAlarmOptionsDialog.TAG)
 	}
 
 	/**
@@ -1373,7 +1365,7 @@ class NacMainActivity
 
 		// Set the default values
 		dialog.defaultShouldDismissEarly = audioOptionsAlarm!!.shouldUseDismissEarly
-		dialog.setDefaultDismissEarlyIndexFromTime(audioOptionsAlarm!!.dismissEarlyTime)
+		dialog.setDefaultIndexFromDismissEarlyTime(audioOptionsAlarm!!.dismissEarlyTime)
 
 		// Setup the listener
 		dialog.onDismissEarlyOptionSelectedListener = OnDismissEarlyOptionSelectedListener { useDismissEarly, _, time ->
@@ -1564,6 +1556,41 @@ class NacMainActivity
 	}
 
 	/**
+	 * Show the upcoming reminder dialog.
+	 */
+	private fun showUpcomingReminderDialog()
+	{
+		// Create the dialog
+		val dialog = NacUpcomingReminderDialog()
+
+		// Set the default values
+		dialog.defaultShouldShowReminder = audioOptionsAlarm!!.shouldShowReminder
+		dialog.setDefaultIndexFromTime(audioOptionsAlarm!!.timeToShowReminder)
+		dialog.defaultReminderFrequencyIndex = audioOptionsAlarm!!.reminderFrequency
+		dialog.defaultShouldUseTts = audioOptionsAlarm!!.shouldUseTtsForReminder
+
+		// Setup the listener
+		dialog.onUpcomingReminderOptionSelectedListener = NacUpcomingReminderDialog.OnUpcomingReminderOptionSelectedListener { shouldShowReminder, timeToShow, reminderFreq, shouldUseTts ->
+
+			// Set the upcoming reminder options
+			audioOptionsAlarm!!.showReminder = shouldShowReminder
+			audioOptionsAlarm!!.timeToShowReminder = timeToShow
+			audioOptionsAlarm!!.reminderFrequency = reminderFreq
+			audioOptionsAlarm!!.useTtsForReminder = shouldUseTts
+
+			// Update the alarm
+			alarmViewModel.update(audioOptionsAlarm!!)
+
+			// Reschedule the alarm
+			NacScheduler.update(this, audioOptionsAlarm!!)
+
+		}
+
+		// Show the dialog
+		dialog.show(supportFragmentManager, NacUpcomingReminderDialog.TAG)
+	}
+
+	/**
 	 * Show a nackbar for the updated alarm.
 	 *
 	 *
@@ -1603,21 +1630,6 @@ class NacMainActivity
 
 		// Show the dialog
 		dialog.show(supportFragmentManager, NacWhatsNewDialog.TAG)
-	}
-
-	/**
-	 * Update the notification.
-	 */
-	private fun updateUpcomingNotification(alarms: List<NacAlarm>)
-	{
-		// Create the notification
-		val notification = NacUpcomingAlarmNotification(this)
-
-		// Set the alarms
-		notification.alarmList = alarms
-
-		// Show the notification
-		notification.show()
 	}
 
 }

@@ -49,6 +49,12 @@
 	<string name="action_email">Email</string>
 	<string name="action_shuffle_music">Trộn nhạc</string>
 	<string name="action_recursively_play_media">Bao gồm các thư mục con</string>
+	<string name="action_alarm_option_audio_source">Nguồn âm thanh</string>
+	<string name="action_alarm_option_gradually_increase_volume">Tăng dần âm lượng</string>
+	<string name="action_alarm_option_restrict_volume">Hạn chế âm lượng</string>
+	<string name="action_alarm_option_text_to_speech">Chuyển văn bản thành giọng nói</string>
+	<string name="action_alarm_option_dismiss_early">Sa thải sớm</string>
+	<string name="action_alarm_option_upcoming_reminder">Lời nhắc sắp tới</string>
 
 
 
@@ -58,7 +64,7 @@
 	<string name="label_dismissed_statistic">bị sa thải</string>
 	<string name="label_missed_statistic">bỏ lỡ</string>
 	<string name="label_snoozed_statistic">đã tạm ẩn</string>
-	<string name="label_created_statistic_header">Thời gian được tạo,Tên,Tên cảnh báo</string>
+	<string name="label_created_statistic_header">Thời gian được tạo</string>
 	<string name="label_deleted_statistic_header">Đã xóa thời gian,Tên,Tên cảnh báo</string>
 	<string name="label_dismissed_statistic_header">Thời gian bị loại bỏ,Tên,Tên cảnh báo,NFC đã qua sử dụng</string>
 	<string name="label_missed_statistic_header">Thời gian bị bỏ lỡ,Tên,Tên cảnh báo</string>
@@ -114,6 +120,7 @@
 	<string name="error_message_play_file">Không thể phát tập tin đã chọn</string>
 	<string name="error_message_google_play_billing">Lỗi khi kết nối với Cửa hàng Google Play</string>
 	<string name="error_message_text_to_speech_audio_focus">Không thể sử dụng tính năng chuyển văn bản thành giọng nói</string>
+	<string name="error_message_unable_to_email_statistics">Không thể gửi số liệu thống kê qua email</string>
 
 
 
@@ -132,17 +139,24 @@
 	<string name="title_audio_option">Chọn một tùy chọn báo động</string>
 	<string name="title_audio_source">Chọn nguồn âm thanh</string>
 	<string name="title_dismiss_early">Chọn tùy chọn loại bỏ sớm</string>
+	<string name="title_dismiss_early_checkbox">Loại bỏ cảnh báo sớm trước khi nó hoạt động...</string>
+	<string name="title_dismiss_early_how_early">Báo động có thể được loại bỏ sớm bao lâu...</string>
+	<string name="title_upcoming_reminder_should_show">Hiển thị thông báo nhắc nhở trước khi báo thức kêu...</string>
+	<string name="title_upcoming_reminder_time_to_show">Thông báo sẽ được hiển thị sớm bao lâu...</string>
 	<string name="title_gradually_increase_volume">Chọn tăng dần âm lượng</string>
+	<string name="title_gradually_increase_volume_checkbox">Tăng dần âm lượng khi báo thức được kích hoạt...</string>
+	<string name="title_gradually_increase_volume_picker">Thời gian chờ giữa mỗi lần tăng âm lượng...</string>
 	<string name="title_restrict_volume">Chọn hạn chế âm lượng</string>
+	<string name="title_restrict_volume_checkbox">Hạn chế âm lượng khi báo thức đang hoạt động...</string>
 	<string name="title_tts">Chọn tùy chọn chuyển văn bản sang giọng nói</string>
-	<string name="title_tts_what_to_say">Phải nói gì...</string>
+	<string name="title_tts_what_to_say">Phải nói gì khi báo thức đang hoạt động...</string>
 	<string name="title_tts_how_often_to_say">Đã bao lần phải nói điều đó...</string>
 	<string name="title_next_alarm_format">Chọn một định dạng</string>
 	<string name="title_speak_frequency">Chọn tần số nói</string>
 	<string name="title_folder_selected">Bạn đã chọn một thư mục</string>
 	<string name="title_active_alarm">Báo động hoạt động</string>
 	<string name="title_missed_alarm">Báo thức bị bỏ lỡ</string>
-	<string name="title_upcoming_alarm">Báo thức sắp tới</string>
+	<string name="title_upcoming_reminder">Lời nhắc sắp tới</string>
 	<string name="title_dismissed_alarms">Đã loại bỏ cảnh báo</string>
 	<string name="title_missed_alarms">Báo thức bị bỏ lỡ</string>
 	<string name="title_snoozed_alarms">Báo thức được báo lại</string>
@@ -160,7 +174,7 @@
 	<!-- Descriptions -->
 	<string name="description_alarm_activity">Quét thẻ NFC để loại bỏ cảnh báo.</string>
 	<string name="description_no_notification">Không hiển thị thông báo.</string>
-	<string name="description_upcoming_alarm">Báo động được lên lịch.</string>
+	<string name="description_upcoming_reminder">Lời nhắc về các báo thức sắp hoạt động.</string>
 	<string name="description_missed_alarm">Các cảnh báo đã được tự động loại bỏ.</string>
 	<string name="description_active_alarm">Báo động hiện đang hoạt động.</string>
 	<string name="description_color">màu lục giác</string>
@@ -394,18 +408,23 @@
 
 
 	<!-- Dismiss early -->
-	<string name="dismiss_early_true">Báo động có thể được loại bỏ trước khi nó hoạt động.</string>
-	<string name="dismiss_early_false">Bạn sẽ không thể loại bỏ cảnh báo trước khi cảnh báo đó hoạt động.</string>
+	<string name="dismiss_early_true">Có, có thể tắt báo thức sớm.</string>
+	<string name="dismiss_early_false">Không, không thể loại bỏ báo thức sớm.</string>
+
+
+	<!-- Upcoming reminder -->
+	<string name="upcoming_reminder_true">Có, hiển thị thông báo.</string>
+	<string name="upcoming_reminder_false">Không, không thể hiện gì cả.</string>
 
 
 	<!-- Restrict volume -->
-	<string name="restrict_volume_true">Bạn sẽ không thể thay đổi âm lượng khi báo thức đang hoạt động.</string>
-	<string name="restrict_volume_false">Âm lượng có thể được thay đổi tự do khi báo thức được kích hoạt.</string>
+	<string name="restrict_volume_true">Có, âm lượng sẽ bị hạn chế và không thể thay đổi.</string>
+	<string name="restrict_volume_false">Không, âm lượng có thể được thay đổi tự do.</string>
 
 
 	<!-- Gradually increase volume -->
-	<string name="gradually_increase_volume_true">Âm lượng sẽ tăng dần cho đến khi đạt đến mức âm lượng báo thức, khi báo thức được kích hoạt.</string>
-	<string name="gradually_increase_volume_false">Âm lượng sẽ được đặt ở mức âm lượng báo thức khi báo thức được kích hoạt.</string>
+	<string name="gradually_increase_volume_true">Có, âm lượng sẽ tăng dần cho đến khi đạt đến mức âm lượng báo động.</string>
+	<string name="gradually_increase_volume_false">Không, âm lượng sẽ được đặt thành âm lượng báo thức.</string>
 
 
 
@@ -499,8 +518,8 @@
 		<item quantity="other">@string/title_missed_alarm</item>
 	</plurals>
 
-	<plurals name="upcoming_alarm">
-		<item quantity="other">@string/title_upcoming_alarm</item>
+	<plurals name="upcoming_reminder">
+		<item quantity="other">@string/title_upcoming_reminder</item>
 	</plurals>
 
 	<plurals name="unit_day">

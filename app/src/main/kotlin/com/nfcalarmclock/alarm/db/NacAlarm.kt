@@ -239,14 +239,20 @@ class NacAlarm()
 	/**
 	 * The time to start showing a reminder.
 	 */
-	@ColumnInfo(name = "time_to_show_reminder", defaultValue = "0")
-	var timeToShowReminder: Long = 0
+	@ColumnInfo(name = "time_to_show_reminder", defaultValue = "5")
+	var timeToShowReminder: Int = 5
 
 	/**
 	 * Frequency at which to show the reminder, in units of minutes.
 	 */
 	@ColumnInfo(name = "reminder_frequency", defaultValue = "0")
 	var reminderFrequency: Int = 0
+
+	/**
+	 * Whether to use text-to-speech for the reminder.
+	 */
+	@ColumnInfo(name = "should_use_tts_for_reminder", defaultValue = "0")
+	var useTtsForReminder: Boolean = false
 
 	/**
 	 * Check if any days are selected.
@@ -349,6 +355,12 @@ class NacAlarm()
 		get() = reminderFrequency * 60L * 1000L
 
 	/**
+	 * Check if should use text-to-speech for the reminder or not.
+	 */
+	val shouldUseTtsForReminder: Boolean
+		get() = useTtsForReminder
+
+	/**
 	 * Populate values with input parcel.
 	 */
 	private constructor(input: Parcel) : this()
@@ -400,8 +412,9 @@ class NacAlarm()
 
 		// Reminder
 		showReminder = input.readInt() != 0
-		timeToShowReminder = input.readLong()
+		timeToShowReminder = input.readInt()
 		reminderFrequency = input.readInt()
+		useTtsForReminder = input.readInt() != 0
 	}
 
 	/**
@@ -609,6 +622,7 @@ class NacAlarm()
 		alarm.showReminder = showReminder
 		alarm.timeToShowReminder = timeToShowReminder
 		alarm.reminderFrequency = reminderFrequency
+		alarm.useTtsForReminder = useTtsForReminder
 
 		return alarm
 	}
@@ -706,6 +720,7 @@ class NacAlarm()
 			&& (shouldShowReminder == alarm.shouldShowReminder)
 			&& (timeToShowReminder == alarm.timeToShowReminder)
 			&& (reminderFrequency == alarm.reminderFrequency)
+			&& (useTtsForReminder == alarm.useTtsForReminder)
 	}
 
 	/**
@@ -816,6 +831,7 @@ class NacAlarm()
 		println("Show Reminder       : $shouldShowReminder")
 		println("Time to show remind : $timeToShowReminder")
 		println("Reminder freq       : $reminderFrequency")
+		println("Use Tts 4 Reminder  : $useTtsForReminder")
 	}
 
 	/**
@@ -1025,8 +1041,9 @@ class NacAlarm()
 
 		// Reminder
 		output.writeInt(if (shouldShowReminder) 1 else 0)
-		output.writeLong(timeToShowReminder)
+		output.writeInt(timeToShowReminder)
 		output.writeInt(reminderFrequency)
+		output.writeInt(if (useTtsForReminder) 1 else 0)
 	}
 
 	companion object
@@ -1098,6 +1115,7 @@ class NacAlarm()
 			alarm.showReminder = shared?.shouldShowReminder ?: false
 			alarm.timeToShowReminder = shared?.timeToShowReminder ?: 0
 			alarm.reminderFrequency = shared?.reminderFrequency ?: 0
+			alarm.useTtsForReminder = shared?.shouldUseTtsForReminder ?: false
 
 			return alarm
 		}

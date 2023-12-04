@@ -5,6 +5,8 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.ViewGroup.LayoutParams
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -76,21 +78,44 @@ class NacWhatsNewDialog
 		val textView = dialog!!.findViewById<TextView>(R.id.whats_new_version)
 		val recyclerView = dialog!!.findViewById<RecyclerView>(R.id.whats_new_bullet_container)
 
-		// Setup the views
-		setupVersion(textView)
-		setupRecyclerView(recyclerView)
-	}
-
-	/**
-	 * Setup the recycler view.
-	 */
-	private fun setupRecyclerView(recyclerView: RecyclerView)
-	{
 		// Get all the whats new items
 		val allMessages = resources.getTextArray(R.array.whats_new_items)
 			.map { it.toString() }
 			.toList()
 
+		// Setup the views
+		setupVersion(textView)
+		setupRecyclerView(recyclerView, allMessages)
+		setupContainer(allMessages)
+	}
+
+	/**
+	 * Setup container.
+	 */
+	private fun setupContainer(allMessages: List<String>)
+	{
+		// Do nothing if there are not that many children
+		if (allMessages.size < 6)
+		{
+			return
+		}
+
+		// Get the container
+		val container = dialog!!.findViewById<LinearLayout>(R.id.whats_new_layout)
+
+		// Get the new height of the container
+		val height = resources.displayMetrics.heightPixels / 2
+		val layoutParams = FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, height)
+
+		// Set the height of the container
+		container.layoutParams = layoutParams
+	}
+
+	/**
+	 * Setup the recycler view.
+	 */
+	private fun setupRecyclerView(recyclerView: RecyclerView, allMessages: List<String>)
+	{
 		// Setup the list adapter
 		val listAdapter = NacWhatsNewListAdapter()
 
@@ -99,18 +124,6 @@ class NacWhatsNewDialog
 		// Setup the recycler view
 		recyclerView.adapter = listAdapter
 		recyclerView.layoutManager = LinearLayoutManager(context)
-
-		// Do nothing if there are not that many children
-		if (allMessages.size < 5)
-		{
-			return
-		}
-
-		// Set the height of the recycler view
-		val height = resources.displayMetrics.heightPixels / 2
-		val layoutParams = LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, height)
-
-		recyclerView.layoutParams = layoutParams
 	}
 
 	/**

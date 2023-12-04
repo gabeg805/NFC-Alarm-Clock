@@ -17,7 +17,7 @@ class NacDismissEarlyDialog
 {
 
 	/**
-	 * Listener for when an audio source is selected.
+	 * Listener for when a dismiss early option is selected.
 	 */
 	fun interface OnDismissEarlyOptionSelectedListener
 	{
@@ -35,25 +35,37 @@ class NacDismissEarlyDialog
 	var defaultShouldDismissEarlyIndex = 0
 
 	/**
-	 * Whether an alarm should be able to be dismissed early or not.
-	 */
-	private val shouldDismissEarly: Boolean
-		get() = checkBox!!.isChecked
-
-	/**
 	 * Check box to dismiss early or not.
 	 */
-	private var checkBox: MaterialCheckBox? = null
+	private lateinit var checkBox: MaterialCheckBox
+
+	/**
+	 * Title above the dismiss early time picker.
+	 */
+	private lateinit var pickerTitle: TextView
 
 	/**
 	 * Scrollable picker to choose the dismiss early time.
 	 */
-	private var timePicker: NumberPicker? = null
+	private lateinit var picker: NumberPicker
 
 	/**
 	 * Listener for when the dismiss early option is clicked.
 	 */
 	var onDismissEarlyOptionSelectedListener: OnDismissEarlyOptionSelectedListener? = null
+
+	/**
+	 * Whether an alarm should be able to be dismissed early or not.
+	 */
+	private val shouldDismissEarly: Boolean
+		get() = checkBox.isChecked
+
+	/**
+	 * The alpha that views should have based on the should use text-to-speech
+	 * flag.
+	 */
+	private val alpha: Float
+		get() = if (shouldDismissEarly) 1.0f else 0.25f
 
 	/**
 	 * Called when the dialog is created.
@@ -65,11 +77,10 @@ class NacDismissEarlyDialog
 
 		// Create the dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(R.string.title_dismiss_early)
 			.setPositiveButton(R.string.action_ok) { _, _ ->
 
 				// Get the index value
-				val index = timePicker!!.value
+				val index = picker.value
 
 				// Calculate the time based on the index
 				val time = if (index < 5)
@@ -101,14 +112,15 @@ class NacDismissEarlyDialog
 
 		// Get the container of the dialog and the text view
 		val container = dialog!!.findViewById<RelativeLayout>(R.id.should_use_dismiss_early)
-		val textView: TextView = dialog!!.findViewById(R.id.should_use_dismiss_early_summary)
+		val textView = dialog!!.findViewById<TextView>(R.id.should_use_dismiss_early_summary)
 
 		// Set the views
 		checkBox = dialog!!.findViewById(R.id.should_use_dismiss_early_checkbox)
-		timePicker = dialog!!.findViewById(R.id.dismiss_early_time_picker)
+		pickerTitle = dialog!!.findViewById(R.id.title_how_early_to_dismiss)
+		picker = dialog!!.findViewById(R.id.dismiss_early_time_picker)
 
 		// Set the status of the checkbox
-		checkBox!!.isChecked = defaultShouldDismissEarly
+		checkBox.isChecked = defaultShouldDismissEarly
 
 		// Setup the views
 		setupOnClickListener(container, textView)
@@ -121,7 +133,7 @@ class NacDismissEarlyDialog
 	/**
 	 * Set the default dismiss early index from a time.
 	 */
-	fun setDefaultDismissEarlyIndexFromTime(time: Int)
+	fun setDefaultIndexFromDismissEarlyTime(time: Int)
 	{
 		defaultShouldDismissEarlyIndex = if (time <= 5)
 		{
@@ -145,7 +157,7 @@ class NacDismissEarlyDialog
 		val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
 
 		// Set the state list of the checkbox
-		checkBox!!.buttonTintList = ColorStateList(states, colors)
+		checkBox.buttonTintList = ColorStateList(states, colors)
 	}
 
 	/**
@@ -157,7 +169,7 @@ class NacDismissEarlyDialog
 		container.setOnClickListener {
 
 			// Toggle the checkbox
-			checkBox!!.isChecked = !shouldDismissEarly
+			checkBox.isChecked = !shouldDismissEarly
 
 			// Setup the views
 			setupTextView(textView)
@@ -193,10 +205,11 @@ class NacDismissEarlyDialog
 	private fun setupTimePickerUsable()
 	{
 		// Set the alpha
-		timePicker!!.alpha = if (shouldDismissEarly) 1.0f else 0.25f
+		pickerTitle.alpha = alpha
+		picker.alpha = alpha
 
 		// Set whether it can be used or not
-		timePicker!!.isEnabled = shouldDismissEarly
+		picker.isEnabled = shouldDismissEarly
 	}
 
 	/**
@@ -208,10 +221,10 @@ class NacDismissEarlyDialog
 		val values = requireContext().resources.getStringArray(R.array.dismiss_early_times).toList()
 
 		// Setup the time picker
-		timePicker!!.minValue = 0
-		timePicker!!.maxValue = values.size - 1
-		timePicker!!.displayedValues = values.toTypedArray()
-		timePicker!!.value = defaultShouldDismissEarlyIndex
+		picker.minValue = 0
+		picker.maxValue = values.size - 1
+		picker.displayedValues = values.toTypedArray()
+		picker.value = defaultShouldDismissEarlyIndex
 	}
 
 	companion object

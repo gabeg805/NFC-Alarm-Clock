@@ -92,14 +92,6 @@ class NacFileTree(path: String)
 	}
 
 	/**
-	 * @see .scan
-	 */
-	fun scan(context: Context)
-	{
-		this.scan(context, false)
-	}
-
-	/**
 	 * Scan the media table for available media to play, filtering by the
 	 * current directory if specified, and create a file tree out of the
 	 * output.
@@ -109,7 +101,7 @@ class NacFileTree(path: String)
 	 * by comparing the media path with the current directory.
 	 */
 	@TargetApi(Build.VERSION_CODES.Q)
-	fun scan(context: Context, filter: Boolean)
+	fun scan(context: Context)
 	{
 		// Get the query cursor or return if unable to do so
 		val c = getQueryCursor(context, queryColumns) ?: return
@@ -135,12 +127,6 @@ class NacFileTree(path: String)
 			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
 			{
 				path = NacFile.toRelativeDirname(path)
-			}
-
-			// Filter out media that is not from the current path
-			if (filter && currentPath != path)
-			{
-				continue
 			}
 
 			// Split up the path by directory
@@ -179,12 +165,12 @@ class NacFileTree(path: String)
 			context: Context,
 			filePath: String?,
 			recursive: Boolean = false
-		): List<Uri>?
+		): List<Uri>
 		{
 			// File path is empty
 			if (filePath.isNullOrEmpty())
 			{
-				return null
+				return emptyList()
 			}
 
 			// Create a file tree from the path
@@ -192,7 +178,7 @@ class NacFileTree(path: String)
 			val mediaPaths: MutableList<Uri> = ArrayList()
 
 			// Scan the tree
-			tree.scan(context, true)
+			tree.scan(context)
 
 			// Get the files
 			val allFiles = if (recursive)
@@ -214,6 +200,7 @@ class NacFileTree(path: String)
 				}
 
 				// Get the URI of the item
+				println("Media : ${metadata.path}")
 				val uri = metadata.toExternalUri()
 
 				// Add the URI to the media path
