@@ -63,8 +63,7 @@ class NacNameDialog
 				onNameEnteredListener?.onNameEntered(name)
 
 			}
-			.setNegativeButton(R.string.action_cancel) { _, _ ->
-			}
+			.setNegativeButton(R.string.action_cancel, null)
 			.setView(R.layout.dlg_alarm_name)
 			.create()
 	}

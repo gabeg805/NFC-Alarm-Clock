@@ -5,39 +5,15 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import androidx.media3.common.util.UnstableApi
-import com.nfcalarmclock.activealarm.NacActiveAlarmNotification
-import com.nfcalarmclock.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.media.NacAudioAttributes
 import com.nfcalarmclock.tts.NacTextToSpeech
+import com.nfcalarmclock.tts.NacTranslate
 import com.nfcalarmclock.util.NacIntent
 
 class NacUpcomingReminderService
 	: Service()
 {
-
-	/**
-	 * The text-to-speech phrase to say.
-	 */
-	private fun getTtsPhrase(alarm: NacAlarm): String
-	{
-		// Initialize the phrase
-		var phrase = ""
-
-		// Check if should say the current time
-		if (alarm.shouldSayCurrentTime)
-		{
-			//phrase += sayCurrentTime
-		}
-
-		// Check if should say the alarm name
-		if (alarm.shouldSayAlarmName)
-		{
-			//phrase += sayAlarmName
-		}
-
-		return phrase
-	}
 
 	/**
 	 * Called when the service is bound.
@@ -63,11 +39,44 @@ class NacUpcomingReminderService
 		startForeground(notification.id,
 			notification.builder().build())
 
-		// Start the wakeup process
-		val textToSpeech = NacTextToSpeech(this, null)
+		// Check if alarm is not null and text-to-speech should be used
+		if (alarm?.shouldUseTtsForReminder == true)
+		{
+			// Setup text-to-speech
+			setupTextToSpeech(alarm)
+		}
 
+		return START_NOT_STICKY
+	}
+
+	/**
+	 * Setup the text-to-speech.
+	 */
+	private fun setupTextToSpeech(alarm: NacAlarm)
+	{
 		// Audio attributes
-		val audioAttributes = NacAudioAttributes(this, alarm!!)
+		val audioAttributes = NacAudioAttributes(this, alarm)
+
+		// Start the wakeup process
+		val textToSpeech = NacTextToSpeech(this, object: NacTextToSpeech.OnSpeakingListener {
+
+			/**
+			 * Called when done speaking.
+			 */
+			override fun onDoneSpeaking(tts: NacTextToSpeech)
+			{
+				// Revert the volume
+				audioAttributes.revertVolume()
+			}
+
+			/**
+			 * Called when the text-to-speech engine has started.
+			 */
+			override fun onStartSpeaking(tts: NacTextToSpeech)
+			{
+			}
+
+		})
 
 		// Save the current volume level so it can be reverted later
 		audioAttributes.saveCurrentVolume()
@@ -77,11 +86,11 @@ class NacUpcomingReminderService
 		// is complete
 		audioAttributes.setStreamVolume()
 
-		// Speak via TTS
-		// TODO: Revert volume after done speaking? Maybe do need a listener
-		textToSpeech.speak(getTtsPhrase(alarm), audioAttributes)
+		// Get the phrase that should be said for the reminder
+		val phrase = NacTranslate.getSayReminder(this, alarm.name, alarm.timeToShowReminder)
 
-		return START_NOT_STICKY
+		// Speak via TTS
+		textToSpeech.speak(phrase, audioAttributes)
 	}
 
 	companion object

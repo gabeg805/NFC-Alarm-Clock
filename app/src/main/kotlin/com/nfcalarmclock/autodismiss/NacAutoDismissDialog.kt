@@ -13,16 +13,6 @@ class NacAutoDismissDialog
 	: NacScrollablePickerDialogFragment()
 {
 
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacAutoDismissDialog"
-
-	}
-
 	/**
 	 * The list of values for the scrollable picker.
 	 */
@@ -54,6 +44,16 @@ class NacAutoDismissDialog
 			.setNegativeButton(R.string.action_cancel, null)
 			.setView(R.layout.dlg_scrollable_picker)
 			.create()
+	}
+
+	companion object
+	{
+
+		/**
+		 * Tag for the class.
+		 */
+		const val TAG = "NacAutoDismissDialog"
+
 	}
 
 }

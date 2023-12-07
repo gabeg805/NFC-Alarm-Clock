@@ -35,12 +35,6 @@ class NacRestrictVolumeDialog
 	var defaultShouldRestrictVolume = false
 
 	/**
-	 * Whether volume should be restricted or not.
-	 */
-	private val shouldRestrictVolume: Boolean
-		get() = checkBox.isChecked
-
-	/**
 	 * Check box to restrict/unrestrict the volume.
 	 */
 	private lateinit var checkBox: MaterialCheckBox
@@ -49,6 +43,12 @@ class NacRestrictVolumeDialog
 	 * Listener for when the volume is restricted/unrestricted.
 	 */
 	var onRestrictVolumeListener: OnRestrictVolumeListener? = null
+
+	/**
+	 * Whether volume should be restricted or not.
+	 */
+	private val shouldRestrictVolume: Boolean
+		get() = checkBox.isChecked
 
 	/**
 	 * Called when the dialog is created.

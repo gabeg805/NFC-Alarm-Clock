@@ -15,9 +15,8 @@ import com.nfcalarmclock.media.NacMedia
 import com.nfcalarmclock.mediaplayer.NacMediaPlayer
 import com.nfcalarmclock.tts.NacTextToSpeech
 import com.nfcalarmclock.tts.NacTextToSpeech.OnSpeakingListener
-import com.nfcalarmclock.util.NacCalendar
+import com.nfcalarmclock.tts.NacTranslate
 import java.util.Calendar
-import java.util.Locale
 
 /**
  * Actions to take upon waking up, such as enabling NFC, playing music, etc.
@@ -196,7 +195,7 @@ class NacWakeupProcess(
 	private val sayAlarmName: String
 		get()
 		{
-			return alarm.name
+			return NacTranslate.getSayAlarmName(context.resources, alarm.name)
 		}
 
 	/**
@@ -206,27 +205,13 @@ class NacWakeupProcess(
 	private val sayCurrentTime: String
 		get()
 		{
-			// Get the default locale
-			val locale = Locale.getDefault()
-
 			// Get the current hour and minute
 			val calendar = Calendar.getInstance()
 			val hour = calendar[Calendar.HOUR_OF_DAY]
 			val minute = calendar[Calendar.MINUTE]
 
-			// Get the meridian (if it should be used based on the user's preferences
-			val meridian = NacCalendar.getMeridian(context, hour)
-
-			// Check if the language is Spanish
-			// TODO: Do something for other languages
-			return if (locale.language == "es")
-			{
-				getSayCurrentTimeEs(hour, minute, meridian)
-			}
-			else
-			{
-				getSayCurrentTimeEn(hour, minute, meridian)
-			}
+			// Get how to say the current time
+			return NacTranslate.getSayCurrentTime(context, hour, minute)
 		}
 
 	/**
@@ -267,68 +252,6 @@ class NacWakeupProcess(
 
 		// Stop any future vibrations from occuring
 		vibrateHandler.removeCallbacksAndMessages(null)
-	}
-
-	/**
-	 * Get how to say the current time in English.
-	 */
-	private fun getSayCurrentTimeEn(hour: Int, minute: Int, meridian: String?): String
-	{
-		val locale = Locale.getDefault()
-
-		// Check if the minute should be said as "oh" e.g. 8:05 would be eight oh five
-		val oh = if (minute in 1..9) "O" else ""
-		var showHour = hour
-		val showMinute = if (minute == 0) "" else minute.toString()
-
-		// Check if the meridian is set. This means the time is in 12 hour format
-		if (!meridian.isNullOrEmpty())
-		{
-			// Convert the hour to 12 hour format
-			showHour = NacCalendar.to12HourFormat(showHour)
-		}
-
-		// Return the statement that should be said
-		return String.format(locale,
-			"The time, is, $showHour, $oh, $showMinute, $meridian. ")
-	}
-
-	/**
-	 * Get how to say the current time in Spanish.
-	 */
-	private fun getSayCurrentTimeEs(
-		hour: Int,
-		minute: Int,
-		meridian: String?
-	): String
-	{
-		val locale = Locale.getDefault()
-		var showHour = hour
-
-		// Check if the meridian is null or empty. This means the time is in
-		// 24 hour format
-		return if (meridian.isNullOrEmpty())
-		{
-			// Pluralize the minutes if not equal to 1
-			val plural = if (minute != 1) "s" else ""
-
-			// Return the statement that should be said
-			String.format(locale,
-				"Es, la hora, $showHour, con, $minute, minuto$plural. ")
-		}
-		else
-		{
-			// Convert the hour to 12 hour format
-			showHour = NacCalendar.to12HourFormat(showHour)
-
-			// Get how the time should be said based on the hour and minute
-			val theTimeIs = if (showHour == 1) "Es, la," else "Son, las,"
-			val showMinute = if (minute == 0) "" else minute.toString()
-
-			// Return the statement that should be said
-			String.format(locale,
-				"$theTimeIs $showHour, $showMinute, $meridian. ")
-		}
 	}
 
 	/**

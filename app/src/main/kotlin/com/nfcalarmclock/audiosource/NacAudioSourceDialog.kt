@@ -19,16 +19,6 @@ class NacAudioSourceDialog
 	: NacDialogFragment()
 {
 
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacAudioSourceDialog"
-
-	}
-
 	/**
 	 * Listener for when an audio source is selected.
 	 */
@@ -43,30 +33,30 @@ class NacAudioSourceDialog
 	var defaultAudioSource: String = ""
 
 	/**
+	 * Radio button group for each alarm source.
+	 */
+	private lateinit var radioGroup: RadioGroup
+
+	/**
+	 * Listener for when an audio source is selected.
+	 */
+	var onAudioSourceSelectedListener: OnAudioSourceSelectedListener? = null
+
+	/**
 	 * The currently selected audio source.
 	 */
 	private val audioSource: String
 		get()
 		{
 			// Get the view ID of the currently selected radio button
-			val viewId = radioGroup!!.checkedRadioButtonId
+			val viewId = radioGroup.checkedRadioButtonId
 
 			// Get the radio button
-			val radioButton = radioGroup!!.findViewById<RadioButton>(viewId)
+			val radioButton = radioGroup.findViewById<RadioButton>(viewId)
 
 			// Get the text of the radio button
 			return radioButton.text.toString()
 		}
-
-	/**
-	 * Radio button group for each alarm source.
-	 */
-	private var radioGroup: RadioGroup? = null
-
-	/**
-	 * Listener for when an audio source is selected.
-	 */
-	var onAudioSourceSelectedListener: OnAudioSourceSelectedListener? = null
 
 	/**
 	 * Called when the dialog is created.
@@ -112,7 +102,7 @@ class NacAudioSourceDialog
 	private fun setupAudioSources()
 	{
 		// No audio sources to setup
-		if (radioGroup!!.childCount > 0)
+		if (radioGroup.childCount > 0)
 		{
 			return
 		}
@@ -159,14 +149,24 @@ class NacAudioSourceDialog
 		val colorStateList = ColorStateList(states, colors)
 
 		// Iterate over each radio button
-		for (i in 0 until radioGroup!!.childCount)
+		for (i in 0 until radioGroup.childCount)
 		{
 			// Get the button
-			val button = radioGroup!!.getChildAt(i) as RadioButton
+			val button = radioGroup.getChildAt(i) as RadioButton
 
 			// Set the color state list
 			button.buttonTintList = colorStateList
 		}
+	}
+
+	companion object
+	{
+
+		/**
+		 * Tag for the class.
+		 */
+		const val TAG = "NacAudioSourceDialog"
+
 	}
 
 }

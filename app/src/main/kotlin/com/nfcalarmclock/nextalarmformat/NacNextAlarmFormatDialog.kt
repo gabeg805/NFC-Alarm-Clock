@@ -10,16 +10,6 @@ class NacNextAlarmFormatDialog
 	: NacDialogFragment()
 {
 
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacNextAlarmFormatDialog"
-
-	}
-
 	/**
 	 * Listener for when a next alarm format is selected.
 	 */
@@ -82,6 +72,16 @@ class NacNextAlarmFormatDialog
 
 			}
 			.create()
+	}
+
+	companion object
+	{
+
+		/**
+		 * Tag for the class.
+		 */
+		const val TAG = "NacNextAlarmFormatDialog"
+
 	}
 
 }

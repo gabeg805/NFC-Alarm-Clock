@@ -511,6 +511,15 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Whether to use text-to-speech or not.
+	 */
+	val shouldUseTts: Boolean
+		get()
+		{
+			return shouldSayCurrentTime || shouldSayAlarmName
+		}
+
+	/**
 	 * Whether to use text-to-speech for the reminder or not.
 	 */
 	val shouldUseTtsForReminder: Boolean

@@ -2,11 +2,9 @@
 TODO
 ----
 
-* Think about how should use TTS for reminder should work
+* Figure out why I use home in NacFile
 
 * Figure out how to work any recurring upcoming reminder notifications
-
-* Organize each Dialog
 
 * Reorganize some of the packages like media. See if I can make a media player package?
 

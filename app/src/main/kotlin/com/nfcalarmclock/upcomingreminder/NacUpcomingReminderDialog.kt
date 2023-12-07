@@ -53,6 +53,11 @@ class NacUpcomingReminderDialog
 	var defaultShouldUseTts = false
 
 	/**
+	 * Whether text-to-speech should be shown or not.
+	 */
+	var canShowTts = false
+
+	/**
 	 * Check box to show the reminder or not.
 	 */
 	private lateinit var showReminderCheckBox: MaterialCheckBox
@@ -406,7 +411,7 @@ class NacUpcomingReminderDialog
 		useTtsCheckBox.isEnabled = shouldShowReminder
 
 		// Set the visibility of the whole use text-to-speech section
-		val visibility = if (defaultShouldUseTts) View.VISIBLE else View.GONE
+		val visibility = if (canShowTts) View.VISIBLE else View.GONE
 
 		useTtsTitle.visibility = visibility
 		container.visibility = visibility

@@ -16,6 +16,7 @@
 	<string name="none">Okenn</string>
 	<string name="settings">Anviwònman</string>
 	<string name="show_next_alarm">Montre pwochen alam</string>
+	<string name="word_alarm">Alam</string>
 
 
 
@@ -543,6 +544,21 @@
 	<plurals name="unit_second">
 		<item quantity="one">dezyèm</item>
 		<item quantity="other">segonn</item>
+	</plurals>
+
+	<plurals name="tts_say_time_12h">
+		<item quantity="one">Lè a se, %1$d, %4$s, %2$s, %3$s.</item>
+		<item quantity="other">Lè a se, %1$d, %4$s, %2$s, %3$s.</item>
+	</plurals>
+
+	<plurals name="tts_say_time_24h">
+		<item quantity="one">Lè a se, %1$d, %3$s, %2$s.</item>
+		<item quantity="other">Lè a se, %1$d, %3$s, %2$s.</item>
+	</plurals>
+
+	<plurals name="tts_say_reminder">
+		<item quantity="one">Rapèl. %1$s, pral kouri nan, %2$d, minit.</item>
+		<item quantity="other">Rapèl. %1$s, pral kouri nan, %2$d, minit.</item>
 	</plurals>
 
 </resources>

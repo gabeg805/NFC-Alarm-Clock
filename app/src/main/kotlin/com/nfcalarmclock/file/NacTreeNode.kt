@@ -3,22 +3,22 @@ package com.nfcalarmclock.file
 /**
  * Node in a tree.
  */
-open class NacTreeNode<T> @JvmOverloads constructor(
-
-	/**
-	 * Root node of this node.
-	 */
-	val root: NacTreeNode<T>? = null,
+open class NacTreeNode<T>(
 
 	/**
 	 * Key.
 	 */
-	val key: T,
+	var key: T,
 
 	/**
 	 * Value.
 	 */
-	value: Any? = null
+	var value: Any? = null,
+
+	/**
+	 * Root node of this node.
+	 */
+	var root: NacTreeNode<T>? = null
 
 )
 {
@@ -27,19 +27,6 @@ open class NacTreeNode<T> @JvmOverloads constructor(
 	 * Children of this node.
 	 */
 	val children: MutableList<NacTreeNode<T>> = ArrayList()
-
-	/**
-	 * Value.
-	 */
-	val value: Any?
-
-	/**
-	 * Constructor.
-	 */
-	init
-	{
-		this.value = value
-	}
 
 	/**
 	 * Add a child.
@@ -62,7 +49,7 @@ open class NacTreeNode<T> @JvmOverloads constructor(
 	fun addChild(key: T, value: Any?)
 	{
 		// Create child
-		val child = NacTreeNode(this, key, value)
+		val child = NacTreeNode(key, value, this)
 
 		// Add child
 		this.addChild(child)

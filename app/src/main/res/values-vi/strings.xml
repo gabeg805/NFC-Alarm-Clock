@@ -16,6 +16,7 @@
 	<string name="none">Không có</string>
 	<string name="settings">Cài đặt</string>
 	<string name="show_next_alarm">Hiển thị báo thức tiếp theo</string>
+	<string name="word_alarm">Báo thức</string>
 
 
 
@@ -536,6 +537,18 @@
 
 	<plurals name="unit_second">
 		<item quantity="other">giây</item>
+	</plurals>
+
+	<plurals name="tts_say_time_12h">
+		<item quantity="other">Bây giờ là, %1$d, %2$s, %3$s.</item>
+	</plurals>
+
+	<plurals name="tts_say_time_24h">
+		<item quantity="other">Bây giờ là, %1$d, %2$s.</item>
+	</plurals>
+
+	<plurals name="tts_say_reminder">
+		<item quantity="other">Lời nhắc nhở. %1$s, sẽ chạy sau, %2$d, phút.</item>
 	</plurals>
 
 </resources>

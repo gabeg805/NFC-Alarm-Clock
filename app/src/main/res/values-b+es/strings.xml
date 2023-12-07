@@ -16,6 +16,7 @@
 	<string name="none">Ninguno</string>
 	<string name="settings">Configuración</string>
 	<string name="show_next_alarm">Muestra próxima alarma</string>
+	<string name="word_alarm">La alarma</string>
 
 
 
@@ -550,6 +551,24 @@
 		<item quantity="one">segundo</item>
 		<item quantity="many">segundos</item>
 		<item quantity="other">segundos</item>
+	</plurals>
+
+	<plurals name="tts_say_time_12h">
+		<item quantity="one">Es, la, %1$d, %2$s, %3$s.</item>
+		<item quantity="many">Son, las, %1$d, %2$s, %3$s.</item>
+		<item quantity="other">Son, las, %1$d, %2$s, %3$s.</item>
+	</plurals>
+
+	<plurals name="tts_say_time_24h">
+		<item quantity="one">Es, la hora, %1$d, con, %2$d, minuto.</item>
+		<item quantity="many">Es, la hora, %1$d, con, %2$d, minutos.</item>
+		<item quantity="other">Es, la hora, %1$d, con, %2$d, minutos.</item>
+	</plurals>
+
+	<plurals name="tts_say_reminder">
+		<item quantity="one">Recordatorio. %1$s, sonará en, %2$d, minuto.</item>
+		<item quantity="many">Recordatorio. %1$s, sonará en, %2$d, minutos.</item>
+		<item quantity="other">Recordatorio. %1$s, sonará en, %2$d, minutos.</item>
 	</plurals>
 
 </resources>

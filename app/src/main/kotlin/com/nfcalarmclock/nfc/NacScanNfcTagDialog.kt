@@ -28,16 +28,6 @@ class NacScanNfcTagDialog
 	NfcAdapter.ReaderCallback
 {
 
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacScanNfcTagDialog"
-
-	}
-
 	/**
 	 * Listener for using any NFC tag.
 	 */
@@ -156,6 +146,16 @@ class NacScanNfcTagDialog
 
 		// Dismiss the dialog
 		dismiss()
+	}
+
+	companion object
+	{
+
+		/**
+		 * Tag for the class.
+		 */
+		const val TAG = "NacScanNfcTagDialog"
+
 	}
 
 }

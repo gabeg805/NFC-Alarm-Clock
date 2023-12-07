@@ -1568,6 +1568,7 @@ class NacMainActivity
 		dialog.setDefaultIndexFromTime(audioOptionsAlarm!!.timeToShowReminder)
 		dialog.defaultReminderFrequencyIndex = audioOptionsAlarm!!.reminderFrequency
 		dialog.defaultShouldUseTts = audioOptionsAlarm!!.shouldUseTtsForReminder
+		dialog.canShowTts = audioOptionsAlarm!!.shouldUseTts
 
 		// Setup the listener
 		dialog.onUpcomingReminderOptionSelectedListener = NacUpcomingReminderDialog.OnUpcomingReminderOptionSelectedListener { shouldShowReminder, timeToShow, reminderFreq, shouldUseTts ->

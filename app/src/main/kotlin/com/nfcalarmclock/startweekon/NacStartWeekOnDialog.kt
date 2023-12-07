@@ -13,16 +13,6 @@ class NacStartWeekOnDialog
 	: NacDialogFragment()
 {
 
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacStartWeekOnDialog"
-
-	}
-
 	/**
 	 * Listener for when a start week is selected.
 	 */
@@ -73,6 +63,16 @@ class NacStartWeekOnDialog
 
 			}
 			.create()
+	}
+
+	companion object
+	{
+
+		/**
+		 * Tag for the class.
+		 */
+		const val TAG = "NacStartWeekOnDialog"
+
 	}
 
 }

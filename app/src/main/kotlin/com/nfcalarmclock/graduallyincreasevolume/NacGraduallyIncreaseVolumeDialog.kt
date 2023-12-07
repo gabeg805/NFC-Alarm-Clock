@@ -41,12 +41,6 @@ class NacGraduallyIncreaseVolumeDialog
 	var defaultShouldGraduallyIncreaseVolumeIndex = 0
 
 	/**
-	 * Whether volume should be gradually increased or not.
-	 */
-	private val shouldGraduallyIncreaseVolume: Boolean
-		get() = checkBox.isChecked
-
-	/**
 	 * Check box for whether the volume should be gradually increased or not.
 	 */
 	private lateinit var checkBox: MaterialCheckBox
@@ -65,6 +59,12 @@ class NacGraduallyIncreaseVolumeDialog
 	 * Listener for when the volume is gradually increased or not.
 	 */
 	var onGraduallyIncreaseVolumeListener: OnGraduallyIncreaseVolumeListener? = null
+
+	/**
+	 * Whether volume should be gradually increased or not.
+	 */
+	private val shouldGraduallyIncreaseVolume: Boolean
+		get() = checkBox.isChecked
 
 	/**
 	 * The alpha that views should have based on the should use text-to-speech

@@ -77,6 +77,16 @@ object NacFile
 	}
 
 	/**
+	 * Split the path by the forward slash, "/", character.
+	 */
+	fun splitPath(path: String): Array<String>
+	{
+		return path.split("/".toRegex())
+			.dropLastWhile { it.isEmpty() }
+			.toTypedArray()
+	}
+
+	/**
 	 * Strip away any trailing '/' characters.
 	 */
 	fun strip(path: String): String
@@ -279,7 +289,7 @@ object NacFile
 	 * Organize files in a tree structure.
 	 */
 	open class Tree(path: String)
-		: NacTreeNode<String>(null, path, null)
+		: NacTreeNode<String>(path)
 	{
 
 		/**
@@ -299,8 +309,23 @@ object NacFile
 		/**
 		 * The home directory.
 		 */
-		private val home: String
+		protected val home: String
 			get() = key
+
+		init
+		{
+			// Clear the key
+			key = ""
+
+			// Iterate over each directory in the path
+			for (d in splitPath(path))
+			{
+				// Add the directory and then change directory to it so that
+				// each directory goes one level deeper
+				add(d)
+				cd(d)
+			}
+		}
 
 		/**
 		 * Add a file/folder to the given directory in the NacTree structure.
@@ -409,7 +434,7 @@ object NacFile
 				{
 					// Build the path out of the key and path. Traversing up so
 					// the name goes before the path
-					path = String.format(locale, "%1\$s/%2\$s", ref.key, path)
+					path = String.format(locale, "${ref.key}/${path}")
 				}
 
 				// Go up to the parent directory
@@ -656,7 +681,7 @@ object NacFile
 		 *
 		 * TODO: This method seems like I'm already doing it somewhere else
 		 */
-		private fun stripHome(path: String): String
+		protected fun stripHome(path: String): String
 		{
 			val reducedPath = path.replace(home, "")
 			var strippedPath = strip(reducedPath)

@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import com.nfcalarmclock.file.NacFile.splitPath
 
 /**
  * File tree of all media on the device.
@@ -38,6 +39,26 @@ class NacFileTree(path: String)
 			// Return the columns
 			return arrayOf(idColumn, pathColumn, nameColumn)
 		}
+
+	/**
+	 * Get the proper directory of the media item.
+	 */
+	private fun getMediaDirectory(rawDirectory: String): String
+	{
+		// Strip out an extra slash at the end if it is there
+		val directory = NacFile.strip(rawDirectory)
+
+		// Remove main /storage... or /sdcard parts of the directory
+		return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+		{
+			NacFile.toRelativeDirname(directory)
+		}
+		// No need to remove that stuff from the directory
+		else
+		{
+			directory
+		}
+	}
 
 	/**
 	 * Get the cursor that will be returned by the query.
@@ -96,56 +117,60 @@ class NacFileTree(path: String)
 	 * current directory if specified, and create a file tree out of the
 	 * output.
 	 *
-	 * @param  context  The application context.
-	 * @param  filter   Whether the media files that are found should be filtered
-	 * by comparing the media path with the current directory.
+	 * @param context The application context.
 	 */
 	@TargetApi(Build.VERSION_CODES.Q)
 	fun scan(context: Context)
 	{
 		// Get the query cursor or return if unable to do so
 		val c = getQueryCursor(context, queryColumns) ?: return
-
-		// TODO: Shouldn't this be a NacFile object?
-		val currentDir = this.directory
-		val currentPath = NacFile.toRelativePath(this.directoryPath)
+		val origDirectory = directory
+		val origPath = NacFile.toRelativePath(directoryPath)
 
 		// Get the column indices
 		val idIndex = c.getColumnIndex(queryColumns[0])
 		val pathIndex = c.getColumnIndex(queryColumns[1])
 		val nameIndex = c.getColumnIndex(queryColumns[2])
 
+		// Change directory to top most root directory
+		cd(this)
+
 		// Iterate over each scanned media file
 		while (c.moveToNext())
 		{
 			// Get the values of each columns
-			val id = c.getLong(idIndex)
-			var path = NacFile.strip(c.getString(pathIndex))
-			val name = c.getString(nameIndex)
+			val mediaId = c.getLong(idIndex)
+			val mediaDirectory = getMediaDirectory(c.getString(pathIndex))
+			val mediaName = c.getString(nameIndex)
 
-			// Get the directory name from the path?
-			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+			// Check if the directory of the current media item matches the
+			// original path. The media item directory will also count as
+			// starting with the original path if it is empty
+			if (!mediaDirectory.startsWith(origPath))
 			{
-				path = NacFile.toRelativeDirname(path)
+				// Skip this item because the paths do not match
+				continue
 			}
 
-			// Split up the path by directory
-			val splitPath = path.replace(currentPath, "")
-				.split("/".toRegex())
-				.dropLastWhile { it.isEmpty() }
-				.toTypedArray()
-
-			// Iterate over each directory and add it to the file tree
-			for (dir in splitPath)
+			// Iterate over each directory in the path
+			for (d in splitPath(mediaDirectory))
 			{
-				this.add(dir)
-				this.cd(dir)
+				// Add the directory, and then change directory to the
+				// newly added directory, so that we are now one level
+				// deeper
+				add(d)
+				cd(d)
 			}
 
-			// Add the current name and change to the current directory
-			this.add(name, id)
-			this.cd(currentDir)
+			// Add the media name and ID to the current directory
+			add(mediaName, mediaId)
+
+			// Change directory to the top most root directory
+			cd(this)
 		}
+
+		// Change directory back to the original directory
+		cd(origDirectory)
 
 		// Close the cursor
 		c.close()
@@ -175,7 +200,6 @@ class NacFileTree(path: String)
 
 			// Create a file tree from the path
 			val tree = NacFileTree(filePath)
-			val mediaPaths: MutableList<Uri> = ArrayList()
 
 			// Scan the tree
 			tree.scan(context)
@@ -190,25 +214,11 @@ class NacFileTree(path: String)
 				tree.lsSort()
 			}
 
-			// Iterate over each item found
-			for (metadata in allFiles)
-			{
-				// Skip directories
-				if (metadata.isDirectory)
-				{
-					continue
-				}
-
-				// Get the URI of the item
-				println("Media : ${metadata.path}")
-				val uri = metadata.toExternalUri()
-
-				// Add the URI to the media path
-				mediaPaths.add(uri)
-			}
-
-			// Return all found media paths
-			return mediaPaths
+			// Iterate over each file and filter to only get files, then map to
+			// transform the Metadata object to an external URI
+			return allFiles
+				.filter { it.isFile }
+				.map { it.toExternalUri() }
 		}
 
 	}

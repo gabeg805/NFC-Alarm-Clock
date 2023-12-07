@@ -93,9 +93,7 @@ object NacMedia
 	): List<MediaItem>
 	{
 		// Get all the files in the directory
-		println("Build media item : $recursive")
 		val files = getFiles(context, path, recursive = recursive)
-		println("DONE")
 
 		// Build list of media items and return it
 		return buildMediaItemsFromFiles(context, files)

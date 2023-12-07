@@ -416,6 +416,7 @@ class NacGeneralSettingFragment
 		dialog.setDefaultIndexFromTime(sharedPreferences!!.timeToShowReminder)
 		dialog.defaultReminderFrequencyIndex = sharedPreferences!!.reminderFrequency
 		dialog.defaultShouldUseTts = sharedPreferences!!.shouldUseTtsForReminder
+		dialog.canShowTts = sharedPreferences!!.shouldUseTts
 
 		// Setup the listener
 		dialog.onUpcomingReminderOptionSelectedListener = NacUpcomingReminderDialog.OnUpcomingReminderOptionSelectedListener { shouldShowReminder, timeToShow, reminderFreq, shouldUseTts ->
