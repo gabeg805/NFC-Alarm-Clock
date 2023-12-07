@@ -182,7 +182,7 @@ class NacWakeupProcess(
 			// Check if should say the alarm name
 			if (alarm.shouldSayAlarmName)
 			{
-				phrase += sayAlarmName
+				phrase += " $sayAlarmName"
 			}
 
 			return phrase
