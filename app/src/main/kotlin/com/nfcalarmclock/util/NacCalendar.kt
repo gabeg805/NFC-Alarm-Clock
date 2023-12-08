@@ -194,6 +194,36 @@ object NacCalendar
 	}
 
 	/**
+	 * Get the Calendar day on which the first upcoming reminder for the
+	 * alarm will run.
+	 *
+	 * @param  alarm  The alarm.
+	 *
+	 * @return The Calendar day on which the first upcoming reminder for the
+	 *         alarm will run.
+	 */
+	fun getFirstAlarmUpcomingReminder(
+		alarm: NacAlarm,
+		alarmCal: Calendar? = null
+	): Calendar
+	{
+		// Get the calendar for the next alarm to use
+		val nextAlarmCal = alarmCal ?: getNextAlarmDay(alarm)
+
+		// Copy the calendar
+		val cal = nextAlarmCal.clone() as Calendar
+
+		// Compute the number of minutes to subtract to show the upcoming
+		// reminder at the correct time
+		val minutes = -1 * alarm.timeToShowReminder
+
+		// Subtract the number of minutes from when the alarm will run
+		cal.add(Calendar.MINUTE, minutes)
+
+		return cal
+	}
+
+	/**
 	 * The full time string, EEE, HH:MM AM/PM.
 	 *
 	 * @return The full time string, EEE, HH:MM AM/PM.
@@ -331,6 +361,28 @@ object NacCalendar
 
 		// Get the calendar
 		return next
+	}
+
+	/**
+	 * Get the Calendar day on which the next upcoming reminder for the
+	 * alarm will run.
+	 *
+	 * @param  alarm  The alarm.
+	 *
+	 * @return The Calendar day on which the next upcoming reminder for the
+	 *         alarm will run.
+	 */
+	fun getNextAlarmUpcomingReminder(alarm: NacAlarm): Calendar
+	{
+		// Get right now
+		val cal = Calendar.getInstance()
+
+		// Add the reminder frequency and clear all fields smaller than MINUTE
+		cal.add(Calendar.MINUTE, alarm.reminderFrequency)
+		cal.set(Calendar.SECOND, 0)
+		cal.set(Calendar.MILLISECOND, 0)
+
+		return cal
 	}
 
 	/**

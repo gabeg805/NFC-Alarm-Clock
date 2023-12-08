@@ -33,16 +33,19 @@ object NacScheduler
 		}
 
 		// Get the calendar for the next alarm
-		val nextCal = NacCalendar.getNextAlarmDay(alarm)
+		val nextAlarmCal = NacCalendar.getNextAlarmDay(alarm)
 
 		// Add the alarm
-		addAlarm(context, alarm, nextCal)
+		addAlarm(context, alarm, nextAlarmCal)
 
 		// Check if should show an upcoming reminder
 		if (alarm.shouldShowReminder)
 		{
+			// Get the calendar for the first upcoming reminder
+			val firstReminderCal = NacCalendar.getFirstAlarmUpcomingReminder(alarm, alarmCal = nextAlarmCal)
+
 			// Add the upcoming reminder
-			addUpcomingReminder(context, alarm, nextCal)
+			addUpcomingReminder(context, alarm, firstReminderCal)
 		}
 	}
 
@@ -64,24 +67,16 @@ object NacScheduler
 	/**
 	 * Add an upcoming reminder to the scheduler.
 	 */
-	private fun addUpcomingReminder(
+	fun addUpcomingReminder(
 		context: Context,
 		alarm: NacAlarm,
-		alarmCal: Calendar)
+		reminderCal: Calendar)
 	{
 		// Get the current calendar and make a copy of the alarm calendar
 		val now = Calendar.getInstance()
-		val cal = alarmCal.clone() as Calendar
-
-		// Compute the number of minutes to subtract to show the upcoming
-		// reminder at the correct time
-		val minutes = -1 * alarm.timeToShowReminder.toInt()
-
-		// Subtract the number of minutes from when the alarm will run
-		cal.add(Calendar.MINUTE, minutes)
 
 		// Check if the calendar for the upcoming reminder has already passed
-		if (cal.before(now))
+		if (reminderCal.before(now))
 		{
 			// Do not schedule the upcoming reminder
 			return
@@ -91,7 +86,7 @@ object NacScheduler
 		val pendingIntent = buildAddUpcomingReminderPendingIntent(context, alarm)
 
 		// Add to the alarm manager
-		addToAlarmManager(context, cal, pendingIntent)
+		addToAlarmManager(context, reminderCal, pendingIntent)
 	}
 
 	/**

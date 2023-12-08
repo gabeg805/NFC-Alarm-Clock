@@ -310,15 +310,8 @@ class NacMediaPlayer(
 		// Cleanup the handler
 		cleanupHandler()
 
-		try
-		{
-			// Release the media player resources
-			exoPlayer.release()
-		}
-		catch (_: IllegalStateException)
-		{
-			// Ignore the exception
-		}
+		// Release the media player resources
+		exoPlayer.release()
 	}
 
 }

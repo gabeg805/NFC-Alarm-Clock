@@ -1327,6 +1327,32 @@ class NacCardHolder(
 	}
 
 	/**
+	 * Set the dismiss view parent, which contains both "Dismiss" and
+	 * "Dismiss early" to its proper setting and collapse refresh as well
+	 * if it needs to be done.
+	 */
+	private fun refreshDismissAndDismissEarlyButtonsWithCollapse()
+	{
+		// Get the visiblity before refreshing the dismiss buttons
+		val beforeVisibility = dismissParentView.visibility
+
+		// Refresh dismiss buttons
+		refreshDismissAndDismissEarlyButtons()
+
+		// Get the visiblity after refreshing the dismiss buttons
+		val afterVisibility = dismissParentView.visibility
+
+		// Determine if the card is already collapsed and the visibility of the
+		// dismiss buttons has changed after the new time was set. If so, there
+		// is or should be new space because of the dismiss buttons, so do a collapse
+		// due to the refresh
+		if (isCollapsed && beforeVisibility != afterVisibility)
+		{
+			collapseRefresh()
+		}
+	}
+
+	/**
 	 * Set the background tint list of a view.
 	 */
 	private fun setBackgroundTintList(view: View, newColorStateList: ColorStateList)
@@ -2189,6 +2215,9 @@ class NacCardHolder(
 			{
 				// Do the switch state change
 				doSwitchCheckedChanged(state)
+
+				// Refresh dismiss buttons and collapse refresh if need be
+				refreshDismissAndDismissEarlyButtonsWithCollapse()
 			}
 			// Alarm cannot be modified
 			else
@@ -2368,23 +2397,8 @@ class NacCardHolder(
 			setSwitchView()
 			setSummaryDaysView()
 
-			// Get the visiblity before refreshing the dismiss buttons
-			val beforeVisibility = dismissParentView.visibility
-
-			// Refresh dismiss buttons
-			refreshDismissAndDismissEarlyButtons()
-
-			// Get the visiblity after refreshing the dismiss buttons
-			val afterVisibility = dismissParentView.visibility
-
-			// Determine if the card is already collapsed and the visibility of the
-			// dismiss buttons has changed after the new time was set. If so, there
-			// is or should be new space because of the dismiss buttons, so do a collapse
-			// due to the refresh
-			if (isCollapsed && beforeVisibility != afterVisibility)
-			{
-				collapseRefresh()
-			}
+			// Refresh dismiss buttons and collapse refresh if need be
+			refreshDismissAndDismissEarlyButtonsWithCollapse()
 
 			// Call the card updated listener
 			callOnCardUpdatedListener()

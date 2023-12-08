@@ -26,7 +26,8 @@
 			android:text="@string/title_upcoming_reminder_should_show"
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:textSize="@dimen/tsz_normal"
-			android:textStyle="bold" />
+			android:textStyle="bold"
+			/>
 
 		<RelativeLayout
 			android:id="@+id/should_show_reminder"
@@ -50,7 +51,8 @@
 				android:clickable="false"
 				android:focusable="false"
 				android:minWidth="0dp"
-				android:minHeight="0dp" />
+				android:minHeight="0dp"
+				/>
 
 			<TextView
 				android:id="@+id/should_show_reminder_summary"
@@ -61,12 +63,14 @@
 				android:layout_toEndOf="@id/should_show_reminder_checkbox"
 				android:maxLines="4"
 				android:text="@string/upcoming_reminder_false"
-				android:textAppearance="?android:attr/textAppearanceMedium" />
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				/>
 		</RelativeLayout>
 
 		<Space
 			android:layout_width="match_parent"
-			android:layout_height="@dimen/normal" />
+			android:layout_height="@dimen/normal"
+			/>
 
 		<TextView
 			android:id="@+id/title_how_early_to_show_reminder"
@@ -78,20 +82,21 @@
 			android:text="@string/title_upcoming_reminder_time_to_show"
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:textSize="@dimen/tsz_normal"
-			android:textStyle="bold" />
+			android:textStyle="bold"
+			/>
 
 		<NumberPicker
 			android:id="@+id/time_to_show_reminder_picker"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_horizontal"
-			android:layout_marginTop="@dimen/small"
-			android:layout_marginBottom="@dimen/small" />
+			android:layout_marginTop="@dimen/tiny"
+			android:layout_marginBottom="@dimen/tiny"
+			/>
 
 		<Space
 			android:layout_width="match_parent"
 			android:layout_height="@dimen/normal"
-			android:visibility="gone"
 			/>
 
 		<TextView
@@ -105,7 +110,6 @@
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:textSize="@dimen/tsz_normal"
 			android:textStyle="bold"
-			android:visibility="gone"
 			/>
 
 		<NumberPicker
@@ -113,28 +117,14 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_horizontal"
-			android:layout_marginTop="@dimen/small"
-			android:layout_marginBottom="@dimen/small"
-			android:visibility="gone"
+			android:layout_marginTop="@dimen/tiny"
+			android:layout_marginBottom="@dimen/tiny"
 			/>
-
-		<!--
-		<TextView
-			android:id="@+id/title_how_freq_to_show_reminder_note"
-			style="@style/Widget.TextView.Primary"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:paddingTop="@dimen/small"
-			android:paddingBottom="@dimen/small"
-			android:text="@string/title_upcoming_reminder_freq_note"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:textSize="@dimen/tsz_normal"
-			android:textStyle="bold" />
-		-->
 
 		<Space
 			android:layout_width="match_parent"
-			android:layout_height="@dimen/normal" />
+			android:layout_height="@dimen/normal"
+			/>
 
 		<TextView
 			android:id="@+id/title_should_use_tts_with_reminder"
@@ -146,7 +136,8 @@
 			android:text="@string/title_upcoming_reminder_should_use_tts"
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:textSize="@dimen/tsz_normal"
-			android:textStyle="bold" />
+			android:textStyle="bold"
+			/>
 
 		<RelativeLayout
 			android:id="@+id/should_use_tts_with_reminder"
@@ -170,7 +161,8 @@
 				android:clickable="false"
 				android:focusable="false"
 				android:minWidth="0dp"
-				android:minHeight="0dp" />
+				android:minHeight="0dp"
+				/>
 
 			<TextView
 				android:id="@+id/should_use_tts_with_reminder_summary"
@@ -179,9 +171,9 @@
 				android:layout_height="wrap_content"
 				android:layout_centerVertical="true"
 				android:layout_toEndOf="@id/should_use_tts_with_reminder_checkbox"
-				android:maxLines="4"
 				android:text="@string/upcoming_reminder_use_tts_false"
-				android:textAppearance="?android:attr/textAppearanceMedium" />
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				/>
 		</RelativeLayout>
 
 	</LinearLayout>

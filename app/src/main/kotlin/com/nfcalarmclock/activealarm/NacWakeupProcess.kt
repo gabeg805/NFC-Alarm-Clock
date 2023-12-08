@@ -430,10 +430,10 @@ class NacWakeupProcess(
 		textToSpeech.speak(ttsPhrase, audioAttributes)
 
 		// Check if text to speech should be run at a certain frequency
-		if (alarm.ttsFrequencyMillis != 0L)
+		if (alarm.ttsFrequency != 0)
 		{
 			// Wait for some period of time before speaking through TTS again
-			speakHandler.postDelayed({ speak() }, alarm.ttsFrequencyMillis)
+			speakHandler.postDelayed({ speak() }, alarm.ttsFrequency*60L*1000L)
 		}
 	}
 

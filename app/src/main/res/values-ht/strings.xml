@@ -17,6 +17,7 @@
 	<string name="settings">Anviwònman</string>
 	<string name="show_next_alarm">Montre pwochen alam</string>
 	<string name="word_alarm">Alam</string>
+	<string name="word_reminder">Rapèl</string>
 
 
 
@@ -69,7 +70,7 @@
 	<string name="label_deleted_statistic_header">Tan efase,Non,Tan alam</string>
 	<string name="label_dismissed_statistic_header">Tan ranvwaye,Non,Tan alam,Itilize NFC</string>
 	<string name="label_missed_statistic_header">Tan rate,Non,Tan alam</string>
-	<string name="label_snoozed_statistic_header">Tan snoozed,Non,Tan alam,Dire snooze</string>
+	<string name="label_snoozed_statistic_header">Tan snoozed,Non,Tan alam,Dire snooze (segonn)</string>
 
 
 
@@ -144,6 +145,8 @@
 	<string name="title_dismiss_early_how_early">Konbyen bonè alam la ka ranvwaye...</string>
 	<string name="title_upcoming_reminder_should_show">Montre yon notifikasyon rapèl anvan alam la sonnen...</string>
 	<string name="title_upcoming_reminder_time_to_show">Konbyen bonè anvan yo ta dwe montre notifikasyon an...</string>
+	<string name="title_upcoming_reminder_freq_to_show">Konbyen fwa li ta dwe montre...</string>
+	<string name="title_upcoming_reminder_should_use_tts">Èske yo ta dwe itilize menm opsyon tèks-a-lapawòl ak alam la lè yo montre notifikasyon an...</string>
 	<string name="title_gradually_increase_volume">Chwazi pou ogmante volim piti piti</string>
 	<string name="title_gradually_increase_volume_checkbox">Piti piti ogmante volim lè alam la aktif...</string>
 	<string name="title_gradually_increase_volume_picker">Tann tan ant chak ogmantasyon volim...</string>
@@ -416,6 +419,8 @@
 	<!-- Upcoming reminder -->
 	<string name="upcoming_reminder_true">Wi, montre yon notifikasyon.</string>
 	<string name="upcoming_reminder_false">Non, pa montre anyen.</string>
+	<string name="upcoming_reminder_use_tts_true">Wi, sèvi ak menm opsyon tèks-a-lapawòl ak alam la.\n\nRemak: Si opsyon a enfim pou alam la, Lè sa a, sa a pa pral fè anyen.</string>
+	<string name="upcoming_reminder_use_tts_false">Non, pa sèvi ak okenn tèks-a-lapawòl.</string>
 
 
 	<!-- Restrict volume -->

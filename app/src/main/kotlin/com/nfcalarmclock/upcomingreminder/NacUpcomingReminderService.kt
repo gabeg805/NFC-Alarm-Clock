@@ -7,13 +7,33 @@ import android.os.IBinder
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.media.NacAudioAttributes
+import com.nfcalarmclock.scheduler.NacScheduler
 import com.nfcalarmclock.tts.NacTextToSpeech
 import com.nfcalarmclock.tts.NacTranslate
+import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacIntent
+import java.util.Calendar
 
 class NacUpcomingReminderService
 	: Service()
 {
+
+	/**
+	 * Get the number of minutes until the next alarm will run.
+	 *
+	 * @return The number of minutes until the next alarm will run.
+	 */
+	private fun getMinutesUntilNextAlarm(nextAlarmCal: Calendar): Int
+	{
+		// Get the calendar for right now
+		val nowCal = Calendar.getInstance()
+
+		// Clear all fields smaller than MINUTE
+		nowCal.set(Calendar.SECOND, 0)
+		nowCal.set(Calendar.MILLISECOND, 0)
+
+		return ((nextAlarmCal.timeInMillis - nowCal.timeInMillis) / 1000L / 60L).toInt()
+	}
 
 	/**
 	 * Called when the service is bound.
@@ -39,11 +59,11 @@ class NacUpcomingReminderService
 		startForeground(notification.id,
 			notification.builder().build())
 
-		// Check if alarm is not null and text-to-speech should be used
-		if (alarm?.shouldUseTtsForReminder == true)
+		// Check if alarm is not null
+		if (alarm != null)
 		{
-			// Setup text-to-speech
-			setupTextToSpeech(alarm)
+			// Start the reminder process
+			startReminderProcess(alarm)
 		}
 
 		return START_NOT_STICKY
@@ -52,7 +72,7 @@ class NacUpcomingReminderService
 	/**
 	 * Setup the text-to-speech.
 	 */
-	private fun setupTextToSpeech(alarm: NacAlarm)
+	private fun setupTextToSpeech(alarm: NacAlarm, nextAlarmCal: Calendar)
 	{
 		// Audio attributes
 		val audioAttributes = NacAudioAttributes(this, alarm)
@@ -87,10 +107,69 @@ class NacUpcomingReminderService
 		audioAttributes.setStreamVolume()
 
 		// Get the phrase that should be said for the reminder
-		val phrase = NacTranslate.getSayReminder(this, alarm.name, alarm.timeToShowReminder)
+		val timeUntilNextAlarm = getMinutesUntilNextAlarm(nextAlarmCal)
+		val phrase = NacTranslate.getSayReminder(this, alarm.name, timeUntilNextAlarm)
 
 		// Speak via TTS
 		textToSpeech.speak(phrase, audioAttributes)
+	}
+
+	/**
+	 * Check if the next upcoming reminder should be shown or not.
+	 *
+	 * @return True if the next upcoming reminder should be shown, and False
+	 *         otherwise.
+	 */
+	private fun shouldShowNextUpcomingReminder(
+		alarm: NacAlarm,
+		nextAlarmCal: Calendar,
+		nextReminderCal: Calendar
+	): Boolean
+	{
+		// Check if reminder frequency is set
+		if (alarm.reminderFrequency <= 0)
+		{
+			// Reminder frequency is not set so do not show the next reminder
+			return false
+		}
+
+		// Compute the time difference between the next alarm and reminder
+		val nextReminderTime = (nextAlarmCal.timeInMillis - nextReminderCal.timeInMillis) / 1000L
+
+		// Compute the accetable tolerance within which another reminder can
+		// run
+		val tolerance = alarm.reminderFrequency*60 - 15
+
+		// Compare the two calendars. The reminder should run no closer than 45
+		// sec to the alarm. Realistically, it should never be close enough
+		// for 45 seconds, but 1 min before should still be possible
+		return (nextReminderTime >= tolerance)
+	}
+
+	/**
+	 * Start the reminder process.
+	 */
+	private fun startReminderProcess(alarm: NacAlarm)
+	{
+		// Get the calendar for when the next alarm will run and when the next
+		// reminder will run
+		val nextAlarmCal = NacCalendar.getNextAlarmDay(alarm)
+		val nextReminderCal = NacCalendar.getNextAlarmUpcomingReminder(alarm)
+
+		// Check if text-to-speech should be used
+		if (alarm.shouldUseTtsForReminder)
+		{
+			// Setup text-to-speech
+			setupTextToSpeech(alarm, nextAlarmCal)
+		}
+
+		// Check if reminder frequency is set and should show the next
+		// upcoming reminder
+		if (shouldShowNextUpcomingReminder(alarm, nextAlarmCal, nextReminderCal))
+		{
+			// Schedule the next reminder
+			NacScheduler.addUpcomingReminder(this, alarm, nextReminderCal)
+		}
 	}
 
 	companion object

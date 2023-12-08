@@ -331,12 +331,6 @@ class NacAlarm()
 		get() = sayAlarmName
 
 	/**
-	 * The frequency at which to use TTS, in units of milliseconds.
-	 */
-	val ttsFrequencyMillis: Long
-		get() = ttsFrequency * 60L * 1000L
-
-	/**
 	 * Check if should use dismiss early or not.
 	 */
 	val shouldUseDismissEarly: Boolean
@@ -349,16 +343,10 @@ class NacAlarm()
 		get() = showReminder
 
 	/**
-	 * The frequency at which to show a reminder, in units of milliseconds.
-	 */
-	val reminderFrequencyMillis: Long
-		get() = reminderFrequency * 60L * 1000L
-
-	/**
 	 * Check if should use text-to-speech for the reminder or not.
 	 */
 	val shouldUseTtsForReminder: Boolean
-		get() = useTtsForReminder
+		get() = shouldUseTts && useTtsForReminder
 
 	/**
 	 * Populate values with input parcel.

@@ -17,6 +17,7 @@
 	<string name="settings">Settings</string>
 	<string name="show_next_alarm">Show next alarm</string>
 	<string name="word_alarm">Alarm</string>
+	<string name="word_reminder">Reminder</string>
 
 
 
@@ -59,7 +60,6 @@
 
 
 
-
 	<!-- Labels -->
 	<string name="label_created_statistic">created</string>
 	<string name="label_deleted_statistic">deleted</string>
@@ -70,8 +70,7 @@
 	<string name="label_deleted_statistic_header">Time Deleted,Name,Alarm Time</string>
 	<string name="label_dismissed_statistic_header">Time Dismissed,Name,Alarm Time,Used NFC</string>
 	<string name="label_missed_statistic_header">Time Missed,Name,Alarm Time</string>
-	<string name="label_snoozed_statistic_header">Time Snoozed,Name,Alarm Time,Snooze Duration</string>
-	<!-- TODO: The snooze is in units of seconds -->
+	<string name="label_snoozed_statistic_header">Time Snoozed,Name,Alarm Time,Snooze Duration (seconds)</string>
 
 
 
@@ -147,7 +146,6 @@
 	<string name="title_upcoming_reminder_should_show">Show a reminder notification before the alarm goes off...</string>
 	<string name="title_upcoming_reminder_time_to_show">How early should it be shown...</string>
 	<string name="title_upcoming_reminder_freq_to_show">How frequently should it be shown...</string>
-	<string name="title_upcoming_reminder_freq_note">Note: This is only shown when a criteria is met.</string>
 	<string name="title_upcoming_reminder_should_use_tts">Should the same text-to-speech options as the alarm be used when the notification is shown...</string>
 	<string name="title_gradually_increase_volume">Choose to gradually increase volume</string>
 	<string name="title_gradually_increase_volume_checkbox">Gradually increase volume when the alarm is active...</string>
@@ -421,7 +419,7 @@
 	<!-- Upcoming reminder -->
 	<string name="upcoming_reminder_true">Yes, show a notification.</string>
 	<string name="upcoming_reminder_false">No, do not show anything.</string>
-	<string name="upcoming_reminder_use_tts_true">Yes, use the same text-to-speech options as the alarm.</string>
+	<string name="upcoming_reminder_use_tts_true">Yes, use the same text-to-speech options as the alarm.\n\nNote: If the option is disabled for the alarm, then this will do nothing.</string>
 	<string name="upcoming_reminder_use_tts_false">No, do not use any text-to-speech.</string>
 
 

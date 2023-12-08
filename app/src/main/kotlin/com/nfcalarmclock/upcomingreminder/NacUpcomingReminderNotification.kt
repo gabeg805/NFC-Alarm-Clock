@@ -201,7 +201,7 @@ class NacUpcomingReminderNotification(
 	/**
 	 * Name of the app.
 	 */
-	private val appName = context.getString(R.string.app_name)
+	private val appName = context.getString(R.string.word_reminder)
 
 	/**
 	 * @see NacNotification.builder

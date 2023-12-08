@@ -17,6 +17,7 @@
 	<string name="settings">Configuración</string>
 	<string name="show_next_alarm">Muestra próxima alarma</string>
 	<string name="word_alarm">La alarma</string>
+	<string name="word_reminder">Recordatorio</string>
 
 
 
@@ -69,7 +70,7 @@
 	<string name="label_deleted_statistic_header">Tiempo eliminado, Nombre, Hora de alarma</string>
 	<string name="label_dismissed_statistic_header">Tiempo despedido, Nombre, Hora de alarma,NFC usado</string>
 	<string name="label_missed_statistic_header">Tiempo perdido, Nombre, Hora de alarma</string>
-	<string name="label_snoozed_statistic_header">Tiempo se pospuso,Nombre,Hora de alarma,Duración de dormitar</string>
+	<string name="label_snoozed_statistic_header">Tiempo se pospuso,Nombre,Hora de alarma,Duración de dormitar (segundos)</string>
 
 
 
@@ -144,6 +145,8 @@
 	<string name="title_dismiss_early_how_early">¿Con qué antelación se puede desactivar la alarma...?</string>
 	<string name="title_upcoming_reminder_should_show">Mostrar una notificación de recordatorio antes de que suene la alarma...</string>
 	<string name="title_upcoming_reminder_time_to_show">¿Con qué antelación se debe mostrar la notificación...?</string>
+	<string name="title_upcoming_reminder_freq_to_show">¿Con qué frecuencia se debe mostrar...?</string>
+	<string name="title_upcoming_reminder_should_use_tts">¿Deberían usarse las mismas opciones de texto a voz que la alarma cuando se muestra la notificación...</string>
 	<string name="title_gradually_increase_volume">Elige aumentar gradualmente el volumen</string>
 	<string name="title_gradually_increase_volume_checkbox">Aumente gradualmente el volumen cuando la alarma esté activa...</string>
 	<string name="title_gradually_increase_volume_picker">Tiempo de espera entre cada aumento de volumen...</string>
@@ -416,6 +419,8 @@
 	<!-- Upcoming reminder -->
 	<string name="upcoming_reminder_true">Sí, mostrar una notificación.</string>
 	<string name="upcoming_reminder_false">No, no muestres nada.</string>
+	<string name="upcoming_reminder_use_tts_true">Sí, utiliza las mismas opciones de texto-a-voz que la alarma.\n\nNota: Si la opción está desactivada para la alarma, esto no hará nada.</string>
+	<string name="upcoming_reminder_use_tts_false">No, no utilice ningún texto-a-voz.</string>
 
 
 	<!-- Restrict volume -->

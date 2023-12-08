@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.NumberPicker
@@ -139,7 +138,6 @@ class NacUpcomingReminderDialog
 				(index-7) * 5
 			}
 		}
-
 
 	/**
 	 * The alpha that views should have based on the should use text-to-speech
@@ -409,12 +407,6 @@ class NacUpcomingReminderDialog
 
 		// Set whether it can be used or not
 		useTtsCheckBox.isEnabled = shouldShowReminder
-
-		// Set the visibility of the whole use text-to-speech section
-		val visibility = if (canShowTts) View.VISIBLE else View.GONE
-
-		useTtsTitle.visibility = visibility
-		container.visibility = visibility
 	}
 
 	companion object
