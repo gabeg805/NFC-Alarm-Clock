@@ -38,6 +38,7 @@
 	<string name="action_ok">ĐƯỢC RỒI</string>
 	<string name="action_cancel">Hủy bỏ</string>
 	<string name="action_clear">Thông thoáng</string>
+	<string name="action_clear_reminder">Xóa lời nhắc</string>
 	<string name="action_default">Mặc định</string>
 	<string name="action_rate_now">Bình chọn bây giờ</string>
 	<string name="action_rate_later">Sau đó</string>

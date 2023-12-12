@@ -28,8 +28,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
 import com.nfcalarmclock.R
-import com.nfcalarmclock.activealarm.NacActiveAlarmActivity.Companion.startAlarmActivity
 import com.nfcalarmclock.activealarm.NacActiveAlarmService.Companion.dismissAlarmService
+import com.nfcalarmclock.activealarm.NacActiveAlarmService.Companion.startAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.media.NacMedia
 import com.nfcalarmclock.name.NacNameDialog
@@ -40,6 +40,7 @@ import com.nfcalarmclock.util.NacUtility.getHeight
 import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek.OnWeekChangedListener
+
 //import com.google.android.material.timepicker.MaterialTimePicker;
 
 /**
@@ -804,8 +805,8 @@ class NacCardHolder(
 		// Check if alarm uses NFC
 		if (alarm!!.shouldUseNfc)
 		{
-			// Start the alarm activity
-			startAlarmActivity(context, alarm)
+			// Start the alarm service
+			startAlarmService(context, alarm)
 		}
 		// Alarm does not require NFC to dismiss the alarm
 		else

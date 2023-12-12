@@ -4,6 +4,7 @@ import android.annotation.TargetApi
 import android.app.NotificationChannel
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
@@ -14,6 +15,7 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.util.NacCalendar
+import com.nfcalarmclock.util.NacIntent
 import com.nfcalarmclock.view.notification.NacNotification
 import java.util.Calendar
 import java.util.Locale
@@ -145,6 +147,27 @@ class NacUpcomingReminderNotification(
 		}
 
 	/**
+	 * The pending intent to clear a recurring reminder.
+	 */
+	private val clearReminderPendingIntent: PendingIntent
+		get()
+		{
+			// Create the intent
+			val intent = NacUpcomingReminderService.getClearReminderIntent(context, alarm)
+
+			// Determine the pending intent flags
+			var flags = PendingIntent.FLAG_CANCEL_CURRENT
+
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+			{
+				flags = flags or PendingIntent.FLAG_IMMUTABLE
+			}
+
+			// Create the pending intent
+			return PendingIntent.getService(context, 0, intent, flags)
+		}
+
+	/**
 	 * @return The notification large icon.
 	 */
 	private val largeIcon: Bitmap?
@@ -209,13 +232,29 @@ class NacUpcomingReminderNotification(
 	public override fun builder(): NotificationCompat.Builder
 	{
 		// Build the notification
-		return super.builder()
+		val notificationBuilder = super.builder()
 			.setLargeIcon(largeIcon)
 			.setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
 			.setAutoCancel(true)
 			.setOngoing(false)
 			.setShowWhen(true)
 			.setTicker(appName)
+
+		// Check if the alarm uses a recurring notification
+		return if ((alarm != null) && (alarm.reminderFrequency > 0))
+		{
+			// Notification actions
+			val clear = context.getString(R.string.action_clear_reminder)
+
+			// Add a button to clear the recurring reminder
+			notificationBuilder
+				.addAction(R.mipmap.dismiss, clear, clearReminderPendingIntent)
+		}
+		else
+		{
+			// Notification is perfectly built as is
+			notificationBuilder
+		}
 	}
 
 	/**

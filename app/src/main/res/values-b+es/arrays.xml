@@ -267,6 +267,7 @@
 
 	<string-array name="whats_new_items">
 		<item>Se agregó soporte para criollo haitiano y vietnamita.  Esto fue usando Google Translate, por lo que cualquier corrección que necesite hacer es bienvenida.</item>
+		<item>Se solucionó el problema por el cual una alarma que requiere que NFC se descarte podría descartarse sin ella.</item>
 		<item>Se modificó la apariencia del cuadro de diálogo &lt;b>opciones de alarma&lt;/b>.</item>
 		<item>Se agregó la opción de alarma &lt;b>Próximo recordatorio&lt;/b>.</item>
 		<item>Se agregó un botón &lt;b>Estadísticas de correo electrónico&lt;/b> a las estadísticas de correo electrónico.</item>

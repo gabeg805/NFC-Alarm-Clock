@@ -267,6 +267,7 @@
 
 	<string-array name="whats_new_items">
 		<item>Te ajoute sipò pou kreyòl ayisyen ak Vyetnamyen.  Sa a te itilize Google Translate, kidonk nenpòt koreksyon mwen bezwen fè yo akeyi.</item>
+		<item>Pwoblèm fiks kote yon alam ki mande pou NFC ranvwaye ta ka anile san li.</item>
 		<item>Chanje fason dyalòg &lt;b>opsyon alam yo&lt;/b> sanble.</item>
 		<item>Te ajoute opsyon alam &lt;b>Rappel k ap vini an&lt;/b>.</item>
 		<item>Te ajoute yon bouton &lt;b>Imèl estatistik&lt;/b> pou imèl estatistik.</item>

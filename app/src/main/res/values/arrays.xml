@@ -272,6 +272,7 @@
 
 	<string-array name="whats_new_items">
 		<item>Added support for Haitian Creole and Vietnamese.  This was using Google Translate so any corrections I need to make are welcome.</item>
+		<item>Fixed issue where an alarm that requires NFC to dismiss could be dismissed without it.</item>
 		<item>Changed how the &lt;b>alarm options&lt;/b> dialog looks.</item>
 		<item>Added the &lt;b>Upcoming reminder&lt;/b> alarm option.</item>
 		<item>Added an &lt;b>Email statistics&lt;/b> button to email statistics.</item>

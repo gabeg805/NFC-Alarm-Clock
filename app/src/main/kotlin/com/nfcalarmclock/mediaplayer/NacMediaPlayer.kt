@@ -2,7 +2,6 @@ package com.nfcalarmclock.mediaplayer
 
 import android.content.Context
 import android.media.AudioManager
-import android.media.AudioManager.OnAudioFocusChangeListener
 import android.net.Uri
 import android.os.Handler
 import androidx.media3.common.MediaItem
@@ -34,13 +33,48 @@ class NacMediaPlayer(
 	listener: Player.Listener? = null
 
 	// Interface
-) : OnAudioFocusChangeListener
+) : AudioManager.OnAudioFocusChangeListener
 {
 
 	/**
-	 * Audio attributes.
+	 * Audio focus change listener.
 	 */
-	val audioAttributes: NacAudioAttributes = NacAudioAttributes(context)
+	interface OnAudioFocusChangeListener
+	{
+
+		/**
+		 * Audio should be ducked.
+		 */
+		fun onAudioFocusDuck(mediaPlayer: NacMediaPlayer)
+		{
+			mediaPlayer.duck()
+		}
+
+		/**
+		 * Audio focus is gained.
+		 */
+		fun onAudioFocusGain(mediaPlayer: NacMediaPlayer)
+		{
+			mediaPlayer.play()
+		}
+
+		/**
+		 * Audio focus is lost.
+		 */
+		fun onAudioFocusLoss(mediaPlayer: NacMediaPlayer)
+		{
+			mediaPlayer.stop()
+		}
+
+		/**
+		 * Audio focus is lost, but is transient.
+		 */
+		fun onAudioFocusLossTransient(mediaPlayer: NacMediaPlayer)
+		{
+			mediaPlayer.pause()
+		}
+
+	}
 
 	/**
 	 * Handler to add some delay if looping media.
@@ -55,16 +89,27 @@ class NacMediaPlayer(
 		.build()
 
 	/**
-	 * Check if the player was playing.
+	 * Audio attributes.
 	 */
-	var wasPlaying: Boolean = false
-		private set
+	val audioAttributes: NacAudioAttributes = NacAudioAttributes(context)
 
 	/**
 	 * Flag indicating whether to gain transient audio focus, when requesting
 	 * audio focus, or to gain regular focus.
 	 */
 	var shouldGainTransientAudioFocus: Boolean = false
+
+	/**
+	 * Check if the player was playing.
+	 */
+	var wasPlaying: Boolean = false
+		private set
+
+	/**
+	 * Listener for any audio focus changes.
+	 */
+	var onAudioFocusChangeListener: NacMediaPlayer.OnAudioFocusChangeListener =
+		object: NacMediaPlayer.OnAudioFocusChangeListener {}
 
 	/**
 	 * Constructor.
@@ -88,6 +133,18 @@ class NacMediaPlayer(
 	}
 
 	/**
+	 * Duck the media player.
+	 */
+	fun duck()
+	{
+		// Set the was playing flag
+		wasPlaying = exoPlayer.isPlaying
+
+		// Duck the volume
+		audioAttributes.duckVolume()
+	}
+
+	/**
 	 * Cleanup the handler.
 	 */
 	private fun cleanupHandler()
@@ -100,60 +157,37 @@ class NacMediaPlayer(
 	 */
 	override fun onAudioFocusChange(focusChange: Int)
 	{
-		println("NacMediaPlayer : onAudioFocusChange! $wasPlaying | $focusChange")
-
 		// Revert ducking
 		audioAttributes.revertDucking()
 
-		// Gain audio focus
-		if (focusChange == AudioManager.AUDIOFOCUS_GAIN)
+		// Check what type of focus change occurred
+		when (focusChange)
 		{
-			println("NacMediaPlayer : GAIN!")
-			wasPlaying = true
 
-			// Play
-			play()
-		}
-		// Lose audio focus
-		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS)
-		{
-			println("NacMediaPlayer : LOSS!")
+			// Gain audio focus
+			AudioManager.AUDIOFOCUS_GAIN ->
+			{
+				onAudioFocusChangeListener.onAudioFocusGain(this)
+			}
 
-			wasPlaying = false
-			//attrs.revertVolume();
-			//this.stopWrapper(); Shown below
-			//this.abandonAudioFocus(); Do I even need to do this? Wouldn't it already be abandoned?
-			//this.cleanupHandler();
+			// Loss of audio focus
+			AudioManager.AUDIOFOCUS_LOSS ->
+			{
+				onAudioFocusChangeListener.onAudioFocusLoss(this)
+			}
 
-			// Stop the media player
-			exoPlayer.stop()
+			// Transient loss of audio focus
+			AudioManager.AUDIOFOCUS_LOSS_TRANSIENT ->
+			{
+				onAudioFocusChangeListener.onAudioFocusLossTransient(this)
+			}
 
-			// Clear all media items
-			exoPlayer.clearMediaItems()
+			// Transient lose audio focus but can duck audio
+			AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK ->
+			{
+				onAudioFocusChangeListener.onAudioFocusDuck(this)
+			}
 
-			//this.getMediaPlayer().reset();
-		}
-		// Transient lose audio focus
-		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)
-		{
-			wasPlaying = exoPlayer.isPlaying
-
-			println("NacMediaPlayer : LOSS TRANSIENT! $wasPlaying")
-
-			//attrs.revertVolume();
-
-			// Pause the media player
-			exoPlayer.pause()
-		}
-		// Transient lose audio focus but can duck audio
-		else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
-		{
-			wasPlaying = exoPlayer.isPlaying
-
-			println("NacMediaPlayer : LOSS TRANSIENT DUCK! $wasPlaying")
-
-			// Duck the volume
-			audioAttributes.duckVolume()
 		}
 	}
 
@@ -187,10 +221,25 @@ class NacMediaPlayer(
 	}
 
 	/**
+	 * Pause the media player.
+	 */
+	fun pause()
+	{
+		// Set the was playing flag
+		wasPlaying = exoPlayer.isPlaying
+
+		// Pause the media player
+		exoPlayer.pause()
+	}
+
+	/**
 	 * Play the media item(s) that are already set.
 	 */
 	fun play()
 	{
+		// Set the was playing flag
+		wasPlaying = true
+
 		// Unable to gain audio focus
 		if (!requestAudioFocus())
 		{
@@ -219,10 +268,6 @@ class NacMediaPlayer(
 	 */
 	fun playAlarm(alarm: NacAlarm)
 	{
-		// Get the media path and URI
-		val path = alarm.mediaPath
-		val uri = Uri.parse(path)
-
 		// Merge alarm with audio attributes
 		audioAttributes.merge(alarm)
 
@@ -232,11 +277,14 @@ class NacMediaPlayer(
 			// Play the directory as a playlist and if the recursive flag is
 			// set, it will also include the media in its subdirectories as
 			// part of the playlist
-			playDirectory(path, recursive = alarm.recursivelyPlayMedia)
+			playDirectory(alarm.mediaPath, recursive = alarm.recursivelyPlayMedia)
 		}
 		// Media is a file
 		else
 		{
+			// Get the media URI
+			val uri = Uri.parse(alarm.mediaPath)
+
 			// Play the file
 			playUri(uri)
 		}
@@ -251,7 +299,8 @@ class NacMediaPlayer(
 	private fun playDirectory(path: String, recursive: Boolean = false)
 	{
 		// Convert the path to media items
-		val items = NacMedia.buildMediaItemsFromDirectory(context, path, recursive = recursive)
+		val items = NacMedia.buildMediaItemsFromDirectory(context, path,
+			recursive = recursive)
 
 		// Play the media items
 		playMediaItems(items)
@@ -312,6 +361,21 @@ class NacMediaPlayer(
 
 		// Release the media player resources
 		exoPlayer.release()
+	}
+
+	/**
+	 * Stop the media player.
+	 */
+	fun stop()
+	{
+		// Set the was playing flag
+		wasPlaying = false
+
+		// Stop the media player
+		exoPlayer.stop()
+
+		// Clear all media items
+		exoPlayer.clearMediaItems()
 	}
 
 }

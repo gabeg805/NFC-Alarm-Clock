@@ -38,6 +38,7 @@
 	<string name="action_ok">OK</string>
 	<string name="action_cancel">Cancel</string>
 	<string name="action_clear">Clear</string>
+	<string name="action_clear_reminder">Clear reminder</string>
 	<string name="action_default">Default</string>
 	<string name="action_rate_now">Rate Now</string>
 	<string name="action_rate_later">Later</string>

@@ -38,6 +38,7 @@
 	<string name="action_ok">OK</string>
 	<string name="action_cancel">Cancelar</string>
 	<string name="action_clear">Despejar</string>
+	<string name="action_clear_reminder">Borrar recordatorio</string>
 	<string name="action_default">Original</string>
 	<string name="action_rate_now">Califica Ahora</string>
 	<string name="action_rate_later">Al Rato</string>

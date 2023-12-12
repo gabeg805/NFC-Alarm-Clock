@@ -4,6 +4,7 @@ import android.content.ContentUris
 import android.net.Uri
 import android.provider.MediaStore
 import java.util.Locale
+import java.util.UnknownFormatConversionException
 
 /**
  * Generic file object.
@@ -214,8 +215,6 @@ object NacFile
 		val path: String
 			get()
 			{
-				val locale = Locale.getDefault()
-
 				// Directory is empty
 				return if (directory.isEmpty())
 				{
@@ -225,8 +224,16 @@ object NacFile
 				// Directory is present
 				else
 				{
-					// Return the path with the directory and name
-					String.format(locale, "$directory/$name")
+					try
+					{
+						// Return the path with the directory and name
+						"${directory}/${name}"
+					}
+					catch (e: UnknownFormatConversionException)
+					{
+						// Unable to convert the path so return an empty string
+						""
+					}
 				}
 			}
 

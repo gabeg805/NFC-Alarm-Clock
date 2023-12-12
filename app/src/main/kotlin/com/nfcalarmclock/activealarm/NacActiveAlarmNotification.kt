@@ -21,14 +21,20 @@ import java.util.Locale
 /**
  * Notification to display for active alarms.
  */
-class NacActiveAlarmNotification(context: Context)
-	: NacNotification(context)
-{
+class NacActiveAlarmNotification(
 
 	/**
-	 * The alarm to show the notification about.
+	 * Context.
 	 */
-	var alarm: NacAlarm? = null
+	context: Context,
+
+	/**
+	 * Alarm.
+	 */
+	private val alarm: NacAlarm?
+
+) : NacNotification(context)
+{
 
 	/**
 	 * @see NacNotification.id

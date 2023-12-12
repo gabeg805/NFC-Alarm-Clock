@@ -558,10 +558,7 @@ class NacActiveAlarmService
 		startAlarmService(this, activeAlarm)
 
 		// Creaete the notification
-		val notification = NacActiveAlarmNotification(this)
-
-		// Set the alarm to be part of the notification
-		notification.alarm = activeAlarm
+		val notification = NacActiveAlarmNotification(this, activeAlarm)
 
 		// Show the notification
 		notification.show()
@@ -616,10 +613,7 @@ class NacActiveAlarmService
 	private fun showActiveAlarmNotification()
 	{
 		// Create the active alarm notification
-		val notification = NacActiveAlarmNotification(this)
-
-		// Set the alarm to be part of the notification
-		notification.alarm = alarm
+		val notification = NacActiveAlarmNotification(this, alarm)
 
 		// Start the service in the foreground
 		startForeground(NacActiveAlarmNotification.ID,

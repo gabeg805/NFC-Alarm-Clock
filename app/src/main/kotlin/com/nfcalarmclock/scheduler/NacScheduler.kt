@@ -333,7 +333,7 @@ object NacScheduler
 	/**
 	 * Cancel an upcoming reminder.
 	 */
-	private fun cancelUpcomingReminder(context: Context, alarm: NacAlarm)
+	fun cancelUpcomingReminder(context: Context, alarm: NacAlarm)
 	{
 		// Build the pending intent for the upcoming reminder
 		val pendingIntent = buildCancelUpcomingReminderPendingIntent(context, alarm)

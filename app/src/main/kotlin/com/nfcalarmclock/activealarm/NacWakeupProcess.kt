@@ -98,7 +98,22 @@ class NacWakeupProcess(
 	 */
 	private val mediaPlayer: NacMediaPlayer? = if (alarm.hasMedia)
 	{
-		NacMediaPlayer(context, this)
+		// Create the media player
+		val player = NacMediaPlayer(context, this)
+
+		// Setup the media player
+		player.onAudioFocusChangeListener = object: NacMediaPlayer.OnAudioFocusChangeListener {
+
+			// Empty override functions so that nothing happens when audio
+			// focus is lost. This means that audio should keep playing even if
+			// audio focus is lost
+			override fun onAudioFocusLoss(mediaPlayer: NacMediaPlayer) { }
+			override fun onAudioFocusLossTransient(mediaPlayer: NacMediaPlayer) { }
+
+		}
+
+		// Return the media player
+		player
 	}
 	else
 	{

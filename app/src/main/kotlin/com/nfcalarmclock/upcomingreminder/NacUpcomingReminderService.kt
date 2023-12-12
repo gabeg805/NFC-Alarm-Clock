@@ -3,6 +3,7 @@ package com.nfcalarmclock.upcomingreminder
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.IBinder
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.alarm.db.NacAlarm
@@ -52,18 +53,33 @@ class NacUpcomingReminderService
 		// Attempt to get the alarm from the intent
 		val alarm = NacIntent.getAlarm(intent)
 
-		// Create the reminder notification
-		val notification = NacUpcomingReminderNotification(this, alarm)
-
-		// Start the service in the foreground
-		startForeground(notification.id,
-			notification.builder().build())
-
-		// Check if alarm is not null
-		if (alarm != null)
+		when (intent?.action)
 		{
-			// Start the reminder process
-			startReminderProcess(alarm)
+
+			// Clear the reminder by stopping the service
+			ACTION_CLEAR_REMINDER ->
+			{
+				// Cancel any remaining reminders
+				NacScheduler.cancelUpcomingReminder(this, alarm!!)
+
+				// Stop the service
+				stopReminderService()
+			}
+
+			// Normal path for the service
+			else ->
+			{
+				// Show the notification
+				showReminderNotification(alarm)
+
+				// Check if alarm is not null
+				if (alarm != null)
+				{
+					// Start the reminder process
+					startReminderProcess(alarm)
+				}
+			}
+
 		}
 
 		return START_NOT_STICKY
@@ -147,6 +163,19 @@ class NacUpcomingReminderService
 	}
 
 	/**
+	 * Show the reminder notification.
+	 */
+	private fun showReminderNotification(alarm: NacAlarm?)
+	{
+		// Create the reminder notification
+		val notification = NacUpcomingReminderNotification(this, alarm)
+
+		// Start the service in the foreground
+		startForeground(notification.id,
+			notification.builder().build())
+	}
+
+	/**
 	 * Start the reminder process.
 	 */
 	private fun startReminderProcess(alarm: NacAlarm)
@@ -172,6 +201,27 @@ class NacUpcomingReminderService
 		}
 	}
 
+	/**
+	 * Stop the service.
+	 */
+	@Suppress("deprecation")
+	private fun stopReminderService()
+	{
+		// Stop the foreground service using the updated form of
+		// stopForeground() for API >= 33
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+		{
+			super.stopForeground(STOP_FOREGROUND_REMOVE)
+		}
+		else
+		{
+			super.stopForeground(true)
+		}
+
+		// Stop the service
+		super.stopSelf()
+	}
+
 	companion object
 	{
 
@@ -188,6 +238,26 @@ class NacUpcomingReminderService
 		{
 			// Create an intent with the alarm service
 			val intent = Intent(context, NacUpcomingReminderService::class.java)
+
+			// Add the alarm to the intent
+			return NacIntent.addAlarm(intent, alarm)
+		}
+
+		/**
+		 * Action to start the service.
+		 */
+		private const val ACTION_CLEAR_REMINDER = "com.nfcalarmclock.ACTION_CLEAR_REMINDER"
+
+		/**
+		 * Get an intent that will be used to clear the reminder.
+		 *
+		 * @return An intent that will be used to clear the reminder.
+		 */
+		fun getClearReminderIntent(context: Context, alarm: NacAlarm?): Intent
+		{
+			// Create the intent with the alarm service
+			val intent = Intent(ACTION_CLEAR_REMINDER, null, context,
+				NacUpcomingReminderService::class.java)
 
 			// Add the alarm to the intent
 			return NacIntent.addAlarm(intent, alarm)

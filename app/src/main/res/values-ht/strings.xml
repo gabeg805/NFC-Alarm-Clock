@@ -38,6 +38,7 @@
 	<string name="action_ok">OK</string>
 	<string name="action_cancel">Anile</string>
 	<string name="action_clear">Klè</string>
+	<string name="action_clear_reminder">Klè rapèl</string>
 	<string name="action_default">Default</string>
 	<string name="action_rate_now">To kounye a</string>
 	<string name="action_rate_later">Pita</string>
