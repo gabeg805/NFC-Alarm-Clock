@@ -160,6 +160,8 @@ class NacWakeupProcess(
 			 */
 			override fun onDoneSpeaking(tts: NacTextToSpeech)
 			{
+				// Use handler to start wake up process so that the media
+				// player is accessed on the correct thread
 				continueWakeupHandler.post { simpleStart() }
 			}
 
@@ -170,6 +172,19 @@ class NacWakeupProcess(
 			{
 				// Stop any vibration when TTS is playing
 				cleanupVibrate()
+
+				// Use handler to start wake up process so that the media
+				// player is accessed on the correct thread
+				continueWakeupHandler.post {
+
+					// Check if the media player was playing music
+					if (mediaPlayer?.wasPlaying == true)
+					{
+						// Pause the media player until done speaking
+						mediaPlayer.pause()
+					}
+
+				}
 			}
 
 		})

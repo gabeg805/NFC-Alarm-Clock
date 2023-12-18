@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.content.res.ColorStateList
 import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.view.ContextMenu
 import android.view.ContextMenu.ContextMenuInfo
 import android.view.HapticFeedbackConstants
@@ -236,6 +237,11 @@ class NacMainActivity
 	 * The IDs of alarms that were recently updated.
 	 */
 	private var recentlyUpdatedAlarmIds: MutableList<Long> = ArrayList()
+
+	/**
+	 * Handler to refresh next alarm message.
+	 */
+	private lateinit var nextAlarmMessageHandler: Handler
 
 	/**
 	 * Alarm that is being used by an open audio options dialog.
@@ -554,7 +560,7 @@ class NacMainActivity
 	override fun onCardUpdated(holder: NacCardHolder, alarm: NacAlarm)
 	{
 		// Set the next alarm message
-		this.setNextAlarmMessage()
+		setNextAlarmMessage()
 
 		// Card is collapsed
 		if (holder.isCollapsed)
@@ -640,6 +646,7 @@ class NacMainActivity
 		alarmCardAdapterLiveData = NacCardAdapterLiveData()
 		alarmCardTouchHelper = NacCardTouchHelper(this)
 		permissionRequestManager = NacPermissionRequestManager(this)
+		nextAlarmMessageHandler = Handler(applicationContext.mainLooper)
 
 		// Set flag that cards need to be measured
 		sharedPreferences!!.editCardIsMeasured(false)
@@ -801,6 +808,7 @@ class NacMainActivity
 		// Cleanup
 		cleanupTimeTickReceiver()
 		cleanupShutdownBroadcastReceiver()
+		nextAlarmMessageHandler.removeCallbacksAndMessages(null)
 
 		// Stop NFC
 		NacNfc.stop(this)
@@ -839,8 +847,8 @@ class NacMainActivity
 
 		}
 
-		// Set the next alarm text
-		setNextAlarmMessage()
+		// Set the message for when the next alarm will be run
+		refreshNextAlarmMessage()
 
 		// Setup UI
 		setupFloatingActionButton()
@@ -972,6 +980,19 @@ class NacMainActivity
 	}
 
 	/**
+	 * Refresh the next alarm message.
+	 */
+	private fun refreshNextAlarmMessage()
+	{
+		// Set the message for when the next alarm will be run
+		setNextAlarmMessage()
+
+		// TODO: Check if the next alarm is even within an hour or not, and if not, do not need to do this.
+		// Set the message for when the next alarm will be run
+		//nextAlarmMessageHandler.postDelayed({ refreshNextAlarmMessage() }, 1000)
+	}
+
+	/**
 	 * Restore an alarm and add it back to the database.
 	 *
 	 * @param  alarm  An alarm.
@@ -1031,7 +1052,7 @@ class NacMainActivity
 	private fun setNextAlarmMessage()
 	{
 		// Set the next alarm message from the current list of alarms
-		this.setNextAlarmMessage(alarmCardAdapter!!.currentList)
+		setNextAlarmMessage(alarmCardAdapter!!.currentList)
 	}
 
 	/**
@@ -1189,7 +1210,7 @@ class NacMainActivity
 			}
 
 			// Set the next alarm message
-			this.setNextAlarmMessage(alarms)
+			setNextAlarmMessage(alarms)
 		}
 
 		// Observe any changes to the alarms in the adapter

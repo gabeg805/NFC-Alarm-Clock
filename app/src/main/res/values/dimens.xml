@@ -19,6 +19,7 @@
 	<dimen name="isz_focus">72dp</dimen>
 
 	<!-- Text -->
+	<dimen name="tsz_tiny">10sp</dimen>
 	<dimen name="tsz_caption">12sp</dimen>
 	<dimen name="tsz_small">14sp</dimen>
 	<dimen name="tsz_normal">16sp</dimen>
@@ -31,5 +32,6 @@
 	<dimen name="radius">6dp</dimen>
 	<dimen name="radius_day_filled">16dp</dimen>
 	<dimen name="radius_day_outlined">16dp</dimen>
+	<dimen name="click_and_slide">100dp</dimen>
 
 </resources>

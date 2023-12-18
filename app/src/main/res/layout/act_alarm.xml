@@ -77,7 +77,7 @@
 		android:layout_marginBottom="@dimen/xlarge">
 
 		<TextView
-			android:id="@+id/name"
+			android:id="@+id/music_title"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="@dimen/normal"

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animator
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:duration="500"
+	android:valueFrom="64dp"
+	android:valueTo="0dp"
+	android:valueType="intType"
+	/>
