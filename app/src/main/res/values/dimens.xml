@@ -24,6 +24,7 @@
 	<dimen name="tsz_small">14sp</dimen>
 	<dimen name="tsz_normal">16sp</dimen>
 	<dimen name="tsz_large">18sp</dimen>
+	<dimen name="tsz_xlarge">24sp</dimen>
 	<dimen name="tsz_title">32sp</dimen>
 	<dimen name="tsz_attention">40sp</dimen>
 

@@ -1,18 +1,14 @@
 package com.nfcalarmclock.activealarm
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
-import android.graphics.Rect
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewAnimationUtils
-import android.view.ViewGroup.MarginLayoutParams
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import kotlin.math.hypot
 
 class NacSwipeLayoutHandler(
 
@@ -49,11 +45,6 @@ class NacSwipeLayoutHandler(
 	private val exampleClickAndSlideView: RelativeLayout = activity.findViewById(R.id.example_click_and_slide)
 
 	/**
-	 * View that represents the click and slide that the user controls.
-	 */
-	private val userClickAndSlideView: RelativeLayout = activity.findViewById(R.id.click_and_slide)
-
-	/**
 	 * Animator for the guide on how the user should swipe.
 	 */
 	private val swipeGuideAnimator: NacSwipeGuideAnimator = NacSwipeGuideAnimator(activity)
@@ -65,11 +56,19 @@ class NacSwipeLayoutHandler(
 
 
 
+	private val sliderPath: RelativeLayout = activity.findViewById(R.id.alarm_action_slider_path)
+	private val sliderPathScaleUp = AnimationUtils.loadAnimation(activity, R.anim.scale_up)
+	private val sliderPathScaleDown = AnimationUtils.loadAnimation(activity, R.anim.scale_down)
 
 	private val snoozeButton: RelativeLayout = activity.findViewById(R.id.round_snooze_button)
 	private val dismissButton: RelativeLayout = activity.findViewById(R.id.round_dismiss_button)
 	private var startAlarmActionX: Float = -1f
 	private var endAlarmActionX: Float = -1f
+
+	private val snoozeAttentionView: RelativeLayout = activity.findViewById(R.id.snooze_attention_view)
+	private val dismissAttentionView: RelativeLayout = activity.findViewById(R.id.dismiss_attention_view)
+	private val snoozeScaleAnimation = AnimationUtils.loadAnimation(activity, R.anim.pulse)
+	private val dismissScaleAnimation = AnimationUtils.loadAnimation(activity, R.anim.pulse)
 
 
 	/**
@@ -94,6 +93,32 @@ class NacSwipeLayoutHandler(
 				{
 					// Compute the offset X position
 					dx = view.x - motionEvent.rawX
+
+					// Cancel the animations
+					snoozeAttentionView.clearAnimation()
+					dismissAttentionView.clearAnimation()
+
+					// Show the slider path
+					// TODO: Hide the attention view and other snooze/dismiss button
+					//sliderPath.visibility = View.VISIBLE
+					sliderPathScaleUp.setAnimationListener(object: Animation.AnimationListener {
+						override fun onAnimationStart(p0: Animation?)
+						{
+							println("Scale up vis start")
+							sliderPath.visibility = View.VISIBLE
+						}
+
+						override fun onAnimationEnd(p0: Animation?)
+						{
+							println("Scale up vis end")
+						}
+
+						override fun onAnimationRepeat(p0: Animation?)
+						{
+						}
+
+					})
+					sliderPath.startAnimation(sliderPathScaleUp)
 				}
 
 				// Finger UP on button
@@ -104,6 +129,32 @@ class NacSwipeLayoutHandler(
 						.x(origX)
 						.setDuration(500)
 						.start()
+
+					// Start the animations
+					snoozeAttentionView.startAnimation(snoozeScaleAnimation)
+					dismissAttentionView.startAnimation(dismissScaleAnimation)
+
+					// Hide the slider path
+					//sliderPath.visibility = View.INVISIBLE
+					sliderPathScaleDown.setAnimationListener(object: Animation.AnimationListener {
+						override fun onAnimationStart(p0: Animation?)
+						{
+							println("Scale down vis start")
+							sliderPath.visibility = View.VISIBLE
+						}
+
+						override fun onAnimationEnd(p0: Animation?)
+						{
+							println("Scale down vis end")
+							sliderPath.visibility = View.INVISIBLE
+						}
+
+						override fun onAnimationRepeat(p0: Animation?)
+						{
+						}
+
+					})
+					sliderPath.startAnimation(sliderPathScaleDown)
 				}
 
 				// Moving finger
@@ -180,16 +231,15 @@ class NacSwipeLayoutHandler(
 	fun start()
 	{
 
-		// Setup the reset animator
-		//userSwipeAnimator.setOnUpdateListener {
-		//	userClickAndSlideView.setViewSizeFromAnimator(it)
-		//}
-
 		// Start the swipe guide animator
 		// TODO: Make the swipe guide on the action buttons
 		swipeGuideAnimator.start {
-			exampleClickAndSlideView.setViewSizeFromAnimator(it)
+			//exampleClickAndSlideView.setViewSizeFromAnimator(it)
+			//snoozeAttentionView.setViewSizeFromAnimator(it)
 		}
+
+		snoozeAttentionView.startAnimation(snoozeScaleAnimation)
+		dismissAttentionView.startAnimation(dismissScaleAnimation)
 
 		// Setup the snooze and dismiss buttons
 		setupSnoozeButton()
