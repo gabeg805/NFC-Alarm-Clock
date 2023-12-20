@@ -35,27 +35,21 @@
 		android:text="Wed Dec 7"
 		/>
 
-	<Space
-		android:id="@+id/header_space"
-		android:layout_width="@dimen/line"
-		android:layout_height="100dp"
-		android:layout_below="@id/current_date"
-		/>
-
 	<TextView
 		android:id="@+id/alarm_name"
-		android:layout_width="wrap_content"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="@dimen/xlarge"
 		android:layout_marginBottom="@dimen/xlarge"
-		android:layout_below="@id/header_space"
+		android:layout_below="@id/current_date"
+		android:gravity="center_horizontal"
 		android:ellipsize="marquee"
 		android:marqueeRepeatLimit="marquee_forever"
 		android:scrollHorizontally="true"
 		android:singleLine="true"
 		android:textColor="@color/white"
 		android:textSize="@dimen/tsz_title"
-		android:text="Hello this is a big alarm name"
+		android:text="Time for work"
 		/>
 
 		<RelativeLayout

@@ -32,6 +32,11 @@ class NacSwipeLayoutHandler(
 {
 
 	/**
+	 * Exception when unable to calculate new X position.
+	 */
+	class UnableToCalculateNewXposition : Exception("Unable to calculate new X position.")
+
+	/**
 	 * View that represents the parent click and slide. This is the max size
 	 * that the click and slide view can be. The parent needs to be there so
 	 * that resizing of the children does not affect any of the other views in
@@ -57,8 +62,6 @@ class NacSwipeLayoutHandler(
 
 
 	private val sliderPath: RelativeLayout = activity.findViewById(R.id.alarm_action_slider_path)
-	private val sliderPathScaleUp = AnimationUtils.loadAnimation(activity, R.anim.scale_up)
-	private val sliderPathScaleDown = AnimationUtils.loadAnimation(activity, R.anim.scale_down)
 
 	private val snoozeButton: RelativeLayout = activity.findViewById(R.id.round_snooze_button)
 	private val dismissButton: RelativeLayout = activity.findViewById(R.id.round_dismiss_button)
@@ -67,9 +70,90 @@ class NacSwipeLayoutHandler(
 
 	private val snoozeAttentionView: RelativeLayout = activity.findViewById(R.id.snooze_attention_view)
 	private val dismissAttentionView: RelativeLayout = activity.findViewById(R.id.dismiss_attention_view)
-	private val snoozeScaleAnimation = AnimationUtils.loadAnimation(activity, R.anim.pulse)
-	private val dismissScaleAnimation = AnimationUtils.loadAnimation(activity, R.anim.pulse)
 
+	/**
+	 * Calculate the new X position.
+	 */
+	private fun calculateNewXposition(
+		view: View,
+		motionEvent: MotionEvent,
+		dx: Float
+	): Float
+	{
+		// Calculate the new X position
+		var newX = motionEvent.rawX + dx
+
+		// Check if the new X position is less than the start position
+		if (newX < startAlarmActionX)
+		{
+			// Check if the view's position is equal to the start position
+			if (view.x == startAlarmActionX)
+			{
+				// Do not move the view
+				throw UnableToCalculateNewXposition()
+			}
+
+			// Set the new X position to the start position
+			newX = startAlarmActionX
+		}
+		// Check if the new X position is greater than the end position
+		else if (newX > endAlarmActionX)
+		{
+			// Check if the view's position is equal to the end position
+			if (view.x == endAlarmActionX)
+			{
+				// Do not move the view
+				throw UnableToCalculateNewXposition()
+			}
+
+			// Set the new X position to the end position
+			newX = endAlarmActionX
+		}
+
+		return newX
+	}
+
+	/**
+	 * Calculate X offset position.
+	 */
+	private fun calculateXoffsetPosition(view: View, motionEvent: MotionEvent): Float
+	{
+		return view.x - motionEvent.rawX
+	}
+
+	/**
+	 * Get the inactive view by comparing the active view against the snooze
+	 * and dismiss button views.
+	 */
+	private fun getInactiveView(
+		activeView: View,
+		snoozeButton: View,
+		dismissButton: View
+	): View
+	{
+		// Get the inactive view by checking the ID of the view actively being
+		// moved and using the other view
+		return when (activeView.id)
+		{
+			// Snooze button is active
+			snoozeButton.id ->
+			{
+				// Dismiss button is inactive
+				dismissButton
+			}
+
+			// Dismiss button is active
+			dismissButton.id ->
+			{
+				// Snooze button is inactive
+				snoozeButton
+			}
+
+			// Return the active view because unable to determine which view is
+			// inactive. This should never happen
+			else -> activeView
+		}
+	}
 
 	/**
 	 * Setup an alarm action button.
@@ -92,33 +176,19 @@ class NacSwipeLayoutHandler(
 				MotionEvent.ACTION_DOWN ->
 				{
 					// Compute the offset X position
-					dx = view.x - motionEvent.rawX
+					dx = calculateXoffsetPosition(view, motionEvent)
 
-					// Cancel the animations
-					snoozeAttentionView.clearAnimation()
-					dismissAttentionView.clearAnimation()
+					// Get the inactive view
+					val inactiveView = getInactiveView(view, snoozeButton, dismissButton)
+
+					// Hide one of the snooze/dismiss views
+					swipeGuideAnimator.hideSnoozeOrDismissButton(inactiveView)
+
+					// Hide the attention views
+					swipeGuideAnimator.stopAttentionAnimations(snoozeAttentionView, dismissAttentionView)
 
 					// Show the slider path
-					// TODO: Hide the attention view and other snooze/dismiss button
-					//sliderPath.visibility = View.VISIBLE
-					sliderPathScaleUp.setAnimationListener(object: Animation.AnimationListener {
-						override fun onAnimationStart(p0: Animation?)
-						{
-							println("Scale up vis start")
-							sliderPath.visibility = View.VISIBLE
-						}
-
-						override fun onAnimationEnd(p0: Animation?)
-						{
-							println("Scale up vis end")
-						}
-
-						override fun onAnimationRepeat(p0: Animation?)
-						{
-						}
-
-					})
-					sliderPath.startAnimation(sliderPathScaleUp)
+					swipeGuideAnimator.startSliderPathAnimation(sliderPath)
 				}
 
 				// Finger UP on button
@@ -128,70 +198,37 @@ class NacSwipeLayoutHandler(
 					view.animate()
 						.x(origX)
 						.setDuration(500)
+						.withEndAction {
+
+							// Get the inactive view
+							val inactiveView = getInactiveView(view, snoozeButton, dismissButton)
+
+							// Show one of the snooze/dismiss views
+							swipeGuideAnimator.showSnoozeOrDismissButton(inactiveView,
+								onEnd = {
+									// Show the attention views
+									swipeGuideAnimator.startAttentionAnimations(snoozeAttentionView, dismissAttentionView)
+								}
+							)
+
+							// Hide the slider path
+							swipeGuideAnimator.stopSliderPathAnimation(sliderPath)
+
+						}
 						.start()
-
-					// Start the animations
-					snoozeAttentionView.startAnimation(snoozeScaleAnimation)
-					dismissAttentionView.startAnimation(dismissScaleAnimation)
-
-					// Hide the slider path
-					//sliderPath.visibility = View.INVISIBLE
-					sliderPathScaleDown.setAnimationListener(object: Animation.AnimationListener {
-						override fun onAnimationStart(p0: Animation?)
-						{
-							println("Scale down vis start")
-							sliderPath.visibility = View.VISIBLE
-						}
-
-						override fun onAnimationEnd(p0: Animation?)
-						{
-							println("Scale down vis end")
-							sliderPath.visibility = View.INVISIBLE
-						}
-
-						override fun onAnimationRepeat(p0: Animation?)
-						{
-						}
-
-					})
-					sliderPath.startAnimation(sliderPathScaleDown)
 				}
 
 				// Moving finger
 				MotionEvent.ACTION_MOVE ->
 				{
-					// Calculate the new X position
-					var newX = motionEvent.rawX + dx
-
-					// Check if the new X position is less than the start position
-					if (newX < startAlarmActionX)
+					try
 					{
-						// Check if the view's position is equal to the start position
-						if (view.x == startAlarmActionX)
-						{
-							// Do not move the view
-							return@setOnTouchListener true
-						}
-
-						// Set the new X position to the start position
-						newX = startAlarmActionX
+						// Set the new X position
+						view.x = calculateNewXposition(view, motionEvent, dx)
 					}
-					// Check if the new X position is greater than the end position
-					else if (newX > endAlarmActionX)
+					catch (_: UnableToCalculateNewXposition)
 					{
-						// Check if the view's position is equal to the end position
-						if (view.x == endAlarmActionX)
-						{
-							// Do not move the view
-							return@setOnTouchListener true
-						}
-
-						// Set the new X position to the end position
-						newX = endAlarmActionX
 					}
-
-					// Set the new X position
-					view.x = newX
 				}
 
 			}
@@ -238,8 +275,7 @@ class NacSwipeLayoutHandler(
 			//snoozeAttentionView.setViewSizeFromAnimator(it)
 		}
 
-		snoozeAttentionView.startAnimation(snoozeScaleAnimation)
-		dismissAttentionView.startAnimation(dismissScaleAnimation)
+		swipeGuideAnimator.startAttentionAnimations(snoozeAttentionView, dismissAttentionView)
 
 		// Setup the snooze and dismiss buttons
 		setupSnoozeButton()
