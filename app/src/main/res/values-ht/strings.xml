@@ -319,74 +319,75 @@
 	<!-- ******************* -->
 
 	<!-- Categories -->
+	<string name="alarm_screen_category">Ekran alam</string>
 	<string name="color_category">Koulè</string>
 	<string name="notification_category">Notifikasyon</string>
 	<string name="style_category">Style</string>
 	<string name="tweaks_category">Tweaks</string>
 
+	<!-- New screen -->
+	<string name="new_screen">Nouvo ekran</string>
+	<string name="new_screen_true">Sèvi ak nouvo ekran alam la, kote ou glise pou snooze/ranvwaye alam la.\n</string>
+	<string name="new_screen_false">Pa sèvi ak nouvo ekran alam la. Sèvi ak ekran orijinal la ak bouton senp pou snooze/ranvwaye alam la.</string>
 
-	<!-- Day button style -->
-	<string name="day_button_style">Bouton jou</string>
+	<!-- Show alarm name -->
+	<string name="show_alarm_name">Montre non alam</string>
+	<string name="show_alarm_name_true">Montre non alam la nan ekran alam la.</string>
+	<string name="show_alarm_name_false">Pa montre non alam.</string>
 
+	<!-- Show current date and time -->
+	<string name="show_current_date_and_time">Montre dat ak lè aktyèl la</string>
+	<string name="show_current_date_and_time_true">Montre dat ak lè aktyèl la nan ekran alam la.</string>
+	<string name="show_current_date_and_time_false">Pa montre dat ak lè aktyèl la.\n</string>
 
-	<!-- Start Week On -->
-	<string name="start_week_on">Kòmanse semèn sou&#8230;</string>
-
+	<!-- Show music information -->
+	<string name="show_music_info">Montre enfòmasyon mizik</string>
+	<string name="show_music_info_true">Montre enfòmasyon sou mizik/sonri k ap jwe kounye a nan ekran alam la.</string>
+	<string name="show_music_info_false">Pa montre enfòmasyon mizik/sonri.\n</string>
 
 	<!-- Theme color -->
 	<string name="theme_color">Tèm</string>
 	<string name="theme_color_summary">Koulè tèm nan.</string>
 
-
 	<!-- Name color -->
 	<string name="name_color">@string/alarm_name</string>
 	<string name="name_color_summary">pa egzan Travay</string>
-
 
 	<!-- Days color -->
 	<string name="days_color">@string/alarm_days</string>
 	<string name="days_color_summary">pa egzan len &#8231; mad &#8231; mèk &#8231; jed &#8231; van</string>
 
-
 	<!-- Time color -->
 	<string name="time_color">Tan</string>
 	<string name="time_color_summary">pa egzan 12:30</string>
 
-
 	<!-- AM color -->
 	<string name="am_color_summary">Koulè si AM se nan lè alam la.</string>
-
 
 	<!-- PM color -->
 	<string name="pm_color_summary">Koulè si PM nan lè alam la.</string>
 
-
 	<!-- Missed alarm notifications -->
 	<string name="missed_alarm_true">Montre notifikasyon pou alam rate yo.</string>
-
 
 	<!-- Upcoming alarm notifications -->
 	<string name="upcoming_alarm_true">Montre notifikasyon pou alam k ap vini yo.</string>
 
+	<!-- Day button style -->
+	<string name="day_button_style">Bouton jou</string>
+
+	<!-- Start Week On -->
+	<string name="start_week_on">Kòmanse semèn sou&#8230;</string>
 
 	<!-- Expand new alarm card -->
 	<string name="expand_new_alarm">Elaji nouvo alam yo</string>
 	<string name="expand_new_alarm_true">Alam yo kopye oswa kreye ak &#8220;+&#8221; bouton yo elaji.</string>
 	<string name="expand_new_alarm_false">Alam yo pa elaji.</string>
 
-
 	<!-- Time remaining format -->
 	<string name="next_alarm_format">Pwochen fòma alam&#8230;</string>
 	<string name="next_alarm_format_time_in">Pwochen alam nan 7 èdtan 30 minit</string>
 	<string name="next_alarm_format_time_on">Pwochen alam lendi 7:00 AM</string>
-
-
-	<!-- Show alarm information -->
-	<string name="show_alarm_info">Montre enfòmasyon alam</string>
-	<string name="show_alarm_info_true">Montre non alam la nan pati anba ekran an lè yon alam sonnen.</string>
-	<string name="show_alarm_info_false">Pa montre enfòmasyon alam yo.\n</string>
-
-
 
 	<!-- ********************** -->
 	<!-- Miscellaneous settings -->

@@ -26,8 +26,11 @@
 
 	<!-- Miscellaneous -->
 	<bool name="default_easy_snooze">false</bool>
-	<bool name="default_show_alarm_info">false</bool>
 	<bool name="default_shuffle_playlist">false</bool>
+	<bool name="default_use_new_alarm_screen">false</bool>
+	<bool name="default_show_alarm_name">false</bool>
+	<bool name="default_show_current_date_and_time">false</bool>
+	<bool name="default_show_music_info">false</bool>
 
 	<!--
 	<bool name="is_app_updated">false</bool>

@@ -1,14 +1,19 @@
 package com.nfcalarmclock.activealarm
 
 import android.annotation.SuppressLint
+import android.text.format.DateFormat
 import android.view.MotionEvent
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.util.NacCalendar
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+import java.util.TimeZone
 
 class NacSwipeLayoutHandler(
 
@@ -34,42 +39,93 @@ class NacSwipeLayoutHandler(
 	/**
 	 * Exception when unable to calculate new X position.
 	 */
-	class UnableToCalculateNewXposition : Exception("Unable to calculate new X position.")
-
-	/**
-	 * View that represents the parent click and slide. This is the max size
-	 * that the click and slide view can be. The parent needs to be there so
-	 * that resizing of the children does not affect any of the other views in
-	 * the activity
-	 */
-	private val parentClickAndSlideView: RelativeLayout = activity.findViewById(R.id.parent_click_and_slide)
-
-	/**
-	 * View that represents the example click and slide.
-	 */
-	private val exampleClickAndSlideView: RelativeLayout = activity.findViewById(R.id.example_click_and_slide)
+	class UnableToCalculateNewXposition
+		: Exception("Unable to calculate new X position.")
 
 	/**
 	 * Animator for the guide on how the user should swipe.
 	 */
-	private val swipeGuideAnimator: NacSwipeGuideAnimator = NacSwipeGuideAnimator(activity)
+	private val swipeAnimation: NacSwipeAnimationHandler = NacSwipeAnimationHandler(activity)
 
 	/**
-	 * Animator for how the user is swiping.
+	 * Alarm name.
 	 */
-	private val userSwipeAnimator: NacUserSwipeAnimator = NacUserSwipeAnimator(activity)
+	private val alarmNameTextView: TextView = activity.findViewById(R.id.alarm_name)
 
+	/**
+	 * Current date.
+	 */
+	private val currentDateTextView: TextView = activity.findViewById(R.id.current_date)
 
+	/**
+	 * Current time.
+	 */
+	private val currentTimeTextView: TextView = activity.findViewById(R.id.current_time)
 
+	/**
+	 * Music information.
+	 */
+	private val musicContainer: RelativeLayout = activity.findViewById(R.id.music_container)
+
+	/**
+	 * Music title.
+	 */
+	private val musicTitleTextView: TextView = activity.findViewById(R.id.music_title)
+
+	/**
+	 * Music artist.
+	 */
+	private val musicArtistTextView: TextView = activity.findViewById(R.id.music_artist)
+
+	/**
+	 * Snooze button.
+	 */
+	private val snoozeButton: RelativeLayout = activity.findViewById(R.id.round_snooze_button)
+
+	/**
+	 * Dismiss button.
+	 */
+	private val dismissButton: RelativeLayout = activity.findViewById(R.id.round_dismiss_button)
+
+	/**
+	 * Slider path for the alarm action buttons (snooze and dismiss).
+	 */
 	private val sliderPath: RelativeLayout = activity.findViewById(R.id.alarm_action_slider_path)
 
-	private val snoozeButton: RelativeLayout = activity.findViewById(R.id.round_snooze_button)
-	private val dismissButton: RelativeLayout = activity.findViewById(R.id.round_dismiss_button)
+	/**
+	 * View to capture the user's attention for the snooze button.
+	 */
+	private val snoozeAttentionView: RelativeLayout = activity.findViewById(R.id.snooze_attention_view)
+
+	/**
+	 * View to capture the user's attention for the dismiss button.
+	 */
+	private val dismissAttentionView: RelativeLayout = activity.findViewById(R.id.dismiss_attention_view)
+
+	/**
+	 * Starting X position on the alarm action row.
+	 */
 	private var startAlarmActionX: Float = -1f
+
+	/**
+	 * Ending X position on the alarm action row.
+	 */
 	private var endAlarmActionX: Float = -1f
 
-	private val snoozeAttentionView: RelativeLayout = activity.findViewById(R.id.snooze_attention_view)
-	private val dismissAttentionView: RelativeLayout = activity.findViewById(R.id.dismiss_attention_view)
+	/**
+	 * Whether 24 hour format should be used or not.
+	 */
+	private val is24HourFormat = DateFormat.is24HourFormat(activity)
+
+	/**
+	 * AM string.
+	 */
+	private val am = activity.getString(R.string.am)
+
+	/**
+	 * PM string.
+	 */
+	private val pm = activity.getString(R.string.pm)
 
 	/**
 	 * Calculate the new X position.
@@ -181,38 +237,55 @@ class NacSwipeLayoutHandler(
 					// Get the inactive view
 					val inactiveView = getInactiveView(view, snoozeButton, dismissButton)
 
-					// Hide one of the snooze/dismiss views
-					swipeGuideAnimator.hideSnoozeOrDismissButton(inactiveView)
+					// Hide the inactive view (either the snooze or dismiss button)
+					swipeAnimation.hideInactiveView(inactiveView)
 
-					// Hide the attention views
-					swipeGuideAnimator.stopAttentionAnimations(snoozeAttentionView, dismissAttentionView)
+					// Hide the attention views and stop the animations
+					swipeAnimation.hideAttentionViews(snoozeAttentionView,
+						dismissAttentionView)
 
 					// Show the slider path
-					swipeGuideAnimator.startSliderPathAnimation(sliderPath)
+					swipeAnimation.showSliderPath(sliderPath)
 				}
 
 				// Finger UP on button
 				MotionEvent.ACTION_UP ->
 				{
+					// Check if the alarm should be snoozed
+					if (shouldSnooze(view))
+					{
+						// Call the snooze listener
+						onAlarmActionListener.onSnooze(alarm!!)
+						return@setOnTouchListener true
+					}
+					// Check if the alarm should be dismissed
+					else if (shouldDismiss(view))
+					{
+						// Call the dismiss listener
+						onAlarmActionListener.onDismiss(alarm!!)
+						return@setOnTouchListener true
+					}
+
 					// Animate back to the original X position
 					view.animate()
 						.x(origX)
-						.setDuration(500)
+						.setDuration(300)
 						.withEndAction {
 
 							// Get the inactive view
-							val inactiveView = getInactiveView(view, snoozeButton, dismissButton)
+							val inactiveView = getInactiveView(view, snoozeButton,
+								dismissButton)
 
-							// Show one of the snooze/dismiss views
-							swipeGuideAnimator.showSnoozeOrDismissButton(inactiveView,
+							// Show the inactive view (either the snooze or dismiss button)
+							swipeAnimation.showInactiveView(inactiveView,
 								onEnd = {
-									// Show the attention views
-									swipeGuideAnimator.startAttentionAnimations(snoozeAttentionView, dismissAttentionView)
-								}
-							)
+									// Show the attention views and start their animations
+									swipeAnimation.showAttentionViews(
+										snoozeAttentionView, dismissAttentionView)
+								})
 
 							// Hide the slider path
-							swipeGuideAnimator.stopSliderPathAnimation(sliderPath)
+							swipeAnimation.hideSliderPath(sliderPath)
 
 						}
 						.start()
@@ -263,19 +336,138 @@ class NacSwipeLayoutHandler(
 	}
 
 	/**
+	 * Check if the alarm should be dismissed .
+	 *
+	 * @return True if the alarm should be dismissed because the view is the
+	 *         dismiss button and it is at the start of the alarm action row,
+	 *         and False otherwise.
+	 */
+	private fun shouldDismiss(view: View): Boolean
+	{
+		return when (view.id)
+		{
+			// Dismiss button
+			dismissButton.id ->
+			{
+				// Check if the view position is at the start of the alarm action row
+				return (view.x == startAlarmActionX)
+			}
+
+			// Snooze button or some other view which should never happen
+			else -> false
+		}
+	}
+
+	/**
+	 * Check if the alarm should be snoozed.
+	 *
+	 * @return True if the alarm should be snoozed because the view is the
+	 *         snooze button and it is at the end of the alarm action row, and
+	 *         False otherwise.
+	 */
+	private fun shouldSnooze(view: View): Boolean
+	{
+		return when (view.id)
+		{
+			// Snooze button
+			snoozeButton.id ->
+			{
+				// Check if the view position is at the end of the alarm action row
+				return (view.x == endAlarmActionX)
+			}
+
+			// Dismiss button or some other view which should never happen
+			else -> false
+		}
+	}
+
+	/**
+	 * Setup the alarm name.
+	 */
+	private fun setupAlarmName()
+	{
+		// Get the user preference on whether the alarm name should be shown
+		val visibility = if (sharedPreferences.showAlarmName) View.VISIBLE else View.INVISIBLE
+
+		// Set the visibility
+		alarmNameTextView.visibility = visibility
+
+		// Check if the alarm is not null and the user wants to see alarm name
+		if ((alarm != null) && sharedPreferences.showAlarmName)
+		{
+			// Show the alarm name
+			alarmNameTextView.text = alarm.nameNormalized
+			alarmNameTextView.isSelected = true
+		}
+	}
+
+	/**
+	 * Setup the current date and time.
+	 */
+	private fun setupCurrentDateAndTime()
+	{
+		// Get the user preference on whether the current date and time should
+		// be shown
+		val visibility = if (sharedPreferences.showCurrentDateAndTime) View.VISIBLE else View.INVISIBLE
+
+		// Set the visibility
+		currentDateTextView.visibility = visibility
+		currentTimeTextView.visibility = visibility
+
+		// Get info for calculating current date and time
+		val locale = Locale.getDefault()
+		val cal = Calendar.getInstance()
+
+		// Get the current date
+		val skeleton = DateFormat.getBestDateTimePattern(locale, "E MMM d")
+		val dateFormat = SimpleDateFormat(skeleton, locale)
+
+		dateFormat.timeZone = TimeZone.getDefault()
+		dateFormat.applyLocalizedPattern(skeleton)
+
+		val date = dateFormat.format(cal.time)
+		println(dateFormat)
+		println(date)
+
+		// Get the current time
+		val hour = cal[Calendar.HOUR]
+		val minute = cal[Calendar.MINUTE]
+		var time = NacCalendar.getClockTime(hour, minute, is24HourFormat)
+		val meridian = NacCalendar.getMeridian(hour, is24HourFormat, am, pm)
+
+		time += " $meridian"
+
+		// Set the text
+		currentDateTextView.text = date
+		currentTimeTextView.text = time
+	}
+
+	/**
+	 * Setup the music information.
+	 */
+	private fun setupMusicInformation()
+	{
+		// Get the user preference on whether the music info should be shown
+		val visibility = if (sharedPreferences.showMusicInfo) View.VISIBLE else View.INVISIBLE
+
+		// Set the visibility
+		// TODO: Get the music event system working
+		musicContainer.visibility = View.INVISIBLE
+	}
+
+
+	/**
 	 * Start the layout and run any setup that needs to run.
 	 */
-	fun start()
+	override fun start()
 	{
+		// Setup the views based on user preference
+		setupAlarmName()
+		setupCurrentDateAndTime()
+		setupMusicInformation()
 
-		// Start the swipe guide animator
-		// TODO: Make the swipe guide on the action buttons
-		swipeGuideAnimator.start {
-			//exampleClickAndSlideView.setViewSizeFromAnimator(it)
-			//snoozeAttentionView.setViewSizeFromAnimator(it)
-		}
-
-		swipeGuideAnimator.startAttentionAnimations(snoozeAttentionView, dismissAttentionView)
+		// Show the attention views and start their animations
+		swipeAnimation.showAttentionViews(snoozeAttentionView, dismissAttentionView)
 
 		// Setup the snooze and dismiss buttons
 		setupSnoozeButton()
@@ -285,11 +477,10 @@ class NacSwipeLayoutHandler(
 	/**
 	 * Stop the layout handler.
 	 */
-	fun stop()
+	override fun stop()
 	{
-		// Cleanup the animators
-		swipeGuideAnimator.cancel()
-		userSwipeAnimator.cancel()
+		// Hide the attention views and stop the animations
+		swipeAnimation.hideAttentionViews(snoozeAttentionView, dismissAttentionView)
 	}
 
 }

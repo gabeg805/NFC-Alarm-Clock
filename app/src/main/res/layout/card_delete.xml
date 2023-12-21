@@ -27,7 +27,7 @@
 		android:layout_centerVertical="true"
 		android:textAllCaps="true"
 		android:textColor="@color/white"
-		android:textSize="@dimen/tsz_large"
+		android:textSize="@dimen/tsz_medium"
 		android:textStyle="bold"
 		android:text="@string/action_alarm_delete"
 		/>

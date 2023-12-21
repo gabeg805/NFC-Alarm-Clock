@@ -16,11 +16,11 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_alignParentTop="true"
-		android:textColor="@color/white_dull"
+		android:textColor="@color/white"
 		android:gravity="center_horizontal"
-		android:textSize="@dimen/tsz_attention"
+		android:textSize="@dimen/tsz_dummy"
 		android:textStyle="bold"
-		android:text="08:00 AM"
+		android:text=""
 		/>
 
 	<TextView
@@ -31,8 +31,7 @@
 		android:gravity="center_horizontal"
 		android:textColor="@color/white_dull"
 		android:textSize="@dimen/tsz_normal"
-		android:textStyle="italic"
-		android:text="Wed Dec 7"
+		android:text=""
 		/>
 
 	<TextView
@@ -48,8 +47,8 @@
 		android:scrollHorizontally="true"
 		android:singleLine="true"
 		android:textColor="@color/white"
-		android:textSize="@dimen/tsz_title"
-		android:text="Time for work"
+		android:textSize="@dimen/tsz_xlarge"
+		android:text=""
 		/>
 
 		<RelativeLayout
@@ -84,7 +83,7 @@
 			android:id="@+id/alarm_action_slider_path"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:background="@drawable/alarm_action_slider_path2"
+			android:background="@drawable/slider_path"
 			android:visibility="invisible"
 			/>
 
@@ -138,7 +137,7 @@
 				android:textColor="@color/white"
 				android:textSize="@dimen/tsz_tiny"
 				android:textStyle="bold"
-				android:text="Snooze"
+				android:text="@string/action_alarm_snooze"
 				/>
 
 		</RelativeLayout>
@@ -171,7 +170,7 @@
 				android:textColor="@color/white"
 				android:textSize="@dimen/tsz_tiny"
 				android:textStyle="bold"
-				android:text="Dismiss"
+				android:text="@string/action_alarm_dismiss"
 				/>
 
 		</RelativeLayout>
@@ -187,7 +186,7 @@
 		android:layout_marginEnd="@dimen/normal"
 		android:layout_alignParentBottom="true"
 		android:gravity="center_horizontal"
-		>
+		android:visibility="invisible">
 
 		<ImageView
 			android:id="@+id/music_icon"
@@ -209,7 +208,7 @@
 			android:textColor="@color/white"
 			android:textSize="@dimen/tsz_normal"
 			android:textStyle="bold"
-			android:text="Hello"
+			android:text=""
 			/>
 
 		<TextView
@@ -223,7 +222,7 @@
 			android:textColor="@color/white"
 			android:textSize="@dimen/tsz_caption"
 			android:textStyle="italic"
-			android:text="by Ripe"
+			android:text=""
 			/>
 
 	</RelativeLayout>

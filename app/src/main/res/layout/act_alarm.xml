@@ -21,7 +21,7 @@
 			android:layout_height="wrap_content"
 			android:layout_marginBottom="@dimen/large"
 			android:textColor="@color/white_dull"
-			android:textSize="@dimen/tsz_title"
+			android:textSize="@dimen/tsz_xxlarge"
 			android:text="@string/title_alarm_activity"
 			/>
 

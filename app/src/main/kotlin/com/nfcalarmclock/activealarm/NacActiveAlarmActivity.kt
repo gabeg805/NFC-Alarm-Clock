@@ -1,13 +1,9 @@
 package com.nfcalarmclock.activealarm
 
-import android.animation.PropertyValuesHolder
-import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.view.MotionEvent
-import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
@@ -21,7 +17,6 @@ import com.nfcalarmclock.util.NacIntent
 import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.util.enableActivityAlias
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.sqrt
 
 
 /**
@@ -38,24 +33,14 @@ class NacActiveAlarmActivity
 	private lateinit var sharedPreferences: NacSharedPreferences
 
 	/**
-	 * Alarm.
+	 * The layout handler to use (either original or swipe).
 	 */
-	private var alarm: NacAlarm? = null
-
-	/**
-	 * Original layout handler.
-	 */
-	private lateinit var originalLayoutHandler: NacOriginalLayoutHandler
-
-	/**
-	 * Swipe to dismiss layout handler.
-	 */
-	private lateinit var swipeLayoutHandler: NacSwipeLayoutHandler
+	private lateinit var layoutHandler: NacActiveAlarmLayoutHandler
 
 	/**
 	 * Listener for an alarm action, such as snooze or dismiss.
 	 */
-	val onAlarmActionListener: NacActiveAlarmLayoutHandler.OnAlarmActionListener =
+	private val onAlarmActionListener: NacActiveAlarmLayoutHandler.OnAlarmActionListener =
 		object: NacActiveAlarmLayoutHandler.OnAlarmActionListener
 		{
 
@@ -81,6 +66,11 @@ class NacActiveAlarmActivity
 			}
 
 		}
+
+	/**
+	 * Alarm.
+	 */
+	private var alarm: NacAlarm? = null
 
 	/**
 	 * Check if an alarm can be dismissed with NFC.
@@ -119,18 +109,34 @@ class NacActiveAlarmActivity
 		// Super
 		super.onCreate(savedInstanceState)
 
-		// Setup the window
-		requestWindowFeature(Window.FEATURE_NO_TITLE)
-		setContentView(R.layout.act_alarm_new)
-		//setContentView(R.layout.act_alarm)
+		// Setup the shared preferences
+		sharedPreferences = NacSharedPreferences(this)
 
+		println("onCreate : ${intent.action}")
 		// Set the alarm from the bundle
 		setAlarm(savedInstanceState)
 
-		// Set the member variables
-		sharedPreferences = NacSharedPreferences(this)
-		//originalLayoutHandler = NacOriginalLayoutHandler(this, alarm, onAlarmActionListener)
-		swipeLayoutHandler = NacSwipeLayoutHandler(this, alarm, onAlarmActionListener)
+		// Setup the window
+		requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+		// Check if the new alarm screen should be used
+		if (sharedPreferences.useNewAlarmScreen)
+		{
+			// Set the screen view
+			setContentView(R.layout.act_alarm_new)
+
+			// Set the layout handler
+			layoutHandler = NacSwipeLayoutHandler(this, alarm, onAlarmActionListener)
+		}
+		// Use the original alarm screen
+		else
+		{
+			// Set the screen view
+			setContentView(R.layout.act_alarm)
+
+			// Set the layout handler
+			layoutHandler = NacOriginalLayoutHandler(this, alarm, onAlarmActionListener)
+		}
 
 		// Setup
 		setupScreenOn()
@@ -155,6 +161,7 @@ class NacActiveAlarmActivity
 		// Super
 		super.onNewIntent(intent)
 
+		println("onNewIntent : ${intent.action}")
 		// Set the intent
 		setIntent(intent)
 
@@ -189,6 +196,7 @@ class NacActiveAlarmActivity
 		// Super
 		super.onResume()
 
+		println("onResume : ${intent.action}")
 		// NFC tag was scanned. Check if can dismiss
 		if (NacNfc.wasScanned(intent) && checkCanDismissWithNfc())
 		{
@@ -198,8 +206,6 @@ class NacActiveAlarmActivity
 
 		// Setup
 		setupNfc()
-		//val x = findViewById<TextView>(R.id.title)
-		//x.isSelected = true
 	}
 
 	/**
@@ -211,18 +217,16 @@ class NacActiveAlarmActivity
 		// Super
 		super.onWindowFocusChanged(hasFocus)
 
-		println("WINDOW FOCUS CHANGE : $hasFocus")
-
+		// Check if the window focus has changed
 		if (hasFocus)
 		{
-			// Start the swipe layout handler
-			//originalLayoutHandler.start()
-			swipeLayoutHandler.start()
+			// Start the layout handler
+			layoutHandler.start()
 		}
 		else
 		{
-			// Stop the swipe layout handler
-			swipeLayoutHandler.stop()
+			// Stop the layout handler
+			layoutHandler.stop()
 		}
 	}
 
@@ -407,58 +411,4 @@ class NacActiveAlarmActivity
 
 	}
 
-}
-
-/**
- * Calculate the radius of where a user is touching with respect to a view.
- */
-fun View.calculateTouchRadius(motionEvent: MotionEvent): Int
-{
-	// Determine the X and Y from the reference of the origin, as
-	// opposed to the top-left corner
-	val xOrigin = this.layoutParams.width / 2
-	val yOrigin = this.layoutParams.height / 2
-	val newX = motionEvent.x - xOrigin
-	val newY = motionEvent.y - yOrigin
-
-	// Calculate the radius of where the user's finger is wrt the view
-	return sqrt(newX*newX + newY*newY).toInt()
-}
-
-/**
- * Set the size of a view.
- */
-fun View.setViewSize(size: Int)
-{
-	// Set the width and height
-	this.layoutParams.width = size
-	this.layoutParams.height = size
-
-	// Force a layout refresh
-	this.requestLayout()
-}
-
-/**
- * Set the size of a view from an animator.
- */
-fun View.setViewSizeFromAnimator(valueAnimator: ValueAnimator)
-{
-	// Get the value from the animator
-	val value = valueAnimator.animatedValue as Int
-
-	// Set the size of the view
-	this.setViewSize(value)
-}
-
-/**
- * Extension function to convert the values of a property holder to an Int.
- */
-fun PropertyValuesHolder.getIntValues(): List<Int>
-{
-	return this.toString()
-		.replace(":", "")
-		.trim()
-		.replace("\\s+".toRegex(), " ")
-		.split("\\s".toRegex())
-		.map { it.toInt() }
 }

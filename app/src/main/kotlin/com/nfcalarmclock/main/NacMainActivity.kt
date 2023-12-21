@@ -84,8 +84,6 @@ import java.util.Locale
 
 /**
  * The application's main activity.
- *
- * TODO: Doubled up menu items. How did that happen? Fix this.
  */
 @AndroidEntryPoint
 class NacMainActivity
@@ -104,43 +102,6 @@ class NacMainActivity
 	OnCardUseNfcChangedListener,
 	OnScanNfcTagListener
 {
-
-	companion object
-	{
-
-		/**
-		 * Create an intent that will be used to start the Main activity.
-		 *
-		 * @param  context  A context.
-		 *
-		 * @return The Main activity intent.
-		 */
-		fun getStartIntent(context: Context): Intent
-		{
-			// Create an intent with the main activity
-			val intent = Intent(context, NacMainActivity::class.java)
-			val flags = (Intent.FLAG_ACTIVITY_NEW_TASK
-				or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-
-			// Add the flags to the intent
-			intent.addFlags(flags)
-
-			return intent
-		}
-
-		/**
-		 * Start the main activity.
-		 */
-		fun startMainActivity(context: Context)
-		{
-			// Create the intent
-			val intent = getStartIntent(context)
-
-			// Start the activity
-			context.startActivity(intent)
-		}
-
-	}
 
 	/**
 	 * Shared preferences.
@@ -208,8 +169,6 @@ class NacMainActivity
 	/**
 	 * Receiver for the time tick intent. This is called when the time increments
 	 * every minute.
-	 *
-	 * TODO: Should this be its own class like NacShutdownBroadcastReceiver?
 	 */
 	private val timeTickReceiver = object : BroadcastReceiver()
 	{
@@ -269,6 +228,20 @@ class NacMainActivity
 		}
 
 	/**
+	 * Check if the app has been newly installed.
+	 */
+	private val isNewInstall: Boolean
+		get()
+		{
+			// Get the previous version
+			val previousVersion = sharedPreferences!!.previousAppVersion
+
+			// When the previous saved version is empty, this means that the
+			// alarm has been newly installed
+			return previousVersion.isEmpty()
+		}
+
+	/**
 	 * Check if the What's New dialog should be shown.
 	 */
 	private val shouldShowWhatsNewDialog: Boolean
@@ -286,6 +259,23 @@ class NacMainActivity
 			// probably do not care
 			return previousVersion.isNotEmpty() && (BuildConfig.VERSION_NAME != previousVersion)
 		}
+
+	private fun setupWhichAlarmScreenToUse()
+	{
+		// Check if the app was not newly installed
+		if (!isNewInstall)
+		{
+			// Do nothing
+			return
+		}
+
+		// Change the alarm screen settings for a new install so that all the
+		// new stuff is shown
+		sharedPreferences!!.editUseNewAlarmScreen(true)
+		sharedPreferences!!.editShowAlarmName(true)
+		sharedPreferences!!.editShowCurrentDateAndTime(true)
+		sharedPreferences!!.editShowMusicInfo(true)
+	}
 
 	/**
 	 * Add an alarm to the database.
@@ -658,6 +648,7 @@ class NacMainActivity
 		toolbar!!.setOnMenuItemClickListener(this)
 		setupAlarmCardAdapter()
 		setupRecyclerView()
+		setupWhichAlarmScreenToUse()
 
 		// Disable the activity alias so that tapping an NFC tag will NOT open
 		// the main activity
@@ -1217,8 +1208,7 @@ class NacMainActivity
 		alarmCardAdapterLiveData!!.observe(this) { alarms ->
 
 			 // Alarm list has changed.
-			 // TODO: There is a race condition between snoozing an alarm, writing to the
-			 // database, and refreshing the main activity.
+			 // TODO: There is a race condition between snoozing an alarm, writing to the database, and refreshing the main activity.
 
 			// If this is the first time the app is running, set the flags accordingly
 			if (sharedPreferences!!.appFirstRun)
@@ -1652,6 +1642,43 @@ class NacMainActivity
 
 		// Show the dialog
 		dialog.show(supportFragmentManager, NacWhatsNewDialog.TAG)
+	}
+
+	companion object
+	{
+
+		/**
+		 * Create an intent that will be used to start the Main activity.
+		 *
+		 * @param  context  A context.
+		 *
+		 * @return The Main activity intent.
+		 */
+		fun getStartIntent(context: Context): Intent
+		{
+			// Create an intent with the main activity
+			val intent = Intent(context, NacMainActivity::class.java)
+			val flags = (Intent.FLAG_ACTIVITY_NEW_TASK
+				or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+
+			// Add the flags to the intent
+			intent.addFlags(flags)
+
+			return intent
+		}
+
+		/**
+		 * Start the main activity.
+		 */
+		fun startMainActivity(context: Context)
+		{
+			// Create the intent
+			val intent = getStartIntent(context)
+
+			// Start the activity
+			context.startActivity(intent)
+		}
+
 	}
 
 }

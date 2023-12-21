@@ -532,13 +532,37 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Whether the alarm information should be shown or not.
+	 * Whether to show the alarm name or not.
 	 */
-	val showAlarmInfo: Boolean
+	val showAlarmName: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.show_alarm_info_key)
-			val defaultValue = false
+			val key = resources.getString(R.string.key_show_alarm_name)
+			val defaultValue = resources.getBoolean(R.bool.default_show_alarm_name)
+
+			return instance.getBoolean(key, defaultValue)
+		}
+
+	/**
+	 * Whether to show the current date and time or not.
+	 */
+	val showCurrentDateAndTime: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_show_current_date_and_time)
+			val defaultValue = resources.getBoolean(R.bool.default_show_current_date_and_time)
+
+			return instance.getBoolean(key, defaultValue)
+		}
+
+	/**
+	 * Whether to show music information or not.
+	 */
+	val showMusicInfo: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_show_music_info)
+			val defaultValue = resources.getBoolean(R.bool.default_show_music_info)
 
 			return instance.getBoolean(key, defaultValue)
 		}
@@ -651,6 +675,18 @@ class NacSharedPreferences(context: Context)
 		{
 			val key = resources.getString(R.string.alarm_use_dismiss_early_key)
 			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+
+	/**
+	 * Whether to use the new alarm screen or not.
+	 */
+	val useNewAlarmScreen: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_use_new_alarm_screen)
+			val defaultValue = resources.getBoolean(R.bool.default_use_new_alarm_screen)
 
 			return instance.getBoolean(key, defaultValue)
 		}
@@ -975,7 +1011,37 @@ class NacSharedPreferences(context: Context)
 	}
 
 	/**
-	 * Whether to shuffle media.
+	 * Edit whether to show the alarm name or not.
+	 */
+	fun editShowAlarmName(showAlarmName: Boolean)
+	{
+		val key = resources.getString(R.string.key_show_alarm_name)
+
+		return saveBoolean(key, showAlarmName)
+	}
+
+	/**
+	 * Edit whether to show the current date and time or not.
+	 */
+	fun editShowCurrentDateAndTime(showDateAndTime: Boolean)
+	{
+		val key = resources.getString(R.string.key_show_current_date_and_time)
+
+		return saveBoolean(key, showDateAndTime)
+	}
+
+	/**
+	 * Whether to show music information or not.
+	 */
+	fun editShowMusicInfo(showMusicInfo: Boolean)
+	{
+		val key = resources.getString(R.string.key_show_music_info)
+
+		return saveBoolean(key, showMusicInfo)
+	}
+
+	/**
+	 * Edit whether to shuffle media.
 	 */
 	fun editShuffleMedia(shuffle: Boolean)
 	{
@@ -1013,6 +1079,16 @@ class NacSharedPreferences(context: Context)
 		val key = resources.getString(R.string.alarm_use_dismiss_early_key)
 
 		saveBoolean(key, useDismissEarly)
+	}
+
+	/**
+	 * Edit whether to use the new alarm screen or not.
+	 */
+	fun editUseNewAlarmScreen(useNewScreen: Boolean)
+	{
+		val key = resources.getString(R.string.key_use_new_alarm_screen)
+
+		saveBoolean(key, useNewScreen)
 	}
 
 	/**

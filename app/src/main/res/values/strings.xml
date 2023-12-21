@@ -319,74 +319,75 @@
 	<!-- ******************* -->
 
 	<!-- Categories -->
+	<string name="alarm_screen_category">Alarm screen</string>
 	<string name="color_category">Colors</string>
 	<string name="notification_category">Notifications</string>
 	<string name="style_category">Style</string>
 	<string name="tweaks_category">Tweaks</string>
 
+	<!-- New screen -->
+	<string name="new_screen">New screen</string>
+	<string name="new_screen_true">Use the new alarm screen, where you swipe to snooze/dismiss the alarm.\n</string>
+	<string name="new_screen_false">Do not use the new alarm screen. Use the original screen with simple buttons to snooze/dismiss the alarm.</string>
 
-	<!-- Day button style -->
-	<string name="day_button_style">Day buttons</string>
+	<!-- Show alarm name -->
+	<string name="show_alarm_name">Show alarm name</string>
+	<string name="show_alarm_name_true">Show the alarm name in the alarm screen.</string>
+	<string name="show_alarm_name_false">Do not show the alarm name.</string>
 
+	<!-- Show current date and time -->
+	<string name="show_current_date_and_time">Show current date and time</string>
+	<string name="show_current_date_and_time_true">Show the current date and time in the alarm screen.</string>
+	<string name="show_current_date_and_time_false">Do not show the current date and time.\n</string>
 
-	<!-- Start Week On -->
-	<string name="start_week_on">Start week on&#8230;</string>
-
+	<!-- Show music information -->
+	<string name="show_music_info">Show music information</string>
+	<string name="show_music_info_true">Show information on the currently playing music/ringtone in the alarm screen.</string>
+	<string name="show_music_info_false">Do not show music/ringtone information.\n</string>
 
 	<!-- Theme color -->
 	<string name="theme_color">Theme</string>
 	<string name="theme_color_summary">The theme color.</string>
 
-
 	<!-- Name color -->
 	<string name="name_color">@string/alarm_name</string>
 	<string name="name_color_summary">e.g. Work</string>
-
 
 	<!-- Days color -->
 	<string name="days_color">@string/alarm_days</string>
 	<string name="days_color_summary">e.g. Mon &#8231; Tue &#8231; Wed &#8231; Thu &#8231; Fri</string>
 
-
 	<!-- Time color -->
 	<string name="time_color">Time</string>
 	<string name="time_color_summary">e.g. 12:30</string>
 
-
 	<!-- AM color -->
 	<string name="am_color_summary">Colored if AM is in the alarm time.</string>
-
 
 	<!-- PM color -->
 	<string name="pm_color_summary">Colored if PM is in the alarm time.</string>
 
-
 	<!-- Missed alarm notifications -->
 	<string name="missed_alarm_true">Show notifications for missed alarms.</string>
-
 
 	<!-- Upcoming alarm notifications -->
 	<string name="upcoming_alarm_true">Show notifications for upcoming alarms.</string>
 
+	<!-- Day button style -->
+	<string name="day_button_style">Day buttons</string>
+
+	<!-- Start Week On -->
+	<string name="start_week_on">Start week on&#8230;</string>
 
 	<!-- Expand new alarm card -->
 	<string name="expand_new_alarm">Expand new alarms</string>
 	<string name="expand_new_alarm_true">Alarms that are copied or created with the &#8220;+&#8221; button are expanded.</string>
 	<string name="expand_new_alarm_false">Alarms are not expanded.</string>
 
-
 	<!-- Time remaining format -->
 	<string name="next_alarm_format">Next alarm format&#8230;</string>
 	<string name="next_alarm_format_time_in">Next alarm in 7 hours 30 minutes</string>
 	<string name="next_alarm_format_time_on">Next alarm on Mon 7:00 AM</string>
-
-
-	<!-- Show alarm information -->
-	<string name="show_alarm_info">Show alarm information</string>
-	<string name="show_alarm_info_true">Show the alarm name at the bottom of the screen when an alarm goes off.</string>
-	<string name="show_alarm_info_false">Do not show alarm information.\n</string>
-
-
 
 	<!-- ********************** -->
 	<!-- Miscellaneous settings -->

@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
 
-open class NacActiveAlarmLayoutHandler(
+abstract class NacActiveAlarmLayoutHandler(
 
 	/**
 	 * Activity.
@@ -37,5 +37,15 @@ open class NacActiveAlarmLayoutHandler(
 	 * Shared preferences.
 	 */
 	val sharedPreferences: NacSharedPreferences = NacSharedPreferences(activity)
+
+	/**
+	 * Start the layout and run any setup that needs to run.
+	 */
+	abstract fun start()
+
+	/**
+	 * Stop the layout handler.
+	 */
+	abstract fun stop()
 
 }

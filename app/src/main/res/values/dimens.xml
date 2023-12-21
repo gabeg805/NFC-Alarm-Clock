@@ -23,10 +23,12 @@
 	<dimen name="tsz_caption">12sp</dimen>
 	<dimen name="tsz_small">14sp</dimen>
 	<dimen name="tsz_normal">16sp</dimen>
-	<dimen name="tsz_large">18sp</dimen>
-	<dimen name="tsz_xlarge">24sp</dimen>
-	<dimen name="tsz_title">32sp</dimen>
+	<dimen name="tsz_medium">18sp</dimen>
+	<dimen name="tsz_large">24sp</dimen>
+	<dimen name="tsz_xlarge">28sp</dimen>
+	<dimen name="tsz_xxlarge">32sp</dimen>
 	<dimen name="tsz_attention">40sp</dimen>
+	<dimen name="tsz_dummy">52sp</dimen>
 
 	<!-- Sizing -->
 	<dimen name="touch">48dp</dimen>

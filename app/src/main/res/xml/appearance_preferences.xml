@@ -3,6 +3,49 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
+	<!-- Alarm screen -->
+	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
+		android:title="@string/alarm_screen_category">
+
+		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
+			android:title="@string/new_screen"
+			android:key="@string/key_use_new_alarm_screen"
+			android:summaryOn="@string/new_screen_true"
+			android:summaryOff="@string/new_screen_false"
+			android:defaultValue="@bool/default_use_new_alarm_screen"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
+			android:title="@string/show_alarm_name"
+			android:key="@string/key_show_alarm_name"
+			android:summaryOn="@string/show_alarm_name_true"
+			android:summaryOff="@string/show_alarm_name_false"
+			android:defaultValue="@bool/default_show_alarm_name"
+			/>
+
+		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
+			android:title="@string/show_current_date_and_time"
+			android:key="@string/key_show_current_date_and_time"
+			android:summaryOn="@string/show_current_date_and_time_true"
+			android:summaryOff="@string/show_current_date_and_time_false"
+			android:defaultValue="@bool/default_show_current_date_and_time"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
+			android:title="@string/show_music_info"
+			android:key="@string/key_show_music_info"
+			android:summaryOn="@string/show_music_info_true"
+			android:summaryOff="@string/show_music_info_false"
+			android:defaultValue="@bool/default_show_music_info"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="true"
+			/>
+	</com.nfcalarmclock.settings.preference.NacPreferenceCategory>
+
 	<!-- Colors -->
 	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
 		android:title="@string/color_category">
@@ -117,14 +160,6 @@
 			android:defaultValue="@integer/default_next_alarm_format_index"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
-			/>
-
-		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
-			android:title="@string/show_alarm_info"
-			android:key="@string/show_alarm_info_key"
-			android:summaryOn="@string/show_alarm_info_true"
-			android:summaryOff="@string/show_alarm_info_false"
-			android:defaultValue="@bool/default_show_alarm_info"
 			/>
 	</com.nfcalarmclock.settings.preference.NacPreferenceCategory>
 

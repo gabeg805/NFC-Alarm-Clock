@@ -140,8 +140,9 @@ class NacFileTree(path: String)
 		{
 			// Get the values of each columns
 			val mediaId = c.getLong(idIndex)
-			val mediaDirectory = getMediaDirectory(c.getString(pathIndex))
-			val mediaName = c.getString(nameIndex)
+			val mediaRawDirectory = c.getString(pathIndex) ?: continue
+			val mediaDirectory = getMediaDirectory(mediaRawDirectory)
+			val mediaName = c.getString(nameIndex) ?: continue
 
 			// Check if the directory of the current media item matches the
 			// original path. The media item directory will also count as

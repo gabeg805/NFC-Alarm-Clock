@@ -57,6 +57,10 @@
 
 	<!-- Appearance -->
 	<string name="appearance_setting_key">pref_screen_appearance</string>
+	<string name="key_use_new_alarm_screen">pref_use_new_alarm_screen</string>
+	<string name="key_show_alarm_name">pref_alarm_info</string>
+	<string name="key_show_current_date_and_time">pref_alarm_current_date_and_time</string>
+	<string name="key_show_music_info">pref_alarm_music_info</string>
 	<string name="theme_color_key">pref_theme_color</string>
 	<string name="name_color_key">pref_name_color</string>
 	<string name="days_color_key">pref_days_color</string>
@@ -69,7 +73,6 @@
 	<string name="start_week_on_key">pref_start_week_on</string>
 	<string name="expand_new_alarm_key">pref_expand_new_alarm</string>
 	<string name="next_alarm_format_key">pref_time_remaining_format</string>
-	<string name="show_alarm_info_key">pref_alarm_info</string>
 
 	<!-- Statistics -->
 	<string name="stats_setting_key">pref_screen_statistics</string>

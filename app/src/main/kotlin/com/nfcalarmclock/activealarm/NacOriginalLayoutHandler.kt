@@ -117,10 +117,10 @@ class NacOriginalLayoutHandler(
 	 */
 	private fun setupAlarmInfo()
 	{
-		// Alarm is present and the user wants to see alarm info
-		if ((alarm != null) && sharedPreferences.showAlarmInfo)
+		// Check if the alarm is not null and the user wants to see alarm name
+		if ((alarm != null) && sharedPreferences.showAlarmName)
 		{
-			// Show alarm info
+			// Show the alarm name
 			nameTextView.text = alarm.nameNormalized
 			nameTextView.isSelected = true
 		}
@@ -148,9 +148,16 @@ class NacOriginalLayoutHandler(
 	/**
 	 * Start the handler.
 	 */
-	fun start()
+	override fun start()
 	{
 		setupAlarmInstructions()
+	}
+
+	/**
+	 * Stop the layout handler.
+	 */
+	override fun stop()
+	{
 	}
 
 }
