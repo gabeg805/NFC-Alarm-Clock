@@ -2,17 +2,20 @@ package com.nfcalarmclock.activealarm
 
 import android.annotation.TargetApi
 import android.content.Context
+import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.media.NacAudioAttributes
 import com.nfcalarmclock.media.NacMedia
 import com.nfcalarmclock.mediaplayer.NacMediaPlayer
+import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.tts.NacTextToSpeech
 import com.nfcalarmclock.tts.NacTextToSpeech.OnSpeakingListener
 import com.nfcalarmclock.tts.NacTranslate
@@ -320,6 +323,22 @@ class NacWakeupProcess(
 		// level has been reached
 		graduallyIncreaseVolumeHandler.postDelayed({ graduallyIncreaseVolume() },
 			alarm.graduallyIncreaseVolumeWaitTime * 1000L)
+	}
+
+	/**
+	 * Called when the media item that is current playing changes.
+	 */
+	override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int)
+	{
+		// Super
+		super.onMediaItemTransition(mediaItem, reason)
+
+		// Get the path to the current media item
+		val sharedPreferences = NacSharedPreferences(context)
+		val mediaPath = mediaItem?.mediaId ?: ""
+
+		// Save the path of the current media item
+		sharedPreferences.editCurrentPlayingAlarmMedia(mediaPath)
 	}
 
 	/**

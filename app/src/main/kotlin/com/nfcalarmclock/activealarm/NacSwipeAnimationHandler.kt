@@ -135,13 +135,23 @@ class NacSwipeAnimationHandler(context: Context)
 	 */
 	fun hideAttentionViews(snoozeAttentionView: View, dismissAttentionView: View)
 	{
-		// Stop the animations
+		// Stop the snooze animation
+		println("Clearing snooze animation")
 		snoozeAttentionView.clearAnimation()
-		dismissAttentionView.clearAnimation()
 
-		// Hide the views
+		// Hide the snooze view
+		println("Hide the snooze view")
 		snoozeAttentionView.visibility = View.INVISIBLE
-		dismissAttentionView.visibility = View.INVISIBLE
+
+		// Check if the dismiss view should be modified
+		if (dismissAttentionView.visibility != View.GONE)
+		{
+			// Stop the dismiss animation
+			dismissAttentionView.clearAnimation()
+
+			// Hide the dismiss view
+			dismissAttentionView.visibility = View.INVISIBLE
+		}
 	}
 
 	/**
@@ -153,6 +163,13 @@ class NacSwipeAnimationHandler(context: Context)
 		//// Start the animation to hide the inactive view
 		//inactiveButtonScaleDown.setAnimationListener(createHideAnimationListener(inactiveView))
 		//inactiveView.startAnimation(inactiveButtonScaleDown)
+
+		// Check if the view visibility is gone
+		if (inactiveView.visibility == View.GONE)
+		{
+			// Do nothing
+			return
+		}
 
 		// Get the center for the clipping circle.
 		val cx = inactiveView.width / 2
@@ -201,13 +218,23 @@ class NacSwipeAnimationHandler(context: Context)
 	 */
 	fun showAttentionViews(snoozeAttentionView: View, dismissAttentionView: View)
 	{
-		// Show the views
+		// Show the snooze view
+		println("Show the snooze view")
 		snoozeAttentionView.visibility = View.VISIBLE
-		dismissAttentionView.visibility = View.VISIBLE
 
-		// Start the animations
+		// Start the snooze animation
+		println("Start the snooze animation")
 		snoozeAttentionView.startAnimation(snoozePulseAnimation)
-		dismissAttentionView.startAnimation(dismissPulseAnimation)
+
+		// Check if the dismiss view should be modified
+		if (dismissAttentionView.visibility != View.GONE)
+		{
+			// Show the dismiss view
+			dismissAttentionView.visibility = View.VISIBLE
+
+			// Start the dismiss animation
+			dismissAttentionView.startAnimation(dismissPulseAnimation)
+		}
 	}
 
 	/**
@@ -219,6 +246,14 @@ class NacSwipeAnimationHandler(context: Context)
 		//// Start the animation to show the inactive view
 		//inactiveButtonScaleUp.setAnimationListener(createShowAnimationListener(inactiveView, onEnd = onEnd))
 		//inactiveView.startAnimation(inactiveButtonScaleUp)
+
+		// Check if the view visibility is gone
+		if (inactiveView.visibility == View.GONE)
+		{
+			// Call onEnd() right away
+			onEnd()
+			return
+		}
 
 		// Get the center for the clipping circle.
 		val cx = inactiveView.width / 2

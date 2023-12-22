@@ -206,6 +206,7 @@ class NacActiveAlarmActivity
 
 		// Setup
 		setupNfc()
+		layoutHandler.setup(this)
 	}
 
 	/**
@@ -221,12 +222,12 @@ class NacActiveAlarmActivity
 		if (hasFocus)
 		{
 			// Start the layout handler
-			layoutHandler.start()
+			layoutHandler.start(this)
 		}
 		else
 		{
 			// Stop the layout handler
-			layoutHandler.stop()
+			layoutHandler.stop(this)
 		}
 	}
 
@@ -380,6 +381,34 @@ class NacActiveAlarmActivity
 		}
 
 		/**
+		 * Create an intent that will be used to start the Alarm activity.
+		 *
+		 * @param context A context.
+		 * @param intent An intent.
+		 * @param alarm An alarm.
+		 *
+		 * @return The Alarm activity intent.
+		 */
+		private fun getStartIntent(
+			context: Context,
+			intent: Intent,
+			alarm: NacAlarm?
+		): Intent
+		{
+			// Set the class of the intent
+			intent.setClass(context, NacActiveAlarmActivity::class.java)
+
+			// Add the flags to the intent
+			val flags = (Intent.FLAG_ACTIVITY_NEW_TASK
+				or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+
+			intent.addFlags(flags)
+
+			// Add the alarm to the intent and return it
+			return NacIntent.addAlarm(intent, alarm)
+		}
+
+		/**
 		 * Start the alarm activity with the given alarm.
 		 */
 		fun startAlarmActivity(context: Context, alarm: NacAlarm?)
@@ -389,6 +418,18 @@ class NacActiveAlarmActivity
 
 			// Start the activity
 			context.startActivity(intent)
+		}
+
+		/**
+		 * Start the alarm activity with the given alarm.
+		 */
+		fun startAlarmActivity(context: Context, intent: Intent, alarm: NacAlarm?)
+		{
+			// Create the intent
+			val updatedIntent = getStartIntent(context, intent, alarm)
+
+			// Start the activity
+			context.startActivity(updatedIntent)
 		}
 
 		/**

@@ -148,6 +148,17 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Get the current playing alarm media.
+	 */
+	val currentPlayingAlarmMedia: String
+		get()
+		{
+			val key = resources.getString(R.string.key_current_playing_alarm_media)
+
+			return instance.getString(key, "") ?: ""
+		}
+
+	/**
 	 * Which style to use for the day buttons.
 	 *
 	 * 1: Represents using the filled-in buttons (Default)
@@ -850,6 +861,16 @@ class NacSharedPreferences(context: Context)
 		val key = resources.getString(R.string.card_is_measured)
 
 		saveBoolean(key, isMeasured)
+	}
+
+	/**
+	 * Edit the current playing alarm media.
+	 */
+	fun editCurrentPlayingAlarmMedia(path: String)
+	{
+		val key = resources.getString(R.string.key_current_playing_alarm_media)
+
+		saveString(key, path)
 	}
 
 	/**

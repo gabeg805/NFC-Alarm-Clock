@@ -170,7 +170,7 @@ object NacCalendar
 	 *
 	 * @return The time.
 	 */
-	fun getClockTime(hour: Int, minute: Int, format: Boolean): String
+	private fun getClockTime(hour: Int, minute: Int, format: Boolean): String
 	{
 		val locale = Locale.getDefault()
 
@@ -278,36 +278,6 @@ object NacCalendar
 			else
 			{
 				context.getString(R.string.pm)
-			}
-		}
-	}
-
-	/**
-	 * Get the time meridian.
-	 *
-	 * @param  hour  The hour.
-	 * @param  format  The 24 hour format, to determine how to interpret the hour.
-	 *
-	 * @return The time meridian.
-	 */
-	fun getMeridian(hour: Int, format: Boolean, am: String, pm: String): String
-	{
-		// Check if time is in 24 hour format
-		return if (format)
-		{
-			""
-		}
-		else
-		{
-			// Check that the hour is in the morning
-			if (hour < 12)
-			{
-				am
-			}
-			// Check that the hour is in the evening
-			else
-			{
-				pm
 			}
 		}
 	}

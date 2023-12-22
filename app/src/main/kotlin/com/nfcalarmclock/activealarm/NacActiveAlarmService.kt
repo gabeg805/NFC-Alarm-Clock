@@ -40,178 +40,6 @@ class NacActiveAlarmService
 	: Service()
 {
 
-	companion object
-	{
-
-		/**
-		 * Action to start the service.
-		 */
-		const val ACTION_START_SERVICE = "com.nfcalarmclock.ACTION_START_SERVICE"
-
-		/**
-		 * Action to stop the service.
-		 */
-		const val ACTION_STOP_SERVICE = "com.nfcalarmclock.ACTION_STOP_SERVICE"
-
-		/**
-		 * Action to dismiss the alarm.
-		 */
-		const val ACTION_DISMISS_ALARM = "com.nfcalarmclock.ACTION_DISMISS_ALARM"
-
-		/**
-		 * Action to dismiss the alarm with NFC.
-		 */
-		const val ACTION_DISMISS_ALARM_WITH_NFC = "com.nfcalarmclock.ACTION_DISMISS_ALARM_WITH_NFC"
-
-		/**
-		 * Action to snooze the alarm.
-		 */
-		const val ACTION_SNOOZE_ALARM = "com.nfcalarmclock.ACTION_SNOOZE_ALARM"
-
-		/**
-		 * Action to do when alarms are equal. This is to say when the service
-		 * is started with the same alarm.
-		 */
-		private const val ACTION_EQUAL_ALARMS = "com.nfcalarmclock.ACTION_EQUAL_ALARMS"
-
-		/**
-		 * Tag for the wakelock.
-		 */
-		const val WAKELOCK_TAG = "NFC Alarm Clock:NacForegroundService"
-
-		/**
-		 * Dismiss the alarm service for the given alarm.
-		 */
-		fun dismissAlarmService(context: Context, alarm: NacAlarm?)
-		{
-			// Create an intent with the alarm activity
-			val intent = getDismissIntent(context, alarm)
-
-			// Start the service. This will not be a foreground service so do
-			// not need to call startForegroundService()
-			context.startService(intent)
-		}
-
-		/**
-		 * Dismiss the alarm activity for the given alarm with NFC.
-		 */
-		fun dismissAlarmServiceWithNfc(context: Context, alarm: NacAlarm?)
-		{
-			// Create the intent with the alarm activity
-			val intent = getDismissIntentWithNfc(context, alarm)
-
-			// Start the service. This will not be a foreground service so do
-			// not need to call startForegroundService()
-			context.startService(intent)
-		}
-
-		/**
-		 * Get an intent that will be used to dismiss the foreground alarm
-		 * service.
-		 *
-		 * @return An intent that will be used to dismiss the foreground alarm
-		 *         service.
-		 */
-		fun getDismissIntent(context: Context, alarm: NacAlarm?): Intent
-		{
-			// Create the intent with the alarm service
-			val intent = Intent(ACTION_DISMISS_ALARM, null, context,
-				NacActiveAlarmService::class.java)
-
-			// Add the alarm to the intent
-			return NacIntent.addAlarm(intent, alarm)
-		}
-
-		/**
-		 * Get an intent that will be used to dismiss the foreground alarm
-		 * service witH NFC.
-		 *
-		 * @return An intent that will be used to dismiss the foreground alarm
-		 *         service with NFC.
-		 */
-		private fun getDismissIntentWithNfc(context: Context, alarm: NacAlarm?): Intent
-		{
-			// Create the intent with the alarm service
-			val intent = Intent(ACTION_DISMISS_ALARM_WITH_NFC, null, context,
-				NacActiveAlarmService::class.java)
-
-			// Add the alarm to the intent
-			return NacIntent.addAlarm(intent, alarm)
-		}
-
-		/**
-		 * Get an intent that will be used to snooze the foreground alarm
-		 * service.
-		 *
-		 * @return An intent that will be used to snooze the foreground alarm
-		 *         service.
-		 */
-		fun getSnoozeIntent(context: Context?, alarm: NacAlarm?): Intent
-		{
-			// Create the intent with the alarm service
-			val intent = Intent(ACTION_SNOOZE_ALARM, null, context,
-				NacActiveAlarmService::class.java)
-
-			// Add the alarm to the intent
-			return NacIntent.addAlarm(intent, alarm)
-		}
-
-		/**
-		 * Create an intent that will be used to start the foreground alarm
-		 * service.
-		 *
-		 * @param context A context.
-		 * @param alarm   An alarm.
-		 *
-		 * @return The Foreground service intent.
-		 */
-		fun getStartIntent(context: Context, alarm: NacAlarm?): Intent
-		{
-			// Create an intent with the alarm service
-			val intent = Intent(ACTION_START_SERVICE, null, context,
-				NacActiveAlarmService::class.java)
-
-			// Add the alarm to the intent
-			return NacIntent.addAlarm(intent, alarm)
-		}
-
-		/**
-		 * Snooze the alarm service for the given alarm.
-		 */
-		fun snoozeAlarmService(context: Context, alarm: NacAlarm?)
-		{
-			// Create an intent with the alarm activity
-			val intent = getSnoozeIntent(context, alarm)
-
-			// Start the service. This will not be a foreground service so do
-			// not need to call startForegroundService()
-			context.startService(intent)
-		}
-
-		/**
-		 * Start the foreground service.
-		 */
-		fun startAlarmService(context: Context, alarm: NacAlarm?)
-		{
-			// Create the intent
-			val intent = getStartIntent(context, alarm)
-
-			// Check if the API >= 26
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-			{
-				// Start the foreground service
-				context.startForegroundService(intent)
-			}
-			// API is < 26
-			else
-			{
-				// Start the service
-				context.startService(intent)
-			}
-		}
-
-	}
-
 	/**
 	 * Supervisor job for the service.
 	 */
@@ -237,7 +65,7 @@ class NacActiveAlarmService
 	/**
 	 * Shared preferences.
 	 */
-	private var sharedPreferences: NacSharedPreferences? = null
+	private lateinit var sharedPreferences: NacSharedPreferences
 
 	/**
 	 * Wakelock.
@@ -271,7 +99,7 @@ class NacActiveAlarmService
 		get()
 		{
 			// Check if the alarm can be snoozed
-			return if (alarm!!.canSnooze(sharedPreferences!!))
+			return if (alarm!!.canSnooze(sharedPreferences))
 			{
 				true
 			}
@@ -341,7 +169,7 @@ class NacActiveAlarmService
 			NacScheduler.update(this@NacActiveAlarmService, alarm!!)
 
 			// Set flag that the main activity needs to be refreshed
-			sharedPreferences!!.editShouldRefreshMainActivity(true)
+			sharedPreferences.editShouldRefreshMainActivity(true)
 
 			// Check if there are any other active alarms that need to run
 			if (hasAnyOtherActiveAlarms())
@@ -436,7 +264,7 @@ class NacActiveAlarmService
 	private fun setupAppVersion()
 	{
 		// Set the previous app version as the current version
-		sharedPreferences!!.editPreviousAppVersion(BuildConfig.VERSION_NAME)
+		sharedPreferences.editPreviousAppVersion(BuildConfig.VERSION_NAME)
 	}
 
 	/**
@@ -449,7 +277,7 @@ class NacActiveAlarmService
 		super.onDestroy()
 
 		// Check if the app version is not set
-		if (sharedPreferences!!.previousAppVersion.isEmpty())
+		if (sharedPreferences.previousAppVersion.isEmpty())
 		{
 			// Setup the app version
 			setupAppVersion()
@@ -631,7 +459,7 @@ class NacActiveAlarmService
 		scope.launch {
 
 			// Snooze the alarm and get the next time to run the alarm again
-			val cal = alarm!!.snooze(sharedPreferences!!)
+			val cal = alarm!!.snooze(sharedPreferences)
 
 			// Update the time the alarm was active
 			alarm!!.addToTimeActive(System.currentTimeMillis() - startTime)
@@ -640,13 +468,13 @@ class NacActiveAlarmService
 			alarmRepository.update(alarm!!)
 
 			// Save this snooze duration to the statistics table
-			statisticRepository.insertSnoozed(alarm!!, 60L * sharedPreferences!!.snoozeDurationValue)
+			statisticRepository.insertSnoozed(alarm!!, 60L * sharedPreferences.snoozeDurationValue)
 
 			// Reschedule the alarm
 			NacScheduler.update(this@NacActiveAlarmService, alarm!!, cal)
 
 			// Set the flag that the main activity will need to be refreshed
-			sharedPreferences!!.editShouldRefreshMainActivity(true)
+			sharedPreferences.editShouldRefreshMainActivity(true)
 
 			// Check if there are any other active alarms that need to run
 			if (hasAnyOtherActiveAlarms())
@@ -682,7 +510,7 @@ class NacActiveAlarmService
 
 		// Get the power manager and timeout for the wakelock
 		val powerManager = getSystemService(POWER_SERVICE) as PowerManager
-		val timeout = sharedPreferences!!.autoDismissTime * 60L * 1000L
+		val timeout = sharedPreferences.autoDismissTime * 60L * 1000L
 
 		// Acquire the wakelock
 		wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
@@ -771,7 +599,7 @@ class NacActiveAlarmService
 	fun waitForAutoDismiss()
 	{
 		// Amount of time until the alarm is automatically dismissed
-		val autoDismiss = sharedPreferences!!.autoDismissTime
+		val autoDismiss = sharedPreferences.autoDismissTime
 		val delay = TimeUnit.MINUTES.toMillis(autoDismiss) - alarm!!.timeActive - 2000
 
 		// There is an auto dismiss time set
@@ -781,7 +609,7 @@ class NacActiveAlarmService
 			autoDismissHandler!!.postDelayed({
 
 				// Show the missed alarm notification
-				if (sharedPreferences!!.missedAlarmNotification)
+				if (sharedPreferences.missedAlarmNotification)
 				{
 					// Create the missed alarm notification
 					val notification = NacMissedAlarmNotification(
@@ -799,6 +627,178 @@ class NacActiveAlarmService
 
 		// Set the start time
 		startTime = System.currentTimeMillis()
+	}
+
+	companion object
+	{
+
+		/**
+		 * Action to start the service.
+		 */
+		const val ACTION_START_SERVICE = "com.nfcalarmclock.ACTION_START_SERVICE"
+
+		/**
+		 * Action to stop the service.
+		 */
+		const val ACTION_STOP_SERVICE = "com.nfcalarmclock.ACTION_STOP_SERVICE"
+
+		/**
+		 * Action to dismiss the alarm.
+		 */
+		const val ACTION_DISMISS_ALARM = "com.nfcalarmclock.ACTION_DISMISS_ALARM"
+
+		/**
+		 * Action to dismiss the alarm with NFC.
+		 */
+		const val ACTION_DISMISS_ALARM_WITH_NFC = "com.nfcalarmclock.ACTION_DISMISS_ALARM_WITH_NFC"
+
+		/**
+		 * Action to snooze the alarm.
+		 */
+		const val ACTION_SNOOZE_ALARM = "com.nfcalarmclock.ACTION_SNOOZE_ALARM"
+
+		/**
+		 * Action to do when alarms are equal. This is to say when the service
+		 * is started with the same alarm.
+		 */
+		private const val ACTION_EQUAL_ALARMS = "com.nfcalarmclock.ACTION_EQUAL_ALARMS"
+
+		/**
+		 * Tag for the wakelock.
+		 */
+		const val WAKELOCK_TAG = "NFC Alarm Clock:NacForegroundService"
+
+		/**
+		 * Dismiss the alarm service for the given alarm.
+		 */
+		fun dismissAlarmService(context: Context, alarm: NacAlarm?)
+		{
+			// Create an intent with the alarm activity
+			val intent = getDismissIntent(context, alarm)
+
+			// Start the service. This will not be a foreground service so do
+			// not need to call startForegroundService()
+			context.startService(intent)
+		}
+
+		/**
+		 * Dismiss the alarm activity for the given alarm with NFC.
+		 */
+		fun dismissAlarmServiceWithNfc(context: Context, alarm: NacAlarm?)
+		{
+			// Create the intent with the alarm activity
+			val intent = getDismissIntentWithNfc(context, alarm)
+
+			// Start the service. This will not be a foreground service so do
+			// not need to call startForegroundService()
+			context.startService(intent)
+		}
+
+		/**
+		 * Get an intent that will be used to dismiss the foreground alarm
+		 * service.
+		 *
+		 * @return An intent that will be used to dismiss the foreground alarm
+		 *         service.
+		 */
+		fun getDismissIntent(context: Context, alarm: NacAlarm?): Intent
+		{
+			// Create the intent with the alarm service
+			val intent = Intent(ACTION_DISMISS_ALARM, null, context,
+				NacActiveAlarmService::class.java)
+
+			// Add the alarm to the intent
+			return NacIntent.addAlarm(intent, alarm)
+		}
+
+		/**
+		 * Get an intent that will be used to dismiss the foreground alarm
+		 * service witH NFC.
+		 *
+		 * @return An intent that will be used to dismiss the foreground alarm
+		 *         service with NFC.
+		 */
+		private fun getDismissIntentWithNfc(context: Context, alarm: NacAlarm?): Intent
+		{
+			// Create the intent with the alarm service
+			val intent = Intent(ACTION_DISMISS_ALARM_WITH_NFC, null, context,
+				NacActiveAlarmService::class.java)
+
+			// Add the alarm to the intent
+			return NacIntent.addAlarm(intent, alarm)
+		}
+
+		/**
+		 * Get an intent that will be used to snooze the foreground alarm
+		 * service.
+		 *
+		 * @return An intent that will be used to snooze the foreground alarm
+		 *         service.
+		 */
+		fun getSnoozeIntent(context: Context?, alarm: NacAlarm?): Intent
+		{
+			// Create the intent with the alarm service
+			val intent = Intent(ACTION_SNOOZE_ALARM, null, context,
+				NacActiveAlarmService::class.java)
+
+			// Add the alarm to the intent
+			return NacIntent.addAlarm(intent, alarm)
+		}
+
+		/**
+		 * Create an intent that will be used to start the foreground alarm
+		 * service.
+		 *
+		 * @param context A context.
+		 * @param alarm   An alarm.
+		 *
+		 * @return The Foreground service intent.
+		 */
+		fun getStartIntent(context: Context, alarm: NacAlarm?): Intent
+		{
+			// Create an intent with the alarm service
+			val intent = Intent(ACTION_START_SERVICE, null, context,
+				NacActiveAlarmService::class.java)
+
+			// Add the alarm to the intent
+			return NacIntent.addAlarm(intent, alarm)
+		}
+
+		/**
+		 * Snooze the alarm service for the given alarm.
+		 */
+		fun snoozeAlarmService(context: Context, alarm: NacAlarm?)
+		{
+			// Create an intent with the alarm activity
+			val intent = getSnoozeIntent(context, alarm)
+
+			// Start the service. This will not be a foreground service so do
+			// not need to call startForegroundService()
+			context.startService(intent)
+		}
+
+		/**
+		 * Start the foreground service.
+		 */
+		fun startAlarmService(context: Context, alarm: NacAlarm?)
+		{
+			// Create the intent
+			val intent = getStartIntent(context, alarm)
+
+			// Check if the API >= 26
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+			{
+				// Start the foreground service
+				context.startForegroundService(intent)
+			}
+			// API is < 26
+			else
+			{
+				// Start the service
+				context.startService(intent)
+			}
+		}
+
 	}
 
 }

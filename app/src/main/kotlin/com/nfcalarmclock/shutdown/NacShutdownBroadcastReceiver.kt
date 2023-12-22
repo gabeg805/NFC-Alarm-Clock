@@ -11,6 +11,11 @@ import javax.inject.Inject
 
 /**
  * Remove any active alarms on shutdown.
+ *
+ * Note: This needs to be registered in NacMainActivity because:
+ *
+ *       "As of Build.VERSION_CODES#P this broadcast is only sent to receivers
+ *        registered through Context.registerReceiver."
  */
 @AndroidEntryPoint
 class NacShutdownBroadcastReceiver

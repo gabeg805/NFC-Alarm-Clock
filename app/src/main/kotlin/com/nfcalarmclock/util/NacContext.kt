@@ -1,8 +1,11 @@
 package com.nfcalarmclock.util
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -10,6 +13,28 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
+
+/**
+ * Receiver for the time tick intent. This is called when the time increments
+ * every minute.
+ */
+fun createTimeTickReceiver(
+	listener: (Context, Intent) -> Unit
+): BroadcastReceiver
+{
+	return object : BroadcastReceiver()
+	{
+
+		/**
+		 * Called when the broadcast is received.
+		 */
+		override fun onReceive(context: Context, intent: Intent)
+		{
+			listener(context, intent)
+		}
+
+	}
+}
 
 /**
  * Disable the alias for the main activity so that tapping an NFC tag
@@ -41,6 +66,34 @@ fun enableActivityAlias(context: Context)
 	context.packageManager.setComponentEnabledSetting(componentName,
 		PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
 		PackageManager.DONT_KILL_APP)
+}
+
+/**
+ * Register a broadcast receiver.
+ */
+@SuppressLint("UnspecifiedRegisterReceiverFlag")
+fun registerMyReceiver(
+	context: Context,
+	broadcastReceiver: BroadcastReceiver,
+	intentFilter: IntentFilter)
+{
+	// Register the receiver
+	context.registerReceiver(broadcastReceiver, intentFilter)
+}
+
+/**
+ * Unregister a broadcast receiver.
+ */
+fun unregisterMyReceiver(context: Context, broadcastReceiver: BroadcastReceiver)
+{
+	try
+	{
+		// Unregister the receiver
+		context.unregisterReceiver(broadcastReceiver)
+	}
+	catch (_: IllegalArgumentException)
+	{
+	}
 }
 
 /**

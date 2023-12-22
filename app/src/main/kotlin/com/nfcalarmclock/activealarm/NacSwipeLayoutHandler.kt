@@ -1,6 +1,12 @@
 package com.nfcalarmclock.activealarm
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.SharedPreferences
+import android.content.res.ColorStateList
+import android.net.Uri
 import android.text.format.DateFormat
 import android.view.MotionEvent
 import android.view.View
@@ -9,7 +15,11 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.media.NacMedia
 import com.nfcalarmclock.util.NacCalendar
+import com.nfcalarmclock.util.createTimeTickReceiver
+import com.nfcalarmclock.util.registerMyReceiver
+import com.nfcalarmclock.util.unregisterMyReceiver
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -63,6 +73,11 @@ class NacSwipeLayoutHandler(
 	private val currentTimeTextView: TextView = activity.findViewById(R.id.current_time)
 
 	/**
+	 * Current meridian.
+	 */
+	private val currentMeridianView: TextView = activity.findViewById(R.id.current_meridian)
+
+	/**
 	 * Music information.
 	 */
 	private val musicContainer: RelativeLayout = activity.findViewById(R.id.music_container)
@@ -113,19 +128,17 @@ class NacSwipeLayoutHandler(
 	private var endAlarmActionX: Float = -1f
 
 	/**
-	 * Whether 24 hour format should be used or not.
+	 * Receiver for the time tick intent. This is called when the time increments
+	 * every minute.
 	 */
-	private val is24HourFormat = DateFormat.is24HourFormat(activity)
+	private val timeTickReceiver = createTimeTickReceiver { context, _ ->
+		setupCurrentDateAndTime(context)
+	}
 
 	/**
-	 * AM string.
+	 * Listener for any changes to the shared preferences.
 	 */
-	private val am = activity.getString(R.string.am)
-
-	/**
-	 * PM string.
-	 */
-	private val pm = activity.getString(R.string.pm)
+	private lateinit var onSharedPreferenceChangedListener: SharedPreferences.OnSharedPreferenceChangeListener
 
 	/**
 	 * Calculate the new X position.
@@ -208,6 +221,26 @@ class NacSwipeLayoutHandler(
 			// Return the active view because unable to determine which view is
 			// inactive. This should never happen
 			else -> activeView
+		}
+	}
+
+	/**
+	 * Run any setup steps.
+	 */
+	override fun setup(context: Context)
+	{
+		// Setup the views based on user preference
+		setupAlarmName()
+		setupCurrentDateAndTime(context)
+		setupMusicInformation(context)
+
+		// Check if the dismiss button should be visible or not
+		if (alarm!!.shouldUseNfc)
+		{
+			// Set to INVISIBLE so that the end X position can still be
+			// determined, and then it will be set to GONE later
+			dismissButton.visibility = View.INVISIBLE
+			dismissAttentionView.visibility = View.INVISIBLE
 		}
 	}
 
@@ -312,6 +345,65 @@ class NacSwipeLayoutHandler(
 	}
 
 	/**
+	 * Setup the alarm name.
+	 */
+	private fun setupAlarmName()
+	{
+		// Get the user preference on whether the alarm name should be shown
+		val visibility = if (sharedPreferences.showAlarmName) View.VISIBLE else View.INVISIBLE
+
+		// Set the visibility
+		alarmNameTextView.visibility = visibility
+
+		// Check if the alarm is not null and the user wants to see alarm name
+		if ((alarm != null) && sharedPreferences.showAlarmName)
+		{
+			// Show the alarm name
+			alarmNameTextView.text = alarm.nameNormalized
+			alarmNameTextView.isSelected = true
+		}
+	}
+
+	/**
+	 * Setup the current date and time.
+	 */
+	private fun setupCurrentDateAndTime(context: Context)
+	{
+		// Get the user preference on whether the current date and time should
+		// be shown
+		val visibility = if (sharedPreferences.showCurrentDateAndTime) View.VISIBLE else View.INVISIBLE
+
+		// Set the visibility
+		currentDateTextView.visibility = visibility
+		currentTimeTextView.visibility = visibility
+		currentMeridianView.visibility = visibility
+
+		// Get info for calculating current date and time
+		val locale = Locale.getDefault()
+		val cal = Calendar.getInstance()
+
+		// Get the current date
+		val skeleton = DateFormat.getBestDateTimePattern(locale, "E MMM d")
+		val dateFormat = SimpleDateFormat(skeleton, locale)
+
+		dateFormat.timeZone = TimeZone.getDefault()
+		dateFormat.applyLocalizedPattern(skeleton)
+
+		val date = dateFormat.format(cal.time)
+
+		// Get the current time
+		val hour = cal[Calendar.HOUR]
+		val minute = cal[Calendar.MINUTE]
+		val time = NacCalendar.getClockTime(context, hour, minute)
+		val meridian = NacCalendar.getMeridian(context, hour)
+
+		// Set the text
+		currentDateTextView.text = date
+		currentTimeTextView.text = time
+		currentMeridianView.text = meridian
+	}
+
+	/**
 	 * Setup the dismiss button.
 	 */
 	private fun setupDismissButton()
@@ -319,8 +411,56 @@ class NacSwipeLayoutHandler(
 		// Determine the right bound of where the snooze/dismiss button can go
 		endAlarmActionX = dismissButton.x
 
+		// Check if the dismiss button should be visible or not
+		if (alarm!!.shouldUseNfc)
+		{
+			dismissButton.visibility = View.GONE
+			dismissAttentionView.visibility = View.GONE
+			return
+		}
+
 		// Setup the dismiss button
 		setupAlarmActionButton(dismissButton)
+
+		// Change color of the dismiss button
+		dismissButton.backgroundTintList = ColorStateList.valueOf(sharedPreferences.themeColor)
+	}
+
+	/**
+	 * Setup the music information.
+	 */
+	private fun setupMusicInformation(context: Context)
+	{
+		// Get the current media item
+		val mediaPath = sharedPreferences.currentPlayingAlarmMedia
+
+		// Get the user preference on whether the music info should be shown
+		val visibility = if (sharedPreferences.showMusicInfo && mediaPath.isNotEmpty())
+			View.VISIBLE else View.INVISIBLE
+
+		// Set the visibility
+		// TODO: Get the music event system working
+		musicContainer.visibility = visibility
+
+		// Check if the music container is not visible
+		if (musicContainer.visibility == View.INVISIBLE)
+		{
+			// Do nothing else
+			return
+		}
+
+		// Get the title and artist of the media
+		val mediaUri = Uri.parse(mediaPath)
+		val title = NacMedia.getTitle(context, mediaUri)
+		val artist = NacMedia.getArtist(context, mediaUri)
+		val unknown = context.getString(R.string.state_unknown)
+
+		// Set the title and artist
+		musicTitleTextView.text = title
+		musicArtistTextView.text = artist
+
+		// Set the visibility of the artist if it is unknown
+		musicArtistTextView.visibility = if (artist != unknown) View.VISIBLE else View.GONE
 	}
 
 	/**
@@ -382,105 +522,54 @@ class NacSwipeLayoutHandler(
 	}
 
 	/**
-	 * Setup the alarm name.
-	 */
-	private fun setupAlarmName()
-	{
-		// Get the user preference on whether the alarm name should be shown
-		val visibility = if (sharedPreferences.showAlarmName) View.VISIBLE else View.INVISIBLE
-
-		// Set the visibility
-		alarmNameTextView.visibility = visibility
-
-		// Check if the alarm is not null and the user wants to see alarm name
-		if ((alarm != null) && sharedPreferences.showAlarmName)
-		{
-			// Show the alarm name
-			alarmNameTextView.text = alarm.nameNormalized
-			alarmNameTextView.isSelected = true
-		}
-	}
-
-	/**
-	 * Setup the current date and time.
-	 */
-	private fun setupCurrentDateAndTime()
-	{
-		// Get the user preference on whether the current date and time should
-		// be shown
-		val visibility = if (sharedPreferences.showCurrentDateAndTime) View.VISIBLE else View.INVISIBLE
-
-		// Set the visibility
-		currentDateTextView.visibility = visibility
-		currentTimeTextView.visibility = visibility
-
-		// Get info for calculating current date and time
-		val locale = Locale.getDefault()
-		val cal = Calendar.getInstance()
-
-		// Get the current date
-		val skeleton = DateFormat.getBestDateTimePattern(locale, "E MMM d")
-		val dateFormat = SimpleDateFormat(skeleton, locale)
-
-		dateFormat.timeZone = TimeZone.getDefault()
-		dateFormat.applyLocalizedPattern(skeleton)
-
-		val date = dateFormat.format(cal.time)
-		println(dateFormat)
-		println(date)
-
-		// Get the current time
-		val hour = cal[Calendar.HOUR]
-		val minute = cal[Calendar.MINUTE]
-		var time = NacCalendar.getClockTime(hour, minute, is24HourFormat)
-		val meridian = NacCalendar.getMeridian(hour, is24HourFormat, am, pm)
-
-		time += " $meridian"
-
-		// Set the text
-		currentDateTextView.text = date
-		currentTimeTextView.text = time
-	}
-
-	/**
-	 * Setup the music information.
-	 */
-	private fun setupMusicInformation()
-	{
-		// Get the user preference on whether the music info should be shown
-		val visibility = if (sharedPreferences.showMusicInfo) View.VISIBLE else View.INVISIBLE
-
-		// Set the visibility
-		// TODO: Get the music event system working
-		musicContainer.visibility = View.INVISIBLE
-	}
-
-
-	/**
 	 * Start the layout and run any setup that needs to run.
 	 */
-	override fun start()
+	override fun start(context: Context)
 	{
-		// Setup the views based on user preference
-		setupAlarmName()
-		setupCurrentDateAndTime()
-		setupMusicInformation()
+		// Setup the snooze and dismiss buttons
+		setupSnoozeButton()
+		setupDismissButton()
 
 		// Show the attention views and start their animations
 		swipeAnimation.showAttentionViews(snoozeAttentionView, dismissAttentionView)
 
-		// Setup the snooze and dismiss buttons
-		setupSnoozeButton()
-		setupDismissButton()
+		// Register the time tick receiver
+		registerMyReceiver(context, timeTickReceiver, IntentFilter(Intent.ACTION_TIME_TICK))
+
+		// Watch shared preferences listener
+		onSharedPreferenceChangedListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+
+			// Get the key for the currently playing media
+			val currentPlayingMediaKey = context.getString(R.string.key_current_playing_alarm_media)
+
+			// Check if the keys do not match. Only care about the currently
+			// playing media key
+			if (key != currentPlayingMediaKey)
+			{
+				return@OnSharedPreferenceChangeListener
+			}
+
+			// Setup the music information
+			setupMusicInformation(context)
+		}
+
+		// Register the shared preference listener
+		sharedPreferences.instance.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangedListener)
 	}
 
 	/**
 	 * Stop the layout handler.
 	 */
-	override fun stop()
+	override fun stop(context: Context)
 	{
 		// Hide the attention views and stop the animations
 		swipeAnimation.hideAttentionViews(snoozeAttentionView, dismissAttentionView)
+
+		// Unregister the time tick receiver
+		unregisterMyReceiver(context, timeTickReceiver)
+
+		// Unregister the shared preference listener
+		sharedPreferences.instance.unregisterOnSharedPreferenceChangeListener(onSharedPreferenceChangedListener)
 	}
 
 }

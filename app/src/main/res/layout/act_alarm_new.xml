@@ -13,12 +13,25 @@
 
 	<TextView
 		android:id="@+id/current_time"
-		android:layout_width="match_parent"
+		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentTop="true"
+		android:layout_centerHorizontal="true"
 		android:textColor="@color/white"
-		android:gravity="center_horizontal"
 		android:textSize="@dimen/tsz_dummy"
+		android:textStyle="bold"
+		android:text=""
+		/>
+
+	<TextView
+		android:id="@+id/current_meridian"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignBaseline="@id/current_time"
+		android:layout_toEndOf="@id/current_time"
+		android:layout_marginStart="@dimen/nudge"
+		android:textColor="@color/white"
+		android:textSize="@dimen/tsz_medium"
 		android:textStyle="bold"
 		android:text=""
 		/>
@@ -47,7 +60,7 @@
 		android:scrollHorizontally="true"
 		android:singleLine="true"
 		android:textColor="@color/white"
-		android:textSize="@dimen/tsz_xlarge"
+		android:textSize="@dimen/tsz_large"
 		android:text=""
 		/>
 
@@ -72,9 +85,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="84dp"
 		android:layout_marginTop="@dimen/xlarge"
-		android:layout_marginBottom="@dimen/xlarge"
-		android:layout_marginStart="@dimen/large"
-		android:layout_marginEnd="@dimen/large"
+		android:layout_marginBottom="@dimen/touch"
 		android:clipChildren="false"
 		android:clipToPadding="false"
 		android:layout_above="@id/music_container">
@@ -181,10 +192,11 @@
 		android:id="@+id/music_container"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/xlarge"
+		android:layout_marginTop="@dimen/touch"
 		android:layout_marginStart="@dimen/normal"
 		android:layout_marginEnd="@dimen/normal"
 		android:layout_alignParentBottom="true"
+		android:animateLayoutChanges="true"
 		android:gravity="center_horizontal"
 		android:visibility="invisible">
 
@@ -193,6 +205,7 @@
 			android:layout_width="24dp"
 			android:layout_height="24dp"
 			android:layout_centerVertical="true"
+			android:animateLayoutChanges="true"
 			android:src="@mipmap/music_note"
 			/>
 
@@ -203,6 +216,7 @@
 			android:layout_marginStart="@dimen/nudge"
 			android:layout_marginEnd="@dimen/nudge"
 			android:layout_toEndOf="@id/music_icon"
+			android:animateLayoutChanges="true"
 			android:singleLine="true"
 			android:ellipsize="end"
 			android:textColor="@color/white"
@@ -217,6 +231,7 @@
 			android:layout_height="wrap_content"
 			android:layout_below="@id/music_title"
 			android:layout_alignStart="@id/music_title"
+			android:animateLayoutChanges="true"
 			android:singleLine="true"
 			android:ellipsize="end"
 			android:textColor="@color/white"

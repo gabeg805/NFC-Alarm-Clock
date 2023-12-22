@@ -10,6 +10,7 @@
 	<string name="app_rating_counter">app_rating_counter</string>
 	<string name="app_start_statistics">app_start_statistics</string>
 	<string name="sys_previous_volume">sys_previous_volume</string>
+	<string name="key_current_playing_alarm_media">key_current_playing_alarm_media</string>
 
 	<!-- Permissions -->
 	<string name="key_permission_ignore_battery_optimization_requested">key_permission_ignore_battery_optimization_requested</string>

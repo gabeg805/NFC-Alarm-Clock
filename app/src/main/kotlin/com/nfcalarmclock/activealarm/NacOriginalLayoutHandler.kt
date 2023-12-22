@@ -1,5 +1,6 @@
 package com.nfcalarmclock.activealarm
 
+import android.content.Context
 import android.view.View
 import android.widget.Button
 import android.widget.RelativeLayout
@@ -148,7 +149,7 @@ class NacOriginalLayoutHandler(
 	/**
 	 * Start the handler.
 	 */
-	override fun start()
+	override fun start(context: Context)
 	{
 		setupAlarmInstructions()
 	}
@@ -156,7 +157,7 @@ class NacOriginalLayoutHandler(
 	/**
 	 * Stop the layout handler.
 	 */
-	override fun stop()
+	override fun stop(context: Context)
 	{
 	}
 
