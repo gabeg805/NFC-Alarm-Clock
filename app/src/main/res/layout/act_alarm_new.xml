@@ -11,6 +11,7 @@
 	android:background="@color/gray_dark"
 	tools:ignore="UseCompoundDrawables">
 
+	<!-- Time -->
 	<TextView
 		android:id="@+id/current_time"
 		android:layout_width="wrap_content"
@@ -36,6 +37,7 @@
 		android:text=""
 		/>
 
+	<!-- Date -->
 	<TextView
 		android:id="@+id/current_date"
 		android:layout_width="match_parent"
@@ -47,6 +49,7 @@
 		android:text=""
 		/>
 
+	<!-- Alarm name -->
 	<TextView
 		android:id="@+id/alarm_name"
 		android:layout_width="match_parent"
@@ -64,64 +67,105 @@
 		android:text=""
 		/>
 
-		<RelativeLayout
-			android:id="@+id/parent_click_and_slide"
-			android:layout_width="match_parent"
-			android:layout_height="300dp"
-			android:visibility="invisible">
-
-			<RelativeLayout
-				android:id="@+id/example_click_and_slide"
-				android:layout_width="@dimen/click_and_slide"
-				android:layout_height="@dimen/click_and_slide"
-				android:background="@drawable/round_action_button"
-				android:backgroundTint="@color/gray_light"
-				android:layout_centerInParent="true"
-				/>
-
-		</RelativeLayout>
-
+	<!-- Scan NFC -->
 	<RelativeLayout
+		android:id="@+id/scan_nfc_rings2"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingBottom="@dimen/xlarge"
+		android:background="@drawable/round_action_button"
+		android:backgroundTint="@color/gray_dark"
+		android:layout_centerInParent="true">
+
+		<ImageView
+			android:id="@+id/ismiss_icon2"
+			android:layout_width="@dimen/isz_attention"
+			android:layout_height="@dimen/isz_attention"
+			android:layout_centerHorizontal="true"
+			android:src="@mipmap/tap_and_play"
+			/>
+
+		<TextView
+			android:id="@+id/ismiss_text2"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/ismiss_icon2"
+			android:layout_centerHorizontal="true"
+			android:layout_marginTop="@dimen/small"
+			android:textColor="@color/white"
+			android:textSize="@dimen/tsz_medium"
+			android:textStyle="bold"
+			android:text="Scan NFC"
+			/>
+
+		<!--
+		<com.nfcalarmclock.view.NacCustomArcView
+			android:id="@+id/hellobroth"
+			android:layout_width="100dp"
+			android:layout_height="100dp"
+			android:layout_alignParentEnd="true"
+			android:layout_marginEnd="100dp"
+			/>
+			-->
+	</RelativeLayout>
+
+	<!-- Snooze/dismiss -->
+	<RelativeLayout
+		android:id="@+id/alarm_action_row"
 		android:layout_width="match_parent"
 		android:layout_height="84dp"
 		android:layout_marginTop="@dimen/xlarge"
-		android:layout_marginBottom="@dimen/touch"
+		android:layout_marginBottom="@dimen/large"
 		android:clipChildren="false"
 		android:clipToPadding="false"
 		android:layout_above="@id/music_container">
 
+		<!-- Slider -->
 		<RelativeLayout
 			android:id="@+id/alarm_action_slider_path"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:background="@drawable/slider_path"
-			android:visibility="invisible"
-			/>
+			android:visibility="invisible">
 
+			<TextView
+				android:id="@+id/slider_instructions"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerInParent="true"
+				android:textColor="@color/white"
+				android:textSize="@dimen/tsz_medium"
+				android:text=""
+				/>
+		</RelativeLayout>
+
+		<!-- Snooze animation -->
 		<RelativeLayout
 			android:id="@+id/snooze_attention_view"
 			android:layout_width="72dp"
 			android:layout_height="72dp"
-			android:layout_alignTop="@id/round_snooze_button"
-			android:layout_alignStart="@id/round_snooze_button"
+			android:layout_alignTop="@id/snooze_view"
+			android:layout_alignStart="@id/snooze_view"
 			android:alpha="0.3"
 			android:background="@drawable/round_action_button"
 			android:backgroundTint="@color/white"
 			/>
 
+		<!-- Dismiss animation -->
 		<RelativeLayout
 			android:id="@+id/dismiss_attention_view"
 			android:layout_width="72dp"
 			android:layout_height="72dp"
-			android:layout_alignTop="@id/round_dismiss_button"
-			android:layout_alignStart="@id/round_dismiss_button"
+			android:layout_alignTop="@id/dismiss_view"
+			android:layout_alignStart="@id/dismiss_view"
 			android:alpha="0.3"
 			android:background="@drawable/round_action_button"
 			android:backgroundTint="@color/white"
 			/>
 
+		<!-- Snooze -->
 		<RelativeLayout
-			android:id="@+id/round_snooze_button"
+			android:id="@+id/snooze_view"
 			android:layout_width="72dp"
 			android:layout_height="72dp"
 			android:layout_marginStart="@dimen/tiny"
@@ -132,7 +176,7 @@
 			android:gravity="center_vertical">
 
 			<ImageView
-				android:id="@+id/snooze_icon2"
+				android:id="@+id/snooze_icon"
 				android:layout_width="30dp"
 				android:layout_height="30dp"
 				android:layout_centerHorizontal="true"
@@ -140,10 +184,10 @@
 				/>
 
 			<TextView
-				android:id="@+id/snooze_text2"
+				android:id="@+id/snooze_text"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_below="@id/snooze_icon2"
+				android:layout_below="@id/snooze_icon"
 				android:layout_centerHorizontal="true"
 				android:textColor="@color/white"
 				android:textSize="@dimen/tsz_tiny"
@@ -153,8 +197,9 @@
 
 		</RelativeLayout>
 
+		<!-- Dismiss -->
 		<RelativeLayout
-			android:id="@+id/round_dismiss_button"
+			android:id="@+id/dismiss_view"
 			android:layout_width="72dp"
 			android:layout_height="72dp"
 			android:layout_marginEnd="@dimen/tiny"
@@ -165,7 +210,7 @@
 			android:gravity="center_vertical">
 
 			<ImageView
-				android:id="@+id/dismiss_icon2"
+				android:id="@+id/dismiss_icon"
 				android:layout_width="28dp"
 				android:layout_height="28dp"
 				android:layout_centerHorizontal="true"
@@ -173,10 +218,10 @@
 				/>
 
 			<TextView
-				android:id="@+id/dismiss_text2"
+				android:id="@+id/dismiss_text"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_below="@id/dismiss_icon2"
+				android:layout_below="@id/dismiss_icon"
 				android:layout_centerHorizontal="true"
 				android:textColor="@color/white"
 				android:textSize="@dimen/tsz_tiny"
@@ -188,6 +233,7 @@
 
 	</RelativeLayout>
 
+	<!-- Music -->
 	<RelativeLayout
 		android:id="@+id/music_container"
 		android:layout_width="match_parent"

@@ -95,17 +95,22 @@ class NacSwipeLayoutHandler(
 	/**
 	 * Snooze button.
 	 */
-	private val snoozeButton: RelativeLayout = activity.findViewById(R.id.round_snooze_button)
+	private val snoozeButton: RelativeLayout = activity.findViewById(R.id.snooze_view)
 
 	/**
 	 * Dismiss button.
 	 */
-	private val dismissButton: RelativeLayout = activity.findViewById(R.id.round_dismiss_button)
+	private val dismissButton: RelativeLayout = activity.findViewById(R.id.dismiss_view)
 
 	/**
 	 * Slider path for the alarm action buttons (snooze and dismiss).
 	 */
 	private val sliderPath: RelativeLayout = activity.findViewById(R.id.alarm_action_slider_path)
+
+	/**
+	 * Instructions as to what sliding on the path will do.
+	 */
+	private val sliderInstructions: TextView = activity.findViewById(R.id.slider_instructions)
 
 	/**
 	 * View to capture the user's attention for the snooze button.
@@ -225,6 +230,9 @@ class NacSwipeLayoutHandler(
 	}
 
 	/**
+	 * Check if the
+	 */
+	/**
 	 * Run any setup steps.
 	 */
 	override fun setup(context: Context)
@@ -233,6 +241,9 @@ class NacSwipeLayoutHandler(
 		setupAlarmName()
 		setupCurrentDateAndTime(context)
 		setupMusicInformation(context)
+
+		// Set the visibility of the rings
+		//scanNfcRings.background.level = 4000
 
 		// Check if the dismiss button should be visible or not
 		if (alarm!!.shouldUseNfc)
@@ -276,6 +287,18 @@ class NacSwipeLayoutHandler(
 					// Hide the attention views and stop the animations
 					swipeAnimation.hideAttentionViews(snoozeAttentionView,
 						dismissAttentionView)
+
+					// Determine the text of the slider instructions
+					val text = if (view.id == snoozeButton.id)
+					{
+						R.string.description_slide_to_snooze
+					}
+					else
+					{
+						R.string.description_slide_to_dismiss
+					}
+
+					sliderInstructions.setText(text)
 
 					// Show the slider path
 					swipeAnimation.showSliderPath(sliderPath)
@@ -392,7 +415,7 @@ class NacSwipeLayoutHandler(
 		val date = dateFormat.format(cal.time)
 
 		// Get the current time
-		val hour = cal[Calendar.HOUR]
+		val hour = cal[Calendar.HOUR_OF_DAY]
 		val minute = cal[Calendar.MINUTE]
 		val time = NacCalendar.getClockTime(context, hour, minute)
 		val meridian = NacCalendar.getMeridian(context, hour)
@@ -400,7 +423,7 @@ class NacSwipeLayoutHandler(
 		// Set the text
 		currentDateTextView.text = date
 		currentTimeTextView.text = time
-		currentMeridianView.text = meridian
+		currentMeridianView.text = if (DateFormat.is24HourFormat(context)) "" else meridian
 	}
 
 	/**
@@ -439,7 +462,6 @@ class NacSwipeLayoutHandler(
 			View.VISIBLE else View.INVISIBLE
 
 		// Set the visibility
-		// TODO: Get the music event system working
 		musicContainer.visibility = visibility
 
 		// Check if the music container is not visible

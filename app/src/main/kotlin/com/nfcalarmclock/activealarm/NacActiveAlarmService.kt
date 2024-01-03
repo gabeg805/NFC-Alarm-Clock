@@ -130,6 +130,9 @@ class NacActiveAlarmService
 			// Cleanup the wake lock
 			wakeLock?.release()
 		}
+
+		// Clear the currently playing media in the shared preference
+		sharedPreferences.editCurrentPlayingAlarmMedia("")
 	}
 
 	/**

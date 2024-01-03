@@ -7,38 +7,39 @@ import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.addListener
 import com.nfcalarmclock.R
+import com.nfcalarmclock.view.NacCustomArcView
 import kotlin.math.hypot
 
 /**
  * Animator to guide how the user should swipe and interact with the view.
  */
-class NacSwipeAnimationHandler(context: Context)
+class NacSwipeAnimationHandler(activity: AppCompatActivity)
 {
 
 	/**
 	 * Pulse animation for the snooze button.
 	 */
-	private val snoozePulseAnimation = AnimationUtils.loadAnimation(context, R.anim.pulse)
+	private val snoozePulseAnimation = AnimationUtils.loadAnimation(activity, R.anim.pulse)
 
 	/**
 	 * Pulse animation for the dismiss button.
 	 */
-	private val dismissPulseAnimation = AnimationUtils.loadAnimation(context, R.anim.pulse)
+	private val dismissPulseAnimation = AnimationUtils.loadAnimation(activity, R.anim.pulse)
 
 	/**
 	 * Fade in animation for the slider path.
 	 */
-	private val sliderPathFadeInAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
+	private val sliderPathFadeInAnimation = AnimationUtils.loadAnimation(activity, R.anim.fade_in)
 
 	/**
 	 * Fade out animation for the slider path.
 	 */
-	private val sliderPathFadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
+	private val sliderPathFadeOutAnimation = AnimationUtils.loadAnimation(activity, R.anim.fade_out)
 
-	//private val inactiveButtonScaleUp = AnimationUtils.loadAnimation(context, R.anim.scale_up)
-	//private val inactiveButtonScaleDown = AnimationUtils.loadAnimation(context, R.anim.scale_down)
+	//private val helloBroth: NacCustomArcView = activity.findViewById(R.id.hellobroth)
 
 	/**
 	 * Create an animation listener to hide a view.
@@ -213,17 +214,64 @@ class NacSwipeAnimationHandler(context: Context)
 		sliderPath.startAnimation(sliderPathFadeOutAnimation)
 	}
 
+	fun scanNfc(context: Context, scanNfcView1: View, scanNfcView2: View, scanNfcView3: View)
+	{
+		//val handler = Handler(Looper.getMainLooper())
+		//var index = 0
+
+		//handler.post(object: Runnable {
+
+		//	override fun run()
+		//	{
+
+		//		val highlight = context.resources.getColor(R.color.white)
+		//		val gray = context.resources.getColor(R.color.gray)
+
+		//		if (index == 0)
+		//		{
+		//			scanNfcView1.backgroundTintList = ColorStateList.valueOf(highlight)
+		//		}
+		//		else
+		//		{
+		//			scanNfcView1.backgroundTintList = ColorStateList.valueOf(gray)
+		//		}
+
+		//		if (index == 1)
+		//		{
+		//			scanNfcView2.backgroundTintList = ColorStateList.valueOf(highlight)
+		//		}
+		//		else
+		//		{
+		//			scanNfcView2.backgroundTintList = ColorStateList.valueOf(gray)
+		//		}
+
+		//		if (index == 2)
+		//		{
+		//			scanNfcView3.backgroundTintList = ColorStateList.valueOf(highlight)
+		//		}
+		//		else
+		//		{
+		//			scanNfcView3.backgroundTintList = ColorStateList.valueOf(gray)
+		//		}
+
+		//		index = (index+1) % 3
+
+
+		//		println("Changing color")
+		//		handler.postDelayed(this, 400)
+		//	}
+		//})
+	}
+
 	/**
 	 * Start the animation to show the attention views.
 	 */
 	fun showAttentionViews(snoozeAttentionView: View, dismissAttentionView: View)
 	{
 		// Show the snooze view
-		println("Show the snooze view")
 		snoozeAttentionView.visibility = View.VISIBLE
 
 		// Start the snooze animation
-		println("Start the snooze animation")
 		snoozeAttentionView.startAnimation(snoozePulseAnimation)
 
 		// Check if the dismiss view should be modified
@@ -235,6 +283,14 @@ class NacSwipeAnimationHandler(context: Context)
 			// Start the dismiss animation
 			dismissAttentionView.startAnimation(dismissPulseAnimation)
 		}
+	}
+
+	/**
+	 * Show bros animation.
+	 */
+	fun showBroth()
+	{
+		//helloBroth.startAnimation()
 	}
 
 	/**
