@@ -5,6 +5,7 @@
 
 	<!-- General -->
 	<Preference
+		android:icon="@drawable/settings"
 		android:key="@string/general_setting_key"
 		android:title="@string/general_setting"
 		android:summary="@string/general_setting_summary"
@@ -12,6 +13,7 @@
 
 	<!-- Appearance -->
 	<Preference
+		android:icon="@drawable/palette"
 		android:key="@string/appearance_setting_key"
 		android:title="@string/appearance_setting"
 		android:summary="@string/appearance_setting_summary"
@@ -19,6 +21,7 @@
 
 	<!-- Statistics -->
 	<Preference
+		android:icon="@drawable/analytics"
 		android:key="@string/stats_setting_key"
 		android:title="@string/stats_setting"
 		android:summary="@string/stats_setting_summary"
@@ -26,6 +29,7 @@
 
 	<!-- About -->
 	<Preference
+		android:icon="@drawable/info"
 		android:key="@string/about_setting_key"
 		android:title="@string/about_setting"
 		android:summary="@string/about_setting_summary"
@@ -34,6 +38,7 @@
 
 	<!-- Support -->
 	<Preference
+		android:icon="@drawable/favorite"
 		android:key="@string/support_setting_key"
 		android:title="@string/support_setting"
 		android:summary="@string/support_setting_summary"

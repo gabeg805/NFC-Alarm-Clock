@@ -10,7 +10,6 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.addListener
 import com.nfcalarmclock.R
-import com.nfcalarmclock.view.NacCustomArcView
 import kotlin.math.hypot
 
 /**

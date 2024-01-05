@@ -68,20 +68,22 @@
 		/>
 
 	<!-- Scan NFC -->
-	<RelativeLayout
-		android:id="@+id/scan_nfc_rings2"
+	<LinearLayout
+		android:id="@+id/scan_nfc_view"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+		android:gravity="center_horizontal"
 		android:paddingBottom="@dimen/xlarge"
 		android:background="@drawable/round_action_button"
 		android:backgroundTint="@color/gray_dark"
-		android:layout_centerInParent="true">
+		android:orientation="vertical"
+		android:visibility="gone">
 
 		<ImageView
-			android:id="@+id/ismiss_icon2"
+			android:id="@+id/scan_nfc_icon"
 			android:layout_width="@dimen/isz_attention"
 			android:layout_height="@dimen/isz_attention"
-			android:layout_centerHorizontal="true"
 			android:src="@mipmap/tap_and_play"
 			/>
 
@@ -89,13 +91,11 @@
 			android:id="@+id/ismiss_text2"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_below="@id/ismiss_icon2"
-			android:layout_centerHorizontal="true"
 			android:layout_marginTop="@dimen/small"
 			android:textColor="@color/white"
 			android:textSize="@dimen/tsz_medium"
 			android:textStyle="bold"
-			android:text="Scan NFC"
+			android:text="@string/description_scan_nfc"
 			/>
 
 		<!--
@@ -107,7 +107,7 @@
 			android:layout_marginEnd="100dp"
 			/>
 			-->
-	</RelativeLayout>
+	</LinearLayout>
 
 	<!-- Snooze/dismiss -->
 	<RelativeLayout
@@ -115,7 +115,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="84dp"
 		android:layout_marginTop="@dimen/xlarge"
-		android:layout_marginBottom="@dimen/large"
+		android:layout_marginBottom="@dimen/normal"
 		android:clipChildren="false"
 		android:clipToPadding="false"
 		android:layout_above="@id/music_container">

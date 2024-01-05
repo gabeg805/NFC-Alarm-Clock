@@ -10,6 +10,7 @@ import android.net.Uri
 import android.text.format.DateFormat
 import android.view.MotionEvent
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +26,9 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
 
+/**
+ * Handler for the swipe layout.
+ */
 class NacSwipeLayoutHandler(
 
 	/**
@@ -78,6 +82,41 @@ class NacSwipeLayoutHandler(
 	private val currentMeridianView: TextView = activity.findViewById(R.id.current_meridian)
 
 	/**
+	 * Scan NFC container.
+	 */
+	private val scanNfcView: LinearLayout = activity.findViewById(R.id.scan_nfc_view)
+
+	/**
+	 * Snooze button.
+	 */
+	private val snoozeButton: RelativeLayout = activity.findViewById(R.id.snooze_view)
+
+	/**
+	 * Dismiss button.
+	 */
+	private val dismissButton: RelativeLayout = activity.findViewById(R.id.dismiss_view)
+
+	/**
+	 * View to capture the user's attention for the snooze button.
+	 */
+	private val snoozeAttentionView: RelativeLayout = activity.findViewById(R.id.snooze_attention_view)
+
+	/**
+	 * View to capture the user's attention for the dismiss button.
+	 */
+	private val dismissAttentionView: RelativeLayout = activity.findViewById(R.id.dismiss_attention_view)
+
+	/**
+	 * Slider path for the alarm action buttons (snooze and dismiss).
+	 */
+	private val sliderPath: RelativeLayout = activity.findViewById(R.id.alarm_action_slider_path)
+
+	/**
+	 * Instructions as to what sliding on the path will do.
+	 */
+	private val sliderInstructions: TextView = activity.findViewById(R.id.slider_instructions)
+
+	/**
 	 * Music information.
 	 */
 	private val musicContainer: RelativeLayout = activity.findViewById(R.id.music_container)
@@ -93,39 +132,14 @@ class NacSwipeLayoutHandler(
 	private val musicArtistTextView: TextView = activity.findViewById(R.id.music_artist)
 
 	/**
-	 * Snooze button.
-	 */
-	private val snoozeButton: RelativeLayout = activity.findViewById(R.id.snooze_view)
-
-	/**
-	 * Dismiss button.
-	 */
-	private val dismissButton: RelativeLayout = activity.findViewById(R.id.dismiss_view)
-
-	/**
-	 * Slider path for the alarm action buttons (snooze and dismiss).
-	 */
-	private val sliderPath: RelativeLayout = activity.findViewById(R.id.alarm_action_slider_path)
-
-	/**
-	 * Instructions as to what sliding on the path will do.
-	 */
-	private val sliderInstructions: TextView = activity.findViewById(R.id.slider_instructions)
-
-	/**
-	 * View to capture the user's attention for the snooze button.
-	 */
-	private val snoozeAttentionView: RelativeLayout = activity.findViewById(R.id.snooze_attention_view)
-
-	/**
-	 * View to capture the user's attention for the dismiss button.
-	 */
-	private val dismissAttentionView: RelativeLayout = activity.findViewById(R.id.dismiss_attention_view)
-
-	/**
 	 * Starting X position on the alarm action row.
 	 */
 	private var startAlarmActionX: Float = -1f
+
+	/**
+	 * Center X position on the alarm action row.
+	 */
+	private var centerAlarmActionX: Float = -1f
 
 	/**
 	 * Ending X position on the alarm action row.
@@ -230,9 +244,6 @@ class NacSwipeLayoutHandler(
 	}
 
 	/**
-	 * Check if the
-	 */
-	/**
 	 * Run any setup steps.
 	 */
 	override fun setup(context: Context)
@@ -248,6 +259,9 @@ class NacSwipeLayoutHandler(
 		// Check if the dismiss button should be visible or not
 		if (alarm!!.shouldUseNfc)
 		{
+			// Show the scan NFC view
+			scanNfcView.visibility = View.VISIBLE
+
 			// Set to INVISIBLE so that the end X position can still be
 			// determined, and then it will be set to GONE later
 			dismissButton.visibility = View.INVISIBLE
@@ -259,10 +273,10 @@ class NacSwipeLayoutHandler(
 	 * Setup an alarm action button.
 	 */
 	@SuppressLint("ClickableViewAccessibility")
-	private fun setupAlarmActionButton(button: View)
+	private fun setupAlarmActionButton(button: View, x: Float = -1f)
 	{
 		// X position information
-		val origX = button.x
+		val origX = if (x >= 0) x else button.x
 		var dx = 0f
 
 		// Set the listener
@@ -322,10 +336,13 @@ class NacSwipeLayoutHandler(
 						return@setOnTouchListener true
 					}
 
+					// Calculate the duration for the animation below
+					val duration = if (view.x == origX) 0L else 300L
+
 					// Animate back to the original X position
 					view.animate()
 						.x(origX)
-						.setDuration(300)
+						.setDuration(duration)
 						.withEndAction {
 
 							// Get the inactive view
@@ -493,8 +510,23 @@ class NacSwipeLayoutHandler(
 		// Determine the left bound of where the snooze/dismiss button can go
 		startAlarmActionX = snoozeButton.x
 
+		// Check if the snooze button should be in the center or not
+		if (alarm!!.shouldUseNfc)
+		{
+			// Determine the center X position where the snooze button will go
+			centerAlarmActionX = ((sliderPath.width - snoozeButton.width) / 2).toFloat()
+
+			// Set the snooze button in the center
+			val layoutParams = snoozeButton.layoutParams as RelativeLayout.LayoutParams
+
+			layoutParams.removeRule(RelativeLayout.ALIGN_PARENT_START)
+			layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
+
+			snoozeButton.layoutParams = layoutParams
+		}
+
 		// Setup the snooze button
-		setupAlarmActionButton(snoozeButton)
+		setupAlarmActionButton(snoozeButton, x=centerAlarmActionX)
 	}
 
 	/**

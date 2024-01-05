@@ -52,7 +52,7 @@
 				android:id="@+id/widget"
 				android:layout_width="@dimen/touch"
 				android:layout_height="@dimen/touch"
-				app:icon="@mipmap/settings"
+				app:icon="@drawable/settings"
 				/>
 		</LinearLayout>
 

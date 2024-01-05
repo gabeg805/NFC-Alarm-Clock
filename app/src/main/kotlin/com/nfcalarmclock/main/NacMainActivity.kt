@@ -578,7 +578,6 @@ class NacMainActivity
 
 		// Set the content view
 		setContentView(R.layout.act_main)
-		println("Main onCreate() : ${intent.action}")
 
 		// Set member variables
 		sharedPreferences = NacSharedPreferences(this)
@@ -768,8 +767,6 @@ class NacMainActivity
 		// Super
 		super.onResume()
 
-		println("Main onResume() : ${intent.action}")
-
 		lifecycleScope.launch {
 
 			// Get the active alarm
@@ -803,7 +800,6 @@ class NacMainActivity
 		if (sharedPreferences.shouldRefreshMainActivity)
 		{
 			// Refresh the activity
-			println("REFRESH IN resume")
 			refreshMainActivity()
 			return
 		}
@@ -1193,7 +1189,6 @@ class NacMainActivity
 			// TODO: Why is this here?
 			if (sharedPreferences.shouldRefreshMainActivity)
 			{
-				println("REFRESH IN OBSERVE")
 				refreshMainActivity()
 			}
 

@@ -1,11 +1,8 @@
 package com.nfcalarmclock.settings
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.TransitionDrawable
-import android.os.Build
+import android.animation.AnimatorInflater
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
@@ -31,51 +28,13 @@ class NacMainSettingFragment
 		// Get the preference
 		val preference = findPreference<Preference>(getString(R.string.support_setting_key))
 
-		// Create the icons
-		val whiteDrawable = createIconDrawable(R.mipmap.favorite)
-		val redDrawable = createIconDrawable(R.mipmap.favorite)
+		// Inflate the animator
+		val context = requireContext()
+		val animator = AnimatorInflater.loadAnimator(context, R.animator.support_development)
 
-		// Create the transition icon
-		val transitionDrawable = TransitionDrawable(arrayOf(whiteDrawable, redDrawable))
-
-		// Get the color based on the version
-		val color = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-		{
-			requireContext().getColor(R.color.red)
-		}
-		else
-		{
-			resources.getColor(R.color.red)
-		}
-
-		// Color the icon that will be transitioned to
-		redDrawable.setTint(color)
-
-		// Set the icon
-		preference!!.icon = transitionDrawable
-
-		// Start the transition
-		transitionDrawable.startTransition(1000)
-	}
-
-	/**
-	 * Get the icon drawable.
-	 *
-	 * @return The icon drawable.
-	 */
-	private fun createIconDrawable(id: Int): BitmapDrawable
-	{
-		// Get the size that the drawable should be
-		val size = resources.getDimension(R.dimen.isz_large).toInt()
-
-		// Create the bitmap
-		val bitmap = BitmapFactory.decodeResource(resources, id)
-
-		// Scale the bitmap to the size
-		val scaled = Bitmap.createScaledBitmap(bitmap, size, size, true)
-
-		// Create the drawable from the scaled bitmap
-		return BitmapDrawable(resources, scaled)
+		// Animate the drawable
+		animator.setTarget(preference!!.icon!!)
+		animator.start()
 	}
 
 	/**
@@ -87,11 +46,7 @@ class NacMainSettingFragment
 		// Inflate the XML file and add the hierarchy to the current preference
 		addPreferencesFromResource(R.xml.main_preferences)
 
-		// Setup the icons for each preference
-		setupAppearanceIcon()
-		setupGeneralIcon()
-		setupStatisticsIcon()
-		setupAboutIcon()
+		// Setup the support icon
 		setupSupportIcon()
 	}
 
@@ -168,81 +123,24 @@ class NacMainSettingFragment
 	}
 
 	/**
-	 * Setup the About preference icon.
-	 */
-	private fun setupAboutIcon()
-	{
-		val preference = findPreference<Preference>(getString(R.string.about_setting_key))
-		val drawable = createIconDrawable(R.mipmap.about)
-
-		preference!!.icon = drawable
-	}
-
-	/**
-	 * Setup the Appearance preference icon.
-	 */
-	private fun setupAppearanceIcon()
-	{
-		val preference = findPreference<Preference>(getString(R.string.appearance_setting_key))
-		val drawable = createIconDrawable(R.mipmap.palette)
-
-		preference!!.icon = drawable
-	}
-
-	/**
-	 * Setup the General preference icon.
-	 */
-	private fun setupGeneralIcon()
-	{
-		val preference = findPreference<Preference>(getString(R.string.general_setting_key))
-		val drawable = createIconDrawable(R.mipmap.settings)
-
-		preference!!.icon = drawable
-	}
-
-	/**
-	 * Setup the Statistics preference icon.
-	 */
-	private fun setupStatisticsIcon()
-	{
-		val preference = findPreference<Preference>(getString(R.string.stats_setting_key))
-		val drawable = createIconDrawable(R.mipmap.analytics)
-
-		preference!!.icon = drawable
-	}
-
-	/**
 	 * Setup the Support preference icon.
 	 */
-	@Suppress("deprecation")
 	private fun setupSupportIcon()
 	{
-		// Get the preference
-		val preference = findPreference<Preference>(getString(R.string.support_setting_key))
-
-		// Create the icon
-		val drawable = createIconDrawable(R.mipmap.favorite)
-
-		// Check if the user has shown their support
-		if (sharedPreferences!!.wasAppSupported)
+		// Check if the user has not shown their support
+		if (!sharedPreferences!!.wasAppSupported)
 		{
-			// Get the color based on the version
-			val color = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-			{
-				requireContext().getColor(R.color.red)
-			}
-			else
-			{
-				resources.getColor(R.color.red)
-			}
-
-			// Change the color of the heart to show that the user has shown their
-			// support
-			drawable.setTint(color)
+			// Do nothing
+			return
 		}
 
-		// Set the icon
-		preference!!.icon = drawable
+		// Prepare the preference
+		val context = requireContext()
+		val preference = findPreference<Preference>(getString(R.string.support_setting_key))
+		val color = ContextCompat.getColor(context, R.color.red)
+
+		// Change the color of the icon to show that the user has shown their support
+		preference!!.icon!!.setTint(color)
 	}
 
 	/**

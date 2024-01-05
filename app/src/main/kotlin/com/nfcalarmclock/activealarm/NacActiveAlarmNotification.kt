@@ -138,6 +138,27 @@ class NacActiveAlarmNotification(
 		}
 
 	/**
+	 * The pending intent to use when dismissing the alarm.
+	 */
+	private val dismissPendingIntent: PendingIntent
+		get()
+		{
+			// Create an intent to dismiss the active alarm service
+			val intent = NacActiveAlarmService.getDismissIntent(context, alarm)
+
+			// Determine the pending intent flags
+			var flags = PendingIntent.FLAG_CANCEL_CURRENT
+
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+			{
+				flags = flags or PendingIntent.FLAG_IMMUTABLE
+			}
+
+			// Create the pending intent
+			return PendingIntent.getService(context, 0, intent, flags)
+		}
+
+	/**
 	 * The pending intent to use when snoozing.
 	 */
 	private val snoozePendingIntent: PendingIntent
@@ -221,15 +242,12 @@ class NacActiveAlarmNotification(
 	 */
 	public override fun builder(): NotificationCompat.Builder
 	{
-		// Create the dismiss pending intent
-		val dismissPending = getDismissPendingIntent(contentPendingIntent)
-
 		// Notification actions
 		val dismiss = context.getString(R.string.action_alarm_dismiss)
 		val snooze = context.getString(R.string.action_alarm_snooze)
 
 		// Build the notification
-		return super.builder()
+		var builder = super.builder()
 			.setLargeIcon(largeIcon)
 			.setFullScreenIntent(contentPendingIntent, true)
 			.setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
@@ -238,7 +256,16 @@ class NacActiveAlarmNotification(
 			.setShowWhen(true)
 			.setTicker(appName)
 			.addAction(R.mipmap.snooze, snooze, snoozePendingIntent)
-			.addAction(R.mipmap.dismiss, dismiss, dismissPending)
+
+		// Check if NFC does not need to be used to dismiss the alarm
+		if (!NacNfc.shouldUseNfc(context, alarm))
+		{
+			// Add the dismiss button to the notification
+			builder = builder.addAction(R.mipmap.dismiss, dismiss, dismissPendingIntent)
+		}
+
+		// Return the builder
+		return builder
 	}
 
 	/**
@@ -256,35 +283,6 @@ class NacActiveAlarmNotification(
 		channel.enableVibration(true)
 
 		return channel
-	}
-
-	/**
-	 * Get the pending intent to use when dismissing the alarm.
-	 *
-	 * @return The pending intent to use when dismissing the alarm.
-	 */
-	private fun getDismissPendingIntent(activityPendingIntent: PendingIntent)
-		: PendingIntent
-	{
-		// NFC should be used so show the active alarm activity pending intent
-		if (NacNfc.shouldUseNfc(context, alarm))
-		{
-			return activityPendingIntent
-		}
-
-		// Create an intent to dismiss the active alarm service
-		val intent = NacActiveAlarmService.getDismissIntent(context, alarm)
-
-		// Determine the pending intent flags
-		var flags = PendingIntent.FLAG_CANCEL_CURRENT
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-		{
-			flags = flags or PendingIntent.FLAG_IMMUTABLE
-		}
-
-		// Create the pending intent
-		return PendingIntent.getService(context, 0, intent, flags)
 	}
 
 	/**

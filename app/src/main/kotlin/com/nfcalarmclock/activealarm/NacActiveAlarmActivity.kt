@@ -112,7 +112,6 @@ class NacActiveAlarmActivity
 		// Setup the shared preferences
 		sharedPreferences = NacSharedPreferences(this)
 
-		println("onCreate : ${intent.action}")
 		// Set the alarm from the bundle
 		setAlarm(savedInstanceState)
 
@@ -161,7 +160,6 @@ class NacActiveAlarmActivity
 		// Super
 		super.onNewIntent(intent)
 
-		println("onNewIntent : ${intent.action}")
 		// Set the intent
 		setIntent(intent)
 
@@ -196,7 +194,6 @@ class NacActiveAlarmActivity
 		// Super
 		super.onResume()
 
-		println("onResume : ${intent.action}")
 		// NFC tag was scanned. Check if can dismiss
 		if (NacNfc.wasScanned(intent) && checkCanDismissWithNfc())
 		{
