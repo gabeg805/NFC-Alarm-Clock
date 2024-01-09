@@ -115,10 +115,10 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_above="@id/alarm_action_row"
-		android:layout_marginBottom="-24dp"
+		android:layout_marginBottom="@dimen/neg_medium"
 		android:layout_centerHorizontal="true"
 		android:textColor="@color/white"
-		android:textSize="@dimen/tsz_small"
+		android:textSize="@dimen/tsz_normal"
 		android:text=""
 		/>
 
@@ -126,9 +126,11 @@
 	<RelativeLayout
 		android:id="@+id/alarm_action_row"
 		android:layout_width="match_parent"
-		android:layout_height="84dp"
+		android:layout_height="@dimen/action_row_height"
 		android:layout_marginTop="@dimen/xlarge"
-		android:layout_marginBottom="@dimen/normal"
+		android:layout_marginBottom="@dimen/medium"
+		android:layout_marginStart="@dimen/normal"
+		android:layout_marginEnd="@dimen/normal"
 		android:clipChildren="false"
 		android:clipToPadding="false"
 		android:layout_above="@id/music_container">
@@ -143,26 +145,26 @@
 
 			<ImageView
 				android:id="@+id/slider_center_arrow"
-				android:layout_width="@dimen/isz_normal"
-				android:layout_height="@dimen/isz_normal"
+				android:layout_width="@dimen/isz_large"
+				android:layout_height="@dimen/isz_large"
 				android:layout_centerVertical="true"
 				android:layout_centerHorizontal="true"
 				/>
 
 			<ImageView
 				android:id="@+id/slider_left_arrow"
-				android:layout_width="@dimen/isz_normal"
-				android:layout_height="@dimen/isz_normal"
-				android:layout_marginEnd="@dimen/xxxlarge"
+				android:layout_width="@dimen/isz_large"
+				android:layout_height="@dimen/isz_large"
+				android:layout_marginEnd="@dimen/xlarge"
 				android:layout_toStartOf="@id/slider_center_arrow"
 				android:layout_centerVertical="true"
 				/>
 
 			<ImageView
 				android:id="@+id/slider_right_arrow"
-				android:layout_width="@dimen/isz_normal"
-				android:layout_height="@dimen/isz_normal"
-				android:layout_marginStart="@dimen/xxxlarge"
+				android:layout_width="@dimen/isz_large"
+				android:layout_height="@dimen/isz_large"
+				android:layout_marginStart="@dimen/xlarge"
 				android:layout_toEndOf="@id/slider_center_arrow"
 				android:layout_centerVertical="true"
 				/>

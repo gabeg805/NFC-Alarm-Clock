@@ -8,6 +8,7 @@
 	<dimen name="small">12dp</dimen>
 	<dimen name="normal">16dp</dimen>
 	<dimen name="medium">20dp</dimen>
+	<dimen name="neg_medium">-20dp</dimen>
 	<dimen name="large">24dp</dimen>
 	<dimen name="huge">28dp</dimen>
 	<dimen name="xlarge">32dp</dimen>
@@ -37,6 +38,6 @@
 	<dimen name="radius">6dp</dimen>
 	<dimen name="radius_day_filled">16dp</dimen>
 	<dimen name="radius_day_outlined">16dp</dimen>
-	<dimen name="click_and_slide">100dp</dimen>
+	<dimen name="action_row_height">84dp</dimen>
 
 </resources>
