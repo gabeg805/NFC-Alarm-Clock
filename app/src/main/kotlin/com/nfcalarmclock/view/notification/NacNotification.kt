@@ -131,14 +131,23 @@ abstract class NacNotification(
 	@TargetApi(Build.VERSION_CODES.N)
 	protected open fun builder(): NotificationCompat.Builder
 	{
-		return NotificationCompat.Builder(context, channelId)
+		// Create the builder
+		var builder = NotificationCompat.Builder(context, channelId)
 			.setGroup(group)
 			.setContentIntent(contentPendingIntent)
-			.setContentTitle(toSpannedString(title))
 			.setContentText(contentText)
 			.setSmallIcon(smallIcon)
 			.setPriority(priority)
 			.setCategory(category)
+
+		// Check if title should be added
+		if (title.isNotEmpty())
+		{
+			builder = builder.setContentTitle(toSpannedString(title))
+		}
+
+		// Return the builder
+		return builder
 	}
 
 	/**

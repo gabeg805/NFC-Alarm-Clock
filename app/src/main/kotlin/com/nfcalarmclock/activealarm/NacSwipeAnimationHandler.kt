@@ -38,6 +38,16 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 	 */
 	private val sliderPathFadeOutAnimation = AnimationUtils.loadAnimation(activity, R.anim.fade_out)
 
+	/**
+	 * Fade in animation for the slider instructions.
+	 */
+	private val sliderInstructionsFadeInAnimation = AnimationUtils.loadAnimation(activity, R.anim.fade_in)
+
+	/**
+	 * Fade out animation for the slider instructions.
+	 */
+	private val sliderInstructionsFadeOutAnimation = AnimationUtils.loadAnimation(activity, R.anim.fade_out)
+
 	//private val helloBroth: NacCustomArcView = activity.findViewById(R.id.hellobroth)
 
 	/**
@@ -201,16 +211,19 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 	/**
 	 * Start the animation to hide the slider path.
 	 */
-	fun hideSliderPath(sliderPath: View)
+	fun hideSliderPath(sliderPath: View, sliderInstructions: View)
 	{
 		// Create the listener
-		val listener = createHideAnimationListener(sliderPath)
+		val pathListener = createHideAnimationListener(sliderPath)
+		val instructionsListener = createHideAnimationListener(sliderInstructions)
 
 		// Set the listener
-		sliderPathFadeOutAnimation.setAnimationListener(listener)
+		sliderPathFadeOutAnimation.setAnimationListener(pathListener)
+		sliderInstructionsFadeOutAnimation.setAnimationListener(instructionsListener)
 
 		// Start the animation
 		sliderPath.startAnimation(sliderPathFadeOutAnimation)
+		sliderInstructions.startAnimation(sliderInstructionsFadeOutAnimation)
 	}
 
 	fun scanNfc(context: Context, scanNfcView1: View, scanNfcView2: View, scanNfcView3: View)
@@ -334,16 +347,19 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 	/**
 	 * Start the animation to show the slider path.
 	 */
-	fun showSliderPath(sliderPath: View)
+	fun showSliderPath(sliderPath: View, sliderInstructions: View)
 	{
 		// Create the listener
-		val listener = createShowAnimationListener(sliderPath)
+		val pathListener = createShowAnimationListener(sliderPath)
+		val instructionsListener = createShowAnimationListener(sliderInstructions)
 
 		// Set the listener
-		sliderPathFadeInAnimation.setAnimationListener(listener)
+		sliderPathFadeInAnimation.setAnimationListener(pathListener)
+		sliderInstructionsFadeInAnimation.setAnimationListener(instructionsListener)
 
 		// Start the animation
 		sliderPath.startAnimation(sliderPathFadeInAnimation)
+		sliderInstructions.startAnimation(sliderInstructionsFadeInAnimation)
 	}
 
 }

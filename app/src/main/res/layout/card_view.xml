@@ -260,7 +260,7 @@
 					app:backgroundTint="@android:color/transparent"
 					app:iconTint="@color/card_toggle_button"
 					app:iconSize="@dimen/isz_large"
-					app:icon="@mipmap/repeat"
+					app:icon="@drawable/repeat"
 					/>
 
 				<!-- Vibrate -->
@@ -274,7 +274,7 @@
 					app:backgroundTint="@android:color/transparent"
 					app:iconTint="@color/card_toggle_button"
 					app:iconSize="@dimen/isz_large"
-					app:icon="@mipmap/vibrate"
+					app:icon="@drawable/vibrate"
 					/>
 
 				<!-- NFC -->
@@ -377,7 +377,7 @@
 					android:paddingBottom="@dimen/zero"
 					android:paddingEnd="@dimen/large"
 					android:text="@string/action_alarm_delete"
-					app:icon="@mipmap/delete"
+					app:icon="@drawable/delete"
 					/>
 
 

@@ -15,7 +15,7 @@
 		android:layout_marginEnd="@dimen/normal"
 		android:layout_alignParentEnd="true"
 		android:layout_centerVertical="true"
-		android:src="@mipmap/delete"
+		android:src="@drawable/delete"
 		android:contentDescription="@null"
 		/>
 

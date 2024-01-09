@@ -10,6 +10,7 @@ import android.net.Uri
 import android.text.format.DateFormat
 import android.view.MotionEvent
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -115,6 +116,13 @@ class NacSwipeLayoutHandler(
 	 * Instructions as to what sliding on the path will do.
 	 */
 	private val sliderInstructions: TextView = activity.findViewById(R.id.slider_instructions)
+
+	/**
+	 * Arrows in the slider path to show which direction to slide.
+	 */
+	private val sliderCenterArrow: ImageView = activity.findViewById(R.id.slider_center_arrow)
+	private val sliderLeftArrow: ImageView = activity.findViewById(R.id.slider_left_arrow)
+	private val sliderRightArrow: ImageView = activity.findViewById(R.id.slider_right_arrow)
 
 	/**
 	 * Music information.
@@ -253,9 +261,6 @@ class NacSwipeLayoutHandler(
 		setupCurrentDateAndTime(context)
 		setupMusicInformation(context)
 
-		// Set the visibility of the rings
-		//scanNfcRings.background.level = 4000
-
 		// Check if the dismiss button should be visible or not
 		if (alarm!!.shouldUseNfc)
 		{
@@ -314,8 +319,22 @@ class NacSwipeLayoutHandler(
 
 					sliderInstructions.setText(text)
 
+					// Determine which arrow to show
+					val arrow = if (view.id == snoozeButton.id)
+					{
+						R.drawable.arrow_right
+					}
+					else
+					{
+						R.drawable.arrow_left
+					}
+
+					sliderCenterArrow.setImageResource(arrow)
+					sliderLeftArrow.setImageResource(arrow)
+					sliderRightArrow.setImageResource(arrow)
+
 					// Show the slider path
-					swipeAnimation.showSliderPath(sliderPath)
+					swipeAnimation.showSliderPath(sliderPath, sliderInstructions)
 				}
 
 				// Finger UP on button
@@ -358,7 +377,7 @@ class NacSwipeLayoutHandler(
 								})
 
 							// Hide the slider path
-							swipeAnimation.hideSliderPath(sliderPath)
+							swipeAnimation.hideSliderPath(sliderPath, sliderInstructions)
 
 						}
 						.start()
@@ -448,6 +467,12 @@ class NacSwipeLayoutHandler(
 	 */
 	private fun setupDismissButton()
 	{
+		// Check if the X position has already been set
+		if (endAlarmActionX >= 0)
+		{
+			return
+		}
+
 		// Determine the right bound of where the snooze/dismiss button can go
 		endAlarmActionX = dismissButton.x
 
@@ -507,6 +532,12 @@ class NacSwipeLayoutHandler(
 	 */
 	private fun setupSnoozeButton()
 	{
+		// Check if the X position has already been set
+		if (startAlarmActionX >= 0)
+		{
+			return
+		}
+
 		// Determine the left bound of where the snooze/dismiss button can go
 		startAlarmActionX = snoozeButton.x
 

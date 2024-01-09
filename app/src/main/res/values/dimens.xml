@@ -11,6 +11,8 @@
 	<dimen name="large">24dp</dimen>
 	<dimen name="huge">28dp</dimen>
 	<dimen name="xlarge">32dp</dimen>
+	<dimen name="xxlarge">36dp</dimen>
+	<dimen name="xxxlarge">40dp</dimen>
 
 	<!-- Image -->
 	<dimen name="isz_normal">24dp</dimen>

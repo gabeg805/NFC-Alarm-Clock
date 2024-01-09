@@ -109,6 +109,19 @@
 			-->
 	</LinearLayout>
 
+	<!-- Slider instructions -->
+	<TextView
+		android:id="@+id/slider_instructions"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_above="@id/alarm_action_row"
+		android:layout_marginBottom="-24dp"
+		android:layout_centerHorizontal="true"
+		android:textColor="@color/white"
+		android:textSize="@dimen/tsz_small"
+		android:text=""
+		/>
+
 	<!-- Snooze/dismiss -->
 	<RelativeLayout
 		android:id="@+id/alarm_action_row"
@@ -128,15 +141,32 @@
 			android:background="@drawable/slider_path"
 			android:visibility="invisible">
 
-			<TextView
-				android:id="@+id/slider_instructions"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_centerInParent="true"
-				android:textColor="@color/white"
-				android:textSize="@dimen/tsz_medium"
-				android:text=""
+			<ImageView
+				android:id="@+id/slider_center_arrow"
+				android:layout_width="@dimen/isz_normal"
+				android:layout_height="@dimen/isz_normal"
+				android:layout_centerVertical="true"
+				android:layout_centerHorizontal="true"
 				/>
+
+			<ImageView
+				android:id="@+id/slider_left_arrow"
+				android:layout_width="@dimen/isz_normal"
+				android:layout_height="@dimen/isz_normal"
+				android:layout_marginEnd="@dimen/xxxlarge"
+				android:layout_toStartOf="@id/slider_center_arrow"
+				android:layout_centerVertical="true"
+				/>
+
+			<ImageView
+				android:id="@+id/slider_right_arrow"
+				android:layout_width="@dimen/isz_normal"
+				android:layout_height="@dimen/isz_normal"
+				android:layout_marginStart="@dimen/xxxlarge"
+				android:layout_toEndOf="@id/slider_center_arrow"
+				android:layout_centerVertical="true"
+				/>
+
 		</RelativeLayout>
 
 		<!-- Snooze animation -->
