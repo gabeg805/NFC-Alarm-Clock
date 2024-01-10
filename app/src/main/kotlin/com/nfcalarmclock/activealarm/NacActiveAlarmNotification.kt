@@ -255,13 +255,15 @@ class NacActiveAlarmNotification(
 			.setOngoing(true)
 			.setShowWhen(true)
 			.setTicker(appName)
-			.addAction(R.mipmap.snooze, snooze, snoozePendingIntent)
+			.addAction(R.drawable.snooze, snooze, snoozePendingIntent)
 
 		// Check if NFC does not need to be used to dismiss the alarm
+		// Note: This evaluates to False on the emulator because the emulator
+		// is unable to use NFC
 		if (!NacNfc.shouldUseNfc(context, alarm))
 		{
 			// Add the dismiss button to the notification
-			builder = builder.addAction(R.mipmap.dismiss, dismiss, dismissPendingIntent)
+			builder = builder.addAction(R.drawable.dismiss, dismiss, dismissPendingIntent)
 		}
 
 		// Return the builder

@@ -271,14 +271,9 @@
 -->
 
 	<string-array name="whats_new_items">
-		<item>Added support for Haitian Creole and Vietnamese.  This was using Google Translate so any corrections I need to make are welcome.</item>
-		<item>Fixed issue where an alarm that requires NFC to dismiss could be dismissed without it.</item>
-		<item>Changed how the &lt;b>alarm options&lt;/b> dialog looks.</item>
-		<item>Added the &lt;b>Upcoming reminder&lt;/b> alarm option.</item>
-		<item>Added an &lt;b>Email statistics&lt;/b> button to email statistics.</item>
-		<item>Added a &lt;b>Shuffle&lt;/b> and &lt;b>Include subfolders&lt;/b> option if a folder is selected when choosing music for an alarm.</item>
-		<item>Added an option to &lt;b>Text-to-speech&lt;/b>.  When an alarm goes off, the &lt;b>alarm name&lt;/b> can now be said, in addition to the &lt;b>current time&lt;/b>.</item>
-		<item>Fixed issue with &lt;b>Restrict volume&lt;/b> where it was not properly restricting volume before.</item>
+		<item>Added a &lt;b>new alarm screen&lt;/b> that can be enabled in &lt;i>Settings > Appearance&lt;/i>.</item>
+		<item>Fixed a rare crash when browsing for music.</item>
+		<item>Reduced the size of the app by using vector icons.</item>
 	</string-array>
 
 </resources>

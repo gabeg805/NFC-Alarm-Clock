@@ -2,14 +2,6 @@
 TODO
 ----
 
-* Get drawables of things that are mipmaps right now
-
-* Clicking on NFC button was closing the dialog and acting as if I clicked it. Maybe just do not show dismiss button when need nfc
-
-* Can maybe do a rings thing, full rings, and pulse it like drops of water
-
-* Fix the AM/PM text in the alarm activity time
-
 * Figure out why I use home in NacFile
 
 * Reorganize some of the packages like media. See if I can make a media player package?

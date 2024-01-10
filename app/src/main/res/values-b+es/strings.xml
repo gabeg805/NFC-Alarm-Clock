@@ -177,6 +177,9 @@
 
 
 	<!-- Descriptions -->
+	<string name="description_scan_nfc">Escanear NFC</string>
+	<string name="description_slide_to_snooze">Deslizar para posponer</string>
+	<string name="description_slide_to_dismiss">Deslizar para descartar</string>
 	<string name="description_alarm_activity">Escanea una etiqueta de NFC para descartar la alarma.</string>
 	<string name="description_no_notification">No mostrar notificaciones.</string>
 	<string name="description_upcoming_reminder">Recordatorio de próximas alarmas que están por activarse.</string>
@@ -327,23 +330,23 @@
 
 	<!-- New screen -->
 	<string name="new_screen">Nueva pantalla</string>
-	<string name="new_screen_true">Utilice la nueva pantalla de alarma, donde desliza el dedo para posponer/descartar la alarma.\n</string>
-	<string name="new_screen_false">No utilice la nueva pantalla de alarma. Utilice la pantalla original con botones simples para posponer/descartar la alarma.</string>
+	<string name="new_screen_true">Utilice la nueva pantalla de alarma, donde desliza el dedo para posponero descartar la alarma.</string>
+	<string name="new_screen_false">No utilice la nueva pantalla de alarma. Utilice la pantalla original con botones simples para posponer o descartar la alarma.</string>
 
 	<!-- Show alarm name -->
 	<string name="show_alarm_name">Muestra nombre de alarma</string>
 	<string name="show_alarm_name_true">Muestra el nombre de la alarma en la pantalla de alarma.</string>
-	<string name="show_alarm_name_false">No mostrar el nombre de la alarma.\n</string>
+	<string name="show_alarm_name_false">No mostrar el nombre de la alarma.</string>
 
 	<!-- Show current date and time -->
 	<string name="show_current_date_and_time">Mostrar fecha y hora actuales</string>
 	<string name="show_current_date_and_time_true">Muestra la fecha y hora actuales en la pantalla de alarma.</string>
-	<string name="show_current_date_and_time_false">No mostrar la fecha y hora actuales.\n</string>
+	<string name="show_current_date_and_time_false">No mostrar la fecha y hora actuales.</string>
 
 	<!-- Show music information -->
 	<string name="show_music_info">Mostrar información musical</string>
-	<string name="show_music_info_true">Muestra información sobre la música/tono de llamada que se está reproduciendo actualmente en la pantalla de alarma.</string>
-	<string name="show_music_info_false">No mostrar información de música/tono de llamada.\n</string>
+	<string name="show_music_info_true">Muestra información sobre la música o tono de llamada que se está reproduciendo actualmente en la pantalla de alarma.</string>
+	<string name="show_music_info_false">No mostrar información de música o tono de llamada.</string>
 
 	<!-- Theme color -->
 	<string name="theme_color">Tema</string>

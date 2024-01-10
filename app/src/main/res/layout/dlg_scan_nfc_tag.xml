@@ -23,7 +23,7 @@
 			android:layout_marginTop="@dimen/large"
 			android:layout_marginBottom="@dimen/large"
 			android:layout_gravity="center"
-			android:src="@mipmap/tap_and_play"
+			android:src="@drawable/tap_and_play"
 			/>
 
 		<TextView

@@ -177,6 +177,9 @@
 
 
 	<!-- Descriptions -->
+	<string name="description_scan_nfc">Quét NFC</string>
+	<string name="description_slide_to_snooze">Trượt để báo lại</string>
+	<string name="description_slide_to_dismiss">Trượt để loại bỏ</string>
 	<string name="description_alarm_activity">Quét thẻ NFC để loại bỏ cảnh báo.</string>
 	<string name="description_no_notification">Không hiển thị thông báo.</string>
 	<string name="description_upcoming_reminder">Lời nhắc về các báo thức sắp hoạt động.</string>
@@ -327,8 +330,8 @@
 
 	<!-- New screen -->
 	<string name="new_screen">Màn hình mới</string>
-	<string name="new_screen_true">Sử dụng màn hình báo thức mới, nơi bạn vuốt để báo lại/đóng báo thức.\n</string>
-	<string name="new_screen_false">Không sử dụng màn hình báo động mới. Sử dụng màn hình gốc với các nút đơn giản để báo lại/bỏ báo thức.</string>
+	<string name="new_screen_true">Sử dụng màn hình báo thức mới, nơi bạn vuốt để báo lại hoặc loại bỏ báo thức.</string>
+	<string name="new_screen_false">Không sử dụng màn hình báo động mới. Sử dụng màn hình gốc với các nút đơn giản để báo lại hoặc tắt báo thức.</string>
 
 	<!-- Show alarm name -->
 	<string name="show_alarm_name">Hiển thị tên cảnh báo</string>
@@ -338,12 +341,12 @@
 	<!-- Show current date and time -->
 	<string name="show_current_date_and_time">Hiển thị ngày và giờ hiện tại</string>
 	<string name="show_current_date_and_time_true">Hiển thị ngày giờ hiện tại trên màn hình báo thức.</string>
-	<string name="show_current_date_and_time_false">Không hiển thị ngày và giờ hiện tại.\n</string>
+	<string name="show_current_date_and_time_false">Không hiển thị ngày và giờ hiện tại.</string>
 
 	<!-- Show music information -->
 	<string name="show_music_info">Hiển thị thông tin âm nhạc</string>
-	<string name="show_music_info_true">Hiển thị thông tin về nhạc/nhạc chuông hiện đang phát trên màn hình báo thức.</string>
-	<string name="show_music_info_false">Không hiển thị thông tin nhạc/nhạc chuông.\n</string>
+	<string name="show_music_info_true">Hiển thị thông tin về nhạc hoặc nhạc chuông hiện đang phát trên màn hình báo thức.</string>
+	<string name="show_music_info_false">Không hiển thị thông tin nhạc hoặc nhạc chuông.</string>
 
 	<!-- Theme color -->
 	<string name="theme_color">Chủ đề</string>

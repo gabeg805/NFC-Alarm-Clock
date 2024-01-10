@@ -21,7 +21,7 @@
 			android:layout_height="wrap_content"
 			android:layout_marginBottom="@dimen/large"
 			android:textColor="@color/white_dull"
-			android:textSize="@dimen/tsz_xxlarge"
+			android:textSize="@dimen/tsz_huge"
 			android:text="@string/title_alarm_activity"
 			/>
 
@@ -29,7 +29,7 @@
 			android:id="@+id/icon"
 			android:layout_width="@dimen/isz_attention"
 			android:layout_height="@dimen/isz_attention"
-			android:src="@mipmap/alarm"
+			android:src="@drawable/alarm"
 			android:contentDescription="@null"
 			/>
 

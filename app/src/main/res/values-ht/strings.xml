@@ -177,6 +177,9 @@
 
 
 	<!-- Descriptions -->
+	<string name="description_scan_nfc">Eskane NFC</string>
+	<string name="description_slide_to_snooze">Glise pou snooze</string>
+	<string name="description_slide_to_dismiss">Glise pou ranvwaye</string>
 	<string name="description_alarm_activity">Eskane tag NFC pou ranvwaye alam la.</string>
 	<string name="description_no_notification">Pa montre notifikasyon.</string>
 	<string name="description_upcoming_reminder">Rapèl pou alam k ap vini yo ki pral aktif.</string>
@@ -327,8 +330,8 @@
 
 	<!-- New screen -->
 	<string name="new_screen">Nouvo ekran</string>
-	<string name="new_screen_true">Sèvi ak nouvo ekran alam la, kote ou glise pou snooze/ranvwaye alam la.\n</string>
-	<string name="new_screen_false">Pa sèvi ak nouvo ekran alam la. Sèvi ak ekran orijinal la ak bouton senp pou snooze/ranvwaye alam la.</string>
+	<string name="new_screen_true">Sèvi ak nouvo ekran alam la, kote ou glise pou snooze oswa ranvwaye alam la.</string>
+	<string name="new_screen_false">Pa sèvi ak nouvo ekran alam la. Sèvi ak ekran orijinal la ak bouton senp pou snooze oswa ranvwaye alam la.</string>
 
 	<!-- Show alarm name -->
 	<string name="show_alarm_name">Montre non alam</string>
@@ -338,12 +341,12 @@
 	<!-- Show current date and time -->
 	<string name="show_current_date_and_time">Montre dat ak lè aktyèl la</string>
 	<string name="show_current_date_and_time_true">Montre dat ak lè aktyèl la nan ekran alam la.</string>
-	<string name="show_current_date_and_time_false">Pa montre dat ak lè aktyèl la.\n</string>
+	<string name="show_current_date_and_time_false">Pa montre dat ak lè aktyèl la.</string>
 
 	<!-- Show music information -->
 	<string name="show_music_info">Montre enfòmasyon mizik</string>
-	<string name="show_music_info_true">Montre enfòmasyon sou mizik/sonri k ap jwe kounye a nan ekran alam la.</string>
-	<string name="show_music_info_false">Pa montre enfòmasyon mizik/sonri.\n</string>
+	<string name="show_music_info_true">Montre enfòmasyon sou mizik oswa sonri k ap jwe kounye a nan ekran alam la.</string>
+	<string name="show_music_info_false">Pa montre enfòmasyon mizik oswa sonri.</string>
 
 	<!-- Theme color -->
 	<string name="theme_color">Tèm</string>

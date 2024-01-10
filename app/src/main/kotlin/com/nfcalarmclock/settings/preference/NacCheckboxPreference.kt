@@ -6,6 +6,7 @@ import android.content.res.ColorStateList
 import android.content.res.TypedArray
 import android.graphics.Color
 import android.util.AttributeSet
+import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import androidx.preference.Preference
@@ -13,11 +14,12 @@ import androidx.preference.PreferenceViewHolder
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
 
+
 /**
  * Preference that indicates repeating the alarm.
  */
 @SuppressLint("ResourceType")
-class NacCheckboxPreference @JvmOverloads constructor(
+class NacCheckboxPreference(
 
 	/**
 	 * Context.
@@ -27,15 +29,10 @@ class NacCheckboxPreference @JvmOverloads constructor(
 	/**
 	 * Attribute set.
 	 */
-	attrs: AttributeSet? = null,
-
-	/**
-	 * Default style.
-	 */
-	style: Int = 0
+	attrs: AttributeSet?
 
 	// Constructor
-) : Preference(context, attrs, style),
+) : Preference(context, attrs),
 
 	// Interfaces
 	Preference.OnPreferenceClickListener,
@@ -43,9 +40,14 @@ class NacCheckboxPreference @JvmOverloads constructor(
 {
 
 	/**
+	 * The parent layout.
+	 */
+	private lateinit var parent: ViewGroup
+
+	/**
 	 * Check box button.
 	 */
-	private var checkBox: CheckBox? = null
+	private lateinit var checkBox: CheckBox
 
 	/**
 	 * Check value.
@@ -61,6 +63,13 @@ class NacCheckboxPreference @JvmOverloads constructor(
 	 * Summary text when checkbox is disabled.
 	 */
 	private var disabledSummary: String? = null
+
+	/**
+	 * The enabled status that was buffered until the view is bound.
+	 *
+	 * Note: If it is null, the enabled status is not buffered.
+	 */
+	private var bufferedEnableStatus: Boolean? = null
 
 	/**
 	 * Constructor.
@@ -118,34 +127,24 @@ class NacCheckboxPreference @JvmOverloads constructor(
 		super.onBindViewHolder(holder)
 
 		// Set the checkbox view
+		parent = holder.itemView as ViewGroup
 		checkBox = holder.findViewById(R.id.widget) as CheckBox
 
 		// Set the checked status and sandwich it by unsetting and resetting
 		// the listener so that it does not go off when the status is set
-		checkBox!!.setOnCheckedChangeListener(null)
-		checkBox!!.isChecked = isChecked
-		checkBox!!.setOnCheckedChangeListener(this)
+		checkBox.setOnCheckedChangeListener(null)
+		checkBox.isChecked = isChecked
+		checkBox.setOnCheckedChangeListener(this)
 
 		// Setup color
 		setupCheckBoxColor()
-	}
 
-	/**
-	 * Setup the color of the check box.
-	 */
-	private fun setupCheckBoxColor()
-	{
-		// Create a shared preferences
-		val shared = NacSharedPreferences(context)
-
-		// Get the colors for the boolean states
-		val colors = intArrayOf(shared.themeColor, Color.LTGRAY)
-
-		// Get the IDs of the two states
-		val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
-
-		// Set the state list
-		checkBox!!.buttonTintList = ColorStateList(states, colors)
+		// Check if the enabled status was buffered
+		if (bufferedEnableStatus != null)
+		{
+			this.isEnabled = bufferedEnableStatus!!
+			bufferedEnableStatus = null
+		}
 	}
 
 	/**
@@ -161,7 +160,7 @@ class NacCheckboxPreference @JvmOverloads constructor(
 
 		// Set the checked status
 		isChecked = state
-		checkBox!!.isChecked = state
+		checkBox.isChecked = state
 
 		// Set the summary
 		summary = this.summary
@@ -189,7 +188,7 @@ class NacCheckboxPreference @JvmOverloads constructor(
 	override fun onPreferenceClick(pref: Preference): Boolean
 	{
 		// Perform the click
-		checkBox!!.performClick()
+		checkBox.performClick()
 
 		return true
 	}
@@ -211,6 +210,46 @@ class NacCheckboxPreference @JvmOverloads constructor(
 
 			persistBoolean(isChecked)
 		}
+	}
+
+	/**
+	 * Set whether the preference is enabled or not.
+	 */
+	override fun setEnabled(enabled: Boolean)
+	{
+		// Super
+		super.setEnabled(enabled)
+
+		// Check if the view has been initialized yet or not
+		if (!this::parent.isInitialized)
+		{
+			bufferedEnableStatus = enabled
+			return
+		}
+
+		// Get the parent layout
+		//val parent = checkBox.parent as View
+
+		// Set the alpha of the parent
+		parent.alpha = if (enabled) 1.0f else 0.25f
+	}
+
+	/**
+	 * Setup the color of the check box.
+	 */
+	private fun setupCheckBoxColor()
+	{
+		// Create a shared preferences
+		val shared = NacSharedPreferences(context)
+
+		// Get the colors for the boolean states
+		val colors = intArrayOf(shared.themeColor, Color.LTGRAY)
+
+		// Get the IDs of the two states
+		val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
+
+		// Set the state list
+		checkBox.buttonTintList = ColorStateList(states, colors)
 	}
 
 	companion object

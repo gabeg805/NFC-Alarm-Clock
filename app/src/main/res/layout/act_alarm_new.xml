@@ -54,8 +54,8 @@
 		android:id="@+id/alarm_name"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/xlarge"
-		android:layout_marginBottom="@dimen/xlarge"
+		android:layout_marginTop="@dimen/large"
+		android:layout_marginBottom="@dimen/large"
 		android:layout_below="@id/current_date"
 		android:gravity="center_horizontal"
 		android:ellipsize="marquee"
@@ -63,7 +63,7 @@
 		android:scrollHorizontally="true"
 		android:singleLine="true"
 		android:textColor="@color/white"
-		android:textSize="@dimen/tsz_large"
+		android:textSize="@dimen/tsz_xlarge"
 		android:text=""
 		/>
 
@@ -84,7 +84,7 @@
 			android:id="@+id/scan_nfc_icon"
 			android:layout_width="@dimen/isz_attention"
 			android:layout_height="@dimen/isz_attention"
-			android:src="@mipmap/tap_and_play"
+			android:src="@drawable/tap_and_play"
 			/>
 
 		<TextView
@@ -155,7 +155,7 @@
 				android:id="@+id/slider_left_arrow"
 				android:layout_width="@dimen/isz_large"
 				android:layout_height="@dimen/isz_large"
-				android:layout_marginEnd="@dimen/xlarge"
+				android:layout_marginEnd="@dimen/large"
 				android:layout_toStartOf="@id/slider_center_arrow"
 				android:layout_centerVertical="true"
 				/>
@@ -164,7 +164,7 @@
 				android:id="@+id/slider_right_arrow"
 				android:layout_width="@dimen/isz_large"
 				android:layout_height="@dimen/isz_large"
-				android:layout_marginStart="@dimen/xlarge"
+				android:layout_marginStart="@dimen/large"
 				android:layout_toEndOf="@id/slider_center_arrow"
 				android:layout_centerVertical="true"
 				/>
@@ -212,7 +212,7 @@
 				android:layout_width="30dp"
 				android:layout_height="30dp"
 				android:layout_centerHorizontal="true"
-				android:src="@mipmap/snooze"
+				android:src="@drawable/snooze"
 				/>
 
 			<TextView
@@ -246,7 +246,7 @@
 				android:layout_width="28dp"
 				android:layout_height="28dp"
 				android:layout_centerHorizontal="true"
-				android:src="@mipmap/dismiss"
+				android:src="@drawable/dismiss"
 				/>
 
 			<TextView
@@ -284,7 +284,7 @@
 			android:layout_height="24dp"
 			android:layout_centerVertical="true"
 			android:animateLayoutChanges="true"
-			android:src="@mipmap/music_note"
+			android:src="@drawable/music_note"
 			/>
 
 		<TextView

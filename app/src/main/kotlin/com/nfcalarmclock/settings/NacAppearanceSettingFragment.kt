@@ -5,6 +5,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
 import com.nfcalarmclock.nextalarmformat.NacNextAlarmFormatPreference
+import com.nfcalarmclock.settings.preference.NacCheckboxPreference
 import com.nfcalarmclock.startweekon.NacStartWeekOnPreference
 import com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 
@@ -12,8 +13,7 @@ import com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
  * Appearance fragment.
  */
 class NacAppearanceSettingFragment
-	: NacGenericSettingFragment(),
-	Preference.OnPreferenceChangeListener
+	: NacGenericSettingFragment()
 {
 
 	/**
@@ -29,6 +29,7 @@ class NacAppearanceSettingFragment
 			R.xml.appearance_preferences, false)
 
 		// Setup color and styles
+		setupAlarmScreenPreferences()
 		setupColorPreferences()
 		setupDayButtonStylePreference()
 
@@ -48,44 +49,40 @@ class NacAppearanceSettingFragment
 	}
 
 	/**
-	 * Reset the screen when the theme color is changed, so that checkboxes,
-	 * etc. change color as well.
+	 * Called when the fragment is resumed.
 	 */
-	override fun onPreferenceChange(pref: Preference, newVal: Any): Boolean
+	override fun onResume()
 	{
-		// Get the keys
-		val themeKey = getString(R.string.theme_color_key)
-		val nameKey = getString(R.string.name_color_key)
-		val dayKey = getString(R.string.days_color_key)
-		val timeKey = getString(R.string.time_color_key)
-		val amKey = getString(R.string.am_color_key)
-		val pmKey = getString(R.string.pm_color_key)
+		// Setuper
+		super.onResume()
 
-		// Put the color keys in a list
-		val colorKeys = arrayOf(themeKey, nameKey, dayKey, timeKey, amKey, pmKey)
+		// Register listener when preferences are changed
+		preferenceScreen.sharedPreferences?.registerOnSharedPreferenceChangeListener(
+			this)
+	}
 
-		// Get the day button style key
-		val dayButtonStyleKey = getString(R.string.day_button_style_key)
+	/**
+	 * Setup the preferences for the alarm screen.
+	 */
+	private fun setupAlarmScreenPreferences()
+	{
+		// Get the new alarm screen preference
+		val newScreenKey = getString(R.string.key_use_new_alarm_screen)
+		val newScreenPref = findPreference<NacCheckboxPreference>(newScreenKey)!!
 
-		// Check if the color keys match the prefernece key or that the preference is
-		// for day button styles
-		if (colorKeys.contains(pref.key) || (pref.key == dayButtonStyleKey))
-		{
-			// Set flag to refresh the main activity
-			sharedPreferences!!.editShouldRefreshMainActivity(true)
+		// Setup the dependent alarm screen preferences
+		setupDependentNewAlarmScreenPreferences(newScreenPref.isChecked)
 
-			// Preference key is for the theme
-			if (pref.key == themeKey)
-			{
-				// Reset the screen
-				preferenceScreen = null
+		// Set the listener for when the new screen preference is changed
+		newScreenPref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, status ->
 
-				// Reinitialize the colors
-				init()
-			}
+			// Set the usability of the dependent preferences
+			setupDependentNewAlarmScreenPreferences(status as Boolean)
+
+			// Return
+			true
+
 		}
-
-		return true
 	}
 
 	/**
@@ -151,7 +148,25 @@ class NacAppearanceSettingFragment
 			val pref = findPreference<Preference>(k)
 
 			// Set the listener for when the prference is changed
-			pref!!.onPreferenceChangeListener = this
+			pref!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { p, _ ->
+
+				// Set flag to refresh the main activity
+				sharedPreferences!!.editShouldRefreshMainActivity(true)
+
+				// Preference key is for the theme
+				if (p.key == themeKey)
+				{
+					// Reset the screen
+					preferenceScreen = null
+
+					// Reinitialize the colors
+					init()
+				}
+
+				// Return
+				true
+
+			}
 		}
 	}
 
@@ -165,7 +180,33 @@ class NacAppearanceSettingFragment
 		val dayButtonStylePref = findPreference<Preference>(dayButtonStyleKey)
 
 		// Set the listener for when the preference is changed
-		dayButtonStylePref!!.onPreferenceChangeListener = this
+		dayButtonStylePref!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
+
+			// Set flag to refresh the main activity
+			sharedPreferences!!.editShouldRefreshMainActivity(true)
+
+			// Return
+			true
+
+		}
+	}
+
+	/**
+	 * Setup the preferences that are dependent on the new alarm screen.
+	 */
+	private fun setupDependentNewAlarmScreenPreferences(enabled: Boolean)
+	{
+		// Get the keys
+		val currentDateAndTimeKey = getString(R.string.key_show_current_date_and_time)
+		val musicInfoKey = getString(R.string.key_show_music_info)
+
+		// Get the dependent preferences
+		val currentDateAndTimePref = findPreference<NacCheckboxPreference>(currentDateAndTimeKey)!!
+		val musicInfoPref = findPreference<NacCheckboxPreference>(musicInfoKey)!!
+
+		// Set the usability of those preferences
+		currentDateAndTimePref.isEnabled = enabled
+		musicInfoPref.isEnabled = enabled
 	}
 
 	/**

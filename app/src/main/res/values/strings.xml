@@ -330,8 +330,8 @@
 
 	<!-- New screen -->
 	<string name="new_screen">New screen</string>
-	<string name="new_screen_true">Use the new alarm screen, where you swipe to snooze/dismiss the alarm.\n</string>
-	<string name="new_screen_false">Do not use the new alarm screen. Use the original screen with simple buttons to snooze/dismiss the alarm.</string>
+	<string name="new_screen_true">Use the new alarm screen, where you swipe to snooze or dismiss the alarm.</string>
+	<string name="new_screen_false">Do not use the new alarm screen. Use the original screen with simple buttons to snooze or dismiss the alarm.</string>
 
 	<!-- Show alarm name -->
 	<string name="show_alarm_name">Show alarm name</string>
@@ -341,12 +341,12 @@
 	<!-- Show current date and time -->
 	<string name="show_current_date_and_time">Show current date and time</string>
 	<string name="show_current_date_and_time_true">Show the current date and time in the alarm screen.</string>
-	<string name="show_current_date_and_time_false">Do not show the current date and time.\n</string>
+	<string name="show_current_date_and_time_false">Do not show the current date and time.</string>
 
 	<!-- Show music information -->
 	<string name="show_music_info">Show music information</string>
-	<string name="show_music_info_true">Show information on the currently playing music/ringtone in the alarm screen.</string>
-	<string name="show_music_info_false">Do not show music/ringtone information.\n</string>
+	<string name="show_music_info_true">Show information on the currently playing music or ringtone in the alarm screen.</string>
+	<string name="show_music_info_false">Do not show music or ringtone information.</string>
 
 	<!-- Theme color -->
 	<string name="theme_color">Theme</string>

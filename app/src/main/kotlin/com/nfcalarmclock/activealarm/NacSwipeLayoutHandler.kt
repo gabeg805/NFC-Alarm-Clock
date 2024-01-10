@@ -1,5 +1,6 @@
 package com.nfcalarmclock.activealarm
 
+import android.animation.LayoutTransition
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -260,6 +261,7 @@ class NacSwipeLayoutHandler(
 		setupAlarmName()
 		setupCurrentDateAndTime(context)
 		setupMusicInformation(context)
+		musicContainer.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
 
 		// Check if the dismiss button should be visible or not
 		if (alarm!!.shouldUseNfc)

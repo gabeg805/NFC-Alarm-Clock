@@ -266,14 +266,9 @@
 	</string-array>
 
 	<string-array name="whats_new_items">
-		<item>Se agregó soporte para criollo haitiano y vietnamita.  Esto fue usando Google Translate, por lo que cualquier corrección que necesite hacer es bienvenida.</item>
-		<item>Se solucionó el problema por el cual una alarma que requiere que NFC se descarte podría descartarse sin ella.</item>
-		<item>Se modificó la apariencia del cuadro de diálogo &lt;b>opciones de alarma&lt;/b>.</item>
-		<item>Se agregó la opción de alarma &lt;b>Próximo recordatorio&lt;/b>.</item>
-		<item>Se agregó un botón &lt;b>Estadísticas de correo electrónico&lt;/b> a las estadísticas de correo electrónico.</item>
-		<item>Se agregó la opción &lt;b>Aleatorio&lt;/b> e &lt;b>Incluir subcarpetas&lt;/b> si se selecciona una carpeta al elegir música para una alarma.</item>
-		<item>Se agregó una opción a &lt;b>Texto a voz&lt;/b> .  Cuando suena una alarma, ahora se puede decir el &lt;b>nombre de la alarma&lt;/b>, además de la &lt;b>hora actual&lt;/b>.</item>
-		<item>Se solucionó el problema con &lt;b>Restringir volumen&lt;/b> donde antes no restringía correctamente el volumen.</item>
+		<item>Se agregó una &lt;b>nueva pantalla de alarma&lt;/b> que se puede habilitar en &lt;i>Configuración > Apariencia&lt;/i>.</item>
+		<item>Se corrigió un bloqueo poco común al buscar música.</item>
+		<item>Se redujo el tamaño de la aplicación mediante el uso de íconos vectoriales.</item>
 	</string-array>
 
 </resources>

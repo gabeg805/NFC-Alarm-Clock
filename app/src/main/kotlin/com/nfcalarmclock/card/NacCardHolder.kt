@@ -1829,22 +1829,22 @@ class NacCardHolder(
 
 			0 ->
 			{
-				R.mipmap.volume_off
+				R.drawable.volume_off
 			}
 
 			in 1..33 ->
 			{
-				R.mipmap.volume_low
+				R.drawable.volume_low
 			}
 
 			in 34..66 ->
 			{
-				R.mipmap.volume_med
+				R.drawable.volume_med
 			}
 
 			else ->
 			{
-				R.mipmap.volume_high
+				R.drawable.volume_high
 			}
 
 		}

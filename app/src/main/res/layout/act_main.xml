@@ -70,7 +70,7 @@
 		android:layout_height="@dimen/isz_attention"
 		android:layout_gravity="bottom|center"
 		android:layout_marginBottom="@dimen/normal"
-		android:src="@mipmap/plus"
+		android:src="@drawable/plus"
 		/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

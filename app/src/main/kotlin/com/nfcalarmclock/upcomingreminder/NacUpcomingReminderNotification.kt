@@ -248,7 +248,7 @@ class NacUpcomingReminderNotification(
 
 			// Add a button to clear the recurring reminder
 			notificationBuilder
-				.addAction(R.mipmap.dismiss, clear, clearReminderPendingIntent)
+				.addAction(R.drawable.dismiss, clear, clearReminderPendingIntent)
 		}
 		else
 		{

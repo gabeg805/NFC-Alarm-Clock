@@ -99,7 +99,7 @@ abstract class NacNotification(
 	 * The small icon of the notification.
 	 */
 	private val smallIcon: Int
-		get() = R.mipmap.notification
+		get() = R.drawable.alarm
 
 	/**
 	 * Get the number of lines in the body.

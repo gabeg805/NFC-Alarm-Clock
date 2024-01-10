@@ -119,7 +119,7 @@ class NacFileBrowser(
 		//TextView annotationView = entry.findViewById(R.id.annotation);
 
 		// Set the image and text of the file entry
-		imageView.setImageResource(R.mipmap.folder)
+		imageView.setImageResource(R.drawable.folder)
 		titleView.text = metadata.extra as String
 
 		return entry
@@ -145,7 +145,7 @@ class NacFileBrowser(
 		val annotationView = entry.findViewById<TextView>(R.id.annotation)
 
 		// Set the image and text of the file entry
-		imageView.setImageResource(R.mipmap.play)
+		imageView.setImageResource(R.drawable.play)
 		titleView.text = title
 		subtitleView.text = artist
 		subtitleView.visibility = View.VISIBLE

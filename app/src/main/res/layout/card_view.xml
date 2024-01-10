@@ -129,7 +129,7 @@
 					android:contentDescription="@string/cd_expand_alarm"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/isz_large"
-					app:icon="@mipmap/expand"
+					app:icon="@drawable/expand"
 					/>
 			</LinearLayout> <!-- Day and name -->
 
@@ -153,7 +153,7 @@
 					android:textSize="@dimen/tsz_small"
 					android:text="@string/action_alarm_dismiss"
 					app:iconSize="@dimen/medium"
-					app:icon="@mipmap/dismiss"
+					app:icon="@drawable/dismiss"
 					/>
 
 				<com.google.android.material.button.MaterialButton
@@ -168,7 +168,7 @@
 					android:text="@string/action_alarm_dismiss_early"
 					android:visibility="gone"
 					app:iconSize="@dimen/medium"
-					app:icon="@mipmap/dismiss"
+					app:icon="@drawable/dismiss"
 					/>
 
 				<Space
@@ -182,7 +182,7 @@
 					android:id="@+id/nac_expand_other"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/isz_large"
-					app:icon="@mipmap/expand"
+					app:icon="@drawable/expand"
 					/>
 			</LinearLayout> <!-- Dismiss snoozed alarm -->
 		</LinearLayout> <!-- Summary -->
@@ -288,7 +288,7 @@
 					app:backgroundTint="@android:color/transparent"
 					app:iconTint="@color/card_toggle_button"
 					app:iconSize="@dimen/isz_large"
-					app:icon="@mipmap/tap_and_play"
+					app:icon="@drawable/tap_and_play"
 					/>
 			</LinearLayout> <!-- Repeat, Vibrate, NFC -->
 
@@ -299,7 +299,7 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:text=""
-				app:icon="@mipmap/music_note"
+				app:icon="@drawable/music_note"
 				/>
 
 			<!-- Volume -->
@@ -314,7 +314,7 @@
 					android:contentDescription="@string/cd_volume_icon"
 					android:layout_width="@dimen/isz_normal"
 					android:layout_height="@dimen/isz_normal"
-					android:src="@mipmap/volume_high"
+					android:src="@drawable/volume_high"
 					/>
 
 				<SeekBar
@@ -348,7 +348,7 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:text=""
-				app:icon="@mipmap/label"
+				app:icon="@drawable/label"
 				/>
 
 			<!-- Divider -->
@@ -394,7 +394,8 @@
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/isz_large"
 					android:layout_gravity="center_vertical"
-					app:icon="@mipmap/collapse"
+					android:rotation="180"
+					app:icon="@drawable/expand"
 					/>
 			</LinearLayout> <!-- Delete/collapse -->
 

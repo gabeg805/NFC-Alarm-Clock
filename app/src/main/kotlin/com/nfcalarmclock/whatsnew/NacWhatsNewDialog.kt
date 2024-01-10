@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.ViewGroup.LayoutParams
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -78,9 +77,23 @@ class NacWhatsNewDialog
 		val textView = dialog!!.findViewById<TextView>(R.id.whats_new_version)
 		val recyclerView = dialog!!.findViewById<RecyclerView>(R.id.whats_new_bullet_container)
 
+		// Get the theme color
+		val themeColor = sharedPreferences!!.themeColor
+
 		// Get all the whats new items
 		val allMessages = resources.getTextArray(R.array.whats_new_items)
-			.map { it.toString() }
+			.map {
+
+				// Convert to a string
+				var text = it.toString()
+
+				// Add theme color to bold sections
+				text = text.replace("<b>", "<b><font color='${themeColor}'>")
+				text = text.replace("</b>", "</font></b>")
+
+				// Return new string
+				text
+			}
 			.toList()
 
 		// Setup the views
