@@ -169,6 +169,11 @@ class NacSwipeLayoutHandler(
 	private lateinit var onSharedPreferenceChangedListener: SharedPreferences.OnSharedPreferenceChangeListener
 
 	/**
+	 * Check if the handler was stopped via stop().
+	 */
+	private var wasStopped: Boolean = false
+
+	/**
 	 * Calculate the new X position.
 	 */
 	private fun calculateNewXposition(
@@ -342,12 +347,19 @@ class NacSwipeLayoutHandler(
 				// Finger UP on button
 				MotionEvent.ACTION_UP ->
 				{
+					// Calculate the duration for the animation below
+					var duration = if (view.x == origX) 0L else 300L
+
 					// Check if the alarm should be snoozed
 					if (shouldSnooze(view))
 					{
+						// Increase the duration so that if it snoozes, the
+						// user does not see the button go back, and if it is
+						// unable to snooze, then the slow animation back is ok
+						duration = 1000L
+
 						// Call the snooze listener
 						onAlarmActionListener.onSnooze(alarm!!)
-						return@setOnTouchListener true
 					}
 					// Check if the alarm should be dismissed
 					else if (shouldDismiss(view))
@@ -358,13 +370,20 @@ class NacSwipeLayoutHandler(
 					}
 
 					// Calculate the duration for the animation below
-					val duration = if (view.x == origX) 0L else 300L
+					//val duration = if (view.x == origX) 0L else 300L
 
 					// Animate back to the original X position
 					view.animate()
 						.x(origX)
 						.setDuration(duration)
 						.withEndAction {
+
+							// Check if the handler was stopped
+							if (wasStopped)
+							{
+								// Do nothing else as the activity was stopped
+								return@withEndAction
+							}
 
 							// Get the inactive view
 							val inactiveView = getInactiveView(view, snoozeButton,
@@ -613,6 +632,9 @@ class NacSwipeLayoutHandler(
 	 */
 	override fun start(context: Context)
 	{
+		// Reset the stopped flag
+		wasStopped = false
+
 		// Setup the snooze and dismiss buttons
 		setupSnoozeButton()
 		setupDismissButton()
@@ -649,6 +671,9 @@ class NacSwipeLayoutHandler(
 	 */
 	override fun stop(context: Context)
 	{
+		// Set the stopped flag
+		wasStopped = true
+
 		// Hide the attention views and stop the animations
 		swipeAnimation.hideAttentionViews(snoozeAttentionView, dismissAttentionView)
 

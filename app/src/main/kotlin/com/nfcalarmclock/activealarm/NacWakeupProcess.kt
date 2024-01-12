@@ -258,8 +258,13 @@ class NacWakeupProcess(
 		// Cleanup the media player
 		mediaPlayer?.release()
 
-		// Revert the volume
-		audioAttributes.revertVolume()
+		// Check if the the current volume was saved and if so, then it should
+		// be reverted
+		if (alarm.shouldUseTts || alarm.hasMedia)
+		{
+			// Revert the volume
+			audioAttributes.revertVolume()
+		}
 
 		// Cleanup the text-to-speech engine
 		textToSpeech?.shutdown()
