@@ -41,5 +41,6 @@
 	<dimen name="radius_day_filled">16dp</dimen>
 	<dimen name="radius_day_outlined">16dp</dimen>
 	<dimen name="action_row_height">84dp</dimen>
+	<dimen name="action_row_landscape_width">420dp</dimen>
 
 </resources>

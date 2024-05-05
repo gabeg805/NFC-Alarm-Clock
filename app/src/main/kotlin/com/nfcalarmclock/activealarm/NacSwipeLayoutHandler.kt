@@ -10,12 +10,16 @@ import android.content.res.ColorStateList
 import android.net.Uri
 import android.text.format.DateFormat
 import android.view.MotionEvent
+import android.view.VelocityTracker
 import android.view.View
+import android.view.ViewPropertyAnimator
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.dynamicanimation.animation.DynamicAnimation
+import androidx.dynamicanimation.animation.FlingAnimation
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.media.NacMedia
@@ -23,6 +27,8 @@ import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.createTimeTickReceiver
 import com.nfcalarmclock.util.registerMyReceiver
 import com.nfcalarmclock.util.unregisterMyReceiver
+import java.lang.Float.max
+import java.lang.Float.min
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -156,6 +162,16 @@ class NacSwipeLayoutHandler(
 	private var endAlarmActionX: Float = -1f
 
 	/**
+	 * View property animator for the previous view that was being moved.
+	 */
+	private var viewPropertyAnimator: ViewPropertyAnimator? = null
+
+	/**
+	 * Velocity tracker for when a view is swiped.
+	 */
+	private var velocityTracker: VelocityTracker? = null
+
+	/**
 	 * Receiver for the time tick intent. This is called when the time increments
 	 * every minute.
 	 */
@@ -172,6 +188,116 @@ class NacSwipeLayoutHandler(
 	 * Check if the handler was stopped via stop().
 	 */
 	private var wasStopped: Boolean = false
+
+	/**
+	 * Aniamte the button back to its original X position
+	 */
+	private fun animateButtonBackToOriginalXposition(view: View)
+	{
+		// Get the original X position of the view
+		val origX = getOriginalXposition(view)
+
+		// Calculate the duration for the animation below
+		var duration = if (view.x == origX) 0L else 300L
+
+		// Check if the alarm should be snoozed
+		if (shouldSnooze(view))
+		{
+			// Increase the duration so that if it snoozes, the
+			// user does not see the button go back, and if it is
+			// unable to snooze, then the slow animation back is ok
+			duration = 1000L
+
+			// Call the snooze listener
+			onAlarmActionListener.onSnooze(alarm!!)
+		}
+		// Check if the alarm should be dismissed
+		else if (shouldDismiss(view))
+		{
+			// Call the dismiss listener
+			onAlarmActionListener.onDismiss(alarm!!)
+			return
+		}
+
+		// Set the animator to animate view the back to its original X position
+		viewPropertyAnimator = view.animate()
+			.x(origX)
+			.setDuration(duration)
+			.withEndAction {
+
+				// Check if the handler was stopped
+				if (wasStopped)
+				{
+					// Do nothing else as the activity was stopped
+					return@withEndAction
+				}
+
+				// Get the inactive view
+				val inactiveView = getInactiveView(view, snoozeButton,
+					dismissButton)
+
+				// Show the inactive view (either the snooze or dismiss button)
+				swipeAnimation.showInactiveView(inactiveView,
+					onEnd = {
+						// Show the attention views and start their animations
+						swipeAnimation.showAttentionViews(
+							snoozeAttentionView, dismissAttentionView)
+					})
+
+				// Hide the slider path
+				swipeAnimation.hideSliderPath(sliderPath, sliderInstructions)
+
+			}
+
+		// Start the animator
+		viewPropertyAnimator?.start()
+
+		return
+	}
+
+	/**
+	 * Calculate the current velocity.
+	 */
+	private fun calculateCurrentVelocity(motionEvent: MotionEvent)
+	{
+		velocityTracker?.apply {
+
+			// TODO: Change units of 1000?
+			addMovement(motionEvent)
+			computeCurrentVelocity(1000)
+
+		}
+	}
+
+	/**
+	 * Calculate the final velocity.
+	 */
+	private fun calculateFinalVelocity(
+		motionEvent: MotionEvent,
+		minValue: Float,
+		maxValue: Float)
+		: Float
+	{
+		// Add movement to the velocity tracker
+		velocityTracker?.addMovement(motionEvent)
+
+		// Compute current velocity
+		velocityTracker?.computeCurrentVelocity(1000)
+
+		// Get velocity
+		val pointerId: Int = motionEvent.getPointerId(motionEvent.actionIndex)
+		val finalVelocity: Float? = velocityTracker?.getXVelocity(pointerId)?.div(6f)
+
+		// Check if final velocity was not able to be computed
+		if (finalVelocity == null)
+		{
+			return 0f
+		}
+
+		// Make sure the final velocity is within the min and max values
+		println("Min value : $minValue | Max value : $maxValue | Vel : $finalVelocity")
+		return max(minValue, min(maxValue, finalVelocity))
+	}
 
 	/**
 	 * Calculate the new X position.
@@ -224,6 +350,69 @@ class NacSwipeLayoutHandler(
 	}
 
 	/**
+	 * Cleanup the velocity tracker.
+	 */
+	private fun cleanupVelocityTracker()
+	{
+		velocityTracker?.recycle()
+		velocityTracker = null
+	}
+
+	/**
+	 * Fling the view.
+	 */
+	private fun flingView(
+		view: View,
+		velocity: Float,
+		minValue: Float,
+		maxValue: Float)
+	{
+		FlingAnimation(view, DynamicAnimation.TRANSLATION_X).apply {
+
+			// Listener for as the animation is updated
+			addUpdateListener { _, _, _ ->
+
+				// Make sure the view's position does not go
+				// outside of the allowable start and end X
+				// positions
+				if (view.x >= endAlarmActionX)
+				{
+					// Set the view to the end X position
+					view.x = endAlarmActionX
+
+					// Cancel the animation
+					cancel()
+				}
+				else if (view.x <= startAlarmActionX)
+				{
+					// Set the view to the start X position
+					view.x = startAlarmActionX
+
+					// Cancel the animation
+					cancel()
+				}
+
+			}
+
+			// Listener for when the animation ends
+			addEndListener { _, _, _, _ ->
+
+				animateButtonBackToOriginalXposition(view)
+
+			}
+
+			// Setup
+			setStartVelocity(velocity)
+			setMinValue(minValue)
+			setMaxValue(maxValue)
+			friction = 0.75f
+
+			// Start the animation
+			start()
+		}
+	}
+
+	/**
 	 * Get the inactive view by comparing the active view against the snooze
 	 * and dismiss button views.
 	 */
@@ -254,6 +443,42 @@ class NacSwipeLayoutHandler(
 			// Return the active view because unable to determine which view is
 			// inactive. This should never happen
 			else -> activeView
+		}
+	}
+
+	/**
+	 * Get the original X position of the view.
+	 *
+	 * @return The original X position of the view.
+	 */
+	private fun getOriginalXposition(view: View): Float
+	{
+		// Determine the X position of the view that is being animated
+		return when (view.id)
+		{
+			// Snooze button
+			snoozeButton.id -> startAlarmActionX
+
+			// Dismiss button
+			dismissButton.id -> endAlarmActionX
+
+			// Default X position
+			else -> startAlarmActionX
+		}
+	}
+
+	/**
+	 * Move the view.
+	 */
+	private fun moveView(view: View, motionEvent: MotionEvent, dx: Float)
+	{
+		try
+		{
+			// Set the new X position
+			view.x = calculateNewXposition(view, motionEvent, dx)
+		}
+		catch (_: UnableToCalculateNewXposition)
+		{
 		}
 	}
 
@@ -301,8 +526,14 @@ class NacSwipeLayoutHandler(
 				// Finger DOWN on button
 				MotionEvent.ACTION_DOWN ->
 				{
+					// Clear any previous animations on the view
+					viewPropertyAnimator?.cancel()
+
 					// Compute the offset X position
 					dx = calculateXoffsetPosition(view, motionEvent)
+
+					// Setup the velocity tracker
+					setupVelocityTracker(motionEvent)
 
 					// Get the inactive view
 					val inactiveView = getInactiveView(view, snoozeButton, dismissButton)
@@ -314,31 +545,11 @@ class NacSwipeLayoutHandler(
 					swipeAnimation.hideAttentionViews(snoozeAttentionView,
 						dismissAttentionView)
 
-					// Determine the text of the slider instructions
-					val text = if (view.id == snoozeButton.id)
-					{
-						R.string.description_slide_to_snooze
-					}
-					else
-					{
-						R.string.description_slide_to_dismiss
-					}
+					// Setup the slider instructions
+					setupSliderInstructions(view.id)
 
-					sliderInstructions.setText(text)
-
-					// Determine which arrow to show
-					val arrow = if (view.id == snoozeButton.id)
-					{
-						R.drawable.arrow_right
-					}
-					else
-					{
-						R.drawable.arrow_left
-					}
-
-					sliderCenterArrow.setImageResource(arrow)
-					sliderLeftArrow.setImageResource(arrow)
-					sliderRightArrow.setImageResource(arrow)
+					// Setup the slider arrows
+					setupSliderArrows(view.id)
 
 					// Show the slider path
 					swipeAnimation.showSliderPath(sliderPath, sliderInstructions)
@@ -347,74 +558,38 @@ class NacSwipeLayoutHandler(
 				// Finger UP on button
 				MotionEvent.ACTION_UP ->
 				{
-					// Calculate the duration for the animation below
-					var duration = if (view.x == origX) 0L else 300L
+					// Calculate the min and max fling value
+					val minValue = if (view.id == snoozeButton.id) FLING_MIN_VALUE else -FLING_MAX_VALUE
+					val maxValue = if (view.id == snoozeButton.id) FLING_MAX_VALUE else FLING_MIN_VALUE
 
-					// Check if the alarm should be snoozed
-					if (shouldSnooze(view))
+					// Calculate the final velocity
+					val finalVelocity = calculateFinalVelocity(motionEvent, minValue, maxValue)
+
+					// Cleanup the velocity tracker
+					cleanupVelocityTracker()
+
+					// Check if the view should be flinged with the additional
+					// velocty the user imparted on the view
+					if (shouldFlingView(view, finalVelocity))
 					{
-						// Increase the duration so that if it snoozes, the
-						// user does not see the button go back, and if it is
-						// unable to snooze, then the slow animation back is ok
-						duration = 1000L
-
-						// Call the snooze listener
-						onAlarmActionListener.onSnooze(alarm!!)
+						// Fling the view
+						flingView(view, finalVelocity, minValue, maxValue)
 					}
-					// Check if the alarm should be dismissed
-					else if (shouldDismiss(view))
+					else
 					{
-						// Call the dismiss listener
-						onAlarmActionListener.onDismiss(alarm!!)
-						return@setOnTouchListener true
+						// Animate the view back to its original X position
+						animateButtonBackToOriginalXposition(view)
 					}
-
-					// Calculate the duration for the animation below
-					//val duration = if (view.x == origX) 0L else 300L
-
-					// Animate back to the original X position
-					view.animate()
-						.x(origX)
-						.setDuration(duration)
-						.withEndAction {
-
-							// Check if the handler was stopped
-							if (wasStopped)
-							{
-								// Do nothing else as the activity was stopped
-								return@withEndAction
-							}
-
-							// Get the inactive view
-							val inactiveView = getInactiveView(view, snoozeButton,
-								dismissButton)
-
-							// Show the inactive view (either the snooze or dismiss button)
-							swipeAnimation.showInactiveView(inactiveView,
-								onEnd = {
-									// Show the attention views and start their animations
-									swipeAnimation.showAttentionViews(
-										snoozeAttentionView, dismissAttentionView)
-								})
-
-							// Hide the slider path
-							swipeAnimation.hideSliderPath(sliderPath, sliderInstructions)
-
-						}
-						.start()
 				}
 
 				// Moving finger
 				MotionEvent.ACTION_MOVE ->
 				{
-					try
-					{
-						// Set the new X position
-						view.x = calculateNewXposition(view, motionEvent, dx)
-					}
-					catch (_: UnableToCalculateNewXposition)
-					{
-					}
+					// Move the view
+					moveView(view, motionEvent, dx)
+
+					// Add movement to the velocity tracker
+					velocityTracker?.addMovement(motionEvent)
 				}
 
 			}
@@ -549,6 +724,46 @@ class NacSwipeLayoutHandler(
 	}
 
 	/**
+	 * Setup the slider arrows.
+	 */
+	private fun setupSliderArrows(viewId: Int)
+	{
+		// Determine which arrow to show
+		val arrow = if (viewId == snoozeButton.id)
+		{
+			R.drawable.arrow_right
+		}
+		else
+		{
+			R.drawable.arrow_left
+		}
+
+		// Set the slider arrows
+		sliderCenterArrow.setImageResource(arrow)
+		sliderLeftArrow.setImageResource(arrow)
+		sliderRightArrow.setImageResource(arrow)
+	}
+
+	/**
+	 * Setup the slider instructions.
+	 */
+	private fun setupSliderInstructions(viewId: Int)
+	{
+		// Determine the text of the slider instructions
+		val text = if (viewId == snoozeButton.id)
+		{
+			R.string.description_slide_to_snooze
+		}
+		else
+		{
+			R.string.description_slide_to_dismiss
+		}
+
+		// Set the instructions
+		sliderInstructions.setText(text)
+	}
+
+	/**
 	 * Setup the snooze button.
 	 */
 	private fun setupSnoozeButton()
@@ -582,6 +797,21 @@ class NacSwipeLayoutHandler(
 	}
 
 	/**
+	 * Setup the velocity tracker.
+	 */
+	private fun setupVelocityTracker(motionEvent: MotionEvent)
+	{
+		// Reset the velocity tracker
+		velocityTracker?.clear()
+
+		// Obtain the current or a new velocity tracker
+		velocityTracker = velocityTracker ?: VelocityTracker.obtain()
+
+		// Add movement to the velocity tracker
+		velocityTracker?.addMovement(motionEvent)
+	}
+
+	/**
 	 * Check if the alarm should be dismissed .
 	 *
 	 * @return True if the alarm should be dismissed because the view is the
@@ -602,6 +832,25 @@ class NacSwipeLayoutHandler(
 			// Snooze button or some other view which should never happen
 			else -> false
 		}
+	}
+
+	/**
+	 * Check if should fling the view with some velocity.
+	 */
+	private fun shouldFlingView(view: View, velocity: Float): Boolean
+	{
+		// Calculate the total distance the a view can travel
+		val totalDistance = endAlarmActionX - startAlarmActionX
+
+		// Initial calculation of the fraactional distance that the view has traveled
+		val initDistance = (view.x - startAlarmActionX) / totalDistance
+
+		// Final calculation of the fractional distance the view
+		val percentDistance = if (view.id == snoozeButton.id) initDistance else 1f - initDistance
+
+		// Determine if the view should be flinged
+		println("Velocity : $velocity | Distance : $percentDistance")
+		return (velocity != 0f) && (percentDistance >= 0.01f)
 	}
 
 	/**
@@ -680,8 +929,26 @@ class NacSwipeLayoutHandler(
 		// Unregister the time tick receiver
 		unregisterMyReceiver(context, timeTickReceiver)
 
-		// Unregister the shared preference listener
-		sharedPreferences.instance.unregisterOnSharedPreferenceChangeListener(onSharedPreferenceChangedListener)
+		// Check if the lateinit shared preference listener has been initialized
+		if (this::onSharedPreferenceChangedListener.isInitialized)
+		{
+			// Unregister the shared preference listener
+			sharedPreferences.instance.unregisterOnSharedPreferenceChangeListener(onSharedPreferenceChangedListener)
+		}
 	}
 
+	companion object
+	{
+
+		/**
+		 * Minimum fling value.
+		 */
+		const val FLING_MIN_VALUE = 0f
+
+		/**
+		 * Maximum fling value.
+		 */
+		const val FLING_MAX_VALUE = 10000f
+
+	}
 }

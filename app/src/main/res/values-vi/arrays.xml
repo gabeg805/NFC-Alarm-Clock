@@ -267,8 +267,7 @@
 
 	<string-array name="whats_new_items">
 		<item>Đã thêm &lt;b>màn hình cảnh báo mới&lt;/b> có thể được bật trong &lt;i>Cài đặt > Giao diện&lt;/i>.</item>
-		<item>Đã khắc phục sự cố hiếm gặp khi duyệt tìm nhạc.</item>
-		<item>Giảm kích thước của ứng dụng bằng cách sử dụng biểu tượng vector.</item>
+		<item>Đã khắc phục sự cố khi dừng báo thức.</item>
 	</string-array>
 
 </resources>

@@ -272,8 +272,7 @@
 
 	<string-array name="whats_new_items">
 		<item>Added a &lt;b>new alarm screen&lt;/b> that can be enabled in &lt;i>Settings > Appearance&lt;/i>.</item>
-		<item>Fixed a rare crash when browsing for music.</item>
-		<item>Reduced the size of the app by using vector icons.</item>
+		<item>Fixed a crash when stopping an alarm.</item>
 	</string-array>
 
 </resources>

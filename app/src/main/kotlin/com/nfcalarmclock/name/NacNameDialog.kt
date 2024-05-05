@@ -15,6 +15,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.view.dialog.NacDialogFragment
+import java.lang.IllegalStateException
 
 /**
  * The dialog class that will handle saving the name of the alarm.
@@ -131,7 +132,18 @@ class NacNameDialog
 	@Suppress("deprecation")
 	private fun showKeyboard(editText: TextInputEditText)
 	{
-		val context = requireContext()
+		// Define the context
+		val context: Context
+
+		try
+		{
+			// Get the context
+			context = requireContext()
+		}
+		catch (e: IllegalStateException)
+		{
+			return
+		}
 
 		// Request focus
 		editText.requestFocus()

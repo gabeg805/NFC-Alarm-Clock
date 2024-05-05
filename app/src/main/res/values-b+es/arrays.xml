@@ -267,8 +267,7 @@
 
 	<string-array name="whats_new_items">
 		<item>Se agregó una &lt;b>nueva pantalla de alarma&lt;/b> que se puede habilitar en &lt;i>Configuración > Apariencia&lt;/i>.</item>
-		<item>Se corrigió un bloqueo poco común al buscar música.</item>
-		<item>Se redujo el tamaño de la aplicación mediante el uso de íconos vectoriales.</item>
+		<item>Se corrigió un bloqueo al detener una alarma.</item>
 	</string-array>
 
 </resources>

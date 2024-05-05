@@ -10,6 +10,7 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.addListener
 import com.nfcalarmclock.R
+import java.lang.IllegalStateException
 import kotlin.math.hypot
 
 /**
@@ -146,11 +147,9 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 	fun hideAttentionViews(snoozeAttentionView: View, dismissAttentionView: View)
 	{
 		// Stop the snooze animation
-		println("Clearing snooze animation")
 		snoozeAttentionView.clearAnimation()
 
 		// Hide the snooze view
-		println("Hide the snooze view")
 		snoozeAttentionView.visibility = View.INVISIBLE
 
 		// Check if the dismiss view should be modified
@@ -330,8 +329,18 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 		// Get the final radius for the clipping circle.
 		val finalRadius = hypot(cx.toDouble(), cy.toDouble()).toFloat()
 
-		// Create the animator for this view. The start radius is 0.
-		val anim = ViewAnimationUtils.createCircularReveal(inactiveView, cx, cy, 0f, finalRadius)
+		// Define the animator
+		val anim: Animator
+
+		try
+		{
+			// Create the animator for this view. The start radius is 0.
+			anim = ViewAnimationUtils.createCircularReveal(inactiveView, cx, cy, 0f, finalRadius)
+		}
+		catch (e: IllegalStateException)
+		{
+			return
+		}
 
 		// Make the view visible and start the animation.
 		inactiveView.visibility = View.VISIBLE
