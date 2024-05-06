@@ -89,7 +89,7 @@ interface NacAlarmDao
 	suspend fun insert(alarm: NacAlarm): Long
 
 	/**
-	 * Update an existing alarm
+	 * Update an existing alarm.
 	 *
 	 * @param  alarm  The alarm to update.
 	 *

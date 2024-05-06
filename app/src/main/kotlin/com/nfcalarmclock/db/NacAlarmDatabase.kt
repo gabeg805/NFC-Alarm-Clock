@@ -16,6 +16,8 @@ import com.nfcalarmclock.alarm.db.NacAlarmTypeConverters
 import com.nfcalarmclock.db.NacAlarmDatabase.ClearAllStatisticsMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.RemoveUseTtsColumnMigration
 import com.nfcalarmclock.db.NacOldDatabase.Companion.read
+import com.nfcalarmclock.nfc.db.NacNfcTag
+import com.nfcalarmclock.nfc.db.NacNfcTagDao
 import com.nfcalarmclock.scheduler.NacScheduler
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.db.NacAlarmCreatedStatistic
@@ -43,10 +45,15 @@ import javax.inject.Singleton
 /**
  * Store alarms in a Room database.
  */
-@Database(version = 13,
-	entities = [NacAlarm::class, NacAlarmCreatedStatistic::class,
-		NacAlarmDeletedStatistic::class, NacAlarmDismissedStatistic::class,
-		NacAlarmMissedStatistic::class, NacAlarmSnoozedStatistic::class],
+@Database(version = 14,
+	entities = [
+		NacAlarm::class,
+		NacAlarmCreatedStatistic::class,
+		NacAlarmDeletedStatistic::class,
+		NacAlarmDismissedStatistic::class,
+		NacAlarmMissedStatistic::class,
+		NacAlarmSnoozedStatistic::class,
+		NacNfcTag::class],
 	autoMigrations = [
 		AutoMigration(from = 1,  to = 2),
 		AutoMigration(from = 2,  to = 3, spec = ClearAllStatisticsMigration::class),
@@ -59,7 +66,9 @@ import javax.inject.Singleton
 		AutoMigration(from = 9,  to = 10),
 		AutoMigration(from = 10, to = 11, spec = RemoveUseTtsColumnMigration::class),
 		AutoMigration(from = 11, to = 12),
-		AutoMigration(from = 12, to = 13)]
+		AutoMigration(from = 12, to = 13),
+		AutoMigration(from = 13, to = 14)]
+
 )
 @TypeConverters(NacAlarmTypeConverters::class, NacStatisticTypeConverters::class)
 abstract class NacAlarmDatabase
@@ -95,6 +104,11 @@ abstract class NacAlarmDatabase
 	 * Store snoozed alarm statistics in the database.
 	 */
 	abstract fun alarmSnoozedStatisticDao(): NacAlarmSnoozedStatisticDao
+
+	/**
+	 * Store NFC tags in the database.
+	 */
+	abstract fun nfcTagDao(): NacNfcTagDao
 
 	/**
 	 * Clear all statistics when auto-migrating.
@@ -296,7 +310,7 @@ abstract class NacAlarmDatabase
 			val dao = db!!.alarmDao()
 			val alarms = read(context)
 
-			// Itereate over each alarm
+			// Iterate over each alarm
 			for (a in alarms!!)
 			{
 				// Set the alarm ID to 0
@@ -383,6 +397,15 @@ class NacAlarmDatabaseModule
 	fun provideSnoozedStatisticDao(db: NacAlarmDatabase) : NacAlarmSnoozedStatisticDao
 	{
 		return db.alarmSnoozedStatisticDao()
+	}
+
+	/**
+	 * Provide the NFC tag DAO.
+	 */
+	@Provides
+	fun provideNfcTagDao(db: NacAlarmDatabase) : NacNfcTagDao
+	{
+		return db.nfcTagDao()
 	}
 
 }

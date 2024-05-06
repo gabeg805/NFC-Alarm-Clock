@@ -17,6 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.nfc.db.NacNfcTag
 
 /**
  * Prompt user to scan an NFC tag that will be used to dismiss the given alarm
@@ -49,7 +50,7 @@ class NacScanNfcTagDialog
 	var alarm: NacAlarm? = null
 
 	/**
-	 * Listener for when the name is entered.
+	 * Listener for when the NFC tag is scanned.
 	 */
 	var onScanNfcTagListener: OnScanNfcTagListener? = null
 
@@ -115,7 +116,39 @@ class NacScanNfcTagDialog
 		// Get the views
 		val useAnyNfcButton = view.findViewById(R.id.use_any_nfc_tag) as MaterialButton
 		val selectNfcButton = view.findViewById(R.id.select_nfc_tag) as MaterialButton
+		val yoButton = view.findViewById(R.id.scan_button) as MaterialButton
 		val thisDialog = this
+
+		yoButton.setOnClickListener {
+
+			val dialog = NacSaveNfcTagDialog()
+			dialog.nfcId = "lkjajhalsjhdlas123180"
+			dialog.onSaveNfcTagListener = object: NacSaveNfcTagDialog.OnSaveNfcTagListener
+			{
+
+				/**
+				 * Called when saving the NFC tag is skipped.
+				 */
+				override fun onCancelNfcTag()
+				{
+				}
+
+				/**
+				 * Called when saving the NFC tag.
+				 */
+				override fun onSaveNfcTag(nfcTag: NacNfcTag)
+				{
+				}
+
+			}
+
+			// Hide the current dialog
+			this.dialog?.hide()
+
+			// Show the dialog
+			dialog.show(childFragmentManager, NacSaveNfcTagDialog.TAG)
+
+		}
 
 		// Setup the use any NFC button
 		useAnyNfcButton.setOnClickListener {
