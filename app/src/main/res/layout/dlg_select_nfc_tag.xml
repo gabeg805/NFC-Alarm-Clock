@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	android:paddingTop="@dimen/normal"
+	android:paddingBottom="@dimen/normal"
+	android:paddingStart="?dialogPreferredPadding"
+	android:paddingEnd="?dialogPreferredPadding"
+	tools:ignore="ContentDescription,UselessParent,UseCompoundDrawables">
+
+	<!-- Title -->
+	<TextView
+		style="@style/Widget.TextView.Primary"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textSize="@dimen/medium"
+		android:textStyle="bold"
+		android:text="Select an NFC tag..."
+		/>
+
+	<!-- Select an NFC tag from a list -->
+	<com.google.android.material.textfield.TextInputLayout
+		style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/medium"
+		android:layout_marginBottom="@dimen/medium">
+
+		<com.google.android.material.textfield.MaterialAutoCompleteTextView
+			android:id="@+id/nfc_tag_dropdown_menu"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:inputType="none"
+			android:backgroundTint="@color/white_dull"
+			app:simpleItems="@array/days_of_week_abbr"
+			/>
+	</com.google.android.material.textfield.TextInputLayout>
+
+	<!-- Button to confirm selection -->
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/select_nfc_tag"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/touch"
+		android:backgroundTint="@color/orange"
+		android:textColor="@color/white"
+		android:text="Done"
+		/>
+
+</LinearLayout>

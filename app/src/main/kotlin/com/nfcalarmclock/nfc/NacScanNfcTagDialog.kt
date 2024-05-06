@@ -1,7 +1,6 @@
 package com.nfcalarmclock.nfc
 
-import android.app.AlertDialog
-import android.app.Dialog
+import android.content.DialogInterface
 import android.nfc.NfcAdapter
 import android.nfc.NfcAdapter.FLAG_READER_NFC_A
 import android.nfc.NfcAdapter.FLAG_READER_NFC_B
@@ -11,9 +10,13 @@ import android.nfc.NfcAdapter.FLAG_READER_NFC_V
 import android.nfc.NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK
 import android.nfc.Tag
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.view.dialog.NacDialogFragment
 
 /**
  * Prompt user to scan an NFC tag that will be used to dismiss the given alarm
@@ -22,7 +25,8 @@ import com.nfcalarmclock.view.dialog.NacDialogFragment
 class NacScanNfcTagDialog
 
 	// Constructor
-	: NacDialogFragment(),
+	//: NacDialogFragment(),
+	: BottomSheetDialogFragment(),
 
 	// Interface
 	NfcAdapter.ReaderCallback
@@ -52,28 +56,115 @@ class NacScanNfcTagDialog
 	/**
 	 * Called when the dialog is created.
 	 */
-	override fun onCreateDialog(savedInstanceState: Bundle?): Dialog
+	//override fun onCreateDialog(savedInstanceState: Bundle?): Dialog
+	//{
+	//	// Setup the shared preferences
+	//	//setupSharedPreferences()
+
+	//	// Create the dialog
+	//	return AlertDialog.Builder(requireContext())
+	//		.setTitle(R.string.title_scan_nfc_tag)
+	//		.setPositiveButton(R.string.action_use_any) { _, _ ->
+
+	//			// Call the listener
+	//			onScanNfcTagListener?.onUseAnyNfcTag(alarm!!)
+
+	//		}
+	//		.setNegativeButton(R.string.action_cancel) { _, _ ->
+
+	//			// Call the listener
+	//			onScanNfcTagListener?.onCancelNfcTagScan(alarm!!)
+
+	//		}
+	//		.setView(R.layout.dlg_scan_nfc_tag)
+	//		.create()
+	//}
+
+	/**
+	 * Called when the dialog view is created.
+	 */
+	override fun onCreateView(
+		inflater: LayoutInflater,
+		container: ViewGroup?,
+		savedInstanceState: Bundle?)
+	: View?
 	{
-		// Setup the shared preferences
-		setupSharedPreferences()
+		return inflater.inflate(R.layout.dlg_scan_nfc_tag, container, false)
+	}
 
-		// Create the dialog
-		return AlertDialog.Builder(requireContext())
-			.setTitle(R.string.title_scan_nfc_tag)
-			.setPositiveButton(R.string.action_use_any) { _, _ ->
+	/**
+	 * Called when the dialog is canceled.
+	 */
+	override fun onCancel(dialog: DialogInterface)
+	{
+		super.onCancel(dialog)
+		println("onCancel()")
 
-				// Call the listener
-				onScanNfcTagListener?.onUseAnyNfcTag(alarm!!)
+		// Call the listener
+		onScanNfcTagListener?.onCancelNfcTagScan(alarm!!)
+	}
+
+	/**
+	 * Called when the dialog view is created.
+	 */
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+	{
+		super.onViewCreated(view, savedInstanceState)
+		println("onViewCreated()")
+
+		// Get the views
+		val useAnyNfcButton = view.findViewById(R.id.use_any_nfc_tag) as MaterialButton
+		val selectNfcButton = view.findViewById(R.id.select_nfc_tag) as MaterialButton
+		val thisDialog = this
+
+		// Setup the use any NFC button
+		useAnyNfcButton.setOnClickListener {
+
+			// Call the listener
+			onScanNfcTagListener?.onUseAnyNfcTag(alarm!!)
+
+			// Dismiss the dialog
+			dismiss()
+
+		}
+
+		// Setup the select NFC button
+		selectNfcButton.setOnClickListener {
+
+			// Create the select NFC tag dialog
+			val dialog = NacSelectNfcTagDialog()
+
+			// Setup the dialog
+			dialog.onSelectNfcTagListener = object: NacSelectNfcTagDialog.OnSelectNfcTagListener
+			{
+
+				/**
+				 * Called when the Select NFC Tag is canceled.
+				 */
+				override fun onCancelNfcTagScan()
+				{
+					// Show the current dialog
+					thisDialog.dialog?.show()
+				}
+
+				/**
+				 * Called when the NFC Tag is selected.
+				 */
+				override fun onSelectNfcTag(nfcId: String)
+				{
+					println("ON SELECT NFC TAG : $nfcId")
+					dismiss()
+				}
 
 			}
-			.setNegativeButton(R.string.action_cancel) { _, _ ->
 
-				// Call the listener
-				onScanNfcTagListener?.onCancelNfcTagScan(alarm!!)
+			// Hide the current dialog
+			this.dialog?.hide()
 
-			}
-			.setView(R.layout.dlg_scan_nfc_tag)
-			.create()
+			// Show the dialog
+			dialog.show(childFragmentManager, NacSelectNfcTagDialog.TAG)
+
+		}
 	}
 
 	/**
@@ -106,7 +197,12 @@ class NacScanNfcTagDialog
 		val nfcAdapter = NfcAdapter.getDefaultAdapter(activity)
 
 		// Get all the NFC tags that can be read
-		val flags = FLAG_READER_NFC_A or FLAG_READER_NFC_B or FLAG_READER_NFC_BARCODE or FLAG_READER_NFC_F or FLAG_READER_NFC_V or FLAG_READER_SKIP_NDEF_CHECK
+		val flags = FLAG_READER_NFC_A or
+			FLAG_READER_NFC_B or
+			FLAG_READER_NFC_BARCODE or
+			FLAG_READER_NFC_F or
+			FLAG_READER_NFC_V or
+			FLAG_READER_SKIP_NDEF_CHECK
 
 		// Enable NFC reader mode
 		nfcAdapter.enableReaderMode(activity, this, flags, null)

@@ -5,34 +5,73 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="vertical"
+	android:paddingTop="@dimen/normal"
+	android:paddingBottom="@dimen/normal"
 	android:paddingStart="?dialogPreferredPadding"
 	android:paddingEnd="?dialogPreferredPadding"
 	tools:ignore="ContentDescription,UselessParent,UseCompoundDrawables">
 
-	<LinearLayout
+	<!-- Title -->
+	<TextView
+		style="@style/Widget.TextView.Primary"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:paddingTop="@dimen/normal"
-		android:paddingBottom="@dimen/normal"
-		android:orientation="vertical">
+		android:textSize="@dimen/medium"
+		android:textStyle="bold"
+		android:text="Scan an NFC tag..."
+		/>
 
-		<ImageView
-			android:contentDescription="@string/title_scan_nfc_tag"
-			android:layout_width="@dimen/isz_focus"
-			android:layout_height="@dimen/isz_focus"
-			android:layout_marginTop="@dimen/large"
-			android:layout_marginBottom="@dimen/large"
-			android:layout_gravity="center"
-			android:src="@drawable/tap_and_play"
-			/>
+	<!-- Description -->
+	<TextView
+		style="@style/Widget.TextView.Primary"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/normal"
+		android:text="The scanned NFC tag will be required to dismiss this alarm when it goes off."
+		/>
 
-		<TextView
-			style="@style/Widget.TextView.Primary"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:text="@string/message_scan_nfc_tag"
-			/>
+	<!-- Image to indicate that the user should scan an NFC tag -->
+	<ImageView
+		android:contentDescription="@string/title_scan_nfc_tag"
+		android:layout_width="@dimen/isz_focus"
+		android:layout_height="@dimen/isz_focus"
+		android:layout_marginTop="@dimen/large"
+		android:layout_marginBottom="@dimen/large"
+		android:layout_gravity="center"
+		android:src="@drawable/tap_and_play"
+		/>
 
-	</LinearLayout>
+	<!--
+	android:text="@string/message_scan_nfc_tag"
+	-->
+
+	<!-- Separator -->
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/line"
+		android:layout_marginTop="@dimen/medium"
+		android:layout_marginBottom="@dimen/medium"
+		android:background="@color/white_dull"
+		/>
+
+	<!-- Use any NFC tag button -->
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/use_any_nfc_tag"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/touch"
+		android:backgroundTint="@color/orange"
+		android:textColor="@color/white"
+		android:text="Use any NFC Tag"
+		/>
+
+	<!-- Select an NFC tag button -->
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/select_nfc_tag"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/touch"
+		android:backgroundTint="@color/gray_light"
+		android:textColor="@color/white"
+		android:text="Select NFC Tag"
+		/>
 
 </LinearLayout>

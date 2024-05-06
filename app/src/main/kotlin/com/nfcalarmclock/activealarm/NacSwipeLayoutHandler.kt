@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
+import kotlin.math.absoluteValue
 
 /**
  * Handler for the swipe layout.
@@ -286,7 +287,7 @@ class NacSwipeLayoutHandler(
 
 		// Get velocity
 		val pointerId: Int = motionEvent.getPointerId(motionEvent.actionIndex)
-		val finalVelocity: Float? = velocityTracker?.getXVelocity(pointerId)?.div(6f)
+		val finalVelocity: Float? = velocityTracker?.getXVelocity(pointerId)?.div(4f)?.absoluteValue
 
 		// Check if final velocity was not able to be computed
 		if (finalVelocity == null)
@@ -526,6 +527,7 @@ class NacSwipeLayoutHandler(
 				// Finger DOWN on button
 				MotionEvent.ACTION_DOWN ->
 				{
+					println("ACTION_DOWN")
 					// Clear any previous animations on the view
 					viewPropertyAnimator?.cancel()
 
@@ -558,6 +560,7 @@ class NacSwipeLayoutHandler(
 				// Finger UP on button
 				MotionEvent.ACTION_UP ->
 				{
+					println("ACTION_UP")
 					// Calculate the min and max fling value
 					val minValue = if (view.id == snoozeButton.id) FLING_MIN_VALUE else -FLING_MAX_VALUE
 					val maxValue = if (view.id == snoozeButton.id) FLING_MAX_VALUE else FLING_MIN_VALUE
@@ -573,10 +576,12 @@ class NacSwipeLayoutHandler(
 					if (shouldFlingView(view, finalVelocity))
 					{
 						// Fling the view
+						println("FLING VIEW")
 						flingView(view, finalVelocity, minValue, maxValue)
 					}
 					else
 					{
+						println("Animate back to orig pos")
 						// Animate the view back to its original X position
 						animateButtonBackToOriginalXposition(view)
 					}
@@ -585,6 +590,7 @@ class NacSwipeLayoutHandler(
 				// Moving finger
 				MotionEvent.ACTION_MOVE ->
 				{
+					println("ACTION_MOVE")
 					// Move the view
 					moveView(view, motionEvent, dx)
 

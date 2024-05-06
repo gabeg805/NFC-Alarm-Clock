@@ -27,6 +27,40 @@
 
 		<item name="colorCard">@color/gray_dark</item>
 		<item name="colorCardExpanded">@color/gray</item>
+
+		<!-- Added to fix Style does not have TextAppearance attribute -->
+		<item name="colorPrimaryInverse">@color/white</item>
+		<item name="colorPrimaryContainer">@color/black</item>
+		<item name="colorOnPrimaryContainer">@color/white</item>
+		<item name="colorSecondaryContainer">@color/black</item>
+		<item name="colorOnSecondaryContainer">@color/gray</item>
+		<item name="colorTertiary">@color/sky_blue</item>
+		<item name="colorOnTertiary">@color/white</item>
+		<item name="colorTertiaryContainer">@color/black</item>
+		<item name="colorOnTertiaryContainer">@color/white</item>
+		<item name="colorSurfaceVariant">@color/orange</item>
+		<item name="colorOnSurfaceVariant">@color/white</item>
+		<item name="colorSurfaceInverse">@color/white</item>
+		<item name="colorOnSurfaceInverse">@color/black</item>
+		<item name="colorOutline">@color/orange</item>
+		<item name="colorErrorContainer">@color/red</item>
+		<item name="colorOnErrorContainer">@color/white</item>
+		<item name="textAppearanceDisplayLarge">@style/TextAppearance.Material3.DisplayLarge</item>
+		<item name="textAppearanceDisplayMedium">@style/TextAppearance.Material3.DisplayMedium</item>
+		<item name="textAppearanceDisplaySmall">@style/TextAppearance.Material3.DisplaySmall</item>
+		<item name="textAppearanceHeadlineLarge">@style/TextAppearance.Material3.HeadlineLarge</item>
+		<item name="textAppearanceHeadlineMedium">@style/TextAppearance.Material3.HeadlineMedium</item>
+		<item name="textAppearanceHeadlineSmall">@style/TextAppearance.Material3.HeadlineSmall</item>
+		<item name="textAppearanceTitleLarge">@style/TextAppearance.Material3.TitleLarge</item>
+		<item name="textAppearanceTitleMedium">@style/TextAppearance.Material3.TitleMedium</item>
+		<item name="textAppearanceTitleSmall">@style/TextAppearance.Material3.TitleSmall</item>
+		<item name="textAppearanceBodyLarge">@style/TextAppearance.Material3.BodyLarge</item>
+		<item name="textAppearanceBodyMedium">@style/TextAppearance.Material3.BodyMedium</item>
+		<item name="textAppearanceBodySmall">@style/TextAppearance.Material3.BodySmall</item>
+		<item name="textAppearanceLabelLarge">@style/TextAppearance.Material3.LabelLarge</item>
+		<item name="textAppearanceLabelMedium">@style/TextAppearance.Material3.LabelMedium</item>
+		<item name="textAppearanceLabelSmall">@style/TextAppearance.Material3.LabelSmall</item>
+
 	</style>
 
 
