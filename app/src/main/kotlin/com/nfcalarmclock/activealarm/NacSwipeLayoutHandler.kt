@@ -287,12 +287,18 @@ class NacSwipeLayoutHandler(
 
 		// Get velocity
 		val pointerId: Int = motionEvent.getPointerId(motionEvent.actionIndex)
-		val finalVelocity: Float? = velocityTracker?.getXVelocity(pointerId)?.div(4f)?.absoluteValue
+		var finalVelocity: Float = velocityTracker?.getXVelocity(pointerId) ?: return 0f
 
 		// Check if final velocity was not able to be computed
-		if (finalVelocity == null)
+		if ((minValue == 0f) && (finalVelocity < 0))
 		{
-			return 0f
+			println("Change min sign of final velocity : $finalVelocity")
+			finalVelocity *= -1f
+		}
+		else if ((maxValue == 0f) && (finalVelocity > 0))
+		{
+			println("Change max sign of final velocity : $finalVelocity")
+			finalVelocity *= -1f
 		}
 
 		// Make sure the final velocity is within the min and max values
@@ -406,7 +412,7 @@ class NacSwipeLayoutHandler(
 			setStartVelocity(velocity)
 			setMinValue(minValue)
 			setMaxValue(maxValue)
-			friction = 0.75f
+			friction = 0.25f
 
 			// Start the animation
 			start()
@@ -527,7 +533,6 @@ class NacSwipeLayoutHandler(
 				// Finger DOWN on button
 				MotionEvent.ACTION_DOWN ->
 				{
-					println("ACTION_DOWN")
 					// Clear any previous animations on the view
 					viewPropertyAnimator?.cancel()
 
@@ -560,7 +565,6 @@ class NacSwipeLayoutHandler(
 				// Finger UP on button
 				MotionEvent.ACTION_UP ->
 				{
-					println("ACTION_UP")
 					// Calculate the min and max fling value
 					val minValue = if (view.id == snoozeButton.id) FLING_MIN_VALUE else -FLING_MAX_VALUE
 					val maxValue = if (view.id == snoozeButton.id) FLING_MAX_VALUE else FLING_MIN_VALUE
@@ -590,7 +594,6 @@ class NacSwipeLayoutHandler(
 				// Moving finger
 				MotionEvent.ACTION_MOVE ->
 				{
-					println("ACTION_MOVE")
 					// Move the view
 					moveView(view, motionEvent, dx)
 

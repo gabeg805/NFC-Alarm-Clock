@@ -27,23 +27,14 @@
 		style="@style/Widget.TextView.Primary"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textColor="@color/white"
-		android:textStyle="italic"
-		android:text="Optional"
-		/>
-
-	<!-- Description -->
-	<TextView
-		style="@style/Widget.TextView.Primary"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
 		android:layout_marginTop="@dimen/normal"
-		android:text="You can reuse this NFC tag without having to scan it again."
+		android:text="You can reuse this NFC tag, without having to scan it again, by giving it a name."
 		/>
 
 	<!-- Name -->
 	<com.google.android.material.textfield.TextInputLayout
 		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+		android:id="@+id/nfc_tag_input_layout"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="@dimen/medium"

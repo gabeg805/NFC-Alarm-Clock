@@ -36,7 +36,6 @@
 			android:layout_height="wrap_content"
 			android:inputType="none"
 			android:backgroundTint="@color/white_dull"
-			app:simpleItems="@array/days_of_week_abbr"
 			/>
 	</com.google.android.material.textfield.TextInputLayout>
 

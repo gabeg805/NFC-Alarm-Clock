@@ -6,17 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textview.MaterialTextView
 import com.nfcalarmclock.R
+import com.nfcalarmclock.nfc.db.NacNfcTag
+import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
 
+/**
+ * Select an NFC tag that has been previously saved.
+ */
 class NacSelectNfcTagDialog
-
-	// Constructor
-	: BottomSheetDialogFragment()
-
+	: NacBottomSheetDialogFragment()
 {
 
 	/**
@@ -24,9 +25,14 @@ class NacSelectNfcTagDialog
 	 */
 	interface OnSelectNfcTagListener
 	{
-		fun onCancelNfcTagScan()
-		fun onSelectNfcTag(nfcId: String)
+		fun onCancel()
+		fun onSelected(nfcId: String)
 	}
+
+	/**
+	 * List of NFC tags.
+	 */
+	var nfcTags: List<NacNfcTag> = ArrayList()
 
 	/**
 	 * Name of the selected NFC tag.
@@ -55,10 +61,11 @@ class NacSelectNfcTagDialog
 	 */
 	override fun onCancel(dialog: DialogInterface)
 	{
+		// Super
 		super.onCancel(dialog)
 
 		// Call the listener
-		onSelectNfcTagListener?.onCancelNfcTagScan()
+		onSelectNfcTagListener?.onCancel()
 	}
 
 	/**
@@ -66,13 +73,20 @@ class NacSelectNfcTagDialog
 	 */
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
+		// Super
 		super.onViewCreated(view, savedInstanceState)
 
 		// Get the views
 		val textView = view.findViewById(R.id.nfc_tag_dropdown_menu) as MaterialAutoCompleteTextView
 		val doneButton = view.findViewById(R.id.select_nfc_tag) as MaterialButton
+		primaryButton = doneButton
+
+		// Get the list of all NFC tag names
+		val nfcTagNames = nfcTags.map { it.name }
 
 		// Setup the text view
+		textView.setSimpleItems(nfcTagNames.toTypedArray())
+		textView.setSelection(0)
 		textView.onItemClickListener = AdapterView.OnItemClickListener { _, v, _, _ ->
 
 			// Set the selected NFC tag name
@@ -84,7 +98,7 @@ class NacSelectNfcTagDialog
 		doneButton.setOnClickListener {
 
 			// Call the listener
-			onSelectNfcTagListener?.onSelectNfcTag(selectedNfcTag)
+			onSelectNfcTagListener?.onSelected(selectedNfcTag)
 
 		}
 	}

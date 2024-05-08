@@ -1,22 +1,24 @@
 package com.nfcalarmclock.nfc
 
 import android.content.DialogInterface
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.nfc.db.NacNfcTag
+import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
 
+/**
+ * Save an NFC tag that was scanned.
+ */
 class NacSaveNfcTagDialog
-
-	// Constructor
-	: BottomSheetDialogFragment()
-
+	: NacBottomSheetDialogFragment()
 {
 
 	/**
@@ -24,8 +26,8 @@ class NacSaveNfcTagDialog
 	 */
 	interface OnSaveNfcTagListener
 	{
-		fun onCancelNfcTag()
-		fun onSaveNfcTag(nfcTag: NacNfcTag)
+		fun onCancel()
+		fun onSave(nfcTag: NacNfcTag)
 	}
 
 	/**
@@ -55,10 +57,11 @@ class NacSaveNfcTagDialog
 	 */
 	override fun onCancel(dialog: DialogInterface)
 	{
+		// Super
 		super.onCancel(dialog)
 
 		// Call the listener
-		onSaveNfcTagListener?.onCancelNfcTag()
+		onSaveNfcTagListener?.onCancel()
 	}
 
 	/**
@@ -66,12 +69,19 @@ class NacSaveNfcTagDialog
 	 */
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
+		// Super
 		super.onViewCreated(view, savedInstanceState)
 
 		// Get the views
+		val inputLayout = view.findViewById(R.id.nfc_tag_input_layout) as TextInputLayout
 		val editText = view.findViewById(R.id.nfc_tag_name) as TextInputEditText
 		val saveButton = view.findViewById(R.id.save_nfc_tag) as MaterialButton
 		val skipButton = view.findViewById(R.id.skip_nfc_tag) as MaterialButton
+		primaryButton = saveButton
+
+		// Setup the input layout
+		inputLayout.hintTextColor = ColorStateList.valueOf(sharedPreferences.themeColor)
+		inputLayout.boxStrokeColor = sharedPreferences.themeColor
 
 		// Setup the edit view
 		editText.addTextChangedListener {
@@ -90,7 +100,10 @@ class NacSaveNfcTagDialog
 			println("SAVE : $nfcName | $nfcId")
 
 			// Call the listener
-			onSaveNfcTagListener?.onSaveNfcTag(nfcTag)
+			onSaveNfcTagListener?.onSave(nfcTag)
+
+			// Dismiss the dialog
+			dismiss()
 
 		}
 
@@ -98,7 +111,10 @@ class NacSaveNfcTagDialog
 		skipButton.setOnClickListener {
 
 			// Call the listener
-			onSaveNfcTagListener?.onCancelNfcTag()
+			onSaveNfcTagListener?.onCancel()
+
+			// Dismiss the dialog
+			dismiss()
 
 		}
 

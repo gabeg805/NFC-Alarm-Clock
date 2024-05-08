@@ -57,8 +57,11 @@ import com.nfcalarmclock.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialo
 import com.nfcalarmclock.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog.OnGraduallyIncreaseVolumeListener
 import com.nfcalarmclock.mediapicker.NacMediaActivity
 import com.nfcalarmclock.nfc.NacNfc
+import com.nfcalarmclock.nfc.NacNfcTagViewModel
+import com.nfcalarmclock.nfc.NacSaveNfcTagDialog
 import com.nfcalarmclock.nfc.NacScanNfcTagDialog
 import com.nfcalarmclock.nfc.NacScanNfcTagDialog.OnScanNfcTagListener
+import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.permission.NacPermissionRequestManager
 import com.nfcalarmclock.ratemyapp.NacRateMyApp
 import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog
@@ -102,8 +105,7 @@ class NacMainActivity
 	OnViewHolderCreatedListener,
 	OnCardCollapsedListener,
 	OnCardUpdatedListener,
-	OnCardUseNfcChangedListener,
-	OnScanNfcTagListener
+	OnCardUseNfcChangedListener
 {
 
 	/**
@@ -150,6 +152,16 @@ class NacMainActivity
 	 * Statistic view model.
 	 */
 	private val statisticViewModel: NacAlarmStatisticViewModel by viewModels()
+
+	/**
+	 * NFC tag view model.
+	 */
+	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
+
+	/**
+	 * List of all NFC tags.
+	 */
+	private var allNfcTags: List<NacNfcTag> = ArrayList()
 
 	/**
 	 * Mutable live data for the alarm card that can be modified and sorted, or
@@ -459,19 +471,6 @@ class NacMainActivity
 	}
 
 	/**
-	 * Called when the user cancels the scan NFC tag dialog.
-	 */
-	override fun onCancelNfcTagScan(alarm: NacAlarm)
-	{
-		// Get the card that corresponds to the alarm
-		val cardHolder = recyclerView.findViewHolderForItemId(alarm.id) as NacCardHolder
-
-		// Uncheck the NFC button when the dialog is canceled.
-		cardHolder.nfcButton.isChecked = false
-		cardHolder.doNfcButtonClick()
-	}
-
-	/**
 	 * Called when the alarm card is collapsed.
 	 */
 	override fun onCardCollapsed(holder: NacCardHolder, alarm: NacAlarm)
@@ -698,18 +697,6 @@ class NacMainActivity
 	}
 
 	/**
-	 * Called when the user cancels the scan NFC tag dialog.
-	 */
-	override fun onDoneScanningNfcTag(alarm: NacAlarm)
-	{
-		// Start NFC. This is here so that if an NFC tag accidentally gets
-		// scanned multiple times after this dialog is closed, it will not
-		// popup some unwanted NFC Entry intent. Instead, it will keep the
-		// focus on this app
-		NacNfc.start(this)
-	}
-
-	/**
 	 * Catch when a menu item is clicked.
 	 */
 	override fun onMenuItemClick(item: MenuItem): Boolean
@@ -731,15 +718,6 @@ class NacMainActivity
 			// Unknown
 			else -> false
 		}
-	}
-
-	/**
-	 * Called when an NFC tag is scanned from the Scan NFC Tag dialog.
-	 */
-	override fun onNfcTagScanned(alarm: NacAlarm, tagId: String)
-	{
-		// Save the NFC tag ID that was scanned
-		saveNfcTagId(alarm, tagId)
 	}
 
 	/**
@@ -822,16 +800,6 @@ class NacMainActivity
 
 		// Start NFC
 		NacNfc.start(this)
-	}
-
-	/**
-	 * Called when theh user wants to use any NFC tag.
-	 */
-	override fun onUseAnyNfcTag(alarm: NacAlarm)
-	{
-		// Save the default (empty) NFC tag ID, indicating that any NFC tag can
-		// be used to dismiss this alarm
-		saveNfcTagId(alarm, "")
 	}
 
 	/**
@@ -1193,6 +1161,15 @@ class NacMainActivity
 			}
 
 		}
+
+		// Observe list of NFC tags
+		nfcTagViewModel.allNfcTags.observe(this) {
+
+			// Count the number of NFC tags
+			allNfcTags = it
+			println("Observing stuff : ${it.size} | $it")
+
+		}
 	}
 
 	/**
@@ -1502,7 +1479,92 @@ class NacMainActivity
 
 		// Setup the dialog
 		scanNfcTagDialog.alarm = alarm
-		scanNfcTagDialog.onScanNfcTagListener = this
+		scanNfcTagDialog.nfcTags = allNfcTags
+		scanNfcTagDialog.onScanNfcTagListener = object: OnScanNfcTagListener {
+
+			/**
+			 * Called when the user cancels the scan NFC tag dialog.
+			 */
+			override fun onCancel(alarm: NacAlarm)
+			{
+				// Get the card that corresponds to the alarm
+				val cardHolder = recyclerView.findViewHolderForItemId(alarm.id) as NacCardHolder
+
+				// Uncheck the NFC button when the dialog is canceled.
+				cardHolder.nfcButton.isChecked = false
+				cardHolder.doNfcButtonClick()
+			}
+
+			/**
+			 * Called when the user cancels the scan NFC tag dialog.
+			 */
+			override fun onDone(alarm: NacAlarm)
+			{
+				// Start NFC. This is here so that if an NFC tag accidentally gets
+				// scanned multiple times after this dialog is closed, it will not
+				// popup some unwanted NFC Entry intent. Instead, it will keep the
+				// focus on this app
+				NacNfc.start(this@NacMainActivity)
+			}
+
+			/**
+			 * Called when an NFC tag is scanned from the Scan NFC Tag dialog.
+			 */
+			override fun onScanned(alarm: NacAlarm, tagId: String)
+			{
+				// Save the NFC tag ID that was scanned
+				saveNfcTagId(alarm, tagId)
+
+				// Create the dialog
+				val saveNfcTagDialog = NacSaveNfcTagDialog()
+
+				// Setup the dialog
+				saveNfcTagDialog.nfcId = tagId
+				saveNfcTagDialog.onSaveNfcTagListener = object: NacSaveNfcTagDialog.OnSaveNfcTagListener
+				{
+
+					/**
+					 * Called when saving the NFC tag is skipped.
+					 */
+					override fun onCancel()
+					{
+					}
+
+					/**
+					 * Called when saving the NFC tag.
+					 */
+					override fun onSave(nfcTag: NacNfcTag)
+					{
+						// Save the NFC tag
+						nfcTagViewModel.insert(nfcTag)
+					}
+
+				}
+
+				// Show the dialog
+				saveNfcTagDialog.show(supportFragmentManager, NacSaveNfcTagDialog.TAG)
+			}
+
+			/**
+			 * Called when an NFC tag is selected in the Select NFC Tag dialog.
+			 */
+			override fun onSelected(alarm: NacAlarm, tagId: String)
+			{
+				// Save the NFC tag ID that was scanned
+				saveNfcTagId(alarm, tagId)
+			}
+
+			/**
+			 * Called when theh user wants to use any NFC tag.
+			 */
+			override fun onUseAny(alarm: NacAlarm)
+			{
+				// Save the default (empty) NFC tag ID, indicating that any NFC tag can
+				// be used to dismiss this alarm
+				saveNfcTagId(alarm, "")
+			}
+
+		}
 
 		// Show the dialog
 		scanNfcTagDialog.show(supportFragmentManager, NacScanNfcTagDialog.TAG)

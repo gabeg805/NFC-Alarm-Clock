@@ -13,21 +13,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.nfc.db.NacNfcTag
+import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
 
 /**
- * Prompt user to scan an NFC tag that will be used to dismiss the given alarm
- * when it goes off.
+ * Scan an NFC tag that will be used to dismiss the given alarm when it goes
+ * off.
  */
 class NacScanNfcTagDialog
 
 	// Constructor
-	//: NacDialogFragment(),
-	: BottomSheetDialogFragment(),
+	: NacBottomSheetDialogFragment(),
 
 	// Interface
 	NfcAdapter.ReaderCallback
@@ -38,10 +37,11 @@ class NacScanNfcTagDialog
 	 */
 	interface OnScanNfcTagListener
 	{
-		fun onCancelNfcTagScan(alarm: NacAlarm)
-		fun onDoneScanningNfcTag(alarm: NacAlarm)
-		fun onNfcTagScanned(alarm: NacAlarm, tagId: String)
-		fun onUseAnyNfcTag(alarm: NacAlarm)
+		fun onCancel(alarm: NacAlarm)
+		fun onDone(alarm: NacAlarm)
+		fun onScanned(alarm: NacAlarm, tagId: String)
+		fun onSelected(alarm: NacAlarm, tagId: String)
+		fun onUseAny(alarm: NacAlarm)
 	}
 
 	/**
@@ -50,36 +50,14 @@ class NacScanNfcTagDialog
 	var alarm: NacAlarm? = null
 
 	/**
+	 * List of NFC tags.
+	 */
+	var nfcTags: List<NacNfcTag> = ArrayList()
+
+	/**
 	 * Listener for when the NFC tag is scanned.
 	 */
 	var onScanNfcTagListener: OnScanNfcTagListener? = null
-
-	/**
-	 * Called when the dialog is created.
-	 */
-	//override fun onCreateDialog(savedInstanceState: Bundle?): Dialog
-	//{
-	//	// Setup the shared preferences
-	//	//setupSharedPreferences()
-
-	//	// Create the dialog
-	//	return AlertDialog.Builder(requireContext())
-	//		.setTitle(R.string.title_scan_nfc_tag)
-	//		.setPositiveButton(R.string.action_use_any) { _, _ ->
-
-	//			// Call the listener
-	//			onScanNfcTagListener?.onUseAnyNfcTag(alarm!!)
-
-	//		}
-	//		.setNegativeButton(R.string.action_cancel) { _, _ ->
-
-	//			// Call the listener
-	//			onScanNfcTagListener?.onCancelNfcTagScan(alarm!!)
-
-	//		}
-	//		.setView(R.layout.dlg_scan_nfc_tag)
-	//		.create()
-	//}
 
 	/**
 	 * Called when the dialog view is created.
@@ -98,11 +76,12 @@ class NacScanNfcTagDialog
 	 */
 	override fun onCancel(dialog: DialogInterface)
 	{
+		// Super
 		super.onCancel(dialog)
 		println("onCancel()")
 
 		// Call the listener
-		onScanNfcTagListener?.onCancelNfcTagScan(alarm!!)
+		onScanNfcTagListener?.onCancel(alarm!!)
 	}
 
 	/**
@@ -110,56 +89,28 @@ class NacScanNfcTagDialog
 	 */
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
+		// Super
 		super.onViewCreated(view, savedInstanceState)
 		println("onViewCreated()")
 
 		// Get the views
 		val useAnyNfcButton = view.findViewById(R.id.use_any_nfc_tag) as MaterialButton
 		val selectNfcButton = view.findViewById(R.id.select_nfc_tag) as MaterialButton
-		val yoButton = view.findViewById(R.id.scan_button) as MaterialButton
-		val thisDialog = this
-
-		yoButton.setOnClickListener {
-
-			val dialog = NacSaveNfcTagDialog()
-			dialog.nfcId = "lkjajhalsjhdlas123180"
-			dialog.onSaveNfcTagListener = object: NacSaveNfcTagDialog.OnSaveNfcTagListener
-			{
-
-				/**
-				 * Called when saving the NFC tag is skipped.
-				 */
-				override fun onCancelNfcTag()
-				{
-				}
-
-				/**
-				 * Called when saving the NFC tag.
-				 */
-				override fun onSaveNfcTag(nfcTag: NacNfcTag)
-				{
-				}
-
-			}
-
-			// Hide the current dialog
-			this.dialog?.hide()
-
-			// Show the dialog
-			dialog.show(childFragmentManager, NacSaveNfcTagDialog.TAG)
-
-		}
+		primaryButton = useAnyNfcButton
 
 		// Setup the use any NFC button
 		useAnyNfcButton.setOnClickListener {
 
 			// Call the listener
-			onScanNfcTagListener?.onUseAnyNfcTag(alarm!!)
+			onScanNfcTagListener?.onUseAny(alarm!!)
 
 			// Dismiss the dialog
 			dismiss()
 
 		}
+
+		// Set the visibility of the select button
+		selectNfcButton.visibility = if (nfcTags.isNotEmpty()) View.VISIBLE else View.GONE
 
 		// Setup the select NFC button
 		selectNfcButton.setOnClickListener {
@@ -168,24 +119,29 @@ class NacScanNfcTagDialog
 			val dialog = NacSelectNfcTagDialog()
 
 			// Setup the dialog
+			dialog.nfcTags = nfcTags
 			dialog.onSelectNfcTagListener = object: NacSelectNfcTagDialog.OnSelectNfcTagListener
 			{
 
 				/**
 				 * Called when the Select NFC Tag is canceled.
 				 */
-				override fun onCancelNfcTagScan()
+				override fun onCancel()
 				{
 					// Show the current dialog
-					thisDialog.dialog?.show()
+					this@NacScanNfcTagDialog.dialog?.show()
 				}
 
 				/**
 				 * Called when the NFC Tag is selected.
 				 */
-				override fun onSelectNfcTag(nfcId: String)
+				override fun onSelected(nfcId: String)
 				{
 					println("ON SELECT NFC TAG : $nfcId")
+					// Call the listener
+					onScanNfcTagListener?.onSelected(alarm!!, nfcId)
+
+					// Dismiss the dialog
 					dismiss()
 				}
 
@@ -209,7 +165,7 @@ class NacScanNfcTagDialog
 		super.onDestroy()
 
 		// Call the listener
-		onScanNfcTagListener?.onDoneScanningNfcTag(alarm!!)
+		onScanNfcTagListener?.onDone(alarm!!)
 	}
 
 	/**
@@ -258,7 +214,7 @@ class NacScanNfcTagDialog
 		// Get the NFC adapter
 		val nfcAdapter = NfcAdapter.getDefaultAdapter(context)
 
-		// Disable NFC reader modeo
+		// Disable NFC reader mode
 		nfcAdapter.disableReaderMode(activity)
 	}
 
@@ -271,7 +227,7 @@ class NacScanNfcTagDialog
 		val tagId = NacNfc.parseId(tag).toString()
 
 		// Call the listener
-		onScanNfcTagListener?.onNfcTagScanned(alarm!!, tagId)
+		onScanNfcTagListener?.onScanned(alarm!!, tagId)
 
 		// Dismiss the dialog
 		dismiss()

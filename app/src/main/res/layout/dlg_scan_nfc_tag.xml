@@ -70,18 +70,9 @@
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/touch"
 		android:backgroundTint="@color/gray_light"
+		android:visibility="gone"
 		android:textColor="@color/white"
 		android:text="Select NFC Tag"
-		/>
-
-	<!-- Select an NFC tag button -->
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/scan_button"
-		android:layout_width="match_parent"
-		android:layout_height="@dimen/touch"
-		android:backgroundTint="@color/sky_blue"
-		android:textColor="@color/white"
-		android:text="Scan NFC Tag"
 		/>
 
 </LinearLayout>
