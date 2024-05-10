@@ -43,6 +43,13 @@ class NacNfcTagViewModel @Inject constructor(
 	}
 
 	/**
+	 * Delete an NFC tag, asynchronously, from the database.
+	 *
+	 * @return The number of rows deleted.
+	 */
+	suspend fun deleteAll(): Int = nfcTagRepository.deleteAll()
+
+	/**
 	 * Find an NFC tag.
 	 *
 	 * @param  id  The ID of the NFC tag to find.

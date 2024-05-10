@@ -2,12 +2,16 @@ package com.nfcalarmclock.nfc.db
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /**
  * An NFC tag.
  */
-@Entity(tableName = "nfc_tag")
+@Entity(
+	tableName = "nfc_tag",
+	indices = [Index(value=["nfc_id"], unique=true)]
+)
 class NacNfcTag()
 {
 

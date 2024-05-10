@@ -12,6 +12,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.nfc.db.NacNfcTag
+import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
 
 /**
@@ -29,6 +30,11 @@ class NacSaveNfcTagDialog
 		fun onCancel()
 		fun onSave(nfcTag: NacNfcTag)
 	}
+
+	/**
+	 * List of NFC tags.
+	 */
+	var allNfcTags: List<NacNfcTag> = ArrayList()
 
 	/**
 	 * NFC tag ID.
@@ -84,8 +90,20 @@ class NacSaveNfcTagDialog
 		inputLayout.boxStrokeColor = sharedPreferences.themeColor
 
 		// Setup the edit view
-		editText.addTextChangedListener {
-			println("HELLO")
+		editText.addTextChangedListener{
+
+			// Make sure the editable is valid and has text
+			if (it?.isNotEmpty() == true)
+			{
+				saveButton.isEnabled = true
+				saveButton.alpha = 1.0f
+			}
+			// Editable is null or does not have a name entered
+			else
+			{
+				saveButton.isEnabled = false
+				saveButton.alpha = 0.4f
+			}
 		}
 
 		// Setup the save button
@@ -93,7 +111,30 @@ class NacSaveNfcTagDialog
 		saveButton.setOnClickListener {
 
 			// Get the name
-			val nfcName = editText.text.toString()
+			val nfcName = editText.text.toString().filterNot { it.isWhitespace() }
+
+			// Iterate over each NFC tag
+			allNfcTags.forEach {
+
+				// Check that the name does not already exist
+				if (it.name == nfcName)
+				{
+					// Show toast
+					NacUtility.quickToast(requireContext(), R.string.error_message_nfc_name_exists)
+					return@setOnClickListener
+				}
+				// Check that the NFC ID does not already exist
+				else if (it.nfcId == nfcId)
+				{
+					// Get the message
+					val msg = getString(R.string.error_message_nfc_id_exists, nfcName)
+
+					// Show toast
+					NacUtility.quickToast(requireContext(), msg)
+					return@setOnClickListener
+				}
+
+			}
 
 			// Create an NFC tag
 			val nfcTag = NacNfcTag(nfcName, nfcId)

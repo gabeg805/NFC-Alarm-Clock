@@ -40,7 +40,7 @@ class NacScanNfcTagDialog
 		fun onCancel(alarm: NacAlarm)
 		fun onDone(alarm: NacAlarm)
 		fun onScanned(alarm: NacAlarm, tagId: String)
-		fun onSelected(alarm: NacAlarm, tagId: String)
+		fun onSelected(alarm: NacAlarm, nfcTag: NacNfcTag)
 		fun onUseAny(alarm: NacAlarm)
 	}
 
@@ -52,7 +52,12 @@ class NacScanNfcTagDialog
 	/**
 	 * List of NFC tags.
 	 */
-	var nfcTags: List<NacNfcTag> = ArrayList()
+	var allNfcTags: List<NacNfcTag> = ArrayList()
+
+	/**
+	 * Last saved/selected NFC tag.
+	 */
+	var lastNfcTag: NacNfcTag? = null
 
 	/**
 	 * Listener for when the NFC tag is scanned.
@@ -110,7 +115,7 @@ class NacScanNfcTagDialog
 		}
 
 		// Set the visibility of the select button
-		selectNfcButton.visibility = if (nfcTags.isNotEmpty()) View.VISIBLE else View.GONE
+		selectNfcButton.visibility = if (allNfcTags.isNotEmpty()) View.VISIBLE else View.GONE
 
 		// Setup the select NFC button
 		selectNfcButton.setOnClickListener {
@@ -119,7 +124,8 @@ class NacScanNfcTagDialog
 			val dialog = NacSelectNfcTagDialog()
 
 			// Setup the dialog
-			dialog.nfcTags = nfcTags
+			dialog.allNfcTags = allNfcTags
+			dialog.selectedNfcTag = lastNfcTag
 			dialog.onSelectNfcTagListener = object: NacSelectNfcTagDialog.OnSelectNfcTagListener
 			{
 
@@ -135,11 +141,11 @@ class NacScanNfcTagDialog
 				/**
 				 * Called when the NFC Tag is selected.
 				 */
-				override fun onSelected(nfcId: String)
+				override fun onSelected(nfcTag: NacNfcTag)
 				{
-					println("ON SELECT NFC TAG : $nfcId")
+					println("ON SELECT NFC TAG : ${nfcTag.nfcId}")
 					// Call the listener
-					onScanNfcTagListener?.onSelected(alarm!!, nfcId)
+					onScanNfcTagListener?.onSelected(alarm!!, nfcTag)
 
 					// Dismiss the dialog
 					dismiss()

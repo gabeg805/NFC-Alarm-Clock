@@ -40,7 +40,7 @@ object NacUtility
 	 */
 	fun getHeight(view: View): Int
 	{
-		// Meaure the view
+		// Measure the view
 		view.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
 			MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED))
 

@@ -16,9 +16,9 @@
 		style="@style/Widget.TextView.Primary"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textSize="@dimen/medium"
+		android:textSize="@dimen/tsz_large"
 		android:textStyle="bold"
-		android:text="Scan an NFC tag..."
+		android:text="@string/title_scan_nfc_tag"
 		/>
 
 	<!-- Description -->
@@ -27,7 +27,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="@dimen/normal"
-		android:text="The scanned NFC tag will be required to dismiss this alarm when it goes off."
+		android:text="@string/message_scan_nfc_tag"
 		/>
 
 	<!-- Image to indicate that the user should scan an NFC tag -->
@@ -40,10 +40,6 @@
 		android:layout_gravity="center"
 		android:src="@drawable/tap_and_play"
 		/>
-
-	<!--
-	android:text="@string/message_scan_nfc_tag"
-	-->
 
 	<!-- Separator -->
 	<View
@@ -61,7 +57,7 @@
 		android:layout_height="@dimen/touch"
 		android:backgroundTint="@color/orange"
 		android:textColor="@color/white"
-		android:text="Use any NFC Tag"
+		android:text="@string/action_use_any"
 		/>
 
 	<!-- Select an NFC tag button -->
@@ -72,7 +68,7 @@
 		android:backgroundTint="@color/gray_light"
 		android:visibility="gone"
 		android:textColor="@color/white"
-		android:text="Select NFC Tag"
+		android:text="@string/action_select_nfc_tag"
 		/>
 
 </LinearLayout>

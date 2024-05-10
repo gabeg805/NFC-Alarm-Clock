@@ -164,6 +164,11 @@ class NacMainActivity
 	private var allNfcTags: List<NacNfcTag> = ArrayList()
 
 	/**
+	 * Last saved/selected NFC tag when enabling NFC on an alarm.
+	 */
+	private var lastNfcTag: NacNfcTag? = null
+
+	/**
 	 * Mutable live data for the alarm card that can be modified and sorted, or
 	 * not sorted, depending on the circumstance.
 	 *
@@ -1479,7 +1484,8 @@ class NacMainActivity
 
 		// Setup the dialog
 		scanNfcTagDialog.alarm = alarm
-		scanNfcTagDialog.nfcTags = allNfcTags
+		scanNfcTagDialog.allNfcTags = allNfcTags
+		scanNfcTagDialog.lastNfcTag = lastNfcTag
 		scanNfcTagDialog.onScanNfcTagListener = object: OnScanNfcTagListener {
 
 			/**
@@ -1519,6 +1525,7 @@ class NacMainActivity
 				val saveNfcTagDialog = NacSaveNfcTagDialog()
 
 				// Setup the dialog
+				saveNfcTagDialog.allNfcTags = allNfcTags
 				saveNfcTagDialog.nfcId = tagId
 				saveNfcTagDialog.onSaveNfcTagListener = object: NacSaveNfcTagDialog.OnSaveNfcTagListener
 				{
@@ -1537,6 +1544,9 @@ class NacMainActivity
 					{
 						// Save the NFC tag
 						nfcTagViewModel.insert(nfcTag)
+
+						// Set the last saved/used NFC tag
+						lastNfcTag = nfcTag
 					}
 
 				}
@@ -1548,10 +1558,13 @@ class NacMainActivity
 			/**
 			 * Called when an NFC tag is selected in the Select NFC Tag dialog.
 			 */
-			override fun onSelected(alarm: NacAlarm, tagId: String)
+			override fun onSelected(alarm: NacAlarm, nfcTag: NacNfcTag)
 			{
 				// Save the NFC tag ID that was scanned
-				saveNfcTagId(alarm, tagId)
+				saveNfcTagId(alarm, nfcTag.nfcId)
+
+				// Set the last saved/used NFC tag
+				lastNfcTag = nfcTag
 			}
 
 			/**

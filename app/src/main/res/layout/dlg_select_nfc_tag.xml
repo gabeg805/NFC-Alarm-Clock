@@ -17,16 +17,22 @@
 		style="@style/Widget.TextView.Primary"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textSize="@dimen/medium"
+		android:textSize="@dimen/tsz_large"
 		android:textStyle="bold"
-		android:text="Select an NFC tag..."
+		android:text="@string/title_select_nfc_tag"
 		/>
 
 	<!-- Select an NFC tag from a list -->
 	<com.google.android.material.textfield.TextInputLayout
-		style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+		style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+		android:id="@+id/nfc_tag_input_layout"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		app:boxCornerRadiusTopStart="10dp"
+		app:boxCornerRadiusTopEnd="10dp"
+		app:boxCornerRadiusBottomStart="10dp"
+		app:boxCornerRadiusBottomEnd="10dp"
+		app:boxStrokeWidth="2dp"
 		android:layout_marginTop="@dimen/medium"
 		android:layout_marginBottom="@dimen/medium">
 
@@ -35,7 +41,6 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:inputType="none"
-			android:backgroundTint="@color/white_dull"
 			/>
 	</com.google.android.material.textfield.TextInputLayout>
 
@@ -46,7 +51,7 @@
 		android:layout_height="@dimen/touch"
 		android:backgroundTint="@color/orange"
 		android:textColor="@color/white"
-		android:text="Done"
+		android:text="@string/action_done"
 		/>
 
 </LinearLayout>

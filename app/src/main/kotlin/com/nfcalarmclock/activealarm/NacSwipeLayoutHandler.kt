@@ -287,7 +287,7 @@ class NacSwipeLayoutHandler(
 
 		// Get velocity
 		val pointerId: Int = motionEvent.getPointerId(motionEvent.actionIndex)
-		var finalVelocity: Float = velocityTracker?.getXVelocity(pointerId) ?: return 0f
+		var finalVelocity: Float = velocityTracker?.getXVelocity(pointerId)?.times(4) ?: return 0f
 
 		// Check if final velocity was not able to be computed
 		if ((minValue == 0f) && (finalVelocity < 0))
@@ -412,7 +412,7 @@ class NacSwipeLayoutHandler(
 			setStartVelocity(velocity)
 			setMinValue(minValue)
 			setMaxValue(maxValue)
-			friction = 0.25f
+			friction = 0.75f
 
 			// Start the animation
 			start()

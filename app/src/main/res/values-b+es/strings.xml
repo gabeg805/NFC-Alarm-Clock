@@ -40,11 +40,15 @@
 	<string name="action_clear">Despejar</string>
 	<string name="action_clear_reminder">Borrar recordatorio</string>
 	<string name="action_default">Original</string>
+	<string name="action_done">Hecho</string>
 	<string name="action_rate_now">Califica Ahora</string>
 	<string name="action_rate_later">Al Rato</string>
 	<string name="action_rate_never">No, Gracias</string>
 	<string name="action_show_nfc_tag_id">Muestra etiqueta de NFC</string>
-	<string name="action_use_any">Usa cualquier</string>
+	<string name="action_use_any">Usa cualquier NFC etiqueta</string>
+	<string name="action_save">Guardar</string>
+	<string name="action_select_nfc_tag">Selecciona etiqueta NFC</string>
+	<string name="action_skip">Saltar</string>
 	<string name="action_undo">Deshacer</string>
 	<string name="action_browse">Navegar</string>
 	<string name="action_previous_folder">Carpeta anterior</string>
@@ -81,7 +85,8 @@
 	<string name="message_nfc_request">Por favor, habilite la NFC para descartar la alarma</string>
 	<string name="message_nfc_required">NFC requerido</string>
 	<string name="message_nfc_optional">NFC opcional</string>
-	<string name="message_scan_nfc_tag">Escanee una etiqueta de NFC única, o usa cualquier etiqueta para descartar esta alarma cuando suena.</string>
+	<string name="message_scan_nfc_tag">Se requerirá la etiqueta NFC escaneada para descartar esta alarma cuando suene.</string>
+	<string name="message_save_nfc_tag">Puedes reutilizar esta etiqueta NFC, sin tener que escanearla nuevamente, dándole un nombre.</string>
 	<string name="message_show_nfc_tag_id">Id:</string>
 	<string name="message_any_nfc_tag_id">Cualquier etiqueta de NFC aceptada</string>
 	<string name="message_no_alarms_scheduled">No hay alarmas programadas</string>
@@ -113,6 +118,8 @@
 	<string name="error_message_max_alarms">Número máximo de alarmas creadas</string>
 	<string name="error_message_nfc_mismatch">Etiqueta no coincide con la etiqueta de NFC guardada.</string>
 	<string name="error_message_nfc_unsupported">Tu teléfono no soporta NFC</string>
+	<string name="error_message_nfc_name_exists">Este nombre ya está siendo utilizado</string>
+	<string name="error_message_nfc_id_exists">Esta ID NFC ya está siendo utilizada por %1$s</string>
 	<string name="error_message_unable_to_scan_nfc">No se pueden escanear etiquetas NFC</string>
 	<string name="error_message_restrict_volume_change">Incapaz de restringir el volumen</string>
 	<string name="error_message_snooze">Incapaz de posponer la alarma</string>
@@ -135,7 +142,9 @@
 	<!-- Titles -->
 	<string name="title_alarm_activity">Desactivar Alarma</string>
 	<string name="title_rate_my_app">Califica esta app</string>
-	<string name="title_scan_nfc_tag">Escanea una etiqueta de NFC</string>
+	<string name="title_scan_nfc_tag">Escanear una etiqueta NFC...</string>
+	<string name="title_select_nfc_tag">Seleccione una etiqueta NFC...</string>
+	<string name="title_save_nfc_tag">Guarde la etiqueta NFC...</string>
 	<string name="title_name">Nombre de la alarma</string>
 	<string name="title_days">Seleccione los días</string>
 	<string name="title_color">Elige un color</string>

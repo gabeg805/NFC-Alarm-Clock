@@ -14,6 +14,8 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.db.NacAlarmDao
 import com.nfcalarmclock.alarm.db.NacAlarmTypeConverters
 import com.nfcalarmclock.db.NacAlarmDatabase.ClearAllStatisticsMigration
+import com.nfcalarmclock.db.NacAlarmDatabase.ClearNfcTagTableMigration
+import com.nfcalarmclock.db.NacAlarmDatabase.DropNfcTagTableMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.RemoveUseTtsColumnMigration
 import com.nfcalarmclock.db.NacOldDatabase.Companion.read
 import com.nfcalarmclock.nfc.db.NacNfcTag
@@ -45,7 +47,7 @@ import javax.inject.Singleton
 /**
  * Store alarms in a Room database.
  */
-@Database(version = 14,
+@Database(version = 18,
 	entities = [
 		NacAlarm::class,
 		NacAlarmCreatedStatistic::class,
@@ -67,8 +69,11 @@ import javax.inject.Singleton
 		AutoMigration(from = 10, to = 11, spec = RemoveUseTtsColumnMigration::class),
 		AutoMigration(from = 11, to = 12),
 		AutoMigration(from = 12, to = 13),
-		AutoMigration(from = 13, to = 14)]
-
+		AutoMigration(from = 13, to = 14),
+		AutoMigration(from = 14, to = 15),
+		AutoMigration(from = 15, to = 16),
+		AutoMigration(from = 16, to = 17, spec = ClearNfcTagTableMigration::class),
+		AutoMigration(from = 17, to = 18, spec = DropNfcTagTableMigration::class)]
 )
 @TypeConverters(NacAlarmTypeConverters::class, NacStatisticTypeConverters::class)
 abstract class NacAlarmDatabase
@@ -134,6 +139,40 @@ abstract class NacAlarmDatabase
 			db.execSQL("CREATE TABLE IF NOT EXISTS alarm_dismissed_statistic (used_nfc INTEGER NOT NULL, id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, timestamp INTEGER NOT NULL, alarm_id INTEGER, hour INTEGER NOT NULL, minute INTEGER NOT NULL, name TEXT DEFAULT '', FOREIGN KEY(alarm_id) REFERENCES alarm(id) ON UPDATE NO ACTION ON DELETE SET NULL )")
 			db.execSQL("CREATE TABLE IF NOT EXISTS alarm_missed_statistic (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, timestamp INTEGER NOT NULL, alarm_id INTEGER, hour INTEGER NOT NULL, minute INTEGER NOT NULL, name TEXT DEFAULT '', FOREIGN KEY(alarm_id) REFERENCES alarm(id) ON UPDATE NO ACTION ON DELETE SET NULL )")
 			db.execSQL("CREATE TABLE IF NOT EXISTS alarm_snoozed_statistic (duration INTEGER NOT NULL DEFAULT 0, id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, timestamp INTEGER NOT NULL, alarm_id INTEGER, hour INTEGER NOT NULL, minute INTEGER NOT NULL, name TEXT DEFAULT '', FOREIGN KEY(alarm_id) REFERENCES alarm(id) ON UPDATE NO ACTION ON DELETE SET NULL )")
+		}
+
+	}
+
+	/**
+	 * Delete everything in the NFC tag table if it exists when auto-migrating.
+	 */
+	internal class ClearNfcTagTableMigration: AutoMigrationSpec
+	{
+
+		/**
+		 * Called after migration.
+		 */
+		override fun onPostMigrate(db: SupportSQLiteDatabase)
+		{
+			db.execSQL("DELETE FROM nfc_tag")
+		}
+
+	}
+
+	/**
+	 * Drop the NFC tag table if it exists when auto-migrating.
+	 */
+	internal class DropNfcTagTableMigration: AutoMigrationSpec
+	{
+
+		/**
+		 * Called after migration.
+		 */
+		override fun onPostMigrate(db: SupportSQLiteDatabase)
+		{
+			db.execSQL("DROP TABLE IF EXISTS nfc_tag")
+			db.execSQL("CREATE TABLE IF NOT EXISTS `nfc_tag` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `nfc_id` TEXT NOT NULL)")
+			db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_nfc_tag_nfc_id` ON `nfc_tag` (`nfc_id`)")
 		}
 
 	}

@@ -40,11 +40,15 @@
 	<string name="action_clear">Thông thoáng</string>
 	<string name="action_clear_reminder">Xóa lời nhắc</string>
 	<string name="action_default">Mặc định</string>
+	<string name="action_done">Xong</string>
 	<string name="action_rate_now">Bình chọn bây giờ</string>
 	<string name="action_rate_later">Sau đó</string>
 	<string name="action_rate_never">Không, cám ơn</string>
 	<string name="action_show_nfc_tag_id">Hiển thị thẻ NFC</string>
-	<string name="action_use_any">Sử dụng bất kỳ</string>
+	<string name="action_use_any">Sử dụng bất kỳ thẻ NFC nào</string>
+	<string name="action_save">Cứu</string>
+	<string name="action_select_nfc_tag">Chọn thẻ NFC</string>
+	<string name="action_skip">Nhảy</string>
 	<string name="action_undo">Hoàn tác</string>
 	<string name="action_browse">Duyệt qua</string>
 	<string name="action_previous_folder">Thư mục trước</string>
@@ -81,7 +85,8 @@
 	<string name="message_nfc_request">Vui lòng bật NFC để tắt báo thức</string>
 	<string name="message_nfc_required">Cần có NFC</string>
 	<string name="message_nfc_optional">tùy chọn NFC</string>
-	<string name="message_scan_nfc_tag">Quét một thẻ NFC duy nhất hoặc sử dụng bất kỳ thẻ nào để loại bỏ báo thức này khi nó kêu.</string>
+	<string name="message_scan_nfc_tag">Thẻ NFC đã quét sẽ được yêu cầu loại bỏ cảnh báo này khi nó kêu.</string>
+	<string name="message_save_nfc_tag">Bạn có thể sử dụng lại thẻ NFC này mà không cần phải quét lại bằng cách đặt tên cho thẻ.</string>
 	<string name="message_show_nfc_tag_id">NHẬN DẠNG:</string>
 	<string name="message_any_nfc_tag_id">Bất kỳ thẻ NFC nào được chấp nhận</string>
 	<string name="message_no_alarms_scheduled">Không có báo thức nào được lên lịch</string>
@@ -113,6 +118,8 @@
 	<string name="error_message_max_alarms">Số lượng cảnh báo tối đa được tạo</string>
 	<string name="error_message_nfc_mismatch">Thẻ NFC không khớp với thẻ đã lưu.</string>
 	<string name="error_message_nfc_unsupported">Thiết bị của bạn không hỗ trợ NFC</string>
+	<string name="error_message_nfc_name_exists">Tên này đã được sử dụng</string>
+	<string name="error_message_nfc_id_exists">ID NFC này đã được %1$s sử dụng</string>
 	<string name="error_message_unable_to_scan_nfc">Không thể quét thẻ NFC</string>
 	<string name="error_message_restrict_volume_change">Không thể hạn chế âm lượng</string>
 	<string name="error_message_snooze">Không thể tạm dừng báo thức</string>
@@ -135,7 +142,9 @@
 	<!-- Titles -->
 	<string name="title_alarm_activity">Loại bỏ cảnh báo</string>
 	<string name="title_rate_my_app">Đánh giá ứng dụng</string>
-	<string name="title_scan_nfc_tag">Quét thẻ NFC</string>
+	<string name="title_scan_nfc_tag">Quét thẻ NFC...</string>
+	<string name="title_select_nfc_tag">Chọn thẻ NFC...</string>
+	<string name="title_save_nfc_tag">Lưu thẻ NFC...</string>
 	<string name="title_name">Đặt tên báo thức</string>
 	<string name="title_days">Chọn ngày</string>
 	<string name="title_color">Chọn một màu</string>

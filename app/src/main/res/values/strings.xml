@@ -40,11 +40,15 @@
 	<string name="action_clear">Clear</string>
 	<string name="action_clear_reminder">Clear reminder</string>
 	<string name="action_default">Default</string>
+	<string name="action_done">Done</string>
 	<string name="action_rate_now">Rate Now</string>
 	<string name="action_rate_later">Later</string>
 	<string name="action_rate_never">No, Thanks</string>
 	<string name="action_show_nfc_tag_id">Show NFC tag</string>
-	<string name="action_use_any">Use any</string>
+	<string name="action_use_any">Use any NFC tag</string>
+	<string name="action_save">Save</string>
+	<string name="action_select_nfc_tag">Select NFC tag</string>
+	<string name="action_skip">Skip</string>
 	<string name="action_undo">Undo</string>
 	<string name="action_browse">Browse</string>
 	<string name="action_previous_folder">Previous folder</string>
@@ -81,7 +85,8 @@
 	<string name="message_nfc_request">Please enable NFC to dismiss the alarm</string>
 	<string name="message_nfc_required">NFC required</string>
 	<string name="message_nfc_optional">NFC optional</string>
-	<string name="message_scan_nfc_tag">Scan a unique NFC tag, or use any tag to dismiss this alarm when it goes off.</string>
+	<string name="message_scan_nfc_tag">The scanned NFC tag will be required to dismiss this alarm when it goes off.</string>
+	<string name="message_save_nfc_tag">You can reuse this NFC tag, without having to scan it again, by giving it a name.</string>
 	<string name="message_show_nfc_tag_id">ID:</string>
 	<string name="message_any_nfc_tag_id">Any NFC tag accepted</string>
 	<string name="message_no_alarms_scheduled">No alarms scheduled</string>
@@ -113,6 +118,8 @@
 	<string name="error_message_max_alarms">Max number of alarms created</string>
 	<string name="error_message_nfc_mismatch">NFC tag does not match the saved tag.</string>
 	<string name="error_message_nfc_unsupported">Your device does not support NFC</string>
+	<string name="error_message_nfc_name_exists">This name is already being used</string>
+	<string name="error_message_nfc_id_exists">This NFC ID is already being used by %1$s</string>
 	<string name="error_message_unable_to_scan_nfc">Unable to scan NFC tags</string>
 	<string name="error_message_restrict_volume_change">Unable to restrict volume</string>
 	<string name="error_message_snooze">Unable to snooze the alarm</string>
@@ -135,7 +142,9 @@
 	<!-- Titles -->
 	<string name="title_alarm_activity">Dismiss Alarm</string>
 	<string name="title_rate_my_app">Rate the app</string>
-	<string name="title_scan_nfc_tag">Scan an NFC tag</string>
+	<string name="title_scan_nfc_tag">Scan an NFC tag...</string>
+	<string name="title_select_nfc_tag">Select an NFC tag...</string>
+	<string name="title_save_nfc_tag">Save NFC tag...</string>
 	<string name="title_name">Set alarm name</string>
 	<string name="title_days">Select days</string>
 	<string name="title_color">Select a color</string>

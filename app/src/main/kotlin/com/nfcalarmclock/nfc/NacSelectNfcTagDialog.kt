@@ -1,6 +1,7 @@
 package com.nfcalarmclock.nfc
 
 import android.content.DialogInterface
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
 import com.nfcalarmclock.R
 import com.nfcalarmclock.nfc.db.NacNfcTag
@@ -26,18 +28,18 @@ class NacSelectNfcTagDialog
 	interface OnSelectNfcTagListener
 	{
 		fun onCancel()
-		fun onSelected(nfcId: String)
+		fun onSelected(nfcTag: NacNfcTag)
 	}
 
 	/**
 	 * List of NFC tags.
 	 */
-	var nfcTags: List<NacNfcTag> = ArrayList()
+	var allNfcTags: List<NacNfcTag> = ArrayList()
 
 	/**
 	 * Name of the selected NFC tag.
 	 */
-	var selectedNfcTag: String = ""
+	var selectedNfcTag: NacNfcTag? = null
 
 	/**
 	 * Listener for when the name is entered.
@@ -77,20 +79,42 @@ class NacSelectNfcTagDialog
 		super.onViewCreated(view, savedInstanceState)
 
 		// Get the views
+		val inputLayout = view.findViewById(R.id.nfc_tag_input_layout) as TextInputLayout
 		val textView = view.findViewById(R.id.nfc_tag_dropdown_menu) as MaterialAutoCompleteTextView
 		val doneButton = view.findViewById(R.id.select_nfc_tag) as MaterialButton
 		primaryButton = doneButton
 
-		// Get the list of all NFC tag names
-		val nfcTagNames = nfcTags.map { it.name }
+		// Setup the color of the input layout
+		inputLayout.boxBackgroundColor = resources.getColor(R.color.gray)
+		inputLayout.boxStrokeColor = sharedPreferences.themeColor
+		inputLayout.setEndIconTintList(ColorStateList.valueOf(sharedPreferences.themeColor))
 
-		// Setup the text view
+		// Get the list of all NFC tag names
+		val nfcTagNames = allNfcTags.map { it.name }
+		println("All NFC tags : $nfcTagNames")
+
+		// Set the list of items in the textview's dropdown menu
 		textView.setSimpleItems(nfcTagNames.toTypedArray())
-		textView.setSelection(0)
+
+		// Check if the list of NFC tags contains the selected NFC tag
+		if ((selectedNfcTag != null) && allNfcTags.contains(selectedNfcTag))
+		{
+			textView.setText(selectedNfcTag!!.name, false)
+		}
+		// Selected NFC tag is not set or is not in the lsit
+		else
+		{
+			textView.setText(nfcTagNames[0], false)
+		}
+
+		// Setup the textview listener
 		textView.onItemClickListener = AdapterView.OnItemClickListener { _, v, _, _ ->
 
+			// Get the name of the NFC tag
+			val name = (v as MaterialTextView).text.toString()
+
 			// Set the selected NFC tag name
-			selectedNfcTag = (v as MaterialTextView).text.toString()
+			selectedNfcTag = allNfcTags.first { it.name == name }
 
 		}
 
@@ -98,9 +122,10 @@ class NacSelectNfcTagDialog
 		doneButton.setOnClickListener {
 
 			// Call the listener
-			onSelectNfcTagListener?.onSelected(selectedNfcTag)
+			onSelectNfcTagListener?.onSelected(selectedNfcTag!!)
 
 		}
+
 	}
 
 	companion object
