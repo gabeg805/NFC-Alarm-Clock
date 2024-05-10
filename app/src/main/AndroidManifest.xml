@@ -203,6 +203,10 @@
 			<intent-filter>
 				<action android:name="android.intent.action.ACTION_SHUTDOWN" />
 			</intent-filter>
+
+			<intent-filter>
+				<action android:name="android.intent.action.ACTION_REBOOT" />
+			</intent-filter>
 		</receiver>
 
 		<!-- Change alarms when time changes. -->

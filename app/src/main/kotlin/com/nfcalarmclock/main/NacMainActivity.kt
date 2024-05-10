@@ -166,7 +166,7 @@ class NacMainActivity
 	/**
 	 * Last saved/selected NFC tag when enabling NFC on an alarm.
 	 */
-	private var lastNfcTag: NacNfcTag? = null
+	private var lastNfcTag: NacNfcTag = NacNfcTag()
 
 	/**
 	 * Mutable live data for the alarm card that can be modified and sorted, or
@@ -184,7 +184,7 @@ class NacMainActivity
 	/**
 	 * Shutdown broadcast receiver.
 	 */
-	private var shutdownBroadcastReceiver: NacShutdownBroadcastReceiver = NacShutdownBroadcastReceiver()
+	private val shutdownBroadcastReceiver: NacShutdownBroadcastReceiver = NacShutdownBroadcastReceiver()
 
 	/**
 	 * Receiver for the time tick intent. This is called when the time increments
@@ -798,7 +798,11 @@ class NacMainActivity
 		registerReceiver(timeTickReceiver, IntentFilter(Intent.ACTION_TIME_TICK))
 
 		// Register the shutdown receiver
-		registerReceiver(shutdownBroadcastReceiver, IntentFilter(Intent.ACTION_SHUTDOWN))
+		val shutdownIntentFilter = IntentFilter()
+
+		shutdownIntentFilter.addAction(Intent.ACTION_SHUTDOWN)
+		shutdownIntentFilter.addAction(Intent.ACTION_REBOOT)
+		registerReceiver(shutdownBroadcastReceiver, shutdownIntentFilter)
 
 		// Add alarm from SET_ALARM intent (if it is present in intent)
 		addSetAlarmFromIntent()
@@ -1048,7 +1052,7 @@ class NacMainActivity
 	private fun setupForAppFirstRun()
 	{
 		// Set the flags indicating that this is no longer the app's first run
-		// and that statistics does not need to be started, since they have alaready started
+		// and that statistics does not need to be started, since they have already started
 		sharedPreferences.editAppFirstRun(this, false)
 		sharedPreferences.editAppStartStatistics(false)
 
@@ -1118,7 +1122,7 @@ class NacMainActivity
 		// starts and the list is initially empty
 		alarmViewModel.allAlarms.observe(this) { alarms: List<NacAlarm> ->
 
-			// Check if statitistics have not started yet
+			// Check if statistics have not started yet
 			if (!sharedPreferences.appStartStatistics)
 			{
 				// Setup statistics
@@ -1172,7 +1176,6 @@ class NacMainActivity
 
 			// Count the number of NFC tags
 			allNfcTags = it
-			println("Observing stuff : ${it.size} | $it")
 
 		}
 	}
@@ -1518,9 +1521,6 @@ class NacMainActivity
 			 */
 			override fun onScanned(alarm: NacAlarm, tagId: String)
 			{
-				// Save the NFC tag ID that was scanned
-				saveNfcTagId(alarm, tagId)
-
 				// Create the dialog
 				val saveNfcTagDialog = NacSaveNfcTagDialog()
 
@@ -1535,6 +1535,8 @@ class NacMainActivity
 					 */
 					override fun onCancel()
 					{
+						// Save the NFC tag ID that was scanned to the alarm
+						saveNfcTagId(alarm, tagId)
 					}
 
 					/**
@@ -1542,7 +1544,10 @@ class NacMainActivity
 					 */
 					override fun onSave(nfcTag: NacNfcTag)
 					{
-						// Save the NFC tag
+						// Save the NFC tag ID that was scanned to the alarm
+						saveNfcTagId(alarm, tagId)
+
+						// Save the NFC tag to the database
 						nfcTagViewModel.insert(nfcTag)
 
 						// Set the last saved/used NFC tag
@@ -1560,7 +1565,7 @@ class NacMainActivity
 			 */
 			override fun onSelected(alarm: NacAlarm, nfcTag: NacNfcTag)
 			{
-				// Save the NFC tag ID that was scanned
+				// Save the NFC tag ID that was scanned to the alarm
 				saveNfcTagId(alarm, nfcTag.nfcId)
 
 				// Set the last saved/used NFC tag
@@ -1568,7 +1573,7 @@ class NacMainActivity
 			}
 
 			/**
-			 * Called when theh user wants to use any NFC tag.
+			 * Called when the user wants to use any NFC tag.
 			 */
 			override fun onUseAny(alarm: NacAlarm)
 			{
@@ -1672,7 +1677,7 @@ class NacMainActivity
 	}
 
 	/**
-	 * Show a nackbar for the updated alarm.
+	 * Show a snackbar for the updated alarm.
 	 *
 	 *
 	 * If this alarm is disabled, a snackbar for the next alarm will be shown.

@@ -57,7 +57,7 @@ class NacScanNfcTagDialog
 	/**
 	 * Last saved/selected NFC tag.
 	 */
-	var lastNfcTag: NacNfcTag? = null
+	var lastNfcTag: NacNfcTag = NacNfcTag()
 
 	/**
 	 * Listener for when the NFC tag is scanned.
@@ -83,7 +83,6 @@ class NacScanNfcTagDialog
 	{
 		// Super
 		super.onCancel(dialog)
-		println("onCancel()")
 
 		// Call the listener
 		onScanNfcTagListener?.onCancel(alarm!!)
@@ -96,7 +95,6 @@ class NacScanNfcTagDialog
 	{
 		// Super
 		super.onViewCreated(view, savedInstanceState)
-		println("onViewCreated()")
 
 		// Get the views
 		val useAnyNfcButton = view.findViewById(R.id.use_any_nfc_tag) as MaterialButton
@@ -143,7 +141,6 @@ class NacScanNfcTagDialog
 				 */
 				override fun onSelected(nfcTag: NacNfcTag)
 				{
-					println("ON SELECT NFC TAG : ${nfcTag.nfcId}")
 					// Call the listener
 					onScanNfcTagListener?.onSelected(alarm!!, nfcTag)
 

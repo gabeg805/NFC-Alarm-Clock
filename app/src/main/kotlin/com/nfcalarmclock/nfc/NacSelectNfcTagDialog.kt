@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
@@ -39,12 +40,20 @@ class NacSelectNfcTagDialog
 	/**
 	 * Name of the selected NFC tag.
 	 */
-	var selectedNfcTag: NacNfcTag? = null
+	var selectedNfcTag: NacNfcTag = NacNfcTag()
 
 	/**
 	 * Listener for when the name is entered.
 	 */
 	var onSelectNfcTagListener: OnSelectNfcTagListener? = null
+
+	/**
+	 * Check if the selected NFC tag matches an NFC tag in the list.
+	 */
+	private fun doesSelectedNfcTagMatchAny(): Boolean
+	{
+		return allNfcTags.any { it.nfcId == selectedNfcTag.nfcId }
+	}
 
 	/**
 	 * Called when the dialog view is created.
@@ -85,25 +94,26 @@ class NacSelectNfcTagDialog
 		primaryButton = doneButton
 
 		// Setup the color of the input layout
-		inputLayout.boxBackgroundColor = resources.getColor(R.color.gray)
+
+		inputLayout.boxBackgroundColor = ContextCompat.getColor(requireContext(), R.color.gray)
 		inputLayout.boxStrokeColor = sharedPreferences.themeColor
 		inputLayout.setEndIconTintList(ColorStateList.valueOf(sharedPreferences.themeColor))
 
 		// Get the list of all NFC tag names
 		val nfcTagNames = allNfcTags.map { it.name }
-		println("All NFC tags : $nfcTagNames")
 
-		// Set the list of items in the textview's dropdown menu
+		// Set the list of items in the textview dropdown menu
 		textView.setSimpleItems(nfcTagNames.toTypedArray())
 
 		// Check if the list of NFC tags contains the selected NFC tag
-		if ((selectedNfcTag != null) && allNfcTags.contains(selectedNfcTag))
+		if (doesSelectedNfcTagMatchAny())
 		{
-			textView.setText(selectedNfcTag!!.name, false)
+			textView.setText(selectedNfcTag.name, false)
 		}
-		// Selected NFC tag is not set or is not in the lsit
+		// Selected NFC tag is not set or is not in the list
 		else
 		{
+			selectedNfcTag = allNfcTags[0]
 			textView.setText(nfcTagNames[0], false)
 		}
 
@@ -122,7 +132,7 @@ class NacSelectNfcTagDialog
 		doneButton.setOnClickListener {
 
 			// Call the listener
-			onSelectNfcTagListener?.onSelected(selectedNfcTag!!)
+			onSelectNfcTagListener?.onSelected(selectedNfcTag)
 
 		}
 

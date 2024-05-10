@@ -10,7 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
- * Remove any active alarms on shutdown.
+ * Remove any active alarms on shutdown or reboot.
  *
  * Note: This needs to be registered in NacMainActivity because:
  *
@@ -37,7 +37,8 @@ class NacShutdownBroadcastReceiver
 	override fun onReceive(context: Context, intent: Intent) = goAsync {
 
 		// Check that the intent action is correct
-		if (intent.action == Intent.ACTION_SHUTDOWN)
+		if ((intent.action == Intent.ACTION_SHUTDOWN)
+			|| (intent.action == Intent.ACTION_REBOOT))
 		{
 			// Get the active alarms from the repository
 			val alarms = alarmRepository.getActiveAlarms()

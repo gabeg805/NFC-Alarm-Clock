@@ -2,6 +2,7 @@ package com.nfcalarmclock.activealarm
 
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.view.Window
@@ -12,10 +13,12 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.shared.NacSharedPreferences
+import com.nfcalarmclock.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.util.NacBundle
 import com.nfcalarmclock.util.NacIntent
 import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.util.enableActivityAlias
+import com.nfcalarmclock.util.unregisterMyReceiver
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -36,6 +39,11 @@ class NacActiveAlarmActivity
 	 * The layout handler to use (either original or swipe).
 	 */
 	private lateinit var layoutHandler: NacActiveAlarmLayoutHandler
+
+	/**
+	 * Shutdown broadcast receiver.
+	 */
+	private val shutdownBroadcastReceiver: NacShutdownBroadcastReceiver = NacShutdownBroadcastReceiver()
 
 	/**
 	 * Listener for an alarm action, such as snooze or dismiss.
@@ -182,8 +190,11 @@ class NacActiveAlarmActivity
 		// Stop scanning for NFC
 		NacNfc.stop(this)
 
-		// Reenable the activity alias
+		// Re-enable the activity alias
 		enableActivityAlias(this)
+
+		// Unregister the shutdown receiver
+		unregisterMyReceiver(this, shutdownBroadcastReceiver)
 	}
 
 	/**
@@ -200,6 +211,13 @@ class NacActiveAlarmActivity
 			// Dismiss the alarm service with NFC
 			NacActiveAlarmService.dismissAlarmServiceWithNfc(this, alarm!!)
 		}
+
+		// Register the shutdown receiver
+		val shutdownIntentFilter = IntentFilter()
+
+		shutdownIntentFilter.addAction(Intent.ACTION_SHUTDOWN)
+		shutdownIntentFilter.addAction(Intent.ACTION_REBOOT)
+		registerReceiver(shutdownBroadcastReceiver, shutdownIntentFilter)
 
 		// Setup
 		setupNfc()

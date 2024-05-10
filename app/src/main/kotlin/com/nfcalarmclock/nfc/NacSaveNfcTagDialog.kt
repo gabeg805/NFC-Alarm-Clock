@@ -107,11 +107,10 @@ class NacSaveNfcTagDialog
 		}
 
 		// Setup the save button
-		// TODO: Make this unusable if no words are entered
 		saveButton.setOnClickListener {
 
 			// Get the name
-			val nfcName = editText.text.toString().filterNot { it.isWhitespace() }
+			val nfcName = editText.text.toString().trim()
 
 			// Iterate over each NFC tag
 			allNfcTags.forEach {
@@ -138,7 +137,6 @@ class NacSaveNfcTagDialog
 
 			// Create an NFC tag
 			val nfcTag = NacNfcTag(nfcName, nfcId)
-			println("SAVE : $nfcName | $nfcId")
 
 			// Call the listener
 			onSaveNfcTagListener?.onSave(nfcTag)
