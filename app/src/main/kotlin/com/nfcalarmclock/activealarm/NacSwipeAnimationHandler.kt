@@ -2,7 +2,6 @@ package com.nfcalarmclock.activealarm
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.content.Context
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.animation.Animation
@@ -10,7 +9,6 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.addListener
 import com.nfcalarmclock.R
-import java.lang.IllegalStateException
 import kotlin.math.hypot
 
 /**
@@ -49,7 +47,10 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 	 */
 	private val sliderInstructionsFadeOutAnimation = AnimationUtils.loadAnimation(activity, R.anim.fade_out)
 
-	//private val helloBroth: NacCustomArcView = activity.findViewById(R.id.hellobroth)
+	/**
+	 * Latest animator for the inactive view.
+	 */
+	private var latestInactiveViewAnimator: Animator? = null
 
 	/**
 	 * Create an animation listener to hide a view.
@@ -169,16 +170,15 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 	 */
 	fun hideInactiveView(inactiveView: View)
 	{
-		//// Start the animation to hide the inactive view
-		//inactiveButtonScaleDown.setAnimationListener(createHideAnimationListener(inactiveView))
-		//inactiveView.startAnimation(inactiveButtonScaleDown)
-
 		// Check if the view visibility is gone
 		if (inactiveView.visibility == View.GONE)
 		{
 			// Do nothing
 			return
 		}
+
+		// Clear the latest animator if it is set
+		latestInactiveViewAnimator?.cancel()
 
 		// Get the center for the clipping circle.
 		val cx = inactiveView.width / 2
@@ -193,10 +193,29 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 		// Make the view invisible when the animation is done.
 		anim.addListener(object : AnimatorListenerAdapter() {
 
+			// Check if the animator was canceled
+			var wasCanceled = false
+
+			/**
+			 * Called when the animation is canceled.
+			 */
+			override fun onAnimationCancel(animation: Animator)
+			{
+				wasCanceled = true
+			}
+
 			/**
 			 * Called when the animation is ended.
 			 */
-			override fun onAnimationEnd(animation: Animator) {
+			override fun onAnimationEnd(animation: Animator)
+			{
+				// Check if the animator was canceled
+				if (wasCanceled)
+				{
+					return
+				}
+
+				// Hide the inactive view
 				inactiveView.visibility = View.INVISIBLE
 			}
 
@@ -205,6 +224,9 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 		// Start the animation.
 		anim.duration = 150
 		anim.start()
+
+		// Set the latest animator for the inactive view
+		latestInactiveViewAnimator = anim
 	}
 
 	/**
@@ -223,55 +245,6 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 		// Start the animation
 		sliderPath.startAnimation(sliderPathFadeOutAnimation)
 		sliderInstructions.startAnimation(sliderInstructionsFadeOutAnimation)
-	}
-
-	fun scanNfc(context: Context, scanNfcView1: View, scanNfcView2: View, scanNfcView3: View)
-	{
-		//val handler = Handler(Looper.getMainLooper())
-		//var index = 0
-
-		//handler.post(object: Runnable {
-
-		//	override fun run()
-		//	{
-
-		//		val highlight = context.resources.getColor(R.color.white)
-		//		val gray = context.resources.getColor(R.color.gray)
-
-		//		if (index == 0)
-		//		{
-		//			scanNfcView1.backgroundTintList = ColorStateList.valueOf(highlight)
-		//		}
-		//		else
-		//		{
-		//			scanNfcView1.backgroundTintList = ColorStateList.valueOf(gray)
-		//		}
-
-		//		if (index == 1)
-		//		{
-		//			scanNfcView2.backgroundTintList = ColorStateList.valueOf(highlight)
-		//		}
-		//		else
-		//		{
-		//			scanNfcView2.backgroundTintList = ColorStateList.valueOf(gray)
-		//		}
-
-		//		if (index == 2)
-		//		{
-		//			scanNfcView3.backgroundTintList = ColorStateList.valueOf(highlight)
-		//		}
-		//		else
-		//		{
-		//			scanNfcView3.backgroundTintList = ColorStateList.valueOf(gray)
-		//		}
-
-		//		index = (index+1) % 3
-
-
-		//		println("Changing color")
-		//		handler.postDelayed(this, 400)
-		//	}
-		//})
 	}
 
 	/**
@@ -297,23 +270,11 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 	}
 
 	/**
-	 * Show bros animation.
-	 */
-	fun showBroth()
-	{
-		//helloBroth.startAnimation()
-	}
-
-	/**
 	 * Start the animation to show the inactive view, which can be the snooze
 	 * or dismiss button.
 	 */
 	fun showInactiveView(inactiveView: View, onEnd: () -> Unit = {})
 	{
-		//// Start the animation to show the inactive view
-		//inactiveButtonScaleUp.setAnimationListener(createShowAnimationListener(inactiveView, onEnd = onEnd))
-		//inactiveView.startAnimation(inactiveButtonScaleUp)
-
 		// Check if the view visibility is gone
 		if (inactiveView.visibility == View.GONE)
 		{
@@ -321,6 +282,9 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 			onEnd()
 			return
 		}
+
+		// Clear the latest animator if it is set
+		latestInactiveViewAnimator?.cancel()
 
 		// Get the center for the clipping circle.
 		val cx = inactiveView.width / 2
@@ -351,6 +315,9 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 			}
 		)
 		anim.start()
+
+		// Set the latest animator for the inactive view
+		latestInactiveViewAnimator = anim
 	}
 
 	/**

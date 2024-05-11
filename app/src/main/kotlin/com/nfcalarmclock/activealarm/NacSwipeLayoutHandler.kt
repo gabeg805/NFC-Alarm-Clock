@@ -193,10 +193,10 @@ class NacSwipeLayoutHandler(
 	/**
 	 * Aniamte the button back to its original X position
 	 */
-	private fun animateButtonBackToOriginalXposition(view: View)
+	private fun animateButtonBackToOriginalXposition(view: View, x: Float = -1f)
 	{
 		// Get the original X position of the view
-		val origX = getOriginalXposition(view)
+		val origX = if (x >= 0) x else getOriginalXposition(view)
 
 		// Calculate the duration for the animation below
 		var duration = if (view.x == origX) 0L else 300L
@@ -246,6 +246,7 @@ class NacSwipeLayoutHandler(
 					})
 
 				// Hide the slider path
+				// TODO: Add NFC tag name to instructions
 				swipeAnimation.hideSliderPath(sliderPath, sliderInstructions)
 
 			}
@@ -254,20 +255,6 @@ class NacSwipeLayoutHandler(
 		viewPropertyAnimator?.start()
 
 		return
-	}
-
-	/**
-	 * Calculate the current velocity.
-	 */
-	private fun calculateCurrentVelocity(motionEvent: MotionEvent)
-	{
-		velocityTracker?.apply {
-
-			// TODO: Change units of 1000?
-			addMovement(motionEvent)
-			computeCurrentVelocity(1000)
-
-		}
 	}
 
 	/**
@@ -287,22 +274,20 @@ class NacSwipeLayoutHandler(
 
 		// Get velocity
 		val pointerId: Int = motionEvent.getPointerId(motionEvent.actionIndex)
-		var finalVelocity: Float = velocityTracker?.getXVelocity(pointerId)?.times(9) ?: return 0f
+		var finalVelocity: Float = velocityTracker?.getXVelocity(pointerId)?.times(8)
+			?: return 0f
 
 		// Check if final velocity was not able to be computed
 		if ((minValue == 0f) && (finalVelocity < 0))
 		{
-			println("Change min sign of final velocity : $finalVelocity")
 			finalVelocity *= -1f
 		}
 		else if ((maxValue == 0f) && (finalVelocity > 0))
 		{
-			println("Change max sign of final velocity : $finalVelocity")
 			finalVelocity *= -1f
 		}
 
 		// Make sure the final velocity is within the min and max values
-		println("Min value : $minValue | Max value : $maxValue | Vel : $finalVelocity")
 		return max(minValue, min(maxValue, finalVelocity))
 	}
 
@@ -372,7 +357,8 @@ class NacSwipeLayoutHandler(
 		view: View,
 		velocity: Float,
 		minValue: Float,
-		maxValue: Float)
+		maxValue: Float,
+		onEnd: () -> Unit = {})
 	{
 		FlingAnimation(view, DynamicAnimation.TRANSLATION_X).apply {
 
@@ -402,11 +388,7 @@ class NacSwipeLayoutHandler(
 			}
 
 			// Listener for when the animation ends
-			addEndListener { _, _, _, _ ->
-
-				animateButtonBackToOriginalXposition(view)
-
-			}
+			addEndListener { _, _, _, _ -> onEnd() }
 
 			// Setup
 			setStartVelocity(velocity)
@@ -421,7 +403,15 @@ class NacSwipeLayoutHandler(
 			}
 			catch (e: IllegalArgumentException)
 			{
-				println("NOT SURE WHAT HAPPENED WHEN TRYING TO FLING. START VALUE OUTSIDE MIN AND MAX VALUE")
+				// Starting value need to be in between min value and max value
+				//
+				// I think this happens when swiping the view outside of its
+				// desired range. For instance, if the view starts in the
+				// center, its desired range is from the center to the right.
+				// However, if a user tries to swipe it to the left, this is
+				// outside of its desired range and thus the exception will
+				// occur
+				onEnd()
 			}
 		}
 	}
@@ -502,6 +492,7 @@ class NacSwipeLayoutHandler(
 	override fun setup(context: Context)
 	{
 		// Setup the views based on user preference
+		// TODO: Add NFC tag name to instructions
 		setupAlarmName()
 		setupCurrentDateAndTime(context)
 		setupMusicInformation(context)
@@ -582,19 +573,21 @@ class NacSwipeLayoutHandler(
 					// Cleanup the velocity tracker
 					cleanupVelocityTracker()
 
-					// Check if the view should be flinged with the additional
-					// velocty the user imparted on the view
+					// Check if the view should be flung with the additional
+					// velocity the user imparted on the view
 					if (shouldFlingView(view, finalVelocity))
 					{
 						// Fling the view
-						println("FLING VIEW")
-						flingView(view, finalVelocity, minValue, maxValue)
+						flingView(view, finalVelocity, minValue, maxValue,
+							onEnd = {
+								// Animate the view back when fling ends
+								animateButtonBackToOriginalXposition(view, x=x)
+							})
 					}
 					else
 					{
-						println("Animate back to orig pos")
 						// Animate the view back to its original X position
-						animateButtonBackToOriginalXposition(view)
+						animateButtonBackToOriginalXposition(view, x=x)
 					}
 				}
 
@@ -815,6 +808,7 @@ class NacSwipeLayoutHandler(
 	/**
 	 * Setup the velocity tracker.
 	 */
+	@SuppressLint("Recycle")
 	private fun setupVelocityTracker(motionEvent: MotionEvent)
 	{
 		// Reset the velocity tracker
@@ -855,17 +849,16 @@ class NacSwipeLayoutHandler(
 	 */
 	private fun shouldFlingView(view: View, velocity: Float): Boolean
 	{
-		// Calculate the total distance the a view can travel
+		// Calculate the total distance that a view can travel
 		val totalDistance = endAlarmActionX - startAlarmActionX
 
-		// Initial calculation of the fraactional distance that the view has traveled
+		// Initial calculation of the fractional distance that the view has traveled
 		val initDistance = (view.x - startAlarmActionX) / totalDistance
 
 		// Final calculation of the fractional distance the view
 		val percentDistance = if (view.id == snoozeButton.id) initDistance else 1f - initDistance
 
 		// Determine if the view should be flinged
-		println("Velocity : $velocity | Distance : $percentDistance")
 		return (velocity != 0f) && (percentDistance >= 0.01f)
 	}
 
@@ -967,4 +960,5 @@ class NacSwipeLayoutHandler(
 		const val FLING_MAX_VALUE = 10000f
 
 	}
+
 }
