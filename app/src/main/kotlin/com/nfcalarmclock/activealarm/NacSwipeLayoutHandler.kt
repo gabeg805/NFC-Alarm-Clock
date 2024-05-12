@@ -23,6 +23,7 @@ import androidx.dynamicanimation.animation.FlingAnimation
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.media.NacMedia
+import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.createTimeTickReceiver
 import com.nfcalarmclock.util.registerMyReceiver
@@ -33,7 +34,6 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
-import kotlin.math.absoluteValue
 
 /**
  * Handler for the swipe layout.
@@ -94,6 +94,11 @@ class NacSwipeLayoutHandler(
 	 * Scan NFC container.
 	 */
 	private val scanNfcView: LinearLayout = activity.findViewById(R.id.scan_nfc_view)
+
+	/**
+	 * TextView for the name of the NFC tag.
+	 */
+	private val nfcNameTextView: TextView = activity.findViewById(R.id.ismiss_text3)
 
 	/**
 	 * Snooze button.
@@ -191,15 +196,15 @@ class NacSwipeLayoutHandler(
 	private var wasStopped: Boolean = false
 
 	/**
-	 * Aniamte the button back to its original X position
+	 * Animate the button back to its original X position
 	 */
-	private fun animateButtonBackToOriginalXposition(view: View, x: Float = -1f)
+	private fun animateButtonBackToOriginalXposition(view: View, origX: Float = -1f)
 	{
 		// Get the original X position of the view
-		val origX = if (x >= 0) x else getOriginalXposition(view)
+		val newOrigX = if (origX >= 0) origX else getOriginalXposition(view)
 
 		// Calculate the duration for the animation below
-		var duration = if (view.x == origX) 0L else 300L
+		var duration = if (view.x == newOrigX) 0L else 300L
 
 		// Check if the alarm should be snoozed
 		if (shouldSnooze(view))
@@ -222,7 +227,7 @@ class NacSwipeLayoutHandler(
 
 		// Set the animator to animate view the back to its original X position
 		viewPropertyAnimator = view.animate()
-			.x(origX)
+			.x(newOrigX)
 			.setDuration(duration)
 			.withEndAction {
 
@@ -246,7 +251,6 @@ class NacSwipeLayoutHandler(
 					})
 
 				// Hide the slider path
-				// TODO: Add NFC tag name to instructions
 				swipeAnimation.hideSliderPath(sliderPath, sliderInstructions)
 
 			}
@@ -492,7 +496,6 @@ class NacSwipeLayoutHandler(
 	override fun setup(context: Context)
 	{
 		// Setup the views based on user preference
-		// TODO: Add NFC tag name to instructions
 		setupAlarmName()
 		setupCurrentDateAndTime(context)
 		setupMusicInformation(context)
@@ -503,6 +506,9 @@ class NacSwipeLayoutHandler(
 		{
 			// Show the scan NFC view
 			scanNfcView.visibility = View.VISIBLE
+
+			// Setup the color of the name of the NFC tag
+			nfcNameTextView.setTextColor(sharedPreferences.themeColor)
 
 			// Set to INVISIBLE so that the end X position can still be
 			// determined, and then it will be set to GONE later
@@ -515,10 +521,9 @@ class NacSwipeLayoutHandler(
 	 * Setup an alarm action button.
 	 */
 	@SuppressLint("ClickableViewAccessibility")
-	private fun setupAlarmActionButton(button: View, x: Float = -1f)
+	private fun setupAlarmActionButton(button: View, origX: Float = -1f)
 	{
-		// X position information
-		val origX = if (x >= 0) x else button.x
+		// Change in X position
 		var dx = 0f
 
 		// Set the listener
@@ -581,13 +586,13 @@ class NacSwipeLayoutHandler(
 						flingView(view, finalVelocity, minValue, maxValue,
 							onEnd = {
 								// Animate the view back when fling ends
-								animateButtonBackToOriginalXposition(view, x=x)
+								animateButtonBackToOriginalXposition(view, origX=origX)
 							})
 					}
 					else
 					{
 						// Animate the view back to its original X position
-						animateButtonBackToOriginalXposition(view, x=x)
+						animateButtonBackToOriginalXposition(view, origX=origX)
 					}
 				}
 
@@ -733,6 +738,15 @@ class NacSwipeLayoutHandler(
 	}
 
 	/**
+	 * Setup an NFC tag, if necessary.
+	 */
+	override fun setupNfcTag(nfcTag: NacNfcTag?)
+	{
+		// Set the name of the NFC tag
+		nfcNameTextView.text = nfcTag?.name
+	}
+
+	/**
 	 * Setup the slider arrows.
 	 */
 	private fun setupSliderArrows(viewId: Int)
@@ -802,7 +816,7 @@ class NacSwipeLayoutHandler(
 		}
 
 		// Setup the snooze button
-		setupAlarmActionButton(snoozeButton, x=centerAlarmActionX)
+		setupAlarmActionButton(snoozeButton, origX=centerAlarmActionX)
 	}
 
 	/**
@@ -858,7 +872,7 @@ class NacSwipeLayoutHandler(
 		// Final calculation of the fractional distance the view
 		val percentDistance = if (view.id == snoozeButton.id) initDistance else 1f - initDistance
 
-		// Determine if the view should be flinged
+		// Determine if the view should be flung
 		return (velocity != 0f) && (percentDistance >= 0.01f)
 	}
 

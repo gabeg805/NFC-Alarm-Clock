@@ -8,10 +8,13 @@ import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.nfc.NacNfc
+import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.util.NacBundle
@@ -20,6 +23,7 @@ import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.util.enableActivityAlias
 import com.nfcalarmclock.util.unregisterMyReceiver
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 
 /**
@@ -39,6 +43,11 @@ class NacActiveAlarmActivity
 	 * The layout handler to use (either original or swipe).
 	 */
 	private lateinit var layoutHandler: NacActiveAlarmLayoutHandler
+
+	/**
+	 * NFC tag view model.
+	 */
+	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
 
 	/**
 	 * Shutdown broadcast receiver.
@@ -222,6 +231,17 @@ class NacActiveAlarmActivity
 		// Setup
 		setupNfc()
 		layoutHandler.setup(this)
+
+		// Setup NFC tag
+		lifecycleScope.launch {
+
+			// Get the NFC tag that corresponds to this ID from the table
+			val nfcTag = nfcTagViewModel.findNfcTag(alarm!!.nfcTagId)
+
+			// Setup the NFC tag
+			layoutHandler.setupNfcTag(nfcTag)
+
+		}
 	}
 
 	/**
