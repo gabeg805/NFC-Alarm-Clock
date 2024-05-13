@@ -28,7 +28,7 @@ class NacNfcTagViewHolder(
 	/**
 	 * NFC ID.
 	 */
-	val nfcIdTextView = root.findViewById(R.id.nfc_tag_id) as TextView
+	val nfcIdTextView = root.findViewById(R.id.nfc_tag_id_value) as TextView
 
 	/**
 	 * Delete button.

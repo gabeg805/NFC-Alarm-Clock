@@ -25,11 +25,6 @@ class NacMainSettingFragment
 {
 
 	/**
-	 * NFC tag view model.
-	 */
-	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
-
-	/**
 	 * Setup the Support preference icon.
 	 */
 	@Suppress("deprecation")

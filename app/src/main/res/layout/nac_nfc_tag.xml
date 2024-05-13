@@ -17,19 +17,36 @@
 		android:textColor="@color/white"
 		android:textSize="@dimen/tsz_medium"
 		android:textStyle="bold"
-		android:text="Bathroom"
+		android:text=""
+		/>
+
+	<!-- ID label -->
+	<TextView
+		android:id="@+id/nfc_tag_id_label"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/nfc_tag_name"
+		android:layout_alignParentStart="true"
+		android:layout_alignBaseline="@id/nfc_tag_id_value"
+		android:layout_marginEnd="@dimen/nudge"
+		android:alpha="0.4"
+		android:textColor="@color/white"
+		android:textSize="@dimen/tsz_tiny"
+		android:textStyle="bold"
+		android:text="@string/message_show_nfc_tag_id"
 		/>
 
 	<!-- NFC ID -->
 	<TextView
-		android:id="@+id/nfc_tag_id"
+		android:id="@+id/nfc_tag_id_value"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_below="@id/nfc_tag_name"
+		android:layout_toEndOf="@id/nfc_tag_id_label"
 		android:alpha="0.4"
 		android:textColor="@color/white"
 		android:textSize="@dimen/tsz_caption"
-		android:text="1342lkj3h;lkj123123"
+		android:text=""
 		/>
 
 	<!-- Rename button -->
@@ -40,7 +57,7 @@
 		android:layout_alignParentEnd="true"
 		android:layout_centerInParent="true"
 		app:backgroundTint="@color/white"
-		android:background="@drawable/copy"
+		android:background="@drawable/edit"
 		/>
 
 	<!-- Delete button -->
@@ -48,8 +65,8 @@
 		android:id="@+id/delete_button"
 		android:layout_width="@dimen/isz_normal"
 		android:layout_height="@dimen/isz_normal"
-		android:layout_marginStart="@dimen/normal"
-		android:layout_marginEnd="@dimen/normal"
+		android:layout_marginStart="@dimen/medium"
+		android:layout_marginEnd="@dimen/medium"
 		android:layout_toStartOf="@id/rename_button"
 		android:layout_centerInParent="true"
 		app:backgroundTint="@color/white"

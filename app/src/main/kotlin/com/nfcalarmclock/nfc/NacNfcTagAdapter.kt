@@ -6,12 +6,20 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.nfcalarmclock.R
 import com.nfcalarmclock.nfc.db.NacNfcTag
+import com.nfcalarmclock.shared.NacSharedPreferences
 
 /**
  * Adapter for a ListView to show NFC tag information.
  */
-class NacNfcTagAdapter
-	: ListAdapter<NacNfcTag, NacNfcTagViewHolder>(DIFF_CALLBACK)
+class NacNfcTagAdapter(
+
+	/**
+	 * Shared preferences.
+	 */
+	val sharedPreferences: NacSharedPreferences
+
+	// Constructor
+) : ListAdapter<NacNfcTag, NacNfcTagViewHolder>(DIFF_CALLBACK)
 {
 
 	/**
@@ -39,6 +47,9 @@ class NacNfcTagAdapter
 		// Populate the view with the NFC tag information
 		holder.nameTextView.text = nfcTag?.name
 		holder.nfcIdTextView.text = nfcTag?.nfcId
+
+		// Set the color of the name
+		holder.nameTextView.setTextColor(sharedPreferences.themeColor)
 
 		// Set click listeners on the buttons
 		holder.deleteButton.setOnClickListener {

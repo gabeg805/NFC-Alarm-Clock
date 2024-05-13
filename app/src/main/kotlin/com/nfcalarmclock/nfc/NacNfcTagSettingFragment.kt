@@ -4,12 +4,17 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nfcalarmclock.R
+import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.nfc.db.NacNfcTag
+import com.nfcalarmclock.scheduler.NacScheduler
+import com.nfcalarmclock.shared.NacSharedPreferences
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 /**
  * Manage NFC tag fragment.
@@ -30,6 +35,11 @@ class NacNfcTagSettingFragment
 	private lateinit var nfcTagAdapter: NacNfcTagAdapter
 
 	/**
+	 * Alarm view model.
+	 */
+	private val alarmViewModel: NacAlarmViewModel by viewModels()
+
+	/**
 	 * NFC tag view model.
 	 */
 	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
@@ -44,10 +54,11 @@ class NacNfcTagSettingFragment
 
 		// Context
 		val context = requireContext()
+		val sharedPreferences = NacSharedPreferences(context)
 
 		// Set views
 		recyclerView = root.findViewById(R.id.nfc_tag_list_view)
-		nfcTagAdapter = NacNfcTagAdapter()
+		nfcTagAdapter = NacNfcTagAdapter(sharedPreferences)
 		val dividerItemDecoration = DividerItemDecoration(context,
 			LinearLayoutManager.VERTICAL)
 
@@ -75,6 +86,30 @@ class NacNfcTagSettingFragment
 					// Delete the NFC tag from the database. The observe() on the
 					// LiveData will take care of updating the adapter
 					nfcTagViewModel.delete(nfcTag)
+
+					// Prepare to update any alarms that were using this NFC tag
+					lifecycleScope.launch {
+
+						// Get all alarms
+						val allAlarms = alarmViewModel.getAllAlarms()
+
+						// Iterate over each alarm
+						allAlarms.forEach { a ->
+
+							// Check if the NFC ID matches the alarm
+							if (a.nfcTagId == nfcTag.nfcId)
+							{
+								// Clear the NFC tag ID for the alarm
+								a.nfcTagId = ""
+
+								// Update the alarm in the view model and scheduler
+								alarmViewModel.update(a)
+								NacScheduler.update(context, a)
+							}
+
+						}
+
+					}
 
 				}
 
