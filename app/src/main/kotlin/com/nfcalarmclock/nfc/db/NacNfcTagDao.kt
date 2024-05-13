@@ -19,8 +19,16 @@ interface NacNfcTagDao
 	 *
 	 * @return All NFC tags.
 	 */
-	@get:Query("SELECT * FROM nfc_tag")
+	@get:Query("SELECT * FROM nfc_tag ORDER BY name")
 	val allNfcTags: LiveData<List<NacNfcTag>>
+
+	/**
+	 * Count the number of NFC tags.
+	 *
+	 * @return The number of NFC tags.
+	 */
+	@Query("SELECT COUNT(id) FROM nfc_tag")
+	suspend fun count(): Long
 
 	/**
 	 * Delete an NFC tag.
@@ -57,7 +65,7 @@ interface NacNfcTagDao
 	 *
 	 * @return All NFC tags.
 	 */
-	@Query("SELECT * FROM nfc_tag")
+	@Query("SELECT * FROM nfc_tag ORDER BY name")
 	suspend fun getAllNfcTags(): List<NacNfcTag>
 
 	/**

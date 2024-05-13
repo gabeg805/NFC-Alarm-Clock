@@ -145,6 +145,8 @@
 	<string name="title_scan_nfc_tag">Quét thẻ NFC...</string>
 	<string name="title_select_nfc_tag">Chọn thẻ NFC...</string>
 	<string name="title_save_nfc_tag">Lưu thẻ NFC...</string>
+	<string name="title_delete_nfc_tag">Xóa thẻ NFC...</string>
+	<string name="title_rename_nfc_tag">Đổi tên thẻ NFC...</string>
 	<string name="title_name">Đặt tên báo thức</string>
 	<string name="title_days">Chọn ngày</string>
 	<string name="title_color">Chọn một màu</string>
@@ -222,6 +224,7 @@
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">Danh sách các cảnh báo sẽ được hiển thị ở đây.</string>
+	<string name="cd_nfc_tag_list">Danh sách các thẻ NFC sẽ được hiển thị ở đây.</string>
 	<string name="cd_floating_action_button">Thêm một báo động mới.</string>
 	<string name="cd_collapse_alarm">Thu gọn một báo động.</string>
 	<string name="cd_expand_alarm">Mở rộng cảnh báo.</string>
@@ -256,6 +259,9 @@
 
 	<string name="stats_setting">Số liệu thống kê</string>
 	<string name="stats_setting_summary">Xem bạn đã tạm ẩn trong bao lâu và hơn thế nữa</string>
+
+	<string name="manage_nfc_tags_setting">Quản lý thẻ NFC</string>
+	<string name="manage_nfc_tags_setting_summary">Xóa hoặc đổi tên các thẻ NFC đã lưu</string>
 
 	<string name="support_setting">Hỗ trợ phát triển</string>
 	<string name="support_setting_summary">Hỗ trợ sẽ được đánh giá rất cao, nhưng không có áp lực! Ứng dụng này sẽ luôn miễn phí</string>

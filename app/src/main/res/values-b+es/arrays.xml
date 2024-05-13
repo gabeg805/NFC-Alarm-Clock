@@ -266,7 +266,9 @@
 	</string-array>
 
 	<string-array name="whats_new_items">
-		<item>Se agregó una &lt;b>nueva pantalla de alarma&lt;/b> que se puede habilitar en &lt;i>Configuración > Apariencia&lt;/i>.</item>
+		<item>Se agregó una función para &lt;b>guardar&lt;/b> y &lt;b>seleccionar etiquetas NFC&lt;/b>. De esta manera, si hay otra alarma para la que desea habilitar la misma etiqueta NFC, podrá seleccionarla fácilmente.</item>
+		<item>Se agregó &lt;b>Configuración > Administrar etiquetas NFC&lt;/b> para que pueda cambiar el nombre o eliminar etiquetas NFC guardadas. Esto sólo es visible si ha guardado etiquetas NFC.</item>
+		<item>Se actualizó la &lt;b>nueva pantalla de alarma&lt;/b> para que &lt;b>deslizar&lt;/b> para posponer o descartar sea mucho más fácil.</item>
 		<item>Se corrigió un bloqueo al detener una alarma.</item>
 	</string-array>
 

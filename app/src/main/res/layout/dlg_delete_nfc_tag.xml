@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	android:paddingTop="@dimen/normal"
+	android:paddingBottom="@dimen/normal"
+	android:paddingStart="?dialogPreferredPadding"
+	android:paddingEnd="?dialogPreferredPadding">
+
+	<!-- Title -->
+	<TextView
+		style="@style/Widget.TextView.Primary"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textSize="@dimen/tsz_large"
+		android:textStyle="bold"
+		android:text="@string/title_delete_nfc_tag"
+		/>
+
+	<!-- Description -->
+	<TextView
+		style="@style/Widget.TextView.Primary"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/normal"
+		android:layout_marginBottom="@dimen/normal"
+		android:text="Are you sure you want to delete this NFC tag?"
+		/>
+
+	<!-- Delete -->
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/delete_nfc_tag"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/touch"
+		android:backgroundTint="@color/orange"
+		android:textColor="@color/white"
+		android:text="@string/action_alarm_delete"
+		/>
+
+	<!-- Cancel -->
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/cancel_nfc_tag"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/touch"
+		android:backgroundTint="@color/gray_light"
+		android:textColor="@color/white"
+		android:text="@string/action_cancel"
+		/>
+
+</LinearLayout>

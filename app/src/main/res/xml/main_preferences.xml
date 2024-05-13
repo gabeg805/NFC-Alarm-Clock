@@ -19,6 +19,15 @@
 		android:summary="@string/appearance_setting_summary"
 		/>
 
+	<!-- Manage NFC tags-->
+	<Preference
+		android:icon="@drawable/list"
+		android:key="@string/manage_nfc_tags_setting_key"
+		android:title="@string/manage_nfc_tags_setting"
+		android:summary="@string/manage_nfc_tags_setting_summary"
+		app:isPreferenceVisible="false"
+		/>
+
 	<!-- Statistics -->
 	<Preference
 		android:icon="@drawable/analytics"

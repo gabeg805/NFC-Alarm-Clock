@@ -145,6 +145,8 @@
 	<string name="title_scan_nfc_tag">Escanear una etiqueta NFC...</string>
 	<string name="title_select_nfc_tag">Seleccione una etiqueta NFC...</string>
 	<string name="title_save_nfc_tag">Guarde la etiqueta NFC...</string>
+	<string name="title_delete_nfc_tag">Eliminar la etiqueta NFC...</string>
+	<string name="title_rename_nfc_tag">Cambiar el nombre de la etiqueta NFC...</string>
 	<string name="title_name">Nombre de la alarma</string>
 	<string name="title_days">Seleccione los días</string>
 	<string name="title_color">Elige un color</string>
@@ -222,6 +224,7 @@
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">Lista de alarmas que se mostrarán aquí.</string>
+	<string name="cd_nfc_tag_list">Aquí se mostrará la lista de etiquetas NFC.</string>
 	<string name="cd_floating_action_button">Crear una nueva alarma.</string>
 	<string name="cd_collapse_alarm">Colapsar una alarma.</string>
 	<string name="cd_expand_alarm">Ampliar una alarma.</string>
@@ -256,6 +259,9 @@
 
 	<string name="stats_setting">Estadísticas</string>
 	<string name="stats_setting_summary">Mira cuanto tiempo has posponada sus alarmas, y más</string>
+
+	<string name="manage_nfc_tags_setting">Administrar etiquetas NFC</string>
+	<string name="manage_nfc_tags_setting_summary">Eliminar o cambiar el nombre de las etiquetas NFC guardadas</string>
 
 	<string name="support_setting">Apoyar el desarrollo</string>
 	<string name="support_setting_summary">Se agradecería mucho el apoyo, ¡pero no hay presión! Esta aplicación siempre será gratis</string>

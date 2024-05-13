@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:paddingTop="@dimen/small"
+	android:paddingBottom="@dimen/small"
+	android:paddingStart="@dimen/small"
+	android:paddingEnd="@dimen/small">
+
+	<!-- Name -->
+	<TextView
+		android:id="@+id/nfc_tag_name"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textColor="@color/white"
+		android:textSize="@dimen/tsz_medium"
+		android:textStyle="bold"
+		android:text="Bathroom"
+		/>
+
+	<!-- NFC ID -->
+	<TextView
+		android:id="@+id/nfc_tag_id"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/nfc_tag_name"
+		android:alpha="0.4"
+		android:textColor="@color/white"
+		android:textSize="@dimen/tsz_caption"
+		android:text="1342lkj3h;lkj123123"
+		/>
+
+	<!-- Rename button -->
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/rename_button"
+		android:layout_width="@dimen/isz_normal"
+		android:layout_height="@dimen/isz_normal"
+		android:layout_alignParentEnd="true"
+		android:layout_centerInParent="true"
+		app:backgroundTint="@color/white"
+		android:background="@drawable/copy"
+		/>
+
+	<!-- Delete button -->
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/delete_button"
+		android:layout_width="@dimen/isz_normal"
+		android:layout_height="@dimen/isz_normal"
+		android:layout_marginStart="@dimen/normal"
+		android:layout_marginEnd="@dimen/normal"
+		android:layout_toStartOf="@id/rename_button"
+		android:layout_centerInParent="true"
+		app:backgroundTint="@color/white"
+		android:background="@drawable/delete"
+		/>
+
+</RelativeLayout>

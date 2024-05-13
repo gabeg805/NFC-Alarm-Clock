@@ -615,6 +615,15 @@ class NacMainActivity
 		// Cleanup any old zip files that were created when sending a
 		// statistics email
 		cleanupEmailZipFiles()
+
+		//lifecycleScope.launch {
+			//nfcTagViewModel.deleteAll()
+			//nfcTagViewModel.insert(NacNfcTag("Bathroom", "akjshdlaksdh"))
+			//nfcTagViewModel.insert(NacNfcTag("Car", "9083kjjhllkjls"))
+			//nfcTagViewModel.insert(NacNfcTag("Garage", "09kj091kj"))
+			//nfcTagViewModel.insert(NacNfcTag("Medicine", "102938kjh3l12"))
+			//nfcTagViewModel.insert(NacNfcTag("Take out the trash", "loi120910j"))
+		//}
 	}
 
 	/**
@@ -1120,7 +1129,7 @@ class NacMainActivity
 	{
 		// Observer is called when list of all alarms changes. Including when the app
 		// starts and the list is initially empty
-		alarmViewModel.allAlarms.observe(this) { alarms: List<NacAlarm> ->
+		alarmViewModel.allAlarms.observe(this) { alarms ->
 
 			// Check if statistics have not started yet
 			if (!sharedPreferences.appStartStatistics)
@@ -1174,8 +1183,13 @@ class NacMainActivity
 		// Observe list of NFC tags
 		nfcTagViewModel.allNfcTags.observe(this) {
 
-			// Count the number of NFC tags
+			// Get the list of all NFC tags
 			allNfcTags = it
+
+			// Set the shared preference whether to show the Manage NFC tags
+			// preference or not. It will be shown if there are NFC tags to
+			// manage
+			sharedPreferences.editShouldShowManageNfcTagsPreference(it.isNotEmpty())
 
 		}
 	}

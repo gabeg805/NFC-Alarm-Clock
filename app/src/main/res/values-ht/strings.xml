@@ -145,6 +145,8 @@
 	<string name="title_scan_nfc_tag">Eskane yon tag NFC...</string>
 	<string name="title_select_nfc_tag">Chwazi yon tag NFC...</string>
 	<string name="title_save_nfc_tag">Sove tag NFC la...</string>
+	<string name="title_delete_nfc_tag">Efase tag NFC...</string>
+	<string name="title_rename_nfc_tag">Chanje non tag NFC la...</string>
 	<string name="title_name">Mete non alam</string>
 	<string name="title_days">Chwazi jou</string>
 	<string name="title_color">Chwazi yon koulè</string>
@@ -222,6 +224,7 @@
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">Lis alam yo pral montre isit la.</string>
+	<string name="cd_nfc_tag_list">Lis tags NFC yo pral montre isit la.</string>
 	<string name="cd_floating_action_button">Ajoute yon nouvo alam.</string>
 	<string name="cd_collapse_alarm">Tonbe yon alam.</string>
 	<string name="cd_expand_alarm">Elaji yon alam.</string>
@@ -256,6 +259,9 @@
 
 	<string name="stats_setting">Estatistik</string>
 	<string name="stats_setting_summary">Gade konbyen tan ou te snoozed pou, ak plis ankò</string>
+
+	<string name="manage_nfc_tags_setting">Jere tags NFC</string>
+	<string name="manage_nfc_tags_setting_summary">Efase oswa chanje non tag NFC ki te sove yo</string>
 
 	<string name="support_setting">Sipòte devlopman</string>
 	<string name="support_setting_summary">Sipò ta ap apresye anpil, men pa gen presyon! Aplikasyon sa a ap toujou gratis</string>

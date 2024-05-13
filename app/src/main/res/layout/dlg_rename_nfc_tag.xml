@@ -17,16 +17,7 @@
 		android:layout_height="wrap_content"
 		android:textSize="@dimen/tsz_large"
 		android:textStyle="bold"
-		android:text="@string/title_save_nfc_tag"
-		/>
-
-	<!-- Description -->
-	<TextView
-		style="@style/Widget.TextView.Primary"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/normal"
-		android:text="@string/message_save_nfc_tag"
+		android:text="@string/title_rename_nfc_tag"
 		/>
 
 	<!-- Name -->
@@ -60,24 +51,24 @@
 		</com.google.android.material.textfield.TextInputEditText>
 	</com.google.android.material.textfield.TextInputLayout>
 
-	<!-- Save -->
+	<!-- Done -->
 	<com.google.android.material.button.MaterialButton
-		android:id="@+id/save_nfc_tag"
+		android:id="@+id/done_nfc_tag"
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/touch"
 		android:backgroundTint="@color/orange"
 		android:textColor="@color/white"
-		android:text="@string/action_save"
+		android:text="@string/action_done"
 		/>
 
-	<!-- Skip button -->
+	<!-- Cancel -->
 	<com.google.android.material.button.MaterialButton
-		android:id="@+id/skip_nfc_tag"
+		android:id="@+id/cancel_nfc_tag"
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/touch"
 		android:backgroundTint="@color/gray_light"
 		android:textColor="@color/white"
-		android:text="@string/action_skip"
+		android:text="@string/action_cancel"
 		/>
 
 </LinearLayout>

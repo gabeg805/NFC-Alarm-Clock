@@ -4,20 +4,30 @@ import android.animation.AnimatorInflater
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import com.nfcalarmclock.R
+import com.nfcalarmclock.nfc.NacNfcTagSettingFragment
+import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.statistics.NacStatisticsSettingFragment
 import com.nfcalarmclock.support.NacSupportSetting
 import com.nfcalarmclock.util.NacUtility.quickToast
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 /**
  * Main setting fragment.
  */
+@AndroidEntryPoint
 class NacMainSettingFragment
 	: NacGenericSettingFragment()
 {
+
+	/**
+	 * NFC tag view model.
+	 */
+	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
 
 	/**
 	 * Setup the Support preference icon.
@@ -46,6 +56,9 @@ class NacMainSettingFragment
 		// Inflate the XML file and add the hierarchy to the current preference
 		addPreferencesFromResource(R.xml.main_preferences)
 
+		// Setup the manage NFC tags preference
+		setupManageNfcTags()
+
 		// Setup the support icon
 		setupSupportIcon()
 	}
@@ -63,6 +76,7 @@ class NacMainSettingFragment
 		val generalKey = getString(R.string.general_setting_key)
 		val appearanceKey = getString(R.string.appearance_setting_key)
 		val statisticsKey = getString(R.string.stats_setting_key)
+		val manageNfcTagsKey = getString(R.string.manage_nfc_tags_setting_key)
 		val aboutKey = getString(R.string.about_setting_key)
 		val supportKey = getString(R.string.support_setting_key)
 
@@ -88,6 +102,13 @@ class NacMainSettingFragment
 			{
 				fragment = NacStatisticsSettingFragment()
 				title = getString(R.string.stats_setting)
+			}
+
+			// Manage NFC tags
+			manageNfcTagsKey ->
+			{
+				fragment = NacNfcTagSettingFragment()
+				title = getString(R.string.manage_nfc_tags_setting)
 			}
 
 			// About
@@ -120,6 +141,18 @@ class NacMainSettingFragment
 
 		// Default return
 		return super.onPreferenceTreeClick(preference)
+	}
+
+	/**
+	 * Setup the Manage NFC tags preference.
+	 */
+	private fun setupManageNfcTags()
+	{
+		// Prepare the preference
+		val preference = findPreference<Preference>(getString(R.string.manage_nfc_tags_setting_key))
+
+		// Set whether to show the managee NFC tags preference
+		preference?.isVisible = sharedPreferences?.shouldShowManageNfcTagsPreference == true
 	}
 
 	/**

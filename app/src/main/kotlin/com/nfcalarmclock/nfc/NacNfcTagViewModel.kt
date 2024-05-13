@@ -18,7 +18,7 @@ class NacNfcTagViewModel @Inject constructor(
 	/**
 	 * NFC tag repository.
 	 */
-	val nfcTagRepository: NacNfcTagRepository
+	private val nfcTagRepository: NacNfcTagRepository
 
 ) : ViewModel()
 {
@@ -41,6 +41,13 @@ class NacNfcTagViewModel @Inject constructor(
 			nfcTagRepository.delete(nfcTag)
 		}
 	}
+
+	/**
+	 * Count the number of NFC tags.
+	 *
+	 * @return The number of NFC tags.
+	 */
+	suspend fun count(): Long = nfcTagRepository.count()
 
 	/**
 	 * Delete an NFC tag, asynchronously, from the database.

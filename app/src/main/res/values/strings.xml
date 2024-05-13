@@ -145,6 +145,8 @@
 	<string name="title_scan_nfc_tag">Scan an NFC tag...</string>
 	<string name="title_select_nfc_tag">Select an NFC tag...</string>
 	<string name="title_save_nfc_tag">Save NFC tag...</string>
+	<string name="title_delete_nfc_tag">Delete NFC tag...</string>
+	<string name="title_rename_nfc_tag">Rename NFC tag...</string>
 	<string name="title_name">Set alarm name</string>
 	<string name="title_days">Select days</string>
 	<string name="title_color">Select a color</string>
@@ -222,6 +224,7 @@
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">List of alarms will be shown here.</string>
+	<string name="cd_nfc_tag_list">List of NFC tags will be shown here.</string>
 	<string name="cd_floating_action_button">Add a new alarm.</string>
 	<string name="cd_collapse_alarm">Collapse an alarm.</string>
 	<string name="cd_expand_alarm">Expand an alarm.</string>
@@ -256,6 +259,9 @@
 
 	<string name="stats_setting">Statistics</string>
 	<string name="stats_setting_summary">See how long you have snoozed for, and more</string>
+
+	<string name="manage_nfc_tags_setting">Manage NFC tags</string>
+	<string name="manage_nfc_tags_setting_summary">Delete or rename saved NFC tags</string>
 
 	<string name="support_setting">Support development</string>
 	<string name="support_setting_summary">Support would be greatly appreciated, but no pressure! This app will always be free</string>

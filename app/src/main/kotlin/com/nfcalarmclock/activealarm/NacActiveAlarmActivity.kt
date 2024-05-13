@@ -232,15 +232,19 @@ class NacActiveAlarmActivity
 		setupNfc()
 		layoutHandler.setup(this)
 
-		// Setup NFC tag
-		lifecycleScope.launch {
+		// Check if NFC should be setup
+		if (alarm!!.shouldUseNfc)
+		{
+			// Setup NFC tag
+			lifecycleScope.launch {
 
-			// Get the NFC tag that corresponds to this ID from the table
-			val nfcTag = nfcTagViewModel.findNfcTag(alarm!!.nfcTagId)
+				// Get the NFC tag that corresponds to this ID from the table
+				val nfcTag = nfcTagViewModel.findNfcTag(alarm!!.nfcTagId)
 
-			// Setup the NFC tag
-			layoutHandler.setupNfcTag(nfcTag)
+				// Setup the NFC tag
+				layoutHandler.setupNfcTag(nfcTag)
 
+			}
 		}
 	}
 

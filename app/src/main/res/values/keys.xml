@@ -78,6 +78,10 @@
 	<!-- Statistics -->
 	<string name="stats_setting_key">pref_screen_statistics</string>
 
+	<!-- Manage NFC tags -->
+	<string name="manage_nfc_tags_setting_key">pref_screen_manage_nfc_tags</string>
+	<string name="should_show_manage_nfc_tags_setting">pref_should_show_manage_nfc_tags</string>
+
 	<!-- About -->
 	<string name="about_setting_key">pref_screen_about</string>
 	<string name="author_key">pref_about_author</string>

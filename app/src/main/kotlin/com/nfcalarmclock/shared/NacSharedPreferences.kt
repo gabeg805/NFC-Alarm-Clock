@@ -510,6 +510,18 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Whether the Manage NFC Tags preference should be visible or not.
+	 */
+	val shouldShowManageNfcTagsPreference: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.should_show_manage_nfc_tags_setting)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+
+	/**
 	 * Whether to show a reminder or not.
 	 */
 	val shouldShowReminder: Boolean
@@ -1009,6 +1021,16 @@ class NacSharedPreferences(context: Context)
 		val key = resources.getString(R.string.should_say_current_time_key)
 
 		saveBoolean(key, speak)
+	}
+
+	/**
+	 * Whether to show a reminder or not.
+	 */
+	fun editShouldShowManageNfcTagsPreference(shouldShow: Boolean)
+	{
+		val key = resources.getString(R.string.should_show_manage_nfc_tags_setting)
+
+		return saveBoolean(key, shouldShow)
 	}
 
 	/**
