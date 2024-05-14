@@ -3,7 +3,6 @@ package com.nfcalarmclock.nfc
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -59,7 +58,7 @@ class NacNfcTagViewModel @Inject constructor(
 	/**
 	 * Find an NFC tag.
 	 *
-	 * @param  id  The ID of the NFC tag to find.
+	 * @param nfcId The ID of the NFC tag to find.
 	 *
 	 * @return The nfcTag with the ID.
 	 */

@@ -87,6 +87,7 @@
 	<string name="message_nfc_optional">NFC opcional</string>
 	<string name="message_scan_nfc_tag">Se requerirá la etiqueta NFC escaneada para descartar esta alarma cuando suene.</string>
 	<string name="message_save_nfc_tag">Puedes reutilizar esta etiqueta NFC, sin tener que escanearla nuevamente, dándole un nombre.</string>
+	<string name="message_delete_nfc_tag">¿Estás seguro de que quieres eliminar esta etiqueta NFC?</string>
 	<string name="message_show_nfc_tag_id">Id:</string>
 	<string name="message_any_nfc_tag_id">Cualquier etiqueta de NFC aceptada</string>
 	<string name="message_no_alarms_scheduled">No hay alarmas programadas</string>

@@ -617,12 +617,12 @@ class NacMainActivity
 		cleanupEmailZipFiles()
 
 		//lifecycleScope.launch {
-			//nfcTagViewModel.deleteAll()
-			//nfcTagViewModel.insert(NacNfcTag("Bathroom", "akjshdlaksdh"))
-			//nfcTagViewModel.insert(NacNfcTag("Car", "9083kjjhllkjls"))
-			//nfcTagViewModel.insert(NacNfcTag("Garage", "09kj091kj"))
-			//nfcTagViewModel.insert(NacNfcTag("Medicine", "102938kjh3l12"))
-			//nfcTagViewModel.insert(NacNfcTag("Take out the trash", "loi120910j"))
+		//	nfcTagViewModel.deleteAll()
+		//	nfcTagViewModel.insert(NacNfcTag("Bathroom", "akjshdlaksdh"))
+		//	nfcTagViewModel.insert(NacNfcTag("Car", "9083kjjhllkjls"))
+		//	nfcTagViewModel.insert(NacNfcTag("Garage", "09kj091kj"))
+		//	nfcTagViewModel.insert(NacNfcTag("Medicine", "102938kjh3l12"))
+		//	nfcTagViewModel.insert(NacNfcTag("Take out the trash", "loi120910j"))
 		//}
 	}
 

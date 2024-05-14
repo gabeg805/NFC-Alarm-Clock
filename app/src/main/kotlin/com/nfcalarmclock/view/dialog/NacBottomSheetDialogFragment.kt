@@ -1,12 +1,9 @@
 package com.nfcalarmclock.view.dialog
 
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
-import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
 
 /**

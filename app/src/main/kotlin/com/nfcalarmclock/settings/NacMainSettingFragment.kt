@@ -4,12 +4,10 @@ import android.animation.AnimatorInflater
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import com.nfcalarmclock.R
 import com.nfcalarmclock.nfc.NacNfcTagSettingFragment
-import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.statistics.NacStatisticsSettingFragment
 import com.nfcalarmclock.support.NacSupportSetting
 import com.nfcalarmclock.util.NacUtility.quickToast
@@ -27,7 +25,6 @@ class NacMainSettingFragment
 	/**
 	 * Setup the Support preference icon.
 	 */
-	@Suppress("deprecation")
 	private fun animateSupportIcon()
 	{
 		// Get the preference

@@ -2,18 +2,23 @@
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:paddingTop="@dimen/small"
 	android:paddingBottom="@dimen/small"
 	android:paddingStart="@dimen/small"
-	android:paddingEnd="@dimen/small">
+	tools:ignore="RtlSymmetry">
 
 	<!-- Name -->
 	<TextView
 		android:id="@+id/nfc_tag_name"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_toStartOf="@id/delete_button"
+		android:layout_alignParentStart="true"
+		android:ellipsize="end"
+		android:maxLines="1"
 		android:textColor="@color/white"
 		android:textSize="@dimen/tsz_medium"
 		android:textStyle="bold"
@@ -43,7 +48,10 @@
 		android:layout_height="wrap_content"
 		android:layout_below="@id/nfc_tag_name"
 		android:layout_toEndOf="@id/nfc_tag_id_label"
+		android:layout_toStartOf="@id/delete_button"
 		android:alpha="0.4"
+		android:ellipsize="end"
+		android:maxLines="1"
 		android:textColor="@color/white"
 		android:textSize="@dimen/tsz_caption"
 		android:text=""
@@ -52,25 +60,31 @@
 	<!-- Rename button -->
 	<com.google.android.material.button.MaterialButton
 		android:id="@+id/rename_button"
-		android:layout_width="@dimen/isz_normal"
-		android:layout_height="@dimen/isz_normal"
+		android:layout_width="@dimen/touch"
+		android:layout_height="@dimen/touch"
 		android:layout_alignParentEnd="true"
 		android:layout_centerInParent="true"
-		app:backgroundTint="@color/white"
-		android:background="@drawable/edit"
+		android:background="@android:color/transparent"
+		app:iconGravity="textStart"
+		app:iconPadding="@dimen/zero"
+		app:iconSize="@dimen/isz_normal"
+		app:iconTint="@color/white"
+		app:icon="@drawable/edit"
 		/>
 
 	<!-- Delete button -->
 	<com.google.android.material.button.MaterialButton
 		android:id="@+id/delete_button"
-		android:layout_width="@dimen/isz_normal"
-		android:layout_height="@dimen/isz_normal"
-		android:layout_marginStart="@dimen/medium"
-		android:layout_marginEnd="@dimen/medium"
+		android:layout_width="@dimen/touch"
+		android:layout_height="@dimen/touch"
 		android:layout_toStartOf="@id/rename_button"
 		android:layout_centerInParent="true"
-		app:backgroundTint="@color/white"
-		android:background="@drawable/delete"
+		android:background="@android:color/transparent"
+		app:iconGravity="textStart"
+		app:iconPadding="@dimen/zero"
+		app:iconSize="@dimen/isz_normal"
+		app:iconTint="@color/white"
+		app:icon="@drawable/delete"
 		/>
 
 </RelativeLayout>

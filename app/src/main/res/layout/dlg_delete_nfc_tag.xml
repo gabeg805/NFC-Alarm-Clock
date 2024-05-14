@@ -26,7 +26,7 @@
 		android:layout_height="wrap_content"
 		android:layout_marginTop="@dimen/normal"
 		android:layout_marginBottom="@dimen/normal"
-		android:text="Are you sure you want to delete this NFC tag?"
+		android:text="@string/message_delete_nfc_tag"
 		/>
 
 	<!-- Delete -->

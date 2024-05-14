@@ -6,15 +6,11 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.util.AttributeSet
-import android.view.View
-
 import android.graphics.Path
-import android.graphics.PorterDuff
 import android.os.Handler
-import android.renderscript.Sampler.Value
+import android.util.AttributeSet
 import android.util.TypedValue
-import android.view.animation.LinearInterpolator
+import android.view.View
 import androidx.core.animation.addListener
 import com.nfcalarmclock.R
 

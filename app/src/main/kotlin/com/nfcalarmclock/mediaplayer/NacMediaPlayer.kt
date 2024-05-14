@@ -108,8 +108,8 @@ class NacMediaPlayer(
 	/**
 	 * Listener for any audio focus changes.
 	 */
-	var onAudioFocusChangeListener: NacMediaPlayer.OnAudioFocusChangeListener =
-		object: NacMediaPlayer.OnAudioFocusChangeListener {}
+	var onAudioFocusChangeListener: OnAudioFocusChangeListener =
+		object: OnAudioFocusChangeListener {}
 
 	/**
 	 * Constructor.

@@ -2,7 +2,6 @@ package com.nfcalarmclock.activealarm
 
 import android.annotation.TargetApi
 import android.content.Context
-import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.VibrationEffect

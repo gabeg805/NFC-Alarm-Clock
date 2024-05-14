@@ -4,7 +4,6 @@ import android.annotation.TargetApi
 import android.app.NotificationChannel
 import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
@@ -15,7 +14,6 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.util.NacCalendar
-import com.nfcalarmclock.util.NacIntent
 import com.nfcalarmclock.view.notification.NacNotification
 import java.util.Calendar
 import java.util.Locale
