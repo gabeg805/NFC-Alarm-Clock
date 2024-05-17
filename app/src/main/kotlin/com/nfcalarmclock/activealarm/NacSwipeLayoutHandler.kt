@@ -25,6 +25,7 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.media.NacMedia
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.util.NacCalendar
+import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.util.createTimeTickReceiver
 import com.nfcalarmclock.util.registerMyReceiver
 import com.nfcalarmclock.util.unregisterMyReceiver
@@ -34,6 +35,8 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
+import kotlin.math.absoluteValue
+import kotlin.math.exp
 
 /**
  * Handler for the swipe layout.
@@ -43,7 +46,8 @@ class NacSwipeLayoutHandler(
 	/**
 	 * Activity.
 	 */
-	activity: AppCompatActivity,
+	// TODO: CHAnGE THIS BACK WHEN DONE
+	val activity: AppCompatActivity,
 
 	/**
 	 * Alarm.
@@ -99,6 +103,7 @@ class NacSwipeLayoutHandler(
 	 * TextView for the name of the NFC tag.
 	 */
 	private val nfcNameTextView: TextView = activity.findViewById(R.id.ismiss_text3)
+	private val yoTextView: TextView = activity.findViewById(R.id.yoyoyo)
 
 	/**
 	 * Snooze button.
@@ -278,18 +283,30 @@ class NacSwipeLayoutHandler(
 
 		// Get velocity
 		val pointerId: Int = motionEvent.getPointerId(motionEvent.actionIndex)
-		var finalVelocity: Float = velocityTracker?.getXVelocity(pointerId)?.times(8)
+		yoTextView.text = "${yoTextView.text}\nPointer id : $pointerId"
+		yoTextView.text = "${yoTextView.text}\nOrig X velocity: ${velocityTracker?.getXVelocity(pointerId)}"
+		var finalVelocity: Float = velocityTracker?.getXVelocity(pointerId)?.times(FLING_SCALE_FACTOR)
 			?: return 0f
+		yoTextView.text = "${yoTextView.text}\nCalc X velocity: $finalVelocity"
 
-		// Check if final velocity was not able to be computed
+		// Calibrate the final velocity based on its current calculated value
+		if (finalVelocity.absoluteValue < 500f)
+		{
+			finalVelocity = 500f
+		}
+
+		// Check if final velocity is the wrong sign when snoozing
 		if ((minValue == 0f) && (finalVelocity < 0))
 		{
 			finalVelocity *= -1f
 		}
+		// Check if final velocity is the wrong sign when dismissing
 		else if ((maxValue == 0f) && (finalVelocity > 0))
 		{
 			finalVelocity *= -1f
 		}
+		yoTextView.text = "${yoTextView.text}\nSigned X velocity: $finalVelocity"
+		yoTextView.text = "${yoTextView.text}\nFinal X velocity: ${max(minValue, min(maxValue, finalVelocity))}"
 
 		// Make sure the final velocity is within the min and max values
 		return max(minValue, min(maxValue, finalVelocity))
@@ -398,7 +415,7 @@ class NacSwipeLayoutHandler(
 			setStartVelocity(velocity)
 			setMinValue(minValue)
 			setMaxValue(maxValue)
-			friction = 2.0f
+			friction = FLING_FRICTION_COEFFICIENT
 
 			// Start the animation
 			try
@@ -574,6 +591,8 @@ class NacSwipeLayoutHandler(
 
 					// Calculate the final velocity
 					val finalVelocity = calculateFinalVelocity(motionEvent, minValue, maxValue)
+					//NacUtility.quickToast(activity, "Velocity : $finalVelocity")
+					//println("Velocity : $finalVelocity")
 
 					// Cleanup the velocity tracker
 					cleanupVelocityTracker()
@@ -830,6 +849,14 @@ class NacSwipeLayoutHandler(
 
 		// Obtain the current or a new velocity tracker
 		velocityTracker = velocityTracker ?: VelocityTracker.obtain()
+		if (velocityTracker == null)
+		{
+			yoTextView.text = "Unable to obtain velocity tracker"
+		}
+		else
+		{
+			yoTextView.text = "Velocity tracker is good"
+		}
 
 		// Add movement to the velocity tracker
 		velocityTracker?.addMovement(motionEvent)
@@ -873,7 +900,7 @@ class NacSwipeLayoutHandler(
 		val percentDistance = if (view.id == snoozeButton.id) initDistance else 1f - initDistance
 
 		// Determine if the view should be flung
-		return (velocity != 0f) && (percentDistance >= 0.01f)
+		return (velocity != 0f)
 	}
 
 	/**
@@ -971,7 +998,17 @@ class NacSwipeLayoutHandler(
 		/**
 		 * Maximum fling value.
 		 */
-		const val FLING_MAX_VALUE = 10000f
+		const val FLING_MAX_VALUE = 4000f
+
+		/**
+		 * Scaling factor to make fling easier.
+		 */
+		const val FLING_SCALE_FACTOR = 2.5f
+
+		/**
+		 * Friction coefficient to slow down fling speed.
+		 */
+		const val FLING_FRICTION_COEFFICIENT = 1f
 
 	}
 

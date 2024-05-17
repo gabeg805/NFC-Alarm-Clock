@@ -10,7 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
- * Restore alarms on startup.
+ * Restore alarms on startup. This should support direct boot mode as well.
  */
 @AndroidEntryPoint
 class NacStartupBroadcastReceiver
@@ -32,7 +32,8 @@ class NacStartupBroadcastReceiver
 	override fun onReceive(context: Context, intent: Intent) = goAsync {
 
 		// Check that the intent action is correct
-		if (intent.action == Intent.ACTION_BOOT_COMPLETED)
+		if ((intent.action == Intent.ACTION_BOOT_COMPLETED)
+			|| (intent.action == Intent.ACTION_LOCKED_BOOT_COMPLETED))
 		{
 			// Get all the alarms
 			val alarms = alarmRepository.getAllAlarms()
