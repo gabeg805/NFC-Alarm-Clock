@@ -103,7 +103,6 @@ class NacSwipeLayoutHandler(
 	 * TextView for the name of the NFC tag.
 	 */
 	private val nfcNameTextView: TextView = activity.findViewById(R.id.ismiss_text3)
-	private val yoTextView: TextView = activity.findViewById(R.id.yoyoyo)
 
 	/**
 	 * Snooze button.
@@ -283,16 +282,13 @@ class NacSwipeLayoutHandler(
 
 		// Get velocity
 		val pointerId: Int = motionEvent.getPointerId(motionEvent.actionIndex)
-		yoTextView.text = "${yoTextView.text}\nPointer id : $pointerId"
-		yoTextView.text = "${yoTextView.text}\nOrig X velocity: ${velocityTracker?.getXVelocity(pointerId)}"
 		var finalVelocity: Float = velocityTracker?.getXVelocity(pointerId)?.times(FLING_SCALE_FACTOR)
 			?: return 0f
-		yoTextView.text = "${yoTextView.text}\nCalc X velocity: $finalVelocity"
 
 		// Calibrate the final velocity based on its current calculated value
-		if (finalVelocity.absoluteValue < 500f)
+		if (finalVelocity.absoluteValue < FLING_DEFAULT_VELOCITY)
 		{
-			finalVelocity = 500f
+			finalVelocity = FLING_DEFAULT_VELOCITY
 		}
 
 		// Check if final velocity is the wrong sign when snoozing
@@ -305,8 +301,6 @@ class NacSwipeLayoutHandler(
 		{
 			finalVelocity *= -1f
 		}
-		yoTextView.text = "${yoTextView.text}\nSigned X velocity: $finalVelocity"
-		yoTextView.text = "${yoTextView.text}\nFinal X velocity: ${max(minValue, min(maxValue, finalVelocity))}"
 
 		// Make sure the final velocity is within the min and max values
 		return max(minValue, min(maxValue, finalVelocity))
@@ -849,14 +843,6 @@ class NacSwipeLayoutHandler(
 
 		// Obtain the current or a new velocity tracker
 		velocityTracker = velocityTracker ?: VelocityTracker.obtain()
-		if (velocityTracker == null)
-		{
-			yoTextView.text = "Unable to obtain velocity tracker"
-		}
-		else
-		{
-			yoTextView.text = "Velocity tracker is good"
-		}
 
 		// Add movement to the velocity tracker
 		velocityTracker?.addMovement(motionEvent)
@@ -1003,7 +989,12 @@ class NacSwipeLayoutHandler(
 		/**
 		 * Scaling factor to make fling easier.
 		 */
-		const val FLING_SCALE_FACTOR = 2.5f
+		const val FLING_SCALE_FACTOR = 2.75f
+
+		/**
+		 * Default velocity for a fling if the calculated velocity is too small.
+		 */
+		const val FLING_DEFAULT_VELOCITY = 750f
 
 		/**
 		 * Friction coefficient to slow down fling speed.
