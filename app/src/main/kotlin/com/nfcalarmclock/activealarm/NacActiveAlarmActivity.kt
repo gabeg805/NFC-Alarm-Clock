@@ -10,6 +10,7 @@ import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
@@ -21,6 +22,7 @@ import com.nfcalarmclock.util.NacBundle
 import com.nfcalarmclock.util.NacIntent
 import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.util.enableActivityAlias
+import com.nfcalarmclock.util.registerMyReceiver
 import com.nfcalarmclock.util.unregisterMyReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -226,7 +228,7 @@ class NacActiveAlarmActivity
 
 		shutdownIntentFilter.addAction(Intent.ACTION_SHUTDOWN)
 		shutdownIntentFilter.addAction(Intent.ACTION_REBOOT)
-		registerReceiver(shutdownBroadcastReceiver, shutdownIntentFilter)
+		registerMyReceiver(this, shutdownBroadcastReceiver, shutdownIntentFilter)
 
 		// Setup
 		setupNfc()

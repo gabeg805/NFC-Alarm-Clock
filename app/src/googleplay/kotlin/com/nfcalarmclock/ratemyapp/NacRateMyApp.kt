@@ -3,7 +3,7 @@ package com.nfcalarmclock.ratemyapp
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.google.android.play.core.tasks.Task
+import com.google.android.gms.tasks.Task
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
 
@@ -57,7 +57,7 @@ object NacRateMyApp
 		val request = manager.requestReviewFlow()
 
 		// Launch the review flow
-		request.addOnCompleteListener { task: Task<ReviewInfo?> ->
+		request.addOnCompleteListener { task: Task<ReviewInfo> ->
 
 			// Task was not successful
 			if (!task.isSuccessful)

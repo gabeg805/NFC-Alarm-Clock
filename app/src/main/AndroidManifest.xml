@@ -17,6 +17,7 @@
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE_SYSTEM_EXEMPTED" />
 	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
 	<!-- Remove permissions that were appearing in the merged manifest for some reason -->
@@ -163,12 +164,14 @@
 		<!-- Start an active alarm (show notification and call alarm activity) -->
 		<service
 			android:name=".activealarm.NacActiveAlarmService"
+			android:foregroundServiceType="systemExempted"
 			android:exported="false">
 		</service>
 
 		<!-- Start an upcoming reminder -->
 		<service
 			android:name=".upcomingreminder.NacUpcomingReminderService"
+			android:foregroundServiceType="systemExempted"
 			android:exported="false">
 		</service>
 

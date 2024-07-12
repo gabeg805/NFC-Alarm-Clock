@@ -266,8 +266,7 @@
 	</string-array>
 
 	<string-array name="whats_new_items">
-		<item>Đã thêm tính năng vào &lt;b>lưu&lt;/b> và &lt;b>chọn thẻ NFC&lt;/b>. Bằng cách này, nếu có một báo thức khác mà bạn muốn bật cùng một thẻ NFC, bạn có thể dễ dàng chọn báo thức đó.</item>
-		<item>Đã thêm &lt;b>Cài đặt > Quản lý thẻ NFC&lt;/b> để bạn có thể đổi tên hoặc xóa các thẻ NFC đã lưu. Điều này chỉ hiển thị nếu bạn đã lưu thẻ NFC.</item>
+		<item>Đã cập nhật ứng dụng cho &lt;b>Android 14&lt;/b>.</item>
 		<item>Đã cập nhật &lt;b>màn hình báo thức mới&lt;/b> để &lt;b>vuốt&lt;/b> để báo lại hoặc loại bỏ dễ dàng hơn nhiều.</item>
 		<item>Đã khắc phục sự cố khi dừng báo thức.</item>
 	</string-array>

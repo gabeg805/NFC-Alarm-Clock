@@ -62,8 +62,7 @@ abstract class NacGenericSettingFragment
 	 *
 	 * TODO: Can this be removed?
 	 */
-	override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences,
-		preferenceKey: String)
+	override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?)
 	{
 	}
 

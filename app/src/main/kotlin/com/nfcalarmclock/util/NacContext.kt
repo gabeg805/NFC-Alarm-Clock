@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -75,10 +76,11 @@ fun enableActivityAlias(context: Context)
 fun registerMyReceiver(
 	context: Context,
 	broadcastReceiver: BroadcastReceiver,
-	intentFilter: IntentFilter)
+	intentFilter: IntentFilter,
+	flags: Int = ContextCompat.RECEIVER_EXPORTED)
 {
 	// Register the receiver
-	context.registerReceiver(broadcastReceiver, intentFilter)
+	ContextCompat.registerReceiver(context, broadcastReceiver, intentFilter, flags)
 }
 
 /**

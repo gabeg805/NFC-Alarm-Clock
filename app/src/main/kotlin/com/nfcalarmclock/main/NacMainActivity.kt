@@ -79,6 +79,7 @@ import com.nfcalarmclock.util.NacIntent
 import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.util.createTimeTickReceiver
 import com.nfcalarmclock.util.disableActivityAlias
+import com.nfcalarmclock.util.registerMyReceiver
 import com.nfcalarmclock.util.unregisterMyReceiver
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog.OnReadWhatsNewListener
@@ -804,14 +805,14 @@ class NacMainActivity
 		setupInitialDialogToShow()
 
 		// Register the time tick receiver
-		registerReceiver(timeTickReceiver, IntentFilter(Intent.ACTION_TIME_TICK))
+		registerMyReceiver(this, timeTickReceiver, IntentFilter(Intent.ACTION_TIME_TICK))
 
 		// Register the shutdown receiver
 		val shutdownIntentFilter = IntentFilter()
 
 		shutdownIntentFilter.addAction(Intent.ACTION_SHUTDOWN)
 		shutdownIntentFilter.addAction(Intent.ACTION_REBOOT)
-		registerReceiver(shutdownBroadcastReceiver, shutdownIntentFilter)
+		registerMyReceiver(this, shutdownBroadcastReceiver, shutdownIntentFilter)
 
 		// Add alarm from SET_ALARM intent (if it is present in intent)
 		addSetAlarmFromIntent()

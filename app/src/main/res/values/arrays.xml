@@ -271,8 +271,7 @@
 -->
 
 	<string-array name="whats_new_items">
-		<item>Added feature to &lt;b>save&lt;/b> and &lt;b>select NFC tags&lt;/b>. This way, if there is another alarm you want to enable the same NFC tag for, you can easily select it.</item>
-		<item>Added &lt;b>Settings > Manage NFC tags&lt;/b> so that you can rename or delete saved NFC tags. This is only visible if you have saved NFC tags.</item>
+		<item>Updated the app for &lt;b>Android 14&lt;/b>.</item>
 		<item>Updated the &lt;b>new alarm screen&lt;/b> so that &lt;b>swiping&lt;/b> to snooze or dismiss is a lot easier.</item>
 		<item>Fixed a crash when stopping an alarm.</item>
 	</string-array>
