@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import com.nfcalarmclock.R
-import com.nfcalarmclock.autodismiss.NacAutoDismissDialog
 
 /**
  * Preference that prompts the user what format they want to display the next
@@ -123,7 +122,7 @@ class NacNextAlarmFormatPreference @JvmOverloads constructor(
 		dialog.onNextAlarmFormatListener = this
 
 		// Show the dialog
-		dialog.show(manager, NacAutoDismissDialog.TAG)
+		dialog.show(manager, NacNextAlarmFormatDialog.TAG)
 	}
 
 }

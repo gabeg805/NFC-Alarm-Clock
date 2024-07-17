@@ -5,16 +5,16 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.res.ColorStateList
+import android.graphics.Camera
 import android.graphics.drawable.InsetDrawable
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
 import android.os.Bundle
 import android.os.Handler
-import android.view.ContextMenu
-import android.view.ContextMenu.ContextMenuInfo
 import android.view.HapticFeedbackConstants
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.View.OnCreateContextMenuListener
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -37,6 +37,7 @@ import com.nfcalarmclock.alarmoptions.NacAlarmOptionsDialog
 import com.nfcalarmclock.alarmoptions.NacAlarmOptionsDialog.OnAlarmOptionClickedListener
 import com.nfcalarmclock.audiosource.NacAudioSourceDialog
 import com.nfcalarmclock.audiosource.NacAudioSourceDialog.OnAudioSourceSelectedListener
+import com.nfcalarmclock.autodismiss.NacAutoDismissDialog
 import com.nfcalarmclock.card.NacCardAdapter
 import com.nfcalarmclock.card.NacCardAdapter.OnViewHolderBoundListener
 import com.nfcalarmclock.card.NacCardAdapter.OnViewHolderCreatedListener
@@ -55,6 +56,7 @@ import com.nfcalarmclock.dismissearly.NacDismissEarlyDialog
 import com.nfcalarmclock.dismissearly.NacDismissEarlyDialog.OnDismissEarlyOptionSelectedListener
 import com.nfcalarmclock.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog
 import com.nfcalarmclock.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog.OnGraduallyIncreaseVolumeListener
+import com.nfcalarmclock.maxsnooze.NacMaxSnoozeDialog
 import com.nfcalarmclock.mediapicker.NacMediaActivity
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
@@ -70,6 +72,7 @@ import com.nfcalarmclock.scheduler.NacScheduler
 import com.nfcalarmclock.settings.NacMainSettingActivity
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.shutdown.NacShutdownBroadcastReceiver
+import com.nfcalarmclock.snoozeduration.NacSnoozeDurationDialog
 import com.nfcalarmclock.statistics.NacAlarmStatisticViewModel
 import com.nfcalarmclock.tts.NacTextToSpeechDialog
 import com.nfcalarmclock.tts.NacTextToSpeechDialog.OnTextToSpeechOptionsSelectedListener
@@ -81,6 +84,7 @@ import com.nfcalarmclock.util.createTimeTickReceiver
 import com.nfcalarmclock.util.disableActivityAlias
 import com.nfcalarmclock.util.registerMyReceiver
 import com.nfcalarmclock.util.unregisterMyReceiver
+import com.nfcalarmclock.view.dialog.NacScrollablePickerDialogFragment.OnScrollablePickerOptionSelectedListener
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog.OnReadWhatsNewListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -99,14 +103,10 @@ class NacMainActivity
 	: AppCompatActivity(),
 
 	// Interface
-	OnCreateContextMenuListener,
 	Toolbar.OnMenuItemClickListener,
 	OnSwipedListener,
 	OnViewHolderBoundListener,
-	OnViewHolderCreatedListener,
-	OnCardCollapsedListener,
-	OnCardUpdatedListener,
-	OnCardUseNfcChangedListener
+	OnViewHolderCreatedListener
 {
 
 	/**
@@ -477,74 +477,6 @@ class NacMainActivity
 	}
 
 	/**
-	 * Called when the alarm card is collapsed.
-	 */
-	override fun onCardCollapsed(holder: NacCardHolder, alarm: NacAlarm)
-	{
-		// Sort the list when no cards are expanded
-		if (cardsExpandedCount == 0)
-		{
-			alarmCardAdapterLiveData.sort()
-		}
-
-		// Check if this alarm was recently updated
-		if (recentlyUpdatedAlarmIds.contains(alarm.id))
-		{
-			// Show the next time the alarm will go off
-			showUpdatedAlarmSnackbar(alarm)
-
-			// Highlight the card
-			holder.highlight()
-
-			// Remove the alarm from the recently updated list
-			recentlyUpdatedAlarmIds.remove(alarm.id)
-		}
-	}
-
-	/**
-	 * Called when the alarm has been changed.
-	 *
-	 * @param  alarm  The alarm that was changed.
-	 */
-	override fun onCardUpdated(holder: NacCardHolder, alarm: NacAlarm)
-	{
-		// Set the next alarm message
-		setNextAlarmMessage()
-
-		// Card is collapsed
-		if (holder.isCollapsed)
-		{
-			showUpdatedAlarmSnackbar(alarm)
-			holder.highlight()
-		}
-		else
-		{
-			recentlyUpdatedAlarmIds.add(alarm.id)
-		}
-
-		// Update the view model
-		alarmViewModel.update(alarm)
-
-		// Reschedule the alarm
-		NacScheduler.update(this, alarm)
-	}
-
-	/**
-	 * Called when the use NFC button is clicked.
-	 */
-	override fun onCardUseNfcChanged(holder: NacCardHolder, alarm: NacAlarm)
-	{
-		// Check if the alarm had use NFC disabled
-		if (!alarm.shouldUseNfc)
-		{
-			return
-		}
-
-		// Show the scan NFC tag dialog
-		showScanNfcTagDialog(alarm)
-	}
-
-	/**
 	 * Called when an alarm card was swiped to copy.
 	 *
 	 * @param  index  The index of the alarm card.
@@ -632,56 +564,56 @@ class NacMainActivity
 	 *
 	 * TODO: I saw double of the context menu items after an alarm was auto dismissed
 	 */
-	override fun onCreateContextMenu(
-		menu: ContextMenu,
-		view: View,
-		menuInfo: ContextMenuInfo?
-	)
-	{
-		// Check if it has already been created. Saw double the menu items one
-		// time, but cannot seem to replicate it. Adding a check just to avoid
-		// this happening in production
-		if (menu.size() > 0)
-		{
-			return
-		}
+	//override fun onCreateContextMenu(
+	//	menu: ContextMenu,
+	//	view: View,
+	//	menuInfo: ContextMenuInfo?
+	//)
+	//{
+	//	// Check if it has already been created. Saw double the menu items one
+	//	// time, but cannot seem to replicate it. Adding a check just to avoid
+	//	// this happening in production
+	//	if (menu.size() > 0)
+	//	{
+	//		return
+	//	}
 
-		// Inflate the context menu
-		menuInflater.inflate(R.menu.menu_card, menu)
+	//	// Inflate the context menu
+	//	menuInflater.inflate(R.menu.menu_card, menu)
 
-		// Iterate over each menu item
-		for (i in 0 until menu.size())
-		{
-			// Get the menu item
-			val item = menu.getItem(i)
+	//	// Iterate over each menu item
+	//	for (i in 0 until menu.size())
+	//	{
+	//		// Get the menu item
+	//		val item = menu.getItem(i)
 
-			// Set the listener for a menu item
-			item.setOnMenuItemClickListener { menuItem: MenuItem ->
+	//		// Set the listener for a menu item
+	//		item.setOnMenuItemClickListener { menuItem: MenuItem ->
 
-				// Get the card holder
-				val holder = recyclerView.findContainingViewHolder(view) as NacCardHolder?
+	//			// Get the card holder
+	//			val holder = recyclerView.findContainingViewHolder(view) as NacCardHolder?
 
-				// Check to make sure the card holder is not null
-				if (holder != null)
-				{
-					when (menuItem.itemId)
-					{
-						// Show the next time the alarm will run
-						R.id.menu_show_next_alarm -> showAlarmSnackbar(holder.alarm!!)
+	//			// Check to make sure the card holder is not null
+	//			if (holder != null)
+	//			{
+	//				when (menuItem.itemId)
+	//				{
+	//					// Show the next time the alarm will run
+	//					R.id.menu_show_next_alarm -> showAlarmSnackbar(holder.alarm!!)
 
-						// Show the NFC tag ID that was set for this alarm
-						R.id.menu_show_nfc_tag_id -> showNfcTagId(holder.alarm!!)
+	//					// Show the NFC tag ID that was set for this alarm
+	//					R.id.menu_show_nfc_tag_id -> showNfcTagId(holder.alarm!!)
 
-						// Unknown
-						else -> {}
-					}
-				}
+	//					// Unknown
+	//					else -> {}
+	//				}
+	//			}
 
-				// Return
-				true
-			}
-		}
-	}
+	//			// Return
+	//			true
+	//		}
+	//	}
+	//}
 
 	/**
 	 * Called when the options menu is created.
@@ -853,10 +785,31 @@ class NacMainActivity
 	 */
 	override fun onViewHolderCreated(holder: NacCardHolder)
 	{
-		// Set the card collapsed listener
-		holder.onCardCollapsedListener = this
+		// Collapsed listener
+		holder.onCardCollapsedListener = OnCardCollapsedListener { _, alarm ->
 
-		// Set the listener for when the delete button is clicked
+			// Sort the list when no cards are expanded
+			if (cardsExpandedCount == 0)
+			{
+				alarmCardAdapterLiveData.sort()
+			}
+
+			// Check if this alarm was recently updated
+			if (recentlyUpdatedAlarmIds.contains(alarm.id))
+			{
+				// Show the next time the alarm will go off
+				showUpdatedAlarmSnackbar(alarm)
+
+				// Highlight the card
+				holder.highlight()
+
+				// Remove the alarm from the recently updated list
+				recentlyUpdatedAlarmIds.remove(alarm.id)
+			}
+
+		}
+
+		// Delete lsitener
 		holder.onCardDeleteClickedListener = OnCardDeleteClickedListener { _, alarm ->
 
 			// Delete the alarm
@@ -864,7 +817,85 @@ class NacMainActivity
 
 		}
 
-		// Set the listener for when the media button is clicked
+		// Updated listener
+		holder.onCardUpdatedListener = OnCardUpdatedListener { _, alarm ->
+
+			// Set the next alarm message
+			setNextAlarmMessage()
+
+			// Card is collapsed
+			if (holder.isCollapsed)
+			{
+				showUpdatedAlarmSnackbar(alarm)
+				holder.highlight()
+			}
+			else
+			{
+				recentlyUpdatedAlarmIds.add(alarm.id)
+			}
+
+			// Update the view model
+			alarmViewModel.update(alarm)
+
+			// Reschedule the alarm
+			NacScheduler.update(this, alarm)
+
+		}
+
+		// Use NFC listener
+		holder.onCardUseNfcChangedListener = OnCardUseNfcChangedListener { _, alarm ->
+
+			// Check if the alarm had use NFC disabled
+			if (!alarm.shouldUseNfc)
+			{
+				return@OnCardUseNfcChangedListener
+			}
+
+			// Show the scan NFC tag dialog
+			showScanNfcTagDialog(alarm)
+
+		}
+
+		// Use flashlight listener
+		holder.onCardUseFlashlightChangedListener = NacCardHolder.OnCardUseFlashlightChangedListener { _, alarm ->
+
+			// Check if the alarm had use NFC disabled
+			if (!alarm.shouldUseFlashlight)
+			{
+				return@OnCardUseFlashlightChangedListener
+			}
+
+			// TODO: Add NacFlashlight and have helper stuff in there
+			//// Get the camera manager
+			//val cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
+			//val cameraList = cameraManager.cameraIdList
+			//println("Ids: $cameraList")
+
+			//for (id in cameraList)
+			//{
+			//	val char = cameraManager.getCameraCharacteristics(id)
+			//	println("Char: $char")
+			//	println("Face: ${char.get(CameraCharacteristics.LENS_FACING)}")
+			//	println("Str : ${char.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)}")
+
+			//	if (char.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true)
+			//	{
+			//		println("HELLO : ${alarm.shouldUseFlashlight}")
+			//		cameraManager.setTorchMode(id, alarm.shouldUseFlashlight)
+			//	}
+
+			//	//for (key in char.keysNeedingPermission)
+			//	//{
+			//	//	println("Key : $key")
+			//	//}
+			//}
+
+			// Show the scan NFC tag dialog
+			//showScanNfcTagDialog(alarm)
+
+		}
+
+		// Media button listener
 		holder.onCardMediaClickedListener = OnCardMediaClickedListener { _, alarm ->
 
 			// Create an intent for the media activity with the alarm attached
@@ -875,7 +906,7 @@ class NacMainActivity
 
 		}
 
-		// Set the listener for when the audio options button is clicked
+		// Audio options listener
 		holder.onCardAudioOptionsClickedListener = OnCardAudioOptionsClickedListener { _, alarm ->
 
 			// Show the audio options dialog
@@ -883,9 +914,55 @@ class NacMainActivity
 
 		}
 
-		holder.onCardUpdatedListener = this
-		holder.onCardUseNfcChangedListener = this
-		holder.setOnCreateContextMenuListener(this)
+		// Context menu for a card listener
+		//holder.setOnCreateContextMenuListener(this)
+		holder.setOnCreateContextMenuListener { menu, _, _ ->
+
+			// Check if it has already been created. Saw double the menu items one
+			// time, but cannot seem to replicate it. Adding a check just to avoid
+			// this happening in production
+			if (menu.size() > 0)
+			{
+				return@setOnCreateContextMenuListener
+			}
+
+			// Inflate the context menu
+			menuInflater.inflate(R.menu.menu_card, menu)
+
+			// Iterate over each menu item
+			for (i in 0 until menu.size())
+			{
+				// Get the menu item
+				val item = menu.getItem(i)
+
+				// Set the listener for a menu item
+				item.setOnMenuItemClickListener { menuItem: MenuItem ->
+
+					//// Get the card holder
+					//val cardHolder = recyclerView.findContainingViewHolder(view) as NacCardHolder?
+
+					//// Check to make sure the card holder is not null
+					//if (cardHolder != null)
+					//{
+						when (menuItem.itemId)
+						{
+							// Show the next time the alarm will run
+							R.id.menu_show_next_alarm -> showAlarmSnackbar(holder.alarm!!)
+
+							// Show the NFC tag ID that was set for this alarm
+							R.id.menu_show_nfc_tag_id -> showNfcTagId(holder.alarm!!)
+
+							// Unknown
+							else -> {}
+						}
+					//}
+
+					// Return
+					true
+				}
+			}
+
+		}
 	}
 
 	/**
@@ -1314,7 +1391,9 @@ class NacMainActivity
 					R.id.alarm_option_gradually_increase_volume -> showGraduallyIncreaseVolumeDialog()
 					R.id.alarm_option_restrict_volume -> showRestrictVolumeDialog()
 					R.id.alarm_option_text_to_speech -> showTextToSpeechDialog()
+					R.id.alarm_option_auto_dismiss -> showAutoDismissDialog()
 					R.id.alarm_option_dismiss_early -> showDismissEarlyDialog()
+					R.id.alarm_option_snooze_options -> {}
 					R.id.alarm_option_upcoming_reminder -> showUpcomingReminderDialog()
 					else -> {}
 				}
@@ -1354,6 +1433,35 @@ class NacMainActivity
 
 		// Show the dialog
 		dialog.show(supportFragmentManager, NacAudioSourceDialog.TAG)
+	}
+
+	/**
+	 * Show the auto dismiss dialog.
+	 */
+	private fun showAutoDismissDialog()
+	{
+		// Create the dialog
+		val dialog = NacAutoDismissDialog()
+
+		// Setup the index
+		dialog.defaultScrollablePickerIndex = audioOptionsAlarm!!.autoDismissIndex
+
+		// Setup the listener
+		dialog.onScrollablePickerOptionSelectedListener = OnScrollablePickerOptionSelectedListener { index ->
+
+				// Set the audio source of the audio options alarm
+				audioOptionsAlarm!!.autoDismissIndex = index
+
+				// Update the alarm
+				alarmViewModel.update(audioOptionsAlarm!!)
+
+				// Reschedule the alarm
+				NacScheduler.update(this, audioOptionsAlarm!!)
+
+			}
+
+		// Show the dialog
+		dialog.show(supportFragmentManager, NacAutoDismissDialog.TAG)
 	}
 
 	/**
@@ -1416,6 +1524,35 @@ class NacMainActivity
 
 		// Show the dialog
 		dialog.show(supportFragmentManager, NacGraduallyIncreaseVolumeDialog.TAG)
+	}
+
+	/**
+	 * Show the max snooze dialog.
+	 */
+	private fun showMaxSnoozeDialog()
+	{
+		// Create the dialog
+		val dialog = NacMaxSnoozeDialog()
+
+		// Setup the index
+		dialog.defaultScrollablePickerIndex = audioOptionsAlarm!!.maxSnoozeIndex
+
+		// Setup the listener
+		dialog.onScrollablePickerOptionSelectedListener = OnScrollablePickerOptionSelectedListener { index ->
+
+			// Set the audio source of the audio options alarm
+			audioOptionsAlarm!!.maxSnoozeIndex = index
+
+			// Update the alarm
+			alarmViewModel.update(audioOptionsAlarm!!)
+
+			// Reschedule the alarm
+			NacScheduler.update(this, audioOptionsAlarm!!)
+
+		}
+
+		// Show the dialog
+		dialog.show(supportFragmentManager, NacAutoDismissDialog.TAG)
 	}
 
 	/**
@@ -1620,6 +1757,35 @@ class NacMainActivity
 
 		// Show the snackbar
 		snackbar.show()
+	}
+
+	/**
+	 * Show the snooze duration dialog.
+	 */
+	private fun showSnoozeDurationDialog()
+	{
+		// Create the dialog
+		val dialog = NacSnoozeDurationDialog()
+
+		// Setup the index
+		dialog.defaultScrollablePickerIndex = audioOptionsAlarm!!.snoozeDurationIndex
+
+		// Setup the listener
+		dialog.onScrollablePickerOptionSelectedListener = OnScrollablePickerOptionSelectedListener { index ->
+
+			// Set the audio source of the audio options alarm
+			audioOptionsAlarm!!.snoozeDurationIndex = index
+
+			// Update the alarm
+			alarmViewModel.update(audioOptionsAlarm!!)
+
+			// Reschedule the alarm
+			NacScheduler.update(this, audioOptionsAlarm!!)
+
+		}
+
+		// Show the dialog
+		dialog.show(supportFragmentManager, NacAutoDismissDialog.TAG)
 	}
 
 	/**

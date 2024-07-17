@@ -13,6 +13,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.db.NacAlarmDao
 import com.nfcalarmclock.alarm.db.NacAlarmTypeConverters
+import com.nfcalarmclock.db.NacAlarmDatabase.AddAutoDismissAndSnoozeSettingsToAllAlarmsMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.ClearAllStatisticsMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.ClearNfcTagTableMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.DropNfcTagTableMigration
@@ -47,7 +48,7 @@ import javax.inject.Singleton
 /**
  * Store alarms in a Room database.
  */
-@Database(version = 19,
+@Database(version = 21,
 	entities = [
 		NacAlarm::class,
 		NacAlarmCreatedStatistic::class,
@@ -74,7 +75,9 @@ import javax.inject.Singleton
 		AutoMigration(from = 15, to = 16),
 		AutoMigration(from = 16, to = 17, spec = ClearNfcTagTableMigration::class),
 		AutoMigration(from = 17, to = 18, spec = DropNfcTagTableMigration::class),
-		AutoMigration(from = 18, to = 19, spec = ClearNfcTagTableMigration::class)]
+		AutoMigration(from = 18, to = 19, spec = ClearNfcTagTableMigration::class),
+		AutoMigration(from = 19, to = 20, spec = AddAutoDismissAndSnoozeSettingsToAllAlarmsMigration::class),
+		AutoMigration(from = 20, to = 21)]
 )
 @TypeConverters(NacAlarmTypeConverters::class, NacStatisticTypeConverters::class)
 abstract class NacAlarmDatabase
@@ -115,6 +118,36 @@ abstract class NacAlarmDatabase
 	 * Store NFC tags in the database.
 	 */
 	abstract fun nfcTagDao(): NacNfcTagDao
+
+	/**
+	 * Added default snooze and auto dismiss settings to all alarms, since they will now
+	 * be able to be changed on a per alarm basis.
+	 */
+	internal class AddAutoDismissAndSnoozeSettingsToAllAlarmsMigration : AutoMigrationSpec
+	{
+
+		/**
+		 * Called after migration.
+		 */
+		override fun onPostMigrate(db: SupportSQLiteDatabase)
+		{
+			// Get the shared preferences
+			val shared = NacSharedPreferences(context!!)
+
+			// Get default auto dismiss and snooze values
+			val autoDismissTime = shared.autoDismissTime
+			val snoozeDuration = shared.snoozeDurationValue
+			val maxSnoozes = shared.maxSnoozeValue
+			val easySnooze = if (shared.easySnooze) 1 else 0
+
+			// Add default values to all alarms
+			db.execSQL("UPDATE alarm SET auto_dismiss_time=$autoDismissTime")
+			db.execSQL("UPDATE alarm SET snooze_duration=$snoozeDuration")
+			db.execSQL("UPDATE alarm SET max_snooze=$maxSnoozes")
+			db.execSQL("UPDATE alarm SET should_use_easy_snooze=$easySnooze")
+		}
+
+	}
 
 	/**
 	 * Clear all statistics when auto-migrating.

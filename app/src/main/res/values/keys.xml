@@ -36,8 +36,12 @@
 	<string name="alarm_name_key">pref_name</string>
 	<string name="alarm_days_key">pref_deys</string>
 	<string name="alarm_repeat_key">pref_repeat</string>
-	<string name="alarm_use_nfc_key">pref_use_nfc</string>
 	<string name="alarm_vibrate_key">pref_vibrate</string>
+	<string name="alarm_use_nfc_key">pref_use_nfc</string>
+	<string name="alarm_use_flashlight_key">pref_use_flashlight</string>
+	<string name="alarm_flashlight_strength_level_key">pref_flashlight_strength_level</string>
+	<string name="alarm_flashlight_on_duration_key">pref_flashlight_on_duration</string>
+	<string name="alarm_flashlight_off_duration_key">pref_flashlight_off_duration</string>
 	<string name="alarm_sound_key">pref_sound</string>
 	<string name="shuffle_playlist_key">pref_shuffle_playlist</string>
 	<string name="alarm_recursively_play_media_key">pref_recursively_play_media</string>

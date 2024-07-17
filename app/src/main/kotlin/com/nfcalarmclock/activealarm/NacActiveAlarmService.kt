@@ -99,7 +99,7 @@ class NacActiveAlarmService
 		get()
 		{
 			// Check if the alarm can be snoozed
-			return if (alarm!!.canSnooze(sharedPreferences))
+			return if (alarm!!.canSnooze)
 			{
 				true
 			}
@@ -462,7 +462,7 @@ class NacActiveAlarmService
 		scope.launch {
 
 			// Snooze the alarm and get the next time to run the alarm again
-			val cal = alarm!!.snooze(sharedPreferences)
+			val cal = alarm!!.snooze()
 
 			// Update the time the alarm was active
 			alarm!!.addToTimeActive(System.currentTimeMillis() - startTime)
@@ -471,7 +471,8 @@ class NacActiveAlarmService
 			alarmRepository.update(alarm!!)
 
 			// Save this snooze duration to the statistics table
-			statisticRepository.insertSnoozed(alarm!!, 60L * sharedPreferences.snoozeDurationValue)
+			//statisticRepository.insertSnoozed(alarm!!, 60L * sharedPreferences.snoozeDurationValue)
+			statisticRepository.insertSnoozed(alarm!!, 60L * alarm!!.snoozeDuration)
 
 			// Reschedule the alarm
 			NacScheduler.update(this@NacActiveAlarmService, alarm!!, cal)
@@ -513,7 +514,8 @@ class NacActiveAlarmService
 
 		// Get the power manager and timeout for the wakelock
 		val powerManager = getSystemService(POWER_SERVICE) as PowerManager
-		val timeout = sharedPreferences.autoDismissTime * 60L * 1000L
+		val timeout = alarm!!.autoDismissTime * 60L * 1000L
+		//val timeout = sharedPreferences.autoDismissTime * 60L * 1000L
 
 		// Acquire the wakelock
 		wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
@@ -602,11 +604,12 @@ class NacActiveAlarmService
 	fun waitForAutoDismiss()
 	{
 		// Amount of time until the alarm is automatically dismissed
-		val autoDismiss = sharedPreferences.autoDismissTime
-		val delay = TimeUnit.MINUTES.toMillis(autoDismiss) - alarm!!.timeActive - 2000
+		//val autoDismiss = sharedPreferences.autoDismissTime
+		val autoDismiss = alarm!!.autoDismissTime
+		val delay = TimeUnit.MINUTES.toMillis(autoDismiss.toLong()) - alarm!!.timeActive - 2000
 
 		// There is an auto dismiss time set
-		if (autoDismiss != 0L)
+		if (autoDismiss != 0)
 		{
 			// Automatically dismiss the alarm.
 			autoDismissHandler!!.postDelayed({

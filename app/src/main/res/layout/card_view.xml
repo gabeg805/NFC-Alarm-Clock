@@ -239,7 +239,7 @@
 				<include layout="@layout/nac_day_of_week" />
 			</LinearLayout>
 
-			<!-- Repeat, Vibrate, NFC -->
+			<!-- Repeat, Vibrate, NFC, Flashlight -->
 			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -290,7 +290,21 @@
 					app:iconSize="@dimen/isz_large"
 					app:icon="@drawable/tap_and_play"
 					/>
-			</LinearLayout> <!-- Repeat, Vibrate, NFC -->
+
+				<!-- Flashlight -->
+				<com.google.android.material.button.MaterialButton
+					style="@style/Widget.Button.Icon"
+					android:id="@+id/nac_flashlight"
+					android:layout_width="@dimen/touch"
+					android:layout_height="@dimen/touch"
+					android:layout_weight="1"
+					android:checkable="true"
+					app:backgroundTint="@android:color/transparent"
+					app:iconTint="@color/card_toggle_button"
+					app:iconSize="@dimen/isz_large"
+					app:icon="@drawable/flashlight_on_32"
+					/>
+			</LinearLayout> <!-- Repeat, Vibrate, NFC, Flashlight -->
 
 			<!-- Media -->
 			<com.google.android.material.button.MaterialButton

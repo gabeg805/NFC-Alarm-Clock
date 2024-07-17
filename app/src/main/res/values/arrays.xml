@@ -271,6 +271,7 @@
 -->
 
 	<string-array name="whats_new_items">
+		<item>Added &lt;b>flashlight&lt;/b> option to turn on the flashlight when an alarm goes off.</item>
 		<item>Updated the app for &lt;b>Android 14&lt;/b>.</item>
 		<item>Updated the &lt;b>new alarm screen&lt;/b> so that &lt;b>swiping&lt;/b> to snooze or dismiss is a lot easier.</item>
 		<item>Fixed a crash when stopping an alarm.</item>

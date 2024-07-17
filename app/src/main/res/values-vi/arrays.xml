@@ -266,6 +266,7 @@
 	</string-array>
 
 	<string-array name="whats_new_items">
+		<item>Đã thêm tùy chọn &lt;b>đèn pin&lt;/b> để bật đèn pin khi báo thức kêu.</item>
 		<item>Đã cập nhật ứng dụng cho &lt;b>Android 14&lt;/b>.</item>
 		<item>Đã cập nhật &lt;b>màn hình báo thức mới&lt;/b> để &lt;b>vuốt&lt;/b> để báo lại hoặc loại bỏ dễ dàng hơn nhiều.</item>
 		<item>Đã khắc phục sự cố khi dừng báo thức.</item>

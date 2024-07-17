@@ -68,7 +68,7 @@ class NacCardHolder(
 	/**
 	 * Listener for when a card is collapsed.
 	 */
-	interface OnCardCollapsedListener
+	fun interface OnCardCollapsedListener
 	{
 		fun onCardCollapsed(holder: NacCardHolder, alarm: NacAlarm)
 	}
@@ -100,32 +100,25 @@ class NacCardHolder(
 	/**
 	 * Listener for when a card is updated.
 	 */
-	interface OnCardUpdatedListener
+	fun interface OnCardUpdatedListener
 	{
 		fun onCardUpdated(holder: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
-	 * Listener for when a card will use NFC or not is changed.
+	 * Listener for when a card will use the flashlight or not is changed.
 	 */
-	interface OnCardUseNfcChangedListener
+	fun interface OnCardUseFlashlightChangedListener
 	{
-		fun onCardUseNfcChanged(holder: NacCardHolder, alarm: NacAlarm)
+		fun onCardUseFlashlightChanged(holder: NacCardHolder, alarm: NacAlarm)
 	}
 
-	companion object
+	/**
+	 * Listener for when a card will use NFC or not is changed.
+	 */
+	fun interface OnCardUseNfcChangedListener
 	{
-
-		/**
-		 * Collapse duration.
-		 */
-		private const val COLLAPSE_DURATION = 250
-
-		/**
-		 * Expand duration.
-		 */
-		private const val EXPAND_DURATION = 250
-
+		fun onCardUseNfcChanged(holder: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -234,6 +227,11 @@ class NacCardHolder(
 	val nfcButton: MaterialButton = root.findViewById(R.id.nac_nfc)
 
 	/**
+	 * Flashlight button.
+	 */
+	val flashlightButton: MaterialButton = root.findViewById(R.id.nac_flashlight)
+
+	/**
 	 * Media button.
 	 */
 	private val mediaButton: MaterialButton = root.findViewById(R.id.nac_media)
@@ -313,6 +311,11 @@ class NacCardHolder(
 	 * Listener for when the alarm card is updated.
 	 */
 	var onCardUpdatedListener: OnCardUpdatedListener? = null
+
+	/**
+	 * Listener for when a card will use flashlight or not is changed.
+	 */
+	var onCardUseFlashlightChangedListener: OnCardUseFlashlightChangedListener? = null
 
 	/**
 	 * Listener for when a card will use NFC or not is changed.
@@ -865,6 +868,36 @@ class NacCardHolder(
 	}
 
 	/**
+	 * Act as if the flashlight button was clicked.
+	 */
+	fun doFlashlightButtonClick()
+	{
+		// Toggle the NFC button
+		alarm!!.toggleUseFlashlight()
+
+		// Check if NFC should not be used
+		if (!alarm!!.shouldUseFlashlight)
+		{
+			// Determine which message to show
+			val messageId = if (alarm!!.shouldUseFlashlight)
+			{
+				R.string.message_flashlight_enabled
+			}
+			else
+			{
+				R.string.message_flashlight_disabled
+			}
+
+			// Toast the NFC message
+			quickToast(context, messageId)
+		}
+
+		// Call the listeners
+		callOnCardUpdatedListener()
+		onCardUseFlashlightChangedListener?.onCardUseFlashlightChanged(this, alarm!!)
+	}
+
+	/**
 	 * Act as if the media button was clicked.
 	 */
 	private fun doMediaButtonClick()
@@ -1099,6 +1132,7 @@ class NacCardHolder(
 		this.setMaterialButtonColor(repeatButton)
 		this.setMaterialButtonColor(vibrateButton)
 		this.setMaterialButtonColor(nfcButton)
+		this.setMaterialButtonColor(flashlightButton)
 		this.setMaterialButtonColor(mediaButton)
 		setVolumeSeekBarColor()
 		this.setMaterialButtonColor(audioOptionsButton)
@@ -1124,6 +1158,7 @@ class NacCardHolder(
 		setupRepeatButtonLongClickListener()
 		setupVibrateButtonListener()
 		setupNfcButtonListener()
+		setupFlashlightButtonListener()
 		setupMediaButtonListener()
 		setupAudioOptionsListener()
 		setupVolumeSeekBarListener()
@@ -1147,6 +1182,7 @@ class NacCardHolder(
 		setRepeatButton()
 		setVibrateButton()
 		setNfcButton()
+		setFlashlightButton()
 		setMediaButton()
 		setVolumeSeekBar()
 		setVolumeImageView()
@@ -1448,6 +1484,22 @@ class NacCardHolder(
 
 		// Set the color
 		cardView.setBackgroundColor(color)
+	}
+
+	/**
+	 * Set the flashlight button to its proper settings.
+	 */
+	private fun setFlashlightButton()
+	{
+		// Get the flashlight state from the alarm
+		val shouldUseFlashlight = alarm!!.shouldUseFlashlight
+
+		// Check if the state of the button and the alarm are different
+		if (flashlightButton.isChecked != shouldUseFlashlight)
+		{
+			// Set the new state of the button
+			flashlightButton.isChecked = shouldUseFlashlight
+		}
 	}
 
 	/**
@@ -2085,6 +2137,36 @@ class NacCardHolder(
 	}
 
 	/**
+	 * Setup the listener for the flashlight button.
+	 *
+	 * TODO: Can I change this to addOnCheckedChangeListener?
+	 */
+	private fun setupFlashlightButtonListener()
+	{
+		// Set the listener
+		flashlightButton.setOnClickListener { view ->
+
+			// Check if the alarm can be modified
+			if (checkCanModifyAlarm())
+			{
+				// Do the button click
+				doFlashlightButtonClick()
+			}
+			// Alarm cannot be modified
+			else
+			{
+				// Revert the button press
+				val flashlightButton = view as MaterialButton
+				flashlightButton.isChecked = !flashlightButton.isChecked
+			}
+
+			// Haptic feedback
+			performHapticFeedback(view)
+
+		}
+	}
+
+	/**
 	 * Setup the listener for the media button.
 	 */
 	private fun setupMediaButtonListener()
@@ -2428,6 +2510,21 @@ class NacCardHolder(
 		//timepicker.show(fragmentManager, "TimePicker");
 
 		//this.mTimePicker = timepicker;
+	}
+
+	companion object
+	{
+
+		/**
+		 * Collapse duration.
+		 */
+		private const val COLLAPSE_DURATION = 250
+
+		/**
+		 * Expand duration.
+		 */
+		private const val EXPAND_DURATION = 250
+
 	}
 
 }

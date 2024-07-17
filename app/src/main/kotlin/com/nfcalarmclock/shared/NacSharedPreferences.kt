@@ -84,18 +84,20 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * This is used when updating database versions.
+	 *
 	 * @see .getAutoDismissTime
 	 */
-	val autoDismissTime: Long
+	val autoDismissTime: Int
 		get()
 		{
 			return if (autoDismissIndex < 5)
 			{
-				autoDismissIndex.toLong()
+				autoDismissIndex
 			}
 			else
 			{
-				(autoDismissIndex - 4) * 5L
+				(autoDismissIndex - 4) * 5
 			}
 		}
 
@@ -246,6 +248,42 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Number of seconds to turn off the flashlight.
+	 */
+	val flashlightOffDuration: Int
+		get()
+		{
+			val key = resources.getString(R.string.alarm_flashlight_off_duration_key)
+			val defaultValue = 0
+
+			return instance.getInt(key, defaultValue)
+		}
+
+	/**
+	 * Number of seconds to turn on the flashlight.
+	 */
+	val flashlightOnDuration: Int
+		get()
+		{
+			val key = resources.getString(R.string.alarm_flashlight_on_duration_key)
+			val defaultValue = 1
+
+			return instance.getInt(key, defaultValue)
+		}
+
+	/**
+	 * Strength level of the flashlight.
+	 */
+	val flashlightStrengthLevel: Int
+		get()
+		{
+			val key = resources.getString(R.string.alarm_flashlight_strength_level_key)
+			val defaultValue = 0
+
+			return instance.getInt(key, defaultValue)
+		}
+
+	/**
 	 * Whether volume should be gradually increased or not.
 	 */
 	val graduallyIncreaseVolumeWaitTime: Int
@@ -291,6 +329,8 @@ class NacSharedPreferences(context: Context)
 
 	/**
 	 * Max number of snoozes.
+	 *
+	 * This is used when updating database versions.
 	 */
 	val maxSnoozeValue: Int
 		get()
@@ -616,6 +656,8 @@ class NacSharedPreferences(context: Context)
 
 	/**
 	 * Snooze duration.
+	 *
+	 * This is used when updating database versions.
 	 */
 	val snoozeDurationValue: Int
 		get()
@@ -698,6 +740,18 @@ class NacSharedPreferences(context: Context)
 		{
 			val key = resources.getString(R.string.alarm_use_dismiss_early_key)
 			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+
+	/**
+	 * Whether the flashlight should be used or not.
+	 */
+	val useFlashlight: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.alarm_use_flashlight_key)
+			val defaultValue = resources.getBoolean(R.bool.default_use_flashlight)
 
 			return instance.getBoolean(key, defaultValue)
 		}
@@ -903,6 +957,36 @@ class NacSharedPreferences(context: Context)
 		val key = resources.getString(R.string.alarm_dismiss_early_time_key)
 
 		saveInt(key, dismissEarly)
+	}
+
+	/**
+	 * Edit the default use number of seconds to turn off the flashlight.
+	 */
+	fun editFlashlightOffDuration(duration: Int)
+	{
+		val key = resources.getString(R.string.alarm_flashlight_off_duration_key)
+
+		saveInt(key, duration)
+	}
+
+	/**
+	 * Edit the default use number of seconds to turn on the flashlight.
+	 */
+	fun editFlashlightOnDuration(duration: Int)
+	{
+		val key = resources.getString(R.string.alarm_flashlight_on_duration_key)
+
+		saveInt(key, duration)
+	}
+
+	/**
+	 * Edit the default strength level of the flashlight.
+	 */
+	fun editFlashlightStrengthLevel(strength: Int)
+	{
+		val key = resources.getString(R.string.alarm_flashlight_strength_level_key)
+
+		saveInt(key, strength)
 	}
 
 	/**
@@ -1122,6 +1206,16 @@ class NacSharedPreferences(context: Context)
 		val key = resources.getString(R.string.alarm_use_dismiss_early_key)
 
 		saveBoolean(key, useDismissEarly)
+	}
+
+	/**
+	 * Edit the default use the flashlight when an alarm is created.
+	 */
+	fun editUseFlashlight(use: Boolean)
+	{
+		val key = resources.getString(R.string.alarm_use_flashlight_key)
+
+		saveBoolean(key, use)
 	}
 
 	/**

@@ -79,6 +79,21 @@
 		/>
 
 	<TextView
+		android:id="@+id/alarm_option_auto_dismiss"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/tiny"
+		android:paddingBottom="@dimen/tiny"
+		android:gravity="center_horizontal"
+		android:clickable="true"
+		android:focusable="true"
+		android:textColor="@color/white"
+		android:textSize="@dimen/tsz_normal"
+		android:text="@string/action_alarm_option_auto_dismiss"
+		android:background="?attr/selectableItemBackground"
+		/>
+
+	<TextView
 		android:id="@+id/alarm_option_dismiss_early"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -90,6 +105,21 @@
 		android:textColor="@color/white"
 		android:textSize="@dimen/tsz_normal"
 		android:text="@string/action_alarm_option_dismiss_early"
+		android:background="?attr/selectableItemBackground"
+		/>
+
+	<TextView
+		android:id="@+id/alarm_option_snooze_options"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/tiny"
+		android:paddingBottom="@dimen/tiny"
+		android:gravity="center_horizontal"
+		android:clickable="true"
+		android:focusable="true"
+		android:textColor="@color/white"
+		android:textSize="@dimen/tsz_normal"
+		android:text="@string/action_alarm_option_snooze_options"
 		android:background="?attr/selectableItemBackground"
 		/>
 

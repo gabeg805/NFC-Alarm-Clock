@@ -2,11 +2,14 @@ package com.nfcalarmclock.activealarm
 
 import android.annotation.TargetApi
 import android.content.Context
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
 import android.os.Build
 import android.os.Handler
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
@@ -51,14 +54,24 @@ class NacWakeupProcess(
 	}
 
 	/**
+	 * The camera manager for enabling the flashlight.
+	 */
+	private val cameraManager = context.getSystemService(AppCompatActivity.CAMERA_SERVICE) as CameraManager
+
+	/**
 	 * Audio attributes.
 	 */
 	private var audioAttributes: NacAudioAttributes = NacAudioAttributes(context, alarm)
 
 	/**
-	 * Vibrate handler, to vibrate the phone at periodic intervals.
+	 * Vibrate handler to vibrate the phone at periodic intervals.
 	 */
 	private val vibrateHandler: Handler = Handler(context.mainLooper)
+
+	/**
+	 * Flashlight handler to shine the flashlight at periodic intervals.
+	 */
+	private val flashlightHandler: Handler = Handler(context.mainLooper)
 
 	/**
 	 * Say the current time at user specified intervals.
@@ -94,6 +107,21 @@ class NacWakeupProcess(
 	 * gradually increase volume process has started.
 	 */
 	private var hasGraduallyIncreaseVolumeStarted: Boolean = false
+
+	/**
+	 * The first camera ID that is able to use the flashlight.
+	 */
+	private val cameraId: String? = cameraManager.cameraIdList.firstOrNull { id ->
+
+			// Get the camera characteristics
+			val char = cameraManager.getCameraCharacteristics(id)
+			//println("Face: ${char.get(CameraCharacteristics.LENS_FACING)}")
+			//println("Str : ${char.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)}")
+
+			// Check if the flashlight is available
+			char.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
+
+	}
 
 	/**
 	 * Media player.
@@ -254,6 +282,9 @@ class NacWakeupProcess(
 		// Cleanup vibrate
 		cleanupVibrate()
 
+		// Cleanup the flashlight
+		cleanupFlashlight()
+
 		// Cleanup the media player
 		mediaPlayer?.release()
 
@@ -280,6 +311,23 @@ class NacWakeupProcess(
 	}
 
 	/**
+	 * Cleanup shining the flashlight.
+	 */
+	private fun cleanupFlashlight()
+	{
+		// Check if the camera ID is set
+		if (cameraId != null)
+		{
+			// Turn off the flashlight
+			println("TURNING OFF FLASHLIGHT")
+			cameraManager.setTorchMode(cameraId, false)
+		}
+
+		// Stop any future flashing to occur
+		flashlightHandler.removeCallbacksAndMessages(null)
+	}
+
+	/**
 	 * Cleanup vibrating the phone.
 	 */
 	private fun cleanupVibrate()
@@ -289,6 +337,30 @@ class NacWakeupProcess(
 
 		// Stop any future vibrations from occuring
 		vibrateHandler.removeCallbacksAndMessages(null)
+	}
+
+	/**
+	 * Find the camera ID.
+	 */
+	private fun findCameraId(): String
+	{
+		// Iterate over the list of camera IDs
+		for (id in cameraManager.cameraIdList)
+		{
+			// Get the camera characteristics
+			val char = cameraManager.getCameraCharacteristics(id)
+			//println("Face: ${char.get(CameraCharacteristics.LENS_FACING)}")
+			//println("Str : ${char.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)}")
+
+			// Check if the flashlight is available
+			if (char.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true)
+			{
+				return id
+			}
+		}
+
+		// Unable to find a camera ID
+		return ""
 	}
 
 	/**
@@ -466,6 +538,45 @@ class NacWakeupProcess(
 	}
 
 	/**
+	 * Shine the flashlight.
+	 */
+	fun shineFlashlight()
+	{
+		// Check if the camera ID is set
+		if (cameraId != null)
+		{
+			// Turn on the flashlight
+			println("TURNING ON FLASHLIGHT")
+			cameraManager.setTorchMode(cameraId, true)
+		}
+	}
+
+	/**
+	 * Start the simple wake up process.
+	 */
+	fun simpleStart()
+	{
+		// Play music
+		if (alarm.hasMedia)
+		{
+			playMusic()
+		}
+
+		// Vibrate
+		if (alarm.shouldVibrate)
+		{
+			vibrate()
+		}
+
+		// Flashlight
+		if (alarm.shouldUseFlashlight)
+		{
+			println("CAMERA ID: $cameraId")
+			shineFlashlight()
+		}
+	}
+
+	/**
 	 * Speak at the desired frequency.
 	 */
 	private fun speak()
@@ -487,24 +598,6 @@ class NacWakeupProcess(
 		{
 			// Wait for some period of time before speaking through TTS again
 			speakHandler.postDelayed({ speak() }, alarm.ttsFrequency*60L*1000L)
-		}
-	}
-
-	/**
-	 * Start the simple wake up process.
-	 */
-	fun simpleStart()
-	{
-		// Play music
-		if (alarm.hasMedia)
-		{
-			playMusic()
-		}
-
-		// Vibrate the phone
-		if (alarm.shouldVibrate)
-		{
-			vibrate()
 		}
 	}
 

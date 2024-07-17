@@ -266,6 +266,7 @@
 	</string-array>
 
 	<string-array name="whats_new_items">
+		<item>Se agregó la opción &lt;b>linterna&lt;/b> para encender la linterna cuando suena una alarma.</item>
 		<item>Se actualizó la aplicación para &lt;b>Android 14&lt;/b>.</item>
 		<item>Se actualizó la &lt;b>nueva pantalla de alarma&lt;/b> para que &lt;b>deslizar&lt;/b> para posponer o descartar sea mucho más fácil.</item>
 		<item>Se corrigió un bloqueo al detener una alarma.</item>

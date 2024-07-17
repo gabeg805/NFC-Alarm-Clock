@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import com.nfcalarmclock.R
-import com.nfcalarmclock.autodismiss.NacAutoDismissDialog
 import com.nfcalarmclock.shared.NacSharedPreferences
 
 /**
@@ -137,7 +136,7 @@ class NacStartWeekOnPreference @JvmOverloads constructor(
 		dialog.onStartWeekSelectedListener = this
 
 		// Show the dialog
-		dialog.show(manager, NacAutoDismissDialog.TAG)
+		dialog.show(manager, NacStartWeekOnDialog.TAG)
 	}
 
 }

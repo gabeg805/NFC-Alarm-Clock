@@ -593,7 +593,7 @@ class NacSwipeLayoutHandler(
 
 					// Check if the view should be flung with the additional
 					// velocity the user imparted on the view
-					if (shouldFlingView(view, finalVelocity))
+					if (shouldFlingView(finalVelocity))
 					{
 						// Fling the view
 						flingView(view, finalVelocity, minValue, maxValue,
@@ -874,18 +874,8 @@ class NacSwipeLayoutHandler(
 	/**
 	 * Check if should fling the view with some velocity.
 	 */
-	private fun shouldFlingView(view: View, velocity: Float): Boolean
+	private fun shouldFlingView(velocity: Float): Boolean
 	{
-		// Calculate the total distance that a view can travel
-		val totalDistance = endAlarmActionX - startAlarmActionX
-
-		// Initial calculation of the fractional distance that the view has traveled
-		val initDistance = (view.x - startAlarmActionX) / totalDistance
-
-		// Final calculation of the fractional distance the view
-		val percentDistance = if (view.id == snoozeButton.id) initDistance else 1f - initDistance
-
-		// Determine if the view should be flung
 		return (velocity != 0f)
 	}
 

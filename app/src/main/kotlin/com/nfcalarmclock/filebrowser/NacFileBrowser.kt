@@ -132,7 +132,8 @@ class NacFileBrowser(
 		metadata: NacFile.Metadata): View
 	{
 		// Get the extra data (title, artist, duration)
-		val extra = metadata.extra as Array<String>
+		val array = metadata.extra as Array<*>
+		val extra = array.filterIsInstance<String>()
 		val title = extra[0]
 		val artist = extra[1]
 		val duration = extra[2]

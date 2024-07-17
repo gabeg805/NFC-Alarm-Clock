@@ -212,7 +212,7 @@ class NacMusicFragment
 		// further needs to be done
 		if (NacMedia.isDirectory(mediaPath))
 		{
-			showWarningDirectorySelected(view)
+			showWarningDirectorySelected()
 			return
 		}
 
@@ -281,7 +281,7 @@ class NacMusicFragment
 	/**
 	 * Show a warning indicating that a music directory was selected.
 	 */
-	private fun showWarningDirectorySelected(view: View?)
+	private fun showWarningDirectorySelected()
 	{
 		// Create the dialog
 		val dialog = NacDirectorySelectedWarningDialog()

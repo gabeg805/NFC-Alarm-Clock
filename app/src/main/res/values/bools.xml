@@ -17,8 +17,9 @@
 
 	<!-- Alarm -->
 	<bool name="default_repeat">true</bool>
-	<bool name="default_use_nfc">false</bool>
 	<bool name="default_vibrate">true</bool>
+	<bool name="default_use_nfc">false</bool>
+	<bool name="default_use_flashlight">false</bool>
 
 	<!-- Notifications -->
 	<bool name="default_missed_alarm">true</bool>

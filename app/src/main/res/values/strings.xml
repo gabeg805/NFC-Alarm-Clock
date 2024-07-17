@@ -57,8 +57,10 @@
 	<string name="action_shuffle_music">Shuffle music</string>
 	<string name="action_recursively_play_media">Include subfolders</string>
 	<string name="action_alarm_option_audio_source">Audio source</string>
+	<string name="action_alarm_option_auto_dismiss">Auto dismiss</string>
 	<string name="action_alarm_option_gradually_increase_volume">Gradually increase volume</string>
 	<string name="action_alarm_option_restrict_volume">Restrict volume</string>
+	<string name="action_alarm_option_snooze_options">Snooze</string>
 	<string name="action_alarm_option_text_to_speech">Text-to-speech</string>
 	<string name="action_alarm_option_dismiss_early">Dismiss early</string>
 	<string name="action_alarm_option_upcoming_reminder">Upcoming reminder</string>
@@ -95,6 +97,8 @@
 	<string name="message_repeat_enabled">Repeat alarm</string>
 	<string name="message_vibrate_disabled">Vibrate off</string>
 	<string name="message_vibrate_enabled">Vibrate on</string>
+	<string name="message_flashlight_disabled">Flashlight off</string>
+	<string name="message_flashlight_enabled">Flashlight on</string>
 	<string name="message_alarm_copy">Copied alarm</string>
 	<string name="message_alarm_delete">Deleted alarm</string>
 	<string name="message_alarm_restore">Restored alarm</string>

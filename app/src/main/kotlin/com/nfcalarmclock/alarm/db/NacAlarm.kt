@@ -112,6 +112,36 @@ class NacAlarm()
 	var useNfc: Boolean = false
 
 	/**
+	 * Flag indicating whether the alarm should use the flashlight or not.
+	 */
+	@ColumnInfo(name = "should_use_flashlight", defaultValue = "0")
+	var useFlashlight: Boolean = false
+
+	/**
+	 * Strength level of the flashlight. Only available on API >= 33.
+	 */
+	@ColumnInfo(name = "flashlight_strength_level", defaultValue = "0")
+	var flashlightStrengthLevel: Int = 0
+
+	/**
+	 * Front or back facing camera flashlight.
+	 */
+	//@ColumnInfo(name = "flashlight_strength_level", defaultValue = "0")
+	//var flashlightStrengthLevel: Int = 0
+
+	/**
+	 * Number of seconds to turn on the flashlight.
+	 */
+	@ColumnInfo(name = "flashlight_on_duration", defaultValue = "0")
+	var flashlightOnDuration: Int = 0
+
+	/**
+	 * Number of seconds to turn off the flashlight.
+	 */
+	@ColumnInfo(name = "flashlight_off_duration", defaultValue = "0")
+	var flashlightOffDuration: Int = 0
+
+	/**
 	 * ID of the NFC tag that needs to be used to dismiss the alarm.
 	 */
 	@ColumnInfo(name = "nfc_tag_id")
@@ -213,6 +243,12 @@ class NacAlarm()
 	var shouldRestrictVolume: Boolean = false
 
 	/**
+	 * Time in which to auto dismiss the alarm.
+	 */
+	@ColumnInfo(name = "auto_dismiss_time", defaultValue = "0")
+	var autoDismissTime: Int = 0
+
+	/**
 	 * Flag indicating whether or not to use dismiss early.
 	 */
 	@ColumnInfo(name = "should_dismiss_early")
@@ -229,6 +265,24 @@ class NacAlarm()
 	 */
 	@ColumnInfo(name = "time_of_dismiss_early_alarm")
 	var timeOfDismissEarlyAlarm: Long = 0
+
+	/**
+	 * Snooze duration.
+	 */
+	@ColumnInfo(name = "snooze_duration", defaultValue = "0")
+	var snoozeDuration: Int = 0
+
+	/**
+	 * Max number of snoozes.
+	 */
+	@ColumnInfo(name = "max_snooze", defaultValue = "0")
+	var maxSnooze: Int = 0
+
+	/**
+	 * Whether snoozing is easy or not.
+	 */
+	@ColumnInfo(name = "should_use_easy_snooze", defaultValue = "0")
+	var useEasySnooze: Boolean = false
 
 	/**
 	 * Whether to show a reminder or not.
@@ -265,6 +319,14 @@ class NacAlarm()
 	 */
 	val hasMedia: Boolean
 		get() = mediaPath.isNotEmpty()
+
+	/**
+	 * Check if the alarm can be snoozed.
+	 *
+	 * @return True if the alarm can be snoozed, and False otherwise.
+	 */
+	val canSnooze: Boolean
+		get() = (snoozeCount < maxSnooze) || (maxSnooze < 0)
 
 	/**
 	 * Check if the alarm is snoozed.
@@ -313,6 +375,12 @@ class NacAlarm()
 		get() = useNfc
 
 	/**
+	 * Check if should use the flashlight or not.
+	 */
+	val shouldUseFlashlight: Boolean
+		get() = useFlashlight
+
+	/**
 	 * Check if should use TTS or not.
 	 */
 	val shouldUseTts: Boolean
@@ -337,6 +405,12 @@ class NacAlarm()
 		get() = useDismissEarly
 
 	/**
+	 * Check if should use easy snooze or not.
+	 */
+	val shouldUseEasySnooze: Boolean
+		get() = useEasySnooze
+
+	/**
 	 * Check if should show a reminder or not.
 	 */
 	val shouldShowReminder: Boolean
@@ -347,6 +421,87 @@ class NacAlarm()
 	 */
 	val shouldUseTtsForReminder: Boolean
 		get() = shouldUseTts && useTtsForReminder
+
+	/**
+	 * The index in a scrollable picker that corresponds to an auto dismiss time.
+	 */
+	var autoDismissIndex: Int
+		get()
+		{
+			return if (autoDismissTime < 5)
+			{
+				autoDismissTime
+			}
+			else
+			{
+				autoDismissTime/5 + 4
+			}
+		}
+		set(value)
+		{
+			autoDismissTime = if (value < 5)
+			{
+				value
+			}
+			else
+			{
+				(autoDismissTime-4) * 5
+			}
+		}
+
+	/**
+	 * The index in a scrollable picker that corresponds to a max snooze value.
+	 */
+	var maxSnoozeIndex: Int
+		get()
+		{
+			return if (maxSnooze == -1)
+			{
+				11
+			}
+			else
+			{
+				maxSnooze
+			}
+		}
+		set(value)
+		{
+			maxSnooze = if (value == 11)
+			{
+				-1
+			}
+			else
+			{
+				value
+			}
+		}
+
+	/**
+	 * The index in a scrollable picker that corresponds to a snooze duration time.
+	 */
+	var snoozeDurationIndex: Int
+		get()
+		{
+			return if (snoozeDuration < 9)
+			{
+				snoozeDuration - 1
+			}
+			else
+			{
+				snoozeDuration/5 + 7
+			}
+		}
+		set(value)
+		{
+			snoozeDuration = if (value < 9)
+			{
+				value + 1
+			}
+			else
+			{
+				(value-7) * 5
+			}
+		}
 
 	/**
 	 * Populate values with input parcel.
@@ -370,6 +525,10 @@ class NacAlarm()
 		vibrate = input.readInt() != 0
 		useNfc = input.readInt() != 0
 		nfcTagId = input.readString() ?: ""
+		useFlashlight = input.readInt() != 0
+		flashlightStrengthLevel = input.readInt()
+		flashlightOnDuration = input.readInt()
+		flashlightOffDuration = input.readInt()
 
 		// Media
 		mediaPath = input.readString() ?: ""
@@ -393,10 +552,18 @@ class NacAlarm()
 		graduallyIncreaseVolumeWaitTime = input.readInt()
 		shouldRestrictVolume = input.readInt() != 0
 
+		// Auto dismiss
+		autoDismissTime = input.readInt()
+
 		// Dismiss early
 		useDismissEarly = input.readInt() != 0
 		dismissEarlyTime = input.readInt()
 		timeOfDismissEarlyAlarm = input.readLong()
+
+		// Snooze
+		snoozeDuration = input.readInt()
+		maxSnooze = input.readInt()
+		useEasySnooze = input.readInt() != 0
 
 		// Reminder
 		showReminder = input.readInt() != 0
@@ -413,16 +580,6 @@ class NacAlarm()
 	fun addToTimeActive(time: Long)
 	{
 		timeActive += time
-	}
-
-	/**
-	 * Check if the alarm can be snoozed.
-	 *
-	 * @return True if the alarm can be snoozed, and False otherwise.
-	 */
-	fun canSnooze(shared: NacSharedPreferences): Boolean
-	{
-		return (snoozeCount < shared.maxSnoozeValue) || (shared.maxSnoozeValue < 0)
 	}
 
 	/**
@@ -578,6 +735,10 @@ class NacAlarm()
 		alarm.vibrate = shouldVibrate
 		alarm.useNfc = shouldUseNfc
 		alarm.nfcTagId = nfcTagId
+		alarm.useFlashlight = shouldUseFlashlight
+		alarm.flashlightStrengthLevel = flashlightStrengthLevel
+		alarm.flashlightOnDuration = flashlightOnDuration
+		alarm.flashlightOffDuration = flashlightOffDuration
 
 		// Media
 		alarm.mediaPath = mediaPath
@@ -601,10 +762,18 @@ class NacAlarm()
 		alarm.graduallyIncreaseVolumeWaitTime = graduallyIncreaseVolumeWaitTime
 		alarm.shouldRestrictVolume = shouldRestrictVolume
 
+		// Auto dismiss
+		alarm.autoDismissTime = autoDismissTime
+
 		// Dismiss early
 		alarm.useDismissEarly = shouldUseDismissEarly
 		alarm.dismissEarlyTime = dismissEarlyTime
 		alarm.timeOfDismissEarlyAlarm = timeOfDismissEarlyAlarm
+
+		// Snooze
+		alarm.snoozeDuration = snoozeDuration
+		alarm.maxSnooze = maxSnooze
+		alarm.useEasySnooze = useEasySnooze
 
 		// Reminder
 		alarm.showReminder = showReminder
@@ -687,6 +856,10 @@ class NacAlarm()
 			&& (shouldRepeat == alarm.shouldRepeat)
 			&& (shouldVibrate == alarm.shouldVibrate)
 			&& (shouldUseNfc == alarm.shouldUseNfc)
+			&& (shouldUseFlashlight == alarm.shouldUseFlashlight)
+			&& (flashlightStrengthLevel == alarm.flashlightStrengthLevel)
+			&& (flashlightOnDuration == alarm.flashlightOnDuration)
+			&& (flashlightOffDuration == alarm.flashlightOffDuration)
 			&& (nfcTagId == alarm.nfcTagId)
 			&& (mediaPath == alarm.mediaPath)
 			&& (mediaTitle == alarm.mediaTitle)
@@ -702,9 +875,13 @@ class NacAlarm()
 			&& (shouldGraduallyIncreaseVolume == alarm.shouldGraduallyIncreaseVolume)
 			&& (graduallyIncreaseVolumeWaitTime == alarm.graduallyIncreaseVolumeWaitTime)
 			&& (shouldRestrictVolume == alarm.shouldRestrictVolume)
+			&& (autoDismissTime == alarm.autoDismissTime)
 			&& (shouldUseDismissEarly == alarm.shouldUseDismissEarly)
 			&& (dismissEarlyTime == alarm.dismissEarlyTime)
 			&& (timeOfDismissEarlyAlarm == alarm.timeOfDismissEarlyAlarm)
+			&& (snoozeDuration == alarm.snoozeDuration)
+			&& (maxSnooze == alarm.maxSnooze)
+			&& (useEasySnooze == alarm.useEasySnooze)
 			&& (shouldShowReminder == alarm.shouldShowReminder)
 			&& (timeToShowReminder == alarm.timeToShowReminder)
 			&& (reminderFrequency == alarm.reminderFrequency)
@@ -799,6 +976,10 @@ class NacAlarm()
 		println("Vibrate             : $shouldVibrate")
 		println("Use NFC             : $shouldUseNfc")
 		println("Nfc Tag Id          : $nfcTagId")
+		println("Use Flashlight      : $shouldUseFlashlight")
+		println("Flashlight Strength : $flashlightStrengthLevel")
+		println("Flashlight On       : $flashlightOnDuration")
+		println("Flashlight Off      : $flashlightOffDuration")
 		println("Media Path          : $mediaPath")
 		println("Media Name          : $mediaTitle")
 		println("Media Type          : $mediaType")
@@ -813,9 +994,13 @@ class NacAlarm()
 		println("Grad Inc Vol        : $shouldGraduallyIncreaseVolume")
 		println("Grad Inc Vol Wait T : $graduallyIncreaseVolumeWaitTime")
 		println("Restrict Vol        : $shouldRestrictVolume")
+		println("Auto Dismiss        : $autoDismissTime")
 		println("Use Dismiss Early   : $shouldUseDismissEarly")
 		println("Dismiss Early       : $dismissEarlyTime")
 		println("Time of Early Alarm : $timeOfDismissEarlyAlarm")
+		println("Snooze Duration     : $snoozeDuration")
+		println("Max Snooze          : $maxSnooze")
+		println("Use Easy Snooze     : $useEasySnooze")
 		println("Show Reminder       : $shouldShowReminder")
 		println("Time to show remind : $timeToShowReminder")
 		println("Reminder freq       : $reminderFrequency")
@@ -854,14 +1039,15 @@ class NacAlarm()
 	 *
 	 * @return Calendar instance of when the snoozed alarm will go off.
 	 */
-	fun snooze(shared: NacSharedPreferences): Calendar
+	fun snooze(): Calendar
 	{
 		// Reset the active flag
 		isActive = false
 
 		// Add the snooze duration value to the current time
 		val cal = Calendar.getInstance()
-		cal.add(Calendar.MINUTE, shared.snoozeDurationValue)
+		cal.add(Calendar.MINUTE, snoozeDuration)
+		//cal.add(Calendar.MINUTE, shared.snoozeDurationValue)
 
 		// Set the snooze hour and minute
 		snoozeHour = cal[Calendar.HOUR_OF_DAY]
@@ -937,6 +1123,14 @@ class NacAlarm()
 	}
 
 	/**
+	 * Toggle use the flashlight.
+	 */
+	fun toggleUseFlashlight()
+	{
+		useFlashlight = !shouldUseFlashlight
+	}
+
+	/**
 	 * Toggle use NFC.
 	 */
 	fun toggleUseNfc()
@@ -999,6 +1193,10 @@ class NacAlarm()
 		output.writeInt(if (shouldVibrate) 1 else 0)
 		output.writeInt(if (shouldUseNfc) 1 else 0)
 		output.writeString(nfcTagId)
+		output.writeInt(if (shouldUseFlashlight) 1 else 0)
+		output.writeInt(flashlightStrengthLevel)
+		output.writeInt(flashlightOnDuration)
+		output.writeInt(flashlightOffDuration)
 
 		// Media
 		output.writeString(mediaPath)
@@ -1022,10 +1220,18 @@ class NacAlarm()
 		output.writeInt(graduallyIncreaseVolumeWaitTime)
 		output.writeInt(if (shouldRestrictVolume) 1 else 0)
 
+		// Auto dismiss
+		output.writeInt(autoDismissTime)
+
 		// Dismiss early
 		output.writeInt(if (shouldUseDismissEarly) 1 else 0)
 		output.writeInt(dismissEarlyTime)
 		output.writeLong(timeOfDismissEarlyAlarm)
+
+		// Snooze
+		output.writeInt(snoozeDuration)
+		output.writeInt(maxSnooze)
+		output.writeInt(if (shouldUseEasySnooze) 1 else 0)
 
 		// Reminder
 		output.writeInt(if (shouldShowReminder) 1 else 0)
@@ -1071,6 +1277,10 @@ class NacAlarm()
 			alarm.vibrate = shared?.vibrate ?: false
 			alarm.useNfc = shared?.useNfc ?: false
 			alarm.nfcTagId = ""
+			alarm.useFlashlight = shared?.useFlashlight ?: false
+			alarm.flashlightStrengthLevel = shared?.flashlightStrengthLevel ?: 0
+			alarm.flashlightOnDuration = shared?.flashlightOnDuration ?: 0
+			alarm.flashlightOffDuration = shared?.flashlightOffDuration ?: 0
 
 			// Media
 			alarm.mediaPath = shared?.mediaPath ?: ""
@@ -1094,10 +1304,18 @@ class NacAlarm()
 			alarm.graduallyIncreaseVolumeWaitTime = shared?.graduallyIncreaseVolumeWaitTime ?: 5
 			alarm.shouldRestrictVolume = shared?.shouldRestrictVolume ?: false
 
+			// Auto dismiss
+			alarm.autoDismissTime = shared?.autoDismissTime ?: 0
+
 			// Dismiss early
 			alarm.useDismissEarly = shared?.useDismissEarly ?: false
 			alarm.dismissEarlyTime = shared?.dismissEarlyTime ?: 0
 			alarm.timeOfDismissEarlyAlarm = 0
+
+			// Snooze
+			alarm.snoozeDuration = shared?.snoozeDurationValue ?: 0
+			alarm.maxSnooze = shared?.maxSnoozeValue ?: 0
+			alarm.useEasySnooze = shared?.easySnooze ?: false
 
 			// Reminder
 			alarm.showReminder = shared?.shouldShowReminder ?: false

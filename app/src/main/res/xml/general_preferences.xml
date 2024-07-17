@@ -4,6 +4,7 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
 	<!-- Dismiss -->
+	<!--
 	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
 		android:title="@string/dismiss_options_category">
 
@@ -15,8 +16,10 @@
 			app:allowDividerBelow="true"
 			/>
 	</com.nfcalarmclock.settings.preference.NacPreferenceCategory>
+	-->
 
 	<!-- Snooze -->
+	<!--
 	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
 		android:title="@string/snooze_options_category">
 
@@ -45,6 +48,7 @@
 			/>
 
 	</com.nfcalarmclock.settings.preference.NacPreferenceCategory>
+	-->
 
 	<!-- Default alarm -->
 	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
