@@ -876,10 +876,10 @@ class NacCardHolder(
 		alarm!!.toggleUseFlashlight()
 
 		// Check if NFC should not be used
-		if (!alarm!!.shouldUseFlashlight)
+		if (!alarm!!.useFlashlight)
 		{
 			// Determine which message to show
-			val messageId = if (alarm!!.shouldUseFlashlight)
+			val messageId = if (alarm!!.useFlashlight)
 			{
 				R.string.message_flashlight_enabled
 			}
@@ -1492,7 +1492,7 @@ class NacCardHolder(
 	private fun setFlashlightButton()
 	{
 		// Get the flashlight state from the alarm
-		val shouldUseFlashlight = alarm!!.shouldUseFlashlight
+		val shouldUseFlashlight = alarm!!.useFlashlight
 
 		// Check if the state of the button and the alarm are different
 		if (flashlightButton.isChecked != shouldUseFlashlight)

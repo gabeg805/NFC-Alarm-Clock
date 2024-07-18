@@ -8,11 +8,13 @@ import android.view.ViewGroup.LayoutParams
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
 import com.nfcalarmclock.view.dialog.NacDialogFragment
+import com.nfcalarmclock.whatsnew.NacWhatsNewDialog.OnReadWhatsNewListener
 import java.util.Locale
 
 /**
@@ -163,6 +165,25 @@ class NacWhatsNewDialog
 		 * Tag for the class.
 		 */
 		const val TAG = "NacWhatsNewDialog"
+
+		/**
+		 * Show the dialog.
+		 */
+		fun show(
+			manager: FragmentManager,
+			listener: () -> Unit = {})
+		{
+			// Create the dialog
+			val dialog = NacWhatsNewDialog()
+
+			// Setup the listener
+			dialog.onReadWhatsNewListener = OnReadWhatsNewListener {
+				listener()
+			}
+
+			// Show the dialog
+			dialog.show(manager, TAG)
+		}
 
 	}
 

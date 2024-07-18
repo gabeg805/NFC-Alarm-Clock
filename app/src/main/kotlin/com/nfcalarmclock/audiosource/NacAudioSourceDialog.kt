@@ -8,7 +8,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import androidx.fragment.app.FragmentManager
 import com.nfcalarmclock.R
+import com.nfcalarmclock.autodismiss.NacAutoDismissDialog
 import com.nfcalarmclock.view.dialog.NacDialogFragment
 
 /**
@@ -166,6 +168,29 @@ class NacAudioSourceDialog
 		 * Tag for the class.
 		 */
 		const val TAG = "NacAudioSourceDialog"
+
+		/**
+		 * Show the dialog.
+		 */
+		fun show(
+			manager: FragmentManager,
+			audioSource: String,
+			listener: (String) -> Unit = { _ -> })
+		{
+			// Create the dialog
+			val dialog = NacAudioSourceDialog()
+
+			// Set the default audio source
+			dialog.defaultAudioSource = audioSource
+
+			// Setup the listener
+			dialog.onAudioSourceSelectedListener = OnAudioSourceSelectedListener { audioSource ->
+				listener(audioSource)
+			}
+
+			// Show the dialog
+			dialog.show(manager, NacAutoDismissDialog.TAG)
+		}
 
 	}
 

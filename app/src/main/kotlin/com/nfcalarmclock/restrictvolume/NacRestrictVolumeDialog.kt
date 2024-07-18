@@ -2,14 +2,15 @@ package com.nfcalarmclock.restrictvolume
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.nfcalarmclock.R
+import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog.OnRestrictVolumeListener
 import com.nfcalarmclock.view.dialog.NacDialogFragment
+import com.nfcalarmclock.view.setupCheckBoxColor
 
 /**
  * Enable or disable the option to restrict the volume of an alarm that goes
@@ -62,11 +63,8 @@ class NacRestrictVolumeDialog
 		return AlertDialog.Builder(requireContext())
 			.setPositiveButton(R.string.action_ok) { _, _ ->
 
-				// Get the checked status
-				val isChecked = checkBox.isChecked
-
 				// Call the listener
-				onRestrictVolumeListener?.onRestrictVolume(isChecked)
+				onRestrictVolumeListener?.onRestrictVolume(checkBox.isChecked)
 
 			}
 			.setNegativeButton(R.string.action_cancel, null)
@@ -82,42 +80,19 @@ class NacRestrictVolumeDialog
 		// Super
 		super.onResume()
 
-		// Get the dialog container and text view
+		// Get the views
 		val container = dialog!!.findViewById<RelativeLayout>(R.id.should_restrict_volume)
 		val textView: TextView = dialog!!.findViewById(R.id.should_restrict_volume_summary)
 
-		// Set the member variable
 		checkBox = dialog!!.findViewById(R.id.should_restrict_volume_checkbox)
 
-		// Set the default checked status
+		// Set the default value
 		checkBox.isChecked = defaultShouldRestrictVolume
 
 		// Setup the views
-		setupOnClickListener(container, textView)
-		setupCheckBoxColor()
 		setupTextView(textView)
-	}
+		setupCheckBoxColor(checkBox, sharedPreferences!!)
 
-	/**
-	 * Setup the color of the restrict volume check box.
-	 */
-	private fun setupCheckBoxColor()
-	{
-		// Get the colors for the boolean states
-		val colors = intArrayOf(sharedPreferences!!.themeColor, Color.GRAY)
-
-		// Get the IDs of the two states
-		val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
-
-		// Set the state list of the checkbox
-		checkBox.buttonTintList = ColorStateList(states, colors)
-	}
-
-	/**
-	 * Setup the on click listener for the restrict volume.
-	 */
-	private fun setupOnClickListener(container: RelativeLayout, textView: TextView)
-	{
 		// Set the listener
 		container.setOnClickListener {
 
@@ -157,6 +132,29 @@ class NacRestrictVolumeDialog
 		 * Tag for the class.
 		 */
 		const val TAG = "NacRestrictVolumeDialog"
+
+		/**
+		 * Show the dialog.
+		 */
+		fun show(
+			manager: FragmentManager,
+			shouldRestrictVolume: Boolean,
+			listener: (Boolean) -> Unit = { _ -> })
+		{
+			// Create the dialog
+			val dialog = NacRestrictVolumeDialog()
+
+			// Set the default value
+			dialog.defaultShouldRestrictVolume = shouldRestrictVolume
+
+			// Setup the listener
+			dialog.onRestrictVolumeListener = OnRestrictVolumeListener { shouldRestrict ->
+				listener(shouldRestrict)
+			}
+
+			// Show the dialog
+			dialog.show(manager, TAG)
+		}
 
 	}
 

@@ -21,6 +21,7 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.tts.NacTextToSpeech
 import com.nfcalarmclock.tts.NacTextToSpeech.OnSpeakingListener
 import com.nfcalarmclock.tts.NacTranslate
+import com.nfcalarmclock.util.findCameraId
 import java.util.Calendar
 
 /**
@@ -111,17 +112,7 @@ class NacWakeupProcess(
 	/**
 	 * The first camera ID that is able to use the flashlight.
 	 */
-	private val cameraId: String? = cameraManager.cameraIdList.firstOrNull { id ->
-
-			// Get the camera characteristics
-			val char = cameraManager.getCameraCharacteristics(id)
-			//println("Face: ${char.get(CameraCharacteristics.LENS_FACING)}")
-			//println("Str : ${char.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)}")
-
-			// Check if the flashlight is available
-			char.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
-
-	}
+	private val cameraId: String = findCameraId(cameraManager)
 
 	/**
 	 * Media player.
@@ -234,13 +225,13 @@ class NacWakeupProcess(
 			var phrase = ""
 
 			// Check if should say the current time
-			if (alarm.shouldSayCurrentTime)
+			if (alarm.sayCurrentTime)
 			{
 				phrase += sayCurrentTime
 			}
 
 			// Check if should say the alarm name
-			if (alarm.shouldSayAlarmName)
+			if (alarm.sayAlarmName)
 			{
 				phrase += " $sayAlarmName"
 			}
@@ -316,10 +307,9 @@ class NacWakeupProcess(
 	private fun cleanupFlashlight()
 	{
 		// Check if the camera ID is set
-		if (cameraId != null)
+		if (cameraId.isNotEmpty())
 		{
 			// Turn off the flashlight
-			println("TURNING OFF FLASHLIGHT")
 			cameraManager.setTorchMode(cameraId, false)
 		}
 
@@ -337,30 +327,6 @@ class NacWakeupProcess(
 
 		// Stop any future vibrations from occuring
 		vibrateHandler.removeCallbacksAndMessages(null)
-	}
-
-	/**
-	 * Find the camera ID.
-	 */
-	private fun findCameraId(): String
-	{
-		// Iterate over the list of camera IDs
-		for (id in cameraManager.cameraIdList)
-		{
-			// Get the camera characteristics
-			val char = cameraManager.getCameraCharacteristics(id)
-			//println("Face: ${char.get(CameraCharacteristics.LENS_FACING)}")
-			//println("Str : ${char.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)}")
-
-			// Check if the flashlight is available
-			if (char.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true)
-			{
-				return id
-			}
-		}
-
-		// Unable to find a camera ID
-		return ""
 	}
 
 	/**
@@ -540,13 +506,12 @@ class NacWakeupProcess(
 	/**
 	 * Shine the flashlight.
 	 */
-	fun shineFlashlight()
+	private fun shineFlashlight()
 	{
 		// Check if the camera ID is set
-		if (cameraId != null)
+		if (cameraId.isNotEmpty())
 		{
 			// Turn on the flashlight
-			println("TURNING ON FLASHLIGHT")
 			cameraManager.setTorchMode(cameraId, true)
 		}
 	}
@@ -569,9 +534,8 @@ class NacWakeupProcess(
 		}
 
 		// Flashlight
-		if (alarm.shouldUseFlashlight)
+		if (alarm.useFlashlight)
 		{
-			println("CAMERA ID: $cameraId")
 			shineFlashlight()
 		}
 	}

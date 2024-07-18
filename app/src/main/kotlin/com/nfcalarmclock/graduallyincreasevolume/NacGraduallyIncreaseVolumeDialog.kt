@@ -2,15 +2,17 @@ package com.nfcalarmclock.graduallyincreasevolume
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.widget.NumberPicker
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.nfcalarmclock.R
+import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog.OnGraduallyIncreaseVolumeListener
 import com.nfcalarmclock.view.dialog.NacDialogFragment
+import com.nfcalarmclock.view.setupCheckBoxColor
 
 /**
  * Ask user if they would like to gradually increase the volume when an alarm
@@ -25,7 +27,7 @@ class NacGraduallyIncreaseVolumeDialog
 	 */
 	fun interface OnGraduallyIncreaseVolumeListener
 	{
-		fun onGraduallyIncreaseVolume(shouldIncrease: Boolean, index: Int, waitTime: Int)
+		fun onGraduallyIncreaseVolume(shouldIncrease: Boolean, waitTime: Int)
 	}
 
 	/**
@@ -36,9 +38,9 @@ class NacGraduallyIncreaseVolumeDialog
 	var defaultShouldGraduallyIncreaseVolume = false
 
 	/**
-	 * Default should increase volume wait time index.
+	 * Default gradually increase volume wait time.
 	 */
-	var defaultShouldGraduallyIncreaseVolumeIndex = 0
+	var defaultGraduallyIncreaseVolumeWaitTime = 0
 
 	/**
 	 * Check box for whether the volume should be gradually increased or not.
@@ -85,22 +87,12 @@ class NacGraduallyIncreaseVolumeDialog
 		return AlertDialog.Builder(requireContext())
 			.setPositiveButton(R.string.action_ok) { _, _ ->
 
-				// Get the index value
-				val index = picker.value
-
-				// Calculate the time based on the index
-				val waitTime = if (index < 10)
-				{
-					index + 1
-				}
-				else
-				{
-					(index - 7) * 5
-				}
+				// Get the time value
+				val waitTime = NacAlarm.calcGraduallyIncreaseVolumeWaitTime(picker.value)
 
 				// Call the listener
 				onGraduallyIncreaseVolumeListener?.onGraduallyIncreaseVolume(
-					shouldGraduallyIncreaseVolume, index, waitTime)
+					shouldGraduallyIncreaseVolume, waitTime)
 
 			}
 			.setNegativeButton(R.string.action_cancel, null)
@@ -116,11 +108,10 @@ class NacGraduallyIncreaseVolumeDialog
 		// Super
 		super.onResume()
 
-		// Get the container of the dialog and the text view
+		// Get the views
 		val container = dialog!!.findViewById<RelativeLayout>(R.id.should_gradually_increase_volume)
 		val textView: TextView = dialog!!.findViewById(R.id.should_gradually_increase_volume_summary)
 
-		// Set the member variable
 		checkBox = dialog!!.findViewById(R.id.should_gradually_increase_volume_checkbox)
 		pickerTitle = dialog!!.findViewById(R.id.title_gradually_increase_volume_wait_time)
 		picker = dialog!!.findViewById(R.id.gradually_increase_volume_wait_time_picker)
@@ -129,48 +120,10 @@ class NacGraduallyIncreaseVolumeDialog
 		checkBox.isChecked = defaultShouldGraduallyIncreaseVolume
 
 		// Setup the views
-		setupOnClickListener(container, textView)
-		setupCheckBoxColor()
+		setupCheckBoxColor(checkBox, sharedPreferences!!)
 		setupTextView(textView)
-		setupTimePickerValues()
 		setupTimePickerUsable()
-	}
 
-	/**
-	 * Set the default gradually increase volume index from a wait time.
-	 */
-	fun setDefaultIndexFromWaitTime(waitTime: Int)
-	{
-		defaultShouldGraduallyIncreaseVolumeIndex = if (waitTime <= 10)
-		{
-			waitTime - 1
-		}
-		else
-		{
-			waitTime / 5 + 7
-		}
-	}
-
-	/**
-	 * Setup the color of the gradually increase volume check box.
-	 */
-	private fun setupCheckBoxColor()
-	{
-		// Get the colors for the boolean states
-		val colors = intArrayOf(sharedPreferences!!.themeColor, Color.GRAY)
-
-		// Get the IDs of the two states
-		val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
-
-		// Set the state list of the checkbox
-		checkBox.buttonTintList = ColorStateList(states, colors)
-	}
-
-	/**
-	 * Setup the on click listener of the container.
-	 */
-	private fun setupOnClickListener(container: RelativeLayout, textView: TextView)
-	{
 		// Set the listener
 		container.setOnClickListener {
 
@@ -182,6 +135,15 @@ class NacGraduallyIncreaseVolumeDialog
 			setupTimePickerUsable()
 
 		}
+
+		// Get the wait times
+		val values = requireContext().resources.getStringArray(R.array.gradually_increase_volume_wait_times).toList()
+
+		// Setup the time picker
+		picker.minValue = 0
+		picker.maxValue = values.size - 1
+		picker.displayedValues = values.toTypedArray()
+		picker.value = NacAlarm.calcGraduallyIncreaseVolumeIndex(defaultGraduallyIncreaseVolumeWaitTime)
 	}
 
 	/**
@@ -218,21 +180,6 @@ class NacGraduallyIncreaseVolumeDialog
 		picker.isEnabled = shouldGraduallyIncreaseVolume
 	}
 
-	/**
-	 * Setup scrollable picker for the gradually increase volume wait time.
-	 */
-	private fun setupTimePickerValues()
-	{
-		// Get the wait times
-		val values = requireContext().resources.getStringArray(R.array.gradually_increase_volume_wait_times).toList()
-
-		// Setup the time picker
-		picker.minValue = 0
-		picker.maxValue = values.size - 1
-		picker.displayedValues = values.toTypedArray()
-		picker.value = defaultShouldGraduallyIncreaseVolumeIndex
-	}
-
 	companion object
 	{
 
@@ -240,6 +187,31 @@ class NacGraduallyIncreaseVolumeDialog
 		 * Tag for the class.
 		 */
 		const val TAG = "NacGraduallyIncreaseVolumeDialog"
+
+		/**
+		 * Show the dialog.
+		 */
+		fun show(
+			manager: FragmentManager,
+			shouldGraduallyIncreaseVolume: Boolean,
+			graduallyIncreaseVolumeWaitTime: Int,
+			listener: (Boolean, Int) -> Unit = { _, _ -> })
+		{
+			// Create the dialog
+			val dialog = NacGraduallyIncreaseVolumeDialog()
+
+			// Set the default value
+			dialog.defaultShouldGraduallyIncreaseVolume = shouldGraduallyIncreaseVolume
+			dialog.defaultGraduallyIncreaseVolumeWaitTime = graduallyIncreaseVolumeWaitTime
+
+			// Setup the listener
+			dialog.onGraduallyIncreaseVolumeListener = OnGraduallyIncreaseVolumeListener { shouldIncrease, waitTime ->
+				listener(shouldIncrease, waitTime)
+			}
+
+			// Show the dialog
+			dialog.show(manager, TAG)
+		}
 
 	}
 

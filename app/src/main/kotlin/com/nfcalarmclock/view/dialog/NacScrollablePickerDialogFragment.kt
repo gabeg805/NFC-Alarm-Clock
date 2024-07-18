@@ -31,7 +31,7 @@ abstract class NacScrollablePickerDialogFragment
 	/**
 	 * Scrollable picker.
 	 */
-	private var scrollablePicker: NumberPicker? = null
+	protected var scrollablePicker: NumberPicker? = null
 
 	/**
 	 * Listener for when the scrollable picker option is selected.

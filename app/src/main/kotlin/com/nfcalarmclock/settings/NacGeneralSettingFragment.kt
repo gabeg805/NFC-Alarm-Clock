@@ -14,18 +14,15 @@ import com.nfcalarmclock.alarmoptions.NacAlarmOptionsDialog
 import com.nfcalarmclock.alarmoptions.NacAlarmOptionsDialog.OnAlarmOptionClickedListener
 import com.nfcalarmclock.audiosource.NacAudioSourceDialog
 import com.nfcalarmclock.audiosource.NacAudioSourceDialog.OnAudioSourceSelectedListener
-import com.nfcalarmclock.autodismiss.NacAutoDismissPreference
 import com.nfcalarmclock.dismissearly.NacDismissEarlyDialog
 import com.nfcalarmclock.dismissearly.NacDismissEarlyDialog.OnDismissEarlyOptionSelectedListener
 import com.nfcalarmclock.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog
 import com.nfcalarmclock.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog.OnGraduallyIncreaseVolumeListener
-import com.nfcalarmclock.maxsnooze.NacMaxSnoozePreference
 import com.nfcalarmclock.mediapicker.NacMediaActivity
 import com.nfcalarmclock.mediapicker.NacMediaPreference
 import com.nfcalarmclock.name.NacNamePreference
 import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog
 import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog.OnRestrictVolumeListener
-import com.nfcalarmclock.snoozeduration.NacSnoozeDurationPreference
 import com.nfcalarmclock.tts.NacTextToSpeechDialog
 import com.nfcalarmclock.tts.NacTextToSpeechDialog.OnTextToSpeechOptionsSelectedListener
 import com.nfcalarmclock.upcomingreminder.NacUpcomingReminderDialog
@@ -89,9 +86,6 @@ class NacGeneralSettingFragment
 		setupMediaPreference()
 
 		// Setup the on click listeners
-		setupAutoDismissOnClickListener()
-		setupMaxSnoozeOnClickListener()
-		setupSnoozeDurationOnClickListener()
 		setupAlarmDaysOnClickListener()
 		setupAlarmNameOnClickListener()
 		setupAudioOptionsOnClickListener()
@@ -156,48 +150,6 @@ class NacGeneralSettingFragment
 	}
 
 	/**
-	 * Setup the auto dismiss on click listener.
-	 */
-	private fun setupAutoDismissOnClickListener()
-	{
-		// Get the preference
-		val key = getString(R.string.auto_dismiss_key)
-		val pref = findPreference<NacAutoDismissPreference>(key)
-
-		// Setup the listener
-		pref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { p ->
-
-			// Show the dialog
-			(p as NacAutoDismissPreference).showDialog(childFragmentManager)
-
-			// Return
-			true
-
-		}
-	}
-
-	/**
-	 * Setup the max snooze on click listener.
-	 */
-	private fun setupMaxSnoozeOnClickListener()
-	{
-		// Get the preference
-		val key = resources.getString(R.string.max_snooze_key)
-		val pref = findPreference<NacMaxSnoozePreference>(key)
-
-		// Setup the listener
-		pref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { p ->
-
-			// Show the dialog
-			(p as NacMaxSnoozePreference).showDialog(childFragmentManager)
-
-			// Return
-			true
-
-		}
-	}
-
-	/**
 	 * Setup the media preference.
 	 */
 	private fun setupMediaPreference()
@@ -231,27 +183,6 @@ class NacGeneralSettingFragment
 	}
 
 	/**
-	 * Setup the snooze duration on click listener.
-	 */
-	private fun setupSnoozeDurationOnClickListener()
-	{
-		// Get the preference
-		val key = getString(R.string.snooze_duration_key)
-		val pref = findPreference<NacSnoozeDurationPreference>(key)
-
-		// Setup the listener
-		pref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { p ->
-
-			// Show the dialog
-			(p as NacSnoozeDurationPreference).showDialog(childFragmentManager)
-
-			// Return
-			true
-
-		}
-	}
-
-	/**
 	 * Show the alarm options dialog.
 	 */
 	private fun showAlarmOptionsDialog()
@@ -265,172 +196,115 @@ class NacGeneralSettingFragment
 			// Show the corresponding alarm option dialog
 			when (id)
 			{
-				R.id.alarm_option_audio_source -> showAudioSourceDialog()
-				R.id.alarm_option_gradually_increase_volume -> showGraduallyIncreaseVolumeDialog()
-				R.id.alarm_option_restrict_volume -> showRestrictVolumeDialog()
-				R.id.alarm_option_text_to_speech -> showTextToSpeechDialog()
-				R.id.alarm_option_dismiss_early -> showDismissEarlyDialog()
-				R.id.alarm_option_upcoming_reminder -> showUpcomingReminderDialog()
+
+				// Audio source
+				R.id.alarm_option_audio_source -> {
+
+					// Show dialog
+					NacAudioSourceDialog.show(childFragmentManager,
+						sharedPreferences!!.audioSource,
+						listener = { audioSource ->
+
+							// Save the audio source that was selected
+							sharedPreferences!!.editAudioSource(audioSource)
+
+						})
+				}
+
+				// Dismiss early
+				R.id.alarm_option_dismiss_early -> {
+
+					// Show dialog
+					NacDismissEarlyDialog.show(childFragmentManager,
+						sharedPreferences!!.useDismissEarly,
+						sharedPreferences!!.dismissEarlyTime,
+						listener = { useDismissEarly, dismissEarlyTime ->
+
+							// Save the settings that were selected for dismiss early
+							sharedPreferences!!.editUseDismissEarly(useDismissEarly)
+							sharedPreferences!!.editDismissEarlyTime(dismissEarlyTime)
+
+						})
+				}
+
+				// Gradually increase volume
+				R.id.alarm_option_gradually_increase_volume -> {
+
+					// Show dialog
+					NacGraduallyIncreaseVolumeDialog.show(childFragmentManager,
+						sharedPreferences!!.shouldGraduallyIncreaseVolume,
+						sharedPreferences!!.graduallyIncreaseVolumeWaitTime,
+						listener = { shouldIncrease, waitTime ->
+
+							// Save the setting for gradually increasing volume
+							sharedPreferences!!.editShouldGraduallyIncreaseVolume(shouldIncrease)
+							sharedPreferences!!.editGraduallyIncreaseVolumeWaitTime(waitTime)
+
+						})
+				}
+
+				// Restrict volume
+				R.id.alarm_option_restrict_volume -> {
+
+					// Show dialog
+					NacRestrictVolumeDialog.show(childFragmentManager,
+						sharedPreferences!!.shouldRestrictVolume,
+						listener = { shouldRestrict ->
+
+							// Save the setting for restricting volume
+							sharedPreferences!!.editShouldRestrictVolume(shouldRestrict)
+
+						})
+				}
+
+				// TTS
+				R.id.alarm_option_text_to_speech -> {
+
+					// Show dialog
+					NacTextToSpeechDialog.show(childFragmentManager,
+						sharedPreferences!!.shouldSayCurrentTime,
+						sharedPreferences!!.shouldSayAlarmName,
+						sharedPreferences!!.speakFrequency,
+						listener = { shouldSayCurrentTime, shouldSayAlarmName, ttsFreq ->
+
+							// Save the text to speech settings
+							sharedPreferences!!.editShouldSayCurrentTime(shouldSayCurrentTime)
+							sharedPreferences!!.editShouldSayAlarmName(shouldSayAlarmName)
+							sharedPreferences!!.editSpeakFrequency(ttsFreq)
+
+						})
+				}
+
+				// Upcoming reminder
+				R.id.alarm_option_upcoming_reminder -> {
+
+					// Show dialog
+					NacUpcomingReminderDialog.show(childFragmentManager,
+						sharedPreferences!!.shouldShowReminder,
+						sharedPreferences!!.timeToShowReminder,
+						sharedPreferences!!.reminderFrequency,
+						sharedPreferences!!.shouldUseTtsForReminder,
+						sharedPreferences!!.shouldUseTts,
+						listener = { shouldShowReminder, timeToShow, reminderFreq, shouldUseTts ->
+
+							// Save the upcoming reminder options
+							sharedPreferences!!.editShouldShowReminder(shouldShowReminder)
+							sharedPreferences!!.editTimeToShowReminder(timeToShow)
+							sharedPreferences!!.editReminderFrequency(reminderFreq)
+							sharedPreferences!!.editShouldUseTtsForReminder(shouldUseTts)
+
+						})
+				}
+
+				// Unknown
 				else -> {}
+
 			}
 
 		}
 
 		// Show the dialog
 		dialog.show(childFragmentManager, NacAlarmOptionsDialog.TAG)
-	}
-
-	/**
-	 * Show the audio source dialog.
-	 */
-	private fun showAudioSourceDialog()
-	{
-		// Create the dialog
-		val dialog = NacAudioSourceDialog()
-
-		// Set the default setting
-		dialog.defaultAudioSource = sharedPreferences!!.audioSource
-
-		// Set the listener for when the user is done
-		dialog.onAudioSourceSelectedListener = OnAudioSourceSelectedListener { audioSource ->
-
-			// Save the audio source that was selected
-			sharedPreferences!!.editAudioSource(audioSource)
-
-		}
-
-		// Show the dialog
-		dialog.show(childFragmentManager, NacAudioSourceDialog.TAG)
-	}
-
-	/**
-	 * Show the dismiss early dialog.
-	 */
-	private fun showDismissEarlyDialog()
-	{
-		// Create the dialog
-		val dialog = NacDismissEarlyDialog()
-
-		// Set the default settings
-		dialog.defaultShouldDismissEarly = sharedPreferences!!.useDismissEarly
-		dialog.setDefaultIndexFromDismissEarlyTime(sharedPreferences!!.dismissEarlyTime)
-
-		// Set the listener for when the user is done
-		dialog.onDismissEarlyOptionSelectedListener = OnDismissEarlyOptionSelectedListener { useDismissEarly, _, time ->
-
-			// Save the settings that were selected for dismiss early
-			sharedPreferences!!.editUseDismissEarly(useDismissEarly)
-			sharedPreferences!!.editDismissEarlyTime(time)
-
-		}
-
-		// Show the dialog
-		dialog.show(childFragmentManager, NacGraduallyIncreaseVolumeDialog.TAG)
-	}
-
-	/**
-	 * Show the gradually increase volume dialog.
-	 */
-	private fun showGraduallyIncreaseVolumeDialog()
-	{
-		// Create the dialog
-		val dialog = NacGraduallyIncreaseVolumeDialog()
-
-		// Set the default setting
-		dialog.defaultShouldGraduallyIncreaseVolume = sharedPreferences!!.shouldGraduallyIncreaseVolume
-		dialog.setDefaultIndexFromWaitTime(sharedPreferences!!.graduallyIncreaseVolumeWaitTime)
-
-		// Set the listener for when the user is done
-		dialog.onGraduallyIncreaseVolumeListener = OnGraduallyIncreaseVolumeListener { shouldIncrease, _, waitTime ->
-
-			// Save the setting for gradually increasing volume
-			sharedPreferences!!.editShouldGraduallyIncreaseVolume(shouldIncrease)
-			sharedPreferences!!.editGraduallyIncreaseVolumeWaitTime(waitTime)
-
-		}
-
-		// Show the dialog
-		dialog.show(childFragmentManager, NacGraduallyIncreaseVolumeDialog.TAG)
-	}
-
-	/**
-	 * Show the restrict volume dialog.
-	 */
-	private fun showRestrictVolumeDialog()
-	{
-		// Create the dialog
-		val dialog = NacRestrictVolumeDialog()
-
-		// Set the default setting
-		dialog.defaultShouldRestrictVolume = sharedPreferences!!.shouldRestrictVolume
-
-		// Set the listener for when the user is done
-		dialog.onRestrictVolumeListener = OnRestrictVolumeListener { shouldRestrict ->
-
-			// Save the setting for restricting volume
-			sharedPreferences!!.editShouldRestrictVolume(shouldRestrict)
-
-		}
-
-		// Show the dialog
-		dialog.show(childFragmentManager, NacRestrictVolumeDialog.TAG)
-	}
-
-	/**
-	 * Show the text-to-speech dialog.
-	 */
-	private fun showTextToSpeechDialog()
-	{
-		// Create the dialog
-		val dialog = NacTextToSpeechDialog()
-
-		// Set the default settings
-		dialog.defaultSayCurrentTime = sharedPreferences!!.shouldSayCurrentTime
-		dialog.defaultSayAlarmName = sharedPreferences!!.shouldSayAlarmName
-		dialog.defaultTtsFrequency = sharedPreferences!!.speakFrequency
-
-		// Set the listener for when the user is done
-		dialog.onTextToSpeechOptionsSelectedListener = OnTextToSpeechOptionsSelectedListener { shouldSayCurrentTime, shouldSayAlarmName, ttsFreq ->
-
-			// Save the text to speech settings
-			sharedPreferences!!.editShouldSayCurrentTime(shouldSayCurrentTime)
-			sharedPreferences!!.editShouldSayAlarmName(shouldSayAlarmName)
-			sharedPreferences!!.editSpeakFrequency(ttsFreq)
-
-		}
-
-		// Show the dialog
-		dialog.show(childFragmentManager, NacTextToSpeechDialog.TAG)
-	}
-
-	/**
-	 * Show the upcoming reminder dialog.
-	 */
-	private fun showUpcomingReminderDialog()
-	{
-		// Create the dialog
-		val dialog = NacUpcomingReminderDialog()
-
-		// Set the default values
-		dialog.defaultShouldShowReminder = sharedPreferences!!.shouldShowReminder
-		dialog.setDefaultIndexFromTime(sharedPreferences!!.timeToShowReminder)
-		dialog.defaultReminderFrequencyIndex = sharedPreferences!!.reminderFrequency
-		dialog.defaultShouldUseTts = sharedPreferences!!.shouldUseTtsForReminder
-		dialog.canShowTts = sharedPreferences!!.shouldUseTts
-
-		// Setup the listener
-		dialog.onUpcomingReminderOptionSelectedListener = NacUpcomingReminderDialog.OnUpcomingReminderOptionSelectedListener { shouldShowReminder, timeToShow, reminderFreq, shouldUseTts ->
-
-			// Save the upcoming reminder options
-			sharedPreferences!!.editShouldShowReminder(shouldShowReminder)
-			sharedPreferences!!.editTimeToShowReminder(timeToShow)
-			sharedPreferences!!.editReminderFrequency(reminderFreq)
-			sharedPreferences!!.editShouldUseTtsForReminder(shouldUseTts)
-
-		}
-
-		// Show the dialog
-		dialog.show(childFragmentManager, NacUpcomingReminderDialog.TAG)
 	}
 
 }

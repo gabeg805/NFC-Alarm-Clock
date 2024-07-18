@@ -2,16 +2,21 @@ package com.nfcalarmclock.dismissearly
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.widget.NumberPicker
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.nfcalarmclock.R
+import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.dismissearly.NacDismissEarlyDialog.OnDismissEarlyOptionSelectedListener
 import com.nfcalarmclock.view.dialog.NacDialogFragment
+import com.nfcalarmclock.view.setupCheckBoxColor
 
+/**
+ * Dismiss early dialog.
+ */
 class NacDismissEarlyDialog
 	: NacDialogFragment()
 {
@@ -21,7 +26,7 @@ class NacDismissEarlyDialog
 	 */
 	fun interface OnDismissEarlyOptionSelectedListener
 	{
-		fun onDismissEarlyOptionSelected(useDismissEarly: Boolean, index: Int, time: Int)
+		fun onDismissEarlyOptionSelected(useDismissEarly: Boolean, dismissEarlyTime: Int)
 	}
 
 	/**
@@ -30,9 +35,9 @@ class NacDismissEarlyDialog
 	var defaultShouldDismissEarly = false
 
 	/**
-	 * Default dismiss early index.
+	 * Default dismiss early time.
 	 */
-	var defaultShouldDismissEarlyIndex = 0
+	var defaultDismissEarlyTime = 0
 
 	/**
 	 * Check box to dismiss early or not.
@@ -79,22 +84,12 @@ class NacDismissEarlyDialog
 		return AlertDialog.Builder(requireContext())
 			.setPositiveButton(R.string.action_ok) { _, _ ->
 
-				// Get the index value
-				val index = picker.value
-
-				// Calculate the time based on the index
-				val time = if (index < 5)
-				{
-					index + 1
-				}
-				else
-				{
-					(index - 3) * 5
-				}
+				// Get the time value
+				val dismissEarlyTime = NacAlarm.calcDismissEarlyTime(picker.value)
 
 				// Call the listener
 				onDismissEarlyOptionSelectedListener?.onDismissEarlyOptionSelected(
-					shouldDismissEarly, index, time)
+					shouldDismissEarly, dismissEarlyTime)
 
 			}
 			.setNegativeButton(R.string.action_cancel, null)
@@ -110,61 +105,22 @@ class NacDismissEarlyDialog
 		// Super
 		super.onResume()
 
-		// Get the container of the dialog and the text view
+		// Get the views
 		val container = dialog!!.findViewById<RelativeLayout>(R.id.should_use_dismiss_early)
 		val textView = dialog!!.findViewById<TextView>(R.id.should_use_dismiss_early_summary)
 
-		// Set the views
 		checkBox = dialog!!.findViewById(R.id.should_use_dismiss_early_checkbox)
 		pickerTitle = dialog!!.findViewById(R.id.title_how_early_to_dismiss)
 		picker = dialog!!.findViewById(R.id.dismiss_early_time_picker)
 
-		// Set the status of the checkbox
+		// Set the default values
 		checkBox.isChecked = defaultShouldDismissEarly
 
 		// Setup the views
-		setupOnClickListener(container, textView)
-		setupCheckBoxColor()
+		setupCheckBoxColor(checkBox, sharedPreferences!!)
 		setupTextView(textView)
-		setupTimePickerValues()
 		setupTimePickerUsable()
-	}
 
-	/**
-	 * Set the default dismiss early index from a time.
-	 */
-	fun setDefaultIndexFromDismissEarlyTime(time: Int)
-	{
-		defaultShouldDismissEarlyIndex = if (time <= 5)
-		{
-			time - 1
-		}
-		else
-		{
-			time / 5 + 3
-		}
-	}
-
-	/**
-	 * Setup the color of the dismiss early check box.
-	 */
-	private fun setupCheckBoxColor()
-	{
-		// Get the colors for the boolean states
-		val colors = intArrayOf(sharedPreferences!!.themeColor, Color.GRAY)
-
-		// Get the IDs of the two states
-		val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
-
-		// Set the state list of the checkbox
-		checkBox.buttonTintList = ColorStateList(states, colors)
-	}
-
-	/**
-	 * Setup the on click listener for when the container is clicked.
-	 */
-	private fun setupOnClickListener(container: RelativeLayout, textView: TextView)
-	{
 		// Setup the listener
 		container.setOnClickListener {
 
@@ -176,6 +132,15 @@ class NacDismissEarlyDialog
 			setupTimePickerUsable()
 
 		}
+
+		// Get the scroll picker values
+		val values = requireContext().resources.getStringArray(R.array.dismiss_early_times).toList()
+
+		// Setup the scroll picker
+		picker.minValue = 0
+		picker.maxValue = values.size - 1
+		picker.displayedValues = values.toTypedArray()
+		picker.value = NacAlarm.calcDismissEarlyIndex(defaultDismissEarlyTime)
 	}
 
 	/**
@@ -212,21 +177,6 @@ class NacDismissEarlyDialog
 		picker.isEnabled = shouldDismissEarly
 	}
 
-	/**
-	 * Setup scrollable picker for the dismiss early time.
-	 */
-	private fun setupTimePickerValues()
-	{
-		// Get the dismiss early times
-		val values = requireContext().resources.getStringArray(R.array.dismiss_early_times).toList()
-
-		// Setup the time picker
-		picker.minValue = 0
-		picker.maxValue = values.size - 1
-		picker.displayedValues = values.toTypedArray()
-		picker.value = defaultShouldDismissEarlyIndex
-	}
-
 	companion object
 	{
 
@@ -234,6 +184,31 @@ class NacDismissEarlyDialog
 		 * Tag for the class.
 		 */
 		const val TAG = "NacDismissEarlyDialog"
+
+		/**
+		 * Show the dialog.
+		 */
+		fun show(
+			manager: FragmentManager,
+			shouldDismissEarly: Boolean,
+			dismissEarlyTime: Int,
+			listener: (Boolean, Int) -> Unit = { _, _ -> })
+		{
+			// Create the dialog
+			val dialog = NacDismissEarlyDialog()
+
+			// Set the default values
+			dialog.defaultShouldDismissEarly = shouldDismissEarly
+			dialog.defaultDismissEarlyTime = dismissEarlyTime
+
+			// Setup the listener
+			dialog.onDismissEarlyOptionSelectedListener = OnDismissEarlyOptionSelectedListener { useDismissEarly, dismissEarlyTime ->
+					listener(useDismissEarly, dismissEarlyTime)
+			}
+
+			// Show the dialog
+			dialog.show(manager, TAG)
+		}
 
 	}
 

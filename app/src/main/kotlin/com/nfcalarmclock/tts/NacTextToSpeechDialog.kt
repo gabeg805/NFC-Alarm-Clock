@@ -2,14 +2,15 @@ package com.nfcalarmclock.tts
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.widget.NumberPicker
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.nfcalarmclock.R
+import com.nfcalarmclock.tts.NacTextToSpeechDialog.OnTextToSpeechOptionsSelectedListener
 import com.nfcalarmclock.view.dialog.NacDialogFragment
+import com.nfcalarmclock.view.setupCheckBoxColor
 
 /**
  * Text to speech dialog asking the user what TTS settings they want.
@@ -125,62 +126,10 @@ class NacTextToSpeechDialog
 		alarmNameCheckBox.isChecked = defaultSayAlarmName
 
 		// Setup the views
-		setupCheckBoxColor()
-		setupOnClickListener()
-		setupFrequencyPickerValues()
+		setupCheckBoxColor(currentTimeCheckBox, sharedPreferences!!)
+		setupCheckBoxColor(alarmNameCheckBox, sharedPreferences!!)
 		setupFrequencyPickerUsable()
-	}
 
-	/**
-	 * Setup the color of the use text-to-speech checkbox.
-	 */
-	private fun setupCheckBoxColor()
-	{
-		// Get the colors for the boolean states
-		val colors = intArrayOf(sharedPreferences!!.themeColor, Color.GRAY)
-
-		// Get the IDs of the two states
-		val states = arrayOf(intArrayOf(android.R.attr.state_checked),
-			intArrayOf(-android.R.attr.state_checked))
-
-		// Set the state list of the checkboxes
-		currentTimeCheckBox.buttonTintList = ColorStateList(states, colors)
-		alarmNameCheckBox.buttonTintList = ColorStateList(states, colors)
-	}
-
-	/**
-	 * Setup whether the text-to-speech frequency picker can be used or not.
-	 */
-	private fun setupFrequencyPickerUsable()
-	{
-		// Set the alpha of the views
-		pickerTitle.alpha = alpha
-		picker.alpha = alpha
-
-		// Set whether the frequency picker should be accessible or not
-		picker.isEnabled = shouldUseTts
-	}
-
-	/**
-	 * Setup the values of the text-to-speech frequency picker.
-	 */
-	private fun setupFrequencyPickerValues()
-	{
-		// Get the max frequency size
-		val values = requireContext().resources.getStringArray(R.array.tts_frequency).toList()
-
-		// Setup the frequency picker
-		picker.minValue = 0
-		picker.maxValue = values.size - 1
-		picker.displayedValues = values.toTypedArray()
-		picker.value = defaultTtsFrequency
-	}
-
-	/**
-	 * Setup the on click listeners.
-	 */
-	private fun setupOnClickListener()
-	{
 		// Set the on click listener for the current time checkbox container
 		currentTimeCheckBox.setOnClickListener {
 
@@ -196,6 +145,28 @@ class NacTextToSpeechDialog
 			setupFrequencyPickerUsable()
 
 		}
+
+		// Get the max frequency size
+		val values = requireContext().resources.getStringArray(R.array.tts_frequency).toList()
+
+		// Setup the frequency picker
+		picker.minValue = 0
+		picker.maxValue = values.size - 1
+		picker.displayedValues = values.toTypedArray()
+		picker.value = defaultTtsFrequency
+	}
+
+	/**
+	 * Setup whether the text-to-speech frequency picker can be used or not.
+	 */
+	private fun setupFrequencyPickerUsable()
+	{
+		// Set the alpha of the views
+		pickerTitle.alpha = alpha
+		picker.alpha = alpha
+
+		// Set whether the frequency picker should be accessible or not
+		picker.isEnabled = shouldUseTts
 	}
 
 	companion object
@@ -205,6 +176,33 @@ class NacTextToSpeechDialog
 		 * Tag for the class.
 		 */
 		const val TAG = "NacAlarmTextToSpeechDialog"
+
+		/**
+		 * Show the dialog.
+		 */
+		fun show(
+			manager: FragmentManager,
+			shouldSayCurrentTime: Boolean,
+			shouldSayAlarmName: Boolean,
+			ttsFreq: Int,
+			listener: (Boolean, Boolean, Int) -> Unit = { _, _, _ -> })
+		{
+			// Create the dialog
+			val dialog = NacTextToSpeechDialog()
+
+			// Set the default values
+			dialog.defaultSayCurrentTime = shouldSayCurrentTime
+			dialog.defaultSayAlarmName = shouldSayAlarmName
+			dialog.defaultTtsFrequency = ttsFreq
+
+			// Setup the listener
+			dialog.onTextToSpeechOptionsSelectedListener = OnTextToSpeechOptionsSelectedListener { shouldSayCurrentTime, shouldSayAlarmName, ttsFreq ->
+				listener(shouldSayCurrentTime, shouldSayAlarmName, ttsFreq)
+			}
+
+			// Show the dialog
+			dialog.show(manager, TAG)
+		}
 
 	}
 

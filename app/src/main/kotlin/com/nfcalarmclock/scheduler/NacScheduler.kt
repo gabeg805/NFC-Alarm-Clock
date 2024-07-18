@@ -39,7 +39,7 @@ object NacScheduler
 		addAlarm(context, alarm, nextAlarmCal)
 
 		// Check if should show an upcoming reminder
-		if (alarm.shouldShowReminder)
+		if (alarm.showReminder)
 		{
 			// Get the calendar for the first upcoming reminder
 			val firstReminderCal = NacCalendar.getFirstAlarmUpcomingReminder(alarm, alarmCal = nextAlarmCal)

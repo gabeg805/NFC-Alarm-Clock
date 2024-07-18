@@ -375,133 +375,16 @@ class NacAlarm()
 		get() = useNfc
 
 	/**
-	 * Check if should use the flashlight or not.
-	 */
-	val shouldUseFlashlight: Boolean
-		get() = useFlashlight
-
-	/**
 	 * Check if should use TTS or not.
 	 */
 	val shouldUseTts: Boolean
 		get() = sayCurrentTime || sayAlarmName
 
 	/**
-	 * Check if should say the current time when an alarm goes off.
-	 */
-	val shouldSayCurrentTime: Boolean
-		get() = sayCurrentTime
-
-	/**
-	 * Check if should say the alarm name when an alarm goes off.
-	 */
-	val shouldSayAlarmName: Boolean
-		get() = sayAlarmName
-
-	/**
-	 * Check if should use dismiss early or not.
-	 */
-	val shouldUseDismissEarly: Boolean
-		get() = useDismissEarly
-
-	/**
-	 * Check if should use easy snooze or not.
-	 */
-	val shouldUseEasySnooze: Boolean
-		get() = useEasySnooze
-
-	/**
-	 * Check if should show a reminder or not.
-	 */
-	val shouldShowReminder: Boolean
-		get() = showReminder
-
-	/**
 	 * Check if should use text-to-speech for the reminder or not.
 	 */
 	val shouldUseTtsForReminder: Boolean
 		get() = shouldUseTts && useTtsForReminder
-
-	/**
-	 * The index in a scrollable picker that corresponds to an auto dismiss time.
-	 */
-	var autoDismissIndex: Int
-		get()
-		{
-			return if (autoDismissTime < 5)
-			{
-				autoDismissTime
-			}
-			else
-			{
-				autoDismissTime/5 + 4
-			}
-		}
-		set(value)
-		{
-			autoDismissTime = if (value < 5)
-			{
-				value
-			}
-			else
-			{
-				(autoDismissTime-4) * 5
-			}
-		}
-
-	/**
-	 * The index in a scrollable picker that corresponds to a max snooze value.
-	 */
-	var maxSnoozeIndex: Int
-		get()
-		{
-			return if (maxSnooze == -1)
-			{
-				11
-			}
-			else
-			{
-				maxSnooze
-			}
-		}
-		set(value)
-		{
-			maxSnooze = if (value == 11)
-			{
-				-1
-			}
-			else
-			{
-				value
-			}
-		}
-
-	/**
-	 * The index in a scrollable picker that corresponds to a snooze duration time.
-	 */
-	var snoozeDurationIndex: Int
-		get()
-		{
-			return if (snoozeDuration < 9)
-			{
-				snoozeDuration - 1
-			}
-			else
-			{
-				snoozeDuration/5 + 7
-			}
-		}
-		set(value)
-		{
-			snoozeDuration = if (value < 9)
-			{
-				value + 1
-			}
-			else
-			{
-				(value-7) * 5
-			}
-		}
 
 	/**
 	 * Populate values with input parcel.
@@ -735,7 +618,7 @@ class NacAlarm()
 		alarm.vibrate = shouldVibrate
 		alarm.useNfc = shouldUseNfc
 		alarm.nfcTagId = nfcTagId
-		alarm.useFlashlight = shouldUseFlashlight
+		alarm.useFlashlight = useFlashlight
 		alarm.flashlightStrengthLevel = flashlightStrengthLevel
 		alarm.flashlightOnDuration = flashlightOnDuration
 		alarm.flashlightOffDuration = flashlightOffDuration
@@ -753,8 +636,8 @@ class NacAlarm()
 		alarm.name = name
 
 		// Text-to-speech
-		alarm.sayCurrentTime = shouldSayCurrentTime
-		alarm.sayAlarmName = shouldSayAlarmName
+		alarm.sayCurrentTime = sayCurrentTime
+		alarm.sayAlarmName = sayAlarmName
 		alarm.ttsFrequency = ttsFrequency
 
 		// Volume features
@@ -766,7 +649,7 @@ class NacAlarm()
 		alarm.autoDismissTime = autoDismissTime
 
 		// Dismiss early
-		alarm.useDismissEarly = shouldUseDismissEarly
+		alarm.useDismissEarly = useDismissEarly
 		alarm.dismissEarlyTime = dismissEarlyTime
 		alarm.timeOfDismissEarlyAlarm = timeOfDismissEarlyAlarm
 
@@ -856,7 +739,7 @@ class NacAlarm()
 			&& (shouldRepeat == alarm.shouldRepeat)
 			&& (shouldVibrate == alarm.shouldVibrate)
 			&& (shouldUseNfc == alarm.shouldUseNfc)
-			&& (shouldUseFlashlight == alarm.shouldUseFlashlight)
+			&& (useFlashlight == alarm.useFlashlight)
 			&& (flashlightStrengthLevel == alarm.flashlightStrengthLevel)
 			&& (flashlightOnDuration == alarm.flashlightOnDuration)
 			&& (flashlightOffDuration == alarm.flashlightOffDuration)
@@ -869,20 +752,20 @@ class NacAlarm()
 			&& (volume == alarm.volume)
 			&& (audioSource == alarm.audioSource)
 			&& (name == alarm.name)
-			&& (shouldSayCurrentTime == alarm.shouldSayCurrentTime)
-			&& (shouldSayAlarmName == alarm.shouldSayAlarmName)
+			&& (sayCurrentTime == alarm.sayCurrentTime)
+			&& (sayAlarmName == alarm.sayAlarmName)
 			&& (ttsFrequency == alarm.ttsFrequency)
 			&& (shouldGraduallyIncreaseVolume == alarm.shouldGraduallyIncreaseVolume)
 			&& (graduallyIncreaseVolumeWaitTime == alarm.graduallyIncreaseVolumeWaitTime)
 			&& (shouldRestrictVolume == alarm.shouldRestrictVolume)
 			&& (autoDismissTime == alarm.autoDismissTime)
-			&& (shouldUseDismissEarly == alarm.shouldUseDismissEarly)
+			&& (useDismissEarly == alarm.useDismissEarly)
 			&& (dismissEarlyTime == alarm.dismissEarlyTime)
 			&& (timeOfDismissEarlyAlarm == alarm.timeOfDismissEarlyAlarm)
 			&& (snoozeDuration == alarm.snoozeDuration)
 			&& (maxSnooze == alarm.maxSnooze)
 			&& (useEasySnooze == alarm.useEasySnooze)
-			&& (shouldShowReminder == alarm.shouldShowReminder)
+			&& (showReminder == alarm.showReminder)
 			&& (timeToShowReminder == alarm.timeToShowReminder)
 			&& (reminderFrequency == alarm.reminderFrequency)
 			&& (useTtsForReminder == alarm.useTtsForReminder)
@@ -976,7 +859,7 @@ class NacAlarm()
 		println("Vibrate             : $shouldVibrate")
 		println("Use NFC             : $shouldUseNfc")
 		println("Nfc Tag Id          : $nfcTagId")
-		println("Use Flashlight      : $shouldUseFlashlight")
+		println("Use Flashlight      : ${useFlashlight}")
 		println("Flashlight Strength : $flashlightStrengthLevel")
 		println("Flashlight On       : $flashlightOnDuration")
 		println("Flashlight Off      : $flashlightOffDuration")
@@ -988,20 +871,20 @@ class NacAlarm()
 		println("Volume              : $volume")
 		println("Audio Source        : $audioSource")
 		println("Name                : $name")
-		println("Tts say time        : $shouldSayCurrentTime")
-		println("Tts say name        : $shouldSayAlarmName")
+		println("Tts say time        : $sayCurrentTime")
+		println("Tts say name        : $sayAlarmName")
 		println("Tts Freq            : $ttsFrequency")
 		println("Grad Inc Vol        : $shouldGraduallyIncreaseVolume")
 		println("Grad Inc Vol Wait T : $graduallyIncreaseVolumeWaitTime")
 		println("Restrict Vol        : $shouldRestrictVolume")
 		println("Auto Dismiss        : $autoDismissTime")
-		println("Use Dismiss Early   : $shouldUseDismissEarly")
+		println("Use Dismiss Early   : $useDismissEarly")
 		println("Dismiss Early       : $dismissEarlyTime")
 		println("Time of Early Alarm : $timeOfDismissEarlyAlarm")
 		println("Snooze Duration     : $snoozeDuration")
 		println("Max Snooze          : $maxSnooze")
 		println("Use Easy Snooze     : $useEasySnooze")
-		println("Show Reminder       : $shouldShowReminder")
+		println("Show Reminder       : $showReminder")
 		println("Time to show remind : $timeToShowReminder")
 		println("Reminder freq       : $reminderFrequency")
 		println("Use Tts 4 Reminder  : $useTtsForReminder")
@@ -1127,7 +1010,7 @@ class NacAlarm()
 	 */
 	fun toggleUseFlashlight()
 	{
-		useFlashlight = !shouldUseFlashlight
+		useFlashlight = !useFlashlight
 	}
 
 	/**
@@ -1155,7 +1038,7 @@ class NacAlarm()
 	fun willAlarmSoon(): Boolean
 	{
 		// Alarm is disabled or unable to use dismiss early
-		if (!isEnabled || !shouldUseDismissEarly || dismissEarlyTime == 0)
+		if (!isEnabled || !useDismissEarly || dismissEarlyTime == 0)
 		{
 			return false
 		}
@@ -1193,7 +1076,7 @@ class NacAlarm()
 		output.writeInt(if (shouldVibrate) 1 else 0)
 		output.writeInt(if (shouldUseNfc) 1 else 0)
 		output.writeString(nfcTagId)
-		output.writeInt(if (shouldUseFlashlight) 1 else 0)
+		output.writeInt(if (useFlashlight) 1 else 0)
 		output.writeInt(flashlightStrengthLevel)
 		output.writeInt(flashlightOnDuration)
 		output.writeInt(flashlightOffDuration)
@@ -1211,8 +1094,8 @@ class NacAlarm()
 		output.writeString(name)
 
 		// Text-to-speech
-		output.writeInt(if (shouldSayCurrentTime) 1 else 0)
-		output.writeInt(if (shouldSayAlarmName) 1 else 0)
+		output.writeInt(if (sayCurrentTime) 1 else 0)
+		output.writeInt(if (sayAlarmName) 1 else 0)
 		output.writeInt(ttsFrequency)
 
 		// Volume features
@@ -1224,17 +1107,17 @@ class NacAlarm()
 		output.writeInt(autoDismissTime)
 
 		// Dismiss early
-		output.writeInt(if (shouldUseDismissEarly) 1 else 0)
+		output.writeInt(if (useDismissEarly) 1 else 0)
 		output.writeInt(dismissEarlyTime)
 		output.writeLong(timeOfDismissEarlyAlarm)
 
 		// Snooze
 		output.writeInt(snoozeDuration)
 		output.writeInt(maxSnooze)
-		output.writeInt(if (shouldUseEasySnooze) 1 else 0)
+		output.writeInt(if (useEasySnooze) 1 else 0)
 
 		// Reminder
-		output.writeInt(if (shouldShowReminder) 1 else 0)
+		output.writeInt(if (showReminder) 1 else 0)
 		output.writeInt(timeToShowReminder)
 		output.writeInt(reminderFrequency)
 		output.writeInt(if (useTtsForReminder) 1 else 0)
@@ -1324,6 +1207,190 @@ class NacAlarm()
 			alarm.useTtsForReminder = shared?.shouldUseTtsForReminder ?: false
 
 			return alarm
+		}
+
+		/**
+		 * Calculate the auto dismiss time from an index.
+		 */
+		fun calcAutoDismissTime(index: Int): Int
+		{
+			return if (index < 5)
+			{
+				index
+			}
+			else
+			{
+				(index - 4) * 5
+			}
+		}
+
+		/**
+		 * Calculate the auto dismiss index from a value.
+		 */
+		fun calcAutoDismissIndex(time: Int): Int
+		{
+			return if (time < 5)
+			{
+				time
+			}
+			else
+			{
+				time / 5 + 4
+			}
+		}
+
+		/**
+		 * Calculate the dismiss early index from a time.
+		 */
+		fun calcDismissEarlyIndex(time: Int): Int
+		{
+			return if (time <= 5)
+			{
+				time - 1
+			}
+			else
+			{
+				time / 5 + 3
+			}
+		}
+
+		/**
+		 * Calculate the dismiss early time from an index.
+		 */
+		fun calcDismissEarlyTime(index: Int): Int
+		{
+			return if (index < 5)
+			{
+				index + 1
+			}
+			else
+			{
+				(index - 3) * 5
+			}
+		}
+
+		/**
+		 * Calculate the gradually increase volume index from a time.
+		 */
+		fun calcGraduallyIncreaseVolumeIndex(time: Int): Int
+		{
+			return if (time <= 10)
+			{
+				time - 1
+			}
+			else
+			{
+				time / 5 + 7
+			}
+		}
+
+		/**
+		 * Calculate the gradually increase volume wait time from an index.
+		 */
+		fun calcGraduallyIncreaseVolumeWaitTime(index: Int): Int
+		{
+			return if (index < 10)
+			{
+				index + 1
+			}
+			else
+			{
+				(index - 7) * 5
+			}
+		}
+
+		/**
+		 * Calculate the max snooze value from an index.
+		 */
+		fun calcMaxSnooze(index: Int): Int
+		{
+			return if (index == 11)
+			{
+				-1
+			}
+			else
+			{
+				index
+			}
+		}
+
+		/**
+		 * Calculate the max snooze index from a value.
+		 */
+		fun calcMaxSnoozeIndex(value: Int): Int
+		{
+			return if (value == -1)
+			{
+				11
+			}
+			else
+			{
+				value
+			}
+		}
+
+		/**
+		 * Calculate the snooze duration value from an index.
+		 */
+		fun calcSnoozeDuration(index: Int): Int
+		{
+			return if (index < 9)
+			{
+				index + 1
+			}
+			else
+			{
+				(index-7) * 5
+			}
+		}
+
+		/**
+		 * Calculate the snooze duration index from a value.
+		 */
+		fun calcSnoozeDurationIndex(value: Int): Int
+		{
+			return if (value < 9)
+			{
+				value - 1
+			}
+			else
+			{
+				value / 5 + 7
+			}
+		}
+
+		/**
+		 * Calculate the upcoming reminder time to show index from a time.
+		 */
+		fun calcUpcomingReminderTimeToShowIndex(time: Int): Int
+		{
+			return if (time == 0)
+			{
+				4
+			}
+			else if (time <= 10)
+			{
+				time - 1
+			}
+			else
+			{
+				time/5 + 7
+			}
+		}
+
+		/**
+		 * Calculate the upcoming reminder time to show from an index.
+		 */
+		fun calcUpcomingReminderTimeToShow(index: Int): Int
+		{
+			return if (index < 10)
+			{
+				index + 1
+			}
+			else
+			{
+				(index-7) * 5
+			}
 		}
 
 	}

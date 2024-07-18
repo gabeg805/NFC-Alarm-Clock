@@ -2,19 +2,23 @@ package com.nfcalarmclock.upcomingreminder
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
-import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.NumberPicker
 import android.widget.RelativeLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.nfcalarmclock.R
+import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.snoozeoptions.NacSnoozeOptionsDialog
 import com.nfcalarmclock.view.dialog.NacDialogFragment
+import com.nfcalarmclock.view.setupCheckBoxColor
+import com.nfcalarmclock.view.setupDialogScrollViewHeight
 
+/**
+ * Upcoming reminder dialog.
+ */
 class NacUpcomingReminderDialog
 	: NacDialogFragment()
 {
@@ -37,14 +41,14 @@ class NacUpcomingReminderDialog
 	var defaultShouldShowReminder = false
 
 	/**
-	 * Default index of time to show reminder.
+	 * Default time when to show the reminder.
 	 */
-	var defaultTimeToShowReminderIndex = 0
+	var defaultTimeToShowReminder = 0
 
 	/**
-	 * Default index of frequency at which to show the reminder.
+	 * Default frequency at which to show the reminder.
 	 */
-	var defaultReminderFrequencyIndex = 0
+	var defaultReminderFrequency = 0
 
 	/**
 	 * Default whether to use text-to-speech.
@@ -120,26 +124,6 @@ class NacUpcomingReminderDialog
 		get() = useTtsCheckBox.isChecked
 
 	/**
-	 * Time of how early to show the reminder.
-	 */
-	private val howEarlyTime: Int
-		get()
-		{
-			// Get the index value
-			val index = howEarlyPicker.value
-
-			// Calculate the time based on the index
-			return if (index < 10)
-			{
-				index + 1
-			}
-			else
-			{
-				(index-7) * 5
-			}
-		}
-
-	/**
 	 * The alpha that views should have based on the should use text-to-speech
 	 * flag.
 	 */
@@ -157,6 +141,9 @@ class NacUpcomingReminderDialog
 		// Create the dialog
 		return AlertDialog.Builder(requireContext())
 			.setPositiveButton(R.string.action_ok) { _, _ ->
+
+				// Get the time of when to show the reminder
+				val howEarlyTime = NacAlarm.calcUpcomingReminderTimeToShow(howEarlyPicker.value)
 
 				// Call the listener
 				onUpcomingReminderOptionSelectedListener?.onUpcomingReminderOptionSelected(
@@ -176,11 +163,11 @@ class NacUpcomingReminderDialog
 		// Super
 		super.onResume()
 
-		// Get the container of the dialog and the text view
+		// Get the views
+		val scrollView = dialog!!.findViewById<ScrollView>(R.id.upcoming_reminder_scrollview)
 		val container = dialog!!.findViewById<RelativeLayout>(R.id.should_show_reminder)
 		val otherContainer = dialog!!.findViewById<RelativeLayout>(R.id.should_use_tts_with_reminder)
 
-		// Set the views
 		showReminderCheckBox = dialog!!.findViewById(R.id.should_show_reminder_checkbox)
 		showReminderTextView = dialog!!.findViewById(R.id.should_show_reminder_summary)
 		howEarlyTitle = dialog!!.findViewById(R.id.title_how_early_to_show_reminder)
@@ -191,66 +178,20 @@ class NacUpcomingReminderDialog
 		useTtsCheckBox = dialog!!.findViewById(R.id.should_use_tts_with_reminder_checkbox)
 		useTtsTextView = dialog!!.findViewById(R.id.should_use_tts_with_reminder_summary)
 
-		// Set the status of the checkbox
+		// Set default values
 		showReminderCheckBox.isChecked = defaultShouldShowReminder
 		useTtsCheckBox.isChecked = defaultShouldUseTts
 
-		// Setup the views
-		setupShowReminderOnClickListener(container, otherContainer)
-		setupUseTtsOnClickListener(otherContainer)
-		setupCheckBoxColors()
+		// Setup
+		setupCheckBoxColor(showReminderCheckBox, sharedPreferences!!)
+		setupCheckBoxColor(useTtsCheckBox, sharedPreferences!!)
 		setupShowReminderSummary()
 		setupUseTtsSummary()
-		setupHowEarlyPickerValues()
 		setupHowEarlyPickerUsable()
-		setupHowFrequentPickerValues()
 		setupHowFrequentPickerUsable()
 		setupUseTtsUsable(otherContainer)
-		setupScrollViewHeight()
-	}
 
-	/**
-	 * Set the default time to show index from a time.
-	 */
-	fun setDefaultIndexFromTime(time: Int)
-	{
-		defaultTimeToShowReminderIndex = if (time == 0)
-		{
-			4
-		}
-		else if (time <= 10)
-		{
-			time - 1
-		}
-		else
-		{
-			time/5 + 7
-		}
-	}
-
-	/**
-	 * Setup the color of the upcoming reminder check boxes.
-	 */
-	private fun setupCheckBoxColors()
-	{
-		// Get the colors for the boolean states
-		val colors = intArrayOf(sharedPreferences!!.themeColor, Color.GRAY)
-
-		// Get the IDs of the two states
-		val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
-
-		// Set the state list of the checkbox
-		showReminderCheckBox.buttonTintList = ColorStateList(states, colors)
-		useTtsCheckBox.buttonTintList = ColorStateList(states, colors)
-	}
-
-	/**
-	 * Setup the on click listener for when the show reminder container is
-	 * clicked.
-	 */
-	private fun setupShowReminderOnClickListener(container: RelativeLayout, otherContainer: RelativeLayout)
-	{
-		// Setup the listener
+		// Show reminder listener
 		container.setOnClickListener {
 
 			// Toggle the checkbox
@@ -263,6 +204,36 @@ class NacUpcomingReminderDialog
 			setupUseTtsUsable(otherContainer)
 
 		}
+
+		// Text to speech listener
+		otherContainer.setOnClickListener {
+
+			// Toggle the checkbox
+			useTtsCheckBox.isChecked = !shouldUseTts
+
+			// Setup the views
+			setupUseTtsSummary()
+
+		}
+
+		// Get the how early and frequent times
+		val howEarlyValues = requireContext().resources.getStringArray(R.array.upcoming_reminder_times_to_show).toList()
+		val howFreqValues = requireContext().resources.getStringArray(R.array.upcoming_reminder_frequency).toList()
+
+		// How early time picker
+		howEarlyPicker.minValue = 0
+		howEarlyPicker.maxValue = howEarlyValues.size - 1
+		howEarlyPicker.displayedValues = howEarlyValues.toTypedArray()
+		howEarlyPicker.value = NacAlarm.calcUpcomingReminderTimeToShowIndex(defaultTimeToShowReminder)
+
+		// How frequent time picker
+		howFreqPicker.minValue = 0
+		howFreqPicker.maxValue = howFreqValues.size - 1
+		howFreqPicker.displayedValues = howFreqValues.toTypedArray()
+		howFreqPicker.value = defaultReminderFrequency
+
+		// Scroll view height
+		setupDialogScrollViewHeight(scrollView, resources)
 	}
 
 	/**
@@ -300,21 +271,6 @@ class NacUpcomingReminderDialog
 	}
 
 	/**
-	 * Setup scrollable picker for the how early times.
-	 */
-	private fun setupHowEarlyPickerValues()
-	{
-		// Get the dismiss early times
-		val values = requireContext().resources.getStringArray(R.array.upcoming_reminder_times_to_show).toList()
-
-		// Setup the time picker
-		howEarlyPicker.minValue = 0
-		howEarlyPicker.maxValue = values.size - 1
-		howEarlyPicker.displayedValues = values.toTypedArray()
-		howEarlyPicker.value = defaultTimeToShowReminderIndex
-	}
-
-	/**
 	 * Setup whether the how frequent time container can be used or not.
 	 */
 	private fun setupHowFrequentPickerUsable()
@@ -325,55 +281,6 @@ class NacUpcomingReminderDialog
 
 		// Set whether it can be used or not
 		howFreqPicker.isEnabled = shouldShowReminder
-	}
-
-	/**
-	 * Setup scrollable picker for the how frequent times.
-	 */
-	private fun setupHowFrequentPickerValues()
-	{
-		// Get the dismiss early times
-		val values = requireContext().resources.getStringArray(R.array.upcoming_reminder_frequency).toList()
-
-		// Setup the time picker
-		howFreqPicker.minValue = 0
-		howFreqPicker.maxValue = values.size - 1
-		howFreqPicker.displayedValues = values.toTypedArray()
-		howFreqPicker.value = defaultReminderFrequencyIndex
-	}
-
-	/**
-	 * Setup the height of the scroll view.
-	 *
-	 */
-	private fun setupScrollViewHeight()
-	{
-		// Get the scroll view
-		val scrollView = dialog!!.findViewById<ScrollView>(R.id.upcoming_reminder_scrollview)
-
-		// Set the height of the scroll view
-		val height = resources.displayMetrics.heightPixels / 2
-		val layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height)
-
-		scrollView.layoutParams = layoutParams
-	}
-
-	/**
-	 * Setup the on click listener for when the use text-to-speech container is
-	 * clicked.
-	 */
-	private fun setupUseTtsOnClickListener(container: RelativeLayout)
-	{
-		// Setup the listener
-		container.setOnClickListener {
-
-			// Toggle the checkbox
-			useTtsCheckBox.isChecked = !shouldUseTts
-
-			// Setup the views
-			setupUseTtsSummary()
-
-		}
 	}
 
 	/**
@@ -416,6 +323,37 @@ class NacUpcomingReminderDialog
 		 * Tag for the class.
 		 */
 		const val TAG = "NacUpcomingReminderDialog"
+
+		/**
+		 * Show the dialog.
+		 */
+		fun show(
+			manager: FragmentManager,
+			shouldShowReminder: Boolean,
+			timeToShow: Int,
+			reminderFreq: Int,
+			shouldUseTts: Boolean,
+			canShowTts: Boolean,
+			listener: (Boolean, Int, Int, Boolean) -> Unit = { _, _, _, _ -> })
+		{
+			// Create the dialog
+			val dialog = NacUpcomingReminderDialog()
+
+			// Set the default values
+			dialog.defaultShouldShowReminder = shouldShowReminder
+			dialog.defaultTimeToShowReminder = timeToShow
+			dialog.defaultReminderFrequency = reminderFreq
+			dialog.defaultShouldUseTts = shouldUseTts
+			dialog.canShowTts = canShowTts
+
+			// Setup the listener
+			dialog.onUpcomingReminderOptionSelectedListener = OnUpcomingReminderOptionSelectedListener { shouldShowReminder, timeToShow, reminderFreq, shouldUseTts ->
+				listener(shouldShowReminder, timeToShow, reminderFreq,shouldUseTts)
+			}
+
+			// Show the dialog
+			dialog.show(manager, NacSnoozeOptionsDialog.TAG)
+		}
 
 	}
 
