@@ -163,6 +163,13 @@ class NacGeneralSettingFragment
 							sharedPreferences!!.audioSource = alarm.audioSource
 						}
 
+						// Flashlight
+						R.id.nacFlashlightOptionsDialog -> {
+							sharedPreferences!!.flashlightStrengthLevel = alarm.flashlightStrengthLevel
+							sharedPreferences!!.flashlightOnDuration = alarm.flashlightOnDuration
+							sharedPreferences!!.flashlightOffDuration = alarm.flashlightOffDuration
+						}
+
 						// Gradually increase volume
 						R.id.nacGraduallyIncreaseVolumeDialog -> {
 							sharedPreferences!!.shouldGraduallyIncreaseVolume = alarm.shouldGraduallyIncreaseVolume
