@@ -131,6 +131,12 @@ class NacAlarm()
 	var graduallyIncreaseFlashlightStrengthLevelWaitTime: Int = 5
 
 	/**
+	 * Whether the flashlight should be blinked or not.
+	 */
+	@ColumnInfo(name = "should_blink_flashlight", defaultValue = "0")
+	var shouldBlinkFlashlight: Boolean = false
+
+	/**
 	 * Number of seconds to turn on the flashlight.
 	 */
 	@ColumnInfo(name = "flashlight_on_duration", defaultValue = "0")
@@ -412,6 +418,7 @@ class NacAlarm()
 		useFlashlight = input.readInt() != 0
 		flashlightStrengthLevel = input.readInt()
 		graduallyIncreaseFlashlightStrengthLevelWaitTime = input.readInt()
+		shouldBlinkFlashlight = input.readInt() != 0
 		flashlightOnDuration = input.readString() ?: ""
 		flashlightOffDuration = input.readString() ?: ""
 
@@ -623,6 +630,7 @@ class NacAlarm()
 		alarm.useFlashlight = useFlashlight
 		alarm.flashlightStrengthLevel = flashlightStrengthLevel
 		alarm.graduallyIncreaseFlashlightStrengthLevelWaitTime = graduallyIncreaseFlashlightStrengthLevelWaitTime
+		alarm.shouldBlinkFlashlight = shouldBlinkFlashlight
 		alarm.flashlightOnDuration = flashlightOnDuration
 		alarm.flashlightOffDuration = flashlightOffDuration
 
@@ -746,6 +754,7 @@ class NacAlarm()
 			&& (useFlashlight == alarm.useFlashlight)
 			&& (flashlightStrengthLevel == alarm.flashlightStrengthLevel)
 			&& (graduallyIncreaseFlashlightStrengthLevelWaitTime == alarm.graduallyIncreaseFlashlightStrengthLevelWaitTime)
+			&& (shouldBlinkFlashlight == alarm.shouldBlinkFlashlight)
 			&& (flashlightOnDuration == alarm.flashlightOnDuration)
 			&& (flashlightOffDuration == alarm.flashlightOffDuration)
 			&& (nfcTagId == alarm.nfcTagId)
@@ -867,6 +876,7 @@ class NacAlarm()
 		println("Use Flashlight      : $useFlashlight")
 		println("Flashlight Strength : $flashlightStrengthLevel")
 		println("Grad Inc Flash      : $graduallyIncreaseFlashlightStrengthLevelWaitTime")
+		println("Should Blink Flash  : $shouldBlinkFlashlight")
 		println("Flashlight On       : $flashlightOnDuration")
 		println("Flashlight Off      : $flashlightOffDuration")
 		println("Media Path          : $mediaPath")
@@ -1082,6 +1092,7 @@ class NacAlarm()
 		output.writeInt(if (useFlashlight) 1 else 0)
 		output.writeInt(flashlightStrengthLevel)
 		output.writeInt(graduallyIncreaseFlashlightStrengthLevelWaitTime)
+		output.writeInt(if (shouldBlinkFlashlight) 1 else 0)
 		output.writeString(flashlightOnDuration)
 		output.writeString(flashlightOffDuration)
 
@@ -1168,6 +1179,7 @@ class NacAlarm()
 			alarm.useFlashlight = shared?.shouldUseFlashlight ?: false
 			alarm.flashlightStrengthLevel = shared?.flashlightStrengthLevel ?: 0
 			alarm.graduallyIncreaseFlashlightStrengthLevelWaitTime = shared?.graduallyIncreaseFlashlightStrengthLevelWaitTime ?: 0
+			alarm.shouldBlinkFlashlight = shared?.shouldBlinkFlashlight ?: false
 			alarm.flashlightOnDuration = shared?.flashlightOnDuration ?: ""
 			alarm.flashlightOffDuration = shared?.flashlightOffDuration ?: ""
 

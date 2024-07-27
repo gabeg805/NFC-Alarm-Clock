@@ -800,11 +800,8 @@ class NacMainActivity
 				recentlyUpdatedAlarmIds.add(alarm.id)
 			}
 
-			// Update the view model
-			alarmViewModel.update(alarm)
-
-			// Reschedule the alarm
-			NacScheduler.update(this, alarm)
+			// Update the alarm
+			updateAlarm(alarm)
 
 		}
 
@@ -825,10 +822,7 @@ class NacMainActivity
 			quickToast(this, message)
 
 			// Update the alarm
-			alarmViewModel.update(alarm)
-
-			// Reschedule the alarm
-			NacScheduler.update(this, alarm)
+			updateAlarm(alarm)
 
 		}
 
@@ -838,11 +832,11 @@ class NacMainActivity
 			// Check if the alarm had use NFC disabled
 			if (!alarm.shouldUseNfc)
 			{
-				// Update the alarm
-				alarmViewModel.update(alarm)
+				// Toast the NFC message
+				quickToast(this@NacMainActivity, R.string.message_nfc_optional)
 
-				// Reschedule the alarm
-				NacScheduler.update(this, alarm)
+				// Update the alarm
+				updateAlarm(alarm)
 
 				return@OnCardUseNfcChangedListener
 			}
@@ -869,10 +863,7 @@ class NacMainActivity
 			quickToast(this@NacMainActivity, message)
 
 			// Update the alarm
-			alarmViewModel.update(alarm)
-
-			// Reschedule the alarm
-			NacScheduler.update(this@NacMainActivity, alarm)
+			updateAlarm(alarm)
 
 		}
 
@@ -1022,10 +1013,7 @@ class NacMainActivity
 		alarm.nfcTagId = tagId
 
 		// Update the alarm
-		alarmViewModel.update(alarm)
-
-		// Reschedule the alarm
-		NacScheduler.update(this, alarm)
+		updateAlarm(alarm)
 
 		lifecycleScope.launch(Dispatchers.Main) {
 
@@ -1400,10 +1388,7 @@ class NacMainActivity
 			?.observe(this) { alarm ->
 
 				// Update the alarm
-				alarmViewModel.update(alarm)
-
-				// Reschedule the alarm
-				NacScheduler.update(this@NacMainActivity, alarm)
+				updateAlarm(alarm)
 
 			}
 
@@ -1479,9 +1464,6 @@ class NacMainActivity
 				// Uncheck the NFC button when the dialog is canceled.
 				cardHolder.nfcButton.isChecked = false
 				cardHolder.doNfcButtonClick()
-
-				// Toast the NFC message
-				quickToast(this@NacMainActivity, R.string.message_nfc_optional)
 			}
 
 			/**
@@ -1606,6 +1588,18 @@ class NacMainActivity
 			// Show the snackbar for the next alarm that will run
 			showNextAlarmSnackbar()
 		}
+	}
+
+	/**
+	 * Update the alarm and reschedule it.
+	 */
+	private fun updateAlarm(alarm: NacAlarm)
+	{
+		// Update the alarm
+		alarmViewModel.update(alarm)
+
+		// Reschedule the alarm
+		NacScheduler.update(this, alarm)
 	}
 
 	companion object

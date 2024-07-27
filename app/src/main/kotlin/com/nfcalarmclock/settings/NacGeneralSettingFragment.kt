@@ -166,6 +166,7 @@ class NacGeneralSettingFragment
 						// Flashlight
 						R.id.nacFlashlightOptionsDialog -> {
 							sharedPreferences!!.flashlightStrengthLevel = alarm.flashlightStrengthLevel
+							sharedPreferences!!.shouldBlinkFlashlight = alarm.shouldBlinkFlashlight
 							sharedPreferences!!.flashlightOnDuration = alarm.flashlightOnDuration
 							sharedPreferences!!.flashlightOffDuration = alarm.flashlightOffDuration
 						}

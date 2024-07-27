@@ -44,6 +44,7 @@
 	<string name="alarm_use_flashlight_key">pref_use_flashlight</string>
 	<string name="alarm_flashlight_strength_level_key">pref_flashlight_strength_level</string>
 	<string name="alarm_flashlight_gradually_increase_flashlight_strength_level_wait_time_key">pref_flashlight_gradually_increase_flashlight_strength_level_wait_time</string>
+	<string name="alarm_flashlight_should_blink_key">pref_flashlight_should_blink</string>
 	<string name="alarm_flashlight_on_duration_key">pref_flashlight_on_duration</string>
 	<string name="alarm_flashlight_off_duration_key">pref_flashlight_off_duration</string>
 	<string name="alarm_sound_key">pref_sound</string>

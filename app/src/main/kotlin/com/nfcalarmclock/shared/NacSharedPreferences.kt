@@ -682,6 +682,24 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Whether the flashlight should be blinked or not.
+	 */
+	var shouldBlinkFlashlight: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.alarm_flashlight_should_blink_key)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.alarm_flashlight_should_blink_key)
+
+			saveBoolean(key, value)
+		}
+
+	/**
 	 * Whether volume should be gradually increased or not.
 	 */
 	var shouldGraduallyIncreaseVolume: Boolean

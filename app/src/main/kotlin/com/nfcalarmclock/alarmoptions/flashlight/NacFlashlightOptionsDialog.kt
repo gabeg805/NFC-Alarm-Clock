@@ -116,6 +116,7 @@ class NacFlashlightOptionsDialog
 
 		// Get the default values
 		val defaultStrength = alarm?.flashlightStrengthLevel ?: 0
+		val defaultShouldBlink = alarm?.shouldBlinkFlashlight ?: false
 		val defaultOnDuration = alarm?.flashlightOnDuration ?: "0"
 		val defaultOffDuration = alarm?.flashlightOffDuration ?: "0"
 		selectedBlinkOnDuration = if (defaultOnDuration == "0") "1.0" else defaultOnDuration
@@ -123,12 +124,15 @@ class NacFlashlightOptionsDialog
 
 		// Setup the views
 		setupStrengthLevel(defaultStrength)
-		setupBlinkCheckBox()
+		setupBlinkCheckBox(defaultShouldBlink)
 		setupBlinkOnOffDuration(defaultOnDuration, defaultOffDuration)
 		setupBlinkOnOffDurationUsable()
 
 		// Setup the ok button
 		setupPrimaryButton(doneButton, listener = {
+
+			// Cleanup the preview if it is running
+			flashlight.cleanup()
 
 			// Set the on/off duration based on if the flashlight should blink
 			val onDuration = if (blinkCheckBox.isChecked) selectedBlinkOnDuration else "0"
@@ -136,6 +140,7 @@ class NacFlashlightOptionsDialog
 
 			// Set the alarm attributes
 			alarm?.flashlightStrengthLevel = strengthSeekBar.progress
+			alarm?.shouldBlinkFlashlight = blinkCheckBox.isChecked
 			alarm?.flashlightOnDuration = onDuration
 			alarm?.flashlightOffDuration = offDuration
 
@@ -186,7 +191,7 @@ class NacFlashlightOptionsDialog
 	/**
 	 * Setup the flashlight blink checkbox.
 	 */
-	private fun setupBlinkCheckBox()
+	private fun setupBlinkCheckBox(default: Boolean)
 	{
 		// Get the views
 		val relativeLayout = dialog!!.findViewById(R.id.should_flashlight_blink) as RelativeLayout
@@ -194,7 +199,7 @@ class NacFlashlightOptionsDialog
 		blinkCheckBox = dialog!!.findViewById(R.id.should_flashlight_blink_checkbox) as MaterialCheckBox
 
 		// Set the status of the checkbox
-		blinkCheckBox.isChecked = false
+		blinkCheckBox.isChecked = default
 
 		// Setup the checkbox
 		blinkCheckBox.setupCheckBoxColor(sharedPreferences)
