@@ -116,12 +116,7 @@ class NacMissedAlarmNotification(
 			val intent = NacMainActivity.getStartIntent(context)
 
 			// Determine the pending intent flags
-			var flags = 0
-
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-			{
-				flags = flags or PendingIntent.FLAG_IMMUTABLE
-			}
+			var flags = PendingIntent.FLAG_IMMUTABLE
 
 			// Return the pending intent for the activity
 			return PendingIntent.getActivity(context, 0, intent, flags)

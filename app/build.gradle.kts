@@ -32,8 +32,8 @@ android {
 		applicationId = "com.nfcalarmclock"
 		minSdk = 23
 		targetSdk = 34
-		versionCode = 392
-		versionName = "12.3.0-beta005"
+		versionCode = 400
+		versionName = "12.3.0-beta013"
 
 		// Set output filename
 		setProperty("archivesBaseName", "nfc_alarm_clock_v${versionName}")
@@ -138,6 +138,8 @@ dependencies {
 	implementation("com.google.android.material:material:1.12.0")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 	implementation("androidx.dynamicanimation:dynamicanimation:1.0.0")
+	implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+	implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
 
 	// Room database (Any later requires API > 34
 	implementation("androidx.room:room-runtime:2.6.1")

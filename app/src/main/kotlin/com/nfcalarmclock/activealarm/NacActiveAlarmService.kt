@@ -132,7 +132,7 @@ class NacActiveAlarmService
 		}
 
 		// Clear the currently playing media in the shared preference
-		sharedPreferences.editCurrentPlayingAlarmMedia("")
+		sharedPreferences.currentPlayingAlarmMedia = ""
 	}
 
 	/**
@@ -143,8 +143,6 @@ class NacActiveAlarmService
 	@UnstableApi
 	fun dismiss(usedNfc: Boolean = false, wasMissed: Boolean = false)
 	{
-		// TODO: Remove null alarm check here. Will this cause crashes for people?
-
 		// Update the alarm
 		scope.launch {
 
@@ -172,7 +170,7 @@ class NacActiveAlarmService
 			NacScheduler.update(this@NacActiveAlarmService, alarm!!)
 
 			// Set flag that the main activity needs to be refreshed
-			sharedPreferences.editShouldRefreshMainActivity(true)
+			sharedPreferences.shouldRefreshMainActivity = true
 
 			// Check if there are any other active alarms that need to run
 			if (hasAnyOtherActiveAlarms())
@@ -267,7 +265,7 @@ class NacActiveAlarmService
 	private fun setupAppVersion()
 	{
 		// Set the previous app version as the current version
-		sharedPreferences.editPreviousAppVersion(BuildConfig.VERSION_NAME)
+		sharedPreferences.previousAppVersion = BuildConfig.VERSION_NAME
 	}
 
 	/**
@@ -471,14 +469,13 @@ class NacActiveAlarmService
 			alarmRepository.update(alarm!!)
 
 			// Save this snooze duration to the statistics table
-			//statisticRepository.insertSnoozed(alarm!!, 60L * sharedPreferences.snoozeDurationValue)
 			statisticRepository.insertSnoozed(alarm!!, 60L * alarm!!.snoozeDuration)
 
 			// Reschedule the alarm
 			NacScheduler.update(this@NacActiveAlarmService, alarm!!, cal)
 
 			// Set the flag that the main activity will need to be refreshed
-			sharedPreferences.editShouldRefreshMainActivity(true)
+			sharedPreferences.shouldRefreshMainActivity = true
 
 			// Check if there are any other active alarms that need to run
 			if (hasAnyOtherActiveAlarms())
@@ -515,7 +512,6 @@ class NacActiveAlarmService
 		// Get the power manager and timeout for the wakelock
 		val powerManager = getSystemService(POWER_SERVICE) as PowerManager
 		val timeout = alarm!!.autoDismissTime * 60L * 1000L
-		//val timeout = sharedPreferences.autoDismissTime * 60L * 1000L
 
 		// Acquire the wakelock
 		wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
@@ -604,7 +600,6 @@ class NacActiveAlarmService
 	fun waitForAutoDismiss()
 	{
 		// Amount of time until the alarm is automatically dismissed
-		//val autoDismiss = sharedPreferences.autoDismissTime
 		val autoDismiss = alarm!!.autoDismissTime
 		val delay = TimeUnit.MINUTES.toMillis(autoDismiss.toLong()) - alarm!!.timeActive - 2000
 

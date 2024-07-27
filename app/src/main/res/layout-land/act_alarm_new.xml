@@ -85,6 +85,7 @@
 			android:layout_width="@dimen/isz_attention"
 			android:layout_height="@dimen/isz_attention"
 			android:src="@drawable/tap_and_play"
+			android:contentDescription="@string/cd_scan_nfc"
 			/>
 
 		<TextView
@@ -107,16 +108,6 @@
 			android:textStyle="bold"
 			android:text=""
 			/>
-
-		<!--
-		<com.nfcalarmclock.view.NacCustomArcView
-			android:id="@+id/hellobroth"
-			android:layout_width="100dp"
-			android:layout_height="100dp"
-			android:layout_alignParentEnd="true"
-			android:layout_marginEnd="100dp"
-			/>
-			-->
 	</LinearLayout>
 
 	<!-- Slider instructions -->
@@ -160,6 +151,7 @@
 				android:layout_height="@dimen/isz_large"
 				android:layout_centerVertical="true"
 				android:layout_centerHorizontal="true"
+				android:contentDescription="@string/cd_alarm_slider_arrow"
 				/>
 
 			<ImageView
@@ -169,6 +161,7 @@
 				android:layout_marginEnd="@dimen/medium"
 				android:layout_toStartOf="@id/slider_center_arrow"
 				android:layout_centerVertical="true"
+				android:contentDescription="@string/cd_alarm_slider_arrow"
 				/>
 
 			<ImageView
@@ -178,6 +171,7 @@
 				android:layout_marginStart="@dimen/medium"
 				android:layout_toEndOf="@id/slider_center_arrow"
 				android:layout_centerVertical="true"
+				android:contentDescription="@string/cd_alarm_slider_arrow"
 				/>
 
 		</RelativeLayout>
@@ -224,6 +218,7 @@
 				android:layout_height="30dp"
 				android:layout_centerHorizontal="true"
 				android:src="@drawable/snooze"
+				android:contentDescription="@string/cd_snooze_alarm"
 				/>
 
 			<TextView
@@ -258,6 +253,7 @@
 				android:layout_height="28dp"
 				android:layout_centerHorizontal="true"
 				android:src="@drawable/dismiss"
+				android:contentDescription="@string/cd_dismiss_alarm"
 				/>
 
 			<TextView
@@ -296,6 +292,7 @@
 			android:layout_centerVertical="true"
 			android:animateLayoutChanges="true"
 			android:src="@drawable/music_note"
+			android:contentDescription="@string/cd_current_alarm_media_playing"
 			/>
 
 		<TextView

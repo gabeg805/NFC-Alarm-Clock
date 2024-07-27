@@ -189,7 +189,7 @@ class NacMainSettingFragment
 					 quickToast(fragmentActivity, R.string.message_support_thank_you)
 
 					// Save that the app was supported in shared preferences
-					sharedPreferences!!.editWasAppSupported(true)
+					sharedPreferences!!.wasAppSupported = true
 
 					// Re-draw the support icon
 					animateSupportIcon()

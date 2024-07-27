@@ -265,11 +265,34 @@
 		<item>60 giây</item>
 	</string-array>
 
+	<string-array name="flashlight_on_off_duration_times">
+		<item>0,5 giây</item>
+		<item>1,0 giây</item>
+		<item>1,5 giây</item>
+		<item>2,0 giây</item>
+		<item>2,5 giây</item>
+		<item>3,0 giây</item>
+		<item>3,5 giây</item>
+		<item>4,0 giây</item>
+		<item>4,5 giây</item>
+		<item>5,0 giây</item>
+		<item>5,5 giây</item>
+		<item>6,0 giây</item>
+		<item>6,5 giây</item>
+		<item>7,0 giây</item>
+		<item>7,5 giây</item>
+		<item>8,0 giây</item>
+		<item>8,5 giây</item>
+		<item>9,0 giây</item>
+		<item>9,5 giây</item>
+		<item>10,0 giây</item>
+	</string-array>
+
 	<string-array name="whats_new_items">
 		<item>Đã thêm tùy chọn &lt;b>đèn pin&lt;/b> để bật đèn pin khi báo thức kêu.</item>
+		<item>Đã thêm khả năng ẩn các tùy chọn &lt;b>rung&lt;/b>, &lt;b>NFC&lt;/b> và &lt;b>đèn pin&lt;/b> khỏi cảnh báo mở rộng. Bạn có thể tìm thấy điều này trong &lt;b>Cài đặt > Giao diện&lt;/b>.</item>
 		<item>Đã cập nhật ứng dụng cho &lt;b>Android 14&lt;/b>.</item>
 		<item>Đã cập nhật &lt;b>màn hình báo thức mới&lt;/b> để &lt;b>vuốt&lt;/b> để báo lại hoặc loại bỏ dễ dàng hơn nhiều.</item>
-		<item>Đã khắc phục sự cố khi dừng báo thức.</item>
 	</string-array>
 
 </resources>

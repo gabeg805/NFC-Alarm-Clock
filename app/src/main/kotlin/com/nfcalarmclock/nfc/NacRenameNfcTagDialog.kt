@@ -64,7 +64,6 @@ class NacRenameNfcTagDialog
 		val editText = view.findViewById(R.id.nfc_tag_name) as TextInputEditText
 		val doneButton = view.findViewById(R.id.done_nfc_tag) as MaterialButton
 		val cancelButton = view.findViewById(R.id.cancel_nfc_tag) as MaterialButton
-		primaryButton = doneButton
 
 		// Setup the input layout
 		inputLayout.hintTextColor = ColorStateList.valueOf(sharedPreferences.themeColor)
@@ -87,8 +86,8 @@ class NacRenameNfcTagDialog
 			}
 		}
 
-		// Listener for the done button
-		doneButton.setOnClickListener {
+		// Setup the done button
+		setupPrimaryButton(doneButton, listener = {
 
 			// Get the name
 			val name = editText.text.toString().trim()
@@ -98,7 +97,7 @@ class NacRenameNfcTagDialog
 			{
 				// Show an error toast
 				NacUtility.quickToast(requireContext(), R.string.error_message_nfc_name_exists)
-				return@setOnClickListener
+				return@setupPrimaryButton
 			}
 
 			// Call the listener
@@ -107,16 +106,10 @@ class NacRenameNfcTagDialog
 			// Dismiss the dialog
 			dismiss()
 
-		}
+		})
 
-		// Listener for the cancel button
-		cancelButton.setOnClickListener {
-
-			// Dismiss the dialog
-			dismiss()
-
-		}
-
+		// Setup the cancel button
+		setupSecondaryButton(cancelButton)
 	}
 
 	companion object

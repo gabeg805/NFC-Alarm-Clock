@@ -3,6 +3,7 @@ package com.nfcalarmclock.settings
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.fragment.NavHostFragment
 import com.nfcalarmclock.R
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -14,6 +15,19 @@ class NacMainSettingActivity
 	: AppCompatActivity(),
 	FragmentManager.OnBackStackChangedListener
 {
+
+	/**
+	 * Navigation host fragment.
+	 */
+	val navController by lazy {
+		(supportFragmentManager.findFragmentById(R.id.hello_content) as NavHostFragment).navController
+	}
+	//val navHostFragment by lazy { NavHostFragment.create(R.navigation.nav_alarm_options) }
+
+	/**
+	 * Navigation controller.
+	 */
+	//val navController by lazy { navHostFragment.navController }
 
 	/**
 	 * The back stack count.
@@ -48,6 +62,9 @@ class NacMainSettingActivity
 	{
 		// Super
 		super.onCreate(savedInstanceState)
+
+		// Set the content view
+		setContentView(R.layout.act_setting)
 
 		// Add the main setting fragment to the activity
 		supportFragmentManager.beginTransaction()

@@ -37,7 +37,7 @@ object NacRateMyApp
 		// Increment the counter
 		else
 		{
-			shared.editRateMyAppCounter(shared.rateMyAppCounter + 1)
+			shared.rateMyAppCounter = shared.rateMyAppCounter + 1
 			false
 		}
 	}
@@ -78,7 +78,7 @@ object NacRateMyApp
 				val rated = shared.resources.getInteger(R.integer.default_rate_my_app_rated)
 
 				// Set the rated counter
-				shared.editRateMyAppCounter(rated)
+				shared.rateMyAppCounter = rated
 
 			}
 

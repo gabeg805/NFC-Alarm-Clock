@@ -25,11 +25,13 @@
 	<bool name="default_missed_alarm">true</bool>
 
 	<!-- Miscellaneous -->
-	<bool name="default_easy_snooze">false</bool>
 	<bool name="default_use_new_alarm_screen">false</bool>
 	<bool name="default_show_alarm_name">true</bool>
 	<bool name="default_show_current_date_and_time">true</bool>
 	<bool name="default_show_music_info">true</bool>
+	<bool name="default_show_hide_vibrate_button">true</bool>
+	<bool name="default_show_hide_nfc_button">true</bool>
+	<bool name="default_show_hide_flashlight_button">true</bool>
 
 	<!--
 	<bool name="is_app_updated">false</bool>

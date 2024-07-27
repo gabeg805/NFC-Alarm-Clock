@@ -2,7 +2,6 @@ package com.nfcalarmclock.activealarm
 
 import android.annotation.TargetApi
 import android.content.Context
-import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.os.Build
 import android.os.Handler
@@ -18,10 +17,11 @@ import com.nfcalarmclock.media.NacAudioAttributes
 import com.nfcalarmclock.media.NacMedia
 import com.nfcalarmclock.mediaplayer.NacMediaPlayer
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.tts.NacTextToSpeech
-import com.nfcalarmclock.tts.NacTextToSpeech.OnSpeakingListener
-import com.nfcalarmclock.tts.NacTranslate
-import com.nfcalarmclock.util.findCameraId
+import com.nfcalarmclock.alarmoptions.tts.NacTextToSpeech
+import com.nfcalarmclock.alarmoptions.tts.NacTextToSpeech.OnSpeakingListener
+import com.nfcalarmclock.alarmoptions.tts.NacTranslate
+import com.nfcalarmclock.flashlight.NacFlashlight
+import com.nfcalarmclock.flashlight.findCameraId
 import java.util.Calendar
 
 /**
@@ -55,9 +55,9 @@ class NacWakeupProcess(
 	}
 
 	/**
-	 * The camera manager for enabling the flashlight.
+	 * Shared preferences.
 	 */
-	private val cameraManager = context.getSystemService(AppCompatActivity.CAMERA_SERVICE) as CameraManager
+	private val sharedPreferences: NacSharedPreferences = NacSharedPreferences(context)
 
 	/**
 	 * Audio attributes.
@@ -110,9 +110,28 @@ class NacWakeupProcess(
 	private var hasGraduallyIncreaseVolumeStarted: Boolean = false
 
 	/**
-	 * The first camera ID that is able to use the flashlight.
+	 * Whether the alarm should vibrate or not.
 	 */
-	private val cameraId: String = findCameraId(cameraManager)
+	private val shouldVibrate: Boolean
+		get() = alarm.shouldVibrate && sharedPreferences.shouldShowVibrateButton
+
+	/**
+	 * Whether the alarm should use the flashlight or not.
+	 */
+	private val shouldUseFlashlight: Boolean
+		get() = alarm.useFlashlight && sharedPreferences.shouldShowFlashlightButton
+
+	/**
+	 * Flashlight.
+	 */
+	private val flashlight: NacFlashlight? = if (shouldUseFlashlight)
+	{
+		NacFlashlight(context)
+	}
+	else
+	{
+		null
+	}
 
 	/**
 	 * Media player.
@@ -142,10 +161,10 @@ class NacWakeupProcess(
 	}
 
 	/**
-	 * Vibrator object to vibratee the phone.
+	 * Vibrator object to vibrate the phone.
 	 */
 	@Suppress("deprecation")
-	private val vibrator: Vibrator? = if (alarm.shouldVibrate)
+	private val vibrator: Vibrator? = if (shouldVibrate)
 	{
 		// Check the Android API
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
@@ -179,6 +198,9 @@ class NacWakeupProcess(
 			/**
 			 * Called when done speaking.
 			 */
+			/**
+			 * Called when done speaking.
+			 */
 			override fun onDoneSpeaking(tts: NacTextToSpeech)
 			{
 				// Use handler to start wake up process so that the media
@@ -186,6 +208,9 @@ class NacWakeupProcess(
 				continueWakeupHandler.post { simpleStart() }
 			}
 
+			/**
+			 * Called when the text-to-speech engine has started.
+			 */
 			/**
 			 * Called when the text-to-speech engine has started.
 			 */
@@ -274,7 +299,7 @@ class NacWakeupProcess(
 		cleanupVibrate()
 
 		// Cleanup the flashlight
-		cleanupFlashlight()
+		flashlight?.cleanup()
 
 		// Cleanup the media player
 		mediaPlayer?.release()
@@ -299,22 +324,6 @@ class NacWakeupProcess(
 
 		// Cleanup the restrict volume handler
 		restrictVolumeHandler.removeCallbacksAndMessages(null)
-	}
-
-	/**
-	 * Cleanup shining the flashlight.
-	 */
-	private fun cleanupFlashlight()
-	{
-		// Check if the camera ID is set
-		if (cameraId.isNotEmpty())
-		{
-			// Turn off the flashlight
-			cameraManager.setTorchMode(cameraId, false)
-		}
-
-		// Stop any future flashing to occur
-		flashlightHandler.removeCallbacksAndMessages(null)
 	}
 
 	/**
@@ -376,11 +385,10 @@ class NacWakeupProcess(
 		super.onMediaItemTransition(mediaItem, reason)
 
 		// Get the path to the current media item
-		val sharedPreferences = NacSharedPreferences(context)
 		val mediaPath = mediaItem?.mediaId ?: ""
 
 		// Save the path of the current media item
-		sharedPreferences.editCurrentPlayingAlarmMedia(mediaPath)
+		sharedPreferences.currentPlayingAlarmMedia = mediaPath
 	}
 
 	/**
@@ -504,19 +512,6 @@ class NacWakeupProcess(
 	}
 
 	/**
-	 * Shine the flashlight.
-	 */
-	private fun shineFlashlight()
-	{
-		// Check if the camera ID is set
-		if (cameraId.isNotEmpty())
-		{
-			// Turn on the flashlight
-			cameraManager.setTorchMode(cameraId, true)
-		}
-	}
-
-	/**
 	 * Start the simple wake up process.
 	 */
 	fun simpleStart()
@@ -528,15 +523,25 @@ class NacWakeupProcess(
 		}
 
 		// Vibrate
-		if (alarm.shouldVibrate)
+		if (shouldVibrate)
 		{
 			vibrate()
 		}
 
 		// Flashlight
-		if (alarm.useFlashlight)
+		if (shouldUseFlashlight)
 		{
-			shineFlashlight()
+			// On/off duration has not been set
+			if (alarm.flashlightOnDuration == "0")
+			{
+				// Turn on the flashlight
+				flashlight?.turnOn()
+			}
+			else
+			{
+				// Blink the flashlight
+				flashlight?.blink(alarm.flashlightOnDuration, alarm.flashlightOffDuration)
+			}
 		}
 	}
 

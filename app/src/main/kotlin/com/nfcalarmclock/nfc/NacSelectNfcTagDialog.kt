@@ -1,13 +1,11 @@
 package com.nfcalarmclock.nfc
 
 import android.content.DialogInterface
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
@@ -15,6 +13,7 @@ import com.google.android.material.textview.MaterialTextView
 import com.nfcalarmclock.R
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
+import com.nfcalarmclock.view.setupInputLayoutColor
 
 /**
  * Select an NFC tag that has been previously saved.
@@ -91,18 +90,13 @@ class NacSelectNfcTagDialog
 		val inputLayout = view.findViewById(R.id.nfc_tag_input_layout) as TextInputLayout
 		val textView = view.findViewById(R.id.nfc_tag_dropdown_menu) as MaterialAutoCompleteTextView
 		val doneButton = view.findViewById(R.id.select_nfc_tag) as MaterialButton
-		primaryButton = doneButton
 
 		// Setup the color of the input layout
-
-		inputLayout.boxBackgroundColor = ContextCompat.getColor(requireContext(), R.color.gray)
-		inputLayout.boxStrokeColor = sharedPreferences.themeColor
-		inputLayout.setEndIconTintList(ColorStateList.valueOf(sharedPreferences.themeColor))
-
-		// Get the list of all NFC tag names
-		val nfcTagNames = allNfcTags.map { it.name }
+		inputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 
 		// Set the list of items in the textview dropdown menu
+		val nfcTagNames = allNfcTags.map { it.name }
+
 		textView.setSimpleItems(nfcTagNames.toTypedArray())
 
 		// Check if the list of NFC tags contains the selected NFC tag
@@ -129,13 +123,9 @@ class NacSelectNfcTagDialog
 		}
 
 		// Setup the button
-		doneButton.setOnClickListener {
-
-			// Call the listener
+		setupPrimaryButton(doneButton, listener = {
 			onSelectNfcTagListener?.onSelected(selectedNfcTag)
-
-		}
-
+		})
 	}
 
 	companion object

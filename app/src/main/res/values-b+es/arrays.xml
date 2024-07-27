@@ -265,11 +265,34 @@
 		<item>60 segundos</item>
 	</string-array>
 
+	<string-array name="flashlight_on_off_duration_times">
+		<item>0,5 segundos</item>
+		<item>1,0 segundo</item>
+		<item>1,5 segundos</item>
+		<item>2,0 segundos</item>
+		<item>2,5 segundos</item>
+		<item>3,0 segundos</item>
+		<item>3,5 segundos</item>
+		<item>4,0 segundos</item>
+		<item>4,5 segundos</item>
+		<item>5,0 segundos</item>
+		<item>5,5 segundos</item>
+		<item>6,0 segundos</item>
+		<item>6,5 segundos</item>
+		<item>7,0 segundos</item>
+		<item>7,5 segundos</item>
+		<item>8,0 segundos</item>
+		<item>8,5 segundos</item>
+		<item>9,0 segundos</item>
+		<item>9,5 segundos</item>
+		<item>10,0 segundos</item>
+	</string-array>
+
 	<string-array name="whats_new_items">
 		<item>Se agregó la opción &lt;b>linterna&lt;/b> para encender la linterna cuando suena una alarma.</item>
+		<item>Se agregó la capacidad de ocultar las opciones &lt;b>vibrar&lt;/b>, &lt;b>NFC&lt;/b> y &lt;b>linterna&lt;/b> de una alarma expandida. Esto se puede encontrar en &lt;b>Configuración > Apariencia&lt;/b>.</item>
 		<item>Se actualizó la aplicación para &lt;b>Android 14&lt;/b>.</item>
 		<item>Se actualizó la &lt;b>nueva pantalla de alarma&lt;/b> para que &lt;b>deslizar&lt;/b> para posponer o descartar sea mucho más fácil.</item>
-		<item>Se corrigió un bloqueo al detener una alarma.</item>
 	</string-array>
 
 </resources>

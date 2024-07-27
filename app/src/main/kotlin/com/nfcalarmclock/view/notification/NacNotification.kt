@@ -273,17 +273,10 @@ abstract class NacNotification(
 		 *
 		 * @return A list of notification lines.
 		 */
-		@TargetApi(Build.VERSION_CODES.M)
 		fun getExtraLines(context: Context, groupKey: String?): MutableList<CharSequence>
 		{
 			// Create a list of lines
 			val lines: MutableList<CharSequence> = ArrayList()
-
-			// Check if API < 23
-			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
-			{
-				return lines
-			}
 
 			// Get the notification manager
 			val manager = context.getSystemService(Context.NOTIFICATION_SERVICE)

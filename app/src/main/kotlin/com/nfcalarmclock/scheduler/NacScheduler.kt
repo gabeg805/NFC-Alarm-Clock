@@ -10,7 +10,7 @@ import com.nfcalarmclock.activealarm.NacActiveAlarmBroadcastReceiver
 import com.nfcalarmclock.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.main.NacMainActivity
-import com.nfcalarmclock.upcomingreminder.NacUpcomingReminderService
+import com.nfcalarmclock.alarmoptions.upcomingreminder.NacUpcomingReminderService
 import com.nfcalarmclock.util.NacCalendar
 import java.util.Calendar
 import kotlin.random.Random
@@ -194,14 +194,7 @@ object NacScheduler
 		val id = Random.nextInt(1, 500)
 
 		// Get the flags
-		val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-		{
-			PendingIntent.FLAG_IMMUTABLE
-		}
-		else
-		{
-			0
-		}
+		val flags = PendingIntent.FLAG_IMMUTABLE
 
 		// Create the intent
 		val intent = Intent(context, NacMainActivity::class.java)
@@ -222,14 +215,7 @@ object NacScheduler
 		val id = alarm.id.toInt()
 
 		// Prepare the flags
-		val intentFlags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-		{
-			flags or PendingIntent.FLAG_IMMUTABLE
-		}
-		else
-		{
-			flags
-		}
+		val intentFlags = flags or PendingIntent.FLAG_IMMUTABLE
 
 		// Create the pending intent
 		return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -285,12 +271,7 @@ object NacScheduler
 	fun cancelOld(context: Context, id: Int)
 	{
 		// Prepare the flags
-		var flags = PendingIntent.FLAG_NO_CREATE
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-		{
-			flags = flags or PendingIntent.FLAG_IMMUTABLE
-		}
+		var flags = PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
 
 		// Create the pending intent for the old type
 		val intent = Intent(context, NacActiveAlarmBroadcastReceiver::class.java)

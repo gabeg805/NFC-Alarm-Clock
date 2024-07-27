@@ -51,10 +51,9 @@ class NacDeleteNfcTagDialog
 		// Get the views
 		val deleteButton = view.findViewById(R.id.delete_nfc_tag) as MaterialButton
 		val cancelButton = view.findViewById(R.id.cancel_nfc_tag) as MaterialButton
-		primaryButton = deleteButton
 
-		// Listener for the delete button
-		deleteButton.setOnClickListener {
+		// Setup the delete button
+		setupPrimaryButton(deleteButton, listener = {
 
 			// Call the listener
 			onDeleteNfcTagListener?.onDelete()
@@ -62,16 +61,10 @@ class NacDeleteNfcTagDialog
 			// Dismiss the dialog
 			dismiss()
 
-		}
+		})
 
-		// Listener for the cancel button
-		cancelButton.setOnClickListener {
-
-			// Dismiss the dialog
-			dismiss()
-
-		}
-
+		// Setup the cancel button
+		setupSecondaryButton(cancelButton)
 	}
 
 	companion object

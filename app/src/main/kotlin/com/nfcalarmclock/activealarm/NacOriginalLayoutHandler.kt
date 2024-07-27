@@ -61,6 +61,12 @@ class NacOriginalLayoutHandler(
 	private val nameTextView = activity.findViewById<TextView>(R.id.music_title)
 
 	/**
+	 * Whether the alarm should use NFC or not.
+	 */
+	private val shouldUseNfc: Boolean
+		get() = (alarm != null) && alarm.shouldUseNfc && sharedPreferences.shouldShowNfcButton
+
+	/**
 	 * Constructor.
 	 */
 	init
@@ -75,7 +81,7 @@ class NacOriginalLayoutHandler(
 	private fun setupAlarmButtons(activity: AppCompatActivity)
 	{
 		// NFC should be used
-		if (NacNfc.shouldUseNfc(activity, alarm))
+		if (NacNfc.exists(activity) && shouldUseNfc)
 		{
 			// Do not show the dismiss button
 			dismissButton.visibility = View.GONE
@@ -119,7 +125,7 @@ class NacOriginalLayoutHandler(
 	private fun setupAlarmInfo()
 	{
 		// Check if the alarm is not null and the user wants to see alarm name
-		if ((alarm != null) && sharedPreferences.showAlarmName)
+		if ((alarm != null) && sharedPreferences.shouldShowAlarmName)
 		{
 			// Show the alarm name
 			nameTextView.text = alarm.nameNormalized
@@ -134,7 +140,7 @@ class NacOriginalLayoutHandler(
 	private fun setupAlarmInstructions()
 	{
 		// Set the visibility of the instructions based on if the alarm uses NFC
-		instructionsTextView.visibility = if (alarm?.shouldUseNfc == true)
+		instructionsTextView.visibility = if (shouldUseNfc)
 		{
 			// Show NFC instructions
 			View.VISIBLE

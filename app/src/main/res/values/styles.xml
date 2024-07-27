@@ -2,7 +2,12 @@
 
 	<!-- Base application theme. -->
 	<!--
+	OLD:
 	<style name="AppTheme" parent="Theme.AppCompat">
+
+	IMPORTANT: If changing to Material3, then any MaterialComponents (Material2) stuff such as
+	           the exposed dropdown menu widgets will cause the app to crash.
+	<style name="AppTheme" parent="Theme.Material3">
 	-->
 	<style name="AppTheme" parent="Theme.MaterialComponents">
 		<item name="colorAccent">@color/orange</item>
@@ -63,6 +68,24 @@
 
 	</style>
 
+	<!-- SEE NOTE ABOVE ABOUT MATERIAL3
+	<style name="Theme.App" parent="Theme.Material3.DayNight">
+		<item name="textInputStyle">@style/Widget.App.ExposedDropdownMenu</item>
+	</style>
+
+	<style name="Widget.App.ExposedDropdownMenu" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+		<item name="materialThemeOverlay">@style/ThemeOverlay.App.ExposedDropdownMenu</item>
+		<item name="hintTextColor">?attr/colorOnSurface</item>
+		<item name="endIconTint">?attr/colorOnSurface</item>
+	</style>
+
+	<style name="ThemeOverlay.App.ExposedDropdownMenu" parent="">
+		<item name="colorPrimary">@color/orange</item>
+		<item name="colorOnSurface">@color/sky_blue</item>
+		<item name="colorError">@color/red</item>
+		<item name="autoCompleteTextViewStyle">@style/Widget.Material3.AutoCompleteTextView.OutlinedBox</item>
+	</style>
+	-->
 
 	<!-- No action bar (largely for main activity) -->
 	<style name="AppTheme.NoActionBar">

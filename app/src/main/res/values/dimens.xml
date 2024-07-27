@@ -3,6 +3,7 @@
 	<!-- Spacing -->
 	<dimen name="zero">0dp</dimen>
 	<dimen name="line">1dp</dimen>
+	<dimen name="twoline">2dp</dimen>
 	<dimen name="nudge">4dp</dimen>
 	<dimen name="tiny">8dp</dimen>
 	<dimen name="small">12dp</dimen>

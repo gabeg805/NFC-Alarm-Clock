@@ -83,7 +83,6 @@ class NacSaveNfcTagDialog
 		val editText = view.findViewById(R.id.nfc_tag_name) as TextInputEditText
 		val saveButton = view.findViewById(R.id.save_nfc_tag) as MaterialButton
 		val skipButton = view.findViewById(R.id.skip_nfc_tag) as MaterialButton
-		primaryButton = saveButton
 
 		// Setup the input layout
 		inputLayout.hintTextColor = ColorStateList.valueOf(sharedPreferences.themeColor)
@@ -107,7 +106,7 @@ class NacSaveNfcTagDialog
 		}
 
 		// Setup the save button
-		saveButton.setOnClickListener {
+		setupPrimaryButton(saveButton, listener = {
 
 			// Get the name
 			val nfcName = editText.text.toString().trim()
@@ -120,7 +119,7 @@ class NacSaveNfcTagDialog
 				{
 					// Show toast
 					NacUtility.quickToast(requireContext(), R.string.error_message_nfc_name_exists)
-					return@setOnClickListener
+					return@setupPrimaryButton
 				}
 				// Check that the NFC ID does not already exist
 				else if (it.nfcId == nfcId)
@@ -130,7 +129,7 @@ class NacSaveNfcTagDialog
 
 					// Show toast
 					NacUtility.quickToast(requireContext(), msg)
-					return@setOnClickListener
+					return@setupPrimaryButton
 				}
 
 			}
@@ -144,10 +143,10 @@ class NacSaveNfcTagDialog
 			// Dismiss the dialog
 			dismiss()
 
-		}
+		})
 
 		// Setup the skip button
-		skipButton.setOnClickListener {
+		setupSecondaryButton(skipButton, listener = {
 
 			// Call the listener
 			onSaveNfcTagListener?.onCancel()
@@ -155,7 +154,7 @@ class NacSaveNfcTagDialog
 			// Dismiss the dialog
 			dismiss()
 
-		}
+		})
 
 	}
 

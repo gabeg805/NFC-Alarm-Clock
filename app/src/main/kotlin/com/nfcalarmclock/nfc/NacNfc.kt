@@ -136,16 +136,6 @@ object NacNfc
 	}
 
 	/**
-	 * Check if should use NFC.
-	 *
-	 * @return True if should use NFC, and False otherwise.
-	 */
-	fun shouldUseNfc(context: Context, alarm: NacAlarm?): Boolean
-	{
-		return (alarm != null) && exists(context) && alarm.shouldUseNfc
-	}
-
-	/**
 	 * @see .start
 	 */
 	fun start(activity: Activity)

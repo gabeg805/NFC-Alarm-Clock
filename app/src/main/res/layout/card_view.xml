@@ -245,7 +245,6 @@
 				android:layout_height="wrap_content"
 				android:paddingTop="@dimen/tiny"
 				android:paddingBottom="@dimen/tiny"
-				android:weightSum="4"
 				android:gravity="center"
 				android:orientation="horizontal">
 
@@ -347,7 +346,7 @@
 
 				<com.google.android.material.button.MaterialButton
 					style="@style/Widget.Button.Icon"
-					android:id="@+id/nac_audio_options"
+					android:id="@+id/nac_alarm_options"
 					android:contentDescription="@string/cd_alarm_options"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/touch"

@@ -10,6 +10,7 @@ import com.nfcalarmclock.shared.NacSharedPreferences
  * here to satisfy the condititon of being able to check if should request, as
  * well as request, but the methods themselves do nothing.
  */
+@Suppress("SameReturnValue")
 object NacRateMyApp
 {
 

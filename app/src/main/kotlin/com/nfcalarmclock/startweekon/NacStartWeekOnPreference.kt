@@ -117,7 +117,7 @@ class NacStartWeekOnPreference @JvmOverloads constructor(
 		// Set flag to refresh the main activity so that the days are redrawn
 		val shared = NacSharedPreferences(context)
 
-		shared.editShouldRefreshMainActivity(true)
+		shared.shouldRefreshMainActivity = true
 
 		// Notify that a change occurred
 		notifyChanged()

@@ -81,14 +81,7 @@ class NacOptionalPermissionPreference
 	private fun setPermissionTextColor(textView: TextView)
 	{
 		// Get the color based on the API
-		val color = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-		{
-			context.getColor(R.color.green)
-		}
-		else
-		{
-			context.resources.getColor(R.color.green)
-		}
+		val color = context.getColor(R.color.green)
 
 		// Set the color
 		textView.setTextColor(color)

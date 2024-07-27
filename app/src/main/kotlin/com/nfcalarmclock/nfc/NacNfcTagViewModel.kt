@@ -67,6 +67,7 @@ class NacNfcTagViewModel @Inject constructor(
 	/**
 	 * All NFC tags in the database.
 	 */
+	@Suppress("unused")
 	suspend fun getAllNfcTags(): List<NacNfcTag> = nfcTagRepository.getAllNfcTags()
 
 	/**

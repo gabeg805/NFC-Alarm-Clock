@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:padding="@dimen/large"
+	android:orientation="vertical">
+
+	<!-- Question about what to say when the alarm is active -->
+	<TextView
+		style="@style/Widget.TextView.Primary"
+		android:id="@+id/title_tts_what_to_say"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:textSize="@dimen/tsz_medium"
+		android:textStyle="bold"
+		android:text="@string/title_tts_what_to_say"
+		/>
+
+	<!-- -->
+	<Space
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/small"
+		/>
+
+	<!-- Say current time -->
+	<com.google.android.material.checkbox.MaterialCheckBox
+		android:id="@+id/say_current_time"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="@dimen/huge"
+		android:layout_marginEnd="@dimen/huge"
+		android:text="@string/message_tts_current_time"
+		/>
+
+	<!-- Say alarm name -->
+	<com.google.android.material.checkbox.MaterialCheckBox
+		android:id="@+id/say_alarm_name"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="@dimen/huge"
+		android:layout_marginEnd="@dimen/huge"
+		android:text="@string/message_tts_alarm_name"
+		/>
+
+	<Space
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/medium"
+		/>
+
+	<!-- Question about how often to say the selected thing(s) above -->
+	<TextView
+		style="@style/Widget.TextView.Primary"
+		android:id="@+id/title_tts_how_often_to_say"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:textSize="@dimen/tsz_medium"
+		android:textStyle="bold"
+		android:text="@string/title_tts_how_often_to_say"
+		/>
+
+	<!-- Pick how often to say the selected thing(s) above -->
+	<com.google.android.material.textfield.TextInputLayout
+		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+		android:id="@+id/tts_frequency_input_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingVertical="@dimen/normal"
+		app:boxCornerRadiusTopStart="6dp"
+		app:boxCornerRadiusTopEnd="6dp"
+		app:boxCornerRadiusBottomStart="6dp"
+		app:boxCornerRadiusBottomEnd="6dp"
+		app:boxStrokeWidth="2dp">
+
+		<com.google.android.material.textfield.MaterialAutoCompleteTextView
+			android:id="@+id/tts_frequency_dropdown_menu"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:inputType="none"
+			app:simpleItems="@array/tts_frequency"
+			/>
+	</com.google.android.material.textfield.TextInputLayout>
+
+	<!-- -->
+	<Space
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/large"
+		/>
+
+	<!-- Ok button -->
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/ok_button"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textColor="@color/white"
+		android:text="@string/action_ok"
+		app:backgroundTint="@color/orange"
+		/>
+
+	<!-- Cancel button -->
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/cancel_button"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textColor="@color/white"
+		android:text="@string/action_cancel"
+		app:backgroundTint="@color/gray_light"
+		/>
+
+</LinearLayout>

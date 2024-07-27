@@ -482,12 +482,14 @@ object NacCalendar
 			/**
 			 * All weekend days.
 			 */
+			@Suppress("MemberVisibilityCanBePrivate")
 			val WEEKEND: EnumSet<Day>
 				get() = EnumSet.of(SUNDAY, SATURDAY)
 
 			/**
 			 * Length of week.
 			 */
+			@Suppress("MemberVisibilityCanBePrivate")
 			val WEEK_LENGTH = WEEK.size
 
 			/**
@@ -581,6 +583,7 @@ object NacCalendar
 			 * @param  daysToConvert  The set of days to convert.
 			 * @param  start  The day to start the week on.
 			 */
+			@Suppress("MemberVisibilityCanBePrivate")
 			fun daysToString(
 				context: Context,
 				daysToConvert: EnumSet<Day>,

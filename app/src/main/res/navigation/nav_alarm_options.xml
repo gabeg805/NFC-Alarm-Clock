@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/nav_alarm_options"
+	app:startDestination="@id/nacAlarmOptionsDialog">
+
+	<dialog
+		android:id="@+id/nacAlarmOptionsDialog"
+		android:name="com.nfcalarmclock.alarmoptions.NacAlarmOptionsDialog"
+		android:label="NacAlarmOptionsDialog" >
+		<action
+			android:id="@+id/action_nacAlarmOptionsDialog_to_nacDismissOptionsDialog"
+			app:destination="@id/nacDismissOptionsDialog" />
+		<action
+			android:id="@+id/action_nacAlarmOptionsDialog_to_nacSnoozeOptionsDialog"
+			app:destination="@id/nacSnoozeOptionsDialog" />
+		<action
+			android:id="@+id/action_nacAlarmOptionsDialog_to_nacAudioSourceDialog"
+			app:destination="@id/nacAudioSourceDialog" />
+		<action
+			android:id="@+id/action_nacAlarmOptionsDialog_to_nacRestrictVolumeDialog"
+			app:destination="@id/nacRestrictVolumeDialog" />
+		<action
+			android:id="@+id/action_nacAlarmOptionsDialog_to_nacGraduallyIncreaseVolumeDialog2"
+			app:destination="@id/nacGraduallyIncreaseVolumeDialog" />
+		<action
+			android:id="@+id/action_nacAlarmOptionsDialog_to_nacTextToSpeechDialog"
+			app:destination="@id/nacTextToSpeechDialog" />
+		<action
+			android:id="@+id/action_nacAlarmOptionsDialog_to_nacUpcomingReminderDialog"
+			app:destination="@id/nacUpcomingReminderDialog" />
+		<action
+			android:id="@+id/action_nacAlarmOptionsDialog_to_nacFlashlightOptionsDialog"
+			app:destination="@id/nacFlashlightOptionsDialog" />
+	</dialog>
+	<dialog
+		android:id="@+id/nacDismissOptionsDialog"
+		android:name="com.nfcalarmclock.alarmoptions.dismissoptions.NacDismissOptionsDialog"
+		android:label="NacDismissOptionsDialog" />
+	<dialog
+		android:id="@+id/nacSnoozeOptionsDialog"
+		android:name="com.nfcalarmclock.alarmoptions.snoozeoptions.NacSnoozeOptionsDialog"
+		android:label="NacSnoozeOptionsDialog" />
+	<dialog
+		android:id="@+id/nacAudioSourceDialog"
+		android:name="com.nfcalarmclock.alarmoptions.audiosource.NacAudioSourceDialog"
+		android:label="NacAudioSourceDialog" />
+	<dialog
+		android:id="@+id/nacGraduallyIncreaseVolumeDialog"
+		android:name="com.nfcalarmclock.alarmoptions.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog"
+		android:label="NacGraduallyIncreaseVolumeDialog" />
+	<dialog
+		android:id="@+id/nacRestrictVolumeDialog"
+		android:name="com.nfcalarmclock.alarmoptions.restrictvolume.NacRestrictVolumeDialog"
+		android:label="NacRestrictVolumeDialog" />
+	<dialog
+		android:id="@+id/nacTextToSpeechDialog"
+		android:name="com.nfcalarmclock.alarmoptions.tts.NacTextToSpeechDialog"
+		android:label="NacTextToSpeechDialog" />
+	<dialog
+		android:id="@+id/nacUpcomingReminderDialog"
+		android:name="com.nfcalarmclock.alarmoptions.upcomingreminder.NacUpcomingReminderDialog"
+		android:label="NacUpcomingReminderDialog" />
+	<dialog
+		android:id="@+id/nacFlashlightOptionsDialog"
+		android:name="com.nfcalarmclock.flashlight.NacFlashlightOptionsDialog"
+		android:label="NacFlashlightOptionsDialog" />
+</navigation>

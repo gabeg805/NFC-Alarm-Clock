@@ -13,6 +13,7 @@ import androidx.core.app.NotificationManagerCompat
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.nfc.NacNfc
+import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.view.notification.NacNotification
 import java.util.Calendar
@@ -126,12 +127,7 @@ class NacActiveAlarmNotification(
 			val intent = NacActiveAlarmActivity.getStartIntent(context, alarm)
 
 			// Determine the pending intent flags
-			var flags = PendingIntent.FLAG_UPDATE_CURRENT
-
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-			{
-				flags = flags or PendingIntent.FLAG_IMMUTABLE
-			}
+			var flags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
 
 			// Return the pending intent for the activity
 			return PendingIntent.getActivity(context, id.toInt(), intent, flags)
@@ -147,16 +143,17 @@ class NacActiveAlarmNotification(
 			val intent = NacActiveAlarmService.getDismissIntent(context, alarm)
 
 			// Determine the pending intent flags
-			var flags = PendingIntent.FLAG_CANCEL_CURRENT
-
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-			{
-				flags = flags or PendingIntent.FLAG_IMMUTABLE
-			}
+			var flags = PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
 
 			// Create the pending intent
 			return PendingIntent.getService(context, 0, intent, flags)
 		}
+
+	/**
+	 * Whether the alarm should use NFC or not.
+	 */
+	private val shouldUseNfc: Boolean
+		get() = (alarm != null) && alarm.shouldUseNfc && NacSharedPreferences(context).shouldShowNfcButton
 
 	/**
 	 * The pending intent to use when snoozing.
@@ -167,12 +164,7 @@ class NacActiveAlarmNotification(
 			val intent = NacActiveAlarmService.getSnoozeIntent(context, alarm)
 
 			// Determine the pending intent flags
-			var flags = PendingIntent.FLAG_CANCEL_CURRENT
-
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-			{
-				flags = flags or PendingIntent.FLAG_IMMUTABLE
-			}
+			var flags = PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
 
 			// Create the pending intent
 			return PendingIntent.getService(context, 0, intent, flags)
@@ -260,7 +252,7 @@ class NacActiveAlarmNotification(
 		// Check if NFC does not need to be used to dismiss the alarm
 		// Note: This evaluates to False on the emulator because the emulator
 		// is unable to use NFC
-		if (!NacNfc.shouldUseNfc(context, alarm))
+		if (!NacNfc.exists(context) || !shouldUseNfc)
 		{
 			// Add the dismiss button to the notification
 			builder = builder.addAction(R.drawable.dismiss, dismiss, dismissPendingIntent)

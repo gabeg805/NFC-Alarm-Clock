@@ -37,7 +37,7 @@ class NacSharedPreferences(context: Context)
 	/**
 	 * App's first run value.
 	 */
-	val appFirstRun: Boolean
+	var appFirstRun: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.app_first_run)
@@ -45,11 +45,17 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getBoolean(key, defaultValue)
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.app_first_run)
+
+			saveBoolean(key, value)
+		}
 
 	/**
 	 * Whether statistics should start to be collected or not.
 	 */
-	val appStartStatistics: Boolean
+	var appStartStatistics: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.app_start_statistics)
@@ -57,11 +63,17 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getBoolean(key, defaultValue)
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.app_start_statistics)
+
+			saveBoolean(key, value)
+		}
 
 	/**
 	 * Audio source.
 	 */
-	val audioSource: String
+	var audioSource: String
 		get()
 		{
 			val key = resources.getString(R.string.alarm_audio_source_key)
@@ -70,77 +82,139 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getString(key, defaultValue) ?: ""
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.alarm_audio_source_key)
+
+			saveString(key, value)
+		}
 
 	/**
-	 * Auto dismiss duration.
+	 * Auto dismiss time.
 	 */
-	private val autoDismissIndex: Int
+	var autoDismissTime: Int
 		get()
 		{
 			val key = resources.getString(R.string.auto_dismiss_key)
+			val defaultValue = 15
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.auto_dismiss_key)
+
+			saveInt(key, value)
+		}
+
+	/**
+	 * Old auto dismiss index.
+	 */
+	private val oldAutoDismissIndex: Int
+		get()
+		{
+			val key = resources.getString(R.string.old_auto_dismiss_key)
 			val defaultValue = resources.getInteger(R.integer.default_auto_dismiss_index)
 
 			return instance.getInt(key, defaultValue)
 		}
 
 	/**
+	 * Old auto dismiss time.
+	 *
 	 * This is used when updating database versions.
 	 *
 	 * @see .getAutoDismissTime
 	 */
-	val autoDismissTime: Int
+	val oldAutoDismissTime: Int
 		get()
 		{
-			return if (autoDismissIndex < 5)
+			return if (oldAutoDismissIndex < 5)
 			{
-				autoDismissIndex
+				oldAutoDismissIndex
 			}
 			else
 			{
-				(autoDismissIndex - 4) * 5
+				(oldAutoDismissIndex - 4) * 5
 			}
+		}
+
+	/**
+	 * Whether an alarm can be dismissed early or not.
+	 */
+	var canDismissEarly: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.alarm_use_dismiss_early_key)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.alarm_use_dismiss_early_key)
+
+			saveBoolean(key, value)
 		}
 
 	/**
 	 * Alarm card height when it is collapsed.
 	 */
-	val cardHeightCollapsed: Int
+	var cardHeightCollapsed: Int
 		get()
 		{
 			val key = resources.getString(R.string.card_height_collapsed)
-			val defaultValue = resources.getInteger(R.integer.default_card_height_collapsed)
+			val defaultValue = 0
 
 			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.card_height_collapsed)
+
+			saveInt(key, value)
 		}
 
 	/**
 	 * Alarm card height when it is collapsed, with dismiss showing.
 	 */
-	val cardHeightCollapsedDismiss: Int
+	var cardHeightCollapsedDismiss: Int
 		get()
 		{
 			val key = resources.getString(R.string.card_height_collapsed_dismiss)
-			val defaultValue = resources.getInteger(R.integer.default_card_height_collapsed_dismiss)
+			val defaultValue = 0
 
 			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.card_height_collapsed_dismiss)
+
+			saveInt(key, value)
 		}
 
 	/**
 	 * Alarm card height when it is expanded.
 	 */
-	val cardHeightExpanded: Int
+	var cardHeightExpanded: Int
 		get()
 		{
 			val key = resources.getString(R.string.card_height_expanded)
-			val defaultValue = resources.getInteger(R.integer.default_card_height_expanded)
+			val defaultValue = 0
 
 			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.card_height_expanded)
+
+			saveInt(key, value)
 		}
 
 	/**
 	 * Check if the alarm card has been measured.
 	 */
-	val cardIsMeasured: Boolean
+	var cardIsMeasured: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.card_is_measured)
@@ -148,16 +222,28 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getBoolean(key, defaultValue)
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.card_is_measured)
+
+			saveBoolean(key, value)
+		}
 
 	/**
 	 * Get the current playing alarm media.
 	 */
-	val currentPlayingAlarmMedia: String
+	var currentPlayingAlarmMedia: String
 		get()
 		{
 			val key = resources.getString(R.string.key_current_playing_alarm_media)
 
 			return instance.getString(key, "") ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_current_playing_alarm_media)
+
+			saveString(key, value)
 		}
 
 	/**
@@ -202,7 +288,7 @@ class NacSharedPreferences(context: Context)
 	/**
 	 * Counter to delay showing the What's New dialog.
 	 */
-	val delayShowingWhatsNewDialogCounter: Int
+	var delayShowingWhatsNewDialogCounter: Int
 		get()
 		{
 			val key = resources.getString(R.string.key_delay_showing_whats_new_dialog_counter)
@@ -210,29 +296,47 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getInt(key, defaultValue)
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_delay_showing_whats_new_dialog_counter)
+
+			saveInt(key, value)
+		}
 
 	/**
 	 * The time before an alarm goes off to start showing the dismiss early button by.
 	 */
-	val dismissEarlyTime: Int
+	var dismissEarlyTime: Int
 		get()
 		{
 			val key = resources.getString(R.string.alarm_dismiss_early_time_key)
-			val defaultValue = resources.getInteger(R.integer.default_dismiss_early_time)
+			val defaultValue = 30
 
 			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.alarm_dismiss_early_time_key)
+
+			saveInt(key, value)
 		}
 
 	/**
 	 * Whether easy snooze is enabled or not.
 	 */
-	val easySnooze: Boolean
+	var easySnooze: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.easy_snooze_key)
 			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.easy_snooze_key)
+
+			saveBoolean(key, value)
 		}
 
 	/**
@@ -250,31 +354,43 @@ class NacSharedPreferences(context: Context)
 	/**
 	 * Number of seconds to turn off the flashlight.
 	 */
-	val flashlightOffDuration: Int
+	var flashlightOffDuration: String
 		get()
 		{
 			val key = resources.getString(R.string.alarm_flashlight_off_duration_key)
-			val defaultValue = 0
+			val defaultValue = "1"
 
-			return instance.getInt(key, defaultValue)
+			return instance.getString(key, defaultValue) ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.alarm_flashlight_off_duration_key)
+
+			saveString(key, value)
 		}
 
 	/**
 	 * Number of seconds to turn on the flashlight.
 	 */
-	val flashlightOnDuration: Int
+	var flashlightOnDuration: String
 		get()
 		{
 			val key = resources.getString(R.string.alarm_flashlight_on_duration_key)
-			val defaultValue = 1
+			val defaultValue = "1"
 
-			return instance.getInt(key, defaultValue)
+			return instance.getString(key, defaultValue) ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.alarm_flashlight_on_duration_key)
+
+			saveString(key, value)
 		}
 
 	/**
 	 * Strength level of the flashlight.
 	 */
-	val flashlightStrengthLevel: Int
+	var flashlightStrengthLevel: Int
 		get()
 		{
 			val key = resources.getString(R.string.alarm_flashlight_strength_level_key)
@@ -282,11 +398,36 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getInt(key, defaultValue)
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.alarm_flashlight_strength_level_key)
+
+			saveInt(key, value)
+		}
 
 	/**
-	 * Whether volume should be gradually increased or not.
+	 * Amount of time to wait before gradually increasing the flashlight strength level
+	 * another step.
 	 */
-	val graduallyIncreaseVolumeWaitTime: Int
+	var graduallyIncreaseFlashlightStrengthLevelWaitTime: Int
+		get()
+		{
+			val key = resources.getString(R.string.alarm_flashlight_gradually_increase_flashlight_strength_level_wait_time_key)
+			val defaultValue = 5
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.alarm_flashlight_gradually_increase_flashlight_strength_level_wait_time_key)
+
+			saveInt(key, value)
+		}
+
+	/**
+	 * Amount of time to wait before gradually increasing the volume another step.
+	 */
+	var graduallyIncreaseVolumeWaitTime: Int
 		get()
 		{
 			val key = resources.getString(R.string.alarm_gradually_increase_volume_wait_time_key)
@@ -294,10 +435,19 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getInt(key, defaultValue)
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.alarm_gradually_increase_volume_wait_time_key)
+
+			saveInt(key, value)
+		}
 
 	/**
 	 * Check if the app has reached the counter limit.
+	 *
+	 * Note: This is used in the Google Play version of NacRateMyApp.
 	 */
+	@Suppress("unused")
 	val isRateMyAppLimit: Boolean
 		get()
 		{
@@ -306,7 +456,10 @@ class NacSharedPreferences(context: Context)
 
 	/**
 	 * Check if the app has been rated.
+	 *
+	 * Note: This is used in the Google Play version of NacRateMyApp.
 	 */
+	@Suppress("unused")
 	val isRateMyAppRated: Boolean
 		get()
 		{
@@ -316,9 +469,9 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * The index for the max number of snoozes.
+	 * Max number of snoozes.
 	 */
-	private val maxSnoozeIndex: Int
+	var maxSnooze: Int
 		get()
 		{
 			val key = resources.getString(R.string.max_snooze_key)
@@ -326,22 +479,40 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getInt(key, defaultValue)
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.max_snooze_key)
+
+			saveInt(key, value)
+		}
 
 	/**
-	 * Max number of snoozes.
+	 * Old index for the max number of snoozes.
+	 */
+	private val oldMaxSnoozeIndex: Int
+		get()
+		{
+			val key = resources.getString(R.string.old_max_snooze_key)
+			val defaultValue = resources.getInteger(R.integer.default_max_snooze_index)
+
+			return instance.getInt(key, defaultValue)
+		}
+
+	/**
+	 * Old max number of snoozes.
 	 *
 	 * This is used when updating database versions.
 	 */
-	val maxSnoozeValue: Int
+	val oldMaxSnoozeValue: Int
 		get()
 		{
-			return if (maxSnoozeIndex == 11)
+			return if (oldMaxSnoozeIndex == 11)
 			{
 				-1
 			}
 			else
 			{
-				maxSnoozeIndex
+				oldMaxSnoozeIndex
 			}
 		}
 
@@ -421,18 +592,24 @@ class NacSharedPreferences(context: Context)
 	 * Normally, this should be the same as the current version, but when an
 	 * install occurs, these values will differ.
 	 */
-	val previousAppVersion: String
+	var previousAppVersion: String
 		get()
 		{
 			val key = resources.getString(R.string.previous_app_version)
 
 			return instance.getString(key, "") ?: ""
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.previous_app_version)
+
+			saveString(key, value)
+		}
 
 	/**
 	 * The previous system volume, before an alarm goes off.
 	 */
-	val previousVolume: Int
+	var previousVolume: Int
 		get()
 		{
 			val key = resources.getString(R.string.sys_previous_volume)
@@ -440,11 +617,20 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getInt(key, defaultValue)
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.sys_previous_volume)
+
+			saveInt(key, value)
+		}
 
 	/**
 	 * The app's rating counter.
+	 *
+	 * Note: This is used in the Google Play version of NacRateMyApp.
 	 */
-	val rateMyAppCounter: Int
+	@Suppress("MemberVisibilityCanBePrivate")
+	var rateMyAppCounter: Int
 		get()
 		{
 			val key = resources.getString(R.string.app_rating_counter)
@@ -452,11 +638,17 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getInt(key, defaultValue)
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.app_rating_counter)
+
+			saveInt(key, value)
+		}
 
 	/**
 	 * Whether to recursively play the media in a directory.
 	 */
-	val recursivelyPlayMedia: Boolean
+	var recursivelyPlayMedia: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.alarm_recursively_play_media_key)
@@ -464,11 +656,17 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getBoolean(key, defaultValue)
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.alarm_recursively_play_media_key)
+
+			saveBoolean(key, value)
+		}
 
 	/**
 	 * Frequency at which to show the reminder, in units of minutes.
 	 */
-	val reminderFrequency: Int
+	var reminderFrequency: Int
 		get()
 		{
 			val key = resources.getString(R.string.reminder_frequency_key)
@@ -476,11 +674,53 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getInt(key, defaultValue)
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.reminder_frequency_key)
+
+			saveInt(key,  value)
+		}
+
+	/**
+	 * Whether volume should be gradually increased or not.
+	 */
+	var shouldGraduallyIncreaseVolume: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.alarm_should_gradually_increase_volume_key)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.alarm_should_gradually_increase_volume_key)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether the main activity should be refreshed or not.
+	 */
+	var shouldRefreshMainActivity: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.app_should_refresh_main_activity)
+			val defaultValue = resources.getBoolean(R.bool.default_app_should_refresh_main_activity)
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.app_should_refresh_main_activity)
+
+			saveBoolean(key, value)
+		}
 
 	/**
 	 * Whether the alarm should be repeated or not.
 	 */
-	val repeat: Boolean
+	val shouldRepeat: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.alarm_repeat_key)
@@ -490,33 +730,9 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Whether volume should be gradually increased or not.
-	 */
-	val shouldGraduallyIncreaseVolume: Boolean
-		get()
-		{
-			val key = resources.getString(R.string.alarm_should_gradually_increase_volume_key)
-			val defaultValue = false
-
-			return instance.getBoolean(key, defaultValue)
-		}
-
-	/**
-	 * Whether the main activity should be refreshed or not.
-	 */
-	val shouldRefreshMainActivity: Boolean
-		get()
-		{
-			val key = resources.getString(R.string.app_should_refresh_main_activity)
-			val defaultValue = resources.getBoolean(R.bool.default_app_should_refresh_main_activity)
-
-			return instance.getBoolean(key, defaultValue)
-		}
-
-	/**
 	 * Whether volume should be restricted or not.
 	 */
-	val shouldRestrictVolume: Boolean
+	var shouldRestrictVolume: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.alarm_should_restrict_volume_key)
@@ -524,11 +740,17 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getBoolean(key, defaultValue)
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.alarm_should_restrict_volume_key)
+
+			saveBoolean(key, value)
+		}
 
 	/**
 	 * Whether to say the alarm name or not via text-to-speech.
 	 */
-	val shouldSayAlarmName: Boolean
+	var shouldSayAlarmName: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.should_say_alarm_name_key)
@@ -536,11 +758,17 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getBoolean(key, defaultValue)
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.should_say_alarm_name_key)
+
+			saveBoolean(key, value)
+		}
 
 	/**
 	 * Whether to say the current time or not via text-to-speech.
 	 */
-	val shouldSayCurrentTime: Boolean
+	var shouldSayCurrentTime: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.should_say_current_time_key)
@@ -548,56 +776,17 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getBoolean(key, defaultValue)
 		}
-
-	/**
-	 * Whether the Manage NFC Tags preference should be visible or not.
-	 */
-	val shouldShowManageNfcTagsPreference: Boolean
-		get()
+		set(value)
 		{
-			val key = resources.getString(R.string.should_show_manage_nfc_tags_setting)
-			val defaultValue = false
+			val key = resources.getString(R.string.should_say_current_time_key)
 
-			return instance.getBoolean(key, defaultValue)
-		}
-
-	/**
-	 * Whether to show a reminder or not.
-	 */
-	val shouldShowReminder: Boolean
-		get()
-		{
-			val key = resources.getString(R.string.should_show_reminder_key)
-			val defaultValue = false
-
-			return instance.getBoolean(key, defaultValue)
-		}
-
-	/**
-	 * Whether to use text-to-speech or not.
-	 */
-	val shouldUseTts: Boolean
-		get()
-		{
-			return shouldSayCurrentTime || shouldSayAlarmName
-		}
-
-	/**
-	 * Whether to use text-to-speech for the reminder or not.
-	 */
-	val shouldUseTtsForReminder: Boolean
-		get()
-		{
-			val key = resources.getString(R.string.should_use_tts_for_reminder_key)
-			val defaultValue = false
-
-			return instance.getBoolean(key, defaultValue)
+			saveBoolean(key, value)
 		}
 
 	/**
 	 * Whether to show the alarm name or not.
 	 */
-	val showAlarmName: Boolean
+	var shouldShowAlarmName: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.key_show_alarm_name)
@@ -605,11 +794,17 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getBoolean(key, defaultValue)
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_show_alarm_name)
+
+			saveBoolean(key, value)
+		}
 
 	/**
 	 * Whether to show the current date and time or not.
 	 */
-	val showCurrentDateAndTime: Boolean
+	var shouldShowCurrentDateAndTime: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.key_show_current_date_and_time)
@@ -617,11 +812,35 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getBoolean(key, defaultValue)
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_show_current_date_and_time)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether the Manage NFC Tags preference should be visible or not.
+	 */
+	var shouldShowManageNfcTagsPreference: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.should_show_manage_nfc_tags_setting)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.should_show_manage_nfc_tags_setting)
+
+			saveBoolean(key, value)
+		}
 
 	/**
 	 * Whether to show music information or not.
 	 */
-	val showMusicInfo: Boolean
+	var shouldShowMusicInfo: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.key_show_music_info)
@@ -629,11 +848,71 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getBoolean(key, defaultValue)
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_show_music_info)
+
+			saveBoolean(key, value)
+		}
 
 	/**
-	 * Whether to shuffle media.
+	 * Whether to show a reminder or not.
 	 */
-	val shuffleMedia: Boolean
+	var shouldShowReminder: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.should_show_reminder_key)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.should_show_reminder_key)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether to show or hide the flashlight button.
+	 */
+	val shouldShowFlashlightButton: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.show_hide_flashlight_button_key)
+			val defaultValue = true
+
+			return instance.getBoolean(key, defaultValue)
+		}
+
+	/**
+	 * Whether to show or hide the NFC button.
+	 */
+	val shouldShowNfcButton: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.show_hide_nfc_button_key)
+			val defaultValue = true
+
+			return instance.getBoolean(key, defaultValue)
+		}
+
+	/**
+	 * Whether to show or hide the vibrate button.
+	 */
+	val shouldShowVibrateButton: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.show_hide_vibrate_button_key)
+			val defaultValue = true
+
+			return instance.getBoolean(key, defaultValue)
+		}
+
+	/**
+	 * Whether to shuffle media or not.
+	 */
+	var shouldShuffleMedia: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.shuffle_playlist_key)
@@ -641,14 +920,116 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getBoolean(key, defaultValue)
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.shuffle_playlist_key)
+
+			saveBoolean(key, value)
+		}
 
 	/**
-	 * Index for the snooze duration.
+	 * Whether the flashlight should be used or not.
 	 */
-	private val snoozeDurationIndex: Int
+	var shouldUseFlashlight: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.alarm_use_flashlight_key)
+			val defaultValue = resources.getBoolean(R.bool.default_use_flashlight)
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.alarm_use_flashlight_key)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether to use the new alarm screen or not.
+	 */
+	var shouldUseNewAlarmScreen: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_use_new_alarm_screen)
+			val defaultValue = resources.getBoolean(R.bool.default_use_new_alarm_screen)
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_use_new_alarm_screen)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether NFC is required or not.
+	 */
+	val shouldUseNfc: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.alarm_use_nfc_key)
+			val defaultValue = resources.getBoolean(R.bool.default_use_nfc)
+
+			return instance.getBoolean(key, defaultValue)
+		}
+
+	/**
+	 * Whether to use text-to-speech for the reminder or not.
+	 */
+	var shouldUseTtsForReminder: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.should_use_tts_for_reminder_key)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.should_use_tts_for_reminder_key)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether the alarm should vibrate the phone or not.
+	 */
+	val shouldVibrate: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.alarm_vibrate_key)
+			val defaultValue = resources.getBoolean(R.bool.default_vibrate)
+
+			return instance.getBoolean(key, defaultValue)
+		}
+
+	/**
+	 * Snooze duration.
+	 */
+	var snoozeDuration: Int
 		get()
 		{
 			val key = resources.getString(R.string.snooze_duration_key)
+			val defaultValue = 5
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.snooze_duration_key)
+
+			saveInt(key, value)
+		}
+
+	/**
+	 * Old index for the snooze duration.
+	 */
+	private val oldSnoozeDurationIndex: Int
+		get()
+		{
+			val key = resources.getString(R.string.old_snooze_duration_key)
 			val defaultValue = resources.getInteger(R.integer.default_snooze_duration_index)
 
 			return instance.getInt(key, defaultValue)
@@ -659,29 +1040,17 @@ class NacSharedPreferences(context: Context)
 	 *
 	 * This is used when updating database versions.
 	 */
-	val snoozeDurationValue: Int
+	val oldSnoozeDurationValue: Int
 		get()
 		{
-			return if (snoozeDurationIndex < 9)
+			return if (oldSnoozeDurationIndex < 9)
 			{
-				snoozeDurationIndex + 1
+				oldSnoozeDurationIndex + 1
 			}
 			else
 			{
-				(snoozeDurationIndex - 7) * 5
+				(oldSnoozeDurationIndex - 7) * 5
 			}
-		}
-
-	/**
-	 * The speak frequency value.
-	 */
-	val speakFrequency: Int
-		get()
-		{
-			val key = resources.getString(R.string.speak_frequency_key)
-			val defaultValue = resources.getInteger(R.integer.default_speak_frequency_index)
-
-			return instance.getInt(key, defaultValue)
 		}
 
 	/**
@@ -723,7 +1092,7 @@ class NacSharedPreferences(context: Context)
 	/**
 	 * The time to start showing a reminder.
 	 */
-	val timeToShowReminder: Int
+	var timeToShowReminder: Int
 		get()
 		{
 			val key = resources.getString(R.string.time_to_show_reminder_key)
@@ -731,65 +1100,29 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getInt(key, defaultValue)
 		}
-
-	/**
-	 * Whether dismiss early should be used or not.
-	 */
-	val useDismissEarly: Boolean
-		get()
+		set(value)
 		{
-			val key = resources.getString(R.string.alarm_use_dismiss_early_key)
-			val defaultValue = false
+			val key = resources.getString(R.string.time_to_show_reminder_key)
 
-			return instance.getBoolean(key, defaultValue)
+			saveInt(key, value)
 		}
 
 	/**
-	 * Whether the flashlight should be used or not.
+	 * Text-to-speech frequency at which it will speak.
 	 */
-	val useFlashlight: Boolean
+	var ttsFrequency: Int
 		get()
 		{
-			val key = resources.getString(R.string.alarm_use_flashlight_key)
-			val defaultValue = resources.getBoolean(R.bool.default_use_flashlight)
+			val key = resources.getString(R.string.speak_frequency_key)
+			val defaultValue = 0
 
-			return instance.getBoolean(key, defaultValue)
+			return instance.getInt(key, defaultValue)
 		}
-
-	/**
-	 * Whether to use the new alarm screen or not.
-	 */
-	val useNewAlarmScreen: Boolean
-		get()
+		set(value)
 		{
-			val key = resources.getString(R.string.key_use_new_alarm_screen)
-			val defaultValue = resources.getBoolean(R.bool.default_use_new_alarm_screen)
+			val key = resources.getString(R.string.speak_frequency_key)
 
-			return instance.getBoolean(key, defaultValue)
-		}
-
-	/**
-	 * Whether NFC is required or not.
-	 */
-	val useNfc: Boolean
-		get()
-		{
-			val key = resources.getString(R.string.alarm_use_nfc_key)
-			val defaultValue = resources.getBoolean(R.bool.default_use_nfc)
-
-			return instance.getBoolean(key, defaultValue)
-		}
-
-	/**
-	 * Whether the alarm should vibrate the phone or not.
-	 */
-	val vibrate: Boolean
-		get()
-		{
-			val key = resources.getString(R.string.alarm_vibrate_key)
-			val defaultValue = resources.getBoolean(R.bool.default_vibrate)
-
-			return instance.getBoolean(key, defaultValue)
+			saveInt(key, value)
 		}
 
 	/**
@@ -807,7 +1140,7 @@ class NacSharedPreferences(context: Context)
 	/**
 	 * Whether the app was supported or not.
 	 */
-	val wasAppSupported: Boolean
+	var wasAppSupported: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.key_app_supported)
@@ -815,11 +1148,17 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getBoolean(key, defaultValue)
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_app_supported)
+
+			saveBoolean(key, value)
+		}
 
 	/**
 	 * Whether the permission to ignore battery optimization was requested.
 	 */
-	val wasIgnoreBatteryOptimizationPermissionRequested: Boolean
+	var wasIgnoreBatteryOptimizationPermissionRequested: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.key_permission_ignore_battery_optimization_requested)
@@ -827,11 +1166,17 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getBoolean(key, defaultValue)
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_permission_ignore_battery_optimization_requested)
+
+			saveBoolean(key, value)
+		}
 
 	/**
 	 * Whether the POST_NOTIFICATIONS permission was requested.
 	 */
-	val wasPostNotificationsPermissionRequested: Boolean
+	var wasPostNotificationsPermissionRequested: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.key_permission_post_notifications_requested)
@@ -839,11 +1184,17 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getBoolean(key, defaultValue)
 		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_permission_post_notifications_requested)
+
+			saveBoolean(key, value)
+		}
 
 	/**
 	 * Whether the SCHEDULE_EXACT_ALARM permission was requested.
 	 */
-	val wasScheduleExactAlarmPermissionRequested: Boolean
+	var wasScheduleExactAlarmPermissionRequested: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.key_permission_schedule_exact_alarm_requested)
@@ -851,422 +1202,12 @@ class NacSharedPreferences(context: Context)
 
 			return instance.getBoolean(key, defaultValue)
 		}
-
-	/**
-	 * Edit whether this is the app's first run or not.
-	 */
-	fun editAppFirstRun(context: Context, first: Boolean)
-	{
-		val key = context.getString(R.string.app_first_run)
-
-		saveBoolean(key, first)
-	}
-
-	/**
-	 * Edit whether statistics should start to be collected or not.
-	 *
-	 * @param  shouldStart  Whether statistics should start to be collected or
-	 * not.
-	 */
-	fun editAppStartStatistics(shouldStart: Boolean)
-	{
-		val key = resources.getString(R.string.app_start_statistics)
-
-		saveBoolean(key, shouldStart)
-	}
-
-	/**
-	 * Edit the default audio source to use when a new alarm card is created.
-	 *
-	 *
-	 * This can be changed for an alarm by clicking the audio settings button.
-	 */
-	fun editAudioSource(source: String?)
-	{
-		val key = resources.getString(R.string.alarm_audio_source_key)
-
-		saveString(key, source)
-	}
-
-	/**
-	 * Edit the height of the alarm card when it is collapsed.
-	 */
-	fun editCardHeightCollapsed(height: Int)
-	{
-		val key = resources.getString(R.string.card_height_collapsed)
-
-		saveInt(key, height)
-	}
-
-	/**
-	 * Edit the height of the alarm card height it is collapsed, but the dismiss
-	 * button is showing.
-	 */
-	fun editCardHeightCollapsedDismiss(height: Int)
-	{
-		val key = resources.getString(R.string.card_height_collapsed_dismiss)
-
-		saveInt(key, height)
-	}
-
-	/**
-	 * Edit the height of the alarm card when it is expanded.
-	 */
-	fun editCardHeightExpanded(height: Int)
-	{
-		val key = resources.getString(R.string.card_height_expanded)
-
-		saveInt(key, height)
-	}
-
-	/**
-	 * Edit the flag indicating if the alarm card has been measured or not.
-	 */
-	fun editCardIsMeasured(isMeasured: Boolean)
-	{
-		val key = resources.getString(R.string.card_is_measured)
-
-		saveBoolean(key, isMeasured)
-	}
-
-	/**
-	 * Edit the current playing alarm media.
-	 */
-	fun editCurrentPlayingAlarmMedia(path: String)
-	{
-		val key = resources.getString(R.string.key_current_playing_alarm_media)
-
-		saveString(key, path)
-	}
-
-	/**
-	 * Edit the counter to delay showing the What's New dialog.
-	 */
-	fun editDelayShowingWhatsNewDialogCounter(count: Int)
-	{
-		val key = resources.getString(R.string.key_delay_showing_whats_new_dialog_counter)
-
-		saveInt(key, count)
-	}
-
-	/**
-	 * Edit the default dismiss early time when an alarm is created.
-	 */
-	fun editDismissEarlyTime(dismissEarly: Int)
-	{
-		val key = resources.getString(R.string.alarm_dismiss_early_time_key)
-
-		saveInt(key, dismissEarly)
-	}
-
-	/**
-	 * Edit the default use number of seconds to turn off the flashlight.
-	 */
-	fun editFlashlightOffDuration(duration: Int)
-	{
-		val key = resources.getString(R.string.alarm_flashlight_off_duration_key)
-
-		saveInt(key, duration)
-	}
-
-	/**
-	 * Edit the default use number of seconds to turn on the flashlight.
-	 */
-	fun editFlashlightOnDuration(duration: Int)
-	{
-		val key = resources.getString(R.string.alarm_flashlight_on_duration_key)
-
-		saveInt(key, duration)
-	}
-
-	/**
-	 * Edit the default strength level of the flashlight.
-	 */
-	fun editFlashlightStrengthLevel(strength: Int)
-	{
-		val key = resources.getString(R.string.alarm_flashlight_strength_level_key)
-
-		saveInt(key, strength)
-	}
-
-	/**
-	 * Edit the default value of a newly created alarm for wait time between
-	 * gradually increasing the volume another step when an alarm is active.
-	 */
-	fun editGraduallyIncreaseVolumeWaitTime(waitTime: Int)
-	{
-		val key = resources.getString(R.string.alarm_gradually_increase_volume_wait_time_key)
-
-		saveInt(key, waitTime)
-	}
-
-	/**
-	 * Edit the previous version that this app was using.
-	 *
-	 *
-	 * Normally, this should be the same as the current version, but when an
-	 * install occurs, these values will differ.
-	 */
-	fun editPreviousAppVersion(version: String?)
-	{
-		val key = resources.getString(R.string.previous_app_version)
-
-		saveString(key, version)
-	}
-
-	/**
-	 * Edit the previous system volume, before an alarm goes off.
-	 */
-	fun editPreviousVolume(previous: Int)
-	{
-		val key = resources.getString(R.string.sys_previous_volume)
-
-		saveInt(key, previous)
-	}
-
-	/**
-	 * Edit the counter that will indicate whether it is time to show the
-	 * dialog to Rate My App.
-	 */
-	fun editRateMyAppCounter(counter: Int)
-	{
-		val key = resources.getString(R.string.app_rating_counter)
-
-		saveInt(key, counter)
-	}
-
-	/**
-	 * Whether to recursively play the media in a directory.
-	 */
-	fun editRecursivelyPlayMedia(recurse: Boolean)
-	{
-		val key = resources.getString(R.string.alarm_recursively_play_media_key)
-
-		saveBoolean(key, recurse)
-	}
-
-	/**
-	 * Frequency at which to show the reminder, in units of minutes.
-	 */
-	fun editReminderFrequency(freq: Int)
-	{
-		val key = resources.getString(R.string.reminder_frequency_key)
-
-		return saveInt(key, freq)
-	}
-
-	/**
-	 * Edit the default value of a newly created alarm for whether the volume should
-	 * gradually be increased when an alarm is active.
-	 */
-	fun editShouldGraduallyIncreaseVolume(shouldIncrease: Boolean)
-	{
-		val key = resources.getString(R.string.alarm_should_gradually_increase_volume_key)
-
-		saveBoolean(key, shouldIncrease)
-	}
-
-	/**
-	 * Edit the default should restrict volume value when an alarm is created.
-	 */
-	fun editShouldRestrictVolume(shouldRestrict: Boolean)
-	{
-		val key = resources.getString(R.string.alarm_should_restrict_volume_key)
-
-		saveBoolean(key, shouldRestrict)
-	}
-
-	/**
-	 * Edit the value indicating whether the main activity should be refreshed or
-	 * not.
-	 */
-	fun editShouldRefreshMainActivity(shouldRefresh: Boolean)
-	{
-		val key = resources.getString(R.string.app_should_refresh_main_activity)
-
-		saveBoolean(key, shouldRefresh)
-	}
-
-	/**
-	 * Edit whether the alarm name will be said or not via text-to-speech.
-	 */
-	fun editShouldSayAlarmName(speak: Boolean)
-	{
-		val key = resources.getString(R.string.should_say_alarm_name_key)
-
-		saveBoolean(key, speak)
-	}
-
-	/**
-	 * Edit whether the current time will be said or not via text-to-speech.
-	 */
-	fun editShouldSayCurrentTime(speak: Boolean)
-	{
-		val key = resources.getString(R.string.should_say_current_time_key)
-
-		saveBoolean(key, speak)
-	}
-
-	/**
-	 * Whether to show a reminder or not.
-	 */
-	fun editShouldShowManageNfcTagsPreference(shouldShow: Boolean)
-	{
-		val key = resources.getString(R.string.should_show_manage_nfc_tags_setting)
-
-		return saveBoolean(key, shouldShow)
-	}
-
-	/**
-	 * Whether to show a reminder or not.
-	 */
-	fun editShouldShowReminder(showReminder: Boolean)
-	{
-		val key = resources.getString(R.string.should_show_reminder_key)
-
-		return saveBoolean(key, showReminder)
-	}
-
-	/**
-	 * Whether to use text-to-speech for the reminder or not.
-	 */
-	fun editShouldUseTtsForReminder(shouldUseTts: Boolean)
-	{
-		val key = resources.getString(R.string.should_use_tts_for_reminder_key)
-
-		return saveBoolean(key, shouldUseTts)
-	}
-
-	/**
-	 * Edit whether to show the alarm name or not.
-	 */
-	fun editShowAlarmName(showAlarmName: Boolean)
-	{
-		val key = resources.getString(R.string.key_show_alarm_name)
-
-		return saveBoolean(key, showAlarmName)
-	}
-
-	/**
-	 * Edit whether to show the current date and time or not.
-	 */
-	fun editShowCurrentDateAndTime(showDateAndTime: Boolean)
-	{
-		val key = resources.getString(R.string.key_show_current_date_and_time)
-
-		return saveBoolean(key, showDateAndTime)
-	}
-
-	/**
-	 * Whether to show music information or not.
-	 */
-	fun editShowMusicInfo(showMusicInfo: Boolean)
-	{
-		val key = resources.getString(R.string.key_show_music_info)
-
-		return saveBoolean(key, showMusicInfo)
-	}
-
-	/**
-	 * Edit whether to shuffle media.
-	 */
-	fun editShuffleMedia(shuffle: Boolean)
-	{
-		val key = resources.getString(R.string.shuffle_playlist_key)
-
-		saveBoolean(key, shuffle)
-	}
-
-	/**
-	 * Edit the frequency at which the text-to-speech should go off when an alarm
-	 * is going off.
-	 */
-	fun editSpeakFrequency(freq: Int)
-	{
-		val key = resources.getString(R.string.speak_frequency_key)
-
-		saveInt(key, freq)
-	}
-
-	/**
-	 * The time to start showing a reminder.
-	 */
-	fun editTimeToShowReminder(timeToShow: Int)
-	{
-		val key = resources.getString(R.string.time_to_show_reminder_key)
-
-		return saveInt(key, timeToShow)
-	}
-
-	/**
-	 * Edit the default use dismiss early when an alarm is created.
-	 */
-	fun editUseDismissEarly(useDismissEarly: Boolean)
-	{
-		val key = resources.getString(R.string.alarm_use_dismiss_early_key)
-
-		saveBoolean(key, useDismissEarly)
-	}
-
-	/**
-	 * Edit the default use the flashlight when an alarm is created.
-	 */
-	fun editUseFlashlight(use: Boolean)
-	{
-		val key = resources.getString(R.string.alarm_use_flashlight_key)
-
-		saveBoolean(key, use)
-	}
-
-	/**
-	 * Edit whether to use the new alarm screen or not.
-	 */
-	fun editUseNewAlarmScreen(useNewScreen: Boolean)
-	{
-		val key = resources.getString(R.string.key_use_new_alarm_screen)
-
-		saveBoolean(key, useNewScreen)
-	}
-
-	/**
-	 * Edit whether the app was supported or not.
-	 */
-	fun editWasAppSupported(wasSupported: Boolean)
-	{
-		val key = resources.getString(R.string.key_app_supported)
-
-		saveBoolean(key, wasSupported)
-	}
-
-	/**
-	 * Edit whether the permission to ignore battery optimization was requested.
-	 */
-	fun editWasIgnoreBatteryOptimizationPermissionRequested(requested: Boolean)
-	{
-		val key = resources.getString(R.string.key_permission_ignore_battery_optimization_requested)
-
-		saveBoolean(key, requested)
-	}
-
-	/**
-	 * Edit whether the POST_NOTIFICATIONS permission was requested.
-	 */
-	fun editWasPostNotificationsPermissionRequested(requested: Boolean)
-	{
-		val key = resources.getString(R.string.key_permission_post_notifications_requested)
-
-		saveBoolean(key, requested)
-	}
-
-	/**
-	 * Edit whether the SCHEDULE_EXACT_ALARM permission was requested.
-	 */
-	fun editWasScheduleExactAlarmPermissionRequested(requested: Boolean)
-	{
-		val key = resources.getString(R.string.key_permission_schedule_exact_alarm_requested)
-
-		saveBoolean(key, requested)
-	}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_permission_schedule_exact_alarm_requested)
+
+			saveBoolean(key, value)
+		}
 
 	/**
 	 * Save a boolean to the shared preference.

@@ -10,22 +10,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
-import com.nfcalarmclock.alarmoptions.NacAlarmOptionsDialog
-import com.nfcalarmclock.alarmoptions.NacAlarmOptionsDialog.OnAlarmOptionClickedListener
-import com.nfcalarmclock.audiosource.NacAudioSourceDialog
-import com.nfcalarmclock.audiosource.NacAudioSourceDialog.OnAudioSourceSelectedListener
-import com.nfcalarmclock.dismissearly.NacDismissEarlyDialog
-import com.nfcalarmclock.dismissearly.NacDismissEarlyDialog.OnDismissEarlyOptionSelectedListener
-import com.nfcalarmclock.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog
-import com.nfcalarmclock.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog.OnGraduallyIncreaseVolumeListener
+import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.mediapicker.NacMediaActivity
 import com.nfcalarmclock.mediapicker.NacMediaPreference
 import com.nfcalarmclock.name.NacNamePreference
-import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog
-import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog.OnRestrictVolumeListener
-import com.nfcalarmclock.tts.NacTextToSpeechDialog
-import com.nfcalarmclock.tts.NacTextToSpeechDialog.OnTextToSpeechOptionsSelectedListener
-import com.nfcalarmclock.upcomingreminder.NacUpcomingReminderDialog
+import com.nfcalarmclock.util.NacBundle
 import com.nfcalarmclock.util.NacIntent
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeekPreference
 import com.nfcalarmclock.volume.NacVolumePreference
@@ -64,8 +53,8 @@ class NacGeneralSettingFragment
 
 			// Save the media info for this preference
 			mediaPreference!!.setAndPersistMediaPath(mediaPath)
-			sharedPreferences!!.editShuffleMedia(shuffleMedia)
-			sharedPreferences!!.editRecursivelyPlayMedia(recursivelyPlayMedia)
+			sharedPreferences!!.shouldShuffleMedia = shuffleMedia
+			sharedPreferences!!.recursivelyPlayMedia = recursivelyPlayMedia
 		}
 	}
 
@@ -88,7 +77,7 @@ class NacGeneralSettingFragment
 		// Setup the on click listeners
 		setupAlarmDaysOnClickListener()
 		setupAlarmNameOnClickListener()
-		setupAudioOptionsOnClickListener()
+		setupAlarmOptionsOnClickListener()
 	}
 
 	/**
@@ -132,9 +121,9 @@ class NacGeneralSettingFragment
 	}
 
 	/**
-	 * Setup the audio options on click listener.
+	 * Setup the alarm options on click listener.
 	 */
-	private fun setupAudioOptionsOnClickListener()
+	private fun setupAlarmOptionsOnClickListener()
 	{
 		// Get the preference
 		val key = getString(R.string.alarm_volume_key)
@@ -143,8 +132,83 @@ class NacGeneralSettingFragment
 		// Setup the listener
 		pref!!.onAudioOptionsClickedListener = OnAudioOptionsClickedListener {
 
-			// Show the dialog showing all the audio options
-			showAlarmOptionsDialog()
+			// Create an alarm from shared preferences defaults
+			val alarm = NacAlarm.build(sharedPreferences)
+			val bundle = NacBundle.alarmToBundle(alarm)
+
+			// Set the graph of the nav controller
+			val navController = (activity as NacMainSettingActivity).navController
+
+			navController.setGraph(R.navigation.nav_alarm_options, bundle)
+
+			// Check if the nav controller did not navigate to the destination
+			if (navController.currentDestination == null)
+			{
+				// Navigate to the destination manually
+				navController.navigate(R.id.nacAlarmOptionsDialog, bundle)
+			}
+
+			// Setup an observe to watch for any changes to the alarm
+			navController.currentBackStackEntry
+				?.savedStateHandle
+				?.getLiveData<NacAlarm>("YOYOYO")
+				?.observe(this) { alarm ->
+
+					// Check which destination this alarm update came from
+					when (navController.currentDestination?.id)
+					{
+
+						// Audio source
+						R.id.nacAudioSourceDialog -> {
+							sharedPreferences!!.audioSource = alarm.audioSource
+						}
+
+						// Gradually increase volume
+						R.id.nacGraduallyIncreaseVolumeDialog -> {
+							sharedPreferences!!.shouldGraduallyIncreaseVolume = alarm.shouldGraduallyIncreaseVolume
+							sharedPreferences!!.graduallyIncreaseVolumeWaitTime = alarm.graduallyIncreaseVolumeWaitTime
+						}
+
+						// Restrict volume
+						R.id.nacRestrictVolumeDialog -> {
+							sharedPreferences!!.shouldRestrictVolume = alarm.shouldRestrictVolume
+						}
+
+						// Text-to-speech
+						R.id.nacTextToSpeechDialog -> {
+							sharedPreferences!!.shouldSayCurrentTime = alarm.sayCurrentTime
+							sharedPreferences!!.shouldSayAlarmName = alarm.sayAlarmName
+							sharedPreferences!!.ttsFrequency = alarm.ttsFrequency
+						}
+
+						// Dismiss options
+						R.id.nacDismissOptionsDialog -> {
+							sharedPreferences!!.autoDismissTime = alarm.autoDismissTime
+							sharedPreferences!!.canDismissEarly = alarm.useDismissEarly
+							sharedPreferences!!.dismissEarlyTime = alarm.dismissEarlyTime
+						}
+
+						// Snooze options
+						R.id.nacSnoozeOptionsDialog -> {
+							sharedPreferences!!.maxSnooze = alarm.maxSnooze
+							sharedPreferences!!.snoozeDuration = alarm.snoozeDuration
+							sharedPreferences!!.easySnooze = alarm.useEasySnooze
+						}
+
+						// Upcoming reminder
+						R.id.nacUpcomingReminderDialog -> {
+							sharedPreferences!!.shouldShowReminder = alarm.showReminder
+							sharedPreferences!!.timeToShowReminder = alarm.timeToShowReminder
+							sharedPreferences!!.reminderFrequency = alarm.reminderFrequency
+							sharedPreferences!!.shouldUseTtsForReminder = alarm.shouldUseTtsForReminder
+						}
+
+						// Unknown
+						else -> {}
+
+					}
+
+				}
 
 		}
 	}
@@ -170,7 +234,7 @@ class NacGeneralSettingFragment
 			val intent = NacMediaActivity.getStartIntentWithMedia(
 				context,
 				sharedPreferences!!.mediaPath,
-				sharedPreferences!!.shuffleMedia,
+				sharedPreferences!!.shouldShuffleMedia,
 				sharedPreferences!!.recursivelyPlayMedia)
 
 			// Launch the intent
@@ -180,131 +244,6 @@ class NacGeneralSettingFragment
 			true
 
 		}
-	}
-
-	/**
-	 * Show the alarm options dialog.
-	 */
-	private fun showAlarmOptionsDialog()
-	{
-		// Create the dialog
-		val dialog = NacAlarmOptionsDialog()
-
-		// Set the listener for when the user is done
-		dialog.onAlarmOptionClickedListener = OnAlarmOptionClickedListener { _, id ->
-
-			// Show the corresponding alarm option dialog
-			when (id)
-			{
-
-				// Audio source
-				R.id.alarm_option_audio_source -> {
-
-					// Show dialog
-					NacAudioSourceDialog.show(childFragmentManager,
-						sharedPreferences!!.audioSource,
-						listener = { audioSource ->
-
-							// Save the audio source that was selected
-							sharedPreferences!!.editAudioSource(audioSource)
-
-						})
-				}
-
-				// Dismiss early
-				R.id.alarm_option_dismiss_early -> {
-
-					// Show dialog
-					NacDismissEarlyDialog.show(childFragmentManager,
-						sharedPreferences!!.useDismissEarly,
-						sharedPreferences!!.dismissEarlyTime,
-						listener = { useDismissEarly, dismissEarlyTime ->
-
-							// Save the settings that were selected for dismiss early
-							sharedPreferences!!.editUseDismissEarly(useDismissEarly)
-							sharedPreferences!!.editDismissEarlyTime(dismissEarlyTime)
-
-						})
-				}
-
-				// Gradually increase volume
-				R.id.alarm_option_gradually_increase_volume -> {
-
-					// Show dialog
-					NacGraduallyIncreaseVolumeDialog.show(childFragmentManager,
-						sharedPreferences!!.shouldGraduallyIncreaseVolume,
-						sharedPreferences!!.graduallyIncreaseVolumeWaitTime,
-						listener = { shouldIncrease, waitTime ->
-
-							// Save the setting for gradually increasing volume
-							sharedPreferences!!.editShouldGraduallyIncreaseVolume(shouldIncrease)
-							sharedPreferences!!.editGraduallyIncreaseVolumeWaitTime(waitTime)
-
-						})
-				}
-
-				// Restrict volume
-				R.id.alarm_option_restrict_volume -> {
-
-					// Show dialog
-					NacRestrictVolumeDialog.show(childFragmentManager,
-						sharedPreferences!!.shouldRestrictVolume,
-						listener = { shouldRestrict ->
-
-							// Save the setting for restricting volume
-							sharedPreferences!!.editShouldRestrictVolume(shouldRestrict)
-
-						})
-				}
-
-				// TTS
-				R.id.alarm_option_text_to_speech -> {
-
-					// Show dialog
-					NacTextToSpeechDialog.show(childFragmentManager,
-						sharedPreferences!!.shouldSayCurrentTime,
-						sharedPreferences!!.shouldSayAlarmName,
-						sharedPreferences!!.speakFrequency,
-						listener = { shouldSayCurrentTime, shouldSayAlarmName, ttsFreq ->
-
-							// Save the text to speech settings
-							sharedPreferences!!.editShouldSayCurrentTime(shouldSayCurrentTime)
-							sharedPreferences!!.editShouldSayAlarmName(shouldSayAlarmName)
-							sharedPreferences!!.editSpeakFrequency(ttsFreq)
-
-						})
-				}
-
-				// Upcoming reminder
-				R.id.alarm_option_upcoming_reminder -> {
-
-					// Show dialog
-					NacUpcomingReminderDialog.show(childFragmentManager,
-						sharedPreferences!!.shouldShowReminder,
-						sharedPreferences!!.timeToShowReminder,
-						sharedPreferences!!.reminderFrequency,
-						sharedPreferences!!.shouldUseTtsForReminder,
-						sharedPreferences!!.shouldUseTts,
-						listener = { shouldShowReminder, timeToShow, reminderFreq, shouldUseTts ->
-
-							// Save the upcoming reminder options
-							sharedPreferences!!.editShouldShowReminder(shouldShowReminder)
-							sharedPreferences!!.editTimeToShowReminder(timeToShow)
-							sharedPreferences!!.editReminderFrequency(reminderFreq)
-							sharedPreferences!!.editShouldUseTtsForReminder(shouldUseTts)
-
-						})
-				}
-
-				// Unknown
-				else -> {}
-
-			}
-
-		}
-
-		// Show the dialog
-		dialog.show(childFragmentManager, NacAlarmOptionsDialog.TAG)
 	}
 
 }

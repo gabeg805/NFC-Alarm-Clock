@@ -13,6 +13,7 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 /**
  * Helper functions for the POST_NOTIFICATIONS permission.
  */
+@Suppress("SameReturnValue")
 object NacPostNotificationsPermission
 {
 

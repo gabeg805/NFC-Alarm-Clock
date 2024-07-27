@@ -58,11 +58,11 @@ class NacCardHolder(
 {
 
 	/**
-	 * Listener for when the audio options button is clicked.
+	 * Listener for when the alarm options button is clicked.
 	 */
-	fun interface OnCardAudioOptionsClickedListener
+	fun interface OnCardAlarmOptionsClickedListener
 	{
-		fun onCardAudioOptionsClicked(holder: NacCardHolder, alarm: NacAlarm)
+		fun onCardAlarmOptionsClicked(holder: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -229,7 +229,7 @@ class NacCardHolder(
 	/**
 	 * Flashlight button.
 	 */
-	val flashlightButton: MaterialButton = root.findViewById(R.id.nac_flashlight)
+	private val flashlightButton: MaterialButton = root.findViewById(R.id.nac_flashlight)
 
 	/**
 	 * Media button.
@@ -247,9 +247,9 @@ class NacCardHolder(
 	private val volumeSeekBar: SeekBar = root.findViewById(R.id.nac_volume_slider)
 
 	/**
-	 * Audio options button.
+	 * Alarm options button.
 	 */
-	private val audioOptionsButton: MaterialButton = root.findViewById(R.id.nac_audio_options)
+	private val alarmOptionsButton: MaterialButton = root.findViewById(R.id.nac_alarm_options)
 
 	/**
 	 * Name button.
@@ -283,9 +283,9 @@ class NacCardHolder(
 	//this.mTimePicker = null;
 
 	/**
-	 * Listener for when the audio options button is clicked.
+	 * Listener for when the alarm options button is clicked.
 	 */
-	var onCardAudioOptionsClickedListener: OnCardAudioOptionsClickedListener? = null
+	var onCardAlarmOptionsClickedListener: OnCardAlarmOptionsClickedListener? = null
 
 	/**
 	 * Listener for when the alarm card is collapsed.
@@ -455,6 +455,7 @@ class NacCardHolder(
 
 		// Hide the swipe views
 		hideSwipeViews()
+		hideAppearanceSettingViews()
 
 		// Setup the views and colors
 		initViews()
@@ -705,11 +706,11 @@ class NacCardHolder(
 	}
 
 	/**
-	 * Act as if the audio options button was clicked.
+	 * Act as if the alarm options button was clicked.
 	 */
-	private fun doAudioOptionsButtonClick()
+	private fun doAlarmOptionsButtonClick()
 	{
-		onCardAudioOptionsClickedListener?.onCardAudioOptionsClicked(this, alarm!!)
+		onCardAlarmOptionsClickedListener?.onCardAlarmOptionsClicked(this, alarm!!)
 	}
 
 	/**
@@ -737,7 +738,7 @@ class NacCardHolder(
 	/**
 	 * Collapse the alarm card without any animations.
 	 */
-	fun doCollapse()
+	private fun doCollapse()
 	{
 		// Setup the summary
 		summaryView.visibility = View.VISIBLE
@@ -870,27 +871,10 @@ class NacCardHolder(
 	/**
 	 * Act as if the flashlight button was clicked.
 	 */
-	fun doFlashlightButtonClick()
+	private fun doFlashlightButtonClick()
 	{
-		// Toggle the NFC button
+		// Toggle the flashlight button
 		alarm!!.toggleUseFlashlight()
-
-		// Check if NFC should not be used
-		if (!alarm!!.useFlashlight)
-		{
-			// Determine which message to show
-			val messageId = if (alarm!!.useFlashlight)
-			{
-				R.string.message_flashlight_enabled
-			}
-			else
-			{
-				R.string.message_flashlight_disabled
-			}
-
-			// Toast the NFC message
-			quickToast(context, messageId)
-		}
 
 		// Call the listeners
 		callOnCardUpdatedListener()
@@ -1089,6 +1073,30 @@ class NacCardHolder(
 	//}
 
 	/**
+	 * Hide the views in the Appearance settings.
+	 */
+	private fun hideAppearanceSettingViews()
+	{
+		// Vibrate
+		if (!sharedPreferences.shouldShowVibrateButton)
+		{
+			vibrateButton.visibility = View.GONE
+		}
+
+		// NFC
+		if (!sharedPreferences.shouldShowNfcButton)
+		{
+			nfcButton.visibility = View.GONE
+		}
+
+		// Flashlight
+		if (!sharedPreferences.shouldShowFlashlightButton)
+		{
+			flashlightButton.visibility = View.GONE
+		}
+	}
+
+	/**
 	 * Hide the swipe views.
 	 */
 	private fun hideSwipeViews()
@@ -1135,7 +1143,7 @@ class NacCardHolder(
 		this.setMaterialButtonColor(flashlightButton)
 		this.setMaterialButtonColor(mediaButton)
 		setVolumeSeekBarColor()
-		this.setMaterialButtonColor(audioOptionsButton)
+		this.setMaterialButtonColor(alarmOptionsButton)
 		this.setMaterialButtonColor(nameButton)
 		this.setMaterialButtonColor(deleteButton)
 		this.setMaterialButtonColor(collapseButton)
@@ -1160,7 +1168,7 @@ class NacCardHolder(
 		setupNfcButtonListener()
 		setupFlashlightButtonListener()
 		setupMediaButtonListener()
-		setupAudioOptionsListener()
+		setupAlarmOptionsListener()
 		setupVolumeSeekBarListener()
 		setupNameListener()
 		setupDeleteButtonListener()
@@ -1950,18 +1958,18 @@ class NacCardHolder(
 	}
 
 	/**
-	 * Setup the audio options button listener.
+	 * Setup the alarm options button listener.
 	 */
-	private fun setupAudioOptionsListener()
+	private fun setupAlarmOptionsListener()
 	{
 		// Set the listener
-		audioOptionsButton.setOnClickListener { view ->
+		alarmOptionsButton.setOnClickListener { view ->
 
 			// Check if the alarm can be modified
 			if (checkCanModifyAlarm())
 			{
-				// Do the audio options button click
-				doAudioOptionsButtonClick()
+				// Do the alarm options button click
+				doAlarmOptionsButtonClick()
 			}
 
 			// Haptic feedback

@@ -264,6 +264,7 @@ object NacFile
 		 *
 		 * @return True if the two objects are equal, and False otherwise.
 		 */
+		@Suppress("CovariantEquals")
 		fun equals(metadata: Metadata) : Boolean
 		{
 			return (directory == metadata.directory)
@@ -302,6 +303,7 @@ object NacFile
 		/**
 		 * The current directory.
 		 */
+		@Suppress("LeakingThis")
 		var directory: NacTreeNode<String> = this
 
 		/**
@@ -316,6 +318,7 @@ object NacFile
 		/**
 		 * The home directory.
 		 */
+		@Suppress("MemberVisibilityCanBePrivate")
 		protected val home: String
 			get() = key
 
@@ -572,7 +575,7 @@ object NacFile
 		 *
 		 * @return The list of files/directories at the given path.
 		 */
-		fun recursiveLs(path: String): List<Metadata>
+		private fun recursiveLs(path: String): List<Metadata>
 		{
 			val listing = lsSort(path).toMutableList()
 
@@ -688,6 +691,7 @@ object NacFile
 		 *
 		 * TODO: This method seems like I'm already doing it somewhere else
 		 */
+		@Suppress("MemberVisibilityCanBePrivate")
 		protected fun stripHome(path: String): String
 		{
 			val reducedPath = path.replace(home, "")

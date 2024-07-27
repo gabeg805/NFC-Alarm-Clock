@@ -66,7 +66,7 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 	/**
 	 * Analyze the permissions that need to be requested.
 	 */
-	fun analyze(context: Context)
+	private fun analyze(context: Context)
 	{
 		val shared = NacSharedPreferences(context)
 		val set = EnumSet.noneOf(Permission::class.java)
@@ -199,7 +199,7 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 	/**
 	 * Show the dialog to ignore battery optimizations.
 	 */
-	fun showIgnoreBatteryOptimizationPermissionDialog(
+	private fun showIgnoreBatteryOptimizationPermissionDialog(
 		activity: AppCompatActivity)
 	{
 		// Create the dialog

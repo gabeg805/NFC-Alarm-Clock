@@ -33,17 +33,17 @@ object NacMedia
 	/**
 	 * Type of sound for a ringtone.
 	 */
-	const val TYPE_RINGTONE = 1
+	private const val TYPE_RINGTONE = 1
 
 	/**
 	 * Type of sound for a music file.
 	 */
-	const val TYPE_FILE = 2
+	private const val TYPE_FILE = 2
 
 	/**
 	 * Type of sound for a music file.
 	 */
-	const val TYPE_DIRECTORY = 5
+	private const val TYPE_DIRECTORY = 5
 
 	/**
 	 * Build a media item from a file.
@@ -395,7 +395,7 @@ object NacMedia
 	 *
 	 * @return The cursor for the alarm ringtones.
 	 */
-	fun getRingtonesCursor(context: Context): Cursor?
+	private fun getRingtonesCursor(context: Context): Cursor?
 	{
 		// Setup the ringtone manager
 		val ringtoneManager = RingtoneManager(context)
@@ -529,7 +529,7 @@ object NacMedia
 	/**
 	 * @see .getVolumeName
 	 */
-	fun getVolumeName(context: Context, path: String?): String
+	private fun getVolumeName(context: Context, path: String?): String
 	{
 		// Get the URI from the path
 		val uri = Uri.parse(path)
@@ -606,7 +606,7 @@ object NacMedia
 	 *
 	 * @return True if the given path is empty, and False otherwise.
 	 */
-	fun isNone(path: String?): Boolean
+	private fun isNone(path: String?): Boolean
 	{
 		return path.isNullOrEmpty()
 	}
@@ -627,7 +627,7 @@ object NacMedia
 	 *
 	 * @return True if the given path is to a ringtone, and False otherwise.
 	 */
-	fun isRingtone(context: Context, path: String?): Boolean
+	private fun isRingtone(context: Context, path: String?): Boolean
 	{
 		val uri = Uri.parse(path)
 		val volumeName = getVolumeName(context, path)
@@ -641,7 +641,7 @@ object NacMedia
 	/**
 	 * Parse the duration string returned from the MediaStore query.
 	 */
-	fun parseDuration(millis: String): String
+	private fun parseDuration(millis: String): String
 	{
 		// Check if an empty string was provided
 		if (millis.isEmpty())
@@ -686,7 +686,7 @@ object NacMedia
 	/**
 	 * @see .parseVolumeName
 	 */
-	fun parseVolumeName(uri: Uri): String
+	private fun parseVolumeName(uri: Uri): String
 	{
 		// Get the path from a URI
 		val path = uri.toString()
@@ -700,7 +700,7 @@ object NacMedia
 	 *
 	 * This should only be done on any version before Q.
 	 */
-	fun parseVolumeName(contentPath: String): String
+	private fun parseVolumeName(contentPath: String): String
 	{
 		// Remove the prefix and split the path on forward slashes, "/"
 		val contentPrefix = "content://"

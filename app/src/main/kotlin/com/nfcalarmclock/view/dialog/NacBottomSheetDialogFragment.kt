@@ -2,9 +2,12 @@ package com.nfcalarmclock.view.dialog
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
+import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
+import com.nfcalarmclock.view.setupRippleColor
 
 /**
  * Generic bottom sheet dialog fragment.
@@ -17,23 +20,6 @@ abstract class NacBottomSheetDialogFragment
 	 * Shared preferences.
 	 */
 	protected lateinit var sharedPreferences: NacSharedPreferences
-
-	/**
-	 * Primary button.
-	 */
-	protected lateinit var primaryButton: MaterialButton
-
-	/**
-	 * Called when the fragment is resumed.
-	 */
-	override fun onResume()
-	{
-		// Super
-		super.onResume()
-
-		// Setup the primary button
-		setupPrimaryButton()
-	}
 
 	/**
 	 * Called when the dialog view is created.
@@ -50,9 +36,31 @@ abstract class NacBottomSheetDialogFragment
 	/**
 	 * Setup the primary button.
 	 */
-	protected fun setupPrimaryButton()
+	protected fun setupPrimaryButton(button: MaterialButton, listener: () -> Unit = { })
 	{
-		primaryButton.setBackgroundColor(sharedPreferences.themeColor)
+		// Setup the color
+		button.setBackgroundColor(sharedPreferences.themeColor)
+		button.setupRippleColor(sharedPreferences)
+
+		// Set the listener
+		button.setOnClickListener {
+			listener()
+		}
+	}
+
+	/**
+	 * Setup the secondary button.
+	 */
+	protected fun setupSecondaryButton(button: MaterialButton, listener: () -> Unit = { dismiss() })
+	{
+		// Setup the color
+		button.setupRippleColor(sharedPreferences,
+			themeColor = ContextCompat.getColor(requireContext(), R.color.gray_light))
+
+		// Set the listener
+		button.setOnClickListener {
+			listener()
+		}
 	}
 
 	/**

@@ -16,7 +16,7 @@ class NacIgnoreBatteryOptimizationPermissionRequestDialog
 	override fun doPermissionRequestAccepted()
 	{
 		// Set the flag that the permission was requested
-		sharedPreferences!!.editWasIgnoreBatteryOptimizationPermissionRequested(true)
+		sharedPreferences!!.wasIgnoreBatteryOptimizationPermissionRequested = true
 
 		// Call the accepeted listeners
 		super.doPermissionRequestAccepted()
@@ -28,7 +28,7 @@ class NacIgnoreBatteryOptimizationPermissionRequestDialog
 	override fun doPermissionRequestCanceled()
 	{
 		// Set the flag that the permission was requested
-		sharedPreferences!!.editWasIgnoreBatteryOptimizationPermissionRequested(true)
+		sharedPreferences!!.wasIgnoreBatteryOptimizationPermissionRequested = true
 
 		// Call the accepeted listeners
 		super.doPermissionRequestCanceled()

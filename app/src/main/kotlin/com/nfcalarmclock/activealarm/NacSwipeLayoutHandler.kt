@@ -25,7 +25,6 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.media.NacMedia
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.util.NacCalendar
-import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.util.createTimeTickReceiver
 import com.nfcalarmclock.util.registerMyReceiver
 import com.nfcalarmclock.util.unregisterMyReceiver
@@ -36,7 +35,6 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
 import kotlin.math.absoluteValue
-import kotlin.math.exp
 
 /**
  * Handler for the swipe layout.
@@ -632,13 +630,13 @@ class NacSwipeLayoutHandler(
 	private fun setupAlarmName()
 	{
 		// Get the user preference on whether the alarm name should be shown
-		val visibility = if (sharedPreferences.showAlarmName) View.VISIBLE else View.INVISIBLE
+		val visibility = if (sharedPreferences.shouldShowAlarmName) View.VISIBLE else View.INVISIBLE
 
 		// Set the visibility
 		alarmNameTextView.visibility = visibility
 
 		// Check if the alarm is not null and the user wants to see alarm name
-		if ((alarm != null) && sharedPreferences.showAlarmName)
+		if ((alarm != null) && sharedPreferences.shouldShowAlarmName)
 		{
 			// Show the alarm name
 			alarmNameTextView.text = alarm.nameNormalized
@@ -653,7 +651,7 @@ class NacSwipeLayoutHandler(
 	{
 		// Get the user preference on whether the current date and time should
 		// be shown
-		val visibility = if (sharedPreferences.showCurrentDateAndTime) View.VISIBLE else View.INVISIBLE
+		val visibility = if (sharedPreferences.shouldShowCurrentDateAndTime) View.VISIBLE else View.INVISIBLE
 
 		// Set the visibility
 		currentDateTextView.visibility = visibility
@@ -723,7 +721,7 @@ class NacSwipeLayoutHandler(
 		val mediaPath = sharedPreferences.currentPlayingAlarmMedia
 
 		// Get the user preference on whether the music info should be shown
-		val visibility = if (sharedPreferences.showMusicInfo && mediaPath.isNotEmpty())
+		val visibility = if (sharedPreferences.shouldShowMusicInfo && mediaPath.isNotEmpty())
 			View.VISIBLE else View.INVISIBLE
 
 		// Set the visibility

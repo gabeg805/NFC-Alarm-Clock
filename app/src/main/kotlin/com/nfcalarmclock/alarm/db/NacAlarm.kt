@@ -124,22 +124,23 @@ class NacAlarm()
 	var flashlightStrengthLevel: Int = 0
 
 	/**
-	 * Front or back facing camera flashlight.
+	 * Amount of time, in seconds, to wait before gradually increasing the flashlight
+	 * strength level another step.
 	 */
-	//@ColumnInfo(name = "flashlight_strength_level", defaultValue = "0")
-	//var flashlightStrengthLevel: Int = 0
+	@ColumnInfo(name = "gradually_increase_flashlight_strength_level_wait_time", defaultValue = "5")
+	var graduallyIncreaseFlashlightStrengthLevelWaitTime: Int = 5
 
 	/**
 	 * Number of seconds to turn on the flashlight.
 	 */
 	@ColumnInfo(name = "flashlight_on_duration", defaultValue = "0")
-	var flashlightOnDuration: Int = 0
+	var flashlightOnDuration: String = "0"
 
 	/**
 	 * Number of seconds to turn off the flashlight.
 	 */
 	@ColumnInfo(name = "flashlight_off_duration", defaultValue = "0")
-	var flashlightOffDuration: Int = 0
+	var flashlightOffDuration: String = "0"
 
 	/**
 	 * ID of the NFC tag that needs to be used to dismiss the alarm.
@@ -246,7 +247,7 @@ class NacAlarm()
 	 * Time in which to auto dismiss the alarm.
 	 */
 	@ColumnInfo(name = "auto_dismiss_time", defaultValue = "0")
-	var autoDismissTime: Int = 0
+	var autoDismissTime: Int = 15
 
 	/**
 	 * Flag indicating whether or not to use dismiss early.
@@ -270,7 +271,7 @@ class NacAlarm()
 	 * Snooze duration.
 	 */
 	@ColumnInfo(name = "snooze_duration", defaultValue = "0")
-	var snoozeDuration: Int = 0
+	var snoozeDuration: Int = 5
 
 	/**
 	 * Max number of snoozes.
@@ -410,8 +411,9 @@ class NacAlarm()
 		nfcTagId = input.readString() ?: ""
 		useFlashlight = input.readInt() != 0
 		flashlightStrengthLevel = input.readInt()
-		flashlightOnDuration = input.readInt()
-		flashlightOffDuration = input.readInt()
+		graduallyIncreaseFlashlightStrengthLevelWaitTime = input.readInt()
+		flashlightOnDuration = input.readString() ?: ""
+		flashlightOffDuration = input.readString() ?: ""
 
 		// Media
 		mediaPath = input.readString() ?: ""
@@ -620,6 +622,7 @@ class NacAlarm()
 		alarm.nfcTagId = nfcTagId
 		alarm.useFlashlight = useFlashlight
 		alarm.flashlightStrengthLevel = flashlightStrengthLevel
+		alarm.graduallyIncreaseFlashlightStrengthLevelWaitTime = graduallyIncreaseFlashlightStrengthLevelWaitTime
 		alarm.flashlightOnDuration = flashlightOnDuration
 		alarm.flashlightOffDuration = flashlightOffDuration
 
@@ -725,6 +728,7 @@ class NacAlarm()
 	 *
 	 * @return True if both alarms are the same, and false otherwise.
 	 */
+	@Suppress("CovariantEquals")
 	fun equals(alarm: NacAlarm?): Boolean
 	{
 		return (alarm != null)
@@ -741,6 +745,7 @@ class NacAlarm()
 			&& (shouldUseNfc == alarm.shouldUseNfc)
 			&& (useFlashlight == alarm.useFlashlight)
 			&& (flashlightStrengthLevel == alarm.flashlightStrengthLevel)
+			&& (graduallyIncreaseFlashlightStrengthLevelWaitTime == alarm.graduallyIncreaseFlashlightStrengthLevelWaitTime)
 			&& (flashlightOnDuration == alarm.flashlightOnDuration)
 			&& (flashlightOffDuration == alarm.flashlightOffDuration)
 			&& (nfcTagId == alarm.nfcTagId)
@@ -859,8 +864,9 @@ class NacAlarm()
 		println("Vibrate             : $shouldVibrate")
 		println("Use NFC             : $shouldUseNfc")
 		println("Nfc Tag Id          : $nfcTagId")
-		println("Use Flashlight      : ${useFlashlight}")
+		println("Use Flashlight      : $useFlashlight")
 		println("Flashlight Strength : $flashlightStrengthLevel")
+		println("Grad Inc Flash      : $graduallyIncreaseFlashlightStrengthLevelWaitTime")
 		println("Flashlight On       : $flashlightOnDuration")
 		println("Flashlight Off      : $flashlightOffDuration")
 		println("Media Path          : $mediaPath")
@@ -918,8 +924,6 @@ class NacAlarm()
 	/**
 	 * Snooze the alarm.
 	 *
-	 * @param  shared  Shared preferences.
-	 *
 	 * @return Calendar instance of when the snoozed alarm will go off.
 	 */
 	fun snooze(): Calendar
@@ -930,7 +934,6 @@ class NacAlarm()
 		// Add the snooze duration value to the current time
 		val cal = Calendar.getInstance()
 		cal.add(Calendar.MINUTE, snoozeDuration)
-		//cal.add(Calendar.MINUTE, shared.snoozeDurationValue)
 
 		// Set the snooze hour and minute
 		snoozeHour = cal[Calendar.HOUR_OF_DAY]
@@ -1078,8 +1081,9 @@ class NacAlarm()
 		output.writeString(nfcTagId)
 		output.writeInt(if (useFlashlight) 1 else 0)
 		output.writeInt(flashlightStrengthLevel)
-		output.writeInt(flashlightOnDuration)
-		output.writeInt(flashlightOffDuration)
+		output.writeInt(graduallyIncreaseFlashlightStrengthLevelWaitTime)
+		output.writeString(flashlightOnDuration)
+		output.writeString(flashlightOffDuration)
 
 		// Media
 		output.writeString(mediaPath)
@@ -1129,6 +1133,7 @@ class NacAlarm()
 		/**
 		 * Generate parcel (required for Parcelable).
 		 */
+		@Suppress("unused")
 		@JvmField
 		val CREATOR: Parcelable.Creator<NacAlarm> = object : Parcelable.Creator<NacAlarm>
 		{
@@ -1156,20 +1161,21 @@ class NacAlarm()
 			alarm.hour = calendar[Calendar.HOUR_OF_DAY]
 			alarm.minute = calendar[Calendar.MINUTE]
 			alarm.days = if (shared != null) Day.valueToDays(shared.days) else Day.NONE
-			alarm.repeat = shared?.repeat ?: false
-			alarm.vibrate = shared?.vibrate ?: false
-			alarm.useNfc = shared?.useNfc ?: false
+			alarm.repeat = shared?.shouldRepeat ?: false
+			alarm.vibrate = shared?.shouldVibrate ?: false
+			alarm.useNfc = shared?.shouldUseNfc ?: false
 			alarm.nfcTagId = ""
-			alarm.useFlashlight = shared?.useFlashlight ?: false
+			alarm.useFlashlight = shared?.shouldUseFlashlight ?: false
 			alarm.flashlightStrengthLevel = shared?.flashlightStrengthLevel ?: 0
-			alarm.flashlightOnDuration = shared?.flashlightOnDuration ?: 0
-			alarm.flashlightOffDuration = shared?.flashlightOffDuration ?: 0
+			alarm.graduallyIncreaseFlashlightStrengthLevelWaitTime = shared?.graduallyIncreaseFlashlightStrengthLevelWaitTime ?: 0
+			alarm.flashlightOnDuration = shared?.flashlightOnDuration ?: ""
+			alarm.flashlightOffDuration = shared?.flashlightOffDuration ?: ""
 
 			// Media
 			alarm.mediaPath = shared?.mediaPath ?: ""
 			alarm.mediaTitle = ""
 			alarm.mediaType = NacMedia.TYPE_NONE
-			alarm.shuffleMedia = shared?.shuffleMedia ?: false
+			alarm.shuffleMedia = shared?.shouldShuffleMedia ?: false
 			alarm.recursivelyPlayMedia = shared?.recursivelyPlayMedia ?: false
 
 			// Other normal stuff
@@ -1180,7 +1186,7 @@ class NacAlarm()
 			// Text-to-speech
 			alarm.sayCurrentTime = shared?.shouldSayCurrentTime ?: false
 			alarm.sayAlarmName = shared?.shouldSayAlarmName ?: false
-			alarm.ttsFrequency = shared?.speakFrequency ?: 0
+			alarm.ttsFrequency = shared?.ttsFrequency ?: 0
 
 			// Volume features
 			alarm.shouldGraduallyIncreaseVolume = shared?.shouldGraduallyIncreaseVolume ?: false
@@ -1188,21 +1194,21 @@ class NacAlarm()
 			alarm.shouldRestrictVolume = shared?.shouldRestrictVolume ?: false
 
 			// Auto dismiss
-			alarm.autoDismissTime = shared?.autoDismissTime ?: 0
+			alarm.autoDismissTime = shared?.autoDismissTime ?: 15
 
 			// Dismiss early
-			alarm.useDismissEarly = shared?.useDismissEarly ?: false
-			alarm.dismissEarlyTime = shared?.dismissEarlyTime ?: 0
+			alarm.useDismissEarly = shared?.canDismissEarly ?: false
+			alarm.dismissEarlyTime = shared?.dismissEarlyTime ?: 30
 			alarm.timeOfDismissEarlyAlarm = 0
 
 			// Snooze
-			alarm.snoozeDuration = shared?.snoozeDurationValue ?: 0
-			alarm.maxSnooze = shared?.maxSnoozeValue ?: 0
+			alarm.snoozeDuration = shared?.snoozeDuration ?: 5
+			alarm.maxSnooze = shared?.maxSnooze ?: 0
 			alarm.useEasySnooze = shared?.easySnooze ?: false
 
 			// Reminder
 			alarm.showReminder = shared?.shouldShowReminder ?: false
-			alarm.timeToShowReminder = shared?.timeToShowReminder ?: 0
+			alarm.timeToShowReminder = shared?.timeToShowReminder ?: 5
 			alarm.reminderFrequency = shared?.reminderFrequency ?: 0
 			alarm.useTtsForReminder = shared?.shouldUseTtsForReminder ?: false
 
@@ -1266,6 +1272,68 @@ class NacAlarm()
 			else
 			{
 				(index - 3) * 5
+			}
+		}
+
+		/**
+		 * Calculate the flashlight on/off duration.
+		 */
+		fun calcFlashlightOnOffDuration(index: Int): String
+		{
+			return when (index)
+			{
+				0    -> "0.5"
+				1    -> "1.0"
+				2    -> "1.5"
+				3    -> "2.0"
+				4    -> "2.5"
+				5    -> "3.0"
+				6    -> "3.5"
+				7    -> "4.0"
+				8    -> "4.5"
+				9    -> "5.0"
+				10   -> "5.5"
+				11   -> "6.0"
+				12   -> "6.5"
+				13   -> "7.0"
+				14   -> "7.5"
+				15   -> "8.0"
+				16   -> "8.5"
+				17   -> "9.0"
+				18   -> "9.5"
+				19   -> "10.0"
+				else -> "1.0"
+			}
+		}
+
+		/**
+		 * Calculate the flashlight on/off duration index.
+		 */
+		fun calcFlashlightOnOffDurationIndex(duration: String): Int
+		{
+			return when (duration)
+			{
+				"0.5"  -> 0
+				"1.0"  -> 1
+				"1.5"  -> 2
+				"2.0"  -> 3
+				"2.5"  -> 4
+				"3.0"  -> 5
+				"3.5"  -> 6
+				"4.0"  -> 7
+				"4.5"  -> 8
+				"5.0"  -> 9
+				"5.5"  -> 10
+				"6.0"  -> 11
+				"6.5"  -> 12
+				"7.0"  -> 13
+				"7.5"  -> 14
+				"8.0"  -> 15
+				"8.5"  -> 16
+				"9.0"  -> 17
+				"9.5"  -> 18
+				"10.0" -> 19
+				else   -> 1
 			}
 		}
 

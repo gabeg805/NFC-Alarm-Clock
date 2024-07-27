@@ -175,6 +175,7 @@ class NacAlarmStatisticViewModel @Inject constructor(
 	 * @param  alarm  Alarm that was dismissed.
 	 * @param  usedNfc  Whether NFC was used to dismiss the alarm or not.
 	 */
+	@Suppress("unused")
 	fun insertDismissed(alarm: NacAlarm?, usedNfc: Boolean)
 	{
 		viewModelScope.launch {
@@ -187,6 +188,7 @@ class NacAlarmStatisticViewModel @Inject constructor(
 	 *
 	 * @param  alarm  Alarm that was missed.
 	 */
+	@Suppress("unused")
 	fun insertMissed(alarm: NacAlarm?)
 	{
 		viewModelScope.launch {
@@ -200,6 +202,7 @@ class NacAlarmStatisticViewModel @Inject constructor(
 	 * @param  alarm  Alarm that was snoozed.
 	 * @param  duration  The duration the alarm was snoozed for.
 	 */
+	@Suppress("unused")
 	fun insertSnoozed(alarm: NacAlarm?, duration: Long)
 	{
 		viewModelScope.launch {

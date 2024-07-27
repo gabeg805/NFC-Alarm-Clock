@@ -31,6 +31,7 @@ class NacAppearanceSettingFragment
 		// Setup color and styles
 		setupAlarmScreenPreferences()
 		setupColorPreferences()
+		setupShowHideButtonPreferences()
 		setupDayButtonStylePreference()
 
 		// Setup on click listeners
@@ -46,19 +47,6 @@ class NacAppearanceSettingFragment
 	{
 		// Initialize the color settings
 		init()
-	}
-
-	/**
-	 * Called when the fragment is resumed.
-	 */
-	override fun onResume()
-	{
-		// Setuper
-		super.onResume()
-
-		// Register listener when preferences are changed
-		preferenceScreen.sharedPreferences?.registerOnSharedPreferenceChangeListener(
-			this)
 	}
 
 	/**
@@ -138,11 +126,11 @@ class NacAppearanceSettingFragment
 		val amKey = getString(R.string.am_color_key)
 		val pmKey = getString(R.string.pm_color_key)
 
-		// Put the color keys in a list
-		val colorKeys = arrayOf(themeKey, nameKey, dayKey, timeKey, amKey, pmKey)
+		// Put the keys in a list
+		val allKeys = arrayOf(themeKey, nameKey, dayKey, timeKey, amKey, pmKey)
 
 		// Iterate over each color key
-		for (k in colorKeys)
+		for (k in allKeys)
 		{
 			// Get the preference
 			val pref = findPreference<Preference>(k)
@@ -151,7 +139,7 @@ class NacAppearanceSettingFragment
 			pref!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { p, _ ->
 
 				// Set flag to refresh the main activity
-				sharedPreferences!!.editShouldRefreshMainActivity(true)
+				sharedPreferences!!.shouldRefreshMainActivity = true
 
 				// Preference key is for the theme
 				if (p.key == themeKey)
@@ -183,7 +171,7 @@ class NacAppearanceSettingFragment
 		dayButtonStylePref!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
 
 			// Set flag to refresh the main activity
-			sharedPreferences!!.editShouldRefreshMainActivity(true)
+			sharedPreferences!!.shouldRefreshMainActivity = true
 
 			// Return
 			true
@@ -227,6 +215,38 @@ class NacAppearanceSettingFragment
 			// Return
 			true
 
+		}
+	}
+
+	/**
+	 * Setup the show/hide buttons.
+	 */
+	private fun setupShowHideButtonPreferences()
+	{
+		// Get the keys
+		val vibrateKey = getString(R.string.show_hide_vibrate_button_key)
+		val nfcKey = getString(R.string.show_hide_nfc_button_key)
+		val flashlightKey = getString(R.string.show_hide_flashlight_button_key)
+
+		// Put the keys in a list
+		val allKeys = arrayOf(vibrateKey, nfcKey, flashlightKey)
+
+		// Iterate over each color key
+		for (k in allKeys)
+		{
+			// Get the preference
+			val pref = findPreference<Preference>(k)
+
+			// Set the listener for when the prference is changed
+			pref!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
+
+				// Set flag to refresh the main activity
+				sharedPreferences!!.shouldRefreshMainActivity = true
+
+				// Return
+				true
+
+			}
 		}
 	}
 

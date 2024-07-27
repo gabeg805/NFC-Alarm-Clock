@@ -99,10 +99,9 @@ class NacScanNfcTagDialog
 		// Get the views
 		val useAnyNfcButton = view.findViewById(R.id.use_any_nfc_tag) as MaterialButton
 		val selectNfcButton = view.findViewById(R.id.select_nfc_tag) as MaterialButton
-		primaryButton = useAnyNfcButton
 
 		// Setup the use any NFC button
-		useAnyNfcButton.setOnClickListener {
+		setupPrimaryButton(useAnyNfcButton, listener = {
 
 			// Call the listener
 			onScanNfcTagListener?.onUseAny(alarm!!)
@@ -110,13 +109,13 @@ class NacScanNfcTagDialog
 			// Dismiss the dialog
 			dismiss()
 
-		}
+		})
 
 		// Set the visibility of the select button
 		selectNfcButton.visibility = if (allNfcTags.isNotEmpty()) View.VISIBLE else View.GONE
 
 		// Setup the select NFC button
-		selectNfcButton.setOnClickListener {
+		setupSecondaryButton(selectNfcButton, listener = {
 
 			// Create the select NFC tag dialog
 			val dialog = NacSelectNfcTagDialog()
@@ -156,7 +155,7 @@ class NacScanNfcTagDialog
 			// Show the dialog
 			dialog.show(childFragmentManager, NacSelectNfcTagDialog.TAG)
 
-		}
+		})
 	}
 
 	/**

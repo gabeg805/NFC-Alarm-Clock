@@ -50,7 +50,9 @@
 		android:name=".NacNfcAlarmClockApplication"
 		android:icon="@mipmap/app"
 		android:allowBackup="false"
-		android:supportsRtl="true">
+		android:enableOnBackInvokedCallback="true"
+		android:supportsRtl="true"
+		tools:targetApi="tiramisu">
 
 		<!-- Main activity -->
 		<activity
@@ -172,7 +174,7 @@
 
 		<!-- Start an upcoming reminder -->
 		<service
-			android:name=".upcomingreminder.NacUpcomingReminderService"
+			android:name=".alarmoptions.upcomingreminder.NacUpcomingReminderService"
 			android:foregroundServiceType="systemExempted"
 			android:exported="false">
 		</service>

@@ -19,7 +19,7 @@ class NacScheduleExactAlarmPermissionRequestDialog
 	override fun doPermissionRequestAccepted()
 	{
 		// Set the flag that the permission was requested
-		sharedPreferences!!.editWasScheduleExactAlarmPermissionRequested(true)
+		sharedPreferences!!.wasScheduleExactAlarmPermissionRequested = true
 
 		// Call the accepeted listeners
 		super.doPermissionRequestAccepted()
@@ -31,7 +31,7 @@ class NacScheduleExactAlarmPermissionRequestDialog
 	override fun doPermissionRequestCanceled()
 	{
 		// Set the flag that the permission was requested
-		sharedPreferences!!.editWasScheduleExactAlarmPermissionRequested(true)
+		sharedPreferences!!.wasScheduleExactAlarmPermissionRequested = true
 
 		// Call the accepeted listeners
 		super.doPermissionRequestCanceled()

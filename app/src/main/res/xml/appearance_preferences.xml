@@ -116,13 +116,45 @@
 			/>
 	</com.nfcalarmclock.settings.preference.NacPreferenceCategory>
 
+	<!-- Show/hide alarm options -->
+	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
+		android:title="Show/hide alarm options">
+
+		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
+			android:title="@string/alarm_vibrate"
+			android:key="@string/show_hide_vibrate_button_key"
+			android:summaryOn="@string/show_hide_vibrate_button_true"
+			android:summaryOff="@string/show_hide_vibrate_button_false"
+			android:defaultValue="@bool/default_show_hide_vibrate_button"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
+			android:title="@string/alarm_nfc"
+			android:key="@string/show_hide_nfc_button_key"
+			android:summaryOn="@string/show_hide_nfc_button_true"
+			android:summaryOff="@string/show_hide_nfc_button_false"
+			android:defaultValue="@bool/default_show_hide_nfc_button"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
+			android:title="@string/alarm_flashlight"
+			android:key="@string/show_hide_flashlight_button_key"
+			android:summaryOn="@string/show_hide_flashlight_button_true"
+			android:summaryOff="@string/show_hide_flashlight_button_false"
+			android:defaultValue="@bool/default_show_hide_flashlight_button"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="true"
+			/>
+	</com.nfcalarmclock.settings.preference.NacPreferenceCategory>
+
 	<!-- Styling -->
 	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
 		android:title="@string/style_category">
 
-			<!--
-			android:summaryOff="@string/day_button_style_false"
-			-->
 		<com.nfcalarmclock.view.dayofweek.NacDayButtonStylePreference
 			android:title="@string/day_button_style"
 			android:key="@string/day_button_style_key"
@@ -162,5 +194,4 @@
 			app:allowDividerBelow="false"
 			/>
 	</com.nfcalarmclock.settings.preference.NacPreferenceCategory>
-
 </PreferenceScreen>

@@ -48,6 +48,7 @@ class NacAlarmViewModel @Inject constructor(
 	 *
 	 * @return The alarm with the ID.
 	 */
+	@Suppress("unused")
 	suspend fun findAlarm(id: Long): NacAlarm? = alarmRepository.findAlarm(id)
 
 	/**

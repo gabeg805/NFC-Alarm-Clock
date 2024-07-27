@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
 	<!-- App -->
 	<string name="app_name">Revèy Alam NFC</string>
@@ -41,6 +41,8 @@
 	<string name="action_clear_reminder">Klè rapèl</string>
 	<string name="action_default">Default</string>
 	<string name="action_done">Fè</string>
+	<string name="action_preview">Preview</string>
+	<string name="action_stop_preview">One Stop Preview</string>
 	<string name="action_rate_now">To kounye a</string>
 	<string name="action_rate_later">Pita</string>
 	<string name="action_rate_never">Non mèsi</string>
@@ -60,7 +62,6 @@
 	<string name="action_alarm_option_gradually_increase_volume">Piti piti ogmante volim</string>
 	<string name="action_alarm_option_restrict_volume">Limite volim</string>
 	<string name="action_alarm_option_text_to_speech">Tèks-a-lapawòl</string>
-	<string name="action_alarm_option_dismiss_early">Ranvwaye bonè</string>
 	<string name="action_alarm_option_upcoming_reminder">Rapèl kap vini</string>
 
 
@@ -90,11 +91,15 @@
 	<string name="message_delete_nfc_tag">Èske w sèten ou vle efase tag NFC sa a?</string>
 	<string name="message_show_nfc_tag_id">ID:</string>
 	<string name="message_any_nfc_tag_id">Nenpòt tag NFC aksepte</string>
+	<string name="message_flashlight_on_duration">Limen:</string>
+	<string name="message_flashlight_off_duration">Etenn:</string>
 	<string name="message_no_alarms_scheduled">Pa gen alam pwograme</string>
 	<string name="message_repeat_disabled">Pa repete alam</string>
 	<string name="message_repeat_enabled">Repete alam</string>
 	<string name="message_vibrate_disabled">Vibre koupe</string>
 	<string name="message_vibrate_enabled">Vibre sou</string>
+	<string name="message_flashlight_disabled">Flach koupe</string>
+	<string name="message_flashlight_enabled">Flach limen</string>
 	<string name="message_alarm_copy">Kopye alam</string>
 	<string name="message_alarm_delete">Alam efase</string>
 	<string name="message_alarm_restore">Alam retabli</string>
@@ -143,31 +148,34 @@
 	<!-- Titles -->
 	<string name="title_alarm_activity">Ranvwaye Alam</string>
 	<string name="title_rate_my_app">Evalye app a</string>
-	<string name="title_scan_nfc_tag">Eskane yon tag NFC...</string>
-	<string name="title_select_nfc_tag">Chwazi yon tag NFC...</string>
-	<string name="title_save_nfc_tag">Sove tag NFC la...</string>
-	<string name="title_delete_nfc_tag">Efase tag NFC...</string>
-	<string name="title_rename_nfc_tag">Chanje non tag NFC la...</string>
+	<string name="title_scan_nfc_tag" tools:ignore="TypographyEllipsis">Eskane yon tag NFC...</string>
+	<string name="title_select_nfc_tag" tools:ignore="TypographyEllipsis">Chwazi yon tag NFC...</string>
+	<string name="title_save_nfc_tag" tools:ignore="TypographyEllipsis">Sove tag NFC la...</string>
+	<string name="title_delete_nfc_tag" tools:ignore="TypographyEllipsis">Efase tag NFC...</string>
+	<string name="title_rename_nfc_tag" tools:ignore="TypographyEllipsis">Chanje non tag NFC la...</string>
+	<string name="title_flashlight_strength" tools:ignore="TypographyEllipsis">Nivo fòs flach...</string>
+	<string name="title_flashlight_blink" tools:ignore="TypographyEllipsis">Èske flach la ta dwe bat...</string>
+	<string name="title_flashlight_on_off_duration" tools:ignore="TypographyEllipsis">Konbyen tan flach la ta dwe limen ak etenn pou...</string>
 	<string name="title_name">Mete non alam</string>
 	<string name="title_days">Chwazi jou</string>
 	<string name="title_color">Chwazi yon koulè</string>
 	<string name="title_audio_option">Chwazi yon opsyon alam</string>
 	<string name="title_audio_source">Chwazi yon sous odyo</string>
 	<string name="title_dismiss_early">Chwazi ranvwaye opsyon bonè</string>
-	<string name="title_dismiss_early_checkbox">Ranvwaye alam la bonè, anvan li aktif...</string>
-	<string name="title_dismiss_early_how_early">Konbyen bonè alam la ka ranvwaye...</string>
-	<string name="title_upcoming_reminder_should_show">Montre yon notifikasyon rapèl anvan alam la sonnen...</string>
-	<string name="title_upcoming_reminder_time_to_show">Konbyen bonè anvan yo ta dwe montre notifikasyon an...</string>
-	<string name="title_upcoming_reminder_freq_to_show">Konbyen fwa li ta dwe montre...</string>
-	<string name="title_upcoming_reminder_should_use_tts">Èske yo ta dwe itilize menm opsyon tèks-a-lapawòl ak alam la lè yo montre notifikasyon an...</string>
+	<string name="title_dismiss_early_checkbox" tools:ignore="TypographyEllipsis">Ranvwaye alam la bonè, anvan li aktif...</string>
+	<string name="title_dismiss_early_how_early" tools:ignore="TypographyEllipsis">Konbyen bonè alam la ka ranvwaye...</string>
+	<string name="title_upcoming_reminder_should_show" tools:ignore="TypographyEllipsis">Montre yon notifikasyon rapèl anvan alam la sonnen...</string>
+	<string name="title_upcoming_reminder_time_to_show" tools:ignore="TypographyEllipsis">Konbyen bonè anvan yo ta dwe montre notifikasyon an...</string>
+	<string name="title_upcoming_reminder_freq_to_show" tools:ignore="TypographyEllipsis">Konbyen fwa li ta dwe montre...</string>
+	<string name="title_upcoming_reminder_should_use_tts" tools:ignore="TypographyEllipsis">Èske yo ta dwe itilize menm opsyon tèks-a-lapawòl ak alam la lè yo montre notifikasyon an...</string>
 	<string name="title_gradually_increase_volume">Chwazi pou ogmante volim piti piti</string>
-	<string name="title_gradually_increase_volume_checkbox">Piti piti ogmante volim lè alam la aktif...</string>
-	<string name="title_gradually_increase_volume_picker">Tann tan ant chak ogmantasyon volim...</string>
+	<string name="title_gradually_increase_volume_checkbox" tools:ignore="TypographyEllipsis">Piti piti ogmante volim lè alam la aktif...</string>
+	<string name="title_gradually_increase_volume_picker" tools:ignore="TypographyEllipsis">Tann tan ant chak ogmantasyon volim...</string>
 	<string name="title_restrict_volume">Chwazi limite volim</string>
-	<string name="title_restrict_volume_checkbox">Limite volim lè alam la aktif...</string>
+	<string name="title_restrict_volume_checkbox" tools:ignore="TypographyEllipsis">Limite volim lè alam la aktif...</string>
 	<string name="title_tts">Chwazi opsyon tèks-a-lapawòl</string>
-	<string name="title_tts_what_to_say">Kisa pou w di lè alam la aktif...</string>
-	<string name="title_tts_how_often_to_say">Konbyen fwa pou di li...</string>
+	<string name="title_tts_what_to_say" tools:ignore="TypographyEllipsis">Kisa pou w di lè alam la aktif...</string>
+	<string name="title_tts_how_often_to_say" tools:ignore="TypographyEllipsis">Konbyen fwa pou di li...</string>
 	<string name="title_next_alarm_format">Chwazi yon fòma</string>
 	<string name="title_speak_frequency">Chwazi frekans pale</string>
 	<string name="title_folder_selected">Ou chwazi yon katab</string>
@@ -184,7 +192,7 @@
 	<string name="title_request_permission_ignore_battery_optimization">Enfim optimize batri?</string>
 	<string name="title_request_permission_post_notifications">Aktive notifikasyon?</string>
 	<string name="title_request_permission_schedule_exact_alarm">Pèmèt alam orè?</string>
-	<string name="title_reset_statistics">Reyajiste estatistik...</string>
+	<string name="title_reset_statistics" tools:ignore="TypographyEllipsis">Reyajiste estatistik...</string>
 
 
 
@@ -240,6 +248,12 @@
 	<string name="cd_request_permission_post_notifications">Mande pou poste notifikasyon.</string>
 	<string name="cd_request_permission_schedule_exact_alarm">Mande pou pwograme alam egzak.</string>
 	<string name="cd_whats_new">Lis atik ki nouvo nan vèsyon sa a nan aplikasyon an.</string>
+	<string name="cd_flashlight_strength_seekbar">Nivo fòs flach.</string>
+	<string name="cd_scan_nfc">Eskane yon tag NFC.</string>
+	<string name="cd_alarm_slider_arrow">Direksyon pou glise dwèt ou.</string>
+	<string name="cd_dismiss_alarm">Rejte alam la.</string>
+	<string name="cd_snooze_alarm">Ranpli alam la.</string>
+	<string name="cd_current_alarm_media_playing">Medya alam aktyèl la k ap jwe.</string>
 
 
 
@@ -312,9 +326,15 @@
 
 
 	<!-- Default alarm use NFC -->
-	<string name="alarm_use_nfc">Sèvi ak NFC</string>
-	<string name="alarm_use_nfc_true">NFC yo itilize pou ranvwaye alam la.</string>
-	<string name="alarm_use_nfc_false">Rejte alam la nòmalman.</string>
+	<string name="alarm_nfc">NFC</string>
+	<string name="alarm_nfc_true">NFC yo itilize pou ranvwaye alam la.</string>
+	<string name="alarm_nfc_false">Rejte alam la nòmalman.</string>
+
+
+	<!-- Default alarm use flashlight -->
+	<string name="alarm_flashlight">Flach</string>
+	<string name="alarm_flashlight_true">Limen flach la lè alam la sonnen.</string>
+	<string name="alarm_flashlight_false">Pa limen flach la lè alam la sonnen.</string>
 
 
 	<!-- Default alarm vibrate -->
@@ -392,6 +412,18 @@
 	<!-- Upcoming alarm notifications -->
 	<string name="upcoming_alarm_true">Montre notifikasyon pou alam k ap vini yo.</string>
 
+	<!-- Show/hide the vibrate button -->
+	<string name="show_hide_vibrate_button_true">Montre bouton vibre a lè w ap agrandi yon alam.</string>
+	<string name="show_hide_vibrate_button_false">Kache bouton vibre a lè w ap agrandi yon alam.</string>
+
+	<!-- Show/hide the NFC button -->
+	<string name="show_hide_nfc_button_true">Montre bouton NFC la lè w ap agrandi yon alam.</string>
+	<string name="show_hide_nfc_button_false">Kache bouton NFC la lè w ap agrandi yon alam.</string>
+
+	<!-- Show/hide the flashlight button -->
+	<string name="show_hide_flashlight_button_true">Montre bouton flach la lè w ap agrandi yon alam.</string>
+	<string name="show_hide_flashlight_button_false">Kache bouton flach la lè agrandi yon alam.</string>
+
 	<!-- Day button style -->
 	<string name="day_button_style">Bouton jou</string>
 
@@ -452,6 +484,11 @@
 	<!-- Gradually increase volume -->
 	<string name="gradually_increase_volume_true">Wi, volim ap ogmante piti piti jiskaske volim alam la rive.</string>
 	<string name="gradually_increase_volume_false">Non, volim yo pral mete sou volim alam la.</string>
+
+
+	<!-- Flashlight blink -->
+	<string name="flashlight_blink_true">Wi, fè flach la bat.</string>
+	<string name="flashlight_blink_false">Non, pa fè flach la bat.</string>
 
 
 

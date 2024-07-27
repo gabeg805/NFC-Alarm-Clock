@@ -64,6 +64,7 @@ class NacHeightAnimator @JvmOverloads constructor(
 	/**
 	 * The height to end with.
 	 */
+	@Suppress("MemberVisibilityCanBePrivate")
 	var toHeight = 0
 
 	/**

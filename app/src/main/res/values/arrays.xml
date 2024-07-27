@@ -265,6 +265,29 @@
 		<item>60 seconds</item>
 	</string-array>
 
+	<string-array name="flashlight_on_off_duration_times">
+		<item>0.5 seconds</item>
+		<item>1.0 second</item>
+		<item>1.5 seconds</item>
+		<item>2.0 seconds</item>
+		<item>2.5 seconds</item>
+		<item>3.0 seconds</item>
+		<item>3.5 seconds</item>
+		<item>4.0 seconds</item>
+		<item>4.5 seconds</item>
+		<item>5.0 seconds</item>
+		<item>5.5 seconds</item>
+		<item>6.0 seconds</item>
+		<item>6.5 seconds</item>
+		<item>7.0 seconds</item>
+		<item>7.5 seconds</item>
+		<item>8.0 seconds</item>
+		<item>8.5 seconds</item>
+		<item>9.0 seconds</item>
+		<item>9.5 seconds</item>
+		<item>10.0 seconds</item>
+	</string-array>
+
 <!--
 &lt;b>
 &lt;/b>
@@ -272,9 +295,9 @@
 
 	<string-array name="whats_new_items">
 		<item>Added &lt;b>flashlight&lt;/b> option to turn on the flashlight when an alarm goes off.</item>
+		<item>Added ability to hide &lt;b>vibrate&lt;/b>, &lt;b>NFC&lt;/b>, and &lt;b>flashlight&lt;/b> options from an expanded alarm. This can be found in &lt;b>Settings > Appearance&lt;/b>.</item>
 		<item>Updated the app for &lt;b>Android 14&lt;/b>.</item>
 		<item>Updated the &lt;b>new alarm screen&lt;/b> so that &lt;b>swiping&lt;/b> to snooze or dismiss is a lot easier.</item>
-		<item>Fixed a crash when stopping an alarm.</item>
 	</string-array>
 
 </resources>

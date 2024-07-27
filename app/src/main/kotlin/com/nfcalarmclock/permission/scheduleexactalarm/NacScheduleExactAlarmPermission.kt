@@ -14,6 +14,7 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 /**
  * Helper functions for the SCHEDULE_EXACT_ALARM permission.
  */
+@Suppress("SameReturnValue")
 object NacScheduleExactAlarmPermission
 {
 

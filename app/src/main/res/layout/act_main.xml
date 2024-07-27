@@ -73,4 +73,13 @@
 		android:src="@drawable/plus"
 		/>
 
+	<!-- Navigation host -->
+	<androidx.fragment.app.FragmentContainerView
+		android:id="@+id/hello_content"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:name="androidx.navigation.fragment.NavHostFragment"
+		app:defaultNavHost="true"
+		/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

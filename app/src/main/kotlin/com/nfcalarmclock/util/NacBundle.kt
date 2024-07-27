@@ -21,17 +21,17 @@ object NacBundle
 	/**
 	 * Key associated with a media path.
 	 */
-	const val MEDIA_PATH_KEY = "NacMediaKey"
+	private const val MEDIA_PATH_KEY = "NacMediaKey"
 
 	/**
 	 * Key associated with whether media should be shuffled.
 	 */
-	const val SHUFFLE_MEDIA_KEY = "NacShuffleMediaKey"
+	private const val SHUFFLE_MEDIA_KEY = "NacShuffleMediaKey"
 
 	/**
 	 * Key associated with whether media should be recursively played.
 	 */
-	const val RECURSIVELY_PLAY_MEDIA_KEY = "NacRecursivelyPlayMediaKey"
+	private const val RECURSIVELY_PLAY_MEDIA_KEY = "NacRecursivelyPlayMediaKey"
 
 	/**
 	 * Get a bundle that contains the alarm.

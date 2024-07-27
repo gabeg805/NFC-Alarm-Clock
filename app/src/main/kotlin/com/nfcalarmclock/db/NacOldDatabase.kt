@@ -16,6 +16,7 @@ import com.nfcalarmclock.util.NacCalendar
 /**
  * NFC Alarm Clock database.
  */
+@Suppress("SameReturnValue")
 class NacOldDatabase(
 
 	/**
@@ -175,7 +176,7 @@ class NacOldDatabase(
 	 *
 	 * @param  db  The SQLite database.
 	 */
-	fun findActiveAlarm(db: SQLiteDatabase): NacAlarm?
+	private fun findActiveAlarm(db: SQLiteDatabase): NacAlarm?
 	{
 		val alarms = this.findActiveAlarms(db)
 
@@ -201,7 +202,7 @@ class NacOldDatabase(
 	 *
 	 * @param  db  The SQLite database.
 	 */
-	fun findActiveAlarms(db: SQLiteDatabase): List<NacAlarm?>?
+	private fun findActiveAlarms(db: SQLiteDatabase): List<NacAlarm?>?
 	{
 		val list: MutableList<NacAlarm?> = ArrayList()
 		val cursor: Cursor?
@@ -553,7 +554,7 @@ class NacOldDatabase(
 	 *
 	 * This assumes the cursor object is already in position to retrieve data.
 	 */
-	fun toAlarm(cursor: Cursor?, version: Int): NacAlarm?
+	private fun toAlarm(cursor: Cursor?, version: Int): NacAlarm?
 	{
 		// Check if cursor is null
 		if (cursor == null)
@@ -877,7 +878,7 @@ class NacOldDatabase(
 		/**
 		 * @see .findAlarm
 		 */
-		fun findAlarm(context: Context?, id: Long): NacAlarm?
+		private fun findAlarm(context: Context?, id: Long): NacAlarm?
 		{
 			// Check if context is null
 			if (context == null)

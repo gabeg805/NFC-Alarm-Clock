@@ -10,7 +10,6 @@ import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
@@ -45,6 +44,17 @@ class NacActiveAlarmActivity
 	 * The layout handler to use (either original or swipe).
 	 */
 	private lateinit var layoutHandler: NacActiveAlarmLayoutHandler
+
+	/**
+	 * Alarm.
+	 */
+	private var alarm: NacAlarm? = null
+
+	/**
+	 * Whether the alarm should use NFC or not.
+	 */
+	private val shouldUseNfc: Boolean
+		get() = (alarm != null) && alarm!!.shouldUseNfc && sharedPreferences.shouldShowNfcButton
 
 	/**
 	 * NFC tag view model.
@@ -87,11 +97,6 @@ class NacActiveAlarmActivity
 		}
 
 	/**
-	 * Alarm.
-	 */
-	private var alarm: NacAlarm? = null
-
-	/**
 	 * Check if an alarm can be dismissed with NFC.
 	 *
 	 * @return True if an alarm can be dismissed with NFC, and False otherwise.
@@ -103,11 +108,12 @@ class NacActiveAlarmActivity
 		val intentNfcId = NacNfc.parseId(intent)
 
 		// Compare the two NFC IDs. As long as nothing is null,
+		// if the NFC button is not shown in the alarm card, or
 		// if the alarm NFC ID is empty, this is good, or
 		// if the two NFC IDs are equal, this is also good
 		return if ((alarm != null)
 			&& (intentNfcId != null)
-			&& (alarmNfcId.isEmpty() || (alarmNfcId == intentNfcId)))
+			&& (!sharedPreferences.shouldShowNfcButton || alarmNfcId.isEmpty() || (alarmNfcId == intentNfcId)))
 		{
 			true
 		}
@@ -138,7 +144,7 @@ class NacActiveAlarmActivity
 		requestWindowFeature(Window.FEATURE_NO_TITLE)
 
 		// Check if the new alarm screen should be used
-		if (sharedPreferences.useNewAlarmScreen)
+		if (sharedPreferences.shouldUseNewAlarmScreen)
 		{
 			// Set the screen view
 			setContentView(R.layout.act_alarm_new)
@@ -235,7 +241,7 @@ class NacActiveAlarmActivity
 		layoutHandler.setup(this)
 
 		// Check if NFC should be setup
-		if (alarm!!.shouldUseNfc)
+		if (shouldUseNfc)
 		{
 			// Setup NFC tag
 			lifecycleScope.launch {
@@ -322,7 +328,7 @@ class NacActiveAlarmActivity
 		if (!NacNfc.isEnabled(this))
 		{
 			// NFC should be used
-			if (NacNfc.shouldUseNfc(this, alarm))
+			if (NacNfc.exists(this) && shouldUseNfc)
 			{
 				// Prompt the user
 				NacNfc.prompt(this)
@@ -359,7 +365,8 @@ class NacActiveAlarmActivity
 	private fun setupScreenOn()
 	{
 		// Get whether the alarm should be shown when locked
-		val showWhenLocked = (alarm != null) && !alarm!!.shouldUseNfc
+		//val showWhenLocked = (alarm != null) && !alarm!!.shouldUseNfc
+		val showWhenLocked = !shouldUseNfc
 
 		// Use updated method calls to control screen for APK >= 27
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)

@@ -14,6 +14,7 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.db.NacAlarmDao
 import com.nfcalarmclock.alarm.db.NacAlarmTypeConverters
 import com.nfcalarmclock.db.NacAlarmDatabase.AddAutoDismissAndSnoozeSettingsToAllAlarmsMigration
+import com.nfcalarmclock.db.NacAlarmDatabase.ChangeFlashlightOnOffDurationTypeToStringMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.ClearAllStatisticsMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.ClearNfcTagTableMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.DropNfcTagTableMigration
@@ -48,7 +49,7 @@ import javax.inject.Singleton
 /**
  * Store alarms in a Room database.
  */
-@Database(version = 21,
+@Database(version = 24,
 	entities = [
 		NacAlarm::class,
 		NacAlarmCreatedStatistic::class,
@@ -77,7 +78,10 @@ import javax.inject.Singleton
 		AutoMigration(from = 17, to = 18, spec = DropNfcTagTableMigration::class),
 		AutoMigration(from = 18, to = 19, spec = ClearNfcTagTableMigration::class),
 		AutoMigration(from = 19, to = 20, spec = AddAutoDismissAndSnoozeSettingsToAllAlarmsMigration::class),
-		AutoMigration(from = 20, to = 21)]
+		AutoMigration(from = 20, to = 21),
+		AutoMigration(from = 21, to = 22, spec = ChangeFlashlightOnOffDurationTypeToStringMigration::class),
+		AutoMigration(from = 22, to = 23),
+		AutoMigration(from = 23, to = 24)]
 )
 @TypeConverters(NacAlarmTypeConverters::class, NacStatisticTypeConverters::class)
 abstract class NacAlarmDatabase
@@ -125,20 +129,16 @@ abstract class NacAlarmDatabase
 	 */
 	internal class AddAutoDismissAndSnoozeSettingsToAllAlarmsMigration : AutoMigrationSpec
 	{
-
-		/**
-		 * Called after migration.
-		 */
 		override fun onPostMigrate(db: SupportSQLiteDatabase)
 		{
 			// Get the shared preferences
-			val shared = NacSharedPreferences(context!!)
+			val sharedPreferences = NacSharedPreferences(context!!)
 
 			// Get default auto dismiss and snooze values
-			val autoDismissTime = shared.autoDismissTime
-			val snoozeDuration = shared.snoozeDurationValue
-			val maxSnoozes = shared.maxSnoozeValue
-			val easySnooze = if (shared.easySnooze) 1 else 0
+			val autoDismissTime = sharedPreferences.oldAutoDismissTime
+			val snoozeDuration = sharedPreferences.oldSnoozeDurationValue
+			val maxSnoozes = sharedPreferences.oldMaxSnoozeValue
+			val easySnooze = if (sharedPreferences.easySnooze) 1 else 0
 
 			// Add default values to all alarms
 			db.execSQL("UPDATE alarm SET auto_dismiss_time=$autoDismissTime")
@@ -146,7 +146,28 @@ abstract class NacAlarmDatabase
 			db.execSQL("UPDATE alarm SET max_snooze=$maxSnoozes")
 			db.execSQL("UPDATE alarm SET should_use_easy_snooze=$easySnooze")
 		}
+	}
 
+	/**
+	 * Change the type of the flashlight on/off duration from Int to String.
+	 */
+	internal class ChangeFlashlightOnOffDurationTypeToStringMigration : AutoMigrationSpec
+	{
+		override fun onPostMigrate(db: SupportSQLiteDatabase)
+		{
+			// Create new table
+			db.execSQL("CREATE TABLE IF NOT EXISTS alarm_new (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_active` INTEGER NOT NULL, `time_active` INTEGER NOT NULL, `snooze_count` INTEGER NOT NULL, `is_enabled` INTEGER NOT NULL, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `snooze_hour` INTEGER NOT NULL, `snooze_minute` INTEGER NOT NULL, `days` INTEGER NOT NULL, `should_repeat` INTEGER NOT NULL, `should_vibrate` INTEGER NOT NULL, `should_use_nfc` INTEGER NOT NULL, `should_use_flashlight` INTEGER NOT NULL DEFAULT 0, `flashlight_strength_level` INTEGER NOT NULL DEFAULT 0, `flashlight_on_duration` TEXT NOT NULL DEFAULT '0', `flashlight_off_duration` TEXT NOT NULL DEFAULT '0', `nfc_tag_id` TEXT NOT NULL, `media_path` TEXT NOT NULL, `media_title` TEXT NOT NULL, `media_type` INTEGER NOT NULL, `should_shuffle_media` INTEGER NOT NULL DEFAULT 0, `should_recursively_play_media` INTEGER NOT NULL DEFAULT 0, `volume` INTEGER NOT NULL, `audio_source` TEXT NOT NULL, `name` TEXT NOT NULL, `should_say_current_time` INTEGER NOT NULL DEFAULT 0, `should_say_alarm_name` INTEGER NOT NULL DEFAULT 0, `tts_frequency` INTEGER NOT NULL, `should_gradually_increase_volume` INTEGER NOT NULL, `gradually_increase_volume_wait_time` INTEGER NOT NULL DEFAULT 5, `should_restrict_volume` INTEGER NOT NULL, `auto_dismiss_time` INTEGER NOT NULL DEFAULT 0, `should_dismiss_early` INTEGER NOT NULL, `dismiss_early_time` INTEGER NOT NULL, `time_of_dismiss_early_alarm` INTEGER NOT NULL, `snooze_duration` INTEGER NOT NULL DEFAULT 0, `max_snooze` INTEGER NOT NULL DEFAULT 0, `should_use_easy_snooze` INTEGER NOT NULL DEFAULT 0, `should_show_reminder` INTEGER NOT NULL DEFAULT 0, `time_to_show_reminder` INTEGER NOT NULL DEFAULT 5, `reminder_frequency` INTEGER NOT NULL DEFAULT 0, `should_use_tts_for_reminder` INTEGER NOT NULL DEFAULT 0)")
+
+			// Copy the data
+			db.execSQL("INSERT INTO alarm_new (id, is_active, time_active, snooze_count, is_enabled, hour, minute, snooze_hour, snooze_minute, days, should_repeat, should_vibrate, should_use_nfc, should_use_flashlight, flashlight_strength_level, flashlight_on_duration, flashlight_off_duration, nfc_tag_id, media_path, media_title, media_type, should_shuffle_media, should_recursively_play_media, volume, audio_source, name, should_say_current_time, should_say_alarm_name, tts_frequency, should_gradually_increase_volume, gradually_increase_volume_wait_time, should_restrict_volume, auto_dismiss_time, should_dismiss_early, dismiss_early_time, time_of_dismiss_early_alarm, snooze_duration, max_snooze, should_use_easy_snooze, should_show_reminder, time_to_show_reminder, reminder_frequency, should_use_tts_for_reminder) SELECT id, is_active, time_active, snooze_count, is_enabled, hour, minute, snooze_hour, snooze_minute, days, should_repeat, should_vibrate, should_use_nfc, should_use_flashlight, flashlight_strength_level, flashlight_on_duration, flashlight_off_duration, nfc_tag_id, media_path, media_title, media_type, should_shuffle_media, should_recursively_play_media, volume, audio_source, name, should_say_current_time, should_say_alarm_name, tts_frequency, should_gradually_increase_volume, gradually_increase_volume_wait_time, should_restrict_volume, auto_dismiss_time, should_dismiss_early, dismiss_early_time, time_of_dismiss_early_alarm, snooze_duration, max_snooze, should_use_easy_snooze, should_show_reminder, time_to_show_reminder, reminder_frequency, should_use_tts_for_reminder FROM alarm")
+
+			// Drop the old table
+			db.execSQL("DROP TABLE alarm")
+
+			// Rename the new table to the old name
+			db.execSQL("ALTER TABLE alarm_new RENAME TO alarm")
+
+		}
 	}
 
 	/**
@@ -154,15 +175,11 @@ abstract class NacAlarmDatabase
 	 */
 	internal class ClearAllStatisticsMigration : AutoMigrationSpec
 	{
-
-		/**
-		 * Called after migration.
-		 */
 		override fun onPostMigrate(db: SupportSQLiteDatabase)
 		{
-			val shared = NacSharedPreferences(context!!)
+			val sharedPreferences = NacSharedPreferences(context!!)
 
-			shared.editAppStartStatistics(true)
+			sharedPreferences.appStartStatistics = true
 			db.execSQL("DROP TABLE alarm_created_statistic")
 			db.execSQL("DROP TABLE alarm_deleted_statistic")
 			db.execSQL("DROP TABLE alarm_dismissed_statistic")
@@ -174,7 +191,6 @@ abstract class NacAlarmDatabase
 			db.execSQL("CREATE TABLE IF NOT EXISTS alarm_missed_statistic (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, timestamp INTEGER NOT NULL, alarm_id INTEGER, hour INTEGER NOT NULL, minute INTEGER NOT NULL, name TEXT DEFAULT '', FOREIGN KEY(alarm_id) REFERENCES alarm(id) ON UPDATE NO ACTION ON DELETE SET NULL )")
 			db.execSQL("CREATE TABLE IF NOT EXISTS alarm_snoozed_statistic (duration INTEGER NOT NULL DEFAULT 0, id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, timestamp INTEGER NOT NULL, alarm_id INTEGER, hour INTEGER NOT NULL, minute INTEGER NOT NULL, name TEXT DEFAULT '', FOREIGN KEY(alarm_id) REFERENCES alarm(id) ON UPDATE NO ACTION ON DELETE SET NULL )")
 		}
-
 	}
 
 	/**
@@ -182,15 +198,10 @@ abstract class NacAlarmDatabase
 	 */
 	internal class ClearNfcTagTableMigration: AutoMigrationSpec
 	{
-
-		/**
-		 * Called after migration.
-		 */
 		override fun onPostMigrate(db: SupportSQLiteDatabase)
 		{
 			db.execSQL("DELETE FROM nfc_tag")
 		}
-
 	}
 
 	/**
@@ -198,17 +209,12 @@ abstract class NacAlarmDatabase
 	 */
 	internal class DropNfcTagTableMigration: AutoMigrationSpec
 	{
-
-		/**
-		 * Called after migration.
-		 */
 		override fun onPostMigrate(db: SupportSQLiteDatabase)
 		{
 			db.execSQL("DROP TABLE IF EXISTS nfc_tag")
 			db.execSQL("CREATE TABLE IF NOT EXISTS `nfc_tag` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `nfc_id` TEXT NOT NULL)")
 			db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_nfc_tag_nfc_id` ON `nfc_tag` (`nfc_id`)")
 		}
-
 	}
 
 	/**

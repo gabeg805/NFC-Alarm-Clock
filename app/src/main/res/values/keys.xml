@@ -29,9 +29,12 @@
 
 	<!-- General -->
 	<string name="general_setting_key">pref_screen_general</string>
-	<string name="auto_dismiss_key">pref_auto_dismiss</string>
-	<string name="max_snooze_key">pref_max_snooze</string>
-	<string name="snooze_duration_key">pref_snooze_duration</string>
+	<string name="auto_dismiss_key">pref_auto_dismiss_new</string>
+	<string name="old_auto_dismiss_key">pref_auto_dismiss</string>
+	<string name="max_snooze_key">pref_max_snooze_new</string>
+	<string name="old_max_snooze_key">pref_max_snooze</string>
+	<string name="snooze_duration_key">pref_snooze_duration_new</string>
+	<string name="old_snooze_duration_key">pref_snooze_duration</string>
 	<string name="easy_snooze_key">pref_easy_snooze</string>
 	<string name="alarm_name_key">pref_name</string>
 	<string name="alarm_days_key">pref_deys</string>
@@ -40,6 +43,7 @@
 	<string name="alarm_use_nfc_key">pref_use_nfc</string>
 	<string name="alarm_use_flashlight_key">pref_use_flashlight</string>
 	<string name="alarm_flashlight_strength_level_key">pref_flashlight_strength_level</string>
+	<string name="alarm_flashlight_gradually_increase_flashlight_strength_level_wait_time_key">pref_flashlight_gradually_increase_flashlight_strength_level_wait_time</string>
 	<string name="alarm_flashlight_on_duration_key">pref_flashlight_on_duration</string>
 	<string name="alarm_flashlight_off_duration_key">pref_flashlight_off_duration</string>
 	<string name="alarm_sound_key">pref_sound</string>
@@ -74,6 +78,9 @@
 	<string name="pm_color_key">pref_pm_color</string>
 	<string name="missed_alarm_key">pref_missed_alarm_notification</string>
 	<string name="upcoming_alarm_key">pref_upcoming_alarm_notification</string>
+	<string name="show_hide_vibrate_button_key">pref_show_hide_vibrate_button</string>
+	<string name="show_hide_nfc_button_key">pref_show_hide_nfc_button</string>
+	<string name="show_hide_flashlight_button_key">pref_show_hide_flashlight_button</string>
 	<string name="day_button_style_key">pref_day_button_style</string>
 	<string name="start_week_on_key">pref_start_week_on</string>
 	<string name="expand_new_alarm_key">pref_expand_new_alarm</string>

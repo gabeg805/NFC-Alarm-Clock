@@ -49,6 +49,7 @@ class NacFileBrowser(
 	/**
 	 * View model for the file browser.
 	 */
+	@Suppress("ReplaceGetOrSet")
 	private val viewModel: NacFileBrowserViewModel =
 		ViewModelProvider(fragment)
 			.get(NacFileBrowserViewModel::class.java)

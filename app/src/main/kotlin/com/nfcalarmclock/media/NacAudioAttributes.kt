@@ -106,7 +106,7 @@ class NacAudioAttributes constructor(
 			{
 				audioManager.setStreamVolume(stream, volume, 0)
 			}
-			catch (e: SecurityException)
+			catch (_: SecurityException)
 			{
 			}
 		}
@@ -158,7 +158,7 @@ class NacAudioAttributes constructor(
 		wasDucking = true
 
 		// Save the current volume
-		sharedPreferences.editPreviousVolume(streamVolume)
+		sharedPreferences.previousVolume = streamVolume
 
 		// Set the volume to half its current value
 		streamVolume /= 2
@@ -206,7 +206,7 @@ class NacAudioAttributes constructor(
 	 */
 	fun saveCurrentVolume()
 	{
-		sharedPreferences.editPreviousVolume(streamVolume)
+		sharedPreferences.previousVolume = streamVolume
 	}
 
 		/**

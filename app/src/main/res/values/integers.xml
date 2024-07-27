@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<integer name="default_card_height_collapsed">0</integer>
-	<integer name="default_card_height_collapsed_dismiss">0</integer>
-	<integer name="default_card_height_expanded">0</integer>
+	<integer name="default_rate_my_app_rated">-999</integer>
+	<integer name="default_previous_volume">-1</integer>
+	<integer name="default_days">62</integer>
+	<integer name="default_volume">75</integer>
 	<integer name="default_auto_dismiss_index">7</integer>
 	<integer name="default_max_snooze_index">11</integer>
 	<integer name="default_snooze_duration_index">4</integer>
-	<integer name="default_days">62</integer>
-	<integer name="default_volume">75</integer>
+
 	<integer name="default_color">0xffffffff</integer>
 	<integer name="default_theme_color">0xfffb8c00</integer>
 	<integer name="default_name_color">0xff00c0fb</integer>
@@ -19,10 +19,6 @@
 	<integer name="default_day_button_style">1</integer>
 	<integer name="default_start_week_on_index">0</integer>
 	<integer name="default_next_alarm_format_index">0</integer>
-	<integer name="default_speak_frequency_index">0</integer>
-	<integer name="default_rate_my_app_rated">-999</integer>
-	<integer name="default_previous_volume">-1</integer>
-	<integer name="default_dismiss_early_time">30</integer>
 
 	<integer name="duration_day_button_off">200</integer>
 	<integer name="duration_day_button_alpha_on">280</integer>

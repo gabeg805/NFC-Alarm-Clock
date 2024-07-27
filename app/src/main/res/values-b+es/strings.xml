@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
 	<!-- App -->
 	<string name="app_name">NFC Despertador</string>
@@ -41,6 +41,8 @@
 	<string name="action_clear_reminder">Borrar recordatorio</string>
 	<string name="action_default">Original</string>
 	<string name="action_done">Hecho</string>
+	<string name="action_preview">Previo</string>
+	<string name="action_stop_preview">Detener vista previa</string>
 	<string name="action_rate_now">Califica Ahora</string>
 	<string name="action_rate_later">Al Rato</string>
 	<string name="action_rate_never">No, Gracias</string>
@@ -60,7 +62,6 @@
 	<string name="action_alarm_option_gradually_increase_volume">Aumentar gradualmente el volumen</string>
 	<string name="action_alarm_option_restrict_volume">Restringe el volumen</string>
 	<string name="action_alarm_option_text_to_speech">Texto-a-voz</string>
-	<string name="action_alarm_option_dismiss_early">Descartar temprano</string>
 	<string name="action_alarm_option_upcoming_reminder">Próximo recordatorio</string>
 
 
@@ -90,11 +91,15 @@
 	<string name="message_delete_nfc_tag">¿Estás seguro de que quieres eliminar esta etiqueta NFC?</string>
 	<string name="message_show_nfc_tag_id">Id:</string>
 	<string name="message_any_nfc_tag_id">Cualquier etiqueta de NFC aceptada</string>
+	<string name="message_flashlight_on_duration">Encender:</string>
+	<string name="message_flashlight_off_duration">Apagar:</string>
 	<string name="message_no_alarms_scheduled">No hay alarmas programadas</string>
 	<string name="message_repeat_disabled">No repite la alarma</string>
 	<string name="message_repeat_enabled">Repite la alarma</string>
 	<string name="message_vibrate_disabled">Vibrar desactivado</string>
 	<string name="message_vibrate_enabled">Vibrar habilitado</string>
+	<string name="message_flashlight_disabled">Linterna apagada</string>
+	<string name="message_flashlight_enabled">Linterna encendida</string>
 	<string name="message_alarm_copy">Alarma copiada</string>
 	<string name="message_alarm_delete">Alarma borrada</string>
 	<string name="message_alarm_restore">Alarma restaurada</string>
@@ -143,31 +148,34 @@
 	<!-- Titles -->
 	<string name="title_alarm_activity">Desactivar Alarma</string>
 	<string name="title_rate_my_app">Califica esta app</string>
-	<string name="title_scan_nfc_tag">Escanear una etiqueta NFC...</string>
-	<string name="title_select_nfc_tag">Seleccione una etiqueta NFC...</string>
-	<string name="title_save_nfc_tag">Guarde la etiqueta NFC...</string>
-	<string name="title_delete_nfc_tag">Eliminar la etiqueta NFC...</string>
-	<string name="title_rename_nfc_tag">Cambiar el nombre de la etiqueta NFC...</string>
+	<string name="title_scan_nfc_tag" tools:ignore="TypographyEllipsis">Escanear una etiqueta NFC...</string>
+	<string name="title_select_nfc_tag" tools:ignore="TypographyEllipsis">Seleccione una etiqueta NFC...</string>
+	<string name="title_save_nfc_tag" tools:ignore="TypographyEllipsis">Guarde la etiqueta NFC...</string>
+	<string name="title_delete_nfc_tag" tools:ignore="TypographyEllipsis">Eliminar la etiqueta NFC...</string>
+	<string name="title_rename_nfc_tag" tools:ignore="TypographyEllipsis">Cambiar el nombre de la etiqueta NFC...</string>
+	<string name="title_flashlight_strength" tools:ignore="TypographyEllipsis">Nivel de potencia de la linterna...</string>
+	<string name="title_flashlight_blink" tools:ignore="TypographyEllipsis">Si la linterna parpadea...</string>
+	<string name="title_flashlight_on_off_duration" tools:ignore="TypographyEllipsis">¿Cuánto tiempo debe parpadear la linterna encendida y apagada durante...</string>
 	<string name="title_name">Nombre de la alarma</string>
 	<string name="title_days">Seleccione los días</string>
 	<string name="title_color">Elige un color</string>
 	<string name="title_audio_option">Seleccione una opción de alarma</string>
 	<string name="title_audio_source">Seleccione una fuente de audio</string>
 	<string name="title_dismiss_early">Seleccione opciones pare descartar temprano</string>
-	<string name="title_dismiss_early_checkbox">Descartar la alarma temprano, antes de que se active...</string>
-	<string name="title_dismiss_early_how_early">¿Con qué antelación se puede desactivar la alarma...?</string>
-	<string name="title_upcoming_reminder_should_show">Mostrar una notificación de recordatorio antes de que suene la alarma...</string>
-	<string name="title_upcoming_reminder_time_to_show">¿Con qué antelación se debe mostrar la notificación...?</string>
-	<string name="title_upcoming_reminder_freq_to_show">¿Con qué frecuencia se debe mostrar...?</string>
-	<string name="title_upcoming_reminder_should_use_tts">¿Deberían usarse las mismas opciones de texto a voz que la alarma cuando se muestra la notificación...</string>
+	<string name="title_dismiss_early_checkbox" tools:ignore="TypographyEllipsis">Descartar la alarma temprano, antes de que se active...</string>
+	<string name="title_dismiss_early_how_early" tools:ignore="TypographyEllipsis">¿Con qué antelación se puede desactivar la alarma...?</string>
+	<string name="title_upcoming_reminder_should_show" tools:ignore="TypographyEllipsis">Mostrar una notificación de recordatorio antes de que suene la alarma...</string>
+	<string name="title_upcoming_reminder_time_to_show" tools:ignore="TypographyEllipsis">¿Con qué antelación se debe mostrar la notificación...?</string>
+	<string name="title_upcoming_reminder_freq_to_show" tools:ignore="TypographyEllipsis">¿Con qué frecuencia se debe mostrar...?</string>
+	<string name="title_upcoming_reminder_should_use_tts" tools:ignore="TypographyEllipsis">¿Deberían usarse las mismas opciones de texto a voz que la alarma cuando se muestra la notificación...</string>
 	<string name="title_gradually_increase_volume">Elige aumentar gradualmente el volumen</string>
-	<string name="title_gradually_increase_volume_checkbox">Aumente gradualmente el volumen cuando la alarma esté activa...</string>
-	<string name="title_gradually_increase_volume_picker">Tiempo de espera entre cada aumento de volumen...</string>
+	<string name="title_gradually_increase_volume_checkbox" tools:ignore="TypographyEllipsis">Aumente gradualmente el volumen cuando la alarma esté activa...</string>
+	<string name="title_gradually_increase_volume_picker" tools:ignore="TypographyEllipsis">Tiempo de espera entre cada aumento de volumen...</string>
 	<string name="title_restrict_volume">Elige restringir el volumen</string>
-	<string name="title_restrict_volume_checkbox">Restringir el volumen cuando la alarma esté activa...</string>
+	<string name="title_restrict_volume_checkbox" tools:ignore="TypographyEllipsis">Restringir el volumen cuando la alarma esté activa...</string>
 	<string name="title_tts">Seleccione opciones de texto-a-voz</string>
-	<string name="title_tts_what_to_say">Qué decir cuando la alarma está activa...</string>
-	<string name="title_tts_how_often_to_say">Cuantas veces decirlo...</string>
+	<string name="title_tts_what_to_say" tools:ignore="TypographyEllipsis">Qué decir cuando la alarma está activa...</string>
+	<string name="title_tts_how_often_to_say" tools:ignore="TypographyEllipsis">Cuantas veces decirlo...</string>
 	<string name="title_next_alarm_format">Selecciona un estilo</string>
 	<string name="title_speak_frequency">Seleccione la frequencia de hablar</string>
 	<string name="title_folder_selected">Seleccionaste una carpeta</string>
@@ -184,7 +192,7 @@
 	<string name="title_request_permission_ignore_battery_optimization">¿Desactivar la optimización de la batería?</string>
 	<string name="title_request_permission_post_notifications">¿Permitir notificaciones?</string>
 	<string name="title_request_permission_schedule_exact_alarm">¿Permitir programar alarmas?</string>
-	<string name="title_reset_statistics">reiniciar las estadísticas...</string>
+	<string name="title_reset_statistics" tools:ignore="TypographyEllipsis">reiniciar las estadísticas...</string>
 
 
 
@@ -240,6 +248,12 @@
 	<string name="cd_request_permission_post_notifications">Solicitud para publicar notificaciones.</string>
 	<string name="cd_request_permission_schedule_exact_alarm">Solicitud para programar alarmas exactas.</string>
 	<string name="cd_whats_new">Lista de elementos nuevos en esta versión de la aplicación.</string>
+	<string name="cd_flashlight_strength_seekbar">Nivel de fuerza de la linterna.</string>
+	<string name="cd_scan_nfc">Escanee una etiqueta NFC.</string>
+	<string name="cd_alarm_slider_arrow">Dirección para deslizar el dedo.</string>
+	<string name="cd_dismiss_alarm">Descartar la alarma.</string>
+	<string name="cd_snooze_alarm">Posponer la alarma.</string>
+	<string name="cd_current_alarm_media_playing">El medio de alarma actual que se está reproduciendo.</string>
 
 
 
@@ -312,9 +326,15 @@
 
 
 	<!-- Default alarm use NFC -->
-	<string name="alarm_use_nfc">Usa NFC</string>
-	<string name="alarm_use_nfc_true">NFC es requerido para desactivar la alarma.</string>
-	<string name="alarm_use_nfc_false">Desactivar la alarma normalmente.</string>
+	<string name="alarm_nfc">NFC</string>
+	<string name="alarm_nfc_true">NFC es requerido para desactivar la alarma.</string>
+	<string name="alarm_nfc_false">Desactivar la alarma normalmente.</string>
+
+
+	<!-- Default alarm use flashlight -->
+	<string name="alarm_flashlight">Linterna</string>
+	<string name="alarm_flashlight_true">Enciende la linterna cuando suene la alarma.</string>
+	<string name="alarm_flashlight_false">No encienda la linterna cuando suene la alarma.</string>
 
 
 	<!-- Default alarm vibrate -->
@@ -392,6 +412,18 @@
 	<!-- Upcoming alarm notifications -->
 	<string name="upcoming_alarm_true">Muestra notificaciones para alarmas programadas.</string>
 
+	<!-- Show/hide the vibrate button -->
+	<string name="show_hide_vibrate_button_true">Muestra el botón de vibración al expandir una alarma.</string>
+	<string name="show_hide_vibrate_button_false">Oculte el botón de vibración al expandir una alarma.</string>
+
+	<!-- Show/hide the NFC button -->
+	<string name="show_hide_nfc_button_true">Muestra el botón NFC al expandir una alarma.</string>
+	<string name="show_hide_nfc_button_false">Oculte el botón NFC al expandir una alarma.</string>
+
+	<!-- Show/hide the flashlight button -->
+	<string name="show_hide_flashlight_button_true">Montre bouton flach la lè w ap agrandi yon alam.</string>
+	<string name="show_hide_flashlight_button_false">Oculte el botón de la linterna al expandir una alarma.</string>
+
 	<!-- Day button style -->
 	<string name="day_button_style">Day buttons</string>
 
@@ -452,6 +484,11 @@
 	<!-- Gradually increase volume -->
 	<string name="gradually_increase_volume_true">Sí, el volumen aumentará gradualmente hasta alcanzar el volumen de la alarma.</string>
 	<string name="gradually_increase_volume_false">No, el volumen se ajustará al volumen de la alarma.</string>
+
+
+	<!-- Flashlight blink -->
+	<string name="flashlight_blink_true">Sí, haz parpadear la linterna.</string>
+	<string name="flashlight_blink_false">No, no hagas parpadear la linterna.</string>
 
 
 

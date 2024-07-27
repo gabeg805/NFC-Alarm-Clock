@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,17 +31,12 @@ import com.nfcalarmclock.activealarm.NacActiveAlarmActivity
 import com.nfcalarmclock.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.alarmoptions.NacAlarmOptionsDialog
-import com.nfcalarmclock.alarmoptions.NacAlarmOptionsDialog.OnAlarmOptionClickedListener
-import com.nfcalarmclock.audiosource.NacAudioSourceDialog
-import com.nfcalarmclock.audiosource.NacAudioSourceDialog.OnAudioSourceSelectedListener
-import com.nfcalarmclock.autodismiss.NacAutoDismissDialog
 import com.nfcalarmclock.card.NacCardAdapter
 import com.nfcalarmclock.card.NacCardAdapter.OnViewHolderBoundListener
 import com.nfcalarmclock.card.NacCardAdapter.OnViewHolderCreatedListener
 import com.nfcalarmclock.card.NacCardAdapterLiveData
 import com.nfcalarmclock.card.NacCardHolder
-import com.nfcalarmclock.card.NacCardHolder.OnCardAudioOptionsClickedListener
+import com.nfcalarmclock.card.NacCardHolder.OnCardAlarmOptionsClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardCollapsedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardDeleteClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardMediaClickedListener
@@ -49,11 +45,7 @@ import com.nfcalarmclock.card.NacCardHolder.OnCardUseNfcChangedListener
 import com.nfcalarmclock.card.NacCardLayoutManager
 import com.nfcalarmclock.card.NacCardTouchHelper
 import com.nfcalarmclock.card.NacCardTouchHelper.OnSwipedListener
-import com.nfcalarmclock.dismissearly.NacDismissEarlyDialog
-import com.nfcalarmclock.dismissearly.NacDismissEarlyDialog.OnDismissEarlyOptionSelectedListener
-import com.nfcalarmclock.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog
-import com.nfcalarmclock.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog.OnGraduallyIncreaseVolumeListener
-import com.nfcalarmclock.maxsnooze.NacMaxSnoozeDialog
+import com.nfcalarmclock.flashlight.NacFlashlightOptionsDialog
 import com.nfcalarmclock.mediapicker.NacMediaActivity
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
@@ -63,18 +55,12 @@ import com.nfcalarmclock.nfc.NacScanNfcTagDialog.OnScanNfcTagListener
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.permission.NacPermissionRequestManager
 import com.nfcalarmclock.ratemyapp.NacRateMyApp
-import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog
-import com.nfcalarmclock.restrictvolume.NacRestrictVolumeDialog.OnRestrictVolumeListener
 import com.nfcalarmclock.scheduler.NacScheduler
 import com.nfcalarmclock.settings.NacMainSettingActivity
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.shutdown.NacShutdownBroadcastReceiver
-import com.nfcalarmclock.snoozeduration.NacSnoozeDurationDialog
-import com.nfcalarmclock.snoozeoptions.NacSnoozeOptionsDialog
 import com.nfcalarmclock.statistics.NacAlarmStatisticViewModel
-import com.nfcalarmclock.tts.NacTextToSpeechDialog
-import com.nfcalarmclock.tts.NacTextToSpeechDialog.OnTextToSpeechOptionsSelectedListener
-import com.nfcalarmclock.upcomingreminder.NacUpcomingReminderDialog
+import com.nfcalarmclock.util.NacBundle
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacIntent
 import com.nfcalarmclock.util.NacUtility.quickToast
@@ -82,9 +68,7 @@ import com.nfcalarmclock.util.createTimeTickReceiver
 import com.nfcalarmclock.util.disableActivityAlias
 import com.nfcalarmclock.util.registerMyReceiver
 import com.nfcalarmclock.util.unregisterMyReceiver
-import com.nfcalarmclock.view.dialog.NacScrollablePickerDialogFragment.OnScrollablePickerOptionSelectedListener
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog
-import com.nfcalarmclock.whatsnew.NacWhatsNewDialog.OnReadWhatsNewListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -106,6 +90,13 @@ class NacMainActivity
 	OnViewHolderBoundListener,
 	OnViewHolderCreatedListener
 {
+
+	/**
+	 * Navigation controller.
+	 */
+	private val navController by lazy {
+		(supportFragmentManager.findFragmentById(R.id.hello_content) as NavHostFragment).navController
+	}
 
 	/**
 	 * Shared preferences.
@@ -220,11 +211,6 @@ class NacMainActivity
 	private lateinit var nextAlarmMessageHandler: Handler
 
 	/**
-	 * Alarm that is being used by an open audio options dialog.
-	 */
-	private var audioOptionsAlarm: NacAlarm? = null
-
-	/**
 	 * Get the number of alarm cards that are expanded.
 	 */
 	private val cardsExpandedCount: Int
@@ -276,23 +262,6 @@ class NacMainActivity
 			// probably do not care
 			return previousVersion.isNotEmpty() && (BuildConfig.VERSION_NAME != previousVersion)
 		}
-
-	private fun setupWhichAlarmScreenToUse()
-	{
-		// Check if the app was not newly installed
-		if (!isNewInstall)
-		{
-			// Do nothing
-			return
-		}
-
-		// Change the alarm screen settings for a new install so that all the
-		// new stuff is shown
-		sharedPreferences.editUseNewAlarmScreen(true)
-		sharedPreferences.editShowAlarmName(true)
-		sharedPreferences.editShowCurrentDateAndTime(true)
-		sharedPreferences.editShowMusicInfo(true)
-	}
 
 	/**
 	 * Add an alarm to the database.
@@ -468,10 +437,10 @@ class NacMainActivity
 		card.measureCard(heights)
 
 		// Setup the shared preferences with those heights
-		sharedPreferences.editCardHeightCollapsed(heights[0])
-		sharedPreferences.editCardHeightCollapsedDismiss(heights[1])
-		sharedPreferences.editCardHeightExpanded(heights[2])
-		sharedPreferences.editCardIsMeasured(true)
+		sharedPreferences.cardHeightCollapsed = heights[0]
+		sharedPreferences.cardHeightCollapsedDismiss = heights[1]
+		sharedPreferences.cardHeightExpanded = heights[2]
+		sharedPreferences.cardIsMeasured = true
 	}
 
 	/**
@@ -528,7 +497,7 @@ class NacMainActivity
 		nextAlarmMessageHandler = Handler(applicationContext.mainLooper)
 
 		// Set flag that cards need to be measured
-		sharedPreferences.editCardIsMeasured(false)
+		sharedPreferences.cardIsMeasured = false
 
 		// Setup live data
 		setupLiveDataObservers()
@@ -857,39 +826,24 @@ class NacMainActivity
 		// Use flashlight listener
 		holder.onCardUseFlashlightChangedListener = NacCardHolder.OnCardUseFlashlightChangedListener { _, alarm ->
 
-			// Check if the alarm had use NFC disabled
-			if (!alarm.useFlashlight)
+			// Get the message
+			val message = if (alarm.useFlashlight)
 			{
-				return@OnCardUseFlashlightChangedListener
+				R.string.message_flashlight_enabled
+			}
+			else
+			{
+				R.string.message_flashlight_disabled
 			}
 
-			// TODO: Add NacFlashlight and have helper stuff in there
-			//// Get the camera manager
-			//val cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
-			//val cameraList = cameraManager.cameraIdList
-			//println("Ids: $cameraList")
+			// Toast the message
+			quickToast(this@NacMainActivity, message)
 
-			//for (id in cameraList)
-			//{
-			//	val char = cameraManager.getCameraCharacteristics(id)
-			//	println("Char: $char")
-			//	println("Face: ${char.get(CameraCharacteristics.LENS_FACING)}")
-			//	println("Str : ${char.get(CameraCharacteristics.FLASH_INFO_AVAILABLE)}")
+			// Update the alarm
+			alarmViewModel.update(alarm)
 
-			//	if (char.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true)
-			//	{
-			//		println("HELLO : ${alarm.shouldUseFlashlight}")
-			//		cameraManager.setTorchMode(id, alarm.shouldUseFlashlight)
-			//	}
-
-			//	//for (key in char.keysNeedingPermission)
-			//	//{
-			//	//	println("Key : $key")
-			//	//}
-			//}
-
-			// Show the scan NFC tag dialog
-			//showScanNfcTagDialog(alarm)
+			// Reschedule the alarm
+			NacScheduler.update(this@NacMainActivity, alarm)
 
 		}
 
@@ -904,11 +858,11 @@ class NacMainActivity
 
 		}
 
-		// Audio options listener
-		holder.onCardAudioOptionsClickedListener = OnCardAudioOptionsClickedListener { _, alarm ->
+		// Alarm options listener
+		holder.onCardAlarmOptionsClickedListener = OnCardAlarmOptionsClickedListener { _, alarm ->
 
-			// Show the audio options dialog
-			showAudioOptionsDialog(alarm)
+			// Show the alarm options dialog
+			showAlarmOptionsDialog(alarm)
 
 		}
 
@@ -992,7 +946,7 @@ class NacMainActivity
 	private fun refreshMainActivity()
 	{
 		// Disable that flag indicating that the main activity should refresh
-		sharedPreferences.editShouldRefreshMainActivity(false)
+		sharedPreferences.shouldRefreshMainActivity = false
 
 		// Recreate the activity
 		recreate()
@@ -1138,8 +1092,8 @@ class NacMainActivity
 	{
 		// Set the flags indicating that this is no longer the app's first run
 		// and that statistics does not need to be started, since they have already started
-		sharedPreferences.editAppFirstRun(this, false)
-		sharedPreferences.editAppStartStatistics(false)
+		sharedPreferences.appFirstRun = false
+		sharedPreferences.appStartStatistics = false
 
 		// Add the first alarm
 		addFirstAlarm()
@@ -1162,7 +1116,7 @@ class NacMainActivity
 				// Set the delay counter for showing the what's new dialog.
 				// Do not want to show the what's new dialog immediately after
 				// all the permissions are requested
-				sharedPreferences.editDelayShowingWhatsNewDialogCounter(1)
+				sharedPreferences.delayShowingWhatsNewDialogCounter = 1
 			}
 
 			// Request permissions
@@ -1177,7 +1131,7 @@ class NacMainActivity
 
 					// Set the previous app version as the current version. This way, the What's
 					// New dialog does not show again
-					sharedPreferences.editPreviousAppVersion(BuildConfig.VERSION_NAME)
+					sharedPreferences.previousAppVersion = BuildConfig.VERSION_NAME
 
 				})
 		}
@@ -1188,13 +1142,13 @@ class NacMainActivity
 			if (delayCounter >= 4)
 			{
 				// Reset the delay counter
-				sharedPreferences.editDelayShowingWhatsNewDialogCounter(0)
+				sharedPreferences.delayShowingWhatsNewDialogCounter = 0
 			}
 			// The delay counter has not been exceeded yet
 			else
 			{
 				// Increment the delay counter
-				sharedPreferences.editDelayShowingWhatsNewDialogCounter(delayCounter + 1)
+				sharedPreferences.delayShowingWhatsNewDialogCounter = delayCounter + 1
 			}
 		}
 		// Check if should request to show the rate my app flow
@@ -1272,7 +1226,7 @@ class NacMainActivity
 			// Set the shared preference whether to show the Manage NFC tags
 			// preference or not. It will be shown if there are NFC tags to
 			// manage
-			sharedPreferences.editShouldShowManageNfcTagsPreference(it.isNotEmpty())
+			sharedPreferences.shouldShowManageNfcTagsPreference = it.isNotEmpty()
 
 		}
 	}
@@ -1328,9 +1282,29 @@ class NacMainActivity
 
 			// Disable the flag indicating that statistics does not need to be started
 			// anymore
-			sharedPreferences.editAppStartStatistics(false)
+			sharedPreferences.appStartStatistics = false
 
 		}
+	}
+
+	/**
+	 * Setup which alarm screen should be used.
+	 */
+	private fun setupWhichAlarmScreenToUse()
+	{
+		// Check if the app was not newly installed
+		if (!isNewInstall)
+		{
+			// Do nothing
+			return
+		}
+
+		// Change the alarm screen settings for a new install so that all the
+		// new stuff is shown
+		sharedPreferences.shouldUseNewAlarmScreen = true
+		sharedPreferences.shouldShowAlarmName = true
+		sharedPreferences.shouldShowCurrentDateAndTime = true
+		sharedPreferences.shouldShowMusicInfo = true
 	}
 
 	/**
@@ -1373,216 +1347,37 @@ class NacMainActivity
 	}
 
 	/**
-	 * Show the audio options dialog.
+	 * Show the alarm options dialog.
 	 */
-	private fun showAudioOptionsDialog(alarm: NacAlarm)
+	private fun showAlarmOptionsDialog(alarm: NacAlarm)
 	{
-		// Create the dialog
-		val dialog = NacAlarmOptionsDialog()
+		// Create bundle with the alarm
+		val bundle = NacBundle.alarmToBundle(alarm)
 
-		// Setup the dialog
-		dialog.alarmId = alarm.id
-		dialog.onAlarmOptionClickedListener = OnAlarmOptionClickedListener { alarmId, id ->
+		// Set the graph of the nav controller
+		navController.setGraph(R.navigation.nav_alarm_options, bundle)
 
-			lifecycleScope.launch {
+		// Check if the nav controller did not navigate to the destination
+		if (navController.currentDestination == null)
+		{
+			// Navigate to the destination manually
+			navController.navigate(R.id.nacAlarmOptionsDialog, bundle)
+		}
 
-				// Set the alarm that had the audio options button clicked
-				audioOptionsAlarm = alarmViewModel.findAlarm(alarmId)
+		// Setup an observe to watch for any changes to the alarm
+		navController.currentBackStackEntry
+			?.savedStateHandle
+			?.getLiveData<NacAlarm>("YOYOYO")
+			?.observe(this) { alarm ->
 
-				// Determine which option to do
-				when (id)
-				{
+				// Update the alarm
+				alarmViewModel.update(alarm)
 
-					// Audio source
-					R.id.alarm_option_audio_source -> {
-
-						// Show dialog
-						NacAudioSourceDialog.show(supportFragmentManager,
-							audioOptionsAlarm!!.audioSource,
-							listener = { audioSource ->
-
-								// Set the audio source of the audio options alarm
-								audioOptionsAlarm!!.audioSource = audioSource
-
-								// Update the alarm
-								alarmViewModel.update(audioOptionsAlarm!!)
-
-								// Reschedule the alarm
-								NacScheduler.update(this@NacMainActivity, audioOptionsAlarm!!)
-
-							})
-					}
-
-					// Auto dismiss
-					R.id.alarm_option_auto_dismiss -> {
-
-						// Show dialog
-						NacAutoDismissDialog.show(supportFragmentManager,
-							audioOptionsAlarm!!.autoDismissTime,
-							listener = { autoDismissTime ->
-
-								// Set the audio source of the audio options alarm
-								audioOptionsAlarm!!.autoDismissTime = autoDismissTime
-
-								// Update the alarm
-								alarmViewModel.update(audioOptionsAlarm!!)
-
-								// Reschedule the alarm
-								NacScheduler.update(this@NacMainActivity, audioOptionsAlarm!!)
-
-							})
-					}
-
-					// Dismiss early
-					R.id.alarm_option_dismiss_early -> {
-
-						// Show dialog
-						NacDismissEarlyDialog.show(supportFragmentManager,
-							audioOptionsAlarm!!.useDismissEarly,
-							audioOptionsAlarm!!.dismissEarlyTime,
-							listener = { useDismissEarly, dismissEarlyTime ->
-
-								// Set the new dismiss early values
-								audioOptionsAlarm!!.useDismissEarly = useDismissEarly
-								audioOptionsAlarm!!.dismissEarlyTime = dismissEarlyTime
-
-								// Update the alarm
-								alarmViewModel.update(audioOptionsAlarm!!)
-
-								// Reschedule the alarm
-								NacScheduler.update(this@NacMainActivity, audioOptionsAlarm!!)
-
-							})
-					}
-
-					// Gradually increase volume
-					R.id.alarm_option_gradually_increase_volume -> {
-
-						// Show dialog
-						NacGraduallyIncreaseVolumeDialog.show(supportFragmentManager,
-							audioOptionsAlarm!!.shouldGraduallyIncreaseVolume,
-							audioOptionsAlarm!!.graduallyIncreaseVolumeWaitTime,
-							listener = { shouldIncrease, waitTime ->
-
-								// Set the new gradually increase value
-								audioOptionsAlarm!!.shouldGraduallyIncreaseVolume = shouldIncrease
-								audioOptionsAlarm!!.graduallyIncreaseVolumeWaitTime = waitTime
-
-								// Update the alarm
-								alarmViewModel.update(audioOptionsAlarm!!)
-
-								// Reschedule the alarm
-								NacScheduler.update(this@NacMainActivity, audioOptionsAlarm!!)
-
-							})
-					}
-
-					// Restrict volume
-					R.id.alarm_option_restrict_volume -> {
-
-						// Show dialog
-						NacRestrictVolumeDialog.show(supportFragmentManager,
-							audioOptionsAlarm!!.shouldRestrictVolume,
-							listener = { shouldRestrict ->
-
-								// Set the new restrict volume value
-								audioOptionsAlarm!!.shouldRestrictVolume = shouldRestrict
-
-								// Update the alarm
-								alarmViewModel.update(audioOptionsAlarm!!)
-
-								// Reschedule the alarm
-								NacScheduler.update(this@NacMainActivity, audioOptionsAlarm!!)
-
-							})
-					}
-
-					// Snooze options
-					R.id.alarm_option_snooze_options -> {
-
-						// Show dialog
-						NacSnoozeOptionsDialog.show(supportFragmentManager,
-							audioOptionsAlarm!!.maxSnooze,
-							audioOptionsAlarm!!.snoozeDuration,
-							audioOptionsAlarm!!.useEasySnooze,
-							listener = { maxSnooze, snoozeDuration, easySnooze ->
-
-								// Update the attributes in the alarm
-								audioOptionsAlarm!!.maxSnooze = maxSnooze
-								audioOptionsAlarm!!.snoozeDuration = snoozeDuration
-								audioOptionsAlarm!!.useEasySnooze = easySnooze
-
-								// Update the alarm
-								alarmViewModel.update(audioOptionsAlarm!!)
-
-								// Reschedule the alarm
-								NacScheduler.update(this@NacMainActivity, audioOptionsAlarm!!)
-
-							})
-					}
-
-					// TTS
-					R.id.alarm_option_text_to_speech -> {
-
-						// Show dialog
-						NacTextToSpeechDialog.show(supportFragmentManager,
-							audioOptionsAlarm!!.sayCurrentTime,
-							audioOptionsAlarm!!.sayAlarmName,
-							audioOptionsAlarm!!.ttsFrequency,
-							listener = { shouldSayCurrentTime, shouldSayAlarmName, ttsFreq ->
-
-								// Set the new text to speech values
-								audioOptionsAlarm!!.sayCurrentTime = shouldSayCurrentTime
-								audioOptionsAlarm!!.sayAlarmName = shouldSayAlarmName
-								audioOptionsAlarm!!.ttsFrequency = ttsFreq
-
-								// Update the alarm
-								alarmViewModel.update(audioOptionsAlarm!!)
-
-								// Reschedule the alarm
-								NacScheduler.update(this@NacMainActivity, audioOptionsAlarm!!)
-
-							})
-					}
-
-					// Upcoming reminder
-					R.id.alarm_option_upcoming_reminder -> {
-
-						// Show dialog
-						NacUpcomingReminderDialog.show(supportFragmentManager,
-							audioOptionsAlarm!!.showReminder,
-							audioOptionsAlarm!!.timeToShowReminder,
-							audioOptionsAlarm!!.reminderFrequency,
-							audioOptionsAlarm!!.shouldUseTtsForReminder,
-							audioOptionsAlarm!!.shouldUseTts,
-							listener = { shouldShowReminder, timeToShow, reminderFreq, shouldUseTts ->
-
-								// Set the upcoming reminder options
-								audioOptionsAlarm!!.showReminder = shouldShowReminder
-								audioOptionsAlarm!!.timeToShowReminder = timeToShow
-								audioOptionsAlarm!!.reminderFrequency = reminderFreq
-								audioOptionsAlarm!!.useTtsForReminder = shouldUseTts
-
-								// Update the alarm
-								alarmViewModel.update(audioOptionsAlarm!!)
-
-								// Reschedule the alarm
-								NacScheduler.update(this@NacMainActivity, audioOptionsAlarm!!)
-
-							})
-					}
-
-					// Unknown
-					else -> {}
-
-				}
+				// Reschedule the alarm
+				NacScheduler.update(this@NacMainActivity, alarm)
 
 			}
 
-		}
-
-		// Show the dialog
-		dialog.show(supportFragmentManager, NacAlarmOptionsDialog.TAG)
 	}
 
 	/**
