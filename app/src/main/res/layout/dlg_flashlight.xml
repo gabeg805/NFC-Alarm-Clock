@@ -25,7 +25,7 @@
 		android:contentDescription="@string/cd_flashlight_strength_seekbar"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:paddingTop="@dimen/huge"
+		android:paddingTop="@dimen/xlarge"
 		android:paddingBottom="@dimen/normal"
 		android:paddingStart="@dimen/normal"
 		android:paddingEnd="@dimen/normal"

@@ -2,26 +2,23 @@ package com.nfcalarmclock.activealarm
 
 import android.annotation.TargetApi
 import android.content.Context
-import android.hardware.camera2.CameraManager
 import android.os.Build
 import android.os.Handler
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.alarmoptions.flashlight.NacFlashlight
+import com.nfcalarmclock.alarmoptions.tts.NacTextToSpeech
+import com.nfcalarmclock.alarmoptions.tts.NacTextToSpeech.OnSpeakingListener
+import com.nfcalarmclock.alarmoptions.tts.NacTranslate
 import com.nfcalarmclock.media.NacAudioAttributes
 import com.nfcalarmclock.media.NacMedia
 import com.nfcalarmclock.mediaplayer.NacMediaPlayer
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.alarmoptions.tts.NacTextToSpeech
-import com.nfcalarmclock.alarmoptions.tts.NacTextToSpeech.OnSpeakingListener
-import com.nfcalarmclock.alarmoptions.tts.NacTranslate
-import com.nfcalarmclock.flashlight.NacFlashlight
-import com.nfcalarmclock.flashlight.findCameraId
 import java.util.Calendar
 
 /**
@@ -68,11 +65,6 @@ class NacWakeupProcess(
 	 * Vibrate handler to vibrate the phone at periodic intervals.
 	 */
 	private val vibrateHandler: Handler = Handler(context.mainLooper)
-
-	/**
-	 * Flashlight handler to shine the flashlight at periodic intervals.
-	 */
-	private val flashlightHandler: Handler = Handler(context.mainLooper)
 
 	/**
 	 * Say the current time at user specified intervals.

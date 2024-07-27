@@ -122,6 +122,14 @@ class NacCardHolder(
 	}
 
 	/**
+	 * Listener for when a card will vibrate or not is changed.
+	 */
+	fun interface OnCardUseVibrateChangedListener
+	{
+		fun onCardUseVibrateChanged(holder: NacCardHolder, alarm: NacAlarm)
+	}
+
+	/**
 	 * Shared preferences.
 	 */
 	private val sharedPreferences: NacSharedPreferences = NacSharedPreferences(context)
@@ -321,6 +329,11 @@ class NacCardHolder(
 	 * Listener for when a card will use NFC or not is changed.
 	 */
 	var onCardUseNfcChangedListener: OnCardUseNfcChangedListener? = null
+
+	/**
+	 * Listener for when a card will vibrate or not is changed.
+	 */
+	var onCardUseVibrateChangedListener: OnCardUseVibrateChangedListener? = null
 
 	/**
 	 * The context.
@@ -876,8 +889,7 @@ class NacCardHolder(
 		// Toggle the flashlight button
 		alarm!!.toggleUseFlashlight()
 
-		// Call the listeners
-		callOnCardUpdatedListener()
+		// Call the listener
 		onCardUseFlashlightChangedListener?.onCardUseFlashlightChanged(this, alarm!!)
 	}
 
@@ -910,23 +922,9 @@ class NacCardHolder(
 		{
 			// Clear the NFC tag ID
 			alarm!!.nfcTagId = ""
-
-			// Determine which message to show
-			val messageId = if (alarm!!.shouldUseNfc)
-			{
-				R.string.message_nfc_required
-			}
-			else
-			{
-				R.string.message_nfc_optional
-			}
-
-			// Toast the NFC message
-			quickToast(context, messageId)
 		}
 
-		// Call the listeners
-		callOnCardUpdatedListener()
+		// Call the listener
 		onCardUseNfcChangedListener?.onCardUseNfcChanged(this, alarm!!)
 	}
 
@@ -1013,20 +1011,7 @@ class NacCardHolder(
 		alarm!!.toggleVibrate()
 
 		// Call the listener
-		callOnCardUpdatedListener()
-
-		// Determine which message to show
-		val message = if (alarm!!.shouldVibrate)
-		{
-			R.string.message_vibrate_enabled
-		}
-		else
-		{
-			R.string.message_vibrate_disabled
-		}
-
-		// Toast the vibrate message
-		quickToast(context, message)
+		onCardUseVibrateChangedListener?.onCardUseVibrateChanged(this, alarm!!)
 	}
 
 	/**

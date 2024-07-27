@@ -127,13 +127,11 @@
 	<string name="error_message_nfc_name_exists">Non sa deja ap itilize</string>
 	<string name="error_message_nfc_id_exists">ID NFC sa a deja itilize pa %1$s</string>
 	<string name="error_message_unable_to_scan_nfc">Pa kapab eskane tags NFC</string>
-	<string name="error_message_restrict_volume_change">Pa kapab limite volim</string>
 	<string name="error_message_snooze">Ou pa kapab rann alam la</string>
 	<string name="error_message_snoozed_delete">Ou pa kapab efase yon alam ki an reta</string>
 	<string name="error_message_snoozed_modify">Pa kapab modifye yon alam snoozed</string>
 	<string name="error_message_select_color">Koulè hex envalid</string>
 	<string name="error_message_play_audio">Pa kapab jwe odyo</string>
-	<string name="error_message_play_file">Pa kapab jwe dosye chwazi</string>
 	<string name="error_message_google_play_billing">Erè lè w konekte ak Google Play Store la</string>
 	<string name="error_message_text_to_speech_audio_focus">Pa kapab itilize tèks-a-lapawòl</string>
 	<string name="error_message_unable_to_email_statistics">Pa kapab voye imèl estatistik</string>
@@ -159,25 +157,18 @@
 	<string name="title_name">Mete non alam</string>
 	<string name="title_days">Chwazi jou</string>
 	<string name="title_color">Chwazi yon koulè</string>
-	<string name="title_audio_option">Chwazi yon opsyon alam</string>
-	<string name="title_audio_source">Chwazi yon sous odyo</string>
-	<string name="title_dismiss_early">Chwazi ranvwaye opsyon bonè</string>
 	<string name="title_dismiss_early_checkbox" tools:ignore="TypographyEllipsis">Ranvwaye alam la bonè, anvan li aktif...</string>
 	<string name="title_dismiss_early_how_early" tools:ignore="TypographyEllipsis">Konbyen bonè alam la ka ranvwaye...</string>
 	<string name="title_upcoming_reminder_should_show" tools:ignore="TypographyEllipsis">Montre yon notifikasyon rapèl anvan alam la sonnen...</string>
 	<string name="title_upcoming_reminder_time_to_show" tools:ignore="TypographyEllipsis">Konbyen bonè anvan yo ta dwe montre notifikasyon an...</string>
 	<string name="title_upcoming_reminder_freq_to_show" tools:ignore="TypographyEllipsis">Konbyen fwa li ta dwe montre...</string>
 	<string name="title_upcoming_reminder_should_use_tts" tools:ignore="TypographyEllipsis">Èske yo ta dwe itilize menm opsyon tèks-a-lapawòl ak alam la lè yo montre notifikasyon an...</string>
-	<string name="title_gradually_increase_volume">Chwazi pou ogmante volim piti piti</string>
 	<string name="title_gradually_increase_volume_checkbox" tools:ignore="TypographyEllipsis">Piti piti ogmante volim lè alam la aktif...</string>
 	<string name="title_gradually_increase_volume_picker" tools:ignore="TypographyEllipsis">Tann tan ant chak ogmantasyon volim...</string>
-	<string name="title_restrict_volume">Chwazi limite volim</string>
 	<string name="title_restrict_volume_checkbox" tools:ignore="TypographyEllipsis">Limite volim lè alam la aktif...</string>
-	<string name="title_tts">Chwazi opsyon tèks-a-lapawòl</string>
 	<string name="title_tts_what_to_say" tools:ignore="TypographyEllipsis">Kisa pou w di lè alam la aktif...</string>
 	<string name="title_tts_how_often_to_say" tools:ignore="TypographyEllipsis">Konbyen fwa pou di li...</string>
 	<string name="title_next_alarm_format">Chwazi yon fòma</string>
-	<string name="title_speak_frequency">Chwazi frekans pale</string>
 	<string name="title_folder_selected">Ou chwazi yon katab</string>
 	<string name="title_active_alarm">Alam aktif</string>
 	<string name="title_missed_alarm">Rate alam yo</string>
@@ -266,8 +257,6 @@
 
 	<string name="appearance_setting">Aparans</string>
 	<string name="appearance_setting_summary">Pèsonalize ki jan app a sanble</string>
-
-	<string name="misc_setting">Divès</string>
 
 	<string name="about_setting">Konsènan</string>
 	<string name="about_setting_summary">Enfòmasyon sou aplikasyon an</string>
@@ -445,23 +434,15 @@
 	<!-- ********************** -->
 
 	<!-- Categories -->
-	<string name="music_category">Opsyon mizik</string>
 
 
 	<!-- Shuffle playlist -->
-	<string name="shuffle_playlist">Shuffle katab mizik</string>
-	<string name="shuffle_playlist_true">Shuffle mizik la nan yon katab.</string>
-	<string name="shuffle_playlist_false">Jwe mizik la nan yon katab sekans.</string>
-	<string name="shuffle_playlist_note">Sèlman aplikab pou alam yo ak yon Katab mizik chwazi.</string>
 
 
 	<!-- Speak to me -->
-	<string name="speak_to_me_true">Di lè aktyèl la lè alam la sonnen.</string>
-	<string name="speak_to_me_false">Pa di anyen.</string>
 
 
 	<!-- Speak frequency -->
-	<string name="speak_frequency">Pale frekans</string>
 
 
 	<!-- Dismiss early -->

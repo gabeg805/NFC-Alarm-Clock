@@ -45,7 +45,6 @@ import com.nfcalarmclock.card.NacCardHolder.OnCardUseNfcChangedListener
 import com.nfcalarmclock.card.NacCardLayoutManager
 import com.nfcalarmclock.card.NacCardTouchHelper
 import com.nfcalarmclock.card.NacCardTouchHelper.OnSwipedListener
-import com.nfcalarmclock.flashlight.NacFlashlightOptionsDialog
 import com.nfcalarmclock.mediapicker.NacMediaActivity
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
@@ -809,12 +808,42 @@ class NacMainActivity
 
 		}
 
+		// Use vibrate listener
+		holder.onCardUseVibrateChangedListener = NacCardHolder.OnCardUseVibrateChangedListener { _, alarm ->
+
+			// Determine which message to show
+			val message = if (alarm.shouldVibrate)
+			{
+				R.string.message_vibrate_enabled
+			}
+			else
+			{
+				R.string.message_vibrate_disabled
+			}
+
+			// Toast the vibrate message
+			quickToast(this, message)
+
+			// Update the alarm
+			alarmViewModel.update(alarm)
+
+			// Reschedule the alarm
+			NacScheduler.update(this, alarm)
+
+		}
+
 		// Use NFC listener
 		holder.onCardUseNfcChangedListener = OnCardUseNfcChangedListener { _, alarm ->
 
 			// Check if the alarm had use NFC disabled
 			if (!alarm.shouldUseNfc)
 			{
+				// Update the alarm
+				alarmViewModel.update(alarm)
+
+				// Reschedule the alarm
+				NacScheduler.update(this, alarm)
+
 				return@OnCardUseNfcChangedListener
 			}
 
@@ -1450,6 +1479,9 @@ class NacMainActivity
 				// Uncheck the NFC button when the dialog is canceled.
 				cardHolder.nfcButton.isChecked = false
 				cardHolder.doNfcButtonClick()
+
+				// Toast the NFC message
+				quickToast(this@NacMainActivity, R.string.message_nfc_optional)
 			}
 
 			/**

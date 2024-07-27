@@ -30,8 +30,8 @@
 		android:id="@+id/say_current_time"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginStart="@dimen/huge"
-		android:layout_marginEnd="@dimen/huge"
+		android:layout_marginStart="@dimen/xlarge"
+		android:layout_marginEnd="@dimen/xlarge"
 		android:text="@string/message_tts_current_time"
 		/>
 
@@ -40,8 +40,8 @@
 		android:id="@+id/say_alarm_name"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginStart="@dimen/huge"
-		android:layout_marginEnd="@dimen/huge"
+		android:layout_marginStart="@dimen/xlarge"
+		android:layout_marginEnd="@dimen/xlarge"
 		android:text="@string/message_tts_alarm_name"
 		/>
 

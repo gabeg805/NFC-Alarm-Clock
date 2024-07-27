@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Parcelable
 import android.provider.Settings
 import com.nfcalarmclock.R
-import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.util.NacUtility.toast
 

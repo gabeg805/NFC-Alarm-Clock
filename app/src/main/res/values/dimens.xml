@@ -9,12 +9,11 @@
 	<dimen name="small">12dp</dimen>
 	<dimen name="normal">16dp</dimen>
 	<dimen name="medium">20dp</dimen>
-	<dimen name="neg_medium">-20dp</dimen>
 	<dimen name="large">24dp</dimen>
-	<dimen name="huge">28dp</dimen>
-	<dimen name="xlarge">32dp</dimen>
-	<dimen name="xxlarge">36dp</dimen>
-	<dimen name="xxxlarge">40dp</dimen>
+	<dimen name="xlarge">28dp</dimen>
+	<dimen name="xxlarge">32dp</dimen>
+	<dimen name="xxxlarge">36dp</dimen>
+	<dimen name="neg_medium">-20dp</dimen>
 
 	<!-- Image -->
 	<dimen name="isz_normal">24dp</dimen>

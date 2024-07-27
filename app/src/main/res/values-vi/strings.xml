@@ -127,13 +127,11 @@
 	<string name="error_message_nfc_name_exists">Tên này đã được sử dụng</string>
 	<string name="error_message_nfc_id_exists">ID NFC này đã được %1$s sử dụng</string>
 	<string name="error_message_unable_to_scan_nfc">Không thể quét thẻ NFC</string>
-	<string name="error_message_restrict_volume_change">Không thể hạn chế âm lượng</string>
 	<string name="error_message_snooze">Không thể tạm dừng báo thức</string>
 	<string name="error_message_snoozed_delete">Không thể xóa báo thức đã tạm ẩn</string>
 	<string name="error_message_snoozed_modify">Không thể sửa đổi báo thức đã tạm ẩn</string>
 	<string name="error_message_select_color">Màu hex không hợp lệ</string>
 	<string name="error_message_play_audio">Không thể phát âm thanh</string>
-	<string name="error_message_play_file">Không thể phát tập tin đã chọn</string>
 	<string name="error_message_google_play_billing">Lỗi khi kết nối với Cửa hàng Google Play</string>
 	<string name="error_message_text_to_speech_audio_focus">Không thể sử dụng tính năng chuyển văn bản thành giọng nói</string>
 	<string name="error_message_unable_to_email_statistics">Không thể gửi số liệu thống kê qua email</string>
@@ -159,25 +157,18 @@
 	<string name="title_name">Đặt tên báo thức</string>
 	<string name="title_days">Chọn ngày</string>
 	<string name="title_color">Chọn một màu</string>
-	<string name="title_audio_option">Chọn một tùy chọn báo động</string>
-	<string name="title_audio_source">Chọn nguồn âm thanh</string>
-	<string name="title_dismiss_early">Chọn tùy chọn loại bỏ sớm</string>
 	<string name="title_dismiss_early_checkbox" tools:ignore="TypographyEllipsis">Loại bỏ cảnh báo sớm trước khi nó hoạt động...</string>
 	<string name="title_dismiss_early_how_early" tools:ignore="TypographyEllipsis">Báo động có thể được loại bỏ sớm bao lâu...</string>
 	<string name="title_upcoming_reminder_should_show" tools:ignore="TypographyEllipsis">Hiển thị thông báo nhắc nhở trước khi báo thức kêu...</string>
 	<string name="title_upcoming_reminder_time_to_show" tools:ignore="TypographyEllipsis">Thông báo sẽ được hiển thị sớm bao lâu...</string>
 	<string name="title_upcoming_reminder_freq_to_show" tools:ignore="TypographyEllipsis">Tần suất nó nên được hiển thị...</string>
 	<string name="title_upcoming_reminder_should_use_tts" tools:ignore="TypographyEllipsis">Có nên sử dụng các tùy chọn chuyển văn bản thành giọng nói tương tự như báo thức khi thông báo được hiển thị...</string>
-	<string name="title_gradually_increase_volume">Chọn tăng dần âm lượng</string>
 	<string name="title_gradually_increase_volume_checkbox" tools:ignore="TypographyEllipsis">Tăng dần âm lượng khi báo thức được kích hoạt...</string>
 	<string name="title_gradually_increase_volume_picker" tools:ignore="TypographyEllipsis">Thời gian chờ giữa mỗi lần tăng âm lượng...</string>
-	<string name="title_restrict_volume">Chọn hạn chế âm lượng</string>
 	<string name="title_restrict_volume_checkbox" tools:ignore="TypographyEllipsis">Hạn chế âm lượng khi báo thức đang hoạt động...</string>
-	<string name="title_tts">Chọn tùy chọn chuyển văn bản sang giọng nói</string>
 	<string name="title_tts_what_to_say" tools:ignore="TypographyEllipsis">Phải nói gì khi báo thức đang hoạt động...</string>
 	<string name="title_tts_how_often_to_say" tools:ignore="TypographyEllipsis">Đã bao lần phải nói điều đó...</string>
 	<string name="title_next_alarm_format">Chọn một định dạng</string>
-	<string name="title_speak_frequency">Chọn tần số nói</string>
 	<string name="title_folder_selected">Bạn đã chọn một thư mục</string>
 	<string name="title_active_alarm">Báo động hoạt động</string>
 	<string name="title_missed_alarm">Báo thức bị bỏ lỡ</string>
@@ -266,8 +257,6 @@
 
 	<string name="appearance_setting">Vẻ bề ngoài</string>
 	<string name="appearance_setting_summary">Tùy chỉnh giao diện của ứng dụng</string>
-
-	<string name="misc_setting">Điều khoản khác</string>
 
 	<string name="about_setting">Về</string>
 	<string name="about_setting_summary">Thông tin về ứng dụng</string>
@@ -445,23 +434,15 @@
 	<!-- ********************** -->
 
 	<!-- Categories -->
-	<string name="music_category">Tùy chọn âm nhạc</string>
 
 
 	<!-- Shuffle playlist -->
-	<string name="shuffle_playlist">Trộn thư mục nhạc</string>
-	<string name="shuffle_playlist_true">Trộn nhạc trong một thư mục.</string>
-	<string name="shuffle_playlist_false">Phát nhạc trong một thư mục một cách tuần tự.</string>
-	<string name="shuffle_playlist_note">Chỉ áp dụng cho các báo thức có thư mục nhạc được chọn.</string>
 
 
 	<!-- Speak to me -->
-	<string name="speak_to_me_true">Nói thời gian hiện tại khi báo thức kêu.</string>
-	<string name="speak_to_me_false">Đừng nói gì cả.</string>
 
 
 	<!-- Speak frequency -->
-	<string name="speak_frequency">Nói tần số</string>
 
 
 	<!-- Dismiss early -->

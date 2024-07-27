@@ -294,8 +294,8 @@
 -->
 
 	<string-array name="whats_new_items">
-		<item>Added &lt;b>flashlight&lt;/b> option to turn on the flashlight when an alarm goes off.</item>
-		<item>Added ability to hide &lt;b>vibrate&lt;/b>, &lt;b>NFC&lt;/b>, and &lt;b>flashlight&lt;/b> options from an expanded alarm. This can be found in &lt;b>Settings > Appearance&lt;/b>.</item>
+		<item>Added &lt;b>flashlight&lt;/b> option to turn on the flashlight when an alarm goes off. Can be further customized in alarm options.</item>
+		<item>Able to hide &lt;b>vibrate&lt;/b>, &lt;b>NFC&lt;/b>, and &lt;b>flashlight&lt;/b> options from an expanded alarm. Found in &lt;b>Settings > Appearance&lt;/b>.</item>
 		<item>Updated the app for &lt;b>Android 14&lt;/b>.</item>
 		<item>Updated the &lt;b>new alarm screen&lt;/b> so that &lt;b>swiping&lt;/b> to snooze or dismiss is a lot easier.</item>
 	</string-array>

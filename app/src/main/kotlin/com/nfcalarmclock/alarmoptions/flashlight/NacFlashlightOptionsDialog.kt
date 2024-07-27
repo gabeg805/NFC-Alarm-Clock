@@ -1,4 +1,4 @@
-package com.nfcalarmclock.flashlight
+package com.nfcalarmclock.alarmoptions.flashlight
 
 import android.os.Build
 import android.os.Bundle
@@ -232,11 +232,11 @@ class NacFlashlightOptionsDialog
 		// be used or not
 		val textId = if (blinkCheckBox.isChecked)
 		{
-			R.string.gradually_increase_volume_true
+			R.string.flashlight_blink_true
 		}
 		else
 		{
-			R.string.gradually_increase_volume_false
+			R.string.flashlight_blink_false
 		}
 
 		// Set the text

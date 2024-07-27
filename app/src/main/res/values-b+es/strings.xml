@@ -127,13 +127,11 @@
 	<string name="error_message_nfc_name_exists">Este nombre ya está siendo utilizado</string>
 	<string name="error_message_nfc_id_exists">Esta ID NFC ya está siendo utilizada por %1$s</string>
 	<string name="error_message_unable_to_scan_nfc">No se pueden escanear etiquetas NFC</string>
-	<string name="error_message_restrict_volume_change">Incapaz de restringir el volumen</string>
 	<string name="error_message_snooze">Incapaz de posponer la alarma</string>
 	<string name="error_message_snoozed_delete">Incapaz de borrar una alarma posponada</string>
 	<string name="error_message_snoozed_modify">Incapaz de modificar una alarma posponada</string>
 	<string name="error_message_select_color">Color inválido</string>
 	<string name="error_message_play_audio">Incapaz de tocar audio</string>
-	<string name="error_message_play_file">Incapaz de tocar la canción seleccionada</string>
 	<string name="error_message_google_play_billing">Error al conectarse a Google Play Store</string>
 	<string name="error_message_text_to_speech_audio_focus">Incapaz de usar texto-a-voz</string>
 	<string name="error_message_unable_to_email_statistics">No se pueden enviar estadísticas por correo electrónico</string>
@@ -159,25 +157,18 @@
 	<string name="title_name">Nombre de la alarma</string>
 	<string name="title_days">Seleccione los días</string>
 	<string name="title_color">Elige un color</string>
-	<string name="title_audio_option">Seleccione una opción de alarma</string>
-	<string name="title_audio_source">Seleccione una fuente de audio</string>
-	<string name="title_dismiss_early">Seleccione opciones pare descartar temprano</string>
 	<string name="title_dismiss_early_checkbox" tools:ignore="TypographyEllipsis">Descartar la alarma temprano, antes de que se active...</string>
 	<string name="title_dismiss_early_how_early" tools:ignore="TypographyEllipsis">¿Con qué antelación se puede desactivar la alarma...?</string>
 	<string name="title_upcoming_reminder_should_show" tools:ignore="TypographyEllipsis">Mostrar una notificación de recordatorio antes de que suene la alarma...</string>
 	<string name="title_upcoming_reminder_time_to_show" tools:ignore="TypographyEllipsis">¿Con qué antelación se debe mostrar la notificación...?</string>
 	<string name="title_upcoming_reminder_freq_to_show" tools:ignore="TypographyEllipsis">¿Con qué frecuencia se debe mostrar...?</string>
 	<string name="title_upcoming_reminder_should_use_tts" tools:ignore="TypographyEllipsis">¿Deberían usarse las mismas opciones de texto a voz que la alarma cuando se muestra la notificación...</string>
-	<string name="title_gradually_increase_volume">Elige aumentar gradualmente el volumen</string>
 	<string name="title_gradually_increase_volume_checkbox" tools:ignore="TypographyEllipsis">Aumente gradualmente el volumen cuando la alarma esté activa...</string>
 	<string name="title_gradually_increase_volume_picker" tools:ignore="TypographyEllipsis">Tiempo de espera entre cada aumento de volumen...</string>
-	<string name="title_restrict_volume">Elige restringir el volumen</string>
 	<string name="title_restrict_volume_checkbox" tools:ignore="TypographyEllipsis">Restringir el volumen cuando la alarma esté activa...</string>
-	<string name="title_tts">Seleccione opciones de texto-a-voz</string>
 	<string name="title_tts_what_to_say" tools:ignore="TypographyEllipsis">Qué decir cuando la alarma está activa...</string>
 	<string name="title_tts_how_often_to_say" tools:ignore="TypographyEllipsis">Cuantas veces decirlo...</string>
 	<string name="title_next_alarm_format">Selecciona un estilo</string>
-	<string name="title_speak_frequency">Seleccione la frequencia de hablar</string>
 	<string name="title_folder_selected">Seleccionaste una carpeta</string>
 	<string name="title_active_alarm">Alarmas activas</string>
 	<string name="title_missed_alarm">Alarmas perdidas</string>
@@ -266,8 +257,6 @@
 
 	<string name="appearance_setting">Apariencia</string>
 	<string name="appearance_setting_summary">Personaliza la aplicacion</string>
-
-	<string name="misc_setting">Miscelaneo</string>
 
 	<string name="about_setting">Acerca</string>
 	<string name="about_setting_summary">Informacion acerca de esta aplicacion</string>
@@ -445,23 +434,15 @@
 	<!-- ********************** -->
 
 	<!-- Categories -->
-	<string name="music_category">Opciones de música</string>
 
 
 	<!-- Shuffle playlist -->
-	<string name="shuffle_playlist">Toco la música aleatoriamente</string>
-	<string name="shuffle_playlist_true">Mezclar la música en la carpeta.</string>
-	<string name="shuffle_playlist_false">Toca la música en orden.</string>
-	<string name="shuffle_playlist_note">Solo aplicable para las alarmas con una carpeta de música seleccionada.</string>
 
 
 	<!-- Speak to me -->
-	<string name="speak_to_me_true">Decir la hora cuando la alarma suena.</string>
-	<string name="speak_to_me_false">No decir nada.</string>
 
 
 	<!-- Speak frequency -->
-	<string name="speak_frequency">Frequencia de hablar</string>
 
 
 	<!-- Dismiss early -->

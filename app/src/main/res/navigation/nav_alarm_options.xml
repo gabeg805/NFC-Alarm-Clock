@@ -64,6 +64,6 @@
 		android:label="NacUpcomingReminderDialog" />
 	<dialog
 		android:id="@+id/nacFlashlightOptionsDialog"
-		android:name="com.nfcalarmclock.flashlight.NacFlashlightOptionsDialog"
+		android:name="com.nfcalarmclock.alarmoptions.flashlight.NacFlashlightOptionsDialog"
 		android:label="NacFlashlightOptionsDialog" />
 </navigation>

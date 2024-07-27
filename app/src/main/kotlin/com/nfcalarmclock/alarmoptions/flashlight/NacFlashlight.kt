@@ -1,4 +1,4 @@
-package com.nfcalarmclock.flashlight
+package com.nfcalarmclock.alarmoptions.flashlight
 
 import android.content.Context
 import android.hardware.camera2.CameraCharacteristics
