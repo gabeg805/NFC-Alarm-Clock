@@ -526,62 +526,6 @@ class NacMainActivity
 	}
 
 	/**
-	 * Create the context menu.
-	 *
-	 * TODO: I saw double of the context menu items after an alarm was auto dismissed
-	 */
-	//override fun onCreateContextMenu(
-	//	menu: ContextMenu,
-	//	view: View,
-	//	menuInfo: ContextMenuInfo?
-	//)
-	//{
-	//	// Check if it has already been created. Saw double the menu items one
-	//	// time, but cannot seem to replicate it. Adding a check just to avoid
-	//	// this happening in production
-	//	if (menu.size() > 0)
-	//	{
-	//		return
-	//	}
-
-	//	// Inflate the context menu
-	//	menuInflater.inflate(R.menu.menu_card, menu)
-
-	//	// Iterate over each menu item
-	//	for (i in 0 until menu.size())
-	//	{
-	//		// Get the menu item
-	//		val item = menu.getItem(i)
-
-	//		// Set the listener for a menu item
-	//		item.setOnMenuItemClickListener { menuItem: MenuItem ->
-
-	//			// Get the card holder
-	//			val holder = recyclerView.findContainingViewHolder(view) as NacCardHolder?
-
-	//			// Check to make sure the card holder is not null
-	//			if (holder != null)
-	//			{
-	//				when (menuItem.itemId)
-	//				{
-	//					// Show the next time the alarm will run
-	//					R.id.menu_show_next_alarm -> showAlarmSnackbar(holder.alarm!!)
-
-	//					// Show the NFC tag ID that was set for this alarm
-	//					R.id.menu_show_nfc_tag_id -> showNfcTagId(holder.alarm!!)
-
-	//					// Unknown
-	//					else -> {}
-	//				}
-	//			}
-
-	//			// Return
-	//			true
-	//		}
-	//	}
-	//}
-
-	/**
 	 * Called when the options menu is created.
 	 */
 	override fun onCreateOptionsMenu(menu: Menu): Boolean
@@ -887,7 +831,6 @@ class NacMainActivity
 		}
 
 		// Context menu for a card listener
-		//holder.setOnCreateContextMenuListener(this)
 		holder.setOnCreateContextMenuListener { menu, _, _ ->
 
 			// Check if it has already been created. Saw double the menu items one
@@ -910,24 +853,17 @@ class NacMainActivity
 				// Set the listener for a menu item
 				item.setOnMenuItemClickListener { menuItem: MenuItem ->
 
-					//// Get the card holder
-					//val cardHolder = recyclerView.findContainingViewHolder(view) as NacCardHolder?
+					when (menuItem.itemId)
+					{
+						// Show the next time the alarm will run
+						R.id.menu_show_next_alarm -> showAlarmSnackbar(holder.alarm!!)
 
-					//// Check to make sure the card holder is not null
-					//if (cardHolder != null)
-					//{
-						when (menuItem.itemId)
-						{
-							// Show the next time the alarm will run
-							R.id.menu_show_next_alarm -> showAlarmSnackbar(holder.alarm!!)
+						// Show the NFC tag ID that was set for this alarm
+						R.id.menu_show_nfc_tag_id -> showNfcTagId(holder.alarm!!)
 
-							// Show the NFC tag ID that was set for this alarm
-							R.id.menu_show_nfc_tag_id -> showNfcTagId(holder.alarm!!)
-
-							// Unknown
-							else -> {}
-						}
-					//}
+						// Unknown
+						else -> {}
+					}
 
 					// Return
 					true

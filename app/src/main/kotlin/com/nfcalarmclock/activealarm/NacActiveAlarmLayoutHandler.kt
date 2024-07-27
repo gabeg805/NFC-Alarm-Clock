@@ -3,6 +3,7 @@ package com.nfcalarmclock.activealarm
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
 
@@ -39,6 +40,11 @@ abstract class NacActiveAlarmLayoutHandler(
 	 * Shared preferences.
 	 */
 	val sharedPreferences: NacSharedPreferences = NacSharedPreferences(activity)
+
+	/**
+	 * Whether the alarm should use NFC or not.
+	 */
+	val shouldUseNfc: Boolean = NacNfc.exists(activity) && (alarm != null) && alarm.shouldUseNfc && sharedPreferences.shouldShowNfcButton
 
 	/**
 	 * Run any setup steps.

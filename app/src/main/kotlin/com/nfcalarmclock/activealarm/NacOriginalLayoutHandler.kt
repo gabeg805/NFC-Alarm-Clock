@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.nfc.NacNfc
 
 /**
  * Original layout that the alarm activity had.
@@ -61,27 +60,22 @@ class NacOriginalLayoutHandler(
 	private val nameTextView = activity.findViewById<TextView>(R.id.music_title)
 
 	/**
-	 * Whether the alarm should use NFC or not.
+	 * Run any setup steps.
 	 */
-	private val shouldUseNfc: Boolean
-		get() = (alarm != null) && alarm.shouldUseNfc && sharedPreferences.shouldShowNfcButton
-
-	/**
-	 * Constructor.
-	 */
-	init
+	override fun setup(context: Context)
 	{
-		setupAlarmButtons(activity)
+		setupAlarmButtons()
 		setupAlarmInfo()
 	}
 
 	/**
 	 * Setup the snooze and dismiss buttons.
 	 */
-	private fun setupAlarmButtons(activity: AppCompatActivity)
+	private fun setupAlarmButtons()
 	{
 		// NFC should be used
-		if (NacNfc.exists(activity) && shouldUseNfc)
+		//if (NacNfc.exists(activity) && shouldUseNfc)
+		if (shouldUseNfc)
 		{
 			// Do not show the dismiss button
 			dismissButton.visibility = View.GONE

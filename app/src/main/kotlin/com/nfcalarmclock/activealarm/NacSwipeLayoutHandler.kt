@@ -45,7 +45,7 @@ class NacSwipeLayoutHandler(
 	 * Activity.
 	 */
 	// TODO: CHAnGE THIS BACK WHEN DONE
-	val activity: AppCompatActivity,
+	activity: AppCompatActivity,
 
 	/**
 	 * Alarm.
@@ -511,7 +511,7 @@ class NacSwipeLayoutHandler(
 		musicContainer.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
 
 		// Check if the dismiss button should be visible or not
-		if (alarm!!.shouldUseNfc)
+		if (shouldUseNfc)
 		{
 			// Show the scan NFC view
 			scanNfcView.visibility = View.VISIBLE
@@ -583,8 +583,6 @@ class NacSwipeLayoutHandler(
 
 					// Calculate the final velocity
 					val finalVelocity = calculateFinalVelocity(motionEvent, minValue, maxValue)
-					//NacUtility.quickToast(activity, "Velocity : $finalVelocity")
-					//println("Velocity : $finalVelocity")
 
 					// Cleanup the velocity tracker
 					cleanupVelocityTracker()
@@ -698,7 +696,7 @@ class NacSwipeLayoutHandler(
 		endAlarmActionX = dismissButton.x
 
 		// Check if the dismiss button should be visible or not
-		if (alarm!!.shouldUseNfc)
+		if (shouldUseNfc)
 		{
 			dismissButton.visibility = View.GONE
 			dismissAttentionView.visibility = View.GONE
@@ -812,7 +810,7 @@ class NacSwipeLayoutHandler(
 		startAlarmActionX = snoozeButton.x
 
 		// Check if the snooze button should be in the center or not
-		if (alarm!!.shouldUseNfc)
+		if (shouldUseNfc)
 		{
 			// Determine the center X position where the snooze button will go
 			centerAlarmActionX = ((sliderPath.width - snoozeButton.width) / 2).toFloat()

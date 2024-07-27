@@ -134,15 +134,11 @@ class NacFlashlightOptionsDialog
 			// Cleanup the preview if it is running
 			flashlight.cleanup()
 
-			// Set the on/off duration based on if the flashlight should blink
-			val onDuration = if (blinkCheckBox.isChecked) selectedBlinkOnDuration else "0"
-			val offDuration = if (blinkCheckBox.isChecked) selectedBlinkOffDuration else "0"
-
 			// Set the alarm attributes
 			alarm?.flashlightStrengthLevel = strengthSeekBar.progress
 			alarm?.shouldBlinkFlashlight = blinkCheckBox.isChecked
-			alarm?.flashlightOnDuration = onDuration
-			alarm?.flashlightOffDuration = offDuration
+			alarm?.flashlightOnDuration = selectedBlinkOnDuration
+			alarm?.flashlightOffDuration = selectedBlinkOffDuration
 
 			// Save the change so that it is accessible in the previous dialog
 			findNavController().previousBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
