@@ -135,6 +135,8 @@
 	<string name="error_message_google_play_billing">Lỗi khi kết nối với Cửa hàng Google Play</string>
 	<string name="error_message_text_to_speech_audio_focus">Không thể sử dụng tính năng chuyển văn bản thành giọng nói</string>
 	<string name="error_message_unable_to_email_statistics">Không thể gửi số liệu thống kê qua email</string>
+	<string name="error_message_unable_to_shine_flashlight">Không thể chiếu đèn pin</string>
+	<string name="error_message_unable_to_start_foreground_service">Không thể khởi động dịch vụ nền trước. Vui lòng bật quyền</string>
 
 
 
@@ -231,7 +233,7 @@
 	<string name="cd_volume_icon">Thay đổi âm lượng của báo thức.</string>
 	<string name="cd_volume_slider">Trượt để thay đổi âm lượng báo thức.</string>
 	<string name="cd_alarm_options">Thay đổi các tùy chọn dành riêng cho cảnh báo.</string>
-	<string name="cd_color_example">Ví dụ về màu hiện được chọn.</string>
+	<string name="cd_color_example">Ví dụ về màu hiện tại.</string>
 	<string name="cd_file_entry">Loại mục đang được hiển thị, chẳng hạn như một tập tin hoặc thư mục.</string>
 	<string name="cd_color_selector">Chọn một màu cho bộ chọn màu.</string>
 	<string name="cd_shader_selector">Chọn một màu cho bộ chọn màu.</string>
@@ -284,6 +286,10 @@
 
 	<!-- Auto dismiss duration -->
 	<string name="auto_dismiss">Tự động loại bỏ</string>
+
+
+	<!-- Auto snooze duration -->
+	<string name="auto_snooze">Tự động báo lại</string>
 
 
 	<!-- Max number of snoozes -->

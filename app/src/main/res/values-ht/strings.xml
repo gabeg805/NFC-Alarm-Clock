@@ -135,6 +135,8 @@
 	<string name="error_message_google_play_billing">Erè lè w konekte ak Google Play Store la</string>
 	<string name="error_message_text_to_speech_audio_focus">Pa kapab itilize tèks-a-lapawòl</string>
 	<string name="error_message_unable_to_email_statistics">Pa kapab voye imèl estatistik</string>
+	<string name="error_message_unable_to_shine_flashlight">Pa kapab klere flach</string>
+	<string name="error_message_unable_to_start_foreground_service">Pa kapab kòmanse sèvis premye plan. Tanpri pèmèt pèmisyon</string>
 
 
 
@@ -231,7 +233,7 @@
 	<string name="cd_volume_icon">Chanje volim yon alam.</string>
 	<string name="cd_volume_slider">Glise pou chanje volim yon alam.</string>
 	<string name="cd_alarm_options">Chanje opsyon alam espesifik yo.</string>
-	<string name="cd_color_example">Egzanp koulè a kounye a chwazi.</string>
+	<string name="cd_color_example">Egzanp koulè aktyèl la.</string>
 	<string name="cd_file_entry">Kalite antre ki parèt, tankou yon fichye oswa anyè.</string>
 	<string name="cd_color_selector">Chwazi yon koulè pou chwazi koulè a.</string>
 	<string name="cd_shader_selector">Chwazi yon lonbraj pou chwazi koulè a.</string>
@@ -284,6 +286,10 @@
 
 	<!-- Auto dismiss duration -->
 	<string name="auto_dismiss">Oto-ranvwaye</string>
+
+
+	<!-- Auto snooze duration -->
+	<string name="auto_snooze">Auto-snooze</string>
 
 
 	<!-- Max number of snoozes -->

@@ -98,6 +98,40 @@
 		<item>60 minutos</item>
 	</string-array>
 
+	<string-array name="auto_snooze_summaries">
+		<item>Desactivada</item>
+		<item>1 minuto</item>
+		<item>2 minutos</item>
+		<item>3 minutos</item>
+		<item>4 minutos</item>
+		<item>5 minutos</item>
+		<item>6 minutos</item>
+		<item>7 minutos</item>
+		<item>8 minutos</item>
+		<item>9 minutos</item>
+		<item>10 minutos</item>
+		<item>11 minutos</item>
+		<item>12 minutos</item>
+		<item>13 minutos</item>
+		<item>14 minutos</item>
+		<item>15 minutos</item>
+		<item>16 minutos</item>
+		<item>17 minutos</item>
+		<item>18 minutos</item>
+		<item>19 minutos</item>
+		<item>20 minutos</item>
+		<item>21 minutos</item>
+		<item>22 minutos</item>
+		<item>23 minutos</item>
+		<item>24 minutos</item>
+		<item>25 minutos</item>
+		<item>26 minutos</item>
+		<item>27 minutos</item>
+		<item>28 minutos</item>
+		<item>29 minutos</item>
+		<item>30 minutos</item>
+	</string-array>
+
 	<string-array name="max_snooze_summaries">
 		<item>Ninguno</item>
 		<item>1</item>
@@ -289,10 +323,10 @@
 	</string-array>
 
 	<string-array name="whats_new_items">
+		<item>Se agregó la opción de &lt;b>posponer automáticamente&lt;/b>. Se puede configurar en las opciones de alarma.</item>
 		<item>Se agregó la opción &lt;b>linterna&lt;/b> para encender la linterna cuando suena una alarma. Se puede personalizar aún más en las opciones de alarma.</item>
 		<item>Posibilidad de ocultar las opciones de &lt;b>vibración&lt;/b>, &lt;b>NFC&lt;/b> y &lt;b>linterna&lt;/b> de una alarma expandida. Se encuentra en &lt;b>Configuración > Apariencia&lt;/b>.</item>
 		<item>Se actualizó la aplicación para &lt;b>Android 14&lt;/b>.</item>
-		<item>Se actualizó la &lt;b>nueva pantalla de alarma&lt;/b> para que &lt;b>deslizar&lt;/b> para posponer o descartar sea mucho más fácil.</item>
 	</string-array>
 
 </resources>

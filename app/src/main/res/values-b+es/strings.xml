@@ -135,6 +135,8 @@
 	<string name="error_message_google_play_billing">Error al conectarse a Google Play Store</string>
 	<string name="error_message_text_to_speech_audio_focus">Incapaz de usar texto-a-voz</string>
 	<string name="error_message_unable_to_email_statistics">No se pueden enviar estadísticas por correo electrónico</string>
+	<string name="error_message_unable_to_shine_flashlight">No se puede encender la linterna</string>
+	<string name="error_message_unable_to_start_foreground_service">No se puede iniciar el servicio en primer plano. Habilite el permiso</string>
 
 
 
@@ -231,7 +233,7 @@
 	<string name="cd_volume_icon">Cambiar el volumen de una alarma.</string>
 	<string name="cd_volume_slider">Desliza para cambiar el volumen de una alarma.</string>
 	<string name="cd_alarm_options">Cambie las opciones específicas de la alarma.</string>
-	<string name="cd_color_example">Ejemplo del seleccionada actualmente.</string>
+	<string name="cd_color_example">Ejemplo del color actual.</string>
 	<string name="cd_file_entry">Tipo de entrada que se muestra, como un archivo o una carpeta.</string>
 	<string name="cd_color_selector">Seleccione un color para el selector de color.</string>
 	<string name="cd_shader_selector">Seleccione un tono para el selector de color.</string>
@@ -284,6 +286,10 @@
 
 	<!-- Auto dismiss duration -->
 	<string name="auto_dismiss">Desactivacion automatica</string>
+
+
+	<!-- Auto snooze duration -->
+	<string name="auto_snooze">Posponer automáticamente</string>
 
 
 	<!-- Max number of snoozes -->

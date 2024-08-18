@@ -135,6 +135,8 @@
 	<string name="error_message_google_play_billing">Error when connecting to the Google Play Store</string>
 	<string name="error_message_text_to_speech_audio_focus">Unable to use text-to-speech</string>
 	<string name="error_message_unable_to_email_statistics">Unable to email statistics</string>
+	<string name="error_message_unable_to_shine_flashlight">Unable to shine flashlight</string>
+	<string name="error_message_unable_to_start_foreground_service">Unable to start foreground service. Please enable permission</string>
 
 
 
@@ -231,7 +233,7 @@
 	<string name="cd_volume_icon">Change the volume of an alarm.</string>
 	<string name="cd_volume_slider">Slide to change the volume of an alarm.</string>
 	<string name="cd_alarm_options">Change alarm-specific options.</string>
-	<string name="cd_color_example">Example of the currently selected color.</string>
+	<string name="cd_color_example">Example of the current color.</string>
 	<string name="cd_file_entry">Type of entry being displayed, such as a file or directory.</string>
 	<string name="cd_color_selector">Select a color for the color picker.</string>
 	<string name="cd_shader_selector">Select a shade for the color picker.</string>
@@ -284,6 +286,10 @@
 
 	<!-- Auto dismiss duration -->
 	<string name="auto_dismiss">Auto-dismiss</string>
+
+
+	<!-- Auto snooze duration -->
+	<string name="auto_snooze">Auto-snooze</string>
 
 
 	<!-- Max number of snoozes -->

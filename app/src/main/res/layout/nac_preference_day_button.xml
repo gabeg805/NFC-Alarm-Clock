@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:padding="?android:attr/listPreferredItemPaddingLeft"
 	android:minHeight="?android:attr/listPreferredItemHeight"
 	android:gravity="center_vertical"
@@ -14,8 +14,9 @@
 
 	<com.nfcalarmclock.view.dayofweek.NacDayButton
 		android:id="@+id/widget"
-		android:layout_width="@dimen/isz_large"
-		android:layout_height="@dimen/isz_large"
+		android:layout_width="@dimen/touch"
+		android:layout_height="@dimen/touch"
+		android:gravity="center"
 		android:text=""
 		/>
 

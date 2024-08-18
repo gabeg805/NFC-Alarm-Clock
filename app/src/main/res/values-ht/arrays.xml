@@ -98,6 +98,40 @@
 		<item>60 minit</item>
 	</string-array>
 
+	<string-array name="auto_snooze_summaries">
+		<item>Off</item>
+		<item>1 minit</item>
+		<item>2 minit</item>
+		<item>3 minit</item>
+		<item>4 minit</item>
+		<item>5 minit</item>
+		<item>6 minit</item>
+		<item>7 minit</item>
+		<item>8 minit</item>
+		<item>9 minit</item>
+		<item>10 minit</item>
+		<item>11 minit</item>
+		<item>12 minit</item>
+		<item>13 minit</item>
+		<item>14 minit</item>
+		<item>15 minit</item>
+		<item>16 minit</item>
+		<item>17 minit</item>
+		<item>18 minit</item>
+		<item>19 minit</item>
+		<item>20 minit</item>
+		<item>21 minit</item>
+		<item>22 minit</item>
+		<item>23 minit</item>
+		<item>24 minit</item>
+		<item>25 minit</item>
+		<item>26 minit</item>
+		<item>27 minit</item>
+		<item>28 minit</item>
+		<item>29 minit</item>
+		<item>30 minit</item>
+	</string-array>
+
 	<string-array name="max_snooze_summaries">
 		<item>Okenn</item>
 		<item>1</item>
@@ -289,10 +323,10 @@
 	</string-array>
 
 	<string-array name="whats_new_items">
+		<item>Te ajoute opsyon &lt;b>auto-snooze&lt;/b>. Ka mete nan opsyon alam.</item>
 		<item>Te ajoute opsyon &lt;b>flèch&lt;/b> pou limen flach la lè yon alam sonnen. Èske yo ka plis Customized nan opsyon alam.</item>
 		<item>Kapab kache opsyon &lt;b>vibre&lt;/b>, &lt;b>NFC&lt;/b>, ak &lt;b>flèch&lt;/b> nan yon alam elaji. Yo jwenn nan &lt;b>Anviwònman > Aparans&lt;/b>.</item>
 		<item>Mete ajou aplikasyon an pou &lt;b>Android 14&lt;/b>.</item>
-		<item>Mete ajou &lt;b>nouvo ekran alam&lt;/b> pou &lt;b>glise&lt;/b> pou fè yon ti repo oswa ranvwaye pi fasil.</item>
 	</string-array>
 
 </resources>

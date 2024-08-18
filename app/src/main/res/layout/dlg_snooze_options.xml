@@ -7,6 +7,44 @@
 	android:padding="@dimen/large"
 	android:orientation="vertical">
 
+	<!-- Auto snooze -->
+	<TextView
+		style="@style/Widget.TextView.Primary"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:textSize="@dimen/tsz_medium"
+		android:textStyle="bold"
+		android:text="@string/auto_snooze"
+		/>
+
+	<com.google.android.material.textfield.TextInputLayout
+		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+		android:id="@+id/auto_snooze_input_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingVertical="@dimen/normal"
+		app:boxCornerRadiusTopStart="6dp"
+		app:boxCornerRadiusTopEnd="6dp"
+		app:boxCornerRadiusBottomStart="6dp"
+		app:boxCornerRadiusBottomEnd="6dp"
+		app:boxStrokeWidth="2dp">
+
+		<com.google.android.material.textfield.MaterialAutoCompleteTextView
+			android:id="@+id/auto_snooze_dropdown_menu"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:inputType="none"
+			app:simpleItems="@array/auto_snooze_summaries"
+			/>
+	</com.google.android.material.textfield.TextInputLayout>
+
+	<!-- -->
+	<Space
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/large"
+		/>
+
 	<!-- Max snooze -->
 	<TextView
 		style="@style/Widget.TextView.Primary"

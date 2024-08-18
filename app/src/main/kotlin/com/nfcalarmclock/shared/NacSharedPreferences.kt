@@ -140,6 +140,24 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Auto snooze time.
+	 */
+	var autoSnoozeTime: Int
+		get()
+		{
+			val key = resources.getString(R.string.auto_snooze_key)
+			val defaultValue = 0
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.auto_snooze_key)
+
+			saveInt(key, value)
+		}
+
+	/**
 	 * Whether an alarm can be dismissed early or not.
 	 */
 	var canDismissEarly: Boolean

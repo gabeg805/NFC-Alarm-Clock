@@ -221,13 +221,6 @@ class NacMusicFragment
 	}
 
 	/**
-	 * Prompt the user to enable read permissions.
-	 */
-	override fun onSelected()
-	{
-	}
-
-	/**
 	 * Called after the view is created.
 	 */
 	@UnstableApi

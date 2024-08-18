@@ -10,6 +10,7 @@ import android.os.VibratorManager
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
+import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarmoptions.flashlight.NacFlashlight
 import com.nfcalarmclock.alarmoptions.tts.NacTextToSpeech
@@ -19,6 +20,8 @@ import com.nfcalarmclock.media.NacAudioAttributes
 import com.nfcalarmclock.media.NacMedia
 import com.nfcalarmclock.mediaplayer.NacMediaPlayer
 import com.nfcalarmclock.shared.NacSharedPreferences
+import com.nfcalarmclock.util.NacUtility
+import java.lang.IllegalArgumentException
 import java.util.Calendar
 
 /**
@@ -118,7 +121,15 @@ class NacWakeupProcess(
 	 */
 	private val flashlight: NacFlashlight? = if (shouldUseFlashlight)
 	{
-		NacFlashlight(context)
+		try
+		{
+			NacFlashlight(context)
+		}
+		catch (e: IllegalArgumentException)
+		{
+			NacUtility.toast(context, R.string.error_message_unable_to_shine_flashlight)
+			null
+		}
 	}
 	else
 	{

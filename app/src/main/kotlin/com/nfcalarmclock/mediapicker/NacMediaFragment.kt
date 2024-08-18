@@ -37,11 +37,6 @@ open class NacMediaFragment
 	private var alarm: NacAlarm? = null
 
 	/**
-	 * The initial selection flag, if this is the first time the fragment is being selected.
-	 */
-	private var isInitialSelection = true
-
-	/**
 	 * Media player.
 	 */
 	var mediaPlayer: NacMediaPlayer? = null
@@ -201,18 +196,6 @@ open class NacMediaFragment
 
 		// Finish the activity
 		activity.finish()
-	}
-
-	/**
-	 * Called when the fragment is selected by the user.
-	 */
-	open fun onSelected()
-	{
-		// Toggle the flag if this is the initial selection
-		if (isInitialSelection)
-		{
-			isInitialSelection = false
-		}
 	}
 
 	/**

@@ -405,7 +405,7 @@
 					android:id="@+id/nac_collapse"
 					android:contentDescription="@string/cd_collapse_alarm"
 					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/isz_large"
+					android:layout_height="@dimen/touch"
 					android:layout_gravity="center_vertical"
 					android:rotation="180"
 					app:icon="@drawable/expand"

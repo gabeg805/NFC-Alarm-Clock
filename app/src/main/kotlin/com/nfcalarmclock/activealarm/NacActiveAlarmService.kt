@@ -1,5 +1,6 @@
 package com.nfcalarmclock.activealarm
 
+import android.app.ForegroundServiceStartNotAllowedException
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -88,6 +89,11 @@ class NacActiveAlarmService
 	private var autoDismissHandler: Handler? = null
 
 	/**
+	 * Automatically snooze the alarm, if desired by the user.
+	 */
+	private var autoSnoozeHandler: Handler? = null
+
+	/**
 	 * Time that the service was started, in milliseconds.
 	 */
 	private var startTime: Long = 0
@@ -121,8 +127,9 @@ class NacActiveAlarmService
 		// Clean the wakeup process
 		wakeupProcess?.cleanup()
 
-		// Cleanup the auto dismiss handler
+		// Cleanup the auto dismiss and snooze handler
 		autoDismissHandler?.removeCallbacksAndMessages(null)
+		autoSnoozeHandler?.removeCallbacksAndMessages(null)
 
 		// Check if a wake lock is held
 		if (wakeLock?.isHeld == true)
@@ -253,6 +260,7 @@ class NacActiveAlarmService
 		wakeLock = null
 		alarm = null
 		autoDismissHandler = Handler(mainLooper)
+		autoSnoozeHandler = Handler(mainLooper)
 
 		// Enable the activity alias so that tapping an NFC tag will open the main
 		// activity
@@ -444,9 +452,20 @@ class NacActiveAlarmService
 		// Create the active alarm notification
 		val notification = NacActiveAlarmNotification(this, alarm)
 
-		// Start the service in the foreground
-		startForeground(NacActiveAlarmNotification.ID,
-			notification.builder().build())
+		try
+		{
+			// Start the service in the foreground
+			startForeground(NacActiveAlarmNotification.ID,
+				notification.builder().build())
+		}
+		catch (e: Exception)
+		{
+			// Check if not allowed to start foreground service
+			if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) && (e is ForegroundServiceStartNotAllowedException))
+			{
+				NacUtility.toast(this, R.string.error_message_unable_to_start_foreground_service)
+			}
+		}
 	}
 
 	/**
@@ -524,6 +543,9 @@ class NacActiveAlarmService
 
 		// Wait for auto dismiss
 		waitForAutoDismiss()
+
+		// Wait for auto snooze
+		waitForAutoSnooze()
 
 		// Start the alarm activity
 		NacActiveAlarmActivity.startAlarmActivity(this, alarm!!)
@@ -606,7 +628,7 @@ class NacActiveAlarmService
 		// There is an auto dismiss time set
 		if (autoDismiss != 0)
 		{
-			// Automatically dismiss the alarm.
+			// Automatically dismiss the alarm
 			autoDismissHandler!!.postDelayed({
 
 				// Show the missed alarm notification
@@ -628,6 +650,28 @@ class NacActiveAlarmService
 
 		// Set the start time
 		startTime = System.currentTimeMillis()
+	}
+
+	/**
+	 * Wait in the background until the activity needs to auto snooze the
+	 * alarm.
+	 *
+	 * Auto snooze a bit early to avoid the race condition between a new alarm
+	 * starting at the same time that the alarm will auto-snooze.
+	 */
+	@UnstableApi
+	fun waitForAutoSnooze()
+	{
+		// Amount of time until the alarm is automatically snoozed
+		val autoSnooze = alarm!!.autoSnoozeTime
+		val delay = TimeUnit.MINUTES.toMillis(autoSnooze.toLong()) - 1000
+
+		// There is an auto snooze time set and the alarm is able to be snoozed
+		if ((autoSnooze != 0) && canSnooze)
+		{
+			// Automatically snooze the alarm
+			autoSnoozeHandler!!.postDelayed({ snooze() }, delay)
+		}
 	}
 
 	companion object

@@ -98,6 +98,40 @@
 		<item>60 phút</item>
 	</string-array>
 
+	<string-array name="auto_snooze_summaries">
+		<item>Tắt</item>
+		<item>1 phút</item>
+		<item>2 phút</item>
+		<item>3 phút</item>
+		<item>4 phút</item>
+		<item>5 phút</item>
+		<item>6 phút</item>
+		<item>7 phút</item>
+		<item>8 phút</item>
+		<item>9 phút</item>
+		<item>10 phút</item>
+		<item>11 phút</item>
+		<item>12 phút</item>
+		<item>13 phút</item>
+		<item>14 phút</item>
+		<item>15 phút</item>
+		<item>16 phút</item>
+		<item>17 phút</item>
+		<item>18 phút</item>
+		<item>19 phút</item>
+		<item>20 phút</item>
+		<item>21 phút</item>
+		<item>22 phút</item>
+		<item>23 phút</item>
+		<item>24 phút</item>
+		<item>25 phút</item>
+		<item>26 phút</item>
+		<item>27 phút</item>
+		<item>28 phút</item>
+		<item>29 phút</item>
+		<item>30 phút</item>
+	</string-array>
+
 	<string-array name="max_snooze_summaries">
 		<item>Không có</item>
 		<item>1</item>
@@ -289,10 +323,10 @@
 	</string-array>
 
 	<string-array name="whats_new_items">
+		<item>Đã thêm tùy chọn &lt;b>tự động báo lại&lt;/b>. Có thể được thiết lập trong tùy chọn báo thức.</item>
 		<item>Đã thêm tùy chọn &lt;b>đèn pin&lt;/b> để bật đèn pin khi báo thức kêu. Có thể tùy chỉnh thêm trong tùy chọn báo thức.</item>
 		<item>Có thể ẩn các tùy chọn &lt;b>rung&lt;/b>, &lt;b>NFC&lt;/b> và &lt;b>đèn pin&lt;/b> khỏi báo thức mở rộng. Tìm thấy trong &lt;b>Cài đặt > Giao diện&lt;/b>.</item>
 		<item>Đã cập nhật ứng dụng cho &lt;b>Android 14&lt;/b>.</item>
-		<item>Đã cập nhật &lt;b>màn hình báo thức mới&lt;/b> để &lt;b>vuốt&lt;/b> để báo lại hoặc loại bỏ dễ dàng hơn nhiều.</item>
 	</string-array>
 
 </resources>

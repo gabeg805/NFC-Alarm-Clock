@@ -45,6 +45,7 @@
 				android:paddingEnd="@dimen/normal"
 				android:max="100"
 				android:progress="75"
+				android:contentDescription="@string/cd_volume_slider"
 				/>
 
 			<com.google.android.material.button.MaterialButton
@@ -53,6 +54,7 @@
 				android:layout_width="@dimen/touch"
 				android:layout_height="@dimen/touch"
 				app:icon="@drawable/settings"
+				android:contentDescription="@string/cd_alarm_options"
 				/>
 		</LinearLayout>
 

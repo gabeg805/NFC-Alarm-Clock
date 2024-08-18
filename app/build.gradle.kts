@@ -32,8 +32,8 @@ android {
 		applicationId = "com.nfcalarmclock"
 		minSdk = 23
 		targetSdk = 34
-		versionCode = 405
-		versionName = "12.3.0"
+		versionCode = 406
+		versionName = "12.3.1"
 
 		// Set output filename
 		setProperty("archivesBaseName", "nfc_alarm_clock_v${versionName}")
@@ -122,16 +122,16 @@ dependencies {
 	// ------------------------------------------------------------------------
 
 	// Android
-	implementation("androidx.annotation:annotation:1.8.0")
+	implementation("androidx.annotation:annotation:1.8.2")
 	implementation("androidx.appcompat:appcompat:1.7.0")
 	implementation("androidx.cardview:cardview:1.0.0")
 	implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
 	implementation("androidx.core:core-ktx:1.13.1")
-	implementation("androidx.fragment:fragment-ktx:1.8.1")
-	implementation("androidx.lifecycle:lifecycle-process:2.8.3")
-	implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.3")
-	implementation("androidx.media3:media3-exoplayer:1.1.1")
-	implementation("androidx.media3:media3-common:1.1.1")
+	implementation("androidx.fragment:fragment-ktx:1.8.2")
+	implementation("androidx.lifecycle:lifecycle-process:2.8.4")
+	implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
+	implementation("androidx.media3:media3-exoplayer:1.4.0")
+	implementation("androidx.media3:media3-common:1.4.0")
 	implementation("androidx.preference:preference-ktx:1.2.1")
 	implementation("androidx.recyclerview:recyclerview:1.3.2")
 	implementation("androidx.viewpager:viewpager:1.0.0")

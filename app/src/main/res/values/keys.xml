@@ -31,6 +31,7 @@
 	<string name="general_setting_key">pref_screen_general</string>
 	<string name="auto_dismiss_key">pref_auto_dismiss_new</string>
 	<string name="old_auto_dismiss_key">pref_auto_dismiss</string>
+	<string name="auto_snooze_key">pref_auto_snooze</string>
 	<string name="max_snooze_key">pref_max_snooze_new</string>
 	<string name="old_max_snooze_key">pref_max_snooze</string>
 	<string name="snooze_duration_key">pref_snooze_duration_new</string>

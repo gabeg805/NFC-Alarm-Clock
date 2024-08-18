@@ -1,12 +1,15 @@
 package com.nfcalarmclock.alarmoptions.flashlight
 
 import android.content.Context
+import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import com.nfcalarmclock.R
+import com.nfcalarmclock.util.NacUtility
 
 /**
  * Find the first available camera ID.
@@ -142,8 +145,17 @@ class NacFlashlight(context: Context)
 	@Suppress("MemberVisibilityCanBePrivate")
 	fun turnOff()
 	{
-		// Turn off the flashlight
-		cameraManager.setTorchMode(cameraId, false)
+		try
+		{
+			// Turn off the flashlight
+			cameraManager.setTorchMode(cameraId, false)
+		}
+		catch (e: CameraAccessException)
+		{
+		}
+		catch (e: IllegalArgumentException)
+		{
+		}
 
 		// Turn on the flashlight after the off duration has elapsed
 		onHandler?.postDelayed({ turnOn() }, offDuration)
@@ -157,16 +169,25 @@ class NacFlashlight(context: Context)
 		// Set the flag indicating the flashlight is running
 		isRunning = true
 
-		// Check if the flashlight strength can change
-		if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) && (maxLevel > 1))
+		try
 		{
-			// Turn on the flashlight
-			cameraManager.turnOnTorchWithStrengthLevel(cameraId, strengthLevel)
+			// Check if the flashlight strength can change
+			if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) && (maxLevel > 1))
+			{
+				// Turn on the flashlight
+				cameraManager.turnOnTorchWithStrengthLevel(cameraId, strengthLevel)
+			}
+			else
+			{
+				// Turn on the flashlight
+				cameraManager.setTorchMode(cameraId, true)
+			}
 		}
-		else
+		catch (e: CameraAccessException)
 		{
-			// Turn on the flashlight
-			cameraManager.setTorchMode(cameraId, true)
+		}
+		catch (e: IllegalArgumentException)
+		{
 		}
 
 		// Turn off the flashlight after the on duration has elapsed

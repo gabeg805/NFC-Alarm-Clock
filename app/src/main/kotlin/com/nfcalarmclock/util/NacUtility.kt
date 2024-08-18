@@ -92,6 +92,18 @@ object NacUtility
 	/**
 	 * Create a toast.
 	 */
+	fun toast(context: Context, resId: Int): Toast
+	{
+		// Get the message
+		val message = context.getString(resId)
+
+		// Show the toast
+		return toast(context, message, Toast.LENGTH_LONG)
+	}
+
+	/**
+	 * Create a toast.
+	 */
 	fun toast(context: Context, message: String): Toast
 	{
 		return toast(context, message, Toast.LENGTH_LONG)

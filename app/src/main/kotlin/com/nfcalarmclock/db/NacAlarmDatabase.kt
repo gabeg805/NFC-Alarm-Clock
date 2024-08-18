@@ -44,12 +44,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import java.lang.IllegalStateException
 import javax.inject.Singleton
 
 /**
  * Store alarms in a Room database.
  */
-@Database(version = 25,
+@Database(version = 26,
 	entities = [
 		NacAlarm::class,
 		NacAlarmCreatedStatistic::class,
@@ -82,7 +83,8 @@ import javax.inject.Singleton
 		AutoMigration(from = 21, to = 22, spec = ChangeFlashlightOnOffDurationTypeToStringMigration::class),
 		AutoMigration(from = 22, to = 23),
 		AutoMigration(from = 23, to = 24),
-		AutoMigration(from = 24, to = 25)]
+		AutoMigration(from = 24, to = 25),
+		AutoMigration(from = 25, to = 26)]
 )
 @TypeConverters(NacAlarmTypeConverters::class, NacStatisticTypeConverters::class)
 abstract class NacAlarmDatabase
@@ -132,14 +134,22 @@ abstract class NacAlarmDatabase
 	{
 		override fun onPostMigrate(db: SupportSQLiteDatabase)
 		{
-			// Get the shared preferences
-			val sharedPreferences = NacSharedPreferences(context!!)
+			val sharedPreferences =
+				try
+				{
+					// Get the shared preferences
+					NacSharedPreferences(context!!)
+				}
+				catch (e: IllegalStateException)
+				{
+					null
+				}
 
 			// Get default auto dismiss and snooze values
-			val autoDismissTime = sharedPreferences.oldAutoDismissTime
-			val snoozeDuration = sharedPreferences.oldSnoozeDurationValue
-			val maxSnoozes = sharedPreferences.oldMaxSnoozeValue
-			val easySnooze = if (sharedPreferences.easySnooze) 1 else 0
+			val autoDismissTime = sharedPreferences?.oldAutoDismissTime ?: 15
+			val snoozeDuration = sharedPreferences?.oldSnoozeDurationValue ?: 5
+			val maxSnoozes = sharedPreferences?.oldMaxSnoozeValue ?: -1
+			val easySnooze = if (sharedPreferences?.easySnooze == true) 1 else 0
 
 			// Add default values to all alarms
 			db.execSQL("UPDATE alarm SET auto_dismiss_time=$autoDismissTime")

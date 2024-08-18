@@ -33,6 +33,11 @@ class NacSnoozeOptionsDialog
 	private lateinit var easySnoozeCheckBox: MaterialCheckBox
 
 	/**
+	 * Selected auto snooze time.
+	 */
+	private var selectedAutoSnoozeTime: Int = 0
+
+	/**
 	 * Selected max snooze time.
 	 */
 	private var selectedMaxSnoozeTime: Int = 0
@@ -70,15 +75,19 @@ class NacSnoozeOptionsDialog
 		val cancelButton = dialog!!.findViewById(R.id.cancel_button) as MaterialButton
 
 		// Get the default values
+		val defaultAutoSnoozeTime = alarm?.autoSnoozeTime ?: 0
 		val defaultMaxSnooze = alarm?.maxSnooze ?: 0
 		val defaultSnoozeDuration = alarm?.snoozeDuration ?: 5
 		val defaultShouldEasySnooze = alarm?.useEasySnooze ?: false
+		selectedAutoSnoozeTime = defaultAutoSnoozeTime
 		selectedMaxSnoozeTime = defaultMaxSnooze
 		selectedSnoozeDurationTime = defaultSnoozeDuration
 
 		// TODO: FIND HOW TO CENTER ITEMS IN MENU AND THEN USE TEXT ALIGNMENT TO CENTER IN TEXTVIEW
 		// TODO: FIND HOW TO SET MAX HEIGHT OF EXPANDED MENU
 
+		// Setup the views
+		setupAutoSnooze(defaultAutoSnoozeTime)
 		setupMaxSnooze(defaultMaxSnooze)
 		setupSnoozeDuration(defaultSnoozeDuration)
 		setupEasySnooze(defaultShouldEasySnooze)
@@ -87,6 +96,7 @@ class NacSnoozeOptionsDialog
 		setupPrimaryButton(okButton, listener = {
 
 			// Update the alarm attributes
+			alarm?.autoSnoozeTime = selectedAutoSnoozeTime
 			alarm?.maxSnooze = selectedMaxSnoozeTime
 			alarm?.snoozeDuration = selectedSnoozeDurationTime
 			alarm?.useEasySnooze = easySnoozeCheckBox.isChecked
@@ -101,6 +111,28 @@ class NacSnoozeOptionsDialog
 
 		// Setup the cancel button
 		setupSecondaryButton(cancelButton)
+	}
+
+	/**
+	 * Setup the auto snooze views.
+	 */
+	private fun setupAutoSnooze(default: Int)
+	{
+		// Get the views
+		val inputLayout = dialog!!.findViewById(R.id.auto_snooze_input_layout) as TextInputLayout
+		val autoCompleteTextView = dialog!!.findViewById(R.id.auto_snooze_dropdown_menu) as MaterialAutoCompleteTextView
+
+		// Setup the input layout
+		inputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+
+		// Set the default selected items in the text views
+		val index = NacAlarm.calcAutoSnoozeIndex(default)
+		autoCompleteTextView.setTextFromIndex(index)
+
+		// Set the textview listeners
+		autoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+			selectedAutoSnoozeTime = NacAlarm.calcAutoSnoozeTime(position)
+		}
 	}
 
 	/**

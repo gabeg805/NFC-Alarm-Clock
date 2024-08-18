@@ -41,13 +41,14 @@
 			style="@style/Widget.TextView.Primary"
 			android:id="@+id/color_value"
 			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
+			android:layout_height="@dimen/touch"
 			android:layout_gravity="fill"
+			android:importantForAutofill="no"
 			android:inputType="textNoSuggestions|textAutoComplete"
 			android:hint="@string/description_color"
 			android:maxLines="1"
 			android:maxLength="@integer/max_hex_length"
-			android:importantForAutofill="no">
+			android:textSize="@dimen/tsz_normal">
 		</EditText>
 
 	</LinearLayout>

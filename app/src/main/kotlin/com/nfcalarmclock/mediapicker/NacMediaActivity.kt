@@ -9,7 +9,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentOnAttachListener
 import androidx.media3.common.util.UnstableApi
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -22,8 +21,7 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.media.NacMedia
 import com.nfcalarmclock.mediapicker.music.NacMusicFragment
 import com.nfcalarmclock.mediapicker.ringtone.NacRingtoneFragment
-import com.nfcalarmclock.permission.readmediaaudio.NacReadMediaAudioPermission.hasPermission
-import com.nfcalarmclock.permission.readmediaaudio.NacReadMediaAudioPermission.requestPermission
+import com.nfcalarmclock.permission.readmediaaudio.NacReadMediaAudioPermission
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacIntent
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,86 +36,28 @@ class NacMediaActivity
 	: FragmentActivity(),
 
 	// Interfaces
-	FragmentOnAttachListener,
-	OnTabSelectedListener,
 	OnRequestPermissionsResultCallback
 {
-
-	companion object
-	{
-
-		/**
-		 * Create an intent that will be used to start the media activity with
-		 * an alarm attached.
-		 *
-		 * @param context A context.
-		 * @param alarm   An alarm.
-		 *
-		 * @return An intent that will be used to start the media activity with
-		 *         an alarm attached.
-		 */
-		fun getStartIntentWithAlarm(
-			context: Context,
-			alarm: NacAlarm
-		): Intent
-		{
-			// Create an intent
-			val intent = Intent(context, NacMediaActivity::class.java)
-
-			// Add the alarm to the intent
-			return NacIntent.addAlarm(intent, alarm)
-		}
-
-		/**
-		 * Create an intent that will be used to start the media activity with
-		 * a media path attached.
-		 *
-		 * @param context The application context.
-		 * @param mediaPath A media path.
-		 * @param shuffleMedia Whether to shuffle media or not.
-		 * @param recursivelyPlayMedia Whether to recursively play media or not.
-		 *
-		 * @return An intent that will be used to start the media activity with
-		 *         a media path attached.
-		 */
-		fun getStartIntentWithMedia(
-			context: Context? = null,
-			mediaPath: String,
-			shuffleMedia: Boolean,
-			recursivelyPlayMedia: Boolean
-		): Intent
-		{
-			// Create an intent with the media activity or an empty intent
-			val intent = context?.let {
-				Intent(context, NacMediaActivity::class.java)
-			} ?: Intent()
-
-			// Add the media to the intent
-			return NacIntent.addMediaInfo(intent, mediaPath, shuffleMedia,
-				recursivelyPlayMedia)
-		}
-
-	}
 
 	/**
 	 * View pager.
 	 */
-	private var viewPager: ViewPager2? = null
-
-	/**
-	 * Adapter for the view pager.
-	 */
-	private var pagerAdapter: NacPagerAdapter? = null
+	private lateinit var viewPager: ViewPager2
 
 	/**
 	 * Tab layout.
 	 */
-	private var tabLayout: TabLayout? = null
+	private lateinit var tabLayout: TabLayout
+
+	/**
+	 * Adapter for the view pager.
+	 */
+	private lateinit var pagerAdapter: NacPagerAdapter
 
 	/**
 	 * List of fragments.
 	 */
-	private val fragments: Array<Fragment?>
+	private val allFragments: Array<NacMediaFragment?> = arrayOfNulls(2)
 
 	/**
 	 * Alarm.
@@ -145,79 +85,82 @@ class NacMediaActivity
 	private var position: Int = 0
 
 	/**
-	 * The tab titles.
+	 * The tab titles: Browse and Ringtone
 	 */
-	private val titles = arrayOfNulls<String>(2)
+	private val titles: Array<String> = Array(2) { "" }
 
 	/**
-	 * The media type.
+	 * Listener for when a fragment is attached.
 	 */
-	private val mediaType: Int
-		get()
+	private val onFragmentAttachListener: FragmentOnAttachListener = FragmentOnAttachListener { _, fragment ->
+
+		// Set the music fragment
+		if (fragment is NacMusicFragment)
 		{
-			return alarm?.mediaType ?: NacMedia.getType(this, mediaPath)
+			allFragments[0] = fragment
+		}
+		// Set the ringtone fragment
+		else if (fragment is NacRingtoneFragment)
+		{
+			allFragments[1] = fragment
 		}
 
-	/**
-	 * Constructor
-	 */
-	init
-	{
-		// Setup the fragment list
-		fragments = arrayOfNulls(titles.size)
+		// Count the number of fragments that have been attached
+		val count = allFragments.filterNotNull().size
 
-		// Add a listener for when a fragment is attached
-		supportFragmentManager.addFragmentOnAttachListener(this)
+		// Check if this is the first fragment that was attached
+		if (count == 1)
+		{
+			// Check if permission should be requested
+			if (shouldRequestReadMediaAudioPermission())
+			{
+				// Request permission to read audio files
+				NacReadMediaAudioPermission.requestPermission(this@NacMediaActivity, NacMusicFragment.READ_REQUEST_CODE)
+			}
+			else
+			{
+				// Select the tab
+				selectTabByIndex(position)
+			}
+		}
 	}
 
 	/**
-	 * Select a fragment.
+	 * Listener for when a tab is selected.
 	 */
-	private fun fragmentSelected(selectedFragment: Fragment?)
-	{
-		val tabFragment = fragments[position]
+	private val onTabSelectedListener: OnTabSelectedListener = object: OnTabSelectedListener {
 
-		// The selected fragment is undefined or does not match the position of
-		// the fragment that the user should be on
-		if (selectedFragment == null || selectedFragment !== tabFragment)
+		/**
+		 * Called when a tab is selected.
+		 */
+		override fun onTabSelected(tab: TabLayout.Tab)
 		{
-			return
+			// Set the current position
+			position = tab.position
+
+			// The user is on the music fragment (where they can select from their
+			// own music to set as the media for an alarm), but the app has not
+			// been given the permission to read audio files on the phone
+			if (shouldRequestReadMediaAudioPermission())
+			{
+				// Request permission to read audio files
+				NacReadMediaAudioPermission.requestPermission(this@NacMediaActivity, NacMusicFragment.READ_REQUEST_CODE)
+				return
+			}
 		}
 
-		// The user is on the music fragment (where they can select from their
-		// own music to set as the media for an alarm), but the app has not
-		// been given the permission to read audio files on the phone
-		if (selectedFragment is NacMusicFragment
-			&& !hasPermission(this))
+		/**
+		 */
+		override fun onTabUnselected(tab: TabLayout.Tab?)
 		{
-			// Request permission to read audio files
-			// TODO: Stack overflow error here
-			requestPermission(this, NacMusicFragment.READ_REQUEST_CODE)
 		}
 
-		// Select the fragment
-		(selectedFragment as NacMediaFragment).onSelected()
-	}
-
-	/**
-	 * Called when the fragment is attached.
-	 */
-	override fun onAttachFragment(manager: FragmentManager,
-		frag: Fragment)
-	{
-		// Music fragment
-		if (frag is NacMusicFragment)
+		/**
+		 */
+		override fun onTabReselected(tab: TabLayout.Tab?)
 		{
-			fragments[0] = frag
-		}
-		// Ringtone fragment
-		else if (frag is NacRingtoneFragment)
-		{
-			fragments[1] = frag
 		}
 
-		// Select the gragment
-		fragmentSelected(frag)
 	}
 
 	/**
@@ -231,9 +174,6 @@ class NacMediaActivity
 		// Set the layout
 		setContentView(R.layout.act_sound)
 
-		// Get all the audio sources
-		val audioSources = resources.getStringArray(R.array.audio_sources)
-
 		// Set the member variables
 		alarm = NacIntent.getAlarm(intent)
 		mediaPath = NacIntent.getMediaPath(intent)
@@ -241,15 +181,52 @@ class NacMediaActivity
 		recursivelyPlayMedia = NacIntent.getRecursivelyPlayMedia(intent)
 		viewPager = findViewById(R.id.act_sound)
 		tabLayout = findViewById(R.id.tab_layout)
-		titles[0] = getString(R.string.action_browse)
-		titles[1] = audioSources[4]
 		pagerAdapter = NacPagerAdapter(this)
-		position = 0
 
-		// Setup the views
-		setupViewPager()
+		// Setup the tab titles
+		titles[0] = getString(R.string.action_browse)
+		titles[1] = resources.getStringArray(R.array.audio_sources)[4]
+
+		// Get the media type
+		val mediaType = alarm?.mediaType ?: NacMedia.getType(this, mediaPath)
+
+		// Set the initial position based on the media path
+		// None
+		position = if (NacMedia.isNone(mediaType))
+		{
+			1
+		}
+		// File or directory
+		else if (NacMedia.isFile(mediaType) || NacMedia.isDirectory(mediaType))
+		{
+			0
+		}
+		// Ringtone
+		else if (NacMedia.isRingtone(mediaType))
+		{
+			1
+		}
+		// Unknown
+		else
+		{
+			1
+		}
+		// Spotify
+		//else if (NacMedia.isSpotify(mediaType))
+		//{
+		//	2
+		//}
+
+		// Set the pager adapter
+		viewPager.adapter = pagerAdapter
+
+		// Set the tab layout mediator
+		TabLayoutMediator(tabLayout, viewPager) { tab: TabLayout.Tab, position: Int ->
+			tab.text = titles[position]
+		}.attach()
+
+		// Setup the colors
 		setupTabColors()
-		selectTabByMediaType(mediaType)
 
 		// Set the listener when the back button is pressed
 		onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true)
@@ -257,7 +234,7 @@ class NacMediaActivity
 			override fun handleOnBackPressed()
 			{
 				// Get the current position and the music fragment
-				val musicFragment = fragments[0] as NacMusicFragment?
+				val musicFragment = allFragments[0] as NacMusicFragment?
 
 				// Check if at position 0 and that the music fragment is defined. The
 				// music fragment (where the user can browse for music to play for
@@ -309,22 +286,18 @@ class NacMediaActivity
 		}
 
 		// Get the music fragment
-		val musicFragment = fragments[0]
+		val musicFragment = allFragments[0]
 
 		// Permission was granted
-		if (musicFragment != null && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+		if ((musicFragment != null) && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
 		{
-
 			// Create a new pager adapter in order to refresh the fragments
 			// in the view pager. Not sure if this is the way to do it, but
 			// this is the only way that I found works
-			val adapter = NacPagerAdapter(this)
+			pagerAdapter = NacPagerAdapter(this)
 
 			// Set pager adapter on the view pager
-			viewPager!!.adapter = adapter
-
-			// Set the new pager adapter member variable
-			pagerAdapter = adapter
+			viewPager.adapter = pagerAdapter
 		}
 		// Permission was denied
 		else
@@ -334,32 +307,42 @@ class NacMediaActivity
 	}
 
 	/**
-	 * Called when a tab is reselected.
+	 * Called when the activity is started.
 	 */
-	override fun onTabReselected(tab: TabLayout.Tab)
+	@Suppress("deprecation")
+	override fun onStart()
 	{
+		// Super
+		super.onStart()
+
+		// Add a listener for when a fragment is attached
+		supportFragmentManager.addFragmentOnAttachListener(onFragmentAttachListener)
+
+		// Set the tab selected listener based on the Android API level
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			tabLayout.addOnTabSelectedListener(onTabSelectedListener)
+		}
+		// API < 26
+		else
+		{
+			tabLayout.setOnTabSelectedListener(onTabSelectedListener)
+		}
 	}
 
 	/**
-	 * Called when a tab is selected.
+	 * Called when the activity is stopped.
 	 */
-	override fun onTabSelected(tab: TabLayout.Tab)
+	override fun onStop()
 	{
-		// Set the current position
-		position = tab.position
+		// Super
+		super.onStop()
 
-		// Get the fragment at that position
-		val fragment = fragments[position]
+		// Remove the listener for when a fragment is attached
+		supportFragmentManager.removeFragmentOnAttachListener(onFragmentAttachListener)
 
-		// Select the fragment
-		fragmentSelected(fragment)
-	}
-
-	/**
-	 * Called when a tab is unselected.
-	 */
-	override fun onTabUnselected(tab: TabLayout.Tab)
-	{
+		// Remove the tab selected listener
+		tabLayout.removeOnTabSelectedListener(onTabSelectedListener)
 	}
 
 	/**
@@ -369,51 +352,11 @@ class NacMediaActivity
 	 */
 	private fun selectTabByIndex(index: Int)
 	{
-		// Check if the tab layout is not defined yet
-		if (tabLayout == null)
-		{
-			return
-		}
-
 		// Get the tab at the index
-		val tab = tabLayout!!.getTabAt(index)
+		val tab = tabLayout.getTabAt(index) ?: return
 
-		// Check if the tab is not null
-		if (tab != null)
-		{
-			// Select the tab
-			tab.select()
-			onTabSelected(tab)
-		}
-	}
-
-	/**
-	 * Select the tab that the fragment activity should start on.
-	 *
-	 * @param  mediaType  The media type for when the alarm goes off.
-	 */
-	private fun selectTabByMediaType(mediaType: Int)
-	{
-		// None
-		if (NacMedia.isNone(mediaType))
-		{
-			selectTabByIndex(1)
-		}
-		// File or directory
-		else if (NacMedia.isFile(mediaType) || NacMedia.isDirectory(mediaType))
-		{
-			selectTabByIndex(0)
-		}
-		// Ringtone
-		else if (NacMedia.isRingtone(mediaType))
-		{
-			selectTabByIndex(1)
-		}
-		// Spotify
-		//else if (NacMedia.isSpotify(mediaType))
-		//{
-		//	selectTabByIndex(2)
-		//}
+		// Select the tab
+		tab.select()
 	}
 
 	/**
@@ -425,34 +368,18 @@ class NacMediaActivity
 		val defaultColor = resources.getInteger(R.integer.default_color)
 
 		// Set the color
-		tabLayout!!.setSelectedTabIndicatorColor(shared.themeColor)
-		tabLayout!!.setTabTextColors(defaultColor, shared.themeColor)
+		tabLayout.setSelectedTabIndicatorColor(shared.themeColor)
+		tabLayout.setTabTextColors(defaultColor, shared.themeColor)
 	}
 
 	/**
-	 * Setup the view pager.
+	 * Check if should request read media audio permission.
 	 */
-	@Suppress("deprecation")
-	private fun setupViewPager()
+	private fun shouldRequestReadMediaAudioPermission(): Boolean
 	{
-		// Set the pager adapter
-		viewPager!!.adapter = pagerAdapter
-
-		// Set the tab layout mediator
-		TabLayoutMediator(tabLayout!!, viewPager!!) { tab: TabLayout.Tab, position: Int ->
-			tab.text = titles[position]
-		}.attach()
-
-		// Set the tab selected listener based on the Android API level
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-		{
-			tabLayout!!.addOnTabSelectedListener(this)
-		}
-		// API < 26
-		else
-		{
-			tabLayout!!.setOnTabSelectedListener(this)
-		}
+		// Current tab is on the Browse tab, but the app does not have
+		// permission to read media so that the user can actually browse
+		return (position == 0) && !NacReadMediaAudioPermission.hasPermission(this)
 	}
 
 	/**
@@ -537,6 +464,62 @@ class NacMediaActivity
 		override fun getItemCount(): Int
 		{
 			return titles.size
+		}
+
+	}
+
+	companion object
+	{
+
+		/**
+		 * Create an intent that will be used to start the media activity with
+		 * an alarm attached.
+		 *
+		 * @param context A context.
+		 * @param alarm   An alarm.
+		 *
+		 * @return An intent that will be used to start the media activity with
+		 *         an alarm attached.
+		 */
+		fun getStartIntentWithAlarm(
+			context: Context,
+			alarm: NacAlarm
+		): Intent
+		{
+			// Create an intent
+			val intent = Intent(context, NacMediaActivity::class.java)
+
+			// Add the alarm to the intent
+			return NacIntent.addAlarm(intent, alarm)
+		}
+
+		/**
+		 * Create an intent that will be used to start the media activity with
+		 * a media path attached.
+		 *
+		 * @param context The application context.
+		 * @param mediaPath A media path.
+		 * @param shuffleMedia Whether to shuffle media or not.
+		 * @param recursivelyPlayMedia Whether to recursively play media or not.
+		 *
+		 * @return An intent that will be used to start the media activity with
+		 *         a media path attached.
+		 */
+		fun getStartIntentWithMedia(
+			context: Context? = null,
+			mediaPath: String,
+			shuffleMedia: Boolean,
+			recursivelyPlayMedia: Boolean
+		): Intent
+		{
+			// Create an intent with the media activity or an empty intent
+			val intent = context?.let {
+				Intent(context, NacMediaActivity::class.java)
+			} ?: Intent()
+
+			// Add the media to the intent
+			return NacIntent.addMediaInfo(intent, mediaPath, shuffleMedia,
+				recursivelyPlayMedia)
 		}
 
 	}

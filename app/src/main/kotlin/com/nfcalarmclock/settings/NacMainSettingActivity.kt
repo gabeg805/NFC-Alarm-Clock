@@ -22,12 +22,6 @@ class NacMainSettingActivity
 	val navController by lazy {
 		(supportFragmentManager.findFragmentById(R.id.hello_content) as NavHostFragment).navController
 	}
-	//val navHostFragment by lazy { NavHostFragment.create(R.navigation.nav_alarm_options) }
-
-	/**
-	 * Navigation controller.
-	 */
-	//val navController by lazy { navHostFragment.navController }
 
 	/**
 	 * The back stack count.

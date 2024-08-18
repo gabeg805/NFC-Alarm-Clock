@@ -274,16 +274,22 @@ class NacAlarm()
 	var timeOfDismissEarlyAlarm: Long = 0
 
 	/**
-	 * Snooze duration.
+	 * Time in which to auto snooze the alarm.
 	 */
-	@ColumnInfo(name = "snooze_duration", defaultValue = "0")
-	var snoozeDuration: Int = 5
+	@ColumnInfo(name = "auto_snooze_time", defaultValue = "0")
+	var autoSnoozeTime: Int = 15
 
 	/**
 	 * Max number of snoozes.
 	 */
 	@ColumnInfo(name = "max_snooze", defaultValue = "0")
 	var maxSnooze: Int = 0
+
+	/**
+	 * Snooze duration.
+	 */
+	@ColumnInfo(name = "snooze_duration", defaultValue = "0")
+	var snoozeDuration: Int = 5
 
 	/**
 	 * Whether snoozing is easy or not.
@@ -453,8 +459,9 @@ class NacAlarm()
 		timeOfDismissEarlyAlarm = input.readLong()
 
 		// Snooze
-		snoozeDuration = input.readInt()
+		autoSnoozeTime = input.readInt()
 		maxSnooze = input.readInt()
+		snoozeDuration = input.readInt()
 		useEasySnooze = input.readInt() != 0
 
 		// Reminder
@@ -665,8 +672,9 @@ class NacAlarm()
 		alarm.timeOfDismissEarlyAlarm = timeOfDismissEarlyAlarm
 
 		// Snooze
-		alarm.snoozeDuration = snoozeDuration
+		alarm.autoSnoozeTime = autoSnoozeTime
 		alarm.maxSnooze = maxSnooze
+		alarm.snoozeDuration = snoozeDuration
 		alarm.useEasySnooze = useEasySnooze
 
 		// Reminder
@@ -776,8 +784,9 @@ class NacAlarm()
 			&& (useDismissEarly == alarm.useDismissEarly)
 			&& (dismissEarlyTime == alarm.dismissEarlyTime)
 			&& (timeOfDismissEarlyAlarm == alarm.timeOfDismissEarlyAlarm)
-			&& (snoozeDuration == alarm.snoozeDuration)
+			&& (autoSnoozeTime == alarm.autoSnoozeTime)
 			&& (maxSnooze == alarm.maxSnooze)
+			&& (snoozeDuration == alarm.snoozeDuration)
 			&& (useEasySnooze == alarm.useEasySnooze)
 			&& (showReminder == alarm.showReminder)
 			&& (timeToShowReminder == alarm.timeToShowReminder)
@@ -897,8 +906,9 @@ class NacAlarm()
 		println("Use Dismiss Early   : $useDismissEarly")
 		println("Dismiss Early       : $dismissEarlyTime")
 		println("Time of Early Alarm : $timeOfDismissEarlyAlarm")
-		println("Snooze Duration     : $snoozeDuration")
+		println("Auto Snooze         : $autoSnoozeTime")
 		println("Max Snooze          : $maxSnooze")
+		println("Snooze Duration     : $snoozeDuration")
 		println("Use Easy Snooze     : $useEasySnooze")
 		println("Show Reminder       : $showReminder")
 		println("Time to show remind : $timeToShowReminder")
@@ -1127,8 +1137,9 @@ class NacAlarm()
 		output.writeLong(timeOfDismissEarlyAlarm)
 
 		// Snooze
-		output.writeInt(snoozeDuration)
+		output.writeInt(autoSnoozeTime)
 		output.writeInt(maxSnooze)
+		output.writeInt(snoozeDuration)
 		output.writeInt(if (useEasySnooze) 1 else 0)
 
 		// Reminder
@@ -1214,8 +1225,9 @@ class NacAlarm()
 			alarm.timeOfDismissEarlyAlarm = 0
 
 			// Snooze
-			alarm.snoozeDuration = shared?.snoozeDuration ?: 5
+			alarm.autoSnoozeTime = shared?.autoSnoozeTime ?: 0
 			alarm.maxSnooze = shared?.maxSnooze ?: 0
+			alarm.snoozeDuration = shared?.snoozeDuration ?: 5
 			alarm.useEasySnooze = shared?.easySnooze ?: false
 
 			// Reminder
@@ -1255,6 +1267,22 @@ class NacAlarm()
 			{
 				time / 5 + 4
 			}
+		}
+
+		/**
+		 * Calculate the auto snooze time from an index.
+		 */
+		fun calcAutoSnoozeTime(index: Int): Int
+		{
+			return index
+		}
+
+		/**
+		 * Calculate the auto snooze index from a value.
+		 */
+		fun calcAutoSnoozeIndex(time: Int): Int
+		{
+			return time
 		}
 
 		/**
