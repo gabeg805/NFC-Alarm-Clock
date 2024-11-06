@@ -275,6 +275,8 @@ class NacAlarm()
 
 	/**
 	 * Time in which to auto snooze the alarm.
+	 *
+	 * TODO: Change this to 0!
 	 */
 	@ColumnInfo(name = "auto_snooze_time", defaultValue = "0")
 	var autoSnoozeTime: Int = 15

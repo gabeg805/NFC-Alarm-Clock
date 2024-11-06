@@ -1,0 +1,14 @@
+Alarm clock that allows you to:
+
+* Customize the colors of your alarms
+* Customize what is shown in the alarm screen
+* Swipe to copy/delete an alarm
+* Play your own music to wake up
+* Use an NFC tag/card to dismiss an alarm
+* Gradually increase the volume when an alarm goes off
+* Restrict the volume when an alarm goes off
+* Use text-to-speech to say the time and/or the name of the alarm when it goes off
+* Dismiss the alarm early so that you don't have to wait for it to go off
+* Set reminders for an alarm
+* See (simple) statistics on your alarm usage
+* See how each permission in the app is used

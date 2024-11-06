@@ -1,0 +1,8 @@
+* Updated package versions. Because of the Room package update, this seems to
+  cause crashes that, according to the Google Developer console, aren't visible
+  to users, so maybe it's ok? Hopefully a later update to the Room package
+  fixes this.
+* Added auto-snooze feature because someone wanted it.
+* Fixed exception issues from using the flashlight feature.
+* Removed some unnecessary code, and updated the width/height of some Views to
+  placate some accessibility warnings I was getting.
