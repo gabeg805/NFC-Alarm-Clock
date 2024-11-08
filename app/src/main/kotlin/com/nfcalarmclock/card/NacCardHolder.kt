@@ -28,12 +28,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
 import com.nfcalarmclock.R
-import com.nfcalarmclock.activealarm.NacActiveAlarmService.Companion.dismissAlarmService
-import com.nfcalarmclock.activealarm.NacActiveAlarmService.Companion.startAlarmService
+import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService.Companion.dismissAlarmService
+import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService.Companion.startAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.media.NacMedia
-import com.nfcalarmclock.name.NacNameDialog
-import com.nfcalarmclock.name.NacNameDialog.OnNameEnteredListener
+import com.nfcalarmclock.util.media.NacMedia
+import com.nfcalarmclock.alarm.options.name.NacNameDialog
+import com.nfcalarmclock.alarm.options.name.NacNameDialog.OnNameEnteredListener
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar.Day
 import com.nfcalarmclock.util.NacUtility.getHeight
@@ -157,7 +157,7 @@ class NacCardHolder(
 	/**
 	 * Header view.
 	 */
-	private val headerView: LinearLayout = root.findViewById(R.id.nac_header)
+	private val headerView: LinearLayout = root.findViewById(R.id.nac_collapsed_alarm)
 
 	/**
 	 * Summary view.
@@ -165,9 +165,9 @@ class NacCardHolder(
 	private val summaryView: LinearLayout = root.findViewById(R.id.nac_summary)
 
 	/**
-	 * Dismiss snoozed alarm parent view.
+	 * Extra view below the summary.
 	 */
-	private val dismissParentView: LinearLayout = root.findViewById(R.id.nac_dismiss_parent)
+	private val extraBelowSummaryView: LinearLayout = root.findViewById(R.id.nac_extra_below_summary)
 
 	/**
 	 * Dismiss snoozed alarm button.
@@ -180,9 +180,9 @@ class NacCardHolder(
 	private val dismissEarlyButton: MaterialButton = root.findViewById(R.id.nac_dismiss_early)
 
 	/**
-	 * Extra view.
+	 * Expanded alarm view.
 	 */
-	private val extraView: LinearLayout = root.findViewById(R.id.nac_extra)
+	private val expandedView: LinearLayout = root.findViewById(R.id.nac_expanded_alarm)
 
 	/**
 	 * On/off switch for an alarm.
@@ -372,7 +372,7 @@ class NacCardHolder(
 		// Check if the alarm is snoozed or will alarm soon
 		get() = if (alarm!!.isSnoozed || alarm!!.willAlarmSoon())
 		{
-			// Show a little extra space for buttons right beneath the time
+			// Show a little extra space for stuff right beneath the summary
 			sharedPreferences.cardHeightCollapsedDismiss
 		}
 		else
@@ -397,7 +397,7 @@ class NacCardHolder(
 	 * Check if the alarm card is collapsed.
 	 */
 	val isCollapsed: Boolean
-		get() = (extraView.visibility == View.GONE)
+		get() = (expandedView.visibility == View.GONE)
 			|| (cardView.measuredHeight == sharedPreferences.cardHeightCollapsed)
 			|| (cardView.measuredHeight == sharedPreferences.cardHeightCollapsedDismiss)
 
@@ -405,7 +405,7 @@ class NacCardHolder(
 	 * Check if the alarm card is expanded.
 	 */
 	val isExpanded: Boolean
-		get() = (extraView.visibility == View.VISIBLE)
+		get() = (expandedView.visibility == View.VISIBLE)
 			|| (cardView.measuredHeight == sharedPreferences.cardHeightExpanded)
 
 	/**
@@ -651,7 +651,7 @@ class NacCardHolder(
 		val toHeight: Int
 
 		// Set the from/to heights that the collapse will act on
-		if (dismissParentView.visibility == View.VISIBLE)
+		if (extraBelowSummaryView.visibility == View.VISIBLE)
 		{
 			fromHeight = sharedPreferences.cardHeightCollapsed
 			toHeight = sharedPreferences.cardHeightCollapsedDismiss
@@ -757,11 +757,11 @@ class NacCardHolder(
 		summaryView.visibility = View.VISIBLE
 		summaryView.isEnabled = true
 
-		// Setup the extra
-		extraView.visibility = View.GONE
-		extraView.isEnabled = false
+		// Setup the expanded view
+		expandedView.visibility = View.GONE
+		expandedView.isEnabled = false
 
-		// Refresh dismiss buttons
+		// Refresh the extra view
 		refreshDismissAndDismissEarlyButtons()
 	}
 
@@ -841,7 +841,7 @@ class NacCardHolder(
 		// Dismiss the alarm early
 		alarm!!.dismissEarly()
 
-		// Refresh the dismiss button
+		// Refresh the extra view
 		refreshDismissAndDismissEarlyButtons()
 		collapseRefresh()
 
@@ -858,9 +858,9 @@ class NacCardHolder(
 		summaryView.visibility = View.GONE
 		summaryView.isEnabled = false
 
-		// Setup the extra
-		extraView.visibility = View.VISIBLE
-		extraView.isEnabled = true
+		// Setup the expanded view
+		expandedView.visibility = View.VISIBLE
+		expandedView.isEnabled = true
 	}
 
 	/**
@@ -1238,19 +1238,19 @@ class NacCardHolder(
 		// Collapse the card
 		doCollapse()
 
-		// Hide the dismiss button
-		dismissParentView.visibility = View.GONE
+		// Hide the extra view
+		extraBelowSummaryView.visibility = View.GONE
 
 		// Save the height
 		heights[0] = getHeight(cardView)
 
-		// Show the dismiss button
-		dismissParentView.visibility = View.VISIBLE
+		// Show the extra view
+		extraBelowSummaryView.visibility = View.VISIBLE
 
 		// Save the height
 		heights[1] = getHeight(cardView)
 
-		// Refresh the dismiss and dismiss early buttons
+		// Refresh the extra view
 		refreshDismissAndDismissEarlyButtons()
 	}
 
@@ -1292,19 +1292,21 @@ class NacCardHolder(
 
 		// The "Dismiss"/"Dismiss early" button OR the "Expand" down-arrow button
 		// are NOT the correct and expected visibilities
-		return (dismissParentView.visibility != dismissVisibility)
+		return (extraBelowSummaryView.visibility != dismissVisibility)
 			|| (expandButton.visibility != expandVisibility)
 	}
 
 	/**
-	 * Set the dismiss view parent, which contains both "Dismiss" and
-	 * "Dismiss early" to its proper setting.
+	 * Refresh the extra view, which contains any one of the "Dismiss",
+	 * "Dismiss early", or "Skipping next alarm" views.
 	 */
 	private fun refreshDismissAndDismissEarlyButtons()
 	{
 
-		// Alarm is in use, or will alarm soon so the "Dismiss" or "Dismiss early"
-		// button should be shown
+		// Alarm is in use, or will alarm soon so the "Dismiss", "Dismiss early",
+		// or "Skipping next alarm" text should be shown
+		// TODO: Add logic for new thing
+		// TODO: Find out why this does not get refreshed when an alarm is auto dismissed
 		val dismissVis = if (alarm!!.isInUse || alarm!!.willAlarmSoon())
 		{
 			View.VISIBLE
@@ -1314,7 +1316,8 @@ class NacCardHolder(
 			View.GONE
 		}
 
-		// The dismiss view is being shown so do not show this view
+		// The extra view should be hidden so show the expand button on its
+		// normal row (the summary row)
 		val expandVis = if (dismissVis == View.GONE)
 		{
 			View.VISIBLE
@@ -1324,19 +1327,19 @@ class NacCardHolder(
 			View.INVISIBLE
 		}
 
-		// Set the "Dismiss" button visibility
-		if (dismissParentView.visibility != dismissVis)
+		// Set the extra view visibility
+		if (extraBelowSummaryView.visibility != dismissVis)
 		{
-			dismissParentView.visibility = dismissVis
+			extraBelowSummaryView.visibility = dismissVis
 		}
 
-		// Set the "Expand" down-arrow button visibility
+		// Set the expand button visibility
 		if (expandButton.visibility != expandVis)
 		{
 			expandButton.visibility = expandVis
 		}
 
-		// Set the "Dismiss" and "Dismiss early" visibilities
+		// Set the extra view visibility
 		if (dismissVis == View.VISIBLE)
 		{
 			// Alarm is in use
@@ -1363,14 +1366,14 @@ class NacCardHolder(
 	 */
 	private fun refreshDismissAndDismissEarlyButtonsWithCollapse()
 	{
-		// Get the visiblity before refreshing the dismiss buttons
-		val beforeVisibility = dismissParentView.visibility
+		// Get the visiblity before refreshing the extra view
+		val beforeVisibility = extraBelowSummaryView.visibility
 
-		// Refresh dismiss buttons
+		// Refresh the extra view
 		refreshDismissAndDismissEarlyButtons()
 
-		// Get the visiblity after refreshing the dismiss buttons
-		val afterVisibility = dismissParentView.visibility
+		// Get the visiblity after refreshing the extra view
+		val afterVisibility = extraBelowSummaryView.visibility
 
 		// Determine if the card is already collapsed and the visibility of the
 		// dismiss buttons has changed after the new time was set. If so, there
@@ -2026,7 +2029,7 @@ class NacCardHolder(
 		// id == R.id.nac_collapse_parent
 
 		// List of all the views that need the same on click listener for the card
-		val allCardViews = listOf(headerView, summaryView, dismissParentView,
+		val allCardViews = listOf(headerView, summaryView, extraBelowSummaryView,
 			expandButton, expandOtherButton, collapseButton, collapseParentView)
 
 		// Iterate over all the main card views that will control expanding and

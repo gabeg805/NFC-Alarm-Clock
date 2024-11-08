@@ -11,14 +11,14 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.mediapicker.NacMediaActivity
-import com.nfcalarmclock.mediapicker.NacMediaPreference
-import com.nfcalarmclock.name.NacNamePreference
+import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerActivity
+import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerPreference
+import com.nfcalarmclock.alarm.options.name.NacNamePreference
 import com.nfcalarmclock.util.NacBundle
 import com.nfcalarmclock.util.NacIntent
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeekPreference
-import com.nfcalarmclock.volume.NacVolumePreference
-import com.nfcalarmclock.volume.NacVolumePreference.OnAudioOptionsClickedListener
+import com.nfcalarmclock.alarm.options.volume.NacVolumePreference
+import com.nfcalarmclock.alarm.options.volume.NacVolumePreference.OnAudioOptionsClickedListener
 
 /**
  * General settings fragment.
@@ -36,7 +36,7 @@ class NacGeneralSettingFragment
 	/**
 	 * The sound preference.
 	 */
-	private var mediaPreference: NacMediaPreference? = null
+	private var mediaPreference: NacMediaPickerPreference? = null
 
 	/**
 	 * Called when the media activity is finished and returns a result.
@@ -228,7 +228,7 @@ class NacGeneralSettingFragment
 	{
 		// Get the preference
 		val key = resources.getString(R.string.alarm_sound_key)
-		val pref = findPreference<NacMediaPreference>(key)
+		val pref = findPreference<NacMediaPickerPreference>(key)
 
 		// Set the member variables
 		mediaPreference = pref
@@ -239,7 +239,7 @@ class NacGeneralSettingFragment
 		pref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
 
 			// Create the intent
-			val intent = NacMediaActivity.getStartIntentWithMedia(
+			val intent = NacMediaPickerActivity.getStartIntentWithMedia(
 				context,
 				sharedPreferences!!.mediaPath,
 				sharedPreferences!!.shouldShuffleMedia,

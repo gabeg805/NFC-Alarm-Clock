@@ -19,9 +19,9 @@
 		android:layout_height="wrap_content"
 		android:orientation="vertical">
 
-		<!-- Header -->
+		<!-- Collapsed alarm -->
 		<LinearLayout
-			android:id="@+id/nac_header"
+			android:id="@+id/nac_collapsed_alarm"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:paddingTop="@dimen/normal"
@@ -69,7 +69,7 @@
 				android:paddingBottom="@dimen/normal"
 				app:switchMinWidth="@dimen/isz_attention"
 				/>
-		</LinearLayout> <!-- Header -->
+		</LinearLayout> <!-- Collapsed alarm -->
 
 		<!-- Summary -->
 		<LinearLayout
@@ -133,15 +133,16 @@
 					/>
 			</LinearLayout> <!-- Day and name -->
 
-			<!-- Dismiss snoozed alarm -->
+			<!-- Extra info beneath summary -->
 			<LinearLayout
-				android:id="@+id/nac_dismiss_parent"
+				android:id="@+id/nac_extra_below_summary"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:orientation="horizontal"
 				android:gravity="center_vertical"
 				android:alpha="0.8">
 
+				<!-- Dismiss snoozed alarm -->
 				<com.google.android.material.button.MaterialButton
 					style="@style/Widget.Button.Text.Row"
 					android:id="@+id/nac_dismiss"
@@ -156,6 +157,7 @@
 					app:icon="@drawable/dismiss"
 					/>
 
+				<!-- Dismiss early -->
 				<com.google.android.material.button.MaterialButton
 					style="@style/Widget.Button.Text.Row"
 					android:id="@+id/nac_dismiss_early"
@@ -169,6 +171,22 @@
 					android:visibility="gone"
 					app:iconSize="@dimen/medium"
 					app:icon="@drawable/dismiss"
+					/>
+
+				<!-- Skipping next alarm -->
+				<com.google.android.material.button.MaterialButton
+					style="@style/Widget.Button.Text.Row"
+					android:id="@+id/nac_next_skipped"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:minWidth="@dimen/zero"
+					android:minHeight="@dimen/zero"
+					android:layout_marginStart="@dimen/nudge"
+					android:textSize="@dimen/tsz_small"
+					android:text="Skipping next alarm"
+					android:visibility="gone"
+					app:iconSize="@dimen/medium"
+					app:icon="@drawable/close"
 					/>
 
 				<Space
@@ -187,9 +205,9 @@
 			</LinearLayout> <!-- Dismiss snoozed alarm -->
 		</LinearLayout> <!-- Summary -->
 
-		<!-- Extra -->
+		<!-- Expanded alarm -->
 		<LinearLayout
-			android:id="@+id/nac_extra"
+			android:id="@+id/nac_expanded_alarm"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical"
@@ -412,7 +430,7 @@
 					/>
 			</LinearLayout> <!-- Delete/collapse -->
 
-		</LinearLayout> <!-- Extra -->
+		</LinearLayout> <!-- Expanded alarm -->
 
 	</LinearLayout> <!-- Content -->
 

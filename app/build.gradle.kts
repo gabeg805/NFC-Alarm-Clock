@@ -143,7 +143,7 @@ dependencies {
 
 	// Room database (Any later requires API > 34
 	implementation("androidx.room:room-runtime:2.6.1")
-	annotationProcessor("androidx.room:room-compiler:2.6.1")
+	ksp("androidx.room:room-compiler:2.6.1")
 
 	// Room kotlin extensions and coroutines
 	ksp("androidx.room:room-compiler:2.6.1")

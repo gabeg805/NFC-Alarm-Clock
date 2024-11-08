@@ -7,7 +7,7 @@
 
 	<dialog
 		android:id="@+id/nacAlarmOptionsDialog"
-		android:name="com.nfcalarmclock.alarmoptions.NacAlarmOptionsDialog"
+		android:name="com.nfcalarmclock.alarm.options.NacAlarmOptionsDialog"
 		android:label="NacAlarmOptionsDialog" >
 		<action
 			android:id="@+id/action_nacAlarmOptionsDialog_to_nacDismissOptionsDialog"
@@ -36,34 +36,34 @@
 	</dialog>
 	<dialog
 		android:id="@+id/nacDismissOptionsDialog"
-		android:name="com.nfcalarmclock.alarmoptions.dismissoptions.NacDismissOptionsDialog"
+		android:name="com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog"
 		android:label="NacDismissOptionsDialog" />
 	<dialog
 		android:id="@+id/nacSnoozeOptionsDialog"
-		android:name="com.nfcalarmclock.alarmoptions.snoozeoptions.NacSnoozeOptionsDialog"
+		android:name="com.nfcalarmclock.alarm.options.snoozeoptions.NacSnoozeOptionsDialog"
 		android:label="NacSnoozeOptionsDialog" />
 	<dialog
 		android:id="@+id/nacAudioSourceDialog"
-		android:name="com.nfcalarmclock.alarmoptions.audiosource.NacAudioSourceDialog"
+		android:name="com.nfcalarmclock.alarm.options.audiosource.NacAudioSourceDialog"
 		android:label="NacAudioSourceDialog" />
 	<dialog
 		android:id="@+id/nacGraduallyIncreaseVolumeDialog"
-		android:name="com.nfcalarmclock.alarmoptions.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog"
+		android:name="com.nfcalarmclock.alarm.options.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog"
 		android:label="NacGraduallyIncreaseVolumeDialog" />
 	<dialog
 		android:id="@+id/nacRestrictVolumeDialog"
-		android:name="com.nfcalarmclock.alarmoptions.restrictvolume.NacRestrictVolumeDialog"
+		android:name="com.nfcalarmclock.alarm.options.restrictvolume.NacRestrictVolumeDialog"
 		android:label="NacRestrictVolumeDialog" />
 	<dialog
 		android:id="@+id/nacTextToSpeechDialog"
-		android:name="com.nfcalarmclock.alarmoptions.tts.NacTextToSpeechDialog"
+		android:name="com.nfcalarmclock.alarm.options.tts.NacTextToSpeechDialog"
 		android:label="NacTextToSpeechDialog" />
 	<dialog
 		android:id="@+id/nacUpcomingReminderDialog"
-		android:name="com.nfcalarmclock.alarmoptions.upcomingreminder.NacUpcomingReminderDialog"
+		android:name="com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderDialog"
 		android:label="NacUpcomingReminderDialog" />
 	<dialog
 		android:id="@+id/nacFlashlightOptionsDialog"
-		android:name="com.nfcalarmclock.alarmoptions.flashlight.NacFlashlightOptionsDialog"
+		android:name="com.nfcalarmclock.alarm.options.flashlight.NacFlashlightOptionsDialog"
 		android:label="NacFlashlightOptionsDialog" />
 </navigation>

@@ -33,4 +33,18 @@
 		app:showAsAction="never"
 		/>
 
+	<item
+		android:id="@+id/menu_skip_next_alarm"
+		android:orderInCategory="500"
+		android:title="Skip next alarm"
+		app:showAsAction="never"
+		/>
+
+	<item
+		android:id="@+id/menu_unskip_next_alarm"
+		android:orderInCategory="600"
+		android:title="Unskip next alarm"
+		app:showAsAction="never"
+		/>
+
 </menu>

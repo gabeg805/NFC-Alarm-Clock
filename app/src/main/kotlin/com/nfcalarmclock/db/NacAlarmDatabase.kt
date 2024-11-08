@@ -20,9 +20,9 @@ import com.nfcalarmclock.db.NacAlarmDatabase.ClearNfcTagTableMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.DropNfcTagTableMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.RemoveUseTtsColumnMigration
 import com.nfcalarmclock.db.NacOldDatabase.Companion.read
-import com.nfcalarmclock.nfc.db.NacNfcTag
-import com.nfcalarmclock.nfc.db.NacNfcTagDao
-import com.nfcalarmclock.scheduler.NacScheduler
+import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
+import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTagDao
+import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.db.NacAlarmCreatedStatistic
 import com.nfcalarmclock.statistics.db.NacAlarmCreatedStatisticDao
@@ -50,7 +50,7 @@ import javax.inject.Singleton
 /**
  * Store alarms in a Room database.
  */
-@Database(version = 26,
+@Database(version = 27,
 	entities = [
 		NacAlarm::class,
 		NacAlarmCreatedStatistic::class,
@@ -84,7 +84,8 @@ import javax.inject.Singleton
 		AutoMigration(from = 22, to = 23),
 		AutoMigration(from = 23, to = 24),
 		AutoMigration(from = 24, to = 25),
-		AutoMigration(from = 25, to = 26)]
+		AutoMigration(from = 25, to = 26),
+		AutoMigration(from = 26, to = 27)]
 )
 @TypeConverters(NacAlarmTypeConverters::class, NacStatisticTypeConverters::class)
 abstract class NacAlarmDatabase

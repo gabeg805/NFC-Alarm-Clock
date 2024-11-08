@@ -65,7 +65,7 @@
 			/>
 
 		<!-- Media -->
-		<com.nfcalarmclock.mediapicker.NacMediaPreference
+		<com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerPreference
 			android:key="@string/alarm_sound_key"
 			android:title="@string/alarm_sound"
 			android:summary="@string/alarm_sound_summary"

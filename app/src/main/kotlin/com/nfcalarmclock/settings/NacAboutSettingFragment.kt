@@ -5,10 +5,10 @@ import android.os.Bundle
 import androidx.preference.Preference
 import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
-import com.nfcalarmclock.permission.ignorebatteryoptimization.NacIgnoreBatteryOptimizationPermission
-import com.nfcalarmclock.permission.postnotifications.NacPostNotificationsPermission
-import com.nfcalarmclock.permission.readmediaaudio.NacReadMediaAudioPermission
-import com.nfcalarmclock.permission.scheduleexactalarm.NacScheduleExactAlarmPermission
+import com.nfcalarmclock.system.permission.ignorebatteryoptimization.NacIgnoreBatteryOptimizationPermission
+import com.nfcalarmclock.system.permission.postnotifications.NacPostNotificationsPermission
+import com.nfcalarmclock.system.permission.readmediaaudio.NacReadMediaAudioPermission
+import com.nfcalarmclock.system.permission.scheduleexactalarm.NacScheduleExactAlarmPermission
 import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog
 

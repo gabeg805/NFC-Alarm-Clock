@@ -332,7 +332,22 @@ object NacCalendar
 		val calendars = alarmToCalendars(alarm)
 
 		// Get the calendar day that is the soonest
-		return getNextDay(calendars)!!
+		val nextDay = getNextDay(calendars)!!
+
+		// Check if the next alarm should be skipped
+		return if (alarm.shouldSkipNextAlarm)
+		{
+			println("Redetermining calendar day")
+			// Get another calendar day ignoring the one that was previously
+			// determined
+			getNextDay(calendars, skipDay = nextDay)!!
+		}
+		else
+		{
+			println("Return next calendar day")
+			// Return the next day
+			nextDay
+		}
 	}
 
 	/**
@@ -340,7 +355,7 @@ object NacCalendar
 	 *
 	 * @return The Calendary day that represents the next upcoming day.
 	 */
-	private fun getNextDay(calendars: List<Calendar>): Calendar?
+	private fun getNextDay(calendars: List<Calendar>, skipDay: Calendar? = null): Calendar?
 	{
 		var next: Calendar? = null
 
@@ -348,8 +363,11 @@ object NacCalendar
 		for (c in calendars)
 		{
 			// Check if either the "next" calendar has not been set yet,
-			// or occurs after the current calendar item
-			next = if ((next == null) || next.after(c))
+			// or occurs after the current calendar item.
+			//
+			// If "skipDay" is set, it will make sure to ignore that day since,
+			// as the name suggests, it should be skipped
+			next = if ((next == null) || next.after(c) || next == skipDay)
 			{
 				c
 			}

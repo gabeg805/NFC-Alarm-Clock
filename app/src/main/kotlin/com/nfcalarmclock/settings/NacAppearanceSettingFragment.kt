@@ -4,9 +4,9 @@ import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
-import com.nfcalarmclock.nextalarmformat.NacNextAlarmFormatPreference
+import com.nfcalarmclock.alarm.options.nextalarmformat.NacNextAlarmFormatPreference
 import com.nfcalarmclock.settings.preference.NacCheckboxPreference
-import com.nfcalarmclock.startweekon.NacStartWeekOnPreference
+import com.nfcalarmclock.alarm.options.startweekon.NacStartWeekOnPreference
 import com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 
 /**

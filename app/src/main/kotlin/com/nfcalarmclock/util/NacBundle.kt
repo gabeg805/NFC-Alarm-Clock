@@ -5,7 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.media.NacAudioAttributes
+import com.nfcalarmclock.util.media.NacAudioAttributes
 
 /**
  * Bundle helper.

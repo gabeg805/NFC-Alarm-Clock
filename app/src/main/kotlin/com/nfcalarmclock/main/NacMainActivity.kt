@@ -27,8 +27,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
 import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
-import com.nfcalarmclock.activealarm.NacActiveAlarmActivity
-import com.nfcalarmclock.activealarm.NacActiveAlarmService
+import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmActivity
+import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.card.NacCardAdapter
@@ -45,19 +45,19 @@ import com.nfcalarmclock.card.NacCardHolder.OnCardUseNfcChangedListener
 import com.nfcalarmclock.card.NacCardLayoutManager
 import com.nfcalarmclock.card.NacCardTouchHelper
 import com.nfcalarmclock.card.NacCardTouchHelper.OnSwipedListener
-import com.nfcalarmclock.mediapicker.NacMediaActivity
-import com.nfcalarmclock.nfc.NacNfc
-import com.nfcalarmclock.nfc.NacNfcTagViewModel
-import com.nfcalarmclock.nfc.NacSaveNfcTagDialog
-import com.nfcalarmclock.nfc.NacScanNfcTagDialog
-import com.nfcalarmclock.nfc.NacScanNfcTagDialog.OnScanNfcTagListener
-import com.nfcalarmclock.nfc.db.NacNfcTag
-import com.nfcalarmclock.permission.NacPermissionRequestManager
+import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerActivity
+import com.nfcalarmclock.alarm.options.nfc.NacNfc
+import com.nfcalarmclock.alarm.options.nfc.NacNfcTagViewModel
+import com.nfcalarmclock.alarm.options.nfc.NacSaveNfcTagDialog
+import com.nfcalarmclock.alarm.options.nfc.NacScanNfcTagDialog
+import com.nfcalarmclock.alarm.options.nfc.NacScanNfcTagDialog.OnScanNfcTagListener
+import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
+import com.nfcalarmclock.system.permission.NacPermissionRequestManager
 import com.nfcalarmclock.ratemyapp.NacRateMyApp
-import com.nfcalarmclock.scheduler.NacScheduler
+import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.settings.NacMainSettingActivity
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.shutdown.NacShutdownBroadcastReceiver
+import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.statistics.NacAlarmStatisticViewModel
 import com.nfcalarmclock.util.NacBundle
 import com.nfcalarmclock.util.NacCalendar
@@ -815,7 +815,7 @@ class NacMainActivity
 		holder.onCardMediaClickedListener = OnCardMediaClickedListener { _, alarm ->
 
 			// Create an intent for the media activity with the alarm attached
-			val intent = NacMediaActivity.getStartIntentWithAlarm(this, alarm)
+			val intent = NacMediaPickerActivity.getStartIntentWithAlarm(this, alarm)
 
 			// Start the activity
 			startActivity(intent)
@@ -844,29 +844,75 @@ class NacMainActivity
 			// Inflate the context menu
 			menuInflater.inflate(R.menu.menu_card, menu)
 
+			// Get the alarm for this card holder
+			val alarm = holder.alarm!!
+
 			// Iterate over each menu item
 			for (i in 0 until menu.size())
 			{
 				// Get the menu item
 				val item = menu.getItem(i)
 
-				// Set the listener for a menu item
-				item.setOnMenuItemClickListener { menuItem: MenuItem ->
-
-					when (menuItem.itemId)
+				// Check the ID of the menu item
+				when (item.itemId)
+				{
+					// Show next alarm
+					R.id.menu_show_next_alarm ->
 					{
 						// Show the next time the alarm will run
-						R.id.menu_show_next_alarm -> showAlarmSnackbar(holder.alarm!!)
-
-						// Show the NFC tag ID that was set for this alarm
-						R.id.menu_show_nfc_tag_id -> showNfcTagId(holder.alarm!!)
-
-						// Unknown
-						else -> {}
+						item.setOnMenuItemClickListener { _ ->
+							showAlarmSnackbar(alarm)
+							true
+						}
 					}
 
-					// Return
-					true
+					// Show NFC tag
+					R.id.menu_show_nfc_tag_id ->
+					{
+						// Set the visibility of this item based on if NFC is being
+						// used for the alarm
+						item.isVisible = alarm.useNfc
+
+						// Show the NFC tag for the current alarm
+						item.setOnMenuItemClickListener { _ ->
+							showNfcTagId(alarm)
+							true
+						}
+					}
+
+					// Skip next alarm
+					R.id.menu_skip_next_alarm ->
+					{
+						// Set the visibility of the menu item based on if the
+						// next alarm is NOT skipped
+						item.isVisible = !holder.alarm!!.shouldSkipNextAlarm
+
+						// Skip the next alarm
+						item.setOnMenuItemClickListener { _ ->
+							alarm.shouldSkipNextAlarm = true
+							updateAlarm(alarm)
+							true
+						}
+					}
+
+					// Unskip next alarm
+					R.id.menu_unskip_next_alarm ->
+					{
+						// Set the visibility of the menu item based on if the
+						// next alarm is skipped
+						item.isVisible = holder.alarm!!.shouldSkipNextAlarm
+
+						// Unskip the next alarm
+						item.setOnMenuItemClickListener { _ ->
+							alarm.shouldSkipNextAlarm = false
+							updateAlarm(alarm)
+							true
+						}
+					}
+
+					// Unknown
+					else -> {}
+
 				}
 			}
 

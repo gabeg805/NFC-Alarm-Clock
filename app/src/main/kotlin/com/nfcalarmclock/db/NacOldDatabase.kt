@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.media.NacMedia
+import com.nfcalarmclock.util.media.NacMedia
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar
 

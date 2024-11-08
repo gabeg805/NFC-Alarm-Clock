@@ -136,7 +136,7 @@
 		<!-- Alarm activity -->
 		<activity
 			android:theme="@style/AppTheme.NoActionBar"
-			android:name=".activealarm.NacActiveAlarmActivity"
+			android:name=".alarm.activealarm.NacActiveAlarmActivity"
 			android:taskAffinity=""
 			android:excludeFromRecents="true">
 		</activity>
@@ -151,7 +151,7 @@
 
 		<!-- Media activity -->
 		<activity
-			android:name=".mediapicker.NacMediaActivity"
+			android:name=".alarm.options.mediapicker.NacMediaPickerActivity"
 			android:launchMode="singleInstance"
 			android:exported="false">
 
@@ -167,14 +167,14 @@
 
 		<!-- Start an active alarm (show notification and call alarm activity) -->
 		<service
-			android:name=".activealarm.NacActiveAlarmService"
+			android:name=".alarm.activealarm.NacActiveAlarmService"
 			android:foregroundServiceType="systemExempted"
 			android:exported="false">
 		</service>
 
 		<!-- Start an upcoming reminder -->
 		<service
-			android:name=".alarmoptions.upcomingreminder.NacUpcomingReminderService"
+			android:name=".alarm.options.upcomingreminder.NacUpcomingReminderService"
 			android:foregroundServiceType="systemExempted"
 			android:exported="false">
 		</service>
@@ -182,12 +182,12 @@
 		<!-- Alarm manager broadcasts this so that alarms can be started.
 		     Start the foreground service. -->
 		<receiver
-			android:name=".activealarm.NacActiveAlarmBroadcastReceiver"
+			android:name=".alarm.activealarm.NacActiveAlarmBroadcastReceiver"
 			/>
 
 		<!-- Restore alarms on boot -->
 		<receiver
-			android:name=".startup.NacStartupBroadcastReceiver"
+			android:name=".system.triggers.startup.NacStartupBroadcastReceiver"
 			android:enabled="true"
 			android:exported="false"
 			android:directBootAware="true"
@@ -205,7 +205,7 @@
 
 		<!-- Shutdown active alarms on boot -->
 		<receiver
-			android:name=".shutdown.NacShutdownBroadcastReceiver"
+			android:name=".system.triggers.shutdown.NacShutdownBroadcastReceiver"
 			android:enabled="true"
 			android:exported="false">
 
@@ -220,7 +220,7 @@
 
 		<!-- Change alarms when time changes. -->
 		<receiver
-			android:name=".timechange.NacTimeChangeBroadcastReceiver"
+			android:name=".system.triggers.timechange.NacTimeChangeBroadcastReceiver"
 			android:enabled="true"
 			android:exported="false">
 
@@ -234,7 +234,7 @@
 
 		<!-- Refresh alarms when the Schedule Exact Alarm permission is changed -->
 		<receiver
-			android:name=".permission.scheduleexactalarm.NacScheduleExactAlarmPermissionChangedBroadcastReceiver"
+			android:name=".system.permission.scheduleexactalarm.NacScheduleExactAlarmPermissionChangedBroadcastReceiver"
 			android:enabled="true"
 			android:exported="false">
 
@@ -245,7 +245,7 @@
 
 		<!-- Restore alarms after the app is updated. Alarms are lost after an update -->
 		<receiver
-			android:name=".appupdate.NacAppUpdatedBroadcastReceiver"
+			android:name=".system.triggers.appupdate.NacAppUpdatedBroadcastReceiver"
 			android:enabled="true"
 			android:exported="false">
 

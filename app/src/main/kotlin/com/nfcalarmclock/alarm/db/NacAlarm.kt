@@ -7,7 +7,7 @@ import android.text.format.DateFormat
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.nfcalarmclock.media.NacMedia
+import com.nfcalarmclock.util.media.NacMedia
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacCalendar.Day
@@ -40,7 +40,7 @@ class NacAlarm()
 	/**
 	 * Flag indicating whether the alarm is currently active or not.
 	 */
-	@ColumnInfo(name = "is_active")
+	@ColumnInfo(name = "is_active", defaultValue = "0")
 	var isActive: Boolean = false
 
 	/**
@@ -48,43 +48,43 @@ class NacAlarm()
 	 *
 	 * This will typically only change when the alarm is snoozed.
 	 */
-	@ColumnInfo(name = "time_active")
+	@ColumnInfo(name = "time_active", defaultValue = "0")
 	var timeActive: Long = 0
 
 	/**
 	 * Number of times the alarm has been snoozed.
 	 */
-	@ColumnInfo(name = "snooze_count")
+	@ColumnInfo(name = "snooze_count", defaultValue = "0")
 	var snoozeCount: Int = 0
 
 	/**
 	 * Flag indicating whether the alarm is enabled or not.
 	 */
-	@ColumnInfo(name = "is_enabled")
+	@ColumnInfo(name = "is_enabled", defaultValue = "0")
 	var isEnabled: Boolean = false
 
 	/**
 	 * Hour at which to run the alarm.
 	 */
-	@ColumnInfo(name = "hour")
+	@ColumnInfo(name = "hour", defaultValue = "0")
 	var hour: Int = 0
 
 	/**
 	 * Minute at which to run the alarm.
 	 */
-	@ColumnInfo(name = "minute")
+	@ColumnInfo(name = "minute", defaultValue = "0")
 	var minute: Int = 0
 
 	/**
 	 * Hour at which to run the alarm, when it is snoozed.
 	 */
-	@ColumnInfo(name = "snooze_hour")
+	@ColumnInfo(name = "snooze_hour", defaultValue = "0")
 	var snoozeHour: Int = 0
 
 	/**
 	 * Minute at which to run the alarm, when it is snoozed
 	 */
-	@ColumnInfo(name = "snooze_minute")
+	@ColumnInfo(name = "snooze_minute", defaultValue = "0")
 	var snoozeMinute: Int = 0
 
 	/**
@@ -96,19 +96,19 @@ class NacAlarm()
 	/**
 	 * Flag indicating whether the alarm should be repeated or not.
 	 */
-	@ColumnInfo(name = "should_repeat")
+	@ColumnInfo(name = "should_repeat", defaultValue = "0")
 	var repeat: Boolean = false
 
 	/**
 	 * Flag indicating whether the alarm should vibrate the phone or not.
 	 */
-	@ColumnInfo(name = "should_vibrate")
+	@ColumnInfo(name = "should_vibrate", defaultValue = "0")
 	var vibrate: Boolean = false
 
 	/**
 	 * Flag indicating whether the alarm should use NFC or not.
 	 */
-	@ColumnInfo(name = "should_use_nfc")
+	@ColumnInfo(name = "should_use_nfc", defaultValue = "0")
 	var useNfc: Boolean = false
 
 	/**
@@ -169,7 +169,7 @@ class NacAlarm()
 	/**
 	 * Type of media.
 	 */
-	@ColumnInfo(name = "media_type")
+	@ColumnInfo(name = "media_type", defaultValue = "0")
 	var mediaType: Int = 0
 
 	/**
@@ -193,7 +193,7 @@ class NacAlarm()
 	/**
 	 * Volume level to set when the alarm is run.
 	 */
-	@ColumnInfo(name = "volume")
+	@ColumnInfo(name = "volume", defaultValue = "0")
 	var volume: Int = 0
 
 	/**
@@ -225,14 +225,14 @@ class NacAlarm()
 	/**
 	 * Frequency at which to play text-to-speech, in units of minutes.
 	 */
-	@ColumnInfo(name = "tts_frequency")
+	@ColumnInfo(name = "tts_frequency", defaultValue = "0")
 	var ttsFrequency: Int = 0
 
 	/**
 	 * Flag indicating whether to gradually increase the volume or not, when an
 	 * alarm is active.
 	 */
-	@ColumnInfo(name = "should_gradually_increase_volume")
+	@ColumnInfo(name = "should_gradually_increase_volume", defaultValue = "0")
 	var shouldGraduallyIncreaseVolume: Boolean = false
 
 	/**
@@ -246,40 +246,38 @@ class NacAlarm()
 	 * Flag indicating whether to restrict changing the volume or not, when an
 	 * alarm is active.
 	 */
-	@ColumnInfo(name = "should_restrict_volume")
+	@ColumnInfo(name = "should_restrict_volume", defaultValue = "0")
 	var shouldRestrictVolume: Boolean = false
 
 	/**
 	 * Time in which to auto dismiss the alarm.
 	 */
 	@ColumnInfo(name = "auto_dismiss_time", defaultValue = "0")
-	var autoDismissTime: Int = 15
+	var autoDismissTime: Int = 0
 
 	/**
 	 * Flag indicating whether or not to use dismiss early.
 	 */
-	@ColumnInfo(name = "should_dismiss_early")
+	@ColumnInfo(name = "should_dismiss_early", defaultValue = "0")
 	var useDismissEarly: Boolean = false
 
 	/**
 	 * Amount of time, in minutes, to allow a user to dismiss early by.
 	 */
-	@ColumnInfo(name = "dismiss_early_time")
+	@ColumnInfo(name = "dismiss_early_time", defaultValue = "30")
 	var dismissEarlyTime: Int = 30
 
 	/**
 	 * Time of alarm that would have been next but was dismissed early.
 	 */
-	@ColumnInfo(name = "time_of_dismiss_early_alarm")
+	@ColumnInfo(name = "time_of_dismiss_early_alarm", defaultValue = "0")
 	var timeOfDismissEarlyAlarm: Long = 0
 
 	/**
 	 * Time in which to auto snooze the alarm.
-	 *
-	 * TODO: Change this to 0!
 	 */
 	@ColumnInfo(name = "auto_snooze_time", defaultValue = "0")
-	var autoSnoozeTime: Int = 15
+	var autoSnoozeTime: Int = 0
 
 	/**
 	 * Max number of snoozes.
@@ -322,6 +320,12 @@ class NacAlarm()
 	 */
 	@ColumnInfo(name = "should_use_tts_for_reminder", defaultValue = "0")
 	var useTtsForReminder: Boolean = false
+
+	/**
+	 * Flag indicating whether to skip the next alarm or not.
+	 */
+	@ColumnInfo(name = "should_skip_next_alarm", defaultValue = "0")
+	var shouldSkipNextAlarm: Boolean = false
 
 	/**
 	 * Check if any days are selected.
