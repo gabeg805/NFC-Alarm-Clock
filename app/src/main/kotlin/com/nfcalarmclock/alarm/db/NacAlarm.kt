@@ -475,6 +475,9 @@ class NacAlarm()
 		timeToShowReminder = input.readInt()
 		reminderFrequency = input.readInt()
 		useTtsForReminder = input.readInt() != 0
+
+		// Skip next alarm
+		shouldSkipNextAlarm = input.readInt() != 0
 	}
 
 	/**
@@ -547,10 +550,8 @@ class NacAlarm()
 	{
 		val locale = Locale.getDefault()
 		val format = "%1$02d:%2$02d"
-		val time = String.format(locale, format, hour,
-			minute)
-		val otherTime = String.format(locale, format, alarm.hour,
-			alarm.minute)
+		val time = String.format(locale, format, hour, minute)
+		val otherTime = String.format(locale, format, alarm.hour, alarm.minute)
 
 		return time.compareTo(otherTime)
 	}
@@ -689,6 +690,9 @@ class NacAlarm()
 		alarm.reminderFrequency = reminderFrequency
 		alarm.useTtsForReminder = useTtsForReminder
 
+		// Skip next alarm
+		alarm.shouldSkipNextAlarm = shouldSkipNextAlarm
+
 		return alarm
 	}
 
@@ -710,6 +714,7 @@ class NacAlarm()
 	fun dismiss()
 	{
 		isActive = false
+		shouldSkipNextAlarm = false
 		timeActive = 0
 		snoozeCount = 0
 		snoozeHour = -1
@@ -798,6 +803,7 @@ class NacAlarm()
 			&& (timeToShowReminder == alarm.timeToShowReminder)
 			&& (reminderFrequency == alarm.reminderFrequency)
 			&& (useTtsForReminder == alarm.useTtsForReminder)
+			&& (shouldSkipNextAlarm == alarm.shouldSkipNextAlarm)
 	}
 
 	/**
@@ -848,12 +854,11 @@ class NacAlarm()
 	 */
 	fun getNameNormalizedForMessage(max: Int): String
 	{
-		val locale = Locale.getDefault()
 		val name = nameNormalized
 
 		return if (name.length > max)
 		{
-			String.format(locale, "%1\$s...", name.substring(0, max - 3))
+			"${name.substring(0, max-3)}..."
 		}
 		else
 		{
@@ -920,6 +925,7 @@ class NacAlarm()
 		println("Time to show remind : $timeToShowReminder")
 		println("Reminder freq       : $reminderFrequency")
 		println("Use Tts 4 Reminder  : $useTtsForReminder")
+		println("Should skip next    : $shouldSkipNextAlarm")
 	}
 
 	/**
@@ -1153,6 +1159,9 @@ class NacAlarm()
 		output.writeInt(timeToShowReminder)
 		output.writeInt(reminderFrequency)
 		output.writeInt(if (useTtsForReminder) 1 else 0)
+
+		// Skip next alarm
+		output.writeInt(if (shouldSkipNextAlarm) 1 else 0)
 	}
 
 	companion object
@@ -1241,6 +1250,9 @@ class NacAlarm()
 			alarm.timeToShowReminder = shared?.timeToShowReminder ?: 5
 			alarm.reminderFrequency = shared?.reminderFrequency ?: 0
 			alarm.useTtsForReminder = shared?.shouldUseTtsForReminder ?: false
+
+			// Skip next alarm
+			alarm.shouldSkipNextAlarm = false
 
 			return alarm
 		}

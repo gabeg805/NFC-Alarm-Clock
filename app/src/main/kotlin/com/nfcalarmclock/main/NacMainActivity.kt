@@ -16,6 +16,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -844,6 +845,9 @@ class NacMainActivity
 			// Inflate the context menu
 			menuInflater.inflate(R.menu.menu_card, menu)
 
+			// Show group dividers
+			MenuCompat.setGroupDividerEnabled(menu, true)
+
 			// Get the alarm for this card holder
 			val alarm = holder.alarm!!
 
@@ -889,8 +893,7 @@ class NacMainActivity
 
 						// Skip the next alarm
 						item.setOnMenuItemClickListener { _ ->
-							alarm.shouldSkipNextAlarm = true
-							updateAlarm(alarm)
+							holder.skipNextAlarm()
 							true
 						}
 					}
@@ -904,8 +907,7 @@ class NacMainActivity
 
 						// Unskip the next alarm
 						item.setOnMenuItemClickListener { _ ->
-							alarm.shouldSkipNextAlarm = false
-							updateAlarm(alarm)
+							holder.unskipNextAlarm()
 							true
 						}
 					}
@@ -934,7 +936,7 @@ class NacMainActivity
 			// Check if the alarm will alarm soon and the card needs to be updated
 			if ((card != null)
 				&& alarm.willAlarmSoon()
-				&& card.shouldRefreshDismissView())
+				&& card.shouldRefreshExtraView())
 			{
 				// Refresh the alarm
 				alarmCardAdapter.notifyItemChanged(i)
@@ -1367,10 +1369,10 @@ class NacMainActivity
 		navController.currentBackStackEntry
 			?.savedStateHandle
 			?.getLiveData<NacAlarm>("YOYOYO")
-			?.observe(this) { alarm ->
+			?.observe(this) { a ->
 
 				// Update the alarm
-				updateAlarm(alarm)
+				updateAlarm(a)
 
 			}
 
@@ -1398,23 +1400,18 @@ class NacMainActivity
 	 */
 	private fun showNfcTagId(alarm: NacAlarm)
 	{
-		// Get the default locale
-		val locale = Locale.getDefault()
-
 		// Build the message
-		val message: String = if (alarm.nfcTagId.isNotEmpty())
+		val message = if (alarm.nfcTagId.isNotEmpty())
 		{
 			// Get the string to show a specific NFC tag
 			val nfcId = getString(R.string.message_show_nfc_tag_id)
 
-			String.format(locale, "$nfcId ${alarm.nfcTagId}")
+			"$nfcId ${alarm.nfcTagId}"
 		}
 		else
 		{
 			// Get the string to show any NFC tag
-			val anyNfc = getString(R.string.message_any_nfc_tag_id)
-
-			String.format(locale, anyNfc)
+			getString(R.string.message_any_nfc_tag_id)
 		}
 
 		// Toast the message

@@ -9,6 +9,7 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.PowerManager
 import android.os.PowerManager.WakeLock
+import androidx.core.app.NotificationManagerCompat
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
@@ -67,6 +68,11 @@ class NacActiveAlarmService
 	 * Shared preferences.
 	 */
 	private lateinit var sharedPreferences: NacSharedPreferences
+
+	/**
+	 * Action of the intent that started the service.
+	 */
+	private var intentAction: String = ""
 
 	/**
 	 * Wakelock.
@@ -140,6 +146,21 @@ class NacActiveAlarmService
 
 		// Clear the currently playing media in the shared preference
 		sharedPreferences.currentPlayingAlarmMedia = ""
+	}
+
+	/**
+	 * Disable any reminder notification that may be present for this alarm.
+	 */
+	private fun disableReminderNotification()
+	{
+		// Get the alarm ID or return if it cannot be found
+		val id = alarm?.id?.toInt() ?: return
+
+		// Get the notification manager
+		val notificationManager = NotificationManagerCompat.from(this)
+
+		// Cancel the notification
+		notificationManager.cancel(id)
 	}
 
 	/**
@@ -224,7 +245,7 @@ class NacActiveAlarmService
 	 */
 	private fun isNewServiceStarted(
 		intentAlarm: NacAlarm?,
-		action: String?
+		action: String
 	): Boolean
 	{
 		return ((alarm != null)
@@ -292,11 +313,19 @@ class NacActiveAlarmService
 			setupAppVersion()
 		}
 
-		// Stop the alarm activity
-		NacActiveAlarmActivity.stopAlarmActivity(this)
-
 		// Disable the activity alias so that tapping an NFC tag will not do anything
 		disableActivityAlias(this)
+
+		// Check if the alarm was skipped
+		if (intentAction == ACTION_SKIP_SERVICE)
+		{
+			// Run the cleanup and end the service
+			cleanup()
+			return
+		}
+
+		// Stop the alarm activity
+		NacActiveAlarmActivity.stopAlarmActivity(this)
 
 		// Start the main activity so that if there are any other alarms that
 		// need to run, this will kick them off
@@ -329,11 +358,40 @@ class NacActiveAlarmService
 		// Setup the service
 		setupActiveAlarmService(intent)
 
-		// Show the notification
-		showActiveAlarmNotification()
+		// Check if this is a skipped alarm
+		if (alarm?.shouldSkipNextAlarm == true)
+		{
+			scope.launch {
+
+				// Clear the skip flag
+				alarm!!.shouldSkipNextAlarm = false
+
+				// Update the database
+				alarmRepository.update(alarm!!)
+
+				// Reschedule the next alarm
+				NacScheduler.update(this@NacActiveAlarmService, alarm!!)
+
+			}
+
+			// Stop the service
+			super.stopSelf()
+
+			return START_NOT_STICKY
+		}
+
+		// Check if the action is meant to skip this alarm
+		if (intentAction != ACTION_SKIP_SERVICE)
+		{
+			// Show the alarm notification
+			showActiveAlarmNotification()
+
+			// Disable any reminder notification that may be present
+			disableReminderNotification()
+		}
 
 		// Check the intent action
-		when (intent?.action)
+		when (intentAction)
 		{
 
 			// Alarms are equal. Start the alarm activity
@@ -369,6 +427,9 @@ class NacActiveAlarmService
 					snooze()
 				}
 			}
+
+			// Skip
+			ACTION_SKIP_SERVICE -> super.stopSelf()
 
 			// The default case if things go wrong
 			else -> stopActiveAlarmService()
@@ -407,17 +468,20 @@ class NacActiveAlarmService
 	@UnstableApi
 	private fun setupActiveAlarmService(intent: Intent?)
 	{
+		// Set the intent action
+		intentAction = intent?.action ?: ""
+
 		// Attempt to get the alarm from the intent
 		val intentAlarm = getAlarm(intent)
 
 		// Check if a new service was started
-		if (isNewServiceStarted(intentAlarm, intent?.action))
+		if (isNewServiceStarted(intentAlarm, intentAction))
 		{
 			// Check if the alarms are equal
 			if (intentAlarm!!.equals(alarm))
 			{
 				// Set the action indicating that the alarms are equal
-				intent!!.action = ACTION_EQUAL_ALARMS
+				intentAction = ACTION_EQUAL_ALARMS
 				return
 			}
 			else
@@ -438,7 +502,7 @@ class NacActiveAlarmService
 		if (alarm == null)
 		{
 			// Set the action indicating to stop the service
-			intent?.action = ACTION_STOP_SERVICE
+			intentAction = ACTION_STOP_SERVICE
 		}
 	}
 
@@ -688,6 +752,11 @@ class NacActiveAlarmService
 		const val ACTION_STOP_SERVICE = "com.nfcalarmclock.ACTION_STOP_SERVICE"
 
 		/**
+		 * Action to skip the service.
+		 */
+		const val ACTION_SKIP_SERVICE = "com.nfcalarmclock.ACTION_SKIP_SERVICE"
+
+		/**
 		 * Action to dismiss the alarm.
 		 */
 		const val ACTION_DISMISS_ALARM = "com.nfcalarmclock.ACTION_DISMISS_ALARM"
@@ -774,6 +843,24 @@ class NacActiveAlarmService
 		}
 
 		/**
+		 * Create an intent that will be used to skip the alarm service.
+		 *
+		 * @param context A context.
+		 * @param alarm   An alarm.
+		 *
+		 * @return The service intent.
+		 */
+		fun getSkipIntent(context: Context, alarm: NacAlarm?): Intent
+		{
+			// Create an intent with the alarm service
+			val intent = Intent(ACTION_SKIP_SERVICE, null, context,
+				NacActiveAlarmService::class.java)
+
+			// Add the alarm to the intent
+			return NacIntent.addAlarm(intent, alarm)
+		}
+
+		/**
 		 * Get an intent that will be used to snooze the foreground alarm
 		 * service.
 		 *
@@ -831,7 +918,10 @@ class NacActiveAlarmService
 			val intent = getStartIntent(context, alarm)
 
 			// Check if the API >= 26
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+			//
+			// Note: Skipped alarms will use the normal startService() since they will stop the
+			// service immediately and won't need to be in the foreground
+			if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) && (alarm?.shouldSkipNextAlarm != true))
 			{
 				// Start the foreground service
 				context.startForegroundService(intent)

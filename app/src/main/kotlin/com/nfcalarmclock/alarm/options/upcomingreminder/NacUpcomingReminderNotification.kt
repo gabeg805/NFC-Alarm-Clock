@@ -63,12 +63,7 @@ class NacUpcomingReminderNotification(
 	 * @see NacNotification.title
 	 */
 	override val title: String
-		get()
-		{
-			val locale = Locale.getDefault()
-
-			return String.format(locale, "<b>$appName</b>")
-		}
+		get() = "<b>$appName</b>"
 
 	/**
 	 * @see NacNotification.priority
@@ -109,6 +104,7 @@ class NacUpcomingReminderNotification(
 			val time = NacCalendar.getFullTime(cal, is24HourFormat)
 
 			// Get the alarm name
+			// TODO: Should the name be normalized?
 			val name = alarm?.name ?: ""
 
 			return if (name.isEmpty())
@@ -117,10 +113,7 @@ class NacUpcomingReminderNotification(
 			}
 			else
 			{
-				val locale = Locale.getDefault()
-
-				// Format the string
-				String.format(locale, "$time  —  $name")
+				"$time  —  $name"
 			}
 		}
 

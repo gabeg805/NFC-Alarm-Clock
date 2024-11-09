@@ -33,7 +33,7 @@ object NacScheduler
 		}
 
 		// Get the calendar for the next alarm
-		val nextAlarmCal = NacCalendar.getNextAlarmDay(alarm)
+		val nextAlarmCal = NacCalendar.getNextAlarmDay(alarm, ignoreSkip = true)
 
 		// Add the alarm
 		addAlarm(context, alarm, nextAlarmCal)
@@ -65,6 +65,28 @@ object NacScheduler
 	}
 
 	/**
+	 * Add an alarm calendar to the scheduler.
+	 */
+	private fun addToAlarmManager(
+		context: Context,
+		cal: Calendar,
+		operationPendingIntent: PendingIntent)
+	{
+		// Time at which the alarm should go off
+		val millis = cal.timeInMillis
+
+		// Show the main activity
+		val showPendingIntent = buildMainActivityPendingIntent(context)
+
+		// Get the clock info and manager
+		val clockInfo = AlarmClockInfo(millis, showPendingIntent)
+		val manager = getAlarmManager(context)
+
+		// Set the alarm
+		manager.setAlarmClock(clockInfo, operationPendingIntent)
+	}
+
+	/**
 	 * Add an upcoming reminder to the scheduler.
 	 */
 	fun addUpcomingReminder(
@@ -90,28 +112,6 @@ object NacScheduler
 	}
 
 	/**
-	 * Add an alarm calendar to the scheduler.
-	 */
-	private fun addToAlarmManager(
-		context: Context,
-		cal: Calendar,
-		operationPendingIntent: PendingIntent)
-	{
-		// Time at which the alarm should go off
-		val millis = cal.timeInMillis
-
-		// Show the main activity
-		val showPendingIntent = buildMainActivityPendingIntent(context)
-
-		// Get the clock info and manager
-		val clockInfo = AlarmClockInfo(millis, showPendingIntent)
-		val manager = getAlarmManager(context)
-
-		// Set the alarm
-		manager.setAlarmClock(clockInfo, operationPendingIntent)
-	}
-
-	/**
 	 * Build the pending intent for adding an alarm.
 	 *
 	 * @return The pending intent for adding an alarm.
@@ -122,11 +122,18 @@ object NacScheduler
 	): PendingIntent
 	{
 		// Create the intent
-		val intent = NacActiveAlarmService.getStartIntent(context, alarm)
-		val flags = PendingIntent.FLAG_CANCEL_CURRENT
+		val intent = if (alarm.shouldSkipNextAlarm)
+		{
+			NacActiveAlarmService.getSkipIntent(context, alarm)
+		}
+		else
+		{
+			NacActiveAlarmService.getStartIntent(context, alarm)
+		}
 
 		// Build the pending intent
-		return buildServicePendingIntent(context, alarm, intent, flags)!!
+		return buildServicePendingIntent(context, alarm, intent,
+			PendingIntent.FLAG_CANCEL_CURRENT, shouldSkipAlarm = alarm.shouldSkipNextAlarm)!!
 	}
 
 	/**
@@ -141,10 +148,9 @@ object NacScheduler
 	{
 		// Create the intent
 		val intent = NacUpcomingReminderService.getStartIntent(context, alarm)
-		val flags = PendingIntent.FLAG_CANCEL_CURRENT
 
 		// Build the pending intent
-		return buildServicePendingIntent(context, alarm, intent, flags)!!
+		return buildServicePendingIntent(context, alarm, intent, PendingIntent.FLAG_CANCEL_CURRENT)!!
 	}
 
 	/**
@@ -157,12 +163,19 @@ object NacScheduler
 		alarm: NacAlarm
 	): PendingIntent?
 	{
-		// Create the intent
-		val intent = NacActiveAlarmService.getStartIntent(context, null)
-		val flags = PendingIntent.FLAG_NO_CREATE
+		// Create the intents
+		val startIntent = NacActiveAlarmService.getStartIntent(context, null)
+		val skipIntent = NacActiveAlarmService.getSkipIntent(context, null)
+
+		// Set the flag
+		val flag = PendingIntent.FLAG_NO_CREATE
 
 		// Build the pending intent
-		return buildServicePendingIntent(context, alarm, intent, flags)
+		val startPendingIntent = buildServicePendingIntent(context, alarm, startIntent, flag, shouldSkipAlarm = false)
+		val skipPendingIntent = buildServicePendingIntent(context, alarm, skipIntent, flag, shouldSkipAlarm = true)
+
+		// Return a pending intent that is hopefully not null
+		return startPendingIntent ?: skipPendingIntent
 	}
 
 	/**
@@ -177,10 +190,9 @@ object NacScheduler
 	{
 		// Create the intent
 		val intent = NacUpcomingReminderService.getStartIntent(context, null)
-		val flags = PendingIntent.FLAG_NO_CREATE
 
 		// Build the pending intent
-		return buildServicePendingIntent(context, alarm, intent, flags)
+		return buildServicePendingIntent(context, alarm, intent, PendingIntent.FLAG_NO_CREATE)
 	}
 
 	/**
@@ -208,8 +220,13 @@ object NacScheduler
 	 *
 	 * @return The pending intent for an alarm.
 	 */
-	private fun buildServicePendingIntent(context: Context, alarm: NacAlarm, intent: Intent,
-		flags: Int): PendingIntent?
+	private fun buildServicePendingIntent(
+		context: Context,
+		alarm: NacAlarm,
+		intent: Intent,
+		flags: Int,
+		shouldSkipAlarm: Boolean = false
+	): PendingIntent?
 	{
 		// Get the alarm ID
 		val id = alarm.id.toInt()
@@ -218,7 +235,10 @@ object NacScheduler
 		val intentFlags = flags or PendingIntent.FLAG_IMMUTABLE
 
 		// Create the pending intent
-		return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		//
+		// Note: Skipped alarms will use the normal getService() since they will stop the
+		// service immediately and won't need to be in the foreground
+		return if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) && !shouldSkipAlarm)
 		{
 			PendingIntent.getForegroundService(context, id, intent, intentFlags)
 		}
@@ -271,7 +291,7 @@ object NacScheduler
 	fun cancelOld(context: Context, id: Int)
 	{
 		// Prepare the flags
-		var flags = PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+		val flags = PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
 
 		// Create the pending intent for the old type
 		val intent = Intent(context, NacActiveAlarmBroadcastReceiver::class.java)

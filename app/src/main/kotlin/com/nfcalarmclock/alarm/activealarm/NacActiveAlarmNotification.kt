@@ -17,7 +17,6 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.view.notification.NacNotification
 import java.util.Calendar
-import java.util.Locale
 
 /**
  * Notification to display for active alarms.
@@ -65,12 +64,7 @@ class NacActiveAlarmNotification(
 	 * @see NacNotification.title
 	 */
 	override val title: String
-		get()
-		{
-			val locale = Locale.getDefault()
-
-			return String.format(locale, "<b>$appName</b>")
-		}
+		get() = "<b>$appName</b>"
 
 	/**
 	 * @see NacNotification.priority
@@ -110,10 +104,7 @@ class NacActiveAlarmNotification(
 			}
 			else
 			{
-				val locale = Locale.getDefault()
-
-				// Format the string
-				String.format(locale, "$time  —  $name")
+				"$time  —  $name"
 			}
 		}
 

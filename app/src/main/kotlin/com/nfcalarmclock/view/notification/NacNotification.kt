@@ -195,7 +195,6 @@ abstract class NacNotification(
 	{
 		val time = alarm.getFullTime(context)
 		val name = alarm.name
-		val locale = Locale.getDefault()
 
 		// Check if the alarm name is empty
 		return if (name.isEmpty())
@@ -207,7 +206,7 @@ abstract class NacNotification(
 			{
 				// The line in the notification will be the time and the name of the
 				// alarm
-				String.format(locale, "%1\$s  —  %2\$s", time, name)
+				"$time  —  $name"
 			}
 	}
 

@@ -153,6 +153,7 @@
 					android:layout_marginStart="@dimen/nudge"
 					android:textSize="@dimen/tsz_small"
 					android:text="@string/action_alarm_dismiss"
+					android:visibility="visible"
 					app:iconSize="@dimen/medium"
 					app:icon="@drawable/dismiss"
 					/>
@@ -174,19 +175,18 @@
 					/>
 
 				<!-- Skipping next alarm -->
-				<com.google.android.material.button.MaterialButton
+				<TextView
 					style="@style/Widget.Button.Text.Row"
-					android:id="@+id/nac_next_skipped"
+					android:id="@+id/nac_skipping_next_alarm"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:minWidth="@dimen/zero"
 					android:minHeight="@dimen/zero"
 					android:layout_marginStart="@dimen/nudge"
 					android:textSize="@dimen/tsz_small"
-					android:text="Skipping next alarm"
+					android:textStyle="italic"
+					android:text="@string/action_skipping_next_alarm"
 					android:visibility="gone"
-					app:iconSize="@dimen/medium"
-					app:icon="@drawable/close"
 					/>
 
 				<Space
@@ -202,7 +202,7 @@
 					android:layout_height="@dimen/isz_large"
 					app:icon="@drawable/expand"
 					/>
-			</LinearLayout> <!-- Dismiss snoozed alarm -->
+			</LinearLayout> <!-- Extra info -->
 		</LinearLayout> <!-- Summary -->
 
 		<!-- Expanded alarm -->

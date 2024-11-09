@@ -180,6 +180,11 @@ class NacCardHolder(
 	private val dismissEarlyButton: MaterialButton = root.findViewById(R.id.nac_dismiss_early)
 
 	/**
+	 * Skip next alarm message.
+	 */
+	private val skipNextAlarmView: TextView = root.findViewById(R.id.nac_skipping_next_alarm)
+
+	/**
 	 * Expanded alarm view.
 	 */
 	private val expandedView: LinearLayout = root.findViewById(R.id.nac_expanded_alarm)
@@ -370,7 +375,7 @@ class NacCardHolder(
 	 */
 	private val heightCollapsed: Int
 		// Check if the alarm is snoozed or will alarm soon
-		get() = if (alarm!!.isSnoozed || alarm!!.willAlarmSoon())
+		get() = if (alarm!!.isSnoozed || alarm!!.willAlarmSoon() || alarm!!.shouldSkipNextAlarm)
 		{
 			// Show a little extra space for stuff right beneath the summary
 			sharedPreferences.cardHeightCollapsedDismiss
@@ -762,7 +767,7 @@ class NacCardHolder(
 		expandedView.isEnabled = false
 
 		// Refresh the extra view
-		refreshDismissAndDismissEarlyButtons()
+		refreshExtraView()
 	}
 
 	/**
@@ -842,7 +847,7 @@ class NacCardHolder(
 		alarm!!.dismissEarly()
 
 		// Refresh the extra view
-		refreshDismissAndDismissEarlyButtons()
+		refreshExtraView()
 		collapseRefresh()
 
 		// Call the listener
@@ -978,10 +983,12 @@ class NacCardHolder(
 	 */
 	private fun doSwitchCheckedChanged(state: Boolean)
 	{
-		// Reset the snooze counter
+		// Check if alarm was disabled
 		if (!state)
 		{
+			// Reset the snooze counter and skip flag
 			alarm!!.snoozeCount = 0
+			alarm!!.shouldSkipNextAlarm = false
 		}
 
 		// Set the alarm enabled state
@@ -1164,7 +1171,7 @@ class NacCardHolder(
 	 */
 	private fun initViews()
 	{
-		refreshDismissAndDismissEarlyButtons()
+		refreshExtraView()
 		setTimeView()
 		setMeridianView()
 		setSwitchView()
@@ -1251,7 +1258,7 @@ class NacCardHolder(
 		heights[1] = getHeight(cardView)
 
 		// Refresh the extra view
-		refreshDismissAndDismissEarlyButtons()
+		refreshExtraView()
 	}
 
 	/**
@@ -1263,74 +1270,24 @@ class NacCardHolder(
 	}
 
 	/**
-	 * Check if the dismiss view should be refreshed or not.
-	 *
-	 * @return True if the dismiss view should be refreshed, and False otherwise.
-	 */
-	fun shouldRefreshDismissView(): Boolean
-	{
-		// Alarm is in use, or will alarm soon so the "Dismiss" or "Dismiss early"
-		// button should be shown
-		val dismissVisibility = if (alarm!!.isInUse || alarm!!.willAlarmSoon())
-		{
-			View.VISIBLE
-		}
-		else
-		{
-			View.GONE
-		}
-
-		// The dismiss view is being shown so do not show this view
-		val expandVisibility = if (dismissVisibility == View.GONE)
-		{
-			View.VISIBLE
-		}
-		else
-		{
-			View.INVISIBLE
-		}
-
-		// The "Dismiss"/"Dismiss early" button OR the "Expand" down-arrow button
-		// are NOT the correct and expected visibilities
-		return (extraBelowSummaryView.visibility != dismissVisibility)
-			|| (expandButton.visibility != expandVisibility)
-	}
-
-	/**
 	 * Refresh the extra view, which contains any one of the "Dismiss",
 	 * "Dismiss early", or "Skipping next alarm" views.
 	 */
-	private fun refreshDismissAndDismissEarlyButtons()
+	private fun refreshExtraView()
 	{
-
-		// Alarm is in use, or will alarm soon so the "Dismiss", "Dismiss early",
-		// or "Skipping next alarm" text should be shown
-		// TODO: Add logic for new thing
-		// TODO: Find out why this does not get refreshed when an alarm is auto dismissed
-		val dismissVis = if (alarm!!.isInUse || alarm!!.willAlarmSoon())
-		{
-			View.VISIBLE
-		}
-		else
-		{
-			View.GONE
-		}
+		// Alarm is in use (so "Dismiss" should be shown),
+		// or will alarm soon (so "Dismiss early" should be shown),
+		// or the next alarm was skipped (so "Skipping next alarm" should be shown)
+		val extraVis = if (shouldShowExtraView()) View.VISIBLE else View.GONE
 
 		// The extra view should be hidden so show the expand button on its
 		// normal row (the summary row)
-		val expandVis = if (dismissVis == View.GONE)
-		{
-			View.VISIBLE
-		}
-		else
-		{
-			View.INVISIBLE
-		}
+		val expandVis = if (extraVis == View.GONE) View.VISIBLE else View.INVISIBLE
 
 		// Set the extra view visibility
-		if (extraBelowSummaryView.visibility != dismissVis)
+		if (extraBelowSummaryView.visibility != extraVis)
 		{
-			extraBelowSummaryView.visibility = dismissVis
+			extraBelowSummaryView.visibility = extraVis
 		}
 
 		// Set the expand button visibility
@@ -1340,7 +1297,7 @@ class NacCardHolder(
 		}
 
 		// Set the extra view visibility
-		if (dismissVis == View.VISIBLE)
+		if (extraVis == View.VISIBLE)
 		{
 			// Alarm is in use
 			if (alarm!!.isInUse)
@@ -1348,6 +1305,7 @@ class NacCardHolder(
 				// Show the "Dismiss" button
 				dismissButton.visibility = View.VISIBLE
 				dismissEarlyButton.visibility = View.GONE
+				skipNextAlarmView.visibility = View.GONE
 			}
 			// Alarm will alarm soon
 			else if (alarm!!.willAlarmSoon())
@@ -1355,6 +1313,15 @@ class NacCardHolder(
 				// Show the "Dismiss early" button
 				dismissButton.visibility = View.GONE
 				dismissEarlyButton.visibility = View.VISIBLE
+				skipNextAlarmView.visibility = View.GONE
+			}
+			// Skip/unskip next alarm
+			else
+			{
+				// Show the "Skipping next alarm" view
+				dismissButton.visibility = View.GONE
+				dismissEarlyButton.visibility = View.GONE
+				skipNextAlarmView.visibility = if (alarm!!.shouldSkipNextAlarm) View.VISIBLE else View.GONE
 			}
 		}
 	}
@@ -1364,13 +1331,13 @@ class NacCardHolder(
 	 * "Dismiss early" to its proper setting and collapse refresh as well
 	 * if it needs to be done.
 	 */
-	private fun refreshDismissAndDismissEarlyButtonsWithCollapse()
+	private fun refreshExtraViewWithCollapse()
 	{
 		// Get the visiblity before refreshing the extra view
 		val beforeVisibility = extraBelowSummaryView.visibility
 
 		// Refresh the extra view
-		refreshDismissAndDismissEarlyButtons()
+		refreshExtraView()
 
 		// Get the visiblity after refreshing the extra view
 		val afterVisibility = extraBelowSummaryView.visibility
@@ -2296,7 +2263,7 @@ class NacCardHolder(
 				doSwitchCheckedChanged(state)
 
 				// Refresh dismiss buttons and collapse refresh if need be
-				refreshDismissAndDismissEarlyButtonsWithCollapse()
+				refreshExtraViewWithCollapse()
 			}
 			// Alarm cannot be modified
 			else
@@ -2426,6 +2393,37 @@ class NacCardHolder(
 	}
 
 	/**
+	 * Check if the extra view should be refreshed or not.
+	 *
+	 * @return True if the extra view should be refreshed, and False otherwise.
+	 */
+	fun shouldRefreshExtraView(): Boolean
+	{
+		// Alarm is in use (so "Dismiss" should be shown),
+		// or will alarm soon (so "Dismiss early" should be shown),
+		// or the next alarm was skipped (so "Skipping next alarm" should be shown)
+		val extraVis = if (shouldShowExtraView()) View.VISIBLE else View.GONE
+
+		// The extra view should be hidden so show the expand button on its
+		// normal row (the summary row)
+		val expandVis = if (extraVis == View.GONE) View.VISIBLE else View.INVISIBLE
+
+		// The views are NOT the correct and expected visibilities
+		return (extraBelowSummaryView.visibility != extraVis)
+			|| (expandButton.visibility != expandVis)
+	}
+
+	/**
+	 * Check whether the extra view should be shown or not.
+	 *
+	 * @return True if the extra view should be shown, and False otherwise.
+	 */
+	private fun shouldShowExtraView(): Boolean
+	{
+		return alarm!!.isInUse || alarm!!.willAlarmSoon() || alarm!!.shouldSkipNextAlarm
+	}
+
+	/**
 	 * Show the name dialog.
 	 */
 	private fun showNameDialog()
@@ -2477,7 +2475,7 @@ class NacCardHolder(
 			setSummaryDaysView()
 
 			// Refresh dismiss buttons and collapse refresh if need be
-			refreshDismissAndDismissEarlyButtonsWithCollapse()
+			refreshExtraViewWithCollapse()
 
 			// Call the card updated listener
 			callOnCardUpdatedListener()
@@ -2506,6 +2504,36 @@ class NacCardHolder(
 		//timepicker.show(fragmentManager, "TimePicker");
 
 		//this.mTimePicker = timepicker;
+	}
+
+	/**
+	 * Skip the next alarm.
+	 */
+	fun skipNextAlarm()
+	{
+		// Set the skip flag
+		alarm!!.shouldSkipNextAlarm = true
+
+		// Refresh the extra view
+		refreshExtraViewWithCollapse()
+
+		// Call the update listener
+		callOnCardUpdatedListener()
+	}
+
+	/**
+	 * Unskip the next alarm.
+	 */
+	fun unskipNextAlarm()
+	{
+		// Unset the skip flag
+		alarm!!.shouldSkipNextAlarm = false
+
+		// Refresh the extra view
+		refreshExtraViewWithCollapse()
+
+		// Call the update listener
+		callOnCardUpdatedListener()
 	}
 
 	companion object

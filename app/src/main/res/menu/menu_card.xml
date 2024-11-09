@@ -3,48 +3,38 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
-	<!--
-	<item
-		android:id="@+id/menu_copy_alarm"
-		android:orderInCategory="100"
-		android:title="@string/action_alarm_copy"
-		app:showAsAction="never"
-		/>
+	<!-- Show info -->
+	<group android:id="@+id/show_info">
+		<item
+			android:id="@+id/menu_show_next_alarm"
+			android:orderInCategory="300"
+			android:title="@string/show_next_alarm"
+			app:showAsAction="never"
+			/>
 
-	<item
-		android:id="@+id/menu_delete_alarm"
-		android:orderInCategory="200"
-		android:title="@string/action_alarm_delete"
-		app:showAsAction="never"
-		/>
-	-->
+		<item
+			android:id="@+id/menu_show_nfc_tag_id"
+			android:orderInCategory="400"
+			android:title="@string/action_show_nfc_tag_id"
+			app:showAsAction="never"
+			/>
+	</group>
 
-	<item
-		android:id="@+id/menu_show_next_alarm"
-		android:orderInCategory="300"
-		android:title="@string/show_next_alarm"
-		app:showAsAction="never"
-		/>
+	<!-- Skip or unskip alarm -->
+	<group android:id="@+id/skip_unskip_alarm">
+		<item
+			android:id="@+id/menu_skip_next_alarm"
+			android:orderInCategory="500"
+			android:title="@string/action_skip_next_alarm"
+			app:showAsAction="never"
+			/>
 
-	<item
-		android:id="@+id/menu_show_nfc_tag_id"
-		android:orderInCategory="400"
-		android:title="@string/action_show_nfc_tag_id"
-		app:showAsAction="never"
-		/>
-
-	<item
-		android:id="@+id/menu_skip_next_alarm"
-		android:orderInCategory="500"
-		android:title="Skip next alarm"
-		app:showAsAction="never"
-		/>
-
-	<item
-		android:id="@+id/menu_unskip_next_alarm"
-		android:orderInCategory="600"
-		android:title="Unskip next alarm"
-		app:showAsAction="never"
-		/>
+		<item
+			android:id="@+id/menu_unskip_next_alarm"
+			android:orderInCategory="600"
+			android:title="@string/action_unskip_next_alarm"
+			app:showAsAction="never"
+			/>
+	</group>
 
 </menu>
