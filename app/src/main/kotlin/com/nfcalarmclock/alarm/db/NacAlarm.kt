@@ -827,19 +827,6 @@ class NacAlarm()
 	}
 
 	/**
-	 * Get the full time string.
-	 *
-	 * @return The full time string.
-	 */
-	fun getFullTime(context: Context): String
-	{
-		val nextCalendar = NacCalendar.getNextAlarmDay(this)
-		val is24HourFormat = DateFormat.is24HourFormat(context)
-
-		return NacCalendar.getFullTime(nextCalendar, is24HourFormat)
-	}
-
-	/**
 	 * Get the meridian (AM or PM).
 	 *
 	 * @return The meridian (AM or PM).
@@ -1073,7 +1060,7 @@ class NacAlarm()
 	fun willAlarmSoon(): Boolean
 	{
 		// Alarm is disabled or unable to use dismiss early
-		if (!isEnabled || !useDismissEarly || dismissEarlyTime == 0)
+		if (!isEnabled || !useDismissEarly || (dismissEarlyTime == 0) || shouldSkipNextAlarm)
 		{
 			return false
 		}

@@ -793,6 +793,9 @@ class NacCardHolder(
 	 */
 	private fun doDayButtonClick(day: Day)
 	{
+		// Reset the skip next alarm flag
+		alarm!!.shouldSkipNextAlarm = false
+
 		// Toggle the day
 		alarm!!.toggleDay(day)
 
@@ -891,6 +894,9 @@ class NacCardHolder(
 	 */
 	private fun doFlashlightButtonClick()
 	{
+		// Reset the skip next alarm flag
+		alarm!!.shouldSkipNextAlarm = false
+
 		// Toggle the flashlight button
 		alarm!!.toggleUseFlashlight()
 
@@ -919,6 +925,9 @@ class NacCardHolder(
 	 */
 	fun doNfcButtonClick()
 	{
+		// Reset the skip next alarm flag
+		alarm!!.shouldSkipNextAlarm = false
+
 		// Toggle the NFC button
 		alarm!!.toggleUseNfc()
 
@@ -938,6 +947,9 @@ class NacCardHolder(
 	 */
 	private fun doRepeatButtonClick()
 	{
+		// Reset the skip next alarm flag
+		alarm!!.shouldSkipNextAlarm = false
+
 		// Toggle the repeat button
 		alarm!!.toggleRepeat()
 
@@ -963,6 +975,9 @@ class NacCardHolder(
 	 */
 	private fun doRepeatButtonLongClick()
 	{
+		// Reset the skip next alarm flag
+		alarm!!.shouldSkipNextAlarm = false
+
 		// Disable the repeat button
 		alarm!!.repeat = false
 
@@ -983,12 +998,14 @@ class NacCardHolder(
 	 */
 	private fun doSwitchCheckedChanged(state: Boolean)
 	{
+		// Reset the skip next alarm flag
+		alarm!!.shouldSkipNextAlarm = false
+
 		// Check if alarm was disabled
 		if (!state)
 		{
-			// Reset the snooze counter and skip flag
+			// Reset the snooze counter
 			alarm!!.snoozeCount = 0
-			alarm!!.shouldSkipNextAlarm = false
 		}
 
 		// Set the alarm enabled state
@@ -1014,6 +1031,9 @@ class NacCardHolder(
 	 */
 	private fun doVibrateButtonClick()
 	{
+		// Reset the skip next alarm flag
+		alarm!!.shouldSkipNextAlarm = false
+
 		// Toggle the vibrate button
 		alarm!!.toggleVibrate()
 
@@ -2353,6 +2373,9 @@ class NacCardHolder(
 				// Alarm can be changed
 				if (checkCanModifyAlarm())
 				{
+					// Reset the skip next alarm flag
+					alarm!!.shouldSkipNextAlarm = false
+
 					// Set the new volume
 					alarm!!.volume = progress
 
@@ -2439,6 +2462,9 @@ class NacCardHolder(
 
 		// Setup the listener
 		dialog.onNameEnteredListener = OnNameEnteredListener { name ->
+			// Reset the skip next alarm flag
+			alarm!!.shouldSkipNextAlarm = false
+
 			// Set the alarm name
 			alarm!!.name = name
 
@@ -2461,6 +2487,9 @@ class NacCardHolder(
 	{
 		// Create the listener
 		val listener = OnTimeSetListener { _, hr, min ->
+
+			// Reset the skip next alarm flag
+			alarm!!.shouldSkipNextAlarm = false
 
 			// Set the alarm attributes
 			alarm!!.hour = hr
@@ -2526,7 +2555,7 @@ class NacCardHolder(
 	 */
 	fun unskipNextAlarm()
 	{
-		// Unset the skip flag
+		// Reset the skip next alarm flag
 		alarm!!.shouldSkipNextAlarm = false
 
 		// Refresh the extra view

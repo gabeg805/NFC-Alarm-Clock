@@ -889,7 +889,7 @@ class NacMainActivity
 					{
 						// Set the visibility of the menu item based on if the
 						// next alarm is NOT skipped
-						item.isVisible = !holder.alarm!!.shouldSkipNextAlarm
+						item.isVisible = !holder.alarm!!.shouldSkipNextAlarm && holder.alarm!!.isEnabled
 
 						// Skip the next alarm
 						item.setOnMenuItemClickListener { _ ->
@@ -903,7 +903,7 @@ class NacMainActivity
 					{
 						// Set the visibility of the menu item based on if the
 						// next alarm is skipped
-						item.isVisible = holder.alarm!!.shouldSkipNextAlarm
+						item.isVisible = holder.alarm!!.shouldSkipNextAlarm && holder.alarm!!.isEnabled
 
 						// Unskip the next alarm
 						item.setOnMenuItemClickListener { _ ->

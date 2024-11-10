@@ -167,7 +167,7 @@ class NacMissedAlarmNotification(
 		val newBody = getExtraLines(context, group)
 
 		// Determine the new line to add
-		val line = this.getBodyLine(alarm)
+		val line = getBodyLine(alarm)
 
 		// Add new line to notification
 		newBody.add(line)

@@ -49,7 +49,7 @@ object NacCalendar
 	 *
 	 * @return Today's day, with the alarm hour and minute, if supplied.
 	 */
-	private fun alarmToCalendar(alarm: NacAlarm): Calendar
+	fun alarmToCalendar(alarm: NacAlarm): Calendar
 	{
 		// Get the current calendar instance
 		val today = Calendar.getInstance()
@@ -823,7 +823,7 @@ object NacCalendar
 			// Show alarm name
 			else
 			{
-				"\"$name\" $isDisabled."
+				"<b>$name</b> $isDisabled."
 			}
 		}
 

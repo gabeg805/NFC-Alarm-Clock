@@ -9,12 +9,15 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.text.format.DateFormat
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacUtility.toSpannedString
+import java.util.Calendar
 
 /**
  * Notification for the app to keep it in memory.
@@ -192,11 +195,13 @@ abstract class NacNotification(
 	 */
 	protected fun getBodyLine(alarm: NacAlarm): String
 	{
-		val time = alarm.getFullTime(context)
-		val name = alarm.name
+		// TODO: This will give the wrong day if a user misses an alarm at a day boundary.
+		val cal = NacCalendar.alarmToCalendar(alarm)
+		val is24HourFormat = DateFormat.is24HourFormat(context)
+		val time = NacCalendar.getFullTime(cal, is24HourFormat)
 
 		// Check if the alarm name is empty
-		return if (name.isEmpty())
+		return if (alarm.name.isEmpty())
 			{
 				// The line in the notification will just be the time
 				time
@@ -205,7 +210,7 @@ abstract class NacNotification(
 			{
 				// The line in the notification will be the time and the name of the
 				// alarm
-				"$time  —  $name"
+				"$time  —  ${alarm.name}"
 			}
 	}
 
