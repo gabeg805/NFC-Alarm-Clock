@@ -108,12 +108,10 @@ class NacMusicPickerFragment
 	@UnstableApi
 	override fun onDirectoryClicked(browser: NacFileBrowser, path: String)
 	{
-		val locale = Locale.getDefault()
-
 		// Build the path to show in the directory text view
 		val textPath = if (path.isNotEmpty())
 		{
-			String.format(locale, "${path}/")
+			"${path}/"
 		}
 		else
 		{
@@ -123,7 +121,7 @@ class NacMusicPickerFragment
 		// Set the alarm media path
 		mediaPath = if(browser.previousDirectory.isNotEmpty())
 		{
-			String.format(locale, "${textPath}${browser.previousDirectory}")
+			"${textPath}${browser.previousDirectory}"
 		}
 		else
 		{

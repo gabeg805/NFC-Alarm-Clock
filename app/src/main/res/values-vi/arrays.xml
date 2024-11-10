@@ -323,10 +323,10 @@
 	</string-array>
 
 	<string-array name="whats_new_items">
-		<item>Đã thêm tùy chọn &lt;b>tự động báo lại&lt;/b>. Có thể được thiết lập trong tùy chọn báo thức.</item>
-		<item>Đã thêm tùy chọn &lt;b>đèn pin&lt;/b> để bật đèn pin khi báo thức kêu. Có thể tùy chỉnh thêm trong tùy chọn báo thức.</item>
-		<item>Có thể ẩn các tùy chọn &lt;b>rung&lt;/b>, &lt;b>NFC&lt;/b> và &lt;b>đèn pin&lt;/b> khỏi báo thức mở rộng. Tìm thấy trong &lt;b>Cài đặt > Giao diện&lt;/b>.</item>
-		<item>Đã cập nhật ứng dụng cho &lt;b>Android 14&lt;/b>.</item>
+		<item>Đã thêm tùy chọn &lt;b>bỏ qua báo thức tiếp theo&lt;/b>. Có thể truy cập bằng cách nhấn và giữ báo thức.</item>
+		<item>Đã khắc phục sự cố khi có dấu &lt;b>%&lt;/b> trong tên báo thức.</item>
+		<item>Đã thêm bản dịch ngôn ngữ cho tiếng Đức.</item>
+		<item>Thông báo nhắc nhở sẽ bị xóa khi báo thức kêu.</item>
 	</string-array>
 
 </resources>

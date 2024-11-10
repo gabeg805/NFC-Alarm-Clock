@@ -1,5 +1,6 @@
 package com.nfcalarmclock.statistics
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -239,21 +240,18 @@ class NacStatisticsSettingFragment
 	/**
 	 * Setup the dismissed alarm statistics.
 	 */
+	@SuppressLint("SetTextI18n")
 	private suspend fun setupDismissedAlarms(root: View)
 	{
 		// Get the text view
-		val locale = Locale.getDefault()
 		val textview = root.findViewById<TextView>(R.id.dismissed_alarms_number)
 
 		// Determine how many alarms were dismissed and how many with NFC
 		val numDismissedTotal = statisticViewModel.dismissedCount()
 		val numDismissedWithNfc = statisticViewModel.dismissedWithNfcCount()
 
-		// Determine the text to show in the textview
-		val text = String.format(locale, "$numDismissedTotal ($numDismissedWithNfc NFC)")
-
 		// Set the text in the textview
-		textview.text = text
+		textview.text = "$numDismissedTotal ($numDismissedWithNfc NFC)"
 	}
 
 	/**
@@ -336,21 +334,18 @@ class NacStatisticsSettingFragment
 	/**
 	 * Setup the snoozed alarm statistics.
 	 */
+	@SuppressLint("SetTextI18n")
 	private suspend fun setupSnoozedAlarms(root: View)
 	{
 		// Get the text view
-		val locale = Locale.getDefault()
 		val textview = root.findViewById<TextView>(R.id.snoozed_alarms_number)
 
 		// Determine how many alarms were snoozed and how much time that was
 		val numSnoozed = statisticViewModel.snoozedCount()
 		val snoozeDuration = statisticViewModel.snoozedTotalDuration() / 60
 
-		// Determine the text to show in the textview
-		val text = String.format(locale, "$numSnoozed ($snoozeDuration min)")
-
 		// Set the text in the textview
-		textview.text = text
+		textview.text = "$numSnoozed ($snoozeDuration min)"
 	}
 
 	/**
@@ -376,7 +371,7 @@ class NacStatisticsSettingFragment
 				val dateText = dateFormat.format(dateStarted)
 
 				// Set the text that will be shown in the textview
-				String.format(locale, "$startedOnMessage $dateText")
+				"$startedOnMessage $dateText"
 			}
 			else
 			{

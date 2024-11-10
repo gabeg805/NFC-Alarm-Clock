@@ -63,6 +63,9 @@
 	<string name="action_alarm_option_restrict_volume">Hạn chế âm lượng</string>
 	<string name="action_alarm_option_text_to_speech">Chuyển văn bản thành giọng nói</string>
 	<string name="action_alarm_option_upcoming_reminder">Lời nhắc sắp tới</string>
+	<string name="action_skipping_next_alarm">Bỏ qua báo thức tiếp theo</string>
+	<string name="action_skip_next_alarm">Bỏ qua báo thức tiếp theo</string>
+	<string name="action_unskip_next_alarm">Bỏ qua báo thức tiếp theo</string>
 
 
 

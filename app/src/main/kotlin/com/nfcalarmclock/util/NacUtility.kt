@@ -9,7 +9,6 @@ import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewGroup.MarginLayoutParams
 import android.widget.Toast
-import java.util.Locale
 
 /**
  * NFC Alarm Clock Utility class.
@@ -18,18 +17,6 @@ import java.util.Locale
  */
 object NacUtility
 {
-
-	/**
-	 * Capitalize the first letter in the string.
-	 */
-	fun capitalize(word: String): String
-	{
-		val locale = Locale.getDefault()
-
-		return String.format(locale, "%1\$s%2\$s",
-			word.substring(0, 1).uppercase(locale),
-			word.substring(1))
-	}
 
 	/**
 	 * Determine the height of the view.

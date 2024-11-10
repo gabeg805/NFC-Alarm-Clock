@@ -16,7 +16,6 @@ import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.view.notification.NacNotification
 import java.util.Calendar
-import java.util.Locale
 
 /**
  */
@@ -39,7 +38,7 @@ class NacUpcomingReminderNotification(
 	 * @see NacNotification.id
 	 */
 	public override val id: Int
-		get() = 111 + (alarm?.id?.toInt() ?: 0)
+		get() = BASE_ID + (alarm?.id?.toInt() ?: 0)
 
 	/**
 	 * @see NacNotification.channelId
@@ -262,6 +261,16 @@ class NacUpcomingReminderNotification(
 	{
 		// Super
 		super.show()
+	}
+
+	companion object
+	{
+
+		/**
+		 * The base ID value to use for this type of notification.
+		 */
+		const val BASE_ID: Int = 111
+
 	}
 
 }

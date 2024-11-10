@@ -61,11 +61,10 @@ class NacMissedAlarmNotification(
 		get()
 		{
 			// Get the title
-			val locale = Locale.getDefault()
 			val missedAlarm = context.resources.getQuantityString(R.plurals.missed_alarm, lineCount)
 
 			// Format the title
-			return String.format(locale, "<b>$missedAlarm</b>")
+			return "<b>$missedAlarm</b>"
 		}
 
 	/**
@@ -92,13 +91,12 @@ class NacMissedAlarmNotification(
 	override val contentText: String
 		get()
 		{
-			val locale = Locale.getDefault()
 			val alarmPlural = context.resources.getQuantityString(R.plurals.alarm, body.size)
 
 			// Check if the body has stuff present
 			return if (body.isNotEmpty())
 			{
-				String.format(locale, "${body.size} $alarmPlural")
+				"${body.size} $alarmPlural"
 			}
 			else
 			{
@@ -116,7 +114,7 @@ class NacMissedAlarmNotification(
 			val intent = NacMainActivity.getStartIntent(context)
 
 			// Determine the pending intent flags
-			var flags = PendingIntent.FLAG_IMMUTABLE
+			val flags = PendingIntent.FLAG_IMMUTABLE
 
 			// Return the pending intent for the activity
 			return PendingIntent.getActivity(context, 0, intent, flags)

@@ -17,6 +17,7 @@ import com.nfcalarmclock.alarm.NacAlarmRepository
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.main.NacMainActivity.Companion.startMainActivity
 import com.nfcalarmclock.alarm.options.missedalarm.NacMissedAlarmNotification
+import com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderNotification
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.NacAlarmStatisticRepository
@@ -160,7 +161,7 @@ class NacActiveAlarmService
 		val notificationManager = NotificationManagerCompat.from(this)
 
 		// Cancel the notification
-		notificationManager.cancel(id)
+		notificationManager.cancel(NacUpcomingReminderNotification.BASE_ID + id)
 	}
 
 	/**

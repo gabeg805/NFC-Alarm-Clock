@@ -356,7 +356,6 @@ object NacMedia
 	 */
 	fun getRingtones(context: Context): TreeMap<String, String>
 	{
-		val locale = Locale.getDefault()
 		val ringtones = TreeMap<String, String>()
 
 		// Get the cursor for the ringtones or return an empty tree map
@@ -370,9 +369,6 @@ object NacMedia
 			val id = c.getString(RingtoneManager.ID_COLUMN_INDEX)
 			val dir = c.getString(RingtoneManager.URI_COLUMN_INDEX)
 
-			// Build the path
-			val path = String.format(locale, "%1\$s/%2\$s", dir, id)
-
 			// Check if the ringtone already contains the title
 			if (ringtones.containsKey(title))
 			{
@@ -381,7 +377,7 @@ object NacMedia
 			}
 
 			// Add the path to the tree map
-			ringtones[title] = path
+			ringtones[title] = "$dir/$id"
 		}
 
 		// Close the cursor

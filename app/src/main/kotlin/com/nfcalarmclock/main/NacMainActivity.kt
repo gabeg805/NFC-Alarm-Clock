@@ -8,6 +8,7 @@ import android.content.res.ColorStateList
 import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
 import android.os.Handler
+import android.text.Html
 import android.view.HapticFeedbackConstants
 import android.view.Menu
 import android.view.MenuItem
@@ -63,6 +64,7 @@ import com.nfcalarmclock.statistics.NacAlarmStatisticViewModel
 import com.nfcalarmclock.util.NacBundle
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacIntent
+import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.util.createTimeTickReceiver
 import com.nfcalarmclock.util.disableActivityAlias
@@ -1538,7 +1540,8 @@ class NacMainActivity
 		listener: View.OnClickListener? = null)
 	{
 		// Create the snackbar
-		val snackbar = Snackbar.make(root, message, Snackbar.LENGTH_LONG)
+		val snackbar = Snackbar.make(root, NacUtility.toSpannedString(message),
+			Snackbar.LENGTH_LONG)
 
 		// Setup the snackbar
 		snackbar.setActionTextColor(sharedPreferences.themeColor)

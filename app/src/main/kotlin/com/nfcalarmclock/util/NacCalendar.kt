@@ -5,7 +5,6 @@ import android.content.res.Resources
 import android.text.format.DateFormat
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.util.NacUtility.capitalize
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.EnumSet
@@ -817,7 +816,7 @@ object NacCalendar
 			{
 				// Get the word
 				val alarmPlural = resources.getQuantityString(R.plurals.alarm, 1)
-				val alarmWord = capitalize(alarmPlural)
+				val alarmWord = alarmPlural.replaceFirstChar(Char::uppercaseChar)
 
 				"$alarmWord $isDisabled."
 			}
@@ -965,7 +964,7 @@ object NacCalendar
 			}
 			else
 			{
-				"\"$name\" ${willRun.lowercase(locale)}"
+				"<b>$name</b> ${willRun.lowercase(locale)}"
 			}
 
 			// Get the message

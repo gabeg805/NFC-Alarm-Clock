@@ -63,6 +63,9 @@
 	<string name="action_alarm_option_restrict_volume">Restringe el volumen</string>
 	<string name="action_alarm_option_text_to_speech">Texto-a-voz</string>
 	<string name="action_alarm_option_upcoming_reminder">Próximo recordatorio</string>
+	<string name="action_skipping_next_alarm">Saltar la siguiente alarma</string>
+	<string name="action_skip_next_alarm">Saltar la siguiente alarma</string>
+	<string name="action_unskip_next_alarm">Dejar de omitir la siguiente alarma</string>
 
 
 

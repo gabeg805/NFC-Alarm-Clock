@@ -1,5 +1,6 @@
 package com.nfcalarmclock.whatsnew
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
@@ -144,18 +145,15 @@ class NacWhatsNewDialog
 	/**
 	 * Setup the version.
 	 */
+	@SuppressLint("SetTextI18n")
 	private fun setupVersion(textView: TextView)
 	{
 		// Prepare the version name and number
 		val versionName = getString(R.string.version)
 		val versionNum = BuildConfig.VERSION_NAME
 
-		// Build the text
-		val locale = Locale.getDefault()
-		val text = String.format(locale, "$versionName $versionNum")
-
 		// Set the text
-		textView.text = text
+		textView.text = "$versionName $versionNum"
 	}
 
 	companion object

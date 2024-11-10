@@ -423,7 +423,6 @@ object NacFile
 		 */
 		private fun getPath(node: NacTreeNode<String>): String
 		{
-			val locale = Locale.getDefault()
 			var ref: NacTreeNode<String>? = node
 			var path = ""
 
@@ -444,7 +443,7 @@ object NacFile
 				{
 					// Build the path out of the key and path. Traversing up so
 					// the name goes before the path
-					path = String.format(locale, "${ref.key}/${path}")
+					path = "${ref.key}/${path}"
 				}
 
 				// Go up to the parent directory

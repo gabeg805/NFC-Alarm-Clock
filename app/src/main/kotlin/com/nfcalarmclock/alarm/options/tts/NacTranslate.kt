@@ -2,6 +2,7 @@ package com.nfcalarmclock.alarm.options.tts
 
 import android.content.Context
 import android.content.res.Resources
+import android.os.Build
 import com.nfcalarmclock.R
 import com.nfcalarmclock.util.NacCalendar
 import java.util.Locale
@@ -32,27 +33,27 @@ object NacTranslate
 		minute: Int
 	): String
 	{
-		// Get the default locale, as well as the locale for each language that
-		// is covered by the app
-		val locale = Locale.getDefault()
-		//val english = Locale("en")
-		val spanish = Locale("es")
-		val creole = Locale("ht")
-		val vietnamese = Locale("vi")
-
-		// Check if using any non-english language
-		val extra = if (locale.language.equals(spanish.language)
-			|| locale.language.equals(creole.language)
-			|| locale.language.equals(vietnamese.language))
+		// Get the current locale being used on the device
+		val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
 		{
-			// Do nothing for extra
-			""
+			Resources.getSystem().configuration.locales.get(0)
 		}
-		// Using english
 		else
+		{
+			Resources.getSystem().configuration.locale
+		}
+
+		// Check if using English
+		val extra = if (locale.language.equals("en"))
 		{
 			// Check if the minute should be said as "oh" e.g. 8:05 would be eight oh five
 			if (minute in 1..9) "O" else ""
+		}
+		// Using non-english language
+		else
+		{
+			// Do nothing for extra
+			""
 		}
 
 		// Get the meridian (if it should be used based on the user's preferences)

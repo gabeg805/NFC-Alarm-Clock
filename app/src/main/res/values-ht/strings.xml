@@ -63,6 +63,9 @@
 	<string name="action_alarm_option_restrict_volume">Limite volim</string>
 	<string name="action_alarm_option_text_to_speech">Tèks-a-lapawòl</string>
 	<string name="action_alarm_option_upcoming_reminder">Rapèl kap vini</string>
+	<string name="action_skipping_next_alarm">Sote pwochen alam</string>
+	<string name="action_skip_next_alarm">Sote pwochen alam</string>
+	<string name="action_unskip_next_alarm">Retire alam kap vini an</string>
 
 
 

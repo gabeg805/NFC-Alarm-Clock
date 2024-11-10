@@ -323,10 +323,10 @@
 	</string-array>
 
 	<string-array name="whats_new_items">
-		<item>Se agregó la opción de &lt;b>posponer automáticamente&lt;/b>. Se puede configurar en las opciones de alarma.</item>
-		<item>Se agregó la opción &lt;b>linterna&lt;/b> para encender la linterna cuando suena una alarma. Se puede personalizar aún más en las opciones de alarma.</item>
-		<item>Posibilidad de ocultar las opciones de &lt;b>vibración&lt;/b>, &lt;b>NFC&lt;/b> y &lt;b>linterna&lt;/b> de una alarma expandida. Se encuentra en &lt;b>Configuración > Apariencia&lt;/b>.</item>
-		<item>Se actualizó la aplicación para &lt;b>Android 14&lt;/b>.</item>
+		<item>Se agregó la opción &lt;b>omitir la siguiente alarma&lt;/b>. Se puede acceder a ella manteniendo presionada una alarma.</item>
+		<item>Se solucionó el fallo que se producía cuando había un signo &lt;b>%&lt;/b> en el nombre de la alarma.</item>
+		<item>Se agregó traducción de idioma para &lt;b>alemán&lt;/b>.</item>
+		<item>Las notificaciones de recordatorio se eliminarán cuando suene una alarma.</item>
 	</string-array>
 
 </resources>

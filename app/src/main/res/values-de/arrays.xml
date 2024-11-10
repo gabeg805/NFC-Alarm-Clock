@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string-array name="audio_sources">
+		<item>Alarm</item>
+		<item>Anruf</item>
+		<item>Medien</item>
+		<item>Benachrichtigung</item>
+		<item>Klingelton</item>
+	</string-array>
+
+	<string-array name="tts_frequency">
+		<item>Einmal</item>
+		<item>Alle 1 Min</item>
+		<item>Alle 2 Min</item>
+		<item>Alle 3 Min</item>
+		<item>Alle 4 Min</item>
+		<item>Alle 5 Min</item>
+		<item>Alle 6 Min</item>
+		<item>Alle 7 Min</item>
+		<item>Alle 8 Min</item>
+		<item>Alle 9 Min</item>
+		<item>Alle 10 Min</item>
+		<item>Alle 11 Min</item>
+		<item>Alle 12 Min</item>
+		<item>Alle 13 Min</item>
+		<item>Alle 14 Min</item>
+		<item>Alle 15 Min</item>
+		<item>Alle 16 Min</item>
+		<item>Alle 17 Min</item>
+		<item>Alle 18 Min</item>
+		<item>Alle 19 Min</item>
+		<item>Alle 20 Min</item>
+		<item>Alle 21 Min</item>
+		<item>Alle 22 Min</item>
+		<item>Alle 23 Min</item>
+		<item>Alle 24 Min</item>
+		<item>Alle 25 Min</item>
+		<item>Alle 26 Min</item>
+		<item>Alle 27 Min</item>
+		<item>Alle 28 Min</item>
+		<item>Alle 29 Min</item>
+		<item>Alle 30 Min</item>
+	</string-array>
+
+	<string-array name="days_of_week">
+		<item>Sonntag</item>
+		<item>Montag</item>
+		<item>Dienstag</item>
+		<item>Mittwoch</item>
+		<item>Donnerstag</item>
+		<item>Freitag</item>
+		<item>Samstag</item>
+	</string-array>
+
+	<string-array name="days_of_week_abbr">
+		<item>So</item>
+		<item>Mo</item>
+		<item>Di</item>
+		<item>Mi</item>
+		<item>Do</item>
+		<item>Fr</item>
+		<item>Sa</item>
+	</string-array>
+
+	<string-array name="days_of_week_one_letter">
+		<item>S</item>
+		<item>M</item>
+		<item>D</item>
+		<item>M</item>
+		<item>D</item>
+		<item>F</item>
+		<item>S</item>
+	</string-array>
+
+	<string-array name="start_week_on">
+		<item>Sonntag</item>
+		<item>Montag</item>
+	</string-array>
+
+	<string-array name="auto_dismiss_summaries">
+		<item>Aus</item>
+		<item>1 Minute</item>
+		<item>2 Minuten</item>
+		<item>3 Minuten</item>
+		<item>4 Minuten</item>
+		<item>5 Minuten</item>
+		<item>10 Minuten</item>
+		<item>15 Minuten</item>
+		<item>20 Minuten</item>
+		<item>25 Minuten</item>
+		<item>30 Minuten</item>
+		<item>35 Minuten</item>
+		<item>40 Minuten</item>
+		<item>45 Minuten</item>
+		<item>50 Minuten</item>
+		<item>55 Minuten</item>
+		<item>60 Minuten</item>
+	</string-array>
+
+	<string-array name="auto_snooze_summaries">
+		<item>Aus</item>
+		<item>1 Minute</item>
+		<item>2 Minuten</item>
+		<item>3 Minuten</item>
+		<item>4 Minuten</item>
+		<item>5 Minuten</item>
+		<item>6 Minuten</item>
+		<item>7 Minuten</item>
+		<item>8 Minuten</item>
+		<item>9 Minuten</item>
+		<item>10 Minuten</item>
+		<item>11 Minuten</item>
+		<item>12 Minuten</item>
+		<item>13 Minuten</item>
+		<item>14 Minuten</item>
+		<item>15 Minuten</item>
+		<item>16 Minuten</item>
+		<item>17 Minuten</item>
+		<item>18 Minuten</item>
+		<item>19 Minuten</item>
+		<item>20 Minuten</item>
+		<item>21 Minuten</item>
+		<item>22 Minuten</item>
+		<item>23 Minuten</item>
+		<item>24 Minuten</item>
+		<item>25 Minuten</item>
+		<item>26 Minuten</item>
+		<item>27 Minuten</item>
+		<item>28 Minuten</item>
+		<item>29 Minuten</item>
+		<item>30 Minuten</item>
+	</string-array>
+
+	<string-array name="max_snooze_summaries">
+		<item>Keiner</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+		<item>5</item>
+		<item>6</item>
+		<item>7</item>
+		<item>8</item>
+		<item>9</item>
+		<item>10</item>
+		<item>Unbegrenzt</item>
+	</string-array>
+
+	<string-array name="snooze_duration_summaries">
+		<item>1 Minute</item>
+		<item>2 Minuten</item>
+		<item>3 Minuten</item>
+		<item>4 Minuten</item>
+		<item>5 Minuten</item>
+		<item>6 Minuten</item>
+		<item>7 Minuten</item>
+		<item>8 Minuten</item>
+		<item>9 Minuten</item>
+		<item>10 Minuten</item>
+		<item>15 Minuten</item>
+		<item>20 Minuten</item>
+		<item>25 Minuten</item>
+		<item>30 Minuten</item>
+		<item>35 Minuten</item>
+		<item>40 Minuten</item>
+		<item>45 Minuten</item>
+		<item>50 Minuten</item>
+		<item>55 Minuten</item>
+		<item>60 Minuten</item>
+		<item>65 Minuten</item>
+		<item>70 Minuten</item>
+		<item>75 Minuten</item>
+		<item>80 Minuten</item>
+		<item>85 Minuten</item>
+		<item>90 Minuten</item>
+	</string-array>
+
+	<string-array name="dismiss_early_times">
+		<item>1 Minute</item>
+		<item>2 Minuten</item>
+		<item>3 Minuten</item>
+		<item>4 Minuten</item>
+		<item>5 Minuten</item>
+		<item>10 Minuten</item>
+		<item>15 Minuten</item>
+		<item>20 Minuten</item>
+		<item>25 Minuten</item>
+		<item>30 Minuten</item>
+		<item>35 Minuten</item>
+		<item>40 Minuten</item>
+		<item>45 Minuten</item>
+		<item>50 Minuten</item>
+		<item>55 Minuten</item>
+		<item>60 Minuten</item>
+		<item>65 Minuten</item>
+		<item>70 Minuten</item>
+		<item>75 Minuten</item>
+		<item>80 Minuten</item>
+		<item>85 Minuten</item>
+		<item>90 Minuten</item>
+		<item>95 Minuten</item>
+		<item>100 Minuten</item>
+		<item>105 Minuten</item>
+		<item>110 Minuten</item>
+		<item>115 Minuten</item>
+		<item>120 Minuten</item>
+	</string-array>
+
+	<string-array name="upcoming_reminder_times_to_show">
+		<item>1 Minute</item>
+		<item>2 Minuten</item>
+		<item>3 Minuten</item>
+		<item>4 Minuten</item>
+		<item>5 Minuten</item>
+		<item>6 Minuten</item>
+		<item>7 Minuten</item>
+		<item>8 Minuten</item>
+		<item>9 Minuten</item>
+		<item>10 Minuten</item>
+		<item>15 Minuten</item>
+		<item>20 Minuten</item>
+		<item>25 Minuten</item>
+		<item>30 Minuten</item>
+		<item>35 Minuten</item>
+		<item>40 Minuten</item>
+		<item>45 Minuten</item>
+		<item>50 Minuten</item>
+		<item>55 Minuten</item>
+		<item>60 Minuten</item>
+		<item>65 Minuten</item>
+		<item>70 Minuten</item>
+		<item>75 Minuten</item>
+		<item>80 Minuten</item>
+		<item>85 Minuten</item>
+		<item>90 Minuten</item>
+		<item>95 Minuten</item>
+		<item>100 Minuten</item>
+		<item>105 Minuten</item>
+		<item>110 Minuten</item>
+		<item>115 Minuten</item>
+		<item>120 Minuten</item>
+	</string-array>
+
+	<string-array name="upcoming_reminder_frequency">
+		<item>Einmal</item>
+		<item>Alle 1 Min</item>
+		<item>Alle 2 Min</item>
+		<item>Alle 3 Min</item>
+		<item>Alle 4 Min</item>
+		<item>Alle 5 Min</item>
+		<item>Alle 6 Min</item>
+		<item>Alle 7 Min</item>
+		<item>Alle 8 Min</item>
+		<item>Alle 9 Min</item>
+		<item>Alle 10 Min</item>
+		<item>Alle 11 Min</item>
+		<item>Alle 12 Min</item>
+		<item>Alle 13 Min</item>
+		<item>Alle 14 Min</item>
+		<item>Alle 15 Min</item>
+		<item>Alle 16 Min</item>
+		<item>Alle 17 Min</item>
+		<item>Alle 18 Min</item>
+		<item>Alle 19 Min</item>
+		<item>Alle 20 Min</item>
+		<item>Alle 21 Min</item>
+		<item>Alle 22 Min</item>
+		<item>Alle 23 Min</item>
+		<item>Alle 24 Min</item>
+		<item>Alle 25 Min</item>
+		<item>Alle 26 Min</item>
+		<item>Alle 27 Min</item>
+		<item>Alle 28 Min</item>
+		<item>Alle 29 Min</item>
+		<item>Alle 30 Min</item>
+	</string-array>
+
+	<string-array name="gradually_increase_volume_wait_times">
+		<item>1 Sekunde</item>
+		<item>2 Sekunden</item>
+		<item>3 Sekunden</item>
+		<item>4 Sekunden</item>
+		<item>5 Sekunden</item>
+		<item>6 Sekunden</item>
+		<item>7 Sekunden</item>
+		<item>8 Sekunden</item>
+		<item>9 Sekunden</item>
+		<item>10 Sekunden</item>
+		<item>15 Sekunden</item>
+		<item>20 Sekunden</item>
+		<item>25 Sekunden</item>
+		<item>30 Sekunden</item>
+		<item>35 Sekunden</item>
+		<item>40 Sekunden</item>
+		<item>45 Sekunden</item>
+		<item>50 Sekunden</item>
+		<item>55 Sekunden</item>
+		<item>60 Sekunden</item>
+	</string-array>
+
+	<string-array name="flashlight_on_off_duration_times">
+		<item>0,5 Sekunden</item>
+		<item>1,0 Sekunde</item>
+		<item>1,5 Sekunden</item>
+		<item>2,0 Sekunden</item>
+		<item>2,5 Sekunden</item>
+		<item>3,0 Sekunden</item>
+		<item>3,5 Sekunden</item>
+		<item>4,0 Sekunden</item>
+		<item>4,5 Sekunden</item>
+		<item>5,0 Sekunden</item>
+		<item>5,5 Sekunden</item>
+		<item>6,0 Sekunden</item>
+		<item>6,5 Sekunden</item>
+		<item>7,0 Sekunden</item>
+		<item>7,5 Sekunden</item>
+		<item>8,0 Sekunden</item>
+		<item>8,5 Sekunden</item>
+		<item>9,0 Sekunden</item>
+		<item>9,5 Sekunden</item>
+		<item>10,0 Sekunden</item>
+	</string-array>
+
+	<string-array name="whats_new_items">
+		<item>Option &lt;b>Nächsten Alarm überspringen&lt;/b> hinzugefügt. Kann durch langes Drücken eines Alarms aufgerufen werden.</item>
+		<item>Absturz behoben, wenn der Alarmname ein &lt;b>%-Zeichen&lt;/b> enthielt.</item>
+		<item>Sprachübersetzung für &lt;b>Deutsch&lt;/b> hinzugefügt.</item>
+		<item>Erinnerungsbenachrichtigungen werden entfernt, wenn ein Alarm losgeht.</item>
+	</string-array>
+
+</resources>

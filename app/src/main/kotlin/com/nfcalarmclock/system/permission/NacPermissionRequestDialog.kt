@@ -1,5 +1,6 @@
 package com.nfcalarmclock.system.permission
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
@@ -119,6 +120,7 @@ abstract class NacPermissionRequestDialog
 	/**
 	 * Set the page information in the dialog.
 	 */
+	@SuppressLint("SetTextI18n")
 	private fun setupPageInfo()
 	{
 		// Get the separate and number of pages views
@@ -133,13 +135,12 @@ abstract class NacPermissionRequestDialog
 			pages.visibility = View.VISIBLE
 
 			// Get the textviews that need to be modified
-			val locale = Locale.getDefault()
 			val positionTextView = dialog!!.findViewById<TextView>(R.id.request_current_page)
 			val totalNumTextView = dialog!!.findViewById<TextView>(R.id.request_total_num_pages)
 
 			// Set the position and total number of pages
-			positionTextView.text = String.format(locale, "%d ", position)
-			totalNumTextView.text = String.format(locale, " %d", totalNumberOfPages)
+			positionTextView.text = "$position "
+			totalNumTextView.text = " $totalNumberOfPages"
 		}
 		else
 		{

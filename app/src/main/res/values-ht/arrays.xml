@@ -323,10 +323,10 @@
 	</string-array>
 
 	<string-array name="whats_new_items">
-		<item>Te ajoute opsyon &lt;b>auto-snooze&lt;/b>. Ka mete nan opsyon alam.</item>
-		<item>Te ajoute opsyon &lt;b>flèch&lt;/b> pou limen flach la lè yon alam sonnen. Èske yo ka plis Customized nan opsyon alam.</item>
-		<item>Kapab kache opsyon &lt;b>vibre&lt;/b>, &lt;b>NFC&lt;/b>, ak &lt;b>flèch&lt;/b> nan yon alam elaji. Yo jwenn nan &lt;b>Anviwònman > Aparans&lt;/b>.</item>
-		<item>Mete ajou aplikasyon an pou &lt;b>Android 14&lt;/b>.</item>
+		<item>Te ajoute opsyon &lt;b>sote pwochen alam&lt;/b>. Ou ka jwenn aksè lè w peze yon alam lontan.</item>
+		<item>Te fikse aksidan lè yon siy &lt;b>%&lt;/b> te nan non alam la.</item>
+		<item>Te ajoute tradiksyon lang pou &lt;b>Alman&lt;/b>.</item>
+		<item>Notifikasyon rapèl yo pral retire lè yon alam sonnen.</item>
 	</string-array>
 
 </resources>

@@ -49,11 +49,10 @@ class NacFileBrowserRepository
 		val extra = if (metadata.name == NacFile.PREVIOUS_DIRECTORY)
 		{
 			// Get the name of the previous folder
-			val locale = Locale.getDefault()
 			val previousFolder = context.getString(R.string.action_previous_folder)
 
 			// Format the string
-			String.format(locale, "($previousFolder)")
+			"($previousFolder)"
 		}
 		else
 		{

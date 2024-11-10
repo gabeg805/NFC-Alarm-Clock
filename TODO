@@ -2,6 +2,13 @@
 TODO
 ----
 
+* Add import/export of database and shared preferences.
+
+* Remove upcoming notifications as well when an alarm goes off
+
+* Add languages for India, Bangladesh, Pakistan, Japan, Thailand, Poland, Turkey, France,
+  Brazil & Portugal, Serbia, Finland, Romania, Italy
+
 * Figure out why I use home in NacFile
 
 * Reorganize some of the packages like media. See if I can make a media player package?
