@@ -13,16 +13,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerFragment
 import com.nfcalarmclock.system.file.NacFile
 import com.nfcalarmclock.system.file.browser.NacFileBrowser
 import com.nfcalarmclock.system.file.browser.NacFileBrowser.OnBrowserClickedListener
-import com.nfcalarmclock.util.media.NacMedia
-import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerFragment
 import com.nfcalarmclock.system.permission.readmediaaudio.NacReadMediaAudioPermission
 import com.nfcalarmclock.util.NacBundle
+import com.nfcalarmclock.util.media.NacMedia
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 /**
  * Display a browser for the user to browse for music files.

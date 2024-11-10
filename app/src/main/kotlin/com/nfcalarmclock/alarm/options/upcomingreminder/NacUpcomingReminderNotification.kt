@@ -125,7 +125,7 @@ class NacUpcomingReminderNotification(
 			val intent = NacMainActivity.getStartIntent(context)
 
 			// Determine the pending intent flags
-			var flags = PendingIntent.FLAG_IMMUTABLE
+			val flags = PendingIntent.FLAG_IMMUTABLE
 
 			// Return the pending intent for the activity
 			return PendingIntent.getActivity(context, 0, intent, flags)
@@ -141,7 +141,7 @@ class NacUpcomingReminderNotification(
 			val intent = NacUpcomingReminderService.getClearReminderIntent(context, alarm)
 
 			// Determine the pending intent flags
-			var flags = PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
+			val flags = PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
 
 			// Create the pending intent
 			return PendingIntent.getService(context, 0, intent, flags)

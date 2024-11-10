@@ -5,7 +5,6 @@ import android.content.res.Resources
 import android.os.Build
 import com.nfcalarmclock.R
 import com.nfcalarmclock.util.NacCalendar
-import java.util.Locale
 
 /**
  * How to translate certain phrases to other languages.

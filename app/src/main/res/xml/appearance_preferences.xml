@@ -164,7 +164,7 @@
 			app:allowDividerBelow="false"
 			/>
 
-		<com.nfcalarmclock.startweekon.NacStartWeekOnPreference
+		<com.nfcalarmclock.alarm.options.startweekon.NacStartWeekOnPreference
 			android:title="@string/start_week_on"
 			android:key="@string/start_week_on_key"
 			android:defaultValue="@integer/default_start_week_on_index"
@@ -186,7 +186,7 @@
 			app:allowDividerBelow="false"
 			/>
 
-		<com.nfcalarmclock.nextalarmformat.NacNextAlarmFormatPreference
+		<com.nfcalarmclock.alarm.options.nextalarmformat.NacNextAlarmFormatPreference
 			android:title="@string/next_alarm_format"
 			android:key="@string/next_alarm_format_key"
 			android:defaultValue="@integer/default_next_alarm_format_index"

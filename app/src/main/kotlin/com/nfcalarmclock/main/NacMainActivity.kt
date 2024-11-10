@@ -8,7 +8,6 @@ import android.content.res.ColorStateList
 import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
 import android.os.Handler
-import android.text.Html
 import android.view.HapticFeedbackConstants
 import android.view.Menu
 import android.view.MenuItem
@@ -29,10 +28,17 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
 import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
+import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmActivity
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService
-import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerActivity
+import com.nfcalarmclock.alarm.options.nfc.NacNfc
+import com.nfcalarmclock.alarm.options.nfc.NacNfcTagViewModel
+import com.nfcalarmclock.alarm.options.nfc.NacSaveNfcTagDialog
+import com.nfcalarmclock.alarm.options.nfc.NacScanNfcTagDialog
+import com.nfcalarmclock.alarm.options.nfc.NacScanNfcTagDialog.OnScanNfcTagListener
+import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
 import com.nfcalarmclock.card.NacCardAdapter
 import com.nfcalarmclock.card.NacCardAdapter.OnViewHolderBoundListener
 import com.nfcalarmclock.card.NacCardAdapter.OnViewHolderCreatedListener
@@ -47,20 +53,13 @@ import com.nfcalarmclock.card.NacCardHolder.OnCardUseNfcChangedListener
 import com.nfcalarmclock.card.NacCardLayoutManager
 import com.nfcalarmclock.card.NacCardTouchHelper
 import com.nfcalarmclock.card.NacCardTouchHelper.OnSwipedListener
-import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerActivity
-import com.nfcalarmclock.alarm.options.nfc.NacNfc
-import com.nfcalarmclock.alarm.options.nfc.NacNfcTagViewModel
-import com.nfcalarmclock.alarm.options.nfc.NacSaveNfcTagDialog
-import com.nfcalarmclock.alarm.options.nfc.NacScanNfcTagDialog
-import com.nfcalarmclock.alarm.options.nfc.NacScanNfcTagDialog.OnScanNfcTagListener
-import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
-import com.nfcalarmclock.system.permission.NacPermissionRequestManager
 import com.nfcalarmclock.ratemyapp.NacRateMyApp
-import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.settings.NacMainSettingActivity
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.statistics.NacAlarmStatisticViewModel
+import com.nfcalarmclock.system.permission.NacPermissionRequestManager
+import com.nfcalarmclock.system.scheduler.NacScheduler
+import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.util.NacBundle
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacIntent
@@ -75,7 +74,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Calendar
-import java.util.Locale
 
 /**
  * The application's main activity.

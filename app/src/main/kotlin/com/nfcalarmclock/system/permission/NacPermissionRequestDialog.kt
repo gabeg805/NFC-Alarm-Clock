@@ -9,7 +9,6 @@ import android.view.View
 import android.widget.TextView
 import com.nfcalarmclock.R
 import com.nfcalarmclock.view.dialog.NacDialogFragment
-import java.util.Locale
 
 /**
  * Generic dialog for requesting permissions.

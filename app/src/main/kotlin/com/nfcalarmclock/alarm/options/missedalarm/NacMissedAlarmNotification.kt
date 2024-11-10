@@ -11,7 +11,6 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.view.notification.NacNotification
-import java.util.Locale
 
 /**
  */

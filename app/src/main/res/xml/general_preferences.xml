@@ -8,7 +8,7 @@
 		android:title="@string/default_alarm_category">
 
 		<!-- Name -->
-		<com.nfcalarmclock.name.NacNamePreference
+		<com.nfcalarmclock.alarm.options.name.NacNamePreference
 			android:key="@string/alarm_name_key"
 			android:title="@string/alarm_name"
 			android:defaultValue=""
@@ -74,7 +74,7 @@
 			/>
 
 		<!-- Volume -->
-		<com.nfcalarmclock.volume.NacVolumePreference
+		<com.nfcalarmclock.alarm.options.volume.NacVolumePreference
 			android:key="@string/alarm_volume_key"
 			android:title="@string/alarm_volume"
 			android:defaultValue="@integer/default_volume"

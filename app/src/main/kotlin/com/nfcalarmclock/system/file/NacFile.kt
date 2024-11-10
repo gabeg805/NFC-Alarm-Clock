@@ -3,7 +3,6 @@ package com.nfcalarmclock.system.file
 import android.content.ContentUris
 import android.net.Uri
 import android.provider.MediaStore
-import java.util.Locale
 import java.util.UnknownFormatConversionException
 
 /**

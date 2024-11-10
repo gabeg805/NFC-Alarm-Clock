@@ -16,7 +16,6 @@ import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
 import com.nfcalarmclock.view.dialog.NacDialogFragment
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog.OnReadWhatsNewListener
-import java.util.Locale
 
 /**
  * Show what is new with the app after an update.
