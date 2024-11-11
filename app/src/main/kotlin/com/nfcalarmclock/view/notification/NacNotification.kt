@@ -17,7 +17,6 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacUtility.toSpannedString
-import java.util.Calendar
 
 /**
  * Notification for the app to keep it in memory.

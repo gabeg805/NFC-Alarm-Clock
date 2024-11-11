@@ -366,7 +366,7 @@ class NacAlarm()
 	 * there are basically no alarms after this.
 	 */
 	val isNextSkippedAndFinal: Boolean
-		get() = shouldSkipNextAlarm && (days.size == 1) && !repeat
+		get() = shouldSkipNextAlarm && (days.size <= 1) && !repeat
 
 	/**
 	 * The normalized alarm name (with newlines replaced with spaces).

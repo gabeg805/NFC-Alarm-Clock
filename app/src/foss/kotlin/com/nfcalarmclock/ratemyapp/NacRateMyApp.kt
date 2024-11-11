@@ -20,6 +20,7 @@ object NacRateMyApp
 	 * @return False because the FOSS version should never request to rate the
 	 *         app.
 	 */
+	@Suppress("unused_parameter")
 	fun shouldRequest(shared: NacSharedPreferences): Boolean
 	{
 		return false
@@ -30,6 +31,7 @@ object NacRateMyApp
 	 *
 	 * This does nothing on the FOSS version.
 	 */
+	@Suppress("unused_parameter")
 	fun request(activity:AppCompatActivity, shared: NacSharedPreferences)
 	{
 	}

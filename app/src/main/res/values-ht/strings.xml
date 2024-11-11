@@ -23,8 +23,6 @@
 
 	<!-- States -->
 	<string name="state_unknown">Enkoni</string>
-	<string name="state_off">Koupe</string>
-
 
 
 	<!-- Actions -->
@@ -43,9 +41,6 @@
 	<string name="action_done">Fè</string>
 	<string name="action_preview">Preview</string>
 	<string name="action_stop_preview">One Stop Preview</string>
-	<string name="action_rate_now">To kounye a</string>
-	<string name="action_rate_later">Pita</string>
-	<string name="action_rate_never">Non mèsi</string>
 	<string name="action_show_nfc_tag_id">Montre tag NFC</string>
 	<string name="action_use_any">Sèvi ak nenpòt tag NFC</string>
 	<string name="action_save">Sove</string>
@@ -85,7 +80,6 @@
 
 	<!-- Messages -->
 	<string name="message_playlist">Ou vle jwe tout mizik ki nan katab sa a?</string>
-	<string name="message_rate_my_app">Si w ap jwi aplikasyon <b>Revèy Alam NFC</b>, tanpri pran yon ti tan pou evalye li. Mèsi pou sipò ou!</string>
 	<string name="message_nfc_request">Tanpri pèmèt NFC pou ranvwaye alam la</string>
 	<string name="message_nfc_required">NFC obligatwa</string>
 	<string name="message_nfc_optional">NFC opsyonèl</string>
@@ -122,6 +116,12 @@
 	<string name="message_skip_named_alarm">Y ap sote &lt;b&gt;%1$s&lt;/b&gt;.</string>
 	<string name="message_disabled_general_alarm">Alam enfim.</string>
 	<string name="message_disabled_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; enfim.</string>
+	<string name="message_will_run_on_general_alarm" tools:ignore="StringFormatCount">Pral kouri %2$s.</string>
+	<string name="message_will_run_on_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; pral kouri %2$s.</string>
+	<string name="message_will_run_in_general_alarm" tools:ignore="StringFormatCount">Pral kouri nan %2$s.</string>
+	<string name="message_will_run_in_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; ap kouri nan %2$s.</string>
+	<string name="message_next_alarm_on">Pwochen alam nan %1$s</string>
+	<string name="message_next_alarm_in">Pwochen alam nan %1$s</string>
 
 
 
@@ -139,7 +139,7 @@
 	<string name="error_message_snoozed_modify">Pa kapab modifye yon alam snoozed</string>
 	<string name="error_message_select_color">Koulè hex envalid</string>
 	<string name="error_message_play_audio">Pa kapab jwe odyo</string>
-	<string name="error_message_google_play_billing">Erè lè w konekte ak Google Play Store la</string>
+	<string name="error_message_google_play_billing" tools:keep="@string/error_message_google_play_billing">Erè lè w konekte ak Google Play Store la</string>
 	<string name="error_message_text_to_speech_audio_focus">Pa kapab itilize tèks-a-lapawòl</string>
 	<string name="error_message_unable_to_email_statistics">Pa kapab voye imèl estatistik</string>
 	<string name="error_message_unable_to_shine_flashlight">Pa kapab klere flach</string>
@@ -154,7 +154,6 @@
 
 	<!-- Titles -->
 	<string name="title_alarm_activity">Ranvwaye Alam</string>
-	<string name="title_rate_my_app">Evalye app a</string>
 	<string name="title_scan_nfc_tag" tools:ignore="TypographyEllipsis">Eskane yon tag NFC...</string>
 	<string name="title_select_nfc_tag" tools:ignore="TypographyEllipsis">Chwazi yon tag NFC...</string>
 	<string name="title_save_nfc_tag" tools:ignore="TypographyEllipsis">Sove tag NFC la...</string>
@@ -163,7 +162,6 @@
 	<string name="title_flashlight_strength" tools:ignore="TypographyEllipsis">Nivo fòs flach...</string>
 	<string name="title_flashlight_blink" tools:ignore="TypographyEllipsis">Èske flach la ta dwe bat...</string>
 	<string name="title_flashlight_on_off_duration" tools:ignore="TypographyEllipsis">Konbyen tan flach la ta dwe limen ak etenn pou...</string>
-	<string name="title_name">Mete non alam</string>
 	<string name="title_days">Chwazi jou</string>
 	<string name="title_color">Chwazi yon koulè</string>
 	<string name="title_dismiss_early_checkbox" tools:ignore="TypographyEllipsis">Ranvwaye alam la bonè, anvan li aktif...</string>
@@ -219,15 +217,6 @@
 	<string name="dow_weekend">Wikenn</string>
 	<string name="dow_today">Jodi a</string>
 	<string name="dow_tomorrow">Demen</string>
-
-
-
-	<!-- Miscellaneous -->
-	<string name="next_alarm">Pwochen alam</string>
-	<string name="will_run">Pral kouri</string>
-	<string name="time_in">nan</string>
-	<string name="time_on">sou</string>
-	<string name="is_disabled">se andikape</string>
 
 
 
@@ -411,9 +400,6 @@
 	<!-- Missed alarm notifications -->
 	<string name="missed_alarm_true">Montre notifikasyon pou alam rate yo.</string>
 
-	<!-- Upcoming alarm notifications -->
-	<string name="upcoming_alarm_true">Montre notifikasyon pou alam k ap vini yo.</string>
-
 	<!-- Show/hide the vibrate button -->
 	<string name="show_hide_vibrate_button_true">Montre bouton vibre a lè w ap agrandi yon alam.</string>
 	<string name="show_hide_vibrate_button_false">Kache bouton vibre a lè w ap agrandi yon alam.</string>
@@ -578,11 +564,6 @@
 		<item quantity="other">@string/title_missed_alarm</item>
 	</plurals>
 
-	<plurals name="upcoming_reminder">
-		<item quantity="one">Alam kap vini</item>
-		<item quantity="other">@string/title_upcoming_reminder</item>
-	</plurals>
-
 	<plurals name="unit_day">
 		<item quantity="one">jou</item>
 		<item quantity="other">jou</item>
@@ -599,7 +580,7 @@
 	</plurals>
 
 	<plurals name="unit_second">
-		<item quantity="one">dezyèm</item>
+		<item quantity="one">segonn</item>
 		<item quantity="other">segonn</item>
 	</plurals>
 

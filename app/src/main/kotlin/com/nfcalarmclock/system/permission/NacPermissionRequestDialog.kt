@@ -20,6 +20,7 @@ abstract class NacPermissionRequestDialog
 	/**
 	 * Listener for when what's new dialog has been read.
 	 */
+	@Suppress("unused_parameter")
 	interface OnPermissionRequestListener
 	{
 		fun onPermissionRequestAccepted(permission: String)

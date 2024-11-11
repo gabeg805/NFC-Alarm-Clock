@@ -25,7 +25,6 @@ object NacAudioManager
 	{
 
 		val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-		val result: Int
 
 		// TODO: This is commented out because you need the original
 		// AudioFocusRequest object that was used when requesting audio focus.
@@ -41,11 +40,9 @@ object NacAudioManager
 		//{
 
 		// Abandon audio focus
-		result = audioManager.abandonAudioFocus(listener)
+		return audioManager.abandonAudioFocus(listener)
 
 		//}
-
-		return result
 	}
 
 	/**

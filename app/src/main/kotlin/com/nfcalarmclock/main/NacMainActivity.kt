@@ -1033,7 +1033,7 @@ class NacMainActivity
 		val nextAlarm = NacCalendar.getNextAlarm(alarms)
 
 		// Get the next alarm message
-		val message = NacCalendar.Message.getNextAlarm(this, nextAlarm,
+		val message = NacCalendar.Message.getNext(this, nextAlarm,
 			sharedPreferences.nextAlarmFormat)
 
 		// Set the message in the text view
@@ -1387,7 +1387,7 @@ class NacMainActivity
 		val nextAlarm = NacCalendar.getNextAlarm(alarmCardAdapter.currentList)
 
 		// Get the message and action for the snackbar
-		val message = NacCalendar.Message.getNextAlarm(this, nextAlarm,
+		val message = NacCalendar.Message.getNext(this, nextAlarm,
 			sharedPreferences.nextAlarmFormat)
 		val action = getString(R.string.action_alarm_dismiss)
 

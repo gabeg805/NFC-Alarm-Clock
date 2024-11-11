@@ -769,89 +769,46 @@ object NacCalendar
 		private const val MAXIMUM_LENGTH = 32
 
 		/**
-		 * Build a message to display.
+		 * Get the message to display when the next alarm will occur.
 		 *
-		 * @return Build a message to display.
+		 * @return The message to display when the next alarm will occur.
 		 */
-		private fun build(
+		fun getNext(
 			context: Context,
 			alarm: NacAlarm?,
-			prefix: String,
 			nextAlarmFormat: Int
 		): String
 		{
-			// Get the alarm name
-			val name = alarm?.getNameNormalizedForMessage(MAXIMUM_LENGTH) ?: ""
-
 			// No alarm provided
 			return if (alarm == null)
 			{
 				context.resources.getString(R.string.message_no_alarms_scheduled)
 			}
-			// Alarm is not enabled
-			else if (!alarm.isEnabled)
-			{
-				// Alarm has a name
-				if (name.isNotEmpty())
-				{
-					context.resources.getString(R.string.message_disabled_named_alarm)
-				}
-				// Alarm does not have a name
-				else
-				{
-					context.resources.getString(R.string.message_disabled_general_alarm)
-				}
-			}
 			else
 			{
 				// Get the next alarm day
-				val calendar = getNextAlarmDay(alarm)
+				val calendar = getNextAlarmDay(alarm)!!
 
-				// No alarm scheduled, possibly because the next alarm is skipped
-				if (calendar == null)
-				{
-					// Alarm has a name
-					if (name.isNotEmpty())
-					{
-						context.resources.getString(R.string.message_skip_named_alarm)
-					}
-					// Alarm does not have a name
-					else
-					{
-						context.resources.getString(R.string.message_skip_general_alarm)
-					}
-				}
 				// e.g. Alarm in 12 hour 5 min
-				else if (nextAlarmFormat == 0)
+				if (nextAlarmFormat == 0)
 				{
-					getTimeIn(context.resources, calendar, prefix)
+					// Get the remaining time until the alarm runs
+					val timeRemaining = getTimeRemaining(context.resources, calendar)
+
+					// Return
+					context.resources.getString(R.string.message_next_alarm_in, timeRemaining)
 				}
 				// e.g. Alarm on ...
 				else
 				{
+					// Get the time at which the alarm will run
 					val is24HourFormat = DateFormat.is24HourFormat(context)
+					val time = getFullTime(calendar, is24HourFormat)
 
-					getTimeOn(context.resources, calendar, prefix, is24HourFormat)
+					// Return
+					context.resources.getString(R.string.message_next_alarm_on, time)
 				}
 			}
-		}
-
-		/**
-		 * Get the message to display when the next alarm will occur.
-		 *
-		 * @return The message to display when the next alarm will occur.
-		 */
-		fun getNextAlarm(
-			context: Context,
-			alarm: NacAlarm?,
-			nextAlarmFormat: Int
-		): String
-		{
-			// Get the prefix
-			val prefix = context.getString(R.string.next_alarm)
-
-			// Create the message
-			return build(context, alarm, prefix, nextAlarmFormat)
 		}
 
 		/**
@@ -860,12 +817,12 @@ object NacCalendar
 		 * @return The message to display when an alarm will run IN some amount of
 		 *         time.
 		 */
-		private fun getTimeIn(
+		private fun getTimeRemaining(
 			resources: Resources,
-			calendar: Calendar,
-			prefix: String
+			calendar: Calendar
 		): String
 		{
+			// Get the time remaining
 			val time = (calendar.timeInMillis - System.currentTimeMillis()) / 1000
 
 			// Get the time components
@@ -879,10 +836,9 @@ object NacCalendar
 			val hrunit = resources.getQuantityString(R.plurals.unit_hour, hr.toInt())
 			val minunit = resources.getQuantityString(R.plurals.unit_minute, min.toInt())
 			val secunit = resources.getQuantityString(R.plurals.unit_second, sec.toInt())
-			val timeIn = resources.getString(R.string.time_in)
 
-
-			val timeRemaining = if (day > 0)
+			// Format the time remaining message
+			return if (day > 0)
 			{
 				// Days
 				"$day $dayunit $hr $hrunit"
@@ -909,38 +865,10 @@ object NacCalendar
 					}
 				}
 			}
-
-			// Build the message
-			return "$prefix $timeIn $timeRemaining"
-		}
-
-		/**
-		 * Get the message to display when an alarm will run ON some date and time.
-		 *
-		 * TODO: Probably need to change this to make this more language neutral.
-		 *
-		 * @return The message to display when an alarm will run ON some date and
-		 *         time.
-		 */
-		private fun getTimeOn(
-			resources: Resources,
-			calendar: Calendar,
-			prefix: String,
-			is24HourFormat: Boolean
-		): String
-		{
-			// Get the message contents
-			val timeOn = resources.getString(R.string.time_on)
-			val time = getFullTime(calendar, is24HourFormat)
-
-			// Format the message
-			return "$prefix $timeOn $time"
 		}
 
 		/**
 		 * Get the message to display when the alarm will run.
-		 *
-		 * TODO: Probably need to change this to make this more language neutral.
 		 *
 		 * @return The message to display when the alarm will run.
 		 */
@@ -950,26 +878,78 @@ object NacCalendar
 			nextAlarmFormat: Int
 		): String
 		{
-			val locale = Locale.getDefault()
-
-			// Get the resources
-			val willRun = context.getString(R.string.will_run)
-
-			// Get the name of the alarm
+			// Get the alarm name
 			val name = alarm.getNameNormalizedForMessage(MAXIMUM_LENGTH)
 
-			// Determine the prefix to use for the message
-			val prefix = if (name.isEmpty())
+			// Alarm is not enabled
+			return if (!alarm.isEnabled)
 			{
-				willRun
+				// Alarm has a name
+				if (name.isNotEmpty())
+				{
+					context.resources.getString(R.string.message_disabled_named_alarm, name)
+				}
+				// Alarm does not have a name
+				else
+				{
+					context.resources.getString(R.string.message_disabled_general_alarm)
+				}
 			}
 			else
 			{
-				"<b>$name</b> ${willRun.lowercase(locale)}"
-			}
+				// Get the next alarm day
+				val calendar = getNextAlarmDay(alarm)
 
-			// Get the message
-			return build(context, alarm, prefix, nextAlarmFormat)
+				// No alarm scheduled, possibly because the next alarm is skipped
+				if (calendar == null)
+				{
+					// Alarm has a name
+					if (name.isNotEmpty())
+					{
+						context.resources.getString(R.string.message_skip_named_alarm, name)
+					}
+					// Alarm does not have a name
+					else
+					{
+						context.resources.getString(R.string.message_skip_general_alarm)
+					}
+				}
+				// e.g. Alarm in 12 hour 5 min
+				else if (nextAlarmFormat == 0)
+				{
+					// Get the remaining time until the alarm runs
+					val timeRemaining = getTimeRemaining(context.resources, calendar)
+
+					// Alarm has a name
+					if (name.isNotEmpty())
+					{
+						context.resources.getString(R.string.message_will_run_in_named_alarm, name, timeRemaining)
+					}
+					// Alarm does not have a name
+					else
+					{
+						context.resources.getString(R.string.message_will_run_in_general_alarm, "", timeRemaining)
+					}
+				}
+				// e.g. Alarm on ...
+				else
+				{
+					// Get the time at which the alarm will run
+					val is24HourFormat = DateFormat.is24HourFormat(context)
+					val time = getFullTime(calendar, is24HourFormat)
+
+					// Alarm has a name
+					if (name.isNotEmpty())
+					{
+						context.resources.getString(R.string.message_will_run_on_named_alarm, name, time)
+					}
+					// Alarm does not have a name
+					else
+					{
+						context.resources.getString(R.string.message_will_run_on_general_alarm, "", time)
+					}
+				}
+			}
 		}
 
 	}

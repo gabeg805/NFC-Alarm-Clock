@@ -23,8 +23,6 @@
 
 	<!-- States -->
 	<string name="state_unknown">Unbekannt</string>
-	<string name="state_off">Aus</string>
-
 
 
 	<!-- Actions -->
@@ -43,9 +41,6 @@
 	<string name="action_done">Erledigt</string>
 	<string name="action_preview">Vorschau</string>
 	<string name="action_stop_preview">Vorschau stoppen</string>
-	<string name="action_rate_now">Jetzt bewerten</string>
-	<string name="action_rate_later">Später</string>
-	<string name="action_rate_never">Nein danke</string>
 	<string name="action_show_nfc_tag_id">NFC-Tag anzeigen</string>
 	<string name="action_use_any">Verwenden Sie einen beliebigen NFC-Tag</string>
 	<string name="action_save">Speichern</string>
@@ -85,7 +80,6 @@
 
 	<!-- Messages -->
 	<string name="message_playlist">Möchten Sie die gesamte Musik in diesem Ordner abspielen?</string>
-	<string name="message_rate_my_app">Wenn Ihnen die App <b>NFC-Wecker</b> gefällt, nehmen Sie sich bitte einen Moment Zeit, um sie zu bewerten. Vielen Dank für Ihre Unterstützung!</string>
 	<string name="message_nfc_request">Bitte aktivieren Sie NFC, um den Alarm auszuschalten</string>
 	<string name="message_nfc_required">NFC erforderlich</string>
 	<string name="message_nfc_optional">NFC optional</string>
@@ -122,6 +116,12 @@
 	<string name="message_skip_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; wird übersprungen.</string>
 	<string name="message_disabled_general_alarm">Der Alarm ist deaktiviert.</string>
 	<string name="message_disabled_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; ist deaktiviert.</string>
+	<string name="message_will_run_on_general_alarm" tools:ignore="StringFormatCount">Läuft am %2$s Uhr.</string>
+	<string name="message_will_run_on_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; wird am %2$s Uhr ausgelöst.</string>
+	<string name="message_will_run_in_general_alarm" tools:ignore="StringFormatCount">Läuft in %2$s.</string>
+	<string name="message_will_run_in_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; wird in %2$s.</string>
+	<string name="message_next_alarm_on">Nächster Wecker am %1$s</string>
+	<string name="message_next_alarm_in">Nächster Alarm in %1$s</string>
 
 
 
@@ -154,7 +154,6 @@
 
 	<!-- Titles -->
 	<string name="title_alarm_activity">Alarm schließen</string>
-	<string name="title_rate_my_app">Bewerte die App</string>
 	<string name="title_scan_nfc_tag" tools:ignore="TypographyEllipsis">Scannen Sie einen NFC-Tag ...</string>
 	<string name="title_select_nfc_tag" tools:ignore="TypographyEllipsis">Wählen Sie einen NFC-Tag aus ...</string>
 	<string name="title_save_nfc_tag" tools:ignore="TypographyEllipsis">NFC-Tag speichern...</string>
@@ -163,7 +162,6 @@
 	<string name="title_flashlight_strength" tools:ignore="TypographyEllipsis">Stärkestufe der Taschenlampe...</string>
 	<string name="title_flashlight_blink" tools:ignore="TypographyEllipsis">Sollte die Taschenlampe blinken...</string>
 	<string name="title_flashlight_on_off_duration" tools:ignore="TypographyEllipsis">Wie lange soll die Taschenlampe an- und ausblinken...</string>
-	<string name="title_name">Alarmnamen festlegen</string>
 	<string name="title_days">Tage auswählen</string>
 	<string name="title_color">Wählen Sie eine Farbe</string>
 	<string name="title_dismiss_early_checkbox" tools:ignore="TypographyEllipsis">Deaktivieren Sie den Alarm frühzeitig, bevor er aktiv wird ...</string>
@@ -219,15 +217,6 @@
 	<string name="dow_weekend">Wochenende</string>
 	<string name="dow_today">Heute</string>
 	<string name="dow_tomorrow">Morgen</string>
-
-
-
-	<!-- Miscellaneous -->
-	<string name="next_alarm">Nächster Alarm</string>
-	<string name="will_run">Wird laufen</string>
-	<string name="time_in">in</string>
-	<string name="time_on">an</string>
-	<string name="is_disabled">ist deaktiviert</string>
 
 
 
@@ -411,9 +400,6 @@
 	<!-- Missed alarm notifications -->
 	<string name="missed_alarm_true">Benachrichtigungen für verpasste Alarme anzeigen.</string>
 
-	<!-- Upcoming alarm notifications -->
-	<string name="upcoming_alarm_true">Benachrichtigungen für bevorstehende Alarme anzeigen.</string>
-
 	<!-- Show/hide the vibrate button -->
 	<string name="show_hide_vibrate_button_true">Beim Erweitern eines Alarms die Vibrationstaste anzeigen.</string>
 	<string name="show_hide_vibrate_button_false">Blenden Sie die Vibrationstaste aus, wenn Sie einen Alarm erweitern.</string>
@@ -578,11 +564,6 @@
 		<item quantity="other">@string/title_missed_alarm</item>
 	</plurals>
 
-	<plurals name="upcoming_reminder">
-		<item quantity="one">Bevorstehender Alarm</item>
-		<item quantity="other">@string/title_upcoming_reminder</item>
-	</plurals>
-
 	<plurals name="unit_day">
 		<item quantity="one">Tag</item>
 		<item quantity="other">Tage</item>
@@ -599,7 +580,7 @@
 	</plurals>
 
 	<plurals name="unit_second">
-		<item quantity="one">zweite</item>
+		<item quantity="one">Sekunde</item>
 		<item quantity="other">Sekunden</item>
 	</plurals>
 

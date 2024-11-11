@@ -23,8 +23,6 @@
 
 	<!-- States -->
 	<string name="state_unknown">Unknown</string>
-	<string name="state_off">Off</string>
-
 
 
 	<!-- Actions -->
@@ -43,9 +41,6 @@
 	<string name="action_done">Done</string>
 	<string name="action_preview">Preview</string>
 	<string name="action_stop_preview">Stop Preview</string>
-	<string name="action_rate_now">Rate Now</string>
-	<string name="action_rate_later">Later</string>
-	<string name="action_rate_never">No, Thanks</string>
 	<string name="action_show_nfc_tag_id">Show NFC tag</string>
 	<string name="action_use_any">Use any NFC tag</string>
 	<string name="action_save">Save</string>
@@ -85,7 +80,6 @@
 
 	<!-- Messages -->
 	<string name="message_playlist">Do you want to play all the music in this folder?</string>
-	<string name="message_rate_my_app">If you have been enjoying the <b>NFC Alarm Clock</b> app, please take a moment to rate it. Thank you for your support!</string>
 	<string name="message_nfc_request">Please enable NFC to dismiss the alarm</string>
 	<string name="message_nfc_required">NFC required</string>
 	<string name="message_nfc_optional">NFC optional</string>
@@ -122,6 +116,12 @@
 	<string name="message_skip_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; will be skipped.</string>
 	<string name="message_disabled_general_alarm">Alarm is disabled.</string>
 	<string name="message_disabled_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; is disabled.</string>
+	<string name="message_will_run_on_general_alarm" tools:ignore="StringFormatCount">Will run on %2$s.</string>
+	<string name="message_will_run_on_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; will run on %2$s.</string>
+	<string name="message_will_run_in_general_alarm" tools:ignore="StringFormatCount">Will run in %2$s.</string>
+	<string name="message_will_run_in_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; will run in %2$s.</string>
+	<string name="message_next_alarm_on">Next alarm on %1$s</string>
+	<string name="message_next_alarm_in">Next alarm in %1$s</string>
 
 
 
@@ -154,7 +154,6 @@
 
 	<!-- Titles -->
 	<string name="title_alarm_activity">Dismiss Alarm</string>
-	<string name="title_rate_my_app">Rate the app</string>
 	<string name="title_scan_nfc_tag" tools:ignore="TypographyEllipsis">Scan an NFC tag...</string>
 	<string name="title_select_nfc_tag" tools:ignore="TypographyEllipsis">Select an NFC tag...</string>
 	<string name="title_save_nfc_tag" tools:ignore="TypographyEllipsis">Save NFC tag...</string>
@@ -163,7 +162,6 @@
 	<string name="title_flashlight_strength" tools:ignore="TypographyEllipsis">Flashlight strength level...</string>
 	<string name="title_flashlight_blink" tools:ignore="TypographyEllipsis">Should the flashlight blink...</string>
 	<string name="title_flashlight_on_off_duration" tools:ignore="TypographyEllipsis">How long should the flashlight blink on and off for...</string>
-	<string name="title_name">Set alarm name</string>
 	<string name="title_days">Select days</string>
 	<string name="title_color">Select a color</string>
 	<string name="title_dismiss_early_checkbox" tools:ignore="TypographyEllipsis">Dismiss the alarm early, before it is active...</string>
@@ -219,15 +217,6 @@
 	<string name="dow_weekend">Weekend</string>
 	<string name="dow_today">Today</string>
 	<string name="dow_tomorrow">Tomorrow</string>
-
-
-
-	<!-- Miscellaneous -->
-	<string name="next_alarm">Next alarm</string>
-	<string name="will_run">Will run</string>
-	<string name="time_in">in</string>
-	<string name="time_on">on</string>
-	<string name="is_disabled">is disabled</string>
 
 
 
@@ -411,9 +400,6 @@
 	<!-- Missed alarm notifications -->
 	<string name="missed_alarm_true">Show notifications for missed alarms.</string>
 
-	<!-- Upcoming alarm notifications -->
-	<string name="upcoming_alarm_true">Show notifications for upcoming alarms.</string>
-
 	<!-- Show/hide the vibrate button -->
 	<string name="show_hide_vibrate_button_true">Show the vibrate button when expanding an alarm.</string>
 	<string name="show_hide_vibrate_button_false">Hide the vibrate button when expanding an alarm.</string>
@@ -576,11 +562,6 @@
 	<plurals name="missed_alarm">
 		<item quantity="one">Missed alarm</item>
 		<item quantity="other">@string/title_missed_alarm</item>
-	</plurals>
-
-	<plurals name="upcoming_reminder">
-		<item quantity="one">Upcoming alarm</item>
-		<item quantity="other">@string/title_upcoming_reminder</item>
 	</plurals>
 
 	<plurals name="unit_day">
