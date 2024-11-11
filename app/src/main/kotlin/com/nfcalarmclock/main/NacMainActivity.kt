@@ -1323,7 +1323,7 @@ class NacMainActivity
 		// Get the next calendar day the alarm will run as well as the
 		// calendar right now
 		val now = Calendar.getInstance()
-		val nextCal = NacCalendar.getNextAlarmDay(nextAlarm)
+		val nextCal = NacCalendar.getNextAlarmDay(nextAlarm)!!
 
 		// Compute the difference between the two calendars and convert
 		// it to minutes

@@ -33,16 +33,16 @@ object NacScheduler
 		}
 
 		// Get the calendar for the next alarm
-		val nextAlarmCal = NacCalendar.getNextAlarmDay(alarm, ignoreSkip = true)
+		val nextAlarmCal = NacCalendar.getNextAlarmDay(alarm, ignoreSkip = true)!!
 
 		// Add the alarm
 		addAlarm(context, alarm, nextAlarmCal)
 
 		// Check if should show an upcoming reminder
-		if (alarm.showReminder)
+		if (alarm.showReminder && !alarm.shouldSkipNextAlarm)
 		{
 			// Get the calendar for the first upcoming reminder
-			val firstReminderCal = NacCalendar.getFirstAlarmUpcomingReminder(alarm, alarmCal = nextAlarmCal)
+			val firstReminderCal = NacCalendar.getFirstAlarmUpcomingReminder(alarm, nextAlarmCal)
 
 			// Add the upcoming reminder
 			addUpcomingReminder(context, alarm, firstReminderCal)

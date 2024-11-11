@@ -91,7 +91,7 @@ class NacUpcomingReminderNotification(
 			// Get the calendar of the alarm
 			val cal = if (alarm != null)
 			{
-				NacCalendar.getNextAlarmDay(alarm)
+				NacCalendar.getNextAlarmDay(alarm)!!
 			}
 			else
 			{

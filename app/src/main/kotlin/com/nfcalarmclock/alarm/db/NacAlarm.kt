@@ -3,14 +3,13 @@ package com.nfcalarmclock.alarm.db
 import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
-import android.text.format.DateFormat
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.nfcalarmclock.util.media.NacMedia
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacCalendar.Day
+import com.nfcalarmclock.util.media.NacMedia
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -360,6 +359,16 @@ class NacAlarm()
 		get() = isActive || isSnoozed
 
 	/**
+	 * Check if the next alarm will be skipped, and there is only one day that the alarm,
+	 * will run on is being used, and repeat is disabled.
+	 *
+	 * This is a unique case where the next alarm is effectively the final alarm, so
+	 * there are basically no alarms after this.
+	 */
+	val isNextSkippedAndFinal: Boolean
+		get() = shouldSkipNextAlarm && (days.size == 1) && !repeat
+
+	/**
 	 * The normalized alarm name (with newlines replaced with spaces).
 	 */
 	val nameNormalized: String
@@ -503,7 +512,26 @@ class NacAlarm()
 		val cal = NacCalendar.getNextAlarmDay(this)
 		val otherCal = NacCalendar.getNextAlarmDay(alarm)
 
-		return cal.compareTo(otherCal)
+		// Both alarms do not have next calendar days so they are technically equal
+		return if ((cal == null) && (otherCal == null))
+		{
+			0
+		}
+		// This alarm does not have a next calendar day so prioritize the other alarm
+		else if (cal == null)
+		{
+			1
+		}
+		// The other alarm does not have a next calendar day so prioritize this alarm
+		else if (otherCal == null)
+		{
+			-1
+		}
+		// Do a normal comparison
+		else
+		{
+			cal.compareTo(otherCal)
+		}
 	}
 
 	/**
@@ -733,10 +761,16 @@ class NacAlarm()
 	 */
 	fun dismissEarly()
 	{
+		// Do not dismiss early if the next alarm will be skipped
+		if (shouldSkipNextAlarm)
+		{
+			return
+		}
+
 		// Alarm should be repeated
 		if (shouldRepeat)
 		{
-			val cal = NacCalendar.getNextAlarmDay(this)
+			val cal = NacCalendar.getNextAlarmDay(this)!!
 			val time = cal.timeInMillis
 
 			timeOfDismissEarlyAlarm = time
@@ -1067,7 +1101,7 @@ class NacAlarm()
 
 		// Determine the difference in time between the next alarm and today
 		val today = Calendar.getInstance()
-		val cal = NacCalendar.getNextAlarmDay(this)
+		val cal = NacCalendar.getNextAlarmDay(this)!!
 		val diff = (cal.timeInMillis - today.timeInMillis) / 1000 / 60
 
 		// Compare the two amounts of time

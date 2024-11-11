@@ -202,7 +202,7 @@ class NacUpcomingReminderService
 	{
 		// Get the calendar for when the next alarm will run and when the next
 		// reminder will run
-		val nextAlarmCal = NacCalendar.getNextAlarmDay(alarm)
+		val nextAlarmCal = NacCalendar.getNextAlarmDay(alarm)!!
 		val nextReminderCal = NacCalendar.getNextAlarmUpcomingReminder(alarm)
 
 		// Check if text-to-speech should be used

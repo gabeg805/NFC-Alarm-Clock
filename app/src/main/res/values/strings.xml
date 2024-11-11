@@ -96,7 +96,7 @@
 	<string name="message_any_nfc_tag_id">Any NFC tag accepted</string>
 	<string name="message_flashlight_on_duration">On:</string>
 	<string name="message_flashlight_off_duration">Off:</string>
-	<string name="message_no_alarms_scheduled">No alarms scheduled</string>
+	<string name="message_no_alarms_scheduled">No alarms scheduled.</string>
 	<string name="message_repeat_disabled">Do not repeat alarm</string>
 	<string name="message_repeat_enabled">Repeat alarm</string>
 	<string name="message_vibrate_disabled">Vibrate off</string>
@@ -118,6 +118,10 @@
 	<string name="message_tts_current_time">Current time</string>
 	<string name="message_tts_alarm_name">Name of the alarm</string>
 	<string name="message_statistics_email_subject">NFC Alarm Clock Statistics</string>
+	<string name="message_skip_general_alarm">Alarm will be skipped.</string>
+	<string name="message_skip_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; will be skipped.</string>
+	<string name="message_disabled_general_alarm">Alarm is disabled.</string>
+	<string name="message_disabled_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; is disabled.</string>
 
 
 

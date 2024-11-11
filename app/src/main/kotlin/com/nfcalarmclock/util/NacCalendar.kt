@@ -199,25 +199,19 @@ object NacCalendar
 	 * @return The Calendar day on which the first upcoming reminder for the
 	 *         alarm will run.
 	 */
-	fun getFirstAlarmUpcomingReminder(
-		alarm: NacAlarm,
-		alarmCal: Calendar? = null
-	): Calendar
+	fun getFirstAlarmUpcomingReminder(alarm: NacAlarm, cal: Calendar): Calendar
 	{
-		// Get the calendar for the next alarm to use
-		val nextAlarmCal = alarmCal ?: getNextAlarmDay(alarm)
-
 		// Copy the calendar
-		val cal = nextAlarmCal.clone() as Calendar
+		val calCopy = cal.clone() as Calendar
 
 		// Compute the number of minutes to subtract to show the upcoming
 		// reminder at the correct time
 		val minutes = -1 * alarm.timeToShowReminder
 
 		// Subtract the number of minutes from when the alarm will run
-		cal.add(Calendar.MINUTE, minutes)
+		calCopy.add(Calendar.MINUTE, minutes)
 
-		return cal
+		return calCopy
 	}
 
 	/**
@@ -294,14 +288,19 @@ object NacCalendar
 		// Iterate over each alarm
 		for (a in alarms)
 		{
-			// Alarm is disabled, so continue to next alarm
+			// Alarm is disabled
 			if (!a.isEnabled)
+			{
+				continue
+			}
+			// Next alarm will be skipped, it only has one day set, and repeat is disabled
+			else if (a.isNextSkippedAndFinal)
 			{
 				continue
 			}
 
 			// Get the calendar instance for the next time the alarm will run
-			val calendar = getNextAlarmDay(a)
+			val calendar = getNextAlarmDay(a)!!
 
 			// Check if this is either the first calendar being checked,
 			// or if this calendar corresponds to an earlier time than the
@@ -325,7 +324,7 @@ object NacCalendar
 	 *
 	 * @return The Calendar day on which the given alarm will run next.
 	 */
-	fun getNextAlarmDay(alarm: NacAlarm, ignoreSkip: Boolean = false): Calendar
+	fun getNextAlarmDay(alarm: NacAlarm, ignoreSkip: Boolean = false): Calendar?
 	{
 		// Convert the alarm to a list of calendar instances
 		val calendars = alarmToCalendars(alarm)
@@ -336,9 +335,19 @@ object NacCalendar
 		// Check if the next alarm should be skipped
 		return if (alarm.shouldSkipNextAlarm && !ignoreSkip)
 		{
-			// Get another calendar day ignoring the one that was previously
-			// determined
-			getNextDay(calendars, skipDay = nextDay)!!
+			// Check if there was only one calendar in the list, but the alarm is scheduled to be repeated
+			if ((calendars.size == 1) && alarm.repeat)
+			{
+				// Add a week to the calendar
+				nextDay.add(Calendar.DAY_OF_MONTH, 7)
+				nextDay
+			}
+			else
+			{
+				// Get another calendar day ignoring the one that was previously
+				// determined
+				getNextDay(calendars, skipDay = nextDay)
+			}
 		}
 		else
 		{
@@ -771,23 +780,49 @@ object NacCalendar
 			nextAlarmFormat: Int
 		): String
 		{
+			// Get the alarm name
+			val name = alarm?.getNameNormalizedForMessage(MAXIMUM_LENGTH) ?: ""
+
 			// No alarm provided
 			return if (alarm == null)
 			{
-				getNoAlarmsScheduled(context.resources)
+				context.resources.getString(R.string.message_no_alarms_scheduled)
 			}
 			// Alarm is not enabled
 			else if (!alarm.isEnabled)
 			{
-				getAlarmDisabled(context.resources, alarm)
+				// Alarm has a name
+				if (name.isNotEmpty())
+				{
+					context.resources.getString(R.string.message_disabled_named_alarm)
+				}
+				// Alarm does not have a name
+				else
+				{
+					context.resources.getString(R.string.message_disabled_general_alarm)
+				}
 			}
 			else
 			{
 				// Get the next alarm day
 				val calendar = getNextAlarmDay(alarm)
 
+				// No alarm scheduled, possibly because the next alarm is skipped
+				if (calendar == null)
+				{
+					// Alarm has a name
+					if (name.isNotEmpty())
+					{
+						context.resources.getString(R.string.message_skip_named_alarm)
+					}
+					// Alarm does not have a name
+					else
+					{
+						context.resources.getString(R.string.message_skip_general_alarm)
+					}
+				}
 				// e.g. Alarm in 12 hour 5 min
-				if (nextAlarmFormat == 0)
+				else if (nextAlarmFormat == 0)
 				{
 					getTimeIn(context.resources, calendar, prefix)
 				}
@@ -798,32 +833,6 @@ object NacCalendar
 
 					getTimeOn(context.resources, calendar, prefix, is24HourFormat)
 				}
-			}
-		}
-
-		/**
-		 * Get the message when an alarm is disabled.
-		 *
-		 * @return The message when an alarm is disabled.
-		 */
-		private fun getAlarmDisabled(resources: Resources, alarm: NacAlarm) : String
-		{
-			val isDisabled = resources.getString(R.string.is_disabled)
-			val name = alarm.getNameNormalizedForMessage(MAXIMUM_LENGTH)
-
-			// No alarm name
-			return if (name.isEmpty())
-			{
-				// Get the word
-				val alarmPlural = resources.getQuantityString(R.plurals.alarm, 1)
-				val alarmWord = alarmPlural.replaceFirstChar(Char::uppercaseChar)
-
-				"$alarmWord $isDisabled."
-			}
-			// Show alarm name
-			else
-			{
-				"<b>$name</b> $isDisabled."
 			}
 		}
 
@@ -843,18 +852,6 @@ object NacCalendar
 
 			// Create the message
 			return build(context, alarm, prefix, nextAlarmFormat)
-		}
-
-		/**
-		 * Get the message when no alarms are scheduled.
-		 *
-		 * @return The message when no alarms are scheduled.
-		 */
-		private fun getNoAlarmsScheduled(resources: Resources) : String
-		{
-			val noAlarmsScheduled = resources.getString(R.string.message_no_alarms_scheduled)
-
-			return "$noAlarmsScheduled."
 		}
 
 		/**
@@ -920,6 +917,8 @@ object NacCalendar
 		/**
 		 * Get the message to display when an alarm will run ON some date and time.
 		 *
+		 * TODO: Probably need to change this to make this more language neutral.
+		 *
 		 * @return The message to display when an alarm will run ON some date and
 		 *         time.
 		 */
@@ -940,6 +939,8 @@ object NacCalendar
 
 		/**
 		 * Get the message to display when the alarm will run.
+		 *
+		 * TODO: Probably need to change this to make this more language neutral.
 		 *
 		 * @return The message to display when the alarm will run.
 		 */

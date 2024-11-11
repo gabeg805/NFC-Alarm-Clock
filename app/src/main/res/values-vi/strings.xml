@@ -96,7 +96,7 @@
 	<string name="message_any_nfc_tag_id">Bất kỳ thẻ NFC nào được chấp nhận</string>
 	<string name="message_flashlight_on_duration">Bật:</string>
 	<string name="message_flashlight_off_duration">Tắt:</string>
-	<string name="message_no_alarms_scheduled">Không có báo thức nào được lên lịch</string>
+	<string name="message_no_alarms_scheduled">Không có báo thức nào được lên lịch.</string>
 	<string name="message_repeat_disabled">Không lặp lại báo động</string>
 	<string name="message_repeat_enabled">Lặp lại báo động</string>
 	<string name="message_vibrate_disabled">Tắt rung</string>
@@ -118,6 +118,10 @@
 	<string name="message_tts_current_time">Thời điểm hiện tại</string>
 	<string name="message_tts_alarm_name">Tên báo động</string>
 	<string name="message_statistics_email_subject">Thống kê đồng hồ báo thức NFC</string>
+	<string name="message_skip_general_alarm">Báo thức sẽ bị bỏ qua.</string>
+	<string name="message_skip_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; sẽ bị bỏ qua.</string>
+	<string name="message_disabled_general_alarm">Báo thức đã bị vô hiệu hóa.</string>
+	<string name="message_disabled_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; bị vô hiệu hóa.</string>
 
 
 
