@@ -198,6 +198,7 @@
 				<com.google.android.material.button.MaterialButton
 					style="@style/Widget.Button.Icon"
 					android:id="@+id/nac_expand_other"
+					android:contentDescription="@string/cd_expand_alarm"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/isz_large"
 					app:icon="@drawable/expand"

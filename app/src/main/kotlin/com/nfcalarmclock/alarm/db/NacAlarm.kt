@@ -1017,8 +1017,13 @@ class NacAlarm()
 		{
 			toggleToday()
 		}
-		// No days selected
-		else
+
+		// Check if days are NOT selected because if the toggle deselected the last day
+		// then the alarm should be disabled.
+		//
+		// If it did not deselect the last day, then there is no harm in checking again
+		// (this use to be the "else" part of the above "if") to disable the alarm
+		if (!areDaysSelected)
 		{
 			isEnabled = false
 		}

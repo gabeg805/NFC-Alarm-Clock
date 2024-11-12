@@ -1191,7 +1191,7 @@ class NacCardHolder(
 	 */
 	private fun initViews()
 	{
-		refreshExtraView()
+		refreshExtraViewWithCollapse()
 		setTimeView()
 		setMeridianView()
 		setSwitchView()

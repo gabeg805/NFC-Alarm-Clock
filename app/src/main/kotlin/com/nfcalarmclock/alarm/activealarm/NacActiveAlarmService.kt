@@ -290,15 +290,6 @@ class NacActiveAlarmService
 	}
 
 	/**
-	 * Setup the app version.
-	 */
-	private fun setupAppVersion()
-	{
-		// Set the previous app version as the current version
-		sharedPreferences.previousAppVersion = BuildConfig.VERSION_NAME
-	}
-
-	/**
 	 * Called when the service is destroyed.
 	 */
 	@UnstableApi
@@ -364,8 +355,10 @@ class NacActiveAlarmService
 		{
 			scope.launch {
 
-				// Clear the skip flag
-				alarm!!.shouldSkipNextAlarm = false
+				// Dismiss the alarm. This will clear flags, such as the
+				// "shouldSkipNextAlarm", but it will also toggle the alarm in case
+				// repeat is not enabled
+				alarm!!.dismiss()
 
 				// Update the database
 				alarmRepository.update(alarm!!)
@@ -505,6 +498,15 @@ class NacActiveAlarmService
 			// Set the action indicating to stop the service
 			intentAction = ACTION_STOP_SERVICE
 		}
+	}
+
+	/**
+	 * Setup the app version.
+	 */
+	private fun setupAppVersion()
+	{
+		// Set the previous app version as the current version
+		sharedPreferences.previousAppVersion = BuildConfig.VERSION_NAME
 	}
 
 	/**
