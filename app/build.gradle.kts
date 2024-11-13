@@ -150,8 +150,8 @@ dependencies {
 	implementation("androidx.room:room-ktx:2.6.1")
 
 	// Dependency injection with Hilt
-	implementation("com.google.dagger:hilt-android:2.48")
-	ksp("com.google.dagger:hilt-android-compiler:2.48")
+	implementation("com.google.dagger:hilt-android:2.51.1")
+	ksp("com.google.dagger:hilt-android-compiler:2.51.1")
 
 	// ------------------------------------------------------------------------
 	// Google Play Build Variant
