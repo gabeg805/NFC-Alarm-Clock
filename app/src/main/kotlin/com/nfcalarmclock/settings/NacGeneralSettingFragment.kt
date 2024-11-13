@@ -152,7 +152,7 @@ class NacGeneralSettingFragment
 			navController.currentBackStackEntry
 				?.savedStateHandle
 				?.getLiveData<NacAlarm>("YOYOYO")
-				?.observe(this) { alarm ->
+				?.observe(this) { a ->
 
 					// Check which destination this alarm update came from
 					when (navController.currentDestination?.id)
@@ -160,55 +160,55 @@ class NacGeneralSettingFragment
 
 						// Audio source
 						R.id.nacAudioSourceDialog -> {
-							sharedPreferences!!.audioSource = alarm.audioSource
+							sharedPreferences!!.audioSource = a.audioSource
 						}
 
 						// Flashlight
 						R.id.nacFlashlightOptionsDialog -> {
-							sharedPreferences!!.flashlightStrengthLevel = alarm.flashlightStrengthLevel
-							sharedPreferences!!.shouldBlinkFlashlight = alarm.shouldBlinkFlashlight
-							sharedPreferences!!.flashlightOnDuration = alarm.flashlightOnDuration
-							sharedPreferences!!.flashlightOffDuration = alarm.flashlightOffDuration
+							sharedPreferences!!.flashlightStrengthLevel = a.flashlightStrengthLevel
+							sharedPreferences!!.shouldBlinkFlashlight = a.shouldBlinkFlashlight
+							sharedPreferences!!.flashlightOnDuration = a.flashlightOnDuration
+							sharedPreferences!!.flashlightOffDuration = a.flashlightOffDuration
 						}
 
 						// Gradually increase volume
 						R.id.nacGraduallyIncreaseVolumeDialog -> {
-							sharedPreferences!!.shouldGraduallyIncreaseVolume = alarm.shouldGraduallyIncreaseVolume
-							sharedPreferences!!.graduallyIncreaseVolumeWaitTime = alarm.graduallyIncreaseVolumeWaitTime
+							sharedPreferences!!.shouldGraduallyIncreaseVolume = a.shouldGraduallyIncreaseVolume
+							sharedPreferences!!.graduallyIncreaseVolumeWaitTime = a.graduallyIncreaseVolumeWaitTime
 						}
 
 						// Restrict volume
 						R.id.nacRestrictVolumeDialog -> {
-							sharedPreferences!!.shouldRestrictVolume = alarm.shouldRestrictVolume
+							sharedPreferences!!.shouldRestrictVolume = a.shouldRestrictVolume
 						}
 
 						// Text-to-speech
 						R.id.nacTextToSpeechDialog -> {
-							sharedPreferences!!.shouldSayCurrentTime = alarm.sayCurrentTime
-							sharedPreferences!!.shouldSayAlarmName = alarm.sayAlarmName
-							sharedPreferences!!.ttsFrequency = alarm.ttsFrequency
+							sharedPreferences!!.shouldSayCurrentTime = a.sayCurrentTime
+							sharedPreferences!!.shouldSayAlarmName = a.sayAlarmName
+							sharedPreferences!!.ttsFrequency = a.ttsFrequency
 						}
 
 						// Dismiss options
 						R.id.nacDismissOptionsDialog -> {
-							sharedPreferences!!.autoDismissTime = alarm.autoDismissTime
-							sharedPreferences!!.canDismissEarly = alarm.useDismissEarly
-							sharedPreferences!!.dismissEarlyTime = alarm.dismissEarlyTime
+							sharedPreferences!!.autoDismissTime = a.autoDismissTime
+							sharedPreferences!!.canDismissEarly = a.useDismissEarly
+							sharedPreferences!!.dismissEarlyTime = a.dismissEarlyTime
 						}
 
 						// Snooze options
 						R.id.nacSnoozeOptionsDialog -> {
-							sharedPreferences!!.maxSnooze = alarm.maxSnooze
-							sharedPreferences!!.snoozeDuration = alarm.snoozeDuration
-							sharedPreferences!!.easySnooze = alarm.useEasySnooze
+							sharedPreferences!!.maxSnooze = a.maxSnooze
+							sharedPreferences!!.snoozeDuration = a.snoozeDuration
+							sharedPreferences!!.easySnooze = a.useEasySnooze
 						}
 
 						// Upcoming reminder
 						R.id.nacUpcomingReminderDialog -> {
-							sharedPreferences!!.shouldShowReminder = alarm.showReminder
-							sharedPreferences!!.timeToShowReminder = alarm.timeToShowReminder
-							sharedPreferences!!.reminderFrequency = alarm.reminderFrequency
-							sharedPreferences!!.shouldUseTtsForReminder = alarm.shouldUseTtsForReminder
+							sharedPreferences!!.shouldShowReminder = a.showReminder
+							sharedPreferences!!.timeToShowReminder = a.timeToShowReminder
+							sharedPreferences!!.reminderFrequency = a.reminderFrequency
+							sharedPreferences!!.shouldUseTtsForReminder = a.shouldUseTtsForReminder
 						}
 
 						// Unknown

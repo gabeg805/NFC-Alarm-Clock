@@ -27,6 +27,7 @@ object NacTranslate
 	/**
 	 * Get how to say the current time in any language.
 	 */
+	@Suppress("deprecation")
 	fun getSayCurrentTime(
 		context: Context,
 		hour: Int,

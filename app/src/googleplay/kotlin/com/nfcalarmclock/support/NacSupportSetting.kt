@@ -11,6 +11,7 @@ import com.android.billingclient.api.BillingFlowParams.ProductDetailsParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ConsumeParams
 import com.android.billingclient.api.ConsumeResponseListener
+import com.android.billingclient.api.PendingPurchasesParams
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.ProductDetailsResponseListener
 import com.android.billingclient.api.Purchase
@@ -73,7 +74,7 @@ class NacSupportSetting(
 	 */
 	private val billingClient: BillingClient = BillingClient.newBuilder(fragmentActivity)
 		.setListener(this)
-		.enablePendingPurchases()
+		.enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
 		.build()
 
 	/**

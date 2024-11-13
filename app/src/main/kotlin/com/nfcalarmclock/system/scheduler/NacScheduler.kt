@@ -163,19 +163,28 @@ object NacScheduler
 		alarm: NacAlarm
 	): PendingIntent?
 	{
-		// Create the intents
-		val startIntent = NacActiveAlarmService.getStartIntent(context, null)
-		val skipIntent = NacActiveAlarmService.getSkipIntent(context, null)
-
-		// Set the flag
-		val flag = PendingIntent.FLAG_NO_CREATE
+		// Create the intent
+		val intent = NacActiveAlarmService.getStartIntent(context, null)
 
 		// Build the pending intent
-		val startPendingIntent = buildServicePendingIntent(context, alarm, startIntent, flag, shouldSkipAlarm = false)
-		val skipPendingIntent = buildServicePendingIntent(context, alarm, skipIntent, flag, shouldSkipAlarm = true)
+		return buildServicePendingIntent(context, alarm, intent, PendingIntent.FLAG_NO_CREATE, shouldSkipAlarm = false)
+	}
 
-		// Return a pending intent that is hopefully not null
-		return startPendingIntent ?: skipPendingIntent
+	/**
+	 * Build the pending intent for canceling a skipped alarm.
+	 *
+	 * @return The pending intent for canceling a skipped alarm.
+	 */
+	private fun buildCancelSkipPendingIntent(
+		context: Context,
+		alarm: NacAlarm
+	): PendingIntent?
+	{
+		// Create the intent
+		val intent = NacActiveAlarmService.getSkipIntent(context, null)
+
+		// Build the pending intent
+		return buildServicePendingIntent(context, alarm, intent, PendingIntent.FLAG_NO_CREATE, shouldSkipAlarm = true)
 	}
 
 	/**
@@ -271,14 +280,22 @@ object NacScheduler
 	 */
 	private fun cancelAlarm(context: Context, alarm: NacAlarm)
 	{
-		// Build the pending intent for the alarm
-		val pendingIntent = buildCancelAlarmPendingIntent(context, alarm)
+		// Build the pending intent for the alarm as well as the skipped alarm (just in case)
+		val alarmPendingIntent = buildCancelAlarmPendingIntent(context, alarm)
+		val skipPendingIntent = buildCancelSkipPendingIntent(context, alarm)
 
-		// Check if the pending intent for the alarm is not null
-		if (pendingIntent != null)
+		// Check if the alarm pending intent can be canceled
+		if (alarmPendingIntent != null)
 		{
 			// Cancel the alarm
-			getAlarmManager(context).cancel(pendingIntent)
+			getAlarmManager(context).cancel(alarmPendingIntent)
+		}
+
+		// Check if the skipped alarm pending intent can be canceled
+		if (skipPendingIntent != null)
+		{
+			// Cancel the skipped alarm
+			getAlarmManager(context).cancel(skipPendingIntent)
 		}
 	}
 
