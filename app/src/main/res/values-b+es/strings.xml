@@ -29,9 +29,9 @@
 	<string name="action_alarm_snooze">Posponer</string>
 	<string name="action_alarm_dismiss">Descartar</string>
 	<string name="action_alarm_dismiss_early">Descartar temprano</string>
-	<string name="action_alarm_copy">Copear</string>
+	<string name="action_alarm_copy">Copiar</string>
 	<string name="action_alarm_delete">Borrar</string>
-	<string name="action_yes">Si</string>
+	<string name="action_yes">Sí</string>
 	<string name="action_no">No</string>
 	<string name="action_ok">OK</string>
 	<string name="action_cancel">Cancelar</string>
@@ -65,9 +65,9 @@
 
 
 	<!-- Labels -->
-	<string name="label_created_statistic">creasdo</string>
+	<string name="label_created_statistic">creado</string>
 	<string name="label_deleted_statistic">eliminado</string>
-	<string name="label_dismissed_statistic">despedido</string>
+	<string name="label_dismissed_statistic">descartado</string>
 	<string name="label_missed_statistic">perdido</string>
 	<string name="label_snoozed_statistic">pospuso</string>
 	<string name="label_created_statistic_header">Tiempo creado</string>
@@ -101,7 +101,7 @@
 	<string name="message_alarm_delete">Alarma borrada</string>
 	<string name="message_alarm_restore">Alarma restaurada</string>
 	<string name="message_alarm_dismiss">Alarma descartada</string>
-	<string name="message_alarm_snooze">Alarma posponada</string>
+	<string name="message_alarm_snooze">Alarma pospuesta</string>
 	<string name="message_statistics_started_on">Las estadísticas empezaron en</string>
 	<string name="message_bullet">\u25BA</string>
 	<string name="message_required">Requerido</string>
@@ -109,7 +109,7 @@
 	<string name="message_already_have_permission">Ya tienes este permiso</string>
 	<string name="message_support_thank_you">¡Gracias por su apoyo!</string>
 	<string name="message_reset_statistics">¿Estás seguro de que quieres restablecer todas las estadísticas?</string>
-	<string name="message_tts_current_time">Tiempo actual</string>
+	<string name="message_tts_current_time">Hora actual</string>
 	<string name="message_tts_alarm_name">Nombre de la alarma</string>
 	<string name="message_statistics_email_subject">Estadísticas del Despertador NFC</string>
 	<string name="message_skip_general_alarm">Se omitirá la alarma.</string>
@@ -135,8 +135,8 @@
 	<string name="error_message_nfc_id_exists">Esta ID NFC ya está siendo utilizada por %1$s</string>
 	<string name="error_message_unable_to_scan_nfc">No se pueden escanear etiquetas NFC</string>
 	<string name="error_message_snooze">Incapaz de posponer la alarma</string>
-	<string name="error_message_snoozed_delete">Incapaz de borrar una alarma posponada</string>
-	<string name="error_message_snoozed_modify">Incapaz de modificar una alarma posponada</string>
+	<string name="error_message_snoozed_delete">Incapaz de borrar una alarma pospuesta</string>
+	<string name="error_message_snoozed_modify">Incapaz de modificar una alarma pospuesta</string>
 	<string name="error_message_select_color">Color inválido</string>
 	<string name="error_message_play_audio">Incapaz de tocar audio</string>
 	<string name="error_message_google_play_billing">Error al conectarse a Google Play Store</string>
@@ -182,7 +182,7 @@
 	<string name="title_upcoming_reminder">Próximos recordatorios</string>
 	<string name="title_dismissed_alarms">Alarmas descartadas</string>
 	<string name="title_missed_alarms">Alarmas perdidas</string>
-	<string name="title_snoozed_alarms">Alarmas posponadas</string>
+	<string name="title_snoozed_alarms">Alarmas pospuestas</string>
 	<string name="title_created_alarms">Alarmas creadas</string>
 	<string name="title_deleted_alarms">Alarmas borradas</string>
 	<string name="title_current_alarms">Actual</string>
@@ -204,8 +204,8 @@
 	<string name="description_missed_alarm">Alarmas desactivadas automaticamente.</string>
 	<string name="description_active_alarm">Alarmas que están activas.</string>
 	<string name="description_color">Color</string>
-	<string name="description_day_button_style_filled">Filled-in buttons.</string>
-	<string name="description_day_button_style_outlined">Outlined buttons.</string>
+	<string name="description_day_button_style_filled">Botones rellenos</string>
+	<string name="description_day_button_style_outlined">Botones delineados</string>
 	<string name="description_media">Música o tono de llamada</string>
 	<string name="example_name">Trabajo</string>
 
@@ -250,17 +250,17 @@
 	<!-- Main Settings -->
 	<!-- ************* -->
 
-	<string name="general_setting">Generala</string>
-	<string name="general_setting_summary">Ajustas generales</string>
+	<string name="general_setting">General</string>
+	<string name="general_setting_summary">Ajustes generales</string>
 
 	<string name="appearance_setting">Apariencia</string>
 	<string name="appearance_setting_summary">Personaliza la aplicacion</string>
 
 	<string name="about_setting">Acerca</string>
-	<string name="about_setting_summary">Informacion acerca de esta aplicacion</string>
+	<string name="about_setting_summary">Información acerca de esta aplicacion</string>
 
 	<string name="stats_setting">Estadísticas</string>
-	<string name="stats_setting_summary">Mira cuanto tiempo has posponada sus alarmas, y más</string>
+	<string name="stats_setting_summary">Mira cuanto tiempo has pospuesto sus alarmas, y más</string>
 
 	<string name="manage_nfc_tags_setting">Administrar etiquetas NFC</string>
 	<string name="manage_nfc_tags_setting_summary">Eliminar o cambiar el nombre de las etiquetas NFC guardadas</string>
@@ -351,9 +351,9 @@
 	<!-- Categories -->
 	<string name="alarm_screen_category">Pantalla de alarma</string>
 	<string name="color_category">Colores</string>
-	<string name="notification_category">Notificaciónes</string>
+	<string name="notification_category">Notificaciones</string>
 	<string name="style_category">Style</string>
-	<string name="tweaks_category">Modificaciónes</string>
+	<string name="tweaks_category">Modificaciones</string>
 
 	<!-- New screen -->
 	<string name="new_screen">Nueva pantalla</string>
@@ -388,17 +388,17 @@
 	<string name="days_color_summary">p.ej. Lun &#8231; Mar &#8231; Mie &#8231; Jue &#8231; Vie</string>
 
 	<!-- Time color -->
-	<string name="time_color">Tiempo</string>
+	<string name="time_color">Hora</string>
 	<string name="time_color_summary">p.ej. 12:30</string>
 
 	<!-- AM color -->
-	<string name="am_color_summary">Coloriada si esta en la hora de alarma AM.</string>
+	<string name="am_color_summary">Colorida si esta en la hora de alarma AM.</string>
 
 	<!-- PM color -->
-	<string name="pm_color_summary">Coloriada si esta en la hora de alarma PM.</string>
+	<string name="pm_color_summary">Colorida si esta en la hora de alarma PM.</string>
 
 	<!-- Missed alarm notifications -->
-	<string name="missed_alarm_true">Muestra notificacions para alarmas perdidas.</string>
+	<string name="missed_alarm_true">Muestra notificaciones para alarmas perdidas.</string>
 
 	<!-- Show/hide the vibrate button -->
 	<string name="show_hide_vibrate_button_true">Muestra el botón de vibración al expandir una alarma.</string>
@@ -409,11 +409,11 @@
 	<string name="show_hide_nfc_button_false">Oculte el botón NFC al expandir una alarma.</string>
 
 	<!-- Show/hide the flashlight button -->
-	<string name="show_hide_flashlight_button_true">Montre bouton flach la lè w ap agrandi yon alam.</string>
+	<string name="show_hide_flashlight_button_true">Mostrar el botón de la linterna al expandir una alarma.</string>
 	<string name="show_hide_flashlight_button_false">Oculte el botón de la linterna al expandir una alarma.</string>
 
 	<!-- Day button style -->
-	<string name="day_button_style">Day buttons</string>
+	<string name="day_button_style">Botones de días</string>
 
 	<!-- Start Week On -->
 	<string name="start_week_on">Empieza la semana&#8230;</string>
