@@ -72,6 +72,17 @@ abstract class NacAlarmStatistic()
 	}
 
 	/**
+	 * Check if two stats are equal, except for the ID.
+	 */
+	open fun equalsExceptId(stat: NacAlarmStatistic): Boolean
+	{
+		return (timestamp == stat.timestamp)
+			&& (hour == stat.hour)
+			&& (minute == stat.minute)
+			&& (name == stat.name)
+	}
+
+	/**
 	 * Convert the data to a csv format so that it can be used to write to an
 	 * output file.
 	 */

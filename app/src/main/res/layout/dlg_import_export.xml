@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:paddingTop="@dimen/normal"
+	android:paddingBottom="@dimen/normal"
+	android:paddingStart="?dialogPreferredPadding"
+	android:paddingEnd="?dialogPreferredPadding">
+
+	<!-- Export -->
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/export_data"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/touch"
+		android:backgroundTint="@color/orange"
+		android:textColor="@color/white"
+		android:text="@string/action_export"
+		/>
+
+	<!-- Import -->
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/import_data"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/touch"
+		android:backgroundTint="@color/gray_light"
+		android:textColor="@color/white"
+		android:text="@string/action_import"
+		/>
+
+</LinearLayout>

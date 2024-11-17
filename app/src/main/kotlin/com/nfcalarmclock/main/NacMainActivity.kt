@@ -1103,6 +1103,7 @@ class NacMainActivity
 	/**
 	 * Setup an initial dialog, if any, that need to be shown.
 	 */
+	@SuppressLint("NotifyDataSetChanged")
 	private fun setupInitialDialogToShow()
 	{
 		// Get the delay counter for showing the what's new dialog
@@ -1121,7 +1122,18 @@ class NacMainActivity
 			}
 
 			// Request permissions
-			permissionRequestManager.requestPermissions(this)
+			permissionRequestManager.requestPermissions(this, onDone = {
+
+				// Refresh the recyclerview in case this is the first time the user is
+				// using the app and the alarm cards do not show because of the
+				// request manager showing up first
+				recyclerView.adapter = null
+				recyclerView.layoutManager = null
+				recyclerView.adapter = alarmCardAdapter
+				recyclerView.layoutManager = NacCardLayoutManager(this)
+				alarmCardAdapter.notifyDataSetChanged()
+
+			})
 		}
 		// Attempt to show the What's new dialog
 		else if (shouldShowWhatsNewDialog && delayCounter == 0)

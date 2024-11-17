@@ -15,6 +15,7 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.db.NacAlarmStatistic
+import com.nfcalarmclock.system.file.zipFiles
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacUtility.quickToast
 import dagger.hilt.android.AndroidEntryPoint
@@ -464,7 +465,7 @@ class NacStatisticsSettingFragment
 		val name = getString(nameId)
 		val filename = "${name}_${timestamp}.csv"
 
-		// Creating the python file
+		// Creating the csv file
 		requireContext().openFileOutput(filename, Context.MODE_PRIVATE).use { output ->
 
 			// Get the header
@@ -513,36 +514,8 @@ class NacStatisticsSettingFragment
 		// Create the zip file
 		requireContext().openFileOutput(zipFileName, Context.MODE_PRIVATE).use { fileOutput ->
 
-			// Start the zip process
-			ZipOutputStream(BufferedOutputStream(fileOutput)).use { zipOutput ->
-
-				// Iterate over each file
-				for (filename in allFiles)
-				{
-					// Build the path to the file name
-					val path = "${directory}/${filename}"
-					val file = File(path)
-
-					// Check if the path exists
-					if (!file.exists())
-					{
-						continue
-					}
-
-					// Create a zip entry for a file
-					val zipEntry = ZipEntry(filename)
-
-					// Add the zip entry to the zip file
-					zipOutput.putNextEntry(zipEntry)
-
-					// Copy the contents of the file to the zip file, which I
-					// believe will be written to the previously set zip entry
-					BufferedInputStream(FileInputStream(file)).use { inputStream ->
-						inputStream.copyTo(zipOutput, 1024)
-					}
-				}
-
-			}
+			// Zip the files
+			zipFiles(fileOutput, allFiles.map { File("${directory}/${it}") })
 
 		}
 

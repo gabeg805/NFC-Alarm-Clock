@@ -48,6 +48,15 @@ class NacAlarmDismissedStatistic
 	}
 
 	/**
+	 * Check if two stats are equal, except for the ID.
+	 */
+	fun equalsExceptId(stat: NacAlarmDismissedStatistic): Boolean
+	{
+		return super.equalsExceptId(stat)
+			&& (usedNfc == stat.usedNfc)
+	}
+
+	/**
 	 * Convert the data to a csv format so that it can be used to write to an
 	 * output file.
 	 */

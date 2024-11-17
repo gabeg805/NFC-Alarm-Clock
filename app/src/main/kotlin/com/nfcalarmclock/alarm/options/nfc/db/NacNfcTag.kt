@@ -43,4 +43,13 @@ class NacNfcTag()
 		nfcId = nfcTagId
 	}
 
+	/**
+	 * Check if two tags are equal, except for the ID.
+	 */
+	fun equalsExceptId(tag: NacNfcTag): Boolean
+	{
+		return (name == tag.name)
+			&& (nfcId == tag.nfcId)
+	}
+
 }

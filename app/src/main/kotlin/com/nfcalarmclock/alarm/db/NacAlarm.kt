@@ -250,6 +250,10 @@ class NacAlarm()
 
 	/**
 	 * Time in which to auto dismiss the alarm.
+	 *
+	 * TODO: Change to 15
+	 * TODO: Check usage here and in other places for default as well
+	 * TODO: Check oldAutoDismissTime default
 	 */
 	@ColumnInfo(name = "auto_dismiss_time", defaultValue = "0")
 	var autoDismissTime: Int = 0
@@ -280,12 +284,20 @@ class NacAlarm()
 
 	/**
 	 * Max number of snoozes.
+	 *
+	 * TODO: Change to -1?
+	 * TODO: Check usage here and in other places for default as well
+	 * TODO: Check oldMaxSnooze default
 	 */
 	@ColumnInfo(name = "max_snooze", defaultValue = "0")
 	var maxSnooze: Int = 0
 
 	/**
 	 * Snooze duration.
+	 *
+	 * TODO: Change to 5
+	 * TODO: Check usage here and in other places for default as well
+	 * TODO: Check oldSnoozeDuration default
 	 */
 	@ColumnInfo(name = "snooze_duration", defaultValue = "0")
 	var snoozeDuration: Int = 5

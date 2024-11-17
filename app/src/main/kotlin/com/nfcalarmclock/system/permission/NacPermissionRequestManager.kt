@@ -129,13 +129,13 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 	/**
 	 * Request all permissions that need to be requested.
 	 */
-	fun requestPermissions(activity: AppCompatActivity)
+	fun requestPermissions(activity: AppCompatActivity, onDone: () -> Unit = {})
 	{
 		// Analyze which permissions need to be requested
 		analyze(activity)
 
 		// Show the first permission dialog that should be requested
-		showNextPermissionRequestDialog(activity)
+		showNextPermissionRequestDialog(activity, onDone=onDone)
 	}
 
 	/**
@@ -165,7 +165,7 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 	 * Show the next permission request dialog.
 	 */
 	@SuppressLint("NewApi")
-	fun showNextPermissionRequestDialog(activity: AppCompatActivity)
+	fun showNextPermissionRequestDialog(activity: AppCompatActivity, onDone: () -> Unit = {})
 	{
 		// Get the permission request set
 		val permissionRequestSet = permissionRequestSet
@@ -177,22 +177,23 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 		// Post notifications
 		if (permissionRequestSet.contains(Permission.POST_NOTIFICATIONS))
 		{
-			showPostNotificationPermissionDialog(activity)
+			showPostNotificationPermissionDialog(activity, onDone=onDone)
 		}
 		// Schedule exact alarm
 		else if (permissionRequestSet.contains(Permission.SCHEDULE_EXACT_ALARM))
 		{
-			showScheduleExactAlarmPermissionDialog(activity)
+			showScheduleExactAlarmPermissionDialog(activity, onDone=onDone)
 		}
 		// Ignore battery optimization
 		else if (permissionRequestSet.contains(Permission.IGNORE_BATTERY_OPTIMIZATION))
 		{
-			showIgnoreBatteryOptimizationPermissionDialog(activity)
+			showIgnoreBatteryOptimizationPermissionDialog(activity, onDone=onDone)
 		}
-		// Reset
+		// Reset and done
 		else
 		{
 			reset()
+			onDone()
 		}
 	}
 
@@ -200,7 +201,7 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 	 * Show the dialog to ignore battery optimizations.
 	 */
 	private fun showIgnoreBatteryOptimizationPermissionDialog(
-		activity: AppCompatActivity)
+		activity: AppCompatActivity, onDone: () -> Unit = {})
 	{
 		// Create the dialog
 		val dialog = NacIgnoreBatteryOptimizationPermissionRequestDialog()
@@ -226,7 +227,7 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 			override fun onPermissionRequestCanceled(permission: String)
 			{
 				permissionRequestSet.remove(Permission.IGNORE_BATTERY_OPTIMIZATION)
-				showNextPermissionRequestDialog(activity)
+				showNextPermissionRequestDialog(activity, onDone=onDone)
 			}
 		}
 
@@ -239,7 +240,7 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 	 * Show the POST_NOTIFICATIONS permission dialog.
 	 */
 	@RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-	fun showPostNotificationPermissionDialog(activity: AppCompatActivity)
+	fun showPostNotificationPermissionDialog(activity: AppCompatActivity, onDone: () -> Unit = {})
 	{
 		// Do nothing if an older version of Android is being used
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
@@ -271,7 +272,7 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 			override fun onPermissionRequestCanceled(permission: String)
 			{
 				permissionRequestSet.remove(Permission.POST_NOTIFICATIONS)
-				showNextPermissionRequestDialog(activity)
+				showNextPermissionRequestDialog(activity, onDone=onDone)
 			}
 		}
 
@@ -284,7 +285,7 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 	 * Show the dialog to request the schedule exact alarm permission.
 	 */
 	@RequiresApi(api = Build.VERSION_CODES.S)
-	fun showScheduleExactAlarmPermissionDialog(activity: AppCompatActivity)
+	fun showScheduleExactAlarmPermissionDialog(activity: AppCompatActivity, onDone: () -> Unit = {})
 	{
 		// Do nothing if an older version of Android is being used
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
@@ -316,7 +317,7 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 			override fun onPermissionRequestCanceled(permission: String)
 			{
 				permissionRequestSet.remove(Permission.SCHEDULE_EXACT_ALARM)
-				showNextPermissionRequestDialog(activity)
+				showNextPermissionRequestDialog(activity, onDone=onDone)
 			}
 		}
 

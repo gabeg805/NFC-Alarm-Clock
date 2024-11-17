@@ -5,7 +5,9 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.RawQuery
 import androidx.room.Update
+import androidx.sqlite.db.SupportSQLiteQuery
 
 /**
  * Data access object for alarms.
@@ -21,6 +23,17 @@ interface NacAlarmDao
 	 */
 	@get:Query("SELECT * FROM alarm")
 	val allAlarms: LiveData<List<NacAlarm>>
+
+	/**
+	 * Checkpoint the database, which will block until there is no database writer and
+	 * all readers are reading from the most recent database snapshot.
+	 *
+	 * It then checkpoints all frames in the log file and syncs the database file.
+	 *
+	 * This makes it so that the database does not need to be closed before exporting it.
+	 */
+	@RawQuery
+	suspend fun checkpoint(supportSQLiteQuery: SupportSQLiteQuery): Int
 
 	/**
 	 * Delete an alarm.

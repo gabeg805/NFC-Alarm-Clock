@@ -48,6 +48,15 @@ class NacAlarmSnoozedStatistic
 	}
 
 	/**
+	 * Check if two stats are equal, except for the ID.
+	 */
+	fun equalsExceptId(stat: NacAlarmSnoozedStatistic): Boolean
+	{
+		return super.equalsExceptId(stat)
+			&& (duration == stat.duration)
+	}
+
+	/**
 	 * Convert the data to a csv format so that it can be used to write to an
 	 * output file.
 	 */

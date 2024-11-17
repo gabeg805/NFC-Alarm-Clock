@@ -61,6 +61,8 @@
 	<string name="action_skipping_next_alarm">Skipping next alarm</string>
 	<string name="action_skip_next_alarm">Skip next alarm</string>
 	<string name="action_unskip_next_alarm">Unskip next alarm</string>
+	<string name="action_export">Export</string>
+	<string name="action_import">Import</string>
 
 
 
@@ -122,6 +124,8 @@
 	<string name="message_will_run_in_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; will run in %2$s.</string>
 	<string name="message_next_alarm_on">Next alarm on %1$s</string>
 	<string name="message_next_alarm_in">Next alarm in %1$s</string>
+	<string name="message_export_completed">Export completed</string>
+	<string name="message_import_completed">Import completed</string>
 
 
 
@@ -144,6 +148,8 @@
 	<string name="error_message_unable_to_email_statistics">Unable to email statistics</string>
 	<string name="error_message_unable_to_shine_flashlight">Unable to shine flashlight</string>
 	<string name="error_message_unable_to_start_foreground_service">Unable to start foreground service. Please enable permission</string>
+	<string name="error_message_import_export_uri_null">Unable to get URI</string>
+	<string name="error_message_unable_to_open_import_export_stream">Unable to open file</string>
 
 
 
@@ -267,6 +273,9 @@
 
 	<string name="support_setting">Support development</string>
 	<string name="support_setting_summary">Support would be greatly appreciated, but no pressure! This app will always be free</string>
+
+	<string name="import_export_setting">Import \u0020|\u0020 Export</string>
+	<string name="import_export_setting_summary">Import or export all your saved data</string>
 
 
 

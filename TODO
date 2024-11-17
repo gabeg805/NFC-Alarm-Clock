@@ -2,16 +2,17 @@
 TODO
 ----
 
-* Add import/export of database and shared preferences.
+* Add icons for skip next alarm and auto delete. Need to update the database for the latter
 
-* Remove upcoming notifications as well when an alarm goes off
+* Add text where music plays in the Alarm Activity so that if the media isn't
+  found, it'll be apparent to the user.
+
+* Find a way to slow down speed of TTS.
 
 * Add languages for India, Bangladesh, Pakistan, Japan, Thailand, Poland, Turkey, France,
   Brazil & Portugal, Serbia, Finland, Romania, Italy
 
 * Figure out why I use home in NacFile
-
-* Reorganize some of the packages like media. See if I can make a media player package?
 
 * Have option to scroll alarm name instead of marquee it
 

@@ -8,9 +8,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.options.nfc.NacNfcTagSettingFragment
+import com.nfcalarmclock.settings.importexport.NacExportManager
+import com.nfcalarmclock.settings.importexport.NacImportExportDialog
+import com.nfcalarmclock.settings.importexport.NacImportManager
 import com.nfcalarmclock.statistics.NacStatisticsSettingFragment
 import com.nfcalarmclock.support.NacSupportSetting
-import com.nfcalarmclock.util.NacUtility.quickToast
+import com.nfcalarmclock.util.NacUtility
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -21,6 +24,18 @@ import kotlinx.coroutines.launch
 class NacMainSettingFragment
 	: NacGenericSettingFragment()
 {
+
+	/**
+	 * Import manager. This will only register the activity result, but otherwise will do
+	 * nothing if it is not used.
+	 */
+	private val importManager = NacImportManager(this)
+
+	/**
+	 * Export manager. This will only register the activity result, but otherwise will do
+	 * nothing if it is not used.
+	 */
+	private val exportManager = NacExportManager(this)
 
 	/**
 	 * Setup the Support preference icon.
@@ -71,6 +86,7 @@ class NacMainSettingFragment
 		val manageNfcTagsKey = getString(R.string.manage_nfc_tags_setting_key)
 		val aboutKey = getString(R.string.about_setting_key)
 		val supportKey = getString(R.string.support_setting_key)
+		val importExportKey = getString(R.string.import_export_setting_key)
 
 		// Check the preference key
 		when (preferenceKey)
@@ -108,6 +124,35 @@ class NacMainSettingFragment
 			{
 				fragment = NacAboutSettingFragment()
 				title = getString(R.string.about_setting)
+			}
+
+			// Import/export
+			importExportKey ->
+			{
+				// Create the dialog and import/export manager
+				val dialog = NacImportExportDialog()
+
+				// Set the import listener
+				dialog.onImportListener = NacImportExportDialog.OnImportListener {
+
+					// Launch the file chooser
+					importManager.launch()
+
+				}
+
+				// Set the export listener
+				dialog.onExportListener = NacImportExportDialog.OnExportListener {
+
+					// Launch the file chooser
+					exportManager.launch(this)
+
+				}
+
+				// Show the dialog
+				dialog.show(parentFragmentManager, NacImportExportDialog.TAG)
+
+				// Default return
+				return super.onPreferenceTreeClick(preference)
 			}
 
 			// Other
@@ -186,7 +231,7 @@ class NacMainSettingFragment
 				{
 
 					 // Show a toast saying thank you
-					 quickToast(fragmentActivity, R.string.message_support_thank_you)
+					 NacUtility.quickToast(fragmentActivity, R.string.message_support_thank_you)
 
 					// Save that the app was supported in shared preferences
 					sharedPreferences!!.wasAppSupported = true

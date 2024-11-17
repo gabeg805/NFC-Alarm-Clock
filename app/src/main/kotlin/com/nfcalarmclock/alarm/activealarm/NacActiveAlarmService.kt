@@ -119,8 +119,13 @@ class NacActiveAlarmService
 			// Unable to snooze the alarm
 			else
 			{
-				// Show a toast saying the alarm could not be snoozed
-				NacUtility.quickToast(this, R.string.error_message_snooze)
+				scope.launch {
+					withContext(Dispatchers.Main)
+					{
+						// Show a toast saying the alarm could not be snoozed
+						NacUtility.quickToast(this@NacActiveAlarmService, R.string.error_message_snooze)
+					}
+				}
 				false
 			}
 		}

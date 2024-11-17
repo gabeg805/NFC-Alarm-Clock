@@ -5,6 +5,9 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
+import java.io.BufferedReader
+import java.io.File
+import java.io.InputStreamReader
 
 /**
  * Container for the values of each preference.
@@ -1246,6 +1249,42 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Copy shared preferences from a CSV file.
+	 */
+	fun copyFromCsv(context: Context, file: File)
+	{
+		// Open the file for reading
+		context.openFileInput(file.name).use { input ->
+
+			// Change the reading mechanism so it reads a character stream instead of a
+			// byte stream
+			BufferedReader(InputStreamReader(input)).use { reader ->
+
+				// Read each line in the file
+				while (true)
+				{
+					val line = reader.readLine() ?: break
+					val (key, type, value) = line.split(",")
+
+					// Save the value, depending on the type
+					when (type)
+					{
+						"Boolean" -> saveBoolean(key, value.toBoolean())
+						"Float"   -> {}
+						"Int"     -> saveInt(key, value.toInt())
+						"Long"    -> {}
+						"String"  -> saveString(key, value)
+						else      -> continue
+					}
+
+				}
+
+			}
+
+		}
+	}
+
+	/**
 	 * Save a boolean to the shared preference.
 	 */
 	private fun saveBoolean(key: String, value: Boolean)
@@ -1273,6 +1312,66 @@ class NacSharedPreferences(context: Context)
 		instance.edit()
 			.putString(key, value)
 			.apply()
+	}
+
+	/**
+	 * Write the all the shared preferences to a CSV file.
+	 */
+	fun writeToCsv(context: Context, file: File)
+	{
+		// List of keys to ignore
+		val ignoreList = listOf(
+			resources.getString(R.string.app_first_run),
+			resources.getString(R.string.card_height_collapsed),
+			resources.getString(R.string.card_height_collapsed_dismiss),
+			resources.getString(R.string.card_height_expanded),
+			resources.getString(R.string.card_is_measured),
+			resources.getString(R.string.key_permission_ignore_battery_optimization_requested),
+			resources.getString(R.string.key_permission_post_notifications_requested),
+			resources.getString(R.string.key_permission_schedule_exact_alarm_requested)
+		)
+
+		// Save shared preferences
+		context.openFileOutput(file.name, Context.MODE_PRIVATE).use { output ->
+
+			// Get all shared preferences
+			instance.all.forEach {
+
+				// Key value pair
+				val key = it.key
+				var value = it.value
+
+				// Check if key is in the ignore list
+				if (key in ignoreList)
+				{
+					return@forEach
+				}
+
+				// Determine the type of the value
+				val type = when (value)
+				{
+					is Boolean -> "Boolean"
+					is Float   -> "Float"
+					is Int     -> "Int"
+					is Long    -> "Long"
+					is String  -> "String"
+					else       -> return@forEach
+				}
+
+				// Check if the value has any newlines and convert them to spaces
+				if ((value is String) && value.contains("\n"))
+				{
+					value = value.replace("\n", " ")
+				}
+
+				// Build the line that will be written to the file
+				val line = "${key},${type},${value}\n"
+
+				// Write to the file
+				output.write(line.toByteArray())
+			}
+
+		}
 	}
 
 }

@@ -2,6 +2,7 @@ package com.nfcalarmclock.db
 
 import android.annotation.SuppressLint
 import android.content.Context
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.DeleteColumn
@@ -10,6 +11,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.AutoMigrationSpec
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.db.NacAlarmDao
 import com.nfcalarmclock.alarm.db.NacAlarmTypeConverters
@@ -35,6 +37,7 @@ import com.nfcalarmclock.statistics.db.NacAlarmMissedStatisticDao
 import com.nfcalarmclock.statistics.db.NacAlarmSnoozedStatistic
 import com.nfcalarmclock.statistics.db.NacAlarmSnoozedStatisticDao
 import com.nfcalarmclock.statistics.db.NacStatisticTypeConverters
+import com.nfcalarmclock.util.NacUtility
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,6 +47,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import java.io.File
 import java.lang.IllegalStateException
 import javax.inject.Singleton
 
@@ -244,7 +248,7 @@ abstract class NacAlarmDatabase
 		/**
 		 * Name of the database.
 		 */
-		private const val DB_NAME = "NfcAlarmClock.db"
+		const val DB_NAME = "NfcAlarmClock.db"
 
 		/**
 		 * Singleton instance of the database.
@@ -325,6 +329,242 @@ abstract class NacAlarmDatabase
 				alarm.id = i.toLong()
 
 				NacScheduler.cancel(context, alarm)
+			}
+		}
+
+		/**
+		 * Close the database.
+		 */
+		fun close(context: Context)
+		{
+			// Close the database
+			getInstance(context).close()
+
+			// Clear the instance
+			INSTANCE = null
+		}
+
+		/**
+		 * Copy alarms from another database.
+		 */
+		private suspend fun copyAlarmsFromDb(
+			db: NacAlarmDatabase,
+			importDb: NacAlarmDatabase
+		)
+		{
+			// Get the dao
+			val alarmDao = db.alarmDao()
+
+			// Copy all the alarms
+			importDb.alarmDao().getAllAlarms().forEach { a ->
+				a.id = 0
+				alarmDao.insert(a)
+			}
+		}
+
+		/**
+		 * Copy created statistics from another database.
+		 */
+		private suspend fun copyCreatedStatisticsFromDb(
+			db: NacAlarmDatabase,
+			importDb: NacAlarmDatabase
+		)
+		{
+			// Get the dao and all the stats
+			val dao = db.alarmCreatedStatisticDao()
+			val allStats = dao.getAll()
+
+			// Copy created statistics
+			importDb.alarmCreatedStatisticDao().getAll().forEach { stat ->
+
+				// Make sure none of the stats in the database already match the
+				// one that will be inserted
+				if (allStats.all { !it.equalsExceptId(stat) })
+				{
+					stat.id = 0
+					dao.insert(stat)
+				}
+
+			}
+		}
+
+		/**
+		 * Copy deleted statistics from another database.
+		 */
+		private suspend fun copyDeletedStatisticsFromDb(
+			db: NacAlarmDatabase,
+			importDb: NacAlarmDatabase
+		)
+		{
+			// Get the dao and all the stats
+			val dao = db.alarmDeletedStatisticDao()
+			val allStats = dao.getAll()
+
+			// Copy deleted statistics
+			importDb.alarmDeletedStatisticDao().getAll().forEach { stat ->
+
+				// Make sure none of the stats in the database already match the
+				// one that will be inserted
+				if (allStats.all { !it.equalsExceptId(stat) })
+				{
+					stat.id = 0
+					dao.insert(stat)
+				}
+
+			}
+		}
+
+		/**
+		 * Copy dismissed statistics from another database.
+		 */
+		private suspend fun copyDismissedStatisticsFromDb(
+			db: NacAlarmDatabase,
+			importDb: NacAlarmDatabase
+		)
+		{
+			// Get the dao and all the stats
+			val dao = db.alarmDismissedStatisticDao()
+			val allStats = dao.getAll()
+
+			// Copy dismissed statistics
+			importDb.alarmDismissedStatisticDao().getAll().forEach { stat ->
+
+				// Make sure none of the stats in the database already match the
+				// one that will be inserted
+				if (allStats.all { !it.equalsExceptId(stat) })
+				{
+					stat.id = 0
+					dao.insert(stat)
+				}
+
+			}
+		}
+
+		/**
+		 * Copy data from another database.
+		 */
+		fun copyFromDb(
+			context: Context,
+			dbFile: File,
+			lifecycleScope: LifecycleCoroutineScope)
+		{
+			// Open the main app database
+			val db = getInstance(context)
+
+			// Open the imported database file
+			val importDb = databaseBuilder(
+				context.applicationContext,
+				NacAlarmDatabase::class.java,
+				dbFile.path)
+				.build()
+
+			lifecycleScope.launch {
+
+				// Copy all the alarms
+				copyAlarmsFromDb(db, importDb)
+
+				// Copy created statistics
+				copyCreatedStatisticsFromDb(db, importDb)
+
+				// Copy deleted statistics
+				copyDeletedStatisticsFromDb(db, importDb)
+
+				// Copy dismissed statistics
+				copyDismissedStatisticsFromDb(db, importDb)
+
+				// Copy missed statistics
+				copyMissedStatisticsFromDb(db, importDb)
+
+				// Copy snoozed statistics
+				copySnoozedStatisticsFromDb(db, importDb)
+
+				// Copy NFC tags
+				copyNfcTagsFromDb(db, importDb)
+
+				// Close the import database
+				importDb.close()
+
+				// Show success message
+				NacUtility.quickToast(context, R.string.message_import_completed)
+
+			}
+		}
+
+		/**
+		 * Copy missed statistics from another database.
+		 */
+		private suspend fun copyMissedStatisticsFromDb(
+			db: NacAlarmDatabase,
+			importDb: NacAlarmDatabase
+		)
+		{
+			// Get the dao and all the stats
+			val dao = db.alarmMissedStatisticDao()
+			val allStats = dao.getAll()
+
+			// Copy missed statistics
+			importDb.alarmMissedStatisticDao().getAll().forEach { stat ->
+
+				// Make sure none of the stats in the database already match the
+				// one that will be inserted
+				if (allStats.all { !it.equalsExceptId(stat) })
+				{
+					stat.id = 0
+					dao.insert(stat)
+				}
+
+			}
+		}
+
+		/**
+		 * Copy NFC tags from another database.
+		 */
+		private suspend fun copyNfcTagsFromDb(
+			db: NacAlarmDatabase,
+			importDb: NacAlarmDatabase
+		)
+		{
+			// Get the dao and all the stats
+			val dao = db.nfcTagDao()
+			val allNfcTags = dao.getAllNfcTags()
+
+			// Copy NFC tags
+			importDb.nfcTagDao().getAllNfcTags().forEach { tag ->
+
+				// Make sure none of the stats in the database already match the
+				// one that will be inserted
+				if (allNfcTags.all { !it.equalsExceptId(tag) })
+				{
+					tag.id = 0
+					dao.insert(tag)
+				}
+
+			}
+		}
+
+		/**
+		 * Copy snoozed statistics from another database.
+		 */
+		private suspend fun copySnoozedStatisticsFromDb(
+			db: NacAlarmDatabase,
+			importDb: NacAlarmDatabase
+		)
+		{
+			// Get the dao and all the stats
+			val dao = db.alarmSnoozedStatisticDao()
+			val allStats = dao.getAll()
+
+			// Copy snoozed statistics
+			importDb.alarmSnoozedStatisticDao().getAll().forEach { stat ->
+
+				// Make sure none of the stats in the database already match the
+				// one that will be inserted
+				if (allStats.all { !it.equalsExceptId(stat) })
+				{
+					stat.id = 0
+					dao.insert(stat)
+				}
+
 			}
 		}
 

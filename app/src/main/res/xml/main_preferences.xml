@@ -45,6 +45,14 @@
 		app:allowDividerAbove="true"
 		/>
 
+	<!-- Import/export -->
+	<Preference
+		android:icon="@drawable/import_export"
+		android:key="@string/import_export_setting_key"
+		android:title="@string/import_export_setting"
+		android:summary="@string/import_export_setting_summary"
+		/>
+
 	<!-- Support -->
 	<Preference
 		android:icon="@drawable/favorite"
