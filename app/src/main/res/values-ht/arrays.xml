@@ -323,9 +323,13 @@
 	</string-array>
 
 	<string-array name="whats_new_items">
-		<item>Te ajoute opsyon &lt;b>sote pwochen alam&lt;/b>. Ou ka jwenn aksè lè w peze yon alam lontan.</item>
+		<item>Te ajoute opsyon &lt;b>sote pwochen alam&lt;/b>. Te jwenn lè &lt;b>tansyone&lt;/b> yon alam.</item>
+		<item>Te ajoute opsyon &lt;b>efase apre ranvwaye&lt;/b> pou efase otomatikman yon alam apre li fin ranvwaye. Yo jwenn nan &lt;b>Opsyon anile&lt;/b>.</item>
+		<item>Te ajoute opsyon &lt;b>enpòte/ekspòtasyon&lt;/b>. Yo jwenn nan &lt;b>Anviwònman&lt;/b>.</item>
 		<item>Te fikse aksidan lè yon siy &lt;b>%&lt;/b> te nan non alam la.</item>
 		<item>Te ajoute tradiksyon lang pou &lt;b>Alman&lt;/b>.</item>
+		<item>Mete ajou fason &lt;b>tèks-a-lapawòl&lt;/b> di lè a ak ki jan vit li pale.</item>
+		<item>Mèsi a &lt;b>Aristeo Montoya&lt;/b> dèske li ede amelyore tradiksyon &lt;b>panyòl&lt;/b> la.</item>
 		<item>Notifikasyon rapèl yo pral retire lè yon alam sonnen.</item>
 	</string-array>
 

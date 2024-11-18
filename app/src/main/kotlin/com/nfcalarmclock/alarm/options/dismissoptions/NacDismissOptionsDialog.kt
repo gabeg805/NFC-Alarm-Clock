@@ -88,8 +88,8 @@ class NacDismissOptionsDialog
 		val alarm = NacBundle.getAlarm(arguments)
 
 		// Get the ok and cancel buttons
-		val okButton = dialog!!.findViewById(R.id.ok_button) as MaterialButton
-		val cancelButton = dialog!!.findViewById(R.id.cancel_button) as MaterialButton
+		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
+		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
 
 		// Get the default values
 		val defaultAutoDismissTime = alarm?.autoDismissTime ?: 15
@@ -186,8 +186,8 @@ class NacDismissOptionsDialog
 	private fun setupAutoDismiss(default: Int)
 	{
 		// Get the views
-		val inputLayout = dialog!!.findViewById(R.id.auto_dismiss_input_layout) as TextInputLayout
-		val autoCompleteTextView = dialog!!.findViewById(R.id.auto_dismiss_dropdown_menu) as MaterialAutoCompleteTextView
+		val inputLayout: TextInputLayout = dialog!!.findViewById(R.id.auto_dismiss_input_layout)
+		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.auto_dismiss_dropdown_menu)
 
 		// Setup the input layout
 		inputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
@@ -210,7 +210,7 @@ class NacDismissOptionsDialog
 		// Get the views
 		dismissEarlyQuestion = dialog!!.findViewById(R.id.how_early_to_dismiss_question)
 		dismissEarlyInputLayout = dialog!!.findViewById(R.id.how_early_to_dismiss_input_layout)
-		val autoCompleteTextView = dialog!!.findViewById(R.id.how_early_to_dismiss_dropdown_menu) as MaterialAutoCompleteTextView
+		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.how_early_to_dismiss_dropdown_menu)
 
 		// Setup the input layout
 		dismissEarlyInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
@@ -231,9 +231,9 @@ class NacDismissOptionsDialog
 	private fun setupShouldDeleteAlarmAfterDismissed(default: Boolean)
 	{
 		// Get the views
-		val relativeLayout = dialog!!.findViewById(R.id.should_delete_alarm_after_dismissed) as RelativeLayout
-		val description = dialog!!.findViewById(R.id.should_delete_alarm_after_dismissed_summary) as TextView
-		val checkBox = dialog!!.findViewById(R.id.should_delete_alarm_after_dismissed_checkbox) as MaterialCheckBox
+		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.should_delete_alarm_after_dismissed)
+		val description: TextView = dialog!!.findViewById(R.id.should_delete_alarm_after_dismissed_summary)
+		val checkBox: MaterialCheckBox = dialog!!.findViewById(R.id.should_delete_alarm_after_dismissed_checkbox)
 
 		// Set the default checkbox value
 		checkBox.isChecked = default
@@ -263,9 +263,9 @@ class NacDismissOptionsDialog
 	private fun setupShouldDismissEarly(default: Boolean)
 	{
 		// Get the views
-		val relativeLayout = dialog!!.findViewById(R.id.should_use_dismiss_early) as RelativeLayout
-		val description = dialog!!.findViewById(R.id.should_use_dismiss_early_summary) as TextView
-		dismissEarlyCheckBox = dialog!!.findViewById(R.id.should_use_dismiss_early_checkbox) as MaterialCheckBox
+		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.should_use_dismiss_early)
+		val description: TextView = dialog!!.findViewById(R.id.should_use_dismiss_early_summary)
+		dismissEarlyCheckBox = dialog!!.findViewById<MaterialCheckBox>(R.id.should_use_dismiss_early_checkbox)!!
 
 		// Set the default checkbox value
 		dismissEarlyCheckBox.isChecked = default

@@ -23,21 +23,21 @@ class NacNfcTagViewHolder(
 	/**
 	 * Name.
 	 */
-	val nameTextView = root.findViewById(R.id.nfc_tag_name) as TextView
+	val nameTextView: TextView = root.findViewById(R.id.nfc_tag_name)
 
 	/**
 	 * NFC ID.
 	 */
-	val nfcIdTextView = root.findViewById(R.id.nfc_tag_id_value) as TextView
+	val nfcIdTextView: TextView = root.findViewById(R.id.nfc_tag_id_value)
 
 	/**
 	 * Delete button.
 	 */
-	val deleteButton = root.findViewById(R.id.delete_button) as MaterialButton
+	val deleteButton: MaterialButton = root.findViewById(R.id.delete_button)
 
 	/**
 	 * Rename button.
 	 */
-	val renameButton = root.findViewById(R.id.rename_button) as MaterialButton
+	val renameButton: MaterialButton = root.findViewById(R.id.rename_button)
 
 }

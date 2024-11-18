@@ -97,8 +97,8 @@ class NacScanNfcTagDialog
 		super.onViewCreated(view, savedInstanceState)
 
 		// Get the views
-		val useAnyNfcButton = view.findViewById(R.id.use_any_nfc_tag) as MaterialButton
-		val selectNfcButton = view.findViewById(R.id.select_nfc_tag) as MaterialButton
+		val useAnyNfcButton: MaterialButton = view.findViewById(R.id.use_any_nfc_tag)
+		val selectNfcButton: MaterialButton = view.findViewById(R.id.select_nfc_tag)
 
 		// Setup the use any NFC button
 		setupPrimaryButton(useAnyNfcButton, listener = {

@@ -57,8 +57,8 @@ class NacImportExportDialog
 		super.onViewCreated(view, savedInstanceState)
 
 		// Get the views
-		val exportButton = view.findViewById(R.id.export_data) as MaterialButton
-		val importButton = view.findViewById(R.id.import_data) as MaterialButton
+		val exportButton: MaterialButton = view.findViewById(R.id.export_data)
+		val importButton: MaterialButton = view.findViewById(R.id.import_data)
 
 		// Setup the export button
 		setupPrimaryButton(exportButton, listener = {

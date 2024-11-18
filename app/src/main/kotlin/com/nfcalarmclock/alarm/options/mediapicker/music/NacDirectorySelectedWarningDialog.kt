@@ -81,8 +81,8 @@ class NacDirectorySelectedWarningDialog
 		super.onResume()
 
 		// Set the member variable
-		shuffleMediaCheckBox = dialog!!.findViewById(R.id.shuffle_media_checkbox) as MaterialCheckBox
-		recursivelyPlayMediaCheckBox = dialog!!.findViewById(R.id.recursively_play_media_checkbox) as MaterialCheckBox
+		shuffleMediaCheckBox = dialog!!.findViewById<MaterialCheckBox>(R.id.shuffle_media_checkbox)!!
+		recursivelyPlayMediaCheckBox = dialog!!.findViewById<MaterialCheckBox>(R.id.recursively_play_media_checkbox)!!
 
 		// Set the status of the checkbox
 		shuffleMediaCheckBox!!.isChecked = defaultShouldShuffleMedia

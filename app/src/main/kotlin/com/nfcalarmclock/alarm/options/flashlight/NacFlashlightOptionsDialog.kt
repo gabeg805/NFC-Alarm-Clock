@@ -110,9 +110,9 @@ class NacFlashlightOptionsDialog
 		flashlight = NacFlashlight(requireContext())
 
 		// Get the done, preview, and cancel buttons
-		val doneButton = dialog!!.findViewById(R.id.ok_button) as MaterialButton
-		val previewButton = dialog!!.findViewById(R.id.preview_button) as MaterialButton
-		val cancelButton = dialog!!.findViewById(R.id.cancel_button) as MaterialButton
+		val doneButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
+		val previewButton: MaterialButton = dialog!!.findViewById(R.id.preview_button)
+		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
 
 		// Get the default values
 		val defaultStrength = alarm?.flashlightStrengthLevel ?: 0
@@ -190,9 +190,9 @@ class NacFlashlightOptionsDialog
 	private fun setupBlinkCheckBox(default: Boolean)
 	{
 		// Get the views
-		val relativeLayout = dialog!!.findViewById(R.id.should_flashlight_blink) as RelativeLayout
-		val description = dialog!!.findViewById(R.id.description_should_flashlight_blink) as TextView
-		blinkCheckBox = dialog!!.findViewById(R.id.should_flashlight_blink_checkbox) as MaterialCheckBox
+		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.should_flashlight_blink)
+		val description: TextView = dialog!!.findViewById(R.id.description_should_flashlight_blink)
+		blinkCheckBox = dialog!!.findViewById<MaterialCheckBox>(R.id.should_flashlight_blink_checkbox)!!
 
 		// Set the status of the checkbox
 		blinkCheckBox.isChecked = default
@@ -254,8 +254,8 @@ class NacFlashlightOptionsDialog
 		onOffDurationRelativeLayout = dialog!!.findViewById(R.id.flashlight_on_off_duration)
 		onDurationInputLayout = dialog!!.findViewById(R.id.flashlight_on_duration_input_layout)
 		offDurationInputLayout = dialog!!.findViewById(R.id.flashlight_off_duration_input_layout)
-		val onDurationAutoCompleteTextView= dialog!!.findViewById(R.id.flashlight_on_duration_dropdown_menu) as MaterialAutoCompleteTextView
-		val offDurationAutoCompleteTextView= dialog!!.findViewById(R.id.flashlight_off_duration_dropdown_menu) as MaterialAutoCompleteTextView
+		val onDurationAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.flashlight_on_duration_dropdown_menu)
+		val offDurationAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.flashlight_off_duration_dropdown_menu)
 
 		// Setup the input layout
 		onDurationInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
@@ -318,8 +318,8 @@ class NacFlashlightOptionsDialog
 	private fun setupStrengthLevel(default: Int)
 	{
 		// Get the views
-		val question = dialog!!.findViewById(R.id.question_flashlight_strength) as TextView
-		val space = dialog!!.findViewById(R.id.space_flashlight_strength) as Space
+		val question: TextView = dialog!!.findViewById(R.id.question_flashlight_strength)
+		val space: Space = dialog!!.findViewById(R.id.space_flashlight_strength)
 		strengthSeekBar = dialog!!.findViewById(R.id.seekbar_flashlight_strength)
 
 		// Check if this version does not support changing the flashlight level

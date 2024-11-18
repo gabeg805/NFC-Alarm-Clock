@@ -61,6 +61,8 @@
 	<string name="action_skipping_next_alarm">Bỏ qua báo thức tiếp theo</string>
 	<string name="action_skip_next_alarm">Bỏ qua báo thức tiếp theo</string>
 	<string name="action_unskip_next_alarm">Bỏ qua báo thức tiếp theo</string>
+	<string name="action_export">Xuất khẩu</string>
+	<string name="action_import">Nhập khẩu</string>
 
 
 
@@ -122,6 +124,8 @@
 	<string name="message_will_run_in_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; sẽ chạy trong %2$s.</string>
 	<string name="message_next_alarm_on">Báo thức tiếp theo vào %1$s</string>
 	<string name="message_next_alarm_in">Báo thức tiếp theo sau %1$s</string>
+	<string name="message_export_completed">Xuất khẩu hoàn tất</string>
+	<string name="message_import_completed">Nhập khẩu hoàn tất</string>
 
 
 
@@ -144,6 +148,8 @@
 	<string name="error_message_unable_to_email_statistics">Không thể gửi số liệu thống kê qua email</string>
 	<string name="error_message_unable_to_shine_flashlight">Không thể chiếu đèn pin</string>
 	<string name="error_message_unable_to_start_foreground_service">Không thể khởi động dịch vụ nền trước. Vui lòng bật quyền</string>
+	<string name="error_message_import_export_uri_null">Không thể lấy được URI</string>
+	<string name="error_message_unable_to_open_import_export_stream">Không thể mở tập tin</string>
 
 
 
@@ -166,6 +172,7 @@
 	<string name="title_color">Chọn một màu</string>
 	<string name="title_dismiss_early_checkbox" tools:ignore="TypographyEllipsis">Loại bỏ cảnh báo sớm trước khi nó hoạt động...</string>
 	<string name="title_dismiss_early_how_early" tools:ignore="TypographyEllipsis">Báo động có thể được loại bỏ sớm bao lâu...</string>
+	<string name="title_delete_alarm_after_dismissed_checkbox" tools:ignore="TypographyEllipsis">Xóa báo thức sau khi nó tắt...</string>
 	<string name="title_upcoming_reminder_should_show" tools:ignore="TypographyEllipsis">Hiển thị thông báo nhắc nhở trước khi báo thức kêu...</string>
 	<string name="title_upcoming_reminder_time_to_show" tools:ignore="TypographyEllipsis">Thông báo sẽ được hiển thị sớm bao lâu...</string>
 	<string name="title_upcoming_reminder_freq_to_show" tools:ignore="TypographyEllipsis">Tần suất nó nên được hiển thị...</string>
@@ -243,6 +250,8 @@
 	<string name="cd_dismiss_alarm">Loại bỏ báo động.</string>
 	<string name="cd_snooze_alarm">Báo lại báo thức.</string>
 	<string name="cd_current_alarm_media_playing">Phương tiện báo động hiện tại đang phát.</string>
+	<string name="cd_skip_next_alarm">Bỏ qua báo thức tiếp theo.</string>
+	<string name="cd_delete_alarm_after_dismiss">Xóa báo thức sau khi nó đã tắt.</string>
 
 
 
@@ -267,6 +276,9 @@
 
 	<string name="support_setting">Hỗ trợ phát triển</string>
 	<string name="support_setting_summary">Hỗ trợ sẽ được đánh giá rất cao, nhưng không có áp lực! Ứng dụng này sẽ luôn miễn phí</string>
+
+	<string name="import_export_setting">Nhập \u0020|\u0020 Xuất</string>
+	<string name="import_export_setting_summary">Nhập hoặc xuất tất cả dữ liệu đã lưu của bạn</string>
 
 
 
@@ -428,26 +440,17 @@
 	<string name="next_alarm_format_time_in">Báo thức tiếp theo sau 7 giờ 30 phút</string>
 	<string name="next_alarm_format_time_on">Báo thức tiếp theo vào Thứ Hai lúc 7:00 sáng</string>
 
-	<!-- ********************** -->
-	<!-- Miscellaneous settings -->
-	<!-- ********************** -->
-
-	<!-- Categories -->
-
-
-	<!-- Shuffle playlist -->
-
-
-	<!-- Speak to me -->
-
-
-	<!-- Speak frequency -->
-
+	<!-- ************** -->
+	<!-- Alarm settings -->
+	<!-- ************** -->
 
 	<!-- Dismiss early -->
 	<string name="dismiss_early_true">Có, có thể tắt báo thức sớm.</string>
 	<string name="dismiss_early_false">Không, không thể loại bỏ báo thức sớm.</string>
 
+	<!-- Delete alarm after dismissed -->
+	<string name="delete_alarm_after_dismissed_true">Có, hãy xóa báo thức sau khi nó tắt.</string>
+	<string name="delete_alarm_after_dismissed_false">Không, không xóa báo thức sau khi nó đã tắt.</string>
 
 	<!-- Upcoming reminder -->
 	<string name="upcoming_reminder_true">Có, hiển thị thông báo.</string>
@@ -455,16 +458,13 @@
 	<string name="upcoming_reminder_use_tts_true">Có, sử dụng các tùy chọn chuyển văn bản thành giọng nói giống như báo thức.\n\nLưu ý: Nếu tùy chọn cảnh báo bị tắt thì thao tác này sẽ không có tác dụng gì.</string>
 	<string name="upcoming_reminder_use_tts_false">Không, không sử dụng bất kỳ tính năng chuyển văn bản thành giọng nói nào.</string>
 
-
 	<!-- Restrict volume -->
 	<string name="restrict_volume_true">Có, âm lượng sẽ bị hạn chế và không thể thay đổi.</string>
 	<string name="restrict_volume_false">Không, âm lượng có thể được thay đổi tự do.</string>
 
-
 	<!-- Gradually increase volume -->
 	<string name="gradually_increase_volume_true">Có, âm lượng sẽ tăng dần cho đến khi đạt đến mức âm lượng báo động.</string>
 	<string name="gradually_increase_volume_false">Không, âm lượng sẽ được đặt thành âm lượng báo thức.</string>
-
 
 	<!-- Flashlight blink -->
 	<string name="flashlight_blink_true">Có, làm cho đèn pin nhấp nháy.</string>
@@ -578,13 +578,7 @@
 		<item quantity="other">giây</item>
 	</plurals>
 
-	<plurals name="tts_say_time_12h">
-		<item quantity="other">Bây giờ là, %1$d, %2$s, %3$s.</item>
-	</plurals>
-
-	<plurals name="tts_say_time_24h">
-		<item quantity="other">Bây giờ là, %1$d, %2$s.</item>
-	</plurals>
+	<string name="tts_say_time">Thời gian là %1$s:%2$s %3$s.</string>
 
 	<plurals name="tts_say_reminder">
 		<item quantity="other">Lời nhắc nhở. %1$s, sẽ chạy sau, %2$d, phút.</item>

@@ -6,9 +6,7 @@ import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.text.format.DateFormat
-import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.View.OnCreateContextMenuListener
 import android.view.ViewGroup
@@ -24,7 +22,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
@@ -33,15 +30,19 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService.Companion.dismissAlarmService
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService.Companion.startAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.util.media.NacMedia
 import com.nfcalarmclock.alarm.options.name.NacNameDialog
 import com.nfcalarmclock.alarm.options.name.NacNameDialog.OnNameEnteredListener
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar.Day
 import com.nfcalarmclock.util.NacUtility.getHeight
 import com.nfcalarmclock.util.NacUtility.quickToast
+import com.nfcalarmclock.util.media.NacMedia
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek.OnWeekChangedListener
+import com.nfcalarmclock.view.performHapticFeedback
+import com.nfcalarmclock.view.setupProgressAndThumbColor
+import com.nfcalarmclock.view.setupRippleColor
+import com.nfcalarmclock.view.setupSwitchColor
 
 //import com.google.android.material.timepicker.MaterialTimePicker;
 
@@ -433,7 +434,8 @@ class NacCardHolder(
 		// Set the interpolator for the animator
 		cardAnimator.interpolator = AccelerateInterpolator()
 
-		// Initialize the listeners
+		// Initialize the colors and listeners
+		initColors()
 		initListeners()
 	}
 
@@ -482,9 +484,10 @@ class NacCardHolder(
 		hideSwipeViews()
 		hideAppearanceSettingViews()
 
-		// Setup the views and colors
+		// Setup the views and the meridian color because it is dependent on the alarm
+		// being bound to the card holder
 		initViews()
-		initColors()
+		setMeridianColor()
 
 		// Unset the binding flag
 		isBinding = false
@@ -687,55 +690,12 @@ class NacCardHolder(
 	}
 
 	/**
-	 * Compare the default color of two ColorStateList objects.
-	 *
-	 * @return True if the default color is the same, and False otherwise.
-	 */
-	private fun compareColorStateList(
-		oldColor: ColorStateList?,
-		newColor: ColorStateList?
-	): Boolean
-	{
-		// Check if the colors are defined
-		return if (oldColor == null || newColor == null)
-		{
-			false
-		}
-		// Compare the old and new colors
-		else
-		{
-			oldColor.defaultColor == newColor.defaultColor
-		}
-	}
-
-	/**
-	 * Create a ColorStateList object that is blended with the theme color.
-	 */
-	private fun createBlendedThemeColorStateList(): ColorStateList
-	{
-		// Blend the theme color
-		val themeColor = sharedPreferences.themeColor
-		val blendedColor = ColorUtils.blendARGB(themeColor, Color.TRANSPARENT, 0.6f)
-
-		// Return the blended color
-		return ColorStateList.valueOf(blendedColor)
-	}
-
-	/**
 	 * Delete the alarm card.
 	 */
 	fun delete()
 	{
 		// Call the listener
 		onCardDeleteClickedListener?.onCardDeleteClicked(this, alarm!!)
-	}
-
-	/**
-	 * Act as if the alarm options button was clicked.
-	 */
-	private fun doAlarmOptionsButtonClick()
-	{
-		onCardAlarmOptionsClickedListener?.onCardAlarmOptionsClicked(this, alarm!!)
 	}
 
 	/**
@@ -796,77 +756,6 @@ class NacCardHolder(
 	}
 
 	/**
-	 * Act as if the day button was clicked.
-	 */
-	private fun doDayButtonClick(day: Day)
-	{
-		// Reset the skip next alarm flag
-		alarm!!.shouldSkipNextAlarm = false
-
-		// Toggle the day
-		alarm!!.toggleDay(day)
-
-		// Check if no days are selected
-		if (!alarm!!.areDaysSelected)
-		{
-			// Disable repeat
-			alarm!!.repeat = false
-		}
-
-		// Setup the views
-		setRepeatButton()
-		setSummaryDaysView()
-		setSummarySkipNextAlarmIcon()
-
-		// Call the listener
-		callOnCardUpdatedListener()
-	}
-
-	/**
-	 * Act as if the delete button was clicked.
-	 */
-	private fun doDeleteButtonClick()
-	{
-		delete()
-	}
-
-	/**
-	 * Act as if the dismiss button was clicked.
-	 */
-	@OptIn(UnstableApi::class)
-	private fun doDismissButtonClick()
-	{
-		// Check if alarm uses NFC
-		if (alarm!!.shouldUseNfc)
-		{
-			// Start the alarm service
-			startAlarmService(context, alarm)
-		}
-		// Alarm does not require NFC to dismiss the alarm
-		else
-		{
-			// Dismiss the alarm service
-			dismissAlarmService(context, alarm)
-		}
-	}
-
-	/**
-	 * Act as if the dismiss early button was clicked.
-	 */
-	private fun doDismissEarlyButtonClick()
-	{
-		// Dismiss the alarm early
-		alarm!!.dismissEarly()
-
-		// Refresh the extra view
-		refreshExtraView()
-		collapseRefresh()
-
-		// Call the listener
-		callOnCardUpdatedListener()
-	}
-
-	/**
 	 * Expand the alarm card without any animations.
 	 */
 	private fun doExpand()
@@ -899,40 +788,6 @@ class NacCardHolder(
 	}
 
 	/**
-	 * Act as if the flashlight button was clicked.
-	 */
-	private fun doFlashlightButtonClick()
-	{
-		// Reset the skip next alarm flag
-		alarm!!.shouldSkipNextAlarm = false
-
-		// Toggle the flashlight button
-		alarm!!.toggleUseFlashlight()
-
-		// Setup the skip icon
-		setSummarySkipNextAlarmIcon()
-
-		// Call the listener
-		onCardUseFlashlightChangedListener?.onCardUseFlashlightChanged(this, alarm!!)
-	}
-
-	/**
-	 * Act as if the media button was clicked.
-	 */
-	private fun doMediaButtonClick()
-	{
-		onCardMediaClickedListener?.onCardMediaClicked(this, alarm!!)
-	}
-
-	/**
-	 * Act as if the name was clicked.
-	 */
-	private fun doNameClick()
-	{
-		showNameDialog()
-	}
-
-	/**
 	 * Act as if the NFC button was clicked.
 	 */
 	fun doNfcButtonClick()
@@ -958,113 +813,6 @@ class NacCardHolder(
 	}
 
 	/**
-	 * Act as if the repeat button was clicked.
-	 */
-	private fun doRepeatButtonClick()
-	{
-		// Reset the skip next alarm flag
-		alarm!!.shouldSkipNextAlarm = false
-
-		// Toggle the repeat button
-		alarm!!.toggleRepeat()
-
-		// Setup the skip icon
-		setSummarySkipNextAlarmIcon()
-
-		// Call the listener
-		callOnCardUpdatedListener()
-
-		// Determine which message to show
-		val messageId = if (alarm!!.shouldRepeat)
-		{
-			R.string.message_repeat_enabled
-		}
-		else
-		{
-			R.string.message_repeat_disabled
-		}
-
-		// Toast the repeat message
-		quickToast(context, messageId)
-	}
-
-	/**
-	 * Act as if the repeat button was long clicked.
-	 */
-	private fun doRepeatButtonLongClick()
-	{
-		// Reset the skip next alarm flag
-		alarm!!.shouldSkipNextAlarm = false
-
-		// Disable the repeat button
-		alarm!!.repeat = false
-
-		// Clear out the selected days
-		alarm!!.setDays(0)
-
-		// Setup the views
-		setDayOfWeek()
-		setRepeatButton()
-		setSummaryDaysView()
-		setSummarySkipNextAlarmIcon()
-
-		// Call the listener
-		callOnCardUpdatedListener()
-	}
-
-	/**
-	 * Act as if the switch was changed.
-	 */
-	private fun doSwitchCheckedChanged(state: Boolean)
-	{
-		// Reset the skip next alarm flag
-		alarm!!.shouldSkipNextAlarm = false
-
-		// Check if alarm was disabled
-		if (!state)
-		{
-			// Reset the snooze counter
-			alarm!!.snoozeCount = 0
-		}
-
-		// Set the alarm enabled state
-		alarm!!.isEnabled = state
-
-		// Setup the views
-		setSummaryDaysView()
-		setSummarySkipNextAlarmIcon()
-
-		// Call the listener
-		callOnCardUpdatedListener()
-	}
-
-	/**
-	 * Act as if the time was clicked.
-	 */
-	private fun doTimeClick()
-	{
-		showTimeDialog()
-	}
-
-	/**
-	 * Act as if the vibrate button was clicked.
-	 */
-	private fun doVibrateButtonClick()
-	{
-		// Reset the skip next alarm flag
-		alarm!!.shouldSkipNextAlarm = false
-
-		// Toggle the vibrate button
-		alarm!!.toggleVibrate()
-
-		// Setup the skip icon
-		setSummarySkipNextAlarmIcon()
-
-		// Call the listener
-		onCardUseVibrateChangedListener?.onCardUseVibrateChanged(this, alarm!!)
-	}
-
-	/**
 	 * Expand the alarm card.
 	 */
 	private fun expand()
@@ -1080,32 +828,6 @@ class NacCardHolder(
 		// Start the animator
 		cardAnimator.start()
 	}
-
-	/**
-	 * @return The meridian color.
-	 */
-	private fun getMeridianColor(meridian: String): Int
-	{
-		// Get the AM and PM strings
-		val am = context.getString(R.string.am)
-		val pm = context.getString(R.string.pm)
-
-		// AM color
-		return when (meridian)
-		{
-			am -> sharedPreferences.amColor
-			pm -> sharedPreferences.pmColor
-			else -> context.resources.getInteger(R.integer.default_color)
-		}
-	}
-
-	///**
-	// * @return The time picker.
-	// */
-	//public MaterialTimePicker getTimePicker()
-	//{
-	//	return this.mTimePicker;
-	//}
 
 	/**
 	 * Hide the views in the Appearance settings.
@@ -1161,28 +883,30 @@ class NacCardHolder(
 
 	/**
 	 * Initialize the colors of the various views.
+	 *
+	 * Do not initialize the meridian color because when this is called, then alarm still
+	 * has not been bound to the card holder.
 	 */
 	private fun initColors()
 	{
 		setDividerColor()
-		setTextViewColor(timeView, sharedPreferences.timeColor)
-		setMeridianColor()
-		setSwitchColor()
-		setTextViewColor(summaryDaysView, sharedPreferences.daysColor)
-		setTextViewColor(summaryNameView, sharedPreferences.nameColor)
-		this.setMaterialButtonColor(dismissButton)
-		setDayOfWeekRippleColor()
-		this.setMaterialButtonColor(repeatButton)
-		this.setMaterialButtonColor(vibrateButton)
-		this.setMaterialButtonColor(nfcButton)
-		this.setMaterialButtonColor(flashlightButton)
-		this.setMaterialButtonColor(mediaButton)
-		setVolumeSeekBarColor()
-		this.setMaterialButtonColor(alarmOptionsButton)
-		this.setMaterialButtonColor(nameButton)
-		this.setMaterialButtonColor(deleteButton)
-		this.setMaterialButtonColor(collapseButton)
-		this.setMaterialButtonColor(expandButton)
+		timeView.setTextColor(sharedPreferences.timeColor)
+		switch.setupSwitchColor(sharedPreferences)
+		summaryDaysView.setTextColor(sharedPreferences.daysColor)
+		summaryNameView.setTextColor(sharedPreferences.nameColor)
+		dismissButton.setupRippleColor(sharedPreferences)
+		dayOfWeek.dayButtons.forEach { it.button?.setupRippleColor(sharedPreferences) }
+		repeatButton.setupRippleColor(sharedPreferences)
+		vibrateButton.setupRippleColor(sharedPreferences)
+		nfcButton.setupRippleColor(sharedPreferences)
+		flashlightButton.setupRippleColor(sharedPreferences)
+		mediaButton.setupRippleColor(sharedPreferences)
+		volumeSeekBar.setupProgressAndThumbColor(sharedPreferences)
+		alarmOptionsButton.setupRippleColor(sharedPreferences)
+		nameButton.setupRippleColor(sharedPreferences)
+		deleteButton.setupRippleColor(sharedPreferences)
+		collapseButton.setupRippleColor(sharedPreferences)
+		expandButton.setupRippleColor(sharedPreferences)
 	}
 
 	/**
@@ -1252,15 +976,6 @@ class NacCardHolder(
 		}
 	}
 
-	///**
-	// * @return True if showing the time picker, and false otherwise.
-	// */
-	//public boolean isShowingTimePicker()
-	//{
-	//	MaterialTimePicker timepicker = this.getTimePicker();
-	//	return (timepicker != null);
-	//}
-
 	/**
 	 * Measure the different alarm card heights.
 	 *
@@ -1304,14 +1019,6 @@ class NacCardHolder(
 
 		// Refresh the extra view
 		refreshExtraView()
-	}
-
-	/**
-	 * Perform haptic feedback on a view.
-	 */
-	private fun performHapticFeedback(view: View)
-	{
-		view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
 	}
 
 	/**
@@ -1389,22 +1096,6 @@ class NacCardHolder(
 	}
 
 	/**
-	 * Set the background tint list of a view.
-	 */
-	private fun setBackgroundTintList(view: View, newColorStateList: ColorStateList)
-	{
-		// Get the current color
-		val colorStateList = view.backgroundTintList
-
-		// Check if the current color and the new color are different
-		if (!this.compareColorStateList(colorStateList, newColorStateList))
-		{
-			// Set the new color
-			view.backgroundTintList = newColorStateList
-		}
-	}
-
-	/**
 	 * Set the background color for when the card is collapsed.
 	 */
 	private fun setCollapsedBackgroundColor()
@@ -1431,22 +1122,6 @@ class NacCardHolder(
 	}
 
 	/**
-	 * Set the ripple color for each day in the day of week view.
-	 */
-	private fun setDayOfWeekRippleColor()
-	{
-		// Create the new color
-		val newColor = createBlendedThemeColorStateList()
-
-		// Iterate over each day button
-		for (day in dayOfWeek.dayButtons)
-		{
-			// Set the new color
-			this.setMaterialButtonColor(day.button, newColor)
-		}
-	}
-
-	/**
 	 * Set the divider color.
 	 */
 	private fun setDividerColor()
@@ -1465,11 +1140,11 @@ class NacCardHolder(
 			val view = headerDivider.getChildAt(i)
 
 			// Set the color
-			this.setBackgroundTintList(view, themeColor)
+			view.backgroundTintList = themeColor
 		}
 
 		// Set the delete divider color
-		this.setBackgroundTintList(deleteDivider, themeColor)
+		deleteDivider.backgroundTintList = themeColor
 	}
 
 	/**
@@ -1499,45 +1174,6 @@ class NacCardHolder(
 			// Set the new state of the button
 			flashlightButton.isChecked = shouldUseFlashlight
 		}
-	}
-
-	/**
-	 * Set the color of a MaterialButton.
-	 *
-	 * @param  button  The button to color.
-	 * @param  newColor  The new color of the button.
-	 */
-	private fun setMaterialButtonColor(button: MaterialButton?, newColor: ColorStateList?)
-	{
-		// Do nothing if the button is null
-		if (button == null)
-		{
-			return
-		}
-
-		// Change color if not equal
-		if (!this.compareColorStateList(button.rippleColor, newColor))
-		{
-			button.rippleColor = newColor
-		}
-	}
-
-	/**
-	 * @see .setMaterialButtonColor
-	 */
-	private fun setMaterialButtonColor(button: MaterialButton?)
-	{
-		// Do nothing if the button is null
-		if (button == null)
-		{
-			return
-		}
-
-		// Create the new color
-		val newColor = createBlendedThemeColorStateList()
-
-		// Set the new color
-		this.setMaterialButtonColor(button, newColor)
 	}
 
 	/**
@@ -1583,14 +1219,23 @@ class NacCardHolder(
 	 */
 	private fun setMeridianColor()
 	{
+		// Get the AM and PM strings
+		val am = context.getString(R.string.am)
+		val pm = context.getString(R.string.pm)
+
 		// Get the meridian (AM/PM) of the alarm
-		val meridian = alarm!!.getMeridian(context)
+		val meridian = alarm?.getMeridian(context) ?: ""
 
 		// Get the color based on the meridian
-		val color = getMeridianColor(meridian)
+		val color = when (meridian)
+		{
+			am -> sharedPreferences.amColor
+			pm -> sharedPreferences.pmColor
+			else -> context.resources.getInteger(R.integer.default_color)
+		}
 
 		// Set the color
-		setTextViewColor(meridianView, color)
+		meridianView.setTextColor(color)
 	}
 
 	/**
@@ -1752,59 +1397,6 @@ class NacCardHolder(
 	}
 
 	/**
-	 * Set the color of the switch.
-	 */
-	private fun setSwitchColor()
-	{
-		// Get the IDs of the two states
-		val states = arrayOf(intArrayOf(android.R.attr.state_checked),
-			intArrayOf(-android.R.attr.state_checked))
-
-		// Get the colors of the two states
-		val themeDark = ColorUtils.blendARGB(sharedPreferences.themeColor, Color.BLACK, 0.6f)
-		val thumbColors = intArrayOf(sharedPreferences.themeColor, Color.GRAY)
-		val trackColors = intArrayOf(themeDark, Color.DKGRAY)
-
-		// Create the color state lists
-		val thumbStateList = ColorStateList(states, thumbColors)
-		val trackStateList = ColorStateList(states, trackColors)
-
-		// Set the color
-		this.setSwitchColor(switch, thumbStateList, trackStateList)
-	}
-
-	/**
-	 * Set the thumb and track color of a switch.
-	 *
-	 * @param  switchView  The switch.
-	 * @param  thumbColor  The color of the thumb.
-	 * @param  trackColor  The color of the track.
-	 */
-	private fun setSwitchColor(switchView: SwitchCompat?,
-		thumbColor: ColorStateList?, trackColor: ColorStateList?)
-	{
-		// Check if the view is null
-		if (switchView == null)
-		{
-			return
-		}
-
-		// Check if the current color and the new color are different
-		if (!this.compareColorStateList(switchView.thumbTintList, thumbColor))
-		{
-			// Set the new thumb color
-			switchView.thumbTintList = thumbColor
-		}
-
-		// Check if the current color and the new color are different
-		if (!this.compareColorStateList(switchView.trackTintList, trackColor))
-		{
-			// Set the new track color
-			switchView.trackTintList = trackColor
-		}
-	}
-
-	/**
 	 * Set the switch to its proper setting.
 	 */
 	private fun setSwitchView()
@@ -1817,28 +1409,6 @@ class NacCardHolder(
 		{
 			// Set the new state of the switch
 			switch.isChecked = enabled
-		}
-	}
-
-	/**
-	 * Set the color of a TextView.
-	 *
-	 * @param  textView  The text view to color.
-	 * @param  newColor  The new color of the text view.
-	 */
-	private fun setTextViewColor(textView: TextView?, newColor: Int)
-	{
-		// Check if the view is null
-		if (textView == null)
-		{
-			return
-		}
-
-		// Check if the current color of the textview and the new color are different
-		if (textView.currentTextColor != newColor)
-		{
-			// Set the new color
-			textView.setTextColor(newColor)
 		}
 	}
 
@@ -1956,29 +1526,6 @@ class NacCardHolder(
 	}
 
 	/**
-	 * Set the volume seekbar color.
-	 */
-	private fun setVolumeSeekBarColor()
-	{
-		// Create the new color
-		val newColor = ColorStateList.valueOf(sharedPreferences.themeColor)
-
-		// Progress bar
-		if (!this.compareColorStateList(volumeSeekBar.progressTintList, newColor))
-		{
-			// Set the color
-			volumeSeekBar.progressTintList = newColor
-		}
-
-		// Thumb
-		if (!this.compareColorStateList(volumeSeekBar.thumbTintList, newColor))
-		{
-			// Set the color
-			volumeSeekBar.thumbTintList = newColor
-		}
-	}
-
-	/**
 	 * Setup the alarm options button listener.
 	 */
 	private fun setupAlarmOptionsListener()
@@ -1989,12 +1536,12 @@ class NacCardHolder(
 			// Check if the alarm can be modified
 			if (checkCanModifyAlarm())
 			{
-				// Do the alarm options button click
-				doAlarmOptionsButtonClick()
+				// Call the listener for when the button is clicked
+				onCardAlarmOptionsClickedListener?.onCardAlarmOptionsClicked(this, alarm!!)
 			}
 
 			// Haptic feedback
-			performHapticFeedback(view)
+			view.performHapticFeedback()
 
 		}
 	}
@@ -2080,7 +1627,7 @@ class NacCardHolder(
 				doCardClick()
 
 				// Haptic feedback
-				performHapticFeedback(view)
+				view.performHapticFeedback()
 			}
 
 		}
@@ -2097,8 +1644,26 @@ class NacCardHolder(
 			// Check if the alarm can be modified
 			if (checkCanModifyAlarm())
 			{
-				// Do the button click
-				doDayButtonClick(day)
+				// Reset the skip next alarm flag
+				alarm!!.shouldSkipNextAlarm = false
+
+				// Toggle the day
+				alarm!!.toggleDay(day)
+
+				// Check if no days are selected
+				if (!alarm!!.areDaysSelected)
+				{
+					// Disable repeat
+					alarm!!.repeat = false
+				}
+
+				// Setup the views
+				setRepeatButton()
+				setSummaryDaysView()
+				setSummarySkipNextAlarmIcon()
+
+				// Call the listener
+				callOnCardUpdatedListener()
 			}
 			// Alarm cannot be modified
 			else
@@ -2108,7 +1673,7 @@ class NacCardHolder(
 			}
 
 			// Haptic feedback
-			performHapticFeedback(button)
+			button.performHapticFeedback()
 
 		}
 	}
@@ -2124,12 +1689,12 @@ class NacCardHolder(
 			// Check if the alarm can be deleted
 			if (checkCanDeleteAlarm())
 			{
-				// Do the button click
-				doDeleteButtonClick()
+				// Delete the alarm
+				delete()
 			}
 
 			// Haptic feedback
-			performHapticFeedback(view)
+			view.performHapticFeedback()
 
 		}
 	}
@@ -2137,16 +1702,27 @@ class NacCardHolder(
 	/**
 	 * Setup the dismiss button listener.
 	 */
+	@OptIn(UnstableApi::class)
 	private fun setupDismissButtonListener()
 	{
 		// Set the listener
 		dismissButton.setOnClickListener { view ->
 
-			// Do the button click
-			doDismissButtonClick()
+			// Check if alarm uses NFC
+			if (alarm!!.shouldUseNfc)
+			{
+				// Start the alarm service
+				startAlarmService(context, alarm)
+			}
+			// Alarm does not require NFC to dismiss the alarm
+			else
+			{
+				// Dismiss the alarm service
+				dismissAlarmService(context, alarm)
+			}
 
 			// Haptic feedback
-			performHapticFeedback(view)
+			view.performHapticFeedback()
 
 		}
 	}
@@ -2159,11 +1735,18 @@ class NacCardHolder(
 		// Set the listener
 		dismissEarlyButton.setOnClickListener { view ->
 
-			// Do the button click
-			doDismissEarlyButtonClick()
+			// Dismiss the alarm early
+			alarm!!.dismissEarly()
+
+			// Refresh the extra view
+			refreshExtraView()
+			collapseRefresh()
+
+			// Call the listener
+			callOnCardUpdatedListener()
 
 			// Haptic feedback
-			performHapticFeedback(view)
+			view.performHapticFeedback()
 
 		}
 	}
@@ -2179,8 +1762,17 @@ class NacCardHolder(
 			// Check if the alarm can be modified
 			if (checkCanModifyAlarm())
 			{
-				// Do the button click
-				doFlashlightButtonClick()
+				// Reset the skip next alarm flag
+				alarm!!.shouldSkipNextAlarm = false
+
+				// Toggle the flashlight button
+				alarm!!.toggleUseFlashlight()
+
+				// Setup the skip icon
+				setSummarySkipNextAlarmIcon()
+
+				// Call the listener
+				onCardUseFlashlightChangedListener?.onCardUseFlashlightChanged(this, alarm!!)
 			}
 			// Alarm cannot be modified
 			else
@@ -2191,7 +1783,7 @@ class NacCardHolder(
 			}
 
 			// Haptic feedback
-			performHapticFeedback(view)
+			view.performHapticFeedback()
 
 		}
 	}
@@ -2207,12 +1799,12 @@ class NacCardHolder(
 			// Check if the alarm can be modified
 			if (checkCanModifyAlarm())
 			{
-				// Do the button click
-				doMediaButtonClick()
+				// Call the listener
+				onCardMediaClickedListener?.onCardMediaClicked(this, alarm!!)
 			}
 
 			// Haptic feedback
-			performHapticFeedback(view)
+			view.performHapticFeedback()
 
 		}
 	}
@@ -2228,12 +1820,12 @@ class NacCardHolder(
 			// Check if the alarm can be modified
 			if (checkCanModifyAlarm())
 			{
-				// Do the name click
-				doNameClick()
+				// Show the name dialog
+				showNameDialog()
 			}
 
 			// Haptic feedback
-			performHapticFeedback(view)
+			view.performHapticFeedback()
 
 		}
 	}
@@ -2261,7 +1853,7 @@ class NacCardHolder(
 			}
 
 			// Haptic feedback
-			performHapticFeedback(view)
+			view.performHapticFeedback()
 
 		}
 	}
@@ -2277,8 +1869,30 @@ class NacCardHolder(
 			// Check if the alarm can be modified
 			if (checkCanModifyAlarm())
 			{
-				// Do the button click
-				doRepeatButtonClick()
+				// Reset the skip next alarm flag
+				alarm!!.shouldSkipNextAlarm = false
+
+				// Toggle the repeat button
+				alarm!!.toggleRepeat()
+
+				// Setup the skip icon
+				setSummarySkipNextAlarmIcon()
+
+				// Call the listener
+				callOnCardUpdatedListener()
+
+				// Determine which message to show
+				val messageId = if (alarm!!.shouldRepeat)
+				{
+					R.string.message_repeat_enabled
+				}
+				else
+				{
+					R.string.message_repeat_disabled
+				}
+
+				// Toast the repeat message
+				quickToast(context, messageId)
 			}
 			// Alarm cannot be modified
 			else
@@ -2289,7 +1903,7 @@ class NacCardHolder(
 			}
 
 			// Haptic feedback
-			performHapticFeedback(view)
+			view.performHapticFeedback()
 
 		}
 	}
@@ -2305,8 +1919,23 @@ class NacCardHolder(
 			// Check if the alarm can be modified
 			if (checkCanModifyAlarm())
 			{
-				// Do the button long click
-				doRepeatButtonLongClick()
+				// Reset the skip next alarm flag
+				alarm!!.shouldSkipNextAlarm = false
+
+				// Disable the repeat button
+				alarm!!.repeat = false
+
+				// Clear out the selected days
+				alarm!!.setDays(0)
+
+				// Setup the views
+				setDayOfWeek()
+				setRepeatButton()
+				setSummaryDaysView()
+				setSummarySkipNextAlarmIcon()
+
+				// Call the listener
+				callOnCardUpdatedListener()
 			}
 
 			true
@@ -2331,8 +1960,25 @@ class NacCardHolder(
 			// Check if the alarm can be modified
 			if (checkCanModifyAlarm())
 			{
-				// Do the switch state change
-				doSwitchCheckedChanged(state)
+				// Reset the skip next alarm flag
+				alarm!!.shouldSkipNextAlarm = false
+
+				// Check if alarm was disabled
+				if (!state)
+				{
+					// Reset the snooze counter
+					alarm!!.snoozeCount = 0
+				}
+
+				// Set the alarm enabled state
+				alarm!!.isEnabled = state
+
+				// Setup the views
+				setSummaryDaysView()
+				setSummarySkipNextAlarmIcon()
+
+				// Call the listener
+				callOnCardUpdatedListener()
 
 				// Refresh dismiss buttons and collapse refresh if need be
 				refreshExtraViewWithCollapse()
@@ -2345,7 +1991,7 @@ class NacCardHolder(
 			}
 
 			// Haptic feedback
-			performHapticFeedback(button)
+			button.performHapticFeedback()
 
 		}
 	}
@@ -2361,14 +2007,14 @@ class NacCardHolder(
 			// Check if the alarm can be modified
 			if (checkCanModifyAlarm())
 			{
-				// Do the time click
-				doTimeClick()
+				// Show the time dialog
+				showTimeDialog()
 			}
 			// Unable to modify the alarm
 			else
 			{
 				// Haptic feedback
-				performHapticFeedback(view)
+				view.performHapticFeedback()
 			}
 
 		}
@@ -2385,8 +2031,17 @@ class NacCardHolder(
 			// Check if the alarm can be modified
 			if (checkCanModifyAlarm())
 			{
-				// Do the button click
-				doVibrateButtonClick()
+				// Reset the skip next alarm flag
+				alarm!!.shouldSkipNextAlarm = false
+
+				// Toggle the vibrate button
+				alarm!!.toggleVibrate()
+
+				// Setup the skip icon
+				setSummarySkipNextAlarmIcon()
+
+				// Call the listener
+				onCardUseVibrateChangedListener?.onCardUseVibrateChanged(this, alarm!!)
 			}
 			// Unable to modify the alarm
 			else
@@ -2397,7 +2052,7 @@ class NacCardHolder(
 			}
 
 			// Haptic feedback
-			performHapticFeedback(view)
+			view.performHapticFeedback()
 
 		}
 	}

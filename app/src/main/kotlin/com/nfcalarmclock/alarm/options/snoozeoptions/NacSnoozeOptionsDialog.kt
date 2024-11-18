@@ -71,8 +71,8 @@ class NacSnoozeOptionsDialog
 		val alarm = NacBundle.getAlarm(arguments)
 
 		// Get the ok and cancel buttons
-		val okButton = dialog!!.findViewById(R.id.ok_button) as MaterialButton
-		val cancelButton = dialog!!.findViewById(R.id.cancel_button) as MaterialButton
+		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
+		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
 
 		// Get the default values
 		val defaultAutoSnoozeTime = alarm?.autoSnoozeTime ?: 0
@@ -116,8 +116,8 @@ class NacSnoozeOptionsDialog
 	private fun setupAutoSnooze(default: Int)
 	{
 		// Get the views
-		val inputLayout = dialog!!.findViewById(R.id.auto_snooze_input_layout) as TextInputLayout
-		val autoCompleteTextView = dialog!!.findViewById(R.id.auto_snooze_dropdown_menu) as MaterialAutoCompleteTextView
+		val inputLayout: TextInputLayout = dialog!!.findViewById(R.id.auto_snooze_input_layout)
+		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.auto_snooze_dropdown_menu)
 
 		// Setup the input layout
 		inputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
@@ -138,8 +138,8 @@ class NacSnoozeOptionsDialog
 	private fun setupMaxSnooze(default: Int)
 	{
 		// Get the views
-		val inputLayout = dialog!!.findViewById(R.id.max_snooze_input_layout) as TextInputLayout
-		val autoCompleteTextView = dialog!!.findViewById(R.id.max_snooze_dropdown_menu) as MaterialAutoCompleteTextView
+		val inputLayout: TextInputLayout = dialog!!.findViewById(R.id.max_snooze_input_layout)
+		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.max_snooze_dropdown_menu)
 
 		// Setup the input layouts
 		inputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
@@ -160,8 +160,8 @@ class NacSnoozeOptionsDialog
 	private fun setupSnoozeDuration(default: Int)
 	{
 		// Get the views
-		val inputLayout = dialog!!.findViewById(R.id.snooze_duration_input_layout) as TextInputLayout
-		val autoCompleteTextView = dialog!!.findViewById(R.id.snooze_duration_dropdown_menu) as MaterialAutoCompleteTextView
+		val inputLayout: TextInputLayout = dialog!!.findViewById(R.id.snooze_duration_input_layout)
+		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.snooze_duration_dropdown_menu)
 
 		// Setup the input layouts
 		inputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
@@ -202,9 +202,9 @@ class NacSnoozeOptionsDialog
 	private fun setupEasySnooze(default: Boolean)
 	{
 		// Get the views
-		val relativeLayout = dialog!!.findViewById(R.id.should_easy_snooze) as RelativeLayout
-		val description = dialog!!.findViewById(R.id.should_easy_snooze_summary) as TextView
-		easySnoozeCheckBox = dialog!!.findViewById(R.id.should_easy_snooze_checkbox) as MaterialCheckBox
+		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.should_easy_snooze)
+		val description: TextView = dialog!!.findViewById(R.id.should_easy_snooze_summary)
+		easySnoozeCheckBox = dialog!!.findViewById<MaterialCheckBox>(R.id.should_easy_snooze_checkbox)!!
 
 		// Set the default checkbox value
 		easySnoozeCheckBox.isChecked = default

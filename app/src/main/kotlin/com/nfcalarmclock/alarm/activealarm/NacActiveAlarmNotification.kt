@@ -8,8 +8,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.text.format.DateFormat
+import androidx.annotation.OptIn
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.nfc.NacNfc
@@ -128,6 +130,7 @@ class NacActiveAlarmNotification(
 	 * The pending intent to use when dismissing the alarm.
 	 */
 	private val dismissPendingIntent: PendingIntent
+		@OptIn(UnstableApi::class)
 		get()
 		{
 			// Create an intent to dismiss the active alarm service
@@ -150,6 +153,7 @@ class NacActiveAlarmNotification(
 	 * The pending intent to use when snoozing.
 	 */
 	private val snoozePendingIntent: PendingIntent
+		@OptIn(UnstableApi::class)
 		get()
 		{
 			val intent = NacActiveAlarmService.getSnoozeIntent(context, alarm)

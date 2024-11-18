@@ -87,8 +87,8 @@ class NacTextToSpeechDialog
 		val alarm = NacBundle.getAlarm(arguments)
 
 		// Get the views
-		val okButton = dialog!!.findViewById(R.id.ok_button) as MaterialButton
-		val cancelButton = dialog!!.findViewById(R.id.cancel_button) as MaterialButton
+		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
+		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
 
 		// Get the default values
 		val defaultSayCurrentTime = alarm?.sayCurrentTime ?: false
@@ -176,7 +176,7 @@ class NacTextToSpeechDialog
 		// Set the member variables
 		ttsFreqDescription = dialog!!.findViewById(R.id.title_tts_how_often_to_say)
 		ttsFreqInputLayout = dialog!!.findViewById(R.id.tts_frequency_input_layout)
-		val autoCompleteTextView = dialog!!.findViewById(R.id.tts_frequency_dropdown_menu) as MaterialAutoCompleteTextView
+		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.tts_frequency_dropdown_menu)
 
 		// Setup the input layout
 		ttsFreqInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)

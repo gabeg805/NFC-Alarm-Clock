@@ -51,8 +51,8 @@ class NacRestrictVolumeDialog
 		val alarm = NacBundle.getAlarm(arguments)
 
 		// Get the views
-		val okButton = dialog!!.findViewById(R.id.ok_button) as MaterialButton
-		val cancelButton = dialog!!.findViewById(R.id.cancel_button) as MaterialButton
+		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
+		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
 
 		// Get the default value
 		val defaultRestrictVolume= alarm?.shouldRestrictVolume ?: false
@@ -84,9 +84,9 @@ class NacRestrictVolumeDialog
 	private fun setupShouldRestrictVolume(default: Boolean)
 	{
 		// Get the views
-		val relativeLayout = dialog!!.findViewById(R.id.should_restrict_volume) as RelativeLayout
-		val description = dialog!!.findViewById(R.id.should_restrict_volume_summary) as TextView
-		checkBox = dialog!!.findViewById(R.id.should_restrict_volume_checkbox) as MaterialCheckBox
+		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.should_restrict_volume)
+		val description: TextView = dialog!!.findViewById(R.id.should_restrict_volume_summary)
+		checkBox = dialog!!.findViewById<MaterialCheckBox>(R.id.should_restrict_volume_checkbox)!!
 
 		// Set the default value
 		checkBox.isChecked = default

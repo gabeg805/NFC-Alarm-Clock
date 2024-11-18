@@ -323,9 +323,13 @@
 	</string-array>
 
 	<string-array name="whats_new_items">
-		<item>Se agregó la opción &lt;b>omitir la siguiente alarma&lt;/b>. Se puede acceder a ella manteniendo presionada una alarma.</item>
+		<item>Se agregó la opción &lt;b>omitir siguiente alarma&lt;/b>. Se encuentra al &lt;b>mantener presionada&lt;/b> una alarma.</item>
+		<item>Se agregó la opción &lt;b>eliminar después de descartar&lt;/b> para eliminar automáticamente una alarma después de descartarla. Se encuentra en &lt;b>Opciones de descartar&lt;/b>.</item>
+		<item>Se agregó la opción &lt;b>importar/exportar&lt;/b>. Se encuentra en &lt;b>Configuración&lt;/b>.</item>
 		<item>Se solucionó el fallo que se producía cuando había un signo &lt;b>%&lt;/b> en el nombre de la alarma.</item>
 		<item>Se agregó traducción de idioma para &lt;b>alemán&lt;/b>.</item>
+		<item>Se actualizó la forma en que &lt;b>text-to-speech&lt;/b> dice la hora y qué tan rápido habla.</item>
+		<item>Gracias a &lt;b>Aristeo Montoya&lt;/b> por ayudarme a mejorar la traducción al &lt;b>español&lt;/b>.</item>
 		<item>Las notificaciones de recordatorio se eliminarán cuando suene una alarma.</item>
 	</string-array>
 

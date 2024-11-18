@@ -13,11 +13,13 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
+import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.util.UnstableApi
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -598,6 +600,7 @@ class NacMainActivity
 	/**
 	 * Called when the activity is resumed.
 	 */
+	@OptIn(UnstableApi::class)
 	override fun onResume()
 	{
 		// Super
@@ -694,6 +697,7 @@ class NacMainActivity
 	/**
 	 * Needed for NacAlarmCardAdapter.OnViewHolderCreatedListener.
 	 */
+	@OptIn(UnstableApi::class)
 	override fun onViewHolderCreated(holder: NacCardHolder)
 	{
 		// Collapsed listener

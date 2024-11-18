@@ -29,6 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint
 /**
  * Media activity.
  */
+@UnstableApi
 @AndroidEntryPoint
 class NacMediaPickerActivity
 

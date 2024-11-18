@@ -201,7 +201,8 @@ object NacCalendar
 	 */
 	fun getFirstAlarmUpcomingReminder(alarm: NacAlarm, cal: Calendar): Calendar
 	{
-		// Copy the calendar
+		// Get the current calendar and a copy of the calendar passed in
+		val nowCal = Calendar.getInstance()
 		val calCopy = cal.clone() as Calendar
 
 		// Compute the number of minutes to subtract to show the upcoming
@@ -211,7 +212,23 @@ object NacCalendar
 		// Subtract the number of minutes from when the alarm will run
 		calCopy.add(Calendar.MINUTE, minutes)
 
-		return calCopy
+		// Check if the calendar corresponds to a time after right now. It needs to be
+		// after right now so that the reminder is shown
+		if (calCopy.after(nowCal))
+		{
+			return calCopy
+		}
+		// Reminder will not be shown because the time has already passed, so need to
+		// change the calendar that will be returned
+		else
+		{
+			// Round up to the nearest minute and then add a minute
+			nowCal.add(Calendar.MINUTE, 1)
+			nowCal.add(Calendar.SECOND, 30)
+			nowCal.set(Calendar.SECOND, 0)
+
+			return nowCal
+		}
 	}
 
 	/**

@@ -89,6 +89,7 @@
 				<!-- Skip next alarm -->
 				<ImageView
 					android:id="@+id/nac_skip_next_alarm"
+					android:contentDescription="@string/cd_skip_next_alarm"
 					android:layout_width="@dimen/isz_small"
 					android:layout_height="@dimen/isz_small"
 					android:layout_marginStart="@dimen/nudge"
@@ -101,6 +102,7 @@
 				<!-- Delete alarm after dismissed -->
 				<ImageView
 					android:id="@+id/nac_delete_alarm_after_dismissed"
+					android:contentDescription="@string/cd_delete_alarm_after_dismiss"
 					android:layout_width="@dimen/isz_xsmall"
 					android:layout_height="@dimen/isz_xsmall"
 					android:layout_marginStart="@dimen/nudge"
@@ -170,7 +172,7 @@
 				android:layout_height="wrap_content"
 				android:orientation="horizontal"
 				android:gravity="center_vertical"
-				android:alpha="0.8">
+				android:visibility="gone">
 
 				<!-- Dismiss snoozed alarm -->
 				<com.google.android.material.button.MaterialButton
@@ -181,6 +183,7 @@
 					android:minWidth="@dimen/zero"
 					android:minHeight="@dimen/zero"
 					android:layout_marginStart="@dimen/nudge"
+					android:alpha="0.8"
 					android:textSize="@dimen/tsz_small"
 					android:text="@string/action_alarm_dismiss"
 					android:visibility="visible"
@@ -197,26 +200,12 @@
 					android:minWidth="@dimen/zero"
 					android:minHeight="@dimen/zero"
 					android:layout_marginStart="@dimen/nudge"
+					android:alpha="0.8"
 					android:textSize="@dimen/tsz_small"
 					android:text="@string/action_alarm_dismiss_early"
 					android:visibility="gone"
 					app:iconSize="@dimen/medium"
 					app:icon="@drawable/dismiss"
-					/>
-
-				<!-- Skipping next alarm -->
-				<TextView
-					style="@style/Widget.Button.Text.Row"
-					android:id="@+id/nac_skipping_next_alarm"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:minWidth="@dimen/zero"
-					android:minHeight="@dimen/zero"
-					android:layout_marginStart="@dimen/nudge"
-					android:textSize="@dimen/tsz_small"
-					android:textStyle="italic"
-					android:text="@string/action_skipping_next_alarm"
-					android:visibility="gone"
 					/>
 
 				<Space

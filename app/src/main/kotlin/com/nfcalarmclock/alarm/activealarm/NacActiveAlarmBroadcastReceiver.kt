@@ -3,6 +3,8 @@ package com.nfcalarmclock.alarm.activealarm
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import androidx.annotation.OptIn
+import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.util.NacIntent
 
 /**
@@ -18,6 +20,7 @@ class NacActiveAlarmBroadcastReceiver
 	 * Ensure that the received Intent's action string matches the expected
 	 * value before restoring alarms.
 	 */
+	@OptIn(UnstableApi::class)
 	override fun onReceive(context: Context, intent: Intent)
 	{
 		// Get the alarm

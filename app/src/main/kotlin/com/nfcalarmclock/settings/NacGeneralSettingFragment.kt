@@ -7,6 +7,8 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.OptIn
+import androidx.media3.common.util.UnstableApi
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
@@ -225,6 +227,7 @@ class NacGeneralSettingFragment
 	/**
 	 * Setup the media preference.
 	 */
+	@OptIn(UnstableApi::class)
 	private fun setupMediaPreference()
 	{
 		// Get the preference

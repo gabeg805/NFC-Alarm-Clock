@@ -79,8 +79,8 @@ class NacGraduallyIncreaseVolumeDialog
 		val alarm = NacBundle.getAlarm(arguments)
 
 		// Get the ok and cancel buttons
-		val okButton = dialog!!.findViewById(R.id.ok_button) as MaterialButton
-		val cancelButton = dialog!!.findViewById(R.id.cancel_button) as MaterialButton
+		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
+		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
 
 		// Get the default values
 		val defaultShouldGraduallyIncreaseVolume = alarm?.shouldGraduallyIncreaseVolume ?: false
@@ -137,9 +137,9 @@ class NacGraduallyIncreaseVolumeDialog
 	private fun setupShouldGraduallyIncreaseVolume(default: Boolean)
 	{
 		// Get the views
-		val relativeLayout = dialog!!.findViewById(R.id.should_gradually_increase_volume) as RelativeLayout
-		val description = dialog!!.findViewById(R.id.should_gradually_increase_volume_summary) as TextView
-		checkBox = dialog!!.findViewById(R.id.should_gradually_increase_volume_checkbox) as MaterialCheckBox
+		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.should_gradually_increase_volume)
+		val description: TextView = dialog!!.findViewById(R.id.should_gradually_increase_volume_summary)
+		checkBox = dialog!!.findViewById<MaterialCheckBox>(R.id.should_gradually_increase_volume_checkbox)!!
 
 		// Set the status of the checkbox
 		checkBox.isChecked = default
@@ -187,7 +187,7 @@ class NacGraduallyIncreaseVolumeDialog
 		// Get the views
 		waitTimeQuestion = dialog!!.findViewById(R.id.title_gradually_increase_volume_wait_time)
 		waitTimeInputLayout = dialog!!.findViewById(R.id.gradually_increase_volume_input_layout)
-		val autoCompleteTextView = dialog!!.findViewById(R.id.gradually_increase_volume_dropdown_menu) as MaterialAutoCompleteTextView
+		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.gradually_increase_volume_dropdown_menu)
 
 		// Setup the input layout
 		waitTimeInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)

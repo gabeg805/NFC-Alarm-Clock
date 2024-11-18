@@ -79,10 +79,10 @@ class NacSaveNfcTagDialog
 		super.onViewCreated(view, savedInstanceState)
 
 		// Get the views
-		val inputLayout = view.findViewById(R.id.nfc_tag_input_layout) as TextInputLayout
-		val editText = view.findViewById(R.id.nfc_tag_name) as TextInputEditText
-		val saveButton = view.findViewById(R.id.save_nfc_tag) as MaterialButton
-		val skipButton = view.findViewById(R.id.skip_nfc_tag) as MaterialButton
+		val inputLayout: TextInputLayout = view.findViewById(R.id.nfc_tag_input_layout)
+		val editText: TextInputEditText = view.findViewById(R.id.nfc_tag_name)
+		val saveButton: MaterialButton = view.findViewById(R.id.save_nfc_tag)
+		val skipButton: MaterialButton = view.findViewById(R.id.skip_nfc_tag)
 
 		// Setup the input layout
 		inputLayout.hintTextColor = ColorStateList.valueOf(sharedPreferences.themeColor)

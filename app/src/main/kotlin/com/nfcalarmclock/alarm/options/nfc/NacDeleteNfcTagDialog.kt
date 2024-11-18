@@ -49,8 +49,8 @@ class NacDeleteNfcTagDialog
 		super.onViewCreated(view, savedInstanceState)
 
 		// Get the views
-		val deleteButton = view.findViewById(R.id.delete_nfc_tag) as MaterialButton
-		val cancelButton = view.findViewById(R.id.cancel_nfc_tag) as MaterialButton
+		val deleteButton: MaterialButton = view.findViewById(R.id.delete_nfc_tag)
+		val cancelButton: MaterialButton = view.findViewById(R.id.cancel_nfc_tag)
 
 		// Setup the delete button
 		setupPrimaryButton(deleteButton, listener = {

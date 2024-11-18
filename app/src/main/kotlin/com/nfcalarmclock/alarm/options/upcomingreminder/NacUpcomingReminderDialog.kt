@@ -109,8 +109,8 @@ class NacUpcomingReminderDialog
 		val alarm = NacBundle.getAlarm(arguments)
 
 		// Get the ok and cancel buttons
-		val okButton = dialog!!.findViewById(R.id.ok_button) as MaterialButton
-		val cancelButton = dialog!!.findViewById(R.id.cancel_button) as MaterialButton
+		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
+		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
 		useTtsRelativeLayout = dialog!!.findViewById(R.id.should_use_tts_with_reminder)
 		useTtsQuestion = dialog!!.findViewById(R.id.title_should_use_tts_with_reminder)
 
@@ -160,7 +160,7 @@ class NacUpcomingReminderDialog
 		// Get the views
 		howEarlyQuestion = dialog!!.findViewById(R.id.title_how_early_to_show_reminder)
 		howEarlyInputLayout = dialog!!.findViewById(R.id.how_early_to_show_reminder_input_layout)
-		val autoCompleteTextView = dialog!!.findViewById(R.id.how_early_to_show_reminder_dropdown_menu) as MaterialAutoCompleteTextView
+		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.how_early_to_show_reminder_dropdown_menu)
 
 		// Setup the input layout
 		howEarlyInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
@@ -196,7 +196,7 @@ class NacUpcomingReminderDialog
 		// Get the views
 		howFreqQuestion = dialog!!.findViewById(R.id.title_how_freq_to_show_reminder)
 		howFreqInputLayout = dialog!!.findViewById(R.id.how_freq_to_show_reminder_input_layout)
-		val autoCompleteTextView = dialog!!.findViewById(R.id.how_freq_to_show_reminder_dropdown_menu) as MaterialAutoCompleteTextView
+		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.how_freq_to_show_reminder_dropdown_menu)
 
 		// Setup the input layout
 		howFreqInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
@@ -229,8 +229,8 @@ class NacUpcomingReminderDialog
 	private fun setupShouldShowReminder(default: Boolean)
 	{
 		// Get the views
-		val relativeLayout = dialog!!.findViewById(R.id.should_show_reminder) as RelativeLayout
-		val textView = dialog!!.findViewById(R.id.should_show_reminder_summary) as TextView
+		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.should_show_reminder)
+		val textView: TextView = dialog!!.findViewById(R.id.should_show_reminder_summary)
 		showReminderCheckBox = dialog!!.findViewById(R.id.should_show_reminder_checkbox)
 
 		// Set the status of the checkbox
@@ -284,8 +284,8 @@ class NacUpcomingReminderDialog
 	private fun setupShouldUseTts(default: Boolean)
 	{
 		// Get the views
-		val relativeLayout = dialog!!.findViewById(R.id.should_use_tts_with_reminder) as RelativeLayout
-		val textView = dialog!!.findViewById(R.id.should_use_tts_with_reminder_summary) as TextView
+		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.should_use_tts_with_reminder)
+		val textView: TextView = dialog!!.findViewById(R.id.should_use_tts_with_reminder_summary)
 		useTtsCheckBox = dialog!!.findViewById(R.id.should_use_tts_with_reminder_checkbox)
 
 		// Set the status of the checkbox

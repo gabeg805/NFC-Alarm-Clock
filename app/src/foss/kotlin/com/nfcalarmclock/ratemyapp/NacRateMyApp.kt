@@ -31,7 +31,7 @@ object NacRateMyApp
 	 *
 	 * This does nothing on the FOSS version.
 	 */
-	@Suppress("unused_parameter")
+	@Suppress("unused_parameter", "EmptyMethod")
 	fun request(activity:AppCompatActivity, shared: NacSharedPreferences)
 	{
 	}

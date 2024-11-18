@@ -2,14 +2,13 @@ package com.nfcalarmclock.view
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.content.res.Resources
 import android.graphics.Color
+import android.view.HapticFeedbackConstants
 import android.view.View
-import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.RadioGroup
-import android.widget.ScrollView
+import android.widget.SeekBar
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import com.google.android.material.button.MaterialButton
@@ -18,6 +17,29 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
+
+/**
+ * Get the text of the selected radio button.
+ */
+fun RadioGroup.getCheckedText(): String
+{
+	// Get the view ID of the currently selected radio button
+	val viewId = this.checkedRadioButtonId
+
+	// Get the radio button
+	val radioButton: RadioButton = this.findViewById(viewId)
+
+	// Get the text of the radio button
+	return radioButton.text.toString()
+}
+
+/**
+ * Perform haptic feedback for the View.
+ */
+fun View.performHapticFeedback()
+{
+	this.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+}
 
 /**
  * Set the text of from an index.
@@ -29,6 +51,42 @@ fun MaterialAutoCompleteTextView.setTextFromIndex(index: Int)
 
 	// Set the text
 	this.setText(text, false)
+}
+
+/**
+ * Setup the background color of a view.
+ */
+fun View.setupBackgroundColor(sharedPreferences: NacSharedPreferences)
+{
+	this.backgroundTintList = ColorStateList.valueOf(sharedPreferences.themeColor)
+}
+
+/**
+ * Setup the color of a check box.
+ */
+fun MaterialCheckBox.setupCheckBoxColor(sharedPreferences: NacSharedPreferences)
+{
+	// Get the colors for the boolean states
+	val colors = intArrayOf(sharedPreferences.themeColor, Color.GRAY)
+
+	// Get the IDs of the two states
+	val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
+
+	// Set the state list of the checkbox
+	this.buttonTintList = ColorStateList(states, colors)
+}
+
+/**
+ * Setup the progress and thumb color of a SeekBar.
+ */
+fun SeekBar.setupProgressAndThumbColor(sharedPreferences: NacSharedPreferences)
+{
+	// Get the theme color
+	val color = ColorStateList.valueOf(sharedPreferences.themeColor)
+
+	// Set the color
+	this.progressTintList = color
+	this.thumbTintList = color
 }
 
 /**
@@ -46,39 +104,33 @@ fun MaterialButton.setupRippleColor(sharedPreferences: NacSharedPreferences, the
 /**
  * Setup the stroke color of a MaterialButton.
  */
-fun MaterialButton.setupStrokeColor(sharedPreferences: NacSharedPreferences)
-{
-	this.strokeColor = ColorStateList.valueOf(sharedPreferences.themeColor)
-}
+//fun MaterialButton.setupStrokeColor(sharedPreferences: NacSharedPreferences)
+//{
+//	this.strokeColor = ColorStateList.valueOf(sharedPreferences.themeColor)
+//}
 
 /**
- * Setup the color of the check box.
+ * Setup the color of a switch.
  */
-fun MaterialCheckBox.setupCheckBoxColor(sharedPreferences: NacSharedPreferences)
+fun SwitchCompat.setupSwitchColor(sharedPreferences: NacSharedPreferences)
 {
-	// Get the colors for the boolean states
-	val colors = intArrayOf(sharedPreferences.themeColor, Color.GRAY)
+	// Get the colors of the two states
+	val themeDark = ColorUtils.blendARGB(sharedPreferences.themeColor, Color.BLACK, 0.6f)
+	val thumbColors = intArrayOf(sharedPreferences.themeColor, Color.GRAY)
+	val trackColors = intArrayOf(themeDark, Color.DKGRAY)
 
 	// Get the IDs of the two states
 	val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
 
-	// Set the state list of the checkbox
-	this.buttonTintList = ColorStateList(states, colors)
-}
+	// Create the color state lists
+	val thumbStateList = ColorStateList(states, thumbColors)
+	val trackStateList = ColorStateList(states, trackColors)
 
-/**
- * Get the text of the selected radio button.
- */
-fun RadioGroup.getCheckedText(): String
-{
-	// Get the view ID of the currently selected radio button
-	val viewId = this.checkedRadioButtonId
+	// Set the new thumb color
+	this.thumbTintList = thumbStateList
 
-	// Get the radio button
-	val radioButton = this.findViewById(viewId) as RadioButton
-
-	// Get the text of the radio button
-	return radioButton.text.toString()
+	// Set the new track color
+	this.trackTintList = trackStateList
 }
 
 /**
@@ -95,23 +147,15 @@ fun TextInputLayout.setupInputLayoutColor(
 }
 
 /**
- * Setup the background color of a view.
- */
-fun View.setupBackgroundColor(sharedPreferences: NacSharedPreferences)
-{
-	this.backgroundTintList = ColorStateList.valueOf(sharedPreferences.themeColor)
-}
-
-/**
  * Setup the height of the scroll view, with respect to the full height of the screen.
  *
  */
-fun ScrollView.setupHeight(resources: Resources, ratio: Float)
-{
-	// Set the height of the scroll view
-	val height = resources.displayMetrics.heightPixels * ratio
-	val layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height.toInt())
-
-	// Update the layout parameters
-	this.layoutParams = layoutParams
-}
+//fun ScrollView.setupHeight(resources: Resources, ratio: Float)
+//{
+//	// Set the height of the scroll view
+//	val height = resources.displayMetrics.heightPixels * ratio
+//	val layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height.toInt())
+//
+//	// Update the layout parameters
+//	this.layoutParams = layoutParams
+//}

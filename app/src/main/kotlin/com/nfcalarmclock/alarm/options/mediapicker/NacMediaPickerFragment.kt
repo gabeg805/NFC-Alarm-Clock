@@ -21,6 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 /**
  * Media fragment for ringtones and music files.
  */
+@UnstableApi
 @AndroidEntryPoint
 open class NacMediaPickerFragment
 	: Fragment()

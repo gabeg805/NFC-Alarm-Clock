@@ -61,6 +61,8 @@
 	<string name="action_skipping_next_alarm">Saltar la siguiente alarma</string>
 	<string name="action_skip_next_alarm">Saltar la siguiente alarma</string>
 	<string name="action_unskip_next_alarm">Dejar de omitir la siguiente alarma</string>
+	<string name="action_export">Exportar</string>
+	<string name="action_import">Importar</string>
 
 
 
@@ -122,6 +124,8 @@
 	<string name="message_will_run_in_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; se activará en %2$s.</string>
 	<string name="message_next_alarm_on">Próxima alarma el %1$s</string>
 	<string name="message_next_alarm_in">Próxima alarma en %1$s</string>
+	<string name="message_export_completed">Exportación completada</string>
+	<string name="message_import_completed">Importación completada</string>
 
 
 
@@ -144,6 +148,8 @@
 	<string name="error_message_unable_to_email_statistics">No se pueden enviar estadísticas por correo electrónico</string>
 	<string name="error_message_unable_to_shine_flashlight">No se puede encender la linterna</string>
 	<string name="error_message_unable_to_start_foreground_service">No se puede iniciar el servicio en primer plano. Habilite el permiso</string>
+	<string name="error_message_import_export_uri_null">No se puede obtener la URI</string>
+	<string name="error_message_unable_to_open_import_export_stream">No se puede abrir el archivo</string>
 
 
 
@@ -166,6 +172,7 @@
 	<string name="title_color">Elige un color</string>
 	<string name="title_dismiss_early_checkbox" tools:ignore="TypographyEllipsis">Descartar la alarma temprano, antes de que se active...</string>
 	<string name="title_dismiss_early_how_early" tools:ignore="TypographyEllipsis">¿Con qué antelación se puede desactivar la alarma...?</string>
+	<string name="title_delete_alarm_after_dismissed_checkbox" tools:ignore="TypographyEllipsis">Eliminar la alarma después de descartarla...</string>
 	<string name="title_upcoming_reminder_should_show" tools:ignore="TypographyEllipsis">Mostrar una notificación de recordatorio antes de que suene la alarma...</string>
 	<string name="title_upcoming_reminder_time_to_show" tools:ignore="TypographyEllipsis">¿Con qué antelación se debe mostrar la notificación...?</string>
 	<string name="title_upcoming_reminder_freq_to_show" tools:ignore="TypographyEllipsis">¿Con qué frecuencia se debe mostrar...?</string>
@@ -243,6 +250,8 @@
 	<string name="cd_dismiss_alarm">Descartar la alarma.</string>
 	<string name="cd_snooze_alarm">Posponer la alarma.</string>
 	<string name="cd_current_alarm_media_playing">El medio de alarma actual que se está reproduciendo.</string>
+	<string name="cd_skip_next_alarm">Saltar la siguiente alarma.</string>
+	<string name="cd_delete_alarm_after_dismiss">Eliminar la alarma después de descartarla.</string>
 
 
 
@@ -267,6 +276,9 @@
 
 	<string name="support_setting">Apoyar el desarrollo</string>
 	<string name="support_setting_summary">Se agradecería mucho el apoyo, ¡pero no hay presión! Esta aplicación siempre será gratis</string>
+
+	<string name="import_export_setting">Importación y exportación</string>
+	<string name="import_export_setting_summary">Importa o exporta todos tus datos guardados</string>
 
 
 
@@ -428,26 +440,17 @@
 	<string name="next_alarm_format_time_in">Próxima alarma en 7 horas 30 minutos</string>
 	<string name="next_alarm_format_time_on">Próxima alarma Lun 7:00 AM</string>
 
-	<!-- ********************** -->
-	<!-- Miscellaneous settings -->
-	<!-- ********************** -->
-
-	<!-- Categories -->
-
-
-	<!-- Shuffle playlist -->
-
-
-	<!-- Speak to me -->
-
-
-	<!-- Speak frequency -->
-
+	<!-- ************** -->
+	<!-- Alarm settings -->
+	<!-- ************** -->
 
 	<!-- Dismiss early -->
 	<string name="dismiss_early_true">Sí, puede descartar la alarma antes de tiempo.</string>
 	<string name="dismiss_early_false">No, la alarma no se puede desactivar antes de tiempo.</string>
 
+	<!-- Delete alarm after dismissed -->
+	<string name="delete_alarm_after_dismissed_true">Sí, elimine la alarma después de descartarla.</string>
+	<string name="delete_alarm_after_dismissed_false">No, no elimine la alarma después de descartarla.</string>
 
 	<!-- Upcoming reminder -->
 	<string name="upcoming_reminder_true">Sí, mostrar una notificación.</string>
@@ -455,16 +458,13 @@
 	<string name="upcoming_reminder_use_tts_true">Sí, utiliza las mismas opciones de texto-a-voz que la alarma.\n\nNota: Si la opción está desactivada para la alarma, esto no hará nada.</string>
 	<string name="upcoming_reminder_use_tts_false">No, no utilice ningún texto-a-voz.</string>
 
-
 	<!-- Restrict volume -->
 	<string name="restrict_volume_true">Sí, el volumen estará restringido y no se podrá cambiar.</string>
 	<string name="restrict_volume_false">No, el volumen se puede cambiar libremente.</string>
 
-
 	<!-- Gradually increase volume -->
 	<string name="gradually_increase_volume_true">Sí, el volumen aumentará gradualmente hasta alcanzar el volumen de la alarma.</string>
 	<string name="gradually_increase_volume_false">No, el volumen se ajustará al volumen de la alarma.</string>
-
 
 	<!-- Flashlight blink -->
 	<string name="flashlight_blink_true">Sí, haz parpadear la linterna.</string>
@@ -590,17 +590,7 @@
 		<item quantity="other">segundos</item>
 	</plurals>
 
-	<plurals name="tts_say_time_12h">
-		<item quantity="one">Es, la, %1$d, %2$s, %3$s.</item>
-		<item quantity="many">Son, las, %1$d, %2$s, %3$s.</item>
-		<item quantity="other">Son, las, %1$d, %2$s, %3$s.</item>
-	</plurals>
-
-	<plurals name="tts_say_time_24h">
-		<item quantity="one">Es, la hora, %1$d, con, %2$d, minuto.</item>
-		<item quantity="many">Es, la hora, %1$d, con, %2$d, minutos.</item>
-		<item quantity="other">Es, la hora, %1$d, con, %2$d, minutos.</item>
-	</plurals>
+	<string name="tts_say_time">La hora es %1$s:%2$s %3$s.</string>
 
 	<plurals name="tts_say_reminder">
 		<item quantity="one">Recordatorio. %1$s, sonará en, %2$d, minuto.</item>

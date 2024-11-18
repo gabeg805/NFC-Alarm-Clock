@@ -87,9 +87,9 @@ class NacSelectNfcTagDialog
 		super.onViewCreated(view, savedInstanceState)
 
 		// Get the views
-		val inputLayout = view.findViewById(R.id.nfc_tag_input_layout) as TextInputLayout
-		val textView = view.findViewById(R.id.nfc_tag_dropdown_menu) as MaterialAutoCompleteTextView
-		val doneButton = view.findViewById(R.id.select_nfc_tag) as MaterialButton
+		val inputLayout: TextInputLayout = view.findViewById(R.id.nfc_tag_input_layout)
+		val textView: MaterialAutoCompleteTextView = view.findViewById(R.id.nfc_tag_dropdown_menu)
+		val doneButton: MaterialButton = view.findViewById(R.id.select_nfc_tag)
 
 		// Setup the color of the input layout
 		inputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)

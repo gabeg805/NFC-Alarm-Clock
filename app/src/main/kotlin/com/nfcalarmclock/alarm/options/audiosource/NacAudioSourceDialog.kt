@@ -47,9 +47,9 @@ class NacAudioSourceDialog
 		val alarm = NacBundle.getAlarm(arguments)
 
 		// Get the views
-		val radioGroup = dialog!!.findViewById(R.id.audio_sources) as RadioGroup
-		val okButton = dialog!!.findViewById(R.id.ok_button) as MaterialButton
-		val cancelButton = dialog!!.findViewById(R.id.cancel_button) as MaterialButton
+		val radioGroup: RadioGroup = dialog!!.findViewById(R.id.audio_sources)
+		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
+		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
 
 		// Get the default values
 		val default = alarm?.audioSource ?: ""

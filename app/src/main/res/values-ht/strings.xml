@@ -61,6 +61,8 @@
 	<string name="action_skipping_next_alarm">Sote pwochen alam</string>
 	<string name="action_skip_next_alarm">Sote pwochen alam</string>
 	<string name="action_unskip_next_alarm">Retire alam kap vini an</string>
+	<string name="action_export">Ekspòtasyon</string>
+	<string name="action_import">Enpòte</string>
 
 
 
@@ -122,6 +124,8 @@
 	<string name="message_will_run_in_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; ap kouri nan %2$s.</string>
 	<string name="message_next_alarm_on">Pwochen alam nan %1$s</string>
 	<string name="message_next_alarm_in">Pwochen alam nan %1$s</string>
+	<string name="message_export_completed">Ekspòtasyon fini</string>
+	<string name="message_import_completed">Enpòte fini</string>
 
 
 
@@ -144,6 +148,8 @@
 	<string name="error_message_unable_to_email_statistics">Pa kapab voye imèl estatistik</string>
 	<string name="error_message_unable_to_shine_flashlight">Pa kapab klere flach</string>
 	<string name="error_message_unable_to_start_foreground_service">Pa kapab kòmanse sèvis premye plan. Tanpri pèmèt pèmisyon</string>
+	<string name="error_message_import_export_uri_null">Pa kapab jwenn URI</string>
+	<string name="error_message_unable_to_open_import_export_stream">Pa kapab louvri fichye a</string>
 
 
 
@@ -166,6 +172,7 @@
 	<string name="title_color">Chwazi yon koulè</string>
 	<string name="title_dismiss_early_checkbox" tools:ignore="TypographyEllipsis">Ranvwaye alam la bonè, anvan li aktif...</string>
 	<string name="title_dismiss_early_how_early" tools:ignore="TypographyEllipsis">Konbyen bonè alam la ka ranvwaye...</string>
+	<string name="title_delete_alarm_after_dismissed_checkbox" tools:ignore="TypographyEllipsis">Efase alam la apre li fin ranvwaye...</string>
 	<string name="title_upcoming_reminder_should_show" tools:ignore="TypographyEllipsis">Montre yon notifikasyon rapèl anvan alam la sonnen...</string>
 	<string name="title_upcoming_reminder_time_to_show" tools:ignore="TypographyEllipsis">Konbyen bonè anvan yo ta dwe montre notifikasyon an...</string>
 	<string name="title_upcoming_reminder_freq_to_show" tools:ignore="TypographyEllipsis">Konbyen fwa li ta dwe montre...</string>
@@ -243,6 +250,8 @@
 	<string name="cd_dismiss_alarm">Rejte alam la.</string>
 	<string name="cd_snooze_alarm">Ranpli alam la.</string>
 	<string name="cd_current_alarm_media_playing">Medya alam aktyèl la k ap jwe.</string>
+	<string name="cd_skip_next_alarm">Sote pwochen alam.</string>
+	<string name="cd_delete_alarm_after_dismiss">Efase alam apre li fin ranvwaye.</string>
 
 
 
@@ -267,6 +276,9 @@
 
 	<string name="support_setting">Sipòte devlopman</string>
 	<string name="support_setting_summary">Sipò ta ap apresye anpil, men pa gen presyon! Aplikasyon sa a ap toujou gratis</string>
+
+	<string name="import_export_setting">Enpòte \u0020|\u0020 Ekspòtasyon</string>
+	<string name="import_export_setting_summary">Enpòte oswa ekspòte tout done ou sove yo</string>
 
 
 
@@ -428,26 +440,17 @@
 	<string name="next_alarm_format_time_in">Pwochen alam nan 7 èdtan 30 minit</string>
 	<string name="next_alarm_format_time_on">Pwochen alam lendi 7:00 AM</string>
 
-	<!-- ********************** -->
-	<!-- Miscellaneous settings -->
-	<!-- ********************** -->
-
-	<!-- Categories -->
-
-
-	<!-- Shuffle playlist -->
-
-
-	<!-- Speak to me -->
-
-
-	<!-- Speak frequency -->
-
+	<!-- ************** -->
+	<!-- Alarm settings -->
+	<!-- ************** -->
 
 	<!-- Dismiss early -->
 	<string name="dismiss_early_true">Wi, ka ranvwaye alam la byen bonè.</string>
 	<string name="dismiss_early_false">Non, alam la pa ka ranvwaye bonè.</string>
 
+	<!-- Delete alarm after dismissed -->
+	<string name="delete_alarm_after_dismissed_true">Wi, efase alam la apre li fin ranvwaye.</string>
+	<string name="delete_alarm_after_dismissed_false">Non, pa efase alam la apre li fin ranvwaye.</string>
 
 	<!-- Upcoming reminder -->
 	<string name="upcoming_reminder_true">Wi, montre yon notifikasyon.</string>
@@ -455,16 +458,13 @@
 	<string name="upcoming_reminder_use_tts_true">Wi, sèvi ak menm opsyon tèks-a-lapawòl ak alam la.\n\nRemak: Si opsyon a enfim pou alam la, Lè sa a, sa a pa pral fè anyen.</string>
 	<string name="upcoming_reminder_use_tts_false">Non, pa sèvi ak okenn tèks-a-lapawòl.</string>
 
-
 	<!-- Restrict volume -->
 	<string name="restrict_volume_true">Wi, volim ap gen restriksyon epi yo p ap ka chanje.</string>
 	<string name="restrict_volume_false">Non, volim ka chanje lib.</string>
 
-
 	<!-- Gradually increase volume -->
 	<string name="gradually_increase_volume_true">Wi, volim ap ogmante piti piti jiskaske volim alam la rive.</string>
 	<string name="gradually_increase_volume_false">Non, volim yo pral mete sou volim alam la.</string>
-
 
 	<!-- Flashlight blink -->
 	<string name="flashlight_blink_true">Wi, fè flach la bat.</string>
@@ -584,15 +584,7 @@
 		<item quantity="other">segonn</item>
 	</plurals>
 
-	<plurals name="tts_say_time_12h">
-		<item quantity="one">Lè a se, %1$d, %4$s, %2$s, %3$s.</item>
-		<item quantity="other">Lè a se, %1$d, %4$s, %2$s, %3$s.</item>
-	</plurals>
-
-	<plurals name="tts_say_time_24h">
-		<item quantity="one">Lè a se, %1$d, %3$s, %2$s.</item>
-		<item quantity="other">Lè a se, %1$d, %3$s, %2$s.</item>
-	</plurals>
+	<string name="tts_say_time">Lè a se %1$s:%2$s %3$s.</string>
 
 	<plurals name="tts_say_reminder">
 		<item quantity="one">Rapèl. %1$s, pral kouri nan, %2$d, minit.</item>

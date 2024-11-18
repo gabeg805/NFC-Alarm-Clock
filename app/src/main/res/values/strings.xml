@@ -448,7 +448,7 @@
 	<string name="dismiss_early_true">Yes, can dismiss the alarm early.</string>
 	<string name="dismiss_early_false">No, the alarm cannot be dismissed early.</string>
 
-	<!-- Dismiss early -->
+	<!-- Delete alarm after dismissed -->
 	<string name="delete_alarm_after_dismissed_true">Yes, delete the alarm after it is dismissed.</string>
 	<string name="delete_alarm_after_dismissed_false">No, do not delete the alarm after it is dismissed.</string>
 
@@ -584,15 +584,7 @@
 		<item quantity="other">seconds</item>
 	</plurals>
 
-	<plurals name="tts_say_time_12h">
-		<item quantity="one">The time, is, %1$d, %4$s, %2$s, %3$s.</item>
-		<item quantity="other">The time is %1$d:%2$s %3$s.</item>
-	</plurals>
-
-	<plurals name="tts_say_time_24h">
-		<item quantity="one">The time, is, %1$d, %3$s, %2$s.</item>
-		<item quantity="other">The time, is, %1$d, %3$s, %2$s.</item>
-	</plurals>
+	<string name="tts_say_time">The time is %1$s:%2$s %3$s.</string>
 
 	<plurals name="tts_say_reminder">
 		<item quantity="one">Reminder. %1$s, will run in, %2$d, minute.</item>

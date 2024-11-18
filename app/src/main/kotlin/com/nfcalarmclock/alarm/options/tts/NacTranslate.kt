@@ -2,7 +2,6 @@ package com.nfcalarmclock.alarm.options.tts
 
 import android.content.Context
 import android.content.res.Resources
-import android.os.Build
 import com.nfcalarmclock.R
 import com.nfcalarmclock.util.NacCalendar
 
@@ -27,58 +26,21 @@ object NacTranslate
 	/**
 	 * Get how to say the current time in any language.
 	 */
-	@Suppress("deprecation")
 	fun getSayCurrentTime(
 		context: Context,
 		hour: Int,
 		minute: Int
 	): String
 	{
-		// Get the current locale being used on the device
-		val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-		{
-			Resources.getSystem().configuration.locales.get(0)
-		}
-		else
-		{
-			Resources.getSystem().configuration.locale
-		}
-
-		// Check if using English
-		val extra = if (locale.language.equals("en"))
-		{
-			// Check if the minute should be said as "oh" e.g. 8:05 would be eight oh five
-			if (minute in 1..9) "O" else ""
-		}
-		// Using non-english language
-		else
-		{
-			// Do nothing for extra
-			""
-		}
-
 		// Get the meridian (if it should be used based on the user's preferences)
 		val meridian = NacCalendar.getMeridian(context, hour)
 
-		// Check if the meridian is null or empty. This means the time is in
-		// 24 hour format
-		return if (meridian.isEmpty())
-		{
-			// Return the statement that should be said
-			context.resources.getQuantityString(R.plurals.tts_say_time_24h, minute,
-				hour, minute, extra)
-		}
-		// The time is in 12 hour format
-		else
-		{
-			// Convert the hour to 12 hour format
-			val showHour = NacCalendar.to12HourFormat(hour)
-			val showMinute = if (minute == 0) "" else minute.toString()
+		// Get the hour and minutes how they should be said by TTS
+		val showHour = if (meridian.isNotEmpty()) hour.toString() else NacCalendar.to12HourFormat(hour)
+		val showMinute = minute.toString().padStart(2, '0')
 
-			// Return the statement that should be said
-			context.resources.getQuantityString(R.plurals.tts_say_time_12h, hour,
-				showHour, showMinute, meridian, extra)
-		}
+		// Return the TTS phrase
+		return context.resources.getString(R.string.tts_say_time, showHour, showMinute, meridian)
 	}
 
 	/**

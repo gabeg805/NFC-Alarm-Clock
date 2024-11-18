@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.annotation.OptIn
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
@@ -26,6 +27,7 @@ import kotlinx.coroutines.launch
 /**
  * Display a browser for the user to browse for music files.
  */
+@UnstableApi
 class NacMusicPickerFragment
 
 	// Constructor
@@ -54,6 +56,7 @@ class NacMusicPickerFragment
 	/**
 	 * Determine the starting directory and file name that should be selected.
 	 */
+	@OptIn(UnstableApi::class)
 	private fun getInitialFileBrowserLocation(): Pair<String, String>
 	{
 		val context = requireContext()

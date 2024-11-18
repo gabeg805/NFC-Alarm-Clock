@@ -9,8 +9,10 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.nfc.NacNfc
@@ -76,6 +78,7 @@ class NacActiveAlarmActivity
 			/**
 			 * Called when the alarm should be snoozed.
 			 */
+			@OptIn(UnstableApi::class)
 			override fun onSnooze(alarm: NacAlarm)
 			{
 				// Snooze the alarm service. Whether the alarm is actually
@@ -87,6 +90,7 @@ class NacActiveAlarmActivity
 			/**
 			 * Called when the alarm should be dismissed.
 			 */
+			@OptIn(UnstableApi::class)
 			override fun onDismiss(alarm: NacAlarm)
 			{
 				// Dismiss the alarm service
@@ -180,6 +184,7 @@ class NacActiveAlarmActivity
 	 * Note: Parent method must be called last. Causes issues with
 	 * setSnoozeCount.
 	 */
+	@OptIn(UnstableApi::class)
 	override fun onNewIntent(intent: Intent)
 	{
 		// Super
@@ -217,6 +222,7 @@ class NacActiveAlarmActivity
 	/**
 	 * Called when the activity is resumed.
 	 */
+	@OptIn(UnstableApi::class)
 	public override fun onResume()
 	{
 		// Super
