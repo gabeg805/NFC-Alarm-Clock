@@ -44,7 +44,6 @@ class NacSwipeLayoutHandler(
 	/**
 	 * Activity.
 	 */
-	// TODO: CHAnGE THIS BACK WHEN DONE
 	activity: AppCompatActivity,
 
 	/**

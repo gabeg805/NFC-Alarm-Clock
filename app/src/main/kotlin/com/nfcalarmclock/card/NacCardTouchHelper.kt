@@ -162,8 +162,6 @@ class NacCardTouchHelper(
 
 		/**
 		 * Check if card is collapsed.
-		 *
-		 * TODO: Should this be isExpanded() instead? Every check is not this method
 		 */
 		private fun isCollapsed(vh: RecyclerView.ViewHolder): Boolean
 		{

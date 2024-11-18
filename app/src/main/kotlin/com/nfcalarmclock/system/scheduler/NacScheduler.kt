@@ -6,6 +6,8 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import androidx.annotation.OptIn
+import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmBroadcastReceiver
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
@@ -116,6 +118,7 @@ object NacScheduler
 	 *
 	 * @return The pending intent for adding an alarm.
 	 */
+	@OptIn(UnstableApi::class)
 	private fun buildAddAlarmPendingIntent(
 		context: Context,
 		alarm: NacAlarm
@@ -158,6 +161,7 @@ object NacScheduler
 	 *
 	 * @return The pending intent for canceling an alarm.
 	 */
+	@OptIn(UnstableApi::class)
 	private fun buildCancelAlarmPendingIntent(
 		context: Context,
 		alarm: NacAlarm
@@ -175,6 +179,7 @@ object NacScheduler
 	 *
 	 * @return The pending intent for canceling a skipped alarm.
 	 */
+	@OptIn(UnstableApi::class)
 	private fun buildCancelSkipPendingIntent(
 		context: Context,
 		alarm: NacAlarm

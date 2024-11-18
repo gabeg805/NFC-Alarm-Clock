@@ -201,16 +201,6 @@ class NacWakeupProcess(
 			/**
 			 * Called when done speaking.
 			 */
-
-			/**
-			 * Called when done speaking.
-			 */
-			/**
-			 * Called when done speaking.
-			 */
-			/**
-			 * Called when done speaking.
-			 */
 			override fun onDoneSpeaking(tts: NacTextToSpeech)
 			{
 				// Use handler to start wake up process so that the media
@@ -218,16 +208,6 @@ class NacWakeupProcess(
 				continueWakeupHandler.post { simpleStart() }
 			}
 
-			/**
-			 * Called when the text-to-speech engine has started.
-			 */
-
-			/**
-			 * Called when the text-to-speech engine has started.
-			 */
-			/**
-			 * Called when the text-to-speech engine has started.
-			 */
 			/**
 			 * Called when the text-to-speech engine has started.
 			 */

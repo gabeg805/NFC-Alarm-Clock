@@ -721,6 +721,24 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Whether to use delete the alarm after it is dismissed or not.
+	 */
+	var shouldDeleteAlarmAfterDismissed: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.should_delete_alarm_after_dismissed_key)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.should_delete_alarm_after_dismissed_key)
+
+			saveBoolean(key, value)
+		}
+
+	/**
 	 * Whether volume should be gradually increased or not.
 	 */
 	var shouldGraduallyIncreaseVolume: Boolean

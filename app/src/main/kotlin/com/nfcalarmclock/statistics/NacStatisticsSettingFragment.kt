@@ -20,16 +20,11 @@ import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacUtility.quickToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.io.BufferedInputStream
-import java.io.BufferedOutputStream
 import java.io.File
-import java.io.FileInputStream
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.zip.ZipEntry
-import java.util.zip.ZipOutputStream
 
 /**
  * Statistics fragment.

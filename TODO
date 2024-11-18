@@ -2,12 +2,9 @@
 TODO
 ----
 
-* Add icons for skip next alarm and auto delete. Need to update the database for the latter
+* Updated tts_* strings in strings.xml
 
-* Add text where music plays in the Alarm Activity so that if the media isn't
-  found, it'll be apparent to the user.
-
-* Find a way to slow down speed of TTS.
+* Upcoming reminder is kind of jank. Need to fix how it works
 
 * Add languages for India, Bangladesh, Pakistan, Japan, Thailand, Poland, Turkey, France,
   Brazil & Portugal, Serbia, Finland, Romania, Italy

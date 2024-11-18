@@ -103,7 +103,6 @@ class NacUpcomingReminderNotification(
 			val time = NacCalendar.getFullTime(cal, is24HourFormat)
 
 			// Get the alarm name
-			// TODO: Should the name be normalized?
 			val name = alarm?.name ?: ""
 
 			return if (name.isEmpty())

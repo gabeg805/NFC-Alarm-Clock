@@ -50,8 +50,6 @@ class NacStartWeekOnPreference @JvmOverloads constructor(
 	/**
 	 * Get the summary text which is the name of the day to start on.
 	 *
-	 * TODO: Update this for when start week is more flexible.
-	 *
 	 * @return The summary text which is the name of the day to start on.
 	 */
 	override fun getSummary(): CharSequence?

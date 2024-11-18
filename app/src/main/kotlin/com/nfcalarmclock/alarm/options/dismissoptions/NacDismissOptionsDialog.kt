@@ -53,6 +53,11 @@ class NacDismissOptionsDialog
 	private var selectedDismissEarlyTime: Int = 0
 
 	/**
+	 * Selected should delete the alarm after it is dismissed option.
+	 */
+	private var selectedShouldDeleteAlarmAfterDismissed: Boolean = false
+
+	/**
 	 * The alpha that views should have based on the should use text-to-speech
 	 * flag.
 	 */
@@ -90,17 +95,16 @@ class NacDismissOptionsDialog
 		val defaultAutoDismissTime = alarm?.autoDismissTime ?: 15
 		val defaultShouldDismissEarly = alarm?.useDismissEarly ?: false
 		val defaultDismissEarlyTime = alarm?.dismissEarlyTime ?: 30
+		val defaultShouldDeleteAlarmAfterDismissed = alarm?.shouldDeleteAlarmAfterDismissed ?: false
 		selectedAutoDismissTime = defaultAutoDismissTime
 		selectedDismissEarlyTime = defaultDismissEarlyTime
-
-		// TODO: FIND HOW TO CENTER ITEMS IN MENU AND THEN USE TEXT ALIGNMENT TO CENTER IN TEXTVIEW
-		// TODO: FIND HOW TO SET MAX HEIGHT OF EXPANDED MENU
 
 		// Setup the views
 		setupAutoDismiss(defaultAutoDismissTime)
 		setupShouldDismissEarly(defaultShouldDismissEarly)
 		setupHowEarlyToDismiss(defaultDismissEarlyTime)
 		setHowEarlyToDismissUsable()
+		setupShouldDeleteAlarmAfterDismissed(defaultShouldDeleteAlarmAfterDismissed)
 
 		// Setup the ok button
 		setupPrimaryButton(okButton, listener = {
@@ -109,6 +113,7 @@ class NacDismissOptionsDialog
 			alarm?.autoDismissTime = selectedAutoDismissTime
 			alarm?.useDismissEarly = dismissEarlyCheckBox.isChecked
 			alarm?.dismissEarlyTime = selectedDismissEarlyTime
+			alarm?.shouldDeleteAlarmAfterDismissed = selectedShouldDeleteAlarmAfterDismissed
 
 			// Save the change so that it is accessible in the previous dialog
 			findNavController().previousBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
@@ -133,6 +138,26 @@ class NacDismissOptionsDialog
 
 		// Set whether it can be used or not
 		dismissEarlyInputLayout.isEnabled = dismissEarlyCheckBox.isChecked
+	}
+
+	/**
+	 * Setup the description for if the alarm should be deleted after it is dismissed or not.
+	 */
+	private fun setShouldDeleteAlarmAfterDismissedDescription(checkBox: MaterialCheckBox, textView: TextView)
+	{
+		// Determine the text ID to use based on whether easy snooze will be
+		// used or not
+		val textId = if (checkBox.isChecked)
+		{
+			R.string.delete_alarm_after_dismissed_true
+		}
+		else
+		{
+			R.string.delete_alarm_after_dismissed_false
+		}
+
+		// Set the text
+		textView.setText(textId)
 	}
 
 	/**
@@ -201,6 +226,38 @@ class NacDismissOptionsDialog
 	}
 
 	/**
+	 * Setup the should delete alarm after it is dismissed views.
+	 */
+	private fun setupShouldDeleteAlarmAfterDismissed(default: Boolean)
+	{
+		// Get the views
+		val relativeLayout = dialog!!.findViewById(R.id.should_delete_alarm_after_dismissed) as RelativeLayout
+		val description = dialog!!.findViewById(R.id.should_delete_alarm_after_dismissed_summary) as TextView
+		val checkBox = dialog!!.findViewById(R.id.should_delete_alarm_after_dismissed_checkbox) as MaterialCheckBox
+
+		// Set the default checkbox value
+		checkBox.isChecked = default
+
+		// Setup the checkbox
+		checkBox.setupCheckBoxColor(sharedPreferences)
+
+		// Set the description
+		setShouldDeleteAlarmAfterDismissedDescription(checkBox, description)
+
+		// Layout click listener to change the checkbox
+		relativeLayout.setOnClickListener {
+
+			// Toggle the checkbox
+			checkBox.toggle()
+			selectedShouldDeleteAlarmAfterDismissed = checkBox.isChecked
+
+			// Set the description
+			setShouldDeleteAlarmAfterDismissedDescription(checkBox, description)
+
+		}
+	}
+
+	/**
 	 * Setup the should dismiss early views.
 	 */
 	private fun setupShouldDismissEarly(default: Boolean)
@@ -216,10 +273,10 @@ class NacDismissOptionsDialog
 		// Setup the checkbox
 		dismissEarlyCheckBox.setupCheckBoxColor(sharedPreferences)
 
-		// Should dismiss early description
+		// Set the description
 		setShouldDismissEarlyDescription(description)
 
-		// Easy snooze listener
+		// Layout click listener to change the checkbox
 		relativeLayout.setOnClickListener {
 
 			// Toggle the checkbox

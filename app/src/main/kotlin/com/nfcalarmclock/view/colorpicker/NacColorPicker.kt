@@ -157,7 +157,7 @@ class NacColorPicker : RelativeLayout
 				hex = hex.substring(hex.length - 6)
 			}
 
-			return if (hex[0] == '#') hex else "#$hex"
+			return hex
 		}
 
 	/**
@@ -608,7 +608,8 @@ class NacColorPicker : RelativeLayout
 	/**
 	 * Perform click.
 	 *
-	 * TODO: Can I remove this?
+	 * Need to override this because onTouchEvent() is also overridden. Need to do
+	 * that to handle accessibility features correctly.
 	 */
 	override fun performClick(): Boolean
 	{

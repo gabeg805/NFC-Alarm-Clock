@@ -194,6 +194,7 @@ class NacGeneralSettingFragment
 							sharedPreferences!!.autoDismissTime = a.autoDismissTime
 							sharedPreferences!!.canDismissEarly = a.useDismissEarly
 							sharedPreferences!!.dismissEarlyTime = a.dismissEarlyTime
+							sharedPreferences!!.shouldDeleteAlarmAfterDismissed = a.shouldDeleteAlarmAfterDismissed
 						}
 
 						// Snooze options

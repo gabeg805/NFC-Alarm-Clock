@@ -37,7 +37,7 @@ class NacAlarm()
 	var id: Long = 0
 
 	/**
-	 * Flag indicating whether the alarm is currently active or not.
+	 * Whether the alarm is currently active or not.
 	 */
 	@ColumnInfo(name = "is_active", defaultValue = "0")
 	var isActive: Boolean = false
@@ -57,7 +57,7 @@ class NacAlarm()
 	var snoozeCount: Int = 0
 
 	/**
-	 * Flag indicating whether the alarm is enabled or not.
+	 * Whether the alarm is enabled or not.
 	 */
 	@ColumnInfo(name = "is_enabled", defaultValue = "0")
 	var isEnabled: Boolean = false
@@ -93,25 +93,25 @@ class NacAlarm()
 	var days: EnumSet<Day> = EnumSet.noneOf(Day::class.java)
 
 	/**
-	 * Flag indicating whether the alarm should be repeated or not.
+	 * Whether the alarm should be repeated or not.
 	 */
 	@ColumnInfo(name = "should_repeat", defaultValue = "0")
 	var repeat: Boolean = false
 
 	/**
-	 * Flag indicating whether the alarm should vibrate the phone or not.
+	 * Whether the alarm should vibrate the phone or not.
 	 */
 	@ColumnInfo(name = "should_vibrate", defaultValue = "0")
 	var vibrate: Boolean = false
 
 	/**
-	 * Flag indicating whether the alarm should use NFC or not.
+	 * Whether the alarm should use NFC or not.
 	 */
 	@ColumnInfo(name = "should_use_nfc", defaultValue = "0")
 	var useNfc: Boolean = false
 
 	/**
-	 * Flag indicating whether the alarm should use the flashlight or not.
+	 * Whether the alarm should use the flashlight or not.
 	 */
 	@ColumnInfo(name = "should_use_flashlight", defaultValue = "0")
 	var useFlashlight: Boolean = false
@@ -208,15 +208,13 @@ class NacAlarm()
 	var name: String = ""
 
 	/**
-	 * Flag indicating whether to say the current time via text-to-speech when
-	 * the alarm goes off.
+	 * Whether to say the current time via text-to-speech when the alarm goes off.
 	 */
 	@ColumnInfo(name = "should_say_current_time", defaultValue = "0")
 	var sayCurrentTime: Boolean = false
 
 	/**
-	 * Flag indicating whether to say the alarm name via text-to-speech when
-	 * the alarm goes off.
+	 * Whether to say the alarm name via text-to-speech when the alarm goes off.
 	 */
 	@ColumnInfo(name = "should_say_alarm_name", defaultValue = "0")
 	var sayAlarmName: Boolean = false
@@ -228,8 +226,7 @@ class NacAlarm()
 	var ttsFrequency: Int = 0
 
 	/**
-	 * Flag indicating whether to gradually increase the volume or not, when an
-	 * alarm is active.
+	 * Whether to gradually increase the volume or not, when an alarm is active.
 	 */
 	@ColumnInfo(name = "should_gradually_increase_volume", defaultValue = "0")
 	var shouldGraduallyIncreaseVolume: Boolean = false
@@ -242,24 +239,19 @@ class NacAlarm()
 	var graduallyIncreaseVolumeWaitTime: Int = 5
 
 	/**
-	 * Flag indicating whether to restrict changing the volume or not, when an
-	 * alarm is active.
+	 * Whether to restrict changing the volume or not, when an alarm is active.
 	 */
 	@ColumnInfo(name = "should_restrict_volume", defaultValue = "0")
 	var shouldRestrictVolume: Boolean = false
 
 	/**
 	 * Time in which to auto dismiss the alarm.
-	 *
-	 * TODO: Change to 15
-	 * TODO: Check usage here and in other places for default as well
-	 * TODO: Check oldAutoDismissTime default
 	 */
-	@ColumnInfo(name = "auto_dismiss_time", defaultValue = "0")
-	var autoDismissTime: Int = 0
+	@ColumnInfo(name = "auto_dismiss_time", defaultValue = "15")
+	var autoDismissTime: Int = 15
 
 	/**
-	 * Flag indicating whether or not to use dismiss early.
+	 * Whether or not to use dismiss early.
 	 */
 	@ColumnInfo(name = "should_dismiss_early", defaultValue = "0")
 	var useDismissEarly: Boolean = false
@@ -284,22 +276,14 @@ class NacAlarm()
 
 	/**
 	 * Max number of snoozes.
-	 *
-	 * TODO: Change to -1?
-	 * TODO: Check usage here and in other places for default as well
-	 * TODO: Check oldMaxSnooze default
 	 */
-	@ColumnInfo(name = "max_snooze", defaultValue = "0")
-	var maxSnooze: Int = 0
+	@ColumnInfo(name = "max_snooze", defaultValue = "-1")
+	var maxSnooze: Int = -1
 
 	/**
 	 * Snooze duration.
-	 *
-	 * TODO: Change to 5
-	 * TODO: Check usage here and in other places for default as well
-	 * TODO: Check oldSnoozeDuration default
 	 */
-	@ColumnInfo(name = "snooze_duration", defaultValue = "0")
+	@ColumnInfo(name = "snooze_duration", defaultValue = "5")
 	var snoozeDuration: Int = 5
 
 	/**
@@ -333,10 +317,16 @@ class NacAlarm()
 	var useTtsForReminder: Boolean = false
 
 	/**
-	 * Flag indicating whether to skip the next alarm or not.
+	 * Whether to skip the next alarm or not.
 	 */
 	@ColumnInfo(name = "should_skip_next_alarm", defaultValue = "0")
 	var shouldSkipNextAlarm: Boolean = false
+
+	/**
+	 * Whether to delete the alarm after it is dismissed or not.
+	 */
+	@ColumnInfo(name = "should_delete_alarm_after_dismissed", defaultValue = "0")
+	var shouldDeleteAlarmAfterDismissed: Boolean = false
 
 	/**
 	 * Check if any days are selected.
@@ -499,6 +489,9 @@ class NacAlarm()
 
 		// Skip next alarm
 		shouldSkipNextAlarm = input.readInt() != 0
+
+		// Delete alarm after dismissed
+		shouldDeleteAlarmAfterDismissed = input.readInt() != 0
 	}
 
 	/**
@@ -733,6 +726,9 @@ class NacAlarm()
 		// Skip next alarm
 		alarm.shouldSkipNextAlarm = shouldSkipNextAlarm
 
+		// Delete alarm after dismissed
+		alarm.shouldDeleteAlarmAfterDismissed = shouldDeleteAlarmAfterDismissed
+
 		return alarm
 	}
 
@@ -850,6 +846,7 @@ class NacAlarm()
 			&& (reminderFrequency == alarm.reminderFrequency)
 			&& (useTtsForReminder == alarm.useTtsForReminder)
 			&& (shouldSkipNextAlarm == alarm.shouldSkipNextAlarm)
+			&& (shouldDeleteAlarmAfterDismissed == alarm.shouldDeleteAlarmAfterDismissed)
 	}
 
 	/**
@@ -959,6 +956,7 @@ class NacAlarm()
 		println("Reminder freq       : $reminderFrequency")
 		println("Use Tts 4 Reminder  : $useTtsForReminder")
 		println("Should skip next    : $shouldSkipNextAlarm")
+		println("Should delete after : $shouldDeleteAlarmAfterDismissed")
 	}
 
 	/**
@@ -1103,8 +1101,7 @@ class NacAlarm()
 	}
 
 	/** Whether or not the alarm will alarm soon.
-	 *
-	 *
+	 * <p>
 	 * "Soon" is determined by the dismiss early time. If it will alarm within
 	 * that time, then it is soon.
 	 */
@@ -1200,6 +1197,9 @@ class NacAlarm()
 
 		// Skip next alarm
 		output.writeInt(if (shouldSkipNextAlarm) 1 else 0)
+
+		// Delete alarm after dismissed
+		output.writeInt(if (shouldDeleteAlarmAfterDismissed) 1 else 0)
 	}
 
 	companion object
@@ -1279,7 +1279,7 @@ class NacAlarm()
 
 			// Snooze
 			alarm.autoSnoozeTime = shared?.autoSnoozeTime ?: 0
-			alarm.maxSnooze = shared?.maxSnooze ?: 0
+			alarm.maxSnooze = shared?.maxSnooze ?: -1
 			alarm.snoozeDuration = shared?.snoozeDuration ?: 5
 			alarm.useEasySnooze = shared?.easySnooze ?: false
 
@@ -1291,6 +1291,9 @@ class NacAlarm()
 
 			// Skip next alarm
 			alarm.shouldSkipNextAlarm = false
+
+			// Delete alarm after dismissed
+			alarm.shouldDeleteAlarmAfterDismissed = shared?.shouldDeleteAlarmAfterDismissed ?: false
 
 			return alarm
 		}

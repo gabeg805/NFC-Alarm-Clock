@@ -27,8 +27,6 @@ import com.nfcalarmclock.view.dialog.NacDialogFragment
 
 /**
  * Handle displaying the color picker dialog.
- *
- * TODO: Have a fixed "#" in front of the edit text.
  */
 class NacColorPickerDialog
 	: NacDialogFragment(),
@@ -108,16 +106,10 @@ class NacColorPickerDialog
 	var onDefaultColorSelectedListener: OnDefaultColorSelectedListener? = null
 
 	/**
-	 * Ensure the text always starts with "#".
-	 *
 	 * Note: This is required to implement TextWatcher.
 	 */
 	override fun afterTextChanged(s: Editable)
 	{
-		if (!s.toString().startsWith("#"))
-		{
-			s.insert(0, "#")
-		}
 	}
 
 	/**

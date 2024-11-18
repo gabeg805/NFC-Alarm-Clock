@@ -76,15 +76,12 @@ class NacSnoozeOptionsDialog
 
 		// Get the default values
 		val defaultAutoSnoozeTime = alarm?.autoSnoozeTime ?: 0
-		val defaultMaxSnooze = alarm?.maxSnooze ?: 0
+		val defaultMaxSnooze = alarm?.maxSnooze ?: -1
 		val defaultSnoozeDuration = alarm?.snoozeDuration ?: 5
 		val defaultShouldEasySnooze = alarm?.useEasySnooze ?: false
 		selectedAutoSnoozeTime = defaultAutoSnoozeTime
 		selectedMaxSnoozeTime = defaultMaxSnooze
 		selectedSnoozeDurationTime = defaultSnoozeDuration
-
-		// TODO: FIND HOW TO CENTER ITEMS IN MENU AND THEN USE TEXT ALIGNMENT TO CENTER IN TEXTVIEW
-		// TODO: FIND HOW TO SET MAX HEIGHT OF EXPANDED MENU
 
 		// Setup the views
 		setupAutoSnooze(defaultAutoSnoozeTime)

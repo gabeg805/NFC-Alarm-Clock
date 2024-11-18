@@ -65,6 +65,7 @@
 	<string name="time_to_show_reminder_key">pref_time_to_show_reminder</string>
 	<string name="reminder_frequency_key">pref_reminder_frequency</string>
 	<string name="should_use_tts_for_reminder_key">pref_should_use_tts_for_reminder</string>
+	<string name="should_delete_alarm_after_dismissed_key">pref_should_delete_alarm_after_dismissed</string>
 
 	<!-- Appearance -->
 	<string name="appearance_setting_key">pref_screen_appearance</string>

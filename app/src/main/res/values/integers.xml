@@ -28,6 +28,6 @@
 
 	<integer name="max_alarms">150</integer>
 	<integer name="max_entry_length">512</integer>
-	<integer name="max_hex_length">7</integer>
+	<integer name="max_hex_length">6</integer>
 
 </resources>

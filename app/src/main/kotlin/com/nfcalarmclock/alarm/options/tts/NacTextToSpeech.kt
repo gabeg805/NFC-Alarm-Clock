@@ -160,6 +160,7 @@ class NacTextToSpeech(
 
 		// Setup text to speech
 		textToSpeech.language = Locale.getDefault()
+		textToSpeech.setSpeechRate(0.65f)
 		textToSpeech.setOnUtteranceProgressListener(utteranceListener)
 	}
 

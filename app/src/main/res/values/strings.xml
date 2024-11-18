@@ -172,6 +172,7 @@
 	<string name="title_color">Select a color</string>
 	<string name="title_dismiss_early_checkbox" tools:ignore="TypographyEllipsis">Dismiss the alarm early, before it is active...</string>
 	<string name="title_dismiss_early_how_early" tools:ignore="TypographyEllipsis">How early can the alarm be dismissed...</string>
+	<string name="title_delete_alarm_after_dismissed_checkbox" tools:ignore="TypographyEllipsis">Delete the alarm after it is dismissed...</string>
 	<string name="title_upcoming_reminder_should_show" tools:ignore="TypographyEllipsis">Show a reminder notification before the alarm goes off...</string>
 	<string name="title_upcoming_reminder_time_to_show" tools:ignore="TypographyEllipsis">How early should it be shown...</string>
 	<string name="title_upcoming_reminder_freq_to_show" tools:ignore="TypographyEllipsis">How frequently should it be shown...</string>
@@ -249,6 +250,8 @@
 	<string name="cd_dismiss_alarm">Dismiss the alarm.</string>
 	<string name="cd_snooze_alarm">Snooze the alarm.</string>
 	<string name="cd_current_alarm_media_playing">The current alarm media that is playing.</string>
+	<string name="cd_skip_next_alarm">Skip next alarm.</string>
+	<string name="cd_delete_alarm_after_dismiss">Delete alarm after it is dismissed.</string>
 
 
 
@@ -437,26 +440,17 @@
 	<string name="next_alarm_format_time_in">Next alarm in 7 hours 30 minutes</string>
 	<string name="next_alarm_format_time_on">Next alarm on Mon 7:00 AM</string>
 
-	<!-- ********************** -->
-	<!-- Miscellaneous settings -->
-	<!-- ********************** -->
-
-	<!-- Categories -->
-
-
-	<!-- Shuffle playlist -->
-
-
-	<!-- Speak to me -->
-
-
-	<!-- Speak frequency -->
-
+	<!-- ************** -->
+	<!-- Alarm settings -->
+	<!-- ************** -->
 
 	<!-- Dismiss early -->
 	<string name="dismiss_early_true">Yes, can dismiss the alarm early.</string>
 	<string name="dismiss_early_false">No, the alarm cannot be dismissed early.</string>
 
+	<!-- Dismiss early -->
+	<string name="delete_alarm_after_dismissed_true">Yes, delete the alarm after it is dismissed.</string>
+	<string name="delete_alarm_after_dismissed_false">No, do not delete the alarm after it is dismissed.</string>
 
 	<!-- Upcoming reminder -->
 	<string name="upcoming_reminder_true">Yes, show a notification.</string>
@@ -464,16 +458,13 @@
 	<string name="upcoming_reminder_use_tts_true">Yes, use the same text-to-speech options as the alarm.\n\nNote: If the option is disabled for the alarm, then this will do nothing.</string>
 	<string name="upcoming_reminder_use_tts_false">No, do not use any text-to-speech.</string>
 
-
 	<!-- Restrict volume -->
 	<string name="restrict_volume_true">Yes, volume will be restricted and unable to be changed.</string>
 	<string name="restrict_volume_false">No, volume can be changed freely.</string>
 
-
 	<!-- Gradually increase volume -->
 	<string name="gradually_increase_volume_true">Yes, volume will gradually increase until the alarm volume is reached.</string>
 	<string name="gradually_increase_volume_false">No, volume will be set to the alarm volume.</string>
-
 
 	<!-- Flashlight blink -->
 	<string name="flashlight_blink_true">Yes, make the flashlight blink.</string>
@@ -595,7 +586,7 @@
 
 	<plurals name="tts_say_time_12h">
 		<item quantity="one">The time, is, %1$d, %4$s, %2$s, %3$s.</item>
-		<item quantity="other">The time, is, %1$d, %4$s, %2$s, %3$s.</item>
+		<item quantity="other">The time is %1$d:%2$s %3$s.</item>
 	</plurals>
 
 	<plurals name="tts_say_time_24h">

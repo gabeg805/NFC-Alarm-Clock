@@ -35,11 +35,15 @@
 	<!-- Camera is optional -->
 
 	<!-- Indicate that the app should be able to query apps that provide the
-	     ACTION_SEND intent -->
+		ACTION_SEND intent -->
 	<queries>
 		<intent>
 			<action android:name="android.intent.action.SEND" />
 			<data android:mimeType="application/zip" />
+		</intent>
+
+		<intent>
+			<action android:name="android.intent.action.TTS_SERVICE" />
 		</intent>
 	</queries>
 
@@ -66,15 +70,15 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 
-            <intent-filter>
-                <action android:name="android.intent.action.SET_ALARM" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.SET_ALARM" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
 
-            <intent-filter>
-                <action android:name="android.intent.action.SHOW_ALARMS" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.SHOW_ALARMS" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
 
 			<!--
 			<intent-filter>
@@ -180,7 +184,7 @@
 		</service>
 
 		<!-- Alarm manager broadcasts this so that alarms can be started.
-		     Start the foreground service. -->
+			Start the foreground service. -->
 		<receiver
 			android:name=".alarm.activealarm.NacActiveAlarmBroadcastReceiver"
 			/>

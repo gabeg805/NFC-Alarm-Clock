@@ -86,6 +86,33 @@
 				android:gravity="center_vertical"
 				android:orientation="horizontal">
 
+				<!-- Skip next alarm -->
+				<ImageView
+					android:id="@+id/nac_skip_next_alarm"
+					android:layout_width="@dimen/isz_small"
+					android:layout_height="@dimen/isz_small"
+					android:layout_marginStart="@dimen/nudge"
+					android:layout_marginEnd="@dimen/nudge"
+					android:src="@drawable/cancel"
+					android:visibility="gone"
+					app:tint="@color/red"
+					/>
+
+				<!-- Delete alarm after dismissed -->
+				<ImageView
+					android:id="@+id/nac_delete_alarm_after_dismissed"
+					android:layout_width="@dimen/isz_xsmall"
+					android:layout_height="@dimen/isz_xsmall"
+					android:layout_marginStart="@dimen/nudge"
+					android:layout_marginEnd="@dimen/nudge"
+					android:textSize="@dimen/tsz_small"
+					android:textStyle="italic"
+					android:src="@drawable/auto_delete"
+					android:visibility="gone"
+					app:tint="@color/red"
+					/>
+
+				<!-- Days -->
 				<TextView
 					style="@style/Widget.TextView.Summary"
 					android:id="@+id/nac_summary_days"
@@ -110,6 +137,7 @@
 					android:focusable="false"
 					-->
 
+				<!-- Name -->
 				<TextView
 					style="@style/Widget.TextView.Summary"
 					android:id="@+id/nac_summary_name"
@@ -121,8 +149,10 @@
 					android:focusable="false"
 					android:singleLine="true"
 					android:textColor="@color/sky_blue"
+					android:text=""
 					/>
 
+				<!-- Expand button -->
 				<com.google.android.material.button.MaterialButton
 					style="@style/Widget.Button.Icon"
 					android:id="@+id/nac_expand"

@@ -38,6 +38,7 @@ import javax.inject.Inject
 /**
  * Service to allow an alarm to be run.
  */
+@UnstableApi
 @AndroidEntryPoint
 class NacActiveAlarmService
 	: Service()
@@ -183,9 +184,6 @@ class NacActiveAlarmService
 			// Dismiss the alarm
 			alarm!!.dismiss()
 
-			// Update the alarm
-			alarmRepository.update(alarm!!)
-
 			// Check if the alarm missed and had to be dismissed via auto
 			// dismiss
 			if (wasMissed)
@@ -200,8 +198,23 @@ class NacActiveAlarmService
 				statisticRepository.insertDismissed(alarm!!, usedNfc)
 			}
 
-			// Reschedule the alarm
-			NacScheduler.update(this@NacActiveAlarmService, alarm!!)
+			// Check if the alarm should be deleted
+			if (alarm!!.shouldDeleteAlarmAfterDismissed)
+			{
+				// Delete the alarm
+				alarmRepository.delete(alarm!!)
+
+				// Cancel any scheduled alarm
+				NacScheduler.cancel(this@NacActiveAlarmService, alarm!!)
+			}
+			else
+			{
+				// Update the alarm
+				alarmRepository.update(alarm!!)
+
+				// Reschedule the alarm
+				NacScheduler.update(this@NacActiveAlarmService, alarm!!)
+			}
 
 			// Set flag that the main activity needs to be refreshed
 			sharedPreferences.shouldRefreshMainActivity = true

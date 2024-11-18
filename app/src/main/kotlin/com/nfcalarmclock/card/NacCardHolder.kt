@@ -19,11 +19,13 @@ import android.widget.RelativeLayout
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
+import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
@@ -180,9 +182,14 @@ class NacCardHolder(
 	private val dismissEarlyButton: MaterialButton = root.findViewById(R.id.nac_dismiss_early)
 
 	/**
-	 * Skip next alarm message.
+	 * Skip next alarm icon.
 	 */
-	private val skipNextAlarmView: TextView = root.findViewById(R.id.nac_skipping_next_alarm)
+	private val skipNextAlarmIcon: ImageView = root.findViewById(R.id.nac_skip_next_alarm)
+
+	/**
+	 * Delete alarm after it is dismissed icon.
+	 */
+	private val deleteAlarmAfterDismissedIcon: ImageView = root.findViewById(R.id.nac_delete_alarm_after_dismissed)
 
 	/**
 	 * Expanded alarm view.
@@ -375,7 +382,7 @@ class NacCardHolder(
 	 */
 	private val heightCollapsed: Int
 		// Check if the alarm is snoozed or will alarm soon
-		get() = if (alarm!!.isSnoozed || alarm!!.willAlarmSoon() || alarm!!.shouldSkipNextAlarm)
+		get() = if (alarm!!.isSnoozed || alarm!!.willAlarmSoon())
 		{
 			// Show a little extra space for stuff right beneath the summary
 			sharedPreferences.cardHeightCollapsedDismiss
@@ -809,6 +816,7 @@ class NacCardHolder(
 		// Setup the views
 		setRepeatButton()
 		setSummaryDaysView()
+		setSummarySkipNextAlarmIcon()
 
 		// Call the listener
 		callOnCardUpdatedListener()
@@ -825,6 +833,7 @@ class NacCardHolder(
 	/**
 	 * Act as if the dismiss button was clicked.
 	 */
+	@OptIn(UnstableApi::class)
 	private fun doDismissButtonClick()
 	{
 		// Check if alarm uses NFC
@@ -900,6 +909,9 @@ class NacCardHolder(
 		// Toggle the flashlight button
 		alarm!!.toggleUseFlashlight()
 
+		// Setup the skip icon
+		setSummarySkipNextAlarmIcon()
+
 		// Call the listener
 		onCardUseFlashlightChangedListener?.onCardUseFlashlightChanged(this, alarm!!)
 	}
@@ -938,6 +950,9 @@ class NacCardHolder(
 			alarm!!.nfcTagId = ""
 		}
 
+		// Setup the skip icon
+		setSummarySkipNextAlarmIcon()
+
 		// Call the listener
 		onCardUseNfcChangedListener?.onCardUseNfcChanged(this, alarm!!)
 	}
@@ -952,6 +967,9 @@ class NacCardHolder(
 
 		// Toggle the repeat button
 		alarm!!.toggleRepeat()
+
+		// Setup the skip icon
+		setSummarySkipNextAlarmIcon()
 
 		// Call the listener
 		callOnCardUpdatedListener()
@@ -988,6 +1006,7 @@ class NacCardHolder(
 		setDayOfWeek()
 		setRepeatButton()
 		setSummaryDaysView()
+		setSummarySkipNextAlarmIcon()
 
 		// Call the listener
 		callOnCardUpdatedListener()
@@ -1013,6 +1032,7 @@ class NacCardHolder(
 
 		// Setup the views
 		setSummaryDaysView()
+		setSummarySkipNextAlarmIcon()
 
 		// Call the listener
 		callOnCardUpdatedListener()
@@ -1036,6 +1056,9 @@ class NacCardHolder(
 
 		// Toggle the vibrate button
 		alarm!!.toggleVibrate()
+
+		// Setup the skip icon
+		setSummarySkipNextAlarmIcon()
 
 		// Call the listener
 		onCardUseVibrateChangedListener?.onCardUseVibrateChanged(this, alarm!!)
@@ -1195,6 +1218,8 @@ class NacCardHolder(
 		setTimeView()
 		setMeridianView()
 		setSwitchView()
+		setSummarySkipNextAlarmIcon()
+		setSummaryShoulDeleteAlarmAfterDismissedIcon()
 		setSummaryDaysView()
 		setSummaryNameView()
 		setDayOfWeek()
@@ -1296,8 +1321,7 @@ class NacCardHolder(
 	private fun refreshExtraView()
 	{
 		// Alarm is in use (so "Dismiss" should be shown),
-		// or will alarm soon (so "Dismiss early" should be shown),
-		// or the next alarm was skipped (so "Skipping next alarm" should be shown)
+		// or will alarm soon (so "Dismiss early" should be shown)
 		val extraVis = if (shouldShowExtraView()) View.VISIBLE else View.GONE
 
 		// The extra view should be hidden so show the expand button on its
@@ -1325,7 +1349,7 @@ class NacCardHolder(
 				// Show the "Dismiss" button
 				dismissButton.visibility = View.VISIBLE
 				dismissEarlyButton.visibility = View.GONE
-				skipNextAlarmView.visibility = View.GONE
+				//skipNextAlarmView.visibility = View.GONE
 			}
 			// Alarm will alarm soon
 			else if (alarm!!.willAlarmSoon())
@@ -1333,15 +1357,7 @@ class NacCardHolder(
 				// Show the "Dismiss early" button
 				dismissButton.visibility = View.GONE
 				dismissEarlyButton.visibility = View.VISIBLE
-				skipNextAlarmView.visibility = View.GONE
-			}
-			// Skip/unskip next alarm
-			else
-			{
-				// Show the "Skipping next alarm" view
-				dismissButton.visibility = View.GONE
-				dismissEarlyButton.visibility = View.GONE
-				skipNextAlarmView.visibility = if (alarm!!.shouldSkipNextAlarm) View.VISIBLE else View.GONE
+				//skipNextAlarmView.visibility = View.GONE
 			}
 		}
 	}
@@ -1706,6 +1722,36 @@ class NacCardHolder(
 	}
 
 	/**
+	 * Set the should delete alarm after it is disimssed icon in the summary area.
+	 */
+	private fun setSummaryShoulDeleteAlarmAfterDismissedIcon()
+	{
+		// Get the what the visibility should be
+		val vis = if (alarm!!.shouldDeleteAlarmAfterDismissed) View.VISIBLE else View.GONE
+
+		// Check if the visibilty does not match
+		if (vis != deleteAlarmAfterDismissedIcon.visibility)
+		{
+			deleteAlarmAfterDismissedIcon.visibility = vis
+		}
+	}
+
+	/**
+	 * Set the skip next alarm icon in the summary area.
+	 */
+	private fun setSummarySkipNextAlarmIcon()
+	{
+		// Get the what the visibility should be
+		val vis = if (alarm!!.shouldSkipNextAlarm) View.VISIBLE else View.GONE
+
+		// Check if the visibilty does not match
+		if (vis != skipNextAlarmIcon.visibility)
+		{
+			skipNextAlarmIcon.visibility = vis
+		}
+	}
+
+	/**
 	 * Set the color of the switch.
 	 */
 	private fun setSwitchColor()
@@ -1977,6 +2023,9 @@ class NacCardHolder(
 					animateCollapsedBackgroundColor()
 				}
 
+				// Update the delete alarm after dismissed icon, if necessary
+				setSummaryShoulDeleteAlarmAfterDismissedIcon()
+
 				// Call the listener
 				callOnCardCollapsedListener()
 			}
@@ -2121,8 +2170,6 @@ class NacCardHolder(
 
 	/**
 	 * Setup the listener for the flashlight button.
-	 *
-	 * TODO: Can I change this to addOnCheckedChangeListener?
 	 */
 	private fun setupFlashlightButtonListener()
 	{
@@ -2193,8 +2240,6 @@ class NacCardHolder(
 
 	/**
 	 * Setup the listener for the NFC button.
-	 *
-	 * TODO: Can I change this to addOnCheckedChangeListener?
 	 */
 	private fun setupNfcButtonListener()
 	{
@@ -2275,6 +2320,13 @@ class NacCardHolder(
 	{
 		// Set the listener
 		switch.setOnCheckedChangeListener { button, state ->
+
+			// Do nothing if binding
+			// TODO: Does this need to be in other listeners?
+			if (isBinding)
+			{
+				return@setOnCheckedChangeListener
+			}
 
 			// Check if the alarm can be modified
 			if (checkCanModifyAlarm())
@@ -2381,6 +2433,9 @@ class NacCardHolder(
 
 					// Change the volume icon, if needed
 					setVolumeImageView()
+
+					// Setup the skip icon
+					setSummarySkipNextAlarmIcon()
 				}
 				// Alarm cannot be changed
 				else
@@ -2443,7 +2498,7 @@ class NacCardHolder(
 	 */
 	private fun shouldShowExtraView(): Boolean
 	{
-		return alarm!!.isInUse || alarm!!.willAlarmSoon() || alarm!!.shouldSkipNextAlarm
+		return alarm!!.isInUse || alarm!!.willAlarmSoon()
 	}
 
 	/**
@@ -2462,6 +2517,7 @@ class NacCardHolder(
 
 		// Setup the listener
 		dialog.onNameEnteredListener = OnNameEnteredListener { name ->
+
 			// Reset the skip next alarm flag
 			alarm!!.shouldSkipNextAlarm = false
 
@@ -2471,9 +2527,11 @@ class NacCardHolder(
 			// Setup the views
 			setNameButton()
 			setSummaryNameView()
+			setSummarySkipNextAlarmIcon()
 
 			// Call the listener
 			callOnCardUpdatedListener()
+
 		}
 
 		// Show the dialog
@@ -2502,6 +2560,7 @@ class NacCardHolder(
 			setMeridianColor()
 			setSwitchView()
 			setSummaryDaysView()
+			setSummarySkipNextAlarmIcon()
 
 			// Refresh dismiss buttons and collapse refresh if need be
 			refreshExtraViewWithCollapse()
@@ -2543,8 +2602,8 @@ class NacCardHolder(
 		// Set the skip flag
 		alarm!!.shouldSkipNextAlarm = true
 
-		// Refresh the extra view
-		refreshExtraViewWithCollapse()
+		// Setup the skip icon
+		setSummarySkipNextAlarmIcon()
 
 		// Call the update listener
 		callOnCardUpdatedListener()
@@ -2558,8 +2617,8 @@ class NacCardHolder(
 		// Reset the skip next alarm flag
 		alarm!!.shouldSkipNextAlarm = false
 
-		// Refresh the extra view
-		refreshExtraViewWithCollapse()
+		// Setup the skip icon
+		setSummarySkipNextAlarmIcon()
 
 		// Call the update listener
 		callOnCardUpdatedListener()
