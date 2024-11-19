@@ -173,7 +173,8 @@
 		<service
 			android:name=".alarm.activealarm.NacActiveAlarmService"
 			android:foregroundServiceType="systemExempted"
-			android:exported="false">
+			android:exported="false"
+			android:directBootAware="true">
 		</service>
 
 		<!-- Start an upcoming reminder -->

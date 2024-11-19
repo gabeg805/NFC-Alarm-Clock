@@ -31,14 +31,18 @@ class NacStartupBroadcastReceiver
 	 */
 	override fun onReceive(context: Context, intent: Intent) = goAsync {
 
+		println("RECEIVED THE BROADCAST : ${intent.action}")
 		// Check that the intent action is correct
 		if ((intent.action == Intent.ACTION_BOOT_COMPLETED)
 			|| (intent.action == Intent.ACTION_LOCKED_BOOT_COMPLETED))
 		{
+			println("READING ALARMS")
 			// Get all the alarms
 			val alarms = alarmRepository.getAllAlarms()
+			println("FOUND ALARMS : ${alarms.size}")
 
 			// Update all the alarms
+			println("UPDATING SCHEDULE OF ALARMS")
 			NacScheduler.updateAll(context, alarms)
 		}
 
