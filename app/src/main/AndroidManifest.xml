@@ -52,8 +52,11 @@
 		android:theme="@style/AppTheme"
 		android:label="@string/app_name"
 		android:name=".NacNfcAlarmClockApplication"
-		android:icon="@mipmap/app"
+		android:icon="@mipmap/ic_launcher"
+		android:roundIcon="@mipmap/ic_launcher_round"
 		android:allowBackup="false"
+		android:dataExtractionRules="@xml/data_extraction_rules"
+		android:fullBackupContent="@xml/full_backup_content"
 		android:enableOnBackInvokedCallback="true"
 		android:supportsRtl="true"
 		tools:targetApi="tiramisu">

@@ -46,6 +46,12 @@ fun View.performHapticFeedback()
  */
 fun MaterialAutoCompleteTextView.setTextFromIndex(index: Int)
 {
+	// Check if the index is invalid
+	if (index < 0)
+	{
+		return
+	}
+
 	// Get the text
 	val text = this.adapter.getItem(index) as String
 

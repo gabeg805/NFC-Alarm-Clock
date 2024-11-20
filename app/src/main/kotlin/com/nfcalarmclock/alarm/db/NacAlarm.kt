@@ -1349,12 +1349,19 @@ class NacAlarm()
 		 */
 		fun calcDismissEarlyIndex(time: Int): Int
 		{
-			return if (time <= 5)
+			return if (time == 0)
 			{
+				// Time should never be 0 min, but if it is, use the default of 30 min
+				30 / 5 + 3
+			}
+			else if (time <= 5)
+			{
+				// 1 to 5 min
 				time - 1
 			}
 			else
 			{
+				// 10+ min
 				time / 5 + 3
 			}
 		}
