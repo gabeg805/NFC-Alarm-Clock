@@ -26,25 +26,11 @@ class NacNfcTagRepository @Inject constructor(
 		get() = nfcTagDao.allNfcTags
 
 	/**
-	 * Count the number of NFC tags.
-	 *
-	 * @return The number of NFC tags.
-	 */
-	suspend fun count(): Long = nfcTagDao.count()
-
-	/**
 	 * Delete an NFC tag, asynchronously, from the database.
 	 *
 	 * @return The number of rows deleted.
 	 */
 	suspend fun delete(nfcTag: NacNfcTag): Int = nfcTagDao.delete(nfcTag)
-
-	/**
-	 * Delete an NFC tag, asynchronously, from the database.
-	 *
-	 * @return The number of rows deleted.
-	 */
-	suspend fun deleteAll(): Int = nfcTagDao.deleteAll()
 
 	/**
 	 * Get an NFC tag with the given ID.

@@ -355,11 +355,19 @@ abstract class NacAlarmDatabase
 		{
 			// Get the dao
 			val alarmDao = db.alarmDao()
+			val allAlarms = alarmDao.getAllAlarms()
 
 			// Copy all the alarms
 			importDb.alarmDao().getAllAlarms().forEach { a ->
-				a.id = 0
-				alarmDao.insert(a)
+
+				// Make sure none of the alarms in the database already match the
+				// one that will be inserted
+				if (allAlarms.all { !it.fuzzyEquals(a) })
+				{
+					a.id = 0
+					alarmDao.insert(a)
+				}
+
 			}
 		}
 

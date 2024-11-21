@@ -42,20 +42,6 @@ class NacNfcTagViewModel @Inject constructor(
 	}
 
 	/**
-	 * Count the number of NFC tags.
-	 *
-	 * @return The number of NFC tags.
-	 */
-	suspend fun count(): Long = nfcTagRepository.count()
-
-	/**
-	 * Delete an NFC tag, asynchronously, from the database.
-	 *
-	 * @return The number of rows deleted.
-	 */
-	suspend fun deleteAll(): Int = nfcTagRepository.deleteAll()
-
-	/**
 	 * Find an NFC tag.
 	 *
 	 * @param nfcId The ID of the NFC tag to find.

@@ -56,26 +56,6 @@ open class NacTreeNode<T>(
 	}
 
 	/**
-	 * Get the number of children.
-	 *
-	 * @return The number of children.
-	 */
-	fun count(): Int
-	{
-		return children.size
-	}
-
-	/**
-	 * Check if the child exists.
-	 *
-	 * @return True if the child exists, and False otherwise.
-	 */
-	fun exists(key: T): Boolean
-	{
-		return this.getChild(key) != null
-	}
-
-	/**
 	 * Check if the child exists as a child of the node.
 	 *
 	 * @return True if the child exists as a child of the node, and False
@@ -121,14 +101,6 @@ open class NacTreeNode<T>(
 			{
 				null
 			}
-	}
-
-	/**
-	 * @see .count
-	 */
-	fun size(): Int
-	{
-		return this.count()
 	}
 
 }

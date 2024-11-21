@@ -862,6 +862,50 @@ class NacAlarm()
 	}
 
 	/**
+	 * Fuzzy equals to compare most of the important alarm attributes, but not all
+	 * attributes.
+	 */
+	fun fuzzyEquals(alarm: NacAlarm): Boolean
+	{
+		return (isEnabled == alarm.isEnabled)
+			&& (hour == alarm.hour)
+			&& (minute == alarm.minute)
+			&& (days == alarm.days)
+			&& (repeat == alarm.repeat)
+			&& (vibrate == alarm.vibrate)
+			&& (useNfc == alarm.useNfc)
+			&& (useFlashlight == alarm.useFlashlight)
+			&& (flashlightStrengthLevel == alarm.flashlightStrengthLevel)
+			&& (graduallyIncreaseFlashlightStrengthLevelWaitTime == alarm.graduallyIncreaseFlashlightStrengthLevelWaitTime)
+			&& (shouldBlinkFlashlight == alarm.shouldBlinkFlashlight)
+			&& (flashlightOnDuration == alarm.flashlightOnDuration)
+			&& (flashlightOffDuration == alarm.flashlightOffDuration)
+			&& (nfcTagId == alarm.nfcTagId)
+			&& (mediaPath == alarm.mediaPath)
+			&& (volume == alarm.volume)
+			&& (audioSource == alarm.audioSource)
+			&& (name == alarm.name)
+			&& (sayCurrentTime == alarm.sayCurrentTime)
+			&& (sayAlarmName == alarm.sayAlarmName)
+			&& (ttsFrequency == alarm.ttsFrequency)
+			&& (shouldGraduallyIncreaseVolume == alarm.shouldGraduallyIncreaseVolume)
+			&& (shouldRestrictVolume == alarm.shouldRestrictVolume)
+			&& (autoDismissTime == alarm.autoDismissTime)
+			&& (useDismissEarly == alarm.useDismissEarly)
+			&& (dismissEarlyTime == alarm.dismissEarlyTime)
+			&& (autoSnoozeTime == alarm.autoSnoozeTime)
+			&& (maxSnooze == alarm.maxSnooze)
+			&& (snoozeDuration == alarm.snoozeDuration)
+			&& (useEasySnooze == alarm.useEasySnooze)
+			&& (showReminder == alarm.showReminder)
+			&& (timeToShowReminder == alarm.timeToShowReminder)
+			&& (reminderFrequency == alarm.reminderFrequency)
+			&& (useTtsForReminder == alarm.useTtsForReminder)
+			&& (shouldSkipNextAlarm == alarm.shouldSkipNextAlarm)
+			&& (shouldDeleteAlarmAfterDismissed == alarm.shouldDeleteAlarmAfterDismissed)
+	}
+
+	/**
 	 * @return The time string.
 	 */
 	fun getClockTime(context: Context): String

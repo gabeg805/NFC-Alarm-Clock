@@ -198,7 +198,7 @@ class NacStatisticsSettingFragment
 		val numCreated = statisticViewModel.createdCount()
 
 		// Set the text in the textview
-		textview.text = numCreated.toString()
+		textview.text = String.format(Locale.getDefault(), "%d", numCreated)
 	}
 
 	/**
@@ -215,7 +215,7 @@ class NacStatisticsSettingFragment
 		val numCurrent = numCreated - numDeleted
 
 		// Set the text in the textview
-		textview.text = numCurrent.toString()
+		textview.text = String.format(Locale.getDefault(), "%d", numCurrent)
 	}
 
 	/**
@@ -230,7 +230,7 @@ class NacStatisticsSettingFragment
 		val numDeleted = statisticViewModel.deletedCount()
 
 		// Set the text in the textview
-		textview.text = numDeleted.toString()
+		textview.text = String.format(Locale.getDefault(), "%d", numDeleted)
 	}
 
 	/**
@@ -262,7 +262,7 @@ class NacStatisticsSettingFragment
 		val numMissed = statisticViewModel.missedCount()
 
 		// Set the text in the textview
-		textview.text = numMissed.toString()
+		textview.text = String.format(Locale.getDefault(), "%d", numMissed)
 	}
 
 	/**

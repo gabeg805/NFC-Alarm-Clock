@@ -148,7 +148,6 @@
 	<string name="error_message_unable_to_email_statistics">Không thể gửi số liệu thống kê qua email</string>
 	<string name="error_message_unable_to_shine_flashlight">Không thể chiếu đèn pin</string>
 	<string name="error_message_unable_to_start_foreground_service">Không thể khởi động dịch vụ nền trước. Vui lòng bật quyền</string>
-	<string name="error_message_import_export_uri_null">Không thể lấy được URI</string>
 	<string name="error_message_unable_to_open_import_export_stream">Không thể mở tập tin</string>
 
 
@@ -184,9 +183,8 @@
 	<string name="title_tts_how_often_to_say" tools:ignore="TypographyEllipsis">Đã bao lần phải nói điều đó...</string>
 	<string name="title_next_alarm_format">Chọn một định dạng</string>
 	<string name="title_folder_selected">Bạn đã chọn một thư mục</string>
-	<string name="title_active_alarm">Báo động hoạt động</string>
-	<string name="title_missed_alarm">Báo thức bị bỏ lỡ</string>
-	<string name="title_upcoming_reminder">Lời nhắc sắp tới</string>
+	<string name="title_active_alarms">Báo động hoạt động</string>
+	<string name="title_upcoming_reminders">Lời nhắc sắp tới</string>
 	<string name="title_dismissed_alarms">Đã loại bỏ cảnh báo</string>
 	<string name="title_missed_alarms">Báo thức bị bỏ lỡ</string>
 	<string name="title_snoozed_alarms">Báo thức được báo lại</string>
@@ -559,7 +557,11 @@
 	</plurals>
 
 	<plurals name="missed_alarm">
-		<item quantity="other">@string/title_missed_alarm</item>
+		<item quantity="other">@string/title_missed_alarms</item>
+	</plurals>
+
+	<plurals name="upcoming_reminder">
+		<item quantity="other">@string/title_upcoming_reminders</item>
 	</plurals>
 
 	<plurals name="unit_day">

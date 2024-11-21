@@ -11,7 +11,7 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 /**
  * Audio attributes.
  */
-class NacAudioAttributes constructor(
+class NacAudioAttributes(
 
 	/**
 	 * Context.

@@ -23,14 +23,6 @@ interface NacNfcTagDao
 	val allNfcTags: LiveData<List<NacNfcTag>>
 
 	/**
-	 * Count the number of NFC tags.
-	 *
-	 * @return The number of NFC tags.
-	 */
-	@Query("SELECT COUNT(id) FROM nfc_tag")
-	suspend fun count(): Long
-
-	/**
 	 * Delete an NFC tag.
 	 *
 	 * @param  nfcTag  An NFC tag to delete.
@@ -39,14 +31,6 @@ interface NacNfcTagDao
 	 */
 	@Delete
 	suspend fun delete(nfcTag: NacNfcTag): Int
-
-	/**
-	 * Delete all NFC tags.
-	 *
-	 * @return The number of rows deleted.
-	 */
-	@Query("DELETE FROM nfc_tag")
-	suspend fun deleteAll(): Int
 
 	/**
 	 * Find an NFC tag.

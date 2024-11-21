@@ -148,7 +148,6 @@
 	<string name="error_message_unable_to_email_statistics">Unable to email statistics</string>
 	<string name="error_message_unable_to_shine_flashlight">Unable to shine flashlight</string>
 	<string name="error_message_unable_to_start_foreground_service">Unable to start foreground service. Please enable permission</string>
-	<string name="error_message_import_export_uri_null">Unable to get URI</string>
 	<string name="error_message_unable_to_open_import_export_stream">Unable to open file</string>
 
 
@@ -184,9 +183,8 @@
 	<string name="title_tts_how_often_to_say" tools:ignore="TypographyEllipsis">How often to say it...</string>
 	<string name="title_next_alarm_format">Select a format</string>
 	<string name="title_folder_selected">You selected a folder</string>
-	<string name="title_active_alarm">Active alarms</string>
-	<string name="title_missed_alarm">Missed alarms</string>
-	<string name="title_upcoming_reminder">Upcoming reminders</string>
+	<string name="title_active_alarms">Active alarms</string>
+	<string name="title_upcoming_reminders">Upcoming reminders</string>
 	<string name="title_dismissed_alarms">Dismissed alarms</string>
 	<string name="title_missed_alarms">Missed alarms</string>
 	<string name="title_snoozed_alarms">Snoozed alarms</string>
@@ -561,7 +559,12 @@
 
 	<plurals name="missed_alarm">
 		<item quantity="one">Missed alarm</item>
-		<item quantity="other">@string/title_missed_alarm</item>
+		<item quantity="other">@string/title_missed_alarms</item>
+	</plurals>
+
+	<plurals name="upcoming_reminder">
+		<item quantity="one">Upcoming reminder</item>
+		<item quantity="other">@string/title_upcoming_reminders</item>
 	</plurals>
 
 	<plurals name="unit_day">

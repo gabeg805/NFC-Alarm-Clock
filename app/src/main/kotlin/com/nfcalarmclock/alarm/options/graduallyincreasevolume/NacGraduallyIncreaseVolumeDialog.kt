@@ -139,7 +139,7 @@ class NacGraduallyIncreaseVolumeDialog
 		// Get the views
 		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.should_gradually_increase_volume)
 		val description: TextView = dialog!!.findViewById(R.id.should_gradually_increase_volume_summary)
-		checkBox = dialog!!.findViewById<MaterialCheckBox>(R.id.should_gradually_increase_volume_checkbox)!!
+		checkBox = dialog!!.findViewById(R.id.should_gradually_increase_volume_checkbox)!!
 
 		// Set the status of the checkbox
 		checkBox.isChecked = default
@@ -200,16 +200,6 @@ class NacGraduallyIncreaseVolumeDialog
 		autoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
 			selectedWaitTime = NacAlarm.calcGraduallyIncreaseVolumeWaitTime(position)
 		}
-	}
-
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacGraduallyIncreaseVolumeDialog"
-
 	}
 
 }

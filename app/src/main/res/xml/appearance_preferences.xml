@@ -106,7 +106,7 @@
 		android:title="@string/notification_category">
 
 		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
-			android:title="@string/title_missed_alarm"
+			android:title="@string/title_missed_alarms"
 			android:key="@string/missed_alarm_key"
 			android:summaryOn="@string/missed_alarm_true"
 			android:summaryOff="@string/description_no_notification"

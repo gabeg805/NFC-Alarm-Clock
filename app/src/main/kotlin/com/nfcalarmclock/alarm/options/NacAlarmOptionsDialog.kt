@@ -171,14 +171,4 @@ class NacAlarmOptionsDialog
 		})
 	}
 
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacAlarmOptionsDialog"
-
-	}
-
 }

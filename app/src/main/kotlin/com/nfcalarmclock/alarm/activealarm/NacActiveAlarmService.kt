@@ -9,18 +9,17 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.PowerManager
 import android.os.PowerManager.WakeLock
-import androidx.core.app.NotificationManagerCompat
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmRepository
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.main.NacMainActivity.Companion.startMainActivity
 import com.nfcalarmclock.alarm.options.missedalarm.NacMissedAlarmNotification
-import com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderNotification
-import com.nfcalarmclock.system.scheduler.NacScheduler
+import com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderService
+import com.nfcalarmclock.main.NacMainActivity.Companion.startMainActivity
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.NacAlarmStatisticRepository
+import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.util.NacIntent
 import com.nfcalarmclock.util.NacIntent.getAlarm
 import com.nfcalarmclock.util.NacUtility
@@ -160,14 +159,11 @@ class NacActiveAlarmService
 	 */
 	private fun disableReminderNotification()
 	{
-		// Get the alarm ID or return if it cannot be found
-		val id = alarm?.id?.toInt() ?: return
+		// Get the intent to stop the reminder service
+		val clearReminderIntent = NacUpcomingReminderService.getClearReminderIntent(this, alarm)
 
-		// Get the notification manager
-		val notificationManager = NotificationManagerCompat.from(this)
-
-		// Cancel the notification
-		notificationManager.cancel(NacUpcomingReminderNotification.BASE_ID + id)
+		// Send the intent to stop the reminder service
+		startService(clearReminderIntent)
 	}
 
 	/**

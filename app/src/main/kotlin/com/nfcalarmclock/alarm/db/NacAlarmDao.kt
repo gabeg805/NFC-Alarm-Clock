@@ -46,14 +46,6 @@ interface NacAlarmDao
 	suspend fun delete(alarm: NacAlarm): Int
 
 	/**
-	 * Delete all alarms.
-	 *
-	 * @return The number of rows deleted.
-	 */
-	@Query("DELETE FROM alarm")
-	suspend fun deleteAll(): Int
-
-	/**
 	 * Find an alarm.
 	 *
 	 * @param  id  The ID of the alarm to find.

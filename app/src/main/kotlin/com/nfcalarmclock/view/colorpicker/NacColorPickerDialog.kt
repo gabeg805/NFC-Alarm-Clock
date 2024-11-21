@@ -192,7 +192,7 @@ class NacColorPickerDialog
 		}
 
 		// Set the new color (this affects the color picker, example color, and edit text
-		color = Color.parseColor(editTextColor)
+		color = Color.parseColor("#$editTextColor")
 
 		// Close the keyboard
 		closeKeyboard()

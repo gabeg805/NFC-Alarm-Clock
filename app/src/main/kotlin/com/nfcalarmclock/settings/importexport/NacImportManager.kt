@@ -44,7 +44,6 @@ class NacImportManager(fragment: Fragment)
 		// Check if URI is populated
 		if (uri == null)
 		{
-			NacUtility.quickToast(context, R.string.error_message_import_export_uri_null)
 			return null
 		}
 

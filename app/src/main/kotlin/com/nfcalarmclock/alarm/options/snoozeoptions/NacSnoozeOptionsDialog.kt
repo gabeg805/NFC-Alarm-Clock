@@ -204,7 +204,7 @@ class NacSnoozeOptionsDialog
 		// Get the views
 		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.should_easy_snooze)
 		val description: TextView = dialog!!.findViewById(R.id.should_easy_snooze_summary)
-		easySnoozeCheckBox = dialog!!.findViewById<MaterialCheckBox>(R.id.should_easy_snooze_checkbox)!!
+		easySnoozeCheckBox = dialog!!.findViewById(R.id.should_easy_snooze_checkbox)!!
 
 		// Set the default checkbox value
 		easySnoozeCheckBox.isChecked = default
@@ -225,16 +225,6 @@ class NacSnoozeOptionsDialog
 			setEasySnoozeDescription(description)
 
 		}
-	}
-
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacSnoozeOptionsDialog"
-
 	}
 
 }

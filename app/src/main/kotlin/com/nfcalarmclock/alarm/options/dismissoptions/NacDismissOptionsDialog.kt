@@ -265,7 +265,7 @@ class NacDismissOptionsDialog
 		// Get the views
 		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.should_use_dismiss_early)
 		val description: TextView = dialog!!.findViewById(R.id.should_use_dismiss_early_summary)
-		dismissEarlyCheckBox = dialog!!.findViewById<MaterialCheckBox>(R.id.should_use_dismiss_early_checkbox)!!
+		dismissEarlyCheckBox = dialog!!.findViewById(R.id.should_use_dismiss_early_checkbox)!!
 
 		// Set the default checkbox value
 		dismissEarlyCheckBox.isChecked = default
@@ -289,16 +289,6 @@ class NacDismissOptionsDialog
 			setHowEarlyToDismissUsable()
 
 		}
-	}
-
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacSnoozeOptionsDialog"
-
 	}
 
 }

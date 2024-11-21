@@ -49,12 +49,12 @@ class NacTextToSpeech(
 		/**
 		 * Called when speech engine is done speaking.
 		 */
-		fun onDoneSpeaking(tts: NacTextToSpeech)
+		fun onDoneSpeaking()
 
 		/**
 		 * Called when speech engine has started speaking.
 		 */
-		fun onStartSpeaking(tts: NacTextToSpeech)
+		fun onStartSpeaking()
 
 	}
 
@@ -68,11 +68,6 @@ class NacTextToSpeech(
 		 * Context.
 		 */
 		private val context: Context,
-
-		/**
-		 * Text-to-speech engine.
-		 */
-		private val textToSpeech: NacTextToSpeech,
 
 		/**
 		 * Audio focus change listener.
@@ -94,7 +89,7 @@ class NacTextToSpeech(
 		override fun onDone(utteranceId: String)
 		{
 			// Call done speaking listener
-			onSpeakingListener?.onDoneSpeaking(textToSpeech)
+			onSpeakingListener?.onDoneSpeaking()
 
 			// Abandon audio focus
 			NacAudioManager.abandonFocus(context, onAudioFocusChangeListener)
@@ -106,7 +101,7 @@ class NacTextToSpeech(
 		override fun onStart(utteranceId: String)
 		{
 			// Call the start speaking listener
-			onSpeakingListener?.onStartSpeaking(textToSpeech)
+			onSpeakingListener?.onStartSpeaking()
 		}
 
 		/**
@@ -148,7 +143,7 @@ class NacTextToSpeech(
 	 * The utterance listener.
 	 */
 	private val utteranceListener: NacUtteranceListener =
-		NacUtteranceListener(context, this, null)
+		NacUtteranceListener(context, null)
 
 	/**
 	 * Constructor.

@@ -76,7 +76,6 @@ class NacOptionalPermissionPreference
 	/**
 	 * Set the color of the permission text.
 	 */
-	@Suppress("deprecation")
 	private fun setPermissionTextColor(textView: TextView)
 	{
 		// Get the color based on the API

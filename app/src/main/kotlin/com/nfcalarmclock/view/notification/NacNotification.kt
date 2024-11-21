@@ -13,6 +13,7 @@ import android.text.format.DateFormat
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.util.NacCalendar
@@ -99,8 +100,7 @@ abstract class NacNotification(
 	/**
 	 * The small icon of the notification.
 	 */
-	private val smallIcon: Int
-		get() = R.drawable.alarm
+	private val smallIcon: Int = R.drawable.alarm
 
 	/**
 	 * Get the number of lines in the body.
@@ -113,7 +113,7 @@ abstract class NacNotification(
 		get() = body.size
 
 	/**
-	 * Check if should create channel by checkin if the API level < 26.
+	 * Check if should create channel by checking if the API level >= 26.
 	 */
 	private val shouldCreateChannel: Boolean
 		get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
@@ -137,9 +137,11 @@ abstract class NacNotification(
 			.setGroup(group)
 			.setContentIntent(contentPendingIntent)
 			.setContentText(contentText)
+			.setColor(ContextCompat.getColor(context, R.color.ic_launcher_background))
 			.setSmallIcon(smallIcon)
 			.setPriority(priority)
 			.setCategory(category)
+			.setTicker(channelName)
 
 		// Check if title should be added
 		if (title.isNotEmpty())
@@ -149,14 +151,6 @@ abstract class NacNotification(
 
 		// Return the builder
 		return builder
-	}
-
-	/**
-	 * Cancel a previously shown notification.
-	 */
-	fun cancel()
-	{
-		notificationManager.cancel(id)
 	}
 
 	/**
@@ -211,13 +205,6 @@ abstract class NacNotification(
 				// alarm
 				"$time  —  ${alarm.name}"
 			}
-	}
-
-	/**
-	 * Setup the notification body lines.
-	 */
-	protected open fun setupBody()
-	{
 	}
 
 	/**

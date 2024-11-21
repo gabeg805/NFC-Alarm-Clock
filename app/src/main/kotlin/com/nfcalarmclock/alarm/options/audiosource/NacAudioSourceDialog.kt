@@ -139,14 +139,4 @@ class NacAudioSourceDialog
 		}
 	}
 
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacAudioSourceDialog"
-
-	}
-
 }

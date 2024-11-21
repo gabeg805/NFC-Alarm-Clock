@@ -148,10 +148,10 @@ class NacFlashlight(context: Context)
 			// Turn off the flashlight
 			cameraManager.setTorchMode(cameraId, false)
 		}
-		catch (e: CameraAccessException)
+		catch (_: CameraAccessException)
 		{
 		}
-		catch (e: IllegalArgumentException)
+		catch (_: IllegalArgumentException)
 		{
 		}
 
@@ -181,10 +181,10 @@ class NacFlashlight(context: Context)
 				cameraManager.setTorchMode(cameraId, true)
 			}
 		}
-		catch (e: CameraAccessException)
+		catch (_: CameraAccessException)
 		{
 		}
-		catch (e: IllegalArgumentException)
+		catch (_: IllegalArgumentException)
 		{
 		}
 

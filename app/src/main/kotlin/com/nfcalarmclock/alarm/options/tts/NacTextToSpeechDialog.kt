@@ -203,14 +203,4 @@ class NacTextToSpeechDialog
 		ttsFreqInputLayout.isEnabled = shouldUseTts
 	}
 
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacAlarmTextToSpeechDialog"
-
-	}
-
 }

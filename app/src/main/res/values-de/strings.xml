@@ -148,7 +148,6 @@
 	<string name="error_message_unable_to_email_statistics">Statistiken können nicht per E-Mail versendet werden</string>
 	<string name="error_message_unable_to_shine_flashlight">Taschenlampe kann nicht leuchten</string>
 	<string name="error_message_unable_to_start_foreground_service">Vordergrunddienst kann nicht gestartet werden. Bitte aktivieren Sie die Berechtigung.</string>
-	<string name="error_message_import_export_uri_null">URI kann nicht abgerufen werden.</string>
 	<string name="error_message_unable_to_open_import_export_stream">Datei kann nicht geöffnet werden</string>
 
 
@@ -184,9 +183,8 @@
 	<string name="title_tts_how_often_to_say" tools:ignore="TypographyEllipsis">Wie oft soll ich es sagen...</string>
 	<string name="title_next_alarm_format">Wählen Sie ein Format</string>
 	<string name="title_folder_selected">Sie haben einen Ordner ausgewählt</string>
-	<string name="title_active_alarm">Aktive Alarme</string>
-	<string name="title_missed_alarm">Verpasste Alarme</string>
-	<string name="title_upcoming_reminder">Bevorstehende Erinnerungen</string>
+	<string name="title_active_alarms">Aktive Alarme</string>
+	<string name="title_upcoming_reminders">Bevorstehende Erinnerungen</string>
 	<string name="title_dismissed_alarms">Abgelehnte Alarme</string>
 	<string name="title_missed_alarms">Verpasste Alarme</string>
 	<string name="title_snoozed_alarms">Schlummernde Alarme</string>
@@ -561,7 +559,12 @@
 
 	<plurals name="missed_alarm">
 		<item quantity="one">Verpasster Alarm</item>
-		<item quantity="other">@string/title_missed_alarm</item>
+		<item quantity="other">@string/title_missed_alarms</item>
+	</plurals>
+
+	<plurals name="upcoming_reminder">
+		<item quantity="one">Bevorstehende Erinnerung</item>
+		<item quantity="other">@string/title_upcoming_reminders</item>
 	</plurals>
 
 	<plurals name="unit_day">

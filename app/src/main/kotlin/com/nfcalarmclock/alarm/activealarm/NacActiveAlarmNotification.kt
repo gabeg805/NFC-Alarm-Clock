@@ -4,8 +4,6 @@ import android.annotation.TargetApi
 import android.app.NotificationChannel
 import android.app.PendingIntent
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Build
 import android.text.format.DateFormat
 import androidx.annotation.OptIn
@@ -54,7 +52,7 @@ class NacActiveAlarmNotification(
 	 * @see NacNotification.channelName
 	 */
 	override val channelName: String
-		get() = context.getString(R.string.title_active_alarm)
+		get() = context.getString(R.string.title_active_alarms)
 
 	/**
 	 * @see NacNotification.channelDescription
@@ -67,6 +65,7 @@ class NacActiveAlarmNotification(
 	 */
 	override val title: String
 		get() = "<b>$appName</b>"
+		//get() = if ((alarm != null) && alarm.name.isNotEmpty()) "<b>${alarm.name}</b>" else "<b>$appName</b>"
 
 	/**
 	 * @see NacNotification.priority
@@ -166,60 +165,6 @@ class NacActiveAlarmNotification(
 		}
 
 	/**
-	 * @return The notification large icon.
-	 */
-	private val largeIcon: Bitmap?
-		get()
-		{
-			val res = context.resources
-			val icon = BitmapFactory.decodeResource(res, R.mipmap.app)
-			val density = res.displayMetrics.density
-
-			// Determine the size of the bitmap
-			val size: Float = if (density.compareTo(4.0f) >= 0)
-			{
-				256f
-			}
-			else if (density.compareTo(3.0f) >= 0)
-			{
-				192f
-			}
-			else if (density.compareTo(2.0f) >= 0)
-			{
-				128f
-			}
-			else if (density.compareTo(1.5f) >= 0)
-			{
-				96f
-			}
-			else if (density.compareTo(1.0f) >= 0)
-			{
-				64f
-			}
-			else if (density.compareTo(0.75f) >= 0)
-			{
-				48f
-			}
-			else
-			{
-				return icon
-			}
-
-			// Determine the integer size
-			val actualSize = (size * density).toInt()
-
-			// Create the bitmap
-			return if (icon != null)
-			{
-				Bitmap.createScaledBitmap(icon, actualSize, actualSize, true)
-			}
-			else
-			{
-				null
-			}
-		}
-
-	/**
 	 * Name of the app.
 	 */
 	private val appName = context.getString(R.string.app_name)
@@ -235,13 +180,13 @@ class NacActiveAlarmNotification(
 
 		// Build the notification
 		var builder = super.builder()
-			.setLargeIcon(largeIcon)
 			.setFullScreenIntent(contentPendingIntent, true)
 			.setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
 			.setAutoCancel(false)
 			.setOngoing(true)
 			.setShowWhen(true)
-			.setTicker(appName)
+			.setSound(null)
+			//.setLargeIcon(Icon.createWithResource(context, R.mipmap.ic_launcher_round))
 			.addAction(R.drawable.snooze, snooze, snoozePendingIntent)
 
 		// Check if NFC does not need to be used to dismiss the alarm
@@ -270,6 +215,7 @@ class NacActiveAlarmNotification(
 		channel.setShowBadge(true)
 		channel.enableLights(true)
 		channel.enableVibration(true)
+		channel.setSound(null, null)
 
 		return channel
 	}

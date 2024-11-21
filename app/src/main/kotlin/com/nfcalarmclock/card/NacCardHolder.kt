@@ -87,7 +87,7 @@ class NacCardHolder(
 	/**
 	 * Listener for when a card is expanded.
 	 */
-	interface OnCardExpandedListener
+	fun interface OnCardExpandedListener
 	{
 		fun onCardExpanded(holder: NacCardHolder, alarm: NacAlarm)
 	}

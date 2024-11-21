@@ -192,7 +192,7 @@ class NacFlashlightOptionsDialog
 		// Get the views
 		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.should_flashlight_blink)
 		val description: TextView = dialog!!.findViewById(R.id.description_should_flashlight_blink)
-		blinkCheckBox = dialog!!.findViewById<MaterialCheckBox>(R.id.should_flashlight_blink_checkbox)!!
+		blinkCheckBox = dialog!!.findViewById(R.id.should_flashlight_blink_checkbox)!!
 
 		// Set the status of the checkbox
 		blinkCheckBox.isChecked = default
@@ -398,16 +398,6 @@ class NacFlashlightOptionsDialog
 		{
 			flashlight.turnOn()
 		}
-	}
-
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacFlashlightOptionsDialog"
-
 	}
 
 }

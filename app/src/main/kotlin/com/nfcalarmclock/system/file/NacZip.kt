@@ -27,25 +27,24 @@ fun unzipFile(
 		// Iterate over each entry in the zip file
 		while (true)
 		{
-			val entry = zipInput.nextEntry ?: break
-			val path = "${outputDirectory.path}/${entry.name}"
-			val canonicalPath = File(path).canonicalPath
+			val zipEntry = zipInput.nextEntry ?: break
+			val file = File("${outputDirectory.path}/${zipEntry.name}")
 
 			// Check for a zip path traversal vulnerability where if a zip entry contains
 			// path traversal characters ("../"), then it could potentialy unzip files to
 			// an unintended and potentially dangerous directory
-			if (!canonicalPath.startsWith(outputDirectory.path))
+			if (!file.canonicalPath.startsWith(outputDirectory.canonicalPath))
 			{
 				continue
 			}
 
 			// Unzip the entry and copy its data to the specified path
-			BufferedOutputStream(FileOutputStream(path)).use { outputStream ->
+			BufferedOutputStream(FileOutputStream(file.path)).use { outputStream ->
 				zipInput.copyTo(outputStream, 1024)
 			}
 
 			// Add the path of the unzipped file to the list
-			unzippedFiles.add(path)
+			unzippedFiles.add(file.path)
 
 		}
 

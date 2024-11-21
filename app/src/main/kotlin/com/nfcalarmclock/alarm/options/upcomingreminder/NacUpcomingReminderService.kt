@@ -99,17 +99,7 @@ class NacUpcomingReminderService
 			/**
 			 * Called when done speaking.
 			 */
-
-			/**
-			 * Called when done speaking.
-			 */
-			/**
-			 * Called when done speaking.
-			 */
-			/**
-			 * Called when done speaking.
-			 */
-			override fun onDoneSpeaking(tts: NacTextToSpeech)
+			override fun onDoneSpeaking()
 			{
 				// Revert the volume
 				audioAttributes.revertVolume()
@@ -118,17 +108,7 @@ class NacUpcomingReminderService
 			/**
 			 * Called when the text-to-speech engine has started.
 			 */
-
-			/**
-			 * Called when the text-to-speech engine has started.
-			 */
-			/**
-			 * Called when the text-to-speech engine has started.
-			 */
-			/**
-			 * Called when the text-to-speech engine has started.
-			 */
-			override fun onStartSpeaking(tts: NacTextToSpeech)
+			override fun onStartSpeaking()
 			{
 			}
 
@@ -246,6 +226,11 @@ class NacUpcomingReminderService
 	{
 
 		/**
+		 * Action to start the service.
+		 */
+		private const val ACTION_CLEAR_REMINDER = "com.nfcalarmclock.ACTION_CLEAR_REMINDER"
+
+		/**
 		 * Create an intent that will be used to start the foreground upcoming
 		 * reminder service.
 		 *
@@ -262,11 +247,6 @@ class NacUpcomingReminderService
 			// Add the alarm to the intent
 			return NacIntent.addAlarm(intent, alarm)
 		}
-
-		/**
-		 * Action to start the service.
-		 */
-		private const val ACTION_CLEAR_REMINDER = "com.nfcalarmclock.ACTION_CLEAR_REMINDER"
 
 		/**
 		 * Get an intent that will be used to clear the reminder.

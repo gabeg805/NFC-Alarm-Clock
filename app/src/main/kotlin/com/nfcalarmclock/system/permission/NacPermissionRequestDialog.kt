@@ -20,7 +20,7 @@ abstract class NacPermissionRequestDialog
 	/**
 	 * Listener for when what's new dialog has been read.
 	 */
-	@Suppress("unused_parameter")
+	@Suppress("Unused")
 	interface OnPermissionRequestListener
 	{
 		fun onPermissionRequestAccepted(permission: String)
@@ -148,16 +148,6 @@ abstract class NacPermissionRequestDialog
 			separator.visibility = View.GONE
 			pages.visibility = View.GONE
 		}
-	}
-
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacScheduleExactAlarmPermissionDialog"
-
 	}
 
 }

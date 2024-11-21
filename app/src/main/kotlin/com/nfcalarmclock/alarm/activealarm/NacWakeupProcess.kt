@@ -201,7 +201,7 @@ class NacWakeupProcess(
 			/**
 			 * Called when done speaking.
 			 */
-			override fun onDoneSpeaking(tts: NacTextToSpeech)
+			override fun onDoneSpeaking()
 			{
 				// Use handler to start wake up process so that the media
 				// player is accessed on the correct thread
@@ -211,7 +211,7 @@ class NacWakeupProcess(
 			/**
 			 * Called when the text-to-speech engine has started.
 			 */
-			override fun onStartSpeaking(tts: NacTextToSpeech)
+			override fun onStartSpeaking()
 			{
 				// Stop any vibration when TTS is playing
 				cleanupVibrate()

@@ -45,7 +45,7 @@ class NacMissedAlarmNotification(
 	 * @see NacNotification.channelName
 	 */
 	override val channelName: String
-		get() = context.getString(R.string.title_missed_alarm)
+		get() = context.getString(R.string.title_missed_alarms)
 
 	/**
 	 * @see NacNotification.channelDescription
@@ -159,9 +159,9 @@ class NacMissedAlarmNotification(
 	}
 
 	/**
-	 * @see NacNotification.setupBody
+	 * Setup the notification body lines.
 	 */
-	override fun setupBody()
+	private fun setupBody()
 	{
 		// Get the lines from the notification
 		val newBody = getExtraLines(context, group)

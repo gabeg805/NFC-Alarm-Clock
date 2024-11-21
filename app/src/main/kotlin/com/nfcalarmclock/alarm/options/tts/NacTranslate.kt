@@ -14,7 +14,7 @@ object NacTranslate
 	/**
 	 * Get how to say the alarm name in any language.
 	 */
-	@Suppress("unused_parameter")
+	@Suppress("Unused")
 	fun getSayAlarmName(
 		resources: Resources,
 		name: String

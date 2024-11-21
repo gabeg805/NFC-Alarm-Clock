@@ -713,7 +713,7 @@ class NacColorPicker : RelativeLayout
 			// Attempt to parse the color
 			return try
 			{
-				Color.parseColor(name)
+				Color.parseColor("#$name")
 				true
 			}
 			// Unable to parse the color
@@ -731,16 +731,17 @@ class NacColorPicker : RelativeLayout
 		fun isHexString(name: String): Boolean
 		{
 			// Iterate over each character in the hex string
-			for (i in 1 until name.length)
-			{
+			name.forEach { char ->
+
 				// Convert the character to base 16
-				val digit = name[i].digitToIntOrNull(16) ?: -1
+				val digit = char.digitToIntOrNull(16) ?: -1
 
 				// Unable to convert the character so this is not a hex string
 				if (digit == -1)
 				{
 					return false
 				}
+
 			}
 
 			// Success. This is a hex string

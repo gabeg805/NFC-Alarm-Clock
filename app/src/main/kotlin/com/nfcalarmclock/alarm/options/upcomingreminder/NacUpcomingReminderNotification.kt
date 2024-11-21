@@ -4,8 +4,6 @@ import android.annotation.TargetApi
 import android.app.NotificationChannel
 import android.app.PendingIntent
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Build
 import android.text.format.DateFormat
 import androidx.core.app.NotificationCompat
@@ -50,7 +48,7 @@ class NacUpcomingReminderNotification(
 	 * @see NacNotification.channelName
 	 */
 	override val channelName: String
-		get() = context.getString(R.string.title_upcoming_reminder)
+		get() = context.getString(R.string.title_upcoming_reminders)
 
 	/**
 	 * @see NacNotification.channelDescription
@@ -62,7 +60,14 @@ class NacUpcomingReminderNotification(
 	 * @see NacNotification.title
 	 */
 	override val title: String
-		get() = "<b>$appName</b>"
+		get()
+		{
+			// Get the title
+			val reminder = context.getString(R.string.word_reminder)
+
+			// Format the title
+			return "<b>$reminder</b>"
+		}
 
 	/**
 	 * @see NacNotification.priority
@@ -147,77 +152,16 @@ class NacUpcomingReminderNotification(
 		}
 
 	/**
-	 * @return The notification large icon.
-	 */
-	private val largeIcon: Bitmap?
-		get()
-		{
-			val res = context.resources
-			val icon = BitmapFactory.decodeResource(res, R.mipmap.app)
-			val density = res.displayMetrics.density
-
-			// Determine the size of the bitmap
-			val size: Float = if (density.compareTo(4.0f) >= 0)
-			{
-				256f
-			}
-			else if (density.compareTo(3.0f) >= 0)
-			{
-				192f
-			}
-			else if (density.compareTo(2.0f) >= 0)
-			{
-				128f
-			}
-			else if (density.compareTo(1.5f) >= 0)
-			{
-				96f
-			}
-			else if (density.compareTo(1.0f) >= 0)
-			{
-				64f
-			}
-			else if (density.compareTo(0.75f) >= 0)
-			{
-				48f
-			}
-			else
-			{
-				return icon
-			}
-
-			// Determine the integer size
-			val actualSize = (size * density).toInt()
-
-			// Create the bitmap
-			return if (icon != null)
-			{
-				Bitmap.createScaledBitmap(icon, actualSize, actualSize, true)
-			}
-			else
-			{
-				null
-			}
-		}
-
-	/**
-	 * Name of the app.
-	 */
-	private val appName = context.getString(R.string.word_reminder)
-
-	/**
 	 * @see NacNotification.builder
 	 */
 	public override fun builder(): NotificationCompat.Builder
 	{
 		// Build the notification
 		val notificationBuilder = super.builder()
-			.setLargeIcon(largeIcon)
 			.setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
 			.setAutoCancel(true)
 			.setOngoing(false)
 			.setShowWhen(true)
-			.setTicker(appName)
 
 		// Check if the alarm uses a recurring notification
 		return if ((alarm != null) && (alarm.reminderFrequency > 0))

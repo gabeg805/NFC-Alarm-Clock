@@ -86,7 +86,7 @@ class NacRestrictVolumeDialog
 		// Get the views
 		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.should_restrict_volume)
 		val description: TextView = dialog!!.findViewById(R.id.should_restrict_volume_summary)
-		checkBox = dialog!!.findViewById<MaterialCheckBox>(R.id.should_restrict_volume_checkbox)!!
+		checkBox = dialog!!.findViewById(R.id.should_restrict_volume_checkbox)!!
 
 		// Set the default value
 		checkBox.isChecked = default
@@ -125,16 +125,6 @@ class NacRestrictVolumeDialog
 
 		// Set the text
 		textView.setText(textId)
-	}
-
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacRestrictVolumeDialog"
-
 	}
 
 }

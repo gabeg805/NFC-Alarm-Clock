@@ -342,14 +342,4 @@ class NacUpcomingReminderDialog
 		useTtsCheckBox.isEnabled = showReminderCheckBox.isChecked
 	}
 
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacUpcomingReminderDialog"
-
-	}
-
 }

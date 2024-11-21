@@ -1340,13 +1340,18 @@ class NacSharedPreferences(context: Context)
 		// List of keys to ignore
 		val ignoreList = listOf(
 			resources.getString(R.string.app_first_run),
+			resources.getString(R.string.app_should_refresh_main_activity),
 			resources.getString(R.string.card_height_collapsed),
 			resources.getString(R.string.card_height_collapsed_dismiss),
 			resources.getString(R.string.card_height_expanded),
 			resources.getString(R.string.card_is_measured),
+			resources.getString(R.string.key_current_playing_alarm_media),
+			resources.getString(R.string.key_delay_showing_whats_new_dialog_counter),
 			resources.getString(R.string.key_permission_ignore_battery_optimization_requested),
 			resources.getString(R.string.key_permission_post_notifications_requested),
-			resources.getString(R.string.key_permission_schedule_exact_alarm_requested)
+			resources.getString(R.string.key_permission_schedule_exact_alarm_requested),
+			resources.getString(R.string.previous_app_version),
+			resources.getString(R.string.sys_previous_volume),
 		)
 
 		// Save shared preferences
