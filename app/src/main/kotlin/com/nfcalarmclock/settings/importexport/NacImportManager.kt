@@ -79,6 +79,9 @@ class NacImportManager(fragment: Fragment)
 			{
 				// Copy data from the imported csv file
 				sharedPreferences.copyFromCsv(context, File(f))
+
+				// Set the refresh main activity setting so that colors can be redrawn
+				sharedPreferences.shouldRefreshMainActivity = true
 			}
 			// Database file
 			else if (f.endsWith(".db"))
