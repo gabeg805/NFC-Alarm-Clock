@@ -260,7 +260,9 @@ class NacMediaPickerActivity
 				if (supportFragmentManager.backStackEntryCount > 0)
 				{
 					// Pop the back stack
-					supportFragmentManager.popBackStack()
+					// TODO: IndexOutOfBoundsException from crashes and ANRs could be happening here?
+					// Change to ...Immedate() so hopefully this does away with the crashes
+					supportFragmentManager.popBackStackImmediate()
 				}
 				else
 				{

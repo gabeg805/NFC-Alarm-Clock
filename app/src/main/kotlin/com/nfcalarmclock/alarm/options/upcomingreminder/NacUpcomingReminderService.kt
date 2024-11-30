@@ -60,7 +60,10 @@ class NacUpcomingReminderService
 			ACTION_CLEAR_REMINDER ->
 			{
 				// Cancel any remaining reminders
-				NacScheduler.cancelUpcomingReminder(this, alarm!!)
+				if (alarm != null)
+				{
+					NacScheduler.cancelUpcomingReminder(this, alarm)
+				}
 
 				// Stop the service
 				stopReminderService()

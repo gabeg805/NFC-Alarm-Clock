@@ -71,23 +71,28 @@ class NacImportManager(fragment: Fragment)
 		// Get the shared preferences
 		val sharedPreferences = NacSharedPreferences(context)
 
-		// Unzip the file and iterate over each file that was unzipped
-		unzipFile(inputStream, context.filesDir).forEach { f ->
+		// Unzip the files and iterate over each one
+		unzipFile(inputStream, context.filesDir).forEach {
+
+			// Create a file object
+			val file = File(it)
 
 			// CSV file
-			if (f.endsWith(".csv"))
+			if (it.endsWith(".csv"))
 			{
-				// Copy data from the imported csv file
-				sharedPreferences.copyFromCsv(context, File(f))
+				// Copy data from the imported csv file and then delete the file
+				sharedPreferences.copyFromCsv(context, file)
+				file.delete()
 
 				// Set the refresh main activity setting so that colors can be redrawn
 				sharedPreferences.shouldRefreshMainActivity = true
 			}
 			// Database file
-			else if (f.endsWith(".db"))
+			else if (it.endsWith(".db"))
 			{
-				// Copy data from the imported database
-				NacAlarmDatabase.copyFromDb(context, File(f), lifecycleCoroutineScope)
+				// Copy data from the imported database. Use regular context so that the
+				// imported database can be opened from the regular context filesDir
+				NacAlarmDatabase.copyFromDb(context, file, lifecycleCoroutineScope)
 			}
 
 		}

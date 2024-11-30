@@ -102,7 +102,7 @@
 				<!-- Delete alarm after dismissed -->
 				<ImageView
 					android:id="@+id/nac_delete_alarm_after_dismissed"
-					android:contentDescription="@string/cd_delete_alarm_after_dismiss"
+					android:contentDescription="@string/cd_delete_alarm_after_dismissed"
 					android:layout_width="@dimen/isz_xsmall"
 					android:layout_height="@dimen/isz_xsmall"
 					android:layout_marginStart="@dimen/nudge"

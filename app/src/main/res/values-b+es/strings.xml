@@ -249,7 +249,7 @@
 	<string name="cd_snooze_alarm">Posponer la alarma.</string>
 	<string name="cd_current_alarm_media_playing">El medio de alarma actual que se está reproduciendo.</string>
 	<string name="cd_skip_next_alarm">Saltar la siguiente alarma.</string>
-	<string name="cd_delete_alarm_after_dismiss">Eliminar la alarma después de descartarla.</string>
+	<string name="cd_delete_alarm_after_dismissed">Eliminar la alarma después de descartarla.</string>
 
 
 
@@ -387,25 +387,25 @@
 
 	<!-- Theme color -->
 	<string name="theme_color">Tema</string>
-	<string name="theme_color_summary">Color del tema.</string>
+	<string name="summary_color_theme">Color del tema.</string>
 
 	<!-- Name color -->
 	<string name="name_color">@string/alarm_name</string>
-	<string name="name_color_summary">p.ej. Trabajo</string>
+	<string name="summary_color_name">p.ej. Trabajo</string>
 
 	<!-- Days color -->
 	<string name="days_color">@string/alarm_days</string>
-	<string name="days_color_summary">p.ej. Lun &#8231; Mar &#8231; Mie &#8231; Jue &#8231; Vie</string>
+	<string name="summary_color_days">p.ej. Lun &#8231; Mar &#8231; Mie &#8231; Jue &#8231; Vie</string>
 
 	<!-- Time color -->
 	<string name="time_color">Hora</string>
-	<string name="time_color_summary">p.ej. 12:30</string>
+	<string name="summary_color_time">p.ej. 12:30</string>
 
 	<!-- AM color -->
-	<string name="am_color_summary">Colorida si esta en la hora de alarma AM.</string>
+	<string name="summary_color_am">Colorida si esta en la hora de alarma AM.</string>
 
 	<!-- PM color -->
-	<string name="pm_color_summary">Colorida si esta en la hora de alarma PM.</string>
+	<string name="summary_color_pm">Colorida si esta en la hora de alarma PM.</string>
 
 	<!-- Missed alarm notifications -->
 	<string name="missed_alarm_true">Muestra notificaciones para alarmas perdidas.</string>

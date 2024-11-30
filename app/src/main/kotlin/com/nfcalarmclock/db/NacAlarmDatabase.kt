@@ -2,6 +2,7 @@ package com.nfcalarmclock.db
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.room.AutoMigration
 import androidx.room.Database
@@ -38,6 +39,7 @@ import com.nfcalarmclock.statistics.db.NacAlarmSnoozedStatistic
 import com.nfcalarmclock.statistics.db.NacAlarmSnoozedStatisticDao
 import com.nfcalarmclock.statistics.db.NacStatisticTypeConverters
 import com.nfcalarmclock.util.NacUtility
+import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -349,6 +351,7 @@ abstract class NacAlarmDatabase
 		 * Copy alarms from another database.
 		 */
 		private suspend fun copyAlarmsFromDb(
+			context: Context,
 			db: NacAlarmDatabase,
 			importDb: NacAlarmDatabase
 		)
@@ -356,16 +359,32 @@ abstract class NacAlarmDatabase
 			// Get the dao
 			val alarmDao = db.alarmDao()
 			val allAlarms = alarmDao.getAllAlarms()
+			println("copyAlarmsFromDb()")
+			println("Num in imported db : ${importDb.alarmDao().getAllAlarms().size}")
 
 			// Copy all the alarms
 			importDb.alarmDao().getAllAlarms().forEach { a ->
+
+				println("Alarm : ${a.id} | ${a.name} | ${a.days} | ${a.hour} | ${a.minute}")
 
 				// Make sure none of the alarms in the database already match the
 				// one that will be inserted
 				if (allAlarms.all { !it.fuzzyEquals(a) })
 				{
+					println("Found unique alarm! ${a.id} | ${a.name} | ${a.days} | ${a.hour} | ${a.minute}")
+					// Clear the ID
 					a.id = 0
-					alarmDao.insert(a)
+
+					// Insert the alarm
+					val rowId = alarmDao.insert(a)
+
+					// Check that the insert worked
+					if (rowId > 0)
+					{
+						// Schedule the alarm
+						a.id = rowId
+						NacScheduler.update(context, a)
+					}
 				}
 
 			}
@@ -457,20 +476,19 @@ abstract class NacAlarmDatabase
 			dbFile: File,
 			lifecycleScope: LifecycleCoroutineScope)
 		{
+			println("copyFromDb()")
 			// Open the main app database
 			val db = getInstance(context)
 
 			// Open the imported database file
-			val importDb = databaseBuilder(
-				context.applicationContext,
-				NacAlarmDatabase::class.java,
-				dbFile.path)
+			val importDb = databaseBuilder(context, NacAlarmDatabase::class.java, dbFile.path)
 				.build()
+			println("Imported db : $importDb | ${dbFile.path}")
 
 			lifecycleScope.launch {
 
 				// Copy all the alarms
-				copyAlarmsFromDb(db, importDb)
+				copyAlarmsFromDb(context, db, importDb)
 
 				// Copy created statistics
 				copyCreatedStatisticsFromDb(db, importDb)
@@ -495,6 +513,9 @@ abstract class NacAlarmDatabase
 
 				// Show success message
 				NacUtility.quickToast(context, R.string.message_import_completed)
+
+				// Delete the database file
+				dbFile.delete()
 
 			}
 		}
@@ -604,9 +625,21 @@ abstract class NacAlarmDatabase
 		 */
 		fun exists(context: Context): Boolean
 		{
-			val file = context.getDatabasePath(DB_NAME)
+			val file = getPath(context)
 
 			return file.exists()
+		}
+
+		/**
+		 * Get the database path, taking into account device protected storage.
+		 */
+		fun getPath(context: Context): File
+		{
+			// Get the context depending on if the device can use direct boot or not
+			val directBootContext = getDeviceProtectedStorageContext(context)
+
+			// Return the database path
+			return directBootContext.getDatabasePath(DB_NAME)
 		}
 
 		/**
@@ -621,14 +654,35 @@ abstract class NacAlarmDatabase
 			return INSTANCE ?:
 				synchronized(this)
 				{
-					val appContext = context.applicationContext
-					val instance = databaseBuilder(appContext, NacAlarmDatabase::class.java, DB_NAME)
+					// Get the context depending on if the device can use direct boot or not
+					val deviceContext = getDeviceProtectedStorageContext(context, appContext = true)
+
+					// Check if this is a credential context. This means this is not a device
+					// protected storage context, so a valid context that could be used
+					// pre-direct boot
+					println("Getting instance of database")
+					if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) && !context.isDeviceProtectedStorage)
+					{
+						// Get the pre-direct boot database path
+						val file = context.getDatabasePath(DB_NAME)
+						println("Getting database path : ${file.path} | ${file.exists()}")
+
+						// Check if the database exists
+						if (file.exists())
+						{
+							println("MOVING the database jank")
+							// Move the database to device protected storage
+							val x = deviceContext.moveDatabaseFrom(context, DB_NAME)
+							println("Was move worked? $x")
+						}
+					}
+
+					// Build the instance of the database
+					val instance = databaseBuilder(deviceContext, NacAlarmDatabase::class.java, DB_NAME)
 						.addCallback(sDatabaseCallback)
-						//.allowMainThreadQueries()
-						//.fallbackToDestructiveMigration()
 						.build()
 
-					Companion.context = appContext
+					Companion.context = deviceContext
 					INSTANCE = instance
 
 					instance

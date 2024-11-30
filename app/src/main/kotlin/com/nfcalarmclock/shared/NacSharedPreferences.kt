@@ -3,8 +3,10 @@ package com.nfcalarmclock.shared
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
+import android.os.Build
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
+import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -18,7 +20,8 @@ class NacSharedPreferences(context: Context)
 	/**
 	 * Shared preferences instance.
 	 */
-	val instance: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+	val instance: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(
+		getDeviceProtectedStorageContext(context))
 
 	/**
 	 * Resources.
@@ -322,6 +325,18 @@ class NacSharedPreferences(context: Context)
 			val key = resources.getString(R.string.key_delay_showing_whats_new_dialog_counter)
 
 			saveInt(key, value)
+		}
+
+	/**
+	 * Delete after dismissed color.
+	 */
+	val deleteAfterDismissedColor: Int
+		get()
+		{
+			val key = resources.getString(R.string.delete_after_dismissed_color_key)
+			val defaultValue = resources.getInteger(R.integer.default_delete_alarm_after_dismissed_color)
+
+			return instance.getInt(key, defaultValue)
 		}
 
 	/**
@@ -1063,6 +1078,18 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Skip next alarm color.
+	 */
+	val skipNextAlarmColor: Int
+		get()
+		{
+			val key = resources.getString(R.string.skip_next_alarm_color_key)
+			val defaultValue = resources.getInteger(R.integer.default_skip_next_alarm_color)
+
+			return instance.getInt(key, defaultValue)
+		}
+
+	/**
 	 * Snooze duration.
 	 */
 	var snoozeDuration: Int
@@ -1271,6 +1298,9 @@ class NacSharedPreferences(context: Context)
 	 */
 	fun copyFromCsv(context: Context, file: File)
 	{
+		// List of keys to ignore
+		val ignoreList = getCsvKeysToIgnore()
+
 		// Open the file for reading
 		context.openFileInput(file.name).use { input ->
 
@@ -1281,8 +1311,15 @@ class NacSharedPreferences(context: Context)
 				// Read each line in the file
 				while (true)
 				{
+					// Read the key, type, and value from the line
 					val line = reader.readLine() ?: break
 					val (key, type, value) = line.split(",")
+
+					// Check if key is in the ignore list
+					if (key in ignoreList)
+					{
+						continue
+					}
 
 					// Save the value, depending on the type
 					when (type)
@@ -1300,6 +1337,28 @@ class NacSharedPreferences(context: Context)
 			}
 
 		}
+	}
+
+	/**
+	 * Get a list of keys to ignore when reading to/writing from a CSV file.
+	 */
+	private fun getCsvKeysToIgnore(): List<String>
+	{
+		return listOf(
+			resources.getString(R.string.app_first_run),
+			resources.getString(R.string.app_should_refresh_main_activity),
+			resources.getString(R.string.card_height_collapsed),
+			resources.getString(R.string.card_height_collapsed_dismiss),
+			resources.getString(R.string.card_height_expanded),
+			resources.getString(R.string.card_is_measured),
+			resources.getString(R.string.key_current_playing_alarm_media),
+			resources.getString(R.string.key_delay_showing_whats_new_dialog_counter),
+			resources.getString(R.string.key_permission_ignore_battery_optimization_requested),
+			resources.getString(R.string.key_permission_post_notifications_requested),
+			resources.getString(R.string.key_permission_schedule_exact_alarm_requested),
+			resources.getString(R.string.previous_app_version),
+			resources.getString(R.string.sys_previous_volume),
+		)
 	}
 
 	/**
@@ -1338,21 +1397,7 @@ class NacSharedPreferences(context: Context)
 	fun writeToCsv(context: Context, file: File)
 	{
 		// List of keys to ignore
-		val ignoreList = listOf(
-			resources.getString(R.string.app_first_run),
-			resources.getString(R.string.app_should_refresh_main_activity),
-			resources.getString(R.string.card_height_collapsed),
-			resources.getString(R.string.card_height_collapsed_dismiss),
-			resources.getString(R.string.card_height_expanded),
-			resources.getString(R.string.card_is_measured),
-			resources.getString(R.string.key_current_playing_alarm_media),
-			resources.getString(R.string.key_delay_showing_whats_new_dialog_counter),
-			resources.getString(R.string.key_permission_ignore_battery_optimization_requested),
-			resources.getString(R.string.key_permission_post_notifications_requested),
-			resources.getString(R.string.key_permission_schedule_exact_alarm_requested),
-			resources.getString(R.string.previous_app_version),
-			resources.getString(R.string.sys_previous_volume),
-		)
+		val ignoreList = getCsvKeysToIgnore()
 
 		// Save shared preferences
 		context.openFileOutput(file.name, Context.MODE_PRIVATE).use { output ->
@@ -1395,6 +1440,51 @@ class NacSharedPreferences(context: Context)
 			}
 
 		}
+	}
+
+	companion object
+	{
+
+		/**
+		 * Moved the shared preference to device protected storage.
+		 */
+		fun moveToDeviceProtectedStorage(context: Context): Boolean
+		{
+			println("moveToDeviceProtectedStorage()")
+			// Check if shared preferences should be moved to device protected storage
+			return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+			{
+				println("MAIN SHARED PREFS")
+				// Get default shared preferences file name
+				val name = "${context.packageName}_preferences"
+				val file = File("${context.dataDir}/shared_prefs/${name}.xml")
+				println("File exists? ${file.exists()} | ${file.path}")
+
+				// Check if the file exists
+				if (file.exists())
+				{
+					// Get device protected storage context
+					val deviceContext = context.createDeviceProtectedStorageContext()
+
+					// Move shared preferences to device encrypted storage
+					val y = deviceContext.moveSharedPreferencesFrom(context, name)
+					println("MAIN Move Shared pref? $y")
+					y
+				}
+				else
+				{
+					// No need to move shared preferences because it has already been moved
+					println("Shared pref already has been moved")
+					false
+				}
+			}
+			else
+			{
+				// Device does not support direct boot
+				false
+			}
+		}
+
 	}
 
 }

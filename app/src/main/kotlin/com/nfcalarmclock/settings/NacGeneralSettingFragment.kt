@@ -2,6 +2,7 @@ package com.nfcalarmclock.settings
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
@@ -21,6 +22,7 @@ import com.nfcalarmclock.util.NacIntent
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeekPreference
 import com.nfcalarmclock.alarm.options.volume.NacVolumePreference
 import com.nfcalarmclock.alarm.options.volume.NacVolumePreference.OnAudioOptionsClickedListener
+import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 
 /**
  * General settings fragment.
@@ -65,13 +67,21 @@ class NacGeneralSettingFragment
 	 */
 	override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?)
 	{
+		// Get the device protected storage context, if available
+		val deviceContext = getDeviceProtectedStorageContext(requireContext())
+
+		// Check if should set device protected storage as the storage location to use
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+		{
+			preferenceManager.setStorageDeviceProtected()
+		}
+
 		// Inflate the XML file and add the hierarchy to the current preference
 		addPreferencesFromResource(R.xml.general_preferences)
 
 		// Set the default values on this preference that are in the
 		// android:defaultValue attribute
-		PreferenceManager.setDefaultValues(requireContext(), R.xml.general_preferences,
-			false)
+		PreferenceManager.setDefaultValues(deviceContext, R.xml.general_preferences,  false)
 
 		// Setup the media preference
 		setupMediaPreference()

@@ -249,7 +249,7 @@
 	<string name="cd_snooze_alarm">Schalten Sie den Wecker schlummern.</string>
 	<string name="cd_current_alarm_media_playing">Das aktuell abgespielte Alarmmedium.</string>
 	<string name="cd_skip_next_alarm">Nächsten Alarm überspringen.</string>
-	<string name="cd_delete_alarm_after_dismiss">Alarm löschen, nachdem er abgewiesen wurde.</string>
+	<string name="cd_delete_alarm_after_dismissed">Alarm löschen, nachdem er abgewiesen wurde.</string>
 
 
 
@@ -387,25 +387,25 @@
 
 	<!-- Theme color -->
 	<string name="theme_color">Thema</string>
-	<string name="theme_color_summary">Die Themenfarbe.</string>
+	<string name="summary_color_theme">Die Themenfarbe.</string>
 
 	<!-- Name color -->
 	<string name="name_color">@string/alarm_name</string>
-	<string name="name_color_summary">z.B. Arbeit</string>
+	<string name="summary_color_name">z.B. Arbeit</string>
 
 	<!-- Days color -->
 	<string name="days_color">@string/alarm_days</string>
-	<string name="days_color_summary">z.B. Mo &#8231; Di &#8231; Mi &#8231; Do &#8231; Fr</string>
+	<string name="summary_color_days">z.B. Mo &#8231; Di &#8231; Mi &#8231; Do &#8231; Fr</string>
 
 	<!-- Time color -->
 	<string name="time_color">Zeit</string>
-	<string name="time_color_summary">zB 12:30</string>
+	<string name="summary_color_time">zB 12:30</string>
 
 	<!-- AM color -->
-	<string name="am_color_summary">Farbig, wenn AM in der Weckzeit liegt.</string>
+	<string name="summary_color_am">Farbig, wenn AM in der Weckzeit liegt.</string>
 
 	<!-- PM color -->
-	<string name="pm_color_summary">Farbig, wenn nachmittags die Weckzeit ist.</string>
+	<string name="summary_color_pm">Farbig, wenn nachmittags die Weckzeit ist.</string>
 
 	<!-- Missed alarm notifications -->
 	<string name="missed_alarm_true">Benachrichtigungen für verpasste Alarme anzeigen.</string>

@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -51,6 +52,53 @@ fun disableActivityAlias(context: Context)
 	context.packageManager.setComponentEnabledSetting(componentName,
 		PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
 		PackageManager.DONT_KILL_APP)
+}
+
+/**
+ * Get the device protected storage context to use for direct boot.
+ *
+ * If direct boot is not supported on the device, then a normal context will be returned.
+ */
+fun getDeviceProtectedStorageContext(context: Context, appContext: Boolean=false): Context
+{
+	// Check if device supports direct boot
+	return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+	{
+		// Check if context is already for device protected storage (used by direct boot)
+		if (context.isDeviceProtectedStorage)
+		{
+			context
+		}
+		// Context is for normal credential storage
+		else
+		{
+			// Check if should get app context
+			if (appContext)
+			{
+				// Return device protected storage context with an app context
+				context.applicationContext.createDeviceProtectedStorageContext()
+			}
+			else
+			{
+				// Return device protected storage context
+				context.createDeviceProtectedStorageContext()
+			}
+		}
+	}
+	else
+	{
+		// Check if should get app context
+		if (appContext)
+		{
+			// Return app context
+			context.applicationContext
+		}
+		else
+		{
+			// Return context that was passed in
+			context
+		}
+	}
 }
 
 /**

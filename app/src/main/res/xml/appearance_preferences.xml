@@ -53,7 +53,7 @@
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 			android:title="@string/theme_color"
 			android:key="@string/theme_color_key"
-			android:summary="@string/theme_color_summary"
+			android:summary="@string/summary_color_theme"
 			android:defaultValue="@integer/default_theme_color"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
@@ -62,7 +62,7 @@
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 			android:title="@string/name_color"
 			android:key="@string/name_color_key"
-			android:summary="@string/name_color_summary"
+			android:summary="@string/summary_color_name"
 			android:defaultValue="@integer/default_name_color"
 			app:allowDividerBelow="false"
 			/>
@@ -70,7 +70,7 @@
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 			android:title="@string/days_color"
 			android:key="@string/days_color_key"
-			android:summary="@string/days_color_summary"
+			android:summary="@string/summary_color_days"
 			android:defaultValue="@integer/default_days_color"
 			app:allowDividerBelow="false"
 			/>
@@ -78,7 +78,7 @@
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 			android:title="@string/time_color"
 			android:key="@string/time_color_key"
-			android:summary="@string/time_color_summary"
+			android:summary="@string/summary_color_time"
 			android:defaultValue="@integer/default_time_color"
 			app:allowDividerBelow="false"
 			/>
@@ -86,7 +86,7 @@
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 			android:title="@string/am"
 			android:key="@string/am_color_key"
-			android:summary="@string/am_color_summary"
+			android:summary="@string/summary_color_am"
 			android:defaultValue="@integer/default_am_color"
 			app:allowDividerBelow="false"
 			/>
@@ -94,8 +94,24 @@
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 			android:title="@string/pm"
 			android:key="@string/pm_color_key"
-			android:summary="@string/pm_color_summary"
+			android:summary="@string/summary_color_pm"
 			android:defaultValue="@integer/default_pm_color"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
+			android:title="@string/action_delete_alarm_after_dismissed"
+			android:key="@string/delete_after_dismissed_color_key"
+			android:summary="@string/summary_color_delete_alarm_after_dismissed"
+			android:defaultValue="@integer/default_delete_alarm_after_dismissed_color"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
+			android:title="@string/action_skip_next_alarm"
+			android:key="@string/skip_next_alarm_color_key"
+			android:summary="@string/summary_color_skip_next_alarm"
+			android:defaultValue="@integer/default_skip_next_alarm_color"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="true"
 			/>

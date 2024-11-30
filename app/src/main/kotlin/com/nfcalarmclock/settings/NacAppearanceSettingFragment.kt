@@ -1,5 +1,6 @@
 package com.nfcalarmclock.settings
 
+import android.os.Build
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
@@ -7,6 +8,7 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.options.nextalarmformat.NacNextAlarmFormatPreference
 import com.nfcalarmclock.settings.preference.NacCheckboxPreference
 import com.nfcalarmclock.alarm.options.startweekon.NacStartWeekOnPreference
+import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 import com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 
 /**
@@ -21,12 +23,14 @@ class NacAppearanceSettingFragment
 	 */
 	private fun init()
 	{
+		// Get the device protected storage context, if available
+		val deviceContext = getDeviceProtectedStorageContext(requireContext())
+
 		// Inflate the XML file and add the hierarchy to the current preference
 		addPreferencesFromResource(R.xml.appearance_preferences)
 
 		// Set the default values in the XML
-		PreferenceManager.setDefaultValues(requireContext(),
-			R.xml.appearance_preferences, false)
+		PreferenceManager.setDefaultValues(deviceContext, R.xml.appearance_preferences, false)
 
 		// Setup color and styles
 		setupAlarmScreenPreferences()
@@ -45,6 +49,12 @@ class NacAppearanceSettingFragment
 	 */
 	override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?)
 	{
+		// Check if should set device protected storage as the storage location to use
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+		{
+			preferenceManager.setStorageDeviceProtected()
+		}
+
 		// Initialize the color settings
 		init()
 	}
@@ -85,6 +95,8 @@ class NacAppearanceSettingFragment
 		val timeKey = getString(R.string.time_color_key)
 		val amKey = getString(R.string.am_color_key)
 		val pmKey = getString(R.string.pm_color_key)
+		val deleteAfterDismissedKey = getString(R.string.delete_after_dismissed_color_key)
+		val skipNextAlarmKey = getString(R.string.skip_next_alarm_color_key)
 
 		// Get the color preferences
 		val themePref = findPreference<NacColorPickerPreference>(themeKey)
@@ -93,9 +105,12 @@ class NacAppearanceSettingFragment
 		val timePref = findPreference<NacColorPickerPreference>(timeKey)
 		val amPref = findPreference<NacColorPickerPreference>(amKey)
 		val pmPref = findPreference<NacColorPickerPreference>(pmKey)
+		val deleteAfterDismissedPref = findPreference<NacColorPickerPreference>(deleteAfterDismissedKey)
+		val skipNextAlarmPref = findPreference<NacColorPickerPreference>(skipNextAlarmKey)
 
 		// Create list of all color preferences
-		val allPrefs = listOf(themePref, namePref, daysPref, timePref, amPref, pmPref)
+		val allPrefs = listOf(themePref, namePref, daysPref, timePref, amPref, pmPref,
+			deleteAfterDismissedPref, skipNextAlarmPref)
 
 		// Iterate over each color preference
 		for (p in allPrefs)
@@ -125,9 +140,12 @@ class NacAppearanceSettingFragment
 		val timeKey = getString(R.string.time_color_key)
 		val amKey = getString(R.string.am_color_key)
 		val pmKey = getString(R.string.pm_color_key)
+		val deleteAfterDismissedKey = getString(R.string.delete_after_dismissed_color_key)
+		val skipNextAlarmKey = getString(R.string.skip_next_alarm_color_key)
 
 		// Put the keys in a list
-		val allKeys = arrayOf(themeKey, nameKey, dayKey, timeKey, amKey, pmKey)
+		val allKeys = arrayOf(themeKey, nameKey, dayKey, timeKey, amKey, pmKey,
+			deleteAfterDismissedKey, skipNextAlarmKey)
 
 		// Iterate over each color key
 		for (k in allKeys)

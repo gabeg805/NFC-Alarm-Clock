@@ -58,6 +58,7 @@
 	<string name="action_alarm_option_restrict_volume">Restrict volume</string>
 	<string name="action_alarm_option_text_to_speech">Text-to-speech</string>
 	<string name="action_alarm_option_upcoming_reminder">Upcoming reminder</string>
+	<string name="action_delete_alarm_after_dismissed">Delete after dismissed</string>
 	<string name="action_skipping_next_alarm">Skipping next alarm</string>
 	<string name="action_skip_next_alarm">Skip next alarm</string>
 	<string name="action_unskip_next_alarm">Unskip next alarm</string>
@@ -249,7 +250,7 @@
 	<string name="cd_snooze_alarm">Snooze the alarm.</string>
 	<string name="cd_current_alarm_media_playing">The current alarm media that is playing.</string>
 	<string name="cd_skip_next_alarm">Skip next alarm.</string>
-	<string name="cd_delete_alarm_after_dismiss">Delete alarm after it is dismissed.</string>
+	<string name="cd_delete_alarm_after_dismissed">Delete alarm after it is dismissed.</string>
 
 
 
@@ -385,27 +386,19 @@
 	<string name="show_music_info_true">Show information on the currently playing music or ringtone in the alarm screen.</string>
 	<string name="show_music_info_false">Do not show music or ringtone information.</string>
 
-	<!-- Theme color -->
+	<!-- Summary color -->
 	<string name="theme_color">Theme</string>
-	<string name="theme_color_summary">The theme color.</string>
-
-	<!-- Name color -->
 	<string name="name_color">@string/alarm_name</string>
-	<string name="name_color_summary">e.g. Work</string>
-
-	<!-- Days color -->
 	<string name="days_color">@string/alarm_days</string>
-	<string name="days_color_summary">e.g. Mon &#8231; Tue &#8231; Wed &#8231; Thu &#8231; Fri</string>
-
-	<!-- Time color -->
 	<string name="time_color">Time</string>
-	<string name="time_color_summary">e.g. 12:30</string>
-
-	<!-- AM color -->
-	<string name="am_color_summary">Colored if AM is in the alarm time.</string>
-
-	<!-- PM color -->
-	<string name="pm_color_summary">Colored if PM is in the alarm time.</string>
+	<string name="summary_color_theme">The theme color.</string>
+	<string name="summary_color_name">e.g. Work</string>
+	<string name="summary_color_days">e.g. Mon &#8231; Tue &#8231; Wed &#8231; Thu &#8231; Fri</string>
+	<string name="summary_color_time">e.g. 12:30</string>
+	<string name="summary_color_am">Colored if AM is in the alarm time.</string>
+	<string name="summary_color_pm">Colored if PM is in the alarm time.</string>
+	<string name="summary_color_delete_alarm_after_dismissed">Icon to indicate the alarm will be deleted after it is dismissed.</string>
+	<string name="summary_color_skip_next_alarm">Icon to indicate the next run of an alarm will be skipped.</string>
 
 	<!-- Missed alarm notifications -->
 	<string name="missed_alarm_true">Show notifications for missed alarms.</string>

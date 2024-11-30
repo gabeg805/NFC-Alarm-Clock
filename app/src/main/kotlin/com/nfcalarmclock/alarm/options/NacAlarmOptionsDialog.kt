@@ -131,10 +131,17 @@ class NacAlarmOptionsDialog
 			// Set the listener
 			v.setOnClickListener {
 
-				// Navigate to the fragment who's button was clicked
+				// Get the ID to navigate to
 				val navId = findNavIdFromButtonId(it.id)
 
-				navController.navigate(navId, arguments)
+				try
+				{
+					// Navigate to the fragment who's button was clicked
+					navController.navigate(navId, arguments)
+				}
+				catch (_: IllegalStateException)
+				{
+				}
 
 				// Get the back stack entry
 				val navBackStackEntry = navController.currentBackStackEntry ?: return@setOnClickListener

@@ -16,6 +16,8 @@
 	<integer name="default_time_color">0xffffffff</integer>
 	<integer name="default_am_color">0xffffffff</integer>
 	<integer name="default_pm_color">0xffffffff</integer>
+	<integer name="default_delete_alarm_after_dismissed_color">0xffff0000</integer>
+	<integer name="default_skip_next_alarm_color">0xffff0000</integer>
 	<integer name="default_day_button_style">1</integer>
 	<integer name="default_start_week_on_index">0</integer>
 	<integer name="default_next_alarm_format_index">0</integer>

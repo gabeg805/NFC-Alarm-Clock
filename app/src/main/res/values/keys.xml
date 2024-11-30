@@ -79,6 +79,8 @@
 	<string name="time_color_key">pref_time_color</string>
 	<string name="am_color_key">pref_am_color</string>
 	<string name="pm_color_key">pref_pm_color</string>
+	<string name="delete_after_dismissed_color_key">pref_delete_after_dismissed_color</string>
+	<string name="skip_next_alarm_color_key">pref_skip_next_alarm_color</string>
 	<string name="missed_alarm_key">pref_missed_alarm_notification</string>
 	<string name="show_hide_vibrate_button_key">pref_show_hide_vibrate_button</string>
 	<string name="show_hide_nfc_button_key">pref_show_hide_nfc_button</string>

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.res.ColorStateList
 import android.graphics.drawable.InsetDrawable
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.HapticFeedbackConstants
@@ -481,12 +482,32 @@ class NacMainActivity
 	{
 		// Setup
 		super.onCreate(savedInstanceState)
+		println("onCreate()")
+
+		// Move the shared preference to device protected storage
+		NacSharedPreferences.moveToDeviceProtectedStorage(this)
 
 		// Set the content view
 		setContentView(R.layout.act_main)
 
 		// Set member variables
+		println("Create first shared pref")
 		sharedPreferences = NacSharedPreferences(this)
+
+		println("Resources : $sharedPreferences.resources")
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+		{
+			sharedPreferences.instance.all.forEach { s, any ->
+				println("$s | $any")
+			}
+		}
+
+		println("1: ${sharedPreferences.appFirstRun}")
+		println("2: ${sharedPreferences.wasIgnoreBatteryOptimizationPermissionRequested}")
+		println("3: ${sharedPreferences.wasPostNotificationsPermissionRequested}")
+		println("4: ${sharedPreferences.wasScheduleExactAlarmPermissionRequested}")
+		println("5: ${sharedPreferences.previousAppVersion}")
+		println("6: ${sharedPreferences.previousVolume}")
 		root = findViewById(R.id.activity_main)
 		toolbar = findViewById(R.id.tb_top_bar)
 		nextAlarmTextView = findViewById(R.id.tv_next_alarm)

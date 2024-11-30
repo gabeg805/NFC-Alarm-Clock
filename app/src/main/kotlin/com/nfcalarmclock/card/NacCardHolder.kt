@@ -892,6 +892,8 @@ class NacCardHolder(
 		setDividerColor()
 		timeView.setTextColor(sharedPreferences.timeColor)
 		switch.setupSwitchColor(sharedPreferences)
+		deleteAlarmAfterDismissedIcon.imageTintList = ColorStateList.valueOf(sharedPreferences.deleteAfterDismissedColor)
+		skipNextAlarmIcon.imageTintList = ColorStateList.valueOf(sharedPreferences.skipNextAlarmColor)
 		summaryDaysView.setTextColor(sharedPreferences.daysColor)
 		summaryNameView.setTextColor(sharedPreferences.nameColor)
 		dismissButton.setupRippleColor(sharedPreferences)

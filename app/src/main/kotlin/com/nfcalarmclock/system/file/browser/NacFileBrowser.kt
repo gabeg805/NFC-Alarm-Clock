@@ -80,8 +80,9 @@ class NacFileBrowser(
 		{
 			// Get the first child view in this container. If this fails, then
 			// unable to get the first child at this level, so cannot determine
-			// if at the root level or not
-			val entry = container.getChildAt(0) ?: return false
+			// if at the root level or not. In this case, assume there is nothing being
+			// drawn and so is technically at root
+			val entry = container.getChildAt(0) ?: return true
 
 			// Get the metadata of the first child
 			val metadata = getFileMetadata(entry)

@@ -290,7 +290,7 @@ class NacActiveAlarmService
 	{
 		// Super
 		super.onCreate()
-		//println("CREATING THE SERVICE")
+		println("CREATING THE SERVICE")
 
 		// Initialize member varirables
 		sharedPreferences = NacSharedPreferences(this)

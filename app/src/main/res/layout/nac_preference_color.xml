@@ -7,6 +7,7 @@
 	android:padding="?android:attr/listPreferredItemPaddingLeft"
 	android:minHeight="?android:attr/listPreferredItemHeight"
 	android:gravity="center_vertical"
+	android:orientation="horizontal"
 	android:baselineAligned="false"
 	tools:ignore="UselessParent">
 
@@ -16,6 +17,7 @@
 		android:id="@+id/widget"
 		android:layout_width="@dimen/isz_large"
 		android:layout_height="@dimen/isz_large"
+		android:layout_marginStart="@dimen/normal"
 		android:contentDescription="@string/cd_color_example"
 		android:src="@drawable/color_example"
 		/>

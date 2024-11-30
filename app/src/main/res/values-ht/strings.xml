@@ -249,7 +249,7 @@
 	<string name="cd_snooze_alarm">Ranpli alam la.</string>
 	<string name="cd_current_alarm_media_playing">Medya alam aktyèl la k ap jwe.</string>
 	<string name="cd_skip_next_alarm">Sote pwochen alam.</string>
-	<string name="cd_delete_alarm_after_dismiss">Efase alam apre li fin ranvwaye.</string>
+	<string name="cd_delete_alarm_after_dismissed">Efase alam apre li fin ranvwaye.</string>
 
 
 
@@ -387,25 +387,25 @@
 
 	<!-- Theme color -->
 	<string name="theme_color">Tèm</string>
-	<string name="theme_color_summary">Koulè tèm nan.</string>
+	<string name="summary_color_theme">Koulè tèm nan.</string>
 
 	<!-- Name color -->
 	<string name="name_color">@string/alarm_name</string>
-	<string name="name_color_summary">pa egzan Travay</string>
+	<string name="summary_color_name">pa egzan Travay</string>
 
 	<!-- Days color -->
 	<string name="days_color">@string/alarm_days</string>
-	<string name="days_color_summary">pa egzan len &#8231; mad &#8231; mèk &#8231; jed &#8231; van</string>
+	<string name="summary_color_days">pa egzan len &#8231; mad &#8231; mèk &#8231; jed &#8231; van</string>
 
 	<!-- Time color -->
 	<string name="time_color">Tan</string>
-	<string name="time_color_summary">pa egzan 12:30</string>
+	<string name="summary_color_time">pa egzan 12:30</string>
 
 	<!-- AM color -->
-	<string name="am_color_summary">Koulè si AM se nan lè alam la.</string>
+	<string name="summary_color_am">Koulè si AM se nan lè alam la.</string>
 
 	<!-- PM color -->
-	<string name="pm_color_summary">Koulè si PM nan lè alam la.</string>
+	<string name="summary_color_pm">Koulè si PM nan lè alam la.</string>
 
 	<!-- Missed alarm notifications -->
 	<string name="missed_alarm_true">Montre notifikasyon pou alam rate yo.</string>

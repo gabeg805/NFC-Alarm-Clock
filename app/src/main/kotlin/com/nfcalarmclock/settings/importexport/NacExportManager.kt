@@ -13,6 +13,7 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.file.zipFiles
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacUtility
+import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.OutputStream
@@ -45,15 +46,17 @@ class NacExportManager(fragment: Fragment)
 	private fun export(
 		context: Context,
 		outputStream: OutputStream,
-		lifecycleCoroutineScope: LifecycleCoroutineScope
-	)
+		lifecycleCoroutineScope: LifecycleCoroutineScope)
 	{
+		// Get the context depending on if the device can use direct boot or not
+		val deviceContext = getDeviceProtectedStorageContext(context)
+
 		// Get the shared preferences and csv file
-		val sharedPreferences = NacSharedPreferences(context)
+		val sharedPreferences = NacSharedPreferences(deviceContext)
 		val csvFile = File("${context.filesDir}/shared_preferences.csv")
 
 		// Get the database files
-		val dbFile = context.getDatabasePath(NacAlarmDatabase.DB_NAME)
+		val dbFile = NacAlarmDatabase.getPath(deviceContext)
 		val dbShm = File("${dbFile.path}-shm")
 		val dbWal = File("${dbFile.path}-wal")
 
@@ -66,7 +69,7 @@ class NacExportManager(fragment: Fragment)
 		lifecycleCoroutineScope.launch {
 
 			// Checkpoint the database so that it does not need to be closed
-			NacAlarmDatabase.getInstance(context)
+			NacAlarmDatabase.getInstance(deviceContext)
 				.alarmDao()
 				.checkpoint(SimpleSQLiteQuery("pragma wal_checkpoint(full)"))
 

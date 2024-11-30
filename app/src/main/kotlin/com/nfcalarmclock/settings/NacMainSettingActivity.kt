@@ -24,12 +24,6 @@ class NacMainSettingActivity
 	}
 
 	/**
-	 * The back stack count.
-	 */
-	private val stackCount: Int
-		get() = supportFragmentManager.backStackEntryCount
-
-	/**
 	 * Called when the back stack is changed.
 	 */
 	override fun onBackStackChanged()
@@ -38,7 +32,7 @@ class NacMainSettingActivity
 		var title = getString(R.string.settings)
 
 		// Check if there are items in the back stack
-		if (stackCount > 0)
+		if (supportFragmentManager.backStackEntryCount > 0)
 		{
 			// Get the title of the first entry in the back stack
 			val entry = supportFragmentManager.getBackStackEntryAt(0)
@@ -75,7 +69,7 @@ class NacMainSettingActivity
 	override fun onSupportNavigateUp(): Boolean
 	{
 		// There are still items in the back stack. Keep popping them
-		return if (stackCount > 0)
+		return if (supportFragmentManager.backStackEntryCount > 0)
 			{
 				supportFragmentManager.popBackStack()
 				false

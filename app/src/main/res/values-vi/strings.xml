@@ -249,7 +249,7 @@
 	<string name="cd_snooze_alarm">Báo lại báo thức.</string>
 	<string name="cd_current_alarm_media_playing">Phương tiện báo động hiện tại đang phát.</string>
 	<string name="cd_skip_next_alarm">Bỏ qua báo thức tiếp theo.</string>
-	<string name="cd_delete_alarm_after_dismiss">Xóa báo thức sau khi nó đã tắt.</string>
+	<string name="cd_delete_alarm_after_dismissed">Xóa báo thức sau khi nó đã tắt.</string>
 
 
 
@@ -387,25 +387,25 @@
 
 	<!-- Theme color -->
 	<string name="theme_color">Chủ đề</string>
-	<string name="theme_color_summary">Màu chủ đề.</string>
+	<string name="summary_color_theme">Màu chủ đề.</string>
 
 	<!-- Name color -->
 	<string name="name_color">@string/alarm_name</string>
-	<string name="name_color_summary">ví dụ. Công việc</string>
+	<string name="summary_color_name">ví dụ. Công việc</string>
 
 	<!-- Days color -->
 	<string name="days_color">@string/alarm_days</string>
-	<string name="days_color_summary">ví dụ. T2 &#8231; T3 &#8231; T4 &#8231; T5 &#8231; T6</string>
+	<string name="summary_color_days">ví dụ. T2 &#8231; T3 &#8231; T4 &#8231; T5 &#8231; T6</string>
 
 	<!-- Time color -->
 	<string name="time_color">Thời gian</string>
-	<string name="time_color_summary">ví dụ. 12:30</string>
+	<string name="summary_color_time">ví dụ. 12:30</string>
 
 	<!-- AM color -->
-	<string name="am_color_summary">Có màu nếu AM đang trong thời gian báo thức.</string>
+	<string name="summary_color_am">Có màu nếu AM đang trong thời gian báo thức.</string>
 
 	<!-- PM color -->
-	<string name="pm_color_summary">Có màu nếu PM đang trong thời gian báo thức.</string>
+	<string name="summary_color_pm">Có màu nếu PM đang trong thời gian báo thức.</string>
 
 	<!-- Missed alarm notifications -->
 	<string name="missed_alarm_true">Hiển thị thông báo cho các báo thức bị bỏ lỡ.</string>

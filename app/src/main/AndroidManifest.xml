@@ -144,8 +144,9 @@
 		<activity
 			android:theme="@style/AppTheme.NoActionBar"
 			android:name=".alarm.activealarm.NacActiveAlarmActivity"
-			android:taskAffinity=""
-			android:excludeFromRecents="true">
+			android:directBootAware="true"
+			android:excludeFromRecents="true"
+			android:taskAffinity="">
 		</activity>
 
 		<!-- Settings activity -->
@@ -175,9 +176,9 @@
 		<!-- Start an active alarm (show notification and call alarm activity) -->
 		<service
 			android:name=".alarm.activealarm.NacActiveAlarmService"
-			android:foregroundServiceType="systemExempted"
+			android:directBootAware="true"
 			android:exported="false"
-			android:directBootAware="true">
+			android:foregroundServiceType="systemExempted">
 		</service>
 
 		<!-- Start an upcoming reminder -->
@@ -196,9 +197,9 @@
 		<!-- Restore alarms on boot -->
 		<receiver
 			android:name=".system.triggers.startup.NacStartupBroadcastReceiver"
+			android:directBootAware="true"
 			android:enabled="true"
 			android:exported="false"
-			android:directBootAware="true"
 			android:permission="android.permission.RECEIVE_BOOT_COMPLETED"
 			tools:targetApi="n">
 
