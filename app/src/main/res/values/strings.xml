@@ -8,7 +8,6 @@
 	<string name="permission_schedule_exact_alarm_request">Alarms will not be able to run if the app is not in focus.\n\nWould you like to enable scheduling alarms?</string>
 
 
-
 	<!-- Consolidate -->
 	<string name="version">Version</string>
 	<string name="am">AM</string>
@@ -18,7 +17,6 @@
 	<string name="show_next_alarm">Show next alarm</string>
 	<string name="word_alarm">Alarm</string>
 	<string name="word_reminder">Reminder</string>
-
 
 
 	<!-- States -->
@@ -66,7 +64,6 @@
 	<string name="action_import">Import</string>
 
 
-
 	<!-- Labels -->
 	<string name="label_created_statistic">created</string>
 	<string name="label_deleted_statistic">deleted</string>
@@ -78,7 +75,6 @@
 	<string name="label_dismissed_statistic_header">Time Dismissed,Name,Alarm Time,Used NFC</string>
 	<string name="label_missed_statistic_header">Time Missed,Name,Alarm Time</string>
 	<string name="label_snoozed_statistic_header">Time Snoozed,Name,Alarm Time,Snooze Duration (seconds)</string>
-
 
 
 	<!-- Messages -->
@@ -129,7 +125,6 @@
 	<string name="message_import_completed">Import completed</string>
 
 
-
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Unable to delete an active alarm</string>
 	<string name="error_message_active_modify">Unable to modify an active alarm</string>
@@ -152,10 +147,8 @@
 	<string name="error_message_unable_to_open_import_export_stream">Unable to open file</string>
 
 
-
 	<!-- Words -->
 	<string name="word_of">of</string>
-
 
 
 	<!-- Titles -->
@@ -199,7 +192,6 @@
 	<string name="title_reset_statistics" tools:ignore="TypographyEllipsis">Reset statistics...</string>
 
 
-
 	<!-- Descriptions -->
 	<string name="description_scan_nfc">Scan NFC</string>
 	<string name="description_slide_to_snooze">Slide to snooze</string>
@@ -216,14 +208,12 @@
 	<string name="example_name">Work</string>
 
 
-
 	<!-- Summary day names -->
 	<string name="dow_everyday">Everyday</string>
 	<string name="dow_weekdays">Weekdays</string>
 	<string name="dow_weekend">Weekend</string>
 	<string name="dow_today">Today</string>
 	<string name="dow_tomorrow">Tomorrow</string>
-
 
 
 	<!-- Content descriptions -->
@@ -253,7 +243,6 @@
 	<string name="cd_delete_alarm_after_dismissed">Delete alarm after it is dismissed.</string>
 
 
-
 	<!-- ************* -->
 	<!-- Main Settings -->
 	<!-- ************* -->
@@ -278,7 +267,6 @@
 
 	<string name="import_export_setting">Import \u0020|\u0020 Export</string>
 	<string name="import_export_setting_summary">Import or export all your saved data</string>
-
 
 
 	<!-- **************** -->
@@ -352,7 +340,6 @@
 
 	<!-- Default alarm volume and audio source -->
 	<string name="alarm_volume">Volume</string>
-
 
 
 	<!-- ******************* -->
@@ -462,7 +449,6 @@
 	<string name="flashlight_blink_false">No, do not make the flashlight blink.</string>
 
 
-
 	<!-- ************** -->
 	<!-- About settings -->
 	<!-- ************** -->
@@ -490,7 +476,7 @@
 	<string name="about_nfc">NFC</string>
 	<string name="about_nfc_summary">Detect NFC tags to dismiss an alarm.</string>
 
-	
+
 	<!-- READ_EXTERNAL_STORAGE permission -->
 	<string name="about_storage">Storage</string>
 	<string name="about_storage_summary">Read music that is stored on your device.</string>
@@ -540,7 +526,6 @@
 	<string name="frg_spotify_search_hint">Search spotify&#8230;</string>
 
 
-
 	<!-- ******* -->
 	<!-- Plurals -->
 	<!-- ******* -->
@@ -586,5 +571,9 @@
 		<item quantity="one">Reminder. %1$s, will run in, %2$d, minute.</item>
 		<item quantity="other">Reminder. %1$s, will run in, %2$d, minutes.</item>
 	</plurals>
+	<string name="appwidget_text">EXAMPLE</string>
+	<string name="configure">Configure</string>
+	<string name="add_widget">Add widget</string>
+	<string name="app_widget_description">This is an app widget description</string>
 
 </resources>

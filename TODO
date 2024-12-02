@@ -2,12 +2,18 @@
 TODO
 ----
 
+* Look into created and deleted import alarms.
+
 * Add languages for India, Bangladesh, Pakistan, Japan, Thailand, Poland, Turkey, France,
   Brazil & Portugal, Serbia, Finland, Romania, Italy
 
-* Figure out why I use home in NacFile
+* Long press repeat, NFC, and flashlight for quick options
+
+* Overlay number over repeat button for custom repeat option?
 
 * Have option to scroll alarm name instead of marquee it
+
+* Figure out why I use home in NacFile
 
 ------
 Issues

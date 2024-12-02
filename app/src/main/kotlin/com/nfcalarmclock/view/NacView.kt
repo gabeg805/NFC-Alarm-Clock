@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
+import com.google.android.material.slider.Slider
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
@@ -93,6 +94,21 @@ fun SeekBar.setupProgressAndThumbColor(sharedPreferences: NacSharedPreferences)
 	// Set the color
 	this.progressTintList = color
 	this.thumbTintList = color
+}
+
+/**
+ * Setup the progress and thumb color of a Slider.
+ */
+fun Slider.setupProgressAndThumbColor(sharedPreferences: NacSharedPreferences)
+{
+	// Get the theme color
+	val activeColor = ColorStateList.valueOf(sharedPreferences.themeColor)
+	val inactiveColor = ColorStateList.valueOf(Color.GRAY)
+
+	// Set the color
+	this.trackActiveTintList = activeColor
+	this.trackInactiveTintList = inactiveColor
+	this.thumbTintList = activeColor
 }
 
 /**

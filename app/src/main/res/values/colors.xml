@@ -23,6 +23,10 @@
 	<color name="white_dull">#b2b2b2</color>
 	<color name="white">#ffffff</color>
 	<color name="ic_launcher_background">#FF5F2D</color>
+	<color name="light_blue_50">#FFE1F5FE</color>
+	<color name="light_blue_200">#FF81D4FA</color>
+	<color name="light_blue_600">#FF039BE5</color>
+	<color name="light_blue_900">#FF01579B</color>
 
 	<!--
 	<color name="blue">#1d00fb</color>

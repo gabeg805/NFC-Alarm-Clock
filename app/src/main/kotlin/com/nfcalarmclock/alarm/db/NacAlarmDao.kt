@@ -36,6 +36,14 @@ interface NacAlarmDao
 	suspend fun checkpoint(supportSQLiteQuery: SupportSQLiteQuery): Int
 
 	/**
+	 * Count the number of alarms.
+	 *
+	 * @return The number of alarms in the table.
+	 */
+	@Query("SELECT COUNT(id) FROM alarm")
+	suspend fun count(): Int
+
+	/**
 	 * Delete an alarm.
 	 *
 	 * @param  alarm  Alarm to delete.

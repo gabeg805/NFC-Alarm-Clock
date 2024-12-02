@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.EnumSet
 import java.util.Locale
+import java.util.TimeZone
 
 /**
  * A list of possible days the alarm can run on.
@@ -143,6 +144,23 @@ object NacCalendar
 	}
 
 	/**
+	 * Format hours.
+	 */
+	fun formatHour(hour: Int, is24HourFormat: Boolean): Int
+	{
+		return if (is24HourFormat)
+		{
+			// Use 24 hour format
+			hour
+		}
+		else
+		{
+			// Convert to 12 hour format
+			to12HourFormat(hour)
+		}
+	}
+
+	/**
 	 * Get the time.
 	 *
 	 * @param  context  The application context.
@@ -165,29 +183,37 @@ object NacCalendar
 	 *
 	 * @param  hour    The hour.
 	 * @param  minute  The minutes.
-	 * @param  format  The 24 hour format, to determine how to interpret the hour.
+	 * @param  is24HourFormat  The 24 hour format, to determine how to interpret the hour.
 	 *
 	 * @return The time.
 	 */
-	private fun getClockTime(hour: Int, minute: Int, format: Boolean): String
+	private fun getClockTime(hour: Int, minute: Int, is24HourFormat: Boolean): String
 	{
-		// Check if using 24 hour format
-		val clockHour = if (format)
-		{
-			// Use 24 hour format
-			hour
-		}
-		else
-		{
-			// Convert the 12 hour format
-			to12HourFormat(hour)
-		}
+		// Format the hour
+		val clockHour = formatHour(hour, is24HourFormat)
 
 		// Zero pad the minutes and make it 2 digits long
 		val clockMinute = minute.toString().padStart(2, '0')
 
 		// Format the time
 		return "$clockHour:$clockMinute"
+	}
+
+	/**
+	 * Get the current date.
+	 */
+	fun getDate(calendar: Calendar): String
+	{
+		// Get the date
+		val locale = Locale.getDefault()
+		val skeleton = DateFormat.getBestDateTimePattern(locale, "E MMM d")
+		val dateFormat = SimpleDateFormat(skeleton, locale)
+
+		// Format the date
+		dateFormat.timeZone = TimeZone.getDefault()
+		dateFormat.applyLocalizedPattern(skeleton)
+
+		return dateFormat.format(calendar.time)
 	}
 
 	/**

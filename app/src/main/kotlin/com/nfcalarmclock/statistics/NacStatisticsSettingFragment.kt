@@ -160,16 +160,16 @@ class NacStatisticsSettingFragment
 		// Change the text of when statistics started
 		lifecycleScope.launch {
 
-			// Get all the current alarms
-			val allAlarms = alarmViewModel.getAllAlarms()
+			//// Get all the current alarms
+			//val allAlarms = alarmViewModel.getAllAlarms()
 
-			// Iterate over each alarm
-			for (alarm in allAlarms)
-			{
-				// Add a created statistic. Use the repository so that
-				// everything is sequential
-				statisticViewModel.statisticRepository.insertCreated()
-			}
+			//// Iterate over each alarm
+			//for (alarm in allAlarms)
+			//{
+			//	// Add a created statistic. Use the repository so that
+			//	// everything is sequential
+			//	statisticViewModel.statisticRepository.insertCreated()
+			//}
 
 			// Get the root view
 			val root = requireView()
@@ -209,10 +209,8 @@ class NacStatisticsSettingFragment
 		// Get the text view
 		val textview = root.findViewById<TextView>(R.id.current_alarms_number)
 
-		// Determine the current number of alarms
-		val numCreated = statisticViewModel.createdCount()
-		val numDeleted = statisticViewModel.deletedCount()
-		val numCurrent = numCreated - numDeleted
+		// Count the current number of alarms
+		val numCurrent = alarmViewModel.count()
 
 		// Set the text in the textview
 		textview.text = String.format(Locale.getDefault(), "%d", numCurrent)

@@ -119,4 +119,30 @@
 	<!-- Import/export -->
 	<string name="import_export_setting_key">pref_screen_import_export</string>
 
+	<!-- Widget background opacity -->
+	<string name="clock_widget_background_transparency_key">pref_clock_widget_background_opacity</string><!-- -->
+
+	<!-- Widget date and time -->
+	<string name="clock_widget_show_date_key">pref_clock_widget_show_date</string>
+	<string name="clock_widget_show_time_key">pref_clock_widget_show_time</string>
+	<string name="clock_widget_bold_date_key">pref_clock_widget_bold_date</string>
+	<string name="clock_widget_bold_hour_key">pref_clock_widget_bold_hour</string>
+	<string name="clock_widget_bold_minute_key">pref_clock_widget_bold_minute</string>
+	<string name="clock_widget_bold_am_pm_key">pref_clock_widget_bold_am_pm</string>
+	<string name="clock_widget_color_date_key">pref_clock_widget_color_date</string>
+	<string name="clock_widget_color_hour_key">pref_clock_widget_color_hour</string>
+	<string name="clock_widget_color_minute_key">pref_clock_widget_color_minute</string>
+	<string name="clock_widget_color_am_key">pref_clock_widget_color_am</string>
+	<string name="clock_widget_color_pm_key">pref_clock_widget_color_pm</string>
+	<string name="clock_widget_text_size_date_key">pref_clock_widget_text_size_date</string>
+	<string name="clock_widget_text_size_time_key">pref_clock_widget_text_size_time</string>
+
+	<!-- Widget alarm -->
+	<string name="clock_widget_show_alarm_icon_key">pref_clock_widget_show_alarm_icon</string>
+	<string name="clock_widget_show_alarm_time_key">pref_clock_widget_show_alarm_time</string>
+	<string name="clock_widget_bold_alarm_time_key">pref_clock_widget_bold_alarm_time</string>
+	<string name="clock_widget_color_alarm_time_key">pref_clock_widget_color_alarm_time</string>
+	<string name="clock_widget_color_alarm_icon_key">pref_clock_widget_color_alarm_icon</string>
+	<string name="clock_widget_text_size_alarm_time_key">pref_clock_widget_text_size_alarm</string>
+
 </resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+	android:configure="com.nfcalarmclock.widget.NacClockWidgetConfigureActivity"
+	android:description="@string/app_widget_description"
+	android:initialKeyguardLayout="@layout/nac_clock_widget"
+	android:initialLayout="@layout/nac_clock_widget"
+	android:minWidth="40dp"
+	android:minHeight="40dp"
+	android:previewImage="@drawable/example_appwidget_preview"
+	android:previewLayout="@layout/nac_clock_widget"
+	android:resizeMode="horizontal|vertical"
+	android:targetCellWidth="3"
+	android:targetCellHeight="2"
+	android:updatePeriodMillis="0"
+	android:widgetCategory="home_screen"
+	android:widgetFeatures="reconfigurable|configuration_optional"
+	/>

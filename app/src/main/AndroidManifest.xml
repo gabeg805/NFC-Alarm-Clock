@@ -32,8 +32,6 @@
 		android:required="false"
 		/>
 
-	<!-- Camera is optional -->
-
 	<!-- Indicate that the app should be able to query apps that provide the
 		ACTION_SEND intent -->
 	<queries>
@@ -49,22 +47,22 @@
 
 	<!-- Application -->
 	<application
-		android:theme="@style/AppTheme"
-		android:label="@string/app_name"
 		android:name=".NacNfcAlarmClockApplication"
+		android:label="@string/app_name"
+		android:theme="@style/AppTheme"
 		android:icon="@mipmap/ic_launcher"
 		android:roundIcon="@mipmap/ic_launcher_round"
+		android:enableOnBackInvokedCallback="true"
 		android:allowBackup="false"
 		android:dataExtractionRules="@xml/data_extraction_rules"
 		android:fullBackupContent="@xml/full_backup_content"
-		android:enableOnBackInvokedCallback="true"
 		android:supportsRtl="true"
 		tools:targetApi="tiramisu">
 
 		<!-- Main activity -->
 		<activity
-			android:theme="@style/AppTheme.NoActionBar"
 			android:name=".main.NacMainActivity"
+			android:theme="@style/AppTheme.NoActionBar"
 			android:windowSoftInputMode="stateAlwaysHidden"
 			android:exported="true">
 
@@ -82,30 +80,6 @@
 				<action android:name="android.intent.action.SHOW_ALARMS" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
-
-			<!--
-			<intent-filter>
-				<action android:name="android.nfc.action.NDEF_DISCOVERED"/>
-				<category android:name="android.intent.category.DEFAULT"/>
-				<data android:mimeType="text/plain" />
-			</intent-filter>
-
-			<intent-filter>
-				<action android:name="android.nfc.action.TECH_DISCOVERED" />
-				<category android:name="android.intent.category.DEFAULT"/>
-			</intent-filter>
-
-			<meta-data
-				android:name="android.nfc.action.TECH_DISCOVERED"
-				android:resource="@xml/nfc_tech_filter"
-				/>
-
-			<intent-filter>
-				<action android:name="android.nfc.action.TAG_DISCOVERED" />
-				<category android:name="android.intent.category.DEFAULT"/>
-			</intent-filter>
-			-->
-
 		</activity>
 
 		<!-- Alias on the main activity so that this NFC tag scanning only gets -->
@@ -113,19 +87,19 @@
 		<activity-alias
 			android:name=".main.NacMainAliasActivity"
 			android:label="@string/app_name"
-			android:exported="true"
+			android:targetActivity=".main.NacMainActivity"
 			android:enabled="false"
-			android:targetActivity=".main.NacMainActivity">
+			android:exported="true">
 
 			<intent-filter>
-				<action android:name="android.nfc.action.NDEF_DISCOVERED"/>
-				<category android:name="android.intent.category.DEFAULT"/>
+				<action android:name="android.nfc.action.NDEF_DISCOVERED" />
+				<category android:name="android.intent.category.DEFAULT" />
 				<data android:mimeType="text/plain" />
 			</intent-filter>
 
 			<intent-filter>
 				<action android:name="android.nfc.action.TECH_DISCOVERED" />
-				<category android:name="android.intent.category.DEFAULT"/>
+				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 
 			<meta-data
@@ -135,33 +109,32 @@
 
 			<intent-filter>
 				<action android:name="android.nfc.action.TAG_DISCOVERED" />
-				<category android:name="android.intent.category.DEFAULT"/>
+				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
-
 		</activity-alias>
 
 		<!-- Alarm activity -->
 		<activity
-			android:theme="@style/AppTheme.NoActionBar"
 			android:name=".alarm.activealarm.NacActiveAlarmActivity"
+			android:theme="@style/AppTheme.NoActionBar"
 			android:directBootAware="true"
 			android:excludeFromRecents="true"
-			android:taskAffinity="">
-		</activity>
+			android:taskAffinity=""
+			/>
 
 		<!-- Settings activity -->
 		<activity
 			android:name=".settings.NacMainSettingActivity"
 			android:label="@string/settings"
 			android:parentActivityName=".main.NacMainActivity"
-			android:windowSoftInputMode="stateAlwaysHidden">
-		</activity>
+			android:windowSoftInputMode="stateAlwaysHidden"
+			/>
 
 		<!-- Media activity -->
 		<activity
 			android:name=".alarm.options.mediapicker.NacMediaPickerActivity"
-			android:launchMode="singleInstance"
-			android:exported="false">
+			android:exported="false"
+			android:launchMode="singleInstance">
 
 			<intent-filter>
 				<action android:name="android.intent.action.SEARCH" />
@@ -173,23 +146,22 @@
 				/>
 		</activity>
 
-		<!-- Start an active alarm (show notification and call alarm activity) -->
+		<!-- Active alarm service (show notification and call alarm activity) -->
 		<service
 			android:name=".alarm.activealarm.NacActiveAlarmService"
+			android:foregroundServiceType="systemExempted"
 			android:directBootAware="true"
 			android:exported="false"
-			android:foregroundServiceType="systemExempted">
-		</service>
+			/>
 
-		<!-- Start an upcoming reminder -->
+		<!-- Upcoming reminder -->
 		<service
 			android:name=".alarm.options.upcomingreminder.NacUpcomingReminderService"
 			android:foregroundServiceType="systemExempted"
-			android:exported="false">
-		</service>
+			android:exported="false"
+			/>
 
-		<!-- Alarm manager broadcasts this so that alarms can be started.
-			Start the foreground service. -->
+		<!-- Alarm manager broadcasts this so that the foreground service can be started. -->
 		<receiver
 			android:name=".alarm.activealarm.NacActiveAlarmBroadcastReceiver"
 			/>
@@ -267,15 +239,49 @@
 		<provider
 			android:name="androidx.core.content.FileProvider"
 			android:authorities="com.nfcalarmclock.fileprovider"
-			android:grantUriPermissions="true"
-			android:exported="false">
+			android:exported="false"
+			android:grantUriPermissions="true">
 
 			<meta-data
 				android:name="android.support.FILE_PROVIDER_PATHS"
 				android:resource="@xml/provider_filepaths"
 				/>
-
 		</provider>
+
+		<!-- Clock widget -->
+		<receiver
+			android:name=".widget.NacClockWidgetProvider"
+			android:exported="false">
+
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+			</intent-filter>
+
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+			</intent-filter>
+
+			<intent-filter>
+				<action android:name="android.intent.action.TIME_SET" />
+				<action android:name="android.intent.action.TIMEZONE_CHANGED" />
+				<action android:name="android.intent.action.LOCALE_CHANGED" />
+				<action android:name="android.app.action.NEXT_ALARM_CLOCK_CHANGED" />
+			</intent-filter>
+
+			<meta-data
+				android:name="android.appwidget.provider"
+				android:resource="@xml/nac_clock_widget_info"
+				/>
+		</receiver>
+
+		<activity
+			android:name=".widget.NacClockWidgetConfigureActivity"
+			android:exported="false">
+
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+			</intent-filter>
+		</activity>
 
 	</application>
 </manifest>

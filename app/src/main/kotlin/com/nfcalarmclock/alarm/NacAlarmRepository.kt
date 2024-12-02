@@ -29,6 +29,13 @@ class NacAlarmRepository @Inject constructor(
 		get() = alarmDao.allAlarms
 
 	/**
+	 * Count the number of alarms.
+	 *
+	 * @return The number of alarms in the table.
+	 */
+	suspend fun count(): Int = alarmDao.count()
+
+	/**
 	 * Delete an alarm, asynchronously, from the database.
 	 *
 	 * @return The number of rows deleted.

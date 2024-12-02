@@ -657,17 +657,10 @@ class NacSwipeLayoutHandler(
 		currentMeridianView.visibility = visibility
 
 		// Get info for calculating current date and time
-		val locale = Locale.getDefault()
 		val cal = Calendar.getInstance()
 
 		// Get the current date
-		val skeleton = DateFormat.getBestDateTimePattern(locale, "E MMM d")
-		val dateFormat = SimpleDateFormat(skeleton, locale)
-
-		dateFormat.timeZone = TimeZone.getDefault()
-		dateFormat.applyLocalizedPattern(skeleton)
-
-		val date = dateFormat.format(cal.time)
+		val date = NacCalendar.getDate(cal)
 
 		// Get the current time
 		val hour = cal[Calendar.HOUR_OF_DAY]

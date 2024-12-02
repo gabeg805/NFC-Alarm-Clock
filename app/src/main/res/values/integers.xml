@@ -32,4 +32,13 @@
 	<integer name="max_entry_length">512</integer>
 	<integer name="max_hex_length">6</integer>
 
+	<integer name="default_clock_widget_color_alarm_icon">0xfffb8c00</integer>
+	<integer name="default_clock_widget_color_alarm_name">0xff00c0fb</integer>
+	<integer name="default_clock_widget_color_alarm_time">0xfffb8c00</integer>
+	<integer name="default_clock_widget_color_am">0xffffffff</integer>
+	<integer name="default_clock_widget_color_pm">0xffffffff</integer>
+	<integer name="default_clock_widget_color_date">0xffffffff</integer>
+	<integer name="default_clock_widget_color_hour">0xffffffff</integer>
+	<integer name="default_clock_widget_color_minute">0xffffffff</integer>
+
 </resources>

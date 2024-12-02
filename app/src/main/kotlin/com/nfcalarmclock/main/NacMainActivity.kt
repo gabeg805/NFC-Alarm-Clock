@@ -1,6 +1,7 @@
 package com.nfcalarmclock.main
 
 import android.annotation.SuppressLint
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -73,6 +74,7 @@ import com.nfcalarmclock.util.disableActivityAlias
 import com.nfcalarmclock.util.registerMyReceiver
 import com.nfcalarmclock.util.unregisterMyReceiver
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog
+import com.nfcalarmclock.widget.refreshAppWidgets
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -686,6 +688,9 @@ class NacMainActivity
 
 		// Start NFC
 		NacNfc.start(this)
+
+		// Refresh widgets
+		refreshAppWidgets(this)
 	}
 
 	/**
@@ -1206,8 +1211,8 @@ class NacMainActivity
 		// starts and the list is initially empty
 		alarmViewModel.allAlarms.observe(this) { alarms ->
 
-			// Check if statistics have not started yet
-			if (!sharedPreferences.appStartStatistics)
+			// Check if statistics should be started or not
+			if (sharedPreferences.appStartStatistics)
 			{
 				// Setup statistics
 				setupStatistics(alarms)
@@ -1645,6 +1650,25 @@ class NacMainActivity
 			intent.addFlags(flags)
 
 			return intent
+		}
+
+		/**
+		 * Create a pending intent that will be used to start the Main activity.
+		 *
+		 * @param  context  A context.
+		 *
+		 * @return The Main activity pending intent.
+		 */
+		fun getStartPendingIntent(context: Context): PendingIntent
+		{
+			// Get the start intent
+			val intent = getStartIntent(context)
+
+			// Set the pending intent flags
+			val flags = PendingIntent.FLAG_IMMUTABLE
+
+			// Return the pending intent for the activity
+			return PendingIntent.getActivity(context, 0, intent, flags)
 		}
 
 		/**

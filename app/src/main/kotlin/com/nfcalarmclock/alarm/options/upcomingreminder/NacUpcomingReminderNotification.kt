@@ -124,16 +124,7 @@ class NacUpcomingReminderNotification(
 	 * @see NacNotification.contentPendingIntent
 	 */
 	override val contentPendingIntent: PendingIntent
-		get()
-		{
-			val intent = NacMainActivity.getStartIntent(context)
-
-			// Determine the pending intent flags
-			val flags = PendingIntent.FLAG_IMMUTABLE
-
-			// Return the pending intent for the activity
-			return PendingIntent.getActivity(context, 0, intent, flags)
-		}
+		get() = NacMainActivity.getStartPendingIntent(context)
 
 	/**
 	 * The pending intent to clear a recurring reminder.

@@ -1,0 +1,197 @@
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/parent"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:paddingHorizontal="@dimen/normal"
+	android:paddingBottom="@dimen/medium"
+	android:orientation="vertical">
+
+	<LinearLayout
+		android:id="@+id/time"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_gravity="center_horizontal">
+
+		<TextClock
+			android:id="@+id/hour"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:format24Hour="HH"
+			android:format12Hour="h"
+			android:textSize="@dimen/tsz_widget"
+			android:textColor="@color/white"
+			android:visibility="gone"
+			/>
+
+		<TextClock
+			android:id="@+id/hour_bold"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:format24Hour="HH"
+			android:format12Hour="h"
+			android:textSize="@dimen/tsz_widget"
+			android:textStyle="bold"
+			android:textColor="@color/white"
+			/>
+
+		<TextView
+			android:id="@+id/colon"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textColor="@color/white"
+			android:textSize="@dimen/tsz_widget"
+			android:text=":"
+			/>
+
+		<TextClock
+			android:id="@+id/minute"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:format24Hour="mm"
+			android:format12Hour="mm"
+			android:textSize="@dimen/tsz_widget"
+			android:textColor="@color/white"
+			/>
+
+		<TextClock
+			android:id="@+id/minute_bold"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:format24Hour="mm"
+			android:format12Hour="mm"
+			android:textSize="@dimen/tsz_widget"
+			android:textStyle="bold"
+			android:textColor="@color/white"
+			android:visibility="gone"
+			/>
+
+		<TextClock
+			android:id="@+id/am_pm"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginHorizontal="@dimen/nudge"
+			android:format24Hour=""
+			android:format12Hour=" a"
+			android:textSize="@dimen/tsz_medium"
+			android:textColor="@color/white"
+			android:visibility="gone"
+			/>
+
+		<TextClock
+			android:id="@+id/am_pm_bold"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginHorizontal="@dimen/nudge"
+			android:format24Hour=""
+			android:format12Hour=" a"
+			android:textSize="@dimen/tsz_medium"
+			android:textStyle="bold"
+			android:textColor="@color/white"
+			/>
+
+		<!--
+		<TextClock
+			android:id="@+id/hello"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:format24Hour="HH:mm"
+			android:format12Hour="h:mm a"
+			android:textColor="@color/white"
+			/>
+			-->
+
+		<!--
+		<TextView
+			android:id="@+id/hour"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textColor="@color/white"
+			android:textSize="@dimen/tsz_widget"
+			android:text="00"
+			/>
+
+		<TextView
+			android:id="@+id/colon"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textColor="@color/white"
+			android:textSize="@dimen/tsz_widget"
+			android:text=":"
+			/>
+
+		<TextView
+			android:id="@+id/minute"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textColor="@color/white"
+			android:textSize="@dimen/tsz_widget"
+			android:text="00"
+			/>
+
+		<TextView
+			android:id="@+id/am_pm"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginHorizontal="@dimen/nudge"
+			android:maxLines="1"
+			android:textColor="@color/white"
+			android:textSize="@dimen/tsz_medium"
+			android:text="AM"
+			/>
+			-->
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+		android:orientation="horizontal">
+
+		<TextClock
+			android:id="@+id/date"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:format24Hour="E MMM d"
+			android:format12Hour="E MMM d"
+			android:textSize="@dimen/tsz_small"
+			android:textStyle="bold"
+			android:textColor="@color/white"
+			/>
+
+		<TextClock
+			android:id="@+id/date_bold"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:format24Hour="E MMM d"
+			android:format12Hour="E MMM d"
+			android:textSize="@dimen/tsz_small"
+			android:textColor="@color/white"
+			android:textStyle="bold"
+			android:visibility="gone"
+			/>
+
+		<ImageView
+			android:id="@+id/alarm_icon"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_marginHorizontal="@dimen/twoline"
+			android:layout_marginVertical="@dimen/twoline"
+			android:src="@drawable/alarm"
+			app:tint="@color/white"
+			/>
+
+		<TextView
+			android:id="@+id/alarm_time"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textColor="@color/orange"
+			android:textSize="@dimen/tsz_small"
+			android:textStyle="bold"
+			android:text="Sun 7:45 AM"
+			/>
+	</LinearLayout>
+
+</LinearLayout>

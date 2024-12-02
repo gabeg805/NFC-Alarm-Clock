@@ -358,6 +358,7 @@ abstract class NacAlarmDatabase
 		{
 			// Get the dao
 			val alarmDao = db.alarmDao()
+			val alarmCreatedStatisticDao = db.alarmCreatedStatisticDao()
 			val allAlarms = alarmDao.getAllAlarms()
 			println("copyAlarmsFromDb()")
 			println("Num in imported db : ${importDb.alarmDao().getAllAlarms().size}")
@@ -385,6 +386,9 @@ abstract class NacAlarmDatabase
 						a.id = rowId
 						NacScheduler.update(context, a)
 					}
+
+					// Insert the created statistic
+					alarmCreatedStatisticDao.insert(NacAlarmCreatedStatistic())
 				}
 
 			}

@@ -69,6 +69,7 @@ android {
 	// Enable being able to use and import the BuildConfig package
 	buildFeatures {
 		buildConfig = true
+		viewBinding = true
 	}
 
 	// Build variants

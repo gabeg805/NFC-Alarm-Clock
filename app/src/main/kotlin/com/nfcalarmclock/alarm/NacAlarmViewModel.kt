@@ -28,6 +28,13 @@ class NacAlarmViewModel @Inject constructor(
 	val allAlarms: LiveData<List<NacAlarm>> = alarmRepository.allAlarms
 
 	/**
+	 * Count the number of alarms.
+	 *
+	 * @return The number of alarms in the table.
+	 */
+	suspend fun count(): Int = alarmRepository.count()
+
+	/**
 	 * Delete an alarm from the database, and cancel its scheduled run time.
 	 *
 	 * @param  alarm  Alarm to delete.
