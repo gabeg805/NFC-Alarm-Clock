@@ -18,6 +18,24 @@
 	<string name="word_alarm">Alarm</string>
 	<string name="word_reminder">Reminder</string>
 
+	<string name="background">Background</string>
+	<string name="time_layout">Time layout</string>
+	<string name="date_layout">Date layout</string>
+	<string name="alarm_layout">Alarm layout</string>
+	<string name="show">Show</string>
+	<string name="bold">Bold</string>
+	<string name="color">Color</string>
+	<string name="text_size">Text size</string>
+
+	<string name="colon">:</string>
+	<string name="icon">Icon</string>
+	<string name="transparency">Transparency</string>
+	<string name="time">Time</string>
+	<string name="hour">Hour</string>
+	<string name="minutes">Minutes</string>
+	<string name="am_pm">AM / PM</string>
+	<string name="example_alarm">8:30 AM</string>
+
 
 	<!-- States -->
 	<string name="state_unknown">Unknown</string>
@@ -75,6 +93,7 @@
 	<string name="label_dismissed_statistic_header">Time Dismissed,Name,Alarm Time,Used NFC</string>
 	<string name="label_missed_statistic_header">Time Missed,Name,Alarm Time</string>
 	<string name="label_snoozed_statistic_header">Time Snoozed,Name,Alarm Time,Snooze Duration (seconds)</string>
+	<string name="label_clock_widget">Clock</string>
 
 
 	<!-- Messages -->
@@ -241,6 +260,7 @@
 	<string name="cd_current_alarm_media_playing">The current alarm media that is playing.</string>
 	<string name="cd_skip_next_alarm">Skip next alarm.</string>
 	<string name="cd_delete_alarm_after_dismissed">Delete alarm after it is dismissed.</string>
+	<string name="cd_clock_widget_alarm_icon">Next alarm</string>
 
 
 	<!-- ************* -->
@@ -571,9 +591,5 @@
 		<item quantity="one">Reminder. %1$s, will run in, %2$d, minute.</item>
 		<item quantity="other">Reminder. %1$s, will run in, %2$d, minutes.</item>
 	</plurals>
-	<string name="appwidget_text">EXAMPLE</string>
-	<string name="configure">Configure</string>
-	<string name="add_widget">Add widget</string>
-	<string name="app_widget_description">This is an app widget description</string>
 
 </resources>

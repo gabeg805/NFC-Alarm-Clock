@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- Section -->
+	<style name="Widget.ClockWidget.Section" parent="">
+		<item name="android:paddingTop">@dimen/small</item>
+		<item name="android:paddingBottom">@dimen/small</item>
+		<item name="android:paddingEnd">@dimen/nudge</item>
+		<item name="android:textColor">@color/orange</item>
+		<item name="android:textSize">@dimen/tsz_normal</item>
+		<item name="android:textStyle">bold</item>
+	</style>
+
+	<!-- Subsection -->
+	<style name="Widget.ClockWidget.Subsection" parent="">
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textSize">@dimen/tsz_normal</item>
+		<item name="android:textStyle">normal</item>
+	</style>
+
+	<!-- Separator -->
+	<style name="Widget.ClockWidget.Separator" parent="">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">@dimen/line</item>
+		<item name="android:layout_marginTop">@dimen/tiny</item>
+		<item name="android:layout_marginBottom">@dimen/tiny</item>
+		<item name="android:alpha">0.3</item>
+		<item name="android:background">@color/white</item>
+	</style>
+
+	<!-- Text -->
+	<style name="Widget.ClockWidget.Text" parent="">
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textSize">@dimen/tsz_normal</item>
+	</style>
+
+	<!-- Slider text -->
+	<style name="Widget.ClockWidget.SliderText" parent="Widget.ClockWidget.Text">
+		<item name="android:paddingTop">@dimen/small</item>
+	</style>
+
+	<!-- Slider row -->
+	<style name="Widget.ClockWidget.SliderRow" parent="">
+		<item name="android:paddingTop">@dimen/small</item>
+		<item name="android:paddingBottom">@dimen/tiny</item>
+		<item name="android:gravity">center_vertical</item>
+	</style>
+
+	<!-- Row -->
+	<style name="Widget.ClockWidget.Row" parent="Widget.ClockWidget.SliderRow">
+		<item name="android:paddingTop">@dimen/tiny</item>
+		<item name="android:paddingBottom">@dimen/small</item>
+		<item name="android:clickable">true</item>
+		<item name="android:focusable">true</item>
+		<item name="android:background">?attr/selectableItemBackground</item>
+	</style>
+
+	<!-- Icon -->
+	<style name="Widget.ClockWidget.Icon" parent="">
+		<item name="android:layout_width">@dimen/isz_medium</item>
+		<item name="android:layout_height">@dimen/isz_medium</item>
+		<item name="android:layout_marginEnd">@dimen/normal</item>
+	</style>
+
+	<!-- Color swatch -->
+	<style name="Widget.ClockWidget.ColorSwatch" parent="">
+		<item name="android:layout_width">@dimen/isz_medium</item>
+		<item name="android:layout_height">@dimen/isz_medium</item>
+		<item name="android:layout_marginEnd">@dimen/nudge</item>
+		<item name="android:src">@drawable/color_example</item>
+	</style>
+
+</resources>

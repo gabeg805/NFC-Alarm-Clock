@@ -1,22 +1,24 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:id="@+id/parent"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
-	android:paddingHorizontal="@dimen/normal"
-	android:paddingBottom="@dimen/medium"
+	android:id="@+id/widget_parent"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:gravity="center"
+	android:background="@color/black"
 	android:orientation="vertical">
 
+	<!-- Time -->
 	<LinearLayout
-		android:id="@+id/time"
+		android:id="@+id/widget_time"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:orientation="horizontal"
 		android:layout_gravity="center_horizontal">
 
+		<!-- Hour -->
 		<TextClock
-			android:id="@+id/hour"
+			android:id="@+id/widget_hour"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:format24Hour="HH"
@@ -27,7 +29,7 @@
 			/>
 
 		<TextClock
-			android:id="@+id/hour_bold"
+			android:id="@+id/widget_hour_bold"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:format24Hour="HH"
@@ -37,17 +39,19 @@
 			android:textColor="@color/white"
 			/>
 
+		<!-- Colon -->
 		<TextView
-			android:id="@+id/colon"
+			android:id="@+id/widget_colon"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:textColor="@color/white"
 			android:textSize="@dimen/tsz_widget"
-			android:text=":"
+			android:text="@string/colon"
 			/>
 
+		<!-- Minute -->
 		<TextClock
-			android:id="@+id/minute"
+			android:id="@+id/widget_minute"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:format24Hour="mm"
@@ -57,7 +61,7 @@
 			/>
 
 		<TextClock
-			android:id="@+id/minute_bold"
+			android:id="@+id/widget_minute_bold"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:format24Hour="mm"
@@ -68,8 +72,9 @@
 			android:visibility="gone"
 			/>
 
+		<!-- AM/PM -->
 		<TextClock
-			android:id="@+id/am_pm"
+			android:id="@+id/widget_am_pm"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginHorizontal="@dimen/nudge"
@@ -81,7 +86,7 @@
 			/>
 
 		<TextClock
-			android:id="@+id/am_pm_bold"
+			android:id="@+id/widget_am_pm_bold"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginHorizontal="@dimen/nudge"
@@ -91,78 +96,28 @@
 			android:textStyle="bold"
 			android:textColor="@color/white"
 			/>
-
-		<!--
-		<TextClock
-			android:id="@+id/hello"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:format24Hour="HH:mm"
-			android:format12Hour="h:mm a"
-			android:textColor="@color/white"
-			/>
-			-->
-
-		<!--
-		<TextView
-			android:id="@+id/hour"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textColor="@color/white"
-			android:textSize="@dimen/tsz_widget"
-			android:text="00"
-			/>
-
-		<TextView
-			android:id="@+id/colon"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textColor="@color/white"
-			android:textSize="@dimen/tsz_widget"
-			android:text=":"
-			/>
-
-		<TextView
-			android:id="@+id/minute"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textColor="@color/white"
-			android:textSize="@dimen/tsz_widget"
-			android:text="00"
-			/>
-
-		<TextView
-			android:id="@+id/am_pm"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginHorizontal="@dimen/nudge"
-			android:maxLines="1"
-			android:textColor="@color/white"
-			android:textSize="@dimen/tsz_medium"
-			android:text="AM"
-			/>
-			-->
 	</LinearLayout>
 
+	<!-- Date and alarm -->
 	<LinearLayout
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_gravity="center_horizontal"
 		android:orientation="horizontal">
 
+		<!-- Date -->
 		<TextClock
-			android:id="@+id/date"
+			android:id="@+id/widget_date"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:format24Hour="E MMM d"
 			android:format12Hour="E MMM d"
 			android:textSize="@dimen/tsz_small"
-			android:textStyle="bold"
 			android:textColor="@color/white"
 			/>
 
 		<TextClock
-			android:id="@+id/date_bold"
+			android:id="@+id/widget_date_bold"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:format24Hour="E MMM d"
@@ -173,24 +128,27 @@
 			android:visibility="gone"
 			/>
 
+		<!-- Alarm -->
 		<ImageView
-			android:id="@+id/alarm_icon"
+			android:contentDescription="@string/cd_clock_widget_alarm_icon"
+			android:id="@+id/widget_alarm_icon"
 			android:layout_width="wrap_content"
 			android:layout_height="match_parent"
-			android:layout_marginHorizontal="@dimen/twoline"
+			android:layout_marginHorizontal="@dimen/nudge"
 			android:layout_marginVertical="@dimen/twoline"
 			android:src="@drawable/alarm"
+			android:visibility="gone"
 			app:tint="@color/white"
 			/>
 
 		<TextView
-			android:id="@+id/alarm_time"
+			android:id="@+id/widget_alarm_time"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:textColor="@color/orange"
 			android:textSize="@dimen/tsz_small"
 			android:textStyle="bold"
-			android:text="Sun 7:45 AM"
+			android:text=""
 			/>
 	</LinearLayout>
 

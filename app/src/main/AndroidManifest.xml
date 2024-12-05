@@ -251,6 +251,7 @@
 		<!-- Clock widget -->
 		<receiver
 			android:name=".widget.NacClockWidgetProvider"
+			android:label="@string/label_clock_widget"
 			android:exported="false">
 
 			<intent-filter>
@@ -276,6 +277,7 @@
 
 		<activity
 			android:name=".widget.NacClockWidgetConfigureActivity"
+			android:theme="@style/AppTheme.NoActionBar"
 			android:exported="false">
 
 			<intent-filter>

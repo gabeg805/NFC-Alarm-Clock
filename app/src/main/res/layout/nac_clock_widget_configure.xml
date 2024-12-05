@@ -2,29 +2,176 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:layout_width="wrap_content"
+	android:id="@+id/widget_configure_parent"
+	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:padding="@dimen/normal"
-	android:orientation="vertical">
+	android:orientation="vertical"
+	android:animateLayoutChanges="true">
 
-	<!--
-	<TextView
+	<!-- Preview -->
+	<LinearLayout
+		android:id="@+id/widget_parent"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginBottom="8dp"
-		android:labelFor="@id/appwidget_text"
-		android:text="@string/configure"
+		android:padding="@dimen/normal"
+		android:gravity="center"
+		android:background="@color/black"
+		android:orientation="vertical">
+
+		<!-- Time -->
+		<LinearLayout
+			android:id="@+id/widget_time"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:layout_gravity="center_horizontal">
+
+			<!-- Hour -->
+			<TextClock
+				android:id="@+id/widget_hour"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:format24Hour="HH"
+				android:format12Hour="h"
+				android:textSize="@dimen/tsz_widget"
+				android:textColor="@color/white"
+				android:visibility="gone"
+				/>
+
+			<TextClock
+				android:id="@+id/widget_hour_bold"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:format24Hour="HH"
+				android:format12Hour="h"
+				android:textSize="@dimen/tsz_widget"
+				android:textStyle="bold"
+				android:textColor="@color/white"
+				/>
+
+			<!-- Colon -->
+			<TextView
+				android:id="@+id/widget_colon"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textColor="@color/white"
+				android:textSize="@dimen/tsz_widget"
+				android:text="@string/colon"
+				/>
+
+			<!-- Minute -->
+			<TextClock
+				android:id="@+id/widget_minute"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:format24Hour="mm"
+				android:format12Hour="mm"
+				android:textSize="@dimen/tsz_widget"
+				android:textColor="@color/white"
+				/>
+
+			<TextClock
+				android:id="@+id/widget_minute_bold"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:format24Hour="mm"
+				android:format12Hour="mm"
+				android:textSize="@dimen/tsz_widget"
+				android:textStyle="bold"
+				android:textColor="@color/white"
+				android:visibility="gone"
+				/>
+
+			<!-- AM/PM -->
+			<TextClock
+				android:id="@+id/widget_am_pm"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginHorizontal="@dimen/nudge"
+				android:format24Hour=""
+				android:format12Hour=" a"
+				android:textSize="@dimen/tsz_medium"
+				android:textColor="@color/white"
+				android:visibility="gone"
+				/>
+
+			<TextClock
+				android:id="@+id/widget_am_pm_bold"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginHorizontal="@dimen/nudge"
+				android:format24Hour=""
+				android:format12Hour=" a"
+				android:textSize="@dimen/tsz_medium"
+				android:textStyle="bold"
+				android:textColor="@color/white"
+				/>
+		</LinearLayout>
+
+		<!-- Date and alarm -->
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_horizontal"
+			android:orientation="horizontal">
+
+			<!-- Date -->
+			<TextClock
+				android:id="@+id/widget_date"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:format24Hour="E MMM d"
+				android:format12Hour="E MMM d"
+				android:textSize="@dimen/tsz_small"
+				android:textColor="@color/white"
+				/>
+
+			<TextClock
+				android:id="@+id/widget_date_bold"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:format24Hour="E MMM d"
+				android:format12Hour="E MMM d"
+				android:textSize="@dimen/tsz_small"
+				android:textColor="@color/white"
+				android:textStyle="bold"
+				android:visibility="gone"
+				/>
+
+			<!-- Alarm -->
+			<ImageView
+				android:contentDescription="@string/cd_clock_widget_alarm_icon"
+				android:id="@+id/widget_alarm_icon"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:layout_marginHorizontal="@dimen/nudge"
+				android:layout_marginVertical="@dimen/twoline"
+				android:src="@drawable/alarm"
+				android:visibility="gone"
+				app:tint="@color/white"
+				/>
+
+			<TextView
+				android:id="@+id/widget_alarm_time"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textColor="@color/orange"
+				android:textSize="@dimen/tsz_small"
+				android:textStyle="bold"
+				android:text=""
+				/>
+		</LinearLayout>
+
+	</LinearLayout>
+
+	<View
+		android:id="@+id/widget_preview_separator"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/line"
+		android:background="@color/orange"
 		/>
 
-	<Button
-		android:id="@+id/add_button"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="8dp"
-		android:text="@string/add_widget"
-		/>
-		-->
-
+	<!-- Options -->
 	<ScrollView
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
@@ -33,405 +180,759 @@
 		android:scrollbarFadeDuration="8000">
 
 		<LinearLayout
-			android:layout_width="wrap_content"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:orientation="vertical">
+			android:orientation="vertical"
+			android:padding="@dimen/large"
+			android:animateLayoutChanges="true">
 
-			<!-- Background transparency -->
+			<!-- Background layout -->
 			<TextView
-				android:id="@+id/background_transparency_title"
+				style="@style/Widget.ClockWidget.Section"
+				android:id="@+id/background_title"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginBottom="@dimen/normal"
-				android:textColor="@color/orange"
-				android:textSize="@dimen/tsz_normal"
-				android:textStyle="bold"
-				android:text="Background transparency"
+				android:text="@string/background"
 				/>
+
+			<!-- Background color -->
+			<LinearLayout
+				style="@style/Widget.ClockWidget.Row"
+				android:id="@+id/background_color_container"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal">
+
+				<ImageView
+					style="@style/Widget.ClockWidget.Icon"
+					android:layout_width="@dimen/isz_medium"
+					android:layout_height="@dimen/isz_medium"
+					android:contentDescription="@string/cd_color_example"
+					android:src="@drawable/palette"
+					/>
+
+				<TextView
+					style="@style/Widget.ClockWidget.Subsection"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="@string/color"
+					/>
+
+				<ImageView
+					style="@style/Widget.ClockWidget.ColorSwatch"
+					android:id="@+id/background_color_swatch"
+					android:contentDescription="@string/cd_color_example"
+					/>
+			</LinearLayout>
+
+			<!-- Background transparency -->
+			<LinearLayout
+				style="@style/Widget.ClockWidget.SliderRow"
+				android:id="@+id/background_transparency_container"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<ImageView
+					style="@style/Widget.ClockWidget.Icon"
+					android:layout_width="@dimen/isz_medium"
+					android:layout_height="@dimen/isz_medium"
+					android:contentDescription="@string/cd_color_example"
+					android:src="@drawable/opacity"
+					/>
+
+				<TextView
+					style="@style/Widget.ClockWidget.Subsection"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="@string/transparency"
+					/>
+			</LinearLayout>
 
 			<com.google.android.material.slider.Slider
 				android:id="@+id/background_transparency_slider"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
+				android:layout_marginStart="44dp"
+				android:stepSize="5"
+				android:value="50"
 				android:valueFrom="0"
 				android:valueTo="100"
-				android:value="50"
-				android:stepSize="5"
 				/>
 
 			<!-- Separator -->
-			<View
-				android:layout_width="match_parent"
-				android:layout_height="@dimen/line"
-				android:layout_marginVertical="@dimen/normal"
-				android:alpha="0.5"
-				android:background="@color/white" />
+			<View style="@style/Widget.ClockWidget.Separator"
+				/>
 
 			<!-- Time layout -->
 			<TextView
-				android:id="@+id/time_title"
+				style="@style/Widget.ClockWidget.Section"
+				android:id="@+id/time_layout_title"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:textColor="@color/orange"
-				android:textSize="@dimen/tsz_normal"
-				android:textStyle="bold"
-				android:text="Time layout"
+				android:text="@string/time_layout"
 				/>
 
 			<!-- Show time -->
 			<LinearLayout
-				style="@style/Widget.ClockWidget.Switch"
-				android:id="@+id/show_time_container"
+				style="@style/Widget.ClockWidget.Row"
+				android:id="@+id/time_layout_show_container"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content">
 
+				<ImageView
+					style="@style/Widget.ClockWidget.Icon"
+					android:layout_width="@dimen/isz_medium"
+					android:layout_height="@dimen/isz_medium"
+					android:contentDescription="@string/cd_color_example"
+					android:src="@drawable/visibility"
+					/>
+
 				<TextView
-					android:id="@+id/show_time_description"
+					style="@style/Widget.ClockWidget.Subsection"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_small"
-					android:text="Show time"
+					android:text="@string/show"
 					/>
 
 				<androidx.appcompat.widget.SwitchCompat
-					android:id="@+id/show_time_switch"
+					android:id="@+id/time_layout_show_switch"
 					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
+					android:layout_height="@dimen/xlarge"
 					android:clickable="false"
 					/>
 			</LinearLayout>
 
-			<!-- Hour bold -->
+			<!-- Bold subsection -->
 			<LinearLayout
-				style="@style/Widget.ClockWidget.Switch"
-				android:id="@+id/bold_hour_container"
+				style="@style/Widget.ClockWidget.SliderRow"
+				android:id="@+id/time_layout_bold_container"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content">
 
-				<TextView
-					android:id="@+id/bold_hour_description"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_small"
-					android:text="Bold hour"
+				<ImageView
+					style="@style/Widget.ClockWidget.Icon"
+					android:layout_width="@dimen/isz_medium"
+					android:layout_height="@dimen/isz_medium"
+					android:contentDescription="@string/cd_color_example"
+					android:src="@drawable/format_bold"
 					/>
 
-				<androidx.appcompat.widget.SwitchCompat
-					android:id="@+id/bold_hour_switch"
-					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
-					android:clickable="false"
+				<TextView
+					style="@style/Widget.ClockWidget.Subsection"
+					android:id="@+id/time_layout_bold_description"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="@string/bold"
+					android:textColor="@color/white"
+					app:drawableEndCompat="@drawable/expand"
 					/>
 			</LinearLayout>
 
-			<!-- Minute bold -->
+			<!-- Bold items -->
 			<LinearLayout
-				style="@style/Widget.ClockWidget.Switch"
-				android:id="@+id/bold_minute_container"
+				android:id="@+id/time_layout_bold_options_container"
 				android:layout_width="match_parent"
-				android:layout_height="wrap_content">
+				android:layout_height="wrap_content"
+				android:layout_marginStart="44dp"
+				android:orientation="vertical"
+				android:visibility="gone">
 
-				<TextView
-					android:id="@+id/bold_minute_description"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_small"
-					android:text="Bold minutes"
-					/>
+				<!-- Hour bold -->
+				<LinearLayout
+					style="@style/Widget.ClockWidget.Row"
+					android:id="@+id/time_layout_bold_hour_container"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content">
 
-				<androidx.appcompat.widget.SwitchCompat
-					android:id="@+id/bold_minute_switch"
-					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
-					android:clickable="false"
-					/>
+					<TextView
+						style="@style/Widget.ClockWidget.Text"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:text="@string/hour"
+						/>
+
+					<androidx.appcompat.widget.SwitchCompat
+						android:id="@+id/time_layout_bold_hour_switch"
+						android:layout_width="@dimen/touch"
+						android:layout_height="@dimen/xlarge"
+						android:clickable="false"
+						/>
+				</LinearLayout>
+
+				<!-- Minute bold -->
+				<LinearLayout
+					style="@style/Widget.ClockWidget.Row"
+					android:id="@+id/time_layout_bold_minute_container"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content">
+
+					<TextView
+						style="@style/Widget.ClockWidget.Text"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:text="@string/minutes"
+						/>
+
+					<androidx.appcompat.widget.SwitchCompat
+						android:id="@+id/time_layout_bold_minute_switch"
+						android:layout_width="@dimen/touch"
+						android:layout_height="@dimen/xlarge"
+						android:clickable="false"
+						/>
+				</LinearLayout>
+
+				<!-- AM/PM bold -->
+				<LinearLayout
+					style="@style/Widget.ClockWidget.Row"
+					android:id="@+id/time_layout_bold_am_pm_container"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content">
+
+					<TextView
+						style="@style/Widget.ClockWidget.Text"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:text="@string/am_pm"
+						/>
+
+					<androidx.appcompat.widget.SwitchCompat
+						android:id="@+id/time_layout_bold_am_pm_switch"
+						android:layout_width="@dimen/touch"
+						android:layout_height="@dimen/xlarge"
+						android:clickable="false"
+						/>
+				</LinearLayout>
 			</LinearLayout>
 
-			<!-- AM/PM bold -->
+			<!-- Color subsection -->
 			<LinearLayout
-				style="@style/Widget.ClockWidget.Switch"
-				android:id="@+id/bold_am_pm_container"
+				style="@style/Widget.ClockWidget.SliderRow"
+				android:id="@+id/time_layout_color_container"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content">
 
-				<TextView
-					android:id="@+id/bold_am_pm_description"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_small"
-					android:text="Bold AM / PM"
+				<ImageView
+					style="@style/Widget.ClockWidget.Icon"
+					android:layout_width="@dimen/isz_medium"
+					android:layout_height="@dimen/isz_medium"
+					android:contentDescription="@string/cd_color_example"
+					android:src="@drawable/palette"
 					/>
 
-				<androidx.appcompat.widget.SwitchCompat
-					android:id="@+id/bold_am_pm_switch"
-					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
-					android:clickable="false"
+				<TextView
+					style="@style/Widget.ClockWidget.Subsection"
+					android:id="@+id/time_layout_color_description"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="@string/color"
+					android:textColor="@color/white"
+					app:drawableEndCompat="@drawable/expand"
 					/>
 			</LinearLayout>
 
-			<!-- Time color -->
-			<TextView
+			<!-- Color items -->
+			<LinearLayout
+				android:id="@+id/time_layout_color_options_container"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:paddingTop="@dimen/normal"
-				android:textColor="@color/white"
-				android:textSize="@dimen/tsz_small"
-				android:text="Time color"
-				/>
+				android:layout_marginStart="44dp"
+				android:orientation="vertical"
+				android:visibility="gone">
 
-			<com.nfcalarmclock.view.colorpicker.NacColorPicker
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				/>
+				<!-- Hour color -->
+				<LinearLayout
+					style="@style/Widget.ClockWidget.Row"
+					android:id="@+id/time_layout_color_hour_container"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical"
+					android:orientation="horizontal">
 
-			<!-- Time size -->
-			<TextView
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:paddingTop="@dimen/normal"
-				android:textColor="@color/white"
-				android:textSize="@dimen/tsz_small"
-				android:text="Time size"
-				/>
+					<TextView
+						style="@style/Widget.ClockWidget.Text"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:text="@string/hour"
+						/>
 
-			<com.google.android.material.slider.Slider
-				android:id="@+id/time_size_slider"
+					<ImageView
+						style="@style/Widget.ClockWidget.ColorSwatch"
+						android:id="@+id/hour_color_swatch"
+						android:contentDescription="@string/cd_color_example"
+						/>
+				</LinearLayout>
+
+				<!-- Minute color -->
+				<LinearLayout
+					style="@style/Widget.ClockWidget.Row"
+					android:id="@+id/time_layout_color_minute_container"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical"
+					android:orientation="horizontal">
+
+					<TextView
+						style="@style/Widget.ClockWidget.Text"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:text="@string/minutes"
+						/>
+
+					<ImageView
+						style="@style/Widget.ClockWidget.ColorSwatch"
+						android:id="@+id/minute_color_swatch"
+						android:contentDescription="@string/cd_color_example"
+						/>
+				</LinearLayout>
+
+				<!-- AM/PM color -->
+				<LinearLayout
+					style="@style/Widget.ClockWidget.Row"
+					android:id="@+id/time_layout_color_am_pm_container"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical"
+					android:orientation="horizontal">
+
+					<TextView
+						style="@style/Widget.ClockWidget.Text"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:text="@string/am_pm"
+						/>
+
+					<ImageView
+						style="@style/Widget.ClockWidget.ColorSwatch"
+						android:id="@+id/am_pm_color_swatch"
+						android:contentDescription="@string/cd_color_example"
+						/>
+				</LinearLayout>
+			</LinearLayout>
+
+			<!-- Text size subsection -->
+			<LinearLayout
+				style="@style/Widget.ClockWidget.SliderRow"
+				android:id="@+id/time_layout_text_size_container"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<ImageView
+					style="@style/Widget.ClockWidget.Icon"
+					android:layout_width="@dimen/isz_medium"
+					android:layout_height="@dimen/isz_medium"
+					android:contentDescription="@string/cd_color_example"
+					android:src="@drawable/format_size"
+					/>
+
+				<TextView
+					style="@style/Widget.ClockWidget.Subsection"
+					android:id="@+id/time_layout_text_size_description"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="@string/text_size"
+					android:textColor="@color/white"
+					app:drawableEndCompat="@drawable/expand"
+					/>
+			</LinearLayout>
+
+			<LinearLayout
+				android:id="@+id/time_layout_text_size_options_container"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:valueFrom="10"
-				android:valueTo="100"
-				android:value="72"
-				android:stepSize="2"
-				/>
+				android:layout_marginStart="44dp"
+				android:orientation="vertical"
+				android:visibility="gone">
+
+				<!-- Time size -->
+				<TextView
+					style="@style/Widget.ClockWidget.SliderText"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="@string/time"
+					/>
+
+				<com.google.android.material.slider.Slider
+					android:id="@+id/time_layout_text_size_time_slider"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginHorizontal="@dimen/tiny"
+					android:stepSize="4"
+					android:value="78"
+					android:valueFrom="10"
+					android:valueTo="150"
+					/>
+
+				<!-- AM/PM size -->
+				<TextView
+					style="@style/Widget.ClockWidget.SliderText"
+					android:id="@+id/time_layout_text_size_am_pm_description"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="@string/am_pm"
+					/>
+
+				<com.google.android.material.slider.Slider
+					android:id="@+id/time_layout_text_size_am_pm_slider"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginHorizontal="@dimen/tiny"
+					android:stepSize="2"
+					android:value="18"
+					android:valueFrom="10"
+					android:valueTo="60"
+					/>
+			</LinearLayout>
 
 			<!-- Separator -->
-			<View
-				android:layout_width="match_parent"
-				android:layout_height="@dimen/line"
-				android:layout_marginVertical="@dimen/normal"
-				android:alpha="0.5"
-				android:background="@color/white" />
+			<View style="@style/Widget.ClockWidget.Separator" />
 
 			<!-- Date layout -->
 			<TextView
-				android:id="@+id/date_title"
+				style="@style/Widget.ClockWidget.Section"
+				android:id="@+id/date_layout_title"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:textColor="@color/orange"
-				android:textSize="@dimen/tsz_normal"
-				android:textStyle="bold"
-				android:text="Date layout"
+				android:text="@string/date_layout"
 				/>
 
 			<!-- Show date -->
 			<LinearLayout
-				style="@style/Widget.ClockWidget.Switch"
-				android:id="@+id/show_date_container"
+				style="@style/Widget.ClockWidget.Row"
+				android:id="@+id/date_layout_show_container"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content">
 
+				<ImageView
+					style="@style/Widget.ClockWidget.Icon"
+					android:layout_width="@dimen/isz_medium"
+					android:layout_height="@dimen/isz_medium"
+					android:contentDescription="@string/cd_color_example"
+					android:src="@drawable/visibility"
+					/>
+
 				<TextView
-					android:id="@+id/show_date_description"
+					style="@style/Widget.ClockWidget.Subsection"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_small"
-					android:text="Show date"
+					android:text="@string/show"
 					/>
 
 				<androidx.appcompat.widget.SwitchCompat
-					android:id="@+id/show_date_switch"
+					android:id="@+id/date_layout_show_switch"
 					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
+					android:layout_height="@dimen/xlarge"
 					android:clickable="false"
 					/>
 			</LinearLayout>
 
 			<!-- Date bold -->
 			<LinearLayout
-				style="@style/Widget.ClockWidget.Switch"
-				android:id="@+id/bold_date_container"
+				style="@style/Widget.ClockWidget.Row"
+				android:id="@+id/date_layout_bold_container"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content">
 
+				<ImageView
+					style="@style/Widget.ClockWidget.Icon"
+					android:layout_width="@dimen/isz_medium"
+					android:layout_height="@dimen/isz_medium"
+					android:contentDescription="@string/cd_color_example"
+					android:src="@drawable/format_bold"
+					/>
+
 				<TextView
-					android:id="@+id/bold_date_description"
+					style="@style/Widget.ClockWidget.Subsection"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_small"
-					android:text="Bold date"
+					android:text="@string/bold"
 					/>
 
 				<androidx.appcompat.widget.SwitchCompat
-					android:id="@+id/bold_date_switch"
+					android:id="@+id/date_layout_bold_switch"
 					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
+					android:layout_height="@dimen/xlarge"
 					android:clickable="false"
+					/>
+			</LinearLayout>
+
+			<!-- Date color -->
+			<LinearLayout
+				style="@style/Widget.ClockWidget.Row"
+				android:id="@+id/date_layout_color_container"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:orientation="horizontal">
+
+				<ImageView
+					style="@style/Widget.ClockWidget.Icon"
+					android:id="@+id/time_size_icon"
+					android:layout_width="@dimen/isz_medium"
+					android:layout_height="@dimen/isz_medium"
+					android:contentDescription="@string/cd_color_example"
+					android:src="@drawable/palette"
+					/>
+
+				<TextView
+					style="@style/Widget.ClockWidget.Subsection"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="@string/color"
+					/>
+
+				<ImageView
+					style="@style/Widget.ClockWidget.ColorSwatch"
+					android:id="@+id/date_layout_color_swatch"
+					android:contentDescription="@string/cd_color_example"
 					/>
 			</LinearLayout>
 
 			<!-- Date size -->
-			<TextView
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:paddingTop="@dimen/normal"
-				android:textColor="@color/white"
-				android:textSize="@dimen/tsz_small"
-				android:text="Date size"
-				/>
-
-			<com.google.android.material.slider.Slider
-				android:id="@+id/date_size_slider"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:valueFrom="10"
-				android:valueTo="100"
-				android:value="14"
-				android:stepSize="2"
-				/>
-
-			<!-- Separator -->
-			<View
-				android:layout_width="match_parent"
-				android:layout_height="@dimen/line"
-				android:layout_marginVertical="@dimen/normal"
-				android:alpha="0.5"
-				android:background="@color/white" />
-
-			<!-- Alarm layout -->
-			<TextView
-				android:id="@+id/alarm_title"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:textColor="@color/orange"
-				android:textSize="@dimen/tsz_normal"
-				android:textStyle="bold"
-				android:text="Alarm layout"
-				/>
-
-			<!-- Show alarm time -->
 			<LinearLayout
-				style="@style/Widget.ClockWidget.Switch"
-				android:id="@+id/show_alarm_time_container"
+				style="@style/Widget.ClockWidget.SliderRow"
+				android:id="@+id/date_layout_text_size_container"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content">
 
-				<TextView
-					android:id="@+id/show_alarm_time_description"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_small"
-					android:text="Show alarm time"
+				<ImageView
+					style="@style/Widget.ClockWidget.Icon"
+					android:layout_width="@dimen/isz_medium"
+					android:layout_height="@dimen/isz_medium"
+					android:contentDescription="@string/cd_color_example"
+					android:src="@drawable/format_size"
 					/>
 
-				<androidx.appcompat.widget.SwitchCompat
-					android:id="@+id/show_alarm_time_switch"
-					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
-					android:clickable="false"
+				<TextView
+					style="@style/Widget.ClockWidget.Subsection"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="@string/text_size"
 					/>
 			</LinearLayout>
 
-			<!-- Show alarm icon -->
+			<com.google.android.material.slider.Slider
+				android:id="@+id/date_layout_text_size_slider"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="44dp"
+				android:stepSize="2"
+				android:value="14"
+				android:valueFrom="10"
+				android:valueTo="60"
+				/>
+
+			<!-- Separator -->
+			<View style="@style/Widget.ClockWidget.Separator" />
+
+			<!-- Alarm layout -->
+			<TextView
+				style="@style/Widget.ClockWidget.Section"
+				android:id="@+id/alarm_layout_title"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/alarm_layout"
+				/>
+
+			<!-- Show alarm time and icon -->
 			<LinearLayout
-				style="@style/Widget.ClockWidget.Switch"
-				android:id="@+id/show_alarm_icon_container"
+				style="@style/Widget.ClockWidget.Row"
+				android:id="@+id/alarm_layout_show_container"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content">
 
+				<ImageView
+					style="@style/Widget.ClockWidget.Icon"
+					android:layout_width="@dimen/isz_medium"
+					android:layout_height="@dimen/isz_medium"
+					android:contentDescription="@string/cd_color_example"
+					android:src="@drawable/visibility"
+					/>
+
 				<TextView
-					android:id="@+id/show_alarm_icon_description"
+					style="@style/Widget.ClockWidget.Subsection"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_small"
-					android:text="Show alarm icon"
+					android:text="@string/show"
 					/>
 
 				<androidx.appcompat.widget.SwitchCompat
-					android:id="@+id/show_alarm_icon_switch"
+					android:id="@+id/alarm_layout_show_switch"
 					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
+					android:layout_height="@dimen/xlarge"
 					android:clickable="false"
 					/>
 			</LinearLayout>
 
 			<!-- Bold alarm time -->
 			<LinearLayout
-				style="@style/Widget.ClockWidget.Switch"
-				android:id="@+id/bold_alarm_time_container"
+				style="@style/Widget.ClockWidget.Row"
+				android:id="@+id/alarm_layout_bold_container"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content">
 
+				<ImageView
+					style="@style/Widget.ClockWidget.Icon"
+					android:layout_width="@dimen/isz_medium"
+					android:layout_height="@dimen/isz_medium"
+					android:contentDescription="@string/cd_color_example"
+					android:src="@drawable/format_bold"
+					/>
+
 				<TextView
-					android:id="@+id/bold_alarm_time_description"
+					style="@style/Widget.ClockWidget.Subsection"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:textColor="@color/white"
-					android:textSize="@dimen/tsz_small"
-					android:text="Bold alarm time"
+					android:text="@string/bold"
 					/>
 
 				<androidx.appcompat.widget.SwitchCompat
-					android:id="@+id/bold_alarm_time_switch"
+					android:id="@+id/alarm_layout_bold_switch"
 					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
+					android:layout_height="@dimen/xlarge"
 					android:clickable="false"
 					/>
 			</LinearLayout>
 
-			<!-- Alarm size -->
-			<TextView
+			<!-- Color subsection -->
+			<LinearLayout
+				style="@style/Widget.ClockWidget.SliderRow"
+				android:id="@+id/alarm_layout_color_container"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<ImageView
+					style="@style/Widget.ClockWidget.Icon"
+					android:layout_width="@dimen/isz_medium"
+					android:layout_height="@dimen/isz_medium"
+					android:contentDescription="@string/cd_color_example"
+					android:src="@drawable/palette"
+					/>
+
+				<TextView
+					style="@style/Widget.ClockWidget.Subsection"
+					android:id="@+id/alarm_layout_color_description"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="@string/color"
+					android:textColor="@color/white"
+					app:drawableEndCompat="@drawable/expand"
+					/>
+			</LinearLayout>
+
+			<!-- Color items -->
+			<LinearLayout
+				android:id="@+id/alarm_layout_color_options_container"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:paddingTop="@dimen/normal"
-				android:textColor="@color/white"
-				android:textSize="@dimen/tsz_small"
-				android:text="Alarm size"
-				/>
+				android:layout_marginStart="44dp"
+				android:orientation="vertical"
+				android:visibility="gone">
+
+				<!-- Alarm time color -->
+				<LinearLayout
+					android:id="@+id/alarm_layout_color_time_container"
+					style="@style/Widget.ClockWidget.Row"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical"
+					android:orientation="horizontal">
+
+					<TextView
+						style="@style/Widget.ClockWidget.Text"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:text="@string/time"
+						/>
+
+					<ImageView
+						style="@style/Widget.ClockWidget.ColorSwatch"
+						android:id="@+id/alarm_layout_color_time_swatch"
+						android:contentDescription="@string/cd_color_example"
+						/>
+				</LinearLayout>
+
+				<!-- Alarm icon color -->
+				<LinearLayout
+					style="@style/Widget.ClockWidget.Row"
+					android:id="@+id/alarm_layout_color_icon_container"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical"
+					android:orientation="horizontal">
+
+					<TextView
+						style="@style/Widget.ClockWidget.Text"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:text="@string/icon"
+						/>
+
+					<ImageView
+						style="@style/Widget.ClockWidget.ColorSwatch"
+						android:id="@+id/alarm_layout_color_icon_swatch"
+						android:contentDescription="@string/cd_color_example"
+						/>
+				</LinearLayout>
+			</LinearLayout>
+
+			<!-- Text size subsection -->
+			<LinearLayout
+				style="@style/Widget.ClockWidget.SliderRow"
+				android:id="@+id/alarm_layout_text_size_container"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<ImageView
+					style="@style/Widget.ClockWidget.Icon"
+					android:layout_width="@dimen/isz_medium"
+					android:layout_height="@dimen/isz_medium"
+					android:contentDescription="@string/cd_color_example"
+					android:src="@drawable/format_size"
+					/>
+
+				<TextView
+					style="@style/Widget.ClockWidget.Subsection"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="@string/text_size"
+					/>
+			</LinearLayout>
 
 			<com.google.android.material.slider.Slider
-				android:id="@+id/alarm_size_slider"
+				android:id="@+id/alarm_layout_text_size_slider"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:valueFrom="10"
-				android:valueTo="100"
-				android:value="14"
+				android:layout_marginStart="44dp"
 				android:stepSize="2"
+				android:value="14"
+				android:valueFrom="10"
+				android:valueTo="60"
 				/>
-
 		</LinearLayout>
 	</ScrollView>
-
-	<!-- -->
-	<Space
-		android:layout_width="match_parent"
-		android:layout_height="@dimen/medium"
-		/>
 
 	<!-- Done -->
 	<com.google.android.material.button.MaterialButton
 		android:id="@+id/done_button"
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/touch"
+		android:layout_margin="@dimen/normal"
 		android:text="@string/action_done"
 		app:backgroundTint="@color/orange"
 		/>
-
 </LinearLayout>

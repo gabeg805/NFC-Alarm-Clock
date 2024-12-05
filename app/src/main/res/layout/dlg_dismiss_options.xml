@@ -1,48 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
+
+<LinearLayout
+	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:padding="@dimen/large"
+	android:layout_margin="@dimen/large"
 	android:orientation="vertical">
 
 	<!-- Auto dismiss -->
-	<TextView
-		style="@style/Widget.TextView.Primary"
+	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:textSize="@dimen/tsz_medium"
-		android:textStyle="bold"
-		android:text="@string/auto_dismiss"
-		/>
+		android:orientation="horizontal">
 
-	<com.google.android.material.textfield.TextInputLayout
-		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-		android:id="@+id/auto_dismiss_input_layout"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:paddingVertical="@dimen/normal"
-		app:boxCornerRadiusTopStart="6dp"
-		app:boxCornerRadiusTopEnd="6dp"
-		app:boxCornerRadiusBottomStart="6dp"
-		app:boxCornerRadiusBottomEnd="6dp"
-		app:boxStrokeWidth="2dp">
-
-		<com.google.android.material.textfield.MaterialAutoCompleteTextView
-			android:id="@+id/auto_dismiss_dropdown_menu"
-			android:layout_width="match_parent"
+		<!-- Title -->
+		<TextView
+			style="@style/Widget.TextView.Primary"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:inputType="none"
-			app:simpleItems="@array/auto_dismiss_summaries"
+			android:layout_weight="1"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textSize="@dimen/tsz_medium"
+			android:textStyle="bold"
+			android:text="@string/auto_dismiss"
 			/>
-	</com.google.android.material.textfield.TextInputLayout>
+
+		<!-- Switch -->
+		<androidx.appcompat.widget.SwitchCompat
+			android:id="@+id/auto_dismiss_switch"
+			android:layout_width="@dimen/touch"
+			android:layout_height="@dimen/touch"
+			/>
+	</LinearLayout>
+
+	<!-- Minutes and seconds -->
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:baselineAligned="false"
+		android:gravity="center_horizontal"
+		android:orientation="horizontal"
+		android:weightSum="2">
+
+		<!-- Minutes -->
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+			android:id="@+id/auto_dismiss_minutes_input_layout"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			app:boxCornerRadiusTopStart="6dp"
+			app:boxCornerRadiusTopEnd="6dp"
+			app:boxCornerRadiusBottomStart="6dp"
+			app:boxCornerRadiusBottomEnd="6dp"
+			app:boxStrokeWidth="2dp">
+
+			<com.google.android.material.textfield.MaterialAutoCompleteTextView
+				android:id="@+id/auto_dismiss_minutes_dropdown_menu"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="none"
+				app:simpleItems="@array/auto_dismiss_minute_summaries"
+				/>
+		</com.google.android.material.textfield.TextInputLayout>
+
+		<!-- Seconds -->
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+			android:id="@+id/auto_dismiss_seconds_input_layout"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			app:boxCornerRadiusTopStart="6dp"
+			app:boxCornerRadiusTopEnd="6dp"
+			app:boxCornerRadiusBottomStart="6dp"
+			app:boxCornerRadiusBottomEnd="6dp"
+			app:boxStrokeWidth="2dp">
+
+			<com.google.android.material.textfield.MaterialAutoCompleteTextView
+				android:id="@+id/auto_dismiss_seconds_dropdown_menu"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="none"
+				app:simpleItems="@array/auto_dismiss_second_summaries"
+				/>
+		</com.google.android.material.textfield.TextInputLayout>
+	</LinearLayout>
 
 	<!-- -->
 	<Space
 		android:layout_width="match_parent"
-		android:layout_height="@dimen/large"
+		android:layout_height="@dimen/xxxlarge"
 		/>
 
 	<!-- Dismiss early -->
@@ -211,3 +263,4 @@
 		/>
 
 </LinearLayout>
+</ScrollView>

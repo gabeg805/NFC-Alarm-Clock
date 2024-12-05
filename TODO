@@ -2,7 +2,15 @@
 TODO
 ----
 
-* Look into created and deleted import alarms.
+* Look up defaults like for auto dismiss, dismiss early, .... really all the
+  times, and see if they should be in the resources directory?
+
+* Weird stuff when selecting a color, the slider bar is all the way to black,
+  and you try to change the color.
+
+* Add seconds to auto-* and durations.
+
+* Have option to use file chooser to select media?
 
 * Add languages for India, Bangladesh, Pakistan, Japan, Thailand, Poland, Turkey, France,
   Brazil & Portugal, Serbia, Finland, Romania, Italy

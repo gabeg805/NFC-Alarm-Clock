@@ -272,24 +272,6 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Text size of the alarm time in the clock widget.
-	 */
-	var clockWidgetAlarmTimeTextSize: Float
-		get()
-		{
-			val key = resources.getString(R.string.clock_widget_text_size_alarm_time_key)
-			val defaultValue = resources.getDimension(R.dimen.tsz_small)
-
-			return instance.getFloat(key, defaultValue)
-		}
-		set(value)
-		{
-			val key = resources.getString(R.string.clock_widget_text_size_alarm_time_key)
-
-			saveFloat(key, value)
-		}
-
-	/**
 	 * Alarm time color in the clock widget.
 	 */
 	var clockWidgetAlarmTimeColor: Int
@@ -308,19 +290,73 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Color of "AM" in the clock widget.
+	 * Text size of the alarm time in the clock widget.
 	 */
-	var clockWidgetAmColor: Int
+	var clockWidgetAlarmTimeTextSize: Float
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_color_am_key)
-			val defaultValue = resources.getInteger(R.integer.default_clock_widget_color_am)
+			val key = resources.getString(R.string.clock_widget_text_size_alarm_time_key)
+			val defaultValue = resources.getDimension(R.dimen.tsz_small)
+
+			return instance.getFloat(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.clock_widget_text_size_alarm_time_key)
+
+			saveFloat(key, value)
+		}
+
+	/**
+	 * Color of AM/PM in the clock widget.
+	 */
+	var clockWidgetAmPmColor: Int
+		get()
+		{
+			val key = resources.getString(R.string.clock_widget_color_am_pm_key)
+			val defaultValue = resources.getInteger(R.integer.default_clock_widget_color_am_pm)
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_color_am_key)
+			val key = resources.getString(R.string.clock_widget_color_am_pm_key)
+
+			saveInt(key, value)
+		}
+
+	/**
+	 * Text size of AM/PM in the clock widget.
+	 */
+	var clockWidgetAmPmTextSize: Float
+		get()
+		{
+			val key = resources.getString(R.string.clock_widget_text_size_am_pm_key)
+			val defaultValue = resources.getDimension(R.dimen.tsz_medium)
+
+			return instance.getFloat(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.clock_widget_text_size_am_pm_key)
+
+			saveFloat(key, value)
+		}
+
+	/**
+	 * Background color of the clock widget.
+	 */
+	var clockWidgetBackgroundColor: Int
+		get()
+		{
+			val key = resources.getString(R.string.clock_widget_background_color_key)
+			val defaultValue = resources.getInteger(R.integer.default_clock_widget_color_background)
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.clock_widget_background_color_key)
 
 			saveInt(key, value)
 		}
@@ -411,24 +447,6 @@ class NacSharedPreferences(context: Context)
 		set(value)
 		{
 			val key = resources.getString(R.string.clock_widget_color_minute_key)
-
-			saveInt(key, value)
-		}
-
-	/**
-	 * Color of "PM" in the clock widget.
-	 */
-	var clockWidgetPmColor: Int
-		get()
-		{
-			val key = resources.getString(R.string.clock_widget_color_pm_key)
-			val defaultValue = resources.getInteger(R.integer.default_clock_widget_color_pm)
-
-			return instance.getInt(key, defaultValue)
-		}
-		set(value)
-		{
-			val key = resources.getString(R.string.clock_widget_color_pm_key)
 
 			saveInt(key, value)
 		}
@@ -542,37 +560,19 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Whether the alarm icon should be shown or not in the clock widget.
+	 * Whether the alarm icon and time should be shown or not in the clock widget.
 	 */
-	var shouldClockWidgetShowAlarmIcon: Boolean
+	var shouldClockWidgetShowAlarm: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_show_alarm_icon_key)
+			val key = resources.getString(R.string.clock_widget_show_alarm_key)
 			val defaultValue = true
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_show_alarm_icon_key)
-
-			saveBoolean(key, value)
-		}
-
-	/**
-	 * Whether the alarm time should be shown or not in the clock widget.
-	 */
-	var shouldClockWidgetShowAlarmTime: Boolean
-		get()
-		{
-			val key = resources.getString(R.string.clock_widget_show_alarm_time_key)
-			val defaultValue = true
-
-			return instance.getBoolean(key, defaultValue)
-		}
-		set(value)
-		{
-			val key = resources.getString(R.string.clock_widget_show_alarm_time_key)
+			val key = resources.getString(R.string.clock_widget_show_alarm_key)
 
 			saveBoolean(key, value)
 		}

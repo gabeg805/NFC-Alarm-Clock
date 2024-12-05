@@ -3,8 +3,11 @@ package com.nfcalarmclock.view
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.view.HapticFeedbackConstants
 import android.view.View
+import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.SeekBar
@@ -18,6 +21,30 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
+
+/**
+ * Determine contrast color, such as to use for text, based on a color.
+ */
+fun calcContrastColor(color: Int): Int
+{
+	// Get RGB components from color
+	val r = Color.red(color)
+	val g = Color.green(color)
+	val b = Color.blue(color)
+
+	// Counting the perceptive luminance - human eye favors green color...
+	val luminance = (0.299*r + 0.587*g + 0.114*b) / 255f
+
+	// Determine which contrast color to use
+	return if (luminance > 0.5)
+	{
+		Color.BLACK
+	}
+	else
+	{
+		Color.WHITE
+	}
+}
 
 /**
  * Get the text of the selected radio button.
@@ -69,6 +96,14 @@ fun View.setupBackgroundColor(sharedPreferences: NacSharedPreferences)
 }
 
 /**
+ * Setup the foreground color of an ImageView.
+ */
+fun ImageView.setupForegroundColor(color: Int)
+{
+	this.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC)
+}
+
+/**
  * Setup the color of a check box.
  */
 fun MaterialCheckBox.setupCheckBoxColor(sharedPreferences: NacSharedPreferences)
@@ -102,13 +137,22 @@ fun SeekBar.setupProgressAndThumbColor(sharedPreferences: NacSharedPreferences)
 fun Slider.setupProgressAndThumbColor(sharedPreferences: NacSharedPreferences)
 {
 	// Get the theme color
-	val activeColor = ColorStateList.valueOf(sharedPreferences.themeColor)
-	val inactiveColor = ColorStateList.valueOf(Color.GRAY)
+	val themeColor = sharedPreferences.themeColor
 
-	// Set the color
+	// Get the contrast color and blend it with the theme
+	val contrastColor = calcContrastColor(themeColor)
+	val blendedColor = ColorUtils.blendARGB(themeColor, contrastColor, 0.7f)
+
+	// Determine the active and inactive colors
+	val activeColor = ColorStateList.valueOf(themeColor)
+	val inactiveColor = ColorStateList.valueOf(blendedColor)
+
+	// Set the colors
 	this.trackActiveTintList = activeColor
 	this.trackInactiveTintList = inactiveColor
 	this.thumbTintList = activeColor
+	this.tickActiveTintList = inactiveColor
+	this.tickInactiveTintList = activeColor
 }
 
 /**
@@ -121,6 +165,21 @@ fun MaterialButton.setupRippleColor(sharedPreferences: NacSharedPreferences, the
 
 	// Set the ripple color
 	this.rippleColor = ColorStateList.valueOf(blendedColor)
+}
+
+/**
+ * Setup the theme color of a MaterialButton.
+ */
+fun MaterialButton.setupThemeColor(sharedPreferences: NacSharedPreferences, themeColor: Int = sharedPreferences.themeColor)
+{
+	// Setup main color
+	this.setBackgroundColor(themeColor)
+	this.setupRippleColor(sharedPreferences, themeColor=themeColor)
+
+	// Setup text color
+	val contrastColor = if (themeColor == sharedPreferences.themeColor) Color.WHITE else calcContrastColor(themeColor)
+
+	this.setTextColor(contrastColor)
 }
 
 /**

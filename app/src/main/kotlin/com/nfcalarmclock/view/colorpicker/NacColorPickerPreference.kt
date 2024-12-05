@@ -3,7 +3,6 @@ package com.nfcalarmclock.view.colorpicker
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.util.AttributeSet
 import android.widget.ImageView
 import androidx.fragment.app.FragmentManager
@@ -12,6 +11,7 @@ import androidx.preference.PreferenceViewHolder
 import com.nfcalarmclock.R
 import com.nfcalarmclock.view.colorpicker.NacColorPickerDialog.OnColorSelectedListener
 import com.nfcalarmclock.view.colorpicker.NacColorPickerDialog.OnDefaultColorSelectedListener
+import com.nfcalarmclock.view.setupForegroundColor
 
 /**
  * Preference that allows a user to select a color.
@@ -76,7 +76,7 @@ class NacColorPickerPreference @JvmOverloads constructor(
 		exampleColor = holder.findViewById(R.id.widget) as ImageView
 
 		// Setup the example color
-		exampleColor!!.setColorFilter(colorValue, PorterDuff.Mode.SRC)
+		exampleColor!!.setupForegroundColor(colorValue)
 	}
 
 	/**
@@ -87,7 +87,7 @@ class NacColorPickerPreference @JvmOverloads constructor(
 		colorValue = color
 
 		// Setup the example color
-		exampleColor!!.setColorFilter(colorValue, PorterDuff.Mode.SRC)
+		exampleColor!!.setupForegroundColor(colorValue)
 
 		// Persist the value
 		persistInt(colorValue)

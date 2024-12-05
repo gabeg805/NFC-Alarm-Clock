@@ -5,8 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.LinearLayout
+import android.widget.NumberPicker
 import android.widget.RelativeLayout
+import android.widget.Switch
 import android.widget.TextView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
@@ -186,20 +190,39 @@ class NacDismissOptionsDialog
 	private fun setupAutoDismiss(default: Int)
 	{
 		// Get the views
-		val inputLayout: TextInputLayout = dialog!!.findViewById(R.id.auto_dismiss_input_layout)
-		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.auto_dismiss_dropdown_menu)
+		val switch: SwitchCompat = dialog!!.findViewById(R.id.auto_dismiss_switch)
+		val minutesInputLayout: TextInputLayout = dialog!!.findViewById(R.id.auto_dismiss_minutes_input_layout)
+		val minutesAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.auto_dismiss_minutes_dropdown_menu)
+		val secondsInputLayout: TextInputLayout = dialog!!.findViewById(R.id.auto_dismiss_seconds_input_layout)
+		val secondsAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.auto_dismiss_seconds_dropdown_menu)
+		// TODO: 0 min 0 sec = Off, so need to find a way so that user cannot do that
+		// TODO: Can do this by when a user is selecting one or the other, make 0 be unselectable by removing it from list or hiding it if possible?
+
+		// Setup the switch
+		switch.setOnCheckedChangeListener { _, state ->
+
+			// Set the enabled state of the text input layouts
+			minutesInputLayout.isEnabled = state
+			secondsInputLayout.isEnabled = state
+
+		}
 
 		// Setup the input layout
-		inputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+		minutesInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+		secondsInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 
 		// Set the default selected items in the text views
-		val index = NacAlarm.calcAutoDismissIndex(default)
-		autoCompleteTextView.setTextFromIndex(index)
+		// TODO
+		//val index = NacAlarm.calcAutoDismissIndex(default)
+		//autoCompleteTextView.setTextFromIndex(index)
+		minutesAutoCompleteTextView.setTextFromIndex(0)
+		secondsAutoCompleteTextView.setTextFromIndex(0)
 
 		// Set the textview listeners
-		autoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-			selectedAutoDismissTime = NacAlarm.calcAutoDismissTime(position)
-		}
+		// TODO
+		//autoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+		//	selectedAutoDismissTime = NacAlarm.calcAutoDismissTime(position)
+		//}
 	}
 
 	/**

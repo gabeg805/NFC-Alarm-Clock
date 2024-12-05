@@ -1,7 +1,6 @@
 package com.nfcalarmclock.widget
 
 import android.app.AlarmManager
-import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
@@ -9,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
-import android.os.Bundle
 import android.text.SpannableString
 import android.text.format.DateFormat
 import android.text.style.StyleSpan
@@ -29,74 +27,18 @@ import java.util.Calendar
 class NacClockWidgetProvider : AppWidgetProvider()
 {
 
-	/**
-	 * Called when the widget is deleted.
-	 */
-	override fun onAppWidgetOptionsChanged(
-		context: Context,
-		appWidgetManager: AppWidgetManager,
-		appWidgetId: Int,
-		newOptions: Bundle)
-	{
-		super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
-
-		println("WIDGET OPTION CHANGED")
-
-		//val bundle = appWidgetManager.getAppWidgetOptions(appWidgetId)
-		val bundle = newOptions
-		println("New Width  : ${bundle.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)} x ${bundle.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH)}")
-		println("New Height : ${bundle.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)} x ${bundle.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT)}")
-
-		updateAppWidget(context, appWidgetManager, appWidgetId)
-
-		// When the user deletes the widget, delete the preference associated with it.
-		//for (id in appWidgetIds)
-		//{
-		//	//deleteTitlePref(context, id)
-		//}
-	}
-
-	/**
-	 * Called when the widget is deleted.
-	 */
-	override fun onDeleted(context: Context, appWidgetIds: IntArray)
-	{
-		println("WIDGET DELETED")
-		// When the user deletes the widget, delete the preference associated with it.
-		//for (id in appWidgetIds)
-		//{
-		//	//deleteTitlePref(context, id)
-		//}
-	}
-
-	/**
-	 * Called when the wiget is removed from the last host.
-	 */
-	override fun onDisabled(context: Context)
-	{
-		// Enter relevant functionality for when the last widget is disabled
-		println("WIDGET DISABLED")
-	}
-
-	/**
-	 * Called when the widget is added to a host for the first time, such as at boot time.
-	 */
-	override fun onEnabled(context: Context)
-	{
-		// Enter relevant functionality for when the first widget is created
-		println("WIDGET ENABLED")
-	}
-
 	override fun onReceive(context: Context, intent: Intent?)
 	{
-		println("WIDGET RECEIVE : ${intent?.action}")
+		// Super
+		super.onReceive(context, intent)
 
-		if ((intent?.action == "android.intent.action.TIME_SET")
+		// Check if certain action pertaining to booting up, time change, or clock change
+		if ((intent?.action == Intent.ACTION_BOOT_COMPLETED)
+			|| (intent?.action == "android.intent.action.TIME_SET")
 			|| (intent?.action == Intent.ACTION_TIMEZONE_CHANGED)
 			|| (intent?.action == Intent.ACTION_LOCALE_CHANGED)
 			|| (intent?.action == AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED))
 		{
-			println("Hello in here!")
 			refreshAppWidgets(context)
 		}
 	}
@@ -109,8 +51,6 @@ class NacClockWidgetProvider : AppWidgetProvider()
 		appWidgetManager: AppWidgetManager,
 		appWidgetIds: IntArray)
 	{
-		println("WIDGET UPDATED")
-
 		// Iterate over each widget
 		for (id in appWidgetIds)
 		{
@@ -126,7 +66,6 @@ class NacClockWidgetProvider : AppWidgetProvider()
  */
 internal fun refreshAppWidgets(context: Context)
 {
-	println("refreshAppWidgets()")
 	// Get the list of widget IDs
 	val componentName = ComponentName(context, NacClockWidgetProvider::class.java)
 	val appWidgetManager = AppWidgetManager.getInstance(context)
@@ -135,7 +74,6 @@ internal fun refreshAppWidgets(context: Context)
 	// Iterate over each widget ID and update it
 	for (id in appWidgetIds)
 	{
-		println("WIDGET ID : $id")
 		updateAppWidget(context, appWidgetManager, id)
 	}
 }
@@ -148,88 +86,335 @@ internal fun updateAppWidget(
 	appWidgetManager: AppWidgetManager,
 	appWidgetId: Int)
 {
-	println("Updating app widget")
-
-	// Get the shared preferences
-	val shared = NacSharedPreferences(context)
-
 	// Construct the RemoteViews object
 	val views = RemoteViews(context.packageName, R.layout.nac_clock_widget)
 
 	// Set on click pending intent
 	val pendingIntent = NacMainActivity.getStartPendingIntent(context)
-	views.setOnClickPendingIntent(R.id.parent, pendingIntent)
+	views.setOnClickPendingIntent(R.id.widget_parent, pendingIntent)
 
-	// Get the AM/PM meridian
-	val nowCal = Calendar.getInstance()
-	val amPm = NacCalendar.getMeridian(context, nowCal[Calendar.HOUR_OF_DAY])
-
-	// Get the next alarm
-	val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-	val alarmInfo = alarmManager.nextAlarmClock
-
-	// Get which parts of the widget should be shown
-	val showTimeVis = if (shared.shouldClockWidgetShowTime) View.VISIBLE else View.GONE
-	val showHourBoldVis = if (shared.shouldClockWidgetShowTime && shared.shouldClockWidgetBoldHour) View.VISIBLE else View.GONE
-	val showHourVis = if (showHourBoldVis == View.VISIBLE) View.GONE else View.VISIBLE
-	val showMinuteBoldVis = if (shared.shouldClockWidgetShowTime && shared.shouldClockWidgetBoldMinute) View.VISIBLE else View.GONE
-	val showMinuteVis = if (showMinuteBoldVis == View.VISIBLE) View.GONE else View.VISIBLE
-	val showMeridianBoldVis = if (amPm.isNotEmpty() && shared.shouldClockWidgetBoldAmPm) View.VISIBLE else View.GONE
-	val showMeridianVis = if (showMeridianBoldVis == View.VISIBLE) View.GONE else View.VISIBLE
-	val showDateBoldVis = if (shared.shouldClockWidgetShowDate && shared.shouldClockWidgetBoldDate) View.VISIBLE else View.GONE
-	val showDateVis = if (shared.shouldClockWidgetShowDate && !shared.shouldClockWidgetBoldDate) View.VISIBLE else View.GONE
-	val showAlarmTimeVis = if (shared.shouldClockWidgetShowAlarmTime && (alarmInfo != null)) View.VISIBLE else View.GONE
-	val showAlarmIconVis = if (shared.shouldClockWidgetShowAlarmIcon && (alarmInfo != null)) View.VISIBLE else View.GONE
+	// Get the clock widget helper
+	val shared = NacSharedPreferences(context)
+	val helper = NacClockWidgetDataHelper(context, shared)
 
 	// Set view visibility
-	views.setViewVisibility(R.id.time, showTimeVis)
-	views.setViewVisibility(R.id.hour, showHourVis)
-	views.setViewVisibility(R.id.hour_bold, showHourBoldVis)
-	views.setViewVisibility(R.id.minute, showMinuteVis)
-	views.setViewVisibility(R.id.minute_bold, showMinuteBoldVis)
-	views.setViewVisibility(R.id.am_pm, showMeridianVis)
-	views.setViewVisibility(R.id.am_pm_bold, showMeridianBoldVis)
-	views.setViewVisibility(R.id.date, showDateVis)
-	views.setViewVisibility(R.id.date_bold, showDateBoldVis)
-	views.setViewVisibility(R.id.alarm_time, showAlarmTimeVis)
-	views.setViewVisibility(R.id.alarm_icon, showAlarmIconVis)
+	views.setViewVisibility(R.id.widget_time, helper.timeVis)
+	views.setViewVisibility(R.id.widget_hour, helper.hourVis)
+	views.setViewVisibility(R.id.widget_hour_bold, helper.hourBoldVis)
+	views.setViewVisibility(R.id.widget_minute, helper.minuteVis)
+	views.setViewVisibility(R.id.widget_minute_bold, helper.minuteBoldVis)
+	views.setViewVisibility(R.id.widget_am_pm, helper.meridianVis)
+	views.setViewVisibility(R.id.widget_am_pm_bold, helper.meridianBoldVis)
+	views.setViewVisibility(R.id.widget_date, helper.dateVis)
+	views.setViewVisibility(R.id.widget_date_bold, helper.dateBoldVis)
+	views.setViewVisibility(R.id.widget_alarm_icon, helper.alarmVis)
+	views.setViewVisibility(R.id.widget_alarm_time, helper.alarmVis)
 
 	// Check if the alarm time should be customized
-	if (showAlarmTimeVis == View.VISIBLE)
+	if (helper.alarmVis == View.VISIBLE)
 	{
-		// Create a calendar with the next alarm time
-		val alarmCal = Calendar.getInstance()
-		alarmCal.timeInMillis = alarmInfo.triggerTime
+		// Set the text
+		views.setTextViewText(R.id.widget_alarm_time, helper.nextAlarm)
+	}
 
+	// Set the background color and transparency
+	views.setInt(R.id.widget_parent, "setBackgroundColor", helper.bgColor)
+
+	// Set text and icon colors
+	views.setTextColor(R.id.widget_hour, shared.clockWidgetHourColor)
+	views.setTextColor(R.id.widget_hour_bold, shared.clockWidgetHourColor)
+	views.setTextColor(R.id.widget_colon, shared.clockWidgetMinuteColor)
+	views.setTextColor(R.id.widget_minute, shared.clockWidgetMinuteColor)
+	views.setTextColor(R.id.widget_minute_bold, shared.clockWidgetMinuteColor)
+	views.setTextColor(R.id.widget_am_pm, shared.clockWidgetAmPmColor)
+	views.setTextColor(R.id.widget_am_pm_bold, shared.clockWidgetAmPmColor)
+	views.setTextColor(R.id.widget_date, shared.clockWidgetDateColor)
+	views.setTextColor(R.id.widget_date_bold, shared.clockWidgetDateColor)
+	views.setTextColor(R.id.widget_alarm_time, shared.clockWidgetAlarmTimeColor)
+	views.setInt(R.id.widget_alarm_icon, "setColorFilter", shared.clockWidgetAlarmIconColor)
+
+	// Set text size
+	views.setTextViewTextSize(R.id.widget_hour, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
+	views.setTextViewTextSize(R.id.widget_hour_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
+	views.setTextViewTextSize(R.id.widget_colon, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
+	views.setTextViewTextSize(R.id.widget_minute, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
+	views.setTextViewTextSize(R.id.widget_minute_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
+	views.setTextViewTextSize(R.id.widget_am_pm, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAmPmTextSize)
+	views.setTextViewTextSize(R.id.widget_am_pm_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAmPmTextSize)
+	views.setTextViewTextSize(R.id.widget_date, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetDateTextSize)
+	views.setTextViewTextSize(R.id.widget_date_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetDateTextSize)
+	views.setTextViewTextSize(R.id.widget_alarm_time, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
+
+	// Instruct the widget manager to update the widget
+	appWidgetManager.updateAppWidget(appWidgetId, views)
+}
+
+/**
+ * Helper for determining various important aspects of the clock widget, such as what
+ * views should be visible, text for the alarm, should views be bold or not, etc.
+ */
+internal class NacClockWidgetDataHelper(
+
+	/**
+	 * Context
+	 */
+	val context: Context,
+
+	/**
+	 * Shared preferences.
+	 */
+	val sharedPreferences: NacSharedPreferences
+
+)
+{
+
+	/**
+	 * The next alarm info.
+	 */
+	private val nextAlarmInfo: AlarmManager.AlarmClockInfo?
+		get()
+		{
+			// Get the alarm manager
+			val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+			// Return the next alarm
+			return alarmManager.nextAlarmClock
+		}
+
+
+	/**
+	 * AM/PM string, if present in the current locale.
+	 */
+	private val amPm: String
+		get()
+		{
+			// Get the current calendar
+			val cal = Calendar.getInstance()
+
+			// Return the meridian
+			return NacCalendar.getMeridian(context, cal[Calendar.HOUR_OF_DAY])
+		}
+
+	/**
+	 * Time visibility.
+	 */
+	val timeVis: Int
+		get()
+		{
+			return if (sharedPreferences.shouldClockWidgetShowTime)
+			{
+				View.VISIBLE
+			}
+			else
+			{
+				View.GONE
+			}
+		}
+
+	/**
+	 * Bold hour visibility.
+	 */
+	val hourBoldVis: Int
+		get()
+		{
+			return if (sharedPreferences.shouldClockWidgetShowTime && sharedPreferences.shouldClockWidgetBoldHour)
+			{
+				View.VISIBLE
+			}
+			else
+			{
+				View.GONE
+			}
+		}
+
+	/**
+	 * Regular hour visibility.
+	 */
+	val hourVis: Int
+		get()
+		{
+			return if (hourBoldVis == View.VISIBLE)
+			{
+				View.GONE
+			}
+			else
+			{
+				View.VISIBLE
+			}
+		}
+
+	/**
+	 * Bold minute visibility.
+	 */
+	val minuteBoldVis: Int
+		get()
+		{
+			return if (sharedPreferences.shouldClockWidgetShowTime && sharedPreferences.shouldClockWidgetBoldMinute)
+			{
+				View.VISIBLE
+			}
+			else
+			{
+				View.GONE
+			}
+		}
+
+	/**
+	 * Regular minute visibility.
+	 */
+	val minuteVis: Int
+		get()
+		{
+			return if (minuteBoldVis == View.VISIBLE)
+			{
+				View.GONE
+			}
+			else
+			{
+				View.VISIBLE
+			}
+		}
+
+	/**
+	 * Bold meridian visibility.
+	 */
+	val meridianBoldVis: Int
+		get()
+		{
+			return if (amPm.isNotEmpty() && sharedPreferences.shouldClockWidgetBoldAmPm)
+			{
+				View.VISIBLE
+			}
+			else
+			{
+				View.GONE
+			}
+		}
+
+	/**
+	 * Regular meridian visibility.
+	 */
+	val meridianVis: Int
+		get()
+		{
+			return if (meridianBoldVis == View.VISIBLE)
+			{
+				View.GONE
+			}
+			else
+			{
+				View.VISIBLE
+			}
+		}
+
+	/**
+	 * Bold date visibility.
+	 */
+	val dateBoldVis: Int
+		get()
+		{
+			return if (sharedPreferences.shouldClockWidgetShowDate && sharedPreferences.shouldClockWidgetBoldDate)
+			{
+				View.VISIBLE
+			}
+			else
+			{
+				View.GONE
+			}
+		}
+
+	/**
+	 * Regular date visibility.
+	 */
+	val dateVis: Int
+		get()
+		{
+			return if (sharedPreferences.shouldClockWidgetShowDate && !sharedPreferences.shouldClockWidgetBoldDate)
+			{
+				View.VISIBLE
+			}
+			else
+			{
+				View.GONE
+			}
+		}
+
+	/**
+	 * Alarm visibility.
+	 */
+	val alarmVis: Int
+		get()
+		{
+			return if (sharedPreferences.shouldClockWidgetShowAlarm && (nextAlarmInfo != null))
+			{
+				View.VISIBLE
+			}
+			else
+			{
+				View.GONE
+			}
+		}
+
+	/**
+	 * ARGB background color.
+	 */
+	val bgColor: Int
+		get()
+		{
+			// Get the color
+			val color = sharedPreferences.clockWidgetBackgroundColor
+
+			// Compute the ARGB components of the color
+			val alpha = ((1f - sharedPreferences.clockWidgetBackgroundTransparency/100f) * 255f).toInt()
+			val r = Color.red(color)
+			val g = Color.green(color)
+			val b = Color.blue(color)
+
+			// Return the color
+			return Color.argb(alpha, r, g, b)
+		}
+
+	/**
+	 * String containing the time at which the next alarm will run.
+	 */
+	val nextAlarm: SpannableString
+		get()
+		{
+			// Check if the alarm time should be customized
+			if (alarmVis != View.VISIBLE)
+			{
+				return SpannableString("")
+			}
+
+			// Create a calendar with the next alarm time
+			val alarmCal = Calendar.getInstance()
+			alarmCal.timeInMillis = nextAlarmInfo!!.triggerTime
+
+			// Return the alarm time as a spannable string
+			val alarmTimeSpan = getAlarmTimeSpannableString(alarmCal)
+
+			// Return the string
+			return alarmTimeSpan
+		}
+
+	/**
+	 * String containing the time at which the next alarm will run.
+	 */
+	fun getAlarmTimeSpannableString(calendar: Calendar): SpannableString
+	{
 		// Get the alarm time as a spannable string
 		val is24HourFormat = DateFormat.is24HourFormat(context)
-		val alarmTime = NacCalendar.getFullTime(alarmCal, is24HourFormat)
+		val alarmTime = NacCalendar.getFullTime(calendar, is24HourFormat)
 		val alarmTimeSpan = SpannableString(alarmTime)
 
 		// Bold alarm time
-		if (shared.shouldClockWidgetBoldAlarmTime)
+		if (sharedPreferences.shouldClockWidgetBoldAlarmTime)
 		{
 			alarmTimeSpan.setSpan(StyleSpan(Typeface.BOLD), 0, alarmTimeSpan.length, 0)
 		}
 
-		// Set the text
-		views.setTextViewText(R.id.alarm_time, alarmTimeSpan)
+		// Return the string
+		return alarmTimeSpan
 	}
 
-	// Set text size
-	views.setTextViewTextSize(R.id.hour, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
-	views.setTextViewTextSize(R.id.hour_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
-	views.setTextViewTextSize(R.id.colon, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
-	views.setTextViewTextSize(R.id.minute, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
-	views.setTextViewTextSize(R.id.minute_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
-	views.setTextViewTextSize(R.id.date, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetDateTextSize)
-	views.setTextViewTextSize(R.id.date_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetDateTextSize)
-	views.setTextViewTextSize(R.id.alarm_time, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
-
-	// Set the background color and transparency
-	val alpha = ((1f - shared.clockWidgetBackgroundTransparency/100f) * 255f).toInt()
-	views.setInt(R.id.parent, "setBackgroundColor", Color.argb(alpha, 0, 0, 0))
-
-	// Instruct the widget manager to update the widget
-	appWidgetManager.updateAppWidget(appWidgetId, views)
 }

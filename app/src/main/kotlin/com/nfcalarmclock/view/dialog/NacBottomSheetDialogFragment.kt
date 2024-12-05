@@ -7,7 +7,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.view.setupRippleColor
+import com.nfcalarmclock.view.setupThemeColor
 
 /**
  * Generic bottom sheet dialog fragment.
@@ -39,8 +39,7 @@ abstract class NacBottomSheetDialogFragment
 	protected fun setupPrimaryButton(button: MaterialButton, listener: () -> Unit = { })
 	{
 		// Setup the color
-		button.setBackgroundColor(sharedPreferences.themeColor)
-		button.setupRippleColor(sharedPreferences)
+		button.setupThemeColor(sharedPreferences)
 
 		// Set the listener
 		button.setOnClickListener {
@@ -54,8 +53,8 @@ abstract class NacBottomSheetDialogFragment
 	protected fun setupSecondaryButton(button: MaterialButton, listener: () -> Unit = { dismiss() })
 	{
 		// Setup the color
-		button.setupRippleColor(sharedPreferences,
-			themeColor = ContextCompat.getColor(requireContext(), R.color.gray_light))
+		val color = ContextCompat.getColor(requireContext(), R.color.gray_light)
+		button.setupThemeColor(sharedPreferences, themeColor=color)
 
 		// Set the listener
 		button.setOnClickListener {
