@@ -5,24 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.LinearLayout
-import android.widget.NumberPicker
 import android.widget.RelativeLayout
-import android.widget.Switch
-import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.util.NacBundle
+import com.nfcalarmclock.view.calcAlpha
+import com.nfcalarmclock.view.changeSimpleItemsOnZero
 import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
 import com.nfcalarmclock.view.setTextFromIndex
-import com.nfcalarmclock.view.setupCheckBoxColor
 import com.nfcalarmclock.view.setupInputLayoutColor
+import com.nfcalarmclock.view.setupSwitchColor
 
 /**
  * Dismiss options.
@@ -32,19 +29,29 @@ class NacDismissOptionsDialog
 {
 
 	/**
-	 * Question above the frequency picker.
+	 * Auto dismiss switch.
 	 */
-	private lateinit var dismissEarlyQuestion: TextView
+	private lateinit var autoDismissSwitch: SwitchCompat
 
 	/**
-	 * Input layout to select the dismiss early wait time.
+	 * Auto dismiss minutes input layout.
+	 */
+	private lateinit var autoDismissMinutesInputLayout: TextInputLayout
+
+	/**
+	 * Auto dismiss seconds input layout.
+	 */
+	private lateinit var autoDismissSecondsInputLayout: TextInputLayout
+
+	/**
+	 * Dismiss early switch.
+	 */
+	private lateinit var dismissEarlySwitch: SwitchCompat
+
+	/**
+	 * Dismiss early input layout.
 	 */
 	private lateinit var dismissEarlyInputLayout: TextInputLayout
-
-	/**
-	 * Checkbox for whether the alarm can be dismissed early or not.
-	 */
-	private lateinit var dismissEarlyCheckBox: MaterialCheckBox
 
 	/**
 	 * Selected auto dismiss time.
@@ -60,13 +67,6 @@ class NacDismissOptionsDialog
 	 * Selected should delete the alarm after it is dismissed option.
 	 */
 	private var selectedShouldDeleteAlarmAfterDismissed: Boolean = false
-
-	/**
-	 * The alpha that views should have based on the should use text-to-speech
-	 * flag.
-	 */
-	private val alpha: Float
-		get() = if (dismissEarlyCheckBox.isChecked) 1.0f else 0.2f
 
 	/**
 	 * Called when the creating the view.
@@ -105,9 +105,9 @@ class NacDismissOptionsDialog
 
 		// Setup the views
 		setupAutoDismiss(defaultAutoDismissTime)
-		setupShouldDismissEarly(defaultShouldDismissEarly)
-		setupHowEarlyToDismiss(defaultDismissEarlyTime)
-		setHowEarlyToDismissUsable()
+		setupAutoDismissUsable()
+		setupDismissEarly(defaultShouldDismissEarly, defaultDismissEarlyTime)
+		setupDismissEarlyUsable()
 		setupShouldDeleteAlarmAfterDismissed(defaultShouldDeleteAlarmAfterDismissed)
 
 		// Setup the ok button
@@ -115,7 +115,7 @@ class NacDismissOptionsDialog
 
 			// Update the alarm attributes
 			alarm?.autoDismissTime = selectedAutoDismissTime
-			alarm?.useDismissEarly = dismissEarlyCheckBox.isChecked
+			alarm?.useDismissEarly = dismissEarlySwitch.isChecked
 			alarm?.dismissEarlyTime = selectedDismissEarlyTime
 			alarm?.shouldDeleteAlarmAfterDismissed = selectedShouldDeleteAlarmAfterDismissed
 
@@ -132,93 +132,52 @@ class NacDismissOptionsDialog
 	}
 
 	/**
-	 * Set if the how early to dismiss views should be usable or not.
-	 */
-	private fun setHowEarlyToDismissUsable()
-	{
-		// Set the alpha for the views
-		dismissEarlyQuestion.alpha = alpha
-		dismissEarlyInputLayout.alpha = alpha
-
-		// Set whether it can be used or not
-		dismissEarlyInputLayout.isEnabled = dismissEarlyCheckBox.isChecked
-	}
-
-	/**
-	 * Setup the description for if the alarm should be deleted after it is dismissed or not.
-	 */
-	private fun setShouldDeleteAlarmAfterDismissedDescription(checkBox: MaterialCheckBox, textView: TextView)
-	{
-		// Determine the text ID to use based on whether easy snooze will be
-		// used or not
-		val textId = if (checkBox.isChecked)
-		{
-			R.string.delete_alarm_after_dismissed_true
-		}
-		else
-		{
-			R.string.delete_alarm_after_dismissed_false
-		}
-
-		// Set the text
-		textView.setText(textId)
-	}
-
-	/**
-	 * Setup the description for what type of snoozing should take place.
-	 */
-	private fun setShouldDismissEarlyDescription(textView: TextView)
-	{
-		// Determine the text ID to use based on whether easy snooze will be
-		// used or not
-		val textId = if (dismissEarlyCheckBox.isChecked)
-		{
-			R.string.dismiss_early_true
-		}
-		else
-		{
-			R.string.dismiss_early_false
-		}
-
-		// Set the text
-		textView.setText(textId)
-	}
-
-	/**
 	 * Setup the auto dismiss views.
 	 */
 	private fun setupAutoDismiss(default: Int)
 	{
 		// Get the views
-		val switch: SwitchCompat = dialog!!.findViewById(R.id.auto_dismiss_switch)
-		val minutesInputLayout: TextInputLayout = dialog!!.findViewById(R.id.auto_dismiss_minutes_input_layout)
 		val minutesAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.auto_dismiss_minutes_dropdown_menu)
-		val secondsInputLayout: TextInputLayout = dialog!!.findViewById(R.id.auto_dismiss_seconds_input_layout)
 		val secondsAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.auto_dismiss_seconds_dropdown_menu)
-		// TODO: 0 min 0 sec = Off, so need to find a way so that user cannot do that
-		// TODO: Can do this by when a user is selecting one or the other, make 0 be unselectable by removing it from list or hiding it if possible?
+		autoDismissSwitch = dialog!!.findViewById(R.id.auto_dismiss_switch)
+		autoDismissMinutesInputLayout = dialog!!.findViewById(R.id.auto_dismiss_minutes_input_layout)
+		autoDismissSecondsInputLayout = dialog!!.findViewById(R.id.auto_dismiss_seconds_input_layout)
+
+		// Get the list of items for minutes and seconds
+		val minutes = resources.getStringArray(R.array.auto_dismiss_minute_summaries)
+		val seconds = resources.getStringArray(R.array.general_seconds_summaries)
 
 		// Setup the switch
-		switch.setOnCheckedChangeListener { _, state ->
-
-			// Set the enabled state of the text input layouts
-			minutesInputLayout.isEnabled = state
-			secondsInputLayout.isEnabled = state
-
-		}
+		autoDismissSwitch.setupSwitchColor(sharedPreferences)
 
 		// Setup the input layout
-		minutesInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
-		secondsInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+		autoDismissMinutesInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+		autoDismissSecondsInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+
+		// Set the switch listener
+		autoDismissSwitch.setOnCheckedChangeListener { _, _ ->
+			setupAutoDismissUsable()
+		}
 
 		// Set the default selected items in the text views
 		// TODO
 		//val index = NacAlarm.calcAutoDismissIndex(default)
 		//autoCompleteTextView.setTextFromIndex(index)
-		minutesAutoCompleteTextView.setTextFromIndex(0)
+		minutesAutoCompleteTextView.setTextFromIndex(1)
 		secondsAutoCompleteTextView.setTextFromIndex(0)
 
-		// Set the textview listeners
+		// Set the minutes textview listeners
+		minutesAutoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+			secondsAutoCompleteTextView.changeSimpleItemsOnZero(seconds, position)
+			//	selectedAutoDismissTime = NacAlarm.calcAutoDismissTime(position)
+		}
+
+		// Set the seconds textview listeners
+		secondsAutoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+			minutesAutoCompleteTextView.changeSimpleItemsOnZero(minutes, position)
+			//	selectedAutoDismissTime = NacAlarm.calcAutoDismissTime(position)
+		}
+
 		// TODO
 		//autoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
 		//	selectedAutoDismissTime = NacAlarm.calcAutoDismissTime(position)
@@ -226,26 +185,71 @@ class NacDismissOptionsDialog
 	}
 
 	/**
-	 * Setup the how early to dismiss views.
+	 * Setup whether the auto dismiss views should be usable or not.
 	 */
-	private fun setupHowEarlyToDismiss(default: Int)
+	private fun setupAutoDismissUsable()
+	{
+		// Get the state and calculate the alpha
+		val state = autoDismissSwitch.isChecked
+		val alpha = calcAlpha(state)
+
+		// Setup the usablity of the dropdowns
+		autoDismissMinutesInputLayout.alpha = alpha
+		autoDismissSecondsInputLayout.alpha = alpha
+		autoDismissMinutesInputLayout.isEnabled = state
+		autoDismissSecondsInputLayout.isEnabled = state
+	}
+
+	/**
+	 * Setup the dismiss early views.
+	 */
+	private fun setupDismissEarly(defaultState: Boolean, defaultTime: Int)
 	{
 		// Get the views
-		dismissEarlyQuestion = dialog!!.findViewById(R.id.how_early_to_dismiss_question)
-		dismissEarlyInputLayout = dialog!!.findViewById(R.id.how_early_to_dismiss_input_layout)
-		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.how_early_to_dismiss_dropdown_menu)
+		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.dismiss_early_container)
+		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.dismiss_early_dropdown_menu)
+		dismissEarlySwitch = dialog!!.findViewById(R.id.dismiss_early_switch)
+		dismissEarlyInputLayout = dialog!!.findViewById(R.id.dismiss_early_input_layout)
 
-		// Setup the input layout
+		// Setup the checkbox
+		dismissEarlySwitch.isChecked = defaultState
+		dismissEarlySwitch.setupSwitchColor(sharedPreferences)
+
+		// Setup the dropdown
+		val index = NacAlarm.calcDismissEarlyIndex(defaultTime)
+
 		dismissEarlyInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
-
-		// Set the default selected items in the text views
-		val index = NacAlarm.calcDismissEarlyIndex(default)
 		autoCompleteTextView.setTextFromIndex(index)
 
-		// Set the textview listeners
+		// Set the listener for the parent to change the checkbox
+		relativeLayout.setOnClickListener {
+
+			// Toggle the checkbox
+			dismissEarlySwitch.isChecked = !dismissEarlySwitch.isChecked
+
+			// Set the usability of the how early to dismiss views
+			setupDismissEarlyUsable()
+
+		}
+
+		// Set the dropdown listener
 		autoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
 			selectedDismissEarlyTime = NacAlarm.calcDismissEarlyTime(position)
 		}
+	}
+
+	/**
+	 * Setup whether the dismiss early views should be usable or not.
+	 */
+	private fun setupDismissEarlyUsable()
+	{
+		// Get the state and calculate the alpha
+		val state = dismissEarlySwitch.isChecked
+		val alpha = calcAlpha(state)
+
+		// Setup usability of the dropdown
+		dismissEarlyInputLayout.alpha = alpha
+		dismissEarlyInputLayout.isEnabled = state
 	}
 
 	/**
@@ -254,62 +258,19 @@ class NacDismissOptionsDialog
 	private fun setupShouldDeleteAlarmAfterDismissed(default: Boolean)
 	{
 		// Get the views
-		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.should_delete_alarm_after_dismissed)
-		val description: TextView = dialog!!.findViewById(R.id.should_delete_alarm_after_dismissed_summary)
-		val checkBox: MaterialCheckBox = dialog!!.findViewById(R.id.should_delete_alarm_after_dismissed_checkbox)
-
-		// Set the default checkbox value
-		checkBox.isChecked = default
+		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.delete_after_dismissed_container)
+		val switch: SwitchCompat = dialog!!.findViewById(R.id.delete_after_dismissed_switch)
 
 		// Setup the checkbox
-		checkBox.setupCheckBoxColor(sharedPreferences)
+		switch.isChecked = default
+		switch.setupSwitchColor(sharedPreferences)
 
-		// Set the description
-		setShouldDeleteAlarmAfterDismissedDescription(checkBox, description)
-
-		// Layout click listener to change the checkbox
+		// Set the parent click listener to change the checkbox
 		relativeLayout.setOnClickListener {
 
 			// Toggle the checkbox
-			checkBox.toggle()
-			selectedShouldDeleteAlarmAfterDismissed = checkBox.isChecked
-
-			// Set the description
-			setShouldDeleteAlarmAfterDismissedDescription(checkBox, description)
-
-		}
-	}
-
-	/**
-	 * Setup the should dismiss early views.
-	 */
-	private fun setupShouldDismissEarly(default: Boolean)
-	{
-		// Get the views
-		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.should_use_dismiss_early)
-		val description: TextView = dialog!!.findViewById(R.id.should_use_dismiss_early_summary)
-		dismissEarlyCheckBox = dialog!!.findViewById(R.id.should_use_dismiss_early_checkbox)!!
-
-		// Set the default checkbox value
-		dismissEarlyCheckBox.isChecked = default
-
-		// Setup the checkbox
-		dismissEarlyCheckBox.setupCheckBoxColor(sharedPreferences)
-
-		// Set the description
-		setShouldDismissEarlyDescription(description)
-
-		// Layout click listener to change the checkbox
-		relativeLayout.setOnClickListener {
-
-			// Toggle the checkbox
-			dismissEarlyCheckBox.isChecked = !dismissEarlyCheckBox.isChecked
-
-			// Set the description
-			setShouldDismissEarlyDescription(description)
-
-			// Set the usability of the how early to dismiss views
-			setHowEarlyToDismissUsable()
+			switch.toggle()
+			selectedShouldDeleteAlarmAfterDismissed = switch.isChecked
 
 		}
 	}

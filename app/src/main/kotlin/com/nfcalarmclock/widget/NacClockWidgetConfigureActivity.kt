@@ -64,6 +64,38 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		}
 
 	/**
+	 * Change the visibility, drawable, and alpha when an expand/collapse event occurs.
+	 */
+	private fun changeOnExpandCollapse(linearLayout: LinearLayout, textView: TextView)
+	{
+		// Get which visibility/drawable/alpha to change to given the current visibility
+		val (vis, drawable, alpha) = getExpandCollapseChangeInfo(linearLayout)
+
+		// Toggle the visibility
+		linearLayout.visibility = vis
+
+		// Set the new drawable
+		textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0)
+		textView.alpha = alpha
+	}
+
+	/**
+	 * Determine what expand/collapse visibility, drawable, and alpha to change to.
+	 */
+	private fun getExpandCollapseChangeInfo(linearLayout: LinearLayout): Triple<Int, Int, Float>
+	{
+		// Check which visibility/drawable/alpha to change to given the current visibility
+		return if (linearLayout.visibility == View.VISIBLE)
+		{
+			Triple(View.GONE, R.drawable.expand, 1f)
+		}
+		else
+		{
+			Triple(View.VISIBLE, R.drawable.collapse, 0.4f)
+		}
+	}
+
+	/**
 	 * Called when the activity is created.
 	 */
 	public override fun onCreate(savedInstanceState: Bundle?)
@@ -198,38 +230,6 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		binding.timeLayoutTextSizeTimeSlider.value = sharedPreferences.clockWidgetTimeTextSize
 		binding.timeLayoutTextSizeAmPmSlider.value = sharedPreferences.clockWidgetAmPmTextSize
 		binding.alarmLayoutTextSizeSlider.value = sharedPreferences.clockWidgetAlarmTimeTextSize
-	}
-
-	/**
-	 * Determine what expand/collapse visibility, drawable, and alpha to change to.
-	 */
-	private fun getExpandCollapseChangeInfo(linearLayout: LinearLayout): Triple<Int, Int, Float>
-	{
-		// Check which visibility/drawable/alpha to change to given the current visibility
-		return if (linearLayout.visibility == View.VISIBLE)
-		{
-			Triple(View.GONE, R.drawable.expand, 1f)
-		}
-		else
-		{
-			Triple(View.VISIBLE, R.drawable.collapse, 0.4f)
-		}
-	}
-
-	/**
-	 * Change the visibility, drawable, and alpha when an expand/collapse event occurs.
-	 */
-	private fun changeOnExpandCollapse(linearLayout: LinearLayout, textView: TextView)
-	{
-		// Get which visibility/drawable/alpha to change to given the current visibility
-		val (vis, drawable, alpha) = getExpandCollapseChangeInfo(linearLayout)
-
-		// Toggle the visibility
-		linearLayout.visibility = vis
-
-		// Set the new drawable
-		textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0)
-		textView.alpha = alpha
 	}
 
 	/**
@@ -606,6 +606,17 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 
 		})
 
+		binding.backgroundTransparencySlider.addOnChangeListener { _, value, _ ->
+
+			// Calculate the new background color
+			val newColor = NacClockWidgetDataHelper.calcBackgroundColor(
+				sharedPreferences.clockWidgetBackgroundColor, value.toInt())
+
+			// Update the preview
+			binding.widgetParent.setBackgroundColor(newColor)
+
+		}
+
 		// Date size
 		binding.dateLayoutTextSizeSlider.addOnSliderTouchListener(object: OnSliderTouchListener {
 
@@ -630,6 +641,14 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 			}
 
 		})
+
+		binding.dateLayoutTextSizeSlider.addOnChangeListener { _, value, _ ->
+
+			// Update the preview
+			binding.widgetDate.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.widgetDateBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+
+		}
 
 		// Time size
 		binding.timeLayoutTextSizeTimeSlider.addOnSliderTouchListener(object: OnSliderTouchListener {
@@ -659,6 +678,17 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 
 		})
 
+		binding.timeLayoutTextSizeTimeSlider.addOnChangeListener { _, value, _ ->
+
+			// Update the preview
+			binding.widgetHour.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.widgetHourBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.widgetColon.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.widgetMinute.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.widgetMinuteBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+
+		}
+
 		// AM/PM size
 		binding.timeLayoutTextSizeAmPmSlider.addOnSliderTouchListener(object: OnSliderTouchListener {
 
@@ -684,6 +714,14 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 
 		})
 
+		binding.timeLayoutTextSizeAmPmSlider.addOnChangeListener { _, value, _ ->
+
+			// Update the preview
+			binding.widgetAmPm.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.widgetAmPmBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+
+		}
+
 		// Alarm time size
 		binding.alarmLayoutTextSizeSlider.addOnSliderTouchListener(object: OnSliderTouchListener {
 
@@ -707,6 +745,13 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 			}
 
 		})
+
+		binding.alarmLayoutTextSizeSlider.addOnChangeListener { _, value, _ ->
+
+			// Update the preview
+			binding.widgetAlarmTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+
+		}
 
 		// Done button
 		binding.doneButton.setOnClickListener {

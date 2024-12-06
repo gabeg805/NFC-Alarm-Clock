@@ -6,19 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.RelativeLayout
-import android.widget.TextView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.util.NacBundle
+import com.nfcalarmclock.view.changeSimpleItemsOnZero
 import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
 import com.nfcalarmclock.view.setTextFromIndex
-import com.nfcalarmclock.view.setupCheckBoxColor
 import com.nfcalarmclock.view.setupInputLayoutColor
+import com.nfcalarmclock.view.setupSwitchColor
 
 /**
  * Snooze options.
@@ -28,9 +28,9 @@ class NacSnoozeOptionsDialog
 {
 
 	/**
-	 * Checkbox for whether the alarm can be snoozed easily or not.
+	 * Easy snooze switch.
 	 */
-	private lateinit var easySnoozeCheckBox: MaterialCheckBox
+	private lateinit var easySnoozeSwitch: SwitchCompat
 
 	/**
 	 * Selected auto snooze time.
@@ -96,7 +96,7 @@ class NacSnoozeOptionsDialog
 			alarm?.autoSnoozeTime = selectedAutoSnoozeTime
 			alarm?.maxSnooze = selectedMaxSnoozeTime
 			alarm?.snoozeDuration = selectedSnoozeDurationTime
-			alarm?.useEasySnooze = easySnoozeCheckBox.isChecked
+			alarm?.useEasySnooze = easySnoozeSwitch.isChecked
 
 			// Save the change so that it is accessible in the previous dialog
 			findNavController().previousBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
@@ -116,19 +116,43 @@ class NacSnoozeOptionsDialog
 	private fun setupAutoSnooze(default: Int)
 	{
 		// Get the views
-		val inputLayout: TextInputLayout = dialog!!.findViewById(R.id.auto_snooze_input_layout)
-		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.auto_snooze_dropdown_menu)
+		val minutesInputLayout: TextInputLayout = dialog!!.findViewById(R.id.auto_snooze_minutes_input_layout)
+		val minutesAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.auto_snooze_minutes_dropdown_menu)
+		val secondsInputLayout: TextInputLayout = dialog!!.findViewById(R.id.auto_snooze_seconds_input_layout)
+		val secondsAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.auto_snooze_seconds_dropdown_menu)
+
+		// Get the list of items for minutes and seconds
+		val minutes = resources.getStringArray(R.array.auto_snooze_minute_summaries)
+		val seconds = resources.getStringArray(R.array.general_seconds_summaries)
 
 		// Setup the input layout
-		inputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+		minutesInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+		secondsInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 
 		// Set the default selected items in the text views
-		val index = NacAlarm.calcAutoSnoozeIndex(default)
-		autoCompleteTextView.setTextFromIndex(index)
+		//val minutesIndex = NacAlarm.calcAutoSnoozeIndex(default)
+		//val secondsIndex = NacAlarm.calcAutoSnoozeIndex(default)
+		//minutesAutoCompleteTextView.setTextFromIndex(minutesIndex)
+		//secondsAutoCompleteTextView.setTextFromIndex(secondsIndex)
+		minutesAutoCompleteTextView.setTextFromIndex(1)
+		secondsAutoCompleteTextView.setTextFromIndex(0)
 
 		// Set the textview listeners
-		autoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-			selectedAutoSnoozeTime = NacAlarm.calcAutoSnoozeTime(position)
+		minutesAutoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+			//selectedAutoSnoozeTime = NacAlarm.calcAutoSnoozeTime(position)
+			secondsAutoCompleteTextView.changeSimpleItemsOnZero(seconds, position)
+
+			// Check if last minute item in dropdown was selected
+			if (position == minutes.lastIndex)
+			{
+				// Change to 0 seconds
+				secondsAutoCompleteTextView.setTextFromIndex(0)
+			}
+		}
+
+		secondsAutoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+			minutesAutoCompleteTextView.changeSimpleItemsOnZero(minutes, position)
+			//selectedAutoSnoozeTime = NacAlarm.calcAutoSnoozeTime(position)
 		}
 	}
 
@@ -160,40 +184,44 @@ class NacSnoozeOptionsDialog
 	private fun setupSnoozeDuration(default: Int)
 	{
 		// Get the views
-		val inputLayout: TextInputLayout = dialog!!.findViewById(R.id.snooze_duration_input_layout)
-		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.snooze_duration_dropdown_menu)
+		val minutesInputLayout: TextInputLayout = dialog!!.findViewById(R.id.snooze_duration_minutes_input_layout)
+		val minutesAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.snooze_duration_minutes_dropdown_menu)
+		val secondsInputLayout: TextInputLayout = dialog!!.findViewById(R.id.snooze_duration_seconds_input_layout)
+		val secondsAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.snooze_duration_seconds_dropdown_menu)
+
+		// Get the list of items for minutes and seconds
+		val minutes = resources.getStringArray(R.array.snooze_duration_minute_summaries)
+		val seconds = resources.getStringArray(R.array.general_seconds_summaries)
 
 		// Setup the input layouts
-		inputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+		minutesInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+		secondsInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 
 		// Set the default selected items in the text views
-		val index = NacAlarm.calcSnoozeDurationIndex(default)
-		autoCompleteTextView.setTextFromIndex(index)
+		//val minutesIndex = NacAlarm.calcSnoozeDurationIndex(default)
+		//val secondsIndex = NacAlarm.calcSnoozeDurationIndex(default)
+		//minutesAutoCompleteTextView.setTextFromIndex(minutesIndex)
+		//secondsAutoCompleteTextView.setTextFromIndex(secondsIndex)
+		minutesAutoCompleteTextView.setTextFromIndex(1)
+		secondsAutoCompleteTextView.setTextFromIndex(0)
 
 		// Set the textview listeners
-		autoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-			selectedSnoozeDurationTime = NacAlarm.calcSnoozeDuration(position)
-		}
-	}
+		minutesAutoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+			//selectedSnoozeDurationTime = NacAlarm.calcSnoozeDuration(position)
+			secondsAutoCompleteTextView.changeSimpleItemsOnZero(seconds, position)
 
-	/**
-	 * Set the description for what type of snoozing should take place.
-	 */
-	private fun setEasySnoozeDescription(textView: TextView)
-	{
-		// Determine the text ID to use based on whether easy snooze will be
-		// used or not
-		val textId = if (easySnoozeCheckBox.isChecked)
-		{
-			R.string.easy_snooze_true
-		}
-		else
-		{
-			R.string.easy_snooze_false
+			// Check if last minute item in dropdown was selected
+			if (position == minutes.lastIndex)
+			{
+				// Change to 0 seconds
+				secondsAutoCompleteTextView.setTextFromIndex(0)
+			}
 		}
 
-		// Set the text
-		textView.setText(textId)
+		secondsAutoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+			//selectedSnoozeDurationTime = NacAlarm.calcSnoozeDuration(position)
+			minutesAutoCompleteTextView.changeSimpleItemsOnZero(minutes, position)
+		}
 	}
 
 	/**
@@ -202,28 +230,16 @@ class NacSnoozeOptionsDialog
 	private fun setupEasySnooze(default: Boolean)
 	{
 		// Get the views
-		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.should_easy_snooze)
-		val description: TextView = dialog!!.findViewById(R.id.should_easy_snooze_summary)
-		easySnoozeCheckBox = dialog!!.findViewById(R.id.should_easy_snooze_checkbox)!!
-
-		// Set the default checkbox value
-		easySnoozeCheckBox.isChecked = default
+		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.easy_snooze_container)
+		easySnoozeSwitch = dialog!!.findViewById(R.id.easy_snooze_switch)
 
 		// Setup the checkbox
-		easySnoozeCheckBox.setupCheckBoxColor(sharedPreferences)
-
-		// Easy snooze description
-		setEasySnoozeDescription(description)
+		easySnoozeSwitch.isChecked = default
+		easySnoozeSwitch.setupSwitchColor(sharedPreferences)
 
 		// Easy snooze listener
 		relativeLayout.setOnClickListener {
-
-			// Toggle the checkbox
-			easySnoozeCheckBox.isChecked = !easySnoozeCheckBox.isChecked
-
-			// Setup the description
-			setEasySnoozeDescription(description)
-
+			easySnoozeSwitch.isChecked = !easySnoozeSwitch.isChecked
 		}
 	}
 

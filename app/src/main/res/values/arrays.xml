@@ -78,6 +78,69 @@
 		<item>Monday</item>
 	</string-array>
 
+	<string-array name="general_seconds_summaries">
+		<item>0 seconds</item>
+		<item>1 second</item>
+		<item>2 seconds</item>
+		<item>3 seconds</item>
+		<item>4 seconds</item>
+		<item>5 seconds</item>
+		<item>6 seconds</item>
+		<item>7 seconds</item>
+		<item>8 seconds</item>
+		<item>9 seconds</item>
+		<item>10 seconds</item>
+		<item>11 seconds</item>
+		<item>12 seconds</item>
+		<item>13 seconds</item>
+		<item>14 seconds</item>
+		<item>15 seconds</item>
+		<item>16 seconds</item>
+		<item>17 seconds</item>
+		<item>18 seconds</item>
+		<item>19 seconds</item>
+		<item>20 seconds</item>
+		<item>21 seconds</item>
+		<item>22 seconds</item>
+		<item>23 seconds</item>
+		<item>24 seconds</item>
+		<item>25 seconds</item>
+		<item>26 seconds</item>
+		<item>27 seconds</item>
+		<item>28 seconds</item>
+		<item>29 seconds</item>
+		<item>30 seconds</item>
+		<item>31 seconds</item>
+		<item>32 seconds</item>
+		<item>33 seconds</item>
+		<item>34 seconds</item>
+		<item>35 seconds</item>
+		<item>36 seconds</item>
+		<item>37 seconds</item>
+		<item>38 seconds</item>
+		<item>39 seconds</item>
+		<item>40 seconds</item>
+		<item>41 seconds</item>
+		<item>42 seconds</item>
+		<item>43 seconds</item>
+		<item>44 seconds</item>
+		<item>45 seconds</item>
+		<item>46 seconds</item>
+		<item>47 seconds</item>
+		<item>48 seconds</item>
+		<item>49 seconds</item>
+		<item>50 seconds</item>
+		<item>51 seconds</item>
+		<item>52 seconds</item>
+		<item>53 seconds</item>
+		<item>54 seconds</item>
+		<item>55 seconds</item>
+		<item>56 seconds</item>
+		<item>57 seconds</item>
+		<item>58 seconds</item>
+		<item>59 seconds</item>
+	</string-array>
+
 	<string-array name="auto_dismiss_summaries">
 		<item>Off</item>
 		<item>1 minute</item>
@@ -161,72 +224,42 @@
 		<item>59 minutes</item>
 	</string-array>
 
-	<string-array name="auto_dismiss_second_summaries">
-		<item>0 seconds</item>
-		<item>1 second</item>
-		<item>2 seconds</item>
-		<item>3 seconds</item>
-		<item>4 seconds</item>
-		<item>5 seconds</item>
-		<item>6 seconds</item>
-		<item>7 seconds</item>
-		<item>8 seconds</item>
-		<item>9 seconds</item>
-		<item>10 seconds</item>
-		<item>11 seconds</item>
-		<item>12 seconds</item>
-		<item>13 seconds</item>
-		<item>14 seconds</item>
-		<item>15 seconds</item>
-		<item>16 seconds</item>
-		<item>17 seconds</item>
-		<item>18 seconds</item>
-		<item>19 seconds</item>
-		<item>20 seconds</item>
-		<item>21 seconds</item>
-		<item>22 seconds</item>
-		<item>23 seconds</item>
-		<item>24 seconds</item>
-		<item>25 seconds</item>
-		<item>26 seconds</item>
-		<item>27 seconds</item>
-		<item>28 seconds</item>
-		<item>29 seconds</item>
-		<item>30 seconds</item>
-		<item>31 seconds</item>
-		<item>32 seconds</item>
-		<item>33 seconds</item>
-		<item>34 seconds</item>
-		<item>35 seconds</item>
-		<item>36 seconds</item>
-		<item>37 seconds</item>
-		<item>38 seconds</item>
-		<item>39 seconds</item>
-		<item>40 seconds</item>
-		<item>41 seconds</item>
-		<item>42 seconds</item>
-		<item>43 seconds</item>
-		<item>44 seconds</item>
-		<item>45 seconds</item>
-		<item>46 seconds</item>
-		<item>47 seconds</item>
-		<item>48 seconds</item>
-		<item>49 seconds</item>
-		<item>50 seconds</item>
-		<item>51 seconds</item>
-		<item>52 seconds</item>
-		<item>53 seconds</item>
-		<item>54 seconds</item>
-		<item>55 seconds</item>
-		<item>56 seconds</item>
-		<item>57 seconds</item>
-		<item>58 seconds</item>
-		<item>59 seconds</item>
-		<item>60 seconds</item>
-	</string-array>
-
 	<string-array name="auto_snooze_summaries">
 		<item>Off</item>
+		<item>1 minute</item>
+		<item>2 minutes</item>
+		<item>3 minutes</item>
+		<item>4 minutes</item>
+		<item>5 minutes</item>
+		<item>6 minutes</item>
+		<item>7 minutes</item>
+		<item>8 minutes</item>
+		<item>9 minutes</item>
+		<item>10 minutes</item>
+		<item>11 minutes</item>
+		<item>12 minutes</item>
+		<item>13 minutes</item>
+		<item>14 minutes</item>
+		<item>15 minutes</item>
+		<item>16 minutes</item>
+		<item>17 minutes</item>
+		<item>18 minutes</item>
+		<item>19 minutes</item>
+		<item>20 minutes</item>
+		<item>21 minutes</item>
+		<item>22 minutes</item>
+		<item>23 minutes</item>
+		<item>24 minutes</item>
+		<item>25 minutes</item>
+		<item>26 minutes</item>
+		<item>27 minutes</item>
+		<item>28 minutes</item>
+		<item>29 minutes</item>
+		<item>30 minutes</item>
+	</string-array>
+
+	<string-array name="auto_snooze_minute_summaries">
+		<item>0 minutes</item>
 		<item>1 minute</item>
 		<item>2 minutes</item>
 		<item>3 minutes</item>
@@ -300,6 +333,100 @@
 		<item>75 minutes</item>
 		<item>80 minutes</item>
 		<item>85 minutes</item>
+		<item>90 minutes</item>
+	</string-array>
+
+	<string-array name="snooze_duration_minute_summaries">
+		<item>0 minutes</item>
+		<item>1 minute</item>
+		<item>2 minutes</item>
+		<item>3 minutes</item>
+		<item>4 minutes</item>
+		<item>5 minutes</item>
+		<item>6 minutes</item>
+		<item>7 minutes</item>
+		<item>8 minutes</item>
+		<item>9 minutes</item>
+		<item>10 minutes</item>
+		<item>11 minutes</item>
+		<item>12 minutes</item>
+		<item>13 minutes</item>
+		<item>14 minutes</item>
+		<item>15 minutes</item>
+		<item>16 minutes</item>
+		<item>17 minutes</item>
+		<item>18 minutes</item>
+		<item>19 minutes</item>
+		<item>20 minutes</item>
+		<item>21 minutes</item>
+		<item>22 minutes</item>
+		<item>23 minutes</item>
+		<item>24 minutes</item>
+		<item>25 minutes</item>
+		<item>26 minutes</item>
+		<item>27 minutes</item>
+		<item>28 minutes</item>
+		<item>29 minutes</item>
+		<item>30 minutes</item>
+		<item>31 minutes</item>
+		<item>32 minutes</item>
+		<item>33 minutes</item>
+		<item>34 minutes</item>
+		<item>35 minutes</item>
+		<item>36 minutes</item>
+		<item>37 minutes</item>
+		<item>38 minutes</item>
+		<item>39 minutes</item>
+		<item>40 minutes</item>
+		<item>41 minutes</item>
+		<item>42 minutes</item>
+		<item>43 minutes</item>
+		<item>44 minutes</item>
+		<item>45 minutes</item>
+		<item>46 minutes</item>
+		<item>47 minutes</item>
+		<item>48 minutes</item>
+		<item>49 minutes</item>
+		<item>50 minutes</item>
+		<item>51 minutes</item>
+		<item>52 minutes</item>
+		<item>53 minutes</item>
+		<item>54 minutes</item>
+		<item>55 minutes</item>
+		<item>56 minutes</item>
+		<item>57 minutes</item>
+		<item>58 minutes</item>
+		<item>59 minutes</item>
+		<item>60 minutes</item>
+		<item>61 minutes</item>
+		<item>62 minutes</item>
+		<item>63 minutes</item>
+		<item>64 minutes</item>
+		<item>65 minutes</item>
+		<item>66 minutes</item>
+		<item>67 minutes</item>
+		<item>68 minutes</item>
+		<item>69 minutes</item>
+		<item>70 minutes</item>
+		<item>71 minutes</item>
+		<item>72 minutes</item>
+		<item>73 minutes</item>
+		<item>74 minutes</item>
+		<item>75 minutes</item>
+		<item>76 minutes</item>
+		<item>77 minutes</item>
+		<item>78 minutes</item>
+		<item>79 minutes</item>
+		<item>80 minutes</item>
+		<item>81 minutes</item>
+		<item>82 minutes</item>
+		<item>83 minutes</item>
+		<item>84 minutes</item>
+		<item>85 minutes</item>
+		<item>86 minutes</item>
+		<item>87 minutes</item>
+		<item>88 minutes</item>
+		<item>89 minutes</item>
 		<item>90 minutes</item>
 	</string-array>
 

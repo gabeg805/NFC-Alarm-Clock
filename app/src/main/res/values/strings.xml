@@ -34,7 +34,6 @@
 	<string name="hour">Hour</string>
 	<string name="minutes">Minutes</string>
 	<string name="am_pm">AM / PM</string>
-	<string name="example_alarm">8:30 AM</string>
 
 
 	<!-- States -->

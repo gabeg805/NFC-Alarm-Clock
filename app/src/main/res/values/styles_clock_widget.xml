@@ -19,13 +19,9 @@
 	</style>
 
 	<!-- Separator -->
-	<style name="Widget.ClockWidget.Separator" parent="">
-		<item name="android:layout_width">match_parent</item>
-		<item name="android:layout_height">@dimen/line</item>
+	<style name="Widget.ClockWidget.Separator" parent="Widget.General.Separator">
 		<item name="android:layout_marginTop">@dimen/tiny</item>
 		<item name="android:layout_marginBottom">@dimen/tiny</item>
-		<item name="android:alpha">0.3</item>
-		<item name="android:background">@color/white</item>
 	</style>
 
 	<!-- Text -->

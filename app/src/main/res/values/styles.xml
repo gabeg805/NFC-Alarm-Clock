@@ -280,4 +280,12 @@
 		<item name="nacSpacing">?dialogPreferredPadding</item>
 	</style>
 
+	<!-- Separator -->
+	<style name="Widget.General.Separator" parent="">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">@dimen/line</item>
+		<item name="android:alpha">0.3</item>
+		<item name="android:background">@color/white</item>
+	</style>
+
 </resources>

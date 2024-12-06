@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:padding="@dimen/large"
+	android:orientation="vertical">
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="@dimen/medium">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<!-- Gradually increase volume title and switch -->
+			<RelativeLayout
+				android:id="@+id/gradually_increase_volume_container"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:clickable="true"
+				android:focusable="true">
+
+				<!-- Title -->
+				<TextView
+					style="@style/Widget.AlarmOptionDialog.Title"
+					android:id="@+id/gradually_increase_volume_title"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_toStartOf="@id/gradually_increase_volume_switch"
+					android:text="Gradually increase volume"
+					/>
+
+				<!-- Description -->
+				<TextView
+					style="@style/Widget.AlarmOptionDialog.Description"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/gradually_increase_volume_title"
+					android:layout_toStartOf="@id/gradually_increase_volume_switch"
+					android:text="Increase the volume of the alarm at a set frequency."
+					/>
+
+				<!-- Switch -->
+				<androidx.appcompat.widget.SwitchCompat
+					android:id="@+id/gradually_increase_volume_switch"
+					android:layout_width="@dimen/touch"
+					android:layout_height="@dimen/touch"
+					android:layout_alignParentEnd="true"
+					android:layout_centerVertical="true"
+					android:clickable="false"
+					/>
+			</RelativeLayout>
+
+			<!-- Gradually increase volume dropdown -->
+			<com.google.android.material.textfield.TextInputLayout
+				style="@style/Widget.AlarmOptionDialog.DropdownRow"
+				android:id="@+id/gradually_increase_volume_input_layout"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<com.google.android.material.textfield.MaterialAutoCompleteTextView
+					android:id="@+id/gradually_increase_volume_dropdown_menu"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:inputType="none"
+					app:simpleItems="@array/gradually_increase_volume_wait_times"
+					/>
+			</com.google.android.material.textfield.TextInputLayout>
+
+			<!-- Separator -->
+			<Space style="@style/Widget.AlarmOptionDialog.Separator" />
+
+			<!-- Restrict volume title, description, and switch -->
+			<RelativeLayout
+				android:id="@+id/restrict_volume_container"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:clickable="true"
+				android:focusable="true">
+
+				<!-- Title -->
+				<TextView
+					style="@style/Widget.AlarmOptionDialog.Title"
+					android:id="@+id/restrict_volume_title"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentStart="true"
+					android:layout_toStartOf="@id/restrict_volume_switch"
+					android:text="Restrict volume"
+					/>
+
+				<!-- Description -->
+				<TextView
+					style="@style/Widget.AlarmOptionDialog.Description"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentStart="true"
+					android:layout_below="@id/restrict_volume_title"
+					android:layout_toStartOf="@id/restrict_volume_switch"
+					android:text="Volume cannot be changed when an alarm goes off."
+					/>
+
+				<!-- Switch -->
+				<androidx.appcompat.widget.SwitchCompat
+					android:id="@+id/restrict_volume_switch"
+					android:layout_width="@dimen/touch"
+					android:layout_height="@dimen/touch"
+					android:layout_alignParentEnd="true"
+					android:layout_centerVertical="true"
+					android:clickable="false"
+					/>
+			</RelativeLayout>
+
+			<!-- Separator -->
+			<Space style="@style/Widget.AlarmOptionDialog.Separator" />
+		</LinearLayout>
+	</ScrollView>
+
+	<!-- Ok button -->
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/ok_button"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textColor="@color/white"
+		android:text="@string/action_ok"
+		app:backgroundTint="@color/orange"
+		/>
+
+	<!-- Cancel button -->
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/cancel_button"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textColor="@color/white"
+		android:text="@string/action_cancel"
+		app:backgroundTint="@color/gray_light"
+		/>
+
+</LinearLayout>

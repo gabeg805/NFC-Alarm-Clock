@@ -361,17 +361,8 @@ internal class NacClockWidgetDataHelper(
 	val bgColor: Int
 		get()
 		{
-			// Get the color
-			val color = sharedPreferences.clockWidgetBackgroundColor
-
-			// Compute the ARGB components of the color
-			val alpha = ((1f - sharedPreferences.clockWidgetBackgroundTransparency/100f) * 255f).toInt()
-			val r = Color.red(color)
-			val g = Color.green(color)
-			val b = Color.blue(color)
-
-			// Return the color
-			return Color.argb(alpha, r, g, b)
+			return calcBackgroundColor(sharedPreferences.clockWidgetBackgroundColor,
+				sharedPreferences.clockWidgetBackgroundTransparency)
 		}
 
 	/**
@@ -415,6 +406,26 @@ internal class NacClockWidgetDataHelper(
 
 		// Return the string
 		return alarmTimeSpan
+	}
+
+	companion object
+	{
+
+		/**
+		 * Calculate the correct background color + alpha channel.
+		 */
+		fun calcBackgroundColor(color: Int, transparency: Int): Int
+		{
+			// Compute the ARGB components of the color
+			val alpha = ((1f - transparency / 100f) * 255f).toInt()
+			val r = Color.red(color)
+			val g = Color.green(color)
+			val b = Color.blue(color)
+
+			// Return the color
+			return Color.argb(alpha, r, g, b)
+		}
+
 	}
 
 }

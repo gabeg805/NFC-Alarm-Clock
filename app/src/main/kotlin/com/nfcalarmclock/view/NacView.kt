@@ -23,6 +23,14 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
 
 /**
+ * Determine the correct alpha to use, depending on the state.
+ */
+fun calcAlpha(state: Boolean): Float
+{
+	return if (state) 1.0f else 0.3f
+}
+
+/**
  * Determine contrast color, such as to use for text, based on a color.
  */
 fun calcContrastColor(color: Int): Int
@@ -67,6 +75,30 @@ fun RadioGroup.getCheckedText(): String
 fun View.performHapticFeedback()
 {
 	this.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+}
+
+/**
+ * Change the simple items if the current position of another view is at the 0th index.
+ *
+ * This is to avoid having double zero values (0 minutes and 0 seconds).
+ */
+fun MaterialAutoCompleteTextView.changeSimpleItemsOnZero(values: Array<String>, position: Int)
+{
+	// Get the list of values that should be used depending on the other value
+	// that was selected
+	val newValues = if (position == 0)
+	{
+		// Get the list of values, excluding the zero value
+		values.slice(1..<values.size).toTypedArray()
+	}
+	else
+	{
+		// Use the normal list of values
+		values
+	}
+
+	// Set the simple items
+	this.setSimpleItems(newValues)
 }
 
 /**
