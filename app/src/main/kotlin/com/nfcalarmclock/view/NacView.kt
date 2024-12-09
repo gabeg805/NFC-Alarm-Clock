@@ -137,16 +137,25 @@ fun MaterialAutoCompleteTextView.changeSimpleItemsOnZero(values: Array<String>, 
 /**
  * Set the text of from an index.
  */
-fun MaterialAutoCompleteTextView.setTextFromIndex(index: Int)
+fun MaterialAutoCompleteTextView.setTextFromIndex(index: Int, fallback: Int = 1)
 {
+	// Create a new index just in case
+	var newIndex = index
+
 	// Check if the index is invalid
 	if (index < 0)
 	{
 		return
 	}
+	// Index exceeds number of items in adapter
+	else if (index >= this.adapter.count)
+	{
+		// Set to the fallback index
+		newIndex = fallback
+	}
 
 	// Get the text
-	val text = this.adapter.getItem(index) as String
+	val text = this.adapter.getItem(newIndex) as String
 
 	// Set the text
 	this.setText(text, false)

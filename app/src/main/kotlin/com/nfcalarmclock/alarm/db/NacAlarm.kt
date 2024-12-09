@@ -1397,6 +1397,12 @@ class NacAlarm()
 				minutes = 15
 			}
 
+			// Check if the number is way too big
+			if (minutes > 60)
+			{
+				minutes /= 60
+			}
+
 			return Pair(minutes, seconds)
 		}
 
@@ -1429,6 +1435,12 @@ class NacAlarm()
 			if ((minutes == 0) && (seconds == 0))
 			{
 				minutes = 5
+			}
+
+			// Check if the number is way too big
+			if (minutes > 30)
+			{
+				minutes /= 60
 			}
 
 			// Calculate the index
@@ -1620,6 +1632,12 @@ class NacAlarm()
 			if ((minutes == 0) && (seconds == 0))
 			{
 				minutes = 5
+			}
+
+			// Check if the number is way too big
+			if (minutes > 90)
+			{
+				minutes /= 60
 			}
 
 			// Calculate the index

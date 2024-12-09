@@ -136,10 +136,10 @@ abstract class NacGenericAlarmOptionsDialog
 		// Setup the input layout
 		minutesInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 		secondsInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
-		minutesAutoCompleteTextView.setTextFromIndex(minutesIndex)
-		secondsAutoCompleteTextView.setTextFromIndex(secondsIndex)
 		minutesAutoCompleteTextView.changeSimpleItemsOnZero(minutes, secondsIndex)
 		secondsAutoCompleteTextView.changeSimpleItemsOnZero(seconds, minutesIndex)
+		minutesAutoCompleteTextView.setTextFromIndex(minutesIndex)
+		secondsAutoCompleteTextView.setTextFromIndex(secondsIndex)
 
 		// Set the minutes input layout end icon click listener
 		minutesInputLayout.setEndIconOnClickListener {

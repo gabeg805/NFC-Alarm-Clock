@@ -244,9 +244,30 @@ abstract class NacAlarmDatabase
 		{
 			println("ON POST MIGRATE")
 			// Convert shared preference values from minutes to seconds
-			sharedPreferences?.let { it.autoDismissTime *= 60 }
-			sharedPreferences?.let { it.autoSnoozeTime *= 60 }
-			sharedPreferences?.let { it.snoozeDuration *= 60 }
+			//
+			// Note: A check is done before hand to make sure they have not been
+			//       converted yet and/or to make sure the default value (which is in
+			//       seconds) is not being returned
+			sharedPreferences?.let {
+				if (it.autoDismissTime < 100)
+				{
+					it.autoDismissTime *= 60
+				}
+			}
+
+			sharedPreferences?.let {
+				if (it.autoSnoozeTime < 100)
+				{
+					it.autoSnoozeTime *= 60
+				}
+			}
+
+			sharedPreferences?.let {
+				if (it.snoozeDuration < 100)
+				{
+					it.snoozeDuration *= 60
+				}
+			}
 
 			// Convert database values from minutes to seconds
 			db.execSQL("UPDATE alarm SET auto_dismiss_time=auto_dismiss_time*60")
