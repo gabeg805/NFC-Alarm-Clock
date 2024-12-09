@@ -3,9 +3,9 @@
 
 	<!-- App -->
 	<string name="app_name">Đồng hồ báo thức NFC</string>
-	<string name="permission_ignore_battery_optimization_request">Báo thức có thể không chạy nếu bạn không sử dụng ứng dụng này trong một thời gian.\n\n<b>Lưu ý:</b> Điều này tùy thuộc vào thiết bị bạn có và <b>có thể không thực sự cần thiết</b>.\n\nBạn có muốn tắt tính năng tối ưu hóa pin không?</string>
-	<string name="permission_post_notifications_request">Cảnh báo sẽ không thể chạy nếu ứng dụng không được chú ý.\n\n<b>Lưu ý:</b> Đây là tác dụng phụ của các chính sách bảo mật được giới thiệu trong <b>Android 13</b>. là vì lợi ích của người dùng nhưng có thể hạn chế ứng dụng trong những trường hợp như thế này.\n\nBạn có muốn bật thông báo không?</string>
-	<string name="permission_schedule_exact_alarm_request">Báo thức sẽ không thể chạy nếu ứng dụng không được chú ý.\n\nBạn có muốn bật lập lịch báo thức không?</string>
+	<string name="message_permission_ignore_battery_optimization_request">Báo thức có thể không chạy nếu bạn không sử dụng ứng dụng này trong một thời gian.\n\n<b>Lưu ý:</b> Điều này tùy thuộc vào thiết bị bạn có và <b>có thể không thực sự cần thiết</b>.\n\nBạn có muốn tắt tính năng tối ưu hóa pin không?</string>
+	<string name="message_permission_post_notifications_request">Cảnh báo sẽ không thể chạy nếu ứng dụng không được chú ý.\n\n<b>Lưu ý:</b> Đây là tác dụng phụ của các chính sách bảo mật được giới thiệu trong <b>Android 13</b>. là vì lợi ích của người dùng nhưng có thể hạn chế ứng dụng trong những trường hợp như thế này.\n\nBạn có muốn bật thông báo không?</string>
+	<string name="message_permission_schedule_exact_alarm_request">Báo thức sẽ không thể chạy nếu ứng dụng không được chú ý.\n\nBạn có muốn bật lập lịch báo thức không?</string>
 
 
 
@@ -54,8 +54,8 @@
 	<string name="action_shuffle_music">Trộn nhạc</string>
 	<string name="action_recursively_play_media">Bao gồm các thư mục con</string>
 	<string name="action_alarm_option_audio_source">Nguồn âm thanh</string>
-	<string name="action_alarm_option_gradually_increase_volume">Tăng dần âm lượng</string>
-	<string name="action_alarm_option_restrict_volume">Hạn chế âm lượng</string>
+	<string name="title_volume_gradually_increase_volume">Tăng dần âm lượng</string>
+	<string name="title_volume_restrict_volume">Hạn chế âm lượng</string>
 	<string name="action_alarm_option_text_to_speech">Chuyển văn bản thành giọng nói</string>
 	<string name="action_alarm_option_upcoming_reminder">Lời nhắc sắp tới</string>
 	<string name="action_skipping_next_alarm">Bỏ qua báo thức tiếp theo</string>
@@ -291,23 +291,23 @@
 
 
 	<!-- Auto dismiss duration -->
-	<string name="auto_dismiss">Tự động loại bỏ</string>
+	<string name="title_dismiss_options_auto_dismiss">Tự động loại bỏ</string>
 
 
 	<!-- Auto snooze duration -->
-	<string name="auto_snooze">Tự động báo lại</string>
+	<string name="title_snooze_options_auto_snooze">Tự động báo lại</string>
 
 
 	<!-- Max number of snoozes -->
-	<string name="max_snooze">Báo lại tối đa</string>
+	<string name="title_snooze_options_max_snooze">Báo lại tối đa</string>
 
 
 	<!-- Snooze duration -->
-	<string name="snooze_duration">Thời gian báo lại</string>
+	<string name="title_snooze_options_snooze_duration">Thời gian báo lại</string>
 
 
 	<!-- Easy snooze -->
-	<string name="easy_snooze">Dễ dàng báo lại</string>
+	<string name="title_snooze_options_easy_snooze">Dễ dàng báo lại</string>
 	<string name="easy_snooze_true">Báo lại báo thức bằng cách chạm vào bất cứ đâu.</string>
 	<string name="easy_snooze_false">Báo lại báo thức một cách bình thường.</string>
 

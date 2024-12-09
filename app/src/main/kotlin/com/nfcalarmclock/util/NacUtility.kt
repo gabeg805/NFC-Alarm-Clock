@@ -1,10 +1,6 @@
 package com.nfcalarmclock.util
 
-import android.annotation.TargetApi
 import android.content.Context
-import android.os.Build
-import android.text.Html
-import android.text.Spanned
 import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewGroup.MarginLayoutParams
@@ -57,23 +53,6 @@ object NacUtility
 
 		// Show the toast
 		return toast(context, message, Toast.LENGTH_SHORT)
-	}
-
-	/**
-	 * Convert the given string to a spanned string.
-	 */
-	@Suppress("deprecation")
-	@TargetApi(Build.VERSION_CODES.N)
-	fun toSpannedString(message: String): Spanned
-	{
-		return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-			{
-				Html.fromHtml(message, Html.FROM_HTML_MODE_LEGACY)
-			}
-			else
-			{
-				Html.fromHtml(message)
-			}
 	}
 
 	/**

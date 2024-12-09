@@ -5,12 +5,6 @@
 	<style name="Widget.AlarmOptionDialog.Section" parent="">
 		<item name="android:paddingTop">@dimen/tiny</item>
 		<item name="android:paddingBottom">@dimen/normal</item>
-		<!--
-		<item name="android:paddingEnd">@dimen/nudge</item>
-		<item name="android:textColor">@color/orange</item>
-		<item name="android:textSize">@dimen/tsz_normal</item>
-		<item name="android:textStyle">bold</item>
-		-->
 	</style>
 
 	<!-- Title -->
@@ -25,10 +19,31 @@
 		<item name="android:paddingBottom">@dimen/small</item>
 	</style>
 
+	<!-- Description before a checkbox -->
+	<style name="Widget.AlarmOptionDialog.DescriptionBeforeCheckBox" parent="Widget.TextView.Secondary">
+		<item name="android:paddingBottom">@dimen/tiny</item>
+	</style>
+
 	<!-- Separator -->
 	<style name="Widget.AlarmOptionDialog.Separator" parent="">
 		<item name="android:layout_width">match_parent</item>
 		<item name="android:layout_height">@dimen/tiny</item>
+	</style>
+
+	<!-- Separator after a checkbox-->
+	<style name="Widget.AlarmOptionDialog.SeparatorAfterCheckBox" parent="Widget.AlarmOptionDialog.Separator">
+		<item name="android:layout_height">@dimen/medium</item>
+	</style>
+
+	<!-- Checkbox -->
+	<style name="Widget.AlarmOptionDialog.CheckBox" parent="">
+		<item name="android:layout_marginStart">@dimen/small</item>
+		<item name="android:layout_marginEnd">@dimen/small</item>
+	</style>
+
+	<!-- Slider -->
+	<style name="Widget.AlarmOptionDialog.Slider" parent="">
+		<item name="android:layout_marginBottom">@dimen/small</item>
 	</style>
 
 	<!-- Dropdown -->
@@ -42,12 +57,12 @@
 
 	<!-- Dropdown row -->
 	<style name="Widget.AlarmOptionDialog.DropdownRow" parent="Widget.AlarmOptionDialog.Dropdown">
-		<item name="android:paddingBottom">@dimen/medium</item>
+		<item name="android:paddingBottom">@dimen/large</item>
 	</style>
 
 	<!-- Regular row -->
 	<style name="Widget.AlarmOptionDialog.Row" parent="">
-		<item name="android:paddingBottom">@dimen/medium</item>
+		<item name="android:paddingBottom">@dimen/large</item>
 	</style>
 
 </resources>

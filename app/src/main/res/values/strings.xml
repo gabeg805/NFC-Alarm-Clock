@@ -3,10 +3,6 @@
 
 	<!-- App -->
 	<string name="app_name">NFC Alarm Clock</string>
-	<string name="permission_ignore_battery_optimization_request">Alarms may not run if the app has not been used for a while.\n\n<b>Note:</b>  This depends on what device you have and <b>may not actually be needed</b>.\n\nWould you like to disable battery optimization?</string>
-	<string name="permission_post_notifications_request">Alarms will not be able to run if the app is not in focus.\n\n<b>Note:</b>  This is a side effect of the security policies introduced in <b>Android 13</b>, which are for the benefit of users, but can restrict apps in instances like this.\n\nWould you like to enable notifications?</string>
-	<string name="permission_schedule_exact_alarm_request">Alarms will not be able to run if the app is not in focus.\n\nWould you like to enable scheduling alarms?</string>
-
 
 	<!-- Consolidate -->
 	<string name="version">Version</string>
@@ -17,7 +13,6 @@
 	<string name="show_next_alarm">Show next alarm</string>
 	<string name="word_alarm">Alarm</string>
 	<string name="word_reminder">Reminder</string>
-
 	<string name="background">Background</string>
 	<string name="time_layout">Time layout</string>
 	<string name="date_layout">Date layout</string>
@@ -26,7 +21,6 @@
 	<string name="bold">Bold</string>
 	<string name="color">Color</string>
 	<string name="text_size">Text size</string>
-
 	<string name="colon">:</string>
 	<string name="icon">Icon</string>
 	<string name="transparency">Transparency</string>
@@ -69,8 +63,7 @@
 	<string name="action_shuffle_music">Shuffle music</string>
 	<string name="action_recursively_play_media">Include subfolders</string>
 	<string name="action_alarm_option_audio_source">Audio source</string>
-	<string name="action_alarm_option_gradually_increase_volume">Gradually increase volume</string>
-	<string name="action_alarm_option_restrict_volume">Restrict volume</string>
+	<string name="action_alarm_option_volume">Volume</string>
 	<string name="action_alarm_option_text_to_speech">Text-to-speech</string>
 	<string name="action_alarm_option_upcoming_reminder">Upcoming reminder</string>
 	<string name="action_delete_alarm_after_dismissed">Delete after dismissed</string>
@@ -96,6 +89,9 @@
 
 
 	<!-- Messages -->
+	<string name="message_permission_ignore_battery_optimization_request">To avoid alarm not running if the app has not been used for a while.&lt;br/>&lt;br/>&lt;b>Note:&lt;/b>  This depends on what device you have and &lt;&lt;b>may not actually be needed&lt;/b>.</string>
+	<string name="message_permission_post_notifications_request">To allow alarms to run when the app is not in focus.&lt;br/>&lt;br/>&lt;b>Note:&lt;/b>  This is a side effect of the security policies introduced in &lt;b>Android 13&lt;/b>, which are for the benefit of users, but can restrict apps in instances like this.</string>
+	<string name="message_permission_schedule_exact_alarm_request">To have alarms run precisely when scheduled.</string>
 	<string name="message_playlist">Do you want to play all the music in this folder?</string>
 	<string name="message_nfc_request">Please enable NFC to dismiss the alarm</string>
 	<string name="message_nfc_required">NFC required</string>
@@ -204,10 +200,25 @@
 	<string name="title_deleted_alarms">Deleted alarms</string>
 	<string name="title_current_alarms">Current</string>
 	<string name="title_whats_new">What\'s New</string>
-	<string name="title_request_permission_ignore_battery_optimization">Disable battery optimization?</string>
-	<string name="title_request_permission_post_notifications">Enable notifications?</string>
-	<string name="title_request_permission_schedule_exact_alarm">Allow scheduling alarms?</string>
+	<string name="title_request_permission_ignore_battery_optimization">Disable battery optimization…</string>
+	<string name="title_request_permission_post_notifications">Enable notifications…</string>
+	<string name="title_request_permission_schedule_exact_alarm">Allow scheduling exact alarms…</string>
 	<string name="title_reset_statistics" tools:ignore="TypographyEllipsis">Reset statistics...</string>
+	<string name="title_flashlight_brightness_level">Brightness level</string>
+	<string name="title_flashlight_blink_on_off">Blink on/off</string>
+	<string name="title_text_to_speech_speak_frequency">Speak frequency</string>
+	<string name="title_volume_gradually_increase_volume">Gradually increase volume</string>
+	<string name="title_volume_restrict_volume">Restrict volume</string>
+	<string name="title_dismiss_options_auto_dismiss">Auto-dismiss</string>
+	<string name="title_dismiss_options_dismiss_early">Dismiss early</string>
+	<string name="title_dismiss_options_delete_after_dismissed">Delete after dismissed</string>
+	<string name="title_snooze_options_auto_snooze">Auto-snooze</string>
+	<string name="title_snooze_options_max_snooze">Max snoozes</string>
+	<string name="title_snooze_options_snooze_duration">Snooze duration</string>
+	<string name="title_snooze_options_easy_snooze">Easy snooze</string>
+	<string name="title_upcoming_reminder_show_reminder">Show reminder</string>
+	<string name="title_upcoming_reminder_how_early">How early…</string>
+	<string name="title_upcoming_reminder_how_frequent">How frequent…</string>
 
 
 	<!-- Descriptions -->
@@ -223,6 +234,23 @@
 	<string name="description_day_button_style_filled">Filled-in buttons.</string>
 	<string name="description_day_button_style_outlined">Outlined buttons.</string>
 	<string name="description_media">Music or ringtone</string>
+	<string name="description_flashlight_brightness_level">Brightness level of the flashlight.</string>
+	<string name="description_flashlight_blink_on_off">Blink the flashlight on and off at set durations.</string>
+	<string name="description_text_to_speech_what_to_say">What to say with text-to-speech when the alarm is active.</string>
+	<string name="description_text_to_speech_speak_frequency">How often to say the selected items above.</string>
+	<string name="description_volume_gradually_increase_volume">Increase the volume of the alarm at a set frequency.</string>
+	<string name="description_volume_restrict_volume">Volume cannot be changed when an alarm goes off.</string>
+	<string name="description_dismiss_options_auto_dismiss">Dismiss the alarm automatically after a set duration.</string>
+	<string name="description_dismiss_options_dismiss_early">Dismiss the alarm early, before it is active.</string>
+	<string name="description_dismiss_options_delete_after_dismissed">The alarm will be deleted after it is dismissed.</string>
+	<string name="description_snooze_options_auto_snooze">Snooze the alarm automatically after a set duration.</string>
+	<string name="description_snooze_options_max_snooze">Maximum number of times the alarm can be snoozed.</string>
+	<string name="description_snooze_options_snooze_duration">Amount of time to snooze the alarm for.</string>
+	<string name="description_snooze_options_easy_snooze">Snooze the alarm by touching anywhere on the alarm screen.</string>
+	<string name="description_upcoming_reminder_show_reminder">Show a reminder notification before the alarm goes off.</string>
+	<string name="description_upcoming_reminder_how_early">How early should the reminder notification should be shown?</string>
+	<string name="description_upcoming_reminder_how_frequent">How frequent should the reminder notification should be shown?</string>
+	<string name="description_upcoming_reminder_text_to_speech">Use the alarm\'s text-to-speech options when the notification is shown.</string>
 	<string name="example_name">Work</string>
 
 
@@ -251,7 +279,6 @@
 	<string name="cd_request_permission_post_notifications">Request to post notifications.</string>
 	<string name="cd_request_permission_schedule_exact_alarm">Request to schedule exact alarms.</string>
 	<string name="cd_whats_new">List of items that are new in this version of the app.</string>
-	<string name="cd_flashlight_strength_seekbar">Flashlight strength level.</string>
 	<string name="cd_scan_nfc">Scan an NFC tag.</string>
 	<string name="cd_alarm_slider_arrow">Direction to swipe your finger.</string>
 	<string name="cd_dismiss_alarm">Dismiss the alarm.</string>
@@ -298,33 +325,8 @@
 	<string name="default_alarm_category">Default alarm</string>
 
 
-	<!-- Auto dismiss duration -->
-	<string name="auto_dismiss">Auto-dismiss</string>
-
-
-	<!-- Auto snooze duration -->
-	<string name="auto_snooze">Auto-snooze</string>
-
-
-	<!-- Max number of snoozes -->
-	<string name="max_snooze">Max snoozes</string>
-
-
-	<!-- Snooze duration -->
-	<string name="snooze_duration">Snooze duration</string>
-
-
-	<!-- Easy snooze -->
-	<string name="easy_snooze">Easy snooze</string>
-	<string name="easy_snooze_true">Snooze the alarm by touching anywhere.</string>
-	<string name="easy_snooze_false">Snooze the alarm normally.</string>
-
-
-	<!-- Default alarm name -->
+	<!-- Default alarm -->
 	<string name="alarm_name">Name</string>
-
-
-	<!-- Default alarm days -->
 	<string name="alarm_days">Days</string>
 
 

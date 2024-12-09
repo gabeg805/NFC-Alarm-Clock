@@ -33,7 +33,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:text="@string/permission_ignore_battery_optimization_request"
+			android:text="@string/message_permission_ignore_battery_optimization_request"
 			/>
 
 	</LinearLayout>

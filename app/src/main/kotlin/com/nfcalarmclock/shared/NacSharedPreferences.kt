@@ -102,7 +102,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.auto_dismiss_key)
-			val defaultValue = 15
+			val defaultValue = 900
 
 			return instance.getInt(key, defaultValue)
 		}
@@ -152,7 +152,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.auto_snooze_key)
-			val defaultValue = 0
+			val defaultValue = 300
 
 			return instance.getInt(key, defaultValue)
 		}
@@ -467,6 +467,42 @@ class NacSharedPreferences(context: Context)
 			val key = resources.getString(R.string.clock_widget_text_size_time_key)
 
 			saveFloat(key, value)
+		}
+
+	/**
+	 * Whether an alarm should be auto dismissed or not.
+	 */
+	var shouldAutoDismiss: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.should_auto_dismiss_key)
+			val defaultValue = true
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.should_auto_dismiss_key)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether an alarm should be auto snoozed or not.
+	 */
+	var shouldAutoSnooze: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.should_auto_snooze_key)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.should_auto_snooze_key)
+
+			saveBoolean(key, value)
 		}
 
 	/**
@@ -1456,7 +1492,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.snooze_duration_key)
-			val defaultValue = 5
+			val defaultValue = 300
 
 			return instance.getInt(key, defaultValue)
 		}

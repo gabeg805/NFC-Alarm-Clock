@@ -1,30 +1,29 @@
 package com.nfcalarmclock.alarm.options.volume
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.RelativeLayout
-import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
-import androidx.navigation.fragment.findNavController
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.util.NacBundle
+import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.view.calcAlpha
-import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
 import com.nfcalarmclock.view.setTextFromIndex
-import com.nfcalarmclock.view.setupCheckBoxColor
 import com.nfcalarmclock.view.setupInputLayoutColor
 import com.nfcalarmclock.view.setupSwitchColor
 
+/**
+ * Customize volume options for an alarm.
+ */
 class NacVolumeOptionsDialog
-	: NacBottomSheetDialogFragment()
+	: NacGenericAlarmOptionsDialog()
 {
+
+	/**
+	 * Layout resource ID.
+	 */
+	override val layoutId = R.layout.dlg_volume_options
 
 	/**
 	 * Gradually increase volume switch.
@@ -47,32 +46,36 @@ class NacVolumeOptionsDialog
 	private var selectedWaitTime: Int = 0
 
 	/**
-	 * Called when the creating the view.
+	 * Called when the Ok button is clicked.
 	 */
-	override fun onCreateView(
-		inflater: LayoutInflater,
-		container: ViewGroup?,
-		savedInstanceState: Bundle?
-	): View?
+	override fun onOkClicked(alarm: NacAlarm?)
 	{
-		return inflater.inflate(R.layout.dlg_volume_options, container, false)
+		// Update the alarm
+		alarm?.shouldGraduallyIncreaseVolume = graduallyIncreaseVolumeSwitch.isChecked
+		alarm?.graduallyIncreaseVolumeWaitTime = selectedWaitTime
+		alarm?.shouldRestrictVolume = restrictVolumeSwitch.isChecked
 	}
 
 	/**
-	 * Called when the view has been created.
+	 * Setup whether the gradually increase volume wait time container can be
+	 * used or not.
 	 */
-	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+	private fun setGraduallyIncreaseVolumeUsability()
 	{
-		// Super
-		super.onViewCreated(view, savedInstanceState)
+		// Get the state and alpha
+		val state = graduallyIncreaseVolumeSwitch.isChecked
+		val alpha = calcAlpha(state)
 
-		// Get the bundle
-		val alarm = NacBundle.getAlarm(arguments)
+		// Set the usability
+		graduallyIncreaseVolumeInputLayout.alpha = alpha
+		graduallyIncreaseVolumeInputLayout.isEnabled = state
+	}
 
-		// Get the ok and cancel buttons
-		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
-		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
-
+	/**
+	 * Setup all alarm options.
+	 */
+	override fun setupAlarmOptions(alarm: NacAlarm?)
+	{
 		// Get the default values
 		val defaultShouldGraduallyIncreaseVolume = alarm?.shouldGraduallyIncreaseVolume ?: false
 		val defaultGraduallyIncreaseVolumeWaitTime = alarm?.graduallyIncreaseVolumeWaitTime ?: 5
@@ -81,27 +84,8 @@ class NacVolumeOptionsDialog
 
 		// Setup the views
 		setupGraduallyIncreaseVolume(defaultShouldGraduallyIncreaseVolume, defaultGraduallyIncreaseVolumeWaitTime)
-		setupGraduallyIncreaseVolumeUsable()
+		setGraduallyIncreaseVolumeUsability()
 		setupRestrictVolume(defaultRestrictVolume)
-
-		// Setup the ok button
-		setupPrimaryButton(okButton, listener = {
-
-			// Update the alarm attributes
-			alarm?.shouldGraduallyIncreaseVolume = graduallyIncreaseVolumeSwitch.isChecked
-			alarm?.graduallyIncreaseVolumeWaitTime = selectedWaitTime
-			alarm?.shouldRestrictVolume = restrictVolumeSwitch.isChecked
-
-			// Save the change so that it is accessible in the previous dialog
-			findNavController().previousBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
-
-			// Dismiss the dialog
-			dismiss()
-
-		})
-
-		// Setup the cancel button
-		setupSecondaryButton(cancelButton)
 	}
 
 	/**
@@ -111,29 +95,32 @@ class NacVolumeOptionsDialog
 	{
 		// Get the views
 		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.gradually_increase_volume_container)
-		val switch: SwitchCompat = dialog!!.findViewById(R.id.gradually_increase_volume_switch)
 		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.gradually_increase_volume_dropdown_menu)
+		graduallyIncreaseVolumeSwitch = dialog!!.findViewById(R.id.gradually_increase_volume_switch)
 		graduallyIncreaseVolumeInputLayout = dialog!!.findViewById(R.id.gradually_increase_volume_input_layout)
 
-		// Setup the checkbox
-		switch.isChecked = defaultState
-		switch.setupSwitchColor(sharedPreferences)
+		// Get the list of seconds, starting at the first index until the end
+		// This will omit 0 seconds
+		val seconds = resources.getStringArray(R.array.general_seconds_summaries).drop(1).toTypedArray()
 
-		// Setup the input layout
-		graduallyIncreaseVolumeInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
-
-		// Set the default selected items in the text views
+		// Get the index of the default selected item in the textview
 		val index = NacAlarm.calcGraduallyIncreaseVolumeIndex(defaultTime)
+
+		// Setup the checkbox
+		graduallyIncreaseVolumeSwitch.isChecked = defaultState
+		graduallyIncreaseVolumeSwitch.setupSwitchColor(sharedPreferences)
+
+		// Setup the input layout and textview
+		graduallyIncreaseVolumeInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+		autoCompleteTextView.setSimpleItems(seconds)
 		autoCompleteTextView.setTextFromIndex(index)
 
 		// Set the listener
 		relativeLayout.setOnClickListener {
 
-			// Toggle the checkbox
-			switch.isChecked = !switch.isChecked
-
-			// Set the usability of the dropdown
-			setupGraduallyIncreaseVolumeUsable()
+			// Toggle the checkbox and set the usability of the dropdown
+			graduallyIncreaseVolumeSwitch.toggle()
+			setGraduallyIncreaseVolumeUsability()
 
 		}
 
@@ -141,21 +128,6 @@ class NacVolumeOptionsDialog
 		autoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
 			selectedWaitTime = NacAlarm.calcGraduallyIncreaseVolumeWaitTime(position)
 		}
-	}
-
-	/**
-	 * Setup whether the gradually increase volume wait time container can be
-	 * used or not.
-	 */
-	private fun setupGraduallyIncreaseVolumeUsable()
-	{
-		// Get the state and alpha
-		val state = graduallyIncreaseVolumeSwitch.isChecked
-		val alpha = calcAlpha(state)
-
-		// Set the usability
-		graduallyIncreaseVolumeInputLayout.alpha = alpha
-		graduallyIncreaseVolumeInputLayout.isEnabled = state
 	}
 
 	/**

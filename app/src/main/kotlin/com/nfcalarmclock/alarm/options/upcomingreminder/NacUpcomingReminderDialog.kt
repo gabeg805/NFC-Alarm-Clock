@@ -1,41 +1,45 @@
 package com.nfcalarmclock.alarm.options.upcomingreminder
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.navigation.fragment.findNavController
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.checkbox.MaterialCheckBox
+import androidx.appcompat.widget.SwitchCompat
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.util.NacBundle
-import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
+import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
+import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.setTextFromIndex
-import com.nfcalarmclock.view.setupCheckBoxColor
 import com.nfcalarmclock.view.setupInputLayoutColor
+import com.nfcalarmclock.view.setupSwitchColor
 
 /**
  * Upcoming reminder dialog.
  */
 class NacUpcomingReminderDialog
-	: NacBottomSheetDialogFragment()
+	: NacGenericAlarmOptionsDialog()
 {
 
 	/**
-	 * Check box to show the reminder or not.
+	 * Layout resourec ID.
 	 */
-	private lateinit var showReminderCheckBox: MaterialCheckBox
+	override val layoutId = R.layout.dlg_upcoming_reminder
 
 	/**
-	 * Question above how early to show the reminder.
+	 * Show reminder switch.
 	 */
-	private lateinit var howEarlyQuestion: TextView
+	private lateinit var showReminderSwitch: SwitchCompat
+
+	/**
+	 * How early title textview.
+	 */
+	private lateinit var howEarlyTitle: TextView
+
+	/**
+	 * How early description textview.
+	 */
+	private lateinit var howEarlyDescription: TextView
 
 	/**
 	 * Input layout for how early to show the reminder.
@@ -43,30 +47,29 @@ class NacUpcomingReminderDialog
 	private lateinit var howEarlyInputLayout: TextInputLayout
 
 	/**
-	 * Question above how frequently to show the reminder.
+	 * How frequent title textview.
 	 */
-	private lateinit var howFreqQuestion: TextView
+	private lateinit var howFrequentTitle: TextView
 
 	/**
-	 * Input layout for how frequently to show the reminder.
+	 * How frequent description textview.
 	 */
-	private lateinit var howFreqInputLayout: TextInputLayout
+	private lateinit var howFrequentDescription: TextView
 
 	/**
-	 * Parent layout for if if text-to-speech should be used when showing the reminder.
+	 * How frequent input layout.
+	 */
+	private lateinit var howFrequentInputLayout: TextInputLayout
+
+	/**
+	 * Use text-to-speech parent container.
 	 */
 	private lateinit var useTtsRelativeLayout: RelativeLayout
 
 	/**
-	 * Question above the checkbox if text-to-speech should be used when
-	 * showing the reminder.
+	 * Use text-to-speech switch.
 	 */
-	private lateinit var useTtsQuestion: TextView
-
-	/**
-	 * Check box whether to use text-to-speech when the reminder is shown or not.
-	 */
-	private lateinit var useTtsCheckBox: MaterialCheckBox
+	private lateinit var useTtsSwitch: SwitchCompat
 
 	/**
 	 * Selected how early time.
@@ -79,41 +82,68 @@ class NacUpcomingReminderDialog
 	private var selectedHowFreqTime: Int = 0
 
 	/**
-	 * The alpha that views should have based on the should use text-to-speech
-	 * flag.
+	 * Called when the Ok button is clicked.
 	 */
-	private val alpha: Float
-		get() = if (showReminderCheckBox.isChecked) 1.0f else 0.2f
-
-	/**
-	 * Called when the creating the view.
-	 */
-	override fun onCreateView(
-		inflater: LayoutInflater,
-		container: ViewGroup?,
-		savedInstanceState: Bundle?
-	): View?
+	override fun onOkClicked(alarm: NacAlarm?)
 	{
-		return inflater.inflate(R.layout.dlg_upcoming_reminder, container, false)
+		// Update the alarm
+		alarm?.showReminder = showReminderSwitch.isChecked
+		alarm?.timeToShowReminder = selectedHowEarlyTime
+		alarm?.reminderFrequency = selectedHowFreqTime
+		alarm?.useTtsForReminder = useTtsSwitch.isChecked
 	}
 
 	/**
-	 * Called when the view has been created.
+	 * Setup the usability of the how early views.
 	 */
-	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+	private fun setHowEarlyUsability()
 	{
-		// Super
-		super.onViewCreated(view, savedInstanceState)
+		// Get the state and alpha
+		val state = showReminderSwitch.isChecked
+		val alpha = calcAlpha(state)
 
-		// Get the bundle
-		val alarm = NacBundle.getAlarm(arguments)
+		// Set the usability
+		howEarlyTitle.alpha = alpha
+		howEarlyDescription.alpha = alpha
+		howEarlyInputLayout.alpha = alpha
+		howEarlyInputLayout.isEnabled = state
+	}
 
-		// Get the ok and cancel buttons
-		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
-		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
-		useTtsRelativeLayout = dialog!!.findViewById(R.id.should_use_tts_with_reminder)
-		useTtsQuestion = dialog!!.findViewById(R.id.title_should_use_tts_with_reminder)
+	/**
+	 * Setup the usability of the how frequent views.
+	 */
+	private fun setHowFrequentUsability()
+	{
+		// Get the state and alpha
+		val state = showReminderSwitch.isChecked
+		val alpha = calcAlpha(state)
 
+		// Set the usability
+		howFrequentTitle.alpha = alpha
+		howFrequentDescription.alpha = alpha
+		howFrequentInputLayout.alpha = alpha
+		howFrequentInputLayout.isEnabled = state
+	}
+
+	/**
+	 * Setup the usability of the use text-to-speech views.
+	 */
+	private fun setUseTtsUsability()
+	{
+		// Get the state and alpha
+		val state = showReminderSwitch.isChecked
+		val alpha = calcAlpha(state)
+
+		// Set the usability
+		useTtsRelativeLayout.alpha = alpha
+		useTtsSwitch.isEnabled = state
+	}
+
+	/**
+	 * Setup all alarm options.
+	 */
+	override fun setupAlarmOptions(alarm: NacAlarm?)
+	{
 		// Get the default values
 		val defaultShouldShowReminder = alarm?.showReminder ?: false
 		val defaultTimeToShowReminder = alarm?.timeToShowReminder ?: 5
@@ -123,44 +153,25 @@ class NacUpcomingReminderDialog
 		selectedHowFreqTime = defaultReminderFrequency
 
 		// Setup the views
-		setupShouldShowReminder(defaultShouldShowReminder)
+		setupShowReminder(defaultShouldShowReminder)
 		setupHowEarly(defaultTimeToShowReminder)
-		setupHowFreq(defaultReminderFrequency)
-		setupShouldUseTts(defaultShouldUseTts)
-		setupHowEarlyUsable()
-		setupHowFreqUsable()
-		setupUseTtsUsable()
-
-		// Setup the ok button
-		setupPrimaryButton(okButton, listener = {
-
-			// Update the alarm attributes
-			alarm?.showReminder = showReminderCheckBox.isChecked
-			alarm?.timeToShowReminder = selectedHowEarlyTime
-			alarm?.reminderFrequency = selectedHowFreqTime
-			alarm?.useTtsForReminder = useTtsCheckBox.isChecked
-
-			// Save the change so that it is accessible in the previous dialog
-			findNavController().previousBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
-
-			// Dismiss the dialog
-			dismiss()
-
-		})
-
-		// Setup the cancel button
-		setupSecondaryButton(cancelButton)
+		setupHowFrequent(defaultReminderFrequency)
+		setupUseTts(defaultShouldUseTts)
+		setHowEarlyUsability()
+		setHowFrequentUsability()
+		setUseTtsUsability()
 	}
 
 	/**
-	 * Setup how early the upcoming reminder should be shown.
+	 * Setup the how early views.
 	 */
 	private fun setupHowEarly(default: Int)
 	{
 		// Get the views
-		howEarlyQuestion = dialog!!.findViewById(R.id.title_how_early_to_show_reminder)
-		howEarlyInputLayout = dialog!!.findViewById(R.id.how_early_to_show_reminder_input_layout)
-		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.how_early_to_show_reminder_dropdown_menu)
+		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.reminder_how_early_dropdown_menu)
+		howEarlyTitle = dialog!!.findViewById(R.id.reminder_how_early_title)
+		howEarlyDescription = dialog!!.findViewById(R.id.reminder_how_early_description)
+		howEarlyInputLayout = dialog!!.findViewById(R.id.reminder_how_early_input_layout)
 
 		// Setup the input layout
 		howEarlyInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
@@ -176,30 +187,18 @@ class NacUpcomingReminderDialog
 	}
 
 	/**
-	 * Setup whether the how early time container can be used or not.
+	 * Setup the how frequent views.
 	 */
-	private fun setupHowEarlyUsable()
-	{
-		// Set the alpha
-		howEarlyQuestion.alpha = alpha
-		howEarlyInputLayout.alpha = alpha
-
-		// Set whether it can be used or not
-		howEarlyInputLayout.isEnabled = showReminderCheckBox.isChecked
-	}
-
-	/**
-	 * Setup how frequent the upcoming reminder should be shown.
-	 */
-	private fun setupHowFreq(default: Int)
+	private fun setupHowFrequent(default: Int)
 	{
 		// Get the views
-		howFreqQuestion = dialog!!.findViewById(R.id.title_how_freq_to_show_reminder)
-		howFreqInputLayout = dialog!!.findViewById(R.id.how_freq_to_show_reminder_input_layout)
-		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.how_freq_to_show_reminder_dropdown_menu)
+		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.reminder_how_frequent_dropdown_menu)
+		howFrequentTitle = dialog!!.findViewById(R.id.reminder_how_frequent_title)
+		howFrequentDescription = dialog!!.findViewById(R.id.reminder_how_frequent_description)
+		howFrequentInputLayout = dialog!!.findViewById(R.id.reminder_how_frequent_input_layout)
 
 		// Setup the input layout
-		howFreqInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+		howFrequentInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 
 		// Set the default selected items in the text views
 		autoCompleteTextView.setTextFromIndex(default)
@@ -211,135 +210,49 @@ class NacUpcomingReminderDialog
 	}
 
 	/**
-	 * Setup whether the how frequent time container can be used or not.
+	 * Setup the show reminder views.
 	 */
-	private fun setupHowFreqUsable()
-	{
-		// Set the alpha
-		howFreqQuestion.alpha = alpha
-		howFreqInputLayout.alpha = alpha
-
-		// Set whether it can be used or not
-		howFreqInputLayout.isEnabled = showReminderCheckBox.isChecked
-	}
-
-	/**
-	 * Setup the whether an upcoming reminder should be shown or not.
-	 */
-	private fun setupShouldShowReminder(default: Boolean)
+	private fun setupShowReminder(default: Boolean)
 	{
 		// Get the views
-		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.should_show_reminder)
-		val textView: TextView = dialog!!.findViewById(R.id.should_show_reminder_summary)
-		showReminderCheckBox = dialog!!.findViewById(R.id.should_show_reminder_checkbox)
+		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.reminder_show_container)
+		showReminderSwitch = dialog!!.findViewById(R.id.reminder_show_switch)
 
-		// Set the status of the checkbox
-		showReminderCheckBox.isChecked = default
-
-		// Setup the checkbox
-		showReminderCheckBox.setupCheckBoxColor(sharedPreferences)
-
-		// Setup the description
-		setupShouldShowReminderDescription(textView)
+		// Setup the switch
+		showReminderSwitch.isChecked = default
+		showReminderSwitch.setupSwitchColor(sharedPreferences)
 
 		// Set the listener
 		relativeLayout.setOnClickListener {
 
-			// Toggle the checkbox
-			showReminderCheckBox.isChecked = !showReminderCheckBox.isChecked
+			// Toggle the switch
+			showReminderSwitch.toggle()
 
 			// Setup the views
-			setupShouldShowReminderDescription(textView)
-			setupHowEarlyUsable()
-			setupHowFreqUsable()
-			setupUseTtsUsable()
+			setHowEarlyUsability()
+			setHowFrequentUsability()
+			setUseTtsUsability()
 
 		}
 	}
 
 	/**
-	 * Setup the summary text for whether an upcoming reminder should be shown
-	 * or not.
+	 * Setup the use text-to-speech views.
 	 */
-	private fun setupShouldShowReminderDescription(textView: TextView)
-	{
-		// Determine the text ID to use based on whether restrict volume will
-		// be used or not
-		val textId = if (showReminderCheckBox.isChecked)
-		{
-			R.string.upcoming_reminder_true
-		}
-		else
-		{
-			R.string.upcoming_reminder_false
-		}
-
-		// Set the text
-		textView.setText(textId)
-	}
-
-	/**
-	 * Setup the whether text-to-speech should be used for the upcoming reminder or not.
-	 */
-	private fun setupShouldUseTts(default: Boolean)
+	private fun setupUseTts(default: Boolean)
 	{
 		// Get the views
-		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.should_use_tts_with_reminder)
-		val textView: TextView = dialog!!.findViewById(R.id.should_use_tts_with_reminder_summary)
-		useTtsCheckBox = dialog!!.findViewById(R.id.should_use_tts_with_reminder_checkbox)
+		useTtsRelativeLayout = dialog!!.findViewById(R.id.reminder_use_tts_container)
+		useTtsSwitch = dialog!!.findViewById(R.id.reminder_use_tts_switch)
 
-		// Set the status of the checkbox
-		useTtsCheckBox.isChecked = default
-
-		// Setup the checkbox
-		useTtsCheckBox.setupCheckBoxColor(sharedPreferences)
-
-		// Setup the description
-		setupShouldUseTtsDescription(textView)
+		// Setup the switch
+		useTtsSwitch.isChecked = default
+		useTtsSwitch.setupSwitchColor(sharedPreferences)
 
 		// Set the listener
-		relativeLayout.setOnClickListener {
-
-			// Toggle the checkbox
-			useTtsCheckBox.isChecked = !useTtsCheckBox.isChecked
-
-			// Setup the views
-			setupShouldUseTtsDescription(textView)
-
+		useTtsRelativeLayout.setOnClickListener {
+			useTtsSwitch.toggle()
 		}
-	}
-
-	/**
-	 * Setup the summary text for whether text-to-speech should be used when
-	 * showing the upcoming reminder or not.
-	 */
-	private fun setupShouldUseTtsDescription(textView: TextView)
-	{
-		// Determine the text ID to use
-		val textId = if (useTtsCheckBox.isChecked)
-		{
-			R.string.upcoming_reminder_use_tts_true
-		}
-		else
-		{
-			R.string.upcoming_reminder_use_tts_false
-		}
-
-		// Set the text
-		textView.setText(textId)
-	}
-
-	/**
-	 * Setup whether the use text-to-speech container can be used or not.
-	 */
-	private fun setupUseTtsUsable()
-	{
-		// Set the alpha
-		useTtsQuestion.alpha = alpha
-		useTtsRelativeLayout.alpha = alpha
-
-		// Set whether it can be used or not
-		useTtsCheckBox.isEnabled = showReminderCheckBox.isChecked
 	}
 
 }

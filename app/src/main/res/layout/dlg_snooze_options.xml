@@ -1,249 +1,236 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:padding="@dimen/large"
-	android:orientation="vertical">
+	android:layout_height="wrap_content">
 
-	<ScrollView
+	<!-- Auto snooze title, description, and switch -->
+	<RelativeLayout
+		android:id="@+id/auto_snooze_container"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginBottom="@dimen/medium">
+		android:layout_height="wrap_content">
 
-		<LinearLayout
+		<!-- Auto snooze title -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Title"
+			android:id="@+id/auto_snooze_title"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:orientation="vertical">
+			android:layout_toStartOf="@id/auto_snooze_switch"
+			android:text="@string/title_snooze_options_auto_snooze"
+			/>
 
-			<!-- Auto snooze title -->
-			<TextView
-				style="@style/Widget.AlarmOptionDialog.Title"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="@string/auto_snooze"
-				/>
+		<!-- Auto snooze description-->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Description"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/auto_snooze_title"
+			android:layout_toStartOf="@id/auto_snooze_switch"
+			android:text="@string/description_snooze_options_auto_snooze"
+			/>
 
-			<!-- Auto snooze description-->
-			<TextView
-				style="@style/Widget.AlarmOptionDialog.Description"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="Snooze the alarm automatically after a set duration."
-				/>
+		<!-- Switch -->
+		<androidx.appcompat.widget.SwitchCompat
+			android:id="@+id/auto_snooze_switch"
+			android:layout_width="@dimen/touch"
+			android:layout_height="@dimen/touch"
+			android:layout_alignParentEnd="true"
+			android:layout_centerVertical="true"
+			android:clickable="false"
+			/>
+	</RelativeLayout>
 
-			<!-- Auto snooze minutes and seconds -->
-			<LinearLayout
-				style="@style/Widget.AlarmOptionDialog.Row"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:baselineAligned="false"
-				android:gravity="center_horizontal"
-				android:orientation="horizontal"
-				android:weightSum="2">
-
-				<!-- Minutes -->
-				<com.google.android.material.textfield.TextInputLayout
-					style="@style/Widget.AlarmOptionDialog.Dropdown"
-					android:id="@+id/auto_snooze_minutes_input_layout"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1">
-
-					<com.google.android.material.textfield.MaterialAutoCompleteTextView
-						android:id="@+id/auto_snooze_minutes_dropdown_menu"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:inputType="none"
-						app:simpleItems="@array/auto_snooze_minute_summaries"
-						/>
-				</com.google.android.material.textfield.TextInputLayout>
-
-				<!-- Seconds -->
-				<com.google.android.material.textfield.TextInputLayout
-					style="@style/Widget.AlarmOptionDialog.Dropdown"
-					android:id="@+id/auto_snooze_seconds_input_layout"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1">
-
-					<com.google.android.material.textfield.MaterialAutoCompleteTextView
-						android:id="@+id/auto_snooze_seconds_dropdown_menu"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:inputType="none"
-						app:simpleItems="@array/general_seconds_summaries"
-						/>
-				</com.google.android.material.textfield.TextInputLayout>
-			</LinearLayout>
-
-			<!-- Separator -->
-			<Space style="@style/Widget.AlarmOptionDialog.Separator" />
-
-			<!-- Max snooze title -->
-			<TextView
-				style="@style/Widget.AlarmOptionDialog.Title"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="@string/max_snooze"
-				/>
-
-			<!-- Max snooze description -->
-			<TextView
-				style="@style/Widget.AlarmOptionDialog.Description"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="Maximum number of times the alarm can be snoozed."
-				/>
-
-			<!-- Max snooze dropdown -->
-			<com.google.android.material.textfield.TextInputLayout
-				style="@style/Widget.AlarmOptionDialog.DropdownRow"
-				android:id="@+id/max_snooze_input_layout"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content">
-
-				<com.google.android.material.textfield.MaterialAutoCompleteTextView
-					android:id="@+id/max_snooze_dropdown_menu"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:inputType="none"
-					app:simpleItems="@array/max_snooze_summaries"
-					/>
-			</com.google.android.material.textfield.TextInputLayout>
-
-			<!-- Separator -->
-			<Space style="@style/Widget.AlarmOptionDialog.Separator" />
-
-			<!-- Snooze duration title -->
-			<TextView
-				style="@style/Widget.AlarmOptionDialog.Title"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="@string/snooze_duration"
-				/>
-
-			<!-- Snooze duration description -->
-			<TextView
-				style="@style/Widget.AlarmOptionDialog.Description"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="Amount of time to snooze the alarm for."
-				/>
-
-			<!-- Snooze duration minutes and seconds -->
-			<LinearLayout
-				style="@style/Widget.AlarmOptionDialog.Row"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:baselineAligned="false"
-				android:gravity="center_horizontal"
-				android:orientation="horizontal"
-				android:weightSum="2">
-
-				<!-- Minutes -->
-				<com.google.android.material.textfield.TextInputLayout
-					style="@style/Widget.AlarmOptionDialog.Dropdown"
-					android:id="@+id/snooze_duration_minutes_input_layout"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1">
-
-					<com.google.android.material.textfield.MaterialAutoCompleteTextView
-						android:id="@+id/snooze_duration_minutes_dropdown_menu"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:inputType="none"
-						app:simpleItems="@array/snooze_duration_minute_summaries"
-						/>
-				</com.google.android.material.textfield.TextInputLayout>
-
-				<!-- Seconds -->
-				<com.google.android.material.textfield.TextInputLayout
-					style="@style/Widget.AlarmOptionDialog.Dropdown"
-					android:id="@+id/snooze_duration_seconds_input_layout"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1">
-
-					<com.google.android.material.textfield.MaterialAutoCompleteTextView
-						android:id="@+id/snooze_duration_seconds_dropdown_menu"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:inputType="none"
-						app:simpleItems="@array/general_seconds_summaries"
-						/>
-				</com.google.android.material.textfield.TextInputLayout>
-			</LinearLayout>
-
-			<!-- Separator -->
-			<Space style="@style/Widget.AlarmOptionDialog.Separator" />
-
-			<!-- Easy snooze -->
-			<RelativeLayout
-				android:id="@+id/easy_snooze_container"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:clickable="true"
-				android:focusable="true">
-
-				<!-- Title -->
-				<TextView
-					style="@style/Widget.AlarmOptionDialog.Title"
-					android:id="@+id/easy_snooze_title"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_alignParentStart="true"
-					android:layout_toStartOf="@id/easy_snooze_switch"
-					android:text="@string/easy_snooze"
-					/>
-
-				<!-- Description -->
-				<TextView
-					style="@style/Widget.AlarmOptionDialog.Description"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_alignParentStart="true"
-					android:layout_below="@id/easy_snooze_title"
-					android:layout_toStartOf="@id/easy_snooze_switch"
-					android:text="Snooze the alarm by touching anywhere on the alarm screen."
-					/>
-
-				<!-- Switch -->
-				<androidx.appcompat.widget.SwitchCompat
-					android:id="@+id/easy_snooze_switch"
-					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
-					android:layout_alignParentEnd="true"
-					android:layout_centerVertical="true"
-					android:clickable="false"
-					/>
-			</RelativeLayout>
-
-			<!-- Separator -->
-			<Space style="@style/Widget.AlarmOptionDialog.Separator" />
-		</LinearLayout>
-	</ScrollView>
-
-	<!-- Ok button -->
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/ok_button"
+	<!-- Auto snooze minutes and seconds -->
+	<LinearLayout
+		style="@style/Widget.AlarmOptionDialog.Row"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textColor="@color/white"
-		android:text="@string/action_ok"
-		app:backgroundTint="@color/orange"
-		/>
+		android:baselineAligned="false"
+		android:gravity="center_horizontal"
+		android:orientation="horizontal"
+		android:weightSum="2">
 
-	<!-- Cancel button -->
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/cancel_button"
+		<!-- Minutes -->
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.AlarmOptionDialog.Dropdown"
+			android:id="@+id/auto_snooze_minutes_input_layout"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1">
+
+			<com.google.android.material.textfield.MaterialAutoCompleteTextView
+				android:id="@+id/auto_snooze_minutes_dropdown_menu"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="none"
+				app:simpleItems="@array/auto_snooze_minute_summaries"
+				/>
+		</com.google.android.material.textfield.TextInputLayout>
+
+		<!-- Seconds -->
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.AlarmOptionDialog.Dropdown"
+			android:id="@+id/auto_snooze_seconds_input_layout"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1">
+
+			<com.google.android.material.textfield.MaterialAutoCompleteTextView
+				android:id="@+id/auto_snooze_seconds_dropdown_menu"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="none"
+				app:simpleItems="@array/general_seconds_summaries"
+				/>
+		</com.google.android.material.textfield.TextInputLayout>
+	</LinearLayout>
+
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
+
+	<!-- Max snooze title -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Title"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textColor="@color/white"
-		android:text="@string/action_cancel"
-		app:backgroundTint="@color/gray_light"
+		android:text="@string/title_snooze_options_max_snooze"
 		/>
 
-</LinearLayout>
+	<!-- Max snooze description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/description_snooze_options_max_snooze"
+		/>
+
+	<!-- Max snooze dropdown -->
+	<com.google.android.material.textfield.TextInputLayout
+		style="@style/Widget.AlarmOptionDialog.DropdownRow"
+		android:id="@+id/max_snooze_input_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<com.google.android.material.textfield.MaterialAutoCompleteTextView
+			android:id="@+id/max_snooze_dropdown_menu"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:inputType="none"
+			app:simpleItems="@array/max_snooze_summaries"
+			/>
+	</com.google.android.material.textfield.TextInputLayout>
+
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
+
+	<!-- Snooze duration title -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/title_snooze_options_snooze_duration"
+		/>
+
+	<!-- Snooze duration description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/description_snooze_options_snooze_duration"
+		/>
+
+	<!-- Snooze duration minutes and seconds -->
+	<LinearLayout
+		style="@style/Widget.AlarmOptionDialog.Row"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:baselineAligned="false"
+		android:gravity="center_horizontal"
+		android:orientation="horizontal"
+		android:weightSum="2">
+
+		<!-- Minutes -->
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.AlarmOptionDialog.Dropdown"
+			android:id="@+id/snooze_duration_minutes_input_layout"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1">
+
+			<com.google.android.material.textfield.MaterialAutoCompleteTextView
+				android:id="@+id/snooze_duration_minutes_dropdown_menu"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="none"
+				app:simpleItems="@array/snooze_duration_minute_summaries"
+				/>
+		</com.google.android.material.textfield.TextInputLayout>
+
+		<!-- Seconds -->
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.AlarmOptionDialog.Dropdown"
+			android:id="@+id/snooze_duration_seconds_input_layout"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1">
+
+			<com.google.android.material.textfield.MaterialAutoCompleteTextView
+				android:id="@+id/snooze_duration_seconds_dropdown_menu"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="none"
+				app:simpleItems="@array/general_seconds_summaries"
+				/>
+		</com.google.android.material.textfield.TextInputLayout>
+	</LinearLayout>
+
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
+
+	<!-- Easy snooze -->
+	<RelativeLayout
+		android:id="@+id/easy_snooze_container"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:clickable="true"
+		android:focusable="true">
+
+		<!-- Title -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Title"
+			android:id="@+id/easy_snooze_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentStart="true"
+			android:layout_toStartOf="@id/easy_snooze_switch"
+			android:text="@string/title_snooze_options_easy_snooze"
+			/>
+
+		<!-- Description -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Description"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentStart="true"
+			android:layout_below="@id/easy_snooze_title"
+			android:layout_toStartOf="@id/easy_snooze_switch"
+			android:text="@string/description_snooze_options_easy_snooze"
+			/>
+
+		<!-- Switch -->
+		<androidx.appcompat.widget.SwitchCompat
+			android:id="@+id/easy_snooze_switch"
+			android:layout_width="@dimen/touch"
+			android:layout_height="@dimen/touch"
+			android:layout_alignParentEnd="true"
+			android:layout_centerVertical="true"
+			android:clickable="false"
+			/>
+	</RelativeLayout>
+
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
+
+</com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

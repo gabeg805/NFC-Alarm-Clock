@@ -139,6 +139,7 @@
 		<item>57 seconds</item>
 		<item>58 seconds</item>
 		<item>59 seconds</item>
+		<item>60 seconds</item>
 	</string-array>
 
 	<string-array name="auto_dismiss_summaries">
@@ -222,6 +223,7 @@
 		<item>57 minutes</item>
 		<item>58 minutes</item>
 		<item>59 minutes</item>
+		<item>60 minutes</item>
 	</string-array>
 
 	<string-array name="auto_snooze_summaries">

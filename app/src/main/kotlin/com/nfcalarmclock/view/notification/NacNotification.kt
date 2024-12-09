@@ -17,7 +17,7 @@ import androidx.core.content.ContextCompat
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.util.NacCalendar
-import com.nfcalarmclock.util.NacUtility.toSpannedString
+import com.nfcalarmclock.view.toSpannedString
 
 /**
  * Notification for the app to keep it in memory.
@@ -146,7 +146,7 @@ abstract class NacNotification(
 		// Check if title should be added
 		if (title.isNotEmpty())
 		{
-			builder = builder.setContentTitle(toSpannedString(title))
+			builder = builder.setContentTitle(title.toSpannedString())
 		}
 
 		// Return the builder

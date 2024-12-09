@@ -1,19 +1,14 @@
 package com.nfcalarmclock.alarm.options.tts
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.TextView
-import androidx.navigation.fragment.findNavController
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
-import com.nfcalarmclock.util.NacBundle
-import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
+import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
+import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.setTextFromIndex
 import com.nfcalarmclock.view.setupCheckBoxColor
 import com.nfcalarmclock.view.setupInputLayoutColor
@@ -22,21 +17,31 @@ import com.nfcalarmclock.view.setupInputLayoutColor
  * Text to speech dialog asking the user what TTS settings they want.
  */
 class NacTextToSpeechDialog
-	: NacBottomSheetDialogFragment()
+	: NacGenericAlarmOptionsDialog()
 {
 
 	/**
-	 * Checkbox for setting whether the time should be said or not.
+	 * Layout resourec ID.
+	 */
+	override val layoutId = R.layout.dlg_text_to_speech
+
+	/**
+	 * Say current time checkbox.
 	 */
 	private lateinit var currentTimeCheckBox: MaterialCheckBox
 
 	/**
-	 * Checkbox for setting whether the alarm name should be said or not.
+	 * Say alarm name checkbox.
 	 */
 	private lateinit var alarmNameCheckBox: MaterialCheckBox
 
 	/**
-	 * Question above the text-to-speech frequency input layout.
+	 * Title for the text-to-speech frequency.
+	 */
+	private lateinit var ttsFreqTitle: TextView
+
+	/**
+	 * Description for the text-to-speech frequency.
 	 */
 	private lateinit var ttsFreqDescription: TextView
 
@@ -57,39 +62,39 @@ class NacTextToSpeechDialog
 		get() = currentTimeCheckBox.isChecked || alarmNameCheckBox.isChecked
 
 	/**
-	 * The alpha that views should have based on the should use text-to-speech
-	 * flag.
+	 * Called when the Ok button is clicked.
 	 */
-	private val alpha: Float
-		get() = if (shouldUseTts) 1.0f else 0.2f
-
-	/**
-	 * Called when the creating the view.
-	 */
-	override fun onCreateView(
-		inflater: LayoutInflater,
-		container: ViewGroup?,
-		savedInstanceState: Bundle?
-	): View?
+	override fun onOkClicked(alarm: NacAlarm?)
 	{
-		return inflater.inflate(R.layout.dlg_text_to_speech, container, false)
+		// Update the alarm
+		alarm?.sayCurrentTime = currentTimeCheckBox.isChecked
+		alarm?.sayAlarmName = alarmNameCheckBox.isChecked
+		alarm?.ttsFrequency = selectedTtsFreq
 	}
 
 	/**
-	 * Called when the view has been created.
+	 * Set whether the text-to-speech frequency can be selected or not.
 	 */
-	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+	private fun setTtsSpeakFrequencyUsability()
 	{
-		// Super
-		super.onViewCreated(view, savedInstanceState)
+		// Get the state and alpha
+		val state = shouldUseTts
+		val alpha = calcAlpha(state)
 
-		// Get the bundle
-		val alarm = NacBundle.getAlarm(arguments)
+		// Set the alpha of the views
+		ttsFreqTitle.alpha = alpha
+		ttsFreqDescription.alpha = alpha
+		ttsFreqInputLayout.alpha = alpha
 
-		// Get the views
-		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
-		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
+		// Set whether the frequency can be selected or not
+		ttsFreqInputLayout.isEnabled = state
+	}
 
+	/**
+	 * Setup all alarm options.
+	 */
+	override fun setupAlarmOptions(alarm: NacAlarm?)
+	{
 		// Get the default values
 		val defaultSayCurrentTime = alarm?.sayCurrentTime ?: false
 		val defaultSayAlarmName = alarm?.sayAlarmName ?: false
@@ -97,86 +102,49 @@ class NacTextToSpeechDialog
 		selectedTtsFreq = defaultTtsFreq
 
 		// Setup the views
-		setupCurrentTimeCheckBox(defaultSayCurrentTime)
-		setupAlarmNameCheckBox(defaultSayAlarmName)
-		setupTtsFrequency(defaultTtsFreq)
-		setupTtsFrequencyUsable()
-
-		// Setup the ok button
-		setupPrimaryButton(okButton, listener = {
-
-			// Update the alarm attributes
-			alarm?.sayCurrentTime = currentTimeCheckBox.isChecked
-			alarm?.sayAlarmName = alarmNameCheckBox.isChecked
-			alarm?.ttsFrequency = selectedTtsFreq
-
-			// Save the change so that it is accessible in the previous dialog
-			findNavController().previousBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
-
-			// Dismiss the dialog
-			dismiss()
-
-		})
-
-		// Setup the cancel button
-		setupSecondaryButton(cancelButton)
+		setupTtsWhatToSay(defaultSayCurrentTime, defaultSayAlarmName)
+		setupTtsSpeakFrequency(defaultTtsFreq)
+		setTtsSpeakFrequencyUsability()
 	}
 
 	/**
-	 * Setup the name of the alarm checkbox.
+	 * Setup the what to say option views.
 	 */
-	private fun setupAlarmNameCheckBox(default: Boolean)
+	private fun setupTtsWhatToSay(defaultSayCurrentTime: Boolean, defaultSayAlarmName: Boolean)
 	{
-		// Get the view
-		alarmNameCheckBox = dialog!!.findViewById(R.id.say_alarm_name)
+		// Get the views
+		currentTimeCheckBox = dialog!!.findViewById(R.id.tts_say_current_time)
+		alarmNameCheckBox = dialog!!.findViewById(R.id.tts_say_alarm_name)
 
-		// Set the default checked status
-		alarmNameCheckBox.isChecked = default
+		// Setup the default status
+		currentTimeCheckBox.isChecked = defaultSayCurrentTime
+		alarmNameCheckBox.isChecked = defaultSayAlarmName
 
-		// Setup the views
-		alarmNameCheckBox.setupCheckBoxColor(sharedPreferences)
-
-		// Set the on click listener for the alarm name checkbox container
-		alarmNameCheckBox.setOnClickListener {
-
-			// Enable/disable the text-to-speech frequency input layout
-			setupTtsFrequencyUsable()
-
-		}
-	}
-
-	/**
-	 * Setup the current time checkbox.
-	 */
-	private fun setupCurrentTimeCheckBox(default: Boolean)
-	{
-		// Get the view
-		currentTimeCheckBox = dialog!!.findViewById(R.id.say_current_time)
-
-		// Set the default checked status
-		currentTimeCheckBox.isChecked = default
-
-		// Setup the color
+		// Setup the colors
 		currentTimeCheckBox.setupCheckBoxColor(sharedPreferences)
+		alarmNameCheckBox.setupCheckBoxColor(sharedPreferences)
 
 		// Set the on click listener for the current time checkbox container
 		currentTimeCheckBox.setOnClickListener {
+			setTtsSpeakFrequencyUsability()
+		}
 
-			// Enable/disable the text-to-speech frequency input layout
-			setupTtsFrequencyUsable()
-
+		// Set the on click listener for the alarm name checkbox container
+		alarmNameCheckBox.setOnClickListener {
+			setTtsSpeakFrequencyUsability()
 		}
 	}
 
 	/**
-	 * Setup the text-to-speech frequency views.
+	 * Setup the speak frequency views.
 	 */
-	private fun setupTtsFrequency(default: Int)
+	private fun setupTtsSpeakFrequency(default: Int)
 	{
 		// Set the member variables
-		ttsFreqDescription = dialog!!.findViewById(R.id.title_tts_how_often_to_say)
-		ttsFreqInputLayout = dialog!!.findViewById(R.id.tts_frequency_input_layout)
 		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.tts_frequency_dropdown_menu)
+		ttsFreqTitle = dialog!!.findViewById(R.id.tts_frequency_title)
+		ttsFreqDescription = dialog!!.findViewById(R.id.tts_frequency_description)
+		ttsFreqInputLayout = dialog!!.findViewById(R.id.tts_frequency_input_layout)
 
 		// Setup the input layout
 		ttsFreqInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
@@ -188,19 +156,6 @@ class NacTextToSpeechDialog
 		autoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
 			selectedTtsFreq = position
 		}
-	}
-
-	/**
-	 * Setup whether the text-to-speech frequency can be selected or not.
-	 */
-	private fun setupTtsFrequencyUsable()
-	{
-		// Set the alpha of the views
-		ttsFreqDescription.alpha = alpha
-		ttsFreqInputLayout.alpha = alpha
-
-		// Set whether the frequency can be selected or not
-		ttsFreqInputLayout.isEnabled = shouldUseTts
 	}
 
 }

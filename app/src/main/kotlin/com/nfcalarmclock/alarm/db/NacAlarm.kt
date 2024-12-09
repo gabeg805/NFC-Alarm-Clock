@@ -245,10 +245,16 @@ class NacAlarm()
 	var shouldRestrictVolume: Boolean = false
 
 	/**
-	 * Time in which to auto dismiss the alarm.
+	 * Whether to auto dismiss or not.
 	 */
-	@ColumnInfo(name = "auto_dismiss_time", defaultValue = "15")
-	var autoDismissTime: Int = 15
+	@ColumnInfo(name = "should_auto_dismiss", defaultValue = "1")
+	var shouldAutoDismiss: Boolean = true
+
+	/**
+	 * Time in which to auto dismiss the alarm (seconds).
+	 */
+	@ColumnInfo(name = "auto_dismiss_time", defaultValue = "900")
+	var autoDismissTime: Int = 900
 
 	/**
 	 * Whether or not to use dismiss early.
@@ -257,7 +263,7 @@ class NacAlarm()
 	var useDismissEarly: Boolean = false
 
 	/**
-	 * Amount of time, in minutes, to allow a user to dismiss early by.
+	 * Amount of time to allow a user to dismiss early by (minutes).
 	 */
 	@ColumnInfo(name = "dismiss_early_time", defaultValue = "30")
 	var dismissEarlyTime: Int = 30
@@ -269,10 +275,16 @@ class NacAlarm()
 	var timeOfDismissEarlyAlarm: Long = 0
 
 	/**
-	 * Time in which to auto snooze the alarm.
+	 * Whether to auto snooze or not.
 	 */
-	@ColumnInfo(name = "auto_snooze_time", defaultValue = "0")
-	var autoSnoozeTime: Int = 0
+	@ColumnInfo(name = "should_auto_snooze", defaultValue = "0")
+	var shouldAutoSnooze: Boolean = false
+
+	/**
+	 * Time in which to auto snooze the alarm (seconds).
+	 */
+	@ColumnInfo(name = "auto_snooze_time", defaultValue = "300")
+	var autoSnoozeTime: Int = 300
 
 	/**
 	 * Max number of snoozes.
@@ -281,10 +293,10 @@ class NacAlarm()
 	var maxSnooze: Int = -1
 
 	/**
-	 * Snooze duration.
+	 * Snooze duration (seconds).
 	 */
-	@ColumnInfo(name = "snooze_duration", defaultValue = "5")
-	var snoozeDuration: Int = 5
+	@ColumnInfo(name = "snooze_duration", defaultValue = "300")
+	var snoozeDuration: Int = 300
 
 	/**
 	 * Whether snoozing is easy or not.
@@ -299,7 +311,7 @@ class NacAlarm()
 	var showReminder: Boolean = false
 
 	/**
-	 * The time to start showing a reminder.
+	 * The time to start showing a reminder (minutes).
 	 */
 	@ColumnInfo(name = "time_to_show_reminder", defaultValue = "5")
 	var timeToShowReminder: Int = 5
@@ -468,6 +480,7 @@ class NacAlarm()
 		shouldRestrictVolume = input.readInt() != 0
 
 		// Auto dismiss
+		shouldAutoDismiss = input.readInt() != 0
 		autoDismissTime = input.readInt()
 
 		// Dismiss early
@@ -476,6 +489,7 @@ class NacAlarm()
 		timeOfDismissEarlyAlarm = input.readLong()
 
 		// Snooze
+		shouldAutoSnooze = input.readInt() != 0
 		autoSnoozeTime = input.readInt()
 		maxSnooze = input.readInt()
 		snoozeDuration = input.readInt()
@@ -833,10 +847,12 @@ class NacAlarm()
 			&& (shouldGraduallyIncreaseVolume == alarm.shouldGraduallyIncreaseVolume)
 			&& (graduallyIncreaseVolumeWaitTime == alarm.graduallyIncreaseVolumeWaitTime)
 			&& (shouldRestrictVolume == alarm.shouldRestrictVolume)
+			&& (shouldAutoDismiss == alarm.shouldAutoDismiss)
 			&& (autoDismissTime == alarm.autoDismissTime)
 			&& (useDismissEarly == alarm.useDismissEarly)
 			&& (dismissEarlyTime == alarm.dismissEarlyTime)
 			&& (timeOfDismissEarlyAlarm == alarm.timeOfDismissEarlyAlarm)
+			&& (shouldAutoSnooze == alarm.shouldAutoSnooze)
 			&& (autoSnoozeTime == alarm.autoSnoozeTime)
 			&& (maxSnooze == alarm.maxSnooze)
 			&& (snoozeDuration == alarm.snoozeDuration)
@@ -890,9 +906,11 @@ class NacAlarm()
 			&& (ttsFrequency == alarm.ttsFrequency)
 			&& (shouldGraduallyIncreaseVolume == alarm.shouldGraduallyIncreaseVolume)
 			&& (shouldRestrictVolume == alarm.shouldRestrictVolume)
+			&& (shouldAutoDismiss == alarm.shouldAutoDismiss)
 			&& (autoDismissTime == alarm.autoDismissTime)
 			&& (useDismissEarly == alarm.useDismissEarly)
 			&& (dismissEarlyTime == alarm.dismissEarlyTime)
+			&& (shouldAutoSnooze == alarm.shouldAutoSnooze)
 			&& (autoSnoozeTime == alarm.autoSnoozeTime)
 			&& (maxSnooze == alarm.maxSnooze)
 			&& (snoozeDuration == alarm.snoozeDuration)
@@ -987,10 +1005,12 @@ class NacAlarm()
 		println("Grad Inc Vol        : $shouldGraduallyIncreaseVolume")
 		println("Grad Inc Vol Wait T : $graduallyIncreaseVolumeWaitTime")
 		println("Restrict Vol        : $shouldRestrictVolume")
+		println("Should auto dismiss : $shouldAutoDismiss")
 		println("Auto Dismiss        : $autoDismissTime")
 		println("Use Dismiss Early   : $useDismissEarly")
 		println("Dismiss Early       : $dismissEarlyTime")
 		println("Time of Early Alarm : $timeOfDismissEarlyAlarm")
+		println("Should auto snooze  : $shouldAutoSnooze")
 		println("Auto Snooze         : $autoSnoozeTime")
 		println("Max Snooze          : $maxSnooze")
 		println("Snooze Duration     : $snoozeDuration")
@@ -1040,7 +1060,7 @@ class NacAlarm()
 
 		// Add the snooze duration value to the current time
 		val cal = Calendar.getInstance()
-		cal.add(Calendar.MINUTE, snoozeDuration)
+		cal.add(Calendar.SECOND, snoozeDuration)
 
 		// Set the snooze hour and minute
 		snoozeHour = cal[Calendar.HOUR_OF_DAY]
@@ -1220,6 +1240,7 @@ class NacAlarm()
 		output.writeInt(if (shouldRestrictVolume) 1 else 0)
 
 		// Auto dismiss
+		output.writeInt(if (shouldAutoDismiss) 1 else 0)
 		output.writeInt(autoDismissTime)
 
 		// Dismiss early
@@ -1228,6 +1249,7 @@ class NacAlarm()
 		output.writeLong(timeOfDismissEarlyAlarm)
 
 		// Snooze
+		output.writeInt(if (shouldAutoSnooze) 1 else 0)
 		output.writeInt(autoSnoozeTime)
 		output.writeInt(maxSnooze)
 		output.writeInt(snoozeDuration)
@@ -1314,7 +1336,8 @@ class NacAlarm()
 			alarm.shouldRestrictVolume = shared?.shouldRestrictVolume ?: false
 
 			// Auto dismiss
-			alarm.autoDismissTime = shared?.autoDismissTime ?: 15
+			alarm.shouldAutoDismiss = shared?.shouldAutoDismiss ?: true
+			alarm.autoDismissTime = shared?.autoDismissTime ?: 900
 
 			// Dismiss early
 			alarm.useDismissEarly = shared?.canDismissEarly ?: false
@@ -1322,9 +1345,10 @@ class NacAlarm()
 			alarm.timeOfDismissEarlyAlarm = 0
 
 			// Snooze
-			alarm.autoSnoozeTime = shared?.autoSnoozeTime ?: 0
+			alarm.shouldAutoSnooze = shared?.shouldAutoSnooze ?: false
+			alarm.autoSnoozeTime = shared?.autoSnoozeTime ?: 300
 			alarm.maxSnooze = shared?.maxSnooze ?: -1
-			alarm.snoozeDuration = shared?.snoozeDuration ?: 5
+			alarm.snoozeDuration = shared?.snoozeDuration ?: 300
 			alarm.useEasySnooze = shared?.easySnooze ?: false
 
 			// Reminder
@@ -1343,39 +1367,51 @@ class NacAlarm()
 		}
 
 		/**
-		 * Calculate the auto dismiss time from an index.
+		 * Calculate the auto dismiss time from a minutes index.
 		 */
-		fun calcAutoDismissTime(index: Int): Int
+		fun calcAutoDismissFromMinutesIndex(index: Int): Int
 		{
-			return if (index < 5)
-			{
-				index
-			}
-			else
-			{
-				(index - 4) * 5
-			}
+			return index * 60
+		}
+
+		/**
+		 * Calculate the auto dismiss time from a seconds index.
+		 */
+		fun calcAutoDismissFromSecondsIndex(index: Int): Int
+		{
+			return index
 		}
 
 		/**
 		 * Calculate the auto dismiss index from a value.
 		 */
-		fun calcAutoDismissIndex(time: Int): Int
+		fun calcAutoDismissIndex(time: Int): Pair<Int, Int>
 		{
-			return if (time < 5)
+			// Get the minute and seconds components from the time
+			var (minutes, seconds) = calcMinutesAndSecondsFromTime(time)
+
+			// Check if minutes and seconds are both 0. This is no good, and so should
+			// default minutes to a better index
+			if ((minutes == 0) && (seconds == 0))
 			{
-				time
+				minutes = 15
 			}
-			else
-			{
-				time / 5 + 4
-			}
+
+			return Pair(minutes, seconds)
 		}
 
 		/**
-		 * Calculate the auto snooze time from an index.
+		 * Calculate the auto snooze time from a minutes index.
 		 */
-		fun calcAutoSnoozeTime(index: Int): Int
+		fun calcAutoSnoozeFromMinutesIndex(index: Int): Int
+		{
+			return index * 60
+		}
+
+		/**
+		 * Calculate the auto snooze time from a seconds index.
+		 */
+		fun calcAutoSnoozeFromSecondsIndex(index: Int): Int
 		{
 			return index
 		}
@@ -1383,9 +1419,20 @@ class NacAlarm()
 		/**
 		 * Calculate the auto snooze index from a value.
 		 */
-		fun calcAutoSnoozeIndex(time: Int): Int
+		fun calcAutoSnoozeIndex(time: Int): Pair<Int, Int>
 		{
-			return time
+			// Get the minute and seconds components from the time
+			var (minutes, seconds) = calcMinutesAndSecondsFromTime(time)
+
+			// Check if minutes and seconds are both 0. This is no good, and so should
+			// default minutes to the 1st index
+			if ((minutes == 0) && (seconds == 0))
+			{
+				minutes = 5
+			}
+
+			// Calculate the index
+			return Pair(minutes, seconds)
 		}
 
 		/**
@@ -1492,14 +1539,7 @@ class NacAlarm()
 		 */
 		fun calcGraduallyIncreaseVolumeIndex(time: Int): Int
 		{
-			return if (time <= 10)
-			{
-				time - 1
-			}
-			else
-			{
-				time / 5 + 7
-			}
+			return time - 1
 		}
 
 		/**
@@ -1507,14 +1547,7 @@ class NacAlarm()
 		 */
 		fun calcGraduallyIncreaseVolumeWaitTime(index: Int): Int
 		{
-			return if (index < 10)
-			{
-				index + 1
-			}
-			else
-			{
-				(index - 7) * 5
-			}
+			return index + 1
 		}
 
 		/**
@@ -1548,33 +1581,49 @@ class NacAlarm()
 		}
 
 		/**
-		 * Calculate the snooze duration value from an index.
+		 * Calculate the minutes and seconds components from a time.
 		 */
-		fun calcSnoozeDuration(index: Int): Int
+		fun calcMinutesAndSecondsFromTime(time: Int): Pair<Int, Int>
 		{
-			return if (index < 9)
-			{
-				index + 1
-			}
-			else
-			{
-				(index-7) * 5
-			}
+			val minutes = time / 60
+			val seconds = time % 60
+
+			return Pair(minutes, seconds)
+		}
+
+		/**
+		 * Calculate the snooze duration from a minutes index.
+		 */
+		fun calcSnoozeDurationFromMinutesIndex(index: Int): Int
+		{
+			return index * 60
+		}
+
+		/**
+		 * Calculate the snooze duration time from a seconds index.
+		 */
+		fun calcSnoozeDurationFromSecondsIndex(index: Int): Int
+		{
+			return index
 		}
 
 		/**
 		 * Calculate the snooze duration index from a value.
 		 */
-		fun calcSnoozeDurationIndex(value: Int): Int
+		fun calcSnoozeDurationIndex(value: Int): Pair<Int, Int>
 		{
-			return if (value < 9)
+			// Get the minute and seconds components from the time
+			var (minutes, seconds) = calcMinutesAndSecondsFromTime(value)
+
+			// Check if minutes and seconds are both 0. This is no good, and so should
+			// default minutes to the 1st index
+			if ((minutes == 0) && (seconds == 0))
 			{
-				value - 1
+				minutes = 5
 			}
-			else
-			{
-				value / 5 + 7
-			}
+
+			// Calculate the index
+			return Pair(minutes, seconds)
 		}
 
 		/**

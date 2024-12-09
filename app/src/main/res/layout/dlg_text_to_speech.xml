@@ -1,79 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:padding="@dimen/large"
-	android:orientation="vertical">
+	android:layout_height="wrap_content">
 
-	<!-- Question about what to say when the alarm is active -->
+	<!-- Text to speech title -->
 	<TextView
-		style="@style/Widget.TextView.Primary"
-		android:id="@+id/title_tts_what_to_say"
+		style="@style/Widget.AlarmOptionDialog.Title"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:textSize="@dimen/tsz_medium"
-		android:textStyle="bold"
-		android:text="@string/title_tts_what_to_say"
+		android:text="@string/action_alarm_option_text_to_speech"
 		/>
 
-	<!-- -->
-	<Space
+	<!-- Text to speech description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.DescriptionBeforeCheckBox"
 		android:layout_width="match_parent"
-		android:layout_height="@dimen/small"
+		android:layout_height="wrap_content"
+		android:text="@string/description_text_to_speech_what_to_say"
 		/>
 
-	<!-- Say current time -->
+	<!-- Option to say current time -->
 	<com.google.android.material.checkbox.MaterialCheckBox
-		android:id="@+id/say_current_time"
+		style="@style/Widget.AlarmOptionDialog.CheckBox"
+		android:id="@+id/tts_say_current_time"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginStart="@dimen/xlarge"
-		android:layout_marginEnd="@dimen/xlarge"
 		android:text="@string/message_tts_current_time"
 		/>
 
-	<!-- Say alarm name -->
+	<!-- Option to say alarm name -->
 	<com.google.android.material.checkbox.MaterialCheckBox
-		android:id="@+id/say_alarm_name"
+		style="@style/Widget.AlarmOptionDialog.CheckBox"
+		android:id="@+id/tts_say_alarm_name"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginStart="@dimen/xlarge"
-		android:layout_marginEnd="@dimen/xlarge"
 		android:text="@string/message_tts_alarm_name"
 		/>
 
-	<Space
-		android:layout_width="match_parent"
-		android:layout_height="@dimen/medium"
-		/>
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.SeparatorAfterCheckBox" />
 
-	<!-- Question about how often to say the selected thing(s) above -->
+	<!-- Speak frequency title -->
 	<TextView
-		style="@style/Widget.TextView.Primary"
-		android:id="@+id/title_tts_how_often_to_say"
+		style="@style/Widget.AlarmOptionDialog.Title"
+		android:id="@+id/tts_frequency_title"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:textSize="@dimen/tsz_medium"
-		android:textStyle="bold"
-		android:text="@string/title_tts_how_often_to_say"
+		android:text="@string/title_text_to_speech_speak_frequency"
+		/>
+
+	<!-- Speak frequency description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:id="@+id/tts_frequency_description"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/description_text_to_speech_speak_frequency"
 		/>
 
 	<!-- Pick how often to say the selected thing(s) above -->
 	<com.google.android.material.textfield.TextInputLayout
-		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+		style="@style/Widget.AlarmOptionDialog.DropdownRow"
 		android:id="@+id/tts_frequency_input_layout"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:paddingVertical="@dimen/normal"
-		app:boxCornerRadiusTopStart="6dp"
-		app:boxCornerRadiusTopEnd="6dp"
-		app:boxCornerRadiusBottomStart="6dp"
-		app:boxCornerRadiusBottomEnd="6dp"
-		app:boxStrokeWidth="2dp">
+		android:layout_height="wrap_content">
 
 		<com.google.android.material.textfield.MaterialAutoCompleteTextView
 			android:id="@+id/tts_frequency_dropdown_menu"
@@ -84,30 +76,4 @@
 			/>
 	</com.google.android.material.textfield.TextInputLayout>
 
-	<!-- -->
-	<Space
-		android:layout_width="match_parent"
-		android:layout_height="@dimen/large"
-		/>
-
-	<!-- Ok button -->
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/ok_button"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:textColor="@color/white"
-		android:text="@string/action_ok"
-		app:backgroundTint="@color/orange"
-		/>
-
-	<!-- Cancel button -->
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/cancel_button"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:textColor="@color/white"
-		android:text="@string/action_cancel"
-		app:backgroundTint="@color/gray_light"
-		/>
-
-</LinearLayout>
+</com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

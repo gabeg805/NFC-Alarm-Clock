@@ -1,228 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:padding="@dimen/large"
-	android:orientation="vertical">
+	android:layout_height="wrap_content">
 
-	<ScrollView
+	<!-- Auto dismiss title, description, and switch -->
+	<RelativeLayout
+		android:id="@+id/auto_dismiss_container"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginBottom="@dimen/medium">
+		android:layout_height="wrap_content">
 
-		<LinearLayout
+		<!-- Title -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Title"
+			android:id="@+id/auto_dismiss_title"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:orientation="vertical">
+			android:layout_toStartOf="@id/auto_dismiss_switch"
+			android:text="@string/title_dismiss_options_auto_dismiss"
+			/>
 
-			<!-- Auto dismiss title, description, and switch -->
-			<RelativeLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content">
+		<!-- Description -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Description"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/auto_dismiss_title"
+			android:layout_toStartOf="@id/auto_dismiss_switch"
+			android:text="@string/description_dismiss_options_auto_dismiss"
+			/>
 
-				<!-- Title -->
-				<TextView
-					style="@style/Widget.AlarmOptionDialog.Title"
-					android:id="@+id/auto_dismiss_title"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_toStartOf="@id/auto_dismiss_switch"
-					android:text="@string/auto_dismiss"
-					/>
+		<!-- Switch -->
+		<androidx.appcompat.widget.SwitchCompat
+			android:id="@+id/auto_dismiss_switch"
+			android:layout_width="@dimen/touch"
+			android:layout_height="@dimen/touch"
+			android:layout_alignParentEnd="true"
+			android:layout_centerVertical="true"
+			android:clickable="false"
+			/>
+	</RelativeLayout>
 
-				<!-- Description -->
-				<TextView
-					style="@style/Widget.AlarmOptionDialog.Description"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_below="@id/auto_dismiss_title"
-					android:layout_toStartOf="@id/auto_dismiss_switch"
-					android:text="Dismiss the alarm automatically after a set duration."
-					/>
-
-				<!-- Switch -->
-				<androidx.appcompat.widget.SwitchCompat
-					android:id="@+id/auto_dismiss_switch"
-					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
-					android:layout_alignParentEnd="true"
-					android:layout_centerVertical="true"
-					/>
-			</RelativeLayout>
-
-			<!-- Auto dismiss inutes and seconds -->
-			<LinearLayout
-				style="@style/Widget.AlarmOptionDialog.Row"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:baselineAligned="false"
-				android:gravity="center_horizontal"
-				android:orientation="horizontal"
-				android:weightSum="2">
-
-				<!-- Minutes -->
-				<com.google.android.material.textfield.TextInputLayout
-					style="@style/Widget.AlarmOptionDialog.Dropdown"
-					android:id="@+id/auto_dismiss_minutes_input_layout"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1">
-
-					<com.google.android.material.textfield.MaterialAutoCompleteTextView
-						android:id="@+id/auto_dismiss_minutes_dropdown_menu"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:inputType="none"
-						app:simpleItems="@array/auto_dismiss_minute_summaries"
-						/>
-				</com.google.android.material.textfield.TextInputLayout>
-
-				<!-- Seconds -->
-				<com.google.android.material.textfield.TextInputLayout
-					style="@style/Widget.AlarmOptionDialog.Dropdown"
-					android:id="@+id/auto_dismiss_seconds_input_layout"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1">
-
-					<com.google.android.material.textfield.MaterialAutoCompleteTextView
-						android:id="@+id/auto_dismiss_seconds_dropdown_menu"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:inputType="none"
-						app:simpleItems="@array/general_seconds_summaries"
-						/>
-				</com.google.android.material.textfield.TextInputLayout>
-			</LinearLayout>
-
-			<!-- Separator -->
-			<Space style="@style/Widget.AlarmOptionDialog.Separator" />
-
-			<!-- Dismiss early title and switch -->
-			<RelativeLayout
-				android:id="@+id/dismiss_early_container"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:clickable="true"
-				android:focusable="true">
-
-				<!-- Title -->
-				<TextView
-					style="@style/Widget.AlarmOptionDialog.Title"
-					android:id="@+id/dismiss_early_title"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_toStartOf="@id/dismiss_early_switch"
-					android:text="Dismiss early"
-					/>
-
-				<!-- Description -->
-				<TextView
-					style="@style/Widget.AlarmOptionDialog.Description"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_below="@id/dismiss_early_title"
-					android:layout_toStartOf="@id/dismiss_early_switch"
-					android:text="Dismiss the alarm early, before it is active."
-					/>
-
-				<!-- Switch -->
-				<androidx.appcompat.widget.SwitchCompat
-					android:id="@+id/dismiss_early_switch"
-					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
-					android:layout_alignParentEnd="true"
-					android:layout_centerVertical="true"
-					android:clickable="false"
-					/>
-			</RelativeLayout>
-
-			<!-- Dismiss early dropdown -->
-			<com.google.android.material.textfield.TextInputLayout
-				style="@style/Widget.AlarmOptionDialog.DropdownRow"
-				android:id="@+id/dismiss_early_input_layout"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content">
-
-				<com.google.android.material.textfield.MaterialAutoCompleteTextView
-					android:id="@+id/dismiss_early_dropdown_menu"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:inputType="none"
-					app:simpleItems="@array/dismiss_early_times"
-					/>
-			</com.google.android.material.textfield.TextInputLayout>
-
-			<!-- Separator -->
-			<Space style="@style/Widget.AlarmOptionDialog.Separator" />
-
-			<!-- Delete after dismissed -->
-			<RelativeLayout
-				android:id="@+id/delete_after_dismissed_container"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:clickable="true"
-				android:focusable="true">
-
-				<!-- Title -->
-				<TextView
-					style="@style/Widget.AlarmOptionDialog.Title"
-					android:id="@+id/delete_after_dismissed_title"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_alignParentStart="true"
-					android:layout_toStartOf="@id/delete_after_dismissed_switch"
-					android:text="Delete after dismissed"
-					/>
-
-				<!-- Description -->
-				<TextView
-					style="@style/Widget.AlarmOptionDialog.Description"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_alignParentStart="true"
-					android:layout_below="@id/delete_after_dismissed_title"
-					android:layout_toStartOf="@id/delete_after_dismissed_switch"
-					android:text="The alarm will be deleted after it is dismissed."
-					/>
-
-				<!-- Switch -->
-				<androidx.appcompat.widget.SwitchCompat
-					android:id="@+id/delete_after_dismissed_switch"
-					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
-					android:layout_alignParentEnd="true"
-					android:layout_centerVertical="true"
-					android:clickable="false"
-					/>
-			</RelativeLayout>
-
-			<!-- Separator -->
-			<Space style="@style/Widget.AlarmOptionDialog.Separator" />
-		</LinearLayout>
-
-	</ScrollView>
-
-	<!-- Ok button -->
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/ok_button"
+	<!-- Auto dismiss inutes and seconds -->
+	<LinearLayout
+		style="@style/Widget.AlarmOptionDialog.Row"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textColor="@color/white"
-		android:text="@string/action_ok"
-		app:backgroundTint="@color/orange"
-		/>
+		android:baselineAligned="false"
+		android:gravity="center_horizontal"
+		android:orientation="horizontal"
+		android:weightSum="2">
 
-	<!-- Cancel button -->
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/cancel_button"
+		<!-- Minutes -->
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.AlarmOptionDialog.Dropdown"
+			android:id="@+id/auto_dismiss_minutes_input_layout"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1">
+
+			<com.google.android.material.textfield.MaterialAutoCompleteTextView
+				android:id="@+id/auto_dismiss_minutes_dropdown_menu"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="none"
+				app:simpleItems="@array/auto_dismiss_minute_summaries"
+				/>
+		</com.google.android.material.textfield.TextInputLayout>
+
+		<!-- Seconds -->
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.AlarmOptionDialog.Dropdown"
+			android:id="@+id/auto_dismiss_seconds_input_layout"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1">
+
+			<com.google.android.material.textfield.MaterialAutoCompleteTextView
+				android:id="@+id/auto_dismiss_seconds_dropdown_menu"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="none"
+				app:simpleItems="@array/general_seconds_summaries"
+				/>
+		</com.google.android.material.textfield.TextInputLayout>
+	</LinearLayout>
+
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
+
+	<!-- Dismiss early title, description, and switch -->
+	<RelativeLayout
+		android:id="@+id/dismiss_early_container"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textColor="@color/white"
-		android:text="@string/action_cancel"
-		app:backgroundTint="@color/gray_light"
-		/>
+		android:clickable="true"
+		android:focusable="true">
 
-</LinearLayout>
+		<!-- Title -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Title"
+			android:id="@+id/dismiss_early_title"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_toStartOf="@id/dismiss_early_switch"
+			android:text="@string/title_dismiss_options_dismiss_early"
+			/>
+
+		<!-- Description -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Description"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/dismiss_early_title"
+			android:layout_toStartOf="@id/dismiss_early_switch"
+			android:text="@string/description_dismiss_options_dismiss_early"
+			/>
+
+		<!-- Switch -->
+		<androidx.appcompat.widget.SwitchCompat
+			android:id="@+id/dismiss_early_switch"
+			android:layout_width="@dimen/touch"
+			android:layout_height="@dimen/touch"
+			android:layout_alignParentEnd="true"
+			android:layout_centerVertical="true"
+			android:clickable="false"
+			/>
+	</RelativeLayout>
+
+	<!-- Dismiss early dropdown -->
+	<com.google.android.material.textfield.TextInputLayout
+		style="@style/Widget.AlarmOptionDialog.DropdownRow"
+		android:id="@+id/dismiss_early_input_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<com.google.android.material.textfield.MaterialAutoCompleteTextView
+			android:id="@+id/dismiss_early_dropdown_menu"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:inputType="none"
+			app:simpleItems="@array/dismiss_early_times"
+			/>
+	</com.google.android.material.textfield.TextInputLayout>
+
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
+
+	<!-- Delete after dismissed -->
+	<RelativeLayout
+		android:id="@+id/delete_after_dismissed_container"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:clickable="true"
+		android:focusable="true">
+
+		<!-- Title -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Title"
+			android:id="@+id/delete_after_dismissed_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentStart="true"
+			android:layout_toStartOf="@id/delete_after_dismissed_switch"
+			android:text="@string/title_dismiss_options_delete_after_dismissed"
+			/>
+
+		<!-- Description -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Description"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentStart="true"
+			android:layout_below="@id/delete_after_dismissed_title"
+			android:layout_toStartOf="@id/delete_after_dismissed_switch"
+			android:text="@string/description_dismiss_options_delete_after_dismissed"
+			/>
+
+		<!-- Switch -->
+		<androidx.appcompat.widget.SwitchCompat
+			android:id="@+id/delete_after_dismissed_switch"
+			android:layout_width="@dimen/touch"
+			android:layout_height="@dimen/touch"
+			android:layout_alignParentEnd="true"
+			android:layout_centerVertical="true"
+			android:clickable="false"
+			/>
+	</RelativeLayout>
+
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
+
+</com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

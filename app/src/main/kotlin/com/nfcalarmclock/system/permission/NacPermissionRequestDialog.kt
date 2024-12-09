@@ -9,6 +9,8 @@ import android.view.View
 import android.widget.TextView
 import com.nfcalarmclock.R
 import com.nfcalarmclock.view.dialog.NacDialogFragment
+import com.nfcalarmclock.view.toSpannedString
+import com.nfcalarmclock.view.toThemedBold
 
 /**
  * Generic dialog for requesting permissions.
@@ -33,15 +35,20 @@ abstract class NacPermissionRequestDialog
 	abstract val layoutId: Int
 
 	/**
+	 * The ID of the title string.
+	 */
+	abstract val titleId: Int
+
+	/**
+	 * The ID of the text string.
+	 */
+	open val textId: Int = 0
+
+	/**
 	 * The name of the permission.
 	 */
 	open val permission: String
 		get() = ""
-
-	/**
-	 * The ID of the title string.
-	 */
-	abstract val titleId: Int
 
 	/**
 	 * Position of this dialog in the permission request manager.
@@ -104,6 +111,25 @@ abstract class NacPermissionRequestDialog
 	}
 
 	/**
+	 * Called when the fragment is resumed.
+	 */
+	override fun onResume()
+	{
+		// Super
+		super.onResume()
+
+		// Get the textview
+		val textView: TextView = dialog!!.findViewById(R.id.request_summary)
+
+		// Get the text and theme color
+		val text = resources.getString(textId)
+		val themeColor = sharedPreferences!!.themeColor
+
+		// Theme the text
+		textView.text = text.toThemedBold(themeColor).toSpannedString()
+	}
+
+	/**
 	 * Called when the view is created.
 	 *
 	 * This is called right after onCreateDialog().
@@ -135,8 +161,8 @@ abstract class NacPermissionRequestDialog
 			pages.visibility = View.VISIBLE
 
 			// Get the textviews that need to be modified
-			val positionTextView = dialog!!.findViewById<TextView>(R.id.request_current_page)
-			val totalNumTextView = dialog!!.findViewById<TextView>(R.id.request_total_num_pages)
+			val positionTextView: TextView = dialog!!.findViewById(R.id.request_current_page)
+			val totalNumTextView: TextView = dialog!!.findViewById(R.id.request_total_num_pages)
 
 			// Set the position and total number of pages
 			positionTextView.text = "$position "

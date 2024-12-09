@@ -67,12 +67,12 @@ import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.util.NacBundle
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacIntent
-import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.util.createTimeTickReceiver
 import com.nfcalarmclock.util.disableActivityAlias
 import com.nfcalarmclock.util.registerMyReceiver
 import com.nfcalarmclock.util.unregisterMyReceiver
+import com.nfcalarmclock.view.toSpannedString
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog
 import com.nfcalarmclock.widget.refreshAppWidgets
 import dagger.hilt.android.AndroidEntryPoint
@@ -1580,7 +1580,7 @@ class NacMainActivity
 		listener: View.OnClickListener? = null)
 	{
 		// Create the snackbar
-		val snackbar = Snackbar.make(root, NacUtility.toSpannedString(message),
+		val snackbar = Snackbar.make(root, message.toSpannedString(),
 			Snackbar.LENGTH_LONG)
 
 		// Setup the snackbar

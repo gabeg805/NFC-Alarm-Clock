@@ -1,117 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:padding="@dimen/large"
-	android:orientation="vertical">
+	android:layout_height="match_parent">
 
-	<!-- Question for the flashlight strength -->
+	<!-- Title -->
 	<TextView
-		style="@style/Widget.TextView.Primary"
-		android:id="@+id/question_flashlight_strength"
+		style="@style/Widget.AlarmOptionDialog.Title"
+		android:id="@+id/flashlight_brightness_title"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:textSize="@dimen/tsz_medium"
-		android:textStyle="bold"
-		android:text="@string/title_flashlight_strength"
+		android:text="@string/title_flashlight_brightness_level"
 		/>
 
-	<!-- Strength -->
-	<SeekBar
-		android:id="@+id/seekbar_flashlight_strength"
-		android:contentDescription="@string/cd_flashlight_strength_seekbar"
+	<!-- Description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:id="@+id/flashlight_brightness_description"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:paddingTop="@dimen/xlarge"
-		android:paddingBottom="@dimen/normal"
-		android:paddingStart="@dimen/normal"
-		android:paddingEnd="@dimen/normal"
-		android:max="10"
-		android:progress="3"
+		android:text="@string/description_flashlight_brightness_level"
 		/>
 
-	<!-- -->
+	<!-- Brightness -->
+	<com.google.android.material.slider.Slider
+		style="@style/Widget.AlarmOptionDialog.Slider"
+		android:id="@+id/flashlight_brightness_slider"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:valueFrom="1"
+		android:valueTo="10"
+		android:value="3"
+		android:stepSize="1"
+		app:labelBehavior="gone"
+		/>
+
+	<!-- Separator -->
 	<Space
-		android:id="@+id/space_flashlight_strength"
-		android:layout_width="match_parent"
-		android:layout_height="@dimen/medium"
+		style="@style/Widget.AlarmOptionDialog.Separator"
+		android:id="@+id/flashlight_brightness_space"
 		/>
 
-	<!-- Question to blink the flashlight -->
-	<TextView
-		style="@style/Widget.TextView.Primary"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:textSize="@dimen/tsz_medium"
-		android:textStyle="bold"
-		android:text="@string/title_flashlight_blink"
-		/>
-
-	<!-- Should gradually increase volume -->
+	<!-- Flashlight blink title, description, and switch -->
 	<RelativeLayout
-		android:id="@+id/should_flashlight_blink"
+		android:id="@+id/flashlight_blink_container"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:paddingVertical="@dimen/normal"
-		android:paddingHorizontal="@dimen/large"
 		android:clickable="true"
-		android:focusable="true"
-		android:background="?android:attr/selectableItemBackground">
+		android:focusable="true">
 
-		<com.google.android.material.checkbox.MaterialCheckBox
-			android:id="@+id/should_flashlight_blink_checkbox"
-			android:layout_width="wrap_content"
+		<!-- Title -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Title"
+			android:id="@+id/flashlight_blink_title"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_alignParentStart="true"
-			android:layout_centerVertical="true"
-			android:layout_marginEnd="@dimen/small"
-			android:clickable="false"
-			android:minWidth="0dp"
-			android:minHeight="0dp"
-			android:focusable="false"
+			android:layout_toStartOf="@id/flashlight_blink_switch"
+			android:text="@string/title_flashlight_blink_on_off"
 			/>
 
+		<!-- Description -->
 		<TextView
-			style="@style/Widget.TextView.Primary"
-			android:id="@+id/description_should_flashlight_blink"
-			android:layout_width="wrap_content"
+			style="@style/Widget.AlarmOptionDialog.Description"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_toEndOf="@id/should_flashlight_blink_checkbox"
+			android:layout_below="@id/flashlight_blink_title"
+			android:layout_toStartOf="@id/flashlight_blink_switch"
+			android:text="@string/description_flashlight_blink_on_off"
+			/>
+
+		<!-- Switch -->
+		<androidx.appcompat.widget.SwitchCompat
+			android:id="@+id/flashlight_blink_switch"
+			android:layout_width="@dimen/touch"
+			android:layout_height="@dimen/touch"
+			android:layout_alignParentEnd="true"
 			android:layout_centerVertical="true"
-			android:maxLines="4"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:text="@string/flashlight_blink_false"
+			android:clickable="false"
 			/>
 	</RelativeLayout>
 
-	<!-- -->
-	<Space
-		android:layout_width="match_parent"
-		android:layout_height="@dimen/medium"
-		/>
-
-	<!-- Question for blink duration -->
-	<TextView
-		style="@style/Widget.TextView.Primary"
-		android:id="@+id/question_flashlight_on_off_duration"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:textSize="@dimen/tsz_medium"
-		android:textStyle="bold"
-		android:text="@string/title_flashlight_on_off_duration"
-		/>
-
 	<!-- On/off durations -->
 	<RelativeLayout
+		style="@style/Widget.AlarmOptionDialog.Row"
 		android:id="@+id/flashlight_on_off_duration"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:paddingVertical="@dimen/normal">
+		android:layout_height="wrap_content">
 
 		<!-- On duration -->
 		<TextView
@@ -123,25 +98,18 @@
 			android:layout_alignBottom="@id/flashlight_on_duration_input_layout"
 			android:layout_marginHorizontal="@dimen/normal"
 			android:gravity="center_vertical"
-			android:textSize="@dimen/tsz_small"
-			android:textStyle="bold"
 			android:text="@string/message_flashlight_on_duration"
 			/>
 
 		<!-- How long to turn on for -->
 		<com.google.android.material.textfield.TextInputLayout
-			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+			style="@style/Widget.AlarmOptionDialog.Dropdown"
 			android:id="@+id/flashlight_on_duration_input_layout"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_vertical"
 			android:layout_marginHorizontal="@dimen/normal"
-			android:layout_toEndOf="@id/message_flashlight_on_duration"
-			app:boxCornerRadiusTopStart="6dp"
-			app:boxCornerRadiusTopEnd="6dp"
-			app:boxCornerRadiusBottomStart="6dp"
-			app:boxCornerRadiusBottomEnd="6dp"
-			app:boxStrokeWidth="2dp">
+			android:layout_toEndOf="@id/message_flashlight_on_duration">
 
 			<com.google.android.material.textfield.MaterialAutoCompleteTextView
 				android:id="@+id/flashlight_on_duration_dropdown_menu"
@@ -163,26 +131,19 @@
 			android:layout_below="@id/flashlight_on_duration_input_layout"
 			android:layout_marginHorizontal="@dimen/normal"
 			android:gravity="center_vertical"
-			android:textSize="@dimen/tsz_small"
-			android:textStyle="bold"
 			android:text="@string/message_flashlight_off_duration"
 			/>
 
 		<!-- How long to turn off for -->
 		<com.google.android.material.textfield.TextInputLayout
-			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+			style="@style/Widget.AlarmOptionDialog.Dropdown"
 			android:id="@+id/flashlight_off_duration_input_layout"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_vertical"
 			android:layout_marginHorizontal="@dimen/normal"
 			android:layout_below="@id/flashlight_on_duration_input_layout"
-			android:layout_toEndOf="@id/message_flashlight_on_duration"
-			app:boxCornerRadiusTopStart="6dp"
-			app:boxCornerRadiusTopEnd="6dp"
-			app:boxCornerRadiusBottomStart="6dp"
-			app:boxCornerRadiusBottomEnd="6dp"
-			app:boxStrokeWidth="2dp">
+			android:layout_toEndOf="@id/message_flashlight_on_duration">
 
 			<com.google.android.material.textfield.MaterialAutoCompleteTextView
 				android:id="@+id/flashlight_off_duration_dropdown_menu"
@@ -194,22 +155,6 @@
 		</com.google.android.material.textfield.TextInputLayout>
 	</RelativeLayout>
 
-	<!-- -->
-	<Space
-		android:layout_width="match_parent"
-		android:layout_height="@dimen/medium"
-		/>
-
-	<!-- Ok button -->
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/ok_button"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:textColor="@color/white"
-		android:text="@string/action_ok"
-		app:backgroundTint="@color/orange"
-		/>
-
 	<!-- Preview button -->
 	<com.google.android.material.button.MaterialButton
 		android:id="@+id/preview_button"
@@ -220,14 +165,4 @@
 		app:backgroundTint="@color/gray_light"
 		/>
 
-	<!-- Cancel button -->
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/cancel_button"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:textColor="@color/white"
-		android:text="@string/action_cancel"
-		app:backgroundTint="@color/gray_light"
-		/>
-
-</LinearLayout>
+</com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

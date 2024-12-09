@@ -3,9 +3,9 @@
 
 	<!-- App -->
 	<string name="app_name">NFC-Wecker</string>
-	<string name="permission_ignore_battery_optimization_request">Alarme werden möglicherweise nicht ausgeführt, wenn die App eine Zeit lang nicht verwendet wurde.\n\n<b>Hinweis:</b> Dies hängt von Ihrem Gerät ab und <b>wird möglicherweise nicht wirklich benötigt</b>.\n\nMöchten Sie die Batterieoptimierung deaktivieren?</string>
-	<string name="permission_post_notifications_request">Alarme können nicht ausgeführt werden, wenn die App nicht im Fokus ist.\n\n<b>Hinweis:</b> Dies ist ein Nebeneffekt der in <b>Android 13</b> eingeführten Sicherheitsrichtlinien, die den Benutzern zugute kommen, in solchen Fällen jedoch Apps einschränken können.\n\nMöchten Sie Benachrichtigungen aktivieren?</string>
-	<string name="permission_schedule_exact_alarm_request">Alarme können nicht ausgeführt werden, wenn die App nicht im Fokus ist.\n\nMöchten Sie die Alarmplanung aktivieren?</string>
+	<string name="message_permission_ignore_battery_optimization_request">Alarme werden möglicherweise nicht ausgeführt, wenn die App eine Zeit lang nicht verwendet wurde.\n\n<b>Hinweis:</b> Dies hängt von Ihrem Gerät ab und <b>wird möglicherweise nicht wirklich benötigt</b>.\n\nMöchten Sie die Batterieoptimierung deaktivieren?</string>
+	<string name="message_permission_post_notifications_request">Alarme können nicht ausgeführt werden, wenn die App nicht im Fokus ist.\n\n<b>Hinweis:</b> Dies ist ein Nebeneffekt der in <b>Android 13</b> eingeführten Sicherheitsrichtlinien, die den Benutzern zugute kommen, in solchen Fällen jedoch Apps einschränken können.\n\nMöchten Sie Benachrichtigungen aktivieren?</string>
+	<string name="message_permission_schedule_exact_alarm_request">Alarme können nicht ausgeführt werden, wenn die App nicht im Fokus ist.\n\nMöchten Sie die Alarmplanung aktivieren?</string>
 
 
 
@@ -54,8 +54,8 @@
 	<string name="action_shuffle_music">Zufallswiedergabe</string>
 	<string name="action_recursively_play_media">Unterordner einschließen</string>
 	<string name="action_alarm_option_audio_source">Audioquelle</string>
-	<string name="action_alarm_option_gradually_increase_volume">Erhöhen Sie die Lautstärke allmählich</string>
-	<string name="action_alarm_option_restrict_volume">Lautstärke beschränken</string>
+	<string name="title_volume_gradually_increase_volume">Erhöhen Sie die Lautstärke allmählich</string>
+	<string name="title_volume_restrict_volume">Lautstärke beschränken</string>
 	<string name="action_alarm_option_text_to_speech">Text-zu-Sprache</string>
 	<string name="action_alarm_option_upcoming_reminder">Bevorstehende Erinnerung</string>
 	<string name="action_skipping_next_alarm">Nächsten Alarm überspringen</string>
@@ -291,23 +291,23 @@
 
 
 	<!-- Auto dismiss duration -->
-	<string name="auto_dismiss">Automatisch schließen</string>
+	<string name="title_dismiss_options_auto_dismiss">Automatisch schließen</string>
 
 
 	<!-- Auto snooze duration -->
-	<string name="auto_snooze">Automatische Schlummerfunktion</string>
+	<string name="title_snooze_options_auto_snooze">Automatische Schlummerfunktion</string>
 
 
 	<!-- Max number of snoozes -->
-	<string name="max_snooze">Max döst</string>
+	<string name="title_snooze_options_max_snooze">Max döst</string>
 
 
 	<!-- Snooze duration -->
-	<string name="snooze_duration">Schlummerdauer</string>
+	<string name="title_snooze_options_snooze_duration">Schlummerdauer</string>
 
 
 	<!-- Easy snooze -->
-	<string name="easy_snooze">Leichtes Einschlafen</string>
+	<string name="title_snooze_options_easy_snooze">Leichtes Einschlafen</string>
 	<string name="easy_snooze_true">Schalten Sie den Alarm durch Berühren einer beliebigen Stelle auf die Schlummerfunktion.</string>
 	<string name="easy_snooze_false">Schalten Sie den Alarm wie gewohnt schlummern.</string>
 

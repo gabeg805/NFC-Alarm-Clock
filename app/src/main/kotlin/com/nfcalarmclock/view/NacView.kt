@@ -1,10 +1,14 @@
 package com.nfcalarmclock.view
 
+import android.annotation.TargetApi
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.os.Build
+import android.text.Html
+import android.text.Spanned
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.widget.ImageView
@@ -27,7 +31,7 @@ import com.nfcalarmclock.shared.NacSharedPreferences
  */
 fun calcAlpha(state: Boolean): Float
 {
-	return if (state) 1.0f else 0.3f
+	return if (state) 1.0f else 0.4f
 }
 
 /**
@@ -44,7 +48,10 @@ fun calcContrastColor(color: Int): Int
 	val luminance = (0.299*r + 0.587*g + 0.114*b) / 255f
 
 	// Determine which contrast color to use
-	return if (luminance > 0.5)
+	// Note: Stackoverflow uses 0.5, but using 0.62 to accomadate the standard orange
+	//       theme color having a white background so that things do not change too much
+	//       for users
+	return if (luminance > 0.62)
 	{
 		Color.BLACK
 	}
@@ -52,6 +59,32 @@ fun calcContrastColor(color: Int): Int
 	{
 		Color.WHITE
 	}
+}
+
+/**
+ * Convert the given string to a spanned string.
+ */
+@Suppress("deprecation")
+@TargetApi(Build.VERSION_CODES.N)
+fun String.toSpannedString(): Spanned
+{
+	return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+	{
+		Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
+	}
+	else
+	{
+		Html.fromHtml(this)
+	}
+}
+
+/**
+ * Convert a bold string to a themed bold string.
+ */
+fun String.toThemedBold(themeColor: Int): String
+{
+	return this.replace("<b>", "<b><font color='${themeColor}'>")
+		.replace("</b>", "</font></b>")
 }
 
 /**
@@ -209,7 +242,7 @@ fun MaterialButton.setupThemeColor(sharedPreferences: NacSharedPreferences, them
 	this.setupRippleColor(sharedPreferences, themeColor=themeColor)
 
 	// Setup text color
-	val contrastColor = if (themeColor == sharedPreferences.themeColor) Color.WHITE else calcContrastColor(themeColor)
+	val contrastColor = calcContrastColor(themeColor)
 
 	this.setTextColor(contrastColor)
 }

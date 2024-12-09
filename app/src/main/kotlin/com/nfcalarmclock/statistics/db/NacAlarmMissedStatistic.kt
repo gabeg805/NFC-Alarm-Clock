@@ -1,8 +1,6 @@
 package com.nfcalarmclock.statistics.db
 
 import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.ForeignKey.Companion.SET_NULL
 import com.nfcalarmclock.alarm.db.NacAlarm
 import dagger.Module
 import dagger.Provides
@@ -12,12 +10,7 @@ import dagger.hilt.components.SingletonComponent
 /**
  * Statistics for when an alarm is missed.
  */
-@Entity(tableName = "alarm_missed_statistic",
-	foreignKeys = [ForeignKey(entity = NacAlarm::class,
-		parentColumns = ["id"],
-		childColumns = ["alarm_id"],
-		onDelete = SET_NULL)],
-	inheritSuperIndices = true)
+@Entity(tableName = "alarm_missed_statistic")
 class NacAlarmMissedStatistic
 	: NacAlarmStatistic
 {

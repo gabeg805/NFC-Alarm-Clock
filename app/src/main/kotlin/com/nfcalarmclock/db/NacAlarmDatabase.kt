@@ -2,6 +2,7 @@ package com.nfcalarmclock.db
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.database.sqlite.SQLiteConstraintException
 import android.os.Build
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.room.AutoMigration
@@ -19,6 +20,7 @@ import com.nfcalarmclock.alarm.db.NacAlarmTypeConverters
 import com.nfcalarmclock.db.NacAlarmDatabase.AddAutoDismissAndSnoozeSettingsToAllAlarmsMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.ChangeFlashlightOnOffDurationTypeToStringMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.ClearAllStatisticsMigration
+import com.nfcalarmclock.db.NacAlarmDatabase.ConvertDismissAndSnoozeOptionsFromMinutesToSecondsMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.ClearNfcTagTableMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.DropNfcTagTableMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.RemoveUseTtsColumnMigration
@@ -56,7 +58,7 @@ import javax.inject.Singleton
 /**
  * Store alarms in a Room database.
  */
-@Database(version = 28,
+@Database(version = 29,
 	entities = [
 		NacAlarm::class,
 		NacAlarmCreatedStatistic::class,
@@ -92,7 +94,9 @@ import javax.inject.Singleton
 		AutoMigration(from = 24, to = 25),
 		AutoMigration(from = 25, to = 26),
 		AutoMigration(from = 26, to = 27),
-		AutoMigration(from = 27, to = 28)]
+		AutoMigration(from = 27, to = 28),
+		AutoMigration(from = 28, to = 29, spec = ConvertDismissAndSnoozeOptionsFromMinutesToSecondsMigration::class)]
+
 )
 @TypeConverters(NacAlarmTypeConverters::class, NacStatisticTypeConverters::class)
 abstract class NacAlarmDatabase
@@ -142,17 +146,6 @@ abstract class NacAlarmDatabase
 	{
 		override fun onPostMigrate(db: SupportSQLiteDatabase)
 		{
-			val sharedPreferences =
-				try
-				{
-					// Get the shared preferences
-					NacSharedPreferences(context!!)
-				}
-				catch (e: IllegalStateException)
-				{
-					null
-				}
-
 			// Get default auto dismiss and snooze values
 			val autoDismissTime = sharedPreferences?.oldAutoDismissTime ?: 15
 			val snoozeDuration = sharedPreferences?.oldSnoozeDurationValue ?: 5
@@ -185,7 +178,6 @@ abstract class NacAlarmDatabase
 
 			// Rename the new table to the old name
 			db.execSQL("ALTER TABLE alarm_new RENAME TO alarm")
-
 		}
 	}
 
@@ -196,9 +188,10 @@ abstract class NacAlarmDatabase
 	{
 		override fun onPostMigrate(db: SupportSQLiteDatabase)
 		{
-			val sharedPreferences = NacSharedPreferences(context!!)
+			// Set that stats should be started
+			sharedPreferences?.appStartStatistics = true
 
-			sharedPreferences.appStartStatistics = true
+			// Clear all stats
 			db.execSQL("DROP TABLE alarm_created_statistic")
 			db.execSQL("DROP TABLE alarm_deleted_statistic")
 			db.execSQL("DROP TABLE alarm_dismissed_statistic")
@@ -237,6 +230,32 @@ abstract class NacAlarmDatabase
 	}
 
 	/**
+	 * Convert dismiss and snooze options from using units of minutes, to seconds.
+	 *
+	 * The following columns were affected:
+	 *
+	 *     - Auto dismiss
+	 *     - Auto snooze
+	 *     - Snooze duration
+	 */
+	internal class ConvertDismissAndSnoozeOptionsFromMinutesToSecondsMigration : AutoMigrationSpec
+	{
+		override fun onPostMigrate(db: SupportSQLiteDatabase)
+		{
+			println("ON POST MIGRATE")
+			// Convert shared preference values from minutes to seconds
+			sharedPreferences?.let { it.autoDismissTime *= 60 }
+			sharedPreferences?.let { it.autoSnoozeTime *= 60 }
+			sharedPreferences?.let { it.snoozeDuration *= 60 }
+
+			// Convert database values from minutes to seconds
+			db.execSQL("UPDATE alarm SET auto_dismiss_time=auto_dismiss_time*60")
+			db.execSQL("UPDATE alarm SET auto_snooze_time=auto_snooze_time*60")
+			db.execSQL("UPDATE alarm SET snooze_duration=snooze_duration*60")
+		}
+	}
+
+	/**
 	 * Remove the "Use TTS" column when auto-migrating.
 	 */
 	@DeleteColumn(tableName = "alarm", columnName = "should_use_tts")
@@ -251,7 +270,7 @@ abstract class NacAlarmDatabase
 		/**
 		 * Name of the database.
 		 */
-		const val DB_NAME = "NfcAlarmClock.db"
+		private const val DB_NAME = "NfcAlarmClock.db"
 
 		/**
 		 * Singleton instance of the database.
@@ -271,6 +290,11 @@ abstract class NacAlarmDatabase
 		private var context: Context? = null
 
 		/**
+		 * Shared preferences that is only used during auto migration
+		 */
+		private var sharedPreferences: NacSharedPreferences? = null
+
+		/**
 		 * Callback for populating the database, for testing purposes.
 		 */
 		private val sDatabaseCallback: Callback = object : Callback()
@@ -281,6 +305,7 @@ abstract class NacAlarmDatabase
 			 */
 			override fun onCreate(db: SupportSQLiteDatabase)
 			{
+				// Super
 				super.onCreate(db)
 
 				// Check if the old database exists
@@ -296,9 +321,6 @@ abstract class NacAlarmDatabase
 					// Cancel the coroutine scope
 					coroutineScope.cancel()
 				}
-
-				// Done with context object. Set it to null
-				context = null
 			}
 
 			/**
@@ -306,10 +328,13 @@ abstract class NacAlarmDatabase
 			 */
 			override fun onOpen(db: SupportSQLiteDatabase)
 			{
+				// Super
 				super.onOpen(db)
+				println("ON OPEN")
 
-				// An extra check to make sure that the context object is set to null
+				// Done with context and shared preferences object. Set it to null
 				context = null
+				sharedPreferences = null
 			}
 
 		}
@@ -465,8 +490,14 @@ abstract class NacAlarmDatabase
 				// one that will be inserted
 				if (allStats.all { !it.equalsExceptId(stat) })
 				{
-					stat.id = 0
-					dao.insert(stat)
+					try
+					{
+						stat.id = 0
+						dao.insert(stat)
+					}
+					catch (_: SQLiteConstraintException)
+					{
+					}
 				}
 
 			}
@@ -543,8 +574,14 @@ abstract class NacAlarmDatabase
 				// one that will be inserted
 				if (allStats.all { !it.equalsExceptId(stat) })
 				{
-					stat.id = 0
-					dao.insert(stat)
+					try
+					{
+						stat.id = 0
+						dao.insert(stat)
+					}
+					catch (_: SQLiteConstraintException)
+					{
+					}
 				}
 
 			}
@@ -595,8 +632,14 @@ abstract class NacAlarmDatabase
 				// one that will be inserted
 				if (allStats.all { !it.equalsExceptId(stat) })
 				{
-					stat.id = 0
-					dao.insert(stat)
+					try
+					{
+						stat.id = 0
+						dao.insert(stat)
+					}
+					catch (_: SQLiteConstraintException)
+					{
+					}
 				}
 
 			}
@@ -686,9 +729,22 @@ abstract class NacAlarmDatabase
 						.addCallback(sDatabaseCallback)
 						.build()
 
-					Companion.context = deviceContext
+					// Set the static variables
 					INSTANCE = instance
+					Companion.context = deviceContext
+					sharedPreferences =
+						try
+						{
+							// Get the shared preferences
+							NacSharedPreferences(deviceContext)
+						}
+						catch (e: IllegalStateException)
+						{
+							// Bad state
+							null
+						}
 
+					// Return the instance
 					instance
 				}
 		}

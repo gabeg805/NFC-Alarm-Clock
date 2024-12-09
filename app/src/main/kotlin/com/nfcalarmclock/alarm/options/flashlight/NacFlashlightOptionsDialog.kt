@@ -1,35 +1,37 @@
 package com.nfcalarmclock.alarm.options.flashlight
 
 import android.os.Build
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.RelativeLayout
-import android.widget.SeekBar
-import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.Space
 import android.widget.TextView
-import androidx.navigation.fragment.findNavController
+import androidx.appcompat.widget.SwitchCompat
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.checkbox.MaterialCheckBox
+import com.google.android.material.slider.Slider
+import com.google.android.material.slider.Slider.OnSliderTouchListener
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.util.NacBundle
-import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
+import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
+import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.setTextFromIndex
-import com.nfcalarmclock.view.setupCheckBoxColor
 import com.nfcalarmclock.view.setupInputLayoutColor
+import com.nfcalarmclock.view.setupProgressAndThumbColor
+import com.nfcalarmclock.view.setupSwitchColor
 
 /**
  * Dialog to prompt user what flashlight options they want.
  */
 class NacFlashlightOptionsDialog
-	: NacBottomSheetDialogFragment()
+	: NacGenericAlarmOptionsDialog()
 {
+
+	/**
+	 * Layout resource ID.
+	 */
+	override val layoutId = R.layout.dlg_flashlight
 
 	/**
 	 * Flashlight.
@@ -39,17 +41,12 @@ class NacFlashlightOptionsDialog
 	/**
 	 * Seekbar for the flashlight strength level.
 	 */
-	private lateinit var strengthSeekBar: SeekBar
+	private lateinit var brightnessSlider: Slider
 
 	/**
-	 * Checkbox indicating whether flashlight should blink or not.
+	 * Blink flashlight switch.
 	 */
-	private lateinit var blinkCheckBox: MaterialCheckBox
-
-	/**
-	 * Question asking how long the flashlight should stay on/off when blinking.
-	 */
-	private lateinit var onOffDurationQuestion: TextView
+	private lateinit var blinkSwitch: SwitchCompat
 
 	/**
 	 * Relative layout containing all the on/off duration views.
@@ -77,42 +74,51 @@ class NacFlashlightOptionsDialog
 	private var selectedBlinkOffDuration: String = ""
 
 	/**
-	 * The alpha that views should have based on the should use text-to-speech
-	 * flag.
+	 * Called when the cancel button is clicked.
 	 */
-	private val alpha: Float
-		get() = if (blinkCheckBox.isChecked) 1.0f else 0.2f
-
-	/**
-	 * Called when the creating the view.
-	 */
-	override fun onCreateView(
-		inflater: LayoutInflater,
-		container: ViewGroup?,
-		savedInstanceState: Bundle?)
-		: View?
+	override fun onCancelClicked(alarm: NacAlarm?)
 	{
-		return inflater.inflate(R.layout.dlg_flashlight, container, false)
+		// Cleanup the flashlight
+		flashlight.cleanup()
 	}
 
 	/**
-	 * Called when the view has been created.
+	 * Update the alarm with selected options.
 	 */
-	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+	override fun onOkClicked(alarm: NacAlarm?)
 	{
-		// Super
-		super.onViewCreated(view, savedInstanceState)
+		// Cleanup the preview if it is running
+		flashlight.cleanup()
 
-		// Get the bundle
-		val alarm = NacBundle.getAlarm(arguments)
+		// Update the alarm
+		alarm?.flashlightStrengthLevel = brightnessSlider.value.toInt()
+		alarm?.shouldBlinkFlashlight = blinkSwitch.isChecked
+		alarm?.flashlightOnDuration = selectedBlinkOnDuration
+		alarm?.flashlightOffDuration = selectedBlinkOffDuration
+	}
 
+	/**
+	 * Setup whether the blink flashlight on/off container can be used or not.
+	 */
+	private fun setBlinkFlashlightUsability()
+	{
+		// Get the state and alpha
+		val state = blinkSwitch.isChecked
+		val alpha = calcAlpha(state)
+
+		// Set the usability
+		onOffDurationRelativeLayout.alpha = alpha
+		onDurationInputLayout.isEnabled = state
+		offDurationInputLayout.isEnabled = state
+	}
+
+	/**
+	 * Setup all alarm options.
+	 */
+	override fun setupAlarmOptions(alarm: NacAlarm?)
+	{
 		// Get the flashlight
 		flashlight = NacFlashlight(requireContext())
-
-		// Get the done, preview, and cancel buttons
-		val doneButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
-		val previewButton: MaterialButton = dialog!!.findViewById(R.id.preview_button)
-		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
 
 		// Get the default values
 		val defaultStrength = alarm?.flashlightStrengthLevel ?: 0
@@ -123,32 +129,173 @@ class NacFlashlightOptionsDialog
 		selectedBlinkOffDuration = if (defaultOffDuration == "0") "1.0" else defaultOffDuration
 
 		// Setup the views
-		setupStrengthLevel(defaultStrength)
-		setupBlinkCheckBox(defaultShouldBlink)
-		setupBlinkOnOffDuration(defaultOnDuration, defaultOffDuration)
-		setupBlinkOnOffDurationUsable()
+		setupBrightnessLevel(defaultStrength)
+		setupBlinkFlashlight(defaultShouldBlink, defaultOnDuration, defaultOffDuration)
+		setBlinkFlashlightUsability()
+	}
 
-		// Setup the ok button
-		setupPrimaryButton(doneButton, listener = {
+	/**
+	 * Setup the blink flashlight views.
+	 */
+	private fun setupBlinkFlashlight(defaultState: Boolean, defaultOn: String, defaultOff: String)
+	{
+		// Get the views
+		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.flashlight_blink_container)
+		val onDurationAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.flashlight_on_duration_dropdown_menu)
+		val offDurationAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.flashlight_off_duration_dropdown_menu)
+		blinkSwitch = dialog!!.findViewById(R.id.flashlight_blink_switch)
+		onOffDurationRelativeLayout = dialog!!.findViewById(R.id.flashlight_on_off_duration)
+		onDurationInputLayout = dialog!!.findViewById(R.id.flashlight_on_duration_input_layout)
+		offDurationInputLayout = dialog!!.findViewById(R.id.flashlight_off_duration_input_layout)
 
-			// Cleanup the preview if it is running
-			flashlight.cleanup()
+		// Setup the switch
+		blinkSwitch.isChecked = defaultState
+		blinkSwitch.setupSwitchColor(sharedPreferences)
 
-			// Set the alarm attributes
-			alarm?.flashlightStrengthLevel = strengthSeekBar.progress
-			alarm?.shouldBlinkFlashlight = blinkCheckBox.isChecked
-			alarm?.flashlightOnDuration = selectedBlinkOnDuration
-			alarm?.flashlightOffDuration = selectedBlinkOffDuration
+		// Setup the input layout
+		onDurationInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+		offDurationInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 
-			// Save the change so that it is accessible in the previous dialog
-			findNavController().previousBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
+		// Set the default selected items in the text views
+		val onIndex = NacAlarm.calcFlashlightOnOffDurationIndex(defaultOn)
+		val offIndex = NacAlarm.calcFlashlightOnOffDurationIndex(defaultOff)
+		onDurationAutoCompleteTextView.setTextFromIndex(onIndex)
+		offDurationAutoCompleteTextView.setTextFromIndex(offIndex)
 
-			// Dismiss the dialog
-			dismiss()
+		// Set the listener
+		relativeLayout.setOnClickListener {
+
+			// Toggle the switch
+			blinkSwitch.toggle()
+
+			// Set the usability of the blink on/off duration views
+			setBlinkFlashlightUsability()
+
+			// Check if the flashlight is running
+			if (flashlight.isRunning)
+			{
+				// Restart the flashlight
+				startFlashlight()
+			}
+
+		}
+
+		// Set the on duration textview listeners
+		onDurationAutoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+
+			// Set the duration
+			selectedBlinkOnDuration = NacAlarm.calcFlashlightOnOffDuration(position)
+
+			// Check if the flashlight is running
+			if (flashlight.isRunning)
+			{
+				// Restart the flashlight
+				startFlashlight()
+			}
+
+		}
+
+		// Set the off duration textview listeners
+		offDurationAutoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+
+			// Set the duration
+			selectedBlinkOffDuration = NacAlarm.calcFlashlightOnOffDuration(position)
+
+			// Check if the flashlight is running
+			if (flashlight.isRunning)
+			{
+				// Restart the flashlight
+				startFlashlight()
+			}
+
+		}
+	}
+
+	/**
+	 * Setup the strength level.
+	 */
+	private fun setupBrightnessLevel(default: Int)
+	{
+		// Get the views
+		val title: TextView = dialog!!.findViewById(R.id.flashlight_brightness_title)
+		val description: TextView = dialog!!.findViewById(R.id.flashlight_brightness_description)
+		val space: Space = dialog!!.findViewById(R.id.flashlight_brightness_space)
+		brightnessSlider = dialog!!.findViewById(R.id.flashlight_brightness_slider)
+
+		// Check if this version does not support changing the flashlight level
+		if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) || (flashlight.maxLevel == 1))
+		{
+			// Get the gone visibility
+			val vis = View.GONE
+
+			// Set the visibility to everything
+			title.visibility = vis
+			description.visibility = vis
+			space.visibility = vis
+			brightnessSlider.visibility = vis
+			return
+		}
+
+		// Setup the color
+		brightnessSlider.setupProgressAndThumbColor(sharedPreferences)
+
+		// Set the min and max value
+		brightnessSlider.valueFrom = flashlight.minLevel.toFloat()
+		brightnessSlider.valueTo = flashlight.maxLevel.toFloat()
+
+		// Set the brightness level
+		brightnessSlider.value = if (default == 0)
+		{
+			flashlight.maxLevel.toFloat()
+		}
+		else
+		{
+			default.toFloat()
+		}
+
+		// Set the change listener
+		brightnessSlider.addOnChangeListener { _, value, _ ->
+
+			// Change the flashlight strength
+			flashlight.strengthLevel = value.toInt()
+
+		}
+
+		// Set the touch listener
+		brightnessSlider.addOnSliderTouchListener(object: OnSliderTouchListener {
+
+			/**
+			 * Seek bar was touched.
+			 */
+			override fun onStartTrackingTouch(slider: Slider)
+			{
+			}
+
+			/**
+			 * Seek bar stopped being touched.
+			 */
+			override fun onStopTrackingTouch(slider: Slider)
+			{
+				// Check if the flashlight is running
+				if (flashlight.isRunning)
+				{
+					// Restart the flashlight
+					startFlashlight()
+				}
+			}
 
 		})
+	}
 
-		// Setup the preview button
+	/**
+	 * Setup any extra buttons.
+	 */
+	override fun setupExtraButtons(alarm: NacAlarm?)
+	{
+		// Get the button
+		val previewButton: MaterialButton = dialog!!.findViewById(R.id.preview_button)
+
+		// Setup the button
 		setupSecondaryButton(previewButton, listener = {
 
 			// Check if preview is running
@@ -171,212 +318,6 @@ class NacFlashlightOptionsDialog
 			}
 
 		})
-
-		// Setup the cancel button
-		setupSecondaryButton(cancelButton, listener = {
-
-			// Cleanup the flashlight
-			flashlight.cleanup()
-
-			// Dismiss the dialog
-			dismiss()
-
-		})
-	}
-
-	/**
-	 * Setup the flashlight blink checkbox.
-	 */
-	private fun setupBlinkCheckBox(default: Boolean)
-	{
-		// Get the views
-		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.should_flashlight_blink)
-		val description: TextView = dialog!!.findViewById(R.id.description_should_flashlight_blink)
-		blinkCheckBox = dialog!!.findViewById(R.id.should_flashlight_blink_checkbox)!!
-
-		// Set the status of the checkbox
-		blinkCheckBox.isChecked = default
-
-		// Setup the checkbox
-		blinkCheckBox.setupCheckBoxColor(sharedPreferences)
-
-		// Setup the description
-		setupBlinkDescription(description)
-
-		// Set the listener
-		relativeLayout.setOnClickListener {
-
-			// Toggle the checkbox
-			blinkCheckBox.isChecked = !blinkCheckBox.isChecked
-
-			// Set the description
-			setupBlinkDescription(description)
-
-			// Set the usability of the blink on/off duration views
-			setupBlinkOnOffDurationUsable()
-
-			// Check if the flashlight is running
-			if (flashlight.isRunning)
-			{
-				// Restart the flashlight
-				startFlashlight()
-			}
-		}
-	}
-
-	/**
-	 * Setup the description for whether flashlight should blink or not.
-	 */
-	private fun setupBlinkDescription(textView: TextView)
-	{
-		// Determine the text ID to use based on whether restrict volume will
-		// be used or not
-		val textId = if (blinkCheckBox.isChecked)
-		{
-			R.string.flashlight_blink_true
-		}
-		else
-		{
-			R.string.flashlight_blink_false
-		}
-
-		// Set the text
-		textView.setText(textId)
-	}
-
-	/**
-	 * Setup the flashlight blink on/off duration.
-	 */
-	private fun setupBlinkOnOffDuration(defaultOn: String, defaultOff: String)
-	{
-		// Get the views
-		onOffDurationQuestion = dialog!!.findViewById(R.id.question_flashlight_on_off_duration)
-		onOffDurationRelativeLayout = dialog!!.findViewById(R.id.flashlight_on_off_duration)
-		onDurationInputLayout = dialog!!.findViewById(R.id.flashlight_on_duration_input_layout)
-		offDurationInputLayout = dialog!!.findViewById(R.id.flashlight_off_duration_input_layout)
-		val onDurationAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.flashlight_on_duration_dropdown_menu)
-		val offDurationAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.flashlight_off_duration_dropdown_menu)
-
-		// Setup the input layout
-		onDurationInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
-		offDurationInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
-
-		// Set the default selected items in the text views
-		val onIndex = NacAlarm.calcFlashlightOnOffDurationIndex(defaultOn)
-		val offIndex = NacAlarm.calcFlashlightOnOffDurationIndex(defaultOff)
-		onDurationAutoCompleteTextView.setTextFromIndex(onIndex)
-		offDurationAutoCompleteTextView.setTextFromIndex(offIndex)
-
-		// Set the textview listeners
-		onDurationAutoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-
-			// Set the duration
-			selectedBlinkOnDuration = NacAlarm.calcFlashlightOnOffDuration(position)
-
-			// Check if the flashlight is running
-			if (flashlight.isRunning)
-			{
-				// Restart the flashlight
-				startFlashlight()
-			}
-
-		}
-
-		offDurationAutoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-
-			// Set the duration
-			selectedBlinkOffDuration = NacAlarm.calcFlashlightOnOffDuration(position)
-
-			// Check if the flashlight is running
-			if (flashlight.isRunning)
-			{
-				// Restart the flashlight
-				startFlashlight()
-			}
-
-		}
-	}
-
-	/**
-	 * Setup whether the blink flashlight on/off container can be used or not.
-	 */
-	private fun setupBlinkOnOffDurationUsable()
-	{
-		// Set the alpha for the views
-		onOffDurationQuestion.alpha = alpha
-		onOffDurationRelativeLayout.alpha = alpha
-
-		// Set whether it can be used or not
-		onOffDurationRelativeLayout.isEnabled = blinkCheckBox.isChecked
-		onDurationInputLayout.isEnabled = blinkCheckBox.isChecked
-		offDurationInputLayout.isEnabled = blinkCheckBox.isChecked
-	}
-
-	/**
-	 * Setup the strength level.
-	 */
-	private fun setupStrengthLevel(default: Int)
-	{
-		// Get the views
-		val question: TextView = dialog!!.findViewById(R.id.question_flashlight_strength)
-		val space: Space = dialog!!.findViewById(R.id.space_flashlight_strength)
-		strengthSeekBar = dialog!!.findViewById(R.id.seekbar_flashlight_strength)
-
-		// Check if this version does not support changing the flashlight level
-		if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) || (flashlight.maxLevel == 1))
-		{
-			question.visibility = View.GONE
-			space.visibility = View.GONE
-			strengthSeekBar.visibility = View.GONE
-
-			return
-		}
-
-		// Set the min and max seekbar value
-		strengthSeekBar.min = flashlight.minLevel
-		strengthSeekBar.max = flashlight.maxLevel
-
-		// Set the strength level
-		strengthSeekBar.progress = if (default == 0)
-		{
-			flashlight.maxLevel
-		}
-		else
-		{
-			default
-		}
-
-		// Set the listener
-		strengthSeekBar.setOnSeekBarChangeListener(object: OnSeekBarChangeListener {
-
-			/**
-			 * Seek bar was changed.
-			 */
-			override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean)
-			{
-				// Change the flashlight strength
-				flashlight.strengthLevel = progress
-			}
-
-			/**
-			 * Seek bar was touched.
-			 */
-			override fun onStartTrackingTouch(seekBar: SeekBar) {}
-
-			/**
-			 * Seek bar stopped being touched.
-			 */
-			override fun onStopTrackingTouch(seekBar: SeekBar)
-			{
-				// Check if the flashlight is running
-				if (flashlight.isRunning)
-				{
-					// Restart the flashlight
-					startFlashlight()
-				}
-			}
-
-		})
 	}
 
 	/**
@@ -388,7 +329,7 @@ class NacFlashlightOptionsDialog
 		flashlight.cleanup()
 
 		// Check if blink handlers need to be setup
-		if (blinkCheckBox.isChecked)
+		if (blinkSwitch.isChecked)
 		{
 			// Blink the flashlight
 			flashlight.blink(selectedBlinkOnDuration, selectedBlinkOffDuration)

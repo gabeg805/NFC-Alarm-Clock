@@ -19,12 +19,6 @@
 			android:id="@+id/action_nacAlarmOptionsDialog_to_nacAudioSourceDialog"
 			app:destination="@id/nacAudioSourceDialog" />
 		<action
-			android:id="@+id/action_nacAlarmOptionsDialog_to_nacRestrictVolumeDialog"
-			app:destination="@id/nacRestrictVolumeDialog" />
-		<action
-			android:id="@+id/action_nacAlarmOptionsDialog_to_nacGraduallyIncreaseVolumeDialog2"
-			app:destination="@id/nacGraduallyIncreaseVolumeDialog" />
-		<action
 			android:id="@+id/action_nacAlarmOptionsDialog_to_nacTextToSpeechDialog"
 			app:destination="@id/nacTextToSpeechDialog" />
 		<action
@@ -33,6 +27,9 @@
 		<action
 			android:id="@+id/action_nacAlarmOptionsDialog_to_nacFlashlightOptionsDialog"
 			app:destination="@id/nacFlashlightOptionsDialog" />
+		<action
+			android:id="@+id/action_nacAlarmOptionsDialog_to_nacVolumeOptionsDialog"
+			app:destination="@id/nacVolumeOptionsDialog" />
 	</dialog>
 	<dialog
 		android:id="@+id/nacDismissOptionsDialog"
@@ -47,14 +44,6 @@
 		android:name="com.nfcalarmclock.alarm.options.audiosource.NacAudioSourceDialog"
 		android:label="NacAudioSourceDialog" />
 	<dialog
-		android:id="@+id/nacGraduallyIncreaseVolumeDialog"
-		android:name="com.nfcalarmclock.alarm.options.graduallyincreasevolume.NacGraduallyIncreaseVolumeDialog"
-		android:label="NacGraduallyIncreaseVolumeDialog" />
-	<dialog
-		android:id="@+id/nacRestrictVolumeDialog"
-		android:name="com.nfcalarmclock.alarm.options.restrictvolume.NacRestrictVolumeDialog"
-		android:label="NacRestrictVolumeDialog" />
-	<dialog
 		android:id="@+id/nacTextToSpeechDialog"
 		android:name="com.nfcalarmclock.alarm.options.tts.NacTextToSpeechDialog"
 		android:label="NacTextToSpeechDialog" />
@@ -66,4 +55,8 @@
 		android:id="@+id/nacFlashlightOptionsDialog"
 		android:name="com.nfcalarmclock.alarm.options.flashlight.NacFlashlightOptionsDialog"
 		android:label="NacFlashlightOptionsDialog" />
+	<dialog
+		android:id="@+id/nacVolumeOptionsDialog"
+		android:name="com.nfcalarmclock.alarm.options.volume.NacVolumeOptionsDialog"
+		android:label="NacVolumeOptionsDialog" />
 </navigation>

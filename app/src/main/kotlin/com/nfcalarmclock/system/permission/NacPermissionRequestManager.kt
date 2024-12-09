@@ -5,15 +5,12 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.permission.NacPermissionRequestDialog.OnPermissionRequestListener
-import com.nfcalarmclock.system.permission.ignorebatteryoptimization.NacIgnoreBatteryOptimizationPermission
-import com.nfcalarmclock.system.permission.ignorebatteryoptimization.NacIgnoreBatteryOptimizationPermissionRequestDialog
 import com.nfcalarmclock.system.permission.postnotifications.NacPostNotificationsPermission
-import com.nfcalarmclock.system.permission.postnotifications.NacPostNotificationsPermission.requestPermission
 import com.nfcalarmclock.system.permission.postnotifications.NacPostNotificationsPermissionRequestDialog
 import com.nfcalarmclock.system.permission.scheduleexactalarm.NacScheduleExactAlarmPermission
 import com.nfcalarmclock.system.permission.scheduleexactalarm.NacScheduleExactAlarmPermissionRequestDialog
-import com.nfcalarmclock.shared.NacSharedPreferences
 import java.util.EnumSet
 
 /**
@@ -27,7 +24,7 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 	 */
 	enum class Permission
 	{
-		IGNORE_BATTERY_OPTIMIZATION,
+		//IGNORE_BATTERY_OPTIMIZATION,
 		POST_NOTIFICATIONS,
 		SCHEDULE_EXACT_ALARM
 	}
@@ -89,11 +86,11 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 			set.add(Permission.SCHEDULE_EXACT_ALARM)
 		}
 
-		// Ignore battery optimization
-		if (NacIgnoreBatteryOptimizationPermission.shouldRequestPermission(context, shared))
-		{
-			set.add(Permission.IGNORE_BATTERY_OPTIMIZATION)
-		}
+		//// Ignore battery optimization
+		//if (NacIgnoreBatteryOptimizationPermission.shouldRequestPermission(context, shared))
+		//{
+		//	set.add(Permission.IGNORE_BATTERY_OPTIMIZATION)
+		//}
 
 		// Set the permissions that need to be requested
 		permissionRequestSet = set
@@ -184,11 +181,11 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 		{
 			showScheduleExactAlarmPermissionDialog(activity, onDone=onDone)
 		}
-		// Ignore battery optimization
-		else if (permissionRequestSet.contains(Permission.IGNORE_BATTERY_OPTIMIZATION))
-		{
-			showIgnoreBatteryOptimizationPermissionDialog(activity, onDone=onDone)
-		}
+		//// Ignore battery optimization
+		//else if (permissionRequestSet.contains(Permission.IGNORE_BATTERY_OPTIMIZATION))
+		//{
+		//	showIgnoreBatteryOptimizationPermissionDialog(activity, onDone=onDone)
+		//}
 		// Reset and done
 		else
 		{
@@ -197,44 +194,44 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 		}
 	}
 
-	/**
-	 * Show the dialog to ignore battery optimizations.
-	 */
-	private fun showIgnoreBatteryOptimizationPermissionDialog(
-		activity: AppCompatActivity, onDone: () -> Unit = {})
-	{
-		// Create the dialog
-		val dialog = NacIgnoreBatteryOptimizationPermissionRequestDialog()
+	///**
+	// * Show the dialog to ignore battery optimizations.
+	// */
+	//private fun showIgnoreBatteryOptimizationPermissionDialog(
+	//	activity: AppCompatActivity, onDone: () -> Unit = {})
+	//{
+	//	// Create the dialog
+	//	val dialog = NacIgnoreBatteryOptimizationPermissionRequestDialog()
 
-		// Setup the current position and total number of pages in the dialog
-		setupDialogPageInfo(dialog)
+	//	// Setup the current position and total number of pages in the dialog
+	//	setupDialogPageInfo(dialog)
 
-		// Handle the cases where the permission request is accepted/canceled
-		dialog.onPermissionRequestListener = object : OnPermissionRequestListener
-		{
-			/**
-			 * Called when the permission request is accepted.
-			 */
-			override fun onPermissionRequestAccepted(permission: String)
-			{
-				permissionRequestSet.remove(Permission.IGNORE_BATTERY_OPTIMIZATION)
-				NacIgnoreBatteryOptimizationPermission.requestPermission(activity)
-			}
+	//	// Handle the cases where the permission request is accepted/canceled
+	//	dialog.onPermissionRequestListener = object : OnPermissionRequestListener
+	//	{
+	//		/**
+	//		 * Called when the permission request is accepted.
+	//		 */
+	//		override fun onPermissionRequestAccepted(permission: String)
+	//		{
+	//			permissionRequestSet.remove(Permission.IGNORE_BATTERY_OPTIMIZATION)
+	//			NacIgnoreBatteryOptimizationPermission.requestPermission(activity)
+	//		}
 
-			/**
-			 * Called when the permission request was canceled.
-			 */
-			override fun onPermissionRequestCanceled(permission: String)
-			{
-				permissionRequestSet.remove(Permission.IGNORE_BATTERY_OPTIMIZATION)
-				showNextPermissionRequestDialog(activity, onDone=onDone)
-			}
-		}
+	//		/**
+	//		 * Called when the permission request was canceled.
+	//		 */
+	//		override fun onPermissionRequestCanceled(permission: String)
+	//		{
+	//			permissionRequestSet.remove(Permission.IGNORE_BATTERY_OPTIMIZATION)
+	//			showNextPermissionRequestDialog(activity, onDone=onDone)
+	//		}
+	//	}
 
-		// Show the dialog
-		dialog.show(activity.supportFragmentManager,
-			NacIgnoreBatteryOptimizationPermissionRequestDialog.TAG)
-	}
+	//	// Show the dialog
+	//	dialog.show(activity.supportFragmentManager,
+	//		NacIgnoreBatteryOptimizationPermissionRequestDialog.TAG)
+	//}
 
 	/**
 	 * Show the POST_NOTIFICATIONS permission dialog.
@@ -263,7 +260,7 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 			override fun onPermissionRequestAccepted(permission: String)
 			{
 				permissionRequestSet.remove(Permission.POST_NOTIFICATIONS)
-				requestPermission(activity, 69)
+				NacPostNotificationsPermission.requestPermission(activity, 69)
 			}
 
 			/**

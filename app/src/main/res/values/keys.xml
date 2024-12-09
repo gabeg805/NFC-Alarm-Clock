@@ -29,8 +29,10 @@
 
 	<!-- General -->
 	<string name="general_setting_key">pref_screen_general</string>
+	<string name="should_auto_dismiss_key">pref_should_auto_dismiss</string>
 	<string name="auto_dismiss_key">pref_auto_dismiss_new</string>
 	<string name="old_auto_dismiss_key">pref_auto_dismiss</string>
+	<string name="should_auto_snooze_key">pref_should_auto_snooze</string>
 	<string name="auto_snooze_key">pref_auto_snooze</string>
 	<string name="max_snooze_key">pref_max_snooze_new</string>
 	<string name="old_max_snooze_key">pref_max_snooze</string>

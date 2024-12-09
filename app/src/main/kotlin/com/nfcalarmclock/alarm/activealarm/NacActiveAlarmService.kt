@@ -570,7 +570,7 @@ class NacActiveAlarmService
 			alarmRepository.update(alarm!!)
 
 			// Save this snooze duration to the statistics table
-			statisticRepository.insertSnoozed(alarm!!, 60L * alarm!!.snoozeDuration)
+			statisticRepository.insertSnoozed(alarm!!, alarm!!.snoozeDuration.toLong())
 
 			// Reschedule the alarm
 			NacScheduler.update(this@NacActiveAlarmService, alarm!!, cal)
@@ -612,7 +612,7 @@ class NacActiveAlarmService
 
 		// Get the power manager and timeout for the wakelock
 		val powerManager = getSystemService(POWER_SERVICE) as PowerManager
-		val timeout = alarm!!.autoDismissTime * 60L * 1000L
+		val timeout = alarm!!.autoDismissTime * 1000L
 
 		// Acquire the wakelock
 		wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
@@ -703,13 +703,13 @@ class NacActiveAlarmService
 	@UnstableApi
 	fun waitForAutoDismiss()
 	{
-		// Amount of time until the alarm is automatically dismissed
-		val autoDismiss = alarm!!.autoDismissTime
-		val delay = TimeUnit.MINUTES.toMillis(autoDismiss.toLong()) - alarm!!.timeActive - 2000
-
-		// There is an auto dismiss time set
-		if (autoDismiss != 0)
+		// Check if should auto dismiss
+		if (alarm!!.shouldAutoDismiss)
 		{
+			// Amount of time until the alarm is automatically dismissed
+			val autoDismiss = alarm!!.autoDismissTime
+			val delay = TimeUnit.SECONDS.toMillis(autoDismiss.toLong()) - alarm!!.timeActive - 750
+
 			// Automatically dismiss the alarm
 			autoDismissHandler!!.postDelayed({
 
@@ -744,16 +744,18 @@ class NacActiveAlarmService
 	@UnstableApi
 	fun waitForAutoSnooze()
 	{
+		// Check if should not auto snooze or cannot snooze
+		if (!alarm!!.shouldAutoSnooze || !canSnooze)
+		{
+			return
+		}
+
 		// Amount of time until the alarm is automatically snoozed
 		val autoSnooze = alarm!!.autoSnoozeTime
-		val delay = TimeUnit.MINUTES.toMillis(autoSnooze.toLong()) - 1000
+		val delay = TimeUnit.SECONDS.toMillis(autoSnooze.toLong()) - 750
 
-		// There is an auto snooze time set and the alarm is able to be snoozed
-		if ((autoSnooze != 0) && canSnooze)
-		{
-			// Automatically snooze the alarm
-			autoSnoozeHandler!!.postDelayed({ snooze() }, delay)
-		}
+		// Automatically snooze the alarm
+		autoSnoozeHandler!!.postDelayed({ snooze() }, delay)
 	}
 
 	companion object

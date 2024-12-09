@@ -14,6 +14,26 @@ class NacPostNotificationsPermissionRequestDialog
 {
 
 	/**
+	 * The name of the permission.
+	 */
+	override val permission: String = NacPostNotificationsPermission.permissionName
+
+	/**
+	 * The ID of the layout.
+	 */
+	override val layoutId: Int = R.layout.dlg_request_post_notifications_permission
+
+	/**
+	 * The ID of the title string.
+	 */
+	override val titleId: Int = R.string.title_request_permission_post_notifications
+
+	/**
+	 * The ID of the text string.
+	 */
+	override val textId: Int = R.string.message_permission_post_notifications_request
+
+	/**
 	 * The actions to execute when the permission request is accepted.
 	 */
 	override fun doPermissionRequestAccepted()
@@ -36,24 +56,6 @@ class NacPostNotificationsPermissionRequestDialog
 		// Call the canceled listeners
 		super.doPermissionRequestCanceled()
 	}
-
-	/**
-	 * The name of the permission.
-	 */
-	override val permission: String
-		get() = NacPostNotificationsPermission.permissionName
-
-	/**
-	 * The ID of the layout.
-	 */
-	override val layoutId: Int
-		get() = R.layout.dlg_request_post_notifications_permission
-
-	/**
-	 * The ID of the title string.
-	 */
-	override val titleId: Int
-		get() = R.string.title_request_permission_post_notifications
 
 	companion object
 	{

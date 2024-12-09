@@ -14,6 +14,29 @@ class NacScheduleExactAlarmPermissionRequestDialog
 {
 
 	/**
+	 * The name of the permission.
+	 */
+	override val permission: String
+		get() = NacScheduleExactAlarmPermission.permissionName
+
+	/**
+	 * The ID of the layout.
+	 */
+	override val layoutId: Int
+		get() = R.layout.dlg_request_schedule_exact_alarm_permission
+
+	/**
+	 * The ID of the title string.
+	 */
+	override val titleId: Int
+		get() = R.string.title_request_permission_schedule_exact_alarm
+
+	/**
+	 * The ID of the text string.
+	 */
+	override val textId: Int = R.string.message_permission_schedule_exact_alarm_request
+
+	/**
 	 * The actions to execute when the permission request is accepted.
 	 */
 	override fun doPermissionRequestAccepted()
@@ -36,24 +59,6 @@ class NacScheduleExactAlarmPermissionRequestDialog
 		// Call the accepeted listeners
 		super.doPermissionRequestCanceled()
 	}
-
-	/**
-	 * The name of the permission.
-	 */
-	override val permission: String
-		get() = NacScheduleExactAlarmPermission.permissionName
-
-	/**
-	 * The ID of the layout.
-	 */
-	override val layoutId: Int
-		get() = R.layout.dlg_request_schedule_exact_alarm_permission
-
-	/**
-	 * The ID of the title string.
-	 */
-	override val titleId: Int
-		get() = R.string.title_request_permission_schedule_exact_alarm
 
 	companion object
 	{

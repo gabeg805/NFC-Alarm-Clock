@@ -183,17 +183,6 @@ class NacGeneralSettingFragment
 							sharedPreferences!!.flashlightOffDuration = a.flashlightOffDuration
 						}
 
-						// Gradually increase volume
-						R.id.nacGraduallyIncreaseVolumeDialog -> {
-							sharedPreferences!!.shouldGraduallyIncreaseVolume = a.shouldGraduallyIncreaseVolume
-							sharedPreferences!!.graduallyIncreaseVolumeWaitTime = a.graduallyIncreaseVolumeWaitTime
-						}
-
-						// Restrict volume
-						R.id.nacRestrictVolumeDialog -> {
-							sharedPreferences!!.shouldRestrictVolume = a.shouldRestrictVolume
-						}
-
 						// Text-to-speech
 						R.id.nacTextToSpeechDialog -> {
 							sharedPreferences!!.shouldSayCurrentTime = a.sayCurrentTime
@@ -201,8 +190,16 @@ class NacGeneralSettingFragment
 							sharedPreferences!!.ttsFrequency = a.ttsFrequency
 						}
 
+						// Volume
+						R.id.nacVolumeOptionsDialog -> {
+							sharedPreferences!!.shouldGraduallyIncreaseVolume = a.shouldGraduallyIncreaseVolume
+							sharedPreferences!!.graduallyIncreaseVolumeWaitTime = a.graduallyIncreaseVolumeWaitTime
+							sharedPreferences!!.shouldRestrictVolume = a.shouldRestrictVolume
+						}
+
 						// Dismiss options
 						R.id.nacDismissOptionsDialog -> {
+							sharedPreferences!!.shouldAutoDismiss = a.shouldAutoDismiss
 							sharedPreferences!!.autoDismissTime = a.autoDismissTime
 							sharedPreferences!!.canDismissEarly = a.useDismissEarly
 							sharedPreferences!!.dismissEarlyTime = a.dismissEarlyTime
@@ -211,6 +208,8 @@ class NacGeneralSettingFragment
 
 						// Snooze options
 						R.id.nacSnoozeOptionsDialog -> {
+							sharedPreferences!!.shouldAutoSnooze = a.shouldAutoSnooze
+							sharedPreferences!!.autoSnoozeTime = a.autoSnoozeTime
 							sharedPreferences!!.maxSnooze = a.maxSnooze
 							sharedPreferences!!.snoozeDuration = a.snoozeDuration
 							sharedPreferences!!.easySnooze = a.useEasySnooze

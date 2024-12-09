@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
 import com.nfcalarmclock.view.dialog.NacDialogFragment
+import com.nfcalarmclock.view.toThemedBold
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog.OnReadWhatsNewListener
 
 /**
@@ -82,20 +83,9 @@ class NacWhatsNewDialog
 		// Get the theme color
 		val themeColor = sharedPreferences!!.themeColor
 
-		// Get all the whats new items
+		// Get all the whats new items and add theme color to bold sections
 		val allMessages = resources.getTextArray(R.array.whats_new_items)
-			.map {
-
-				// Convert to a string
-				var text = it.toString()
-
-				// Add theme color to bold sections
-				text = text.replace("<b>", "<b><font color='${themeColor}'>")
-				text = text.replace("</b>", "</font></b>")
-
-				// Return new string
-				text
-			}
+			.map { it.toString().toThemedBold(themeColor) }
 			.toList()
 
 		// Setup the views

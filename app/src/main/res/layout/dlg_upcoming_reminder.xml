@@ -1,233 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:padding="@dimen/large"
-	android:orientation="vertical">
+	android:layout_height="wrap_content">
 
-	<ScrollView
-		android:id="@+id/upcoming_reminder_scrollview"
+	<!-- Show reminder title, description, and switch -->
+	<RelativeLayout
+		android:id="@+id/reminder_show_container"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:fillViewport="true"
-		android:scrollbarFadeDuration="8000">
+		android:layout_height="wrap_content">
 
-		<LinearLayout
+		<!-- Title -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Title"
+			android:id="@+id/reminder_show_title"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:orientation="vertical">
+			android:layout_toStartOf="@id/reminder_show_switch"
+			android:text="@string/title_upcoming_reminder_show_reminder"
+			/>
 
-			<!-- Question if reminder should be shown -->
-			<TextView
-				style="@style/Widget.TextView.Primary"
-				android:id="@+id/title_should_show_reminder"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceMedium"
-				android:textSize="@dimen/tsz_medium"
-				android:textStyle="bold"
-				android:text="@string/title_upcoming_reminder_should_show"
-				/>
+		<!-- Description -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Description"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/reminder_show_title"
+			android:layout_toStartOf="@id/reminder_show_switch"
+			android:text="@string/description_upcoming_reminder_show_reminder"
+			/>
 
-			<!-- Checkbox for whether the reminder should be shown or not -->
-			<RelativeLayout
-				android:id="@+id/should_show_reminder"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:paddingVertical="@dimen/normal"
-				android:paddingHorizontal="@dimen/large"
-				android:clickable="true"
-				android:focusable="true"
-				android:background="?android:attr/selectableItemBackground">
+		<!-- Switch -->
+		<androidx.appcompat.widget.SwitchCompat
+			android:id="@+id/reminder_show_switch"
+			android:layout_width="@dimen/touch"
+			android:layout_height="@dimen/touch"
+			android:layout_alignParentEnd="true"
+			android:layout_centerVertical="true"
+			android:clickable="false"
+			/>
+	</RelativeLayout>
 
-				<com.google.android.material.checkbox.MaterialCheckBox
-					android:id="@+id/should_show_reminder_checkbox"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_alignParentStart="true"
-					android:layout_centerVertical="true"
-					android:layout_marginEnd="@dimen/small"
-					android:clickable="false"
-					android:focusable="false"
-					android:minWidth="0dp"
-					android:minHeight="0dp"
-					/>
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.SeparatorAfterCheckBox" />
 
-				<TextView
-					style="@style/Widget.TextView.Primary"
-					android:id="@+id/should_show_reminder_summary"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_centerVertical="true"
-					android:layout_toEndOf="@id/should_show_reminder_checkbox"
-					android:maxLines="4"
-					android:textAppearance="?android:attr/textAppearanceMedium"
-					android:text="@string/upcoming_reminder_false"
-					/>
-			</RelativeLayout>
-
-			<!-- -->
-			<Space
-				android:layout_width="match_parent"
-				android:layout_height="@dimen/medium"
-				/>
-
-			<!-- Question about how early the reminder should be shown -->
-			<TextView
-				style="@style/Widget.TextView.Primary"
-				android:id="@+id/title_how_early_to_show_reminder"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceMedium"
-				android:textSize="@dimen/tsz_medium"
-				android:textStyle="bold"
-				android:text="@string/title_upcoming_reminder_time_to_show"
-				/>
-
-			<!-- How early the reminder should be shown -->
-			<com.google.android.material.textfield.TextInputLayout
-				style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-				android:id="@+id/how_early_to_show_reminder_input_layout"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:paddingVertical="@dimen/normal"
-				app:boxCornerRadiusTopStart="6dp"
-				app:boxCornerRadiusTopEnd="6dp"
-				app:boxCornerRadiusBottomStart="6dp"
-				app:boxCornerRadiusBottomEnd="6dp"
-				app:boxStrokeWidth="2dp">
-
-				<com.google.android.material.textfield.MaterialAutoCompleteTextView
-					android:id="@+id/how_early_to_show_reminder_dropdown_menu"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:inputType="none"
-					app:simpleItems="@array/upcoming_reminder_times_to_show"
-					/>
-			</com.google.android.material.textfield.TextInputLayout>
-
-			<!-- -->
-			<Space
-				android:layout_width="match_parent"
-				android:layout_height="@dimen/large"
-				/>
-
-			<!-- Question about how frequent to show the reminder -->
-			<TextView
-				style="@style/Widget.TextView.Primary"
-				android:id="@+id/title_how_freq_to_show_reminder"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceMedium"
-				android:textSize="@dimen/tsz_medium"
-				android:textStyle="bold"
-				android:text="@string/title_upcoming_reminder_freq_to_show"
-				/>
-
-			<!-- How frequent to show the reminder -->
-			<com.google.android.material.textfield.TextInputLayout
-				style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-				android:id="@+id/how_freq_to_show_reminder_input_layout"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:paddingVertical="@dimen/normal"
-				app:boxCornerRadiusTopStart="6dp"
-				app:boxCornerRadiusTopEnd="6dp"
-				app:boxCornerRadiusBottomStart="6dp"
-				app:boxCornerRadiusBottomEnd="6dp"
-				app:boxStrokeWidth="2dp">
-
-				<com.google.android.material.textfield.MaterialAutoCompleteTextView
-					android:id="@+id/how_freq_to_show_reminder_dropdown_menu"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:inputType="none"
-					app:simpleItems="@array/upcoming_reminder_frequency"
-					/>
-			</com.google.android.material.textfield.TextInputLayout>
-
-			<!-- -->
-			<Space
-				android:layout_width="match_parent"
-				android:layout_height="@dimen/large"
-				/>
-
-			<!-- Question about whether text-to-speech should be used or not -->
-			<TextView
-				style="@style/Widget.TextView.Primary"
-				android:id="@+id/title_should_use_tts_with_reminder"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceMedium"
-				android:textSize="@dimen/tsz_medium"
-				android:textStyle="bold"
-				android:text="@string/title_upcoming_reminder_should_use_tts"
-				/>
-
-			<!-- Checkbox for if text-to-speech should be used for the reminder -->
-			<RelativeLayout
-				android:id="@+id/should_use_tts_with_reminder"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:paddingVertical="@dimen/normal"
-				android:paddingHorizontal="@dimen/large"
-				android:clickable="true"
-				android:focusable="true"
-				android:background="?android:attr/selectableItemBackground">
-
-				<com.google.android.material.checkbox.MaterialCheckBox
-					android:id="@+id/should_use_tts_with_reminder_checkbox"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_alignParentStart="true"
-					android:layout_centerVertical="true"
-					android:layout_marginEnd="@dimen/small"
-					android:clickable="false"
-					android:focusable="false"
-					android:minWidth="0dp"
-					android:minHeight="0dp"
-					/>
-
-				<TextView
-					android:id="@+id/should_use_tts_with_reminder_summary"
-					style="@style/Widget.TextView.Primary"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_centerVertical="true"
-					android:layout_toEndOf="@id/should_use_tts_with_reminder_checkbox"
-					android:text="@string/upcoming_reminder_use_tts_false"
-					android:textAppearance="?android:attr/textAppearanceMedium"
-					/>
-			</RelativeLayout>
-		</LinearLayout>
-	</ScrollView>
-
-	<!-- -->
-	<Space
-		android:layout_width="match_parent"
-		android:layout_height="@dimen/medium"
-		/>
-
-	<!-- Ok button -->
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/ok_button"
+	<!-- How early title -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Title"
+		android:id="@+id/reminder_how_early_title"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textColor="@color/white"
-		android:text="@string/action_ok"
-		app:backgroundTint="@color/orange"
+		android:text="@string/title_upcoming_reminder_how_early"
 		/>
 
-	<!-- Cancel button -->
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/cancel_button"
+	<!-- How early description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:id="@+id/reminder_how_early_description"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textColor="@color/white"
-		android:text="@string/action_cancel"
-		app:backgroundTint="@color/gray_light"
+		android:text="@string/description_upcoming_reminder_how_early"
 		/>
 
-</LinearLayout>
+	<!-- How early the reminder should be shown -->
+	<com.google.android.material.textfield.TextInputLayout
+		style="@style/Widget.AlarmOptionDialog.DropdownRow"
+		android:id="@+id/reminder_how_early_input_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<com.google.android.material.textfield.MaterialAutoCompleteTextView
+			android:id="@+id/reminder_how_early_dropdown_menu"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:inputType="none"
+			app:simpleItems="@array/upcoming_reminder_times_to_show"
+			/>
+	</com.google.android.material.textfield.TextInputLayout>
+
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
+
+	<!-- How frequent title -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Title"
+		android:id="@+id/reminder_how_frequent_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/title_upcoming_reminder_how_frequent"
+		/>
+
+	<!-- How frequent description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:id="@+id/reminder_how_frequent_description"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/description_upcoming_reminder_how_frequent"
+		/>
+
+	<!-- How frequent to show the reminder -->
+	<com.google.android.material.textfield.TextInputLayout
+		style="@style/Widget.AlarmOptionDialog.DropdownRow"
+		android:id="@+id/reminder_how_frequent_input_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<com.google.android.material.textfield.MaterialAutoCompleteTextView
+			android:id="@+id/reminder_how_frequent_dropdown_menu"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:inputType="none"
+			app:simpleItems="@array/upcoming_reminder_frequency"
+			/>
+	</com.google.android.material.textfield.TextInputLayout>
+
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
+
+	<!-- Use text to speech -->
+	<RelativeLayout
+		android:id="@+id/reminder_use_tts_container"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:clickable="true"
+		android:focusable="true">
+
+		<!-- Title -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Title"
+			android:id="@+id/reminder_use_tts_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentStart="true"
+			android:layout_toStartOf="@id/reminder_use_tts_switch"
+			android:text="@string/action_alarm_option_text_to_speech"
+			/>
+
+		<!-- Description -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Description"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentStart="true"
+			android:layout_below="@id/reminder_use_tts_title"
+			android:layout_toStartOf="@id/reminder_use_tts_switch"
+			android:text="@string/description_upcoming_reminder_text_to_speech"
+			/>
+
+		<!-- Switch -->
+		<androidx.appcompat.widget.SwitchCompat
+			android:id="@+id/reminder_use_tts_switch"
+			android:layout_width="@dimen/touch"
+			android:layout_height="@dimen/touch"
+			android:layout_alignParentEnd="true"
+			android:layout_centerVertical="true"
+			android:clickable="false"
+			/>
+	</RelativeLayout>
+
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
+
+</com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

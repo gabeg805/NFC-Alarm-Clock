@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- Button -->
+	<style name="Widget.AlarmOptionMain.Button" parent="Widget.MaterialComponents.Button.OutlinedButton">
+		<item name="android:paddingTop">@dimen/tiny</item>
+		<item name="android:paddingBottom">@dimen/tiny</item>
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textSize">@dimen/tsz_small</item>
+		<item name="cornerRadius">@dimen/tiny</item>
+	</style>
+
+	<!-- Separator -->
+	<style name="Widget.AlarmOptionMain.Separator" parent="">
+		<item name="android:layout_width">@dimen/xxxlarge</item>
+		<item name="android:layout_height">@dimen/twoline</item>
+		<item name="android:layout_gravity">center_horizontal</item>
+		<item name="android:layout_marginTop">@dimen/small</item>
+		<item name="android:layout_marginBottom">@dimen/small</item>
+		<item name="android:background">@color/orange</item>
+	</style>
+
+</resources>

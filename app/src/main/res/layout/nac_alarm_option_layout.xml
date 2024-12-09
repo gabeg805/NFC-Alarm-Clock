@@ -2,39 +2,29 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:padding="@dimen/large"
 	android:orientation="vertical">
 
-	<!-- Audio source title -->
-	<TextView
-		style="@style/Widget.AlarmOptionDialog.Title"
+	<!-- Scroll view in case there are a lot of views -->
+	<ScrollView
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/action_alarm_option_audio_source"
-		/>
+		android:layout_marginBottom="@dimen/medium">
 
-	<!-- Audio source description -->
-	<TextView
-		style="@style/Widget.AlarmOptionDialog.DescriptionBeforeCheckBox"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:text="The audio channel to play the alarm on."
-		/>
+		<!-- Inner layout -->
+		<LinearLayout
+			android:id="@+id/container"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
 
-	<!-- Audio source options -->
-	<RadioGroup
-		style="@style/RadioGroup"
-		android:id="@+id/audio_sources"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginVertical="@dimen/tiny"
-		tools:ignore="RtlSymmetry" />
+			<!-- This is where child views will go -->
 
-	<!-- Separator -->
-	<Space style="@style/Widget.AlarmOptionDialog.SeparatorAfterCheckBox" />
+		</LinearLayout>
+
+	</ScrollView>
 
 	<!-- Ok button -->
 	<com.google.android.material.button.MaterialButton

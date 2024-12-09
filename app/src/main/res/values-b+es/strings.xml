@@ -3,9 +3,9 @@
 
 	<!-- App -->
 	<string name="app_name">NFC Despertador</string>
-	<string name="permission_ignore_battery_optimization_request">Es posible que las alarmas no se ejecuten si la aplicación no se ha utilizado durante un tiempo.\n\n<b>Nota:</b> Esto depende del dispositivo que tengas y <b>es posible</b> que en realidad <b>no sea necesario</b>.\n\n¿Quieres desactivar la optimización de la batería?</string>
-	<string name="permission_post_notifications_request">Las alarmas no podrán ejecutarse cuando la aplicación no esté enfocada.\n\n<b>Nota:</b> Este es un efecto secundario de las políticas de seguridad introducidas en <b>Android 13</b>, que benefician a los usuarios, pero pueden restringir aplicaciones en instancias como esta.\n\n¿Desea continuar habilitando este permiso?</string>
-	<string name="permission_schedule_exact_alarm_request">Las alarmas no podrán ejecutarse cuando la aplicación no esté enfocada.\n\n¿Le gustaría continuar a la siguiente pantalla para habilitar este permiso?</string>
+	<string name="message_permission_ignore_battery_optimization_request">Es posible que las alarmas no se ejecuten si la aplicación no se ha utilizado durante un tiempo.\n\n<b>Nota:</b> Esto depende del dispositivo que tengas y <b>es posible</b> que en realidad <b>no sea necesario</b>.\n\n¿Quieres desactivar la optimización de la batería?</string>
+	<string name="message_permission_post_notifications_request">Las alarmas no podrán ejecutarse cuando la aplicación no esté enfocada.\n\n<b>Nota:</b> Este es un efecto secundario de las políticas de seguridad introducidas en <b>Android 13</b>, que benefician a los usuarios, pero pueden restringir aplicaciones en instancias como esta.\n\n¿Desea continuar habilitando este permiso?</string>
+	<string name="message_permission_schedule_exact_alarm_request">Las alarmas no podrán ejecutarse cuando la aplicación no esté enfocada.\n\n¿Le gustaría continuar a la siguiente pantalla para habilitar este permiso?</string>
 
 
 
@@ -54,8 +54,8 @@
 	<string name="action_shuffle_music">Música aleatoria</string>
 	<string name="action_recursively_play_media">Incluir subcarpétas</string>
 	<string name="action_alarm_option_audio_source">Fuente de audio</string>
-	<string name="action_alarm_option_gradually_increase_volume">Aumentar gradualmente el volumen</string>
-	<string name="action_alarm_option_restrict_volume">Restringe el volumen</string>
+	<string name="title_volume_gradually_increase_volume">Aumentar gradualmente el volumen</string>
+	<string name="title_volume_restrict_volume">Restringe el volumen</string>
 	<string name="action_alarm_option_text_to_speech">Texto-a-voz</string>
 	<string name="action_alarm_option_upcoming_reminder">Próximo recordatorio</string>
 	<string name="action_skipping_next_alarm">Saltar la siguiente alarma</string>
@@ -291,23 +291,23 @@
 
 
 	<!-- Auto dismiss duration -->
-	<string name="auto_dismiss">Desactivacion automatica</string>
+	<string name="title_dismiss_options_auto_dismiss">Desactivacion automatica</string>
 
 
 	<!-- Auto snooze duration -->
-	<string name="auto_snooze">Posponer automáticamente</string>
+	<string name="title_snooze_options_auto_snooze">Posponer automáticamente</string>
 
 
 	<!-- Max number of snoozes -->
-	<string name="max_snooze">Dormitar la máxima numero de veces</string>
+	<string name="title_snooze_options_max_snooze">Dormitar la máxima numero de veces</string>
 
 
 	<!-- Snooze duration -->
-	<string name="snooze_duration">Duracion de dormitar</string>
+	<string name="title_snooze_options_snooze_duration">Duracion de dormitar</string>
 
 
 	<!-- Easy snooze -->
-	<string name="easy_snooze">Dormitar fácilmente</string>
+	<string name="title_snooze_options_easy_snooze">Dormitar fácilmente</string>
 	<string name="easy_snooze_true">Dormitar tocando en cualquier lugar.</string>
 	<string name="easy_snooze_false">Dormitar normalmente.</string>
 

@@ -3,9 +3,9 @@
 
 	<!-- App -->
 	<string name="app_name">Revèy Alam NFC</string>
-	<string name="permission_ignore_battery_optimization_request">Alam yo ka pa fonksyone si aplikasyon an pa te itilize pou yon ti tan.\n\n<b>Remak:</b> Sa a depann de ki aparèy ou genyen epi <b>ka pa vrèman nesesè</b>.\n\nÈske w ta renmen enfim optimize batri a?</string>
-	<string name="permission_post_notifications_request">Alam yo p ap ka kouri si aplikasyon an pa konsantre.\n\n<b>Remak:</b> Sa a se yon efè segondè nan règleman sekirite yo prezante nan <b>Android 13</b>, ki se pou benefis itilizatè yo, men yo ka mete restriksyon sou aplikasyon yo nan ka sa a.\n\nÈske w ta renmen aktive notifikasyon?</string>
-	<string name="permission_schedule_exact_alarm_request">Alam yo p ap ka kouri si aplikasyon an pa konsantre.\n\nÈske w ta renmen aktive alam orè yo?</string>
+	<string name="message_permission_ignore_battery_optimization_request">Alam yo ka pa fonksyone si aplikasyon an pa te itilize pou yon ti tan.\n\n<b>Remak:</b> Sa a depann de ki aparèy ou genyen epi <b>ka pa vrèman nesesè</b>.\n\nÈske w ta renmen enfim optimize batri a?</string>
+	<string name="message_permission_post_notifications_request">Alam yo p ap ka kouri si aplikasyon an pa konsantre.\n\n<b>Remak:</b> Sa a se yon efè segondè nan règleman sekirite yo prezante nan <b>Android 13</b>, ki se pou benefis itilizatè yo, men yo ka mete restriksyon sou aplikasyon yo nan ka sa a.\n\nÈske w ta renmen aktive notifikasyon?</string>
+	<string name="message_permission_schedule_exact_alarm_request">Alam yo p ap ka kouri si aplikasyon an pa konsantre.\n\nÈske w ta renmen aktive alam orè yo?</string>
 
 
 
@@ -54,8 +54,8 @@
 	<string name="action_shuffle_music">Shuffle mizik</string>
 	<string name="action_recursively_play_media">Mete sousdosye yo</string>
 	<string name="action_alarm_option_audio_source">Sous odyo</string>
-	<string name="action_alarm_option_gradually_increase_volume">Piti piti ogmante volim</string>
-	<string name="action_alarm_option_restrict_volume">Limite volim</string>
+	<string name="title_volume_gradually_increase_volume">Piti piti ogmante volim</string>
+	<string name="title_volume_restrict_volume">Limite volim</string>
 	<string name="action_alarm_option_text_to_speech">Tèks-a-lapawòl</string>
 	<string name="action_alarm_option_upcoming_reminder">Rapèl kap vini</string>
 	<string name="action_skipping_next_alarm">Sote pwochen alam</string>
@@ -291,23 +291,23 @@
 
 
 	<!-- Auto dismiss duration -->
-	<string name="auto_dismiss">Oto-ranvwaye</string>
+	<string name="title_dismiss_options_auto_dismiss">Oto-ranvwaye</string>
 
 
 	<!-- Auto snooze duration -->
-	<string name="auto_snooze">Auto-snooze</string>
+	<string name="title_snooze_options_auto_snooze">Auto-snooze</string>
 
 
 	<!-- Max number of snoozes -->
-	<string name="max_snooze">Max snoozes</string>
+	<string name="title_snooze_options_max_snooze">Max snoozes</string>
 
 
 	<!-- Snooze duration -->
-	<string name="snooze_duration">Dire snooze</string>
+	<string name="title_snooze_options_snooze_duration">Dire snooze</string>
 
 
 	<!-- Easy snooze -->
-	<string name="easy_snooze">Fasil snooze</string>
+	<string name="title_snooze_options_easy_snooze">Fasil snooze</string>
 	<string name="easy_snooze_true">Ranpli alam la lè w manyen nenpòt kote.</string>
 	<string name="easy_snooze_false">Ranpli alam la nòmalman.</string>
 
