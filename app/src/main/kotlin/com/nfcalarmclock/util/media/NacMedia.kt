@@ -10,7 +10,6 @@ import android.provider.MediaStore
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.nfcalarmclock.R
-import com.nfcalarmclock.system.file.NacFile
 import com.nfcalarmclock.system.file.NacFile.basename
 import com.nfcalarmclock.system.file.NacFile.strip
 import com.nfcalarmclock.system.file.NacFile.toRelativeDirname
@@ -147,12 +146,13 @@ object NacMedia
 	/**
 	 * @see .getArtist
 	 */
-	fun getArtist(context: Context, metadata: NacFile.Metadata): String
+	@JvmStatic
+	fun getArtist(context: Context, path: String): String
 	{
-		// Get the URI from the metadata object
-		val uri = metadata.toExternalUri()
+		// Get the URI from the path
+		val uri = Uri.parse(path)
 
-		// Get the artist
+		// Get the title
 		return getArtist(context, uri)
 	}
 
@@ -242,18 +242,6 @@ object NacMedia
 
 		// Parse the duration
 		return parseDuration(duration)
-	}
-
-	/**
-	 * @see .getDuration
-	 */
-	fun getDuration(context: Context, metadata: NacFile.Metadata): String
-	{
-		// Get the URI from the metadata object
-		val uri = metadata.toExternalUri()
-
-		// Get the duration
-		return getDuration(context, uri)
 	}
 
 	/**
@@ -432,7 +420,7 @@ object NacMedia
 		var title = getColumnFromCursor(context, uri, column)
 
 		// Unable to determine the title
-		if (title.isEmpty() || title == "<unknown>")
+		if (title.isEmpty() || (title == "<unknown>"))
 		{
 			// Get string to show that the title is unknown
 			title = context.getString(R.string.state_unknown)
@@ -444,20 +432,8 @@ object NacMedia
 	/**
 	 * @see .getTitle
 	 */
-	fun getTitle(context: Context, metadata: NacFile.Metadata): String
-	{
-		// Get the URI from the metadata object
-		val uri = metadata.toExternalUri()
-
-		// Get the title
-		return getTitle(context, uri)
-	}
-
-	/**
-	 * @see .getTitle
-	 */
 	@JvmStatic
-	fun getTitle(context: Context, path: String?): String
+	fun getTitle(context: Context, path: String): String
 	{
 		// Get the URI from the path
 		val uri = Uri.parse(path)

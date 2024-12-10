@@ -1,49 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
-	<string-array name="audio_sources">
-		<item>Alam</item>
-		<item>Rele</item>
-		<item>Medya</item>
-		<item>Notifikasyon</item>
-		<item>Sonnerie</item>
-	</string-array>
-
-	<string-array name="tts_frequency">
-		<item>Yon fwa</item>
-		<item>Chak 1 min</item>
-		<item>Chak 2 min</item>
-		<item>Chak 3 min</item>
-		<item>Chak 4 min</item>
-		<item>Chak 5 min</item>
-		<item>Chak 6 min</item>
-		<item>Chak 7 min</item>
-		<item>Chak 8 min</item>
-		<item>Chak 9 min</item>
-		<item>Chak 10 min</item>
-		<item>Chak 11 min</item>
-		<item>Chak 12 min</item>
-		<item>Chak 13 min</item>
-		<item>Chak 14 min</item>
-		<item>Chak 15 min</item>
-		<item>Chak 16 min</item>
-		<item>Chak 17 min</item>
-		<item>Chak 18 min</item>
-		<item>Chak 19 min</item>
-		<item>Chak 20 min</item>
-		<item>Chak 21 min</item>
-		<item>Chak 22 min</item>
-		<item>Chak 23 min</item>
-		<item>Chak 24 min</item>
-		<item>Chak 25 min</item>
-		<item>Chak 26 min</item>
-		<item>Chak 27 min</item>
-		<item>Chak 28 min</item>
-		<item>Chak 29 min</item>
-		<item>Chak 30 min</item>
-	</string-array>
-
-	<string-array name="days_of_week">
+	<!-- Days of week full names -->
+	<string-array name="days_of_week_full">
 		<item>dimanch</item>
 		<item>lendi</item>
 		<item>madi</item>
@@ -53,6 +12,7 @@
 		<item>samdi</item>
 	</string-array>
 
+	<!-- Days of week abbreviated -->
 	<string-array name="days_of_week_abbr">
 		<item>dim</item>
 		<item>len</item>
@@ -63,6 +23,7 @@
 		<item>sam</item>
 	</string-array>
 
+	<!-- Days of week one letter -->
 	<string-array name="days_of_week_one_letter">
 		<item>D</item>
 		<item>L</item>
@@ -73,210 +34,15 @@
 		<item>S</item>
 	</string-array>
 
+	<!-- Start week on days -->
 	<string-array name="start_week_on">
 		<item>dimanch</item>
 		<item>lendi</item>
 	</string-array>
 
-	<string-array name="auto_dismiss_summaries">
-		<item>Off</item>
-		<item>1 minit</item>
-		<item>2 minit</item>
-		<item>3 minit</item>
-		<item>4 minit</item>
-		<item>5 minit</item>
-		<item>10 minit</item>
-		<item>15 minit</item>
-		<item>20 minit</item>
-		<item>25 minit</item>
-		<item>30 minit</item>
-		<item>35 minit</item>
-		<item>40 minit</item>
-		<item>45 minit</item>
-		<item>50 minit</item>
-		<item>55 minit</item>
-		<item>60 minit</item>
-	</string-array>
-
-	<string-array name="auto_snooze_summaries">
-		<item>Off</item>
-		<item>1 minit</item>
-		<item>2 minit</item>
-		<item>3 minit</item>
-		<item>4 minit</item>
-		<item>5 minit</item>
-		<item>6 minit</item>
-		<item>7 minit</item>
-		<item>8 minit</item>
-		<item>9 minit</item>
-		<item>10 minit</item>
-		<item>11 minit</item>
-		<item>12 minit</item>
-		<item>13 minit</item>
-		<item>14 minit</item>
-		<item>15 minit</item>
-		<item>16 minit</item>
-		<item>17 minit</item>
-		<item>18 minit</item>
-		<item>19 minit</item>
-		<item>20 minit</item>
-		<item>21 minit</item>
-		<item>22 minit</item>
-		<item>23 minit</item>
-		<item>24 minit</item>
-		<item>25 minit</item>
-		<item>26 minit</item>
-		<item>27 minit</item>
-		<item>28 minit</item>
-		<item>29 minit</item>
-		<item>30 minit</item>
-	</string-array>
-
-	<string-array name="max_snooze_summaries">
-		<item>Okenn</item>
-		<item>1</item>
-		<item>2</item>
-		<item>3</item>
-		<item>4</item>
-		<item>5</item>
-		<item>6</item>
-		<item>7</item>
-		<item>8</item>
-		<item>9</item>
-		<item>10</item>
-		<item>San limit</item>
-	</string-array>
-
-	<string-array name="snooze_duration_summaries">
-		<item>1 minit</item>
-		<item>2 minit</item>
-		<item>3 minit</item>
-		<item>4 minit</item>
-		<item>5 minit</item>
-		<item>6 minit</item>
-		<item>7 minit</item>
-		<item>8 minit</item>
-		<item>9 minit</item>
-		<item>10 minit</item>
-		<item>15 minit</item>
-		<item>20 minit</item>
-		<item>25 minit</item>
-		<item>30 minit</item>
-		<item>35 minit</item>
-		<item>40 minit</item>
-		<item>45 minit</item>
-		<item>50 minit</item>
-		<item>55 minit</item>
-		<item>60 minit</item>
-		<item>65 minit</item>
-		<item>70 minit</item>
-		<item>75 minit</item>
-		<item>80 minit</item>
-		<item>85 minit</item>
-		<item>90 minit</item>
-	</string-array>
-
-	<string-array name="dismiss_early_times">
-		<item>1 minit</item>
-		<item>2 minit</item>
-		<item>3 minit</item>
-		<item>4 minit</item>
-		<item>5 minit</item>
-		<item>10 minit</item>
-		<item>15 minit</item>
-		<item>20 minit</item>
-		<item>25 minit</item>
-		<item>30 minit</item>
-		<item>35 minit</item>
-		<item>40 minit</item>
-		<item>45 minit</item>
-		<item>50 minit</item>
-		<item>55 minit</item>
-		<item>60 minit</item>
-		<item>65 minit</item>
-		<item>70 minit</item>
-		<item>75 minit</item>
-		<item>80 minit</item>
-		<item>85 minit</item>
-		<item>90 minit</item>
-		<item>95 minit</item>
-		<item>100 minit</item>
-		<item>105 minit</item>
-		<item>110 minit</item>
-		<item>115 minit</item>
-		<item>120 minit</item>
-	</string-array>
-
-	<string-array name="upcoming_reminder_times_to_show">
-		<item>1 minit</item>
-		<item>2 minit</item>
-		<item>3 minit</item>
-		<item>4 minit</item>
-		<item>5 minit</item>
-		<item>6 minit</item>
-		<item>7 minit</item>
-		<item>8 minit</item>
-		<item>9 minit</item>
-		<item>10 minit</item>
-		<item>15 minit</item>
-		<item>20 minit</item>
-		<item>25 minit</item>
-		<item>30 minit</item>
-		<item>35 minit</item>
-		<item>40 minit</item>
-		<item>45 minit</item>
-		<item>50 minit</item>
-		<item>55 minit</item>
-		<item>60 minit</item>
-		<item>65 minit</item>
-		<item>70 minit</item>
-		<item>75 minit</item>
-		<item>80 minit</item>
-		<item>85 minit</item>
-		<item>90 minit</item>
-		<item>95 minit</item>
-		<item>100 minit</item>
-		<item>105 minit</item>
-		<item>110 minit</item>
-		<item>115 minit</item>
-		<item>120 minit</item>
-	</string-array>
-
-	<string-array name="upcoming_reminder_frequency">
-		<item>Yon fwa</item>
-		<item>Chak 1 min</item>
-		<item>Chak 2 min</item>
-		<item>Chak 3 min</item>
-		<item>Chak 4 min</item>
-		<item>Chak 5 min</item>
-		<item>Chak 6 min</item>
-		<item>Chak 7 min</item>
-		<item>Chak 8 min</item>
-		<item>Chak 9 min</item>
-		<item>Chak 10 min</item>
-		<item>Chak 11 min</item>
-		<item>Chak 12 min</item>
-		<item>Chak 13 min</item>
-		<item>Chak 14 min</item>
-		<item>Chak 15 min</item>
-		<item>Chak 16 min</item>
-		<item>Chak 17 min</item>
-		<item>Chak 18 min</item>
-		<item>Chak 19 min</item>
-		<item>Chak 20 min</item>
-		<item>Chak 21 min</item>
-		<item>Chak 22 min</item>
-		<item>Chak 23 min</item>
-		<item>Chak 24 min</item>
-		<item>Chak 25 min</item>
-		<item>Chak 26 min</item>
-		<item>Chak 27 min</item>
-		<item>Chak 28 min</item>
-		<item>Chak 29 min</item>
-		<item>Chak 30 min</item>
-	</string-array>
-
-	<string-array name="gradually_increase_volume_wait_times">
+	<!-- General list of seconds -->
+	<string-array name="general_seconds_summaries">
+		<item>0 segonn</item>
 		<item>1 segonn</item>
 		<item>2 segonn</item>
 		<item>3 segonn</item>
@@ -287,50 +53,56 @@
 		<item>8 segonn</item>
 		<item>9 segonn</item>
 		<item>10 segonn</item>
+		<item>11 segonn</item>
+		<item>12 segonn</item>
+		<item>13 segonn</item>
+		<item>14 segonn</item>
 		<item>15 segonn</item>
+		<item>16 segonn</item>
+		<item>17 segonn</item>
+		<item>18 segonn</item>
+		<item>19 segonn</item>
 		<item>20 segonn</item>
+		<item>21 segonn</item>
+		<item>22 segonn</item>
+		<item>23 segonn</item>
+		<item>24 segonn</item>
 		<item>25 segonn</item>
+		<item>26 segonn</item>
+		<item>27 segonn</item>
+		<item>28 segonn</item>
+		<item>29 segonn</item>
 		<item>30 segonn</item>
+		<item>31 segonn</item>
+		<item>32 segonn</item>
+		<item>33 segonn</item>
+		<item>34 segonn</item>
 		<item>35 segonn</item>
+		<item>36 segonn</item>
+		<item>37 segonn</item>
+		<item>38 segonn</item>
+		<item>39 segonn</item>
 		<item>40 segonn</item>
+		<item>41 segonn</item>
+		<item>42 segonn</item>
+		<item>43 segonn</item>
+		<item>44 segonn</item>
 		<item>45 segonn</item>
+		<item>46 segonn</item>
+		<item>47 segonn</item>
+		<item>48 segonn</item>
+		<item>49 segonn</item>
 		<item>50 segonn</item>
+		<item>51 segonn</item>
+		<item>52 segonn</item>
+		<item>53 segonn</item>
+		<item>54 segonn</item>
 		<item>55 segonn</item>
+		<item>56 segonn</item>
+		<item>57 segonn</item>
+		<item>58 segonn</item>
+		<item>59 segonn</item>
 		<item>60 segonn</item>
-	</string-array>
-
-	<string-array name="flashlight_on_off_duration_times">
-		<item>0.5 segonn</item>
-		<item>1.0 segonn</item>
-		<item>1.5 segonn</item>
-		<item>2.0 segonn</item>
-		<item>2.5 segonn</item>
-		<item>3.0 segonn</item>
-		<item>3.5 segonn</item>
-		<item>4.0 segonn</item>
-		<item>4.5 segonn</item>
-		<item>5.0 segonn</item>
-		<item>5.5 segonn</item>
-		<item>6.0 segonn</item>
-		<item>6.5 segonn</item>
-		<item>7.0 segonn</item>
-		<item>7.5 segonn</item>
-		<item>8.0 segonn</item>
-		<item>8.5 segonn</item>
-		<item>9.0 segonn</item>
-		<item>9.5 segonn</item>
-		<item>10.0 segonn</item>
-	</string-array>
-
-	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
-		<item>Te ajoute opsyon &lt;b>sote pwochen alam&lt;/b>. Long peze yon alam pou wè opsyon an.</item>
-		<item>Te ajoute opsyon &lt;b>efase apre ranvwaye&lt;/b> pou efase otomatikman yon alam apre li fin ranvwaye. Yo jwenn nan &lt;b>Opsyon anile&lt;/b>.</item>
-		<item>Te ajoute opsyon &lt;b>enpòte/ekspòtasyon&lt;/b>. Yo jwenn nan &lt;b>Anviwònman&lt;/b>.</item>
-		<item>Te fikse aksidan lè yon siy &lt;b>%&lt;/b> te nan non alam la.</item>
-		<item>Te ajoute tradiksyon lang pou &lt;b>Alman&lt;/b>.</item>
-		<item>Mèsi a &lt;b>Aristeo Montoya&lt;/b> dèske li ede amelyore tradiksyon &lt;b>panyòl&lt;/b> la.</item>
-		<item>Mete ajou fason &lt;b>tèks-a-lapawòl&lt;/b> di lè a ak ralanti vitès la nan ki li pale.</item>
-		<item>Notifikasyon rapèl yo pral retire lè yon alam sonnen.</item>
 	</string-array>
 
 </resources>

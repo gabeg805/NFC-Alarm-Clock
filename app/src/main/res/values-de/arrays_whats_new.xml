@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+	<!-- &lt;b> -->
+	<!-- &lt;/b> -->
+
+	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>Option &lt;b>Nächsten Alarm überspringen&lt;/b> hinzugefügt. Drücken Sie lange auf einen Alarm, um die Option anzuzeigen.</item>
+		<item>Option &lt;b>Löschen nach Schließen&lt;/b> hinzugefügt, um einen Alarm automatisch zu löschen, nachdem er geschlossen wurde. Gefunden unter &lt;b>Schließoptionen&lt;/b>.</item>
+		<item>Option &lt;b>Import/Export&lt;/b> hinzugefügt. Zu finden unter &lt;b>Einstellungen&lt;/b>.</item>
+		<item>Absturz behoben, wenn der Alarmname ein &lt;b>%-Zeichen&lt;/b> enthielt.</item>
+		<item>Sprachübersetzung für &lt;b>Deutsch&lt;/b> hinzugefügt.</item>
+		<item>Danke an &lt;b>Aristeo Montoya&lt;/b> für seine Hilfe bei der Verbesserung der &lt;b>spanischen&lt;/b> Übersetzung.</item>
+		<item>Die Art und Weise, wie &lt;b>Text-to-Speech&lt;/b> die Uhrzeit angibt, wurde aktualisiert und die Sprechgeschwindigkeit wurde verlangsamt.</item>
+		<item>Erinnerungsbenachrichtigungen werden entfernt, wenn ein Alarm losgeht.</item>
+	</string-array>
+
+</resources>

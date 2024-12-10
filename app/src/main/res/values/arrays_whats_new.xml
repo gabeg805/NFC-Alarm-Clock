@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+	<!-- &lt;b> -->
+	<!-- &lt;/b> -->
+
+	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>Added &lt;b>skip next alarm&lt;/b> option. Long press an alarm to see the option.</item>
+		<item>Added &lt;b>delete after dismiss&lt;/b> option to automatically delete an alarm after it is dismissed. Found in &lt;b>Dismiss options&lt;/b>.</item>
+		<item>Added &lt;b>import/export&lt;/b> option. Found in &lt;b>Settings&lt;/b>.</item>
+		<item>Fixed crash when a &lt;b>% sign&lt;/b> was in the alarm name.</item>
+		<item>Added language translation for &lt;b>German&lt;/b>.</item>
+		<item>Thanks to &lt;b>Aristeo Montoya&lt;/b> for helping improve the &lt;b>Spanish&lt;/b> translation.</item>
+		<item>Updated the way &lt;b>text-to-speech&lt;/b> says the time and slowed down the speed at which it speaks.</item>
+		<item>Reminder notifications will be removed when an alarm goes off.</item>
+	</string-array>
+
+</resources>

@@ -76,7 +76,7 @@
 			/>
 
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
-			android:title="@string/time_color"
+			android:title="@string/title_time"
 			android:key="@string/time_color_key"
 			android:summary="@string/summary_color_time"
 			android:defaultValue="@integer/default_time_color"
@@ -157,7 +157,7 @@
 			/>
 
 		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
-			android:title="@string/alarm_flashlight"
+			android:title="@string/action_alarm_option_flashlight"
 			android:key="@string/show_hide_flashlight_button_key"
 			android:summaryOn="@string/show_hide_flashlight_button_true"
 			android:summaryOff="@string/show_hide_flashlight_button_false"

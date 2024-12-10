@@ -4,13 +4,13 @@
 	tools:ignore="MissingTranslation">
 
 	<!-- App -->
-	<string name="app_first_run">app_first_run</string>
-	<string name="previous_app_version">previous_app_version</string>
+	<string name="key_app_first_run">app_first_run</string>
+	<string name="key_app_previous_version">previous_app_version</string>
 	<string name="key_app_supported">key_app_supported</string>
-	<string name="app_rating_counter">app_rating_counter</string>
-	<string name="app_start_statistics">app_start_statistics</string>
-	<string name="sys_previous_volume">sys_previous_volume</string>
+	<string name="key_app_rating_counter">app_rating_counter</string>
+	<string name="key_app_start_statistics">app_start_statistics</string>
 	<string name="key_current_playing_alarm_media">key_current_playing_alarm_media</string>
+	<string name="sys_previous_volume">sys_previous_volume</string>
 
 	<!-- Permissions -->
 	<string name="key_permission_ignore_battery_optimization_requested">key_permission_ignore_battery_optimization_requested</string>
@@ -18,17 +18,17 @@
 	<string name="key_permission_schedule_exact_alarm_requested">key_permission_schedule_exact_alarm_requested</string>
 
 	<!-- Main activity -->
-	<string name="app_should_refresh_main_activity">app_should_refresh_main_activity</string>
+	<string name="key_main_should_refresh_activity">app_should_refresh_main_activity</string>
+	<string name="key_main_delay_showing_whats_new_dialog_counter">key_delay_showing_whats_new_dialog_counter</string>
 
 	<!-- Card -->
-	<string name="card_is_measured">card_is_measured</string>
-	<string name="card_height_collapsed">card_height_collapsed</string>
-	<string name="card_height_collapsed_dismiss">card_height_collapsed_dismiss</string>
-	<string name="card_height_expanded">card_height_expanded</string>
-	<string name="key_delay_showing_whats_new_dialog_counter">key_delay_showing_whats_new_dialog_counter</string>
+	<string name="key_main_card_is_measured">card_is_measured</string>
+	<string name="key_main_card_height_collapsed">card_height_collapsed</string>
+	<string name="key_main_card_height_collapsed_dismiss">card_height_collapsed_dismiss</string>
+	<string name="key_main_card_height_expanded">card_height_expanded</string>
 
 	<!-- General -->
-	<string name="general_setting_key">pref_screen_general</string>
+	<string name="key_settings_general">pref_screen_general</string>
 	<string name="should_auto_dismiss_key">pref_should_auto_dismiss</string>
 	<string name="auto_dismiss_key">pref_auto_dismiss_new</string>
 	<string name="old_auto_dismiss_key">pref_auto_dismiss</string>
@@ -50,7 +50,11 @@
 	<string name="alarm_flashlight_should_blink_key">pref_flashlight_should_blink</string>
 	<string name="alarm_flashlight_on_duration_key">pref_flashlight_on_duration</string>
 	<string name="alarm_flashlight_off_duration_key">pref_flashlight_off_duration</string>
-	<string name="alarm_sound_key">pref_sound</string>
+	<string name="key_general_default_alarm_media_path">pref_sound</string>
+	<string name="key_general_default_alarm_media_artist">pref_default_alarm_media_artist</string>
+	<string name="key_general_default_alarm_media_title">pref_default_alarm_media_title</string>
+	<string name="key_general_default_alarm_media_type">pref_default_alarm_media_type</string>
+	<string name="key_general_default_alarm_local_media_path">pref_default_alarm_local_media_path</string>
 	<string name="shuffle_playlist_key">pref_shuffle_playlist</string>
 	<string name="alarm_recursively_play_media_key">pref_recursively_play_media</string>
 	<string name="alarm_volume_key">pref_volume</string>
@@ -70,7 +74,7 @@
 	<string name="should_delete_alarm_after_dismissed_key">pref_should_delete_alarm_after_dismissed</string>
 
 	<!-- Appearance -->
-	<string name="appearance_setting_key">pref_screen_appearance</string>
+	<string name="key_settings_appearance">pref_screen_appearance</string>
 	<string name="key_use_new_alarm_screen">pref_use_new_alarm_screen</string>
 	<string name="key_show_alarm_name">pref_alarm_info</string>
 	<string name="key_show_current_date_and_time">pref_alarm_current_date_and_time</string>
@@ -93,58 +97,58 @@
 	<string name="next_alarm_format_key">pref_time_remaining_format</string>
 
 	<!-- Statistics -->
-	<string name="stats_setting_key">pref_screen_statistics</string>
+	<string name="key_settings_statistics">pref_screen_statistics</string>
 
 	<!-- Manage NFC tags -->
-	<string name="manage_nfc_tags_setting_key">pref_screen_manage_nfc_tags</string>
-	<string name="should_show_manage_nfc_tags_setting">pref_should_show_manage_nfc_tags</string>
+	<string name="key_settings_manage_nfc_tags">pref_screen_manage_nfc_tags</string>
+	<string name="key_settings_should_show_manage_nfc_tags">pref_should_show_manage_nfc_tags</string>
 
 	<!-- About -->
-	<string name="about_setting_key">pref_screen_about</string>
-	<string name="author_key">pref_about_author</string>
-	<string name="version_key">pref_about_version</string>
-	<string name="about_ignore_battery_optimization_key">pref_about_ignore_battery_optimization</string>
-	<string name="about_nfc_key">pref_about_nfc</string>
-	<string name="about_storage_key">pref_about_storage</string>
-	<string name="about_vibrate_key">pref_about_vibrate</string>
-	<string name="about_post_notifications_key">pref_about_post_notifications</string>
-	<string name="about_schedule_alarm_key">pref_about_schedule_alarm</string>
-	<string name="about_set_alarm_key">pref_about_set_alarm</string>
-	<string name="about_boot_key">pref_about_boot</string>
-	<string name="about_wakelock_key">pref_about_wakelock</string>
-	<string name="about_full_screen_intent_key">pref_about_full_screen_intent</string>
-	<string name="about_foreground_service_key">pref_about_foreground_service</string>
+	<string name="key_settings_about">pref_screen_about</string>
+	<string name="key_settings_about_author">pref_about_author</string>
+	<string name="key_settings_about_version">pref_about_version</string>
+	<string name="key_settings_about_ignore_battery_optimization">pref_about_ignore_battery_optimization</string>
+	<string name="key_settings_about_nfc">pref_about_nfc</string>
+	<string name="key_settings_about_storage">pref_about_storage</string>
+	<string name="key_settings_about_vibrate">pref_about_vibrate</string>
+	<string name="key_settings_about_post_notifications">pref_about_post_notifications</string>
+	<string name="key_settings_about_schedule_alarm">pref_about_schedule_alarm</string>
+	<string name="key_settings_about_set_alarm">pref_about_set_alarm</string>
+	<string name="key_settings_about_boot">pref_about_boot</string>
+	<string name="key_settings_about_wakelock">pref_about_wakelock</string>
+	<string name="key_settings_about_full_screen_intent">pref_about_full_screen_intent</string>
+	<string name="key_settings_about_foreground_service">pref_about_foreground_service</string>
 
 	<!-- Support -->
-	<string name="support_setting_key">pref_screen_support</string>
+	<string name="key_settings_support">pref_screen_support</string>
 
 	<!-- Import/export -->
-	<string name="import_export_setting_key">pref_screen_import_export</string>
+	<string name="key_settings_import_export">pref_screen_import_export</string>
 
 	<!-- Widget background -->
-	<string name="clock_widget_background_color_key">pref_clock_widget_background_color</string>
-	<string name="clock_widget_background_transparency_key">pref_clock_widget_background_transparency</string>
+	<string name="key_clock_widget_background_color">pref_clock_widget_background_color</string>
+	<string name="key_clock_widget_background_transparency">pref_clock_widget_background_transparency</string>
 
 	<!-- Widget date and time -->
-	<string name="clock_widget_show_date_key">pref_clock_widget_show_date</string>
-	<string name="clock_widget_show_time_key">pref_clock_widget_show_time</string>
-	<string name="clock_widget_bold_date_key">pref_clock_widget_bold_date</string>
-	<string name="clock_widget_bold_hour_key">pref_clock_widget_bold_hour</string>
-	<string name="clock_widget_bold_minute_key">pref_clock_widget_bold_minute</string>
-	<string name="clock_widget_bold_am_pm_key">pref_clock_widget_bold_am_pm</string>
-	<string name="clock_widget_color_date_key">pref_clock_widget_color_date</string>
-	<string name="clock_widget_color_hour_key">pref_clock_widget_color_hour</string>
-	<string name="clock_widget_color_minute_key">pref_clock_widget_color_minute</string>
-	<string name="clock_widget_color_am_pm_key">pref_clock_widget_color_am_pm</string>
-	<string name="clock_widget_text_size_date_key">pref_clock_widget_text_size_date</string>
-	<string name="clock_widget_text_size_time_key">pref_clock_widget_text_size_time</string>
-	<string name="clock_widget_text_size_am_pm_key">pref_clock_widget_text_size_am_pm</string>
+	<string name="key_clock_widget_show_date">pref_clock_widget_show_date</string>
+	<string name="key_clock_widget_show_time">pref_clock_widget_show_time</string>
+	<string name="key_clock_widget_bold_date">pref_clock_widget_bold_date</string>
+	<string name="key_clock_widget_bold_hour">pref_clock_widget_bold_hour</string>
+	<string name="key_clock_widget_bold_minute">pref_clock_widget_bold_minute</string>
+	<string name="key_clock_widget_bold_am_pm">pref_clock_widget_bold_am_pm</string>
+	<string name="key_clock_widget_color_date">pref_clock_widget_color_date</string>
+	<string name="key_clock_widget_color_hour">pref_clock_widget_color_hour</string>
+	<string name="key_clock_widget_color_minute">pref_clock_widget_color_minute</string>
+	<string name="key_clock_widget_color_am_pm">pref_clock_widget_color_am_pm</string>
+	<string name="key_clock_widget_text_size_date">pref_clock_widget_text_size_date</string>
+	<string name="key_clock_widget_text_size_time">pref_clock_widget_text_size_time</string>
+	<string name="key_clock_widget_text_size_am_pm">pref_clock_widget_text_size_am_pm</string>
 
 	<!-- Widget alarm -->
-	<string name="clock_widget_show_alarm_key">pref_clock_widget_show_alarm</string>
-	<string name="clock_widget_bold_alarm_time_key">pref_clock_widget_bold_alarm_time</string>
-	<string name="clock_widget_color_alarm_time_key">pref_clock_widget_color_alarm_time</string>
-	<string name="clock_widget_color_alarm_icon_key">pref_clock_widget_color_alarm_icon</string>
-	<string name="clock_widget_text_size_alarm_time_key">pref_clock_widget_text_size_alarm</string>
+	<string name="key_clock_widget_show_alarm">pref_clock_widget_show_alarm</string>
+	<string name="key_clock_widget_bold_alarm_time">pref_clock_widget_bold_alarm_time</string>
+	<string name="key_clock_widget_color_alarm_time">pref_clock_widget_color_alarm_time</string>
+	<string name="key_clock_widget_color_alarm_icon">pref_clock_widget_color_alarm_icon</string>
+	<string name="key_clock_widget_text_size_alarm_time">pref_clock_widget_text_size_alarm</string>
 
 </resources>

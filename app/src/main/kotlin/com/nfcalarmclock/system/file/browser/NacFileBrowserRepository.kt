@@ -72,10 +72,13 @@ class NacFileBrowserRepository
 	{
 		withContext(Dispatchers.IO) {
 
+			// Get the URI from the metadata object
+			val uri = metadata.toExternalUri()
+
 			// Determine the extra data. This will be shown to the user
-			val title = NacMedia.getTitle(context, metadata)
-			val artist = NacMedia.getArtist(context, metadata)
-			val duration = NacMedia.getDuration(context, metadata)
+			val title = NacMedia.getTitle(context, uri)
+			val artist = NacMedia.getArtist(context, uri)
+			val duration = NacMedia.getDuration(context, uri)
 
 			// No title so there is nothing to show the user. Exit here
 			if (title.isEmpty())

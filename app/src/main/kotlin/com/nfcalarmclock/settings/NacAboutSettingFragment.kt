@@ -28,7 +28,7 @@ class NacAboutSettingFragment
 		addPreferencesFromResource(R.xml.about_preferences)
 
 		// Get the version preference
-		val versionKey = getString(R.string.version_key)
+		val versionKey = getString(R.string.key_settings_about_version)
 		val versionPref = findPreference<Preference>(versionKey)
 
 		// Set the version name as the summary
@@ -44,19 +44,19 @@ class NacAboutSettingFragment
 		val preferenceKey = preference.key
 
 		// Keys to compare against
-		val versionKey = getString(R.string.version_key)
+		val versionKey = getString(R.string.key_settings_about_version)
 		val disableBatteryOptimizationKey =
-			getString(R.string.about_ignore_battery_optimization_key)
-		val nfcKey = getString(R.string.about_nfc_key)
-		val storageKey = getString(R.string.about_storage_key)
-		val vibrateKey = getString(R.string.about_vibrate_key)
-		val foregroundServiceKey = getString(R.string.about_foreground_service_key)
-		val fullScreenKey = getString(R.string.about_full_screen_intent_key)
-		val scheduleAlarmsKey = getString(R.string.about_schedule_alarm_key)
-		val setAlarmKey = getString(R.string.about_set_alarm_key)
-		val showNotificationsKey = getString(R.string.about_post_notifications_key)
-		val startupKey = getString(R.string.about_boot_key)
-		val wakelockKey = getString(R.string.about_wakelock_key)
+			getString(R.string.key_settings_about_ignore_battery_optimization)
+		val nfcKey = getString(R.string.key_settings_about_nfc)
+		val storageKey = getString(R.string.key_settings_about_storage)
+		val vibrateKey = getString(R.string.key_settings_about_vibrate)
+		val foregroundServiceKey = getString(R.string.key_settings_about_foreground_service)
+		val fullScreenKey = getString(R.string.key_settings_about_full_screen_intent)
+		val scheduleAlarmsKey = getString(R.string.key_settings_about_schedule_alarm)
+		val setAlarmKey = getString(R.string.key_settings_about_set_alarm)
+		val showNotificationsKey = getString(R.string.key_settings_about_post_notifications)
+		val startupKey = getString(R.string.key_settings_about_boot)
+		val wakelockKey = getString(R.string.key_settings_about_wakelock)
 
 		// Message if already have this permission
 		val messageId = R.string.message_already_have_permission

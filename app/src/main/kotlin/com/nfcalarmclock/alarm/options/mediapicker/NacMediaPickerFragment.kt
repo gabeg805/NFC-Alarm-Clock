@@ -1,6 +1,8 @@
 package com.nfcalarmclock.alarm.options.mediapicker
 
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -16,6 +18,15 @@ import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacBundle
 import com.nfcalarmclock.util.NacUtility
+import com.nfcalarmclock.util.addMediaInfo
+import com.nfcalarmclock.util.getDeviceProtectedStorageContext
+import com.nfcalarmclock.util.getMediaArtist
+import com.nfcalarmclock.util.getMediaPath
+import com.nfcalarmclock.util.getMediaTitle
+import com.nfcalarmclock.util.getMediaType
+import com.nfcalarmclock.util.getRecursivelyPlayMedia
+import com.nfcalarmclock.util.getShuffleMedia
+import com.nfcalarmclock.util.media.NacMedia
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -43,7 +54,7 @@ open class NacMediaPickerFragment
 	var mediaPlayer: NacMediaPlayer? = null
 
 	/**
-	 * The media path.
+	 * Media path.
 	 */
 	var mediaPath: String = ""
 		get()
@@ -54,7 +65,68 @@ open class NacMediaPickerFragment
 		{
 			if (alarm != null)
 			{
-				alarm!!.setMedia(requireContext(), value)
+				alarm!!.mediaPath = value
+				//alarm!!.setMedia(requireContext(), value)
+			}
+			else
+			{
+				field = value
+			}
+		}
+
+	/**
+	 * Media artist.
+	 */
+	var mediaArtist: String = ""
+		get()
+		{
+			return alarm?.mediaArtist ?: field
+		}
+		set(value)
+		{
+			if (alarm != null)
+			{
+				alarm!!.mediaArtist = value
+			}
+			else
+			{
+				field = value
+			}
+		}
+
+	/**
+	 * Media title.
+	 */
+	private var mediaTitle: String = ""
+		get()
+		{
+			return alarm?.mediaTitle ?: field
+		}
+		set(value)
+		{
+			if (alarm != null)
+			{
+				alarm!!.mediaTitle = value
+			}
+			else
+			{
+				field = value
+			}
+		}
+
+	/**
+	 * Media type.
+	 */
+	var mediaType: Int = NacMedia.TYPE_NONE
+		get()
+		{
+			return alarm?.mediaType ?: field
+		}
+		set(value)
+		{
+			if (alarm != null)
+			{
+				alarm!!.mediaType = value
 			}
 			else
 			{
@@ -118,6 +190,9 @@ open class NacMediaPickerFragment
 	{
 		// Clear the media that is being used
 		mediaPath = ""
+		mediaArtist = ""
+		mediaTitle = ""
+		mediaType = NacMedia.TYPE_NONE
 
 		// Stop any media that is already playing
 		mediaPlayer?.exoPlayer?.stop()
@@ -132,6 +207,9 @@ open class NacMediaPickerFragment
 		// Super
 		super.onCreate(savedInstanceState)
 
+		// Get the bundle
+		val bundle = arguments ?: Bundle()
+
 		// Set the alarm
 		alarm = NacBundle.getAlarm(arguments)
 
@@ -139,9 +217,12 @@ open class NacMediaPickerFragment
 		if (alarm == null)
 		{
 			// Set the media info
-			mediaPath = NacBundle.getMediaPath(arguments)
-			shuffleMedia = NacBundle.getShuffleMedia(arguments)
-			recursivelyPlayMedia = NacBundle.getRecursivelyPlayMedia(arguments)
+			mediaPath = bundle.getMediaPath()
+			mediaArtist = bundle.getMediaArtist()
+			mediaTitle = bundle.getMediaTitle()
+			mediaType = bundle.getMediaType()
+			shuffleMedia = bundle.getShuffleMedia()
+			recursivelyPlayMedia = bundle.getRecursivelyPlayMedia()
 		}
 
 		// Create the media player
@@ -171,6 +252,40 @@ open class NacMediaPickerFragment
 	open fun onOkClicked()
 	{
 		val activity = requireActivity()
+		val deviceContext = getDeviceProtectedStorageContext(activity)
+
+		println("Hello : $mediaPath")
+
+		// Get the directory for app specific files and the name of the file to create
+		val resolver = deviceContext.contentResolver
+		val directory = deviceContext.filesDir
+
+		// Get the URI from the path
+		val uri = Uri.parse(mediaPath)
+		val artist = NacMedia.getArtist(activity, uri)
+		val title = NacMedia.getTitle(activity, uri)
+		val type = NacMedia.getType(activity, mediaPath)
+		val name = if (artist.isNotEmpty()) "$artist - $title" else title
+		val newPath = "$directory/$name"
+		println("New path : $newPath")
+		println("Name     : $name")
+
+		// TODO: What to do if directory is selected because it returns and never gets here?
+		// TODO: When copying a ringtone, it thinks it is on external storage on the device.
+		// Need to maybe save the original path too for comparison's sake?
+		// TODO: Remove the file too when an alarm is deleted
+
+		// Copy the file
+		deviceContext.openFileOutput(name, Context.MODE_PRIVATE).use { fileOutput ->
+
+			// Copy the file to the local file dir (for the app)
+			resolver.openInputStream(uri).use { inputStream ->
+				inputStream?.copyTo(fileOutput, 1024)
+			}
+
+		}
+
+		//mediaPath = newPath
 
 		// Check if alarm is set
 		if (alarm != null)
@@ -185,10 +300,9 @@ open class NacMediaPickerFragment
 		else
 		{
 			// Create an intent with the media
-			val intent = NacMediaPickerActivity.getStartIntentWithMedia(
-				mediaPath = mediaPath,
-				shuffleMedia = shuffleMedia,
-				recursivelyPlayMedia = recursivelyPlayMedia)
+			val intent = Intent()
+				.addMediaInfo(mediaPath, artist, title, type,
+					shuffleMedia, recursivelyPlayMedia)
 
 			// Set the result of the activity with the media path as part of
 			// the intent
@@ -219,6 +333,9 @@ open class NacMediaPickerFragment
 
 		// Set the path of the media that is going to play
 		mediaPath = path
+		mediaArtist = NacMedia.getArtist(requireContext(), path)
+		mediaTitle = NacMedia.getTitle(requireContext(), path)
+		mediaType = NacMedia.getType(requireContext(), path)
 
 		// Stop any media that is already playing
 		mediaPlayer?.exoPlayer?.stop()

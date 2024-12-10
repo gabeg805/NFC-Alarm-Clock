@@ -52,12 +52,12 @@ class NacMediaPickerPreference @JvmOverloads constructor(
 	override fun getSummary(): CharSequence
 	{
 		// Get the name of the media
-		val name = NacMedia.getTitle(context, mediaPath)
+		val title = NacMedia.getTitle(context, mediaPath)
 
 		// Get the name "None" if unable to determine the name
 		val none = context.getString(R.string.none)
 
-		return name.ifEmpty { none }
+		return title.ifEmpty { none }
 	}
 
 	/**

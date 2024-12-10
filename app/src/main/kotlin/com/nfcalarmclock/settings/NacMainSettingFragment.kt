@@ -43,7 +43,7 @@ class NacMainSettingFragment
 	private fun animateSupportIcon()
 	{
 		// Get the preference
-		val preference = findPreference<Preference>(getString(R.string.support_setting_key))
+		val preference = findPreference<Preference>(getString(R.string.key_settings_support))
 
 		// Inflate the animator
 		val context = requireContext()
@@ -80,13 +80,13 @@ class NacMainSettingFragment
 		val title: String
 
 		// Keys for all settings
-		val generalKey = getString(R.string.general_setting_key)
-		val appearanceKey = getString(R.string.appearance_setting_key)
-		val statisticsKey = getString(R.string.stats_setting_key)
-		val manageNfcTagsKey = getString(R.string.manage_nfc_tags_setting_key)
-		val aboutKey = getString(R.string.about_setting_key)
-		val supportKey = getString(R.string.support_setting_key)
-		val importExportKey = getString(R.string.import_export_setting_key)
+		val generalKey = getString(R.string.key_settings_general)
+		val appearanceKey = getString(R.string.key_settings_appearance)
+		val statisticsKey = getString(R.string.key_settings_statistics)
+		val manageNfcTagsKey = getString(R.string.key_settings_manage_nfc_tags)
+		val aboutKey = getString(R.string.key_settings_about)
+		val supportKey = getString(R.string.key_settings_support)
+		val importExportKey = getString(R.string.key_settings_import_export)
 
 		// Check the preference key
 		when (preferenceKey)
@@ -186,7 +186,7 @@ class NacMainSettingFragment
 	private fun setupManageNfcTags()
 	{
 		// Prepare the preference
-		val preference = findPreference<Preference>(getString(R.string.manage_nfc_tags_setting_key))
+		val preference = findPreference<Preference>(getString(R.string.key_settings_manage_nfc_tags))
 
 		// Set whether to show the managee NFC tags preference
 		preference?.isVisible = sharedPreferences?.shouldShowManageNfcTagsPreference == true
@@ -206,7 +206,7 @@ class NacMainSettingFragment
 
 		// Prepare the preference
 		val context = requireContext()
-		val preference = findPreference<Preference>(getString(R.string.support_setting_key))
+		val preference = findPreference<Preference>(getString(R.string.key_settings_support))
 		val color = ContextCompat.getColor(context, R.color.red)
 
 		// Change the color of the icon to show that the user has shown their support

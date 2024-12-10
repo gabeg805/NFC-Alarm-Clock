@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- Audio sources -->
+	<string-array name="audio_sources">
+		<item>Alarm</item>
+		<item>Anruf</item>
+		<item>Medien</item>
+		<item>Benachrichtigung</item>
+		<item>Klingelton</item>
+	</string-array>
+
+	<!-- Flashlight -->
+	<string-array name="flashlight_on_off_duration_times">
+		<item>0,5 Sekunden</item>
+		<item>1,0 Sekunde</item>
+		<item>1,5 Sekunden</item>
+		<item>2,0 Sekunden</item>
+		<item>2,5 Sekunden</item>
+		<item>3,0 Sekunden</item>
+		<item>3,5 Sekunden</item>
+		<item>4,0 Sekunden</item>
+		<item>4,5 Sekunden</item>
+		<item>5,0 Sekunden</item>
+		<item>5,5 Sekunden</item>
+		<item>6,0 Sekunden</item>
+		<item>6,5 Sekunden</item>
+		<item>7,0 Sekunden</item>
+		<item>7,5 Sekunden</item>
+		<item>8,0 Sekunden</item>
+		<item>8,5 Sekunden</item>
+		<item>9,0 Sekunden</item>
+		<item>9,5 Sekunden</item>
+		<item>10,0 Sekunden</item>
+	</string-array>
+
+	<!-- Text to speech -->
+	<string-array name="tts_frequency">
+		<item>Einmal</item>
+		<item>Alle 1 Min</item>
+		<item>Alle 2 Min</item>
+		<item>Alle 3 Min</item>
+		<item>Alle 4 Min</item>
+		<item>Alle 5 Min</item>
+		<item>Alle 6 Min</item>
+		<item>Alle 7 Min</item>
+		<item>Alle 8 Min</item>
+		<item>Alle 9 Min</item>
+		<item>Alle 10 Min</item>
+		<item>Alle 11 Min</item>
+		<item>Alle 12 Min</item>
+		<item>Alle 13 Min</item>
+		<item>Alle 14 Min</item>
+		<item>Alle 15 Min</item>
+		<item>Alle 16 Min</item>
+		<item>Alle 17 Min</item>
+		<item>Alle 18 Min</item>
+		<item>Alle 19 Min</item>
+		<item>Alle 20 Min</item>
+		<item>Alle 21 Min</item>
+		<item>Alle 22 Min</item>
+		<item>Alle 23 Min</item>
+		<item>Alle 24 Min</item>
+		<item>Alle 25 Min</item>
+		<item>Alle 26 Min</item>
+		<item>Alle 27 Min</item>
+		<item>Alle 28 Min</item>
+		<item>Alle 29 Min</item>
+		<item>Alle 30 Min</item>
+	</string-array>
+
+	<!-- Auto dismiss minutes -->
+	<string-array name="auto_dismiss_minute_summaries">
+		<item>0 Minuten</item>
+		<item>1 Minute</item>
+		<item>2 Minuten</item>
+		<item>3 Minuten</item>
+		<item>4 Minuten</item>
+		<item>5 Minuten</item>
+		<item>6 Minuten</item>
+		<item>7 Minuten</item>
+		<item>8 Minuten</item>
+		<item>9 Minuten</item>
+		<item>10 Minuten</item>
+		<item>11 Minuten</item>
+		<item>12 Minuten</item>
+		<item>13 Minuten</item>
+		<item>14 Minuten</item>
+		<item>15 Minuten</item>
+		<item>16 Minuten</item>
+		<item>17 Minuten</item>
+		<item>18 Minuten</item>
+		<item>19 Minuten</item>
+		<item>20 Minuten</item>
+		<item>21 Minuten</item>
+		<item>22 Minuten</item>
+		<item>23 Minuten</item>
+		<item>24 Minuten</item>
+		<item>25 Minuten</item>
+		<item>26 Minuten</item>
+		<item>27 Minuten</item>
+		<item>28 Minuten</item>
+		<item>29 Minuten</item>
+		<item>30 Minuten</item>
+		<item>31 Minuten</item>
+		<item>32 Minuten</item>
+		<item>33 Minuten</item>
+		<item>34 Minuten</item>
+		<item>35 Minuten</item>
+		<item>36 Minuten</item>
+		<item>37 Minuten</item>
+		<item>38 Minuten</item>
+		<item>39 Minuten</item>
+		<item>40 Minuten</item>
+		<item>41 Minuten</item>
+		<item>42 Minuten</item>
+		<item>43 Minuten</item>
+		<item>44 Minuten</item>
+		<item>45 Minuten</item>
+		<item>46 Minuten</item>
+		<item>47 Minuten</item>
+		<item>48 Minuten</item>
+		<item>49 Minuten</item>
+		<item>50 Minuten</item>
+		<item>51 Minuten</item>
+		<item>52 Minuten</item>
+		<item>53 Minuten</item>
+		<item>54 Minuten</item>
+		<item>55 Minuten</item>
+		<item>56 Minuten</item>
+		<item>57 Minuten</item>
+		<item>58 Minuten</item>
+		<item>59 Minuten</item>
+		<item>60 Minuten</item>
+	</string-array>
+
+	<!-- Dismiss early -->
+	<string-array name="dismiss_early_times">
+		<item>1 Minute</item>
+		<item>2 Minuten</item>
+		<item>3 Minuten</item>
+		<item>4 Minuten</item>
+		<item>5 Minuten</item>
+		<item>10 Minuten</item>
+		<item>15 Minuten</item>
+		<item>20 Minuten</item>
+		<item>25 Minuten</item>
+		<item>30 Minuten</item>
+		<item>35 Minuten</item>
+		<item>40 Minuten</item>
+		<item>45 Minuten</item>
+		<item>50 Minuten</item>
+		<item>55 Minuten</item>
+		<item>60 Minuten</item>
+		<item>65 Minuten</item>
+		<item>70 Minuten</item>
+		<item>75 Minuten</item>
+		<item>80 Minuten</item>
+		<item>85 Minuten</item>
+		<item>90 Minuten</item>
+		<item>95 Minuten</item>
+		<item>100 Minuten</item>
+		<item>105 Minuten</item>
+		<item>110 Minuten</item>
+		<item>115 Minuten</item>
+		<item>120 Minuten</item>
+	</string-array>
+
+	<!-- Auto snooze minutes -->
+	<string-array name="auto_snooze_minute_summaries">
+		<item>0 Minuten</item>
+		<item>1 Minute</item>
+		<item>2 Minuten</item>
+		<item>3 Minuten</item>
+		<item>4 Minuten</item>
+		<item>5 Minuten</item>
+		<item>6 Minuten</item>
+		<item>7 Minuten</item>
+		<item>8 Minuten</item>
+		<item>9 Minuten</item>
+		<item>10 Minuten</item>
+		<item>11 Minuten</item>
+		<item>12 Minuten</item>
+		<item>13 Minuten</item>
+		<item>14 Minuten</item>
+		<item>15 Minuten</item>
+		<item>16 Minuten</item>
+		<item>17 Minuten</item>
+		<item>18 Minuten</item>
+		<item>19 Minuten</item>
+		<item>20 Minuten</item>
+		<item>21 Minuten</item>
+		<item>22 Minuten</item>
+		<item>23 Minuten</item>
+		<item>24 Minuten</item>
+		<item>25 Minuten</item>
+		<item>26 Minuten</item>
+		<item>27 Minuten</item>
+		<item>28 Minuten</item>
+		<item>29 Minuten</item>
+		<item>30 Minuten</item>
+	</string-array>
+
+	<!-- Max snoozes -->
+	<string-array name="max_snooze_summaries">
+		<item>Keiner</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+		<item>5</item>
+		<item>6</item>
+		<item>7</item>
+		<item>8</item>
+		<item>9</item>
+		<item>10</item>
+		<item>Unbegrenzt</item>
+	</string-array>
+
+	<!-- Snooze duration minutes -->
+	<string-array name="snooze_duration_minute_summaries">
+		<item>0 Minuten</item>
+		<item>1 Minute</item>
+		<item>2 Minuten</item>
+		<item>3 Minuten</item>
+		<item>4 Minuten</item>
+		<item>5 Minuten</item>
+		<item>6 Minuten</item>
+		<item>7 Minuten</item>
+		<item>8 Minuten</item>
+		<item>9 Minuten</item>
+		<item>10 Minuten</item>
+		<item>11 Minuten</item>
+		<item>12 Minuten</item>
+		<item>13 Minuten</item>
+		<item>14 Minuten</item>
+		<item>15 Minuten</item>
+		<item>16 Minuten</item>
+		<item>17 Minuten</item>
+		<item>18 Minuten</item>
+		<item>19 Minuten</item>
+		<item>20 Minuten</item>
+		<item>21 Minuten</item>
+		<item>22 Minuten</item>
+		<item>23 Minuten</item>
+		<item>24 Minuten</item>
+		<item>25 Minuten</item>
+		<item>26 Minuten</item>
+		<item>27 Minuten</item>
+		<item>28 Minuten</item>
+		<item>29 Minuten</item>
+		<item>30 Minuten</item>
+		<item>31 Minuten</item>
+		<item>32 Minuten</item>
+		<item>33 Minuten</item>
+		<item>34 Minuten</item>
+		<item>35 Minuten</item>
+		<item>36 Minuten</item>
+		<item>37 Minuten</item>
+		<item>38 Minuten</item>
+		<item>39 Minuten</item>
+		<item>40 Minuten</item>
+		<item>41 Minuten</item>
+		<item>42 Minuten</item>
+		<item>43 Minuten</item>
+		<item>44 Minuten</item>
+		<item>45 Minuten</item>
+		<item>46 Minuten</item>
+		<item>47 Minuten</item>
+		<item>48 Minuten</item>
+		<item>49 Minuten</item>
+		<item>50 Minuten</item>
+		<item>51 Minuten</item>
+		<item>52 Minuten</item>
+		<item>53 Minuten</item>
+		<item>54 Minuten</item>
+		<item>55 Minuten</item>
+		<item>56 Minuten</item>
+		<item>57 Minuten</item>
+		<item>58 Minuten</item>
+		<item>59 Minuten</item>
+		<item>60 Minuten</item>
+		<item>61 Minuten</item>
+		<item>62 Minuten</item>
+		<item>63 Minuten</item>
+		<item>64 Minuten</item>
+		<item>65 Minuten</item>
+		<item>66 Minuten</item>
+		<item>67 Minuten</item>
+		<item>68 Minuten</item>
+		<item>69 Minuten</item>
+		<item>70 Minuten</item>
+		<item>71 Minuten</item>
+		<item>72 Minuten</item>
+		<item>73 Minuten</item>
+		<item>74 Minuten</item>
+		<item>75 Minuten</item>
+		<item>76 Minuten</item>
+		<item>77 Minuten</item>
+		<item>78 Minuten</item>
+		<item>79 Minuten</item>
+		<item>80 Minuten</item>
+		<item>81 Minuten</item>
+		<item>82 Minuten</item>
+		<item>83 Minuten</item>
+		<item>84 Minuten</item>
+		<item>85 Minuten</item>
+		<item>86 Minuten</item>
+		<item>87 Minuten</item>
+		<item>88 Minuten</item>
+		<item>89 Minuten</item>
+		<item>90 Minuten</item>
+	</string-array>
+
+	<!-- Upcoming reminder how early -->
+	<string-array name="upcoming_reminder_how_early">
+		<item>1 Minute</item>
+		<item>2 Minuten</item>
+		<item>3 Minuten</item>
+		<item>4 Minuten</item>
+		<item>5 Minuten</item>
+		<item>6 Minuten</item>
+		<item>7 Minuten</item>
+		<item>8 Minuten</item>
+		<item>9 Minuten</item>
+		<item>10 Minuten</item>
+		<item>15 Minuten</item>
+		<item>20 Minuten</item>
+		<item>25 Minuten</item>
+		<item>30 Minuten</item>
+		<item>35 Minuten</item>
+		<item>40 Minuten</item>
+		<item>45 Minuten</item>
+		<item>50 Minuten</item>
+		<item>55 Minuten</item>
+		<item>60 Minuten</item>
+		<item>65 Minuten</item>
+		<item>70 Minuten</item>
+		<item>75 Minuten</item>
+		<item>80 Minuten</item>
+		<item>85 Minuten</item>
+		<item>90 Minuten</item>
+		<item>95 Minuten</item>
+		<item>100 Minuten</item>
+		<item>105 Minuten</item>
+		<item>110 Minuten</item>
+		<item>115 Minuten</item>
+		<item>120 Minuten</item>
+	</string-array>
+
+	<!-- Upcoming reminder how frequent -->
+	<string-array name="upcoming_reminder_how_frequent">
+		<item>Einmal</item>
+		<item>Alle 1 Min</item>
+		<item>Alle 2 Min</item>
+		<item>Alle 3 Min</item>
+		<item>Alle 4 Min</item>
+		<item>Alle 5 Min</item>
+		<item>Alle 6 Min</item>
+		<item>Alle 7 Min</item>
+		<item>Alle 8 Min</item>
+		<item>Alle 9 Min</item>
+		<item>Alle 10 Min</item>
+		<item>Alle 11 Min</item>
+		<item>Alle 12 Min</item>
+		<item>Alle 13 Min</item>
+		<item>Alle 14 Min</item>
+		<item>Alle 15 Min</item>
+		<item>Alle 16 Min</item>
+		<item>Alle 17 Min</item>
+		<item>Alle 18 Min</item>
+		<item>Alle 19 Min</item>
+		<item>Alle 20 Min</item>
+		<item>Alle 21 Min</item>
+		<item>Alle 22 Min</item>
+		<item>Alle 23 Min</item>
+		<item>Alle 24 Min</item>
+		<item>Alle 25 Min</item>
+		<item>Alle 26 Min</item>
+		<item>Alle 27 Min</item>
+		<item>Alle 28 Min</item>
+		<item>Alle 29 Min</item>
+		<item>Alle 30 Min</item>
+	</string-array>
+
+</resources>

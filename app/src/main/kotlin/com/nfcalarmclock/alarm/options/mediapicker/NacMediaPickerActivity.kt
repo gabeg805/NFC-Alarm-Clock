@@ -24,6 +24,13 @@ import com.nfcalarmclock.alarm.options.mediapicker.ringtone.NacRingtonePickerFra
 import com.nfcalarmclock.system.permission.readmediaaudio.NacReadMediaAudioPermission
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacIntent
+import com.nfcalarmclock.util.getMediaArtist
+import com.nfcalarmclock.util.getMediaBundle
+import com.nfcalarmclock.util.getMediaPath
+import com.nfcalarmclock.util.getMediaTitle
+import com.nfcalarmclock.util.getMediaType
+import com.nfcalarmclock.util.getRecursivelyPlayMedia
+import com.nfcalarmclock.util.getShuffleMedia
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -69,6 +76,21 @@ class NacMediaPickerActivity
 	 * Media path.
 	 */
 	private var mediaPath: String = ""
+
+	/**
+	 * Media artist.
+	 */
+	private var mediaArtist: String = ""
+
+	/**
+	 * Media title.
+	 */
+	private var mediaTitle: String = ""
+
+	/**
+	 * Media type.
+	 */
+	private var mediaType: Int = NacMedia.TYPE_NONE
 
 	/**
 	 * Whether to shuffle the media.
@@ -175,11 +197,18 @@ class NacMediaPickerActivity
 		// Set the layout
 		setContentView(R.layout.act_sound)
 
+		// Get the media bundle from the intent
+		val bundle = intent.getMediaBundle()
+
 		// Set the member variables
 		alarm = NacIntent.getAlarm(intent)
-		mediaPath = NacIntent.getMediaPath(intent)
-		shuffleMedia = NacIntent.getShuffleMedia(intent)
-		recursivelyPlayMedia = NacIntent.getRecursivelyPlayMedia(intent)
+		mediaPath = bundle.getMediaPath()
+		mediaArtist = bundle.getMediaArtist()
+		mediaTitle = bundle.getMediaTitle()
+		mediaType = bundle.getMediaType()
+		//val mediaType = alarm?.mediaType ?: NacMedia.getType(this, mediaPath)
+		shuffleMedia = bundle.getShuffleMedia()
+		recursivelyPlayMedia = bundle.getRecursivelyPlayMedia()
 		viewPager = findViewById(R.id.act_sound)
 		tabLayout = findViewById(R.id.tab_layout)
 		pagerAdapter = NacPagerAdapter(this)
@@ -189,7 +218,6 @@ class NacMediaPickerActivity
 		titles[1] = resources.getStringArray(R.array.audio_sources)[4]
 
 		// Get the media type
-		val mediaType = alarm?.mediaType ?: NacMedia.getType(this, mediaPath)
 
 		// Set the initial position based on the media path
 		// None
@@ -435,8 +463,8 @@ class NacMediaPickerActivity
 			// Use the media path
 			else
 			{
-				NacMusicPickerFragment.newInstance(mediaPath, shuffleMedia,
-					recursivelyPlayMedia)
+				NacMusicPickerFragment.newInstance(mediaPath, mediaArtist, mediaTitle,
+					mediaType, shuffleMedia, recursivelyPlayMedia)
 			}
 		}
 
@@ -454,8 +482,8 @@ class NacMediaPickerActivity
 			// Use the media path
 			else
 			{
-				NacRingtonePickerFragment.newInstance(mediaPath, shuffleMedia,
-					recursivelyPlayMedia)
+				NacRingtonePickerFragment.newInstance(mediaPath, mediaArtist, mediaTitle,
+					mediaType, shuffleMedia, recursivelyPlayMedia)
 			}
 		}
 
@@ -494,35 +522,6 @@ class NacMediaPickerActivity
 
 			// Add the alarm to the intent
 			return NacIntent.addAlarm(intent, alarm)
-		}
-
-		/**
-		 * Create an intent that will be used to start the media activity with
-		 * a media path attached.
-		 *
-		 * @param context The application context.
-		 * @param mediaPath A media path.
-		 * @param shuffleMedia Whether to shuffle media or not.
-		 * @param recursivelyPlayMedia Whether to recursively play media or not.
-		 *
-		 * @return An intent that will be used to start the media activity with
-		 *         a media path attached.
-		 */
-		fun getStartIntentWithMedia(
-			context: Context? = null,
-			mediaPath: String,
-			shuffleMedia: Boolean,
-			recursivelyPlayMedia: Boolean
-		): Intent
-		{
-			// Create an intent with the media activity or an empty intent
-			val intent = context?.let {
-				Intent(context, NacMediaPickerActivity::class.java)
-			} ?: Intent()
-
-			// Add the media to the intent
-			return NacIntent.addMediaInfo(intent, mediaPath, shuffleMedia,
-				recursivelyPlayMedia)
 		}
 
 	}

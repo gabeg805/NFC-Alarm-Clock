@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
+import com.nfcalarmclock.util.media.NacMedia
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -46,14 +47,14 @@ class NacSharedPreferences(context: Context)
 	var appFirstRun: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.app_first_run)
+			val key = resources.getString(R.string.key_app_first_run)
 			val defaultValue = true
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.app_first_run)
+			val key = resources.getString(R.string.key_app_first_run)
 
 			saveBoolean(key, value)
 		}
@@ -64,14 +65,14 @@ class NacSharedPreferences(context: Context)
 	var appStartStatistics: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.app_start_statistics)
+			val key = resources.getString(R.string.key_app_start_statistics)
 			val defaultValue = resources.getBoolean(R.bool.default_app_start_statistics)
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.app_start_statistics)
+			val key = resources.getString(R.string.key_app_start_statistics)
 
 			saveBoolean(key, value)
 		}
@@ -187,14 +188,14 @@ class NacSharedPreferences(context: Context)
 	var cardHeightCollapsed: Int
 		get()
 		{
-			val key = resources.getString(R.string.card_height_collapsed)
+			val key = resources.getString(R.string.key_main_card_height_collapsed)
 			val defaultValue = 0
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.card_height_collapsed)
+			val key = resources.getString(R.string.key_main_card_height_collapsed)
 
 			saveInt(key, value)
 		}
@@ -205,14 +206,14 @@ class NacSharedPreferences(context: Context)
 	var cardHeightCollapsedDismiss: Int
 		get()
 		{
-			val key = resources.getString(R.string.card_height_collapsed_dismiss)
+			val key = resources.getString(R.string.key_main_card_height_collapsed_dismiss)
 			val defaultValue = 0
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.card_height_collapsed_dismiss)
+			val key = resources.getString(R.string.key_main_card_height_collapsed_dismiss)
 
 			saveInt(key, value)
 		}
@@ -223,14 +224,14 @@ class NacSharedPreferences(context: Context)
 	var cardHeightExpanded: Int
 		get()
 		{
-			val key = resources.getString(R.string.card_height_expanded)
+			val key = resources.getString(R.string.key_main_card_height_expanded)
 			val defaultValue = 0
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.card_height_expanded)
+			val key = resources.getString(R.string.key_main_card_height_expanded)
 
 			saveInt(key, value)
 		}
@@ -241,14 +242,14 @@ class NacSharedPreferences(context: Context)
 	var cardIsMeasured: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.card_is_measured)
+			val key = resources.getString(R.string.key_main_card_is_measured)
 			val defaultValue = resources.getBoolean(R.bool.default_card_is_measured)
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.card_is_measured)
+			val key = resources.getString(R.string.key_main_card_is_measured)
 
 			saveBoolean(key, value)
 		}
@@ -259,14 +260,14 @@ class NacSharedPreferences(context: Context)
 	var clockWidgetAlarmIconColor: Int
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_color_alarm_icon_key)
+			val key = resources.getString(R.string.key_clock_widget_color_alarm_icon)
 			val defaultValue = resources.getInteger(R.integer.default_clock_widget_color_alarm_icon)
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_color_alarm_icon_key)
+			val key = resources.getString(R.string.key_clock_widget_color_alarm_icon)
 
 			saveInt(key, value)
 		}
@@ -277,14 +278,14 @@ class NacSharedPreferences(context: Context)
 	var clockWidgetAlarmTimeColor: Int
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_color_alarm_time_key)
+			val key = resources.getString(R.string.key_clock_widget_color_alarm_time)
 			val defaultValue = resources.getInteger(R.integer.default_clock_widget_color_alarm_time)
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_color_alarm_time_key)
+			val key = resources.getString(R.string.key_clock_widget_color_alarm_time)
 
 			saveInt(key, value)
 		}
@@ -295,14 +296,14 @@ class NacSharedPreferences(context: Context)
 	var clockWidgetAlarmTimeTextSize: Float
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_text_size_alarm_time_key)
-			val defaultValue = resources.getDimension(R.dimen.tsz_small)
+			val key = resources.getString(R.string.key_clock_widget_text_size_alarm_time)
+			val defaultValue = resources.getDimension(R.dimen.tsz_small) / resources.displayMetrics.density
 
 			return instance.getFloat(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_text_size_alarm_time_key)
+			val key = resources.getString(R.string.key_clock_widget_text_size_alarm_time)
 
 			saveFloat(key, value)
 		}
@@ -313,14 +314,14 @@ class NacSharedPreferences(context: Context)
 	var clockWidgetAmPmColor: Int
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_color_am_pm_key)
+			val key = resources.getString(R.string.key_clock_widget_color_am_pm)
 			val defaultValue = resources.getInteger(R.integer.default_clock_widget_color_am_pm)
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_color_am_pm_key)
+			val key = resources.getString(R.string.key_clock_widget_color_am_pm)
 
 			saveInt(key, value)
 		}
@@ -331,14 +332,14 @@ class NacSharedPreferences(context: Context)
 	var clockWidgetAmPmTextSize: Float
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_text_size_am_pm_key)
-			val defaultValue = resources.getDimension(R.dimen.tsz_medium)
+			val key = resources.getString(R.string.key_clock_widget_text_size_am_pm)
+			val defaultValue = resources.getDimension(R.dimen.tsz_medium) / resources.displayMetrics.density
 
 			return instance.getFloat(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_text_size_am_pm_key)
+			val key = resources.getString(R.string.key_clock_widget_text_size_am_pm)
 
 			saveFloat(key, value)
 		}
@@ -349,14 +350,14 @@ class NacSharedPreferences(context: Context)
 	var clockWidgetBackgroundColor: Int
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_background_color_key)
+			val key = resources.getString(R.string.key_clock_widget_background_color)
 			val defaultValue = resources.getInteger(R.integer.default_clock_widget_color_background)
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_background_color_key)
+			val key = resources.getString(R.string.key_clock_widget_background_color)
 
 			saveInt(key, value)
 		}
@@ -367,14 +368,14 @@ class NacSharedPreferences(context: Context)
 	var clockWidgetBackgroundTransparency: Int
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_background_transparency_key)
+			val key = resources.getString(R.string.key_clock_widget_background_transparency)
 			val defaultValue = 100
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_background_transparency_key)
+			val key = resources.getString(R.string.key_clock_widget_background_transparency)
 
 			saveInt(key, value)
 		}
@@ -385,14 +386,14 @@ class NacSharedPreferences(context: Context)
 	var clockWidgetDateColor: Int
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_color_date_key)
+			val key = resources.getString(R.string.key_clock_widget_color_date)
 			val defaultValue = resources.getInteger(R.integer.default_clock_widget_color_date)
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_color_date_key)
+			val key = resources.getString(R.string.key_clock_widget_color_date)
 
 			saveInt(key, value)
 		}
@@ -403,14 +404,14 @@ class NacSharedPreferences(context: Context)
 	var clockWidgetDateTextSize: Float
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_text_size_date_key)
-			val defaultValue = resources.getDimension(R.dimen.tsz_small)
+			val key = resources.getString(R.string.key_clock_widget_text_size_date)
+			val defaultValue = resources.getDimension(R.dimen.tsz_small) / resources.displayMetrics.density
 
 			return instance.getFloat(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_text_size_date_key)
+			val key = resources.getString(R.string.key_clock_widget_text_size_date)
 
 			saveFloat(key, value)
 		}
@@ -421,14 +422,14 @@ class NacSharedPreferences(context: Context)
 	var clockWidgetHourColor: Int
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_color_hour_key)
+			val key = resources.getString(R.string.key_clock_widget_color_hour)
 			val defaultValue = resources.getInteger(R.integer.default_clock_widget_color_hour)
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_color_hour_key)
+			val key = resources.getString(R.string.key_clock_widget_color_hour)
 
 			saveInt(key, value)
 		}
@@ -439,14 +440,14 @@ class NacSharedPreferences(context: Context)
 	var clockWidgetMinuteColor: Int
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_color_minute_key)
+			val key = resources.getString(R.string.key_clock_widget_color_minute)
 			val defaultValue = resources.getInteger(R.integer.default_clock_widget_color_minute)
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_color_minute_key)
+			val key = resources.getString(R.string.key_clock_widget_color_minute)
 
 			saveInt(key, value)
 		}
@@ -457,14 +458,14 @@ class NacSharedPreferences(context: Context)
 	var clockWidgetTimeTextSize: Float
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_text_size_time_key)
-			val defaultValue = resources.getDimension(R.dimen.tsz_widget)
+			val key = resources.getString(R.string.key_clock_widget_text_size_time)
+			val defaultValue = resources.getDimension(R.dimen.tsz_widget) / resources.displayMetrics.density
 
 			return instance.getFloat(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_text_size_time_key)
+			val key = resources.getString(R.string.key_clock_widget_text_size_time)
 
 			saveFloat(key, value)
 		}
@@ -511,14 +512,14 @@ class NacSharedPreferences(context: Context)
 	var shouldClockWidgetBoldAlarmTime: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_bold_alarm_time_key)
+			val key = resources.getString(R.string.key_clock_widget_bold_alarm_time)
 			val defaultValue = true
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_bold_alarm_time_key)
+			val key = resources.getString(R.string.key_clock_widget_bold_alarm_time)
 
 			saveBoolean(key, value)
 		}
@@ -529,14 +530,14 @@ class NacSharedPreferences(context: Context)
 	var shouldClockWidgetBoldAmPm: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_bold_am_pm_key)
+			val key = resources.getString(R.string.key_clock_widget_bold_am_pm)
 			val defaultValue = true
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_bold_am_pm_key)
+			val key = resources.getString(R.string.key_clock_widget_bold_am_pm)
 
 			saveBoolean(key, value)
 		}
@@ -547,14 +548,14 @@ class NacSharedPreferences(context: Context)
 	var shouldClockWidgetBoldDate: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_bold_date_key)
+			val key = resources.getString(R.string.key_clock_widget_bold_date)
 			val defaultValue = true
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_bold_date_key)
+			val key = resources.getString(R.string.key_clock_widget_bold_date)
 
 			saveBoolean(key, value)
 		}
@@ -565,14 +566,14 @@ class NacSharedPreferences(context: Context)
 	var shouldClockWidgetBoldHour: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_bold_hour_key)
+			val key = resources.getString(R.string.key_clock_widget_bold_hour)
 			val defaultValue = true
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_bold_hour_key)
+			val key = resources.getString(R.string.key_clock_widget_bold_hour)
 
 			saveBoolean(key, value)
 		}
@@ -583,14 +584,14 @@ class NacSharedPreferences(context: Context)
 	var shouldClockWidgetBoldMinute: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_bold_minute_key)
+			val key = resources.getString(R.string.key_clock_widget_bold_minute)
 			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_bold_minute_key)
+			val key = resources.getString(R.string.key_clock_widget_bold_minute)
 
 			saveBoolean(key, value)
 		}
@@ -601,14 +602,14 @@ class NacSharedPreferences(context: Context)
 	var shouldClockWidgetShowAlarm: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_show_alarm_key)
+			val key = resources.getString(R.string.key_clock_widget_show_alarm)
 			val defaultValue = true
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_show_alarm_key)
+			val key = resources.getString(R.string.key_clock_widget_show_alarm)
 
 			saveBoolean(key, value)
 		}
@@ -619,14 +620,14 @@ class NacSharedPreferences(context: Context)
 	var shouldClockWidgetShowDate: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_show_date_key)
+			val key = resources.getString(R.string.key_clock_widget_show_date)
 			val defaultValue = true
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_show_date_key)
+			val key = resources.getString(R.string.key_clock_widget_show_date)
 
 			saveBoolean(key, value)
 		}
@@ -637,14 +638,14 @@ class NacSharedPreferences(context: Context)
 	var shouldClockWidgetShowTime: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.clock_widget_show_time_key)
+			val key = resources.getString(R.string.key_clock_widget_show_time)
 			val defaultValue = true
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.clock_widget_show_time_key)
+			val key = resources.getString(R.string.key_clock_widget_show_time)
 
 			saveBoolean(key, value)
 		}
@@ -711,14 +712,14 @@ class NacSharedPreferences(context: Context)
 	var delayShowingWhatsNewDialogCounter: Int
 		get()
 		{
-			val key = resources.getString(R.string.key_delay_showing_whats_new_dialog_counter)
+			val key = resources.getString(R.string.key_main_delay_showing_whats_new_dialog_counter)
 			val defaultValue = 0
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.key_delay_showing_whats_new_dialog_counter)
+			val key = resources.getString(R.string.key_main_delay_showing_whats_new_dialog_counter)
 
 			saveInt(key, value)
 		}
@@ -949,14 +950,83 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Local media path.
+	 */
+	var localMediaPath: String
+		get()
+		{
+			val key = resources.getString(R.string.key_general_default_alarm_local_media_path)
+
+			return instance.getString(key, "") ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_general_default_alarm_local_media_path)
+
+			saveString(key, value)
+		}
+
+	/**
+	 * Media artist.
+	 */
+	var mediaArtist: String
+		get()
+		{
+			val key = resources.getString(R.string.key_general_default_alarm_media_artist)
+
+			return instance.getString(key, "") ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_general_default_alarm_media_artist)
+
+			saveString(key, value)
+		}
+
+	/**
 	 * Media path.
 	 */
 	val mediaPath: String
 		get()
 		{
-			val key = resources.getString(R.string.alarm_sound_key)
+			val key = resources.getString(R.string.key_general_default_alarm_media_path)
 
 			return instance.getString(key, "") ?: ""
+		}
+
+	/**
+	 * Media title.
+	 */
+	var mediaTitle: String
+		get()
+		{
+			val key = resources.getString(R.string.key_general_default_alarm_media_title)
+
+			return instance.getString(key, "") ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_general_default_alarm_media_title)
+
+			saveString(key, value)
+		}
+
+	/**
+	 * Media type.
+	 */
+	var mediaType: Int
+		get()
+		{
+			val key = resources.getString(R.string.key_general_default_alarm_media_type)
+			val defaultValue = NacMedia.TYPE_NONE
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_general_default_alarm_media_type)
+
+			saveInt(key, value)
 		}
 
 	/**
@@ -1027,13 +1097,13 @@ class NacSharedPreferences(context: Context)
 	var previousAppVersion: String
 		get()
 		{
-			val key = resources.getString(R.string.previous_app_version)
+			val key = resources.getString(R.string.key_app_previous_version)
 
 			return instance.getString(key, "") ?: ""
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.previous_app_version)
+			val key = resources.getString(R.string.key_app_previous_version)
 
 			saveString(key, value)
 		}
@@ -1065,14 +1135,14 @@ class NacSharedPreferences(context: Context)
 	var rateMyAppCounter: Int
 		get()
 		{
-			val key = resources.getString(R.string.app_rating_counter)
+			val key = resources.getString(R.string.key_app_rating_counter)
 			val defaultValue = 0
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.app_rating_counter)
+			val key = resources.getString(R.string.key_app_rating_counter)
 
 			saveInt(key, value)
 		}
@@ -1173,14 +1243,14 @@ class NacSharedPreferences(context: Context)
 	var shouldRefreshMainActivity: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.app_should_refresh_main_activity)
+			val key = resources.getString(R.string.key_main_should_refresh_activity)
 			val defaultValue = resources.getBoolean(R.bool.default_app_should_refresh_main_activity)
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.app_should_refresh_main_activity)
+			val key = resources.getString(R.string.key_main_should_refresh_activity)
 
 			saveBoolean(key, value)
 		}
@@ -1293,14 +1363,14 @@ class NacSharedPreferences(context: Context)
 	var shouldShowManageNfcTagsPreference: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.should_show_manage_nfc_tags_setting)
+			val key = resources.getString(R.string.key_settings_should_show_manage_nfc_tags)
 			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.should_show_manage_nfc_tags_setting)
+			val key = resources.getString(R.string.key_settings_should_show_manage_nfc_tags)
 
 			saveBoolean(key, value)
 		}
@@ -1741,18 +1811,18 @@ class NacSharedPreferences(context: Context)
 	private fun getCsvKeysToIgnore(): List<String>
 	{
 		return listOf(
-			resources.getString(R.string.app_first_run),
-			resources.getString(R.string.app_should_refresh_main_activity),
-			resources.getString(R.string.card_height_collapsed),
-			resources.getString(R.string.card_height_collapsed_dismiss),
-			resources.getString(R.string.card_height_expanded),
-			resources.getString(R.string.card_is_measured),
+			resources.getString(R.string.key_app_first_run),
+			resources.getString(R.string.key_main_should_refresh_activity),
+			resources.getString(R.string.key_main_card_height_collapsed),
+			resources.getString(R.string.key_main_card_height_collapsed_dismiss),
+			resources.getString(R.string.key_main_card_height_expanded),
+			resources.getString(R.string.key_main_card_is_measured),
 			resources.getString(R.string.key_current_playing_alarm_media),
-			resources.getString(R.string.key_delay_showing_whats_new_dialog_counter),
+			resources.getString(R.string.key_main_delay_showing_whats_new_dialog_counter),
 			resources.getString(R.string.key_permission_ignore_battery_optimization_requested),
 			resources.getString(R.string.key_permission_post_notifications_requested),
 			resources.getString(R.string.key_permission_schedule_exact_alarm_requested),
-			resources.getString(R.string.previous_app_version),
+			resources.getString(R.string.key_app_previous_version),
 			resources.getString(R.string.sys_previous_volume),
 		)
 	}
@@ -1856,15 +1926,12 @@ class NacSharedPreferences(context: Context)
 		 */
 		fun moveToDeviceProtectedStorage(context: Context): Boolean
 		{
-			println("moveToDeviceProtectedStorage()")
 			// Check if shared preferences should be moved to device protected storage
 			return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
 			{
-				println("MAIN SHARED PREFS")
 				// Get default shared preferences file name
 				val name = "${context.packageName}_preferences"
 				val file = File("${context.dataDir}/shared_prefs/${name}.xml")
-				println("File exists? ${file.exists()} | ${file.path}")
 
 				// Check if the file exists
 				if (file.exists())
@@ -1873,14 +1940,11 @@ class NacSharedPreferences(context: Context)
 					val deviceContext = context.createDeviceProtectedStorageContext()
 
 					// Move shared preferences to device encrypted storage
-					val y = deviceContext.moveSharedPreferencesFrom(context, name)
-					println("MAIN Move Shared pref? $y")
-					y
+					deviceContext.moveSharedPreferencesFrom(context, name)
 				}
 				else
 				{
 					// No need to move shared preferences because it has already been moved
-					println("Shared pref already has been moved")
 					false
 				}
 			}

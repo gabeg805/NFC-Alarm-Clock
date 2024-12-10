@@ -26,36 +26,19 @@ class NacAppUpdatedBroadcastReceiver
 	 */
 	override fun onReceive(context: Context, intent: Intent) = goAsync {
 
-		println("APP UPDATE BROADCAST : ${intent.action}")
 		// Check that the action is correct
 		if (intent.action == Intent.ACTION_MY_PACKAGE_REPLACED)
 		{
-			println("IN THE JANK")
-			//// Define the context that should be used
-			//var deviceContext = context
-
-			//// Check if device can use direct boot
-			//if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-			//{
-			println("BROADCAST MOVING SHARED PREFS")
+			// Move shared preferences to device protected storage
 			NacSharedPreferences.moveToDeviceProtectedStorage(context)
-			//	// Get direct boot context and default shared preferences file name
-			//	deviceContext = context.createDeviceProtectedStorageContext()
-			//	val sharedPrefsFileName = "${context.packageName}_preferences"
 
-			//	// Move database and shared preferences to device encrypted storage
-			//	val x = deviceContext.moveDatabaseFrom(context, NacAlarmDatabase.DB_NAME)
-			//	println("Move database? $x")
-			//	val y = deviceContext.moveSharedPreferencesFrom(context, sharedPrefsFileName)
-			//	println("Move Shared pref? $y")
-			//}
-
-			println("GETTING ALL ALARMS")
-			// Get all the alarms
+			// Get the database. Before opening it, a check will run to move the database
+			// to device protected storage
 			val db = NacAlarmDatabase.getInstance(context)
+
+			// Get all the alarms
 			val alarmDao = db.alarmDao()
 			val alarms = alarmDao.getAllAlarms()
-			println("SCHEDULING ALARMS : ${alarms.size}")
 
 			// Update all the alarms
 			NacScheduler.updateAll(context, alarms)

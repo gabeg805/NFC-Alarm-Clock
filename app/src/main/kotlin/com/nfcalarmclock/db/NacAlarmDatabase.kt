@@ -21,6 +21,7 @@ import com.nfcalarmclock.db.NacAlarmDatabase.AddAutoDismissAndSnoozeSettingsToAl
 import com.nfcalarmclock.db.NacAlarmDatabase.ChangeFlashlightOnOffDurationTypeToStringMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.ClearAllStatisticsMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.ConvertDismissAndSnoozeOptionsFromMinutesToSecondsMigration
+import com.nfcalarmclock.db.NacAlarmDatabase.FixDismissAndSnoozeOptionsConvertedFromMinutesToSecondsMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.ClearNfcTagTableMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.DropNfcTagTableMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.RemoveUseTtsColumnMigration
@@ -58,7 +59,7 @@ import javax.inject.Singleton
 /**
  * Store alarms in a Room database.
  */
-@Database(version = 29,
+@Database(version = 31,
 	entities = [
 		NacAlarm::class,
 		NacAlarmCreatedStatistic::class,
@@ -95,7 +96,9 @@ import javax.inject.Singleton
 		AutoMigration(from = 25, to = 26),
 		AutoMigration(from = 26, to = 27),
 		AutoMigration(from = 27, to = 28),
-		AutoMigration(from = 28, to = 29, spec = ConvertDismissAndSnoozeOptionsFromMinutesToSecondsMigration::class)]
+		AutoMigration(from = 28, to = 29, spec = ConvertDismissAndSnoozeOptionsFromMinutesToSecondsMigration::class),
+		AutoMigration(from = 29, to = 30, spec = FixDismissAndSnoozeOptionsConvertedFromMinutesToSecondsMigration::class),
+		AutoMigration(from = 30, to = 31)]
 
 )
 @TypeConverters(NacAlarmTypeConverters::class, NacStatisticTypeConverters::class)
@@ -230,9 +233,9 @@ abstract class NacAlarmDatabase
 	}
 
 	/**
-	 * Convert dismiss and snooze options from using units of minutes, to seconds.
+	 * Convert dismiss and snooze options from using units of minutes to seconds.
 	 *
-	 * The following columns were affected:
+	 * The following columns are affected:
 	 *
 	 *     - Auto dismiss
 	 *     - Auto snooze
@@ -242,7 +245,6 @@ abstract class NacAlarmDatabase
 	{
 		override fun onPostMigrate(db: SupportSQLiteDatabase)
 		{
-			println("ON POST MIGRATE")
 			// Convert shared preference values from minutes to seconds
 			//
 			// Note: A check is done before hand to make sure they have not been
@@ -273,6 +275,46 @@ abstract class NacAlarmDatabase
 			db.execSQL("UPDATE alarm SET auto_dismiss_time=auto_dismiss_time*60")
 			db.execSQL("UPDATE alarm SET auto_snooze_time=auto_snooze_time*60")
 			db.execSQL("UPDATE alarm SET snooze_duration=snooze_duration*60")
+		}
+	}
+
+	/**
+	 * Fix dismiss and snooze options when converted from units of minutes to seconds.
+	 *
+	 * The following columns are affected:
+	 *
+	 *     - Auto dismiss
+	 *     - Auto snooze
+	 *     - Snooze duration
+	 */
+	internal class FixDismissAndSnoozeOptionsConvertedFromMinutesToSecondsMigration : AutoMigrationSpec
+	{
+		override fun onPostMigrate(db: SupportSQLiteDatabase)
+		{
+			// Fix the shared preference values that were converted from minutes to seconds
+			//
+			// Note: A check is done before hand to make sure they were converted
+			//       incorrectly, in which case the fix will take place.
+			sharedPreferences?.let {
+				if (it.autoDismissTime > 3700)
+				{
+					it.autoDismissTime /= 60
+				}
+			}
+
+			sharedPreferences?.let {
+				if (it.autoSnoozeTime > 1900)
+				{
+					it.autoSnoozeTime /= 60
+				}
+			}
+
+			sharedPreferences?.let {
+				if (it.snoozeDuration > 5500)
+				{
+					it.snoozeDuration /= 60
+				}
+			}
 		}
 	}
 
@@ -351,7 +393,6 @@ abstract class NacAlarmDatabase
 			{
 				// Super
 				super.onOpen(db)
-				println("ON OPEN")
 
 				// Done with context and shared preferences object. Set it to null
 				context = null
@@ -406,19 +447,14 @@ abstract class NacAlarmDatabase
 			val alarmDao = db.alarmDao()
 			val alarmCreatedStatisticDao = db.alarmCreatedStatisticDao()
 			val allAlarms = alarmDao.getAllAlarms()
-			println("copyAlarmsFromDb()")
-			println("Num in imported db : ${importDb.alarmDao().getAllAlarms().size}")
 
 			// Copy all the alarms
 			importDb.alarmDao().getAllAlarms().forEach { a ->
-
-				println("Alarm : ${a.id} | ${a.name} | ${a.days} | ${a.hour} | ${a.minute}")
 
 				// Make sure none of the alarms in the database already match the
 				// one that will be inserted
 				if (allAlarms.all { !it.fuzzyEquals(a) })
 				{
-					println("Found unique alarm! ${a.id} | ${a.name} | ${a.days} | ${a.hour} | ${a.minute}")
 					// Clear the ID
 					a.id = 0
 
@@ -532,14 +568,12 @@ abstract class NacAlarmDatabase
 			dbFile: File,
 			lifecycleScope: LifecycleCoroutineScope)
 		{
-			println("copyFromDb()")
 			// Open the main app database
 			val db = getInstance(context)
 
 			// Open the imported database file
 			val importDb = databaseBuilder(context, NacAlarmDatabase::class.java, dbFile.path)
 				.build()
-			println("Imported db : $importDb | ${dbFile.path}")
 
 			lifecycleScope.launch {
 
@@ -728,20 +762,16 @@ abstract class NacAlarmDatabase
 					// Check if this is a credential context. This means this is not a device
 					// protected storage context, so a valid context that could be used
 					// pre-direct boot
-					println("Getting instance of database")
 					if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) && !context.isDeviceProtectedStorage)
 					{
 						// Get the pre-direct boot database path
 						val file = context.getDatabasePath(DB_NAME)
-						println("Getting database path : ${file.path} | ${file.exists()}")
 
 						// Check if the database exists
 						if (file.exists())
 						{
-							println("MOVING the database jank")
 							// Move the database to device protected storage
-							val x = deviceContext.moveDatabaseFrom(context, DB_NAME)
-							println("Was move worked? $x")
+							deviceContext.moveDatabaseFrom(context, DB_NAME)
 						}
 					}
 

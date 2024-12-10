@@ -4,8 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
@@ -18,18 +16,24 @@ import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerActivity
 import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerPreference
 import com.nfcalarmclock.alarm.options.name.NacNamePreference
 import com.nfcalarmclock.util.NacBundle
-import com.nfcalarmclock.util.NacIntent
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeekPreference
 import com.nfcalarmclock.alarm.options.volume.NacVolumePreference
 import com.nfcalarmclock.alarm.options.volume.NacVolumePreference.OnAudioOptionsClickedListener
+import com.nfcalarmclock.util.addMediaInfo
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
+import com.nfcalarmclock.util.getMediaArtist
+import com.nfcalarmclock.util.getMediaBundle
+import com.nfcalarmclock.util.getMediaPath
+import com.nfcalarmclock.util.getMediaTitle
+import com.nfcalarmclock.util.getMediaType
+import com.nfcalarmclock.util.getRecursivelyPlayMedia
+import com.nfcalarmclock.util.getShuffleMedia
 
 /**
  * General settings fragment.
  */
 class NacGeneralSettingFragment
-	: NacGenericSettingFragment(),
-	ActivityResultCallback<ActivityResult>
+	: NacGenericSettingFragment()
 {
 
 	/**
@@ -42,25 +46,25 @@ class NacGeneralSettingFragment
 	 */
 	private var mediaPreference: NacMediaPickerPreference? = null
 
-	/**
-	 * Called when the media activity is finished and returns a result.
-	 */
-	override fun onActivityResult(result: ActivityResult)
-	{
-		// Check that the result was OK
-		if (result.resultCode == Activity.RESULT_OK)
-		{
-			// Get the media info from the activity result data
-			val mediaPath = NacIntent.getMediaPath(result.data)
-			val shuffleMedia = NacIntent.getShuffleMedia(result.data)
-			val recursivelyPlayMedia = NacIntent.getRecursivelyPlayMedia(result.data)
+	///**
+	// * Called when the media activity is finished and returns a result.
+	// */
+	//override fun onActivityResult(result: ActivityResult)
+	//{
+	//	// Check that the result was OK
+	//	if (result.resultCode == Activity.RESULT_OK)
+	//	{
+	//		// Get the media info from the activity result data
+	//		val mediaPath = NacIntent.getMediaPath(result.data)
+	//		val shuffleMedia = NacIntent.getShuffleMedia(result.data)
+	//		val recursivelyPlayMedia = NacIntent.getRecursivelyPlayMedia(result.data)
 
-			// Save the media info for this preference
-			mediaPreference!!.setAndPersistMediaPath(mediaPath)
-			sharedPreferences!!.shouldShuffleMedia = shuffleMedia
-			sharedPreferences!!.recursivelyPlayMedia = recursivelyPlayMedia
-		}
-	}
+	//		// Save the media info for this preference
+	//		mediaPreference!!.setAndPersistMediaPath(mediaPath)
+	//		sharedPreferences!!.shouldShuffleMedia = shuffleMedia
+	//		sharedPreferences!!.recursivelyPlayMedia = recursivelyPlayMedia
+	//	}
+	//}
 
 	/**
 	 * Called when the preference is created.
@@ -240,23 +244,51 @@ class NacGeneralSettingFragment
 	private fun setupMediaPreference()
 	{
 		// Get the preference
-		val key = resources.getString(R.string.alarm_sound_key)
+		val key = resources.getString(R.string.key_general_default_alarm_media_path)
 		val pref = findPreference<NacMediaPickerPreference>(key)
 
 		// Set the member variables
+		//ActivityResultContracts.StartActivityForResult(), this)
 		mediaPreference = pref
 		activityLauncher = registerForActivityResult(
-			ActivityResultContracts.StartActivityForResult(), this)
+			ActivityResultContracts.StartActivityForResult()) { result ->
+
+				// Check that the result was OK
+				if (result.resultCode == Activity.RESULT_OK)
+				{
+					// Get the media bundle from the activity result data, and the media
+					// path from the bundle
+					val bundle = result.data?.getMediaBundle() ?: Bundle()
+					val mediaPath = bundle.getMediaPath()
+
+					// Save the media info for this preference
+					mediaPreference!!.setAndPersistMediaPath(mediaPath)
+					sharedPreferences!!.mediaArtist = bundle.getMediaArtist()
+					sharedPreferences!!.mediaTitle = bundle.getMediaTitle()
+					sharedPreferences!!.mediaType = bundle.getMediaType()
+					sharedPreferences!!.shouldShuffleMedia = bundle.getShuffleMedia()
+					sharedPreferences!!.recursivelyPlayMedia = bundle.getRecursivelyPlayMedia()
+				}
+
+			}
 
 		// Setup the on click listener
 		pref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
 
-			// Create the intent
-			val intent = NacMediaPickerActivity.getStartIntentWithMedia(
-				context,
-				sharedPreferences!!.mediaPath,
-				sharedPreferences!!.shouldShuffleMedia,
-				sharedPreferences!!.recursivelyPlayMedia)
+			//val intent = NacMediaPickerActivity.getStartIntentWithMedia(
+			//	context,
+			//	sharedPreferences!!.mediaPath,
+			//	sharedPreferences!!.shouldShuffleMedia,
+			//	sharedPreferences!!.recursivelyPlayMedia)
+
+			// Create the intent and add the media to the intent
+			val intent = Intent(context, NacMediaPickerActivity::class.java)
+				.addMediaInfo(sharedPreferences!!.mediaPath,
+					sharedPreferences!!.mediaArtist,
+					sharedPreferences!!.mediaTitle,
+					sharedPreferences!!.mediaType,
+					sharedPreferences!!.shouldShuffleMedia,
+					sharedPreferences!!.recursivelyPlayMedia)
 
 			// Launch the intent
 			activityLauncher!!.launch(intent)

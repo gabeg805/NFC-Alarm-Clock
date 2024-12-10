@@ -2,12 +2,55 @@ package com.nfcalarmclock.util
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.provider.AlarmClock
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar.Day
+import com.nfcalarmclock.util.NacIntent.MEDIA_BUNDLE_NAME
+import com.nfcalarmclock.util.media.NacMedia
 import java.util.Calendar
+
+/**
+ * Add a media information to an intent.
+ *
+ * @param mediaPath A media path.
+ * @param shuffleMedia Whether to shuffle media or not.
+ * @param recursivelyPlayMedia Whether to recursively play media or not.
+ *
+ * @return The intent that was passed in with the media path and how to
+ *         play the media inside a bundle in that intent.
+ */
+fun Intent.addMediaInfo(
+	mediaPath: String,
+	mediaArtist: String,
+	mediaTitle: String,
+	mediaType: Int,
+	shuffleMedia: Boolean,
+	recursivelyPlayMedia: Boolean
+): Intent
+{
+	// Create a bundle with the media
+	val bundle = Bundle().addMediaInfo(mediaPath, mediaArtist, mediaTitle, mediaType,
+		shuffleMedia, recursivelyPlayMedia)
+
+	// Add the bundle to the intent
+	this.putExtra(MEDIA_BUNDLE_NAME, bundle)
+
+	return this
+}
+
+/**
+ * Get the media bundle from an intent.
+ *
+ * @return The media bundle from an intent.
+ */
+fun Intent.getMediaBundle(): Bundle
+{
+	// Get the bundle from the intent
+	return this.getBundleExtra(MEDIA_BUNDLE_NAME) ?: Bundle()
+}
 
 /**
  * Intent helper object.
@@ -23,7 +66,7 @@ object NacIntent
 	/**
 	 * Tag name for retrieving a media path from a bundle.
 	 */
-	private const val MEDIA_BUNDLE_NAME = "NacMediaBundle"
+	const val MEDIA_BUNDLE_NAME = "NacMediaBundle"
 
 	/**
 	 * Add an alarm to an intent.
@@ -40,33 +83,6 @@ object NacIntent
 
 		// Add the bundle to the intent
 		intent.putExtra(ALARM_BUNDLE_NAME, bundle)
-
-		return intent
-	}
-
-	/**
-	 * Add a media information to an intent.
-	 *
-	 * @param intent An intent.
-	 * @param mediaPath A media path.
-	 * @param shuffleMedia Whether to shuffle media or not.
-	 * @param recursivelyPlayMedia Whether to recursively play media or not.
-	 *
-	 * @return The intent that was passed in with the media path and how to
-	 *         play the media inside a bundle in that intent.
-	 */
-	fun addMediaInfo(
-		intent: Intent,
-		mediaPath: String?,
-		shuffleMedia: Boolean,
-		recursivelyPlayMedia: Boolean
-	): Intent
-	{
-		// Create a bundle with the media
-		val bundle = NacBundle.mediaInfoToBundle(mediaPath, shuffleMedia, recursivelyPlayMedia)
-
-		// Add the bundle to the intent
-		intent.putExtra(MEDIA_BUNDLE_NAME, bundle)
 
 		return intent
 	}
@@ -91,36 +107,6 @@ object NacIntent
 
 		// Get the alarm from the bundle
 		return NacBundle.getAlarm(bundle)
-	}
-
-	/**
-	 * Get the media path from an intent.
-	 *
-	 * @param intent An intent.
-	 *
-	 * @return The media path from an intent.
-	 */
-	fun getMediaPath(intent: Intent?): String
-	{
-		// Get the bundle from the intent
-		val bundle = intent?.getBundleExtra(MEDIA_BUNDLE_NAME)
-
-		return NacBundle.getMediaPath(bundle)
-	}
-
-	/**
-	 * Get whether media should be played recursively from an intent.
-	 *
-	 * @param intent An intent.
-	 *
-	 * @return Whether media should be played recursively from an intent.
-	 */
-	fun getRecursivelyPlayMedia(intent: Intent?): Boolean
-	{
-		// Get the bundle from the intent
-		val bundle = intent?.getBundleExtra(MEDIA_BUNDLE_NAME)
-
-		return NacBundle.getRecursivelyPlayMedia(bundle)
 	}
 
 	/**
@@ -196,11 +182,14 @@ object NacIntent
 		// Check if the RINGTONE is in the intent
 		if (intent.hasExtra(AlarmClock.EXTRA_RINGTONE))
 		{
-			val ringtone = intent.getStringExtra(AlarmClock.EXTRA_RINGTONE)
+			val ringtone = intent.getStringExtra(AlarmClock.EXTRA_RINGTONE) ?: ""
 			isSet = true
 
 			// Add to the alarm
-			alarm.setMedia(context, ringtone ?: "")
+			alarm.mediaPath = ringtone
+			alarm.mediaArtist = NacMedia.getArtist(context, ringtone)
+			alarm.mediaTitle = NacMedia.getTitle(context, ringtone)
+			alarm.mediaType = NacMedia.getType(context, ringtone)
 		}
 
 		// Check if the VIBRATE is in the intent
@@ -225,21 +214,6 @@ object NacIntent
 			{
 				null
 			}
-	}
-
-	/**
-	 * Get whether media should be shuffled from an intent.
-	 *
-	 * @param intent An intent.
-	 *
-	 * @return Whether media should be shuffled from an intent.
-	 */
-	fun getShuffleMedia(intent: Intent?): Boolean
-	{
-		// Get the bundle from the intent
-		val bundle = intent?.getBundleExtra(MEDIA_BUNDLE_NAME)
-
-		return NacBundle.getShuffleMedia(bundle)
 	}
 
 }

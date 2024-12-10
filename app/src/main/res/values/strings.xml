@@ -9,10 +9,7 @@
 	<string name="am">AM</string>
 	<string name="pm">PM</string>
 	<string name="none">None</string>
-	<string name="settings">Settings</string>
 	<string name="show_next_alarm">Show next alarm</string>
-	<string name="word_alarm">Alarm</string>
-	<string name="word_reminder">Reminder</string>
 	<string name="background">Background</string>
 	<string name="time_layout">Time layout</string>
 	<string name="date_layout">Date layout</string>
@@ -24,15 +21,17 @@
 	<string name="colon">:</string>
 	<string name="icon">Icon</string>
 	<string name="transparency">Transparency</string>
-	<string name="time">Time</string>
 	<string name="hour">Hour</string>
 	<string name="minutes">Minutes</string>
 	<string name="am_pm">AM / PM</string>
 
+	<!-- Words -->
+	<string name="word_of">of</string>
+	<string name="word_alarm">Alarm</string>
+	<string name="word_reminder">Reminder</string>
 
 	<!-- States -->
 	<string name="state_unknown">Unknown</string>
-
 
 	<!-- Actions -->
 	<string name="action_alarm_snooze">Snooze</string>
@@ -63,8 +62,11 @@
 	<string name="action_shuffle_music">Shuffle music</string>
 	<string name="action_recursively_play_media">Include subfolders</string>
 	<string name="action_alarm_option_audio_source">Audio source</string>
-	<string name="action_alarm_option_volume">Volume</string>
+	<string name="action_alarm_option_flashlight">Flashlight</string>
 	<string name="action_alarm_option_text_to_speech">Text-to-speech</string>
+	<string name="action_alarm_option_volume">Volume</string>
+	<string name="action_alarm_option_dismiss_options">Dismiss options</string>
+	<string name="action_alarm_option_snooze_options">Snooze options</string>
 	<string name="action_alarm_option_upcoming_reminder">Upcoming reminder</string>
 	<string name="action_delete_alarm_after_dismissed">Delete after dismissed</string>
 	<string name="action_skipping_next_alarm">Skipping next alarm</string>
@@ -72,7 +74,6 @@
 	<string name="action_unskip_next_alarm">Unskip next alarm</string>
 	<string name="action_export">Export</string>
 	<string name="action_import">Import</string>
-
 
 	<!-- Labels -->
 	<string name="label_created_statistic">created</string>
@@ -86,7 +87,6 @@
 	<string name="label_missed_statistic_header">Time Missed,Name,Alarm Time</string>
 	<string name="label_snoozed_statistic_header">Time Snoozed,Name,Alarm Time,Snooze Duration (seconds)</string>
 	<string name="label_clock_widget">Clock</string>
-
 
 	<!-- Messages -->
 	<string name="message_permission_ignore_battery_optimization_request">To avoid alarm not running if the app has not been used for a while.&lt;br/>&lt;br/>&lt;b>Note:&lt;/b>  This depends on what device you have and &lt;&lt;b>may not actually be needed&lt;/b>.</string>
@@ -138,7 +138,6 @@
 	<string name="message_export_completed">Export completed</string>
 	<string name="message_import_completed">Import completed</string>
 
-
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Unable to delete an active alarm</string>
 	<string name="error_message_active_modify">Unable to modify an active alarm</string>
@@ -160,35 +159,17 @@
 	<string name="error_message_unable_to_start_foreground_service">Unable to start foreground service. Please enable permission</string>
 	<string name="error_message_unable_to_open_import_export_stream">Unable to open file</string>
 
-
-	<!-- Words -->
-	<string name="word_of">of</string>
-
-
 	<!-- Titles -->
+	<string name="title_settings">Settings</string>
+	<string name="title_time">Time</string>
 	<string name="title_alarm_activity">Dismiss Alarm</string>
 	<string name="title_scan_nfc_tag" tools:ignore="TypographyEllipsis">Scan an NFC tag...</string>
 	<string name="title_select_nfc_tag" tools:ignore="TypographyEllipsis">Select an NFC tag...</string>
 	<string name="title_save_nfc_tag" tools:ignore="TypographyEllipsis">Save NFC tag...</string>
 	<string name="title_delete_nfc_tag" tools:ignore="TypographyEllipsis">Delete NFC tag...</string>
 	<string name="title_rename_nfc_tag" tools:ignore="TypographyEllipsis">Rename NFC tag...</string>
-	<string name="title_flashlight_strength" tools:ignore="TypographyEllipsis">Flashlight strength level...</string>
-	<string name="title_flashlight_blink" tools:ignore="TypographyEllipsis">Should the flashlight blink...</string>
-	<string name="title_flashlight_on_off_duration" tools:ignore="TypographyEllipsis">How long should the flashlight blink on and off for...</string>
 	<string name="title_days">Select days</string>
 	<string name="title_color">Select a color</string>
-	<string name="title_dismiss_early_checkbox" tools:ignore="TypographyEllipsis">Dismiss the alarm early, before it is active...</string>
-	<string name="title_dismiss_early_how_early" tools:ignore="TypographyEllipsis">How early can the alarm be dismissed...</string>
-	<string name="title_delete_alarm_after_dismissed_checkbox" tools:ignore="TypographyEllipsis">Delete the alarm after it is dismissed...</string>
-	<string name="title_upcoming_reminder_should_show" tools:ignore="TypographyEllipsis">Show a reminder notification before the alarm goes off...</string>
-	<string name="title_upcoming_reminder_time_to_show" tools:ignore="TypographyEllipsis">How early should it be shown...</string>
-	<string name="title_upcoming_reminder_freq_to_show" tools:ignore="TypographyEllipsis">How frequently should it be shown...</string>
-	<string name="title_upcoming_reminder_should_use_tts" tools:ignore="TypographyEllipsis">Should the same text-to-speech options as the alarm be used when the notification is shown...</string>
-	<string name="title_gradually_increase_volume_checkbox" tools:ignore="TypographyEllipsis">Gradually increase volume when the alarm is active...</string>
-	<string name="title_gradually_increase_volume_picker" tools:ignore="TypographyEllipsis">Wait time between each volume increase...</string>
-	<string name="title_restrict_volume_checkbox" tools:ignore="TypographyEllipsis">Restrict volume when the alarm is active...</string>
-	<string name="title_tts_what_to_say" tools:ignore="TypographyEllipsis">What to say when the alarm is active...</string>
-	<string name="title_tts_how_often_to_say" tools:ignore="TypographyEllipsis">How often to say it...</string>
 	<string name="title_next_alarm_format">Select a format</string>
 	<string name="title_folder_selected">You selected a folder</string>
 	<string name="title_active_alarms">Active alarms</string>
@@ -203,7 +184,7 @@
 	<string name="title_request_permission_ignore_battery_optimization">Disable battery optimization…</string>
 	<string name="title_request_permission_post_notifications">Enable notifications…</string>
 	<string name="title_request_permission_schedule_exact_alarm">Allow scheduling exact alarms…</string>
-	<string name="title_reset_statistics" tools:ignore="TypographyEllipsis">Reset statistics...</string>
+	<string name="title_reset_statistics">Reset statistics…</string>
 	<string name="title_flashlight_brightness_level">Brightness level</string>
 	<string name="title_flashlight_blink_on_off">Blink on/off</string>
 	<string name="title_text_to_speech_speak_frequency">Speak frequency</string>
@@ -219,7 +200,6 @@
 	<string name="title_upcoming_reminder_show_reminder">Show reminder</string>
 	<string name="title_upcoming_reminder_how_early">How early…</string>
 	<string name="title_upcoming_reminder_how_frequent">How frequent…</string>
-
 
 	<!-- Descriptions -->
 	<string name="description_scan_nfc">Scan NFC</string>
@@ -253,14 +233,12 @@
 	<string name="description_upcoming_reminder_text_to_speech">Use the alarm\'s text-to-speech options when the notification is shown.</string>
 	<string name="example_name">Work</string>
 
-
 	<!-- Summary day names -->
 	<string name="dow_everyday">Everyday</string>
 	<string name="dow_weekdays">Weekdays</string>
 	<string name="dow_weekend">Weekend</string>
 	<string name="dow_today">Today</string>
 	<string name="dow_tomorrow">Tomorrow</string>
-
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">List of alarms will be shown here.</string>
@@ -288,11 +266,7 @@
 	<string name="cd_delete_alarm_after_dismissed">Delete alarm after it is dismissed.</string>
 	<string name="cd_clock_widget_alarm_icon">Next alarm</string>
 
-
-	<!-- ************* -->
 	<!-- Main Settings -->
-	<!-- ************* -->
-
 	<string name="general_setting">General</string>
 	<string name="general_setting_summary">General alarm settings</string>
 
@@ -314,58 +288,42 @@
 	<string name="import_export_setting">Import \u0020|\u0020 Export</string>
 	<string name="import_export_setting_summary">Import or export all your saved data</string>
 
-
-	<!-- **************** -->
 	<!-- General settings -->
-	<!-- **************** -->
 
 	<!-- Categories -->
-	<string name="dismiss_options_category">Dismiss options</string>
-	<string name="snooze_options_category">Snooze options</string>
 	<string name="default_alarm_category">Default alarm</string>
-
 
 	<!-- Default alarm -->
 	<string name="alarm_name">Name</string>
 	<string name="alarm_days">Days</string>
-
 
 	<!-- Default alarm repeat -->
 	<string name="alarm_repeat">Repeat</string>
 	<string name="alarm_repeat_true">Repeat the alarm.</string>
 	<string name="alarm_repeat_false">Disable the alarm after it is run.</string>
 
-
 	<!-- Default alarm vibrate -->
 	<string name="alarm_vibrate">Vibrate</string>
 	<string name="alarm_vibrate_true">Vibrate the phone.</string>
 	<string name="alarm_vibrate_false">Do not vibrate the phone.</string>
-
 
 	<!-- Default alarm use NFC -->
 	<string name="alarm_nfc">NFC</string>
 	<string name="alarm_nfc_true">NFC is used to dismiss the alarm.</string>
 	<string name="alarm_nfc_false">Dismiss the alarm normally.</string>
 
-
 	<!-- Default alarm use flashlight -->
-	<string name="alarm_flashlight">Flashlight</string>
 	<string name="alarm_flashlight_true">Turn on the flashlight when the alarm goes off.</string>
 	<string name="alarm_flashlight_false">Do not turn on the flashlight when the alarm goes off.</string>
-
 
 	<!-- Default alarm sound -->
 	<string name="alarm_sound">Sound</string>
 	<string name="alarm_sound_summary">@string/none</string>
 
-
 	<!-- Default alarm volume and audio source -->
 	<string name="alarm_volume">Volume</string>
 
-
-	<!-- ******************* -->
 	<!-- Appearance settings -->
-	<!-- ******************* -->
 
 	<!-- Categories -->
 	<string name="alarm_screen_category">Alarm screen</string>
@@ -398,7 +356,6 @@
 	<string name="theme_color">Theme</string>
 	<string name="name_color">@string/alarm_name</string>
 	<string name="days_color">@string/alarm_days</string>
-	<string name="time_color">Time</string>
 	<string name="summary_color_theme">The theme color.</string>
 	<string name="summary_color_name">e.g. Work</string>
 	<string name="summary_color_days">e.g. Mon &#8231; Tue &#8231; Wed &#8231; Thu &#8231; Fri</string>
@@ -439,40 +396,7 @@
 	<string name="next_alarm_format_time_in">Next alarm in 7 hours 30 minutes</string>
 	<string name="next_alarm_format_time_on">Next alarm on Mon 7:00 AM</string>
 
-	<!-- ************** -->
-	<!-- Alarm settings -->
-	<!-- ************** -->
-
-	<!-- Dismiss early -->
-	<string name="dismiss_early_true">Yes, can dismiss the alarm early.</string>
-	<string name="dismiss_early_false">No, the alarm cannot be dismissed early.</string>
-
-	<!-- Delete alarm after dismissed -->
-	<string name="delete_alarm_after_dismissed_true">Yes, delete the alarm after it is dismissed.</string>
-	<string name="delete_alarm_after_dismissed_false">No, do not delete the alarm after it is dismissed.</string>
-
-	<!-- Upcoming reminder -->
-	<string name="upcoming_reminder_true">Yes, show a notification.</string>
-	<string name="upcoming_reminder_false">No, do not show anything.</string>
-	<string name="upcoming_reminder_use_tts_true">Yes, use the same text-to-speech options as the alarm.\n\nNote: If the option is disabled for the alarm, then this will do nothing.</string>
-	<string name="upcoming_reminder_use_tts_false">No, do not use any text-to-speech.</string>
-
-	<!-- Restrict volume -->
-	<string name="restrict_volume_true">Yes, volume will be restricted and unable to be changed.</string>
-	<string name="restrict_volume_false">No, volume can be changed freely.</string>
-
-	<!-- Gradually increase volume -->
-	<string name="gradually_increase_volume_true">Yes, volume will gradually increase until the alarm volume is reached.</string>
-	<string name="gradually_increase_volume_false">No, volume will be set to the alarm volume.</string>
-
-	<!-- Flashlight blink -->
-	<string name="flashlight_blink_true">Yes, make the flashlight blink.</string>
-	<string name="flashlight_blink_false">No, do not make the flashlight blink.</string>
-
-
-	<!-- ************** -->
 	<!-- About settings -->
-	<!-- ************** -->
 
 	<!-- Categories -->
 	<string name="app_category">App</string>

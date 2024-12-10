@@ -484,7 +484,6 @@ class NacMainActivity
 	{
 		// Setup
 		super.onCreate(savedInstanceState)
-		println("onCreate()")
 
 		// Move the shared preference to device protected storage
 		NacSharedPreferences.moveToDeviceProtectedStorage(this)
@@ -493,7 +492,6 @@ class NacMainActivity
 		setContentView(R.layout.act_main)
 
 		// Set member variables
-		println("Create first shared pref")
 		sharedPreferences = NacSharedPreferences(this)
 
 		println("Resources : $sharedPreferences.resources")
@@ -504,12 +502,6 @@ class NacMainActivity
 			}
 		}
 
-		println("1: ${sharedPreferences.appFirstRun}")
-		println("2: ${sharedPreferences.wasIgnoreBatteryOptimizationPermissionRequested}")
-		println("3: ${sharedPreferences.wasPostNotificationsPermissionRequested}")
-		println("4: ${sharedPreferences.wasScheduleExactAlarmPermissionRequested}")
-		println("5: ${sharedPreferences.previousAppVersion}")
-		println("6: ${sharedPreferences.previousVolume}")
 		root = findViewById(R.id.activity_main)
 		toolbar = findViewById(R.id.tb_top_bar)
 		nextAlarmTextView = findViewById(R.id.tv_next_alarm)

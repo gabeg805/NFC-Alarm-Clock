@@ -9,9 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.util.media.NacMedia
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar
+import com.nfcalarmclock.util.media.NacMedia
 
 /**
  * NFC Alarm Clock database.
@@ -39,22 +39,10 @@ class NacOldDatabase(
 	private var wasUpgraded: Boolean = false
 
 	/**
-	 * Where arguments for when the alarm is active.
-	 */
-	private val whereArgsActive: Array<String>
-		get() = arrayOf("1")
-
-	/**
 	 * The where clause for matching with the alarm ID.
 	 */
 	private val whereClause: String
 		get() = Contract.AlarmTable.COLUMN_ID + "=?"
-
-	/**
-	 * The where clause for matching with the is active column.
-	 */
-	private val whereClauseActive: String
-		get() = Contract.AlarmTable.COLUMN_IS_ACTIVE + "=?"
 
 	/**
 	 * @see .add
@@ -160,128 +148,6 @@ class NacOldDatabase(
 	}
 
 	/**
-	 * @see .findActiveAlarm
-	 */
-	fun findActiveAlarm(): NacAlarm?
-	{
-		val db = this.writableDatabase
-
-		return this.findActiveAlarm(db)
-	}
-
-	/**
-	 * Find the alarm that is currently active.
-	 *
-	 * @return The alarm that is active.
-	 *
-	 * @param  db  The SQLite database.
-	 */
-	private fun findActiveAlarm(db: SQLiteDatabase): NacAlarm?
-	{
-		val alarms = this.findActiveAlarms(db)
-
-		return if (!alarms.isNullOrEmpty()) alarms[0] else null
-	}
-
-	/**
-	 * Find the list of alarms that are currently active.
-	 *
-	 * @return The list of alarms that are currently active.
-	 */
-	fun findActiveAlarms(): List<NacAlarm?>?
-	{
-		val db = this.writableDatabase
-
-		return this.findActiveAlarms(db)
-	}
-
-	/**
-	 * Find the list of alarms that are currently active.
-	 *
-	 * @return The list of alarms that are currently active.
-	 *
-	 * @param  db  The SQLite database.
-	 */
-	private fun findActiveAlarms(db: SQLiteDatabase): List<NacAlarm?>?
-	{
-		val list: MutableList<NacAlarm?> = ArrayList()
-		val cursor: Cursor?
-
-		// Query the database for the cursor
-		try
-		{
-			cursor = db.query(alarmTable, null, whereClauseActive, whereArgsActive, null, null, null)
-		}
-		// Exception occurred. Stop everything
-		catch (e: SQLiteException)
-		{
-			return null
-		}
-
-		// Unable to get cursor, return empty list
-		if (cursor == null)
-		{
-			return list
-		}
-
-		// Iterate over each item in cursor
-		while (cursor.moveToNext())
-		{
-			// Get the alarm in the cursor
-			val alarm = toAlarm(cursor, db.version)
-
-			// Add the alarm to the list
-			list.add(alarm)
-		}
-
-		// Close the cursor
-		cursor.close()
-
-		return list
-	}
-
-	/**
-	 * Find the alarm with the given ID.
-	 *
-	 * @return The alarm that is found.
-	 *
-	 * @param  id  The alarm ID.
-	 */
-	fun findAlarm(id: Long): NacAlarm?
-	{
-		val db = this.writableDatabase
-		val whereArgs = this.getWhereArgs(id)
-		val limit = "1"
-		var alarm: NacAlarm? = null
-		val cursor = db.query(alarmTable, null, whereClause, whereArgs, null, null, null, limit)
-
-		// Check if cursor is null
-		if (cursor == null)
-		{
-			return null
-		}
-		// Increment the cursor to the starting location
-		else if (cursor.moveToFirst())
-		{
-			// Get the alarm from the cursor
-			alarm = toAlarm(cursor, db.version)
-		}
-
-		// Close the cursor
-		cursor.close()
-
-		return alarm
-	}
-
-	/**
-	 * @see .findAlarm
-	 */
-	fun findAlarm(alarm: NacAlarm?): NacAlarm?
-	{
-		return if (alarm != null) this.findAlarm(alarm.id) else null
-	}
-
-	/**
 	 * @return A ContentValues object based on the given alarm.
 	 *
 	 * Change this every new database version.
@@ -360,18 +226,6 @@ class NacOldDatabase(
 	}
 
 	/**
-	 * @param  value  The value to convert to a where clause.
-	 *
-	 * @return Where arguments for the where clause.
-	 */
-	private fun getWhereArgs(value: Long): Array<String>
-	{
-		val id = value.toString()
-
-		return arrayOf(id)
-	}
-
-	/**
 	 * @param  alarm  The alarm to convert to a where clause.
 	 *
 	 * @return Where arguments for the where clause.
@@ -430,6 +284,7 @@ class NacOldDatabase(
 		// Create the database
 		db.execSQL(Contract.AlarmTable.CREATE_TABLE_V5)
 
+		// Get the info
 		val shared = NacSharedPreferences(context)
 		val mediaPath = shared.mediaPath
 		val mediaTitle = NacMedia.getTitle(context, mediaPath)
@@ -860,50 +715,6 @@ class NacOldDatabase(
 		{
 			val file = context.getDatabasePath(DATABASE_NAME)
 			return file.exists()
-		}
-
-		/**
-		 * @see .findActiveAlarm
-		 */
-		fun findActiveAlarm(context: Context): NacAlarm?
-		{
-			val db = NacOldDatabase(context)
-			val activeAlarm = db.findActiveAlarm()
-
-			db.close()
-
-			return activeAlarm
-		}
-
-		/**
-		 * @see .findAlarm
-		 */
-		private fun findAlarm(context: Context?, id: Long): NacAlarm?
-		{
-			// Check if context is null
-			if (context == null)
-			{
-				return null
-			}
-
-			// Create the database object
-			val db = NacOldDatabase(context)
-
-			// Find the alarm
-			val foundAlarm = db.findAlarm(id)
-
-			// Close the database
-			db.close()
-
-			return foundAlarm
-		}
-
-		/**
-		 * @see .findAlarm
-		 */
-		fun findAlarm(context: Context?, alarm: NacAlarm?): NacAlarm?
-		{
-			return if (alarm != null) findAlarm(context, alarm.id) else null
 		}
 
 		/**

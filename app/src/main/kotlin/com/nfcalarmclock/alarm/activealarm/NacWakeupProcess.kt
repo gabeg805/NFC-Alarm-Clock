@@ -141,8 +141,20 @@ class NacWakeupProcess(
 	 */
 	private val mediaPlayer: NacMediaPlayer? = if (alarm.hasMedia)
 	{
+		// Check which context to use
+		val newContext = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+		{
+			println("CREATE DEVICE PROTECTED STORAGE CONTEXT FOR MEDIA PLAYER")
+			context.applicationContext.createDeviceProtectedStorageContext()
+		}
+		else
+		{
+			context
+		}
+
 		// Create the media player
-		val player = NacMediaPlayer(context, this)
+		//val player = NacMediaPlayer(context, this)
+		val player = NacMediaPlayer(newContext, this)
 
 		// Setup the media player
 		player.onAudioFocusChangeListener = object: NacMediaPlayer.OnAudioFocusChangeListener {

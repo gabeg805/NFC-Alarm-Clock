@@ -1,49 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
-	<string-array name="audio_sources">
-		<item>Báo thức</item>
-		<item>Gọi</item>
-		<item>Phương tiện truyền thông</item>
-		<item>Thông báo</item>
-		<item>Nhạc chuông</item>
-	</string-array>
-
-	<string-array name="tts_frequency">
-		<item>Một lần</item>
-		<item>Cứ sau 1 phút</item>
-		<item>Cứ sau 2 phút</item>
-		<item>Cứ sau 3 phút</item>
-		<item>Cứ sau 4 phút</item>
-		<item>Cứ sau 5 phút</item>
-		<item>Cứ sau 6 phút</item>
-		<item>Cứ sau 7 phút</item>
-		<item>Cứ sau 8 phút</item>
-		<item>Cứ 9 phút một lần</item>
-		<item>Cứ sau 10 phút</item>
-		<item>Cứ sau 11 phút</item>
-		<item>Cứ sau 12 phút</item>
-		<item>Cứ sau 13 phút</item>
-		<item>Cứ sau 14 phút</item>
-		<item>Cứ sau 15 phút</item>
-		<item>Cứ sau 16 phút</item>
-		<item>Cứ sau 17 phút</item>
-		<item>Cứ sau 18 phút</item>
-		<item>Cứ sau 19 phút</item>
-		<item>Cứ sau 20 phút</item>
-		<item>Cứ sau 21 phút</item>
-		<item>Cứ sau 22 phút</item>
-		<item>Cứ sau 23 phút</item>
-		<item>Cứ sau 24 phút</item>
-		<item>Cứ sau 25 phút</item>
-		<item>Cứ sau 26 phút</item>
-		<item>Cứ sau 27 phút</item>
-		<item>Cứ sau 28 phút</item>
-		<item>Cứ sau 29 phút</item>
-		<item>Cứ sau 30 phút</item>
-	</string-array>
-
-	<string-array name="days_of_week">
+	<!-- Days of week full names -->
+	<string-array name="days_of_week_full">
 		<item>Chủ nhật</item>
 		<item>Thứ hai</item>
 		<item>Thứ ba</item>
@@ -53,6 +12,7 @@
 		<item>Thứ bảy</item>
 	</string-array>
 
+	<!-- Days of week abbreviated -->
 	<string-array name="days_of_week_abbr">
 		<item>CN</item>
 		<item>T2</item>
@@ -63,6 +23,7 @@
 		<item>T7</item>
 	</string-array>
 
+	<!-- Days of week one letter -->
 	<string-array name="days_of_week_one_letter">
 		<item>C</item>
 		<item>2</item>
@@ -73,210 +34,15 @@
 		<item>7</item>
 	</string-array>
 
+	<!-- Start week on days -->
 	<string-array name="start_week_on">
 		<item>Chủ nhật</item>
 		<item>Thứ hai</item>
 	</string-array>
 
-	<string-array name="auto_dismiss_summaries">
-		<item>Tắt</item>
-		<item>1 phút</item>
-		<item>2 phút</item>
-		<item>3 phút</item>
-		<item>4 phút</item>
-		<item>5 phút</item>
-		<item>10 phút</item>
-		<item>15 phút</item>
-		<item>20 phút</item>
-		<item>25 phút</item>
-		<item>30 phút</item>
-		<item>35 phút</item>
-		<item>40 phút</item>
-		<item>45 phút</item>
-		<item>50 phút</item>
-		<item>55 phút</item>
-		<item>60 phút</item>
-	</string-array>
-
-	<string-array name="auto_snooze_summaries">
-		<item>Tắt</item>
-		<item>1 phút</item>
-		<item>2 phút</item>
-		<item>3 phút</item>
-		<item>4 phút</item>
-		<item>5 phút</item>
-		<item>6 phút</item>
-		<item>7 phút</item>
-		<item>8 phút</item>
-		<item>9 phút</item>
-		<item>10 phút</item>
-		<item>11 phút</item>
-		<item>12 phút</item>
-		<item>13 phút</item>
-		<item>14 phút</item>
-		<item>15 phút</item>
-		<item>16 phút</item>
-		<item>17 phút</item>
-		<item>18 phút</item>
-		<item>19 phút</item>
-		<item>20 phút</item>
-		<item>21 phút</item>
-		<item>22 phút</item>
-		<item>23 phút</item>
-		<item>24 phút</item>
-		<item>25 phút</item>
-		<item>26 phút</item>
-		<item>27 phút</item>
-		<item>28 phút</item>
-		<item>29 phút</item>
-		<item>30 phút</item>
-	</string-array>
-
-	<string-array name="max_snooze_summaries">
-		<item>Không có</item>
-		<item>1</item>
-		<item>2</item>
-		<item>3</item>
-		<item>4</item>
-		<item>5</item>
-		<item>6</item>
-		<item>7</item>
-		<item>số 8</item>
-		<item>9</item>
-		<item>10</item>
-		<item>Vô hạn</item>
-	</string-array>
-
-	<string-array name="snooze_duration_summaries">
-		<item>1 phút</item>
-		<item>2 phút</item>
-		<item>3 phút</item>
-		<item>4 phút</item>
-		<item>5 phút</item>
-		<item>6 phút</item>
-		<item>7 phút</item>
-		<item>8 phút</item>
-		<item>9 phút</item>
-		<item>10 phút</item>
-		<item>15 phút</item>
-		<item>20 phút</item>
-		<item>25 phút</item>
-		<item>30 phút</item>
-		<item>35 phút</item>
-		<item>40 phút</item>
-		<item>45 phút</item>
-		<item>50 phút</item>
-		<item>55 phút</item>
-		<item>60 phút</item>
-		<item>65 phút</item>
-		<item>70 phút</item>
-		<item>75 phút</item>
-		<item>80 phút</item>
-		<item>85 phút</item>
-		<item>90 phút</item>
-	</string-array>
-
-	<string-array name="dismiss_early_times">
-		<item>1 phút</item>
-		<item>2 phút</item>
-		<item>3 phút</item>
-		<item>4 phút</item>
-		<item>5 phút</item>
-		<item>10 phút</item>
-		<item>15 phút</item>
-		<item>20 phút</item>
-		<item>25 phút</item>
-		<item>30 phút</item>
-		<item>35 phút</item>
-		<item>40 phút</item>
-		<item>45 phút</item>
-		<item>50 phút</item>
-		<item>55 phút</item>
-		<item>60 phút</item>
-		<item>65 phút</item>
-		<item>70 phút</item>
-		<item>75 phút</item>
-		<item>80 phút</item>
-		<item>85 phút</item>
-		<item>90 phút</item>
-		<item>95 phút</item>
-		<item>100 phút</item>
-		<item>105 phút</item>
-		<item>110 phút</item>
-		<item>115 phút</item>
-		<item>120 phút</item>
-	</string-array>
-
-	<string-array name="upcoming_reminder_times_to_show">
-		<item>1 phút</item>
-		<item>2 phút</item>
-		<item>3 phút</item>
-		<item>4 phút</item>
-		<item>5 phút</item>
-		<item>6 phút</item>
-		<item>7 phút</item>
-		<item>8 phút</item>
-		<item>9 phút</item>
-		<item>10 phút</item>
-		<item>15 phút</item>
-		<item>20 phút</item>
-		<item>25 phút</item>
-		<item>30 phút</item>
-		<item>35 phút</item>
-		<item>40 phút</item>
-		<item>45 phút</item>
-		<item>50 phút</item>
-		<item>55 phút</item>
-		<item>60 phút</item>
-		<item>65 phút</item>
-		<item>70 phút</item>
-		<item>75 phút</item>
-		<item>80 phút</item>
-		<item>85 phút</item>
-		<item>90 phút</item>
-		<item>95 phút</item>
-		<item>100 phút</item>
-		<item>105 phút</item>
-		<item>110 phút</item>
-		<item>115 phút</item>
-		<item>120 phút</item>
-	</string-array>
-
-	<string-array name="upcoming_reminder_frequency">
-		<item>Một lần</item>
-		<item>Cứ sau 1 phút</item>
-		<item>Cứ sau 2 phút</item>
-		<item>Cứ sau 3 phút</item>
-		<item>Cứ sau 4 phút</item>
-		<item>Cứ sau 5 phút</item>
-		<item>Cứ sau 6 phút</item>
-		<item>Cứ sau 7 phút</item>
-		<item>Cứ sau 8 phút</item>
-		<item>Cứ 9 phút một lần</item>
-		<item>Cứ sau 10 phút</item>
-		<item>Cứ sau 11 phút</item>
-		<item>Cứ sau 12 phút</item>
-		<item>Cứ sau 13 phút</item>
-		<item>Cứ sau 14 phút</item>
-		<item>Cứ sau 15 phút</item>
-		<item>Cứ sau 16 phút</item>
-		<item>Cứ sau 17 phút</item>
-		<item>Cứ sau 18 phút</item>
-		<item>Cứ sau 19 phút</item>
-		<item>Cứ sau 20 phút</item>
-		<item>Cứ sau 21 phút</item>
-		<item>Cứ sau 22 phút</item>
-		<item>Cứ sau 23 phút</item>
-		<item>Cứ sau 24 phút</item>
-		<item>Cứ sau 25 phút</item>
-		<item>Cứ sau 26 phút</item>
-		<item>Cứ sau 27 phút</item>
-		<item>Cứ sau 28 phút</item>
-		<item>Cứ sau 29 phút</item>
-		<item>Cứ sau 30 phút</item>
-	</string-array>
-
-	<string-array name="gradually_increase_volume_wait_times">
+	<!-- General list of seconds -->
+	<string-array name="general_seconds_summaries">
+		<item>0 giây</item>
 		<item>1 giây</item>
 		<item>2 giây</item>
 		<item>3 giây</item>
@@ -287,50 +53,56 @@
 		<item>8 giây</item>
 		<item>9 giây</item>
 		<item>10 giây</item>
+		<item>11 giây</item>
+		<item>12 giây</item>
+		<item>13 giây</item>
+		<item>14 giây</item>
 		<item>15 giây</item>
+		<item>16 giây</item>
+		<item>17 giây</item>
+		<item>18 giây</item>
+		<item>19 giây</item>
 		<item>20 giây</item>
+		<item>21 giây</item>
+		<item>22 giây</item>
+		<item>23 giây</item>
+		<item>24 giây</item>
 		<item>25 giây</item>
+		<item>26 giây</item>
+		<item>27 giây</item>
+		<item>28 giây</item>
+		<item>29 giây</item>
 		<item>30 giây</item>
+		<item>31 giây</item>
+		<item>32 giây</item>
+		<item>33 giây</item>
+		<item>34 giây</item>
 		<item>35 giây</item>
+		<item>36 giây</item>
+		<item>37 giây</item>
+		<item>38 giây</item>
+		<item>39 giây</item>
 		<item>40 giây</item>
+		<item>41 giây</item>
+		<item>42 giây</item>
+		<item>43 giây</item>
+		<item>44 giây</item>
 		<item>45 giây</item>
+		<item>46 giây</item>
+		<item>47 giây</item>
+		<item>48 giây</item>
+		<item>49 giây</item>
 		<item>50 giây</item>
+		<item>51 giây</item>
+		<item>52 giây</item>
+		<item>53 giây</item>
+		<item>54 giây</item>
 		<item>55 giây</item>
+		<item>56 giây</item>
+		<item>57 giây</item>
+		<item>58 giây</item>
+		<item>59 giây</item>
 		<item>60 giây</item>
-	</string-array>
-
-	<string-array name="flashlight_on_off_duration_times">
-		<item>0,5 giây</item>
-		<item>1,0 giây</item>
-		<item>1,5 giây</item>
-		<item>2,0 giây</item>
-		<item>2,5 giây</item>
-		<item>3,0 giây</item>
-		<item>3,5 giây</item>
-		<item>4,0 giây</item>
-		<item>4,5 giây</item>
-		<item>5,0 giây</item>
-		<item>5,5 giây</item>
-		<item>6,0 giây</item>
-		<item>6,5 giây</item>
-		<item>7,0 giây</item>
-		<item>7,5 giây</item>
-		<item>8,0 giây</item>
-		<item>8,5 giây</item>
-		<item>9,0 giây</item>
-		<item>9,5 giây</item>
-		<item>10,0 giây</item>
-	</string-array>
-
-	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
-		<item>Đã thêm tùy chọn &lt;b>bỏ qua báo thức tiếp theo&lt;/b>. Nhấn và giữ báo thức để xem tùy chọn.</item>
-		<item>Đã thêm tùy chọn &lt;b>xóa sau khi tắt&lt;/b> để tự động xóa báo thức sau khi tắt. Tìm thấy trong &lt;b>Tùy chọn tắt&lt;/b>.</item>
-		<item>Đã thêm tùy chọn &lt;b>nhập/xuất&lt;/b>. Tìm thấy trong &lt;b>Cài đặt&lt;/b>.</item>
-		<item>Đã khắc phục sự cố khi có dấu &lt;b>%&lt;/b> trong tên báo thức.</item>
-		<item>Đã thêm bản dịch ngôn ngữ cho tiếng Đức.</item>
-		<item>Cảm ơn &lt;b>Aristeo Montoya&lt;/b> đã giúp cải thiện bản dịch &lt;b>tiếng Tây Ban Nha&lt;/b>.</item>
-		<item>Đã cập nhật cách &lt;b>chuyển văn bản thành giọng nói&lt;/b> hiển thị thời gian và làm chậm tốc độ nói.</item>
-		<item>Thông báo nhắc nhở sẽ bị xóa khi báo thức kêu.</item>
 	</string-array>
 
 </resources>

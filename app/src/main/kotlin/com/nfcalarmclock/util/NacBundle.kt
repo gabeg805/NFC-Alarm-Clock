@@ -5,7 +5,112 @@ import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.util.NacBundle.MEDIA_ARTIST_KEY
+import com.nfcalarmclock.util.NacBundle.MEDIA_PATH_KEY
+import com.nfcalarmclock.util.NacBundle.MEDIA_TITLE_KEY
+import com.nfcalarmclock.util.NacBundle.MEDIA_TYPE_KEY
+import com.nfcalarmclock.util.NacBundle.RECURSIVELY_PLAY_MEDIA_KEY
+import com.nfcalarmclock.util.NacBundle.SHUFFLE_MEDIA_KEY
 import com.nfcalarmclock.util.media.NacAudioAttributes
+
+/**
+ * Get a bundle that contains a media path and how to play that media.
+ *
+ * @param mediaPath A media path.
+ * @param shuffleMedia Whether to shuffle media or not.
+ * @param recursivelyPlayMedia Whether to recursively play media or not.
+ *
+ * @return A bundle that contains a media path and how to play that media.
+ */
+fun Bundle.addMediaInfo(
+	mediaPath: String,
+	mediaArtist: String,
+	mediaTitle: String,
+	mediaType: Int,
+	shuffleMedia: Boolean,
+	recursivelyPlayMedia: Boolean
+): Bundle
+{
+	// Media path
+	this.putString(MEDIA_PATH_KEY, mediaPath)
+
+	// Media artist
+	this.putString(MEDIA_ARTIST_KEY, mediaArtist)
+
+	// Media title
+	this.putString(MEDIA_TITLE_KEY, mediaTitle)
+
+	// Media type
+	this.putInt(MEDIA_TYPE_KEY, mediaType)
+
+	// Shuffle media
+	this.putBoolean(SHUFFLE_MEDIA_KEY, shuffleMedia)
+
+	// Recursively play media
+	this.putBoolean(RECURSIVELY_PLAY_MEDIA_KEY, recursivelyPlayMedia)
+
+	return this
+}
+
+/**
+ * Get the media artist from a bundle.
+ *
+ * @return The media artist from a bundle.
+ */
+fun Bundle.getMediaArtist(): String
+{
+	return this.getString(MEDIA_ARTIST_KEY) ?: ""
+}
+
+/**
+ * Get the media path from a bundle.
+ *
+ * @return The media path from a bundle.
+ */
+fun Bundle.getMediaPath(): String
+{
+	return this.getString(MEDIA_PATH_KEY) ?: ""
+}
+
+/**
+ * Get the media title from a bundle.
+ *
+ * @return The media title from a bundle.
+ */
+fun Bundle.getMediaTitle(): String
+{
+	return this.getString(MEDIA_TITLE_KEY) ?: ""
+}
+
+/**
+ * Get the media type from a bundle.
+ *
+ * @return The media type from a bundle.
+ */
+fun Bundle.getMediaType(): Int
+{
+	return this.getInt(MEDIA_TYPE_KEY)
+}
+
+/**
+ * Get whether media should be played recursively from a bundle.
+ *
+ * @return Whether media should be played recursively from a bundle.
+ */
+fun Bundle.getRecursivelyPlayMedia(): Boolean
+{
+	return this.getBoolean(RECURSIVELY_PLAY_MEDIA_KEY)
+}
+
+/**
+ * Get whether media should be shuffled from a bundle.
+ *
+ * @return Whether media should be shuffled from a bundle.
+ */
+fun Bundle.getShuffleMedia(): Boolean
+{
+	return this.getBoolean(SHUFFLE_MEDIA_KEY)
+}
 
 /**
  * Bundle helper.
@@ -14,24 +119,39 @@ object NacBundle
 {
 
 	/**
-	 * Tag name associated with a parceled alarm.
+	 * Tag name for a parceled alarm.
 	 */
 	const val ALARM_PARCEL_NAME = "NacAlarmParcel"
 
 	/**
-	 * Key associated with a media path.
+	 * Media path key.
 	 */
-	private const val MEDIA_PATH_KEY = "NacMediaKey"
+	const val MEDIA_PATH_KEY = "NacMediaPathKey"
 
 	/**
-	 * Key associated with whether media should be shuffled.
+	 * Media artist key.
 	 */
-	private const val SHUFFLE_MEDIA_KEY = "NacShuffleMediaKey"
+	const val MEDIA_ARTIST_KEY = "NacMediaArtistKey"
 
 	/**
-	 * Key associated with whether media should be recursively played.
+	 * Media title key.
 	 */
-	private const val RECURSIVELY_PLAY_MEDIA_KEY = "NacRecursivelyPlayMediaKey"
+	const val MEDIA_TITLE_KEY = "NacMediaTitleKey"
+
+	/**
+	 * Media type key.
+	 */
+	const val MEDIA_TYPE_KEY = "NacMediaTypeKey"
+
+	/**
+	 * Whether media should be shuffled or not key.
+	 */
+	const val SHUFFLE_MEDIA_KEY = "NacShuffleMediaKey"
+
+	/**
+	 * Whether media should be recursively played or not key.
+	 */
+	const val RECURSIVELY_PLAY_MEDIA_KEY = "NacRecursivelyPlayMediaKey"
 
 	/**
 	 * Get a bundle that contains the alarm.
@@ -99,66 +219,6 @@ object NacBundle
 			{
 				null
 			}
-	}
-
-	/**
-	 * Get the media path from a bundle.
-	 *
-	 * @return The media path from a bundle.
-	 */
-	fun getMediaPath(bundle: Bundle?): String
-	{
-		return bundle?.getString(MEDIA_PATH_KEY) ?: ""
-	}
-
-	/**
-	 * Get whether media should be played recursively from a bundle.
-	 *
-	 * @return Whether media should be played recursively from a bundle.
-	 */
-	fun getRecursivelyPlayMedia(bundle: Bundle?): Boolean
-	{
-		return bundle?.getBoolean(RECURSIVELY_PLAY_MEDIA_KEY) ?: false
-	}
-
-	/**
-	 * Get whether media should be shuffled from a bundle.
-	 *
-	 * @return Whether media should be shuffled from a bundle.
-	 */
-	fun getShuffleMedia(bundle: Bundle?): Boolean
-	{
-		return bundle?.getBoolean(SHUFFLE_MEDIA_KEY) ?: false
-	}
-
-	/**
-	 * Get a bundle that contains a media path and how to play that media.
-	 *
-	 * @param mediaPath A media path.
-	 * @param shuffleMedia Whether to shuffle media or not.
-	 * @param recursivelyPlayMedia Whether to recursively play media or not.
-	 *
-	 * @return A bundle that contains a media path and how to play that media.
-	 */
-	fun mediaInfoToBundle(
-		mediaPath: String?,
-		shuffleMedia: Boolean,
-		recursivelyPlayMedia: Boolean
-	): Bundle
-	{
-		// Create the bundle
-		val bundle = Bundle()
-
-		// Media path
-		bundle.putString(MEDIA_PATH_KEY, mediaPath)
-
-		// Shuffle media
-		bundle.putBoolean(SHUFFLE_MEDIA_KEY, shuffleMedia)
-
-		// Recursively play media
-		bundle.putBoolean(RECURSIVELY_PLAY_MEDIA_KEY, recursivelyPlayMedia)
-
-		return bundle
 	}
 
 	/**

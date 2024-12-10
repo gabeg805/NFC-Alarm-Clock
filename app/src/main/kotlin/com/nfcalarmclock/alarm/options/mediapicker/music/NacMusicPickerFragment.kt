@@ -21,6 +21,7 @@ import com.nfcalarmclock.system.file.browser.NacFileBrowser.OnBrowserClickedList
 import com.nfcalarmclock.system.permission.readmediaaudio.NacReadMediaAudioPermission
 import com.nfcalarmclock.util.NacBundle
 import com.nfcalarmclock.util.media.NacMedia
+import com.nfcalarmclock.util.addMediaInfo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -312,9 +313,11 @@ class NacMusicPickerFragment
 		 */
 		fun newInstance(alarm: NacAlarm?): Fragment
 		{
+			// Create the fragment
 			val fragment: Fragment = NacMusicPickerFragment()
-			val bundle = NacBundle.alarmToBundle(alarm)
-			fragment.arguments = bundle
+
+			// Add the bundle to the fragment
+			fragment.arguments = NacBundle.alarmToBundle(alarm)
 
 			return fragment
 		}
@@ -324,14 +327,19 @@ class NacMusicPickerFragment
 		 */
 		fun newInstance(
 			mediaPath: String,
+			mediaArtist: String,
+			mediaTitle: String,
+			mediaType: Int,
 			shuffleMedia: Boolean,
 			recursivelyPlayMedia: Boolean
 		): Fragment
 		{
+			// Create the fragment
 			val fragment: Fragment = NacMusicPickerFragment()
-			val bundle = NacBundle.mediaInfoToBundle(mediaPath, shuffleMedia,
-				recursivelyPlayMedia)
-			fragment.arguments = bundle
+
+			// Add the bundle to the fragment
+			fragment.arguments = Bundle().addMediaInfo(mediaPath, mediaArtist, mediaTitle,
+				mediaType, shuffleMedia, recursivelyPlayMedia)
 
 			return fragment
 		}

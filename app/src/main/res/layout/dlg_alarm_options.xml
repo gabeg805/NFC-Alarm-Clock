@@ -22,7 +22,7 @@
 		android:id="@+id/alarm_option_flashlight"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/alarm_flashlight"
+		android:text="@string/action_alarm_option_flashlight"
 		/>
 
 	<!-- Text-to-speech -->
@@ -40,7 +40,7 @@
 		android:id="@+id/alarm_option_volume"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="Volume"
+		android:text="@string/action_alarm_option_volume"
 		/>
 
 	<!-- Separator -->
@@ -52,7 +52,7 @@
 		android:id="@+id/alarm_option_dismiss_options"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/dismiss_options_category"
+		android:text="@string/action_alarm_option_dismiss_options"
 		/>
 
 	<!-- Snooze options -->
@@ -61,7 +61,7 @@
 		android:id="@+id/alarm_option_snooze_options"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/snooze_options_category"
+		android:text="@string/action_alarm_option_snooze_options"
 		/>
 
 	<!-- Separator -->

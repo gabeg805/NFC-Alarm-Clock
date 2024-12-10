@@ -160,9 +160,15 @@ class NacAlarm()
 	var mediaPath: String = ""
 
 	/**
+	 * Artist of the media that will play when the alarm is run.
+	 */
+	@ColumnInfo(name = "media_artist", defaultValue = "")
+	var mediaArtist: String = ""
+
+	/**
 	 * Title of the media that will play when the alarm is run.
 	 */
-	@ColumnInfo(name = "media_title")
+	@ColumnInfo(name = "media_title", defaultValue = "")
 	var mediaTitle: String = ""
 
 	/**
@@ -170,6 +176,14 @@ class NacAlarm()
 	 */
 	@ColumnInfo(name = "media_type", defaultValue = "0")
 	var mediaType: Int = 0
+
+	/**
+	 * Local path, internal to the app, to the media that will play when the alarm is run.
+	 *
+	 * This will only be used if an alarm goes off in direct boot mode.
+	 */
+	@ColumnInfo(name = "local_media_path", defaultValue = "")
+	var localMediaPath: String = ""
 
 	/**
 	 * Whether to shuffle the media.
@@ -459,8 +473,10 @@ class NacAlarm()
 
 		// Media
 		mediaPath = input.readString() ?: ""
+		mediaArtist = input.readString() ?: ""
 		mediaTitle = input.readString() ?: ""
 		mediaType = input.readInt()
+		localMediaPath = input.readString() ?: ""
 		shuffleMedia = input.readInt() != 0
 		recursivelyPlayMedia = input.readInt() != 0
 
@@ -697,8 +713,10 @@ class NacAlarm()
 
 		// Media
 		alarm.mediaPath = mediaPath
+		alarm.mediaArtist = mediaArtist
 		alarm.mediaTitle = mediaTitle
 		alarm.mediaType = mediaType
+		alarm.localMediaPath = localMediaPath
 		alarm.shuffleMedia = shuffleMedia
 		alarm.recursivelyPlayMedia = recursivelyPlayMedia
 
@@ -834,8 +852,10 @@ class NacAlarm()
 			&& (flashlightOffDuration == alarm.flashlightOffDuration)
 			&& (nfcTagId == alarm.nfcTagId)
 			&& (mediaPath == alarm.mediaPath)
+			&& (mediaArtist == alarm.mediaArtist)
 			&& (mediaTitle == alarm.mediaTitle)
 			&& (mediaType == alarm.mediaType)
+			&& (localMediaPath == alarm.localMediaPath)
 			&& (shuffleMedia == alarm.shuffleMedia)
 			&& (recursivelyPlayMedia == alarm.recursivelyPlayMedia)
 			&& (volume == alarm.volume)
@@ -992,8 +1012,10 @@ class NacAlarm()
 		println("Flashlight On       : $flashlightOnDuration")
 		println("Flashlight Off      : $flashlightOffDuration")
 		println("Media Path          : $mediaPath")
+		println("Media Artist        : $mediaArtist")
 		println("Media Name          : $mediaTitle")
 		println("Media Type          : $mediaType")
+		println("Local media Path    : $localMediaPath")
 		println("Shuffle media       : $shuffleMedia")
 		println("Recusively Play     : $recursivelyPlayMedia")
 		println("Volume              : $volume")
@@ -1029,23 +1051,6 @@ class NacAlarm()
 	fun setDays(value: Int)
 	{
 		days = Day.valueToDays(value)
-	}
-
-	/**
-	 * Set the sound to play when the alarm goes off.
-	 *
-	 * @param  context  The application context.
-	 * @param  path  The path to sound to play.
-	 */
-	fun setMedia(context: Context, path: String)
-	{
-		// TODO: Set shuffle and recurse here?
-		val title = NacMedia.getTitle(context, path)
-		val type = NacMedia.getType(context, path)
-
-		mediaPath = path
-		mediaTitle = title
-		mediaType = type
 	}
 
 	/**
@@ -1219,8 +1224,10 @@ class NacAlarm()
 
 		// Media
 		output.writeString(mediaPath)
+		output.writeString(mediaArtist)
 		output.writeString(mediaTitle)
 		output.writeInt(mediaType)
+		output.writeString(localMediaPath)
 		output.writeInt(if (shuffleMedia) 1 else 0)
 		output.writeInt(if (recursivelyPlayMedia) 1 else 0)
 
@@ -1315,8 +1322,10 @@ class NacAlarm()
 
 			// Media
 			alarm.mediaPath = shared?.mediaPath ?: ""
-			alarm.mediaTitle = ""
-			alarm.mediaType = NacMedia.TYPE_NONE
+			alarm.mediaArtist = shared?.mediaArtist ?: ""
+			alarm.mediaTitle = shared?.mediaTitle ?: ""
+			alarm.mediaType = shared?.mediaType ?: NacMedia.TYPE_NONE
+			alarm.localMediaPath = shared?.localMediaPath ?: ""
 			alarm.shuffleMedia = shared?.shouldShuffleMedia ?: false
 			alarm.recursivelyPlayMedia = shared?.recursivelyPlayMedia ?: false
 

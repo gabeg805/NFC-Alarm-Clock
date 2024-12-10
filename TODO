@@ -2,6 +2,8 @@
 TODO
 ----
 
+* INCREASE TEXT SIZE OF ALARM OPTIONS
+
 * Check if the bold themed permission text needs to actually use the textId or
   if getText() can be used on the textview?
 

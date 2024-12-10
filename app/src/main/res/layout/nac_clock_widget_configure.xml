@@ -556,7 +556,7 @@
 					style="@style/Widget.ClockWidget.SliderText"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:text="@string/time"
+					android:text="@string/title_time"
 					/>
 
 				<com.google.android.material.slider.Slider
@@ -855,7 +855,7 @@
 						android:layout_width="0dp"
 						android:layout_height="wrap_content"
 						android:layout_weight="1"
-						android:text="@string/time"
+						android:text="@string/title_time"
 						/>
 
 					<ImageView

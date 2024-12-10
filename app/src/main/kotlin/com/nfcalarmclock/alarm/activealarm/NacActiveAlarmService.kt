@@ -9,6 +9,7 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.PowerManager
 import android.os.PowerManager.WakeLock
+import android.os.UserManager
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
@@ -290,7 +291,6 @@ class NacActiveAlarmService
 	{
 		// Super
 		super.onCreate()
-		println("CREATING THE SERVICE")
 
 		// Initialize member varirables
 		sharedPreferences = NacSharedPreferences(this)
@@ -334,9 +334,15 @@ class NacActiveAlarmService
 		// Stop the alarm activity
 		NacActiveAlarmActivity.stopAlarmActivity(this)
 
-		// Start the main activity so that if there are any other alarms that
-		// need to run, this will kick them off
-		startMainActivity(this)
+		// Check if the device has been unlocked so as not to be running in direct boot mode
+		val userManager = getSystemService(Context.USER_SERVICE) as UserManager
+
+		if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.N) || userManager.isUserUnlocked)
+		{
+			// Start the main activity so that if there are any other alarms that
+			// need to run, this will kick them off
+			startMainActivity(this)
+		}
 
 		scope.launch {
 

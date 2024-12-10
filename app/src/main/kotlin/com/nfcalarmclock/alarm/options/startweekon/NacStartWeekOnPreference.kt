@@ -54,7 +54,7 @@ class NacStartWeekOnPreference @JvmOverloads constructor(
 	 */
 	override fun getSummary(): CharSequence?
 	{
-		val week = context.resources.getStringArray(R.array.days_of_week)
+		val week = context.resources.getStringArray(R.array.days_of_week_full)
 		var index = startWeekOnIndex
 
 		// Get the name of the day by the index

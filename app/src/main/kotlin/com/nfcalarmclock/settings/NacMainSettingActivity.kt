@@ -29,7 +29,7 @@ class NacMainSettingActivity
 	override fun onBackStackChanged()
 	{
 		// Get the default title
-		var title = getString(R.string.settings)
+		var title = getString(R.string.title_settings)
 
 		// Check if there are items in the back stack
 		if (supportFragmentManager.backStackEntryCount > 0)

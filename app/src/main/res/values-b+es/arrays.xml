@@ -1,49 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
-	<string-array name="audio_sources">
-		<item>Alarma</item>
-		<item>Llamda</item>
-		<item>Multimedia</item>
-		<item>Notificaciónes</item>
-		<item>Tono</item>
-	</string-array>
-
-	<string-array name="tts_frequency">
-		<item>Una vez</item>
-		<item>Cada 1 min</item>
-		<item>Cada 2 min</item>
-		<item>Cada 3 min</item>
-		<item>Cada 4 min</item>
-		<item>Cada 5 min</item>
-		<item>Cada 6 min</item>
-		<item>Cada 7 min</item>
-		<item>Cada 8 min</item>
-		<item>Cada 9 min</item>
-		<item>Cada 10 min</item>
-		<item>Cada 11 min</item>
-		<item>Cada 12 min</item>
-		<item>Cada 13 min</item>
-		<item>Cada 14 min</item>
-		<item>Cada 15 min</item>
-		<item>Cada 16 min</item>
-		<item>Cada 17 min</item>
-		<item>Cada 18 min</item>
-		<item>Cada 19 min</item>
-		<item>Cada 20 min</item>
-		<item>Cada 21 min</item>
-		<item>Cada 22 min</item>
-		<item>Cada 23 min</item>
-		<item>Cada 24 min</item>
-		<item>Cada 25 min</item>
-		<item>Cada 26 min</item>
-		<item>Cada 27 min</item>
-		<item>Cada 28 min</item>
-		<item>Cada 29 min</item>
-		<item>Cada 30 min</item>
-	</string-array>
-
-	<string-array name="days_of_week">
+	<!-- Days of week full names -->
+	<string-array name="days_of_week_full">
 		<item>domingo</item>
 		<item>lunes</item>
 		<item>martes</item>
@@ -53,6 +12,7 @@
 		<item>sabado</item>
 	</string-array>
 
+	<!-- Days of week abbreviated -->
 	<string-array name="days_of_week_abbr">
 		<item>dom</item>
 		<item>lun</item>
@@ -63,6 +23,7 @@
 		<item>sab</item>
 	</string-array>
 
+	<!-- Days of week one letter -->
 	<string-array name="days_of_week_one_letter">
 		<item>D</item>
 		<item>L</item>
@@ -73,210 +34,15 @@
 		<item>S</item>
 	</string-array>
 
+	<!-- Start week on days -->
 	<string-array name="start_week_on">
 		<item>Domingo</item>
 		<item>Lunes</item>
 	</string-array>
 
-	<string-array name="auto_dismiss_summaries">
-		<item>Desactivada</item>
-		<item>1 minuto</item>
-		<item>2 minutos</item>
-		<item>3 minutos</item>
-		<item>4 minutos</item>
-		<item>5 minutos</item>
-		<item>10 minutos</item>
-		<item>15 minutos</item>
-		<item>20 minutos</item>
-		<item>25 minutos</item>
-		<item>30 minutos</item>
-		<item>35 minutos</item>
-		<item>40 minutos</item>
-		<item>45 minutos</item>
-		<item>50 minutos</item>
-		<item>55 minutos</item>
-		<item>60 minutos</item>
-	</string-array>
-
-	<string-array name="auto_snooze_summaries">
-		<item>Desactivada</item>
-		<item>1 minuto</item>
-		<item>2 minutos</item>
-		<item>3 minutos</item>
-		<item>4 minutos</item>
-		<item>5 minutos</item>
-		<item>6 minutos</item>
-		<item>7 minutos</item>
-		<item>8 minutos</item>
-		<item>9 minutos</item>
-		<item>10 minutos</item>
-		<item>11 minutos</item>
-		<item>12 minutos</item>
-		<item>13 minutos</item>
-		<item>14 minutos</item>
-		<item>15 minutos</item>
-		<item>16 minutos</item>
-		<item>17 minutos</item>
-		<item>18 minutos</item>
-		<item>19 minutos</item>
-		<item>20 minutos</item>
-		<item>21 minutos</item>
-		<item>22 minutos</item>
-		<item>23 minutos</item>
-		<item>24 minutos</item>
-		<item>25 minutos</item>
-		<item>26 minutos</item>
-		<item>27 minutos</item>
-		<item>28 minutos</item>
-		<item>29 minutos</item>
-		<item>30 minutos</item>
-	</string-array>
-
-	<string-array name="max_snooze_summaries">
-		<item>Ninguno</item>
-		<item>1</item>
-		<item>2</item>
-		<item>3</item>
-		<item>4</item>
-		<item>5</item>
-		<item>6</item>
-		<item>7</item>
-		<item>8</item>
-		<item>9</item>
-		<item>10</item>
-		<item>Ilimitado</item>
-	</string-array>
-
-	<string-array name="snooze_duration_summaries">
-		<item>1 minuto</item>
-		<item>2 minutos</item>
-		<item>3 minutos</item>
-		<item>4 minutos</item>
-		<item>5 minutos</item>
-		<item>6 minutos</item>
-		<item>7 minutos</item>
-		<item>8 minutos</item>
-		<item>9 minutos</item>
-		<item>10 minutos</item>
-		<item>15 minutos</item>
-		<item>20 minutos</item>
-		<item>25 minutos</item>
-		<item>30 minutos</item>
-		<item>35 minutos</item>
-		<item>40 minutos</item>
-		<item>45 minutos</item>
-		<item>50 minutos</item>
-		<item>55 minutos</item>
-		<item>60 minutos</item>
-		<item>65 minutos</item>
-		<item>70 minutos</item>
-		<item>75 minutos</item>
-		<item>80 minutos</item>
-		<item>85 minutos</item>
-		<item>90 minutos</item>
-	</string-array>
-
-	<string-array name="dismiss_early_times">
-		<item>1 minuto</item>
-		<item>2 minutos</item>
-		<item>3 minutos</item>
-		<item>4 minutos</item>
-		<item>5 minutos</item>
-		<item>10 minutos</item>
-		<item>15 minutos</item>
-		<item>20 minutos</item>
-		<item>25 minutos</item>
-		<item>30 minutos</item>
-		<item>35 minutos</item>
-		<item>40 minutos</item>
-		<item>45 minutos</item>
-		<item>50 minutos</item>
-		<item>55 minutos</item>
-		<item>60 minutos</item>
-		<item>65 minutos</item>
-		<item>70 minutos</item>
-		<item>75 minutos</item>
-		<item>80 minutos</item>
-		<item>85 minutos</item>
-		<item>90 minutos</item>
-		<item>95 minutos</item>
-		<item>100 minutos</item>
-		<item>105 minutos</item>
-		<item>110 minutos</item>
-		<item>115 minutos</item>
-		<item>120 minutos</item>
-	</string-array>
-
-	<string-array name="upcoming_reminder_times_to_show">
-		<item>1 minuto</item>
-		<item>2 minutos</item>
-		<item>3 minutos</item>
-		<item>4 minutos</item>
-		<item>5 minutos</item>
-		<item>6 minutos</item>
-		<item>7 minutos</item>
-		<item>8 minutos</item>
-		<item>9 minutos</item>
-		<item>10 minutos</item>
-		<item>15 minutos</item>
-		<item>20 minutos</item>
-		<item>25 minutos</item>
-		<item>30 minutos</item>
-		<item>35 minutos</item>
-		<item>40 minutos</item>
-		<item>45 minutos</item>
-		<item>50 minutos</item>
-		<item>55 minutos</item>
-		<item>60 minutos</item>
-		<item>65 minutos</item>
-		<item>70 minutos</item>
-		<item>75 minutos</item>
-		<item>80 minutos</item>
-		<item>85 minutos</item>
-		<item>90 minutos</item>
-		<item>95 minutos</item>
-		<item>100 minutos</item>
-		<item>105 minutos</item>
-		<item>110 minutos</item>
-		<item>115 minutos</item>
-		<item>120 minutos</item>
-	</string-array>
-
-	<string-array name="upcoming_reminder_frequency">
-		<item>Una vez</item>
-		<item>Cada 1 min</item>
-		<item>Cada 2 min</item>
-		<item>Cada 3 min</item>
-		<item>Cada 4 min</item>
-		<item>Cada 5 min</item>
-		<item>Cada 6 min</item>
-		<item>Cada 7 min</item>
-		<item>Cada 8 min</item>
-		<item>Cada 9 min</item>
-		<item>Cada 10 min</item>
-		<item>Cada 11 min</item>
-		<item>Cada 12 min</item>
-		<item>Cada 13 min</item>
-		<item>Cada 14 min</item>
-		<item>Cada 15 min</item>
-		<item>Cada 16 min</item>
-		<item>Cada 17 min</item>
-		<item>Cada 18 min</item>
-		<item>Cada 19 min</item>
-		<item>Cada 20 min</item>
-		<item>Cada 21 min</item>
-		<item>Cada 22 min</item>
-		<item>Cada 23 min</item>
-		<item>Cada 24 min</item>
-		<item>Cada 25 min</item>
-		<item>Cada 26 min</item>
-		<item>Cada 27 min</item>
-		<item>Cada 28 min</item>
-		<item>Cada 29 min</item>
-		<item>Cada 30 min</item>
-	</string-array>
-
-	<string-array name="gradually_increase_volume_wait_times">
+	<!-- General list of seconds -->
+	<string-array name="general_seconds_summaries">
+		<item>0 segundos</item>
 		<item>1 segundo</item>
 		<item>2 segundos</item>
 		<item>3 segundos</item>
@@ -287,50 +53,56 @@
 		<item>8 segundos</item>
 		<item>9 segundos</item>
 		<item>10 segundos</item>
+		<item>11 segundos</item>
+		<item>12 segundos</item>
+		<item>13 segundos</item>
+		<item>14 segundos</item>
 		<item>15 segundos</item>
+		<item>16 segundos</item>
+		<item>17 segundos</item>
+		<item>18 segundos</item>
+		<item>19 segundos</item>
 		<item>20 segundos</item>
+		<item>21 segundos</item>
+		<item>22 segundos</item>
+		<item>23 segundos</item>
+		<item>24 segundos</item>
 		<item>25 segundos</item>
+		<item>26 segundos</item>
+		<item>27 segundos</item>
+		<item>28 segundos</item>
+		<item>29 segundos</item>
 		<item>30 segundos</item>
+		<item>31 segundos</item>
+		<item>32 segundos</item>
+		<item>33 segundos</item>
+		<item>34 segundos</item>
 		<item>35 segundos</item>
+		<item>36 segundos</item>
+		<item>37 segundos</item>
+		<item>38 segundos</item>
+		<item>39 segundos</item>
 		<item>40 segundos</item>
+		<item>41 segundos</item>
+		<item>42 segundos</item>
+		<item>43 segundos</item>
+		<item>44 segundos</item>
 		<item>45 segundos</item>
+		<item>46 segundos</item>
+		<item>47 segundos</item>
+		<item>48 segundos</item>
+		<item>49 segundos</item>
 		<item>50 segundos</item>
+		<item>51 segundos</item>
+		<item>52 segundos</item>
+		<item>53 segundos</item>
+		<item>54 segundos</item>
 		<item>55 segundos</item>
+		<item>56 segundos</item>
+		<item>57 segundos</item>
+		<item>58 segundos</item>
+		<item>59 segundos</item>
 		<item>60 segundos</item>
-	</string-array>
-
-	<string-array name="flashlight_on_off_duration_times">
-		<item>0,5 segundos</item>
-		<item>1,0 segundo</item>
-		<item>1,5 segundos</item>
-		<item>2,0 segundos</item>
-		<item>2,5 segundos</item>
-		<item>3,0 segundos</item>
-		<item>3,5 segundos</item>
-		<item>4,0 segundos</item>
-		<item>4,5 segundos</item>
-		<item>5,0 segundos</item>
-		<item>5,5 segundos</item>
-		<item>6,0 segundos</item>
-		<item>6,5 segundos</item>
-		<item>7,0 segundos</item>
-		<item>7,5 segundos</item>
-		<item>8,0 segundos</item>
-		<item>8,5 segundos</item>
-		<item>9,0 segundos</item>
-		<item>9,5 segundos</item>
-		<item>10,0 segundos</item>
-	</string-array>
-
-	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
-		<item>Se agregó la opción &lt;b>omitir la siguiente alarma&lt;/b>. Mantenga presionada una alarma para ver la opción.</item>
-		<item>Se agregó la opción &lt;b>eliminar después de descartar&lt;/b> para eliminar automáticamente una alarma después de descartarla. Se encuentra en &lt;b>Opciones de descartar&lt;/b>.</item>
-		<item>Se agregó la opción &lt;b>importar/exportar&lt;/b>. Se encuentra en &lt;b>Configuración&lt;/b>.</item>
-		<item>Se solucionó el fallo que se producía cuando había un signo &lt;b>%&lt;/b> en el nombre de la alarma.</item>
-		<item>Se agregó traducción de idioma para &lt;b>alemán&lt;/b>.</item>
-		<item>Gracias a &lt;b>Aristeo Montoya&lt;/b> por ayudarnos a mejorar la traducción al &lt;b>español&lt;/b>.</item>
-		<item>Se actualizó la forma en que &lt;b>text-to-speech&lt;/b> dice la hora y se redujo la velocidad a la que habla.</item>
-		<item>Las notificaciones de recordatorio se eliminarán cuando suene una alarma.</item>
 	</string-array>
 
 </resources>

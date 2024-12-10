@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- Audio sources -->
+	<string-array name="audio_sources">
+		<item>Alam</item>
+		<item>Rele</item>
+		<item>Medya</item>
+		<item>Notifikasyon</item>
+		<item>Sonnerie</item>
+	</string-array>
+
+	<!-- Flashlight -->
+	<string-array name="flashlight_on_off_duration_times">
+		<item>0.5 segonn</item>
+		<item>1.0 segonn</item>
+		<item>1.5 segonn</item>
+		<item>2.0 segonn</item>
+		<item>2.5 segonn</item>
+		<item>3.0 segonn</item>
+		<item>3.5 segonn</item>
+		<item>4.0 segonn</item>
+		<item>4.5 segonn</item>
+		<item>5.0 segonn</item>
+		<item>5.5 segonn</item>
+		<item>6.0 segonn</item>
+		<item>6.5 segonn</item>
+		<item>7.0 segonn</item>
+		<item>7.5 segonn</item>
+		<item>8.0 segonn</item>
+		<item>8.5 segonn</item>
+		<item>9.0 segonn</item>
+		<item>9.5 segonn</item>
+		<item>10.0 segonn</item>
+	</string-array>
+
+	<!-- Text to speech -->
+	<string-array name="tts_frequency">
+		<item>Yon fwa</item>
+		<item>Chak 1 min</item>
+		<item>Chak 2 min</item>
+		<item>Chak 3 min</item>
+		<item>Chak 4 min</item>
+		<item>Chak 5 min</item>
+		<item>Chak 6 min</item>
+		<item>Chak 7 min</item>
+		<item>Chak 8 min</item>
+		<item>Chak 9 min</item>
+		<item>Chak 10 min</item>
+		<item>Chak 11 min</item>
+		<item>Chak 12 min</item>
+		<item>Chak 13 min</item>
+		<item>Chak 14 min</item>
+		<item>Chak 15 min</item>
+		<item>Chak 16 min</item>
+		<item>Chak 17 min</item>
+		<item>Chak 18 min</item>
+		<item>Chak 19 min</item>
+		<item>Chak 20 min</item>
+		<item>Chak 21 min</item>
+		<item>Chak 22 min</item>
+		<item>Chak 23 min</item>
+		<item>Chak 24 min</item>
+		<item>Chak 25 min</item>
+		<item>Chak 26 min</item>
+		<item>Chak 27 min</item>
+		<item>Chak 28 min</item>
+		<item>Chak 29 min</item>
+		<item>Chak 30 min</item>
+	</string-array>
+
+	<!-- Auto dismiss minutes -->
+	<string-array name="auto_dismiss_minute_summaries">
+		<item>0 minit</item>
+		<item>1 minit</item>
+		<item>2 minit</item>
+		<item>3 minit</item>
+		<item>4 minit</item>
+		<item>5 minit</item>
+		<item>6 minit</item>
+		<item>7 minit</item>
+		<item>8 minit</item>
+		<item>9 minit</item>
+		<item>10 minit</item>
+		<item>11 minit</item>
+		<item>12 minit</item>
+		<item>13 minit</item>
+		<item>14 minit</item>
+		<item>15 minit</item>
+		<item>16 minit</item>
+		<item>17 minit</item>
+		<item>18 minit</item>
+		<item>19 minit</item>
+		<item>20 minit</item>
+		<item>21 minit</item>
+		<item>22 minit</item>
+		<item>23 minit</item>
+		<item>24 minit</item>
+		<item>25 minit</item>
+		<item>26 minit</item>
+		<item>27 minit</item>
+		<item>28 minit</item>
+		<item>29 minit</item>
+		<item>30 minit</item>
+		<item>31 minit</item>
+		<item>32 minit</item>
+		<item>33 minit</item>
+		<item>34 minit</item>
+		<item>35 minit</item>
+		<item>36 minit</item>
+		<item>37 minit</item>
+		<item>38 minit</item>
+		<item>39 minit</item>
+		<item>40 minit</item>
+		<item>41 minit</item>
+		<item>42 minit</item>
+		<item>43 minit</item>
+		<item>44 minit</item>
+		<item>45 minit</item>
+		<item>46 minit</item>
+		<item>47 minit</item>
+		<item>48 minit</item>
+		<item>49 minit</item>
+		<item>50 minit</item>
+		<item>51 minit</item>
+		<item>52 minit</item>
+		<item>53 minit</item>
+		<item>54 minit</item>
+		<item>55 minit</item>
+		<item>56 minit</item>
+		<item>57 minit</item>
+		<item>58 minit</item>
+		<item>59 minit</item>
+		<item>60 minit</item>
+	</string-array>
+
+	<!-- Dismiss early -->
+	<string-array name="dismiss_early_times">
+		<item>1 minit</item>
+		<item>2 minit</item>
+		<item>3 minit</item>
+		<item>4 minit</item>
+		<item>5 minit</item>
+		<item>10 minit</item>
+		<item>15 minit</item>
+		<item>20 minit</item>
+		<item>25 minit</item>
+		<item>30 minit</item>
+		<item>35 minit</item>
+		<item>40 minit</item>
+		<item>45 minit</item>
+		<item>50 minit</item>
+		<item>55 minit</item>
+		<item>60 minit</item>
+		<item>65 minit</item>
+		<item>70 minit</item>
+		<item>75 minit</item>
+		<item>80 minit</item>
+		<item>85 minit</item>
+		<item>90 minit</item>
+		<item>95 minit</item>
+		<item>100 minit</item>
+		<item>105 minit</item>
+		<item>110 minit</item>
+		<item>115 minit</item>
+		<item>120 minit</item>
+	</string-array>
+
+	<!-- Auto snooze minutes -->
+	<string-array name="auto_snooze_minute_summaries">
+		<item>0 minit</item>
+		<item>1 minit</item>
+		<item>2 minit</item>
+		<item>3 minit</item>
+		<item>4 minit</item>
+		<item>5 minit</item>
+		<item>6 minit</item>
+		<item>7 minit</item>
+		<item>8 minit</item>
+		<item>9 minit</item>
+		<item>10 minit</item>
+		<item>11 minit</item>
+		<item>12 minit</item>
+		<item>13 minit</item>
+		<item>14 minit</item>
+		<item>15 minit</item>
+		<item>16 minit</item>
+		<item>17 minit</item>
+		<item>18 minit</item>
+		<item>19 minit</item>
+		<item>20 minit</item>
+		<item>21 minit</item>
+		<item>22 minit</item>
+		<item>23 minit</item>
+		<item>24 minit</item>
+		<item>25 minit</item>
+		<item>26 minit</item>
+		<item>27 minit</item>
+		<item>28 minit</item>
+		<item>29 minit</item>
+		<item>30 minit</item>
+	</string-array>
+
+	<!-- Max snoozes -->
+	<string-array name="max_snooze_summaries">
+		<item>Okenn</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+		<item>5</item>
+		<item>6</item>
+		<item>7</item>
+		<item>8</item>
+		<item>9</item>
+		<item>10</item>
+		<item>San limit</item>
+	</string-array>
+
+	<!-- Snooze duration minutes -->
+	<string-array name="snooze_duration_minute_summaries">
+		<item>0 minit</item>
+		<item>1 minit</item>
+		<item>2 minit</item>
+		<item>3 minit</item>
+		<item>4 minit</item>
+		<item>5 minit</item>
+		<item>6 minit</item>
+		<item>7 minit</item>
+		<item>8 minit</item>
+		<item>9 minit</item>
+		<item>10 minit</item>
+		<item>11 minit</item>
+		<item>12 minit</item>
+		<item>13 minit</item>
+		<item>14 minit</item>
+		<item>15 minit</item>
+		<item>16 minit</item>
+		<item>17 minit</item>
+		<item>18 minit</item>
+		<item>19 minit</item>
+		<item>20 minit</item>
+		<item>21 minit</item>
+		<item>22 minit</item>
+		<item>23 minit</item>
+		<item>24 minit</item>
+		<item>25 minit</item>
+		<item>26 minit</item>
+		<item>27 minit</item>
+		<item>28 minit</item>
+		<item>29 minit</item>
+		<item>30 minit</item>
+		<item>31 minit</item>
+		<item>32 minit</item>
+		<item>33 minit</item>
+		<item>34 minit</item>
+		<item>35 minit</item>
+		<item>36 minit</item>
+		<item>37 minit</item>
+		<item>38 minit</item>
+		<item>39 minit</item>
+		<item>40 minit</item>
+		<item>41 minit</item>
+		<item>42 minit</item>
+		<item>43 minit</item>
+		<item>44 minit</item>
+		<item>45 minit</item>
+		<item>46 minit</item>
+		<item>47 minit</item>
+		<item>48 minit</item>
+		<item>49 minit</item>
+		<item>50 minit</item>
+		<item>51 minit</item>
+		<item>52 minit</item>
+		<item>53 minit</item>
+		<item>54 minit</item>
+		<item>55 minit</item>
+		<item>56 minit</item>
+		<item>57 minit</item>
+		<item>58 minit</item>
+		<item>59 minit</item>
+		<item>60 minit</item>
+		<item>61 minit</item>
+		<item>62 minit</item>
+		<item>63 minit</item>
+		<item>64 minit</item>
+		<item>65 minit</item>
+		<item>66 minit</item>
+		<item>67 minit</item>
+		<item>68 minit</item>
+		<item>69 minit</item>
+		<item>70 minit</item>
+		<item>71 minit</item>
+		<item>72 minit</item>
+		<item>73 minit</item>
+		<item>74 minit</item>
+		<item>75 minit</item>
+		<item>76 minit</item>
+		<item>77 minit</item>
+		<item>78 minit</item>
+		<item>79 minit</item>
+		<item>80 minit</item>
+		<item>81 minit</item>
+		<item>82 minit</item>
+		<item>83 minit</item>
+		<item>84 minit</item>
+		<item>85 minit</item>
+		<item>86 minit</item>
+		<item>87 minit</item>
+		<item>88 minit</item>
+		<item>89 minit</item>
+		<item>90 minit</item>
+	</string-array>
+
+	<!-- Upcoming reminder how early -->
+	<string-array name="upcoming_reminder_how_early">
+		<item>1 minit</item>
+		<item>2 minit</item>
+		<item>3 minit</item>
+		<item>4 minit</item>
+		<item>5 minit</item>
+		<item>6 minit</item>
+		<item>7 minit</item>
+		<item>8 minit</item>
+		<item>9 minit</item>
+		<item>10 minit</item>
+		<item>15 minit</item>
+		<item>20 minit</item>
+		<item>25 minit</item>
+		<item>30 minit</item>
+		<item>35 minit</item>
+		<item>40 minit</item>
+		<item>45 minit</item>
+		<item>50 minit</item>
+		<item>55 minit</item>
+		<item>60 minit</item>
+		<item>65 minit</item>
+		<item>70 minit</item>
+		<item>75 minit</item>
+		<item>80 minit</item>
+		<item>85 minit</item>
+		<item>90 minit</item>
+		<item>95 minit</item>
+		<item>100 minit</item>
+		<item>105 minit</item>
+		<item>110 minit</item>
+		<item>115 minit</item>
+		<item>120 minit</item>
+	</string-array>
+
+	<!-- Upcoming reminder how frequent -->
+	<string-array name="upcoming_reminder_how_frequent">
+		<item>Yon fwa</item>
+		<item>Chak 1 min</item>
+		<item>Chak 2 min</item>
+		<item>Chak 3 min</item>
+		<item>Chak 4 min</item>
+		<item>Chak 5 min</item>
+		<item>Chak 6 min</item>
+		<item>Chak 7 min</item>
+		<item>Chak 8 min</item>
+		<item>Chak 9 min</item>
+		<item>Chak 10 min</item>
+		<item>Chak 11 min</item>
+		<item>Chak 12 min</item>
+		<item>Chak 13 min</item>
+		<item>Chak 14 min</item>
+		<item>Chak 15 min</item>
+		<item>Chak 16 min</item>
+		<item>Chak 17 min</item>
+		<item>Chak 18 min</item>
+		<item>Chak 19 min</item>
+		<item>Chak 20 min</item>
+		<item>Chak 21 min</item>
+		<item>Chak 22 min</item>
+		<item>Chak 23 min</item>
+		<item>Chak 24 min</item>
+		<item>Chak 25 min</item>
+		<item>Chak 26 min</item>
+		<item>Chak 27 min</item>
+		<item>Chak 28 min</item>
+		<item>Chak 29 min</item>
+		<item>Chak 30 min</item>
+	</string-array>
+
+</resources>

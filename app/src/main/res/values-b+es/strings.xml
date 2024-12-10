@@ -7,23 +7,20 @@
 	<string name="message_permission_post_notifications_request">Las alarmas no podrán ejecutarse cuando la aplicación no esté enfocada.\n\n<b>Nota:</b> Este es un efecto secundario de las políticas de seguridad introducidas en <b>Android 13</b>, que benefician a los usuarios, pero pueden restringir aplicaciones en instancias como esta.\n\n¿Desea continuar habilitando este permiso?</string>
 	<string name="message_permission_schedule_exact_alarm_request">Las alarmas no podrán ejecutarse cuando la aplicación no esté enfocada.\n\n¿Le gustaría continuar a la siguiente pantalla para habilitar este permiso?</string>
 
-
-
 	<!-- Consolidate -->
 	<string name="version">Versión</string>
 	<string name="am">AM</string>
 	<string name="pm">PM</string>
 	<string name="none">Ninguno</string>
-	<string name="settings">Configuración</string>
 	<string name="show_next_alarm">Muestra próxima alarma</string>
+
+	<!-- Words -->
+	<string name="word_of">de</string>
 	<string name="word_alarm">La alarma</string>
 	<string name="word_reminder">Recordatorio</string>
 
-
-
 	<!-- States -->
 	<string name="state_unknown">Desconocido</string>
-
 
 	<!-- Actions -->
 	<string name="action_alarm_snooze">Posponer</string>
@@ -54,17 +51,16 @@
 	<string name="action_shuffle_music">Música aleatoria</string>
 	<string name="action_recursively_play_media">Incluir subcarpétas</string>
 	<string name="action_alarm_option_audio_source">Fuente de audio</string>
-	<string name="title_volume_gradually_increase_volume">Aumentar gradualmente el volumen</string>
-	<string name="title_volume_restrict_volume">Restringe el volumen</string>
+	<string name="action_alarm_option_flashlight">Linterna</string>
 	<string name="action_alarm_option_text_to_speech">Texto-a-voz</string>
+	<string name="action_alarm_option_dismiss_options">Descartar opciones</string>
+	<string name="action_alarm_option_snooze_options">Posponer opciones</string>
 	<string name="action_alarm_option_upcoming_reminder">Próximo recordatorio</string>
 	<string name="action_skipping_next_alarm">Saltar la siguiente alarma</string>
 	<string name="action_skip_next_alarm">Saltar la siguiente alarma</string>
 	<string name="action_unskip_next_alarm">Dejar de omitir la siguiente alarma</string>
 	<string name="action_export">Exportar</string>
 	<string name="action_import">Importar</string>
-
-
 
 	<!-- Labels -->
 	<string name="label_created_statistic">creado</string>
@@ -77,8 +73,6 @@
 	<string name="label_dismissed_statistic_header">Tiempo despedido, Nombre, Hora de alarma,NFC usado</string>
 	<string name="label_missed_statistic_header">Tiempo perdido, Nombre, Hora de alarma</string>
 	<string name="label_snoozed_statistic_header">Tiempo se pospuso,Nombre,Hora de alarma,Duración de dormitar (segundos)</string>
-
-
 
 	<!-- Messages -->
 	<string name="message_playlist">¿Quieres tocar toda la música de esta carpeta?</string>
@@ -127,8 +121,6 @@
 	<string name="message_export_completed">Exportación completada</string>
 	<string name="message_import_completed">Importación completada</string>
 
-
-
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Incapaz de borrar una alarma activa</string>
 	<string name="error_message_active_modify">Incapaz de modificar una alarma activa</string>
@@ -150,37 +142,17 @@
 	<string name="error_message_unable_to_start_foreground_service">No se puede iniciar el servicio en primer plano. Habilite el permiso</string>
 	<string name="error_message_unable_to_open_import_export_stream">No se puede abrir el archivo</string>
 
-
-
-	<!-- Words -->
-	<string name="word_of">de</string>
-
-
-
 	<!-- Titles -->
+	<string name="title_settings">Configuración</string>
+	<string name="title_time">Hora</string>
 	<string name="title_alarm_activity">Desactivar Alarma</string>
 	<string name="title_scan_nfc_tag" tools:ignore="TypographyEllipsis">Escanear una etiqueta NFC...</string>
 	<string name="title_select_nfc_tag" tools:ignore="TypographyEllipsis">Seleccione una etiqueta NFC...</string>
 	<string name="title_save_nfc_tag" tools:ignore="TypographyEllipsis">Guarde la etiqueta NFC...</string>
 	<string name="title_delete_nfc_tag" tools:ignore="TypographyEllipsis">Eliminar la etiqueta NFC...</string>
 	<string name="title_rename_nfc_tag" tools:ignore="TypographyEllipsis">Cambiar el nombre de la etiqueta NFC...</string>
-	<string name="title_flashlight_strength" tools:ignore="TypographyEllipsis">Nivel de potencia de la linterna...</string>
-	<string name="title_flashlight_blink" tools:ignore="TypographyEllipsis">Si la linterna parpadea...</string>
-	<string name="title_flashlight_on_off_duration" tools:ignore="TypographyEllipsis">¿Cuánto tiempo debe parpadear la linterna encendida y apagada durante...</string>
 	<string name="title_days">Seleccione los días</string>
 	<string name="title_color">Elige un color</string>
-	<string name="title_dismiss_early_checkbox" tools:ignore="TypographyEllipsis">Descartar la alarma temprano, antes de que se active...</string>
-	<string name="title_dismiss_early_how_early" tools:ignore="TypographyEllipsis">¿Con qué antelación se puede desactivar la alarma...?</string>
-	<string name="title_delete_alarm_after_dismissed_checkbox" tools:ignore="TypographyEllipsis">Eliminar la alarma después de descartarla...</string>
-	<string name="title_upcoming_reminder_should_show" tools:ignore="TypographyEllipsis">Mostrar una notificación de recordatorio antes de que suene la alarma...</string>
-	<string name="title_upcoming_reminder_time_to_show" tools:ignore="TypographyEllipsis">¿Con qué antelación se debe mostrar la notificación...?</string>
-	<string name="title_upcoming_reminder_freq_to_show" tools:ignore="TypographyEllipsis">¿Con qué frecuencia se debe mostrar...?</string>
-	<string name="title_upcoming_reminder_should_use_tts" tools:ignore="TypographyEllipsis">¿Deberían usarse las mismas opciones de texto a voz que la alarma cuando se muestra la notificación...</string>
-	<string name="title_gradually_increase_volume_checkbox" tools:ignore="TypographyEllipsis">Aumente gradualmente el volumen cuando la alarma esté activa...</string>
-	<string name="title_gradually_increase_volume_picker" tools:ignore="TypographyEllipsis">Tiempo de espera entre cada aumento de volumen...</string>
-	<string name="title_restrict_volume_checkbox" tools:ignore="TypographyEllipsis">Restringir el volumen cuando la alarma esté activa...</string>
-	<string name="title_tts_what_to_say" tools:ignore="TypographyEllipsis">Qué decir cuando la alarma está activa...</string>
-	<string name="title_tts_how_often_to_say" tools:ignore="TypographyEllipsis">Cuantas veces decirlo...</string>
 	<string name="title_next_alarm_format">Selecciona un estilo</string>
 	<string name="title_folder_selected">Seleccionaste una carpeta</string>
 	<string name="title_active_alarms">Alarmas activas</string>
@@ -195,9 +167,9 @@
 	<string name="title_request_permission_ignore_battery_optimization">¿Desactivar la optimización de la batería?</string>
 	<string name="title_request_permission_post_notifications">¿Permitir notificaciones?</string>
 	<string name="title_request_permission_schedule_exact_alarm">¿Permitir programar alarmas?</string>
-	<string name="title_reset_statistics" tools:ignore="TypographyEllipsis">reiniciar las estadísticas...</string>
-
-
+	<string name="title_reset_statistics">reiniciar las estadísticas…</string>
+	<string name="title_volume_gradually_increase_volume">Aumentar gradualmente el volumen</string>
+	<string name="title_volume_restrict_volume">Restringe el volumen</string>
 
 	<!-- Descriptions -->
 	<string name="description_scan_nfc">Escanear NFC</string>
@@ -214,16 +186,12 @@
 	<string name="description_media">Música o tono de llamada</string>
 	<string name="example_name">Trabajo</string>
 
-
-
 	<!-- Summary day names -->
 	<string name="dow_everyday">Todos los días</string>
 	<string name="dow_weekdays">Días de semana</string>
 	<string name="dow_weekend">Fines de semana</string>
 	<string name="dow_today">Hoy</string>
 	<string name="dow_tomorrow">Mañana</string>
-
-
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">Lista de alarmas que se mostrarán aquí.</string>
@@ -242,7 +210,6 @@
 	<string name="cd_request_permission_post_notifications">Solicitud para publicar notificaciones.</string>
 	<string name="cd_request_permission_schedule_exact_alarm">Solicitud para programar alarmas exactas.</string>
 	<string name="cd_whats_new">Lista de elementos nuevos en esta versión de la aplicación.</string>
-	<string name="cd_flashlight_strength_seekbar">Nivel de fuerza de la linterna.</string>
 	<string name="cd_scan_nfc">Escanee una etiqueta NFC.</string>
 	<string name="cd_alarm_slider_arrow">Dirección para deslizar el dedo.</string>
 	<string name="cd_dismiss_alarm">Descartar la alarma.</string>
@@ -251,12 +218,7 @@
 	<string name="cd_skip_next_alarm">Saltar la siguiente alarma.</string>
 	<string name="cd_delete_alarm_after_dismissed">Eliminar la alarma después de descartarla.</string>
 
-
-
-	<!-- ************* -->
 	<!-- Main Settings -->
-	<!-- ************* -->
-
 	<string name="general_setting">General</string>
 	<string name="general_setting_summary">Ajustes generales</string>
 
@@ -278,47 +240,33 @@
 	<string name="import_export_setting">Importación y exportación</string>
 	<string name="import_export_setting_summary">Importa o exporta todos tus datos guardados</string>
 
-
-
-	<!-- **************** -->
 	<!-- General settings -->
-	<!-- **************** -->
 
 	<!-- Categories -->
-	<string name="dismiss_options_category">Descartar opciones</string>
-	<string name="snooze_options_category">Posponer opciones</string>
 	<string name="default_alarm_category">Alarm predeterminada</string>
-
 
 	<!-- Auto dismiss duration -->
 	<string name="title_dismiss_options_auto_dismiss">Desactivacion automatica</string>
 
-
 	<!-- Auto snooze duration -->
 	<string name="title_snooze_options_auto_snooze">Posponer automáticamente</string>
-
 
 	<!-- Max number of snoozes -->
 	<string name="title_snooze_options_max_snooze">Dormitar la máxima numero de veces</string>
 
-
 	<!-- Snooze duration -->
 	<string name="title_snooze_options_snooze_duration">Duracion de dormitar</string>
-
 
 	<!-- Easy snooze -->
 	<string name="title_snooze_options_easy_snooze">Dormitar fácilmente</string>
 	<string name="easy_snooze_true">Dormitar tocando en cualquier lugar.</string>
 	<string name="easy_snooze_false">Dormitar normalmente.</string>
 
-
 	<!-- Default alarm name -->
 	<string name="alarm_name">Nombre</string>
 
-
 	<!-- Default alarm days -->
 	<string name="alarm_days">Días</string>
-
 
 	<!-- Default alarm repeat -->
 	<string name="alarm_repeat">Repetir</string>
@@ -333,7 +281,6 @@
 
 
 	<!-- Default alarm use flashlight -->
-	<string name="alarm_flashlight">Linterna</string>
 	<string name="alarm_flashlight_true">Enciende la linterna cuando suene la alarma.</string>
 	<string name="alarm_flashlight_false">No encienda la linterna cuando suene la alarma.</string>
 
@@ -352,11 +299,7 @@
 	<!-- Default alarm volume and audio source -->
 	<string name="alarm_volume">Volumen</string>
 
-
-
-	<!-- ******************* -->
 	<!-- Appearance settings -->
-	<!-- ******************* -->
 
 	<!-- Categories -->
 	<string name="alarm_screen_category">Pantalla de alarma</string>
@@ -398,7 +341,6 @@
 	<string name="summary_color_days">p.ej. Lun &#8231; Mar &#8231; Mie &#8231; Jue &#8231; Vie</string>
 
 	<!-- Time color -->
-	<string name="time_color">Hora</string>
 	<string name="summary_color_time">p.ej. 12:30</string>
 
 	<!-- AM color -->
@@ -438,41 +380,7 @@
 	<string name="next_alarm_format_time_in">Próxima alarma en 7 horas 30 minutos</string>
 	<string name="next_alarm_format_time_on">Próxima alarma Lun 7:00 AM</string>
 
-	<!-- ************** -->
-	<!-- Alarm settings -->
-	<!-- ************** -->
-
-	<!-- Dismiss early -->
-	<string name="dismiss_early_true">Sí, puede descartar la alarma antes de tiempo.</string>
-	<string name="dismiss_early_false">No, la alarma no se puede desactivar antes de tiempo.</string>
-
-	<!-- Delete alarm after dismissed -->
-	<string name="delete_alarm_after_dismissed_true">Sí, elimine la alarma después de descartarla.</string>
-	<string name="delete_alarm_after_dismissed_false">No, no elimine la alarma después de descartarla.</string>
-
-	<!-- Upcoming reminder -->
-	<string name="upcoming_reminder_true">Sí, mostrar una notificación.</string>
-	<string name="upcoming_reminder_false">No, no muestres nada.</string>
-	<string name="upcoming_reminder_use_tts_true">Sí, utiliza las mismas opciones de texto-a-voz que la alarma.\n\nNota: Si la opción está desactivada para la alarma, esto no hará nada.</string>
-	<string name="upcoming_reminder_use_tts_false">No, no utilice ningún texto-a-voz.</string>
-
-	<!-- Restrict volume -->
-	<string name="restrict_volume_true">Sí, el volumen estará restringido y no se podrá cambiar.</string>
-	<string name="restrict_volume_false">No, el volumen se puede cambiar libremente.</string>
-
-	<!-- Gradually increase volume -->
-	<string name="gradually_increase_volume_true">Sí, el volumen aumentará gradualmente hasta alcanzar el volumen de la alarma.</string>
-	<string name="gradually_increase_volume_false">No, el volumen se ajustará al volumen de la alarma.</string>
-
-	<!-- Flashlight blink -->
-	<string name="flashlight_blink_true">Sí, haz parpadear la linterna.</string>
-	<string name="flashlight_blink_false">No, no hagas parpadear la linterna.</string>
-
-
-
-	<!-- ************** -->
 	<!-- About settings -->
-	<!-- ************** -->
 
 	<!-- Categories -->
 	<string name="app_category">Aplicacion</string>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+	<!-- &lt;b> -->
+	<!-- &lt;/b> -->
+
+	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>Đã thêm tùy chọn &lt;b>bỏ qua báo thức tiếp theo&lt;/b>. Nhấn và giữ báo thức để xem tùy chọn.</item>
+		<item>Đã thêm tùy chọn &lt;b>xóa sau khi tắt&lt;/b> để tự động xóa báo thức sau khi tắt. Tìm thấy trong &lt;b>Tùy chọn tắt&lt;/b>.</item>
+		<item>Đã thêm tùy chọn &lt;b>nhập/xuất&lt;/b>. Tìm thấy trong &lt;b>Cài đặt&lt;/b>.</item>
+		<item>Đã khắc phục sự cố khi có dấu &lt;b>%&lt;/b> trong tên báo thức.</item>
+		<item>Đã thêm bản dịch ngôn ngữ cho tiếng Đức.</item>
+		<item>Cảm ơn &lt;b>Aristeo Montoya&lt;/b> đã giúp cải thiện bản dịch &lt;b>tiếng Tây Ban Nha&lt;/b>.</item>
+		<item>Đã cập nhật cách &lt;b>chuyển văn bản thành giọng nói&lt;/b> hiển thị thời gian và làm chậm tốc độ nói.</item>
+		<item>Thông báo nhắc nhở sẽ bị xóa khi báo thức kêu.</item>
+	</string-array>
+
+</resources>

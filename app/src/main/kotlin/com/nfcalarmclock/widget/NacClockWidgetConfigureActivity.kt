@@ -17,10 +17,10 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.databinding.NacClockWidgetConfigureBinding
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.view.colorpicker.NacColorPickerDialog
-import com.nfcalarmclock.view.setupBackgroundColor
 import com.nfcalarmclock.view.setupForegroundColor
 import com.nfcalarmclock.view.setupProgressAndThumbColor
 import com.nfcalarmclock.view.setupSwitchColor
+import com.nfcalarmclock.view.setupThemeColor
 import java.util.Calendar
 
 /**
@@ -197,7 +197,7 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		binding.alarmLayoutTextSizeSlider.setupProgressAndThumbColor(sharedPreferences)
 
 		// Done button
-		binding.doneButton.setupBackgroundColor(sharedPreferences)
+		binding.doneButton.setupThemeColor(sharedPreferences)
 	}
 
 	/**

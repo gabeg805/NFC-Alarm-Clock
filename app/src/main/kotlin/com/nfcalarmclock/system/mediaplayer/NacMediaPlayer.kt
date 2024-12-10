@@ -4,6 +4,7 @@ import android.content.Context
 import android.media.AudioManager
 import android.net.Uri
 import android.os.Handler
+import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.Player.COMMAND_SET_REPEAT_MODE
@@ -15,6 +16,7 @@ import com.nfcalarmclock.util.media.NacAudioAttributes
 import com.nfcalarmclock.util.media.NacAudioManager
 import com.nfcalarmclock.util.media.NacMedia
 import com.nfcalarmclock.util.NacUtility.quickToast
+import java.io.File
 
 /**
  * Wrapper for the MediaPlayer class.
@@ -285,6 +287,7 @@ class NacMediaPlayer(
 		{
 			// Get the media URI
 			val uri = Uri.parse(alarm.mediaPath)
+			println("URI : $uri | Path : ${alarm.mediaPath} | File : ${File(alarm.mediaPath)} | ${File(alarm.mediaPath).toUri()}")
 
 			// Play the file
 			playUri(uri)
@@ -334,8 +337,7 @@ class NacMediaPlayer(
 		// Play the media items
 		play()
 	}
-
-	/**
+ /**
 	 * Play the media with the given Uri.
 	 *
 	 * @param  uri  The Uri of the content to play.
