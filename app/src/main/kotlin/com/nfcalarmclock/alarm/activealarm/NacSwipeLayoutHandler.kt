@@ -22,18 +22,16 @@ import androidx.dynamicanimation.animation.DynamicAnimation
 import androidx.dynamicanimation.animation.FlingAnimation
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.util.media.NacMedia
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.createTimeTickReceiver
+import com.nfcalarmclock.util.media.getMediaArtist
+import com.nfcalarmclock.util.media.getMediaTitle
 import com.nfcalarmclock.util.registerMyReceiver
 import com.nfcalarmclock.util.unregisterMyReceiver
 import java.lang.Float.max
 import java.lang.Float.min
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Locale
-import java.util.TimeZone
 import kotlin.math.absoluteValue
 
 /**
@@ -727,16 +725,15 @@ class NacSwipeLayoutHandler(
 
 		// Get the title and artist of the media
 		val mediaUri = Uri.parse(mediaPath)
-		val title = NacMedia.getTitle(context, mediaUri)
-		val artist = NacMedia.getArtist(context, mediaUri)
-		val unknown = context.getString(R.string.state_unknown)
+		val title = mediaUri.getMediaTitle(context)
+		val artist = mediaUri.getMediaArtist(context)
 
 		// Set the title and artist
 		musicTitleTextView.text = title
 		musicArtistTextView.text = artist
 
 		// Set the visibility of the artist if it is unknown
-		musicArtistTextView.visibility = if (artist != unknown) View.VISIBLE else View.GONE
+		musicArtistTextView.visibility = if (artist.isNotEmpty()) View.VISIBLE else View.GONE
 	}
 
 	/**

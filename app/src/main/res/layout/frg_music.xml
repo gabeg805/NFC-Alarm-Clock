@@ -1,48 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:orientation="vertical">
+	android:layout_height="match_parent">
 
-	<TextView
-		android:id="@+id/path"
+	<LinearLayout
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:paddingTop="@dimen/nudge"
-		android:paddingBottom="@dimen/nudge"
-		android:paddingStart="@dimen/tiny"
-		android:paddingEnd="@dimen/tiny"
-		android:singleLine="true"
-		android:ellipsize="start"
-		android:textStyle="italic"
-		android:textSize="@dimen/tsz_small"
-		android:text=""
-		/>
+		android:layout_height="match_parent"
+		android:orientation="vertical">
 
-	<View
-		android:layout_width="match_parent"
-		android:layout_height="@dimen/line"
-		android:layout_marginBottom="@dimen/tiny"
-		android:background="@color/gray_light"
-		/>
-
-	<ScrollView
-		android:id="@+id/scrollview"
-		android:layout_width="match_parent"
-		android:layout_height="0dp"
-		android:layout_weight="1">
-
-		<LinearLayout
-			android:id="@+id/container"
+		<!-- File path -->
+		<TextView
+			android:id="@+id/path"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:orientation="vertical"
-			android:scrollbars="vertical">
-		</LinearLayout>
+			android:paddingTop="@dimen/nudge"
+			android:paddingBottom="@dimen/nudge"
+			android:paddingStart="@dimen/tiny"
+			android:paddingEnd="@dimen/tiny"
+			android:singleLine="true"
+			android:ellipsize="start"
+			android:textStyle="italic"
+			android:textSize="@dimen/tsz_small"
+			android:text=""
+			/>
 
-	</ScrollView>
+		<!-- Separator -->
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/line"
+			android:layout_marginBottom="@dimen/tiny"
+			android:background="@color/gray_light"
+			/>
 
-	<include layout="@layout/frg_buttons" />
+		<!-- Container for files and stuff -->
+		<ScrollView
+			android:id="@+id/scrollview"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_weight="1">
 
-</LinearLayout>
+			<LinearLayout
+				android:id="@+id/container"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:scrollbars="vertical">
+			</LinearLayout>
+
+		</ScrollView>
+
+		<!-- Action buttons -->
+		<include layout="@layout/frg_buttons" />
+	</LinearLayout>
+
+	<!-- Floating action button -->
+	<com.google.android.material.floatingactionbutton.FloatingActionButton
+		android:contentDescription="@string/cd_fab_launch_system_file_browser"
+		android:id="@+id/fab_launch_file_browser"
+		android:layout_width="@dimen/isz_attention"
+		android:layout_height="@dimen/isz_attention"
+		android:layout_gravity="bottom|end"
+		android:layout_marginBottom="@dimen/action_row_height"
+		android:layout_marginEnd="@dimen/xxlarge"
+		android:visibility="gone"
+		android:src="@drawable/launch_32"
+		/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

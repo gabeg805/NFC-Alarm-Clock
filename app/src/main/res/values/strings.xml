@@ -243,7 +243,8 @@
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">List of alarms will be shown here.</string>
 	<string name="cd_nfc_tag_list">List of NFC tags will be shown here.</string>
-	<string name="cd_floating_action_button">Add a new alarm.</string>
+	<string name="cd_fab_add_alarm">Add a new alarm.</string>
+	<string name="cd_fab_launch_system_file_browser">Launch system file browser.</string>
 	<string name="cd_collapse_alarm">Collapse an alarm.</string>
 	<string name="cd_expand_alarm">Expand an alarm.</string>
 	<string name="cd_volume_icon">Change the volume of an alarm.</string>

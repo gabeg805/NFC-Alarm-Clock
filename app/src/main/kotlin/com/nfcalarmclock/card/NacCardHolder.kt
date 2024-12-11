@@ -36,7 +36,6 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar.Day
 import com.nfcalarmclock.util.NacUtility.getHeight
 import com.nfcalarmclock.util.NacUtility.quickToast
-import com.nfcalarmclock.util.media.NacMedia
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek.OnWeekChangedListener
 import com.nfcalarmclock.view.performHapticFeedback
@@ -1183,15 +1182,15 @@ class NacCardHolder(
 	 */
 	private fun setMediaButton()
 	{
-		val mediaPath = alarm!!.mediaPath
+		val mediaTitle = alarm!!.mediaTitle
 		val message : String
 		val alpha : Float
 
 		// Check if the media path is not empty
-		if (mediaPath.isNotEmpty())
+		if (mediaTitle.isNotEmpty())
 		{
 			// Get the message and alpha of the alarm
-			message = NacMedia.getTitle(context, mediaPath)
+			message = mediaTitle
 			alpha = 1.0f
 		}
 		else

@@ -4,7 +4,9 @@ import android.content.Context
 import com.nfcalarmclock.R
 import com.nfcalarmclock.system.file.NacFile
 import com.nfcalarmclock.system.file.NacFileTree
-import com.nfcalarmclock.util.media.NacMedia
+import com.nfcalarmclock.util.media.getMediaDuration
+import com.nfcalarmclock.util.media.getMediaArtist
+import com.nfcalarmclock.util.media.getMediaTitle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -38,8 +40,6 @@ class NacFileBrowserRepository
 
 	/**
 	 * Add a directory entry to the file listing.
-	 *
-	 * TODO Count number of songs in subdirectories and make that the annotation.
 	 */
 	private suspend fun addDirectory(context: Context, metadata: NacFile.Metadata)
 	{
@@ -76,9 +76,9 @@ class NacFileBrowserRepository
 			val uri = metadata.toExternalUri()
 
 			// Determine the extra data. This will be shown to the user
-			val title = NacMedia.getTitle(context, uri)
-			val artist = NacMedia.getArtist(context, uri)
-			val duration = NacMedia.getDuration(context, uri)
+			val title = uri.getMediaTitle(context)
+			val artist = uri.getMediaArtist(context)
+			val duration = uri.getMediaDuration(context)
 
 			// No title so there is nothing to show the user. Exit here
 			if (title.isEmpty())

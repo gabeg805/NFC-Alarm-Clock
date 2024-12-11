@@ -9,6 +9,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.ContextCompat
+import androidx.core.os.UserManagerCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -55,11 +56,21 @@ fun disableActivityAlias(context: Context)
 }
 
 /**
+ * Check if the deviec is user unlocked or not.
+ */
+fun isUserUnlocked(context: Context): Boolean
+{
+	// Check the status
+	return (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
+		|| UserManagerCompat.isUserUnlocked(context)
+}
+
+/**
  * Get the device protected storage context to use for direct boot.
  *
  * If direct boot is not supported on the device, then a normal context will be returned.
  */
-fun getDeviceProtectedStorageContext(context: Context, appContext: Boolean=false): Context
+fun getDeviceProtectedStorageContext(context: Context, appContext: Boolean = false): Context
 {
 	// Check if device supports direct boot
 	return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)

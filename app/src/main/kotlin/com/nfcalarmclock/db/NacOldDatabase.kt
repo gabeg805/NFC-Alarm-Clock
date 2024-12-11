@@ -6,12 +6,14 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
+import android.net.Uri
 import android.provider.BaseColumns
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar
-import com.nfcalarmclock.util.media.NacMedia
+import com.nfcalarmclock.util.media.getMediaTitle
+import com.nfcalarmclock.util.media.getMediaType
 
 /**
  * NFC Alarm Clock database.
@@ -284,12 +286,12 @@ class NacOldDatabase(
 		// Create the database
 		db.execSQL(Contract.AlarmTable.CREATE_TABLE_V5)
 
-		// Get the info
+		// Get the shared preferences
 		val shared = NacSharedPreferences(context)
+
+		// Get the media information
 		val mediaPath = shared.mediaPath
-		val mediaTitle = NacMedia.getTitle(context, mediaPath)
-		val mediaType = NacMedia.getType(context, mediaPath)
-		val name = context.getString(R.string.example_name)
+		val uri = Uri.parse(mediaPath)
 
 		// Build an alarm
 		val alarm = NacAlarm.build(shared)
@@ -297,10 +299,10 @@ class NacOldDatabase(
 		alarm.id = 1
 		alarm.hour = 8
 		alarm.minute = 0
-		alarm.mediaTitle = mediaTitle
+		alarm.mediaTitle = uri.getMediaTitle(context)
 		alarm.mediaPath = mediaPath
-		alarm.mediaType = mediaType
-		alarm.name = name
+		alarm.mediaType = uri.getMediaType(context)
+		alarm.name = context.getString(R.string.example_name)
 
 		// Add the alarm to the database
 		this.add(db, alarm)

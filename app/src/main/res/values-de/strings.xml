@@ -196,7 +196,7 @@
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">Hier wird eine Liste der Alarme angezeigt.</string>
 	<string name="cd_nfc_tag_list">Hier wird eine Liste der NFC-Tags angezeigt.</string>
-	<string name="cd_floating_action_button">Fügen Sie einen neuen Alarm hinzu.</string>
+	<string name="cd_fab_add_alarm">Fügen Sie einen neuen Alarm hinzu.</string>
 	<string name="cd_collapse_alarm">Einen Alarm ausblenden.</string>
 	<string name="cd_expand_alarm">Erweitern Sie einen Alarm.</string>
 	<string name="cd_volume_icon">Ändern Sie die Lautstärke eines Alarms.</string>

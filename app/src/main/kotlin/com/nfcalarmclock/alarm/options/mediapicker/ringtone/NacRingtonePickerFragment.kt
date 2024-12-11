@@ -16,7 +16,7 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.util.media.NacMedia
 import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerFragment
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.util.NacBundle
+import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.addMediaInfo
 
 /**
@@ -165,7 +165,7 @@ class NacRingtonePickerFragment
 			val fragment: Fragment = NacRingtonePickerFragment()
 
 			// Add the bundle to the fragment
-			fragment.arguments = NacBundle.alarmToBundle(alarm)
+			fragment.arguments = Bundle().addAlarm(alarm)
 
 			return fragment
 		}

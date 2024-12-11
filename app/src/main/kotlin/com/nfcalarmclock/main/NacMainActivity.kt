@@ -5,8 +5,8 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.res.ColorStateList
 import android.graphics.drawable.InsetDrawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
 import com.nfcalarmclock.BuildConfig
@@ -64,20 +65,27 @@ import com.nfcalarmclock.statistics.NacAlarmStatisticViewModel
 import com.nfcalarmclock.system.permission.NacPermissionRequestManager
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
-import com.nfcalarmclock.util.NacBundle
 import com.nfcalarmclock.util.NacCalendar
-import com.nfcalarmclock.util.NacIntent
 import com.nfcalarmclock.util.NacUtility.quickToast
+import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.createTimeTickReceiver
 import com.nfcalarmclock.util.disableActivityAlias
+import com.nfcalarmclock.util.getSetAlarm
+import com.nfcalarmclock.util.media.buildLocalMediaPath
+import com.nfcalarmclock.util.media.copyMediaToDeviceEncryptedStorage
+import com.nfcalarmclock.util.media.getMediaArtist
+import com.nfcalarmclock.util.media.getMediaTitle
+import com.nfcalarmclock.util.media.getMediaType
 import com.nfcalarmclock.util.registerMyReceiver
 import com.nfcalarmclock.util.unregisterMyReceiver
+import com.nfcalarmclock.view.setupThemeColor
 import com.nfcalarmclock.view.toSpannedString
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog
 import com.nfcalarmclock.widget.refreshAppWidgets
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.Calendar
 
 /**
@@ -328,7 +336,7 @@ class NacMainActivity
 	private fun addSetAlarmFromIntent()
 	{
 		// Get the alarm from the intent
-		val alarm = NacIntent.getSetAlarm(this, intent)
+		val alarm = intent.getSetAlarm(this)
 
 		// Check if the alarm is not null
 		if (alarm != null)
@@ -384,12 +392,13 @@ class NacMainActivity
 		val message = getString(R.string.message_alarm_copy)
 		val action = getString(R.string.action_undo)
 
-		showSnackbar(message, action) {
+		showSnackbar(message, action,
+			onClickListener = {
 
-			// Undo the copy, so delete the alarm
-			deleteAlarm(copiedAlarm)
+				// Undo the copy, so delete the alarm
+				deleteAlarm(copiedAlarm)
 
-		}
+			})
 	}
 
 	/**
@@ -399,6 +408,9 @@ class NacMainActivity
 	 */
 	private fun deleteAlarm(alarm: NacAlarm)
 	{
+		// Get the local media path
+		val localMediaPath = alarm.localMediaPath
+
 		// Delete the alarm
 		alarmViewModel.delete(alarm)
 
@@ -412,12 +424,43 @@ class NacMainActivity
 		val message = getString(R.string.message_alarm_delete)
 		val action = getString(R.string.action_undo)
 
-		showSnackbar(message, action) {
+		showSnackbar(message, action,
+			onClickListener = {
 
-			// Undo the delete, so restore the alarm
-			restoreAlarm(alarm)
+				// Undo the delete, so restore the alarm
+				restoreAlarm(alarm)
 
-		}
+			},
+			onDismissListener = { event ->
+
+				// Check if the snackbar was not dismissed via timeout
+				// or if the local media path is empty
+				// or if the local media path is equal to the shared preference path
+				if ((event != BaseTransientBottomBar.BaseCallback.DISMISS_EVENT_TIMEOUT)
+					|| localMediaPath.isEmpty()
+					|| (localMediaPath == sharedPreferences.localMediaPath))
+				{
+					// Do nothing
+					return@showSnackbar
+				}
+
+				// Check if the local media path is empty or if it is equal to the shared
+				// preference local media path
+				lifecycleScope.launch {
+
+					val allAlarms = alarmViewModel.getAllAlarms()
+					val noMatchingMedia = allAlarms.all { it.localMediaPath != localMediaPath }
+
+					// Check if no alarms are using the local media path
+					if (noMatchingMedia)
+					{
+						// Delete the local media
+						val file = File(localMediaPath)
+						file.delete()
+					}
+
+				}
+			})
 	}
 
 	/**
@@ -516,8 +559,16 @@ class NacMainActivity
 		// Set flag that cards need to be measured
 		sharedPreferences.cardIsMeasured = false
 
-		// Setup live data
-		setupLiveDataObservers()
+		// Run alarm update events in order, namely, before the livedata observer is setup
+		lifecycleScope.launch {
+
+			// Setup events
+			setupEventsFromSharedPreferences()
+
+			// Setup live data
+			setupLiveDataObservers()
+
+		}
 
 		// Setup UI
 		toolbar.setOnMenuItemClickListener(this)
@@ -1000,12 +1051,13 @@ class NacMainActivity
 			val message = getString(R.string.message_alarm_restore)
 			val action = getString(R.string.action_undo)
 
-			showSnackbar(message, action) {
+			showSnackbar(message, action,
+				onClickListener = {
 
-				// Undo the restore, so delete the alarm
-				deleteAlarm(alarm)
+					// Undo the restore, so delete the alarm
+					deleteAlarm(alarm)
 
-			}
+				})
 
 		}
 	}
@@ -1076,12 +1128,56 @@ class NacMainActivity
 	}
 
 	/**
+	 * Setup the events from shared preferences.
+	 */
+	private suspend fun setupEventsFromSharedPreferences()
+	{
+		// Check if should update and backup media information in alarms, starting at
+		// database version 31
+		if (!sharedPreferences.eventUpdateAndBackupMediaInfoInAlarmsDbV31)
+		{
+			// Iterate over each alarm
+			alarmViewModel.getAllAlarms().forEach { alarm ->
+
+				// Check if the media path is set
+				if (alarm.mediaPath.isEmpty())
+				{
+					// Skip if no media set
+					return@forEach
+				}
+
+				// Get the media uri
+				val uri = Uri.parse(alarm.mediaPath)
+
+				// Update the alarm
+				alarm.mediaArtist = uri.getMediaArtist(this)
+				alarm.mediaTitle = uri.getMediaTitle(this)
+				alarm.mediaType = uri.getMediaType(this)
+				alarm.localMediaPath = buildLocalMediaPath(this,
+					alarm.mediaArtist, alarm.mediaTitle, alarm.mediaType)
+
+				// Update the database
+				alarmViewModel.update(alarm)
+
+				// Copy the media to device encrypted storage in case of having to run an
+				// alarm in direct boot mode
+				copyMediaToDeviceEncryptedStorage(this, alarm.mediaPath, alarm.mediaArtist,
+					alarm.mediaTitle, alarm.mediaType)
+
+			}
+
+			// Mark the event as completed
+			sharedPreferences.eventUpdateAndBackupMediaInfoInAlarmsDbV31 = true
+		}
+	}
+
+	/**
 	 * Setup the floating action button.
 	 */
 	private fun setupFloatingActionButton()
 	{
-		// Get the theme color
-		val color = ColorStateList.valueOf(sharedPreferences.themeColor)
+		// Set the color
+		floatingActionButton.setupThemeColor(sharedPreferences)
 
 		// Set the listener
 		floatingActionButton.setOnClickListener { view: View ->
@@ -1103,9 +1199,6 @@ class NacMainActivity
 			// Add the alarm
 			addAlarm(alarm)
 		}
-
-		// Set the color
-		floatingActionButton.backgroundTintList = color
 	}
 
 	/**
@@ -1387,7 +1480,7 @@ class NacMainActivity
 	private fun showAlarmOptionsDialog(alarm: NacAlarm)
 	{
 		// Create bundle with the alarm
-		val bundle = NacBundle.alarmToBundle(alarm)
+		val bundle = Bundle().addAlarm(alarm)
 
 		// Set the graph of the nav controller
 		navController.setGraph(R.navigation.nav_alarm_options, bundle)
@@ -1569,7 +1662,8 @@ class NacMainActivity
 	private fun showSnackbar(
 		message: String,
 		action: String,
-		listener: View.OnClickListener? = null)
+		onClickListener: View.OnClickListener? = null,
+		onDismissListener: (Int) -> Unit = { })
 	{
 		// Create the snackbar
 		val snackbar = Snackbar.make(root, message.toSpannedString(),
@@ -1577,7 +1671,18 @@ class NacMainActivity
 
 		// Setup the snackbar
 		snackbar.setActionTextColor(sharedPreferences.themeColor)
-		snackbar.setAction(action, listener ?: View.OnClickListener { })
+		snackbar.setAction(action, onClickListener ?: View.OnClickListener { })
+		snackbar.addCallback(object: BaseTransientBottomBar.BaseCallback<Snackbar>() {
+
+			/**
+			 * Called when the snackbar has been dismissed.
+			 */
+			override fun onDismissed(transientBottomBar: Snackbar?, event: Int)
+			{
+				onDismissListener(event)
+			}
+
+		})
 
 		// Show the snackbar
 		snackbar.show()

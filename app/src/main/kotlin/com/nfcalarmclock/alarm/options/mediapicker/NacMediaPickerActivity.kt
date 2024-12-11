@@ -23,7 +23,8 @@ import com.nfcalarmclock.alarm.options.mediapicker.music.NacMusicPickerFragment
 import com.nfcalarmclock.alarm.options.mediapicker.ringtone.NacRingtonePickerFragment
 import com.nfcalarmclock.system.permission.readmediaaudio.NacReadMediaAudioPermission
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.util.NacIntent
+import com.nfcalarmclock.util.addAlarm
+import com.nfcalarmclock.util.getAlarm
 import com.nfcalarmclock.util.getMediaArtist
 import com.nfcalarmclock.util.getMediaBundle
 import com.nfcalarmclock.util.getMediaPath
@@ -31,6 +32,10 @@ import com.nfcalarmclock.util.getMediaTitle
 import com.nfcalarmclock.util.getMediaType
 import com.nfcalarmclock.util.getRecursivelyPlayMedia
 import com.nfcalarmclock.util.getShuffleMedia
+import com.nfcalarmclock.util.media.isMediaDirectory
+import com.nfcalarmclock.util.media.isMediaFile
+import com.nfcalarmclock.util.media.isMediaNone
+import com.nfcalarmclock.util.media.isMediaRingtone
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -201,14 +206,13 @@ class NacMediaPickerActivity
 		val bundle = intent.getMediaBundle()
 
 		// Set the member variables
-		alarm = NacIntent.getAlarm(intent)
-		mediaPath = bundle.getMediaPath()
-		mediaArtist = bundle.getMediaArtist()
-		mediaTitle = bundle.getMediaTitle()
-		mediaType = bundle.getMediaType()
-		//val mediaType = alarm?.mediaType ?: NacMedia.getType(this, mediaPath)
-		shuffleMedia = bundle.getShuffleMedia()
-		recursivelyPlayMedia = bundle.getRecursivelyPlayMedia()
+		alarm = intent.getAlarm()
+		mediaPath = alarm?.mediaPath ?: bundle.getMediaPath()
+		mediaArtist = alarm?.mediaArtist ?: bundle.getMediaArtist()
+		mediaTitle = alarm?.mediaTitle ?: bundle.getMediaTitle()
+		mediaType = alarm?.mediaType ?: bundle.getMediaType()
+		shuffleMedia = alarm?.shuffleMedia ?: bundle.getShuffleMedia()
+		recursivelyPlayMedia = alarm?.recursivelyPlayMedia ?: bundle.getRecursivelyPlayMedia()
 		viewPager = findViewById(R.id.act_sound)
 		tabLayout = findViewById(R.id.tab_layout)
 		pagerAdapter = NacPagerAdapter(this)
@@ -217,21 +221,19 @@ class NacMediaPickerActivity
 		titles[0] = getString(R.string.action_browse)
 		titles[1] = resources.getStringArray(R.array.audio_sources)[4]
 
-		// Get the media type
-
 		// Set the initial position based on the media path
 		// None
-		position = if (NacMedia.isNone(mediaType))
+		position = if (mediaType.isMediaNone())
 		{
 			1
 		}
 		// File or directory
-		else if (NacMedia.isFile(mediaType) || NacMedia.isDirectory(mediaType))
+		else if (mediaType.isMediaFile() || mediaType.isMediaDirectory())
 		{
 			0
 		}
 		// Ringtone
-		else if (NacMedia.isRingtone(mediaType))
+		else if (mediaType.isMediaRingtone())
 		{
 			1
 		}
@@ -518,10 +520,8 @@ class NacMediaPickerActivity
 		): Intent
 		{
 			// Create an intent
-			val intent = Intent(context, NacMediaPickerActivity::class.java)
-
-			// Add the alarm to the intent
-			return NacIntent.addAlarm(intent, alarm)
+			return Intent(context, NacMediaPickerActivity::class.java)
+				.addAlarm(alarm)
 		}
 
 	}

@@ -11,7 +11,7 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.util.NacBundle
+import com.nfcalarmclock.util.getAlarm
 import com.nfcalarmclock.view.changeSimpleItemsOnZero
 import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
 import com.nfcalarmclock.view.setTextFromIndex
@@ -74,7 +74,7 @@ abstract class NacGenericAlarmOptionsDialog
 		super.onViewCreated(view, savedInstanceState)
 
 		// Get the bundle
-		val alarm = NacBundle.getAlarm(arguments)
+		val alarm = arguments?.getAlarm()
 
 		// Get the ok and cancel buttons
 		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)

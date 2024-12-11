@@ -773,6 +773,25 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Event to update and backup media information in alarms, starting at database
+	 * version 31.
+	 */
+	var eventUpdateAndBackupMediaInfoInAlarmsDbV31: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_event_update_and_backup_media_info_in_alarms_db_v31)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_event_update_and_backup_media_info_in_alarms_db_v31)
+
+			saveBoolean(key, value)
+		}
+
+	/**
 	 * Whether a new alarm card should be expanded or not.
 	 */
 	val expandNewAlarm: Boolean

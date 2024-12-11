@@ -7,6 +7,7 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.nfcalarmclock.R
@@ -14,9 +15,571 @@ import com.nfcalarmclock.system.file.NacFile.basename
 import com.nfcalarmclock.system.file.NacFile.strip
 import com.nfcalarmclock.system.file.NacFile.toRelativeDirname
 import com.nfcalarmclock.system.file.NacFileTree.Companion.getFiles
+import com.nfcalarmclock.util.getDeviceProtectedStorageContext
+import com.nfcalarmclock.util.isUserUnlocked
+import com.nfcalarmclock.util.media.NacMedia.TYPE_DIRECTORY
+import com.nfcalarmclock.util.media.NacMedia.TYPE_FILE
+import com.nfcalarmclock.util.media.NacMedia.TYPE_NONE
+import com.nfcalarmclock.util.media.NacMedia.TYPE_RINGTONE
+import java.io.File
 import java.util.Locale
 import java.util.TreeMap
 import java.util.concurrent.TimeUnit
+
+/**
+ * Build the local media path.
+ *
+ * @return The local media path.
+ */
+fun buildLocalMediaPath(
+	context: Context,
+	artist: String,
+	title: String,
+	type: Int
+): String
+{
+	// Check if the type is a directory
+	if (type.isMediaDirectory())
+	{
+		// Return an empty local media path
+		return ""
+	}
+
+	// Get the device protected storage context and files directory to that storage area
+	val deviceContext = getDeviceProtectedStorageContext(context)
+	val directory = deviceContext.filesDir
+
+	// Build the name of the file
+	val name = if (artist.isNotEmpty()) "$artist - $title" else title
+
+	// Build the path
+	return "$directory/$name"
+}
+
+/**
+ * Copy the media to the local files/ directory in device encrypted storage.
+ *
+ * This is used as a failsafe, in case the device gets rebooted and an alarm needs to be
+ * run before the user can unlock their device. In this case, the device would be in
+ * direct boot mode and special considerations need to take place so that the alarm is
+ * run as expected.
+ */
+fun copyMediaToDeviceEncryptedStorage(
+	context: Context,
+	path: String,
+	artist: String,
+	title: String,
+	type: Int
+)
+{
+	// Get the device protected storage context
+	val deviceContext = getDeviceProtectedStorageContext(context)
+
+	// Get the source and destination files
+	val localMediaPath = buildLocalMediaPath(deviceContext, artist, title, type)
+	val srcUri = Uri.parse(path)
+	val dstFile = File(localMediaPath)
+
+	// Check if a directory was selected
+	if (type.isMediaFile() || type.isMediaRingtone())
+	{
+		println("COPYING TO DEVICE ENCRYPTED STORAGE : $srcUri")
+		// Copy the file to the local media path
+		deviceContext.openFileOutput(dstFile.name, Context.MODE_PRIVATE).use { fileOutput ->
+
+			// Copy the file to the local file dir (for the app)
+			context.contentResolver.openInputStream(srcUri).use { inputStream ->
+				inputStream?.copyTo(fileOutput, 1024)
+			}
+
+		}
+	}
+}
+
+/**
+ * Find the Uri of a random media file to play.
+ *
+ * This file must be located in device protected storage in the files/ directory.
+ *
+ * @return Uri of a random media file to play.
+ */
+fun findRandomMedia(deviceContext: Context): Uri
+{
+	val localFileList = deviceContext.filesDir.listFiles()
+	val randomLocalFile = localFileList?.get(0) ?: return Uri.EMPTY
+	val uri = randomLocalFile.toUri()
+	println("RANDOM LOCAL FILE : ${randomLocalFile.path} | $uri")
+
+	return uri
+}
+
+/**
+ * Check if the media is accessible.
+ *
+ * This means that the phone has been unlocked and the query on the media returns a name.
+ * If the phone is locked or the media name is empty, then this will evaluate to False.
+ *
+ * @return True if the media is accessible, and False otherwise.
+ */
+fun Uri.canAccessMedia(context: Context): Boolean
+{
+	// Check if the uri is empty
+	if (this.isMediaNone())
+	{
+		return false
+	}
+
+	// Most media should have a name. Use this as a test
+	val test = this.getMediaName(context)
+
+	// Media is accessible if the phone has been unlocked and the name is not empty
+	return isUserUnlocked(context) && test.isNotEmpty()
+}
+
+/**
+ * Get the name of the artist.
+ *
+ * @return The name of the artist.
+ */
+fun Uri.getMediaArtist(
+	context: Context,
+	default: String = ""
+): String
+{
+	// Get the artist from the column
+	val column = MediaStore.Audio.Artists.ARTIST
+	var artist = this.queryColumn(context, column)
+
+	// Unable to determine artist
+	if (artist.isEmpty() || artist == "<unknown>")
+	{
+		// Get string to show that the artist is unknown
+		artist = default
+	}
+
+	return artist
+}
+
+/**
+ * Get the duration of the track.
+ *
+ * @return The duration of the track.
+ */
+@TargetApi(Build.VERSION_CODES.Q)
+fun Uri.getMediaDuration(context: Context): String
+{
+	// Check if API is too old or does not start with "content://"
+	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q ||
+		!this.toString().startsWith("content://"))
+	{
+		return ""
+	}
+
+	// Get the duration from the column
+	val column = MediaStore.Audio.Media.DURATION
+	val duration = this.queryColumn(context, column)
+
+	// Parse the duration
+	return parseMediaDuration(duration)
+}
+
+/**
+ * Get the name of the file.
+ *
+ * @return The name of the file.
+ */
+fun Uri.getMediaName(context: Context): String
+{
+	// Check if the URI does not start with "content://"
+	if (!this.toString().startsWith("content://"))
+	{
+		// Return the basename of the URI
+		return basename(this)
+	}
+
+	// Get the name from the column
+	val column = MediaStore.Audio.Media.DISPLAY_NAME
+
+	return this.queryColumn(context, column)
+}
+
+/**
+ * Get the relative path of the media.
+ *
+ * @return The relative path of the media.
+ */
+@TargetApi(Build.VERSION_CODES.Q)
+fun Uri.getMediaRelativePath(context: Context): String
+{
+	// Check if the URI does not start with "content://"
+	if (!this.toString().startsWith("content://"))
+	{
+		// Convert the URI to a relative directory name
+		return toRelativeDirname(this)
+	}
+
+	// Check if can query relative path
+	val canQueryRelativePath = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+
+	// Get the appropriate relative path column
+	val column = if (canQueryRelativePath)
+	{
+		MediaStore.Audio.Media.RELATIVE_PATH
+	}
+	else
+	{
+		MediaStore.Audio.Media.DATA
+	}
+
+	// Get the relative path from the column
+	var path = this.queryColumn(context, column)
+
+	// Check if unable to query relative path
+	if (!canQueryRelativePath)
+	{
+		// Conver the path to a directory name
+		path = toRelativeDirname(path)
+	}
+
+	return strip(path)
+}
+
+/**
+ * Get the title of the track.
+ *
+ * @return The title of the track.
+ */
+fun Uri.getMediaTitle(
+	context: Context,
+	default: String = context.getString(R.string.state_unknown)
+): String
+{
+	// Check if the URI does not start with "content://"
+	if (!this.toString().startsWith("content://"))
+	{
+		// Get the basename of the URI
+		return basename(this)
+	}
+
+	// Get the title from the column
+	val column = MediaStore.Audio.Media.TITLE
+	var title = this.queryColumn(context, column)
+
+	// Unable to determine the title
+	if (title.isEmpty() || (title == "<unknown>"))
+	{
+		// Get string to show that the title is unknown
+		title = default
+	}
+
+	return title
+}
+
+/**
+ * Get the volume name of the media.
+ *
+ * @return The volume name of the media.
+ */
+@TargetApi(Build.VERSION_CODES.Q)
+fun Uri.getMediaVolumeName(context: Context): String
+{
+	// Check if the URI does not start with "content://"
+	if (!this.toString().startsWith("content://"))
+	{
+		return ""
+	}
+
+	// Check if the API is too old
+	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+	{
+		// Parse the name of the volume
+		return this.parseVolumeName()
+	}
+
+	// Get the name of the volume from the column
+	val column = MediaStore.Audio.Media.VOLUME_NAME
+
+	return this.queryColumn(context, column)
+}
+
+/**
+ * Parse the duration string returned from the MediaStore query.
+ */
+private fun parseMediaDuration(millis: String): String
+{
+	// Check if an empty string was provided
+	if (millis.isEmpty())
+	{
+		return ""
+	}
+
+	// Get the locale
+	val locale = Locale.getDefault()
+
+	return try
+	{
+		// Convert the string to a long
+		val value = millis.toLong()
+
+		// Get the constituent hours/minutes/seconds
+		val rounded = (value + 500) / 1000
+		val hours = TimeUnit.SECONDS.toHours(rounded) % 24
+		val minutes = TimeUnit.SECONDS.toMinutes(rounded) % 60
+		val seconds = rounded % 60
+
+		// Check if hours is 0
+		if (hours == 0L)
+		{
+			String.format(locale, "%1$02d:%2$02d", minutes,
+				seconds)
+		}
+		// Has hours
+		else
+		{
+			String.format(locale, "%1$02d:%2$02d:%3$02d", hours,
+				minutes, seconds)
+		}
+	}
+	catch (e: NumberFormatException)
+	{
+		println("NacMedia : getDuration : NumberFormatException!")
+		""
+	}
+}
+
+/**
+ * Parse the volume name from a path.
+ *
+ * This should only be done on any version before Q.
+ */
+private fun Uri.parseVolumeName(): String
+{
+	// Get the path from a URI
+	val path = this.toString()
+
+	// Remove the prefix and split the path on forward slashes, "/"
+	val contentPrefix = "content://"
+	val items = path.replace(contentPrefix, "")
+		.split("/".toRegex())
+		.dropLastWhile { it.isEmpty() }
+		.toTypedArray()
+
+	var index = 0
+
+	// Check if no items in the path
+	if (items.isEmpty())
+	{
+		return ""
+	}
+
+	// Check if the first index is empty
+	if (items[0].isEmpty())
+	{
+		index++
+	}
+
+	// Check if the next index is equal to "media"
+	if (items[index] == "media")
+	{
+		index++
+	}
+
+	// Return the last index
+	return items[index]
+}
+
+/**
+ * Check if the Uri corresponds to a directory.
+ *
+ * @return True if the Uri is a directory, and False otherwise.
+ */
+fun Uri.isMediaDirectory(): Boolean
+{
+	// Get the uri as a string
+	val string = this.toString()
+
+	// Check the attributes
+	return string.isNotEmpty() && !string.startsWith("content://")
+}
+
+/**
+ * Check if the Uri corresponds to a file.
+ *
+ * @param  context  The application context.
+ *
+ * @return True if the Uri is a file, and False otherwise.
+ */
+fun Uri.isMediaFile(context: Context): Boolean
+{
+	// Get the volume name and relative path
+	val volumeName = this.getMediaVolumeName(context)
+	val relativePath = this.getMediaRelativePath(context)
+
+	// Check the attributes
+	//return ((volumeName != null) && volumeName.startsWith("external")
+	return volumeName.isNotEmpty() && relativePath.isNotEmpty()
+}
+
+/**
+ * Check if the Uri is empty.
+ *
+ * @return True if the Uri is empty, and False otherwise.
+ */
+private fun Uri.isMediaNone(): Boolean
+{
+	return this.toString().isEmpty()
+}
+
+/**
+ * Check if the Uri corresponds to a ringtone.
+ *
+ * @param  context  The application context.
+ *
+ * @return True if the Uri is to a ringtone, and False otherwise.
+ */
+private fun Uri.isMediaRingtone(context: Context): Boolean
+{
+	// Get the volume name and relative path
+	val volumeName = this.getMediaVolumeName(context)
+	val relativePath = this.getMediaRelativePath(context)
+
+	// Check the attributes
+	return volumeName == "internal" && relativePath.isEmpty()
+}
+
+/**
+ * Get the media type.
+ *
+ * @return The media type.
+ */
+fun Uri.getMediaType(context: Context): Int
+{
+	return if (this.isMediaNone())
+	{
+		TYPE_NONE
+	}
+	else if (this.isMediaFile(context))
+	{
+		TYPE_FILE
+	}
+	else if (this.isMediaRingtone(context))
+	{
+		TYPE_RINGTONE
+	}
+	else if (this.isMediaDirectory())
+	{
+		TYPE_DIRECTORY
+	}
+	else
+	{
+		TYPE_NONE
+	}
+}
+
+/**
+ * Query the requested column from the content resolver.
+ *
+ * @return The requested column.
+ */
+private fun Uri.queryColumn(context: Context, column: String): String
+{
+	val queryColumns = arrayOf(column)
+	val resolver = context.contentResolver
+	var value = ""
+
+	// Attempt to get the content resolver and cursor
+	val c: Cursor? = try
+	{
+		resolver.query(this, queryColumns, null, null, null)
+	}
+	// Something happened. Last time this occured, it said
+	// "Volume external_primary not found"
+	catch (e: IllegalArgumentException)
+	{
+		e.printStackTrace()
+		return value
+	}
+	// Security exception
+	catch (e: SecurityException)
+	{
+		e.printStackTrace()
+		return value
+	}
+
+	// Check if cursor is null
+	if (c == null)
+	{
+		return value
+	}
+	// Unable to move to first item in cursor
+	else if (!c.moveToFirst())
+	{
+		// Close the cursor
+		c.close()
+
+		return value
+	}
+
+	// Find the index of the string and get the string from the cursor
+	try
+	{
+		// Get the value from the column
+		val index = c.getColumnIndexOrThrow(column)
+		value = c.getString(index) ?: ""
+
+	}
+	// Something happened, unable to get the string
+	catch (e: IllegalArgumentException)
+	{
+		println("NacMedia : getColumnFromCursor : IllegalArgumentException!")
+		e.printStackTrace()
+	}
+
+	// ANR could be due to having to load lots of files?
+	c.close()
+
+	return value
+}
+
+/**
+ * Check if the type corresponds to a directory.
+ *
+ * @return True if the type is a directory, and False otherwise.
+ */
+fun Int.isMediaDirectory(): Boolean
+{
+	return this == TYPE_DIRECTORY
+}
+
+/**
+ * Check if the type corresponds to a file.
+ *
+ * @return True if the type is a file, and False otherwise.
+ */
+fun Int.isMediaFile(): Boolean
+{
+	return this == TYPE_FILE
+}
+
+/**
+ * Check if the type corresponds to none.
+ *
+ * @return True if the type is none, and False otherwise.
+ */
+fun Int.isMediaNone(): Boolean
+{
+	return this == TYPE_NONE
+}
+
+/**
+ * Check if the type corresponds to a ringtone.
+ *
+ * @return True if the type is a ringtone, and False otherwise.
+ */
+fun Int.isMediaRingtone(): Boolean
+{
+	return this == TYPE_RINGTONE
+}
 
 /**
  * Media helper object.
@@ -32,17 +595,17 @@ object NacMedia
 	/**
 	 * Type of sound for a ringtone.
 	 */
-	private const val TYPE_RINGTONE = 1
+	const val TYPE_RINGTONE = 1
 
 	/**
 	 * Type of sound for a music file.
 	 */
-	private const val TYPE_FILE = 2
+	const val TYPE_FILE = 2
 
 	/**
 	 * Type of sound for a music file.
 	 */
-	private const val TYPE_DIRECTORY = 5
+	const val TYPE_DIRECTORY = 5
 
 	/**
 	 * Build a media item from a file.
@@ -55,10 +618,10 @@ object NacMedia
 		val path = uri.toString()
 
 		// Get media information
-		val artist = getArtist(context, uri)
+		val artist = uri.getMediaArtist(context)
 		//val duration = getRawDuration(context, uri)
-		val displayName = getName(context, uri)
-		val title = getTitle(context, uri)
+		val displayName = uri.getMediaName(context)
+		val title = uri.getMediaTitle(context)
 
 		// Build metadata
 		val metadata = MediaMetadata.Builder()
@@ -120,219 +683,6 @@ object NacMedia
 		}
 
 		return mediaItems
-	}
-
-	/**
-	 * Get the name of the artist.
-	 *
-	 * @return The name of the artist.
-	 */
-	fun getArtist(context: Context, uri: Uri): String
-	{
-		// Get the artist from the column
-		val column = MediaStore.Audio.Artists.ARTIST
-		var artist = getColumnFromCursor(context, uri, column)
-
-		// Unable to determine artist
-		if (artist.isEmpty() || artist == "<unknown>")
-		{
-			// Get string to show that the artist is unknown
-			artist = context.getString(R.string.state_unknown)
-		}
-
-		return artist
-	}
-
-	/**
-	 * @see .getArtist
-	 */
-	@JvmStatic
-	fun getArtist(context: Context, path: String): String
-	{
-		// Get the URI from the path
-		val uri = Uri.parse(path)
-
-		// Get the title
-		return getArtist(context, uri)
-	}
-
-	/**
-	 * Get the requested column in the cursor object.
-	 *
-	 * @return The requested column in the cursor object.
-	 */
-	private fun getColumnFromCursor(context: Context, uri: Uri, column: String): String
-	{
-		val queryColumns = arrayOf(column)
-		val resolver = context.contentResolver
-		var value = ""
-
-		// Attempt to get the content resolver and cursor
-		val c: Cursor? = try
-		{
-			resolver.query(uri, queryColumns, null, null, null)
-		}
-		// Something happened. Last time this occured, it said
-		// "Volume external_primary not found"
-		catch (e: IllegalArgumentException)
-		{
-			e.printStackTrace()
-			return value
-		}
-		// Security exception
-		catch (e: SecurityException)
-		{
-			e.printStackTrace()
-			return value
-		}
-
-		// Check if cursor is null
-		if (c == null)
-		{
-			return value
-		}
-		// Unable to move to first item in cursor
-		else if (!c.moveToFirst())
-		{
-			// Close the cursor
-			c.close()
-
-			return value
-		}
-
-		// Find the index of the string and get the string from the cursor
-		try
-		{
-			// Get the value from the column
-			val index = c.getColumnIndexOrThrow(column)
-			value = c.getString(index) ?: ""
-
-		}
-		// Something happened, unable to get the string
-		catch (e: IllegalArgumentException)
-		{
-			println("NacMedia : getColumnFromCursor : IllegalArgumentException!")
-			e.printStackTrace()
-		}
-
-		// ANR could be due to having to load lots of files?
-		c.close()
-
-		return value
-	}
-
-	/**
-	 * Get the duration of the track.
-	 *
-	 * @return The duration of the track.
-	 */
-	@TargetApi(Build.VERSION_CODES.Q)
-	fun getDuration(context: Context, uri: Uri): String
-	{
-		// Check if API is too old or does not start with "content://"
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q ||
-			!uri.toString().startsWith("content://"))
-		{
-			return ""
-		}
-
-		// Get the duration from the column
-		val column = MediaStore.Audio.Media.DURATION
-		val duration = getColumnFromCursor(context, uri, column)
-
-		// Parse the duration
-		return parseDuration(duration)
-	}
-
-	/**
-	 * Get the name of the file.
-	 *
-	 * @return The name of the file.
-	 */
-	fun getName(context: Context, uri: Uri): String
-	{
-		// Check if the URI does not start with "content://"
-		if (!uri.toString().startsWith("content://"))
-		{
-			// Return the basename of the URI
-			return basename(uri)
-		}
-
-		// Get the name from the column
-		val column = MediaStore.Audio.Media.DISPLAY_NAME
-
-		return getColumnFromCursor(context, uri, column)
-	}
-
-	/**
-	 * Get the duration of the track.
-	 *
-	 * @return The duration of the track.
-	 */
-	@TargetApi(Build.VERSION_CODES.Q)
-	fun getRawDuration(context: Context, uri: Uri): Long
-	{
-		// Check if the API is too old or does not start with "content://"
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q ||
-			!uri.toString().startsWith("content://"))
-		{
-			return -1
-		}
-
-		// Get the duration from the column
-		val column = MediaStore.Audio.Media.DURATION
-		val duration = getColumnFromCursor(context, uri, column)
-
-		// Convert the duration to a number
-		return if (duration.isNotEmpty())
-		{
-			duration.toLong()
-		}
-		else
-		{
-			0
-		}
-	}
-
-	/**
-	 * Get the relative path.
-	 *
-	 * @return The relative path.
-	 */
-	@TargetApi(Build.VERSION_CODES.Q)
-	fun getRelativePath(context: Context, uri: Uri): String
-	{
-		// Check if the URI does not start with "content://"
-		if (!uri.toString().startsWith("content://"))
-		{
-			// Convert the URI to a relative directory name
-			return toRelativeDirname(uri)
-		}
-
-		// Check if can query relative path
-		val canQueryRelativePath = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
-
-		// Get the appropriate relative path column
-		val column = if (canQueryRelativePath)
-		{
-			MediaStore.Audio.Media.RELATIVE_PATH
-		}
-		else
-		{
-			MediaStore.Audio.Media.DATA
-		}
-
-		// Get the relative path from the column
-		var path = getColumnFromCursor(context, uri, column)
-
-		// Check if unable to query relative path
-		if (!canQueryRelativePath)
-		{
-			// Conver the path to a directory name
-			path = toRelativeDirname(path)
-		}
-
-		return strip(path)
 	}
 
 	/**
@@ -399,310 +749,6 @@ object NacMedia
 		{
 			null
 		}
-	}
-
-	/**
-	 * Get the title of the track.
-	 *
-	 * @return The title of the track.
-	 */
-	fun getTitle(context: Context, uri: Uri): String
-	{
-		// Check if the URI does not start with "content://"
-		if (!uri.toString().startsWith("content://"))
-		{
-			// Get the basename of the URI
-			return basename(uri)
-		}
-
-		// Get the title from the column
-		val column = MediaStore.Audio.Media.TITLE
-		var title = getColumnFromCursor(context, uri, column)
-
-		// Unable to determine the title
-		if (title.isEmpty() || (title == "<unknown>"))
-		{
-			// Get string to show that the title is unknown
-			title = context.getString(R.string.state_unknown)
-		}
-
-		return title
-	}
-
-	/**
-	 * @see .getTitle
-	 */
-	@JvmStatic
-	fun getTitle(context: Context, path: String): String
-	{
-		// Get the URI from the path
-		val uri = Uri.parse(path)
-
-		// Get the title
-		return getTitle(context, uri)
-	}
-
-	/**
-	 * Get the sound type.
-	 *
-	 * @return The sound type.
-	 */
-	fun getType(context: Context, path: String): Int
-	{
-		return if (isNone(path))
-		{
-			TYPE_NONE
-		}
-		else if (isFile(context, path))
-		{
-			TYPE_FILE
-		}
-		else if (isRingtone(context, path))
-		{
-			TYPE_RINGTONE
-		}
-		else if (isDirectory(path))
-		{
-			TYPE_DIRECTORY
-		}
-		else
-		{
-			TYPE_NONE
-		}
-	}
-
-	/**
-	 * Get the volume name.
-	 *
-	 * @return The volume name.
-	 */
-	@TargetApi(Build.VERSION_CODES.Q)
-	fun getVolumeName(context: Context, uri: Uri): String
-	{
-		// Check if the URI does not start with "content://"
-		if (!uri.toString().startsWith("content://"))
-		{
-			return ""
-		}
-
-		// Check if the API is too old
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
-		{
-			// Parse the name of the volume
-			return parseVolumeName(uri)
-		}
-
-		// Get the name of the volume from the column
-		val column = MediaStore.Audio.Media.VOLUME_NAME
-
-		return getColumnFromCursor(context, uri, column)
-	}
-
-	/**
-	 * @see .getVolumeName
-	 */
-	private fun getVolumeName(context: Context, path: String?): String
-	{
-		// Get the URI from the path
-		val uri = Uri.parse(path)
-
-		// Get the name of the volume
-		return getVolumeName(context, uri)
-	}
-
-	/**
-	 * Check if the given type represents a directory.
-	 *
-	 * @param  type  The type to check
-	 *
-	 * @return True if the given type represents a directory, and False otherwise.
-	 */
-	@JvmStatic
-	fun isDirectory(type: Int): Boolean
-	{
-		return type == TYPE_DIRECTORY
-	}
-
-	/**
-	 * @return True if the given path is a directory, and False otherwise.
-	 *
-	 * @param  path  The path to check.
-	 */
-	fun isDirectory(path: String): Boolean
-	{
-		return path.isNotEmpty() && !path.startsWith("content://")
-	}
-
-	/**
-	 * @return True if the given type represents a file, and False otherwise.
-	 *
-	 * @param  type  The type to check
-	 */
-	fun isFile(type: Int): Boolean
-	{
-		return type == TYPE_FILE
-	}
-
-	/**
-	 * @return True if the given path is a file, and False otherwise.
-	 *
-	 * @param  context  The application context.
-	 * @param  path     The path to check.
-	 */
-	fun isFile(context: Context, path: String?): Boolean
-	{
-		val uri = Uri.parse(path)
-		val volumeName = getVolumeName(context, path)
-		val relativePath = getRelativePath(context, uri)
-
-		//return ((volumeName != null) && volumeName.startsWith("external")
-		return volumeName.isNotEmpty() && relativePath.isNotEmpty()
-	}
-
-	/**
-	 * Check if the given type represents an empty path.
-	 *
-	 * @param  type  The type to check.
-	 *
-	 * @return True if the given type represents an empty path, and False otherwise.
-	 */
-	fun isNone(type: Int): Boolean
-	{
-		return type == TYPE_NONE
-	}
-
-	/**
-	 * Check if the given path is empty.
-	 *
-	 * @param  path  The path to check.
-	 *
-	 * @return True if the given path is empty, and False otherwise.
-	 */
-	private fun isNone(path: String?): Boolean
-	{
-		return path.isNullOrEmpty()
-	}
-
-	/**
-	 * Check if the given type corresponds to a ringtone.
-	 */
-	fun isRingtone(type: Int): Boolean
-	{
-		return type == TYPE_RINGTONE
-	}
-
-	/**
-	 * Check if the given path is to a ringtone.
-	 *
-	 * @param  context  The application context.
-	 * @param  path     The path of the ringtone to check.
-	 *
-	 * @return True if the given path is to a ringtone, and False otherwise.
-	 */
-	private fun isRingtone(context: Context, path: String?): Boolean
-	{
-		val uri = Uri.parse(path)
-		val volumeName = getVolumeName(context, path)
-		val relativePath = getRelativePath(context, uri)
-
-		// Changed this when converting to Kotlin on 11/06/23
-		//return volumeName == "internal" && relativePath == null
-		return volumeName == "internal" && relativePath.isEmpty()
-	}
-
-	/**
-	 * Parse the duration string returned from the MediaStore query.
-	 */
-	private fun parseDuration(millis: String): String
-	{
-		// Check if an empty string was provided
-		if (millis.isEmpty())
-		{
-			return ""
-		}
-
-		// Get the locale
-		val locale = Locale.getDefault()
-
-		return try
-		{
-			// Convert the string to a long
-			val value = millis.toLong()
-
-			// Get the constituent hours/minutes/seconds
-			val rounded = (value + 500) / 1000
-			val hours = TimeUnit.SECONDS.toHours(rounded) % 24
-			val minutes = TimeUnit.SECONDS.toMinutes(rounded) % 60
-			val seconds = rounded % 60
-
-			// Check if hours is 0
-			if (hours == 0L)
-			{
-				String.format(locale, "%1$02d:%2$02d", minutes,
-					seconds)
-			}
-			// Has hours
-			else
-			{
-				String.format(locale, "%1$02d:%2$02d:%3$02d", hours,
-					minutes, seconds)
-			}
-		}
-		catch (e: NumberFormatException)
-		{
-			println("NacMedia : getDuration : NumberFormatException!")
-			""
-		}
-	}
-
-	/**
-	 * @see .parseVolumeName
-	 */
-	private fun parseVolumeName(uri: Uri): String
-	{
-		// Get the path from a URI
-		val path = uri.toString()
-
-		// Parse the name of the volume
-		return parseVolumeName(path)
-	}
-
-	/**
-	 * Parse the volume name from a path.
-	 *
-	 * This should only be done on any version before Q.
-	 */
-	private fun parseVolumeName(contentPath: String): String
-	{
-		// Remove the prefix and split the path on forward slashes, "/"
-		val contentPrefix = "content://"
-		val items = contentPath.replace(contentPrefix, "")
-			.split("/".toRegex())
-			.dropLastWhile { it.isEmpty() }
-			.toTypedArray()
-
-		var index = 0
-
-		// Check if no items in the path
-		if (items.isEmpty())
-		{
-			return ""
-		}
-
-		// Check if the first index is empty
-		if (items[0].isEmpty())
-		{
-			index++
-		}
-
-		// Check if the next index is equal to "media"
-		if (items[index] == "media")
-		{
-			index++
-		}
-
-		// Return the last index
-		return items[index]
 	}
 
 }

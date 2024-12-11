@@ -15,10 +15,10 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerActivity
 import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerPreference
 import com.nfcalarmclock.alarm.options.name.NacNamePreference
-import com.nfcalarmclock.util.NacBundle
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeekPreference
 import com.nfcalarmclock.alarm.options.volume.NacVolumePreference
 import com.nfcalarmclock.alarm.options.volume.NacVolumePreference.OnAudioOptionsClickedListener
+import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.addMediaInfo
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.getMediaArtist
@@ -28,6 +28,7 @@ import com.nfcalarmclock.util.getMediaTitle
 import com.nfcalarmclock.util.getMediaType
 import com.nfcalarmclock.util.getRecursivelyPlayMedia
 import com.nfcalarmclock.util.getShuffleMedia
+import com.nfcalarmclock.util.media.buildLocalMediaPath
 
 /**
  * General settings fragment.
@@ -150,7 +151,7 @@ class NacGeneralSettingFragment
 
 			// Create an alarm from shared preferences defaults
 			val alarm = NacAlarm.build(sharedPreferences)
-			val bundle = NacBundle.alarmToBundle(alarm)
+			val bundle = Bundle().addAlarm(alarm)
 
 			// Set the graph of the nav controller
 			val navController = (activity as NacMainSettingActivity).navController
@@ -266,6 +267,11 @@ class NacGeneralSettingFragment
 					sharedPreferences!!.mediaArtist = bundle.getMediaArtist()
 					sharedPreferences!!.mediaTitle = bundle.getMediaTitle()
 					sharedPreferences!!.mediaType = bundle.getMediaType()
+					sharedPreferences!!.localMediaPath = buildLocalMediaPath(
+						requireContext(),
+						sharedPreferences!!.mediaArtist,
+						sharedPreferences!!.mediaTitle,
+						sharedPreferences!!.mediaType)
 					sharedPreferences!!.shouldShuffleMedia = bundle.getShuffleMedia()
 					sharedPreferences!!.recursivelyPlayMedia = bundle.getRecursivelyPlayMedia()
 				}
@@ -274,12 +280,6 @@ class NacGeneralSettingFragment
 
 		// Setup the on click listener
 		pref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-
-			//val intent = NacMediaPickerActivity.getStartIntentWithMedia(
-			//	context,
-			//	sharedPreferences!!.mediaPath,
-			//	sharedPreferences!!.shouldShuffleMedia,
-			//	sharedPreferences!!.recursivelyPlayMedia)
 
 			// Create the intent and add the media to the intent
 			val intent = Intent(context, NacMediaPickerActivity::class.java)

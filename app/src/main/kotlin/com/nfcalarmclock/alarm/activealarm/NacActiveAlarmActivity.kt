@@ -20,9 +20,10 @@ import com.nfcalarmclock.alarm.options.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.util.NacBundle
-import com.nfcalarmclock.util.NacIntent
 import com.nfcalarmclock.util.NacUtility.quickToast
+import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.enableActivityAlias
+import com.nfcalarmclock.util.getAlarm
 import com.nfcalarmclock.util.registerMyReceiver
 import com.nfcalarmclock.util.unregisterMyReceiver
 import dagger.hilt.android.AndroidEntryPoint
@@ -305,13 +306,13 @@ class NacActiveAlarmActivity
 	private fun setAlarm(savedInstanceState: Bundle?)
 	{
 		// Attempt to get the alarm from the intent
-		var intentAlarm = NacIntent.getAlarm(intent)
+		var intentAlarm = intent.getAlarm()
 
 		// Unable to get the alarm from the intent
 		if (intentAlarm == null)
 		{
 			// Attempt to get the alarm from the saved instance state
-			intentAlarm = NacBundle.getAlarm(savedInstanceState)
+			intentAlarm = savedInstanceState?.getAlarm()
 		}
 
 		// Alarm is still null, finish the activity
@@ -423,15 +424,14 @@ class NacActiveAlarmActivity
 		 */
 		fun getStartIntent(context: Context, alarm: NacAlarm?): Intent
 		{
-			// Create the intent and its flags
-			val intent = Intent(context, NacActiveAlarmActivity::class.java)
+			// Intent flags
 			val flags = (Intent.FLAG_ACTIVITY_NEW_TASK
 				or Intent.FLAG_ACTIVITY_CLEAR_TASK)
 
-			// Add the flags to the intent
-			intent.addFlags(flags)
-
-			return NacIntent.addAlarm(intent, alarm)
+			// Create the intent
+			return Intent(context, NacActiveAlarmActivity::class.java)
+				.addFlags(flags)
+				.addAlarm(alarm)
 		}
 
 		/**
@@ -449,17 +449,15 @@ class NacActiveAlarmActivity
 			alarm: NacAlarm?
 		): Intent
 		{
-			// Set the class of the intent
-			intent.setClass(context, NacActiveAlarmActivity::class.java)
 
-			// Add the flags to the intent
+			// Intent flags
 			val flags = (Intent.FLAG_ACTIVITY_NEW_TASK
 				or Intent.FLAG_ACTIVITY_CLEAR_TASK)
 
-			intent.addFlags(flags)
-
-			// Add the alarm to the intent and return it
-			return NacIntent.addAlarm(intent, alarm)
+			// Set the class of the intent
+			return intent.setClass(context, NacActiveAlarmActivity::class.java)
+				.addFlags(flags)
+				.addAlarm(alarm)
 		}
 
 		/**

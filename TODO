@@ -2,7 +2,7 @@
 TODO
 ----
 
-* INCREASE TEXT SIZE OF ALARM OPTIONS
+* Improve look of warning selected directory dialog
 
 * Check if the bold themed permission text needs to actually use the textId or
   if getText() can be used on the textview?

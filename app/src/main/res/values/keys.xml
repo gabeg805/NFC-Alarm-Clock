@@ -17,6 +17,9 @@
 	<string name="key_permission_post_notifications_requested">key_permission_post_notifications_requested</string>
 	<string name="key_permission_schedule_exact_alarm_requested">key_permission_schedule_exact_alarm_requested</string>
 
+	<!-- Event -->
+	<string name="key_event_update_and_backup_media_info_in_alarms_db_v31">event_update_and_backup_media_info_in_alarms_db_v31</string>
+
 	<!-- Main activity -->
 	<string name="key_main_should_refresh_activity">app_should_refresh_main_activity</string>
 	<string name="key_main_delay_showing_whats_new_dialog_counter">key_delay_showing_whats_new_dialog_counter</string>

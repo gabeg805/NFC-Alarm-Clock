@@ -4,7 +4,6 @@ import android.content.Context
 import android.media.AudioManager
 import android.net.Uri
 import android.os.Handler
-import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.Player.COMMAND_SET_REPEAT_MODE
@@ -16,7 +15,9 @@ import com.nfcalarmclock.util.media.NacAudioAttributes
 import com.nfcalarmclock.util.media.NacAudioManager
 import com.nfcalarmclock.util.media.NacMedia
 import com.nfcalarmclock.util.NacUtility.quickToast
-import java.io.File
+import com.nfcalarmclock.util.media.canAccessMedia
+import com.nfcalarmclock.util.media.findRandomMedia
+import com.nfcalarmclock.util.media.isMediaDirectory
 
 /**
  * Wrapper for the MediaPlayer class.
@@ -274,24 +275,52 @@ class NacMediaPlayer(
 		// Merge alarm with audio attributes
 		audioAttributes.merge(alarm)
 
-		// Check if the media is a directory
-		if (NacMedia.isDirectory(alarm.mediaType))
+		// Check if file/directory exists
+		var uri = Uri.parse(alarm.mediaPath)
+		println("MEDIA PATH : $uri")
+
+		// Check if the media can be accessed. Most of the times when it cannot be
+		// acessed, it is because the alarm went off in direct boot mode (when the
+		// device rebooted and the user has not unlocked it yet) or because the media
+		// was moved/removed
+		if (uri.canAccessMedia(context))
 		{
-			// Play the directory as a playlist and if the recursive flag is
-			// set, it will also include the media in its subdirectories as
-			// part of the playlist
-			playDirectory(alarm.mediaPath, recursive = alarm.recursivelyPlayMedia)
+			// Directory
+			if (alarm.mediaType.isMediaDirectory())
+			{
+				// Play the directory as a playlist and if the recursive flag is
+				// set, it will also include the media in its subdirectories as
+				// part of the playlist
+				println("PLAY DIRECTORY")
+				playDirectory(alarm.mediaPath, recursive = alarm.recursivelyPlayMedia)
+				return
+			}
 		}
-		// Media is a file
 		else
 		{
-			// Get the media URI
-			val uri = Uri.parse(alarm.mediaPath)
-			println("URI : $uri | Path : ${alarm.mediaPath} | File : ${File(alarm.mediaPath)} | ${File(alarm.mediaPath).toUri()}")
+			// Get the local media path
+			val localUri = Uri.parse(alarm.localMediaPath)
+			println("Local URI : $localUri")
 
-			// Play the file
-			playUri(uri)
+			// Check if this local path can be accessed. If this cannot be accessed, it
+			// could be that the original media is a directory, which would not have any
+			// local media to play, so the expected behavior here would be to just play
+			// a random song in the local files directory
+			uri = if (localUri.canAccessMedia(context))
+			{
+				println("Local media path is solid")
+				localUri
+			}
+			else
+			{
+				println("Need to find a replacement for local media path")
+				findRandomMedia(context)
+			}
 		}
+
+		// Play the file
+		println("PLAY FILE : $uri")
+		playUri(uri)
 	}
 
 	/**
@@ -307,6 +336,7 @@ class NacMediaPlayer(
 			recursive = recursive)
 
 		// Play the media items
+		items.forEach { println(it.mediaId) }
 		playMediaItems(items)
 	}
 

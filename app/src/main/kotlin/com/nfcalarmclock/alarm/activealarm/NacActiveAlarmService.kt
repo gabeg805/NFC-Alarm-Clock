@@ -9,7 +9,6 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.PowerManager
 import android.os.PowerManager.WakeLock
-import android.os.UserManager
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
@@ -21,11 +20,12 @@ import com.nfcalarmclock.main.NacMainActivity.Companion.startMainActivity
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.NacAlarmStatisticRepository
 import com.nfcalarmclock.system.scheduler.NacScheduler
-import com.nfcalarmclock.util.NacIntent
-import com.nfcalarmclock.util.NacIntent.getAlarm
 import com.nfcalarmclock.util.NacUtility
+import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.disableActivityAlias
 import com.nfcalarmclock.util.enableActivityAlias
+import com.nfcalarmclock.util.getAlarm
+import com.nfcalarmclock.util.isUserUnlocked
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -335,9 +335,7 @@ class NacActiveAlarmService
 		NacActiveAlarmActivity.stopAlarmActivity(this)
 
 		// Check if the device has been unlocked so as not to be running in direct boot mode
-		val userManager = getSystemService(Context.USER_SERVICE) as UserManager
-
-		if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.N) || userManager.isUserUnlocked)
+		if (isUserUnlocked(this))
 		{
 			// Start the main activity so that if there are any other alarms that
 			// need to run, this will kick them off
@@ -487,7 +485,7 @@ class NacActiveAlarmService
 		intentAction = intent?.action ?: ""
 
 		// Attempt to get the alarm from the intent
-		val intentAlarm = getAlarm(intent)
+		val intentAlarm = intent?.getAlarm()
 
 		// Check if a new service was started
 		if (isNewServiceStarted(intentAlarm, intentAction))
@@ -844,11 +842,8 @@ class NacActiveAlarmService
 		fun getDismissIntent(context: Context, alarm: NacAlarm?): Intent
 		{
 			// Create the intent with the alarm service
-			val intent = Intent(ACTION_DISMISS_ALARM, null, context,
-				NacActiveAlarmService::class.java)
-
-			// Add the alarm to the intent
-			return NacIntent.addAlarm(intent, alarm)
+			return Intent(ACTION_DISMISS_ALARM, null, context, NacActiveAlarmService::class.java)
+				.addAlarm(alarm)
 		}
 
 		/**
@@ -861,11 +856,8 @@ class NacActiveAlarmService
 		private fun getDismissIntentWithNfc(context: Context, alarm: NacAlarm?): Intent
 		{
 			// Create the intent with the alarm service
-			val intent = Intent(ACTION_DISMISS_ALARM_WITH_NFC, null, context,
-				NacActiveAlarmService::class.java)
-
-			// Add the alarm to the intent
-			return NacIntent.addAlarm(intent, alarm)
+			return Intent(ACTION_DISMISS_ALARM_WITH_NFC, null, context, NacActiveAlarmService::class.java)
+				.addAlarm(alarm)
 		}
 
 		/**
@@ -879,11 +871,8 @@ class NacActiveAlarmService
 		fun getSkipIntent(context: Context, alarm: NacAlarm?): Intent
 		{
 			// Create an intent with the alarm service
-			val intent = Intent(ACTION_SKIP_SERVICE, null, context,
-				NacActiveAlarmService::class.java)
-
-			// Add the alarm to the intent
-			return NacIntent.addAlarm(intent, alarm)
+			return Intent(ACTION_SKIP_SERVICE, null, context, NacActiveAlarmService::class.java)
+				.addAlarm(alarm)
 		}
 
 		/**
@@ -896,11 +885,8 @@ class NacActiveAlarmService
 		fun getSnoozeIntent(context: Context?, alarm: NacAlarm?): Intent
 		{
 			// Create the intent with the alarm service
-			val intent = Intent(ACTION_SNOOZE_ALARM, null, context,
-				NacActiveAlarmService::class.java)
-
-			// Add the alarm to the intent
-			return NacIntent.addAlarm(intent, alarm)
+			return Intent(ACTION_SNOOZE_ALARM, null, context, NacActiveAlarmService::class.java)
+				.addAlarm(alarm)
 		}
 
 		/**
@@ -915,11 +901,8 @@ class NacActiveAlarmService
 		fun getStartIntent(context: Context, alarm: NacAlarm?): Intent
 		{
 			// Create an intent with the alarm service
-			val intent = Intent(ACTION_START_SERVICE, null, context,
-				NacActiveAlarmService::class.java)
-
-			// Add the alarm to the intent
-			return NacIntent.addAlarm(intent, alarm)
+			return Intent(ACTION_START_SERVICE, null, context, NacActiveAlarmService::class.java)
+				.addAlarm(alarm)
 		}
 
 		/**

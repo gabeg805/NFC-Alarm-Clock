@@ -1,7 +1,6 @@
 package com.nfcalarmclock.alarm.options.mediapicker
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -13,12 +12,12 @@ import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
 import com.nfcalarmclock.system.scheduler.NacScheduler
-import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.util.NacBundle
 import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.util.addMediaInfo
+import com.nfcalarmclock.util.getAlarm
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.getMediaArtist
 import com.nfcalarmclock.util.getMediaPath
@@ -27,6 +26,11 @@ import com.nfcalarmclock.util.getMediaType
 import com.nfcalarmclock.util.getRecursivelyPlayMedia
 import com.nfcalarmclock.util.getShuffleMedia
 import com.nfcalarmclock.util.media.NacMedia
+import com.nfcalarmclock.util.media.buildLocalMediaPath
+import com.nfcalarmclock.util.media.copyMediaToDeviceEncryptedStorage
+import com.nfcalarmclock.util.media.getMediaArtist
+import com.nfcalarmclock.util.media.getMediaTitle
+import com.nfcalarmclock.util.media.getMediaType
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -77,7 +81,7 @@ open class NacMediaPickerFragment
 	/**
 	 * Media artist.
 	 */
-	var mediaArtist: String = ""
+	private var mediaArtist: String = ""
 		get()
 		{
 			return alarm?.mediaArtist ?: field
@@ -127,6 +131,26 @@ open class NacMediaPickerFragment
 			if (alarm != null)
 			{
 				alarm!!.mediaType = value
+			}
+			else
+			{
+				field = value
+			}
+		}
+
+	/**
+	 * Local media path.
+	 */
+	private var localMediaPath: String = ""
+		get()
+		{
+			return alarm?.localMediaPath ?: field
+		}
+		set(value)
+		{
+			if (alarm != null)
+			{
+				alarm!!.localMediaPath = value
 			}
 			else
 			{
@@ -211,7 +235,7 @@ open class NacMediaPickerFragment
 		val bundle = arguments ?: Bundle()
 
 		// Set the alarm
-		alarm = NacBundle.getAlarm(arguments)
+		alarm = bundle.getAlarm()
 
 		// Check if the alarm was not set
 		if (alarm == null)
@@ -251,41 +275,21 @@ open class NacMediaPickerFragment
 	 */
 	open fun onOkClicked()
 	{
+		// Get the activity and the device protected storage context
 		val activity = requireActivity()
 		val deviceContext = getDeviceProtectedStorageContext(activity)
 
-		println("Hello : $mediaPath")
-
-		// Get the directory for app specific files and the name of the file to create
-		val resolver = deviceContext.contentResolver
-		val directory = deviceContext.filesDir
-
 		// Get the URI from the path
 		val uri = Uri.parse(mediaPath)
-		val artist = NacMedia.getArtist(activity, uri)
-		val title = NacMedia.getTitle(activity, uri)
-		val type = NacMedia.getType(activity, mediaPath)
-		val name = if (artist.isNotEmpty()) "$artist - $title" else title
-		val newPath = "$directory/$name"
-		println("New path : $newPath")
-		println("Name     : $name")
 
-		// TODO: What to do if directory is selected because it returns and never gets here?
-		// TODO: When copying a ringtone, it thinks it is on external storage on the device.
-		// Need to maybe save the original path too for comparison's sake?
-		// TODO: Remove the file too when an alarm is deleted
+		// Set the media information
+		mediaArtist = uri.getMediaArtist(activity)
+		mediaTitle = uri.getMediaTitle(activity)
+		mediaType = uri.getMediaType(activity)
+		localMediaPath = buildLocalMediaPath(deviceContext, mediaArtist, mediaTitle, mediaType)
 
-		// Copy the file
-		deviceContext.openFileOutput(name, Context.MODE_PRIVATE).use { fileOutput ->
-
-			// Copy the file to the local file dir (for the app)
-			resolver.openInputStream(uri).use { inputStream ->
-				inputStream?.copyTo(fileOutput, 1024)
-			}
-
-		}
-
-		//mediaPath = newPath
+		// Copy the media to the local files/ directory
+		copyMediaToDeviceEncryptedStorage(activity, mediaPath, mediaArtist, mediaTitle, mediaType)
 
 		// Check if alarm is set
 		if (alarm != null)
@@ -301,7 +305,7 @@ open class NacMediaPickerFragment
 		{
 			// Create an intent with the media
 			val intent = Intent()
-				.addMediaInfo(mediaPath, artist, title, type,
+				.addMediaInfo(mediaPath, mediaArtist, mediaTitle, mediaType,
 					shuffleMedia, recursivelyPlayMedia)
 
 			// Set the result of the activity with the media path as part of
@@ -331,11 +335,9 @@ open class NacMediaPickerFragment
 			return
 		}
 
-		// Set the path of the media that is going to play
+		// Set the path for the media that is going to play. Do not do the other
+		// information yet until the user is ready
 		mediaPath = path
-		mediaArtist = NacMedia.getArtist(requireContext(), path)
-		mediaTitle = NacMedia.getTitle(requireContext(), path)
-		mediaType = NacMedia.getType(requireContext(), path)
 
 		// Stop any media that is already playing
 		mediaPlayer?.exoPlayer?.stop()
@@ -354,9 +356,9 @@ open class NacMediaPickerFragment
 	protected fun setupActionButtons(root: View)
 	{
 		val shared = NacSharedPreferences(requireContext())
-		val clear = root.findViewById<Button>(R.id.clear)
-		val cancel = root.findViewById<Button>(R.id.cancel)
-		val ok = root.findViewById<Button>(R.id.ok)
+		val clear: Button = root.findViewById(R.id.clear)
+		val cancel: Button = root.findViewById(R.id.cancel)
+		val ok: Button = root.findViewById(R.id.ok)
 
 		// Set the color of the buttons
 		clear.setTextColor(shared.themeColor)

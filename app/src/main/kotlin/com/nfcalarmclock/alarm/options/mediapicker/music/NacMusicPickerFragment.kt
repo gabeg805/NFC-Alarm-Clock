@@ -1,27 +1,38 @@
 package com.nfcalarmclock.alarm.options.mediapicker.music
 
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerFragment
+import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.file.NacFile
 import com.nfcalarmclock.system.file.browser.NacFileBrowser
 import com.nfcalarmclock.system.file.browser.NacFileBrowser.OnBrowserClickedListener
 import com.nfcalarmclock.system.permission.readmediaaudio.NacReadMediaAudioPermission
-import com.nfcalarmclock.util.NacBundle
-import com.nfcalarmclock.util.media.NacMedia
+import com.nfcalarmclock.util.NacUtility.quickToast
+import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.addMediaInfo
+import com.nfcalarmclock.util.media.getMediaName
+import com.nfcalarmclock.util.media.getMediaRelativePath
+import com.nfcalarmclock.util.media.isMediaDirectory
+import com.nfcalarmclock.util.media.isMediaFile
+import com.nfcalarmclock.view.setupThemeColor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -37,6 +48,42 @@ class NacMusicPickerFragment
 	// Interfaces
 	OnBrowserClickedListener
 {
+
+	/**
+	 * File chooser content.
+	 */
+	@RequiresApi(Build.VERSION_CODES.Q)
+	private val fileChooserContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+
+		// Get the context
+		val context = requireContext()
+		println("Uri : $uri")
+
+		// Check if the uri is null
+		if (uri == null)
+		{
+			quickToast(context, "Unable to select file")
+			return@registerForActivityResult
+		}
+
+		// Get the media uri
+		val mediaUri = MediaStore.getMediaUri(context, uri)
+		println("Media URI : $mediaUri")
+
+		// Check that the media uri is valid
+		if (mediaUri == null)
+		{
+			quickToast(context, "Unable to get media information for file")
+			return@registerForActivityResult
+		}
+
+		// Set the media path of the selected file
+		mediaPath = mediaUri.toString()
+
+		// Select the file
+		super.onOkClicked()
+
+	}
 
 	/**
 	 * Scroll view containing all the file browser contents.
@@ -64,18 +111,18 @@ class NacMusicPickerFragment
 		var dir = ""
 		var name = ""
 
-		// Check if the media is a file
-		if (NacMedia.isFile(context, mediaPath))
-		{
-			// Get the URI
-			val uri = Uri.parse(mediaPath)
+		// Get the uri
+		val uri = Uri.parse(mediaPath)
 
+		// Check if the media is a file
+		if (uri.isMediaFile(context))
+		{
 			// Set the directory and name
-			dir = NacMedia.getRelativePath(context, uri)
-			name = NacMedia.getName(context, uri)
+			dir = uri.getMediaRelativePath(context)
+			name = uri.getMediaName(context)
 		}
 		// Check if the media is a directory
-		else if (NacMedia.isDirectory(mediaPath))
+		else if (uri.isMediaDirectory())
 		{
 			dir = mediaPath
 		}
@@ -208,10 +255,13 @@ class NacMusicPickerFragment
 	 */
 	override fun onOkClicked()
 	{
+		// Get the media path as a uri
+		val uri = Uri.parse(mediaPath)
+
 		// Check if the a directory was selected. If so, show a warning.
 		// The path has already been set in onBrowserClicked() so nothing
 		// further needs to be done
-		if (NacMedia.isDirectory(mediaPath))
+		if (uri.isMediaDirectory())
 		{
 			showWarningDirectorySelected()
 			return
@@ -244,6 +294,7 @@ class NacMusicPickerFragment
 
 		// Setup the file browser
 		setupFileBrowser(view)
+		setupFloatingActionButton(view)
 	}
 
 	/**
@@ -269,6 +320,49 @@ class NacMusicPickerFragment
 			// Select the item once it is done being shown
 			fileBrowser!!.select(requireContext(), name)
 
+		}
+	}
+
+	/**
+	 * Setup the floating action button.
+	 */
+	private fun setupFloatingActionButton(root: View)
+	{
+		// Check if the Android version is correct
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+		{
+			return
+		}
+
+		// Get the views
+		val shared = NacSharedPreferences(requireContext())
+		val fab: FloatingActionButton = root.findViewById(R.id.fab_launch_file_browser)
+
+		// Setup the floating action button
+		fab.visibility = View.VISIBLE
+		fab.setupThemeColor(shared)
+
+		// Set the click listener
+		fab.setOnClickListener {
+
+			// Launch the file chooser
+			fileChooserContent.launch("audio/*")
+
+		}
+
+		// Set the scroll listener
+		scrollView?.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+
+			// Scrolling down
+			if (scrollY >= oldScrollY)
+			{
+				fab.hide()
+			}
+			// Scrolling up
+			else
+			{
+				fab.show()
+			}
 		}
 	}
 
@@ -317,7 +411,7 @@ class NacMusicPickerFragment
 			val fragment: Fragment = NacMusicPickerFragment()
 
 			// Add the bundle to the fragment
-			fragment.arguments = NacBundle.alarmToBundle(alarm)
+			fragment.arguments = Bundle().addAlarm(alarm)
 
 			return fragment
 		}

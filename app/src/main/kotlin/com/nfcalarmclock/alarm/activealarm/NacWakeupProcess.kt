@@ -17,10 +17,11 @@ import com.nfcalarmclock.alarm.options.tts.NacTextToSpeech
 import com.nfcalarmclock.alarm.options.tts.NacTextToSpeech.OnSpeakingListener
 import com.nfcalarmclock.alarm.options.tts.NacTranslate
 import com.nfcalarmclock.util.media.NacAudioAttributes
-import com.nfcalarmclock.util.media.NacMedia
 import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacUtility
+import com.nfcalarmclock.util.getDeviceProtectedStorageContext
+import com.nfcalarmclock.util.media.isMediaDirectory
 import java.lang.IllegalArgumentException
 import java.util.Calendar
 
@@ -141,20 +142,9 @@ class NacWakeupProcess(
 	 */
 	private val mediaPlayer: NacMediaPlayer? = if (alarm.hasMedia)
 	{
-		// Check which context to use
-		val newContext = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-		{
-			println("CREATE DEVICE PROTECTED STORAGE CONTEXT FOR MEDIA PLAYER")
-			context.applicationContext.createDeviceProtectedStorageContext()
-		}
-		else
-		{
-			context
-		}
-
 		// Create the media player
-		//val player = NacMediaPlayer(context, this)
-		val player = NacMediaPlayer(newContext, this)
+		val deviceContext = getDeviceProtectedStorageContext(context)
+		val player = NacMediaPlayer(deviceContext, this)
 
 		// Setup the media player
 		player.onAudioFocusChangeListener = object: NacMediaPlayer.OnAudioFocusChangeListener {
@@ -395,6 +385,10 @@ class NacWakeupProcess(
 
 		// Get the path to the current media item
 		val mediaPath = mediaItem?.mediaId ?: ""
+		// TODO: Could this have been after reboot? Alarm runs, and then next alarm media player breaks?
+		//println("Media item transition : $mediaPath")
+		//println("Artist : ${mediaItem?.mediaMetadata?.artist}")
+		//println("Title  : ${mediaItem?.mediaMetadata?.title}")
 
 		// Save the path of the current media item
 		sharedPreferences.currentPlayingAlarmMedia = mediaPath
@@ -440,7 +434,7 @@ class NacWakeupProcess(
 		else
 		{
 			// Check if the media being played is a directory
-			if (NacMedia.isDirectory(alarm.mediaType))
+			if (alarm.mediaType.isMediaDirectory())
 			{
 				// Set shuffle mode (can be set or not set) based on the preference
 				mediaPlayer.exoPlayer.shuffleModeEnabled = alarm.shuffleMedia

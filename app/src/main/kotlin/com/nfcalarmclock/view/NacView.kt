@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.slider.Slider
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
@@ -263,6 +264,20 @@ fun MaterialButton.setupThemeColor(sharedPreferences: NacSharedPreferences, them
 //{
 //	this.strokeColor = ColorStateList.valueOf(sharedPreferences.themeColor)
 //}
+
+/**
+ * Setup the background color of a FloatingActionButton.
+ */
+fun FloatingActionButton.setupThemeColor(sharedPreferences: NacSharedPreferences)
+{
+	// Get the theme color
+	val themeColor = sharedPreferences.themeColor
+	val contrastColor = calcContrastColor(themeColor)
+
+	// Set the color
+	this.backgroundTintList = ColorStateList.valueOf(themeColor)
+	this.imageTintList = ColorStateList.valueOf(contrastColor)
+}
 
 /**
  * Setup the color of a switch.

@@ -11,7 +11,7 @@ import android.widget.RadioGroup
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
-import com.nfcalarmclock.util.NacBundle
+import com.nfcalarmclock.util.getAlarm
 import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
 import com.nfcalarmclock.view.getCheckedText
 
@@ -44,7 +44,7 @@ class NacAudioSourceDialog
 		super.onViewCreated(view, savedInstanceState)
 
 		// Get the bundle
-		val alarm = NacBundle.getAlarm(arguments)
+		val alarm = arguments?.getAlarm()
 
 		// Get the views
 		val radioGroup: RadioGroup = dialog!!.findViewById(R.id.audio_sources)

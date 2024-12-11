@@ -196,7 +196,7 @@
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">Danh sách các cảnh báo sẽ được hiển thị ở đây.</string>
 	<string name="cd_nfc_tag_list">Danh sách các thẻ NFC sẽ được hiển thị ở đây.</string>
-	<string name="cd_floating_action_button">Thêm một báo động mới.</string>
+	<string name="cd_fab_add_alarm">Thêm một báo động mới.</string>
 	<string name="cd_collapse_alarm">Thu gọn một báo động.</string>
 	<string name="cd_expand_alarm">Mở rộng cảnh báo.</string>
 	<string name="cd_volume_icon">Thay đổi âm lượng của báo thức.</string>

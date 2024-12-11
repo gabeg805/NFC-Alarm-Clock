@@ -12,7 +12,8 @@ import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.alarm.options.tts.NacTextToSpeech
 import com.nfcalarmclock.alarm.options.tts.NacTranslate
 import com.nfcalarmclock.util.NacCalendar
-import com.nfcalarmclock.util.NacIntent
+import com.nfcalarmclock.util.addAlarm
+import com.nfcalarmclock.util.getAlarm
 import java.util.Calendar
 
 class NacUpcomingReminderService
@@ -51,8 +52,9 @@ class NacUpcomingReminderService
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
 	{
 		// Attempt to get the alarm from the intent
-		val alarm = NacIntent.getAlarm(intent)
+		val alarm = intent?.getAlarm()
 
+		// Check the intent action
 		when (intent?.action)
 		{
 
@@ -245,10 +247,8 @@ class NacUpcomingReminderService
 		fun getStartIntent(context: Context, alarm: NacAlarm?): Intent
 		{
 			// Create an intent with the alarm service
-			val intent = Intent(context, NacUpcomingReminderService::class.java)
-
-			// Add the alarm to the intent
-			return NacIntent.addAlarm(intent, alarm)
+			return Intent(context, NacUpcomingReminderService::class.java)
+				.addAlarm(alarm)
 		}
 
 		/**
@@ -259,11 +259,8 @@ class NacUpcomingReminderService
 		fun getClearReminderIntent(context: Context, alarm: NacAlarm?): Intent
 		{
 			// Create the intent with the alarm service
-			val intent = Intent(ACTION_CLEAR_REMINDER, null, context,
-				NacUpcomingReminderService::class.java)
-
-			// Add the alarm to the intent
-			return NacIntent.addAlarm(intent, alarm)
+			return Intent(ACTION_CLEAR_REMINDER, null, context, NacUpcomingReminderService::class.java)
+				.addAlarm(alarm)
 		}
 
 	}

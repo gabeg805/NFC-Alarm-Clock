@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.util.NacBundle.ALARM_PARCEL_NAME
 import com.nfcalarmclock.util.NacBundle.MEDIA_ARTIST_KEY
 import com.nfcalarmclock.util.NacBundle.MEDIA_PATH_KEY
 import com.nfcalarmclock.util.NacBundle.MEDIA_TITLE_KEY
@@ -12,6 +13,33 @@ import com.nfcalarmclock.util.NacBundle.MEDIA_TYPE_KEY
 import com.nfcalarmclock.util.NacBundle.RECURSIVELY_PLAY_MEDIA_KEY
 import com.nfcalarmclock.util.NacBundle.SHUFFLE_MEDIA_KEY
 import com.nfcalarmclock.util.media.NacAudioAttributes
+
+/**
+ * Add an alarm to a bundle.
+ *
+ * @return A bundle that contains the alarm.
+ */
+fun Bundle.addAlarm(alarm: NacAlarm?): Bundle
+{
+	// Put the alarm in the bundle
+	this.putParcelable(ALARM_PARCEL_NAME, alarm)
+
+	return this
+}
+
+/**
+ * Add text-to-speech audio attributes to a bundle.
+ *
+ * @return A bundle that contains the parameter to control the volume level
+ *         of a Text-to-Speech engine.
+ */
+fun Bundle.addTextToSpeechAudioAttributes(attrs: NacAudioAttributes): Bundle
+{
+	// Put the audio attributes in the bundle
+	this.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, attrs.stream)
+
+	return this
+}
 
 /**
  * Get a bundle that contains a media path and how to play that media.
@@ -50,6 +78,51 @@ fun Bundle.addMediaInfo(
 	this.putBoolean(RECURSIVELY_PLAY_MEDIA_KEY, recursivelyPlayMedia)
 
 	return this
+}
+
+/**
+ * Get the alarm contained in the bundle.
+ *
+ * @return The alarm contained in the bundle.
+ */
+@Suppress("deprecation")
+fun Bundle.getAlarm(): NacAlarm?
+{
+	return try
+		{
+			this.classLoader = NacAlarm::class.java.classLoader
+
+			// Use the updated form of Bundle.getParcelable() for API >= 33
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+			{
+				this.getParcelable(ALARM_PARCEL_NAME, NacAlarm::class.java)
+			}
+			// Use the old form of getting parcelable
+			else
+			{
+				this.getParcelable(ALARM_PARCEL_NAME)
+			}
+		}
+		catch (bpe: BadParcelableException)
+		{
+			try
+			{
+				// Use the updated form of Bundle.getParcelable() for API >= 33
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+				{
+					this.getParcelable(ALARM_PARCEL_NAME, NacAlarm::class.java)
+				}
+				// Use the old form of getting parcelable
+				else
+				{
+					this.getParcelable(ALARM_PARCEL_NAME)
+				}
+			}
+			catch (re: RuntimeException)
+			{
+				null
+			}
+		}
 }
 
 /**
@@ -152,88 +225,5 @@ object NacBundle
 	 * Whether media should be recursively played or not key.
 	 */
 	const val RECURSIVELY_PLAY_MEDIA_KEY = "NacRecursivelyPlayMediaKey"
-
-	/**
-	 * Get a bundle that contains the alarm.
-	 *
-	 * @return A bundle that contains the alarm.
-	 */
-	fun alarmToBundle(alarm: NacAlarm?): Bundle
-	{
-		// Create the bundle
-		val bundle = Bundle()
-
-		// Put the alarm in the bundle
-		bundle.putParcelable(ALARM_PARCEL_NAME, alarm)
-
-		return bundle
-	}
-
-	/**
-	 * Get the alarm contained in the bundle.
-	 *
-	 * @return The alarm contained in the bundle.
-	 */
-	@Suppress("deprecation")
-	fun getAlarm(bundle: Bundle?): NacAlarm?
-	{
-		return if (bundle != null)
-			{
-				try
-				{
-					bundle.classLoader = NacAlarm::class.java.classLoader
-
-					// Use the updated form of Bundle.getParcelable() for API >= 33
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-					{
-						bundle.getParcelable(ALARM_PARCEL_NAME, NacAlarm::class.java)
-					}
-					// Use the old form of getting parcelable
-					else
-					{
-						bundle.getParcelable(ALARM_PARCEL_NAME)
-					}
-				}
-				catch (bpe: BadParcelableException)
-				{
-					try
-					{
-						// Use the updated form of Bundle.getParcelable() for API >= 33
-						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-						{
-							bundle.getParcelable(ALARM_PARCEL_NAME, NacAlarm::class.java)
-						}
-						// Use the old form of getting parcelable
-						else
-						{
-							bundle.getParcelable(ALARM_PARCEL_NAME)
-						}
-					}
-					catch (re: RuntimeException)
-					{
-						null
-					}
-				}
-			}
-			else
-			{
-				null
-			}
-	}
-
-	/**
-	 * @return A bundle that contains the parameter to control the volume level
-	 * of a Text-to-Speech engine.
-	 */
-	fun toBundle(attrs: NacAudioAttributes): Bundle
-	{
-		// Create the bundle
-		val bundle = Bundle()
-
-		// Put the audio attributes in the bundle
-		bundle.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, attrs.stream)
-
-		return bundle
-	}
 
 }

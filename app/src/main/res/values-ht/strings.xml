@@ -196,7 +196,7 @@
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">Lis alam yo pral montre isit la.</string>
 	<string name="cd_nfc_tag_list">Lis tags NFC yo pral montre isit la.</string>
-	<string name="cd_floating_action_button">Ajoute yon nouvo alam.</string>
+	<string name="cd_fab_add_alarm">Ajoute yon nouvo alam.</string>
 	<string name="cd_collapse_alarm">Tonbe yon alam.</string>
 	<string name="cd_expand_alarm">Elaji yon alam.</string>
 	<string name="cd_volume_icon">Chanje volim yon alam.</string>

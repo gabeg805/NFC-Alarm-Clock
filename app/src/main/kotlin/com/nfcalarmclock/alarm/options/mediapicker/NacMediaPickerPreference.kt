@@ -2,10 +2,11 @@ package com.nfcalarmclock.alarm.options.mediapicker
 
 import android.content.Context
 import android.content.res.TypedArray
+import android.net.Uri
 import android.util.AttributeSet
 import androidx.preference.Preference
 import com.nfcalarmclock.R
-import com.nfcalarmclock.util.media.NacMedia
+import com.nfcalarmclock.util.media.getMediaTitle
 
 /**
  * Preference that displays the sound prompt dialog.
@@ -52,7 +53,8 @@ class NacMediaPickerPreference @JvmOverloads constructor(
 	override fun getSummary(): CharSequence
 	{
 		// Get the name of the media
-		val title = NacMedia.getTitle(context, mediaPath)
+		val uri = Uri.parse(mediaPath)
+		val title = uri.getMediaTitle(context)
 
 		// Get the name "None" if unable to determine the name
 		val none = context.getString(R.string.none)
