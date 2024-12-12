@@ -39,7 +39,7 @@
 		android:layout_marginBottom="@dimen/medium"
 		android:layout_marginStart="@dimen/medium"
 		android:layout_marginEnd="@dimen/medium"
-		android:hint="@string/alarm_name"
+		android:hint="@string/title_alarm_name"
 		app:counterEnabled="true"
 		app:counterMaxLength="@integer/max_entry_length">
 

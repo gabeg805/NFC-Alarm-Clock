@@ -23,6 +23,7 @@
 			android:layout_height="wrap_content"
 			android:format24Hour="HH"
 			android:format12Hour="h"
+			android:fontFamily="sans-serif"
 			android:textSize="@dimen/tsz_widget"
 			android:textColor="@color/white"
 			android:visibility="gone"
@@ -34,6 +35,7 @@
 			android:layout_height="wrap_content"
 			android:format24Hour="HH"
 			android:format12Hour="h"
+			android:fontFamily="sans-serif"
 			android:textSize="@dimen/tsz_widget"
 			android:textStyle="bold"
 			android:textColor="@color/white"
@@ -44,6 +46,7 @@
 			android:id="@+id/widget_colon"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:fontFamily="sans-serif"
 			android:textColor="@color/white"
 			android:textSize="@dimen/tsz_widget"
 			android:text="@string/colon"
@@ -56,6 +59,7 @@
 			android:layout_height="wrap_content"
 			android:format24Hour="mm"
 			android:format12Hour="mm"
+			android:fontFamily="sans-serif-light"
 			android:textSize="@dimen/tsz_widget"
 			android:textColor="@color/white"
 			/>
@@ -66,6 +70,7 @@
 			android:layout_height="wrap_content"
 			android:format24Hour="mm"
 			android:format12Hour="mm"
+			android:fontFamily="sans-serif-light"
 			android:textSize="@dimen/tsz_widget"
 			android:textStyle="bold"
 			android:textColor="@color/white"
@@ -79,7 +84,8 @@
 			android:layout_height="wrap_content"
 			android:layout_marginHorizontal="@dimen/nudge"
 			android:format24Hour=""
-			android:format12Hour=" a"
+			android:format12Hour="a"
+			android:fontFamily="sans-serif"
 			android:textSize="@dimen/tsz_medium"
 			android:textColor="@color/white"
 			android:visibility="gone"
@@ -91,7 +97,8 @@
 			android:layout_height="wrap_content"
 			android:layout_marginHorizontal="@dimen/nudge"
 			android:format24Hour=""
-			android:format12Hour=" a"
+			android:format12Hour="a"
+			android:fontFamily="sans-serif-black"
 			android:textSize="@dimen/tsz_medium"
 			android:textStyle="bold"
 			android:textColor="@color/white"
@@ -128,7 +135,7 @@
 			android:visibility="gone"
 			/>
 
-		<!-- Alarm -->
+		<!-- Icon -->
 		<ImageView
 			android:contentDescription="@string/cd_clock_widget_alarm_icon"
 			android:id="@+id/widget_alarm_icon"
@@ -141,14 +148,25 @@
 			app:tint="@color/white"
 			/>
 
+		<!-- Alarm -->
 		<TextView
 			android:id="@+id/widget_alarm_time"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:textColor="@color/orange"
 			android:textSize="@dimen/tsz_small"
+			android:text=""
+			/>
+
+		<TextView
+			android:id="@+id/widget_alarm_time_bold"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textColor="@color/orange"
+			android:textSize="@dimen/tsz_small"
 			android:textStyle="bold"
 			android:text=""
+			android:visibility="gone"
 			/>
 	</LinearLayout>
 

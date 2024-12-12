@@ -1262,7 +1262,7 @@ class NacCardHolder(
 	{
 		// Get the name message
 		val message = alarm!!.nameNormalized.ifEmpty {
-			context.resources.getString(R.string.alarm_name)
+			context.resources.getString(R.string.title_alarm_name)
 		}
 
 		// Get the alpha that the view should be

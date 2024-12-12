@@ -3,6 +3,7 @@
 
 	<!-- App -->
 	<string name="app_name">NFC Alarm Clock</string>
+	<string name="app_developer">Gabe Gonzalez</string>
 
 	<!-- Consolidate -->
 	<string name="version">Version</string>
@@ -25,7 +26,16 @@
 	<string name="minutes">Minutes</string>
 	<string name="am_pm">AM / PM</string>
 
+	<!-- Day names -->
+	<string name="dow_everyday">Everyday</string>
+	<string name="dow_weekdays">Weekdays</string>
+	<string name="dow_weekend">Weekend</string>
+	<string name="dow_today">Today</string>
+	<string name="dow_tomorrow">Tomorrow</string>
+
 	<!-- Words -->
+	<string name="word_app">App</string>
+	<string name="word_version">Version</string>
 	<string name="word_of">of</string>
 	<string name="word_alarm">Alarm</string>
 	<string name="word_reminder">Reminder</string>
@@ -158,6 +168,8 @@
 	<string name="error_message_unable_to_shine_flashlight">Unable to shine flashlight</string>
 	<string name="error_message_unable_to_start_foreground_service">Unable to start foreground service. Please enable permission</string>
 	<string name="error_message_unable_to_open_import_export_stream">Unable to open file</string>
+	<string name="error_message_unable_to_select_file">Unable to select file</string>
+	<string name="error_message_unable_to_get_media_information_from_file">Unable to get media information from file</string>
 
 	<!-- Titles -->
 	<string name="title_settings">Settings</string>
@@ -168,9 +180,9 @@
 	<string name="title_save_nfc_tag" tools:ignore="TypographyEllipsis">Save NFC tag...</string>
 	<string name="title_delete_nfc_tag" tools:ignore="TypographyEllipsis">Delete NFC tag...</string>
 	<string name="title_rename_nfc_tag" tools:ignore="TypographyEllipsis">Rename NFC tag...</string>
-	<string name="title_days">Select days</string>
-	<string name="title_color">Select a color</string>
-	<string name="title_next_alarm_format">Select a format</string>
+	<string name="title_select_days">Select days</string>
+	<string name="title_select_color">Select a color</string>
+	<string name="title_select_next_alarm_format">Select a format</string>
 	<string name="title_folder_selected">You selected a folder</string>
 	<string name="title_active_alarms">Active alarms</string>
 	<string name="title_upcoming_reminders">Upcoming reminders</string>
@@ -181,9 +193,16 @@
 	<string name="title_deleted_alarms">Deleted alarms</string>
 	<string name="title_current_alarms">Current</string>
 	<string name="title_whats_new">What\'s New</string>
-	<string name="title_request_permission_ignore_battery_optimization">Disable battery optimization…</string>
-	<string name="title_request_permission_post_notifications">Enable notifications…</string>
-	<string name="title_request_permission_schedule_exact_alarm">Allow scheduling exact alarms…</string>
+	<string name="title_permission_disable_battery_optimization">Disable battery optimization</string>
+	<string name="title_permission_storage">Storage</string>
+	<string name="title_permission_foreground_service">Foreground service</string>
+	<string name="title_permission_full_screen_intent">Full screen</string>
+	<string name="title_permission_schedule_alarm">Schedule exact alarms</string>
+	<string name="title_permission_set_alarm">Set alarm</string>
+	<string name="title_permission_show_notifications">Show notifications</string>
+	<string name="title_permission_boot">Startup</string>
+	<string name="title_permission_wakelock">Wakelock</string>
+	<string name="title_request_permission_schedule_exact_alarm">Enable schedule exact alarms</string>
 	<string name="title_reset_statistics">Reset statistics…</string>
 	<string name="title_flashlight_brightness_level">Brightness level</string>
 	<string name="title_flashlight_blink_on_off">Blink on/off</string>
@@ -200,6 +219,37 @@
 	<string name="title_upcoming_reminder_show_reminder">Show reminder</string>
 	<string name="title_upcoming_reminder_how_early">How early…</string>
 	<string name="title_upcoming_reminder_how_frequent">How frequent…</string>
+	<string name="title_setting_general">General</string>
+	<string name="title_setting_appearance">Appearance</string>
+	<string name="title_setting_about">About</string>
+	<string name="title_setting_statistics">Statistics</string>
+	<string name="title_setting_manage_nfc_tags">Manage NFC tags</string>
+	<string name="title_setting_support">Support development</string>
+	<string name="title_setting_import_export">Import \u0020|\u0020 Export</string>
+	<string name="title_default_alarm">Default alarm</string>
+	<string name="title_alarm_name">Name</string>
+	<string name="title_alarm_days">Days</string>
+	<string name="title_alarm_repeat">Repeat</string>
+	<string name="title_alarm_vibrate">Vibrate</string>
+	<string name="title_alarm_nfc">NFC</string>
+	<string name="title_alarm_sound">Sound</string>
+	<string name="title_alarm_volume">Volume</string>
+	<string name="title_alarm_screen">Alarm screen</string>
+	<string name="title_colors">Colors</string>
+	<string name="title_notifications">Notifications</string>
+	<string name="title_style">Style</string>
+	<string name="title_tweaks">Tweaks</string>
+	<string name="title_new_screen">New screen</string>
+	<string name="title_show_alarm_name">Show alarm name</string>
+	<string name="title_show_current_date_and_time">Show current date and time</string>
+	<string name="title_show_music_info">Show music information</string>
+	<string name="title_theme_color">Theme</string>
+	<string name="title_day_button_style">Day buttons</string>
+	<string name="title_start_week_on">Start week on&#8230;</string>
+	<string name="title_expand_new_alarm">Expand new alarms</string>
+	<string name="title_next_alarm_format">Next alarm format&#8230;</string>
+	<string name="title_permissions">Permissions</string>
+	<string name="title_developer">Developer</string>
 
 	<!-- Descriptions -->
 	<string name="description_scan_nfc">Scan NFC</string>
@@ -232,13 +282,60 @@
 	<string name="description_upcoming_reminder_how_frequent">How frequent should the reminder notification should be shown?</string>
 	<string name="description_upcoming_reminder_text_to_speech">Use the alarm\'s text-to-speech options when the notification is shown.</string>
 	<string name="example_name">Work</string>
-
-	<!-- Summary day names -->
-	<string name="dow_everyday">Everyday</string>
-	<string name="dow_weekdays">Weekdays</string>
-	<string name="dow_weekend">Weekend</string>
-	<string name="dow_today">Today</string>
-	<string name="dow_tomorrow">Tomorrow</string>
+	<string name="description_setting_general">General alarm settings</string>
+	<string name="description_setting_appearance">Customize how the app looks</string>
+	<string name="description_setting_about">Information about the app</string>
+	<string name="description_setting_statistics">See how long you have snoozed for, and more</string>
+	<string name="description_setting_manage_nfc_tags">Delete or rename saved NFC tags</string>
+	<string name="description_setting_support">Support would be greatly appreciated, but no pressure! This app will always be free</string>
+	<string name="description_setting_import_export">Import or export all your saved data</string>
+	<string name="description_alarm_repeat_true">Repeat the alarm.</string>
+	<string name="description_alarm_repeat_false">Disable the alarm after it is run.</string>
+	<string name="description_alarm_vibrate_true">Vibrate the phone.</string>
+	<string name="description_alarm_vibrate_false">Do not vibrate the phone.</string>
+	<string name="description_alarm_nfc_true">NFC is used to dismiss the alarm.</string>
+	<string name="description_alarm_nfc_false">Dismiss the alarm normally.</string>
+	<string name="description_alarm_flashlight_true">Turn on the flashlight when the alarm goes off.</string>
+	<string name="description_alarm_flashlight_false">Do not turn on the flashlight when the alarm goes off.</string>
+	<string name="description_alarm_sound">@string/none</string>
+	<string name="description_new_screen_true">Use the new alarm screen, where you swipe to snooze or dismiss the alarm.</string>
+	<string name="description_new_screen_false">Do not use the new alarm screen. Use the original screen with simple buttons to snooze or dismiss the alarm.</string>
+	<string name="description_show_alarm_name_true">Show the alarm name in the alarm screen.</string>
+	<string name="description_show_alarm_name_false">Do not show the alarm name.</string>
+	<string name="description_show_current_date_and_time_true">Show the current date and time in the alarm screen.</string>
+	<string name="description_show_current_date_and_time_false">Do not show the current date and time.</string>
+	<string name="description_show_music_info_true">Show information on the currently playing music or ringtone in the alarm screen.</string>
+	<string name="description_show_music_info_false">Do not show music or ringtone information.</string>
+	<string name="description_color_theme">The theme color.</string>
+	<string name="description_color_name">e.g. Work</string>
+	<string name="description_color_days">e.g. Mon &#8231; Tue &#8231; Wed &#8231; Thu &#8231; Fri</string>
+	<string name="description_color_time">e.g. 12:30</string>
+	<string name="description_color_am">Colored if AM is in the alarm time.</string>
+	<string name="description_color_pm">Colored if PM is in the alarm time.</string>
+	<string name="description_color_delete_alarm_after_dismissed">Icon to indicate the alarm will be deleted after it is dismissed.</string>
+	<string name="description_color_skip_next_alarm">Icon to indicate the next run of an alarm will be skipped.</string>
+	<string name="description_missed_alarm_true">Show notifications for missed alarms.</string>
+	<string name="description_show_hide_vibrate_button_true">Show the vibrate button when expanding an alarm.</string>
+	<string name="description_show_hide_vibrate_button_false">Hide the vibrate button when expanding an alarm.</string>
+	<string name="description_show_hide_nfc_button_true">Show the NFC button when expanding an alarm.</string>
+	<string name="description_show_hide_nfc_button_false">Hide the NFC button when expanding an alarm.</string>
+	<string name="description_show_hide_flashlight_button_true">Show the flashlight button when expanding an alarm.</string>
+	<string name="description_show_hide_flashlight_button_false">Hide the flashlight button when expanding an alarm.</string>
+	<string name="description_expand_new_alarm_true">Alarms that are copied or created with the &#8220;+&#8221; button are expanded.</string>
+	<string name="description_expand_new_alarm_false">Alarms are not expanded.</string>
+	<string name="description_next_alarm_format_time_in">Next alarm in 7 hours 30 minutes</string>
+	<string name="description_next_alarm_format_time_on">Next alarm on Mon 7:00 AM</string>
+	<string name="description_permission_disable_battery_optimization">The app will not be put to sleep, allowing alarms to be activated as normal.</string>
+	<string name="description_permission_nfc">Detect NFC tags to dismiss an alarm.</string>
+	<string name="description_permission_storage">Read music that is stored on your device.</string>
+	<string name="description_permission_vibrate">Vibrate your device when an alarm is activated.</string>
+	<string name="description_permission_foreground_service">Run a foreground service that will play audio, vibrate your device, etc. when an alarm is activated.</string>
+	<string name="description_permission_full_screen_intent">Use the full screen when an alarm is activated.</string>
+	<string name="description_permission_schedule_alarm">Schedule exact alarms.</string>
+	<string name="description_permission_set_alarm">Set an alarm from an external source, such as the Google Assistant.</string>
+	<string name="description_permission_post_notifications">Show a notification when an alarm is activated that will keep your device from putting the app to sleep and turning the alarm off by itself.</string>
+	<string name="description_permission_boot">Restore alarms when your device is turned on.  Android will delete alarms when your device is turned off.</string>
+	<string name="description_permission_wakelock">Prevent your device from sleeping so that an activated alarm will continue to go off.</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">List of alarms will be shown here.</string>
@@ -267,215 +364,7 @@
 	<string name="cd_delete_alarm_after_dismissed">Delete alarm after it is dismissed.</string>
 	<string name="cd_clock_widget_alarm_icon">Next alarm</string>
 
-	<!-- Main Settings -->
-	<string name="general_setting">General</string>
-	<string name="general_setting_summary">General alarm settings</string>
-
-	<string name="appearance_setting">Appearance</string>
-	<string name="appearance_setting_summary">Customize how the app looks</string>
-
-	<string name="about_setting">About</string>
-	<string name="about_setting_summary">Information about the app</string>
-
-	<string name="stats_setting">Statistics</string>
-	<string name="stats_setting_summary">See how long you have snoozed for, and more</string>
-
-	<string name="manage_nfc_tags_setting">Manage NFC tags</string>
-	<string name="manage_nfc_tags_setting_summary">Delete or rename saved NFC tags</string>
-
-	<string name="support_setting">Support development</string>
-	<string name="support_setting_summary">Support would be greatly appreciated, but no pressure! This app will always be free</string>
-
-	<string name="import_export_setting">Import \u0020|\u0020 Export</string>
-	<string name="import_export_setting_summary">Import or export all your saved data</string>
-
-	<!-- General settings -->
-
-	<!-- Categories -->
-	<string name="default_alarm_category">Default alarm</string>
-
-	<!-- Default alarm -->
-	<string name="alarm_name">Name</string>
-	<string name="alarm_days">Days</string>
-
-	<!-- Default alarm repeat -->
-	<string name="alarm_repeat">Repeat</string>
-	<string name="alarm_repeat_true">Repeat the alarm.</string>
-	<string name="alarm_repeat_false">Disable the alarm after it is run.</string>
-
-	<!-- Default alarm vibrate -->
-	<string name="alarm_vibrate">Vibrate</string>
-	<string name="alarm_vibrate_true">Vibrate the phone.</string>
-	<string name="alarm_vibrate_false">Do not vibrate the phone.</string>
-
-	<!-- Default alarm use NFC -->
-	<string name="alarm_nfc">NFC</string>
-	<string name="alarm_nfc_true">NFC is used to dismiss the alarm.</string>
-	<string name="alarm_nfc_false">Dismiss the alarm normally.</string>
-
-	<!-- Default alarm use flashlight -->
-	<string name="alarm_flashlight_true">Turn on the flashlight when the alarm goes off.</string>
-	<string name="alarm_flashlight_false">Do not turn on the flashlight when the alarm goes off.</string>
-
-	<!-- Default alarm sound -->
-	<string name="alarm_sound">Sound</string>
-	<string name="alarm_sound_summary">@string/none</string>
-
-	<!-- Default alarm volume and audio source -->
-	<string name="alarm_volume">Volume</string>
-
-	<!-- Appearance settings -->
-
-	<!-- Categories -->
-	<string name="alarm_screen_category">Alarm screen</string>
-	<string name="color_category">Colors</string>
-	<string name="notification_category">Notifications</string>
-	<string name="style_category">Style</string>
-	<string name="tweaks_category">Tweaks</string>
-
-	<!-- New screen -->
-	<string name="new_screen">New screen</string>
-	<string name="new_screen_true">Use the new alarm screen, where you swipe to snooze or dismiss the alarm.</string>
-	<string name="new_screen_false">Do not use the new alarm screen. Use the original screen with simple buttons to snooze or dismiss the alarm.</string>
-
-	<!-- Show alarm name -->
-	<string name="show_alarm_name">Show alarm name</string>
-	<string name="show_alarm_name_true">Show the alarm name in the alarm screen.</string>
-	<string name="show_alarm_name_false">Do not show the alarm name.</string>
-
-	<!-- Show current date and time -->
-	<string name="show_current_date_and_time">Show current date and time</string>
-	<string name="show_current_date_and_time_true">Show the current date and time in the alarm screen.</string>
-	<string name="show_current_date_and_time_false">Do not show the current date and time.</string>
-
-	<!-- Show music information -->
-	<string name="show_music_info">Show music information</string>
-	<string name="show_music_info_true">Show information on the currently playing music or ringtone in the alarm screen.</string>
-	<string name="show_music_info_false">Do not show music or ringtone information.</string>
-
-	<!-- Summary color -->
-	<string name="theme_color">Theme</string>
-	<string name="name_color">@string/alarm_name</string>
-	<string name="days_color">@string/alarm_days</string>
-	<string name="summary_color_theme">The theme color.</string>
-	<string name="summary_color_name">e.g. Work</string>
-	<string name="summary_color_days">e.g. Mon &#8231; Tue &#8231; Wed &#8231; Thu &#8231; Fri</string>
-	<string name="summary_color_time">e.g. 12:30</string>
-	<string name="summary_color_am">Colored if AM is in the alarm time.</string>
-	<string name="summary_color_pm">Colored if PM is in the alarm time.</string>
-	<string name="summary_color_delete_alarm_after_dismissed">Icon to indicate the alarm will be deleted after it is dismissed.</string>
-	<string name="summary_color_skip_next_alarm">Icon to indicate the next run of an alarm will be skipped.</string>
-
-	<!-- Missed alarm notifications -->
-	<string name="missed_alarm_true">Show notifications for missed alarms.</string>
-
-	<!-- Show/hide the vibrate button -->
-	<string name="show_hide_vibrate_button_true">Show the vibrate button when expanding an alarm.</string>
-	<string name="show_hide_vibrate_button_false">Hide the vibrate button when expanding an alarm.</string>
-
-	<!-- Show/hide the NFC button -->
-	<string name="show_hide_nfc_button_true">Show the NFC button when expanding an alarm.</string>
-	<string name="show_hide_nfc_button_false">Hide the NFC button when expanding an alarm.</string>
-
-	<!-- Show/hide the flashlight button -->
-	<string name="show_hide_flashlight_button_true">Show the flashlight button when expanding an alarm.</string>
-	<string name="show_hide_flashlight_button_false">Hide the flashlight button when expanding an alarm.</string>
-
-	<!-- Day button style -->
-	<string name="day_button_style">Day buttons</string>
-
-	<!-- Start Week On -->
-	<string name="start_week_on">Start week on&#8230;</string>
-
-	<!-- Expand new alarm card -->
-	<string name="expand_new_alarm">Expand new alarms</string>
-	<string name="expand_new_alarm_true">Alarms that are copied or created with the &#8220;+&#8221; button are expanded.</string>
-	<string name="expand_new_alarm_false">Alarms are not expanded.</string>
-
-	<!-- Time remaining format -->
-	<string name="next_alarm_format">Next alarm format&#8230;</string>
-	<string name="next_alarm_format_time_in">Next alarm in 7 hours 30 minutes</string>
-	<string name="next_alarm_format_time_on">Next alarm on Mon 7:00 AM</string>
-
-	<!-- About settings -->
-
-	<!-- Categories -->
-	<string name="app_category">App</string>
-	<string name="permissions_category">Permissions</string>
-
-
-	<!-- App developer -->
-	<string name="author_title">Developer</string>
-	<string name="author">Gabe Gonzalez</string>
-
-
-	<!-- App version -->
-	<string name="version_title">Version</string>
-
-
-	<!-- Ignore battery optimization -->
-	<string name="about_ignore_battery_optimization">Disable battery optimization</string>
-	<string name="about_ignore_battery_optimization_summary">The app will not be put to sleep, allowing alarms to be activated as normal.</string>
-
-
-	<!-- NFC permission -->
-	<string name="about_nfc">NFC</string>
-	<string name="about_nfc_summary">Detect NFC tags to dismiss an alarm.</string>
-
-
-	<!-- READ_EXTERNAL_STORAGE permission -->
-	<string name="about_storage">Storage</string>
-	<string name="about_storage_summary">Read music that is stored on your device.</string>
-
-
-	<!-- VIBRATE permission -->
-	<string name="about_vibrate">@string/alarm_vibrate</string>
-	<string name="about_vibrate_summary">Vibrate your device when an alarm is activated.</string>
-
-
-	<!-- FOREGROUND_SERVICE permission -->
-	<string name="about_foreground_service">Foreground service</string>
-	<string name="about_foreground_service_summary">Run a foreground service that will play audio, vibrate your device, etc. when an alarm is activated.</string>
-
-
-	<!-- USE_FULL_SCREEN_INTENT permission -->
-	<string name="about_full_screen_intent">Full screen</string>
-	<string name="about_full_screen_intent_summary">Use the full screen when an alarm is activated.</string>
-
-
-	<!-- Schedule/use exact alarm permission -->
-	<string name="about_schedule_alarm">Schedule exact alarms</string>
-	<string name="about_schedule_alarm_summary">Schedule exact alarms.</string>
-
-
-	<!-- SET_ALARM permission -->
-	<string name="about_set_alarm">Set alarm</string>
-	<string name="about_set_alarm_summary">Set an alarm from an external source, such as the Google Assistant.</string>
-
-
-	<!-- Post notifications permission -->
-	<string name="about_post_notifications">Show notifications</string>
-	<string name="about_post_notifications_summary">Show a notification when an alarm is activated that will keep your device from putting the app to sleep and turning the alarm off by itself.</string>
-
-
-	<!-- RECEIVE_BOOT_COMPLETED permission -->
-	<string name="about_boot">Startup</string>
-	<string name="about_boot_summary">Restore alarms when your device is turned on.  Android will delete alarms when your device is turned off.</string>
-
-
-	<!-- WAKE_LOCK -->
-	<string name="about_wakelock">Wakelock</string>
-	<string name="about_wakelock_summary">Prevent your device from sleeping so that an activated alarm will continue to go off.</string>
-
-
-	<!-- Spotify -->
-	<string name="frg_spotify_search_hint">Search spotify&#8230;</string>
-
-
-	<!-- ******* -->
 	<!-- Plurals -->
-	<!-- ******* -->
-
 	<plurals name="alarm">
 		<item quantity="one">alarm</item>
 		<item quantity="other">alarms</item>

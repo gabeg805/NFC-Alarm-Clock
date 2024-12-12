@@ -385,7 +385,7 @@ class NacWakeupProcess(
 
 		// Get the path to the current media item
 		val mediaPath = mediaItem?.mediaId ?: ""
-		// TODO: Could this have been after reboot? Alarm runs, and then next alarm media player breaks?
+		// TODO: Could the issue where shuffle does not work happen after reboot? Alarm runs, and then next alarm media player breaks?
 		//println("Media item transition : $mediaPath")
 		//println("Artist : ${mediaItem?.mediaMetadata?.artist}")
 		//println("Title  : ${mediaItem?.mediaMetadata?.title}")

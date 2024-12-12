@@ -57,9 +57,9 @@ class NacNextAlarmFormatPreference @JvmOverloads constructor(
 	{
 		return when (nextAlarmFormatIndex)
 			{
-				1 -> context.getString(R.string.next_alarm_format_time_on)
-				0 -> context.getString(R.string.next_alarm_format_time_in)
-				else -> context.getString(R.string.next_alarm_format_time_in)
+				1 -> context.getString(R.string.description_next_alarm_format_time_on)
+				0 -> context.getString(R.string.description_next_alarm_format_time_in)
+				else -> context.getString(R.string.description_next_alarm_format_time_in)
 			}
 	}
 

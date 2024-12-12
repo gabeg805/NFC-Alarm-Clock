@@ -58,7 +58,7 @@ class NacDayOfWeekDialog
 
 		// Create the dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(R.string.title_days)
+			.setTitle(R.string.title_select_days)
 			.setPositiveButton(R.string.action_ok) { _, _ ->
 
 				// Call the listener

@@ -3,9 +3,7 @@
 
 	<!-- App -->
 	<string name="app_name">NFC-Wecker</string>
-	<string name="message_permission_ignore_battery_optimization_request">Alarme werden möglicherweise nicht ausgeführt, wenn die App eine Zeit lang nicht verwendet wurde.\n\n<b>Hinweis:</b> Dies hängt von Ihrem Gerät ab und <b>wird möglicherweise nicht wirklich benötigt</b>.\n\nMöchten Sie die Batterieoptimierung deaktivieren?</string>
-	<string name="message_permission_post_notifications_request">Alarme können nicht ausgeführt werden, wenn die App nicht im Fokus ist.\n\n<b>Hinweis:</b> Dies ist ein Nebeneffekt der in <b>Android 13</b> eingeführten Sicherheitsrichtlinien, die den Benutzern zugute kommen, in solchen Fällen jedoch Apps einschränken können.\n\nMöchten Sie Benachrichtigungen aktivieren?</string>
-	<string name="message_permission_schedule_exact_alarm_request">Alarme können nicht ausgeführt werden, wenn die App nicht im Fokus ist.\n\nMöchten Sie die Alarmplanung aktivieren?</string>
+	<string name="app_developer">Gabe Gonzalez</string>
 
 	<!-- Consolidate -->
 	<string name="version">Version</string>
@@ -13,8 +11,31 @@
 	<string name="pm">PM</string>
 	<string name="none">Keiner</string>
 	<string name="show_next_alarm">Nächsten Alarm anzeigen</string>
+	<string name="background">Hintergrund</string>
+	<string name="time_layout">Zeitaufteilung</string>
+	<string name="date_layout">Datumslayout</string>
+	<string name="alarm_layout">Alarmlayout</string>
+	<string name="show">Zeigen</string>
+	<string name="bold">Deutlich</string>
+	<string name="color">Farbe</string>
+	<string name="text_size">Textgröße</string>
+	<string name="colon">:</string>
+	<string name="icon">Symbol</string>
+	<string name="transparency">Transparenz</string>
+	<string name="hour">Stunde</string>
+	<string name="minutes">Minuten</string>
+	<string name="am_pm">Vormittags/nachmittags</string>
+
+	<!-- Day names -->
+	<string name="dow_everyday">Täglich</string>
+	<string name="dow_weekdays">Wochentage</string>
+	<string name="dow_weekend">Wochenende</string>
+	<string name="dow_today">Heute</string>
+	<string name="dow_tomorrow">Morgen</string>
 
 	<!-- Words -->
+	<string name="word_app">App</string>
+	<string name="word_version">Version</string>
 	<string name="word_of">von</string>
 	<string name="word_alarm">Alarm</string>
 	<string name="word_reminder">Erinnerung</string>
@@ -53,9 +74,11 @@
 	<string name="action_alarm_option_audio_source">Audioquelle</string>
 	<string name="action_alarm_option_flashlight">Taschenlampe</string>
 	<string name="action_alarm_option_text_to_speech">Text-zu-Sprache</string>
+	<string name="action_alarm_option_volume">Volumen</string>
 	<string name="action_alarm_option_dismiss_options">Optionen zum Schließen</string>
 	<string name="action_alarm_option_snooze_options">Schlummeroptionen</string>
 	<string name="action_alarm_option_upcoming_reminder">Bevorstehende Erinnerung</string>
+	<string name="action_delete_alarm_after_dismissed">Löschen nach Abweisung</string>
 	<string name="action_skipping_next_alarm">Nächsten Alarm überspringen</string>
 	<string name="action_skip_next_alarm">Nächsten Alarm überspringen</string>
 	<string name="action_unskip_next_alarm">Nächsten Alarm überspringen</string>
@@ -73,8 +96,12 @@
 	<string name="label_dismissed_statistic_header">Entlassungszeit, Name, Weckzeit, NFC verwendet</string>
 	<string name="label_missed_statistic_header">Verpasste Zeit, Name, Weckzeit</string>
 	<string name="label_snoozed_statistic_header">Schlummerzeit, Name, Weckzeit, Schlummerdauer (Sekunden)</string>
+	<string name="label_clock_widget">Uhr</string>
 
 	<!-- Messages -->
+	<string name="message_permission_ignore_battery_optimization_request">Alarme werden möglicherweise nicht ausgeführt, wenn die App eine Zeit lang nicht verwendet wurde.\n\n<b>Hinweis:</b> Dies hängt von Ihrem Gerät ab und <b>wird möglicherweise nicht wirklich benötigt</b>.\n\nMöchten Sie die Batterieoptimierung deaktivieren?</string>
+	<string name="message_permission_post_notifications_request">Alarme können nicht ausgeführt werden, wenn die App nicht im Fokus ist.\n\n<b>Hinweis:</b> Dies ist ein Nebeneffekt der in <b>Android 13</b> eingeführten Sicherheitsrichtlinien, die den Benutzern zugute kommen, in solchen Fällen jedoch Apps einschränken können.\n\nMöchten Sie Benachrichtigungen aktivieren?</string>
+	<string name="message_permission_schedule_exact_alarm_request">Alarme können nicht ausgeführt werden, wenn die App nicht im Fokus ist.\n\nMöchten Sie die Alarmplanung aktivieren?</string>
 	<string name="message_playlist">Möchten Sie die gesamte Musik in diesem Ordner abspielen?</string>
 	<string name="message_nfc_request">Bitte aktivieren Sie NFC, um den Alarm auszuschalten</string>
 	<string name="message_nfc_required">NFC erforderlich</string>
@@ -141,6 +168,8 @@
 	<string name="error_message_unable_to_shine_flashlight">Taschenlampe kann nicht leuchten</string>
 	<string name="error_message_unable_to_start_foreground_service">Vordergrunddienst kann nicht gestartet werden. Bitte aktivieren Sie die Berechtigung.</string>
 	<string name="error_message_unable_to_open_import_export_stream">Datei kann nicht geöffnet werden</string>
+	<string name="error_message_unable_to_select_file">Datei kann nicht ausgewählt werden</string>
+	<string name="error_message_unable_to_get_media_information_from_file">Medieninformationen können nicht aus der Datei abgerufen werden.</string>
 
 	<!-- Titles -->
 	<string name="title_settings">Einstellungen</string>
@@ -151,9 +180,9 @@
 	<string name="title_save_nfc_tag" tools:ignore="TypographyEllipsis">NFC-Tag speichern...</string>
 	<string name="title_delete_nfc_tag" tools:ignore="TypographyEllipsis">NFC-Tag löschen...</string>
 	<string name="title_rename_nfc_tag" tools:ignore="TypographyEllipsis">NFC-Tag umbenennen...</string>
-	<string name="title_days">Tage auswählen</string>
-	<string name="title_color">Wählen Sie eine Farbe</string>
-	<string name="title_next_alarm_format">Wählen Sie ein Format</string>
+	<string name="title_select_days">Tage auswählen</string>
+	<string name="title_select_color">Wählen Sie eine Farbe</string>
+	<string name="title_select_next_alarm_format">Wählen Sie ein Format</string>
 	<string name="title_folder_selected">Sie haben einen Ordner ausgewählt</string>
 	<string name="title_active_alarms">Aktive Alarme</string>
 	<string name="title_upcoming_reminders">Bevorstehende Erinnerungen</string>
@@ -164,12 +193,63 @@
 	<string name="title_deleted_alarms">Gelöschte Alarme</string>
 	<string name="title_current_alarms">Aktuell</string>
 	<string name="title_whats_new">Was ist neu</string>
-	<string name="title_request_permission_ignore_battery_optimization">Batterieoptimierung deaktivieren?</string>
-	<string name="title_request_permission_post_notifications">Benachrichtigungen aktivieren?</string>
-	<string name="title_request_permission_schedule_exact_alarm">Planen von Alarmen zulassen?</string>
+	<string name="title_permission_disable_battery_optimization">Batterieoptimierung deaktivieren?</string>
+	<string name="title_permission_storage">Lagerung</string>
+	<string name="title_permission_foreground_service">Vordergrunddienst</string>
+	<string name="title_permission_full_screen_intent">Vollbild</string>
+	<string name="title_permission_schedule_alarm">Planen Sie genaue Alarme</string>
+	<string name="title_permission_set_alarm">Alarm einstellen</string>
+	<string name="title_permission_show_notifications">Benachrichtigungen aktivieren?</string>
+	<string name="title_permission_boot">Start-up</string>
+	<string name="title_permission_wakelock">Wakelock</string>
+	<string name="title_request_permission_schedule_exact_alarm">Genaue Alarmplanung aktivieren</string>
 	<string name="title_reset_statistics">Statistiken zurücksetzen…</string>
+	<string name="title_flashlight_brightness_level">Helligkeitsstufe</string>
+	<string name="title_flashlight_blink_on_off">Blinken ein/aus</string>
+	<string name="title_text_to_speech_speak_frequency">Sprechfrequenz</string>
 	<string name="title_volume_gradually_increase_volume">Erhöhen Sie die Lautstärke allmählich</string>
 	<string name="title_volume_restrict_volume">Lautstärke beschränken</string>
+	<string name="title_dismiss_options_auto_dismiss">Automatisch schließen</string>
+	<string name="title_dismiss_options_dismiss_early">Frühzeitig entlassen</string>
+	<string name="title_dismiss_options_delete_after_dismissed">Löschen nach Abweisung</string>
+	<string name="title_snooze_options_auto_snooze">Automatische Schlummerfunktion</string>
+	<string name="title_snooze_options_max_snooze">Max döst</string>
+	<string name="title_snooze_options_snooze_duration">Schlummerdauer</string>
+	<string name="title_snooze_options_easy_snooze">Leichtes Einschlafen</string>
+	<string name="title_upcoming_reminder_show_reminder">Erinnerung anzeigen</string>
+	<string name="title_upcoming_reminder_how_early">Wie früh…</string>
+	<string name="title_upcoming_reminder_how_frequent">Wie häufig…</string>
+	<string name="title_setting_general">Allgemein</string>
+	<string name="title_setting_appearance">Aussehen</string>
+	<string name="title_setting_about">Um</string>
+	<string name="title_setting_statistics">Statistiken</string>
+	<string name="title_setting_manage_nfc_tags">NFC-Tags verwalten</string>
+	<string name="title_setting_support">Entwicklung unterstützen</string>
+	<string name="title_setting_import_export">Importieren \u0020|\u0020 Exportieren</string>
+	<string name="title_default_alarm">Standardalarm</string>
+	<string name="title_alarm_name">Name</string>
+	<string name="title_alarm_days">Tage</string>
+	<string name="title_alarm_repeat">Wiederholen</string>
+	<string name="title_alarm_vibrate">Vibrieren</string>
+	<string name="title_alarm_nfc">NFC</string>
+	<string name="title_alarm_sound">Klang</string>
+	<string name="title_alarm_volume">Volumen</string>
+	<string name="title_alarm_screen">Alarmbildschirm</string>
+	<string name="title_colors">Farben</string>
+	<string name="title_notifications">Benachrichtigungen</string>
+	<string name="title_style">Stil</string>
+	<string name="title_tweaks">Optimierungen</string>
+	<string name="title_new_screen">Neuer Bildschirm</string>
+	<string name="title_show_alarm_name">Alarmnamen anzeigen</string>
+	<string name="title_show_current_date_and_time">Aktuelles Datum und Uhrzeit anzeigen</string>
+	<string name="title_show_music_info">Musikinformationen anzeigen</string>
+	<string name="title_theme_color">Thema</string>
+	<string name="title_day_button_style">Tagestasten</string>
+	<string name="title_start_week_on">Beginnen Sie die Woche am&#8230;</string>
+	<string name="title_expand_new_alarm">Neue Alarme erweitern</string>
+	<string name="title_next_alarm_format">Nächstes Alarmformat&#8230;</string>
+	<string name="title_permissions">Berechtigungen</string>
+	<string name="title_developer">Entwickler</string>
 
 	<!-- Descriptions -->
 	<string name="description_scan_nfc">NFC scannen</string>
@@ -184,19 +264,84 @@
 	<string name="description_day_button_style_filled">Ausgefüllte Schaltflächen.</string>
 	<string name="description_day_button_style_outlined">Umrandete Schaltflächen.</string>
 	<string name="description_media">Musik oder Klingelton</string>
+	<string name="description_flashlight_brightness_level">Helligkeitsstufe der Taschenlampe.</string>
+	<string name="description_flashlight_blink_on_off">Lassen Sie die Taschenlampe in festgelegten Zeitabständen blinken und aus.</string>
+	<string name="description_text_to_speech_what_to_say">Was mit der Text-to-Speech-Funktion gesagt werden soll, wenn der Alarm aktiv ist.</string>
+	<string name="description_text_to_speech_speak_frequency">Wie oft die oben ausgewählten Elemente gesagt werden sollen.</string>
+	<string name="description_volume_gradually_increase_volume">Erhöhen Sie die Lautstärke des Alarms in festgelegten Intervallen.</string>
+	<string name="description_volume_restrict_volume">Wenn ein Alarm losgeht, kann die Lautstärke nicht geändert werden.</string>
+	<string name="description_dismiss_options_auto_dismiss">Beenden Sie den Alarm automatisch nach einer festgelegten Dauer.</string>
+	<string name="description_dismiss_options_dismiss_early">Deaktivieren Sie den Alarm frühzeitig, bevor er aktiv wird.</string>
+	<string name="description_dismiss_options_delete_after_dismissed">Nach dem Aufheben wird der Alarm gelöscht.</string>
+	<string name="description_snooze_options_auto_snooze">Schalten Sie den Alarm nach einer festgelegten Dauer automatisch stummen.</string>
+	<string name="description_snooze_options_max_snooze">Maximale Anzahl der Schlummervorgänge des Alarms.</string>
+	<string name="description_snooze_options_snooze_duration">Zeitspanne für die Schlummerfunktion des Alarms.</string>
+	<string name="description_snooze_options_easy_snooze">Schalten Sie den Alarm stumm, indem Sie eine beliebige Stelle auf dem Alarmbildschirm berühren.</string>
+	<string name="description_upcoming_reminder_show_reminder">Zeigen Sie eine Erinnerungsbenachrichtigung an, bevor der Alarm losgeht.</string>
+	<string name="description_upcoming_reminder_how_early">Wie früh soll die Erinnerungsbenachrichtigung angezeigt werden?</string>
+	<string name="description_upcoming_reminder_how_frequent">Wie häufig soll die Erinnerungsbenachrichtigung angezeigt werden?</string>
+	<string name="description_upcoming_reminder_text_to_speech">Verwenden Sie die Text-to-Speech-Optionen des Alarms, wenn die Benachrichtigung angezeigt wird.</string>
 	<string name="example_name">Arbeiten</string>
-
-	<!-- Summary day names -->
-	<string name="dow_everyday">Täglich</string>
-	<string name="dow_weekdays">Wochentage</string>
-	<string name="dow_weekend">Wochenende</string>
-	<string name="dow_today">Heute</string>
-	<string name="dow_tomorrow">Morgen</string>
+	<string name="description_setting_general">Allgemeine Alarmeinstellungen</string>
+	<string name="description_setting_appearance">Passen Sie das Aussehen der App an</string>
+	<string name="description_setting_about">Informationen zur App</string>
+	<string name="description_setting_statistics">Sehen Sie, wie lange Sie geschlafen haben und mehr</string>
+	<string name="description_setting_manage_nfc_tags">Gespeicherte NFC-Tags löschen oder umbenennen</string>
+	<string name="description_setting_support">Für Unterstützung wäre ich sehr dankbar, aber bitte keinen Druck! Diese App wird immer kostenlos sein</string>
+	<string name="description_setting_import_export">Importieren oder exportieren Sie alle Ihre gespeicherten Daten</string>
+	<string name="description_alarm_repeat_true">Wiederholen Sie den Alarm.</string>
+	<string name="description_alarm_repeat_false">Deaktivieren Sie den Alarm, nachdem er ausgeführt wurde.</string>
+	<string name="description_alarm_vibrate_true">Lassen Sie das Telefon vibrieren.</string>
+	<string name="description_alarm_vibrate_false">Lassen Sie das Telefon nicht vibrieren.</string>
+	<string name="description_alarm_nfc_true">Zum Beenden des Alarms wird NFC verwendet.</string>
+	<string name="description_alarm_nfc_false">Deaktivieren Sie den Alarm wie gewohnt.</string>
+	<string name="description_alarm_flashlight_true">Schalten Sie die Taschenlampe ein, wenn der Alarm losgeht.</string>
+	<string name="description_alarm_flashlight_false">Schalten Sie die Taschenlampe nicht ein, wenn der Alarm losgeht.</string>
+	<string name="description_alarm_sound">@string/none</string>
+	<string name="description_new_screen_true">Verwenden Sie den neuen Weckerbildschirm, auf dem Sie durch Wischen die Schlummerfunktion aktivieren oder den Wecker ausschalten können.</string>
+	<string name="description_new_screen_false">Verwenden Sie nicht den neuen Alarmbildschirm. Verwenden Sie den Originalbildschirm mit einfachen Schaltflächen zum Schlummern oder Deaktivieren des Alarms.</string>
+	<string name="description_show_alarm_name_true">Zeigen Sie den Alarmnamen im Alarmbildschirm an.</string>
+	<string name="description_show_alarm_name_false">Den Alarmnamen nicht anzeigen.</string>
+	<string name="description_show_current_date_and_time_true">Zeigen Sie das aktuelle Datum und die Uhrzeit im Alarmbildschirm an.</string>
+	<string name="description_show_current_date_and_time_false">Aktuelles Datum und Uhrzeit nicht anzeigen.</string>
+	<string name="description_show_music_info_true">Zeigen Sie im Alarmbildschirm Informationen zur aktuell abgespielten Musik oder zum Klingelton an.</string>
+	<string name="description_show_music_info_false">Keine Musik- oder Klingeltoninformationen anzeigen.</string>
+	<string name="description_color_theme">Die Themenfarbe.</string>
+	<string name="description_color_name">z.B. Arbeit</string>
+	<string name="description_color_days">z.B. Mo &#8231; Di &#8231; Mi &#8231; Do &#8231; Fr</string>
+	<string name="description_color_time">zB 12:30</string>
+	<string name="description_color_am">Farbig, wenn AM in der Weckzeit liegt.</string>
+	<string name="description_color_pm">Farbig, wenn nachmittags die Weckzeit ist.</string>
+	<string name="description_color_delete_alarm_after_dismissed">Symbol, das anzeigt, dass der Alarm nach dem Abweisen gelöscht wird.</string>
+	<string name="description_color_skip_next_alarm">Symbol, das anzeigt, dass der nächste Alarmdurchlauf übersprungen wird.</string>
+	<string name="description_missed_alarm_true">Benachrichtigungen für verpasste Alarme anzeigen.</string>
+	<string name="description_show_hide_vibrate_button_true">Beim Erweitern eines Alarms die Vibrationstaste anzeigen.</string>
+	<string name="description_show_hide_vibrate_button_false">Blenden Sie die Vibrationstaste aus, wenn Sie einen Alarm erweitern.</string>
+	<string name="description_show_hide_nfc_button_true">Beim Erweitern eines Alarms die NFC-Schaltfläche anzeigen.</string>
+	<string name="description_show_hide_nfc_button_false">Blenden Sie die NFC-Taste aus, wenn Sie einen Alarm erweitern.</string>
+	<string name="description_show_hide_flashlight_button_true">Beim Erweitern eines Alarms die Taschenlampentaste anzeigen.</string>
+	<string name="description_show_hide_flashlight_button_false">Blenden Sie die Taschenlampentaste aus, wenn Sie einen Alarm erweitern.</string>
+	<string name="description_expand_new_alarm_true">Alarme, die mit der Schaltfläche „+“ kopiert oder erstellt wurden, werden erweitert.</string>
+	<string name="description_expand_new_alarm_false">Alarme werden nicht erweitert.</string>
+	<string name="description_next_alarm_format_time_in">Nächster Alarm in 7 Stunden 30 Minuten</string>
+	<string name="description_next_alarm_format_time_on">Nächster Alarm am Mo. 7:00 Uhr</string>
+	<string name="description_permission_disable_battery_optimization">Die App wird nicht in den Ruhezustand versetzt, sodass Alarme wie gewohnt aktiviert werden können.</string>
+	<string name="description_permission_nfc">Erkennen Sie NFC-Tags, um einen Alarm auszulösen.</string>
+	<string name="description_permission_storage">Lesen Sie Musik, die auf Ihrem Gerät gespeichert ist.</string>
+	<string name="description_permission_vibrate">Lassen Sie Ihr Gerät vibrieren, wenn ein Alarm aktiviert wird.</string>
+	<string name="description_permission_foreground_service">Führen Sie einen Vordergrunddienst aus, der Audio abspielt, Ihr Gerät vibrieren lässt usw., wenn ein Alarm aktiviert wird.</string>
+	<string name="description_permission_full_screen_intent">Verwenden Sie den gesamten Bildschirm, wenn ein Alarm aktiviert ist.</string>
+	<string name="description_permission_schedule_alarm">Planen Sie genaue Alarme.</string>
+	<string name="description_permission_set_alarm">Stellen Sie einen Alarm über eine externe Quelle ein, beispielsweise über den Google Assistant.</string>
+	<string name="description_permission_post_notifications">Zeigen Sie bei Aktivierung eines Alarms eine Benachrichtigung an, die verhindert, dass Ihr Gerät die App in den Ruhezustand versetzt und den Alarm automatisch ausschaltet.</string>
+	<string name="description_permission_boot">Stellen Sie Alarme wieder her, wenn Ihr Gerät eingeschaltet wird. Android löscht Alarme, wenn Ihr Gerät ausgeschaltet wird.</string>
+	<string name="description_permission_wakelock">Verhindern Sie den Ruhezustand Ihres Geräts, damit ein aktivierter Alarm weiterhin ausgelöst wird.</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">Hier wird eine Liste der Alarme angezeigt.</string>
 	<string name="cd_nfc_tag_list">Hier wird eine Liste der NFC-Tags angezeigt.</string>
 	<string name="cd_fab_add_alarm">Fügen Sie einen neuen Alarm hinzu.</string>
+	<string name="cd_fab_launch_system_file_browser">Starten Sie den Systemdateibrowser.</string>
 	<string name="cd_collapse_alarm">Einen Alarm ausblenden.</string>
 	<string name="cd_expand_alarm">Erweitern Sie einen Alarm.</string>
 	<string name="cd_volume_icon">Ändern Sie die Lautstärke eines Alarms.</string>
@@ -217,245 +362,9 @@
 	<string name="cd_current_alarm_media_playing">Das aktuell abgespielte Alarmmedium.</string>
 	<string name="cd_skip_next_alarm">Nächsten Alarm überspringen.</string>
 	<string name="cd_delete_alarm_after_dismissed">Alarm löschen, nachdem er abgewiesen wurde.</string>
+	<string name="cd_clock_widget_alarm_icon">Nächster Alarm</string>
 
-	<!-- Main Settings -->
-
-	<string name="general_setting">Allgemein</string>
-	<string name="general_setting_summary">Allgemeine Alarmeinstellungen</string>
-
-	<string name="appearance_setting">Aussehen</string>
-	<string name="appearance_setting_summary">Passen Sie das Aussehen der App an</string>
-
-	<string name="about_setting">Um</string>
-	<string name="about_setting_summary">Informationen zur App</string>
-
-	<string name="stats_setting">Statistiken</string>
-	<string name="stats_setting_summary">Sehen Sie, wie lange Sie geschlafen haben und mehr</string>
-
-	<string name="manage_nfc_tags_setting">NFC-Tags verwalten</string>
-	<string name="manage_nfc_tags_setting_summary">Gespeicherte NFC-Tags löschen oder umbenennen</string>
-
-	<string name="support_setting">Entwicklung unterstützen</string>
-	<string name="support_setting_summary">Für Unterstützung wäre ich sehr dankbar, aber bitte keinen Druck! Diese App wird immer kostenlos sein</string>
-
-	<string name="import_export_setting">Importieren \u0020|\u0020 Exportieren</string>
-	<string name="import_export_setting_summary">Importieren oder exportieren Sie alle Ihre gespeicherten Daten</string>
-
-	<!-- General settings -->
-
-	<!-- Categories -->
-	<string name="default_alarm_category">Standardalarm</string>
-
-	<!-- Auto dismiss duration -->
-	<string name="title_dismiss_options_auto_dismiss">Automatisch schließen</string>
-
-	<!-- Auto snooze duration -->
-	<string name="title_snooze_options_auto_snooze">Automatische Schlummerfunktion</string>
-
-	<!-- Max number of snoozes -->
-	<string name="title_snooze_options_max_snooze">Max döst</string>
-
-	<!-- Snooze duration -->
-	<string name="title_snooze_options_snooze_duration">Schlummerdauer</string>
-
-	<!-- Easy snooze -->
-	<string name="title_snooze_options_easy_snooze">Leichtes Einschlafen</string>
-	<string name="easy_snooze_true">Schalten Sie den Alarm durch Berühren einer beliebigen Stelle auf die Schlummerfunktion.</string>
-	<string name="easy_snooze_false">Schalten Sie den Alarm wie gewohnt schlummern.</string>
-
-	<!-- Default alarm name -->
-	<string name="alarm_name">Name</string>
-
-	<!-- Default alarm days -->
-	<string name="alarm_days">Tage</string>
-
-	<!-- Default alarm repeat -->
-	<string name="alarm_repeat">Wiederholen</string>
-	<string name="alarm_repeat_true">Wiederholen Sie den Alarm.</string>
-	<string name="alarm_repeat_false">Deaktivieren Sie den Alarm, nachdem er ausgeführt wurde.</string>
-
-	<!-- Default alarm vibrate -->
-	<string name="alarm_vibrate">Vibrieren</string>
-	<string name="alarm_vibrate_true">Lassen Sie das Telefon vibrieren.</string>
-	<string name="alarm_vibrate_false">Lassen Sie das Telefon nicht vibrieren.</string>
-
-	<!-- Default alarm use NFC -->
-	<string name="alarm_nfc">NFC</string>
-	<string name="alarm_nfc_true">Zum Beenden des Alarms wird NFC verwendet.</string>
-	<string name="alarm_nfc_false">Deaktivieren Sie den Alarm wie gewohnt.</string>
-
-	<!-- Default alarm use flashlight -->
-	<string name="alarm_flashlight_true">Schalten Sie die Taschenlampe ein, wenn der Alarm losgeht.</string>
-	<string name="alarm_flashlight_false">Schalten Sie die Taschenlampe nicht ein, wenn der Alarm losgeht.</string>
-
-	<!-- Default alarm sound -->
-	<string name="alarm_sound">Klang</string>
-	<string name="alarm_sound_summary">@string/none</string>
-
-	<!-- Default alarm volume and audio source -->
-	<string name="alarm_volume">Volumen</string>
-
-	<!-- Appearance settings -->
-
-	<!-- Categories -->
-	<string name="alarm_screen_category">Alarmbildschirm</string>
-	<string name="color_category">Farben</string>
-	<string name="notification_category">Benachrichtigungen</string>
-	<string name="style_category">Stil</string>
-	<string name="tweaks_category">Optimierungen</string>
-
-	<!-- New screen -->
-	<string name="new_screen">Neuer Bildschirm</string>
-	<string name="new_screen_true">Verwenden Sie den neuen Weckerbildschirm, auf dem Sie durch Wischen die Schlummerfunktion aktivieren oder den Wecker ausschalten können.</string>
-	<string name="new_screen_false">Verwenden Sie nicht den neuen Alarmbildschirm. Verwenden Sie den Originalbildschirm mit einfachen Schaltflächen zum Schlummern oder Deaktivieren des Alarms.</string>
-
-	<!-- Show alarm name -->
-	<string name="show_alarm_name">Alarmnamen anzeigen</string>
-	<string name="show_alarm_name_true">Zeigen Sie den Alarmnamen im Alarmbildschirm an.</string>
-	<string name="show_alarm_name_false">Den Alarmnamen nicht anzeigen.</string>
-
-	<!-- Show current date and time -->
-	<string name="show_current_date_and_time">Aktuelles Datum und Uhrzeit anzeigen</string>
-	<string name="show_current_date_and_time_true">Zeigen Sie das aktuelle Datum und die Uhrzeit im Alarmbildschirm an.</string>
-	<string name="show_current_date_and_time_false">Aktuelles Datum und Uhrzeit nicht anzeigen.</string>
-
-	<!-- Show music information -->
-	<string name="show_music_info">Musikinformationen anzeigen</string>
-	<string name="show_music_info_true">Zeigen Sie im Alarmbildschirm Informationen zur aktuell abgespielten Musik oder zum Klingelton an.</string>
-	<string name="show_music_info_false">Keine Musik- oder Klingeltoninformationen anzeigen.</string>
-
-	<!-- Theme color -->
-	<string name="theme_color">Thema</string>
-	<string name="summary_color_theme">Die Themenfarbe.</string>
-
-	<!-- Name color -->
-	<string name="name_color">@string/alarm_name</string>
-	<string name="summary_color_name">z.B. Arbeit</string>
-
-	<!-- Days color -->
-	<string name="days_color">@string/alarm_days</string>
-	<string name="summary_color_days">z.B. Mo &#8231; Di &#8231; Mi &#8231; Do &#8231; Fr</string>
-
-	<!-- Time color -->
-	<string name="summary_color_time">zB 12:30</string>
-
-	<!-- AM color -->
-	<string name="summary_color_am">Farbig, wenn AM in der Weckzeit liegt.</string>
-
-	<!-- PM color -->
-	<string name="summary_color_pm">Farbig, wenn nachmittags die Weckzeit ist.</string>
-
-	<!-- Missed alarm notifications -->
-	<string name="missed_alarm_true">Benachrichtigungen für verpasste Alarme anzeigen.</string>
-
-	<!-- Show/hide the vibrate button -->
-	<string name="show_hide_vibrate_button_true">Beim Erweitern eines Alarms die Vibrationstaste anzeigen.</string>
-	<string name="show_hide_vibrate_button_false">Blenden Sie die Vibrationstaste aus, wenn Sie einen Alarm erweitern.</string>
-
-	<!-- Show/hide the NFC button -->
-	<string name="show_hide_nfc_button_true">Beim Erweitern eines Alarms die NFC-Schaltfläche anzeigen.</string>
-	<string name="show_hide_nfc_button_false">Blenden Sie die NFC-Taste aus, wenn Sie einen Alarm erweitern.</string>
-
-	<!-- Show/hide the flashlight button -->
-	<string name="show_hide_flashlight_button_true">Beim Erweitern eines Alarms die Taschenlampentaste anzeigen.</string>
-	<string name="show_hide_flashlight_button_false">Blenden Sie die Taschenlampentaste aus, wenn Sie einen Alarm erweitern.</string>
-
-	<!-- Day button style -->
-	<string name="day_button_style">Tagestasten</string>
-
-	<!-- Start Week On -->
-	<string name="start_week_on">Beginnen Sie die Woche am&#8230;</string>
-
-	<!-- Expand new alarm card -->
-	<string name="expand_new_alarm">Neue Alarme erweitern</string>
-	<string name="expand_new_alarm_true">Alarme, die mit der Schaltfläche „+“ kopiert oder erstellt wurden, werden erweitert.</string>
-	<string name="expand_new_alarm_false">Alarme werden nicht erweitert.</string>
-
-	<!-- Time remaining format -->
-	<string name="next_alarm_format">Nächstes Alarmformat:</string>
-	<string name="next_alarm_format_time_in">Nächster Alarm in 7 Stunden 30 Minuten</string>
-	<string name="next_alarm_format_time_on">Nächster Alarm am Mo. 7:00 Uhr</string>
-
-	<!-- About settings -->
-
-	<!-- Categories -->
-	<string name="app_category">App</string>
-	<string name="permissions_category">Berechtigungen</string>
-
-
-	<!-- App developer -->
-	<string name="author_title">Entwickler</string>
-	<string name="author">Gabe Gonzalez</string>
-
-
-	<!-- App version -->
-	<string name="version_title">Version</string>
-
-
-	<!-- Ignore battery optimization -->
-	<string name="about_ignore_battery_optimization">Batterieoptimierung deaktivieren</string>
-	<string name="about_ignore_battery_optimization_summary">Die App wird nicht in den Ruhezustand versetzt, sodass Alarme wie gewohnt aktiviert werden können.</string>
-
-
-	<!-- NFC permission -->
-	<string name="about_nfc">NFC</string>
-	<string name="about_nfc_summary">Erkennen Sie NFC-Tags, um einen Alarm auszulösen.</string>
-
-	
-	<!-- READ_EXTERNAL_STORAGE permission -->
-	<string name="about_storage">Lagerung</string>
-	<string name="about_storage_summary">Lesen Sie Musik, die auf Ihrem Gerät gespeichert ist.</string>
-
-
-	<!-- VIBRATE permission -->
-	<string name="about_vibrate">@string/alarm_vibrate</string>
-	<string name="about_vibrate_summary">Lassen Sie Ihr Gerät vibrieren, wenn ein Alarm aktiviert wird.</string>
-
-
-	<!-- FOREGROUND_SERVICE permission -->
-	<string name="about_foreground_service">Vordergrunddienst</string>
-	<string name="about_foreground_service_summary">Führen Sie einen Vordergrunddienst aus, der Audio abspielt, Ihr Gerät vibrieren lässt usw., wenn ein Alarm aktiviert wird.</string>
-
-
-	<!-- USE_FULL_SCREEN_INTENT permission -->
-	<string name="about_full_screen_intent">Vollbild</string>
-	<string name="about_full_screen_intent_summary">Verwenden Sie den gesamten Bildschirm, wenn ein Alarm aktiviert ist.</string>
-
-
-	<!-- Schedule/use exact alarm permission -->
-	<string name="about_schedule_alarm">Planen Sie genaue Alarme</string>
-	<string name="about_schedule_alarm_summary">Planen Sie genaue Alarme.</string>
-
-
-	<!-- SET_ALARM permission -->
-	<string name="about_set_alarm">Alarm einstellen</string>
-	<string name="about_set_alarm_summary">Stellen Sie einen Alarm über eine externe Quelle ein, beispielsweise über den Google Assistant.</string>
-
-
-	<!-- Post notifications permission -->
-	<string name="about_post_notifications">Benachrichtigungen anzeigen</string>
-	<string name="about_post_notifications_summary">Zeigen Sie bei Aktivierung eines Alarms eine Benachrichtigung an, die verhindert, dass Ihr Gerät die App in den Ruhezustand versetzt und den Alarm automatisch ausschaltet.</string>
-
-
-	<!-- RECEIVE_BOOT_COMPLETED permission -->
-	<string name="about_boot">Start-up</string>
-	<string name="about_boot_summary">Stellen Sie Alarme wieder her, wenn Ihr Gerät eingeschaltet wird. Android löscht Alarme, wenn Ihr Gerät ausgeschaltet wird.</string>
-
-
-	<!-- WAKE_LOCK -->
-	<string name="about_wakelock">Wakelock</string>
-	<string name="about_wakelock_summary">Verhindern Sie den Ruhezustand Ihres Geräts, damit ein aktivierter Alarm weiterhin ausgelöst wird.</string>
-
-
-	<!-- Spotify -->
-	<string name="frg_spotify_search_hint">Suche Spotify…</string>
-
-
-
-	<!-- ******* -->
 	<!-- Plurals -->
-	<!-- ******* -->
-
 	<plurals name="alarm">
 		<item quantity="one">Alarm</item>
 		<item quantity="other">Alarm</item>

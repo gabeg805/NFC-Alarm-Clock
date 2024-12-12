@@ -7,24 +7,24 @@
 	<Preference
 		android:icon="@drawable/settings"
 		android:key="@string/key_settings_general"
-		android:title="@string/general_setting"
-		android:summary="@string/general_setting_summary"
+		android:title="@string/title_setting_general"
+		android:summary="@string/description_setting_general"
 		/>
 
 	<!-- Appearance -->
 	<Preference
 		android:icon="@drawable/palette"
 		android:key="@string/key_settings_appearance"
-		android:title="@string/appearance_setting"
-		android:summary="@string/appearance_setting_summary"
+		android:title="@string/title_setting_appearance"
+		android:summary="@string/description_setting_appearance"
 		/>
 
 	<!-- Manage NFC tags-->
 	<Preference
 		android:icon="@drawable/list"
 		android:key="@string/key_settings_manage_nfc_tags"
-		android:title="@string/manage_nfc_tags_setting"
-		android:summary="@string/manage_nfc_tags_setting_summary"
+		android:title="@string/title_setting_manage_nfc_tags"
+		android:summary="@string/description_setting_manage_nfc_tags"
 		app:isPreferenceVisible="false"
 		/>
 
@@ -32,16 +32,16 @@
 	<Preference
 		android:icon="@drawable/analytics"
 		android:key="@string/key_settings_statistics"
-		android:title="@string/stats_setting"
-		android:summary="@string/stats_setting_summary"
+		android:title="@string/title_setting_statistics"
+		android:summary="@string/description_setting_statistics"
 		/>
 
 	<!-- About -->
 	<Preference
 		android:icon="@drawable/info"
 		android:key="@string/key_settings_about"
-		android:title="@string/about_setting"
-		android:summary="@string/about_setting_summary"
+		android:title="@string/title_setting_about"
+		android:summary="@string/description_setting_about"
 		app:allowDividerAbove="true"
 		/>
 
@@ -49,16 +49,16 @@
 	<Preference
 		android:icon="@drawable/import_export"
 		android:key="@string/key_settings_import_export"
-		android:title="@string/import_export_setting"
-		android:summary="@string/import_export_setting_summary"
+		android:title="@string/title_setting_import_export"
+		android:summary="@string/description_setting_import_export"
 		/>
 
 	<!-- Support -->
 	<Preference
 		android:icon="@drawable/favorite"
 		android:key="@string/key_settings_support"
-		android:title="@string/support_setting"
-		android:summary="@string/support_setting_summary"
+		android:title="@string/title_setting_support"
+		android:summary="@string/description_setting_support"
 		/>
 
 </PreferenceScreen>

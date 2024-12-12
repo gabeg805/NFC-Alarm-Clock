@@ -62,18 +62,29 @@ class NacMusicPickerFragment
 		// Check if the uri is null
 		if (uri == null)
 		{
-			quickToast(context, "Unable to select file")
+			quickToast(context, R.string.error_message_unable_to_select_file)
 			return@registerForActivityResult
 		}
 
 		// Get the media uri
-		val mediaUri = MediaStore.getMediaUri(context, uri)
+		val mediaUri = try
+		{
+			MediaStore.getMediaUri(context, uri)
+		}
+		catch (_: IllegalArgumentException)
+		{
+			// Show toast if unable to get media uri. This seems to happen when selecting
+			// from the Downloads directory
+			quickToast(context, R.string.error_message_unable_to_select_file)
+			return@registerForActivityResult
+		}
+
 		println("Media URI : $mediaUri")
 
 		// Check that the media uri is valid
 		if (mediaUri == null)
 		{
-			quickToast(context, "Unable to get media information for file")
+			quickToast(context, R.string.error_message_unable_to_get_media_information_from_file)
 			return@registerForActivityResult
 		}
 

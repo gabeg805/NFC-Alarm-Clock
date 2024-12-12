@@ -7,10 +7,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.Typeface
-import android.text.SpannableString
-import android.text.format.DateFormat
-import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
@@ -107,14 +103,16 @@ internal fun updateAppWidget(
 	views.setViewVisibility(R.id.widget_am_pm_bold, helper.meridianBoldVis)
 	views.setViewVisibility(R.id.widget_date, helper.dateVis)
 	views.setViewVisibility(R.id.widget_date_bold, helper.dateBoldVis)
-	views.setViewVisibility(R.id.widget_alarm_icon, helper.alarmVis)
+	views.setViewVisibility(R.id.widget_alarm_icon, helper.alarmIconVis)
 	views.setViewVisibility(R.id.widget_alarm_time, helper.alarmVis)
+	views.setViewVisibility(R.id.widget_alarm_time_bold, helper.alarmBoldVis)
 
 	// Check if the alarm time should be customized
-	if (helper.alarmVis == View.VISIBLE)
+	if ((helper.alarmVis == View.VISIBLE) || (helper.alarmBoldVis == View.VISIBLE))
 	{
 		// Set the text
 		views.setTextViewText(R.id.widget_alarm_time, helper.nextAlarm)
+		views.setTextViewText(R.id.widget_alarm_time_bold, helper.nextAlarm)
 	}
 
 	// Set the background color and transparency
@@ -131,6 +129,7 @@ internal fun updateAppWidget(
 	views.setTextColor(R.id.widget_date, shared.clockWidgetDateColor)
 	views.setTextColor(R.id.widget_date_bold, shared.clockWidgetDateColor)
 	views.setTextColor(R.id.widget_alarm_time, shared.clockWidgetAlarmTimeColor)
+	views.setTextColor(R.id.widget_alarm_time_bold, shared.clockWidgetAlarmTimeColor)
 	views.setInt(R.id.widget_alarm_icon, "setColorFilter", shared.clockWidgetAlarmIconColor)
 
 	// Set text size
@@ -144,6 +143,7 @@ internal fun updateAppWidget(
 	views.setTextViewTextSize(R.id.widget_date, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetDateTextSize)
 	views.setTextViewTextSize(R.id.widget_date_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetDateTextSize)
 	views.setTextViewTextSize(R.id.widget_alarm_time, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
+	views.setTextViewTextSize(R.id.widget_alarm_time_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
 
 	// Instruct the widget manager to update the widget
 	appWidgetManager.updateAppWidget(appWidgetId, views)
@@ -340,12 +340,44 @@ internal class NacClockWidgetDataHelper(
 		}
 
 	/**
-	 * Alarm visibility.
+	 * Bold Alarm visibility.
+	 */
+	val alarmBoldVis: Int
+		get()
+		{
+			return if (sharedPreferences.shouldClockWidgetShowAlarm && (nextAlarmInfo != null) && sharedPreferences.shouldClockWidgetBoldAlarmTime)
+			{
+				View.VISIBLE
+			}
+			else
+			{
+				View.GONE
+			}
+		}
+
+	/**
+	 * Alarm icon visibility.
+	 */
+	val alarmIconVis: Int
+		get()
+		{
+			return if (sharedPreferences.shouldClockWidgetShowAlarm && (nextAlarmInfo != null))
+			{
+				View.VISIBLE
+			}
+			else
+			{
+				View.GONE
+			}
+		}
+
+	/**
+	 * Regular alarm visibility.
 	 */
 	val alarmVis: Int
 		get()
 		{
-			return if (sharedPreferences.shouldClockWidgetShowAlarm && (nextAlarmInfo != null))
+			return if (sharedPreferences.shouldClockWidgetShowAlarm && (nextAlarmInfo != null) && !sharedPreferences.shouldClockWidgetBoldAlarmTime)
 			{
 				View.VISIBLE
 			}
@@ -368,13 +400,13 @@ internal class NacClockWidgetDataHelper(
 	/**
 	 * String containing the time at which the next alarm will run.
 	 */
-	val nextAlarm: SpannableString
+	val nextAlarm: String
 		get()
 		{
 			// Check if the alarm time should be customized
-			if (alarmVis != View.VISIBLE)
+			if ((alarmVis != View.VISIBLE) && (alarmBoldVis != View.VISIBLE))
 			{
-				return SpannableString("")
+				return ""
 			}
 
 			// Create a calendar with the next alarm time
@@ -382,31 +414,8 @@ internal class NacClockWidgetDataHelper(
 			alarmCal.timeInMillis = nextAlarmInfo!!.triggerTime
 
 			// Return the alarm time as a spannable string
-			val alarmTimeSpan = getAlarmTimeSpannableString(alarmCal)
-
-			// Return the string
-			return alarmTimeSpan
+			return NacCalendar.getFullTime(context, alarmCal)
 		}
-
-	/**
-	 * String containing the time at which the next alarm will run.
-	 */
-	fun getAlarmTimeSpannableString(calendar: Calendar): SpannableString
-	{
-		// Get the alarm time as a spannable string
-		val is24HourFormat = DateFormat.is24HourFormat(context)
-		val alarmTime = NacCalendar.getFullTime(calendar, is24HourFormat)
-		val alarmTimeSpan = SpannableString(alarmTime)
-
-		// Bold alarm time
-		if (sharedPreferences.shouldClockWidgetBoldAlarmTime)
-		{
-			alarmTimeSpan.setSpan(StyleSpan(Typeface.BOLD), 0, alarmTimeSpan.length, 0)
-		}
-
-		// Return the string
-		return alarmTimeSpan
-	}
 
 	companion object
 	{

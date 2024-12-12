@@ -26,7 +26,7 @@ class NacPostNotificationsPermissionRequestDialog
 	/**
 	 * The ID of the title string.
 	 */
-	override val titleId: Int = R.string.title_request_permission_post_notifications
+	override val titleId: Int = R.string.title_permission_show_notifications
 
 	/**
 	 * The ID of the text string.

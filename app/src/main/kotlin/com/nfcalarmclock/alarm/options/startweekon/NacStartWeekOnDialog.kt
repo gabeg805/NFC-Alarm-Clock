@@ -48,7 +48,7 @@ class NacStartWeekOnDialog
 
 		// Create the dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(R.string.start_week_on)
+			.setTitle(R.string.title_start_week_on)
 			.setPositiveButton(R.string.action_ok) { _, _ ->
 
 				// Call the listener

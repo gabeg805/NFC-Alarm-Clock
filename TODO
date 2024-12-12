@@ -2,6 +2,9 @@
 TODO
 ----
 
+* Look into querying MediaStore.Downloads table?
+  https://developer.android.com/training/data-storage/shared/media
+
 * Improve look of warning selected directory dialog
 
 * Check if the bold themed permission text needs to actually use the textId or

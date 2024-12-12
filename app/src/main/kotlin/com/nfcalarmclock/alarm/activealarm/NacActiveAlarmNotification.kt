@@ -5,7 +5,6 @@ import android.app.NotificationChannel
 import android.app.PendingIntent
 import android.content.Context
 import android.os.Build
-import android.text.format.DateFormat
 import androidx.annotation.OptIn
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -93,8 +92,7 @@ class NacActiveAlarmNotification(
 		{
 			// Get the full time
 			val now = Calendar.getInstance()
-			val is24HourFormat = DateFormat.is24HourFormat(context)
-			val time = NacCalendar.getFullTime(now, is24HourFormat)
+			val time = NacCalendar.getFullTime(context, now)
 
 			// Get the alarm name
 			val name = alarm?.name ?: ""

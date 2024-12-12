@@ -9,7 +9,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import android.text.format.DateFormat
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -190,8 +189,7 @@ abstract class NacNotification(
 	{
 		// TODO: This will give the wrong day if a user misses an alarm at a day boundary.
 		val cal = NacCalendar.alarmToCalendar(alarm)
-		val is24HourFormat = DateFormat.is24HourFormat(context)
-		val time = NacCalendar.getFullTime(cal, is24HourFormat)
+		val time = NacCalendar.getFullTime(context, cal)
 
 		// Check if the alarm name is empty
 		return if (alarm.name.isEmpty())

@@ -44,7 +44,7 @@ class NacIgnoreBatteryOptimizationPermissionRequestDialog
 	 * The ID of the title string.
 	 */
 	override val titleId: Int
-		get() = R.string.title_request_permission_ignore_battery_optimization
+		get() = R.string.title_permission_disable_battery_optimization
 
 	companion object
 	{

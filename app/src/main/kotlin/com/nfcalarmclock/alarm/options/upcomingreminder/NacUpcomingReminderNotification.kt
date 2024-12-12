@@ -5,7 +5,6 @@ import android.app.NotificationChannel
 import android.app.PendingIntent
 import android.content.Context
 import android.os.Build
-import android.text.format.DateFormat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.nfcalarmclock.R
@@ -104,8 +103,7 @@ class NacUpcomingReminderNotification(
 			}
 
 			// Get the full time from the calendar
-			val is24HourFormat = DateFormat.is24HourFormat(context)
-			val time = NacCalendar.getFullTime(cal, is24HourFormat)
+			val time = NacCalendar.getFullTime(context, cal)
 
 			// Get the alarm name
 			val name = alarm?.name ?: ""

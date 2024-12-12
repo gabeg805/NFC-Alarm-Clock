@@ -159,7 +159,7 @@ class NacColorPickerDialog
 
 		// Create the dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(R.string.title_color)
+			.setTitle(R.string.title_select_color)
 			.setPositiveButton(R.string.action_ok) { _, _ ->
 
 				// Call the listener

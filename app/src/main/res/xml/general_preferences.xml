@@ -5,12 +5,12 @@
 
 	<!-- Default alarm -->
 	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
-		android:title="@string/default_alarm_category">
+		android:title="@string/title_default_alarm">
 
 		<!-- Name -->
 		<com.nfcalarmclock.alarm.options.name.NacNamePreference
 			android:key="@string/alarm_name_key"
-			android:title="@string/alarm_name"
+			android:title="@string/title_alarm_name"
 			android:defaultValue=""
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
@@ -19,7 +19,7 @@
 		<!-- Day of week -->
 		<com.nfcalarmclock.view.dayofweek.NacDayOfWeekPreference
 			android:key="@string/alarm_days_key"
-			android:title="@string/alarm_days"
+			android:title="@string/title_alarm_days"
 			android:defaultValue="@integer/default_days"
 			app:allowDividerBelow="false"
 			/>
@@ -27,9 +27,9 @@
 		<!-- Repeat -->
 		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
 			android:key="@string/alarm_repeat_key"
-			android:title="@string/alarm_repeat"
-			android:summaryOn="@string/alarm_repeat_true"
-			android:summaryOff="@string/alarm_repeat_false"
+			android:title="@string/title_alarm_repeat"
+			android:summaryOn="@string/description_alarm_repeat_true"
+			android:summaryOff="@string/description_alarm_repeat_false"
 			android:defaultValue="@bool/default_repeat"
 			app:allowDividerBelow="false"
 			/>
@@ -37,9 +37,9 @@
 		<!-- Vibrate -->
 		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
 			android:key="@string/alarm_vibrate_key"
-			android:title="@string/alarm_vibrate"
-			android:summaryOn="@string/alarm_vibrate_true"
-			android:summaryOff="@string/alarm_vibrate_false"
+			android:title="@string/title_alarm_vibrate"
+			android:summaryOn="@string/description_alarm_vibrate_true"
+			android:summaryOff="@string/description_alarm_vibrate_false"
 			android:defaultValue="@bool/default_vibrate"
 			app:allowDividerBelow="false"
 			/>
@@ -47,9 +47,9 @@
 		<!-- NFC -->
 		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
 			android:key="@string/alarm_use_nfc_key"
-			android:title="@string/alarm_nfc"
-			android:summaryOn="@string/alarm_nfc_true"
-			android:summaryOff="@string/alarm_nfc_false"
+			android:title="@string/title_alarm_nfc"
+			android:summaryOn="@string/description_alarm_nfc_true"
+			android:summaryOff="@string/description_alarm_nfc_false"
 			android:defaultValue="@bool/default_use_nfc"
 			app:allowDividerBelow="false"
 			/>
@@ -58,8 +58,8 @@
 		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
 			android:key="@string/alarm_use_flashlight_key"
 			android:title="@string/action_alarm_option_flashlight"
-			android:summaryOn="@string/alarm_flashlight_true"
-			android:summaryOff="@string/alarm_flashlight_false"
+			android:summaryOn="@string/description_alarm_flashlight_true"
+			android:summaryOff="@string/description_alarm_flashlight_false"
 			android:defaultValue="@bool/default_use_flashlight"
 			app:allowDividerBelow="false"
 			/>
@@ -67,8 +67,8 @@
 		<!-- Media -->
 		<com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerPreference
 			android:key="@string/key_general_default_alarm_media_path"
-			android:title="@string/alarm_sound"
-			android:summary="@string/alarm_sound_summary"
+			android:title="@string/title_alarm_sound"
+			android:summary="@string/description_alarm_sound"
 			android:defaultValue=""
 			app:allowDividerBelow="false"
 			/>
@@ -76,7 +76,7 @@
 		<!-- Volume -->
 		<com.nfcalarmclock.alarm.options.volume.NacVolumePreference
 			android:key="@string/alarm_volume_key"
-			android:title="@string/alarm_volume"
+			android:title="@string/title_alarm_volume"
 			android:defaultValue="@integer/default_volume"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"

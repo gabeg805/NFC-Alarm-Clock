@@ -288,6 +288,20 @@ object NacCalendar
 	}
 
 	/**
+	 * The full time string, EEE, HH:MM AM/PM.
+	 *
+	 * @return The full time string, EEE, HH:MM AM/PM.
+	 */
+	fun getFullTime(context: Context, calendar: Calendar): String
+	{
+		// Get if 24 hour format is used or not
+		val is24HourFormat = DateFormat.is24HourFormat(context)
+
+		// Get the full time
+		return getFullTime(calendar, is24HourFormat)
+	}
+
+	/**
 	 * Get the time meridian.
 	 *
 	 * @param  hour  The hour.

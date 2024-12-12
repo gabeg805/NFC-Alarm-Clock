@@ -51,13 +51,13 @@ class NacNextAlarmFormatDialog
 		setupSharedPreferences()
 
 		// Create list of items to display
-		val timeIn = getString(R.string.next_alarm_format_time_in)
-		val timeOn = getString(R.string.next_alarm_format_time_on)
+		val timeIn = getString(R.string.description_next_alarm_format_time_in)
+		val timeOn = getString(R.string.description_next_alarm_format_time_on)
 		val timeFormats = arrayOf(timeIn, timeOn)
 
 		// Create the dialog
 		return AlertDialog.Builder(requireContext())
-			.setTitle(R.string.title_next_alarm_format)
+			.setTitle(R.string.title_select_next_alarm_format)
 			.setPositiveButton(R.string.action_ok) { _, _ ->
 
 				// Call the listener

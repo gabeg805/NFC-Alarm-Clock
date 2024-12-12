@@ -16,7 +16,9 @@ import com.google.android.material.slider.Slider.OnSliderTouchListener
 import com.nfcalarmclock.R
 import com.nfcalarmclock.databinding.NacClockWidgetConfigureBinding
 import com.nfcalarmclock.shared.NacSharedPreferences
+import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.view.colorpicker.NacColorPickerDialog
+import com.nfcalarmclock.view.setupBackgroundColor
 import com.nfcalarmclock.view.setupForegroundColor
 import com.nfcalarmclock.view.setupProgressAndThumbColor
 import com.nfcalarmclock.view.setupSwitchColor
@@ -61,6 +63,24 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 			calendar[Calendar.MINUTE] = 30
 
 			return calendar
+		}
+
+	/**
+	 * Whether to show the alarm time or not.
+	 */
+	private val shouldShowAlarmTime: Boolean
+		get()
+		{
+			return sharedPreferences.shouldClockWidgetShowAlarm && !sharedPreferences.shouldClockWidgetBoldAlarmTime
+		}
+
+	/**
+	 * Whether to show the bold alarm time or not.
+	 */
+	private val shouldShowAlarmTimeBold: Boolean
+		get()
+		{
+			return sharedPreferences.shouldClockWidgetShowAlarm && sharedPreferences.shouldClockWidgetBoldAlarmTime
 		}
 
 	/**
@@ -129,13 +149,8 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		sharedPreferences = NacSharedPreferences(this)
 		helper = NacClockWidgetDataHelper(this, sharedPreferences)
 
-		// Setup layout change transitions
-		val parentLayout = binding.widgetConfigureParent
-		val layoutTransition = parentLayout.layoutTransition
-
-		layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
-
 		// Setup the activity
+		setupAnimateLayoutChanges()
 		setupWidgetPreview()
 		setupAmPmVisibility()
 		setupInitialValues()
@@ -169,6 +184,25 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 	}
 
 	/**
+	 * Setup animate layout changes.
+	 */
+	private fun setupAnimateLayoutChanges()
+	{
+		// Get the parent and child views (the ones that have "animateLayoutChanges"
+		// set on them)
+		val parentLayout = binding.widgetConfigureParent
+		val childLayout = binding.widgetConfigureChild
+
+		// Setup layout change transitions. Most importantly, shorten the time where the
+		// view is disappearing because it looks weird if it is too slow
+		parentLayout.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+		childLayout.layoutTransition.setDuration(LayoutTransition.APPEARING, 300)
+		childLayout.layoutTransition.setDuration(LayoutTransition.DISAPPEARING, 100)
+		childLayout.layoutTransition.setDuration(LayoutTransition.CHANGE_APPEARING, 300)
+		childLayout.layoutTransition.setDuration(LayoutTransition.CHANGE_DISAPPEARING, 300)
+	}
+
+	/**
 	 * Setup colors.
 	 */
 	private fun setupColors()
@@ -195,6 +229,11 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		binding.timeLayoutTextSizeTimeSlider.setupProgressAndThumbColor(sharedPreferences)
 		binding.timeLayoutTextSizeAmPmSlider.setupProgressAndThumbColor(sharedPreferences)
 		binding.alarmLayoutTextSizeSlider.setupProgressAndThumbColor(sharedPreferences)
+
+		// Separators for expandable rows
+		binding.timeLayoutBoldSeparator.setupBackgroundColor(sharedPreferences)
+		binding.timeLayoutColorSeparator.setupBackgroundColor(sharedPreferences)
+		binding.alarmLayoutColorSeparator.setupBackgroundColor(sharedPreferences)
 
 		// Done button
 		binding.doneButton.setupThemeColor(sharedPreferences)
@@ -292,7 +331,8 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 
 			// Update the preview
 			binding.widgetAlarmIcon.visibility = if (sharedPreferences.shouldClockWidgetShowAlarm) View.VISIBLE else View.GONE
-			binding.widgetAlarmTime.visibility = if (sharedPreferences.shouldClockWidgetShowAlarm) View.VISIBLE else View.GONE
+			binding.widgetAlarmTime.visibility = if (shouldShowAlarmTime) View.VISIBLE else View.GONE
+			binding.widgetAlarmTimeBold.visibility = if (shouldShowAlarmTimeBold) View.VISIBLE else View.GONE
 
 		}
 
@@ -356,7 +396,8 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 			sharedPreferences.shouldClockWidgetBoldAlarmTime = binding.alarmLayoutBoldSwitch.isChecked
 
 			// Update the preview
-			binding.widgetAlarmTime.text = helper.getAlarmTimeSpannableString(exampleAlarmCalendar)
+			binding.widgetAlarmTime.visibility = if (shouldShowAlarmTime) View.VISIBLE else View.GONE
+			binding.widgetAlarmTimeBold.visibility = if (shouldShowAlarmTimeBold) View.VISIBLE else View.GONE
 
 		}
 
@@ -538,6 +579,7 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 
 				// Update the preview
 				binding.widgetAlarmTime.setTextColor(sharedPreferences.clockWidgetAlarmTimeColor)
+				binding.widgetAlarmTimeBold.setTextColor(sharedPreferences.clockWidgetAlarmTimeColor)
 
 			}
 
@@ -742,6 +784,7 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 
 				// Update the preview
 				binding.widgetAlarmTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
+				binding.widgetAlarmTimeBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
 			}
 
 		})
@@ -750,6 +793,7 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 
 			// Update the preview
 			binding.widgetAlarmTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.widgetAlarmTimeBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
 
 		}
 
@@ -778,10 +822,13 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		binding.widgetDate.visibility = helper.dateVis
 		binding.widgetDateBold.visibility = helper.dateBoldVis
 		binding.widgetAlarmIcon.visibility = if (sharedPreferences.shouldClockWidgetShowAlarm) View.VISIBLE else View.GONE
-		binding.widgetAlarmTime.visibility = if (sharedPreferences.shouldClockWidgetShowAlarm) View.VISIBLE else View.GONE
+		binding.widgetAlarmTime.visibility = if (shouldShowAlarmTime) View.VISIBLE else View.GONE
+		binding.widgetAlarmTimeBold.visibility = if (shouldShowAlarmTimeBold) View.VISIBLE else View.GONE
 
 		// Set the example alarm time
-		binding.widgetAlarmTime.text = helper.getAlarmTimeSpannableString(exampleAlarmCalendar)
+		val time = NacCalendar.getFullTime(this, exampleAlarmCalendar)
+		binding.widgetAlarmTime.text = time
+		binding.widgetAlarmTimeBold.text = time
 
 		// Set the background color and transparency
 		binding.widgetParent.setBackgroundColor(helper.bgColor)
@@ -797,6 +844,7 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		binding.widgetDate.setTextColor(sharedPreferences.clockWidgetDateColor)
 		binding.widgetDateBold.setTextColor(sharedPreferences.clockWidgetDateColor)
 		binding.widgetAlarmTime.setTextColor(sharedPreferences.clockWidgetAlarmTimeColor)
+		binding.widgetAlarmTimeBold.setTextColor(sharedPreferences.clockWidgetAlarmTimeColor)
 		binding.widgetAlarmIcon.setColorFilter(sharedPreferences.clockWidgetAlarmIconColor)
 
 		// Set text size
@@ -810,6 +858,7 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		binding.widgetDate.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetDateTextSize)
 		binding.widgetDateBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetDateTextSize)
 		binding.widgetAlarmTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
+		binding.widgetAlarmTimeBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
 	}
 
 	/**

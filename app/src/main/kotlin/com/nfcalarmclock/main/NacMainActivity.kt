@@ -70,6 +70,7 @@ import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.createTimeTickReceiver
 import com.nfcalarmclock.util.disableActivityAlias
+import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.getSetAlarm
 import com.nfcalarmclock.util.media.buildLocalMediaPath
 import com.nfcalarmclock.util.media.copyMediaToDeviceEncryptedStorage
@@ -537,14 +538,6 @@ class NacMainActivity
 		// Set member variables
 		sharedPreferences = NacSharedPreferences(this)
 
-		println("Resources : $sharedPreferences.resources")
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-		{
-			sharedPreferences.instance.all.forEach { s, any ->
-				println("$s | $any")
-			}
-		}
-
 		root = findViewById(R.id.activity_main)
 		toolbar = findViewById(R.id.tb_top_bar)
 		nextAlarmTextView = findViewById(R.id.tv_next_alarm)
@@ -583,15 +576,6 @@ class NacMainActivity
 		// Cleanup any old zip files that were created when sending a
 		// statistics email
 		cleanupEmailZipFiles()
-
-		//lifecycleScope.launch {
-		//	nfcTagViewModel.deleteAll()
-		//	nfcTagViewModel.insert(NacNfcTag("Bathroom", "akjshdlaksdh"))
-		//	nfcTagViewModel.insert(NacNfcTag("Car", "9083kjjhllkjls"))
-		//	nfcTagViewModel.insert(NacNfcTag("Garage", "09kj091kj"))
-		//	nfcTagViewModel.insert(NacNfcTag("Medicine", "102938kjh3l12"))
-		//	nfcTagViewModel.insert(NacNfcTag("Take out the trash", "loi120910j"))
-		//}
 	}
 
 	/**

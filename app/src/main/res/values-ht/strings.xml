@@ -3,9 +3,7 @@
 
 	<!-- App -->
 	<string name="app_name">Revèy Alam NFC</string>
-	<string name="message_permission_ignore_battery_optimization_request">Alam yo ka pa fonksyone si aplikasyon an pa te itilize pou yon ti tan.\n\n<b>Remak:</b> Sa a depann de ki aparèy ou genyen epi <b>ka pa vrèman nesesè</b>.\n\nÈske w ta renmen enfim optimize batri a?</string>
-	<string name="message_permission_post_notifications_request">Alam yo p ap ka kouri si aplikasyon an pa konsantre.\n\n<b>Remak:</b> Sa a se yon efè segondè nan règleman sekirite yo prezante nan <b>Android 13</b>, ki se pou benefis itilizatè yo, men yo ka mete restriksyon sou aplikasyon yo nan ka sa a.\n\nÈske w ta renmen aktive notifikasyon?</string>
-	<string name="message_permission_schedule_exact_alarm_request">Alam yo p ap ka kouri si aplikasyon an pa konsantre.\n\nÈske w ta renmen aktive alam orè yo?</string>
+	<string name="app_developer">Gabe Gonzalez</string>
 
 	<!-- Consolidate -->
 	<string name="version">Version</string>
@@ -13,8 +11,31 @@
 	<string name="pm">PM</string>
 	<string name="none">Okenn</string>
 	<string name="show_next_alarm">Montre pwochen alam</string>
+	<string name="background">Jan nou koumanse</string>
+	<string name="time_layout">Layout tan</string>
+	<string name="date_layout">Layout dat</string>
+	<string name="alarm_layout">Layout alam</string>
+	<string name="show">Montre</string>
+	<string name="bold">Bold</string>
+	<string name="color">Koulè</string>
+	<string name="text_size">Gwosè tèks la</string>
+	<string name="colon">:</string>
+	<string name="icon">Icône</string>
+	<string name="transparency">Transparans</string>
+	<string name="hour">Lè</string>
+	<string name="minutes">Minit</string>
+	<string name="am_pm">AM / PM</string>
+
+	<!-- Day names -->
+	<string name="dow_everyday">Chak jou</string>
+	<string name="dow_weekdays">Jou lasemèn yo</string>
+	<string name="dow_weekend">Wikenn</string>
+	<string name="dow_today">Jodi a</string>
+	<string name="dow_tomorrow">Demen</string>
 
 	<!-- Words -->
+	<string name="word_app">Aplikasyon</string>
+	<string name="word_version">Version</string>
 	<string name="word_of">nan</string>
 	<string name="word_alarm">Alam</string>
 	<string name="word_reminder">Rapèl</string>
@@ -53,9 +74,11 @@
 	<string name="action_alarm_option_audio_source">Sous odyo</string>
 	<string name="action_alarm_option_flashlight">Flach</string>
 	<string name="action_alarm_option_text_to_speech">Tèks-a-lapawòl</string>
+	<string name="action_alarm_option_volume">Volim</string>
 	<string name="action_alarm_option_dismiss_options">Rejte opsyon</string>
 	<string name="action_alarm_option_snooze_options">Opsyon snooze</string>
 	<string name="action_alarm_option_upcoming_reminder">Rapèl kap vini</string>
+	<string name="action_delete_alarm_after_dismissed">Efase apre ranvwaye</string>
 	<string name="action_skipping_next_alarm">Sote pwochen alam</string>
 	<string name="action_skip_next_alarm">Sote pwochen alam</string>
 	<string name="action_unskip_next_alarm">Retire alam kap vini an</string>
@@ -73,8 +96,12 @@
 	<string name="label_dismissed_statistic_header">Tan ranvwaye,Non,Tan alam,Itilize NFC</string>
 	<string name="label_missed_statistic_header">Tan rate,Non,Tan alam</string>
 	<string name="label_snoozed_statistic_header">Tan snoozed,Non,Tan alam,Dire snooze (segonn)</string>
+	<string name="label_clock_widget">Revèy</string>
 
 	<!-- Messages -->
+	<string name="message_permission_ignore_battery_optimization_request">Alam yo ka pa fonksyone si aplikasyon an pa te itilize pou yon ti tan.\n\n<b>Remak:</b> Sa a depann de ki aparèy ou genyen epi <b>ka pa vrèman nesesè</b>.\n\nÈske w ta renmen enfim optimize batri a?</string>
+	<string name="message_permission_post_notifications_request">Alam yo p ap ka kouri si aplikasyon an pa konsantre.\n\n<b>Remak:</b> Sa a se yon efè segondè nan règleman sekirite yo prezante nan <b>Android 13</b>, ki se pou benefis itilizatè yo, men yo ka mete restriksyon sou aplikasyon yo nan ka sa a.\n\nÈske w ta renmen aktive notifikasyon?</string>
+	<string name="message_permission_schedule_exact_alarm_request">Alam yo p ap ka kouri si aplikasyon an pa konsantre.\n\nÈske w ta renmen aktive alam orè yo?</string>
 	<string name="message_playlist">Ou vle jwe tout mizik ki nan katab sa a?</string>
 	<string name="message_nfc_request">Tanpri pèmèt NFC pou ranvwaye alam la</string>
 	<string name="message_nfc_required">NFC obligatwa</string>
@@ -141,6 +168,8 @@
 	<string name="error_message_unable_to_shine_flashlight">Pa kapab klere flach</string>
 	<string name="error_message_unable_to_start_foreground_service">Pa kapab kòmanse sèvis premye plan. Tanpri pèmèt pèmisyon</string>
 	<string name="error_message_unable_to_open_import_export_stream">Pa kapab louvri fichye a</string>
+	<string name="error_message_unable_to_select_file">Pa kapab chwazi dosye</string>
+	<string name="error_message_unable_to_get_media_information_from_file">Pa kapab jwenn enfòmasyon medya nan dosye</string>
 
 	<!-- Titles -->
 	<string name="title_settings">Anviwònman</string>
@@ -151,9 +180,9 @@
 	<string name="title_save_nfc_tag" tools:ignore="TypographyEllipsis">Sove tag NFC la...</string>
 	<string name="title_delete_nfc_tag" tools:ignore="TypographyEllipsis">Efase tag NFC...</string>
 	<string name="title_rename_nfc_tag" tools:ignore="TypographyEllipsis">Chanje non tag NFC la...</string>
-	<string name="title_days">Chwazi jou</string>
-	<string name="title_color">Chwazi yon koulè</string>
-	<string name="title_next_alarm_format">Chwazi yon fòma</string>
+	<string name="title_select_days">Chwazi jou</string>
+	<string name="title_select_color">Chwazi yon koulè</string>
+	<string name="title_select_next_alarm_format">Chwazi yon fòma</string>
 	<string name="title_folder_selected">Ou chwazi yon katab</string>
 	<string name="title_active_alarms">Alam aktif</string>
 	<string name="title_upcoming_reminders">Rapèl kap vini yo</string>
@@ -164,12 +193,63 @@
 	<string name="title_deleted_alarms">Efase alam yo</string>
 	<string name="title_current_alarms">Kouran</string>
 	<string name="title_whats_new">Sa ki nouvo</string>
-	<string name="title_request_permission_ignore_battery_optimization">Enfim optimize batri?</string>
-	<string name="title_request_permission_post_notifications">Aktive notifikasyon?</string>
-	<string name="title_request_permission_schedule_exact_alarm">Pèmèt alam orè?</string>
+	<string name="title_permission_disable_battery_optimization">Enfim optimize batri?</string>
+	<string name="title_permission_storage">Depo</string>
+	<string name="title_permission_foreground_service">Sèvis premye plan</string>
+	<string name="title_permission_full_screen_intent">Ekran konplè</string>
+	<string name="title_permission_schedule_alarm">Orè egzak alam yo</string>
+	<string name="title_permission_set_alarm">Mete alam</string>
+	<string name="title_permission_show_notifications">Aktive notifikasyon?</string>
+	<string name="title_permission_boot">Demaraj</string>
+	<string name="title_permission_wakelock">Wakelock</string>
+	<string name="title_request_permission_schedule_exact_alarm">Pèmèt orè egzak alam yo</string>
 	<string name="title_reset_statistics">Reyajiste estatistik…</string>
+	<string name="title_flashlight_brightness_level">Nivo klète</string>
+	<string name="title_flashlight_blink_on_off">Klike sou / koupe</string>
+	<string name="title_text_to_speech_speak_frequency">Pale frekans</string>
 	<string name="title_volume_gradually_increase_volume">Piti piti ogmante volim</string>
 	<string name="title_volume_restrict_volume">Limite volim</string>
+	<string name="title_dismiss_options_auto_dismiss">Oto-ranvwaye</string>
+	<string name="title_dismiss_options_dismiss_early">Ranvwaye bonè</string>
+	<string name="title_dismiss_options_delete_after_dismissed">Efase apre ranvwaye</string>
+	<string name="title_snooze_options_auto_snooze">Auto-snooze</string>
+	<string name="title_snooze_options_max_snooze">Max snoozes</string>
+	<string name="title_snooze_options_snooze_duration">Dire snooze</string>
+	<string name="title_snooze_options_easy_snooze">Fasil snooze</string>
+	<string name="title_upcoming_reminder_show_reminder">Montre rapèl</string>
+	<string name="title_upcoming_reminder_how_early">Konbyen bonè…</string>
+	<string name="title_upcoming_reminder_how_frequent">Konbyen fwa…</string>
+	<string name="title_setting_general">Jeneral</string>
+	<string name="title_setting_appearance">Aparans</string>
+	<string name="title_setting_about">Konsènan</string>
+	<string name="title_setting_statistics">Estatistik</string>
+	<string name="title_setting_manage_nfc_tags">Jere tags NFC</string>
+	<string name="title_setting_support">Sipòte devlopman</string>
+	<string name="title_setting_import_export">Enpòte \u0020|\u0020 Ekspòtasyon</string>
+	<string name="title_default_alarm">Default alam</string>
+	<string name="title_alarm_name">Non</string>
+	<string name="title_alarm_days">Jou</string>
+	<string name="title_alarm_repeat">Repete</string>
+	<string name="title_alarm_nfc">NFC</string>
+	<string name="title_alarm_vibrate">Vibre</string>
+	<string name="title_alarm_sound">Son</string>
+	<string name="title_alarm_volume">Volim</string>
+	<string name="title_alarm_screen">Ekran alam</string>
+	<string name="title_colors">Koulè</string>
+	<string name="title_notifications">Notifikasyon</string>
+	<string name="title_style">Style</string>
+	<string name="title_tweaks">Tweaks</string>
+	<string name="title_new_screen">Nouvo ekran</string>
+	<string name="title_show_alarm_name">Montre non alam</string>
+	<string name="title_show_current_date_and_time">Montre dat ak lè aktyèl la</string>
+	<string name="title_show_music_info">Montre enfòmasyon mizik</string>
+	<string name="title_theme_color">Tèm</string>
+	<string name="title_day_button_style">Bouton jou</string>
+	<string name="title_start_week_on">Kòmanse semèn sou&#8230;</string>
+	<string name="title_expand_new_alarm">Elaji nouvo alam yo</string>
+	<string name="title_next_alarm_format">Pwochen fòma alam&#8230;</string>
+	<string name="title_permissions">Otorizasyon</string>
+	<string name="title_developer">Devlopè</string>
 
 	<!-- Descriptions -->
 	<string name="description_scan_nfc">Eskane NFC</string>
@@ -184,19 +264,84 @@
 	<string name="description_day_button_style_filled">Bouton ranpli.</string>
 	<string name="description_day_button_style_outlined">Dekri bouton.</string>
 	<string name="description_media">Mizik oswa sonri</string>
+	<string name="description_flashlight_brightness_level">Nivo klète flach la.</string>
+	<string name="description_flashlight_blink_on_off">Klike flach la limen ak etenn nan dire yo fikse.</string>
+	<string name="description_text_to_speech_what_to_say">Kisa pou w di ak tèks-a-lapawòl lè alam la aktif.</string>
+	<string name="description_text_to_speech_speak_frequency">Konbyen fwa yo di atik yo chwazi pi wo a.</string>
+	<string name="description_volume_gradually_increase_volume">Ogmante volim alam la nan yon frekans fikse.</string>
+	<string name="description_volume_restrict_volume">Volim pa ka chanje lè yon alam sonnen.</string>
+	<string name="description_dismiss_options_auto_dismiss">Ranvwaye alam la otomatikman apre yon dire.</string>
+	<string name="description_dismiss_options_dismiss_early">Ranvwaye alam la bonè, anvan li aktif.</string>
+	<string name="description_dismiss_options_delete_after_dismissed">Alam la pral efase apre li fin ranvwaye.</string>
+	<string name="description_snooze_options_auto_snooze">Ranpli alam la otomatikman apre yon dire.</string>
+	<string name="description_snooze_options_max_snooze">Maksimòm kantite fwa alam la ka snoozed.</string>
+	<string name="description_snooze_options_snooze_duration">Kantite tan pou snooze alam la pou.</string>
+	<string name="description_snooze_options_easy_snooze">Ranpli alam la lè w manyen nenpòt kote sou ekran alam la.</string>
+	<string name="description_upcoming_reminder_show_reminder">Montre yon notifikasyon rapèl anvan alam la sonnen.</string>
+	<string name="description_upcoming_reminder_how_early">Konbyen bonè yo ta dwe montre notifikasyon rapèl la?</string>
+	<string name="description_upcoming_reminder_how_frequent">Konbyen fwa yo ta dwe montre notifikasyon rapèl la?</string>
+	<string name="description_upcoming_reminder_text_to_speech">Sèvi ak opsyon tèks-a-lapawòl alam la lè yo montre notifikasyon an.</string>
 	<string name="example_name">Travay</string>
-
-	<!-- Summary day names -->
-	<string name="dow_everyday">Chak jou</string>
-	<string name="dow_weekdays">Jou lasemèn yo</string>
-	<string name="dow_weekend">Wikenn</string>
-	<string name="dow_today">Jodi a</string>
-	<string name="dow_tomorrow">Demen</string>
+	<string name="description_setting_general">Anviwònman alam jeneral</string>
+	<string name="description_setting_appearance">Pèsonalize ki jan app a sanble</string>
+	<string name="description_setting_about">Enfòmasyon sou aplikasyon an</string>
+	<string name="description_setting_statistics">Gade konbyen tan ou te snoozed pou, ak plis ankò</string>
+	<string name="description_setting_manage_nfc_tags">Efase oswa chanje non tag NFC ki te sove yo</string>
+	<string name="description_setting_support">Sipò ta ap apresye anpil, men pa gen presyon! Aplikasyon sa a ap toujou gratis</string>
+	<string name="description_setting_import_export">Enpòte oswa ekspòte tout done ou sove yo</string>
+	<string name="description_alarm_repeat_true">Repete alam la.</string>
+	<string name="description_alarm_repeat_false">Enfim alam la apre li fin kouri.</string>
+	<string name="description_alarm_vibrate_true">Vibre telefòn nan.</string>
+	<string name="description_alarm_vibrate_false">Pa vibre telefòn nan.</string>
+	<string name="description_alarm_nfc_true">NFC yo itilize pou ranvwaye alam la.</string>
+	<string name="description_alarm_nfc_false">Rejte alam la nòmalman.</string>
+	<string name="description_alarm_flashlight_true">Limen flach la lè alam la sonnen.</string>
+	<string name="description_alarm_flashlight_false">Pa limen flach la lè alam la sonnen.</string>
+	<string name="description_alarm_sound">@string/none</string>
+	<string name="description_new_screen_true">Sèvi ak nouvo ekran alam la, kote ou glise pou snooze oswa ranvwaye alam la.</string>
+	<string name="description_new_screen_false">Pa sèvi ak nouvo ekran alam la. Sèvi ak ekran orijinal la ak bouton senp pou snooze oswa ranvwaye alam la.</string>
+	<string name="description_show_alarm_name_true">Montre non alam la nan ekran alam la.</string>
+	<string name="description_show_alarm_name_false">Pa montre non alam.</string>
+	<string name="description_show_current_date_and_time_true">Montre dat ak lè aktyèl la nan ekran alam la.</string>
+	<string name="description_show_current_date_and_time_false">Pa montre dat ak lè aktyèl la.</string>
+	<string name="description_show_music_info_true">Montre enfòmasyon sou mizik oswa sonri k ap jwe kounye a nan ekran alam la.</string>
+	<string name="description_show_music_info_false">Pa montre enfòmasyon mizik oswa sonri.</string>
+	<string name="description_color_theme">Koulè tèm nan.</string>
+	<string name="description_color_name">pa egzan Travay</string>
+	<string name="description_color_days">pa egzan len &#8231; mad &#8231; mèk &#8231; jed &#8231; van</string>
+	<string name="description_color_time">pa egzan 12:30</string>
+	<string name="description_color_am">Koulè si AM se nan lè alam la.</string>
+	<string name="description_color_pm">Koulè si PM nan lè alam la.</string>
+	<string name="description_color_delete_alarm_after_dismissed">Ikon pou endike alam la pral efase apre li fin ranvwaye.</string>
+	<string name="description_color_skip_next_alarm">Yo pral sote ikòn ki endike pwochen kouri yon alam.</string>
+	<string name="description_missed_alarm_true">Montre notifikasyon pou alam rate yo.</string>
+	<string name="description_show_hide_vibrate_button_true">Montre bouton vibre a lè w ap agrandi yon alam.</string>
+	<string name="description_show_hide_vibrate_button_false">Kache bouton vibre a lè w ap agrandi yon alam.</string>
+	<string name="description_show_hide_nfc_button_true">Montre bouton NFC la lè w ap agrandi yon alam.</string>
+	<string name="description_show_hide_nfc_button_false">Kache bouton NFC la lè w ap agrandi yon alam.</string>
+	<string name="description_show_hide_flashlight_button_true">Montre bouton flach la lè w ap agrandi yon alam.</string>
+	<string name="description_show_hide_flashlight_button_false">Kache bouton flach la lè agrandi yon alam.</string>
+	<string name="description_expand_new_alarm_true">Alam yo kopye oswa kreye ak &#8220;+&#8221; bouton yo elaji.</string>
+	<string name="description_expand_new_alarm_false">Alam yo pa elaji.</string>
+	<string name="description_next_alarm_format_time_in">Pwochen alam nan 7 èdtan 30 minit</string>
+	<string name="description_next_alarm_format_time_on">Pwochen alam lendi 7:00 AM</string>
+	<string name="description_permission_disable_battery_optimization">Aplikasyon an pa pral dòmi, sa ki pèmèt alam yo dwe aktive kòm nòmal.</string>
+	<string name="description_permission_nfc">Detekte tags NFC pou ranvwaye yon alam.</string>
+	<string name="description_permission_storage">Li mizik ki estoke sou aparèy ou an.</string>
+	<string name="description_permission_vibrate">Vibre aparèy ou an lè yon alam aktive.</string>
+	<string name="description_permission_foreground_service">Kouri yon sèvis premye plan ki pral jwe odyo, vibre aparèy ou an, elatriye lè yon alam aktive.</string>
+	<string name="description_permission_full_screen_intent">Sèvi ak ekran konplè a lè yon alam aktive.</string>
+	<string name="description_permission_schedule_alarm">Orè egzak alam yo.</string>
+	<string name="description_permission_set_alarm">Mete yon alam ki soti nan yon sous ekstèn, tankou Google Assistant.</string>
+	<string name="description_permission_post_notifications">Montre yon notifikasyon lè yon alam aktive ki pral anpeche aparèy ou a pa mete aplikasyon an nan dòmi epi fèmen alam la pou kont li.</string>
+	<string name="description_permission_boot">Retabli alam yo lè aparèy ou an limen. Android pral efase alam lè aparèy ou an etenn.</string>
+	<string name="description_permission_wakelock">Anpeche aparèy ou an dòmi pou yon alam aktive ap kontinye sonnen.</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">Lis alam yo pral montre isit la.</string>
 	<string name="cd_nfc_tag_list">Lis tags NFC yo pral montre isit la.</string>
 	<string name="cd_fab_add_alarm">Ajoute yon nouvo alam.</string>
+	<string name="cd_fab_launch_system_file_browser">Lanse navigatè dosye sistèm lan.</string>
 	<string name="cd_collapse_alarm">Tonbe yon alam.</string>
 	<string name="cd_expand_alarm">Elaji yon alam.</string>
 	<string name="cd_volume_icon">Chanje volim yon alam.</string>
@@ -217,245 +362,9 @@
 	<string name="cd_current_alarm_media_playing">Medya alam aktyèl la k ap jwe.</string>
 	<string name="cd_skip_next_alarm">Sote pwochen alam.</string>
 	<string name="cd_delete_alarm_after_dismissed">Efase alam apre li fin ranvwaye.</string>
+	<string name="cd_clock_widget_alarm_icon">Pwochen alam</string>
 
-	<!-- Main Settings -->
-
-	<string name="general_setting">Jeneral</string>
-	<string name="general_setting_summary">Anviwònman alam jeneral</string>
-
-	<string name="appearance_setting">Aparans</string>
-	<string name="appearance_setting_summary">Pèsonalize ki jan app a sanble</string>
-
-	<string name="about_setting">Konsènan</string>
-	<string name="about_setting_summary">Enfòmasyon sou aplikasyon an</string>
-
-	<string name="stats_setting">Estatistik</string>
-	<string name="stats_setting_summary">Gade konbyen tan ou te snoozed pou, ak plis ankò</string>
-
-	<string name="manage_nfc_tags_setting">Jere tags NFC</string>
-	<string name="manage_nfc_tags_setting_summary">Efase oswa chanje non tag NFC ki te sove yo</string>
-
-	<string name="support_setting">Sipòte devlopman</string>
-	<string name="support_setting_summary">Sipò ta ap apresye anpil, men pa gen presyon! Aplikasyon sa a ap toujou gratis</string>
-
-	<string name="import_export_setting">Enpòte \u0020|\u0020 Ekspòtasyon</string>
-	<string name="import_export_setting_summary">Enpòte oswa ekspòte tout done ou sove yo</string>
-
-	<!-- General settings -->
-
-	<!-- Categories -->
-	<string name="default_alarm_category">Default alam</string>
-
-	<!-- Auto dismiss duration -->
-	<string name="title_dismiss_options_auto_dismiss">Oto-ranvwaye</string>
-
-	<!-- Auto snooze duration -->
-	<string name="title_snooze_options_auto_snooze">Auto-snooze</string>
-
-	<!-- Max number of snoozes -->
-	<string name="title_snooze_options_max_snooze">Max snoozes</string>
-
-	<!-- Snooze duration -->
-	<string name="title_snooze_options_snooze_duration">Dire snooze</string>
-
-	<!-- Easy snooze -->
-	<string name="title_snooze_options_easy_snooze">Fasil snooze</string>
-	<string name="easy_snooze_true">Ranpli alam la lè w manyen nenpòt kote.</string>
-	<string name="easy_snooze_false">Ranpli alam la nòmalman.</string>
-
-	<!-- Default alarm name -->
-	<string name="alarm_name">Non</string>
-
-	<!-- Default alarm days -->
-	<string name="alarm_days">Jou</string>
-
-	<!-- Default alarm repeat -->
-	<string name="alarm_repeat">Repete</string>
-	<string name="alarm_repeat_true">Repete alam la.</string>
-	<string name="alarm_repeat_false">Enfim alam la apre li fin kouri.</string>
-
-	<!-- Default alarm use NFC -->
-	<string name="alarm_nfc">NFC</string>
-	<string name="alarm_nfc_true">NFC yo itilize pou ranvwaye alam la.</string>
-	<string name="alarm_nfc_false">Rejte alam la nòmalman.</string>
-
-	<!-- Default alarm use flashlight -->
-	<string name="alarm_flashlight_true">Limen flach la lè alam la sonnen.</string>
-	<string name="alarm_flashlight_false">Pa limen flach la lè alam la sonnen.</string>
-
-	<!-- Default alarm vibrate -->
-	<string name="alarm_vibrate">Vibre</string>
-	<string name="alarm_vibrate_true">Vibre telefòn nan.</string>
-	<string name="alarm_vibrate_false">Pa vibre telefòn nan.</string>
-
-	<!-- Default alarm sound -->
-	<string name="alarm_sound">Son</string>
-	<string name="alarm_sound_summary">@string/none</string>
-
-	<!-- Default alarm volume and audio source -->
-	<string name="alarm_volume">Volim</string>
-
-	<!-- Appearance settings -->
-
-	<!-- Categories -->
-	<string name="alarm_screen_category">Ekran alam</string>
-	<string name="color_category">Koulè</string>
-	<string name="notification_category">Notifikasyon</string>
-	<string name="style_category">Style</string>
-	<string name="tweaks_category">Tweaks</string>
-
-	<!-- New screen -->
-	<string name="new_screen">Nouvo ekran</string>
-	<string name="new_screen_true">Sèvi ak nouvo ekran alam la, kote ou glise pou snooze oswa ranvwaye alam la.</string>
-	<string name="new_screen_false">Pa sèvi ak nouvo ekran alam la. Sèvi ak ekran orijinal la ak bouton senp pou snooze oswa ranvwaye alam la.</string>
-
-	<!-- Show alarm name -->
-	<string name="show_alarm_name">Montre non alam</string>
-	<string name="show_alarm_name_true">Montre non alam la nan ekran alam la.</string>
-	<string name="show_alarm_name_false">Pa montre non alam.</string>
-
-	<!-- Show current date and time -->
-	<string name="show_current_date_and_time">Montre dat ak lè aktyèl la</string>
-	<string name="show_current_date_and_time_true">Montre dat ak lè aktyèl la nan ekran alam la.</string>
-	<string name="show_current_date_and_time_false">Pa montre dat ak lè aktyèl la.</string>
-
-	<!-- Show music information -->
-	<string name="show_music_info">Montre enfòmasyon mizik</string>
-	<string name="show_music_info_true">Montre enfòmasyon sou mizik oswa sonri k ap jwe kounye a nan ekran alam la.</string>
-	<string name="show_music_info_false">Pa montre enfòmasyon mizik oswa sonri.</string>
-
-	<!-- Theme color -->
-	<string name="theme_color">Tèm</string>
-	<string name="summary_color_theme">Koulè tèm nan.</string>
-
-	<!-- Name color -->
-	<string name="name_color">@string/alarm_name</string>
-	<string name="summary_color_name">pa egzan Travay</string>
-
-	<!-- Days color -->
-	<string name="days_color">@string/alarm_days</string>
-	<string name="summary_color_days">pa egzan len &#8231; mad &#8231; mèk &#8231; jed &#8231; van</string>
-
-	<!-- Time color -->
-	<string name="summary_color_time">pa egzan 12:30</string>
-
-	<!-- AM color -->
-	<string name="summary_color_am">Koulè si AM se nan lè alam la.</string>
-
-	<!-- PM color -->
-	<string name="summary_color_pm">Koulè si PM nan lè alam la.</string>
-
-	<!-- Missed alarm notifications -->
-	<string name="missed_alarm_true">Montre notifikasyon pou alam rate yo.</string>
-
-	<!-- Show/hide the vibrate button -->
-	<string name="show_hide_vibrate_button_true">Montre bouton vibre a lè w ap agrandi yon alam.</string>
-	<string name="show_hide_vibrate_button_false">Kache bouton vibre a lè w ap agrandi yon alam.</string>
-
-	<!-- Show/hide the NFC button -->
-	<string name="show_hide_nfc_button_true">Montre bouton NFC la lè w ap agrandi yon alam.</string>
-	<string name="show_hide_nfc_button_false">Kache bouton NFC la lè w ap agrandi yon alam.</string>
-
-	<!-- Show/hide the flashlight button -->
-	<string name="show_hide_flashlight_button_true">Montre bouton flach la lè w ap agrandi yon alam.</string>
-	<string name="show_hide_flashlight_button_false">Kache bouton flach la lè agrandi yon alam.</string>
-
-	<!-- Day button style -->
-	<string name="day_button_style">Bouton jou</string>
-
-	<!-- Start Week On -->
-	<string name="start_week_on">Kòmanse semèn sou&#8230;</string>
-
-	<!-- Expand new alarm card -->
-	<string name="expand_new_alarm">Elaji nouvo alam yo</string>
-	<string name="expand_new_alarm_true">Alam yo kopye oswa kreye ak &#8220;+&#8221; bouton yo elaji.</string>
-	<string name="expand_new_alarm_false">Alam yo pa elaji.</string>
-
-	<!-- Time remaining format -->
-	<string name="next_alarm_format">Pwochen fòma alam&#8230;</string>
-	<string name="next_alarm_format_time_in">Pwochen alam nan 7 èdtan 30 minit</string>
-	<string name="next_alarm_format_time_on">Pwochen alam lendi 7:00 AM</string>
-
-	<!-- About settings -->
-
-	<!-- Categories -->
-	<string name="app_category">Aplikasyon</string>
-	<string name="permissions_category">Otorizasyon</string>
-
-
-	<!-- App developer -->
-	<string name="author_title">Devlopè</string>
-	<string name="author">Gabe Gonzalez</string>
-
-
-	<!-- App version -->
-	<string name="version_title">Version</string>
-
-
-	<!-- Ignore battery optimization -->
-	<string name="about_ignore_battery_optimization">Enfim optimize batri</string>
-	<string name="about_ignore_battery_optimization_summary">Aplikasyon an pa pral dòmi, sa ki pèmèt alam yo dwe aktive kòm nòmal.</string>
-
-
-	<!-- NFC permission -->
-	<string name="about_nfc">NFC</string>
-	<string name="about_nfc_summary">Detekte tags NFC pou ranvwaye yon alam.</string>
-
-
-	<!-- READ_EXTERNAL_STORAGE permission -->
-	<string name="about_storage">Depo</string>
-	<string name="about_storage_summary">Li mizik ki estoke sou aparèy ou an.</string>
-
-
-	<!-- VIBRATE permission -->
-	<string name="about_vibrate">@string/alarm_vibrate</string>
-	<string name="about_vibrate_summary">Vibre aparèy ou an lè yon alam aktive.</string>
-
-
-	<!-- FOREGROUND_SERVICE permission -->
-	<string name="about_foreground_service">Sèvis premye plan</string>
-	<string name="about_foreground_service_summary">Kouri yon sèvis premye plan ki pral jwe odyo, vibre aparèy ou an, elatriye lè yon alam aktive.</string>
-
-
-	<!-- USE_FULL_SCREEN_INTENT permission -->
-	<string name="about_full_screen_intent">Ekran konplè</string>
-	<string name="about_full_screen_intent_summary">Sèvi ak ekran konplè a lè yon alam aktive.</string>
-
-
-	<!-- Schedule/use exact alarm permission -->
-	<string name="about_schedule_alarm">Orè egzak alam yo</string>
-	<string name="about_schedule_alarm_summary">Orè egzak alam yo.</string>
-
-
-	<!-- SET_ALARM permission -->
-	<string name="about_set_alarm">Mete alam</string>
-	<string name="about_set_alarm_summary">Mete yon alam ki soti nan yon sous ekstèn, tankou Google Assistant.</string>
-
-
-	<!-- Post notifications permission -->
-	<string name="about_post_notifications">Montre notifikasyon</string>
-	<string name="about_post_notifications_summary">Montre yon notifikasyon lè yon alam aktive ki pral anpeche aparèy ou a pa mete aplikasyon an nan dòmi epi fèmen alam la pou kont li.</string>
-
-
-	<!-- RECEIVE_BOOT_COMPLETED permission -->
-	<string name="about_boot">Demaraj</string>
-	<string name="about_boot_summary">Retabli alam yo lè aparèy ou an limen. Android pral efase alam lè aparèy ou an etenn.</string>
-
-
-	<!-- WAKE_LOCK -->
-	<string name="about_wakelock">Wakelock</string>
-	<string name="about_wakelock_summary">Anpeche aparèy ou an dòmi pou yon alam aktive ap kontinye sonnen.</string>
-
-
-	<!-- Spotify -->
-	<string name="frg_spotify_search_hint">Rechèch Spotify&#8230;</string>
-
-
-
-	<!-- ******* -->
 	<!-- Plurals -->
-	<!-- ******* -->
-
 	<plurals name="alarm">
 		<item quantity="one">alam</item>
 		<item quantity="other">alam</item>

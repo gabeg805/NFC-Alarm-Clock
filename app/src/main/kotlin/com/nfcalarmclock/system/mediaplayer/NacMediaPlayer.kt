@@ -11,13 +11,14 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.util.NacUtility.quickToast
+import com.nfcalarmclock.util.isUserUnlocked
 import com.nfcalarmclock.util.media.NacAudioAttributes
 import com.nfcalarmclock.util.media.NacAudioManager
 import com.nfcalarmclock.util.media.NacMedia
-import com.nfcalarmclock.util.NacUtility.quickToast
-import com.nfcalarmclock.util.media.canAccessMedia
-import com.nfcalarmclock.util.media.findRandomMedia
+import com.nfcalarmclock.util.media.findFirstLocalValidMedia
 import com.nfcalarmclock.util.media.isMediaDirectory
+import com.nfcalarmclock.util.media.isMediaValid
 
 /**
  * Wrapper for the MediaPlayer class.
@@ -283,7 +284,7 @@ class NacMediaPlayer(
 		// acessed, it is because the alarm went off in direct boot mode (when the
 		// device rebooted and the user has not unlocked it yet) or because the media
 		// was moved/removed
-		if (uri.canAccessMedia(context))
+		if (!uri.isMediaValid(context) || !isUserUnlocked(context))
 		{
 			// Directory
 			if (alarm.mediaType.isMediaDirectory())
@@ -306,21 +307,32 @@ class NacMediaPlayer(
 			// could be that the original media is a directory, which would not have any
 			// local media to play, so the expected behavior here would be to just play
 			// a random song in the local files directory
-			uri = if (localUri.canAccessMedia(context))
+			//uri = if (localUri.canAccessMedia(context))
+			uri = if (localUri.isMediaValid(context))
 			{
 				println("Local media path is solid")
 				localUri
 			}
 			else
 			{
-				println("Need to find a replacement for local media path")
-				findRandomMedia(context)
+				println("Find first jank")
+				findFirstLocalValidMedia(context, localUri)
 			}
 		}
 
-		// Play the file
 		println("PLAY FILE : $uri")
-		playUri(uri)
+
+		// Check if the uri is valid
+		if (uri != null)
+		{
+			// Play the file
+			playUri(uri)
+		}
+		else
+		{
+			// Show toast saying unable to play audio
+			quickToast(context, R.string.error_message_play_audio)
+		}
 	}
 
 	/**

@@ -5,41 +5,41 @@
 
 	<!-- Alarm screen -->
 	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
-		android:title="@string/alarm_screen_category">
+		android:title="@string/title_alarm_screen">
 
 		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
-			android:title="@string/new_screen"
+			android:title="@string/title_new_screen"
 			android:key="@string/key_use_new_alarm_screen"
-			android:summaryOn="@string/new_screen_true"
-			android:summaryOff="@string/new_screen_false"
+			android:summaryOn="@string/description_new_screen_true"
+			android:summaryOff="@string/description_new_screen_false"
 			android:defaultValue="@bool/default_use_new_alarm_screen"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
 			/>
 
 		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
-			android:title="@string/show_alarm_name"
+			android:title="@string/title_show_alarm_name"
 			android:key="@string/key_show_alarm_name"
-			android:summaryOn="@string/show_alarm_name_true"
-			android:summaryOff="@string/show_alarm_name_false"
+			android:summaryOn="@string/description_show_alarm_name_true"
+			android:summaryOff="@string/description_show_alarm_name_false"
 			android:defaultValue="@bool/default_show_alarm_name"
 			/>
 
 		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
-			android:title="@string/show_current_date_and_time"
+			android:title="@string/title_show_current_date_and_time"
 			android:key="@string/key_show_current_date_and_time"
-			android:summaryOn="@string/show_current_date_and_time_true"
-			android:summaryOff="@string/show_current_date_and_time_false"
+			android:summaryOn="@string/description_show_current_date_and_time_true"
+			android:summaryOff="@string/description_show_current_date_and_time_false"
 			android:defaultValue="@bool/default_show_current_date_and_time"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
 			/>
 
 		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
-			android:title="@string/show_music_info"
+			android:title="@string/title_show_music_info"
 			android:key="@string/key_show_music_info"
-			android:summaryOn="@string/show_music_info_true"
-			android:summaryOff="@string/show_music_info_false"
+			android:summaryOn="@string/description_show_music_info_true"
+			android:summaryOff="@string/description_show_music_info_false"
 			android:defaultValue="@bool/default_show_music_info"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="true"
@@ -48,29 +48,29 @@
 
 	<!-- Colors -->
 	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
-		android:title="@string/color_category">
+		android:title="@string/title_colors">
 
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
-			android:title="@string/theme_color"
+			android:title="@string/title_theme_color"
 			android:key="@string/theme_color_key"
-			android:summary="@string/summary_color_theme"
+			android:summary="@string/description_color_theme"
 			android:defaultValue="@integer/default_theme_color"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
 			/>
 
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
-			android:title="@string/name_color"
+			android:title="@string/title_alarm_name"
 			android:key="@string/name_color_key"
-			android:summary="@string/summary_color_name"
+			android:summary="@string/description_color_name"
 			android:defaultValue="@integer/default_name_color"
 			app:allowDividerBelow="false"
 			/>
 
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
-			android:title="@string/days_color"
+			android:title="@string/title_alarm_days"
 			android:key="@string/days_color_key"
-			android:summary="@string/summary_color_days"
+			android:summary="@string/description_color_days"
 			android:defaultValue="@integer/default_days_color"
 			app:allowDividerBelow="false"
 			/>
@@ -78,7 +78,7 @@
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 			android:title="@string/title_time"
 			android:key="@string/time_color_key"
-			android:summary="@string/summary_color_time"
+			android:summary="@string/description_color_time"
 			android:defaultValue="@integer/default_time_color"
 			app:allowDividerBelow="false"
 			/>
@@ -86,7 +86,7 @@
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 			android:title="@string/am"
 			android:key="@string/am_color_key"
-			android:summary="@string/summary_color_am"
+			android:summary="@string/description_color_am"
 			android:defaultValue="@integer/default_am_color"
 			app:allowDividerBelow="false"
 			/>
@@ -94,7 +94,7 @@
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 			android:title="@string/pm"
 			android:key="@string/pm_color_key"
-			android:summary="@string/summary_color_pm"
+			android:summary="@string/description_color_pm"
 			android:defaultValue="@integer/default_pm_color"
 			app:allowDividerBelow="false"
 			/>
@@ -102,7 +102,7 @@
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 			android:title="@string/action_delete_alarm_after_dismissed"
 			android:key="@string/delete_after_dismissed_color_key"
-			android:summary="@string/summary_color_delete_alarm_after_dismissed"
+			android:summary="@string/description_color_delete_alarm_after_dismissed"
 			android:defaultValue="@integer/default_delete_alarm_after_dismissed_color"
 			app:allowDividerBelow="false"
 			/>
@@ -110,7 +110,7 @@
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 			android:title="@string/action_skip_next_alarm"
 			android:key="@string/skip_next_alarm_color_key"
-			android:summary="@string/summary_color_skip_next_alarm"
+			android:summary="@string/description_color_skip_next_alarm"
 			android:defaultValue="@integer/default_skip_next_alarm_color"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="true"
@@ -119,12 +119,12 @@
 
 	<!-- Notifications -->
 	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
-		android:title="@string/notification_category">
+		android:title="@string/title_notifications">
 
 		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
 			android:title="@string/title_missed_alarms"
 			android:key="@string/missed_alarm_key"
-			android:summaryOn="@string/missed_alarm_true"
+			android:summaryOn="@string/description_missed_alarm_true"
 			android:summaryOff="@string/description_no_notification"
 			android:defaultValue="@bool/default_missed_alarm"
 			app:allowDividerAbove="false"
@@ -137,20 +137,20 @@
 		android:title="Show/hide alarm options">
 
 		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
-			android:title="@string/alarm_vibrate"
+			android:title="@string/title_alarm_vibrate"
 			android:key="@string/show_hide_vibrate_button_key"
-			android:summaryOn="@string/show_hide_vibrate_button_true"
-			android:summaryOff="@string/show_hide_vibrate_button_false"
+			android:summaryOn="@string/description_show_hide_vibrate_button_true"
+			android:summaryOff="@string/description_show_hide_vibrate_button_false"
 			android:defaultValue="@bool/default_show_hide_vibrate_button"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
 			/>
 
 		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
-			android:title="@string/alarm_nfc"
+			android:title="@string/title_alarm_nfc"
 			android:key="@string/show_hide_nfc_button_key"
-			android:summaryOn="@string/show_hide_nfc_button_true"
-			android:summaryOff="@string/show_hide_nfc_button_false"
+			android:summaryOn="@string/description_show_hide_nfc_button_true"
+			android:summaryOff="@string/description_show_hide_nfc_button_false"
 			android:defaultValue="@bool/default_show_hide_nfc_button"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
@@ -159,8 +159,8 @@
 		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
 			android:title="@string/action_alarm_option_flashlight"
 			android:key="@string/show_hide_flashlight_button_key"
-			android:summaryOn="@string/show_hide_flashlight_button_true"
-			android:summaryOff="@string/show_hide_flashlight_button_false"
+			android:summaryOn="@string/description_show_hide_flashlight_button_true"
+			android:summaryOff="@string/description_show_hide_flashlight_button_false"
 			android:defaultValue="@bool/default_show_hide_flashlight_button"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="true"
@@ -169,10 +169,10 @@
 
 	<!-- Styling -->
 	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
-		android:title="@string/style_category">
+		android:title="@string/title_style">
 
 		<com.nfcalarmclock.view.dayofweek.NacDayButtonStylePreference
-			android:title="@string/day_button_style"
+			android:title="@string/title_day_button_style"
 			android:key="@string/day_button_style_key"
 			android:summary="@string/description_day_button_style_filled"
 			android:defaultValue="@integer/default_day_button_style"
@@ -181,7 +181,7 @@
 			/>
 
 		<com.nfcalarmclock.alarm.options.startweekon.NacStartWeekOnPreference
-			android:title="@string/start_week_on"
+			android:title="@string/title_start_week_on"
 			android:key="@string/start_week_on_key"
 			android:defaultValue="@integer/default_start_week_on_index"
 			app:allowDividerBelow="true"
@@ -190,20 +190,20 @@
 
 	<!-- Tweaks -->
 	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
-		android:title="@string/tweaks_category">
+		android:title="@string/title_tweaks">
 
 		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
-			android:title="@string/expand_new_alarm"
+			android:title="@string/title_expand_new_alarm"
 			android:key="@string/expand_new_alarm_key"
-			android:summaryOn="@string/expand_new_alarm_true"
-			android:summaryOff="@string/expand_new_alarm_false"
+			android:summaryOn="@string/description_expand_new_alarm_true"
+			android:summaryOff="@string/description_expand_new_alarm_false"
 			android:defaultValue="@bool/default_expand_new_alarm"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
 			/>
 
 		<com.nfcalarmclock.alarm.options.nextalarmformat.NacNextAlarmFormatPreference
-			android:title="@string/next_alarm_format"
+			android:title="@string/title_next_alarm_format"
 			android:key="@string/next_alarm_format_key"
 			android:defaultValue="@integer/default_next_alarm_format_index"
 			app:allowDividerAbove="false"

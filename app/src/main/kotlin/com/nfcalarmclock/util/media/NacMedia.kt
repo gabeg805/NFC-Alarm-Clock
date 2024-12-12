@@ -7,7 +7,6 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.nfcalarmclock.R
@@ -16,7 +15,6 @@ import com.nfcalarmclock.system.file.NacFile.strip
 import com.nfcalarmclock.system.file.NacFile.toRelativeDirname
 import com.nfcalarmclock.system.file.NacFileTree.Companion.getFiles
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
-import com.nfcalarmclock.util.isUserUnlocked
 import com.nfcalarmclock.util.media.NacMedia.TYPE_DIRECTORY
 import com.nfcalarmclock.util.media.NacMedia.TYPE_FILE
 import com.nfcalarmclock.util.media.NacMedia.TYPE_NONE
@@ -83,7 +81,6 @@ fun copyMediaToDeviceEncryptedStorage(
 	// Check if a directory was selected
 	if (type.isMediaFile() || type.isMediaRingtone())
 	{
-		println("COPYING TO DEVICE ENCRYPTED STORAGE : $srcUri")
 		// Copy the file to the local media path
 		deviceContext.openFileOutput(dstFile.name, Context.MODE_PRIVATE).use { fileOutput ->
 
@@ -97,43 +94,65 @@ fun copyMediaToDeviceEncryptedStorage(
 }
 
 /**
- * Find the Uri of a random media file to play.
+ * Find the first Uri that is valid in the local files/ directory.
  *
- * This file must be located in device protected storage in the files/ directory.
+ * It must not match [localUri] as this is an invalid Uri.
  *
- * @return Uri of a random media file to play.
+ * @return Uri of the first Uri that is valid in the local files/ directory, or null.
  */
-fun findRandomMedia(deviceContext: Context): Uri
+fun findFirstLocalValidMedia(deviceContext: Context, localUri: Uri): Uri?
 {
-	val localFileList = deviceContext.filesDir.listFiles()
-	val randomLocalFile = localFileList?.get(0) ?: return Uri.EMPTY
-	val uri = randomLocalFile.toUri()
-	println("RANDOM LOCAL FILE : ${randomLocalFile.path} | $uri")
+	val uri = deviceContext.filesDir.listFiles()
+		?.map { Uri.parse(it.path) }
+		?.find { (it.compareTo(localUri) != 0) && it.isMediaValid(deviceContext) }
+	println("FIRST VALID LOCAL FILE : $uri")
 
 	return uri
 }
 
 /**
- * Check if the media is accessible.
- *
- * This means that the phone has been unlocked and the query on the media returns a name.
- * If the phone is locked or the media name is empty, then this will evaluate to False.
- *
- * @return True if the media is accessible, and False otherwise.
+ * Parse the duration string returned from the MediaStore query.
  */
-fun Uri.canAccessMedia(context: Context): Boolean
+private fun parseMediaDuration(millis: String): String
 {
-	// Check if the uri is empty
-	if (this.isMediaNone())
+	// Check if an empty string was provided
+	if (millis.isEmpty())
 	{
-		return false
+		return ""
 	}
 
-	// Most media should have a name. Use this as a test
-	val test = this.getMediaName(context)
+	// Get the locale
+	val locale = Locale.getDefault()
 
-	// Media is accessible if the phone has been unlocked and the name is not empty
-	return isUserUnlocked(context) && test.isNotEmpty()
+	return try
+	{
+		// Convert the string to a long
+		val value = millis.toLong()
+
+		// Get the constituent hours/minutes/seconds
+		val rounded = (value + 500) / 1000
+		val hours = TimeUnit.SECONDS.toHours(rounded) % 24
+		val minutes = TimeUnit.SECONDS.toMinutes(rounded) % 60
+		val seconds = rounded % 60
+
+		// Check if hours is 0
+		if (hours == 0L)
+		{
+			String.format(locale, "%1$02d:%2$02d", minutes,
+				seconds)
+		}
+		// Has hours
+		else
+		{
+			String.format(locale, "%1$02d:%2$02d:%3$02d", hours,
+				minutes, seconds)
+		}
+	}
+	catch (e: NumberFormatException)
+	{
+		println("NacMedia : getDuration : NumberFormatException!")
+		""
+	}
 }
 
 /**
@@ -276,6 +295,35 @@ fun Uri.getMediaTitle(
 }
 
 /**
+ * Get the media type.
+ *
+ * @return The media type.
+ */
+fun Uri.getMediaType(context: Context): Int
+{
+	return if (this.isMediaNone())
+	{
+		TYPE_NONE
+	}
+	else if (this.isMediaFile(context))
+	{
+		TYPE_FILE
+	}
+	else if (this.isMediaRingtone(context))
+	{
+		TYPE_RINGTONE
+	}
+	else if (this.isMediaDirectory())
+	{
+		TYPE_DIRECTORY
+	}
+	else
+	{
+		TYPE_NONE
+	}
+}
+
+/**
  * Get the volume name of the media.
  *
  * @return The volume name of the media.
@@ -300,92 +348,6 @@ fun Uri.getMediaVolumeName(context: Context): String
 	val column = MediaStore.Audio.Media.VOLUME_NAME
 
 	return this.queryColumn(context, column)
-}
-
-/**
- * Parse the duration string returned from the MediaStore query.
- */
-private fun parseMediaDuration(millis: String): String
-{
-	// Check if an empty string was provided
-	if (millis.isEmpty())
-	{
-		return ""
-	}
-
-	// Get the locale
-	val locale = Locale.getDefault()
-
-	return try
-	{
-		// Convert the string to a long
-		val value = millis.toLong()
-
-		// Get the constituent hours/minutes/seconds
-		val rounded = (value + 500) / 1000
-		val hours = TimeUnit.SECONDS.toHours(rounded) % 24
-		val minutes = TimeUnit.SECONDS.toMinutes(rounded) % 60
-		val seconds = rounded % 60
-
-		// Check if hours is 0
-		if (hours == 0L)
-		{
-			String.format(locale, "%1$02d:%2$02d", minutes,
-				seconds)
-		}
-		// Has hours
-		else
-		{
-			String.format(locale, "%1$02d:%2$02d:%3$02d", hours,
-				minutes, seconds)
-		}
-	}
-	catch (e: NumberFormatException)
-	{
-		println("NacMedia : getDuration : NumberFormatException!")
-		""
-	}
-}
-
-/**
- * Parse the volume name from a path.
- *
- * This should only be done on any version before Q.
- */
-private fun Uri.parseVolumeName(): String
-{
-	// Get the path from a URI
-	val path = this.toString()
-
-	// Remove the prefix and split the path on forward slashes, "/"
-	val contentPrefix = "content://"
-	val items = path.replace(contentPrefix, "")
-		.split("/".toRegex())
-		.dropLastWhile { it.isEmpty() }
-		.toTypedArray()
-
-	var index = 0
-
-	// Check if no items in the path
-	if (items.isEmpty())
-	{
-		return ""
-	}
-
-	// Check if the first index is empty
-	if (items[0].isEmpty())
-	{
-		index++
-	}
-
-	// Check if the next index is equal to "media"
-	if (items[index] == "media")
-	{
-		index++
-	}
-
-	// Return the last index
-	return items[index]
 }
 
 /**
@@ -448,32 +410,70 @@ private fun Uri.isMediaRingtone(context: Context): Boolean
 }
 
 /**
- * Get the media type.
+ * Check if the media is valid.
  *
- * @return The media type.
+ * This will check the type, name, and artist. If all are none, then the media is
+ * invalid.
+ *
+ * @return True if the media is valid, and False otherwise.
  */
-fun Uri.getMediaType(context: Context): Int
+fun Uri.isMediaValid(context: Context): Boolean
 {
-	return if (this.isMediaNone())
+	// Check if the uri is empty
+	if (this.isMediaNone())
 	{
-		TYPE_NONE
+		println("MEDIA IS NONE SO CANNOT ACCESS")
+		return false
 	}
-	else if (this.isMediaFile(context))
+
+	// Most media should have a name. Use this as a test
+	val artist = this.getMediaArtist(context)
+	val name = this.getMediaName(context)
+	println("MEDIA NAME = $name | $artist")
+
+	// Check the artist and name
+	return artist.isNotEmpty() || name.isNotEmpty()
+}
+
+/**
+ * Parse the volume name from a path.
+ *
+ * This should only be done on any version before Q.
+ */
+private fun Uri.parseVolumeName(): String
+{
+	// Get the path from a URI
+	val path = this.toString()
+
+	// Remove the prefix and split the path on forward slashes, "/"
+	val contentPrefix = "content://"
+	val items = path.replace(contentPrefix, "")
+		.split("/".toRegex())
+		.dropLastWhile { it.isEmpty() }
+		.toTypedArray()
+
+	var index = 0
+
+	// Check if no items in the path
+	if (items.isEmpty())
 	{
-		TYPE_FILE
+		return ""
 	}
-	else if (this.isMediaRingtone(context))
+
+	// Check if the first index is empty
+	if (items[0].isEmpty())
 	{
-		TYPE_RINGTONE
+		index++
 	}
-	else if (this.isMediaDirectory())
+
+	// Check if the next index is equal to "media"
+	if (items[index] == "media")
 	{
-		TYPE_DIRECTORY
+		index++
 	}
-	else
-	{
-		TYPE_NONE
-	}
+
+	// Return the last index
+	return items[index]
 }
 
 /**

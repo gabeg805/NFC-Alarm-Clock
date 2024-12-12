@@ -134,17 +134,8 @@
 		<activity
 			android:name=".alarm.options.mediapicker.NacMediaPickerActivity"
 			android:exported="false"
-			android:launchMode="singleInstance">
-
-			<intent-filter>
-				<action android:name="android.intent.action.SEARCH" />
-			</intent-filter>
-
-			<meta-data
-				android:name="android.app.searchable"
-				android:resource="@xml/searchable"
-				/>
-		</activity>
+			android:launchMode="singleInstance"
+			/>
 
 		<!-- Active alarm service (show notification and call alarm activity) -->
 		<service

@@ -95,35 +95,35 @@ class NacMainSettingFragment
 			generalKey ->
 			{
 				fragment = NacGeneralSettingFragment()
-				title = getString(R.string.general_setting)
+				title = getString(R.string.title_setting_general)
 			}
 
 			// Appearance
 			appearanceKey ->
 			{
 				fragment = NacAppearanceSettingFragment()
-				title = getString(R.string.appearance_setting)
+				title = getString(R.string.title_setting_appearance)
 			}
 
 			// Statistics
 			statisticsKey ->
 			{
 				fragment = NacStatisticsSettingFragment()
-				title = getString(R.string.stats_setting)
+				title = getString(R.string.title_setting_statistics)
 			}
 
 			// Manage NFC tags
 			manageNfcTagsKey ->
 			{
 				fragment = NacNfcTagSettingFragment()
-				title = getString(R.string.manage_nfc_tags_setting)
+				title = getString(R.string.title_setting_manage_nfc_tags)
 			}
 
 			// About
 			aboutKey ->
 			{
 				fragment = NacAboutSettingFragment()
-				title = getString(R.string.about_setting)
+				title = getString(R.string.title_setting_about)
 			}
 
 			// Import/export
