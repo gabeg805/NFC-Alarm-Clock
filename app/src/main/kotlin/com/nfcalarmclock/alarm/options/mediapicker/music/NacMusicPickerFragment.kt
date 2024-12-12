@@ -28,6 +28,8 @@ import com.nfcalarmclock.system.permission.readmediaaudio.NacReadMediaAudioPermi
 import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.addMediaInfo
+import com.nfcalarmclock.util.getDeviceProtectedStorageContext
+import com.nfcalarmclock.util.media.addToMediaStore
 import com.nfcalarmclock.util.media.getMediaName
 import com.nfcalarmclock.util.media.getMediaRelativePath
 import com.nfcalarmclock.util.media.isMediaDirectory
@@ -56,27 +58,31 @@ class NacMusicPickerFragment
 	private val fileChooserContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
 
 		// Get the context
-		val context = requireContext()
+		val context = getDeviceProtectedStorageContext(requireContext())
 		println("Uri : $uri")
 
 		// Check if the uri is null
 		if (uri == null)
 		{
-			quickToast(context, R.string.error_message_unable_to_select_file)
 			return@registerForActivityResult
 		}
+
+		// TODO: ADD CHECK WHERE IF PATH IS LOCAL MEDIA PATH THEN DO NOT DO ANYTHING TO PATH TEXTVIEW
+		// TODO: ALSO CHECK WHAT HAPPENS IF DOING SELECTED MEDIA FROM LAUNCHER
 
 		// Get the media uri
 		val mediaUri = try
 		{
+			// Attempt to convert the document uri to a media uri
 			MediaStore.getMediaUri(context, uri)
 		}
 		catch (_: IllegalArgumentException)
 		{
-			// Show toast if unable to get media uri. This seems to happen when selecting
-			// from the Downloads directory
-			quickToast(context, R.string.error_message_unable_to_select_file)
-			return@registerForActivityResult
+			// Attempt to add the document uri to the media store. This should really
+			// be done if the selected document is from the Downloads/ directory, or if
+			// the file is not a media file
+			// TODO: Update mime type so it only includes media files (not zips and images and the like)
+			addToMediaStore(context, uri)
 		}
 
 		println("Media URI : $mediaUri")

@@ -99,7 +99,7 @@
 	<string name="label_clock_widget">Clock</string>
 
 	<!-- Messages -->
-	<string name="message_permission_ignore_battery_optimization_request">To avoid alarm not running if the app has not been used for a while.&lt;br/>&lt;br/>&lt;b>Note:&lt;/b>  This depends on what device you have and &lt;&lt;b>may not actually be needed&lt;/b>.</string>
+	<string name="message_permission_ignore_battery_optimization_request">To avoid alarm not running if the app has not been used for a while.&lt;br/>&lt;br/>&lt;b>Note:&lt;/b>  This depends on what device you have and &lt;b>may not actually be needed&lt;/b>.</string>
 	<string name="message_permission_post_notifications_request">To allow alarms to run when the app is not in focus.&lt;br/>&lt;br/>&lt;b>Note:&lt;/b>  This is a side effect of the security policies introduced in &lt;b>Android 13&lt;/b>, which are for the benefit of users, but can restrict apps in instances like this.</string>
 	<string name="message_permission_schedule_exact_alarm_request">To have alarms run precisely when scheduled.</string>
 	<string name="message_playlist">Do you want to play all the music in this folder?</string>

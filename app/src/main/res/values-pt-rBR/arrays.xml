@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- Days of week full names -->
+	<string-array name="days_of_week_full">
+		<item>Domingo</item>
+		<item>Segunda-feira</item>
+		<item>Terça-feira</item>
+		<item>Quarta-feira</item>
+		<item>Quinta-feira</item>
+		<item>Sexta-feira</item>
+		<item>Sábado</item>
+	</string-array>
+
+	<!-- Days of week abbreviated -->
+	<string-array name="days_of_week_abbr">
+		<item>dom</item>
+		<item>seg</item>
+		<item>ter</item>
+		<item>qua</item>
+		<item>qui</item>
+		<item>sex</item>
+		<item>sab</item>
+	</string-array>
+
+	<!-- Days of week one letter -->
+	<string-array name="days_of_week_one_letter">
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+		<item>5</item>
+		<item>6</item>
+		<item>7</item>
+	</string-array>
+
+	<!-- Start week on days -->
+	<string-array name="start_week_on">
+		<item>Domingo</item>
+		<item>Segunda-feira</item>
+	</string-array>
+
+	<!-- General list of seconds -->
+	<string-array name="general_seconds_summaries">
+		<item>0 segundos</item>
+		<item>1 segundo</item>
+		<item>2 segundos</item>
+		<item>3 segundos</item>
+		<item>4 segundos</item>
+		<item>5 segundos</item>
+		<item>6 segundos</item>
+		<item>7 segundos</item>
+		<item>8 segundos</item>
+		<item>9 segundos</item>
+		<item>10 segundos</item>
+		<item>11 segundos</item>
+		<item>12 segundos</item>
+		<item>13 segundos</item>
+		<item>14 segundos</item>
+		<item>15 segundos</item>
+		<item>16 segundos</item>
+		<item>17 segundos</item>
+		<item>18 segundos</item>
+		<item>19 segundos</item>
+		<item>20 segundos</item>
+		<item>21 segundos</item>
+		<item>22 segundos</item>
+		<item>23 segundos</item>
+		<item>24 segundos</item>
+		<item>25 segundos</item>
+		<item>26 segundos</item>
+		<item>27 segundos</item>
+		<item>28 segundos</item>
+		<item>29 segundos</item>
+		<item>30 segundos</item>
+		<item>31 segundos</item>
+		<item>32 segundos</item>
+		<item>33 segundos</item>
+		<item>34 segundos</item>
+		<item>35 segundos</item>
+		<item>36 segundos</item>
+		<item>37 segundos</item>
+		<item>38 segundos</item>
+		<item>39 segundos</item>
+		<item>40 segundos</item>
+		<item>41 segundos</item>
+		<item>42 segundos</item>
+		<item>43 segundos</item>
+		<item>44 segundos</item>
+		<item>45 segundos</item>
+		<item>46 segundos</item>
+		<item>47 segundos</item>
+		<item>48 segundos</item>
+		<item>49 segundos</item>
+		<item>50 segundos</item>
+		<item>51 segundos</item>
+		<item>52 segundos</item>
+		<item>53 segundos</item>
+		<item>54 segundos</item>
+		<item>55 segundos</item>
+		<item>56 segundos</item>
+		<item>57 segundos</item>
+		<item>58 segundos</item>
+		<item>59 segundos</item>
+		<item>60 segundos</item>
+	</string-array>
+
+</resources>

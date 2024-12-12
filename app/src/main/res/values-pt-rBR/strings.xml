@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+	<!-- App -->
+	<string name="app_name">Despertador NFC</string>
+	<string name="app_developer">Gabriel González</string>
+
+	<!-- Consolidate -->
+	<string name="version">Versão</string>
+	<string name="am">SOU</string>
+	<string name="pm">PM</string>
+	<string name="none">Nenhum</string>
+	<string name="show_next_alarm">Mostrar próximo alarme</string>
+	<string name="background">Fundo</string>
+	<string name="time_layout">Layout de tempo</string>
+	<string name="date_layout">Layout de data</string>
+	<string name="alarm_layout">Layout do alarme</string>
+	<string name="show">Mostrar</string>
+	<string name="bold">Audacioso</string>
+	<string name="color">Cor</string>
+	<string name="text_size">Tamanho do texto</string>
+	<string name="colon">:</string>
+	<string name="icon">Ícone</string>
+	<string name="transparency">Transparência</string>
+	<string name="hour">Hora</string>
+	<string name="minutes">Minutos</string>
+	<string name="am_pm">AM / PM</string>
+
+	<!-- Day names -->
+	<string name="dow_everyday">Diariamente</string>
+	<string name="dow_weekdays">Dias da semana</string>
+	<string name="dow_weekend">Fim de semana</string>
+	<string name="dow_today">Hoje</string>
+	<string name="dow_tomorrow">Amanhã</string>
+
+	<!-- Words -->
+	<string name="word_app">Aplicativo</string>
+	<string name="word_version">Versão</string>
+	<string name="word_of">de</string>
+	<string name="word_alarm">Alarme</string>
+	<string name="word_reminder">Lembrete</string>
+
+	<!-- States -->
+	<string name="state_unknown">Desconhecido</string>
+
+	<!-- Actions -->
+	<string name="action_alarm_snooze">Soneca</string>
+	<string name="action_alarm_dismiss">Liberar</string>
+	<string name="action_alarm_dismiss_early">Demitir mais cedo</string>
+	<string name="action_alarm_copy">Cópia</string>
+	<string name="action_alarm_delete">Excluir</string>
+	<string name="action_yes">Sim</string>
+	<string name="action_no">Não</string>
+	<string name="action_ok">OK</string>
+	<string name="action_cancel">Cancelar</string>
+	<string name="action_clear">Claro</string>
+	<string name="action_clear_reminder">Lembrete claro</string>
+	<string name="action_default">Padrão</string>
+	<string name="action_done">Feito</string>
+	<string name="action_preview">Pré-visualização</string>
+	<string name="action_stop_preview">Parar visualização</string>
+	<string name="action_show_nfc_tag_id">Mostrar etiqueta NFC</string>
+	<string name="action_use_any">Use qualquer etiqueta NFC</string>
+	<string name="action_save">Salvar</string>
+	<string name="action_select_nfc_tag">Selecione a etiqueta NFC</string>
+	<string name="action_skip">Pular</string>
+	<string name="action_undo">Desfazer</string>
+	<string name="action_browse">Navegar</string>
+	<string name="action_previous_folder">Pasta anterior</string>
+	<string name="action_reset">Reiniciar</string>
+	<string name="action_email">E-mail</string>
+	<string name="action_shuffle_music">Música aleatória</string>
+	<string name="action_recursively_play_media">Incluir subpastas</string>
+	<string name="action_alarm_option_audio_source">Fonte de áudio</string>
+	<string name="action_alarm_option_flashlight">Lanterna</string>
+	<string name="action_alarm_option_text_to_speech">Conversão de texto em fala</string>
+	<string name="action_alarm_option_volume">Volume</string>
+	<string name="action_alarm_option_dismiss_options">Descartar opções</string>
+	<string name="action_alarm_option_snooze_options">Opções de soneca</string>
+	<string name="action_alarm_option_upcoming_reminder">Próximo lembrete</string>
+	<string name="action_delete_alarm_after_dismissed">Excluir após dispensado</string>
+	<string name="action_skipping_next_alarm">Ignorando o próximo alarme</string>
+	<string name="action_skip_next_alarm">Pular próximo alarme</string>
+	<string name="action_unskip_next_alarm">Despular próximo alarme</string>
+	<string name="action_export">Exportar</string>
+	<string name="action_import">Importar</string>
+
+	<!-- Labels -->
+	<string name="label_created_statistic">criado</string>
+	<string name="label_deleted_statistic">deletado</string>
+	<string name="label_dismissed_statistic">dispensado</string>
+	<string name="label_missed_statistic">perdido</string>
+	<string name="label_snoozed_statistic">cochilou</string>
+	<string name="label_created_statistic_header">Tempo de criação</string>
+	<string name="label_deleted_statistic_header">Hora Excluída, Nome, Hora do Alarme</string>
+	<string name="label_dismissed_statistic_header">Hora de dispensa, nome, hora do alarme, NFC usado</string>
+	<string name="label_missed_statistic_header">Tempo perdido, nome, hora do alarme</string>
+	<string name="label_snoozed_statistic_header">Tempo de soneca, nome, hora do alarme, duração da soneca (segundos)</string>
+	<string name="label_clock_widget">Relógio</string>
+
+	<!-- Messages -->
+	<string name="message_permission_ignore_battery_optimization_request">Para evitar que o alarme não seja executado caso o aplicativo não seja usado por um tempo.&lt;br/>&lt;br/>&lt;b>Observação:&lt;/b>Isso depende do dispositivo que você tem e &lt;b>pode não ser realmente necessário&lt;/b>.</string>
+	<string name="message_permission_post_notifications_request">Para permitir que alarmes sejam executados quando o aplicativo não estiver em foco.&lt;br/>&lt;br/>&lt;b>Observação:&lt;/b> Este é um efeito colateral das políticas de segurança introduzidas no &lt;b>Android 13&lt;/b>, que são para o benefício dos usuários, mas podem restringir aplicativos em casos como este.</string>
+	<string name="message_permission_schedule_exact_alarm_request">Para que os alarmes sejam disparados precisamente quando programados.</string>
+	<string name="message_playlist">Você quer reproduzir todas as músicas desta pasta?</string>
+	<string name="message_nfc_request">Por favor, habilite o NFC para ignorar o alarme</string>
+	<string name="message_nfc_required">NFC necessário</string>
+	<string name="message_nfc_optional">NFC opcional</string>
+	<string name="message_scan_nfc_tag">A etiqueta NFC escaneada será necessária para ignorar este alarme quando ele disparar.</string>
+	<string name="message_save_nfc_tag">Você pode reutilizar esta etiqueta NFC, sem precisar escaneá-la novamente, dando-lhe um nome.</string>
+	<string name="message_delete_nfc_tag">Tem certeza de que deseja excluir esta etiqueta NFC?</string>
+	<string name="message_show_nfc_tag_id">EU IA:</string>
+	<string name="message_any_nfc_tag_id">Qualquer etiqueta NFC aceita</string>
+	<string name="message_flashlight_on_duration">Sobre:</string>
+	<string name="message_flashlight_off_duration">Desligado:</string>
+	<string name="message_no_alarms_scheduled">Nenhum alarme programado.</string>
+	<string name="message_repeat_disabled">Não repita o alarme</string>
+	<string name="message_repeat_enabled">Repetir alarme</string>
+	<string name="message_vibrate_disabled">Vibrar desligado</string>
+	<string name="message_vibrate_enabled">Vibrar em</string>
+	<string name="message_flashlight_disabled">Lanterna desligada</string>
+	<string name="message_flashlight_enabled">Lanterna ligada</string>
+	<string name="message_alarm_copy">Alarme copiado</string>
+	<string name="message_alarm_delete">Alarme excluído</string>
+	<string name="message_alarm_restore">Alarme restaurado</string>
+	<string name="message_alarm_dismiss">Alarme dispensado</string>
+	<string name="message_alarm_snooze">Alarme adiado</string>
+	<string name="message_statistics_started_on">As estatísticas começaram em</string>
+	<string name="message_bullet">\u25BA</string>
+	<string name="message_required">Obrigatório</string>
+	<string name="message_optional">Opcional</string>
+	<string name="message_already_have_permission">Você já tem essa permissão</string>
+	<string name="message_support_thank_you">Obrigado pelo seu apoio!</string>
+	<string name="message_reset_statistics">Tem certeza de que deseja redefinir todas as estatísticas?</string>
+	<string name="message_tts_current_time">Hora atual</string>
+	<string name="message_tts_alarm_name">Nome do alarme</string>
+	<string name="message_statistics_email_subject">Estatísticas do Despertador NFC</string>
+	<string name="message_skip_general_alarm">O alarme será ignorado.</string>
+	<string name="message_skip_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; será ignorado.</string>
+	<string name="message_disabled_general_alarm">O alarme está desativado.</string>
+	<string name="message_disabled_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; está desabilitado.</string>
+	<string name="message_will_run_on_general_alarm" tools:ignore="StringFormatCount">Será executado em %2$s.</string>
+	<string name="message_will_run_on_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; será executado em %2$s.</string>
+	<string name="message_will_run_in_general_alarm" tools:ignore="StringFormatCount">Será executado em %2$s.</string>
+	<string name="message_will_run_in_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; será executado em %2$s.</string>
+	<string name="message_next_alarm_on">Próximo alarme em %1$s</string>
+	<string name="message_next_alarm_in">Próximo alarme em %1$s</string>
+	<string name="message_export_completed">Exportação concluída</string>
+	<string name="message_import_completed">Importação concluída</string>
+
+	<!-- Error messages -->
+	<string name="error_message_active_delete">Não é possível excluir um alarme ativo</string>
+	<string name="error_message_active_modify">Não é possível modificar um alarme ativo</string>
+	<string name="error_message_max_alarms">Número máximo de alarmes criados</string>
+	<string name="error_message_nfc_mismatch">A etiqueta NFC não corresponde à etiqueta salva.</string>
+	<string name="error_message_nfc_unsupported">Seu dispositivo não suporta NFC</string>
+	<string name="error_message_nfc_name_exists">Este nome já está sendo usado</string>
+	<string name="error_message_nfc_id_exists">Este ID NFC já está sendo usado por %1$s</string>
+	<string name="error_message_unable_to_scan_nfc">Não é possível escanear tags NFC</string>
+	<string name="error_message_snooze">Não é possível adiar o alarme</string>
+	<string name="error_message_snoozed_delete">Não é possível excluir um alarme adiado</string>
+	<string name="error_message_snoozed_modify">Não é possível modificar um alarme adiado</string>
+	<string name="error_message_select_color">Cor hexadecimal inválida</string>
+	<string name="error_message_play_audio">Não é possível reproduzir áudio</string>
+	<string name="error_message_google_play_billing">Erro ao conectar na Google Play Store</string>
+	<string name="error_message_text_to_speech_audio_focus">Não é possível usar conversão de texto em fala</string>
+	<string name="error_message_unable_to_email_statistics">Não é possível enviar estatísticas por e-mail</string>
+	<string name="error_message_unable_to_shine_flashlight">Não é possível acender a lanterna</string>
+	<string name="error_message_unable_to_start_foreground_service">Não é possível iniciar o serviço em primeiro plano. Por favor, habilite a permissão</string>
+	<string name="error_message_unable_to_open_import_export_stream">Não é possível abrir o arquivo</string>
+	<string name="error_message_unable_to_select_file">Não é possível selecionar o arquivo</string>
+	<string name="error_message_unable_to_get_media_information_from_file">Não é possível obter informações de mídia do arquivo</string>
+
+	<!-- Titles -->
+	<string name="title_settings">Configurações</string>
+	<string name="title_time">Tempo</string>
+	<string name="title_alarm_activity">Dispensar alarme</string>
+	<string name="title_scan_nfc_tag" tools:ignore="TypographyEllipsis">Digitalize uma etiqueta NFC...</string>
+	<string name="title_select_nfc_tag" tools:ignore="TypographyEllipsis">Selecione uma etiqueta NFC...</string>
+	<string name="title_save_nfc_tag" tools:ignore="TypographyEllipsis">Salvar etiqueta NFC...</string>
+	<string name="title_delete_nfc_tag" tools:ignore="TypographyEllipsis">Excluir etiqueta NFC...</string>
+	<string name="title_rename_nfc_tag" tools:ignore="TypographyEllipsis">Renomear etiqueta NFC...</string>
+	<string name="title_select_days">Selecione os dias</string>
+	<string name="title_select_color">Selecione uma cor</string>
+	<string name="title_select_next_alarm_format">Selecione um formato</string>
+	<string name="title_folder_selected">Você selecionou uma pasta</string>
+	<string name="title_active_alarms">Alarmes ativos</string>
+	<string name="title_upcoming_reminders">Próximos lembretes</string>
+	<string name="title_dismissed_alarms">Alarmes dispensados</string>
+	<string name="title_missed_alarms">Alarmes perdidos</string>
+	<string name="title_snoozed_alarms">Alarmes adiados</string>
+	<string name="title_created_alarms">Alarmes criados</string>
+	<string name="title_deleted_alarms">Alarmes excluídos</string>
+	<string name="title_current_alarms">Atual</string>
+	<string name="title_whats_new">O que há de novo</string>
+	<string name="title_permission_disable_battery_optimization">Desativar otimização da bateria</string>
+	<string name="title_permission_storage">Armazenar</string>
+	<string name="title_permission_foreground_service">Serviço de primeiro plano</string>
+	<string name="title_permission_full_screen_intent">Tela cheia</string>
+	<string name="title_permission_schedule_alarm">Programe alarmes exatos</string>
+	<string name="title_permission_set_alarm">Definir alarme</string>
+	<string name="title_permission_show_notifications">Mostrar notificações</string>
+	<string name="title_permission_boot">Comece</string>
+	<string name="title_permission_wakelock">Despertar</string>
+	<string name="title_request_permission_schedule_exact_alarm">Habilitar agendamento de alarmes exatos</string>
+	<string name="title_reset_statistics">Redefinir estatísticas…</string>
+	<string name="title_flashlight_brightness_level">Nível de brilho</string>
+	<string name="title_flashlight_blink_on_off">Ligar/desligar piscando</string>
+	<string name="title_text_to_speech_speak_frequency">Frequência de fala</string>
+	<string name="title_volume_gradually_increase_volume">Aumente o volume gradualmente</string>
+	<string name="title_volume_restrict_volume">Restringir volume</string>
+	<string name="title_dismiss_options_auto_dismiss">Descartar automaticamente</string>
+	<string name="title_dismiss_options_dismiss_early">Demitir mais cedo</string>
+	<string name="title_dismiss_options_delete_after_dismissed">Excluir após dispensado</string>
+	<string name="title_snooze_options_auto_snooze">Soneca automática</string>
+	<string name="title_snooze_options_max_snooze">Max cochila</string>
+	<string name="title_snooze_options_snooze_duration">Duração da soneca</string>
+	<string name="title_snooze_options_easy_snooze">Soneca fácil</string>
+	<string name="title_upcoming_reminder_show_reminder">Mostrar lembrete</string>
+	<string name="title_upcoming_reminder_how_early">Quão cedo…</string>
+	<string name="title_upcoming_reminder_how_frequent">Quão frequente…</string>
+	<string name="title_setting_general">Em geral</string>
+	<string name="title_setting_appearance">Aparência</string>
+	<string name="title_setting_about">Sobre</string>
+	<string name="title_setting_statistics">Estatísticas</string>
+	<string name="title_setting_manage_nfc_tags">Gerenciar tags NFC</string>
+	<string name="title_setting_support">Apoio ao desenvolvimento</string>
+	<string name="title_setting_import_export">Importar \u0020|\u0020 Exportar</string>
+	<string name="title_default_alarm">Alarme padrão</string>
+	<string name="title_alarm_name">Nome</string>
+	<string name="title_alarm_days">Dias</string>
+	<string name="title_alarm_repeat">Repita</string>
+	<string name="title_alarm_vibrate">Vibrar</string>
+	<string name="title_alarm_nfc">NFC</string>
+	<string name="title_alarm_sound">Som</string>
+	<string name="title_alarm_volume">Volume</string>
+	<string name="title_alarm_screen">Tela de alarme</string>
+	<string name="title_colors">Cores</string>
+	<string name="title_notifications">Notificações</string>
+	<string name="title_style">Estilo</string>
+	<string name="title_tweaks">Ajustes</string>
+	<string name="title_new_screen">Nova tela</string>
+	<string name="title_show_alarm_name">Mostrar nome do alarme</string>
+	<string name="title_show_current_date_and_time">Mostrar data e hora atuais</string>
+	<string name="title_show_music_info">Mostrar informações da música</string>
+	<string name="title_theme_color">Tema</string>
+	<string name="title_day_button_style">Botões de dia</string>
+	<string name="title_start_week_on">Comece a semana em...</string>
+	<string name="title_expand_new_alarm">Expandir novos alarmes</string>
+	<string name="title_next_alarm_format">Próximo formato de alarme&#8230;</string>
+	<string name="title_permissions">Permissões</string>
+	<string name="title_developer">Desenvolvedor</string>
+
+	<!-- Descriptions -->
+	<string name="description_scan_nfc">Digitalizar NFC</string>
+	<string name="description_slide_to_snooze">Deslize para adiar</string>
+	<string name="description_slide_to_dismiss">Deslize para descartar</string>
+	<string name="description_alarm_activity">Escaneie a etiqueta NFC para ignorar o alarme.</string>
+	<string name="description_no_notification">Não mostrar notificações.</string>
+	<string name="description_upcoming_reminder">Lembrete para os próximos alarmes que estão prestes a serem ativados.</string>
+	<string name="description_missed_alarm">Alarmes que foram descartados automaticamente.</string>
+	<string name="description_active_alarm">Alarmes que estão ativos no momento.</string>
+	<string name="description_color">Cor hexadecimal</string>
+	<string name="description_day_button_style_filled">Botões preenchidos.</string>
+	<string name="description_day_button_style_outlined">Botões contornados.</string>
+	<string name="description_media">Música ou toque</string>
+	<string name="description_flashlight_brightness_level">Nível de brilho da lanterna.</string>
+	<string name="description_flashlight_blink_on_off">Pisque a lanterna em durações definidas.</string>
+	<string name="description_text_to_speech_what_to_say">O que dizer com conversão de texto em fala quando o alarme estiver ativo.</string>
+	<string name="description_text_to_speech_speak_frequency">Com que frequência dizer os itens selecionados acima.</string>
+	<string name="description_volume_gradually_increase_volume">Aumente o volume do alarme em uma frequência definida.</string>
+	<string name="description_volume_restrict_volume">O volume não pode ser alterado quando um alarme dispara.</string>
+	<string name="description_dismiss_options_auto_dismiss">Descartar o alarme automaticamente após um período definido.</string>
+	<string name="description_dismiss_options_dismiss_early">Descarte o alarme antecipadamente, antes que ele seja ativado.</string>
+	<string name="description_dismiss_options_delete_after_dismissed">O alarme será excluído após ser descartado.</string>
+	<string name="description_snooze_options_auto_snooze">Adie o alarme automaticamente após um período definido.</string>
+	<string name="description_snooze_options_max_snooze">Número máximo de vezes que o alarme pode ser adiado.</string>
+	<string name="description_snooze_options_snooze_duration">Período de tempo para adiar o alarme.</string>
+	<string name="description_snooze_options_easy_snooze">Adie o alarme tocando em qualquer lugar na tela do alarme.</string>
+	<string name="description_upcoming_reminder_show_reminder">Exiba uma notificação de lembrete antes do alarme disparar.</string>
+	<string name="description_upcoming_reminder_how_early">Com que antecedência a notificação de lembrete deve ser exibida?</string>
+	<string name="description_upcoming_reminder_how_frequent">Com que frequência a notificação de lembrete deve ser exibida?</string>
+	<string name="description_upcoming_reminder_text_to_speech">Use as opções de conversão de texto em fala do alarme quando a notificação for exibida.</string>
+	<string name="example_name">Trabalhar</string>
+	<string name="description_setting_general">Configurações gerais de alarme</string>
+	<string name="description_setting_appearance">Personalize a aparência do aplicativo</string>
+	<string name="description_setting_about">Informações sobre o aplicativo</string>
+	<string name="description_setting_statistics">Veja quanto tempo você cochilou e muito mais</string>
+	<string name="description_setting_manage_nfc_tags">Excluir ou renomear tags NFC salvas</string>
+	<string name="description_setting_support">O suporte seria muito apreciado, mas sem pressão! Este aplicativo sempre será gratuito</string>
+	<string name="description_setting_import_export">Importe ou exporte todos os seus dados salvos</string>
+	<string name="description_alarm_repeat_true">Repita o alarme.</string>
+	<string name="description_alarm_repeat_false">Desative o alarme depois que ele for executado.</string>
+	<string name="description_alarm_vibrate_true">Vibrar o telefone.</string>
+	<string name="description_alarm_vibrate_false">Não vibre o telefone.</string>
+	<string name="description_alarm_nfc_true">O NFC é usado para ignorar o alarme.</string>
+	<string name="description_alarm_nfc_false">Descarte o alarme normalmente.</string>
+	<string name="description_alarm_flashlight_true">Ligue a lanterna quando o alarme disparar.</string>
+	<string name="description_alarm_flashlight_false">Não ligue a lanterna quando o alarme disparar.</string>
+	<string name="description_alarm_sound">@string/none</string>
+	<string name="description_new_screen_true">Use a nova tela de alarme, onde você desliza para adiar ou ignorar o alarme.</string>
+	<string name="description_new_screen_false">Não use a nova tela de alarme. Use a tela original com botões simples para adiar ou dispensar o alarme.</string>
+	<string name="description_show_alarm_name_true">Mostrar o nome do alarme na tela de alarme.</string>
+	<string name="description_show_alarm_name_false">Não mostrar o nome do alarme.</string>
+	<string name="description_show_current_date_and_time_true">Exiba a data e a hora atuais na tela de alarme.</string>
+	<string name="description_show_current_date_and_time_false">Não mostrar a data e hora atuais.</string>
+	<string name="description_show_music_info_true">Exiba informações sobre a música ou o toque que está sendo reproduzido no momento na tela de alarme.</string>
+	<string name="description_show_music_info_false">Não mostre informações sobre música ou toque.</string>
+	<string name="description_color_theme">A cor do tema.</string>
+	<string name="description_color_name">por exemplo Trabalho</string>
+	<string name="description_color_days">por exemplo Seg &#8231; Terça-feira &#8231; Quarta &#8231; Qui &#8231; sex</string>
+	<string name="description_color_time">por exemplo 12:30</string>
+	<string name="description_color_am">Colorido se AM estiver no horário do alarme.</string>
+	<string name="description_color_pm">Colorido se PM estiver no horário do alarme.</string>
+	<string name="description_color_delete_alarm_after_dismissed">Ícone para indicar que o alarme será excluído após ser descartado.</string>
+	<string name="description_color_skip_next_alarm">O ícone para indicar que a próxima execução de um alarme será ignorada.</string>
+	<string name="description_missed_alarm_true">Mostrar notificações para alarmes perdidos.</string>
+	<string name="description_show_hide_vibrate_button_true">Mostrar o botão de vibração ao expandir um alarme.</string>
+	<string name="description_show_hide_vibrate_button_false">Oculte o botão de vibração ao expandir um alarme.</string>
+	<string name="description_show_hide_nfc_button_true">Mostrar o botão NFC ao expandir um alarme.</string>
+	<string name="description_show_hide_nfc_button_false">Oculte o botão NFC ao expandir um alarme.</string>
+	<string name="description_show_hide_flashlight_button_true">Mostrar o botão da lanterna ao expandir um alarme.</string>
+	<string name="description_show_hide_flashlight_button_false">Oculte o botão da lanterna ao expandir um alarme.</string>
+	<string name="description_expand_new_alarm_true">Os alarmes copiados ou criados com o botão &#8220;+&#8221; são expandidos.</string>
+	<string name="description_expand_new_alarm_false">Os alarmes não são expandidos.</string>
+	<string name="description_next_alarm_format_time_in">Próximo alarme em 7 horas e 30 minutos</string>
+	<string name="description_next_alarm_format_time_on">Próximo alarme na segunda-feira às 7h00</string>
+	<string name="description_permission_disable_battery_optimization">O aplicativo não será colocado em hibernação, permitindo que os alarmes sejam ativados normalmente.</string>
+	<string name="description_permission_nfc">Detecte tags NFC para ignorar um alarme.</string>
+	<string name="description_permission_storage">Leia músicas armazenadas no seu dispositivo.</string>
+	<string name="description_permission_vibrate">Vibrar seu dispositivo quando um alarme for ativado.</string>
+	<string name="description_permission_foreground_service">Execute um serviço em primeiro plano que reproduzirá áudio, vibrará seu dispositivo, etc. quando um alarme for ativado.</string>
+	<string name="description_permission_full_screen_intent">Use a tela cheia quando um alarme for ativado.</string>
+	<string name="description_permission_schedule_alarm">Programe alarmes exatos.</string>
+	<string name="description_permission_set_alarm">Defina um alarme de uma fonte externa, como o Google Assistente.</string>
+	<string name="description_permission_post_notifications">Exiba uma notificação quando um alarme for ativado, o que impedirá que seu dispositivo coloque o aplicativo em hibernação e desligue o alarme sozinho.</string>
+	<string name="description_permission_boot">Restaure alarmes quando seu dispositivo for ligado. O Android apagará alarmes quando seu dispositivo for desligado.</string>
+	<string name="description_permission_wakelock">Evite que seu dispositivo entre em modo de espera para que um alarme ativado continue a disparar.</string>
+
+	<!-- Content descriptions -->
+	<string name="cd_alarm_list">A lista de alarmes será exibida aqui.</string>
+	<string name="cd_nfc_tag_list">A lista de tags NFC será exibida aqui.</string>
+	<string name="cd_fab_add_alarm">Adicione um novo alarme.</string>
+	<string name="cd_fab_launch_system_file_browser">Inicie o navegador de arquivos do sistema.</string>
+	<string name="cd_collapse_alarm">Recolher um alarme.</string>
+	<string name="cd_expand_alarm">Expandir um alarme.</string>
+	<string name="cd_volume_icon">Alterar o volume de um alarme.</string>
+	<string name="cd_volume_slider">Deslize para alterar o volume de um alarme.</string>
+	<string name="cd_alarm_options">Alterar opções específicas de alarme.</string>
+	<string name="cd_color_example">Exemplo da cor atual.</string>
+	<string name="cd_file_entry">Tipo de entrada exibida, como um arquivo ou diretório.</string>
+	<string name="cd_color_selector">Selecione uma cor para o seletor de cores.</string>
+	<string name="cd_shader_selector">Selecione um tom para o seletor de cores.</string>
+	<string name="cd_request_permission_ignore_battery_optimization">Solicitação para desabilitar a otimização da bateria.</string>
+	<string name="cd_request_permission_post_notifications">Solicitação para postar notificações.</string>
+	<string name="cd_request_permission_schedule_exact_alarm">Solicitar agendamento de alarmes exatos.</string>
+	<string name="cd_whats_new">Lista de itens novos nesta versão do aplicativo.</string>
+	<string name="cd_scan_nfc">Digitalize uma etiqueta NFC.</string>
+	<string name="cd_alarm_slider_arrow">Direção para deslizar o dedo.</string>
+	<string name="cd_dismiss_alarm">Ignore o alarme.</string>
+	<string name="cd_snooze_alarm">Adie o alarme.</string>
+	<string name="cd_current_alarm_media_playing">A mídia de alarme atual que está sendo reproduzida.</string>
+	<string name="cd_skip_next_alarm">Pular próximo alarme.</string>
+	<string name="cd_delete_alarm_after_dismissed">Excluir alarme após ele ser descartado.</string>
+	<string name="cd_clock_widget_alarm_icon">Próximo alarme</string>
+
+	<!-- Plurals -->
+	<plurals name="alarm">
+		<item quantity="one">alarme</item>
+		<item quantity="other">alarmes</item>
+	</plurals>
+
+	<plurals name="missed_alarm">
+		<item quantity="one">Alarme perdido</item>
+		<item quantity="other">@string/title_missed_alarms</item>
+	</plurals>
+
+	<plurals name="upcoming_reminder">
+		<item quantity="one">Próximo lembrete</item>
+		<item quantity="other">@string/title_upcoming_reminders</item>
+	</plurals>
+
+	<plurals name="unit_day">
+		<item quantity="one">dia</item>
+		<item quantity="other">dias</item>
+	</plurals>
+
+	<plurals name="unit_hour">
+		<item quantity="one">hora</item>
+		<item quantity="other">horas</item>
+	</plurals>
+
+	<plurals name="unit_minute">
+		<item quantity="one">minuto</item>
+		<item quantity="other">minutos</item>
+	</plurals>
+
+	<plurals name="unit_second">
+		<item quantity="one">segundo</item>
+		<item quantity="other">segundos</item>
+	</plurals>
+
+	<string name="tts_say_time">O tempo é %1$s:%2$s %3$s.</string>
+
+	<plurals name="tts_say_reminder">
+		<item quantity="one">Lembrete. %1$s, será executado em %2$d minuto.</item>
+		<item quantity="other">Lembrete. %1$s, será executado em %2$d minutos.</item>
+	</plurals>
+
+</resources>

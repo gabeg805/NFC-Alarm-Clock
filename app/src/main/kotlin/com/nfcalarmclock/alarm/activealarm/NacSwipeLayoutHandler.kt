@@ -734,6 +734,10 @@ class NacSwipeLayoutHandler(
 
 		// Set the visibility of the artist if it is unknown
 		musicArtistTextView.visibility = if (artist.isNotEmpty()) View.VISIBLE else View.GONE
+
+		// Select the title and artist to marquee it, if applicable
+		musicTitleTextView.isSelected = true
+		musicArtistTextView.isSelected = true
 	}
 
 	/**

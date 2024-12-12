@@ -1,12 +1,14 @@
 package com.nfcalarmclock.util.media
 
 import android.annotation.TargetApi
+import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.nfcalarmclock.R
@@ -14,6 +16,7 @@ import com.nfcalarmclock.system.file.NacFile.basename
 import com.nfcalarmclock.system.file.NacFile.strip
 import com.nfcalarmclock.system.file.NacFile.toRelativeDirname
 import com.nfcalarmclock.system.file.NacFileTree.Companion.getFiles
+import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.media.NacMedia.TYPE_DIRECTORY
 import com.nfcalarmclock.util.media.NacMedia.TYPE_FILE
@@ -23,6 +26,110 @@ import java.io.File
 import java.util.Locale
 import java.util.TreeMap
 import java.util.concurrent.TimeUnit
+
+/**
+ * Add a file to the media store.
+ */
+fun addToMediaStore(context: Context, documentUri: Uri): Uri?
+{
+	// Get the name of the document and its title (name without the file extension)
+	val documentName = documentUri.getDocumentName(context)
+	val documentTitle = if (documentName.isNotEmpty())
+	{
+		File(documentName).nameWithoutExtension
+	}
+	else
+	{
+		""
+	}
+
+	val x = File("").nameWithoutExtension
+	println("X : $x")
+
+	// Copy the media to a temporary file
+	val tmpName = "tmp"
+	val tmpUri = copyMediaToDeviceEncryptedStorage(context, documentUri, tmpName)
+	val tmpFile = File(tmpUri.toString())
+	println("DOC NAME : $documentName")
+
+	// Add the temporary file to the media store
+	val contentValues = ContentValues().apply {
+
+		// Set the path
+		put(MediaStore.Audio.Media.DATA, tmpUri.toString())
+
+		// Check if the document name could be found
+		if (documentName.isNotEmpty())
+		{
+			// Set the name and title
+			put(MediaStore.Audio.Media.DISPLAY_NAME, documentName)
+			put(MediaStore.Audio.Media.TITLE, documentTitle)
+		}
+
+	}
+
+	println("Content values")
+	println(contentValues.get(MediaStore.Audio.Media.DATA))
+	println(contentValues.get(MediaStore.Audio.Media.DISPLAY_NAME))
+	println(contentValues.get(MediaStore.Audio.Media.TITLE))
+
+	// Add the song to the MediaStore
+	val newUri = context.contentResolver.insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, contentValues)
+	println("New Uri : $newUri")
+
+	// Check if the new uri is a valid media file
+	if (newUri == null)
+	{
+		quickToast(context, R.string.error_message_unable_to_get_media_information_from_file)
+		return null
+	}
+
+	// Get the local media file and path
+	val localMediaPath = buildLocalMediaPath(context, "", documentTitle, TYPE_FILE)
+	val localMediaFile = File(localMediaPath)
+	println("To file : $localMediaPath")
+
+	// Move temporary file to real file
+	if (tmpFile.renameTo(localMediaFile))
+	{
+		println("RENAME SUCCESSFUL")
+	}
+	else
+	{
+		println("RENAME UNSUCCESSFUL")
+	}
+
+	// Delete temporary file
+	if (tmpFile.exists())
+	{
+		tmpFile.delete()
+	}
+
+	return Uri.parse(localMediaPath)
+}
+
+/**
+ * Get the name of a file from a document provider.
+ *
+ * @return The name of a file from a document provider.
+ */
+fun Uri.getDocumentName(context: Context): String
+{
+	// Query the content resolver for the name
+	context.contentResolver.query(this, null, null, null, null)
+		.use { cursor ->
+
+			// Get the index of the name column
+			val nameIndex = cursor?.getColumnIndex(OpenableColumns.DISPLAY_NAME) ?: return ""
+
+			// Move to the first item
+			cursor.moveToFirst()
+
+			// Get the name
+			return cursor.getString(nameIndex)
+
+	}
+}
 
 /**
  * Build the local media path.
@@ -64,6 +171,39 @@ fun buildLocalMediaPath(
  */
 fun copyMediaToDeviceEncryptedStorage(
 	context: Context,
+	srcUri: Uri,
+	dstName: String,
+): Uri
+{
+	// Get the device protected storage context
+	val deviceContext = getDeviceProtectedStorageContext(context)
+
+	// Build the destination uri
+	val dstUri = Uri.parse("${deviceContext.filesDir}/$dstName")
+
+	// Copy the file to the local media path
+	deviceContext.openFileOutput(dstName, Context.MODE_PRIVATE).use { fileOutput ->
+
+		// Copy the file to the local file dir (for the app)
+		context.contentResolver.openInputStream(srcUri).use { inputStream ->
+			inputStream?.copyTo(fileOutput, 1024)
+		}
+
+	}
+
+	return dstUri
+}
+
+/**
+ * Copy the media to the local files/ directory in device encrypted storage.
+ *
+ * This is used as a failsafe, in case the device gets rebooted and an alarm needs to be
+ * run before the user can unlock their device. In this case, the device would be in
+ * direct boot mode and special considerations need to take place so that the alarm is
+ * run as expected.
+ */
+fun copyMediaToDeviceEncryptedStorage(
+	context: Context,
 	path: String,
 	artist: String,
 	title: String,
@@ -81,15 +221,8 @@ fun copyMediaToDeviceEncryptedStorage(
 	// Check if a directory was selected
 	if (type.isMediaFile() || type.isMediaRingtone())
 	{
-		// Copy the file to the local media path
-		deviceContext.openFileOutput(dstFile.name, Context.MODE_PRIVATE).use { fileOutput ->
-
-			// Copy the file to the local file dir (for the app)
-			context.contentResolver.openInputStream(srcUri).use { inputStream ->
-				inputStream?.copyTo(fileOutput, 1024)
-			}
-
-		}
+		// Copy the file
+		copyMediaToDeviceEncryptedStorage(deviceContext, srcUri, dstFile.name)
 	}
 }
 

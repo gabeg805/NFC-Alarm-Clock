@@ -303,7 +303,6 @@
 			android:layout_width="24dp"
 			android:layout_height="24dp"
 			android:layout_centerVertical="true"
-			android:animateLayoutChanges="true"
 			android:src="@drawable/music_note"
 			android:contentDescription="@string/cd_current_alarm_media_playing"
 			/>
@@ -315,7 +314,6 @@
 			android:layout_marginStart="@dimen/nudge"
 			android:layout_marginEnd="@dimen/nudge"
 			android:layout_toEndOf="@id/music_icon"
-			android:animateLayoutChanges="true"
 			android:singleLine="true"
 			android:ellipsize="marquee"
 			android:textColor="@color/white"
@@ -330,7 +328,6 @@
 			android:layout_height="wrap_content"
 			android:layout_below="@id/music_title"
 			android:layout_alignStart="@id/music_title"
-			android:animateLayoutChanges="true"
 			android:singleLine="true"
 			android:ellipsize="marquee"
 			android:textColor="@color/white"

@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- Audio sources -->
+	<string-array name="audio_sources">
+		<item>এলার্ম</item>
+		<item>কল</item>
+		<item>মিডিয়া</item>
+		<item>বিজ্ঞপ্তি</item>
+		<item>রিংটোন</item>
+	</string-array>
+
+	<!-- Flashlight -->
+	<string-array name="flashlight_on_off_duration_times">
+		<item>0.5 সেকেন্ড</item>
+		<item>1.0 সেকেন্ড</item>
+		<item>1.5 সেকেন্ড</item>
+		<item>2.0 সেকেন্ড</item>
+		<item>2.5 সেকেন্ড</item>
+		<item>3.0 সেকেন্ড</item>
+		<item>3.5 সেকেন্ড</item>
+		<item>4.0 সেকেন্ড</item>
+		<item>4.5 সেকেন্ড</item>
+		<item>5.0 সেকেন্ড</item>
+		<item>5.5 সেকেন্ড</item>
+		<item>6.0 সেকেন্ড</item>
+		<item>6.5 সেকেন্ড</item>
+		<item>7.0 সেকেন্ড</item>
+		<item>7.5 সেকেন্ড</item>
+		<item>8.0 সেকেন্ড</item>
+		<item>8.5 সেকেন্ড</item>
+		<item>9.0 সেকেন্ড</item>
+		<item>9.5 সেকেন্ড</item>
+		<item>10.0 সেকেন্ড</item>
+	</string-array>
+
+	<!-- Text to speech -->
+	<string-array name="tts_frequency">
+		<item>একবার</item>
+		<item>প্রতি ১ মিনিটে</item>
+		<item>প্রতি 2 মিনিটে</item>
+		<item>প্রতি ৩ মিনিটে</item>
+		<item>প্রতি 4 মিনিটে</item>
+		<item>প্রতি 5 মিনিটে</item>
+		<item>প্রতি ৬ মিনিটে</item>
+		<item>প্রতি 7 মিনিটে</item>
+		<item>প্রতি 8 মিনিটে</item>
+		<item>প্রতি 9 মিনিটে</item>
+		<item>প্রতি 10 মিনিটে</item>
+		<item>প্রতি 11 মিনিটে</item>
+		<item>প্রতি 12 মিনিটে</item>
+		<item>প্রতি 13 মিনিটে</item>
+		<item>প্রতি 14 মিনিটে</item>
+		<item>প্রতি 15 মিনিটে</item>
+		<item>প্রতি 16 মিনিটে</item>
+		<item>প্রতি 17 মিনিটে</item>
+		<item>প্রতি 18 মিনিটে</item>
+		<item>প্রতি 19 মিনিটে</item>
+		<item>প্রতি 20 মিনিটে</item>
+		<item>প্রতি 21 মিনিটে</item>
+		<item>প্রতি 22 মিনিটে</item>
+		<item>প্রতি 23 মিনিটে</item>
+		<item>প্রতি 24 মিনিটে</item>
+		<item>প্রতি 25 মিনিটে</item>
+		<item>প্রতি 26 মিনিটে</item>
+		<item>প্রতি 27 মিনিটে</item>
+		<item>প্রতি ২৮ মিনিটে</item>
+		<item>প্রতি 29 মিনিটে</item>
+		<item>প্রতি 30 মিনিটে</item>
+	</string-array>
+
+	<!-- Auto dismiss minutes -->
+	<string-array name="auto_dismiss_minute_summaries">
+		<item>0 মিনিট</item>
+		<item>1 মিনিট</item>
+		<item>2 মিনিট</item>
+		<item>3 মিনিট</item>
+		<item>4 মিনিট</item>
+		<item>5 মিনিট</item>
+		<item>6 মিনিট</item>
+		<item>7 মিনিট</item>
+		<item>8 মিনিট</item>
+		<item>9 মিনিট</item>
+		<item>10 মিনিট</item>
+		<item>11 মিনিট</item>
+		<item>12 মিনিট</item>
+		<item>13 মিনিট</item>
+		<item>14 মিনিট</item>
+		<item>15 মিনিট</item>
+		<item>16 মিনিট</item>
+		<item>17 মিনিট</item>
+		<item>18 মিনিট</item>
+		<item>19 মিনিট</item>
+		<item>20 মিনিট</item>
+		<item>21 মিনিট</item>
+		<item>22 মিনিট</item>
+		<item>23 মিনিট</item>
+		<item>24 মিনিট</item>
+		<item>25 মিনিট</item>
+		<item>26 মিনিট</item>
+		<item>27 মিনিট</item>
+		<item>28 মিনিট</item>
+		<item>29 মিনিট</item>
+		<item>30 মিনিট</item>
+		<item>31 মিনিট</item>
+		<item>32 মিনিট</item>
+		<item>33 মিনিট</item>
+		<item>34 মিনিট</item>
+		<item>35 মিনিট</item>
+		<item>36 মিনিট</item>
+		<item>37 মিনিট</item>
+		<item>38 মিনিট</item>
+		<item>39 মিনিট</item>
+		<item>40 মিনিট</item>
+		<item>41 মিনিট</item>
+		<item>42 মিনিট</item>
+		<item>43 মিনিট</item>
+		<item>44 মিনিট</item>
+		<item>45 মিনিট</item>
+		<item>46 মিনিট</item>
+		<item>47 মিনিট</item>
+		<item>48 মিনিট</item>
+		<item>49 মিনিট</item>
+		<item>50 মিনিট</item>
+		<item>51 মিনিট</item>
+		<item>52 মিনিট</item>
+		<item>53 মিনিট</item>
+		<item>54 মিনিট</item>
+		<item>55 মিনিট</item>
+		<item>56 মিনিট</item>
+		<item>57 মিনিট</item>
+		<item>58 মিনিট</item>
+		<item>59 মিনিট</item>
+		<item>60 মিনিট</item>
+	</string-array>
+
+	<!-- Dismiss early -->
+	<string-array name="dismiss_early_times">
+		<item>1 মিনিট</item>
+		<item>2 মিনিট</item>
+		<item>3 মিনিট</item>
+		<item>4 মিনিট</item>
+		<item>5 মিনিট</item>
+		<item>10 মিনিট</item>
+		<item>15 মিনিট</item>
+		<item>20 মিনিট</item>
+		<item>25 মিনিট</item>
+		<item>30 মিনিট</item>
+		<item>35 মিনিট</item>
+		<item>40 মিনিট</item>
+		<item>45 মিনিট</item>
+		<item>50 মিনিট</item>
+		<item>55 মিনিট</item>
+		<item>60 মিনিট</item>
+		<item>65 মিনিট</item>
+		<item>70 মিনিট</item>
+		<item>75 মিনিট</item>
+		<item>80 মিনিট</item>
+		<item>85 মিনিট</item>
+		<item>90 মিনিট</item>
+		<item>95 মিনিট</item>
+		<item>100 মিনিট</item>
+		<item>105 মিনিট</item>
+		<item>110 মিনিট</item>
+		<item>115 মিনিট</item>
+		<item>120 মিনিট</item>
+	</string-array>
+
+	<!-- Auto snooze minutes -->
+	<string-array name="auto_snooze_minute_summaries">
+		<item>0 মিনিট</item>
+		<item>1 মিনিট</item>
+		<item>2 মিনিট</item>
+		<item>3 মিনিট</item>
+		<item>4 মিনিট</item>
+		<item>5 মিনিট</item>
+		<item>6 মিনিট</item>
+		<item>7 মিনিট</item>
+		<item>8 মিনিট</item>
+		<item>9 মিনিট</item>
+		<item>10 মিনিট</item>
+		<item>11 মিনিট</item>
+		<item>12 মিনিট</item>
+		<item>13 মিনিট</item>
+		<item>14 মিনিট</item>
+		<item>15 মিনিট</item>
+		<item>16 মিনিট</item>
+		<item>17 মিনিট</item>
+		<item>18 মিনিট</item>
+		<item>19 মিনিট</item>
+		<item>20 মিনিট</item>
+		<item>21 মিনিট</item>
+		<item>22 মিনিট</item>
+		<item>23 মিনিট</item>
+		<item>24 মিনিট</item>
+		<item>25 মিনিট</item>
+		<item>26 মিনিট</item>
+		<item>27 মিনিট</item>
+		<item>28 মিনিট</item>
+		<item>29 মিনিট</item>
+		<item>30 মিনিট</item>
+	</string-array>
+
+	<!-- Max snoozes -->
+	<string-array name="max_snooze_summaries">
+		<item>কোনোটিই নয়</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+		<item>5</item>
+		<item>6</item>
+		<item>7</item>
+		<item>8</item>
+		<item>9</item>
+		<item>10</item>
+		<item>আনলিমিটেড</item>
+	</string-array>
+
+	<!-- Snooze duration minutes -->
+	<string-array name="snooze_duration_minute_summaries">
+		<item>0 মিনিট</item>
+		<item>1 মিনিট</item>
+		<item>2 মিনিট</item>
+		<item>3 মিনিট</item>
+		<item>4 মিনিট</item>
+		<item>5 মিনিট</item>
+		<item>6 মিনিট</item>
+		<item>7 মিনিট</item>
+		<item>8 মিনিট</item>
+		<item>9 মিনিট</item>
+		<item>10 মিনিট</item>
+		<item>11 মিনিট</item>
+		<item>12 মিনিট</item>
+		<item>13 মিনিট</item>
+		<item>14 মিনিট</item>
+		<item>15 মিনিট</item>
+		<item>16 মিনিট</item>
+		<item>17 মিনিট</item>
+		<item>18 মিনিট</item>
+		<item>19 মিনিট</item>
+		<item>20 মিনিট</item>
+		<item>21 মিনিট</item>
+		<item>22 মিনিট</item>
+		<item>23 মিনিট</item>
+		<item>24 মিনিট</item>
+		<item>25 মিনিট</item>
+		<item>26 মিনিট</item>
+		<item>27 মিনিট</item>
+		<item>28 মিনিট</item>
+		<item>29 মিনিট</item>
+		<item>30 মিনিট</item>
+		<item>31 মিনিট</item>
+		<item>32 মিনিট</item>
+		<item>33 মিনিট</item>
+		<item>34 মিনিট</item>
+		<item>35 মিনিট</item>
+		<item>36 মিনিট</item>
+		<item>37 মিনিট</item>
+		<item>38 মিনিট</item>
+		<item>39 মিনিট</item>
+		<item>40 মিনিট</item>
+		<item>41 মিনিট</item>
+		<item>42 মিনিট</item>
+		<item>43 মিনিট</item>
+		<item>44 মিনিট</item>
+		<item>45 মিনিট</item>
+		<item>46 মিনিট</item>
+		<item>47 মিনিট</item>
+		<item>48 মিনিট</item>
+		<item>49 মিনিট</item>
+		<item>50 মিনিট</item>
+		<item>51 মিনিট</item>
+		<item>52 মিনিট</item>
+		<item>53 মিনিট</item>
+		<item>54 মিনিট</item>
+		<item>55 মিনিট</item>
+		<item>56 মিনিট</item>
+		<item>57 মিনিট</item>
+		<item>58 মিনিট</item>
+		<item>59 মিনিট</item>
+		<item>60 মিনিট</item>
+		<item>61 মিনিট</item>
+		<item>62 মিনিট</item>
+		<item>63 মিনিট</item>
+		<item>64 মিনিট</item>
+		<item>65 মিনিট</item>
+		<item>66 মিনিট</item>
+		<item>67 মিনিট</item>
+		<item>68 মিনিট</item>
+		<item>69 মিনিট</item>
+		<item>70 মিনিট</item>
+		<item>71 মিনিট</item>
+		<item>72 মিনিট</item>
+		<item>73 মিনিট</item>
+		<item>74 মিনিট</item>
+		<item>75 মিনিট</item>
+		<item>76 মিনিট</item>
+		<item>77 মিনিট</item>
+		<item>78 মিনিট</item>
+		<item>79 মিনিট</item>
+		<item>80 মিনিট</item>
+		<item>81 মিনিট</item>
+		<item>82 মিনিট</item>
+		<item>83 মিনিট</item>
+		<item>84 মিনিট</item>
+		<item>85 মিনিট</item>
+		<item>86 মিনিট</item>
+		<item>87 মিনিট</item>
+		<item>88 মিনিট</item>
+		<item>89 মিনিট</item>
+		<item>90 মিনিট</item>
+	</string-array>
+
+	<!-- Upcoming reminder how early -->
+	<string-array name="upcoming_reminder_how_early">
+		<item>1 মিনিট</item>
+		<item>2 মিনিট</item>
+		<item>3 মিনিট</item>
+		<item>4 মিনিট</item>
+		<item>5 মিনিট</item>
+		<item>6 মিনিট</item>
+		<item>7 মিনিট</item>
+		<item>8 মিনিট</item>
+		<item>9 মিনিট</item>
+		<item>10 মিনিট</item>
+		<item>15 মিনিট</item>
+		<item>20 মিনিট</item>
+		<item>25 মিনিট</item>
+		<item>30 মিনিট</item>
+		<item>35 মিনিট</item>
+		<item>40 মিনিট</item>
+		<item>45 মিনিট</item>
+		<item>50 মিনিট</item>
+		<item>55 মিনিট</item>
+		<item>60 মিনিট</item>
+		<item>65 মিনিট</item>
+		<item>70 মিনিট</item>
+		<item>75 মিনিট</item>
+		<item>80 মিনিট</item>
+		<item>85 মিনিট</item>
+		<item>90 মিনিট</item>
+		<item>95 মিনিট</item>
+		<item>100 মিনিট</item>
+		<item>105 মিনিট</item>
+		<item>110 মিনিট</item>
+		<item>115 মিনিট</item>
+		<item>120 মিনিট</item>
+	</string-array>
+
+	<!-- Upcoming reminder how frequent -->
+	<string-array name="upcoming_reminder_how_frequent">
+		<item>একবার</item>
+		<item>প্রতি ১ মিনিটে</item>
+		<item>প্রতি 2 মিনিটে</item>
+		<item>প্রতি ৩ মিনিটে</item>
+		<item>প্রতি 4 মিনিটে</item>
+		<item>প্রতি 5 মিনিটে</item>
+		<item>প্রতি ৬ মিনিটে</item>
+		<item>প্রতি 7 মিনিটে</item>
+		<item>প্রতি 8 মিনিটে</item>
+		<item>প্রতি 9 মিনিটে</item>
+		<item>প্রতি 10 মিনিটে</item>
+		<item>প্রতি 11 মিনিটে</item>
+		<item>প্রতি 12 মিনিটে</item>
+		<item>প্রতি 13 মিনিটে</item>
+		<item>প্রতি 14 মিনিটে</item>
+		<item>প্রতি 15 মিনিটে</item>
+		<item>প্রতি 16 মিনিটে</item>
+		<item>প্রতি 17 মিনিটে</item>
+		<item>প্রতি 18 মিনিটে</item>
+		<item>প্রতি 19 মিনিটে</item>
+		<item>প্রতি 20 মিনিটে</item>
+		<item>প্রতি 21 মিনিটে</item>
+		<item>প্রতি 22 মিনিটে</item>
+		<item>প্রতি 23 মিনিটে</item>
+		<item>প্রতি 24 মিনিটে</item>
+		<item>প্রতি 25 মিনিটে</item>
+		<item>প্রতি 26 মিনিটে</item>
+		<item>প্রতি 27 মিনিটে</item>
+		<item>প্রতি ২৮ মিনিটে</item>
+		<item>প্রতি 29 মিনিটে</item>
+		<item>প্রতি 30 মিনিটে</item>
+	</string-array>
+
+</resources>

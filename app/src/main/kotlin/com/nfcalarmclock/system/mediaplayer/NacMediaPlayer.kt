@@ -19,6 +19,7 @@ import com.nfcalarmclock.util.media.NacMedia
 import com.nfcalarmclock.util.media.findFirstLocalValidMedia
 import com.nfcalarmclock.util.media.isMediaDirectory
 import com.nfcalarmclock.util.media.isMediaValid
+import java.io.File
 
 /**
  * Wrapper for the MediaPlayer class.
@@ -284,7 +285,7 @@ class NacMediaPlayer(
 		// acessed, it is because the alarm went off in direct boot mode (when the
 		// device rebooted and the user has not unlocked it yet) or because the media
 		// was moved/removed
-		if (!uri.isMediaValid(context) || !isUserUnlocked(context))
+		if (uri.isMediaValid(context) && !isUserUnlocked(context))
 		{
 			// Directory
 			if (alarm.mediaType.isMediaDirectory())
@@ -301,14 +302,15 @@ class NacMediaPlayer(
 		{
 			// Get the local media path
 			val localUri = Uri.parse(alarm.localMediaPath)
-			println("Local URI : $localUri")
+			val localFile = File(alarm.localMediaPath)
+			println("Local URI : $localUri | Exists? ${localFile.exists()}")
 
 			// Check if this local path can be accessed. If this cannot be accessed, it
 			// could be that the original media is a directory, which would not have any
 			// local media to play, so the expected behavior here would be to just play
 			// a random song in the local files directory
 			//uri = if (localUri.canAccessMedia(context))
-			uri = if (localUri.isMediaValid(context))
+			uri = if (localUri.isMediaValid(context) && localFile.exists())
 			{
 				println("Local media path is solid")
 				localUri
@@ -318,6 +320,9 @@ class NacMediaPlayer(
 				println("Find first jank")
 				findFirstLocalValidMedia(context, localUri)
 			}
+
+			println("TEST first jank")
+			println(findFirstLocalValidMedia(context, localUri))
 		}
 
 		println("PLAY FILE : $uri")

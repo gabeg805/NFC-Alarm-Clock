@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- Days of week full names -->
+	<string-array name="days_of_week_full">
+		<item>রবিবার</item>
+		<item>সোমবার</item>
+		<item>মঙ্গলবার</item>
+		<item>বুধবার</item>
+		<item>বৃহস্পতিবার</item>
+		<item>শুক্রবার</item>
+		<item>শনিবার</item>
+	</string-array>
+
+	<!-- Days of week abbreviated -->
+	<string-array name="days_of_week_abbr">
+		<item>সূর্য</item>
+		<item>সোম</item>
+		<item>মঙ্গল</item>
+		<item>বুধ</item>
+		<item>বৃহ</item>
+		<item>শুক্র</item>
+		<item>শনি</item>
+	</string-array>
+
+	<!-- Days of week one letter -->
+	<string-array name="days_of_week_one_letter">
+		<item>এস</item>
+		<item>এম</item>
+		<item>টি</item>
+		<item>ডব্লিউ</item>
+		<item>টি</item>
+		<item>চ</item>
+		<item>এস</item>
+	</string-array>
+
+	<!-- Start week on days -->
+	<string-array name="start_week_on">
+		<item>রবিবার</item>
+		<item>সোমবার</item>
+	</string-array>
+
+	<!-- General list of seconds -->
+	<string-array name="general_seconds_summaries">
+		<item>0 সেকেন্ড</item>
+		<item>1 সেকেন্ড</item>
+		<item>2 সেকেন্ড</item>
+		<item>3 সেকেন্ড</item>
+		<item>4 সেকেন্ড</item>
+		<item>5 সেকেন্ড</item>
+		<item>6 সেকেন্ড</item>
+		<item>7 সেকেন্ড</item>
+		<item>8 সেকেন্ড</item>
+		<item>9 সেকেন্ড</item>
+		<item>10 সেকেন্ড</item>
+		<item>11 সেকেন্ড</item>
+		<item>12 সেকেন্ড</item>
+		<item>13 সেকেন্ড</item>
+		<item>14 সেকেন্ড</item>
+		<item>15 সেকেন্ড</item>
+		<item>16 সেকেন্ড</item>
+		<item>17 সেকেন্ড</item>
+		<item>18 সেকেন্ড</item>
+		<item>19 সেকেন্ড</item>
+		<item>20 সেকেন্ড</item>
+		<item>21 সেকেন্ড</item>
+		<item>22 সেকেন্ড</item>
+		<item>23 সেকেন্ড</item>
+		<item>24 সেকেন্ড</item>
+		<item>25 সেকেন্ড</item>
+		<item>26 সেকেন্ড</item>
+		<item>27 সেকেন্ড</item>
+		<item>28 সেকেন্ড</item>
+		<item>29 সেকেন্ড</item>
+		<item>30 সেকেন্ড</item>
+		<item>31 সেকেন্ড</item>
+		<item>32 সেকেন্ড</item>
+		<item>33 সেকেন্ড</item>
+		<item>34 সেকেন্ড</item>
+		<item>35 সেকেন্ড</item>
+		<item>36 সেকেন্ড</item>
+		<item>37 সেকেন্ড</item>
+		<item>38 সেকেন্ড</item>
+		<item>39 সেকেন্ড</item>
+		<item>40 সেকেন্ড</item>
+		<item>41 সেকেন্ড</item>
+		<item>42 সেকেন্ড</item>
+		<item>43 সেকেন্ড</item>
+		<item>44 সেকেন্ড</item>
+		<item>45 সেকেন্ড</item>
+		<item>46 সেকেন্ড</item>
+		<item>47 সেকেন্ড</item>
+		<item>48 সেকেন্ড</item>
+		<item>49 সেকেন্ড</item>
+		<item>50 সেকেন্ড</item>
+		<item>51 সেকেন্ড</item>
+		<item>52 সেকেন্ড</item>
+		<item>53 সেকেন্ড</item>
+		<item>54 সেকেন্ড</item>
+		<item>55 সেকেন্ড</item>
+		<item>56 সেকেন্ড</item>
+		<item>57 সেকেন্ড</item>
+		<item>58 সেকেন্ড</item>
+		<item>59 সেকেন্ড</item>
+		<item>60 সেকেন্ড</item>
+	</string-array>
+
+</resources>

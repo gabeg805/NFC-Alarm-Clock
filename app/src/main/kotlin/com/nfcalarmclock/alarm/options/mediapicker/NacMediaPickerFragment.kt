@@ -283,13 +283,14 @@ open class NacMediaPickerFragment
 		val uri = Uri.parse(mediaPath)
 
 		// Set the media information
-		mediaArtist = uri.getMediaArtist(activity)
-		mediaTitle = uri.getMediaTitle(activity)
-		mediaType = uri.getMediaType(activity)
+		mediaArtist = uri.getMediaArtist(deviceContext)
+		mediaTitle = uri.getMediaTitle(deviceContext)
+		mediaType = uri.getMediaType(deviceContext)
 		localMediaPath = buildLocalMediaPath(deviceContext, mediaArtist, mediaTitle, mediaType)
+		println("Final jank : $mediaArtist | $mediaTitle | $mediaType | $localMediaPath")
 
 		// Copy the media to the local files/ directory
-		copyMediaToDeviceEncryptedStorage(activity, mediaPath, mediaArtist, mediaTitle, mediaType)
+		copyMediaToDeviceEncryptedStorage(deviceContext, mediaPath, mediaArtist, mediaTitle, mediaType)
 
 		// Check if alarm is set
 		if (alarm != null)
