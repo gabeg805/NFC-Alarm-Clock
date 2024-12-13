@@ -16,7 +16,7 @@ import com.nfcalarmclock.util.isUserUnlocked
 import com.nfcalarmclock.util.media.NacAudioAttributes
 import com.nfcalarmclock.util.media.NacAudioManager
 import com.nfcalarmclock.util.media.NacMedia
-import com.nfcalarmclock.util.media.findFirstLocalValidMedia
+import com.nfcalarmclock.util.media.findFirstValidLocalMedia
 import com.nfcalarmclock.util.media.isMediaDirectory
 import com.nfcalarmclock.util.media.isMediaValid
 import java.io.File
@@ -272,7 +272,7 @@ class NacMediaPlayer(
 	 *
 	 * @param  alarm   The alarm to get the media path from.
 	 */
-	fun playAlarm(alarm: NacAlarm)
+	fun playAlarm(alarm: NacAlarm): Uri?
 	{
 		// Merge alarm with audio attributes
 		audioAttributes.merge(alarm)
@@ -285,7 +285,7 @@ class NacMediaPlayer(
 		// acessed, it is because the alarm went off in direct boot mode (when the
 		// device rebooted and the user has not unlocked it yet) or because the media
 		// was moved/removed
-		if (uri.isMediaValid(context) && !isUserUnlocked(context))
+		if (uri.isMediaValid(context) && isUserUnlocked(context))
 		{
 			// Directory
 			if (alarm.mediaType.isMediaDirectory())
@@ -295,7 +295,7 @@ class NacMediaPlayer(
 				// part of the playlist
 				println("PLAY DIRECTORY")
 				playDirectory(alarm.mediaPath, recursive = alarm.recursivelyPlayMedia)
-				return
+				return uri
 			}
 		}
 		else
@@ -318,25 +318,28 @@ class NacMediaPlayer(
 			else
 			{
 				println("Find first jank")
-				findFirstLocalValidMedia(context, localUri)
+				findFirstValidLocalMedia(context, localUri)
 			}
 
 			println("TEST first jank")
-			println(findFirstLocalValidMedia(context, localUri))
+			println(findFirstValidLocalMedia(context, localUri))
 		}
 
 		println("PLAY FILE : $uri")
+		// TODO: Can return nullable URI that is being played to determine if a random is playing or not?
 
 		// Check if the uri is valid
 		if (uri != null)
 		{
 			// Play the file
 			playUri(uri)
+			return uri
 		}
 		else
 		{
 			// Show toast saying unable to play audio
 			quickToast(context, R.string.error_message_play_audio)
+			return null
 		}
 	}
 

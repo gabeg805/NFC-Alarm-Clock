@@ -29,7 +29,7 @@ import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.addMediaInfo
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
-import com.nfcalarmclock.util.media.addToMediaStore
+import com.nfcalarmclock.util.media.copyDocumentToDeviceEncryptedStorageAndCheckMetadata
 import com.nfcalarmclock.util.media.getMediaName
 import com.nfcalarmclock.util.media.getMediaRelativePath
 import com.nfcalarmclock.util.media.isMediaDirectory
@@ -67,31 +67,34 @@ class NacMusicPickerFragment
 			return@registerForActivityResult
 		}
 
-		// TODO: ADD CHECK WHERE IF PATH IS LOCAL MEDIA PATH THEN DO NOT DO ANYTHING TO PATH TEXTVIEW
-		// TODO: ALSO CHECK WHAT HAPPENS IF DOING SELECTED MEDIA FROM LAUNCHER
-
 		// Get the media uri
-		val mediaUri = try
+		var mediaUri = try
 		{
 			// Attempt to convert the document uri to a media uri
 			MediaStore.getMediaUri(context, uri)
 		}
 		catch (_: IllegalArgumentException)
 		{
-			// Attempt to add the document uri to the media store. This should really
-			// be done if the selected document is from the Downloads/ directory, or if
-			// the file is not a media file
-			// TODO: Update mime type so it only includes media files (not zips and images and the like)
-			addToMediaStore(context, uri)
+			null
 		}
 
 		println("Media URI : $mediaUri")
 
-		// Check that the media uri is valid
+		// Check if the media uri is invalid
 		if (mediaUri == null)
 		{
-			quickToast(context, R.string.error_message_unable_to_get_media_information_from_file)
-			return@registerForActivityResult
+			// Attempt to copy media to local files/ directory and then check the
+			// metadata. This seems to only be necessary if the selected document is from
+			// the Downloads/ directory, or if the file is not a media file
+			mediaUri = copyDocumentToDeviceEncryptedStorageAndCheckMetadata(context, uri)
+			println("Final media URI : $mediaUri")
+
+			// Final check if the media uri is invalid
+			if (mediaUri == null)
+			{
+				quickToast(context, R.string.error_message_unable_to_get_media_information_from_file)
+				return@registerForActivityResult
+			}
 		}
 
 		// Set the media path of the selected file
@@ -124,21 +127,27 @@ class NacMusicPickerFragment
 	@OptIn(UnstableApi::class)
 	private fun getInitialFileBrowserLocation(): Pair<String, String>
 	{
-		val context = requireContext()
+		val context = getDeviceProtectedStorageContext(requireContext())
 		var dir = ""
 		var name = ""
 
 		// Get the uri
 		val uri = Uri.parse(mediaPath)
+		println("Check starts with : $mediaPath | ${context.filesDir.path}")
 
-		// Check if the media is a file
-		if (uri.isMediaFile(context))
+		// Check if local media path
+		if (mediaPath.startsWith(context.filesDir.path))
+		{
+			// Do nothing
+		}
+		// File
+		else if (uri.isMediaFile(context))
 		{
 			// Set the directory and name
 			dir = uri.getMediaRelativePath(context)
 			name = uri.getMediaName(context)
 		}
-		// Check if the media is a directory
+		// Directory
 		else if (uri.isMediaDirectory())
 		{
 			dir = mediaPath

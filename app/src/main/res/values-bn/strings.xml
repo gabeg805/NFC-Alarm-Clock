@@ -147,6 +147,7 @@
 	<string name="message_next_alarm_in">পরবর্তী অ্যালার্ম %1$s এ</string>
 	<string name="message_export_completed">রপ্তানি সম্পন্ন হয়েছে</string>
 	<string name="message_import_completed">আমদানি সম্পন্ন হয়েছে</string>
+	<string name="message_selected_alarm_song_not_available">অ্যালার্মের জন্য নির্বাচিত গান উপলব্ধ নেই৷</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">একটি সক্রিয় অ্যালার্ম মুছতে অক্ষম৷</string>
@@ -336,6 +337,7 @@
 	<string name="description_permission_post_notifications">যখন একটি অ্যালার্ম সক্রিয় করা হয় তখন একটি বিজ্ঞপ্তি দেখান যা আপনার ডিভাইসটিকে অ্যাপটিকে ঘুমাতে এবং অ্যালার্মটি নিজে থেকে বন্ধ করা থেকে বিরত রাখবে৷</string>
 	<string name="description_permission_boot">আপনার ডিভাইস চালু হলে অ্যালার্ম পুনরুদ্ধার করুন।  আপনার ডিভাইস বন্ধ হয়ে গেলে Android অ্যালার্ম মুছে দেবে।</string>
 	<string name="description_permission_wakelock">আপনার ডিভাইসটিকে ঘুম থেকে বিরত রাখুন যাতে একটি সক্রিয় অ্যালার্ম বন্ধ হতে থাকে।</string>
+	<string name="description_audio_sources">অ্যালার্ম বাজানোর জন্য অডিও চ্যানেল।</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">অ্যালার্মের তালিকা এখানে দেখানো হবে।</string>

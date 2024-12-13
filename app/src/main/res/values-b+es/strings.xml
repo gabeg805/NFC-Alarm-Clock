@@ -99,9 +99,9 @@
 	<string name="label_clock_widget">Reloj</string>
 
 	<!-- Messages -->
-	<string name="message_permission_ignore_battery_optimization_request">Es posible que las alarmas no se ejecuten si la aplicación no se ha utilizado durante un tiempo.\n\n<b>Nota:</b> Esto depende del dispositivo que tengas y <b>es posible</b> que en realidad <b>no sea necesario</b>.\n\n¿Quieres desactivar la optimización de la batería?</string>
-	<string name="message_permission_post_notifications_request">Las alarmas no podrán ejecutarse cuando la aplicación no esté enfocada.\n\n<b>Nota:</b> Este es un efecto secundario de las políticas de seguridad introducidas en <b>Android 13</b>, que benefician a los usuarios, pero pueden restringir aplicaciones en instancias como esta.\n\n¿Desea continuar habilitando este permiso?</string>
-	<string name="message_permission_schedule_exact_alarm_request">Las alarmas no podrán ejecutarse cuando la aplicación no esté enfocada.\n\n¿Le gustaría continuar a la siguiente pantalla para habilitar este permiso?</string>
+	<string name="message_permission_ignore_battery_optimization_request">Para evitar que la alarma no se ejecute si la aplicación no se ha utilizado durante un tiempo.&lt;br/>&lt;br/>&lt;b>Nota:&lt;/b> Esto depende del dispositivo que tengas y &lt;b>puede que en realidad no sea necesario&lt;/b>.</string>
+	<string name="message_permission_post_notifications_request">Para permitir que las alarmas se ejecuten cuando la aplicación no está en foco.&lt;br/>&lt;br/>&lt;b>Nota:&lt;/b> Este es un efecto secundario de las políticas de seguridad introducidas en &lt;b>Android 13&lt;/b>, que son para el beneficio de los usuarios, pero pueden restringir las aplicaciones en casos como este.</string>
+	<string name="message_permission_schedule_exact_alarm_request">Para que las alarmas se ejecuten exactamente en el momento programado.</string>
 	<string name="message_playlist">¿Quieres tocar toda la música de esta carpeta?</string>
 	<string name="message_nfc_request">Por favor, habilite la NFC para descartar la alarma</string>
 	<string name="message_nfc_required">NFC requerido</string>
@@ -147,6 +147,7 @@
 	<string name="message_next_alarm_in">Próxima alarma en %1$s</string>
 	<string name="message_export_completed">Exportación completada</string>
 	<string name="message_import_completed">Importación completada</string>
+	<string name="message_selected_alarm_song_not_available">Canción elegida para alarma no disponible</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Incapaz de borrar una alarma activa</string>
@@ -336,6 +337,7 @@
 	<string name="description_permission_post_notifications">Muestra una notificación cuando se activa una alarma que evitará que tu dispositivo ponga la aplicación en suspensión y apague la alarma por sí solo.</string>
 	<string name="description_permission_boot">Restaurar alarmas cuando el telefono este encendido. Android va eliminar alarmas cuando el dispositivo se apage.</string>
 	<string name="description_permission_wakelock">Evitar que el dispositivo entre en estado de inactividad para que las alarmas continúan de sonar.</string>
+	<string name="description_audio_sources">El canal de audio para reproducir la alarma.</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">Lista de alarmas que se mostrarán aquí.</string>

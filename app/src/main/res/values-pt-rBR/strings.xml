@@ -147,6 +147,7 @@
 	<string name="message_next_alarm_in">Próximo alarme em %1$s</string>
 	<string name="message_export_completed">Exportação concluída</string>
 	<string name="message_import_completed">Importação concluída</string>
+	<string name="message_selected_alarm_song_not_available">Música escolhida para alarme não disponível</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Não é possível excluir um alarme ativo</string>
@@ -245,7 +246,7 @@
 	<string name="title_show_music_info">Mostrar informações da música</string>
 	<string name="title_theme_color">Tema</string>
 	<string name="title_day_button_style">Botões de dia</string>
-	<string name="title_start_week_on">Comece a semana em...</string>
+	<string name="title_start_week_on">Comece a semana em…</string>
 	<string name="title_expand_new_alarm">Expandir novos alarmes</string>
 	<string name="title_next_alarm_format">Próximo formato de alarme&#8230;</string>
 	<string name="title_permissions">Permissões</string>
@@ -336,6 +337,7 @@
 	<string name="description_permission_post_notifications">Exiba uma notificação quando um alarme for ativado, o que impedirá que seu dispositivo coloque o aplicativo em hibernação e desligue o alarme sozinho.</string>
 	<string name="description_permission_boot">Restaure alarmes quando seu dispositivo for ligado. O Android apagará alarmes quando seu dispositivo for desligado.</string>
 	<string name="description_permission_wakelock">Evite que seu dispositivo entre em modo de espera para que um alarme ativado continue a disparar.</string>
+	<string name="description_audio_sources">O canal de áudio para tocar o alarme.</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">A lista de alarmes será exibida aqui.</string>
@@ -367,44 +369,44 @@
 	<!-- Plurals -->
 	<plurals name="alarm">
 		<item quantity="one">alarme</item>
-		<item quantity="other">alarmes</item>
+		<item quantity="many">alarmes</item>
 	</plurals>
 
 	<plurals name="missed_alarm">
 		<item quantity="one">Alarme perdido</item>
-		<item quantity="other">@string/title_missed_alarms</item>
+		<item quantity="many">@string/title_missed_alarms</item>
 	</plurals>
 
 	<plurals name="upcoming_reminder">
 		<item quantity="one">Próximo lembrete</item>
-		<item quantity="other">@string/title_upcoming_reminders</item>
+		<item quantity="many">@string/title_upcoming_reminders</item>
 	</plurals>
 
 	<plurals name="unit_day">
 		<item quantity="one">dia</item>
-		<item quantity="other">dias</item>
+		<item quantity="many">dias</item>
 	</plurals>
 
 	<plurals name="unit_hour">
 		<item quantity="one">hora</item>
-		<item quantity="other">horas</item>
+		<item quantity="many">horas</item>
 	</plurals>
 
 	<plurals name="unit_minute">
 		<item quantity="one">minuto</item>
-		<item quantity="other">minutos</item>
+		<item quantity="many">minutos</item>
 	</plurals>
 
 	<plurals name="unit_second">
 		<item quantity="one">segundo</item>
-		<item quantity="other">segundos</item>
+		<item quantity="many">segundos</item>
 	</plurals>
 
 	<string name="tts_say_time">O tempo é %1$s:%2$s %3$s.</string>
 
 	<plurals name="tts_say_reminder">
 		<item quantity="one">Lembrete. %1$s, será executado em %2$d minuto.</item>
-		<item quantity="other">Lembrete. %1$s, será executado em %2$d minutos.</item>
+		<item quantity="many">Lembrete. %1$s, será executado em %2$d minutos.</item>
 	</plurals>
 
 </resources>

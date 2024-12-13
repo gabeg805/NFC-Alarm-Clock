@@ -21,7 +21,7 @@
 		style="@style/Widget.AlarmOptionDialog.DescriptionBeforeCheckBox"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="The audio channel to play the alarm on."
+		android:text="@string/description_audio_sources"
 		/>
 
 	<!-- Audio source options -->

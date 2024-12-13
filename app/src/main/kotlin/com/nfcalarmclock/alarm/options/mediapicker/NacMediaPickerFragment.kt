@@ -28,9 +28,11 @@ import com.nfcalarmclock.util.getShuffleMedia
 import com.nfcalarmclock.util.media.NacMedia
 import com.nfcalarmclock.util.media.buildLocalMediaPath
 import com.nfcalarmclock.util.media.copyMediaToDeviceEncryptedStorage
+import com.nfcalarmclock.util.media.directQueryMediaMetadata
 import com.nfcalarmclock.util.media.getMediaArtist
 import com.nfcalarmclock.util.media.getMediaTitle
 import com.nfcalarmclock.util.media.getMediaType
+import com.nfcalarmclock.util.media.isLocalMediaPath
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -70,7 +72,6 @@ open class NacMediaPickerFragment
 			if (alarm != null)
 			{
 				alarm!!.mediaPath = value
-				//alarm!!.setMedia(requireContext(), value)
 			}
 			else
 			{
@@ -272,6 +273,7 @@ open class NacMediaPickerFragment
 
 	/**
 	 * Called when the Ok button is clicked.
+	 * 	// Do nothing
 	 */
 	open fun onOkClicked()
 	{
@@ -282,15 +284,35 @@ open class NacMediaPickerFragment
 		// Get the URI from the path
 		val uri = Uri.parse(mediaPath)
 
-		// Set the media information
-		mediaArtist = uri.getMediaArtist(deviceContext)
-		mediaTitle = uri.getMediaTitle(deviceContext)
-		mediaType = uri.getMediaType(deviceContext)
-		localMediaPath = buildLocalMediaPath(deviceContext, mediaArtist, mediaTitle, mediaType)
-		println("Final jank : $mediaArtist | $mediaTitle | $mediaType | $localMediaPath")
+		if (uri.isLocalMediaPath(deviceContext))
+		{
+			// Query the file for metadata
+			val (artist, title) = uri.directQueryMediaMetadata()
 
-		// Copy the media to the local files/ directory
-		copyMediaToDeviceEncryptedStorage(deviceContext, mediaPath, mediaArtist, mediaTitle, mediaType)
+			// Set the media information
+			mediaArtist = artist
+			mediaTitle = title
+			mediaType = NacMedia.TYPE_FILE
+			localMediaPath = mediaPath
+		}
+		else
+		{
+			// Set the media information
+			mediaArtist = uri.getMediaArtist(deviceContext)
+			mediaTitle = uri.getMediaTitle(deviceContext)
+			mediaType = uri.getMediaType(deviceContext)
+			localMediaPath = buildLocalMediaPath(deviceContext, mediaArtist, mediaTitle, mediaType)
+
+			// Copy the media to the local files/ directory
+			// TODO: QUERY SPACE
+			copyMediaToDeviceEncryptedStorage(deviceContext,
+				mediaPath,
+				mediaArtist,
+				mediaTitle,
+				mediaType)
+		}
+
+		println("Final jank : $mediaArtist | $mediaTitle | $mediaType | $localMediaPath")
 
 		// Check if alarm is set
 		if (alarm != null)

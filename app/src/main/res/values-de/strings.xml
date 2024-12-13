@@ -99,9 +99,9 @@
 	<string name="label_clock_widget">Uhr</string>
 
 	<!-- Messages -->
-	<string name="message_permission_ignore_battery_optimization_request">Alarme werden möglicherweise nicht ausgeführt, wenn die App eine Zeit lang nicht verwendet wurde.\n\n<b>Hinweis:</b> Dies hängt von Ihrem Gerät ab und <b>wird möglicherweise nicht wirklich benötigt</b>.\n\nMöchten Sie die Batterieoptimierung deaktivieren?</string>
-	<string name="message_permission_post_notifications_request">Alarme können nicht ausgeführt werden, wenn die App nicht im Fokus ist.\n\n<b>Hinweis:</b> Dies ist ein Nebeneffekt der in <b>Android 13</b> eingeführten Sicherheitsrichtlinien, die den Benutzern zugute kommen, in solchen Fällen jedoch Apps einschränken können.\n\nMöchten Sie Benachrichtigungen aktivieren?</string>
-	<string name="message_permission_schedule_exact_alarm_request">Alarme können nicht ausgeführt werden, wenn die App nicht im Fokus ist.\n\nMöchten Sie die Alarmplanung aktivieren?</string>
+	<string name="message_permission_ignore_battery_optimization_request">So vermeiden Sie, dass der Alarm nicht ausgeführt wird, wenn die App eine Zeit lang nicht verwendet wurde.&lt;br/>&lt;br/>&lt;b>Hinweis:&lt;/b> Dies hängt von Ihrem Gerät ab und &lt;b>wird möglicherweise nicht wirklich benötigt &lt;/b>.</string>
+	<string name="message_permission_post_notifications_request">Um Alarme auszuführen, wenn die App nicht im Fokus ist.&lt;br/>&lt;br/>&lt;b>Hinweis:&lt;/b> Dies ist ein Nebeneffekt der in &lt;b>Android 13&lt;/b> eingeführten Sicherheitsrichtlinien, die den Benutzern zugute kommen, in solchen Fällen jedoch Apps einschränken können.</string>
+	<string name="message_permission_schedule_exact_alarm_request">Damit Alarme genau zum geplanten Zeitpunkt ausgelöst werden.</string>
 	<string name="message_playlist">Möchten Sie die gesamte Musik in diesem Ordner abspielen?</string>
 	<string name="message_nfc_request">Bitte aktivieren Sie NFC, um den Alarm auszuschalten</string>
 	<string name="message_nfc_required">NFC erforderlich</string>
@@ -147,6 +147,7 @@
 	<string name="message_next_alarm_in">Nächster Alarm in %1$s</string>
 	<string name="message_export_completed">Export abgeschlossen</string>
 	<string name="message_import_completed">Import abgeschlossen</string>
+	<string name="message_selected_alarm_song_not_available">Ausgewähltes Lied für den Wecker nicht verfügbar</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Ein aktiver Alarm kann nicht gelöscht werden</string>
@@ -336,6 +337,7 @@
 	<string name="description_permission_post_notifications">Zeigen Sie bei Aktivierung eines Alarms eine Benachrichtigung an, die verhindert, dass Ihr Gerät die App in den Ruhezustand versetzt und den Alarm automatisch ausschaltet.</string>
 	<string name="description_permission_boot">Stellen Sie Alarme wieder her, wenn Ihr Gerät eingeschaltet wird. Android löscht Alarme, wenn Ihr Gerät ausgeschaltet wird.</string>
 	<string name="description_permission_wakelock">Verhindern Sie den Ruhezustand Ihres Geräts, damit ein aktivierter Alarm weiterhin ausgelöst wird.</string>
+	<string name="description_audio_sources">Der Audiokanal, auf dem der Alarm abgespielt werden soll.</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">Hier wird eine Liste der Alarme angezeigt.</string>

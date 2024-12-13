@@ -99,9 +99,9 @@
 	<string name="label_clock_widget">Cái đồng hồ</string>
 
 	<!-- Messages -->
-	<string name="message_permission_ignore_battery_optimization_request">Báo thức có thể không chạy nếu bạn không sử dụng ứng dụng này trong một thời gian.\n\n<b>Lưu ý:</b> Điều này tùy thuộc vào thiết bị bạn có và <b>có thể không thực sự cần thiết</b>.\n\nBạn có muốn tắt tính năng tối ưu hóa pin không?</string>
-	<string name="message_permission_post_notifications_request">Cảnh báo sẽ không thể chạy nếu ứng dụng không được chú ý.\n\n<b>Lưu ý:</b> Đây là tác dụng phụ của các chính sách bảo mật được giới thiệu trong <b>Android 13</b>. là vì lợi ích của người dùng nhưng có thể hạn chế ứng dụng trong những trường hợp như thế này.\n\nBạn có muốn bật thông báo không?</string>
-	<string name="message_permission_schedule_exact_alarm_request">Báo thức sẽ không thể chạy nếu ứng dụng không được chú ý.\n\nBạn có muốn bật lập lịch báo thức không?</string>
+	<string name="message_permission_ignore_battery_optimization_request">Để tránh báo thức không chạy nếu ứng dụng không được sử dụng trong một thời gian.&lt;br/>&lt;br/>&lt;b>Lưu ý:&lt;/b> Điều này tùy thuộc vào thiết bị bạn có và &lt;b>có thể không thực sự cần thiết &lt;/b>.</string>
+	<string name="message_permission_post_notifications_request">Cho phép báo thức chạy khi ứng dụng không được chú ý.&lt;br/>&lt;br/>&lt;b>Lưu ý:&lt;/b> Đây là tác dụng phụ của các chính sách bảo mật được giới thiệu trong &lt;b>Android 13&lt;/b>, nhằm mang lại lợi ích cho người dùng nhưng có thể hạn chế các ứng dụng trong những trường hợp như thế này.</string>
+	<string name="message_permission_schedule_exact_alarm_request">Để báo thức chạy chính xác theo đúng lịch trình.</string>
 	<string name="message_playlist">Bạn có muốn phát tất cả nhạc trong thư mục này không?</string>
 	<string name="message_nfc_request">Vui lòng bật NFC để tắt báo thức</string>
 	<string name="message_nfc_required">Cần có NFC</string>
@@ -147,6 +147,7 @@
 	<string name="message_next_alarm_in">Báo thức tiếp theo sau %1$s</string>
 	<string name="message_export_completed">Xuất khẩu hoàn tất</string>
 	<string name="message_import_completed">Nhập khẩu hoàn tất</string>
+	<string name="message_selected_alarm_song_not_available">Bài hát đã chọn để báo thức không khả dụng</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Không thể xóa báo thức đang hoạt động</string>
@@ -336,6 +337,7 @@
 	<string name="description_permission_post_notifications">Hiển thị thông báo khi báo thức được kích hoạt, điều này sẽ ngăn thiết bị của bạn chuyển ứng dụng sang chế độ ngủ và tự tắt báo thức.</string>
 	<string name="description_permission_boot">Khôi phục báo thức khi thiết bị của bạn được bật. Android sẽ xóa báo thức khi thiết bị của bạn tắt.</string>
 	<string name="description_permission_wakelock">Ngăn chặn thiết bị của bạn chuyển sang chế độ ngủ để báo thức được kích hoạt sẽ tiếp tục kêu.</string>
+	<string name="description_audio_sources">Kênh âm thanh để phát báo thức.</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">Danh sách các cảnh báo sẽ được hiển thị ở đây.</string>

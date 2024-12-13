@@ -207,6 +207,7 @@ class NacWakeupProcess(
 			{
 				// Use handler to start wake up process so that the media
 				// player is accessed on the correct thread
+				println("DONE SPEAKING")
 				continueWakeupHandler.post { simpleStart() }
 			}
 
@@ -441,7 +442,18 @@ class NacWakeupProcess(
 			}
 
 			// Play the alarm
-			mediaPlayer.playAlarm(alarm)
+			println("AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
+			val playingUri = mediaPlayer.playAlarm(alarm)
+			println("Playing : ${playingUri.toString()} | ${alarm.mediaPath} | ${alarm.localMediaPath}")
+
+			// Check if the current playing uri does not match the path from the alarm
+			if ((playingUri == null)
+				|| ((playingUri.toString() != alarm.mediaPath) && (playingUri.toString() != alarm.localMediaPath)))
+			{
+				println("SETTING THIS JANK TO TRUE")
+				// Selected media for alarm is not available
+				sharedPreferences.isSelectedMediaForAlarmNotAvailable = true
+			}
 		}
 	}
 

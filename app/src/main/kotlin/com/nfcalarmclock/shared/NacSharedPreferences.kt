@@ -656,13 +656,13 @@ class NacSharedPreferences(context: Context)
 	var currentPlayingAlarmMedia: String
 		get()
 		{
-			val key = resources.getString(R.string.key_current_playing_alarm_media)
+			val key = resources.getString(R.string.key_media_current_playing_alarm)
 
 			return instance.getString(key, "") ?: ""
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.key_current_playing_alarm_media)
+			val key = resources.getString(R.string.key_media_current_playing_alarm)
 
 			saveString(key, value)
 		}
@@ -892,6 +892,24 @@ class NacSharedPreferences(context: Context)
 			val key = resources.getString(R.string.alarm_gradually_increase_volume_wait_time_key)
 
 			saveInt(key, value)
+		}
+
+	/**
+	 * Check if the selected media for an alarm is not available.
+	 */
+	var isSelectedMediaForAlarmNotAvailable: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_media_is_selected_for_alarm_not_available)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_media_is_selected_for_alarm_not_available)
+
+			saveBoolean(key, value)
 		}
 
 	/**
@@ -1836,7 +1854,7 @@ class NacSharedPreferences(context: Context)
 			resources.getString(R.string.key_main_card_height_collapsed_dismiss),
 			resources.getString(R.string.key_main_card_height_expanded),
 			resources.getString(R.string.key_main_card_is_measured),
-			resources.getString(R.string.key_current_playing_alarm_media),
+			resources.getString(R.string.key_media_current_playing_alarm),
 			resources.getString(R.string.key_main_delay_showing_whats_new_dialog_counter),
 			resources.getString(R.string.key_permission_ignore_battery_optimization_requested),
 			resources.getString(R.string.key_permission_post_notifications_requested),

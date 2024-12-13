@@ -147,6 +147,7 @@
 	<string name="message_next_alarm_in">Next alarm in %1$s</string>
 	<string name="message_export_completed">Export completed</string>
 	<string name="message_import_completed">Import completed</string>
+	<string name="message_selected_alarm_song_not_available">Chosen song for alarm not available</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Unable to delete an active alarm</string>
@@ -336,6 +337,7 @@
 	<string name="description_permission_post_notifications">Show a notification when an alarm is activated that will keep your device from putting the app to sleep and turning the alarm off by itself.</string>
 	<string name="description_permission_boot">Restore alarms when your device is turned on.  Android will delete alarms when your device is turned off.</string>
 	<string name="description_permission_wakelock">Prevent your device from sleeping so that an activated alarm will continue to go off.</string>
+	<string name="description_audio_sources">The audio channel to play the alarm on.</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">List of alarms will be shown here.</string>

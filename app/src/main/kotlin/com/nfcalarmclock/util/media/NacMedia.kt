@@ -1,9 +1,9 @@
 package com.nfcalarmclock.util.media
 
 import android.annotation.TargetApi
-import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import android.media.MediaMetadataRetriever
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
@@ -28,84 +28,118 @@ import java.util.TreeMap
 import java.util.concurrent.TimeUnit
 
 /**
- * Add a file to the media store.
+ * Copy the document to device encrypted storage so that the metadata can be checked and
+ * verified that this is a media file.
+ *
+ * This must be done in case a document Uri is inaccessible by the app, or its
+ * information is not found in the MediaStore table, in which case the metadata has to be
+ * queried more directly.
+ *
+ * @return The Uri of the copied file, located in the local files/ directory, or null if
+ *         it was unable to be copied or it was not a media file.
  */
-fun addToMediaStore(context: Context, documentUri: Uri): Uri?
+fun copyDocumentToDeviceEncryptedStorageAndCheckMetadata(context: Context, documentUri: Uri): Uri?
 {
 	// Get the name of the document and its title (name without the file extension)
 	val documentName = documentUri.getDocumentName(context)
-	val documentTitle = if (documentName.isNotEmpty())
+	val documentTitle = File(documentName).nameWithoutExtension
+
+	// Check if document does not have name
+	if (documentName.isEmpty())
 	{
-		File(documentName).nameWithoutExtension
-	}
-	else
-	{
-		""
+		quickToast(context, R.string.error_message_unable_to_select_file)
+		return null
 	}
 
-	val x = File("").nameWithoutExtension
-	println("X : $x")
+	// TODO: QUERY SPACE
+	// https://developer.android.com/training/data-storage/app-specific#query-free-space
 
 	// Copy the media to a temporary file
 	val tmpName = "tmp"
 	val tmpUri = copyMediaToDeviceEncryptedStorage(context, documentUri, tmpName)
 	val tmpFile = File(tmpUri.toString())
-	println("DOC NAME : $documentName")
+	println("DOC NAME : $documentName | Copy path : ${tmpFile.path}")
 
-	// Add the temporary file to the media store
-	val contentValues = ContentValues().apply {
+	// Get metadata from file
+	val (metadataArtist, metadataTitle, metadataHasAudio) = tmpFile.queryMediaMetadata()
 
-		// Set the path
-		put(MediaStore.Audio.Media.DATA, tmpUri.toString())
+	println("Meta artist    : $metadataArtist")
+	println("Meta title     : $metadataTitle")
+	println("Meta has audio : $metadataHasAudio")
+	println("File size      : ${tmpFile.length()}")
 
-		// Check if the document name could be found
-		if (documentName.isNotEmpty())
-		{
-			// Set the name and title
-			put(MediaStore.Audio.Media.DISPLAY_NAME, documentName)
-			put(MediaStore.Audio.Media.TITLE, documentTitle)
-		}
-
-	}
-
-	println("Content values")
-	println(contentValues.get(MediaStore.Audio.Media.DATA))
-	println(contentValues.get(MediaStore.Audio.Media.DISPLAY_NAME))
-	println(contentValues.get(MediaStore.Audio.Media.TITLE))
-
-	// Add the song to the MediaStore
-	val newUri = context.contentResolver.insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, contentValues)
-	println("New Uri : $newUri")
-
-	// Check if the new uri is a valid media file
-	if (newUri == null)
+	// Check if the selected file does not have audio
+	if (metadataHasAudio?.isNotEmpty() != true)
 	{
+		// Delete temporary file
+		tmpFile.delete()
+
+		// Show error toast
 		quickToast(context, R.string.error_message_unable_to_get_media_information_from_file)
 		return null
 	}
 
 	// Get the local media file and path
-	val localMediaPath = buildLocalMediaPath(context, "", documentTitle, TYPE_FILE)
+	val artist = metadataArtist ?: ""
+	val title = metadataTitle ?: documentTitle
+	val localMediaPath = buildLocalMediaPath(context, artist, title, TYPE_FILE)
 	val localMediaFile = File(localMediaPath)
-	println("To file : $localMediaPath")
+	println("Rename To file : $localMediaPath")
 
 	// Move temporary file to real file
-	if (tmpFile.renameTo(localMediaFile))
+	val status = tmpFile.renameTo(localMediaFile)
+
+	// Delete temporary file
+	tmpFile.delete()
+
+	// Check rename status
+	return if (status)
 	{
-		println("RENAME SUCCESSFUL")
+		// Successful
+		Uri.parse(localMediaPath)
 	}
 	else
 	{
 		println("RENAME UNSUCCESSFUL")
+		// Show error toast
+		quickToast(context, R.string.error_message_unable_to_select_file)
+		return null
 	}
+}
 
-	// Delete temporary file
-	if (tmpFile.exists())
-	{
-		tmpFile.delete()
-	}
+/**
+ * Query a file for relavant media metadata.
+ *
+ * @return Media metadata.
+ */
+fun File.queryMediaMetadata(): Triple<String?, String?, String?>
+{
+	// Build the metadata retriever
+	val metadataRetriever = MediaMetadataRetriever()
+		.apply { setDataSource(this@queryMediaMetadata.path) }
 
-	return Uri.parse(localMediaPath)
+	// Get metadata from file
+	val artist = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
+	val title = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
+	val hasAudio = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_AUDIO)
+
+	return Triple(artist, title, hasAudio)
+}
+
+/**
+ * Directly query for relavant media metadata.
+ *
+ * @return Media metadata.
+ */
+fun Uri.directQueryMediaMetadata(): Pair<String, String>
+{
+	// Query the file for metadata
+	val file = File(this.toString())
+	val (artist, title, _) = file.queryMediaMetadata()
+
+	return Pair(
+		artist ?: "",
+		title ?: file.nameWithoutExtension)
 }
 
 /**
@@ -218,12 +252,15 @@ fun copyMediaToDeviceEncryptedStorage(
 	val srcUri = Uri.parse(path)
 	val dstFile = File(localMediaPath)
 
-	// Check if a directory was selected
-	if (type.isMediaFile() || type.isMediaRingtone())
+	// Check if the file already exists or if the media is a type that should not be copied
+	if (dstFile.exists() || (!type.isMediaFile() && !type.isMediaRingtone()))
 	{
-		// Copy the file
-		copyMediaToDeviceEncryptedStorage(deviceContext, srcUri, dstFile.name)
+		// Do nothing
+		return
 	}
+
+	// Copy the file
+	copyMediaToDeviceEncryptedStorage(deviceContext, srcUri, dstFile.name)
 }
 
 /**
@@ -233,12 +270,16 @@ fun copyMediaToDeviceEncryptedStorage(
  *
  * @return Uri of the first Uri that is valid in the local files/ directory, or null.
  */
-fun findFirstLocalValidMedia(deviceContext: Context, localUri: Uri): Uri?
+fun findFirstValidLocalMedia(deviceContext: Context, localUri: Uri): Uri?
 {
+	println("FIRST VALID LOCAL FILE")
 	val uri = deviceContext.filesDir.listFiles()
 		?.map { Uri.parse(it.path) }
-		?.find { (it.compareTo(localUri) != 0) && it.isMediaValid(deviceContext) }
-	println("FIRST VALID LOCAL FILE : $uri")
+		?.find {
+			println(it)
+			(it.compareTo(localUri) != 0) && it.isMediaValid(deviceContext)
+		}
+	println("Found : $uri")
 
 	return uri
 }
@@ -481,6 +522,16 @@ fun Uri.getMediaVolumeName(context: Context): String
 	val column = MediaStore.Audio.Media.VOLUME_NAME
 
 	return this.queryColumn(context, column)
+}
+
+/**
+ * Check if the Uri corresponds to a local media path.
+ *
+ * @return True if the Uri corresponds to a local media path.
+ */
+fun Uri.isLocalMediaPath(deviceContext: Context): Boolean
+{
+	return this.toString().startsWith(deviceContext.filesDir.path)
 }
 
 /**

@@ -99,9 +99,9 @@
 	<string name="label_clock_widget">Revèy</string>
 
 	<!-- Messages -->
-	<string name="message_permission_ignore_battery_optimization_request">Alam yo ka pa fonksyone si aplikasyon an pa te itilize pou yon ti tan.\n\n<b>Remak:</b> Sa a depann de ki aparèy ou genyen epi <b>ka pa vrèman nesesè</b>.\n\nÈske w ta renmen enfim optimize batri a?</string>
-	<string name="message_permission_post_notifications_request">Alam yo p ap ka kouri si aplikasyon an pa konsantre.\n\n<b>Remak:</b> Sa a se yon efè segondè nan règleman sekirite yo prezante nan <b>Android 13</b>, ki se pou benefis itilizatè yo, men yo ka mete restriksyon sou aplikasyon yo nan ka sa a.\n\nÈske w ta renmen aktive notifikasyon?</string>
-	<string name="message_permission_schedule_exact_alarm_request">Alam yo p ap ka kouri si aplikasyon an pa konsantre.\n\nÈske w ta renmen aktive alam orè yo?</string>
+	<string name="message_permission_ignore_battery_optimization_request">Pou evite alam pa kouri si aplikasyon an pa te itilize pou yon ti tan.&lt;br/>&lt;br/>&lt;b>Remak:&lt;/b> Sa depann de ki aparèy ou genyen epi &lt;b>ka pa aktyèlman nesesè &lt;/b>.</string>
+	<string name="message_permission_post_notifications_request">Pou pèmèt alam yo kouri lè aplikasyon an pa konsantre.&lt;br/>&lt;br/>&lt;b>Remak:&lt;/b> Sa a se yon efè segondè nan règleman sekirite yo prezante nan &lt;b>Android. 13&lt;/b>, ki se pou benefis itilizatè yo, men yo ka mete restriksyon sou aplikasyon yo nan ka sa a.</string>
+	<string name="message_permission_schedule_exact_alarm_request">Pou gen alam yo kouri jisteman lè pwograme.</string>
 	<string name="message_playlist">Ou vle jwe tout mizik ki nan katab sa a?</string>
 	<string name="message_nfc_request">Tanpri pèmèt NFC pou ranvwaye alam la</string>
 	<string name="message_nfc_required">NFC obligatwa</string>
@@ -147,6 +147,7 @@
 	<string name="message_next_alarm_in">Pwochen alam nan %1$s</string>
 	<string name="message_export_completed">Ekspòtasyon fini</string>
 	<string name="message_import_completed">Enpòte fini</string>
+	<string name="message_selected_alarm_song_not_available">Chante chwazi pou alam pa disponib</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Pa kapab efase yon alam aktif</string>
@@ -336,6 +337,7 @@
 	<string name="description_permission_post_notifications">Montre yon notifikasyon lè yon alam aktive ki pral anpeche aparèy ou a pa mete aplikasyon an nan dòmi epi fèmen alam la pou kont li.</string>
 	<string name="description_permission_boot">Retabli alam yo lè aparèy ou an limen. Android pral efase alam lè aparèy ou an etenn.</string>
 	<string name="description_permission_wakelock">Anpeche aparèy ou an dòmi pou yon alam aktive ap kontinye sonnen.</string>
+	<string name="description_audio_sources">Chanèl odyo pou jwe alam la.</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">Lis alam yo pral montre isit la.</string>

@@ -9,8 +9,11 @@
 	<string name="key_app_supported">key_app_supported</string>
 	<string name="key_app_rating_counter">app_rating_counter</string>
 	<string name="key_app_start_statistics">app_start_statistics</string>
-	<string name="key_current_playing_alarm_media">key_current_playing_alarm_media</string>
 	<string name="sys_previous_volume">sys_previous_volume</string>
+
+	<!-- Media -->
+	<string name="key_media_current_playing_alarm">key_current_playing_alarm_media</string>
+	<string name="key_media_is_selected_for_alarm_not_available">key_media_is_selected_for_alarm_not_available</string>
 
 	<!-- Permissions -->
 	<string name="key_permission_ignore_battery_optimization_requested">key_permission_ignore_battery_optimization_requested</string>

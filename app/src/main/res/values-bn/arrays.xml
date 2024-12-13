@@ -14,24 +14,24 @@
 
 	<!-- Days of week abbreviated -->
 	<string-array name="days_of_week_abbr">
-		<item>সূর্য</item>
+		<item>রবি</item>
 		<item>সোম</item>
 		<item>মঙ্গল</item>
 		<item>বুধ</item>
-		<item>বৃহ</item>
+		<item>বৃহস্পতি</item>
 		<item>শুক্র</item>
 		<item>শনি</item>
 	</string-array>
 
 	<!-- Days of week one letter -->
 	<string-array name="days_of_week_one_letter">
-		<item>এস</item>
-		<item>এম</item>
-		<item>টি</item>
-		<item>ডব্লিউ</item>
-		<item>টি</item>
-		<item>চ</item>
-		<item>এস</item>
+		<item>র</item>
+		<item>সো</item>
+		<item>ম</item>
+		<item>বু</item>
+		<item>বৃ</item>
+		<item>শু</item>
+		<item>শ</item>
 	</string-array>
 
 	<!-- Start week on days -->

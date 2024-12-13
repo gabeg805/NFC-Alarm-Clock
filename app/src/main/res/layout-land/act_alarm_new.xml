@@ -135,7 +135,7 @@
 		android:layout_centerHorizontal="true"
 		android:clipChildren="false"
 		android:clipToPadding="false"
-		android:layout_above="@id/music_container">
+		android:layout_above="@id/music_and_warning_container">
 
 		<!-- Slider -->
 		<RelativeLayout
@@ -274,7 +274,7 @@
 
 	<!-- Music -->
 	<RelativeLayout
-		android:id="@+id/music_container"
+		android:id="@+id/music_and_warning_container"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="@dimen/normal"
@@ -282,48 +282,73 @@
 		android:layout_marginEnd="@dimen/normal"
 		android:layout_alignParentBottom="true"
 		android:animateLayoutChanges="true"
-		android:gravity="center_horizontal"
-		android:visibility="invisible">
+		android:gravity="center_horizontal">
 
-		<ImageView
-			android:id="@+id/music_icon"
-			android:layout_width="24dp"
-			android:layout_height="24dp"
-			android:layout_centerVertical="true"
-			android:animateLayoutChanges="true"
-			android:src="@drawable/music_note"
-			android:contentDescription="@string/cd_current_alarm_media_playing"
-			/>
-
-		<TextView
-			android:id="@+id/music_title"
+		<RelativeLayout
+			android:id="@+id/music_container"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginStart="@dimen/nudge"
-			android:layout_marginEnd="@dimen/nudge"
-			android:layout_toEndOf="@id/music_icon"
+			android:layout_centerHorizontal="true"
 			android:animateLayoutChanges="true"
-			android:singleLine="true"
-			android:ellipsize="marquee"
-			android:textColor="@color/white"
-			android:textSize="@dimen/tsz_normal"
-			android:textStyle="bold"
-			android:text=""
-			/>
+			android:visibility="invisible">
 
+			<!-- Icon -->
+			<ImageView
+				android:contentDescription="@string/cd_current_alarm_media_playing"
+				android:id="@+id/music_icon"
+				android:layout_width="24dp"
+				android:layout_height="24dp"
+				android:layout_centerVertical="true"
+				android:src="@drawable/music_note"
+				/>
+
+			<!-- Title -->
+			<TextView
+				android:id="@+id/music_title"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="@dimen/nudge"
+				android:layout_marginEnd="@dimen/nudge"
+				android:layout_toEndOf="@id/music_icon"
+				android:ellipsize="marquee"
+				android:marqueeRepeatLimit="marquee_forever"
+				android:singleLine="true"
+				android:textColor="@color/white"
+				android:textSize="@dimen/tsz_normal"
+				android:textStyle="bold"
+				android:text=""
+				/>
+
+			<!-- Artist -->
+			<TextView
+				android:id="@+id/music_artist"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_below="@id/music_title"
+				android:layout_alignStart="@id/music_title"
+				android:ellipsize="marquee"
+				android:marqueeRepeatLimit="marquee_forever"
+				android:singleLine="true"
+				android:textColor="@color/white"
+				android:textSize="@dimen/tsz_caption"
+				android:textStyle="italic"
+				android:text=""
+				/>
+		</RelativeLayout>
+
+		<!-- Warning -->
 		<TextView
-			android:id="@+id/music_artist"
-			android:layout_width="wrap_content"
+			android:id="@+id/selected_alarm_song_not_available_warning"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_below="@id/music_title"
-			android:layout_alignStart="@id/music_title"
-			android:animateLayoutChanges="true"
-			android:singleLine="true"
-			android:ellipsize="marquee"
-			android:textColor="@color/white"
-			android:textSize="@dimen/tsz_caption"
-			android:textStyle="italic"
-			android:text=""
+			android:layout_marginTop="@dimen/nudge"
+			android:layout_marginStart="@dimen/small"
+			android:layout_below="@id/music_container"
+			android:gravity="center_horizontal"
+			android:textColor="@color/white_dull"
+			android:textSize="@dimen/tsz_tiny"
+			android:text="@string/message_selected_alarm_song_not_available"
+			android:visibility="invisible"
 			/>
 
 	</RelativeLayout>

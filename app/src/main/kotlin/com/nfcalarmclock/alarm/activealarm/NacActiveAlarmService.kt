@@ -153,6 +153,7 @@ class NacActiveAlarmService
 
 		// Clear the currently playing media in the shared preference
 		sharedPreferences.currentPlayingAlarmMedia = ""
+		sharedPreferences.isSelectedMediaForAlarmNotAvailable = false
 	}
 
 	/**

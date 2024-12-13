@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.drawable.InsetDrawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.HapticFeedbackConstants
@@ -377,6 +376,27 @@ class NacMainActivity
 	}
 
 	/**
+	 * Cleanup any extra media files in device encrypted storage that are not used by any
+	 * alarm.
+	 *
+	 * This will typically happen if an alarm changes the media that they are using for
+	 * an alarm.
+	 */
+	private suspend fun cleanupExtraMediaFilesInDeviceEncryptedStorage()
+	{
+		// Get the device context
+		val deviceContext = getDeviceProtectedStorageContext(this)
+
+		// Get all the local media paths for each alarm
+		val allAlarmLocalMediaPaths = alarmViewModel.getAllAlarms().map { it.localMediaPath }
+
+		// Cleanup any extra media files that are not used by any alarm
+		deviceContext.filesDir.listFiles()
+			?.filter { !allAlarmLocalMediaPaths.contains(it.path) }
+			?.forEach { it.delete() }
+	}
+
+	/**
 	 * Copy an alarm and add it to the database.
 	 *
 	 * @param  alarm  An alarm.
@@ -449,10 +469,10 @@ class NacMainActivity
 				// preference local media path
 				lifecycleScope.launch {
 
-					val allAlarms = alarmViewModel.getAllAlarms()
-					val noMatchingMedia = allAlarms.all { it.localMediaPath != localMediaPath }
-
 					// Check if no alarms are using the local media path
+					val noMatchingMedia = alarmViewModel.getAllAlarms()
+						.all { it.localMediaPath != localMediaPath }
+
 					if (noMatchingMedia)
 					{
 						// Delete the local media
@@ -462,6 +482,41 @@ class NacMainActivity
 
 				}
 			})
+	}
+
+	/**
+	 * Do the event to update and backup media info in all alarms starting at database
+	 * version 31.
+	 */
+	private suspend fun doEventUpdateAndBackupMediaInfoInAlarmsDbV31()
+	{
+		// Iterate over each alarm that has the media path set
+		alarmViewModel.getAllAlarms()
+			.filter { it.mediaPath.isNotEmpty() }
+			.forEach { alarm ->
+
+				// Get the media uri
+				val uri = Uri.parse(alarm.mediaPath)
+
+				// Update the alarm
+				alarm.mediaArtist = uri.getMediaArtist(this)
+				alarm.mediaTitle = uri.getMediaTitle(this)
+				alarm.mediaType = uri.getMediaType(this)
+				alarm.localMediaPath = buildLocalMediaPath(this,
+					alarm.mediaArtist, alarm.mediaTitle, alarm.mediaType)
+
+				// Update the database
+				alarmViewModel.update(alarm)
+
+				// Copy the media to device encrypted storage in case of having to run an
+				// alarm in direct boot mode
+				copyMediaToDeviceEncryptedStorage(this, alarm.mediaPath, alarm.mediaArtist,
+					alarm.mediaTitle, alarm.mediaType)
+
+			}
+
+		// Mark the event as completed
+		sharedPreferences.eventUpdateAndBackupMediaInfoInAlarmsDbV31 = true
 	}
 
 	/**
@@ -576,6 +631,9 @@ class NacMainActivity
 		// Cleanup any old zip files that were created when sending a
 		// statistics email
 		cleanupEmailZipFiles()
+
+		// Cleanup any extra media files in device encrypted storage
+		lifecycleScope.launch {  cleanupExtraMediaFilesInDeviceEncryptedStorage() }
 	}
 
 	/**
@@ -1120,38 +1178,7 @@ class NacMainActivity
 		// database version 31
 		if (!sharedPreferences.eventUpdateAndBackupMediaInfoInAlarmsDbV31)
 		{
-			// Iterate over each alarm
-			alarmViewModel.getAllAlarms().forEach { alarm ->
-
-				// Check if the media path is set
-				if (alarm.mediaPath.isEmpty())
-				{
-					// Skip if no media set
-					return@forEach
-				}
-
-				// Get the media uri
-				val uri = Uri.parse(alarm.mediaPath)
-
-				// Update the alarm
-				alarm.mediaArtist = uri.getMediaArtist(this)
-				alarm.mediaTitle = uri.getMediaTitle(this)
-				alarm.mediaType = uri.getMediaType(this)
-				alarm.localMediaPath = buildLocalMediaPath(this,
-					alarm.mediaArtist, alarm.mediaTitle, alarm.mediaType)
-
-				// Update the database
-				alarmViewModel.update(alarm)
-
-				// Copy the media to device encrypted storage in case of having to run an
-				// alarm in direct boot mode
-				copyMediaToDeviceEncryptedStorage(this, alarm.mediaPath, alarm.mediaArtist,
-					alarm.mediaTitle, alarm.mediaType)
-
-			}
-
-			// Mark the event as completed
-			sharedPreferences.eventUpdateAndBackupMediaInfoInAlarmsDbV31 = true
+			doEventUpdateAndBackupMediaInfoInAlarmsDbV31()
 		}
 	}
 

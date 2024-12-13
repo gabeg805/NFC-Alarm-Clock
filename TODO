@@ -2,9 +2,7 @@
 TODO
 ----
 
-* Add check to remove any unused media files from de in onCreate()
-
-* Fix message_permission strings for all languages
+* Updated shared preferences ignore list to include the is selected media available key.
 
 * Move easy to mess up strings to top
 

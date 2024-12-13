@@ -25,6 +25,7 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.createTimeTickReceiver
+import com.nfcalarmclock.util.media.directQueryMediaMetadata
 import com.nfcalarmclock.util.media.getMediaArtist
 import com.nfcalarmclock.util.media.getMediaTitle
 import com.nfcalarmclock.util.registerMyReceiver
@@ -137,7 +138,7 @@ class NacSwipeLayoutHandler(
 	private val sliderRightArrow: ImageView = activity.findViewById(R.id.slider_right_arrow)
 
 	/**
-	 * Music information.
+	 * Music information container.
 	 */
 	private val musicContainer: RelativeLayout = activity.findViewById(R.id.music_container)
 
@@ -150,6 +151,11 @@ class NacSwipeLayoutHandler(
 	 * Music artist.
 	 */
 	private val musicArtistTextView: TextView = activity.findViewById(R.id.music_artist)
+
+	/**
+	 * Music not available warning.
+	 */
+	private val musicSongNotAvailableWarningTextView: TextView = activity.findViewById(R.id.selected_alarm_song_not_available_warning)
 
 	/**
 	 * Starting X position on the alarm action row.
@@ -708,27 +714,53 @@ class NacSwipeLayoutHandler(
 	{
 		// Get the current media item
 		val mediaPath = sharedPreferences.currentPlayingAlarmMedia
+		println("Current playing : $mediaPath | Alarm : ${alarm?.mediaPath} | Local : ${alarm?.localMediaPath}")
+		println("Show music info ? ${sharedPreferences.shouldShowMusicInfo}")
+		println("Is not available? ${sharedPreferences.isSelectedMediaForAlarmNotAvailable}")
 
-		// Get the user preference on whether the music info should be shown
-		val visibility = if (sharedPreferences.shouldShowMusicInfo && mediaPath.isNotEmpty())
-			View.VISIBLE else View.INVISIBLE
+		// Set the visibility of the song warning
+		musicSongNotAvailableWarningTextView.visibility = if (sharedPreferences.isSelectedMediaForAlarmNotAvailable)
+		{
+			View.VISIBLE
+		}
+		else
+		{
+			View.GONE
+		}
 
-		// Set the visibility
-		musicContainer.visibility = visibility
-
-		// Check if the music container is not visible
-		if (musicContainer.visibility == View.INVISIBLE)
+		// Check if music information does not need to be shown
+		if (!sharedPreferences.shouldShowMusicInfo || mediaPath.isEmpty())
 		{
 			// Do nothing else
 			return
 		}
 
+		// Set the visibility
+		println("SHOWING MUSIC CONTAINER")
+		musicContainer.visibility = View.VISIBLE
+
 		// Get the title and artist of the media
 		val mediaUri = Uri.parse(mediaPath)
-		val title = mediaUri.getMediaTitle(context)
-		val artist = mediaUri.getMediaArtist(context)
+		val title: String
+		val artist: String
+
+		// Check if media needs to be queried directly, instead of through the MediaStore
+		if (mediaPath.isNotEmpty() && (mediaPath == alarm?.localMediaPath))
+		{
+			println("Direct query")
+			val (a, t) = mediaUri.directQueryMediaMetadata()
+			title = t
+			artist = a
+		}
+		else
+		{
+			println("Normal query")
+			title = mediaUri.getMediaTitle(context)
+			artist = mediaUri.getMediaArtist(context)
+		}
 
 		// Set the title and artist
+		println("SETTING : $title | $artist")
 		musicTitleTextView.text = title
 		musicArtistTextView.text = artist
 
@@ -914,11 +946,12 @@ class NacSwipeLayoutHandler(
 		onSharedPreferenceChangedListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
 
 			// Get the key for the currently playing media
-			val currentPlayingMediaKey = context.getString(R.string.key_current_playing_alarm_media)
+			val currentPlayingMediaKey = context.getString(R.string.key_media_current_playing_alarm)
+			val isSelectedMediaNotAvailableKey = context.getString(R.string.key_media_is_selected_for_alarm_not_available)
 
 			// Check if the keys do not match. Only care about the currently
 			// playing media key
-			if (key != currentPlayingMediaKey)
+			if ((key != currentPlayingMediaKey) && (key != isSelectedMediaNotAvailableKey))
 			{
 				return@OnSharedPreferenceChangeListener
 			}

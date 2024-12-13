@@ -147,6 +147,7 @@
 	<string name="message_next_alarm_in">अगला अलार्म %1$s में</string>
 	<string name="message_export_completed">निर्यात पूर्ण हुआ</string>
 	<string name="message_import_completed">आयात पूर्ण हुआ</string>
+	<string name="message_selected_alarm_song_not_available">अलार्म के लिए चुना गया गाना उपलब्ध नहीं है</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">सक्रिय अलार्म को हटाने में असमर्थ</string>
@@ -336,6 +337,7 @@
 	<string name="description_permission_post_notifications">अलार्म सक्रिय होने पर एक अधिसूचना दिखाएं जो आपके डिवाइस को ऐप को स्लीप मोड में डालने और अलार्म को स्वयं बंद करने से रोकेगा।</string>
 	<string name="description_permission_boot">जब आपका डिवाइस चालू हो तो अलार्म पुनर्स्थापित करें। जब आपका डिवाइस बंद हो तो Android अलार्म हटा देगा।</string>
 	<string name="description_permission_wakelock">अपने डिवाइस को स्लीप मोड में जाने से रोकें ताकि सक्रिय अलार्म लगातार बजता रहे।</string>
+	<string name="description_audio_sources">अलार्म बजाने के लिए ऑडियो चैनल.</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">अलार्मों की सूची यहां दिखाई जाएगी।</string>
