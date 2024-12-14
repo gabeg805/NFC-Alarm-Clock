@@ -221,10 +221,6 @@ class NacSwipeLayoutHandler(
 	private var wasStopped: Boolean = false
 
 	/**
-	 * Orange color.
-	 */
-
-	/**
 	 * Animate the button back to its original X position
 	 */
 	private fun animateButtonBackToOriginalXposition(view: View, origX: Float = -1f)

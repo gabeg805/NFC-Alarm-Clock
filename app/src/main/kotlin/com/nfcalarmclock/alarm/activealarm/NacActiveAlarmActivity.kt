@@ -197,6 +197,7 @@ class NacActiveAlarmActivity
 		// Check if the alarm can be dismissed with NFC
 		if (checkCanDismissWithNfc())
 		{
+			println("onNewIntent() Dismiss with NFC")
 			// Dismiss the alarm service with NFC
 			NacActiveAlarmService.dismissAlarmServiceWithNfc(this, alarm!!)
 		}
@@ -232,6 +233,7 @@ class NacActiveAlarmActivity
 		// NFC tag was scanned. Check if can dismiss
 		if (NacNfc.wasScanned(intent) && checkCanDismissWithNfc())
 		{
+			println("onResume() Dismiss with NFC")
 			// Dismiss the alarm service with NFC
 			NacActiveAlarmService.dismissAlarmServiceWithNfc(this, alarm!!)
 		}
@@ -264,6 +266,21 @@ class NacActiveAlarmActivity
 	}
 
 	/**
+	 * Save the alarm before the activity is killed.
+	 */
+	public override fun onSaveInstanceState(outState: Bundle)
+	{
+		// Super
+		super.onSaveInstanceState(outState)
+
+		// Save the alarm to the save instance state
+		if (alarm != null)
+		{
+			outState.putParcelable(NacBundle.ALARM_PARCEL_NAME, alarm)
+		}
+	}
+
+	/**
 	 * Called when the window focus has changed. This is the best indicator of
 	 * whether the activity is visible to the user, or not.
 	 */
@@ -282,21 +299,6 @@ class NacActiveAlarmActivity
 		{
 			// Stop the layout handler
 			layoutHandler.stop(this)
-		}
-	}
-
-	/**
-	 * Save the alarm before the activity is killed.
-	 */
-	public override fun onSaveInstanceState(outState: Bundle)
-	{
-		// Super
-		super.onSaveInstanceState(outState)
-
-		// Save the alarm to the save instance state
-		if (alarm != null)
-		{
-			outState.putParcelable(NacBundle.ALARM_PARCEL_NAME, alarm)
 		}
 	}
 

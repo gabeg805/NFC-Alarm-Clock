@@ -96,7 +96,7 @@
 			android:id="@+id/scan_nfc_text"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textColor="@color/orange"
+			android:textColor="@color/white"
 			android:textSize="@dimen/tsz_large"
 			android:textStyle="bold"
 			android:text=""

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.text.format.DateFormat
 import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
@@ -680,6 +681,7 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 				// Update the preview
 				binding.widgetDate.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetDateTextSize)
 				binding.widgetDateBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetDateTextSize)
+				updateAlarmIconMargins()
 			}
 
 		})
@@ -689,6 +691,7 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 			// Update the preview
 			binding.widgetDate.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
 			binding.widgetDateBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			updateAlarmIconMargins(dateTextSize = value)
 
 		}
 
@@ -785,6 +788,7 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 				// Update the preview
 				binding.widgetAlarmTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
 				binding.widgetAlarmTimeBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
+				updateAlarmIconMargins()
 			}
 
 		})
@@ -794,6 +798,7 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 			// Update the preview
 			binding.widgetAlarmTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
 			binding.widgetAlarmTimeBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			updateAlarmIconMargins(alarmTextSize = value)
 
 		}
 
@@ -801,6 +806,28 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		binding.doneButton.setOnClickListener {
 			updateAndFinish()
 		}
+	}
+
+	/**
+	 * Update the alarm icon margins.
+	 */
+	private fun updateAlarmIconMargins(
+		dateTextSize: Float = sharedPreferences.clockWidgetDateTextSize,
+		alarmTextSize: Float = sharedPreferences.clockWidgetAlarmTimeTextSize)
+	{
+		// Calculate the new margin in dp
+		val avgTextSize = (dateTextSize + alarmTextSize) / 2
+		val newMarginDp = NacClockWidgetDataHelper.calcAlarmIconMargin(this, avgTextSize)
+
+		// Compute the new margin in px
+		val layoutParams = binding.widgetAlarmIcon.layoutParams as ViewGroup.MarginLayoutParams
+		val newMarginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, newMarginDp,
+			resources.displayMetrics).toInt()
+
+		// Set the new margin
+		layoutParams.marginStart = newMarginPx
+		layoutParams.marginEnd = newMarginPx
+		binding.widgetAlarmIcon.layoutParams = layoutParams
 	}
 
 	/**
@@ -859,6 +886,9 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		binding.widgetDateBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetDateTextSize)
 		binding.widgetAlarmTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
 		binding.widgetAlarmTimeBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
+
+		// Set the margin
+		updateAlarmIconMargins()
 	}
 
 	/**

@@ -7,6 +7,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
@@ -144,6 +145,22 @@ internal fun updateAppWidget(
 	views.setTextViewTextSize(R.id.widget_date_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetDateTextSize)
 	views.setTextViewTextSize(R.id.widget_alarm_time, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
 	views.setTextViewTextSize(R.id.widget_alarm_time_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
+
+	// Set margin
+	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+	{
+		// Calculate the average text size
+		val avgTextSize = (shared.clockWidgetDateTextSize+shared.clockWidgetAlarmTimeTextSize) / 2
+		val newMargin = NacClockWidgetDataHelper.calcAlarmIconMargin(context, avgTextSize)
+
+		// Start
+		views.setViewLayoutMargin(R.id.widget_alarm_icon, RemoteViews.MARGIN_START,
+			newMargin, TypedValue.COMPLEX_UNIT_DIP)
+
+		// End
+		views.setViewLayoutMargin(R.id.widget_alarm_icon, RemoteViews.MARGIN_END,
+			newMargin, TypedValue.COMPLEX_UNIT_DIP)
+	}
 
 	// Instruct the widget manager to update the widget
 	appWidgetManager.updateAppWidget(appWidgetId, views)
@@ -419,6 +436,26 @@ internal class NacClockWidgetDataHelper(
 
 	companion object
 	{
+
+		/**
+		 * Calculate what the alarm icon margin should be.
+		 */
+		fun calcAlarmIconMargin(context: Context, textSize: Float): Float
+		{
+			// Get the base margin
+			val res = context.resources
+			val baseMargin = res.getDimension(R.dimen.nudge) / res.displayMetrics.density
+
+			// Determine the correct margin
+			return if (textSize >= 20)
+			{
+				2 * baseMargin
+			}
+			else
+			{
+				baseMargin
+			}
+		}
 
 		/**
 		 * Calculate the correct background color + alpha channel.
