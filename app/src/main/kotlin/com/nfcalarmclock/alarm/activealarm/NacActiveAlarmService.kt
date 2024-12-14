@@ -16,7 +16,6 @@ import com.nfcalarmclock.alarm.NacAlarmRepository
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.missedalarm.NacMissedAlarmNotification
 import com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderService
-import com.nfcalarmclock.main.NacMainActivity.Companion.startMainActivity
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.NacAlarmStatisticRepository
 import com.nfcalarmclock.system.scheduler.NacScheduler
@@ -25,7 +24,6 @@ import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.disableActivityAlias
 import com.nfcalarmclock.util.enableActivityAlias
 import com.nfcalarmclock.util.getAlarm
-import com.nfcalarmclock.util.isUserUnlocked
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -309,14 +307,6 @@ class NacActiveAlarmService
 
 		// Stop the alarm activity
 		NacActiveAlarmActivity.stopAlarmActivity(this)
-
-		// Check if the device has been unlocked so as not to be running in direct boot mode
-		if (isUserUnlocked(this))
-		{
-			// Start the main activity so that if there are any other alarms that
-			// need to run, this will kick them off
-			startMainActivity(this)
-		}
 
 		scope.launch {
 

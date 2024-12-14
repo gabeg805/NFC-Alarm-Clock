@@ -248,7 +248,6 @@ class NacActiveAlarmActivity
 		layoutHandler.setup(this)
 
 		// Check if NFC should be setup
-		println("Should use nfc? $shouldUseNfc")
 		if (shouldUseNfc)
 		{
 			// Setup NFC tag
@@ -256,8 +255,6 @@ class NacActiveAlarmActivity
 
 				// Get the NFC tag that corresponds to this ID from the table
 				val nfcTag = nfcTagViewModel.findNfcTag(alarm!!.nfcTagId)
-				println(nfcTag)
-				println("Id : ${nfcTag?.nfcId} | Name : ${nfcTag?.name}")
 
 				// Setup the NFC tag
 				layoutHandler.setupNfcTag(this@NacActiveAlarmActivity, nfcTag)

@@ -151,10 +151,9 @@
 				android:id="@+id/widget_alarm_icon"
 				android:layout_width="wrap_content"
 				android:layout_height="match_parent"
-				android:layout_marginHorizontal="@dimen/nudge"
+				android:layout_marginHorizontal="@dimen/tiny"
 				android:layout_marginVertical="@dimen/twoline"
 				android:src="@drawable/alarm"
-				android:visibility="gone"
 				app:tint="@color/white"
 				/>
 
@@ -165,7 +164,7 @@
 				android:layout_height="wrap_content"
 				android:textColor="@color/orange"
 				android:textSize="@dimen/tsz_small"
-				android:text=""
+				android:text="Wed 9:00 AM"
 				/>
 
 			<TextView

@@ -49,9 +49,6 @@ fun calcContrastColor(color: Int): Int
 	val luminance = (0.299*r + 0.587*g + 0.114*b) / 255f
 
 	// Determine which contrast color to use
-	// Note: Stackoverflow uses 0.5, but using 0.62 to accomadate the standard orange
-	//       theme color having a white background so that things do not change too much
-	//       for users
 	return if (luminance > 0.5)
 	{
 		Color.BLACK

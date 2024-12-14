@@ -2,17 +2,16 @@ package com.nfcalarmclock.settings.preference
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.ColorStateList
 import android.content.res.TypedArray
-import android.graphics.Color
 import android.util.AttributeSet
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.CompoundButton
 import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
+import com.google.android.material.checkbox.MaterialCheckBox
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
+import com.nfcalarmclock.view.setupCheckBoxColor
 
 
 /**
@@ -47,7 +46,7 @@ class NacCheckboxPreference(
 	/**
 	 * Check box button.
 	 */
-	private lateinit var checkBox: CheckBox
+	private lateinit var checkBox: MaterialCheckBox
 
 	/**
 	 * Check value.
@@ -126,9 +125,12 @@ class NacCheckboxPreference(
 		// Super
 		super.onBindViewHolder(holder)
 
+		// Create the shared preferences
+		val shared = NacSharedPreferences(context)
+
 		// Set the checkbox view
 		parent = holder.itemView as ViewGroup
-		checkBox = holder.findViewById(R.id.widget) as CheckBox
+		checkBox = holder.findViewById(R.id.widget) as MaterialCheckBox
 
 		// Set the checked status and sandwich it by unsetting and resetting
 		// the listener so that it does not go off when the status is set
@@ -137,7 +139,7 @@ class NacCheckboxPreference(
 		checkBox.setOnCheckedChangeListener(this)
 
 		// Setup color
-		setupCheckBoxColor()
+		checkBox.setupCheckBoxColor(shared)
 
 		// Check if the enabled status was buffered
 		if (bufferedEnableStatus != null)
@@ -232,24 +234,6 @@ class NacCheckboxPreference(
 
 		// Set the alpha of the parent
 		parent.alpha = if (enabled) 1.0f else 0.25f
-	}
-
-	/**
-	 * Setup the color of the check box.
-	 */
-	private fun setupCheckBoxColor()
-	{
-		// Create a shared preferences
-		val shared = NacSharedPreferences(context)
-
-		// Get the colors for the boolean states
-		val colors = intArrayOf(shared.themeColor, Color.LTGRAY)
-
-		// Get the IDs of the two states
-		val states = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
-
-		// Set the state list
-		checkBox.buttonTintList = ColorStateList(states, colors)
 	}
 
 	companion object

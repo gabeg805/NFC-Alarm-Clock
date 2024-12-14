@@ -5,14 +5,11 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
-		<item>Se agregó la opción &lt;b>omitir la siguiente alarma&lt;/b>. Mantenga presionada una alarma para ver la opción.</item>
-		<item>Se agregó la opción &lt;b>eliminar después de descartar&lt;/b> para eliminar automáticamente una alarma después de descartarla. Se encuentra en &lt;b>Opciones de descartar&lt;/b>.</item>
-		<item>Se agregó la opción &lt;b>importar/exportar&lt;/b>. Se encuentra en &lt;b>Configuración&lt;/b>.</item>
-		<item>Se solucionó el fallo que se producía cuando había un signo &lt;b>%&lt;/b> en el nombre de la alarma.</item>
-		<item>Se agregó traducción de idioma para &lt;b>alemán&lt;/b>.</item>
-		<item>Gracias a &lt;b>Aristeo Montoya&lt;/b> por ayudarnos a mejorar la traducción al &lt;b>español&lt;/b>.</item>
-		<item>Se actualizó la forma en que &lt;b>text-to-speech&lt;/b> dice la hora y se redujo la velocidad a la que habla.</item>
-		<item>Las notificaciones de recordatorio se eliminarán cuando suene una alarma.</item>
+		<item>Se agregó soporte para &lt;b>arranque directo&lt;/b>, de modo que las alarmas puedan ejecutarse cuando el dispositivo esté encendido, pero aún no se haya desbloqueado.</item>
+		<item>Se agregó el &lt;b>widget de reloj&lt;/b> para la pantalla de inicio.</item>
+		<item>Se agregó el botón &lt;b>selector de archivos del sistema&lt;/b> al elegir una canción para una alarma.</item>
+		<item>Se agregaron traducciones para &lt;b>bengalí&lt;/b>, &lt;b>hindi&lt;/b> y &lt;b>portugués brasileño&lt;/b>.</item>
+		<item>Se actualizaron las funciones de apagado automático, posposición automática y duración de posposición para permitir configurar los &lt;b>segundos&lt;/b>, así como los minutos.</item>
 	</string-array>
 
 </resources>

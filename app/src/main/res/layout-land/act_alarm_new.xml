@@ -64,7 +64,7 @@
 		android:marqueeRepeatLimit="marquee_forever"
 		android:scrollHorizontally="true"
 		android:singleLine="true"
-		android:textColor="@color/orange"
+		android:textColor="@color/white"
 		android:textSize="@dimen/tsz_huge"
 		android:textStyle="bold"
 		android:text=""
@@ -88,7 +88,7 @@
 			android:id="@+id/scan_nfc_icon"
 			android:layout_width="@dimen/isz_xlarge"
 			android:layout_height="@dimen/isz_xlarge"
-			android:layout_marginEnd="@dimen/nudge"
+			android:layout_marginEnd="@dimen/tiny"
 			android:src="@drawable/tap_and_play"
 			/>
 
@@ -96,8 +96,8 @@
 			android:id="@+id/scan_nfc_text"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textColor="@color/white"
-			android:textSize="@dimen/tsz_medium"
+			android:textColor="@color/orange"
+			android:textSize="@dimen/tsz_large"
 			android:textStyle="bold"
 			android:text=""
 			/>
@@ -266,7 +266,6 @@
 		android:id="@+id/music_and_warning_container"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/normal"
 		android:layout_marginStart="@dimen/normal"
 		android:layout_marginEnd="@dimen/normal"
 		android:animateLayoutChanges="true"

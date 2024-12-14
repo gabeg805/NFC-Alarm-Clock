@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+	<!-- &lt;b> -->
+	<!-- &lt;/b> -->
+
+	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>Adicionado suporte para &lt;b>inicialização direta&lt;/b>, para que os alarmes possam ser executados quando o dispositivo estiver ligado, mas ainda não tiver sido desbloqueado.</item>
+		<item>Adicionado &lt;b>widget de relógio&lt;/b> para a tela inicial.</item>
+		<item>Adicionado o botão &lt;b>seletor de arquivos do sistema&lt;/b> ao escolher uma música para um alarme.</item>
+		<item>Adicionadas traduções para &lt;b>Bengali&lt;/b>, &lt;b>Hindi&lt;/b> e &lt;b>Português Brasileiro&lt;/b>.</item>
+		<item>Atualização do desligamento automático, soneca automática e duração da soneca para permitir a configuração de &lt;b>segundos&lt;/b>, bem como minutos.</item>
+	</string-array>
+
+</resources>

@@ -18,6 +18,7 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.dynamicanimation.animation.DynamicAnimation
 import androidx.dynamicanimation.animation.FlingAnimation
 import com.nfcalarmclock.R
@@ -32,6 +33,8 @@ import com.nfcalarmclock.util.media.getMediaTitle
 import com.nfcalarmclock.util.media.isLocalMediaPath
 import com.nfcalarmclock.util.registerMyReceiver
 import com.nfcalarmclock.util.unregisterMyReceiver
+import com.nfcalarmclock.view.calcContrastColor
+import com.nfcalarmclock.view.setupBackgroundColor
 import java.lang.Float.max
 import java.lang.Float.min
 import java.util.Calendar
@@ -111,6 +114,16 @@ class NacSwipeLayoutHandler(
 	 * Dismiss button.
 	 */
 	private val dismissButton: RelativeLayout = activity.findViewById(R.id.dismiss_view)
+
+	/**
+	 * Dismiss icon.
+	 */
+	private val dismissIcon: ImageView = activity.findViewById(R.id.dismiss_icon)
+
+	/**
+	 * Dismiss text.
+	 */
+	private val dismissTextView: TextView = activity.findViewById(R.id.dismiss_text)
 
 	/**
 	 * View to capture the user's attention for the snooze button.
@@ -206,6 +219,10 @@ class NacSwipeLayoutHandler(
 	 * Check if the handler was stopped via stop().
 	 */
 	private var wasStopped: Boolean = false
+
+	/**
+	 * Orange color.
+	 */
 
 	/**
 	 * Animate the button back to its original X position
@@ -707,8 +724,16 @@ class NacSwipeLayoutHandler(
 		// Setup the dismiss button
 		setupAlarmActionButton(dismissButton)
 
-		// Change color of the dismiss button
-		dismissButton.backgroundTintList = ColorStateList.valueOf(sharedPreferences.themeColor)
+		// Setup the color
+		dismissButton.setupBackgroundColor(sharedPreferences)
+
+		// Check if the theme color is not orange
+		if (sharedPreferences.themeColor != ResourcesCompat.getColor(sharedPreferences.resources, R.color.orange, null))
+		{
+			dismissIcon.imageTintList =
+				ColorStateList.valueOf(calcContrastColor(sharedPreferences.themeColor))
+			dismissTextView.setTextColor(calcContrastColor(sharedPreferences.themeColor))
+		}
 	}
 
 	/**
@@ -782,11 +807,14 @@ class NacSwipeLayoutHandler(
 	}
 
 	/**
-	 * Setup an NFC tag, if necessary.
+	 * Setup an NFC tag. This is only called if NFC is enabled for an alarm.
 	 */
 	override fun setupNfcTag(context: Context, nfcTag: NacNfcTag?)
 	{
-		// Set the name of the NFC tag
+		// Set the color
+		nfcNameTextView.setTextColor(sharedPreferences.themeColor)
+
+		// Set the name
 		nfcNameTextView.text = nfcTag?.name ?: context.resources.getString(R.string.title_scan_nfc_tag)
 	}
 

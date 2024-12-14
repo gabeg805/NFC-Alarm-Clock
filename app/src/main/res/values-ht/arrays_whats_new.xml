@@ -5,14 +5,11 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
-		<item>Te ajoute opsyon &lt;b>sote pwochen alam&lt;/b>. Long peze yon alam pou wè opsyon an.</item>
-		<item>Te ajoute opsyon &lt;b>efase apre ranvwaye&lt;/b> pou efase otomatikman yon alam apre li fin ranvwaye. Yo jwenn nan &lt;b>Opsyon anile&lt;/b>.</item>
-		<item>Te ajoute opsyon &lt;b>enpòte/ekspòtasyon&lt;/b>. Yo jwenn nan &lt;b>Anviwònman&lt;/b>.</item>
-		<item>Te fikse aksidan lè yon siy &lt;b>%&lt;/b> te nan non alam la.</item>
-		<item>Te ajoute tradiksyon lang pou &lt;b>Alman&lt;/b>.</item>
-		<item>Mèsi a &lt;b>Aristeo Montoya&lt;/b> dèske li ede amelyore tradiksyon &lt;b>panyòl&lt;/b> la.</item>
-		<item>Mete ajou fason &lt;b>tèks-a-lapawòl&lt;/b> di lè a ak ralanti vitès la nan ki li pale.</item>
-		<item>Notifikasyon rapèl yo pral retire lè yon alam sonnen.</item>
+		<item>Te ajoute sipò pou &lt;b>bòt dirèk&lt;/b>, pou alam yo ka kouri lè aparèy la limen, men li poko debloke.</item>
+		<item>Te ajoute &lt;b>widget revèy&lt;/b> pou ekran lakay ou.</item>
+		<item>Te ajoute yon bouton &lt;b>sélection fichye sistèm&lt;/b> lè w ap chwazi yon chante pou yon alam.</item>
+		<item>Te ajoute tradiksyon pou &lt;b>Bengali&lt;/b>, &lt;b>Hendi&lt;/b>, ak &lt;b>Portigè brezilyen&lt;/b>.</item>
+		<item>Mete ajou oto ranvwaye, oto snooze, ak snooze dire pou pèmèt mete &lt;b>segonn&lt;/b>, osi byen ke minit.</item>
 	</string-array>
 
 </resources>

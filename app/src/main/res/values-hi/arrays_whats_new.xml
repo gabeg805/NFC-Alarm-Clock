@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+	<!-- &lt;b> -->
+	<!-- &lt;/b> -->
+
+	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>&lt;b>प्रत्यक्ष बूट&lt;/b> के लिए समर्थन जोड़ा गया, ताकि डिवाइस चालू होने पर अलार्म चल सके, लेकिन इसे अभी तक अनलॉक नहीं किया गया है।</item>
+		<item>होम स्क्रीन के लिए &lt;b>घड़ी विजेट&lt;/b> जोड़ा गया.</item>
+		<item>अलार्म के लिए गाना चुनते समय &lt;b>सिस्टम फ़ाइल चयनकर्ता&lt;/b> बटन जोड़ा गया।</item>
+		<item>&lt;b>बंगाली&lt;/b>, &lt;b>हिंदी&lt;/b>, और &lt;b>ब्राजीलियन पुर्तगाली&lt;/b> के लिए अनुवाद जोड़े गए।</item>
+		<item>ऑटो डिसमिस, ऑटो स्नूज़ और स्नूज़ अवधि को अपडेट किया गया है, जिससे &lt;b>सेकंड&lt;/b> के साथ-साथ मिनट भी सेट करने की अनुमति मिल सके।</item>
+	</string-array>
+
+</resources>

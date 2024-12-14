@@ -141,7 +141,7 @@
 			android:id="@+id/widget_alarm_icon"
 			android:layout_width="wrap_content"
 			android:layout_height="match_parent"
-			android:layout_marginHorizontal="@dimen/nudge"
+			android:layout_marginHorizontal="@dimen/tiny"
 			android:layout_marginVertical="@dimen/twoline"
 			android:src="@drawable/alarm"
 			android:visibility="gone"
