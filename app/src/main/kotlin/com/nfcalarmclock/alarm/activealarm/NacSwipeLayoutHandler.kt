@@ -807,9 +807,6 @@ class NacSwipeLayoutHandler(
 	 */
 	override fun setupNfcTag(context: Context, nfcTag: NacNfcTag?)
 	{
-		// Set the color
-		nfcNameTextView.setTextColor(sharedPreferences.themeColor)
-
 		// Set the name
 		nfcNameTextView.text = nfcTag?.name ?: context.resources.getString(R.string.title_scan_nfc_tag)
 	}

@@ -180,10 +180,10 @@ class NacActiveAlarmActivity
 	}
 
 	/**
-	 * NFC tag discovered so dismiss the dialog.
+	 * NFC tag discovered.
 	 *
-	 * Note: Parent method must be called last. Causes issues with
-	 * setSnoozeCount.
+	 * After this, onResume() will be called, which will check if an NFC tag was scanned
+	 * and, if so, will disimss the alarm.
 	 */
 	@OptIn(UnstableApi::class)
 	override fun onNewIntent(intent: Intent)
@@ -193,14 +193,6 @@ class NacActiveAlarmActivity
 
 		// Set the intent
 		setIntent(intent)
-
-		// Check if the alarm can be dismissed with NFC
-		if (checkCanDismissWithNfc())
-		{
-			println("onNewIntent() Dismiss with NFC")
-			// Dismiss the alarm service with NFC
-			NacActiveAlarmService.dismissAlarmServiceWithNfc(this, alarm!!)
-		}
 	}
 
 	/**
@@ -233,7 +225,6 @@ class NacActiveAlarmActivity
 		// NFC tag was scanned. Check if can dismiss
 		if (NacNfc.wasScanned(intent) && checkCanDismissWithNfc())
 		{
-			println("onResume() Dismiss with NFC")
 			// Dismiss the alarm service with NFC
 			NacActiveAlarmService.dismissAlarmServiceWithNfc(this, alarm!!)
 		}

@@ -202,7 +202,6 @@ class NacActiveAlarmService
 				withContext(Dispatchers.Main) {
 
 					// Show toast that the alarm was dismissed
-					println("Toast dismiss")
 					NacUtility.quickToast(this@NacActiveAlarmService, R.string.message_alarm_dismiss)
 
 					// Stop the service
@@ -335,7 +334,6 @@ class NacActiveAlarmService
 	{
 		// Setup the service
 		setupActiveAlarmService(intent)
-		println("Intent : ${intent?.action} | $intentAction | Alarm : $alarm")
 
 		// Check if this is a skipped alarm
 		if (alarm?.shouldSkipNextAlarm == true)
