@@ -1855,6 +1855,7 @@ class NacSharedPreferences(context: Context)
 			resources.getString(R.string.key_main_card_height_expanded),
 			resources.getString(R.string.key_main_card_is_measured),
 			resources.getString(R.string.key_media_current_playing_alarm),
+			resources.getString(R.string.key_media_is_selected_for_alarm_not_available),
 			resources.getString(R.string.key_main_delay_showing_whats_new_dialog_counter),
 			resources.getString(R.string.key_permission_ignore_battery_optimization_requested),
 			resources.getString(R.string.key_permission_post_notifications_requested),

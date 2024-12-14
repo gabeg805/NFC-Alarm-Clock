@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:id="@+id/act_alarm"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
@@ -16,25 +16,28 @@
 		android:id="@+id/current_time"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_alignParentTop="true"
-		android:layout_centerHorizontal="true"
 		android:textColor="@color/white"
-		android:textSize="@dimen/tsz_dummy"
+		android:textSize="@dimen/tsz_widget"
 		android:textStyle="bold"
 		android:text=""
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toStartOf="@id/current_meridian"
+		app:layout_constraintHorizontal_chainStyle="packed"
 		/>
 
 	<TextView
 		android:id="@+id/current_meridian"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_alignBaseline="@id/current_time"
-		android:layout_toEndOf="@id/current_time"
 		android:layout_marginStart="@dimen/nudge"
 		android:textColor="@color/white"
-		android:textSize="@dimen/tsz_medium"
+		android:textSize="@dimen/tsz_large"
 		android:textStyle="bold"
 		android:text=""
+		app:layout_constraintStart_toEndOf="@id/current_time"
+		app:layout_constraintBaseline_toBaselineOf="@id/current_time"
+		app:layout_constraintEnd_toEndOf="parent"
 		/>
 
 	<!-- Date -->
@@ -42,11 +45,12 @@
 		android:id="@+id/current_date"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_below="@id/current_time"
+		android:layout_marginTop="@dimen/nudge"
 		android:gravity="center_horizontal"
 		android:textColor="@color/white_dull"
 		android:textSize="@dimen/tsz_normal"
 		android:text=""
+		app:layout_constraintTop_toBottomOf="@id/current_meridian"
 		/>
 
 	<!-- Alarm name -->
@@ -54,17 +58,17 @@
 		android:id="@+id/alarm_name"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/large"
-		android:layout_marginBottom="@dimen/large"
-		android:layout_below="@id/current_date"
+		android:layout_marginTop="@dimen/small"
 		android:gravity="center_horizontal"
 		android:ellipsize="marquee"
 		android:marqueeRepeatLimit="marquee_forever"
 		android:scrollHorizontally="true"
 		android:singleLine="true"
-		android:textColor="@color/white"
-		android:textSize="@dimen/tsz_xlarge"
+		android:textColor="@color/orange"
+		android:textSize="@dimen/tsz_huge"
+		android:textStyle="bold"
 		android:text=""
+		app:layout_constraintTop_toBottomOf="@id/current_date"
 		/>
 
 	<!-- Scan NFC -->
@@ -72,69 +76,44 @@
 		android:id="@+id/scan_nfc_view"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_centerInParent="true"
 		android:gravity="center_horizontal"
-		android:paddingBottom="@dimen/xxlarge"
-		android:background="@drawable/round_action_button"
-		android:backgroundTint="@color/gray_dark"
 		android:orientation="vertical"
-		android:visibility="visible">
-
-		<TextView
-			android:id="@+id/yoyoyo"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="@dimen/small"
-			android:textColor="@color/white"
-			android:textSize="@dimen/tsz_small"
-			android:textStyle="bold"
-			android:text=""
-			/>
+		android:visibility="invisible"
+		app:layout_constraintTop_toBottomOf="@id/alarm_name"
+		app:layout_constraintBottom_toTopOf="@id/slider_instructions">
 
 		<ImageView
-			android:id="@+id/scan_nfc_icon"
-			android:layout_width="@dimen/isz_attention"
-			android:layout_height="@dimen/isz_attention"
-			android:src="@drawable/tap_and_play"
-			android:visibility="gone"
 			android:contentDescription="@string/cd_scan_nfc"
+			android:id="@+id/scan_nfc_icon"
+			android:layout_width="@dimen/isz_focus"
+			android:layout_height="@dimen/isz_focus"
+			android:layout_marginStart="@dimen/nudge"
+			android:src="@drawable/tap_and_play"
 			/>
 
 		<TextView
-			android:id="@+id/ismiss_text2"
+			android:id="@+id/scan_nfc_text"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginTop="@dimen/small"
+			android:layout_marginTop="@dimen/nudge"
 			android:textColor="@color/white"
 			android:textSize="@dimen/tsz_medium"
 			android:textStyle="bold"
-			android:text="@string/description_scan_nfc"
-			android:visibility="gone"
-			/>
-
-		<TextView
-			android:id="@+id/ismiss_text3"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textColor="@color/orange"
-			android:textSize="@dimen/tsz_small"
-			android:textStyle="bold"
 			android:text=""
-			android:visibility="gone"
 			/>
 	</LinearLayout>
 
 	<!-- Slider instructions -->
 	<TextView
 		android:id="@+id/slider_instructions"
-		android:layout_width="wrap_content"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_above="@id/alarm_action_row"
-		android:layout_marginBottom="@dimen/neg_medium"
-		android:layout_centerHorizontal="true"
+		android:layout_marginBottom="@dimen/twoline"
+		android:gravity="center_horizontal"
 		android:textColor="@color/white"
 		android:textSize="@dimen/tsz_normal"
 		android:text=""
+		app:layout_constraintBottom_toTopOf="@id/alarm_action_row"
 		/>
 
 	<!-- Snooze/dismiss -->
@@ -142,13 +121,14 @@
 		android:id="@+id/alarm_action_row"
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/action_row_height"
-		android:layout_marginTop="@dimen/xlarge"
 		android:layout_marginBottom="@dimen/medium"
 		android:layout_marginStart="@dimen/large"
 		android:layout_marginEnd="@dimen/large"
 		android:clipChildren="false"
 		android:clipToPadding="false"
-		android:layout_above="@id/music_and_warning_container">
+		app:layout_constraintBottom_toTopOf="@id/music_and_warning_container"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent">
 
 		<!-- Slider -->
 		<RelativeLayout
@@ -171,9 +151,9 @@
 				android:id="@+id/slider_left_arrow"
 				android:layout_width="@dimen/isz_large"
 				android:layout_height="@dimen/isz_large"
-				android:layout_marginEnd="@dimen/medium"
-				android:layout_toStartOf="@id/slider_center_arrow"
 				android:layout_centerVertical="true"
+				android:layout_toStartOf="@id/slider_center_arrow"
+				android:layout_marginEnd="@dimen/medium"
 				android:contentDescription="@string/cd_alarm_slider_arrow"
 				/>
 
@@ -181,19 +161,18 @@
 				android:id="@+id/slider_right_arrow"
 				android:layout_width="@dimen/isz_large"
 				android:layout_height="@dimen/isz_large"
-				android:layout_marginStart="@dimen/medium"
-				android:layout_toEndOf="@id/slider_center_arrow"
 				android:layout_centerVertical="true"
+				android:layout_toEndOf="@id/slider_center_arrow"
+				android:layout_marginStart="@dimen/medium"
 				android:contentDescription="@string/cd_alarm_slider_arrow"
 				/>
-
 		</RelativeLayout>
 
 		<!-- Snooze animation -->
 		<RelativeLayout
 			android:id="@+id/snooze_attention_view"
-			android:layout_width="72dp"
-			android:layout_height="72dp"
+			android:layout_width="@dimen/isz_focus"
+			android:layout_height="@dimen/isz_focus"
 			android:layout_alignTop="@id/snooze_view"
 			android:layout_alignStart="@id/snooze_view"
 			android:alpha="0.3"
@@ -204,8 +183,8 @@
 		<!-- Dismiss animation -->
 		<RelativeLayout
 			android:id="@+id/dismiss_attention_view"
-			android:layout_width="72dp"
-			android:layout_height="72dp"
+			android:layout_width="@dimen/isz_focus"
+			android:layout_height="@dimen/isz_focus"
 			android:layout_alignTop="@id/dismiss_view"
 			android:layout_alignStart="@id/dismiss_view"
 			android:alpha="0.3"
@@ -216,19 +195,19 @@
 		<!-- Snooze -->
 		<RelativeLayout
 			android:id="@+id/snooze_view"
-			android:layout_width="72dp"
-			android:layout_height="72dp"
-			android:layout_marginStart="@dimen/tiny"
+			android:layout_width="@dimen/isz_focus"
+			android:layout_height="@dimen/isz_focus"
 			android:layout_alignParentStart="true"
 			android:layout_centerVertical="true"
+			android:layout_marginStart="@dimen/tiny"
 			android:background="@drawable/round_action_button"
 			android:backgroundTint="@color/gray_light"
 			android:gravity="center_vertical">
 
 			<ImageView
 				android:id="@+id/snooze_icon"
-				android:layout_width="30dp"
-				android:layout_height="30dp"
+				android:layout_width="@dimen/isz_large"
+				android:layout_height="@dimen/isz_large"
 				android:layout_centerHorizontal="true"
 				android:src="@drawable/snooze"
 				android:contentDescription="@string/cd_snooze_alarm"
@@ -245,25 +224,24 @@
 				android:textStyle="bold"
 				android:text="@string/action_alarm_snooze"
 				/>
-
 		</RelativeLayout>
 
 		<!-- Dismiss -->
 		<RelativeLayout
 			android:id="@+id/dismiss_view"
-			android:layout_width="72dp"
-			android:layout_height="72dp"
-			android:layout_marginEnd="@dimen/tiny"
+			android:layout_width="@dimen/isz_focus"
+			android:layout_height="@dimen/isz_focus"
 			android:layout_alignParentEnd="true"
 			android:layout_centerVertical="true"
+			android:layout_marginEnd="@dimen/tiny"
 			android:background="@drawable/round_action_button"
 			android:backgroundTint="@color/orange"
 			android:gravity="center_vertical">
 
 			<ImageView
 				android:id="@+id/dismiss_icon"
-				android:layout_width="28dp"
-				android:layout_height="28dp"
+				android:layout_width="@dimen/isz_large"
+				android:layout_height="@dimen/isz_large"
 				android:layout_centerHorizontal="true"
 				android:src="@drawable/dismiss"
 				android:contentDescription="@string/cd_dismiss_alarm"
@@ -280,12 +258,10 @@
 				android:textStyle="bold"
 				android:text="@string/action_alarm_dismiss"
 				/>
-
 		</RelativeLayout>
-
 	</RelativeLayout>
 
-	<!-- Music -->
+	<!-- Music and warning -->
 	<RelativeLayout
 		android:id="@+id/music_and_warning_container"
 		android:layout_width="match_parent"
@@ -293,26 +269,38 @@
 		android:layout_marginTop="@dimen/touch"
 		android:layout_marginStart="@dimen/normal"
 		android:layout_marginEnd="@dimen/normal"
-		android:layout_alignParentBottom="true"
 		android:animateLayoutChanges="true"
-		android:gravity="center_horizontal">
+		app:layout_constraintBottom_toBottomOf="parent">
 
+		<!-- Dummy -->
+		<TextView
+			android:id="@+id/music_dummy"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:textColor="@color/white"
+			android:textSize="@dimen/tsz_caption"
+			android:text=""
+			/>
+
+		<!-- Music -->
 		<RelativeLayout
 			android:id="@+id/music_container"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_below="@id/music_dummy"
 			android:layout_centerHorizontal="true"
 			android:animateLayoutChanges="true"
 			android:visibility="invisible">
 
 			<!-- Icon -->
 			<ImageView
-				android:contentDescription="@string/cd_current_alarm_media_playing"
 				android:id="@+id/music_icon"
-				android:layout_width="24dp"
-				android:layout_height="24dp"
+				android:layout_width="@dimen/isz_normal"
+				android:layout_height="@dimen/isz_normal"
 				android:layout_centerVertical="true"
 				android:src="@drawable/music_note"
+				android:contentDescription="@string/cd_current_alarm_media_playing"
 				/>
 
 			<!-- Title -->
@@ -320,9 +308,9 @@
 				android:id="@+id/music_title"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:layout_toEndOf="@id/music_icon"
 				android:layout_marginStart="@dimen/nudge"
 				android:layout_marginEnd="@dimen/nudge"
-				android:layout_toEndOf="@id/music_icon"
 				android:ellipsize="marquee"
 				android:marqueeRepeatLimit="marquee_forever"
 				android:singleLine="true"
@@ -337,8 +325,8 @@
 				android:id="@+id/music_artist"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_below="@id/music_title"
 				android:layout_alignStart="@id/music_title"
+				android:layout_below="@id/music_title"
 				android:ellipsize="marquee"
 				android:marqueeRepeatLimit="marquee_forever"
 				android:singleLine="true"
@@ -346,6 +334,7 @@
 				android:textSize="@dimen/tsz_caption"
 				android:textStyle="italic"
 				android:text=""
+				android:visibility="gone"
 				/>
 		</RelativeLayout>
 
@@ -359,10 +348,10 @@
 			android:layout_below="@id/music_container"
 			android:gravity="center_horizontal"
 			android:textColor="@color/white_dull"
-			android:textSize="@dimen/tsz_tiny"
+			android:textSize="@dimen/tsz_caption"
 			android:text="@string/message_selected_alarm_song_not_available"
 			android:visibility="invisible"
 			/>
 	</RelativeLayout>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,6 +32,7 @@ import com.nfcalarmclock.util.media.directQueryMediaMetadata
 import com.nfcalarmclock.util.media.getMediaArtist
 import com.nfcalarmclock.util.media.getMediaTitle
 import com.nfcalarmclock.util.media.getMediaType
+import com.nfcalarmclock.util.media.doesDeviceHaveFreeSpace
 import com.nfcalarmclock.util.media.isLocalMediaPath
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -303,16 +304,18 @@ open class NacMediaPickerFragment
 			mediaType = uri.getMediaType(deviceContext)
 			localMediaPath = buildLocalMediaPath(deviceContext, mediaArtist, mediaTitle, mediaType)
 
-			// Copy the media to the local files/ directory
-			// TODO: QUERY SPACE
-			copyMediaToDeviceEncryptedStorage(deviceContext,
-				mediaPath,
-				mediaArtist,
-				mediaTitle,
-				mediaType)
+			// Check if there is enough free space
+			if (doesDeviceHaveFreeSpace(deviceContext))
+			{
+				// Copy the media to the local files/ directory
+				copyMediaToDeviceEncryptedStorage(deviceContext, mediaPath, mediaArtist,
+					mediaTitle, mediaType)
+			}
+			else
+			{
+				println("Not enough space to make a backup!")
+			}
 		}
-
-		println("Final jank : $mediaArtist | $mediaTitle | $mediaType | $localMediaPath")
 
 		// Check if alarm is set
 		if (alarm != null)

@@ -25,9 +25,11 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.createTimeTickReceiver
+import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.media.directQueryMediaMetadata
 import com.nfcalarmclock.util.media.getMediaArtist
 import com.nfcalarmclock.util.media.getMediaTitle
+import com.nfcalarmclock.util.media.isLocalMediaPath
 import com.nfcalarmclock.util.registerMyReceiver
 import com.nfcalarmclock.util.unregisterMyReceiver
 import java.lang.Float.max
@@ -98,7 +100,7 @@ class NacSwipeLayoutHandler(
 	/**
 	 * TextView for the name of the NFC tag.
 	 */
-	private val nfcNameTextView: TextView = activity.findViewById(R.id.ismiss_text3)
+	private val nfcNameTextView: TextView = activity.findViewById(R.id.scan_nfc_text)
 
 	/**
 	 * Snooze button.
@@ -151,6 +153,11 @@ class NacSwipeLayoutHandler(
 	 * Music artist.
 	 */
 	private val musicArtistTextView: TextView = activity.findViewById(R.id.music_artist)
+
+	/**
+	 * Dummy music textview.
+	 */
+	private val musicDummyTextView: TextView = activity.findViewById(R.id.music_dummy)
 
 	/**
 	 * Music not available warning.
@@ -520,9 +527,6 @@ class NacSwipeLayoutHandler(
 			// Show the scan NFC view
 			scanNfcView.visibility = View.VISIBLE
 
-			// Setup the color of the name of the NFC tag
-			nfcNameTextView.setTextColor(sharedPreferences.themeColor)
-
 			// Set to INVISIBLE so that the end X position can still be
 			// determined, and then it will be set to GONE later
 			dismissButton.visibility = View.INVISIBLE
@@ -714,9 +718,6 @@ class NacSwipeLayoutHandler(
 	{
 		// Get the current media item
 		val mediaPath = sharedPreferences.currentPlayingAlarmMedia
-		println("Current playing : $mediaPath | Alarm : ${alarm?.mediaPath} | Local : ${alarm?.localMediaPath}")
-		println("Show music info ? ${sharedPreferences.shouldShowMusicInfo}")
-		println("Is not available? ${sharedPreferences.isSelectedMediaForAlarmNotAvailable}")
 
 		// Set the visibility of the song warning
 		musicSongNotAvailableWarningTextView.visibility = if (sharedPreferences.isSelectedMediaForAlarmNotAvailable)
@@ -736,36 +737,44 @@ class NacSwipeLayoutHandler(
 		}
 
 		// Set the visibility
-		println("SHOWING MUSIC CONTAINER")
 		musicContainer.visibility = View.VISIBLE
 
 		// Get the title and artist of the media
+		val deviceContext = getDeviceProtectedStorageContext(context)
 		val mediaUri = Uri.parse(mediaPath)
 		val title: String
 		val artist: String
 
 		// Check if media needs to be queried directly, instead of through the MediaStore
-		if (mediaPath.isNotEmpty() && (mediaPath == alarm?.localMediaPath))
+		//if (mediaPath.isNotEmpty() && (mediaPath == alarm?.localMediaPath))
+		if (mediaUri.isLocalMediaPath(deviceContext))
 		{
-			println("Direct query")
 			val (a, t) = mediaUri.directQueryMediaMetadata()
 			title = t
 			artist = a
 		}
 		else
 		{
-			println("Normal query")
 			title = mediaUri.getMediaTitle(context)
 			artist = mediaUri.getMediaArtist(context)
 		}
 
 		// Set the title and artist
-		println("SETTING : $title | $artist")
 		musicTitleTextView.text = title
 		musicArtistTextView.text = artist
 
-		// Set the visibility of the artist if it is unknown
-		musicArtistTextView.visibility = if (artist.isNotEmpty()) View.VISIBLE else View.GONE
+		// Set the visibility of the artist and the dummy. The dummy is there so that
+		// there is not a vertical shifting of views as one appears and the other disappears
+		if (artist.isNotEmpty())
+		{
+			musicArtistTextView.visibility = View.VISIBLE
+			musicDummyTextView.visibility = View.GONE
+		}
+		else
+		{
+			musicArtistTextView.visibility = View.GONE
+			musicDummyTextView.visibility = View.VISIBLE
+		}
 
 		// Select the title and artist to marquee it, if applicable
 		musicTitleTextView.isSelected = true
@@ -775,10 +784,10 @@ class NacSwipeLayoutHandler(
 	/**
 	 * Setup an NFC tag, if necessary.
 	 */
-	override fun setupNfcTag(nfcTag: NacNfcTag?)
+	override fun setupNfcTag(context: Context, nfcTag: NacNfcTag?)
 	{
 		// Set the name of the NFC tag
-		nfcNameTextView.text = nfcTag?.name
+		nfcNameTextView.text = nfcTag?.name ?: context.resources.getString(R.string.title_scan_nfc_tag)
 	}
 
 	/**

@@ -107,31 +107,6 @@ class NacActiveAlarmService
 	private var startTime: Long = 0
 
 	/**
-	 * Check if the alarm can be snoozed and show a toast if it cannot.
-	 */
-	private val canSnooze: Boolean
-		get()
-		{
-			// Check if the alarm can be snoozed
-			return if (alarm!!.canSnooze)
-			{
-				true
-			}
-			// Unable to snooze the alarm
-			else
-			{
-				scope.launch {
-					withContext(Dispatchers.Main)
-					{
-						// Show a toast saying the alarm could not be snoozed
-						NacUtility.quickToast(this@NacActiveAlarmService, R.string.error_message_snooze)
-					}
-				}
-				false
-			}
-		}
-
-	/**
 	 * Run cleanup.
 	 */
 	@UnstableApi
@@ -436,9 +411,20 @@ class NacActiveAlarmService
 			ACTION_SNOOZE_ALARM ->
 			{
 				// Check if can snooze
-				if (canSnooze)
+				if (alarm!!.canSnooze)
 				{
 					snooze()
+				}
+				// Unable to snooze the alarm
+				else
+				{
+					scope.launch {
+						withContext(Dispatchers.Main)
+						{
+							// Show a toast saying the alarm could not be snoozed
+							NacUtility.quickToast(this@NacActiveAlarmService, R.string.error_message_snooze)
+						}
+					}
 				}
 			}
 
@@ -750,7 +736,7 @@ class NacActiveAlarmService
 	fun waitForAutoSnooze()
 	{
 		// Check if should not auto snooze or cannot snooze
-		if (!alarm!!.shouldAutoSnooze || !canSnooze)
+		if (!alarm!!.shouldAutoSnooze || !alarm!!.canSnooze)
 		{
 			return
 		}

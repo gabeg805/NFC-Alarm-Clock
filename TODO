@@ -2,8 +2,6 @@
 TODO
 ----
 
-* Updated shared preferences ignore list to include the is selected media available key.
-
 * Move easy to mess up strings to top
 
 * Look into querying MediaStore.Downloads table?
@@ -20,10 +18,8 @@ TODO
 * Weird stuff when selecting a color, the slider bar is all the way to black,
   and you try to change the color.
 
-* Have option to use file chooser to select media?
-
-* Add languages for India, Bangladesh, Pakistan, Japan, Thailand, Poland, Turkey, France,
-  Brazil & Portugal, Serbia, Finland, Romania, Italy
+* Add languages for Pakistan, Japan, Thailand, Poland, Turkey, France,
+  Portugal, Serbia, Finland, Romania, Italy
 
 * Long press repeat, NFC, and flashlight for quick options
 

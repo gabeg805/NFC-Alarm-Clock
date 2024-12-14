@@ -107,8 +107,10 @@
 	<string name="message_nfc_required">NFC obligatwa</string>
 	<string name="message_nfc_optional">NFC opsyonèl</string>
 	<string name="message_scan_nfc_tag">Tag NFC tcheke a pral oblije ranvwaye alam sa a lè li ale.</string>
+	<string name="message_select_nfc_tag">Tag NFC chwazi a pral oblije ranvwaye alam sa a lè li sonnen.</string>
 	<string name="message_save_nfc_tag">Ou ka reitilize tag NFC sa a, san ou pa bezwen eskane li ankò, lè w ba li yon non.</string>
 	<string name="message_delete_nfc_tag">Èske w sèten ou vle efase tag NFC sa a?</string>
+	<string name="message_rename_nfc_tag">Ki sa ou ta renmen chanje non tag NFC la?</string>
 	<string name="message_show_nfc_tag_id">ID:</string>
 	<string name="message_any_nfc_tag_id">Nenpòt tag NFC aksepte</string>
 	<string name="message_flashlight_on_duration">Limen:</string>
@@ -171,16 +173,17 @@
 	<string name="error_message_unable_to_open_import_export_stream">Pa kapab louvri fichye a</string>
 	<string name="error_message_unable_to_select_file">Pa kapab chwazi dosye</string>
 	<string name="error_message_unable_to_get_media_information_from_file">Pa kapab jwenn enfòmasyon medya nan dosye</string>
+	<string name="error_message_not_enough_free_space">Pa gen ase espas gratis pou fè backup nan chante</string>
 
 	<!-- Titles -->
 	<string name="title_settings">Anviwònman</string>
 	<string name="title_time">Tan</string>
 	<string name="title_alarm_activity">Ranvwaye Alam</string>
-	<string name="title_scan_nfc_tag" tools:ignore="TypographyEllipsis">Eskane yon tag NFC...</string>
-	<string name="title_select_nfc_tag" tools:ignore="TypographyEllipsis">Chwazi yon tag NFC...</string>
-	<string name="title_save_nfc_tag" tools:ignore="TypographyEllipsis">Sove tag NFC la...</string>
-	<string name="title_delete_nfc_tag" tools:ignore="TypographyEllipsis">Efase tag NFC...</string>
-	<string name="title_rename_nfc_tag" tools:ignore="TypographyEllipsis">Chanje non tag NFC la...</string>
+	<string name="title_scan_nfc_tag">Eskane tag NFC</string>
+	<string name="title_select_nfc_tag">Chwazi tag NFC</string>
+	<string name="title_save_nfc_tag">Sove tag NFC</string>
+	<string name="title_delete_nfc_tag">Efase tag NFC</string>
+	<string name="title_rename_nfc_tag">Chanje non tag NFC</string>
 	<string name="title_select_days">Chwazi jou</string>
 	<string name="title_select_color">Chwazi yon koulè</string>
 	<string name="title_select_next_alarm_format">Chwazi yon fòma</string>
@@ -368,45 +371,40 @@
 
 	<!-- Plurals -->
 	<plurals name="alarm">
-		<item quantity="one">alam</item>
-		<item quantity="other">alam</item>
+		<item quantity="one">%d alam</item>
+		<item quantity="other">%d alam</item>
 	</plurals>
 
 	<plurals name="missed_alarm">
-		<item quantity="one">Alam rate</item>
-		<item quantity="other">@string/title_missed_alarms</item>
-	</plurals>
-
-	<plurals name="upcoming_reminder">
-		<item quantity="one">Rapèl kap vini</item>
-		<item quantity="other">@string/title_upcoming_reminders</item>
+		<item quantity="one">%d Alam rate</item>
+		<item quantity="other">%d Alam rate</item>
 	</plurals>
 
 	<plurals name="unit_day">
-		<item quantity="one">jou</item>
-		<item quantity="other">jou</item>
+		<item quantity="one">%d jou</item>
+		<item quantity="other">%d jou</item>
 	</plurals>
 
 	<plurals name="unit_hour">
-		<item quantity="one">èdtan</item>
-		<item quantity="other">èdtan</item>
+		<item quantity="one">%d èdtan</item>
+		<item quantity="other">%d èdtan</item>
 	</plurals>
 
 	<plurals name="unit_minute">
-		<item quantity="one">minit</item>
-		<item quantity="other">minit</item>
+		<item quantity="one">%d minit</item>
+		<item quantity="other">%d minit</item>
 	</plurals>
 
 	<plurals name="unit_second">
-		<item quantity="one">segonn</item>
-		<item quantity="other">segonn</item>
+		<item quantity="one">%d segonn</item>
+		<item quantity="other">%d segonn</item>
 	</plurals>
-
-	<string name="tts_say_time">Lè a se %1$s:%2$s %3$s.</string>
 
 	<plurals name="tts_say_reminder">
 		<item quantity="one">Rapèl. %1$s, pral kouri nan, %2$d, minit.</item>
 		<item quantity="other">Rapèl. %1$s, pral kouri nan, %2$d, minit.</item>
 	</plurals>
+
+	<string name="tts_say_time">Lè a se %1$s:%2$s %3$s.</string>
 
 </resources>

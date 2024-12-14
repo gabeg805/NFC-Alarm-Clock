@@ -54,7 +54,7 @@ abstract class NacActiveAlarmLayoutHandler(
 	/**
 	 * Setup an NFC tag, if necessary.
 	 */
-	open fun setupNfcTag(nfcTag: NacNfcTag?) {}
+	open fun setupNfcTag(context: Context, nfcTag: NacNfcTag?) {}
 
 	/**
 	 * Start the layout and run any setup that needs to run.

@@ -883,42 +883,42 @@ object NacCalendar
 			val time = (calendar.timeInMillis - System.currentTimeMillis()) / 1000
 
 			// Get the time components
-			val day = time / (60 * 60 * 24) % 365
-			val hr = time / (60 * 60) % 24
-			val min = time / 60 % 60
-			val sec = time % 60
+			val day = (time / (60 * 60 * 24) % 365).toInt()
+			val hr = (time / (60 * 60) % 24).toInt()
+			val min = (time / 60 % 60).toInt()
+			val sec = (time % 60).toInt()
 
-			// Get the units of time
-			val dayunit = resources.getQuantityString(R.plurals.unit_day, day.toInt())
-			val hrunit = resources.getQuantityString(R.plurals.unit_hour, hr.toInt())
-			val minunit = resources.getQuantityString(R.plurals.unit_minute, min.toInt())
-			val secunit = resources.getQuantityString(R.plurals.unit_second, sec.toInt())
+			// Get the phrase for the different units of time
+			val dayPhrase = resources.getQuantityString(R.plurals.unit_day, day, day)
+			val hrPhrase = resources.getQuantityString(R.plurals.unit_hour, hr, hr)
+			val minPhrase = resources.getQuantityString(R.plurals.unit_minute, min, min)
+			val secPhrase = resources.getQuantityString(R.plurals.unit_second, sec, sec)
 
 			// Format the time remaining message
 			return if (day > 0)
 			{
 				// Days
-				"$day $dayunit $hr $hrunit"
+				"$dayPhrase $hrPhrase"
 			}
 			else
 			{
 				if (hr > 0)
 				{
 					// Hours
-					"$hr $hrunit $min $minunit"
+					"$hrPhrase $minPhrase"
 				}
 				else
 				{
 					// Check if minutes is 0
-					if (min == 0L)
+					if (min == 0)
 					{
 						// Only show seconds since there are no minutes
-						"$sec $secunit"
+						secPhrase
 					}
 					else
 					{
 						// Minutes and seconds
-						"$min $minunit $sec $secunit"
+						"$minPhrase $secPhrase"
 					}
 				}
 			}

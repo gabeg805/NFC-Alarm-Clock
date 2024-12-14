@@ -14,27 +14,26 @@
 
 	<!-- Title -->
 	<TextView
-		style="@style/Widget.TextView.Primary"
+		style="@style/Widget.AlarmOptionDialog.Title"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textSize="@dimen/tsz_large"
-		android:textStyle="bold"
 		android:text="@string/title_select_nfc_tag"
+		/>
+
+	<!-- Description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/message_select_nfc_tag"
 		/>
 
 	<!-- Select an NFC tag from a list -->
 	<com.google.android.material.textfield.TextInputLayout
-		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+		style="@style/Widget.AlarmOptionDialog.DropdownRow"
 		android:id="@+id/nfc_tag_input_layout"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		app:boxCornerRadiusTopStart="10dp"
-		app:boxCornerRadiusTopEnd="10dp"
-		app:boxCornerRadiusBottomStart="10dp"
-		app:boxCornerRadiusBottomEnd="10dp"
-		app:boxStrokeWidth="2dp"
-		android:layout_marginTop="@dimen/medium"
-		android:layout_marginBottom="@dimen/medium">
+		android:layout_height="wrap_content">
 
 		<com.google.android.material.textfield.MaterialAutoCompleteTextView
 			android:id="@+id/nfc_tag_dropdown_menu"
@@ -43,6 +42,9 @@
 			android:inputType="none"
 			/>
 	</com.google.android.material.textfield.TextInputLayout>
+
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
 
 	<!-- Button to confirm selection -->
 	<com.google.android.material.button.MaterialButton

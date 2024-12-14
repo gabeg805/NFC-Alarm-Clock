@@ -60,10 +60,10 @@ class NacMissedAlarmNotification(
 		get()
 		{
 			// Get the title
-			val missedAlarm = context.resources.getQuantityString(R.plurals.missed_alarm, lineCount)
+			val missedAlarm = context.resources.getQuantityString(R.plurals.missed_alarm, lineCount, lineCount)
 
 			// Format the title
-			return "<b>$missedAlarm</b>"
+			return "<b>${missedAlarm.replace("$lineCount ", "")}</b>"
 		}
 
 	/**
@@ -90,12 +90,12 @@ class NacMissedAlarmNotification(
 	override val contentText: String
 		get()
 		{
-			val alarmPlural = context.resources.getQuantityString(R.plurals.alarm, body.size)
+			val alarmPlural = context.resources.getQuantityString(R.plurals.alarm, body.size, body.size)
 
 			// Check if the body has stuff present
 			return if (body.isNotEmpty())
 			{
-				"${body.size} $alarmPlural"
+				alarmPlural
 			}
 			else
 			{

@@ -29,6 +29,9 @@
 		android:text="@string/message_delete_nfc_tag"
 		/>
 
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
+
 	<!-- Delete -->
 	<com.google.android.material.button.MaterialButton
 		android:id="@+id/delete_nfc_tag"

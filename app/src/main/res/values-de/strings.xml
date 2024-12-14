@@ -107,8 +107,10 @@
 	<string name="message_nfc_required">NFC erforderlich</string>
 	<string name="message_nfc_optional">NFC optional</string>
 	<string name="message_scan_nfc_tag">Um den Alarm zu deaktivieren, wenn er losgeht, ist der gescannte NFC-Tag erforderlich.</string>
+	<string name="message_select_nfc_tag">Um den Alarm zu deaktivieren, wenn er ausgelöst wird, ist der ausgewählte NFC-Tag erforderlich.</string>
 	<string name="message_save_nfc_tag">Sie können diesen NFC-Tag wiederverwenden, ohne ihn erneut scannen zu müssen, indem Sie ihm einen Namen geben.</string>
 	<string name="message_delete_nfc_tag">Möchten Sie diesen NFC-Tag wirklich löschen?</string>
+	<string name="message_rename_nfc_tag">Wie möchten Sie das NFC-Tag umbenennen?</string>
 	<string name="message_show_nfc_tag_id">AUSWEIS:</string>
 	<string name="message_any_nfc_tag_id">Alle NFC-Tags werden akzeptiert</string>
 	<string name="message_flashlight_on_duration">An:</string>
@@ -171,16 +173,17 @@
 	<string name="error_message_unable_to_open_import_export_stream">Datei kann nicht geöffnet werden</string>
 	<string name="error_message_unable_to_select_file">Datei kann nicht ausgewählt werden</string>
 	<string name="error_message_unable_to_get_media_information_from_file">Medieninformationen können nicht aus der Datei abgerufen werden.</string>
+	<string name="error_message_not_enough_free_space">Nicht genügend freier Speicherplatz, um ein Backup des Songs zu erstellen</string>
 
 	<!-- Titles -->
 	<string name="title_settings">Einstellungen</string>
 	<string name="title_time">Zeit</string>
 	<string name="title_alarm_activity">Alarm schließen</string>
-	<string name="title_scan_nfc_tag" tools:ignore="TypographyEllipsis">Scannen Sie einen NFC-Tag ...</string>
-	<string name="title_select_nfc_tag" tools:ignore="TypographyEllipsis">Wählen Sie einen NFC-Tag aus ...</string>
-	<string name="title_save_nfc_tag" tools:ignore="TypographyEllipsis">NFC-Tag speichern...</string>
-	<string name="title_delete_nfc_tag" tools:ignore="TypographyEllipsis">NFC-Tag löschen...</string>
-	<string name="title_rename_nfc_tag" tools:ignore="TypographyEllipsis">NFC-Tag umbenennen...</string>
+	<string name="title_scan_nfc_tag">NFC-Tag scannen</string>
+	<string name="title_select_nfc_tag">NFC-Tag auswählen</string>
+	<string name="title_save_nfc_tag">NFC-Tag speichern</string>
+	<string name="title_delete_nfc_tag">NFC-Tag löschen</string>
+	<string name="title_rename_nfc_tag">NFC-Tag umbenennen</string>
 	<string name="title_select_days">Tage auswählen</string>
 	<string name="title_select_color">Wählen Sie eine Farbe</string>
 	<string name="title_select_next_alarm_format">Wählen Sie ein Format</string>
@@ -368,45 +371,40 @@
 
 	<!-- Plurals -->
 	<plurals name="alarm">
-		<item quantity="one">Alarm</item>
-		<item quantity="other">Alarm</item>
+		<item quantity="one">%d Alarm</item>
+		<item quantity="other">%d Alarme</item>
 	</plurals>
 
 	<plurals name="missed_alarm">
-		<item quantity="one">Verpasster Alarm</item>
-		<item quantity="other">@string/title_missed_alarms</item>
-	</plurals>
-
-	<plurals name="upcoming_reminder">
-		<item quantity="one">Bevorstehende Erinnerung</item>
-		<item quantity="other">@string/title_upcoming_reminders</item>
+		<item quantity="one">%d Verpasster Alarm</item>
+		<item quantity="other">%d Verpasste Alarme</item>
 	</plurals>
 
 	<plurals name="unit_day">
-		<item quantity="one">Tag</item>
-		<item quantity="other">Tage</item>
+		<item quantity="one">%d Tag</item>
+		<item quantity="other">%d Tage</item>
 	</plurals>
 
 	<plurals name="unit_hour">
-		<item quantity="one">Stunde</item>
-		<item quantity="other">Stunden</item>
+		<item quantity="one">%d Stunde</item>
+		<item quantity="other">%d Stunden</item>
 	</plurals>
 
 	<plurals name="unit_minute">
-		<item quantity="one">Minute</item>
-		<item quantity="other">Minuten</item>
+		<item quantity="one">%d Minute</item>
+		<item quantity="other">%d Minuten</item>
 	</plurals>
 
 	<plurals name="unit_second">
-		<item quantity="one">Sekunde</item>
-		<item quantity="other">Sekunden</item>
+		<item quantity="one">%d Sekunde</item>
+		<item quantity="other">%d Sekunden</item>
 	</plurals>
-
-	<string name="tts_say_time">Es ist %1$s:%2$s %3$s.</string>
 
 	<plurals name="tts_say_reminder">
 		<item quantity="one">Erinnerung: %1$s wird in %2$d Minute ausgeführt.</item>
 		<item quantity="other">Erinnerung: %1$s wird in %2$d Minuten ausgeführt.</item>
 	</plurals>
+
+	<string name="tts_say_time">Es ist %1$s:%2$s %3$s.</string>
 
 </resources>

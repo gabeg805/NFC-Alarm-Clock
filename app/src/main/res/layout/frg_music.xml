@@ -61,9 +61,9 @@
 		android:layout_width="@dimen/isz_attention"
 		android:layout_height="@dimen/isz_attention"
 		android:layout_gravity="bottom|end"
-		android:layout_marginBottom="@dimen/action_row_height"
-		android:layout_marginEnd="@dimen/xxlarge"
-		android:visibility="gone"
+		android:layout_marginBottom="@dimen/file_browser_fab"
+		android:layout_marginEnd="@dimen/xxxlarge"
+		android:visibility="visible"
 		android:src="@drawable/launch_32"
 		/>
 

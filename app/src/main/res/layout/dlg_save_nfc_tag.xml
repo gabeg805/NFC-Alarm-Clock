@@ -12,20 +12,17 @@
 
 	<!-- Title -->
 	<TextView
-		style="@style/Widget.TextView.Primary"
+		style="@style/Widget.AlarmOptionDialog.Title"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textSize="@dimen/tsz_large"
-		android:textStyle="bold"
 		android:text="@string/title_save_nfc_tag"
 		/>
 
 	<!-- Description -->
 	<TextView
-		style="@style/Widget.TextView.Primary"
+		style="@style/Widget.AlarmOptionDialog.Description"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/normal"
 		android:text="@string/message_save_nfc_tag"
 		/>
 
@@ -35,8 +32,8 @@
 		android:id="@+id/nfc_tag_input_layout"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/medium"
-		android:layout_marginBottom="@dimen/medium"
+		android:layout_marginTop="@dimen/normal"
+		android:layout_marginBottom="@dimen/normal"
 		android:layout_marginStart="@dimen/medium"
 		android:layout_marginEnd="@dimen/medium"
 		android:hint="@string/title_alarm_name"
@@ -59,6 +56,9 @@
 
 		</com.google.android.material.textfield.TextInputEditText>
 	</com.google.android.material.textfield.TextInputLayout>
+
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
 
 	<!-- Save -->
 	<com.google.android.material.button.MaterialButton

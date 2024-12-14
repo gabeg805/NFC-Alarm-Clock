@@ -107,8 +107,10 @@
 	<string name="message_nfc_required">Cần có NFC</string>
 	<string name="message_nfc_optional">tùy chọn NFC</string>
 	<string name="message_scan_nfc_tag">Thẻ NFC đã quét sẽ được yêu cầu loại bỏ cảnh báo này khi nó kêu.</string>
+	<string name="message_select_nfc_tag">Thẻ NFC đã chọn sẽ được yêu cầu để tắt báo thức này khi nó kêu.</string>
 	<string name="message_save_nfc_tag">Bạn có thể sử dụng lại thẻ NFC này mà không cần phải quét lại bằng cách đặt tên cho thẻ.</string>
 	<string name="message_delete_nfc_tag">Bạn có chắc chắn muốn xóa thẻ NFC này không?</string>
+	<string name="message_rename_nfc_tag">Bạn muốn đổi tên thẻ NFC thành gì?</string>
 	<string name="message_show_nfc_tag_id">NHẬN DẠNG:</string>
 	<string name="message_any_nfc_tag_id">Bất kỳ thẻ NFC nào được chấp nhận</string>
 	<string name="message_flashlight_on_duration">Bật:</string>
@@ -171,16 +173,17 @@
 	<string name="error_message_unable_to_open_import_export_stream">Không thể mở tập tin</string>
 	<string name="error_message_unable_to_select_file">Không thể chọn tập tin</string>
 	<string name="error_message_unable_to_get_media_information_from_file">Không thể lấy thông tin phương tiện từ tệp</string>
+	<string name="error_message_not_enough_free_space">Không đủ dung lượng trống để sao lưu bài hát</string>
 
 	<!-- Titles -->
 	<string name="title_settings">Cài đặt</string>
 	<string name="title_time">Thời gian</string>
 	<string name="title_alarm_activity">Loại bỏ cảnh báo</string>
-	<string name="title_scan_nfc_tag" tools:ignore="TypographyEllipsis">Quét thẻ NFC...</string>
-	<string name="title_select_nfc_tag" tools:ignore="TypographyEllipsis">Chọn thẻ NFC...</string>
-	<string name="title_save_nfc_tag" tools:ignore="TypographyEllipsis">Lưu thẻ NFC...</string>
-	<string name="title_delete_nfc_tag" tools:ignore="TypographyEllipsis">Xóa thẻ NFC...</string>
-	<string name="title_rename_nfc_tag" tools:ignore="TypographyEllipsis">Đổi tên thẻ NFC...</string>
+	<string name="title_scan_nfc_tag">Quét thẻ NFC</string>
+	<string name="title_select_nfc_tag">Chọn thẻ NFC</string>
+	<string name="title_save_nfc_tag">Lưu thẻ NFC</string>
+	<string name="title_delete_nfc_tag">Xóa thẻ NFC</string>
+	<string name="title_rename_nfc_tag">Đổi tên thẻ NFC</string>
 	<string name="title_select_days">Chọn ngày</string>
 	<string name="title_select_color">Chọn một màu</string>
 	<string name="title_select_next_alarm_format">Chọn một định dạng</string>
@@ -368,37 +371,33 @@
 
 	<!-- Plurals -->
 	<plurals name="alarm">
-		<item quantity="other">báo động</item>
+		<item quantity="other">%d báo động</item>
 	</plurals>
 
 	<plurals name="missed_alarm">
-		<item quantity="other">@string/title_missed_alarms</item>
-	</plurals>
-
-	<plurals name="upcoming_reminder">
-		<item quantity="other">@string/title_upcoming_reminders</item>
+		<item quantity="other">%d Báo thức bị bỏ lỡ</item>
 	</plurals>
 
 	<plurals name="unit_day">
-		<item quantity="other">ngày</item>
+		<item quantity="other">%d ngày</item>
 	</plurals>
 
 	<plurals name="unit_hour">
-		<item quantity="other">giờ</item>
+		<item quantity="other">%d giờ</item>
 	</plurals>
 
 	<plurals name="unit_minute">
-		<item quantity="other">phút</item>
+		<item quantity="other">%d phút</item>
 	</plurals>
 
 	<plurals name="unit_second">
-		<item quantity="other">giây</item>
+		<item quantity="other">%d giây</item>
 	</plurals>
-
-	<string name="tts_say_time">Thời gian là %1$s:%2$s %3$s.</string>
 
 	<plurals name="tts_say_reminder">
 		<item quantity="other">Lời nhắc nhở. %1$s, sẽ chạy sau, %2$d, phút.</item>
 	</plurals>
+
+	<string name="tts_say_time">Thời gian là %1$s:%2$s %3$s.</string>
 
 </resources>

@@ -7,6 +7,7 @@ import android.media.MediaMetadataRetriever
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
+import android.os.storage.StorageManager
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import androidx.media3.common.MediaItem
@@ -51,22 +52,13 @@ fun copyDocumentToDeviceEncryptedStorageAndCheckMetadata(context: Context, docum
 		return null
 	}
 
-	// TODO: QUERY SPACE
-	// https://developer.android.com/training/data-storage/app-specific#query-free-space
-
 	// Copy the media to a temporary file
 	val tmpName = "tmp"
 	val tmpUri = copyMediaToDeviceEncryptedStorage(context, documentUri, tmpName)
 	val tmpFile = File(tmpUri.toString())
-	println("DOC NAME : $documentName | Copy path : ${tmpFile.path}")
 
 	// Get metadata from file
 	val (metadataArtist, metadataTitle, metadataHasAudio) = tmpFile.queryMediaMetadata()
-
-	println("Meta artist    : $metadataArtist")
-	println("Meta title     : $metadataTitle")
-	println("Meta has audio : $metadataHasAudio")
-	println("File size      : ${tmpFile.length()}")
 
 	// Check if the selected file does not have audio
 	if (metadataHasAudio?.isNotEmpty() != true)
@@ -84,7 +76,6 @@ fun copyDocumentToDeviceEncryptedStorageAndCheckMetadata(context: Context, docum
 	val title = metadataTitle ?: documentTitle
 	val localMediaPath = buildLocalMediaPath(context, artist, title, TYPE_FILE)
 	val localMediaFile = File(localMediaPath)
-	println("Rename To file : $localMediaPath")
 
 	// Move temporary file to real file
 	val status = tmpFile.renameTo(localMediaFile)
@@ -100,11 +91,38 @@ fun copyDocumentToDeviceEncryptedStorageAndCheckMetadata(context: Context, docum
 	}
 	else
 	{
-		println("RENAME UNSUCCESSFUL")
 		// Show error toast
 		quickToast(context, R.string.error_message_unable_to_select_file)
 		return null
 	}
+}
+
+/**
+ * Check if there is enough space on the device to create a file.
+ *
+ * https://developer.android.com/training/data-storage/app-specific#query-free-space
+ *
+ * @return True if there is enough space, and False otherwise.
+ */
+fun doesDeviceHaveFreeSpace(deviceContext: Context, bytesNeeded: Long = 1024*1024 *10L): Boolean
+{
+	// Check if correct build
+	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+	{
+		return true
+	}
+
+	// Get the storage service
+	val storageManager = deviceContext.getSystemService(Context.STORAGE_SERVICE) as StorageManager
+
+	// Get the UUID of the device encrypted files/ directory
+	val uuid = storageManager.getUuidForPath(deviceContext.filesDir)
+
+	// Calculate the available bytes
+	val availableBytes = storageManager.getAllocatableBytes(uuid)
+	println("Available bytes : $availableBytes")
+
+	return (availableBytes >= bytesNeeded)
 }
 
 /**
@@ -272,14 +290,9 @@ fun copyMediaToDeviceEncryptedStorage(
  */
 fun findFirstValidLocalMedia(deviceContext: Context, localUri: Uri): Uri?
 {
-	println("FIRST VALID LOCAL FILE")
 	val uri = deviceContext.filesDir.listFiles()
 		?.map { Uri.parse(it.path) }
-		?.find {
-			println(it)
-			(it.compareTo(localUri) != 0) && it.isMediaValid(deviceContext)
-		}
-	println("Found : $uri")
+		?.find { (it.compareTo(localUri) != 0) && it.isMediaValid(deviceContext) }
 
 	return uri
 }
@@ -606,14 +619,12 @@ fun Uri.isMediaValid(context: Context): Boolean
 	// Check if the uri is empty
 	if (this.isMediaNone())
 	{
-		println("MEDIA IS NONE SO CANNOT ACCESS")
 		return false
 	}
 
 	// Most media should have a name. Use this as a test
 	val artist = this.getMediaArtist(context)
 	val name = this.getMediaName(context)
-	println("MEDIA NAME = $name | $artist")
 
 	// Check the artist and name
 	return artist.isNotEmpty() || name.isNotEmpty()

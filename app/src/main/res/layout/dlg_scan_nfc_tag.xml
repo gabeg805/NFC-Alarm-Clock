@@ -13,20 +13,17 @@
 
 	<!-- Title -->
 	<TextView
-		style="@style/Widget.TextView.Primary"
+		style="@style/Widget.AlarmOptionDialog.Title"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textSize="@dimen/tsz_large"
-		android:textStyle="bold"
 		android:text="@string/title_scan_nfc_tag"
 		/>
 
 	<!-- Description -->
 	<TextView
-		style="@style/Widget.TextView.Primary"
+		style="@style/Widget.AlarmOptionDialog.Description"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/normal"
 		android:text="@string/message_scan_nfc_tag"
 		/>
 
@@ -42,13 +39,7 @@
 		/>
 
 	<!-- Separator -->
-	<View
-		android:layout_width="match_parent"
-		android:layout_height="@dimen/line"
-		android:layout_marginTop="@dimen/medium"
-		android:layout_marginBottom="@dimen/medium"
-		android:background="@color/white_dull"
-		/>
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
 
 	<!-- Use any NFC tag button -->
 	<com.google.android.material.button.MaterialButton

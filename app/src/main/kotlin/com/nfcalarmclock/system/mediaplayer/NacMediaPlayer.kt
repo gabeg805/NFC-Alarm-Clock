@@ -279,7 +279,6 @@ class NacMediaPlayer(
 
 		// Check if file/directory exists
 		var uri = Uri.parse(alarm.mediaPath)
-		println("MEDIA PATH : $uri")
 
 		// Check if the media can be accessed. Most of the times when it cannot be
 		// acessed, it is because the alarm went off in direct boot mode (when the
@@ -293,7 +292,6 @@ class NacMediaPlayer(
 				// Play the directory as a playlist and if the recursive flag is
 				// set, it will also include the media in its subdirectories as
 				// part of the playlist
-				println("PLAY DIRECTORY")
 				playDirectory(alarm.mediaPath, recursive = alarm.recursivelyPlayMedia)
 				return uri
 			}
@@ -303,7 +301,6 @@ class NacMediaPlayer(
 			// Get the local media path
 			val localUri = Uri.parse(alarm.localMediaPath)
 			val localFile = File(alarm.localMediaPath)
-			println("Local URI : $localUri | Exists? ${localFile.exists()}")
 
 			// Check if this local path can be accessed. If this cannot be accessed, it
 			// could be that the original media is a directory, which would not have any
@@ -312,21 +309,13 @@ class NacMediaPlayer(
 			//uri = if (localUri.canAccessMedia(context))
 			uri = if (localUri.isMediaValid(context) && localFile.exists())
 			{
-				println("Local media path is solid")
 				localUri
 			}
 			else
 			{
-				println("Find first jank")
 				findFirstValidLocalMedia(context, localUri)
 			}
-
-			println("TEST first jank")
-			println(findFirstValidLocalMedia(context, localUri))
 		}
-
-		println("PLAY FILE : $uri")
-		// TODO: Can return nullable URI that is being played to determine if a random is playing or not?
 
 		// Check if the uri is valid
 		if (uri != null)
@@ -356,7 +345,7 @@ class NacMediaPlayer(
 			recursive = recursive)
 
 		// Play the media items
-		items.forEach { println(it.mediaId) }
+		//items.forEach { println(it.mediaId) }
 		playMediaItems(items)
 	}
 

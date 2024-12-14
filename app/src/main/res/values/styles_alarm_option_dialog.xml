@@ -48,11 +48,11 @@
 
 	<!-- Dropdown -->
 	<style name="Widget.AlarmOptionDialog.Dropdown" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-		<item name="boxCornerRadiusTopStart">6dp</item>
-		<item name="boxCornerRadiusTopEnd">6dp</item>
-		<item name="boxCornerRadiusBottomStart">6dp</item>
-		<item name="boxCornerRadiusBottomEnd">6dp</item>
-		<item name="boxStrokeWidth">2dp</item>
+		<item name="boxCornerRadiusTopStart">10dp</item>
+		<item name="boxCornerRadiusTopEnd">10dp</item>
+		<item name="boxCornerRadiusBottomStart">10dp</item>
+		<item name="boxCornerRadiusBottomEnd">10dp</item>
+		<item name="boxStrokeWidth">@dimen/twoline</item>
 	</style>
 
 	<!-- Dropdown row -->

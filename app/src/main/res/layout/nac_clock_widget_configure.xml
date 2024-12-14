@@ -277,6 +277,7 @@
 				android:value="50"
 				android:valueFrom="0"
 				android:valueTo="100"
+				app:labelStyle="@style/Widget.ClockWidget.Tooltip"
 				/>
 
 			<!-- Separator -->
@@ -601,6 +602,7 @@
 					android:value="78"
 					android:valueFrom="10"
 					android:valueTo="150"
+					app:labelStyle="@style/Widget.ClockWidget.Tooltip"
 					/>
 
 				<!-- AM/PM size -->
@@ -621,6 +623,7 @@
 					android:value="18"
 					android:valueFrom="10"
 					android:valueTo="60"
+					app:labelStyle="@style/Widget.ClockWidget.Tooltip"
 					/>
 			</LinearLayout>
 
@@ -763,6 +766,7 @@
 				android:value="14"
 				android:valueFrom="10"
 				android:valueTo="60"
+				app:labelStyle="@style/Widget.ClockWidget.Tooltip"
 				/>
 
 			<!-- Separator -->
@@ -962,6 +966,7 @@
 				android:value="14"
 				android:valueFrom="10"
 				android:valueTo="60"
+				app:labelStyle="@style/Widget.ClockWidget.Tooltip"
 				/>
 		</LinearLayout>
 	</ScrollView>

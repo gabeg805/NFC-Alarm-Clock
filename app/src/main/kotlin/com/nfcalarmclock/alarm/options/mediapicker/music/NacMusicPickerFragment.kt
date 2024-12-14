@@ -32,6 +32,8 @@ import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.media.copyDocumentToDeviceEncryptedStorageAndCheckMetadata
 import com.nfcalarmclock.util.media.getMediaName
 import com.nfcalarmclock.util.media.getMediaRelativePath
+import com.nfcalarmclock.util.media.doesDeviceHaveFreeSpace
+import com.nfcalarmclock.util.media.isLocalMediaPath
 import com.nfcalarmclock.util.media.isMediaDirectory
 import com.nfcalarmclock.util.media.isMediaFile
 import com.nfcalarmclock.view.setupThemeColor
@@ -59,7 +61,6 @@ class NacMusicPickerFragment
 
 		// Get the context
 		val context = getDeviceProtectedStorageContext(requireContext())
-		println("Uri : $uri")
 
 		// Check if the uri is null
 		if (uri == null)
@@ -78,16 +79,20 @@ class NacMusicPickerFragment
 			null
 		}
 
-		println("Media URI : $mediaUri")
-
 		// Check if the media uri is invalid
 		if (mediaUri == null)
 		{
+			// Check if there is enough free space
+			if (!doesDeviceHaveFreeSpace(context))
+			{
+				quickToast(context, R.string.error_message_not_enough_free_space)
+				return@registerForActivityResult
+			}
+
 			// Attempt to copy media to local files/ directory and then check the
 			// metadata. This seems to only be necessary if the selected document is from
 			// the Downloads/ directory, or if the file is not a media file
 			mediaUri = copyDocumentToDeviceEncryptedStorageAndCheckMetadata(context, uri)
-			println("Final media URI : $mediaUri")
 
 			// Final check if the media uri is invalid
 			if (mediaUri == null)
@@ -133,10 +138,9 @@ class NacMusicPickerFragment
 
 		// Get the uri
 		val uri = Uri.parse(mediaPath)
-		println("Check starts with : $mediaPath | ${context.filesDir.path}")
 
 		// Check if local media path
-		if (mediaPath.startsWith(context.filesDir.path))
+		if (uri.isLocalMediaPath(context))
 		{
 			// Do nothing
 		}
