@@ -1,0 +1,5 @@
+* Added support for direct boot, which will allow alarms to run when the phone is locked after a reboot.
+* Added clock widget for home screen, and many customization options to go with it.
+* Updated auto dismiss, auto snooze, and snooze duration to allow setting the seconds, as well as minutes.
+* Added translations for Bengali, Hindi, and Brazilian Portuguese.
+* Added system file chooser button when choosing a song for an alarm.
