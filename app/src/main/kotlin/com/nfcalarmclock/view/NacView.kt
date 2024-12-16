@@ -308,9 +308,14 @@ fun TextInputLayout.setupInputLayoutColor(
 	sharedPreferences: NacSharedPreferences
 )
 {
+	// Get the theme color
+	val themeColor = ColorStateList.valueOf(sharedPreferences.themeColor)
+
+	// Set the colors
 	this.boxBackgroundColor = ContextCompat.getColor(context, R.color.gray_light)
 	this.boxStrokeColor = sharedPreferences.themeColor
-	this.setEndIconTintList(ColorStateList.valueOf(sharedPreferences.themeColor))
+	this.hintTextColor = themeColor
+	this.setEndIconTintList(themeColor)
 }
 
 /**

@@ -3,18 +3,16 @@ package com.nfcalarmclock.alarm.options.name
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.core.graphics.ColorUtils
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.view.dialog.NacDialogFragment
+import com.nfcalarmclock.view.setupInputLayoutColor
 import java.lang.IllegalStateException
 
 /**
@@ -77,44 +75,14 @@ class NacNameDialog
 		// Super
 		super.onResume()
 
-		// Get the edit text views
-		val editBox = dialog!!.findViewById<TextInputLayout>(R.id.name_box)
-		val editText = dialog!!.findViewById<TextInputEditText>(R.id.name_entry)
+		// Get the context
+		val context = requireContext()
 
-		setupEditText(editText)
-		setupEditBoxColor(editBox)
+		// Get the views
+		val inputLayout: TextInputLayout = dialog!!.findViewById(R.id.name_box)
+		val editText: TextInputEditText = dialog!!.findViewById(R.id.name_entry)
 
-		// Show the keyboard. This occurs on a delay so that the window has time to
-		// be in focus
-		waitToShowKeyboard(editText)
-	}
-
-	/**
-	 * Setup the color of the edit box.
-	 */
-	private fun setupEditBoxColor(editBox: TextInputLayout)
-	{
-		// Get the theme color
-		val theme = sharedPreferences!!.themeColor
-
-		// Get the blended theme
-		val blendedTheme = ColorUtils.blendARGB(theme, Color.TRANSPARENT, 0.1f)
-
-		// Get the color state list
-		val colorStateList = ColorStateList.valueOf(blendedTheme)
-
-		// Color the edit box
-		//editText.setBackgroundTintList(ColorStateList.valueOf(themeColor));
-		editBox.boxStrokeColor = blendedTheme
-		editBox.hintTextColor = colorStateList
-	}
-
-	/**
-	 * Setup the edit text for the name.
-	 */
-	private fun setupEditText(editText: TextInputEditText)
-	{
-		// The text to show
+		// Set text to show
 		editText.setText(defaultName)
 
 		// Select all the text so that the user can delete it easily if they
@@ -124,6 +92,13 @@ class NacNameDialog
 		// This will show the newline button in the soft keyboard, since the
 		// text entry is multi-line
 		editText.imeOptions = EditorInfo.IME_ACTION_DONE
+
+		// Setup the color
+		inputLayout.setupInputLayoutColor(context, sharedPreferences!!)
+
+		// Show the keyboard. This occurs on a delay so that the window has time to
+		// be in focus
+		waitToShowKeyboard(editText)
 	}
 
 	/**

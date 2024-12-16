@@ -9,14 +9,8 @@ TODO
 
 * Improve look of warning selected directory dialog
 
-* Check if the bold themed permission text needs to actually use the textId or
-  if getText() can be used on the textview?
-
 * Look up defaults like for auto dismiss, dismiss early, .... really all the
   times, and see if they should be in the resources directory?
-
-* Weird stuff when selecting a color, the slider bar is all the way to black,
-  and you try to change the color.
 
 * Add languages for Pakistan, Japan, Thailand, Poland, Turkey, France,
   Portugal, Serbia, Finland, Romania, Italy

@@ -1,6 +1,5 @@
 package com.nfcalarmclock.alarm.options.nfc
 
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +12,7 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
 import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
+import com.nfcalarmclock.view.setupInputLayoutColor
 
 /**
  * Dialog to rename an NFC tag.
@@ -59,6 +59,9 @@ class NacRenameNfcTagDialog
 		// Super
 		super.onViewCreated(view, savedInstanceState)
 
+		// Get the context
+		val context = requireContext()
+
 		// Get the views
 		val inputLayout: TextInputLayout = view.findViewById(R.id.nfc_tag_input_layout)
 		val editText: TextInputEditText = view.findViewById(R.id.nfc_tag_name)
@@ -66,8 +69,7 @@ class NacRenameNfcTagDialog
 		val cancelButton: MaterialButton = view.findViewById(R.id.cancel_nfc_tag)
 
 		// Setup the input layout
-		inputLayout.hintTextColor = ColorStateList.valueOf(sharedPreferences.themeColor)
-		inputLayout.boxStrokeColor = sharedPreferences.themeColor
+		inputLayout.setupInputLayoutColor(context, sharedPreferences)
 
 		// Listener for when the text in the EditText changes
 		editText.addTextChangedListener{

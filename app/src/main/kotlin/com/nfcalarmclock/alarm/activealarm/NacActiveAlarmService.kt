@@ -159,27 +159,33 @@ class NacActiveAlarmService
 			// dismiss
 			if (wasMissed)
 			{
-				// Save the missed alarm into the statistics table
+				// Write the missed alarm to the statistics table
 				statisticRepository.insertMissed(alarm)
 			}
 			// Alarm was dismissed normally
 			else
 			{
-				// Save the dismissed alarm to the statistics table (used NFC)
-				statisticRepository.insertDismissed(alarm!!, usedNfc)
+				// Write the dismissed alarm to the statistics table (used NFC)
+				statisticRepository.insertDismissed(alarm, usedNfc)
 			}
 
+			println("Alarm should be deleted? ${alarm!!.shouldDeleteAlarmAfterDismissed}")
 			// Check if the alarm should be deleted
 			if (alarm!!.shouldDeleteAlarmAfterDismissed)
 			{
+				println("DELETING ALARM")
 				// Delete the alarm
 				alarmRepository.delete(alarm!!)
+
+				// Write the deleted alarm to the statistics table
+				statisticRepository.insertDeleted(alarm)
 
 				// Cancel any scheduled alarm
 				NacScheduler.cancel(this@NacActiveAlarmService, alarm!!)
 			}
 			else
 			{
+				println("Update the alarm")
 				// Update the alarm
 				alarmRepository.update(alarm!!)
 
@@ -550,8 +556,8 @@ class NacActiveAlarmService
 			// Update the alarm
 			alarmRepository.update(alarm!!)
 
-			// Save this snooze duration to the statistics table
-			statisticRepository.insertSnoozed(alarm!!, alarm!!.snoozeDuration.toLong())
+			// Write the snooze duration to the statistics table
+			statisticRepository.insertSnoozed(alarm, alarm!!.snoozeDuration.toLong())
 
 			// Reschedule the alarm
 			NacScheduler.update(this@NacActiveAlarmService, alarm!!, cal)

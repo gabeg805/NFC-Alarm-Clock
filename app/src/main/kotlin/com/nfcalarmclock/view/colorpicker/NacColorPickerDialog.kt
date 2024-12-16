@@ -4,34 +4,27 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
-import android.text.InputType
-import android.text.TextWatcher
-import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.view.dialog.NacDialogFragment
+import com.nfcalarmclock.view.setupInputLayoutColor
 
 /**
  * Handle displaying the color picker dialog.
  */
 class NacColorPickerDialog
 	: NacDialogFragment(),
-	TextView.OnEditorActionListener,
-	TextWatcher,
 	View.OnTouchListener
 {
 
@@ -59,41 +52,40 @@ class NacColorPickerDialog
 	/**
 	 * Color picker.
 	 */
-	private var colorPicker: NacColorPicker? = null
+	private lateinit var colorPicker: NacColorPicker
 
 	/**
 	 * Example of the color.
 	 */
-	private var exampleColor: ImageView? = null
+	private lateinit var exampleColor: ImageView
 
 	/**
-	 * User can enter a hex color value.
+	 * Input layout for the hex color.
 	 */
-	private var editText: EditText? = null
+	private lateinit var inputLayout: TextInputLayout
+
+	/**
+	 * Edit text for the hex color.
+	 */
+	private lateinit var editText: TextInputEditText
 
 	/**
 	 * The color of the edit text box.
 	 */
 	var color: Int
-		get() = colorPicker!!.color
+		get() = colorPicker.color
 		set(value)
 		{
 			// Select the color of the color picker. This will set the HSV,
 			// move the color selector, and redraw the shader
-			colorPicker!!.selectColor(value)
-
-			// Set the example color
-			exampleColor!!.setColorFilter(value, PorterDuff.Mode.SRC)
-
-			// Set the hex color in the edit text
-			editText!!.setText(colorPicker!!.hexColor)
+			colorPicker.selectColor(value)
 		}
 
 	/**
 	 * The EditText color.
 	 */
 	private val editTextColor: String
-		get() = editText!!.text.toString()
+		get() = editText.text.toString()
 
 	/**
 	 * Listener for when the color is selected.
@@ -106,17 +98,23 @@ class NacColorPickerDialog
 	var onDefaultColorSelectedListener: OnDefaultColorSelectedListener? = null
 
 	/**
-	 * Note: This is required to implement TextWatcher.
+	 * Check if can parse the color.
+	 *
+	 * @return True if can parse the color, and False otherwise.
 	 */
-	override fun afterTextChanged(s: Editable)
+	private fun canParseColor(name: String): Boolean
 	{
-	}
-
-	/**
-	 * Note: This is required to implement TextWatcher.
-	 */
-	override fun beforeTextChanged(seq: CharSequence, start: Int, count: Int, after: Int)
-	{
+		// Attempt to parse the color
+		return try
+		{
+			Color.parseColor("#$name")
+			true
+		}
+		// Unable to parse the color
+		catch (e: IllegalArgumentException)
+		{
+			false
+		}
 	}
 
 	/**
@@ -150,6 +148,31 @@ class NacColorPickerDialog
 	}
 
 	/**
+	 * Check if valid hex string was input into the EditText.
+	 *
+	 * @return True if it is a valid hex string, and False otherwise.
+	 */
+	private fun isHexString(name: String): Boolean
+	{
+		// Iterate over each character in the hex string
+		name.forEach { char ->
+
+			// Convert the character to base 16
+			val digit = char.digitToIntOrNull(16) ?: -1
+
+			// Unable to convert the character so this is not a hex string
+			if (digit == -1)
+			{
+				return false
+			}
+
+		}
+
+		// Success. This is a hex string
+		return true
+	}
+
+	/**
 	 * Called when the dialog is created.
 	 */
 	override fun onCreateDialog(savedInstanceState: Bundle?): Dialog
@@ -173,33 +196,6 @@ class NacColorPickerDialog
 	}
 
 	/**
-	 * Close the keyboard when the user hits enter.
-	 */
-	override fun onEditorAction(tv: TextView?, action: Int, event: KeyEvent?): Boolean
-	{
-		//if ((event == null) && (action == EditorInfo.IME_ACTION_DONE))
-		if ((event != null) || (action != EditorInfo.IME_ACTION_DONE))
-		{
-			return false
-		}
-
-		// Check if the color is not hex or it cannot be parsed
-		if (!NacColorPicker.isHexString(editTextColor) || !NacColorPicker.canParseColor(editTextColor))
-		{
-			// Toast an error message
-			quickToast(requireContext(), R.string.error_message_select_color)
-			return false
-		}
-
-		// Set the new color (this affects the color picker, example color, and edit text
-		color = Color.parseColor("#$editTextColor")
-
-		// Close the keyboard
-		closeKeyboard()
-		return true
-	}
-
-	/**
 	 * Called when the fragment is resumed.
 	 */
 	override fun onResume()
@@ -210,22 +206,17 @@ class NacColorPickerDialog
 		// Setup the member variables
 		colorPicker = dialog!!.findViewById(R.id.color_picker)
 		exampleColor = dialog!!.findViewById(R.id.color_example)
-		editText = dialog!!.findViewById(R.id.color_value)
+		editText = dialog!!.findViewById(R.id.color_edittext)
+		inputLayout = dialog!!.findViewById(R.id.color_input_layout)
 
 		// Set the initial color
 		color = initialColor
+		updateExampleAndHexColors(initialColor)
 
 		// Setup the views
-		colorPicker!!.setOnTouchListener(this)
+		colorPicker.setOnTouchListener(this)
 		setupEditText()
 		setupNeutralButtonOnClickListener()
-	}
-
-	/**
-	 * Note: This is required to implement TextWatcher.
-	 */
-	override fun onTextChanged(seq: CharSequence, start: Int, before: Int, count: Int)
-	{
 	}
 
 	/**
@@ -236,8 +227,8 @@ class NacColorPickerDialog
 		// Call the touch event
 		view.onTouchEvent(event)
 
-		// Set the example color and hex color via the setter backing field
-		color = color
+		// Update the example color and hex color
+		updateExampleAndHexColors(color)
 
 		// Perform click
 		if (event.action == MotionEvent.ACTION_UP)
@@ -253,18 +244,38 @@ class NacColorPickerDialog
 	 */
 	private fun setupEditText()
 	{
-		val shared = NacSharedPreferences(requireContext())
+		// Get the context
+		val context = requireContext()
 
-		// Set the listeners
-		editText!!.addTextChangedListener(this)
-		editText!!.setOnEditorActionListener(this)
+		// Setup the color
+		inputLayout.setupInputLayoutColor(context, sharedPreferences!!)
 
-		// Set the options and types
-		editText!!.setRawInputType(InputType.TYPE_CLASS_TEXT)
-		editText!!.imeOptions = EditorInfo.IME_ACTION_DONE
+		// Set the keyboard action listener so that the keyboard closes when the user
+		// hits enter
+		editText.setOnEditorActionListener { _, action, event ->
 
-		// Set the background color
-		editText!!.backgroundTintList = ColorStateList.valueOf(shared.themeColor)
+			// Check if a keyboard action occurred
+			if ((event != null) || (action != EditorInfo.IME_ACTION_GO))
+			{
+				return@setOnEditorActionListener false
+			}
+
+			// Check if the color is not hex or it cannot be parsed
+			if (!isHexString(editTextColor) || !canParseColor(editTextColor))
+			{
+				// Show error hint message
+				inputLayout.setError(getString(R.string.error_message_select_color))
+				return@setOnEditorActionListener false
+			}
+
+			// Set the new color on the color picker, example color, and hex color
+			color = Color.parseColor("#$editTextColor")
+			updateExampleAndHexColors(color)
+
+			// Close the keyboard
+			closeKeyboard()
+			return@setOnEditorActionListener true
+		}
 	}
 
 	/**
@@ -282,7 +293,27 @@ class NacColorPickerDialog
 			// Call the listener
 			onDefaultColorSelectedListener?.onDefaultColorSelected(this)
 
+			// Update the example color and hex color
+			updateExampleAndHexColors(color)
+
 		}
+	}
+
+	/**
+	 * Update the example and hex colors.
+	 */
+	private fun updateExampleAndHexColors(newColor: Int)
+	{
+		// Set the example color
+		exampleColor.setColorFilter(newColor, PorterDuff.Mode.SRC)
+
+		// Set the hex color in the edit text
+		val hexColor = String.format("%06X", (0xFFFFFF and newColor))
+
+		editText.setText(hexColor)
+
+		// Clear the error hint message, if it was set
+		inputLayout.error = null
 	}
 
 	companion object

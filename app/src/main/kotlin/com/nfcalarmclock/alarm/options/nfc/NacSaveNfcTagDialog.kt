@@ -1,7 +1,6 @@
 package com.nfcalarmclock.alarm.options.nfc
 
 import android.content.DialogInterface
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +13,7 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
 import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
+import com.nfcalarmclock.view.setupInputLayoutColor
 
 /**
  * Save an NFC tag that was scanned.
@@ -78,6 +78,9 @@ class NacSaveNfcTagDialog
 		// Super
 		super.onViewCreated(view, savedInstanceState)
 
+		// Get the context
+		val context = requireContext()
+
 		// Get the views
 		val inputLayout: TextInputLayout = view.findViewById(R.id.nfc_tag_input_layout)
 		val editText: TextInputEditText = view.findViewById(R.id.nfc_tag_name)
@@ -85,8 +88,7 @@ class NacSaveNfcTagDialog
 		val skipButton: MaterialButton = view.findViewById(R.id.skip_nfc_tag)
 
 		// Setup the input layout
-		inputLayout.hintTextColor = ColorStateList.valueOf(sharedPreferences.themeColor)
-		inputLayout.boxStrokeColor = sharedPreferences.themeColor
+		inputLayout.setupInputLayoutColor(context, sharedPreferences)
 
 		// Setup the edit view
 		editText.addTextChangedListener{

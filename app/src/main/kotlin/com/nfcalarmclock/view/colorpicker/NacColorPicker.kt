@@ -140,24 +140,8 @@ class NacColorPicker : RelativeLayout
 			val green = Color.green(color)
 			val blue = Color.blue(color)
 
-			// Convert RGB to HSV
+			// Update the HSV array with the RGB color
 			Color.RGBToHSV(red, green, blue, hsv)
-		}
-
-	/**
-	 * The hex string of the selected color.
-	 */
-	val hexColor: String
-		get()
-		{
-			var hex = Integer.toHexString(color)
-
-			if (hex.length > 6)
-			{
-				hex = hex.substring(hex.length - 6)
-			}
-
-			return hex
 		}
 
 	/**
@@ -196,8 +180,8 @@ class NacColorPicker : RelativeLayout
 	 */
 	private fun calculateColorSelection(eventX: Float, eventY: Float)
 	{
-		val x = this.getColorSelectionX(eventX)
-		val y = this.getColorSelectionY(eventY)
+		val x = getColorSelectionX(eventX)
+		val y = getColorSelectionY(eventY)
 		val distance = sqrt((x * x + y * y).toDouble()).toFloat()
 
 		// Distance is outside of color radius so do nothing
@@ -217,16 +201,12 @@ class NacColorPicker : RelativeLayout
 			(2 * Math.PI + theta).toFloat()
 		}
 
-		// Calculate the hue, saturation, and value
-		val hue = (angle * 180f / Math.PI).toFloat()
-		val sat = distance / radius
-		val value = hsv[2]
-
-		// Set the new HSV
-		setHsv(hue, sat, value)
+		// Calculate the hue and saturation. The value in HSV does not change
+		hsv[0] = (angle * 180f / Math.PI).toFloat()
+		hsv[1] = distance / radius
 
 		// Set the new color selector position
-		this.setColorSelectorPosition(eventX, eventY)
+		setColorSelectorPosition(eventX, eventY)
 
 		// Redraw everything
 		drawColorRect()
@@ -245,16 +225,11 @@ class NacColorPicker : RelativeLayout
 			return
 		}
 
-		// Get the HSV
-		val hue = hsv[0]
-		val sat = hsv[1]
-		val value = getShaderSelectionValue(eventX)
-
-		// Set the new HSV
-		setHsv(hue, sat, value)
+		// Calculate the value in HSV. Hue and saturation do not change
+		hsv[2] = getShaderSelectionValue(eventX)
 
 		// Set the new shader position
-		this.setShaderSelectorPosition(eventX)
+		setShaderSelectorPosition(eventX)
 	}
 
 	/**
@@ -486,8 +461,8 @@ class NacColorPicker : RelativeLayout
 		canvas.drawRoundRect(valueRect, curve, curve, valuePaint)
 
 		// Set the color and shader selector positions
-		this.setColorSelectorPosition()
-		this.setShaderSelectorPosition()
+		setColorSelectorPosition()
+		setShaderSelectorPosition()
 	}
 
 	/**
@@ -618,14 +593,14 @@ class NacColorPicker : RelativeLayout
 	}
 
 	/**
-	 * Select a color
+	 * Select a color.
 	 *
-	 * @param color The color to select.
+	 * @param newColor The new color to select.
 	 */
-	fun selectColor(color: Int)
+	fun selectColor(newColor: Int)
 	{
-		// Set the color of the color picker, example color, and edit text
-		this.color = color
+		// Set the new color
+		color = newColor
 
 		// Set the position of the color selector
 		setColorSelectorPosition()
@@ -633,17 +608,6 @@ class NacColorPicker : RelativeLayout
 		// Redraw the color shader for the new color
 		drawColorShader()
 		invalidate()
-	}
-
-	/**
-	 * Set the hue, saturation, and value.
-	 */
-	private fun setHsv(hue: Float, sat: Float, value: Float)
-	{
-		// Set the HSV
-		hsv[0] = hue
-		hsv[1] = sat
-		hsv[2] = value
 	}
 
 	/**
@@ -665,11 +629,11 @@ class NacColorPicker : RelativeLayout
 	private fun setColorSelectorPosition()
 	{
 		// Get the X and Y positions
-		val x = this.getColorSelectionX(hsv)
-		val y = this.getColorSelectionY(hsv)
+		val x = getColorSelectionX(hsv)
+		val y = getColorSelectionY(hsv)
 
 		// Set the new color selector position
-		this.setColorSelectorPosition(x, y)
+		setColorSelectorPosition(x, y)
 	}
 
 	/**
@@ -697,57 +661,7 @@ class NacColorPicker : RelativeLayout
 		val x = getShaderSelectionX(hsv)
 
 		// Set the shader selector position in the X direction
-		this.setShaderSelectorPosition(x)
-	}
-
-	companion object
-	{
-
-		/**
-		 * Check if can parse the color.
-		 *
-		 * @return True if can parse the color, and False otherwise.
-		 */
-		fun canParseColor(name: String): Boolean
-		{
-			// Attempt to parse the color
-			return try
-			{
-				Color.parseColor("#$name")
-				true
-			}
-			// Unable to parse the color
-			catch (e: IllegalArgumentException)
-			{
-				false
-			}
-		}
-
-		/**
-		 * Check if valid hex string was input into the EditText.
-		 *
-		 * @return True if it is a valid hex string, and False otherwise.
-		 */
-		fun isHexString(name: String): Boolean
-		{
-			// Iterate over each character in the hex string
-			name.forEach { char ->
-
-				// Convert the character to base 16
-				val digit = char.digitToIntOrNull(16) ?: -1
-
-				// Unable to convert the character so this is not a hex string
-				if (digit == -1)
-				{
-					return false
-				}
-
-			}
-
-			// Success. This is a hex string
-			return true
-		}
-
+		setShaderSelectorPosition(x)
 	}
 
 }

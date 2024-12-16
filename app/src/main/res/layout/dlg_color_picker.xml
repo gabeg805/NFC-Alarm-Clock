@@ -2,7 +2,6 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	android:orientation="vertical"
@@ -10,6 +9,7 @@
 	android:paddingEnd="?dialogPreferredPadding"
 	android:clipChildren="false">
 
+	<!-- Color picker -->
 	<com.nfcalarmclock.view.colorpicker.NacColorPicker
 		android:id="@+id/color_picker"
 		android:layout_width="match_parent"
@@ -21,46 +21,51 @@
 		app:nacSpacing="@dimen/isz_large"
 		/>
 
-	<LinearLayout
+	<RelativeLayout
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/normal"
 		android:layout_marginBottom="@dimen/large"
-		android:orientation="horizontal"
 		android:layout_gravity="center_horizontal">
 
+		<!-- Color swatch -->
 		<ImageView
 			android:id="@+id/color_example"
 			android:layout_width="@dimen/isz_large"
 			android:layout_height="@dimen/isz_large"
-			android:layout_gravity="center_vertical"
 			android:layout_marginEnd="@dimen/normal"
-			android:contentDescription="@string/cd_color_example"
+			android:baselineAlignBottom="true"
 			android:src="@drawable/color_example"
+			android:contentDescription="@string/cd_color_example"
 			/>
 
-		<TextView
+		<!-- Hex color -->
+		<com.google.android.material.textfield.TextInputLayout
+			android:id="@+id/color_input_layout"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
-			android:textColor="@color/white"
-			android:text="#"
-			tools:ignore="HardcodedText"
-			/>
-
-		<EditText
-			style="@style/Widget.TextView.Primary"
-			android:id="@+id/color_value"
-			android:layout_width="wrap_content"
-			android:layout_height="@dimen/touch"
-			android:layout_gravity="fill"
-			android:importantForAutofill="no"
-			android:inputType="textNoSuggestions"
+			android:layout_toEndOf="@id/color_example"
+			android:layout_alignBaseline="@id/color_example"
 			android:hint="@string/description_color"
-			android:maxLines="1"
-			android:maxLength="@integer/max_hex_length"
-			android:textSize="@dimen/tsz_normal">
-		</EditText>
+			android:maxEms="@integer/max_hex_length"
+			android:minEms="@integer/max_hex_length"
+			app:errorEnabled="true"
+			app:errorIconDrawable="@null"
+			app:errorTextColor="@color/red_light"
+			app:helperTextEnabled="true"
+			app:prefixText="#">
 
-	</LinearLayout>
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/color_edittext"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:imeOptions="actionGo"
+				android:inputType="textNoSuggestions"
+				android:singleLine="true"
+				android:maxLength="@integer/max_hex_length"
+				android:textSize="@dimen/tsz_normal"
+				/>
+		</com.google.android.material.textfield.TextInputLayout>
+	</RelativeLayout>
 
 </LinearLayout>
