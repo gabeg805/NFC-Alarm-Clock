@@ -32,8 +32,8 @@ android {
 		applicationId = "com.nfcalarmclock"
 		minSdk = 23
 		targetSdk = 34
-		versionCode = 438
-		versionName = "12.4.1-beta002"
+		versionCode = 439
+		versionName = "12.4.1"
 
 		// Set output filename
 		setProperty("archivesBaseName", "nfc_alarm_clock_v${versionName}")
@@ -59,9 +59,9 @@ android {
 
 		// Setup when creating a release build
 		getByName("release") {
-			//isMinifyEnabled = true
-			//isShrinkResources = true
-			//proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+			isMinifyEnabled = true
+			isShrinkResources = true
+			proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
 		}
 
 	}
