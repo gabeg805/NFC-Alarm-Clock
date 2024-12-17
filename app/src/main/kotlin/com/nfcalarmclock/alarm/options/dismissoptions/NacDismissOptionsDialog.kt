@@ -153,7 +153,6 @@ class NacDismissOptionsDialog
 			autoDismissSecondsInputLayout,
 			minutesAutoCompleteTextView,
 			secondsAutoCompleteTextView,
-			arrayId = R.array.auto_dismiss_minute_summaries,
 			startIndices = NacAlarm.calcAutoDismissIndex(defaultTime),
 			onMinutesChanged = { truePosition ->
 

@@ -265,11 +265,18 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		binding.alarmLayoutColorIconSwatch.setupForegroundColor(sharedPreferences.clockWidgetAlarmIconColor)
 
 		// Sliders
-		binding.backgroundTransparencySlider.value = sharedPreferences.clockWidgetBackgroundTransparency.toFloat()
-		binding.dateLayoutTextSizeSlider.value = sharedPreferences.clockWidgetDateTextSize
-		binding.timeLayoutTextSizeTimeSlider.value = sharedPreferences.clockWidgetTimeTextSize
-		binding.timeLayoutTextSizeAmPmSlider.value = sharedPreferences.clockWidgetAmPmTextSize
-		binding.alarmLayoutTextSizeSlider.value = sharedPreferences.clockWidgetAlarmTimeTextSize
+		binding.backgroundTransparencySlider.setSafeValue(sharedPreferences.clockWidgetBackgroundTransparency.toFloat())
+		binding.dateLayoutTextSizeSlider.setSafeValue(sharedPreferences.clockWidgetDateTextSize)
+		binding.timeLayoutTextSizeTimeSlider.setSafeValue(sharedPreferences.clockWidgetTimeTextSize)
+		binding.timeLayoutTextSizeAmPmSlider.setSafeValue(sharedPreferences.clockWidgetAmPmTextSize)
+		binding.alarmLayoutTextSizeSlider.setSafeValue(sharedPreferences.clockWidgetAlarmTimeTextSize)
+
+		// Save the shared preference values just in case the above failed
+		sharedPreferences.clockWidgetBackgroundTransparency = binding.backgroundTransparencySlider.value.toInt()
+		sharedPreferences.clockWidgetDateTextSize = binding.dateLayoutTextSizeSlider.value
+		sharedPreferences.clockWidgetTimeTextSize = binding.timeLayoutTextSizeTimeSlider.value
+		sharedPreferences.clockWidgetAmPmTextSize = binding.timeLayoutTextSizeAmPmSlider.value
+		sharedPreferences.clockWidgetAlarmTimeTextSize = binding.alarmLayoutTextSizeSlider.value
 	}
 
 	/**
@@ -905,6 +912,22 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
 		setResult(RESULT_OK, resultValue)
 		finish()
+	}
+
+	/**
+	 * Set a slider value and if it fails, set it to the minimum.
+	 */
+	private fun Slider.setSafeValue(value: Float)
+	{
+		try
+		{
+			// Set to the desired value
+			this.value = value
+		}
+		catch (_: IllegalStateException)
+		{
+			// Do nothing and use the default value
+		}
 	}
 
 }

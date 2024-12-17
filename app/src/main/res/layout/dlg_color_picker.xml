@@ -25,16 +25,16 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="@dimen/normal"
-		android:layout_marginBottom="@dimen/large"
+		android:layout_marginBottom="@dimen/small"
 		android:layout_gravity="center_horizontal">
 
 		<!-- Color swatch -->
 		<ImageView
 			android:id="@+id/color_example"
-			android:layout_width="@dimen/isz_large"
-			android:layout_height="@dimen/isz_large"
+			android:layout_width="@dimen/isz_xxlarge"
+			android:layout_height="@dimen/isz_xxlarge"
+			android:layout_marginTop="@dimen/tiny"
 			android:layout_marginEnd="@dimen/normal"
-			android:baselineAlignBottom="true"
 			android:src="@drawable/color_example"
 			android:contentDescription="@string/cd_color_example"
 			/>
@@ -45,7 +45,6 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_toEndOf="@id/color_example"
-			android:layout_alignBaseline="@id/color_example"
 			android:hint="@string/description_color"
 			android:maxEms="@integer/max_hex_length"
 			android:minEms="@integer/max_hex_length"

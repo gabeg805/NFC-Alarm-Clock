@@ -185,19 +185,6 @@ internal class NacClockWidgetDataHelper(
 )
 {
 
-	/**
-	 * The next alarm info.
-	 */
-	private val nextAlarmInfo: AlarmManager.AlarmClockInfo?
-		get()
-		{
-			// Get the alarm manager
-			val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-			// Return the next alarm
-			return alarmManager.nextAlarmClock
-		}
-
 
 	/**
 	 * AM/PM string, if present in the current locale.
@@ -415,6 +402,19 @@ internal class NacClockWidgetDataHelper(
 		}
 
 	/**
+	 * The next alarm info.
+	 */
+	private val nextAlarmInfo: AlarmManager.AlarmClockInfo?
+		get()
+		{
+			// Get the alarm manager
+			val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+			// Return the next alarm
+			return alarmManager.nextAlarmClock
+		}
+
+	/**
 	 * String containing the time at which the next alarm will run.
 	 */
 	val nextAlarm: String
@@ -431,7 +431,7 @@ internal class NacClockWidgetDataHelper(
 			alarmCal.timeInMillis = nextAlarmInfo!!.triggerTime
 
 			// Return the alarm time as a spannable string
-			return NacCalendar.getFullTime(context, alarmCal)
+			return NacCalendar.getFullTime(context, alarmCal).replace("  ", " ")
 		}
 
 	companion object

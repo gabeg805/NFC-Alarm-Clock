@@ -2,6 +2,18 @@
 TODO
 ----
 
+* Increase size of color swatch in color picker. Can you make something same
+  width as height?
+
+* Add vibration option to:
+
+    - Set on/off vibration for custom effect
+
+	- vibrate watch every X sec (make it clear that above would only be for
+	  phone, not watch)
+
+	- Only vibrate watch
+
 * Move easy to mess up strings to top
 
 * Look into querying MediaStore.Downloads table?

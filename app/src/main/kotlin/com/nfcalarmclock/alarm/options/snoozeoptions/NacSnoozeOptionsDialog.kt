@@ -135,7 +135,6 @@ class NacSnoozeOptionsDialog
 			autoSnoozeSecondsInputLayout,
 			minutesAutoCompleteTextView,
 			secondsAutoCompleteTextView,
-			arrayId = R.array.auto_snooze_minute_summaries,
 			startIndices = NacAlarm.calcAutoSnoozeIndex(defaultTime),
 			onMinutesChanged = { truePosition ->
 
@@ -203,7 +202,6 @@ class NacSnoozeOptionsDialog
 			secondsInputLayout,
 			minutesAutoCompleteTextView,
 			secondsAutoCompleteTextView,
-			arrayId = R.array.snooze_duration_minute_summaries,
 			startIndices = NacAlarm.calcSnoozeDurationIndex(default),
 			onMinutesChanged = { truePosition ->
 

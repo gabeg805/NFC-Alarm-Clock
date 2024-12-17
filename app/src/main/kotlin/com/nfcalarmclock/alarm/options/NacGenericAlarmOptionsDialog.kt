@@ -12,7 +12,6 @@ import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.util.getAlarm
-import com.nfcalarmclock.view.changeSimpleItemsOnZero
 import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
 import com.nfcalarmclock.view.setTextFromIndex
 import com.nfcalarmclock.view.setupInputLayoutColor
@@ -120,14 +119,12 @@ abstract class NacGenericAlarmOptionsDialog
 		secondsInputLayout: TextInputLayout,
 		minutesAutoCompleteTextView: MaterialAutoCompleteTextView,
 		secondsAutoCompleteTextView: MaterialAutoCompleteTextView,
-		arrayId: Int,
 		startIndices: Pair<Int, Int>,
 		onMinutesChanged: (truePosition: Int) -> Unit,
 		onSecondsChanged: (truePosition: Int) -> Unit
 	)
 	{
-		// Get the list of minutes and seconds
-		val minutes = resources.getStringArray(arrayId)
+		// Get the list of seconds, without 60 seconds. Only need 0 to 59 seconds
 		val seconds = resources.getStringArray(R.array.general_seconds_summaries).dropLast(1).toTypedArray()
 
 		// Get the index of the default selected items in the textviews
@@ -138,8 +135,7 @@ abstract class NacGenericAlarmOptionsDialog
 		secondsInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 		minutesAutoCompleteTextView.setTextFromIndex(minutesIndex)
 		secondsAutoCompleteTextView.setTextFromIndex(secondsIndex)
-		minutesAutoCompleteTextView.changeSimpleItemsOnZero(minutes, secondsIndex)
-		secondsAutoCompleteTextView.changeSimpleItemsOnZero(seconds, minutesIndex)
+		secondsAutoCompleteTextView.setSimpleItems(seconds)
 
 		// Set the minutes input layout end icon click listener
 		minutesInputLayout.setEndIconOnClickListener {
@@ -169,15 +165,14 @@ abstract class NacGenericAlarmOptionsDialog
 			// Set the current index
 			minutesIndex = position
 
-			// Determine the true index, ignoring all the array slicing
-			val text = minutesAutoCompleteTextView.adapter.getItem(position)
-			val truePosition = minutes.indexOf(text)
-
 			// Set the selected time
-			onMinutesChanged(truePosition)
+			onMinutesChanged(position)
 
 			// Change the seconds dropdown if minutes are set to 0
-			secondsAutoCompleteTextView.changeSimpleItemsOnZero(seconds, position)
+			if ((minutesIndex == 0) && (secondsIndex == 0))
+			{
+				secondsAutoCompleteTextView.setTextFromIndex(1)
+			}
 
 		}
 
@@ -187,15 +182,14 @@ abstract class NacGenericAlarmOptionsDialog
 			// Set the current index
 			secondsIndex = position
 
-			// Determine the true position, ignoring all the array slicing
-			val text = secondsAutoCompleteTextView.adapter.getItem(position)
-			val truePosition = seconds.indexOf(text)
-
 			// Set the selected time
-			onSecondsChanged(truePosition)
+			onSecondsChanged(position)
 
 			// Change the minutes dropdown if seconds are set to 0
-			minutesAutoCompleteTextView.changeSimpleItemsOnZero(minutes, position)
+			if ((minutesIndex == 0) && (secondsIndex == 0))
+			{
+				minutesAutoCompleteTextView.setTextFromIndex(1)
+			}
 
 		}
 	}

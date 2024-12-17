@@ -109,30 +109,6 @@ fun View.performHapticFeedback()
 }
 
 /**
- * Change the simple items if the current position of another view is at the 0th index.
- *
- * This is to avoid having double zero values (0 minutes and 0 seconds).
- */
-fun MaterialAutoCompleteTextView.changeSimpleItemsOnZero(values: Array<String>, position: Int)
-{
-	// Get the list of values that should be used depending on the other value
-	// that was selected
-	val newValues = if (position == 0)
-	{
-		// Get the list of values, excluding the zero value
-		values.slice(1..<values.size).toTypedArray()
-	}
-	else
-	{
-		// Use the normal list of values
-		values
-	}
-
-	// Set the simple items
-	this.setSimpleItems(newValues)
-}
-
-/**
  * Set the text of from an index.
  */
 fun MaterialAutoCompleteTextView.setTextFromIndex(index: Int, fallback: Int = 1)
