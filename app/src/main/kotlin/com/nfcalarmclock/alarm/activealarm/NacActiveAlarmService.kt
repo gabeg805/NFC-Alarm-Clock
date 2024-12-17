@@ -691,11 +691,10 @@ class NacActiveAlarmService
 	fun waitForAutoDismiss()
 	{
 		// Check if should auto dismiss
-		if (alarm!!.shouldAutoDismiss)
+		if (alarm!!.shouldAutoDismiss && (alarm!!.autoDismissTime > 0))
 		{
 			// Amount of time until the alarm is automatically dismissed
-			val autoDismiss = alarm!!.autoDismissTime
-			val delay = TimeUnit.SECONDS.toMillis(autoDismiss.toLong()) - alarm!!.timeActive - 750
+			val delay = TimeUnit.SECONDS.toMillis(alarm!!.autoDismissTime.toLong()) - alarm!!.timeActive - 750
 
 			// Automatically dismiss the alarm
 			autoDismissHandler!!.postDelayed({
@@ -732,14 +731,13 @@ class NacActiveAlarmService
 	fun waitForAutoSnooze()
 	{
 		// Check if should not auto snooze or cannot snooze
-		if (!alarm!!.shouldAutoSnooze || !alarm!!.canSnooze)
+		if (!alarm!!.shouldAutoSnooze || !alarm!!.canSnooze || (alarm!!.autoSnoozeTime == 0))
 		{
 			return
 		}
 
 		// Amount of time until the alarm is automatically snoozed
-		val autoSnooze = alarm!!.autoSnoozeTime
-		val delay = TimeUnit.SECONDS.toMillis(autoSnooze.toLong()) - 750
+		val delay = TimeUnit.SECONDS.toMillis(alarm!!.autoSnoozeTime.toLong()) - 750
 
 		// Automatically snooze the alarm
 		autoSnoozeHandler!!.postDelayed({ snooze() }, delay)

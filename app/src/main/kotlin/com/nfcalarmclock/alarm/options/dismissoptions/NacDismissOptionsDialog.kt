@@ -154,20 +154,12 @@ class NacDismissOptionsDialog
 			minutesAutoCompleteTextView,
 			secondsAutoCompleteTextView,
 			startIndices = NacAlarm.calcAutoDismissIndex(defaultTime),
-			onMinutesChanged = { truePosition ->
+			onTimeChanged = { minIndex, secIndex ->
 
 				// Update the selected time
-				val (_, sec) = NacAlarm.calcMinutesAndSecondsFromTime(selectedAutoDismissTime)
-				val newTime = NacAlarm.calcAutoDismissFromMinutesIndex(truePosition)
-				selectedAutoDismissTime = newTime + sec
-
-			},
-			onSecondsChanged = { truePosition ->
-
-				// Update the selected time
-				val (min, _) = NacAlarm.calcMinutesAndSecondsFromTime(selectedAutoDismissTime)
-				val newTime = NacAlarm.calcAutoDismissFromSecondsIndex(truePosition)
-				selectedAutoDismissTime = min*60 + newTime
+				val newMin = NacAlarm.calcAutoDismissFromMinutesIndex(minIndex)
+				val newSec = NacAlarm.calcAutoDismissFromSecondsIndex(secIndex)
+				selectedAutoDismissTime = newMin + newSec
 
 			})
 

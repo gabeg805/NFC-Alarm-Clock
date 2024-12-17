@@ -136,20 +136,12 @@ class NacSnoozeOptionsDialog
 			minutesAutoCompleteTextView,
 			secondsAutoCompleteTextView,
 			startIndices = NacAlarm.calcAutoSnoozeIndex(defaultTime),
-			onMinutesChanged = { truePosition ->
+			onTimeChanged = { minIndex, secIndex ->
 
 				// Update the selected time
-				val (_, sec) = NacAlarm.calcMinutesAndSecondsFromTime(selectedAutoSnoozeTime)
-				val newTime = NacAlarm.calcAutoSnoozeFromMinutesIndex(truePosition)
-				selectedAutoSnoozeTime = newTime + sec
-
-			},
-			onSecondsChanged = { truePosition ->
-
-				// Update the selected time
-				val (min, _) = NacAlarm.calcMinutesAndSecondsFromTime(selectedAutoSnoozeTime)
-				val newTime = NacAlarm.calcAutoSnoozeFromSecondsIndex(truePosition)
-				selectedAutoSnoozeTime = min*60 + newTime
+				val newMin = NacAlarm.calcAutoSnoozeFromMinutesIndex(minIndex)
+				val newSec = NacAlarm.calcAutoSnoozeFromSecondsIndex(secIndex)
+				selectedAutoSnoozeTime = newMin + newSec
 
 			})
 
@@ -203,20 +195,12 @@ class NacSnoozeOptionsDialog
 			minutesAutoCompleteTextView,
 			secondsAutoCompleteTextView,
 			startIndices = NacAlarm.calcSnoozeDurationIndex(default),
-			onMinutesChanged = { truePosition ->
+			onTimeChanged = { minIndex, secIndex ->
 
 				// Update the selected time
-				val (_, sec) = NacAlarm.calcMinutesAndSecondsFromTime(selectedSnoozeDurationTime)
-				val newTime = NacAlarm.calcSnoozeDurationFromMinutesIndex(truePosition)
-				selectedSnoozeDurationTime = newTime + sec
-
-			},
-			onSecondsChanged = { truePosition ->
-
-				// Update the selected time
-				val (min, _) = NacAlarm.calcMinutesAndSecondsFromTime(selectedSnoozeDurationTime)
-				val newTime = NacAlarm.calcSnoozeDurationFromSecondsIndex(truePosition)
-				selectedSnoozeDurationTime = min*60 + newTime
+				val newMin = NacAlarm.calcSnoozeDurationFromMinutesIndex(minIndex)
+				val newSec = NacAlarm.calcSnoozeDurationFromSecondsIndex(secIndex)
+				selectedSnoozeDurationTime = newMin + newSec
 
 			})
 	}

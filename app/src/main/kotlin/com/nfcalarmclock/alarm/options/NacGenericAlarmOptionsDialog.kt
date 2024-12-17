@@ -120,8 +120,7 @@ abstract class NacGenericAlarmOptionsDialog
 		minutesAutoCompleteTextView: MaterialAutoCompleteTextView,
 		secondsAutoCompleteTextView: MaterialAutoCompleteTextView,
 		startIndices: Pair<Int, Int>,
-		onMinutesChanged: (truePosition: Int) -> Unit,
-		onSecondsChanged: (truePosition: Int) -> Unit
+		onTimeChanged: (minIndex: Int, secIndex: Int) -> Unit
 	)
 	{
 		// Get the list of seconds, without 60 seconds. Only need 0 to 59 seconds
@@ -165,14 +164,15 @@ abstract class NacGenericAlarmOptionsDialog
 			// Set the current index
 			minutesIndex = position
 
-			// Set the selected time
-			onMinutesChanged(position)
-
 			// Change the seconds dropdown if minutes are set to 0
 			if ((minutesIndex == 0) && (secondsIndex == 0))
 			{
-				secondsAutoCompleteTextView.setTextFromIndex(1)
+				secondsIndex = 1
+				secondsAutoCompleteTextView.setTextFromIndex(secondsIndex)
 			}
+
+			// Call the callback when the time is changed
+			onTimeChanged(minutesIndex, secondsIndex)
 
 		}
 
@@ -182,14 +182,15 @@ abstract class NacGenericAlarmOptionsDialog
 			// Set the current index
 			secondsIndex = position
 
-			// Set the selected time
-			onSecondsChanged(position)
-
 			// Change the minutes dropdown if seconds are set to 0
 			if ((minutesIndex == 0) && (secondsIndex == 0))
 			{
-				minutesAutoCompleteTextView.setTextFromIndex(1)
+				minutesIndex = 1
+				minutesAutoCompleteTextView.setTextFromIndex(minutesIndex)
 			}
+
+			// Call the callback when the time is changed
+			onTimeChanged(minutesIndex, secondsIndex)
 
 		}
 	}
