@@ -1,0 +1,5 @@
+* Fixed issue where alarms would have their auto dismiss, auto snooze, and
+  snooze duration times set to 0, resulting in alarms dismissing immediately
+  and being marked as "missed".
+* Fixed issue with clock widget where the configuration activity would crash
+  due to the computed default slider values not being correct.
