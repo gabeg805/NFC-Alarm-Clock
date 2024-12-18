@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.os.Build
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
+import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.media.NacMedia
 import java.io.BufferedReader
@@ -1885,6 +1886,72 @@ class NacSharedPreferences(context: Context)
 			resources.getString(R.string.old_max_snooze_key),
 			resources.getString(R.string.old_snooze_duration_key),
 		)
+	}
+
+	/**
+	 * Run the event to fix any auto dismiss, auto snooze, or snooze duration values
+	 * that are set to 0 in alarms.
+	 */
+	suspend fun runEventFixZeroAutoDismissAndSnooze(
+		allAlarms: List<NacAlarm>,
+		onAlarmChanged: suspend (NacAlarm) -> Unit = {})
+	{
+		// Set the default values
+		val defaultAutoDismissTime = 900
+		val defaultAutoSnoozeTime = 300
+		val defaultSnoozeDuration = 300
+
+		// Auto dismiss for the shared preferences
+		if (autoDismissTime == 0)
+		{
+			autoDismissTime = defaultAutoDismissTime
+		}
+
+		// Auto snooze for the shared preferences
+		if (autoSnoozeTime == 0)
+		{
+			autoSnoozeTime = defaultAutoSnoozeTime
+		}
+
+		// Snooze duration for the shared preferences
+		if (snoozeDuration == 0)
+		{
+			snoozeDuration = defaultSnoozeDuration
+		}
+
+		// Iterate over each alarm that has the auto dismiss, auto snooze, or snooze
+		// duration set incorrectly
+		allAlarms
+			.filter {
+				(it.autoDismissTime == 0) || (it.autoSnoozeTime == 0) || (it.snoozeDuration == 0)
+			}
+			.forEach { alarm ->
+
+				// Auto dismiss
+				if (alarm.autoDismissTime == 0)
+				{
+					alarm.autoDismissTime = defaultAutoDismissTime
+				}
+
+				// Auto snooze
+				if (alarm.autoSnoozeTime == 0)
+				{
+					alarm.autoSnoozeTime = defaultAutoSnoozeTime
+				}
+
+				// Snooze duration
+				if (alarm.snoozeDuration == 0)
+				{
+					alarm.snoozeDuration = defaultSnoozeDuration
+				}
+
+				// Call the listener when the alarm is changed
+				onAlarmChanged(alarm)
+
+			}
+
+		// Mark the event as completed
+		eventFixZeroAutoDismissAndSnooze = true
 	}
 
 	/**

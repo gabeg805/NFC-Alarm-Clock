@@ -485,73 +485,6 @@ class NacMainActivity
 	}
 
 	/**
-	 * Do the event to fix any auto dismiss, auto snooze, or snooze duration values
-	 * that are set to 0 in alarms.
-	 */
-	private suspend fun doEventFixZeroAutoDismissAndSnooze()
-	{
-		// Set the default values
-		val defaultAutoDismissTime = 900
-		val defaultAutoSnoozeTime = 300
-		val defaultSnoozeDuration = 300
-
-		// Auto dismiss for the shared preferences
-		if (sharedPreferences.autoDismissTime == 0)
-		{
-			sharedPreferences.autoDismissTime = defaultAutoDismissTime
-		}
-
-		// Auto snooze for the shared preferences
-		if (sharedPreferences.autoSnoozeTime == 0)
-		{
-			sharedPreferences.autoSnoozeTime = defaultAutoSnoozeTime
-		}
-
-		// Snooze duration for the shared preferences
-		if (sharedPreferences.snoozeDuration == 0)
-		{
-			sharedPreferences.snoozeDuration = defaultSnoozeDuration
-		}
-
-		// Iterate over each alarm that has the auto dismiss, auto snooze, or snooze
-		// duration set incorrectly
-		alarmViewModel.getAllAlarms()
-			.filter {
-				(it.autoDismissTime == 0) || (it.autoSnoozeTime == 0) || (it.snoozeDuration == 0)
-			}
-			.forEach { alarm ->
-
-				// Auto dismiss
-				if (alarm.autoDismissTime == 0)
-				{
-					alarm.autoDismissTime = defaultAutoDismissTime
-				}
-
-				// Auto snooze
-				if (alarm.autoSnoozeTime == 0)
-				{
-					alarm.autoSnoozeTime = defaultAutoSnoozeTime
-				}
-
-				// Snooze duration
-				if (alarm.snoozeDuration == 0)
-				{
-					alarm.snoozeDuration = defaultSnoozeDuration
-				}
-
-				// Update the database
-				alarmViewModel.update(alarm)
-
-				// Reschedule the alarm
-				NacScheduler.update(this, alarm)
-
-			}
-
-		// Mark the event as completed
-		sharedPreferences.eventFixZeroAutoDismissAndSnooze = true
-	}
-
-	/**
 	 * Do the event to update and backup media info in all alarms starting at database
 	 * version 31.
 	 */
@@ -1252,7 +1185,15 @@ class NacMainActivity
 		// that are set to 0 in alarms.
 		if (!sharedPreferences.eventFixZeroAutoDismissAndSnooze)
 		{
-			doEventFixZeroAutoDismissAndSnooze()
+			sharedPreferences.runEventFixZeroAutoDismissAndSnooze(
+				alarmViewModel.getAllAlarms(),
+				onAlarmChanged = { alarm ->
+
+					// Update the database and reschedule the alarm
+					alarmViewModel.update(alarm)
+					NacScheduler.update(this, alarm)
+
+				})
 		}
 	}
 

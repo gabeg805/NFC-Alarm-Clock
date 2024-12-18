@@ -35,13 +35,29 @@ class NacAppUpdatedBroadcastReceiver
 			// Get the database. Before opening it, a check will run to move the database
 			// to device protected storage
 			val db = NacAlarmDatabase.getInstance(context)
+			val sharedPreferences = NacSharedPreferences(context)
 
 			// Get all the alarms
 			val alarmDao = db.alarmDao()
-			val alarms = alarmDao.getAllAlarms()
+			val allAlarms = alarmDao.getAllAlarms()
 
-			// Update all the alarms
-			NacScheduler.updateAll(context, alarms)
+			// Reschedule all the alarms
+			NacScheduler.updateAll(context, allAlarms)
+
+			// Check if should fix any auto dismiss, auto snooze, or snooze duration values
+			// that are set to 0 in alarms.
+			if (!sharedPreferences.eventFixZeroAutoDismissAndSnooze)
+			{
+				sharedPreferences.runEventFixZeroAutoDismissAndSnooze(
+					allAlarms,
+					onAlarmChanged = { alarm ->
+
+						// Update the database and reschedule the alarm
+						alarmDao.update(alarm)
+						NacScheduler.update(context, alarm)
+
+					})
+			}
 		}
 
 	}
