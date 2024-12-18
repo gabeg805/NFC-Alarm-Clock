@@ -690,34 +690,36 @@ class NacActiveAlarmService
 	@UnstableApi
 	fun waitForAutoDismiss()
 	{
-		// Check if should auto dismiss
-		if (alarm!!.shouldAutoDismiss && (alarm!!.autoDismissTime > 0))
-		{
-			// Amount of time until the alarm is automatically dismissed
-			val delay = TimeUnit.SECONDS.toMillis(alarm!!.autoDismissTime.toLong()) - alarm!!.timeActive - 750
-
-			// Automatically dismiss the alarm
-			autoDismissHandler!!.postDelayed({
-
-				// Show the missed alarm notification
-				if (sharedPreferences.missedAlarmNotification)
-				{
-					// Create the missed alarm notification
-					val notification = NacMissedAlarmNotification(
-						this@NacActiveAlarmService, alarm!!)
-
-					// Show the notification
-					notification.show()
-				}
-
-				// Auto dismiss the alarm. This will stop the service
-				dismiss(wasMissed = true)
-
-			}, delay)
-		}
-
 		// Set the start time
 		startTime = System.currentTimeMillis()
+
+		// Check if should not auto dismiss
+		if (!alarm!!.shouldAutoDismiss || (alarm!!.autoDismissTime == 0))
+		{
+			return
+		}
+
+		// Amount of time until the alarm is automatically dismissed
+		val delay = TimeUnit.SECONDS.toMillis(alarm!!.autoDismissTime.toLong()) - alarm!!.timeActive - 750
+
+		// Automatically dismiss the alarm
+		autoDismissHandler!!.postDelayed({
+
+			// Show the missed alarm notification
+			if (sharedPreferences.missedAlarmNotification)
+			{
+				// Create the missed alarm notification
+				val notification = NacMissedAlarmNotification(
+					this@NacActiveAlarmService, alarm!!)
+
+				// Show the notification
+				notification.show()
+			}
+
+			// Auto dismiss the alarm. This will stop the service
+			dismiss(wasMissed = true)
+
+		}, delay)
 	}
 
 	/**

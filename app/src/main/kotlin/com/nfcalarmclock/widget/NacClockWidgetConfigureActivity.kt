@@ -265,11 +265,11 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		binding.alarmLayoutColorIconSwatch.setupForegroundColor(sharedPreferences.clockWidgetAlarmIconColor)
 
 		// Sliders
-		binding.backgroundTransparencySlider.setSafeValue(sharedPreferences.clockWidgetBackgroundTransparency.toFloat())
-		binding.dateLayoutTextSizeSlider.setSafeValue(sharedPreferences.clockWidgetDateTextSize)
-		binding.timeLayoutTextSizeTimeSlider.setSafeValue(sharedPreferences.clockWidgetTimeTextSize)
-		binding.timeLayoutTextSizeAmPmSlider.setSafeValue(sharedPreferences.clockWidgetAmPmTextSize)
-		binding.alarmLayoutTextSizeSlider.setSafeValue(sharedPreferences.clockWidgetAlarmTimeTextSize)
+		binding.backgroundTransparencySlider.setValueSafe(sharedPreferences.clockWidgetBackgroundTransparency.toFloat(), fallback = 100f)
+		binding.dateLayoutTextSizeSlider.setValueSafe(sharedPreferences.clockWidgetDateTextSize, fallback = 14f)
+		binding.timeLayoutTextSizeTimeSlider.setValueSafe(sharedPreferences.clockWidgetTimeTextSize, fallback = 78f)
+		binding.timeLayoutTextSizeAmPmSlider.setValueSafe(sharedPreferences.clockWidgetAmPmTextSize, fallback = 18f)
+		binding.alarmLayoutTextSizeSlider.setValueSafe(sharedPreferences.clockWidgetAlarmTimeTextSize, fallback = 14f)
 
 		// Save the shared preference values just in case the above failed
 		sharedPreferences.clockWidgetBackgroundTransparency = binding.backgroundTransparencySlider.value.toInt()
@@ -915,9 +915,9 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 	}
 
 	/**
-	 * Set a slider value and if it fails, set it to the minimum.
+	 * Set a slider value and if it fails, set it to the fallback value.
 	 */
-	private fun Slider.setSafeValue(value: Float)
+	private fun Slider.setValueSafe(value: Float, fallback: Float)
 	{
 		try
 		{
@@ -926,7 +926,14 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		}
 		catch (_: IllegalStateException)
 		{
-			// Do nothing and use the default value
+			try
+			{
+				// Set to the fallback value
+				this.value = fallback
+			}
+			catch (_: IllegalStateException)
+			{
+			}
 		}
 	}
 

@@ -115,7 +115,7 @@ class NacDismissOptionsDialog
 	{
 		// Get the default values
 		val defaultShouldAutoDismiss = alarm?.shouldAutoDismiss ?: true
-		val defaultAutoDismissTime = alarm?.autoDismissTime ?: 900
+		val defaultAutoDismissTime = alarm?.autoDismissTime?.takeIf { it > 0 } ?: 900
 		val defaultShouldDismissEarly = alarm?.useDismissEarly ?: false
 		val defaultDismissEarlyTime = alarm?.dismissEarlyTime ?: 30
 		val defaultShouldDeleteAlarmAfterDismissed = alarm?.shouldDeleteAlarmAfterDismissed ?: false

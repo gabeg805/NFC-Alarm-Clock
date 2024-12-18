@@ -96,9 +96,9 @@ class NacSnoozeOptionsDialog
 	{
 		// Get the default values
 		val defaultShouldAutoSnooze = alarm?.shouldAutoSnooze ?: false
-		val defaultAutoSnoozeTime = alarm?.autoSnoozeTime ?: 300
+		val defaultAutoSnoozeTime = alarm?.autoSnoozeTime?.takeIf { it > 0 } ?: 300
 		val defaultMaxSnooze = alarm?.maxSnooze ?: -1
-		val defaultSnoozeDuration = alarm?.snoozeDuration ?: 300
+		val defaultSnoozeDuration = alarm?.snoozeDuration?.takeIf { it > 0 } ?: 300
 		val defaultShouldEasySnooze = alarm?.useEasySnooze ?: false
 		selectedAutoSnoozeTime = defaultAutoSnoozeTime
 		selectedMaxSnoozeTime = defaultMaxSnooze

@@ -22,6 +22,7 @@
 
 	<!-- Event -->
 	<string name="key_event_update_and_backup_media_info_in_alarms_db_v31">event_update_and_backup_media_info_in_alarms_db_v31</string>
+	<string name="key_event_fix_zero_auto_dismiss_and_snooze">event_fix_zero_auto_dismiss_and_snooze</string>
 
 	<!-- Main activity -->
 	<string name="key_main_should_refresh_activity">app_should_refresh_main_activity</string>

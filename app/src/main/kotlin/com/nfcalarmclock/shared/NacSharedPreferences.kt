@@ -297,7 +297,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.key_clock_widget_text_size_alarm_time)
-			val defaultValue = resources.getDimension(R.dimen.tsz_small) / resources.displayMetrics.density
+			val defaultValue = 14f
 
 			return instance.getFloat(key, defaultValue)
 		}
@@ -333,7 +333,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.key_clock_widget_text_size_am_pm)
-			val defaultValue = resources.getDimension(R.dimen.tsz_medium) / resources.displayMetrics.density
+			val defaultValue = 18f
 
 			return instance.getFloat(key, defaultValue)
 		}
@@ -405,7 +405,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.key_clock_widget_text_size_date)
-			val defaultValue = resources.getDimension(R.dimen.tsz_small) / resources.displayMetrics.density
+			val defaultValue = 14f
 
 			return instance.getFloat(key, defaultValue)
 		}
@@ -459,7 +459,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.key_clock_widget_text_size_time)
-			val defaultValue = resources.getDimension(R.dimen.tsz_widget) / resources.displayMetrics.density
+			val defaultValue = 78f
 
 			return instance.getFloat(key, defaultValue)
 		}
@@ -768,6 +768,25 @@ class NacSharedPreferences(context: Context)
 		set(value)
 		{
 			val key = resources.getString(R.string.easy_snooze_key)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Event to fix any auto dismiss, auto snooze, or snooze duration values that are set
+	 * to 0 in alarms.
+	 */
+	var eventFixZeroAutoDismissAndSnooze: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_event_fix_zero_auto_dismiss_and_snooze)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_event_fix_zero_auto_dismiss_and_snooze)
 
 			saveBoolean(key, value)
 		}
@@ -1862,6 +1881,9 @@ class NacSharedPreferences(context: Context)
 			resources.getString(R.string.key_permission_schedule_exact_alarm_requested),
 			resources.getString(R.string.key_app_previous_version),
 			resources.getString(R.string.sys_previous_volume),
+			resources.getString(R.string.old_auto_dismiss_key),
+			resources.getString(R.string.old_max_snooze_key),
+			resources.getString(R.string.old_snooze_duration_key),
 		)
 	}
 

@@ -277,7 +277,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginStart="44dp"
 				android:stepSize="5"
-				android:value="50"
+				android:value="100"
 				android:valueFrom="0"
 				android:valueTo="100"
 				app:labelStyle="@style/Widget.ClockWidget.Tooltip"
