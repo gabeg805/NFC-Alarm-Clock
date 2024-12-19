@@ -67,7 +67,7 @@ android {
 				isRemoveUnusedCode = true
 				isRemoveUnusedResources = true
 				isObfuscate = false
-				isOptimizeCode = false
+				isOptimizeCode = true
 			}
 		}
 
