@@ -59,9 +59,16 @@ android {
 
 		// Setup when creating a release build
 		getByName("release") {
-			isMinifyEnabled = true
-			isShrinkResources = true
-			proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+			//isMinifyEnabled = true
+			//isShrinkResources = true
+			//proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+
+			postprocessing {
+				isRemoveUnusedCode = true
+				isRemoveUnusedResources = false
+				isObfuscate = false
+				isOptimizeCode = false
+			}
 		}
 
 	}
