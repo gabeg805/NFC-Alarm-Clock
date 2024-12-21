@@ -64,12 +64,13 @@ android {
 
 		// Setup when creating a release build
 		getByName("release") {
-			// Remove unused code without obfuscating so that the build is reproducible
+			// Remove unused code and resources, and optimize the code without
+			// obfuscating so that the build is reproducible
 			postprocessing {
 				isRemoveUnusedCode = true
-				isRemoveUnusedResources = false
+				isRemoveUnusedResources = true
 				isObfuscate = false
-				isOptimizeCode = false
+				isOptimizeCode = true
 			}
 
 			// Set the signing config for release builds, if the keystore.properties file exists
