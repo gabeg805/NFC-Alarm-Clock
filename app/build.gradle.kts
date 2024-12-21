@@ -18,8 +18,10 @@ val keystorePropertiesFile = rootProject.file("keystore.properties")
 // Initialize a new Properties() object called keystoreProperties.
 val keystoreProperties = Properties()
 
-// Load your keystore.properties file into the keystoreProperties object.
-keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+// Load your keystore.properties file into the keystoreProperties object if it exists
+if (keystorePropertiesFile.exists()) {
+	keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
 
 android {
 
@@ -47,11 +49,14 @@ android {
 
 	// Configuration for signing the app
 	signingConfigs {
-		create("config") {
-			keyAlias = keystoreProperties["keyAlias"] as String
-			keyPassword = keystoreProperties["keyPassword"] as String
-			storePassword = keystoreProperties["storePassword"] as String
-			storeFile = file(keystoreProperties["storeFile"] as String)
+		create("release") {
+			// Set the signing config for release builds, if the keystore.properties file exists
+			if (keystorePropertiesFile.exists()) {
+				keyAlias = keystoreProperties["keyAlias"] as String
+				keyPassword = keystoreProperties["keyPassword"] as String
+				storePassword = keystoreProperties["storePassword"] as String
+				storeFile = file(keystoreProperties["storeFile"] as String)
+			}
 		}
 	}
 
@@ -59,15 +64,17 @@ android {
 
 		// Setup when creating a release build
 		getByName("release") {
-			//isMinifyEnabled = true
-			//isShrinkResources = true
-			//proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-
+			// Remove unused code without obfuscating so that the build is reproducible
 			postprocessing {
 				isRemoveUnusedCode = true
 				isRemoveUnusedResources = false
 				isObfuscate = false
 				isOptimizeCode = false
+			}
+
+			// Set the signing config for release builds, if the keystore.properties file exists
+			if (keystorePropertiesFile.exists()) {
+				signingConfig = signingConfigs.getByName("release")
 			}
 		}
 
