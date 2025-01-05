@@ -70,7 +70,7 @@ android {
 				isRemoveUnusedCode = true
 				isRemoveUnusedResources = true
 				isObfuscate = false
-				isOptimizeCode = true
+				isOptimizeCode = false
 			}
 
 			// Set the signing config for release builds, if the keystore.properties file exists

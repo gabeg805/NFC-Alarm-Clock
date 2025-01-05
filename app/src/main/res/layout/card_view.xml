@@ -231,7 +231,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical"
-			android:visibility="gone">
+			android:visibility="visible">
 
 			<!-- Header divider -->
 			<LinearLayout
@@ -382,14 +382,6 @@
 					android:progress="75"
 					/>
 
-				<com.google.android.material.button.MaterialButton
-					style="@style/Widget.Button.Icon"
-					android:id="@+id/nac_alarm_options"
-					android:contentDescription="@string/cd_alarm_options"
-					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
-					app:icon="@drawable/settings"
-					/>
 			</LinearLayout> <!-- Volume -->
 
 			<!-- Name -->
@@ -402,21 +394,49 @@
 				app:icon="@drawable/label"
 				/>
 
-			<!-- Divider -->
-			<View
-				android:id="@+id/nac_divider_delete"
+			<!-- Options divider -->
+			<LinearLayout
 				android:layout_width="match_parent"
-				android:layout_height="@dimen/line"
-				android:background="?attr/colorAccent"
-				/>
+				android:layout_height="wrap_content"
+				android:gravity="center_vertical">
+
+					<!-- Divider -->
+					<View
+						android:id="@+id/nac_divider_delete2"
+						android:layout_width="0dp"
+						android:layout_height="@dimen/line"
+						android:layout_weight="1"
+						android:background="?attr/colorAccent"
+						/>
+
+					<!-- Title -->
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginHorizontal="@dimen/tiny"
+						android:alpha="0.6"
+						android:textSize="@dimen/tsz_small"
+						android:textStyle="bold"
+						android:text="Options"
+						/>
+
+					<!-- Divider -->
+					<View
+						android:id="@+id/nac_divider_delete"
+						android:layout_width="0dp"
+						android:layout_height="@dimen/line"
+						android:layout_weight="1"
+						android:background="?attr/colorAccent"
+						/>
+			</LinearLayout>
 
 			<!-- Delete/collapse -->
 			<LinearLayout
 				android:id="@+id/nac_collapse_parent"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:paddingTop="@dimen/tiny"
-				android:paddingBottom="@dimen/tiny"
+				android:paddingBottom="@dimen/nudge"
+				android:gravity="center_horizontal"
 				android:orientation="horizontal">
 
 				<com.google.android.material.button.MaterialButton
@@ -428,14 +448,45 @@
 					android:paddingBottom="@dimen/zero"
 					android:paddingEnd="@dimen/large"
 					android:text="@string/action_alarm_delete"
+					android:visibility="gone"
 					app:icon="@drawable/delete"
 					/>
 
-
-				<Space
-					android:layout_width="0dp"
-					android:layout_height="0dp"
+				<!-- Dismiss -->
+				<com.google.android.material.button.MaterialButton
+					style="@style/Widget.Button.Icon"
+					android:id="@+id/nac_dismiss_options"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
 					android:layout_weight="1"
+					app:iconSize="@dimen/isz_normal"
+					app:iconTint="@color/white"
+					app:icon="@drawable/dismiss"
+					/>
+
+				<!-- Snooze -->
+				<com.google.android.material.button.MaterialButton
+					style="@style/Widget.Button.Icon"
+					android:id="@+id/nac_snooze_options"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					app:iconTint="@color/white"
+					app:iconSize="@dimen/isz_normal"
+					app:icon="@drawable/snooze"
+					/>
+
+				<!-- More -->
+				<com.google.android.material.button.MaterialButton
+					style="@style/Widget.Button.Icon"
+					android:contentDescription="@string/cd_alarm_options"
+					android:id="@+id/nac_alarm_options"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					app:iconTint="@color/white"
+					app:iconSize="@dimen/isz_normal"
+					app:icon="@drawable/settings"
 					/>
 
 				<com.google.android.material.button.MaterialButton
@@ -446,10 +497,10 @@
 					android:layout_height="@dimen/touch"
 					android:layout_gravity="center_vertical"
 					android:rotation="180"
+					android:visibility="gone"
 					app:icon="@drawable/expand"
 					/>
 			</LinearLayout> <!-- Delete/collapse -->
-
 		</LinearLayout> <!-- Expanded alarm -->
 
 	</LinearLayout> <!-- Content -->

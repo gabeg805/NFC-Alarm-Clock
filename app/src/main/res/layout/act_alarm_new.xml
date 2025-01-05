@@ -240,8 +240,8 @@
 
 			<ImageView
 				android:id="@+id/dismiss_icon"
-				android:layout_width="@dimen/isz_large"
-				android:layout_height="@dimen/isz_large"
+				android:layout_width="@dimen/isz_dismiss_large"
+				android:layout_height="@dimen/isz_dismiss_large"
 				android:layout_centerHorizontal="true"
 				android:src="@drawable/dismiss"
 				android:contentDescription="@string/cd_dismiss_alarm"

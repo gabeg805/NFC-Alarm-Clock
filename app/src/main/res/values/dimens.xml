@@ -26,6 +26,7 @@
 	<dimen name="isz_xxxlarge">44dp</dimen>
 	<dimen name="isz_attention">54dp</dimen>
 	<dimen name="isz_focus">72dp</dimen>
+	<dimen name="isz_dismiss_large">30dp</dimen>
 
 	<!-- Text -->
 	<dimen name="tsz_tiny">10sp</dimen>
