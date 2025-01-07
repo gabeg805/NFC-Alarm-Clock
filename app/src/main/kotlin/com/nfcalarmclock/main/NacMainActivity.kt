@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.MenuCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -51,7 +52,9 @@ import com.nfcalarmclock.card.NacCardHolder
 import com.nfcalarmclock.card.NacCardHolder.OnCardAlarmOptionsClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardCollapsedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardDeleteClickedListener
+import com.nfcalarmclock.card.NacCardHolder.OnCardDismissOptionsClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardMediaClickedListener
+import com.nfcalarmclock.card.NacCardHolder.OnCardSnoozeOptionsClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardUpdatedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardUseNfcChangedListener
 import com.nfcalarmclock.card.NacCardLayoutManager
@@ -938,6 +941,22 @@ class NacMainActivity
 
 		}
 
+		// Dismiss options listener
+		holder.onCardDismissOptionsClickedListener = OnCardDismissOptionsClickedListener { _, alarm ->
+
+			// Show the dismiss options dialog
+			showDismissOptionsDialog(alarm)
+
+		}
+
+		// Snooze options listener
+		holder.onCardSnoozeOptionsClickedListener = OnCardSnoozeOptionsClickedListener { _, alarm ->
+
+			// Show the snooze options dialog
+			showSnoozeOptionsDialog(alarm)
+
+		}
+
 		// Alarm options listener
 		holder.onCardAlarmOptionsClickedListener = OnCardAlarmOptionsClickedListener { _, alarm ->
 
@@ -1532,6 +1551,49 @@ class NacMainActivity
 	}
 
 	/**
+	 * Show the dismiss options dialog.
+	 */
+	private fun showDismissOptionsDialog(alarm: NacAlarm)
+	{
+		// Create bundle with the alarm
+		val bundle = Bundle().addAlarm(alarm)
+
+		// Set the graph of the nav controller
+		navController.setGraph(R.navigation.nav_alarm_options, bundle)
+
+		// Check if the current destination is set
+		if (navController.currentDestination != null)
+		{
+
+			// Create the navigation option to pop the main alarm option fragment from the graph
+			val options = NavOptions.Builder()
+				.setPopUpTo(R.id.nacAlarmOptionsDialog, true)
+				.build()
+
+			// Navigate to the dismiss option dialog
+			navController.navigate(R.id.action_nacAlarmOptionsDialog_to_nacDismissOptionsDialog,
+				bundle, options)
+		}
+		else
+		{
+			// Navigate to the dismiss option dialog directly
+			navController.navigate(R.id.nacDismissOptionsDialog, bundle)
+		}
+
+		// Setup an observe to watch for any changes to the alarm
+		navController.currentBackStackEntry
+			?.savedStateHandle
+			?.getLiveData<NacAlarm>("YOYOYO")
+			?.observe(this) { a ->
+
+				// Update the alarm
+				updateAlarm(a)
+
+			}
+
+	}
+
+	/**
 	 * Show a snackbar for the next alarm that will run.
 	 */
 	private fun showNextAlarmSnackbar()
@@ -1712,6 +1774,48 @@ class NacMainActivity
 
 		// Show the snackbar
 		snackbar.show()
+	}
+
+	/**
+	 * Show the snooze options dialog.
+	 */
+	private fun showSnoozeOptionsDialog(alarm: NacAlarm)
+	{
+		// Create bundle with the alarm
+		val bundle = Bundle().addAlarm(alarm)
+
+		// Set the graph of the nav controller and navigate to the dismiss option dialog
+		navController.setGraph(R.navigation.nav_alarm_options, bundle)
+
+		// Check if the current destination is set
+		if (navController.currentDestination != null)
+		{
+			// Create the navigation option to pop the main alarm option fragment from the graph
+			val options = NavOptions.Builder()
+				.setPopUpTo(R.id.nacAlarmOptionsDialog, true)
+				.build()
+
+			// Navigate to the snooze options dialog
+			navController.navigate(R.id.action_nacAlarmOptionsDialog_to_nacSnoozeOptionsDialog,
+				bundle, options)
+		}
+		else
+		{
+			// Navigate to the snooze options dialog directly
+			navController.navigate(R.id.nacSnoozeOptionsDialog, bundle)
+		}
+
+		// Setup an observe to watch for any changes to the alarm
+		navController.currentBackStackEntry
+			?.savedStateHandle
+			?.getLiveData<NacAlarm>("YOYOYO")
+			?.observe(this) { a ->
+
+				// Update the alarm
+				updateAlarm(a)
+
+			}
+
 	}
 
 	/**
