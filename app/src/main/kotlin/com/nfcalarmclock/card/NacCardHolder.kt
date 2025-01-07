@@ -60,6 +60,22 @@ class NacCardHolder(
 {
 
 	/**
+	 * Listener for when the dismiss options button is clicked.
+	 */
+	fun interface OnCardDismissOptionsClickedListener
+	{
+		fun onCardDismissOptionsClicked(holder: NacCardHolder, alarm: NacAlarm)
+	}
+
+	/**
+	 * Listener for when the snooze options button is clicked.
+	 */
+	fun interface OnCardSnoozeOptionsClickedListener
+	{
+		fun onCardSnoozeOptionsClicked(holder: NacCardHolder, alarm: NacAlarm)
+	}
+
+	/**
 	 * Listener for when the alarm options button is clicked.
 	 */
 	fun interface OnCardAlarmOptionsClickedListener
@@ -267,19 +283,39 @@ class NacCardHolder(
 	private val volumeSeekBar: SeekBar = root.findViewById(R.id.nac_volume_slider)
 
 	/**
-	 * Alarm options button.
-	 */
-	private val alarmOptionsButton: MaterialButton = root.findViewById(R.id.nac_alarm_options)
-
-	/**
 	 * Name button.
 	 */
 	private val nameButton: MaterialButton = root.findViewById(R.id.nac_name)
 
 	/**
-	 * Delete button.
+	 * Dismiss options button.
 	 */
-	private val deleteButton: MaterialButton = root.findViewById(R.id.nac_delete)
+	private val dismissOptionsButton: MaterialButton = root.findViewById(R.id.nac_dismiss_options)
+
+	/**
+	 * Snooze options button.
+	 */
+	private val snoozeOptionsButton: MaterialButton = root.findViewById(R.id.nac_snooze_options)
+
+	/**
+	 * Alarm options button.
+	 */
+	private val alarmOptionsButton: MaterialButton = root.findViewById(R.id.nac_alarm_options)
+
+	/**
+	 * The parent view that contains the collapse button.
+	 */
+	private val collapseParentView: LinearLayout = root.findViewById(R.id.nac_collapse_parent)
+
+	/**
+	 * The button to expand the alarm card.
+	 */
+	private val expandButton: MaterialButton = root.findViewById(R.id.nac_expand)
+
+	/**
+	 * The other button to expand the alarm card (there are 2).
+	 */
+	private val expandOtherButton: MaterialButton = root.findViewById(R.id.nac_expand_other)
 
 	/**
 	 * Card animator for collapsing and expanding.
@@ -301,6 +337,16 @@ class NacCardHolder(
 	// */
 	//private MaterialTimePicker mTimePicker;
 	//this.mTimePicker = null;
+
+	/**
+	 * Listener for when the dismiss options button is clicked.
+	 */
+	var onCardDismissOptionsClickedListener: OnCardDismissOptionsClickedListener? = null
+
+	/**
+	 * Listener for when the snooze options button is clicked.
+	 */
+	var onCardSnoozeOptionsClickedListener: OnCardSnoozeOptionsClickedListener? = null
 
 	/**
 	 * Listener for when the alarm options button is clicked.
@@ -352,30 +398,6 @@ class NacCardHolder(
 	 */
 	val context: Context
 		get() = root.context
-
-	/**
-	 * The button to collapse the alarm card.
-	 */
-	private val collapseButton: MaterialButton
-		get() = root.findViewById(R.id.nac_collapse)
-
-	/**
-	 * The parent view that contains the collapse button.
-	 */
-	private val collapseParentView: LinearLayout
-		get() = root.findViewById(R.id.nac_collapse_parent)
-
-	/**
-	 * The button to expand the alarm card.
-	 */
-	private val expandButton: MaterialButton
-		get() = root.findViewById(R.id.nac_expand)
-
-	/**
-	 * The other button to expand the alarm card (there are 2).
-	 */
-	private val expandOtherButton: MaterialButton
-		get() = root.findViewById(R.id.nac_expand_other)
 
 	/**
 	 * The height when the card is collapsed.
@@ -903,10 +925,10 @@ class NacCardHolder(
 		flashlightButton.setupRippleColor(sharedPreferences)
 		mediaButton.setupRippleColor(sharedPreferences)
 		volumeSeekBar.setupProgressAndThumbColor(sharedPreferences)
-		alarmOptionsButton.setupRippleColor(sharedPreferences)
 		nameButton.setupRippleColor(sharedPreferences)
-		deleteButton.setupRippleColor(sharedPreferences)
-		collapseButton.setupRippleColor(sharedPreferences)
+		dismissOptionsButton.setupRippleColor(sharedPreferences)
+		snoozeOptionsButton.setupRippleColor(sharedPreferences)
+		alarmOptionsButton.setupRippleColor(sharedPreferences)
 		expandButton.setupRippleColor(sharedPreferences)
 	}
 
@@ -928,10 +950,11 @@ class NacCardHolder(
 		setupNfcButtonListener()
 		setupFlashlightButtonListener()
 		setupMediaButtonListener()
-		setupAlarmOptionsListener()
 		setupVolumeSeekBarListener()
 		setupNameListener()
-		setupDeleteButtonListener()
+		setupDismissOptionsListener()
+		setupSnoozeOptionsListener()
+		setupAlarmOptionsListener()
 	}
 
 	/**
@@ -1609,12 +1632,11 @@ class NacCardHolder(
 		// id == R.id.nac_dismiss_parent
 		// id == R.id.nac_expand
 		// id == R.id.nac_expand_other
-		// id == R.id.nac_collapse
 		// id == R.id.nac_collapse_parent
 
 		// List of all the views that need the same on click listener for the card
 		val allCardViews = listOf(headerView, summaryView, extraBelowSummaryView,
-			expandButton, expandOtherButton, collapseButton, collapseParentView)
+			expandButton, expandOtherButton, collapseParentView)
 
 		// Iterate over all the main card views that will control expanding and
 		// collapsing the alarm
@@ -1680,27 +1702,6 @@ class NacCardHolder(
 	}
 
 	/**
-	 * Setup the delete button listener.
-	 */
-	private fun setupDeleteButtonListener()
-	{
-		// Set the listener
-		deleteButton.setOnClickListener { view ->
-
-			// Check if the alarm can be deleted
-			if (checkCanDeleteAlarm())
-			{
-				// Delete the alarm
-				delete()
-			}
-
-			// Haptic feedback
-			view.performHapticFeedback()
-
-		}
-	}
-
-	/**
 	 * Setup the dismiss button listener.
 	 */
 	@OptIn(UnstableApi::class)
@@ -1745,6 +1746,27 @@ class NacCardHolder(
 
 			// Call the listener
 			callOnCardUpdatedListener()
+
+			// Haptic feedback
+			view.performHapticFeedback()
+
+		}
+	}
+
+	/**
+	 * Setup the disimss options button listener.
+	 */
+	private fun setupDismissOptionsListener()
+	{
+		// Set the listener
+		dismissOptionsButton.setOnClickListener { view ->
+
+			// Check if the alarm can be modified
+			if (checkCanModifyAlarm())
+			{
+				// Call the listener for when the button is clicked
+				onCardDismissOptionsClickedListener?.onCardDismissOptionsClicked(this, alarm!!)
+			}
 
 			// Haptic feedback
 			view.performHapticFeedback()
@@ -1940,6 +1962,27 @@ class NacCardHolder(
 			}
 
 			true
+		}
+	}
+
+	/**
+	 * Setup the snooze options button listener.
+	 */
+	private fun setupSnoozeOptionsListener()
+	{
+		// Set the listener
+		snoozeOptionsButton.setOnClickListener { view ->
+
+			// Check if the alarm can be modified
+			if (checkCanModifyAlarm())
+			{
+				// Call the listener for when the button is clicked
+				onCardSnoozeOptionsClickedListener?.onCardSnoozeOptionsClicked(this, alarm!!)
+			}
+
+			// Haptic feedback
+			view.performHapticFeedback()
+
 		}
 	}
 
