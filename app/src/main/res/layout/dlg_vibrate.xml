@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<!-- Title -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Title"
+		android:id="@+id/vibration_duration_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Vibration duration"
+		/>
+
+	<!-- Description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:id="@+id/vibration_duration_description"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="How long to vibrate for, and how long to wait in between vibrations."
+		/>
+
+	<!-- Vibrate/wait durations -->
+	<RelativeLayout
+		style="@style/Widget.AlarmOptionDialog.Row"
+		android:id="@+id/vibration_on_off_duration"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<!-- On duration -->
+		<TextView
+			style="@style/Widget.TextView.Primary"
+			android:id="@+id/message_vibration_on_duration"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignTop="@id/vibration_on_duration_input_layout"
+			android:layout_alignBottom="@id/vibration_on_duration_input_layout"
+			android:layout_marginHorizontal="@dimen/normal"
+			android:gravity="center_vertical"
+			android:text="Vibrate:"
+			/>
+
+		<!-- How long to turn on for -->
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.AlarmOptionDialog.Dropdown"
+			android:id="@+id/vibration_on_duration_input_layout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_marginHorizontal="@dimen/normal"
+			android:layout_toEndOf="@id/message_vibration_on_duration">
+
+			<com.google.android.material.textfield.MaterialAutoCompleteTextView
+				android:id="@+id/vibration_on_duration_dropdown_menu"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="none"
+				app:simpleItems="@array/flashlight_on_off_duration_times"
+				/>
+		</com.google.android.material.textfield.TextInputLayout>
+
+		<!-- Wait duration -->
+		<TextView
+			style="@style/Widget.TextView.Primary"
+			android:id="@+id/message_vibration_off_duration"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignTop="@id/vibration_off_duration_input_layout"
+			android:layout_alignBottom="@id/vibration_off_duration_input_layout"
+			android:layout_below="@id/vibration_on_duration_input_layout"
+			android:layout_marginHorizontal="@dimen/normal"
+			android:gravity="center_vertical"
+			android:text="Wait:"
+			/>
+
+		<!-- How long to wait for -->
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.AlarmOptionDialog.Dropdown"
+			android:id="@+id/vibration_off_duration_input_layout"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_marginHorizontal="@dimen/normal"
+			android:layout_below="@id/vibration_on_duration_input_layout"
+			android:layout_toEndOf="@id/message_vibration_on_duration">
+
+			<com.google.android.material.textfield.MaterialAutoCompleteTextView
+				android:id="@+id/vibration_off_duration_dropdown_menu"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="none"
+				app:simpleItems="@array/flashlight_on_off_duration_times"
+				/>
+		</com.google.android.material.textfield.TextInputLayout>
+	</RelativeLayout>
+
+	<!-- Custom pattern title, description, and switch -->
+	<RelativeLayout
+		android:id="@+id/custom_pattern_container"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:clickable="true"
+		android:focusable="true">
+
+		<!-- Title -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Title"
+			android:id="@+id/custom_pattern_title"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_toStartOf="@id/custom_pattern_switch"
+			android:text="Custom pattern"
+			/>
+
+		<!-- Description -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Description"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/custom_pattern_title"
+			android:layout_toStartOf="@id/custom_pattern_switch"
+			android:text="Repeat the vibration duration a set number of times, and then wait for a duration."
+			/>
+
+		<!-- Switch -->
+		<androidx.appcompat.widget.SwitchCompat
+			android:id="@+id/custom_pattern_switch"
+			android:layout_width="@dimen/touch"
+			android:layout_height="@dimen/touch"
+			android:layout_alignParentEnd="true"
+			android:layout_centerVertical="true"
+			android:clickable="false"
+			/>
+	</RelativeLayout>
+
+	<!-- Repeat/wait durations -->
+	<RelativeLayout
+		style="@style/Widget.AlarmOptionDialog.Row"
+		android:id="@+id/custom_pattern_on_off_duration"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<!-- On duration -->
+		<TextView
+			style="@style/Widget.TextView.Primary"
+			android:id="@+id/message_custom_pattern_on_duration"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignTop="@id/custom_pattern_on_duration_input_layout"
+			android:layout_alignBottom="@id/custom_pattern_on_duration_input_layout"
+			android:layout_marginHorizontal="@dimen/normal"
+			android:gravity="center_vertical"
+			android:text="Repeat:"
+			/>
+
+		<!-- How long to turn on for -->
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.AlarmOptionDialog.Dropdown"
+			android:id="@+id/custom_pattern_on_duration_input_layout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_marginHorizontal="@dimen/normal"
+			android:layout_toEndOf="@id/message_custom_pattern_on_duration">
+
+			<com.google.android.material.textfield.MaterialAutoCompleteTextView
+				android:id="@+id/custom_pattern_on_duration_dropdown_menu"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="none"
+				app:simpleItems="@array/flashlight_on_off_duration_times"
+				/>
+		</com.google.android.material.textfield.TextInputLayout>
+
+		<!-- Off duration -->
+		<TextView
+			style="@style/Widget.TextView.Primary"
+			android:id="@+id/message_custom_pattern_off_duration"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignTop="@id/custom_pattern_off_duration_input_layout"
+			android:layout_alignBottom="@id/custom_pattern_off_duration_input_layout"
+			android:layout_below="@id/custom_pattern_on_duration_input_layout"
+			android:layout_marginHorizontal="@dimen/normal"
+			android:gravity="center_vertical"
+			android:text="Wait:"
+			/>
+
+		<!-- How long to turn off for -->
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.AlarmOptionDialog.Dropdown"
+			android:id="@+id/custom_pattern_off_duration_input_layout"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_marginHorizontal="@dimen/normal"
+			android:layout_below="@id/custom_pattern_on_duration_input_layout"
+			android:layout_toEndOf="@id/message_custom_pattern_on_duration">
+
+			<com.google.android.material.textfield.MaterialAutoCompleteTextView
+				android:id="@+id/custom_pattern_off_duration_dropdown_menu"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="none"
+				app:simpleItems="@array/flashlight_on_off_duration_times"
+				/>
+		</com.google.android.material.textfield.TextInputLayout>
+	</RelativeLayout>
+
+	<!-- Preview button -->
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/preview_button"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textColor="@color/white"
+		android:text="@string/action_preview"
+		app:backgroundTint="@color/gray_light"
+		/>
+
+</com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

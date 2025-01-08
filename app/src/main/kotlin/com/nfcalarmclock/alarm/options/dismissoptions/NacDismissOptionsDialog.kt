@@ -79,6 +79,14 @@ class NacDismissOptionsDialog
 	}
 
 	/**
+	 * Called when the alarm should be saved.
+	 */
+	override fun onSaveAlarm(alarm: NacAlarm?)
+	{
+		onSaveAlarmListener?.onSaveAlarm(alarm!!)
+	}
+
+	/**
 	 * Setup whether the auto dismiss views should be usable or not.
 	 */
 	private fun setAutoDismissUsability()
@@ -230,6 +238,16 @@ class NacDismissOptionsDialog
 			selectedShouldDeleteAlarmAfterDismissed = switch.isChecked
 
 		}
+	}
+
+	companion object
+	{
+
+		/**
+		 * Dialog name.
+		 */
+		const val TAG = "NacDismissOptionsDialog"
+
 	}
 
 }

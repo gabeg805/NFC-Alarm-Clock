@@ -24,14 +24,32 @@ abstract class NacGenericAlarmOptionsDialog
 {
 
 	/**
+	 * Interface to use to save the alarm, if the NavController is not used.
+	 */
+	fun interface OnSaveAlarmListener
+	{
+		fun onSaveAlarm(alarm: NacAlarm)
+	}
+
+	/**
 	 * Layout resource ID.
 	 */
 	abstract val layoutId: Int
 
 	/**
+	 * Save alarm listener. Should be used if the NavController is not used.
+	 */
+	var onSaveAlarmListener: OnSaveAlarmListener? = null
+
+	/**
 	 * Setup all alarm options.
 	 */
 	abstract fun setupAlarmOptions(alarm: NacAlarm?)
+
+	/**
+	 * Called when the Ok button is clicked.
+	 */
+	abstract fun onOkClicked(alarm: NacAlarm?)
 
 	/**
 	 * Setup any extra buttons.
@@ -41,15 +59,19 @@ abstract class NacGenericAlarmOptionsDialog
 	}
 
 	/**
-	 * Called when the Ok button is clicked.
-	 */
-	abstract fun onOkClicked(alarm: NacAlarm?)
-
-	/**
 	 * Called when the cancel button is clicked.
 	 */
 	open fun onCancelClicked(alarm: NacAlarm?)
 	{
+	}
+
+	/**
+	 * Called when the alarm should be saved.
+	 */
+	open fun onSaveAlarm(alarm: NacAlarm?)
+	{
+		// Save the change so that it is accessible in the previous dialog
+		findNavController().previousBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
 	}
 
 	/**
@@ -88,8 +110,8 @@ abstract class NacGenericAlarmOptionsDialog
 			// Call the ok clicked function
 			onOkClicked(alarm)
 
-			// Save the change so that it is accessible in the previous dialog
-			findNavController().previousBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
+			// Save the alarm
+			onSaveAlarm(alarm)
 
 			// Dismiss the dialog
 			dismiss()

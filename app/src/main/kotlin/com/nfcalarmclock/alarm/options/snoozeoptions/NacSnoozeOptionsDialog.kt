@@ -74,6 +74,14 @@ class NacSnoozeOptionsDialog
 	}
 
 	/**
+	 * Called when the alarm should be saved.
+	 */
+	override fun onSaveAlarm(alarm: NacAlarm?)
+	{
+		onSaveAlarmListener?.onSaveAlarm(alarm!!)
+	}
+
+	/**
 	 * Setup the usability of the auto snooze views.
 	 */
 	private fun setAutoSnoozeUsability()
@@ -222,6 +230,16 @@ class NacSnoozeOptionsDialog
 		relativeLayout.setOnClickListener {
 			easySnoozeSwitch.isChecked = !easySnoozeSwitch.isChecked
 		}
+	}
+
+	companion object
+	{
+
+		/**
+		 * Dialog name.
+		 */
+		const val TAG = "NacSnoozeOptionsDialog"
+
 	}
 
 }
