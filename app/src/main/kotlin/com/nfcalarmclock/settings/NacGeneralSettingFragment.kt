@@ -202,23 +202,23 @@ class NacGeneralSettingFragment
 							sharedPreferences!!.shouldRestrictVolume = a.shouldRestrictVolume
 						}
 
-						// Dismiss options
-						R.id.nacDismissOptionsDialog -> {
-							sharedPreferences!!.shouldAutoDismiss = a.shouldAutoDismiss
-							sharedPreferences!!.autoDismissTime = a.autoDismissTime
-							sharedPreferences!!.canDismissEarly = a.useDismissEarly
-							sharedPreferences!!.dismissEarlyTime = a.dismissEarlyTime
-							sharedPreferences!!.shouldDeleteAlarmAfterDismissed = a.shouldDeleteAlarmAfterDismissed
-						}
+						//// Dismiss options
+						//R.id.nacDismissOptionsDialog -> {
+						//	sharedPreferences!!.shouldAutoDismiss = a.shouldAutoDismiss
+						//	sharedPreferences!!.autoDismissTime = a.autoDismissTime
+						//	sharedPreferences!!.canDismissEarly = a.useDismissEarly
+						//	sharedPreferences!!.dismissEarlyTime = a.dismissEarlyTime
+						//	sharedPreferences!!.shouldDeleteAlarmAfterDismissed = a.shouldDeleteAlarmAfterDismissed
+						//}
 
-						// Snooze options
-						R.id.nacSnoozeOptionsDialog -> {
-							sharedPreferences!!.shouldAutoSnooze = a.shouldAutoSnooze
-							sharedPreferences!!.autoSnoozeTime = a.autoSnoozeTime
-							sharedPreferences!!.maxSnooze = a.maxSnooze
-							sharedPreferences!!.snoozeDuration = a.snoozeDuration
-							sharedPreferences!!.easySnooze = a.useEasySnooze
-						}
+						//// Snooze options
+						//R.id.nacSnoozeOptionsDialog -> {
+						//	sharedPreferences!!.shouldAutoSnooze = a.shouldAutoSnooze
+						//	sharedPreferences!!.autoSnoozeTime = a.autoSnoozeTime
+						//	sharedPreferences!!.maxSnooze = a.maxSnooze
+						//	sharedPreferences!!.snoozeDuration = a.snoozeDuration
+						//	sharedPreferences!!.easySnooze = a.useEasySnooze
+						//}
 
 						// Upcoming reminder
 						R.id.nacUpcomingReminderDialog -> {

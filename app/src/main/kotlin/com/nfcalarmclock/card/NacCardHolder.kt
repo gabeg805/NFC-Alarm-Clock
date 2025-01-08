@@ -592,33 +592,6 @@ class NacCardHolder(
 	}
 
 	/**
-	 * Check if the alarm can be deleted.
-	 */
-	private fun checkCanDeleteAlarm(): Boolean
-	{
-		// Alarm is active
-		if (alarm!!.isActive)
-		{
-			// Show toast that unable to delete an active alarm
-			quickToast(context, R.string.error_message_active_delete)
-		}
-		// Alarm is snoozed
-		else if (alarm!!.isSnoozed)
-		{
-			// Show a toast that unable to delete a snoozed alarm
-			quickToast(context, R.string.error_message_snoozed_delete)
-		}
-		// Alarm can be deleted
-		else
-		{
-			return true
-		}
-
-		// Unable to delete the alarm
-		return false
-	}
-
-	/**
 	 * Check if the alarm can be modified, and if it cannot, display toasts to the
 	 * user indicating as such.
 	 *

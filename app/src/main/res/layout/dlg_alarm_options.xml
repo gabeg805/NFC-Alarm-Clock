@@ -16,15 +16,6 @@
 		android:text="@string/action_alarm_option_audio_source"
 		/>
 
-	<!-- Flashlight -->
-	<Button
-		style="@style/Widget.AlarmOptionMain.Button"
-		android:id="@+id/alarm_option_flashlight"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:text="@string/action_alarm_option_flashlight"
-		/>
-
 	<!-- Text-to-speech -->
 	<Button
 		style="@style/Widget.AlarmOptionMain.Button"
@@ -46,22 +37,33 @@
 	<!-- Separator -->
 	<View style="@style/Widget.AlarmOptionMain.Separator" />
 
-	<!-- Dismiss options -->
+	<!-- Flashlight -->
 	<Button
 		style="@style/Widget.AlarmOptionMain.Button"
-		android:id="@+id/alarm_option_dismiss_options"
+		android:id="@+id/alarm_option_flashlight"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/action_alarm_option_dismiss_options"
+		android:text="@string/action_alarm_option_flashlight"
 		/>
 
-	<!-- Snooze options -->
+	<!-- NFC -->
+	<!--
 	<Button
 		style="@style/Widget.AlarmOptionMain.Button"
-		android:id="@+id/alarm_option_snooze_options"
+		android:id="@+id/alarm_option_nfc"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/action_alarm_option_snooze_options"
+		android:text="@string/title_alarm_nfc"
+		/>
+		-->
+
+	<!-- Vibrate -->
+	<Button
+		style="@style/Widget.AlarmOptionMain.Button"
+		android:id="@+id/alarm_option_vibrate"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/title_alarm_vibrate"
 		/>
 
 	<!-- Separator -->

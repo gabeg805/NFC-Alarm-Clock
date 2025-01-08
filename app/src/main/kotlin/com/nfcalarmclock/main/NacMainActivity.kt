@@ -37,6 +37,9 @@ import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmActivity
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
+import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog.OnSaveAlarmListener
+import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog
 import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerActivity
 import com.nfcalarmclock.alarm.options.nfc.NacNfc
 import com.nfcalarmclock.alarm.options.nfc.NacNfcTagViewModel
@@ -44,6 +47,7 @@ import com.nfcalarmclock.alarm.options.nfc.NacSaveNfcTagDialog
 import com.nfcalarmclock.alarm.options.nfc.NacScanNfcTagDialog
 import com.nfcalarmclock.alarm.options.nfc.NacScanNfcTagDialog.OnScanNfcTagListener
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
+import com.nfcalarmclock.alarm.options.snoozeoptions.NacSnoozeOptionsDialog
 import com.nfcalarmclock.card.NacCardAdapter
 import com.nfcalarmclock.card.NacCardAdapter.OnViewHolderBoundListener
 import com.nfcalarmclock.card.NacCardAdapter.OnViewHolderCreatedListener
@@ -1555,42 +1559,19 @@ class NacMainActivity
 	 */
 	private fun showDismissOptionsDialog(alarm: NacAlarm)
 	{
-		// Create bundle with the alarm
-		val bundle = Bundle().addAlarm(alarm)
+		// Create the dialog
+		val dialog = NacDismissOptionsDialog()
 
-		// Set the graph of the nav controller
-		navController.setGraph(R.navigation.nav_alarm_options, bundle)
+		// Add the alarm to the dialog
+		dialog.arguments = Bundle().addAlarm(alarm)
 
-		// Check if the current destination is set
-		if (navController.currentDestination != null)
-		{
-
-			// Create the navigation option to pop the main alarm option fragment from the graph
-			val options = NavOptions.Builder()
-				.setPopUpTo(R.id.nacAlarmOptionsDialog, true)
-				.build()
-
-			// Navigate to the dismiss option dialog
-			navController.navigate(R.id.action_nacAlarmOptionsDialog_to_nacDismissOptionsDialog,
-				bundle, options)
-		}
-		else
-		{
-			// Navigate to the dismiss option dialog directly
-			navController.navigate(R.id.nacDismissOptionsDialog, bundle)
+		// Set the listener to save the alarm
+		dialog.onSaveAlarmListener = OnSaveAlarmListener { a ->
+			updateAlarm(a)
 		}
 
-		// Setup an observe to watch for any changes to the alarm
-		navController.currentBackStackEntry
-			?.savedStateHandle
-			?.getLiveData<NacAlarm>("YOYOYO")
-			?.observe(this) { a ->
-
-				// Update the alarm
-				updateAlarm(a)
-
-			}
-
+		// Show the dialog
+		dialog.show(supportFragmentManager, NacDismissOptionsDialog.TAG)
 	}
 
 	/**
@@ -1781,41 +1762,19 @@ class NacMainActivity
 	 */
 	private fun showSnoozeOptionsDialog(alarm: NacAlarm)
 	{
-		// Create bundle with the alarm
-		val bundle = Bundle().addAlarm(alarm)
+		// Create the dialog
+		val dialog = NacSnoozeOptionsDialog()
 
-		// Set the graph of the nav controller and navigate to the dismiss option dialog
-		navController.setGraph(R.navigation.nav_alarm_options, bundle)
+		// Add the alarm to the dialog
+		dialog.arguments = Bundle().addAlarm(alarm)
 
-		// Check if the current destination is set
-		if (navController.currentDestination != null)
-		{
-			// Create the navigation option to pop the main alarm option fragment from the graph
-			val options = NavOptions.Builder()
-				.setPopUpTo(R.id.nacAlarmOptionsDialog, true)
-				.build()
-
-			// Navigate to the snooze options dialog
-			navController.navigate(R.id.action_nacAlarmOptionsDialog_to_nacSnoozeOptionsDialog,
-				bundle, options)
-		}
-		else
-		{
-			// Navigate to the snooze options dialog directly
-			navController.navigate(R.id.nacSnoozeOptionsDialog, bundle)
+		// Set the listener to save the alarm
+		dialog.onSaveAlarmListener = OnSaveAlarmListener { a ->
+			updateAlarm(a)
 		}
 
-		// Setup an observe to watch for any changes to the alarm
-		navController.currentBackStackEntry
-			?.savedStateHandle
-			?.getLiveData<NacAlarm>("YOYOYO")
-			?.observe(this) { a ->
-
-				// Update the alarm
-				updateAlarm(a)
-
-			}
-
+		// Show the dialog
+		dialog.show(supportFragmentManager, NacDismissOptionsDialog.TAG)
 	}
 
 	/**

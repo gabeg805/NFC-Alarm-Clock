@@ -10,12 +10,6 @@
 		android:name="com.nfcalarmclock.alarm.options.NacAlarmOptionsDialog"
 		android:label="NacAlarmOptionsDialog" >
 		<action
-			android:id="@+id/action_nacAlarmOptionsDialog_to_nacDismissOptionsDialog"
-			app:destination="@id/nacDismissOptionsDialog" />
-		<action
-			android:id="@+id/action_nacAlarmOptionsDialog_to_nacSnoozeOptionsDialog"
-			app:destination="@id/nacSnoozeOptionsDialog" />
-		<action
 			android:id="@+id/action_nacAlarmOptionsDialog_to_nacAudioSourceDialog"
 			app:destination="@id/nacAudioSourceDialog" />
 		<action
@@ -31,14 +25,6 @@
 			android:id="@+id/action_nacAlarmOptionsDialog_to_nacVolumeOptionsDialog"
 			app:destination="@id/nacVolumeOptionsDialog" />
 	</dialog>
-	<dialog
-		android:id="@+id/nacDismissOptionsDialog"
-		android:name="com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog"
-		android:label="NacDismissOptionsDialog" />
-	<dialog
-		android:id="@+id/nacSnoozeOptionsDialog"
-		android:name="com.nfcalarmclock.alarm.options.snoozeoptions.NacSnoozeOptionsDialog"
-		android:label="NacSnoozeOptionsDialog" />
 	<dialog
 		android:id="@+id/nacAudioSourceDialog"
 		android:name="com.nfcalarmclock.alarm.options.audiosource.NacAudioSourceDialog"

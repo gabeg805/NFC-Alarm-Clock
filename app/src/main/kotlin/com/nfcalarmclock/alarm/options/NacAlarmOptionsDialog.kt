@@ -68,11 +68,13 @@ class NacAlarmOptionsDialog
 		return when (id)
 		{
 			R.id.alarm_option_audio_source -> R.id.nacAudioSourceDialog
-			R.id.alarm_option_flashlight -> R.id.nacFlashlightOptionsDialog
 			R.id.alarm_option_text_to_speech -> R.id.nacTextToSpeechDialog
 			R.id.alarm_option_volume -> R.id.nacVolumeOptionsDialog
-			R.id.alarm_option_dismiss_options -> R.id.nacDismissOptionsDialog
-			R.id.alarm_option_snooze_options -> R.id.nacSnoozeOptionsDialog
+			R.id.alarm_option_flashlight -> R.id.nacFlashlightOptionsDialog
+			//R.id.alarm_option_nfc -> R.id.nacFlashlightOptionsDialog
+			R.id.alarm_option_vibrate -> R.id.nacFlashlightOptionsDialog
+			//R.id.alarm_option_dismiss_options -> R.id.nacDismissOptionsDialog
+			//R.id.alarm_option_snooze_options -> R.id.nacSnoozeOptionsDialog
 			R.id.alarm_option_upcoming_reminder -> R.id.nacUpcomingReminderDialog
 			else -> -1
 		}
