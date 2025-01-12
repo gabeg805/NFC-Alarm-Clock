@@ -100,6 +100,10 @@ class NacActiveAlarmService
 	private var autoSnoozeHandler: Handler? = null
 
 	/**
+	 */
+	private var vibrateWatchHandler: Handler? = null
+
+	/**
 	 * Time that the service was started, in milliseconds.
 	 */
 	private var startTime: Long = 0
@@ -116,6 +120,7 @@ class NacActiveAlarmService
 		// Cleanup the auto dismiss and snooze handler
 		autoDismissHandler?.removeCallbacksAndMessages(null)
 		autoSnoozeHandler?.removeCallbacksAndMessages(null)
+		vibrateWatchHandler?.removeCallbacksAndMessages(null)
 
 		// Check if a wake lock is held
 		if (wakeLock?.isHeld == true)
@@ -278,6 +283,7 @@ class NacActiveAlarmService
 		alarm = null
 		autoDismissHandler = Handler(mainLooper)
 		autoSnoozeHandler = Handler(mainLooper)
+		vibrateWatchHandler = Handler(mainLooper)
 
 		// Enable the activity alias so that tapping an NFC tag will open the main
 		// activity
@@ -365,7 +371,7 @@ class NacActiveAlarmService
 			return START_NOT_STICKY
 		}
 
-		// Check if the action is meant to skip this alarm
+		// Check if the action is NOT meant to skip this alarm
 		if (intentAction != ACTION_SKIP_SERVICE)
 		{
 			// Show the alarm notification
@@ -526,6 +532,17 @@ class NacActiveAlarmService
 			// Start the service in the foreground
 			startForeground(NacActiveAlarmNotification.ID,
 				notification.builder().build())
+
+			println("Should vibrate watch? ${alarm?.shouldVibratePattern}")
+			if (alarm?.shouldVibratePattern == true)
+			{
+				println("Vibrate delay? ${alarm?.vibrateWaitTimeAfterPattern}")
+				vibrateWatchHandler?.postDelayed({
+					println("VIBRATE WATCH")
+					showActiveAlarmNotification()
+												 },
+					alarm!!.vibrateWaitTimeAfterPattern * 2)
+			}
 		}
 		catch (e: Exception)
 		{

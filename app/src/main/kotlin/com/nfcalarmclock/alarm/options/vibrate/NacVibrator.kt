@@ -72,7 +72,7 @@ class NacVibrator(context: Context)
 	 */
 	@Suppress("deprecation")
 	@TargetApi(Build.VERSION_CODES.O)
-	private fun doVibrate(duration: Long, wait: Long)
+	private fun doVibrate(duration: Long)
 	{
 		// Cancel the previous vibration, if any
 		cleanup()
@@ -125,10 +125,10 @@ class NacVibrator(context: Context)
 	fun vibrate(duration: Long, wait: Long)
 	{
 		// Vibrate
-		doVibrate(duration, wait)
+		doVibrate(duration)
 
 		// Wait for a period of time before vibrating the device again
-		handler.postDelayed({ doVibrate(duration, wait) }, wait)
+		handler.postDelayed({ vibrate(duration, wait) }, duration+wait)
 	}
 
 	/**
@@ -147,36 +147,30 @@ class NacVibrator(context: Context)
 	{
 		// Vibrate
 		println("FIRST VIBRATE")
-		doVibrate(duration, wait)
+		doVibrate(duration)
 
 		// Increase the count
-		currentRepeatCount += 1
+		currentRepeatCount = (currentRepeatCount+1) % repeatPattern
+
+		// Get the correct wait time based on how many repetitions have occurred
+		val newWaitTime = if (currentRepeatCount == 0)
+		{
+			println("VIBRATE wait after pattern : $currentRepeatCount")
+			// The repeat count has been reached, so the wait time should be the pattern
+			// wait time
+			waitAfterPattern
+		}
+		else
+		{
+			println("VIBRATE normally : $currentRepeatCount")
+			// Wait normally
+			wait
+		}
 
 		// Wait for a period of time before vibrating the device again
 		handler.postDelayed({
-
-			// Check the current repeat count
-			if (currentRepeatCount+1 == repeatPattern)
-			{
-				println("VIBRATE wait after pattern : $currentRepeatCount")
-				// This is the last repeat before reaching the limit, so the wait time
-				// should be the pattern wait time
-				vibrate(duration, waitAfterPattern)
-
-				// Reset the repeat count
-				currentRepeatCount = 0
-			}
-			else
-			{
-				println("VIBRATE normally : $currentRepeatCount")
-				// Vibrate normally
-				vibrate(duration, wait)
-
-				// Increase the count
-				currentRepeatCount += 1
-			}
-
-		}, wait)
+			vibrate(duration, wait, repeatPattern, waitAfterPattern)
+		}, duration+newWaitTime)
 	}
 
 }

@@ -5,11 +5,7 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
-		<item>Added support for &lt;b>direct boot&lt;/b>, so that alarms can run when the device is powered on, but has not been unlocked yet.</item>
-		<item>Added &lt;b>clock widget&lt;/b> for home screen.</item>
-		<item>Added &lt;b>system file chooser&lt;/b> button when choosing a song for an alarm.</item>
-		<item>Added translations for &lt;b>Bengali&lt;/b>, &lt;b>Hindi&lt;/b>, and &lt;b>Brazilian Portuguese&lt;/b>.</item>
-		<item>Updated auto dismiss, auto snooze, and snooze duration to allow setting the &lt;b>seconds&lt;/b>, as well as minutes.</item>
+		<item>Update in progress.</item>
 	</string-array>
 
 </resources>
