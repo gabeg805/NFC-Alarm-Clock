@@ -10,8 +10,8 @@
 		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
 			android:title="@string/title_new_screen"
 			android:key="@string/key_use_new_alarm_screen"
-			android:summaryOn="@string/description_new_screen_true"
-			android:summaryOff="@string/description_new_screen_false"
+			android:summaryOn="@string/description_use_new_screen_true"
+			android:summaryOff="@string/description_use_new_screen_false"
 			android:defaultValue="@bool/default_use_new_alarm_screen"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
@@ -19,28 +19,38 @@
 
 		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
 			android:title="@string/title_show_alarm_name"
-			android:key="@string/key_show_alarm_name"
-			android:summaryOn="@string/description_show_alarm_name_true"
-			android:summaryOff="@string/description_show_alarm_name_false"
-			android:defaultValue="@bool/default_show_alarm_name"
+			android:key="@string/key_alarm_screen_show_alarm_name"
+			android:summaryOn="@string/description_alarm_screen_show_alarm_name_true"
+			android:summaryOff="@string/description_alarm_screen_show_alarm_name_false"
+			android:defaultValue="@bool/default_alarm_screen_show_alarm_name"
 			/>
 
 		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
 			android:title="@string/title_show_current_date_and_time"
-			android:key="@string/key_show_current_date_and_time"
-			android:summaryOn="@string/description_show_current_date_and_time_true"
-			android:summaryOff="@string/description_show_current_date_and_time_false"
-			android:defaultValue="@bool/default_show_current_date_and_time"
+			android:key="@string/key_alarm_screen_show_current_date_and_time"
+			android:summaryOn="@string/description_alarm_screen_show_current_date_and_time_true"
+			android:summaryOff="@string/description_alarm_screen_show_current_date_and_time_false"
+			android:defaultValue="@bool/default_alarm_screen_show_current_date_and_time"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="false"
 			/>
 
 		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
 			android:title="@string/title_show_music_info"
-			android:key="@string/key_show_music_info"
-			android:summaryOn="@string/description_show_music_info_true"
-			android:summaryOff="@string/description_show_music_info_false"
-			android:defaultValue="@bool/default_show_music_info"
+			android:key="@string/key_alarm_screen_show_music_info"
+			android:summaryOn="@string/description_alarm_screen_show_music_info_true"
+			android:summaryOff="@string/description_alarm_screen_show_music_info_false"
+			android:defaultValue="@bool/default_alarm_screen_show_music_info"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
+			android:title="@string/title_battery_saver"
+			android:key="@string/key_alarm_screen_battery_saver"
+			android:summaryOn="@string/description_alarm_screen_battery_saver_true"
+			android:summaryOff="@string/description_alarm_screen_battery_saver_false"
+			android:defaultValue="@bool/default_alarm_screen_battery_saver"
 			app:allowDividerAbove="false"
 			app:allowDividerBelow="true"
 			/>
@@ -52,7 +62,7 @@
 
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 			android:title="@string/title_theme_color"
-			android:key="@string/theme_color_key"
+			android:key="@string/key_color_theme"
 			android:summary="@string/description_color_theme"
 			android:defaultValue="@integer/default_theme_color"
 			app:allowDividerAbove="false"
@@ -61,7 +71,7 @@
 
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 			android:title="@string/title_alarm_name"
-			android:key="@string/name_color_key"
+			android:key="@string/key_color_name"
 			android:summary="@string/description_color_name"
 			android:defaultValue="@integer/default_name_color"
 			app:allowDividerBelow="false"
@@ -69,7 +79,7 @@
 
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 			android:title="@string/title_alarm_days"
-			android:key="@string/days_color_key"
+			android:key="@string/key_color_days"
 			android:summary="@string/description_color_days"
 			android:defaultValue="@integer/default_days_color"
 			app:allowDividerBelow="false"
@@ -77,7 +87,7 @@
 
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 			android:title="@string/title_time"
-			android:key="@string/time_color_key"
+			android:key="@string/key_color_time"
 			android:summary="@string/description_color_time"
 			android:defaultValue="@integer/default_time_color"
 			app:allowDividerBelow="false"
@@ -85,7 +95,7 @@
 
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 			android:title="@string/am"
-			android:key="@string/am_color_key"
+			android:key="@string/key_color_am"
 			android:summary="@string/description_color_am"
 			android:defaultValue="@integer/default_am_color"
 			app:allowDividerBelow="false"
@@ -93,7 +103,7 @@
 
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 			android:title="@string/pm"
-			android:key="@string/pm_color_key"
+			android:key="@string/key_color_pm"
 			android:summary="@string/description_color_pm"
 			android:defaultValue="@integer/default_pm_color"
 			app:allowDividerBelow="false"
@@ -101,7 +111,7 @@
 
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 			android:title="@string/action_delete_alarm_after_dismissed"
-			android:key="@string/delete_after_dismissed_color_key"
+			android:key="@string/key_color_delete_after_dismissed"
 			android:summary="@string/description_color_delete_alarm_after_dismissed"
 			android:defaultValue="@integer/default_delete_alarm_after_dismissed_color"
 			app:allowDividerBelow="false"
@@ -109,7 +119,7 @@
 
 		<com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
 			android:title="@string/action_skip_next_alarm"
-			android:key="@string/skip_next_alarm_color_key"
+			android:key="@string/key_color_skip_next_alarm"
 			android:summary="@string/description_color_skip_next_alarm"
 			android:defaultValue="@integer/default_skip_next_alarm_color"
 			app:allowDividerAbove="false"

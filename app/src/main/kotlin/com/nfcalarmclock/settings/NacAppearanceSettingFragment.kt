@@ -89,14 +89,14 @@ class NacAppearanceSettingFragment
 	private fun setupColorPickerOnClickListeners()
 	{
 		// Get the keys
-		val themeKey = getString(R.string.theme_color_key)
-		val nameKey = getString(R.string.name_color_key)
-		val dayKey = getString(R.string.days_color_key)
-		val timeKey = getString(R.string.time_color_key)
-		val amKey = getString(R.string.am_color_key)
-		val pmKey = getString(R.string.pm_color_key)
-		val deleteAfterDismissedKey = getString(R.string.delete_after_dismissed_color_key)
-		val skipNextAlarmKey = getString(R.string.skip_next_alarm_color_key)
+		val themeKey = getString(R.string.key_color_theme)
+		val nameKey = getString(R.string.key_color_name)
+		val dayKey = getString(R.string.key_color_days)
+		val timeKey = getString(R.string.key_color_time)
+		val amKey = getString(R.string.key_color_am)
+		val pmKey = getString(R.string.key_color_pm)
+		val deleteAfterDismissedKey = getString(R.string.key_color_delete_after_dismissed)
+		val skipNextAlarmKey = getString(R.string.key_color_skip_next_alarm)
 
 		// Get the color preferences
 		val themePref = findPreference<NacColorPickerPreference>(themeKey)
@@ -134,14 +134,14 @@ class NacAppearanceSettingFragment
 	private fun setupColorPreferences()
 	{
 		// Get the keys
-		val themeKey = getString(R.string.theme_color_key)
-		val nameKey = getString(R.string.name_color_key)
-		val dayKey = getString(R.string.days_color_key)
-		val timeKey = getString(R.string.time_color_key)
-		val amKey = getString(R.string.am_color_key)
-		val pmKey = getString(R.string.pm_color_key)
-		val deleteAfterDismissedKey = getString(R.string.delete_after_dismissed_color_key)
-		val skipNextAlarmKey = getString(R.string.skip_next_alarm_color_key)
+		val themeKey = getString(R.string.key_color_theme)
+		val nameKey = getString(R.string.key_color_name)
+		val dayKey = getString(R.string.key_color_days)
+		val timeKey = getString(R.string.key_color_time)
+		val amKey = getString(R.string.key_color_am)
+		val pmKey = getString(R.string.key_color_pm)
+		val deleteAfterDismissedKey = getString(R.string.key_color_delete_after_dismissed)
+		val skipNextAlarmKey = getString(R.string.key_color_skip_next_alarm)
 
 		// Put the keys in a list
 		val allKeys = arrayOf(themeKey, nameKey, dayKey, timeKey, amKey, pmKey,
@@ -203,8 +203,8 @@ class NacAppearanceSettingFragment
 	private fun setupDependentNewAlarmScreenPreferences(enabled: Boolean)
 	{
 		// Get the keys
-		val currentDateAndTimeKey = getString(R.string.key_show_current_date_and_time)
-		val musicInfoKey = getString(R.string.key_show_music_info)
+		val currentDateAndTimeKey = getString(R.string.key_alarm_screen_show_current_date_and_time)
+		val musicInfoKey = getString(R.string.key_alarm_screen_show_music_info)
 
 		// Get the dependent preferences
 		val currentDateAndTimePref = findPreference<NacCheckboxPreference>(currentDateAndTimeKey)!!
