@@ -185,7 +185,7 @@ fun Intent.getSetAlarm(context: Context): NacAlarm?
 		isSet = true
 
 		// Add to the alarm
-		alarm.vibrate = vibrate
+		alarm.shouldVibrate = vibrate
 	}
 
 	//getBooleanExtra(AlarmClock.EXTRA_SKIP_UI);

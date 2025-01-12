@@ -394,9 +394,6 @@ class NacActiveAlarmActivity
 
 		// Keep screen on
 		window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-
-		// Allow lock screen when screen is turned on
-		//window.addFlags(WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
 	}
 
 	companion object

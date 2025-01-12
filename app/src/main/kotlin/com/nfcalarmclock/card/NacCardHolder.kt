@@ -1650,7 +1650,7 @@ class NacCardHolder(
 				if (!alarm!!.areDaysSelected)
 				{
 					// Disable repeat
-					alarm!!.repeat = false
+					alarm!!.shouldRepeat = false
 				}
 
 				// Setup the views
@@ -1919,7 +1919,7 @@ class NacCardHolder(
 				alarm!!.shouldSkipNextAlarm = false
 
 				// Disable the repeat button
-				alarm!!.repeat = false
+				alarm!!.shouldRepeat = false
 
 				// Clear out the selected days
 				alarm!!.setDays(0)

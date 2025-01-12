@@ -36,7 +36,7 @@
 
 		<!-- Vibrate -->
 		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
-			android:key="@string/alarm_vibrate_key"
+			android:key="@string/alarm_should_vibrate_key"
 			android:title="@string/title_alarm_vibrate"
 			android:summaryOn="@string/description_alarm_vibrate_true"
 			android:summaryOff="@string/description_alarm_vibrate_false"

@@ -1,12 +1,7 @@
 package com.nfcalarmclock.alarm.activealarm
 
-import android.annotation.TargetApi
 import android.content.Context
-import android.os.Build
 import android.os.Handler
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.os.VibratorManager
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
@@ -16,13 +11,13 @@ import com.nfcalarmclock.alarm.options.flashlight.NacFlashlight
 import com.nfcalarmclock.alarm.options.tts.NacTextToSpeech
 import com.nfcalarmclock.alarm.options.tts.NacTextToSpeech.OnSpeakingListener
 import com.nfcalarmclock.alarm.options.tts.NacTranslate
-import com.nfcalarmclock.util.media.NacAudioAttributes
-import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
+import com.nfcalarmclock.alarm.options.vibrate.NacVibrator
 import com.nfcalarmclock.shared.NacSharedPreferences
+import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
 import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
+import com.nfcalarmclock.util.media.NacAudioAttributes
 import com.nfcalarmclock.util.media.isMediaDirectory
-import java.lang.IllegalArgumentException
 import java.util.Calendar
 
 /**
@@ -64,11 +59,6 @@ class NacWakeupProcess(
 	 * Audio attributes.
 	 */
 	private var audioAttributes: NacAudioAttributes = NacAudioAttributes(context, alarm)
-
-	/**
-	 * Vibrate handler to vibrate the phone at periodic intervals.
-	 */
-	private val vibrateHandler: Handler = Handler(context.mainLooper)
 
 	/**
 	 * Say the current time at user specified intervals.
@@ -116,6 +106,11 @@ class NacWakeupProcess(
 	 */
 	private val shouldUseFlashlight: Boolean
 		get() = alarm.useFlashlight && sharedPreferences.shouldShowFlashlightButton
+
+	/**
+	 * Vibrate the device.
+	 */
+	private val vibrator: NacVibrator? = if (shouldVibrate) NacVibrator(context) else null
 
 	/**
 	 * Flashlight.
@@ -166,34 +161,6 @@ class NacWakeupProcess(
 	}
 
 	/**
-	 * Vibrator object to vibrate the phone.
-	 */
-	@Suppress("deprecation")
-	private val vibrator: Vibrator? = if (shouldVibrate)
-	{
-		// Check the Android API
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-		{
-			// Get the manager
-			val manager = context.getSystemService(
-				Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
-
-			// Return the vibrator
-			manager.defaultVibrator
-		}
-		// Use the old API
-		else
-		{
-			// Return the vibrator
-			context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-		}
-	}
-	else
-	{
-		null
-	}
-
-	/**
 	 * Text-to-speech engine.
 	 */
 	private val textToSpeech: NacTextToSpeech? = if (alarm.shouldUseTts)
@@ -216,7 +183,7 @@ class NacWakeupProcess(
 			override fun onStartSpeaking()
 			{
 				// Stop any vibration when TTS is playing
-				cleanupVibrate()
+				vibrator?.cleanup()
 
 				// Use handler to start wake up process so that the media
 				// player is accessed on the correct thread
@@ -295,7 +262,7 @@ class NacWakeupProcess(
 	fun cleanup()
 	{
 		// Cleanup vibrate
-		cleanupVibrate()
+		vibrator?.cleanup()
 
 		// Cleanup the flashlight
 		flashlight?.cleanup()
@@ -323,18 +290,6 @@ class NacWakeupProcess(
 
 		// Cleanup the restrict volume handler
 		restrictVolumeHandler.removeCallbacksAndMessages(null)
-	}
-
-	/**
-	 * Cleanup vibrating the phone.
-	 */
-	private fun cleanupVibrate()
-	{
-		// Stop any current vibrations
-		vibrator?.cancel()
-
-		// Stop any future vibrations from occuring
-		vibrateHandler.removeCallbacksAndMessages(null)
 	}
 
 	/**
@@ -536,7 +491,7 @@ class NacWakeupProcess(
 		// Vibrate
 		if (shouldVibrate)
 		{
-			vibrate()
+			vibrator?.vibrate(alarm)
 		}
 
 		// Flashlight
@@ -599,49 +554,6 @@ class NacWakeupProcess(
 		{
 			simpleStart()
 		}
-	}
-
-	/**
-	 * Vibrate the phone repeatedly until the alarm is dismissed.
-	 */
-	@Suppress("deprecation")
-	@TargetApi(Build.VERSION_CODES.O)
-	fun vibrate()
-	{
-		// Unable to vibrate. Vibrator is not set yet, or alarm is not set yet, or
-		// alarm should not vibrate
-		if (vibrator == null)
-		{
-			return
-		}
-
-		// Cancel the previous vibration, if any
-		cleanupVibrate()
-
-		// Set the amount of time to vibrate, and the amount of time to wait in
-		// between vibrations
-		val duration = 500L
-		val waitTime = 1000 + duration
-
-		// Check if the new API needs to be used
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-		{
-			// Create the vibration effect
-			val effect = VibrationEffect.createOneShot(duration,
-				VibrationEffect.DEFAULT_AMPLITUDE)
-
-			// Vibrate
-			vibrator.vibrate(effect)
-		}
-		// The old API can be used
-		else
-		{
-			// Vibrate
-			vibrator.vibrate(duration)
-		}
-
-		// Wait for a period of time before vibrating the phone again
-		vibrateHandler.postDelayed({ vibrate() }, waitTime)
 	}
 
 }

@@ -2,6 +2,7 @@
 <com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
@@ -11,7 +12,7 @@
 		android:id="@+id/vibration_duration_title"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="Vibration duration"
+		android:text="@string/title_vibrate_vibration_duration"
 		/>
 
 	<!-- Description -->
@@ -20,82 +21,101 @@
 		android:id="@+id/vibration_duration_description"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="How long to vibrate for, and how long to wait in between vibrations."
+		android:text="@string/description_vibrate_vibration_duration"
 		/>
 
 	<!-- Vibrate/wait durations -->
 	<RelativeLayout
 		style="@style/Widget.AlarmOptionDialog.Row"
-		android:id="@+id/vibration_on_off_duration"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
 
 		<!-- On duration -->
-		<TextView
-			style="@style/Widget.TextView.Primary"
-			android:id="@+id/message_vibration_on_duration"
+		<LinearLayout
+			android:id="@+id/message_vibrate_on"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_alignTop="@id/vibration_on_duration_input_layout"
-			android:layout_alignBottom="@id/vibration_on_duration_input_layout"
-			android:layout_marginHorizontal="@dimen/normal"
+			android:layout_alignTop="@id/vibrate_on_slider"
+			android:layout_alignBottom="@id/vibrate_on_slider"
+			android:layout_marginHorizontal="@dimen/medium"
 			android:gravity="center_vertical"
-			android:text="Vibrate:"
-			/>
+			android:orientation="vertical">
+
+			<TextView
+				style="@style/Widget.TextView.Primary"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/title_alarm_vibrate"
+				/>
+
+			<TextView
+				style="@style/Widget.TextView.Secondary"
+				android:id="@+id/message_vibrate_on_value"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/tsz_caption"
+				android:text=""
+				/>
+		</LinearLayout>
 
 		<!-- How long to turn on for -->
-		<com.google.android.material.textfield.TextInputLayout
-			style="@style/Widget.AlarmOptionDialog.Dropdown"
-			android:id="@+id/vibration_on_duration_input_layout"
+		<com.google.android.material.slider.Slider
+			android:id="@+id/vibrate_on_slider"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
-			android:layout_marginHorizontal="@dimen/normal"
-			android:layout_toEndOf="@id/message_vibration_on_duration">
-
-			<com.google.android.material.textfield.MaterialAutoCompleteTextView
-				android:id="@+id/vibration_on_duration_dropdown_menu"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:inputType="none"
-				app:simpleItems="@array/flashlight_on_off_duration_times"
-				/>
-		</com.google.android.material.textfield.TextInputLayout>
-
-		<!-- Wait duration -->
-		<TextView
-			style="@style/Widget.TextView.Primary"
-			android:id="@+id/message_vibration_off_duration"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignTop="@id/vibration_off_duration_input_layout"
-			android:layout_alignBottom="@id/vibration_off_duration_input_layout"
-			android:layout_below="@id/vibration_on_duration_input_layout"
-			android:layout_marginHorizontal="@dimen/normal"
-			android:gravity="center_vertical"
-			android:text="Wait:"
+			android:layout_toEndOf="@id/message_vibrate_on"
+			android:layout_marginVertical="@dimen/tiny"
+			android:valueFrom="100"
+			android:valueTo="5000"
+			android:stepSize="100"
 			/>
 
-		<!-- How long to wait for -->
-		<com.google.android.material.textfield.TextInputLayout
-			style="@style/Widget.AlarmOptionDialog.Dropdown"
-			android:id="@+id/vibration_off_duration_input_layout"
-			android:layout_width="fill_parent"
+		<!-- Wait duration -->
+		<LinearLayout
+			android:id="@+id/message_vibrate_off"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
-			android:layout_marginHorizontal="@dimen/normal"
-			android:layout_below="@id/vibration_on_duration_input_layout"
-			android:layout_toEndOf="@id/message_vibration_on_duration">
+			android:layout_alignTop="@id/vibrate_off_slider"
+			android:layout_alignBottom="@id/vibrate_off_slider"
+			android:layout_below="@id/vibrate_on_slider"
+			android:layout_marginHorizontal="@dimen/medium"
+			android:gravity="center_vertical"
+			android:orientation="vertical">
 
-			<com.google.android.material.textfield.MaterialAutoCompleteTextView
-				android:id="@+id/vibration_off_duration_dropdown_menu"
-				android:layout_width="match_parent"
+			<TextView
+				style="@style/Widget.TextView.Primary"
+				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:inputType="none"
-				app:simpleItems="@array/flashlight_on_off_duration_times"
+				android:gravity="center_vertical"
+				android:text="@string/title_vibrate_wait"
 				/>
-		</com.google.android.material.textfield.TextInputLayout>
+
+			<TextView
+				style="@style/Widget.TextView.Secondary"
+				android:id="@+id/message_vibrate_off_value"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/tsz_caption"
+				android:text=""
+				/>
+		</LinearLayout>
+
+		<!-- How long to wait for -->
+		<com.google.android.material.slider.Slider
+			android:id="@+id/vibrate_off_slider"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_toEndOf="@id/message_vibrate_on"
+			android:layout_below="@id/vibrate_on_slider"
+			android:layout_marginTop="@dimen/small"
+			android:valueFrom="100"
+			android:valueTo="5000"
+			android:stepSize="100"
+			/>
 	</RelativeLayout>
+
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
 
 	<!-- Custom pattern title, description, and switch -->
 	<RelativeLayout
@@ -112,7 +132,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_toStartOf="@id/custom_pattern_switch"
-			android:text="Custom pattern"
+			android:text="@string/title_vibrate_custom_pattern"
 			/>
 
 		<!-- Description -->
@@ -122,7 +142,7 @@
 			android:layout_height="wrap_content"
 			android:layout_below="@id/custom_pattern_title"
 			android:layout_toStartOf="@id/custom_pattern_switch"
-			android:text="Repeat the vibration duration a set number of times, and then wait for a duration."
+			android:text="@string/description_vibrate_custom_pattern"
 			/>
 
 		<!-- Switch -->
@@ -139,75 +159,94 @@
 	<!-- Repeat/wait durations -->
 	<RelativeLayout
 		style="@style/Widget.AlarmOptionDialog.Row"
-		android:id="@+id/custom_pattern_on_off_duration"
+		android:id="@+id/custom_pattern_repeat_wait_layout"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
 
-		<!-- On duration -->
-		<TextView
-			style="@style/Widget.TextView.Primary"
-			android:id="@+id/message_custom_pattern_on_duration"
+		<!-- Repeat -->
+		<LinearLayout
+			android:id="@+id/message_custom_pattern_repeat"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_alignTop="@id/custom_pattern_on_duration_input_layout"
-			android:layout_alignBottom="@id/custom_pattern_on_duration_input_layout"
-			android:layout_marginHorizontal="@dimen/normal"
+			android:layout_alignTop="@id/custom_pattern_repeat_slider"
+			android:layout_alignBottom="@id/custom_pattern_repeat_slider"
+			android:layout_marginHorizontal="@dimen/medium"
 			android:gravity="center_vertical"
-			android:text="Repeat:"
-			/>
+			android:orientation="vertical">
 
-		<!-- How long to turn on for -->
-		<com.google.android.material.textfield.TextInputLayout
-			style="@style/Widget.AlarmOptionDialog.Dropdown"
-			android:id="@+id/custom_pattern_on_duration_input_layout"
+			<TextView
+				style="@style/Widget.TextView.Primary"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingEnd="@dimen/nudge"
+				android:text="@string/title_alarm_repeat"
+				tools:ignore="RtlSymmetry"
+				/>
+
+			<TextView
+				style="@style/Widget.TextView.Secondary"
+				android:id="@+id/essage_custom_pattern_repeat2"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/tsz_caption"
+				android:text=""
+				/>
+		</LinearLayout>
+
+		<!-- How many times to repeat -->
+		<com.google.android.material.slider.Slider
+			android:id="@+id/custom_pattern_repeat_slider"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
-			android:layout_marginHorizontal="@dimen/normal"
-			android:layout_toEndOf="@id/message_custom_pattern_on_duration">
-
-			<com.google.android.material.textfield.MaterialAutoCompleteTextView
-				android:id="@+id/custom_pattern_on_duration_dropdown_menu"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:inputType="none"
-				app:simpleItems="@array/flashlight_on_off_duration_times"
-				/>
-		</com.google.android.material.textfield.TextInputLayout>
-
-		<!-- Off duration -->
-		<TextView
-			style="@style/Widget.TextView.Primary"
-			android:id="@+id/message_custom_pattern_off_duration"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignTop="@id/custom_pattern_off_duration_input_layout"
-			android:layout_alignBottom="@id/custom_pattern_off_duration_input_layout"
-			android:layout_below="@id/custom_pattern_on_duration_input_layout"
-			android:layout_marginHorizontal="@dimen/normal"
-			android:gravity="center_vertical"
-			android:text="Wait:"
+			android:layout_toEndOf="@id/message_custom_pattern_repeat"
+			android:layout_marginVertical="@dimen/tiny"
+			android:valueFrom="2"
+			android:valueTo="5"
+			android:stepSize="1"
 			/>
 
-		<!-- How long to turn off for -->
-		<com.google.android.material.textfield.TextInputLayout
-			style="@style/Widget.AlarmOptionDialog.Dropdown"
-			android:id="@+id/custom_pattern_off_duration_input_layout"
-			android:layout_width="fill_parent"
+		<!-- Wait duration -->
+		<LinearLayout
+			android:id="@+id/message_custom_pattern_wait"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
-			android:layout_marginHorizontal="@dimen/normal"
-			android:layout_below="@id/custom_pattern_on_duration_input_layout"
-			android:layout_toEndOf="@id/message_custom_pattern_on_duration">
+			android:layout_alignTop="@id/custom_pattern_wait_slider"
+			android:layout_alignBottom="@id/custom_pattern_wait_slider"
+			android:layout_below="@id/custom_pattern_repeat_slider"
+			android:layout_marginHorizontal="@dimen/medium"
+			android:gravity="center_vertical"
+			android:orientation="vertical">
 
-			<com.google.android.material.textfield.MaterialAutoCompleteTextView
-				android:id="@+id/custom_pattern_off_duration_dropdown_menu"
-				android:layout_width="match_parent"
+			<TextView
+				style="@style/Widget.TextView.Primary"
+				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:inputType="none"
-				app:simpleItems="@array/flashlight_on_off_duration_times"
+				android:gravity="center_vertical"
+				android:text="@string/title_vibrate_wait"
 				/>
-		</com.google.android.material.textfield.TextInputLayout>
+
+			<TextView
+				style="@style/Widget.TextView.Secondary"
+				android:id="@+id/message_custom_pattern_wait_value"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/tsz_caption"
+				android:text=""
+				/>
+		</LinearLayout>
+
+		<!-- How long to turn off for -->
+		<com.google.android.material.slider.Slider
+			android:id="@+id/custom_pattern_wait_slider"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/custom_pattern_repeat_slider"
+			android:layout_toEndOf="@id/message_custom_pattern_repeat"
+			android:layout_marginTop="@dimen/small"
+			android:valueFrom="100"
+			android:valueTo="5000"
+			android:stepSize="100"
+			/>
 	</RelativeLayout>
 
 	<!-- Preview button -->

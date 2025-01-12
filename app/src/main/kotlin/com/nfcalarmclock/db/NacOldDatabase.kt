@@ -434,9 +434,9 @@ class NacOldDatabase(
 				alarm.hour = cursor.getInt(3)
 				alarm.minute = cursor.getInt(4)
 				alarm.days = NacCalendar.Day.valueToDays(cursor.getInt(5))
-				alarm.repeat = cursor.getInt(6) != 0
-				alarm.useNfc = cursor.getInt(7) != 0
-				alarm.vibrate = cursor.getInt(8) != 0
+				alarm.shouldRepeat = cursor.getInt(6) != 0
+				alarm.shouldUseNfc = cursor.getInt(7) != 0
+				alarm.shouldVibrate = cursor.getInt(8) != 0
 				alarm.volume = cursor.getInt(9)
 				alarm.audioSource = cursor.getString(10)
 				alarm.mediaType = cursor.getInt(11)
@@ -452,9 +452,9 @@ class NacOldDatabase(
 				alarm.hour = cursor.getInt(3)
 				alarm.minute = cursor.getInt(4)
 				alarm.days = NacCalendar.Day.valueToDays(cursor.getInt(5))
-				alarm.repeat = cursor.getInt(6) != 0
-				alarm.useNfc = cursor.getInt(7) != 0
-				alarm.vibrate = cursor.getInt(8) != 0
+				alarm.shouldRepeat = cursor.getInt(6) != 0
+				alarm.shouldUseNfc = cursor.getInt(7) != 0
+				alarm.shouldVibrate = cursor.getInt(8) != 0
 				alarm.volume = cursor.getInt(9)
 				alarm.audioSource = cursor.getString(10)
 				alarm.mediaType = cursor.getInt(11)
@@ -470,9 +470,9 @@ class NacOldDatabase(
 				alarm.hour = cursor.getInt(3)
 				alarm.minute = cursor.getInt(4)
 				alarm.days = NacCalendar.Day.valueToDays(cursor.getInt(5))
-				alarm.repeat = cursor.getInt(6) != 0
-				alarm.useNfc = cursor.getInt(7) != 0
-				alarm.vibrate = cursor.getInt(8) != 0
+				alarm.shouldRepeat = cursor.getInt(6) != 0
+				alarm.shouldUseNfc = cursor.getInt(7) != 0
+				alarm.shouldVibrate = cursor.getInt(8) != 0
 				alarm.volume = cursor.getInt(9)
 				alarm.audioSource = cursor.getString(10)
 				alarm.mediaType = cursor.getInt(11)

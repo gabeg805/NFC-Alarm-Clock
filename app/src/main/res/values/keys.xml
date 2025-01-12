@@ -49,7 +49,12 @@
 	<string name="alarm_name_key">pref_name</string>
 	<string name="alarm_days_key">pref_deys</string>
 	<string name="alarm_repeat_key">pref_repeat</string>
-	<string name="alarm_vibrate_key">pref_vibrate</string>
+	<string name="alarm_should_vibrate_key">pref_vibrate</string>
+	<string name="alarm_vibrate_duration_key">pref_vibrate_duration</string>
+	<string name="alarm_vibrate_wait_time_key">pref_vibrate_wait_time</string>
+	<string name="alarm_should_vibrate_pattern_key">pref_should_vibrate_pattern</string>
+	<string name="alarm_vibrate_repeat_pattern_key">pref_vibrate_repeat_pattern</string>
+	<string name="alarm_vibrate_wait_time_after_pattern_key">pref_vibrate_wait_time_after_pattern</string>
 	<string name="alarm_use_nfc_key">pref_use_nfc</string>
 	<string name="alarm_use_flashlight_key">pref_use_flashlight</string>
 	<string name="alarm_flashlight_strength_level_key">pref_flashlight_strength_level</string>
