@@ -371,14 +371,22 @@ class NacActiveAlarmActivity
 		// Use updated method calls to control screen for APK >= 27
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)
 		{
-			setTurnScreenOn(true)
+			// Check if should NOT save battery and turn screen on
+			if (!sharedPreferences.shouldSaveBatteryInAlarmScreen)
+			{
+				setTurnScreenOn(true)
+			}
+
+			// Show when locked
 			setShowWhenLocked(showWhenLocked)
-			//setShowWhenLocked(false);
 		}
 		else
 		{
-			// Turn on the screen
-			window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+			// Check if should NOT save battery and turn screen on
+			if (!sharedPreferences.shouldSaveBatteryInAlarmScreen)
+			{
+				window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+			}
 
 			// Add flag to show when locked
 			if (showWhenLocked)
@@ -392,8 +400,11 @@ class NacActiveAlarmActivity
 			}
 		}
 
-		// Keep screen on
-		window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+		// Check if should NOT save battery and keep screen on
+		if (!sharedPreferences.shouldSaveBatteryInAlarmScreen)
+		{
+			window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+		}
 	}
 
 	companion object
