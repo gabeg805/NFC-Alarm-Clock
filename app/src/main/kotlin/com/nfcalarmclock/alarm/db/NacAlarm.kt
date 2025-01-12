@@ -96,19 +96,56 @@ class NacAlarm()
 	 * Whether the alarm should be repeated or not.
 	 */
 	@ColumnInfo(name = "should_repeat", defaultValue = "0")
-	var repeat: Boolean = false
+	var shouldRepeat: Boolean = false
 
 	/**
 	 * Whether the alarm should vibrate the phone or not.
 	 */
 	@ColumnInfo(name = "should_vibrate", defaultValue = "0")
-	var vibrate: Boolean = false
+	var shouldVibrate: Boolean = false
+
+	/**
+	 * Duration to vibrate the device for.
+	 */
+	@ColumnInfo(name = "vibrate_duration", defaultValue = "500")
+	var vibrateDuration: Long = 500
+
+	/**
+	 * Amount of time to wait in between vibrations.
+	 */
+	@ColumnInfo(name = "vibrate_wait_time", defaultValue = "1000")
+	var vibrateWaitTime: Long = 1000
+
+	/**
+	 * Whether to vibrate using a pattern or not.
+	 */
+	@ColumnInfo(name = "should_vibrate_pattern", defaultValue = "0")
+	var shouldVibratePattern: Boolean = false
+
+	/**
+	 * Number of times to repeat the vibration.
+	 */
+	@ColumnInfo(name = "vibrate_repeat_pattern", defaultValue = "3")
+	var vibrateRepeatPattern: Int = 3
+
+	/**
+	 * Amount of time to wait after the vibration has been repeated the set number of
+	 * times.
+	 */
+	@ColumnInfo(name = "vibrate_wait_time_after_pattern", defaultValue = "2000")
+	var vibrateWaitTimeAfterPattern: Long = 2000
 
 	/**
 	 * Whether the alarm should use NFC or not.
 	 */
 	@ColumnInfo(name = "should_use_nfc", defaultValue = "0")
-	var useNfc: Boolean = false
+	var shouldUseNfc: Boolean = false
+
+	/**
+	 * ID of the NFC tag that needs to be used to dismiss the alarm.
+	 */
+	@ColumnInfo(name = "nfc_tag_id")
+	var nfcTagId: String = ""
 
 	/**
 	 * Whether the alarm should use the flashlight or not.
@@ -146,12 +183,6 @@ class NacAlarm()
 	 */
 	@ColumnInfo(name = "flashlight_off_duration", defaultValue = "0")
 	var flashlightOffDuration: String = "0"
-
-	/**
-	 * ID of the NFC tag that needs to be used to dismiss the alarm.
-	 */
-	@ColumnInfo(name = "nfc_tag_id")
-	var nfcTagId: String = ""
 
 	/**
 	 * Path to the media that will play when the alarm is run.
@@ -394,7 +425,7 @@ class NacAlarm()
 	 * there are basically no alarms after this.
 	 */
 	val isNextSkippedAndFinal: Boolean
-		get() = shouldSkipNextAlarm && (days.size <= 1) && !repeat
+		get() = shouldSkipNextAlarm && (days.size <= 1) && !shouldRepeat
 
 	/**
 	 * The normalized alarm name (with newlines replaced with spaces).
@@ -411,24 +442,6 @@ class NacAlarm()
 				name
 			}
 		}
-
-	/**
-	 * Check if should repeat the alarm after it runs or not.
-	 */
-	val shouldRepeat: Boolean
-		get() = repeat
-
-	/**
-	 * Check if the phone should vibrate when the alarm is run.
-	 */
-	val shouldVibrate: Boolean
-		get() = vibrate
-
-	/**
-	 * Check if should use NFC or not.
-	 */
-	val shouldUseNfc: Boolean
-		get() = useNfc
 
 	/**
 	 * Check if should use TTS or not.
@@ -460,9 +473,14 @@ class NacAlarm()
 		hour = input.readInt()
 		minute = input.readInt()
 		setDays(input.readInt())
-		repeat = input.readInt() != 0
-		vibrate = input.readInt() != 0
-		useNfc = input.readInt() != 0
+		shouldRepeat = input.readInt() != 0
+		shouldVibrate = input.readInt() != 0
+		vibrateDuration = input.readLong()
+		vibrateWaitTime = input.readLong()
+		shouldVibratePattern = input.readInt() != 0
+		vibrateRepeatPattern= input.readInt()
+		vibrateWaitTimeAfterPattern= input.readLong()
+		shouldUseNfc = input.readInt() != 0
 		nfcTagId = input.readString() ?: ""
 		useFlashlight = input.readInt() != 0
 		flashlightStrengthLevel = input.readInt()
@@ -700,9 +718,14 @@ class NacAlarm()
 		alarm.hour = hour
 		alarm.minute = minute
 		alarm.days = days
-		alarm.repeat = shouldRepeat
-		alarm.vibrate = shouldVibrate
-		alarm.useNfc = shouldUseNfc
+		alarm.shouldRepeat = shouldRepeat
+		alarm.shouldVibrate = shouldVibrate
+		alarm.vibrateDuration = vibrateDuration
+		alarm.vibrateWaitTime = vibrateWaitTime
+		alarm.shouldVibratePattern = shouldVibratePattern
+		alarm.vibrateRepeatPattern = vibrateRepeatPattern
+		alarm.vibrateWaitTimeAfterPattern = vibrateWaitTimeAfterPattern
+		alarm.shouldUseNfc = shouldUseNfc
 		alarm.nfcTagId = nfcTagId
 		alarm.useFlashlight = useFlashlight
 		alarm.flashlightStrengthLevel = flashlightStrengthLevel
@@ -843,14 +866,19 @@ class NacAlarm()
 			&& (days == alarm.days)
 			&& (shouldRepeat == alarm.shouldRepeat)
 			&& (shouldVibrate == alarm.shouldVibrate)
+			&& (vibrateDuration == alarm.vibrateDuration)
+			&& (vibrateWaitTime == alarm.vibrateWaitTime)
+			&& (shouldVibratePattern == alarm.shouldVibratePattern)
+			&& (vibrateRepeatPattern == alarm.vibrateRepeatPattern)
+			&& (vibrateWaitTimeAfterPattern == alarm.vibrateWaitTimeAfterPattern)
 			&& (shouldUseNfc == alarm.shouldUseNfc)
+			&& (nfcTagId == alarm.nfcTagId)
 			&& (useFlashlight == alarm.useFlashlight)
 			&& (flashlightStrengthLevel == alarm.flashlightStrengthLevel)
 			&& (graduallyIncreaseFlashlightStrengthLevelWaitTime == alarm.graduallyIncreaseFlashlightStrengthLevelWaitTime)
 			&& (shouldBlinkFlashlight == alarm.shouldBlinkFlashlight)
 			&& (flashlightOnDuration == alarm.flashlightOnDuration)
 			&& (flashlightOffDuration == alarm.flashlightOffDuration)
-			&& (nfcTagId == alarm.nfcTagId)
 			&& (mediaPath == alarm.mediaPath)
 			&& (mediaArtist == alarm.mediaArtist)
 			&& (mediaTitle == alarm.mediaTitle)
@@ -907,16 +935,21 @@ class NacAlarm()
 			&& (hour == alarm.hour)
 			&& (minute == alarm.minute)
 			&& (days == alarm.days)
-			&& (repeat == alarm.repeat)
-			&& (vibrate == alarm.vibrate)
-			&& (useNfc == alarm.useNfc)
+			&& (shouldRepeat == alarm.shouldRepeat)
+			&& (shouldVibrate == alarm.shouldVibrate)
+			&& (vibrateDuration == alarm.vibrateDuration)
+			&& (vibrateWaitTime == alarm.vibrateWaitTime)
+			&& (shouldVibratePattern == alarm.shouldVibratePattern)
+			&& (vibrateRepeatPattern == alarm.vibrateRepeatPattern)
+			&& (vibrateWaitTimeAfterPattern == alarm.vibrateWaitTimeAfterPattern)
+			&& (shouldUseNfc == alarm.shouldUseNfc)
+			&& (nfcTagId == alarm.nfcTagId)
 			&& (useFlashlight == alarm.useFlashlight)
 			&& (flashlightStrengthLevel == alarm.flashlightStrengthLevel)
 			&& (graduallyIncreaseFlashlightStrengthLevelWaitTime == alarm.graduallyIncreaseFlashlightStrengthLevelWaitTime)
 			&& (shouldBlinkFlashlight == alarm.shouldBlinkFlashlight)
 			&& (flashlightOnDuration == alarm.flashlightOnDuration)
 			&& (flashlightOffDuration == alarm.flashlightOffDuration)
-			&& (nfcTagId == alarm.nfcTagId)
 			&& (mediaPath == alarm.mediaPath)
 			&& (volume == alarm.volume)
 			&& (audioSource == alarm.audioSource)
@@ -1003,6 +1036,11 @@ class NacAlarm()
 		println("Days                : $days")
 		println("Repeat              : $shouldRepeat")
 		println("Vibrate             : $shouldVibrate")
+		println("Vibrate duration    : $vibrateDuration")
+		println("Vibrate wait time   : $vibrateWaitTime")
+		println("Vibrate pattern     : $shouldVibratePattern")
+		println("Vibrate repeat pat. : $vibrateRepeatPattern")
+		println("Vibrate wait after  : $vibrateWaitTimeAfterPattern")
 		println("Use NFC             : $shouldUseNfc")
 		println("Nfc Tag Id          : $nfcTagId")
 		println("Use Flashlight      : $useFlashlight")
@@ -1130,7 +1168,7 @@ class NacAlarm()
 	 */
 	fun toggleRepeat()
 	{
-		repeat = !shouldRepeat
+		shouldRepeat = !shouldRepeat
 	}
 
 	/**
@@ -1158,7 +1196,7 @@ class NacAlarm()
 	 */
 	fun toggleUseNfc()
 	{
-		useNfc = !shouldUseNfc
+		shouldUseNfc = !shouldUseNfc
 	}
 
 	/**
@@ -1166,7 +1204,7 @@ class NacAlarm()
 	 */
 	fun toggleVibrate()
 	{
-		vibrate = !shouldVibrate
+		shouldVibrate = !shouldVibrate
 	}
 
 	/** Whether or not the alarm will alarm soon.
@@ -1213,6 +1251,11 @@ class NacAlarm()
 		output.writeInt(Day.daysToValue(days))
 		output.writeInt(if (shouldRepeat) 1 else 0)
 		output.writeInt(if (shouldVibrate) 1 else 0)
+		output.writeLong(vibrateDuration)
+		output.writeLong(vibrateWaitTime)
+		output.writeInt(if (shouldVibratePattern) 1 else 0)
+		output.writeInt(vibrateRepeatPattern)
+		output.writeLong(vibrateWaitTimeAfterPattern)
 		output.writeInt(if (shouldUseNfc) 1 else 0)
 		output.writeString(nfcTagId)
 		output.writeInt(if (useFlashlight) 1 else 0)
@@ -1309,9 +1352,14 @@ class NacAlarm()
 			alarm.hour = calendar[Calendar.HOUR_OF_DAY]
 			alarm.minute = calendar[Calendar.MINUTE]
 			alarm.days = if (shared != null) Day.valueToDays(shared.days) else Day.NONE
-			alarm.repeat = shared?.shouldRepeat ?: false
-			alarm.vibrate = shared?.shouldVibrate ?: false
-			alarm.useNfc = shared?.shouldUseNfc ?: false
+			alarm.shouldRepeat = shared?.shouldRepeat ?: false
+			alarm.shouldVibrate = shared?.shouldVibrate ?: false
+			alarm.vibrateDuration = shared?.vibrateDuration ?: 500L
+			alarm.vibrateWaitTime = shared?.vibrateWaitTime ?: 1000L
+			alarm.shouldVibratePattern = shared?.shouldVibratePattern ?: false
+			alarm.vibrateRepeatPattern = shared?.vibrateRepeatPattern ?: 3
+			alarm.vibrateWaitTimeAfterPattern = shared?.vibrateWaitTimeAfterPattern ?: 2000L
+			alarm.shouldUseNfc = shared?.shouldUseNfc ?: false
 			alarm.nfcTagId = ""
 			alarm.useFlashlight = shared?.shouldUseFlashlight ?: false
 			alarm.flashlightStrengthLevel = shared?.flashlightStrengthLevel ?: 0

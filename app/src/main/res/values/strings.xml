@@ -150,6 +150,7 @@
 	<string name="message_export_completed">Export completed</string>
 	<string name="message_import_completed">Import completed</string>
 	<string name="message_selected_alarm_song_not_available">Chosen song for alarm not available</string>
+	<string name="message_milliseconds">%1$d ms</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Unable to delete an active alarm</string>
@@ -208,6 +209,9 @@
 	<string name="title_permission_wakelock">Wakelock</string>
 	<string name="title_request_permission_schedule_exact_alarm">Enable schedule exact alarms</string>
 	<string name="title_reset_statistics">Reset statistics…</string>
+	<string name="title_vibrate_vibration_duration">Vibration duration</string>
+	<string name="title_vibrate_custom_pattern">Custom pattern</string>
+	<string name="title_vibrate_wait">Wait</string>
 	<string name="title_flashlight_brightness_level">Brightness level</string>
 	<string name="title_flashlight_blink_on_off">Blink on/off</string>
 	<string name="title_text_to_speech_speak_frequency">Speak frequency</string>
@@ -268,6 +272,8 @@
 	<string name="description_day_button_style_filled">Filled-in buttons.</string>
 	<string name="description_day_button_style_outlined">Outlined buttons.</string>
 	<string name="description_media">Music or ringtone</string>
+	<string name="description_vibrate_vibration_duration">How long to vibrate for, and how long to wait in between vibrations.</string>
+	<string name="description_vibrate_custom_pattern">Repeat the vibration duration a set number of times, and then wait for a duration.</string>
 	<string name="description_flashlight_brightness_level">Brightness level of the flashlight.</string>
 	<string name="description_flashlight_blink_on_off">Blink the flashlight on and off at set durations.</string>
 	<string name="description_text_to_speech_what_to_say">What to say with text-to-speech when the alarm is active.</string>
@@ -398,6 +404,11 @@
 	<plurals name="unit_second">
 		<item quantity="one">%d second</item>
 		<item quantity="other">%d seconds</item>
+	</plurals>
+
+	<plurals name="unit_number_of_times">
+		<item quantity="one">%1$d time</item>
+		<item quantity="other">%1$d times</item>
 	</plurals>
 
 	<plurals name="tts_say_reminder">

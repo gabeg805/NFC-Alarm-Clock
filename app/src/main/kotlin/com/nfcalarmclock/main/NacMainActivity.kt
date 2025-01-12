@@ -21,7 +21,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.MenuCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,7 +36,6 @@ import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmActivity
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog.OnSaveAlarmListener
 import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog
 import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerActivity
@@ -1013,7 +1011,7 @@ class NacMainActivity
 					{
 						// Set the visibility of this item based on if NFC is being
 						// used for the alarm
-						item.isVisible = alarm.useNfc
+						item.isVisible = alarm.shouldUseNfc
 
 						// Show the NFC tag for the current alarm
 						item.setOnMenuItemClickListener { _ ->

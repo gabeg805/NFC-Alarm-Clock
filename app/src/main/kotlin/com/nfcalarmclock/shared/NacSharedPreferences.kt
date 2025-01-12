@@ -1594,8 +1594,20 @@ class NacSharedPreferences(context: Context)
 	val shouldVibrate: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.alarm_vibrate_key)
+			val key = resources.getString(R.string.alarm_should_vibrate_key)
 			val defaultValue = resources.getBoolean(R.bool.default_vibrate)
+
+			return instance.getBoolean(key, defaultValue)
+		}
+
+	/**
+	 * Whether to vibrate using a pattern or not.
+	 */
+	val shouldVibratePattern: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.alarm_should_vibrate_pattern_key)
+			val defaultValue = resources.getBoolean(R.bool.default_vibrate_pattern)
 
 			return instance.getBoolean(key, defaultValue)
 		}
@@ -1730,6 +1742,55 @@ class NacSharedPreferences(context: Context)
 			val key = resources.getString(R.string.speak_frequency_key)
 
 			saveInt(key, value)
+		}
+
+	/**
+	 * Duration to vibrate the device for.
+	 */
+	val vibrateDuration: Long
+		get()
+		{
+			val key = resources.getString(R.string.alarm_vibrate_duration_key)
+			val defaultValue = 500L
+
+			return instance.getLong(key, defaultValue)
+		}
+
+	/**
+	 * Number of times to repeat the vibration.
+	 */
+	val vibrateRepeatPattern: Int
+		get()
+		{
+			val key = resources.getString(R.string.alarm_vibrate_repeat_pattern_key)
+			val defaultValue = 3
+
+			return instance.getInt(key, defaultValue)
+		}
+
+	/**
+	 * Amount of time to wait in between vibrations.
+	 */
+	val vibrateWaitTime: Long
+		get()
+		{
+			val key = resources.getString(R.string.alarm_vibrate_wait_time_key)
+			val defaultValue = 1000L
+
+			return instance.getLong(key, defaultValue)
+		}
+
+	/**
+	 * Amount of time to wait after the vibration has been repeated the set number of
+	 * times.
+	 */
+	val vibrateWaitTimeAfterPattern: Long
+		get()
+		{
+			val key = resources.getString(R.string.alarm_vibrate_wait_time_after_pattern_key)
+			val defaultValue = 2000L
+
+			return instance.getLong(key, defaultValue)
 		}
 
 	/**

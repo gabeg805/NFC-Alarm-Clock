@@ -16,14 +16,17 @@
 			android:id="@+id/action_nacAlarmOptionsDialog_to_nacTextToSpeechDialog"
 			app:destination="@id/nacTextToSpeechDialog" />
 		<action
-			android:id="@+id/action_nacAlarmOptionsDialog_to_nacUpcomingReminderDialog"
-			app:destination="@id/nacUpcomingReminderDialog" />
+			android:id="@+id/action_nacAlarmOptionsDialog_to_nacVolumeOptionsDialog"
+			app:destination="@id/nacVolumeOptionsDialog" />
 		<action
 			android:id="@+id/action_nacAlarmOptionsDialog_to_nacFlashlightOptionsDialog"
 			app:destination="@id/nacFlashlightOptionsDialog" />
 		<action
-			android:id="@+id/action_nacAlarmOptionsDialog_to_nacVolumeOptionsDialog"
-			app:destination="@id/nacVolumeOptionsDialog" />
+			android:id="@+id/action_nacAlarmOptionsDialog_to_nacVibrateOptionsDialog"
+			app:destination="@id/nacVibrateOptionsDialog" />
+		<action
+			android:id="@+id/action_nacAlarmOptionsDialog_to_nacUpcomingReminderDialog"
+			app:destination="@id/nacUpcomingReminderDialog" />
 	</dialog>
 	<dialog
 		android:id="@+id/nacAudioSourceDialog"
@@ -34,15 +37,19 @@
 		android:name="com.nfcalarmclock.alarm.options.tts.NacTextToSpeechDialog"
 		android:label="NacTextToSpeechDialog" />
 	<dialog
-		android:id="@+id/nacUpcomingReminderDialog"
-		android:name="com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderDialog"
-		android:label="NacUpcomingReminderDialog" />
+		android:id="@+id/nacVolumeOptionsDialog"
+		android:name="com.nfcalarmclock.alarm.options.volume.NacVolumeOptionsDialog"
+		android:label="NacVolumeOptionsDialog" />
 	<dialog
 		android:id="@+id/nacFlashlightOptionsDialog"
 		android:name="com.nfcalarmclock.alarm.options.flashlight.NacFlashlightOptionsDialog"
 		android:label="NacFlashlightOptionsDialog" />
 	<dialog
-		android:id="@+id/nacVolumeOptionsDialog"
-		android:name="com.nfcalarmclock.alarm.options.volume.NacVolumeOptionsDialog"
-		android:label="NacVolumeOptionsDialog" />
+		android:id="@+id/nacVibrateOptionsDialog"
+		android:name="com.nfcalarmclock.alarm.options.vibrate.NacVibrateOptionsDialog"
+		android:label="NacVibrateOptionsDialog" />
+	<dialog
+		android:id="@+id/nacUpcomingReminderDialog"
+		android:name="com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderDialog"
+		android:label="NacUpcomingReminderDialog" />
 </navigation>

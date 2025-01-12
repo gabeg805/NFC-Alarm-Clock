@@ -393,7 +393,7 @@ object NacCalendar
 		return if (alarm.shouldSkipNextAlarm && !ignoreSkip)
 		{
 			// Check if there was only one calendar in the list, but the alarm is scheduled to be repeated
-			if ((calendars.size == 1) && alarm.repeat)
+			if ((calendars.size == 1) && alarm.shouldRepeat)
 			{
 				// Add a week to the calendar
 				nextDay.add(Calendar.DAY_OF_MONTH, 7)
