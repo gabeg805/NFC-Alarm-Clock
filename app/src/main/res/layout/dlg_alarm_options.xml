@@ -47,7 +47,6 @@
 		/>
 
 	<!-- NFC -->
-	<!--
 	<Button
 		style="@style/Widget.AlarmOptionMain.Button"
 		android:id="@+id/alarm_option_nfc"
@@ -55,7 +54,6 @@
 		android:layout_height="wrap_content"
 		android:text="@string/title_alarm_nfc"
 		/>
-		-->
 
 	<!-- Vibrate -->
 	<Button

@@ -1,25 +1,25 @@
 package com.nfcalarmclock.alarm.options.nfc
 
 import android.content.DialogInterface
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
-import com.google.android.material.button.MaterialButton
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
-import com.google.android.material.textview.MaterialTextView
 import com.nfcalarmclock.R
+import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
-import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
 import com.nfcalarmclock.view.setupInputLayoutColor
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 /**
  * Select an NFC tag that has been previously saved.
  */
+@AndroidEntryPoint
 class NacSelectNfcTagDialog
-	: NacBottomSheetDialogFragment()
+	: NacGenericAlarmOptionsDialog()
 {
 
 	/**
@@ -32,9 +32,16 @@ class NacSelectNfcTagDialog
 	}
 
 	/**
+	 * Layout resource ID.
+	 */
+	override val layoutId = R.layout.dlg_select_nfc_tag
+
+	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
+
+	/**
 	 * List of NFC tags.
 	 */
-	var allNfcTags: List<NacNfcTag> = ArrayList()
+	private lateinit var allNfcTags: List<NacNfcTag>
 
 	/**
 	 * Name of the selected NFC tag.
@@ -45,26 +52,6 @@ class NacSelectNfcTagDialog
 	 * Listener for when the name is entered.
 	 */
 	var onSelectNfcTagListener: OnSelectNfcTagListener? = null
-
-	/**
-	 * Check if the selected NFC tag matches an NFC tag in the list.
-	 */
-	private fun doesSelectedNfcTagMatchAny(): Boolean
-	{
-		return allNfcTags.any { it.nfcId == selectedNfcTag.nfcId }
-	}
-
-	/**
-	 * Called when the dialog view is created.
-	 */
-	override fun onCreateView(
-		inflater: LayoutInflater,
-		container: ViewGroup?,
-		savedInstanceState: Bundle?)
-		: View?
-	{
-		return inflater.inflate(R.layout.dlg_select_nfc_tag, container, false)
-	}
 
 	/**
 	 * Called when the dialog is canceled.
@@ -79,53 +66,90 @@ class NacSelectNfcTagDialog
 	}
 
 	/**
-	 * Called when the dialog view is created.
+	 * Called when the cancel button is clicked.
 	 */
-	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+	override fun onCancelClicked(alarm: NacAlarm?)
 	{
-		// Super
-		super.onViewCreated(view, savedInstanceState)
+		// Call the listener
+		onSelectNfcTagListener?.onCancel()
+	}
 
-		// Get the views
-		val inputLayout: TextInputLayout = view.findViewById(R.id.nfc_tag_input_layout)
-		val textView: MaterialAutoCompleteTextView = view.findViewById(R.id.nfc_tag_dropdown_menu)
-		val doneButton: MaterialButton = view.findViewById(R.id.select_nfc_tag)
+	/**
+	 * Update the alarm with selected options.
+	 */
+	override fun onOkClicked(alarm: NacAlarm?)
+	{
+		alarm?.nfcTagId = selectedNfcTag.nfcId
+	}
 
-		// Setup the color of the input layout
-		inputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
-
-		// Set the list of items in the textview dropdown menu
-		val nfcTagNames = allNfcTags.map { it.name }
-
-		textView.setSimpleItems(nfcTagNames.toTypedArray())
-
-		// Check if the list of NFC tags contains the selected NFC tag
-		if (doesSelectedNfcTagMatchAny())
+	/**
+	 * Called when the alarm should be saved.
+	 */
+	override fun onSaveAlarm(alarm: NacAlarm?)
+	{
+		// Save the change using the nav controller
+		if (alarm != null)
 		{
-			textView.setText(selectedNfcTag.name, false)
+			super.onSaveAlarm(alarm)
 		}
-		// Selected NFC tag is not set or is not in the list
+		// Save the change by sending the selected NFC tag to the listener
 		else
 		{
-			selectedNfcTag = allNfcTags[0]
-			textView.setText(nfcTagNames[0], false)
+			onSelectNfcTagListener?.onSelected(selectedNfcTag)
 		}
+	}
+
+	/**
+	 * Setup all alarm options.
+	 */
+	override fun setupAlarmOptions(alarm: NacAlarm?)
+	{
+		lifecycleScope.launch {
+
+			// Get all the NFC tags
+			allNfcTags = nfcTagViewModel.getAllNfcTags()
+
+			// Set the selected NFC tag based on the alarm if it is set
+			if (alarm != null)
+			{
+				selectedNfcTag = allNfcTags.firstOrNull { it.nfcId == alarm.nfcTagId }
+					?: allNfcTags[0]
+			}
+
+			// Verify that the selected NFC tag exists. If it does not, set it to the
+			// first tag in the list
+			if (allNfcTags.none { it.nfcId == selectedNfcTag.nfcId })
+			{
+				selectedNfcTag = allNfcTags[0]
+			}
+
+			// Set the list of items in the textview dropdown menu
+			val nfcTagNames = allNfcTags.map { it.name }.toTypedArray()
+
+			// Setup the input layout and textview
+			setupInputLayoutAndTextView(selectedNfcTag.name, nfcTagNames)
+
+		}
+	}
+
+	/**
+	 * Setup the input layout and textview.
+	 */
+	private fun setupInputLayoutAndTextView(defaultName: String, nfcTagNames: Array<String>)
+	{
+		// Get the views
+		val inputLayout: TextInputLayout = dialog!!.findViewById(R.id.nfc_tag_input_layout)
+		val textView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.nfc_tag_dropdown_menu)
+
+		// Setup the views
+		inputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+		textView.setSimpleItems(nfcTagNames)
+		textView.setText(defaultName, false)
 
 		// Setup the textview listener
-		textView.onItemClickListener = AdapterView.OnItemClickListener { _, v, _, _ ->
-
-			// Get the name of the NFC tag
-			val name = (v as MaterialTextView).text.toString()
-
-			// Set the selected NFC tag name
-			selectedNfcTag = allNfcTags.first { it.name == name }
-
+		textView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+			selectedNfcTag = allNfcTags[position]
 		}
-
-		// Setup the button
-		setupPrimaryButton(doneButton, listener = {
-			onSelectNfcTagListener?.onSelected(selectedNfcTag)
-		})
 	}
 
 	companion object

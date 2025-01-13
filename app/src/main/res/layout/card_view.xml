@@ -417,7 +417,7 @@
 						android:alpha="0.6"
 						android:textSize="@dimen/tsz_small"
 						android:textStyle="bold"
-						android:text="@string/title_settings"
+						android:text="Options"
 						/>
 
 					<!-- Divider -->
@@ -447,7 +447,8 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					app:iconSize="@dimen/isz_medium"
+					android:minHeight="@dimen/isz_xxlarge"
+					app:iconSize="@dimen/isz_normal"
 					app:iconTint="@color/white"
 					app:icon="@drawable/dismiss"
 					/>
@@ -459,8 +460,9 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
+					android:minHeight="@dimen/isz_xxlarge"
 					app:iconTint="@color/white"
-					app:iconSize="@dimen/isz_medium"
+					app:iconSize="@dimen/isz_normal"
 					app:icon="@drawable/snooze"
 					/>
 
@@ -472,8 +474,9 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
+					android:minHeight="@dimen/isz_xxlarge"
 					app:iconTint="@color/white"
-					app:iconSize="@dimen/isz_medium"
+					app:iconSize="@dimen/isz_normal"
 					app:icon="@drawable/settings"
 					/>
 			</LinearLayout> <!-- Delete/collapse -->

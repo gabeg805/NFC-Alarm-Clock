@@ -292,7 +292,7 @@ class NacMediaPlayer(
 				// Play the directory as a playlist and if the recursive flag is
 				// set, it will also include the media in its subdirectories as
 				// part of the playlist
-				playDirectory(alarm.mediaPath, recursive = alarm.recursivelyPlayMedia)
+				playDirectory(alarm.mediaPath, recursive = alarm.shouldRecursivelyPlayMedia)
 				return uri
 			}
 		}

@@ -106,7 +106,7 @@ class NacCardTouchHelper(
 			val holder = getCardHolder(vh)
 
 			// Return the copy view
-			return holder.copySwipeView
+			return holder.copySwipeView!!
 		}
 
 		/**
@@ -118,7 +118,7 @@ class NacCardTouchHelper(
 			val holder = getCardHolder(vh)
 
 			// Return the delete view
-			return holder.deleteSwipeView
+			return holder.deleteSwipeView!!
 		}
 
 		/**

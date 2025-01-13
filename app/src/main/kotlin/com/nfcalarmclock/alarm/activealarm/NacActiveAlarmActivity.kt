@@ -367,6 +367,7 @@ class NacActiveAlarmActivity
 		// Get whether the alarm should be shown when locked
 		//val showWhenLocked = (alarm != null) && !alarm!!.shouldUseNfc
 		val showWhenLocked = !shouldUseNfc
+		println("Battery saver? ${sharedPreferences.shouldSaveBatteryInAlarmScreen}")
 
 		// Use updated method calls to control screen for APK >= 27
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)
@@ -374,6 +375,7 @@ class NacActiveAlarmActivity
 			// Check if should NOT save battery and turn screen on
 			if (!sharedPreferences.shouldSaveBatteryInAlarmScreen)
 			{
+				println("Turn screen on")
 				setTurnScreenOn(true)
 			}
 
@@ -385,6 +387,7 @@ class NacActiveAlarmActivity
 			// Check if should NOT save battery and turn screen on
 			if (!sharedPreferences.shouldSaveBatteryInAlarmScreen)
 			{
+				println("Turn screen on")
 				window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
 			}
 
@@ -403,6 +406,7 @@ class NacActiveAlarmActivity
 		// Check if should NOT save battery and keep screen on
 		if (!sharedPreferences.shouldSaveBatteryInAlarmScreen)
 		{
+			println("Keep screen on")
 			window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 		}
 	}

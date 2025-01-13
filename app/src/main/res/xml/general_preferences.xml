@@ -7,6 +7,12 @@
 	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
 		android:title="@string/title_default_alarm">
 
+		<com.nfcalarmclock.card.NacCardPreference
+			android:key="@string/key_default_alarm_card"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="false"
+			/>
+
 		<!-- Name -->
 		<com.nfcalarmclock.alarm.options.name.NacNamePreference
 			android:key="@string/alarm_name_key"
