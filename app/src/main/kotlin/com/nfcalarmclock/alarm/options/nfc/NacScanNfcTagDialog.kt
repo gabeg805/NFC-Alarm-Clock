@@ -50,9 +50,9 @@ class NacScanNfcTagDialog
 	var alarm: NacAlarm? = null
 
 	/**
-	 * List of NFC tags.
+	 * Whether to show the Select button or not.
 	 */
-	var allNfcTags: List<NacNfcTag> = ArrayList()
+	var shouldShowSelectButton: Boolean = false
 
 	/**
 	 * Last saved/selected NFC tag.
@@ -112,7 +112,7 @@ class NacScanNfcTagDialog
 		})
 
 		// Set the visibility of the select button
-		selectNfcButton.visibility = if (allNfcTags.isNotEmpty()) View.VISIBLE else View.GONE
+		selectNfcButton.visibility = if (shouldShowSelectButton) View.VISIBLE else View.GONE
 
 		// Setup the select NFC button
 		setupSecondaryButton(selectNfcButton, listener = {
@@ -121,7 +121,6 @@ class NacScanNfcTagDialog
 			val dialog = NacSelectNfcTagDialog()
 
 			// Setup the dialog
-			dialog.allNfcTags = allNfcTags
 			dialog.selectedNfcTag = lastNfcTag
 			dialog.onSelectNfcTagListener = object: NacSelectNfcTagDialog.OnSelectNfcTagListener
 			{

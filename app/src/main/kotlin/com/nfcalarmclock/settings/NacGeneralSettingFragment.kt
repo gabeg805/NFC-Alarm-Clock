@@ -12,12 +12,15 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog
 import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerActivity
 import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerPreference
 import com.nfcalarmclock.alarm.options.name.NacNamePreference
+import com.nfcalarmclock.alarm.options.snoozeoptions.NacSnoozeOptionsDialog
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeekPreference
 import com.nfcalarmclock.alarm.options.volume.NacVolumePreference
 import com.nfcalarmclock.alarm.options.volume.NacVolumePreference.OnAudioOptionsClickedListener
+import com.nfcalarmclock.card.NacCardPreference
 import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.addMediaInfo
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
@@ -89,12 +92,103 @@ class NacGeneralSettingFragment
 		PreferenceManager.setDefaultValues(deviceContext, R.xml.general_preferences,  false)
 
 		// Setup the media preference
-		setupMediaPreference()
+		//setupMediaPreference()
+		setupYo()
 
 		// Setup the on click listeners
-		setupAlarmDaysOnClickListener()
-		setupAlarmNameOnClickListener()
-		setupAlarmOptionsOnClickListener()
+		//setupAlarmDaysOnClickListener()
+		//setupAlarmNameOnClickListener()
+		//setupAlarmOptionsOnClickListener()
+	}
+
+	/**
+	 */
+	@OptIn(UnstableApi::class)
+	private fun setupYo()
+	{
+		// Get the preference
+		val key = getString(R.string.key_default_alarm_card)
+		val pref = findPreference<NacCardPreference>(key)!!
+
+		// Define the activity layuncher
+		activityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+
+			// Check that the result was OK
+			if (result.resultCode == Activity.RESULT_OK)
+			{
+				// Get the media bundle from the activity result data, and the media
+				// path from the bundle
+				val bundle = result.data?.getMediaBundle() ?: Bundle()
+				val mediaPath = bundle.getMediaPath()
+
+				// Save the media info for this preference
+				sharedPreferences!!.mediaPath = mediaPath
+				sharedPreferences!!.mediaArtist = bundle.getMediaArtist()
+				sharedPreferences!!.mediaTitle = bundle.getMediaTitle()
+				sharedPreferences!!.mediaType = bundle.getMediaType()
+				sharedPreferences!!.localMediaPath = buildLocalMediaPath(
+					requireContext(),
+					sharedPreferences!!.mediaArtist,
+					sharedPreferences!!.mediaTitle,
+					sharedPreferences!!.mediaType)
+				sharedPreferences!!.shouldShuffleMedia = bundle.getShuffleMedia()
+				sharedPreferences!!.recursivelyPlayMedia = bundle.getRecursivelyPlayMedia()
+
+				// Update the card
+				pref.card.alarm!!.mediaPath = mediaPath
+				pref.card.alarm!!.mediaArtist = sharedPreferences!!.mediaArtist
+				pref.card.alarm!!.mediaTitle = sharedPreferences!!.mediaTitle
+				pref.card.alarm!!.mediaType = sharedPreferences!!.mediaType
+				pref.card.setMediaButton()
+			}
+
+		}
+
+		// Media
+		pref.onCardMediaClickedListener = NacCardPreference.OnCardMediaClickedListener { alarm ->
+
+			// Create the intent and add the media to the intent
+			val intent = Intent(context, NacMediaPickerActivity::class.java)
+				.addMediaInfo(
+					alarm.mediaPath,
+					alarm.mediaArtist,
+					alarm.mediaTitle,
+					alarm.mediaType,
+					alarm.shouldShuffleMedia,
+					alarm.shouldRecursivelyPlayMedia)
+
+			// Launch the intent
+			activityLauncher!!.launch(intent)
+
+		}
+
+		// Dismiss options
+		pref.onCardDismissClickedListener = NacCardPreference.OnCardDismissOptionsClickedListener { alarm ->
+
+			// Show the dismiss options dialog
+			NacDismissOptionsDialog.create(
+				alarm,
+				onSaveAlarmListener = {
+					// TODO
+					//updateAlarm(it)
+				})
+				.show(childFragmentManager, NacDismissOptionsDialog.TAG)
+
+		}
+
+		// Snooze options
+		pref.onCardSnoozeClickedListener = NacCardPreference.OnCardSnoozeOptionsClickedListener { alarm ->
+
+			// Show the snooze options dialog
+			NacSnoozeOptionsDialog.create(
+				alarm,
+				onSaveAlarmListener = {
+					// TODO
+					//updateAlarm(it)
+				})
+				.show(childFragmentManager, NacSnoozeOptionsDialog.TAG)
+
+		}
 	}
 
 	/**
@@ -180,14 +274,6 @@ class NacGeneralSettingFragment
 							sharedPreferences!!.audioSource = a.audioSource
 						}
 
-						// Flashlight
-						R.id.nacFlashlightOptionsDialog -> {
-							sharedPreferences!!.flashlightStrengthLevel = a.flashlightStrengthLevel
-							sharedPreferences!!.shouldBlinkFlashlight = a.shouldBlinkFlashlight
-							sharedPreferences!!.flashlightOnDuration = a.flashlightOnDuration
-							sharedPreferences!!.flashlightOffDuration = a.flashlightOffDuration
-						}
-
 						// Text-to-speech
 						R.id.nacTextToSpeechDialog -> {
 							sharedPreferences!!.shouldSayCurrentTime = a.sayCurrentTime
@@ -200,6 +286,14 @@ class NacGeneralSettingFragment
 							sharedPreferences!!.shouldGraduallyIncreaseVolume = a.shouldGraduallyIncreaseVolume
 							sharedPreferences!!.graduallyIncreaseVolumeWaitTime = a.graduallyIncreaseVolumeWaitTime
 							sharedPreferences!!.shouldRestrictVolume = a.shouldRestrictVolume
+						}
+
+						// Flashlight
+						R.id.nacFlashlightOptionsDialog -> {
+							sharedPreferences!!.flashlightStrengthLevel = a.flashlightStrengthLevel
+							sharedPreferences!!.shouldBlinkFlashlight = a.shouldBlinkFlashlight
+							sharedPreferences!!.flashlightOnDuration = a.flashlightOnDuration
+							sharedPreferences!!.flashlightOffDuration = a.flashlightOffDuration
 						}
 
 						//// Dismiss options

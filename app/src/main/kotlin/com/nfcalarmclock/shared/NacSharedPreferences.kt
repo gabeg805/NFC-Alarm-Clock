@@ -686,13 +686,19 @@ class NacSharedPreferences(context: Context)
 	/**
 	 * Alarm days.
 	 */
-	val days: Int
+	var days: Int
 		get()
 		{
 			val key = resources.getString(R.string.alarm_days_key)
 			val defaultValue = resources.getInteger(R.integer.default_days)
 
 			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.alarm_days_key)
+
+			saveInt(key, value)
 		}
 
 	/**
@@ -1043,12 +1049,18 @@ class NacSharedPreferences(context: Context)
 	/**
 	 * Media path.
 	 */
-	val mediaPath: String
+	var mediaPath: String
 		get()
 		{
 			val key = resources.getString(R.string.key_general_default_alarm_media_path)
 
 			return instance.getString(key, "") ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_general_default_alarm_media_path)
+
+			saveString(key, value)
 		}
 
 	/**
@@ -1315,13 +1327,19 @@ class NacSharedPreferences(context: Context)
 	/**
 	 * Whether the alarm should be repeated or not.
 	 */
-	val shouldRepeat: Boolean
+	var shouldRepeat: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.alarm_repeat_key)
 			val defaultValue = resources.getBoolean(R.bool.default_repeat)
 
 			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.alarm_repeat_key)
+
+			saveBoolean(key, value)
 		}
 
 	/**
@@ -1579,13 +1597,19 @@ class NacSharedPreferences(context: Context)
 	/**
 	 * Whether NFC is required or not.
 	 */
-	val shouldUseNfc: Boolean
+	var shouldUseNfc: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.alarm_use_nfc_key)
 			val defaultValue = resources.getBoolean(R.bool.default_use_nfc)
 
 			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.alarm_use_nfc_key)
+
+			saveBoolean(key, value)
 		}
 
 	/**
@@ -1609,13 +1633,19 @@ class NacSharedPreferences(context: Context)
 	/**
 	 * Whether the alarm should vibrate the phone or not.
 	 */
-	val shouldVibrate: Boolean
+	var shouldVibrate: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.alarm_should_vibrate_key)
 			val defaultValue = resources.getBoolean(R.bool.default_vibrate)
 
 			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.alarm_should_vibrate_key)
+
+			saveBoolean(key, value)
 		}
 
 	/**

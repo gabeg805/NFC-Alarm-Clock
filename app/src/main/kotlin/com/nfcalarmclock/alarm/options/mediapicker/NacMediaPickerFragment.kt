@@ -166,13 +166,13 @@ open class NacMediaPickerFragment
 	var shuffleMedia: Boolean = false
 		get()
 		{
-			return alarm?.shuffleMedia ?: field
+			return alarm?.shouldShuffleMedia ?: field
 		}
 		set(value)
 		{
 			if (alarm != null)
 			{
-				alarm!!.shuffleMedia = value
+				alarm!!.shouldShuffleMedia = value
 			}
 			else
 			{
@@ -186,13 +186,13 @@ open class NacMediaPickerFragment
 	var recursivelyPlayMedia: Boolean = false
 		get()
 		{
-			return alarm?.recursivelyPlayMedia ?: field
+			return alarm?.shouldRecursivelyPlayMedia ?: field
 		}
 		set(value)
 		{
 			if (alarm != null)
 			{
-				alarm!!.recursivelyPlayMedia = value
+				alarm!!.shouldRecursivelyPlayMedia = value
 			}
 			else
 			{

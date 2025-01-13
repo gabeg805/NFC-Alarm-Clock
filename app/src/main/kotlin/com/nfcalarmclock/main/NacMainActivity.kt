@@ -36,9 +36,9 @@ import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmActivity
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog.OnSaveAlarmListener
 import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog
 import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerActivity
+import com.nfcalarmclock.alarm.options.name.NacNameDialog
 import com.nfcalarmclock.alarm.options.nfc.NacNfc
 import com.nfcalarmclock.alarm.options.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.alarm.options.nfc.NacSaveNfcTagDialog
@@ -56,6 +56,7 @@ import com.nfcalarmclock.card.NacCardHolder.OnCardCollapsedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardDeleteClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardDismissOptionsClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardMediaClickedListener
+import com.nfcalarmclock.card.NacCardHolder.OnCardNameClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardSnoozeOptionsClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardUpdatedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardUseNfcChangedListener
@@ -639,6 +640,15 @@ class NacMainActivity
 
 		// Cleanup any extra media files in device encrypted storage
 		lifecycleScope.launch {  cleanupExtraMediaFilesInDeviceEncryptedStorage() }
+
+		//lifecycleScope.launch {
+		//	nfcTagViewModel.getAllNfcTags().forEach { nfcTagViewModel.delete(it) }
+		//	nfcTagViewModel.insert(NacNfcTag("Bathroom", "akjshdlaksdh"))
+		//	nfcTagViewModel.insert(NacNfcTag("Car", "9083kjjhllkjls"))
+		//	nfcTagViewModel.insert(NacNfcTag("Garage", "09kj091kj"))
+		//	nfcTagViewModel.insert(NacNfcTag("Medicine", "102938kjh3l12"))
+		//	nfcTagViewModel.insert(NacNfcTag("Take out the trash", "loi120910j"))
+		//}
 	}
 
 	/**
@@ -870,11 +880,40 @@ class NacMainActivity
 
 		}
 
-		// Use vibrate listener
+		// Days
+		holder.onCardDaysChangedListener = NacCardHolder.OnCardDaysChangedListener { _, alarm ->
+
+			// Update the alarm
+			updateAlarm(alarm)
+
+		}
+
+		// Repeat
+		holder.onCardUseRepeatChangedListener = NacCardHolder.OnCardUseRepeatChangedListener { _, alarm ->
+
+			// Determine which message to show
+			val messageId = if (alarm.shouldRepeat)
+			{
+				R.string.message_repeat_enabled
+			}
+			else
+			{
+				R.string.message_repeat_disabled
+			}
+
+			// Toast the vibrate message
+			quickToast(this, messageId)
+
+			// Update the alarm
+			updateAlarm(alarm)
+
+		}
+
+		// Vibrate
 		holder.onCardUseVibrateChangedListener = NacCardHolder.OnCardUseVibrateChangedListener { _, alarm ->
 
 			// Determine which message to show
-			val message = if (alarm.shouldVibrate)
+			val messageId = if (alarm.shouldVibrate)
 			{
 				R.string.message_vibrate_enabled
 			}
@@ -884,21 +923,21 @@ class NacMainActivity
 			}
 
 			// Toast the vibrate message
-			quickToast(this, message)
+			quickToast(this, messageId)
 
 			// Update the alarm
 			updateAlarm(alarm)
 
 		}
 
-		// Use NFC listener
+		// NFC
 		holder.onCardUseNfcChangedListener = OnCardUseNfcChangedListener { _, alarm ->
 
 			// Check if the alarm had use NFC disabled
 			if (!alarm.shouldUseNfc)
 			{
 				// Toast the NFC message
-				quickToast(this@NacMainActivity, R.string.message_nfc_optional)
+				quickToast(this, R.string.message_nfc_optional)
 
 				// Update the alarm
 				updateAlarm(alarm)
@@ -911,11 +950,11 @@ class NacMainActivity
 
 		}
 
-		// Use flashlight listener
+		// Flashlight
 		holder.onCardUseFlashlightChangedListener = NacCardHolder.OnCardUseFlashlightChangedListener { _, alarm ->
 
 			// Get the message
-			val message = if (alarm.useFlashlight)
+			val messageId = if (alarm.useFlashlight)
 			{
 				R.string.message_flashlight_enabled
 			}
@@ -925,14 +964,14 @@ class NacMainActivity
 			}
 
 			// Toast the message
-			quickToast(this@NacMainActivity, message)
+			quickToast(this, messageId)
 
 			// Update the alarm
 			updateAlarm(alarm)
 
 		}
 
-		// Media button listener
+		// Media
 		holder.onCardMediaClickedListener = OnCardMediaClickedListener { _, alarm ->
 
 			// Create an intent for the media activity with the alarm attached
@@ -943,11 +982,37 @@ class NacMainActivity
 
 		}
 
+		// Name
+		holder.onCardNameClickedListener = OnCardNameClickedListener { card, alarm ->
+
+			// Create the dialog
+			val dialog = NacNameDialog()
+
+			// Setup the default name
+			dialog.defaultName = alarm.name
+
+			// Setup the listener
+			dialog.onNameEnteredListener = NacNameDialog.OnNameEnteredListener { name ->
+
+				// Set the name and update the alarm
+				card.setName(name)
+				updateAlarm(alarm)
+
+			}
+
+			// Show the dialog
+			dialog.show(supportFragmentManager, NacNameDialog.TAG)
+
+		}
+
 		// Dismiss options listener
 		holder.onCardDismissOptionsClickedListener = OnCardDismissOptionsClickedListener { _, alarm ->
 
 			// Show the dismiss options dialog
-			showDismissOptionsDialog(alarm)
+			NacDismissOptionsDialog.create(
+					alarm,
+					onSaveAlarmListener = { updateAlarm(it) })
+				.show(supportFragmentManager, NacDismissOptionsDialog.TAG)
 
 		}
 
@@ -955,7 +1020,10 @@ class NacMainActivity
 		holder.onCardSnoozeOptionsClickedListener = OnCardSnoozeOptionsClickedListener { _, alarm ->
 
 			// Show the snooze options dialog
-			showSnoozeOptionsDialog(alarm)
+			NacSnoozeOptionsDialog.create(
+					alarm,
+					onSaveAlarmListener = { updateAlarm(it) })
+				.show(supportFragmentManager, NacSnoozeOptionsDialog.TAG)
 
 		}
 
@@ -1553,26 +1621,6 @@ class NacMainActivity
 	}
 
 	/**
-	 * Show the dismiss options dialog.
-	 */
-	private fun showDismissOptionsDialog(alarm: NacAlarm)
-	{
-		// Create the dialog
-		val dialog = NacDismissOptionsDialog()
-
-		// Add the alarm to the dialog
-		dialog.arguments = Bundle().addAlarm(alarm)
-
-		// Set the listener to save the alarm
-		dialog.onSaveAlarmListener = OnSaveAlarmListener { a ->
-			updateAlarm(a)
-		}
-
-		// Show the dialog
-		dialog.show(supportFragmentManager, NacDismissOptionsDialog.TAG)
-	}
-
-	/**
 	 * Show a snackbar for the next alarm that will run.
 	 */
 	private fun showNextAlarmSnackbar()
@@ -1622,7 +1670,7 @@ class NacMainActivity
 
 		// Setup the dialog
 		scanNfcTagDialog.alarm = alarm
-		scanNfcTagDialog.allNfcTags = allNfcTags
+		scanNfcTagDialog.shouldShowSelectButton = allNfcTags.isNotEmpty()
 		scanNfcTagDialog.lastNfcTag = lastNfcTag
 		scanNfcTagDialog.onScanNfcTagListener = object: OnScanNfcTagListener {
 
@@ -1753,26 +1801,6 @@ class NacMainActivity
 
 		// Show the snackbar
 		snackbar.show()
-	}
-
-	/**
-	 * Show the snooze options dialog.
-	 */
-	private fun showSnoozeOptionsDialog(alarm: NacAlarm)
-	{
-		// Create the dialog
-		val dialog = NacSnoozeOptionsDialog()
-
-		// Add the alarm to the dialog
-		dialog.arguments = Bundle().addAlarm(alarm)
-
-		// Set the listener to save the alarm
-		dialog.onSaveAlarmListener = OnSaveAlarmListener { a ->
-			updateAlarm(a)
-		}
-
-		// Show the dialog
-		dialog.show(supportFragmentManager, NacDismissOptionsDialog.TAG)
 	}
 
 	/**

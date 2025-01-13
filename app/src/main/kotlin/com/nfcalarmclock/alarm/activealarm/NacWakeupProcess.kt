@@ -392,7 +392,7 @@ class NacWakeupProcess(
 			if (alarm.mediaType.isMediaDirectory())
 			{
 				// Set shuffle mode (can be set or not set) based on the preference
-				mediaPlayer.exoPlayer.shuffleModeEnabled = alarm.shuffleMedia
+				mediaPlayer.exoPlayer.shuffleModeEnabled = alarm.shouldShuffleMedia
 			}
 
 			// Play the alarm

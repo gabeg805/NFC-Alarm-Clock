@@ -532,17 +532,6 @@ class NacActiveAlarmService
 			// Start the service in the foreground
 			startForeground(NacActiveAlarmNotification.ID,
 				notification.builder().build())
-
-			println("Should vibrate watch? ${alarm?.shouldVibratePattern}")
-			if (alarm?.shouldVibratePattern == true)
-			{
-				println("Vibrate delay? ${alarm?.vibrateWaitTimeAfterPattern}")
-				vibrateWatchHandler?.postDelayed({
-					println("VIBRATE WATCH")
-					showActiveAlarmNotification()
-												 },
-					alarm!!.vibrateWaitTimeAfterPattern * 2)
-			}
 		}
 		catch (e: Exception)
 		{
@@ -627,13 +616,10 @@ class NacActiveAlarmService
 		wakeupProcess = NacWakeupProcess(this, alarm!!)
 		wakeupProcess!!.start()
 
-		// Wait for auto dismiss
+		// Wait for auto dismiss and auto snooze, vibrate smart watch, and start the
+		// alarm activity
 		waitForAutoDismiss()
-
-		// Wait for auto snooze
 		waitForAutoSnooze()
-
-		// Start the alarm activity
 		NacActiveAlarmActivity.startAlarmActivity(this, alarm!!)
 
 		scope.launch {

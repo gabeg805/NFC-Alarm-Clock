@@ -46,6 +46,7 @@
 	<string name="snooze_duration_key">pref_snooze_duration_new</string>
 	<string name="old_snooze_duration_key">pref_snooze_duration</string>
 	<string name="easy_snooze_key">pref_easy_snooze</string>
+	<string name="key_default_alarm_card">pref_default_alarm_card</string>
 	<string name="alarm_name_key">pref_name</string>
 	<string name="alarm_days_key">pref_deys</string>
 	<string name="alarm_repeat_key">pref_repeat</string>

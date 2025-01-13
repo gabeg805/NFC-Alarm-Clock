@@ -9,7 +9,6 @@ import androidx.room.PrimaryKey
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacCalendar.Day
-import com.nfcalarmclock.util.media.NacMedia
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -132,8 +131,8 @@ class NacAlarm()
 	 * Amount of time to wait after the vibration has been repeated the set number of
 	 * times.
 	 */
-	@ColumnInfo(name = "vibrate_wait_time_after_pattern", defaultValue = "2000")
-	var vibrateWaitTimeAfterPattern: Long = 2000
+	@ColumnInfo(name = "vibrate_wait_time_after_pattern", defaultValue = "3000")
+	var vibrateWaitTimeAfterPattern: Long = 3000
 
 	/**
 	 * Whether the alarm should use NFC or not.
@@ -175,14 +174,14 @@ class NacAlarm()
 	/**
 	 * Number of seconds to turn on the flashlight.
 	 */
-	@ColumnInfo(name = "flashlight_on_duration", defaultValue = "0")
-	var flashlightOnDuration: String = "0"
+	@ColumnInfo(name = "flashlight_on_duration", defaultValue = "1.0")
+	var flashlightOnDuration: String = "1.0"
 
 	/**
 	 * Number of seconds to turn off the flashlight.
 	 */
-	@ColumnInfo(name = "flashlight_off_duration", defaultValue = "0")
-	var flashlightOffDuration: String = "0"
+	@ColumnInfo(name = "flashlight_off_duration", defaultValue = "1.0")
+	var flashlightOffDuration: String = "1.0"
 
 	/**
 	 * Path to the media that will play when the alarm is run.
@@ -223,7 +222,7 @@ class NacAlarm()
 	 *       be ignored.
 	 */
 	@ColumnInfo(name = "should_shuffle_media", defaultValue = "0")
-	var shuffleMedia: Boolean = false
+	var shouldShuffleMedia: Boolean = false
 
 	/**
 	 * Whether to recursively play the media in a directory.
@@ -232,7 +231,7 @@ class NacAlarm()
 	 *       be ignored.
 	 */
 	@ColumnInfo(name = "should_recursively_play_media", defaultValue = "0")
-	var recursivelyPlayMedia: Boolean = false
+	var shouldRecursivelyPlayMedia: Boolean = false
 
 	/**
 	 * Volume level to set when the alarm is run.
@@ -495,8 +494,8 @@ class NacAlarm()
 		mediaTitle = input.readString() ?: ""
 		mediaType = input.readInt()
 		localMediaPath = input.readString() ?: ""
-		shuffleMedia = input.readInt() != 0
-		recursivelyPlayMedia = input.readInt() != 0
+		shouldShuffleMedia = input.readInt() != 0
+		shouldRecursivelyPlayMedia = input.readInt() != 0
 
 		// Other normal stuff
 		volume = input.readInt()
@@ -740,8 +739,8 @@ class NacAlarm()
 		alarm.mediaTitle = mediaTitle
 		alarm.mediaType = mediaType
 		alarm.localMediaPath = localMediaPath
-		alarm.shuffleMedia = shuffleMedia
-		alarm.recursivelyPlayMedia = recursivelyPlayMedia
+		alarm.shouldShuffleMedia = shouldShuffleMedia
+		alarm.shouldRecursivelyPlayMedia = shouldRecursivelyPlayMedia
 
 		// Other normal stuff
 		alarm.volume = volume
@@ -884,8 +883,8 @@ class NacAlarm()
 			&& (mediaTitle == alarm.mediaTitle)
 			&& (mediaType == alarm.mediaType)
 			&& (localMediaPath == alarm.localMediaPath)
-			&& (shuffleMedia == alarm.shuffleMedia)
-			&& (recursivelyPlayMedia == alarm.recursivelyPlayMedia)
+			&& (shouldShuffleMedia == alarm.shouldShuffleMedia)
+			&& (shouldRecursivelyPlayMedia == alarm.shouldRecursivelyPlayMedia)
 			&& (volume == alarm.volume)
 			&& (audioSource == alarm.audioSource)
 			&& (name == alarm.name)
@@ -1054,8 +1053,8 @@ class NacAlarm()
 		println("Media Name          : $mediaTitle")
 		println("Media Type          : $mediaType")
 		println("Local media Path    : $localMediaPath")
-		println("Shuffle media       : $shuffleMedia")
-		println("Recusively Play     : $recursivelyPlayMedia")
+		println("Shuffle media       : $shouldShuffleMedia")
+		println("Recusively Play     : $shouldRecursivelyPlayMedia")
 		println("Volume              : $volume")
 		println("Audio Source        : $audioSource")
 		println("Name                : $name")
@@ -1271,8 +1270,8 @@ class NacAlarm()
 		output.writeString(mediaTitle)
 		output.writeInt(mediaType)
 		output.writeString(localMediaPath)
-		output.writeInt(if (shuffleMedia) 1 else 0)
-		output.writeInt(if (recursivelyPlayMedia) 1 else 0)
+		output.writeInt(if (shouldShuffleMedia) 1 else 0)
+		output.writeInt(if (shouldRecursivelyPlayMedia) 1 else 0)
 
 		// Other normal stuff
 		output.writeInt(volume)
@@ -1344,6 +1343,7 @@ class NacAlarm()
 		 */
 		fun build(shared: NacSharedPreferences? = null): NacAlarm
 		{
+			// Create an alarm and get calendar instance
 			val alarm = NacAlarm()
 			val calendar = Calendar.getInstance()
 
@@ -1351,74 +1351,88 @@ class NacAlarm()
 			alarm.isEnabled = true
 			alarm.hour = calendar[Calendar.HOUR_OF_DAY]
 			alarm.minute = calendar[Calendar.MINUTE]
-			alarm.days = if (shared != null) Day.valueToDays(shared.days) else Day.NONE
-			alarm.shouldRepeat = shared?.shouldRepeat ?: false
-			alarm.shouldVibrate = shared?.shouldVibrate ?: false
-			alarm.vibrateDuration = shared?.vibrateDuration ?: 500L
-			alarm.vibrateWaitTime = shared?.vibrateWaitTime ?: 1000L
-			alarm.shouldVibratePattern = shared?.shouldVibratePattern ?: false
-			alarm.vibrateRepeatPattern = shared?.vibrateRepeatPattern ?: 3
-			alarm.vibrateWaitTimeAfterPattern = shared?.vibrateWaitTimeAfterPattern ?: 2000L
-			alarm.shouldUseNfc = shared?.shouldUseNfc ?: false
+
+			// Defaults that probably do not need it because they are already set this way
 			alarm.nfcTagId = ""
-			alarm.useFlashlight = shared?.shouldUseFlashlight ?: false
-			alarm.flashlightStrengthLevel = shared?.flashlightStrengthLevel ?: 0
-			alarm.graduallyIncreaseFlashlightStrengthLevelWaitTime = shared?.graduallyIncreaseFlashlightStrengthLevelWaitTime ?: 0
-			alarm.shouldBlinkFlashlight = shared?.shouldBlinkFlashlight ?: false
-			alarm.flashlightOnDuration = shared?.flashlightOnDuration ?: ""
-			alarm.flashlightOffDuration = shared?.flashlightOffDuration ?: ""
-
-			// Media
-			alarm.mediaPath = shared?.mediaPath ?: ""
-			alarm.mediaArtist = shared?.mediaArtist ?: ""
-			alarm.mediaTitle = shared?.mediaTitle ?: ""
-			alarm.mediaType = shared?.mediaType ?: NacMedia.TYPE_NONE
-			alarm.localMediaPath = shared?.localMediaPath ?: ""
-			alarm.shuffleMedia = shared?.shouldShuffleMedia ?: false
-			alarm.recursivelyPlayMedia = shared?.recursivelyPlayMedia ?: false
-
-			// Other normal stuff
-			alarm.volume = shared?.volume ?: 0
-			alarm.audioSource = shared?.audioSource ?: ""
-			alarm.name = shared?.name ?: ""
-
-			// Text-to-speech
-			alarm.sayCurrentTime = shared?.shouldSayCurrentTime ?: false
-			alarm.sayAlarmName = shared?.shouldSayAlarmName ?: false
-			alarm.ttsFrequency = shared?.ttsFrequency ?: 0
-
-			// Volume features
-			alarm.shouldGraduallyIncreaseVolume = shared?.shouldGraduallyIncreaseVolume ?: false
-			alarm.graduallyIncreaseVolumeWaitTime = shared?.graduallyIncreaseVolumeWaitTime ?: 5
-			alarm.shouldRestrictVolume = shared?.shouldRestrictVolume ?: false
-
-			// Auto dismiss
-			alarm.shouldAutoDismiss = shared?.shouldAutoDismiss ?: true
-			alarm.autoDismissTime = shared?.autoDismissTime ?: 900
-
-			// Dismiss early
-			alarm.useDismissEarly = shared?.canDismissEarly ?: false
-			alarm.dismissEarlyTime = shared?.dismissEarlyTime ?: 30
 			alarm.timeOfDismissEarlyAlarm = 0
-
-			// Snooze
-			alarm.shouldAutoSnooze = shared?.shouldAutoSnooze ?: false
-			alarm.autoSnoozeTime = shared?.autoSnoozeTime ?: 300
-			alarm.maxSnooze = shared?.maxSnooze ?: -1
-			alarm.snoozeDuration = shared?.snoozeDuration ?: 300
-			alarm.useEasySnooze = shared?.easySnooze ?: false
-
-			// Reminder
-			alarm.showReminder = shared?.shouldShowReminder ?: false
-			alarm.timeToShowReminder = shared?.timeToShowReminder ?: 5
-			alarm.reminderFrequency = shared?.reminderFrequency ?: 0
-			alarm.useTtsForReminder = shared?.shouldUseTtsForReminder ?: false
-
-			// Skip next alarm
 			alarm.shouldSkipNextAlarm = false
 
-			// Delete alarm after dismissed
-			alarm.shouldDeleteAlarmAfterDismissed = shared?.shouldDeleteAlarmAfterDismissed ?: false
+			// Check if shared preferences is set
+			if (shared != null)
+			{
+				// Days
+				alarm.days = Day.valueToDays(shared.days)
+
+				// Repeat
+				alarm.shouldRepeat = shared.shouldRepeat
+
+				// Vibrate
+				alarm.shouldVibrate = shared.shouldVibrate
+				alarm.vibrateDuration = shared.vibrateDuration
+				alarm.vibrateWaitTime = shared.vibrateWaitTime
+				alarm.shouldVibratePattern = shared.shouldVibratePattern
+				alarm.vibrateRepeatPattern = shared.vibrateRepeatPattern
+				alarm.vibrateWaitTimeAfterPattern = shared.vibrateWaitTimeAfterPattern
+
+				// NFC
+				alarm.shouldUseNfc = shared.shouldUseNfc
+
+				// Flashlight
+				alarm.useFlashlight = shared.shouldUseFlashlight
+				alarm.flashlightStrengthLevel = shared.flashlightStrengthLevel
+				alarm.graduallyIncreaseFlashlightStrengthLevelWaitTime = shared.graduallyIncreaseFlashlightStrengthLevelWaitTime
+				alarm.shouldBlinkFlashlight = shared.shouldBlinkFlashlight
+				alarm.flashlightOnDuration = shared.flashlightOnDuration
+				alarm.flashlightOffDuration = shared.flashlightOffDuration
+
+				// Media
+				alarm.mediaPath = shared.mediaPath
+				alarm.mediaArtist = shared.mediaArtist
+				alarm.mediaTitle = shared.mediaTitle
+				alarm.mediaType = shared.mediaType
+				alarm.localMediaPath = shared.localMediaPath
+				alarm.shouldShuffleMedia = shared.shouldShuffleMedia
+				alarm.shouldRecursivelyPlayMedia = shared.recursivelyPlayMedia
+
+				// Other normal stuff
+				alarm.volume = shared.volume
+				alarm.audioSource = shared.audioSource
+				alarm.name = shared.name
+
+				// Text-to-speech
+				alarm.sayCurrentTime = shared.shouldSayCurrentTime
+				alarm.sayAlarmName = shared.shouldSayAlarmName
+				alarm.ttsFrequency = shared.ttsFrequency
+
+				// Volume features
+				alarm.shouldGraduallyIncreaseVolume = shared.shouldGraduallyIncreaseVolume
+				alarm.graduallyIncreaseVolumeWaitTime = shared.graduallyIncreaseVolumeWaitTime
+				alarm.shouldRestrictVolume = shared.shouldRestrictVolume
+
+				// Auto dismiss
+				alarm.shouldAutoDismiss = shared.shouldAutoDismiss
+				alarm.autoDismissTime = shared.autoDismissTime
+
+				// Dismiss early
+				alarm.useDismissEarly = shared.canDismissEarly
+				alarm.dismissEarlyTime = shared.dismissEarlyTime
+
+				// Snooze
+				alarm.shouldAutoSnooze = shared.shouldAutoSnooze
+				alarm.autoSnoozeTime = shared.autoSnoozeTime
+				alarm.maxSnooze = shared.maxSnooze
+				alarm.snoozeDuration = shared.snoozeDuration
+				alarm.useEasySnooze = shared.easySnooze
+
+				// Reminder
+				alarm.showReminder = shared.shouldShowReminder
+				alarm.timeToShowReminder = shared.timeToShowReminder
+				alarm.reminderFrequency = shared.reminderFrequency
+				alarm.useTtsForReminder = shared.shouldUseTtsForReminder
+
+				// Delete alarm after dismissed
+				alarm.shouldDeleteAlarmAfterDismissed = shared.shouldDeleteAlarmAfterDismissed
+			}
 
 			return alarm
 		}
@@ -1652,7 +1666,7 @@ class NacAlarm()
 		/**
 		 * Calculate the minutes and seconds components from a time.
 		 */
-		fun calcMinutesAndSecondsFromTime(time: Int): Pair<Int, Int>
+		private fun calcMinutesAndSecondsFromTime(time: Int): Pair<Int, Int>
 		{
 			val minutes = time / 60
 			val seconds = time % 60

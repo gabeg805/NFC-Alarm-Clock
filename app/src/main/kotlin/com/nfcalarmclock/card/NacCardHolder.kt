@@ -18,7 +18,6 @@ import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import androidx.annotation.OptIn
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
@@ -30,8 +29,6 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService.Companion.dismissAlarmService
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService.Companion.startAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.alarm.options.name.NacNameDialog
-import com.nfcalarmclock.alarm.options.name.NacNameDialog.OnNameEnteredListener
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar.Day
 import com.nfcalarmclock.util.NacUtility.getHeight
@@ -60,22 +57,6 @@ class NacCardHolder(
 {
 
 	/**
-	 * Listener for when the dismiss options button is clicked.
-	 */
-	fun interface OnCardDismissOptionsClickedListener
-	{
-		fun onCardDismissOptionsClicked(holder: NacCardHolder, alarm: NacAlarm)
-	}
-
-	/**
-	 * Listener for when the snooze options button is clicked.
-	 */
-	fun interface OnCardSnoozeOptionsClickedListener
-	{
-		fun onCardSnoozeOptionsClicked(holder: NacCardHolder, alarm: NacAlarm)
-	}
-
-	/**
 	 * Listener for when the alarm options button is clicked.
 	 */
 	fun interface OnCardAlarmOptionsClickedListener
@@ -92,11 +73,27 @@ class NacCardHolder(
 	}
 
 	/**
+	 * Listener for when the days changed.
+	 */
+	fun interface OnCardDaysChangedListener
+	{
+		fun onCardDaysChanged(holder: NacCardHolder, alarm: NacAlarm)
+	}
+
+	/**
 	 * Listener for when the delete button is clicked.
 	 */
 	fun interface OnCardDeleteClickedListener
 	{
 		fun onCardDeleteClicked(holder: NacCardHolder, alarm: NacAlarm)
+	}
+
+	/**
+	 * Listener for when the dismiss options button is clicked.
+	 */
+	fun interface OnCardDismissOptionsClickedListener
+	{
+		fun onCardDismissOptionsClicked(holder: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -113,6 +110,22 @@ class NacCardHolder(
 	fun interface OnCardMediaClickedListener
 	{
 		fun onCardMediaClicked(holder: NacCardHolder, alarm: NacAlarm)
+	}
+
+	/**
+	 * Listener for when the name button is clicked.
+	 */
+	fun interface OnCardNameClickedListener
+	{
+		fun onCardNameClicked(holder: NacCardHolder, alarm: NacAlarm)
+	}
+
+	/**
+	 * Listener for when the snooze options button is clicked.
+	 */
+	fun interface OnCardSnoozeOptionsClickedListener
+	{
+		fun onCardSnoozeOptionsClicked(holder: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -137,6 +150,14 @@ class NacCardHolder(
 	fun interface OnCardUseNfcChangedListener
 	{
 		fun onCardUseNfcChanged(holder: NacCardHolder, alarm: NacAlarm)
+	}
+
+	/**
+	 * Listener for when a card will repeat or not is changed.
+	 */
+	fun interface OnCardUseRepeatChangedListener
+	{
+		fun onCardUseRepeatChanged(holder: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -165,12 +186,12 @@ class NacCardHolder(
 	/**
 	 * Copy swipe view.
 	 */
-	val copySwipeView: RelativeLayout = root.findViewById(R.id.nac_swipe_copy)
+	val copySwipeView: RelativeLayout? = root.findViewById(R.id.nac_swipe_copy)
 
 	/**
 	 * Delete swipe view.
 	 */
-	val deleteSwipeView: RelativeLayout = root.findViewById(R.id.nac_swipe_delete)
+	val deleteSwipeView: RelativeLayout? = root.findViewById(R.id.nac_swipe_delete)
 
 	/**
 	 * Header view.
@@ -215,12 +236,12 @@ class NacCardHolder(
 	/**
 	 * On/off switch for an alarm.
 	 */
-	private val switch: SwitchCompat = root.findViewById(R.id.nac_switch)
+	val switch: SwitchCompat = root.findViewById(R.id.nac_switch)
 
 	/**
 	 * Time parent view.
 	 */
-	private val timeParentView: LinearLayout = root.findViewById(R.id.nac_time_parent)
+	val timeParentView: LinearLayout = root.findViewById(R.id.nac_time_parent)
 
 	/**
 	 * Time text.
@@ -339,16 +360,6 @@ class NacCardHolder(
 	//this.mTimePicker = null;
 
 	/**
-	 * Listener for when the dismiss options button is clicked.
-	 */
-	var onCardDismissOptionsClickedListener: OnCardDismissOptionsClickedListener? = null
-
-	/**
-	 * Listener for when the snooze options button is clicked.
-	 */
-	var onCardSnoozeOptionsClickedListener: OnCardSnoozeOptionsClickedListener? = null
-
-	/**
 	 * Listener for when the alarm options button is clicked.
 	 */
 	var onCardAlarmOptionsClickedListener: OnCardAlarmOptionsClickedListener? = null
@@ -359,9 +370,19 @@ class NacCardHolder(
 	var onCardCollapsedListener: OnCardCollapsedListener? = null
 
 	/**
+	 * Listener for when the days changed.
+	 */
+	var onCardDaysChangedListener: OnCardDaysChangedListener? = null
+
+	/**
 	 * Listener for when the delete button is clicked.
 	 */
 	var onCardDeleteClickedListener: OnCardDeleteClickedListener? = null
+
+	/**
+	 * Listener for when the dismiss options button is clicked.
+	 */
+	var onCardDismissOptionsClickedListener: OnCardDismissOptionsClickedListener? = null
 
 	/**
 	 * Listener for when the alarm card is expanded.
@@ -372,6 +393,16 @@ class NacCardHolder(
 	 * Listener for when the media button is clicked.
 	 */
 	var onCardMediaClickedListener: OnCardMediaClickedListener? = null
+
+	/**
+	 * Listener for when the name button is clicked.
+	 */
+	var onCardNameClickedListener: OnCardNameClickedListener? = null
+
+	/**
+	 * Listener for when the snooze options button is clicked.
+	 */
+	var onCardSnoozeOptionsClickedListener: OnCardSnoozeOptionsClickedListener? = null
 
 	/**
 	 * Listener for when the alarm card is updated.
@@ -387,6 +418,11 @@ class NacCardHolder(
 	 * Listener for when a card will use NFC or not is changed.
 	 */
 	var onCardUseNfcChangedListener: OnCardUseNfcChangedListener? = null
+
+	/**
+	 * Listener for when a card will repeat or not is changed.
+	 */
+	var onCardUseRepeatChangedListener: OnCardUseRepeatChangedListener? = null
 
 	/**
 	 * Listener for when a card will vibrate or not is changed.
@@ -852,8 +888,8 @@ class NacCardHolder(
 	 */
 	private fun hideSwipeViews()
 	{
-		copySwipeView.visibility = View.GONE
-		deleteSwipeView.visibility = View.GONE
+		copySwipeView?.visibility = View.GONE
+		deleteSwipeView?.visibility = View.GONE
 	}
 
 	/**
@@ -1176,7 +1212,7 @@ class NacCardHolder(
 	/**
 	 * Set the media button to its proper setting.
 	 */
-	private fun setMediaButton()
+	fun setMediaButton()
 	{
 		val mediaTitle = alarm!!.mediaTitle
 		val message : String
@@ -1249,6 +1285,23 @@ class NacCardHolder(
 			// Set the new meridian in the view
 			meridianView.text = meridian
 		}
+	}
+
+	/**
+	 * Set a new name.
+	 */
+	fun setName(name: String)
+	{
+		// Reset the skip next alarm flag
+		alarm!!.shouldSkipNextAlarm = false
+
+		// Set the alarm name
+		alarm!!.name = name
+
+		// Setup the views
+		setNameButton()
+		setSummaryNameView()
+		setSummarySkipNextAlarmIcon()
 	}
 
 	/**
@@ -1659,7 +1712,7 @@ class NacCardHolder(
 				setSummarySkipNextAlarmIcon()
 
 				// Call the listener
-				callOnCardUpdatedListener()
+				onCardDaysChangedListener?.onCardDaysChanged(this, alarm!!)
 			}
 			// Alarm cannot be modified
 			else
@@ -1816,8 +1869,8 @@ class NacCardHolder(
 			// Check if the alarm can be modified
 			if (checkCanModifyAlarm())
 			{
-				// Show the name dialog
-				showNameDialog()
+				// Call the listener
+				onCardNameClickedListener?.onCardNameClicked(this, alarm!!)
 			}
 
 			// Haptic feedback
@@ -1875,20 +1928,7 @@ class NacCardHolder(
 				setSummarySkipNextAlarmIcon()
 
 				// Call the listener
-				callOnCardUpdatedListener()
-
-				// Determine which message to show
-				val messageId = if (alarm!!.shouldRepeat)
-				{
-					R.string.message_repeat_enabled
-				}
-				else
-				{
-					R.string.message_repeat_disabled
-				}
-
-				// Toast the repeat message
-				quickToast(context, messageId)
+				onCardUseRepeatChangedListener?.onCardUseRepeatChanged(this, alarm!!)
 			}
 			// Alarm cannot be modified
 			else
@@ -2171,43 +2211,6 @@ class NacCardHolder(
 	private fun shouldShowExtraView(): Boolean
 	{
 		return alarm!!.isInUse || alarm!!.willAlarmSoon()
-	}
-
-	/**
-	 * Show the name dialog.
-	 */
-	private fun showNameDialog()
-	{
-		// Get the fragment manager
-		val manager = (context as AppCompatActivity).supportFragmentManager
-
-		// Create the dialog
-		val dialog = NacNameDialog()
-
-		// Setup the default name
-		dialog.defaultName = alarm!!.name
-
-		// Setup the listener
-		dialog.onNameEnteredListener = OnNameEnteredListener { name ->
-
-			// Reset the skip next alarm flag
-			alarm!!.shouldSkipNextAlarm = false
-
-			// Set the alarm name
-			alarm!!.name = name
-
-			// Setup the views
-			setNameButton()
-			setSummaryNameView()
-			setSummarySkipNextAlarmIcon()
-
-			// Call the listener
-			callOnCardUpdatedListener()
-
-		}
-
-		// Show the dialog
-		dialog.show(manager, NacNameDialog.TAG)
 	}
 
 	/**

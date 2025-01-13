@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:orientation="vertical"
-	android:paddingTop="@dimen/normal"
-	android:paddingBottom="@dimen/normal"
-	android:paddingStart="?dialogPreferredPadding"
-	android:paddingEnd="?dialogPreferredPadding"
-	tools:ignore="ContentDescription,UselessParent,UseCompoundDrawables">
+	android:orientation="vertical">
 
 	<!-- Title -->
 	<TextView
@@ -43,17 +36,4 @@
 			/>
 	</com.google.android.material.textfield.TextInputLayout>
 
-	<!-- Separator -->
-	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
-
-	<!-- Button to confirm selection -->
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/select_nfc_tag"
-		android:layout_width="match_parent"
-		android:layout_height="@dimen/touch"
-		android:backgroundTint="@color/orange"
-		android:textColor="@color/white"
-		android:text="@string/action_done"
-		/>
-
-</LinearLayout>
+</com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>
