@@ -123,7 +123,7 @@ class NacCardPreference @JvmOverloads constructor(
 		card.bind(alarm)
 		card.doExpandWithColor()
 
-		// TODO: Force always expanded
+		// TODO: Force always expanded?
 
 		// Do not allow changing the time and is enabled switch
 		card.timeParentView.isEnabled = false

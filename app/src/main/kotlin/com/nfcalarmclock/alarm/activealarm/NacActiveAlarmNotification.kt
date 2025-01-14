@@ -190,7 +190,6 @@ class NacActiveAlarmNotification(
 		// Check if battery saver option is disabled
 		if (!sharedPreferences.shouldSaveBatteryInAlarmScreen)
 		{
-			println("ADDING FULL SCREEN INTENT")
 			builder = builder.setFullScreenIntent(contentPendingIntent, true)
 		}
 

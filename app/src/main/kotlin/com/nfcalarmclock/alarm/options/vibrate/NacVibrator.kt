@@ -168,9 +168,10 @@ class NacVibrator(context: Context)
 		}
 
 		// Wait for a period of time before vibrating the device again
+		println("VIBRATE post delayed")
 		handler.postDelayed({
 			vibrate(duration, wait, repeatPattern, waitAfterPattern)
-		}, duration+newWaitTime)
+		}, newWaitTime)
 	}
 
 }

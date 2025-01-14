@@ -417,7 +417,7 @@
 						android:alpha="0.6"
 						android:textSize="@dimen/tsz_small"
 						android:textStyle="bold"
-						android:text="Options"
+						android:text="@string/title_options"
 						/>
 
 					<!-- Divider -->
