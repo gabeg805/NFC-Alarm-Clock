@@ -255,19 +255,25 @@ class NacAlarm()
 	 * Whether to say the current time via text-to-speech when the alarm goes off.
 	 */
 	@ColumnInfo(name = "should_say_current_time", defaultValue = "0")
-	var sayCurrentTime: Boolean = false
+	var shouldSayCurrentTime: Boolean = false
 
 	/**
 	 * Whether to say the alarm name via text-to-speech when the alarm goes off.
 	 */
 	@ColumnInfo(name = "should_say_alarm_name", defaultValue = "0")
-	var sayAlarmName: Boolean = false
+	var shouldSayAlarmName: Boolean = false
 
 	/**
 	 * Frequency at which to play text-to-speech, in units of minutes.
 	 */
 	@ColumnInfo(name = "tts_frequency", defaultValue = "0")
 	var ttsFrequency: Int = 0
+
+	/**
+	 * Name of the voice to use for text-to-speech.
+	 */
+	@ColumnInfo(name = "tts_voice", defaultValue = "")
+	var ttsVoice: String = ""
 
 	/**
 	 * Whether to gradually increase the volume or not, when an alarm is active.
@@ -446,7 +452,7 @@ class NacAlarm()
 	 * Check if should use TTS or not.
 	 */
 	val shouldUseTts: Boolean
-		get() = sayCurrentTime || sayAlarmName
+		get() = shouldSayCurrentTime || shouldSayAlarmName
 
 	/**
 	 * Check if should use text-to-speech for the reminder or not.
@@ -503,9 +509,10 @@ class NacAlarm()
 		name = input.readString() ?: ""
 
 		// Text-to-speech
-		sayCurrentTime = input.readInt() != 0
-		sayAlarmName = input.readInt() != 0
+		shouldSayCurrentTime = input.readInt() != 0
+		shouldSayAlarmName = input.readInt() != 0
 		ttsFrequency = input.readInt()
+		ttsVoice = input.readString() ?: ""
 
 		// Volume features
 		shouldGraduallyIncreaseVolume = input.readInt() != 0
@@ -748,9 +755,10 @@ class NacAlarm()
 		alarm.name = name
 
 		// Text-to-speech
-		alarm.sayCurrentTime = sayCurrentTime
-		alarm.sayAlarmName = sayAlarmName
+		alarm.shouldSayCurrentTime = shouldSayCurrentTime
+		alarm.shouldSayAlarmName = shouldSayAlarmName
 		alarm.ttsFrequency = ttsFrequency
+		alarm.ttsVoice = ttsVoice
 
 		// Volume features
 		alarm.shouldGraduallyIncreaseVolume = shouldGraduallyIncreaseVolume
@@ -888,9 +896,10 @@ class NacAlarm()
 			&& (volume == alarm.volume)
 			&& (audioSource == alarm.audioSource)
 			&& (name == alarm.name)
-			&& (sayCurrentTime == alarm.sayCurrentTime)
-			&& (sayAlarmName == alarm.sayAlarmName)
+			&& (shouldSayCurrentTime == alarm.shouldSayCurrentTime)
+			&& (shouldSayAlarmName == alarm.shouldSayAlarmName)
 			&& (ttsFrequency == alarm.ttsFrequency)
+			&& (ttsVoice == alarm.ttsVoice)
 			&& (shouldGraduallyIncreaseVolume == alarm.shouldGraduallyIncreaseVolume)
 			&& (graduallyIncreaseVolumeWaitTime == alarm.graduallyIncreaseVolumeWaitTime)
 			&& (shouldRestrictVolume == alarm.shouldRestrictVolume)
@@ -953,9 +962,10 @@ class NacAlarm()
 			&& (volume == alarm.volume)
 			&& (audioSource == alarm.audioSource)
 			&& (name == alarm.name)
-			&& (sayCurrentTime == alarm.sayCurrentTime)
-			&& (sayAlarmName == alarm.sayAlarmName)
+			&& (shouldSayCurrentTime == alarm.shouldSayCurrentTime)
+			&& (shouldSayAlarmName == alarm.shouldSayAlarmName)
 			&& (ttsFrequency == alarm.ttsFrequency)
+			&& (ttsVoice == alarm.ttsVoice)
 			&& (shouldGraduallyIncreaseVolume == alarm.shouldGraduallyIncreaseVolume)
 			&& (shouldRestrictVolume == alarm.shouldRestrictVolume)
 			&& (shouldAutoDismiss == alarm.shouldAutoDismiss)
@@ -1058,9 +1068,10 @@ class NacAlarm()
 		println("Volume              : $volume")
 		println("Audio Source        : $audioSource")
 		println("Name                : $name")
-		println("Tts say time        : $sayCurrentTime")
-		println("Tts say name        : $sayAlarmName")
+		println("Tts say time        : $shouldSayCurrentTime")
+		println("Tts say name        : $shouldSayAlarmName")
 		println("Tts Freq            : $ttsFrequency")
+		println("Tts Voice           : $ttsVoice")
 		println("Grad Inc Vol        : $shouldGraduallyIncreaseVolume")
 		println("Grad Inc Vol Wait T : $graduallyIncreaseVolumeWaitTime")
 		println("Restrict Vol        : $shouldRestrictVolume")
@@ -1279,9 +1290,10 @@ class NacAlarm()
 		output.writeString(name)
 
 		// Text-to-speech
-		output.writeInt(if (sayCurrentTime) 1 else 0)
-		output.writeInt(if (sayAlarmName) 1 else 0)
+		output.writeInt(if (shouldSayCurrentTime) 1 else 0)
+		output.writeInt(if (shouldSayAlarmName) 1 else 0)
 		output.writeInt(ttsFrequency)
+		output.writeString(ttsVoice)
 
 		// Volume features
 		output.writeInt(if (shouldGraduallyIncreaseVolume) 1 else 0)
@@ -1400,9 +1412,10 @@ class NacAlarm()
 				alarm.name = shared.name
 
 				// Text-to-speech
-				alarm.sayCurrentTime = shared.shouldSayCurrentTime
-				alarm.sayAlarmName = shared.shouldSayAlarmName
+				alarm.shouldSayCurrentTime = shared.shouldSayCurrentTime
+				alarm.shouldSayAlarmName = shared.shouldSayAlarmName
 				alarm.ttsFrequency = shared.ttsFrequency
+				alarm.ttsVoice = shared.ttsVoice
 
 				// Volume features
 				alarm.shouldGraduallyIncreaseVolume = shared.shouldGraduallyIncreaseVolume

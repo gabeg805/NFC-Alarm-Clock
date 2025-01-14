@@ -143,16 +143,12 @@ class NacVibrateOptionsDialog
 		val context = requireContext()
 		vibrator = NacVibrator(context)
 
-		// Get the default values
-		val defaultVibrateDuration = alarm?.vibrateDuration ?: 500L
-		val defaultVibrateWaitTime = alarm?.vibrateWaitTime ?: 1000L
-		val defaultShouldVibratePattern = alarm?.shouldVibratePattern ?: false
-		val defaultVibrateRepeatPattern = alarm?.vibrateRepeatPattern ?: 3
-		val defaultVibrateWaitTimeAfterPattern = alarm?.vibrateWaitTimeAfterPattern ?: 2000L
+		// Get the alarm, or build a new one, to get default values
+		val a = alarm ?: NacAlarm.build()
 
 		// Setup the views
-		setupVibrationDuration(defaultVibrateDuration, defaultVibrateWaitTime)
-		setupCustomPattern(defaultShouldVibratePattern, defaultVibrateRepeatPattern, defaultVibrateWaitTimeAfterPattern)
+		setupVibrationDuration(a.vibrateDuration, a.vibrateWaitTime)
+		setupCustomPattern(a.shouldVibratePattern, a.vibrateRepeatPattern, a.vibrateWaitTimeAfterPattern)
 		setCustomPatternUsability()
 
 	}

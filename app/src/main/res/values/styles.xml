@@ -32,6 +32,7 @@
 
 		<item name="colorCard">@color/gray_dark</item>
 		<item name="colorCardExpanded">@color/gray</item>
+		<item name="android:windowBackground">?attr/colorCard</item>
 
 		<!-- Added to fix Style does not have TextAppearance attribute -->
 		<item name="colorPrimaryInverse">@color/white</item>

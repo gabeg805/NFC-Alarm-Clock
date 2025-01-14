@@ -36,6 +36,9 @@ class NacSelectNfcTagDialog
 	 */
 	override val layoutId = R.layout.dlg_select_nfc_tag
 
+	/**
+	 * NFC tag view model.
+	 */
 	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
 
 	/**

@@ -1,7 +1,9 @@
 package com.nfcalarmclock.settings
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.NavHostFragment
 import com.nfcalarmclock.R
@@ -61,6 +63,12 @@ class NacMainSettingActivity
 
 		// Set a back stack changed listener
 		supportFragmentManager.addOnBackStackChangedListener(this)
+
+		// Set the color of the action bar
+		val black = ContextCompat.getColor(this, R.color.black)
+		val actionBarColor = ColorDrawable(black)
+
+		supportActionBar?.setBackgroundDrawable(actionBarColor)
 	}
 
 	/**

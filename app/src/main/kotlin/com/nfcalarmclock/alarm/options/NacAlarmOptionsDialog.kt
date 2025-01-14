@@ -8,11 +8,14 @@ import android.widget.LinearLayout
 import androidx.core.view.children
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
+import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
 import com.nfcalarmclock.view.setupBackgroundColor
 import com.nfcalarmclock.view.setupRippleColor
@@ -175,6 +178,38 @@ class NacAlarmOptionsDialog
 			}
 
 		})
+	}
+
+	companion object
+	{
+
+		/**
+		 * Start the navigation to the alarm options dialog.
+		 */
+		fun navigate(
+			navController: NavController,
+			alarm: NacAlarm
+		): MutableLiveData<NacAlarm>?
+		{
+			// Create bundle with the alarm
+			val bundle = Bundle().addAlarm(alarm)
+
+			// Set the graph of the nav controller
+			navController.setGraph(R.navigation.nav_alarm_options, bundle)
+
+			// Check if the nav controller did not navigate to the destination
+			if (navController.currentDestination == null)
+			{
+				// Navigate to the destination manually
+				navController.navigate(R.id.nacAlarmOptionsDialog, bundle)
+			}
+
+			// Setup an observe to watch for any changes to the alarm
+			return navController.currentBackStackEntry
+				?.savedStateHandle
+				?.getLiveData("YOYOYO")
+		}
+
 	}
 
 }

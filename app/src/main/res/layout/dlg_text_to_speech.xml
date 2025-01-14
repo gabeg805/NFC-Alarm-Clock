@@ -76,4 +76,50 @@
 			/>
 	</com.google.android.material.textfield.TextInputLayout>
 
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
+
+	<!-- Voice title -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Title"
+		android:id="@+id/tts_voice_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Voice"
+		/>
+
+	<!-- Voice description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:id="@+id/tts_voice_description"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="The voice to use for text-to-speech."
+		/>
+
+	<!-- Pick how often to say the selected thing(s) above -->
+	<com.google.android.material.textfield.TextInputLayout
+		style="@style/Widget.AlarmOptionDialog.DropdownRow"
+		android:id="@+id/tts_voice_input_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<com.google.android.material.textfield.MaterialAutoCompleteTextView
+			android:id="@+id/tts_voice_dropdown_menu"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:inputType="none"
+			/>
+	</com.google.android.material.textfield.TextInputLayout>
+
+	<!-- Preview button -->
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/preview_button"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textColor="@color/white"
+		android:text="@string/action_preview"
+		app:backgroundTint="@color/gray_light"
+		/>
+
 </com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

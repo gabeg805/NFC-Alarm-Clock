@@ -32,11 +32,11 @@ class NacCardPreference @JvmOverloads constructor(
 {
 
 	/**
-	 * Listener for when the media button is clicked.
+	 * Listener for when the alarm options button is clicked.
 	 */
-	fun interface OnCardMediaClickedListener
+	fun interface OnCardAlarmOptionsClickedListener
 	{
-		fun onCardMediaClicked(alarm: NacAlarm)
+		fun onCardAlarmOptionsClicked(alarm: NacAlarm)
 	}
 
 	/**
@@ -48,6 +48,22 @@ class NacCardPreference @JvmOverloads constructor(
 	}
 
 	/**
+	 * Listener for when the media button is clicked.
+	 */
+	fun interface OnCardMediaClickedListener
+	{
+		fun onCardMediaClicked(alarm: NacAlarm)
+	}
+
+	/**
+	 * Listener for when the name button is clicked.
+	 */
+	fun interface OnCardNameClickedListener
+	{
+		fun onCardNameClicked(alarm: NacAlarm)
+	}
+
+	/**
 	 * Listener for when the snooze options button is clicked.
 	 */
 	fun interface OnCardSnoozeOptionsClickedListener
@@ -56,19 +72,29 @@ class NacCardPreference @JvmOverloads constructor(
 	}
 
 	/**
+	 * Listener for when the alarm options button is clicked.
+	 */
+	var onCardAlarmOptionsClickedListener: OnCardAlarmOptionsClickedListener? = null
+
+	/**
+	 * Listener for when the dismiss options button is clicked.
+	 */
+	var onCardDismissOptionsClickedListener: OnCardDismissOptionsClickedListener? = null
+
+	/**
 	 * Listener for when the media button is clicked.
 	 */
 	var onCardMediaClickedListener: OnCardMediaClickedListener? = null
 
 	/**
-	 * Listener for when the dismiss options button is clicked.
+	 * Listener for when the name button is clicked.
 	 */
-	var onCardDismissClickedListener: OnCardDismissOptionsClickedListener? = null
+	var onCardNameClickedListener: OnCardNameClickedListener? = null
 
 	/**
 	 * Listener for when the snooze options button is clicked.
 	 */
-	var onCardSnoozeClickedListener: OnCardSnoozeOptionsClickedListener? = null
+	var onCardSnoozeOptionsClickedListener: OnCardSnoozeOptionsClickedListener? = null
 
 	/**
 	 * Alarm card.
@@ -135,22 +161,29 @@ class NacCardPreference @JvmOverloads constructor(
 			onCardMediaClickedListener?.onCardMediaClicked(a)
 		}
 
+		// Volume
+		card.onCardVolumeChangedListener = NacCardHolder.OnCardVolumeChangedListener { _, a ->
+			sharedPreferences.volume = a.volume
+		}
+
+		// Name
+		card.onCardNameClickedListener = NacCardHolder.OnCardNameClickedListener { _, a ->
+			onCardNameClickedListener?.onCardNameClicked(a)
+		}
+
 		// Dismiss options
 		card.onCardDismissOptionsClickedListener = NacCardHolder.OnCardDismissOptionsClickedListener { _, a ->
-			onCardDismissClickedListener?.onCardDismissOptionsClicked(a)
+			onCardDismissOptionsClickedListener?.onCardDismissOptionsClicked(a)
 		}
 
 		// Snooze options
 		card.onCardSnoozeOptionsClickedListener = NacCardHolder.OnCardSnoozeOptionsClickedListener { _, a ->
-			onCardSnoozeClickedListener?.onCardSnoozeOptionsClicked(a)
+			onCardSnoozeOptionsClickedListener?.onCardSnoozeOptionsClicked(a)
 		}
 
-		// Alarm options listener
+		// Alarm options
 		card.onCardAlarmOptionsClickedListener = NacCardHolder.OnCardAlarmOptionsClickedListener { _, a ->
-
-			// Show the alarm options dialog
-			//showAlarmOptionsDialog(alarm)
-
+			onCardAlarmOptionsClickedListener?.onCardAlarmOptionsClicked(a)
 		}
 
 	}

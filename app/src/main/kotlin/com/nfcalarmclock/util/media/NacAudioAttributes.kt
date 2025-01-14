@@ -125,6 +125,11 @@ class NacAudioAttributes(
 		}
 
 	/**
+	 * Voice name for text-to-speech.
+	 */
+	var voice: String = ""
+
+	/**
 	 * Constructor.
 	 */
 	constructor(context: Context, alarm: NacAlarm) : this(context, "")
@@ -174,6 +179,9 @@ class NacAudioAttributes(
 
 		// Set the volume level
 		volumeLevel = alarm.volume
+
+		// Set the text-to-speech voice
+		voice = alarm.ttsVoice
 
 		return this
 	}

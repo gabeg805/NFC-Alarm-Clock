@@ -6,7 +6,6 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.options.nextalarmformat.NacNextAlarmFormatPreference
-import com.nfcalarmclock.settings.preference.NacCheckboxPreference
 import com.nfcalarmclock.alarm.options.startweekon.NacStartWeekOnPreference
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 import com.nfcalarmclock.view.colorpicker.NacColorPickerPreference
@@ -33,7 +32,6 @@ class NacAppearanceSettingFragment
 		PreferenceManager.setDefaultValues(deviceContext, R.xml.appearance_preferences, false)
 
 		// Setup color and styles
-		setupAlarmScreenPreferences()
 		setupColorPreferences()
 		setupShowHideButtonPreferences()
 		setupDayButtonStylePreference()
@@ -57,30 +55,6 @@ class NacAppearanceSettingFragment
 
 		// Initialize the color settings
 		init()
-	}
-
-	/**
-	 * Setup the preferences for the alarm screen.
-	 */
-	private fun setupAlarmScreenPreferences()
-	{
-		// Get the new alarm screen preference
-		val newScreenKey = getString(R.string.key_use_new_alarm_screen)
-		val newScreenPref = findPreference<NacCheckboxPreference>(newScreenKey)!!
-
-		// Setup the dependent alarm screen preferences
-		setupDependentNewAlarmScreenPreferences(newScreenPref.isChecked)
-
-		// Set the listener for when the new screen preference is changed
-		newScreenPref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, status ->
-
-			// Set the usability of the dependent preferences
-			setupDependentNewAlarmScreenPreferences(status as Boolean)
-
-			// Return
-			true
-
-		}
 	}
 
 	/**
@@ -195,24 +169,6 @@ class NacAppearanceSettingFragment
 			true
 
 		}
-	}
-
-	/**
-	 * Setup the preferences that are dependent on the new alarm screen.
-	 */
-	private fun setupDependentNewAlarmScreenPreferences(enabled: Boolean)
-	{
-		// Get the keys
-		val currentDateAndTimeKey = getString(R.string.key_alarm_screen_show_current_date_and_time)
-		val musicInfoKey = getString(R.string.key_alarm_screen_show_music_info)
-
-		// Get the dependent preferences
-		val currentDateAndTimePref = findPreference<NacCheckboxPreference>(currentDateAndTimeKey)!!
-		val musicInfoPref = findPreference<NacCheckboxPreference>(musicInfoKey)!!
-
-		// Set the usability of those preferences
-		currentDateAndTimePref.isEnabled = enabled
-		musicInfoPref.isEnabled = enabled
 	}
 
 	/**
