@@ -337,7 +337,7 @@ class NacTextToSpeechDialog
 		ttsVoiceInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 
 		// Set the textview listeners
-		ttsVoiceAutoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, view, position, _ ->
+		ttsVoiceAutoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
 			selectedTtsVoice = position
 		}
 	}

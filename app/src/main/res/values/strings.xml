@@ -180,6 +180,7 @@
 
 	<!-- Titles -->
 	<string name="title_settings">Settings</string>
+	<string name="title_options">Options</string>
 	<string name="title_time">Time</string>
 	<string name="title_alarm_activity">Dismiss Alarm</string>
 	<string name="title_scan_nfc_tag">Scan NFC tag</string>

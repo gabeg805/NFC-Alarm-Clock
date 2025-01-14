@@ -5,7 +5,10 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
-		<item>Update in progress.</item>
+		<item>Changed the look of the alarm card.</item>
+		<item>Added vibrate option for alarms.</item>
+		<item>Added battery saver option to keep the screen off when an alarm is active.</item>
+		<item>Added text-to-speech option to choose which voice to use.</item>
 	</string-array>
 
 </resources>
