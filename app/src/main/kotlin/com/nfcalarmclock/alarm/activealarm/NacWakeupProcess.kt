@@ -18,7 +18,6 @@ import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.media.NacAudioAttributes
 import com.nfcalarmclock.util.media.isMediaDirectory
-import java.util.Calendar
 
 /**
  * Actions to take upon waking up, such as enabling NFC, playing music, etc.
@@ -207,56 +206,6 @@ class NacWakeupProcess(
 	}
 
 	/**
-	 * The text-to-speech phrase to say.
-	 */
-	private val ttsPhrase: String
-		get()
-		{
-			// Initialize the phrase
-			var phrase = ""
-
-			// Check if should say the current time
-			if (alarm.sayCurrentTime)
-			{
-				phrase += sayCurrentTime
-			}
-
-			// Check if should say the alarm name
-			if (alarm.sayAlarmName)
-			{
-				phrase += " $sayAlarmName"
-			}
-
-			return phrase
-		}
-
-	/**
-	 * The words that should be said when stating the alarm name, in the
-	 * designated language.
-	 */
-	private val sayAlarmName: String
-		get()
-		{
-			return NacTranslate.getSayAlarmName(context.resources, alarm.name)
-		}
-
-	/**
-	 * The words that should be said when stating the time, in the
-	 * designated language.
-	 */
-	private val sayCurrentTime: String
-		get()
-		{
-			// Get the current hour and minute
-			val calendar = Calendar.getInstance()
-			val hour = calendar[Calendar.HOUR_OF_DAY]
-			val minute = calendar[Calendar.MINUTE]
-
-			// Get how to say the current time
-			return NacTranslate.getSayCurrentTime(context, hour, minute)
-		}
-
-	/**
 	 * Cleanup various alarm objects.
 	 */
 	fun cleanup()
@@ -279,7 +228,7 @@ class NacWakeupProcess(
 		}
 
 		// Cleanup the text-to-speech engine
-		textToSpeech?.shutdown()
+		textToSpeech?.textToSpeech?.shutdown()
 		speakHandler.removeCallbacksAndMessages(null)
 
 		// Cleanup the continue wakeup handler
@@ -526,7 +475,9 @@ class NacWakeupProcess(
 		}
 
 		// Speak via TTS
-		textToSpeech.speak(ttsPhrase, audioAttributes)
+		val phrase = NacTranslate.getTtsPhrase(context, alarm.shouldSayCurrentTime, alarm.shouldSayAlarmName, alarm.name)
+
+		textToSpeech.speak(phrase, audioAttributes)
 
 		// Check if text to speech should be run at a certain frequency
 		if (alarm.ttsFrequency != 0)

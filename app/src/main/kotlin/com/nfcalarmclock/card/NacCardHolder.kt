@@ -169,6 +169,14 @@ class NacCardHolder(
 	}
 
 	/**
+	 * Listener for when the volume is changed.
+	 */
+	fun interface OnCardVolumeChangedListener
+	{
+		fun onCardVolumeChanged(holder: NacCardHolder, alarm: NacAlarm)
+	}
+
+	/**
 	 * Shared preferences.
 	 */
 	private val sharedPreferences: NacSharedPreferences = NacSharedPreferences(context)
@@ -428,6 +436,11 @@ class NacCardHolder(
 	 * Listener for when a card will vibrate or not is changed.
 	 */
 	var onCardUseVibrateChangedListener: OnCardUseVibrateChangedListener? = null
+
+	/**
+	 * Listener for when the volume is changed.
+	 */
+	var onCardVolumeChangedListener: OnCardVolumeChangedListener? = null
 
 	/**
 	 * The context.
@@ -2175,8 +2188,8 @@ class NacCardHolder(
 					return
 				}
 
-				// Update the card
-				callOnCardUpdatedListener()
+				// Call the listener
+				onCardVolumeChangedListener?.onCardVolumeChanged(this@NacCardHolder, alarm!!)
 			}
 
 		})

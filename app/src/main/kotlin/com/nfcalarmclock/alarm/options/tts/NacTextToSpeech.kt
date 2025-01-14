@@ -25,20 +25,18 @@ class NacTextToSpeech(
 	/**
 	 * Listener for when TTS is speaking.
 	 */
-	listener: OnSpeakingListener?
+	listener: OnSpeakingListener? = null
 
 	// Interface
 ) : TextToSpeech.OnInitListener
 {
 
-	companion object
+	/**
+	 * On initialized listener.
+	 */
+	fun interface OnInitializedListener
 	{
-
-		/**
-		 * Utterance ID when speaking through the TTS engine.
-		 */
-		const val UTTERANCE_ID = "NacAlarmTts"
-
+		fun onInitialized(tts: TextToSpeech, status: Int)
 	}
 
 	/**
@@ -58,7 +56,6 @@ class NacTextToSpeech(
 		fun onStartSpeaking()
 
 	}
-
 
 	/**
 	 * Utterance listener.
@@ -123,7 +120,7 @@ class NacTextToSpeech(
 	/**
 	 * The speech engine.
 	 */
-	private val textToSpeech: TextToSpeech = TextToSpeech(context, this)
+	val textToSpeech: TextToSpeech = TextToSpeech(context, this)
 
 	/**
 	 * Message to buffer and speak when ready.
@@ -145,6 +142,11 @@ class NacTextToSpeech(
 	 */
 	private val utteranceListener: NacUtteranceListener =
 		NacUtteranceListener(context, null)
+
+	/**
+	 * On initialized listener.
+	 */
+	var onInitializedListener: OnInitializedListener? = null
 
 	/**
 	 * Constructor.
@@ -211,14 +213,9 @@ class NacTextToSpeech(
 			// Say what is in the buffer
 			speak(bufferMessage, bufferAudioAttributes!!)
 		}
-	}
 
-	/**
-	 * Shutdown the speech engine.
-	 */
-	fun shutdown()
-	{
-		textToSpeech.shutdown()
+		// Call the listener
+		onInitializedListener?.onInitialized(textToSpeech, status)
 	}
 
 	/**
@@ -234,6 +231,14 @@ class NacTextToSpeech(
 			{
 				NacUtility.quickToast(context, R.string.error_message_text_to_speech_audio_focus)
 				return
+			}
+
+			// Set the voice
+			if (attrs.voice.isNotEmpty())
+			{
+				textToSpeech.voices
+					.find { it.name == attrs.voice }
+					?.let { textToSpeech.voice = it }
 			}
 
 			// Speak the message
@@ -253,6 +258,16 @@ class NacTextToSpeech(
 			bufferMessage = message
 			bufferAudioAttributes = attrs
 		}
+	}
+
+	companion object
+	{
+
+		/**
+		 * Utterance ID when speaking through the TTS engine.
+		 */
+		const val UTTERANCE_ID = "NacAlarmTts"
+
 	}
 
 }

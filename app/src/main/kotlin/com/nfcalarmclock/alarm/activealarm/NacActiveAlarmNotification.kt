@@ -64,7 +64,6 @@ class NacActiveAlarmNotification(
 	 */
 	override val title: String
 		get() = "<b>$appName</b>"
-		//get() = if ((alarm != null) && alarm.name.isNotEmpty()) "<b>${alarm.name}</b>" else "<b>$appName</b>"
 
 	/**
 	 * @see NacNotification.priority
@@ -172,20 +171,28 @@ class NacActiveAlarmNotification(
 	 */
 	public override fun builder(): NotificationCompat.Builder
 	{
+		// Get shared preferences
+		val sharedPreferences = NacSharedPreferences(context)
+
 		// Notification actions
 		val dismiss = context.getString(R.string.action_alarm_dismiss)
 		val snooze = context.getString(R.string.action_alarm_snooze)
 
 		// Build the notification
 		var builder = super.builder()
-			.setFullScreenIntent(contentPendingIntent, true)
 			.setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
 			.setAutoCancel(false)
 			.setOngoing(true)
 			.setShowWhen(true)
 			.setSound(null)
-			//.setLargeIcon(Icon.createWithResource(context, R.mipmap.ic_launcher_round))
 			.addAction(R.drawable.snooze, snooze, snoozePendingIntent)
+
+		// Check if battery saver option is disabled
+		if (!sharedPreferences.shouldSaveBatteryInAlarmScreen)
+		{
+			println("ADDING FULL SCREEN INTENT")
+			builder = builder.setFullScreenIntent(contentPendingIntent, true)
+		}
 
 		// Check if NFC does not need to be used to dismiss the alarm
 		// Note: This evaluates to False on the emulator because the emulator

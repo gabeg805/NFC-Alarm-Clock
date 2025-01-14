@@ -151,6 +151,8 @@
 	<string name="message_import_completed">Import completed</string>
 	<string name="message_selected_alarm_song_not_available">Chosen song for alarm not available</string>
 	<string name="message_milliseconds">%1$d ms</string>
+	<string name="message_text_to_speech_default_voice">Default voice</string>
+	<string name="message_text_to_speech_voice">Voice %1$d</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Unable to delete an active alarm</string>

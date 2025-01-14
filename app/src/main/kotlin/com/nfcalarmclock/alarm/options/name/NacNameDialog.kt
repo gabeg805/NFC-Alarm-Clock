@@ -11,9 +11,9 @@ import android.view.inputmethod.InputMethodManager
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
+import com.nfcalarmclock.alarm.options.name.NacNameDialog.OnNameEnteredListener
 import com.nfcalarmclock.view.dialog.NacDialogFragment
 import com.nfcalarmclock.view.setupInputLayoutColor
-import java.lang.IllegalStateException
 
 /**
  * The dialog class that will handle saving the name of the alarm.
@@ -162,6 +162,28 @@ class NacNameDialog
 		 * Tag for the class.
 		 */
 		const val TAG = "NacNameDialog"
+
+		/**
+		 * Create a dialog that can be shown easily.
+		 */
+		fun create(
+			name: String,
+			onNameEnteredListener: (String) -> Unit = {}
+		): NacNameDialog
+		{
+			// Create the dialog
+			val dialog = NacNameDialog()
+
+			// Set the default name
+			dialog.defaultName = name
+
+			// Set the listener
+			dialog.onNameEnteredListener = OnNameEnteredListener { n ->
+				onNameEnteredListener(n)
+			}
+
+			return dialog
+		}
 
 	}
 

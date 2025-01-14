@@ -36,6 +36,7 @@ import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmActivity
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.alarm.options.NacAlarmOptionsDialog
 import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog
 import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerActivity
 import com.nfcalarmclock.alarm.options.name.NacNameDialog
@@ -72,7 +73,6 @@ import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacUtility.quickToast
-import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.createTimeTickReceiver
 import com.nfcalarmclock.util.disableActivityAlias
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
@@ -985,53 +985,54 @@ class NacMainActivity
 		// Name
 		holder.onCardNameClickedListener = OnCardNameClickedListener { card, alarm ->
 
-			// Create the dialog
-			val dialog = NacNameDialog()
+			// Show the name dialog
+			NacNameDialog.create(
+				alarm.name,
+				onNameEnteredListener = {
 
-			// Setup the default name
-			dialog.defaultName = alarm.name
+					// Set the name and update the alarm
+					card.setName(it)
+					println(alarm.name)
+					updateAlarm(alarm)
 
-			// Setup the listener
-			dialog.onNameEnteredListener = NacNameDialog.OnNameEnteredListener { name ->
-
-				// Set the name and update the alarm
-				card.setName(name)
-				updateAlarm(alarm)
-
-			}
-
-			// Show the dialog
-			dialog.show(supportFragmentManager, NacNameDialog.TAG)
+				})
+				.show(supportFragmentManager, NacNameDialog.TAG)
 
 		}
 
-		// Dismiss options listener
+		// Dismiss options
 		holder.onCardDismissOptionsClickedListener = OnCardDismissOptionsClickedListener { _, alarm ->
 
 			// Show the dismiss options dialog
 			NacDismissOptionsDialog.create(
-					alarm,
-					onSaveAlarmListener = { updateAlarm(it) })
+				alarm,
+				onSaveAlarmListener = { updateAlarm(it) })
 				.show(supportFragmentManager, NacDismissOptionsDialog.TAG)
 
 		}
 
-		// Snooze options listener
+		// Snooze options
 		holder.onCardSnoozeOptionsClickedListener = OnCardSnoozeOptionsClickedListener { _, alarm ->
 
 			// Show the snooze options dialog
 			NacSnoozeOptionsDialog.create(
-					alarm,
-					onSaveAlarmListener = { updateAlarm(it) })
+				alarm,
+				onSaveAlarmListener = { updateAlarm(it) })
 				.show(supportFragmentManager, NacSnoozeOptionsDialog.TAG)
 
 		}
 
-		// Alarm options listener
+		// Alarm options
 		holder.onCardAlarmOptionsClickedListener = OnCardAlarmOptionsClickedListener { _, alarm ->
 
 			// Show the alarm options dialog
-			showAlarmOptionsDialog(alarm)
+			NacAlarmOptionsDialog.navigate(navController, alarm)
+				?.observe(this) { a ->
+
+					// Update the alarm
+					updateAlarm(a)
+
+				}
 
 		}
 
@@ -1590,37 +1591,6 @@ class NacMainActivity
 	}
 
 	/**
-	 * Show the alarm options dialog.
-	 */
-	private fun showAlarmOptionsDialog(alarm: NacAlarm)
-	{
-		// Create bundle with the alarm
-		val bundle = Bundle().addAlarm(alarm)
-
-		// Set the graph of the nav controller
-		navController.setGraph(R.navigation.nav_alarm_options, bundle)
-
-		// Check if the nav controller did not navigate to the destination
-		if (navController.currentDestination == null)
-		{
-			// Navigate to the destination manually
-			navController.navigate(R.id.nacAlarmOptionsDialog, bundle)
-		}
-
-		// Setup an observe to watch for any changes to the alarm
-		navController.currentBackStackEntry
-			?.savedStateHandle
-			?.getLiveData<NacAlarm>("YOYOYO")
-			?.observe(this) { a ->
-
-				// Update the alarm
-				updateAlarm(a)
-
-			}
-
-	}
-
-	/**
 	 * Show a snackbar for the next alarm that will run.
 	 */
 	private fun showNextAlarmSnackbar()
@@ -1881,18 +1851,6 @@ class NacMainActivity
 
 			// Return the pending intent for the activity
 			return PendingIntent.getActivity(context, 0, intent, flags)
-		}
-
-		/**
-		 * Start the main activity.
-		 */
-		fun startMainActivity(context: Context)
-		{
-			// Create the intent
-			val intent = getStartIntent(context)
-
-			// Start the activity
-			context.startActivity(intent)
 		}
 
 	}
