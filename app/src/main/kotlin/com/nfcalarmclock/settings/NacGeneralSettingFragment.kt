@@ -161,9 +161,11 @@ class NacGeneralSettingFragment
 				alarm.name,
 				onNameEnteredListener = {
 
-					// Save the name and update the card
+					// Save the name
 					sharedPreferences!!.name = it
-					pref.card.setName(it)
+
+					// Refresh the views
+					pref.card.refreshNameViews()
 
 				})
 				.show(childFragmentManager, NacNameDialog.TAG)
@@ -181,7 +183,7 @@ class NacGeneralSettingFragment
 					// Save the changes
 					sharedPreferences!!.shouldAutoDismiss = a.shouldAutoDismiss
 					sharedPreferences!!.autoDismissTime = a.autoDismissTime
-					sharedPreferences!!.canDismissEarly = a.useDismissEarly
+					sharedPreferences!!.canDismissEarly = a.canDismissEarly
 					sharedPreferences!!.dismissEarlyTime = a.dismissEarlyTime
 					sharedPreferences!!.shouldDeleteAlarmAfterDismissed = a.shouldDeleteAlarmAfterDismissed
 
@@ -203,7 +205,7 @@ class NacGeneralSettingFragment
 					sharedPreferences!!.autoSnoozeTime = a.autoSnoozeTime
 					sharedPreferences!!.maxSnooze = a.maxSnooze
 					sharedPreferences!!.snoozeDuration = a.snoozeDuration
-					sharedPreferences!!.easySnooze = a.useEasySnooze
+					sharedPreferences!!.shouldEasySnooze = a.shouldUseEasySnooze
 
 				})
 				.show(childFragmentManager, NacSnoozeOptionsDialog.TAG)
@@ -268,10 +270,10 @@ class NacGeneralSettingFragment
 
 						// Upcoming reminder
 						R.id.nacUpcomingReminderDialog -> {
-							sharedPreferences!!.shouldShowReminder = a.showReminder
+							sharedPreferences!!.shouldShowReminder = a.shouldShowReminder
 							sharedPreferences!!.timeToShowReminder = a.timeToShowReminder
 							sharedPreferences!!.reminderFrequency = a.reminderFrequency
-							sharedPreferences!!.shouldUseTtsForReminder = a.shouldUseTtsForReminder
+							sharedPreferences!!.shouldUseTtsForReminder = a.shouldUseTts && a.shouldUseTtsForReminder
 						}
 
 						// Unknown

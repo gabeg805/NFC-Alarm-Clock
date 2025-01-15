@@ -146,7 +146,7 @@ class NacVibrator(context: Context)
 		waitAfterPattern: Long)
 	{
 		// Vibrate
-		println("FIRST VIBRATE : $currentRepeatCount")
+		println("VIBRATE : $currentRepeatCount")
 		doVibrate(duration)
 
 		// Increase the count
@@ -155,23 +155,21 @@ class NacVibrator(context: Context)
 		// Get the correct wait time based on how many repetitions have occurred
 		val newWaitTime = if (currentRepeatCount == 0)
 		{
-			println("VIBRATE wait after pattern")
+			println("  vibrate wait after pattern")
 			// The repeat count has been reached, so the wait time should be the pattern
 			// wait time
 			waitAfterPattern
 		}
 		else
 		{
-			println("VIBRATE normally")
 			// Wait normally
 			wait
 		}
 
 		// Wait for a period of time before vibrating the device again
-		println("VIBRATE post delayed")
 		handler.postDelayed({
 			vibrate(duration, wait, repeatPattern, waitAfterPattern)
-		}, newWaitTime)
+		}, duration+newWaitTime)
 	}
 
 }

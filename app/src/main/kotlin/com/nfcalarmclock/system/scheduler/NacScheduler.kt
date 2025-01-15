@@ -41,7 +41,7 @@ object NacScheduler
 		addAlarm(context, alarm, nextAlarmCal)
 
 		// Check if should show an upcoming reminder
-		if (alarm.showReminder && !alarm.shouldSkipNextAlarm)
+		if (alarm.shouldShowReminder && !alarm.shouldSkipNextAlarm)
 		{
 			// Get the calendar for the first upcoming reminder
 			val firstReminderCal = NacCalendar.getFirstAlarmUpcomingReminder(alarm, nextAlarmCal)
@@ -267,7 +267,7 @@ object NacScheduler
 	 */
 	fun cancel(context: Context, alarm: NacAlarm?)
 	{
-		println("NacScheduler.cancel() : $alarm")
+		//println("NacScheduler.cancel() : $alarm")
 		// Check if the alarm is null
 		if (alarm == null)
 		{
@@ -289,7 +289,7 @@ object NacScheduler
 		// Build the pending intent for the alarm as well as the skipped alarm (just in case)
 		val alarmPendingIntent = buildCancelAlarmPendingIntent(context, alarm)
 		val skipPendingIntent = buildCancelSkipPendingIntent(context, alarm)
-		println("Cancel alarm() : $alarmPendingIntent | $skipPendingIntent")
+		//println("Cancel alarm() : $alarmPendingIntent | $skipPendingIntent")
 
 		// Check if the alarm pending intent can be canceled
 		if (alarmPendingIntent != null)
@@ -362,7 +362,7 @@ object NacScheduler
 	{
 		// Build the pending intent for the upcoming reminder
 		val pendingIntent = buildCancelUpcomingReminderPendingIntent(context, alarm)
-		println("Cancel upcoming reminder() : $pendingIntent")
+		//println("Cancel upcoming reminder() : $pendingIntent")
 
 		// Check if the pending intent for the upcoming reminder is not null
 		if (pendingIntent != null)

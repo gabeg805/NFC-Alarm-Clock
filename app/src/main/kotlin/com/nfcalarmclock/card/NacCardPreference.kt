@@ -109,6 +109,8 @@ class NacCardPreference @JvmOverloads constructor(
 
 	/**
 	 * Called when binding the view.
+	 *
+	 * Note: No need to do Time and Switch as these are not modifiable here.
 	 */
 	override fun onBindViewHolder(holder: PreferenceViewHolder)
 	{
@@ -122,8 +124,6 @@ class NacCardPreference @JvmOverloads constructor(
 		// Bind the alarm to the card and expand the card
 		card.bind(alarm)
 		card.doExpandWithColor()
-
-		// TODO: Force always expanded?
 
 		// Do not allow changing the time and is enabled switch
 		card.timeParentView.isEnabled = false
@@ -153,7 +153,7 @@ class NacCardPreference @JvmOverloads constructor(
 
 		// Flashlight
 		card.onCardUseFlashlightChangedListener = NacCardHolder.OnCardUseFlashlightChangedListener { _, a ->
-			sharedPreferences.shouldUseFlashlight = a.useFlashlight
+			sharedPreferences.shouldUseFlashlight = a.shouldUseFlashlight
 		}
 
 		// Media

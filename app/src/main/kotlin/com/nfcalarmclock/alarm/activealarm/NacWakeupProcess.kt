@@ -104,7 +104,7 @@ class NacWakeupProcess(
 	 * Whether the alarm should use the flashlight or not.
 	 */
 	private val shouldUseFlashlight: Boolean
-		get() = alarm.useFlashlight && sharedPreferences.shouldShowFlashlightButton
+		get() = alarm.shouldUseFlashlight && sharedPreferences.shouldShowFlashlightButton
 
 	/**
 	 * Vibrate the device.
