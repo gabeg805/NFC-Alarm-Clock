@@ -191,7 +191,7 @@ class NacUpcomingReminderService
 		val nextReminderCal = NacCalendar.getNextAlarmUpcomingReminder(alarm)
 
 		// Check if text-to-speech should be used
-		if (alarm.shouldUseTtsForReminder)
+		if (alarm.shouldUseTts && alarm.shouldUseTtsForReminder)
 		{
 			// Setup text-to-speech
 			setupTextToSpeech(alarm, nextAlarmCal)

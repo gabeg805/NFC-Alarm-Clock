@@ -95,7 +95,7 @@ class NacOriginalLayoutHandler(
 		layout.setOnClickListener {
 
 			// Check if easy snooze is allowed
-			if (sharedPreferences.easySnooze)
+			if (sharedPreferences.shouldEasySnooze)
 			{
 				onAlarmActionListener.onSnooze(alarm!!)
 			}

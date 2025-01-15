@@ -16,6 +16,7 @@ import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar
 import java.util.Calendar
+import java.util.TimeZone
 
 /**
  * Implementation of App Widget functionality.
@@ -428,7 +429,23 @@ internal class NacClockWidgetDataHelper(
 
 			// Create a calendar with the next alarm time
 			val alarmCal = Calendar.getInstance()
-			alarmCal.timeInMillis = nextAlarmInfo!!.triggerTime
+
+			// App next alarm
+			if (sharedPreferences.appShouldSaveNextAlarm)
+			{
+				val millis = sharedPreferences.appNextAlarmTimeMillis
+				val fromTimezone = alarmCal.timeZone
+				val toTimezone = TimeZone.getTimeZone(sharedPreferences.appNextAlarmTimezoneId)
+				val offset = fromTimezone.getOffset(millis) - toTimezone.getOffset(millis)
+
+				println("Time : $millis || Offset : $offset")
+				alarmCal.timeInMillis = millis - offset
+			}
+			// System next alarm
+			else
+			{
+				alarmCal.timeInMillis = nextAlarmInfo!!.triggerTime
+			}
 
 			// Return the alarm time as a spannable string
 			return NacCalendar.getFullTime(context, alarmCal).replace("  ", " ")

@@ -198,6 +198,16 @@ class NacActiveAlarmService
 				NacScheduler.update(this@NacActiveAlarmService, alarm!!)
 			}
 
+			// Check if should save the app's next alarm or if any system alarm is used
+			if (sharedPreferences.appShouldSaveNextAlarm)
+			{
+				// Save the next alarm information
+				println("Before saving : ${System.currentTimeMillis()}")
+				val allAlarms = alarmRepository.getAllAlarms()
+				sharedPreferences.saveNextAlarm(allAlarms)
+				println("After saving : ${System.currentTimeMillis()}")
+			}
+
 			// Set flag that the main activity needs to be refreshed
 			sharedPreferences.shouldRefreshMainActivity = true
 

@@ -2,11 +2,8 @@ package com.nfcalarmclock.card
 
 import android.animation.Animator
 import android.animation.AnimatorInflater
-import android.app.TimePickerDialog
-import android.app.TimePickerDialog.OnTimeSetListener
 import android.content.Context
 import android.content.res.ColorStateList
-import android.text.format.DateFormat
 import android.view.View
 import android.view.View.OnCreateContextMenuListener
 import android.view.ViewGroup
@@ -81,14 +78,6 @@ class NacCardHolder(
 	}
 
 	/**
-	 * Listener for when the delete button is clicked.
-	 */
-	fun interface OnCardDeleteClickedListener
-	{
-		fun onCardDeleteClicked(holder: NacCardHolder, alarm: NacAlarm)
-	}
-
-	/**
 	 * Listener for when the dismiss options button is clicked.
 	 */
 	fun interface OnCardDismissOptionsClickedListener
@@ -126,6 +115,22 @@ class NacCardHolder(
 	fun interface OnCardSnoozeOptionsClickedListener
 	{
 		fun onCardSnoozeOptionsClicked(holder: NacCardHolder, alarm: NacAlarm)
+	}
+
+	/**
+	 * Listener for when the switch is changed.
+	 */
+	fun interface OnCardSwitchChangedListener
+	{
+		fun onCardSwitchChanged(holder: NacCardHolder, alarm: NacAlarm)
+	}
+
+	/**
+	 * Listener for when the time is clicked.
+	 */
+	fun interface OnCardTimeClickedListener
+	{
+		fun onCardTimeClicked(holder: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -361,12 +366,6 @@ class NacCardHolder(
 	 */
 	private var highlightAnimator: Animator? = null
 
-	///**
-	// * Time picker dialog.
-	// */
-	//private MaterialTimePicker mTimePicker;
-	//this.mTimePicker = null;
-
 	/**
 	 * Listener for when the alarm options button is clicked.
 	 */
@@ -381,11 +380,6 @@ class NacCardHolder(
 	 * Listener for when the days changed.
 	 */
 	var onCardDaysChangedListener: OnCardDaysChangedListener? = null
-
-	/**
-	 * Listener for when the delete button is clicked.
-	 */
-	var onCardDeleteClickedListener: OnCardDeleteClickedListener? = null
 
 	/**
 	 * Listener for when the dismiss options button is clicked.
@@ -411,6 +405,16 @@ class NacCardHolder(
 	 * Listener for when the snooze options button is clicked.
 	 */
 	var onCardSnoozeOptionsClickedListener: OnCardSnoozeOptionsClickedListener? = null
+
+	/**
+	 * Listener for when the switch is changed.
+	 */
+	var onCardSwitchChangedListener: OnCardSwitchChangedListener? = null
+
+	/**
+	 * Listener for when the time is clicked.
+	 */
+	var onCardTimeClickedListener: OnCardTimeClickedListener? = null
 
 	/**
 	 * Listener for when the alarm card is updated.
@@ -733,15 +737,6 @@ class NacCardHolder(
 	}
 
 	/**
-	 * Delete the alarm card.
-	 */
-	fun delete()
-	{
-		// Call the listener
-		onCardDeleteClickedListener?.onCardDeleteClicked(this, alarm!!)
-	}
-
-	/**
 	 * Act as if the alarm card was clicked.
 	 */
 	private fun doCardClick()
@@ -858,7 +853,7 @@ class NacCardHolder(
 	/**
 	 * Expand the alarm card.
 	 */
-	private fun expand()
+	fun expand()
 	{
 		// Cancel the highlight
 		cancelHighlight()
@@ -1005,24 +1000,6 @@ class NacCardHolder(
 	}
 
 	/**
-	 * Interact with an alarm.
-	 *
-	 * Should be called when an alarm has been newly added.
-	 */
-	fun interact()
-	{
-		// Check if the alarm should be expanded
-		if (sharedPreferences.expandNewAlarm)
-		{
-			// Show the time dialog
-			showTimeDialog()
-
-			// Expand the alarm
-			expand()
-		}
-	}
-
-	/**
 	 * Measure the different alarm card heights.
 	 *
 	 * This will populate the array that is passed in with the corresponding
@@ -1142,6 +1119,32 @@ class NacCardHolder(
 	}
 
 	/**
+	 * Refresh all the views that can be affected when the name is changed.
+	 */
+	fun refreshNameViews()
+	{
+		setNameButton()
+		setSummaryNameView()
+		setSummarySkipNextAlarmIcon()
+	}
+
+	/**
+	 * Refresh all the views that can be affected when time is changed.
+	 */
+	fun refreshTimeViews()
+	{
+		setTimeView()
+		setMeridianView()
+		setMeridianColor()
+		setSwitchView()
+		setSummaryDaysView()
+		setSummarySkipNextAlarmIcon()
+
+		// Refresh dismiss buttons and collapse refresh if need be
+		refreshExtraViewWithCollapse()
+	}
+
+	/**
 	 * Set the background color for when the card is collapsed.
 	 */
 	private fun setCollapsedBackgroundColor()
@@ -1212,7 +1215,7 @@ class NacCardHolder(
 	private fun setFlashlightButton()
 	{
 		// Get the flashlight state from the alarm
-		val shouldUseFlashlight = alarm!!.useFlashlight
+		val shouldUseFlashlight = alarm!!.shouldUseFlashlight
 
 		// Check if the state of the button and the alarm are different
 		if (flashlightButton.isChecked != shouldUseFlashlight)
@@ -1298,23 +1301,6 @@ class NacCardHolder(
 			// Set the new meridian in the view
 			meridianView.text = meridian
 		}
-	}
-
-	/**
-	 * Set a new name.
-	 */
-	fun setName(name: String)
-	{
-		// Reset the skip next alarm flag
-		alarm!!.shouldSkipNextAlarm = false
-
-		// Set the alarm name
-		alarm!!.name = name
-
-		// Setup the views
-		setNameButton()
-		setSummaryNameView()
-		setSummarySkipNextAlarmIcon()
 	}
 
 	/**
@@ -1474,31 +1460,6 @@ class NacCardHolder(
 			switch.isChecked = enabled
 		}
 	}
-
-	///**
-	// * Set the time.
-	// */
-	//public void setTime()
-	//{
-	//	//if (!this.isShowingTimePicker())
-	//	//{
-	//	//	return;
-	//	//}
-	//	MaterialTimePicker timepicker = this.getTimePicker();
-	//	NacAlarm alarm = this.getAlarm();
-	//	int hr = timepicker.getHour();
-	//	int min = timepicker.getMinute();
-	//	alarm.setHour(hr);
-	//	alarm.setMinute(min);
-	//	alarm.setIsEnabled(true);
-	//	//alarm.changed();
-	//	this.setTimeView();
-	//	this.setMeridianView();
-	//	this.setMeridianColor();
-	//	this.setSwitchView();
-	//	this.setSummaryDaysView();
-	//	this.callOnCardUpdatedListener();
-	//}
 
 	/**
 	 * Set the time view to its proper setting.
@@ -2021,7 +1982,6 @@ class NacCardHolder(
 		switch.setOnCheckedChangeListener { button, state ->
 
 			// Do nothing if binding
-			// TODO: Does this need to be in other listeners?
 			if (isBinding)
 			{
 				return@setOnCheckedChangeListener
@@ -2048,7 +2008,7 @@ class NacCardHolder(
 				setSummarySkipNextAlarmIcon()
 
 				// Call the listener
-				callOnCardUpdatedListener()
+				onCardSwitchChangedListener?.onCardSwitchChanged(this, alarm!!)
 
 				// Refresh dismiss buttons and collapse refresh if need be
 				refreshExtraViewWithCollapse()
@@ -2077,8 +2037,8 @@ class NacCardHolder(
 			// Check if the alarm can be modified
 			if (checkCanModifyAlarm())
 			{
-				// Show the time dialog
-				showTimeDialog()
+				// Call the listener
+				onCardTimeClickedListener?.onCardTimeClicked(this, alarm!!)
 			}
 			// Unable to modify the alarm
 			else
@@ -2141,8 +2101,8 @@ class NacCardHolder(
 			override fun onProgressChanged(seekBar: SeekBar, progress: Int,
 				fromUser: Boolean)
 			{
-				// Do nothing if the volumes are already the same
-				if (alarm!!.volume == progress)
+				// Do nothing if binding or the volumes are already the same
+				if (isBinding || (alarm!!.volume == progress))
 				{
 					return
 				}
@@ -2224,62 +2184,6 @@ class NacCardHolder(
 	private fun shouldShowExtraView(): Boolean
 	{
 		return alarm!!.isInUse || alarm!!.willAlarmSoon()
-	}
-
-	/**
-	 * Show the time picker dialog.
-	 */
-	private fun showTimeDialog()
-	{
-		// Create the listener
-		val listener = OnTimeSetListener { _, hr, min ->
-
-			// Reset the skip next alarm flag
-			alarm!!.shouldSkipNextAlarm = false
-
-			// Set the alarm attributes
-			alarm!!.hour = hr
-			alarm!!.minute = min
-			alarm!!.isEnabled = true
-
-			// Setup the views
-			setTimeView()
-			setMeridianView()
-			setMeridianColor()
-			setSwitchView()
-			setSummaryDaysView()
-			setSummarySkipNextAlarmIcon()
-
-			// Refresh dismiss buttons and collapse refresh if need be
-			refreshExtraViewWithCollapse()
-
-			// Call the card updated listener
-			callOnCardUpdatedListener()
-
-		}
-
-		// Get whether 24 hour format should be used
-		val is24HourFormat = DateFormat.is24HourFormat(context)
-
-		// Create the dialog
-		val dialog = TimePickerDialog(context, listener, alarm!!.hour, alarm!!.minute,
-			is24HourFormat)
-
-		// Show the dialog
-		dialog.show()
-
-		//FragmentManager fragmentManager = ((AppCompatActivity)context)
-		//	.getSupportFragmentManager();
-		//MaterialTimePicker timepicker = new MaterialTimePicker.Builder()
-		//	.setHour(hour)
-		//	.setMinute(minute)
-		//	.setTimeFormat(is24HourFormat ? TimeFormat.CLOCK_24H : TimeFormat.CLOCK_12H)
-		//	.build();
-
-		//timepicker.addOnPositiveButtonClickListener(this);
-		//timepicker.show(fragmentManager, "TimePicker");
-
-		//this.mTimePicker = timepicker;
 	}
 
 	/**

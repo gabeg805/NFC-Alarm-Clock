@@ -156,7 +156,7 @@ class NacAppearanceSettingFragment
 	private fun setupDayButtonStylePreference()
 	{
 		// Get the preference
-		val dayButtonStyleKey = getString(R.string.day_button_style_key)
+		val dayButtonStyleKey = getString(R.string.key_style_day_button)
 		val dayButtonStylePref = findPreference<Preference>(dayButtonStyleKey)
 
 		// Set the listener for when the preference is changed
@@ -177,7 +177,7 @@ class NacAppearanceSettingFragment
 	private fun setupNexAlarmFormatOnClickListener()
 	{
 		// Get the preference
-		val key = getString(R.string.next_alarm_format_key)
+		val key = getString(R.string.key_tweak_next_alarm_format)
 		val pref = findPreference<NacNextAlarmFormatPreference>(key)
 
 		// Set the on click listener
@@ -198,9 +198,9 @@ class NacAppearanceSettingFragment
 	private fun setupShowHideButtonPreferences()
 	{
 		// Get the keys
-		val vibrateKey = getString(R.string.show_hide_vibrate_button_key)
-		val nfcKey = getString(R.string.show_hide_nfc_button_key)
-		val flashlightKey = getString(R.string.show_hide_flashlight_button_key)
+		val vibrateKey = getString(R.string.key_show_hide_vibrate_button)
+		val nfcKey = getString(R.string.key_show_hide_nfc_button)
+		val flashlightKey = getString(R.string.key_show_hide_flashlight_button)
 
 		// Put the keys in a list
 		val allKeys = arrayOf(vibrateKey, nfcKey, flashlightKey)
@@ -230,7 +230,7 @@ class NacAppearanceSettingFragment
 	private fun setupStartWeekOnClickListener()
 	{
 		// Get the preference
-		val key = getString(R.string.start_week_on_key)
+		val key = getString(R.string.key_style_start_week_on)
 		val pref = findPreference<NacStartWeekOnPreference>(key)
 
 		// Set the on click listener

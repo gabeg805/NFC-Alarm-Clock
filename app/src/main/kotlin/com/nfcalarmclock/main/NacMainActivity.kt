@@ -2,6 +2,7 @@ package com.nfcalarmclock.main
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -9,6 +10,7 @@ import android.graphics.drawable.InsetDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.text.format.DateFormat
 import android.view.HapticFeedbackConstants
 import android.view.Menu
 import android.view.MenuItem
@@ -54,7 +56,6 @@ import com.nfcalarmclock.card.NacCardAdapterLiveData
 import com.nfcalarmclock.card.NacCardHolder
 import com.nfcalarmclock.card.NacCardHolder.OnCardAlarmOptionsClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardCollapsedListener
-import com.nfcalarmclock.card.NacCardHolder.OnCardDeleteClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardDismissOptionsClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardMediaClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardNameClickedListener
@@ -93,6 +94,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.Calendar
+import java.util.TimeZone
 
 /**
  * The application's main activity.
@@ -230,6 +232,16 @@ class NacMainActivity
 	private lateinit var nextAlarmMessageHandler: Handler
 
 	/**
+	 * Handler to refresh next alarm message.
+	 */
+	private lateinit var saveNextAlarmHandler: Handler
+
+	/**
+	 * List of all alarms.
+	 */
+	private var allAlarms: List<NacAlarm> = emptyList()
+
+	/**
 	 * Get the number of alarm cards that are expanded.
 	 */
 	private val cardsExpandedCount: Int
@@ -283,13 +295,18 @@ class NacMainActivity
 		}
 
 	/**
+	 * The current snackbar being used.
+	 */
+	private var currentSnackbar: Snackbar? = null
+
+	/**
 	 * Add an alarm to the database.
 	 *
 	 * @param alarm    An alarm.
 	 * @param interact Whether the alarm should be interacted with by the card
 	 *                 holder via interact() or not.
 	 */
-	private fun addAlarm(alarm: NacAlarm, interact: Boolean=true)
+	private fun addAlarm(alarm: NacAlarm, interact: Boolean = true)
 	{
 		lifecycleScope.launch {
 
@@ -421,10 +438,8 @@ class NacMainActivity
 
 		showSnackbar(message, action,
 			onClickListener = {
-
-				// Undo the copy, so delete the alarm
+				// Undo the copy. This will delete the alarm
 				deleteAlarm(copiedAlarm)
-
 			})
 	}
 
@@ -439,12 +454,10 @@ class NacMainActivity
 		val localMediaPath = alarm.localMediaPath
 
 		// Delete the alarm
-		alarmViewModel.delete(alarm)
-
 		// Save the statistics
-		statisticViewModel.insertDeleted(alarm)
-
 		// Cancel the alarm
+		alarmViewModel.delete(alarm)
+		statisticViewModel.insertDeleted(alarm)
 		NacScheduler.cancel(this, alarm)
 
 		// Show the snackbar
@@ -453,10 +466,8 @@ class NacMainActivity
 
 		showSnackbar(message, action,
 			onClickListener = {
-
-				// Undo the delete, so restore the alarm
+				// Undo the delete. This will restore the alarm
 				restoreAlarm(alarm)
-
 			},
 			onDismissListener = { event ->
 
@@ -609,6 +620,7 @@ class NacMainActivity
 		alarmCardTouchHelper = NacCardTouchHelper(this)
 		permissionRequestManager = NacPermissionRequestManager(this)
 		nextAlarmMessageHandler = Handler(applicationContext.mainLooper)
+		saveNextAlarmHandler = Handler(applicationContext.mainLooper)
 
 		// Set flag that cards need to be measured
 		sharedPreferences.cardIsMeasured = false
@@ -649,6 +661,11 @@ class NacMainActivity
 		//	nfcTagViewModel.insert(NacNfcTag("Medicine", "102938kjh3l12"))
 		//	nfcTagViewModel.insert(NacNfcTag("Take out the trash", "loi120910j"))
 		//}
+
+		val cal = Calendar.getInstance()
+		val millis = sharedPreferences.appNextAlarmTimeMillis
+		val tz = TimeZone.getTimeZone(sharedPreferences.appNextAlarmTimezoneId)
+		println("Time : ${cal.timeInMillis} || Zone : ${cal.timeZone.id} || ${cal.timeZone.getOffset(millis)} || ${tz.getOffset(millis)}")
 	}
 
 	/**
@@ -715,6 +732,7 @@ class NacMainActivity
 		unregisterMyReceiver(this, timeTickReceiver)
 		unregisterMyReceiver(this, shutdownBroadcastReceiver)
 		nextAlarmMessageHandler.removeCallbacksAndMessages(null)
+		saveNextAlarmHandler.removeCallbacksAndMessages(null)
 
 		// Stop NFC
 		NacNfc.stop(this)
@@ -811,9 +829,13 @@ class NacMainActivity
 		// Check if the alarm was recently added
 		if (recentlyAddedAlarmIds.contains(alarm.id))
 		{
-			// Interact with card holder of that alarm, showing the time dialog
-			// and expanding the card if the user wants that
-			holder.interact()
+			// Check if the user wants new alarm cards expanded
+			if (sharedPreferences.expandNewAlarm)
+			{
+				// Show the time dialog and expand the card
+				showTimeDialog(holder, alarm)
+				holder.expand()
+			}
 
 			// Remove the alarm from the recently added list
 			recentlyAddedAlarmIds.remove(alarm.id)
@@ -832,60 +854,47 @@ class NacMainActivity
 			// Sort the list when no cards are expanded
 			if (cardsExpandedCount == 0)
 			{
+				// TODO: This could be the cause of poor performance when there are a lot of alarms?
 				alarmCardAdapterLiveData.sort()
 			}
 
-			// Check if this alarm was recently updated
+			// Highlight the alarm card if it was recently updated and then remove it
+			// from the recently updated list
 			if (recentlyUpdatedAlarmIds.contains(alarm.id))
 			{
-				// Show the next time the alarm will go off
-				showUpdatedAlarmSnackbar(alarm)
-
-				// Highlight the card
 				holder.highlight()
-
-				// Remove the alarm from the recently updated list
 				recentlyUpdatedAlarmIds.remove(alarm.id)
 			}
 
 		}
 
-		// Delete lsitener
-		holder.onCardDeleteClickedListener = OnCardDeleteClickedListener { _, alarm ->
-
-			// Delete the alarm
-			deleteAlarm(alarm)
-
+		// Updated listener
+		// setupDismissEarly
+		// setupRepeatButtonLongPress
+		// unskip/skipNextAlarm
+		holder.onCardUpdatedListener = OnCardUpdatedListener { _, alarm ->
+			showNextAlarm(holder, alarm)
+			updateAlarm(alarm)
+			saveNextAlarm(alarm)
 		}
 
-		// Updated listener
-		holder.onCardUpdatedListener = OnCardUpdatedListener { _, alarm ->
+		// Time
+		holder.onCardTimeClickedListener = NacCardHolder.OnCardTimeClickedListener { _, alarm ->
+			showTimeDialog(holder, alarm)
+		}
 
-			// Set the next alarm message
-			setNextAlarmMessage()
-
-			// Card is collapsed
-			if (holder.isCollapsed)
-			{
-				showUpdatedAlarmSnackbar(alarm)
-				holder.highlight()
-			}
-			else
-			{
-				recentlyUpdatedAlarmIds.add(alarm.id)
-			}
-
-			// Update the alarm
+		// Switch
+		holder.onCardSwitchChangedListener = NacCardHolder.OnCardSwitchChangedListener { _, alarm ->
+			showNextAlarm(holder, alarm)
 			updateAlarm(alarm)
-
+			saveNextAlarm(alarm)
 		}
 
 		// Days
 		holder.onCardDaysChangedListener = NacCardHolder.OnCardDaysChangedListener { _, alarm ->
-
-			// Update the alarm
+			showNextAlarm(holder, alarm)
 			updateAlarm(alarm)
-
+			saveNextAlarm(alarm)
 		}
 
 		// Repeat
@@ -954,7 +963,7 @@ class NacMainActivity
 		holder.onCardUseFlashlightChangedListener = NacCardHolder.OnCardUseFlashlightChangedListener { _, alarm ->
 
 			// Get the message
-			val messageId = if (alarm.useFlashlight)
+			val messageId = if (alarm.shouldUseFlashlight)
 			{
 				R.string.message_flashlight_enabled
 			}
@@ -982,17 +991,27 @@ class NacMainActivity
 
 		}
 
+		// Volume
+		holder.onCardVolumeChangedListener = NacCardHolder.OnCardVolumeChangedListener { _, alarm ->
+			updateAlarm(alarm)
+		}
+
 		// Name
 		holder.onCardNameClickedListener = OnCardNameClickedListener { card, alarm ->
 
-			// Show the name dialog
+			// Show the dialog
 			NacNameDialog.create(
 				alarm.name,
-				onNameEnteredListener = {
+				onNameEnteredListener = { name ->
 
-					// Set the name and update the alarm
-					card.setName(it)
-					println(alarm.name)
+					// Reset the skip next alarm flag
+					alarm.shouldSkipNextAlarm = false
+
+					// Set the alarm name
+					alarm.name = name
+
+					// Refresh the views and update the alarm
+					card.refreshNameViews()
 					updateAlarm(alarm)
 
 				})
@@ -1003,7 +1022,7 @@ class NacMainActivity
 		// Dismiss options
 		holder.onCardDismissOptionsClickedListener = OnCardDismissOptionsClickedListener { _, alarm ->
 
-			// Show the dismiss options dialog
+			// Show the dialog
 			NacDismissOptionsDialog.create(
 				alarm,
 				onSaveAlarmListener = { updateAlarm(it) })
@@ -1014,7 +1033,7 @@ class NacMainActivity
 		// Snooze options
 		holder.onCardSnoozeOptionsClickedListener = OnCardSnoozeOptionsClickedListener { _, alarm ->
 
-			// Show the snooze options dialog
+			// Show the dialog
 			NacSnoozeOptionsDialog.create(
 				alarm,
 				onSaveAlarmListener = { updateAlarm(it) })
@@ -1025,13 +1044,10 @@ class NacMainActivity
 		// Alarm options
 		holder.onCardAlarmOptionsClickedListener = OnCardAlarmOptionsClickedListener { _, alarm ->
 
-			// Show the alarm options dialog
+			// Show the dialog
 			NacAlarmOptionsDialog.navigate(navController, alarm)
 				?.observe(this) { a ->
-
-					// Update the alarm
 					updateAlarm(a)
-
 				}
 
 		}
@@ -1171,12 +1187,10 @@ class NacMainActivity
 		lifecycleScope.launch {
 
 			// Insert the alarm
-			alarmViewModel.insert(alarm)
-
 			// Save the statistics
-			statisticViewModel.insertCreated()
-
 			// Reschedule the alarm
+			alarmViewModel.insert(alarm)
+			statisticViewModel.insertCreated()
 			NacScheduler.update(this@NacMainActivity, alarm)
 
 			// Show the snackbar
@@ -1185,12 +1199,32 @@ class NacMainActivity
 
 			showSnackbar(message, action,
 				onClickListener = {
-
-					// Undo the restore, so delete the alarm
+					// Undo the restore. This will delete the alarm
 					deleteAlarm(alarm)
-
 				})
 
+		}
+	}
+
+	/**
+	 * Save the next alarm information.
+	 */
+	private fun saveNextAlarm(alarm: NacAlarm)
+	{
+		// Check if should save the app's next alarm or if any system alarm is used
+		if (sharedPreferences.appShouldSaveNextAlarm)
+		{
+			// Save the next alarm
+			//val allAlarms = List(alarmCardAdapter.itemCount)
+			val newAllAlarms = allAlarms.toMutableList()
+				.apply {
+					val index = indexOfFirst { it.id == alarm.id }
+					set(index, alarm)
+				}
+			println("Alarm card item count : ${alarmCardAdapter.itemCount} || ${allAlarms.size}")
+			println("Before on stop save next alarm : ${System.currentTimeMillis()}")
+			sharedPreferences.saveNextAlarm(newAllAlarms)
+			println("After on stop save next alarm : ${System.currentTimeMillis()}")
 		}
 	}
 
@@ -1207,7 +1241,7 @@ class NacMainActivity
 
 		lifecycleScope.launch(Dispatchers.Main) {
 
-			// Toast to the that NFC is required
+			// Toast that NFC is required
 			quickToast(this@NacMainActivity, R.string.message_nfc_required)
 
 		}
@@ -1412,6 +1446,10 @@ class NacMainActivity
 		// starts and the list is initially empty
 		alarmViewModel.allAlarms.observe(this) { alarms ->
 
+			// Set the list of alarms
+			println("SETTING ALL ALARMS")
+			allAlarms = alarms
+
 			// Check if statistics should be started or not
 			if (sharedPreferences.appStartStatistics)
 			{
@@ -1456,6 +1494,7 @@ class NacMainActivity
 			// TODO: Why is this here?
 			if (sharedPreferences.shouldRefreshMainActivity)
 			{
+				println("REFRESH MAIN ACTIVITY THAT I THOUGHT NEVER HAPPENS")
 				refreshMainActivity()
 			}
 
@@ -1577,14 +1616,23 @@ class NacMainActivity
 	}
 
 	/**
-	 * Show a snackbar for the alarm.
+	 * Show a snackbar for an alarm.
 	 */
-	private fun showAlarmSnackbar(alarm: NacAlarm)
+	private fun showAlarmSnackbar(alarm: NacAlarm? = null)
 	{
-		// Get the message and action for the snackbar
-		val message = NacCalendar.Message.getWillRun(this, alarm,
-			sharedPreferences.nextAlarmFormat)
+		// Get the message and action text
 		val action = getString(R.string.action_alarm_dismiss)
+		val message = if (alarm != null)
+		{
+			// When the given alarm will run
+			NacCalendar.Message.getWillRun(this, alarm, sharedPreferences.nextAlarmFormat)
+		}
+		else
+		{
+			// When the next alarm will run
+			val nextAlarm = NacCalendar.getNextAlarm(alarmCardAdapter.currentList)
+			NacCalendar.Message.getNext(this, nextAlarm, sharedPreferences.nextAlarmFormat)
+		}
 
 		// Show the snackbar
 		showSnackbar(message, action)
@@ -1593,18 +1641,34 @@ class NacMainActivity
 	/**
 	 * Show a snackbar for the next alarm that will run.
 	 */
-	private fun showNextAlarmSnackbar()
+	private fun showNextAlarm(card: NacCardHolder, alarm: NacAlarm)
 	{
-		// Get the next alarm
-		val nextAlarm = NacCalendar.getNextAlarm(alarmCardAdapter.currentList)
+		// Set the next alarm message
+		setNextAlarmMessage()
 
-		// Get the message and action for the snackbar
-		val message = NacCalendar.Message.getNext(this, nextAlarm,
-			sharedPreferences.nextAlarmFormat)
-		val action = getString(R.string.action_alarm_dismiss)
+		// Show a snackbar for the next time this alarm will run, if it is enabled
+		if (alarm.isEnabled)
+		{
+			showAlarmSnackbar(alarm)
+		}
+		// Show a snackbar for the next alarm that will run
+		else
+		{
+			showAlarmSnackbar()
+		}
 
-		// Show the snackbar
-		showSnackbar(message, action)
+		// Highlight the alarm card if it is collapsed
+		if (card.isCollapsed)
+		{
+			card.highlight()
+		}
+		// Card is expanded
+		else
+		{
+			// Save the ID of the alarm that was modified so that later when it is
+			// collapsed, the collapsed logic can be run
+			recentlyUpdatedAlarmIds.add(alarm.id)
+		}
 	}
 
 	/**
@@ -1748,50 +1812,101 @@ class NacMainActivity
 		message: String,
 		action: String,
 		onClickListener: View.OnClickListener? = null,
-		onDismissListener: (Int) -> Unit = { })
+		onDismissListener: ((Int) -> Unit)? = null)
 	{
-		// Create the snackbar
-		val snackbar = Snackbar.make(root, message.toSpannedString(),
-			Snackbar.LENGTH_LONG)
+		// Check if there is a normal "Dismiss" snackbar that is currently shown
+		val snackbar = if ((currentSnackbar?.isShown == true) && (onClickListener == null))
+		{
+			// Reuse the snackbar
+			currentSnackbar!!.setText(message.toSpannedString())
+			currentSnackbar!!.show()
+			currentSnackbar!!
+		}
+		else
+		{
+			// Create the snackbar
+			Snackbar.make(root, message.toSpannedString(),
+				Snackbar.LENGTH_LONG)
+		}
 
 		// Setup the snackbar
 		snackbar.setActionTextColor(sharedPreferences.themeColor)
 		snackbar.setAction(action, onClickListener ?: View.OnClickListener { })
-		snackbar.addCallback(object: BaseTransientBottomBar.BaseCallback<Snackbar>() {
 
-			/**
-			 * Called when the snackbar has been dismissed.
-			 */
-			override fun onDismissed(transientBottomBar: Snackbar?, event: Int)
+		// Add callback if listener is set
+		if (onDismissListener != null)
+		{
+			snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>()
 			{
-				onDismissListener(event)
-			}
 
-		})
+				/**
+				 * Called when the snackbar has been dismissed.
+				 *
+				 * Note: If the snackbar is reused, this will be called multiple times. This
+				 *       is currently not an issue, but it could be in the future.
+				 */
+				override fun onDismissed(transientBottomBar: Snackbar?, event: Int)
+				{
+					onDismissListener(event)
+				}
+
+			})
+		}
 
 		// Show the snackbar
 		snackbar.show()
+
+		// Set the current snackbar
+		currentSnackbar = snackbar.takeIf { onClickListener == null }
 	}
 
 	/**
-	 * Show a snackbar for the updated alarm.
-	 *
-	 *
-	 * If this alarm is disabled, a snackbar for the next alarm will be shown.
+	 * Show the time picker dialog.
 	 */
-	private fun showUpdatedAlarmSnackbar(alarm: NacAlarm)
+	private fun showTimeDialog(card: NacCardHolder, alarm: NacAlarm)
 	{
-		// Check if the alarm is enabled
-		if (alarm.isEnabled)
-		{
-			// Show the snackbar for the alarm
-			showAlarmSnackbar(alarm)
-		}
-		else
-		{
-			// Show the snackbar for the next alarm that will run
-			showNextAlarmSnackbar()
-		}
+		// Get whether 24 hour format should be used
+		val is24HourFormat = DateFormat.is24HourFormat(this)
+
+		// Create the dialog
+		val dialog = TimePickerDialog(this,
+			{ _, hr, min ->
+
+				// Reset the skip next alarm flag
+				alarm.shouldSkipNextAlarm = false
+
+				// Set the alarm attributes
+				alarm.hour = hr
+				alarm.minute = min
+				alarm.isEnabled = true
+
+				// Refresh the time views
+				card.refreshTimeViews()
+
+				// Show the next alarm, update the alarm, and save the next alarm
+				showNextAlarm(card, alarm)
+				updateAlarm(alarm)
+				saveNextAlarm(alarm)
+
+			},
+			alarm.hour,
+			alarm.minute,
+			is24HourFormat)
+
+		// Show the dialog
+		dialog.show()
+		// TODO: GO back to showTimeDialog()
+
+		//FragmentManager fragmentManager = ((AppCompatActivity)context)
+		//	.getSupportFragmentManager();
+		//MaterialTimePicker timepicker = new MaterialTimePicker.Builder()
+		//	.setHour(hour)
+		//	.setMinute(minute)
+		//	.setTimeFormat(is24HourFormat ? TimeFormat.CLOCK_24H : TimeFormat.CLOCK_12H)
+		//	.build();
+
+		//timepicker.addOnPositiveButtonClickListener(this);
+		//timepicker.show(fragmentManager, "TimePicker");
 	}
 
 	/**

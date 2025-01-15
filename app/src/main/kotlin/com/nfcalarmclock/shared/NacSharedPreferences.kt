@@ -7,11 +7,13 @@ import android.os.Build
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.media.NacMedia
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
+import java.util.Calendar
 
 /**
  * Container for the values of each preference.
@@ -61,6 +63,58 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * App's next alarm time in milliseconds.
+	 */
+	var appNextAlarmTimeMillis: Long
+		get()
+		{
+			val key = resources.getString(R.string.key_app_next_alarm_time_millis)
+			val defaultValue = 0L
+
+			return instance.getLong(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_app_next_alarm_time_millis)
+
+			saveLong(key, value)
+		}
+
+	/**
+	 * App's next alarm timezone ID.
+	 */
+	var appNextAlarmTimezoneId: String
+		get()
+		{
+			val key = resources.getString(R.string.key_app_next_alarm_timezone_id)
+
+			return instance.getString(key, "") ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_app_next_alarm_timezone_id)
+
+			saveString(key, value)
+		}
+
+	/**
+	 * App's next alarm time in milliseconds.
+	 */
+	var appShouldSaveNextAlarm: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_app_next_alarm_should_save_app_alarm)
+
+			return instance.getBoolean(key, true)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_app_next_alarm_should_save_app_alarm)
+
+			saveBoolean(key, value)
+		}
+
+	/**
 	 * Whether statistics should start to be collected or not.
 	 */
 	var appStartStatistics: Boolean
@@ -84,7 +138,7 @@ class NacSharedPreferences(context: Context)
 	var audioSource: String
 		get()
 		{
-			val key = resources.getString(R.string.alarm_audio_source_key)
+			val key = resources.getString(R.string.key_default_alarm_audio_source)
 			val audioSources = resources.getStringArray(R.array.audio_sources)
 			val defaultValue = audioSources[2]
 
@@ -92,7 +146,7 @@ class NacSharedPreferences(context: Context)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_audio_source_key)
+			val key = resources.getString(R.string.key_default_alarm_audio_source)
 
 			saveString(key, value)
 		}
@@ -103,14 +157,14 @@ class NacSharedPreferences(context: Context)
 	var autoDismissTime: Int
 		get()
 		{
-			val key = resources.getString(R.string.auto_dismiss_key)
+			val key = resources.getString(R.string.key_default_alarm_dismiss_auto_dismiss_time)
 			val defaultValue = 900
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.auto_dismiss_key)
+			val key = resources.getString(R.string.key_default_alarm_dismiss_auto_dismiss_time)
 
 			saveInt(key, value)
 		}
@@ -153,14 +207,14 @@ class NacSharedPreferences(context: Context)
 	var autoSnoozeTime: Int
 		get()
 		{
-			val key = resources.getString(R.string.auto_snooze_key)
+			val key = resources.getString(R.string.key_default_alarm_snooze_auto_snooze_time)
 			val defaultValue = 300
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.auto_snooze_key)
+			val key = resources.getString(R.string.key_default_alarm_snooze_auto_snooze_time)
 
 			saveInt(key, value)
 		}
@@ -171,14 +225,14 @@ class NacSharedPreferences(context: Context)
 	var canDismissEarly: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.alarm_use_dismiss_early_key)
+			val key = resources.getString(R.string.key_default_alarm_dismiss_can_dismiss_early)
 			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_use_dismiss_early_key)
+			val key = resources.getString(R.string.key_default_alarm_dismiss_can_dismiss_early)
 
 			saveBoolean(key, value)
 		}
@@ -477,14 +531,14 @@ class NacSharedPreferences(context: Context)
 	var shouldAutoDismiss: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.should_auto_dismiss_key)
+			val key = resources.getString(R.string.key_default_alarm_dismiss_should_auto_dismiss)
 			val defaultValue = true
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.should_auto_dismiss_key)
+			val key = resources.getString(R.string.key_default_alarm_dismiss_should_auto_dismiss)
 
 			saveBoolean(key, value)
 		}
@@ -495,14 +549,14 @@ class NacSharedPreferences(context: Context)
 	var shouldAutoSnooze: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.should_auto_snooze_key)
+			val key = resources.getString(R.string.key_default_alarm_snooze_should_auto_snooze)
 			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.should_auto_snooze_key)
+			val key = resources.getString(R.string.key_default_alarm_snooze_should_auto_snooze)
 
 			saveBoolean(key, value)
 		}
@@ -677,7 +731,7 @@ class NacSharedPreferences(context: Context)
 	val dayButtonStyle: Int
 		get()
 		{
-			val key = resources.getString(R.string.day_button_style_key)
+			val key = resources.getString(R.string.key_style_day_button)
 			val defaultValue = resources.getInteger(R.integer.default_day_button_style)
 
 			return instance.getInt(key, defaultValue)
@@ -689,14 +743,14 @@ class NacSharedPreferences(context: Context)
 	var days: Int
 		get()
 		{
-			val key = resources.getString(R.string.alarm_days_key)
+			val key = resources.getString(R.string.key_default_alarm_days)
 			val defaultValue = resources.getInteger(R.integer.default_days)
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_days_key)
+			val key = resources.getString(R.string.key_default_alarm_days)
 
 			saveInt(key, value)
 		}
@@ -749,34 +803,16 @@ class NacSharedPreferences(context: Context)
 	var dismissEarlyTime: Int
 		get()
 		{
-			val key = resources.getString(R.string.alarm_dismiss_early_time_key)
+			val key = resources.getString(R.string.key_default_alarm_dismiss_early_time)
 			val defaultValue = 30
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_dismiss_early_time_key)
+			val key = resources.getString(R.string.key_default_alarm_dismiss_early_time)
 
 			saveInt(key, value)
-		}
-
-	/**
-	 * Whether easy snooze is enabled or not.
-	 */
-	var easySnooze: Boolean
-		get()
-		{
-			val key = resources.getString(R.string.easy_snooze_key)
-			val defaultValue = false
-
-			return instance.getBoolean(key, defaultValue)
-		}
-		set(value)
-		{
-			val key = resources.getString(R.string.easy_snooze_key)
-
-			saveBoolean(key, value)
 		}
 
 	/**
@@ -823,7 +859,7 @@ class NacSharedPreferences(context: Context)
 	val expandNewAlarm: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.expand_new_alarm_key)
+			val key = resources.getString(R.string.key_tweak_expand_new_alarm)
 			val defaultValue = resources.getBoolean(R.bool.default_expand_new_alarm)
 
 			return instance.getBoolean(key, defaultValue)
@@ -835,14 +871,14 @@ class NacSharedPreferences(context: Context)
 	var flashlightOffDuration: String
 		get()
 		{
-			val key = resources.getString(R.string.alarm_flashlight_off_duration_key)
+			val key = resources.getString(R.string.key_default_alarm_flashlight_off_duration)
 			val defaultValue = "1"
 
 			return instance.getString(key, defaultValue) ?: ""
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_flashlight_off_duration_key)
+			val key = resources.getString(R.string.key_default_alarm_flashlight_off_duration)
 
 			saveString(key, value)
 		}
@@ -853,14 +889,14 @@ class NacSharedPreferences(context: Context)
 	var flashlightOnDuration: String
 		get()
 		{
-			val key = resources.getString(R.string.alarm_flashlight_on_duration_key)
+			val key = resources.getString(R.string.key_default_alarm_flashlight_on_duration)
 			val defaultValue = "1"
 
 			return instance.getString(key, defaultValue) ?: ""
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_flashlight_on_duration_key)
+			val key = resources.getString(R.string.key_default_alarm_flashlight_on_duration)
 
 			saveString(key, value)
 		}
@@ -871,14 +907,14 @@ class NacSharedPreferences(context: Context)
 	var flashlightStrengthLevel: Int
 		get()
 		{
-			val key = resources.getString(R.string.alarm_flashlight_strength_level_key)
+			val key = resources.getString(R.string.key_default_alarm_flashlight_strength_level)
 			val defaultValue = 0
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_flashlight_strength_level_key)
+			val key = resources.getString(R.string.key_default_alarm_flashlight_strength_level)
 
 			saveInt(key, value)
 		}
@@ -890,14 +926,14 @@ class NacSharedPreferences(context: Context)
 	var graduallyIncreaseFlashlightStrengthLevelWaitTime: Int
 		get()
 		{
-			val key = resources.getString(R.string.alarm_flashlight_gradually_increase_flashlight_strength_level_wait_time_key)
+			val key = resources.getString(R.string.key_default_alarm_flashlight_gradually_increase_flashlight_strength_level_wait_time)
 			val defaultValue = 5
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_flashlight_gradually_increase_flashlight_strength_level_wait_time_key)
+			val key = resources.getString(R.string.key_default_alarm_flashlight_gradually_increase_flashlight_strength_level_wait_time)
 
 			saveInt(key, value)
 		}
@@ -908,14 +944,14 @@ class NacSharedPreferences(context: Context)
 	var graduallyIncreaseVolumeWaitTime: Int
 		get()
 		{
-			val key = resources.getString(R.string.alarm_gradually_increase_volume_wait_time_key)
+			val key = resources.getString(R.string.key_default_alarm_volume_gradually_increase_volume_wait_time)
 			val defaultValue = 5
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_gradually_increase_volume_wait_time_key)
+			val key = resources.getString(R.string.key_default_alarm_volume_gradually_increase_volume_wait_time)
 
 			saveInt(key, value)
 		}
@@ -970,14 +1006,14 @@ class NacSharedPreferences(context: Context)
 	var maxSnooze: Int
 		get()
 		{
-			val key = resources.getString(R.string.max_snooze_key)
+			val key = resources.getString(R.string.key_default_alarm_snooze_max_snooze)
 			val defaultValue = resources.getInteger(R.integer.default_max_snooze_index)
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.max_snooze_key)
+			val key = resources.getString(R.string.key_default_alarm_snooze_max_snooze)
 
 			saveInt(key, value)
 		}
@@ -1104,7 +1140,7 @@ class NacSharedPreferences(context: Context)
 	val missedAlarmNotification: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.missed_alarm_key)
+			val key = resources.getString(R.string.key_missed_alarm)
 			val defaultValue = resources.getBoolean(R.bool.default_missed_alarm)
 
 			return instance.getBoolean(key, defaultValue)
@@ -1116,13 +1152,13 @@ class NacSharedPreferences(context: Context)
 	var name: String
 		get()
 		{
-			val key = resources.getString(R.string.alarm_name_key)
+			val key = resources.getString(R.string.key_default_alarm_name)
 
 			return instance.getString(key, "") ?: ""
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_name_key)
+			val key = resources.getString(R.string.key_default_alarm_name)
 
 			saveString(key, value)
 		}
@@ -1145,7 +1181,7 @@ class NacSharedPreferences(context: Context)
 	val nextAlarmFormat: Int
 		get()
 		{
-			val key = resources.getString(R.string.next_alarm_format_key)
+			val key = resources.getString(R.string.key_tweak_next_alarm_format)
 			val defaultValue = resources.getInteger(R.integer.default_next_alarm_format_index)
 
 			return instance.getInt(key, defaultValue)
@@ -1245,14 +1281,14 @@ class NacSharedPreferences(context: Context)
 	var recursivelyPlayMedia: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.alarm_recursively_play_media_key)
+			val key = resources.getString(R.string.key_default_alarm_media_should_recursively_play_media)
 			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_recursively_play_media_key)
+			val key = resources.getString(R.string.key_default_alarm_media_should_recursively_play_media)
 
 			saveBoolean(key, value)
 		}
@@ -1263,14 +1299,14 @@ class NacSharedPreferences(context: Context)
 	var reminderFrequency: Int
 		get()
 		{
-			val key = resources.getString(R.string.reminder_frequency_key)
+			val key = resources.getString(R.string.key_default_alarm_reminder_frequency)
 			val defaultValue = 0
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.reminder_frequency_key)
+			val key = resources.getString(R.string.key_default_alarm_reminder_frequency)
 
 			saveInt(key,  value)
 		}
@@ -1281,14 +1317,14 @@ class NacSharedPreferences(context: Context)
 	var shouldBlinkFlashlight: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.alarm_flashlight_should_blink_key)
+			val key = resources.getString(R.string.key_default_alarm_flashlight_should_blink)
 			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_flashlight_should_blink_key)
+			val key = resources.getString(R.string.key_default_alarm_flashlight_should_blink)
 
 			saveBoolean(key, value)
 		}
@@ -1299,14 +1335,32 @@ class NacSharedPreferences(context: Context)
 	var shouldDeleteAlarmAfterDismissed: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.should_delete_alarm_after_dismissed_key)
+			val key = resources.getString(R.string.key_default_alarm_dismiss_should_delete_alarm_after_dismissed)
 			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.should_delete_alarm_after_dismissed_key)
+			val key = resources.getString(R.string.key_default_alarm_dismiss_should_delete_alarm_after_dismissed)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether easy snooze is enabled or not.
+	 */
+	var shouldEasySnooze: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_alarm_snooze_should_use_easy_snooze)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_alarm_snooze_should_use_easy_snooze)
 
 			saveBoolean(key, value)
 		}
@@ -1317,14 +1371,14 @@ class NacSharedPreferences(context: Context)
 	var shouldGraduallyIncreaseVolume: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.alarm_should_gradually_increase_volume_key)
+			val key = resources.getString(R.string.key_default_alarm_volume_should_gradually_increase_volume)
 			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_should_gradually_increase_volume_key)
+			val key = resources.getString(R.string.key_default_alarm_volume_should_gradually_increase_volume)
 
 			saveBoolean(key, value)
 		}
@@ -1353,14 +1407,14 @@ class NacSharedPreferences(context: Context)
 	var shouldRepeat: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.alarm_repeat_key)
+			val key = resources.getString(R.string.key_default_alarm_repeat_should_repeat)
 			val defaultValue = resources.getBoolean(R.bool.default_repeat)
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_repeat_key)
+			val key = resources.getString(R.string.key_default_alarm_repeat_should_repeat)
 
 			saveBoolean(key, value)
 		}
@@ -1371,14 +1425,14 @@ class NacSharedPreferences(context: Context)
 	var shouldRestrictVolume: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.alarm_should_restrict_volume_key)
+			val key = resources.getString(R.string.key_default_alarm_volume_should_restrict_volume)
 			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_should_restrict_volume_key)
+			val key = resources.getString(R.string.key_default_alarm_volume_should_restrict_volume)
 
 			saveBoolean(key, value)
 		}
@@ -1407,14 +1461,14 @@ class NacSharedPreferences(context: Context)
 	var shouldSayAlarmName: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.key_default_alarm_should_say_alarm_name)
+			val key = resources.getString(R.string.key_default_alarm_tts_should_say_alarm_name)
 			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.key_default_alarm_should_say_alarm_name)
+			val key = resources.getString(R.string.key_default_alarm_tts_should_say_alarm_name)
 
 			saveBoolean(key, value)
 		}
@@ -1425,14 +1479,14 @@ class NacSharedPreferences(context: Context)
 	var shouldSayCurrentTime: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.key_default_alarm_should_say_current_time)
+			val key = resources.getString(R.string.key_default_alarm_tts_should_say_current_time)
 			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.key_default_alarm_should_say_current_time)
+			val key = resources.getString(R.string.key_default_alarm_tts_should_say_current_time)
 
 			saveBoolean(key, value)
 		}
@@ -1515,14 +1569,14 @@ class NacSharedPreferences(context: Context)
 	var shouldShowReminder: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.should_show_reminder_key)
+			val key = resources.getString(R.string.key_default_alarm_reminder_should_show_reminder)
 			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.should_show_reminder_key)
+			val key = resources.getString(R.string.key_default_alarm_reminder_should_show_reminder)
 
 			saveBoolean(key, value)
 		}
@@ -1533,7 +1587,7 @@ class NacSharedPreferences(context: Context)
 	val shouldShowFlashlightButton: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.show_hide_flashlight_button_key)
+			val key = resources.getString(R.string.key_show_hide_flashlight_button)
 			val defaultValue = true
 
 			return instance.getBoolean(key, defaultValue)
@@ -1545,7 +1599,7 @@ class NacSharedPreferences(context: Context)
 	val shouldShowNfcButton: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.show_hide_nfc_button_key)
+			val key = resources.getString(R.string.key_show_hide_nfc_button)
 			val defaultValue = true
 
 			return instance.getBoolean(key, defaultValue)
@@ -1557,7 +1611,7 @@ class NacSharedPreferences(context: Context)
 	val shouldShowVibrateButton: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.show_hide_vibrate_button_key)
+			val key = resources.getString(R.string.key_show_hide_vibrate_button)
 			val defaultValue = true
 
 			return instance.getBoolean(key, defaultValue)
@@ -1569,14 +1623,14 @@ class NacSharedPreferences(context: Context)
 	var shouldShuffleMedia: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.shuffle_playlist_key)
+			val key = resources.getString(R.string.key_default_alarm_media_should_shuffle_media)
 			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.shuffle_playlist_key)
+			val key = resources.getString(R.string.key_default_alarm_media_should_shuffle_media)
 
 			saveBoolean(key, value)
 		}
@@ -1587,14 +1641,14 @@ class NacSharedPreferences(context: Context)
 	var shouldUseFlashlight: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.alarm_use_flashlight_key)
+			val key = resources.getString(R.string.key_default_alarm_flashlight_should_use_flashlight)
 			val defaultValue = resources.getBoolean(R.bool.default_use_flashlight)
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_use_flashlight_key)
+			val key = resources.getString(R.string.key_default_alarm_flashlight_should_use_flashlight)
 
 			saveBoolean(key, value)
 		}
@@ -1623,14 +1677,14 @@ class NacSharedPreferences(context: Context)
 	var shouldUseNfc: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.key_default_alarm_should_use_nfc)
+			val key = resources.getString(R.string.key_default_alarm_nfc_should_use_nfc)
 			val defaultValue = resources.getBoolean(R.bool.default_use_nfc)
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.key_default_alarm_should_use_nfc)
+			val key = resources.getString(R.string.key_default_alarm_nfc_should_use_nfc)
 
 			saveBoolean(key, value)
 		}
@@ -1641,14 +1695,14 @@ class NacSharedPreferences(context: Context)
 	var shouldUseTtsForReminder: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.should_use_tts_for_reminder_key)
+			val key = resources.getString(R.string.key_default_alarm_reminder_should_use_tts_for_reminder)
 			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.should_use_tts_for_reminder_key)
+			val key = resources.getString(R.string.key_default_alarm_reminder_should_use_tts_for_reminder)
 
 			saveBoolean(key, value)
 		}
@@ -1659,14 +1713,14 @@ class NacSharedPreferences(context: Context)
 	var shouldVibrate: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.alarm_should_vibrate_key)
+			val key = resources.getString(R.string.key_default_alarm_vibrate_should_vibrate)
 			val defaultValue = resources.getBoolean(R.bool.default_vibrate)
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_should_vibrate_key)
+			val key = resources.getString(R.string.key_default_alarm_vibrate_should_vibrate)
 
 			saveBoolean(key, value)
 		}
@@ -1677,14 +1731,14 @@ class NacSharedPreferences(context: Context)
 	var shouldVibratePattern: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.alarm_should_vibrate_pattern_key)
+			val key = resources.getString(R.string.key_default_alarm_vibrate_should_vibrate_pattern)
 			val defaultValue = resources.getBoolean(R.bool.default_vibrate_pattern)
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_should_vibrate_pattern_key)
+			val key = resources.getString(R.string.key_default_alarm_vibrate_should_vibrate_pattern)
 
 			saveBoolean(key, value)
 		}
@@ -1707,14 +1761,14 @@ class NacSharedPreferences(context: Context)
 	var snoozeDuration: Int
 		get()
 		{
-			val key = resources.getString(R.string.snooze_duration_key)
+			val key = resources.getString(R.string.key_default_alarm_snooze_duration)
 			val defaultValue = 300
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.snooze_duration_key)
+			val key = resources.getString(R.string.key_default_alarm_snooze_duration)
 
 			saveInt(key, value)
 		}
@@ -1755,7 +1809,7 @@ class NacSharedPreferences(context: Context)
 	val startWeekOn: Int
 		get()
 		{
-			val key = resources.getString(R.string.start_week_on_key)
+			val key = resources.getString(R.string.key_style_start_week_on)
 			val defaultValue = resources.getInteger(R.integer.default_start_week_on_index)
 
 			return instance.getInt(key, defaultValue)
@@ -1791,14 +1845,14 @@ class NacSharedPreferences(context: Context)
 	var timeToShowReminder: Int
 		get()
 		{
-			val key = resources.getString(R.string.time_to_show_reminder_key)
+			val key = resources.getString(R.string.key_default_alarm_reminder_time_to_show_reminder)
 			val defaultValue = 5
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.time_to_show_reminder_key)
+			val key = resources.getString(R.string.key_default_alarm_reminder_time_to_show_reminder)
 
 			saveInt(key, value)
 		}
@@ -1809,14 +1863,14 @@ class NacSharedPreferences(context: Context)
 	var ttsFrequency: Int
 		get()
 		{
-			val key = resources.getString(R.string.key_default_alarm_speak_frequency)
+			val key = resources.getString(R.string.key_default_alarm_tts_speak_frequency)
 			val defaultValue = 0
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.key_default_alarm_speak_frequency)
+			val key = resources.getString(R.string.key_default_alarm_tts_speak_frequency)
 
 			saveInt(key, value)
 		}
@@ -1844,14 +1898,14 @@ class NacSharedPreferences(context: Context)
 	var vibrateDuration: Long
 		get()
 		{
-			val key = resources.getString(R.string.alarm_vibrate_duration_key)
+			val key = resources.getString(R.string.key_default_alarm_vibrate_duration)
 			val defaultValue = 500L
 
 			return instance.getLong(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_vibrate_duration_key)
+			val key = resources.getString(R.string.key_default_alarm_vibrate_duration)
 
 			saveLong(key, value)
 		}
@@ -1862,14 +1916,14 @@ class NacSharedPreferences(context: Context)
 	var vibrateRepeatPattern: Int
 		get()
 		{
-			val key = resources.getString(R.string.alarm_vibrate_repeat_pattern_key)
+			val key = resources.getString(R.string.key_default_alarm_vibrate_repeat_pattern)
 			val defaultValue = 3
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_vibrate_repeat_pattern_key)
+			val key = resources.getString(R.string.key_default_alarm_vibrate_repeat_pattern)
 
 			saveInt(key, value)
 		}
@@ -1880,14 +1934,14 @@ class NacSharedPreferences(context: Context)
 	var vibrateWaitTime: Long
 		get()
 		{
-			val key = resources.getString(R.string.alarm_vibrate_wait_time_key)
+			val key = resources.getString(R.string.key_default_alarm_vibrate_wait_time)
 			val defaultValue = 1000L
 
 			return instance.getLong(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_vibrate_wait_time_key)
+			val key = resources.getString(R.string.key_default_alarm_vibrate_wait_time)
 
 			saveLong(key, value)
 		}
@@ -1899,14 +1953,14 @@ class NacSharedPreferences(context: Context)
 	var vibrateWaitTimeAfterPattern: Long
 		get()
 		{
-			val key = resources.getString(R.string.alarm_vibrate_wait_time_after_pattern_key)
+			val key = resources.getString(R.string.key_default_alarm_vibrate_wait_time_after_pattern)
 			val defaultValue = 2000L
 
 			return instance.getLong(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_vibrate_wait_time_after_pattern_key)
+			val key = resources.getString(R.string.key_default_alarm_vibrate_wait_time_after_pattern)
 
 			saveLong(key, value)
 		}
@@ -1917,14 +1971,14 @@ class NacSharedPreferences(context: Context)
 	var volume: Int
 		get()
 		{
-			val key = resources.getString(R.string.alarm_volume_key)
+			val key = resources.getString(R.string.key_default_alarm_volume)
 			val defaultValue = resources.getInteger(R.integer.default_volume)
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.alarm_volume_key)
+			val key = resources.getString(R.string.key_default_alarm_volume)
 
 			saveInt(key, value)
 		}
@@ -2177,6 +2231,27 @@ class NacSharedPreferences(context: Context)
 		instance.edit()
 			.putLong(key, value)
 			.apply()
+	}
+
+	/**
+	 * Find and save the next alarm.
+	 */
+	fun saveNextAlarm(allAlarms: List<NacAlarm>)
+	{
+		// Find the next alarm
+		val nextAlarm = NacCalendar.getNextAlarm(allAlarms)
+
+		// Save the next alarm information
+		appNextAlarmTimezoneId = Calendar.getInstance().timeZone.id
+		appNextAlarmTimeMillis = if (nextAlarm != null)
+		{
+			val nextCal = NacCalendar.getNextAlarmDay(nextAlarm)
+			nextCal?.timeInMillis ?: 0L
+		}
+		else
+		{
+			0L
+		}
 	}
 
 	/**

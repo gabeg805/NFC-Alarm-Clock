@@ -73,7 +73,7 @@ class NacSnoozeOptionsDialog
 		alarm?.autoSnoozeTime = selectedAutoSnoozeTime
 		alarm?.maxSnooze = selectedMaxSnoozeTime
 		alarm?.snoozeDuration = selectedSnoozeDurationTime
-		alarm?.useEasySnooze = easySnoozeSwitch.isChecked
+		alarm?.shouldUseEasySnooze = easySnoozeSwitch.isChecked
 	}
 
 	/**
@@ -110,7 +110,7 @@ class NacSnoozeOptionsDialog
 		val defaultAutoSnoozeTime = alarm?.autoSnoozeTime?.takeIf { it > 0 } ?: 300
 		val defaultMaxSnooze = alarm?.maxSnooze ?: -1
 		val defaultSnoozeDuration = alarm?.snoozeDuration?.takeIf { it > 0 } ?: 300
-		val defaultShouldEasySnooze = alarm?.useEasySnooze ?: false
+		val defaultShouldEasySnooze = alarm?.shouldUseEasySnooze ?: false
 		selectedAutoSnoozeTime = defaultAutoSnoozeTime
 		selectedMaxSnoozeTime = defaultMaxSnooze
 		selectedSnoozeDurationTime = defaultSnoozeDuration

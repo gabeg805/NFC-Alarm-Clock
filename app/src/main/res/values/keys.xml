@@ -11,6 +11,11 @@
 	<string name="key_app_start_statistics">app_start_statistics</string>
 	<string name="sys_previous_volume">sys_previous_volume</string>
 
+	<!-- Next alarm -->
+	<string name="key_app_next_alarm_should_save_app_alarm">key_app_next_alarm_should_save_app_alarm</string>
+	<string name="key_app_next_alarm_time_millis">key_app_next_alarm_time_millis</string>
+	<string name="key_app_next_alarm_timezone_id">key_app_next_alarm_timezone_id</string>
+
 	<!-- Media -->
 	<string name="key_media_current_playing_alarm">key_current_playing_alarm_media</string>
 	<string name="key_media_is_selected_for_alarm_not_available">key_media_is_selected_for_alarm_not_available</string>
@@ -36,65 +41,69 @@
 
 	<!-- General -->
 	<string name="key_settings_general">pref_screen_general</string>
-	<string name="should_auto_dismiss_key">pref_should_auto_dismiss</string>
-	<string name="auto_dismiss_key">pref_auto_dismiss_new</string>
-	<string name="old_auto_dismiss_key">pref_auto_dismiss</string>
-	<string name="should_auto_snooze_key">pref_should_auto_snooze</string>
-	<string name="auto_snooze_key">pref_auto_snooze</string>
-	<string name="max_snooze_key">pref_max_snooze_new</string>
 	<string name="old_max_snooze_key">pref_max_snooze</string>
-	<string name="snooze_duration_key">pref_snooze_duration_new</string>
 	<string name="old_snooze_duration_key">pref_snooze_duration</string>
-	<string name="easy_snooze_key">pref_easy_snooze</string>
+	<string name="old_auto_dismiss_key">pref_auto_dismiss</string>
+
+	<!-- Default alarm -->
 	<string name="key_default_alarm_card">pref_default_alarm_card</string>
-	<string name="alarm_name_key">pref_name</string>
-	<string name="alarm_days_key">pref_deys</string>
-	<string name="alarm_repeat_key">pref_repeat</string>
-	<string name="alarm_should_vibrate_key">pref_vibrate</string>
-	<string name="alarm_vibrate_duration_key">pref_vibrate_duration</string>
-	<string name="alarm_vibrate_wait_time_key">pref_vibrate_wait_time</string>
-	<string name="alarm_should_vibrate_pattern_key">pref_should_vibrate_pattern</string>
-	<string name="alarm_vibrate_repeat_pattern_key">pref_vibrate_repeat_pattern</string>
-	<string name="alarm_vibrate_wait_time_after_pattern_key">pref_vibrate_wait_time_after_pattern</string>
-	<string name="key_default_alarm_should_use_nfc">pref_use_nfc</string>
+	<string name="key_default_alarm_days">pref_deys</string>
+	<string name="key_default_alarm_repeat_should_repeat">pref_repeat</string>
+	<string name="key_default_alarm_vibrate_should_vibrate">pref_vibrate</string>
+	<string name="key_default_alarm_vibrate_duration">pref_vibrate_duration</string>
+	<string name="key_default_alarm_vibrate_wait_time">pref_vibrate_wait_time</string>
+	<string name="key_default_alarm_vibrate_should_vibrate_pattern">pref_should_vibrate_pattern</string>
+	<string name="key_default_alarm_vibrate_repeat_pattern">pref_vibrate_repeat_pattern</string>
+	<string name="key_default_alarm_vibrate_wait_time_after_pattern">pref_vibrate_wait_time_after_pattern</string>
+	<string name="key_default_alarm_nfc_should_use_nfc">pref_use_nfc</string>
 	<string name="key_default_alarm_nfc_tag_id">pref_default_alarm_nfc_tag_id</string>
-	<string name="alarm_use_flashlight_key">pref_use_flashlight</string>
-	<string name="alarm_flashlight_strength_level_key">pref_flashlight_strength_level</string>
-	<string name="alarm_flashlight_gradually_increase_flashlight_strength_level_wait_time_key">pref_flashlight_gradually_increase_flashlight_strength_level_wait_time</string>
-	<string name="alarm_flashlight_should_blink_key">pref_flashlight_should_blink</string>
-	<string name="alarm_flashlight_on_duration_key">pref_flashlight_on_duration</string>
-	<string name="alarm_flashlight_off_duration_key">pref_flashlight_off_duration</string>
+	<string name="key_default_alarm_flashlight_should_use_flashlight">pref_use_flashlight</string>
+	<string name="key_default_alarm_flashlight_strength_level">pref_flashlight_strength_level</string>
+	<string name="key_default_alarm_flashlight_gradually_increase_flashlight_strength_level_wait_time">pref_flashlight_gradually_increase_flashlight_strength_level_wait_time</string>
+	<string name="key_default_alarm_flashlight_should_blink">pref_flashlight_should_blink</string>
+	<string name="key_default_alarm_flashlight_on_duration">pref_flashlight_on_duration</string>
+	<string name="key_default_alarm_flashlight_off_duration">pref_flashlight_off_duration</string>
 	<string name="key_general_default_alarm_media_path">pref_sound</string>
 	<string name="key_general_default_alarm_media_artist">pref_default_alarm_media_artist</string>
 	<string name="key_general_default_alarm_media_title">pref_default_alarm_media_title</string>
 	<string name="key_general_default_alarm_media_type">pref_default_alarm_media_type</string>
 	<string name="key_general_default_alarm_local_media_path">pref_default_alarm_local_media_path</string>
-	<string name="shuffle_playlist_key">pref_shuffle_playlist</string>
-	<string name="alarm_recursively_play_media_key">pref_recursively_play_media</string>
-	<string name="alarm_volume_key">pref_volume</string>
-	<string name="alarm_audio_source_key">pref_audio_source</string>
-	<string name="key_default_alarm_should_say_current_time">pref_should_say_current_time</string>
-	<string name="key_default_alarm_should_say_alarm_name">pref_should_say_alarm_name</string>
-	<string name="key_default_alarm_speak_frequency">pref_speak_frequency</string>
+	<string name="key_default_alarm_media_should_shuffle_media">pref_shuffle_playlist</string>
+	<string name="key_default_alarm_media_should_recursively_play_media">pref_recursively_play_media</string>
+	<string name="key_default_alarm_volume">pref_volume</string>
+	<string name="key_default_alarm_volume_should_gradually_increase_volume">pref_should_gradually_increase_volume</string>
+	<string name="key_default_alarm_volume_gradually_increase_volume_wait_time">pref_gradually_increase_volume_wait_time</string>
+	<string name="key_default_alarm_volume_should_restrict_volume">pref_should_restrict_volume</string>
+	<string name="key_default_alarm_audio_source">pref_audio_source</string>
+	<string name="key_default_alarm_name">pref_name</string>
+	<string name="key_default_alarm_tts_should_say_current_time">pref_should_say_current_time</string>
+	<string name="key_default_alarm_tts_should_say_alarm_name">pref_should_say_alarm_name</string>
+	<string name="key_default_alarm_tts_speak_frequency">pref_speak_frequency</string>
 	<string name="key_default_alarm_tts_voice">pref_default_alarm_tts_voice</string>
-	<string name="alarm_should_gradually_increase_volume_key">pref_should_gradually_increase_volume</string>
-	<string name="alarm_gradually_increase_volume_wait_time_key">pref_gradually_increase_volume_wait_time</string>
-	<string name="alarm_should_restrict_volume_key">pref_should_restrict_volume</string>
-	<string name="alarm_use_dismiss_early_key">pref_use_dismiss_early</string>
-	<string name="alarm_dismiss_early_time_key">pref_dismiss_early_time</string>
-	<string name="should_show_reminder_key">pref_should_show_reminder</string>
-	<string name="time_to_show_reminder_key">pref_time_to_show_reminder</string>
-	<string name="reminder_frequency_key">pref_reminder_frequency</string>
-	<string name="should_use_tts_for_reminder_key">pref_should_use_tts_for_reminder</string>
-	<string name="should_delete_alarm_after_dismissed_key">pref_should_delete_alarm_after_dismissed</string>
+	<string name="key_default_alarm_dismiss_should_auto_dismiss">pref_should_auto_dismiss</string>
+	<string name="key_default_alarm_dismiss_auto_dismiss_time">pref_auto_dismiss_new</string>
+	<string name="key_default_alarm_dismiss_can_dismiss_early">pref_use_dismiss_early</string>
+	<string name="key_default_alarm_dismiss_early_time">pref_dismiss_early_time</string>
+	<string name="key_default_alarm_dismiss_should_delete_alarm_after_dismissed">pref_should_delete_alarm_after_dismissed</string>
+	<string name="key_default_alarm_snooze_should_auto_snooze">pref_should_auto_snooze</string>
+	<string name="key_default_alarm_snooze_auto_snooze_time">pref_auto_snooze</string>
+	<string name="key_default_alarm_snooze_max_snooze">pref_max_snooze_new</string>
+	<string name="key_default_alarm_snooze_duration">pref_snooze_duration_new</string>
+	<string name="key_default_alarm_snooze_should_use_easy_snooze">pref_easy_snooze</string>
+	<string name="key_default_alarm_reminder_should_show_reminder">pref_should_show_reminder</string>
+	<string name="key_default_alarm_reminder_time_to_show_reminder">pref_time_to_show_reminder</string>
+	<string name="key_default_alarm_reminder_frequency">pref_reminder_frequency</string>
+	<string name="key_default_alarm_reminder_should_use_tts_for_reminder">pref_should_use_tts_for_reminder</string>
 
-	<!-- Appearance -->
-	<string name="key_settings_appearance">pref_screen_appearance</string>
+	<!-- Alarm screen -->
 	<string name="key_use_new_alarm_screen">pref_use_new_alarm_screen</string>
 	<string name="key_alarm_screen_show_alarm_name">pref_alarm_info</string>
 	<string name="key_alarm_screen_show_current_date_and_time">pref_alarm_current_date_and_time</string>
 	<string name="key_alarm_screen_show_music_info">pref_alarm_music_info</string>
 	<string name="key_alarm_screen_battery_saver">pref_alarm_screen_battery_saver</string>
+
+	<!-- Appearance -->
+	<string name="key_settings_appearance">pref_screen_appearance</string>
 	<string name="key_color_theme">pref_theme_color</string>
 	<string name="key_color_name">pref_name_color</string>
 	<string name="key_color_days">pref_days_color</string>
@@ -103,14 +112,14 @@
 	<string name="key_color_pm">pref_pm_color</string>
 	<string name="key_color_delete_after_dismissed">pref_delete_after_dismissed_color</string>
 	<string name="key_color_skip_next_alarm">pref_skip_next_alarm_color</string>
-	<string name="missed_alarm_key">pref_missed_alarm_notification</string>
-	<string name="show_hide_vibrate_button_key">pref_show_hide_vibrate_button</string>
-	<string name="show_hide_nfc_button_key">pref_show_hide_nfc_button</string>
-	<string name="show_hide_flashlight_button_key">pref_show_hide_flashlight_button</string>
-	<string name="day_button_style_key">pref_day_button_style</string>
-	<string name="start_week_on_key">pref_start_week_on</string>
-	<string name="expand_new_alarm_key">pref_expand_new_alarm</string>
-	<string name="next_alarm_format_key">pref_time_remaining_format</string>
+	<string name="key_missed_alarm">pref_missed_alarm_notification</string>
+	<string name="key_show_hide_vibrate_button">pref_show_hide_vibrate_button</string>
+	<string name="key_show_hide_nfc_button">pref_show_hide_nfc_button</string>
+	<string name="key_show_hide_flashlight_button">pref_show_hide_flashlight_button</string>
+	<string name="key_style_day_button">pref_day_button_style</string>
+	<string name="key_style_start_week_on">pref_start_week_on</string>
+	<string name="key_tweak_expand_new_alarm">pref_expand_new_alarm</string>
+	<string name="key_tweak_next_alarm_format">pref_time_remaining_format</string>
 
 	<!-- Statistics -->
 	<string name="key_settings_statistics">pref_screen_statistics</string>

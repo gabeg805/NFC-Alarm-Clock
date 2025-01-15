@@ -156,7 +156,7 @@ abstract class NacAlarmDatabase
 			val autoDismissTime = sharedPreferences?.oldAutoDismissTime ?: 15
 			val snoozeDuration = sharedPreferences?.oldSnoozeDurationValue ?: 5
 			val maxSnoozes = sharedPreferences?.oldMaxSnoozeValue ?: -1
-			val easySnooze = if (sharedPreferences?.easySnooze == true) 1 else 0
+			val easySnooze = if (sharedPreferences?.shouldEasySnooze == true) 1 else 0
 
 			// Add default values to all alarms
 			db.execSQL("UPDATE alarm SET auto_dismiss_time=$autoDismissTime")
