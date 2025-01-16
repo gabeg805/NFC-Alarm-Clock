@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import androidx.core.view.children
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
@@ -21,47 +22,104 @@ import com.nfcalarmclock.view.setupBackgroundColor
 import com.nfcalarmclock.view.setupRippleColor
 
 /**
+ * Create back stack entry lifecycle observer.
+ */
+fun createBackStackEntryLifecycleObserver(
+	navController: NavController,
+	fragment: NacBottomSheetDialogFragment,
+	onBackStackPopulated: () -> Unit = {
+
+		// Dismiss the dialog
+		fragment.dismiss()
+
+	}
+): LifecycleEventObserver
+{
+	return LifecycleEventObserver { _, event ->
+
+		// Check if the destination was started
+		if (event == Lifecycle.Event.ON_START)
+		{
+			// Hide the dialog
+			fragment.dialog?.hide()
+		}
+		// Check if the destination was stopped
+		else if (event == Lifecycle.Event.ON_STOP)
+		{
+			// Check if the current back stack entry contains the updated alarm
+			if (navController.currentBackStackEntry?.savedStateHandle?.contains("YOYOYO") == true)
+			{
+				// Call the listener
+				onBackStackPopulated()
+			}
+			// The ok button was not clicked, so proceed as normal
+			else
+			{
+				// Show the dialog
+				fragment.dialog?.show()
+
+			}
+		}
+
+	}
+}
+
+/**
+ * Observe a back stack entry until it is cleaned up.
+ */
+fun observeBackStackEntry(
+	navController: NavController,
+	fragment: NacBottomSheetDialogFragment,
+	onBackStackPopulated: () -> Unit = {
+
+		// Dismiss the dialog
+		fragment.dismiss()
+
+	}
+)
+{
+	// Get the back stack entry
+	val navBackStackEntry = navController.currentBackStackEntry ?: return
+
+	// Create an observer for any changes to the lifecycle of the back stack entry
+	val observer = createBackStackEntryLifecycleObserver(
+		navController, fragment,
+		onBackStackPopulated = onBackStackPopulated)
+
+	// Observe any changes to the lifecycle of the back stack entry
+	navBackStackEntry.lifecycle.addObserver(observer)
+
+	// Observe the lifecycle of the current fragment
+	waitToCleanupBackStackEntryLifecycleObserver(
+		fragment.viewLifecycleOwner, navBackStackEntry, observer)
+}
+
+/**
+ * Wait to cleanup the back stack entry lifecycle observer.
+ */
+fun waitToCleanupBackStackEntryLifecycleObserver(
+	lifecycleOwner: LifecycleOwner,
+	navBackStackEntry: NavBackStackEntry,
+	lifecycleEventObserver: LifecycleEventObserver)
+{
+	lifecycleOwner.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+
+		// Check if the fragment is going to be destroyed
+		if (event == Lifecycle.Event.ON_DESTROY)
+		{
+			// Remove the observer to the back stack entry
+			navBackStackEntry.lifecycle.removeObserver(lifecycleEventObserver)
+		}
+
+	})
+}
+
+/**
  * Show the options for an alarm.
  */
 class NacAlarmOptionsDialog
 	: NacBottomSheetDialogFragment()
 {
-
-	/**
-	 * Create back stack entry lifecycle observer.
-	 */
-	private fun createBackStackEntryLifecycleObserver(
-		navController: NavController
-	): LifecycleEventObserver
-	{
-		return LifecycleEventObserver { _, event ->
-
-			// Check if the destination was started
-			if (event == Lifecycle.Event.ON_START)
-			{
-				// Hide the dialog
-				this@NacAlarmOptionsDialog.dialog?.hide()
-			}
-			// Check if the destination was stopped
-			else if (event == Lifecycle.Event.ON_STOP)
-			{
-				// Check if the current back stack entry contains the updated alarm
-				if (navController.currentBackStackEntry?.savedStateHandle?.contains("YOYOYO") == true)
-				{
-					// Dismiss the dialog
-					dismiss()
-				}
-				// The ok button was not clicked, so proceed as normal
-				else
-				{
-					// Show the dialog
-					this@NacAlarmOptionsDialog.dialog?.show()
-
-				}
-			}
-
-		}
-	}
 
 	/**
 	 * Find the correct navigation ID to use from a button ID.
@@ -74,7 +132,8 @@ class NacAlarmOptionsDialog
 			R.id.alarm_option_text_to_speech -> R.id.nacTextToSpeechDialog
 			R.id.alarm_option_volume -> R.id.nacVolumeOptionsDialog
 			R.id.alarm_option_flashlight -> R.id.nacFlashlightOptionsDialog
-			R.id.alarm_option_nfc -> R.id.nacSelectNfcTagDialog
+			R.id.alarm_option_nfc -> R.id.nacScanNfcTagDialog
+			//R.id.alarm_option_nfc -> R.id.nacSelectNfcTagDialog
 			R.id.alarm_option_vibrate -> R.id.nacVibrateOptionsDialog
 			R.id.alarm_option_upcoming_reminder -> R.id.nacUpcomingReminderDialog
 			else -> -1
@@ -149,35 +208,16 @@ class NacAlarmOptionsDialog
 				val navBackStackEntry = navController.currentBackStackEntry ?: return@setOnClickListener
 
 				// Create an observer for any changes to the lifecycle of the back stack entry
-				val observer = createBackStackEntryLifecycleObserver(navController)
+				val observer = createBackStackEntryLifecycleObserver(navController, this)
 
 				// Observe any changes to the lifecycle of the back stack entry
 				navBackStackEntry.lifecycle.addObserver(observer)
 
 				// Observe the lifecycle of the current fragment
-				waitToCleanupBackStackEntryLifecycleObserver(navBackStackEntry, observer)
+				waitToCleanupBackStackEntryLifecycleObserver(viewLifecycleOwner, navBackStackEntry, observer)
 
 			}
 		}
-	}
-
-	/**
-	 * Wait to cleanup the back stack entry lifecycle observer.
-	 */
-	private fun waitToCleanupBackStackEntryLifecycleObserver(
-		navBackStackEntry: NavBackStackEntry,
-		lifecycleEventObserver: LifecycleEventObserver)
-	{
-		viewLifecycleOwner.lifecycle.addObserver(LifecycleEventObserver { _, event ->
-
-			// Check if the fragment is going to be destroyed
-			if (event == Lifecycle.Event.ON_DESTROY)
-			{
-				// Remove the observer to the back stack entry
-				navBackStackEntry.lifecycle.removeObserver(lifecycleEventObserver)
-			}
-
-		})
 	}
 
 	companion object

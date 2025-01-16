@@ -23,8 +23,7 @@ class NacCardLayoutManager(context: Context)
 		position: Int)
 	{
 		// Create a smooth scroller
-		val context = recyclerView.context
-		val smoothScroller = SmoothScroller(context, position)
+		val smoothScroller = SmoothScroller(recyclerView.context, position)
 
 		// Start the smooth scroll
 		startSmoothScroll(smoothScroller)
@@ -33,7 +32,8 @@ class NacCardLayoutManager(context: Context)
 	/**
 	 * Smooth scroller
 	 */
-	class SmoothScroller(context: Context?, position: Int) : LinearSmoothScroller(context)
+	class SmoothScroller(context: Context?, position: Int)
+		: LinearSmoothScroller(context)
 	{
 
 		companion object
@@ -42,7 +42,7 @@ class NacCardLayoutManager(context: Context)
 			/**
 			 * Speed to scroll in millimeters per pixel.
 			 */
-			private const val SPEED = 250f
+			private const val SPEED = 75f
 
 		}
 
@@ -55,7 +55,19 @@ class NacCardLayoutManager(context: Context)
 		}
 
 		/**
-		 * Calculates the scroll speed.
+		 * Calculate the amount to scroll to consider the view visible.
+		 */
+		override fun calculateDtToFit(viewStart: Int,
+			viewEnd: Int,
+			boxStart: Int,
+			boxEnd: Int,
+			snapPreference: Int): Int
+		{
+			return (boxStart + (boxEnd - boxStart) / 2) - (viewStart + (viewEnd - viewStart) / 2)
+		}
+
+		/**
+		 * Calculate the scroll speed.
 		 */
 		override fun calculateSpeedPerPixel(dm: DisplayMetrics): Float
 		{

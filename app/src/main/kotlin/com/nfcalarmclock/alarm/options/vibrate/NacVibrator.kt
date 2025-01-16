@@ -146,7 +146,6 @@ class NacVibrator(context: Context)
 		waitAfterPattern: Long)
 	{
 		// Vibrate
-		println("VIBRATE : $currentRepeatCount")
 		doVibrate(duration)
 
 		// Increase the count
@@ -155,7 +154,6 @@ class NacVibrator(context: Context)
 		// Get the correct wait time based on how many repetitions have occurred
 		val newWaitTime = if (currentRepeatCount == 0)
 		{
-			println("  vibrate wait after pattern")
 			// The repeat count has been reached, so the wait time should be the pattern
 			// wait time
 			waitAfterPattern

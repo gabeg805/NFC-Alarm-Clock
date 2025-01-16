@@ -58,7 +58,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardAlarmOptionsClickedListener
 	{
-		fun onCardAlarmOptionsClicked(holder: NacCardHolder, alarm: NacAlarm)
+		fun onCardAlarmOptionsClicked(card: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -66,7 +66,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardCollapsedListener
 	{
-		fun onCardCollapsed(holder: NacCardHolder, alarm: NacAlarm)
+		fun onCardCollapsed(card: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -74,7 +74,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardDaysChangedListener
 	{
-		fun onCardDaysChanged(holder: NacCardHolder, alarm: NacAlarm)
+		fun onCardDaysChanged(card: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -82,7 +82,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardDismissOptionsClickedListener
 	{
-		fun onCardDismissOptionsClicked(holder: NacCardHolder, alarm: NacAlarm)
+		fun onCardDismissOptionsClicked(card: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -90,7 +90,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardExpandedListener
 	{
-		fun onCardExpanded(holder: NacCardHolder, alarm: NacAlarm)
+		fun onCardExpanded(card: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -98,7 +98,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardMediaClickedListener
 	{
-		fun onCardMediaClicked(holder: NacCardHolder, alarm: NacAlarm)
+		fun onCardMediaClicked(card: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -106,7 +106,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardNameClickedListener
 	{
-		fun onCardNameClicked(holder: NacCardHolder, alarm: NacAlarm)
+		fun onCardNameClicked(card: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -114,7 +114,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardSnoozeOptionsClickedListener
 	{
-		fun onCardSnoozeOptionsClicked(holder: NacCardHolder, alarm: NacAlarm)
+		fun onCardSnoozeOptionsClicked(card: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -122,7 +122,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardSwitchChangedListener
 	{
-		fun onCardSwitchChanged(holder: NacCardHolder, alarm: NacAlarm)
+		fun onCardSwitchChanged(card: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -130,7 +130,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardTimeClickedListener
 	{
-		fun onCardTimeClicked(holder: NacCardHolder, alarm: NacAlarm)
+		fun onCardTimeClicked(card: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -138,7 +138,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardUpdatedListener
 	{
-		fun onCardUpdated(holder: NacCardHolder, alarm: NacAlarm)
+		fun onCardUpdated(card: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -146,7 +146,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardUseFlashlightChangedListener
 	{
-		fun onCardUseFlashlightChanged(holder: NacCardHolder, alarm: NacAlarm)
+		fun onCardUseFlashlightChanged(card: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -154,7 +154,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardUseNfcChangedListener
 	{
-		fun onCardUseNfcChanged(holder: NacCardHolder, alarm: NacAlarm)
+		fun onCardUseNfcChanged(card: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -162,7 +162,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardUseRepeatChangedListener
 	{
-		fun onCardUseRepeatChanged(holder: NacCardHolder, alarm: NacAlarm)
+		fun onCardUseRepeatChanged(card: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -170,7 +170,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardUseVibrateChangedListener
 	{
-		fun onCardUseVibrateChanged(holder: NacCardHolder, alarm: NacAlarm)
+		fun onCardUseVibrateChanged(card: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -178,7 +178,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardVolumeChangedListener
 	{
-		fun onCardVolumeChanged(holder: NacCardHolder, alarm: NacAlarm)
+		fun onCardVolumeChanged(card: NacCardHolder, alarm: NacAlarm)
 	}
 
 	/**

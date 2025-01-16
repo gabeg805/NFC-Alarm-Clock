@@ -23,6 +23,14 @@ interface NacNfcTagDao
 	val allNfcTags: LiveData<List<NacNfcTag>>
 
 	/**
+	 * Count the number of created alarm statistics.
+	 *
+	 * @return The number of created alarm statistics.
+	 */
+	@Query("SELECT COUNT(id) FROM nfc_tag")
+	suspend fun count(): Long
+
+	/**
 	 * Delete an NFC tag.
 	 *
 	 * @param  nfcTag  An NFC tag to delete.

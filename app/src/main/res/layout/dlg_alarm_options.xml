@@ -34,6 +34,15 @@
 		android:text="@string/action_alarm_option_volume"
 		/>
 
+	<!-- Upcoming reminder -->
+	<Button
+		style="@style/Widget.AlarmOptionMain.Button"
+		android:id="@+id/alarm_option_upcoming_reminder"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/action_alarm_option_upcoming_reminder"
+		/>
+
 	<!-- Separator -->
 	<View style="@style/Widget.AlarmOptionMain.Separator" />
 
@@ -62,18 +71,6 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/title_alarm_vibrate"
-		/>
-
-	<!-- Separator -->
-	<View style="@style/Widget.AlarmOptionMain.Separator" />
-
-	<!-- Upcoming reminder -->
-	<Button
-		style="@style/Widget.AlarmOptionMain.Button"
-		android:id="@+id/alarm_option_upcoming_reminder"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:text="@string/action_alarm_option_upcoming_reminder"
 		/>
 
 </LinearLayout>

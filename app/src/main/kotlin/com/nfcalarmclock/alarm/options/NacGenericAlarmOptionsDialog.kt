@@ -97,26 +97,22 @@ abstract class NacGenericAlarmOptionsDialog
 		// Get the bundle
 		val alarm = arguments?.getAlarm()
 
-		// Get the ok and cancel buttons
-		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
-		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
-
 		// Setup any alarm options
 		setupAlarmOptions(alarm)
 
-		// Setup the ok button
-		setupPrimaryButton(okButton, listener = {
+		// Setup the ok, cancel, and any extra buttons
+		setupOkButton(alarm)
+		setupCancelButton(alarm)
+		setupExtraButtons(alarm)
+	}
 
-			// Call the ok clicked function
-			onOkClicked(alarm)
-
-			// Save the alarm
-			onSaveAlarm(alarm)
-
-			// Dismiss the dialog
-			dismiss()
-
-		})
+	/**
+	 * Setup the Cancel button.
+	 */
+	open fun setupCancelButton(alarm: NacAlarm?)
+	{
+		// Get the cancel button
+		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
 
 		// Setup the cancel button
 		setupSecondaryButton(cancelButton, listener = {
@@ -128,9 +124,6 @@ abstract class NacGenericAlarmOptionsDialog
 			dismiss()
 
 		})
-
-		// Setup any extra buttons
-		setupExtraButtons(alarm)
 	}
 
 	/**
@@ -215,6 +208,30 @@ abstract class NacGenericAlarmOptionsDialog
 			onTimeChanged(minutesIndex, secondsIndex)
 
 		}
+	}
+
+	/**
+	 * Setup the OK button.
+	 */
+	open fun setupOkButton(alarm: NacAlarm?)
+	{
+		// Get the ok button
+		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
+
+		// Setup the ok button
+		setupPrimaryButton(okButton, listener = {
+
+			println("NORMAL OK BUTTON SETUP")
+			// Call the ok clicked function
+			onOkClicked(alarm)
+
+			// Save the alarm
+			onSaveAlarm(alarm)
+
+			// Dismiss the dialog
+			dismiss()
+
+		})
 	}
 
 }

@@ -30,6 +30,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -174,62 +175,29 @@ class NacActiveAlarmService
 				statisticRepository.insertDismissed(alarm, usedNfc)
 			}
 
-			println("Alarm should be deleted? ${alarm!!.shouldDeleteAlarmAfterDismissed}")
-			// Check if the alarm should be deleted
+			// Delete the alarm after it is dismissed and cancel any subsequent alarms.
+			// This will also write to the stats table
 			if (alarm!!.shouldDeleteAlarmAfterDismissed)
 			{
-				println("DELETING ALARM")
-				// Delete the alarm
 				alarmRepository.delete(alarm!!)
-
-				// Write the deleted alarm to the statistics table
 				statisticRepository.insertDeleted(alarm)
-
-				// Cancel any scheduled alarm
 				NacScheduler.cancel(this@NacActiveAlarmService, alarm!!)
 			}
+			// Update and reschedule the alarm
 			else
 			{
-				println("Update the alarm")
-				// Update the alarm
 				alarmRepository.update(alarm!!)
-
-				// Reschedule the alarm
 				NacScheduler.update(this@NacActiveAlarmService, alarm!!)
 			}
 
-			// Check if should save the app's next alarm or if any system alarm is used
-			if (sharedPreferences.appShouldSaveNextAlarm)
-			{
-				// Save the next alarm information
-				println("Before saving : ${System.currentTimeMillis()}")
-				val allAlarms = alarmRepository.getAllAlarms()
-				sharedPreferences.saveNextAlarm(allAlarms)
-				println("After saving : ${System.currentTimeMillis()}")
-			}
+			// Save the next alarm
+			saveNextAlarm()
 
-			// Set flag that the main activity needs to be refreshed
+			// Set flag to refresh the main activity
 			sharedPreferences.shouldRefreshMainActivity = true
 
-			// Check if there are any other active alarms that need to run
-			if (hasAnyOtherActiveAlarms())
-			{
-				// Restart another active alarm
-				restartOtherActiveAlarm()
-			}
-			// No other active alarms
-			else
-			{
-				withContext(Dispatchers.Main) {
-
-					// Show toast that the alarm was dismissed
-					NacUtility.quickToast(this@NacActiveAlarmService, R.string.message_alarm_dismiss)
-
-					// Stop the service
-					stopActiveAlarmService()
-
-				}
-			}
+			// Restart any other active alarm or stop the service
+			restartOtherActiveAlarmOrStop(R.string.message_alarm_dismiss)
 
 		}
 	}
@@ -298,6 +266,12 @@ class NacActiveAlarmService
 		// Enable the activity alias so that tapping an NFC tag will open the main
 		// activity
 		enableActivityAlias(this)
+
+		// Set the previous app version if it has not been set yet
+		if (sharedPreferences.previousAppVersion.isEmpty())
+		{
+			setupAppVersion()
+		}
 	}
 
 	/**
@@ -309,20 +283,12 @@ class NacActiveAlarmService
 		// Super
 		super.onDestroy()
 
-		// Check if the app version is not set
-		if (sharedPreferences.previousAppVersion.isEmpty())
-		{
-			// Setup the app version
-			setupAppVersion()
-		}
-
 		// Disable the activity alias so that tapping an NFC tag will not do anything
 		disableActivityAlias(this)
 
-		// Check if the alarm was skipped
+		// Skip the service, so just run the cleanup and return
 		if (intentAction == ACTION_SKIP_SERVICE)
 		{
-			// Run the cleanup and end the service
 			cleanup()
 			return
 		}
@@ -456,22 +422,56 @@ class NacActiveAlarmService
 	 */
 	private suspend fun restartOtherActiveAlarm()
 	{
-		// Restart alarms
-		// Get output from restart
-		// startAlarmService
-		// recreate notification
-
 		// Try and find any active alarms
 		val activeAlarm = alarmRepository.getActiveAlarm()
 
 		// Start the alarm service for this alarm
 		startAlarmService(this, activeAlarm)
 
-		// Creaete the notification
+		// Create the notification
 		val notification = NacActiveAlarmNotification(this, activeAlarm)
 
 		// Show the notification
 		notification.show()
+	}
+
+	/**
+	 * Restart any other active alarm that may be set, or show a toast and stop the
+	 * service.
+	 */
+	private suspend fun restartOtherActiveAlarmOrStop(messageId: Int)
+	{
+		// Check if there are any other active alarms that need to run
+		if (hasAnyOtherActiveAlarms())
+		{
+			// Restart another active alarm
+			restartOtherActiveAlarm()
+		}
+		// No other active alarms
+		else
+		{
+			// Show toast that the alarm was snoozed/dismissed and stop the service
+			withContext(Dispatchers.Main) {
+				NacUtility.quickToast(this@NacActiveAlarmService, messageId)
+				stopActiveAlarmService()
+			}
+		}
+	}
+
+	/**
+	 * Save the next alarm.
+	 *
+	 * This will only do something if the shared preference to do so is set.
+	 */
+	private suspend fun saveNextAlarm(snoozeCal: Calendar? = null)
+	{
+		// Check if should save the app's next alarm or if any system alarm is used
+		if (sharedPreferences.appShouldSaveNextAlarm)
+		{
+			// Save the next alarm information
+			val allAlarms = alarmRepository.getAllAlarms()
+			sharedPreferences.saveNextAlarm(allAlarms, snoozeCal = snoozeCal)
+		}
 	}
 
 	/**
@@ -569,37 +569,19 @@ class NacActiveAlarmService
 			// Update the time the alarm was active
 			alarm!!.addToTimeActive(System.currentTimeMillis() - startTime)
 
-			// Update the alarm
+			// Update the alarm, write to the stats table, and reschedule the alarm
 			alarmRepository.update(alarm!!)
-
-			// Write the snooze duration to the statistics table
 			statisticRepository.insertSnoozed(alarm, alarm!!.snoozeDuration.toLong())
-
-			// Reschedule the alarm
 			NacScheduler.update(this@NacActiveAlarmService, alarm!!, cal)
 
-			// Set the flag that the main activity will need to be refreshed
+			// Save the next alarm
+			saveNextAlarm(snoozeCal = cal)
+
+			// Set flag to refresh the main activity
 			sharedPreferences.shouldRefreshMainActivity = true
 
-			// Check if there are any other active alarms that need to run
-			if (hasAnyOtherActiveAlarms())
-			{
-				// Restart another active alarm
-				restartOtherActiveAlarm()
-			}
-			// No other active alarms
-			else
-			{
-				withContext(Dispatchers.Main) {
-
-					// Show a toast saying the alarm was snoozed
-					NacUtility.quickToast(this@NacActiveAlarmService, R.string.message_alarm_snooze)
-
-					// Stop the service
-					stopActiveAlarmService()
-
-				}
-			}
+			// Restart any other active alarm or stop the service
+			restartOtherActiveAlarmOrStop(R.string.message_alarm_snooze)
 
 		}
 	}

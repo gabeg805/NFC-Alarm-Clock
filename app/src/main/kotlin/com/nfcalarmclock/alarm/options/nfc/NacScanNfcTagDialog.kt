@@ -1,6 +1,5 @@
 package com.nfcalarmclock.alarm.options.nfc
 
-import android.content.DialogInterface
 import android.nfc.NfcAdapter
 import android.nfc.NfcAdapter.FLAG_READER_NFC_A
 import android.nfc.NfcAdapter.FLAG_READER_NFC_B
@@ -9,40 +8,41 @@ import android.nfc.NfcAdapter.FLAG_READER_NFC_F
 import android.nfc.NfcAdapter.FLAG_READER_NFC_V
 import android.nfc.NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK
 import android.nfc.Tag
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
-import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
+import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
+import com.nfcalarmclock.alarm.options.observeBackStackEntry
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 /**
  * Scan an NFC tag that will be used to dismiss the given alarm when it goes
  * off.
  */
+@AndroidEntryPoint
 class NacScanNfcTagDialog
 
 	// Constructor
-	: NacBottomSheetDialogFragment(),
+	: NacGenericAlarmOptionsDialog(),
 
 	// Interface
 	NfcAdapter.ReaderCallback
 {
 
 	/**
-	 * Listener for using any NFC tag.
+	 * Layout resource ID.
 	 */
-	interface OnScanNfcTagListener
-	{
-		fun onCancel(alarm: NacAlarm)
-		fun onDone(alarm: NacAlarm)
-		fun onScanned(alarm: NacAlarm, tagId: String)
-		fun onSelected(alarm: NacAlarm, nfcTag: NacNfcTag)
-		fun onUseAny(alarm: NacAlarm)
-	}
+	override val layoutId = R.layout.dlg_scan_nfc_tag
+
+	/**
+	 * NFC tag view model.
+	 */
+	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
 
 	/**
 	 * Alarm.
@@ -50,123 +50,72 @@ class NacScanNfcTagDialog
 	var alarm: NacAlarm? = null
 
 	/**
-	 * Whether to show the Select button or not.
+	 * Called when the OK buton is clicked.
 	 */
-	var shouldShowSelectButton: Boolean = false
-
-	/**
-	 * Last saved/selected NFC tag.
-	 */
-	var lastNfcTag: NacNfcTag = NacNfcTag()
-
-	/**
-	 * Listener for when the NFC tag is scanned.
-	 */
-	var onScanNfcTagListener: OnScanNfcTagListener? = null
-
-	/**
-	 * Called when the dialog view is created.
-	 */
-	override fun onCreateView(
-		inflater: LayoutInflater,
-		container: ViewGroup?,
-		savedInstanceState: Bundle?)
-	: View?
+	override fun onOkClicked(alarm: NacAlarm?)
 	{
-		return inflater.inflate(R.layout.dlg_scan_nfc_tag, container, false)
 	}
 
 	/**
-	 * Called when the dialog is canceled.
+	 * Setup all alarm options.
 	 */
-	override fun onCancel(dialog: DialogInterface)
+	override fun setupAlarmOptions(alarm: NacAlarm?)
 	{
-		// Super
-		super.onCancel(dialog)
-
-		// Call the listener
-		onScanNfcTagListener?.onCancel(alarm!!)
 	}
 
 	/**
-	 * Called when the dialog view is created.
+	 * Setup OK button.
 	 */
-	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+	override fun setupOkButton(alarm: NacAlarm?)
 	{
-		// Super
-		super.onViewCreated(view, savedInstanceState)
+		setupSelectNfcTagButton()
+	}
 
-		// Get the views
-		val useAnyNfcButton: MaterialButton = view.findViewById(R.id.use_any_nfc_tag)
-		val selectNfcButton: MaterialButton = view.findViewById(R.id.select_nfc_tag)
+	/**
+	 * Setup the select NFC tag button.
+	 */
+	private fun setupSelectNfcTagButton()
+	{
+		// Get the ok (select NFC tag) button
+		val selectNfcButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
 
-		// Setup the use any NFC button
-		setupPrimaryButton(useAnyNfcButton, listener = {
+		// Rename the button
+		selectNfcButton.setText(R.string.action_select_nfc_tag)
 
-			// Call the listener
-			onScanNfcTagListener?.onUseAny(alarm!!)
+		// Set the visibility of the button
+		lifecycleScope.launch {
+			selectNfcButton.visibility = if (nfcTagViewModel.count() > 0) View.VISIBLE else View.GONE
+		}
 
-			// Dismiss the dialog
-			dismiss()
+		// Setup the button
+		setupPrimaryButton(selectNfcButton, listener = {
 
-		})
+			// Get the nav controller
+			val navController = findNavController()
 
-		// Set the visibility of the select button
-		selectNfcButton.visibility = if (shouldShowSelectButton) View.VISIBLE else View.GONE
-
-		// Setup the select NFC button
-		setupSecondaryButton(selectNfcButton, listener = {
-
-			// Create the select NFC tag dialog
-			val dialog = NacSelectNfcTagDialog()
-
-			// Setup the dialog
-			dialog.selectedNfcTag = lastNfcTag
-			dialog.onSelectNfcTagListener = object: NacSelectNfcTagDialog.OnSelectNfcTagListener
+			try
 			{
-
-				/**
-				 * Called when the Select NFC Tag is canceled.
-				 */
-				override fun onCancel()
-				{
-					// Show the current dialog
-					this@NacScanNfcTagDialog.dialog?.show()
-				}
-
-				/**
-				 * Called when the NFC Tag is selected.
-				 */
-				override fun onSelected(nfcTag: NacNfcTag)
-				{
-					// Call the listener
-					onScanNfcTagListener?.onSelected(alarm!!, nfcTag)
-
-					// Dismiss the dialog
-					dismiss()
-				}
-
+				// Navigate to the select NFC tag dialog
+				navController.navigate(R.id.nacSelectNfcTagDialog, arguments)
+			}
+			catch (_: IllegalStateException)
+			{
 			}
 
-			// Hide the current dialog
-			this.dialog?.hide()
+			// Observe the back stack entry
+			observeBackStackEntry(navController, this,
+				onBackStackPopulated = {
 
-			// Show the dialog
-			dialog.show(childFragmentManager, NacSelectNfcTagDialog.TAG)
+					// Get the alarm from the select NFC tag dialog
+					val a = navController.currentBackStackEntry?.savedStateHandle?.get<NacAlarm>("YOYOYO")
+					println("A : ${a?.nfcTagId}")
+
+					// Save the alarm and dismiss
+					onSaveAlarm(a)
+					dismiss()
+				})
 
 		})
-	}
-
-	/**
-	 * Called when the fragment is no longer in use.
-	 */
-	override fun onDestroy()
-	{
-		// Super
-		super.onDestroy()
-
-		// Call the listener
-		onScanNfcTagListener?.onDone(alarm!!)
 	}
 
 	/**
@@ -224,11 +173,15 @@ class NacScanNfcTagDialog
 	 */
 	override fun onTagDiscovered(tag: Tag?)
 	{
-		// Parse the tag ID from the NFC tag
-		val tagId = NacNfc.parseId(tag).toString()
+		// Parse and save the ID from the NFC tag
+		alarm?.nfcTagId = NacNfc.parseId(tag).toString()
+		println("NFC : ${alarm?.nfcTagId}")
 
-		// Call the listener
-		onScanNfcTagListener?.onScanned(alarm!!, tagId)
+		// TODO: Add saving use any NFC tag logic in main activity?
+		// TODO: Add the save alarm dialog here
+
+		// Save the alarm to the backstack
+		onSaveAlarm(alarm)
 
 		// Dismiss the dialog
 		dismiss()

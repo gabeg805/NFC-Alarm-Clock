@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.nfcalarmclock.alarm.NacAlarmRepository
+import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.util.goAsync
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,10 +39,14 @@ class NacTimeChangeBroadcastReceiver
 			|| (intent.action == Intent.ACTION_LOCALE_CHANGED))
 		{
 			// Get all the alarms
-			val alarms = alarmRepository.getAllAlarms()
+			val sharedPreferences = NacSharedPreferences(context)
+			val allAlarms = alarmRepository.getAllAlarms()
 
 			// Update all the alarms
-			NacScheduler.updateAll(context, alarms)
+			NacScheduler.updateAll(context, allAlarms)
+
+			// Save the next alarm
+			sharedPreferences.saveNextAlarm(allAlarms)
 		}
 
 	}

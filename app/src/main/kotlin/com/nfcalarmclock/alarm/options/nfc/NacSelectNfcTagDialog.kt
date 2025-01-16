@@ -1,6 +1,5 @@
 package com.nfcalarmclock.alarm.options.nfc
 
-import android.content.DialogInterface
 import android.widget.AdapterView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -23,15 +22,6 @@ class NacSelectNfcTagDialog
 {
 
 	/**
-	 * Listener for using any NFC tag.
-	 */
-	interface OnSelectNfcTagListener
-	{
-		fun onCancel()
-		fun onSelected(nfcTag: NacNfcTag)
-	}
-
-	/**
 	 * Layout resource ID.
 	 */
 	override val layoutId = R.layout.dlg_select_nfc_tag
@@ -49,33 +39,7 @@ class NacSelectNfcTagDialog
 	/**
 	 * Name of the selected NFC tag.
 	 */
-	var selectedNfcTag: NacNfcTag = NacNfcTag()
-
-	/**
-	 * Listener for when the name is entered.
-	 */
-	var onSelectNfcTagListener: OnSelectNfcTagListener? = null
-
-	/**
-	 * Called when the dialog is canceled.
-	 */
-	override fun onCancel(dialog: DialogInterface)
-	{
-		// Super
-		super.onCancel(dialog)
-
-		// Call the listener
-		onSelectNfcTagListener?.onCancel()
-	}
-
-	/**
-	 * Called when the cancel button is clicked.
-	 */
-	override fun onCancelClicked(alarm: NacAlarm?)
-	{
-		// Call the listener
-		onSelectNfcTagListener?.onCancel()
-	}
+	private var selectedNfcTag: NacNfcTag = NacNfcTag()
 
 	/**
 	 * Update the alarm with selected options.
@@ -90,16 +54,8 @@ class NacSelectNfcTagDialog
 	 */
 	override fun onSaveAlarm(alarm: NacAlarm?)
 	{
-		// Save the change using the nav controller
-		if (alarm != null)
-		{
-			super.onSaveAlarm(alarm)
-		}
-		// Save the change by sending the selected NFC tag to the listener
-		else
-		{
-			onSelectNfcTagListener?.onSelected(selectedNfcTag)
-		}
+		println("Saving alarm : ${alarm?.nfcTagId}")
+		super.onSaveAlarm(alarm)
 	}
 
 	/**
@@ -113,11 +69,8 @@ class NacSelectNfcTagDialog
 			allNfcTags = nfcTagViewModel.getAllNfcTags()
 
 			// Set the selected NFC tag based on the alarm if it is set
-			if (alarm != null)
-			{
-				selectedNfcTag = allNfcTags.firstOrNull { it.nfcId == alarm.nfcTagId }
-					?: allNfcTags[0]
-			}
+			selectedNfcTag = allNfcTags.firstOrNull { it.nfcId == alarm?.nfcTagId }
+				?: allNfcTags[0]
 
 			// Verify that the selected NFC tag exists. If it does not, set it to the
 			// first tag in the list
@@ -153,16 +106,6 @@ class NacSelectNfcTagDialog
 		textView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
 			selectedNfcTag = allNfcTags[position]
 		}
-	}
-
-	companion object
-	{
-
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacSelectNfcTagDialog"
-
 	}
 
 }

@@ -350,7 +350,7 @@ internal class NacClockWidgetDataHelper(
 	val alarmBoldVis: Int
 		get()
 		{
-			return if (sharedPreferences.shouldClockWidgetShowAlarm && (nextAlarmInfo != null) && sharedPreferences.shouldClockWidgetBoldAlarmTime)
+			return if (sharedPreferences.shouldClockWidgetShowAlarm && (nextAlarmCal != null) && sharedPreferences.shouldClockWidgetBoldAlarmTime)
 			{
 				View.VISIBLE
 			}
@@ -366,7 +366,7 @@ internal class NacClockWidgetDataHelper(
 	val alarmIconVis: Int
 		get()
 		{
-			return if (sharedPreferences.shouldClockWidgetShowAlarm && (nextAlarmInfo != null))
+			return if (sharedPreferences.shouldClockWidgetShowAlarm && (nextAlarmCal != null))
 			{
 				View.VISIBLE
 			}
@@ -382,7 +382,7 @@ internal class NacClockWidgetDataHelper(
 	val alarmVis: Int
 		get()
 		{
-			return if (sharedPreferences.shouldClockWidgetShowAlarm && (nextAlarmInfo != null) && !sharedPreferences.shouldClockWidgetBoldAlarmTime)
+			return if (sharedPreferences.shouldClockWidgetShowAlarm && (nextAlarmCal != null) && !sharedPreferences.shouldClockWidgetBoldAlarmTime)
 			{
 				View.VISIBLE
 			}
@@ -403,16 +403,43 @@ internal class NacClockWidgetDataHelper(
 		}
 
 	/**
-	 * The next alarm info.
+	 * The next alarm calendar.
 	 */
-	private val nextAlarmInfo: AlarmManager.AlarmClockInfo?
+	private val nextAlarmCal: Calendar?
 		get()
 		{
-			// Get the alarm manager
-			val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+			// Create a calendar for the next alarm time
+			val alarmCal = Calendar.getInstance()
 
-			// Return the next alarm
-			return alarmManager.nextAlarmClock
+			// App next alarm
+			if (sharedPreferences.appShouldSaveNextAlarm)
+			{
+				// Get the current time in milliseconds and compute any timezone offset
+				val millis = sharedPreferences.appNextAlarmTimeMillis
+				val fromTimezone = alarmCal.timeZone
+				val toTimezone = TimeZone.getTimeZone(sharedPreferences.appNextAlarmTimezoneId)
+				val offset = fromTimezone.getOffset(millis) - toTimezone.getOffset(millis)
+
+				//println("Time : $millis || Offset : $offset")
+				// Return if there is not a next alarm set
+				if (millis == 0L)
+				{
+					return null
+				}
+
+				// Set the next alarm time
+				alarmCal.timeInMillis = millis - offset
+			}
+			else
+			{
+				// Get the alarm manager
+				val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+				// Set the next alarm time or return null if there is no next alarm
+				alarmCal.timeInMillis = alarmManager.nextAlarmClock?.triggerTime ?: return null
+			}
+
+			return alarmCal
 		}
 
 	/**
@@ -427,28 +454,8 @@ internal class NacClockWidgetDataHelper(
 				return ""
 			}
 
-			// Create a calendar with the next alarm time
-			val alarmCal = Calendar.getInstance()
-
-			// App next alarm
-			if (sharedPreferences.appShouldSaveNextAlarm)
-			{
-				val millis = sharedPreferences.appNextAlarmTimeMillis
-				val fromTimezone = alarmCal.timeZone
-				val toTimezone = TimeZone.getTimeZone(sharedPreferences.appNextAlarmTimezoneId)
-				val offset = fromTimezone.getOffset(millis) - toTimezone.getOffset(millis)
-
-				println("Time : $millis || Offset : $offset")
-				alarmCal.timeInMillis = millis - offset
-			}
-			// System next alarm
-			else
-			{
-				alarmCal.timeInMillis = nextAlarmInfo!!.triggerTime
-			}
-
 			// Return the alarm time as a spannable string
-			return NacCalendar.getFullTime(context, alarmCal).replace("  ", " ")
+			return NacCalendar.getFullTime(context, nextAlarmCal!!).replace("  ", " ")
 		}
 
 	companion object
