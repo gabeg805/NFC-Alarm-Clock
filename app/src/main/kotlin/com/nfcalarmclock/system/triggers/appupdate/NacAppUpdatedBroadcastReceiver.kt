@@ -58,6 +58,9 @@ class NacAppUpdatedBroadcastReceiver
 
 					})
 			}
+
+			// Save the next alarm
+			sharedPreferences.saveNextAlarm(allAlarms)
 		}
 
 	}

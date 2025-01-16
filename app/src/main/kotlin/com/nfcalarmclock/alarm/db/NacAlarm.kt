@@ -1114,6 +1114,7 @@ class NacAlarm()
 		cal.add(Calendar.SECOND, snoozeDuration)
 
 		// Set the snooze hour and minute
+		// TODO: Are snooze hour and minute ever used?
 		snoozeHour = cal[Calendar.HOUR_OF_DAY]
 		snoozeMinute = cal[Calendar.MINUTE]
 

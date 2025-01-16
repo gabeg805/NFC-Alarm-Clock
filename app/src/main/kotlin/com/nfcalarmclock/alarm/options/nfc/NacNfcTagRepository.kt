@@ -26,6 +26,11 @@ class NacNfcTagRepository @Inject constructor(
 		get() = nfcTagDao.allNfcTags
 
 	/**
+	 * The number of created alarm statistics.
+	 */
+	suspend fun count(): Long = nfcTagDao.count()
+
+	/**
 	 * Delete an NFC tag, asynchronously, from the database.
 	 *
 	 * @return The number of rows deleted.

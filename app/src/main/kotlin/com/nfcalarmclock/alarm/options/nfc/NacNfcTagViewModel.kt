@@ -28,6 +28,11 @@ class NacNfcTagViewModel @Inject constructor(
 	val allNfcTags: LiveData<List<NacNfcTag>> = nfcTagRepository.allNfcTags
 
 	/**
+	 * The number of created alarm statistics.
+	 */
+	suspend fun count(): Long = nfcTagRepository.count()
+
+	/**
 	 * Delete an NFC tag from the database.
 	 *
 	 * @param  nfcTag  NFC tag to delete.

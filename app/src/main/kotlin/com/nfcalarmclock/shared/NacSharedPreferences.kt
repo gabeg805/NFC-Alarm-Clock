@@ -2236,22 +2236,33 @@ class NacSharedPreferences(context: Context)
 	/**
 	 * Find and save the next alarm.
 	 */
-	fun saveNextAlarm(allAlarms: List<NacAlarm>)
+	fun saveNextAlarm(allAlarms: List<NacAlarm>, snoozeCal: Calendar? = null)
 	{
 		// Find the next alarm
 		val nextAlarm = NacCalendar.getNextAlarm(allAlarms)
 
+		// Get the next calendar
+		val nextCal = nextAlarm?.let { NacCalendar.getNextAlarmDay(it) }
+
+		// Determine the time in milliseconds to use
+		val millis = nextCal?.let {
+
+			// Snooze time
+			if (snoozeCal?.before(it) == true)
+			{
+				snoozeCal.timeInMillis
+			}
+			// Next calendar time
+			else
+			{
+				it.timeInMillis
+			}
+
+		} ?: 0L
+
 		// Save the next alarm information
 		appNextAlarmTimezoneId = Calendar.getInstance().timeZone.id
-		appNextAlarmTimeMillis = if (nextAlarm != null)
-		{
-			val nextCal = NacCalendar.getNextAlarmDay(nextAlarm)
-			nextCal?.timeInMillis ?: 0L
-		}
-		else
-		{
-			0L
-		}
+		appNextAlarmTimeMillis = millis
 	}
 
 	/**

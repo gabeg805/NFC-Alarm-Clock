@@ -22,14 +22,14 @@
 			android:id="@+id/action_nacAlarmOptionsDialog_to_nacFlashlightOptionsDialog"
 			app:destination="@id/nacFlashlightOptionsDialog" />
 		<action
-			android:id="@+id/action_nacAlarmOptionsDialog_to_nacSelectNfcTagDialog"
-			app:destination="@id/nacSelectNfcTagDialog" />
-		<action
 			android:id="@+id/action_nacAlarmOptionsDialog_to_nacVibrateOptionsDialog"
 			app:destination="@id/nacVibrateOptionsDialog" />
 		<action
 			android:id="@+id/action_nacAlarmOptionsDialog_to_nacUpcomingReminderDialog"
 			app:destination="@id/nacUpcomingReminderDialog" />
+		<action
+			android:id="@+id/action_nacAlarmOptionsDialog_to_nacScanNfcTagDialog"
+			app:destination="@id/nacScanNfcTagDialog" />
 	</dialog>
 	<dialog
 		android:id="@+id/nacAudioSourceDialog"
@@ -59,4 +59,12 @@
 		android:id="@+id/nacUpcomingReminderDialog"
 		android:name="com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderDialog"
 		android:label="NacUpcomingReminderDialog" />
+	<dialog
+		android:id="@+id/nacScanNfcTagDialog"
+		android:name="com.nfcalarmclock.alarm.options.nfc.NacScanNfcTagDialog"
+		android:label="NacScanNfcTagDialog" >
+		<action
+			android:id="@+id/action_nacScanNfcTagDialog_to_nacSelectNfcTagDialog"
+			app:destination="@id/nacSelectNfcTagDialog" />
+	</dialog>
 </navigation>

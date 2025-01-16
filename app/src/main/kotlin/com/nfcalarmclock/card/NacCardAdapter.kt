@@ -58,7 +58,7 @@ class NacCardAdapter
 	 */
 	interface OnViewHolderBoundListener
 	{
-		fun onViewHolderBound(holder: NacCardHolder, index: Int)
+		fun onViewHolderBound(card: NacCardHolder, index: Int)
 	}
 
 	/**
@@ -66,7 +66,7 @@ class NacCardAdapter
 	 */
 	interface OnViewHolderCreatedListener
 	{
-		fun onViewHolderCreated(holder: NacCardHolder)
+		fun onViewHolderCreated(card: NacCardHolder)
 	}
 
 	/**
