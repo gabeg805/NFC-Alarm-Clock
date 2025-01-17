@@ -1211,6 +1211,7 @@ class NacMainActivity
 			}
 
 		})
+
 	}
 
 	/**
@@ -1380,22 +1381,21 @@ class NacMainActivity
 				sharedPreferences.saveNextAlarm(alarms)
 			}
 
+			// Save the recyclerview state so that it does not scroll down with an
+			// item that was changed. Instead it should retain its current scroll
+			// position
+			println("SAVING STATE : $recyclerViewSavedState")
+			recyclerViewSavedState = recyclerView.layoutManager?.onSaveInstanceState()
+
 			// Check if no cards are expanded
 			if (cardsExpandedCount == 0)
 			{
-				// Save the recyclerview state so that it does not scroll down with an
-				// item that was changed. Instead it should retain its current scroll
-				// position
-				println("SAVING STATE : $recyclerViewSavedState")
-				recyclerViewSavedState = recyclerView.layoutManager?.onSaveInstanceState()
-
 				// Merge and sort the alarms
 				alarmCardAdapterLiveData.mergeSort(alarms)
 			}
 			// One or more cards is expanded
 			else
 			{
-				println("MERGING")
 				// Merge the alarms but do not sort yet
 				alarmCardAdapterLiveData.merge(alarms)
 			}

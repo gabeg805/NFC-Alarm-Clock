@@ -22,7 +22,9 @@ import com.nfcalarmclock.alarm.options.navigate
 import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.getAlarm
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Scan an NFC tag that will be used to dismiss the given alarm when it goes
@@ -117,28 +119,43 @@ class NacScanNfcTagDialog
 
 		println("NFC : $id")
 
-		// Get the nav controller
-		val navController = findNavController()
-		val newArgs = arguments?.addAlarm(alarm)
+		lifecycleScope.launch {
 
-		// Navigate to the select NFC tag dialog
-		navController.navigate(R.id.nacSaveNfcTagDialog, newArgs, this,
-			onBackStackPopulated = {
+			// NFC tag already exists so no need to save it
+			if (nfcTagViewModel.findNfcTag(id) != null)
+			{
+				withContext(Dispatchers.Main)
+				{
+					// Save the alarm to the backstack
+					onSaveAlarm(alarm)
 
-				// Get the alarm from the select NFC tag dialog
-				val a = navController.currentBackStackEntry?.savedStateHandle?.get<NacAlarm>("YOYOYO")
-				println("S : ${a?.nfcTagId}")
+					// Dismiss the dialog
+					dismiss()
+				}
+			}
+			// Save the NFC tag
+			else
+			{
+				// Get the nav controller
+				val navController = findNavController()
+				val newArgs = arguments?.addAlarm(alarm)
 
-				// Save the alarm and dismiss
-				onSaveAlarm(a)
-				dismiss()
-			})
+				// Navigate to the select NFC tag dialog
+				navController.navigate(R.id.nacSaveNfcTagDialog, newArgs, this@NacScanNfcTagDialog,
+					onBackStackPopulated = {
 
-		// Save the alarm to the backstack
-		onSaveAlarm(alarm)
+						// Get the alarm from the select NFC tag dialog
+						val a = navController.currentBackStackEntry?.savedStateHandle?.get<NacAlarm>("YOYOYO")
+						println("S : ${a?.nfcTagId}")
 
-		// Dismiss the dialog
-		dismiss()
+						// Save the alarm and dismiss
+						onSaveAlarm(a)
+						dismiss()
+					})
+			}
+
+		}
+
 	}
 
 	/**
