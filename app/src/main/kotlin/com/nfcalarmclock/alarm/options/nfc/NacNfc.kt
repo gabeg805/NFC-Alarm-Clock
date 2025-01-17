@@ -5,6 +5,12 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.nfc.NfcAdapter
+import android.nfc.NfcAdapter.FLAG_READER_NFC_A
+import android.nfc.NfcAdapter.FLAG_READER_NFC_B
+import android.nfc.NfcAdapter.FLAG_READER_NFC_BARCODE
+import android.nfc.NfcAdapter.FLAG_READER_NFC_F
+import android.nfc.NfcAdapter.FLAG_READER_NFC_V
+import android.nfc.NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK
 import android.nfc.Tag
 import android.os.Build
 import android.os.Parcelable
@@ -18,6 +24,38 @@ import com.nfcalarmclock.util.NacUtility.toast
  */
 object NacNfc
 {
+
+	/**
+	 * Disable NFC reader mode.
+	 */
+	fun disableReaderMode(activity: Activity)
+	{
+		// Get the NFC adapter
+		val nfcAdapter = NfcAdapter.getDefaultAdapter(activity)
+
+		// Disable NFC reader mode
+		nfcAdapter.disableReaderMode(activity)
+	}
+
+	/**
+	 * Enable NFC reader mode.
+	 */
+	fun enableReaderMode(activity: Activity, callback:NfcAdapter.ReaderCallback)
+	{
+		// Get the NFC adapter
+		val nfcAdapter = NfcAdapter.getDefaultAdapter(activity)
+
+		// Get all the NFC tags that can be read
+		val flags = FLAG_READER_NFC_A or
+			FLAG_READER_NFC_B or
+			FLAG_READER_NFC_BARCODE or
+			FLAG_READER_NFC_F or
+			FLAG_READER_NFC_V or
+			FLAG_READER_SKIP_NDEF_CHECK
+
+		// Enable NFC reader mode
+		nfcAdapter.enableReaderMode(activity, callback, flags, null)
+	}
 
 	/**
 	 * Check if NFC exists on this device.

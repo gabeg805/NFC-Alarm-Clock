@@ -1,12 +1,6 @@
 package com.nfcalarmclock.alarm.options.nfc
 
 import android.nfc.NfcAdapter
-import android.nfc.NfcAdapter.FLAG_READER_NFC_A
-import android.nfc.NfcAdapter.FLAG_READER_NFC_B
-import android.nfc.NfcAdapter.FLAG_READER_NFC_BARCODE
-import android.nfc.NfcAdapter.FLAG_READER_NFC_F
-import android.nfc.NfcAdapter.FLAG_READER_NFC_V
-import android.nfc.NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK
 import android.nfc.Tag
 import android.view.View
 import android.widget.LinearLayout
@@ -71,19 +65,8 @@ class NacScanNfcTagDialog
 			return
 		}
 
-		// Get the NFC adapter
-		val nfcAdapter = NfcAdapter.getDefaultAdapter(activity)
-
-		// Get all the NFC tags that can be read
-		val flags = FLAG_READER_NFC_A or
-			FLAG_READER_NFC_B or
-			FLAG_READER_NFC_BARCODE or
-			FLAG_READER_NFC_F or
-			FLAG_READER_NFC_V or
-			FLAG_READER_SKIP_NDEF_CHECK
-
 		// Enable NFC reader mode
-		nfcAdapter.enableReaderMode(activity, this, flags, null)
+		NacNfc.enableReaderMode(requireActivity(), this)
 	}
 
 	/**
@@ -100,11 +83,8 @@ class NacScanNfcTagDialog
 			return
 		}
 
-		// Get the NFC adapter
-		val nfcAdapter = NfcAdapter.getDefaultAdapter(context)
-
 		// Disable NFC reader mode
-		nfcAdapter.disableReaderMode(activity)
+		NacNfc.disableReaderMode(requireActivity())
 	}
 
 	/**
@@ -117,7 +97,9 @@ class NacScanNfcTagDialog
 		val alarm = arguments?.getAlarm()
 		alarm?.nfcTagId = id
 
-		println("NFC : $id")
+		// TODO: Disable reader mode here? Multiple scans are causing the save NFC tag dialog to popup
+		// Disable NFC reader mode
+		NacNfc.disableReaderMode(requireActivity())
 
 		lifecycleScope.launch {
 
@@ -146,7 +128,6 @@ class NacScanNfcTagDialog
 
 						// Get the alarm from the select NFC tag dialog
 						val a = navController.currentBackStackEntry?.savedStateHandle?.get<NacAlarm>("YOYOYO")
-						println("S : ${a?.nfcTagId}")
 
 						// Save the alarm and dismiss
 						onSaveAlarm(a)
@@ -260,7 +241,6 @@ class NacScanNfcTagDialog
 
 					// Get the alarm from the select NFC tag dialog
 					val a = navController.currentBackStackEntry?.savedStateHandle?.get<NacAlarm>("YOYOYO")
-					println("A : ${a?.nfcTagId}")
 
 					// Save the alarm and dismiss
 					onSaveAlarm(a)
