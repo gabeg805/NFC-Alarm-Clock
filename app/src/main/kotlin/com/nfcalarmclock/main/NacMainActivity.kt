@@ -812,26 +812,36 @@ class NacMainActivity
 		// Check if the alarm was recently added
 		if (recentlyAddedAlarmIds.contains(alarm.id))
 		{
-			// Set a scroll listener so that once the recyclerview has reached where its
-			// destination, then the new alarm can be shown
-			recyclerView.addOnScrollListener(object: OnScrollListener()
+			// Card is already visible so did not smooth scroll
+			if (recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE)
 			{
-
-				/**
-				 * Called when the scroll state is changed.
-				 */
-				override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int)
+				// Highlight the alarm card
+				showNewAlarm(card, alarm)
+			}
+			// Smooth scrolling to card
+			else
+			{
+				// Set a scroll listener so that once the recyclerview has reached where its
+				// destination, then the new alarm can be shown
+				recyclerView.addOnScrollListener(object : OnScrollListener()
 				{
-					// Highlight the alarm card and clear the scroll listeners
-					// once the recyclerview is no longer scrolling
-					if (newState == RecyclerView.SCROLL_STATE_IDLE)
-					{
-						recyclerView.clearOnScrollListeners()
-						showNewAlarm(card, alarm)
-					}
-				}
 
-			})
+					/**
+					 * Called when the scroll state is changed.
+					 */
+					override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int)
+					{
+						// Highlight the alarm card and clear the scroll listeners
+						// once the recyclerview is no longer scrolling
+						if (newState == RecyclerView.SCROLL_STATE_IDLE)
+						{
+							recyclerView.clearOnScrollListeners()
+							showNewAlarm(card, alarm)
+						}
+					}
+
+				})
+			}
 
 			// Remove the alarm from the recently added list
 			recentlyAddedAlarmIds.remove(alarm.id)
@@ -985,7 +995,6 @@ class NacMainActivity
 			// Show the dialog
 			NacAlarmOptionsDialog.navigate(navController, alarm)
 				?.observe(this) { a ->
-					println("Hello? ${a.nfcTagId}")
 					updateAlarm(a)
 				}
 
@@ -1204,7 +1213,6 @@ class NacMainActivity
 				// Restore the recyclerview saved state
 				if (recyclerViewSavedState != null)
 				{
-					println("RESTORING STATE : $recyclerViewSavedState")
 					recyclerView.layoutManager?.onRestoreInstanceState(recyclerViewSavedState)
 					recyclerViewSavedState = null
 				}
@@ -1384,7 +1392,6 @@ class NacMainActivity
 			// Save the recyclerview state so that it does not scroll down with an
 			// item that was changed. Instead it should retain its current scroll
 			// position
-			println("SAVING STATE : $recyclerViewSavedState")
 			recyclerViewSavedState = recyclerView.layoutManager?.onSaveInstanceState()
 
 			// Check if no cards are expanded
@@ -1424,8 +1431,16 @@ class NacMainActivity
 				val id = recentlyAddedAlarmIds.first()
 				val index = alarms.indexOfFirst { it.id == id }
 
-				// Scroll down to that alarm card
-				recyclerView.smoothScrollToPosition(index)
+				// Find the first and last currently visible indices
+				val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager
+				val firstIndex = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
+				val lastIndex = linearLayoutManager.findLastCompletelyVisibleItemPosition()
+
+				// Scroll down to that alarm card if it is not visible
+				if ((index < firstIndex) || (index > lastIndex))
+				{
+					recyclerView.smoothScrollToPosition(index)
+				}
 			}
 
 		}
