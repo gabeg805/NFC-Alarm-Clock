@@ -34,7 +34,7 @@ class NacSelectNfcTagDialog
 	/**
 	 * List of NFC tags.
 	 */
-	private lateinit var allNfcTags: List<NacNfcTag>
+	private var allNfcTags: List<NacNfcTag> = emptyList()
 
 	/**
 	 * Name of the selected NFC tag.
@@ -47,15 +47,6 @@ class NacSelectNfcTagDialog
 	override fun onOkClicked(alarm: NacAlarm?)
 	{
 		alarm?.nfcTagId = selectedNfcTag.nfcId
-	}
-
-	/**
-	 * Called when the alarm should be saved.
-	 */
-	override fun onSaveAlarm(alarm: NacAlarm?)
-	{
-		println("Saving alarm : ${alarm?.nfcTagId}")
-		super.onSaveAlarm(alarm)
 	}
 
 	/**

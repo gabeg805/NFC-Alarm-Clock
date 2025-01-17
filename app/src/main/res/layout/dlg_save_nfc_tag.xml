@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:orientation="vertical"
-	android:paddingTop="@dimen/normal"
-	android:paddingBottom="@dimen/normal"
-	android:paddingStart="?dialogPreferredPadding"
-	android:paddingEnd="?dialogPreferredPadding">
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
 
 	<!-- Title -->
 	<TextView
@@ -57,27 +52,4 @@
 		</com.google.android.material.textfield.TextInputEditText>
 	</com.google.android.material.textfield.TextInputLayout>
 
-	<!-- Separator -->
-	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
-
-	<!-- Save -->
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/save_nfc_tag"
-		android:layout_width="match_parent"
-		android:layout_height="@dimen/touch"
-		android:backgroundTint="@color/orange"
-		android:textColor="@color/white"
-		android:text="@string/action_save"
-		/>
-
-	<!-- Skip button -->
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/skip_nfc_tag"
-		android:layout_width="match_parent"
-		android:layout_height="@dimen/touch"
-		android:backgroundTint="@color/gray_light"
-		android:textColor="@color/white"
-		android:text="@string/action_skip"
-		/>
-
-</LinearLayout>
+</com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

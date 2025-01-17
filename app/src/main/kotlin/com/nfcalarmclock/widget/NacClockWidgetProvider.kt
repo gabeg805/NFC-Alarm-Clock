@@ -420,7 +420,7 @@ internal class NacClockWidgetDataHelper(
 				val toTimezone = TimeZone.getTimeZone(sharedPreferences.appNextAlarmTimezoneId)
 				val offset = fromTimezone.getOffset(millis) - toTimezone.getOffset(millis)
 
-				//println("Time : $millis || Offset : $offset")
+				println("Time : $millis || Offset : $offset")
 				// Return if there is not a next alarm set
 				if (millis == 0L)
 				{

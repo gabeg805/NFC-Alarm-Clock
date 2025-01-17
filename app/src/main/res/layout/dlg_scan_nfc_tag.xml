@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
+<com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	tools:ignore="ContentDescription,UselessParent,UseCompoundDrawables">
 
 	<!-- Title -->
@@ -33,18 +33,40 @@
 		android:src="@drawable/tap_and_play"
 		/>
 
-	<!-- Separator -->
-	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
-
-	<!-- Select an NFC tag button -->
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/select_nfc_tag"
+	<!-- Title -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Title"
+		android:id="@+id/title_currently_selected"
 		android:layout_width="match_parent"
-		android:layout_height="@dimen/touch"
-		android:backgroundTint="@color/gray_light"
-		android:textColor="@color/white"
-		android:text="@string/action_select_nfc_tag"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/tiny"
+		android:textAlignment="textEnd"
+		android:textSize="@dimen/tsz_small"
+		android:text="@string/title_current_selected"
 		android:visibility="gone"
+		/>
+
+	<!-- Description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:id="@+id/description_nfc_tag_name"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textAlignment="textEnd"
+		android:ellipsize="end"
+		android:maxLines="1"
+		android:text=""
+		android:visibility="gone"
+		/>
+
+	<!-- Use any NFC tag button -->
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/use_any_nfc_tag_button"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textColor="@color/white"
+		android:text="@string/action_use_any"
+		app:backgroundTint="@color/gray_light"
 		/>
 
 </com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

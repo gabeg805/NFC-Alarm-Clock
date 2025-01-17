@@ -117,8 +117,16 @@ abstract class NacGenericAlarmOptionsDialog
 		// Setup the cancel button
 		setupSecondaryButton(cancelButton, listener = {
 
-			// Call the cancel clicked function
-			onCancelClicked(alarm)
+			try
+			{
+				// Call the cancel clicked function
+				onCancelClicked(alarm)
+			}
+			catch (_: IllegalStateException)
+			{
+				// Stop on exception
+				return@setupSecondaryButton
+			}
 
 			// Dismiss the dialog
 			dismiss()
@@ -221,9 +229,16 @@ abstract class NacGenericAlarmOptionsDialog
 		// Setup the ok button
 		setupPrimaryButton(okButton, listener = {
 
-			println("NORMAL OK BUTTON SETUP")
-			// Call the ok clicked function
-			onOkClicked(alarm)
+			try
+			{
+				// Call the ok clicked function
+				onOkClicked(alarm)
+			}
+			catch (_: IllegalStateException)
+			{
+				// Stop on exception
+				return@setupPrimaryButton
+			}
 
 			// Save the alarm
 			onSaveAlarm(alarm)

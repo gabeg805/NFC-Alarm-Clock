@@ -22,6 +22,34 @@ import com.nfcalarmclock.view.setupBackgroundColor
 import com.nfcalarmclock.view.setupRippleColor
 
 /**
+ * Observe a back stack entry until it is cleaned up.
+ */
+fun NavController.navigate(
+	navId: Int,
+	args: Bundle?,
+	fragment: NacBottomSheetDialogFragment,
+	onBackStackPopulated: () -> Unit = {
+
+		// Dismiss the dialog
+		fragment.dismiss()
+
+	}
+)
+{
+	try
+	{
+		// Navigate to the fragment
+		navigate(navId, args)
+
+		// Observe the back stack entry
+		observeBackStackEntry(this, fragment, onBackStackPopulated = onBackStackPopulated)
+	}
+	catch (_: IllegalStateException)
+	{
+	}
+}
+
+/**
  * Create back stack entry lifecycle observer.
  */
 fun createBackStackEntryLifecycleObserver(
@@ -130,12 +158,11 @@ class NacAlarmOptionsDialog
 		{
 			R.id.alarm_option_audio_source -> R.id.nacAudioSourceDialog
 			R.id.alarm_option_text_to_speech -> R.id.nacTextToSpeechDialog
+			R.id.alarm_option_upcoming_reminder -> R.id.nacUpcomingReminderDialog
 			R.id.alarm_option_volume -> R.id.nacVolumeOptionsDialog
 			R.id.alarm_option_flashlight -> R.id.nacFlashlightOptionsDialog
 			R.id.alarm_option_nfc -> R.id.nacScanNfcTagDialog
-			//R.id.alarm_option_nfc -> R.id.nacSelectNfcTagDialog
 			R.id.alarm_option_vibrate -> R.id.nacVibrateOptionsDialog
-			R.id.alarm_option_upcoming_reminder -> R.id.nacUpcomingReminderDialog
 			else -> -1
 		}
 	}
@@ -195,26 +222,8 @@ class NacAlarmOptionsDialog
 				// Get the ID to navigate to
 				val navId = findNavIdFromButtonId(it.id)
 
-				try
-				{
-					// Navigate to the fragment who's button was clicked
-					navController.navigate(navId, arguments)
-				}
-				catch (_: IllegalStateException)
-				{
-				}
-
-				// Get the back stack entry
-				val navBackStackEntry = navController.currentBackStackEntry ?: return@setOnClickListener
-
-				// Create an observer for any changes to the lifecycle of the back stack entry
-				val observer = createBackStackEntryLifecycleObserver(navController, this)
-
-				// Observe any changes to the lifecycle of the back stack entry
-				navBackStackEntry.lifecycle.addObserver(observer)
-
-				// Observe the lifecycle of the current fragment
-				waitToCleanupBackStackEntryLifecycleObserver(viewLifecycleOwner, navBackStackEntry, observer)
+				// Navigate to the fragment who's button was clicked
+				navController.navigate(navId, arguments, this)
 
 			}
 		}

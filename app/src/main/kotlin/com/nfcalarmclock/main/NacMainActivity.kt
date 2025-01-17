@@ -10,6 +10,7 @@ import android.graphics.drawable.InsetDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Parcelable
 import android.text.format.DateFormat
 import android.view.HapticFeedbackConstants
 import android.view.Menu
@@ -171,11 +172,6 @@ class NacMainActivity
 	private var allNfcTags: List<NacNfcTag> = ArrayList()
 
 	/**
-	 * Last saved/selected NFC tag when enabling NFC on an alarm.
-	 */
-	private var lastNfcTag: NacNfcTag = NacNfcTag()
-
-	/**
 	 * Mutable live data for the alarm card that can be modified and sorted, or
 	 * not sorted, depending on the circumstance.
 	 *
@@ -226,6 +222,17 @@ class NacMainActivity
 	 * Handler to refresh next alarm message.
 	 */
 	private lateinit var nextAlarmMessageHandler: Handler
+
+	/**
+	 * The current snackbar being used.
+	 */
+	private var currentSnackbar: Snackbar? = null
+
+	/**
+	 * Saved state of the recyclerview so that it does not change scroll position when
+	 * disabling/enabling or changing the time. Anything that causes a sort to occur.
+	 */
+	private var recyclerViewSavedState: Parcelable? = null
 
 	/**
 	 * Get the number of alarm cards that are expanded.
@@ -279,11 +286,6 @@ class NacMainActivity
 			// probably do not care
 			return previousVersion.isNotEmpty() && (BuildConfig.VERSION_NAME != previousVersion)
 		}
-
-	/**
-	 * The current snackbar being used.
-	 */
-	private var currentSnackbar: Snackbar? = null
 
 	/**
 	 * Add an alarm to the database.
@@ -890,91 +892,28 @@ class NacMainActivity
 
 		// Repeat
 		card.onCardUseRepeatChangedListener = NacCardHolder.OnCardUseRepeatChangedListener { _, alarm ->
-
-			// Determine which message to show
-			val messageId = if (alarm.shouldRepeat)
-			{
-				R.string.message_repeat_enabled
-			}
-			else
-			{
-				R.string.message_repeat_disabled
-			}
-
-			// Toast the message
-			quickToast(this, messageId)
-
-			// Update the alarm
+			card.toastRepeat(this)
 			updateAlarm(alarm)
 
 		}
 
 		// Vibrate
 		card.onCardUseVibrateChangedListener = NacCardHolder.OnCardUseVibrateChangedListener { _, alarm ->
-
-			// Determine which message to show
-			val messageId = if (alarm.shouldVibrate)
-			{
-				R.string.message_vibrate_enabled
-			}
-			else
-			{
-				R.string.message_vibrate_disabled
-			}
-
-			// Toast the message
-			quickToast(this, messageId)
-
-			// Update the alarm
+			card.toastVibrate(this)
 			updateAlarm(alarm)
 
 		}
 
 		// NFC
 		card.onCardUseNfcChangedListener = OnCardUseNfcChangedListener { _, alarm ->
-
-			// Determine which message to show
-			val messageId = if (alarm.shouldUseNfc)
-			{
-				if (alarm.nfcTagId.isNotEmpty())
-				{
-					R.string.message_nfc_required
-				}
-				else
-				{
-					R.string.message_any_nfc_tag_id
-				}
-			}
-			else
-			{
-				R.string.message_nfc_optional
-			}
-
-			// Toast the message
-			quickToast(this, messageId)
-
-			// Update the alarm
+			card.toastNfc(this)
 			updateAlarm(alarm)
 
 		}
 
 		// Flashlight
 		card.onCardUseFlashlightChangedListener = NacCardHolder.OnCardUseFlashlightChangedListener { _, alarm ->
-
-			// Get the message
-			val messageId = if (alarm.shouldUseFlashlight)
-			{
-				R.string.message_flashlight_enabled
-			}
-			else
-			{
-				R.string.message_flashlight_disabled
-			}
-
-			// Toast the message
-			quickToast(this, messageId)
-
-			// Update the alarm
+			card.toastFlashlight(this)
 			updateAlarm(alarm)
 
 		}
@@ -1100,7 +1039,7 @@ class NacMainActivity
 
 						// Show the NFC tag for the current alarm
 						item.setOnMenuItemClickListener { _ ->
-							showNfcTagId(alarm)
+							card.toastNfcId(this)
 							true
 						}
 					}
@@ -1250,6 +1189,28 @@ class NacMainActivity
 
 		// Attach the recycler view to the touch helper
 		alarmCardTouchHelper.attachToRecyclerView(recyclerView)
+
+		alarmCardAdapter.registerAdapterDataObserver(object: RecyclerView.AdapterDataObserver()
+		{
+
+			/**
+			 * Called when a range of items are moved.
+			 */
+			override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int)
+			{
+				// Super
+				super.onItemRangeMoved(fromPosition, toPosition, itemCount)
+
+				// Restore the recyclerview saved state
+				if (recyclerViewSavedState != null)
+				{
+					println("RESTORING STATE : $recyclerViewSavedState")
+					recyclerView.layoutManager?.onRestoreInstanceState(recyclerViewSavedState)
+					recyclerViewSavedState = null
+				}
+			}
+
+		})
 	}
 
 	/**
@@ -1422,12 +1383,19 @@ class NacMainActivity
 			// Check if no cards are expanded
 			if (cardsExpandedCount == 0)
 			{
+				// Save the recyclerview state so that it does not scroll down with an
+				// item that was changed. Instead it should retain its current scroll
+				// position
+				println("SAVING STATE : $recyclerViewSavedState")
+				recyclerViewSavedState = recyclerView.layoutManager?.onSaveInstanceState()
+
 				// Merge and sort the alarms
 				alarmCardAdapterLiveData.mergeSort(alarms)
 			}
 			// One or more cards is expanded
 			else
 			{
+				println("MERGING")
 				// Merge the alarms but do not sort yet
 				alarmCardAdapterLiveData.merge(alarms)
 			}
@@ -1653,55 +1621,13 @@ class NacMainActivity
 		}
 	}
 
-	/**
-	 * Show the saved NFC tag ID of the given alarm.
-	 */
-	private fun showNfcTagId(alarm: NacAlarm)
-	{
-		// Build the message
-		val message = if (alarm.nfcTagId.isNotEmpty())
-		{
-			// Get the string to show a specific NFC tag
-			val nfcId = getString(R.string.message_show_nfc_tag_id)
-
-			"$nfcId ${alarm.nfcTagId}"
-		}
-		else
-		{
-			// Get the string to show any NFC tag
-			getString(R.string.message_any_nfc_tag_id)
-		}
-
-		// Toast the message
-		quickToast(this, message)
-	}
-
-	/**
-	 * Show the scan NFC tag dialog.
-	 */
-	//private fun showScanNfcTagDialog(alarm: NacAlarm)
+	//private fun showNfcTagDialog(alarm: NacAlarm)
 	//{
 	//	// Create and set the dialog
 	//	val scanNfcTagDialog = NacScanNfcTagDialog()
 
 	//	// Setup the dialog
-	//	scanNfcTagDialog.alarm = alarm
-	//	scanNfcTagDialog.shouldShowSelectButton = allNfcTags.isNotEmpty()
-	//	scanNfcTagDialog.lastNfcTag = lastNfcTag
 	//	scanNfcTagDialog.onScanNfcTagListener = object: OnScanNfcTagListener {
-
-	//		/**
-	//		 * Called when the user cancels the scan NFC tag dialog.
-	//		 */
-	//		override fun onCancel(alarm: NacAlarm)
-	//		{
-	//			// Get the card that corresponds to the alarm
-	//			val cardHolder = recyclerView.findViewHolderForItemId(alarm.id) as NacCardHolder
-
-	//			// Uncheck the NFC button when the dialog is canceled.
-	//			cardHolder.nfcButton.isChecked = false
-	//			cardHolder.doNfcButtonClick()
-	//		}
 
 	//		/**
 	//		 * Called when the user cancels the scan NFC tag dialog.
@@ -1715,77 +1641,7 @@ class NacMainActivity
 	//			NacNfc.start(this@NacMainActivity)
 	//		}
 
-	//		/**
-	//		 * Called when an NFC tag is scanned from the Scan NFC Tag dialog.
-	//		 */
-	//		override fun onScanned(alarm: NacAlarm, tagId: String)
-	//		{
-	//			// Create the dialog
-	//			val saveNfcTagDialog = NacSaveNfcTagDialog()
-
-	//			// Setup the dialog
-	//			saveNfcTagDialog.allNfcTags = allNfcTags
-	//			saveNfcTagDialog.nfcId = tagId
-	//			saveNfcTagDialog.onSaveNfcTagListener = object: NacSaveNfcTagDialog.OnSaveNfcTagListener
-	//			{
-
-	//				/**
-	//				 * Called when saving the NFC tag is skipped.
-	//				 */
-	//				override fun onCancel()
-	//				{
-	//					// Save the NFC tag ID that was scanned to the alarm
-	//					saveNfcTagId(alarm, tagId)
-	//				}
-
-	//				/**
-	//				 * Called when saving the NFC tag.
-	//				 */
-	//				override fun onSave(nfcTag: NacNfcTag)
-	//				{
-	//					// Save the NFC tag ID that was scanned to the alarm
-	//					saveNfcTagId(alarm, tagId)
-
-	//					// Save the NFC tag to the database
-	//					nfcTagViewModel.insert(nfcTag)
-
-	//					// Set the last saved/used NFC tag
-	//					lastNfcTag = nfcTag
-	//				}
-
-	//			}
-
-	//			// Show the dialog
-	//			saveNfcTagDialog.show(supportFragmentManager, NacSaveNfcTagDialog.TAG)
-	//		}
-
-	//		/**
-	//		 * Called when an NFC tag is selected in the Select NFC Tag dialog.
-	//		 */
-	//		override fun onSelected(alarm: NacAlarm, nfcTag: NacNfcTag)
-	//		{
-	//			// Save the NFC tag ID that was scanned to the alarm
-	//			saveNfcTagId(alarm, nfcTag.nfcId)
-
-	//			// Set the last saved/used NFC tag
-	//			lastNfcTag = nfcTag
-	//		}
-
-	//		/**
-	//		 * Called when the user wants to use any NFC tag.
-	//		 */
-	//		override fun onUseAny(alarm: NacAlarm)
-	//		{
-	//			// Save the default (empty) NFC tag ID, indicating that any NFC tag can
-	//			// be used to dismiss this alarm
-	//			saveNfcTagId(alarm, "")
-	//		}
-
 	//	}
-
-	//	// Show the dialog
-	//	scanNfcTagDialog.show(supportFragmentManager, NacScanNfcTagDialog.TAG)
-	//}
 
 	/**
 	 * Show a snackbar.
@@ -1807,13 +1663,14 @@ class NacMainActivity
 		else
 		{
 			// Create the snackbar
-			Snackbar.make(root, message.toSpannedString(),
+			Snackbar.make(floatingActionButton, message.toSpannedString(),
 				Snackbar.LENGTH_LONG)
 		}
 
 		// Setup the snackbar
 		snackbar.setActionTextColor(sharedPreferences.themeColor)
 		snackbar.setAction(action, onClickListener ?: View.OnClickListener { })
+		snackbar.setAnchorView(floatingActionButton)
 
 		// Add callback if listener is set
 		if (onDismissListener != null)
