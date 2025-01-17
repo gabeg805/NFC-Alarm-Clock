@@ -66,5 +66,12 @@
 		<action
 			android:id="@+id/action_nacScanNfcTagDialog_to_nacSelectNfcTagDialog"
 			app:destination="@id/nacSelectNfcTagDialog" />
+		<action
+			android:id="@+id/action_nacScanNfcTagDialog_to_nacSaveNfcTagDialog"
+			app:destination="@id/nacSaveNfcTagDialog" />
 	</dialog>
+	<dialog
+		android:id="@+id/nacSaveNfcTagDialog"
+		android:name="com.nfcalarmclock.alarm.options.nfc.NacSaveNfcTagDialog"
+		android:label="NacSaveNfcTagDialog" />
 </navigation>

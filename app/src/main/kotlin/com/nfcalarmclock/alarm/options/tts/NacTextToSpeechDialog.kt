@@ -283,7 +283,8 @@ class NacTextToSpeechDialog
 				.takeIf { it >= 0 } ?: 0
 
 			// Get the items to use in the dropdown
-			val simpleItems = List(allVoices.size) { i ->
+			val size = if (allVoices.isNotEmpty()) allVoices.size else 1
+			val simpleItems = List(size) { i ->
 				if (i == 0)
 				{
 					context.getString(R.string.message_text_to_speech_default_voice)

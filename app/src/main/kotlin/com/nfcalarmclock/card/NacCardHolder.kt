@@ -294,7 +294,7 @@ class NacCardHolder(
 	/**
 	 * NFC button.
 	 */
-	val nfcButton: MaterialButton = root.findViewById(R.id.nac_nfc)
+	private val nfcButton: MaterialButton = root.findViewById(R.id.nac_nfc)
 
 	/**
 	 * Flashlight button.
@@ -828,7 +828,7 @@ class NacCardHolder(
 	/**
 	 * Act as if the NFC button was clicked.
 	 */
-	fun doNfcButtonClick()
+	private fun doNfcButtonClick()
 	{
 		// Reset the skip next alarm flag
 		alarm!!.shouldSkipNextAlarm = false
@@ -1334,7 +1334,7 @@ class NacCardHolder(
 	/**
 	 * Set the NFC button to its proper settings.
 	 */
-	private fun setNfcButton()
+	fun setNfcButton()
 	{
 		// Get the NFC state from the alarm
 		val shouldUseNfc = alarm!!.shouldUseNfc
@@ -2199,6 +2199,113 @@ class NacCardHolder(
 
 		// Call the update listener
 		callOnCardUpdatedListener()
+	}
+
+	/**
+	 * Toast the flashlight message.
+	 */
+	fun toastFlashlight(context: Context)
+	{
+		// Determine which message to show
+		val messageId = if (alarm!!.shouldUseFlashlight)
+		{
+			R.string.message_flashlight_enabled
+		}
+		else
+		{
+			R.string.message_flashlight_disabled
+		}
+
+		// Toast the message
+		quickToast(context, messageId)
+	}
+
+	/**
+	 * Toast the NFC message.
+	 */
+	fun toastNfc(context: Context)
+	{
+		// Determine which message to show
+		val messageId = if (alarm!!.shouldUseNfc)
+		{
+			if (alarm!!.nfcTagId.isNotEmpty())
+			{
+				R.string.message_nfc_required
+			}
+			else
+			{
+				R.string.message_any_nfc_tag_id
+			}
+		}
+		else
+		{
+			R.string.message_nfc_optional
+		}
+
+		// Toast the message
+		quickToast(context, messageId)
+	}
+
+	/**
+	 * Toast the NFC ID message.
+	 */
+	fun toastNfcId(context: Context)
+	{
+		// Determine which message to show
+		val message = if (alarm!!.nfcTagId.isNotEmpty())
+		{
+			// Get the string to show a specific NFC tag
+			val nfcId = context.getString(R.string.message_show_nfc_tag_id)
+
+			"$nfcId ${alarm!!.nfcTagId}"
+		}
+		else
+		{
+			// Get the string to show any NFC tag
+			context.getString(R.string.message_any_nfc_tag_id)
+		}
+
+		// Toast the message
+		quickToast(context, message)
+	}
+
+	/**
+	 * Toast the repeat message.
+	 */
+	fun toastRepeat(context: Context)
+	{
+		// Determine which message to show
+		val messageId = if (alarm!!.shouldRepeat)
+		{
+			R.string.message_repeat_enabled
+		}
+		else
+		{
+			R.string.message_repeat_disabled
+		}
+
+		// Toast the message
+		quickToast(context, messageId)
+	}
+
+	/**
+	 * Toast the vibrate message.
+	 */
+	fun toastVibrate(context: Context)
+	{
+		// Determine which message to show
+		val messageId = if (alarm!!.shouldVibrate)
+		{
+			R.string.message_vibrate_enabled
+		}
+		else
+		{
+			R.string.message_vibrate_disabled
+		}
+
+
+		// Toast the message
+		quickToast(context, messageId)
 	}
 
 	/**

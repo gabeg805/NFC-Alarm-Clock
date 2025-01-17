@@ -42,7 +42,7 @@ class NacCardLayoutManager(context: Context)
 			/**
 			 * Speed to scroll in millimeters per pixel.
 			 */
-			private const val SPEED = 75f
+			private const val SPEED = 50f
 
 		}
 

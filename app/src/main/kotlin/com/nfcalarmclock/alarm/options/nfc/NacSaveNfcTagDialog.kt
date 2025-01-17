@@ -1,94 +1,147 @@
 package com.nfcalarmclock.alarm.options.nfc
 
-import android.content.DialogInterface
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
+import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
 import com.nfcalarmclock.util.NacUtility
-import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
+import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.setupInputLayoutColor
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 /**
  * Save an NFC tag that was scanned.
  */
+@AndroidEntryPoint
 class NacSaveNfcTagDialog
-	: NacBottomSheetDialogFragment()
+	: NacGenericAlarmOptionsDialog()
 {
 
 	/**
-	 * Listener for saving an NFC tag.
+	 * Layout resource ID.
 	 */
-	interface OnSaveNfcTagListener
-	{
-		fun onCancel()
-		fun onSave(nfcTag: NacNfcTag)
-	}
+	override val layoutId = R.layout.dlg_save_nfc_tag
+
+	/**
+	 * NFC tag view model.
+	 */
+	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
+
+	/**
+	 * Edit text containing the name of the NFC tag to save.
+	 */
+	private lateinit var editText: TextInputEditText
 
 	/**
 	 * List of NFC tags.
 	 */
-	var allNfcTags: List<NacNfcTag> = ArrayList()
+	private var allNfcTags: List<NacNfcTag> = emptyList()
 
 	/**
-	 * NFC tag ID.
+	 * Called when the cancel button is clicked.
 	 */
-	var nfcId: String = ""
-
-	/**
-	 * Listener for when the NFC tag is saved.
-	 */
-	var onSaveNfcTagListener: OnSaveNfcTagListener? = null
-
-	/**
-	 * Called when the dialog view is created.
-	 */
-	override fun onCreateView(
-		inflater: LayoutInflater,
-		container: ViewGroup?,
-		savedInstanceState: Bundle?)
-		: View?
+	override fun onCancelClicked(alarm: NacAlarm?)
 	{
-		return inflater.inflate(R.layout.dlg_save_nfc_tag, container, false)
+		// Save the alarm
+		onSaveAlarm(alarm)
 	}
 
 	/**
-	 * Called when the dialog is canceled.
+	 * Update the alarm with selected options.
 	 */
-	override fun onCancel(dialog: DialogInterface)
+	override fun onOkClicked(alarm: NacAlarm?)
 	{
-		// Super
-		super.onCancel(dialog)
+		// Get the name
+		val nfcName = editText.text.toString().trim()
 
-		// Call the listener
-		onSaveNfcTagListener?.onCancel()
+		// Iterate over each NFC tag
+		allNfcTags.forEach {
+
+			// Check that the name does not already exist
+			if (it.name == nfcName)
+			{
+				// Show toast
+				NacUtility.quickToast(requireContext(), R.string.error_message_nfc_name_exists)
+				throw IllegalStateException()
+			}
+			// Check that the NFC ID does not already exist
+			else if (it.nfcId == alarm!!.nfcTagId)
+			{
+				// Get the message
+				val msg = getString(R.string.error_message_nfc_id_exists, it.name)
+
+				// Show toast
+				NacUtility.quickToast(requireContext(), msg)
+				throw IllegalStateException()
+			}
+
+		}
+
+		// Save the NFC tag
+		lifecycleScope.launch {
+			val tag = NacNfcTag(nfcName, alarm!!.nfcTagId)
+
+			nfcTagViewModel.insert(tag)
+		}
 	}
 
 	/**
-	 * Called when the dialog view is created.
+	 * Called when the alarm should be saved.
 	 */
-	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+	override fun onSaveAlarm(alarm: NacAlarm?)
+	{
+		println("Extra saving alarm : ${alarm?.nfcTagId}")
+		super.onSaveAlarm(alarm)
+	}
+
+	/**
+	 * Setup all alarm options.
+	 */
+	override fun setupAlarmOptions(alarm: NacAlarm?)
+	{
+		// Get all the NFC tags
+		lifecycleScope.launch {
+			allNfcTags = nfcTagViewModel.getAllNfcTags()
+		}
+
+		// Setup the views
+		setupEditText()
+	}
+
+	/**
+	 * Setup the Cancel button.
+	 */
+	override fun setupCancelButton(alarm: NacAlarm?)
 	{
 		// Super
-		super.onViewCreated(view, savedInstanceState)
+		super.setupCancelButton(alarm)
 
-		// Get the context
-		val context = requireContext()
+		// Get the cancel button
+		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
 
+		// Rename the button
+		cancelButton.setText(R.string.action_skip)
+	}
+
+	/**
+	 * Setup the edit text.
+	 */
+	private fun setupEditText()
+	{
 		// Get the views
-		val inputLayout: TextInputLayout = view.findViewById(R.id.nfc_tag_input_layout)
-		val editText: TextInputEditText = view.findViewById(R.id.nfc_tag_name)
-		val saveButton: MaterialButton = view.findViewById(R.id.save_nfc_tag)
-		val skipButton: MaterialButton = view.findViewById(R.id.skip_nfc_tag)
+		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
+		val inputLayout: TextInputLayout = dialog!!.findViewById(R.id.nfc_tag_input_layout)
+		editText = dialog!!.findViewById(R.id.nfc_tag_name)
 
 		// Setup the input layout
-		inputLayout.setupInputLayoutColor(context, sharedPreferences)
+		inputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 
 		// Setup the edit view
 		editText.addTextChangedListener{
@@ -96,78 +149,33 @@ class NacSaveNfcTagDialog
 			// Make sure the editable is valid and has text
 			if (it?.isNotEmpty() == true)
 			{
-				saveButton.isEnabled = true
-				saveButton.alpha = 1.0f
+				okButton.isEnabled = true
+				okButton.alpha = 1.0f
 			}
 			// Editable is null or does not have a name entered
 			else
 			{
-				saveButton.isEnabled = false
-				saveButton.alpha = 0.4f
+				okButton.isEnabled = false
+				okButton.alpha = calcAlpha(false)
 			}
 		}
-
-		// Setup the save button
-		setupPrimaryButton(saveButton, listener = {
-
-			// Get the name
-			val nfcName = editText.text.toString().trim()
-
-			// Iterate over each NFC tag
-			allNfcTags.forEach {
-
-				// Check that the name does not already exist
-				if (it.name == nfcName)
-				{
-					// Show toast
-					NacUtility.quickToast(requireContext(), R.string.error_message_nfc_name_exists)
-					return@setupPrimaryButton
-				}
-				// Check that the NFC ID does not already exist
-				else if (it.nfcId == nfcId)
-				{
-					// Get the message
-					val msg = getString(R.string.error_message_nfc_id_exists, nfcName)
-
-					// Show toast
-					NacUtility.quickToast(requireContext(), msg)
-					return@setupPrimaryButton
-				}
-
-			}
-
-			// Create an NFC tag
-			val nfcTag = NacNfcTag(nfcName, nfcId)
-
-			// Call the listener
-			onSaveNfcTagListener?.onSave(nfcTag)
-
-			// Dismiss the dialog
-			dismiss()
-
-		})
-
-		// Setup the skip button
-		setupSecondaryButton(skipButton, listener = {
-
-			// Call the listener
-			onSaveNfcTagListener?.onCancel()
-
-			// Dismiss the dialog
-			dismiss()
-
-		})
-
 	}
 
-	companion object
+	/**
+	 * Setup OK button.
+	 */
+	override fun setupOkButton(alarm: NacAlarm?)
 	{
+		// Super
+		super.setupOkButton(alarm)
 
-		/**
-		 * Tag for the class.
-		 */
-		const val TAG = "NacSaveNfcTagDialog"
+		// Get the ok button
+		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
 
+		// Rename the button and set its usability
+		okButton.setText(R.string.action_save)
+		okButton.isEnabled = false
+		okButton.alpha = calcAlpha(false)
 	}
 
 }

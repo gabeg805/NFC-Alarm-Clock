@@ -25,15 +25,6 @@
 		android:text="@string/action_alarm_option_text_to_speech"
 		/>
 
-	<!-- Volume -->
-	<Button
-		style="@style/Widget.AlarmOptionMain.Button"
-		android:id="@+id/alarm_option_volume"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:text="@string/action_alarm_option_volume"
-		/>
-
 	<!-- Upcoming reminder -->
 	<Button
 		style="@style/Widget.AlarmOptionMain.Button"
@@ -41,6 +32,15 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/action_alarm_option_upcoming_reminder"
+		/>
+
+	<!-- Volume -->
+	<Button
+		style="@style/Widget.AlarmOptionMain.Button"
+		android:id="@+id/alarm_option_volume"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/action_alarm_option_volume"
 		/>
 
 	<!-- Separator -->
