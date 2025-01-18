@@ -93,15 +93,6 @@ class NacSaveNfcTagDialog
 	}
 
 	/**
-	 * Called when the alarm should be saved.
-	 */
-	override fun onSaveAlarm(alarm: NacAlarm?)
-	{
-		println("Extra saving alarm : ${alarm?.nfcTagId}")
-		super.onSaveAlarm(alarm)
-	}
-
-	/**
 	 * Setup all alarm options.
 	 */
 	override fun setupAlarmOptions(alarm: NacAlarm?)

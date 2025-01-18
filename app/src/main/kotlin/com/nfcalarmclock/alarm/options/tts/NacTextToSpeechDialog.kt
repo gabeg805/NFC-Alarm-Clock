@@ -96,9 +96,18 @@ class NacTextToSpeechDialog
 	private var selectedTtsFreq: Int = 0
 
 	/**
-	 * Selected text-to-speech voice.
+	 * Selected text-to-speech voice index.
 	 */
-	private var selectedTtsVoice: Int = 0
+	private var selectedTtsVoiceIndex: Int = 0
+
+	/**
+	 * Selected text-to-speech voice name.
+	 */
+	private val selectedTtsVoiceName: String
+		get()
+		{
+			return allVoices.getOrNull(selectedTtsVoiceIndex)?.name ?: ""
+		}
 
 	/**
 	 * Whether text-to-speech is being used or not.
@@ -115,7 +124,7 @@ class NacTextToSpeechDialog
 		alarm?.shouldSayCurrentTime = currentTimeCheckBox.isChecked
 		alarm?.shouldSayAlarmName = alarmNameCheckBox.isChecked
 		alarm?.ttsFrequency = selectedTtsFreq
-		alarm?.ttsVoice = allVoices[selectedTtsVoice].name
+		alarm?.ttsVoice = selectedTtsVoiceName
 	}
 
 	/**
@@ -227,7 +236,7 @@ class NacTextToSpeechDialog
 				// Get the audio attributes
 				val attrs = NacAudioAttributes(context)
 					.apply {
-						voice = allVoices[selectedTtsVoice].name
+						voice = selectedTtsVoiceName
 					}
 
 				// Start the preview
@@ -278,7 +287,7 @@ class NacTextToSpeechDialog
 
 			// Set the currently selected voice
 			val defaultVoice = default.ifEmpty { ttsHelper.textToSpeech.defaultVoice.name }
-			selectedTtsVoice = allVoices
+			selectedTtsVoiceIndex = allVoices
 				.indexOfFirst { it.name == defaultVoice }
 				.takeIf { it >= 0 } ?: 0
 
@@ -297,7 +306,7 @@ class NacTextToSpeechDialog
 
 			// Setup the voices
 			ttsVoiceAutoCompleteTextView.setSimpleItems(simpleItems)
-			ttsVoiceAutoCompleteTextView.setText(simpleItems[selectedTtsVoice], false)
+			ttsVoiceAutoCompleteTextView.setText(simpleItems[selectedTtsVoiceIndex], false)
 
 		}
 	}
@@ -339,7 +348,7 @@ class NacTextToSpeechDialog
 
 		// Set the textview listeners
 		ttsVoiceAutoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-			selectedTtsVoice = position
+			selectedTtsVoiceIndex = position
 		}
 	}
 

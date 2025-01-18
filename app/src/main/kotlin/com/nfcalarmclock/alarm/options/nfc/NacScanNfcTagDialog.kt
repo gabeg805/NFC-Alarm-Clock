@@ -97,7 +97,6 @@ class NacScanNfcTagDialog
 		val alarm = arguments?.getAlarm()
 		alarm?.nfcTagId = id
 
-		// TODO: Disable reader mode here? Multiple scans are causing the save NFC tag dialog to popup
 		// Disable NFC reader mode
 		NacNfc.disableReaderMode(requireActivity())
 

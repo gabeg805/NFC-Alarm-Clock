@@ -16,6 +16,7 @@ import android.view.HapticFeedbackConstants
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewTreeObserver
 import androidx.activity.viewModels
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
@@ -227,6 +228,11 @@ class NacMainActivity
 	 * The current snackbar being used.
 	 */
 	private var currentSnackbar: Snackbar? = null
+
+	/**
+	 * Previous Y position of the current snackbar.
+	 */
+	private var prevSnackbarY: Float = 0f
 
 	/**
 	 * Saved state of the recyclerview so that it does not change scroll position when
@@ -902,29 +908,29 @@ class NacMainActivity
 
 		// Repeat
 		card.onCardUseRepeatChangedListener = NacCardHolder.OnCardUseRepeatChangedListener { _, alarm ->
-			card.toastRepeat(this)
 			updateAlarm(alarm)
+			card.toastRepeat(this)
 
 		}
 
 		// Vibrate
 		card.onCardUseVibrateChangedListener = NacCardHolder.OnCardUseVibrateChangedListener { _, alarm ->
-			card.toastVibrate(this)
 			updateAlarm(alarm)
+			card.toastVibrate(this)
 
 		}
 
 		// NFC
 		card.onCardUseNfcChangedListener = OnCardUseNfcChangedListener { _, alarm ->
-			card.toastNfc(this)
 			updateAlarm(alarm)
+			card.toastNfc(this)
 
 		}
 
 		// Flashlight
 		card.onCardUseFlashlightChangedListener = NacCardHolder.OnCardUseFlashlightChangedListener { _, alarm ->
-			card.toastFlashlight(this)
 			updateAlarm(alarm)
+			card.toastFlashlight(this)
 
 		}
 
@@ -1665,10 +1671,14 @@ class NacMainActivity
 		message: String,
 		action: String,
 		onClickListener: View.OnClickListener? = null,
-		onDismissListener: ((Int) -> Unit)? = null)
+		onDismissListener: (Int) -> Unit = {})
 	{
+		// Check if there is a normal "Dismiss" snackbar that is currently shown, in
+		// which case it will be reused
+		val shouldReuseSnackbar = (currentSnackbar?.isShown == true) && (onClickListener == null)
+
 		// Check if there is a normal "Dismiss" snackbar that is currently shown
-		val snackbar = if ((currentSnackbar?.isShown == true) && (onClickListener == null))
+		val snackbar = if (shouldReuseSnackbar)
 		{
 			// Reuse the snackbar
 			currentSnackbar!!.setText(message.toSpannedString())
@@ -1678,30 +1688,115 @@ class NacMainActivity
 		else
 		{
 			// Create the snackbar
-			Snackbar.make(floatingActionButton, message.toSpannedString(),
+			Snackbar.make(root, message.toSpannedString(),
 				Snackbar.LENGTH_LONG)
 		}
 
 		// Setup the snackbar
 		snackbar.setActionTextColor(sharedPreferences.themeColor)
 		snackbar.setAction(action, onClickListener ?: View.OnClickListener { })
-		snackbar.setAnchorView(floatingActionButton)
+		snackbar.setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
 
 		// Add callback if listener is set
-		if (onDismissListener != null)
+		if (!shouldReuseSnackbar)
 		{
+			// Listener when the snackbar is being drawn and thus when it is moving up and down
+			snackbar.view.viewTreeObserver.addOnPreDrawListener(object: ViewTreeObserver.OnPreDrawListener
+			{
+
+				/**
+				 * Called when the view tree is about to be drawn.
+				 */
+				override fun onPreDraw(): Boolean
+				{
+					// Get the current Y position
+					val y = snackbar.view.y
+
+					// Do nothing when the snackbar has not been shown yet
+					if (prevSnackbarY == 0f)
+					{
+					}
+					// Snackbar is moving down
+					else if (prevSnackbarY < y)
+					{
+						// Animate the FAB moving back to its original position
+						floatingActionButton.animate()
+							.apply {
+								translationY(0f)
+								duration = 250
+							}
+							.start()
+
+						// Remove the listener
+						snackbar.view.viewTreeObserver.removeOnPreDrawListener(this)
+					}
+					// Snackbar is moving up. Update the previous Y position to compare
+					// later
+					else
+					{
+						prevSnackbarY = y
+					}
+
+					return true
+				}
+
+			})
+
+			// Listener for when the snackbar is starting to change and become visible.
+			// This means the view has been measured and has a height, so the animation
+			// of the FAB can be started at the same time since now it is known how much
+			// to animate the FAB's Y position by
+			snackbar.view.addOnLayoutChangeListener(object: View.OnLayoutChangeListener
+			{
+
+				/**
+				 * Called when the view layout has changed.
+				 */
+				override fun onLayoutChange(view: View,
+					left: Int, top: Int, right: Int, bottom: Int,
+					oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int)
+				{
+					// Get the height of the snackbar
+					val height = snackbar.view.height.toFloat()
+
+					// Animate the FAB moving up
+					floatingActionButton.animate()
+						.apply {
+							translationY(-height)
+							duration = 250
+						}
+						.start()
+
+					// Remove the listener
+					view.removeOnLayoutChangeListener(this)
+				}
+
+			})
+
+			// Add the normal show/dismiss callback
 			snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>()
 			{
 
 				/**
+				 * Called when the snackbar is shown.
+				 */
+				override fun onShown(transientBottomBar: Snackbar?)
+				{
+					// The snackbar is visible now, so get its starting Y position
+					prevSnackbarY = snackbar.view.y
+				}
+
+				/**
 				 * Called when the snackbar has been dismissed.
-				 *
-				 * Note: If the snackbar is reused, this will be called multiple times. This
-				 *       is currently not an issue, but it could be in the future.
 				 */
 				override fun onDismissed(transientBottomBar: Snackbar?, event: Int)
 				{
+					// Call the listener
 					onDismissListener(event)
+
+					// Reset the values of the FAB and snackbar
+					floatingActionButton.translationY = 0f
+					prevSnackbarY = 0f
 				}
 
 			})
