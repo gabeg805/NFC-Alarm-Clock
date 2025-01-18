@@ -139,21 +139,25 @@ class NacCardPreference @JvmOverloads constructor(
 		// Repeat
 		card.onCardUseRepeatChangedListener = NacCardHolder.OnCardUseRepeatChangedListener { _, a ->
 			sharedPreferences.shouldRepeat = a.shouldRepeat
+			card.toastRepeat(context)
 		}
 
 		// Vibrate
 		card.onCardUseVibrateChangedListener = NacCardHolder.OnCardUseVibrateChangedListener { _, a ->
 			sharedPreferences.shouldVibrate = a.shouldVibrate
+			card.toastVibrate(context)
 		}
 
 		// NFC
 		card.onCardUseNfcChangedListener = NacCardHolder.OnCardUseNfcChangedListener { _, a ->
 			sharedPreferences.shouldUseNfc = a.shouldUseNfc
+			card.toastNfc(context)
 		}
 
 		// Flashlight
 		card.onCardUseFlashlightChangedListener = NacCardHolder.OnCardUseFlashlightChangedListener { _, a ->
 			sharedPreferences.shouldUseFlashlight = a.shouldUseFlashlight
+			card.toastFlashlight(context)
 		}
 
 		// Media

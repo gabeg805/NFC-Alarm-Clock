@@ -63,7 +63,7 @@ class NacGeneralSettingFragment
 		PreferenceManager.setDefaultValues(deviceContext, R.xml.general_preferences,  false)
 
 		// Setup the preferences
-		setupDefaultAlarm()
+		setupDefaultAlarmCard()
 		setupAlarmScreen()
 	}
 
@@ -92,10 +92,10 @@ class NacGeneralSettingFragment
 	}
 
 	/**
-	 * Setup the default alarm preference.
+	 * Setup the default alarm card.
 	 */
 	@OptIn(UnstableApi::class)
-	private fun setupDefaultAlarm()
+	private fun setupDefaultAlarmCard()
 	{
 		// Get the preference
 		val key = getString(R.string.key_default_alarm_card)
@@ -226,26 +226,6 @@ class NacGeneralSettingFragment
 					when (navController.currentDestination?.id)
 					{
 
-						// Audio source
-						R.id.nacAudioSourceDialog -> {
-							sharedPreferences!!.audioSource = a.audioSource
-						}
-
-						// Text-to-speech
-						R.id.nacTextToSpeechDialog -> {
-							sharedPreferences!!.shouldSayCurrentTime = a.shouldSayCurrentTime
-							sharedPreferences!!.shouldSayAlarmName = a.shouldSayAlarmName
-							sharedPreferences!!.ttsFrequency = a.ttsFrequency
-							sharedPreferences!!.ttsVoice = a.ttsVoice
-						}
-
-						// Volume
-						R.id.nacVolumeOptionsDialog -> {
-							sharedPreferences!!.shouldGraduallyIncreaseVolume = a.shouldGraduallyIncreaseVolume
-							sharedPreferences!!.graduallyIncreaseVolumeWaitTime = a.graduallyIncreaseVolumeWaitTime
-							sharedPreferences!!.shouldRestrictVolume = a.shouldRestrictVolume
-						}
-
 						// Flashlight
 						R.id.nacFlashlightOptionsDialog -> {
 							sharedPreferences!!.flashlightStrengthLevel = a.flashlightStrengthLevel
@@ -268,12 +248,32 @@ class NacGeneralSettingFragment
 							sharedPreferences!!.vibrateWaitTimeAfterPattern = a.vibrateWaitTimeAfterPattern
 						}
 
+						// Audio source
+						R.id.nacAudioSourceDialog -> {
+							sharedPreferences!!.audioSource = a.audioSource
+						}
+
+						// Text-to-speech
+						R.id.nacTextToSpeechDialog -> {
+							sharedPreferences!!.shouldSayCurrentTime = a.shouldSayCurrentTime
+							sharedPreferences!!.shouldSayAlarmName = a.shouldSayAlarmName
+							sharedPreferences!!.ttsFrequency = a.ttsFrequency
+							sharedPreferences!!.ttsVoice = a.ttsVoice
+						}
+
 						// Upcoming reminder
 						R.id.nacUpcomingReminderDialog -> {
 							sharedPreferences!!.shouldShowReminder = a.shouldShowReminder
 							sharedPreferences!!.timeToShowReminder = a.timeToShowReminder
 							sharedPreferences!!.reminderFrequency = a.reminderFrequency
 							sharedPreferences!!.shouldUseTtsForReminder = a.shouldUseTts && a.shouldUseTtsForReminder
+						}
+
+						// Volume
+						R.id.nacVolumeOptionsDialog -> {
+							sharedPreferences!!.shouldGraduallyIncreaseVolume = a.shouldGraduallyIncreaseVolume
+							sharedPreferences!!.graduallyIncreaseVolumeWaitTime = a.graduallyIncreaseVolumeWaitTime
+							sharedPreferences!!.shouldRestrictVolume = a.shouldRestrictVolume
 						}
 
 						// Unknown
