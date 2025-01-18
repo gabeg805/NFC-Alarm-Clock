@@ -220,6 +220,12 @@ class NacMainActivity
 	private var recentlyUpdatedAlarmIds: MutableList<Long> = ArrayList()
 
 	/**
+	 * The IDs of two alarms. The first is the alarm that was copied, and the second is
+	 * the alarm that resulted from the copy.
+	 */
+	private var recentlyCopiedAlarmIds: Pair<Long, Long>? = null
+
+	/**
 	 * Handler to refresh next alarm message.
 	 */
 	private lateinit var nextAlarmMessageHandler: Handler
@@ -233,6 +239,11 @@ class NacMainActivity
 	 * Previous Y position of the current snackbar.
 	 */
 	private var prevSnackbarY: Float = 0f
+
+	/**
+	 * Previous height of the current snackbar.
+	 */
+	private var prevSnackbarHeight: Float = 0f
 
 	/**
 	 * Saved state of the recyclerview so that it does not change scroll position when
@@ -297,26 +308,20 @@ class NacMainActivity
 	 * Add an alarm to the database.
 	 *
 	 * @param alarm    An alarm.
-	 * @param interact Whether the alarm should be interacted with by the card
-	 *                 holder via interact() or not.
+	 * @param onInsertListener Listener to call after the alarm is inserted and has an ID.
 	 */
-	private fun addAlarm(alarm: NacAlarm, interact: Boolean = true)
+	private fun addAlarm(
+		alarm: NacAlarm,
+		onInsertListener: () -> Unit = {})
 	{
 		lifecycleScope.launch {
 
 			// Insert alarm
 			alarmViewModel.insert(alarm) {
 
-				// Schedule the alarm
+				// Schedule the alarm and call the listener
 				NacScheduler.update(this@NacMainActivity, alarm)
-
-				// Check if the alarm card should be interacted with. This
-				// would essentially mean calling interact() on the alarm card
-				if (interact)
-				{
-					// Save the recently added alarm ID
-					recentlyAddedAlarmIds.add(alarm.id)
-				}
+				onInsertListener()
 
 			}
 
@@ -342,9 +347,8 @@ class NacMainActivity
 		alarm.minute = 0
 		alarm.name = getString(R.string.example_name)
 
-		// Add the alarm and avoid having interact() called for the alarm card,
-		// that way it does not get expanded and show the time dialog
-		addAlarm(alarm, interact = false)
+		// Add the alarm
+		addAlarm(alarm)
 	}
 
 	/**
@@ -358,8 +362,10 @@ class NacMainActivity
 		// Check if the alarm is not null
 		if (alarm != null)
 		{
-			// Add the alarm
-			addAlarm(alarm)
+			// Add the alarm. When it is added, it will be scrolled to and interacted with
+			addAlarm(alarm) {
+				recentlyAddedAlarmIds.add(alarm.id)
+			}
 		}
 	}
 
@@ -423,8 +429,13 @@ class NacMainActivity
 		// Create a copy of the alarm
 		val copiedAlarm = alarm.copy()
 
-		// Add the copied alarm
-		addAlarm(copiedAlarm)
+		// Add the copied alarm. When it is added, it will be interacted with but most
+		// likely will not be scrolled as it is probably already on screen. This is
+		// because the index of the copied alarm is right after the original alarm
+		addAlarm(copiedAlarm) {
+			recentlyAddedAlarmIds.add(copiedAlarm.id)
+			recentlyCopiedAlarmIds = Pair(alarm.id, copiedAlarm.id)
+		}
 
 		// Show the snackbar
 		val message = getString(R.string.message_alarm_copy)
@@ -1281,8 +1292,10 @@ class NacMainActivity
 			// Create the alarm
 			val alarm = NacAlarm.build(sharedPreferences)
 
-			// Add the alarm
-			addAlarm(alarm)
+			// Add the alarm. When it is added, it will be scrolled to and interacted with
+			addAlarm(alarm) {
+				recentlyAddedAlarmIds.add(alarm.id)
+			}
 		}
 	}
 
@@ -1410,7 +1423,8 @@ class NacMainActivity
 			else
 			{
 				// Merge the alarms but do not sort yet
-				alarmCardAdapterLiveData.merge(alarms)
+				alarmCardAdapterLiveData.merge(alarms, copiedIds = recentlyCopiedAlarmIds)
+
 			}
 
 			// Set the next alarm message
@@ -1435,12 +1449,18 @@ class NacMainActivity
 			{
 				// Find the index of the of first recently added alarm
 				val id = recentlyAddedAlarmIds.first()
-				val index = alarms.indexOfFirst { it.id == id }
+
+				// Clear the alarm IDs if there was a recently copied alarm
+				if (id == recentlyCopiedAlarmIds?.second)
+				{
+					recentlyCopiedAlarmIds = null
+				}
 
 				// Find the first and last currently visible indices
 				val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager
 				val firstIndex = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
 				val lastIndex = linearLayoutManager.findLastCompletelyVisibleItemPosition()
+				val index = alarms.indexOfFirst { it.id == id }
 
 				// Scroll down to that alarm card if it is not visible
 				if ((index < firstIndex) || (index > lastIndex))
@@ -1715,6 +1735,7 @@ class NacMainActivity
 					// Do nothing when the snackbar has not been shown yet
 					if (prevSnackbarY == 0f)
 					{
+						return true
 					}
 					// Snackbar is moving down
 					else if (prevSnackbarY < y)
@@ -1746,32 +1767,32 @@ class NacMainActivity
 			// This means the view has been measured and has a height, so the animation
 			// of the FAB can be started at the same time since now it is known how much
 			// to animate the FAB's Y position by
-			snackbar.view.addOnLayoutChangeListener(object: View.OnLayoutChangeListener
-			{
+			snackbar.view.addOnLayoutChangeListener { view, _, _, _, _, _, _, _, _ ->
 
 				/**
 				 * Called when the view layout has changed.
 				 */
-				override fun onLayoutChange(view: View,
-					left: Int, top: Int, right: Int, bottom: Int,
-					oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int)
+				// Get the height of the snackbar
+				val height = view.height.toFloat()
+
+				// Animate the FAB moving up
+				floatingActionButton.animate()
+					.apply {
+						translationY(-height)
+						duration = 250
+					}
+					.start()
+
+				// Snackbar was already being shown. Update the Y position to the
+				// snackbar's current Y position in case its height changed
+				if (prevSnackbarHeight > 0)
 				{
-					// Get the height of the snackbar
-					val height = snackbar.view.height.toFloat()
-
-					// Animate the FAB moving up
-					floatingActionButton.animate()
-						.apply {
-							translationY(-height)
-							duration = 250
-						}
-						.start()
-
-					// Remove the listener
-					view.removeOnLayoutChangeListener(this)
+					prevSnackbarY = view.y
 				}
 
-			})
+				// Update the previous snackbar height
+				prevSnackbarHeight = height
+			}
 
 			// Add the normal show/dismiss callback
 			snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>()
@@ -1797,6 +1818,7 @@ class NacMainActivity
 					// Reset the values of the FAB and snackbar
 					floatingActionButton.translationY = 0f
 					prevSnackbarY = 0f
+					prevSnackbarHeight = 0f
 				}
 
 			})

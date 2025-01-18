@@ -150,6 +150,9 @@
 	<string name="message_export_completed">Exportación completada</string>
 	<string name="message_import_completed">Importación completada</string>
 	<string name="message_selected_alarm_song_not_available">Canción elegida para alarma no disponible</string>
+	<string name="message_milliseconds">%1$d milisegundos</string>
+	<string name="message_text_to_speech_default_voice">Voz predeterminada</string>
+	<string name="message_text_to_speech_voice">Voz %1$d</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Incapaz de borrar una alarma activa</string>
@@ -177,6 +180,7 @@
 
 	<!-- Titles -->
 	<string name="title_settings">Configuración</string>
+	<string name="title_options">Opciones</string>
 	<string name="title_time">Hora</string>
 	<string name="title_alarm_activity">Desactivar Alarma</string>
 	<string name="title_scan_nfc_tag">Escanear una etiqueta NFC</string>
@@ -184,6 +188,7 @@
 	<string name="title_save_nfc_tag">Guardar la etiqueta NFC</string>
 	<string name="title_delete_nfc_tag">Eliminar la etiqueta NFC</string>
 	<string name="title_rename_nfc_tag">Cambiar el nombre de la etiqueta NFC</string>
+	<string name="title_current_selected">Seleccionado actualmente</string>
 	<string name="title_select_days">Seleccione los días</string>
 	<string name="title_select_color">Elige un color</string>
 	<string name="title_select_next_alarm_format">Selecciona un estilo</string>
@@ -208,6 +213,9 @@
 	<string name="title_permission_wakelock">Wakelock</string>
 	<string name="title_request_permission_schedule_exact_alarm">Habilitar alarmas programadas con precisión</string>
 	<string name="title_reset_statistics">reiniciar las estadísticas…</string>
+	<string name="title_vibrate_vibration_duration">Duración de la vibración</string>
+	<string name="title_vibrate_custom_pattern">Patrón personalizado</string>
+	<string name="title_vibrate_wait">Esperar</string>
 	<string name="title_flashlight_brightness_level">Nivel de brillo</string>
 	<string name="title_flashlight_blink_on_off">Parpadeo encendido/apagado</string>
 	<string name="title_text_to_speech_speak_frequency">Frecuencia de habla</string>
@@ -247,6 +255,7 @@
 	<string name="title_show_alarm_name">Muestra nombre de alarma</string>
 	<string name="title_show_current_date_and_time">Mostrar fecha y hora actuales</string>
 	<string name="title_show_music_info">Mostrar información musical</string>
+	<string name="title_battery_saver">Ahorrador de batería</string>
 	<string name="title_theme_color">Tema</string>
 	<string name="title_day_button_style">Botones de días</string>
 	<string name="title_start_week_on">Empieza la semana&#8230;</string>
@@ -268,6 +277,8 @@
 	<string name="description_day_button_style_filled">Botones rellenos</string>
 	<string name="description_day_button_style_outlined">Botones delineados</string>
 	<string name="description_media">Música o tono de llamada</string>
+	<string name="description_vibrate_vibration_duration">¿Cuánto tiempo hay que vibrar y cuánto tiempo hay que esperar entre vibraciones?</string>
+	<string name="description_vibrate_custom_pattern">Repita la duración de la vibración una cantidad determinada de veces y luego espere un tiempo.</string>
 	<string name="description_flashlight_brightness_level">Nivel de brillo de la linterna.</string>
 	<string name="description_flashlight_blink_on_off">Enciende y apaga la linterna durante períodos de tiempo establecidos.</string>
 	<string name="description_text_to_speech_what_to_say">Qué decir con texto a voz cuando la alarma está activa.</string>
@@ -310,6 +321,8 @@
 	<string name="description_alarm_screen_show_current_date_and_time_false">No mostrar la fecha y hora actuales.</string>
 	<string name="description_alarm_screen_show_music_info_true">Muestra información sobre la música o tono de llamada que se está reproduciendo actualmente en la pantalla de alarma.</string>
 	<string name="description_alarm_screen_show_music_info_false">No mostrar información de música o tono de llamada.</string>
+	<string name="description_alarm_screen_battery_saver_true">Ahorre batería manteniendo la pantalla apagada cuando haya una alarma activa. Será necesario encender la pantalla manualmente.</string>
+	<string name="description_alarm_screen_battery_saver_false">La pantalla se encenderá automáticamente cuando una alarma esté activa.</string>
 	<string name="description_color_theme">Color del tema.</string>
 	<string name="description_color_name">p.ej. Trabajo</string>
 	<string name="description_color_days">p.ej. Lun &#8231; Mar &#8231; Mie &#8231; Jue &#8231; Vie</string>
@@ -404,6 +417,12 @@
 		<item quantity="one">%d segundo</item>
 		<item quantity="many">%d segundos</item>
 		<item quantity="other">%d segundos</item>
+	</plurals>
+
+	<plurals name="unit_number_of_times">
+		<item quantity="one">%1$d tiempo</item>
+		<item quantity="many">%1$d veces</item>
+		<item quantity="other">%1$d veces</item>
 	</plurals>
 
 	<plurals name="tts_say_reminder">

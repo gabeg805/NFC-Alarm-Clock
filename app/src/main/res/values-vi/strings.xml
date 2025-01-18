@@ -150,6 +150,9 @@
 	<string name="message_export_completed">Xuất khẩu hoàn tất</string>
 	<string name="message_import_completed">Nhập khẩu hoàn tất</string>
 	<string name="message_selected_alarm_song_not_available">Bài hát đã chọn để báo thức không khả dụng</string>
+	<string name="message_milliseconds">%1$d giây</string>
+	<string name="message_text_to_speech_default_voice">Giọng nói mặc định</string>
+	<string name="message_text_to_speech_voice">Giọng nói %1$d</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Không thể xóa báo thức đang hoạt động</string>
@@ -177,6 +180,7 @@
 
 	<!-- Titles -->
 	<string name="title_settings">Cài đặt</string>
+	<string name="title_options">Tùy chọn</string>
 	<string name="title_time">Thời gian</string>
 	<string name="title_alarm_activity">Loại bỏ cảnh báo</string>
 	<string name="title_scan_nfc_tag">Quét thẻ NFC</string>
@@ -184,6 +188,7 @@
 	<string name="title_save_nfc_tag">Lưu thẻ NFC</string>
 	<string name="title_delete_nfc_tag">Xóa thẻ NFC</string>
 	<string name="title_rename_nfc_tag">Đổi tên thẻ NFC</string>
+	<string name="title_current_selected">Hiện tại đã chọn</string>
 	<string name="title_select_days">Chọn ngày</string>
 	<string name="title_select_color">Chọn một màu</string>
 	<string name="title_select_next_alarm_format">Chọn một định dạng</string>
@@ -208,6 +213,9 @@
 	<string name="title_permission_wakelock">Khóa sau</string>
 	<string name="title_request_permission_schedule_exact_alarm">Bật lịch báo thức chính xác</string>
 	<string name="title_reset_statistics">Đặt lại thống kê…</string>
+	<string name="title_vibrate_vibration_duration">Thời gian rung động</string>
+	<string name="title_vibrate_custom_pattern">Mẫu tùy chỉnh</string>
+	<string name="title_vibrate_wait">Chờ đợi</string>
 	<string name="title_flashlight_brightness_level">Mức độ sáng</string>
 	<string name="title_flashlight_blink_on_off">Nhấp nháy bật/tắt</string>
 	<string name="title_text_to_speech_speak_frequency">Tần suất nói</string>
@@ -247,6 +255,7 @@
 	<string name="title_show_alarm_name">Hiển thị tên cảnh báo</string>
 	<string name="title_show_current_date_and_time">Hiển thị ngày và giờ hiện tại</string>
 	<string name="title_show_music_info">Hiển thị thông tin âm nhạc</string>
+	<string name="title_battery_saver">Tiết kiệm pin</string>
 	<string name="title_theme_color">Chủ đề</string>
 	<string name="title_day_button_style">Nút ngày</string>
 	<string name="title_start_week_on">Bắt đầu tuần vào&#8230;</string>
@@ -268,6 +277,8 @@
 	<string name="description_day_button_style_filled">Các nút điền đầy đủ.</string>
 	<string name="description_day_button_style_outlined">Các nút được phác thảo.</string>
 	<string name="description_media">Nhạc hoặc nhạc chuông</string>
+	<string name="description_vibrate_vibration_duration">Rung trong bao lâu và chờ bao lâu giữa các lần rung.</string>
+	<string name="description_vibrate_custom_pattern">Lặp lại thời lượng rung động theo số lần nhất định, sau đó đợi trong khoảng thời gian đó.</string>
 	<string name="description_flashlight_brightness_level">Mức độ sáng của đèn pin.</string>
 	<string name="description_flashlight_blink_on_off">Nhấp nháy đèn pin theo khoảng thời gian đã cài đặt.</string>
 	<string name="description_text_to_speech_what_to_say">Nói gì với tính năng chuyển văn bản thành giọng nói khi báo thức đang hoạt động.</string>
@@ -310,6 +321,8 @@
 	<string name="description_alarm_screen_show_current_date_and_time_false">Không hiển thị ngày và giờ hiện tại.</string>
 	<string name="description_alarm_screen_show_music_info_true">Hiển thị thông tin về nhạc hoặc nhạc chuông hiện đang phát trên màn hình báo thức.</string>
 	<string name="description_alarm_screen_show_music_info_false">Không hiển thị thông tin nhạc hoặc nhạc chuông.</string>
+	<string name="description_alarm_screen_battery_saver_true">Tiết kiệm pin bằng cách tắt màn hình khi báo thức đang hoạt động. Màn hình sẽ cần được bật thủ công.</string>
+	<string name="description_alarm_screen_battery_saver_false">Màn hình sẽ tự động bật khi có báo thức.</string>
 	<string name="description_color_theme">Màu chủ đề.</string>
 	<string name="description_color_name">ví dụ. Công việc</string>
 	<string name="description_color_days">ví dụ. T2 &#8231; T3 &#8231; T4 &#8231; T5 &#8231; T6</string>
@@ -392,6 +405,10 @@
 
 	<plurals name="unit_second">
 		<item quantity="other">%d giây</item>
+	</plurals>
+
+	<plurals name="unit_number_of_times">
+		<item quantity="other">%1$d lần</item>
 	</plurals>
 
 	<plurals name="tts_say_reminder">

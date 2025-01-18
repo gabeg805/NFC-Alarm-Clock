@@ -150,6 +150,9 @@
 	<string name="message_export_completed">রপ্তানি সম্পন্ন হয়েছে</string>
 	<string name="message_import_completed">আমদানি সম্পন্ন হয়েছে</string>
 	<string name="message_selected_alarm_song_not_available">অ্যালার্মের জন্য নির্বাচিত গান উপলব্ধ নেই৷</string>
+	<string name="message_milliseconds">%1$d ms</string>
+	<string name="message_text_to_speech_default_voice">ডিফল্ট ভয়েস</string>
+	<string name="message_text_to_speech_voice">ভয়েস %1$d</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">একটি সক্রিয় অ্যালার্ম মুছতে অক্ষম৷</string>
@@ -178,12 +181,14 @@
 	<!-- Titles -->
 	<string name="title_settings">সেটিংস</string>
 	<string name="title_time">সময়</string>
+	<string name="title_options">অপশন</string>
 	<string name="title_alarm_activity">অ্যালার্ম খারিজ করুন</string>
 	<string name="title_scan_nfc_tag">NFC ট্যাগ স্ক্যান করুন</string>
 	<string name="title_select_nfc_tag">NFC ট্যাগ নির্বাচন করুন</string>
 	<string name="title_save_nfc_tag">NFC ট্যাগ সংরক্ষণ করুন</string>
 	<string name="title_delete_nfc_tag">NFC ট্যাগ মুছুন</string>
 	<string name="title_rename_nfc_tag">NFC ট্যাগের নাম পরিবর্তন করুন</string>
+	<string name="title_current_selected">বর্তমান নির্বাচিত</string>
 	<string name="title_select_days">দিন নির্বাচন করুন</string>
 	<string name="title_select_color">একটি রং নির্বাচন করুন</string>
 	<string name="title_select_next_alarm_format">একটি বিন্যাস নির্বাচন করুন</string>
@@ -208,6 +213,9 @@
 	<string name="title_permission_wakelock">ওয়েকলক</string>
 	<string name="title_request_permission_schedule_exact_alarm">সময়সূচী সঠিক অ্যালার্ম সক্ষম করুন</string>
 	<string name="title_reset_statistics">পরিসংখ্যান রিসেট করুন…</string>
+	<string name="title_vibrate_vibration_duration">কম্পন সময়কাল</string>
+	<string name="title_vibrate_custom_pattern">কাস্টম প্যাটার্ন</string>
+	<string name="title_vibrate_wait">অপেক্ষা করুন</string>
 	<string name="title_flashlight_brightness_level">উজ্জ্বলতা স্তর</string>
 	<string name="title_flashlight_blink_on_off">ব্লিঙ্ক অন/অফ</string>
 	<string name="title_text_to_speech_speak_frequency">ফ্রিকোয়েন্সি কথা বলুন</string>
@@ -247,6 +255,7 @@
 	<string name="title_show_alarm_name">অ্যালার্মের নাম দেখান</string>
 	<string name="title_show_current_date_and_time">বর্তমান তারিখ এবং সময় দেখান</string>
 	<string name="title_show_music_info">সঙ্গীত তথ্য দেখান</string>
+	<string name="title_battery_saver">ব্যাটারি সেভার</string>
 	<string name="title_theme_color">থিম</string>
 	<string name="title_day_button_style">দিনের বোতাম</string>
 	<string name="title_start_week_on">সপ্তাহ শুরু করুন&#8230;</string>
@@ -268,6 +277,8 @@
 	<string name="description_day_button_style_filled">ভরাট-ইন বোতাম।</string>
 	<string name="description_day_button_style_outlined">আউটলাইন করা বোতাম।</string>
 	<string name="description_media">সঙ্গীত বা রিংটোন</string>
+	<string name="description_vibrate_vibration_duration">কতক্ষণ কম্পন করতে হবে এবং কম্পনের মধ্যে কতক্ষণ অপেক্ষা করতে হবে।</string>
+	<string name="description_vibrate_custom_pattern">কম্পনের সময়কাল নির্দিষ্ট সংখ্যক বার পুনরাবৃত্তি করুন, এবং তারপর একটি সময়কালের জন্য অপেক্ষা করুন।</string>
 	<string name="description_flashlight_brightness_level">ফ্ল্যাশলাইটের উজ্জ্বলতার মাত্রা।</string>
 	<string name="description_flashlight_blink_on_off">ফ্ল্যাশলাইটটি ব্লিঙ্ক করুন এবং নির্দিষ্ট সময়ে বন্ধ করুন।</string>
 	<string name="description_text_to_speech_what_to_say">অ্যালার্ম সক্রিয় থাকলে টেক্সট-টু-স্পিচ দিয়ে কী বলতে হবে।</string>
@@ -310,6 +321,8 @@
 	<string name="description_alarm_screen_show_current_date_and_time_false">বর্তমান তারিখ এবং সময় দেখাবেন না।</string>
 	<string name="description_alarm_screen_show_music_info_true">অ্যালার্ম স্ক্রিনে বর্তমানে বাজানো মিউজিক বা রিংটোনের তথ্য দেখান।</string>
 	<string name="description_alarm_screen_show_music_info_false">সঙ্গীত বা রিংটোন তথ্য প্রদর্শন করবেন না.</string>
+	<string name="description_alarm_screen_battery_saver_true">অ্যালার্ম সক্রিয় থাকলে স্ক্রিন বন্ধ রেখে ব্যাটারি বাঁচান। স্ক্রিনটি ম্যানুয়ালি চালু করতে হবে।</string>
+	<string name="description_alarm_screen_battery_saver_false">একটি অ্যালার্ম সক্রিয় হলে স্ক্রীন স্বয়ংক্রিয়ভাবে চালু হবে।</string>
 	<string name="description_color_theme">থিমের রঙ।</string>
 	<string name="description_color_name">যেমন কাজ</string>
 	<string name="description_color_days">যেমন সোম &#8231; মঙ্গলবার &#8231; বুধ &#8231; বৃহস্পতিবার &#8231; শুক্র</string>
@@ -398,6 +411,11 @@
 	<plurals name="unit_second">
 		<item quantity="one">%d দ্বিতীয়</item>
 		<item quantity="other">%d সেকেন্ড</item>
+	</plurals>
+
+	<plurals name="unit_number_of_times">
+		<item quantity="one">%1$d বার</item>
+		<item quantity="other">%1$d বার</item>
 	</plurals>
 
 	<plurals name="tts_say_reminder">
