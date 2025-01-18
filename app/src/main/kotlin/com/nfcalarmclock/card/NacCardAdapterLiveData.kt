@@ -101,13 +101,33 @@ class NacCardAdapterLiveData
 	/**
 	 * Merge the current alarms with a new set of alarms.
 	 */
-	fun merge(alarms: List<NacAlarm>?)
+	fun merge(alarms: List<NacAlarm>?, copiedIds: Pair<Long, Long>? = null)
 	{
 		// Get the current alarms
 		val currentAlarms = value
 
 		// Merge the current alarms with the new alarms
-		val mergedAlarms = calculateMerge(currentAlarms, alarms)
+		var mergedAlarms = calculateMerge(currentAlarms, alarms)
+
+		// Check if an alarm was copied
+		if (copiedIds != null)
+		{
+			// Get the indices of the original and output alarm
+			val origIndex = mergedAlarms.indexOfFirst { it.id == copiedIds.first }
+			val outputIndex = mergedAlarms.indexOfFirst { it.id == copiedIds.second }
+
+			// Check if the indices are valid
+			if ((origIndex > 0) && (outputIndex > 0))
+			{
+				// Change the index of the copied alarm from the end of the list, to the
+				// index right after the original alarm
+				val newList = mergedAlarms.toMutableList()
+				val outputAlarm = newList.removeAt(outputIndex)
+
+				newList.add(origIndex+1, outputAlarm)
+				mergedAlarms = newList
+			}
+		}
 
 		// Set the merged alarms as the current alarms
 		value = mergedAlarms

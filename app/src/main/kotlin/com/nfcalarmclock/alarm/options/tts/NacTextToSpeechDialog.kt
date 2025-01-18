@@ -292,20 +292,31 @@ class NacTextToSpeechDialog
 				.takeIf { it >= 0 } ?: 0
 
 			// Get the items to use in the dropdown
-			val size = if (allVoices.isNotEmpty()) allVoices.size else 1
-			val simpleItems = List(size) { i ->
-				if (i == 0)
-				{
-					context.getString(R.string.message_text_to_speech_default_voice)
+			val simpleItems = if (allVoices.isNotEmpty())
+			{
+				// Create a list of all the voices
+				List(allVoices.size) { i ->
+
+					// Make the first index the default voice
+					if (i == 0)
+					{
+						context.getString(R.string.message_text_to_speech_default_voice)
+					}
+					// Every other voice is "Voice #"
+					else
+					{
+						context.getString(R.string.message_text_to_speech_voice, i+1)
+					}
 				}
-				else
-				{
-					context.getString(R.string.message_text_to_speech_voice, i+1)
-				}
-			}.toTypedArray()
+			}
+			else
+			{
+				// Make a list with one item: "None"
+				listOf(context.getString(R.string.none))
+			}
 
 			// Setup the voices
-			ttsVoiceAutoCompleteTextView.setSimpleItems(simpleItems)
+			ttsVoiceAutoCompleteTextView.setSimpleItems(simpleItems.toTypedArray())
 			ttsVoiceAutoCompleteTextView.setText(simpleItems[selectedTtsVoiceIndex], false)
 
 		}

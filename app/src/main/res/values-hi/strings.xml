@@ -150,6 +150,9 @@
 	<string name="message_export_completed">निर्यात पूर्ण हुआ</string>
 	<string name="message_import_completed">आयात पूर्ण हुआ</string>
 	<string name="message_selected_alarm_song_not_available">अलार्म के लिए चुना गया गाना उपलब्ध नहीं है</string>
+	<string name="message_milliseconds">%1$d मि.से.</string>
+	<string name="message_text_to_speech_default_voice">डिफ़ॉल्ट आवाज़</string>
+	<string name="message_text_to_speech_voice">आवाज़ %1$d</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">सक्रिय अलार्म को हटाने में असमर्थ</string>
@@ -177,6 +180,7 @@
 
 	<!-- Titles -->
 	<string name="title_settings">सेटिंग्स</string>
+	<string name="title_options">विकल्प</string>
 	<string name="title_time">समय</string>
 	<string name="title_alarm_activity">अलार्म ख़ारिज करें</string>
 	<string name="title_scan_nfc_tag">NFC टैग स्कैन करें</string>
@@ -184,6 +188,7 @@
 	<string name="title_save_nfc_tag">NFC टैग सहेजें</string>
 	<string name="title_delete_nfc_tag">NFC टैग हटाएं</string>
 	<string name="title_rename_nfc_tag">NFC टैग का नाम बदलें</string>
+	<string name="title_current_selected">वर्तमान चयनित</string>
 	<string name="title_select_days">दिन चुनें</string>
 	<string name="title_select_color">एक रंग चुनें</string>
 	<string name="title_select_next_alarm_format">एक प्रारूप चुनें</string>
@@ -208,6 +213,9 @@
 	<string name="title_permission_wakelock">जागा ताला</string>
 	<string name="title_request_permission_schedule_exact_alarm">सटीक अलार्म शेड्यूल करना सक्षम करें</string>
 	<string name="title_reset_statistics">सांख्यिकीय को रीसेट करें…</string>
+	<string name="title_vibrate_vibration_duration">कंपन अवधि</string>
+	<string name="title_vibrate_custom_pattern">कस्टम पैटर्न</string>
+	<string name="title_vibrate_wait">इंतज़ार</string>
 	<string name="title_flashlight_brightness_level">चमक स्तर</string>
 	<string name="title_flashlight_blink_on_off">ब्लिंक ऑन/ऑफ</string>
 	<string name="title_text_to_speech_speak_frequency">बोलने की आवृत्ति</string>
@@ -247,6 +255,7 @@
 	<string name="title_show_alarm_name">अलार्म का नाम दिखाएं</string>
 	<string name="title_show_current_date_and_time">वर्तमान दिनांक और समय दिखाएँ</string>
 	<string name="title_show_music_info">संगीत जानकारी दिखाएं</string>
+	<string name="title_battery_saver">बैटरी बचाने वाला</string>
 	<string name="title_theme_color">विषय</string>
 	<string name="title_day_button_style">दिन बटन</string>
 	<string name="title_start_week_on">सप्ताह की शुरुआत&#8230;</string>
@@ -268,6 +277,8 @@
 	<string name="description_day_button_style_filled">भरे हुए बटन.</string>
 	<string name="description_day_button_style_outlined">रेखांकित बटन.</string>
 	<string name="description_media">संगीत या रिंगटोन</string>
+	<string name="description_vibrate_vibration_duration">कितनी देर तक कंपन करना है, तथा कंपनों के बीच कितनी देर तक प्रतीक्षा करनी है।</string>
+	<string name="description_vibrate_custom_pattern">कंपन अवधि को एक निश्चित संख्या में बार दोहराएं, और फिर एक निश्चित अवधि तक प्रतीक्षा करें।</string>
 	<string name="description_flashlight_brightness_level">टॉर्च की चमक का स्तर.</string>
 	<string name="description_flashlight_blink_on_off">टॉर्च को निर्धारित समय पर चालू और बंद करें।</string>
 	<string name="description_text_to_speech_what_to_say">अलार्म सक्रिय होने पर टेक्स्ट-टू-स्पीच के माध्यम से क्या कहना है।</string>
@@ -310,6 +321,8 @@
 	<string name="description_alarm_screen_show_current_date_and_time_false">वर्तमान दिनांक और समय न दिखाएं.</string>
 	<string name="description_alarm_screen_show_music_info_true">अलार्म स्क्रीन पर वर्तमान में चल रहे संगीत या रिंगटोन की जानकारी दिखाएं।</string>
 	<string name="description_alarm_screen_show_music_info_false">संगीत या रिंगटोन की जानकारी न दिखाएं.</string>
+	<string name="description_alarm_screen_battery_saver_true">अलार्म चालू होने पर स्क्रीन को बंद रखकर बैटरी बचाएं। स्क्रीन को मैन्युअल रूप से चालू करना होगा।</string>
+	<string name="description_alarm_screen_battery_saver_false">अलार्म सक्रिय होने पर स्क्रीन स्वचालित रूप से चालू हो जाएगी।</string>
 	<string name="description_color_theme">थीम रंग.</string>
 	<string name="description_color_name">जैसे काम</string>
 	<string name="description_color_days">जैसे सोम &#8231; मंगल &#8231; बुध &#8231; गुरु &#8231; शुक्र</string>
@@ -398,6 +411,11 @@
 	<plurals name="unit_second">
 		<item quantity="one">%d दूसरा</item>
 		<item quantity="other">%d सेकंड</item>
+	</plurals>
+
+	<plurals name="unit_number_of_times">
+		<item quantity="one">%1$d समय</item>
+		<item quantity="other">%1$d बार</item>
 	</plurals>
 
 	<plurals name="tts_say_reminder">

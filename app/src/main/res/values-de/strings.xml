@@ -150,6 +150,9 @@
 	<string name="message_export_completed">Export abgeschlossen</string>
 	<string name="message_import_completed">Import abgeschlossen</string>
 	<string name="message_selected_alarm_song_not_available">Ausgewähltes Lied für den Wecker nicht verfügbar</string>
+	<string name="message_milliseconds">%1$d ms</string>
+	<string name="message_text_to_speech_default_voice">Standardstimme</string>
+	<string name="message_text_to_speech_voice">Stimme %1$d</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Ein aktiver Alarm kann nicht gelöscht werden</string>
@@ -177,6 +180,7 @@
 
 	<!-- Titles -->
 	<string name="title_settings">Einstellungen</string>
+	<string name="title_options">Optionen</string>
 	<string name="title_time">Zeit</string>
 	<string name="title_alarm_activity">Alarm schließen</string>
 	<string name="title_scan_nfc_tag">NFC-Tag scannen</string>
@@ -184,6 +188,7 @@
 	<string name="title_save_nfc_tag">NFC-Tag speichern</string>
 	<string name="title_delete_nfc_tag">NFC-Tag löschen</string>
 	<string name="title_rename_nfc_tag">NFC-Tag umbenennen</string>
+	<string name="title_current_selected">Aktuell ausgewählt</string>
 	<string name="title_select_days">Tage auswählen</string>
 	<string name="title_select_color">Wählen Sie eine Farbe</string>
 	<string name="title_select_next_alarm_format">Wählen Sie ein Format</string>
@@ -208,6 +213,9 @@
 	<string name="title_permission_wakelock">Wakelock</string>
 	<string name="title_request_permission_schedule_exact_alarm">Genaue Alarmplanung aktivieren</string>
 	<string name="title_reset_statistics">Statistiken zurücksetzen…</string>
+	<string name="title_vibrate_vibration_duration">Schwingungsdauer</string>
+	<string name="title_vibrate_custom_pattern">Benutzerdefiniertes Muster</string>
+	<string name="title_vibrate_wait">Warten</string>
 	<string name="title_flashlight_brightness_level">Helligkeitsstufe</string>
 	<string name="title_flashlight_blink_on_off">Blinken ein/aus</string>
 	<string name="title_text_to_speech_speak_frequency">Sprechfrequenz</string>
@@ -247,6 +255,7 @@
 	<string name="title_show_alarm_name">Alarmnamen anzeigen</string>
 	<string name="title_show_current_date_and_time">Aktuelles Datum und Uhrzeit anzeigen</string>
 	<string name="title_show_music_info">Musikinformationen anzeigen</string>
+	<string name="title_battery_saver">Batteriesparmodus</string>
 	<string name="title_theme_color">Thema</string>
 	<string name="title_day_button_style">Tagestasten</string>
 	<string name="title_start_week_on">Beginnen Sie die Woche am&#8230;</string>
@@ -268,6 +277,8 @@
 	<string name="description_day_button_style_filled">Ausgefüllte Schaltflächen.</string>
 	<string name="description_day_button_style_outlined">Umrandete Schaltflächen.</string>
 	<string name="description_media">Musik oder Klingelton</string>
+	<string name="description_vibrate_vibration_duration">Wie lange vibrieren soll und wie lange zwischen den Vibrationen gewartet werden soll.</string>
+	<string name="description_vibrate_custom_pattern">Wiederholen Sie die Vibrationsdauer eine festgelegte Anzahl von Malen und warten Sie dann eine Weile.</string>
 	<string name="description_flashlight_brightness_level">Helligkeitsstufe der Taschenlampe.</string>
 	<string name="description_flashlight_blink_on_off">Lassen Sie die Taschenlampe in festgelegten Zeitabständen blinken und aus.</string>
 	<string name="description_text_to_speech_what_to_say">Was mit der Text-to-Speech-Funktion gesagt werden soll, wenn der Alarm aktiv ist.</string>
@@ -310,6 +321,8 @@
 	<string name="description_alarm_screen_show_current_date_and_time_false">Aktuelles Datum und Uhrzeit nicht anzeigen.</string>
 	<string name="description_alarm_screen_show_music_info_true">Zeigen Sie im Alarmbildschirm Informationen zur aktuell abgespielten Musik oder zum Klingelton an.</string>
 	<string name="description_alarm_screen_show_music_info_false">Keine Musik- oder Klingeltoninformationen anzeigen.</string>
+	<string name="description_alarm_screen_battery_saver_true">Sparen Sie Akku, indem Sie den Bildschirm ausgeschaltet lassen, wenn ein Alarm aktiv ist. Der Bildschirm muss manuell eingeschaltet werden.</string>
+	<string name="description_alarm_screen_battery_saver_false">Der Bildschirm wird automatisch eingeschaltet, wenn ein Alarm aktiv ist.</string>
 	<string name="description_color_theme">Die Themenfarbe.</string>
 	<string name="description_color_name">z.B. Arbeit</string>
 	<string name="description_color_days">z.B. Mo &#8231; Di &#8231; Mi &#8231; Do &#8231; Fr</string>
@@ -398,6 +411,11 @@
 	<plurals name="unit_second">
 		<item quantity="one">%d Sekunde</item>
 		<item quantity="other">%d Sekunden</item>
+	</plurals>
+
+	<plurals name="unit_number_of_times">
+		<item quantity="one">%1$d Zeit</item>
+		<item quantity="other">%1$d mal</item>
 	</plurals>
 
 	<plurals name="tts_say_reminder">
