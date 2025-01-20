@@ -4,6 +4,7 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.Voice
 import android.widget.AdapterView
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -16,6 +17,9 @@ import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.setTextFromIndex
 import com.nfcalarmclock.view.setupCheckBoxColor
 import com.nfcalarmclock.view.setupInputLayoutColor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Locale
 
 /**
@@ -261,7 +265,12 @@ class NacTextToSpeechDialog
 			 */
 			override fun onDoneSpeaking()
 			{
-				setPreviewText(true)
+				lifecycleScope.launch {
+					withContext(Dispatchers.Main)
+					{
+						setPreviewText(true)
+					}
+				}
 			}
 
 			/**
