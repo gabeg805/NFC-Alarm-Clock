@@ -1,5 +1,6 @@
 package com.nfcalarmclock.alarm.options.nfc
 
+import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -103,7 +104,7 @@ class NacSaveNfcTagDialog
 		}
 
 		// Setup the views
-		setupEditText()
+		setupEditText(alarm)
 	}
 
 	/**
@@ -124,7 +125,7 @@ class NacSaveNfcTagDialog
 	/**
 	 * Setup the edit text.
 	 */
-	private fun setupEditText()
+	private fun setupEditText(alarm: NacAlarm?)
 	{
 		// Get the views
 		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
@@ -134,7 +135,7 @@ class NacSaveNfcTagDialog
 		// Setup the input layout
 		inputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 
-		// Setup the edit view
+		// Text change listener
 		editText.addTextChangedListener{
 
 			// Make sure the editable is valid and has text
@@ -149,6 +150,21 @@ class NacSaveNfcTagDialog
 				okButton.isEnabled = false
 				okButton.alpha = calcAlpha(false)
 			}
+		}
+
+		// Keyboard IME action listener
+		editText.setOnEditorActionListener { _, id, _ ->
+
+			// Act as if the Ok button was clicked when the Go button in the keyboard is
+			// pressed
+			when (id)
+			{
+				EditorInfo.IME_ACTION_GO -> { onPrimaryButtonClicked(alarm) }
+				else -> {}
+			}
+
+			return@setOnEditorActionListener false
+
 		}
 	}
 

@@ -20,6 +20,7 @@ import com.nfcalarmclock.view.setupInputLayoutColor
  * Generic alarm options dialog.
  */
 abstract class NacGenericAlarmOptionsDialog
+
 	: NacBottomSheetDialogFragment()
 {
 
@@ -52,26 +53,10 @@ abstract class NacGenericAlarmOptionsDialog
 	abstract fun onOkClicked(alarm: NacAlarm?)
 
 	/**
-	 * Setup any extra buttons.
-	 */
-	open fun setupExtraButtons(alarm: NacAlarm?)
-	{
-	}
-
-	/**
 	 * Called when the cancel button is clicked.
 	 */
 	open fun onCancelClicked(alarm: NacAlarm?)
 	{
-	}
-
-	/**
-	 * Called when the alarm should be saved.
-	 */
-	open fun onSaveAlarm(alarm: NacAlarm?)
-	{
-		// Save the change so that it is accessible in the previous dialog
-		findNavController().previousBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
 	}
 
 	/**
@@ -84,6 +69,58 @@ abstract class NacGenericAlarmOptionsDialog
 	): View?
 	{
 		return inflater.inflate(layoutId, container, false)
+	}
+
+	/**
+	 * Called when the primary button is clicked.
+	 */
+	open fun onPrimaryButtonClicked(alarm: NacAlarm?)
+	{
+		try
+		{
+			// Call the ok clicked function
+			onOkClicked(alarm)
+		}
+		catch (_: IllegalStateException)
+		{
+			// Stop on exception
+			return
+		}
+
+		// Save the alarm
+		onSaveAlarm(alarm)
+
+		// Dismiss the dialog
+		dismiss()
+	}
+
+	/**
+	 * Called when the alarm should be saved.
+	 */
+	open fun onSaveAlarm(alarm: NacAlarm?)
+	{
+		// Save the change so that it is accessible in the previous dialog
+		findNavController().previousBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
+	}
+
+	/**
+	 * Called when the secondary button is clicked.
+	 */
+	open fun onSecondaryButtonClicked(alarm: NacAlarm?)
+	{
+		try
+		{
+			// Call the cancel clicked function
+			onCancelClicked(alarm)
+		}
+		catch (_: IllegalStateException)
+		{
+			// Stop on exception
+			return
+		}
+
+		// Dismiss the dialog
+		dismiss()
 	}
 
 	/**
@@ -115,23 +152,14 @@ abstract class NacGenericAlarmOptionsDialog
 		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
 
 		// Setup the cancel button
-		setupSecondaryButton(cancelButton, listener = {
+		setupSecondaryButton(cancelButton, listener = { onSecondaryButtonClicked(alarm) })
+	}
 
-			try
-			{
-				// Call the cancel clicked function
-				onCancelClicked(alarm)
-			}
-			catch (_: IllegalStateException)
-			{
-				// Stop on exception
-				return@setupSecondaryButton
-			}
-
-			// Dismiss the dialog
-			dismiss()
-
-		})
+	/**
+	 * Setup any extra buttons.
+	 */
+	open fun setupExtraButtons(alarm: NacAlarm?)
+	{
 	}
 
 	/**
@@ -227,26 +255,7 @@ abstract class NacGenericAlarmOptionsDialog
 		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
 
 		// Setup the ok button
-		setupPrimaryButton(okButton, listener = {
-
-			try
-			{
-				// Call the ok clicked function
-				onOkClicked(alarm)
-			}
-			catch (_: IllegalStateException)
-			{
-				// Stop on exception
-				return@setupPrimaryButton
-			}
-
-			// Save the alarm
-			onSaveAlarm(alarm)
-
-			// Dismiss the dialog
-			dismiss()
-
-		})
+		setupPrimaryButton(okButton, listener = { onPrimaryButtonClicked(alarm) })
 	}
 
 }
