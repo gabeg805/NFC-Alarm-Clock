@@ -3,7 +3,6 @@ package com.nfcalarmclock.view.dayofweek
 import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
-import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
@@ -120,22 +119,6 @@ class NacDayOfWeekPreference @JvmOverloads constructor(
 			dayOfWeekValue = defaultValue as Int
 			persistInt(dayOfWeekValue)
 		}
-	}
-
-	/**
-	 * Show the start week on dialog.
-	 */
-	fun showDialog(manager: FragmentManager)
-	{
-		// Create the dialog
-		val dialog = NacDayOfWeekDialog()
-
-		// Setup the dialog
-		dialog.defaultDayOfWeekValues = dayOfWeekValue
-		dialog.onDaysOfWeekSelectedListener = this
-
-		// Show the dialog
-		dialog.show(manager, NacDayOfWeekDialog.TAG)
 	}
 
 }

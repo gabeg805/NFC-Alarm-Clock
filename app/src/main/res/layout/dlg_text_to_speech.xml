@@ -85,7 +85,7 @@
 		android:id="@+id/tts_voice_title"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="Voice"
+		android:text="@string/title_text_to_speech_voice"
 		/>
 
 	<!-- Voice description -->
@@ -94,7 +94,7 @@
 		android:id="@+id/tts_voice_description"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="The voice to use for text-to-speech."
+		android:text="@string/description_text_to_speech_voice"
 		/>
 
 	<!-- Pick how often to say the selected thing(s) above -->

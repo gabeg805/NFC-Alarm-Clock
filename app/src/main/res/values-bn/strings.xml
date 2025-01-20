@@ -104,15 +104,16 @@
 	<string name="message_permission_schedule_exact_alarm_request">নির্ধারিত সময়ে অ্যালার্মগুলি সঠিকভাবে চালানোর জন্য।</string>
 	<string name="message_playlist">আপনি কি এই ফোল্ডারে সমস্ত সঙ্গীত চালাতে চান?</string>
 	<string name="message_nfc_request">অ্যালার্ম খারিজ করতে অনুগ্রহ করে NFC সক্ষম করুন৷</string>
-	<string name="message_nfc_required">NFC প্রয়োজন</string>
 	<string name="message_nfc_optional">NFC ঐচ্ছিক</string>
+	<string name="message_nfc_required_unsaved">NFC প্রয়োজন</string>
+	<string name="message_nfc_required_saved">NFC প্রয়োজন — %1$s</string>
+	<string name="message_nfc_required_use_any">NFC প্রয়োজন (যেকোনো ব্যবহার করুন)</string>
+	<string name="message_show_nfc_tag_id">আইডি:</string>
 	<string name="message_scan_nfc_tag">স্ক্যান করা NFC ট্যাগ এই অ্যালার্মটি বন্ধ হয়ে গেলে খারিজ করার জন্য প্রয়োজন হবে৷</string>
 	<string name="message_select_nfc_tag">এই অ্যালার্মটি বন্ধ হয়ে গেলে খারিজ করার জন্য নির্বাচিত NFC ট্যাগের প্রয়োজন হবে৷</string>
 	<string name="message_save_nfc_tag">আপনি এই এনএফসি ট্যাগটিকে আবার স্ক্যান না করেই একটি নাম দিয়ে পুনরায় ব্যবহার করতে পারেন৷</string>
 	<string name="message_delete_nfc_tag">আপনি কি এই NFC ট্যাগটি মুছতে চান?</string>
 	<string name="message_rename_nfc_tag">আপনি NFC ট্যাগের নাম পরিবর্তন করতে চান কি?</string>
-	<string name="message_show_nfc_tag_id">আইডি:</string>
-	<string name="message_any_nfc_tag_id">যেকোনো NFC ট্যাগ গৃহীত</string>
 	<string name="message_flashlight_on_duration">চালু:</string>
 	<string name="message_flashlight_off_duration">বন্ধ:</string>
 	<string name="message_no_alarms_scheduled">কোনো অ্যালার্ম নির্ধারিত নেই।</string>
@@ -219,6 +220,7 @@
 	<string name="title_flashlight_brightness_level">উজ্জ্বলতা স্তর</string>
 	<string name="title_flashlight_blink_on_off">ব্লিঙ্ক অন/অফ</string>
 	<string name="title_text_to_speech_speak_frequency">ফ্রিকোয়েন্সি কথা বলুন</string>
+	<string name="title_text_to_speech_voice">ভয়েস</string>
 	<string name="title_volume_gradually_increase_volume">ধীরে ধীরে ভলিউম বাড়ান</string>
 	<string name="title_volume_restrict_volume">ভলিউম সীমাবদ্ধ করুন</string>
 	<string name="title_dismiss_options_auto_dismiss">স্বতঃ-খারিজ</string>
@@ -354,6 +356,8 @@
 	<string name="description_permission_boot">আপনার ডিভাইস চালু হলে অ্যালার্ম পুনরুদ্ধার করুন।  আপনার ডিভাইস বন্ধ হয়ে গেলে Android অ্যালার্ম মুছে দেবে।</string>
 	<string name="description_permission_wakelock">আপনার ডিভাইসটিকে ঘুম থেকে বিরত রাখুন যাতে একটি সক্রিয় অ্যালার্ম বন্ধ হতে থাকে।</string>
 	<string name="description_audio_sources">অ্যালার্ম বাজানোর জন্য অডিও চ্যানেল।</string>
+	<string name="description_widget_alarm_example">পূর্বরূপ দেখানো অ্যালার্ম শুধুমাত্র একটি উদাহরণ.</string>
+	<string name="description_text_to_speech_voice">টেক্সট-টু-স্পিচের জন্য ব্যবহার করা ভয়েস।</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">অ্যালার্মের তালিকা এখানে দেখানো হবে।</string>

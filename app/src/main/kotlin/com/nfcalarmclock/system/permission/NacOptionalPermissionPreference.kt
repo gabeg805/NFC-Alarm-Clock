@@ -11,30 +11,26 @@ import java.util.Locale
 /**
  * A preference that is used to display optional permissions.
  */
-class NacOptionalPermissionPreference
-	: Preference
+class NacOptionalPermissionPreference @JvmOverloads constructor(
+
+	/**
+	 * Context.
+	 */
+	context: Context,
+
+	/**
+	 * Attribute set.
+	 */
+	attrs: AttributeSet? = null,
+
+	/**
+	 * Default style.
+	 */
+	style: Int = 0
+
+	// Constructor
+) : Preference(context, attrs, style)
 {
-
-	/**
-	 * Constructor.
-	 */
-	constructor(context: Context) : super(context)
-	{
-	}
-
-	/**
-	 * Constructor.
-	 */
-	constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
-	{
-	}
-
-	/**
-	 * Constructor.
-	 */
-	constructor(context: Context, attrs: AttributeSet?, style: Int) : super(context, attrs, style)
-	{
-	}
 
 	/**
 	 * Constructor.
