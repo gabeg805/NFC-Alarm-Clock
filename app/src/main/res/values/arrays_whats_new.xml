@@ -5,10 +5,10 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
-		<item>Changed the look of the alarm card.</item>
-		<item>Added vibrate option for alarms.</item>
-		<item>Added battery saver option to keep the screen off when an alarm is active.</item>
-		<item>Added text-to-speech option to choose which voice to use.</item>
+		<item>Updated &lt;b>alarm card&lt;/b> look to show buttons for dismiss options, snooze options, and regular alarm options.</item>
+		<item>Added &lt;b>custom vibration pattern&lt;/b> option for alarms.</item>
+		<item>Added &lt;b>battery saver&lt;/b> option to keep the screen off when an alarm is active. Found in Settings > General.</item>
+		<item>Added &lt;b>voice&lt;/b> option to &lt;b>text-to-speech&lt;/b> to choose which voice to use.</item>
 	</string-array>
 
 </resources>
