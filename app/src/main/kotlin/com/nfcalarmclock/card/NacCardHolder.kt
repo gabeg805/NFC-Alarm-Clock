@@ -26,6 +26,7 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService.Companion.dismissAlarmService
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService.Companion.startAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar.Day
 import com.nfcalarmclock.util.NacUtility.getHeight
@@ -826,31 +827,6 @@ class NacCardHolder(
 	}
 
 	/**
-	 * Act as if the NFC button was clicked.
-	 */
-	private fun doNfcButtonClick()
-	{
-		// Reset the skip next alarm flag
-		alarm!!.shouldSkipNextAlarm = false
-
-		// Toggle the NFC button
-		alarm!!.toggleUseNfc()
-
-		// Check if NFC should not be used
-		if (!alarm!!.shouldUseNfc)
-		{
-			// Clear the NFC tag ID
-			alarm!!.nfcTagId = ""
-		}
-
-		// Setup the skip icon
-		setSummarySkipNextAlarmIcon()
-
-		// Call the listener
-		onCardUseNfcChangedListener?.onCardUseNfcChanged(this, alarm!!)
-	}
-
-	/**
 	 * Expand the alarm card.
 	 */
 	fun expand()
@@ -1334,7 +1310,7 @@ class NacCardHolder(
 	/**
 	 * Set the NFC button to its proper settings.
 	 */
-	fun setNfcButton()
+	private fun setNfcButton()
 	{
 		// Get the NFC state from the alarm
 		val shouldUseNfc = alarm!!.shouldUseNfc
@@ -1864,8 +1840,17 @@ class NacCardHolder(
 			// Check if the alarm can be modified
 			if (checkCanModifyAlarm())
 			{
-				// Do the button click
-				doNfcButtonClick()
+				// Reset the skip next alarm flag
+				alarm!!.shouldSkipNextAlarm = false
+
+				// Toggle the NFC button
+				alarm!!.toggleUseNfc()
+
+				// Setup the skip icon
+				setSummarySkipNextAlarmIcon()
+
+				// Call the listener
+				onCardUseNfcChangedListener?.onCardUseNfcChanged(this, alarm!!)
 			}
 			// Alarm cannot be modified
 			else
@@ -2223,27 +2208,42 @@ class NacCardHolder(
 	/**
 	 * Toast the NFC message.
 	 */
-	fun toastNfc(context: Context)
+	fun toastNfc(context: Context, allNfcTags: List<NacNfcTag>)
 	{
 		// Determine which message to show
-		val messageId = if (alarm!!.shouldUseNfc)
+		val message = if (alarm!!.shouldUseNfc)
 		{
+			// NFC ID
 			if (alarm!!.nfcTagId.isNotEmpty())
 			{
-				R.string.message_nfc_required
+				// Find a matching NFC tag
+				val tag = allNfcTags.firstOrNull { it.nfcId == alarm!!.nfcTagId }
+
+				// Saved and named
+				if (tag != null)
+				{
+					context.getString(R.string.message_nfc_required_saved, tag.name)
+				}
+				// Unsaved and no name
+				else
+				{
+					context.getString(R.string.message_nfc_required_unsaved)
+				}
 			}
+			// Use any
 			else
 			{
-				R.string.message_any_nfc_tag_id
+				context.getString(R.string.message_nfc_required_use_any)
 			}
 		}
+		// Normal
 		else
 		{
-			R.string.message_nfc_optional
+			context.getString(R.string.message_nfc_optional)
 		}
 
 		// Toast the message
-		quickToast(context, messageId)
+		quickToast(context, message)
 	}
 
 	/**
@@ -2262,7 +2262,7 @@ class NacCardHolder(
 		else
 		{
 			// Get the string to show any NFC tag
-			context.getString(R.string.message_any_nfc_tag_id)
+			context.getString(R.string.message_nfc_required_use_any)
 		}
 
 		// Toast the message

@@ -6,10 +6,14 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.view.calcAlpha
 
+/**
+ * An alarm card to use in a preference.
+ */
 class NacCardPreference @JvmOverloads constructor(
 
 	/**
@@ -70,6 +74,11 @@ class NacCardPreference @JvmOverloads constructor(
 	{
 		fun onCardSnoozeOptionsClicked(alarm: NacAlarm)
 	}
+
+	/**
+	 * List of NFC tags.
+	 */
+	var allNfcTags: List<NacNfcTag> = emptyList()
 
 	/**
 	 * Listener for when the alarm options button is clicked.
@@ -151,7 +160,7 @@ class NacCardPreference @JvmOverloads constructor(
 		// NFC
 		card.onCardUseNfcChangedListener = NacCardHolder.OnCardUseNfcChangedListener { _, a ->
 			sharedPreferences.shouldUseNfc = a.shouldUseNfc
-			card.toastNfc(context)
+			card.toastNfc(context, allNfcTags)
 		}
 
 		// Flashlight

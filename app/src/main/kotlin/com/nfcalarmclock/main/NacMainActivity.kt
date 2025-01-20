@@ -241,11 +241,6 @@ class NacMainActivity
 	private var prevSnackbarY: Float = 0f
 
 	/**
-	 * Previous height of the current snackbar.
-	 */
-	private var prevSnackbarHeight: Float = 0f
-
-	/**
 	 * Saved state of the recyclerview so that it does not change scroll position when
 	 * disabling/enabling or changing the time. Anything that causes a sort to occur.
 	 */
@@ -934,8 +929,10 @@ class NacMainActivity
 		// NFC
 		card.onCardUseNfcChangedListener = OnCardUseNfcChangedListener { _, alarm ->
 			updateAlarm(alarm)
-			card.toastNfc(this)
 
+			lifecycleScope.launch {
+				card.toastNfc(this@NacMainActivity, nfcTagViewModel.getAllNfcTags())
+			}
 		}
 
 		// Flashlight
@@ -1785,13 +1782,10 @@ class NacMainActivity
 
 				// Snackbar was already being shown. Update the Y position to the
 				// snackbar's current Y position in case its height changed
-				if (prevSnackbarHeight > 0)
+				if (prevSnackbarY > 0)
 				{
 					prevSnackbarY = view.y
 				}
-
-				// Update the previous snackbar height
-				prevSnackbarHeight = height
 			}
 
 			// Add the normal show/dismiss callback
@@ -1818,7 +1812,6 @@ class NacMainActivity
 					// Reset the values of the FAB and snackbar
 					floatingActionButton.translationY = 0f
 					prevSnackbarY = 0f
-					prevSnackbarHeight = 0f
 				}
 
 			})

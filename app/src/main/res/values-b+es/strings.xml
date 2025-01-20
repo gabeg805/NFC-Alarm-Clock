@@ -104,15 +104,16 @@
 	<string name="message_permission_schedule_exact_alarm_request">Para que las alarmas se ejecuten exactamente en el momento programado.</string>
 	<string name="message_playlist">¿Quieres tocar toda la música de esta carpeta?</string>
 	<string name="message_nfc_request">Por favor, habilite la NFC para descartar la alarma</string>
-	<string name="message_nfc_required">NFC requerido</string>
 	<string name="message_nfc_optional">NFC opcional</string>
+	<string name="message_nfc_required_unsaved">NFC requerido</string>
+	<string name="message_nfc_required_saved">NFC requerido — %1$s</string>
+	<string name="message_nfc_required_use_any">NFC requerido (usa cualquiera)</string>
+	<string name="message_show_nfc_tag_id">Id:</string>
 	<string name="message_scan_nfc_tag">Se requerirá la etiqueta NFC escaneada para descartar esta alarma cuando suene.</string>
 	<string name="message_select_nfc_tag">Se requerirá la etiqueta NFC seleccionada para descartar esta alarma cuando suene.</string>
 	<string name="message_save_nfc_tag">Puedes reutilizar esta etiqueta NFC, sin tener que escanearla nuevamente, dándole un nombre.</string>
 	<string name="message_delete_nfc_tag">¿Estás seguro de que quieres eliminar esta etiqueta NFC?</string>
 	<string name="message_rename_nfc_tag">¿Cómo te gustaría cambiar el nombre de la etiqueta NFC?</string>
-	<string name="message_show_nfc_tag_id">Id:</string>
-	<string name="message_any_nfc_tag_id">Cualquier etiqueta de NFC aceptada</string>
 	<string name="message_flashlight_on_duration">Encender:</string>
 	<string name="message_flashlight_off_duration">Apagar:</string>
 	<string name="message_no_alarms_scheduled">No hay alarmas programadas.</string>
@@ -219,6 +220,7 @@
 	<string name="title_flashlight_brightness_level">Nivel de brillo</string>
 	<string name="title_flashlight_blink_on_off">Parpadeo encendido/apagado</string>
 	<string name="title_text_to_speech_speak_frequency">Frecuencia de habla</string>
+	<string name="title_text_to_speech_voice">Voz</string>
 	<string name="title_volume_gradually_increase_volume">Aumentar gradualmente el volumen</string>
 	<string name="title_volume_restrict_volume">Restringe el volumen</string>
 	<string name="title_dismiss_options_auto_dismiss">Desactivacion automatica</string>
@@ -354,6 +356,8 @@
 	<string name="description_permission_boot">Restaurar alarmas cuando el telefono este encendido. Android va eliminar alarmas cuando el dispositivo se apage.</string>
 	<string name="description_permission_wakelock">Evitar que el dispositivo entre en estado de inactividad para que las alarmas continúan de sonar.</string>
 	<string name="description_audio_sources">El canal de audio para reproducir la alarma.</string>
+	<string name="description_widget_alarm_example">La alarma que se muestra en la vista previa es solo un ejemplo.</string>
+	<string name="description_text_to_speech_voice">La voz a utilizar para la conversión de texto a voz.</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">Lista de alarmas que se mostrarán aquí.</string>

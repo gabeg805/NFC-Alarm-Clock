@@ -781,7 +781,20 @@
 				android:id="@+id/alarm_layout_title"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
+				android:paddingBottom="@dimen/zero"
 				android:text="@string/alarm_layout"
+				/>
+
+			<!-- Example -->
+			<TextView
+				style="@style/Widget.TextView.Secondary"
+				android:id="@+id/idget_colon"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingBottom="@dimen/small"
+				android:fontFamily="sans-serif"
+				android:textSize="@dimen/tsz_small"
+				android:text="@string/description_widget_alarm_example"
 				/>
 
 			<!-- Show alarm time and icon -->

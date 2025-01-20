@@ -104,15 +104,16 @@
 	<string name="message_permission_schedule_exact_alarm_request">Để báo thức chạy chính xác theo đúng lịch trình.</string>
 	<string name="message_playlist">Bạn có muốn phát tất cả nhạc trong thư mục này không?</string>
 	<string name="message_nfc_request">Vui lòng bật NFC để tắt báo thức</string>
-	<string name="message_nfc_required">Cần có NFC</string>
 	<string name="message_nfc_optional">tùy chọn NFC</string>
+	<string name="message_nfc_required_unsaved">Cần có NFC</string>
+	<string name="message_nfc_required_saved">Cần có NFC — %1$s</string>
+	<string name="message_nfc_required_use_any">Cần có NFC (sử dụng bất kỳ)</string>
+	<string name="message_show_nfc_tag_id">NHẬN DẠNG:</string>
 	<string name="message_scan_nfc_tag">Thẻ NFC đã quét sẽ được yêu cầu loại bỏ cảnh báo này khi nó kêu.</string>
 	<string name="message_select_nfc_tag">Thẻ NFC đã chọn sẽ được yêu cầu để tắt báo thức này khi nó kêu.</string>
 	<string name="message_save_nfc_tag">Bạn có thể sử dụng lại thẻ NFC này mà không cần phải quét lại bằng cách đặt tên cho thẻ.</string>
 	<string name="message_delete_nfc_tag">Bạn có chắc chắn muốn xóa thẻ NFC này không?</string>
 	<string name="message_rename_nfc_tag">Bạn muốn đổi tên thẻ NFC thành gì?</string>
-	<string name="message_show_nfc_tag_id">NHẬN DẠNG:</string>
-	<string name="message_any_nfc_tag_id">Bất kỳ thẻ NFC nào được chấp nhận</string>
 	<string name="message_flashlight_on_duration">Bật:</string>
 	<string name="message_flashlight_off_duration">Tắt:</string>
 	<string name="message_no_alarms_scheduled">Không có báo thức nào được lên lịch.</string>
@@ -219,6 +220,7 @@
 	<string name="title_flashlight_brightness_level">Mức độ sáng</string>
 	<string name="title_flashlight_blink_on_off">Nhấp nháy bật/tắt</string>
 	<string name="title_text_to_speech_speak_frequency">Tần suất nói</string>
+	<string name="title_text_to_speech_voice">Tiếng nói</string>
 	<string name="title_volume_gradually_increase_volume">Tăng dần âm lượng</string>
 	<string name="title_volume_restrict_volume">Hạn chế âm lượng</string>
 	<string name="title_dismiss_options_auto_dismiss">Tự động loại bỏ</string>
@@ -354,6 +356,8 @@
 	<string name="description_permission_boot">Khôi phục báo thức khi thiết bị của bạn được bật. Android sẽ xóa báo thức khi thiết bị của bạn tắt.</string>
 	<string name="description_permission_wakelock">Ngăn chặn thiết bị của bạn chuyển sang chế độ ngủ để báo thức được kích hoạt sẽ tiếp tục kêu.</string>
 	<string name="description_audio_sources">Kênh âm thanh để phát báo thức.</string>
+	<string name="description_widget_alarm_example">Báo thức hiển thị trong bản xem trước chỉ là một ví dụ.</string>
+	<string name="description_text_to_speech_voice">Giọng nói sử dụng để chuyển văn bản thành giọng nói.</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">Danh sách các cảnh báo sẽ được hiển thị ở đây.</string>

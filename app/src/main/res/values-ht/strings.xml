@@ -104,15 +104,16 @@
 	<string name="message_permission_schedule_exact_alarm_request">Pou gen alam yo kouri jisteman lè pwograme.</string>
 	<string name="message_playlist">Ou vle jwe tout mizik ki nan katab sa a?</string>
 	<string name="message_nfc_request">Tanpri pèmèt NFC pou ranvwaye alam la</string>
-	<string name="message_nfc_required">NFC obligatwa</string>
 	<string name="message_nfc_optional">NFC opsyonèl</string>
+	<string name="message_nfc_required_unsaved">NFC obligatwa</string>
+	<string name="message_nfc_required_saved">NFC obligatwa — %1$s</string>
+	<string name="message_nfc_required_use_any">NFC obligatwa (itilize nenpòt)</string>
+	<string name="message_show_nfc_tag_id">ID:</string>
 	<string name="message_scan_nfc_tag">Tag NFC tcheke a pral oblije ranvwaye alam sa a lè li ale.</string>
 	<string name="message_select_nfc_tag">Tag NFC chwazi a pral oblije ranvwaye alam sa a lè li sonnen.</string>
 	<string name="message_save_nfc_tag">Ou ka reitilize tag NFC sa a, san ou pa bezwen eskane li ankò, lè w ba li yon non.</string>
 	<string name="message_delete_nfc_tag">Èske w sèten ou vle efase tag NFC sa a?</string>
 	<string name="message_rename_nfc_tag">Ki sa ou ta renmen chanje non tag NFC la?</string>
-	<string name="message_show_nfc_tag_id">ID:</string>
-	<string name="message_any_nfc_tag_id">Nenpòt tag NFC aksepte</string>
 	<string name="message_flashlight_on_duration">Limen:</string>
 	<string name="message_flashlight_off_duration">Etenn:</string>
 	<string name="message_no_alarms_scheduled">Pa gen alam pwograme.</string>
@@ -219,6 +220,7 @@
 	<string name="title_flashlight_brightness_level">Nivo klète</string>
 	<string name="title_flashlight_blink_on_off">Klike sou / koupe</string>
 	<string name="title_text_to_speech_speak_frequency">Pale frekans</string>
+	<string name="title_text_to_speech_voice">Vwa</string>
 	<string name="title_volume_gradually_increase_volume">Piti piti ogmante volim</string>
 	<string name="title_volume_restrict_volume">Limite volim</string>
 	<string name="title_dismiss_options_auto_dismiss">Oto-ranvwaye</string>
@@ -354,6 +356,8 @@
 	<string name="description_permission_boot">Retabli alam yo lè aparèy ou an limen. Android pral efase alam lè aparèy ou an etenn.</string>
 	<string name="description_permission_wakelock">Anpeche aparèy ou an dòmi pou yon alam aktive ap kontinye sonnen.</string>
 	<string name="description_audio_sources">Chanèl odyo pou jwe alam la.</string>
+	<string name="description_widget_alarm_example">Alam yo montre nan preview la se jis yon egzanp.</string>
+	<string name="description_text_to_speech_voice">Vwa pou itilize pou tèks-a-lapawòl.</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">Lis alam yo pral montre isit la.</string>

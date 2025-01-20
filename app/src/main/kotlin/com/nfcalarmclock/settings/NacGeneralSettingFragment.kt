@@ -7,6 +7,8 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
@@ -15,6 +17,7 @@ import com.nfcalarmclock.alarm.options.NacAlarmOptionsDialog
 import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog
 import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerActivity
 import com.nfcalarmclock.alarm.options.name.NacNameDialog
+import com.nfcalarmclock.alarm.options.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.alarm.options.snoozeoptions.NacSnoozeOptionsDialog
 import com.nfcalarmclock.card.NacCardPreference
 import com.nfcalarmclock.settings.preference.NacCheckboxPreference
@@ -28,10 +31,13 @@ import com.nfcalarmclock.util.getMediaType
 import com.nfcalarmclock.util.getRecursivelyPlayMedia
 import com.nfcalarmclock.util.getShuffleMedia
 import com.nfcalarmclock.util.media.buildLocalMediaPath
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 /**
  * General settings fragment.
  */
+@AndroidEntryPoint
 class NacGeneralSettingFragment
 	: NacGenericSettingFragment()
 {
@@ -40,6 +46,11 @@ class NacGeneralSettingFragment
 	 * Activity result launcher, used to get results from a finished activity.
 	 */
 	private var activityLauncher: ActivityResultLauncher<Intent>? = null
+
+	/**
+	 * NFC tag view model.
+	 */
+	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
 
 	/**
 	 * Called when the preference is created.
@@ -100,6 +111,11 @@ class NacGeneralSettingFragment
 		// Get the preference
 		val key = getString(R.string.key_default_alarm_card)
 		val pref = findPreference<NacCardPreference>(key)!!
+
+		// Set the list of NFC tags
+		lifecycleScope.launch {
+			pref.allNfcTags = nfcTagViewModel.getAllNfcTags()
+		}
 
 		// Define the activity launcher
 		activityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
