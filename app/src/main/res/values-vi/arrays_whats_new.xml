@@ -5,11 +5,10 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
-		<item>Đã thêm hỗ trợ cho &lt;b>khởi động trực tiếp&lt;/b>, để báo thức có thể chạy khi thiết bị được bật nguồn nhưng chưa được mở khóa.</item>
-		<item>Đã thêm &lt;b>tiện ích đồng hồ&lt;/b> cho màn hình chính.</item>
-		<item>Đã thêm nút &lt;b>trình chọn tệp hệ thống&lt;/b> khi chọn bài hát cho báo thức.</item>
-		<item>Đã thêm bản dịch cho &lt;b>tiếng Bengal&lt;/b>, &lt;b>tiếng Hindi&lt;/b> và &lt;b>tiếng Bồ Đào Nha Brazil&lt;/b>.</item>
-		<item>Đã cập nhật chức năng tự động tắt, tự động báo lại và thời lượng báo lại để cho phép cài đặt &lt;b>giây&lt;/b> cũng như phút.</item>
+		<item>Đã cập nhật giao diện &lt;b>thẻ báo thức&lt;/b> để hiển thị các nút cho tùy chọn hủy báo thức, tùy chọn báo lại và tùy chọn báo thức thông thường.</item>
+		<item>Đã thêm tùy chọn &lt;b>mẫu rung tùy chỉnh&lt;/b> cho báo thức.</item>
+		<item>Đã thêm tùy chọn &lt;b>tiết kiệm pin&lt;/b> để tắt màn hình khi báo thức đang hoạt động. Tìm thấy trong Cài đặt > Chung.</item>
+		<item>Đã thêm tùy chọn &lt;b>giọng nói&lt;/b> vào &lt;b>chuyển văn bản thành giọng nói&lt;/b> để chọn giọng nói sẽ sử dụng.</item>
 	</string-array>
 
 </resources>

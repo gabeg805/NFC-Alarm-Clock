@@ -34,8 +34,8 @@ android {
 		applicationId = "com.nfcalarmclock"
 		minSdk = 23
 		targetSdk = 34
-		versionCode = 461
-		versionName = "12.5.0-beta015"
+		versionCode = 462
+		versionName = "12.5.0"
 
 		// Set output filename
 		setProperty("archivesBaseName", "nfc_alarm_clock_v${versionName}")
@@ -70,7 +70,7 @@ android {
 				isRemoveUnusedCode = true
 				isRemoveUnusedResources = true
 				isObfuscate = false
-				isOptimizeCode = false
+				isOptimizeCode = true
 			}
 
 			// Set the signing config for release builds, if the keystore.properties file exists
