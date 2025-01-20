@@ -5,11 +5,10 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
-		<item>Te ajoute sipò pou &lt;b>bòt dirèk&lt;/b>, pou alam yo ka kouri lè aparèy la limen, men li poko debloke.</item>
-		<item>Te ajoute &lt;b>widget revèy&lt;/b> pou ekran lakay ou.</item>
-		<item>Te ajoute yon bouton &lt;b>sélection fichye sistèm&lt;/b> lè w ap chwazi yon chante pou yon alam.</item>
-		<item>Te ajoute tradiksyon pou &lt;b>Bengali&lt;/b>, &lt;b>Hendi&lt;/b>, ak &lt;b>Portigè brezilyen&lt;/b>.</item>
-		<item>Mete ajou oto ranvwaye, oto snooze, ak snooze dire pou pèmèt mete &lt;b>segonn&lt;/b>, osi byen ke minit.</item>
+		<item>Mizajou &lt;b>kat alam&lt;/b> gade pou montre bouton pou opsyon ranvwaye, opsyon snooze, ak opsyon alam regilye.</item>
+		<item>Te ajoute &lt;b>modèl Vibration Customized&lt;/b> opsyon pou alam.</item>
+		<item>Te ajoute opsyon &lt;b>ekonomizeur batri&lt;/b> pou kenbe ekran an etenn lè yon alam aktif. Jwenn nan Anviwònman> Jeneral.</item>
+		<item>Te ajoute opsyon &lt;b>vwa&lt;/b> nan &lt;b>tèks-a-lapawòl&lt;/b> pou chwazi ki vwa pou itilize.</item>
 	</string-array>
 
 </resources>
