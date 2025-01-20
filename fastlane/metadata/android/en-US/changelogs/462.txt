@@ -1,0 +1,6 @@
+* Updated alarm card look to show buttons for dismiss options, snooze options,
+  and regular options.
+* Added custom vibration pattern option for alarms.
+* Added battery saver option to keep the screen off when an alarm is active.
+  Found in Settings > General.
+* Added voice option to text-to-speech to choose which voice to use.
