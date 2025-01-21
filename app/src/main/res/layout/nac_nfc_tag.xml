@@ -33,12 +33,27 @@
 		android:layout_below="@id/nfc_tag_name"
 		android:layout_alignParentStart="true"
 		android:layout_alignBaseline="@id/nfc_tag_id_value"
-		android:layout_marginEnd="@dimen/nudge"
 		android:alpha="0.4"
 		android:textColor="@color/white"
 		android:textSize="@dimen/tsz_tiny"
 		android:textStyle="bold"
 		android:text="@string/message_show_nfc_tag_id"
+		/>
+
+	<!-- ID colon -->
+	<TextView
+		android:id="@+id/nfc_tag_id_colon"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignBaseline="@id/nfc_tag_id_label"
+		android:layout_below="@id/nfc_tag_name"
+		android:layout_toEndOf="@id/nfc_tag_id_label"
+		android:layout_marginEnd="@dimen/nudge"
+		android:alpha="0.4"
+		android:textColor="@color/white"
+		android:textSize="@dimen/tsz_tiny"
+		android:textStyle="bold"
+		android:text="@string/colon"
 		/>
 
 	<!-- NFC ID -->
@@ -47,7 +62,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_below="@id/nfc_tag_name"
-		android:layout_toEndOf="@id/nfc_tag_id_label"
+		android:layout_toEndOf="@id/nfc_tag_id_colon"
 		android:layout_toStartOf="@id/delete_button"
 		android:alpha="0.4"
 		android:ellipsize="end"

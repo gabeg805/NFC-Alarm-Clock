@@ -108,7 +108,7 @@
 	<string name="message_nfc_required_unsaved">NFC obligatwa</string>
 	<string name="message_nfc_required_saved">NFC obligatwa — %1$s</string>
 	<string name="message_nfc_required_use_any">NFC obligatwa (itilize nenpòt)</string>
-	<string name="message_show_nfc_tag_id">ID:</string>
+	<string name="message_show_nfc_tag_id">ID</string>
 	<string name="message_scan_nfc_tag">Tag NFC tcheke a pral oblije ranvwaye alam sa a lè li ale.</string>
 	<string name="message_select_nfc_tag">Tag NFC chwazi a pral oblije ranvwaye alam sa a lè li sonnen.</string>
 	<string name="message_save_nfc_tag">Ou ka reitilize tag NFC sa a, san ou pa bezwen eskane li ankò, lè w ba li yon non.</string>

@@ -2257,7 +2257,7 @@ class NacCardHolder(
 			// Get the string to show a specific NFC tag
 			val nfcId = context.getString(R.string.message_show_nfc_tag_id)
 
-			"$nfcId ${alarm!!.nfcTagId}"
+			"$nfcId: ${alarm!!.nfcTagId}"
 		}
 		else
 		{

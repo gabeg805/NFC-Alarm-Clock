@@ -65,6 +65,8 @@
 		android:id="@+id/use_any_nfc_tag_button"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:layout_marginStart="@dimen/large"
+		android:layout_marginEnd="@dimen/large"
 		android:textColor="@color/white"
 		android:text="@string/action_use_any"
 		app:backgroundTint="@color/gray_light"

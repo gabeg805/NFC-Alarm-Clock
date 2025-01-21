@@ -108,7 +108,7 @@
 	<string name="message_nfc_required_unsaved">NFC erforderlich</string>
 	<string name="message_nfc_required_saved">NFC erforderlich — %1$s</string>
 	<string name="message_nfc_required_use_any">NFC erforderlich (beliebig verwenden)</string>
-	<string name="message_show_nfc_tag_id">AUSWEIS:</string>
+	<string name="message_show_nfc_tag_id">AUSWEIS</string>
 	<string name="message_scan_nfc_tag">Um den Alarm zu deaktivieren, wenn er losgeht, ist der gescannte NFC-Tag erforderlich.</string>
 	<string name="message_select_nfc_tag">Um den Alarm zu deaktivieren, wenn er ausgelöst wird, ist der ausgewählte NFC-Tag erforderlich.</string>
 	<string name="message_save_nfc_tag">Sie können diesen NFC-Tag wiederverwenden, ohne ihn erneut scannen zu müssen, indem Sie ihm einen Namen geben.</string>

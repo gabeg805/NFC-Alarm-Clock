@@ -155,6 +155,12 @@ class NacScanNfcTagDialog
 	 */
 	private fun setupCurrentlySelectedInfo(id: String)
 	{
+		// No NFC ID is set
+		if (id.isEmpty())
+		{
+			return
+		}
+
 		// Get the views and NFC tag name
 		val title: TextView = dialog!!.findViewById(R.id.title_currently_selected)
 		val description: TextView = dialog!!.findViewById(R.id.description_nfc_tag_name)
@@ -162,15 +168,14 @@ class NacScanNfcTagDialog
 		lifecycleScope.launch {
 
 			// Find the NFC tag
-			nfcTagViewModel.findNfcTag(id)
-				?.let {
+			val tag = nfcTagViewModel.findNfcTag(id)
 
-					// Setup the views
-					title.visibility = View.VISIBLE
-					description.visibility = View.VISIBLE
-					description.text = it.name
+			// Change the visibility of the views
+			title.visibility = View.VISIBLE
+			description.visibility = View.VISIBLE
 
-				}
+			// Set the description
+			description.text = tag?.name ?: "(${resources.getString(R.string.message_show_nfc_tag_id)}) $id"
 
 		}
 	}

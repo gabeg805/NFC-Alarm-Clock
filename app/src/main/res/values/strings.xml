@@ -108,7 +108,7 @@
 	<string name="message_nfc_required_unsaved">NFC required</string>
 	<string name="message_nfc_required_saved">NFC required — %1$s</string>
 	<string name="message_nfc_required_use_any">NFC required (use any)</string>
-	<string name="message_show_nfc_tag_id">ID:</string>
+	<string name="message_show_nfc_tag_id">ID</string>
 	<string name="message_scan_nfc_tag">The scanned NFC tag will be required to dismiss this alarm when it goes off.</string>
 	<string name="message_select_nfc_tag">The selected NFC tag will be required to dismiss this alarm when it goes off.</string>
 	<string name="message_save_nfc_tag">You can reuse this NFC tag, without having to scan it again, by giving it a name.</string>

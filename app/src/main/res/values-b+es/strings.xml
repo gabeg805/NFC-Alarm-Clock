@@ -108,7 +108,7 @@
 	<string name="message_nfc_required_unsaved">NFC requerido</string>
 	<string name="message_nfc_required_saved">NFC requerido — %1$s</string>
 	<string name="message_nfc_required_use_any">NFC requerido (usa cualquiera)</string>
-	<string name="message_show_nfc_tag_id">Id:</string>
+	<string name="message_show_nfc_tag_id">Id</string>
 	<string name="message_scan_nfc_tag">Se requerirá la etiqueta NFC escaneada para descartar esta alarma cuando suene.</string>
 	<string name="message_select_nfc_tag">Se requerirá la etiqueta NFC seleccionada para descartar esta alarma cuando suene.</string>
 	<string name="message_save_nfc_tag">Puedes reutilizar esta etiqueta NFC, sin tener que escanearla nuevamente, dándole un nombre.</string>

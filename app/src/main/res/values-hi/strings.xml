@@ -108,7 +108,7 @@
 	<string name="message_nfc_required_unsaved">एनएफसी आवश्यक</string>
 	<string name="message_nfc_required_saved">एनएफसी आवश्यक — %1$s</string>
 	<string name="message_nfc_required_use_any">एनएफसी आवश्यक (किसी भी का उपयोग करें)</string>
-	<string name="message_show_nfc_tag_id">पहचान:</string>
+	<string name="message_show_nfc_tag_id">पहचान</string>
 	<string name="message_scan_nfc_tag">जब यह अलार्म बजेगा तो उसे बंद करने के लिए स्कैन किए गए NFC टैग की आवश्यकता होगी।</string>
 	<string name="message_select_nfc_tag">जब यह अलार्म बजेगा तो इसे बंद करने के लिए चयनित NFC टैग की आवश्यकता होगी।</string>
 	<string name="message_save_nfc_tag">आप इस NFC टैग को नाम देकर, इसे दोबारा स्कैन किए बिना, पुनः उपयोग कर सकते हैं।</string>

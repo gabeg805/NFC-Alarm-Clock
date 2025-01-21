@@ -108,7 +108,7 @@
 	<string name="message_nfc_required_unsaved">NFC necessário</string>
 	<string name="message_nfc_required_saved">NFC necessário — %1$s</string>
 	<string name="message_nfc_required_use_any">NFC necessário (use qualquer)</string>
-	<string name="message_show_nfc_tag_id">EU IA:</string>
+	<string name="message_show_nfc_tag_id">EU IA</string>
 	<string name="message_scan_nfc_tag">A etiqueta NFC escaneada será necessária para ignorar este alarme quando ele disparar.</string>
 	<string name="message_select_nfc_tag">A etiqueta NFC selecionada será necessária para ignorar este alarme quando ele disparar.</string>
 	<string name="message_save_nfc_tag">Você pode reutilizar esta etiqueta NFC, sem precisar escaneá-la novamente, dando-lhe um nome.</string>

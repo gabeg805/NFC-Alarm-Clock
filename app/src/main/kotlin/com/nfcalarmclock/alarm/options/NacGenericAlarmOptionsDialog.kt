@@ -1,10 +1,13 @@
 package com.nfcalarmclock.alarm.options
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.core.view.updateLayoutParams
+import androidx.core.widget.NestedScrollView
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -16,11 +19,11 @@ import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
 import com.nfcalarmclock.view.setTextFromIndex
 import com.nfcalarmclock.view.setupInputLayoutColor
 
+
 /**
  * Generic alarm options dialog.
  */
 abstract class NacGenericAlarmOptionsDialog
-
 	: NacBottomSheetDialogFragment()
 {
 
@@ -137,10 +140,11 @@ abstract class NacGenericAlarmOptionsDialog
 		// Setup any alarm options
 		setupAlarmOptions(alarm)
 
-		// Setup the ok, cancel, and any extra buttons
+		// Setup the views
 		setupOkButton(alarm)
 		setupCancelButton(alarm)
 		setupExtraButtons(alarm)
+		setupScrollView(alarm)
 	}
 
 	/**
@@ -256,6 +260,35 @@ abstract class NacGenericAlarmOptionsDialog
 
 		// Setup the ok button
 		setupPrimaryButton(okButton, listener = { onPrimaryButtonClicked(alarm) })
+	}
+
+	/**
+	 * Setup the scroll view.
+	 */
+	open fun setupScrollView(alarm: NacAlarm?)
+	{
+		// Get the view
+		val scrollView = dialog!!.findViewById<NestedScrollView>(R.id.options_scroll_view)
+
+		// Get the handler and max height of the view
+		val handler = Handler(requireContext().mainLooper)
+		val screenHeight = requireContext().resources.displayMetrics.heightPixels
+		val maxScrollHeight = screenHeight / 2
+
+		// Layout listener
+		scrollView.addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ ->
+
+			// Set the height of the view if it exceeds the max
+			if (v.height > maxScrollHeight)
+			{
+				handler.post {
+					scrollView.updateLayoutParams {
+						height = maxScrollHeight
+					}
+				}
+			}
+
+		}
 	}
 
 }
