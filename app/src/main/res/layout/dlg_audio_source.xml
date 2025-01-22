@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:padding="@dimen/large"
-	android:orientation="vertical">
+	android:layout_height="wrap_content">
 
 	<!-- Audio source title -->
 	<TextView
@@ -36,24 +34,4 @@
 	<!-- Separator -->
 	<Space style="@style/Widget.AlarmOptionDialog.SeparatorAfterCheckBox" />
 
-	<!-- Ok button -->
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/ok_button"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:textColor="@color/white"
-		android:text="@string/action_ok"
-		app:backgroundTint="@color/orange"
-		/>
-
-	<!-- Cancel button -->
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/cancel_button"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:textColor="@color/white"
-		android:text="@string/action_cancel"
-		app:backgroundTint="@color/gray_light"
-		/>
-
-</LinearLayout>
+</com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

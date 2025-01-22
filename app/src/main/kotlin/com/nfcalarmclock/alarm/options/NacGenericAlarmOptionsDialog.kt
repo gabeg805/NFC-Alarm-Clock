@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.LinearLayout
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.NestedScrollView
 import androidx.navigation.fragment.findNavController
@@ -267,20 +268,30 @@ abstract class NacGenericAlarmOptionsDialog
 	 */
 	open fun setupScrollView(alarm: NacAlarm?)
 	{
-		// Get the view
-		val scrollView = dialog!!.findViewById<NestedScrollView>(R.id.options_scroll_view)
+		// Get the views
+		val container: LinearLayout = dialog!!.findViewById(R.id.alarm_option_container)
+		val scrollView: NestedScrollView = dialog!!.findViewById(R.id.options_scroll_view)
 
-		// Get the handler and max height of the view
-		val handler = Handler(requireContext().mainLooper)
+		// Compute the amount of space (in pixels) is needed for the buttons
+		val nbuttons = container.childCount - 1
+		val touchDimen = resources.getDimension(R.dimen.touch)
+		val marginsDimen = resources.getDimension(R.dimen.medium) + resources.getDimension(R.dimen.large)
+		val buttonsHeight = nbuttons*touchDimen.toInt() + marginsDimen.toInt()
+
+		// Get the max height that the scroll view can take up
 		val screenHeight = requireContext().resources.displayMetrics.heightPixels
-		val maxScrollHeight = screenHeight / 2
+		val maxScrollHeight = screenHeight * 85 / 100 - buttonsHeight
 
 		// Layout listener
 		scrollView.addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ ->
 
-			// Set the height of the view if it exceeds the max
+			// Set the height of the scroll view if it exceeds the max
 			if (v.height > maxScrollHeight)
 			{
+				// Update the height in a handler so that it executes outside of the
+				// layout change listener
+				val handler = Handler(requireContext().mainLooper)
+
 				handler.post {
 					scrollView.updateLayoutParams {
 						height = maxScrollHeight

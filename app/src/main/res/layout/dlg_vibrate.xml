@@ -251,14 +251,10 @@
 
 	<!-- Preview button -->
 	<com.google.android.material.button.MaterialButton
+		style="@style/Widget.AlarmOptionDialog.Button"
 		android:id="@+id/preview_button"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginStart="@dimen/large"
-		android:layout_marginEnd="@dimen/large"
-		android:textColor="@color/white"
 		android:text="@string/action_preview"
-		app:backgroundTint="@color/gray_light"
 		/>
 
 </com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

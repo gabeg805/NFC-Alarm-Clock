@@ -45,7 +45,25 @@ class NacFlashlight(context: Context)
 	/**
 	 * Camera characteristics.
 	 */
-	private val cameraCharacteristics: CameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId)
+	private val cameraCharacteristics: CameraCharacteristics? = if (cameraId.isNotEmpty())
+	{
+		try
+		{
+			cameraManager.getCameraCharacteristics(cameraId)
+		}
+		catch (_: IllegalArgumentException)
+		{
+			null
+		}
+		catch (_: CameraAccessException)
+		{
+			null
+		}
+	}
+	else
+	{
+		null
+	}
 
 	/**
 	 * Flag indicating whether the flashlight is running or not.
@@ -65,7 +83,9 @@ class NacFlashlight(context: Context)
 		{
 			return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
 			{
-				cameraCharacteristics.get(CameraCharacteristics.FLASH_INFO_STRENGTH_MAXIMUM_LEVEL) as Int
+				cameraCharacteristics?.let {
+						it.get(CameraCharacteristics.FLASH_INFO_STRENGTH_MAXIMUM_LEVEL) as Int
+					} ?: 1
 			}
 			else
 			{

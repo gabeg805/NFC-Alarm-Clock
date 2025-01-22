@@ -35,26 +35,19 @@
 
 	<!-- Ok button -->
 	<com.google.android.material.button.MaterialButton
+		style="@style/Widget.AlarmOptionDialog.Button"
 		android:id="@+id/ok_button"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginStart="@dimen/large"
-		android:layout_marginEnd="@dimen/large"
-		android:textColor="@color/white"
 		android:text="@string/action_ok"
 		app:backgroundTint="@color/orange"
 		/>
 
 	<!-- Cancel button -->
 	<com.google.android.material.button.MaterialButton
+		style="@style/Widget.AlarmOptionDialog.Button"
 		android:id="@+id/cancel_button"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginStart="@dimen/large"
-		android:layout_marginEnd="@dimen/large"
-		android:textColor="@color/white"
 		android:text="@string/action_cancel"
-		app:backgroundTint="@color/gray_light"
 		/>
 
 </LinearLayout>

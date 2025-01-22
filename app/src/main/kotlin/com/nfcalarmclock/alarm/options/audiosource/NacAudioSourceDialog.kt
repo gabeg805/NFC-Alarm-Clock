@@ -2,17 +2,12 @@ package com.nfcalarmclock.alarm.options.audiosource
 
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
-import androidx.navigation.fragment.findNavController
-import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
-import com.nfcalarmclock.util.getAlarm
-import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
+import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.view.getCheckedText
 
 /**
@@ -20,66 +15,48 @@ import com.nfcalarmclock.view.getCheckedText
  * originate from.
  */
 class NacAudioSourceDialog
-	: NacBottomSheetDialogFragment()
+	: NacGenericAlarmOptionsDialog()
 {
 
 	/**
-	 * Called when the creating the view.
+	 * Layout resource ID.
 	 */
-	override fun onCreateView(
-		inflater: LayoutInflater,
-		container: ViewGroup?,
-		savedInstanceState: Bundle?
-	): View?
+	override val layoutId = R.layout.dlg_audio_source
+
+	/**
+	 * Radio group of all the radio buttons.
+	 */
+	private lateinit var radioGroup: RadioGroup
+
+	/**
+	 * Called when the Ok button is clicked.
+	 */
+	override fun onOkClicked(alarm: NacAlarm?)
 	{
-		return inflater.inflate(R.layout.dlg_audio_source, container, false)
+		// Update the alarm
+		alarm?.audioSource = radioGroup.getCheckedText()
 	}
 
 	/**
-	 * Called when the view has been created.
+	 * Setup all alarm options.
 	 */
-	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+	override fun setupAlarmOptions(alarm: NacAlarm?)
 	{
-		// Super
-		super.onViewCreated(view, savedInstanceState)
+		// Get the alarm, or build a new one, to get default values
+		val a = alarm ?: NacAlarm.build()
 
-		// Get the bundle
-		val alarm = arguments?.getAlarm()
-
-		// Get the views
-		val radioGroup: RadioGroup = dialog!!.findViewById(R.id.audio_sources)
-		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
-		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
-
-		// Get the default values
-		val default = alarm?.audioSource ?: ""
+		// Set the radio group
+		radioGroup = dialog!!.findViewById(R.id.audio_sources)
 
 		// Setup the views
-		setupAudioSources(radioGroup, default)
-		setupAudioSourceColor(radioGroup)
-
-		// Setup the ok button
-		setupPrimaryButton(okButton, listener = {
-
-			// Update the alarm attribute
-			alarm?.audioSource = radioGroup.getCheckedText()
-
-			// Save the change so that it is accessible in the previous dialog
-			findNavController().previousBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
-
-			// Dismiss the dialog
-			dismiss()
-
-		})
-
-		// Setup the cancel button
-		setupSecondaryButton(cancelButton)
+		setupAudioSources(a.audioSource)
+		setupAudioSourceColor()
 	}
 
 	/**
 	 * Setup the audio source.
 	 */
-	private fun setupAudioSources(radioGroup: RadioGroup, default: String)
+	private fun setupAudioSources(default: String)
 	{
 		// No audio sources to setup
 		if (radioGroup.childCount > 0)
@@ -117,7 +94,7 @@ class NacAudioSourceDialog
 	/**
 	 * Setup the color of the audio source items.
 	 */
-	private fun setupAudioSourceColor(radioGroup: RadioGroup)
+	private fun setupAudioSourceColor()
 	{
 		// Get the colors for the boolean states
 		val colors = intArrayOf(sharedPreferences.themeColor, Color.GRAY)

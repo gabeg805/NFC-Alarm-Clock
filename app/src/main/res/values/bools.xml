@@ -26,7 +26,7 @@
 	<bool name="default_missed_alarm">true</bool>
 
 	<!-- Miscellaneous -->
-	<bool name="default_use_new_alarm_screen">false</bool>
+	<bool name="default_use_new_alarm_screen">true</bool>
 	<bool name="default_alarm_screen_show_alarm_name">true</bool>
 	<bool name="default_alarm_screen_show_current_date_and_time">true</bool>
 	<bool name="default_alarm_screen_show_music_info">true</bool>

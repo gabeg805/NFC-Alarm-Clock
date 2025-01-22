@@ -641,7 +641,6 @@ class NacMainActivity
 		toolbar.setOnMenuItemClickListener(this)
 		setupAlarmCardAdapter()
 		setupRecyclerView()
-		setupWhichAlarmScreenToUse()
 
 		// Disable the activity alias so that tapping an NFC tag will NOT open
 		// the main activity
@@ -1536,26 +1535,6 @@ class NacMainActivity
 			sharedPreferences.appStartStatistics = false
 
 		}
-	}
-
-	/**
-	 * Setup which alarm screen should be used.
-	 */
-	private fun setupWhichAlarmScreenToUse()
-	{
-		// Check if the app was not newly installed
-		if (!isNewInstall)
-		{
-			// Do nothing
-			return
-		}
-
-		// Change the alarm screen settings for a new install so that all the
-		// new stuff is shown
-		sharedPreferences.shouldUseNewAlarmScreen = true
-		sharedPreferences.shouldShowAlarmName = true
-		sharedPreferences.shouldShowCurrentDateAndTime = true
-		sharedPreferences.shouldShowMusicInfo = true
 	}
 
 	/**
