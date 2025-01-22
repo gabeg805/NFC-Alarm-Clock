@@ -1,0 +1,3 @@
+* Fixed alarm options not showing everything and not being scrollable if there were too many things to display.
+* Fixed rare crashes that occur initializing the flashlight.
+* Show the NFC tag ID if the tag name is not saved.
