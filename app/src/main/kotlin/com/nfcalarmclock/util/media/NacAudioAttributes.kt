@@ -125,6 +125,11 @@ class NacAudioAttributes(
 		}
 
 	/**
+	 * Speech rate for text-to-speech.
+	 */
+	var speechRate: Float = 0f
+
+	/**
 	 * Voice name for text-to-speech.
 	 */
 	var voice: String = ""
@@ -180,7 +185,8 @@ class NacAudioAttributes(
 		// Set the volume level
 		volumeLevel = alarm.volume
 
-		// Set the text-to-speech voice
+		// Set the text-to-speech rate and voice
+		speechRate = alarm.ttsSpeechRate.toFloat()
 		voice = alarm.ttsVoice
 
 		return this

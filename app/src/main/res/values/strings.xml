@@ -61,6 +61,7 @@
 	<string name="action_stop_preview">Stop Preview</string>
 	<string name="action_show_nfc_tag_id">Show NFC tag</string>
 	<string name="action_use_any">Use any NFC tag</string>
+	<string name="action_add_nfc_tag">Add NFC tag</string>
 	<string name="action_save">Save</string>
 	<string name="action_select_nfc_tag">Select NFC tag</string>
 	<string name="action_skip">Skip</string>
@@ -111,6 +112,7 @@
 	<string name="message_show_nfc_tag_id">ID</string>
 	<string name="message_scan_nfc_tag">The scanned NFC tag will be required to dismiss this alarm when it goes off.</string>
 	<string name="message_select_nfc_tag">The selected NFC tag will be required to dismiss this alarm when it goes off.</string>
+	<string name="message_add_backup_nfc_tag">Select an NFC tag to use as a backup which can also dismiss this alarm when it goes off.</string>
 	<string name="message_save_nfc_tag">You can reuse this NFC tag, without having to scan it again, by giving it a name.</string>
 	<string name="message_delete_nfc_tag">Are you sure you want to delete this NFC tag?</string>
 	<string name="message_rename_nfc_tag">What would you like to rename the NFC tag to?</string>
@@ -154,6 +156,7 @@
 	<string name="message_milliseconds">%1$d ms</string>
 	<string name="message_text_to_speech_default_voice">Default voice</string>
 	<string name="message_text_to_speech_voice">Voice %1$d</string>
+	<string name="message_text_to_speech_network_required">Network connection may be required for voice to work</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Unable to delete an active alarm</string>
@@ -186,6 +189,7 @@
 	<string name="title_alarm_activity">Dismiss Alarm</string>
 	<string name="title_scan_nfc_tag">Scan NFC tag</string>
 	<string name="title_select_nfc_tag">Select NFC tag</string>
+	<string name="title_add_backup_nfc_tag">Add backup NFC tag</string>
 	<string name="title_save_nfc_tag">Save NFC tag</string>
 	<string name="title_delete_nfc_tag">Delete NFC tag</string>
 	<string name="title_rename_nfc_tag">Rename NFC tag</string>
@@ -220,6 +224,7 @@
 	<string name="title_flashlight_brightness_level">Brightness level</string>
 	<string name="title_flashlight_blink_on_off">Blink on/off</string>
 	<string name="title_text_to_speech_speak_frequency">Speak frequency</string>
+	<string name="title_text_to_speech_speech_rate">Speech rate</string>
 	<string name="title_text_to_speech_voice">Voice</string>
 	<string name="title_volume_gradually_increase_volume">Gradually increase volume</string>
 	<string name="title_volume_restrict_volume">Restrict volume</string>
@@ -285,6 +290,7 @@
 	<string name="description_flashlight_blink_on_off">Blink the flashlight on and off at set durations.</string>
 	<string name="description_text_to_speech_what_to_say">What to say with text-to-speech when the alarm is active.</string>
 	<string name="description_text_to_speech_speak_frequency">How often to say the selected items above.</string>
+	<string name="description_text_to_speech_speech_rate">How fast text-to-speech should speak.</string>
 	<string name="description_volume_gradually_increase_volume">Increase the volume of the alarm at a set frequency.</string>
 	<string name="description_volume_restrict_volume">Volume cannot be changed when an alarm goes off.</string>
 	<string name="description_dismiss_options_auto_dismiss">Dismiss the alarm automatically after a set duration.</string>

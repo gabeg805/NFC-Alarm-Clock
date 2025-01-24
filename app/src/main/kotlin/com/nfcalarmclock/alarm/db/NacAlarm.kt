@@ -270,6 +270,12 @@ class NacAlarm()
 	var ttsFrequency: Int = 0
 
 	/**
+	 * Speech rate to use for text-to-speech.
+	 */
+	@ColumnInfo(name = "tts_speech_rate", defaultValue = "0.7")
+	var ttsSpeechRate : Float = 0.7f
+
+	/**
 	 * Name of the voice to use for text-to-speech.
 	 */
 	@ColumnInfo(name = "tts_voice", defaultValue = "")
@@ -519,6 +525,7 @@ class NacAlarm()
 		shouldSayCurrentTime = input.readInt() != 0
 		shouldSayAlarmName = input.readInt() != 0
 		ttsFrequency = input.readInt()
+		ttsSpeechRate = input.readFloat()
 		ttsVoice = input.readString() ?: ""
 
 		// Dismiss
@@ -756,6 +763,7 @@ class NacAlarm()
 		alarm.shouldSayCurrentTime = shouldSayCurrentTime
 		alarm.shouldSayAlarmName = shouldSayAlarmName
 		alarm.ttsFrequency = ttsFrequency
+		alarm.ttsSpeechRate = ttsSpeechRate
 		alarm.ttsVoice = ttsVoice
 
 		// Volume features
@@ -897,6 +905,7 @@ class NacAlarm()
 			&& (shouldSayCurrentTime == alarm.shouldSayCurrentTime)
 			&& (shouldSayAlarmName == alarm.shouldSayAlarmName)
 			&& (ttsFrequency == alarm.ttsFrequency)
+			&& (ttsSpeechRate == alarm.ttsSpeechRate)
 			&& (ttsVoice == alarm.ttsVoice)
 			&& (shouldGraduallyIncreaseVolume == alarm.shouldGraduallyIncreaseVolume)
 			&& (graduallyIncreaseVolumeWaitTime == alarm.graduallyIncreaseVolumeWaitTime)
@@ -963,6 +972,7 @@ class NacAlarm()
 			&& (shouldSayCurrentTime == alarm.shouldSayCurrentTime)
 			&& (shouldSayAlarmName == alarm.shouldSayAlarmName)
 			&& (ttsFrequency == alarm.ttsFrequency)
+			&& (ttsSpeechRate == alarm.ttsSpeechRate)
 			&& (ttsVoice == alarm.ttsVoice)
 			&& (shouldGraduallyIncreaseVolume == alarm.shouldGraduallyIncreaseVolume)
 			&& (shouldRestrictVolume == alarm.shouldRestrictVolume)
@@ -1069,6 +1079,7 @@ class NacAlarm()
 		println("Tts say time        : $shouldSayCurrentTime")
 		println("Tts say name        : $shouldSayAlarmName")
 		println("Tts Freq            : $ttsFrequency")
+		println("Tts Speech Rate     : $ttsSpeechRate")
 		println("Tts Voice           : $ttsVoice")
 		println("Grad Inc Vol        : $shouldGraduallyIncreaseVolume")
 		println("Grad Inc Vol Wait T : $graduallyIncreaseVolumeWaitTime")
@@ -1305,6 +1316,7 @@ class NacAlarm()
 		output.writeInt(if (shouldSayCurrentTime) 1 else 0)
 		output.writeInt(if (shouldSayAlarmName) 1 else 0)
 		output.writeInt(ttsFrequency)
+		output.writeFloat(ttsSpeechRate)
 		output.writeString(ttsVoice)
 
 		// Dismiss
@@ -1423,6 +1435,7 @@ class NacAlarm()
 				alarm.shouldSayCurrentTime = shared.shouldSayCurrentTime
 				alarm.shouldSayAlarmName = shared.shouldSayAlarmName
 				alarm.ttsFrequency = shared.ttsFrequency
+				alarm.ttsSpeechRate = shared.ttsSpeechRate
 				alarm.ttsVoice = shared.ttsVoice
 
 				// Auto dismiss

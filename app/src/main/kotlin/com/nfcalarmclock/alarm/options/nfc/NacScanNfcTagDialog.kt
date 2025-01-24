@@ -15,6 +15,7 @@ import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.alarm.options.navigate
 import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.getAlarm
+import com.nfcalarmclock.view.setupThemeColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -185,16 +186,8 @@ class NacScanNfcTagDialog
 	 */
 	override fun setupExtraButtons(alarm: NacAlarm?)
 	{
-		// Get the views
+		// Get the button
 		val useAnyButton: MaterialButton = dialog!!.findViewById(R.id.use_any_nfc_tag_button)
-		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
-		val parentView: LinearLayout = useAnyButton.parent as LinearLayout
-
-		// Swap views
-		parentView.removeView(cancelButton)
-		parentView.removeView(useAnyButton)
-		parentView.addView(useAnyButton)
-		parentView.addView(cancelButton)
 
 		// Setup the button
 		setupSecondaryButton(useAnyButton, listener = {
@@ -224,16 +217,20 @@ class NacScanNfcTagDialog
 	{
 		// Get the ok (select NFC tag) button
 		val selectNfcButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
+		val addNfcButton: MaterialButton = dialog!!.findViewById(R.id.add_nfc_tag_button)
 
 		// Rename the button
 		selectNfcButton.setText(R.string.action_select_nfc_tag)
 
-		// Set the visibility of the button
+		// Set the visibility of the button based on if there are any NFC tags saved
 		lifecycleScope.launch {
-			selectNfcButton.visibility = if (nfcTagViewModel.count() > 0) View.VISIBLE else View.GONE
+			val vis = if (nfcTagViewModel.count() > 0) View.VISIBLE else View.GONE
+
+			selectNfcButton.visibility = vis
+			addNfcButton.visibility = vis
 		}
 
-		// Setup the button
+		// Setup the select NFC tag button
 		setupPrimaryButton(selectNfcButton, listener = {
 
 			// Get the nav controller
@@ -252,6 +249,18 @@ class NacScanNfcTagDialog
 				})
 
 		})
+
+		// Setup the add button
+		addNfcButton.setupThemeColor(sharedPreferences)
+
+		// Set the click listener
+		addNfcButton.setOnClickListener {
+			println("HELLO")
+			// TODO: Make sure the backup does not show any currently selected NFC tags
+			// TODO: Make a thing to get a list of NFC tags, even if the list has one element
+			// TODO: Only show the plus if an NFC tag has already been selected
+			// TODO: Do I want to forego the plus and just add it to select NFC tag? That way a person can select all of them in one go
+		}
 	}
 
 }

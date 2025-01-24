@@ -41,7 +41,7 @@
 		<item name="android:layout_marginStart">@dimen/large</item>
 		<item name="android:layout_marginEnd">@dimen/large</item>
 		<item name="android:textColor">@color/white</item>
-		<item name="android:textSize">@dimen/tsz_normal</item>
+		<item name="android:textSize">@dimen/tsz_small</item>
 		<item name="backgroundTint">@color/gray_light</item>
 	</style>
 

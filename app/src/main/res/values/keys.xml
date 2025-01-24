@@ -79,6 +79,7 @@
 	<string name="key_default_alarm_tts_should_say_current_time">pref_should_say_current_time</string>
 	<string name="key_default_alarm_tts_should_say_alarm_name">pref_should_say_alarm_name</string>
 	<string name="key_default_alarm_tts_speak_frequency">pref_speak_frequency</string>
+	<string name="key_default_alarm_tts_speech_rate">pref_default_alarm_tts_speech_rate</string>
 	<string name="key_default_alarm_tts_voice">pref_default_alarm_tts_voice</string>
 	<string name="key_default_alarm_dismiss_should_auto_dismiss">pref_should_auto_dismiss</string>
 	<string name="key_default_alarm_dismiss_auto_dismiss_time">pref_auto_dismiss_new</string>

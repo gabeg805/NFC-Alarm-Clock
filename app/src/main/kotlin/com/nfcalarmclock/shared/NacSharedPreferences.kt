@@ -1876,6 +1876,23 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Text-to-speech speech rate.
+	 */
+	var ttsSpeechRate: Float
+		get()
+		{
+			val key = resources.getString(R.string.key_default_alarm_tts_speech_rate)
+
+			return instance.getFloat(key, 0.7f)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_alarm_tts_speech_rate)
+
+			saveFloat(key, value)
+		}
+
+	/**
 	 * Text-to-speech voice name.
 	 */
 	var ttsVoice: String

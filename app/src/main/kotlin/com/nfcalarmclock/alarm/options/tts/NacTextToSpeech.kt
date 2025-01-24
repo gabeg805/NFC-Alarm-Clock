@@ -147,6 +147,16 @@ class NacTextToSpeech(
 	 * On initialized listener.
 	 */
 	var onInitializedListener: OnInitializedListener? = null
+		set(value)
+		{
+			field = value
+
+			// Call the listener if already initialized
+			if (isInitialized)
+			{
+				onInitializedListener?.onInitialized(textToSpeech, TextToSpeech.SUCCESS)
+			}
+		}
 
 	/**
 	 * Constructor.
@@ -158,7 +168,6 @@ class NacTextToSpeech(
 
 		// Setup text to speech
 		textToSpeech.language = Locale.getDefault()
-		textToSpeech.setSpeechRate(0.65f)
 		textToSpeech.setOnUtteranceProgressListener(utteranceListener)
 	}
 
@@ -224,13 +233,19 @@ class NacTextToSpeech(
 	fun speak(message: String, attrs: NacAudioAttributes)
 	{
 		// TTS object is already initialized
-		if (this.isInitialized)
+		if (isInitialized)
 		{
 			// Gain transient audio focus
 			if (!NacAudioManager.requestFocusGainTransient(context, null, attrs))
 			{
 				NacUtility.quickToast(context, R.string.error_message_text_to_speech_audio_focus)
 				return
+			}
+
+			// Set the speech rate
+			if (attrs.speechRate != 0f)
+			{
+				textToSpeech.setSpeechRate(attrs.speechRate)
 			}
 
 			// Set the voice

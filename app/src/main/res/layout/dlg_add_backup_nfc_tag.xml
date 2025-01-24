@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical">
+
+	<!-- Title -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/title_add_backup_nfc_tag"
+		/>
+
+	<!-- Description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/message_add_backup_nfc_tag"
+		/>
+
+	<!-- Select an NFC tag from a list -->
+	<com.google.android.material.textfield.TextInputLayout
+		style="@style/Widget.AlarmOptionDialog.DropdownRow"
+		android:id="@+id/nfc_tag_input_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<com.google.android.material.textfield.MaterialAutoCompleteTextView
+			android:id="@+id/nfc_tag_dropdown_menu"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:inputType="none"
+			/>
+	</com.google.android.material.textfield.TextInputLayout>
+
+</com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

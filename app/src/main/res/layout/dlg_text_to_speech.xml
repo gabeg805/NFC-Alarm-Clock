@@ -79,6 +79,39 @@
 	<!-- Separator -->
 	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
 
+	<!-- Speech rate -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Title"
+		android:id="@+id/tts_speech_rate_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/title_text_to_speech_speech_rate"
+		/>
+
+	<!-- Speech rate description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:id="@+id/tts_speech_rate_description"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/description_text_to_speech_speech_rate"
+		/>
+
+	<!-- Speech rate slider -->
+	<com.google.android.material.slider.Slider
+		style="@style/Widget.AlarmOptionDialog.Slider"
+		android:id="@+id/tts_speech_rate_slider"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:valueFrom="0.1"
+		android:valueTo="2.0"
+		android:value="1"
+		android:stepSize="0.1"
+		/>
+
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
+
 	<!-- Voice title -->
 	<TextView
 		style="@style/Widget.AlarmOptionDialog.Title"
@@ -99,7 +132,7 @@
 
 	<!-- Pick how often to say the selected thing(s) above -->
 	<com.google.android.material.textfield.TextInputLayout
-		style="@style/Widget.AlarmOptionDialog.DropdownRow"
+		style="@style/Widget.AlarmOptionDialog.Dropdown"
 		android:id="@+id/tts_voice_input_layout"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
@@ -111,6 +144,23 @@
 			android:inputType="none"
 			/>
 	</com.google.android.material.textfield.TextInputLayout>
+
+	<!-- Voice description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:id="@+id/tts_voice_requirement"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/nudge"
+		android:layout_marginStart="@dimen/tiny"
+		android:textSize="@dimen/tsz_caption"
+		android:textStyle="italic"
+		android:text="@string/message_text_to_speech_network_required"
+		android:visibility="invisible"
+		/>
+
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
 
 	<!-- Preview button -->
 	<com.google.android.material.button.MaterialButton

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.LinearLayout
+import androidx.core.view.doOnLayout
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.NestedScrollView
 import androidx.navigation.fragment.findNavController
@@ -139,6 +140,7 @@ abstract class NacGenericAlarmOptionsDialog
 		val alarm = arguments?.getAlarm()
 
 		// Setup any alarm options
+		// TODO: Can this be moved after setting up the views below?
 		setupAlarmOptions(alarm)
 
 		// Setup the views
@@ -281,6 +283,7 @@ abstract class NacGenericAlarmOptionsDialog
 		// Get the max height that the scroll view can take up
 		val screenHeight = requireContext().resources.displayMetrics.heightPixels
 		val maxScrollHeight = screenHeight * 85 / 100 - buttonsHeight
+		val handler = Handler(requireContext().mainLooper)
 
 		// Layout listener
 		scrollView.addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ ->
@@ -290,8 +293,6 @@ abstract class NacGenericAlarmOptionsDialog
 			{
 				// Update the height in a handler so that it executes outside of the
 				// layout change listener
-				val handler = Handler(requireContext().mainLooper)
-
 				handler.post {
 					scrollView.updateLayoutParams {
 						height = maxScrollHeight
