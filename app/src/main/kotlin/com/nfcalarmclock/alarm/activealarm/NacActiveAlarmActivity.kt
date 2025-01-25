@@ -108,8 +108,7 @@ class NacActiveAlarmActivity
 	 */
 	private fun checkCanDismissWithNfc() : Boolean
 	{
-		// Get the NFC ID of the alarm and the intent
-		val alarmNfcId = alarm!!.nfcTagId
+		// Get the NFC ID from the intent
 		val intentNfcId = NacNfc.parseId(intent)
 
 		// Compare the two NFC IDs. As long as nothing is null,
@@ -118,7 +117,10 @@ class NacActiveAlarmActivity
 		// if the two NFC IDs are equal, this is also good
 		return if ((alarm != null)
 			&& (intentNfcId != null)
-			&& (!sharedPreferences.shouldShowNfcButton || alarmNfcId.isEmpty() || (alarmNfcId == intentNfcId)))
+			&& (!sharedPreferences.shouldShowNfcButton
+				|| alarm!!.nfcTagId.isEmpty()
+				|| (alarm!!.nfcTagId == intentNfcId)
+				|| (alarm!!.nfcTagIdList.contains(intentNfcId))))
 		{
 			true
 		}
@@ -247,7 +249,8 @@ class NacActiveAlarmActivity
 			lifecycleScope.launch {
 
 				// Get the NFC tag that corresponds to this ID from the table
-				val nfcTag = nfcTagViewModel.findNfcTag(alarm!!.nfcTagId)
+				val nfcIdList = alarm!!.nfcTagIdList
+				val nfcTag = if (nfcIdList.isNotEmpty()) nfcTagViewModel.findNfcTag(nfcIdList[0]) else null
 
 				// Setup the NFC tag
 				layoutHandler.setupNfcTag(this@NacActiveAlarmActivity, nfcTag)
@@ -370,22 +373,14 @@ class NacActiveAlarmActivity
 		// Use updated method calls to control screen for APK >= 27
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)
 		{
-			// Check if should NOT save battery and turn screen on
-			if (!sharedPreferences.shouldSaveBatteryInAlarmScreen)
-			{
-				setTurnScreenOn(true)
-			}
-
-			// Show when locked
+			// Turn the screen on and show when locked
+			setTurnScreenOn(true)
 			setShowWhenLocked(showWhenLocked)
 		}
 		else
 		{
-			// Check if should NOT save battery and turn screen on
-			if (!sharedPreferences.shouldSaveBatteryInAlarmScreen)
-			{
-				window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
-			}
+			// Turn the screen on
+			window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
 
 			// Add flag to show when locked
 			if (showWhenLocked)

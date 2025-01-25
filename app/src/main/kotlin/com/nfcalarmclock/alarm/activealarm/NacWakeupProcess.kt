@@ -14,7 +14,7 @@ import com.nfcalarmclock.alarm.options.tts.NacTranslate
 import com.nfcalarmclock.alarm.options.vibrate.NacVibrator
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
-import com.nfcalarmclock.util.NacUtility
+import com.nfcalarmclock.util.NacUtility.toast
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.media.NacAudioAttributes
 import com.nfcalarmclock.util.media.isMediaDirectory
@@ -122,7 +122,8 @@ class NacWakeupProcess(
 		}
 		catch (e: IllegalArgumentException)
 		{
-			NacUtility.toast(context, R.string.error_message_unable_to_shine_flashlight)
+			println("INIT SHINE EXCEPTION")
+			toast(context, R.string.error_message_unable_to_shine_flashlight)
 			null
 		}
 	}

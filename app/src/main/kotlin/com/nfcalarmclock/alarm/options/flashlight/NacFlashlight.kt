@@ -8,6 +8,8 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import com.nfcalarmclock.R
+import com.nfcalarmclock.util.NacUtility.toast
 
 /**
  * Find the first available camera ID.
@@ -29,7 +31,7 @@ fun findCameraId(cameraManager: CameraManager): String
 /**
  * Flashlight.
  */
-class NacFlashlight(context: Context)
+class NacFlashlight(private val context: Context)
 {
 
 	/**
@@ -53,15 +55,20 @@ class NacFlashlight(context: Context)
 		}
 		catch (_: IllegalArgumentException)
 		{
+			println("CAMERA CHARACTERISTICS CAMERA ID $cameraId EXCEPTION")
+			toast(context, R.string.error_message_unable_to_get_flashlight_characteristics)
 			null
 		}
 		catch (_: CameraAccessException)
 		{
+			println("CAMERA CHARACTERISTICS CAMERA ACCESS EXCEPTION")
+			toast(context, R.string.error_message_unable_to_access_flashlight)
 			null
 		}
 	}
 	else
 	{
+		println("EMPTY CAMERA ID WHAT THE HECK '$cameraId'")
 		null
 	}
 
@@ -170,9 +177,13 @@ class NacFlashlight(context: Context)
 		}
 		catch (_: CameraAccessException)
 		{
+			println("TURN OFF CAMERA ACCESS EXCEPTION")
+			toast(context, R.string.error_message_unable_to_access_flashlight)
 		}
 		catch (_: IllegalArgumentException)
 		{
+			println("TURN OFF INVALID CAMERA ID EXCEPTION")
+			toast(context, R.string.error_message_invalid_flashlight_id)
 		}
 
 		// Turn on the flashlight after the off duration has elapsed
@@ -203,9 +214,13 @@ class NacFlashlight(context: Context)
 		}
 		catch (_: CameraAccessException)
 		{
+			println("TURN ON CAMERA ACCESS EXCEPTION")
+			toast(context, R.string.error_message_unable_to_access_flashlight)
 		}
 		catch (_: IllegalArgumentException)
 		{
+			println("TURN ON INVALID CAMERA ID EXCEPTION")
+			toast(context, R.string.error_message_invalid_flashlight_id)
 		}
 
 		// Turn off the flashlight after the on duration has elapsed

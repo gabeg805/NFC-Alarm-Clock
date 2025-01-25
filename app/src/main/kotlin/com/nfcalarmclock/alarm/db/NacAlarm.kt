@@ -455,6 +455,27 @@ class NacAlarm()
 		}
 
 	/**
+	 * ID of the NFC tag that needs to be used to dismiss the alarm.
+	 */
+	val nfcTagIdList: List<String>
+		get()
+		{
+			// Create the regex
+			val regex = Regex(" \\|\\| ")
+
+			return if (nfcTagId.isEmpty())
+			{
+				// No NFC ID
+				emptyList()
+			}
+			else
+			{
+				// Try to split the NFC IDs
+				nfcTagId.split(regex)
+			}
+		}
+
+	/**
 	 * Check if should use TTS or not.
 	 */
 	val shouldUseTts: Boolean

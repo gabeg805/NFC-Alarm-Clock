@@ -653,14 +653,14 @@ class NacMainActivity
 		// Cleanup any extra media files in device encrypted storage
 		lifecycleScope.launch {  cleanupExtraMediaFilesInDeviceEncryptedStorage() }
 
-		lifecycleScope.launch {
-			nfcTagViewModel.getAllNfcTags().forEach { nfcTagViewModel.delete(it) }
-			nfcTagViewModel.insert(NacNfcTag("Bathroom", "akjshdlaksdh"))
-			nfcTagViewModel.insert(NacNfcTag("Car", "9083kjjhllkjls"))
-			nfcTagViewModel.insert(NacNfcTag("Garage", "09kj091kj"))
-			nfcTagViewModel.insert(NacNfcTag("Medicine", "102938kjh3l12"))
-			nfcTagViewModel.insert(NacNfcTag("Take out the trash", "loi120910j"))
-		}
+		//lifecycleScope.launch {
+		//	nfcTagViewModel.getAllNfcTags().forEach { nfcTagViewModel.delete(it) }
+		//	nfcTagViewModel.insert(NacNfcTag("Bathroom", "akjshdlaksdh"))
+		//	nfcTagViewModel.insert(NacNfcTag("Car", "9083kjjhllkjls"))
+		//	nfcTagViewModel.insert(NacNfcTag("Garage", "09kj091kj"))
+		//	nfcTagViewModel.insert(NacNfcTag("Medicine", "102938kjh3l12"))
+		//	nfcTagViewModel.insert(NacNfcTag("Take out the trash", "loi120910j"))
+		//}
 	}
 
 	/**

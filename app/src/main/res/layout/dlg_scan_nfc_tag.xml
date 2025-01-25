@@ -1,128 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:id="@+id/alarm_option_container"
 	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:paddingTop="@dimen/large"
-	android:paddingBottom="@dimen/large"
-	android:orientation="vertical"
-	app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+	android:layout_height="wrap_content">
 
-	<!-- Scroll view in case there are a lot of views -->
-	<androidx.core.widget.NestedScrollView
-		android:id="@+id/options_scroll_view"
+	<!-- Title -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Title"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginBottom="@dimen/medium"
-		android:scrollbarFadeDuration="10000"
-		android:scrollbars="vertical">
+		android:text="@string/title_scan_nfc_tag"
+		/>
 
-		<!-- Inner layout -->
-		<LinearLayout
-			android:id="@+id/container"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginStart="@dimen/large"
-			android:layout_marginEnd="@dimen/large"
-			android:orientation="vertical">
-
-			<!-- Title -->
-			<TextView
-				style="@style/Widget.AlarmOptionDialog.Title"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="@string/title_scan_nfc_tag"
-				/>
-
-			<!-- Description -->
-			<TextView
-				style="@style/Widget.AlarmOptionDialog.Description"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="@string/message_scan_nfc_tag"
-				/>
-
-			<!-- Image to indicate that the user should scan an NFC tag -->
-			<ImageView
-				android:contentDescription="@string/title_scan_nfc_tag"
-				android:layout_width="@dimen/isz_focus"
-				android:layout_height="@dimen/isz_focus"
-				android:layout_marginTop="@dimen/large"
-				android:layout_marginBottom="@dimen/large"
-				android:layout_gravity="center"
-				android:src="@drawable/tap_and_play"
-				/>
-
-			<!-- Title -->
-			<TextView
-				style="@style/Widget.AlarmOptionDialog.Title"
-				android:id="@+id/title_currently_selected"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="@dimen/tiny"
-				android:textAlignment="textEnd"
-				android:textSize="@dimen/tsz_small"
-				android:text="@string/title_current_selected"
-				android:visibility="gone"
-				/>
-
-			<!-- Description -->
-			<TextView
-				style="@style/Widget.AlarmOptionDialog.Description"
-				android:id="@+id/description_nfc_tag_name"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:textAlignment="textEnd"
-				android:ellipsize="end"
-				android:maxLines="1"
-				android:text=""
-				android:visibility="gone"
-				/>
-
-		</LinearLayout>
-	</androidx.core.widget.NestedScrollView>
-
-	<LinearLayout
+	<!-- Description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginStart="@dimen/large"
-		android:layout_marginEnd="@dimen/large"
-		android:orientation="horizontal">
+		android:text="@string/message_scan_nfc_tag"
+		/>
 
-		<!-- Ok button -->
-		<com.google.android.material.button.MaterialButton
-			style="@style/Widget.AlarmOptionDialog.Button"
-			android:id="@+id/ok_button"
-			android:layout_width="0dp"
-			android:layout_weight="5"
-			android:layout_marginStart="0dp"
-			android:layout_marginEnd="0dp"
-			android:text="@string/action_select_nfc_tag"
-			app:backgroundTint="@color/orange"
-			/>
+	<!-- Image to indicate that the user should scan an NFC tag -->
+	<ImageView
+		android:contentDescription="@string/title_scan_nfc_tag"
+		android:layout_width="@dimen/isz_focus"
+		android:layout_height="@dimen/isz_focus"
+		android:layout_marginTop="@dimen/large"
+		android:layout_marginBottom="@dimen/large"
+		android:layout_gravity="center"
+		android:src="@drawable/tap_and_play"
+		/>
 
-		<Space
-			android:layout_width="@dimen/normal"
-			android:layout_height="match_parent"
-			/>
+	<!-- Title -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Title"
+		android:id="@+id/title_currently_selected"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/tiny"
+		android:textAlignment="textEnd"
+		android:textSize="@dimen/tsz_small"
+		android:text="@string/title_current_selected"
+		android:visibility="gone"
+		/>
 
-		<!-- Add an additional tag button -->
-		<com.google.android.material.button.MaterialButton
-			style="@style/Widget.AlarmOptionDialog.Button"
-			android:id="@+id/add_nfc_tag_button"
-			android:layout_width="0dp"
-			android:layout_weight="1"
-			android:layout_marginStart="0dp"
-			android:layout_marginEnd="0dp"
-			app:backgroundTint="@color/orange"
-			app:iconGravity="textStart"
-			app:iconPadding="0dp"
-			app:iconTint="@color/black"
-			app:icon="@drawable/plus"
-			/>
-	</LinearLayout>
+	<!-- Description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:id="@+id/description_nfc_tag_name"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textAlignment="textEnd"
+		android:ellipsize="end"
+		android:maxLines="5"
+		android:text=""
+		android:visibility="gone"
+		/>
 
 	<!-- Use any NFC tag button -->
 	<com.google.android.material.button.MaterialButton
@@ -132,12 +65,4 @@
 		android:text="@string/action_use_any"
 		/>
 
-	<!-- Cancel button -->
-	<com.google.android.material.button.MaterialButton
-		style="@style/Widget.AlarmOptionDialog.Button"
-		android:id="@+id/cancel_button"
-		android:layout_width="match_parent"
-		android:text="@string/action_cancel"
-		/>
-
-</LinearLayout>
+</com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

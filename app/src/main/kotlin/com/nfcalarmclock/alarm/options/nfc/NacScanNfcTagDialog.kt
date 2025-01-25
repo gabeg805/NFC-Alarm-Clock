@@ -15,7 +15,6 @@ import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.alarm.options.navigate
 import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.getAlarm
-import com.nfcalarmclock.view.setupThemeColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -148,16 +147,16 @@ class NacScanNfcTagDialog
 		val a = alarm ?: NacAlarm.build()
 
 		// Setup the views
-		setupCurrentlySelectedInfo(a.nfcTagId)
+		setupCurrentlySelectedInfo(a.nfcTagIdList)
 	}
 
 	/**
 	 * Setup the currently selected information.
 	 */
-	private fun setupCurrentlySelectedInfo(id: String)
+	private fun setupCurrentlySelectedInfo(ids: List<String>)
 	{
-		// No NFC ID is set
-		if (id.isEmpty())
+		// No NFC IDs are set
+		if (ids.isEmpty())
 		{
 			return
 		}
@@ -168,15 +167,32 @@ class NacScanNfcTagDialog
 
 		lifecycleScope.launch {
 
-			// Find the NFC tag
-			val tag = nfcTagViewModel.findNfcTag(id)
+			// Get the name of each NFC tag selected
+			var names = ""
+
+			ids.forEachIndexed { index, s ->
+
+				// Find the NFC tag
+				val tag = nfcTagViewModel.findNfcTag(s)
+
+				// Add a newline if multiple NFC tags have been found
+				if (index > 0)
+				{
+					names += "\n"
+				}
+
+				// Add the tag name or show the ID. Showing the ID should only occur for
+				// a list of one item
+				names += tag?.name ?: "(${resources.getString(R.string.message_show_nfc_tag_id)}) $s"
+
+			}
+
+			// Set the description
+			description.text = names
 
 			// Change the visibility of the views
 			title.visibility = View.VISIBLE
 			description.visibility = View.VISIBLE
-
-			// Set the description
-			description.text = tag?.name ?: "(${resources.getString(R.string.message_show_nfc_tag_id)}) $id"
 
 		}
 	}
@@ -186,8 +202,16 @@ class NacScanNfcTagDialog
 	 */
 	override fun setupExtraButtons(alarm: NacAlarm?)
 	{
-		// Get the button
+		// Get the views
 		val useAnyButton: MaterialButton = dialog!!.findViewById(R.id.use_any_nfc_tag_button)
+		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
+		val parentView: LinearLayout = useAnyButton.parent as LinearLayout
+
+		// Swap views
+		parentView.removeView(cancelButton)
+		parentView.removeView(useAnyButton)
+		parentView.addView(useAnyButton)
+		parentView.addView(cancelButton)
 
 		// Setup the button
 		setupSecondaryButton(useAnyButton, listener = {
@@ -217,17 +241,13 @@ class NacScanNfcTagDialog
 	{
 		// Get the ok (select NFC tag) button
 		val selectNfcButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
-		val addNfcButton: MaterialButton = dialog!!.findViewById(R.id.add_nfc_tag_button)
 
 		// Rename the button
-		selectNfcButton.setText(R.string.action_select_nfc_tag)
+		selectNfcButton.setText(R.string.title_select_nfc_tag)
 
 		// Set the visibility of the button based on if there are any NFC tags saved
 		lifecycleScope.launch {
-			val vis = if (nfcTagViewModel.count() > 0) View.VISIBLE else View.GONE
-
-			selectNfcButton.visibility = vis
-			addNfcButton.visibility = vis
+			selectNfcButton.visibility = if (nfcTagViewModel.count() > 0) View.VISIBLE else View.GONE
 		}
 
 		// Setup the select NFC tag button
@@ -250,17 +270,6 @@ class NacScanNfcTagDialog
 
 		})
 
-		// Setup the add button
-		addNfcButton.setupThemeColor(sharedPreferences)
-
-		// Set the click listener
-		addNfcButton.setOnClickListener {
-			println("HELLO")
-			// TODO: Make sure the backup does not show any currently selected NFC tags
-			// TODO: Make a thing to get a list of NFC tags, even if the list has one element
-			// TODO: Only show the plus if an NFC tag has already been selected
-			// TODO: Do I want to forego the plus and just add it to select NFC tag? That way a person can select all of them in one go
-		}
 	}
 
 }
