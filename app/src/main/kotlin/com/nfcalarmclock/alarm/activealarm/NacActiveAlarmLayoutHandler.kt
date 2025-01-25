@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.nfc.NacNfc
-import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
 
 abstract class NacActiveAlarmLayoutHandler(
@@ -54,7 +53,7 @@ abstract class NacActiveAlarmLayoutHandler(
 	/**
 	 * Setup an NFC tag, if necessary.
 	 */
-	open fun setupNfcTag(context: Context, nfcTag: NacNfcTag?) {}
+	open fun setupNfcTag(context: Context, names: String?) {}
 
 	/**
 	 * Start the layout and run any setup that needs to run.

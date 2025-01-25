@@ -5,10 +5,13 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>Funktion zum &lt;b>Auswählen mehrerer NFC-Tags&lt;/b> hinzugefügt, mit der ein Alarm deaktiviert werden kann.</item>
+		<item>Zur Text-to-Speech-Option wurde die &lt;b>Sprechgeschwindigkeit&lt;/b> hinzugefügt, um die Sprechgeschwindigkeit zu ändern.</item>
 		<item>Das Erscheinungsbild der &lt;b>Weckerkarte&lt;/b> wurde aktualisiert, um Schaltflächen für Optionen zum Schließen, Schlummern und für den normalen Wecker anzuzeigen.</item>
 		<item>Option &lt;b>benutzerdefiniertes Vibrationsmuster&lt;/b> für Alarme hinzugefügt.</item>
 		<item>Option &lt;b>Batteriesparmodus&lt;/b> hinzugefügt, um den Bildschirm ausgeschaltet zu lassen, wenn ein Alarm aktiv ist. Zu finden unter „Einstellungen“ > „Allgemein“.</item>
 		<item>Option &lt;b>Stimme&lt;/b> zu &lt;b>Text-to-Speech&lt;/b> hinzugefügt, um auszuwählen, welche Stimme verwendet werden soll.</item>
+		<item>Ein Problem mit der &lt;b>Taschenlampe&lt;/b> wurde behoben, bei dem diese nur blinkte und nicht einfach anging und an blieb.</item>
 	</string-array>
 
 </resources>

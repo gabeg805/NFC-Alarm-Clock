@@ -5,10 +5,13 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>Te ajoute yon karakteristik nan &lt;b>chwazi plizyè tag NFC&lt;/b> ki ka anile yon alam.</item>
+		<item>Te ajoute &lt;b>pousantaj lapawòl&lt;/b> nan opsyon tèks-a-lapawòl pou chanje vitès la ke li pral pale.</item>
 		<item>Mizajou &lt;b>kat alam&lt;/b> gade pou montre bouton pou opsyon ranvwaye, opsyon snooze, ak opsyon alam regilye.</item>
 		<item>Te ajoute &lt;b>modèl Vibration Customized&lt;/b> opsyon pou alam.</item>
 		<item>Te ajoute opsyon &lt;b>ekonomizeur batri&lt;/b> pou kenbe ekran an etenn lè yon alam aktif. Jwenn nan Anviwònman> Jeneral.</item>
 		<item>Te ajoute opsyon &lt;b>vwa&lt;/b> nan &lt;b>tèks-a-lapawòl&lt;/b> pou chwazi ki vwa pou itilize.</item>
+		<item>Fikse yon pwoblèm ak &lt;b>flich&lt;/b> kote li ta sèlman bat je, pa jis limen epi rete limen.</item>
 	</string-array>
 
 </resources>

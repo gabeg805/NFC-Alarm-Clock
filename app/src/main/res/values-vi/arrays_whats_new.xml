@@ -5,10 +5,13 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>Đã thêm tính năng &lt;b>chọn nhiều thẻ NFC&lt;/b> để có thể tắt báo thức.</item>
+		<item>Đã thêm &lt;b>tốc độ giọng nói&lt;/b> vào tùy chọn chuyển văn bản thành giọng nói để thay đổi tốc độ nói.</item>
 		<item>Đã cập nhật giao diện &lt;b>thẻ báo thức&lt;/b> để hiển thị các nút cho tùy chọn hủy báo thức, tùy chọn báo lại và tùy chọn báo thức thông thường.</item>
 		<item>Đã thêm tùy chọn &lt;b>mẫu rung tùy chỉnh&lt;/b> cho báo thức.</item>
 		<item>Đã thêm tùy chọn &lt;b>tiết kiệm pin&lt;/b> để tắt màn hình khi báo thức đang hoạt động. Tìm thấy trong Cài đặt > Chung.</item>
 		<item>Đã thêm tùy chọn &lt;b>giọng nói&lt;/b> vào &lt;b>chuyển văn bản thành giọng nói&lt;/b> để chọn giọng nói sẽ sử dụng.</item>
+		<item>Đã khắc phục sự cố liên quan đến đèn pin chỉ nhấp nháy chứ không bật và sáng liên tục.</item>
 	</string-array>
 
 </resources>

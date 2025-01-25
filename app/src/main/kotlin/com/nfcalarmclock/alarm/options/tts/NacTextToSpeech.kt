@@ -135,7 +135,7 @@ class NacTextToSpeech(
 	/**
 	 * Check if speech engine is initialized.
 	 */
-	private var isInitialized: Boolean = false
+	var isInitialized: Boolean = false
 
 	/**
 	 * The utterance listener.

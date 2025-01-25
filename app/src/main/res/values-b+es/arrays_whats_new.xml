@@ -5,10 +5,13 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>Se agregó la función para &lt;b>seleccionar múltiples etiquetas NFC&lt;/b> que pueden descartar una alarma.</item>
+		<item>Se agregó &lt;b>velocidad de voz&lt;/b> a la opción de texto a voz para cambiar la velocidad a la que hablará.</item>
 		<item>Se actualizó el aspecto de la &lt;b>tarjeta de alarma&lt;/b> para mostrar botones para opciones de descartar, opciones de posponer y opciones de alarma normales.</item>
 		<item>Se agregó la opción &lt;b>patrón de vibración personalizado&lt;/b> para las alarmas.</item>
 		<item>Se agregó la opción &lt;b>ahorro de batería&lt;/b> para mantener la pantalla apagada cuando hay una alarma activa. Se encuentra en Configuración > General.</item>
 		<item>Se agregó la opción &lt;b>voz&lt;/b> a &lt;b>texto a voz&lt;/b> para elegir qué voz usar.</item>
+		<item>Se solucionó un problema con la &lt;b>linterna&lt;/b> donde solo parpadeaba y no simplemente se encendía y permanecía encendida.</item>
 	</string-array>
 
 </resources>

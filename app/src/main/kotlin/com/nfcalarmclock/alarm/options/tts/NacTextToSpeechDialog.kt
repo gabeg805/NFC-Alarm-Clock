@@ -163,7 +163,13 @@ class NacTextToSpeechDialog
 		alarm?.shouldSayAlarmName = alarmNameCheckBox.isChecked
 		alarm?.ttsFrequency = selectedTtsFreq
 		alarm?.ttsSpeechRate = ttsSpeechRateSlider.value
-		alarm?.ttsVoice = selectedTtsVoiceName
+
+		// Set the voice if TTS is initialized, otherwise the user probably was not able
+		// to change it so it does not need to change
+		if (ttsHelper.isInitialized)
+		{
+			alarm?.ttsVoice = selectedTtsVoiceName
+		}
 
 		// Shutdown the text-to-speech resource
 		ttsHelper.textToSpeech.shutdown()

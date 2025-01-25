@@ -23,7 +23,6 @@ import androidx.dynamicanimation.animation.DynamicAnimation
 import androidx.dynamicanimation.animation.FlingAnimation
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.createTimeTickReceiver
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
@@ -805,10 +804,10 @@ class NacSwipeLayoutHandler(
 	/**
 	 * Setup an NFC tag. This is only called if NFC is enabled for an alarm.
 	 */
-	override fun setupNfcTag(context: Context, nfcTag: NacNfcTag?)
+	override fun setupNfcTag(context: Context, names: String?)
 	{
 		// Set the name
-		nfcNameTextView.text = nfcTag?.name ?: context.resources.getString(R.string.title_scan_nfc_tag)
+		nfcNameTextView.text = names ?: context.resources.getString(R.string.title_scan_nfc_tag)
 	}
 
 	/**

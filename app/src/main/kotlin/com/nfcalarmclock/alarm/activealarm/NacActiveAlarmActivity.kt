@@ -249,11 +249,12 @@ class NacActiveAlarmActivity
 			lifecycleScope.launch {
 
 				// Get the NFC tag that corresponds to this ID from the table
-				val nfcIdList = alarm!!.nfcTagIdList
-				val nfcTag = if (nfcIdList.isNotEmpty()) nfcTagViewModel.findNfcTag(nfcIdList[0]) else null
+				val nfcTagNames = alarm!!.nfcTagIdList.takeIf { alarm!!.nfcTagId.isNotEmpty() }
+					?.mapNotNull {  nfcTagViewModel.findNfcTag(it) }
+					?.joinToString(", ") { it.name }
 
 				// Setup the NFC tag
-				layoutHandler.setupNfcTag(this@NacActiveAlarmActivity, nfcTag)
+				layoutHandler.setupNfcTag(this@NacActiveAlarmActivity, nfcTagNames)
 
 			}
 		}

@@ -56,8 +56,7 @@ class NacSelectNfcTagDialog
 	 * updated.
 	 */
 	private val unusedNfcTagNames: List<String>
-		get() = allNfcTags
-			.filter { !selectedNfcTags.contains(it) }
+		get() = allNfcTags.filter { !selectedNfcTags.contains(it) }
 			.map { it.name }
 
 	/**
@@ -219,22 +218,31 @@ class NacSelectNfcTagDialog
 		textView.setText(defaultName, false)
 
 		// Dropdown item click listener
-		textView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+		textView.onItemClickListener = AdapterView.OnItemClickListener { _, _, _, _ ->
 
-			// Get the index of this view in relation to the container. This will help
-			// determine the correct index in the selected NFC tags list
+			// Get the name of the selected NFC tag and the index of this view in
+			// relation to the container. This will help determine the correct index in
+			// the selected NFC tags list
+			val name = textView.text.toString()
 			val index = container.indexOfChild(root)
 
-			// Add the selected NFC tag
-			if (index+1 > selectedNfcTags.size)
-			{
-				selectedNfcTags.add(allNfcTags[position])
-			}
-			// Replace the selected NFC tag
-			else
-			{
-				selectedNfcTags[index] = allNfcTags[position]
-			}
+			// Find the matching tag in the list of all NFC tags and add/replace it in
+			// the selected NFC tags list
+			allNfcTags.firstOrNull { it.name == name }
+				?.let { match ->
+
+					// Add the selected NFC tag
+					if (index+1 > selectedNfcTags.size)
+					{
+						selectedNfcTags.add(match)
+					}
+					// Replace the selected NFC tag
+					else
+					{
+						selectedNfcTags[index] = match
+					}
+
+				}
 
 			// Update the dropdown items
 			setAllDropdownItems()
@@ -245,19 +253,17 @@ class NacSelectNfcTagDialog
 
 			// Find the first NFC tag that is not being used
 			val unusedName = unusedNfcTagNames.firstOrNull()
+				?.also { name ->
 
-			// Add the unused tag to the selected NFC tags
-			if (unusedName != null)
-			{
-				allNfcTags
-					.firstOrNull { it.name == unusedName }
-					?.also { selectedNfcTags.add(it) }
-			}
+					// Add the unused tag to the selected NFC tags
+					allNfcTags.firstOrNull { it.name == name }
+						?.let { selectedNfcTags.add(it) }
+
+				}
 
 			// Add a new NFC tag and update all the dropdown items
 			setupInputLayoutAndTextView(unusedName ?: nfcTagNames[0], nfcTagNames)
 			setAllDropdownItems()
-
 		}
 
 		// Remove button click listener
@@ -267,12 +273,11 @@ class NacSelectNfcTagDialog
 			container.removeView(root)
 
 			// Remove the tag from the list
-			val index = selectedNfcTags.indexOfFirst { it.name == textView.text.toString() }
-
-			if (index >= 0)
-			{
-				selectedNfcTags.removeAt(index)
-			}
+			selectedNfcTags.indexOfFirst { it.name == textView.text.toString() }
+				.takeIf { it >= 0 }
+				?.let { index ->
+					selectedNfcTags.removeAt(index)
+				}
 
 			// Update all the dropdown items
 			setAllDropdownItems()
