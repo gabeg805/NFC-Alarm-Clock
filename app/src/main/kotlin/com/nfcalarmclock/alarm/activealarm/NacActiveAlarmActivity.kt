@@ -251,7 +251,7 @@ class NacActiveAlarmActivity
 				// Get the NFC tag that corresponds to this ID from the table
 				val nfcTagNames = alarm!!.nfcTagIdList.takeIf { alarm!!.nfcTagId.isNotEmpty() }
 					?.mapNotNull {  nfcTagViewModel.findNfcTag(it) }
-					?.joinToString(", ") { it.name }
+					?.joinToString(" \u2027 ") { it.name }
 
 				// Setup the NFC tag
 				layoutHandler.setupNfcTag(this@NacActiveAlarmActivity, nfcTagNames)

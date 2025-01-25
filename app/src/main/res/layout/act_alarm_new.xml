@@ -98,6 +98,7 @@
 			android:layout_marginTop="@dimen/small"
 			android:ellipsize="end"
 			android:maxLines="2"
+			android:textAlignment="center"
 			android:textColor="@color/white"
 			android:textSize="@dimen/tsz_large"
 			android:textStyle="bold"
