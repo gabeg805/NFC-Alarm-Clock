@@ -29,6 +29,45 @@ fun findCameraId(cameraManager: CameraManager): String
 }
 
 /**
+ * Get the reason for why there was a failure to access the camera.
+ */
+fun getReasonForCameraAccessFailure(
+	context: Context,
+	exception: CameraAccessException
+): String
+{
+	// Get the string resource to use
+	val id = when (exception.reason)
+	{
+		CameraAccessException.CAMERA_DISABLED     -> R.string.error_message_camera_disabled
+		CameraAccessException.CAMERA_DISCONNECTED -> R.string.error_message_camera_disconnected
+		CameraAccessException.CAMERA_ERROR        -> R.string.error_message_camera_error
+		CameraAccessException.CAMERA_IN_USE       -> R.string.error_message_camera_in_use
+		CameraAccessException.MAX_CAMERAS_IN_USE  -> R.string.error_message_camera_max_in_use
+		else                                      -> R.string.state_unknown
+	}
+
+	// Get the string
+	return context.getString(id)
+}
+
+/**
+ * Get the reason for why there was a failure to access the camera.
+ */
+fun toastReasonForCameraAccessFailure(
+	context: Context,
+	exception: CameraAccessException
+)
+{
+	// Get the reason
+	val reason = getReasonForCameraAccessFailure(context, exception)
+	val message = context.getString(R.string.error_message_unable_to_access_flashlight, reason)
+
+	// Toast
+	toast(context, message)
+}
+
+/**
  * Flashlight.
  */
 class NacFlashlight(private val context: Context)
@@ -42,7 +81,20 @@ class NacFlashlight(private val context: Context)
 	/**
 	 * Camera ID.
 	 */
-	private val cameraId: String = findCameraId(cameraManager)
+	private val cameraId: String = try
+	{
+		findCameraId(cameraManager)
+	}
+	catch (e: CameraAccessException)
+	{
+		// Get the reason
+		val reason = getReasonForCameraAccessFailure(context, e)
+		val message = context.getString(R.string.error_message_unable_to_shine_flashlight, reason)
+
+		// Toast
+		toast(context, message)
+		""
+	}
 
 	/**
 	 * Camera characteristics.
@@ -53,22 +105,19 @@ class NacFlashlight(private val context: Context)
 		{
 			cameraManager.getCameraCharacteristics(cameraId)
 		}
-		catch (_: IllegalArgumentException)
+		catch (e: CameraAccessException)
 		{
-			println("CAMERA CHARACTERISTICS CAMERA ID $cameraId EXCEPTION")
-			toast(context, R.string.error_message_unable_to_get_flashlight_characteristics)
+			toastReasonForCameraAccessFailure(context, e)
 			null
 		}
-		catch (_: CameraAccessException)
+		catch (_: IllegalArgumentException)
 		{
-			println("CAMERA CHARACTERISTICS CAMERA ACCESS EXCEPTION")
-			toast(context, R.string.error_message_unable_to_access_flashlight)
+			toast(context, R.string.error_message_unable_to_get_flashlight_characteristics)
 			null
 		}
 	}
 	else
 	{
-		println("EMPTY CAMERA ID WHAT THE HECK '$cameraId'")
 		null
 	}
 
@@ -175,15 +224,13 @@ class NacFlashlight(private val context: Context)
 			// Turn off the flashlight
 			cameraManager.setTorchMode(cameraId, false)
 		}
-		catch (_: CameraAccessException)
+		catch (e: CameraAccessException)
 		{
-			println("TURN OFF CAMERA ACCESS EXCEPTION")
-			toast(context, R.string.error_message_unable_to_access_flashlight)
+			toastReasonForCameraAccessFailure(context, e)
 		}
 		catch (_: IllegalArgumentException)
 		{
-			println("TURN OFF INVALID CAMERA ID EXCEPTION")
-			toast(context, R.string.error_message_invalid_flashlight_id)
+			toast(context, R.string.error_message_unable_to_turn_off_flashlight)
 		}
 
 		// Turn on the flashlight after the off duration has elapsed
@@ -212,15 +259,13 @@ class NacFlashlight(private val context: Context)
 				cameraManager.setTorchMode(cameraId, true)
 			}
 		}
-		catch (_: CameraAccessException)
+		catch (e: CameraAccessException)
 		{
-			println("TURN ON CAMERA ACCESS EXCEPTION")
-			toast(context, R.string.error_message_unable_to_access_flashlight)
+			toastReasonForCameraAccessFailure(context, e)
 		}
 		catch (_: IllegalArgumentException)
 		{
-			println("TURN ON INVALID CAMERA ID EXCEPTION")
-			toast(context, R.string.error_message_invalid_flashlight_id)
+			toast(context, R.string.error_message_unable_to_turn_on_flashlight)
 		}
 
 		// Turn off the flashlight after the on duration has elapsed

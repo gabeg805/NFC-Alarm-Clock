@@ -5,7 +5,6 @@ import android.os.Handler
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
-import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.flashlight.NacFlashlight
 import com.nfcalarmclock.alarm.options.tts.NacTextToSpeech
@@ -14,7 +13,6 @@ import com.nfcalarmclock.alarm.options.tts.NacTranslate
 import com.nfcalarmclock.alarm.options.vibrate.NacVibrator
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
-import com.nfcalarmclock.util.NacUtility.toast
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.media.NacAudioAttributes
 import com.nfcalarmclock.util.media.isMediaDirectory
@@ -116,16 +114,13 @@ class NacWakeupProcess(
 	 */
 	private val flashlight: NacFlashlight? = if (shouldUseFlashlight)
 	{
-		try
-		{
-			NacFlashlight(context)
-		}
-		catch (e: IllegalArgumentException)
-		{
-			println("INIT SHINE EXCEPTION")
-			toast(context, R.string.error_message_unable_to_shine_flashlight)
-			null
-		}
+		NacFlashlight(context)
+		//catch (e: IllegalArgumentException)
+		//{
+		//	println("INIT SHINE EXCEPTION")
+		//	toast(context, R.string.error_message_unable_to_shine_flashlight)
+		//	null
+		//}
 	}
 	else
 	{
@@ -182,8 +177,9 @@ class NacWakeupProcess(
 			 */
 			override fun onStartSpeaking()
 			{
-				// Stop any vibration when TTS is playing
+				// Stop any vibration and flashlight when TTS is playing
 				vibrator?.cleanup()
+				flashlight?.cleanup()
 
 				// Use handler to start wake up process so that the media
 				// player is accessed on the correct thread
@@ -447,16 +443,15 @@ class NacWakeupProcess(
 		// Flashlight
 		if (shouldUseFlashlight)
 		{
-			// On/off duration has not been set
-			if (alarm.flashlightOnDuration == "0")
+			// Blink the flashlight
+			if (alarm.shouldBlinkFlashlight)
 			{
-				// Turn on the flashlight
-				flashlight?.turnOn()
+				flashlight?.blink(alarm.flashlightOnDuration, alarm.flashlightOffDuration)
 			}
+			// Turn on the flashlight
 			else
 			{
-				// Blink the flashlight
-				flashlight?.blink(alarm.flashlightOnDuration, alarm.flashlightOffDuration)
+				flashlight?.turnOn()
 			}
 		}
 	}

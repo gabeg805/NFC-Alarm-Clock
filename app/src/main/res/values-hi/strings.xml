@@ -62,7 +62,6 @@
 	<string name="action_show_nfc_tag_id">NFC टैग दिखाएं</string>
 	<string name="action_use_any">किसी भी NFC टैग का उपयोग करें</string>
 	<string name="action_save">बचाना</string>
-	<string name="action_select_nfc_tag">NFC टैग चुनें</string>
 	<string name="action_skip">छोडना</string>
 	<string name="action_undo">पूर्ववत</string>
 	<string name="action_browse">ब्राउज़</string>
@@ -110,7 +109,7 @@
 	<string name="message_nfc_required_use_any">एनएफसी आवश्यक (किसी भी का उपयोग करें)</string>
 	<string name="message_show_nfc_tag_id">पहचान</string>
 	<string name="message_scan_nfc_tag">जब यह अलार्म बजेगा तो उसे बंद करने के लिए स्कैन किए गए NFC टैग की आवश्यकता होगी।</string>
-	<string name="message_select_nfc_tag">जब यह अलार्म बजेगा तो इसे बंद करने के लिए चयनित NFC टैग की आवश्यकता होगी।</string>
+	<string name="message_select_nfc_tag">एक NFC टैग चुनें जो इस अलार्म के बजने पर उसे बंद करने के लिए ज़रूरी होगा। अगर एक से ज़्यादा टैग चुने गए हैं, तो उनका इस्तेमाल इस अलार्म को बंद करने के लिए भी किया जा सकता है।</string>
 	<string name="message_save_nfc_tag">आप इस NFC टैग को नाम देकर, इसे दोबारा स्कैन किए बिना, पुनः उपयोग कर सकते हैं।</string>
 	<string name="message_delete_nfc_tag">क्या आप वाकई इस NFC टैग को हटाना चाहते हैं?</string>
 	<string name="message_rename_nfc_tag">आप एनएफसी टैग का नाम बदलकर क्या रखना चाहेंगे?</string>
@@ -154,6 +153,7 @@
 	<string name="message_milliseconds">%1$d मि.से.</string>
 	<string name="message_text_to_speech_default_voice">डिफ़ॉल्ट आवाज़</string>
 	<string name="message_text_to_speech_voice">आवाज़ %1$d</string>
+	<string name="message_text_to_speech_network_required">आवाज़ के काम करने के लिए नेटवर्क कनेक्शन की आवश्यकता हो सकती है</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">सक्रिय अलार्म को हटाने में असमर्थ</string>
@@ -172,12 +172,21 @@
 	<string name="error_message_google_play_billing">Google Play स्टोर से कनेक्ट करते समय त्रुटि</string>
 	<string name="error_message_text_to_speech_audio_focus">टेक्स्ट-टू-स्पीच का उपयोग करने में असमर्थ</string>
 	<string name="error_message_unable_to_email_statistics">आंकड़े ईमेल करने में असमर्थ</string>
-	<string name="error_message_unable_to_shine_flashlight">टॉर्च चमकाने में असमर्थ</string>
+	<string name="error_message_unable_to_shine_flashlight">टॉर्च चमकाने में असमर्थ — %1$s</string>
+	<string name="error_message_unable_to_get_flashlight_characteristics">टॉर्च संबंधी जानकारी प्राप्त करने में असमर्थ</string>
+	<string name="error_message_unable_to_access_flashlight">फ्लैशलाइट तक पहुंचने में असमर्थ — %1$s</string>
+	<string name="error_message_unable_to_turn_off_flashlight">टॉर्च बंद करने में असमर्थ</string>
+	<string name="error_message_unable_to_turn_on_flashlight">टॉर्च चालू करने में असमर्थ</string>
 	<string name="error_message_unable_to_start_foreground_service">अग्रभूमि सेवा शुरू करने में असमर्थ। कृपया अनुमति सक्षम करें</string>
 	<string name="error_message_unable_to_open_import_export_stream">फाइल खोलने में असमर्थ</string>
 	<string name="error_message_unable_to_select_file">फ़ाइल का चयन करने में असमर्थ</string>
 	<string name="error_message_unable_to_get_media_information_from_file">फ़ाइल से मीडिया जानकारी प्राप्त करने में असमर्थ</string>
 	<string name="error_message_not_enough_free_space">गाने का बैकअप बनाने के लिए पर्याप्त खाली स्थान नहीं है</string>
+	<string name="error_message_camera_disabled">कैमरा अक्षम</string>
+	<string name="error_message_camera_disconnected">कैमरा डिस्कनेक्ट हो गया</string>
+	<string name="error_message_camera_error">कैमरा त्रुटि</string>
+	<string name="error_message_camera_in_use">उपयोग में कैमरा</string>
+	<string name="error_message_camera_max_in_use">अधिकतम उपयोग में कैमरे</string>
 
 	<!-- Titles -->
 	<string name="title_settings">सेटिंग्स</string>
@@ -220,6 +229,7 @@
 	<string name="title_flashlight_brightness_level">चमक स्तर</string>
 	<string name="title_flashlight_blink_on_off">ब्लिंक ऑन/ऑफ</string>
 	<string name="title_text_to_speech_speak_frequency">बोलने की आवृत्ति</string>
+	<string name="title_text_to_speech_speech_rate">भाषण दर</string>
 	<string name="title_text_to_speech_voice">आवाज़</string>
 	<string name="title_volume_gradually_increase_volume">धीरे-धीरे वॉल्यूम बढ़ाएं</string>
 	<string name="title_volume_restrict_volume">वॉल्यूम सीमित करें</string>
@@ -285,6 +295,7 @@
 	<string name="description_flashlight_blink_on_off">टॉर्च को निर्धारित समय पर चालू और बंद करें।</string>
 	<string name="description_text_to_speech_what_to_say">अलार्म सक्रिय होने पर टेक्स्ट-टू-स्पीच के माध्यम से क्या कहना है।</string>
 	<string name="description_text_to_speech_speak_frequency">उपरोक्त चयनित आइटम को कितनी बार कहना है।</string>
+	<string name="description_text_to_speech_speech_rate">टेक्स्ट-टू-स्पीच को कितनी तेजी से बोलना चाहिए।</string>
 	<string name="description_volume_gradually_increase_volume">अलार्म की आवाज़ को निर्धारित आवृत्ति पर बढ़ाएँ।</string>
 	<string name="description_volume_restrict_volume">अलार्म बजने पर वॉल्यूम नहीं बदला जा सकता।</string>
 	<string name="description_dismiss_options_auto_dismiss">निर्धारित अवधि के बाद अलार्म स्वचालित रूप से बंद हो जाएगा।</string>

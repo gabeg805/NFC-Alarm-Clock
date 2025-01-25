@@ -62,7 +62,6 @@
 	<string name="action_show_nfc_tag_id">NFC-Tag anzeigen</string>
 	<string name="action_use_any">Verwenden Sie einen beliebigen NFC-Tag</string>
 	<string name="action_save">Speichern</string>
-	<string name="action_select_nfc_tag">NFC-Tag auswählen</string>
 	<string name="action_skip">Überspringen</string>
 	<string name="action_undo">Rückgängig machen</string>
 	<string name="action_browse">Durchsuchen</string>
@@ -110,7 +109,7 @@
 	<string name="message_nfc_required_use_any">NFC erforderlich (beliebig verwenden)</string>
 	<string name="message_show_nfc_tag_id">AUSWEIS</string>
 	<string name="message_scan_nfc_tag">Um den Alarm zu deaktivieren, wenn er losgeht, ist der gescannte NFC-Tag erforderlich.</string>
-	<string name="message_select_nfc_tag">Um den Alarm zu deaktivieren, wenn er ausgelöst wird, ist der ausgewählte NFC-Tag erforderlich.</string>
+	<string name="message_select_nfc_tag">Wählen Sie ein NFC-Tag aus, das zum Deaktivieren dieses Alarms erforderlich ist, wenn er ausgelöst wird. Wenn mehr als eines ausgewählt ist, kann es auch zum Deaktivieren dieses Alarms verwendet werden.</string>
 	<string name="message_save_nfc_tag">Sie können diesen NFC-Tag wiederverwenden, ohne ihn erneut scannen zu müssen, indem Sie ihm einen Namen geben.</string>
 	<string name="message_delete_nfc_tag">Möchten Sie diesen NFC-Tag wirklich löschen?</string>
 	<string name="message_rename_nfc_tag">Wie möchten Sie das NFC-Tag umbenennen?</string>
@@ -154,6 +153,7 @@
 	<string name="message_milliseconds">%1$d ms</string>
 	<string name="message_text_to_speech_default_voice">Standardstimme</string>
 	<string name="message_text_to_speech_voice">Stimme %1$d</string>
+	<string name="message_text_to_speech_network_required">Für die Sprachfunktion ist möglicherweise eine Netzwerkverbindung erforderlich</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Ein aktiver Alarm kann nicht gelöscht werden</string>
@@ -172,12 +172,21 @@
 	<string name="error_message_google_play_billing">Fehler beim Verbinden mit dem Google Play Store</string>
 	<string name="error_message_text_to_speech_audio_focus">Text-to-Speech kann nicht verwendet werden</string>
 	<string name="error_message_unable_to_email_statistics">Statistiken können nicht per E-Mail versendet werden</string>
-	<string name="error_message_unable_to_shine_flashlight">Taschenlampe kann nicht leuchten</string>
+	<string name="error_message_unable_to_shine_flashlight">Taschenlampe kann nicht leuchten — %1$s</string>
+	<string name="error_message_unable_to_get_flashlight_characteristics">Taschenlampeninformationen können nicht abgerufen werden.</string>
+	<string name="error_message_unable_to_access_flashlight">Auf Taschenlampe kann nicht zugegriffen werden — %1$s</string>
+	<string name="error_message_unable_to_turn_off_flashlight">Taschenlampe kann nicht ausgeschaltet werden</string>
+	<string name="error_message_unable_to_turn_on_flashlight">Taschenlampe kann nicht eingeschaltet werden</string>
 	<string name="error_message_unable_to_start_foreground_service">Vordergrunddienst kann nicht gestartet werden. Bitte aktivieren Sie die Berechtigung.</string>
 	<string name="error_message_unable_to_open_import_export_stream">Datei kann nicht geöffnet werden</string>
 	<string name="error_message_unable_to_select_file">Datei kann nicht ausgewählt werden</string>
 	<string name="error_message_unable_to_get_media_information_from_file">Medieninformationen können nicht aus der Datei abgerufen werden.</string>
 	<string name="error_message_not_enough_free_space">Nicht genügend freier Speicherplatz, um ein Backup des Songs zu erstellen</string>
+	<string name="error_message_camera_disabled">Kamera deaktiviert</string>
+	<string name="error_message_camera_disconnected">Kamera getrennt</string>
+	<string name="error_message_camera_error">Kamerafehler</string>
+	<string name="error_message_camera_in_use">Kamera im Einsatz</string>
+	<string name="error_message_camera_max_in_use">Max. genutzte Kameras</string>
 
 	<!-- Titles -->
 	<string name="title_settings">Einstellungen</string>
@@ -185,7 +194,7 @@
 	<string name="title_time">Zeit</string>
 	<string name="title_alarm_activity">Alarm schließen</string>
 	<string name="title_scan_nfc_tag">NFC-Tag scannen</string>
-	<string name="title_select_nfc_tag">NFC-Tag auswählen</string>
+	<string name="title_select_nfc_tag">NFC-Tag(s) auswählen</string>
 	<string name="title_save_nfc_tag">NFC-Tag speichern</string>
 	<string name="title_delete_nfc_tag">NFC-Tag löschen</string>
 	<string name="title_rename_nfc_tag">NFC-Tag umbenennen</string>
@@ -220,6 +229,7 @@
 	<string name="title_flashlight_brightness_level">Helligkeitsstufe</string>
 	<string name="title_flashlight_blink_on_off">Blinken ein/aus</string>
 	<string name="title_text_to_speech_speak_frequency">Sprechfrequenz</string>
+	<string name="title_text_to_speech_speech_rate">Sprechgeschwindigkeit</string>
 	<string name="title_text_to_speech_voice">Stimme</string>
 	<string name="title_volume_gradually_increase_volume">Erhöhen Sie die Lautstärke allmählich</string>
 	<string name="title_volume_restrict_volume">Lautstärke beschränken</string>
@@ -285,6 +295,7 @@
 	<string name="description_flashlight_blink_on_off">Lassen Sie die Taschenlampe in festgelegten Zeitabständen blinken und aus.</string>
 	<string name="description_text_to_speech_what_to_say">Was mit der Text-to-Speech-Funktion gesagt werden soll, wenn der Alarm aktiv ist.</string>
 	<string name="description_text_to_speech_speak_frequency">Wie oft die oben ausgewählten Elemente gesagt werden sollen.</string>
+	<string name="description_text_to_speech_speech_rate">Wie schnell Text-to-Speech sprechen soll.</string>
 	<string name="description_volume_gradually_increase_volume">Erhöhen Sie die Lautstärke des Alarms in festgelegten Intervallen.</string>
 	<string name="description_volume_restrict_volume">Wenn ein Alarm losgeht, kann die Lautstärke nicht geändert werden.</string>
 	<string name="description_dismiss_options_auto_dismiss">Beenden Sie den Alarm automatisch nach einer festgelegten Dauer.</string>

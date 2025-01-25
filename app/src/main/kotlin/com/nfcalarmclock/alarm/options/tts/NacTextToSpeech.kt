@@ -167,7 +167,6 @@ class NacTextToSpeech(
 		utteranceListener.onSpeakingListener = listener
 
 		// Setup text to speech
-		textToSpeech.language = Locale.getDefault()
 		textToSpeech.setOnUtteranceProgressListener(utteranceListener)
 	}
 
@@ -255,6 +254,9 @@ class NacTextToSpeech(
 					.find { it.name == attrs.voice }
 					?.let { textToSpeech.voice = it }
 			}
+
+			// Set the language
+			textToSpeech.language = Locale.getDefault()
 
 			// Speak the message
 			val androidAttrs = attrs.audioAttributes.audioAttributesV21.audioAttributes

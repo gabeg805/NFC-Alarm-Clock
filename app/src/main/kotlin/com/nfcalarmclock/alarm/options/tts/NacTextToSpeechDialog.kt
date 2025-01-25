@@ -162,6 +162,7 @@ class NacTextToSpeechDialog
 		alarm?.shouldSayCurrentTime = currentTimeCheckBox.isChecked
 		alarm?.shouldSayAlarmName = alarmNameCheckBox.isChecked
 		alarm?.ttsFrequency = selectedTtsFreq
+		alarm?.ttsSpeechRate = ttsSpeechRateSlider.value
 		alarm?.ttsVoice = selectedTtsVoiceName
 
 		// Shutdown the text-to-speech resource

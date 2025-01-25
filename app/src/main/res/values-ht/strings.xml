@@ -62,7 +62,6 @@
 	<string name="action_show_nfc_tag_id">Montre tag NFC</string>
 	<string name="action_use_any">Sèvi ak nenpòt tag NFC</string>
 	<string name="action_save">Sove</string>
-	<string name="action_select_nfc_tag">Chwazi tag NFC</string>
 	<string name="action_skip">Sote</string>
 	<string name="action_undo">Defèt</string>
 	<string name="action_browse">Browse</string>
@@ -110,7 +109,7 @@
 	<string name="message_nfc_required_use_any">NFC obligatwa (itilize nenpòt)</string>
 	<string name="message_show_nfc_tag_id">ID</string>
 	<string name="message_scan_nfc_tag">Tag NFC tcheke a pral oblije ranvwaye alam sa a lè li ale.</string>
-	<string name="message_select_nfc_tag">Tag NFC chwazi a pral oblije ranvwaye alam sa a lè li sonnen.</string>
+	<string name="message_select_nfc_tag">Chwazi yon tag NFC ki pral oblije ranvwaye alam sa a lè li sonnen. Si yo chwazi plis pase youn, li kapab tou itilize pou ranvwaye alam sa a.</string>
 	<string name="message_save_nfc_tag">Ou ka reitilize tag NFC sa a, san ou pa bezwen eskane li ankò, lè w ba li yon non.</string>
 	<string name="message_delete_nfc_tag">Èske w sèten ou vle efase tag NFC sa a?</string>
 	<string name="message_rename_nfc_tag">Ki sa ou ta renmen chanje non tag NFC la?</string>
@@ -154,6 +153,7 @@
 	<string name="message_milliseconds">%1$d ms</string>
 	<string name="message_text_to_speech_default_voice">Default vwa</string>
 	<string name="message_text_to_speech_voice">Vwa %1$d</string>
+	<string name="message_text_to_speech_network_required">Koneksyon rezo ka nesesè pou vwa a travay</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Pa kapab efase yon alam aktif</string>
@@ -172,12 +172,21 @@
 	<string name="error_message_google_play_billing" tools:keep="@string/error_message_google_play_billing">Erè lè w konekte ak Google Play Store la</string>
 	<string name="error_message_text_to_speech_audio_focus">Pa kapab itilize tèks-a-lapawòl</string>
 	<string name="error_message_unable_to_email_statistics">Pa kapab voye imèl estatistik</string>
-	<string name="error_message_unable_to_shine_flashlight">Pa kapab klere flach</string>
+	<string name="error_message_unable_to_shine_flashlight">Pa kapab klere flach — %1$s</string>
+	<string name="error_message_unable_to_get_flashlight_characteristics">Pa kapab jwenn enfòmasyon flach</string>
+	<string name="error_message_unable_to_access_flashlight">Pa kapab jwenn aksè nan flach — %1$s</string>
+	<string name="error_message_unable_to_turn_off_flashlight">Pa kapab etenn flach</string>
+	<string name="error_message_unable_to_turn_on_flashlight">Pa kapab limen flach</string>
 	<string name="error_message_unable_to_start_foreground_service">Pa kapab kòmanse sèvis premye plan. Tanpri pèmèt pèmisyon</string>
 	<string name="error_message_unable_to_open_import_export_stream">Pa kapab louvri fichye a</string>
 	<string name="error_message_unable_to_select_file">Pa kapab chwazi dosye</string>
 	<string name="error_message_unable_to_get_media_information_from_file">Pa kapab jwenn enfòmasyon medya nan dosye</string>
 	<string name="error_message_not_enough_free_space">Pa gen ase espas gratis pou fè backup nan chante</string>
+	<string name="error_message_camera_disabled">Kamera andikape</string>
+	<string name="error_message_camera_disconnected">Kamera dekonekte</string>
+	<string name="error_message_camera_error">Erè kamera</string>
+	<string name="error_message_camera_in_use">Kamera nan itilize</string>
+	<string name="error_message_camera_max_in_use">Maksimòm kamera nan itilize</string>
 
 	<!-- Titles -->
 	<string name="title_settings">Anviwònman</string>
@@ -185,7 +194,7 @@
 	<string name="title_time">Tan</string>
 	<string name="title_alarm_activity">Ranvwaye Alam</string>
 	<string name="title_scan_nfc_tag">Eskane tag NFC</string>
-	<string name="title_select_nfc_tag">Chwazi tag NFC</string>
+	<string name="title_select_nfc_tag">Chwazi tag (yo) NFC</string>
 	<string name="title_save_nfc_tag">Sove tag NFC</string>
 	<string name="title_delete_nfc_tag">Efase tag NFC</string>
 	<string name="title_rename_nfc_tag">Chanje non tag NFC</string>
@@ -220,6 +229,7 @@
 	<string name="title_flashlight_brightness_level">Nivo klète</string>
 	<string name="title_flashlight_blink_on_off">Klike sou / koupe</string>
 	<string name="title_text_to_speech_speak_frequency">Pale frekans</string>
+	<string name="title_text_to_speech_speech_rate">To lapawòl</string>
 	<string name="title_text_to_speech_voice">Vwa</string>
 	<string name="title_volume_gradually_increase_volume">Piti piti ogmante volim</string>
 	<string name="title_volume_restrict_volume">Limite volim</string>
@@ -285,6 +295,7 @@
 	<string name="description_flashlight_blink_on_off">Klike flach la limen ak etenn nan dire yo fikse.</string>
 	<string name="description_text_to_speech_what_to_say">Kisa pou w di ak tèks-a-lapawòl lè alam la aktif.</string>
 	<string name="description_text_to_speech_speak_frequency">Konbyen fwa yo di atik yo chwazi pi wo a.</string>
+	<string name="description_text_to_speech_speech_rate">Ki jan vit tèks-a-lapawòl ta dwe pale.</string>
 	<string name="description_volume_gradually_increase_volume">Ogmante volim alam la nan yon frekans fikse.</string>
 	<string name="description_volume_restrict_volume">Volim pa ka chanje lè yon alam sonnen.</string>
 	<string name="description_dismiss_options_auto_dismiss">Ranvwaye alam la otomatikman apre yon dire.</string>

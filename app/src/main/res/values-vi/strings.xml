@@ -62,7 +62,6 @@
 	<string name="action_show_nfc_tag_id">Hiển thị thẻ NFC</string>
 	<string name="action_use_any">Sử dụng bất kỳ thẻ NFC nào</string>
 	<string name="action_save">Cứu</string>
-	<string name="action_select_nfc_tag">Chọn thẻ NFC</string>
 	<string name="action_skip">Nhảy</string>
 	<string name="action_undo">Hoàn tác</string>
 	<string name="action_browse">Duyệt qua</string>
@@ -110,7 +109,7 @@
 	<string name="message_nfc_required_use_any">Cần có NFC (sử dụng bất kỳ)</string>
 	<string name="message_show_nfc_tag_id">NHẬN DẠNG</string>
 	<string name="message_scan_nfc_tag">Thẻ NFC đã quét sẽ được yêu cầu loại bỏ cảnh báo này khi nó kêu.</string>
-	<string name="message_select_nfc_tag">Thẻ NFC đã chọn sẽ được yêu cầu để tắt báo thức này khi nó kêu.</string>
+	<string name="message_select_nfc_tag">Chọn thẻ NFC cần thiết để tắt báo thức này khi nó kêu. Nếu chọn nhiều hơn một thẻ, nó cũng có thể được sử dụng để tắt báo thức này.</string>
 	<string name="message_save_nfc_tag">Bạn có thể sử dụng lại thẻ NFC này mà không cần phải quét lại bằng cách đặt tên cho thẻ.</string>
 	<string name="message_delete_nfc_tag">Bạn có chắc chắn muốn xóa thẻ NFC này không?</string>
 	<string name="message_rename_nfc_tag">Bạn muốn đổi tên thẻ NFC thành gì?</string>
@@ -154,6 +153,7 @@
 	<string name="message_milliseconds">%1$d giây</string>
 	<string name="message_text_to_speech_default_voice">Giọng nói mặc định</string>
 	<string name="message_text_to_speech_voice">Giọng nói %1$d</string>
+	<string name="message_text_to_speech_network_required">Có thể cần kết nối mạng để giọng nói hoạt động</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Không thể xóa báo thức đang hoạt động</string>
@@ -172,12 +172,21 @@
 	<string name="error_message_google_play_billing">Lỗi khi kết nối với Cửa hàng Google Play</string>
 	<string name="error_message_text_to_speech_audio_focus">Không thể sử dụng tính năng chuyển văn bản thành giọng nói</string>
 	<string name="error_message_unable_to_email_statistics">Không thể gửi số liệu thống kê qua email</string>
-	<string name="error_message_unable_to_shine_flashlight">Không thể chiếu đèn pin</string>
+	<string name="error_message_unable_to_shine_flashlight">Không thể chiếu đèn pin — %1$s</string>
+	<string name="error_message_unable_to_get_flashlight_characteristics">Không thể lấy thông tin đèn pin</string>
+	<string name="error_message_unable_to_access_flashlight">Không thể truy cập đèn pin — %1$s</string>
+	<string name="error_message_unable_to_turn_off_flashlight">Không thể tắt đèn pin</string>
+	<string name="error_message_unable_to_turn_on_flashlight">Không thể bật đèn pin</string>
 	<string name="error_message_unable_to_start_foreground_service">Không thể khởi động dịch vụ nền trước. Vui lòng bật quyền</string>
 	<string name="error_message_unable_to_open_import_export_stream">Không thể mở tập tin</string>
 	<string name="error_message_unable_to_select_file">Không thể chọn tập tin</string>
 	<string name="error_message_unable_to_get_media_information_from_file">Không thể lấy thông tin phương tiện từ tệp</string>
 	<string name="error_message_not_enough_free_space">Không đủ dung lượng trống để sao lưu bài hát</string>
+	<string name="error_message_camera_disabled">Máy ảnh đã tắt</string>
+	<string name="error_message_camera_disconnected">Máy ảnh bị ngắt kết nối</string>
+	<string name="error_message_camera_error">Lỗi máy ảnh</string>
+	<string name="error_message_camera_in_use">Máy ảnh đang sử dụng</string>
+	<string name="error_message_camera_max_in_use">Số lượng máy ảnh tối đa đang sử dụng</string>
 
 	<!-- Titles -->
 	<string name="title_settings">Cài đặt</string>
@@ -220,6 +229,7 @@
 	<string name="title_flashlight_brightness_level">Mức độ sáng</string>
 	<string name="title_flashlight_blink_on_off">Nhấp nháy bật/tắt</string>
 	<string name="title_text_to_speech_speak_frequency">Tần suất nói</string>
+	<string name="title_text_to_speech_speech_rate">Tốc độ nói</string>
 	<string name="title_text_to_speech_voice">Tiếng nói</string>
 	<string name="title_volume_gradually_increase_volume">Tăng dần âm lượng</string>
 	<string name="title_volume_restrict_volume">Hạn chế âm lượng</string>
@@ -285,6 +295,7 @@
 	<string name="description_flashlight_blink_on_off">Nhấp nháy đèn pin theo khoảng thời gian đã cài đặt.</string>
 	<string name="description_text_to_speech_what_to_say">Nói gì với tính năng chuyển văn bản thành giọng nói khi báo thức đang hoạt động.</string>
 	<string name="description_text_to_speech_speak_frequency">Tần suất nói các mục đã chọn ở trên.</string>
+	<string name="description_text_to_speech_speech_rate">Tốc độ chuyển văn bản thành giọng nói nên nói như thế nào.</string>
 	<string name="description_volume_gradually_increase_volume">Tăng âm lượng báo thức theo tần suất đã đặt.</string>
 	<string name="description_volume_restrict_volume">Không thể thay đổi âm lượng khi báo thức kêu.</string>
 	<string name="description_dismiss_options_auto_dismiss">Tự động tắt báo thức sau một khoảng thời gian đã cài đặt.</string>

@@ -62,7 +62,6 @@
 	<string name="action_show_nfc_tag_id">Muestra etiqueta de NFC</string>
 	<string name="action_use_any">Usa cualquier NFC etiqueta</string>
 	<string name="action_save">Guardar</string>
-	<string name="action_select_nfc_tag">Selecciona etiqueta NFC</string>
 	<string name="action_skip">Saltar</string>
 	<string name="action_undo">Deshacer</string>
 	<string name="action_browse">Navegar</string>
@@ -110,7 +109,7 @@
 	<string name="message_nfc_required_use_any">NFC requerido (usa cualquiera)</string>
 	<string name="message_show_nfc_tag_id">Id</string>
 	<string name="message_scan_nfc_tag">Se requerirá la etiqueta NFC escaneada para descartar esta alarma cuando suene.</string>
-	<string name="message_select_nfc_tag">Se requerirá la etiqueta NFC seleccionada para descartar esta alarma cuando suene.</string>
+	<string name="message_select_nfc_tag">Seleccione una etiqueta NFC que será necesaria para descartar esta alarma cuando suene. Si se selecciona más de una, también se puede usar para descartar esta alarma.</string>
 	<string name="message_save_nfc_tag">Puedes reutilizar esta etiqueta NFC, sin tener que escanearla nuevamente, dándole un nombre.</string>
 	<string name="message_delete_nfc_tag">¿Estás seguro de que quieres eliminar esta etiqueta NFC?</string>
 	<string name="message_rename_nfc_tag">¿Cómo te gustaría cambiar el nombre de la etiqueta NFC?</string>
@@ -154,6 +153,7 @@
 	<string name="message_milliseconds">%1$d milisegundos</string>
 	<string name="message_text_to_speech_default_voice">Voz predeterminada</string>
 	<string name="message_text_to_speech_voice">Voz %1$d</string>
+	<string name="message_text_to_speech_network_required">Es posible que se requiera una conexión de red para que la voz funcione</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Incapaz de borrar una alarma activa</string>
@@ -172,12 +172,21 @@
 	<string name="error_message_google_play_billing">Error al conectarse a Google Play Store</string>
 	<string name="error_message_text_to_speech_audio_focus">Incapaz de usar texto-a-voz</string>
 	<string name="error_message_unable_to_email_statistics">No se pueden enviar estadísticas por correo electrónico</string>
-	<string name="error_message_unable_to_shine_flashlight">No se puede encender la linterna</string>
+	<string name="error_message_unable_to_shine_flashlight">No se puede encender la linterna — %1$s</string>
+	<string name="error_message_unable_to_get_flashlight_characteristics">No se puede obtener información de la linterna</string>
+	<string name="error_message_unable_to_access_flashlight">No se puede acceder a la linterna — %1$s</string>
+	<string name="error_message_unable_to_turn_off_flashlight">No se puede apagar la linterna</string>
+	<string name="error_message_unable_to_turn_on_flashlight">No se puede encender la linterna</string>
 	<string name="error_message_unable_to_start_foreground_service">No se puede iniciar el servicio en primer plano. Habilite el permiso</string>
 	<string name="error_message_unable_to_open_import_export_stream">No se puede abrir el archivo</string>
 	<string name="error_message_unable_to_select_file">No se puede seleccionar el archivo</string>
 	<string name="error_message_unable_to_get_media_information_from_file">No se puede obtener información multimedia del archivo</string>
 	<string name="error_message_not_enough_free_space">No hay suficiente espacio libre para hacer una copia de seguridad de la canción</string>
+	<string name="error_message_camera_disabled">Cámara deshabilitada</string>
+	<string name="error_message_camera_disconnected">Cámara desconectada</string>
+	<string name="error_message_camera_error">Error de cámara</string>
+	<string name="error_message_camera_in_use">Cámara en uso</string>
+	<string name="error_message_camera_max_in_use">Máximo de cámaras en uso</string>
 
 	<!-- Titles -->
 	<string name="title_settings">Configuración</string>
@@ -185,7 +194,7 @@
 	<string name="title_time">Hora</string>
 	<string name="title_alarm_activity">Desactivar Alarma</string>
 	<string name="title_scan_nfc_tag">Escanear una etiqueta NFC</string>
-	<string name="title_select_nfc_tag">Seleccionar una etiqueta NFC</string>
+	<string name="title_select_nfc_tag">Seleccione la(s) etiqueta(s) NFC</string>
 	<string name="title_save_nfc_tag">Guardar la etiqueta NFC</string>
 	<string name="title_delete_nfc_tag">Eliminar la etiqueta NFC</string>
 	<string name="title_rename_nfc_tag">Cambiar el nombre de la etiqueta NFC</string>
@@ -220,6 +229,7 @@
 	<string name="title_flashlight_brightness_level">Nivel de brillo</string>
 	<string name="title_flashlight_blink_on_off">Parpadeo encendido/apagado</string>
 	<string name="title_text_to_speech_speak_frequency">Frecuencia de habla</string>
+	<string name="title_text_to_speech_speech_rate">Velocidad del habla</string>
 	<string name="title_text_to_speech_voice">Voz</string>
 	<string name="title_volume_gradually_increase_volume">Aumentar gradualmente el volumen</string>
 	<string name="title_volume_restrict_volume">Restringe el volumen</string>
@@ -285,6 +295,7 @@
 	<string name="description_flashlight_blink_on_off">Enciende y apaga la linterna durante períodos de tiempo establecidos.</string>
 	<string name="description_text_to_speech_what_to_say">Qué decir con texto a voz cuando la alarma está activa.</string>
 	<string name="description_text_to_speech_speak_frequency">¿Con qué frecuencia se deben decir los elementos seleccionados arriba?</string>
+	<string name="description_text_to_speech_speech_rate">¿Qué tan rápido debe hablar el texto a voz?</string>
 	<string name="description_volume_gradually_increase_volume">Aumente el volumen de la alarma a una frecuencia establecida.</string>
 	<string name="description_volume_restrict_volume">No se puede cambiar el volumen cuando suena una alarma.</string>
 	<string name="description_dismiss_options_auto_dismiss">Descartar la alarma automáticamente después de un período de tiempo establecido.</string>

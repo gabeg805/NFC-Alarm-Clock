@@ -18,7 +18,7 @@
 		style="@style/Widget.AlarmOptionDialog.Description"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/message_add_backup_nfc_tag"
+		android:text="@string/message_select_nfc_tag"
 		/>
 
 	<!-- Scrollview -->
