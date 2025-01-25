@@ -1,0 +1,5 @@
+* Added feature to select multiple NFC tags that can be used to dismiss an
+  alarm.
+* Added speech rate to text-to-speech to change the speed it would speak.
+* Fixed issue with flashlight where (assuming flashlight was being used) if
+  blink was disabled, it would still blink the flashlight.
