@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.os.Build
+import android.view.Gravity
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
@@ -346,6 +347,57 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Position of the alarm time above the date in the clock widget.
+	 */
+	var clockWidgetAlarmTimePositionAboveDate: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_clock_widget_position_alarm_time_above_date)
+
+			return instance.getBoolean(key, false)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_clock_widget_position_alarm_time_above_date)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Position of the alarm time below the date in the clock widget.
+	 */
+	var clockWidgetAlarmTimePositionBelowDate: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_clock_widget_position_alarm_time_below_date)
+
+			return instance.getBoolean(key, false)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_clock_widget_position_alarm_time_below_date)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Position of the alarm time same line as the date in the clock widget.
+	 */
+	var clockWidgetAlarmTimePositionSameLineAsDate: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_clock_widget_position_alarm_time_same_line_as_date)
+
+			return instance.getBoolean(key, true)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_clock_widget_position_alarm_time_same_line_as_date)
+
+			saveBoolean(key, value)
+		}
+
+	/**
 	 * Text size of the alarm time in the clock widget.
 	 */
 	var clockWidgetAlarmTimeTextSize: Float
@@ -469,6 +521,23 @@ class NacSharedPreferences(context: Context)
 			val key = resources.getString(R.string.key_clock_widget_text_size_date)
 
 			saveFloat(key, value)
+		}
+
+	/**
+	 * General alignment of the views in the clock widget.
+	 */
+	var clockWidgetGeneralAlignment: Int
+		get()
+		{
+			val key = resources.getString(R.string.key_clock_widget_general_alignment)
+
+			return instance.getInt(key, Gravity.CENTER_HORIZONTAL)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_clock_widget_general_alignment)
+
+			saveInt(key, value)
 		}
 
 	/**
@@ -665,6 +734,24 @@ class NacSharedPreferences(context: Context)
 		set(value)
 		{
 			val key = resources.getString(R.string.key_clock_widget_show_alarm)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether to show app specific alarms in the clock widget.
+	 */
+	var shouldClockWidgetShowAppSpecificAlarms: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_clock_widget_show_app_specific_alarms)
+			val defaultValue = true
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_clock_widget_show_app_specific_alarms)
 
 			saveBoolean(key, value)
 		}

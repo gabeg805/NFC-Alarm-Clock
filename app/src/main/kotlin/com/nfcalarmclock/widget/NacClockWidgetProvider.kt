@@ -89,7 +89,7 @@ internal fun updateAppWidget(
 
 	// Set on click pending intent
 	val pendingIntent = NacMainActivity.getStartPendingIntent(context)
-	views.setOnClickPendingIntent(R.id.widget_parent, pendingIntent)
+	views.setOnClickPendingIntent(R.id.preview_parent, pendingIntent)
 
 	// Get the clock widget helper
 	val shared = NacSharedPreferences(context)
@@ -106,19 +106,38 @@ internal fun updateAppWidget(
 	views.setViewVisibility(R.id.widget_date, helper.dateVis)
 	views.setViewVisibility(R.id.widget_date_bold, helper.dateBoldVis)
 	views.setViewVisibility(R.id.widget_alarm_icon, helper.alarmIconVis)
+	views.setViewVisibility(R.id.widget_alarm_icon_above, helper.alarmIconVis)
+	views.setViewVisibility(R.id.widget_alarm_icon_below, helper.alarmIconVis)
 	views.setViewVisibility(R.id.widget_alarm_time, helper.alarmVis)
+	views.setViewVisibility(R.id.widget_alarm_time_above, helper.alarmVis)
+	views.setViewVisibility(R.id.widget_alarm_time_below, helper.alarmVis)
 	views.setViewVisibility(R.id.widget_alarm_time_bold, helper.alarmBoldVis)
+	views.setViewVisibility(R.id.widget_alarm_time_bold_above, helper.alarmBoldVis)
+	views.setViewVisibility(R.id.widget_alarm_time_bold_below, helper.alarmBoldVis)
+	views.setViewVisibility(R.id.widget_alarm_same_line_as_date_container, helper.alarmPositionSameLineAsDateVis)
+	views.setViewVisibility(R.id.widget_alarm_above_container, helper.alarmPositionAboveDateVis)
+	views.setViewVisibility(R.id.widget_alarm_below_container, helper.alarmPositionBelowDateVis)
+
+	// Set the gravity
+	views.setInt(R.id.widget_time, "setGravity", helper.gravity)
+	views.setInt(R.id.widget_alarm_date_inline_container, "setGravity", helper.gravity)
+	views.setInt(R.id.widget_alarm_above_container, "setGravity", helper.gravity)
+	views.setInt(R.id.widget_alarm_below_container, "setGravity", helper.gravity)
 
 	// Check if the alarm time should be customized
 	if ((helper.alarmVis == View.VISIBLE) || (helper.alarmBoldVis == View.VISIBLE))
 	{
 		// Set the text
 		views.setTextViewText(R.id.widget_alarm_time, helper.nextAlarm)
+		views.setTextViewText(R.id.widget_alarm_time_above, helper.nextAlarm)
+		views.setTextViewText(R.id.widget_alarm_time_below, helper.nextAlarm)
 		views.setTextViewText(R.id.widget_alarm_time_bold, helper.nextAlarm)
+		views.setTextViewText(R.id.widget_alarm_time_bold_above, helper.nextAlarm)
+		views.setTextViewText(R.id.widget_alarm_time_bold_below, helper.nextAlarm)
 	}
 
 	// Set the background color and transparency
-	views.setInt(R.id.widget_parent, "setBackgroundColor", helper.bgColor)
+	views.setInt(R.id.preview_parent, "setBackgroundColor", helper.bgColor)
 
 	// Set text and icon colors
 	views.setTextColor(R.id.widget_hour, shared.clockWidgetHourColor)
@@ -131,8 +150,14 @@ internal fun updateAppWidget(
 	views.setTextColor(R.id.widget_date, shared.clockWidgetDateColor)
 	views.setTextColor(R.id.widget_date_bold, shared.clockWidgetDateColor)
 	views.setTextColor(R.id.widget_alarm_time, shared.clockWidgetAlarmTimeColor)
+	views.setTextColor(R.id.widget_alarm_time_above, shared.clockWidgetAlarmTimeColor)
+	views.setTextColor(R.id.widget_alarm_time_below, shared.clockWidgetAlarmTimeColor)
 	views.setTextColor(R.id.widget_alarm_time_bold, shared.clockWidgetAlarmTimeColor)
+	views.setTextColor(R.id.widget_alarm_time_bold_above, shared.clockWidgetAlarmTimeColor)
+	views.setTextColor(R.id.widget_alarm_time_bold_below, shared.clockWidgetAlarmTimeColor)
 	views.setInt(R.id.widget_alarm_icon, "setColorFilter", shared.clockWidgetAlarmIconColor)
+	views.setInt(R.id.widget_alarm_icon_above, "setColorFilter", shared.clockWidgetAlarmIconColor)
+	views.setInt(R.id.widget_alarm_icon_below, "setColorFilter", shared.clockWidgetAlarmIconColor)
 
 	// Set text size
 	views.setTextViewTextSize(R.id.widget_hour, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
@@ -145,13 +170,27 @@ internal fun updateAppWidget(
 	views.setTextViewTextSize(R.id.widget_date, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetDateTextSize)
 	views.setTextViewTextSize(R.id.widget_date_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetDateTextSize)
 	views.setTextViewTextSize(R.id.widget_alarm_time, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
+	views.setTextViewTextSize(R.id.widget_alarm_time_above, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
+	views.setTextViewTextSize(R.id.widget_alarm_time_below, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
 	views.setTextViewTextSize(R.id.widget_alarm_time_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
+	views.setTextViewTextSize(R.id.widget_alarm_time_bold_above, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
+	views.setTextViewTextSize(R.id.widget_alarm_time_bold_below, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
 
 	// Set margin
 	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
 	{
-		// Calculate the average text size
-		val avgTextSize = (shared.clockWidgetDateTextSize+shared.clockWidgetAlarmTimeTextSize) / 2
+		// Get the average text size, depending on if the alarm is shown inline or
+		// different line that the date
+		val avgTextSize = if (shared.clockWidgetAlarmTimePositionSameLineAsDate)
+		{
+			(shared.clockWidgetDateTextSize+shared.clockWidgetAlarmTimeTextSize) / 2
+		}
+		else
+		{
+			shared.clockWidgetAlarmTimeTextSize
+		}
+
+		// Calculate the new margin
 		val newMargin = NacClockWidgetDataHelper.calcAlarmIconMargin(context, avgTextSize)
 
 		// Start
@@ -160,6 +199,10 @@ internal fun updateAppWidget(
 
 		// End
 		views.setViewLayoutMargin(R.id.widget_alarm_icon, RemoteViews.MARGIN_END,
+			newMargin, TypedValue.COMPLEX_UNIT_DIP)
+		views.setViewLayoutMargin(R.id.widget_alarm_icon_above, RemoteViews.MARGIN_END,
+			newMargin, TypedValue.COMPLEX_UNIT_DIP)
+		views.setViewLayoutMargin(R.id.widget_alarm_icon_below, RemoteViews.MARGIN_END,
 			newMargin, TypedValue.COMPLEX_UNIT_DIP)
 	}
 
@@ -198,6 +241,15 @@ internal class NacClockWidgetDataHelper(
 
 			// Return the meridian
 			return NacCalendar.getMeridian(context, cal[Calendar.HOUR_OF_DAY])
+		}
+
+	/**
+	 * Gravity.
+	 */
+	val gravity: Int
+		get()
+		{
+			return sharedPreferences.clockWidgetGeneralAlignment
 		}
 
 	/**
@@ -393,6 +445,54 @@ internal class NacClockWidgetDataHelper(
 		}
 
 	/**
+	 * Alarm position above date visibility.
+	 */
+	val alarmPositionAboveDateVis: Int
+		get()
+		{
+			return if (sharedPreferences.clockWidgetAlarmTimePositionAboveDate)
+			{
+				View.VISIBLE
+			}
+			else
+			{
+				View.GONE
+			}
+		}
+
+	/**
+	 * Alarm position same linee as date visibility.
+	 */
+	val alarmPositionSameLineAsDateVis: Int
+		get()
+		{
+			return if (sharedPreferences.clockWidgetAlarmTimePositionSameLineAsDate)
+			{
+				View.VISIBLE
+			}
+			else
+			{
+				View.GONE
+			}
+		}
+
+	/**
+	 * Alarm position below date visibility.
+	 */
+	val alarmPositionBelowDateVis: Int
+		get()
+		{
+			return if (sharedPreferences.clockWidgetAlarmTimePositionBelowDate)
+			{
+				View.VISIBLE
+			}
+			else
+			{
+				View.GONE
+			}
+		}
+
+	/**
 	 * ARGB background color.
 	 */
 	val bgColor: Int
@@ -412,7 +512,7 @@ internal class NacClockWidgetDataHelper(
 			val alarmCal = Calendar.getInstance()
 
 			// App next alarm
-			if (sharedPreferences.appShouldSaveNextAlarm)
+			if (sharedPreferences.appShouldSaveNextAlarm && sharedPreferences.shouldClockWidgetShowAppSpecificAlarms)
 			{
 				// Get the current time in milliseconds and compute any timezone offset
 				val millis = sharedPreferences.appNextAlarmTimeMillis
@@ -474,9 +574,13 @@ internal class NacClockWidgetDataHelper(
 			{
 				2 * baseMargin
 			}
-			else
+			else if (textSize >= 14)
 			{
 				baseMargin
+			}
+			else
+			{
+				0f
 			}
 		}
 

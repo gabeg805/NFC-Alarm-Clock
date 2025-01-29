@@ -1,7 +1,7 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:id="@+id/widget_parent"
+	android:id="@+id/preview_parent"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:gravity="center"
@@ -11,9 +11,9 @@
 	<!-- Time -->
 	<LinearLayout
 		android:id="@+id/widget_time"
-		android:layout_width="wrap_content"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_gravity="center_horizontal"
+		android:gravity="center_horizontal"
 		android:orientation="horizontal">
 
 		<!-- Hour -->
@@ -105,11 +105,57 @@
 			/>
 	</LinearLayout>
 
+	<!-- Above alarm -->
+	<LinearLayout
+		android:id="@+id/widget_alarm_above_container"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginVertical="@dimen/twoline"
+		android:gravity="center_horizontal"
+		android:orientation="horizontal"
+		android:visibility="gone">
+
+		<!-- Icon -->
+		<ImageView
+			android:contentDescription="@string/cd_clock_widget_alarm_icon"
+			android:id="@+id/widget_alarm_icon_above"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_marginEnd="@dimen/twoline"
+			android:layout_marginVertical="@dimen/twoline"
+			android:src="@drawable/alarm"
+			android:visibility="gone"
+			app:tint="@color/white"
+			/>
+
+		<!-- Alarm -->
+		<TextView
+			android:id="@+id/widget_alarm_time_above"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textColor="@color/orange"
+			android:textSize="@dimen/tsz_small"
+			android:text=""
+			/>
+
+		<TextView
+			android:id="@+id/widget_alarm_time_bold_above"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textColor="@color/orange"
+			android:textSize="@dimen/tsz_small"
+			android:textStyle="bold"
+			android:text=""
+			android:visibility="gone"
+			/>
+	</LinearLayout>
+
 	<!-- Date and alarm -->
 	<LinearLayout
-		android:layout_width="wrap_content"
+		android:id="@+id/widget_alarm_date_inline_container"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_gravity="center_horizontal"
+		android:gravity="center_horizontal"
 		android:orientation="horizontal">
 
 		<!-- Date -->
@@ -117,7 +163,6 @@
 			android:id="@+id/widget_date"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
 			android:format24Hour="E MMM d"
 			android:format12Hour="E MMM d"
 			android:textSize="@dimen/tsz_small"
@@ -128,7 +173,6 @@
 			android:id="@+id/widget_date_bold"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
 			android:format24Hour="E MMM d"
 			android:format12Hour="E MMM d"
 			android:textSize="@dimen/tsz_small"
@@ -137,13 +181,65 @@
 			android:visibility="gone"
 			/>
 
+		<LinearLayout
+			android:id="@+id/widget_alarm_same_line_as_date_container"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+			<!-- Icon -->
+			<ImageView
+				android:contentDescription="@string/cd_clock_widget_alarm_icon"
+				android:id="@+id/widget_alarm_icon"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:layout_marginHorizontal="@dimen/nudge"
+				android:layout_marginVertical="@dimen/twoline"
+				android:src="@drawable/alarm"
+				android:visibility="gone"
+				app:tint="@color/white"
+				/>
+
+			<!-- Alarm -->
+			<TextView
+				android:id="@+id/widget_alarm_time"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textColor="@color/orange"
+				android:textSize="@dimen/tsz_small"
+				android:text=""
+				android:visibility="gone"
+				/>
+
+			<TextView
+				android:id="@+id/widget_alarm_time_bold"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textColor="@color/orange"
+				android:textSize="@dimen/tsz_small"
+				android:textStyle="bold"
+				android:text=""
+				android:visibility="gone"
+				/>
+		</LinearLayout>
+	</LinearLayout>
+
+	<!-- Below alarm -->
+	<LinearLayout
+		android:id="@+id/widget_alarm_below_container"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginVertical="@dimen/twoline"
+		android:gravity="center_horizontal"
+		android:orientation="horizontal"
+		android:visibility="gone">
+
 		<!-- Icon -->
 		<ImageView
 			android:contentDescription="@string/cd_clock_widget_alarm_icon"
-			android:id="@+id/widget_alarm_icon"
+			android:id="@+id/widget_alarm_icon_below"
 			android:layout_width="wrap_content"
 			android:layout_height="match_parent"
-			android:layout_marginHorizontal="@dimen/nudge"
+			android:layout_marginEnd="@dimen/twoline"
 			android:layout_marginVertical="@dimen/twoline"
 			android:src="@drawable/alarm"
 			android:visibility="gone"
@@ -152,20 +248,18 @@
 
 		<!-- Alarm -->
 		<TextView
-			android:id="@+id/widget_alarm_time"
+			android:id="@+id/widget_alarm_time_below"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
 			android:textColor="@color/orange"
 			android:textSize="@dimen/tsz_small"
 			android:text=""
 			/>
 
 		<TextView
-			android:id="@+id/widget_alarm_time_bold"
+			android:id="@+id/widget_alarm_time_bold_below"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
 			android:textColor="@color/orange"
 			android:textSize="@dimen/tsz_small"
 			android:textStyle="bold"

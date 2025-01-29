@@ -48,6 +48,16 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 	private val sliderInstructionsFadeOutAnimation = AnimationUtils.loadAnimation(activity, R.anim.fade_out)
 
 	/**
+	 * Fade in animation for the number of snoozes left message.
+	 */
+	private val numberOfSnoozesLeftFadeInAnimation = AnimationUtils.loadAnimation(activity, R.anim.fade_in)
+
+	/**
+	 * Fade out animation for the number of snoozes left message.
+	 */
+	private val numberOfSnoozesLeftFadeOutAnimation = AnimationUtils.loadAnimation(activity, R.anim.fade_out)
+
+	/**
 	 * Latest animator for the inactive view.
 	 */
 	private var latestInactiveViewAnimator: Animator? = null
@@ -232,19 +242,29 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 	/**
 	 * Start the animation to hide the slider path.
 	 */
-	fun hideSliderPath(sliderPath: View, sliderInstructions: View)
+	fun hideSliderPath(
+		sliderPath: View,
+		sliderInstructions: View,
+		numberOfSnoozesLeftMessage: View? = null
+	)
 	{
 		// Create the listener
 		val pathListener = createHideAnimationListener(sliderPath)
 		val instructionsListener = createHideAnimationListener(sliderInstructions)
+		val numberOfSnoozesLeftListener = numberOfSnoozesLeftMessage?.let {
+			createHideAnimationListener(it)
+		}
 
 		// Set the listener
 		sliderPathFadeOutAnimation.setAnimationListener(pathListener)
 		sliderInstructionsFadeOutAnimation.setAnimationListener(instructionsListener)
+		println("Fade out listener : $numberOfSnoozesLeftListener")
+		numberOfSnoozesLeftFadeOutAnimation.setAnimationListener(numberOfSnoozesLeftListener)
 
 		// Start the animation
 		sliderPath.startAnimation(sliderPathFadeOutAnimation)
 		sliderInstructions.startAnimation(sliderInstructionsFadeOutAnimation)
+		numberOfSnoozesLeftMessage?.startAnimation(numberOfSnoozesLeftFadeOutAnimation)
 	}
 
 	/**
@@ -323,19 +343,29 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 	/**
 	 * Start the animation to show the slider path.
 	 */
-	fun showSliderPath(sliderPath: View, sliderInstructions: View)
+	fun showSliderPath(
+		sliderPath: View,
+		sliderInstructions: View,
+		numberOfSnoozesLeftMessage: View? = null
+	)
 	{
 		// Create the listener
 		val pathListener = createShowAnimationListener(sliderPath)
 		val instructionsListener = createShowAnimationListener(sliderInstructions)
+		val numberOfSnoozesLeftListener = numberOfSnoozesLeftMessage?.let {
+			createShowAnimationListener(it)
+		}
 
 		// Set the listener
 		sliderPathFadeInAnimation.setAnimationListener(pathListener)
 		sliderInstructionsFadeInAnimation.setAnimationListener(instructionsListener)
+		println("Fade in listener : $numberOfSnoozesLeftListener")
+		numberOfSnoozesLeftFadeInAnimation.setAnimationListener(numberOfSnoozesLeftListener)
 
 		// Start the animation
 		sliderPath.startAnimation(sliderPathFadeInAnimation)
 		sliderInstructions.startAnimation(sliderInstructionsFadeInAnimation)
+		numberOfSnoozesLeftMessage?.startAnimation(numberOfSnoozesLeftFadeInAnimation)
 	}
 
 }

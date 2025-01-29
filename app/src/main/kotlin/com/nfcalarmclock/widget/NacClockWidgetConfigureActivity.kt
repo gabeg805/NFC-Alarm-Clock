@@ -6,12 +6,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.updateLayoutParams
 import com.google.android.material.slider.Slider
 import com.google.android.material.slider.Slider.OnSliderTouchListener
 import com.nfcalarmclock.R
@@ -223,6 +225,15 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		binding.timeLayoutBoldMinuteSwitch.setupSwitchColor(sharedPreferences)
 		binding.timeLayoutBoldAmPmSwitch.setupSwitchColor(sharedPreferences)
 		binding.alarmLayoutBoldSwitch.setupSwitchColor(sharedPreferences)
+		binding.alarmLayoutShowAppSpecificSwitch.setupSwitchColor(sharedPreferences)
+
+		// Radio groups
+		binding.generalLayoutAlignmentCenterRadioButton.setupBackgroundColor(sharedPreferences)
+		binding.generalLayoutAlignmentLeftRadioButton.setupBackgroundColor(sharedPreferences)
+		binding.generalLayoutAlignmentRightRadioButton.setupBackgroundColor(sharedPreferences)
+		binding.alarmLayoutPositionAboveDateRadioButton.setupBackgroundColor(sharedPreferences)
+		binding.alarmLayoutPositionBelowDateRadioButton.setupBackgroundColor(sharedPreferences)
+		binding.alarmLayoutPositionSameLineAsDateRadioButton.setupBackgroundColor(sharedPreferences)
 
 		// Sliders
 		binding.backgroundTransparencySlider.setupProgressAndThumbColor(sharedPreferences)
@@ -232,9 +243,11 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		binding.alarmLayoutTextSizeSlider.setupProgressAndThumbColor(sharedPreferences)
 
 		// Separators for expandable rows
+		binding.generalLayoutAlignmentSeparator.setupBackgroundColor(sharedPreferences)
 		binding.timeLayoutBoldSeparator.setupBackgroundColor(sharedPreferences)
 		binding.timeLayoutColorSeparator.setupBackgroundColor(sharedPreferences)
 		binding.alarmLayoutColorSeparator.setupBackgroundColor(sharedPreferences)
+		binding.alarmLayoutPositionSeparator.setupBackgroundColor(sharedPreferences)
 
 		// Done button
 		binding.doneButton.setupThemeColor(sharedPreferences)
@@ -254,6 +267,24 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		binding.timeLayoutBoldMinuteSwitch.isChecked = sharedPreferences.shouldClockWidgetBoldMinute
 		binding.timeLayoutBoldAmPmSwitch.isChecked = sharedPreferences.shouldClockWidgetBoldAmPm
 		binding.alarmLayoutBoldSwitch.isChecked = sharedPreferences.shouldClockWidgetBoldAlarmTime
+		binding.alarmLayoutShowAppSpecificSwitch.isChecked = sharedPreferences.shouldClockWidgetShowAppSpecificAlarms
+		binding.alarmLayoutShowAppSpecificDescription.text =
+			if (sharedPreferences.shouldClockWidgetShowAppSpecificAlarms)
+			{
+				getString(R.string.description_only_show_app_alarms)
+			}
+			else
+			{
+				getString(R.string.description_show_any_alarms)
+			}
+
+		// Radio groups
+		binding.generalLayoutAlignmentCenterRadioButton.isChecked = (sharedPreferences.clockWidgetGeneralAlignment == Gravity.CENTER_HORIZONTAL)
+		binding.generalLayoutAlignmentLeftRadioButton.isChecked = (sharedPreferences.clockWidgetGeneralAlignment == Gravity.START)
+		binding.generalLayoutAlignmentRightRadioButton.isChecked = (sharedPreferences.clockWidgetGeneralAlignment == Gravity.END)
+		binding.alarmLayoutPositionAboveDateRadioButton.isChecked = sharedPreferences.clockWidgetAlarmTimePositionAboveDate
+		binding.alarmLayoutPositionBelowDateRadioButton.isChecked = sharedPreferences.clockWidgetAlarmTimePositionBelowDate
+		binding.alarmLayoutPositionSameLineAsDateRadioButton.isChecked = sharedPreferences.clockWidgetAlarmTimePositionSameLineAsDate
 
 		// Colors
 		binding.backgroundColorSwatch.setupForegroundColor(sharedPreferences.clockWidgetBackgroundColor)
@@ -280,53 +311,18 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 	}
 
 	/**
-	 * Setup listeners.
+	 * Setup alarm layout listeners.
 	 */
-	private fun setupListeners()
+	private fun setupAlarmLayoutListeners()
 	{
-		// Time layout bold section
-		binding.timeLayoutBoldContainer.setOnClickListener {
-			changeOnExpandCollapse(binding.timeLayoutBoldOptionsContainer, binding.timeLayoutBoldDescription)
-		}
-
-		// Time layout color section
-		binding.timeLayoutColorContainer.setOnClickListener {
-			changeOnExpandCollapse(binding.timeLayoutColorOptionsContainer, binding.timeLayoutColorDescription)
-
-		}
-
-		// Time layout text size section
-		binding.timeLayoutTextSizeContainer.setOnClickListener {
-			changeOnExpandCollapse(binding.timeLayoutTextSizeOptionsContainer, binding.timeLayoutTextSizeDescription)
-		}
-
 		// Alarm layout color section
 		binding.alarmLayoutColorContainer.setOnClickListener {
 			changeOnExpandCollapse(binding.alarmLayoutColorOptionsContainer, binding.alarmLayoutColorDescription)
 		}
 
-		// Show date
-		binding.dateLayoutShowContainer.setOnClickListener {
-
-			// Toggle the state
-			binding.dateLayoutShowSwitch.toggle()
-			sharedPreferences.shouldClockWidgetShowDate = binding.dateLayoutShowSwitch.isChecked
-
-			// Update the preview
-			binding.widgetDate.visibility = helper.dateVis
-			binding.widgetDateBold.visibility = helper.dateBoldVis
-
-		}
-
-		// Show time
-		binding.timeLayoutShowContainer.setOnClickListener {
-
-			// Toggle the state
-			binding.timeLayoutShowSwitch.toggle()
-			sharedPreferences.shouldClockWidgetShowTime = binding.timeLayoutShowSwitch.isChecked
-
-			// Update the preview
-			binding.widgetTime.visibility = helper.timeVis
+		// Alarm layout position section
+		binding.alarmLayoutPositionContainer.setOnClickListener {
+			changeOnExpandCollapse(binding.alarmLayoutPositionOptionsContainer, binding.alarmLayoutPositionDescription)
 
 		}
 
@@ -338,61 +334,33 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 			sharedPreferences.shouldClockWidgetShowAlarm = binding.alarmLayoutShowSwitch.isChecked
 
 			// Update the preview
-			binding.widgetAlarmIcon.visibility = if (sharedPreferences.shouldClockWidgetShowAlarm) View.VISIBLE else View.GONE
-			binding.widgetAlarmTime.visibility = if (shouldShowAlarmTime) View.VISIBLE else View.GONE
-			binding.widgetAlarmTimeBold.visibility = if (shouldShowAlarmTimeBold) View.VISIBLE else View.GONE
+			binding.previewWidget.widgetAlarmIcon.visibility = if (sharedPreferences.shouldClockWidgetShowAlarm) View.VISIBLE else View.GONE
+			binding.previewWidget.widgetAlarmIconAbove.visibility = if (sharedPreferences.shouldClockWidgetShowAlarm) View.VISIBLE else View.GONE
+			binding.previewWidget.widgetAlarmIconBelow.visibility = if (sharedPreferences.shouldClockWidgetShowAlarm) View.VISIBLE else View.GONE
+			binding.previewWidget.widgetAlarmTime.visibility = if (shouldShowAlarmTime) View.VISIBLE else View.GONE
+			binding.previewWidget.widgetAlarmTimeAbove.visibility = if (shouldShowAlarmTime) View.VISIBLE else View.GONE
+			binding.previewWidget.widgetAlarmTimeBelow.visibility = if (shouldShowAlarmTime) View.VISIBLE else View.GONE
+			binding.previewWidget.widgetAlarmTimeBold.visibility = if (shouldShowAlarmTimeBold) View.VISIBLE else View.GONE
+			binding.previewWidget.widgetAlarmTimeBoldAbove.visibility = if (shouldShowAlarmTimeBold) View.VISIBLE else View.GONE
+			binding.previewWidget.widgetAlarmTimeBoldBelow.visibility = if (shouldShowAlarmTimeBold) View.VISIBLE else View.GONE
 
 		}
 
-		// Bold date
-		binding.dateLayoutBoldContainer.setOnClickListener {
+		// Show app specific alarms
+		binding.alarmLayoutShowAppSpecificContainer.setOnClickListener {
 
 			// Toggle the state
-			binding.dateLayoutBoldSwitch.toggle()
-			sharedPreferences.shouldClockWidgetBoldDate = binding.dateLayoutBoldSwitch.isChecked
-
-			// Update the preview
-			binding.widgetDate.visibility = helper.dateVis
-			binding.widgetDateBold.visibility = helper.dateBoldVis
-
-		}
-
-		// Bold hour
-		binding.timeLayoutBoldHourContainer.setOnClickListener {
-
-			// Toggle the state
-			binding.timeLayoutBoldHourSwitch.toggle()
-			sharedPreferences.shouldClockWidgetBoldHour = binding.timeLayoutBoldHourSwitch.isChecked
-
-			// Update the preview
-			binding.widgetHour.visibility = helper.hourVis
-			binding.widgetHourBold.visibility = helper.hourBoldVis
-
-		}
-
-		// Bold minute
-		binding.timeLayoutBoldMinuteContainer.setOnClickListener {
-
-			// Toggle the state
-			binding.timeLayoutBoldMinuteSwitch.toggle()
-			sharedPreferences.shouldClockWidgetBoldMinute = binding.timeLayoutBoldMinuteSwitch.isChecked
-
-			// Update the preview
-			binding.widgetMinute.visibility = helper.minuteVis
-			binding.widgetMinuteBold.visibility = helper.minuteBoldVis
-
-		}
-
-		// Bold am/pm
-		binding.timeLayoutBoldAmPmContainer.setOnClickListener {
-
-			// Toggle the state
-			binding.timeLayoutBoldAmPmSwitch.toggle()
-			sharedPreferences.shouldClockWidgetBoldAmPm = binding.timeLayoutBoldAmPmSwitch.isChecked
-
-			// Update the preview
-			binding.widgetAmPm.visibility = helper.meridianVis
-			binding.widgetAmPmBold.visibility = helper.meridianBoldVis
+			binding.alarmLayoutShowAppSpecificSwitch.toggle()
+			sharedPreferences.shouldClockWidgetShowAppSpecificAlarms = binding.alarmLayoutShowAppSpecificSwitch.isChecked
+			binding.alarmLayoutShowAppSpecificDescription.text =
+				if (sharedPreferences.shouldClockWidgetShowAppSpecificAlarms)
+				{
+					getString(R.string.description_only_show_app_alarms)
+				}
+				else
+				{
+					getString(R.string.description_show_any_alarms)
+				}
 
 		}
 
@@ -404,168 +372,12 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 			sharedPreferences.shouldClockWidgetBoldAlarmTime = binding.alarmLayoutBoldSwitch.isChecked
 
 			// Update the preview
-			binding.widgetAlarmTime.visibility = if (shouldShowAlarmTime) View.VISIBLE else View.GONE
-			binding.widgetAlarmTimeBold.visibility = if (shouldShowAlarmTimeBold) View.VISIBLE else View.GONE
-
-		}
-
-		// Background color
-		binding.backgroundColorContainer.setOnClickListener {
-
-			// Create the dialog
-			val dialog = NacColorPickerDialog()
-
-			// Setup the initial color
-			dialog.initialColor = sharedPreferences.clockWidgetBackgroundColor
-
-			// Setup the color selected listener
-			dialog.onColorSelectedListener = NacColorPickerDialog.OnColorSelectedListener { color ->
-
-				// Set the color
-				sharedPreferences.clockWidgetBackgroundColor = color
-				binding.backgroundColorSwatch.setupForegroundColor(color)
-
-				// Update the preview
-				binding.widgetParent.setBackgroundColor(helper.bgColor)
-
-			}
-
-			// Setup the default color selected listener
-			dialog.onDefaultColorSelectedListener = NacColorPickerDialog.OnDefaultColorSelectedListener { d ->
-				d.color = resources.getInteger(R.integer.default_clock_widget_color_background)
-			}
-
-			// Show the dialog
-			dialog.show(supportFragmentManager, NacColorPickerDialog.TAG)
-
-		}
-
-		// Hour color
-		binding.timeLayoutColorHourContainer.setOnClickListener {
-
-			// Create the dialog
-			val dialog = NacColorPickerDialog()
-
-			// Setup the initial color
-			dialog.initialColor = sharedPreferences.clockWidgetHourColor
-
-			// Setup the color selected listener
-			dialog.onColorSelectedListener = NacColorPickerDialog.OnColorSelectedListener { color ->
-
-				// Set the color
-				sharedPreferences.clockWidgetHourColor = color
-				binding.hourColorSwatch.setupForegroundColor(color)
-
-				// Update the preview
-				binding.widgetHour.setTextColor(sharedPreferences.clockWidgetHourColor)
-				binding.widgetHourBold.setTextColor(sharedPreferences.clockWidgetHourColor)
-
-			}
-
-			// Setup the default color selected listener
-			dialog.onDefaultColorSelectedListener = NacColorPickerDialog.OnDefaultColorSelectedListener { d ->
-				d.color = resources.getInteger(R.integer.default_clock_widget_color_hour)
-			}
-
-			// Show the dialog
-			dialog.show(supportFragmentManager, NacColorPickerDialog.TAG)
-
-		}
-
-		// Minute color
-		binding.timeLayoutColorMinuteContainer.setOnClickListener {
-
-			// Create the dialog
-			val dialog = NacColorPickerDialog()
-
-			// Setup the initial color
-			dialog.initialColor = sharedPreferences.clockWidgetMinuteColor
-
-			// Setup the color selected listener
-			dialog.onColorSelectedListener = NacColorPickerDialog.OnColorSelectedListener { color ->
-
-				// Set the color
-				sharedPreferences.clockWidgetMinuteColor = color
-				binding.minuteColorSwatch.setupForegroundColor(color)
-
-				// Update the preview
-				binding.widgetColon.setTextColor(sharedPreferences.clockWidgetMinuteColor)
-				binding.widgetMinute.setTextColor(sharedPreferences.clockWidgetMinuteColor)
-				binding.widgetMinuteBold.setTextColor(sharedPreferences.clockWidgetMinuteColor)
-
-			}
-
-			// Setup the default color selected listener
-			dialog.onDefaultColorSelectedListener = NacColorPickerDialog.OnDefaultColorSelectedListener { d ->
-				d.color = resources.getInteger(R.integer.default_clock_widget_color_minute)
-			}
-
-			// Show the dialog
-			dialog.show(supportFragmentManager, NacColorPickerDialog.TAG)
-
-		}
-
-		// AM/PM color
-		binding.timeLayoutColorAmPmContainer.setOnClickListener {
-
-			// Create the dialog
-			val dialog = NacColorPickerDialog()
-
-			// Setup the initial color
-			dialog.initialColor = sharedPreferences.clockWidgetAmPmColor
-
-			// Setup the color selected listener
-			dialog.onColorSelectedListener = NacColorPickerDialog.OnColorSelectedListener { color ->
-
-				// Set the color
-				sharedPreferences.clockWidgetAmPmColor = color
-				binding.amPmColorSwatch.setupForegroundColor(color)
-
-				// Update the preview
-				binding.widgetAmPm.setTextColor(sharedPreferences.clockWidgetAmPmColor)
-				binding.widgetAmPmBold.setTextColor(sharedPreferences.clockWidgetAmPmColor)
-
-			}
-
-			// Setup the default color selected listener
-			dialog.onDefaultColorSelectedListener = NacColorPickerDialog.OnDefaultColorSelectedListener { d ->
-				d.color = resources.getInteger(R.integer.default_clock_widget_color_am_pm)
-			}
-
-			// Show the dialog
-			dialog.show(supportFragmentManager, NacColorPickerDialog.TAG)
-
-		}
-
-		// Date color
-		binding.dateLayoutColorContainer.setOnClickListener {
-
-			// Create the dialog
-			val dialog = NacColorPickerDialog()
-
-			// Setup the initial color
-			dialog.initialColor = sharedPreferences.clockWidgetDateColor
-
-			// Setup the color selected listener
-			dialog.onColorSelectedListener = NacColorPickerDialog.OnColorSelectedListener { color ->
-
-				// Set the color
-				sharedPreferences.clockWidgetDateColor = color
-				binding.dateLayoutColorSwatch.setupForegroundColor(color)
-
-				// Update the preview
-				binding.widgetDate.setTextColor(sharedPreferences.clockWidgetDateColor)
-				binding.widgetDateBold.setTextColor(sharedPreferences.clockWidgetDateColor)
-
-			}
-
-			// Setup the default color selected listener
-			dialog.onDefaultColorSelectedListener = NacColorPickerDialog.OnDefaultColorSelectedListener { d ->
-				d.color = resources.getInteger(R.integer.default_clock_widget_color_date)
-			}
-
-			// Show the dialog
-			dialog.show(supportFragmentManager, NacColorPickerDialog.TAG)
+			binding.previewWidget.widgetAlarmTime.visibility = if (shouldShowAlarmTime) View.VISIBLE else View.GONE
+			binding.previewWidget.widgetAlarmTimeAbove.visibility = if (shouldShowAlarmTime) View.VISIBLE else View.GONE
+			binding.previewWidget.widgetAlarmTimeBelow.visibility = if (shouldShowAlarmTime) View.VISIBLE else View.GONE
+			binding.previewWidget.widgetAlarmTimeBold.visibility = if (shouldShowAlarmTimeBold) View.VISIBLE else View.GONE
+			binding.previewWidget.widgetAlarmTimeBoldAbove.visibility = if (shouldShowAlarmTimeBold) View.VISIBLE else View.GONE
+			binding.previewWidget.widgetAlarmTimeBoldBelow.visibility = if (shouldShowAlarmTimeBold) View.VISIBLE else View.GONE
 
 		}
 
@@ -586,8 +398,12 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 				binding.alarmLayoutColorTimeSwatch.setupForegroundColor(color)
 
 				// Update the preview
-				binding.widgetAlarmTime.setTextColor(sharedPreferences.clockWidgetAlarmTimeColor)
-				binding.widgetAlarmTimeBold.setTextColor(sharedPreferences.clockWidgetAlarmTimeColor)
+				binding.previewWidget.widgetAlarmTime.setTextColor(sharedPreferences.clockWidgetAlarmTimeColor)
+				binding.previewWidget.widgetAlarmTimeAbove.setTextColor(sharedPreferences.clockWidgetAlarmTimeColor)
+				binding.previewWidget.widgetAlarmTimeBelow.setTextColor(sharedPreferences.clockWidgetAlarmTimeColor)
+				binding.previewWidget.widgetAlarmTimeBold.setTextColor(sharedPreferences.clockWidgetAlarmTimeColor)
+				binding.previewWidget.widgetAlarmTimeBoldAbove.setTextColor(sharedPreferences.clockWidgetAlarmTimeColor)
+				binding.previewWidget.widgetAlarmTimeBoldBelow.setTextColor(sharedPreferences.clockWidgetAlarmTimeColor)
 
 			}
 
@@ -618,13 +434,134 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 				binding.alarmLayoutColorIconSwatch.setupForegroundColor(color)
 
 				// Update the preview
-				binding.widgetAlarmIcon.setColorFilter(sharedPreferences.clockWidgetAlarmIconColor)
+				binding.previewWidget.widgetAlarmIcon.setColorFilter(sharedPreferences.clockWidgetAlarmIconColor)
+				binding.previewWidget.widgetAlarmIconAbove.setColorFilter(sharedPreferences.clockWidgetAlarmIconColor)
+				binding.previewWidget.widgetAlarmIconBelow.setColorFilter(sharedPreferences.clockWidgetAlarmIconColor)
 
 			}
 
 			// Setup the default color selected listener
 			dialog.onDefaultColorSelectedListener = NacColorPickerDialog.OnDefaultColorSelectedListener { d ->
 				d.color = resources.getInteger(R.integer.default_clock_widget_color_alarm_icon)
+			}
+
+			// Show the dialog
+			dialog.show(supportFragmentManager, NacColorPickerDialog.TAG)
+
+		}
+
+		// Alarm time size
+		binding.alarmLayoutTextSizeSlider.addOnSliderTouchListener(object: OnSliderTouchListener {
+
+			/**
+			 * Called when the touch is started.
+			 */
+			override fun onStartTrackingTouch(slider: Slider)
+			{
+			}
+
+			/**
+			 * Called when the touch is stopped.
+			 */
+			override fun onStopTrackingTouch(slider: Slider)
+			{
+				// Set the new text size
+				sharedPreferences.clockWidgetAlarmTimeTextSize = slider.value
+
+				// Update the preview
+				binding.previewWidget.widgetAlarmTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
+				binding.previewWidget.widgetAlarmTimeAbove.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
+				binding.previewWidget.widgetAlarmTimeBelow.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
+				binding.previewWidget.widgetAlarmTimeBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
+				binding.previewWidget.widgetAlarmTimeBoldAbove.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
+				binding.previewWidget.widgetAlarmTimeBoldBelow.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
+				updateAlarmIconMargins()
+			}
+
+		})
+
+		binding.alarmLayoutTextSizeSlider.addOnChangeListener { _, value, _ ->
+
+			// Update the preview
+			binding.previewWidget.widgetAlarmTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.previewWidget.widgetAlarmTimeAbove.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.previewWidget.widgetAlarmTimeBelow.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.previewWidget.widgetAlarmTimeBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.previewWidget.widgetAlarmTimeBoldAbove.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.previewWidget.widgetAlarmTimeBoldBelow.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			updateAlarmIconMargins(alarmTextSize = value)
+
+		}
+
+		// Alarm position
+		binding.alarmLayoutPositionRadioGroup.setOnCheckedChangeListener { _, id ->
+
+			when (id)
+			{
+				// Above
+				R.id.alarm_layout_position_above_date_radio_button ->
+				{
+					sharedPreferences.clockWidgetAlarmTimePositionAboveDate = true
+					sharedPreferences.clockWidgetAlarmTimePositionBelowDate = false
+					sharedPreferences.clockWidgetAlarmTimePositionSameLineAsDate = false
+				}
+
+				// Below
+				R.id.alarm_layout_position_below_date_radio_button ->
+				{
+					sharedPreferences.clockWidgetAlarmTimePositionAboveDate = false
+					sharedPreferences.clockWidgetAlarmTimePositionBelowDate = true
+					sharedPreferences.clockWidgetAlarmTimePositionSameLineAsDate = false
+				}
+
+				// Same line
+				R.id.alarm_layout_position_same_line_as_date_radio_button ->
+				{
+					sharedPreferences.clockWidgetAlarmTimePositionAboveDate = false
+					sharedPreferences.clockWidgetAlarmTimePositionBelowDate = false
+					sharedPreferences.clockWidgetAlarmTimePositionSameLineAsDate = true
+				}
+
+				else -> {}
+			}
+
+			// Update the preview
+			binding.previewWidget.widgetAlarmAboveContainer.visibility = helper.alarmPositionAboveDateVis
+			binding.previewWidget.widgetAlarmSameLineAsDateContainer.visibility = helper.alarmPositionSameLineAsDateVis
+			binding.previewWidget.widgetAlarmBelowContainer.visibility = helper.alarmPositionBelowDateVis
+
+		}
+	}
+
+	/**
+	 * Setup background listeners.
+	 */
+	private fun setupBackgroundListeners()
+	{
+		// Background color
+		binding.backgroundColorContainer.setOnClickListener {
+
+			// Create the dialog
+			val dialog = NacColorPickerDialog()
+
+			// Setup the initial color
+			dialog.initialColor = sharedPreferences.clockWidgetBackgroundColor
+
+			// Setup the color selected listener
+			dialog.onColorSelectedListener = NacColorPickerDialog.OnColorSelectedListener { color ->
+
+				// Set the color
+				sharedPreferences.clockWidgetBackgroundColor = color
+				binding.backgroundColorSwatch.setupForegroundColor(color)
+
+				// Update the preview
+				binding.previewParent.setBackgroundColor(helper.bgColor)
+
+			}
+
+			// Setup the default color selected listener
+			dialog.onDefaultColorSelectedListener = NacColorPickerDialog.OnDefaultColorSelectedListener { d ->
+				d.color = resources.getInteger(R.integer.default_clock_widget_color_background)
 			}
 
 			// Show the dialog
@@ -651,7 +588,7 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 				sharedPreferences.clockWidgetBackgroundTransparency = slider.value.toInt()
 
 				// Update the preview
-				binding.widgetParent.setBackgroundColor(helper.bgColor)
+				binding.previewParent.setBackgroundColor(helper.bgColor)
 			}
 
 		})
@@ -663,7 +600,71 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 				sharedPreferences.clockWidgetBackgroundColor, value.toInt())
 
 			// Update the preview
-			binding.widgetParent.setBackgroundColor(newColor)
+			binding.previewParent.setBackgroundColor(newColor)
+
+		}
+	}
+
+	/**
+	 * Setup date layout listeners.
+	 */
+	private fun setupDateLayoutListeners()
+	{
+		// Show date
+		binding.dateLayoutShowContainer.setOnClickListener {
+
+			// Toggle the state
+			binding.dateLayoutShowSwitch.toggle()
+			sharedPreferences.shouldClockWidgetShowDate = binding.dateLayoutShowSwitch.isChecked
+
+			// Update the preview
+			binding.previewWidget.widgetDate.visibility = helper.dateVis
+			binding.previewWidget.widgetDateBold.visibility = helper.dateBoldVis
+
+		}
+
+		// Bold date
+		binding.dateLayoutBoldContainer.setOnClickListener {
+
+			// Toggle the state
+			binding.dateLayoutBoldSwitch.toggle()
+			sharedPreferences.shouldClockWidgetBoldDate = binding.dateLayoutBoldSwitch.isChecked
+
+			// Update the preview
+			binding.previewWidget.widgetDate.visibility = helper.dateVis
+			binding.previewWidget.widgetDateBold.visibility = helper.dateBoldVis
+
+		}
+
+		// Date color
+		binding.dateLayoutColorContainer.setOnClickListener {
+
+			// Create the dialog
+			val dialog = NacColorPickerDialog()
+
+			// Setup the initial color
+			dialog.initialColor = sharedPreferences.clockWidgetDateColor
+
+			// Setup the color selected listener
+			dialog.onColorSelectedListener = NacColorPickerDialog.OnColorSelectedListener { color ->
+
+				// Set the color
+				sharedPreferences.clockWidgetDateColor = color
+				binding.dateLayoutColorSwatch.setupForegroundColor(color)
+
+				// Update the preview
+				binding.previewWidget.widgetDate.setTextColor(sharedPreferences.clockWidgetDateColor)
+				binding.previewWidget.widgetDateBold.setTextColor(sharedPreferences.clockWidgetDateColor)
+
+			}
+
+			// Setup the default color selected listener
+			dialog.onDefaultColorSelectedListener = NacColorPickerDialog.OnDefaultColorSelectedListener { d ->
+				d.color = resources.getInteger(R.integer.default_clock_widget_color_date)
+			}
+
+			// Show the dialog
+			dialog.show(supportFragmentManager, NacColorPickerDialog.TAG)
 
 		}
 
@@ -686,8 +687,8 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 				sharedPreferences.clockWidgetDateTextSize = slider.value
 
 				// Update the preview
-				binding.widgetDate.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetDateTextSize)
-				binding.widgetDateBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetDateTextSize)
+				binding.previewWidget.widgetDate.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetDateTextSize)
+				binding.previewWidget.widgetDateBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetDateTextSize)
 				updateAlarmIconMargins()
 			}
 
@@ -696,12 +697,219 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		binding.dateLayoutTextSizeSlider.addOnChangeListener { _, value, _ ->
 
 			// Update the preview
-			binding.widgetDate.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
-			binding.widgetDateBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.previewWidget.widgetDate.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.previewWidget.widgetDateBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
 			updateAlarmIconMargins(dateTextSize = value)
 
 		}
+	}
 
+	/**
+	 * Setup general listeners.
+	 */
+	private fun setupGeneralListeners()
+	{
+		// General layout alignment section
+		binding.generalLayoutAlignmentContainer.setOnClickListener {
+			changeOnExpandCollapse(binding.generalLayoutAlignmentOptionsContainer, binding.generalLayoutAlignmentDescription)
+		}
+
+		// Alignment
+		binding.generalLayoutAlignmentRadioGroup.setOnCheckedChangeListener { _, id ->
+
+			when (id)
+			{
+
+				// Center
+				R.id.general_layout_alignment_center_radio_button -> sharedPreferences.clockWidgetGeneralAlignment = Gravity.CENTER_HORIZONTAL
+
+				// Left
+				R.id.general_layout_alignment_left_radio_button -> sharedPreferences.clockWidgetGeneralAlignment = Gravity.START
+
+				// Right
+				R.id.general_layout_alignment_right_radio_button -> sharedPreferences.clockWidgetGeneralAlignment = Gravity.END
+
+				// Default to center
+				else -> sharedPreferences.clockWidgetGeneralAlignment = Gravity.CENTER_HORIZONTAL
+			}
+
+			// Update the preview
+			binding.previewWidget.widgetTime.gravity = sharedPreferences.clockWidgetGeneralAlignment
+			binding.previewWidget.widgetAlarmAboveContainer.gravity = sharedPreferences.clockWidgetGeneralAlignment
+			binding.previewWidget.widgetAlarmDateInlineContainer.gravity = sharedPreferences.clockWidgetGeneralAlignment
+			binding.previewWidget.widgetAlarmBelowContainer.gravity = sharedPreferences.clockWidgetGeneralAlignment
+
+		}
+	}
+
+	/**
+	 * Setup time layout listeners.
+	 */
+	private fun setupTimeLayoutListeners()
+	{
+		// Time layout bold section
+		binding.timeLayoutBoldContainer.setOnClickListener {
+			changeOnExpandCollapse(binding.timeLayoutBoldOptionsContainer, binding.timeLayoutBoldDescription)
+		}
+
+		// Time layout color section
+		binding.timeLayoutColorContainer.setOnClickListener {
+			changeOnExpandCollapse(binding.timeLayoutColorOptionsContainer, binding.timeLayoutColorDescription)
+
+		}
+
+		// Time layout text size section
+		binding.timeLayoutTextSizeContainer.setOnClickListener {
+			changeOnExpandCollapse(binding.timeLayoutTextSizeOptionsContainer, binding.timeLayoutTextSizeDescription)
+		}
+
+		// Show time
+		binding.timeLayoutShowContainer.setOnClickListener {
+
+			// Toggle the state
+			binding.timeLayoutShowSwitch.toggle()
+			sharedPreferences.shouldClockWidgetShowTime = binding.timeLayoutShowSwitch.isChecked
+
+			// Update the preview
+			binding.previewWidget.widgetTime.visibility = helper.timeVis
+
+		}
+
+		// Bold hour
+		binding.timeLayoutBoldHourContainer.setOnClickListener {
+
+			// Toggle the state
+			binding.timeLayoutBoldHourSwitch.toggle()
+			sharedPreferences.shouldClockWidgetBoldHour = binding.timeLayoutBoldHourSwitch.isChecked
+
+			// Update the preview
+			binding.previewWidget.widgetHour.visibility = helper.hourVis
+			binding.previewWidget.widgetHourBold.visibility = helper.hourBoldVis
+
+		}
+
+		// Bold minute
+		binding.timeLayoutBoldMinuteContainer.setOnClickListener {
+
+			// Toggle the state
+			binding.timeLayoutBoldMinuteSwitch.toggle()
+			sharedPreferences.shouldClockWidgetBoldMinute = binding.timeLayoutBoldMinuteSwitch.isChecked
+
+			// Update the preview
+			binding.previewWidget.widgetMinute.visibility = helper.minuteVis
+			binding.previewWidget.widgetMinuteBold.visibility = helper.minuteBoldVis
+
+		}
+
+		// Bold am/pm
+		binding.timeLayoutBoldAmPmContainer.setOnClickListener {
+
+			// Toggle the state
+			binding.timeLayoutBoldAmPmSwitch.toggle()
+			sharedPreferences.shouldClockWidgetBoldAmPm = binding.timeLayoutBoldAmPmSwitch.isChecked
+
+			// Update the preview
+			binding.previewWidget.widgetAmPm.visibility = helper.meridianVis
+			binding.previewWidget.widgetAmPmBold.visibility = helper.meridianBoldVis
+
+		}
+
+		// Hour color
+		binding.timeLayoutColorHourContainer.setOnClickListener {
+
+			// Create the dialog
+			val dialog = NacColorPickerDialog()
+
+			// Setup the initial color
+			dialog.initialColor = sharedPreferences.clockWidgetHourColor
+
+			// Setup the color selected listener
+			dialog.onColorSelectedListener = NacColorPickerDialog.OnColorSelectedListener { color ->
+
+				// Set the color
+				sharedPreferences.clockWidgetHourColor = color
+				binding.hourColorSwatch.setupForegroundColor(color)
+
+				// Update the preview
+				binding.previewWidget.widgetHour.setTextColor(sharedPreferences.clockWidgetHourColor)
+				binding.previewWidget.widgetHourBold.setTextColor(sharedPreferences.clockWidgetHourColor)
+
+			}
+
+			// Setup the default color selected listener
+			dialog.onDefaultColorSelectedListener = NacColorPickerDialog.OnDefaultColorSelectedListener { d ->
+				d.color = resources.getInteger(R.integer.default_clock_widget_color_hour)
+			}
+
+			// Show the dialog
+			dialog.show(supportFragmentManager, NacColorPickerDialog.TAG)
+
+		}
+
+		// Minute color
+		binding.timeLayoutColorMinuteContainer.setOnClickListener {
+
+			// Create the dialog
+			val dialog = NacColorPickerDialog()
+
+			// Setup the initial color
+			dialog.initialColor = sharedPreferences.clockWidgetMinuteColor
+
+			// Setup the color selected listener
+			dialog.onColorSelectedListener = NacColorPickerDialog.OnColorSelectedListener { color ->
+
+				// Set the color
+				sharedPreferences.clockWidgetMinuteColor = color
+				binding.minuteColorSwatch.setupForegroundColor(color)
+
+				// Update the preview
+				binding.previewWidget.widgetColon.setTextColor(sharedPreferences.clockWidgetMinuteColor)
+				binding.previewWidget.widgetMinute.setTextColor(sharedPreferences.clockWidgetMinuteColor)
+				binding.previewWidget.widgetMinuteBold.setTextColor(sharedPreferences.clockWidgetMinuteColor)
+
+			}
+
+			// Setup the default color selected listener
+			dialog.onDefaultColorSelectedListener = NacColorPickerDialog.OnDefaultColorSelectedListener { d ->
+				d.color = resources.getInteger(R.integer.default_clock_widget_color_minute)
+			}
+
+			// Show the dialog
+			dialog.show(supportFragmentManager, NacColorPickerDialog.TAG)
+
+		}
+
+		// AM/PM color
+		binding.timeLayoutColorAmPmContainer.setOnClickListener {
+
+			// Create the dialog
+			val dialog = NacColorPickerDialog()
+
+			// Setup the initial color
+			dialog.initialColor = sharedPreferences.clockWidgetAmPmColor
+
+			// Setup the color selected listener
+			dialog.onColorSelectedListener = NacColorPickerDialog.OnColorSelectedListener { color ->
+
+				// Set the color
+				sharedPreferences.clockWidgetAmPmColor = color
+				binding.amPmColorSwatch.setupForegroundColor(color)
+
+				// Update the preview
+				binding.previewWidget.widgetAmPm.setTextColor(sharedPreferences.clockWidgetAmPmColor)
+				binding.previewWidget.widgetAmPmBold.setTextColor(sharedPreferences.clockWidgetAmPmColor)
+
+			}
+
+			// Setup the default color selected listener
+			dialog.onDefaultColorSelectedListener = NacColorPickerDialog.OnDefaultColorSelectedListener { d ->
+				d.color = resources.getInteger(R.integer.default_clock_widget_color_am_pm)
+			}
+
+			// Show the dialog
+			dialog.show(supportFragmentManager, NacColorPickerDialog.TAG)
+
+		}
 		// Time size
 		binding.timeLayoutTextSizeTimeSlider.addOnSliderTouchListener(object: OnSliderTouchListener {
 
@@ -721,11 +929,11 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 				sharedPreferences.clockWidgetTimeTextSize = slider.value
 
 				// Update the preview
-				binding.widgetHour.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetTimeTextSize)
-				binding.widgetHourBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetTimeTextSize)
-				binding.widgetColon.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetTimeTextSize)
-				binding.widgetMinute.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetTimeTextSize)
-				binding.widgetMinuteBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetTimeTextSize)
+				binding.previewWidget.widgetHour.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetTimeTextSize)
+				binding.previewWidget.widgetHourBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetTimeTextSize)
+				binding.previewWidget.widgetColon.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetTimeTextSize)
+				binding.previewWidget.widgetMinute.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetTimeTextSize)
+				binding.previewWidget.widgetMinuteBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetTimeTextSize)
 			}
 
 		})
@@ -733,11 +941,11 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		binding.timeLayoutTextSizeTimeSlider.addOnChangeListener { _, value, _ ->
 
 			// Update the preview
-			binding.widgetHour.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
-			binding.widgetHourBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
-			binding.widgetColon.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
-			binding.widgetMinute.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
-			binding.widgetMinuteBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.previewWidget.widgetHour.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.previewWidget.widgetHourBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.previewWidget.widgetColon.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.previewWidget.widgetMinute.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.previewWidget.widgetMinuteBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
 
 		}
 
@@ -760,8 +968,8 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 				sharedPreferences.clockWidgetAmPmTextSize = slider.value
 
 				// Update the preview
-				binding.widgetAmPm.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAmPmTextSize)
-				binding.widgetAmPmBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAmPmTextSize)
+				binding.previewWidget.widgetAmPm.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAmPmTextSize)
+				binding.previewWidget.widgetAmPmBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAmPmTextSize)
 			}
 
 		})
@@ -769,45 +977,22 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		binding.timeLayoutTextSizeAmPmSlider.addOnChangeListener { _, value, _ ->
 
 			// Update the preview
-			binding.widgetAmPm.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
-			binding.widgetAmPmBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.previewWidget.widgetAmPm.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
+			binding.previewWidget.widgetAmPmBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
 
 		}
+	}
 
-		// Alarm time size
-		binding.alarmLayoutTextSizeSlider.addOnSliderTouchListener(object: OnSliderTouchListener {
-
-			/**
-			 * Called when the touch is started.
-			 */
-			override fun onStartTrackingTouch(slider: Slider)
-			{
-			}
-
-			/**
-			 * Called when the touch is stopped.
-			 */
-			override fun onStopTrackingTouch(slider: Slider)
-			{
-				// Set the new text size
-				sharedPreferences.clockWidgetAlarmTimeTextSize = slider.value
-
-				// Update the preview
-				binding.widgetAlarmTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
-				binding.widgetAlarmTimeBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
-				updateAlarmIconMargins()
-			}
-
-		})
-
-		binding.alarmLayoutTextSizeSlider.addOnChangeListener { _, value, _ ->
-
-			// Update the preview
-			binding.widgetAlarmTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
-			binding.widgetAlarmTimeBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
-			updateAlarmIconMargins(alarmTextSize = value)
-
-		}
+	/**
+	 * Setup listeners.
+	 */
+	private fun setupListeners()
+	{
+		setupGeneralListeners()
+		setupTimeLayoutListeners()
+		setupDateLayoutListeners()
+		setupAlarmLayoutListeners()
+		setupBackgroundListeners()
 
 		// Done button
 		binding.doneButton.setOnClickListener {
@@ -822,19 +1007,37 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 		dateTextSize: Float = sharedPreferences.clockWidgetDateTextSize,
 		alarmTextSize: Float = sharedPreferences.clockWidgetAlarmTimeTextSize)
 	{
-		// Calculate the new margin in dp
-		val avgTextSize = (dateTextSize + alarmTextSize) / 2
-		val newMarginDp = NacClockWidgetDataHelper.calcAlarmIconMargin(this, avgTextSize)
+		// Get the average text size, depending on if the alarm is shown inline or
+		// different line that the date
+		val avgTextSize = if (sharedPreferences.clockWidgetAlarmTimePositionSameLineAsDate)
+		{
+			(dateTextSize + alarmTextSize) / 2
+		}
+		else
+		{
+			alarmTextSize
+		}
 
-		// Compute the new margin in px
-		val layoutParams = binding.widgetAlarmIcon.layoutParams as ViewGroup.MarginLayoutParams
+		// Calculate the new margin in dp and px
+		val newMarginDp = NacClockWidgetDataHelper.calcAlarmIconMargin(this, avgTextSize)
 		val newMarginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, newMarginDp,
 			resources.displayMetrics).toInt()
 
 		// Set the new margin
-		layoutParams.marginStart = newMarginPx
-		layoutParams.marginEnd = newMarginPx
-		binding.widgetAlarmIcon.layoutParams = layoutParams
+		binding.previewWidget.widgetAlarmIcon.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+			marginStart = newMarginPx
+			marginEnd = newMarginPx
+		}
+
+		binding.previewWidget.widgetAlarmIconAbove.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+			marginStart = 0
+			marginEnd = newMarginPx
+		}
+
+		binding.previewWidget.widgetAlarmIconBelow.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+			marginStart = 0
+			marginEnd = newMarginPx
+		}
 	}
 
 	/**
@@ -842,57 +1045,87 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 	 */
 	private fun setupWidgetPreview()
 	{
-		// Set the background color of the preview separator
+		// Background color of the preview separator
 		binding.widgetPreviewSeparator.setBackgroundColor(sharedPreferences.themeColor)
 
-		// Set view visibility
-		binding.widgetTime.visibility = helper.timeVis
-		binding.widgetHour.visibility = helper.hourVis
-		binding.widgetHourBold.visibility = helper.hourBoldVis
-		binding.widgetMinute.visibility = helper.minuteVis
-		binding.widgetMinuteBold.visibility = helper.minuteBoldVis
-		binding.widgetAmPm.visibility = helper.meridianVis
-		binding.widgetAmPmBold.visibility = helper.meridianBoldVis
-		binding.widgetDate.visibility = helper.dateVis
-		binding.widgetDateBold.visibility = helper.dateBoldVis
-		binding.widgetAlarmIcon.visibility = if (sharedPreferences.shouldClockWidgetShowAlarm) View.VISIBLE else View.GONE
-		binding.widgetAlarmTime.visibility = if (shouldShowAlarmTime) View.VISIBLE else View.GONE
-		binding.widgetAlarmTimeBold.visibility = if (shouldShowAlarmTimeBold) View.VISIBLE else View.GONE
+		// View visibility
+		binding.previewWidget.widgetTime.visibility = helper.timeVis
+		binding.previewWidget.widgetHour.visibility = helper.hourVis
+		binding.previewWidget.widgetHourBold.visibility = helper.hourBoldVis
+		binding.previewWidget.widgetMinute.visibility = helper.minuteVis
+		binding.previewWidget.widgetMinuteBold.visibility = helper.minuteBoldVis
+		binding.previewWidget.widgetAmPm.visibility = helper.meridianVis
+		binding.previewWidget.widgetAmPmBold.visibility = helper.meridianBoldVis
+		binding.previewWidget.widgetDate.visibility = helper.dateVis
+		binding.previewWidget.widgetDateBold.visibility = helper.dateBoldVis
+		binding.previewWidget.widgetAlarmIcon.visibility = if (sharedPreferences.shouldClockWidgetShowAlarm) View.VISIBLE else View.GONE
+		binding.previewWidget.widgetAlarmIconAbove.visibility = if (sharedPreferences.shouldClockWidgetShowAlarm) View.VISIBLE else View.GONE
+		binding.previewWidget.widgetAlarmIconBelow.visibility = if (sharedPreferences.shouldClockWidgetShowAlarm) View.VISIBLE else View.GONE
+		binding.previewWidget.widgetAlarmTime.visibility = if (shouldShowAlarmTime) View.VISIBLE else View.GONE
+		binding.previewWidget.widgetAlarmTimeAbove.visibility = if (shouldShowAlarmTime) View.VISIBLE else View.GONE
+		binding.previewWidget.widgetAlarmTimeBelow.visibility = if (shouldShowAlarmTime) View.VISIBLE else View.GONE
+		binding.previewWidget.widgetAlarmTimeBold.visibility = if (shouldShowAlarmTimeBold) View.VISIBLE else View.GONE
+		binding.previewWidget.widgetAlarmTimeBoldAbove.visibility = if (shouldShowAlarmTimeBold) View.VISIBLE else View.GONE
+		binding.previewWidget.widgetAlarmTimeBoldBelow.visibility = if (shouldShowAlarmTimeBold) View.VISIBLE else View.GONE
+		binding.previewWidget.widgetAlarmAboveContainer.visibility = helper.alarmPositionAboveDateVis
+		binding.previewWidget.widgetAlarmSameLineAsDateContainer.visibility = helper.alarmPositionSameLineAsDateVis
+		binding.previewWidget.widgetAlarmBelowContainer.visibility = helper.alarmPositionBelowDateVis
 
-		// Set the example alarm time
+		// Gravity
+		binding.previewWidget.widgetTime.gravity = sharedPreferences.clockWidgetGeneralAlignment
+		binding.previewWidget.widgetAlarmAboveContainer.gravity = sharedPreferences.clockWidgetGeneralAlignment
+		binding.previewWidget.widgetAlarmDateInlineContainer.gravity = sharedPreferences.clockWidgetGeneralAlignment
+		binding.previewWidget.widgetAlarmBelowContainer.gravity = sharedPreferences.clockWidgetGeneralAlignment
+
+		// Example alarm time
 		val time = NacCalendar.getFullTime(this, exampleAlarmCalendar)
-		binding.widgetAlarmTime.text = time
-		binding.widgetAlarmTimeBold.text = time
+		binding.previewWidget.widgetAlarmTime.text = time
+		binding.previewWidget.widgetAlarmTimeAbove.text = time
+		binding.previewWidget.widgetAlarmTimeBelow.text = time
+		binding.previewWidget.widgetAlarmTimeBold.text = time
+		binding.previewWidget.widgetAlarmTimeBoldAbove.text = time
+		binding.previewWidget.widgetAlarmTimeBoldBelow.text = time
 
-		// Set the background color and transparency
-		binding.widgetParent.setBackgroundColor(helper.bgColor)
+		// Background color and transparency
+		binding.previewParent.setBackgroundColor(helper.bgColor)
+		binding.previewWidget.previewParent.background = null
 
-		// Set text and icon colors
-		binding.widgetHour.setTextColor(sharedPreferences.clockWidgetHourColor)
-		binding.widgetHourBold.setTextColor(sharedPreferences.clockWidgetHourColor)
-		binding.widgetColon.setTextColor(sharedPreferences.clockWidgetMinuteColor)
-		binding.widgetMinute.setTextColor(sharedPreferences.clockWidgetMinuteColor)
-		binding.widgetMinuteBold.setTextColor(sharedPreferences.clockWidgetMinuteColor)
-		binding.widgetAmPm.setTextColor(sharedPreferences.clockWidgetAmPmColor)
-		binding.widgetAmPmBold.setTextColor(sharedPreferences.clockWidgetAmPmColor)
-		binding.widgetDate.setTextColor(sharedPreferences.clockWidgetDateColor)
-		binding.widgetDateBold.setTextColor(sharedPreferences.clockWidgetDateColor)
-		binding.widgetAlarmTime.setTextColor(sharedPreferences.clockWidgetAlarmTimeColor)
-		binding.widgetAlarmTimeBold.setTextColor(sharedPreferences.clockWidgetAlarmTimeColor)
-		binding.widgetAlarmIcon.setColorFilter(sharedPreferences.clockWidgetAlarmIconColor)
+		// Text and icon colors
+		binding.previewWidget.widgetHour.setTextColor(sharedPreferences.clockWidgetHourColor)
+		binding.previewWidget.widgetHourBold.setTextColor(sharedPreferences.clockWidgetHourColor)
+		binding.previewWidget.widgetColon.setTextColor(sharedPreferences.clockWidgetMinuteColor)
+		binding.previewWidget.widgetMinute.setTextColor(sharedPreferences.clockWidgetMinuteColor)
+		binding.previewWidget.widgetMinuteBold.setTextColor(sharedPreferences.clockWidgetMinuteColor)
+		binding.previewWidget.widgetAmPm.setTextColor(sharedPreferences.clockWidgetAmPmColor)
+		binding.previewWidget.widgetAmPmBold.setTextColor(sharedPreferences.clockWidgetAmPmColor)
+		binding.previewWidget.widgetDate.setTextColor(sharedPreferences.clockWidgetDateColor)
+		binding.previewWidget.widgetDateBold.setTextColor(sharedPreferences.clockWidgetDateColor)
+		binding.previewWidget.widgetAlarmTime.setTextColor(sharedPreferences.clockWidgetAlarmTimeColor)
+		binding.previewWidget.widgetAlarmTimeAbove.setTextColor(sharedPreferences.clockWidgetAlarmTimeColor)
+		binding.previewWidget.widgetAlarmTimeBelow.setTextColor(sharedPreferences.clockWidgetAlarmTimeColor)
+		binding.previewWidget.widgetAlarmTimeBold.setTextColor(sharedPreferences.clockWidgetAlarmTimeColor)
+		binding.previewWidget.widgetAlarmTimeBoldAbove.setTextColor(sharedPreferences.clockWidgetAlarmTimeColor)
+		binding.previewWidget.widgetAlarmTimeBoldBelow.setTextColor(sharedPreferences.clockWidgetAlarmTimeColor)
+		binding.previewWidget.widgetAlarmIcon.setColorFilter(sharedPreferences.clockWidgetAlarmIconColor)
+		binding.previewWidget.widgetAlarmIconAbove.setColorFilter(sharedPreferences.clockWidgetAlarmIconColor)
+		binding.previewWidget.widgetAlarmIconBelow.setColorFilter(sharedPreferences.clockWidgetAlarmIconColor)
 
-		// Set text size
-		binding.widgetHour.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetTimeTextSize)
-		binding.widgetHourBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetTimeTextSize)
-		binding.widgetColon.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetTimeTextSize)
-		binding.widgetMinute.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetTimeTextSize)
-		binding.widgetMinuteBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetTimeTextSize)
-		binding.widgetAmPm.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAmPmTextSize)
-		binding.widgetAmPmBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAmPmTextSize)
-		binding.widgetDate.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetDateTextSize)
-		binding.widgetDateBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetDateTextSize)
-		binding.widgetAlarmTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
-		binding.widgetAlarmTimeBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
+		// Text size
+		binding.previewWidget.widgetHour.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetTimeTextSize)
+		binding.previewWidget.widgetHourBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetTimeTextSize)
+		binding.previewWidget.widgetColon.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetTimeTextSize)
+		binding.previewWidget.widgetMinute.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetTimeTextSize)
+		binding.previewWidget.widgetMinuteBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetTimeTextSize)
+		binding.previewWidget.widgetAmPm.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAmPmTextSize)
+		binding.previewWidget.widgetAmPmBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAmPmTextSize)
+		binding.previewWidget.widgetDate.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetDateTextSize)
+		binding.previewWidget.widgetDateBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetDateTextSize)
+		binding.previewWidget.widgetAlarmTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
+		binding.previewWidget.widgetAlarmTimeAbove.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
+		binding.previewWidget.widgetAlarmTimeBelow.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
+		binding.previewWidget.widgetAlarmTimeBold.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
+		binding.previewWidget.widgetAlarmTimeBoldAbove.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
+		binding.previewWidget.widgetAlarmTimeBoldBelow.setTextSize(TypedValue.COMPLEX_UNIT_SP, sharedPreferences.clockWidgetAlarmTimeTextSize)
 
 		// Set the margin
 		updateAlarmIconMargins()

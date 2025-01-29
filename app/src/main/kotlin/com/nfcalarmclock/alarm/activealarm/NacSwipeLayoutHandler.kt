@@ -152,6 +152,11 @@ class NacSwipeLayoutHandler(
 	private val sliderRightArrow: ImageView = activity.findViewById(R.id.slider_right_arrow)
 
 	/**
+	 * Number of snoozes left.
+	 */
+	private val numberOfSnoozesLeftTextView: TextView = activity.findViewById(R.id.number_of_snoozes_left_message)
+
+	/**
 	 * Music information container.
 	 */
 	private val musicContainer: RelativeLayout = activity.findViewById(R.id.music_container)
@@ -275,7 +280,8 @@ class NacSwipeLayoutHandler(
 					})
 
 				// Hide the slider path
-				swipeAnimation.hideSliderPath(sliderPath, sliderInstructions)
+				swipeAnimation.hideSliderPath(sliderPath, sliderInstructions,
+					numberOfSnoozesLeftMessage = numberOfSnoozesLeftTextView.takeIf { view == snoozeButton })
 
 			}
 
@@ -523,6 +529,19 @@ class NacSwipeLayoutHandler(
 	}
 
 	/**
+	 * Setup the number of snoozes that are left.
+	 */
+	private fun setupNumberOfSnoozesLeft(context: Context)
+	{
+		// Get the message
+		val numLeft = alarm!!.maxSnooze - alarm.snoozeCount
+		val message = context.getString(R.string.message_number_of_snoozes_left, numLeft)
+
+		// Set the text
+		numberOfSnoozesLeftTextView.text = message
+	}
+
+	/**
 	 * Run any setup steps.
 	 */
 	override fun setup(context: Context)
@@ -530,6 +549,7 @@ class NacSwipeLayoutHandler(
 		// Setup the views based on user preference
 		setupAlarmName()
 		setupCurrentDateAndTime(context)
+		setupNumberOfSnoozesLeft(context)
 		setupMusicInformation(context)
 		musicContainer.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
 
@@ -591,7 +611,8 @@ class NacSwipeLayoutHandler(
 					setupSliderArrows(view.id)
 
 					// Show the slider path
-					swipeAnimation.showSliderPath(sliderPath, sliderInstructions)
+					swipeAnimation.showSliderPath(sliderPath, sliderInstructions,
+						numberOfSnoozesLeftMessage = numberOfSnoozesLeftTextView.takeIf { view == snoozeButton })
 				}
 
 				// Finger UP on button

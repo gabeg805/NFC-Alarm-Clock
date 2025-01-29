@@ -151,9 +151,8 @@
 	<!-- Import/export -->
 	<string name="key_settings_import_export">pref_screen_import_export</string>
 
-	<!-- Widget background -->
-	<string name="key_clock_widget_background_color">pref_clock_widget_background_color</string>
-	<string name="key_clock_widget_background_transparency">pref_clock_widget_background_transparency</string>
+	<!-- Widget general -->
+	<string name="key_clock_widget_general_alignment">pref_clock_widget_general_alignment</string>
 
 	<!-- Widget date and time -->
 	<string name="key_clock_widget_show_date">pref_clock_widget_show_date</string>
@@ -175,6 +174,14 @@
 	<string name="key_clock_widget_bold_alarm_time">pref_clock_widget_bold_alarm_time</string>
 	<string name="key_clock_widget_color_alarm_time">pref_clock_widget_color_alarm_time</string>
 	<string name="key_clock_widget_color_alarm_icon">pref_clock_widget_color_alarm_icon</string>
+	<string name="key_clock_widget_position_alarm_time_above_date">pref_clock_widget_position_alarm_time_above_date</string>
+	<string name="key_clock_widget_position_alarm_time_below_date">pref_clock_widget_position_alarm_time_below_date</string>
+	<string name="key_clock_widget_position_alarm_time_same_line_as_date">pref_clock_widget_position_alarm_time_same_line_as_date</string>
 	<string name="key_clock_widget_text_size_alarm_time">pref_clock_widget_text_size_alarm</string>
+	<string name="key_clock_widget_show_app_specific_alarms">pref_clock_widget_show_app_specific_alarms</string>
+
+	<!-- Widget background -->
+	<string name="key_clock_widget_background_color">pref_clock_widget_background_color</string>
+	<string name="key_clock_widget_background_transparency">pref_clock_widget_background_transparency</string>
 
 </resources>

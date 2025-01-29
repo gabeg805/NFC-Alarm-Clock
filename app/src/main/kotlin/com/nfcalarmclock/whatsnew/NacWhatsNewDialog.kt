@@ -1,20 +1,17 @@
 package com.nfcalarmclock.whatsnew
 
-import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.ViewGroup.LayoutParams
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.nfcalarmclock.BuildConfig
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
-import com.nfcalarmclock.view.dialog.NacDialogFragment
+import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
 import com.nfcalarmclock.view.toThemedBold
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog.OnReadWhatsNewListener
 
@@ -22,7 +19,7 @@ import com.nfcalarmclock.whatsnew.NacWhatsNewDialog.OnReadWhatsNewListener
  * Show what is new with the app after an update.
  */
 class NacWhatsNewDialog
-	: NacDialogFragment()
+	: NacBottomSheetDialogFragment()
 {
 
 	/**
@@ -48,40 +45,27 @@ class NacWhatsNewDialog
 	}
 
 	/**
-	 * Called when the dialog is created.
+	 * Called when the creating the view.
 	 */
-	override fun onCreateDialog(savedInstanceState: Bundle?): Dialog
+	override fun onCreateView(
+		inflater: LayoutInflater,
+		container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View?
 	{
-		// Setup the shared preferences
-		setupSharedPreferences()
-
-		// Create the dialog
-		return AlertDialog.Builder(requireContext())
-			.setTitle(R.string.title_whats_new)
-			.setPositiveButton(R.string.action_ok) { _, _ ->
-
-				// Call the listener
-				onReadWhatsNewListener?.onReadWhatsNew()
-
-			}
-			.setView(R.layout.dlg_whats_new)
-			.create()
+		return inflater.inflate(R.layout.dlg_whats_new, container, false)
 	}
 
 	/**
-	 * Called when the fragment is resumed
+	 * Called when the view has been created.
 	 */
-	override fun onResume()
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
 		// Super
-		super.onResume()
-
-		// Get the views
-		val textView = dialog!!.findViewById<TextView>(R.id.whats_new_version)
-		val recyclerView = dialog!!.findViewById<RecyclerView>(R.id.whats_new_bullet_container)
+		super.onViewCreated(view, savedInstanceState)
 
 		// Get the theme color
-		val themeColor = sharedPreferences!!.themeColor
+		val themeColor = sharedPreferences.themeColor
 
 		// Get all the whats new items and add theme color to bold sections
 		val allMessages = resources.getTextArray(R.array.whats_new_items)
@@ -89,60 +73,49 @@ class NacWhatsNewDialog
 			.toList()
 
 		// Setup the views
-		setupVersion(textView)
-		setupRecyclerView(recyclerView, allMessages)
-		setupContainer(allMessages)
+		setupOkButton()
+		setupRecyclerView(allMessages)
+		setBehaviorState(BottomSheetBehavior.STATE_EXPANDED)
 	}
 
 	/**
-	 * Setup container.
+	 * Setup the OK button.
 	 */
-	private fun setupContainer(allMessages: List<String>)
+	private fun setupOkButton()
 	{
-		// Do nothing if there are not that many children
-		if (allMessages.size < 6)
-		{
-			return
-		}
+		// Get the ok button
+		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
 
-		// Get the container
-		val container = dialog!!.findViewById<LinearLayout>(R.id.whats_new_layout)
+		// Setup the ok button
+		setupPrimaryButton(okButton, listener = {
 
-		// Get the new height of the container
-		val height = resources.displayMetrics.heightPixels / 2
-		val layoutParams = FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, height)
+			// Call the listener
+			onReadWhatsNewListener?.onReadWhatsNew()
 
-		// Set the height of the container
-		container.layoutParams = layoutParams
+			// Dismiss
+			dismiss()
+
+		})
 	}
 
 	/**
 	 * Setup the recycler view.
 	 */
-	private fun setupRecyclerView(recyclerView: RecyclerView, allMessages: List<String>)
+	private fun setupRecyclerView(allMessages: List<String>)
 	{
-		// Setup the list adapter
+		// Get the views
+		val recyclerView = dialog!!.findViewById<RecyclerView>(R.id.whats_new_recyclerview)
 		val listAdapter = NacWhatsNewListAdapter()
 
+		// Setup the list adapter
 		listAdapter.submitList(allMessages)
 
-		// Setup the recycler view
+		// Setup the recyclerview
 		recyclerView.adapter = listAdapter
 		recyclerView.layoutManager = LinearLayoutManager(context)
-	}
 
-	/**
-	 * Setup the version.
-	 */
-	@SuppressLint("SetTextI18n")
-	private fun setupVersion(textView: TextView)
-	{
-		// Prepare the version name and number
-		val versionName = getString(R.string.version)
-		val versionNum = BuildConfig.VERSION_NAME
-
-		// Set the text
-		textView.text = "$versionName $versionNum"
+		// Set the height of the recyclerview
+		setupScrollableViewHeight(recyclerView, 60)
 	}
 
 	companion object

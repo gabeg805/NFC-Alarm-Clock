@@ -83,6 +83,12 @@
 	<string name="action_unskip_next_alarm">Unskip next alarm</string>
 	<string name="action_export">Export</string>
 	<string name="action_import">Import</string>
+	<string name="action_center">Center</string>
+	<string name="action_left">Left</string>
+	<string name="action_right">Right</string>
+	<string name="action_above_date">Above date</string>
+	<string name="action_below_date">Below date</string>
+	<string name="action_same_line_as_date">Same line as date</string>
 
 	<!-- Labels -->
 	<string name="label_created_statistic">created</string>
@@ -154,6 +160,7 @@
 	<string name="message_text_to_speech_default_voice">Default voice</string>
 	<string name="message_text_to_speech_voice">Voice %1$d</string>
 	<string name="message_text_to_speech_network_required">Network connection may be required for voice to work</string>
+	<string name="message_number_of_snoozes_left">%1$d snoozes left</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Unable to delete an active alarm</string>
@@ -275,6 +282,9 @@
 	<string name="title_next_alarm_format">Next alarm format&#8230;</string>
 	<string name="title_permissions">Permissions</string>
 	<string name="title_developer">Developer</string>
+	<string name="title_alignment">Alignment</string>
+	<string name="title_position">Position</string>
+	<string name="title_only_show_app_alarms">Only show app alarms</string>
 
 	<!-- Descriptions -->
 	<string name="description_scan_nfc">Scan NFC</string>
@@ -369,6 +379,8 @@
 	<string name="description_audio_sources">The audio channel to play the alarm on.</string>
 	<string name="description_widget_alarm_example">The alarm shown in the preview is just an example.</string>
 	<string name="description_text_to_speech_voice">The voice to use for text-to-speech.</string>
+	<string name="description_only_show_app_alarms">Only alarms from this app will be shown in the widget.</string>
+	<string name="description_show_any_alarms">Alarms created in any app will be shown in the widget.</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">List of alarms will be shown here.</string>

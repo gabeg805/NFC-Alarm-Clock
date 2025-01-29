@@ -241,6 +241,9 @@ class NacTextToSpeech(
 				return
 			}
 
+			// Set the language
+			textToSpeech.language = Locale.getDefault()
+
 			// Set the speech rate
 			if (attrs.speechRate != 0f)
 			{
@@ -254,9 +257,6 @@ class NacTextToSpeech(
 					.find { it.name == attrs.voice }
 					?.let { textToSpeech.voice = it }
 			}
-
-			// Set the language
-			textToSpeech.language = Locale.getDefault()
 
 			// Speak the message
 			val androidAttrs = attrs.audioAttributes.audioAttributesV21.audioAttributes

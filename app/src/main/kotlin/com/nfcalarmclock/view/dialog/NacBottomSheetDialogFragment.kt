@@ -1,8 +1,12 @@
 package com.nfcalarmclock.view.dialog
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.updateLayoutParams
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
@@ -31,6 +35,15 @@ abstract class NacBottomSheetDialogFragment
 
 		// Setup the shared preferences
 		setupSharedPreferences()
+	}
+
+	/**
+	 * Set the state of the bottom sheet dialog.
+	 */
+	@Suppress("SameParameterValue")
+	protected fun setBehaviorState(behavior: Int)
+	{
+		(dialog as BottomSheetDialog).behavior.state = behavior
 	}
 
 	/**
@@ -63,9 +76,52 @@ abstract class NacBottomSheetDialogFragment
 	}
 
 	/**
+	 * Setup the height of a scrollable view.
+	 *
+	 * @param viewGroup The scrollable view's height to change.
+	 * @param maxHeightPercent Percentage of the max screen height that the scrollable
+	 *  view should take up. This should be a value from 0-100.
+	 * @param nbuttons The number of buttons that are in the dialog, to take into account
+	 *  any extra space that should NOT be used by the scrollable view.
+	 */
+	open fun setupScrollableViewHeight(
+		viewGroup: ViewGroup,
+		maxHeightPercent: Int,
+		nbuttons: Int = 1
+	)
+	{
+		// Compute the amount of space (in pixels) is needed for the buttons
+		val touchDimen = resources.getDimension(R.dimen.touch)
+		val marginsDimen = resources.getDimension(R.dimen.medium) + resources.getDimension(R.dimen.large)
+		val buttonsHeight = nbuttons*touchDimen.toInt() + marginsDimen.toInt()
+
+		// Get the max height that the scroll view can take up
+		val screenHeight = requireContext().resources.displayMetrics.heightPixels
+		val maxScrollHeight = screenHeight * maxHeightPercent / 100 - buttonsHeight
+		val handler = Handler(requireContext().mainLooper)
+
+		// Layout listener
+		viewGroup.addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ ->
+
+			// Set the height of the scroll view if it exceeds the max
+			if (v.height > maxScrollHeight)
+			{
+				// Update the height in a handler so that it executes outside of the
+				// layout change listener
+				handler.post {
+					viewGroup.updateLayoutParams {
+						height = maxScrollHeight
+					}
+				}
+			}
+
+		}
+	}
+
+	/**
 	 * Setup the shared preferences.
 	 */
-	protected fun setupSharedPreferences()
+	private fun setupSharedPreferences()
 	{
 		sharedPreferences = NacSharedPreferences(requireContext())
 	}

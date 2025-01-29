@@ -5,13 +5,20 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.5.3-beta001</item>
+		<item>Fixed issue with &lt;b>voice&lt;/b> where text-to-speech was using the default voice even though a different voice was selected.</item>
+		<item>Add jank to &lt;b>widget&lt;/b>.</item>
+		<item>Show &lt;b>number of snoozes&lt;/b> left after snoozing.</item>
+		<item>Updated look of the &lt;b>What\'s New&lt;/b> dialog.</item>
+		<item>12.5.2</item>
 		<item>Added feature to &lt;b>select multiple NFC tags&lt;/b> that can dismiss an alarm.</item>
 		<item>Added &lt;b>speech rate&lt;/b> to text-to-speech option to change the speed that it will speak.</item>
+		<item>Fixed an issue with &lt;b>flashlight&lt;/b> where it would only blink, not simply turn on and stay on.</item>
+		<item>12.5.0</item>
 		<item>Updated &lt;b>alarm card&lt;/b> look to show buttons for dismiss options, snooze options, and regular alarm options.</item>
 		<item>Added &lt;b>custom vibration pattern&lt;/b> option for alarms.</item>
 		<item>Added &lt;b>battery saver&lt;/b> option to keep the screen off when an alarm is active. Found in Settings > General.</item>
 		<item>Added &lt;b>voice&lt;/b> option to &lt;b>text-to-speech&lt;/b> to choose which voice to use.</item>
-		<item>Fixed an issue with &lt;b>flashlight&lt;/b> where it would only blink, not simply turn on and stay on.</item>
 	</string-array>
 
 </resources>

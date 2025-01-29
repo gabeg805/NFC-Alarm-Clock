@@ -30,9 +30,15 @@
 		<item name="snackbarTextViewStyle">@style/Widget.SnackbarText</item>
 		<item name="snackbarButtonStyle">@style/Widget.SnackbarButton</item>
 
+		<!-- Card -->
 		<item name="colorCard">@color/gray_dark</item>
 		<item name="colorCardExpanded">@color/gray</item>
+
+		<!-- Activity background -->
 		<item name="android:windowBackground">?attr/colorCard</item>
+
+		<!-- Bottom sheet dialog -->
+		<item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialogTheme</item>
 
 		<!-- Added to fix Style does not have TextAppearance attribute -->
 		<item name="colorPrimaryInverse">@color/white</item>
@@ -66,8 +72,17 @@
 		<item name="textAppearanceLabelLarge">@style/TextAppearance.Material3.LabelLarge</item>
 		<item name="textAppearanceLabelMedium">@style/TextAppearance.Material3.LabelMedium</item>
 		<item name="textAppearanceLabelSmall">@style/TextAppearance.Material3.LabelSmall</item>
-
 	</style>
+
+	<!-- Bottom sheet dialog -->
+	<style name="CustomBottomSheetDialogTheme" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+		<item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
+	</style>
+
+	<style name="CustomBottomSheetStyle" parent="Widget.MaterialComponents.BottomSheet.Modal">
+		<item name="backgroundTint">?attr/colorCardExpanded</item>
+	</style>
+
 
 	<!-- SEE NOTE ABOVE ABOUT MATERIAL3
 	<style name="Theme.App" parent="Theme.Material3.DayNight">

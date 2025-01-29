@@ -264,6 +264,20 @@
 		</RelativeLayout>
 	</RelativeLayout>
 
+	<!-- Snooze count -->
+	<TextView
+		android:id="@+id/number_of_snoozes_left_message"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="@dimen/twoline"
+		android:gravity="center_horizontal"
+		android:textColor="@color/white"
+		android:textSize="@dimen/tsz_caption"
+		android:text=""
+		android:visibility="invisible"
+		app:layout_constraintTop_toBottomOf="@id/alarm_action_row"
+		/>
+
 	<!-- Music and warning -->
 	<RelativeLayout
 		android:id="@+id/music_and_warning_container"
