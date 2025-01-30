@@ -252,13 +252,12 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 		val pathListener = createHideAnimationListener(sliderPath)
 		val instructionsListener = createHideAnimationListener(sliderInstructions)
 		val numberOfSnoozesLeftListener = numberOfSnoozesLeftMessage?.let {
-			createHideAnimationListener(it)
+			createHideAnimationListener(it, onEnd = { it.visibility = View.GONE })
 		}
 
 		// Set the listener
 		sliderPathFadeOutAnimation.setAnimationListener(pathListener)
 		sliderInstructionsFadeOutAnimation.setAnimationListener(instructionsListener)
-		println("Fade out listener : $numberOfSnoozesLeftListener")
 		numberOfSnoozesLeftFadeOutAnimation.setAnimationListener(numberOfSnoozesLeftListener)
 
 		// Start the animation
@@ -359,7 +358,6 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 		// Set the listener
 		sliderPathFadeInAnimation.setAnimationListener(pathListener)
 		sliderInstructionsFadeInAnimation.setAnimationListener(instructionsListener)
-		println("Fade in listener : $numberOfSnoozesLeftListener")
 		numberOfSnoozesLeftFadeInAnimation.setAnimationListener(numberOfSnoozesLeftListener)
 
 		// Start the animation

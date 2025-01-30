@@ -281,7 +281,9 @@ class NacSwipeLayoutHandler(
 
 				// Hide the slider path
 				swipeAnimation.hideSliderPath(sliderPath, sliderInstructions,
-					numberOfSnoozesLeftMessage = numberOfSnoozesLeftTextView.takeIf { view == snoozeButton })
+					numberOfSnoozesLeftMessage = numberOfSnoozesLeftTextView.takeIf {
+						(view == snoozeButton) && it.text.isNotEmpty()
+					})
 
 			}
 
@@ -533,9 +535,21 @@ class NacSwipeLayoutHandler(
 	 */
 	private fun setupNumberOfSnoozesLeft(context: Context)
 	{
-		// Get the message
-		val numLeft = alarm!!.maxSnooze - alarm.snoozeCount
-		val message = context.getString(R.string.message_number_of_snoozes_left, numLeft)
+		// Get the message when the max number of snoozes is not unlimited (< 0)
+		val message = if (alarm!!.maxSnooze >= 0)
+		{
+			// Calculate the number of snoozes left
+			val numLeft = alarm.maxSnooze - alarm.snoozeCount
+
+			// Get the string resource
+			context.resources.getQuantityString(R.plurals.number_of_snoozes_left,
+				numLeft, numLeft)
+		}
+		else
+		{
+			// Unlimited snoozes. Do nothing
+			return
+		}
 
 		// Set the text
 		numberOfSnoozesLeftTextView.text = message
@@ -612,7 +626,9 @@ class NacSwipeLayoutHandler(
 
 					// Show the slider path
 					swipeAnimation.showSliderPath(sliderPath, sliderInstructions,
-						numberOfSnoozesLeftMessage = numberOfSnoozesLeftTextView.takeIf { view == snoozeButton })
+						numberOfSnoozesLeftMessage = numberOfSnoozesLeftTextView.takeIf {
+							(view == snoozeButton) && it.text.isNotEmpty()
+						})
 				}
 
 				// Finger UP on button

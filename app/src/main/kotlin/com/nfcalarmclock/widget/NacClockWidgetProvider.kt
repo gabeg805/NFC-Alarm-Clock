@@ -89,7 +89,7 @@ internal fun updateAppWidget(
 
 	// Set on click pending intent
 	val pendingIntent = NacMainActivity.getStartPendingIntent(context)
-	views.setOnClickPendingIntent(R.id.preview_parent, pendingIntent)
+	views.setOnClickPendingIntent(R.id.widget_parent, pendingIntent)
 
 	// Get the clock widget helper
 	val shared = NacSharedPreferences(context)
@@ -137,7 +137,7 @@ internal fun updateAppWidget(
 	}
 
 	// Set the background color and transparency
-	views.setInt(R.id.preview_parent, "setBackgroundColor", helper.bgColor)
+	views.setInt(R.id.widget_parent, "setBackgroundColor", helper.bgColor)
 
 	// Set text and icon colors
 	views.setTextColor(R.id.widget_hour, shared.clockWidgetHourColor)

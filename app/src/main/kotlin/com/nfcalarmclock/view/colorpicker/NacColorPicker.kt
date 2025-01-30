@@ -17,6 +17,7 @@ import android.widget.RelativeLayout
 import com.nfcalarmclock.R
 import kotlin.math.atan2
 import kotlin.math.cos
+import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlin.math.sin
 import kotlin.math.sqrt
@@ -204,6 +205,12 @@ class NacColorPicker : RelativeLayout
 		// Calculate the hue and saturation. The value in HSV does not change
 		hsv[0] = (angle * 180f / Math.PI).toFloat()
 		hsv[1] = distance / radius
+
+		// Change the value in HSV if the current shade is completely black
+		if (floor(hsv[2]*100f) == 0f)
+		{
+			hsv[2] = 1f
+		}
 
 		// Set the new color selector position
 		setColorSelectorPosition(eventX, eventY)

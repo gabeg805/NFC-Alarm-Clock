@@ -1088,7 +1088,7 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 
 		// Background color and transparency
 		binding.previewParent.setBackgroundColor(helper.bgColor)
-		binding.previewWidget.previewParent.background = null
+		binding.previewWidget.widgetParent.background = null
 
 		// Text and icon colors
 		binding.previewWidget.widgetHour.setTextColor(sharedPreferences.clockWidgetHourColor)

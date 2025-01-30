@@ -160,7 +160,6 @@
 	<string name="message_text_to_speech_default_voice">Default voice</string>
 	<string name="message_text_to_speech_voice">Voice %1$d</string>
 	<string name="message_text_to_speech_network_required">Network connection may be required for voice to work</string>
-	<string name="message_number_of_snoozes_left">%1$d snoozes left</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Unable to delete an active alarm</string>
@@ -443,6 +442,11 @@
 	<plurals name="unit_number_of_times">
 		<item quantity="one">%1$d time</item>
 		<item quantity="other">%1$d times</item>
+	</plurals>
+
+	<plurals name="number_of_snoozes_left">
+		<item quantity="one">(%1$d remaining)</item>
+		<item quantity="other">(%1$d remaining)</item>
 	</plurals>
 
 	<plurals name="tts_say_reminder">

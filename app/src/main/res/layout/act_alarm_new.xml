@@ -111,11 +111,25 @@
 		android:id="@+id/slider_instructions"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginBottom="@dimen/twoline"
 		android:gravity="center_horizontal"
 		android:textColor="@color/white"
 		android:textSize="@dimen/tsz_normal"
 		android:text=""
+		app:layout_constraintBottom_toTopOf="@id/number_of_snoozes_left_message"
+		app:layout_goneMarginBottom="@dimen/twoline"
+		/>
+
+	<!-- Number of snoozes left -->
+	<TextView
+		android:id="@+id/number_of_snoozes_left_message"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="@dimen/nudge"
+		android:gravity="center_horizontal"
+		android:textColor="@color/white"
+		android:textSize="@dimen/tsz_caption"
+		android:text=""
+		android:visibility="gone"
 		app:layout_constraintBottom_toTopOf="@id/alarm_action_row"
 		/>
 
@@ -265,6 +279,7 @@
 	</RelativeLayout>
 
 	<!-- Snooze count -->
+	<!--
 	<TextView
 		android:id="@+id/number_of_snoozes_left_message"
 		android:layout_width="match_parent"
@@ -277,6 +292,7 @@
 		android:visibility="invisible"
 		app:layout_constraintTop_toBottomOf="@id/alarm_action_row"
 		/>
+		-->
 
 	<!-- Music and warning -->
 	<RelativeLayout

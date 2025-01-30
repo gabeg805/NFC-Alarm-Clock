@@ -5,10 +5,12 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
-		<item>12.5.3-beta001</item>
+		<item>12.5.3-beta002</item>
 		<item>Fixed issue with &lt;b>voice&lt;/b> where text-to-speech was using the default voice even though a different voice was selected.</item>
-		<item>Add jank to &lt;b>widget&lt;/b>.</item>
-		<item>Show &lt;b>number of snoozes&lt;/b> left after snoozing.</item>
+		<item>Added &lt;b>alignment&lt;/b> option to the &lt;b>widget&lt;/b> to align all text.</item>
+		<item>Added &lt;b>position&lt;/b> option to the &lt;b>widget&lt;/b> to position the alarm text.</item>
+		<item>Added &lt;b>only show app alarms&lt;/b> in the &lt;b>widget&lt;/b>, which controls whether only alarms created in this app will be shown, or alarms created in any app will be shown.</item>
+		<item>Added information on the &lt;b>remaining number of snoozes&lt;/b> when swiping to snooze an active alarm.</item>
 		<item>Updated look of the &lt;b>What\'s New&lt;/b> dialog.</item>
 		<item>12.5.2</item>
 		<item>Added feature to &lt;b>select multiple NFC tags&lt;/b> that can dismiss an alarm.</item>
