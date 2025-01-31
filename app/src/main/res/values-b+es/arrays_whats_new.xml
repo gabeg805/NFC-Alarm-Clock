@@ -5,13 +5,22 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.5.3</item>
+		<item>Se solucionó el problema con &lt;b>voz&lt;/b> donde la conversión de texto a voz usaba la voz predeterminada aunque se hubiera seleccionado una voz diferente.</item>
+		<item>Se agregó la opción &lt;b>alineación&lt;/b> al &lt;b>widget&lt;/b> para alinear todo el texto.</item>
+		<item>Se agregó la opción &lt;b>posición&lt;/b> al &lt;b>widget&lt;/b> para posicionar el texto de la alarma.</item>
+		<item>Se agregó la opción &lt;b>mostrar solo alarmas de la aplicación&lt;/b> al &lt;b>widget&lt;/b> que controla si solo se mostrarán las alarmas creadas en esta aplicación o si se mostrarán las alarmas creadas en cualquier aplicación.</item>
+		<item>Se agregó información sobre el &lt;b>número restante de repeticiones de alarma&lt;/b> al deslizar el dedo para posponer una alarma activa.</item>
+		<item>Aspecto actualizado del cuadro de diálogo &lt;b>Novedades&lt;/b>.</item>
+		<item>12.5.2</item>
 		<item>Se agregó la función para &lt;b>seleccionar múltiples etiquetas NFC&lt;/b> que pueden descartar una alarma.</item>
 		<item>Se agregó &lt;b>velocidad de voz&lt;/b> a la opción de texto a voz para cambiar la velocidad a la que hablará.</item>
+		<item>Se solucionó un problema con la &lt;b>linterna&lt;/b> donde, cuando el parpadeo estaba deshabilitado, aún parpadeaba.</item>
+		<item>12.5.0</item>
 		<item>Se actualizó el aspecto de la &lt;b>tarjeta de alarma&lt;/b> para mostrar botones para opciones de descartar, opciones de posponer y opciones de alarma normales.</item>
 		<item>Se agregó la opción &lt;b>patrón de vibración personalizado&lt;/b> para las alarmas.</item>
 		<item>Se agregó la opción &lt;b>ahorro de batería&lt;/b> para mantener la pantalla apagada cuando hay una alarma activa. Se encuentra en Configuración > General.</item>
 		<item>Se agregó la opción &lt;b>voz&lt;/b> a &lt;b>texto a voz&lt;/b> para elegir qué voz usar.</item>
-		<item>Se solucionó un problema con la &lt;b>linterna&lt;/b> donde solo parpadeaba y no simplemente se encendía y permanecía encendida.</item>
 	</string-array>
 
 </resources>

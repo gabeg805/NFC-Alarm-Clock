@@ -83,6 +83,12 @@
 	<string name="action_unskip_next_alarm">अगला अलार्म अनस्किप करें</string>
 	<string name="action_export">निर्यात</string>
 	<string name="action_import">आयात</string>
+	<string name="action_center">केंद्र</string>
+	<string name="action_left">बाएं</string>
+	<string name="action_right">सही</string>
+	<string name="action_above_date">उपरोक्त तिथि</string>
+	<string name="action_below_date">नीचे दी गई तारीख</string>
+	<string name="action_same_line_as_date">तारीख के समान पंक्ति</string>
 
 	<!-- Labels -->
 	<string name="label_created_statistic">बनाया था</string>
@@ -275,6 +281,9 @@
 	<string name="title_next_alarm_format">अगला अलार्म प्रारूप&#8230;</string>
 	<string name="title_permissions">अनुमतियां</string>
 	<string name="title_developer">डेवलपर</string>
+	<string name="title_alignment">संरेखण</string>
+	<string name="title_position">पद</string>
+	<string name="title_only_show_app_alarms">केवल ऐप अलार्म दिखाएं</string>
 
 	<!-- Descriptions -->
 	<string name="description_scan_nfc">एनएफसी स्कैन करें</string>
@@ -369,6 +378,8 @@
 	<string name="description_audio_sources">अलार्म बजाने के लिए ऑडियो चैनल.</string>
 	<string name="description_widget_alarm_example">पूर्वावलोकन में दिखाया गया अलार्म केवल एक उदाहरण है।</string>
 	<string name="description_text_to_speech_voice">टेक्स्ट-टू-स्पीच के लिए उपयोग की जाने वाली आवाज़।</string>
+	<string name="description_only_show_app_alarms">विजेट में केवल इस ऐप के अलार्म ही दिखाए जाएंगे।</string>
+	<string name="description_show_any_alarms">किसी भी ऐप में बनाए गए अलार्म विजेट में दिखाए जाएंगे।</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">अलार्मों की सूची यहां दिखाई जाएगी।</string>
@@ -431,6 +442,11 @@
 	<plurals name="unit_number_of_times">
 		<item quantity="one">%1$d समय</item>
 		<item quantity="other">%1$d बार</item>
+	</plurals>
+
+	<plurals name="number_of_snoozes_left">
+		<item quantity="one">(%1$d शेष)</item>
+		<item quantity="other">(%1$d शेष)</item>
 	</plurals>
 
 	<plurals name="tts_say_reminder">

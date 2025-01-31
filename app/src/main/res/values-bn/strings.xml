@@ -83,6 +83,12 @@
 	<string name="action_unskip_next_alarm">পরবর্তী অ্যালার্ম বাদ দিন</string>
 	<string name="action_export">রপ্তানি</string>
 	<string name="action_import">আমদানি</string>
+	<string name="action_center">কেন্দ্র</string>
+	<string name="action_left">বাম</string>
+	<string name="action_right">ঠিক</string>
+	<string name="action_above_date">তারিখের উপরে</string>
+	<string name="action_below_date">তারিখের নিচে</string>
+	<string name="action_same_line_as_date">তারিখ হিসাবে একই লাইন</string>
 
 	<!-- Labels -->
 	<string name="label_created_statistic">তৈরি</string>
@@ -275,6 +281,9 @@
 	<string name="title_next_alarm_format">পরবর্তী অ্যালার্ম বিন্যাস&#8230;</string>
 	<string name="title_permissions">অনুমতি</string>
 	<string name="title_developer">বিকাশকারী</string>
+	<string name="title_alignment">প্রান্তিককরণ</string>
+	<string name="title_position">অবস্থান</string>
+	<string name="title_only_show_app_alarms">শুধুমাত্র অ্যাপ অ্যালার্ম দেখান</string>
 
 	<!-- Descriptions -->
 	<string name="description_scan_nfc">NFC স্ক্যান করুন</string>
@@ -369,6 +378,8 @@
 	<string name="description_audio_sources">অ্যালার্ম বাজানোর জন্য অডিও চ্যানেল।</string>
 	<string name="description_widget_alarm_example">পূর্বরূপ দেখানো অ্যালার্ম শুধুমাত্র একটি উদাহরণ.</string>
 	<string name="description_text_to_speech_voice">টেক্সট-টু-স্পিচের জন্য ব্যবহার করা ভয়েস।</string>
+	<string name="description_only_show_app_alarms">এই অ্যাপ থেকে শুধুমাত্র অ্যালার্ম উইজেটে দেখানো হবে।</string>
+	<string name="description_show_any_alarms">যেকোনো অ্যাপে তৈরি অ্যালার্ম উইজেটে দেখানো হবে।</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">অ্যালার্মের তালিকা এখানে দেখানো হবে।</string>
@@ -431,6 +442,11 @@
 	<plurals name="unit_number_of_times">
 		<item quantity="one">%1$d বার</item>
 		<item quantity="other">%1$d বার</item>
+	</plurals>
+
+	<plurals name="number_of_snoozes_left">
+		<item quantity="one">(%1$d বাকি)</item>
+		<item quantity="other">(%1$d বাকি)</item>
 	</plurals>
 
 	<plurals name="tts_say_reminder">

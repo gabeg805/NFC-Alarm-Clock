@@ -83,6 +83,12 @@
 	<string name="action_unskip_next_alarm">Bỏ qua báo thức tiếp theo</string>
 	<string name="action_export">Xuất khẩu</string>
 	<string name="action_import">Nhập khẩu</string>
+	<string name="action_center">Trung tâm</string>
+	<string name="action_left">Bên trái</string>
+	<string name="action_right">Phải</string>
+	<string name="action_above_date">Ngày trên</string>
+	<string name="action_below_date">Ngày dưới đây</string>
+	<string name="action_same_line_as_date">Cùng dòng với ngày</string>
 
 	<!-- Labels -->
 	<string name="label_created_statistic">tạo</string>
@@ -275,6 +281,9 @@
 	<string name="title_next_alarm_format">Định dạng cảnh báo tiếp theo&#8230;</string>
 	<string name="title_permissions">Quyền</string>
 	<string name="title_developer">Nhà phát triển</string>
+	<string name="title_alignment">Căn chỉnh</string>
+	<string name="title_position">Chức vụ</string>
+	<string name="title_only_show_app_alarms">Chỉ hiển thị báo thức ứng dụng</string>
 
 	<!-- Descriptions -->
 	<string name="description_scan_nfc">Quét NFC</string>
@@ -369,6 +378,8 @@
 	<string name="description_audio_sources">Kênh âm thanh để phát báo thức.</string>
 	<string name="description_widget_alarm_example">Báo thức hiển thị trong bản xem trước chỉ là một ví dụ.</string>
 	<string name="description_text_to_speech_voice">Giọng nói sử dụng để chuyển văn bản thành giọng nói.</string>
+	<string name="description_only_show_app_alarms">Chỉ những cảnh báo từ ứng dụng này mới được hiển thị trong tiện ích.</string>
+	<string name="description_show_any_alarms">Báo thức được tạo trong bất kỳ ứng dụng nào sẽ được hiển thị trong tiện ích.</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">Danh sách các cảnh báo sẽ được hiển thị ở đây.</string>
@@ -424,6 +435,10 @@
 
 	<plurals name="unit_number_of_times">
 		<item quantity="other">%1$d lần</item>
+	</plurals>
+
+	<plurals name="number_of_snoozes_left">
+		<item quantity="other">(%1$d còn lại)</item>
 	</plurals>
 
 	<plurals name="tts_say_reminder">

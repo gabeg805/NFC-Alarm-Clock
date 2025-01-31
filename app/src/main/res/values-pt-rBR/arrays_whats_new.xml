@@ -5,13 +5,22 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.5.3</item>
+		<item>Problema corrigido com &lt;b>voz&lt;/b>, em que a conversão de texto em fala estava usando a voz padrão, mesmo que uma voz diferente estivesse selecionada.</item>
+		<item>Adicionada a opção &lt;b>alinhamento&lt;/b> ao &lt;b>widget&lt;/b> para alinhar todo o texto.</item>
+		<item>Adicionada a opção &lt;b>position&lt;/b> ao &lt;b>widget&lt;/b> para posicionar o texto do alarme.</item>
+		<item>Adicionada a opção &lt;b>mostrar somente alarmes do aplicativo&lt;/b> ao &lt;b>widget&lt;/b> que controla se somente os alarmes criados neste aplicativo serão exibidos ou se os alarmes criados em qualquer aplicativo serão exibidos.</item>
+		<item>Adicionadas informações sobre o &lt;b>número restante de sonecas&lt;/b> ao deslizar para adiar um alarme ativo.</item>
+		<item>Aparência atualizada da caixa de diálogo &lt;b>O que há de novo&lt;/b>.</item>
+		<item>12.5.2</item>
 		<item>Recurso adicionado para &lt;b>selecionar várias tags NFC&lt;/b> que podem ignorar um alarme.</item>
 		<item>Adicionado &lt;b>velocidade de fala&lt;/b> à opção de conversão de texto em fala para alterar a velocidade com que o texto será falado.</item>
+		<item>Corrigido um problema com &lt;b>lanterna&lt;/b> em que, quando o piscar estava desativado, ele ainda piscava.</item>
+		<item>12.5.0</item>
 		<item>O visual do &lt;b>cartão de alarme&lt;/b> foi atualizado para mostrar botões para opções de dispensar, opções de soneca e opções de alarme normal.</item>
 		<item>Adicionada a opção &lt;b>padrão de vibração personalizado&lt;/b> para alarmes.</item>
 		<item>Adicionada a opção &lt;b>economizador de bateria&lt;/b> para manter a tela desligada quando um alarme estiver ativo. Encontrada em Ajustes > Geral.</item>
 		<item>Adicionada a opção &lt;b>voz&lt;/b> para &lt;b>texto para fala&lt;/b> para escolher qual voz usar.</item>
-		<item>Corrigido um problema com &lt;b>lanterna&lt;/b> em que ela apenas piscava, não simplesmente acendia e permanecia acesa.</item>
 	</string-array>
 
 </resources>

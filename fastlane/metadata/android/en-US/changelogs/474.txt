@@ -1,0 +1,6 @@
+* Fixed issue with voice where text-to-speech was using default voice even when different voice was selected.
+* Added alignment option to the widget to align all text.
+* Added position option to the widget to position the alarm text.
+* Added only show app alarms option to the widget which controls whether only alarms created in this app vs. in any app will be shown.
+* Added information on remaining number of snoozes when swiping to snooze an active alarm.
+* Updated look of What's New dialog.

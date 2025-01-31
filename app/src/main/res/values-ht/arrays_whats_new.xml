@@ -5,13 +5,22 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.5.3</item>
+		<item>Pwoblèm ranje ak &lt;b>vwa&lt;/b> kote tèks-a-lapawòl t ap itilize vwa default menmsi yo te chwazi yon vwa diferan.</item>
+		<item>Te ajoute opsyon &lt;b>aliyman&lt;/b> nan &lt;b>widget&lt;/b> pou fè aliman tout tèks yo.</item>
+		<item>Te ajoute opsyon &lt;b>pozisyon&lt;/b> nan &lt;b>widget&lt;/b> pou pozisyon tèks alam la.</item>
+		<item>Te ajoute opsyon &lt;b>sèlman montre alam aplikasyon yo&lt;/b> nan &lt;b>widget&lt;/b> ki kontwole si yo pral montre sèlman alam ki te kreye nan aplikasyon sa a, oswa si alam ki te kreye nan nenpòt aplikasyon yo pral montre.</item>
+		<item>Te ajoute enfòmasyon sou &lt;b>kantite repetisyon ki rete yo&lt;/b> lè w ap glise pou fè yon alam aktif.</item>
+		<item>Mizajou gade nan dyalòg &lt;b>Ki Nouvo&lt;/b>.</item>
+		<item>12.5.2</item>
 		<item>Te ajoute yon karakteristik nan &lt;b>chwazi plizyè tag NFC&lt;/b> ki ka anile yon alam.</item>
 		<item>Te ajoute &lt;b>pousantaj lapawòl&lt;/b> nan opsyon tèks-a-lapawòl pou chanje vitès la ke li pral pale.</item>
+		<item>Fikse yon pwoblèm ak &lt;b>flèch&lt;/b> kote, lè blink te enfim, li ta toujou bat.</item>
+		<item>12.5.0</item>
 		<item>Mizajou &lt;b>kat alam&lt;/b> gade pou montre bouton pou opsyon ranvwaye, opsyon snooze, ak opsyon alam regilye.</item>
 		<item>Te ajoute &lt;b>modèl Vibration Customized&lt;/b> opsyon pou alam.</item>
 		<item>Te ajoute opsyon &lt;b>ekonomizeur batri&lt;/b> pou kenbe ekran an etenn lè yon alam aktif. Jwenn nan Anviwònman> Jeneral.</item>
 		<item>Te ajoute opsyon &lt;b>vwa&lt;/b> nan &lt;b>tèks-a-lapawòl&lt;/b> pou chwazi ki vwa pou itilize.</item>
-		<item>Fikse yon pwoblèm ak &lt;b>flich&lt;/b> kote li ta sèlman bat je, pa jis limen epi rete limen.</item>
 	</string-array>
 
 </resources>

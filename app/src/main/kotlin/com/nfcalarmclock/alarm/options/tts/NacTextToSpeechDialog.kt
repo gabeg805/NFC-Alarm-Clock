@@ -463,6 +463,14 @@ class NacTextToSpeechDialog
 	 */
 	private fun setupTtsVoiceDropdownItems(default: String)
 	{
+		// Check the context before proceeding because this caused an
+		// IllegalStateException when requireFragment was called and the task was
+		// finishing
+		if (context == null)
+		{
+			return
+		}
+
 		// Get the context
 		val context = requireContext()
 

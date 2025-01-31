@@ -83,6 +83,12 @@
 	<string name="action_unskip_next_alarm">Retire alam kap vini an</string>
 	<string name="action_export">Ekspòtasyon</string>
 	<string name="action_import">Enpòte</string>
+	<string name="action_center">Sant</string>
+	<string name="action_left">Goch</string>
+	<string name="action_right">Dwa</string>
+	<string name="action_above_date">Dat pi wo a</string>
+	<string name="action_below_date">Anba dat</string>
+	<string name="action_same_line_as_date">Menm liy ak dat</string>
 
 	<!-- Labels -->
 	<string name="label_created_statistic">kreye</string>
@@ -275,6 +281,9 @@
 	<string name="title_next_alarm_format">Pwochen fòma alam&#8230;</string>
 	<string name="title_permissions">Otorizasyon</string>
 	<string name="title_developer">Devlopè</string>
+	<string name="title_alignment">Aliyman</string>
+	<string name="title_position">Pozisyon</string>
+	<string name="title_only_show_app_alarms">Montre sèlman alam aplikasyon yo</string>
 
 	<!-- Descriptions -->
 	<string name="description_scan_nfc">Eskane NFC</string>
@@ -369,6 +378,8 @@
 	<string name="description_audio_sources">Chanèl odyo pou jwe alam la.</string>
 	<string name="description_widget_alarm_example">Alam yo montre nan preview la se jis yon egzanp.</string>
 	<string name="description_text_to_speech_voice">Vwa pou itilize pou tèks-a-lapawòl.</string>
+	<string name="description_only_show_app_alarms">Sèlman alam ki soti nan aplikasyon sa a pral montre nan widget la.</string>
+	<string name="description_show_any_alarms">Alam ki te kreye nan nenpòt aplikasyon yo pral montre nan widget la.</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">Lis alam yo pral montre isit la.</string>
@@ -431,6 +442,11 @@
 	<plurals name="unit_number_of_times">
 		<item quantity="one">%1$d tan</item>
 		<item quantity="other">%1$d fwa</item>
+	</plurals>
+
+	<plurals name="number_of_snoozes_left">
+		<item quantity="one">(%1$d ki rete)</item>
+		<item quantity="other">(%1$d ki rete)</item>
 	</plurals>
 
 	<plurals name="tts_say_reminder">

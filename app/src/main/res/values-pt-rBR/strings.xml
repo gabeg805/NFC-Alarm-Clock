@@ -83,6 +83,12 @@
 	<string name="action_unskip_next_alarm">Despular próximo alarme</string>
 	<string name="action_export">Exportar</string>
 	<string name="action_import">Importar</string>
+	<string name="action_center">Centro</string>
+	<string name="action_left">Esquerda</string>
+	<string name="action_right">Certo</string>
+	<string name="action_above_date">Acima da data</string>
+	<string name="action_below_date">Abaixo da data</string>
+	<string name="action_same_line_as_date">Mesma linha da data</string>
 
 	<!-- Labels -->
 	<string name="label_created_statistic">criado</string>
@@ -275,6 +281,9 @@
 	<string name="title_next_alarm_format">Próximo formato de alarme&#8230;</string>
 	<string name="title_permissions">Permissões</string>
 	<string name="title_developer">Desenvolvedor</string>
+	<string name="title_alignment">Alinhamento</string>
+	<string name="title_position">Posição</string>
+	<string name="title_only_show_app_alarms">Mostrar apenas alarmes de aplicativos</string>
 
 	<!-- Descriptions -->
 	<string name="description_scan_nfc">Digitalizar NFC</string>
@@ -369,6 +378,8 @@
 	<string name="description_audio_sources">O canal de áudio para tocar o alarme.</string>
 	<string name="description_widget_alarm_example">O alarme mostrado na prévia é apenas um exemplo.</string>
 	<string name="description_text_to_speech_voice">A voz a ser usada para conversão de texto em fala.</string>
+	<string name="description_only_show_app_alarms">Somente alarmes deste aplicativo serão exibidos no widget.</string>
+	<string name="description_show_any_alarms">Os alarmes criados em qualquer aplicativo serão exibidos no widget.</string>
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">A lista de alarmes será exibida aqui.</string>
@@ -438,6 +449,12 @@
 		<item quantity="one">%1$d vez</item>
 		<item quantity="many">%1$d vezes</item>
 		<item quantity="other">%1$d vezes</item>
+	</plurals>
+
+	<plurals name="number_of_snoozes_left">
+		<item quantity="one">(%1$d restante)</item>
+		<item quantity="many">(%1$d restantes)</item>
+		<item quantity="other">(%1$d restantes)</item>
 	</plurals>
 
 	<plurals name="tts_say_reminder">

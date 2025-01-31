@@ -5,13 +5,22 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.5.3</item>
+		<item>Đã khắc phục sự cố liên quan đến &lt;b>giọng nói&lt;/b> khi tính năng chuyển văn bản thành giọng nói sử dụng giọng nói mặc định ngay cả khi đã chọn giọng nói khác.</item>
+		<item>Đã thêm tùy chọn &lt;b>căn chỉnh&lt;/b> vào tiện ích &lt;/b> để căn chỉnh toàn bộ văn bản.</item>
+		<item>Đã thêm tùy chọn &lt;b>vị trí&lt;/b> vào &lt;b>tiện ích&lt;/b> để định vị văn bản cảnh báo.</item>
+		<item>Đã thêm tùy chọn &lt;b>chỉ hiển thị báo thức ứng dụng&lt;/b> vào &lt;b>tiện ích&lt;/b> để kiểm soát việc chỉ hiển thị báo thức được tạo trong ứng dụng này hay báo thức được tạo trong bất kỳ ứng dụng nào.</item>
+		<item>Đã thêm thông tin về &lt;b>số lần báo lại còn lại&lt;/b> khi vuốt để báo lại báo thức đang hoạt động.</item>
+		<item>Cập nhật giao diện của hộp thoại &lt;b>Có gì mới&lt;/b>.</item>
+		<item>12.5.2</item>
 		<item>Đã thêm tính năng &lt;b>chọn nhiều thẻ NFC&lt;/b> để có thể tắt báo thức.</item>
 		<item>Đã thêm &lt;b>tốc độ giọng nói&lt;/b> vào tùy chọn chuyển văn bản thành giọng nói để thay đổi tốc độ nói.</item>
+		<item>Đã khắc phục sự cố liên quan đến đèn pin khi tắt chức năng nhấp nháy thì đèn vẫn nhấp nháy.</item>
+		<item>12.5.0</item>
 		<item>Đã cập nhật giao diện &lt;b>thẻ báo thức&lt;/b> để hiển thị các nút cho tùy chọn hủy báo thức, tùy chọn báo lại và tùy chọn báo thức thông thường.</item>
 		<item>Đã thêm tùy chọn &lt;b>mẫu rung tùy chỉnh&lt;/b> cho báo thức.</item>
 		<item>Đã thêm tùy chọn &lt;b>tiết kiệm pin&lt;/b> để tắt màn hình khi báo thức đang hoạt động. Tìm thấy trong Cài đặt > Chung.</item>
 		<item>Đã thêm tùy chọn &lt;b>giọng nói&lt;/b> vào &lt;b>chuyển văn bản thành giọng nói&lt;/b> để chọn giọng nói sẽ sử dụng.</item>
-		<item>Đã khắc phục sự cố liên quan đến đèn pin chỉ nhấp nháy chứ không bật và sáng liên tục.</item>
 	</string-array>
 
 </resources>
