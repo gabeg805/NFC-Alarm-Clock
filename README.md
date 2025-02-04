@@ -1,6 +1,28 @@
 # NFC Alarm Clock
 
-Customizable and feature-rich alarm clock app.
+Customizable and feature-rich alarm clock app that allows you to:
+
+* Customize the colors of your alarms
+* Customize what is shown in the alarm screen
+* Swipe to copy/delete an alarm
+* Play your own music to wake up
+* Use an NFC tag/card to dismiss an alarm
+* Gradually increase the volume when an alarm goes off
+* Restrict the volume when an alarm goes off
+* Use text-to-speech to say the time and/or the name of the alarm when it goes off
+* Dismiss the alarm early so that you don't have to wait for it to go off
+* Set reminders for an alarm
+* See (simple) statistics on your alarm usage
+* See how each permission in the app is used
+
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/com.nfcalarmclock/)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=com.nfcalarmclock)
+
+Or download the latest APK from the [Releases Section](https://github.com/gabeg805/NFC-Alarm-Clock/releases/latest).
 
 # License
 
