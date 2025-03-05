@@ -1,5 +1,6 @@
 package com.nfcalarmclock.alarm.options.mediapicker.music
 
+import android.content.ActivityNotFoundException
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -75,6 +76,10 @@ class NacMusicPickerFragment
 			MediaStore.getMediaUri(context, uri)
 		}
 		catch (_: IllegalArgumentException)
+		{
+			null
+		}
+		catch (_: IllegalStateException)
 		{
 			null
 		}
@@ -375,8 +380,16 @@ class NacMusicPickerFragment
 		// Set the click listener
 		fab.setOnClickListener {
 
-			// Launch the file chooser
-			fileChooserContent.launch("audio/*")
+			try
+			{
+				// Launch the file chooser
+				fileChooserContent.launch("audio/*")
+			}
+			catch (_: ActivityNotFoundException)
+			{
+				// Show error toast
+				quickToast(requireContext(), "Unable to launch system audio picker")
+			}
 
 		}
 

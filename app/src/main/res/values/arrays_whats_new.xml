@@ -5,6 +5,8 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.5.4</item>
+		<item>Fixed issue where &lt;b>skip next alarm&lt;/b> would keep skipping the alarm.</item>
 		<item>12.5.3</item>
 		<item>Fixed issue with &lt;b>voice&lt;/b> where text-to-speech was using the default voice even though a different voice was selected.</item>
 		<item>Added &lt;b>alignment&lt;/b> option to the &lt;b>widget&lt;/b> to align all text.</item>

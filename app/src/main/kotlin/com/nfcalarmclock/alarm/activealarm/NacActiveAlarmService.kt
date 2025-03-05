@@ -320,42 +320,17 @@ class NacActiveAlarmService
 	@UnstableApi
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
 	{
-		// Setup the service
-		setupActiveAlarmService(intent)
-
-		// Check if this is a skipped alarm
-		if (alarm?.shouldSkipNextAlarm == true)
+		// Legacy check to see if the alarm should be skipped
+		if (intent?.action == ACTION_SKIP_SERVICE)
 		{
-			scope.launch {
-
-				// Dismiss the alarm. This will clear flags, such as the
-				// "shouldSkipNextAlarm", but it will also toggle the alarm in case
-				// repeat is not enabled
-				alarm!!.dismiss()
-
-				// Update the database
-				alarmRepository.update(alarm!!)
-
-				// Reschedule the next alarm
-				NacScheduler.update(this@NacActiveAlarmService, alarm!!)
-
-			}
-
-			// Stop the service
-			super.stopSelf()
-
+			println("SKIP THE ALARM SERVICE")
 			return START_NOT_STICKY
 		}
 
-		// Check if the action is NOT meant to skip this alarm
-		if (intentAction != ACTION_SKIP_SERVICE)
-		{
-			// Show the alarm notification
-			showActiveAlarmNotification()
-
-			// Disable any reminder notification that may be present
-			disableReminderNotification()
-		}
+		// Setup the service and disable any reminder notification that may be present
+		setupActiveAlarmService(intent)
+		showActiveAlarmNotification()
+		disableReminderNotification()
 
 		// Check the intent action
 		when (intentAction)
@@ -405,9 +380,6 @@ class NacActiveAlarmService
 					}
 				}
 			}
-
-			// Skip
-			ACTION_SKIP_SERVICE -> super.stopSelf()
 
 			// The default case if things go wrong
 			else -> stopActiveAlarmService()
@@ -616,14 +588,16 @@ class NacActiveAlarmService
 
 		scope.launch {
 
-			 // Set the active flag
-			 alarm!!.isActive = true
+			 // Set the active flag and reset the skip flag
+			println("CLEARING SKIP FLAG")
+			alarm!!.isActive = true
+			alarm!!.shouldSkipNextAlarm = false
 
-			 // Update the alarm
-			 alarmRepository.update(alarm!!)
+			// Update the alarm
+			alarmRepository.update(alarm!!)
 
-			 // Reschedule the alarm
-			 NacScheduler.update(this@NacActiveAlarmService, alarm!!)
+			// Reschedule the alarm
+			NacScheduler.update(this@NacActiveAlarmService, alarm!!)
 
 		}
 	}
@@ -835,21 +809,6 @@ class NacActiveAlarmService
 		{
 			// Create the intent with the alarm service
 			return Intent(ACTION_DISMISS_ALARM_WITH_NFC, null, context, NacActiveAlarmService::class.java)
-				.addAlarm(alarm)
-		}
-
-		/**
-		 * Create an intent that will be used to skip the alarm service.
-		 *
-		 * @param context A context.
-		 * @param alarm   An alarm.
-		 *
-		 * @return The service intent.
-		 */
-		fun getSkipIntent(context: Context, alarm: NacAlarm?): Intent
-		{
-			// Create an intent with the alarm service
-			return Intent(ACTION_SKIP_SERVICE, null, context, NacActiveAlarmService::class.java)
 				.addAlarm(alarm)
 		}
 

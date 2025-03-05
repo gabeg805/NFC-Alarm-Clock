@@ -24,6 +24,7 @@ import com.nfcalarmclock.util.media.NacMedia.TYPE_FILE
 import com.nfcalarmclock.util.media.NacMedia.TYPE_NONE
 import com.nfcalarmclock.util.media.NacMedia.TYPE_RINGTONE
 import java.io.File
+import java.io.FileNotFoundException
 import java.util.Locale
 import java.util.TreeMap
 import java.util.concurrent.TimeUnit
@@ -120,7 +121,6 @@ fun doesDeviceHaveFreeSpace(deviceContext: Context, bytesNeeded: Long = 1024*102
 
 	// Calculate the available bytes
 	val availableBytes = storageManager.getAllocatableBytes(uuid)
-	println("Available bytes : $availableBytes")
 
 	return (availableBytes >= bytesNeeded)
 }
@@ -233,14 +233,22 @@ fun copyMediaToDeviceEncryptedStorage(
 	// Build the destination uri
 	val dstUri = Uri.parse("${deviceContext.filesDir}/$dstName")
 
-	// Copy the file to the local media path
-	deviceContext.openFileOutput(dstName, Context.MODE_PRIVATE).use { fileOutput ->
+	try
+	{
+		// Copy the file to the local media path
+		deviceContext.openFileOutput(dstName, Context.MODE_PRIVATE).use { fileOutput ->
 
-		// Copy the file to the local file dir (for the app)
-		context.contentResolver.openInputStream(srcUri).use { inputStream ->
-			inputStream?.copyTo(fileOutput, 1024)
+			// Copy the file to the local file dir (for the app)
+			context.contentResolver.openInputStream(srcUri).use { inputStream ->
+				inputStream?.copyTo(fileOutput, 1024)
+			}
+
 		}
-
+	}
+	catch (_: FileNotFoundException)
+	{
+		// Unable to copy the file. Do nothing and hope the user does not happen to need
+		// it. This has only happened so far when the filename was too long
 	}
 
 	return dstUri

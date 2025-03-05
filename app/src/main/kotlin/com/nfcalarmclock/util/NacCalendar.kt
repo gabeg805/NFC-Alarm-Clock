@@ -690,7 +690,7 @@ object NacCalendar
 				val daysOfWeek = context.resources.getStringArray(R.array.days_of_week_abbr)
 
 				// Iterate over each day in the week
-				val days = listOf(*Day.values())
+				val days = entries
 				val summary = StringBuilder(32)
 				var count = 0
 				var i = start

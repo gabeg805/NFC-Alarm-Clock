@@ -11,9 +11,10 @@ import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmBroadcastReceiver
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderService
+import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.util.NacCalendar
+import java.text.DateFormat.getDateTimeInstance
 import java.util.Calendar
 import kotlin.random.Random
 
@@ -35,7 +36,11 @@ object NacScheduler
 		}
 
 		// Get the calendar for the next alarm
-		val nextAlarmCal = NacCalendar.getNextAlarmDay(alarm, ignoreSkip = true)!!
+		val nextAlarmCal = NacCalendar.getNextAlarmDay(alarm)!!
+
+		// Default ignore=false
+		println("Before : ${getDateTimeInstance().format(NacCalendar.getNextAlarmDay(alarm, ignoreSkip = true)!!.time)}")
+		println("After  : ${getDateTimeInstance().format(NacCalendar.getNextAlarmDay(alarm, ignoreSkip = false)!!.time)}")
 
 		// Add the alarm
 		addAlarm(context, alarm, nextAlarmCal)
@@ -125,18 +130,11 @@ object NacScheduler
 	): PendingIntent
 	{
 		// Create the intent
-		val intent = if (alarm.shouldSkipNextAlarm)
-		{
-			NacActiveAlarmService.getSkipIntent(context, alarm)
-		}
-		else
-		{
-			NacActiveAlarmService.getStartIntent(context, alarm)
-		}
+		val intent = NacActiveAlarmService.getStartIntent(context, alarm)
 
 		// Build the pending intent
 		return buildServicePendingIntent(context, alarm, intent,
-			PendingIntent.FLAG_CANCEL_CURRENT, shouldSkipAlarm = alarm.shouldSkipNextAlarm)!!
+			PendingIntent.FLAG_CANCEL_CURRENT)!!
 	}
 
 	/**
@@ -171,25 +169,8 @@ object NacScheduler
 		val intent = NacActiveAlarmService.getStartIntent(context, null)
 
 		// Build the pending intent
-		return buildServicePendingIntent(context, alarm, intent, PendingIntent.FLAG_NO_CREATE, shouldSkipAlarm = false)
-	}
-
-	/**
-	 * Build the pending intent for canceling a skipped alarm.
-	 *
-	 * @return The pending intent for canceling a skipped alarm.
-	 */
-	@OptIn(UnstableApi::class)
-	private fun buildCancelSkipPendingIntent(
-		context: Context,
-		alarm: NacAlarm
-	): PendingIntent?
-	{
-		// Create the intent
-		val intent = NacActiveAlarmService.getSkipIntent(context, null)
-
-		// Build the pending intent
-		return buildServicePendingIntent(context, alarm, intent, PendingIntent.FLAG_NO_CREATE, shouldSkipAlarm = true)
+		return buildServicePendingIntent(context, alarm, intent,
+			PendingIntent.FLAG_NO_CREATE)
 	}
 
 	/**
@@ -238,8 +219,7 @@ object NacScheduler
 		context: Context,
 		alarm: NacAlarm,
 		intent: Intent,
-		flags: Int,
-		shouldSkipAlarm: Boolean = false
+		flags: Int
 	): PendingIntent?
 	{
 		// Get the alarm ID
@@ -249,10 +229,7 @@ object NacScheduler
 		val intentFlags = flags or PendingIntent.FLAG_IMMUTABLE
 
 		// Create the pending intent
-		//
-		// Note: Skipped alarms will use the normal getService() since they will stop the
-		// service immediately and won't need to be in the foreground
-		return if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) && !shouldSkipAlarm)
+		return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{
 			PendingIntent.getForegroundService(context, id, intent, intentFlags)
 		}
@@ -286,23 +263,14 @@ object NacScheduler
 	 */
 	private fun cancelAlarm(context: Context, alarm: NacAlarm)
 	{
-		// Build the pending intent for the alarm as well as the skipped alarm (just in case)
+		// Build the pending intent for the alarm
 		val alarmPendingIntent = buildCancelAlarmPendingIntent(context, alarm)
-		val skipPendingIntent = buildCancelSkipPendingIntent(context, alarm)
-		//println("Cancel alarm() : $alarmPendingIntent | $skipPendingIntent")
 
 		// Check if the alarm pending intent can be canceled
 		if (alarmPendingIntent != null)
 		{
 			// Cancel the alarm
 			getAlarmManager(context).cancel(alarmPendingIntent)
-		}
-
-		// Check if the skipped alarm pending intent can be canceled
-		if (skipPendingIntent != null)
-		{
-			// Cancel the skipped alarm
-			getAlarmManager(context).cancel(skipPendingIntent)
 		}
 	}
 

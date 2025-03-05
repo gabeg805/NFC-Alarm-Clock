@@ -267,20 +267,6 @@ class NacMainActivity
 		}
 
 	/**
-	 * Check if the app has been newly installed.
-	 */
-	private val isNewInstall: Boolean
-		get()
-		{
-			// Get the previous version
-			val previousVersion = sharedPreferences.previousAppVersion
-
-			// When the previous saved version is empty, this means that the
-			// alarm has been newly installed
-			return previousVersion.isEmpty()
-		}
-
-	/**
 	 * Check if the What's New dialog should be shown.
 	 */
 	private val shouldShowWhatsNewDialog: Boolean
