@@ -193,6 +193,7 @@
 	<string name="error_message_camera_error">ক্যামেরা ত্রুটি</string>
 	<string name="error_message_camera_in_use">ক্যামেরা ব্যবহার করা হচ্ছে</string>
 	<string name="error_message_camera_max_in_use">সর্বাধিক ক্যামেরা ব্যবহার করা হচ্ছে</string>
+	<string name="error_message_unable_to_launch_media_picker">সিস্টেম অডিও পিকার চালু করা যাচ্ছে না</string>
 
 	<!-- Titles -->
 	<string name="title_settings">সেটিংস</string>

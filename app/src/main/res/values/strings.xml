@@ -193,6 +193,7 @@
 	<string name="error_message_camera_error">Camera error</string>
 	<string name="error_message_camera_in_use">Camera in use</string>
 	<string name="error_message_camera_max_in_use">Max cameras in use</string>
+	<string name="error_message_unable_to_launch_media_picker">Unable to launch system audio picker</string>
 
 	<!-- Titles -->
 	<string name="title_settings">Settings</string>
@@ -292,8 +293,9 @@
 	<string name="description_alarm_activity">Scan NFC tag to dismiss the alarm.</string>
 	<string name="description_no_notification">Do not show notifications.</string>
 	<string name="description_upcoming_reminder">Reminder for upcoming alarms that are about to be active.</string>
-	<string name="description_missed_alarm">Alarms that have been automatically dismissed.</string>
+	<string name="description_missed_alarm">Alarms that are automatically dismissed.</string>
 	<string name="description_active_alarm">Alarms that are currently active.</string>
+	<string name="description_skipped_alarm">Alarms that are skipped.</string>
 	<string name="description_color">Hex color</string>
 	<string name="description_day_button_style_filled">Filled-in buttons.</string>
 	<string name="description_day_button_style_outlined">Outlined buttons.</string>
@@ -417,6 +419,11 @@
 	<plurals name="missed_alarm">
 		<item quantity="one">%d Missed alarm</item>
 		<item quantity="other">%d Missed alarms</item>
+	</plurals>
+
+	<plurals name="skipped_alarm">
+		<item quantity="one">Skipped alarm</item>
+		<item quantity="other">Skipped alarms</item>
 	</plurals>
 
 	<plurals name="unit_day">

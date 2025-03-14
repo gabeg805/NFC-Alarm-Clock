@@ -193,6 +193,7 @@
 	<string name="error_message_camera_error">Kamerafehler</string>
 	<string name="error_message_camera_in_use">Kamera im Einsatz</string>
 	<string name="error_message_camera_max_in_use">Max. genutzte Kameras</string>
+	<string name="error_message_unable_to_launch_media_picker">System-Audio-Picker kann nicht gestartet werden</string>
 
 	<!-- Titles -->
 	<string name="title_settings">Einstellungen</string>

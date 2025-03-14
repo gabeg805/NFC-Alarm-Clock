@@ -193,6 +193,7 @@
 	<string name="error_message_camera_error">Error de cámara</string>
 	<string name="error_message_camera_in_use">Cámara en uso</string>
 	<string name="error_message_camera_max_in_use">Máximo de cámaras en uso</string>
+	<string name="error_message_unable_to_launch_media_picker">No se puede iniciar el selector de audio del sistema</string>
 
 	<!-- Titles -->
 	<string name="title_settings">Configuración</string>

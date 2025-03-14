@@ -320,17 +320,16 @@ class NacActiveAlarmService
 	@UnstableApi
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
 	{
-		// Legacy check to see if the alarm should be skipped
-		if (intent?.action == ACTION_SKIP_SERVICE)
-		{
-			println("SKIP THE ALARM SERVICE")
-			return START_NOT_STICKY
-		}
+		// Setup the service
+		setupActiveAlarmService(intent)
 
 		// Setup the service and disable any reminder notification that may be present
-		setupActiveAlarmService(intent)
-		showActiveAlarmNotification()
-		disableReminderNotification()
+		// when NOT skipping this alarm
+		if (intentAction != ACTION_SKIP_SERVICE)
+		{
+			showActiveAlarmNotification()
+			disableReminderNotification()
+		}
 
 		// Check the intent action
 		when (intentAction)
@@ -342,6 +341,33 @@ class NacActiveAlarmService
 				NacActiveAlarmActivity.startAlarmActivity(this, alarm!!)
 				return START_STICKY
 
+			}
+
+			// Legacy check to see if the alarm should be skipped
+			ACTION_SKIP_SERVICE ->
+			{
+				println("SKIP THE ALARM SERVICE")
+
+				// Show the skip notification
+				showSkipAlarmNotification()
+
+				scope.launch {
+
+					// Clear the skip flag
+					alarm!!.shouldSkipNextAlarm = false
+
+					// Update the database
+					alarmRepository.update(alarm!!)
+
+					// Reschedule the next alarm
+					NacScheduler.update(this@NacActiveAlarmService, alarm!!)
+
+					// Stop the service
+					super.stopSelf()
+
+				}
+
+				return START_NOT_STICKY
 			}
 
 			// Start the service
@@ -447,7 +473,8 @@ class NacActiveAlarmService
 	}
 
 	/**
-	 * Setup the service.
+	 * Setup the service by getting the action, setting up the alarm, and showing the
+	 * notification.
 	 */
 	@UnstableApi
 	private fun setupActiveAlarmService(intent: Intent?)
@@ -513,6 +540,30 @@ class NacActiveAlarmService
 		{
 			// Start the service in the foreground
 			startForeground(NacActiveAlarmNotification.ID,
+				notification.builder().build())
+		}
+		catch (e: Exception)
+		{
+			// Check if not allowed to start foreground service
+			if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) && (e is ForegroundServiceStartNotAllowedException))
+			{
+				NacUtility.toast(this, R.string.error_message_unable_to_start_foreground_service)
+			}
+		}
+	}
+
+	/**
+	 * Show the notification when an alarm is skipped.
+	 */
+	private fun showSkipAlarmNotification()
+	{
+		// Create the active alarm notification
+		val notification = NacSkipAlarmNotification(this, alarm)
+
+		try
+		{
+			// Start the service in the foreground
+			startForeground(NacSkipAlarmNotification.ID,
 				notification.builder().build())
 		}
 		catch (e: Exception)
@@ -809,6 +860,21 @@ class NacActiveAlarmService
 		{
 			// Create the intent with the alarm service
 			return Intent(ACTION_DISMISS_ALARM_WITH_NFC, null, context, NacActiveAlarmService::class.java)
+				.addAlarm(alarm)
+		}
+
+		/**
+		 * Create an intent that will be used to skip the alarm service.
+		 *
+		 * @param context A context.
+		 * @param alarm   An alarm.
+		 *
+		 * @return The service intent.
+		 */
+		fun getSkipIntent(context: Context, alarm: NacAlarm?): Intent
+		{
+			// Create an intent with the alarm service
+			return Intent(ACTION_SKIP_SERVICE, null, context, NacActiveAlarmService::class.java)
 				.addAlarm(alarm)
 		}
 

@@ -388,7 +388,7 @@ class NacMusicPickerFragment
 			catch (_: ActivityNotFoundException)
 			{
 				// Show error toast
-				quickToast(requireContext(), "Unable to launch system audio picker")
+				quickToast(requireContext(), R.string.error_message_unable_to_launch_media_picker)
 			}
 
 		}

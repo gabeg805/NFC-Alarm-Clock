@@ -193,6 +193,7 @@
 	<string name="error_message_camera_error">Erè kamera</string>
 	<string name="error_message_camera_in_use">Kamera nan itilize</string>
 	<string name="error_message_camera_max_in_use">Maksimòm kamera nan itilize</string>
+	<string name="error_message_unable_to_launch_media_picker">Pa kapab lanse sistèm odyo seleksyon an</string>
 
 	<!-- Titles -->
 	<string name="title_settings">Anviwònman</string>

@@ -193,6 +193,7 @@
 	<string name="error_message_camera_error">Lỗi máy ảnh</string>
 	<string name="error_message_camera_in_use">Máy ảnh đang sử dụng</string>
 	<string name="error_message_camera_max_in_use">Số lượng máy ảnh tối đa đang sử dụng</string>
+	<string name="error_message_unable_to_launch_media_picker">Không thể khởi chạy trình chọn âm thanh hệ thống</string>
 
 	<!-- Titles -->
 	<string name="title_settings">Cài đặt</string>
