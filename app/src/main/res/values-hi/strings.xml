@@ -293,8 +293,9 @@
 	<string name="description_alarm_activity">अलार्म बंद करने के लिए NFC टैग को स्कैन करें।</string>
 	<string name="description_no_notification">अधिसूचनाएं न दिखाएं.</string>
 	<string name="description_upcoming_reminder">आगामी सक्रिय होने वाले अलार्मों के लिए अनुस्मारक।</string>
-	<string name="description_missed_alarm">अलार्म जो स्वचालित रूप से खारिज कर दिए गए हैं।</string>
 	<string name="description_active_alarm">वर्तमान में सक्रिय अलार्म.</string>
+	<string name="description_missed_alarm">अलार्म जो स्वचालित रूप से खारिज हो जाते हैं।</string>
+	<string name="description_skipped_alarm">अलार्म जो छोड़ दिए गए हैं.</string>
 	<string name="description_color">हेक्स रंग</string>
 	<string name="description_day_button_style_filled">भरे हुए बटन.</string>
 	<string name="description_day_button_style_outlined">रेखांकित बटन.</string>
@@ -418,6 +419,11 @@
 	<plurals name="missed_alarm">
 		<item quantity="one">%d अलार्म छूट गया</item>
 		<item quantity="other">%d छूटे हुए अलार्म</item>
+	</plurals>
+
+	<plurals name="skipped_alarm">
+		<item quantity="one" tools:ignore="ImpliedQuantity">अलार्म छूट गया</item>
+		<item quantity="other">छोड़े गए अलार्म</item>
 	</plurals>
 
 	<plurals name="unit_day">

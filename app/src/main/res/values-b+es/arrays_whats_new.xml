@@ -5,6 +5,8 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.5.4</item>
+		<item>Se solucionó el problema por el cual &lt;b>omitir siguiente alarma&lt;/b> seguía omitiendo la alarma.</item>
 		<item>12.5.3</item>
 		<item>Se solucionó el problema con &lt;b>voz&lt;/b> donde la conversión de texto a voz usaba la voz predeterminada aunque se hubiera seleccionado una voz diferente.</item>
 		<item>Se agregó la opción &lt;b>alineación&lt;/b> al &lt;b>widget&lt;/b> para alinear todo el texto.</item>

@@ -5,6 +5,8 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.5.4</item>
+		<item>Problema corrigido em que &lt;b>ignorar próximo alarme&lt;/b>continuava pulando o alarme.</item>
 		<item>12.5.3</item>
 		<item>Problema corrigido com &lt;b>voz&lt;/b>, em que a conversão de texto em fala estava usando a voz padrão, mesmo que uma voz diferente estivesse selecionada.</item>
 		<item>Adicionada a opção &lt;b>alinhamento&lt;/b> ao &lt;b>widget&lt;/b> para alinhar todo o texto.</item>

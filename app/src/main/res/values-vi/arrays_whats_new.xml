@@ -5,6 +5,8 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.5.4</item>
+		<item>Đã khắc phục sự cố trong đó &lt;b>bỏ qua báo thức tiếp theo&lt;/b> sẽ tiếp tục bỏ qua báo thức.</item>
 		<item>12.5.3</item>
 		<item>Đã khắc phục sự cố liên quan đến &lt;b>giọng nói&lt;/b> khi tính năng chuyển văn bản thành giọng nói sử dụng giọng nói mặc định ngay cả khi đã chọn giọng nói khác.</item>
 		<item>Đã thêm tùy chọn &lt;b>căn chỉnh&lt;/b> vào tiện ích &lt;/b> để căn chỉnh toàn bộ văn bản.</item>

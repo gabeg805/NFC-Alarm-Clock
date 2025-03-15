@@ -293,8 +293,9 @@
 	<string name="description_alarm_activity">Scannen Sie den NFC-Tag, um den Alarm auszuschalten.</string>
 	<string name="description_no_notification">Keine Benachrichtigungen anzeigen.</string>
 	<string name="description_upcoming_reminder">Erinnerung an bevorstehende Alarme, die bald aktiv werden.</string>
-	<string name="description_missed_alarm">Alarme, die automatisch gelöscht wurden.</string>
 	<string name="description_active_alarm">Alarme, die aktuell aktiv sind.</string>
+	<string name="description_missed_alarm">Alarme, die automatisch abgewiesen werden.</string>
+	<string name="description_skipped_alarm">Übersprungene Alarme.</string>
 	<string name="description_color">Hex-Farbe</string>
 	<string name="description_day_button_style_filled">Ausgefüllte Schaltflächen.</string>
 	<string name="description_day_button_style_outlined">Umrandete Schaltflächen.</string>
@@ -418,6 +419,11 @@
 	<plurals name="missed_alarm">
 		<item quantity="one">%d Verpasster Alarm</item>
 		<item quantity="other">%d Verpasste Alarme</item>
+	</plurals>
+
+	<plurals name="skipped_alarm">
+		<item quantity="one">Übersprungener Alarm</item>
+		<item quantity="other">Übersprungene Alarme</item>
 	</plurals>
 
 	<plurals name="unit_day">

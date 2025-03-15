@@ -293,8 +293,9 @@
 	<string name="description_alarm_activity">Escanea una etiqueta de NFC para descartar la alarma.</string>
 	<string name="description_no_notification">No mostrar notificaciones.</string>
 	<string name="description_upcoming_reminder">Recordatorio de próximas alarmas que están por activarse.</string>
-	<string name="description_missed_alarm">Alarmas desactivadas automaticamente.</string>
 	<string name="description_active_alarm">Alarmas que están activas.</string>
+	<string name="description_missed_alarm">Alarmas que se descartan automáticamente.</string>
+	<string name="description_skipped_alarm">Alarmas que se omiten.</string>
 	<string name="description_color">Color</string>
 	<string name="description_day_button_style_filled">Botones rellenos</string>
 	<string name="description_day_button_style_outlined">Botones delineados</string>
@@ -420,6 +421,12 @@
 		<item quantity="one">%d Alarma perdida</item>
 		<item quantity="many">%d Alarmas perdidas</item>
 		<item quantity="other">%d Alarmas perdidas</item>
+	</plurals>
+
+	<plurals name="skipped_alarm">
+		<item quantity="one">Alarma omitida</item>
+		<item quantity="many">Alarmas omitidas</item>
+		<item quantity="other">Alarmas omitidas</item>
 	</plurals>
 
 	<plurals name="unit_day">

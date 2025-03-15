@@ -293,8 +293,9 @@
 	<string name="description_alarm_activity">Eskane tag NFC pou ranvwaye alam la.</string>
 	<string name="description_no_notification">Pa montre notifikasyon.</string>
 	<string name="description_upcoming_reminder">Rapèl pou alam k ap vini yo ki pral aktif.</string>
-	<string name="description_missed_alarm">Alam ki te ranvwaye otomatikman.</string>
 	<string name="description_active_alarm">Alam ki aktif kounye a.</string>
+	<string name="description_missed_alarm">Alam yo otomatikman ranvwaye.</string>
+	<string name="description_skipped_alarm">Alam ki sote.</string>
 	<string name="description_color">Hex koulè</string>
 	<string name="description_day_button_style_filled">Bouton ranpli.</string>
 	<string name="description_day_button_style_outlined">Dekri bouton.</string>
@@ -418,6 +419,11 @@
 	<plurals name="missed_alarm">
 		<item quantity="one">%d Alam rate</item>
 		<item quantity="other">%d Alam rate</item>
+	</plurals>
+
+	<plurals name="skipped_alarm">
+		<item quantity="one">Sote alam</item>
+		<item quantity="other">Sote alam yo</item>
 	</plurals>
 
 	<plurals name="unit_day">

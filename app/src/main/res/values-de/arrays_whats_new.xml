@@ -5,6 +5,8 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.5.4</item>
+		<item>Problem behoben, bei dem &lt;b>Nächsten Alarm überspringen&lt;/b> den Alarm immer wieder übersprang.</item>
 		<item>12.5.3</item>
 		<item>Problem mit &lt;b>Stimme&lt;/b> behoben, bei dem die Text-to-Speech-Funktion die Standard-Stimme verwendete, obwohl eine andere Stimme ausgewählt wurde.</item>
 		<item>Option &lt;b>Ausrichtung&lt;/b> zum &lt;b>Widget&lt;/b> hinzugefügt, um den gesamten Text auszurichten.</item>

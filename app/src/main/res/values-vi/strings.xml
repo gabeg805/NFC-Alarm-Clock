@@ -293,8 +293,9 @@
 	<string name="description_alarm_activity">Quét thẻ NFC để loại bỏ cảnh báo.</string>
 	<string name="description_no_notification">Không hiển thị thông báo.</string>
 	<string name="description_upcoming_reminder">Lời nhắc về các báo thức sắp hoạt động.</string>
-	<string name="description_missed_alarm">Các cảnh báo đã được tự động loại bỏ.</string>
 	<string name="description_active_alarm">Báo động hiện đang hoạt động.</string>
+	<string name="description_missed_alarm">Cảnh báo tự động bị loại bỏ.</string>
+	<string name="description_skipped_alarm">Báo thức bị bỏ qua.</string>
 	<string name="description_color">màu lục giác</string>
 	<string name="description_day_button_style_filled">Các nút điền đầy đủ.</string>
 	<string name="description_day_button_style_outlined">Các nút được phác thảo.</string>
@@ -416,6 +417,10 @@
 
 	<plurals name="missed_alarm">
 		<item quantity="other">%d Báo thức bị bỏ lỡ</item>
+	</plurals>
+
+	<plurals name="skipped_alarm">
+		<item quantity="other">Báo thức bị bỏ qua</item>
 	</plurals>
 
 	<plurals name="unit_day">

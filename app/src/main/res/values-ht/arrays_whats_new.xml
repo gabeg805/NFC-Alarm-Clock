@@ -5,6 +5,8 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.5.4</item>
+		<item>Pwoblèm fiks kote &lt;b>sote pwochen alam&lt;/b> ta kontinye sote alam la.</item>
 		<item>12.5.3</item>
 		<item>Pwoblèm ranje ak &lt;b>vwa&lt;/b> kote tèks-a-lapawòl t ap itilize vwa default menmsi yo te chwazi yon vwa diferan.</item>
 		<item>Te ajoute opsyon &lt;b>aliyman&lt;/b> nan &lt;b>widget&lt;/b> pou fè aliman tout tèks yo.</item>

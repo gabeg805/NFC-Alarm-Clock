@@ -293,8 +293,9 @@
 	<string name="description_alarm_activity">অ্যালার্ম খারিজ করতে NFC ট্যাগ স্ক্যান করুন।</string>
 	<string name="description_no_notification">বিজ্ঞপ্তি দেখাবেন না।</string>
 	<string name="description_upcoming_reminder">আসন্ন অ্যালার্মগুলির জন্য অনুস্মারক যা সক্রিয় হতে চলেছে৷</string>
-	<string name="description_missed_alarm">স্বয়ংক্রিয়ভাবে বরখাস্ত করা হয়েছে যে অ্যালার্ম.</string>
 	<string name="description_active_alarm">বর্তমানে সক্রিয় অ্যালার্ম।</string>
+	<string name="description_missed_alarm">স্বয়ংক্রিয়ভাবে বাতিল হওয়া অ্যালার্ম।</string>
+	<string name="description_skipped_alarm">এড়িয়ে যাওয়া অ্যালার্ম।</string>
 	<string name="description_color">হেক্স রঙ</string>
 	<string name="description_day_button_style_filled">ভরাট-ইন বোতাম।</string>
 	<string name="description_day_button_style_outlined">আউটলাইন করা বোতাম।</string>
@@ -418,6 +419,11 @@
 	<plurals name="missed_alarm">
 		<item quantity="one">%d মিস করা অ্যালার্ম</item>
 		<item quantity="other">%d মিস করা অ্যালার্ম</item>
+	</plurals>
+
+	<plurals name="skipped_alarm">
+		<item quantity="one" tools:ignore="ImpliedQuantity">এড়িয়ে যাওয়া অ্যালার্ম</item>
+		<item quantity="other">এড়িয়ে যাওয়া অ্যালার্ম</item>
 	</plurals>
 
 	<plurals name="unit_day">

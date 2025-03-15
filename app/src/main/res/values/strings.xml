@@ -293,8 +293,8 @@
 	<string name="description_alarm_activity">Scan NFC tag to dismiss the alarm.</string>
 	<string name="description_no_notification">Do not show notifications.</string>
 	<string name="description_upcoming_reminder">Reminder for upcoming alarms that are about to be active.</string>
-	<string name="description_missed_alarm">Alarms that are automatically dismissed.</string>
 	<string name="description_active_alarm">Alarms that are currently active.</string>
+	<string name="description_missed_alarm">Alarms that are automatically dismissed.</string>
 	<string name="description_skipped_alarm">Alarms that are skipped.</string>
 	<string name="description_color">Hex color</string>
 	<string name="description_day_button_style_filled">Filled-in buttons.</string>
