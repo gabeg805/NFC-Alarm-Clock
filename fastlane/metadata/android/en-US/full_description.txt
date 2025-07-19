@@ -1,14 +1,27 @@
-Alarm clock that allows you to:
+Customize how your alarms look, easily create/delete alarms, and more. Each alarm can be configured however you want to use it.
 
-* Customize the colors of your alarms
-* Customize what is shown in the alarm screen
-* Swipe to copy/delete an alarm
-* Play your own music to wake up
-* Use an NFC tag/card to dismiss an alarm
-* Gradually increase the volume when an alarm goes off
-* Restrict the volume when an alarm goes off
-* Use text-to-speech to say the time and/or the name of the alarm when it goes off
-* Dismiss the alarm early so that you don't have to wait for it to go off
-* Set reminders for an alarm
-* See (simple) statistics on your alarm usage
-* See how each permission in the app is used
+For those that struggle to wake up, you can restrict the volume or have it gradually increase when your alarm goes off. You can also use an NFC card or tag to dismiss your alarm.
+
+See the full list of features below for a more detailed look into all the things you can do.
+
+<b>Features:</b>
+
+* Edit and view alarms all in one screen.
+* Swipe left to delete an alarm.
+* Swipe right to copy an alarm.
+* Play music from your phone to wake up. Can even choose to play all the music in a folder.
+* Use NFC to dismiss an alarm. This is optional and can be set on a per-alarm basis. Found by selecting the gear icon next to the volume slider of an alarm.
+* Gradually increase the volume when your alarm goes off. This is optional and can be set on a per-alarm basis. Found by selecting the gear icon next to the volume slider of an alarm.
+* Restrict changing the volume when your alarm goes off. This is optional and can be set on a per-alarm basis. Found by selecting the gear icon next to the volume slider of an alarm.
+* Text-to-speech when your alarm goes off. It will say the current time to you at whatever cadence you choose. This is optional and can be set on a per-alarm basis. Found by selecting the gear icon next to the volume slider of an alarm.
+* Choose which audio source you want the alarm sound to play out of (Alarm, Call, Music, Notification, Ringtone). This is optional and can be set on a per-alarm basis. Found by selecting the gear icon next to the volume slider of an alarm.
+* Customize the colors of: the theme, name of the alarm, days in which the alarm runs, time, and AM/PM. Found in <i>Settings › Appearance</i>.
+* View statistics of how many alarms you have dismissed/snoozed/missed, and how many you have created/deleted.
+
+<b>Permissions:</b>
+
+* <b>NFC:</b> (Optional) Allow the app to detect NFC tags.
+* <b>Storage:</b> (Optional) Read music that is stored on the phone. You are prompted to enable this permission if and only if you choose to play music as the alarm ringtone. Otherwise, this permission is unused.
+* <b>Vibrate:</b> (Optional) Allow the app to vibrate the phone.
+* <b>Startup:</b> (Required) Restore alarms when the phone is turned on. By default, Android will delete alarms when the phone is turned off.
+* <b>Wakelock:</b> (Required) Prevent the phone from sleeping so that an activated alarm will continue to go off.
