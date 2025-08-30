@@ -18,6 +18,7 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.Purchase.PurchaseState
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
+import com.android.billingclient.api.QueryProductDetailsResult
 import com.google.common.collect.ImmutableList
 import com.nfcalarmclock.R
 import com.nfcalarmclock.util.NacUtility
@@ -197,8 +198,12 @@ class NacSupportSetting(
 	 * @param productDetailsList List of product details.
 	 */
 	override fun onProductDetailsResponse(billingResult: BillingResult,
-		productDetailsList: List<ProductDetails>)
+		productDetailsResult: QueryProductDetailsResult
+	)
 	{
+		// Get the list of product details
+		val productDetailsList = productDetailsResult.productDetailsList
+
 		// Unable to get a list of product details
 		if (billingResult.responseCode != BillingResponseCode.OK
 			|| productDetailsList.isEmpty())
