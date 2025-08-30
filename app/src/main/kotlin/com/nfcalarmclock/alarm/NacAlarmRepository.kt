@@ -26,7 +26,7 @@ class NacAlarmRepository @Inject constructor(
 	 * Live data list of all alarms.
 	 */
 	val allAlarms: LiveData<List<NacAlarm>>
-		get() = alarmDao.allAlarms
+		get() = alarmDao.allAlarmsLive
 
 	/**
 	 * Count the number of alarms.

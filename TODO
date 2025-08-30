@@ -2,6 +2,23 @@
 TODO
 ----
 
+* Power/volume button to snooze?
+
+* German translation bad: Clear reminder -> Erinnerung ausblenden
+About -> Über
+(Statistics) Turned down Alams -> Abgeschaltete Alarme
+
+* Different repeat options, someone even wants monthly.  Should I just add a
+  calendar?  How would I handle showing the date it's going to alarm?
+
+* Stream internet radio, like KEXP?
+
+* Bring back upcoming alarm notification?
+
+* Add notification to dismiss early?
+
+* Snooze with physical buttons?
+
 * Add option to select multiple NFC tags.
 
 * Move easy to mess up strings to top

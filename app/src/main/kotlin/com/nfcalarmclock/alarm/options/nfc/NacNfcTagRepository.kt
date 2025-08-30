@@ -23,7 +23,7 @@ class NacNfcTagRepository @Inject constructor(
 	 * Live data list of all NFC tags.
 	 */
 	val allNfcTags: LiveData<List<NacNfcTag>>
-		get() = nfcTagDao.allNfcTags
+		get() = nfcTagDao.allNfcTagsLive
 
 	/**
 	 * The number of created alarm statistics.

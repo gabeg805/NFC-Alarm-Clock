@@ -20,7 +20,7 @@ interface NacNfcTagDao
 	 * @return All NFC tags.
 	 */
 	@get:Query("SELECT * FROM nfc_tag ORDER BY name")
-	val allNfcTags: LiveData<List<NacNfcTag>>
+	val allNfcTagsLive: LiveData<List<NacNfcTag>>
 
 	/**
 	 * Count the number of created alarm statistics.

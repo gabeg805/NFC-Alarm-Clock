@@ -22,7 +22,7 @@ interface NacAlarmDao
 	 * @return All alarms.
 	 */
 	@get:Query("SELECT * FROM alarm")
-	val allAlarms: LiveData<List<NacAlarm>>
+	val allAlarmsLive: LiveData<List<NacAlarm>>
 
 	/**
 	 * Checkpoint the database, which will block until there is no database writer and
