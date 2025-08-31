@@ -37,6 +37,8 @@ import com.nfcalarmclock.view.performHapticFeedback
 import com.nfcalarmclock.view.setupProgressAndThumbColor
 import com.nfcalarmclock.view.setupRippleColor
 import com.nfcalarmclock.view.setupSwitchColor
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 
 //import com.google.android.material.timepicker.MaterialTimePicker;
 
@@ -485,7 +487,7 @@ class NacCardHolder(
 	 * Check if the alarm card is collapsed.
 	 */
 	val isCollapsed: Boolean
-		get() = (expandedView.visibility == View.GONE)
+		get() = (expandedView.isGone)
 			|| (cardView.measuredHeight == sharedPreferences.cardHeightCollapsed)
 			|| (cardView.measuredHeight == sharedPreferences.cardHeightCollapsedDismiss)
 
@@ -493,7 +495,7 @@ class NacCardHolder(
 	 * Check if the alarm card is expanded.
 	 */
 	val isExpanded: Boolean
-		get() = (expandedView.visibility == View.VISIBLE)
+		get() = (expandedView.isVisible)
 			|| (cardView.measuredHeight == sharedPreferences.cardHeightExpanded)
 
 	/**
@@ -714,7 +716,7 @@ class NacCardHolder(
 		val toHeight: Int
 
 		// Set the from/to heights that the collapse will act on
-		if (extraBelowSummaryView.visibility == View.VISIBLE)
+		if (extraBelowSummaryView.isVisible)
 		{
 			fromHeight = sharedPreferences.cardHeightCollapsed
 			toHeight = sharedPreferences.cardHeightCollapsedDismiss

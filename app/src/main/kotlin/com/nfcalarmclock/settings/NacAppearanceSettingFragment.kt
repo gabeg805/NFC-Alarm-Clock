@@ -1,6 +1,5 @@
 package com.nfcalarmclock.settings
 
-import android.os.Build
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
@@ -47,11 +46,8 @@ class NacAppearanceSettingFragment
 	 */
 	override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?)
 	{
-		// Check if should set device protected storage as the storage location to use
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-		{
-			preferenceManager.setStorageDeviceProtected()
-		}
+		// Set device protected storage as the storage location to use
+		preferenceManager.setStorageDeviceProtected()
 
 		// Initialize the color settings
 		init()

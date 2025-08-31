@@ -11,7 +11,6 @@ import android.view.inputmethod.InputMethodManager
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
-import com.nfcalarmclock.alarm.options.name.NacNameDialog.OnNameEnteredListener
 import com.nfcalarmclock.view.dialog.NacDialogFragment
 import com.nfcalarmclock.view.setupInputLayoutColor
 

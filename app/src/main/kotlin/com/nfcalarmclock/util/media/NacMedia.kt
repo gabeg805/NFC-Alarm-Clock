@@ -1,6 +1,5 @@
 package com.nfcalarmclock.util.media
 
-import android.annotation.TargetApi
 import android.content.Context
 import android.database.Cursor
 import android.media.MediaMetadataRetriever
@@ -10,6 +9,7 @@ import android.os.Build
 import android.os.storage.StorageManager
 import android.provider.MediaStore
 import android.provider.OpenableColumns
+import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.nfcalarmclock.R
@@ -88,7 +88,7 @@ fun copyDocumentToDeviceEncryptedStorageAndCheckMetadata(context: Context, docum
 	return if (status)
 	{
 		// Successful
-		Uri.parse(localMediaPath)
+		localMediaPath.toUri()
 	}
 	else
 	{
@@ -231,7 +231,7 @@ fun copyMediaToDeviceEncryptedStorage(
 	val deviceContext = getDeviceProtectedStorageContext(context)
 
 	// Build the destination uri
-	val dstUri = Uri.parse("${deviceContext.filesDir}/$dstName")
+	val dstUri = "${deviceContext.filesDir}/$dstName".toUri()
 
 	try
 	{
@@ -275,7 +275,7 @@ fun copyMediaToDeviceEncryptedStorage(
 
 	// Get the source and destination files
 	val localMediaPath = buildLocalMediaPath(deviceContext, artist, title, type)
-	val srcUri = Uri.parse(path)
+	val srcUri = path.toUri()
 	val dstFile = File(localMediaPath)
 
 	// Check if the file already exists or if the media is a type that should not be copied
@@ -299,7 +299,7 @@ fun copyMediaToDeviceEncryptedStorage(
 fun findFirstValidLocalMedia(deviceContext: Context, localUri: Uri): Uri?
 {
 	val uri = deviceContext.filesDir.listFiles()
-		?.map { Uri.parse(it.path) }
+		?.map { it.path.toUri() }
 		?.find { (it.compareTo(localUri) != 0) && it.isMediaValid(deviceContext) }
 
 	return uri
@@ -343,7 +343,7 @@ private fun parseMediaDuration(millis: String): String
 				minutes, seconds)
 		}
 	}
-	catch (e: NumberFormatException)
+	catch (_: NumberFormatException)
 	{
 		println("NacMedia : getDuration : NumberFormatException!")
 		""
@@ -379,7 +379,6 @@ fun Uri.getMediaArtist(
  *
  * @return The duration of the track.
  */
-@TargetApi(Build.VERSION_CODES.Q)
 fun Uri.getMediaDuration(context: Context): String
 {
 	// Check if API is too old or does not start with "content://"
@@ -422,7 +421,6 @@ fun Uri.getMediaName(context: Context): String
  *
  * @return The relative path of the media.
  */
-@TargetApi(Build.VERSION_CODES.Q)
 fun Uri.getMediaRelativePath(context: Context): String
 {
 	// Check if the URI does not start with "content://"
@@ -523,7 +521,6 @@ fun Uri.getMediaType(context: Context): Int
  *
  * @return The volume name of the media.
  */
-@TargetApi(Build.VERSION_CODES.Q)
 fun Uri.getMediaVolumeName(context: Context): String
 {
 	// Check if the URI does not start with "content://"
@@ -944,11 +941,11 @@ object NacMedia
 		{
 			ringtoneManager.cursor
 		}
-		catch (ignored: IllegalArgumentException)
+		catch (_: IllegalArgumentException)
 		{
 			null
 		}
-		catch (ignored: NullPointerException)
+		catch (_: NullPointerException)
 		{
 			null
 		}

@@ -1,7 +1,6 @@
 package com.nfcalarmclock.alarm.options.mediapicker.music
 
 import android.content.ActivityNotFoundException
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -14,6 +13,7 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
@@ -30,10 +30,12 @@ import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.addMediaInfo
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
+import com.nfcalarmclock.util.media.NacMedia
 import com.nfcalarmclock.util.media.copyDocumentToDeviceEncryptedStorageAndCheckMetadata
+import com.nfcalarmclock.util.media.directQueryMediaMetadata
+import com.nfcalarmclock.util.media.doesDeviceHaveFreeSpace
 import com.nfcalarmclock.util.media.getMediaName
 import com.nfcalarmclock.util.media.getMediaRelativePath
-import com.nfcalarmclock.util.media.doesDeviceHaveFreeSpace
 import com.nfcalarmclock.util.media.isLocalMediaPath
 import com.nfcalarmclock.util.media.isMediaDirectory
 import com.nfcalarmclock.util.media.isMediaFile
@@ -142,7 +144,7 @@ class NacMusicPickerFragment
 		var name = ""
 
 		// Get the uri
-		val uri = Uri.parse(mediaPath)
+		val uri = mediaPath.toUri()
 
 		// Check if local media path
 		if (uri.isLocalMediaPath(context))
@@ -291,7 +293,7 @@ class NacMusicPickerFragment
 	override fun onOkClicked()
 	{
 		// Get the media path as a uri
-		val uri = Uri.parse(mediaPath)
+		val uri = mediaPath.toUri()
 
 		// Check if the a directory was selected. If so, show a warning.
 		// The path has already been set in onBrowserClicked() so nothing
@@ -301,6 +303,15 @@ class NacMusicPickerFragment
 			showWarningDirectorySelected()
 			return
 		}
+
+		// Query the file for metadata
+		val (artist, title) = uri.directQueryMediaMetadata()
+
+		// Set the media information
+		mediaArtist = artist
+		mediaTitle = title
+		mediaType = NacMedia.TYPE_FILE
+		localMediaPath = mediaPath
 
 		// Super
 		super.onOkClicked()

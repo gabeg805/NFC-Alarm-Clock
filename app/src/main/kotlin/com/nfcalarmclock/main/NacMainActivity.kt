@@ -7,8 +7,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.drawable.InsetDrawable
-import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Parcelable
 import android.text.format.DateFormat
@@ -22,7 +22,10 @@ import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.view.MenuCompat
+import androidx.core.view.isNotEmpty
+import androidx.core.view.size
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.fragment.NavHostFragment
@@ -93,6 +96,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.Calendar
+import androidx.core.view.get
 
 /**
  * The application's main activity.
@@ -501,7 +505,7 @@ class NacMainActivity
 			.forEach { alarm ->
 
 				// Get the media uri
-				val uri = Uri.parse(alarm.mediaPath)
+				val uri = alarm.mediaPath.toUri()
 
 				// Update the alarm
 				alarm.mediaArtist = uri.getMediaArtist(this)
@@ -594,6 +598,7 @@ class NacMainActivity
 
 		// Set the content view
 		setContentView(R.layout.act_main)
+		println(Environment.getExternalStorageDirectory().path)
 
 		// Set member variables
 		sharedPreferences = NacSharedPreferences(this)
@@ -733,6 +738,9 @@ class NacMainActivity
 			val activeAlarm = alarmViewModel.getActiveAlarm()
 
 			// Check if the active alarm is not null
+			// TODO: Add print statements to see what a normal intent should look like
+			// here and then add checks to make sure it is safe to pass into these start
+			// activity/service functions
 			if (activeAlarm != null)
 			{
 
@@ -1005,7 +1013,7 @@ class NacMainActivity
 			// Check if it has already been created. Saw double the menu items one
 			// time, but cannot seem to replicate it. Adding a check just to avoid
 			// this happening in production
-			if (menu.size() > 0)
+			if (menu.isNotEmpty())
 			{
 				return@setOnCreateContextMenuListener
 			}
@@ -1020,10 +1028,10 @@ class NacMainActivity
 			val alarm = card.alarm!!
 
 			// Iterate over each menu item
-			for (i in 0 until menu.size())
+			for (i in 0 until menu.size)
 			{
 				// Get the menu item
-				val item = menu.getItem(i)
+				val item = menu[i]
 
 				// Check the ID of the menu item
 				when (item.itemId)
@@ -1508,10 +1516,8 @@ class NacMainActivity
 			// Check if nothing has been created
 			if (statisticViewModel.createdCount() == 0L)
 			{
-				// Iterate over each alarm
-				for (a in alarms)
-				{
-					// Add a created alarm row to the table
+				// Add a created alarm row to the table for each alarm
+				alarms.forEach { _ ->
 					statisticViewModel.insertCreated()
 				}
 			}

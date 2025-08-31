@@ -9,6 +9,7 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.view.getCheckedText
+import androidx.core.view.isNotEmpty
 
 /**
  * A way for users to select the audio source that the alarm media should
@@ -59,7 +60,7 @@ class NacAudioSourceDialog
 	private fun setupAudioSources(default: String)
 	{
 		// No audio sources to setup
-		if (radioGroup.childCount > 0)
+		if (radioGroup.isNotEmpty())
 		{
 			return
 		}

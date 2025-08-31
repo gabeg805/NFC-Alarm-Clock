@@ -2,22 +2,28 @@ package com.nfcalarmclock.alarm.options.mediapicker.ringtone
 
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.util.media.NacMedia
 import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerFragment
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.addMediaInfo
+import com.nfcalarmclock.util.getDeviceProtectedStorageContext
+import com.nfcalarmclock.util.media.NacMedia
+import com.nfcalarmclock.util.media.buildLocalMediaPath
+import com.nfcalarmclock.util.media.copyMediaToDeviceEncryptedStorage
+import com.nfcalarmclock.util.media.doesDeviceHaveFreeSpace
+import com.nfcalarmclock.util.media.getMediaArtist
+import com.nfcalarmclock.util.media.getMediaTitle
 
 /**
  * Display a dialog that shows a list of alarm ringtones.
@@ -56,7 +62,7 @@ class NacRingtonePickerFragment
 		button.setOnClickListener {
 
 			// Get the URI
-			val uri = Uri.parse(path)
+			val uri = path.toUri()
 
 			// Play the media at the URI
 			play(uri)
@@ -85,6 +91,40 @@ class NacRingtonePickerFragment
 		savedInstanceState: Bundle?): View?
 	{
 		return inflater.inflate(R.layout.frg_ringtone, container, false)
+	}
+
+	/**
+	 * Called when the Ok button is clicked.
+	 */
+	override fun onOkClicked()
+	{
+		// Get the activity and the device protected storage context
+		val activity = requireActivity()
+		val deviceContext = getDeviceProtectedStorageContext(activity)
+
+		// Get the URI from the path
+		val uri = mediaPath.toUri()
+
+		// Set the media information
+		mediaArtist = uri.getMediaArtist(deviceContext)
+		mediaTitle = uri.getMediaTitle(deviceContext)
+		mediaType = NacMedia.TYPE_RINGTONE
+		localMediaPath = buildLocalMediaPath(deviceContext, mediaArtist, mediaTitle, mediaType)
+
+		// Check if there is enough free space
+		if (doesDeviceHaveFreeSpace(deviceContext))
+		{
+			// Copy the media to the local files/ directory
+			copyMediaToDeviceEncryptedStorage(deviceContext, mediaPath, mediaArtist,
+				mediaTitle, mediaType)
+		}
+		else
+		{
+			println("Not enough space to make a backup!")
+		}
+
+		// Super
+		super.onOkClicked()
 	}
 
 	/**

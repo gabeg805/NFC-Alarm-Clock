@@ -3,7 +3,6 @@ package com.nfcalarmclock.shared
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
-import android.os.Build
 import android.view.Gravity
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
@@ -15,6 +14,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
 import java.util.Calendar
+import androidx.core.content.edit
 
 /**
  * Container for the values of each preference.
@@ -2302,9 +2302,9 @@ class NacSharedPreferences(context: Context)
 	 */
 	private fun saveBoolean(key: String, value: Boolean)
 	{
-		instance.edit()
-			.putBoolean(key, value)
-			.apply()
+		instance.edit {
+			putBoolean(key, value)
+		}
 	}
 
 	/**
@@ -2312,9 +2312,9 @@ class NacSharedPreferences(context: Context)
 	 */
 	private fun saveFloat(key: String, value: Float)
 	{
-		instance.edit()
-			.putFloat(key, value)
-			.apply()
+		instance.edit {
+			putFloat(key, value)
+		}
 	}
 
 	/**
@@ -2322,9 +2322,9 @@ class NacSharedPreferences(context: Context)
 	 */
 	private fun saveInt(key: String, value: Int)
 	{
-		instance.edit()
-			.putInt(key, value)
-			.apply()
+		instance.edit {
+			putInt(key, value)
+		}
 	}
 
 	/**
@@ -2332,9 +2332,9 @@ class NacSharedPreferences(context: Context)
 	 */
 	private fun saveLong(key: String, value: Long)
 	{
-		instance.edit()
-			.putLong(key, value)
-			.apply()
+		instance.edit {
+			putLong(key, value)
+		}
 	}
 
 	/**
@@ -2374,9 +2374,9 @@ class NacSharedPreferences(context: Context)
 	 */
 	private fun saveString(key: String, value: String?)
 	{
-		instance.edit()
-			.putString(key, value)
-			.apply()
+		instance.edit {
+			putString(key, value)
+		}
 	}
 
 	/**
@@ -2438,31 +2438,22 @@ class NacSharedPreferences(context: Context)
 		 */
 		fun moveToDeviceProtectedStorage(context: Context): Boolean
 		{
-			// Check if shared preferences should be moved to device protected storage
-			return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+			// Get default shared preferences file name
+			val name = "${context.packageName}_preferences"
+			val file = File("${context.dataDir}/shared_prefs/${name}.xml")
+
+			// Check if the file exists
+			return if (file.exists())
 			{
-				// Get default shared preferences file name
-				val name = "${context.packageName}_preferences"
-				val file = File("${context.dataDir}/shared_prefs/${name}.xml")
+				// Get device protected storage context
+				val deviceContext = context.createDeviceProtectedStorageContext()
 
-				// Check if the file exists
-				if (file.exists())
-				{
-					// Get device protected storage context
-					val deviceContext = context.createDeviceProtectedStorageContext()
-
-					// Move shared preferences to device encrypted storage
-					deviceContext.moveSharedPreferencesFrom(context, name)
-				}
-				else
-				{
-					// No need to move shared preferences because it has already been moved
-					false
-				}
+				// Move shared preferences to device encrypted storage
+				deviceContext.moveSharedPreferencesFrom(context, name)
 			}
 			else
 			{
-				// Device does not support direct boot
+				// No need to move shared preferences because it has already been moved
 				false
 			}
 		}

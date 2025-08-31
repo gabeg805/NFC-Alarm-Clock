@@ -74,11 +74,8 @@
 	<string name="action_alarm_option_flashlight">Flach</string>
 	<string name="action_alarm_option_text_to_speech">Tèks-a-lapawòl</string>
 	<string name="action_alarm_option_volume">Volim</string>
-	<string name="action_alarm_option_dismiss_options">Rejte opsyon</string>
-	<string name="action_alarm_option_snooze_options">Opsyon snooze</string>
 	<string name="action_alarm_option_upcoming_reminder">Rapèl kap vini</string>
 	<string name="action_delete_alarm_after_dismissed">Efase apre ranvwaye</string>
-	<string name="action_skipping_next_alarm">Sote pwochen alam</string>
 	<string name="action_skip_next_alarm">Sote pwochen alam</string>
 	<string name="action_unskip_next_alarm">Retire alam kap vini an</string>
 	<string name="action_export">Ekspòtasyon</string>
@@ -206,7 +203,6 @@
 	<string name="title_delete_nfc_tag">Efase tag NFC</string>
 	<string name="title_rename_nfc_tag">Chanje non tag NFC</string>
 	<string name="title_current_selected">Kouran chwazi</string>
-	<string name="title_select_days">Chwazi jou</string>
 	<string name="title_select_color">Chwazi yon koulè</string>
 	<string name="title_select_next_alarm_format">Chwazi yon fòma</string>
 	<string name="title_folder_selected">Ou chwazi yon katab</string>
@@ -263,8 +259,6 @@
 	<string name="title_alarm_repeat">Repete</string>
 	<string name="title_alarm_nfc">NFC</string>
 	<string name="title_alarm_vibrate">Vibre</string>
-	<string name="title_alarm_sound">Son</string>
-	<string name="title_alarm_volume">Volim</string>
 	<string name="title_alarm_screen">Ekran alam</string>
 	<string name="title_colors">Koulè</string>
 	<string name="title_notifications">Notifikasyon</string>
@@ -287,7 +281,6 @@
 	<string name="title_only_show_app_alarms">Montre sèlman alam aplikasyon yo</string>
 
 	<!-- Descriptions -->
-	<string name="description_scan_nfc">Eskane NFC</string>
 	<string name="description_slide_to_snooze">Glise pou snooze</string>
 	<string name="description_slide_to_dismiss">Glise pou ranvwaye</string>
 	<string name="description_alarm_activity">Eskane tag NFC pou ranvwaye alam la.</string>
@@ -328,15 +321,6 @@
 	<string name="description_setting_manage_nfc_tags">Efase oswa chanje non tag NFC ki te sove yo</string>
 	<string name="description_setting_support">Sipò ta ap apresye anpil, men pa gen presyon! Aplikasyon sa a ap toujou gratis</string>
 	<string name="description_setting_import_export">Enpòte oswa ekspòte tout done ou sove yo</string>
-	<string name="description_alarm_repeat_true">Repete alam la.</string>
-	<string name="description_alarm_repeat_false">Enfim alam la apre li fin kouri.</string>
-	<string name="description_alarm_vibrate_true">Vibre telefòn nan.</string>
-	<string name="description_alarm_vibrate_false">Pa vibre telefòn nan.</string>
-	<string name="description_alarm_nfc_true">NFC yo itilize pou ranvwaye alam la.</string>
-	<string name="description_alarm_nfc_false">Rejte alam la nòmalman.</string>
-	<string name="description_alarm_flashlight_true">Limen flach la lè alam la sonnen.</string>
-	<string name="description_alarm_flashlight_false">Pa limen flach la lè alam la sonnen.</string>
-	<string name="description_alarm_sound">@string/none</string>
 	<string name="description_use_new_screen_true">Sèvi ak nouvo ekran alam la, kote ou glise pou snooze oswa ranvwaye alam la.</string>
 	<string name="description_use_new_screen_false">Pa sèvi ak nouvo ekran alam la. Sèvi ak ekran orijinal la ak bouton senp pou snooze oswa ranvwaye alam la.</string>
 	<string name="description_alarm_screen_show_alarm_name_true">Montre non alam la nan ekran alam la.</string>
@@ -388,7 +372,6 @@
 	<string name="cd_nfc_tag_list">Lis tags NFC yo pral montre isit la.</string>
 	<string name="cd_fab_add_alarm">Ajoute yon nouvo alam.</string>
 	<string name="cd_fab_launch_system_file_browser">Lanse navigatè dosye sistèm lan.</string>
-	<string name="cd_collapse_alarm">Tonbe yon alam.</string>
 	<string name="cd_expand_alarm">Elaji yon alam.</string>
 	<string name="cd_volume_icon">Chanje volim yon alam.</string>
 	<string name="cd_volume_slider">Glise pou chanje volim yon alam.</string>

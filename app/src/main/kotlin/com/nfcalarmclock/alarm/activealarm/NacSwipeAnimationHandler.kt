@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.addListener
 import com.nfcalarmclock.R
 import kotlin.math.hypot
+import androidx.core.view.isGone
 
 /**
  * Animator to guide how the user should swipe and interact with the view.
@@ -181,7 +182,7 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 	fun hideInactiveView(inactiveView: View)
 	{
 		// Check if the view visibility is gone
-		if (inactiveView.visibility == View.GONE)
+		if (inactiveView.isGone)
 		{
 			// Do nothing
 			return
@@ -295,7 +296,7 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 	fun showInactiveView(inactiveView: View, onEnd: () -> Unit = {})
 	{
 		// Check if the view visibility is gone
-		if (inactiveView.visibility == View.GONE)
+		if (inactiveView.isGone)
 		{
 			// Call onEnd() right away
 			onEnd()
@@ -320,7 +321,7 @@ class NacSwipeAnimationHandler(activity: AppCompatActivity)
 			// Create the animator for this view. The start radius is 0.
 			anim = ViewAnimationUtils.createCircularReveal(inactiveView, cx, cy, 0f, finalRadius)
 		}
-		catch (e: IllegalStateException)
+		catch (_: IllegalStateException)
 		{
 			return
 		}

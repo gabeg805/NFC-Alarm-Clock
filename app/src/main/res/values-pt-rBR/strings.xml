@@ -74,11 +74,8 @@
 	<string name="action_alarm_option_flashlight">Lanterna</string>
 	<string name="action_alarm_option_text_to_speech">Conversão de texto em fala</string>
 	<string name="action_alarm_option_volume">Volume</string>
-	<string name="action_alarm_option_dismiss_options">Descartar opções</string>
-	<string name="action_alarm_option_snooze_options">Opções de soneca</string>
 	<string name="action_alarm_option_upcoming_reminder">Próximo lembrete</string>
 	<string name="action_delete_alarm_after_dismissed">Excluir após dispensado</string>
-	<string name="action_skipping_next_alarm">Ignorando o próximo alarme</string>
 	<string name="action_skip_next_alarm">Pular próximo alarme</string>
 	<string name="action_unskip_next_alarm">Despular próximo alarme</string>
 	<string name="action_export">Exportar</string>
@@ -206,7 +203,6 @@
 	<string name="title_delete_nfc_tag">Excluir etiqueta NFC</string>
 	<string name="title_rename_nfc_tag">Renomear etiqueta NFC</string>
 	<string name="title_current_selected">Selecionado atualmente</string>
-	<string name="title_select_days">Selecione os dias</string>
 	<string name="title_select_color">Selecione uma cor</string>
 	<string name="title_select_next_alarm_format">Selecione um formato</string>
 	<string name="title_folder_selected">Você selecionou uma pasta</string>
@@ -263,8 +259,6 @@
 	<string name="title_alarm_repeat">Repita</string>
 	<string name="title_alarm_vibrate">Vibrar</string>
 	<string name="title_alarm_nfc">NFC</string>
-	<string name="title_alarm_sound">Som</string>
-	<string name="title_alarm_volume">Volume</string>
 	<string name="title_alarm_screen">Tela de alarme</string>
 	<string name="title_colors">Cores</string>
 	<string name="title_notifications">Notificações</string>
@@ -287,7 +281,6 @@
 	<string name="title_only_show_app_alarms">Mostrar apenas alarmes de aplicativos</string>
 
 	<!-- Descriptions -->
-	<string name="description_scan_nfc">Digitalizar NFC</string>
 	<string name="description_slide_to_snooze">Deslize para adiar</string>
 	<string name="description_slide_to_dismiss">Deslize para descartar</string>
 	<string name="description_alarm_activity">Escaneie a etiqueta NFC para ignorar o alarme.</string>
@@ -328,15 +321,6 @@
 	<string name="description_setting_manage_nfc_tags">Excluir ou renomear tags NFC salvas</string>
 	<string name="description_setting_support">O suporte seria muito apreciado, mas sem pressão! Este aplicativo sempre será gratuito</string>
 	<string name="description_setting_import_export">Importe ou exporte todos os seus dados salvos</string>
-	<string name="description_alarm_repeat_true">Repita o alarme.</string>
-	<string name="description_alarm_repeat_false">Desative o alarme depois que ele for executado.</string>
-	<string name="description_alarm_vibrate_true">Vibrar o telefone.</string>
-	<string name="description_alarm_vibrate_false">Não vibre o telefone.</string>
-	<string name="description_alarm_nfc_true">O NFC é usado para ignorar o alarme.</string>
-	<string name="description_alarm_nfc_false">Descarte o alarme normalmente.</string>
-	<string name="description_alarm_flashlight_true">Ligue a lanterna quando o alarme disparar.</string>
-	<string name="description_alarm_flashlight_false">Não ligue a lanterna quando o alarme disparar.</string>
-	<string name="description_alarm_sound">@string/none</string>
 	<string name="description_use_new_screen_true">Use a nova tela de alarme, onde você desliza para adiar ou ignorar o alarme.</string>
 	<string name="description_use_new_screen_false">Não use a nova tela de alarme. Use a tela original com botões simples para adiar ou dispensar o alarme.</string>
 	<string name="description_alarm_screen_show_alarm_name_true">Mostrar o nome do alarme na tela de alarme.</string>
@@ -388,7 +372,6 @@
 	<string name="cd_nfc_tag_list">A lista de tags NFC será exibida aqui.</string>
 	<string name="cd_fab_add_alarm">Adicione um novo alarme.</string>
 	<string name="cd_fab_launch_system_file_browser">Inicie o navegador de arquivos do sistema.</string>
-	<string name="cd_collapse_alarm">Recolher um alarme.</string>
 	<string name="cd_expand_alarm">Expandir um alarme.</string>
 	<string name="cd_volume_icon">Alterar o volume de um alarme.</string>
 	<string name="cd_volume_slider">Deslize para alterar o volume de um alarme.</string>

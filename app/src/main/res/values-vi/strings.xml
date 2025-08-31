@@ -74,11 +74,8 @@
 	<string name="action_alarm_option_flashlight">Đèn pin</string>
 	<string name="action_alarm_option_text_to_speech">Chuyển văn bản thành giọng nói</string>
 	<string name="action_alarm_option_volume">Âm lượng</string>
-	<string name="action_alarm_option_dismiss_options">Loại bỏ tùy chọn</string>
-	<string name="action_alarm_option_snooze_options">Tùy chọn báo lại</string>
 	<string name="action_alarm_option_upcoming_reminder">Lời nhắc sắp tới</string>
 	<string name="action_delete_alarm_after_dismissed">Xóa sau khi đã xóa</string>
-	<string name="action_skipping_next_alarm">Bỏ qua báo thức tiếp theo</string>
 	<string name="action_skip_next_alarm">Bỏ qua báo thức tiếp theo</string>
 	<string name="action_unskip_next_alarm">Bỏ qua báo thức tiếp theo</string>
 	<string name="action_export">Xuất khẩu</string>
@@ -206,7 +203,6 @@
 	<string name="title_delete_nfc_tag">Xóa thẻ NFC</string>
 	<string name="title_rename_nfc_tag">Đổi tên thẻ NFC</string>
 	<string name="title_current_selected">Hiện tại đã chọn</string>
-	<string name="title_select_days">Chọn ngày</string>
 	<string name="title_select_color">Chọn một màu</string>
 	<string name="title_select_next_alarm_format">Chọn một định dạng</string>
 	<string name="title_folder_selected">Bạn đã chọn một thư mục</string>
@@ -263,8 +259,6 @@
 	<string name="title_alarm_repeat">Lặp lại</string>
 	<string name="title_alarm_nfc">NFC</string>
 	<string name="title_alarm_vibrate">Rung</string>
-	<string name="title_alarm_sound">Âm thanh</string>
-	<string name="title_alarm_volume">Âm lượng</string>
 	<string name="title_alarm_screen">Màn hình báo động</string>
 	<string name="title_colors">Màu sắc</string>
 	<string name="title_notifications">Thông báo</string>
@@ -287,7 +281,6 @@
 	<string name="title_only_show_app_alarms">Chỉ hiển thị báo thức ứng dụng</string>
 
 	<!-- Descriptions -->
-	<string name="description_scan_nfc">Quét NFC</string>
 	<string name="description_slide_to_snooze">Trượt để báo lại</string>
 	<string name="description_slide_to_dismiss">Trượt để loại bỏ</string>
 	<string name="description_alarm_activity">Quét thẻ NFC để loại bỏ cảnh báo.</string>
@@ -328,15 +321,6 @@
 	<string name="description_setting_manage_nfc_tags">Xóa hoặc đổi tên các thẻ NFC đã lưu</string>
 	<string name="description_setting_support">Hỗ trợ sẽ được đánh giá rất cao, nhưng không có áp lực! Ứng dụng này sẽ luôn miễn phí</string>
 	<string name="description_setting_import_export">Nhập hoặc xuất tất cả dữ liệu đã lưu của bạn</string>
-	<string name="description_alarm_repeat_true">Lặp lại báo động.</string>
-	<string name="description_alarm_repeat_false">Tắt báo thức sau khi nó được chạy.</string>
-	<string name="description_alarm_vibrate_true">Rung điện thoại.</string>
-	<string name="description_alarm_vibrate_false">Không rung điện thoại.</string>
-	<string name="description_alarm_nfc_true">NFC được sử dụng để loại bỏ báo động.</string>
-	<string name="description_alarm_nfc_false">Tắt báo động bình thường.</string>
-	<string name="description_alarm_flashlight_true">Bật đèn pin khi báo thức tắt.</string>
-	<string name="description_alarm_flashlight_false">Không bật đèn pin khi báo thức tắt.</string>
-	<string name="description_alarm_sound">@string/none</string>
 	<string name="description_use_new_screen_true">Sử dụng màn hình báo thức mới, nơi bạn vuốt để báo lại hoặc loại bỏ báo thức.</string>
 	<string name="description_use_new_screen_false">Không sử dụng màn hình báo động mới. Sử dụng màn hình gốc với các nút đơn giản để báo lại hoặc tắt báo thức.</string>
 	<string name="description_alarm_screen_show_alarm_name_true">Hiển thị tên cảnh báo trên màn hình cảnh báo.</string>
@@ -388,7 +372,6 @@
 	<string name="cd_nfc_tag_list">Danh sách các thẻ NFC sẽ được hiển thị ở đây.</string>
 	<string name="cd_fab_add_alarm">Thêm một báo động mới.</string>
 	<string name="cd_fab_launch_system_file_browser">Khởi chạy trình duyệt tập tin hệ thống.</string>
-	<string name="cd_collapse_alarm">Thu gọn một báo động.</string>
 	<string name="cd_expand_alarm">Mở rộng cảnh báo.</string>
 	<string name="cd_volume_icon">Thay đổi âm lượng của báo thức.</string>
 	<string name="cd_volume_slider">Trượt để thay đổi âm lượng báo thức.</string>

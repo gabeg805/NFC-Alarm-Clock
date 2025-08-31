@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.res.ColorStateList
-import android.net.Uri
 import android.text.format.DateFormat
 import android.view.MotionEvent
 import android.view.VelocityTracker
@@ -19,6 +18,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.net.toUri
 import androidx.dynamicanimation.animation.DynamicAnimation
 import androidx.dynamicanimation.animation.FlingAnimation
 import com.nfcalarmclock.R
@@ -445,7 +445,7 @@ class NacSwipeLayoutHandler(
 			{
 				start()
 			}
-			catch (e: IllegalArgumentException)
+			catch (_: IllegalArgumentException)
 			{
 				// Starting value need to be in between min value and max value
 				//
@@ -798,7 +798,7 @@ class NacSwipeLayoutHandler(
 
 		// Get the title and artist of the media
 		val deviceContext = getDeviceProtectedStorageContext(context)
-		val mediaUri = Uri.parse(mediaPath)
+		val mediaUri = mediaPath.toUri()
 		val title: String
 		val artist: String
 

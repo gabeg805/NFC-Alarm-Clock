@@ -195,7 +195,7 @@ class NacSupportSetting(
 	 * Note: This is part of ProductDetailsResponseListener.
 	 *
 	 * @param billingResult Billing result.
-	 * @param productDetailsList List of product details.
+	 * @param productDetailsResult Result of product details query.
 	 */
 	override fun onProductDetailsResponse(billingResult: BillingResult,
 		productDetailsResult: QueryProductDetailsResult

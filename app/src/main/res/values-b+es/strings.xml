@@ -74,11 +74,8 @@
 	<string name="action_alarm_option_flashlight">Linterna</string>
 	<string name="action_alarm_option_text_to_speech">Texto-a-voz</string>
 	<string name="action_alarm_option_volume">Volumen</string>
-	<string name="action_alarm_option_dismiss_options">Descartar opciones</string>
-	<string name="action_alarm_option_snooze_options">Posponer opciones</string>
 	<string name="action_alarm_option_upcoming_reminder">Próximo recordatorio</string>
 	<string name="action_delete_alarm_after_dismissed">Eliminar después de descartar</string>
-	<string name="action_skipping_next_alarm">Saltar la siguiente alarma</string>
 	<string name="action_skip_next_alarm">Saltar la siguiente alarma</string>
 	<string name="action_unskip_next_alarm">Dejar de omitir la siguiente alarma</string>
 	<string name="action_export">Exportar</string>
@@ -206,7 +203,6 @@
 	<string name="title_delete_nfc_tag">Eliminar la etiqueta NFC</string>
 	<string name="title_rename_nfc_tag">Cambiar el nombre de la etiqueta NFC</string>
 	<string name="title_current_selected">Seleccionado actualmente</string>
-	<string name="title_select_days">Seleccione los días</string>
 	<string name="title_select_color">Elige un color</string>
 	<string name="title_select_next_alarm_format">Selecciona un estilo</string>
 	<string name="title_folder_selected">Seleccionaste una carpeta</string>
@@ -263,8 +259,6 @@
 	<string name="title_alarm_repeat">Repetir</string>
 	<string name="title_alarm_nfc">NFC</string>
 	<string name="title_alarm_vibrate">Vibra</string>
-	<string name="title_alarm_sound">Sonido</string>
-	<string name="title_alarm_volume">Volumen</string>
 	<string name="title_alarm_screen">Pantalla de alarma</string>
 	<string name="title_colors">Colores</string>
 	<string name="title_notifications">Notificaciones</string>
@@ -287,7 +281,6 @@
 	<string name="title_only_show_app_alarms">Mostrar solo alarmas de aplicaciones</string>
 
 	<!-- Descriptions -->
-	<string name="description_scan_nfc">Escanear NFC</string>
 	<string name="description_slide_to_snooze">Deslizar para posponer</string>
 	<string name="description_slide_to_dismiss">Deslizar para descartar</string>
 	<string name="description_alarm_activity">Escanea una etiqueta de NFC para descartar la alarma.</string>
@@ -328,15 +321,6 @@
 	<string name="description_setting_manage_nfc_tags">Eliminar o cambiar el nombre de las etiquetas NFC guardadas</string>
 	<string name="description_setting_support">Se agradecería mucho el apoyo, ¡pero no hay presión! Esta aplicación siempre será gratis</string>
 	<string name="description_setting_import_export">Importa o exporta todos tus datos guardados</string>
-	<string name="description_alarm_repeat_true">Repetir la alarma.</string>
-	<string name="description_alarm_repeat_false">Deshabilitar la alarma después de se ejecucion.</string>
-	<string name="description_alarm_vibrate_true">Vibra el telefono.</string>
-	<string name="description_alarm_vibrate_false">Que no vibre el telefono.</string>
-	<string name="description_alarm_nfc_true">NFC es requerido para desactivar la alarma.</string>
-	<string name="description_alarm_nfc_false">Desactivar la alarma normalmente.</string>
-	<string name="description_alarm_flashlight_true">Enciende la linterna cuando suene la alarma.</string>
-	<string name="description_alarm_flashlight_false">No encienda la linterna cuando suene la alarma.</string>
-	<string name="description_alarm_sound">@string/none</string>
 	<string name="description_use_new_screen_true">Utilice la nueva pantalla de alarma, donde desliza el dedo para posponero descartar la alarma.</string>
 	<string name="description_use_new_screen_false">No utilice la nueva pantalla de alarma. Utilice la pantalla original con botones simples para posponer o descartar la alarma.</string>
 	<string name="description_alarm_screen_show_alarm_name_true">Muestra el nombre de la alarma en la pantalla de alarma.</string>
@@ -388,7 +372,6 @@
 	<string name="cd_nfc_tag_list">Aquí se mostrará la lista de etiquetas NFC.</string>
 	<string name="cd_fab_add_alarm">Crear una nueva alarma.</string>
 	<string name="cd_fab_launch_system_file_browser">Inicie el explorador de archivos del sistema.</string>
-	<string name="cd_collapse_alarm">Colapsar una alarma.</string>
 	<string name="cd_expand_alarm">Ampliar una alarma.</string>
 	<string name="cd_volume_icon">Cambiar el volumen de una alarma.</string>
 	<string name="cd_volume_slider">Desliza para cambiar el volumen de una alarma.</string>

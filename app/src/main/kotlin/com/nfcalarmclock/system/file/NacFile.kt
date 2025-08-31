@@ -1,7 +1,9 @@
 package com.nfcalarmclock.system.file
 
+import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.net.Uri
+import android.os.Environment
 import android.provider.MediaStore
 import java.util.UnknownFormatConversionException
 
@@ -142,7 +144,8 @@ object NacFile
 	 *
 	 * @param  path  Path to a file or directory.
 	 */
-	fun toRelativePath(path: String?): String
+    @SuppressLint("SdCardPath")
+    fun toRelativePath(path: String?): String
 	{
 		// Check if path is empty
 		if (path.isNullOrEmpty())
@@ -151,9 +154,10 @@ object NacFile
 		}
 
 		// Define fixed paths
-		val emulated = "/storage/emulated/0"
-		val sdcard = "/sdcard"
+		//val emulated = "/storage/emulated/0"
 		//val sdcard = Environment.getExternalStorageDirectory().path
+		val emulated = Environment.getExternalStorageDirectory().path
+		val sdcard = "/sdcard"
 
 		// Initialize relative path
 		var relativePath: String = path
@@ -228,7 +232,7 @@ object NacFile
 						// Return the path with the directory and name
 						"${directory}/${name}"
 					}
-					catch (e: UnknownFormatConversionException)
+					catch (_: UnknownFormatConversionException)
 					{
 						// Unable to convert the path so return an empty string
 						""

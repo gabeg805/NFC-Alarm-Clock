@@ -13,7 +13,6 @@ import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
 import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
 import com.nfcalarmclock.view.toThemedBold
-import com.nfcalarmclock.whatsnew.NacWhatsNewDialog.OnReadWhatsNewListener
 
 /**
  * Show what is new with the app after an update.

@@ -1,6 +1,5 @@
 package com.nfcalarmclock.alarm.options.vibrate
 
-import android.annotation.TargetApi
 import android.content.Context
 import android.os.Build
 import android.os.Handler
@@ -71,7 +70,6 @@ class NacVibrator(context: Context)
 	 * Do the vibration.
 	 */
 	@Suppress("deprecation")
-	@TargetApi(Build.VERSION_CODES.O)
 	private fun doVibrate(duration: Long)
 	{
 		// Cancel the previous vibration, if any

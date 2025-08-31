@@ -59,9 +59,9 @@ object NacAudioManager
 		val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
 		// Assume a result of FAILED
-		var result = AudioManager.AUDIOFOCUS_REQUEST_FAILED
+		var result: Int
 
-		// Build the audio request
+        // Build the audio request
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{
 			var builder = AudioFocusRequest.Builder(focusGainType)
@@ -81,13 +81,19 @@ object NacAudioManager
 		else
 		{
 			// Get the stream the request is for
-			val stream = attrs.stream
-
-			// Request focus when the stream is NOT the default type
-			if (stream != AudioManager.USE_DEFAULT_STREAM_TYPE)
+			val stream = if (attrs.stream == AudioManager.USE_DEFAULT_STREAM_TYPE)
 			{
-				result = audioManager.requestAudioFocus(listener, stream, focusGainType)
+				// Stream has not been set. Must be set before requesting focus. Use music
+				// stream by default
+				AudioManager.STREAM_MUSIC
 			}
+			else
+			{
+				attrs.stream
+			}
+
+			// Request focus
+			result = audioManager.requestAudioFocus(listener, stream, focusGainType)
 		}
 
 		// Check the result

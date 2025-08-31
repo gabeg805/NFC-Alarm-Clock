@@ -1,10 +1,10 @@
 package com.nfcalarmclock.alarm.options.upcomingreminder
 
-import android.annotation.TargetApi
 import android.app.NotificationChannel
 import android.app.PendingIntent
 import android.content.Context
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.nfcalarmclock.R
@@ -172,7 +172,7 @@ class NacUpcomingReminderNotification(
 	/**
 	 * @see NacNotification.createChannel
 	 */
-	@TargetApi(Build.VERSION_CODES.O)
+	@RequiresApi(Build.VERSION_CODES.O)
 	override fun createChannel(): NotificationChannel
 	{
 		// Create the channel

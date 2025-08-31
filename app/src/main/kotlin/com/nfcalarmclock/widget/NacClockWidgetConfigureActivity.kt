@@ -27,6 +27,7 @@ import com.nfcalarmclock.view.setupProgressAndThumbColor
 import com.nfcalarmclock.view.setupSwitchColor
 import com.nfcalarmclock.view.setupThemeColor
 import java.util.Calendar
+import androidx.core.view.isVisible
 
 /**
  * The configuration screen for the [NacClockWidgetProvider] AppWidget.
@@ -108,7 +109,7 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 	private fun getExpandCollapseChangeInfo(linearLayout: LinearLayout): Triple<Int, Int, Float>
 	{
 		// Check which visibility/drawable/alpha to change to given the current visibility
-		return if (linearLayout.visibility == View.VISIBLE)
+		return if (linearLayout.isVisible)
 		{
 			Triple(View.GONE, R.drawable.expand, 1f)
 		}

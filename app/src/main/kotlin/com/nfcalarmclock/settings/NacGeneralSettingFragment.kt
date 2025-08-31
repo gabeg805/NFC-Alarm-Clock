@@ -2,7 +2,6 @@ package com.nfcalarmclock.settings
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -60,11 +59,8 @@ class NacGeneralSettingFragment
 		// Get the device protected storage context, if available
 		val deviceContext = getDeviceProtectedStorageContext(requireContext())
 
-		// Check if should set device protected storage as the storage location to use
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-		{
-			preferenceManager.setStorageDeviceProtected()
-		}
+		// Set device protected storage as the storage location to use
+		preferenceManager.setStorageDeviceProtected()
 
 		// Inflate the XML file and add the hierarchy to the current preference
 		addPreferencesFromResource(R.xml.general_preferences)

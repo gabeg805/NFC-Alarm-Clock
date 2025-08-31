@@ -74,11 +74,8 @@
 	<string name="action_alarm_option_flashlight">टॉर्च</string>
 	<string name="action_alarm_option_text_to_speech">भाषण के पाठ</string>
 	<string name="action_alarm_option_volume">आयतन</string>
-	<string name="action_alarm_option_dismiss_options">विकल्प खारिज करें</string>
-	<string name="action_alarm_option_snooze_options">स्नूज़ विकल्प</string>
 	<string name="action_alarm_option_upcoming_reminder">आगामी अनुस्मारक</string>
 	<string name="action_delete_alarm_after_dismissed">खारिज करने के बाद हटाएं</string>
-	<string name="action_skipping_next_alarm">अगला अलार्म छोड़ना</string>
 	<string name="action_skip_next_alarm">अगला अलार्म छोड़ें</string>
 	<string name="action_unskip_next_alarm">अगला अलार्म अनस्किप करें</string>
 	<string name="action_export">निर्यात</string>
@@ -206,7 +203,6 @@
 	<string name="title_delete_nfc_tag">NFC टैग हटाएं</string>
 	<string name="title_rename_nfc_tag">NFC टैग का नाम बदलें</string>
 	<string name="title_current_selected">वर्तमान चयनित</string>
-	<string name="title_select_days">दिन चुनें</string>
 	<string name="title_select_color">एक रंग चुनें</string>
 	<string name="title_select_next_alarm_format">एक प्रारूप चुनें</string>
 	<string name="title_folder_selected">आपने एक फ़ोल्डर चुना</string>
@@ -263,8 +259,6 @@
 	<string name="title_alarm_repeat">दोहराना</string>
 	<string name="title_alarm_vibrate">कंपन</string>
 	<string name="title_alarm_nfc">एनएफसी</string>
-	<string name="title_alarm_sound">आवाज़</string>
-	<string name="title_alarm_volume">आयतन</string>
 	<string name="title_alarm_screen">अलार्म स्क्रीन</string>
 	<string name="title_colors">रंग</string>
 	<string name="title_notifications">सूचनाएं</string>
@@ -287,7 +281,6 @@
 	<string name="title_only_show_app_alarms">केवल ऐप अलार्म दिखाएं</string>
 
 	<!-- Descriptions -->
-	<string name="description_scan_nfc">एनएफसी स्कैन करें</string>
 	<string name="description_slide_to_snooze">स्नूज़ करने के लिए स्लाइड करें</string>
 	<string name="description_slide_to_dismiss">खारिज करने के लिए स्लाइड करें</string>
 	<string name="description_alarm_activity">अलार्म बंद करने के लिए NFC टैग को स्कैन करें।</string>
@@ -328,15 +321,6 @@
 	<string name="description_setting_manage_nfc_tags">सहेजे गए NFC टैग्स को हटाएं या उनका नाम बदलें</string>
 	<string name="description_setting_support">सहायता की बहुत सराहना की जाएगी, लेकिन कोई दबाव नहीं! यह ऐप हमेशा मुफ़्त रहेगा</string>
 	<string name="description_setting_import_export">अपना समस्त सहेजा गया डेटा आयात या निर्यात करें</string>
-	<string name="description_alarm_repeat_true">अलार्म दोहराएँ.</string>
-	<string name="description_alarm_repeat_false">अलार्म चलाने के बाद उसे अक्षम करें.</string>
-	<string name="description_alarm_vibrate_true">फ़ोन को कंपन करें.</string>
-	<string name="description_alarm_vibrate_false">फ़ोन को कंपन न करें.</string>
-	<string name="description_alarm_nfc_true">एनएफसी का उपयोग अलार्म को बंद करने के लिए किया जाता है।</string>
-	<string name="description_alarm_nfc_false">अलार्म को सामान्य रूप से बंद करें।</string>
-	<string name="description_alarm_flashlight_true">जब अलार्म बज जाए तो टॉर्च चालू कर दें।</string>
-	<string name="description_alarm_flashlight_false">अलार्म बजने पर टॉर्च न जलाएं।</string>
-	<string name="description_alarm_sound">@string/none</string>
 	<string name="description_use_new_screen_true">नई अलार्म स्क्रीन का उपयोग करें, जहां आप अलार्म को बंद करने या बंद करने के लिए स्वाइप कर सकते हैं।</string>
 	<string name="description_use_new_screen_false">नई अलार्म स्क्रीन का इस्तेमाल न करें। अलार्म को बंद करने या बंद करने के लिए साधारण बटन वाली मूल स्क्रीन का इस्तेमाल करें।</string>
 	<string name="description_alarm_screen_show_alarm_name_true">अलार्म स्क्रीन पर अलार्म का नाम दिखाएँ.</string>
@@ -388,7 +372,6 @@
 	<string name="cd_nfc_tag_list">एनएफसी टैग की सूची यहां दिखाई जाएगी।</string>
 	<string name="cd_fab_add_alarm">नया अलार्म जोड़ें.</string>
 	<string name="cd_fab_launch_system_file_browser">सिस्टम फ़ाइल ब्राउज़र लॉन्च करें.</string>
-	<string name="cd_collapse_alarm">अलार्म को संक्षिप्त करें.</string>
 	<string name="cd_expand_alarm">अलार्म का विस्तार करें.</string>
 	<string name="cd_volume_icon">अलार्म का वॉल्यूम बदलें.</string>
 	<string name="cd_volume_slider">अलार्म का वॉल्यूम बदलने के लिए स्लाइड करें।</string>

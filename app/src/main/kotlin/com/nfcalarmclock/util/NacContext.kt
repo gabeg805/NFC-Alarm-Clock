@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.core.os.UserManagerCompat
 import kotlinx.coroutines.CoroutineScope
@@ -61,8 +60,7 @@ fun disableActivityAlias(context: Context)
 fun isUserUnlocked(context: Context): Boolean
 {
 	// Check the status
-	return (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
-		|| UserManagerCompat.isUserUnlocked(context)
+	return UserManagerCompat.isUserUnlocked(context)
 }
 
 /**
@@ -72,42 +70,24 @@ fun isUserUnlocked(context: Context): Boolean
  */
 fun getDeviceProtectedStorageContext(context: Context, appContext: Boolean = false): Context
 {
-	// Check if device supports direct boot
-	return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+	// Check if context is already for device protected storage (used by direct boot)
+	return if (context.isDeviceProtectedStorage)
 	{
-		// Check if context is already for device protected storage (used by direct boot)
-		if (context.isDeviceProtectedStorage)
-		{
-			context
-		}
-		// Context is for normal credential storage
-		else
-		{
-			// Check if should get app context
-			if (appContext)
-			{
-				// Return device protected storage context with an app context
-				context.applicationContext.createDeviceProtectedStorageContext()
-			}
-			else
-			{
-				// Return device protected storage context
-				context.createDeviceProtectedStorageContext()
-			}
-		}
+		context
 	}
+	// Context is for normal credential storage
 	else
 	{
 		// Check if should get app context
 		if (appContext)
 		{
-			// Return app context
-			context.applicationContext
+			// Return device protected storage context with an app context
+			context.applicationContext.createDeviceProtectedStorageContext()
 		}
 		else
 		{
-			// Return context that was passed in
-			context
+			// Return device protected storage context
+			context.createDeviceProtectedStorageContext()
 		}
 	}
 }

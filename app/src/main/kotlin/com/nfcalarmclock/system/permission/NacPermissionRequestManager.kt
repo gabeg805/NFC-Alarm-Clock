@@ -3,7 +3,6 @@ package com.nfcalarmclock.system.permission
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.permission.NacPermissionRequestDialog.OnPermissionRequestListener
@@ -236,7 +235,6 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 	/**
 	 * Show the POST_NOTIFICATIONS permission dialog.
 	 */
-	@RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
 	fun showPostNotificationPermissionDialog(activity: AppCompatActivity, onDone: () -> Unit = {})
 	{
 		// Do nothing if an older version of Android is being used
@@ -281,7 +279,6 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 	/**
 	 * Show the dialog to request the schedule exact alarm permission.
 	 */
-	@RequiresApi(api = Build.VERSION_CODES.S)
 	fun showScheduleExactAlarmPermissionDialog(activity: AppCompatActivity, onDone: () -> Unit = {})
 	{
 		// Do nothing if an older version of Android is being used

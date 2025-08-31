@@ -3,7 +3,6 @@ package com.nfcalarmclock.db
 import android.annotation.SuppressLint
 import android.content.Context
 import android.database.sqlite.SQLiteConstraintException
-import android.os.Build
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.room.AutoMigration
 import androidx.room.Database
@@ -766,7 +765,7 @@ abstract class NacAlarmDatabase
 					// Check if this is a credential context. This means this is not a device
 					// protected storage context, so a valid context that could be used
 					// pre-direct boot
-					if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) && !context.isDeviceProtectedStorage)
+					if (!context.isDeviceProtectedStorage)
 					{
 						// Get the pre-direct boot database path
 						val file = context.getDatabasePath(DB_NAME)
@@ -793,7 +792,7 @@ abstract class NacAlarmDatabase
 							// Get the shared preferences
 							NacSharedPreferences(deviceContext)
 						}
-						catch (e: IllegalStateException)
+						catch (_: IllegalStateException)
 						{
 							// Bad state
 							null

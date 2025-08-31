@@ -1,12 +1,10 @@
 package com.nfcalarmclock.view
 
-import android.annotation.TargetApi
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
-import android.os.Build
 import android.text.Html
 import android.text.Spanned
 import android.view.HapticFeedbackConstants
@@ -62,18 +60,9 @@ fun calcContrastColor(color: Int): Int
 /**
  * Convert the given string to a spanned string.
  */
-@Suppress("deprecation")
-@TargetApi(Build.VERSION_CODES.N)
 fun String.toSpannedString(): Spanned
 {
-	return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-	{
-		Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
-	}
-	else
-	{
-		Html.fromHtml(this)
-	}
+	return Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
 }
 
 /**

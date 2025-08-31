@@ -1,19 +1,17 @@
 package com.nfcalarmclock.whatsnew
 
 import android.annotation.SuppressLint
-import android.os.Build
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
 import android.widget.TextView
-import androidx.core.view.marginTop
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nfcalarmclock.R
+import com.nfcalarmclock.view.toSpannedString
 
 /**
  * Generic message holder for the adapter.
@@ -88,14 +86,7 @@ class NacWhatsNewListAdapter
 				val textView = holder.itemView.findViewById<TextView>(R.id.whats_new_message)
 
 				// Set the text
-				textView.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-				{
-					Html.fromHtml(message, Html.FROM_HTML_MODE_LEGACY)
-				}
-				else
-				{
-					Html.fromHtml(message)
-				}
+				textView.text = message.toSpannedString()
 			}
 
 			// Version view type

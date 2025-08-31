@@ -1,5 +1,6 @@
 // Imports need to come first. Android Studio was showing syntax errors when
 // this was after plugins
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
 import java.io.FileInputStream
 
@@ -34,8 +35,8 @@ android {
 		applicationId = "com.nfcalarmclock"
 		minSdk = 24
 		targetSdk = 35
-		versionCode = 478
-		versionName = "12.6.0-beta001"
+		versionCode = 479
+		versionName = "12.6.0-beta002"
 
 		// Set output filename
 		setProperty("archivesBaseName", "nfc_alarm_clock_v${versionName}")
@@ -118,8 +119,10 @@ android {
 	}
 
 	// Set the same JVM version as the compile options
-	kotlinOptions {
-		jvmTarget = "17"
+	kotlin {
+		compilerOptions {
+			jvmTarget.set(JvmTarget.JVM_17)
+		}
 	}
 
 	// Lint setup

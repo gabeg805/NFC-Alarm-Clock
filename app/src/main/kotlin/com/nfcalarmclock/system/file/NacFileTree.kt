@@ -1,6 +1,5 @@
 package com.nfcalarmclock.system.file
 
-import android.annotation.TargetApi
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
@@ -20,7 +19,6 @@ class NacFileTree(path: String)
 	 *
 	 * @return The names of the columns that will be returned from the query.
 	 */
-	@get:TargetApi(Build.VERSION_CODES.Q)
 	private val queryColumns: Array<String>
 		get()
 		{
@@ -95,7 +93,7 @@ class NacFileTree(path: String)
 			c = context.contentResolver.query(collection, columns, null, null, sortOrder)
 		}
 		// Unable to query
-		catch (e: IllegalArgumentException)
+		catch (_: IllegalArgumentException)
 		{
 			// Try to query again without sorting?
 			try
@@ -103,7 +101,7 @@ class NacFileTree(path: String)
 				c = context.contentResolver.query(collection, columns, null, null, null)
 			}
 			// Unable to query
-			catch (ignored: IllegalArgumentException)
+			catch (_: IllegalArgumentException)
 			{
 			}
 		}
@@ -119,7 +117,6 @@ class NacFileTree(path: String)
 	 *
 	 * @param context The application context.
 	 */
-	@TargetApi(Build.VERSION_CODES.Q)
 	fun scan(context: Context)
 	{
 		// Get the query cursor or return if unable to do so

@@ -1,11 +1,11 @@
 package com.nfcalarmclock.alarm.activealarm
 
-import android.annotation.TargetApi
 import android.app.NotificationChannel
 import android.app.PendingIntent
 import android.content.Context
 import android.os.Build
 import androidx.annotation.OptIn
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.media3.common.util.UnstableApi
@@ -209,7 +209,7 @@ class NacActiveAlarmNotification(
 	/**
 	 * @see NacNotification.createChannel
 	 */
-	@TargetApi(Build.VERSION_CODES.O)
+	@RequiresApi(Build.VERSION_CODES.O)
 	override fun createChannel(): NotificationChannel
 	{
 		// Create the channel

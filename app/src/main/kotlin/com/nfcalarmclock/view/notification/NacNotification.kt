@@ -1,7 +1,6 @@
 package com.nfcalarmclock.view.notification
 
 import android.Manifest
-import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -9,6 +8,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -128,7 +128,6 @@ abstract class NacNotification(
 	/**
 	 * Build the notification.
 	 */
-	@TargetApi(Build.VERSION_CODES.N)
 	protected open fun builder(): NotificationCompat.Builder
 	{
 		// Create the builder
@@ -155,7 +154,7 @@ abstract class NacNotification(
 	/**
 	 * Create the notification channel.
 	 */
-	@TargetApi(Build.VERSION_CODES.O)
+	@RequiresApi(Build.VERSION_CODES.O)
 	protected open fun createChannel(): NotificationChannel
 	{
 		// Create the channel

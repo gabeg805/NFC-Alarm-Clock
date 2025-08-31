@@ -74,11 +74,8 @@
 	<string name="action_alarm_option_flashlight">টর্চলাইট</string>
 	<string name="action_alarm_option_text_to_speech">টেক্সট টু স্পিচ</string>
 	<string name="action_alarm_option_volume">আয়তন</string>
-	<string name="action_alarm_option_dismiss_options">অপশন খারিজ করুন</string>
-	<string name="action_alarm_option_snooze_options">স্নুজ বিকল্প</string>
 	<string name="action_alarm_option_upcoming_reminder">আসন্ন অনুস্মারক</string>
 	<string name="action_delete_alarm_after_dismissed">বরখাস্ত করার পরে মুছুন</string>
-	<string name="action_skipping_next_alarm">পরবর্তী অ্যালার্ম এড়িয়ে যাচ্ছে</string>
 	<string name="action_skip_next_alarm">পরবর্তী অ্যালার্ম এড়িয়ে যান</string>
 	<string name="action_unskip_next_alarm">পরবর্তী অ্যালার্ম বাদ দিন</string>
 	<string name="action_export">রপ্তানি</string>
@@ -206,7 +203,6 @@
 	<string name="title_delete_nfc_tag">NFC ট্যাগ মুছুন</string>
 	<string name="title_rename_nfc_tag">NFC ট্যাগের নাম পরিবর্তন করুন</string>
 	<string name="title_current_selected">বর্তমান নির্বাচিত</string>
-	<string name="title_select_days">দিন নির্বাচন করুন</string>
 	<string name="title_select_color">একটি রং নির্বাচন করুন</string>
 	<string name="title_select_next_alarm_format">একটি বিন্যাস নির্বাচন করুন</string>
 	<string name="title_folder_selected">আপনি একটি ফোল্ডার নির্বাচন করেছেন</string>
@@ -263,8 +259,6 @@
 	<string name="title_alarm_repeat">পুনরাবৃত্তি করুন</string>
 	<string name="title_alarm_vibrate">কম্পন</string>
 	<string name="title_alarm_nfc">এনএফসি</string>
-	<string name="title_alarm_sound">শব্দ</string>
-	<string name="title_alarm_volume">আয়তন</string>
 	<string name="title_alarm_screen">অ্যালার্ম স্ক্রীন</string>
 	<string name="title_colors">রং</string>
 	<string name="title_notifications">বিজ্ঞপ্তি</string>
@@ -287,7 +281,6 @@
 	<string name="title_only_show_app_alarms">শুধুমাত্র অ্যাপ অ্যালার্ম দেখান</string>
 
 	<!-- Descriptions -->
-	<string name="description_scan_nfc">NFC স্ক্যান করুন</string>
 	<string name="description_slide_to_snooze">স্নুজ করতে স্লাইড করুন</string>
 	<string name="description_slide_to_dismiss">খারিজ করতে স্লাইড করুন</string>
 	<string name="description_alarm_activity">অ্যালার্ম খারিজ করতে NFC ট্যাগ স্ক্যান করুন।</string>
@@ -328,15 +321,6 @@
 	<string name="description_setting_manage_nfc_tags">সংরক্ষিত NFC ট্যাগগুলি মুছুন বা পুনঃনামকরণ করুন৷</string>
 	<string name="description_setting_support">সমর্থন ব্যাপকভাবে প্রশংসা করা হবে, কিন্তু কোন চাপ! এই অ্যাপ্লিকেশন সবসময় বিনামূল্যে হবে</string>
 	<string name="description_setting_import_export">আপনার সমস্ত সংরক্ষিত ডেটা আমদানি বা রপ্তানি করুন</string>
-	<string name="description_alarm_repeat_true">অ্যালার্ম পুনরাবৃত্তি করুন।</string>
-	<string name="description_alarm_repeat_false">এটি চালানোর পরে অ্যালার্ম নিষ্ক্রিয় করুন।</string>
-	<string name="description_alarm_vibrate_true">ফোন ভাইব্রেট করুন।</string>
-	<string name="description_alarm_vibrate_false">ফোন ভাইব্রেট করবেন না।</string>
-	<string name="description_alarm_nfc_true">অ্যালার্ম খারিজ করতে NFC ব্যবহার করা হয়।</string>
-	<string name="description_alarm_nfc_false">সাধারণভাবে অ্যালার্ম খারিজ করুন।</string>
-	<string name="description_alarm_flashlight_true">অ্যালার্ম বন্ধ হয়ে গেলে ফ্ল্যাশলাইট চালু করুন।</string>
-	<string name="description_alarm_flashlight_false">অ্যালার্ম বন্ধ হয়ে গেলে ফ্ল্যাশলাইট চালু করবেন না।</string>
-	<string name="description_alarm_sound">@string/none</string>
 	<string name="description_use_new_screen_true">নতুন অ্যালার্ম স্ক্রীন ব্যবহার করুন, যেখানে আপনি অ্যালার্ম স্নুজ করতে বা খারিজ করতে সোয়াইপ করেন।</string>
 	<string name="description_use_new_screen_false">নতুন অ্যালার্ম স্ক্রিন ব্যবহার করবেন না। অ্যালার্ম স্নুজ বা খারিজ করতে সাধারণ বোতাম সহ আসল স্ক্রিনটি ব্যবহার করুন।</string>
 	<string name="description_alarm_screen_show_alarm_name_true">অ্যালার্ম স্ক্রিনে অ্যালার্মের নাম দেখান।</string>
@@ -388,7 +372,6 @@
 	<string name="cd_nfc_tag_list">NFC ট্যাগের তালিকা এখানে দেখানো হবে।</string>
 	<string name="cd_fab_add_alarm">একটি নতুন অ্যালার্ম যোগ করুন।</string>
 	<string name="cd_fab_launch_system_file_browser">সিস্টেম ফাইল ব্রাউজার চালু করুন।</string>
-	<string name="cd_collapse_alarm">একটি অ্যালার্ম সঙ্কুচিত করুন।</string>
 	<string name="cd_expand_alarm">একটি অ্যালার্ম প্রসারিত করুন।</string>
 	<string name="cd_volume_icon">অ্যালার্মের ভলিউম পরিবর্তন করুন।</string>
 	<string name="cd_volume_slider">অ্যালার্মের ভলিউম পরিবর্তন করতে স্লাইড করুন।</string>

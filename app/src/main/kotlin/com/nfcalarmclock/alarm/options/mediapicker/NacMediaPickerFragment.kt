@@ -18,7 +18,6 @@ import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.util.addMediaInfo
 import com.nfcalarmclock.util.getAlarm
-import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.getMediaArtist
 import com.nfcalarmclock.util.getMediaPath
 import com.nfcalarmclock.util.getMediaTitle
@@ -26,14 +25,6 @@ import com.nfcalarmclock.util.getMediaType
 import com.nfcalarmclock.util.getRecursivelyPlayMedia
 import com.nfcalarmclock.util.getShuffleMedia
 import com.nfcalarmclock.util.media.NacMedia
-import com.nfcalarmclock.util.media.buildLocalMediaPath
-import com.nfcalarmclock.util.media.copyMediaToDeviceEncryptedStorage
-import com.nfcalarmclock.util.media.directQueryMediaMetadata
-import com.nfcalarmclock.util.media.getMediaArtist
-import com.nfcalarmclock.util.media.getMediaTitle
-import com.nfcalarmclock.util.media.getMediaType
-import com.nfcalarmclock.util.media.doesDeviceHaveFreeSpace
-import com.nfcalarmclock.util.media.isLocalMediaPath
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -83,7 +74,7 @@ open class NacMediaPickerFragment
 	/**
 	 * Media artist.
 	 */
-	private var mediaArtist: String = ""
+	var mediaArtist: String = ""
 		get()
 		{
 			return alarm?.mediaArtist ?: field
@@ -103,7 +94,7 @@ open class NacMediaPickerFragment
 	/**
 	 * Media title.
 	 */
-	private var mediaTitle: String = ""
+	var mediaTitle: String = ""
 		get()
 		{
 			return alarm?.mediaTitle ?: field
@@ -143,7 +134,7 @@ open class NacMediaPickerFragment
 	/**
 	 * Local media path.
 	 */
-	private var localMediaPath: String = ""
+	var localMediaPath: String = ""
 		get()
 		{
 			return alarm?.localMediaPath ?: field
@@ -274,48 +265,11 @@ open class NacMediaPickerFragment
 
 	/**
 	 * Called when the Ok button is clicked.
-	 * 	// Do nothing
 	 */
 	open fun onOkClicked()
 	{
-		// Get the activity and the device protected storage context
+		// Get the activity
 		val activity = requireActivity()
-		val deviceContext = getDeviceProtectedStorageContext(activity)
-
-		// Get the URI from the path
-		val uri = Uri.parse(mediaPath)
-
-		if (uri.isLocalMediaPath(deviceContext))
-		{
-			// Query the file for metadata
-			val (artist, title) = uri.directQueryMediaMetadata()
-
-			// Set the media information
-			mediaArtist = artist
-			mediaTitle = title
-			mediaType = NacMedia.TYPE_FILE
-			localMediaPath = mediaPath
-		}
-		else
-		{
-			// Set the media information
-			mediaArtist = uri.getMediaArtist(deviceContext)
-			mediaTitle = uri.getMediaTitle(deviceContext)
-			mediaType = uri.getMediaType(deviceContext)
-			localMediaPath = buildLocalMediaPath(deviceContext, mediaArtist, mediaTitle, mediaType)
-
-			// Check if there is enough free space
-			if (doesDeviceHaveFreeSpace(deviceContext))
-			{
-				// Copy the media to the local files/ directory
-				copyMediaToDeviceEncryptedStorage(deviceContext, mediaPath, mediaArtist,
-					mediaTitle, mediaType)
-			}
-			else
-			{
-				println("Not enough space to make a backup!")
-			}
-		}
 
 		// Check if alarm is set
 		if (alarm != null)
@@ -406,21 +360,5 @@ open class NacMediaPickerFragment
 			onOkClicked()
 		}
 	}
-
-	///**
-	// * Setup the media player.
-	// */
-	//@UnstableApi
-	//private fun setupMediaPlayer()
-	//{
-	//	// Get the context
-	//	val context = requireContext()
-
-	//	// Create the media player
-	//	mediaPlayer = NacMediaPlayer(context)
-
-	//	// Gain transient audio focus
-	//	mediaPlayer!!.shouldGainTransientAudioFocus = true
-	//}
 
 }

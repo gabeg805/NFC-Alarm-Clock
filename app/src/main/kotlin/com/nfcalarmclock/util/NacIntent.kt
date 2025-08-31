@@ -2,9 +2,9 @@ package com.nfcalarmclock.util
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.provider.AlarmClock
+import androidx.core.net.toUri
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
@@ -164,7 +164,7 @@ fun Intent.getSetAlarm(context: Context): NacAlarm?
 	{
 		// Get the ringtone
 		val ringtone = this.getStringExtra(AlarmClock.EXTRA_RINGTONE) ?: ""
-		val uri = Uri.parse(ringtone)
+		val uri = ringtone.toUri()
 		isSet = true
 
 		// Add to the alarm

@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
@@ -18,6 +17,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.view.dialog.NacDialogFragment
 import com.nfcalarmclock.view.setupInputLayoutColor
+import androidx.core.graphics.toColorInt
 
 /**
  * Handle displaying the color picker dialog.
@@ -106,11 +106,11 @@ class NacColorPickerDialog
 		// Attempt to parse the color
 		return try
 		{
-			Color.parseColor("#$name")
+			"#$name".toColorInt()
 			true
 		}
 		// Unable to parse the color
-		catch (e: IllegalArgumentException)
+		catch (_: IllegalArgumentException)
 		{
 			false
 		}
@@ -268,7 +268,7 @@ class NacColorPickerDialog
 			}
 
 			// Set the new color on the color picker, example color, and hex color
-			color = Color.parseColor("#$editTextColor")
+			color = "#$editTextColor".toColorInt()
 			updateExampleAndHexColors(color)
 
 			// Close the keyboard

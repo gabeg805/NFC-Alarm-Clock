@@ -74,11 +74,8 @@
 	<string name="action_alarm_option_flashlight">Taschenlampe</string>
 	<string name="action_alarm_option_text_to_speech">Text-zu-Sprache</string>
 	<string name="action_alarm_option_volume">Volumen</string>
-	<string name="action_alarm_option_dismiss_options">Optionen zum Schließen</string>
-	<string name="action_alarm_option_snooze_options">Schlummeroptionen</string>
 	<string name="action_alarm_option_upcoming_reminder">Bevorstehende Erinnerung</string>
 	<string name="action_delete_alarm_after_dismissed">Löschen nach Abweisung</string>
-	<string name="action_skipping_next_alarm">Nächsten Alarm überspringen</string>
 	<string name="action_skip_next_alarm">Nächsten Alarm überspringen</string>
 	<string name="action_unskip_next_alarm">Nächsten Alarm überspringen</string>
 	<string name="action_export">Export</string>
@@ -206,7 +203,6 @@
 	<string name="title_delete_nfc_tag">NFC-Tag löschen</string>
 	<string name="title_rename_nfc_tag">NFC-Tag umbenennen</string>
 	<string name="title_current_selected">Aktuell ausgewählt</string>
-	<string name="title_select_days">Tage auswählen</string>
 	<string name="title_select_color">Wählen Sie eine Farbe</string>
 	<string name="title_select_next_alarm_format">Wählen Sie ein Format</string>
 	<string name="title_folder_selected">Sie haben einen Ordner ausgewählt</string>
@@ -263,8 +259,6 @@
 	<string name="title_alarm_repeat">Wiederholen</string>
 	<string name="title_alarm_vibrate">Vibrieren</string>
 	<string name="title_alarm_nfc">NFC</string>
-	<string name="title_alarm_sound">Klang</string>
-	<string name="title_alarm_volume">Volumen</string>
 	<string name="title_alarm_screen">Alarmbildschirm</string>
 	<string name="title_colors">Farben</string>
 	<string name="title_notifications">Benachrichtigungen</string>
@@ -287,7 +281,6 @@
 	<string name="title_only_show_app_alarms">Nur App-Alarme anzeigen</string>
 
 	<!-- Descriptions -->
-	<string name="description_scan_nfc">NFC scannen</string>
 	<string name="description_slide_to_snooze">Zum Schlummern schieben</string>
 	<string name="description_slide_to_dismiss">Zum Schließen schieben</string>
 	<string name="description_alarm_activity">Scannen Sie den NFC-Tag, um den Alarm auszuschalten.</string>
@@ -328,15 +321,6 @@
 	<string name="description_setting_manage_nfc_tags">Gespeicherte NFC-Tags löschen oder umbenennen</string>
 	<string name="description_setting_support">Für Unterstützung wäre ich sehr dankbar, aber bitte keinen Druck! Diese App wird immer kostenlos sein</string>
 	<string name="description_setting_import_export">Importieren oder exportieren Sie alle Ihre gespeicherten Daten</string>
-	<string name="description_alarm_repeat_true">Wiederholen Sie den Alarm.</string>
-	<string name="description_alarm_repeat_false">Deaktivieren Sie den Alarm, nachdem er ausgeführt wurde.</string>
-	<string name="description_alarm_vibrate_true">Lassen Sie das Telefon vibrieren.</string>
-	<string name="description_alarm_vibrate_false">Lassen Sie das Telefon nicht vibrieren.</string>
-	<string name="description_alarm_nfc_true">Zum Beenden des Alarms wird NFC verwendet.</string>
-	<string name="description_alarm_nfc_false">Deaktivieren Sie den Alarm wie gewohnt.</string>
-	<string name="description_alarm_flashlight_true">Schalten Sie die Taschenlampe ein, wenn der Alarm losgeht.</string>
-	<string name="description_alarm_flashlight_false">Schalten Sie die Taschenlampe nicht ein, wenn der Alarm losgeht.</string>
-	<string name="description_alarm_sound">@string/none</string>
 	<string name="description_use_new_screen_true">Verwenden Sie den neuen Weckerbildschirm, auf dem Sie durch Wischen die Schlummerfunktion aktivieren oder den Wecker ausschalten können.</string>
 	<string name="description_use_new_screen_false">Verwenden Sie nicht den neuen Alarmbildschirm. Verwenden Sie den Originalbildschirm mit einfachen Schaltflächen zum Schlummern oder Deaktivieren des Alarms.</string>
 	<string name="description_alarm_screen_show_alarm_name_true">Zeigen Sie den Alarmnamen im Alarmbildschirm an.</string>
@@ -388,7 +372,6 @@
 	<string name="cd_nfc_tag_list">Hier wird eine Liste der NFC-Tags angezeigt.</string>
 	<string name="cd_fab_add_alarm">Fügen Sie einen neuen Alarm hinzu.</string>
 	<string name="cd_fab_launch_system_file_browser">Starten Sie den Systemdateibrowser.</string>
-	<string name="cd_collapse_alarm">Einen Alarm ausblenden.</string>
 	<string name="cd_expand_alarm">Erweitern Sie einen Alarm.</string>
 	<string name="cd_volume_icon">Ändern Sie die Lautstärke eines Alarms.</string>
 	<string name="cd_volume_slider">Schieben Sie, um die Lautstärke eines Alarms zu ändern.</string>

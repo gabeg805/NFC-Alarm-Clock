@@ -186,7 +186,7 @@ class NacAudioAttributes(
 		volumeLevel = alarm.volume
 
 		// Set the text-to-speech rate and voice
-		speechRate = alarm.ttsSpeechRate.toFloat()
+		speechRate = alarm.ttsSpeechRate
 		voice = alarm.ttsVoice
 
 		return this

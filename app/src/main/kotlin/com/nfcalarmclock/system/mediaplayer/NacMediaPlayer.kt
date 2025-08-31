@@ -20,6 +20,7 @@ import com.nfcalarmclock.util.media.findFirstValidLocalMedia
 import com.nfcalarmclock.util.media.isMediaDirectory
 import com.nfcalarmclock.util.media.isMediaValid
 import java.io.File
+import androidx.core.net.toUri
 
 /**
  * Wrapper for the MediaPlayer class.
@@ -278,13 +279,13 @@ class NacMediaPlayer(
 		audioAttributes.merge(alarm)
 
 		// Check if file/directory exists
-		var uri = Uri.parse(alarm.mediaPath)
+		var uri: Uri? = alarm.mediaPath.toUri()
 
 		// Check if the media can be accessed. Most of the times when it cannot be
 		// acessed, it is because the alarm went off in direct boot mode (when the
 		// device rebooted and the user has not unlocked it yet) or because the media
 		// was moved/removed
-		if (uri.isMediaValid(context) && isUserUnlocked(context))
+		if (uri!!.isMediaValid(context) && isUserUnlocked(context))
 		{
 			// Directory
 			if (alarm.mediaType.isMediaDirectory())
@@ -299,7 +300,7 @@ class NacMediaPlayer(
 		else
 		{
 			// Get the local media path
-			val localUri = Uri.parse(alarm.localMediaPath)
+			val localUri = alarm.localMediaPath.toUri()
 			val localFile = File(alarm.localMediaPath)
 
 			// Check if this local path can be accessed. If this cannot be accessed, it

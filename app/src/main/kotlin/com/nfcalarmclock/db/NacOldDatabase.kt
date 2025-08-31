@@ -6,7 +6,6 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
-import android.net.Uri
 import android.provider.BaseColumns
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
@@ -14,6 +13,8 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.media.getMediaTitle
 import com.nfcalarmclock.util.media.getMediaType
+import androidx.core.database.sqlite.transaction
+import androidx.core.net.toUri
 
 /**
  * NFC Alarm Clock database.
@@ -82,21 +83,21 @@ class NacOldDatabase(
 		}
 
 		val cv = getContentValues(version, alarm)
-		val result: Long
+		var result = -1L
 
 		// Begin database transaction
-		db.beginTransaction()
+		db.transaction {
 
-		// Execute database action
-		try
-		{
-			result = db.insert(alarmTable, null, cv)
-			db.setTransactionSuccessful()
-		}
-		// End database transaction
-		finally
-		{
-			db.endTransaction()
+            // Execute database action
+            try
+			{
+                result = insert(alarmTable, null, cv)
+            }
+            // End database transaction
+            finally
+			{
+            }
+
 		}
 
 		return result
@@ -129,21 +130,21 @@ class NacOldDatabase(
 		}
 
 		val args = this.getWhereArgs(alarm)
-		val result: Long
+		var result = -1L
 
 		// Begin database transaction
-		db.beginTransaction()
+		db.transaction {
 
-		// Execute database action
-		try
-		{
-			result = db.delete(alarmTable, whereClause, args).toLong()
-			db.setTransactionSuccessful()
-		}
-		// End database transaction
-		finally
-		{
-			db.endTransaction()
+            // Execute database action
+            try
+			{
+                result = delete(alarmTable, whereClause, args).toLong()
+            }
+            // End database transaction
+            finally
+			{
+            }
+
 		}
 
 		return result
@@ -291,7 +292,7 @@ class NacOldDatabase(
 
 		// Get the media information
 		val mediaPath = shared.mediaPath
-		val uri = Uri.parse(mediaPath)
+		val uri = mediaPath.toUri()
 
 		// Build an alarm
 		val alarm = NacAlarm.build(shared)
@@ -378,7 +379,7 @@ class NacOldDatabase(
 			cursor = db.query(alarmTable, null, null, null, null, null, null)
 		}
 		// Exception occurred. Stop everything
-		catch (e: SQLiteException)
+		catch (_: SQLiteException)
 		{
 			return null
 		}
@@ -519,21 +520,21 @@ class NacOldDatabase(
 
 		val cv = getContentValues(db.version, alarm)
 		val args = this.getWhereArgs(alarm)
-		val result: Long
+		var result = -1L
 
 		// Begin database transaction
-		db.beginTransaction()
+		db.transaction {
 
-		// Execute database action
-		try
-		{
-			result = db.update(alarmTable, cv, whereClause, args).toLong()
-			db.setTransactionSuccessful()
-		}
-		// End database transaction
-		finally
-		{
-			db.endTransaction()
+            // Execute database action
+            try
+			{
+                result = update(alarmTable, cv, whereClause, args).toLong()
+            }
+            // End database transaction
+            finally
+			{
+            }
+
 		}
 
 		return result

@@ -74,11 +74,8 @@
 	<string name="action_alarm_option_flashlight">Flashlight</string>
 	<string name="action_alarm_option_text_to_speech">Text-to-speech</string>
 	<string name="action_alarm_option_volume">Volume</string>
-	<string name="action_alarm_option_dismiss_options">Dismiss options</string>
-	<string name="action_alarm_option_snooze_options">Snooze options</string>
 	<string name="action_alarm_option_upcoming_reminder">Upcoming reminder</string>
 	<string name="action_delete_alarm_after_dismissed">Delete after dismissed</string>
-	<string name="action_skipping_next_alarm">Skipping next alarm</string>
 	<string name="action_skip_next_alarm">Skip next alarm</string>
 	<string name="action_unskip_next_alarm">Unskip next alarm</string>
 	<string name="action_export">Export</string>
@@ -206,7 +203,6 @@
 	<string name="title_delete_nfc_tag">Delete NFC tag</string>
 	<string name="title_rename_nfc_tag">Rename NFC tag</string>
 	<string name="title_current_selected">Current selected</string>
-	<string name="title_select_days">Select days</string>
 	<string name="title_select_color">Select a color</string>
 	<string name="title_select_next_alarm_format">Select a format</string>
 	<string name="title_folder_selected">You selected a folder</string>
@@ -263,8 +259,6 @@
 	<string name="title_alarm_repeat">Repeat</string>
 	<string name="title_alarm_vibrate">Vibrate</string>
 	<string name="title_alarm_nfc">NFC</string>
-	<string name="title_alarm_sound">Sound</string>
-	<string name="title_alarm_volume">Volume</string>
 	<string name="title_alarm_screen">Alarm screen</string>
 	<string name="title_colors">Colors</string>
 	<string name="title_notifications">Notifications</string>
@@ -287,7 +281,6 @@
 	<string name="title_only_show_app_alarms">Only show app alarms</string>
 
 	<!-- Descriptions -->
-	<string name="description_scan_nfc">Scan NFC</string>
 	<string name="description_slide_to_snooze">Slide to snooze</string>
 	<string name="description_slide_to_dismiss">Slide to dismiss</string>
 	<string name="description_alarm_activity">Scan NFC tag to dismiss the alarm.</string>
@@ -328,15 +321,6 @@
 	<string name="description_setting_manage_nfc_tags">Delete or rename saved NFC tags</string>
 	<string name="description_setting_support">Support would be greatly appreciated, but no pressure! This app will always be free</string>
 	<string name="description_setting_import_export">Import or export all your saved data</string>
-	<string name="description_alarm_repeat_true">Repeat the alarm.</string>
-	<string name="description_alarm_repeat_false">Disable the alarm after it is run.</string>
-	<string name="description_alarm_vibrate_true">Vibrate the phone.</string>
-	<string name="description_alarm_vibrate_false">Do not vibrate the phone.</string>
-	<string name="description_alarm_nfc_true">NFC is used to dismiss the alarm.</string>
-	<string name="description_alarm_nfc_false">Dismiss the alarm normally.</string>
-	<string name="description_alarm_flashlight_true">Turn on the flashlight when the alarm goes off.</string>
-	<string name="description_alarm_flashlight_false">Do not turn on the flashlight when the alarm goes off.</string>
-	<string name="description_alarm_sound">@string/none</string>
 	<string name="description_use_new_screen_true">Use the new alarm screen, where you swipe to snooze or dismiss the alarm.</string>
 	<string name="description_use_new_screen_false">Do not use the new alarm screen. Use the original screen with simple buttons to snooze or dismiss the alarm.</string>
 	<string name="description_alarm_screen_show_alarm_name_true">Show the alarm name in the alarm screen.</string>
@@ -388,7 +372,6 @@
 	<string name="cd_nfc_tag_list">List of NFC tags will be shown here.</string>
 	<string name="cd_fab_add_alarm">Add a new alarm.</string>
 	<string name="cd_fab_launch_system_file_browser">Launch system file browser.</string>
-	<string name="cd_collapse_alarm">Collapse an alarm.</string>
 	<string name="cd_expand_alarm">Expand an alarm.</string>
 	<string name="cd_volume_icon">Change the volume of an alarm.</string>
 	<string name="cd_volume_slider">Slide to change the volume of an alarm.</string>

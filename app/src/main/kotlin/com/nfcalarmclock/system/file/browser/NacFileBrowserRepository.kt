@@ -133,7 +133,7 @@ class NacFileBrowserRepository
 					TimeUnit.MILLISECONDS.sleep(50)
 				}
 			}
-			catch (ignored: InterruptedException)
+			catch (_: InterruptedException)
 			{
 			}
 		}
