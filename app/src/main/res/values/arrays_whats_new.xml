@@ -5,6 +5,8 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.0-beta</item>
+		<item>Updating stuff.</item>
 		<item>12.5.4</item>
 		<item>Fixed issue where &lt;b>skip next alarm&lt;/b> would keep skipping the alarm.</item>
 		<item>12.5.3</item>

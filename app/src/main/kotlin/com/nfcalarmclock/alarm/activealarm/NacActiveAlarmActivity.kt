@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.Window
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
@@ -179,6 +180,25 @@ class NacActiveAlarmActivity
 			{
 			}
 		})
+	}
+
+	/**
+	 * Called when a physical button is pressed.
+	 */
+	override fun onKeyUp(keyCode: Int, event: KeyEvent?) : Boolean
+	{
+		println("KEY : $keyCode")
+		// Check if volume up or down was pressed
+		if ((keyCode == KeyEvent.KEYCODE_VOLUME_UP)
+			|| (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN))
+		{
+			// TODO: Check if the snooze on volume button pressed option is set
+			println("SUCCESS")
+
+			// TODO: Return true here
+		}
+
+		return super.onKeyUp(keyCode, event)
 	}
 
 	/**

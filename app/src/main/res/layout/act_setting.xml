@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.core.view.insets.ProtectionLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:id="@+id/activity_setting"
+	android:id="@+id/protection_layout"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:orientation="vertical">
+	android:layout_height="match_parent">
 
-	<!-- Navigation host -->
-	<androidx.fragment.app.FragmentContainerView
-		android:id="@+id/hello_content"
+	<LinearLayout
+		android:id="@+id/activity_setting"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:name="androidx.navigation.fragment.NavHostFragment"
-		app:defaultNavHost="true"
-		/>
+		android:orientation="vertical">
 
-</LinearLayout>
+		<!-- Navigation host -->
+		<androidx.fragment.app.FragmentContainerView
+			android:id="@+id/hello_content"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:name="androidx.navigation.fragment.NavHostFragment"
+			app:defaultNavHost="true"
+			/>
+
+	</LinearLayout>
+</androidx.core.view.insets.ProtectionLayout>

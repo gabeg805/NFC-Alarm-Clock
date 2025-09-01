@@ -3,16 +3,20 @@ package com.nfcalarmclock.statistics
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.FileProvider
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmViewModel
+import com.nfcalarmclock.settings.NacMainSettingActivity
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.db.NacAlarmStatistic
 import com.nfcalarmclock.system.file.zipFiles
@@ -143,6 +147,15 @@ class NacStatisticsSettingFragment
 
 		// Setup all the views that need to use the theme color
 		setupViewsWithThemeColor(root)
+
+		// Setup edge to edge for the scrollview by using the margin that was saved in
+		// the main settings fragment. Edge-to-edge is enforced in API >= 35
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM)
+		{
+			root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+				topMargin = (activity as NacMainSettingActivity).rvTopMargin
+			}
+		}
 	}
 
 	/**

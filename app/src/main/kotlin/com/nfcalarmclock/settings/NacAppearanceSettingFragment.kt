@@ -1,6 +1,10 @@
 package com.nfcalarmclock.settings
 
+import android.os.Build
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.updateLayoutParams
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
@@ -51,6 +55,28 @@ class NacAppearanceSettingFragment
 
 		// Initialize the color settings
 		init()
+	}
+
+	/**
+	 * Called after the view is created.
+	 */
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+	{
+		// Super
+		super.onViewCreated(view, savedInstanceState)
+
+		// Check if API < 35, then edge-to-edge is not enforced and do not need to do
+		// anything
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM)
+		{
+			return
+		}
+
+		// Setup edge to edge for the recyclerview by using the margin that was saved in
+		// the main settings fragment
+		listView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+			topMargin = (activity as NacMainSettingActivity).rvTopMargin
+		}
 	}
 
 	/**

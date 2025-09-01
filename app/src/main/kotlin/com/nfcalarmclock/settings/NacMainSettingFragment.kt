@@ -1,8 +1,12 @@
 package com.nfcalarmclock.settings
 
 import android.animation.AnimatorInflater
+import android.os.Build
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
@@ -14,6 +18,7 @@ import com.nfcalarmclock.settings.importexport.NacImportManager
 import com.nfcalarmclock.statistics.NacStatisticsSettingFragment
 import com.nfcalarmclock.support.NacSupportSetting
 import com.nfcalarmclock.util.NacUtility
+import com.nfcalarmclock.view.setupEdgeToEdge
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -178,6 +183,43 @@ class NacMainSettingFragment
 
 		// Default return
 		return super.onPreferenceTreeClick(preference)
+	}
+
+	/**
+	 * Called after the view is created.
+	 */
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+	{
+		// Super
+		super.onViewCreated(view, savedInstanceState)
+
+		// Check if API < 35, then edge-to-edge is not enforced and do not need to do
+		// anything
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM)
+		{
+			return
+		}
+
+		// Setup edge to edge for the recyclerview
+		listView.setupEdgeToEdge { insets ->
+
+			// Save the top margin value for the recyclerview
+			(activity as NacMainSettingActivity).rvTopMargin = insets.top
+
+		}
+
+		// Get the top margin value that was saved for the recyclerview
+		val rvTopMargin = (activity as NacMainSettingActivity).rvTopMargin
+
+		// When the main settings fragment is navigated back to, the above edge to edge
+		// setup will not work. In this case, the margin needs to be set directly,
+		// instead of being set in a window insets listener
+		if (rvTopMargin > 0)
+		{
+			listView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+				topMargin = rvTopMargin
+			}
+		}
 	}
 
 	/**

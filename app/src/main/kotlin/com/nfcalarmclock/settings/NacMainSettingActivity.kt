@@ -1,9 +1,14 @@
 package com.nfcalarmclock.settings
 
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.insets.ColorProtection
+import androidx.core.view.insets.ProtectionLayout
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.NavHostFragment
 import com.nfcalarmclock.R
@@ -24,6 +29,11 @@ class NacMainSettingActivity
 	val navController by lazy {
 		(supportFragmentManager.findFragmentById(R.id.hello_content) as NavHostFragment).navController
 	}
+
+	/**
+	 * RecyclerView top margin.
+	 */
+	var rvTopMargin: Int = 0
 
 	/**
 	 * Called when the back stack is changed.
@@ -69,6 +79,9 @@ class NacMainSettingActivity
 		val actionBarColor = black.toDrawable()
 
 		supportActionBar?.setBackgroundDrawable(actionBarColor)
+
+		// Setup edge to edge
+		setupEdgeToEdge()
 	}
 
 	/**
@@ -88,6 +101,27 @@ class NacMainSettingActivity
 				finish()
 				true
 			}
+	}
+
+	/**
+	 * Setup any views that need changing due to API 35+ edge-to-edge.
+	 */
+	private fun setupEdgeToEdge()
+	{
+		// Check if API < 35, then edge-to-edge is not enforced and do not need to do
+		// anything
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM)
+		{
+			return
+		}
+
+		// Set edge to edge color of top status bar
+		findViewById<ProtectionLayout>(R.id.protection_layout)
+			.setProtections(
+				listOf(
+					ColorProtection(WindowInsetsCompat.Side.TOP, Color.BLACK)
+				)
+			)
 	}
 
 }

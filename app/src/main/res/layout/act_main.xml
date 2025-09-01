@@ -1,86 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.core.view.insets.ProtectionLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:id="@+id/activity_main"
+	android:id="@+id/protection_layout"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<androidx.coordinatorlayout.widget.CoordinatorLayout
-		android:layout_width="match_parent"
-		android:layout_height="match_parent">
-
-		<!-- Toolbar -->
-		<com.google.android.material.appbar.AppBarLayout
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
-
-			<com.google.android.material.appbar.MaterialToolbar
-				android:id="@+id/tb_top_bar"
-				android:layout_width="match_parent"
-				android:layout_height="?attr/actionBarSize"
-				app:title="@string/app_name"
-				app:menu="@menu/menu_action_bar"
-				app:layout_scrollFlags="scroll|enterAlways|snap"
-				style="@style/Toolbar"
-				/>
-		</com.google.android.material.appbar.AppBarLayout>
-
-		<!-- Container for next alarm and alarm list -->
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:orientation="vertical"
-			app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-			<!-- Next alarm message -->
-			<com.google.android.material.textview.MaterialTextView
-				android:id="@+id/tv_next_alarm"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:background="?attr/colorCard"
-				android:gravity="center_horizontal"
-				android:paddingTop="@dimen/small"
-				android:paddingBottom="@dimen/tiny"
-				android:textSize="@dimen/tsz_normal"
-				android:text=""
-				/>
-
-			<!-- Alarm list -->
-			<androidx.recyclerview.widget.RecyclerView
-				android:id="@+id/rv_alarm_list"
-				android:contentDescription="@string/cd_alarm_list"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:layout_marginBottom="@dimen/normal"
-				android:clipToPadding="false"
-				android:descendantFocusability="blocksDescendants"
-				android:paddingBottom="@dimen/isz_attention"
-				android:scrollbars="vertical"
-				/>
-		</LinearLayout>
-	</androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-	<!-- Floating action button -->
-	<com.google.android.material.floatingactionbutton.FloatingActionButton
-		android:contentDescription="@string/cd_fab_add_alarm"
-		android:id="@+id/fab_add_alarm"
-		android:layout_width="@dimen/isz_attention"
-		android:layout_height="@dimen/isz_attention"
-		android:layout_marginBottom="@dimen/large"
-		android:src="@drawable/plus"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		/>
-
-	<!-- Navigation host -->
-	<androidx.fragment.app.FragmentContainerView
-		android:id="@+id/hello_content"
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:id="@+id/activity_main"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:name="androidx.navigation.fragment.NavHostFragment"
-		app:defaultNavHost="true"
-		/>
+		android:fitsSystemWindows="true">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+		<androidx.coordinatorlayout.widget.CoordinatorLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+
+			<!-- Toolbar -->
+			<com.google.android.material.appbar.AppBarLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<com.google.android.material.appbar.MaterialToolbar
+					android:id="@+id/tb_top_bar"
+					android:layout_width="match_parent"
+					android:layout_height="?attr/actionBarSize"
+					app:title="@string/app_name"
+					app:menu="@menu/menu_action_bar"
+					app:layout_scrollFlags="scroll|enterAlways|snap"
+					style="@style/Toolbar"
+					/>
+			</com.google.android.material.appbar.AppBarLayout>
+
+			<!-- Container for next alarm and alarm list -->
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:orientation="vertical"
+				app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+				<!-- Next alarm message -->
+				<com.google.android.material.textview.MaterialTextView
+					android:id="@+id/tv_next_alarm"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:background="?attr/colorCard"
+					android:gravity="center_horizontal"
+					android:paddingTop="@dimen/small"
+					android:paddingBottom="@dimen/tiny"
+					android:textSize="@dimen/tsz_normal"
+					android:text=""
+					/>
+
+				<!-- Alarm list -->
+				<androidx.recyclerview.widget.RecyclerView
+					android:id="@+id/rv_alarm_list"
+					android:contentDescription="@string/cd_alarm_list"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_marginBottom="@dimen/normal"
+					android:clipToPadding="false"
+					android:descendantFocusability="blocksDescendants"
+					android:paddingBottom="@dimen/isz_attention"
+					android:scrollbars="vertical"
+					/>
+			</LinearLayout>
+		</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+		<!-- Floating action button -->
+		<com.google.android.material.floatingactionbutton.FloatingActionButton
+			android:contentDescription="@string/cd_fab_add_alarm"
+			android:id="@+id/fab_add_alarm"
+			android:layout_width="@dimen/isz_attention"
+			android:layout_height="@dimen/isz_attention"
+			android:layout_marginBottom="@dimen/large"
+			android:src="@drawable/plus"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			/>
+
+		<!-- Navigation host -->
+		<androidx.fragment.app.FragmentContainerView
+			android:id="@+id/hello_content"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:name="androidx.navigation.fragment.NavHostFragment"
+			app:defaultNavHost="true"
+			/>
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.view.insets.ProtectionLayout>

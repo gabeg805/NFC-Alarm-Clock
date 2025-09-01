@@ -5,10 +5,12 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.os.Build
 import android.text.Html
 import android.text.Spanned
 import android.view.HapticFeedbackConstants
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RadioGroup
@@ -16,6 +18,10 @@ import android.widget.SeekBar
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.Insets
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -130,6 +136,42 @@ fun MaterialAutoCompleteTextView.setTextFromIndex(index: Int, fallback: Int = 1)
 fun View.setupBackgroundColor(sharedPreferences: NacSharedPreferences)
 {
 	this.backgroundTintList = ColorStateList.valueOf(sharedPreferences.themeColor)
+}
+
+/**
+ * Setup any views that need changing due to API 35+ edge-to-edge.
+ */
+fun View.setupEdgeToEdge(callback: (Insets) -> Unit = {})
+{
+	// Check if API < 35, then edge-to-edge is not enforced and do not need to do
+	// anything
+	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM)
+	{
+		return
+	}
+
+	// Set the inset listener
+	ViewCompat.setOnApplyWindowInsetsListener(this) { v, windowInsets ->
+
+		// Get the insets
+		val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+		// Apply the insets as a margin to the view. This solution sets only the
+		// bottom, left, and right dimensions, but can also apply whichever insets
+		// are appropriate to the layout. Can also update the view padding if that is
+		// more appropriate
+		v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+			topMargin = insets.top
+			bottomMargin = insets.bottom
+
+			// Call the callback
+			callback(insets)
+		}
+
+		// Return CONSUMED so that the window insets do not keep passing down to
+		// descendant views
+		WindowInsetsCompat.CONSUMED
+	}
 }
 
 /**

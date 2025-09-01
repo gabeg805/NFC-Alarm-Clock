@@ -6,7 +6,9 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Color
 import android.graphics.drawable.InsetDrawable
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
@@ -24,6 +26,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.MenuCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.get
+import androidx.core.view.insets.ColorProtection
+import androidx.core.view.insets.ProtectionLayout
 import androidx.core.view.isNotEmpty
 import androidx.core.view.size
 import androidx.lifecycle.lifecycleScope
@@ -96,7 +102,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.Calendar
-import androidx.core.view.get
 
 /**
  * The application's main activity.
@@ -632,6 +637,7 @@ class NacMainActivity
 		toolbar.setOnMenuItemClickListener(this)
 		setupAlarmCardAdapter()
 		setupRecyclerView()
+		setupEdgeToEdge()
 
 		// Disable the activity alias so that tapping an NFC tag will NOT open
 		// the main activity
@@ -1230,6 +1236,27 @@ class NacMainActivity
 	}
 
 	/**
+	 * Setup any views that need changing due to API 35+ edge-to-edge.
+	 */
+	private fun setupEdgeToEdge()
+	{
+		// Check if API < 35, then edge-to-edge is not enforced and do not need to do
+		// anything
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM)
+		{
+			return
+		}
+
+		// Set edge to edge color of top status bar
+		findViewById<ProtectionLayout>(R.id.protection_layout)
+			.setProtections(
+				listOf(
+					ColorProtection(WindowInsetsCompat.Side.TOP, Color.BLACK)
+				)
+			)
+	}
+
+	/**
 	 * Setup the events from shared preferences.
 	 */
 	private suspend fun setupEventsFromSharedPreferences()
@@ -1265,7 +1292,7 @@ class NacMainActivity
 		// Set the color
 		floatingActionButton.setupThemeColor(sharedPreferences)
 
-		// Set the listener
+		// Set the click listener
 		floatingActionButton.setOnClickListener { view: View ->
 
 			// Haptic feedback so that the user knows the action was received

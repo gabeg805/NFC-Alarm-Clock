@@ -2,10 +2,14 @@ package com.nfcalarmclock.settings
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
@@ -72,6 +76,28 @@ class NacGeneralSettingFragment
 		// Setup the preferences
 		setupDefaultAlarmCard()
 		setupAlarmScreen()
+	}
+
+	/**
+	 * Called after the view is created.
+	 */
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+	{
+		// Super
+		super.onViewCreated(view, savedInstanceState)
+
+		// Check if API < 35, then edge-to-edge is not enforced and do not need to do
+		// anything
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM)
+		{
+			return
+		}
+
+		// Setup edge to edge for the recyclerview by using the margin that was saved in
+		// the main settings fragment
+		listView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+			topMargin = (activity as NacMainSettingActivity).rvTopMargin
+		}
 	}
 
 	/**

@@ -13,17 +13,13 @@ About -> Über
 
 * Stream internet radio, like KEXP?
 
-* Bring back upcoming alarm notification?
-
 * Add notification to dismiss early?
 
 * Snooze with physical buttons?
 
-* Add option to select multiple NFC tags.
+* Add option to use multiple NFC tags in order/random to dismiss.
 
-* Move easy to mess up strings to top
-
-* Improve look of warning selected directory dialog
+* Check that selected directory for music works.
 
 * Look up defaults like for auto dismiss, dismiss early, .... really all the
   times, and see if they should be in the resources directory?
@@ -36,8 +32,6 @@ About -> Über
 * Overlay number over repeat button for custom repeat option?
 
 * Have option to scroll alarm name instead of marquee it
-
-* Figure out why I use home in NacFile
 
 ------
 Issues
