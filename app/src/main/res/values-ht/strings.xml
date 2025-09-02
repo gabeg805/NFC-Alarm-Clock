@@ -111,9 +111,6 @@
 	<string name="message_nfc_required_saved">NFC obligatwa — %1$s</string>
 	<string name="message_nfc_required_use_any">NFC obligatwa (itilize nenpòt)</string>
 	<string name="message_show_nfc_tag_id">ID</string>
-	<string name="message_scan_nfc_tag">Tag NFC tcheke a pral oblije ranvwaye alam sa a lè li ale.</string>
-	<string name="message_select_nfc_tag">Chwazi yon tag NFC ki pral oblije ranvwaye alam sa a lè li sonnen. Si yo chwazi plis pase youn, li kapab tou itilize pou ranvwaye alam sa a.</string>
-	<string name="message_save_nfc_tag">Ou ka reitilize tag NFC sa a, san ou pa bezwen eskane li ankò, lè w ba li yon non.</string>
 	<string name="message_delete_nfc_tag">Èske w sèten ou vle efase tag NFC sa a?</string>
 	<string name="message_rename_nfc_tag">Ki sa ou ta renmen chanje non tag NFC la?</string>
 	<string name="message_flashlight_on_duration">Limen:</string>
@@ -293,6 +290,9 @@
 	<string name="description_day_button_style_filled">Bouton ranpli.</string>
 	<string name="description_day_button_style_outlined">Dekri bouton.</string>
 	<string name="description_media">Mizik oswa sonri</string>
+	<string name="description_scan_nfc_tag">Tag NFC tcheke a pral oblije ranvwaye alam sa a lè li ale.</string>
+	<string name="description_select_nfc_tag">Chwazi yon tag NFC ki pral oblije ranvwaye alam sa a lè li sonnen. Si yo chwazi plis pase youn, li kapab tou itilize pou ranvwaye alam sa a.</string>
+	<string name="description_save_nfc_tag">Ou ka reitilize tag NFC sa a, san ou pa bezwen eskane li ankò, lè w ba li yon non.</string>
 	<string name="description_vibrate_vibration_duration">Konbyen tan pou vibre pou, ak konbyen tan pou tann nan ant vibrations.</string>
 	<string name="description_vibrate_custom_pattern">Repete dire a Vibration yon seri kantite fwa, epi tann pou yon dire.</string>
 	<string name="description_flashlight_brightness_level">Nivo klète flach la.</string>

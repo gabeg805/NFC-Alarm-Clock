@@ -243,7 +243,7 @@ class NacGeneralSettingFragment
 					sharedPreferences!!.autoSnoozeTime = a.autoSnoozeTime
 					sharedPreferences!!.maxSnooze = a.maxSnooze
 					sharedPreferences!!.snoozeDuration = a.snoozeDuration
-					sharedPreferences!!.shouldEasySnooze = a.shouldUseEasySnooze
+					sharedPreferences!!.shouldEasySnooze = a.shouldEasySnooze
 
 				})
 				.show(childFragmentManager, NacSnoozeOptionsDialog.TAG)

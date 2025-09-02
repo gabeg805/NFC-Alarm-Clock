@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:orientation="vertical">
 
-	<!-- Title -->
+	<!-- Select NFC tags title -->
 	<TextView
 		style="@style/Widget.AlarmOptionDialog.Title"
 		android:layout_width="match_parent"
@@ -13,15 +14,15 @@
 		android:text="@string/title_select_nfc_tag"
 		/>
 
-	<!-- Description -->
+	<!-- Select NFC tags description -->
 	<TextView
 		style="@style/Widget.AlarmOptionDialog.Description"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/message_select_nfc_tag"
+		android:text="@string/description_select_nfc_tag"
 		/>
 
-	<!-- Scrollview -->
+	<!-- Select NFC tags scrollview -->
 	<androidx.core.widget.NestedScrollView
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -36,5 +37,45 @@
 
 		</LinearLayout>
 	</androidx.core.widget.NestedScrollView>
+
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.SeparatorAfterCheckBox" />
+
+	<!-- Dismiss order title -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Title"
+		android:id="@+id/nfc_tag_dismiss_order_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/title_nfc_tag_dismiss_order"
+		/>
+
+	<!-- Dismiss order description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:id="@+id/nfc_tag_dismiss_order_description"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/description_nfc_tag_dismiss_order"
+		/>
+
+	<!-- Dismiss order dropdown -->
+	<com.google.android.material.textfield.TextInputLayout
+		style="@style/Widget.AlarmOptionDialog.DropdownRow"
+		android:id="@+id/nfc_tag_dismiss_order_input_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<com.google.android.material.textfield.MaterialAutoCompleteTextView
+			android:id="@+id/nfc_tag_dismiss_order_dropdown_menu"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:inputType="none"
+			app:simpleItems="@array/nfc_tag_dismiss_orders"
+			/>
+	</com.google.android.material.textfield.TextInputLayout>
+
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
 
 </com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

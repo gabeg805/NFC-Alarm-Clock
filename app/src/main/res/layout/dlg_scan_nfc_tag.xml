@@ -17,7 +17,7 @@
 		style="@style/Widget.AlarmOptionDialog.Description"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/message_scan_nfc_tag"
+		android:text="@string/description_scan_nfc_tag"
 		/>
 
 	<!-- Image to indicate that the user should scan an NFC tag -->

@@ -231,6 +231,50 @@
 	</RelativeLayout>
 
 	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.SeparatorAfterCheckBox" />
+
+	<!-- Volume snooze -->
+	<RelativeLayout
+		android:id="@+id/volume_snooze_container"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:clickable="true"
+		android:focusable="true">
+
+		<!-- Title -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Title"
+			android:id="@+id/volume_snooze_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentStart="true"
+			android:layout_toStartOf="@id/volume_snooze_switch"
+			android:text="@string/title_snooze_options_volume_snooze"
+			/>
+
+		<!-- Description -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Description"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentStart="true"
+			android:layout_below="@id/volume_snooze_title"
+			android:layout_toStartOf="@id/volume_snooze_switch"
+			android:text="@string/description_snooze_options_volume_snooze"
+			/>
+
+		<!-- Switch -->
+		<androidx.appcompat.widget.SwitchCompat
+			android:id="@+id/volume_snooze_switch"
+			android:layout_width="@dimen/touch"
+			android:layout_height="@dimen/touch"
+			android:layout_alignParentEnd="true"
+			android:layout_centerVertical="true"
+			android:clickable="false"
+			/>
+	</RelativeLayout>
+
+	<!-- Separator -->
 	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
 
 </com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

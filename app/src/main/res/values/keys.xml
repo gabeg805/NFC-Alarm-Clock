@@ -48,7 +48,9 @@
 	<!-- Default alarm -->
 	<string name="key_default_alarm_card">pref_default_alarm_card</string>
 	<string name="key_default_alarm_days">pref_deys</string>
+	<string name="key_default_alarm_date">pref_date</string>
 	<string name="key_default_alarm_repeat_should_repeat">pref_repeat</string>
+	<string name="key_default_alarm_repeat_frequency">pref_repeat_frequency</string>
 	<string name="key_default_alarm_vibrate_should_vibrate">pref_vibrate</string>
 	<string name="key_default_alarm_vibrate_duration">pref_vibrate_duration</string>
 	<string name="key_default_alarm_vibrate_wait_time">pref_vibrate_wait_time</string>
@@ -57,6 +59,7 @@
 	<string name="key_default_alarm_vibrate_wait_time_after_pattern">pref_vibrate_wait_time_after_pattern</string>
 	<string name="key_default_alarm_nfc_should_use_nfc">pref_use_nfc</string>
 	<string name="key_default_alarm_nfc_tag_id">pref_default_alarm_nfc_tag_id</string>
+	<string name="key_default_alarm_nfc_tag_dismiss_order">pref_default_alarm_nfc_tag_dismiss_order</string>
 	<string name="key_default_alarm_flashlight_should_use_flashlight">pref_use_flashlight</string>
 	<string name="key_default_alarm_flashlight_strength_level">pref_flashlight_strength_level</string>
 	<string name="key_default_alarm_flashlight_gradually_increase_flashlight_strength_level_wait_time">pref_flashlight_gradually_increase_flashlight_strength_level_wait_time</string>
@@ -91,6 +94,7 @@
 	<string name="key_default_alarm_snooze_max_snooze">pref_max_snooze_new</string>
 	<string name="key_default_alarm_snooze_duration">pref_snooze_duration_new</string>
 	<string name="key_default_alarm_snooze_should_use_easy_snooze">pref_easy_snooze</string>
+	<string name="key_default_alarm_snooze_should_use_volume_snooze">pref_should_volume_snooze</string>
 	<string name="key_default_alarm_reminder_should_show_reminder">pref_should_show_reminder</string>
 	<string name="key_default_alarm_reminder_time_to_show_reminder">pref_time_to_show_reminder</string>
 	<string name="key_default_alarm_reminder_frequency">pref_reminder_frequency</string>

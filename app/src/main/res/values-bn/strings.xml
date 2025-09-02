@@ -111,9 +111,6 @@
 	<string name="message_nfc_required_saved">NFC প্রয়োজন — %1$s</string>
 	<string name="message_nfc_required_use_any">NFC প্রয়োজন (যেকোনো ব্যবহার করুন)</string>
 	<string name="message_show_nfc_tag_id">আইডি</string>
-	<string name="message_scan_nfc_tag">স্ক্যান করা NFC ট্যাগ এই অ্যালার্মটি বন্ধ হয়ে গেলে খারিজ করার জন্য প্রয়োজন হবে৷</string>
-	<string name="message_select_nfc_tag">একটি NFC ট্যাগ নির্বাচন করুন যা এই অ্যালার্মটি বন্ধ হয়ে গেলে খারিজ করতে প্রয়োজন হবে৷ একাধিক নির্বাচন করা হলে, এটি এই অ্যালার্ম খারিজ করতে ব্যবহার করা যেতে পারে।</string>
-	<string name="message_save_nfc_tag">আপনি এই এনএফসি ট্যাগটিকে আবার স্ক্যান না করেই একটি নাম দিয়ে পুনরায় ব্যবহার করতে পারেন৷</string>
 	<string name="message_delete_nfc_tag">আপনি কি এই NFC ট্যাগটি মুছতে চান?</string>
 	<string name="message_rename_nfc_tag">আপনি NFC ট্যাগের নাম পরিবর্তন করতে চান কি?</string>
 	<string name="message_flashlight_on_duration">চালু:</string>
@@ -293,6 +290,9 @@
 	<string name="description_day_button_style_filled">ভরাট-ইন বোতাম।</string>
 	<string name="description_day_button_style_outlined">আউটলাইন করা বোতাম।</string>
 	<string name="description_media">সঙ্গীত বা রিংটোন</string>
+	<string name="description_scan_nfc_tag">স্ক্যান করা NFC ট্যাগ এই অ্যালার্মটি বন্ধ হয়ে গেলে খারিজ করার জন্য প্রয়োজন হবে৷</string>
+	<string name="description_select_nfc_tag">একটি NFC ট্যাগ নির্বাচন করুন যা এই অ্যালার্মটি বন্ধ হয়ে গেলে খারিজ করতে প্রয়োজন হবে৷ একাধিক নির্বাচন করা হলে, এটি এই অ্যালার্ম খারিজ করতে ব্যবহার করা যেতে পারে।</string>
+	<string name="description_save_nfc_tag">আপনি এই এনএফসি ট্যাগটিকে আবার স্ক্যান না করেই একটি নাম দিয়ে পুনরায় ব্যবহার করতে পারেন৷</string>
 	<string name="description_vibrate_vibration_duration">কতক্ষণ কম্পন করতে হবে এবং কম্পনের মধ্যে কতক্ষণ অপেক্ষা করতে হবে।</string>
 	<string name="description_vibrate_custom_pattern">কম্পনের সময়কাল নির্দিষ্ট সংখ্যক বার পুনরাবৃত্তি করুন, এবং তারপর একটি সময়কালের জন্য অপেক্ষা করুন।</string>
 	<string name="description_flashlight_brightness_level">ফ্ল্যাশলাইটের উজ্জ্বলতার মাত্রা।</string>

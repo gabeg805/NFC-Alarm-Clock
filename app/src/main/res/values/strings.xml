@@ -111,9 +111,6 @@
 	<string name="message_nfc_required_saved">NFC required — %1$s</string>
 	<string name="message_nfc_required_use_any">NFC required (use any)</string>
 	<string name="message_show_nfc_tag_id">ID</string>
-	<string name="message_scan_nfc_tag">The scanned NFC tag will be required to dismiss this alarm when it goes off.</string>
-	<string name="message_select_nfc_tag">Select an NFC tag that will be required to dismiss this alarm when it goes off. If more than one is selected, it can also be used to dismiss this alarm.</string>
-	<string name="message_save_nfc_tag">You can reuse this NFC tag, without having to scan it again, by giving it a name.</string>
 	<string name="message_delete_nfc_tag">Are you sure you want to delete this NFC tag?</string>
 	<string name="message_rename_nfc_tag">What would you like to rename the NFC tag to?</string>
 	<string name="message_flashlight_on_duration">On:</string>
@@ -199,6 +196,7 @@
 	<string name="title_alarm_activity">Dismiss Alarm</string>
 	<string name="title_scan_nfc_tag">Scan NFC tag</string>
 	<string name="title_select_nfc_tag">Select NFC tag(s)</string>
+	<string name="title_nfc_tag_dismiss_order">Dismiss order</string>
 	<string name="title_save_nfc_tag">Save NFC tag</string>
 	<string name="title_delete_nfc_tag">Delete NFC tag</string>
 	<string name="title_rename_nfc_tag">Rename NFC tag</string>
@@ -243,6 +241,7 @@
 	<string name="title_snooze_options_max_snooze">Max snoozes</string>
 	<string name="title_snooze_options_snooze_duration">Snooze duration</string>
 	<string name="title_snooze_options_easy_snooze">Easy snooze</string>
+	<string name="title_snooze_options_volume_snooze">Volume snooze</string>
 	<string name="title_upcoming_reminder_show_reminder">Show reminder</string>
 	<string name="title_upcoming_reminder_how_early">How early…</string>
 	<string name="title_upcoming_reminder_how_frequent">How frequent…</string>
@@ -293,6 +292,10 @@
 	<string name="description_day_button_style_filled">Filled-in buttons.</string>
 	<string name="description_day_button_style_outlined">Outlined buttons.</string>
 	<string name="description_media">Music or ringtone</string>
+	<string name="description_scan_nfc_tag">The scanned NFC tag will be required to dismiss this alarm when it goes off.</string>
+	<string name="description_select_nfc_tag">Select an NFC tag that will be required to dismiss this alarm when it goes off. If more than one is selected, it can also be used to dismiss this alarm.</string>
+	<string name="description_nfc_tag_dismiss_order">Order in which the NFC tags above should be dismissed.</string>
+	<string name="description_save_nfc_tag">You can reuse this NFC tag, without having to scan it again, by giving it a name.</string>
 	<string name="description_vibrate_vibration_duration">How long to vibrate for, and how long to wait in between vibrations.</string>
 	<string name="description_vibrate_custom_pattern">Repeat the vibration duration a set number of times, and then wait for a duration.</string>
 	<string name="description_flashlight_brightness_level">Brightness level of the flashlight.</string>
@@ -309,6 +312,7 @@
 	<string name="description_snooze_options_max_snooze">Maximum number of times the alarm can be snoozed.</string>
 	<string name="description_snooze_options_snooze_duration">Amount of time to snooze the alarm for.</string>
 	<string name="description_snooze_options_easy_snooze">Snooze the alarm by touching anywhere on the alarm screen.</string>
+	<string name="description_snooze_options_volume_snooze">Snooze the alarm by pressing the volume up or down button.</string>
 	<string name="description_upcoming_reminder_show_reminder">Show a reminder notification before the alarm goes off.</string>
 	<string name="description_upcoming_reminder_how_early">How early should the reminder notification should be shown?</string>
 	<string name="description_upcoming_reminder_how_frequent">How frequent should the reminder notification should be shown?</string>

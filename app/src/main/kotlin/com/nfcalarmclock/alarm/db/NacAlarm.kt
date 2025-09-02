@@ -92,10 +92,22 @@ class NacAlarm()
 	var days: EnumSet<Day> = EnumSet.noneOf(Day::class.java)
 
 	/**
+	 * Date on which to run the alarm.
+	 */
+	@ColumnInfo(name = "date", defaultValue = "")
+	var date: String = ""
+
+	/**
 	 * Whether the alarm should be repeated or not.
 	 */
 	@ColumnInfo(name = "should_repeat", defaultValue = "0")
 	var shouldRepeat: Boolean = false
+
+	/**
+	 * Frequency at which to repeat the alarm, in units of days.
+	 */
+	@ColumnInfo(name = "repeat_frequency", defaultValue = "0")
+	var repeatFrequency: Int = 0
 
 	/**
 	 * Whether the alarm should vibrate the phone or not.
@@ -145,6 +157,12 @@ class NacAlarm()
 	 */
 	@ColumnInfo(name = "nfc_tag_id")
 	var nfcTagId: String = ""
+
+	/**
+	 * Order in which to dismiss NFC tags when multiple are selected.
+	 */
+	@ColumnInfo(name = "nfc_tag_dismiss_order", defaultValue = "0")
+	var nfcTagDismissOrder: Int = 0
 
 	/**
 	 * Whether the alarm should use the flashlight or not.
@@ -356,9 +374,17 @@ class NacAlarm()
 
 	/**
 	 * Whether snoozing is easy or not.
+	 *
+	 * TODO: Can I change a column name?
 	 */
 	@ColumnInfo(name = "should_use_easy_snooze", defaultValue = "0")
-	var shouldUseEasySnooze: Boolean = false
+	var shouldEasySnooze: Boolean = false
+
+	/**
+	 * Whether snoozing with a volume button is allowed or not.
+	 */
+	@ColumnInfo(name = "should_volume_snooze", defaultValue = "0")
+	var shouldVolumeSnooze: Boolean = false
 
 	/**
 	 * Whether to show a reminder or not.
@@ -499,9 +525,11 @@ class NacAlarm()
 		hour = input.readInt()
 		minute = input.readInt()
 		setDays(input.readInt())
+		date = input.readString() ?: ""
 
 		// Repeat
 		shouldRepeat = input.readInt() != 0
+		repeatFrequency = input.readInt()
 
 		// Vibrate
 		shouldVibrate = input.readInt() != 0
@@ -514,6 +542,7 @@ class NacAlarm()
 		// NFC
 		shouldUseNfc = input.readInt() != 0
 		nfcTagId = input.readString() ?: ""
+		nfcTagDismissOrder = input.readInt()
 
 		// Flashlight
 		shouldUseFlashlight = input.readInt() != 0
@@ -562,7 +591,8 @@ class NacAlarm()
 		autoSnoozeTime = input.readInt()
 		maxSnooze = input.readInt()
 		snoozeDuration = input.readInt()
-		shouldUseEasySnooze = input.readInt() != 0
+		shouldEasySnooze = input.readInt() != 0
+		shouldVolumeSnooze = input.readInt() != 0
 
 		// Reminder
 		shouldShowReminder = input.readInt() != 0
@@ -750,7 +780,9 @@ class NacAlarm()
 		alarm.hour = hour
 		alarm.minute = minute
 		alarm.days = days
+		alarm.date = date
 		alarm.shouldRepeat = shouldRepeat
+		alarm.repeatFrequency = repeatFrequency
 		alarm.shouldVibrate = shouldVibrate
 		alarm.vibrateDuration = vibrateDuration
 		alarm.vibrateWaitTime = vibrateWaitTime
@@ -759,6 +791,7 @@ class NacAlarm()
 		alarm.vibrateWaitTimeAfterPattern = vibrateWaitTimeAfterPattern
 		alarm.shouldUseNfc = shouldUseNfc
 		alarm.nfcTagId = nfcTagId
+		alarm.nfcTagDismissOrder = nfcTagDismissOrder
 		alarm.shouldUseFlashlight = shouldUseFlashlight
 		alarm.flashlightStrengthLevel = flashlightStrengthLevel
 		alarm.graduallyIncreaseFlashlightStrengthLevelWaitTime = graduallyIncreaseFlashlightStrengthLevelWaitTime
@@ -804,7 +837,8 @@ class NacAlarm()
 		alarm.autoSnoozeTime = autoSnoozeTime
 		alarm.maxSnooze = maxSnooze
 		alarm.snoozeDuration = snoozeDuration
-		alarm.shouldUseEasySnooze = shouldUseEasySnooze
+		alarm.shouldEasySnooze = shouldEasySnooze
+		alarm.shouldVolumeSnooze = shouldVolumeSnooze
 
 		// Reminder
 		alarm.shouldShowReminder = shouldShowReminder
@@ -898,7 +932,9 @@ class NacAlarm()
 			&& (hour == alarm.hour)
 			&& (minute == alarm.minute)
 			&& (days == alarm.days)
+			&& (date == alarm.date)
 			&& (shouldRepeat == alarm.shouldRepeat)
+			&& (repeatFrequency == alarm.repeatFrequency)
 			&& (shouldVibrate == alarm.shouldVibrate)
 			&& (vibrateDuration == alarm.vibrateDuration)
 			&& (vibrateWaitTime == alarm.vibrateWaitTime)
@@ -907,6 +943,7 @@ class NacAlarm()
 			&& (vibrateWaitTimeAfterPattern == alarm.vibrateWaitTimeAfterPattern)
 			&& (shouldUseNfc == alarm.shouldUseNfc)
 			&& (nfcTagId == alarm.nfcTagId)
+			&& (nfcTagDismissOrder == alarm.nfcTagDismissOrder)
 			&& (shouldUseFlashlight == alarm.shouldUseFlashlight)
 			&& (flashlightStrengthLevel == alarm.flashlightStrengthLevel)
 			&& (graduallyIncreaseFlashlightStrengthLevelWaitTime == alarm.graduallyIncreaseFlashlightStrengthLevelWaitTime)
@@ -940,7 +977,8 @@ class NacAlarm()
 			&& (autoSnoozeTime == alarm.autoSnoozeTime)
 			&& (maxSnooze == alarm.maxSnooze)
 			&& (snoozeDuration == alarm.snoozeDuration)
-			&& (shouldUseEasySnooze == alarm.shouldUseEasySnooze)
+			&& (shouldEasySnooze == alarm.shouldEasySnooze)
+			&& (shouldVolumeSnooze == alarm.shouldVolumeSnooze)
 			&& (shouldShowReminder == alarm.shouldShowReminder)
 			&& (timeToShowReminder == alarm.timeToShowReminder)
 			&& (reminderFrequency == alarm.reminderFrequency)
@@ -971,7 +1009,9 @@ class NacAlarm()
 			&& (hour == alarm.hour)
 			&& (minute == alarm.minute)
 			&& (days == alarm.days)
+			&& (date == alarm.date)
 			&& (shouldRepeat == alarm.shouldRepeat)
+			&& (repeatFrequency == alarm.repeatFrequency)
 			&& (shouldVibrate == alarm.shouldVibrate)
 			&& (vibrateDuration == alarm.vibrateDuration)
 			&& (vibrateWaitTime == alarm.vibrateWaitTime)
@@ -980,6 +1020,7 @@ class NacAlarm()
 			&& (vibrateWaitTimeAfterPattern == alarm.vibrateWaitTimeAfterPattern)
 			&& (shouldUseNfc == alarm.shouldUseNfc)
 			&& (nfcTagId == alarm.nfcTagId)
+			&& (nfcTagDismissOrder == alarm.nfcTagDismissOrder)
 			&& (shouldUseFlashlight == alarm.shouldUseFlashlight)
 			&& (flashlightStrengthLevel == alarm.flashlightStrengthLevel)
 			&& (graduallyIncreaseFlashlightStrengthLevelWaitTime == alarm.graduallyIncreaseFlashlightStrengthLevelWaitTime)
@@ -1005,7 +1046,8 @@ class NacAlarm()
 			&& (autoSnoozeTime == alarm.autoSnoozeTime)
 			&& (maxSnooze == alarm.maxSnooze)
 			&& (snoozeDuration == alarm.snoozeDuration)
-			&& (shouldUseEasySnooze == alarm.shouldUseEasySnooze)
+			&& (shouldEasySnooze == alarm.shouldEasySnooze)
+			&& (shouldVolumeSnooze == alarm.shouldVolumeSnooze)
 			&& (shouldShowReminder == alarm.shouldShowReminder)
 			&& (timeToShowReminder == alarm.timeToShowReminder)
 			&& (reminderFrequency == alarm.reminderFrequency)
@@ -1064,63 +1106,67 @@ class NacAlarm()
 	fun print()
 	{
 		println("Alarm Information")
-		println("Id                  : $id")
-		println("Is Active           : $isActive")
-		println("Time Active         : $timeActive")
-		println("Snooze Count        : $snoozeCount")
-		println("Is Enabled          : $isEnabled")
-		println("Hour                : $hour")
-		println("Minute              : $minute")
-		println("Days                : $days")
-		println("Repeat              : $shouldRepeat")
-		println("Vibrate             : $shouldVibrate")
-		println("Vibrate duration    : $vibrateDuration")
-		println("Vibrate wait time   : $vibrateWaitTime")
-		println("Vibrate pattern     : $shouldVibratePattern")
-		println("Vibrate repeat pat. : $vibrateRepeatPattern")
-		println("Vibrate wait after  : $vibrateWaitTimeAfterPattern")
-		println("Use NFC             : $shouldUseNfc")
-		println("Nfc Tag Id          : $nfcTagId")
-		println("Use Flashlight      : $shouldUseFlashlight")
-		println("Flashlight Strength : $flashlightStrengthLevel")
-		println("Grad Inc Flash      : $graduallyIncreaseFlashlightStrengthLevelWaitTime")
-		println("Should Blink Flash  : $shouldBlinkFlashlight")
-		println("Flashlight On       : $flashlightOnDuration")
-		println("Flashlight Off      : $flashlightOffDuration")
-		println("Media Path          : $mediaPath")
-		println("Media Artist        : $mediaArtist")
-		println("Media Name          : $mediaTitle")
-		println("Media Type          : $mediaType")
-		println("Local media Path    : $localMediaPath")
-		println("Shuffle media       : $shouldShuffleMedia")
-		println("Recusively Play     : $shouldRecursivelyPlayMedia")
-		println("Volume              : $volume")
-		println("Audio Source        : $audioSource")
-		println("Name                : $name")
-		println("Tts say time        : $shouldSayCurrentTime")
-		println("Tts say name        : $shouldSayAlarmName")
-		println("Tts Freq            : $ttsFrequency")
-		println("Tts Speech Rate     : $ttsSpeechRate")
-		println("Tts Voice           : $ttsVoice")
-		println("Grad Inc Vol        : $shouldGraduallyIncreaseVolume")
-		println("Grad Inc Vol Wait T : $graduallyIncreaseVolumeWaitTime")
-		println("Restrict Vol        : $shouldRestrictVolume")
-		println("Should auto dismiss : $shouldAutoDismiss")
-		println("Auto Dismiss        : $autoDismissTime")
-		println("Use Dismiss Early   : $canDismissEarly")
-		println("Dismiss Early       : $dismissEarlyTime")
-		println("Time of Early Alarm : $timeOfDismissEarlyAlarm")
-		println("Should auto snooze  : $shouldAutoSnooze")
-		println("Auto Snooze         : $autoSnoozeTime")
-		println("Max Snooze          : $maxSnooze")
-		println("Snooze Duration     : $snoozeDuration")
-		println("Use Easy Snooze     : $shouldUseEasySnooze")
-		println("Show Reminder       : $shouldShowReminder")
-		println("Time to show remind : $timeToShowReminder")
-		println("Reminder freq       : $reminderFrequency")
-		println("Use Tts 4 Reminder  : $shouldUseTtsForReminder")
-		println("Should skip next    : $shouldSkipNextAlarm")
-		println("Should delete after : $shouldDeleteAlarmAfterDismissed")
+		println("Id                    : $id")
+		println("Is Active             : $isActive")
+		println("Time Active           : $timeActive")
+		println("Snooze Count          : $snoozeCount")
+		println("Is Enabled            : $isEnabled")
+		println("Hour                  : $hour")
+		println("Minute                : $minute")
+		println("Days                  : $days")
+		println("Date                  : $date")
+		println("Repeat                : $shouldRepeat")
+		println("Repeat Freq           : $repeatFrequency")
+		println("Vibrate               : $shouldVibrate")
+		println("Vibrate duration      : $vibrateDuration")
+		println("Vibrate wait time     : $vibrateWaitTime")
+		println("Vibrate pattern       : $shouldVibratePattern")
+		println("Vibrate repeat pat.   : $vibrateRepeatPattern")
+		println("Vibrate wait after    : $vibrateWaitTimeAfterPattern")
+		println("Use NFC               : $shouldUseNfc")
+		println("Nfc Tag Id            : $nfcTagId")
+		println("Nfc Tag Dismiss Order : $nfcTagDismissOrder")
+		println("Use Flashlight        : $shouldUseFlashlight")
+		println("Flashlight Strength   : $flashlightStrengthLevel")
+		println("Grad Inc Flash        : $graduallyIncreaseFlashlightStrengthLevelWaitTime")
+		println("Should Blink Flash    : $shouldBlinkFlashlight")
+		println("Flashlight On         : $flashlightOnDuration")
+		println("Flashlight Off        : $flashlightOffDuration")
+		println("Media Path            : $mediaPath")
+		println("Media Artist          : $mediaArtist")
+		println("Media Name            : $mediaTitle")
+		println("Media Type            : $mediaType")
+		println("Local media Path      : $localMediaPath")
+		println("Shuffle media         : $shouldShuffleMedia")
+		println("Recusively Play       : $shouldRecursivelyPlayMedia")
+		println("Volume                : $volume")
+		println("Audio Source          : $audioSource")
+		println("Name                  : $name")
+		println("Tts say time          : $shouldSayCurrentTime")
+		println("Tts say name          : $shouldSayAlarmName")
+		println("Tts Freq              : $ttsFrequency")
+		println("Tts Speech Rate       : $ttsSpeechRate")
+		println("Tts Voice             : $ttsVoice")
+		println("Grad Inc Vol          : $shouldGraduallyIncreaseVolume")
+		println("Grad Inc Vol Wait T   : $graduallyIncreaseVolumeWaitTime")
+		println("Restrict Vol          : $shouldRestrictVolume")
+		println("Should auto dismiss   : $shouldAutoDismiss")
+		println("Auto Dismiss          : $autoDismissTime")
+		println("Use Dismiss Early     : $canDismissEarly")
+		println("Dismiss Early         : $dismissEarlyTime")
+		println("Time of Early Alarm   : $timeOfDismissEarlyAlarm")
+		println("Should auto snooze    : $shouldAutoSnooze")
+		println("Auto Snooze           : $autoSnoozeTime")
+		println("Max Snooze            : $maxSnooze")
+		println("Snooze Duration       : $snoozeDuration")
+		println("Should Easy Snooze    : $shouldEasySnooze")
+		println("Should Volume Snooze  : $shouldVolumeSnooze")
+		println("Show Reminder         : $shouldShowReminder")
+		println("Time to show remind   : $timeToShowReminder")
+		println("Reminder freq         : $reminderFrequency")
+		println("Use Tts 4 Reminder    : $shouldUseTtsForReminder")
+		println("Should skip next      : $shouldSkipNextAlarm")
+		println("Should delete after   : $shouldDeleteAlarmAfterDismissed")
 	}
 
 	/**
@@ -1290,9 +1336,11 @@ class NacAlarm()
 		output.writeInt(hour)
 		output.writeInt(minute)
 		output.writeInt(Day.daysToValue(days))
+		output.writeString(date)
 
 		// Repeat
 		output.writeInt(if (shouldRepeat) 1 else 0)
+		output.writeInt(repeatFrequency)
 
 		// Vibrate
 		output.writeInt(if (shouldVibrate) 1 else 0)
@@ -1305,6 +1353,7 @@ class NacAlarm()
 		// NFC
 		output.writeInt(if (shouldUseNfc) 1 else 0)
 		output.writeString(nfcTagId)
+		output.writeInt(nfcTagDismissOrder)
 
 		// Flashlight
 		output.writeInt(if (shouldUseFlashlight) 1 else 0)
@@ -1353,7 +1402,8 @@ class NacAlarm()
 		output.writeInt(autoSnoozeTime)
 		output.writeInt(maxSnooze)
 		output.writeInt(snoozeDuration)
-		output.writeInt(if (shouldUseEasySnooze) 1 else 0)
+		output.writeInt(if (shouldEasySnooze) 1 else 0)
+		output.writeInt(if (shouldVolumeSnooze) 1 else 0)
 
 		// Reminder
 		output.writeInt(if (shouldShowReminder) 1 else 0)
@@ -1409,9 +1459,11 @@ class NacAlarm()
 			{
 				// Days
 				alarm.days = Day.valueToDays(shared.days)
+				alarm.date = shared.date
 
 				// Repeat
 				alarm.shouldRepeat = shared.shouldRepeat
+				alarm.repeatFrequency = shared.repeatFrequency
 
 				// Vibrate
 				alarm.shouldVibrate = shared.shouldVibrate
@@ -1424,6 +1476,7 @@ class NacAlarm()
 				// NFC
 				alarm.shouldUseNfc = shared.shouldUseNfc
 				alarm.nfcTagId = shared.nfcTagId
+				alarm.nfcTagDismissOrder = shared.nfcTagDismissOrder
 
 				// Flashlight
 				alarm.shouldUseFlashlight = shared.shouldUseFlashlight
@@ -1472,7 +1525,8 @@ class NacAlarm()
 				alarm.autoSnoozeTime = shared.autoSnoozeTime
 				alarm.maxSnooze = shared.maxSnooze
 				alarm.snoozeDuration = shared.snoozeDuration
-				alarm.shouldUseEasySnooze = shared.shouldEasySnooze
+				alarm.shouldEasySnooze = shared.shouldEasySnooze
+				alarm.shouldVolumeSnooze = shared.shouldVolumeSnooze
 
 				// Reminder
 				alarm.shouldShowReminder = shared.shouldShowReminder

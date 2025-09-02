@@ -10,6 +10,13 @@
 		<item>Ringtone</item>
 	</string-array>
 
+	<!-- NFC tag dismiss orders -->
+	<string-array name="nfc_tag_dismiss_orders">
+		<item>Any</item>
+		<item>Random</item>
+		<item>Sequential</item>
+	</string-array>
+
 	<!-- Flashlight -->
 	<string-array name="flashlight_on_off_duration_times">
 		<item>0.5 seconds</item>

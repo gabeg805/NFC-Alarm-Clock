@@ -18,7 +18,7 @@
 		style="@style/Widget.AlarmOptionDialog.Description"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/message_save_nfc_tag"
+		android:text="@string/description_save_nfc_tag"
 		/>
 
 	<!-- Name -->

@@ -48,6 +48,11 @@ class NacSnoozeOptionsDialog
 	private lateinit var easySnoozeSwitch: SwitchCompat
 
 	/**
+	 * Volume snooze switch.
+	 */
+	private lateinit var volumeSnoozeSwitch: SwitchCompat
+
+	/**
 	 * Selected auto snooze time.
 	 */
 	private var selectedAutoSnoozeTime: Int = 0
@@ -72,7 +77,8 @@ class NacSnoozeOptionsDialog
 		alarm?.autoSnoozeTime = selectedAutoSnoozeTime
 		alarm?.maxSnooze = selectedMaxSnoozeTime
 		alarm?.snoozeDuration = selectedSnoozeDurationTime
-		alarm?.shouldUseEasySnooze = easySnoozeSwitch.isChecked
+		alarm?.shouldEasySnooze = easySnoozeSwitch.isChecked
+		alarm?.shouldVolumeSnooze = volumeSnoozeSwitch.isChecked
 	}
 
 	/**
@@ -109,7 +115,8 @@ class NacSnoozeOptionsDialog
 		val defaultAutoSnoozeTime = alarm?.autoSnoozeTime?.takeIf { it > 0 } ?: 300
 		val defaultMaxSnooze = alarm?.maxSnooze ?: -1
 		val defaultSnoozeDuration = alarm?.snoozeDuration?.takeIf { it > 0 } ?: 300
-		val defaultShouldEasySnooze = alarm?.shouldUseEasySnooze ?: false
+		val defaultShouldEasySnooze = alarm?.shouldEasySnooze ?: false
+		val defaultShouldVolumeSnooze = alarm?.shouldVolumeSnooze ?: false
 		selectedAutoSnoozeTime = defaultAutoSnoozeTime
 		selectedMaxSnoozeTime = defaultMaxSnooze
 		selectedSnoozeDurationTime = defaultSnoozeDuration
@@ -120,6 +127,7 @@ class NacSnoozeOptionsDialog
 		setupMaxSnooze(defaultMaxSnooze)
 		setupSnoozeDuration(defaultSnoozeDuration)
 		setupEasySnooze(defaultShouldEasySnooze)
+		setupVolumeSnooze(defaultShouldVolumeSnooze)
 	}
 
 	/**
@@ -231,6 +239,25 @@ class NacSnoozeOptionsDialog
 		// Easy snooze listener
 		relativeLayout.setOnClickListener {
 			easySnoozeSwitch.isChecked = !easySnoozeSwitch.isChecked
+		}
+	}
+
+	/**
+	 * Setup volume snooze.
+	 */
+	private fun setupVolumeSnooze(default: Boolean)
+	{
+		// Get the views
+		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.volume_snooze_container)
+		volumeSnoozeSwitch = dialog!!.findViewById(R.id.volume_snooze_switch)
+
+		// Setup the checkbox
+		volumeSnoozeSwitch.isChecked = default
+		volumeSnoozeSwitch.setupSwitchColor(sharedPreferences)
+
+		// Volume snooze listener
+		relativeLayout.setOnClickListener {
+			volumeSnoozeSwitch.isChecked = !volumeSnoozeSwitch.isChecked
 		}
 	}
 

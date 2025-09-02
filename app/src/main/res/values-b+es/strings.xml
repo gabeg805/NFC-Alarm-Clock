@@ -111,9 +111,6 @@
 	<string name="message_nfc_required_saved">NFC requerido — %1$s</string>
 	<string name="message_nfc_required_use_any">NFC requerido (usa cualquiera)</string>
 	<string name="message_show_nfc_tag_id">Id</string>
-	<string name="message_scan_nfc_tag">Se requerirá la etiqueta NFC escaneada para descartar esta alarma cuando suene.</string>
-	<string name="message_select_nfc_tag">Seleccione una etiqueta NFC que será necesaria para descartar esta alarma cuando suene. Si se selecciona más de una, también se puede usar para descartar esta alarma.</string>
-	<string name="message_save_nfc_tag">Puedes reutilizar esta etiqueta NFC, sin tener que escanearla nuevamente, dándole un nombre.</string>
 	<string name="message_delete_nfc_tag">¿Estás seguro de que quieres eliminar esta etiqueta NFC?</string>
 	<string name="message_rename_nfc_tag">¿Cómo te gustaría cambiar el nombre de la etiqueta NFC?</string>
 	<string name="message_flashlight_on_duration">Encender:</string>
@@ -293,6 +290,9 @@
 	<string name="description_day_button_style_filled">Botones rellenos</string>
 	<string name="description_day_button_style_outlined">Botones delineados</string>
 	<string name="description_media">Música o tono de llamada</string>
+	<string name="description_scan_nfc_tag">Se requerirá la etiqueta NFC escaneada para descartar esta alarma cuando suene.</string>
+	<string name="description_select_nfc_tag">Seleccione una etiqueta NFC que será necesaria para descartar esta alarma cuando suene. Si se selecciona más de una, también se puede usar para descartar esta alarma.</string>
+	<string name="description_save_nfc_tag">Puedes reutilizar esta etiqueta NFC, sin tener que escanearla nuevamente, dándole un nombre.</string>
 	<string name="description_vibrate_vibration_duration">¿Cuánto tiempo hay que vibrar y cuánto tiempo hay que esperar entre vibraciones?</string>
 	<string name="description_vibrate_custom_pattern">Repita la duración de la vibración una cantidad determinada de veces y luego espere un tiempo.</string>
 	<string name="description_flashlight_brightness_level">Nivel de brillo de la linterna.</string>

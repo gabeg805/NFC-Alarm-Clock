@@ -111,9 +111,6 @@
 	<string name="message_nfc_required_saved">एनएफसी आवश्यक — %1$s</string>
 	<string name="message_nfc_required_use_any">एनएफसी आवश्यक (किसी भी का उपयोग करें)</string>
 	<string name="message_show_nfc_tag_id">पहचान</string>
-	<string name="message_scan_nfc_tag">जब यह अलार्म बजेगा तो उसे बंद करने के लिए स्कैन किए गए NFC टैग की आवश्यकता होगी।</string>
-	<string name="message_select_nfc_tag">एक NFC टैग चुनें जो इस अलार्म के बजने पर उसे बंद करने के लिए ज़रूरी होगा। अगर एक से ज़्यादा टैग चुने गए हैं, तो उनका इस्तेमाल इस अलार्म को बंद करने के लिए भी किया जा सकता है।</string>
-	<string name="message_save_nfc_tag">आप इस NFC टैग को नाम देकर, इसे दोबारा स्कैन किए बिना, पुनः उपयोग कर सकते हैं।</string>
 	<string name="message_delete_nfc_tag">क्या आप वाकई इस NFC टैग को हटाना चाहते हैं?</string>
 	<string name="message_rename_nfc_tag">आप एनएफसी टैग का नाम बदलकर क्या रखना चाहेंगे?</string>
 	<string name="message_flashlight_on_duration">पर:</string>
@@ -293,6 +290,9 @@
 	<string name="description_day_button_style_filled">भरे हुए बटन.</string>
 	<string name="description_day_button_style_outlined">रेखांकित बटन.</string>
 	<string name="description_media">संगीत या रिंगटोन</string>
+	<string name="description_scan_nfc_tag">जब यह अलार्म बजेगा तो उसे बंद करने के लिए स्कैन किए गए NFC टैग की आवश्यकता होगी।</string>
+	<string name="description_select_nfc_tag">एक NFC टैग चुनें जो इस अलार्म के बजने पर उसे बंद करने के लिए ज़रूरी होगा। अगर एक से ज़्यादा टैग चुने गए हैं, तो उनका इस्तेमाल इस अलार्म को बंद करने के लिए भी किया जा सकता है।</string>
+	<string name="description_save_nfc_tag">आप इस NFC टैग को नाम देकर, इसे दोबारा स्कैन किए बिना, पुनः उपयोग कर सकते हैं।</string>
 	<string name="description_vibrate_vibration_duration">कितनी देर तक कंपन करना है, तथा कंपनों के बीच कितनी देर तक प्रतीक्षा करनी है।</string>
 	<string name="description_vibrate_custom_pattern">कंपन अवधि को एक निश्चित संख्या में बार दोहराएं, और फिर एक निश्चित अवधि तक प्रतीक्षा करें।</string>
 	<string name="description_flashlight_brightness_level">टॉर्च की चमक का स्तर.</string>

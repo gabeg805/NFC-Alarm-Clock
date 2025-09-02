@@ -1,0 +1,721 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 36,
+    "identityHash": "edf198314d36cab77c4269a49973c1b5",
+    "entities": [
+      {
+        "tableName": "alarm",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_active` INTEGER NOT NULL DEFAULT 0, `time_active` INTEGER NOT NULL DEFAULT 0, `snooze_count` INTEGER NOT NULL DEFAULT 0, `is_enabled` INTEGER NOT NULL DEFAULT 0, `hour` INTEGER NOT NULL DEFAULT 0, `minute` INTEGER NOT NULL DEFAULT 0, `snooze_hour` INTEGER NOT NULL DEFAULT 0, `snooze_minute` INTEGER NOT NULL DEFAULT 0, `days` INTEGER NOT NULL, `date` TEXT NOT NULL DEFAULT '', `should_repeat` INTEGER NOT NULL DEFAULT 0, `repeat_frequency` INTEGER NOT NULL DEFAULT 0, `should_vibrate` INTEGER NOT NULL DEFAULT 0, `vibrate_duration` INTEGER NOT NULL DEFAULT 500, `vibrate_wait_time` INTEGER NOT NULL DEFAULT 1000, `should_vibrate_pattern` INTEGER NOT NULL DEFAULT 0, `vibrate_repeat_pattern` INTEGER NOT NULL DEFAULT 3, `vibrate_wait_time_after_pattern` INTEGER NOT NULL DEFAULT 3000, `should_use_nfc` INTEGER NOT NULL DEFAULT 0, `nfc_tag_id` TEXT NOT NULL, `nfc_tag_dismiss_order` INTEGER NOT NULL DEFAULT 0, `should_use_flashlight` INTEGER NOT NULL DEFAULT 0, `flashlight_strength_level` INTEGER NOT NULL DEFAULT 0, `gradually_increase_flashlight_strength_level_wait_time` INTEGER NOT NULL DEFAULT 5, `should_blink_flashlight` INTEGER NOT NULL DEFAULT 0, `flashlight_on_duration` TEXT NOT NULL DEFAULT '1.0', `flashlight_off_duration` TEXT NOT NULL DEFAULT '1.0', `media_path` TEXT NOT NULL, `media_artist` TEXT NOT NULL DEFAULT '', `media_title` TEXT NOT NULL DEFAULT '', `media_type` INTEGER NOT NULL DEFAULT 0, `local_media_path` TEXT NOT NULL DEFAULT '', `should_shuffle_media` INTEGER NOT NULL DEFAULT 0, `should_recursively_play_media` INTEGER NOT NULL DEFAULT 0, `volume` INTEGER NOT NULL DEFAULT 0, `audio_source` TEXT NOT NULL, `name` TEXT NOT NULL, `should_say_current_time` INTEGER NOT NULL DEFAULT 0, `should_say_alarm_name` INTEGER NOT NULL DEFAULT 0, `tts_frequency` INTEGER NOT NULL DEFAULT 0, `tts_speech_rate` REAL NOT NULL DEFAULT 0.7, `tts_voice` TEXT NOT NULL DEFAULT '', `should_gradually_increase_volume` INTEGER NOT NULL DEFAULT 0, `gradually_increase_volume_wait_time` INTEGER NOT NULL DEFAULT 5, `should_restrict_volume` INTEGER NOT NULL DEFAULT 0, `should_auto_dismiss` INTEGER NOT NULL DEFAULT 1, `auto_dismiss_time` INTEGER NOT NULL DEFAULT 900, `should_dismiss_early` INTEGER NOT NULL DEFAULT 0, `dismiss_early_time` INTEGER NOT NULL DEFAULT 30, `time_of_dismiss_early_alarm` INTEGER NOT NULL DEFAULT 0, `should_auto_snooze` INTEGER NOT NULL DEFAULT 0, `auto_snooze_time` INTEGER NOT NULL DEFAULT 300, `max_snooze` INTEGER NOT NULL DEFAULT -1, `snooze_duration` INTEGER NOT NULL DEFAULT 300, `should_use_easy_snooze` INTEGER NOT NULL DEFAULT 0, `should_volume_snooze` INTEGER NOT NULL DEFAULT 0, `should_show_reminder` INTEGER NOT NULL DEFAULT 0, `time_to_show_reminder` INTEGER NOT NULL DEFAULT 5, `reminder_frequency` INTEGER NOT NULL DEFAULT 0, `should_use_tts_for_reminder` INTEGER NOT NULL DEFAULT 0, `should_skip_next_alarm` INTEGER NOT NULL DEFAULT 0, `should_delete_alarm_after_dismissed` INTEGER NOT NULL DEFAULT 0)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isActive",
+            "columnName": "is_active",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "timeActive",
+            "columnName": "time_active",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "snoozeCount",
+            "columnName": "snooze_count",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "isEnabled",
+            "columnName": "is_enabled",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "hour",
+            "columnName": "hour",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "minute",
+            "columnName": "minute",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "snoozeHour",
+            "columnName": "snooze_hour",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "snoozeMinute",
+            "columnName": "snooze_minute",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "days",
+            "columnName": "days",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "shouldRepeat",
+            "columnName": "should_repeat",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "repeatFrequency",
+            "columnName": "repeat_frequency",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "shouldVibrate",
+            "columnName": "should_vibrate",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "vibrateDuration",
+            "columnName": "vibrate_duration",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "500"
+          },
+          {
+            "fieldPath": "vibrateWaitTime",
+            "columnName": "vibrate_wait_time",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1000"
+          },
+          {
+            "fieldPath": "shouldVibratePattern",
+            "columnName": "should_vibrate_pattern",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "vibrateRepeatPattern",
+            "columnName": "vibrate_repeat_pattern",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "3"
+          },
+          {
+            "fieldPath": "vibrateWaitTimeAfterPattern",
+            "columnName": "vibrate_wait_time_after_pattern",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "3000"
+          },
+          {
+            "fieldPath": "shouldUseNfc",
+            "columnName": "should_use_nfc",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "nfcTagId",
+            "columnName": "nfc_tag_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nfcTagDismissOrder",
+            "columnName": "nfc_tag_dismiss_order",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "shouldUseFlashlight",
+            "columnName": "should_use_flashlight",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "flashlightStrengthLevel",
+            "columnName": "flashlight_strength_level",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "graduallyIncreaseFlashlightStrengthLevelWaitTime",
+            "columnName": "gradually_increase_flashlight_strength_level_wait_time",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "5"
+          },
+          {
+            "fieldPath": "shouldBlinkFlashlight",
+            "columnName": "should_blink_flashlight",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "flashlightOnDuration",
+            "columnName": "flashlight_on_duration",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'1.0'"
+          },
+          {
+            "fieldPath": "flashlightOffDuration",
+            "columnName": "flashlight_off_duration",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'1.0'"
+          },
+          {
+            "fieldPath": "mediaPath",
+            "columnName": "media_path",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mediaArtist",
+            "columnName": "media_artist",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "mediaTitle",
+            "columnName": "media_title",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "mediaType",
+            "columnName": "media_type",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "localMediaPath",
+            "columnName": "local_media_path",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "shouldShuffleMedia",
+            "columnName": "should_shuffle_media",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "shouldRecursivelyPlayMedia",
+            "columnName": "should_recursively_play_media",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "volume",
+            "columnName": "volume",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "audioSource",
+            "columnName": "audio_source",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "shouldSayCurrentTime",
+            "columnName": "should_say_current_time",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "shouldSayAlarmName",
+            "columnName": "should_say_alarm_name",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "ttsFrequency",
+            "columnName": "tts_frequency",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "ttsSpeechRate",
+            "columnName": "tts_speech_rate",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0.7"
+          },
+          {
+            "fieldPath": "ttsVoice",
+            "columnName": "tts_voice",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "shouldGraduallyIncreaseVolume",
+            "columnName": "should_gradually_increase_volume",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "graduallyIncreaseVolumeWaitTime",
+            "columnName": "gradually_increase_volume_wait_time",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "5"
+          },
+          {
+            "fieldPath": "shouldRestrictVolume",
+            "columnName": "should_restrict_volume",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "shouldAutoDismiss",
+            "columnName": "should_auto_dismiss",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "autoDismissTime",
+            "columnName": "auto_dismiss_time",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "900"
+          },
+          {
+            "fieldPath": "canDismissEarly",
+            "columnName": "should_dismiss_early",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "dismissEarlyTime",
+            "columnName": "dismiss_early_time",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "30"
+          },
+          {
+            "fieldPath": "timeOfDismissEarlyAlarm",
+            "columnName": "time_of_dismiss_early_alarm",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "shouldAutoSnooze",
+            "columnName": "should_auto_snooze",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "autoSnoozeTime",
+            "columnName": "auto_snooze_time",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "300"
+          },
+          {
+            "fieldPath": "maxSnooze",
+            "columnName": "max_snooze",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "-1"
+          },
+          {
+            "fieldPath": "snoozeDuration",
+            "columnName": "snooze_duration",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "300"
+          },
+          {
+            "fieldPath": "shouldEasySnooze",
+            "columnName": "should_use_easy_snooze",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "shouldVolumeSnooze",
+            "columnName": "should_volume_snooze",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "shouldShowReminder",
+            "columnName": "should_show_reminder",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "timeToShowReminder",
+            "columnName": "time_to_show_reminder",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "5"
+          },
+          {
+            "fieldPath": "reminderFrequency",
+            "columnName": "reminder_frequency",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "shouldUseTtsForReminder",
+            "columnName": "should_use_tts_for_reminder",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "shouldSkipNextAlarm",
+            "columnName": "should_skip_next_alarm",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "shouldDeleteAlarmAfterDismissed",
+            "columnName": "should_delete_alarm_after_dismissed",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "alarm_created_statistic",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "alarm_deleted_statistic",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `name` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hour",
+            "columnName": "hour",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "minute",
+            "columnName": "minute",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "alarm_dismissed_statistic",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`used_nfc` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `alarm_id` INTEGER, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `name` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "usedNfc",
+            "columnName": "used_nfc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "alarmId",
+            "columnName": "alarm_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "hour",
+            "columnName": "hour",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "minute",
+            "columnName": "minute",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "alarm_missed_statistic",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `alarm_id` INTEGER, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `name` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "alarmId",
+            "columnName": "alarm_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "hour",
+            "columnName": "hour",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "minute",
+            "columnName": "minute",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "alarm_snoozed_statistic",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`duration` INTEGER NOT NULL DEFAULT 0, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `alarm_id` INTEGER, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `name` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "duration",
+            "columnName": "duration",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "alarmId",
+            "columnName": "alarm_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "hour",
+            "columnName": "hour",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "minute",
+            "columnName": "minute",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "nfc_tag",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `nfc_id` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nfcId",
+            "columnName": "nfc_id",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_nfc_tag_nfc_id",
+            "unique": true,
+            "columnNames": [
+              "nfc_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_nfc_tag_nfc_id` ON `${TABLE_NAME}` (`nfc_id`)"
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'edf198314d36cab77c4269a49973c1b5')"
+    ]
+  }
+}

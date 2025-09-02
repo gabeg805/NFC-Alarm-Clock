@@ -148,7 +148,7 @@ class NacStatisticsSettingFragment
 		// Setup all the views that need to use the theme color
 		setupViewsWithThemeColor(root)
 
-		// Setup edge to edge for the scrollview by using the margin that was saved in
+		// Setup edge to edge for the root view by using the margin that was saved in
 		// the main settings fragment. Edge-to-edge is enforced in API >= 35
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM)
 		{

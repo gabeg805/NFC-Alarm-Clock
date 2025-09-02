@@ -111,9 +111,6 @@
 	<string name="message_nfc_required_saved">NFC necessário — %1$s</string>
 	<string name="message_nfc_required_use_any">NFC necessário (use qualquer)</string>
 	<string name="message_show_nfc_tag_id">EU IA</string>
-	<string name="message_scan_nfc_tag">A etiqueta NFC escaneada será necessária para ignorar este alarme quando ele disparar.</string>
-	<string name="message_select_nfc_tag">Selecione uma tag NFC que será necessária para dispensar este alarme quando ele disparar. Se mais de uma for selecionada, ela também pode ser usada para dispensar este alarme.</string>
-	<string name="message_save_nfc_tag">Você pode reutilizar esta etiqueta NFC, sem precisar escaneá-la novamente, dando-lhe um nome.</string>
 	<string name="message_delete_nfc_tag">Tem certeza de que deseja excluir esta etiqueta NFC?</string>
 	<string name="message_rename_nfc_tag">Como você gostaria de renomear a etiqueta NFC?</string>
 	<string name="message_flashlight_on_duration">Sobre:</string>
@@ -293,6 +290,9 @@
 	<string name="description_day_button_style_filled">Botões preenchidos.</string>
 	<string name="description_day_button_style_outlined">Botões contornados.</string>
 	<string name="description_media">Música ou toque</string>
+	<string name="description_scan_nfc_tag">A etiqueta NFC escaneada será necessária para ignorar este alarme quando ele disparar.</string>
+	<string name="description_select_nfc_tag">Selecione uma tag NFC que será necessária para dispensar este alarme quando ele disparar. Se mais de uma for selecionada, ela também pode ser usada para dispensar este alarme.</string>
+	<string name="description_save_nfc_tag">Você pode reutilizar esta etiqueta NFC, sem precisar escaneá-la novamente, dando-lhe um nome.</string>
 	<string name="description_vibrate_vibration_duration">Por quanto tempo vibrar e quanto tempo esperar entre as vibrações.</string>
 	<string name="description_vibrate_custom_pattern">Repita a duração da vibração um determinado número de vezes e depois aguarde um tempo.</string>
 	<string name="description_flashlight_brightness_level">Nível de brilho da lanterna.</string>

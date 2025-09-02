@@ -111,9 +111,6 @@
 	<string name="message_nfc_required_saved">Cần có NFC — %1$s</string>
 	<string name="message_nfc_required_use_any">Cần có NFC (sử dụng bất kỳ)</string>
 	<string name="message_show_nfc_tag_id">NHẬN DẠNG</string>
-	<string name="message_scan_nfc_tag">Thẻ NFC đã quét sẽ được yêu cầu loại bỏ cảnh báo này khi nó kêu.</string>
-	<string name="message_select_nfc_tag">Chọn thẻ NFC cần thiết để tắt báo thức này khi nó kêu. Nếu chọn nhiều hơn một thẻ, nó cũng có thể được sử dụng để tắt báo thức này.</string>
-	<string name="message_save_nfc_tag">Bạn có thể sử dụng lại thẻ NFC này mà không cần phải quét lại bằng cách đặt tên cho thẻ.</string>
 	<string name="message_delete_nfc_tag">Bạn có chắc chắn muốn xóa thẻ NFC này không?</string>
 	<string name="message_rename_nfc_tag">Bạn muốn đổi tên thẻ NFC thành gì?</string>
 	<string name="message_flashlight_on_duration">Bật:</string>
@@ -293,6 +290,9 @@
 	<string name="description_day_button_style_filled">Các nút điền đầy đủ.</string>
 	<string name="description_day_button_style_outlined">Các nút được phác thảo.</string>
 	<string name="description_media">Nhạc hoặc nhạc chuông</string>
+	<string name="description_scan_nfc_tag">Thẻ NFC đã quét sẽ được yêu cầu loại bỏ cảnh báo này khi nó kêu.</string>
+	<string name="description_select_nfc_tag">Chọn thẻ NFC cần thiết để tắt báo thức này khi nó kêu. Nếu chọn nhiều hơn một thẻ, nó cũng có thể được sử dụng để tắt báo thức này.</string>
+	<string name="description_save_nfc_tag">Bạn có thể sử dụng lại thẻ NFC này mà không cần phải quét lại bằng cách đặt tên cho thẻ.</string>
 	<string name="description_vibrate_vibration_duration">Rung trong bao lâu và chờ bao lâu giữa các lần rung.</string>
 	<string name="description_vibrate_custom_pattern">Lặp lại thời lượng rung động theo số lần nhất định, sau đó đợi trong khoảng thời gian đó.</string>
 	<string name="description_flashlight_brightness_level">Mức độ sáng của đèn pin.</string>

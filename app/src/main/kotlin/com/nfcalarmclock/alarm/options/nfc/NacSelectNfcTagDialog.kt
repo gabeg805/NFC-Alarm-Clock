@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup.OnHierarchyChangeListener
 import android.widget.AdapterView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.view.children
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,9 +15,20 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
+import com.nfcalarmclock.view.setTextFromIndex
 import com.nfcalarmclock.view.setupInputLayoutColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+
+/**
+ * Order in which NFC tags can be dismissed.
+ */
+object NacNfcTagDismissOrder
+{
+	const val ANY = 0
+	const val RANDOM = 1
+	const val SEQUENTIAL = 2
+}
 
 /**
  * Select an NFC tag that has been previously saved.
@@ -37,6 +49,21 @@ class NacSelectNfcTagDialog
 	private lateinit var container: LinearLayout
 
 	/**
+	 * Title for the dismiss order.
+	 */
+	private lateinit var dismissOrderTitle: TextView
+
+	/**
+	 * Description for the dismiss order.
+	 */
+	private lateinit var dismissOrderDescription: TextView
+
+	/**
+	 * Input layout (dropdown) for the dismiss order.
+	 */
+	private lateinit var dismissOrderInputLayout: TextInputLayout
+
+	/**
 	 * NFC tag view model.
 	 */
 	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
@@ -52,6 +79,11 @@ class NacSelectNfcTagDialog
 	private var selectedNfcTags: MutableList<NacNfcTag> = mutableListOf()
 
 	/**
+	 * Selected dismiss order.
+	 */
+	private var selectedDismissOrder: Int = 0
+
+	/**
 	 * Unused (unselected) NFC tag names and is updated as the selected NFC tags list is
 	 * updated.
 	 */
@@ -65,6 +97,7 @@ class NacSelectNfcTagDialog
 	override fun onOkClicked(alarm: NacAlarm?)
 	{
 		alarm?.nfcTagId = selectedNfcTags.joinToString(" || ") { it.nfcId }
+		alarm?.nfcTagDismissOrder = selectedDismissOrder
 	}
 
 	/**
@@ -121,6 +154,28 @@ class NacSelectNfcTagDialog
 	}
 
 	/**
+	 * Set dismiss order views usability.
+	 */
+	private fun setDismissOrderUsability()
+	{
+		// Determine the usability
+		val enabled = (selectedNfcTags.size > 1)
+		val alpha = if (enabled) 1f else 0.25f
+
+		// Title
+		dismissOrderTitle.alpha = alpha
+		dismissOrderTitle.isEnabled = enabled
+
+		// Description
+		dismissOrderDescription.alpha = alpha
+		dismissOrderDescription.isEnabled = enabled
+
+		// Dropdown menu
+		dismissOrderInputLayout.alpha = alpha
+		dismissOrderInputLayout.isEnabled = enabled
+	}
+
+	/**
 	 * Set remove button usability.
 	 */
 	private fun setRemoveButtonUsability(button: MaterialButton)
@@ -147,6 +202,9 @@ class NacSelectNfcTagDialog
 			{
 				// Set the usability of all add buttons
 				setAllAddButtonUsability()
+
+				// Set the usability of the dismiss order views
+				setDismissOrderUsability()
 			}
 
 			/**
@@ -156,19 +214,25 @@ class NacSelectNfcTagDialog
 			{
 				// Set the usability of all add buttons
 				setAllAddButtonUsability()
+
+				// Set the usability of the dismiss order views
+				setDismissOrderUsability()
 			}
 
 		})
 
 		lifecycleScope.launch {
 
+			// Get the default values
+			val defaultNfcTagIdList = alarm?.nfcTagIdList ?: emptyList()
+			val defaultDismissOrder = alarm?.nfcTagDismissOrder ?: 0
+			selectedDismissOrder = defaultDismissOrder
+
 			// Get the alarm NFC IDs and all the NFC tags
-			val alarmNfcTagIdList = alarm?.nfcTagIdList ?: emptyList()
 			allNfcTags = nfcTagViewModel.getAllNfcTags()
 
 			// Set the selected NFC tags based on the alarm
-			selectedNfcTags = alarmNfcTagIdList
-				.mapNotNull { id ->
+			selectedNfcTags = defaultNfcTagIdList.mapNotNull { id ->
 					allNfcTags.find { it.nfcId == id }
 				}
 				.toMutableList()
@@ -183,12 +247,40 @@ class NacSelectNfcTagDialog
 			// Set the list of items in the textview dropdown menu
 			val nfcTagNames = allNfcTags.map { it.name }.toTypedArray()
 
-			// Setup the input layout and textview
+			// Dismiss order. This comes first to initialize all the lateinit vars
+			setupDismissOrder(defaultDismissOrder)
+
+			// Select NFC tags
 			selectedNfcTags.forEach {
 				setupInputLayoutAndTextView(it.name, nfcTagNames)
 			}
 
 		}
+	}
+
+	/**
+	 * Setup the input layout and textview.
+	 */
+	private fun setupDismissOrder(default: Int)
+	{
+		// Get the views
+		dismissOrderTitle = dialog!!.findViewById(R.id.nfc_tag_dismiss_order_title)
+		dismissOrderDescription = dialog!!.findViewById(R.id.nfc_tag_dismiss_order_description)
+		dismissOrderInputLayout = dialog!!.findViewById(R.id.nfc_tag_dismiss_order_input_layout)
+		val textView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.nfc_tag_dismiss_order_dropdown_menu)
+
+		// Setup the views
+		dismissOrderInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+		textView.setTextFromIndex(default)
+
+		// Set the textview listeners
+		textView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+			println("SELECTED POSITION : $position")
+			selectedDismissOrder = position
+		}
+
+		// Set the usability
+		setDismissOrderUsability()
 	}
 
 	/**

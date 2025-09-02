@@ -1,7 +1,10 @@
 package com.nfcalarmclock.alarm.options.nfc
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -11,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
+import com.nfcalarmclock.settings.NacMainSettingActivity
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.shared.NacSharedPreferences
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,6 +59,15 @@ class NacNfcTagSettingFragment
 		// Context
 		val context = requireContext()
 		val sharedPreferences = NacSharedPreferences(context)
+
+		// Setup edge to edge for the root view by using the margin that was saved in
+		// the main settings fragment. Edge-to-edge is enforced in API >= 35
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM)
+		{
+			root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+				topMargin = (activity as NacMainSettingActivity).rvTopMargin
+			}
+		}
 
 		// Set views
 		recyclerView = root.findViewById(R.id.nfc_tag_list_view)

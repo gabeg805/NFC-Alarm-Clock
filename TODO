@@ -2,24 +2,25 @@
 TODO
 ----
 
-* Power/volume button to snooze?
+* TODO: Does NacCardHolder toastNfc work if multiple NFC tags are selected?
+* TODO: Music did not work on Android 13 (SDK 33). Possible 34 as well
 
-* German translation bad: Clear reminder -> Erinnerung ausblenden
-About -> Über
-(Statistics) Turned down Alams -> Abgeschaltete Alarme
+* Add selecting a date.
 
 * Different repeat options, someone even wants monthly.  Should I just add a
   calendar?  How would I handle showing the date it's going to alarm?
 
-* Stream internet radio, like KEXP?
+* Add option to use multiple NFC tags in order/random to dismiss.
 
 * Add notification to dismiss early?
 
-* Snooze with physical buttons?
-
-* Add option to use multiple NFC tags in order/random to dismiss.
-
 * Check that selected directory for music works.
+
+* Stream internet radio, like KEXP?
+
+* German translation bad: Clear reminder -> Erinnerung ausblenden
+About -> Über
+(Statistics) Turned down Alams -> Abgeschaltete Alarme
 
 * Look up defaults like for auto dismiss, dismiss early, .... really all the
   times, and see if they should be in the resources directory?

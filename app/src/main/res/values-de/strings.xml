@@ -111,9 +111,6 @@
 	<string name="message_nfc_required_saved">NFC erforderlich — %1$s</string>
 	<string name="message_nfc_required_use_any">NFC erforderlich (beliebig verwenden)</string>
 	<string name="message_show_nfc_tag_id">AUSWEIS</string>
-	<string name="message_scan_nfc_tag">Um den Alarm zu deaktivieren, wenn er losgeht, ist der gescannte NFC-Tag erforderlich.</string>
-	<string name="message_select_nfc_tag">Wählen Sie ein NFC-Tag aus, das zum Deaktivieren dieses Alarms erforderlich ist, wenn er ausgelöst wird. Wenn mehr als eines ausgewählt ist, kann es auch zum Deaktivieren dieses Alarms verwendet werden.</string>
-	<string name="message_save_nfc_tag">Sie können diesen NFC-Tag wiederverwenden, ohne ihn erneut scannen zu müssen, indem Sie ihm einen Namen geben.</string>
 	<string name="message_delete_nfc_tag">Möchten Sie diesen NFC-Tag wirklich löschen?</string>
 	<string name="message_rename_nfc_tag">Wie möchten Sie das NFC-Tag umbenennen?</string>
 	<string name="message_flashlight_on_duration">An:</string>
@@ -293,6 +290,9 @@
 	<string name="description_day_button_style_filled">Ausgefüllte Schaltflächen.</string>
 	<string name="description_day_button_style_outlined">Umrandete Schaltflächen.</string>
 	<string name="description_media">Musik oder Klingelton</string>
+	<string name="description_scan_nfc_tag">Um den Alarm zu deaktivieren, wenn er losgeht, ist der gescannte NFC-Tag erforderlich.</string>
+	<string name="description_select_nfc_tag">Wählen Sie ein NFC-Tag aus, das zum Deaktivieren dieses Alarms erforderlich ist, wenn er ausgelöst wird. Wenn mehr als eines ausgewählt ist, kann es auch zum Deaktivieren dieses Alarms verwendet werden.</string>
+	<string name="description_save_nfc_tag">Sie können diesen NFC-Tag wiederverwenden, ohne ihn erneut scannen zu müssen, indem Sie ihm einen Namen geben.</string>
 	<string name="description_vibrate_vibration_duration">Wie lange vibrieren soll und wie lange zwischen den Vibrationen gewartet werden soll.</string>
 	<string name="description_vibrate_custom_pattern">Wiederholen Sie die Vibrationsdauer eine festgelegte Anzahl von Malen und warten Sie dann eine Weile.</string>
 	<string name="description_flashlight_brightness_level">Helligkeitsstufe der Taschenlampe.</string>

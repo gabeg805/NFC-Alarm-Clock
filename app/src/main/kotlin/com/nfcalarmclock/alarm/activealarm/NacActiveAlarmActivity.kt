@@ -17,7 +17,9 @@ import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.nfc.NacNfc
+import com.nfcalarmclock.alarm.options.nfc.NacNfcTagDismissOrder
 import com.nfcalarmclock.alarm.options.nfc.NacNfcTagViewModel
+import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.util.NacBundle
@@ -59,6 +61,11 @@ class NacActiveAlarmActivity
 	 */
 	private val shouldUseNfc: Boolean
 		get() = (alarm != null) && alarm!!.shouldUseNfc && sharedPreferences.shouldShowNfcButton
+
+	/**
+	 * Whether the alarm should use NFC or not.
+	 */
+	private var nfcTags: List<NacNfcTag> = listOf()
 
 	/**
 	 * NFC tag view model.
@@ -112,18 +119,47 @@ class NacActiveAlarmActivity
 		// Get the NFC ID from the intent
 		val intentNfcId = NacNfc.parseId(intent)
 
+		// NFC tag IDs, in case need to check an ID in the list
+		val nfcTagIds = nfcTags.map { it.nfcId }
+
 		// Compare the two NFC IDs. As long as nothing is null,
-		// if the NFC button is not shown in the alarm card, or
-		// if the alarm NFC ID is empty, this is good, or
-		// if the two NFC IDs are equal, this is also good
+		//   if the NFC button is not shown in the alarm card, or
+		//   if the alarm NFC ID is empty, this is good, or
+		//   if the two NFC IDs are equal, this is also good
+		//   if the NFC IDs match a particular dismiss order
 		return if ((alarm != null)
 			&& (intentNfcId != null)
-			&& (!sharedPreferences.shouldShowNfcButton
+			&& (
+				!sharedPreferences.shouldShowNfcButton
 				|| alarm!!.nfcTagId.isEmpty()
 				|| (alarm!!.nfcTagId == intentNfcId)
-				|| (alarm!!.nfcTagIdList.contains(intentNfcId))))
+				|| ((alarm!!.nfcTagDismissOrder == NacNfcTagDismissOrder.ANY) && nfcTagIds.contains(intentNfcId))
+				|| ((alarm!!.nfcTagDismissOrder == NacNfcTagDismissOrder.SEQUENTIAL) && nfcTagIds.first() == intentNfcId)
+				|| ((alarm!!.nfcTagDismissOrder == NacNfcTagDismissOrder.RANDOM) && nfcTagIds.first() == intentNfcId)
+				))
 		{
-			true
+			// Check if NFC tags need to be dismissed in a particular order
+			if ((alarm!!.nfcTagDismissOrder == NacNfcTagDismissOrder.SEQUENTIAL)
+				|| (alarm!!.nfcTagDismissOrder == NacNfcTagDismissOrder.RANDOM))
+			{
+				// The first NFC tag matched the one that was scanned so remove it
+				nfcTags = nfcTags.drop(1)
+
+				// Setup the NFC tag
+				if (nfcTags.isNotEmpty())
+				{
+					layoutHandler.setupNfcTag(this@NacActiveAlarmActivity, nfcTags.get(0).name)
+				}
+
+				// Return. When all the NFC tags have been scanned, then the alarm can be
+				// dismissed
+				nfcTags.isEmpty()
+			}
+			// Dismiss the alarm
+			else
+			{
+				true
+			}
 		}
 		// Something went wrong when comparing the NFC IDs
 		else
@@ -185,19 +221,23 @@ class NacActiveAlarmActivity
 	/**
 	 * Called when a physical button is pressed.
 	 */
+	@OptIn(UnstableApi::class)
 	override fun onKeyUp(keyCode: Int, event: KeyEvent?) : Boolean
 	{
-		println("KEY : $keyCode")
 		// Check if volume up or down was pressed
 		if ((keyCode == KeyEvent.KEYCODE_VOLUME_UP)
 			|| (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN))
 		{
-			// TODO: Check if the snooze on volume button pressed option is set
-			println("SUCCESS")
-
-			// TODO: Return true here
+			// Check alarm to see if snoozing with volume buttons is desired
+			if (alarm?.shouldVolumeSnooze == true)
+			{
+				// Snooze the alarm
+				NacActiveAlarmService.snoozeAlarmService(this, alarm)
+				return true
+			}
 		}
 
+		// Default return
 		return super.onKeyUp(keyCode, event)
 	}
 
@@ -268,10 +308,36 @@ class NacActiveAlarmActivity
 			// Setup NFC tag
 			lifecycleScope.launch {
 
-				// Get the NFC tag that corresponds to this ID from the table
-				val nfcTagNames = alarm!!.nfcTagIdList.takeIf { alarm!!.nfcTagId.isNotEmpty() }
+				// Get the list of NFC tags that are valid
+				nfcTags = alarm!!.nfcTagIdList.takeIf { alarm!!.nfcTagId.isNotEmpty() }
 					?.mapNotNull {  nfcTagViewModel.findNfcTag(it) }
-					?.joinToString(" \u2027 ") { it.name }
+					?: listOf()
+
+				// Order the NFC tags based on how the user wants them ordered
+				var nfcTagNames: String? = null
+
+				when (alarm!!.nfcTagDismissOrder)
+				{
+					// Any. Show all NFC tags
+					NacNfcTagDismissOrder.ANY -> {
+						nfcTagNames = nfcTags.takeIf { nfcTags.isNotEmpty() }
+							?.joinToString(" \u2027 ") { it.name }
+					}
+
+					// Sequential. Show the first NFC tag
+					NacNfcTagDismissOrder.SEQUENTIAL -> {
+						nfcTagNames = nfcTags.getOrNull(0)?.name
+					}
+
+					// Random. Randomize the list and then show the first NFC tag
+					NacNfcTagDismissOrder.RANDOM -> {
+						nfcTags = nfcTags.shuffled()
+						nfcTagNames = nfcTags.getOrNull(0)?.name
+					}
+
+					// Unknown
+					else -> {}
+				}
 
 				// Setup the NFC tag
 				layoutHandler.setupNfcTag(this@NacActiveAlarmActivity, nfcTagNames)

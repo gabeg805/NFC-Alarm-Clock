@@ -810,6 +810,23 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Alarm date.
+	 */
+	var date: String
+		get()
+		{
+			val key = resources.getString(R.string.key_default_alarm_date)
+
+			return instance.getString(key, "") ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_alarm_date)
+
+			saveString(key, value)
+		}
+
+	/**
 	 * Which style to use for the day buttons.
 	 *
 	 * 1: Represents using the filled-in buttons (Default)
@@ -1275,7 +1292,25 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Whether to show or hide the NFC button.
+	 * Order in which to dismiss NFC tags when multiple are selected.
+	 */
+	var nfcTagDismissOrder: Int
+		get()
+		{
+			val key = resources.getString(R.string.key_default_alarm_nfc_tag_dismiss_order)
+			val defaultValue = 0
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_alarm_nfc_tag_dismiss_order)
+
+			saveInt(key, value)
+		}
+
+	/**
+	 * ID of the NFC tag that needs to be used to dismiss the alarm.
 	 */
 	var nfcTagId: String
 		get()
@@ -1394,6 +1429,24 @@ class NacSharedPreferences(context: Context)
 		set(value)
 		{
 			val key = resources.getString(R.string.key_default_alarm_reminder_frequency)
+
+			saveInt(key,  value)
+		}
+
+	/**
+	 * Frequency at which to repeat the alarm, in units of days.
+	 */
+	var repeatFrequency: Int
+		get()
+		{
+			val key = resources.getString(R.string.key_default_alarm_repeat_frequency)
+			val defaultValue = 0
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_alarm_repeat_frequency)
 
 			saveInt(key,  value)
 		}
@@ -1718,6 +1771,24 @@ class NacSharedPreferences(context: Context)
 		set(value)
 		{
 			val key = resources.getString(R.string.key_default_alarm_media_should_shuffle_media)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether volume snooze is enabled or not.
+	 */
+	var shouldVolumeSnooze: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_alarm_snooze_should_use_volume_snooze)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_alarm_snooze_should_use_volume_snooze)
 
 			saveBoolean(key, value)
 		}
