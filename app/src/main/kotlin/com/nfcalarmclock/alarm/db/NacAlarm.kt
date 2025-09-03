@@ -92,7 +92,7 @@ class NacAlarm()
 	var days: EnumSet<Day> = EnumSet.noneOf(Day::class.java)
 
 	/**
-	 * Date on which to run the alarm.
+	 * Date on which to run the alarm, in format of YYYY-MM-DD.
 	 */
 	@ColumnInfo(name = "date", defaultValue = "")
 	var date: String = ""
@@ -335,6 +335,12 @@ class NacAlarm()
 	 */
 	@ColumnInfo(name = "should_dismiss_early", defaultValue = "0")
 	var canDismissEarly: Boolean = false
+
+	/**
+	 * Whether to show a notification for dismiss early or not.
+	 */
+	@ColumnInfo(name = "should_show_dismiss_early_notification", defaultValue = "0")
+	var shouldShowDismissEarlyNotification: Boolean = false
 
 	/**
 	 * Amount of time to allow a user to dismiss early by (minutes).
@@ -582,6 +588,7 @@ class NacAlarm()
 		shouldAutoDismiss = input.readInt() != 0
 		autoDismissTime = input.readInt()
 		canDismissEarly = input.readInt() != 0
+		shouldShowDismissEarlyNotification = input.readInt() != 0
 		dismissEarlyTime = input.readInt()
 		timeOfDismissEarlyAlarm = input.readLong()
 		shouldDeleteAlarmAfterDismissed = input.readInt() != 0
@@ -830,6 +837,7 @@ class NacAlarm()
 
 		// Dismiss early
 		alarm.canDismissEarly = canDismissEarly
+		alarm.shouldShowDismissEarlyNotification = shouldShowDismissEarlyNotification
 		alarm.dismissEarlyTime = dismissEarlyTime
 		alarm.timeOfDismissEarlyAlarm = timeOfDismissEarlyAlarm
 
@@ -971,6 +979,7 @@ class NacAlarm()
 			&& (shouldAutoDismiss == alarm.shouldAutoDismiss)
 			&& (autoDismissTime == alarm.autoDismissTime)
 			&& (canDismissEarly == alarm.canDismissEarly)
+			&& (shouldShowDismissEarlyNotification == alarm.shouldShowDismissEarlyNotification)
 			&& (dismissEarlyTime == alarm.dismissEarlyTime)
 			&& (timeOfDismissEarlyAlarm == alarm.timeOfDismissEarlyAlarm)
 			&& (shouldAutoSnooze == alarm.shouldAutoSnooze)
@@ -1041,6 +1050,7 @@ class NacAlarm()
 			&& (shouldAutoDismiss == alarm.shouldAutoDismiss)
 			&& (autoDismissTime == alarm.autoDismissTime)
 			&& (canDismissEarly == alarm.canDismissEarly)
+			&& (shouldShowDismissEarlyNotification == alarm.shouldShowDismissEarlyNotification)
 			&& (dismissEarlyTime == alarm.dismissEarlyTime)
 			&& (shouldAutoSnooze == alarm.shouldAutoSnooze)
 			&& (autoSnoozeTime == alarm.autoSnoozeTime)
@@ -1153,6 +1163,7 @@ class NacAlarm()
 		println("Should auto dismiss   : $shouldAutoDismiss")
 		println("Auto Dismiss          : $autoDismissTime")
 		println("Use Dismiss Early     : $canDismissEarly")
+		println("Should Dismiss Early N: $shouldShowDismissEarlyNotification")
 		println("Dismiss Early         : $dismissEarlyTime")
 		println("Time of Early Alarm   : $timeOfDismissEarlyAlarm")
 		println("Should auto snooze    : $shouldAutoSnooze")
@@ -1393,6 +1404,7 @@ class NacAlarm()
 		output.writeInt(if (shouldAutoDismiss) 1 else 0)
 		output.writeInt(autoDismissTime)
 		output.writeInt(if (canDismissEarly) 1 else 0)
+		output.writeInt(if (shouldShowDismissEarlyNotification) 1 else 0)
 		output.writeInt(dismissEarlyTime)
 		output.writeLong(timeOfDismissEarlyAlarm)
 		output.writeInt(if (shouldDeleteAlarmAfterDismissed) 1 else 0)
@@ -1516,6 +1528,7 @@ class NacAlarm()
 				alarm.shouldAutoDismiss = shared.shouldAutoDismiss
 				alarm.autoDismissTime = shared.autoDismissTime
 				alarm.canDismissEarly = shared.canDismissEarly
+				alarm.shouldShowDismissEarlyNotification = shared.shouldShowDismissEarlyNotification
 				alarm.dismissEarlyTime = shared.dismissEarlyTime
 				alarm.timeOfDismissEarlyAlarm = 0
 				alarm.shouldDeleteAlarmAfterDismissed = shared.shouldDeleteAlarmAfterDismissed

@@ -113,6 +113,14 @@ class NacCardHolder(
 	}
 
 	/**
+	 * Listener for when the schedule date button is clicked.
+	 */
+	fun interface OnCardScheduleDateClickedListener
+	{
+		fun onCardScheduleDateClicked(card: NacCardHolder, alarm: NacAlarm)
+	}
+
+	/**
 	 * Listener for when the snooze options button is clicked.
 	 */
 	fun interface OnCardSnoozeOptionsClickedListener
@@ -280,6 +288,11 @@ class NacCardHolder(
 	private val summaryNameView: TextView = root.findViewById(R.id.nac_summary_name)
 
 	/**
+	 * Schedule date.
+	 */
+	private val scheduleDate: MaterialButton = root.findViewById(R.id.nac_schedule_date)
+
+	/**
 	 * Day of week.
 	 */
 	private val dayOfWeek: NacDayOfWeek = NacDayOfWeek(root.findViewById(R.id.nac_days))
@@ -403,6 +416,11 @@ class NacCardHolder(
 	 * Listener for when the name button is clicked.
 	 */
 	var onCardNameClickedListener: OnCardNameClickedListener? = null
+
+	/**
+	 * Listener for when the schedule date button is clicked.
+	 */
+	var onCardScheduleDateClickedListener: OnCardScheduleDateClickedListener? = null
 
 	/**
 	 * Listener for when the snooze options button is clicked.
@@ -913,6 +931,7 @@ class NacCardHolder(
 		summaryDaysView.setTextColor(sharedPreferences.daysColor)
 		summaryNameView.setTextColor(sharedPreferences.nameColor)
 		dismissButton.setupRippleColor(sharedPreferences)
+		scheduleDate.setupRippleColor(sharedPreferences)
 		dayOfWeek.dayButtons.forEach { it.button?.setupRippleColor(sharedPreferences) }
 		repeatButton.setupRippleColor(sharedPreferences)
 		vibrateButton.setupRippleColor(sharedPreferences)
@@ -938,6 +957,7 @@ class NacCardHolder(
 		setupSwitchChangedListener()
 		setupDismissButtonListener()
 		setupDismissEarlyButtonListener()
+		setupScheduleDateButtonListener()
 		setupDayOfWeekChangedListener()
 		setupRepeatButtonListener()
 		setupRepeatButtonLongClickListener()
@@ -1104,6 +1124,21 @@ class NacCardHolder(
 		setNameButton()
 		setSummaryNameView()
 		setSummarySkipNextAlarmIcon()
+	}
+
+	/**
+	 * Refresh all the views that can be affected when a date is scheduled.
+	 */
+	fun refreshScheduleDateViews()
+	{
+		setSwitchView()
+		setDayOfWeek()
+		setRepeatButton()
+		setSummaryDaysView()
+		setSummarySkipNextAlarmIcon()
+
+		// Refresh dismiss buttons and collapse refresh if need be
+		refreshExtraViewWithCollapse()
 	}
 
 	/**
@@ -1658,6 +1693,9 @@ class NacCardHolder(
 					alarm!!.shouldRepeat = false
 				}
 
+				// Clear the date
+				alarm!!.date = ""
+
 				// Setup the views
 				setRepeatButton()
 				setSummaryDaysView()
@@ -1936,6 +1974,30 @@ class NacCardHolder(
 			}
 
 			true
+		}
+	}
+
+	/**
+	 * Setup the listener when the schedule date button is clicked.
+	 */
+	private fun setupScheduleDateButtonListener()
+	{
+		// Set the listener
+		scheduleDate.setOnClickListener { view ->
+
+			// Check if the alarm can be modified
+			if (checkCanModifyAlarm())
+			{
+				// Call the listener
+				onCardScheduleDateClickedListener?.onCardScheduleDateClicked(this, alarm!!)
+			}
+			// Alarm cannot be modified
+			else
+			{
+				// Haptic feedback
+				view.performHapticFeedback()
+			}
+
 		}
 	}
 

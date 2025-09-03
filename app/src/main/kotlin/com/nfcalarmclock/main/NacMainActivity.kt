@@ -1,6 +1,7 @@
 package com.nfcalarmclock.main
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Context
@@ -51,6 +52,7 @@ import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmActivity
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacAlarmOptionsDialog
+import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissEarlyService
 import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog
 import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerActivity
 import com.nfcalarmclock.alarm.options.name.NacNameDialog
@@ -771,28 +773,27 @@ class NacMainActivity
 			}
 
 			// Check if an alarm should be dismissed early
-			println("Intent action : ${intent.action}")
 			if (intent.action == ACTION_DISMISS_ALARM_EARLY)
 			{
-				println("Getting the alarm from the intent")
 				// Get the alarm from the intent
 				val alarm = intent.getAlarm()
 
-				// Check if the alarm exists
+				// Check if the alarm is in the intent
 				if (alarm != null)
 				{
-					println("Alarm is not null, dope")
-
-					// Dismiss the alarm early
+					// Dismiss the alarm early and update it
 					alarm.dismissEarly()
-
-					// Update the alarm
-					println("Update the alarm card plz work")
 					updateAlarm(alarm)
+
+					// Clear the notification
+					val intent = NacDismissEarlyService.getStopIntent(this@NacMainActivity, alarm)
+					startService(intent)
 				}
+				// Null alarm
 				else
 				{
-					println("TODO: SHOW TOAST THAT THIS SHOULD NOT HAPPEN")
+					// Show error toast
+					quickToast(this@NacMainActivity, R.string.error_message_unable_to_dismiss_early)
 				}
 			}
 
@@ -933,6 +934,49 @@ class NacMainActivity
 			updateAlarm(alarm)
 		}
 
+		// Schedule date
+		card.onCardScheduleDateClickedListener = NacCardHolder.OnCardScheduleDateClickedListener { _, alarm ->
+
+			// Create the dialog
+			val dialog = DatePickerDialog(this)
+
+			println("Current  : ${System.currentTimeMillis()}")
+			println("Calendar : ${Calendar.getInstance().timeInMillis}")
+
+			// Customize the date picker
+			dialog.datePicker.apply {
+				firstDayOfWeek = if (sharedPreferences.startWeekOn == 1) Calendar.MONDAY else Calendar.SUNDAY
+				minDate = Calendar.getInstance().timeInMillis - 1000
+			}
+
+			// Set the listener
+			dialog.setOnDateSetListener { _, year, month, day ->
+
+				// Set the date
+				println("Year : $year | Month : $month | Day : $day")
+				alarm.date = "$year-${month+1}-$day"
+				println("Date : ${alarm.date}")
+
+				// Set various other alarm attributes that setting the date affects
+				alarm.isEnabled = true
+				alarm.setDays(0)
+				alarm.shouldRepeat = false
+				alarm.shouldSkipNextAlarm = false
+
+				// Refresh the schedule date views
+				card.refreshScheduleDateViews()
+
+				// Show the next alarm, update the alarm, and save the next alarm
+				showNextAlarm(card, alarm)
+				updateAlarm(alarm)
+
+			}
+
+			// Show the dialog
+			dialog.show()
+
+		}
+
 		// Days
 		card.onCardDaysChangedListener = NacCardHolder.OnCardDaysChangedListener { _, alarm ->
 			showNextAlarm(card, alarm)
@@ -943,14 +987,12 @@ class NacMainActivity
 		card.onCardUseRepeatChangedListener = NacCardHolder.OnCardUseRepeatChangedListener { _, alarm ->
 			updateAlarm(alarm)
 			card.toastRepeat(this)
-
 		}
 
 		// Vibrate
 		card.onCardUseVibrateChangedListener = NacCardHolder.OnCardUseVibrateChangedListener { _, alarm ->
 			updateAlarm(alarm)
 			card.toastVibrate(this)
-
 		}
 
 		// NFC
@@ -966,7 +1008,6 @@ class NacMainActivity
 		card.onCardUseFlashlightChangedListener = NacCardHolder.OnCardUseFlashlightChangedListener { _, alarm ->
 			updateAlarm(alarm)
 			card.toastFlashlight(this)
-
 		}
 
 		// Media

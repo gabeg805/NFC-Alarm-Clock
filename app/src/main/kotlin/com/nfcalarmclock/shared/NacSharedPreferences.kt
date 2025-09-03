@@ -1668,6 +1668,24 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Whether to show a notification for dismiss early or not.
+	 */
+	var shouldShowDismissEarlyNotification: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_alarm_dismiss_should_show_dismiss_early_notification)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_alarm_dismiss_should_show_dismiss_early_notification)
+
+			saveBoolean(key, value)
+		}
+
+	/**
 	 * Whether the Manage NFC Tags preference should be visible or not.
 	 */
 	var shouldShowManageNfcTagsPreference: Boolean
@@ -2243,7 +2261,7 @@ class NacSharedPreferences(context: Context)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.key_permission_schedule_exact_alarm_requested)
+			val key = resources.getString(R.string.key_permission_system_alert_window_requested)
 
 			saveBoolean(key, value)
 		}

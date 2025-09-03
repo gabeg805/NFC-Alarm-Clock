@@ -79,6 +79,7 @@
 		android:gravity="center_horizontal"
 		android:orientation="vertical"
 		android:visibility="invisible"
+		android:animateLayoutChanges="true"
 		app:layout_constraintTop_toBottomOf="@id/alarm_name"
 		app:layout_constraintBottom_toTopOf="@id/slider_instructions">
 

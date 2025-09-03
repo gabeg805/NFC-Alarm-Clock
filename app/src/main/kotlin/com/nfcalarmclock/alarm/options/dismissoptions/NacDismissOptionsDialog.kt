@@ -43,9 +43,19 @@ class NacDismissOptionsDialog
 	private lateinit var autoDismissSecondsInputLayout: TextInputLayout
 
 	/**
+	 * Dismiss early notification container.
+	 */
+	private lateinit var dismissEarlyNotificationContainer: RelativeLayout
+
+	/**
 	 * Dismiss early switch.
 	 */
 	private lateinit var dismissEarlySwitch: SwitchCompat
+
+	/**
+	 * Dismiss early notification switch.
+	 */
+	private lateinit var dismissEarlyNotificationSwitch: SwitchCompat
 
 	/**
 	 * Dismiss early input layout.
@@ -76,6 +86,7 @@ class NacDismissOptionsDialog
 		alarm?.shouldAutoDismiss = autoDismissSwitch.isChecked
 		alarm?.autoDismissTime = selectedAutoDismissTime
 		alarm?.canDismissEarly = dismissEarlySwitch.isChecked
+		alarm?.shouldShowDismissEarlyNotification = dismissEarlyNotificationSwitch.isChecked
 		alarm?.dismissEarlyTime = selectedDismissEarlyTime
 		alarm?.shouldDeleteAlarmAfterDismissed = selectedShouldDeleteAlarmAfterDismissed
 	}
@@ -113,9 +124,11 @@ class NacDismissOptionsDialog
 		val state = dismissEarlySwitch.isChecked
 		val alpha = calcAlpha(state)
 
-		// Setup usability of the dropdown
+		// Setup usability of the dropdown and notification container
 		dismissEarlyInputLayout.alpha = alpha
 		dismissEarlyInputLayout.isEnabled = state
+		dismissEarlyNotificationContainer.alpha = alpha
+		dismissEarlyNotificationContainer.isEnabled = state
 	}
 
 	/**
@@ -127,6 +140,7 @@ class NacDismissOptionsDialog
 		val defaultShouldAutoDismiss = alarm?.shouldAutoDismiss ?: true
 		val defaultAutoDismissTime = alarm?.autoDismissTime?.takeIf { it > 0 } ?: 900
 		val defaultShouldDismissEarly = alarm?.canDismissEarly ?: false
+		val defaultShouldShowDismissEarlyNotification = alarm?.shouldShowDismissEarlyNotification ?: false
 		val defaultDismissEarlyTime = alarm?.dismissEarlyTime ?: 30
 		val defaultShouldDeleteAlarmAfterDismissed = alarm?.shouldDeleteAlarmAfterDismissed ?: false
 		selectedAutoDismissTime = defaultAutoDismissTime
@@ -134,7 +148,7 @@ class NacDismissOptionsDialog
 
 		// Setup the views
 		setupAutoDismiss(defaultShouldAutoDismiss, defaultAutoDismissTime)
-		setupDismissEarly(defaultShouldDismissEarly, defaultDismissEarlyTime)
+		setupDismissEarly(defaultShouldDismissEarly, defaultShouldShowDismissEarlyNotification, defaultDismissEarlyTime)
 		setupShouldDeleteAlarmAfterDismissed(defaultShouldDeleteAlarmAfterDismissed)
 		setAutoDismissUsability()
 		setDismissEarlyUsability()
@@ -186,17 +200,24 @@ class NacDismissOptionsDialog
 	/**
 	 * Setup the dismiss early views.
 	 */
-	private fun setupDismissEarly(defaultState: Boolean, defaultTime: Int)
+	private fun setupDismissEarly(
+		defaultState: Boolean,
+		defaultNotificationState: Boolean,
+		defaultTime: Int)
 	{
 		// Get the views
 		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.dismiss_early_container)
 		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.dismiss_early_dropdown_menu)
 		dismissEarlySwitch = dialog!!.findViewById(R.id.dismiss_early_switch)
 		dismissEarlyInputLayout = dialog!!.findViewById(R.id.dismiss_early_input_layout)
+		dismissEarlyNotificationContainer = dialog!!.findViewById(R.id.dismiss_early_notification_container)
+		dismissEarlyNotificationSwitch = dialog!!.findViewById(R.id.dismiss_early_notification_switch)
 
-		// Setup the checkbox
+		// Setup the checkboxes
 		dismissEarlySwitch.isChecked = defaultState
+		dismissEarlyNotificationSwitch.isChecked = defaultNotificationState
 		dismissEarlySwitch.setupSwitchColor(sharedPreferences)
+		dismissEarlyNotificationSwitch.setupSwitchColor(sharedPreferences)
 
 		// Setup the dropdown
 		val index = NacAlarm.calcDismissEarlyIndex(defaultTime)
@@ -204,7 +225,7 @@ class NacDismissOptionsDialog
 		dismissEarlyInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 		autoCompleteTextView.setTextFromIndex(index)
 
-		// Set the listener for the parent to change the checkbox
+		// Set the listener for the dismiss early parent to change the checkbox
 		relativeLayout.setOnClickListener {
 
 			// Toggle the switch and set the usability of the views the switch controls
@@ -216,6 +237,11 @@ class NacDismissOptionsDialog
 		// Set the dropdown listener
 		autoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
 			selectedDismissEarlyTime = NacAlarm.calcDismissEarlyTime(position)
+		}
+
+		// Set the listener for the dismiss early notification parent to change the checkbox
+		dismissEarlyNotificationContainer.setOnClickListener {
+			dismissEarlyNotificationSwitch.toggle()
 		}
 	}
 

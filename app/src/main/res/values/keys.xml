@@ -88,6 +88,7 @@
 	<string name="key_default_alarm_dismiss_should_auto_dismiss">pref_should_auto_dismiss</string>
 	<string name="key_default_alarm_dismiss_auto_dismiss_time">pref_auto_dismiss_new</string>
 	<string name="key_default_alarm_dismiss_can_dismiss_early">pref_use_dismiss_early</string>
+	<string name="key_default_alarm_dismiss_should_show_dismiss_early_notification">pref_should_show_dismiss_early_notification</string>
 	<string name="key_default_alarm_dismiss_early_time">pref_dismiss_early_time</string>
 	<string name="key_default_alarm_dismiss_should_delete_alarm_after_dismissed">pref_should_delete_alarm_after_dismissed</string>
 	<string name="key_default_alarm_snooze_should_auto_snooze">pref_should_auto_snooze</string>

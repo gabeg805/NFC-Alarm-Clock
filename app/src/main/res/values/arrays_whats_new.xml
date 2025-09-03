@@ -6,9 +6,10 @@
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
 		<item>12.6.0-beta</item>
-		<item>Added option to &lt;b>snooze&lt;/b> with &lt;b>volume buttons&lt;/b>.</item>
-		<item>Added option to &lt;b>dismiss NFC tags&lt;/b> in particular &lt;b>order&lt;/b>.</item>
-		<item>When an alarm has &lt;b>dismiss early&lt;/b> enabled, show a &lt;b>notification &lt;/b> at the time that it can be dismissed early.</item>
+		<item>Added &lt;b>schedule date&lt;/b> to set an alarm on a particular date.</item>
+		<item>Added &lt;b>snooze&lt;/b> with &lt;b>volume buttons&lt;/b>.</item>
+		<item>Added &lt;b>dismiss NFC tags&lt;/b> in &lt;b>order&lt;/b>, if multiple NFC tags are selected.  Can be dismissed in any, random, or sequential order.</item>
+		<item>Added &lt;b>dismiss early notification&lt;/b>. Optionally show a notification when an alarm can be dismissed early.</item>
 		<item>Updated to support &lt;b>Android 15&lt;/b>.</item>
 		<item>12.5.4</item>
 		<item>Fixed issue where &lt;b>skip next alarm&lt;/b> would keep skipping the alarm.</item>

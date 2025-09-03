@@ -231,9 +231,9 @@ class NacUpcomingReminderService
 	{
 
 		/**
-		 * Action to start the service.
+		 * Action to clear the notification and stop the service.
 		 */
-		const val ACTION_CLEAR_REMINDER = "com.nfcalarmclock.ACTION_CLEAR_REMINDER"
+		private const val ACTION_CLEAR_REMINDER = "com.nfcalarmclock.ACTION_CLEAR_REMINDER"
 
 		/**
 		 * Create an intent that will be used to start the foreground upcoming

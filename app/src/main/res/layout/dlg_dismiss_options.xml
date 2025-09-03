@@ -148,6 +148,50 @@
 	<!-- Separator -->
 	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
 
+	<!-- Dismiss early notification -->
+	<RelativeLayout
+		android:id="@+id/dismiss_early_notification_container"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:clickable="true"
+		android:focusable="true">
+
+		<!-- Title -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Title"
+			android:id="@+id/dismiss_early_notification_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentStart="true"
+			android:layout_toStartOf="@id/dismiss_early_notification_switch"
+			android:text="@string/title_dismiss_options_dismiss_early_notification"
+			/>
+
+		<!-- Description -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Description"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentStart="true"
+			android:layout_below="@id/dismiss_early_notification_title"
+			android:layout_toStartOf="@id/dismiss_early_notification_switch"
+			android:text="@string/description_dismiss_options_dismiss_early_notification"
+			/>
+
+		<!-- Switch -->
+		<androidx.appcompat.widget.SwitchCompat
+			android:id="@+id/dismiss_early_notification_switch"
+			android:layout_width="@dimen/touch"
+			android:layout_height="@dimen/touch"
+			android:layout_alignParentEnd="true"
+			android:layout_centerVertical="true"
+			android:clickable="false"
+			/>
+	</RelativeLayout>
+
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.SeparatorAfterCheckBox" />
+
 	<!-- Delete after dismissed -->
 	<RelativeLayout
 		android:id="@+id/delete_after_dismissed_container"

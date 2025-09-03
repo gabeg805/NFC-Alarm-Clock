@@ -46,22 +46,37 @@ object NacCalendar
 	}
 
 	/**
-	 * Get today's day, with the alarm hour and minute, if supplied.
+	 * Get a calendar with the alarm hour and minute.
 	 *
-	 * @return Today's day, with the alarm hour and minute, if supplied.
+	 * If a date is set, then the calendar will have the alarm's date. Otherwise, it will
+	 * have today's date.
+	 *
+	 * @return A calendar with the alarm hour, minute, and date, if present.
 	 */
 	fun alarmToCalendar(alarm: NacAlarm): Calendar
 	{
 		// Get the current calendar instance
-		val today = Calendar.getInstance()
+		val cal = Calendar.getInstance()
 
 		// Set the calendar instance with attributes from the alarm
-		today[Calendar.HOUR_OF_DAY] = alarm.hour
-		today[Calendar.MINUTE] = alarm.minute
-		today[Calendar.SECOND] = 0
-		today[Calendar.MILLISECOND] = 0
+		cal[Calendar.HOUR_OF_DAY] = alarm.hour
+		cal[Calendar.MINUTE] = alarm.minute
+		cal[Calendar.SECOND] = 0
+		cal[Calendar.MILLISECOND] = 0
 
-		return today
+		// Check if a date was set
+		if (alarm.date.isNotEmpty())
+		{
+			// Get the year/month/day
+			val (year, month, day) = alarm.date.split("-")
+
+			// Build a calendar with that date
+			cal[Calendar.YEAR] = year.toInt()
+			cal[Calendar.MONTH] = month.toInt()
+			cal[Calendar.DAY_OF_MONTH] = day.toInt()
+		}
+
+		return cal
 	}
 
 	/**
@@ -590,6 +605,16 @@ object NacCalendar
 				// Check if unable to convert the days to a string or if there are no days selected
 				if (string.isEmpty() || !alarm.areDaysSelected)
 				{
+					// Check if date is set
+					if (alarm.date.isNotEmpty())
+					{
+						// Build a calendar with the date
+						val cal = alarmToCalendar(alarm)
+
+						// Return a formatted string
+						return DateFormat.format("MMM d", cal).toString()
+					}
+
 					// Get the current day
 					val now = Calendar.getInstance()[Calendar.DAY_OF_MONTH]
 
@@ -671,17 +696,23 @@ object NacCalendar
 				start: Int
 			): String
 			{
-
+				// None
+				if (daysToConvert.isEmpty())
+				{
+					return ""
+				}
 				// Every day
-				if (isEveryday(daysToConvert))
+				else if (daysToConvert == WEEK)
 				{
 					return context.getString(R.string.dow_everyday)
 				}
-				else if (isWeekday(daysToConvert))
+				// Weekdays
+				else if (daysToConvert == WEEKDAY)
 				{
 					return context.getString(R.string.dow_weekdays)
 				}
-				else if (isWeekend(daysToConvert))
+				// Weekend
+				else if (daysToConvert == WEEKEND)
 				{
 					return context.getString(R.string.dow_weekend)
 				}
@@ -738,48 +769,6 @@ object NacCalendar
 				}
 
 				return value
-			}
-
-			/**
-			 * Check if every day is in the set.
-			 *
-			 * @return True if every day is in the set, and False otherwise.
-			 */
-			private fun isEveryday(days: EnumSet<Day>): Boolean
-			{
-				return days == WEEK
-			}
-
-			/**
-			 * Check if all weekdays are in the set.
-			 *
-			 * @return True if all weekdays are in the set, and False otherwise.
-			 */
-			private fun isWeekday(days: EnumSet<Day>): Boolean
-			{
-				return days == WEEKDAY
-			}
-
-			/**
-			 * Check if all weekend days are in the set.
-			 *
-			 * @return True if all weekend days are in the set, and False otherwise.
-			 */
-			private fun isWeekend(days: EnumSet<Day>): Boolean
-			{
-				return days == WEEKEND
-			}
-
-			/**
-			 * @see .toString
-			 */
-			fun valueToDayString(context: Context, value: Int, start: Int): String
-			{
-				// Convert value of days to enum set
-				val days = valueToDays(value)
-
-				// Convert to a string
-				return daysToString(context, days, start)
 			}
 
 			/**

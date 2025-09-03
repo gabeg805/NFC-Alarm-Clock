@@ -121,10 +121,6 @@ class NacActiveAlarmActivity
 
 		// NFC tag IDs, in case need to check an ID in the list
 		val nfcTagIds = nfcTags!!.map { it.nfcId }
-		println("checkCanDismissWithNfc()")
-		println(nfcTags!!.map { it.name})
-		println(nfcTagIds)
-		println("Intent NFC ID : $intentNfcId | Alarm NFC ID : ${alarm!!.nfcTagId} | Alarm dismiss order : ${alarm!!.nfcTagDismissOrder}")
 
 		// Compare the two NFC IDs. As long as nothing is null,
 		//   if the NFC button is not shown in the alarm card, or
@@ -146,17 +142,8 @@ class NacActiveAlarmActivity
 			if ((alarm!!.nfcTagDismissOrder == NacNfcTagDismissOrder.SEQUENTIAL)
 				|| (alarm!!.nfcTagDismissOrder == NacNfcTagDismissOrder.RANDOM))
 			{
-				println("Dropping 1st NFC tag")
 				// The first NFC tag matched the one that was scanned so remove it
 				nfcTags = nfcTags!!.drop(1)
-				println(nfcTags!!.map { it.name})
-
-				//// Setup the NFC tag
-				//if (nfcTags.isNotEmpty())
-				//{
-				//	println("Resetup NFC tag layout : ${nfcTags[0].name}")
-				//	layoutHandler.setupNfcTag(this@NacActiveAlarmActivity, nfcTags[0].name)
-				//}
 
 				// Return. When all the NFC tags have been scanned, then the alarm can be
 				// dismissed
@@ -315,12 +302,10 @@ class NacActiveAlarmActivity
 			// Setup NFC tag
 			lifecycleScope.launch {
 
-				println("onResume()")
-				println(nfcTags?.map { it.name})
-
-				// Get the list of NFC tags that are valid
+				// Check if NFC tags have not been initialized yet
 				if (nfcTags == null)
 				{
+					// Get the list of NFC tags that are valid
 					nfcTags = alarm!!.nfcTagIdList.takeIf { alarm!!.nfcTagId.isNotEmpty() }
 						?.mapNotNull { nfcTagViewModel.findNfcTag(it) }
 						?: listOf()
@@ -351,10 +336,6 @@ class NacActiveAlarmActivity
 					// Unknown
 					else -> {}
 				}
-
-				println("AFTER")
-				println(nfcTags!!.map { it.name})
-				println(nfcTagNames)
 
 				// Setup the NFC tag
 				layoutHandler.setupNfcTag(this@NacActiveAlarmActivity, nfcTagNames)

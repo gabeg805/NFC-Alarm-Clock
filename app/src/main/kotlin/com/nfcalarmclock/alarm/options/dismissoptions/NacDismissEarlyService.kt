@@ -3,6 +3,7 @@ package com.nfcalarmclock.alarm.options.dismissoptions
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.IBinder
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.alarm.db.NacAlarm
@@ -27,25 +28,58 @@ class NacDismissEarlyService
 	/**
 	 * Called when the service is started.
 	 */
+	@Suppress("deprecation")
 	@UnstableApi
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
 	{
-		println("Starting dismiss early service!")
 		// Attempt to get the alarm from the intent
 		val alarm = intent?.getAlarm()
 
-		// Create the reminder notification
-		val notification = NacDismissEarlyNotification(this, alarm)
+		// Check the intent action
+		when (intent?.action)
+		{
 
-		// Start the service in the foreground
-		startForeground(notification.id,
-			notification.builder().build())
+			// Clear the notification by stopping the service
+			ACTION_STOP_SERVICE ->
+			{
+				// Stop the foreground service using the updated form of
+				// stopForeground() for API >= 33
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+				{
+					super.stopForeground(STOP_FOREGROUND_REMOVE)
+				}
+				else
+				{
+					super.stopForeground(true)
+				}
+
+				// Stop the service
+				super.stopSelf()
+			}
+
+			// Normal. Show the notification
+			else ->
+			{
+				// Create the reminder notification
+				val notification = NacDismissEarlyNotification(this, alarm)
+
+				// Start the service in the foreground
+				startForeground(notification.id,
+					notification.builder().build())
+			}
+
+		}
 
 		return START_NOT_STICKY
 	}
 
 	companion object
 	{
+
+		/**
+		 * Action to clear the notification and stop the service.
+		 */
+		private const val ACTION_STOP_SERVICE = "com.nfcalarmclock.ACTION_STOP_SERVICE"
 
 		/**
 		 * Create an intent that will be used to start the foreground upcoming
@@ -60,6 +94,18 @@ class NacDismissEarlyService
 		{
 			// Create an intent with the alarm service
 			return Intent(context, NacDismissEarlyService::class.java)
+				.addAlarm(alarm)
+		}
+
+		/**
+		 * Get an intent that will be used to clear the notification and stop the service.
+		 *
+		 * @return An intent that will be used to clear the notification and stop the service.
+		 */
+		fun getStopIntent(context: Context, alarm: NacAlarm?): Intent
+		{
+			// Create the intent with the alarm service
+			return Intent(ACTION_STOP_SERVICE, null, context, NacDismissEarlyService::class.java)
 				.addAlarm(alarm)
 		}
 

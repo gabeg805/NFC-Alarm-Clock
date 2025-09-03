@@ -222,6 +222,7 @@ class NacGeneralSettingFragment
 					sharedPreferences!!.shouldAutoDismiss = a.shouldAutoDismiss
 					sharedPreferences!!.autoDismissTime = a.autoDismissTime
 					sharedPreferences!!.canDismissEarly = a.canDismissEarly
+					sharedPreferences!!.shouldShowDismissEarlyNotification = a.shouldShowDismissEarlyNotification
 					sharedPreferences!!.dismissEarlyTime = a.dismissEarlyTime
 					sharedPreferences!!.shouldDeleteAlarmAfterDismissed = a.shouldDeleteAlarmAfterDismissed
 

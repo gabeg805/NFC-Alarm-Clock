@@ -3,18 +3,13 @@ TODO
 ----
 
 * TODO: Does NacCardHolder toastNfc work if multiple NFC tags are selected?
-* TODO: Music did not work on Android 13 (SDK 33). Possible 34 as well
-* TODO: Change verbiage "show app over other apps" sounds kind of weird
-* TODO: Need to schedule when the dismiss early notification shows up
-
-* Add selecting a date.
+* TODO: NFC tag dropdown usability is strange and needs to be fixed
+* TODO: In NacCardHolder, do I always want to do the haptic jank whenever a button is clicked?
+* TODO: Start week on and next alarm format radio button colors are not themed
+* TODO: Bottom padding of settings is wack, and possibly in main activity as well
 
 * Different repeat options, someone even wants monthly.  Should I just add a
   calendar?  How would I handle showing the date it's going to alarm?
-
-* Add option to use multiple NFC tags in order/random to dismiss.
-
-* Add notification to dismiss early?
 
 * Check that selected directory for music works.
 
@@ -33,8 +28,6 @@ About -> Über
 * Long press repeat, NFC, and flashlight for quick options
 
 * Overlay number over repeat button for custom repeat option?
-
-* Have option to scroll alarm name instead of marquee it
 
 ------
 Issues

@@ -173,6 +173,7 @@
 	<string name="error_message_play_audio">Unable to play audio</string>
 	<string name="error_message_google_play_billing">Error when connecting to the Google Play Store</string>
 	<string name="error_message_text_to_speech_audio_focus">Unable to use text-to-speech</string>
+	<string name="error_message_unable_to_dismiss_early">Unable to find alarm to dismiss early</string>
 	<string name="error_message_unable_to_email_statistics">Unable to email statistics</string>
 	<string name="error_message_unable_to_shine_flashlight">Unable to shine flashlight — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">Unable to get flashlight information</string>
@@ -239,6 +240,7 @@
 	<string name="title_volume_restrict_volume">Restrict volume</string>
 	<string name="title_dismiss_options_auto_dismiss">Auto-dismiss</string>
 	<string name="title_dismiss_options_dismiss_early">Dismiss early</string>
+	<string name="title_dismiss_options_dismiss_early_notification">Dismiss early notification</string>
 	<string name="title_dismiss_options_delete_after_dismissed">Delete after dismissed</string>
 	<string name="title_snooze_options_auto_snooze">Auto-snooze</string>
 	<string name="title_snooze_options_max_snooze">Max snoozes</string>
@@ -258,6 +260,7 @@
 	<string name="title_default_alarm">Default alarm</string>
 	<string name="title_alarm_name">Name</string>
 	<string name="title_alarm_days">Days</string>
+	<string name="title_alarm_schedule_date">Schedule date</string>
 	<string name="title_alarm_repeat">Repeat</string>
 	<string name="title_alarm_vibrate">Vibrate</string>
 	<string name="title_alarm_nfc">NFC</string>
@@ -310,6 +313,7 @@
 	<string name="description_volume_restrict_volume">Volume cannot be changed when an alarm goes off.</string>
 	<string name="description_dismiss_options_auto_dismiss">Dismiss the alarm automatically after a set duration.</string>
 	<string name="description_dismiss_options_dismiss_early">Dismiss the alarm early, before it is active.</string>
+	<string name="description_dismiss_options_dismiss_early_notification">Show a notification when the alarm can be dismissed early.</string>
 	<string name="description_dismiss_options_delete_after_dismissed">The alarm will be deleted after it is dismissed.</string>
 	<string name="description_snooze_options_auto_snooze">Snooze the alarm automatically after a set duration.</string>
 	<string name="description_snooze_options_max_snooze">Maximum number of times the alarm can be snoozed.</string>
@@ -366,7 +370,7 @@
 	<string name="description_permission_schedule_alarm">Schedule exact alarms.</string>
 	<string name="description_permission_set_alarm">Set an alarm from an external source, such as the Google Assistant.</string>
 	<string name="description_permission_post_notifications">Show a notification when an alarm is activated that will keep your device from putting the app to sleep and turning the alarm off by itself.</string>
-	<string name="description_permission_system_alert_window">Show app over other apps.  This will ensure that the alarm screen is shown, which is a requirement for audio to play, if the app is in the background and has not been used in a while.</string>
+	<string name="description_permission_system_alert_window">Ensure that the alarm screen is shown, which is a requirement for audio to play, if the app is in the background and has not been used in a while.  Should only affect Android 13–15.</string>
 	<string name="description_permission_boot">Restore alarms when your device is turned on.  Android will delete alarms when your device is turned off.</string>
 	<string name="description_permission_wakelock">Prevent your device from sleeping so that an activated alarm will continue to go off.</string>
 	<string name="description_audio_sources">The audio channel to play the alarm on.</string>
