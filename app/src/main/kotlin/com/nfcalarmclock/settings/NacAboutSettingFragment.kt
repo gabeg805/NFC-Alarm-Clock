@@ -13,6 +13,7 @@ import com.nfcalarmclock.system.permission.ignorebatteryoptimization.NacIgnoreBa
 import com.nfcalarmclock.system.permission.postnotifications.NacPostNotificationsPermission
 import com.nfcalarmclock.system.permission.readmediaaudio.NacReadMediaAudioPermission
 import com.nfcalarmclock.system.permission.scheduleexactalarm.NacScheduleExactAlarmPermission
+import com.nfcalarmclock.system.permission.systemalertwindow.NacSystemAlertWindowPermission
 import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog
 
@@ -37,6 +38,16 @@ class NacAboutSettingFragment
 
 		// Set the version name as the summary
 		versionPref!!.summary = BuildConfig.VERSION_NAME
+
+		// Check if the system alert window permission is needed
+		if (!NacSystemAlertWindowPermission.isCorrectAndroidVersion)
+		{
+			val systemAlertWindowKey = getString(R.string.key_settings_about_system_alert_window)
+			val systemAlertWindowPref = findPreference<Preference>(systemAlertWindowKey)
+
+			// Hide the system alert window preference
+			systemAlertWindowPref?.isVisible = false
+		}
 	}
 
 	/**
@@ -59,6 +70,7 @@ class NacAboutSettingFragment
 		val scheduleAlarmsKey = getString(R.string.key_settings_about_schedule_alarm)
 		val setAlarmKey = getString(R.string.key_settings_about_set_alarm)
 		val showNotificationsKey = getString(R.string.key_settings_about_post_notifications)
+		val systemAlertWindowKey = getString(R.string.key_settings_about_system_alert_window)
 		val startupKey = getString(R.string.key_settings_about_boot)
 		val wakelockKey = getString(R.string.key_settings_about_wakelock)
 
@@ -166,6 +178,24 @@ class NacAboutSettingFragment
 				val activity: Activity = requireActivity()
 
 				NacPostNotificationsPermission.requestPermission(activity, 0)
+			}
+
+		}
+		// System alert window
+		else if (preferenceKey == systemAlertWindowKey)
+		{
+
+			// Show toast to the user saying that the app already has the permission
+			if (NacSystemAlertWindowPermission.hasPermission(context))
+			{
+				quickToast(context, messageId)
+			}
+			// Request the permission
+			else
+			{
+				val activity: Activity = requireActivity()
+
+				NacSystemAlertWindowPermission.requestPermission(activity)
 			}
 
 		}

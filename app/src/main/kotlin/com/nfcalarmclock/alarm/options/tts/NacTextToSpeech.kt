@@ -107,12 +107,14 @@ class NacTextToSpeech(
 		@Deprecated("Deprecated in Java")
 		override fun onError(utteranceId: String)
 		{
+			println("On speaking error : $utteranceId")
 		}
 
 		/**
 		 */
 		override fun onError(utteranceId: String, errorCode: Int)
 		{
+			println("On speaking error : $utteranceId | $errorCode")
 		}
 
 	}
@@ -201,7 +203,7 @@ class NacTextToSpeech(
 		{
 			this.isInitialized && textToSpeech.isSpeaking
 		}
-		catch (e: IllegalArgumentException)
+		catch (_: IllegalArgumentException)
 		{
 			true
 		}
@@ -237,7 +239,11 @@ class NacTextToSpeech(
 			// Gain transient audio focus
 			if (!NacAudioManager.requestFocusGainTransient(context, null, attrs))
 			{
+				// Show toast
 				NacUtility.quickToast(context, R.string.error_message_text_to_speech_audio_focus)
+
+				// Call listener that speaking is done
+				utteranceListener.onSpeakingListener?.onDoneSpeaking()
 				return
 			}
 

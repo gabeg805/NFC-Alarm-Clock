@@ -105,6 +105,14 @@
 			/>
 
 		<com.nfcalarmclock.system.permission.NacRequiredPermissionPreference
+			android:key="@string/key_settings_about_system_alert_window"
+			android:title="@string/title_permission_system_alert_window"
+			android:summary="@string/description_permission_system_alert_window"
+			app:iconSpaceReserved="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.system.permission.NacRequiredPermissionPreference
 			android:key="@string/key_settings_about_boot"
 			android:title="@string/title_permission_boot"
 			android:summary="@string/description_permission_boot"

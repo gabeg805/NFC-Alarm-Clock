@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.AlarmClock
 import androidx.core.net.toUri
-import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar.Day
@@ -179,7 +178,7 @@ fun Intent.getSetAlarm(context: Context): NacAlarm?
 	// Check if the VIBRATE is in the intent
 	if (this.hasExtra(AlarmClock.EXTRA_VIBRATE))
 	{
-		val defaultVibrate = context.resources.getBoolean(R.bool.default_vibrate)
+		val defaultVibrate = true
 		val vibrate = this.getBooleanExtra(AlarmClock.EXTRA_VIBRATE,
 			defaultVibrate)
 		isSet = true

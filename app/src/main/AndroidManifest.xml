@@ -19,6 +19,7 @@
 	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 	<uses-permission android:name="android.permission.FOREGROUND_SERVICE_SYSTEM_EXEMPTED" />
 	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
 	<!-- Remove permissions that were appearing in the merged manifest for some reason -->
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"
@@ -148,6 +149,13 @@
 		<!-- Upcoming reminder -->
 		<service
 			android:name=".alarm.options.upcomingreminder.NacUpcomingReminderService"
+			android:foregroundServiceType="systemExempted"
+			android:exported="false"
+			/>
+
+		<!-- Dismiss early -->
+		<service
+			android:name=".alarm.options.dismissoptions.NacDismissEarlyService"
 			android:foregroundServiceType="systemExempted"
 			android:exported="false"
 			/>

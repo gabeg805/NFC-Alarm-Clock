@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/request_system_alert_window_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/normal"
+    android:paddingBottom="@dimen/zero"
+    android:paddingStart="@dimen/medium"
+    android:paddingEnd="@dimen/medium"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:id="@+id/request_icon"
+            android:layout_width="@dimen/isz_attention"
+            android:layout_height="@dimen/isz_attention"
+            android:layout_marginEnd="@dimen/small"
+            android:src="@drawable/desktop_windows_32"
+            android:contentDescription="@string/cd_request_permission_system_alert_window"
+            />
+
+        <TextView
+            style="@style/Widget.TextView.Primary"
+            android:id="@+id/request_summary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/message_permission_system_alert_window_request"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/request_separator"
+        android:layout_width="@dimen/isz_attention"
+        android:layout_height="@dimen/line"
+        android:layout_marginTop="@dimen/large"
+        android:layout_marginStart="@dimen/tiny"
+        android:layout_marginEnd="@dimen/tiny"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/white"
+        />
+
+    <LinearLayout
+        android:id="@+id/request_pages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/tiny"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/Widget.TextView.Caption"
+            android:id="@+id/request_current_page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/tiny"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text=""
+            />
+
+        <TextView
+            style="@style/Widget.TextView.Caption"
+            android:id="@+id/request_of_page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/tiny"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/word_of"
+            />
+
+        <TextView
+            style="@style/Widget.TextView.Caption"
+            android:id="@+id/request_total_num_pages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/tiny"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text=""
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

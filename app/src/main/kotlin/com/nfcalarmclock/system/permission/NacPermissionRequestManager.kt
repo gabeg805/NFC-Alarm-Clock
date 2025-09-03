@@ -10,6 +10,8 @@ import com.nfcalarmclock.system.permission.postnotifications.NacPostNotification
 import com.nfcalarmclock.system.permission.postnotifications.NacPostNotificationsPermissionRequestDialog
 import com.nfcalarmclock.system.permission.scheduleexactalarm.NacScheduleExactAlarmPermission
 import com.nfcalarmclock.system.permission.scheduleexactalarm.NacScheduleExactAlarmPermissionRequestDialog
+import com.nfcalarmclock.system.permission.systemalertwindow.NacSystemAlertWindowPermission
+import com.nfcalarmclock.system.permission.systemalertwindow.NacSystemAlertWindowPermissionRequestDialog
 import java.util.EnumSet
 
 /**
@@ -25,7 +27,8 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 	{
 		//IGNORE_BATTERY_OPTIMIZATION,
 		POST_NOTIFICATIONS,
-		SCHEDULE_EXACT_ALARM
+		SCHEDULE_EXACT_ALARM,
+		SYSTEM_ALERT_WINDOW
 	}
 
 	/**
@@ -83,6 +86,12 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 		if (NacScheduleExactAlarmPermission.shouldRequestPermission(context, shared))
 		{
 			set.add(Permission.SCHEDULE_EXACT_ALARM)
+		}
+
+		// System alert window
+		if (NacSystemAlertWindowPermission.shouldRequestPermission(context, shared))
+		{
+			set.add(Permission.SYSTEM_ALERT_WINDOW)
 		}
 
 		//// Ignore battery optimization
@@ -179,6 +188,11 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 		else if (permissionRequestSet.contains(Permission.SCHEDULE_EXACT_ALARM))
 		{
 			showScheduleExactAlarmPermissionDialog(activity, onDone=onDone)
+		}
+		// System alert window
+		else if (permissionRequestSet.contains(Permission.SYSTEM_ALERT_WINDOW))
+		{
+			showSystemAlertWindowPermissionDialog(activity, onDone=onDone)
 		}
 		//// Ignore battery optimization
 		//else if (permissionRequestSet.contains(Permission.IGNORE_BATTERY_OPTIMIZATION))
@@ -311,6 +325,50 @@ class NacPermissionRequestManager(activity: AppCompatActivity)
 			override fun onPermissionRequestCanceled(permission: String)
 			{
 				permissionRequestSet.remove(Permission.SCHEDULE_EXACT_ALARM)
+				showNextPermissionRequestDialog(activity, onDone=onDone)
+			}
+		}
+
+		// Show the dialog
+		dialog.show(activity.supportFragmentManager,
+			NacScheduleExactAlarmPermissionRequestDialog.TAG)
+	}
+
+	/**
+	 * Show the dialog to request the SYSTEM_ALERT_WINDOW permission.
+	 */
+	fun showSystemAlertWindowPermissionDialog(activity: AppCompatActivity, onDone: () -> Unit = {})
+	{
+		// Do nothing if an older version of Android is being used
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+		{
+			return
+		}
+
+		// Create the dialog
+		val dialog = NacSystemAlertWindowPermissionRequestDialog()
+
+		// Setup the current position and total number of pages in the dialog
+		setupDialogPageInfo(dialog)
+
+		// Handle the cases where the permission request is accepted/canceled
+		dialog.onPermissionRequestListener = object : OnPermissionRequestListener
+		{
+			/**
+			 * Called when the permission request is accepted.
+			 */
+			override fun onPermissionRequestAccepted(permission: String)
+			{
+				permissionRequestSet.remove(Permission.SYSTEM_ALERT_WINDOW)
+				NacSystemAlertWindowPermission.requestPermission(activity)
+			}
+
+			/**
+			 * Called when the permission request was canceled.
+			 */
+			override fun onPermissionRequestCanceled(permission: String)
+			{
+				permissionRequestSet.remove(Permission.SYSTEM_ALERT_WINDOW)
 				showNextPermissionRequestDialog(activity, onDone=onDone)
 			}
 		}

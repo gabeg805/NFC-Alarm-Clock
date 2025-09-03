@@ -11,6 +11,7 @@ import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmBroadcastReceiver
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissEarlyService
 import com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderService
 import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.util.NacCalendar
@@ -54,6 +55,12 @@ object NacScheduler
 			// Add the upcoming reminder
 			addUpcomingReminder(context, alarm, firstReminderCal)
 		}
+
+		// Check if should schedule a dismiss early notification
+		if (alarm.canDismissEarly)
+		{
+			addDismissEarly(context, alarm)
+		}
 	}
 
 	/**
@@ -69,6 +76,47 @@ object NacScheduler
 
 		// Add to the alarm manager
 		addToAlarmManager(context, cal, pendingIntent)
+	}
+
+	/**
+	 * Add a dismiss early notification to the scheduler.
+	 */
+	fun addDismissEarly(context: Context, alarm: NacAlarm)
+	{
+		// Get the time when the next alarm can be dismissed early
+		val nextCal = NacCalendar.getNextAlarmDay(alarm)
+		val nextMillis = nextCal!!.timeInMillis
+		var millis = nextMillis - alarm.dismissEarlyTime*60*1000
+		val now = Calendar.getInstance()
+		println("Diff : ${(millis - now.timeInMillis)/1000} | Millis : ${millis/1000} | Now : ${now.timeInMillis/1000}")
+
+		// Check the time to make sure it is valid and not imminent
+		if (millis < 0)
+		{
+			// Imminent so do not schedule anything
+			if (nextMillis < 60000)
+			{
+				println("Next time imminent : $nextMillis")
+				return
+			}
+			// Use the current time
+			else
+			{
+				println("Use current time")
+				millis = now.timeInMillis
+			}
+		}
+
+		// Create the intent
+		val intent = NacDismissEarlyService.getStartIntent(context, alarm)
+
+		// Build the pending intent
+		val pendingIntent = buildServicePendingIntent(context, alarm, intent, PendingIntent.FLAG_CANCEL_CURRENT)!!
+
+		// Schedule the notification
+		println("SETTING DISMISS EARLY SERVICE JANK")
+		val manager = getAlarmManager(context)
+		manager.setExactAndAllowWhileIdle(AlarmManager.RTC, millis, pendingIntent)
 	}
 
 	/**
@@ -111,8 +159,11 @@ object NacScheduler
 			return
 		}
 
-		// Operation to perform when the alarm goes off
-		val pendingIntent = buildAddUpcomingReminderPendingIntent(context, alarm)
+		// Create the intent
+		val intent = NacUpcomingReminderService.getStartIntent(context, alarm)
+
+		// Build the pending intent
+		val pendingIntent = buildServicePendingIntent(context, alarm, intent, PendingIntent.FLAG_CANCEL_CURRENT)!!
 
 		// Add to the alarm manager
 		addToAlarmManager(context, reminderCal, pendingIntent)
@@ -142,23 +193,6 @@ object NacScheduler
 		// Build the pending intent
 		return buildServicePendingIntent(context, alarm, intent,
 			PendingIntent.FLAG_CANCEL_CURRENT)!!
-	}
-
-	/**
-	 * Build the pending intent for adding an upcoming reminder.
-	 *
-	 * @return The pending intent for adding an upcoming reminder.
-	 */
-	private fun buildAddUpcomingReminderPendingIntent(
-		context: Context,
-		alarm: NacAlarm
-	): PendingIntent
-	{
-		// Create the intent
-		val intent = NacUpcomingReminderService.getStartIntent(context, alarm)
-
-		// Build the pending intent
-		return buildServicePendingIntent(context, alarm, intent, PendingIntent.FLAG_CANCEL_CURRENT)!!
 	}
 
 	/**
@@ -197,23 +231,6 @@ object NacScheduler
 		// Build the pending intent
 		return buildServicePendingIntent(context, alarm, intent,
 			PendingIntent.FLAG_NO_CREATE)
-	}
-
-	/**
-	 * Build the pending intent for canceling an upcoming reminder.
-	 *
-	 * @return The pending intent for canceling an upcoming reminder.
-	 */
-	private fun buildCancelUpcomingReminderPendingIntent(
-		context: Context,
-		alarm: NacAlarm
-	): PendingIntent?
-	{
-		// Create the intent
-		val intent = NacUpcomingReminderService.getStartIntent(context, null)
-
-		// Build the pending intent
-		return buildServicePendingIntent(context, alarm, intent, PendingIntent.FLAG_NO_CREATE)
 	}
 
 	/**
@@ -282,6 +299,9 @@ object NacScheduler
 
 		// Cancel the upcoming reminder
 		cancelUpcomingReminder(context, alarm)
+
+		// Cancel the dismiss early
+		cancelDismissEarly(context, alarm)
 	}
 
 	/**
@@ -305,6 +325,26 @@ object NacScheduler
 		{
 			// Cancel the skipped alarm
 			getAlarmManager(context).cancel(skipPendingIntent)
+		}
+	}
+
+	/**
+	 * Cancel dismiss early.
+	 */
+	fun cancelDismissEarly(context: Context, alarm: NacAlarm)
+	{
+		// Create the intent
+		val intent = NacDismissEarlyService.getStartIntent(context, null)
+
+		// Build the pending intent
+		val pendingIntent = buildServicePendingIntent(context, alarm, intent, PendingIntent.FLAG_NO_CREATE)
+		println("Cancel dismiss early() : $pendingIntent")
+
+		// Check if the pending intent for the upcoming reminder is not null
+		if (pendingIntent != null)
+		{
+			// Cancel the alarm
+			getAlarmManager(context).cancel(pendingIntent)
 		}
 	}
 
@@ -362,8 +402,11 @@ object NacScheduler
 	 */
 	fun cancelUpcomingReminder(context: Context, alarm: NacAlarm)
 	{
-		// Build the pending intent for the upcoming reminder
-		val pendingIntent = buildCancelUpcomingReminderPendingIntent(context, alarm)
+		// Create the intent
+		val intent = NacUpcomingReminderService.getStartIntent(context, null)
+
+		// Build the pending intent
+		val pendingIntent = buildServicePendingIntent(context, alarm, intent, PendingIntent.FLAG_NO_CREATE)
 		//println("Cancel upcoming reminder() : $pendingIntent")
 
 		// Check if the pending intent for the upcoming reminder is not null

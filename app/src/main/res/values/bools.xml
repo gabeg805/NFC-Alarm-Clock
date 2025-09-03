@@ -6,21 +6,9 @@
 	<bool name="default_app_should_refresh_main_activity">false</bool>
 	<bool name="default_was_app_supported">false</bool>
 
-	<!-- Permissions -->
-	<bool name="default_was_ignore_battery_optimization_permission_requested">false</bool>
-	<bool name="default_was_post_notifications_permission_requested">false</bool>
-	<bool name="default_was_schedule_exact_alarm_permission_requested">false</bool>
-
 	<!-- Card -->
 	<bool name="default_card_is_measured">false</bool>
 	<bool name="default_expand_new_alarm">true</bool>
-
-	<!-- Alarm -->
-	<bool name="default_repeat">true</bool>
-	<bool name="default_vibrate">true</bool>
-	<bool name="default_vibrate_pattern">false</bool>
-	<bool name="default_use_nfc">false</bool>
-	<bool name="default_use_flashlight">false</bool>
 
 	<!-- Notifications -->
 	<bool name="default_missed_alarm">true</bool>

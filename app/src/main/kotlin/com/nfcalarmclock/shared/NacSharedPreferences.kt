@@ -1548,7 +1548,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.key_default_alarm_repeat_should_repeat)
-			val defaultValue = resources.getBoolean(R.bool.default_repeat)
+			val defaultValue = true
 
 			return instance.getBoolean(key, defaultValue)
 		}
@@ -1800,7 +1800,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.key_default_alarm_flashlight_should_use_flashlight)
-			val defaultValue = resources.getBoolean(R.bool.default_use_flashlight)
+			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
@@ -1836,7 +1836,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.key_default_alarm_nfc_should_use_nfc)
-			val defaultValue = resources.getBoolean(R.bool.default_use_nfc)
+			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
@@ -1872,7 +1872,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.key_default_alarm_vibrate_should_vibrate)
-			val defaultValue = resources.getBoolean(R.bool.default_vibrate)
+			val defaultValue = true
 
 			return instance.getBoolean(key, defaultValue)
 		}
@@ -1890,7 +1890,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.key_default_alarm_vibrate_should_vibrate_pattern)
-			val defaultValue = resources.getBoolean(R.bool.default_vibrate_pattern)
+			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
@@ -2183,7 +2183,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.key_permission_ignore_battery_optimization_requested)
-			val defaultValue = resources.getBoolean(R.bool.default_was_ignore_battery_optimization_permission_requested)
+			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
@@ -2201,7 +2201,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.key_permission_post_notifications_requested)
-			val defaultValue = resources.getBoolean(R.bool.default_was_post_notifications_permission_requested)
+			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}
@@ -2219,7 +2219,25 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.key_permission_schedule_exact_alarm_requested)
-			val defaultValue = resources.getBoolean(R.bool.default_was_schedule_exact_alarm_permission_requested)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_permission_schedule_exact_alarm_requested)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether the SYSTEM_ALERT_WINDOW permission was requested.
+	 */
+	var wasSystemAlertWindowPermissionRequested: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_permission_system_alert_window_requested)
+			val defaultValue = false
 
 			return instance.getBoolean(key, defaultValue)
 		}

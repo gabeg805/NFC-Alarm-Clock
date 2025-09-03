@@ -4,6 +4,8 @@ TODO
 
 * TODO: Does NacCardHolder toastNfc work if multiple NFC tags are selected?
 * TODO: Music did not work on Android 13 (SDK 33). Possible 34 as well
+* TODO: Change verbiage "show app over other apps" sounds kind of weird
+* TODO: Need to schedule when the dismiss early notification shows up
 
 * Add selecting a date.
 

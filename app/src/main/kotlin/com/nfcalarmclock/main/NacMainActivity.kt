@@ -83,8 +83,10 @@ import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacUtility.quickToast
+import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.createTimeTickReceiver
 import com.nfcalarmclock.util.disableActivityAlias
+import com.nfcalarmclock.util.getAlarm
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.getSetAlarm
 import com.nfcalarmclock.util.media.buildLocalMediaPath
@@ -766,6 +768,32 @@ class NacMainActivity
 
 				// Finish the main activity
 				finish()
+			}
+
+			// Check if an alarm should be dismissed early
+			println("Intent action : ${intent.action}")
+			if (intent.action == ACTION_DISMISS_ALARM_EARLY)
+			{
+				println("Getting the alarm from the intent")
+				// Get the alarm from the intent
+				val alarm = intent.getAlarm()
+
+				// Check if the alarm exists
+				if (alarm != null)
+				{
+					println("Alarm is not null, dope")
+
+					// Dismiss the alarm early
+					alarm.dismissEarly()
+
+					// Update the alarm
+					println("Update the alarm card plz work")
+					updateAlarm(alarm)
+				}
+				else
+				{
+					println("TODO: SHOW TOAST THAT THIS SHOULD NOT HAPPEN")
+				}
 			}
 
 		}
@@ -1888,6 +1916,35 @@ class NacMainActivity
 		 * Rate at which the next alarm message is refreshed.
 		 */
 		const val REFRESH_NEXT_ALARM_MESSAGE_PERIOD = 1000L
+
+		/**
+		 * Dismiss an alarm early action.
+		 */
+		private const val ACTION_DISMISS_ALARM_EARLY = "com.nfcalarmclock.ACTION_DISMISS_ALARM_EARLY"
+
+		/**
+		 * Create an intent that will be used to dismiss an alarm early.
+		 *
+		 * @param  context  A context.
+		 *
+		 * @return The Main activity intent.
+		 */
+		fun getDismissEarlyIntent(context: Context, alarm: NacAlarm): Intent
+		{
+			// Create an intent with the main activity
+			val intent = Intent(context, NacMainActivity::class.java)
+			val flags = (Intent.FLAG_ACTIVITY_NEW_TASK
+					or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+
+			// Add the action, alarm, and flags to the intent
+			intent.apply {
+				action = ACTION_DISMISS_ALARM_EARLY
+				addAlarm(alarm)
+				addFlags(flags)
+			}
+
+			return intent
+		}
 
 		/**
 		 * Create an intent that will be used to start the Main activity.

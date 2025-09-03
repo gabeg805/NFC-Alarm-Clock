@@ -24,6 +24,7 @@
 	<string name="key_permission_ignore_battery_optimization_requested">key_permission_ignore_battery_optimization_requested</string>
 	<string name="key_permission_post_notifications_requested">key_permission_post_notifications_requested</string>
 	<string name="key_permission_schedule_exact_alarm_requested">key_permission_schedule_exact_alarm_requested</string>
+	<string name="key_permission_system_alert_window_requested">key_permission_system_alert_window_requested</string>
 
 	<!-- Event -->
 	<string name="key_event_update_and_backup_media_info_in_alarms_db_v31">event_update_and_backup_media_info_in_alarms_db_v31</string>
@@ -144,6 +145,7 @@
 	<string name="key_settings_about_post_notifications">pref_about_post_notifications</string>
 	<string name="key_settings_about_schedule_alarm">pref_about_schedule_alarm</string>
 	<string name="key_settings_about_set_alarm">pref_about_set_alarm</string>
+	<string name="key_settings_about_system_alert_window">pref_about_system_alert_window</string>
 	<string name="key_settings_about_boot">pref_about_boot</string>
 	<string name="key_settings_about_wakelock">pref_about_wakelock</string>
 	<string name="key_settings_about_full_screen_intent">pref_about_full_screen_intent</string>
