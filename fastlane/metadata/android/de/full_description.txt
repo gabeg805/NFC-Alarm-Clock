@@ -1,0 +1,27 @@
+Passen Sie das Aussehen Ihrer Alarme an, erstellen/löschen Sie ganz einfach Alarme und vieles mehr. Jeder Alarm kann so konfiguriert werden, wie Sie ihn verwenden möchten.
+
+Für diejenigen, die Schwierigkeiten haben, aufzuwachen, können Sie die Lautstärke drosseln oder allmählich erhöhen, wenn Ihr Wecker klingelt. Sie können auch eine NFC-Karte oder ein NFC-Tag verwenden, um Ihren Alarm zu deaktivieren.
+
+Sehen Sie sich die vollständige Liste der Funktionen unten an, um einen detaillierteren Einblick in all die Dinge zu erhalten, die Sie tun können.
+
+<b>Features:</b>
+
+* Alarme auf einem Bildschirm bearbeiten und anzeigen.
+* Streichen Sie nach links, um einen Alarm zu löschen.
+* Wischen Sie nach rechts, um einen Alarm zu kopieren.
+* Spielen Sie Musik von Ihrem Telefon ab, um aufzuwachen. Sie können sogar die gesamte Musik in einem Ordner abspielen.
+* Verwenden Sie NFC, um einen Alarm zu schließen. Dies ist optional und kann pro Alarm eingestellt werden. Gefunden durch Auswahl des Zahnradsymbols neben dem Lautstärkeregler eines Weckers.
+* Erhöhen Sie allmählich die Lautstärke, wenn Ihr Wecker klingelt. Dies ist optional und kann pro Alarm eingestellt werden. Gefunden durch Auswahl des Zahnradsymbols neben dem Lautstärkeregler eines Weckers.
+* Schränken Sie das Ändern der Lautstärke ein, wenn Ihr Wecker klingelt. Dies ist optional und kann pro Alarm eingestellt werden. Gefunden durch Auswahl des Zahnradsymbols neben dem Lautstärkeregler eines Weckers.
+* Text-zu-Sprache, wenn Ihr Wecker klingelt. Es sagt Ihnen die aktuelle Uhrzeit in der von Ihnen gewählten Kadenz. Dies ist optional und kann pro Alarm eingestellt werden. Gefunden durch Auswahl des Zahnradsymbols neben dem Lautstärkeregler eines Weckers.
+* Wählen Sie aus, aus welcher Audioquelle der Alarmton wiedergegeben werden soll (Alarm, Anruf, Musik, Benachrichtigung, Klingelton). Dies ist optional und kann pro Alarm eingestellt werden. Gefunden durch Auswahl des Zahnradsymbols neben dem Lautstärkeregler eines Weckers.
+* Passen Sie die Farben an: Thema, Name des Alarms, Tage, an denen der Alarm ausgeführt wird, Uhrzeit und AM/PM. Gefunden in <i>Einstellungen › Aussehen</i>.
+* Zeigen Sie Statistiken darüber an, wie viele Alarme Sie abgewiesen/zurückgestellt/verpasst und wie viele Sie erstellt/gelöscht haben.
+
+<b>Berechtigungen:</b>
+
+* <b>NFC:</b> (Optional) Erlauben Sie der App, NFC-Tags zu erkennen.
+* <b>Speicher:</b> (Optional) Auf dem Telefon gespeicherte Musik lesen. Sie werden aufgefordert, diese Berechtigung zu aktivieren, wenn und nur wenn Sie Musik als Alarmklingelton abspielen möchten. Andernfalls wird diese Berechtigung nicht verwendet.
+* <b>Vibrieren:</b> (Optional) Erlauben Sie der App, das Telefon zu vibrieren.
+* <b>Beim Booten starten:</b> (Erforderlich) Stellen Sie Alarme wieder her, wenn das Telefon eingeschaltet ist. Standardmäßig löscht Android Alarme, wenn das Telefon ausgeschaltet ist.
+* <b>Wakelock:</b> (Erforderlich) Verhindern Sie, dass das Telefon in den Ruhezustand versetzt wird, damit ein aktivierter Alarm weiterhin ausgelöst wird.
