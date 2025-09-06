@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacCalendar.Day
+import com.nfcalarmclock.util.daysToValue
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -104,10 +105,38 @@ class NacAlarm()
 	var shouldRepeat: Boolean = false
 
 	/**
-	 * Frequency at which to repeat the alarm, in units of days.
+	 * Frequency at which to repeat the alarm.
 	 */
-	@ColumnInfo(name = "repeat_frequency", defaultValue = "0")
-	var repeatFrequency: Int = 0
+	@ColumnInfo(name = "repeat_frequency", defaultValue = "1")
+	var repeatFrequency: Int = 1
+
+	/**
+	 * Units for the frequency at which to repeat the alarm.
+	 *
+	 * 0 = Seconds
+	 * 1 = Minutes
+	 * 2 = Hours
+	 * 3 = Days
+	 * 4 = Weeks
+	 * 5 = Months
+	 * 6 = Years
+	 */
+	@ColumnInfo(name = "repeat_frequency_units", defaultValue = "4")
+	var repeatFrequencyUnits: Int = 4
+
+	/**
+	 * Units for the frequency at which to repeat the alarm.
+	 *
+	 * 0 = Seconds
+	 * 1 = Minutes
+	 * 2 = Hours
+	 * 3 = Days
+	 * 4 = Weeks
+	 * 5 = Months
+	 * 6 = Years
+	 */
+	@ColumnInfo(name = "repeat_frequency_days_to_run_before_starting", defaultValue = "127")
+	var repeatFrequencyDaysToRunBeforeStarting: EnumSet<Day> = Day.WEEK
 
 	/**
 	 * Whether the alarm should vibrate the phone or not.
@@ -155,7 +184,7 @@ class NacAlarm()
 	/**
 	 * ID of the NFC tag that needs to be used to dismiss the alarm.
 	 */
-	@ColumnInfo(name = "nfc_tag_id")
+	@ColumnInfo(name = "nfc_tag_id", defaultValue = "")
 	var nfcTagId: String = ""
 
 	/**
@@ -204,7 +233,7 @@ class NacAlarm()
 	/**
 	 * Path to the media that will play when the alarm is run.
 	 */
-	@ColumnInfo(name = "media_path")
+	@ColumnInfo(name = "media_path", defaultValue = "")
 	var mediaPath: String = ""
 
 	/**
@@ -260,13 +289,13 @@ class NacAlarm()
 	/**
 	 * Audio source to use for the media that will play when the alarm is run.
 	 */
-	@ColumnInfo(name = "audio_source")
+	@ColumnInfo(name = "audio_source", defaultValue = "")
 	var audioSource: String = ""
 
 	/**
 	 * Name of the alarm.
 	 */
-	@ColumnInfo(name = "name")
+	@ColumnInfo(name = "name", defaultValue = "")
 	var name: String = ""
 
 	/**
@@ -429,12 +458,6 @@ class NacAlarm()
 	var shouldDeleteAlarmAfterDismissed: Boolean = false
 
 	/**
-	 * Check if any days are selected.
-	 */
-	val areDaysSelected: Boolean
-		get() = days.isNotEmpty()
-
-	/**
 	 * Check if the alarm has a sound that will be played when it goes off.
 	 */
 	val hasMedia: Boolean
@@ -536,6 +559,8 @@ class NacAlarm()
 		// Repeat
 		shouldRepeat = input.readInt() != 0
 		repeatFrequency = input.readInt()
+		repeatFrequencyUnits = input.readInt()
+		repeatFrequencyDaysToRunBeforeStarting = Day.valueToDays(input.readInt())
 
 		// Vibrate
 		shouldVibrate = input.readInt() != 0
@@ -790,6 +815,8 @@ class NacAlarm()
 		alarm.date = date
 		alarm.shouldRepeat = shouldRepeat
 		alarm.repeatFrequency = repeatFrequency
+		alarm.repeatFrequencyUnits = repeatFrequencyUnits
+		alarm.repeatFrequencyDaysToRunBeforeStarting = repeatFrequencyDaysToRunBeforeStarting
 		alarm.shouldVibrate = shouldVibrate
 		alarm.vibrateDuration = vibrateDuration
 		alarm.vibrateWaitTime = vibrateWaitTime
@@ -893,6 +920,13 @@ class NacAlarm()
 			// Toggle the alarm
 			toggleAlarm()
 		}
+
+		// Check if repeat frequency units is in hours
+		if (repeatFrequencyUnits == 2)
+		{
+			// Update the alarm hour
+			hour += repeatFrequency
+		}
 	}
 
 	/**
@@ -943,6 +977,8 @@ class NacAlarm()
 			&& (date == alarm.date)
 			&& (shouldRepeat == alarm.shouldRepeat)
 			&& (repeatFrequency == alarm.repeatFrequency)
+			&& (repeatFrequencyUnits == alarm.repeatFrequencyUnits)
+			&& (repeatFrequencyDaysToRunBeforeStarting == alarm.repeatFrequencyDaysToRunBeforeStarting)
 			&& (shouldVibrate == alarm.shouldVibrate)
 			&& (vibrateDuration == alarm.vibrateDuration)
 			&& (vibrateWaitTime == alarm.vibrateWaitTime)
@@ -1021,6 +1057,8 @@ class NacAlarm()
 			&& (date == alarm.date)
 			&& (shouldRepeat == alarm.shouldRepeat)
 			&& (repeatFrequency == alarm.repeatFrequency)
+			&& (repeatFrequencyUnits == alarm.repeatFrequencyUnits)
+			&& (repeatFrequencyDaysToRunBeforeStarting == alarm.repeatFrequencyDaysToRunBeforeStarting)
 			&& (shouldVibrate == alarm.shouldVibrate)
 			&& (vibrateDuration == alarm.vibrateDuration)
 			&& (vibrateWaitTime == alarm.vibrateWaitTime)
@@ -1127,6 +1165,8 @@ class NacAlarm()
 		println("Date                  : $date")
 		println("Repeat                : $shouldRepeat")
 		println("Repeat Freq           : $repeatFrequency")
+		println("Repeat Freq Units     : $repeatFrequencyUnits")
+		println("Repeat Freq Days 2 Run: $repeatFrequencyDaysToRunBeforeStarting")
 		println("Vibrate               : $shouldVibrate")
 		println("Vibrate duration      : $vibrateDuration")
 		println("Vibrate wait time     : $vibrateWaitTime")
@@ -1228,7 +1268,7 @@ class NacAlarm()
 		}
 
 		// Check if there are any days selected
-		if (areDaysSelected)
+		if (days.isNotEmpty())
 		{
 			toggleToday()
 		}
@@ -1238,7 +1278,7 @@ class NacAlarm()
 		//
 		// If it did not deselect the last day, then there is no harm in checking again
 		// (this use to be the "else" part of the above "if") to disable the alarm
-		if (!areDaysSelected)
+		if (days.isEmpty())
 		{
 			isEnabled = false
 		}
@@ -1346,12 +1386,14 @@ class NacAlarm()
 		output.writeInt(if (isEnabled) 1 else 0)
 		output.writeInt(hour)
 		output.writeInt(minute)
-		output.writeInt(Day.daysToValue(days))
+		output.writeInt(days.daysToValue())
 		output.writeString(date)
 
 		// Repeat
 		output.writeInt(if (shouldRepeat) 1 else 0)
 		output.writeInt(repeatFrequency)
+		output.writeInt(repeatFrequencyUnits)
+		output.writeInt(repeatFrequencyDaysToRunBeforeStarting.daysToValue())
 
 		// Vibrate
 		output.writeInt(if (shouldVibrate) 1 else 0)
@@ -1476,6 +1518,8 @@ class NacAlarm()
 				// Repeat
 				alarm.shouldRepeat = shared.shouldRepeat
 				alarm.repeatFrequency = shared.repeatFrequency
+				alarm.repeatFrequencyUnits = shared.repeatFrequencyUnits
+				alarm.repeatFrequencyDaysToRunBeforeStarting = Day.valueToDays(shared.repeatFrequencyDaysToRunBeforeStarting)
 
 				// Vibrate
 				alarm.shouldVibrate = shared.shouldVibrate
@@ -1786,6 +1830,58 @@ class NacAlarm()
 			val seconds = time % 60
 
 			return Pair(minutes, seconds)
+		}
+
+		/**
+		 * Calculate the repeat frequency units from an index.
+		 */
+		fun calcRepeatFrequencyUnitsFromIndex(index: Int): Int
+		{
+			return when (index)
+			{
+				0 -> 2
+				1 -> 3
+				2 -> 4
+				else -> 4
+			}
+		}
+
+		/**
+		 * Calculate the repeat frequency units index.
+		 *
+		 * 0 = Seconds
+		 * 1 = Minutes
+		 * 2 = Hours
+		 * 3 = Days
+		 * 4 = Weeks
+		 * 5 = Months
+		 * 6 = Years
+		 */
+		fun calcRepeatFrequencyUnitsIndex(units: Int): Int
+		{
+			return when (units)
+			{
+				2 -> 0
+				3 -> 1
+				4 -> 2
+				else -> 2
+			}
+		}
+
+		/**
+		 * Calculate the repeat frequency from an index.
+		 */
+		fun calcRepeatFrequencyFromIndex(index: Int): Int
+		{
+			return index+1
+		}
+
+		/**
+		 * Calculate the repeat frequency index.
+		 */
+		fun calcRepeatFrequencyIndex(value: Int): Int
+		{
+			return value-1
 		}
 
 		/**

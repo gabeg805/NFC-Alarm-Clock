@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Repeat frequency title -->
+    <TextView
+        style="@style/Widget.AlarmOptionDialog.Title"
+        android:id="@+id/repeat_freq_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Repeat frequency"
+        />
+
+    <!-- Repeat frequency description-->
+    <TextView
+        style="@style/Widget.AlarmOptionDialog.Description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Repeat the alarm at a given frequency (every X amount of time).  Note: Selecting hours or days will clear all of the alarm's days."
+        />
+    <!--
+    android:text="Repeat the alarm at a given frequency (every X amount of time). If the alarm has any days selected, they will only be used when repeating by week(s). Otherwise, they will be cleared."
+    -->
+
+    <!-- Repeat frequency value and units -->
+    <LinearLayout
+        style="@style/Widget.AlarmOptionDialog.Row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <!-- Value -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.AlarmOptionDialog.Dropdown"
+            android:id="@+id/repeat_freq_value_input_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/repeat_freq_value_dropdown_menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Units -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.AlarmOptionDialog.Dropdown"
+            android:id="@+id/repeat_freq_units_input_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/repeat_freq_units_dropdown_menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <!-- Separator -->
+    <Space style="@style/Widget.AlarmOptionDialog.Separator" />
+
+    <!-- Repeat frequency days to run before starting the frequency -->
+    <TextView
+        style="@style/Widget.AlarmOptionDialog.Title"
+        android:id="@+id/repeat_freq_days_to_run_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Days to run before starting frequency"
+        />
+
+    <!-- Repeat frequency description-->
+    <TextView
+        style="@style/Widget.AlarmOptionDialog.Description"
+        android:id="@+id/repeat_freq_days_to_run_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Which of the alarm's currently selected days should be run this week before starting the frequency."
+        />
+
+    <!-- Days -->
+    <LinearLayout
+        android:id="@+id/repeat_freq_days_to_run"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/touch"
+        android:layout_marginStart="@dimen/small"
+        android:layout_marginEnd="@dimen/small"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <include layout="@layout/nac_day_of_week" />
+    </LinearLayout>
+
+    <!-- Separator -->
+    <Space style="@style/Widget.AlarmOptionDialog.Separator" />
+
+</com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

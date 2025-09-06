@@ -573,6 +573,9 @@ class NacSwipeLayoutHandler(
 			// Show the scan NFC view
 			scanNfcView.visibility = View.VISIBLE
 
+			// Enable layout transitions alongside animateLayoutChanges=true
+			scanNfcView.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+
 			// Set to INVISIBLE so that the end X position can still be
 			// determined, and then it will be set to GONE later
 			dismissButton.visibility = View.INVISIBLE

@@ -52,6 +52,8 @@
 	<string name="key_default_alarm_date">pref_date</string>
 	<string name="key_default_alarm_repeat_should_repeat">pref_repeat</string>
 	<string name="key_default_alarm_repeat_frequency">pref_repeat_frequency</string>
+	<string name="key_default_alarm_repeat_frequency_units">pref_repeat_frequency_units</string>
+	<string name="key_default_alarm_repeat_frequency_days_to_run_before_starting">pref_repeat_frequency_days_to_run_before_starting</string>
 	<string name="key_default_alarm_vibrate_should_vibrate">pref_vibrate</string>
 	<string name="key_default_alarm_vibrate_duration">pref_vibrate_duration</string>
 	<string name="key_default_alarm_vibrate_wait_time">pref_vibrate_wait_time</string>

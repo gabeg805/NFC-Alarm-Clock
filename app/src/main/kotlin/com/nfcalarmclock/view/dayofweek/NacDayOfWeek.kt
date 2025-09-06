@@ -14,7 +14,7 @@ class NacDayOfWeek(
 	/**
 	 * Day of week view.
 	 */
-	private val dayOfWeekView: LinearLayout
+	val dayOfWeekView: LinearLayout
 
 ) : OnDayChangedListener
 {
@@ -190,18 +190,6 @@ class NacDayOfWeek(
 			// Set the listener once again
 			button.onDayChangedListener = this
 		}
-	}
-
-	/**
-	 * @see .setDays
-	 */
-	fun setDays(value: Int)
-	{
-		// Determine the days
-		val days = Day.valueToDays(value)
-
-		// Set the days
-		this.setDays(days)
 	}
 
 	/**

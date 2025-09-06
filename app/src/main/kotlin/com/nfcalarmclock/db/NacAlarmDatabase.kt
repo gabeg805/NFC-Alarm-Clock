@@ -24,6 +24,7 @@ import com.nfcalarmclock.db.NacAlarmDatabase.FixDismissAndSnoozeOptionsConverted
 import com.nfcalarmclock.db.NacAlarmDatabase.ClearNfcTagTableMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.DropNfcTagTableMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.RemoveUseTtsColumnMigration
+import com.nfcalarmclock.db.NacAlarmDatabase.UpdateRepeatFrequencyFrom0To1Migration
 import com.nfcalarmclock.db.NacOldDatabase.Companion.read
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTagDao
@@ -58,7 +59,7 @@ import javax.inject.Singleton
 /**
  * Store alarms in a Room database.
  */
-@Database(version = 37,
+@Database(version = 39,
 	entities = [
 		NacAlarm::class,
 		NacAlarmCreatedStatistic::class,
@@ -103,7 +104,9 @@ import javax.inject.Singleton
 		AutoMigration(from = 33, to = 34),
 		AutoMigration(from = 34, to = 35),
 		AutoMigration(from = 35, to = 36),
-		AutoMigration(from = 36, to = 37)]
+		AutoMigration(from = 36, to = 37),
+		AutoMigration(from = 37, to = 38, spec = UpdateRepeatFrequencyFrom0To1Migration::class),
+		AutoMigration(from = 38, to = 39)]
 
 )
 @TypeConverters(NacAlarmTypeConverters::class, NacStatisticTypeConverters::class)
@@ -328,6 +331,24 @@ abstract class NacAlarmDatabase
 	 */
 	@DeleteColumn(tableName = "alarm", columnName = "should_use_tts")
 	internal class RemoveUseTtsColumnMigration : AutoMigrationSpec
+
+	/**
+	 * Update all values of the repeat frequency from 0 (the old default value) to 1
+	 * (the new default value).
+	 */
+	internal class UpdateRepeatFrequencyFrom0To1Migration : AutoMigrationSpec
+	{
+		override fun onPostMigrate(db: SupportSQLiteDatabase)
+		{
+			// Update the table
+			db.execSQL("UPDATE alarm SET repeat_frequency=1 WHERE repeat_frequency=0")
+
+			// Update the shared preferences
+			println("SHARED BEFORE : ${sharedPreferences?.repeatFrequency}")
+			sharedPreferences?.repeatFrequency = 1
+			println("SHARED AFTER : ${sharedPreferences?.repeatFrequency}")
+		}
+	}
 
 	/**
 	 * Static stuff.

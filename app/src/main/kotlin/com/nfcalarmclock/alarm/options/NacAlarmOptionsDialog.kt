@@ -158,6 +158,7 @@ class NacAlarmOptionsDialog
 		{
 			R.id.alarm_option_flashlight -> R.id.nacFlashlightOptionsDialog
 			R.id.alarm_option_nfc -> R.id.nacScanNfcTagDialog
+			R.id.alarm_option_repeat -> R.id.nacRepeatOptionsDialog
 			R.id.alarm_option_vibrate -> R.id.nacVibrateOptionsDialog
 			R.id.alarm_option_audio_source -> R.id.nacAudioSourceDialog
 			R.id.alarm_option_text_to_speech -> R.id.nacTextToSpeechDialog

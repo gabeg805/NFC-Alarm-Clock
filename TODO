@@ -7,6 +7,8 @@ TODO
 * TODO: In NacCardHolder, do I always want to do the haptic jank whenever a button is clicked?
 * TODO: Start week on and next alarm format radio button colors are not themed
 * TODO: Bottom padding of settings is wack, and possibly in main activity as well
+* TODO: Test MediaActivity with edge-to-edge
+* TODO: Scheduled a date alarm and it ran immediately.  Need to investigate this.
 
 * Different repeat options, someone even wants monthly.  Should I just add a
   calendar?  How would I handle showing the date it's going to alarm?

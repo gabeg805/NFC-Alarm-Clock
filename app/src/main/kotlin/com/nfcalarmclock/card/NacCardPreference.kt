@@ -8,7 +8,7 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.util.NacCalendar
+import com.nfcalarmclock.util.daysToValue
 import com.nfcalarmclock.view.calcAlpha
 
 /**
@@ -142,7 +142,7 @@ class NacCardPreference @JvmOverloads constructor(
 
 		// Days
 		card.onCardDaysChangedListener = NacCardHolder.OnCardDaysChangedListener { _, a ->
-			sharedPreferences.days = NacCalendar.Day.daysToValue(a.days)
+			sharedPreferences.days = a.days.daysToValue()
 		}
 
 		// Repeat

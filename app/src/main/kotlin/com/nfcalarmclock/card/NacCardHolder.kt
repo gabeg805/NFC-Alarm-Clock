@@ -1127,6 +1127,17 @@ class NacCardHolder(
 	}
 
 	/**
+	 * Refresh all the views associated with a change to the repeat options.
+	 */
+	fun refreshRepeatOptionViews()
+	{
+		setDayOfWeek()
+		setRepeatButton()
+		setSummaryDaysView()
+		setSummarySkipNextAlarmIcon()
+	}
+
+	/**
 	 * Refresh all the views that can be affected when a date is scheduled.
 	 */
 	fun refreshScheduleDateViews()
@@ -1376,8 +1387,10 @@ class NacCardHolder(
 	private fun setRepeatButton()
 	{
 		// Get the is enabled and should repeat states from the alarm
-		val isEnabled = alarm!!.areDaysSelected
-		val shouldRepeat = alarm!!.areDaysSelected && alarm!!.shouldRepeat
+		//val isEnabled = alarm!!.areDaysSelected
+		//val shouldRepeat = alarm!!.areDaysSelected && alarm!!.shouldRepeat
+		// TODO: TEST THIS AND SEE IF REPEAT STILL WORKS LIKE THIS
+		val shouldRepeat = alarm!!.shouldRepeat
 
 		// Check if the repeat button status and the alarm should repeat status are
 		// different
@@ -1389,11 +1402,11 @@ class NacCardHolder(
 
 		// Check if the repeat button is enabled status and the alarm is enabled status
 		// are different
-		if (repeatButton.isEnabled != isEnabled)
-		{
-			// Set the new is enabled status in the button
-			repeatButton.isEnabled = isEnabled
-		}
+		//if (repeatButton.isEnabled != isEnabled)
+		//{
+		//	// Set the new is enabled status in the button
+		//	repeatButton.isEnabled = isEnabled
+		//}
 	}
 
 	/**
@@ -1686,11 +1699,35 @@ class NacCardHolder(
 				// Toggle the day
 				alarm!!.toggleDay(day)
 
+				// TODO: Should I add logic for when the last day is unselected, change to day
+				//       frequency, and when clicking a day, change to week frequency?
+
+				// TODO: If hour/day, then clicking a day can change to week.
+				//       If week, then clicking a day should not change anything unless all days are toasted
+
 				// Check if no days are selected
-				if (!alarm!!.areDaysSelected)
+				if (alarm!!.days.isEmpty())
 				{
 					// Disable repeat
-					alarm!!.shouldRepeat = false
+					//alarm!!.shouldRepeat = false
+
+					// Change the repeat frequency to be every day
+					println("Changing repeat frequency to daily")
+					alarm!!.repeatFrequency = 1
+					alarm!!.repeatFrequencyUnits = 3
+					alarm!!.repeatFrequencyDaysToRunBeforeStarting = Day.NONE
+				}
+				else
+				{
+					// Check if the repeat frequency is not set to a weekly cadence
+					if (alarm!!.repeatFrequencyUnits != 4)
+					{
+						println("Changing repeat frequency to weekly")
+						// Change the repeat frequency to be weekly
+						alarm!!.repeatFrequency = 1
+						alarm!!.repeatFrequencyUnits = 4
+						alarm!!.repeatFrequencyDaysToRunBeforeStarting = Day.WEEK
+					}
 				}
 
 				// Clear the date
@@ -1957,8 +1994,8 @@ class NacCardHolder(
 				// Reset the skip next alarm flag
 				alarm!!.shouldSkipNextAlarm = false
 
-				// Disable the repeat button
-				alarm!!.shouldRepeat = false
+				//// Disable the repeat button
+				//alarm!!.shouldRepeat = false
 
 				// Clear out the selected days
 				alarm!!.setDays(0)

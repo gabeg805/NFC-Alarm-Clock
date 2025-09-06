@@ -2,6 +2,7 @@ package com.nfcalarmclock.alarm.db
 
 import androidx.room.TypeConverter
 import com.nfcalarmclock.util.NacCalendar.Day
+import com.nfcalarmclock.util.daysToValue
 import java.util.EnumSet
 
 /**
@@ -25,7 +26,7 @@ object NacAlarmTypeConverters
 	@TypeConverter
 	fun daysToDayValue(days: EnumSet<Day>): Int
 	{
-		return Day.daysToValue(days)
+		return days.daysToValue()
 	}
 
 }

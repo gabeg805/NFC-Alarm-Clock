@@ -87,6 +87,7 @@ import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.createTimeTickReceiver
+import com.nfcalarmclock.util.daysToValue
 import com.nfcalarmclock.util.disableActivityAlias
 import com.nfcalarmclock.util.getAlarm
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
@@ -946,7 +947,7 @@ class NacMainActivity
 			// Customize the date picker
 			dialog.datePicker.apply {
 				firstDayOfWeek = if (sharedPreferences.startWeekOn == 1) Calendar.MONDAY else Calendar.SUNDAY
-				minDate = Calendar.getInstance().timeInMillis - 1000
+				minDate = System.currentTimeMillis() - 1000
 			}
 
 			// Set the listener
@@ -961,7 +962,9 @@ class NacMainActivity
 				alarm.isEnabled = true
 				alarm.setDays(0)
 				alarm.shouldRepeat = false
+				alarm.repeatFrequencyDaysToRunBeforeStarting = NacCalendar.Day.NONE
 				alarm.shouldSkipNextAlarm = false
+				// TODO: Should this be in NacCardPreference as well??
 
 				// Refresh the schedule date views
 				card.refreshScheduleDateViews()
@@ -1078,6 +1081,7 @@ class NacMainActivity
 			NacAlarmOptionsDialog.navigate(navController, alarm)
 				?.observe(this) { a ->
 					updateAlarm(a)
+					card.refreshRepeatOptionViews()
 				}
 
 		}

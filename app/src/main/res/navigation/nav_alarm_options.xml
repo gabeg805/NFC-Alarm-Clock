@@ -30,6 +30,9 @@
 		<action
 			android:id="@+id/action_nacAlarmOptionsDialog_to_nacScanNfcTagDialog"
 			app:destination="@id/nacScanNfcTagDialog" />
+		<action
+			android:id="@+id/action_nacAlarmOptionsDialog_to_nacRepeatOptionsDialog"
+			app:destination="@id/nacRepeatOptionsDialog" />
 	</dialog>
 	<dialog
 		android:id="@+id/nacAudioSourceDialog"
@@ -74,4 +77,8 @@
 		android:id="@+id/nacSaveNfcTagDialog"
 		android:name="com.nfcalarmclock.alarm.options.nfc.NacSaveNfcTagDialog"
 		android:label="NacSaveNfcTagDialog" />
+	<dialog
+		android:id="@+id/nacRepeatOptionsDialog"
+		android:name="com.nfcalarmclock.alarm.options.repeat.NacRepeatOptionsDialog"
+		android:label="NacRepeatOptionsDialog" />
 </navigation>

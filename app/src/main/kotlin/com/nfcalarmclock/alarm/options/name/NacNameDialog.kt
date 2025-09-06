@@ -114,7 +114,7 @@ class NacNameDialog
 			// Get the context
 			context = requireContext()
 		}
-		catch (e: IllegalStateException)
+		catch (_: IllegalStateException)
 		{
 			return
 		}

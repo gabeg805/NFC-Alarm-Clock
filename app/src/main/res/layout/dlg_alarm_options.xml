@@ -25,6 +25,15 @@
 		android:text="@string/title_alarm_nfc"
 		/>
 
+	<!-- Repeat -->
+	<Button
+		style="@style/Widget.AlarmOptionMain.Button"
+		android:id="@+id/alarm_option_repeat"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/title_alarm_repeat"
+		/>
+
 	<!-- Vibrate -->
 	<Button
 		style="@style/Widget.AlarmOptionMain.Button"

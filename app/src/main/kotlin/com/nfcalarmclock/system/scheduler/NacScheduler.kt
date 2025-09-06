@@ -38,10 +38,14 @@ object NacScheduler
 		// Get the calendar for the next alarm
 		val nextAlarmCal = if (alarm.date.isNotEmpty())
 		{
-			// A date is set so converting to a calendar is easy
+			// Alarm has a date. Converting to a calendar is easy
 			println("HELLO")
 			NacCalendar.alarmToCalendar(alarm)
 		}
+		// TODO: FIGURE OUT WHAT TO DO HERE
+		//else if (alarm.)
+		//{
+		//}
 		else
 		{
 			// Get the calendar for the next alarm

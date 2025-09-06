@@ -422,6 +422,36 @@
 		<item quantity="other">Skipped alarms</item>
 	</plurals>
 
+	<plurals name="repeat_hourly">
+		<item quantity="one">Every %d hour</item>
+		<item quantity="other">Every %d hours</item>
+	</plurals>
+
+	<plurals name="repeat_daily">
+		<item quantity="one">Every %d day</item>
+		<item quantity="other">Every %d days</item>
+	</plurals>
+
+	<plurals name="repeat_weekly">
+		<item quantity="one">Every %d week</item>
+		<item quantity="other">Every %d weeks</item>
+	</plurals>
+
+	<plurals name="standalone_unit_hour">
+		<item quantity="one">Hour</item>
+		<item quantity="other">Hours</item>
+	</plurals>
+
+	<plurals name="standalone_unit_day">
+		<item quantity="one">Day</item>
+		<item quantity="other">Days</item>
+	</plurals>
+
+	<plurals name="standalone_unit_week">
+		<item quantity="one">Week</item>
+		<item quantity="other">Weeks</item>
+	</plurals>
+
 	<plurals name="unit_day">
 		<item quantity="one">%d day</item>
 		<item quantity="other">%d days</item>

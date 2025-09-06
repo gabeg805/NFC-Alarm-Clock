@@ -15,6 +15,7 @@ import java.io.File
 import java.io.InputStreamReader
 import java.util.Calendar
 import androidx.core.content.edit
+import com.nfcalarmclock.util.daysToValue
 
 /**
  * Container for the values of each preference.
@@ -1434,19 +1435,55 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Frequency at which to repeat the alarm, in units of days.
+	 * Frequency at which to repeat the alarm.
 	 */
 	var repeatFrequency: Int
 		get()
 		{
 			val key = resources.getString(R.string.key_default_alarm_repeat_frequency)
-			val defaultValue = 0
+			val defaultValue = 1
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
 			val key = resources.getString(R.string.key_default_alarm_repeat_frequency)
+
+			saveInt(key,  value)
+		}
+
+	/**
+	 * Days to run before starting the frequency at which to repeat the alarm.
+	 */
+	var repeatFrequencyDaysToRunBeforeStarting: Int
+		get()
+		{
+			val key = resources.getString(R.string.key_default_alarm_repeat_frequency_days_to_run_before_starting)
+			val defaultValue = NacCalendar.Day.WEEK.daysToValue()
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_alarm_repeat_frequency_days_to_run_before_starting)
+
+			saveInt(key,  value)
+		}
+
+	/**
+	 * Units for the frequency at which to repeat the alarm.
+	 */
+	var repeatFrequencyUnits: Int
+		get()
+		{
+			val key = resources.getString(R.string.key_default_alarm_repeat_frequency_units)
+			val defaultValue = 0
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_alarm_repeat_frequency_units)
 
 			saveInt(key,  value)
 		}

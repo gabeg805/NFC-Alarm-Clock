@@ -1,12 +1,12 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 37,
-    "identityHash": "b71b72641f88dd8b3c892a5f609753da",
+    "version": 39,
+    "identityHash": "ade19022f6743dabae4111b5374af202",
     "entities": [
       {
         "tableName": "alarm",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_active` INTEGER NOT NULL DEFAULT 0, `time_active` INTEGER NOT NULL DEFAULT 0, `snooze_count` INTEGER NOT NULL DEFAULT 0, `is_enabled` INTEGER NOT NULL DEFAULT 0, `hour` INTEGER NOT NULL DEFAULT 0, `minute` INTEGER NOT NULL DEFAULT 0, `snooze_hour` INTEGER NOT NULL DEFAULT 0, `snooze_minute` INTEGER NOT NULL DEFAULT 0, `days` INTEGER NOT NULL, `date` TEXT NOT NULL DEFAULT '', `should_repeat` INTEGER NOT NULL DEFAULT 0, `repeat_frequency` INTEGER NOT NULL DEFAULT 0, `should_vibrate` INTEGER NOT NULL DEFAULT 0, `vibrate_duration` INTEGER NOT NULL DEFAULT 500, `vibrate_wait_time` INTEGER NOT NULL DEFAULT 1000, `should_vibrate_pattern` INTEGER NOT NULL DEFAULT 0, `vibrate_repeat_pattern` INTEGER NOT NULL DEFAULT 3, `vibrate_wait_time_after_pattern` INTEGER NOT NULL DEFAULT 3000, `should_use_nfc` INTEGER NOT NULL DEFAULT 0, `nfc_tag_id` TEXT NOT NULL DEFAULT '', `nfc_tag_dismiss_order` INTEGER NOT NULL DEFAULT 0, `should_use_flashlight` INTEGER NOT NULL DEFAULT 0, `flashlight_strength_level` INTEGER NOT NULL DEFAULT 0, `gradually_increase_flashlight_strength_level_wait_time` INTEGER NOT NULL DEFAULT 5, `should_blink_flashlight` INTEGER NOT NULL DEFAULT 0, `flashlight_on_duration` TEXT NOT NULL DEFAULT '1.0', `flashlight_off_duration` TEXT NOT NULL DEFAULT '1.0', `media_path` TEXT NOT NULL DEFAULT '', `media_artist` TEXT NOT NULL DEFAULT '', `media_title` TEXT NOT NULL DEFAULT '', `media_type` INTEGER NOT NULL DEFAULT 0, `local_media_path` TEXT NOT NULL DEFAULT '', `should_shuffle_media` INTEGER NOT NULL DEFAULT 0, `should_recursively_play_media` INTEGER NOT NULL DEFAULT 0, `volume` INTEGER NOT NULL DEFAULT 0, `audio_source` TEXT NOT NULL DEFAULT '', `name` TEXT NOT NULL DEFAULT '', `should_say_current_time` INTEGER NOT NULL DEFAULT 0, `should_say_alarm_name` INTEGER NOT NULL DEFAULT 0, `tts_frequency` INTEGER NOT NULL DEFAULT 0, `tts_speech_rate` REAL NOT NULL DEFAULT 0.7, `tts_voice` TEXT NOT NULL DEFAULT '', `should_gradually_increase_volume` INTEGER NOT NULL DEFAULT 0, `gradually_increase_volume_wait_time` INTEGER NOT NULL DEFAULT 5, `should_restrict_volume` INTEGER NOT NULL DEFAULT 0, `should_auto_dismiss` INTEGER NOT NULL DEFAULT 1, `auto_dismiss_time` INTEGER NOT NULL DEFAULT 900, `should_dismiss_early` INTEGER NOT NULL DEFAULT 0, `should_show_dismiss_early_notification` INTEGER NOT NULL DEFAULT 0, `dismiss_early_time` INTEGER NOT NULL DEFAULT 30, `time_of_dismiss_early_alarm` INTEGER NOT NULL DEFAULT 0, `should_auto_snooze` INTEGER NOT NULL DEFAULT 0, `auto_snooze_time` INTEGER NOT NULL DEFAULT 300, `max_snooze` INTEGER NOT NULL DEFAULT -1, `snooze_duration` INTEGER NOT NULL DEFAULT 300, `should_use_easy_snooze` INTEGER NOT NULL DEFAULT 0, `should_volume_snooze` INTEGER NOT NULL DEFAULT 0, `should_show_reminder` INTEGER NOT NULL DEFAULT 0, `time_to_show_reminder` INTEGER NOT NULL DEFAULT 5, `reminder_frequency` INTEGER NOT NULL DEFAULT 0, `should_use_tts_for_reminder` INTEGER NOT NULL DEFAULT 0, `should_skip_next_alarm` INTEGER NOT NULL DEFAULT 0, `should_delete_alarm_after_dismissed` INTEGER NOT NULL DEFAULT 0)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_active` INTEGER NOT NULL DEFAULT 0, `time_active` INTEGER NOT NULL DEFAULT 0, `snooze_count` INTEGER NOT NULL DEFAULT 0, `is_enabled` INTEGER NOT NULL DEFAULT 0, `hour` INTEGER NOT NULL DEFAULT 0, `minute` INTEGER NOT NULL DEFAULT 0, `snooze_hour` INTEGER NOT NULL DEFAULT 0, `snooze_minute` INTEGER NOT NULL DEFAULT 0, `days` INTEGER NOT NULL, `date` TEXT NOT NULL DEFAULT '', `should_repeat` INTEGER NOT NULL DEFAULT 0, `repeat_frequency` INTEGER NOT NULL DEFAULT 1, `repeat_frequency_units` INTEGER NOT NULL DEFAULT 4, `repeat_frequency_days_to_run_before_starting` INTEGER NOT NULL DEFAULT 127, `should_vibrate` INTEGER NOT NULL DEFAULT 0, `vibrate_duration` INTEGER NOT NULL DEFAULT 500, `vibrate_wait_time` INTEGER NOT NULL DEFAULT 1000, `should_vibrate_pattern` INTEGER NOT NULL DEFAULT 0, `vibrate_repeat_pattern` INTEGER NOT NULL DEFAULT 3, `vibrate_wait_time_after_pattern` INTEGER NOT NULL DEFAULT 3000, `should_use_nfc` INTEGER NOT NULL DEFAULT 0, `nfc_tag_id` TEXT NOT NULL DEFAULT '', `nfc_tag_dismiss_order` INTEGER NOT NULL DEFAULT 0, `should_use_flashlight` INTEGER NOT NULL DEFAULT 0, `flashlight_strength_level` INTEGER NOT NULL DEFAULT 0, `gradually_increase_flashlight_strength_level_wait_time` INTEGER NOT NULL DEFAULT 5, `should_blink_flashlight` INTEGER NOT NULL DEFAULT 0, `flashlight_on_duration` TEXT NOT NULL DEFAULT '1.0', `flashlight_off_duration` TEXT NOT NULL DEFAULT '1.0', `media_path` TEXT NOT NULL DEFAULT '', `media_artist` TEXT NOT NULL DEFAULT '', `media_title` TEXT NOT NULL DEFAULT '', `media_type` INTEGER NOT NULL DEFAULT 0, `local_media_path` TEXT NOT NULL DEFAULT '', `should_shuffle_media` INTEGER NOT NULL DEFAULT 0, `should_recursively_play_media` INTEGER NOT NULL DEFAULT 0, `volume` INTEGER NOT NULL DEFAULT 0, `audio_source` TEXT NOT NULL DEFAULT '', `name` TEXT NOT NULL DEFAULT '', `should_say_current_time` INTEGER NOT NULL DEFAULT 0, `should_say_alarm_name` INTEGER NOT NULL DEFAULT 0, `tts_frequency` INTEGER NOT NULL DEFAULT 0, `tts_speech_rate` REAL NOT NULL DEFAULT 0.7, `tts_voice` TEXT NOT NULL DEFAULT '', `should_gradually_increase_volume` INTEGER NOT NULL DEFAULT 0, `gradually_increase_volume_wait_time` INTEGER NOT NULL DEFAULT 5, `should_restrict_volume` INTEGER NOT NULL DEFAULT 0, `should_auto_dismiss` INTEGER NOT NULL DEFAULT 1, `auto_dismiss_time` INTEGER NOT NULL DEFAULT 900, `should_dismiss_early` INTEGER NOT NULL DEFAULT 0, `should_show_dismiss_early_notification` INTEGER NOT NULL DEFAULT 0, `dismiss_early_time` INTEGER NOT NULL DEFAULT 30, `time_of_dismiss_early_alarm` INTEGER NOT NULL DEFAULT 0, `should_auto_snooze` INTEGER NOT NULL DEFAULT 0, `auto_snooze_time` INTEGER NOT NULL DEFAULT 300, `max_snooze` INTEGER NOT NULL DEFAULT -1, `snooze_duration` INTEGER NOT NULL DEFAULT 300, `should_use_easy_snooze` INTEGER NOT NULL DEFAULT 0, `should_volume_snooze` INTEGER NOT NULL DEFAULT 0, `should_show_reminder` INTEGER NOT NULL DEFAULT 0, `time_to_show_reminder` INTEGER NOT NULL DEFAULT 5, `reminder_frequency` INTEGER NOT NULL DEFAULT 0, `should_use_tts_for_reminder` INTEGER NOT NULL DEFAULT 0, `should_skip_next_alarm` INTEGER NOT NULL DEFAULT 0, `should_delete_alarm_after_dismissed` INTEGER NOT NULL DEFAULT 0)",
         "fields": [
           {
             "fieldPath": "id",
@@ -95,7 +95,21 @@
             "columnName": "repeat_frequency",
             "affinity": "INTEGER",
             "notNull": true,
-            "defaultValue": "0"
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "repeatFrequencyUnits",
+            "columnName": "repeat_frequency_units",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "4"
+          },
+          {
+            "fieldPath": "repeatFrequencyDaysToRunBeforeStarting",
+            "columnName": "repeat_frequency_days_to_run_before_starting",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "127"
           },
           {
             "fieldPath": "shouldVibrate",
@@ -726,7 +740,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b71b72641f88dd8b3c892a5f609753da')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ade19022f6743dabae4111b5374af202')"
     ]
   }
 }

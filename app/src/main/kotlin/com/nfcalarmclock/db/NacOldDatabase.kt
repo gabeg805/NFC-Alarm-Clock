@@ -15,6 +15,7 @@ import com.nfcalarmclock.util.media.getMediaTitle
 import com.nfcalarmclock.util.media.getMediaType
 import androidx.core.database.sqlite.transaction
 import androidx.core.net.toUri
+import com.nfcalarmclock.util.daysToValue
 
 /**
  * NFC Alarm Clock database.
@@ -176,7 +177,7 @@ class NacOldDatabase(
 				cv.put(Contract.AlarmTable.COLUMN_ENABLED, alarm.isEnabled)
 				cv.put(Contract.AlarmTable.COLUMN_HOUR, alarm.hour)
 				cv.put(Contract.AlarmTable.COLUMN_MINUTE, alarm.minute)
-				cv.put(Contract.AlarmTable.COLUMN_DAYS, NacCalendar.Day.daysToValue(alarm.days))
+				cv.put(Contract.AlarmTable.COLUMN_DAYS, alarm.days.daysToValue())
 				cv.put(Contract.AlarmTable.COLUMN_REPEAT, alarm.shouldRepeat)
 				cv.put(Contract.AlarmTable.COLUMN_VIBRATE, alarm.shouldVibrate)
 				cv.put(Contract.AlarmTable.COLUMN_MEDIA_PATH, alarm.mediaPath)
@@ -194,7 +195,7 @@ class NacOldDatabase(
 				cv.put(Contract.AlarmTable.COLUMN_ENABLED, alarm.isEnabled)
 				cv.put(Contract.AlarmTable.COLUMN_HOUR, alarm.hour)
 				cv.put(Contract.AlarmTable.COLUMN_MINUTE, alarm.minute)
-				cv.put(Contract.AlarmTable.COLUMN_DAYS, NacCalendar.Day.daysToValue(alarm.days))
+				cv.put(Contract.AlarmTable.COLUMN_DAYS, alarm.days.daysToValue())
 				cv.put(Contract.AlarmTable.COLUMN_REPEAT, alarm.shouldRepeat)
 				cv.put(Contract.AlarmTable.COLUMN_VIBRATE, alarm.shouldVibrate)
 				cv.put(Contract.AlarmTable.COLUMN_MEDIA_PATH, alarm.mediaPath)
@@ -212,7 +213,7 @@ class NacOldDatabase(
 				cv.put(Contract.AlarmTable.COLUMN_ENABLED, alarm.isEnabled)
 				cv.put(Contract.AlarmTable.COLUMN_HOUR, alarm.hour)
 				cv.put(Contract.AlarmTable.COLUMN_MINUTE, alarm.minute)
-				cv.put(Contract.AlarmTable.COLUMN_DAYS, NacCalendar.Day.daysToValue(alarm.days))
+				cv.put(Contract.AlarmTable.COLUMN_DAYS, alarm.days.daysToValue())
 				cv.put(Contract.AlarmTable.COLUMN_REPEAT, alarm.shouldRepeat)
 				cv.put(Contract.AlarmTable.COLUMN_VIBRATE, alarm.shouldVibrate)
 				cv.put(Contract.AlarmTable.COLUMN_MEDIA_PATH, alarm.mediaPath)
