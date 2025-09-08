@@ -204,7 +204,7 @@ class NacRepeatOptionsDialog
 	}
 
 	/**
-	 * Setup the auto snooze views.
+	 * Setup the repeat frequency views.
 	 */
 	private fun setupRepeatFrequency(defaultValue: Int, defaultUnits: Int)
 	{
@@ -212,10 +212,10 @@ class NacRepeatOptionsDialog
 		val context = requireContext()
 
 		// Get the views
-		val valueAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.auto_snooze_minutes_dropdown_menu)
-		val unitsAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.auto_snooze_seconds_dropdown_menu)
-		val valueInputLayout: TextInputLayout = dialog!!.findViewById(R.id.auto_snooze_minutes_input_layout)
-		val unitsInputLayout: TextInputLayout = dialog!!.findViewById(R.id.auto_snooze_seconds_input_layout)
+		val valueAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.repeat_freq_value_dropdown_menu)
+		val unitsAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.repeat_freq_units_dropdown_menu)
+		val valueInputLayout: TextInputLayout = dialog!!.findViewById(R.id.repeat_freq_value_input_layout)
+		val unitsInputLayout: TextInputLayout = dialog!!.findViewById(R.id.repeat_freq_units_input_layout)
 
 		// Setup the input layouts
 		valueInputLayout.setupInputLayoutColor(context, sharedPreferences)

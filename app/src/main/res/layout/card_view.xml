@@ -238,8 +238,8 @@
 				android:id="@+id/nac_divider_header"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:paddingTop="@dimen/nudge"
-				android:paddingBottom="@dimen/nudge"
+				android:paddingTop="@dimen/tiny"
+				android:paddingBottom="@dimen/tiny"
 				android:gravity="center"
 				android:orientation="horizontal">
 
@@ -263,22 +263,6 @@
 					android:background="@drawable/color_selector"
 					/>
 			</LinearLayout> <!-- Header divider -->
-
-			<!-- Calendar -->
-			<com.google.android.material.button.MaterialButton
-				style="@style/Widget.Button.Text.Row"
-				android:id="@+id/nac_schedule_date"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_gravity="end"
-				android:paddingStart="@dimen/normal"
-				android:paddingEnd="@dimen/normal"
-				android:minHeight="@dimen/normal"
-				android:textSize="@dimen/tsz_small"
-				android:text="@string/title_alarm_schedule_date"
-				app:iconSize="@dimen/isz_small"
-				app:icon="@drawable/calendar_clock_32"
-				/>
 
 			<!-- Days -->
 			<LinearLayout

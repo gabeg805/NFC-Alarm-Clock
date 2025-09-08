@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/gray_dark">
+
+    <!-- Time -->
+    <TimePicker
+        style="@style/Widget.TimePickerStyle"
+        android:id="@+id/time_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <!-- Date -->
+    <DatePicker
+        android:id="@+id/date_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        />
+
+    <!-- Set the date -->
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.Button.Text.Row"
+        android:id="@+id/set_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/time_picker"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/tsz_small"
+        android:text="@string/title_set_date"
+        app:iconPadding="@dimen/small"
+        app:iconSize="@dimen/isz_small"
+        app:iconTint="@color/white"
+        app:icon="@drawable/calendar_clock_32"
+        />
+
+    <!-- Set the time -->
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.Button.Text.Row"
+        android:id="@+id/set_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/date_picker"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/tsz_small"
+        android:text="@string/title_set_time"
+        app:iconPadding="@dimen/small"
+        app:iconSize="@dimen/isz_small"
+        app:iconTint="@color/white"
+        app:icon="@drawable/alarm"
+        />
+
+    <!-- Ok -->
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.Button.Text.Row"
+        android:id="@+id/ok_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/time_picker"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textSize="@dimen/tsz_small"
+        android:text="@string/action_ok"
+        />
+
+    <!-- Cancel -->
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.Button.Text.Row"
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/ok_button"
+        app:layout_constraintEnd_toStartOf="@id/ok_button"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textSize="@dimen/tsz_small"
+        android:text="@string/action_cancel"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

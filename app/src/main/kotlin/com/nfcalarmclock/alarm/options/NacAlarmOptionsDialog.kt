@@ -16,7 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.util.addAlarm
+import com.nfcalarmclock.util.toBundle
 import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
 import com.nfcalarmclock.view.setupBackgroundColor
 import com.nfcalarmclock.view.setupRippleColor
@@ -242,7 +242,7 @@ class NacAlarmOptionsDialog
 		): MutableLiveData<NacAlarm>?
 		{
 			// Create bundle with the alarm
-			val bundle = Bundle().addAlarm(alarm)
+			val bundle = alarm.toBundle()
 
 			// Set the graph of the nav controller
 			navController.setGraph(R.navigation.nav_alarm_options, bundle)
@@ -272,7 +272,7 @@ class NacAlarmOptionsDialog
 		): MutableLiveData<NacAlarm>?
 		{
 			// Create bundle with the alarm
-			val bundle = Bundle().addAlarm(alarm)
+			val bundle = alarm.toBundle()
 
 			// Inflate the graph for the nav controller
 			val navGraph = navController.navInflater.inflate(R.navigation.nav_quick_alarm_options)

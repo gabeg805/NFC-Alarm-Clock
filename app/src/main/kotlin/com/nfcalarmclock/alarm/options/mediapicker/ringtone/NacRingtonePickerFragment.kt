@@ -15,7 +15,6 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerFragment
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.addMediaInfo
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.media.NacMedia
@@ -24,6 +23,7 @@ import com.nfcalarmclock.util.media.copyMediaToDeviceEncryptedStorage
 import com.nfcalarmclock.util.media.doesDeviceHaveFreeSpace
 import com.nfcalarmclock.util.media.getMediaArtist
 import com.nfcalarmclock.util.media.getMediaTitle
+import com.nfcalarmclock.util.toBundle
 
 /**
  * Display a dialog that shows a list of alarm ringtones.
@@ -205,7 +205,7 @@ class NacRingtonePickerFragment
 			val fragment: Fragment = NacRingtonePickerFragment()
 
 			// Add the bundle to the fragment
-			fragment.arguments = Bundle().addAlarm(alarm)
+			fragment.arguments = alarm?.toBundle() ?: Bundle()
 
 			return fragment
 		}

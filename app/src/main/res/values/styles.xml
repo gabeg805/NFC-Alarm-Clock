@@ -215,14 +215,6 @@
   </style>
   -->
 
-	<!--
-	<style name="Widget.TimePickerClockStyle" parent="Widget.MaterialComponents.TimePicker.Clock">
-		<item name="clockFaceBackgroundColor">@color/red</item>
-		<item name="clockHandColor">@color/red</item>
-		<item name="clockNumberTextColor">@color/red</item>
-	</style>
-	-->
-
 	<style name="Widget.TimePickerTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
 		<!--
 		<item name="clockFaceBackgroundColor">?attr/colorAccent</item>

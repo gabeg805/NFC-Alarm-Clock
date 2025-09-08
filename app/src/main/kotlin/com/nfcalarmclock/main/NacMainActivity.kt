@@ -1,9 +1,7 @@
 package com.nfcalarmclock.main
 
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
 import android.app.PendingIntent
-import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -31,7 +29,6 @@ import androidx.core.view.isNotEmpty
 import androidx.core.view.size
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,6 +47,7 @@ import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.db.NacNextAlarm
 import com.nfcalarmclock.alarm.options.NacAlarmOptionsDialog
+import com.nfcalarmclock.alarm.options.dateandtime.NacDateAndTimePickerDialog
 import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissEarlyService
 import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog
 import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerActivity
@@ -65,12 +63,19 @@ import com.nfcalarmclock.card.NacCardAdapterLiveData
 import com.nfcalarmclock.card.NacCardHolder
 import com.nfcalarmclock.card.NacCardHolder.OnCardAlarmOptionsClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardCollapsedListener
+import com.nfcalarmclock.card.NacCardHolder.OnCardDaysChangedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardDismissOptionsClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardMediaClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardNameClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardSnoozeOptionsClickedListener
+import com.nfcalarmclock.card.NacCardHolder.OnCardSwitchChangedListener
+import com.nfcalarmclock.card.NacCardHolder.OnCardTimeClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardUpdatedListener
+import com.nfcalarmclock.card.NacCardHolder.OnCardUseFlashlightChangedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardUseNfcChangedListener
+import com.nfcalarmclock.card.NacCardHolder.OnCardUseRepeatChangedListener
+import com.nfcalarmclock.card.NacCardHolder.OnCardUseVibrateChangedListener
+import com.nfcalarmclock.card.NacCardHolder.OnCardVolumeChangedListener
 import com.nfcalarmclock.card.NacCardLayoutManager
 import com.nfcalarmclock.card.NacCardTouchHelper
 import com.nfcalarmclock.card.NacCardTouchHelper.OnSwipedListener
@@ -922,88 +927,30 @@ class NacMainActivity
 		}
 
 		// Time
-		card.onCardTimeClickedListener = NacCardHolder.OnCardTimeClickedListener { _, alarm ->
+		card.onCardTimeClickedListener = OnCardTimeClickedListener { _, alarm ->
 			showTimeDialog(card, alarm)
 		}
 
 		// Switch
-		card.onCardSwitchChangedListener = NacCardHolder.OnCardSwitchChangedListener { _, alarm ->
+		card.onCardSwitchChangedListener = OnCardSwitchChangedListener { _, alarm ->
 			showNextAlarm(card, alarm)
 			updateAlarm(alarm)
 		}
 
-		// Schedule date
-		card.onCardScheduleDateClickedListener = NacCardHolder.OnCardScheduleDateClickedListener { _, alarm ->
-
-			// Create the dialog
-			val dialog = DatePickerDialog(this)
-
-			println("Current  : ${System.currentTimeMillis()}")
-			println("Calendar : ${Calendar.getInstance().timeInMillis}")
-
-			// Customize the date picker
-			dialog.datePicker.apply {
-				val now = Calendar.getInstance()
-				val alarmCal = NacCalendar.alarmToCalendar(alarm, skipDate = true)
-
-				minDate = if (alarmCal.before(now))
-				{
-					now.add(Calendar.DAY_OF_MONTH, 1)
-					now.timeInMillis
-				}
-				else
-				{
-					System.currentTimeMillis() - 1000
-				}
-
-				firstDayOfWeek = if (sharedPreferences.startWeekOn == 1) Calendar.MONDAY else Calendar.SUNDAY
-			}
-
-			// Set the listener
-			dialog.setOnDateSetListener { _, year, month, day ->
-
-				// Set the date
-				println("Year : $year | Month : $month | Day : $day")
-				alarm.date = "$year-${month+1}-$day"
-				println("Date : ${alarm.date}")
-
-				// Set various other alarm attributes that setting the date affects
-				alarm.isEnabled = true
-				alarm.setDays(0)
-				alarm.shouldRepeat = false
-				alarm.shouldSkipNextAlarm = false
-				//alarm.repeatFrequencyDaysToRunBeforeStarting = NacCalendar.Day.WEEK
-				// TODO: Should this be in NacCardPreference as well??
-
-
-				// Refresh the schedule date views
-				card.refreshScheduleDateViews()
-
-				// Show the next alarm, update the alarm, and save the next alarm
-				showNextAlarm(card, alarm)
-				updateAlarm(alarm)
-
-			}
-
-			// Show the dialog
-			dialog.show()
-
-		}
-
 		// Days
-		card.onCardDaysChangedListener = NacCardHolder.OnCardDaysChangedListener { _, alarm ->
+		card.onCardDaysChangedListener = OnCardDaysChangedListener { _, alarm ->
 			showNextAlarm(card, alarm)
 			updateAlarm(alarm)
 		}
 
 		// Repeat
-		card.onCardUseRepeatChangedListener = NacCardHolder.OnCardUseRepeatChangedListener { _, alarm ->
+		card.onCardUseRepeatChangedListener = OnCardUseRepeatChangedListener { _, alarm ->
 			updateAlarm(alarm)
 			card.toastRepeat(this)
 		}
 
 		// Vibrate
-		card.onCardUseVibrateChangedListener = NacCardHolder.OnCardUseVibrateChangedListener { _, alarm ->
+		card.onCardUseVibrateChangedListener = OnCardUseVibrateChangedListener { _, alarm ->
 			updateAlarm(alarm)
 			card.toastVibrate(this)
 		}
@@ -1018,7 +965,7 @@ class NacMainActivity
 		}
 
 		// Flashlight
-		card.onCardUseFlashlightChangedListener = NacCardHolder.OnCardUseFlashlightChangedListener { _, alarm ->
+		card.onCardUseFlashlightChangedListener = OnCardUseFlashlightChangedListener { _, alarm ->
 			updateAlarm(alarm)
 			card.toastFlashlight(this)
 		}
@@ -1035,7 +982,7 @@ class NacMainActivity
 		}
 
 		// Volume
-		card.onCardVolumeChangedListener = NacCardHolder.OnCardVolumeChangedListener { _, alarm ->
+		card.onCardVolumeChangedListener = OnCardVolumeChangedListener { _, alarm ->
 			updateAlarm(alarm)
 		}
 
@@ -1936,31 +1883,86 @@ class NacMainActivity
 		val is24HourFormat = DateFormat.is24HourFormat(this)
 
 		// Create the dialog
-		val dialog = TimePickerDialog(this,
-			{ _, hr, min ->
+		val dialog = NacDateAndTimePickerDialog()
 
-				// Reset the skip next alarm flag
-				alarm.shouldSkipNextAlarm = false
+		// Setup the date picker
+		dialog.onSetupDatePickerListener = NacDateAndTimePickerDialog.OnSetupDatePickerListener {
 
-				// Set the alarm attributes
-				alarm.hour = hr
-				alarm.minute = min
-				alarm.isEnabled = true
+			println("Current  : ${System.currentTimeMillis()}")
+			println("Calendar : ${Calendar.getInstance().timeInMillis}")
 
-				// Refresh the time views
-				card.refreshTimeViews()
+			val now = Calendar.getInstance()
+			val alarmCal = NacCalendar.alarmToCalendar(alarm, skipDate = true)
 
-				// Show the next alarm, update the alarm, and save the next alarm
-				showNextAlarm(card, alarm)
-				updateAlarm(alarm)
+			// Min date
+			it.minDate = if (alarmCal.before(now))
+			{
+				now.add(Calendar.DAY_OF_MONTH, 1)
+				now.timeInMillis
+			}
+			else
+			{
+				System.currentTimeMillis() - 1000
+			}
 
-			},
-			alarm.hour,
-			alarm.minute,
-			is24HourFormat)
+			// First day of week
+			it.firstDayOfWeek = if (sharedPreferences.startWeekOn == 1) Calendar.MONDAY else Calendar.SUNDAY
+		}
+
+		// Setup the time picker
+		dialog.onSetupTimePickerListener = NacDateAndTimePickerDialog.OnSetupTimePickerListener {
+			it.hour = alarm.hour
+			it.minute = alarm.minute
+			it.setIs24HourView(is24HourFormat)
+		}
+
+		// Date listener
+		dialog.onDateSelectedListener = NacDateAndTimePickerDialog.OnDateSelectedListener { _, year, month, day ->
+
+			// Set the date
+			println("Year : $year | Month : $month | Day : $day")
+			alarm.date = "$year-${month+1}-$day"
+			println("Date : ${alarm.date}")
+
+			// Set various other alarm attributes that setting the date affects
+			alarm.isEnabled = true
+			alarm.setDays(0)
+			alarm.shouldRepeat = false
+			alarm.shouldSkipNextAlarm = false
+			//alarm.repeatFrequencyDaysToRunBeforeStarting = NacCalendar.Day.WEEK
+			// TODO: Should this be in NacCardPreference as well??
+
+			// Refresh the schedule date views
+			card.refreshScheduleDateViews()
+
+			// Show the next alarm, update the alarm, and save the next alarm
+			showNextAlarm(card, alarm)
+			updateAlarm(alarm)
+
+		}
+
+		// Time listener
+		dialog.onTimeSelectedListener = NacDateAndTimePickerDialog.OnTimeSelectedListener { _, hr, min ->
+			println("HERE TIME")
+
+			// Reset the skip next alarm flag
+			alarm.shouldSkipNextAlarm = false
+
+			// Set the alarm attributes
+			alarm.hour = hr
+			alarm.minute = min
+			alarm.isEnabled = true
+
+			// Refresh the time views
+			card.refreshTimeViews()
+
+			// Show the next alarm, update the alarm, and save the next alarm
+			showNextAlarm(card, alarm)
+			updateAlarm(alarm)
+		}
 
 		// Show the dialog
-		dialog.show()
+		dialog.show(supportFragmentManager, NacDateAndTimePickerDialog.TAG)
 
 		//FragmentManager fragmentManager = ((AppCompatActivity)context)
 		//	.getSupportFragmentManager();

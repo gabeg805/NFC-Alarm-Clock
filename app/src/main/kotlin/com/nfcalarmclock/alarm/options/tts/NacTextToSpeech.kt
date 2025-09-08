@@ -2,14 +2,13 @@ package com.nfcalarmclock.alarm.options.tts
 
 import android.content.Context
 import android.media.AudioManager.OnAudioFocusChangeListener
-import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import com.nfcalarmclock.R
+import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.util.media.NacAudioAttributes
 import com.nfcalarmclock.util.media.NacAudioManager
-import com.nfcalarmclock.util.NacUtility
-import com.nfcalarmclock.util.addTextToSpeechAudioAttributes
+import com.nfcalarmclock.util.toBundle
 import java.util.Locale
 
 /**
@@ -266,7 +265,7 @@ class NacTextToSpeech(
 
 			// Speak the message
 			val androidAttrs = attrs.audioAttributes.audioAttributesV21.audioAttributes
-			val bundle = Bundle().addTextToSpeechAudioAttributes(attrs)
+			val bundle = attrs.toBundle()
 
 			textToSpeech.setAudioAttributes(androidAttrs)
 			textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, bundle,

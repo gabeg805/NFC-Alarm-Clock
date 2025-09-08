@@ -737,25 +737,43 @@ object NacCalendar
 						else -> oneTimeAlarmToString(context, alarm)
 					}
 				}
-				// Every day
-				else if (alarm.days == WEEK)
-				{
-					return context.getString(R.string.dow_everyday)
-				}
-				// Weekdays
-				else if (alarm.days == WEEKDAY)
-				{
-					return context.getString(R.string.dow_weekdays)
-				}
-				// Weekend
-				else if (alarm.days == WEEKEND)
-				{
-					return context.getString(R.string.dow_weekend)
-				}
-				// Other combination of days
+				// Combination of days
 				else
 				{
-					return daysToString(context, alarm.days, start)
+					// Build string
+					var string = when (alarm.days)
+					{
+						// Every day
+						WEEK ->
+						{
+							context.getString(R.string.dow_everyday)
+						}
+						// Weekdays
+						WEEKDAY ->
+						{
+							context.getString(R.string.dow_weekdays)
+						}
+						// Weekend
+						WEEKEND ->
+						{
+							context.getString(R.string.dow_weekend)
+						}
+						// Other combination of days
+						else ->
+						{
+							daysToString(context, alarm.days, start)
+						}
+					}
+
+					// Check if a repeat frequency is set for more than every 1 week
+					if ((alarm.repeatFrequencyUnits == 4) && (alarm.repeatFrequency != 1))
+					{
+						string += " \u2027 "
+						string += context.resources.getQuantityString(R.plurals.repeat_weekly,
+							alarm.repeatFrequency, alarm.repeatFrequency)
+					}
+
+					return string
 				}
 			}
 

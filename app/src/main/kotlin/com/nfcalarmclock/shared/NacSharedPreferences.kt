@@ -2489,9 +2489,6 @@ class NacSharedPreferences(context: Context)
 		// Find the next alarm
 		val nextAlarm = NacCalendar.getNextAlarm(allAlarms)
 
-		// Get the next calendar
-		//val nextCal = nextAlarm?.let { NacCalendar.getNextAlarmDay(it) }
-
 		// Determine the time in milliseconds to use
 		val millis = nextAlarm?.calendar?.let {
 

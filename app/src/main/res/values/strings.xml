@@ -215,6 +215,8 @@
 	<string name="title_created_alarms">Created alarms</string>
 	<string name="title_deleted_alarms">Deleted alarms</string>
 	<string name="title_current_alarms">Current</string>
+	<string name="title_set_date">Set date</string>
+	<string name="title_set_time">Set time</string>
 	<string name="title_whats_new">What\'s New</string>
 	<string name="title_permission_disable_battery_optimization">Disable battery optimization</string>
 	<string name="title_permission_storage">Storage</string>

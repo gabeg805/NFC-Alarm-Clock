@@ -28,17 +28,36 @@ fun Bundle.addAlarm(alarm: NacAlarm?): Bundle
 }
 
 /**
- * Add text-to-speech audio attributes to a bundle.
+ * Convert an alarm to a bundle.
+ *
+ * @return A bundle that contains the alarm.
+ */
+fun NacAlarm.toBundle(): Bundle
+{
+	// Create a bundle
+	val bundle = Bundle()
+
+	// Put the alarm in a bundle
+	bundle.putParcelable(ALARM_PARCEL_NAME, this)
+
+	return bundle
+}
+
+/**
+ * Convert text-to-speech audio attributes to a bundle.
  *
  * @return A bundle that contains the parameter to control the volume level
  *         of a Text-to-Speech engine.
  */
-fun Bundle.addTextToSpeechAudioAttributes(attrs: NacAudioAttributes): Bundle
+fun NacAudioAttributes.toBundle(): Bundle
 {
-	// Put the audio attributes in the bundle
-	this.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, attrs.stream)
+	// Create a bundle
+	val bundle = Bundle()
 
-	return this
+	// Put the audio attributes in a bundle
+	bundle.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, this.stream)
+
+	return bundle
 }
 
 /**

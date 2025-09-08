@@ -1,6 +1,5 @@
 package com.nfcalarmclock.alarm.options.snoozeoptions
 
-import android.os.Bundle
 import android.widget.AdapterView
 import android.widget.RelativeLayout
 import androidx.appcompat.widget.SwitchCompat
@@ -9,7 +8,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
-import com.nfcalarmclock.util.addAlarm
+import com.nfcalarmclock.util.toBundle
 import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.setTextFromIndex
 import com.nfcalarmclock.view.setupInputLayoutColor
@@ -281,7 +280,7 @@ class NacSnoozeOptionsDialog
 			val dialog = NacSnoozeOptionsDialog()
 
 			// Add the alarm to the dialog
-			dialog.arguments = Bundle().addAlarm(alarm)
+			dialog.arguments = alarm.toBundle()
 
 			// Set the listener to save the alarm
 			dialog.onSaveAlarmListener = OnSaveAlarmListener { a ->

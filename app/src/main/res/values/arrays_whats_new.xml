@@ -6,7 +6,7 @@
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
 		<item>12.6.0-beta</item>
-		<item>Added &lt;b>schedule date&lt;/b> to set an alarm on a particular date.</item>
+		<item>Added &lt;b>date&lt;/b> option to have an alarm run on a particular date.  Accessible when selecting a time.</item>
 		<item>Added &lt;b>repeat&lt;/b> options in alarm settings. Can repeat an alarm by &lt;b>hours&lt;/b>, &lt;b>days&lt;/b>, or &lt;b>weeks&lt;/b>.</item>
 		<item>Added &lt;b>snooze&lt;/b> with &lt;b>volume buttons&lt;/b>.</item>
 		<item>Added &lt;b>dismiss NFC tags&lt;/b> in &lt;b>order&lt;/b> if multiple NFC tags are selected.  Can be dismissed in any, random, or sequential order.</item>

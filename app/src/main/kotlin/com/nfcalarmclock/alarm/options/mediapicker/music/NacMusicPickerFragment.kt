@@ -27,7 +27,6 @@ import com.nfcalarmclock.system.file.browser.NacFileBrowser
 import com.nfcalarmclock.system.file.browser.NacFileBrowser.OnBrowserClickedListener
 import com.nfcalarmclock.system.permission.readmediaaudio.NacReadMediaAudioPermission
 import com.nfcalarmclock.util.NacUtility.quickToast
-import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.addMediaInfo
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.media.NacMedia
@@ -39,6 +38,7 @@ import com.nfcalarmclock.util.media.getMediaRelativePath
 import com.nfcalarmclock.util.media.isLocalMediaPath
 import com.nfcalarmclock.util.media.isMediaDirectory
 import com.nfcalarmclock.util.media.isMediaFile
+import com.nfcalarmclock.util.toBundle
 import com.nfcalarmclock.view.setupThemeColor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -465,7 +465,7 @@ class NacMusicPickerFragment
 			val fragment: Fragment = NacMusicPickerFragment()
 
 			// Add the bundle to the fragment
-			fragment.arguments = Bundle().addAlarm(alarm)
+			fragment.arguments = alarm?.toBundle() ?: Bundle()
 
 			return fragment
 		}
