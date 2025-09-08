@@ -200,26 +200,27 @@ class NacMainSettingFragment
 			return
 		}
 
-		// Setup edge to edge for the recyclerview
-		listView.setupEdgeToEdge { insets ->
+		// TODO: Can maybe customize this more when going up to API 36, but for now opting out
+		//// Setup edge to edge for the recyclerview
+		//listView.setupEdgeToEdge { insets ->
 
-			// Save the top margin value for the recyclerview
-			(activity as NacMainSettingActivity).rvTopMargin = insets.top
+		//	// Save the top margin value for the recyclerview
+		//	(activity as NacMainSettingActivity).rvTopMargin = insets.top
 
-		}
+		//}
 
-		// Get the top margin value that was saved for the recyclerview
-		val rvTopMargin = (activity as NacMainSettingActivity).rvTopMargin
+		//// Get the top margin value that was saved for the recyclerview
+		//val rvTopMargin = (activity as NacMainSettingActivity).rvTopMargin
 
-		// When the main settings fragment is navigated back to, the above edge to edge
-		// setup will not work. In this case, the margin needs to be set directly,
-		// instead of being set in a window insets listener
-		if (rvTopMargin > 0)
-		{
-			listView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-				topMargin = rvTopMargin
-			}
-		}
+		//// When the main settings fragment is navigated back to, the above edge to edge
+		//// setup will not work. In this case, the margin needs to be set directly,
+		//// instead of being set in a window insets listener
+		//if (rvTopMargin > 0)
+		//{
+		//	listView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+		//		topMargin = rvTopMargin
+		//	}
+		//}
 	}
 
 	/**

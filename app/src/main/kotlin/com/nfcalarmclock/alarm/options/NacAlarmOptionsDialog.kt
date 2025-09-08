@@ -260,6 +260,42 @@ class NacAlarmOptionsDialog
 				?.getLiveData("YOYOYO")
 		}
 
+		/**
+		 * Quickly navigate directly to one of the main alarm option dialogs:
+		 *
+		 * Repeat, Vibrate, NFC, or Flashlight.
+		 */
+		fun quickNavigate(
+			navController: NavController,
+			destinationId: Int,
+			alarm: NacAlarm
+		): MutableLiveData<NacAlarm>?
+		{
+			// Create bundle with the alarm
+			val bundle = Bundle().addAlarm(alarm)
+
+			// Inflate the graph for the nav controller
+			val navGraph = navController.navInflater.inflate(R.navigation.nav_quick_alarm_options)
+
+			// Set the start destination
+			navGraph.setStartDestination(destinationId)
+
+			// Set the graph of the nav controller
+			navController.setGraph(navGraph, bundle)
+
+			// Check if the nav controller did not navigate to the destination
+			if (navController.currentDestination == null)
+			{
+				// Navigate to the destination manually
+				navController.navigate(destinationId, bundle)
+			}
+
+			// Setup an observe to watch for any changes to the alarm
+			return navController.currentBackStackEntry
+				?.savedStateHandle
+				?.getLiveData("YOYOYO")
+		}
+
 	}
 
 }

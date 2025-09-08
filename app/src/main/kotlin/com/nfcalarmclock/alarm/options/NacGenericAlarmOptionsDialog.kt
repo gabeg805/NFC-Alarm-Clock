@@ -101,8 +101,21 @@ abstract class NacGenericAlarmOptionsDialog
 	 */
 	open fun onSaveAlarm(alarm: NacAlarm?)
 	{
-		// Save the change so that it is accessible in the previous dialog
-		findNavController().previousBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
+		// Get the nav controller
+		val navController = findNavController()
+
+		// Check if there was a previous dialog being shown before this one
+		if (navController.previousBackStackEntry != null)
+		{
+			// Save the change so that it is accessible in the previous dialog
+			navController.previousBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
+		}
+		// No previous dialog. This is a quick alarm option
+		else
+		{
+			// Save to the current dialog
+			navController.currentBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
+		}
 	}
 
 	/**

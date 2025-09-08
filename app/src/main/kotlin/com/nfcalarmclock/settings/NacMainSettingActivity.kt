@@ -115,13 +115,14 @@ class NacMainSettingActivity
 			return
 		}
 
-		// Set edge to edge color of top status bar
-		findViewById<ProtectionLayout>(R.id.protection_layout)
-			.setProtections(
-				listOf(
-					ColorProtection(WindowInsetsCompat.Side.TOP, Color.BLACK)
-				)
-			)
+		// TODO: Can maybe customize this more when going up to API 36, but for now opting out
+		//// Set edge to edge color of top status bar
+		//findViewById<ProtectionLayout>(R.id.protection_layout)
+		//	.setProtections(
+		//		listOf(
+		//			ColorProtection(WindowInsetsCompat.Side.TOP, Color.BLACK)
+		//		)
+		//	)
 	}
 
 }

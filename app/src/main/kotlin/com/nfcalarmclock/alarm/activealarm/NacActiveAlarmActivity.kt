@@ -302,8 +302,11 @@ class NacActiveAlarmActivity
 			// Setup NFC tag
 			lifecycleScope.launch {
 
-				// Check if NFC tags have not been initialized yet
-				if (nfcTags == null)
+				// Save a variable off that checks if the NFC tags list has been initialized yet
+				val isFirstTimeInitializingNfcTags = (nfcTags == null)
+
+				// Check if this will be the first time initializing the NFC tags list
+				if (isFirstTimeInitializingNfcTags)
 				{
 					// Get the list of NFC tags that are valid
 					nfcTags = alarm!!.nfcTagIdList.takeIf { alarm!!.nfcTagId.isNotEmpty() }
@@ -329,8 +332,16 @@ class NacActiveAlarmActivity
 
 					// Random. Randomize the list and then show the first NFC tag
 					NacNfcTagDismissOrder.RANDOM -> {
-						nfcTags = nfcTags!!.shuffled()
+
+						// Check if this was the first time initializing the NFC tags list
+						if (isFirstTimeInitializingNfcTags)
+						{
+							nfcTags = nfcTags!!.shuffled()
+						}
+
+						// Get the name of the first NFC tag
 						nfcTagNames = nfcTags!!.getOrNull(0)?.name
+
 					}
 
 					// Unknown

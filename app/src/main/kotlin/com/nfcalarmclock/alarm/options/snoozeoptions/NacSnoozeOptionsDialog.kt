@@ -137,11 +137,11 @@ class NacSnoozeOptionsDialog
 	{
 		// Get the views
 		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.auto_snooze_container)
-		val minutesAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.repeat_freq_value_dropdown_menu)
-		val secondsAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.repeat_freq_units_dropdown_menu)
-		autoSnoozeSwitch = dialog!!.findViewById(R.id.repeat_freq_switch)
-		autoSnoozeMinutesInputLayout = dialog!!.findViewById(R.id.repeat_freq_value_input_layout)
-		autoSnoozeSecondsInputLayout = dialog!!.findViewById(R.id.repeat_freq_units_input_layout)
+		val minutesAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.auto_snooze_minutes_dropdown_menu)
+		val secondsAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.auto_snooze_seconds_dropdown_menu)
+		autoSnoozeSwitch = dialog!!.findViewById(R.id.auto_snooze_switch)
+		autoSnoozeMinutesInputLayout = dialog!!.findViewById(R.id.auto_snooze_minutes_input_layout)
+		autoSnoozeSecondsInputLayout = dialog!!.findViewById(R.id.auto_snooze_seconds_input_layout)
 
 		// Setup the switch
 		autoSnoozeSwitch.isChecked = defaultState

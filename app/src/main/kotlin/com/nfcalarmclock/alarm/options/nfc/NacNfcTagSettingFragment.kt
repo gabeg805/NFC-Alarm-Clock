@@ -60,14 +60,15 @@ class NacNfcTagSettingFragment
 		val context = requireContext()
 		val sharedPreferences = NacSharedPreferences(context)
 
+		// TODO: Can maybe customize this more when going up to API 36, but for now opting out
 		// Setup edge to edge for the root view by using the margin that was saved in
 		// the main settings fragment. Edge-to-edge is enforced in API >= 35
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM)
-		{
-			root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-				topMargin = (activity as NacMainSettingActivity).rvTopMargin
-			}
-		}
+		//if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM)
+		//{
+		//	root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+		//		topMargin = (activity as NacMainSettingActivity).rvTopMargin
+		//	}
+		//}
 
 		// Set views
 		recyclerView = root.findViewById(R.id.nfc_tag_list_view)

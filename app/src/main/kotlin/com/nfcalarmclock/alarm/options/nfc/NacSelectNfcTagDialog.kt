@@ -159,7 +159,7 @@ class NacSelectNfcTagDialog
 	private fun setDismissOrderUsability()
 	{
 		// Determine the usability
-		val enabled = (selectedNfcTags.size > 1)
+		val enabled = (container.childCount > 1)
 		val alpha = if (enabled) 1f else 0.25f
 
 		// Title
@@ -275,7 +275,6 @@ class NacSelectNfcTagDialog
 
 		// Set the textview listeners
 		textView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-			println("SELECTED POSITION : $position")
 			selectedDismissOrder = position
 		}
 

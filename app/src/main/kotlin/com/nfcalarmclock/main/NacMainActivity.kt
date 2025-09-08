@@ -7,7 +7,6 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.Color
 import android.graphics.drawable.InsetDrawable
 import android.os.Build
 import android.os.Bundle
@@ -27,14 +26,12 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.MenuCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.get
-import androidx.core.view.insets.ColorProtection
-import androidx.core.view.insets.ProtectionLayout
 import androidx.core.view.isNotEmpty
 import androidx.core.view.size
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -51,6 +48,7 @@ import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmActivity
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.alarm.db.NacNextAlarm
 import com.nfcalarmclock.alarm.options.NacAlarmOptionsDialog
 import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissEarlyService
 import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog
@@ -87,7 +85,6 @@ import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.createTimeTickReceiver
-import com.nfcalarmclock.util.daysToValue
 import com.nfcalarmclock.util.disableActivityAlias
 import com.nfcalarmclock.util.getAlarm
 import com.nfcalarmclock.util.getDeviceProtectedStorageContext
@@ -946,8 +943,20 @@ class NacMainActivity
 
 			// Customize the date picker
 			dialog.datePicker.apply {
+				val now = Calendar.getInstance()
+				val alarmCal = NacCalendar.alarmToCalendar(alarm, skipDate = true)
+
+				minDate = if (alarmCal.before(now))
+				{
+					now.add(Calendar.DAY_OF_MONTH, 1)
+					now.timeInMillis
+				}
+				else
+				{
+					System.currentTimeMillis() - 1000
+				}
+
 				firstDayOfWeek = if (sharedPreferences.startWeekOn == 1) Calendar.MONDAY else Calendar.SUNDAY
-				minDate = System.currentTimeMillis() - 1000
 			}
 
 			// Set the listener
@@ -962,9 +971,10 @@ class NacMainActivity
 				alarm.isEnabled = true
 				alarm.setDays(0)
 				alarm.shouldRepeat = false
-				alarm.repeatFrequencyDaysToRunBeforeStarting = NacCalendar.Day.NONE
 				alarm.shouldSkipNextAlarm = false
+				//alarm.repeatFrequencyDaysToRunBeforeStarting = NacCalendar.Day.WEEK
 				// TODO: Should this be in NacCardPreference as well??
+
 
 				// Refresh the schedule date views
 				card.refreshScheduleDateViews()
@@ -1080,6 +1090,20 @@ class NacMainActivity
 			// Show the dialog
 			NacAlarmOptionsDialog.navigate(navController, alarm)
 				?.observe(this) { a ->
+					println("Updating alarm")
+					updateAlarm(a)
+					card.refreshRepeatOptionViews()
+				}
+
+		}
+
+		// Repeat, vibrate, NFC, and flashlight long click listener
+		card.onCardButtonLongClickedListener = NacCardHolder.OnCardButtonLongClickedListener { _, alarm, destinationId ->
+
+			// Show the dialog
+			NacAlarmOptionsDialog.quickNavigate(navController, destinationId, alarm)
+				?.observe(this) { a ->
+					println("YO I'm HERE")
 					updateAlarm(a)
 					card.refreshRepeatOptionViews()
 				}
@@ -1243,34 +1267,40 @@ class NacMainActivity
 	/**
 	 * Set the next alarm message in the text view.
 	 */
-	private fun setNextAlarmMessage()
+	private fun setNextAlarmMessage(): NacNextAlarm?
 	{
 		// Set the next alarm message from the current list of alarms
-		setNextAlarmMessage(alarmCardAdapter.currentList)
+		val nextAlarm = setNextAlarmMessage(alarmCardAdapter.currentList)
 
 		// Check if the next alarm message should be refreshed
-		if (shouldRefreshNextAlarmMessage())
+		if (shouldRefreshNextAlarmMessage(nextAlarm))
 		{
 			// Set the message for when the next alarm will be run
 			nextAlarmMessageHandler.postDelayed({ setNextAlarmMessage() },
 				REFRESH_NEXT_ALARM_MESSAGE_PERIOD)
 		}
+
+		// Return the next alarm
+		return nextAlarm
 	}
 
 	/**
 	 * Set the next alarm message in the text view.
 	 */
-	private fun setNextAlarmMessage(alarms: List<NacAlarm>)
+	private fun setNextAlarmMessage(alarms: List<NacAlarm>): NacNextAlarm?
 	{
 		// Get the next alarm
 		val nextAlarm = NacCalendar.getNextAlarm(alarms)
 
 		// Get the next alarm message
-		val message = NacCalendar.Message.getNext(this, nextAlarm,
+		val message = NacCalendar.Message.getNext(this, nextAlarm?.calendar,
 			sharedPreferences.nextAlarmFormat)
 
 		// Set the message in the text view
 		nextAlarmTextView.text = message
+
+		// Return the next alarm
+		return nextAlarm
 	}
 
 	/**
@@ -1320,13 +1350,14 @@ class NacMainActivity
 			return
 		}
 
+		// TODO: Can maybe customize this more when going up to API 36, but for now opting out
 		// Set edge to edge color of top status bar
-		findViewById<ProtectionLayout>(R.id.protection_layout)
-			.setProtections(
-				listOf(
-					ColorProtection(WindowInsetsCompat.Side.TOP, Color.BLACK)
-				)
-			)
+		//findViewById<ProtectionLayout>(R.id.protection_layout)
+		//	.setProtections(
+		//		listOf(
+		//			ColorProtection(WindowInsetsCompat.Side.TOP, Color.BLACK)
+		//		)
+		//	)
 	}
 
 	/**
@@ -1635,20 +1666,21 @@ class NacMainActivity
 	 * @return True if the difference between the next alarm and right now is
 	 *         less than 60 minutes, and False otherwise.
 	 */
-	private fun shouldRefreshNextAlarmMessage(): Boolean
+	private fun shouldRefreshNextAlarmMessage(nextAlarm: NacNextAlarm?): Boolean
 	{
-		// Get the next alarm or return if it is null
-		val nextAlarm = NacCalendar.getNextAlarm(alarmCardAdapter.currentList)
-			?: return false
+		// Check if there is no next alarm
+		if (nextAlarm == null)
+		{
+			return false
+		}
 
 		// Get the next calendar day the alarm will run as well as the
 		// calendar right now
 		val now = Calendar.getInstance()
-		val nextCal = NacCalendar.getNextAlarmDay(nextAlarm)!!
 
 		// Compute the difference between the two calendars and convert
 		// it to minutes
-		val diff = (nextCal.timeInMillis - now.timeInMillis) / 1000L / 60L
+		val diff = (nextAlarm.calendar.timeInMillis - now.timeInMillis) / 1000L / 60L
 
 		// Check if the difference is less than an hour
 		return diff < 60
@@ -1657,7 +1689,7 @@ class NacMainActivity
 	/**
 	 * Show a snackbar for an alarm.
 	 */
-	private fun showAlarmSnackbar(alarm: NacAlarm? = null)
+	private fun showAlarmSnackbar(alarm: NacAlarm? = null, nextAlarm: NacNextAlarm? = null)
 	{
 		// Get the message and action text
 		val action = getString(R.string.action_alarm_dismiss)
@@ -1669,8 +1701,8 @@ class NacMainActivity
 		else
 		{
 			// When the next alarm will run
-			val nextAlarm = NacCalendar.getNextAlarm(alarmCardAdapter.currentList)
-			NacCalendar.Message.getNext(this, nextAlarm, sharedPreferences.nextAlarmFormat)
+			val next = nextAlarm ?: NacCalendar.getNextAlarm(alarmCardAdapter.currentList)
+			NacCalendar.Message.getNext(this, next?.calendar, sharedPreferences.nextAlarmFormat)
 		}
 
 		// Show the snackbar
@@ -1703,7 +1735,7 @@ class NacMainActivity
 	private fun showNextAlarm(card: NacCardHolder, alarm: NacAlarm)
 	{
 		// Set the next alarm message
-		setNextAlarmMessage()
+		val nextAlarm = setNextAlarmMessage()
 
 		// Show a snackbar for the next time this alarm will run, if it is enabled
 		if (alarm.isEnabled)
@@ -1713,7 +1745,7 @@ class NacMainActivity
 		// Show a snackbar for the next alarm that will run
 		else
 		{
-			showAlarmSnackbar()
+			showAlarmSnackbar(nextAlarm = nextAlarm)
 		}
 
 		// Highlight the alarm card if it is collapsed

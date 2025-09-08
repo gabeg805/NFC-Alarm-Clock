@@ -36,21 +36,8 @@ object NacScheduler
 		}
 
 		// Get the calendar for the next alarm
-		val nextAlarmCal = if (alarm.date.isNotEmpty())
-		{
-			// Alarm has a date. Converting to a calendar is easy
-			println("HELLO")
-			NacCalendar.alarmToCalendar(alarm)
-		}
-		// TODO: FIGURE OUT WHAT TO DO HERE
-		//else if (alarm.)
-		//{
-		//}
-		else
-		{
-			// Get the calendar for the next alarm
-			NacCalendar.getNextAlarmDay(alarm, ignoreSkip = true)!!
-		}
+		println("NacScheduler.add()")
+		val nextAlarmCal = NacCalendar.getNextAlarmDay(alarm, ignoreSkip = true)!!
 
 		// Default ignore=false
 		//println("Before : ${getDateTimeInstance().format(NacCalendar.getNextAlarmDay(alarm, ignoreSkip = true)!!.time)}")

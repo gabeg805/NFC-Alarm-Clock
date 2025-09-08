@@ -7,7 +7,7 @@
     <!-- Repeat frequency title -->
     <TextView
         style="@style/Widget.AlarmOptionDialog.Title"
-        android:id="@+id/repeat_freq_title"
+        android:id="@+id/auto_snooze_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Repeat frequency"
@@ -37,13 +37,13 @@
         <!-- Value -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.AlarmOptionDialog.Dropdown"
-            android:id="@+id/repeat_freq_value_input_layout"
+            android:id="@+id/auto_snooze_minutes_input_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/repeat_freq_value_dropdown_menu"
+                android:id="@+id/auto_snooze_minutes_dropdown_menu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
@@ -53,13 +53,13 @@
         <!-- Units -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.AlarmOptionDialog.Dropdown"
-            android:id="@+id/repeat_freq_units_input_layout"
+            android:id="@+id/auto_snooze_seconds_input_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/repeat_freq_units_dropdown_menu"
+                android:id="@+id/auto_snooze_seconds_dropdown_menu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"

@@ -93,11 +93,12 @@ class NacGeneralSettingFragment
 			return
 		}
 
-		// Setup edge to edge for the recyclerview by using the margin that was saved in
-		// the main settings fragment
-		listView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-			topMargin = (activity as NacMainSettingActivity).rvTopMargin
-		}
+		// TODO: Can maybe customize this more when going up to API 36, but for now opting out
+		//// Setup edge to edge for the recyclerview by using the margin that was saved in
+		//// the main settings fragment
+		//listView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+		//	topMargin = (activity as NacMainSettingActivity).rvTopMargin
+		//}
 	}
 
 	/**

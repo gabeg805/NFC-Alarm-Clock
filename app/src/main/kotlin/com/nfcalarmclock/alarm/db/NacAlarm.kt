@@ -19,6 +19,25 @@ import java.util.EnumSet
 import java.util.Locale
 
 /**
+ * Next alarm object.
+ *
+ * Really just a container for a NacAlarm and Calendar.
+ */
+class NacNextAlarm(
+
+	/**
+	 * Alarm object corresponding to the next alarm that will run.
+	 */
+	val alarm: NacAlarm,
+
+	/**
+	 * Calendar object corresponding to the next date and time the alarm will run.
+	 */
+	val calendar: Calendar
+
+)
+
+/**
  * Alarm.
  */
 @Entity(tableName = "alarm")

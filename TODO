@@ -2,16 +2,13 @@
 TODO
 ----
 
-* TODO: Does NacCardHolder toastNfc work if multiple NFC tags are selected?
-* TODO: NFC tag dropdown usability is strange and needs to be fixed
-* TODO: In NacCardHolder, do I always want to do the haptic jank whenever a button is clicked?
 * TODO: Start week on and next alarm format radio button colors are not themed
-* TODO: Bottom padding of settings is wack, and possibly in main activity as well
-* TODO: Test MediaActivity with edge-to-edge
-* TODO: Scheduled a date alarm and it ran immediately.  Need to investigate this.
 
-* Different repeat options, someone even wants monthly.  Should I just add a
-  calendar?  How would I handle showing the date it's going to alarm?
+* When updating to support API 36:
+
+    - Bottom padding of settings is wack, and possibly in main activity as well
+
+    - Test MediaActivity with edge-to-edge
 
 * Check that selected directory for music works.
 
@@ -21,15 +18,10 @@ TODO
 About -> Über
 (Statistics) Turned down Alams -> Abgeschaltete Alarme
 
-* Look up defaults like for auto dismiss, dismiss early, .... really all the
-  times, and see if they should be in the resources directory?
+* In NacCardHolder, do I always want to do the haptic jank whenever a button is clicked?
 
 * Add languages for Pakistan, Japan, Thailand, Poland, Turkey, France,
   Serbia, Finland, Romania, Italy
-
-* Long press repeat, NFC, and flashlight for quick options
-
-* Overlay number over repeat button for custom repeat option?
 
 ------
 Issues

@@ -5,6 +5,7 @@ import android.content.res.Resources
 import android.text.format.DateFormat
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.alarm.db.NacNextAlarm
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.EnumSet
@@ -59,7 +60,7 @@ object NacCalendar
 		// or repeat alarm on an X number of weeks (whatever the repeat frequency is) but
 		// this day is not included to run early
 		if (alarmCalendar.before(now)
-			|| ((alarm.repeatFrequencyUnits == 4) && !alarm.repeatFrequencyDaysToRunBeforeStarting.contains(day)))
+			|| ((alarm.repeatFrequencyUnits == 4) && (alarm.repeatFrequency != 1) && !alarm.repeatFrequencyDaysToRunBeforeStarting.contains(day)))
 		{
 			println("HELLO : ${alarm.repeatFrequency} | ${alarm.repeatFrequencyUnits} | ${alarm.repeatFrequencyDaysToRunBeforeStarting}")
 
@@ -80,7 +81,7 @@ object NacCalendar
 	 *
 	 * @return A calendar with the alarm hour, minute, and date, if present.
 	 */
-	fun alarmToCalendar(alarm: NacAlarm): Calendar
+	fun alarmToCalendar(alarm: NacAlarm, skipDate: Boolean = false): Calendar
 	{
 		// Get the current calendar instance
 		val cal = Calendar.getInstance()
@@ -91,8 +92,8 @@ object NacCalendar
 		cal[Calendar.SECOND] = 0
 		cal[Calendar.MILLISECOND] = 0
 
-		// Check if a date was set
-		if (alarm.date.isNotEmpty())
+		// Check if a date was set and should not be skipped
+		if (alarm.date.isNotEmpty() && !skipDate)
 		{
 			// Get the year/month/day
 			val (year, month, day) = alarm.date.split("-")
@@ -146,6 +147,7 @@ object NacCalendar
 		// is a one-time alarm
 		else
 		{
+			println("alarmToCalendars()")
 			val c = alarmToNextOneTimeCalendar(alarm)
 			calendars.add(c)
 		}
@@ -394,7 +396,7 @@ object NacCalendar
 	 *
 	 * @return The alarm that will run next.
 	 */
-	fun getNextAlarm(alarms: List<NacAlarm>): NacAlarm?
+	fun getNextAlarm(alarms: List<NacAlarm>): NacNextAlarm?
 	{
 		var nextCalendar: Calendar? = null
 		var nextAlarm: NacAlarm? = null
@@ -426,7 +428,17 @@ object NacCalendar
 			}
 		}
 
-		return nextAlarm
+		// Check that the alarm and calendar were set
+		return if ((nextAlarm != null) && (nextCalendar != null))
+		{
+			// Create object that contains alarm and calendar
+			NacNextAlarm(nextAlarm, nextCalendar)
+		}
+		// Unable to find the next alarm and calendar
+		else
+		{
+			null
+		}
 	}
 
 	/**
@@ -440,6 +452,15 @@ object NacCalendar
 	 */
 	fun getNextAlarmDay(alarm: NacAlarm, ignoreSkip: Boolean = false): Calendar?
 	{
+		// Check if the date is set
+		if (alarm.date.isNotEmpty())
+		{
+			// TODO: This is not taking into account skip. Should I?
+			// Alarm has a date. Converting to a calendar is easy
+			println("HELLOIOIOIOI")
+			return alarmToCalendar(alarm)
+		}
+
 		// Convert the alarm to a list of calendar instances
 		val calendars = alarmToCalendars(alarm)
 
@@ -846,6 +867,7 @@ object NacCalendar
 				val now = Calendar.getInstance()[Calendar.DAY_OF_MONTH]
 
 				// Get the next time the alarm will ring
+				println("oneTimeAlarmToString()")
 				val next = alarmToNextOneTimeCalendar(alarm)[Calendar.DAY_OF_MONTH]
 
 				// Check if the two days are the same, that means that the name
@@ -910,20 +932,17 @@ object NacCalendar
 		 */
 		fun getNext(
 			context: Context,
-			alarm: NacAlarm?,
+			calendar: Calendar?,
 			nextAlarmFormat: Int
 		): String
 		{
-			// No alarm provided
-			return if (alarm == null)
+			// No calendar provided
+			return if (calendar == null)
 			{
 				context.resources.getString(R.string.message_no_alarms_scheduled)
 			}
 			else
 			{
-				// Get the next alarm day
-				val calendar = getNextAlarmDay(alarm)!!
-
 				// e.g. Alarm in 12 hour 5 min
 				if (nextAlarmFormat == 0)
 				{

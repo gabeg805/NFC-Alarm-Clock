@@ -65,6 +65,14 @@ class NacCardHolder(
 	}
 
 	/**
+	 * Listener for when a button is long clicked.
+	 */
+	fun interface OnCardButtonLongClickedListener
+	{
+		fun onCardButtonLongClicked(card: NacCardHolder, alarm: NacAlarm, destinationId: Int)
+	}
+
+	/**
 	 * Listener for when a card is collapsed.
 	 */
 	fun interface OnCardCollapsedListener
@@ -386,6 +394,11 @@ class NacCardHolder(
 	 * Listener for when the alarm options button is clicked.
 	 */
 	var onCardAlarmOptionsClickedListener: OnCardAlarmOptionsClickedListener? = null
+
+	/**
+	 * Listener for when a button is long clicked.
+	 */
+	var onCardButtonLongClickedListener: OnCardButtonLongClickedListener? = null
 
 	/**
 	 * Listener for when the alarm card is collapsed.
@@ -962,8 +975,11 @@ class NacCardHolder(
 		setupRepeatButtonListener()
 		setupRepeatButtonLongClickListener()
 		setupVibrateButtonListener()
+		setupVibrateButtonLongClickListener()
 		setupNfcButtonListener()
+		setupNfcButtonLongClickListener()
 		setupFlashlightButtonListener()
+		setupFlashlightButtonLongClickListener()
 		setupMediaButtonListener()
 		setupVolumeSeekBarListener()
 		setupNameListener()
@@ -1865,6 +1881,28 @@ class NacCardHolder(
 	}
 
 	/**
+	 * Setup the listener for when the flashlight button is long clicked.
+	 */
+	private fun setupFlashlightButtonLongClickListener()
+	{
+		// Set the listener
+		flashlightButton.setOnLongClickListener {
+
+			// Check if the alarm can be modified
+			if (checkCanModifyAlarm())
+			{
+				// Call the listener
+				onCardButtonLongClickedListener?.onCardButtonLongClicked(this, alarm!!, R.id.nacFlashlightOptionsDialog2)
+
+				// Haptic feedback
+				it.performHapticFeedback()
+			}
+
+			true
+		}
+	}
+
+	/**
 	 * Setup the listener for the media button.
 	 */
 	private fun setupMediaButtonListener()
@@ -1944,6 +1982,28 @@ class NacCardHolder(
 	}
 
 	/**
+	 * Setup the listener for when the NFC button is long clicked.
+	 */
+	private fun setupNfcButtonLongClickListener()
+	{
+		// Set the listener
+		nfcButton.setOnLongClickListener {
+
+			// Check if the alarm can be modified
+			if (checkCanModifyAlarm())
+			{
+				// Call the listener
+				onCardButtonLongClickedListener?.onCardButtonLongClicked(this, alarm!!, R.id.nacScanNfcTagDialog2)
+
+				// Haptic feedback
+				it.performHapticFeedback()
+			}
+
+			true
+		}
+	}
+
+	/**
 	 * Setup the listener for when the repeat button is clicked.
 	 */
 	private fun setupRepeatButtonListener()
@@ -1991,23 +2051,11 @@ class NacCardHolder(
 			// Check if the alarm can be modified
 			if (checkCanModifyAlarm())
 			{
-				// Reset the skip next alarm flag
-				alarm!!.shouldSkipNextAlarm = false
-
-				//// Disable the repeat button
-				//alarm!!.shouldRepeat = false
-
-				// Clear out the selected days
-				alarm!!.setDays(0)
-
-				// Setup the views
-				setDayOfWeek()
-				setRepeatButton()
-				setSummaryDaysView()
-				setSummarySkipNextAlarmIcon()
-
 				// Call the listener
-				callOnCardUpdatedListener()
+				onCardButtonLongClickedListener?.onCardButtonLongClicked(this, alarm!!, R.id.nacRepeatOptionsDialog2)
+
+				// Haptic feedback
+				it.performHapticFeedback()
 			}
 
 			true
@@ -2170,6 +2218,28 @@ class NacCardHolder(
 			// Haptic feedback
 			view.performHapticFeedback()
 
+		}
+	}
+
+	/**
+	 * Setup the listener for when the vibrate button is long clicked.
+	 */
+	private fun setupVibrateButtonLongClickListener()
+	{
+		// Set the listener
+		vibrateButton.setOnLongClickListener {
+
+			// Check if the alarm can be modified
+			if (checkCanModifyAlarm())
+			{
+				// Call the listener
+				onCardButtonLongClickedListener?.onCardButtonLongClicked(this, alarm!!, R.id.nacVibrateOptionsDialog2)
+
+				// Haptic feedback
+				it.performHapticFeedback()
+			}
+
+			true
 		}
 	}
 

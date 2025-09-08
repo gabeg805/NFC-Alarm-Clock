@@ -2490,10 +2490,10 @@ class NacSharedPreferences(context: Context)
 		val nextAlarm = NacCalendar.getNextAlarm(allAlarms)
 
 		// Get the next calendar
-		val nextCal = nextAlarm?.let { NacCalendar.getNextAlarmDay(it) }
+		//val nextCal = nextAlarm?.let { NacCalendar.getNextAlarmDay(it) }
 
 		// Determine the time in milliseconds to use
-		val millis = nextCal?.let {
+		val millis = nextAlarm?.calendar?.let {
 
 			// Snooze time
 			if (snoozeCal?.before(it) == true)
