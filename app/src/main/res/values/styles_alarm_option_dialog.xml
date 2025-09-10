@@ -57,7 +57,7 @@
 	</style>
 
 	<!-- Dropdown -->
-	<style name="Widget.AlarmOptionDialog.Dropdown" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+	<style name="Widget.AlarmOptionDialog.Dropdown" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 		<item name="boxCornerRadiusTopStart">10dp</item>
 		<item name="boxCornerRadiusTopEnd">10dp</item>
 		<item name="boxCornerRadiusBottomStart">10dp</item>

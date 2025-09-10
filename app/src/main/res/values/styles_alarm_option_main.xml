@@ -2,7 +2,7 @@
 <resources>
 
 	<!-- Button -->
-	<style name="Widget.AlarmOptionMain.Button" parent="Widget.MaterialComponents.Button.OutlinedButton">
+	<style name="Widget.AlarmOptionMain.Button" parent="Widget.Material3.Button.OutlinedButton">
 		<item name="android:paddingTop">@dimen/tiny</item>
 		<item name="android:paddingBottom">@dimen/tiny</item>
 		<item name="android:textColor">@color/white</item>

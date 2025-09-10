@@ -1197,7 +1197,8 @@ class NacCardHolder(
 	{
 		// Get the dividers
 		val headerDivider = root.findViewById<ViewGroup>(R.id.nac_divider_header)
-		val deleteDivider = root.findViewById<View>(R.id.nac_divider_delete)
+		val optionsDivider1 = root.findViewById<View>(R.id.nac_options_divider)
+		val optionsDivider2 = root.findViewById<View>(R.id.nac_options_divider2)
 
 		// Get the color
 		val themeColor = ColorStateList.valueOf(sharedPreferences.themeColor)
@@ -1213,7 +1214,8 @@ class NacCardHolder(
 		}
 
 		// Set the delete divider color
-		deleteDivider.backgroundTintList = themeColor
+		optionsDivider1.backgroundTintList = themeColor
+		optionsDivider2.backgroundTintList = themeColor
 	}
 
 	/**

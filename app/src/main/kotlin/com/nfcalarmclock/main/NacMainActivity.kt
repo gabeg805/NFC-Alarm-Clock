@@ -1930,7 +1930,6 @@ class NacMainActivity
 			alarm.shouldRepeat = false
 			alarm.shouldSkipNextAlarm = false
 			//alarm.repeatFrequencyDaysToRunBeforeStarting = NacCalendar.Day.WEEK
-			// TODO: Should this be in NacCardPreference as well??
 
 			// Refresh the schedule date views
 			card.refreshScheduleDateViews()

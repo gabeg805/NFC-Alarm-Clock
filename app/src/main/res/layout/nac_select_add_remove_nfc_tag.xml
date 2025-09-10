@@ -31,7 +31,7 @@
 
 	<!-- Remove -->
 	<com.google.android.material.button.MaterialButton
-		style="@style/Widget.MaterialComponents.Button.TextButton"
+		style="@style/Widget.Material3.Button.TextButton"
 		android:id="@+id/remove_nfc_tag"
 		android:layout_width="@dimen/isz_xxlarge"
 		android:layout_height="@dimen/isz_xxlarge"
@@ -44,7 +44,7 @@
 
 	<!-- Add -->
 	<com.google.android.material.button.MaterialButton
-		style="@style/Widget.MaterialComponents.Button.TextButton"
+		style="@style/Widget.Material3.Button.TextButton"
 		android:id="@+id/add_nfc_tag"
 		android:layout_width="@dimen/isz_xxlarge"
 		android:layout_height="@dimen/isz_xxlarge"

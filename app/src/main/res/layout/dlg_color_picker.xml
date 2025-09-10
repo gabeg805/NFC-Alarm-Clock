@@ -33,7 +33,7 @@
 			android:id="@+id/color_example"
 			android:layout_width="@dimen/isz_xxlarge"
 			android:layout_height="@dimen/isz_xxlarge"
-			android:layout_marginTop="@dimen/tiny"
+			android:layout_marginTop="@dimen/small"
 			android:layout_marginEnd="@dimen/normal"
 			android:src="@drawable/color_example"
 			android:contentDescription="@string/cd_color_example"

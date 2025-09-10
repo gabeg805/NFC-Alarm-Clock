@@ -83,6 +83,23 @@ class NacDateAndTimePickerDialog
 	}
 
 	/**
+	 * Called when the fragment is resumed.
+	 */
+	override fun onResume()
+	{
+		// Super
+		super.onResume()
+
+		// Get the width of the screen
+		val screenWidth = resources.displayMetrics.widthPixels
+		val height = ViewGroup.LayoutParams.WRAP_CONTENT
+		val width = 0.9f * screenWidth
+
+		// Set the dialog to 90% width and wrap the height
+		dialog?.window?.setLayout(width.toInt(), height)
+	}
+
+	/**
 	 * Called after the view has been created.
 	 */
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
@@ -101,7 +118,8 @@ class NacDateAndTimePickerDialog
 		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
 		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
 
-		// Setup the date and time pickers
+		// Call any listeners that may have been external set to setup the date and time
+		// pickers
 		onSetupDatePickerListener?.onSetupDatePicker(datePicker)
 		onSetupTimePickerListener?.onSetupTimePicker(timePicker)
 
@@ -112,9 +130,13 @@ class NacDateAndTimePickerDialog
 			timePicker.visibility = View.GONE
 			datePicker.visibility = View.VISIBLE
 
+			// Show the time button
+			timeButton.visibility = View.VISIBLE
+			dateButton.visibility = View.GONE
+
 			// Constrain the ok button to be beneath the date picker
 			okButton.updateLayoutParams<ConstraintLayout.LayoutParams> {
-				topToBottom = R.id.date_picker
+				topToBottom = R.id.set_time
 			}
 
 		}
@@ -126,9 +148,13 @@ class NacDateAndTimePickerDialog
 			timePicker.visibility = View.VISIBLE
 			datePicker.visibility = View.GONE
 
+			// Show the date button
+			timeButton.visibility = View.GONE
+			dateButton.visibility = View.VISIBLE
+
 			// Constrain the ok button to be beneath the time picker
 			okButton.updateLayoutParams<ConstraintLayout.LayoutParams> {
-				topToBottom = R.id.time_picker
+				topToBottom = R.id.set_date
 			}
 
 		}

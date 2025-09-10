@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/gray_dark">
 
@@ -29,16 +29,21 @@
         />
 
     <!-- Set the date -->
-    <com.google.android.material.button.MaterialButton
+    <!--
         style="@style/Widget.Button.Text.Row"
+    -->
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.Material3.Button.OutlinedButton"
         android:id="@+id/set_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@id/time_picker"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="@dimen/normal"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="@dimen/tsz_small"
+        android:letterSpacing="0"
+        android:textSize="@dimen/tsz_normal"
         android:text="@string/title_set_date"
         app:iconPadding="@dimen/small"
         app:iconSize="@dimen/isz_small"
@@ -48,29 +53,32 @@
 
     <!-- Set the time -->
     <com.google.android.material.button.MaterialButton
-        style="@style/Widget.Button.Text.Row"
+        style="@style/Widget.Material3.Button.OutlinedButton"
         android:id="@+id/set_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/date_picker"
+        app:layout_constraintTop_toBottomOf="@id/date_picker"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="@dimen/normal"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="@dimen/tsz_small"
+        android:textSize="@dimen/tsz_normal"
         android:text="@string/title_set_time"
         app:iconPadding="@dimen/small"
         app:iconSize="@dimen/isz_small"
         app:iconTint="@color/white"
         app:icon="@drawable/alarm"
+        android:visibility="gone"
         />
 
     <!-- Ok -->
     <com.google.android.material.button.MaterialButton
-        style="@style/Widget.Button.Text.Row"
+        style="@style/Widget.Button.Text"
         android:id="@+id/ok_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/time_picker"
+        android:layout_marginTop="@dimen/small"
+        app:layout_constraintTop_toBottomOf="@id/set_date"
         app:layout_constraintEnd_toEndOf="parent"
         android:textAlignment="center"
         android:textAllCaps="true"
@@ -80,7 +88,7 @@
 
     <!-- Cancel -->
     <com.google.android.material.button.MaterialButton
-        style="@style/Widget.Button.Text.Row"
+        style="@style/Widget.Button.Text"
         android:id="@+id/cancel_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

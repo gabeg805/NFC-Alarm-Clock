@@ -67,7 +67,7 @@
 	</style>
 
 	<!-- Tooltip for sliders -->
-	<style name="Widget.ClockWidget.Tooltip" parent="Widget.MaterialComponents.Tooltip">
+	<style name="Widget.ClockWidget.Tooltip" parent="Widget.Material3.Tooltip">
 		<item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
 		<item name="android:textColor">@color/white</item>
 		<item name="backgroundTint">@color/gray_light</item>

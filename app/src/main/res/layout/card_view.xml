@@ -10,9 +10,6 @@
 	app:contentPaddingRight="@dimen/normal"
 	app:cardBackgroundColor="?attr/colorCard"
 	tools:ignore="RtlSymmetry">
-	<!--
-	tools:ignore="RelativeOverlap,RtlSymmetry"
-	-->
 
 	<LinearLayout
 		android:layout_width="match_parent"
@@ -402,7 +399,7 @@
 
 					<!-- Divider -->
 					<View
-						android:id="@+id/nac_divider_delete2"
+						android:id="@+id/nac_options_divider"
 						android:layout_width="0dp"
 						android:layout_height="@dimen/line"
 						android:layout_weight="1"
@@ -422,7 +419,7 @@
 
 					<!-- Divider -->
 					<View
-						android:id="@+id/nac_divider_delete"
+						android:id="@+id/nac_options_divider2"
 						android:layout_width="0dp"
 						android:layout_height="@dimen/line"
 						android:layout_weight="1"

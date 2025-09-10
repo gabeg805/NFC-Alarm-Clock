@@ -7,7 +7,7 @@
 	android:orientation="vertical">
 
 	<com.google.android.material.textfield.TextInputLayout
-		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+		style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
 		android:id="@+id/name_box"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"

@@ -1,15 +1,9 @@
 <resources>
 
 	<!-- Base application theme. -->
-	<!--
-	OLD:
-	<style name="AppTheme" parent="Theme.AppCompat">
+	<style name="BaseAppTheme" parent="Theme.Material3.Dark">
+		<item name="android:statusBarColor">@color/black</item>
 
-	IMPORTANT: If changing to Material3, then any MaterialComponents (Material2) stuff such as
-	           the exposed dropdown menu widgets will cause the app to crash.
-	<style name="AppTheme" parent="Theme.Material3">
-	-->
-	<style name="AppTheme" parent="Theme.MaterialComponents">
 		<item name="colorAccent">@color/orange</item>
 		<item name="colorError">@color/red</item>
 		<item name="colorOnPrimary">@color/white</item>
@@ -41,6 +35,7 @@
 		<item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialogTheme</item>
 
 		<!-- Added to fix Style does not have TextAppearance attribute -->
+		<!--
 		<item name="colorPrimaryInverse">@color/white</item>
 		<item name="colorPrimaryContainer">@color/black</item>
 		<item name="colorOnPrimaryContainer">@color/white</item>
@@ -57,6 +52,7 @@
 		<item name="colorOutline">@color/orange</item>
 		<item name="colorErrorContainer">@color/red</item>
 		<item name="colorOnErrorContainer">@color/white</item>
+		-->
 		<item name="textAppearanceDisplayLarge">@style/TextAppearance.Material3.DisplayLarge</item>
 		<item name="textAppearanceDisplayMedium">@style/TextAppearance.Material3.DisplayMedium</item>
 		<item name="textAppearanceDisplaySmall">@style/TextAppearance.Material3.DisplaySmall</item>
@@ -74,34 +70,17 @@
 		<item name="textAppearanceLabelSmall">@style/TextAppearance.Material3.LabelSmall</item>
 	</style>
 
+	<!-- Declare the main app theme so that it is inheritable in version specific styles -->
+	<style name="AppTheme" parent="BaseAppTheme" />
+
 	<!-- Bottom sheet dialog -->
-	<style name="CustomBottomSheetDialogTheme" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+	<style name="CustomBottomSheetDialogTheme" parent="ThemeOverlay.Material3.BottomSheetDialog">
 		<item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
 	</style>
 
-	<style name="CustomBottomSheetStyle" parent="Widget.MaterialComponents.BottomSheet.Modal">
+	<style name="CustomBottomSheetStyle" parent="Widget.Material3.BottomSheet.Modal">
 		<item name="backgroundTint">?attr/colorCardExpanded</item>
 	</style>
-
-
-	<!-- SEE NOTE ABOVE ABOUT MATERIAL3
-	<style name="Theme.App" parent="Theme.Material3.DayNight">
-		<item name="textInputStyle">@style/Widget.App.ExposedDropdownMenu</item>
-	</style>
-
-	<style name="Widget.App.ExposedDropdownMenu" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-		<item name="materialThemeOverlay">@style/ThemeOverlay.App.ExposedDropdownMenu</item>
-		<item name="hintTextColor">?attr/colorOnSurface</item>
-		<item name="endIconTint">?attr/colorOnSurface</item>
-	</style>
-
-	<style name="ThemeOverlay.App.ExposedDropdownMenu" parent="">
-		<item name="colorPrimary">@color/orange</item>
-		<item name="colorOnSurface">@color/sky_blue</item>
-		<item name="colorError">@color/red</item>
-		<item name="autoCompleteTextViewStyle">@style/Widget.Material3.AutoCompleteTextView.OutlinedBox</item>
-	</style>
-	-->
 
 	<!-- No action bar (largely for main activity) -->
 	<style name="AppTheme.NoActionBar">
@@ -109,15 +88,16 @@
 		<item name="windowNoTitle">true</item>
 	</style>
 
-
 	<!-- Toolbar -->
+	<!--
 	<style name="Toolbar" parent="@style/Widget.MaterialComponents.Toolbar.Primary">
+	-->
+	<style name="Toolbar" parent="@style/Widget.Material3.Toolbar">
 		<item name="android:background">@color/black</item>
 	</style>
 
 	<!-- Widget base style -->
 	<style name="Widget"></style>
-
 
 	<!-- Radio button -->
 	<style name="RadioGroup">
@@ -131,9 +111,8 @@
 		<item name="android:textSize">@dimen/tsz_normal</item>
 	</style>
 
-
 	<!-- Button -->
-	<style name="Widget.Button" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+	<style name="Widget.Button" parent="Widget.Material3.Button.UnelevatedButton">
 		<item name="android:insetTop">@dimen/zero</item>
 		<item name="android:insetBottom">@dimen/zero</item>
 		<item name="android:textColor">@color/white</item>
@@ -144,14 +123,12 @@
 		<item name="iconTint">@color/white</item>
 	</style>
 
-
 	<!-- Image button -->
 	<style name="Widget.Button.Icon">
 		<item name="android:padding">0dp</item>
 		<item name="iconGravity">textStart</item>
 		<item name="iconPadding">0dp</item>
 	</style>
-
 
 	<!-- Text button -->
 	<style name="Widget.Button.Text">
@@ -170,7 +147,6 @@
 		<item name="android:paddingEnd">@dimen/small</item>
 	</style>
 
-
 	<!-- Text view -->
 	<style name="Widget.TextView">
 		<item name="android:textColor">@color/white</item>
@@ -178,19 +154,16 @@
 	</style>
 
 	<style name="Widget.TextView.Primary">
-		<!-- <item name="android:textColor">?android:attr/textColorPrimary</item> -->
 		<item name="android:textColor">@color/white</item>
 		<item name="android:textSize">@dimen/tsz_normal</item>
 	</style>
 
 	<style name="Widget.TextView.Secondary">
-		<!-- <item name="android:textColor">?android:attr/textColorSecondary</item> -->
 		<item name="android:textColor">@color/white_dull</item>
 		<item name="android:textSize">@dimen/tsz_small</item>
 	</style>
 
 	<style name="Widget.TextView.Caption">
-		<!-- <item name="android:textColor">?android:attr/textColorSecondary</item> -->
 		<item name="android:textColor">@color/white_dull</item>
 		<item name="android:textSize">@dimen/tsz_caption</item>
 	</style>
@@ -208,21 +181,20 @@
 		<item name="android:textColor">@color/red</item>
 	</style>
 
-  <style name="Widget.TimePickerClockStyle" parent="Widget.MaterialComponents.TimePicker.Clock">
-    <item name="clockFaceBackgroundColor">@color/red</item>
-    <item name="clockHandColor">@color/green</item>
-    <item name="clockNumberTextColor">@color/sky_blue</item>
-  </style>
-  -->
+	<style name="Widget.TimePickerClockStyle" parent="Widget.MaterialComponents.TimePicker.Clock">
+		<item name="clockFaceBackgroundColor">@color/red</item>
+		<item name="clockHandColor">@color/green</item>
+		<item name="clockNumberTextColor">@color/sky_blue</item>
+	</style>
+	-->
 
-	<style name="Widget.TimePickerTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+	<style name="Widget.TimePickerTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
 		<!--
 		<item name="clockFaceBackgroundColor">?attr/colorAccent</item>
 		<item name="android:headerBackground">@color/gray</item>
 		<item name="android:numbersBackgroundColor">@color/gray</item>
 		<item name="android:numbersSelectorColor">?attr/colorAccent</item>
 		<item name="android:background">@color/gray_dark</item>
-
 
 		<item name="android:textColorPrimary">@color/green</item>
 		<item name="android:textColorSecondary">@color/red</item>
@@ -232,7 +204,6 @@
 		<item name="android:textColorSecondary">@color/gray_light</item>
 		<item name="colorAccent">@color/orange</item>
 		<item name="colorPrimary">?attr/colorAccent</item>
-
 
 		<!--
 		<item name="colorOnPrimary">?attr/colorAccent</item>
@@ -260,28 +231,25 @@
 		<item name="android:background">@color/gray_dark</item>
 	</style>
 
-
 	<!-- Snackbar -->
-	<style name="Widget.Snackbar" parent="Widget.MaterialComponents.Snackbar">
+	<style name="Widget.Snackbar" parent="Widget.Material3.Snackbar">
 		<item name="backgroundTint">@color/gray</item>
 		<item name="actionTextColorAlpha">1</item>
 	</style>
 
-	<style name="Widget.SnackbarText" parent="Widget.MaterialComponents.Snackbar.TextView">
+	<style name="Widget.SnackbarText" parent="Widget.Material3.Snackbar.TextView">
 		<item name="android:textColor">@color/white</item>
 	</style>
 
-	<style name="Widget.SnackbarButton" parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
+	<style name="Widget.SnackbarButton" parent="Widget.Material3.Button.TextButton.Snackbar">
 		<item name="android:textColor">?attr/colorAccent</item>
 	</style>
-
 
 	<!-- NacDayButton -->
 	<style name="NacDayButton">
 		<item name="nacWidth">@dimen/isz_large</item>
 		<item name="nacHeight">@dimen/isz_large</item>
 	</style>
-
 
 	<!-- NacColorPicker -->
 	<style name="NacColorPicker">
