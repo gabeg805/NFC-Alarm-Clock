@@ -20,7 +20,7 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.databinding.NacClockWidgetConfigureBinding
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.util.NacCalendar
-import com.nfcalarmclock.view.colorpicker.NacColorPickerDialog
+import com.nfcalarmclock.settings.colorpicker.NacColorPickerDialog
 import com.nfcalarmclock.view.setupBackgroundColor
 import com.nfcalarmclock.view.setupForegroundColor
 import com.nfcalarmclock.view.setupProgressAndThumbColor

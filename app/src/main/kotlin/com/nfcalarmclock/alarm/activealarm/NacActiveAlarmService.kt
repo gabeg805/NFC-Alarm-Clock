@@ -14,6 +14,7 @@ import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmRepository
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissEarlyService
 import com.nfcalarmclock.alarm.options.missedalarm.NacMissedAlarmNotification
 import com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderService
 import com.nfcalarmclock.shared.NacSharedPreferences
@@ -136,15 +137,27 @@ class NacActiveAlarmService
 	}
 
 	/**
-	 * Disable any reminder notification that may be present for this alarm.
+	 * Clear any dismiss early notification that may be present for this alarm.
 	 */
-	private fun disableReminderNotification()
+	private fun clearDismissEarlyNotification()
 	{
 		// Get the intent to stop the reminder service
-		val clearReminderIntent = NacUpcomingReminderService.getClearReminderIntent(this, alarm)
+		val stopIntent = NacDismissEarlyService.getStopIntent(this, alarm)
 
 		// Send the intent to stop the reminder service
-		startService(clearReminderIntent)
+		startService(stopIntent)
+	}
+
+	/**
+	 * Clear any reminder notification that may be present for this alarm.
+	 */
+	private fun clearReminderNotification()
+	{
+		// Get the intent to stop the reminder service
+		val stopIntent = NacUpcomingReminderService.getStopIntent(this, alarm)
+
+		// Send the intent to stop the reminder service
+		startService(stopIntent)
 	}
 
 	/**
@@ -195,6 +208,9 @@ class NacActiveAlarmService
 
 			// Set flag to refresh the main activity
 			sharedPreferences.shouldRefreshMainActivity = true
+
+			// Clear the dismiss early notification
+			clearDismissEarlyNotification()
 
 			// Restart any other active alarm or stop the service
 			restartOtherActiveAlarmOrStop(R.string.message_alarm_dismiss)
@@ -328,7 +344,7 @@ class NacActiveAlarmService
 		if (intentAction != ACTION_SKIP_SERVICE)
 		{
 			showActiveAlarmNotification()
-			disableReminderNotification()
+			clearReminderNotification()
 		}
 
 		// Check the intent action
@@ -346,8 +362,6 @@ class NacActiveAlarmService
 			// Legacy check to see if the alarm should be skipped
 			ACTION_SKIP_SERVICE ->
 			{
-				println("SKIP THE ALARM SERVICE")
-
 				// Show the skip notification
 				showSkipAlarmNotification()
 
@@ -640,7 +654,6 @@ class NacActiveAlarmService
 		scope.launch {
 
 			 // Set the active flag and reset the skip flag
-			println("CLEARING SKIP FLAG")
 			alarm!!.isActive = true
 			alarm!!.shouldSkipNextAlarm = false
 

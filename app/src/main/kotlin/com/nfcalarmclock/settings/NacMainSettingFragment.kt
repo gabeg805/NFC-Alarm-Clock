@@ -4,9 +4,7 @@ import android.animation.AnimatorInflater
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
@@ -18,7 +16,6 @@ import com.nfcalarmclock.settings.importexport.NacImportManager
 import com.nfcalarmclock.statistics.NacStatisticsSettingFragment
 import com.nfcalarmclock.support.NacSupportSetting
 import com.nfcalarmclock.util.NacUtility
-import com.nfcalarmclock.view.setupEdgeToEdge
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

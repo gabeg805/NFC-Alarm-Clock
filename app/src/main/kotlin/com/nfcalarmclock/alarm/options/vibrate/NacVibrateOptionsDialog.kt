@@ -144,7 +144,7 @@ class NacVibrateOptionsDialog
 		vibrator = NacVibrator(context)
 
 		// Get the alarm, or build a new one, to get default values
-		val a = alarm ?: NacAlarm.build()
+		val a = alarm ?: NacAlarm.build(sharedPreferences)
 
 		// Setup the views
 		setupVibrationDuration(a.vibrateDuration, a.vibrateWaitTime)

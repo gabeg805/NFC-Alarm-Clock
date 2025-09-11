@@ -230,6 +230,8 @@
 	<string name="title_permission_wakelock">Wakelock</string>
 	<string name="title_request_permission_schedule_exact_alarm">Enable schedule exact alarms</string>
 	<string name="title_reset_statistics">Reset statistics…</string>
+	<string name="title_repeat_frequency">Repeat frequency</string>
+	<string name="title_repeat_frequency_days_to_run_before_starting">Days to run before starting frequency</string>
 	<string name="title_vibrate_vibration_duration">Vibration duration</string>
 	<string name="title_vibrate_custom_pattern">Custom pattern</string>
 	<string name="title_vibrate_wait">Wait</string>
@@ -304,6 +306,8 @@
 	<string name="description_select_nfc_tag">Select an NFC tag that will be required to dismiss this alarm when it goes off. If more than one is selected, it can also be used to dismiss this alarm.</string>
 	<string name="description_nfc_tag_dismiss_order">Order in which the NFC tags above should be dismissed.</string>
 	<string name="description_save_nfc_tag">You can reuse this NFC tag, without having to scan it again, by giving it a name.</string>
+	<string name="description_repeat_frequency">Repeat the alarm at a given frequency (every X amount of time).  Note: Selecting hours or days will clear all of the alarm\'s days.</string>
+	<string name="description_repeat_frequency_days_to_run_before_starting">Which of the alarm\'s currently selected days should be run this week before starting the frequency.</string>
 	<string name="description_vibrate_vibration_duration">How long to vibrate for, and how long to wait in between vibrations.</string>
 	<string name="description_vibrate_custom_pattern">Repeat the vibration duration a set number of times, and then wait for a duration.</string>
 	<string name="description_flashlight_brightness_level">Brightness level of the flashlight.</string>

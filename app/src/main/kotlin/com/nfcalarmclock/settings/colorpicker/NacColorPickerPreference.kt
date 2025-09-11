@@ -1,4 +1,4 @@
-package com.nfcalarmclock.view.colorpicker
+package com.nfcalarmclock.settings.colorpicker
 
 import android.content.Context
 import android.content.res.TypedArray
@@ -9,8 +9,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
 import com.nfcalarmclock.R
-import com.nfcalarmclock.view.colorpicker.NacColorPickerDialog.OnColorSelectedListener
-import com.nfcalarmclock.view.colorpicker.NacColorPickerDialog.OnDefaultColorSelectedListener
+import com.nfcalarmclock.settings.colorpicker.NacColorPickerDialog.OnColorSelectedListener
+import com.nfcalarmclock.settings.colorpicker.NacColorPickerDialog.OnDefaultColorSelectedListener
 import com.nfcalarmclock.view.setupForegroundColor
 
 /**

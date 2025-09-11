@@ -2,20 +2,9 @@
 TODO
 ----
 
-* TODO: Need to dismiss the Dismiss Early notification after dismiss
-
-* TODO: Start week on and next alarm format radio button colors are not themed
+* Need to figure out coloring for Date and Time picker
 
 * TODO: Time was not updating in widget.
-
-* TODO: When a 2 week repeat frequency is set, and you say to run on all days
-  before starting, then you toggle off some of the days, could this cause an
-  issue? I guess those days that are toggled off will not ever get run so maybe
-  it is ok.
-
-* TODO: Look up NacAlarm.build() and see if it is used without shared preferences. Should that be done?
-
-* TODO: When repeating X weekly, where X > 1, need to figure out what to do about repeat days because I feel like the logic I have is wrong.
 
 * When updating to support API 36:
 
@@ -32,6 +21,10 @@ About -> Über
 (Statistics) Turned down Alams -> Abgeschaltete Alarme
 
 * In NacCardHolder, do I always want to do the haptic jank whenever a button is clicked?
+
+* Should NacAlarm.build() for alarm options be done everywhere? Like in upcoming reminder dialog?
+
+* Start week on and next alarm format radio button colors are not themed
 
 * Add languages for Pakistan, Japan, Thailand, Poland, Turkey, France,
   Serbia, Finland, Romania, Italy

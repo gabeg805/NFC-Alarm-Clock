@@ -81,6 +81,9 @@ class NacNameDialog
 		val inputLayout: TextInputLayout = dialog!!.findViewById(R.id.name_box)
 		val editText: TextInputEditText = dialog!!.findViewById(R.id.name_entry)
 
+		// Set the dialog background color
+		dialog!!.window?.setBackgroundDrawableResource(R.color.gray)
+
 		// Set text to show
 		editText.setText(defaultName)
 

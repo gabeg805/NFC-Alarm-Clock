@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:configure="com.nfcalarmclock.widget.NacClockWidgetConfigureActivity"
 	android:initialKeyguardLayout="@layout/nac_clock_widget"
 	android:initialLayout="@layout/nac_clock_widget"
@@ -13,4 +14,5 @@
 	android:updatePeriodMillis="0"
 	android:widgetCategory="home_screen"
 	android:widgetFeatures="reconfigurable|configuration_optional"
+	tools:ignore="UnusedAttribute"
 	/>

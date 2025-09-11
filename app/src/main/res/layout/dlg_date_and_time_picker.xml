@@ -9,6 +9,7 @@
     <!-- Time -->
     <TimePicker
         style="@style/Widget.TimePickerStyle"
+        android:theme="@style/Widget.TimePickerTheme"
         android:id="@+id/time_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,6 +20,8 @@
 
     <!-- Date -->
     <DatePicker
+        style="@style/Widget.DatePickerStyle"
+        android:theme="@style/Widget.DatePickerTheme"
         android:id="@+id/date_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

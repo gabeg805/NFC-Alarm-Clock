@@ -16,10 +16,11 @@
 		This was not working for some reason
 		<item name="chipStyle">@style/Widget.TimePickerChipStyle</item>
 		<item name="materialClockStyle">@style/Widget.TimePickerClockStyle</item>
+
 		-->
 
-
 		<item name="android:timePickerDialogTheme">@style/Widget.TimePickerTheme</item>
+
 		<item name="snackbarStyle">@style/Widget.Snackbar</item>
 		<item name="snackbarTextViewStyle">@style/Widget.SnackbarText</item>
 		<item name="snackbarButtonStyle">@style/Widget.SnackbarButton</item>
@@ -97,7 +98,7 @@
 	</style>
 
 	<!-- Widget base style -->
-	<style name="Widget"></style>
+	<style name="Widget" />
 
 	<!-- Radio button -->
 	<style name="RadioGroup">
@@ -174,61 +175,27 @@
 		<item name="android:textStyle">bold</item>
 	</style>
 
-
-	<!-- Time picker dialog -->
-	<!--
-	<style name="Widget.TimePickerChipStyle" parent="Widget.MaterialComponents.TimePicker.Display">
-		<item name="android:textColor">@color/red</item>
-	</style>
-
-	<style name="Widget.TimePickerClockStyle" parent="Widget.MaterialComponents.TimePicker.Clock">
-		<item name="clockFaceBackgroundColor">@color/red</item>
-		<item name="clockHandColor">@color/green</item>
-		<item name="clockNumberTextColor">@color/sky_blue</item>
-	</style>
-	-->
-
-	<style name="Widget.TimePickerTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-		<!--
-		<item name="clockFaceBackgroundColor">?attr/colorAccent</item>
-		<item name="android:headerBackground">@color/gray</item>
-		<item name="android:numbersBackgroundColor">@color/gray</item>
-		<item name="android:numbersSelectorColor">?attr/colorAccent</item>
-		<item name="android:background">@color/gray_dark</item>
-
-		<item name="android:textColorPrimary">@color/green</item>
-		<item name="android:textColorSecondary">@color/red</item>
-		-->
-
-		<item name="android:textColorPrimary">@color/white_dull</item>
+	<!-- Time picker -->
+	<style name="Widget.TimePickerTheme" parent="BaseAppTheme">
+		<item name="android:textColorPrimary">@color/white</item>
 		<item name="android:textColorSecondary">@color/gray_light</item>
-		<item name="colorAccent">@color/orange</item>
-		<item name="colorPrimary">?attr/colorAccent</item>
-
-		<!--
-		<item name="colorOnPrimary">?attr/colorAccent</item>
-		<item name="colorOnSecondary">@color/green</item>
-		<item name="colorOnBackground">@color/sky_blue</item>
-		<item name="colorOnSurface">@color/red</item>
-		<item name="colorControlActivated">@color/black</item>
-
-		<item name="colorError">@color/red</item>
-		<item name="colorOnPrimary">@color/white</item>
-		<item name="colorOnSecondary">@color/black</item>
-		<item name="colorOnBackground">@color/white</item>
-		<item name="colorOnSurface">@color/white</item>
-		<item name="colorOnError">@color/white</item>
-		-->
-
-		<item name="android:timePickerStyle">@style/Widget.TimePickerStyle</item>
 	</style>
 
-	<style name="Widget.TimePickerStyle" parent="@android:style/Widget.Material.TimePicker">
+	<style name="Widget.TimePickerStyle" parent="Widget.Material3.MaterialTimePicker">
+		<!-- Unable to change this one programatically, otherwise, could do custom accent color -->
+		<!-- <item name="android:numbersSelectorColor">@color/red</item> -->
 		<item name="android:headerBackground">@color/gray_dark2</item>
 		<item name="android:numbersBackgroundColor">@color/gray_dark2</item>
-		<item name="android:numbersSelectorColor">?attr/colorAccent</item>
-		<item name="android:numbersTextColor">@color/white</item>
-		<item name="android:background">@color/gray_dark</item>
+	</style>
+
+	<!-- Date picker -->
+	<style name="Widget.DatePickerTheme" parent="BaseAppTheme">
+		<item name="android:textColorPrimary">@color/white</item>
+		<item name="android:textColorSecondary">@color/gray_light</item>
+	</style>
+
+	<style name="Widget.DatePickerStyle" parent="Widget.Material3.MaterialCalendar">
+		<item name="android:headerBackground">@color/gray_dark2</item>
 	</style>
 
 	<!-- Snackbar -->

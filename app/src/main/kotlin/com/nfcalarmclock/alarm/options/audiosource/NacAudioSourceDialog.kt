@@ -44,7 +44,7 @@ class NacAudioSourceDialog
 	override fun setupAlarmOptions(alarm: NacAlarm?)
 	{
 		// Get the alarm, or build a new one, to get default values
-		val a = alarm ?: NacAlarm.build()
+		val a = alarm ?: NacAlarm.build(sharedPreferences)
 
 		// Set the radio group
 		radioGroup = dialog!!.findViewById(R.id.audio_sources)

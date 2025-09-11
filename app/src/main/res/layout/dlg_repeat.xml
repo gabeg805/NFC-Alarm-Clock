@@ -10,7 +10,7 @@
         android:id="@+id/repeat_freq_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Repeat frequency"
+        android:text="@string/title_repeat_frequency"
         />
 
     <!-- Repeat frequency description-->
@@ -18,11 +18,8 @@
         style="@style/Widget.AlarmOptionDialog.Description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Repeat the alarm at a given frequency (every X amount of time).  Note: Selecting hours or days will clear all of the alarm's days."
+        android:text="@string/description_repeat_frequency"
         />
-    <!--
-    android:text="Repeat the alarm at a given frequency (every X amount of time). If the alarm has any days selected, they will only be used when repeating by week(s). Otherwise, they will be cleared."
-    -->
 
     <!-- Repeat frequency value and units -->
     <LinearLayout
@@ -76,7 +73,7 @@
         android:id="@+id/repeat_freq_days_to_run_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Days to run before starting frequency"
+        android:text="@string/title_repeat_frequency_days_to_run_before_starting"
         />
 
     <!-- Repeat frequency description-->
@@ -85,7 +82,7 @@
         android:id="@+id/repeat_freq_days_to_run_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Which of the alarm's currently selected days should be run this week before starting the frequency."
+        android:text="@string/description_repeat_frequency_days_to_run_before_starting"
         />
 
     <!-- Days -->

@@ -6,12 +6,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.drawable.InsetDrawable
+import android.nfc.NfcAdapter
+import android.nfc.Tag
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.os.Parcelable
-import android.text.format.DateFormat
 import android.view.HapticFeedbackConstants
 import android.view.Menu
 import android.view.MenuItem
@@ -22,6 +23,7 @@ import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.content.IntentSanitizer
 import androidx.core.net.toUri
 import androidx.core.view.MenuCompat
 import androidx.core.view.get
@@ -751,7 +753,6 @@ class NacMainActivity
 			val activeAlarm = alarmViewModel.getActiveAlarm()
 
 			// Check if the active alarm is not null
-			// TODO: Add print statements to see what a normal intent should look like
 			// here and then add checks to make sure it is safe to pass into these start
 			// activity/service functions
 			if (activeAlarm != null)
@@ -760,9 +761,21 @@ class NacMainActivity
 				// Check if an NFC tag was scanned to open up the main activity
 				if (NacNfc.wasScanned(intent))
 				{
+					println("Original : ${intent.action} | ${NacNfc.parseId(intent)}")
 					// Start the alarm activity with the intent containing the
 					// NFC tag information in order to dismiss this alarm
-					NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, intent, activeAlarm)
+					val sanitizedIntent = IntentSanitizer.Builder()
+						.allowAction(NfcAdapter.ACTION_NDEF_DISCOVERED)
+						.allowAction(NfcAdapter.ACTION_TECH_DISCOVERED)
+						.allowAction(NfcAdapter.ACTION_TAG_DISCOVERED)
+						.allowExtra(NfcAdapter.EXTRA_TAG, Tag::class.java)
+						.allowFlags(0)
+						.build()
+						.sanitizeByFiltering(intent)
+					println("Sanitized : ${sanitizedIntent.action} | ${NacNfc.parseId(sanitizedIntent)}")
+
+					NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, sanitizedIntent, activeAlarm)
+					//NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, intent, activeAlarm)
 				}
 				// An NFC tag was not scanned so start the alarm service normally
 				else
@@ -1037,7 +1050,6 @@ class NacMainActivity
 			// Show the dialog
 			NacAlarmOptionsDialog.navigate(navController, alarm)
 				?.observe(this) { a ->
-					println("Updating alarm")
 					updateAlarm(a)
 					card.refreshRepeatOptionViews()
 				}
@@ -1050,7 +1062,6 @@ class NacMainActivity
 			// Show the dialog
 			NacAlarmOptionsDialog.quickNavigate(navController, destinationId, alarm)
 				?.observe(this) { a ->
-					println("YO I'm HERE")
 					updateAlarm(a)
 					card.refreshRepeatOptionViews()
 				}
@@ -1879,100 +1890,47 @@ class NacMainActivity
 	 */
 	private fun showTimeDialog(card: NacCardHolder, alarm: NacAlarm)
 	{
-		// Get whether 24 hour format should be used
-		val is24HourFormat = DateFormat.is24HourFormat(this)
+		NacDateAndTimePickerDialog.create(
+			alarm,
+			onDateSelectedListener = { _, year, month, day ->
 
-		// Create the dialog
-		val dialog = NacDateAndTimePickerDialog()
+				// Set the date
+				alarm.date = "$year-${month+1}-$day"
 
-		// Setup the date picker
-		dialog.onSetupDatePickerListener = NacDateAndTimePickerDialog.OnSetupDatePickerListener {
+				// Set various other alarm attributes that setting the date affects
+				alarm.isEnabled = true
+				alarm.setDays(0)
+				alarm.shouldRepeat = false
+				alarm.shouldSkipNextAlarm = false
+				//alarm.repeatFrequencyDaysToRunBeforeStarting = NacCalendar.Day.WEEK
 
-			println("Current  : ${System.currentTimeMillis()}")
-			println("Calendar : ${Calendar.getInstance().timeInMillis}")
+				// Refresh the schedule date views
+				card.refreshScheduleDateViews()
 
-			val now = Calendar.getInstance()
-			val alarmCal = NacCalendar.alarmToCalendar(alarm, skipDate = true)
+				// Show the next alarm, update the alarm, and save the next alarm
+				showNextAlarm(card, alarm)
+				updateAlarm(alarm)
 
-			// Min date
-			it.minDate = if (alarmCal.before(now))
-			{
-				now.add(Calendar.DAY_OF_MONTH, 1)
-				now.timeInMillis
-			}
-			else
-			{
-				System.currentTimeMillis() - 1000
-			}
+			},
+			onTimeSelectedListener = { _, hr, min ->
 
-			// First day of week
-			it.firstDayOfWeek = if (sharedPreferences.startWeekOn == 1) Calendar.MONDAY else Calendar.SUNDAY
-		}
+				// Reset the skip next alarm flag
+				alarm.shouldSkipNextAlarm = false
 
-		// Setup the time picker
-		dialog.onSetupTimePickerListener = NacDateAndTimePickerDialog.OnSetupTimePickerListener {
-			it.hour = alarm.hour
-			it.minute = alarm.minute
-			it.setIs24HourView(is24HourFormat)
-		}
+				// Set the alarm attributes
+				alarm.hour = hr
+				alarm.minute = min
+				alarm.isEnabled = true
 
-		// Date listener
-		dialog.onDateSelectedListener = NacDateAndTimePickerDialog.OnDateSelectedListener { _, year, month, day ->
+				// Refresh the time views
+				card.refreshTimeViews()
 
-			// Set the date
-			println("Year : $year | Month : $month | Day : $day")
-			alarm.date = "$year-${month+1}-$day"
-			println("Date : ${alarm.date}")
+				// Show the next alarm, update the alarm, and save the next alarm
+				showNextAlarm(card, alarm)
+				updateAlarm(alarm)
 
-			// Set various other alarm attributes that setting the date affects
-			alarm.isEnabled = true
-			alarm.setDays(0)
-			alarm.shouldRepeat = false
-			alarm.shouldSkipNextAlarm = false
-			//alarm.repeatFrequencyDaysToRunBeforeStarting = NacCalendar.Day.WEEK
-
-			// Refresh the schedule date views
-			card.refreshScheduleDateViews()
-
-			// Show the next alarm, update the alarm, and save the next alarm
-			showNextAlarm(card, alarm)
-			updateAlarm(alarm)
-
-		}
-
-		// Time listener
-		dialog.onTimeSelectedListener = NacDateAndTimePickerDialog.OnTimeSelectedListener { _, hr, min ->
-			println("HERE TIME")
-
-			// Reset the skip next alarm flag
-			alarm.shouldSkipNextAlarm = false
-
-			// Set the alarm attributes
-			alarm.hour = hr
-			alarm.minute = min
-			alarm.isEnabled = true
-
-			// Refresh the time views
-			card.refreshTimeViews()
-
-			// Show the next alarm, update the alarm, and save the next alarm
-			showNextAlarm(card, alarm)
-			updateAlarm(alarm)
-		}
-
-		// Show the dialog
-		dialog.show(supportFragmentManager, NacDateAndTimePickerDialog.TAG)
-
-		//FragmentManager fragmentManager = ((AppCompatActivity)context)
-		//	.getSupportFragmentManager();
-		//MaterialTimePicker timepicker = new MaterialTimePicker.Builder()
-		//	.setHour(hour)
-		//	.setMinute(minute)
-		//	.setTimeFormat(is24HourFormat ? TimeFormat.CLOCK_24H : TimeFormat.CLOCK_12H)
-		//	.build();
-
-		//timepicker.addOnPositiveButtonClickListener(this);
-		//timepicker.show(fragmentManager, "TimePicker");
+			})
+			.show(supportFragmentManager, NacDateAndTimePickerDialog.TAG)
 	}
 
 	/**

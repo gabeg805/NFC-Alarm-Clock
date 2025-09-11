@@ -36,12 +36,7 @@ object NacScheduler
 		}
 
 		// Get the calendar for the next alarm
-		println("NacScheduler.add()")
 		val nextAlarmCal = NacCalendar.getNextAlarmDay(alarm, ignoreSkip = true)!!
-
-		// Default ignore=false
-		//println("Before : ${getDateTimeInstance().format(NacCalendar.getNextAlarmDay(alarm, ignoreSkip = true)!!.time)}")
-		//println("After  : ${getDateTimeInstance().format(NacCalendar.getNextAlarmDay(alarm, ignoreSkip = false)!!.time)}")
 
 		// Add the alarm
 		addAlarm(context, alarm, nextAlarmCal)
@@ -77,7 +72,6 @@ object NacScheduler
 		// Check if the next alarm should be skipped
 		if (alarm.shouldSkipNextAlarm)
 		{
-			println("SHOULD SKIP")
 			// Schedule the notification, but not as an alarm so it does not show up in
 			// the status bar tile
 			val manager = getAlarmManager(context)

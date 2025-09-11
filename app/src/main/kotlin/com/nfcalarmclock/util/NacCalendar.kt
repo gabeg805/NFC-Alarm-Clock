@@ -62,11 +62,8 @@ object NacCalendar
 		if (alarmCalendar.before(now)
 			|| ((alarm.repeatFrequencyUnits == 4) && (alarm.repeatFrequency != 1) && !alarm.repeatFrequencyDaysToRunBeforeStarting.contains(day)))
 		{
-			println("HELLO : ${alarm.repeatFrequency} | ${alarm.repeatFrequencyUnits} | ${alarm.repeatFrequencyDaysToRunBeforeStarting}")
-
 			// Alarm will occur in X weeks
 			alarmCalendar.add(Calendar.WEEK_OF_YEAR, alarm.repeatFrequency)
-			//alarmCalendar.add(Calendar.DAY_OF_MONTH, 7)
 		}
 
 		// Return the alarm calendar
@@ -134,9 +131,7 @@ object NacCalendar
 				// this calendar, whatever the repeat frequency is
 				if (timeOfDismissEarlyAlarm > 0 && t == timeOfDismissEarlyAlarm)
 				{
-					println("HELLO DISMISSED EARLY : ${alarm.repeatFrequency} | ${alarm.repeatFrequencyUnits}")
 					c.add(Calendar.WEEK_OF_YEAR, alarm.repeatFrequency)
-					//c.add(Calendar.DAY_OF_MONTH, 7)
 				}
 
 				// Add calendar to list of calendars
@@ -147,7 +142,6 @@ object NacCalendar
 		// is a one-time alarm
 		else
 		{
-			println("alarmToCalendars()")
 			val c = alarmToNextOneTimeCalendar(alarm)
 			calendars.add(c)
 		}
@@ -166,23 +160,21 @@ object NacCalendar
 		// Build the alarm calendar instance
 		val alarmCalendar = alarmToCalendar(alarm)
 
-		// Check if the alarm calendar
+		// Check if the alarm calendar occurs in the past. Need to fix that
 		if (alarmCalendar.before(now))
 		{
-			println("HELLO ONE TIME")
-
-			// Get the calendar field unit to use to adjust the calendar date
-			val fieldUnit = when (alarm.repeatFrequencyUnits)
+			// Hourly
+			if (alarm.repeatFrequencyUnits == 2)
 			{
-				2 -> Calendar.HOUR_OF_DAY
-				3 -> Calendar.DAY_OF_MONTH
-				else -> Calendar.DAY_OF_MONTH
+				// Start the alarm the next day
+				alarmCalendar.add(Calendar.DAY_OF_MONTH, 1)
 			}
-
-			// Add to the calendar by the repeat frequency value
-			alarmCalendar.add(fieldUnit, alarm.repeatFrequency)
-			//alarmCalendar.add(Calendar.DAY_OF_MONTH, 1)
-			// TODO: Add a small label above the days that indicates what the cadence is
+			// Daily
+			else
+			{
+				// Add to the calendar by the repeat frequency value
+				alarmCalendar.add(Calendar.DAY_OF_MONTH, alarm.repeatFrequency)
+			}
 		}
 
 		// Return the alarm calendar
@@ -457,7 +449,6 @@ object NacCalendar
 		{
 			// TODO: This is not taking into account skip. Should I?
 			// Alarm has a date. Converting to a calendar is easy
-			println("HELLOIOIOIOI")
 			return alarmToCalendar(alarm)
 		}
 
@@ -485,7 +476,6 @@ object NacCalendar
 
 
 				// Add a week to the calendar
-				//nextDay.add(Calendar.DAY_OF_MONTH, 7)
 				nextDay.add(fieldUnit, alarm.repeatFrequency)
 				nextDay
 			}
@@ -885,7 +875,6 @@ object NacCalendar
 				val now = Calendar.getInstance()[Calendar.DAY_OF_MONTH]
 
 				// Get the next time the alarm will ring
-				println("oneTimeAlarmToString()")
 				val next = alarmToNextOneTimeCalendar(alarm)[Calendar.DAY_OF_MONTH]
 
 				// Check if the two days are the same, that means that the name

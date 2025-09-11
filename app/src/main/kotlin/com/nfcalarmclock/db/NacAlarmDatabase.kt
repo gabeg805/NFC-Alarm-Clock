@@ -344,9 +344,7 @@ abstract class NacAlarmDatabase
 			db.execSQL("UPDATE alarm SET repeat_frequency=1 WHERE repeat_frequency=0")
 
 			// Update the shared preferences
-			println("SHARED BEFORE : ${sharedPreferences?.repeatFrequency}")
 			sharedPreferences?.repeatFrequency = 1
-			println("SHARED AFTER : ${sharedPreferences?.repeatFrequency}")
 		}
 	}
 

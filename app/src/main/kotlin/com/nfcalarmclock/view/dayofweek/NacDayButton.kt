@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
@@ -67,9 +66,9 @@ class NacDayButton
 			try
 			{
 				width = ta.getDimension(R.styleable.NacDayButton_nacWidth,
-					ViewGroup.LayoutParams.WRAP_CONTENT.toFloat()).toInt()
+					LayoutParams.WRAP_CONTENT.toFloat()).toInt()
 				height = ta.getDimension(R.styleable.NacDayButton_nacHeight,
-					ViewGroup.LayoutParams.WRAP_CONTENT.toFloat()).toInt()
+					LayoutParams.WRAP_CONTENT.toFloat()).toInt()
 				text = androidTa.getString(0)
 			}
 			// Recycle the typed array

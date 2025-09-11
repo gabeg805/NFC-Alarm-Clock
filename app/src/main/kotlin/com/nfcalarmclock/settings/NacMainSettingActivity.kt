@@ -1,14 +1,10 @@
 package com.nfcalarmclock.settings
 
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.insets.ColorProtection
-import androidx.core.view.insets.ProtectionLayout
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.NavHostFragment
 import com.nfcalarmclock.R
@@ -33,7 +29,7 @@ class NacMainSettingActivity
 	/**
 	 * RecyclerView top margin.
 	 */
-	var rvTopMargin: Int = 0
+	//var rvTopMargin: Int = 0
 
 	/**
 	 * Called when the back stack is changed.

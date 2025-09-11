@@ -1697,12 +1697,6 @@ class NacCardHolder(
 				// Toggle the day
 				alarm!!.toggleDay(day)
 
-				// TODO: Should I add logic for when the last day is unselected, change to day
-				//       frequency, and when clicking a day, change to week frequency?
-
-				// TODO: If hour/day, then clicking a day can change to week.
-				//       If week, then clicking a day should not change anything unless all days are toasted
-
 				// Check if no days are selected
 				if (alarm!!.days.isEmpty())
 				{
@@ -1710,7 +1704,6 @@ class NacCardHolder(
 					//alarm!!.shouldRepeat = false
 
 					// Change the repeat frequency to be every day
-					println("Changing repeat frequency to daily")
 					alarm!!.repeatFrequency = 1
 					alarm!!.repeatFrequencyUnits = 3
 					alarm!!.repeatFrequencyDaysToRunBeforeStarting = Day.NONE
@@ -1720,7 +1713,6 @@ class NacCardHolder(
 					// Check if the repeat frequency is not set to a weekly cadence
 					if (alarm!!.repeatFrequencyUnits != 4)
 					{
-						println("Changing repeat frequency to weekly")
 						// Change the repeat frequency to be weekly
 						alarm!!.repeatFrequency = 1
 						alarm!!.repeatFrequencyUnits = 4

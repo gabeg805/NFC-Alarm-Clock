@@ -115,12 +115,6 @@ class NacWakeupProcess(
 	private val flashlight: NacFlashlight? = if (shouldUseFlashlight)
 	{
 		NacFlashlight(context)
-		//catch (e: IllegalArgumentException)
-		//{
-		//	println("INIT SHINE EXCEPTION")
-		//	toast(context, R.string.error_message_unable_to_shine_flashlight)
-		//	null
-		//}
 	}
 	else
 	{

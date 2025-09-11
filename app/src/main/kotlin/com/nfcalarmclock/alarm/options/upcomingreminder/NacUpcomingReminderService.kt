@@ -59,7 +59,7 @@ class NacUpcomingReminderService
 		{
 
 			// Clear the reminder by stopping the service
-			ACTION_CLEAR_REMINDER ->
+			ACTION_STOP_SERVICE ->
 			{
 				// Cancel any remaining reminders
 				if (alarm != null)
@@ -233,7 +233,7 @@ class NacUpcomingReminderService
 		/**
 		 * Action to clear the notification and stop the service.
 		 */
-		private const val ACTION_CLEAR_REMINDER = "com.nfcalarmclock.ACTION_CLEAR_REMINDER"
+		private const val ACTION_STOP_SERVICE = "com.nfcalarmclock.alarm.options.upcomingreminder.ACTION_STOP_SERVICE"
 
 		/**
 		 * Create an intent that will be used to start the foreground upcoming
@@ -252,14 +252,14 @@ class NacUpcomingReminderService
 		}
 
 		/**
-		 * Get an intent that will be used to clear the reminder.
+		 * Get an intent that will be used to clear the reminder and stop the service.
 		 *
-		 * @return An intent that will be used to clear the reminder.
+		 * @return An intent that will be used to clear the reminder and stop the service.
 		 */
-		fun getClearReminderIntent(context: Context, alarm: NacAlarm?): Intent
+		fun getStopIntent(context: Context, alarm: NacAlarm?): Intent
 		{
 			// Create the intent with the alarm service
-			return Intent(ACTION_CLEAR_REMINDER, null, context, NacUpcomingReminderService::class.java)
+			return Intent(ACTION_STOP_SERVICE, null, context, NacUpcomingReminderService::class.java)
 				.addAlarm(alarm)
 		}
 

@@ -1,6 +1,7 @@
 package com.nfcalarmclock.alarm.options.dateandtime
 
 import android.os.Bundle
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +13,16 @@ import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
+import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
+import com.nfcalarmclock.util.NacCalendar
+import com.nfcalarmclock.util.getAlarm
+import com.nfcalarmclock.util.toBundle
+import java.util.Calendar
 
+/**
+ * Dialog that allows picking the date and time.
+ */
 class NacDateAndTimePickerDialog
 	: DialogFragment()
 {
@@ -27,22 +36,6 @@ class NacDateAndTimePickerDialog
 	}
 
 	/**
-	 * Listener for when to setup the date picker.
-	 */
-	fun interface OnSetupDatePickerListener
-	{
-		fun onSetupDatePicker(datePicker: DatePicker)
-	}
-
-	/**
-	 * Listener for when to setup the time picker.
-	 */
-	fun interface OnSetupTimePickerListener
-	{
-		fun onSetupTimePicker(timePicker: TimePicker)
-	}
-
-	/**
 	 * Listener for when the time is selected.
 	 */
 	fun interface OnTimeSelectedListener
@@ -51,19 +44,24 @@ class NacDateAndTimePickerDialog
 	}
 
 	/**
+	 * Shared preferences.
+	 */
+	private lateinit var sharedPreferences: NacSharedPreferences
+
+	/**
+	 * Date picker.
+	 */
+	private lateinit var datePicker: DatePicker
+
+	/**
+	 * Shared preferences.
+	 */
+	private lateinit var timePicker: TimePicker
+
+	/**
 	 * Date selected listener.
 	 */
 	var onDateSelectedListener: OnDateSelectedListener? = null
-
-	/**
-	 * Setup date picker listener.
-	 */
-	var onSetupDatePickerListener: OnSetupDatePickerListener? = null
-
-	/**
-	 * Setup time picker listener.
-	 */
-	var onSetupTimePickerListener: OnSetupTimePickerListener? = null
 
 	/**
 	 * Time selected listener.
@@ -107,21 +105,23 @@ class NacDateAndTimePickerDialog
 		// Super
 		super.onViewCreated(view, savedInstanceState)
 
+		// Get the bundle
+		val alarm = arguments?.getAlarm()!!
+
 		// Get the shared preferences
-		val sharedPreferences = NacSharedPreferences(requireContext())
+		sharedPreferences = NacSharedPreferences(requireContext())
 
 		// Get the views
-		val timePicker: TimePicker = dialog!!.findViewById(R.id.time_picker)
-		val datePicker: DatePicker = dialog!!.findViewById(R.id.date_picker)
+		timePicker = dialog!!.findViewById(R.id.time_picker)
+		datePicker = dialog!!.findViewById(R.id.date_picker)
 		val dateButton: MaterialButton = dialog!!.findViewById(R.id.set_date)
 		val timeButton: MaterialButton = dialog!!.findViewById(R.id.set_time)
 		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
 		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
 
-		// Call any listeners that may have been external set to setup the date and time
-		// pickers
-		onSetupDatePickerListener?.onSetupDatePicker(datePicker)
-		onSetupTimePickerListener?.onSetupTimePicker(timePicker)
+		// Setup the date and time pickers
+		setupDatePicker(alarm)
+		setupTimePicker(alarm)
 
 		// Setup the date button
 		dateButton.setOnClickListener {
@@ -190,6 +190,45 @@ class NacDateAndTimePickerDialog
 
 	}
 
+	/**
+	 * Setup the date picker.
+	 */
+	private fun setupDatePicker(alarm: NacAlarm)
+	{
+		// Get the next time the alarm will go off
+		val now = Calendar.getInstance()
+		val alarmCal = NacCalendar.alarmToCalendar(alarm, skipDate = true)
+
+		// Min date
+		datePicker.minDate = if (alarmCal.before(now))
+		{
+			now.add(Calendar.DAY_OF_MONTH, 1)
+			now.timeInMillis
+		}
+		else
+		{
+			System.currentTimeMillis() - 1000
+		}
+
+		// First day of week
+		datePicker.firstDayOfWeek = if (sharedPreferences.startWeekOn == 1) Calendar.MONDAY else Calendar.SUNDAY
+	}
+
+	/**
+	 * Setup the time picker.
+	 */
+	@Suppress("UsePropertyAccessSyntax")
+	private fun setupTimePicker(alarm: NacAlarm)
+	{
+		// Get whether the time is 24 hour format or not
+		val is24HourFormat = DateFormat.is24HourFormat(context)
+
+		// Set the time attributes
+		timePicker.hour = alarm.hour
+		timePicker.minute = alarm.minute
+		timePicker.setIs24HourView(is24HourFormat)
+	}
+
 	companion object
 	{
 
@@ -197,6 +236,35 @@ class NacDateAndTimePickerDialog
 		 * Tag for the class.
 		 */
 		const val TAG = "NacDateAndTimePickerDialog"
+
+		/**
+		 * Create a dialog that can be shown easily.
+		 */
+		fun create(
+			alarm: NacAlarm,
+			onDateSelectedListener: (DatePicker, Int, Int, Int) -> Unit = { _, _, _, _ -> },
+			onTimeSelectedListener: (TimePicker, Int, Int) -> Unit = { _, _, _ -> },
+		): NacDateAndTimePickerDialog
+		{
+
+			// Create the dialog
+			val dialog = NacDateAndTimePickerDialog()
+
+			// Add the alarm to the dialog
+			dialog.arguments = alarm.toBundle()
+
+			// Set the date listener
+			dialog.onDateSelectedListener = OnDateSelectedListener { datePicker, year, month, day ->
+				onDateSelectedListener(datePicker, year, month, day)
+			}
+
+			// Set the time listener
+			dialog.onTimeSelectedListener = OnTimeSelectedListener { timePicker, hr, min ->
+				onTimeSelectedListener(timePicker, hr, min)
+			}
+
+			return dialog
+		}
 
 	}
 

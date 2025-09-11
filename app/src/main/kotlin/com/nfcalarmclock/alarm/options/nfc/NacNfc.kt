@@ -214,7 +214,7 @@ object NacNfc
 		{
 			nfcAdapter.enableForegroundDispatch(activity, pending, null, null)
 		}
-		catch (e: SecurityException)
+		catch (_: SecurityException)
 		{
 			quickToast(activity, R.string.error_message_unable_to_scan_nfc)
 		}

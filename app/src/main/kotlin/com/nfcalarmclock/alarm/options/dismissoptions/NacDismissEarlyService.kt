@@ -79,7 +79,7 @@ class NacDismissEarlyService
 		/**
 		 * Action to clear the notification and stop the service.
 		 */
-		private const val ACTION_STOP_SERVICE = "com.nfcalarmclock.ACTION_STOP_SERVICE"
+		private const val ACTION_STOP_SERVICE = "com.nfcalarmclock.alarm.options.dismissearly.ACTION_STOP_SERVICE"
 
 		/**
 		 * Create an intent that will be used to start the foreground upcoming

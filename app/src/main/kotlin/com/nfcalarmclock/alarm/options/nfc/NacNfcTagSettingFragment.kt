@@ -1,10 +1,7 @@
 package com.nfcalarmclock.alarm.options.nfc
 
-import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
-import com.nfcalarmclock.settings.NacMainSettingActivity
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.shared.NacSharedPreferences
 import dagger.hilt.android.AndroidEntryPoint

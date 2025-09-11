@@ -1,4 +1,4 @@
-package com.nfcalarmclock.view.colorpicker
+package com.nfcalarmclock.settings.colorpicker
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -18,6 +18,7 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.view.dialog.NacDialogFragment
 import com.nfcalarmclock.view.setupInputLayoutColor
 import androidx.core.graphics.toColorInt
+import com.nfcalarmclock.view.colorpicker.NacColorPicker
 
 /**
  * Handle displaying the color picker dialog.
@@ -207,6 +208,9 @@ class NacColorPickerDialog
 		exampleColor = dialog!!.findViewById(R.id.color_example)
 		editText = dialog!!.findViewById(R.id.color_edittext)
 		inputLayout = dialog!!.findViewById(R.id.color_input_layout)
+
+		// Set the dialog background color
+		dialog!!.window?.setBackgroundDrawableResource(R.color.gray)
 
 		// Set the initial color
 		color = initialColor

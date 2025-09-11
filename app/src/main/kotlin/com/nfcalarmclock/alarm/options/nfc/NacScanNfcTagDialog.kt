@@ -144,7 +144,7 @@ class NacScanNfcTagDialog
 	override fun setupAlarmOptions(alarm: NacAlarm?)
 	{
 		// Get the alarm, or build a new one, to get default values
-		val a = alarm ?: NacAlarm.build()
+		val a = alarm ?: NacAlarm.build(sharedPreferences)
 
 		// Setup the views
 		setupCurrentlySelectedInfo(a.nfcTagIdList)
