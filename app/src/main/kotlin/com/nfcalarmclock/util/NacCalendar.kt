@@ -163,8 +163,8 @@ object NacCalendar
 		// Check if the alarm calendar occurs in the past. Need to fix that
 		if (alarmCalendar.before(now))
 		{
-			// Hourly
-			if (alarm.repeatFrequencyUnits == 2)
+			// Minutely or Hourly
+			if ((alarm.repeatFrequencyUnits == 1) || (alarm.repeatFrequencyUnits == 2))
 			{
 				// Start the alarm the next day
 				alarmCalendar.add(Calendar.DAY_OF_MONTH, 1)
@@ -468,6 +468,7 @@ object NacCalendar
 				// Get the calendar field unit to use to adjust the calendar date
 				val fieldUnit = when (alarm.repeatFrequencyUnits)
 				{
+					1 -> Calendar.MINUTE
 					2 -> Calendar.HOUR_OF_DAY
 					3 -> Calendar.DAY_OF_MONTH
 					4 -> Calendar.WEEK_OF_YEAR
@@ -475,7 +476,7 @@ object NacCalendar
 				}
 
 
-				// Add a week to the calendar
+				// Add the repeat frequency to the calendar
 				nextDay.add(fieldUnit, alarm.repeatFrequency)
 				nextDay
 			}
@@ -679,6 +680,14 @@ object NacCalendar
 					// Check the repeat frequency units
 					return when (alarm.repeatFrequencyUnits)
 					{
+						// Minutes
+						1 ->
+						{
+							// Every X minutes
+							context.resources.getQuantityString(R.plurals.repeat_minutely,
+								alarm.repeatFrequency, alarm.repeatFrequency)
+						}
+
 						// Hours
 						2 ->
 						{

@@ -117,20 +117,19 @@ class NacFlashlightOptionsDialog
 	 */
 	override fun setupAlarmOptions(alarm: NacAlarm?)
 	{
-		// Get the flashlight
+		// Create the flashlight
 		flashlight = NacFlashlight(requireContext())
 
-		// Get the default values
-		val defaultStrength = alarm?.flashlightStrengthLevel ?: 0
-		val defaultShouldBlink = alarm?.shouldBlinkFlashlight ?: false
-		val defaultOnDuration = alarm?.flashlightOnDuration ?: "0"
-		val defaultOffDuration = alarm?.flashlightOffDuration ?: "0"
-		selectedBlinkOnDuration = if (defaultOnDuration == "0") "1.0" else defaultOnDuration
-		selectedBlinkOffDuration = if (defaultOffDuration == "0") "1.0" else defaultOffDuration
+		// Get the alarm, or build a new one, to get default values
+		val a = alarm ?: NacAlarm.build(sharedPreferences)
+
+		// Set the default selected values
+		selectedBlinkOnDuration = if (a.flashlightOnDuration == "0") "1.0" else a.flashlightOnDuration
+		selectedBlinkOffDuration = if (a.flashlightOffDuration == "0") "1.0" else a.flashlightOffDuration
 
 		// Setup the views
-		setupBrightnessLevel(defaultStrength)
-		setupBlinkFlashlight(defaultShouldBlink, defaultOnDuration, defaultOffDuration)
+		setupBrightnessLevel(a.flashlightStrengthLevel)
+		setupBlinkFlashlight(a.shouldBlinkFlashlight, a.flashlightOnDuration, a.flashlightOffDuration)
 		setBlinkFlashlightUsability()
 	}
 

@@ -135,20 +135,18 @@ class NacDismissOptionsDialog
 	 */
 	override fun setupAlarmOptions(alarm: NacAlarm?)
 	{
-		// Get the default values
-		val defaultShouldAutoDismiss = alarm?.shouldAutoDismiss ?: true
-		val defaultAutoDismissTime = alarm?.autoDismissTime?.takeIf { it > 0 } ?: 900
-		val defaultShouldDismissEarly = alarm?.canDismissEarly ?: false
-		val defaultShouldShowDismissEarlyNotification = alarm?.shouldShowDismissEarlyNotification ?: false
-		val defaultDismissEarlyTime = alarm?.dismissEarlyTime ?: 30
-		val defaultShouldDeleteAlarmAfterDismissed = alarm?.shouldDeleteAlarmAfterDismissed ?: false
+		// Get the alarm, or build a new one, to get default values
+		val a = alarm ?: NacAlarm.build(sharedPreferences)
+
+		// Set the default selected values
+		val defaultAutoDismissTime = a.autoDismissTime.takeIf { it > 0 } ?: 900
 		selectedAutoDismissTime = defaultAutoDismissTime
-		selectedDismissEarlyTime = defaultDismissEarlyTime
+		selectedDismissEarlyTime = a.dismissEarlyTime
 
 		// Setup the views
-		setupAutoDismiss(defaultShouldAutoDismiss, defaultAutoDismissTime)
-		setupDismissEarly(defaultShouldDismissEarly, defaultShouldShowDismissEarlyNotification, defaultDismissEarlyTime)
-		setupShouldDeleteAlarmAfterDismissed(defaultShouldDeleteAlarmAfterDismissed)
+		setupAutoDismiss(a.shouldAutoDismiss, defaultAutoDismissTime)
+		setupDismissEarly(a.canDismissEarly, a.shouldShowDismissEarlyNotification, a.dismissEarlyTime)
+		setupShouldDeleteAlarmAfterDismissed(a.shouldDeleteAlarmAfterDismissed)
 		setAutoDismissUsability()
 		setDismissEarlyUsability()
 	}

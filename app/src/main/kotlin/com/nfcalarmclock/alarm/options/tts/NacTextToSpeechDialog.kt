@@ -256,6 +256,8 @@ class NacTextToSpeechDialog
 	{
 		// Get the alarm, or build a new one, to get default values
 		val a = alarm ?: NacAlarm.build(sharedPreferences)
+
+		// Set the default selected values
 		selectedTtsFreq = a.ttsFrequency
 
 		// Setup the views

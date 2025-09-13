@@ -2,15 +2,11 @@
 TODO
 ----
 
-* Need to figure out coloring for Date and Time picker
+* Need to create a watchdog for the music to make sure it's playing.
 
-* TODO: Time was not updating in widget.
+* Should be able to set date and then repeat by whatever option is set? Such as monthly??
 
-* When updating to support API 36:
-
-    - Bottom padding of settings is wack, and possibly in main activity as well
-
-    - Test MediaActivity with edge-to-edge
+* Dismiss early does not do same stuff as dismiss(), which handles adding repeat freq stuff
 
 * Check that selected directory for music works.
 
@@ -20,9 +16,13 @@ TODO
 About -> Über
 (Statistics) Turned down Alams -> Abgeschaltete Alarme
 
-* In NacCardHolder, do I always want to do the haptic jank whenever a button is clicked?
+* When updating to support API 36:
 
-* Should NacAlarm.build() for alarm options be done everywhere? Like in upcoming reminder dialog?
+    - Bottom padding of settings is wack, and possibly in main activity as well
+
+    - Test MediaActivity with edge-to-edge
+
+* In NacCardHolder, do I always want to do the haptic jank whenever a button is clicked?
 
 * Start week on and next alarm format radio button colors are not themed
 

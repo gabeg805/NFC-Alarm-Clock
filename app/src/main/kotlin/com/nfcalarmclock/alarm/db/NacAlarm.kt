@@ -132,13 +132,11 @@ class NacAlarm()
 	/**
 	 * Units for the frequency at which to repeat the alarm.
 	 *
-	 * 0 = Seconds
 	 * 1 = Minutes
 	 * 2 = Hours
 	 * 3 = Days
 	 * 4 = Weeks
 	 * 5 = Months
-	 * 6 = Years
 	 */
 	@ColumnInfo(name = "repeat_frequency_units", defaultValue = "4")
 	var repeatFrequencyUnits: Int = 4
@@ -146,13 +144,11 @@ class NacAlarm()
 	/**
 	 * Units for the frequency at which to repeat the alarm.
 	 *
-	 * 0 = Seconds
 	 * 1 = Minutes
 	 * 2 = Hours
 	 * 3 = Days
 	 * 4 = Weeks
 	 * 5 = Months
-	 * 6 = Years
 	 */
 	@ColumnInfo(name = "repeat_frequency_days_to_run_before_starting", defaultValue = "127")
 	var repeatFrequencyDaysToRunBeforeStarting: EnumSet<Day> = Day.WEEK
@@ -940,11 +936,25 @@ class NacAlarm()
 			toggleAlarm()
 		}
 
-		// Check if repeat frequency units is in hours
-		if (repeatFrequencyUnits == 2)
+		// Check if repeat frequency units is in minutes or hours
+		if (repeatFrequencyUnits == 1)
 		{
+			// Create a calendar from the alarm and add the repeat frequency to it
+			val alarmCal = NacCalendar.alarmToCalendar(this)
+			alarmCal.add(Calendar.MINUTE, repeatFrequency)
+
+			// Update the alarm hour and minute
+			hour = alarmCal.get(Calendar.HOUR_OF_DAY)
+			minute = alarmCal.get(Calendar.MINUTE)
+		}
+		else if (repeatFrequencyUnits == 2)
+		{
+			// Create a calendar from the alarm and add the repeat frequency to it
+			val alarmCal = NacCalendar.alarmToCalendar(this)
+			alarmCal.add(Calendar.HOUR_OF_DAY, repeatFrequency)
+
 			// Update the alarm hour
-			hour += repeatFrequency
+			hour = alarmCal.get(Calendar.HOUR_OF_DAY)
 		}
 	}
 
@@ -1858,9 +1868,11 @@ class NacAlarm()
 		{
 			return when (index)
 			{
-				0 -> 2
-				1 -> 3
-				2 -> 4
+				0 -> 1
+				1 -> 2
+				2 -> 3
+				3 -> 4
+				4 -> 5
 				else -> 4
 			}
 		}
@@ -1868,39 +1880,39 @@ class NacAlarm()
 		/**
 		 * Calculate the repeat frequency units index.
 		 *
-		 * 0 = Seconds
 		 * 1 = Minutes
 		 * 2 = Hours
 		 * 3 = Days
 		 * 4 = Weeks
 		 * 5 = Months
-		 * 6 = Years
 		 */
 		fun calcRepeatFrequencyUnitsIndex(units: Int): Int
 		{
 			return when (units)
 			{
-				2 -> 0
-				3 -> 1
-				4 -> 2
-				else -> 2
+				1 -> 0
+				2 -> 1
+				3 -> 2
+				4 -> 3
+				5 -> 4
+				else -> 3
 			}
-		}
-
-		/**
-		 * Calculate the repeat frequency from an index.
-		 */
-		fun calcRepeatFrequencyFromIndex(index: Int): Int
-		{
-			return index+1
 		}
 
 		/**
 		 * Calculate the repeat frequency index.
 		 */
-		fun calcRepeatFrequencyIndex(value: Int): Int
+		fun calcRepeatFrequencyIndex(value: Int, units: Int): Int
 		{
-			return value-1
+			// Determine the index
+			val index = when (units)
+			{
+				1 -> value-15
+				else -> value-1
+			}
+
+			// Make sure to return a proper index
+			return if (index >= 0) index else 0
 		}
 
 		/**

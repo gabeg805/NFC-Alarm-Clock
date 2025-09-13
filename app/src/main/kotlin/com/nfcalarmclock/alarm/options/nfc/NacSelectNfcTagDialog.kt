@@ -223,16 +223,17 @@ class NacSelectNfcTagDialog
 
 		lifecycleScope.launch {
 
-			// Get the default values
-			val defaultNfcTagIdList = alarm?.nfcTagIdList ?: emptyList()
-			val defaultDismissOrder = alarm?.nfcTagDismissOrder ?: 0
-			selectedDismissOrder = defaultDismissOrder
+			// Get the alarm, or build a new one, to get default values
+			val a = alarm ?: NacAlarm.build(sharedPreferences)
+
+			// Set the default selected values
+			selectedDismissOrder = a.nfcTagDismissOrder
 
 			// Get the alarm NFC IDs and all the NFC tags
 			allNfcTags = nfcTagViewModel.getAllNfcTags()
 
 			// Set the selected NFC tags based on the alarm
-			selectedNfcTags = defaultNfcTagIdList.mapNotNull { id ->
+			selectedNfcTags = a.nfcTagIdList.mapNotNull { id ->
 					allNfcTags.find { it.nfcId == id }
 				}
 				.toMutableList()
@@ -248,7 +249,7 @@ class NacSelectNfcTagDialog
 			val nfcTagNames = allNfcTags.map { it.name }.toTypedArray()
 
 			// Dismiss order. This comes first to initialize all the lateinit vars
-			setupDismissOrder(defaultDismissOrder)
+			setupDismissOrder(a.nfcTagDismissOrder)
 
 			// Select NFC tags
 			selectedNfcTags.forEach {

@@ -57,9 +57,9 @@ class NacSnoozeOptionsDialog
 	private var selectedAutoSnoozeTime: Int = 0
 
 	/**
-	 * Selected max snooze time.
+	 * Selected max snooze.
 	 */
-	private var selectedMaxSnoozeTime: Int = 0
+	private var selectedMaxSnooze: Int = 0
 
 	/**
 	 * Selected snooze duration time.
@@ -74,7 +74,7 @@ class NacSnoozeOptionsDialog
 		// Update the alarm
 		alarm?.shouldAutoSnooze = autoSnoozeSwitch.isChecked
 		alarm?.autoSnoozeTime = selectedAutoSnoozeTime
-		alarm?.maxSnooze = selectedMaxSnoozeTime
+		alarm?.maxSnooze = selectedMaxSnooze
 		alarm?.snoozeDuration = selectedSnoozeDurationTime
 		alarm?.shouldEasySnooze = easySnoozeSwitch.isChecked
 		alarm?.shouldVolumeSnooze = volumeSnoozeSwitch.isChecked
@@ -109,24 +109,23 @@ class NacSnoozeOptionsDialog
 	 */
 	override fun setupAlarmOptions(alarm: NacAlarm?)
 	{
-		// Get the default values
-		val defaultShouldAutoSnooze = alarm?.shouldAutoSnooze ?: false
-		val defaultAutoSnoozeTime = alarm?.autoSnoozeTime?.takeIf { it > 0 } ?: 300
-		val defaultMaxSnooze = alarm?.maxSnooze ?: -1
-		val defaultSnoozeDuration = alarm?.snoozeDuration?.takeIf { it > 0 } ?: 300
-		val defaultShouldEasySnooze = alarm?.shouldEasySnooze ?: false
-		val defaultShouldVolumeSnooze = alarm?.shouldVolumeSnooze ?: false
+		// Get the alarm, or build a new one, to get default values
+		val a = alarm ?: NacAlarm.build(sharedPreferences)
+
+		// Set the default selected values
+		val defaultAutoSnoozeTime = a.autoSnoozeTime.takeIf { it > 0 } ?: 300
+		val defaultSnoozeDuration = a.snoozeDuration.takeIf { it > 0 } ?: 300
 		selectedAutoSnoozeTime = defaultAutoSnoozeTime
-		selectedMaxSnoozeTime = defaultMaxSnooze
+		selectedMaxSnooze = a.maxSnooze
 		selectedSnoozeDurationTime = defaultSnoozeDuration
 
 		// Setup the views
-		setupAutoSnooze(defaultShouldAutoSnooze, defaultAutoSnoozeTime)
+		setupAutoSnooze(a.shouldAutoSnooze, defaultAutoSnoozeTime)
 		setAutoSnoozeUsability()
-		setupMaxSnooze(defaultMaxSnooze)
+		setupMaxSnooze(a.maxSnooze)
 		setupSnoozeDuration(defaultSnoozeDuration)
-		setupEasySnooze(defaultShouldEasySnooze)
-		setupVolumeSnooze(defaultShouldVolumeSnooze)
+		setupEasySnooze(a.shouldEasySnooze)
+		setupVolumeSnooze(a.shouldVolumeSnooze)
 	}
 
 	/**
@@ -190,7 +189,7 @@ class NacSnoozeOptionsDialog
 
 		// Set the textview listeners
 		autoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-			selectedMaxSnoozeTime = NacAlarm.calcMaxSnooze(position)
+			selectedMaxSnooze = NacAlarm.calcMaxSnooze(position)
 		}
 	}
 

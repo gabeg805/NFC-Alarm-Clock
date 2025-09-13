@@ -146,6 +146,8 @@ class NacUpcomingReminderDialog
 	{
 		// Get the alarm, or build a new one, to get default values
 		val a = alarm ?: NacAlarm.build(sharedPreferences)
+
+		// Set the default selected values
 		selectedHowEarlyTime = a.timeToShowReminder
 		selectedHowFreqTime = a.reminderFrequency
 

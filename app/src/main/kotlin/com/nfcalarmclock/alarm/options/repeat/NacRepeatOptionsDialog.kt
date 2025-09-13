@@ -142,29 +142,33 @@ class NacRepeatOptionsDialog
 
 		// Get singular and plural form of the units
 		singularUnits = listOf(
+			context.resources.getQuantityString(R.plurals.standalone_unit_minute, 1),
 			context.resources.getQuantityString(R.plurals.standalone_unit_hour, 1),
 			context.resources.getQuantityString(R.plurals.standalone_unit_day, 1),
 			context.resources.getQuantityString(R.plurals.standalone_unit_week, 1)
+			//context.resources.getQuantityString(R.plurals.standalone_unit_month, 1)
 		).toTypedArray()
 
 		pluralUnits = listOf(
+			context.resources.getQuantityString(R.plurals.standalone_unit_minute, 5),
 			context.resources.getQuantityString(R.plurals.standalone_unit_hour, 5),
 			context.resources.getQuantityString(R.plurals.standalone_unit_day, 5),
 			context.resources.getQuantityString(R.plurals.standalone_unit_week, 5)
+			//context.resources.getQuantityString(R.plurals.standalone_unit_month, 5)
 		).toTypedArray()
 
-		// Get the default values
-		val defaultRepeatFrequencyValue = alarm?.repeatFrequency ?: 1
-		val defaultRepeatFrequencyUnits = alarm?.repeatFrequencyUnits ?: 4
-		val defaultCurrentDays = alarm?.days ?: NacCalendar.Day.WEEK
-		val defaultDaysToRun = alarm?.repeatFrequencyDaysToRunBeforeStarting ?: NacCalendar.Day.WEEK
-		selectedRepeatFrequencyValue = defaultRepeatFrequencyValue
-		selectedRepeatFrequencyUnits = defaultRepeatFrequencyUnits
-		selectedDaysToRunBeforeFrequency = defaultDaysToRun
+		// Get the alarm, or build a new one, to get default values
+		val a = alarm ?: NacAlarm.build(sharedPreferences)
+
+		// Set the default selected values
+		// TODO: Think about how I want to do current days vs days to run before starting
+		selectedRepeatFrequencyValue = a.repeatFrequency
+		selectedRepeatFrequencyUnits = a.repeatFrequencyUnits
+		selectedDaysToRunBeforeFrequency = a.repeatFrequencyDaysToRunBeforeStarting
 
 		// Setup the views
-		setupRepeatFrequency(defaultRepeatFrequencyValue, defaultRepeatFrequencyUnits)
-		setupDaysToRun(defaultCurrentDays)
+		setupRepeatFrequency(a.repeatFrequency, a.repeatFrequencyUnits)
+		setupDaysToRun(a.days)
 		setDaysToRunUsability()
 	}
 
@@ -217,41 +221,40 @@ class NacRepeatOptionsDialog
 		val valueInputLayout: TextInputLayout = dialog!!.findViewById(R.id.repeat_freq_value_input_layout)
 		val unitsInputLayout: TextInputLayout = dialog!!.findViewById(R.id.repeat_freq_units_input_layout)
 
+		// Get the indices to use
+		var valueIndex = NacAlarm.calcRepeatFrequencyIndex(defaultValue, defaultUnits)
+		var unitsIndex = NacAlarm.calcRepeatFrequencyUnitsIndex(defaultUnits)
+
+		// Setup the dropdowns
+		var valuesList = getRepeatFrequencyValuesFromUnitsIndex(unitsIndex)
+		var unitsList = getCorrectUnitsList(defaultValue, defaultUnits)
+
 		// Setup the input layouts
 		valueInputLayout.setupInputLayoutColor(context, sharedPreferences)
 		unitsInputLayout.setupInputLayoutColor(context, sharedPreferences)
 
-		// Setup the dropdowns
-		val valuesList = (1..100).map { it.toString()  }.toTypedArray()
-		val unitsList = getCorrectUnitsList(defaultValue, defaultUnits)
-
+		// Setup the textviews
 		valueAutoCompleteTextView.setSimpleItems(valuesList)
 		unitsAutoCompleteTextView.setSimpleItems(unitsList)
-
-		// Set the default value in the textview
-		val valueIndex = NacAlarm.calcRepeatFrequencyIndex(defaultValue)
-		valueAutoCompleteTextView.setTextFromIndex(valueIndex)
-
-		// Set the default unit in the textview
-		var unitsIndex = NacAlarm.calcRepeatFrequencyUnitsIndex(defaultUnits)
+		valueAutoCompleteTextView.setTextFromIndex(valueIndex, fallback = 0)
 		unitsAutoCompleteTextView.setTextFromIndex(unitsIndex)
 
 		// Setup the listeners
 		valueAutoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
 
 			// Set the repeat frequency
-			selectedRepeatFrequencyValue = NacAlarm.calcRepeatFrequencyFromIndex(position)
+			selectedRepeatFrequencyValue = valuesList[position].toInt()
 
 			// Get the current unit selected, and the corrected units list
-			val list = getCorrectUnitsList(selectedRepeatFrequencyValue, selectedRepeatFrequencyUnits)
+			unitsList = getCorrectUnitsList(selectedRepeatFrequencyValue, selectedRepeatFrequencyUnits)
 			val text = unitsAutoCompleteTextView.adapter.getItem(unitsIndex) as String
 
 			// Check if the current unit is in the corrected units list
-			if (text !in list)
+			if (text !in unitsList)
 			{
 				// The unit is not in the list, so the dropdown list being shown needs to
 				// be updated
-				unitsAutoCompleteTextView.setSimpleItems(list)
+				unitsAutoCompleteTextView.setSimpleItems(unitsList)
 				unitsAutoCompleteTextView.setTextFromIndex(unitsIndex)
 			}
 
@@ -266,10 +269,53 @@ class NacRepeatOptionsDialog
 			selectedRepeatFrequencyUnits = NacAlarm.calcRepeatFrequencyUnitsFromIndex(position)
 			unitsIndex = position
 
+			// Recompute a new list of values and the value index
+			valuesList = getRepeatFrequencyValuesFromUnitsIndex(position)
+			valueIndex = valuesList.indexOfFirst{ selectedRepeatFrequencyValue.toString() == it }
+
+			// Check if the value index was not able to be found
+			if (valueIndex < 0)
+			{
+				// Reset the index to 0 and update the selected repeat frequency value
+				valueIndex = 0
+				selectedRepeatFrequencyValue = valuesList[0].toInt()
+			}
+
+			// Update the repeat frequency values
+			valueAutoCompleteTextView.setSimpleItems(valuesList)
+			valueAutoCompleteTextView.setTextFromIndex(valueIndex)
+
 			// Set the usability of the days view
 			setDaysToRunUsability()
 
 		}
+	}
+
+	/**
+	 * Get the repeat frequency values from the repeat frequency units index.
+	 */
+	fun getRepeatFrequencyValuesFromUnitsIndex(index: Int): Array<String>
+	{
+		return when (index)
+		{
+			// Minute (max 8 hours)
+			0 -> (15..480)
+
+			// Hour (max 1 week)
+			1 -> (1..168)
+
+			// Day
+			2 -> (1..365)
+
+			// Week
+			3 -> (1..52)
+
+			// Month
+			4 -> (1..12)
+
+			// Week
+			else -> (1..52)
+		}.map { it.toString() }.toTypedArray()
 	}
 
 }

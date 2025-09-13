@@ -76,16 +76,16 @@ class NacVolumeOptionsDialog
 	 */
 	override fun setupAlarmOptions(alarm: NacAlarm?)
 	{
-		// Get the default values
-		val defaultShouldGraduallyIncreaseVolume = alarm?.shouldGraduallyIncreaseVolume ?: false
-		val defaultGraduallyIncreaseVolumeWaitTime = alarm?.graduallyIncreaseVolumeWaitTime ?: 5
-		val defaultRestrictVolume = alarm?.shouldRestrictVolume ?: false
-		selectedWaitTime = defaultGraduallyIncreaseVolumeWaitTime
+		// Get the alarm, or build a new one, to get default values
+		val a = alarm ?: NacAlarm.build(sharedPreferences)
+
+		// Set the default selected values
+		selectedWaitTime = a.graduallyIncreaseVolumeWaitTime
 
 		// Setup the views
-		setupGraduallyIncreaseVolume(defaultShouldGraduallyIncreaseVolume, defaultGraduallyIncreaseVolumeWaitTime)
+		setupGraduallyIncreaseVolume(a.shouldGraduallyIncreaseVolume, a.graduallyIncreaseVolumeWaitTime)
 		setGraduallyIncreaseVolumeUsability()
-		setupRestrictVolume(defaultRestrictVolume)
+		setupRestrictVolume(a.shouldRestrictVolume)
 	}
 
 	/**

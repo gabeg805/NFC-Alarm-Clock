@@ -2,6 +2,7 @@ package com.nfcalarmclock.main
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -89,6 +90,7 @@ import com.nfcalarmclock.system.permission.NacPermissionRequestManager
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.util.NacCalendar
+import com.nfcalarmclock.util.NacIntent.ALARM_BUNDLE_NAME
 import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.createTimeTickReceiver
@@ -761,19 +763,55 @@ class NacMainActivity
 				// Check if an NFC tag was scanned to open up the main activity
 				if (NacNfc.wasScanned(intent))
 				{
-					println("Original : ${intent.action} | ${NacNfc.parseId(intent)}")
-					// Start the alarm activity with the intent containing the
-					// NFC tag information in order to dismiss this alarm
+					println("Original action    : ${intent.action} | ${NacNfc.parseId(intent)}")
+					println("Original component : ${intent.component}")
+					println("Original extra     : ${intent.extras}")
+					println("Original flags     : ${intent.flags}")
+					println("Original data      : ${intent.data}")
+					println("Original categories: ${intent.categories}")
+					println("Original test1     : ${callingActivity?.packageName}")
+					println("Original test2     : ${intent.resolveActivity(packageManager)}")
+
 					val sanitizedIntent = IntentSanitizer.Builder()
+						.allowComponent(ComponentName(this@NacMainActivity, "com.nfcalarmclock.main.NacMainAliasActivity"))
+						.allowComponent(ComponentName(this@NacMainActivity, NacMainActivity::class.java))
+						.allowComponent(ComponentName(this@NacMainActivity, NacActiveAlarmActivity::class.java))
 						.allowAction(NfcAdapter.ACTION_NDEF_DISCOVERED)
 						.allowAction(NfcAdapter.ACTION_TECH_DISCOVERED)
 						.allowAction(NfcAdapter.ACTION_TAG_DISCOVERED)
+						.allowCategory("android.intent.category.LAUNCHER")
+						.allowCategory("android.intent.category.DEFAULT")
 						.allowExtra(NfcAdapter.EXTRA_TAG, Tag::class.java)
+						.allowExtra(ALARM_BUNDLE_NAME, NacAlarm::class.java)
 						.allowFlags(0)
+						//.allowReceiverFlags()
+						//.allowSelector()
 						.build()
 						.sanitizeByFiltering(intent)
-					println("Sanitized : ${sanitizedIntent.action} | ${NacNfc.parseId(sanitizedIntent)}")
+					println("Sanitized action    : ${sanitizedIntent.action} | ${NacNfc.parseId(sanitizedIntent)}")
+					println("Sanitized component : ${sanitizedIntent.component}")
+					println("Sanitized extra     : ${sanitizedIntent.extras}")
+					println("Sanitized flags     : ${sanitizedIntent.flags}")
+					println("Sanitized data      : ${sanitizedIntent.data}")
+					println("Sanitized categories: ${sanitizedIntent.categories}")
 
+					// Remove the grant URI permissions in the untrusted intent
+					//if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+					//{
+					//	intent.removeFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+					//	intent.removeFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+					//}
+
+					// Check that the nested intent does not grant URI permissions
+					if (((intent.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION) == 0) &&
+						((intent.flags and Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0))
+					{
+						// redirect the nested Intent
+						println("GOLDEN")
+					}
+
+					// Start the alarm activity with the intent containing the
+					// NFC tag information in order to dismiss this alarm
 					NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, sanitizedIntent, activeAlarm)
 					//NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, intent, activeAlarm)
 				}
@@ -1900,8 +1938,8 @@ class NacMainActivity
 				// Set various other alarm attributes that setting the date affects
 				alarm.isEnabled = true
 				alarm.setDays(0)
-				alarm.shouldRepeat = false
 				alarm.shouldSkipNextAlarm = false
+				//alarm.shouldRepeat = false
 				//alarm.repeatFrequencyDaysToRunBeforeStarting = NacCalendar.Day.WEEK
 
 				// Refresh the schedule date views
