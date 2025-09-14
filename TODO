@@ -2,11 +2,9 @@
 TODO
 ----
 
+* Need to look at all usages of getNextAlarmDay() to make sure there are not any more null errors
+
 * Need to create a watchdog for the music to make sure it's playing.
-
-* Should be able to set date and then repeat by whatever option is set? Such as monthly??
-
-* Dismiss early does not do same stuff as dismiss(), which handles adding repeat freq stuff
 
 * Check that selected directory for music works.
 

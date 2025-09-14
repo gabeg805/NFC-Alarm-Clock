@@ -929,32 +929,45 @@ class NacAlarm()
 		snoozeHour = -1
 		snoozeMinute = -1
 
-		// Check if the alarm should not be repeated
+		// Date is set
+		if (date.isNotEmpty())
+		{
+			// Clear the date
+			date = ""
+		}
+
+		// Alarm will not repeat
 		if (!shouldRepeat)
 		{
 			// Toggle the alarm
 			toggleAlarm()
 		}
 
-		// Check if repeat frequency units is in minutes or hours
-		if (repeatFrequencyUnits == 1)
+		// Check repeat frequency units
+		when (repeatFrequencyUnits)
 		{
-			// Create a calendar from the alarm and add the repeat frequency to it
-			val alarmCal = NacCalendar.alarmToCalendar(this)
-			alarmCal.add(Calendar.MINUTE, repeatFrequency)
+			// Minutes
+			1 ->
+			{
+				// Create a calendar from the alarm and add the repeat frequency to it
+				val alarmCal = NacCalendar.alarmToCalendar(this)
+				alarmCal.add(Calendar.MINUTE, repeatFrequency)
 
-			// Update the alarm hour and minute
-			hour = alarmCal.get(Calendar.HOUR_OF_DAY)
-			minute = alarmCal.get(Calendar.MINUTE)
-		}
-		else if (repeatFrequencyUnits == 2)
-		{
-			// Create a calendar from the alarm and add the repeat frequency to it
-			val alarmCal = NacCalendar.alarmToCalendar(this)
-			alarmCal.add(Calendar.HOUR_OF_DAY, repeatFrequency)
+				// Update the alarm hour and minute
+				hour = alarmCal.get(Calendar.HOUR_OF_DAY)
+				minute = alarmCal.get(Calendar.MINUTE)
+			}
 
-			// Update the alarm hour
-			hour = alarmCal.get(Calendar.HOUR_OF_DAY)
+			// Hours
+			2 ->
+			{
+				// Create a calendar from the alarm and add the repeat frequency to it
+				val alarmCal = NacCalendar.alarmToCalendar(this)
+				alarmCal.add(Calendar.HOUR_OF_DAY, repeatFrequency)
+
+				// Update the alarm hour
+				hour = alarmCal.get(Calendar.HOUR_OF_DAY)
+			}
 		}
 	}
 
@@ -969,7 +982,7 @@ class NacAlarm()
 			return
 		}
 
-		// Alarm should be repeated
+		// Alarm will repeat
 		if (shouldRepeat)
 		{
 			val cal = NacCalendar.getNextAlarmDay(this)!!
@@ -977,11 +990,9 @@ class NacAlarm()
 
 			timeOfDismissEarlyAlarm = time
 		}
-		// Alarm should only be run once
-		else
-		{
-			toggleAlarm()
-		}
+
+		// Dismiss the alarm
+		dismiss()
 	}
 
 	/**
@@ -1255,6 +1266,37 @@ class NacAlarm()
 	fun setDays(value: Int)
 	{
 		days = Day.valueToDays(value)
+	}
+
+	/**
+	 * Skip an alarm.
+	 */
+	fun skipAlarm()
+	{
+		// Check if the alarm does not need to be skipped
+		if (!shouldSkipNextAlarm)
+		{
+			return
+		}
+
+		// Get the next time this alarm will run
+		val nextCal = NacCalendar.getNextAlarmDay(this)
+
+		// There is no next alarm
+		if (nextCal == null)
+		{
+			// Disable the alarm since there is no next time this will run
+			isEnabled = false
+		}
+		// Date is set
+		else if (date.isNotEmpty())
+		{
+			// Clear the date
+			date = ""
+		}
+
+		// Clear the skip flag
+		shouldSkipNextAlarm = false
 	}
 
 	/**

@@ -15,6 +15,7 @@ import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissEarlyService
 import com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderService
 import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.util.NacCalendar
+import com.nfcalarmclock.util.NacCalendar.calendarToString
 import java.util.Calendar
 import kotlin.random.Random
 
@@ -37,6 +38,7 @@ object NacScheduler
 
 		// Get the calendar for the next alarm
 		val nextAlarmCal = NacCalendar.getNextAlarmDay(alarm, ignoreSkip = true)!!
+		println("Next alarm : ${calendarToString(nextAlarmCal, "EEE MMM dd HH:mm:ss z yyyy")}")
 
 		// Add the alarm
 		addAlarm(context, alarm, nextAlarmCal)
@@ -52,7 +54,7 @@ object NacScheduler
 		}
 
 		// Check if should schedule a dismiss early notification
-		if (alarm.canDismissEarly && alarm.shouldShowDismissEarlyNotification)
+		if (alarm.canDismissEarly && alarm.shouldShowDismissEarlyNotification && !alarm.shouldSkipNextAlarm)
 		{
 			addDismissEarly(context, alarm)
 		}

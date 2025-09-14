@@ -41,6 +41,7 @@ object NacCalendar
 
 	/**
 	 * Convert the alarm on the given day to a Calendar.
+	 * TODO: Should this be only run weekly? CHECK
 	 *
 	 * @param  alarm  The alarm.
 	 * @param  day  The day to convert.
@@ -106,6 +107,7 @@ object NacCalendar
 
 	/**
 	 * Convert all the days an alarm is scheduled to go off, to Calendars.
+	 * TODO: Check how to use dismiss early alarm time
 	 *
 	 * @param  alarm  The alarm.
 	 *
@@ -115,8 +117,14 @@ object NacCalendar
 	{
 		val calendars: MutableList<Calendar> = ArrayList()
 
+		// Date is set
+		if (alarm.date.isNotEmpty())
+		{
+			val c = alarmToCalendar(alarm)
+			calendars.add(c)
+		}
 		// Days are selected
-		if (alarm.days.isNotEmpty())
+		else if (alarm.days.isNotEmpty())
 		{
 			val timeOfDismissEarlyAlarm = alarm.timeOfDismissEarlyAlarm
 
@@ -183,8 +191,9 @@ object NacCalendar
 
 	/**
 	 * Convert the calendar to a string in the given format.
+	 * TODO: Change back to private
 	 */
-	private fun calendarToString(calendar: Calendar, format: String?): String
+	fun calendarToString(calendar: Calendar, format: String?): String
 	{
 		// Create the date format
 		val locale = Locale.getDefault()
@@ -434,6 +443,22 @@ object NacCalendar
 	}
 
 	/**
+	 * Convert a repeat frequency unit to a calendar field.
+	 */
+	fun repeatFrequencyUnitToCalendarField(unit: Int): Int
+	{
+		return when (unit)
+		{
+			1 -> Calendar.MINUTE
+			2 -> Calendar.HOUR_OF_DAY
+			3 -> Calendar.DAY_OF_MONTH
+			4 -> Calendar.WEEK_OF_YEAR
+			5 -> Calendar.MONTH
+			else -> Calendar.WEEK_OF_YEAR
+		}
+	}
+
+	/**
 	 * Get the Calendar day on which the given alarm will run next.
 	 *
 	 * @param  alarm  The alarm who's days to check.
@@ -444,14 +469,6 @@ object NacCalendar
 	 */
 	fun getNextAlarmDay(alarm: NacAlarm, ignoreSkip: Boolean = false): Calendar?
 	{
-		// Check if the date is set
-		if (alarm.date.isNotEmpty())
-		{
-			// TODO: This is not taking into account skip. Should I?
-			// Alarm has a date. Converting to a calendar is easy
-			return alarmToCalendar(alarm)
-		}
-
 		// Convert the alarm to a list of calendar instances
 		val calendars = alarmToCalendars(alarm)
 
@@ -464,20 +481,16 @@ object NacCalendar
 			// Check if there was only one calendar in the list, but the alarm is scheduled to be repeated
 			if ((calendars.size == 1) && alarm.shouldRepeat)
 			{
-				println("SKIPPIO. Should skip alarm but do not ignore skip and only one day in list: ${alarm.repeatFrequency} | ${alarm.repeatFrequencyUnits} | ${alarm.repeatFrequencyDaysToRunBeforeStarting}")
+				println("SKIPPIO. Should skip alarm but do not ignore skip and only one calendar in list: ${alarm.repeatFrequency} | ${alarm.repeatFrequencyUnits} | ${alarm.repeatFrequencyDaysToRunBeforeStarting}")
 				// Get the calendar field unit to use to adjust the calendar date
-				val fieldUnit = when (alarm.repeatFrequencyUnits)
-				{
-					1 -> Calendar.MINUTE
-					2 -> Calendar.HOUR_OF_DAY
-					3 -> Calendar.DAY_OF_MONTH
-					4 -> Calendar.WEEK_OF_YEAR
-					else -> Calendar.WEEK_OF_YEAR
-				}
-
+				val fieldUnit = repeatFrequencyUnitToCalendarField(alarm.repeatFrequencyUnits)
 
 				// Add the repeat frequency to the calendar
+				var yo = calendarToString(nextDay, "EEE MMM dd HH:mm:ss z yyyy")
+				println("Before alarm : $yo")
 				nextDay.add(fieldUnit, alarm.repeatFrequency)
+				yo = calendarToString(nextDay, "EEE MMM dd HH:mm:ss z yyyy")
+				println("After alarm : $yo")
 				nextDay
 			}
 			else
@@ -671,76 +684,36 @@ object NacCalendar
 					// Build a calendar with the date
 					val cal = alarmToCalendar(alarm)
 
-					// Return a formatted string
-					return DateFormat.format("MMM d", cal).toString()
+					// Convert date to string
+					val date = DateFormat.format("MMM d", cal).toString()
+
+					// Alarm will repeat
+					if (alarm.shouldRepeat)
+					{
+						// Get the repeat frequency string
+						val repeatFrequency = repeatFrequencyToString(context, alarm)
+
+						// Combine the date and repeat frequency string
+						return "$date \u2027 $repeatFrequency"
+					}
+					// Do not repeat alarm
+					else
+					{
+						// Simply return the date
+						return date
+					}
 				}
 				// No days
 				else if (alarm.days.isEmpty())
 				{
-					// Check the repeat frequency units
-					return when (alarm.repeatFrequencyUnits)
-					{
-						// Minutes
-						1 ->
-						{
-							// Every X minutes
-							context.resources.getQuantityString(R.plurals.repeat_minutely,
-								alarm.repeatFrequency, alarm.repeatFrequency)
-						}
-
-						// Hours
-						2 ->
-						{
-							// Every X hours
-							context.resources.getQuantityString(R.plurals.repeat_hourly,
-								alarm.repeatFrequency, alarm.repeatFrequency)
-						}
-
-						// Days
-						3 ->
-						{
-							// Check if repeating every day
-							if (alarm.repeatFrequency == 1)
-							{
-								// Today or tomorrow
-								oneTimeAlarmToString(context, alarm)
-							}
-							// Repeating every X days
-							else
-							{
-								// Every X days
-								context.resources.getQuantityString(R.plurals.repeat_daily,
-									alarm.repeatFrequency, alarm.repeatFrequency)
-							}
-						}
-
-						// Weeks
-						4 ->
-						{
-							// Check if repeating every week
-							if (alarm.repeatFrequency == 1)
-							{
-								// Today or tomorrow
-								oneTimeAlarmToString(context, alarm)
-							}
-							// Repeating every X days
-							else
-							{
-								// Every X weeks
-								context.resources.getQuantityString(R.plurals.repeat_weekly,
-									alarm.repeatFrequency, alarm.repeatFrequency)
-							}
-						}
-
-						// Unknown
-						else -> oneTimeAlarmToString(context, alarm)
-					}
+					// Repeat frequency string
+					return repeatFrequencyToString(context, alarm)
 				}
 				// Combination of days
 				else
 				{
 					// Build string
-					var string = when (alarm.days)
+					val days = when (alarm.days)
 					{
 						// Every day
 						WEEK ->
@@ -764,15 +737,20 @@ object NacCalendar
 						}
 					}
 
-					// Check if a repeat frequency is set for more than every 1 week
-					if ((alarm.repeatFrequencyUnits == 4) && (alarm.repeatFrequency != 1))
+					// Alarm should be repeat at a frequency that is NOT just every 1 week (which is the norm)
+					if (alarm.shouldRepeat && !((alarm.repeatFrequencyUnits == 4) && (alarm.repeatFrequency == 1)))
 					{
-						string += " \u2027 "
-						string += context.resources.getQuantityString(R.plurals.repeat_weekly,
-							alarm.repeatFrequency, alarm.repeatFrequency)
-					}
+						// Get the repeat frequency string
+						val repeatFrequency = repeatFrequencyToString(context, alarm)
 
-					return string
+						// Combine the date and repeat frequency string
+						return "$days \u2027 $repeatFrequency"
+					}
+					// Alarm will not be repeated or if it is, it will be every 1 week (the norm)
+					else
+					{
+						return days
+					}
 				}
 			}
 
@@ -895,6 +873,95 @@ object NacCalendar
 				else
 				{
 					context.getString(R.string.dow_tomorrow)
+				}
+			}
+
+			/**
+			 * Convert a repeat frequency to a string.
+			 *
+			 * @return A repeat frequency to a string.
+			 */
+			private fun repeatFrequencyToString(
+				context: Context,
+				alarm: NacAlarm
+			): String
+			{
+				// Check the repeat frequency units
+				return when (alarm.repeatFrequencyUnits)
+				{
+					// Minutes
+					1 ->
+					{
+						// Every X minutes
+						context.resources.getQuantityString(R.plurals.repeat_minutely,
+							alarm.repeatFrequency, alarm.repeatFrequency)
+					}
+
+					// Hours
+					2 ->
+					{
+						// Every X hours
+						context.resources.getQuantityString(R.plurals.repeat_hourly,
+							alarm.repeatFrequency, alarm.repeatFrequency)
+					}
+
+					// Days
+					3 ->
+					{
+						// Check if repeating every day
+						if (alarm.repeatFrequency == 1)
+						{
+							// Today or tomorrow
+							oneTimeAlarmToString(context, alarm)
+						}
+						// Repeating every X days
+						else
+						{
+							// Every X days
+							context.resources.getQuantityString(R.plurals.repeat_daily,
+								alarm.repeatFrequency, alarm.repeatFrequency)
+						}
+					}
+
+					// Weeks
+					4 ->
+					{
+						// Check if repeating every week
+						if (alarm.repeatFrequency == 1)
+						{
+							// Today or tomorrow
+							oneTimeAlarmToString(context, alarm)
+						}
+						// Repeating every X weeks
+						else
+						{
+							// Every X weeks
+							context.resources.getQuantityString(R.plurals.repeat_weekly,
+								alarm.repeatFrequency, alarm.repeatFrequency)
+						}
+					}
+
+					// Months
+					5 ->
+					{
+						// TODO: Test this, don't really understand it
+						// Check if repeating every month
+						if (alarm.repeatFrequency == 1)
+						{
+							// Today or tomorrow
+							oneTimeAlarmToString(context, alarm)
+						}
+						// Repeating every X months
+						else
+						{
+							// Every X months
+							context.resources.getQuantityString(R.plurals.repeat_monthly,
+								alarm.repeatFrequency, alarm.repeatFrequency)
+						}
+					}
+
+					// Unknown
+					else -> oneTimeAlarmToString(context, alarm)
 				}
 			}
 

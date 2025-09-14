@@ -367,8 +367,8 @@ class NacActiveAlarmService
 
 				scope.launch {
 
-					// Clear the skip flag
-					alarm!!.shouldSkipNextAlarm = false
+					// Skip the alarm
+					alarm!!.skipAlarm()
 
 					// Update the database
 					alarmRepository.update(alarm!!)

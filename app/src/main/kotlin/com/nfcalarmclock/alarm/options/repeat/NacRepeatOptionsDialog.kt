@@ -79,9 +79,11 @@ class NacRepeatOptionsDialog
 		// Determine the resource ID of the given unit
 		val unitsId = when (units)
 		{
-			0 -> R.plurals.standalone_unit_week
-			1 -> R.plurals.standalone_unit_day
+			1 -> R.plurals.standalone_unit_minute
 			2 -> R.plurals.standalone_unit_hour
+			3 -> R.plurals.standalone_unit_day
+			4 -> R.plurals.standalone_unit_week
+			5 -> R.plurals.standalone_unit_month
 			else -> R.plurals.standalone_unit_week
 		}
 
@@ -93,12 +95,40 @@ class NacRepeatOptionsDialog
 	}
 
 	/**
+	 * Get the repeat frequency values from the repeat frequency units index.
+	 */
+	fun getRepeatFrequencyValuesFromUnitsIndex(index: Int): Array<String>
+	{
+		return when (index)
+		{
+			// Minute (max 8 hours)
+			0 -> (15..480)
+
+			// Hour (max 1 week)
+			1 -> (1..168)
+
+			// Day
+			2 -> (1..365)
+
+			// Week
+			3 -> (1..52)
+
+			// Month
+			4 -> (1..12)
+
+			// Week
+			else -> (1..52)
+		}.map { it.toString() }.toTypedArray()
+	}
+
+	/**
 	 * Called when the Ok button is clicked.
 	 */
 	override fun onOkClicked(alarm: NacAlarm?)
 	{
 		// Update the alarm
 		alarm?.shouldRepeat = true
+		alarm?.shouldSkipNextAlarm = false
 		alarm?.repeatFrequency = selectedRepeatFrequencyValue
 		alarm?.repeatFrequencyUnits = selectedRepeatFrequencyUnits
 		alarm?.repeatFrequencyDaysToRunBeforeStarting = selectedDaysToRunBeforeFrequency
@@ -107,9 +137,7 @@ class NacRepeatOptionsDialog
 		if (selectedRepeatFrequencyUnits != 4)
 		{
 			// Clear various alarm attributes
-			alarm?.shouldSkipNextAlarm = false
 			alarm?.repeatFrequencyDaysToRunBeforeStarting = NacCalendar.Day.NONE
-			alarm?.date = ""
 			alarm?.setDays(0)
 		}
 	}
@@ -145,30 +173,30 @@ class NacRepeatOptionsDialog
 			context.resources.getQuantityString(R.plurals.standalone_unit_minute, 1),
 			context.resources.getQuantityString(R.plurals.standalone_unit_hour, 1),
 			context.resources.getQuantityString(R.plurals.standalone_unit_day, 1),
-			context.resources.getQuantityString(R.plurals.standalone_unit_week, 1)
-			//context.resources.getQuantityString(R.plurals.standalone_unit_month, 1)
+			context.resources.getQuantityString(R.plurals.standalone_unit_week, 1),
+			context.resources.getQuantityString(R.plurals.standalone_unit_month, 1),
 		).toTypedArray()
 
 		pluralUnits = listOf(
 			context.resources.getQuantityString(R.plurals.standalone_unit_minute, 5),
 			context.resources.getQuantityString(R.plurals.standalone_unit_hour, 5),
 			context.resources.getQuantityString(R.plurals.standalone_unit_day, 5),
-			context.resources.getQuantityString(R.plurals.standalone_unit_week, 5)
-			//context.resources.getQuantityString(R.plurals.standalone_unit_month, 5)
+			context.resources.getQuantityString(R.plurals.standalone_unit_week, 5),
+			context.resources.getQuantityString(R.plurals.standalone_unit_month, 5),
 		).toTypedArray()
 
 		// Get the alarm, or build a new one, to get default values
 		val a = alarm ?: NacAlarm.build(sharedPreferences)
 
 		// Set the default selected values
-		// TODO: Think about how I want to do current days vs days to run before starting
 		selectedRepeatFrequencyValue = a.repeatFrequency
 		selectedRepeatFrequencyUnits = a.repeatFrequencyUnits
 		selectedDaysToRunBeforeFrequency = a.repeatFrequencyDaysToRunBeforeStarting
+			.ifEmpty { a.days.ifEmpty {  NacCalendar.Day.WEEKDAY } }
 
 		// Setup the views
 		setupRepeatFrequency(a.repeatFrequency, a.repeatFrequencyUnits)
-		setupDaysToRun(a.days)
+		setupDaysToRun(selectedDaysToRunBeforeFrequency)
 		setDaysToRunUsability()
 	}
 
@@ -289,33 +317,6 @@ class NacRepeatOptionsDialog
 			setDaysToRunUsability()
 
 		}
-	}
-
-	/**
-	 * Get the repeat frequency values from the repeat frequency units index.
-	 */
-	fun getRepeatFrequencyValuesFromUnitsIndex(index: Int): Array<String>
-	{
-		return when (index)
-		{
-			// Minute (max 8 hours)
-			0 -> (15..480)
-
-			// Hour (max 1 week)
-			1 -> (1..168)
-
-			// Day
-			2 -> (1..365)
-
-			// Week
-			3 -> (1..52)
-
-			// Month
-			4 -> (1..12)
-
-			// Week
-			else -> (1..52)
-		}.map { it.toString() }.toTypedArray()
 	}
 
 }

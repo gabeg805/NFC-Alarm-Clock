@@ -1039,8 +1039,8 @@ class NacCardHolder(
 	}
 
 	/**
-	 * Refresh the extra view, which contains any one of the "Dismiss",
-	 * "Dismiss early", or "Skipping next alarm" views.
+	 * Refresh the extra view, which contains any one of the "Dismiss", or
+	 * "Dismiss early" views.
 	 */
 	private fun refreshExtraView()
 	{
@@ -1073,7 +1073,6 @@ class NacCardHolder(
 				// Show the "Dismiss" button
 				dismissButton.visibility = View.VISIBLE
 				dismissEarlyButton.visibility = View.GONE
-				//skipNextAlarmView.visibility = View.GONE
 			}
 			// Alarm will alarm soon
 			else if (alarm!!.willAlarmSoon())
@@ -1081,7 +1080,6 @@ class NacCardHolder(
 				// Show the "Dismiss early" button
 				dismissButton.visibility = View.GONE
 				dismissEarlyButton.visibility = View.VISIBLE
-				//skipNextAlarmView.visibility = View.GONE
 			}
 		}
 	}
@@ -1700,9 +1698,6 @@ class NacCardHolder(
 				// Check if no days are selected
 				if (alarm!!.days.isEmpty())
 				{
-					// Disable repeat
-					//alarm!!.shouldRepeat = false
-
 					// Change the repeat frequency to be every day
 					alarm!!.repeatFrequency = 1
 					alarm!!.repeatFrequencyUnits = 3
@@ -2270,7 +2265,6 @@ class NacCardHolder(
 	{
 		// Alarm is in use (so "Dismiss" should be shown),
 		// or will alarm soon (so "Dismiss early" should be shown),
-		// or the next alarm was skipped (so "Skipping next alarm" should be shown)
 		val extraVis = if (shouldShowExtraView()) View.VISIBLE else View.GONE
 
 		// The extra view should be hidden so show the expand button on its
@@ -2302,6 +2296,7 @@ class NacCardHolder(
 
 		// Setup the skip icon
 		setSummarySkipNextAlarmIcon()
+		refreshExtraViewWithCollapse()
 
 		// Call the update listener
 		callOnCardUpdatedListener()

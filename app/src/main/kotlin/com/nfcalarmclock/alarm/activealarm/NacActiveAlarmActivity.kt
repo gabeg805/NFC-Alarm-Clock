@@ -245,9 +245,7 @@ class NacActiveAlarmActivity
 	override fun onNewIntent(intent: Intent)
 	{
 		// Super
-		println("onNewIntent() Before")
 		super.onNewIntent(intent)
-		println("onNewIntent() After")
 
 		// Set the intent
 		setIntent(intent)
@@ -277,15 +275,12 @@ class NacActiveAlarmActivity
 	@OptIn(UnstableApi::class)
 	public override fun onResume()
 	{
-		println("onResume() Before")
 		// Super
 		super.onResume()
-		println("onResume() After")
 
 		// NFC tag was scanned. Check if can dismiss
 		if (NacNfc.wasScanned(intent) && checkCanDismissWithNfc())
 		{
-			println("onResume() dismiss service")
 			// Dismiss the alarm service with NFC
 			NacActiveAlarmService.dismissAlarmServiceWithNfc(this, alarm!!)
 		}

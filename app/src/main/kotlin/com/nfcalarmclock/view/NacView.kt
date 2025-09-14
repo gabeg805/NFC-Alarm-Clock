@@ -112,15 +112,24 @@ fun MaterialAutoCompleteTextView.setTextFromIndex(index: Int, fallback: Int = 1)
 	var newIndex = index
 
 	// Check if the index is invalid
-	if (index < 0)
+	if ((index < 0) || (this.adapter.count == 0))
 	{
 		return
 	}
 	// Index exceeds number of items in adapter
 	else if (index >= this.adapter.count)
 	{
-		// Set to the fallback index
-		newIndex = fallback
+		// Check the fallback value
+		newIndex = if (fallback >= this.adapter.count)
+		{
+			// Set to the 0th index
+			0
+		}
+		else
+		{
+			// Set to the fallback index
+			fallback
+		}
 	}
 
 	// Get the text
