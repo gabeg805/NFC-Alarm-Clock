@@ -28,6 +28,14 @@ class NacDateAndTimePickerDialog
 {
 
 	/**
+	 * Listener for when the date is cleared.
+	 */
+	fun interface OnDateClearedListener
+	{
+		fun onDateCleared(datePicker: DatePicker)
+	}
+
+	/**
 	 * Listener for when the date is selected.
 	 */
 	fun interface OnDateSelectedListener
@@ -57,6 +65,11 @@ class NacDateAndTimePickerDialog
 	 * Shared preferences.
 	 */
 	private lateinit var timePicker: TimePicker
+
+	/**
+	 * Date cleared listener.
+	 */
+	var onDateClearedListener: OnDateClearedListener? = null
 
 	/**
 	 * Date selected listener.
@@ -118,6 +131,7 @@ class NacDateAndTimePickerDialog
 		val timeButton: MaterialButton = dialog!!.findViewById(R.id.set_time)
 		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
 		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
+		val clearButton: MaterialButton = dialog!!.findViewById(R.id.clear_button)
 
 		// Setup the date and time pickers
 		setupDatePicker(alarm)
@@ -134,6 +148,13 @@ class NacDateAndTimePickerDialog
 			timeButton.visibility = View.VISIBLE
 			dateButton.visibility = View.GONE
 
+			// Alarm has a date set
+			if (alarm.date.isNotEmpty())
+			{
+				// Show the clear button
+				clearButton.visibility = View.VISIBLE
+			}
+
 			// Constrain the ok button to be beneath the date picker
 			okButton.updateLayoutParams<ConstraintLayout.LayoutParams> {
 				topToBottom = R.id.set_time
@@ -144,13 +165,16 @@ class NacDateAndTimePickerDialog
 		// Setup the time button
 		timeButton.setOnClickListener {
 
-			// Show the date picker
+			// Show the time picker
 			timePicker.visibility = View.VISIBLE
 			datePicker.visibility = View.GONE
 
 			// Show the date button
 			timeButton.visibility = View.GONE
 			dateButton.visibility = View.VISIBLE
+
+			// Hide the clear button
+			clearButton.visibility = View.GONE
 
 			// Constrain the ok button to be beneath the time picker
 			okButton.updateLayoutParams<ConstraintLayout.LayoutParams> {
@@ -162,6 +186,7 @@ class NacDateAndTimePickerDialog
 		// Setup the color of the ok and cancel button
 		okButton.setTextColor(sharedPreferences.themeColor)
 		cancelButton.setTextColor(sharedPreferences.themeColor)
+		clearButton.setTextColor(sharedPreferences.themeColor)
 
 		// Setup the ok button
 		okButton.setOnClickListener {
@@ -169,23 +194,37 @@ class NacDateAndTimePickerDialog
 			// Time picker is visible
 			if (timePicker.isVisible)
 			{
+				// Call the listener
 				onTimeSelectedListener?.onTimeSelected(timePicker, timePicker.hour,
 					timePicker.minute)
 			}
 			// Date picker is visible
 			else
 			{
+				// Call the listener
 				onDateSelectedListener?.onDateSelected(datePicker, datePicker.year,
 					datePicker.month, datePicker.dayOfMonth)
 			}
 
 			// Dismiss the dialog
 			dismiss()
+
 		}
 
 		// Setup the cancel button
 		cancelButton.setOnClickListener {
 			dismiss()
+		}
+
+		// Setup the clear button
+		clearButton.setOnClickListener {
+
+			// Call the listener
+			onDateClearedListener?.onDateCleared(datePicker)
+
+			// Dismiss the dialog
+			dismiss()
+
 		}
 
 	}
@@ -242,6 +281,7 @@ class NacDateAndTimePickerDialog
 		 */
 		fun create(
 			alarm: NacAlarm,
+			onDateClearedListener: (DatePicker) -> Unit = { },
 			onDateSelectedListener: (DatePicker, Int, Int, Int) -> Unit = { _, _, _, _ -> },
 			onTimeSelectedListener: (TimePicker, Int, Int) -> Unit = { _, _, _ -> },
 		): NacDateAndTimePickerDialog
@@ -253,7 +293,12 @@ class NacDateAndTimePickerDialog
 			// Add the alarm to the dialog
 			dialog.arguments = alarm.toBundle()
 
-			// Set the date listener
+			// Set the date cleared listener
+			dialog.onDateClearedListener = OnDateClearedListener { datePicker ->
+				onDateClearedListener(datePicker)
+			}
+
+			// Set the date set listener
 			dialog.onDateSelectedListener = OnDateSelectedListener { datePicker, year, month, day ->
 				onDateSelectedListener(datePicker, year, month, day)
 			}

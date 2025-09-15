@@ -42,6 +42,7 @@ object NacCalendar
 	/**
 	 * Convert the alarm on the given day to a Calendar.
 	 * TODO: Should this be only run weekly? CHECK
+	 * TODO: Did an every 2 week alarm on Sun (time already had past) with Sun as day to run before starting, and it still starting 2 weeks later. Should start 1 week later, then do 2 weeks
 	 *
 	 * @param  alarm  The alarm.
 	 * @param  day  The day to convert.
@@ -171,17 +172,36 @@ object NacCalendar
 		// Check if the alarm calendar occurs in the past. Need to fix that
 		if (alarmCalendar.before(now))
 		{
-			// Minutely or Hourly
-			if ((alarm.repeatFrequencyUnits == 1) || (alarm.repeatFrequencyUnits == 2))
+			// Check the units of the repeat frequency
+			when (alarm.repeatFrequencyUnits)
 			{
-				// Start the alarm the next day
-				alarmCalendar.add(Calendar.DAY_OF_MONTH, 1)
-			}
-			// Daily
-			else
-			{
-				// Add to the calendar by the repeat frequency value
-				alarmCalendar.add(Calendar.DAY_OF_MONTH, alarm.repeatFrequency)
+				// Minutely or Hourly
+				1, 2 ->
+				{
+					// Start the alarm the next day
+					alarmCalendar.add(Calendar.DAY_OF_MONTH, 1)
+				}
+
+				// Weekly
+				4 ->
+				{
+					// Add to the calendar by the repeat frequency value
+					alarmCalendar.add(Calendar.WEEK_OF_YEAR, alarm.repeatFrequency)
+				}
+
+				// Monthly
+				5 ->
+				{
+					// Add to the calendar by the repeat frequency value
+					alarmCalendar.add(Calendar.MONTH, alarm.repeatFrequency)
+				}
+
+				// Daily
+				else ->
+				{
+					// Add to the calendar by the repeat frequency value
+					alarmCalendar.add(Calendar.DAY_OF_MONTH, alarm.repeatFrequency)
+				}
 			}
 		}
 
@@ -486,11 +506,7 @@ object NacCalendar
 				val fieldUnit = repeatFrequencyUnitToCalendarField(alarm.repeatFrequencyUnits)
 
 				// Add the repeat frequency to the calendar
-				var yo = calendarToString(nextDay, "EEE MMM dd HH:mm:ss z yyyy")
-				println("Before alarm : $yo")
 				nextDay.add(fieldUnit, alarm.repeatFrequency)
-				yo = calendarToString(nextDay, "EEE MMM dd HH:mm:ss z yyyy")
-				println("After alarm : $yo")
 				nextDay
 			}
 			else
@@ -887,6 +903,8 @@ object NacCalendar
 			): String
 			{
 				// Check the repeat frequency units
+				// Note: The "Every X <unit>" for Minutes, Hours, and Months reflects
+				//       what is in alarmToNextOneTimeCalendar()
 				return when (alarm.repeatFrequencyUnits)
 				{
 					// Minutes
@@ -926,38 +944,17 @@ object NacCalendar
 					// Weeks
 					4 ->
 					{
-						// Check if repeating every week
-						if (alarm.repeatFrequency == 1)
-						{
-							// Today or tomorrow
-							oneTimeAlarmToString(context, alarm)
-						}
-						// Repeating every X weeks
-						else
-						{
-							// Every X weeks
-							context.resources.getQuantityString(R.plurals.repeat_weekly,
-								alarm.repeatFrequency, alarm.repeatFrequency)
-						}
+						// Every X weeks
+						context.resources.getQuantityString(R.plurals.repeat_weekly,
+							alarm.repeatFrequency, alarm.repeatFrequency)
 					}
 
 					// Months
 					5 ->
 					{
-						// TODO: Test this, don't really understand it
-						// Check if repeating every month
-						if (alarm.repeatFrequency == 1)
-						{
-							// Today or tomorrow
-							oneTimeAlarmToString(context, alarm)
-						}
-						// Repeating every X months
-						else
-						{
-							// Every X months
-							context.resources.getQuantityString(R.plurals.repeat_monthly,
-								alarm.repeatFrequency, alarm.repeatFrequency)
-						}
+						// Every X months
+						context.resources.getQuantityString(R.plurals.repeat_monthly,
+							alarm.repeatFrequency, alarm.repeatFrequency)
 					}
 
 					// Unknown

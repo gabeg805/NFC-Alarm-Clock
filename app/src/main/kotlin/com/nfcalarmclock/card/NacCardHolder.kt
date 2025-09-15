@@ -1385,7 +1385,6 @@ class NacCardHolder(
 		// Get the is enabled and should repeat states from the alarm
 		//val isEnabled = alarm!!.areDaysSelected
 		//val shouldRepeat = alarm!!.areDaysSelected && alarm!!.shouldRepeat
-		// TODO: TEST THIS AND SEE IF REPEAT STILL WORKS LIKE THIS
 		val shouldRepeat = alarm!!.shouldRepeat
 
 		// Check if the repeat button status and the alarm should repeat status are
@@ -1989,8 +1988,9 @@ class NacCardHolder(
 				// Toggle the repeat button
 				alarm!!.toggleRepeat()
 
-				// Setup the skip icon
+				// Setup the skip icon and days string
 				setSummarySkipNextAlarmIcon()
+				setSummaryDaysView()
 
 				// Call the listener
 				onCardUseRepeatChangedListener?.onCardUseRepeatChanged(this, alarm!!)

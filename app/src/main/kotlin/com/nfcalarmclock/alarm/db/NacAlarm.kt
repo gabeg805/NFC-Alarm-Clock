@@ -652,6 +652,50 @@ class NacAlarm()
 	}
 
 	/**
+	 * Add the repeat frequency to the alarm time, if it should be added.
+	 */
+	fun addRepeatFrequencyToTime()
+	{
+		// Alarm will not repeat
+		if (!shouldRepeat)
+		{
+			return
+		}
+
+		// Check repeat frequency units
+		when (repeatFrequencyUnits)
+		{
+			// Minutes
+			1 ->
+			{
+				// Create a calendar from the alarm
+				val alarmCal = NacCalendar.alarmToCalendar(this)
+
+				// Add the repeat frequency to the calendar
+				alarmCal.add(Calendar.MINUTE, repeatFrequency)
+
+				// Update the alarm hour and minute
+				hour = alarmCal.get(Calendar.HOUR_OF_DAY)
+				minute = alarmCal.get(Calendar.MINUTE)
+			}
+
+			// Hours
+			2 ->
+			{
+				// Create a calendar from the alarm
+				val alarmCal = NacCalendar.alarmToCalendar(this)
+
+				// Add the repeat frequency to the calendar
+				alarmCal.add(Calendar.HOUR_OF_DAY, repeatFrequency)
+
+				// Update the alarm hour
+				hour = alarmCal.get(Calendar.HOUR_OF_DAY)
+			}
+		}
+
+	}
+
+	/**
 	 * Add to the time, in milliseconds, that the alarm is active.
 	 *
 	 * @param  time  Time, in milliseconds, to add to the active time.
@@ -936,38 +980,17 @@ class NacAlarm()
 			date = ""
 		}
 
+		// Alarm will repeat
+		if (shouldRepeat)
+		{
+			// Add the repeat frequency to the alarm time, if it should be added
+			addRepeatFrequencyToTime()
+		}
 		// Alarm will not repeat
-		if (!shouldRepeat)
+		else
 		{
 			// Toggle the alarm
 			toggleAlarm()
-		}
-
-		// Check repeat frequency units
-		when (repeatFrequencyUnits)
-		{
-			// Minutes
-			1 ->
-			{
-				// Create a calendar from the alarm and add the repeat frequency to it
-				val alarmCal = NacCalendar.alarmToCalendar(this)
-				alarmCal.add(Calendar.MINUTE, repeatFrequency)
-
-				// Update the alarm hour and minute
-				hour = alarmCal.get(Calendar.HOUR_OF_DAY)
-				minute = alarmCal.get(Calendar.MINUTE)
-			}
-
-			// Hours
-			2 ->
-			{
-				// Create a calendar from the alarm and add the repeat frequency to it
-				val alarmCal = NacCalendar.alarmToCalendar(this)
-				alarmCal.add(Calendar.HOUR_OF_DAY, repeatFrequency)
-
-				// Update the alarm hour
-				hour = alarmCal.get(Calendar.HOUR_OF_DAY)
-			}
 		}
 	}
 
@@ -1295,6 +1318,13 @@ class NacAlarm()
 			date = ""
 		}
 
+		// Alarm will repeat
+		if (shouldRepeat)
+		{
+			// Add the repeat frequency to the alarm time, if it should be added
+			addRepeatFrequencyToTime()
+		}
+
 		// Clear the skip flag
 		shouldSkipNextAlarm = false
 	}
@@ -1383,7 +1413,7 @@ class NacAlarm()
 	/**
 	 * Toggle today.
 	 */
-	private fun toggleToday()
+	fun toggleToday()
 	{
 		// Get today's day
 		val day = Day.TODAY
@@ -2039,6 +2069,7 @@ class NacAlarm()
 /**
  * Hilt module to provide an instance of an alarm.
  */
+@Suppress("unused")
 @InstallIn(SingletonComponent::class)
 @Module
 class NacAlarmModule

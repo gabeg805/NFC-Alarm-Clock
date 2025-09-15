@@ -78,6 +78,11 @@ class NacWakeupProcess(
 	private val restrictVolumeHandler: Handler = Handler(context.mainLooper)
 
 	/**
+	 * Watchdog to make sure media is playing when it should be playing.
+	 */
+	private val mediaWatchdogHandler: Handler = Handler(context.mainLooper)
+
+	/**
 	 * Volume level to restrict any volume changes to.
 	 *
 	 * This is not just the alarm volume, since if the user wants to gradually
@@ -163,7 +168,8 @@ class NacWakeupProcess(
 			{
 				// Use handler to start wake up process so that the media
 				// player is accessed on the correct thread
-				continueWakeupHandler.post { simpleStart() }
+				println("onDoneSpeak()")
+				continueWakeupHandler.post { startNoTts() }
 			}
 
 			/**
@@ -171,6 +177,7 @@ class NacWakeupProcess(
 			 */
 			override fun onStartSpeaking()
 			{
+				println("onStartSpeaking()")
 				// Stop any vibration and flashlight when TTS is playing
 				vibrator?.cleanup()
 				flashlight?.cleanup()
@@ -179,9 +186,11 @@ class NacWakeupProcess(
 				// player is accessed on the correct thread
 				continueWakeupHandler.post {
 
+					println("Check was playing? ${mediaPlayer?.wasPlaying}")
 					// Check if the media player was playing music
 					if (mediaPlayer?.wasPlaying == true)
 					{
+						println("PAUSE DA MUSIC")
 						// Pause the media player until done speaking
 						mediaPlayer.pause()
 					}
@@ -225,6 +234,9 @@ class NacWakeupProcess(
 		// Cleanup the continue wakeup handler
 		continueWakeupHandler.removeCallbacksAndMessages(null)
 
+		// Cleanup the media watchdog handler
+		mediaWatchdogHandler.removeCallbacksAndMessages(null)
+
 		// Cleanup the gradually increasing volume handler
 		graduallyIncreaseVolumeHandler.removeCallbacksAndMessages(null)
 
@@ -261,12 +273,16 @@ class NacWakeupProcess(
 			volumeToRestrictChangeTo = newVolume
 			audioAttributes.streamVolume = newVolume
 		}
+		println("Current volume : $currentVolume | Alarm volume : $alarmVolume | Stream : ${audioAttributes.streamVolume}")
 
 		// Wait for a period of time before increasing the volume again.
 		// This will get called even if the volume does not need to change, in
 		// case the user tries to lower then volume after the alarm volume
 		// level has been reached
-		graduallyIncreaseVolumeHandler.postDelayed({ graduallyIncreaseVolume() },
+		graduallyIncreaseVolumeHandler.postDelayed({
+			println("Gradually increase the bit")
+			graduallyIncreaseVolume()
+												   },
 			alarm.graduallyIncreaseVolumeWaitTime * 1000L)
 	}
 
@@ -305,7 +321,10 @@ class NacWakeupProcess(
 		}
 
 		// Run the handler
-		restrictVolumeHandler.postDelayed({ restrictVolume() },
+		restrictVolumeHandler.postDelayed({
+			println("Restrict the bit")
+			restrictVolume()
+										  },
 			PERIOD_RESTRICT_VOLUME)
 	}
 
@@ -320,10 +339,12 @@ class NacWakeupProcess(
 			return
 		}
 
+		println("playMusic() : ${mediaPlayer.wasPlaying}")
 		// Check if the media player was playing music
 		if (mediaPlayer.wasPlaying)
 		{
 			// Continue playing what was playing before
+			println("PLAY THAT ASS")
 			mediaPlayer.play()
 		}
 		else
@@ -336,6 +357,7 @@ class NacWakeupProcess(
 			}
 
 			// Play the alarm
+			println("PLAY URI ALARM")
 			val playingUri = mediaPlayer.playAlarm(alarm)
 
 			// Check if the current playing uri does not match the path from the alarm
@@ -349,6 +371,36 @@ class NacWakeupProcess(
 	}
 
 	/**
+	 * Setup the media watchdog to make sure media is playing when it should be.
+	 */
+	private fun setupMediaWatchdog()
+	{
+		// No media needs to be played for this alarm
+		if ((mediaPlayer == null) && (textToSpeech == null))
+		{
+			return
+		}
+
+		// Start the watchdog
+		mediaWatchdogHandler.postDelayed({
+			println("Media watchdog! Media : ${mediaPlayer?.exoPlayer?.isPlaying} | TTS : ${textToSpeech?.isSpeaking()}")
+
+			// Media is not playing and TTS is not speaking
+			if (((mediaPlayer == null) || !mediaPlayer.exoPlayer.isPlaying)
+				&& ((textToSpeech == null) || !textToSpeech.isSpeaking()))
+			{
+				println("HElllo")
+				// Start the wakeup process, everything except for TTS
+				startNoTts()
+			}
+
+			// Recursively call the watchdog
+			setupMediaWatchdog()
+
+		}, 10000)
+	}
+
+	/**
 	 * Setup gradually increasing the volume.
 	 */
 	private fun setupGraduallyIncreaseVolume()
@@ -356,6 +408,7 @@ class NacWakeupProcess(
 		// Set the volume to 0 to start with
 		volumeToRestrictChangeTo = 0
 		audioAttributes.streamVolume = 0
+		println("Setup gradually")
 
 		// Run handler at a cadence in order to gradually increase the volume
 		graduallyIncreaseVolumeHandler.postDelayed({
@@ -375,6 +428,7 @@ class NacWakeupProcess(
 	 */
 	private fun setupRestrictVolume()
 	{
+		println("Setup restrict jank")
 		// Set the volume to restrict to, if any changes occur
 		volumeToRestrictChangeTo = audioAttributes.streamVolume
 
@@ -418,10 +472,65 @@ class NacWakeupProcess(
 	}
 
 	/**
-	 * Start the simple wake up process.
+	 * Speak at the desired frequency.
 	 */
-	fun simpleStart()
+	private fun speak()
 	{
+		println("speak()")
+		// Unable to speak via TTS. The engine is not set yet, or is already
+		// speaking, or there is something in the buffer, or the alarm is not set
+		// yet, or the alarm should not use TTS
+		if (textToSpeech == null || textToSpeech.isSpeaking() || textToSpeech.hasBuffer()
+			|| !alarm.shouldUseTts)
+		{
+			println("Returning immediately...has buffer? ${textToSpeech?.hasBuffer()}")
+			return
+		}
+
+		// Speak via TTS
+		val phrase = NacTranslate.getTtsPhrase(context, alarm.shouldSayCurrentTime, alarm.shouldSayAlarmName, alarm.name)
+		println("Saying : $phrase")
+
+		textToSpeech.speak(phrase, audioAttributes)
+
+		// Check if text to speech should be run at a certain frequency
+		if (alarm.ttsFrequency != 0)
+		{
+			println("Speak delayed on freq : ${alarm.ttsFrequency}")
+			// Wait for some period of time before speaking through TTS again
+			speakHandler.postDelayed({ speak() }, alarm.ttsFrequency*60L*1000L)
+		}
+	}
+
+	/**
+	 * Start the wake up process.
+	 */
+	fun start()
+	{
+		// Setup the volume
+		setupVolume()
+
+		// Start TTS
+		if (alarm.shouldUseTts)
+		{
+			speak()
+		}
+		// Start everything except TTS
+		else
+		{
+			startNoTts()
+		}
+
+		// Setup the media watchdog
+		setupMediaWatchdog()
+	}
+
+	/**
+	 * Start the wake up process, everything except for TTS.
+	 */
+	private fun startNoTts()
+	{
+		println("startNoTts()")
 		// Play music
 		if (alarm.hasMedia)
 		{
@@ -447,53 +556,6 @@ class NacWakeupProcess(
 			{
 				flashlight?.turnOn()
 			}
-		}
-	}
-
-	/**
-	 * Speak at the desired frequency.
-	 */
-	private fun speak()
-	{
-		// Unable to speak via TTS. The engine is not set yet, or is already
-		// speaking, or there is something in the buffer, or the alarm is not set
-		// yet, or the alarm should not use TTS
-		if (textToSpeech == null || textToSpeech.isSpeaking() || textToSpeech.hasBuffer()
-			|| !alarm.shouldUseTts)
-		{
-			return
-		}
-
-		// Speak via TTS
-		val phrase = NacTranslate.getTtsPhrase(context, alarm.shouldSayCurrentTime, alarm.shouldSayAlarmName, alarm.name)
-
-		textToSpeech.speak(phrase, audioAttributes)
-
-		// Check if text to speech should be run at a certain frequency
-		if (alarm.ttsFrequency != 0)
-		{
-			// Wait for some period of time before speaking through TTS again
-			speakHandler.postDelayed({ speak() }, alarm.ttsFrequency*60L*1000L)
-		}
-	}
-
-	/**
-	 * Start the wake up process.
-	 */
-	fun start()
-	{
-		// Setup the volume
-		setupVolume()
-
-		// Start text-to-speech
-		if (alarm.shouldUseTts)
-		{
-			speak()
-		}
-		// Start the simple wakeup process
-		else
-		{
-			simpleStart()
 		}
 	}
 

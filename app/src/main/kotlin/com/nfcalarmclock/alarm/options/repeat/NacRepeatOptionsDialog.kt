@@ -133,8 +133,18 @@ class NacRepeatOptionsDialog
 		alarm?.repeatFrequencyUnits = selectedRepeatFrequencyUnits
 		alarm?.repeatFrequencyDaysToRunBeforeStarting = selectedDaysToRunBeforeFrequency
 
-		// Check if the frequency unit is not by week
-		if (selectedRepeatFrequencyUnits != 4)
+		// Weekly frequency unit
+		if (selectedRepeatFrequencyUnits == 4)
+		{
+			// Days are empty
+			if (alarm?.days?.isEmpty() == true)
+			{
+				// Toggle today
+				alarm.toggleToday()
+			}
+		}
+		// Every other frequency unit
+		else
 		{
 			// Clear various alarm attributes
 			alarm?.repeatFrequencyDaysToRunBeforeStarting = NacCalendar.Day.NONE
@@ -191,8 +201,9 @@ class NacRepeatOptionsDialog
 		// Set the default selected values
 		selectedRepeatFrequencyValue = a.repeatFrequency
 		selectedRepeatFrequencyUnits = a.repeatFrequencyUnits
-		selectedDaysToRunBeforeFrequency = a.repeatFrequencyDaysToRunBeforeStarting
-			.ifEmpty { a.days.ifEmpty {  NacCalendar.Day.WEEKDAY } }
+		selectedDaysToRunBeforeFrequency = a.days.ifEmpty {
+				EnumSet.of(NacCalendar.Day.TODAY)
+		}
 
 		// Setup the views
 		setupRepeatFrequency(a.repeatFrequency, a.repeatFrequencyUnits)

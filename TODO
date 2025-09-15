@@ -2,9 +2,9 @@
 TODO
 ----
 
-* Need to look at all usages of getNextAlarmDay() to make sure there are not any more null errors
+* Remove all print statements and TODO statements that were added, before releasing to production.
 
-* Need to create a watchdog for the music to make sure it's playing.
+* Change repeat toast to include the frequency?
 
 * Check that selected directory for music works.
 

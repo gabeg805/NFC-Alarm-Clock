@@ -241,6 +241,9 @@ class NacTextToSpeech(
 				// Show toast
 				NacUtility.quickToast(context, R.string.error_message_text_to_speech_audio_focus)
 
+				// Clear the buffer, just in case
+				clearBuffer()
+
 				// Call listener that speaking is done
 				utteranceListener.onSpeakingListener?.onDoneSpeaking()
 				return

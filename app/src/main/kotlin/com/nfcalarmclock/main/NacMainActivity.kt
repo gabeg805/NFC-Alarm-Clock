@@ -1890,6 +1890,23 @@ class NacMainActivity
 	{
 		NacDateAndTimePickerDialog.create(
 			alarm,
+			onDateClearedListener = {
+
+				// Clear the date
+				alarm.date = ""
+
+				// Enable the alarm and clear the skip next alarm flag
+				alarm.isEnabled = true
+				alarm.shouldSkipNextAlarm = false
+
+				// Refresh the schedule date views
+				card.refreshScheduleDateViews()
+
+				// Show the next alarm, update the alarm, and save the next alarm
+				showNextAlarm(card, alarm)
+				updateAlarm(alarm)
+
+			},
 			onDateSelectedListener = { _, year, month, day ->
 
 				// Set the date
