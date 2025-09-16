@@ -7,13 +7,13 @@ import android.os.Build
 import android.os.IBinder
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.util.media.NacAudioAttributes
-import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.alarm.options.tts.NacTextToSpeech
 import com.nfcalarmclock.alarm.options.tts.NacTranslate
+import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.util.NacCalendar
 import com.nfcalarmclock.util.addAlarm
 import com.nfcalarmclock.util.getAlarm
+import com.nfcalarmclock.util.media.NacAudioAttributes
 import java.util.Calendar
 
 class NacUpcomingReminderService
@@ -261,6 +261,18 @@ class NacUpcomingReminderService
 			// Create the intent with the alarm service
 			return Intent(ACTION_STOP_SERVICE, null, context, NacUpcomingReminderService::class.java)
 				.addAlarm(alarm)
+		}
+
+		/**
+		 * Stop the service.
+		 */
+		fun stopService(context: Context, alarm: NacAlarm?)
+		{
+			// Create the stop intent
+			val intent = getStopIntent(context, alarm)
+
+			// Start the intent to stop the service
+			context.startService(intent)
 		}
 
 	}

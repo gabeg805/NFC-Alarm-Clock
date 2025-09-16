@@ -34,6 +34,10 @@ class NacDismissEarlyService
 	{
 		// Attempt to get the alarm from the intent
 		val alarm = intent?.getAlarm()
+		println("Dismiss early at your service : ${intent?.action}")
+		println("Alarm : ${alarm?.hour}:${alarm?.minute} | ${alarm?.id} | ${alarm?.timeOfDismissEarlyAlarm}")
+		//alarm?.print()
+		println("AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
 
 		// Check the intent action
 		when (intent?.action)
@@ -42,6 +46,7 @@ class NacDismissEarlyService
 			// Clear the notification by stopping the service
 			ACTION_STOP_SERVICE ->
 			{
+				println("STOP the jank")
 				// Stop the foreground service using the updated form of
 				// stopForeground() for API >= 33
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
@@ -107,6 +112,18 @@ class NacDismissEarlyService
 			// Create the intent with the alarm service
 			return Intent(ACTION_STOP_SERVICE, null, context, NacDismissEarlyService::class.java)
 				.addAlarm(alarm)
+		}
+
+		/**
+		 * Stop the service.
+		 */
+		fun stopService(context: Context, alarm: NacAlarm?)
+		{
+			// Create the stop intent
+			val intent = getStopIntent(context, alarm)
+
+			// Start the intent to stop the service
+			context.startService(intent)
 		}
 
 	}

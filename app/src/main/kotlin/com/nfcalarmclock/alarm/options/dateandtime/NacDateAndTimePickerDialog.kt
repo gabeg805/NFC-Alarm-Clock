@@ -148,12 +148,8 @@ class NacDateAndTimePickerDialog
 			timeButton.visibility = View.VISIBLE
 			dateButton.visibility = View.GONE
 
-			// Alarm has a date set
-			if (alarm.date.isNotEmpty())
-			{
-				// Show the clear button
-				clearButton.visibility = View.VISIBLE
-			}
+			// Show the clear button
+			clearButton.visibility = View.VISIBLE
 
 			// Constrain the ok button to be beneath the date picker
 			okButton.updateLayoutParams<ConstraintLayout.LayoutParams> {

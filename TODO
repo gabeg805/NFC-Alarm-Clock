@@ -2,6 +2,8 @@
 TODO
 ----
 
+* Move NacIntent, NacBundle, etc. but once an update has been committed so that the next changes are solely all the files that were affected by the move
+
 * Remove all print statements and TODO statements that were added, before releasing to production.
 
 * Change repeat toast to include the frequency?

@@ -8,7 +8,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.nfcalarmclock.R
-import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmActivity
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.util.NacCalendar
@@ -120,7 +119,7 @@ class NacDismissEarlyNotification(
 		get()
 		{
 			val id = alarm?.id ?: 0
-			val intent = NacActiveAlarmActivity.getStartIntent(context, alarm)
+			val intent = NacMainActivity.getStartIntent(context)
 
 			// Determine the pending intent flags
 			val flags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE

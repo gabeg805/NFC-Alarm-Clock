@@ -124,7 +124,7 @@ internal fun updateAppWidget(
 	views.setInt(R.id.widget_alarm_above_container, "setGravity", helper.gravity)
 	views.setInt(R.id.widget_alarm_below_container, "setGravity", helper.gravity)
 
-	// Check if the alarm time should be customized
+	// Show alarm time
 	if ((helper.alarmVis == View.VISIBLE) || (helper.alarmBoldVis == View.VISIBLE))
 	{
 		// Set the text

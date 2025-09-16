@@ -11,7 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
- * Receive this signal from AlarmManager and start the foreground service.
+ * Receive this signal from the system.
  */
 @AndroidEntryPoint
 class NacTimeChangeBroadcastReceiver

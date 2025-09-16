@@ -385,11 +385,12 @@ class NacWakeupProcess(
 		mediaWatchdogHandler.postDelayed({
 			println("Media watchdog! Media : ${mediaPlayer?.exoPlayer?.isPlaying} | TTS : ${textToSpeech?.isSpeaking()}")
 
-			// Media is not playing and TTS is not speaking
-			if (((mediaPlayer == null) || !mediaPlayer.exoPlayer.isPlaying)
+			// Media is not playing and TTS is not speaking, which means media should be
+			// playing
+			if (((mediaPlayer != null) && !mediaPlayer.exoPlayer.isPlaying)
 				&& ((textToSpeech == null) || !textToSpeech.isSpeaking()))
 			{
-				println("HElllo")
+				println("HELLLO")
 				// Start the wakeup process, everything except for TTS
 				startNoTts()
 			}
@@ -408,7 +409,6 @@ class NacWakeupProcess(
 		// Set the volume to 0 to start with
 		volumeToRestrictChangeTo = 0
 		audioAttributes.streamVolume = 0
-		println("Setup gradually")
 
 		// Run handler at a cadence in order to gradually increase the volume
 		graduallyIncreaseVolumeHandler.postDelayed({
@@ -428,7 +428,6 @@ class NacWakeupProcess(
 	 */
 	private fun setupRestrictVolume()
 	{
-		println("Setup restrict jank")
 		// Set the volume to restrict to, if any changes occur
 		volumeToRestrictChangeTo = audioAttributes.streamVolume
 

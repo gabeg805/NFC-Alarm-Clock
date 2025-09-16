@@ -55,6 +55,7 @@ import com.nfcalarmclock.alarm.options.nfc.NacNfc
 import com.nfcalarmclock.alarm.options.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
 import com.nfcalarmclock.alarm.options.snoozeoptions.NacSnoozeOptionsDialog
+import com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderService
 import com.nfcalarmclock.card.NacCardAdapter
 import com.nfcalarmclock.card.NacCardAdapter.OnViewHolderBoundListener
 import com.nfcalarmclock.card.NacCardAdapter.OnViewHolderCreatedListener
@@ -800,8 +801,7 @@ class NacMainActivity
 					updateAlarm(alarm)
 
 					// Clear the notification
-					val intent = NacDismissEarlyService.getStopIntent(this@NacMainActivity, alarm)
-					startService(intent)
+					NacDismissEarlyService.stopService(this@NacMainActivity, alarm)
 				}
 				// Null alarm
 				else
@@ -944,8 +944,19 @@ class NacMainActivity
 
 		// Switch
 		card.onCardSwitchChangedListener = OnCardSwitchChangedListener { _, alarm ->
+
+			// Show next alarm and update the alarm
 			showNextAlarm(card, alarm)
 			updateAlarm(alarm)
+
+			// Alarm was disabled
+			if (!alarm.isEnabled)
+			{
+				// Clear any notifications, just in case
+				NacDismissEarlyService.stopService(this@NacMainActivity, alarm)
+				NacUpcomingReminderService.stopService(this@NacMainActivity, alarm)
+			}
+
 		}
 
 		// Days
@@ -1482,7 +1493,21 @@ class NacMainActivity
 			// device
 			if (sharedPreferences.appShouldSaveNextAlarm)
 			{
+				// Get the previous timezone ID and alarm time
+				val preTimeZoneId = sharedPreferences.appNextAlarmTimezoneId
+				val preAlarmTimeMillis = sharedPreferences.appNextAlarmTimeMillis
+
+				// Save the next alarm. This will overwrite the timezone ID and alarm time
 				sharedPreferences.saveNextAlarm(alarms)
+
+				// Compare the previous and current timezone ID and alarm time. This will
+				// indicate if the next alarm changed or not
+				if ((preTimeZoneId != sharedPreferences.appNextAlarmTimezoneId)
+					|| (preAlarmTimeMillis !=  sharedPreferences.appNextAlarmTimeMillis))
+				{
+					// Refresh widgets
+					refreshAppWidgets(this@NacMainActivity)
+				}
 			}
 
 			// Save the recyclerview state so that it does not scroll down with an
@@ -1986,7 +2011,8 @@ class NacMainActivity
 			// Create an intent with the main activity
 			val intent = Intent(context, NacMainActivity::class.java)
 			val flags = (Intent.FLAG_ACTIVITY_NEW_TASK
-					or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+					or Intent.FLAG_ACTIVITY_CLEAR_TASK
+					or Intent.FLAG_ACTIVITY_NO_HISTORY)
 
 			// Add the action, alarm, and flags to the intent
 			intent.apply {

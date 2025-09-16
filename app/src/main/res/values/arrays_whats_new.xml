@@ -6,10 +6,10 @@
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
 		<item>12.6.0-beta</item>
-		<item>Added &lt;b>repeat&lt;/b> options in alarm settings. Can repeat an alarm by &lt;b>hours&lt;/b>, &lt;b>days&lt;/b>, or &lt;b>weeks&lt;/b>.</item>
+		<item>Added &lt;b>repeat&lt;/b> options in alarm settings. Can repeat an alarm by hours, days, weeks, or months.</item>
 		<item>Added &lt;b>date&lt;/b> option to have an alarm run on a particular date.  Accessible when selecting a time.</item>
 		<item>Added &lt;b>snooze&lt;/b> with &lt;b>volume buttons&lt;/b>.</item>
-		<item>Added &lt;b>dismiss NFC tags&lt;/b> in order if multiple NFC tags are selected.  Can be dismissed in &lt;b>any&lt;/b>, &lt;b>random&lt;/b>, or &lt;b>sequential&lt;/b> order.</item>
+		<item>Added &lt;b>dismiss NFC tags&lt;/b> in &lt;b>order&lt;/b> if multiple NFC tags are selected.  Can be dismissed in any, random, or sequential order.</item>
 		<item>Added &lt;b>dismiss early notification&lt;/b>. Optionally show a notification when an alarm can be dismissed early.</item>
 		<item>Added &lt;b>long press&lt;/b> on the repeat, vibrate, NFC, and flashlight buttons to quickly access those options.</item>
 		<item>Updated to support &lt;b>Android 15&lt;/b>.</item>

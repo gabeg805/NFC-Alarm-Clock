@@ -656,11 +656,14 @@ class NacAlarm()
 	 */
 	fun addRepeatFrequencyToTime()
 	{
-		// Alarm will not repeat
-		if (!shouldRepeat)
+		// Alarm will not repeat or weekly repeat frequency
+		if (!shouldRepeat || (repeatFrequencyUnits == 4))
 		{
 			return
 		}
+
+		// Create a calendar from the alarm
+		val alarmCal = NacCalendar.alarmToCalendar(this)
 
 		// Check repeat frequency units
 		when (repeatFrequencyUnits)
@@ -668,9 +671,6 @@ class NacAlarm()
 			// Minutes
 			1 ->
 			{
-				// Create a calendar from the alarm
-				val alarmCal = NacCalendar.alarmToCalendar(this)
-
 				// Add the repeat frequency to the calendar
 				alarmCal.add(Calendar.MINUTE, repeatFrequency)
 
@@ -682,14 +682,58 @@ class NacAlarm()
 			// Hours
 			2 ->
 			{
-				// Create a calendar from the alarm
-				val alarmCal = NacCalendar.alarmToCalendar(this)
-
 				// Add the repeat frequency to the calendar
 				alarmCal.add(Calendar.HOUR_OF_DAY, repeatFrequency)
 
 				// Update the alarm hour
 				hour = alarmCal.get(Calendar.HOUR_OF_DAY)
+			}
+
+			// Days
+			// TODO: May need to select today's date when selecting repeat by X days
+			3 ->
+			{
+				// Every 1 day frequency
+				if (repeatFrequency == 1)
+				{
+					return
+				}
+
+				// Get today's day
+				val today = Day.TODAY
+
+				// Remove today if it is in the days
+				if (today in days)
+				{
+					days.remove(today)
+				}
+
+				// Add the repeat frequency to the calendar
+				alarmCal.add(Calendar.DAY_OF_MONTH, repeatFrequency)
+
+				// Get the new day of week
+				val calDay = alarmCal.get(Calendar.DAY_OF_WEEK)
+				val newDay = Day.calendarDayToDay(calDay)
+
+				// Add the new day to the days
+				days.add(newDay)
+			}
+
+			// Month
+			// TODO: If I do every month and a time that has already past, what will the next alarm time show? Should maybe show "<date> * Every X months"
+			5 ->
+			{
+				// Add the repeat frequency to the calendar
+				// TODO: This calculation of field unit and repeat frequency might already be done in NacCalendar. Check
+				alarmCal.add(Calendar.MONTH, repeatFrequency)
+
+				// Get the new day of week
+				val year = alarmCal.get(Calendar.YEAR)
+				val month = alarmCal.get(Calendar.MONTH)
+				val day = alarmCal.get(Calendar.DAY_OF_MONTH)
+
+				// Set the new date
+				date = "$year-${month+1}-$day"
 			}
 		}
 
@@ -974,6 +1018,7 @@ class NacAlarm()
 		snoozeMinute = -1
 
 		// Date is set
+		// TODO: Fix this logic so it jives with addRepeatFrequencyToTime()....unless it is already ok
 		if (date.isNotEmpty())
 		{
 			// Clear the date
