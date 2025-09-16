@@ -13,7 +13,7 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.nfc.NacNfc
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.util.NacCalendar
+import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.view.notification.NacNotification
 import java.util.Calendar
 

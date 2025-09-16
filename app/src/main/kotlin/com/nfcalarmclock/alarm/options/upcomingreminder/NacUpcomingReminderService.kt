@@ -10,9 +10,9 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.tts.NacTextToSpeech
 import com.nfcalarmclock.alarm.options.tts.NacTranslate
 import com.nfcalarmclock.system.scheduler.NacScheduler
-import com.nfcalarmclock.util.NacCalendar
-import com.nfcalarmclock.util.addAlarm
-import com.nfcalarmclock.util.getAlarm
+import com.nfcalarmclock.system.NacCalendar
+import com.nfcalarmclock.system.addAlarm
+import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.util.media.NacAudioAttributes
 import java.util.Calendar
 

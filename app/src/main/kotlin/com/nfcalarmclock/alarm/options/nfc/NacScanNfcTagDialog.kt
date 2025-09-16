@@ -13,8 +13,8 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.alarm.options.navigate
-import com.nfcalarmclock.util.addAlarm
-import com.nfcalarmclock.util.getAlarm
+import com.nfcalarmclock.system.addAlarm
+import com.nfcalarmclock.system.getAlarm
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -21,10 +21,10 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.NacAlarmStatisticRepository
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.util.NacUtility
-import com.nfcalarmclock.util.addAlarm
-import com.nfcalarmclock.util.disableActivityAlias
-import com.nfcalarmclock.util.enableActivityAlias
-import com.nfcalarmclock.util.getAlarm
+import com.nfcalarmclock.system.addAlarm
+import com.nfcalarmclock.system.disableActivityAlias
+import com.nfcalarmclock.system.enableActivityAlias
+import com.nfcalarmclock.system.getAlarm
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -6,7 +6,7 @@ import android.content.Intent
 import com.nfcalarmclock.alarm.NacAlarmRepository
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.scheduler.NacScheduler
-import com.nfcalarmclock.util.goAsync
+import com.nfcalarmclock.system.goAsync
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

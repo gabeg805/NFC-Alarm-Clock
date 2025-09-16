@@ -1,4 +1,4 @@
-package com.nfcalarmclock.util
+package com.nfcalarmclock.system
 
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver

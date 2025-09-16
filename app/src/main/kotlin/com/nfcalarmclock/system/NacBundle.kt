@@ -1,17 +1,17 @@
-package com.nfcalarmclock.util
+package com.nfcalarmclock.system
 
 import android.os.BadParcelableException
 import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.util.NacBundle.ALARM_PARCEL_NAME
-import com.nfcalarmclock.util.NacBundle.MEDIA_ARTIST_KEY
-import com.nfcalarmclock.util.NacBundle.MEDIA_PATH_KEY
-import com.nfcalarmclock.util.NacBundle.MEDIA_TITLE_KEY
-import com.nfcalarmclock.util.NacBundle.MEDIA_TYPE_KEY
-import com.nfcalarmclock.util.NacBundle.RECURSIVELY_PLAY_MEDIA_KEY
-import com.nfcalarmclock.util.NacBundle.SHUFFLE_MEDIA_KEY
+import com.nfcalarmclock.system.NacBundle.ALARM_PARCEL_NAME
+import com.nfcalarmclock.system.NacBundle.MEDIA_ARTIST_KEY
+import com.nfcalarmclock.system.NacBundle.MEDIA_PATH_KEY
+import com.nfcalarmclock.system.NacBundle.MEDIA_TITLE_KEY
+import com.nfcalarmclock.system.NacBundle.MEDIA_TYPE_KEY
+import com.nfcalarmclock.system.NacBundle.RECURSIVELY_PLAY_MEDIA_KEY
+import com.nfcalarmclock.system.NacBundle.SHUFFLE_MEDIA_KEY
 import com.nfcalarmclock.util.media.NacAudioAttributes
 
 /**

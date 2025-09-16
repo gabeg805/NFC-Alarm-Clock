@@ -19,7 +19,7 @@ import com.google.android.material.slider.Slider.OnSliderTouchListener
 import com.nfcalarmclock.R
 import com.nfcalarmclock.databinding.NacClockWidgetConfigureBinding
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.util.NacCalendar
+import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.settings.colorpicker.NacColorPickerDialog
 import com.nfcalarmclock.view.setupBackgroundColor
 import com.nfcalarmclock.view.setupForegroundColor

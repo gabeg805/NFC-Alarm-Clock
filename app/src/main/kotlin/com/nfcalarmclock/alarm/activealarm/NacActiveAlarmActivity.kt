@@ -22,13 +22,13 @@ import com.nfcalarmclock.alarm.options.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
-import com.nfcalarmclock.util.NacBundle
+import com.nfcalarmclock.system.NacBundle
 import com.nfcalarmclock.util.NacUtility.quickToast
-import com.nfcalarmclock.util.addAlarm
-import com.nfcalarmclock.util.enableActivityAlias
-import com.nfcalarmclock.util.getAlarm
-import com.nfcalarmclock.util.registerMyReceiver
-import com.nfcalarmclock.util.unregisterMyReceiver
+import com.nfcalarmclock.system.addAlarm
+import com.nfcalarmclock.system.enableActivityAlias
+import com.nfcalarmclock.system.getAlarm
+import com.nfcalarmclock.system.registerMyReceiver
+import com.nfcalarmclock.system.unregisterMyReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

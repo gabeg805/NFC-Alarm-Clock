@@ -6,7 +6,7 @@ import android.content.Intent
 import com.nfcalarmclock.db.NacAlarmDatabase
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.scheduler.NacScheduler
-import com.nfcalarmclock.util.goAsync
+import com.nfcalarmclock.system.goAsync
 
 /**
  * After the app is updated, reapply the alarms.

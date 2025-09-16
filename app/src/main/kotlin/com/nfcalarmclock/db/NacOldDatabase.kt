@@ -10,12 +10,12 @@ import android.provider.BaseColumns
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.util.NacCalendar
+import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.util.media.getMediaTitle
 import com.nfcalarmclock.util.media.getMediaType
 import androidx.core.database.sqlite.transaction
 import androidx.core.net.toUri
-import com.nfcalarmclock.util.daysToValue
+import com.nfcalarmclock.system.daysToValue
 
 /**
  * NFC Alarm Clock database.

@@ -14,8 +14,8 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissEarlyService
 import com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderService
 import com.nfcalarmclock.main.NacMainActivity
-import com.nfcalarmclock.util.NacCalendar
-import com.nfcalarmclock.util.NacCalendar.calendarToString
+import com.nfcalarmclock.system.NacCalendar
+import com.nfcalarmclock.system.NacCalendar.calendarToString
 import java.util.Calendar
 import kotlin.random.Random
 

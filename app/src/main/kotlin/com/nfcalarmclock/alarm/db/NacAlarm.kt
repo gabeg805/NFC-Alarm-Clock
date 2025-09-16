@@ -7,9 +7,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.util.NacCalendar
-import com.nfcalarmclock.util.NacCalendar.Day
-import com.nfcalarmclock.util.daysToValue
+import com.nfcalarmclock.system.NacCalendar
+import com.nfcalarmclock.system.NacCalendar.Day
+import com.nfcalarmclock.system.daysToValue
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

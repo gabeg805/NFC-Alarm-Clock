@@ -8,7 +8,7 @@ import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.options.nextalarmformat.NacNextAlarmFormatPreference
 import com.nfcalarmclock.alarm.options.startweekon.NacStartWeekOnPreference
-import com.nfcalarmclock.util.getDeviceProtectedStorageContext
+import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.settings.colorpicker.NacColorPickerPreference
 
 /**

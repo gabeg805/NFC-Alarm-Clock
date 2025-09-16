@@ -8,7 +8,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
-import com.nfcalarmclock.util.toBundle
+import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.setTextFromIndex
 import com.nfcalarmclock.view.setupInputLayoutColor

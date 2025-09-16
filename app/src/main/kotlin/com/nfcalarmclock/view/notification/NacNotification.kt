@@ -15,7 +15,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.util.NacCalendar
+import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.view.toSpannedString
 
 /**

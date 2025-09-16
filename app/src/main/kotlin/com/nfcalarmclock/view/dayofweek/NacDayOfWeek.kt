@@ -2,7 +2,7 @@ package com.nfcalarmclock.view.dayofweek
 
 import android.widget.LinearLayout
 import com.nfcalarmclock.R
-import com.nfcalarmclock.util.NacCalendar.Day
+import com.nfcalarmclock.system.NacCalendar.Day
 import com.nfcalarmclock.view.dayofweek.NacDayButton.OnDayChangedListener
 import java.util.EnumSet
 

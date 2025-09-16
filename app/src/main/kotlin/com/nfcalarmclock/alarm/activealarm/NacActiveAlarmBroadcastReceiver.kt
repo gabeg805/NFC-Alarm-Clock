@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.annotation.OptIn
 import androidx.media3.common.util.UnstableApi
-import com.nfcalarmclock.util.getAlarm
+import com.nfcalarmclock.system.getAlarm
 
 /**
  * Receive this signal from AlarmManager and start the foreground service.

@@ -10,7 +10,7 @@ import androidx.core.app.NotificationManagerCompat
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.main.NacMainActivity
-import com.nfcalarmclock.util.NacCalendar
+import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.view.notification.NacNotification
 import java.util.Calendar
 

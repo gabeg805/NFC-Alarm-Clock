@@ -14,7 +14,7 @@ import android.widget.RemoteViews
 import com.nfcalarmclock.R
 import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.util.NacCalendar
+import com.nfcalarmclock.system.NacCalendar
 import java.util.Calendar
 import java.util.TimeZone
 

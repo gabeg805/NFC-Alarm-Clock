@@ -28,7 +28,7 @@ import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService.Companion.start
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.util.NacCalendar.Day
+import com.nfcalarmclock.system.NacCalendar.Day
 import com.nfcalarmclock.util.NacUtility.getHeight
 import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek

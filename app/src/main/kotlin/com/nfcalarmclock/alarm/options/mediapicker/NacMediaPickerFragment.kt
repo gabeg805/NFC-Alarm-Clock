@@ -16,14 +16,14 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.util.NacUtility
-import com.nfcalarmclock.util.addMediaInfo
-import com.nfcalarmclock.util.getAlarm
-import com.nfcalarmclock.util.getMediaArtist
-import com.nfcalarmclock.util.getMediaPath
-import com.nfcalarmclock.util.getMediaTitle
-import com.nfcalarmclock.util.getMediaType
-import com.nfcalarmclock.util.getRecursivelyPlayMedia
-import com.nfcalarmclock.util.getShuffleMedia
+import com.nfcalarmclock.system.addMediaInfo
+import com.nfcalarmclock.system.getAlarm
+import com.nfcalarmclock.system.getMediaArtist
+import com.nfcalarmclock.system.getMediaPath
+import com.nfcalarmclock.system.getMediaTitle
+import com.nfcalarmclock.system.getMediaType
+import com.nfcalarmclock.system.getRecursivelyPlayMedia
+import com.nfcalarmclock.system.getShuffleMedia
 import com.nfcalarmclock.util.media.NacMedia
 import dagger.hilt.android.AndroidEntryPoint
 

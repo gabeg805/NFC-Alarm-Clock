@@ -7,8 +7,8 @@ import android.os.Build
 import android.os.IBinder
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.util.addAlarm
-import com.nfcalarmclock.util.getAlarm
+import com.nfcalarmclock.system.addAlarm
+import com.nfcalarmclock.system.getAlarm
 
 /**
  * Service to show the dismiss early notification.
@@ -34,10 +34,6 @@ class NacDismissEarlyService
 	{
 		// Attempt to get the alarm from the intent
 		val alarm = intent?.getAlarm()
-		println("Dismiss early at your service : ${intent?.action}")
-		println("Alarm : ${alarm?.hour}:${alarm?.minute} | ${alarm?.id} | ${alarm?.timeOfDismissEarlyAlarm}")
-		//alarm?.print()
-		println("AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
 
 		// Check the intent action
 		when (intent?.action)
@@ -46,7 +42,6 @@ class NacDismissEarlyService
 			// Clear the notification by stopping the service
 			ACTION_STOP_SERVICE ->
 			{
-				println("STOP the jank")
 				// Stop the foreground service using the updated form of
 				// stopForeground() for API >= 33
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)

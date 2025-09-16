@@ -18,7 +18,7 @@ import com.nfcalarmclock.system.file.NacFile.strip
 import com.nfcalarmclock.system.file.NacFile.toRelativeDirname
 import com.nfcalarmclock.system.file.NacFileTree.Companion.getFiles
 import com.nfcalarmclock.util.NacUtility.quickToast
-import com.nfcalarmclock.util.getDeviceProtectedStorageContext
+import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.media.NacMedia.TYPE_DIRECTORY
 import com.nfcalarmclock.util.media.NacMedia.TYPE_FILE
 import com.nfcalarmclock.util.media.NacMedia.TYPE_NONE

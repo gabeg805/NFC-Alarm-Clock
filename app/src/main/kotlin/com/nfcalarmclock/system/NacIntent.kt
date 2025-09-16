@@ -1,4 +1,4 @@
-package com.nfcalarmclock.util
+package com.nfcalarmclock.system
 
 import android.content.Context
 import android.content.Intent
@@ -7,9 +7,6 @@ import android.provider.AlarmClock
 import androidx.core.net.toUri
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.util.NacCalendar.Day
-import com.nfcalarmclock.util.NacIntent.ALARM_BUNDLE_NAME
-import com.nfcalarmclock.util.NacIntent.MEDIA_BUNDLE_NAME
 import com.nfcalarmclock.util.media.buildLocalMediaPath
 import com.nfcalarmclock.util.media.getMediaArtist
 import com.nfcalarmclock.util.media.getMediaTitle
@@ -29,7 +26,7 @@ fun Intent.addAlarm(alarm: NacAlarm?): Intent
 	val bundle = Bundle().addAlarm(alarm)
 
 	// Add the bundle to the intent
-	this.putExtra(ALARM_BUNDLE_NAME, bundle)
+	this.putExtra(NacIntent.ALARM_BUNDLE_NAME, bundle)
 
 	return this
 }
@@ -58,7 +55,7 @@ fun Intent.addMediaInfo(
 		shuffleMedia, recursivelyPlayMedia)
 
 	// Add the bundle to the intent
-	this.putExtra(MEDIA_BUNDLE_NAME, bundle)
+	this.putExtra(NacIntent.MEDIA_BUNDLE_NAME, bundle)
 
 	return this
 }
@@ -71,7 +68,7 @@ fun Intent.addMediaInfo(
 fun Intent.getAlarm(): NacAlarm?
 {
 	// Get the bundle from the intent
-	val bundle = this.getBundleExtra(ALARM_BUNDLE_NAME)
+	val bundle = this.getBundleExtra(NacIntent.ALARM_BUNDLE_NAME)
 
 	// Get the alarm from the bundle
 	return bundle?.getAlarm()
@@ -85,7 +82,7 @@ fun Intent.getAlarm(): NacAlarm?
 fun Intent.getMediaBundle(): Bundle
 {
 	// Get the bundle from the intent
-	return this.getBundleExtra(MEDIA_BUNDLE_NAME) ?: Bundle()
+	return this.getBundleExtra(NacIntent.MEDIA_BUNDLE_NAME) ?: Bundle()
 }
 
 /**
@@ -142,7 +139,7 @@ fun Intent.getSetAlarm(context: Context): NacAlarm?
 	if (this.hasExtra(AlarmClock.EXTRA_DAYS))
 	{
 		val extraDays = this.getIntegerArrayListExtra(AlarmClock.EXTRA_DAYS)
-		val days = Day.NONE
+		val days = NacCalendar.Day.Companion.NONE
 		isSet = true
 
 		// Iterate over each day
@@ -150,7 +147,7 @@ fun Intent.getSetAlarm(context: Context): NacAlarm?
 		{
 			for (d in extraDays)
 			{
-				days.add(Day.calendarDayToDay(d))
+				days.add(NacCalendar.Day.Companion.calendarDayToDay(d))
 			}
 		}
 

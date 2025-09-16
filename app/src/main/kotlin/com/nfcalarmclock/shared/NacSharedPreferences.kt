@@ -7,15 +7,15 @@ import android.view.Gravity
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.util.NacCalendar
-import com.nfcalarmclock.util.getDeviceProtectedStorageContext
+import com.nfcalarmclock.system.NacCalendar
+import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.media.NacMedia
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
 import java.util.Calendar
 import androidx.core.content.edit
-import com.nfcalarmclock.util.daysToValue
+import com.nfcalarmclock.system.daysToValue
 
 /**
  * Container for the values of each preference.

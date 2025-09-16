@@ -12,7 +12,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.util.NacUtility.quickToast
-import com.nfcalarmclock.util.isUserUnlocked
+import com.nfcalarmclock.system.isUserUnlocked
 import com.nfcalarmclock.util.media.NacAudioAttributes
 import com.nfcalarmclock.util.media.NacAudioManager
 import com.nfcalarmclock.util.media.NacMedia

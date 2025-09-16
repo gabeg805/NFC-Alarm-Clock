@@ -13,7 +13,7 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.util.getAlarm
+import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
 import com.nfcalarmclock.view.setTextFromIndex
 import com.nfcalarmclock.view.setupInputLayoutColor

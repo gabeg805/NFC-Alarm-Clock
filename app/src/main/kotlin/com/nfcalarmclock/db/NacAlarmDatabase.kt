@@ -42,7 +42,7 @@ import com.nfcalarmclock.statistics.db.NacAlarmSnoozedStatistic
 import com.nfcalarmclock.statistics.db.NacAlarmSnoozedStatisticDao
 import com.nfcalarmclock.statistics.db.NacStatisticTypeConverters
 import com.nfcalarmclock.util.NacUtility
-import com.nfcalarmclock.util.getDeviceProtectedStorageContext
+import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

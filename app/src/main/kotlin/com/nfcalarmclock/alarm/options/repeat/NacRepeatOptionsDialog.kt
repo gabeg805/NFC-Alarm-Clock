@@ -7,7 +7,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
-import com.nfcalarmclock.util.NacCalendar
+import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek.OnWeekChangedListener

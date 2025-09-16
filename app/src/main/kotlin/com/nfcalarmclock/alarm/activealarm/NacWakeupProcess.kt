@@ -13,7 +13,7 @@ import com.nfcalarmclock.alarm.options.tts.NacTranslate
 import com.nfcalarmclock.alarm.options.vibrate.NacVibrator
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
-import com.nfcalarmclock.util.getDeviceProtectedStorageContext
+import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.media.NacAudioAttributes
 import com.nfcalarmclock.util.media.isMediaDirectory
 
