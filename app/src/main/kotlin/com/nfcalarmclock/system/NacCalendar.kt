@@ -172,37 +172,47 @@ object NacCalendar
 		// Check if the alarm calendar occurs in the past. Need to fix that
 		if (alarmCalendar.before(now))
 		{
-			// Check the units of the repeat frequency
-			when (alarm.repeatFrequencyUnits)
-			{
-				// Minutely or Hourly
-				1, 2 ->
-				{
-					// Start the alarm the next day
-					alarmCalendar.add(Calendar.DAY_OF_MONTH, 1)
-				}
+			// Start the alarm the next day
+			alarmCalendar.add(Calendar.DAY_OF_MONTH, 1)
+			//// Check the units of the repeat frequency
+			//when (alarm.repeatFrequencyUnits)
+			//{
+			//	// Minutely or Hourly
+			//	1, 2 ->
+			//	{
+			//		// Start the alarm the next day
+			//		alarmCalendar.add(Calendar.DAY_OF_MONTH, 1)
+			//	}
 
-				// Weekly
-				4 ->
-				{
-					// Add to the calendar by the repeat frequency value
-					alarmCalendar.add(Calendar.WEEK_OF_YEAR, alarm.repeatFrequency)
-				}
+			//	// Weekly (with no days selected)
+			//	4 ->
+			//	{
+			//		// Start the alarm the next day
+			//		alarmCalendar.add(Calendar.DAY_OF_MONTH, 1)
+			//		// TODO: How does an X weekly alarm without days handle if someone, say, reboots their phone?
+			//		//  Does it reset the X week counter? Maybe need to use date in some way?
+			//		//// Add to the calendar by the repeat frequency value
+			//		//alarmCalendar.add(Calendar.WEEK_OF_YEAR, alarm.repeatFrequency)
+			//	}
 
-				// Monthly
-				5 ->
-				{
-					// Add to the calendar by the repeat frequency value
-					alarmCalendar.add(Calendar.MONTH, alarm.repeatFrequency)
-				}
+			//	// Monthly
+			//	5 ->
+			//	{
+			//		// Start the alarm the next day
+			//		alarmCalendar.add(Calendar.DAY_OF_MONTH, 1)
+			//		//// Add to the calendar by the repeat frequency value
+			//		//alarmCalendar.add(Calendar.MONTH, alarm.repeatFrequency)
+			//	}
 
-				// Daily
-				else ->
-				{
-					// Add to the calendar by the repeat frequency value
-					alarmCalendar.add(Calendar.DAY_OF_MONTH, alarm.repeatFrequency)
-				}
-			}
+			//	// Daily
+			//	else ->
+			//	{
+			//		// TODO: How does this work? Should this be like the other janks
+			//		//  where it is only today or tomorrow and then NacAlarm handles the rest?
+			//		// Add to the calendar by the repeat frequency value
+			//		alarmCalendar.add(Calendar.DAY_OF_MONTH, alarm.repeatFrequency)
+			//	}
+			//}
 		}
 
 		// Return the alarm calendar
@@ -722,8 +732,68 @@ object NacCalendar
 				// No days
 				else if (alarm.days.isEmpty())
 				{
+					// Today or tomorrow
+					val oneTime = oneTimeAlarmToString(context, alarm)
+					println("No days : $oneTime")
+
+					// Alarm will not repeat
+					if (!alarm.shouldRepeat)
+					{
+						// Only show the one time alarm
+						return oneTime
+					}
+
 					// Repeat frequency string
-					return repeatFrequencyToString(context, alarm)
+					val repeatFrequency = repeatFrequencyToString(context, alarm)
+					println("No days repeat : $repeatFrequency")
+
+					// Check the repeat frequency units
+					return when (alarm.repeatFrequencyUnits)
+					{
+						// Minutes or Hours
+						1, 2 ->
+						{
+							// Tomorrow string
+							val tomorrow = context.getString(R.string.dow_tomorrow)
+
+							// One time alarm will occur tomorrow
+							if (oneTime == tomorrow)
+							{
+								// Tomorrow * Every X <min/hour>
+								"$oneTime \u2027 $repeatFrequency"
+							}
+							// Alarm will occur today
+							else
+							{
+								// Every X <min/hour>
+								repeatFrequency
+							}
+						}
+
+						// Days
+						3 ->
+						{
+							// Every day alarm
+							if (alarm.repeatFrequency == 1)
+							{
+								// Today/tomorrow
+								oneTime
+							}
+							// Every X days
+							else
+							{
+								// Today/tomorrow * Every X days
+								"$oneTime \u2027 $repeatFrequency"
+							}
+						}
+
+						// Months. Show: Today/tomorrow * Every X months
+						5 -> "$oneTime \u2027 $repeatFrequency"
+
+						// Unknown or weeks, but don't think this is possible? Since
+						// no day = current day so a day would always be selected
+						else -> repeatFrequency
+					}
 				}
 				// Combination of days
 				else
@@ -753,11 +823,13 @@ object NacCalendar
 						}
 					}
 
+					println("Days : $days | Repeat? ${alarm.shouldRepeat} | ${alarm.repeatFrequencyUnits} | ${alarm.repeatFrequency}")
 					// Alarm should be repeat at a frequency that is NOT just every 1 week (which is the norm)
 					if (alarm.shouldRepeat && !((alarm.repeatFrequencyUnits == 4) && (alarm.repeatFrequency == 1)))
 					{
 						// Get the repeat frequency string
 						val repeatFrequency = repeatFrequencyToString(context, alarm)
+						println("Jank : $repeatFrequency")
 
 						// Combine the date and repeat frequency string
 						return "$days \u2027 $repeatFrequency"

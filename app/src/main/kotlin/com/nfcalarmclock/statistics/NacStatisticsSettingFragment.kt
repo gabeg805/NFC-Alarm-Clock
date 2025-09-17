@@ -3,6 +3,7 @@ package com.nfcalarmclock.statistics
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -18,6 +19,8 @@ import com.nfcalarmclock.statistics.db.NacAlarmStatistic
 import com.nfcalarmclock.system.file.zipFiles
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.util.NacUtility.quickToast
+import com.nfcalarmclock.view.calcContrastColor
+import com.nfcalarmclock.view.setupThemeColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.File
@@ -395,7 +398,8 @@ class NacStatisticsSettingFragment
 	 */
 	private fun setupViewsWithThemeColor(root: View)
 	{
-		val shared = NacSharedPreferences(requireContext())
+		// Get shared preferences
+		val sharedPreferences = NacSharedPreferences(requireContext())
 
 		// Get the views
 		val divider1 = root.findViewById<View>(R.id.divider1)
@@ -403,14 +407,17 @@ class NacStatisticsSettingFragment
 		val emailButton = root.findViewById<MaterialButton>(R.id.email_button)
 
 		// Get the theme color
-		val themeColor = shared.themeColor
+		val themeColor = sharedPreferences.themeColor
 
 		// Set the color of the dividers to the theme color
 		divider1.setBackgroundColor(themeColor)
 		divider2.setBackgroundColor(themeColor)
 
 		// Set the color of the reset button to the theme color
-		emailButton.setBackgroundColor(themeColor)
+		val contrastColor = calcContrastColor(themeColor)
+
+		emailButton.setupThemeColor(sharedPreferences)
+		emailButton.iconTint = ColorStateList.valueOf(contrastColor)
 	}
 
 	/**

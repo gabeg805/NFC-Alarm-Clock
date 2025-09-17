@@ -641,15 +641,21 @@ class NacActiveAlarmService
 			WAKELOCK_TAG)
 		wakeLock!!.acquire(timeout)
 
-		// Start the wakeup process
-		wakeupProcess = NacWakeupProcess(this, alarm!!)
-		wakeupProcess!!.start()
+		// Start the alarm activity
+		NacActiveAlarmActivity.startAlarmActivity(this, alarm!!)
 
-		// Wait for auto dismiss and auto snooze, vibrate smart watch, and start the
-		// alarm activity
+		// Wait for auto dismiss and auto snooze, vibrate smart watch
 		waitForAutoDismiss()
 		waitForAutoSnooze()
-		NacActiveAlarmActivity.startAlarmActivity(this, alarm!!)
+
+		// Start the wakeup process after a delay of 3 sec. With Android 15, possibly
+		// earlier versions as well, need to ensure that the activity is in focus before
+		// trying to request audio focus, otherwise any media or TTS will fail
+		wakeupProcess = NacWakeupProcess(this, alarm!!)
+
+		Handler(mainLooper).postDelayed({
+			wakeupProcess!!.start()
+		}, 3000)
 
 		scope.launch {
 

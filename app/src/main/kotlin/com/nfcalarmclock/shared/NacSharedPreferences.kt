@@ -1477,7 +1477,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.key_default_alarm_repeat_frequency_units)
-			val defaultValue = 0
+			val defaultValue = 4
 
 			return instance.getInt(key, defaultValue)
 		}

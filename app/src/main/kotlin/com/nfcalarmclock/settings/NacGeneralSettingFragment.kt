@@ -23,6 +23,7 @@ import com.nfcalarmclock.alarm.options.snoozeoptions.NacSnoozeOptionsDialog
 import com.nfcalarmclock.card.NacCardPreference
 import com.nfcalarmclock.settings.preference.NacCheckboxPreference
 import com.nfcalarmclock.system.addMediaInfo
+import com.nfcalarmclock.system.daysToValue
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.system.getMediaArtist
 import com.nfcalarmclock.system.getMediaBundle
@@ -125,6 +126,9 @@ class NacGeneralSettingFragment
 
 	/**
 	 * Setup the default alarm card.
+	 *
+	 * Note: Only actions that open up a dialog are here, otherwise, the simple stuff is
+	 *       handled in NacCardPreference
 	 */
 	@OptIn(UnstableApi::class)
 	private fun setupDefaultAlarmCard()
@@ -250,6 +254,8 @@ class NacGeneralSettingFragment
 
 		}
 
+		// TODO: Repeat, vibrate, NFC, and flashlight long click listener
+
 		// Alarm options
 		pref.onCardAlarmOptionsClickedListener = NacCardPreference.OnCardAlarmOptionsClickedListener { alarm ->
 
@@ -264,17 +270,27 @@ class NacGeneralSettingFragment
 					when (navController.currentDestination?.id)
 					{
 
-						// Flashlight
-						R.id.nacFlashlightOptionsDialog -> {
-							sharedPreferences!!.flashlightStrengthLevel = a.flashlightStrengthLevel
-							sharedPreferences!!.shouldBlinkFlashlight = a.shouldBlinkFlashlight
-							sharedPreferences!!.flashlightOnDuration = a.flashlightOnDuration
-							sharedPreferences!!.flashlightOffDuration = a.flashlightOffDuration
-						}
+						// Repeat
+						R.id.nacRepeatOptionsDialog -> {
+							sharedPreferences!!.shouldRepeat = true
+							sharedPreferences!!.repeatFrequency = a.repeatFrequency
+							sharedPreferences!!.repeatFrequencyUnits = a.repeatFrequencyUnits
+							sharedPreferences!!.repeatFrequencyDaysToRunBeforeStarting = a.repeatFrequencyDaysToRunBeforeStarting.daysToValue()
 
-						// NFC
-						R.id.nacSelectNfcTagDialog -> {
-							sharedPreferences!!.nfcTagId = a.nfcTagId
+							// Weekly frequency unit
+							if (a.repeatFrequencyUnits == 4)
+							{
+								// Days are empty
+								if (a.days.isEmpty())
+								{
+									sharedPreferences!!.days = a.days.daysToValue()
+								}
+							}
+							// Every other frequency unit
+							else
+							{
+								sharedPreferences!!.days = a.days.daysToValue()
+							}
 						}
 
 						// Vibrate
@@ -284,6 +300,19 @@ class NacGeneralSettingFragment
 							sharedPreferences!!.shouldVibratePattern = a.shouldVibratePattern
 							sharedPreferences!!.vibrateRepeatPattern = a.vibrateRepeatPattern
 							sharedPreferences!!.vibrateWaitTimeAfterPattern = a.vibrateWaitTimeAfterPattern
+						}
+
+						// NFC
+						R.id.nacSelectNfcTagDialog -> {
+							sharedPreferences!!.nfcTagId = a.nfcTagId
+						}
+
+						// Flashlight
+						R.id.nacFlashlightOptionsDialog -> {
+							sharedPreferences!!.flashlightStrengthLevel = a.flashlightStrengthLevel
+							sharedPreferences!!.shouldBlinkFlashlight = a.shouldBlinkFlashlight
+							sharedPreferences!!.flashlightOnDuration = a.flashlightOnDuration
+							sharedPreferences!!.flashlightOffDuration = a.flashlightOffDuration
 						}
 
 						// Audio source

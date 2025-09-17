@@ -74,6 +74,18 @@ class NacNextAlarmFormatDialog
 			.create()
 	}
 
+	/**
+	 * Called when the fragment is resumed.
+	 */
+	override fun onResume()
+	{
+		// Super
+		super.onResume()
+
+		// Set the dialog background color
+		dialog!!.window?.setBackgroundDrawableResource(R.color.gray)
+	}
+
 	companion object
 	{
 
