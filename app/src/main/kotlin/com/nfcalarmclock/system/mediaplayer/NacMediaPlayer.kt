@@ -112,6 +112,11 @@ class NacMediaPlayer(
 		private set
 
 	/**
+	 * Whether to show toasts or not.
+	 */
+	var shouldShowToasts: Boolean = true
+
+	/**
 	 * Listener for any audio focus changes.
 	 */
 	var onAudioFocusChangeListener: OnAudioFocusChangeListener =
@@ -221,7 +226,10 @@ class NacMediaPlayer(
 		if (!request)
 		{
 			// Show toast with error message
-			quickToast(context, R.string.error_message_play_audio)
+			if (shouldShowToasts)
+			{
+				quickToast(context, R.string.error_message_play_audio)
+			}
 		}
 
 		return request
@@ -328,7 +336,10 @@ class NacMediaPlayer(
 		else
 		{
 			// Show toast saying unable to play audio
-			quickToast(context, R.string.error_message_play_audio)
+			if (shouldShowToasts)
+			{
+				quickToast(context, R.string.error_message_play_audio)
+			}
 			return null
 		}
 	}

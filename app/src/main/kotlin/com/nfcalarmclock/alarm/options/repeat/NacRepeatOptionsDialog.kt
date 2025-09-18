@@ -7,7 +7,8 @@ import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
-import com.nfcalarmclock.system.NacCalendar
+import com.nfcalarmclock.system.NacCalendar.Day
+import com.nfcalarmclock.system.NacCalendar.alarmToCalendar
 import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek.OnWeekChangedListener
@@ -15,6 +16,7 @@ import com.nfcalarmclock.view.performHapticFeedback
 import com.nfcalarmclock.view.setTextFromIndex
 import com.nfcalarmclock.view.setupInputLayoutColor
 import com.nfcalarmclock.view.setupRippleColor
+import java.util.Calendar
 import java.util.EnumSet
 
 /**
@@ -57,7 +59,7 @@ class NacRepeatOptionsDialog
 	/**
 	 * Selected days to run before starting the frequency.
 	 */
-	private var selectedDaysToRunBeforeFrequency: EnumSet<NacCalendar.Day> = NacCalendar.Day.WEEK
+	private var selectedDaysToRunBeforeFrequency: EnumSet<Day> = Day.WEEK
 
 	/**
 	 * List of units in singular form.
@@ -122,6 +124,36 @@ class NacRepeatOptionsDialog
 	}
 
 	/**
+	 * Get next alarm day.
+	 */
+	private fun getNextAlarmDay(alarm: NacAlarm): Day
+	{
+		// Get the current time
+		val now = Calendar.getInstance()
+
+		// Build the alarm calendar instance
+		val alarmCal = alarmToCalendar(alarm)
+		alarmCal[Calendar.DAY_OF_WEEK] = Day.dayToCalendarDay(Day.TODAY)
+
+		// Alarm will occur in the future
+		return if (alarmCal.after(now))
+		{
+			Day.TODAY
+		}
+		// Alarm is in the past
+		else
+		{
+			// Increment today to tomorrow
+			now.add(Calendar.DAY_OF_MONTH, 1)
+
+			// Get tomorrow as a day
+			val tomorrow = now.get(Calendar.DAY_OF_WEEK)
+
+			return Day.calendarDayToDay(tomorrow)
+		}
+	}
+
+	/**
 	 * Called when the Ok button is clicked.
 	 */
 	override fun onOkClicked(alarm: NacAlarm?)
@@ -139,15 +171,18 @@ class NacRepeatOptionsDialog
 			// Days are empty
 			if (alarm?.days?.isEmpty() == true)
 			{
-				// Toggle today
-				alarm.toggleToday()
+				// Get the next alarm day
+				val nextDay = getNextAlarmDay(alarm)
+
+				// Toggle the day
+				alarm.toggleDay(nextDay)
 			}
 		}
 		// Every other frequency unit
 		else
 		{
 			// Clear various alarm attributes
-			alarm?.repeatFrequencyDaysToRunBeforeStarting = NacCalendar.Day.NONE
+			alarm?.repeatFrequencyDaysToRunBeforeStarting = Day.NONE
 			alarm?.setDays(0)
 		}
 	}
@@ -202,7 +237,7 @@ class NacRepeatOptionsDialog
 		selectedRepeatFrequencyValue = a.repeatFrequency
 		selectedRepeatFrequencyUnits = a.repeatFrequencyUnits
 		selectedDaysToRunBeforeFrequency = a.days.ifEmpty {
-				EnumSet.of(NacCalendar.Day.TODAY)
+				EnumSet.of(getNextAlarmDay(a))
 		}
 
 		// Setup the views
@@ -214,7 +249,7 @@ class NacRepeatOptionsDialog
 	/**
 	 * Setup the views for the days to run before starting the frequency.
 	 */
-	private fun setupDaysToRun(defaultCurrentDays: EnumSet<NacCalendar.Day>)
+	private fun setupDaysToRun(defaultCurrentDays: EnumSet<Day>)
 	{
 		// Get the views
 		daysToRunTitle = dialog!!.findViewById(R.id.repeat_freq_days_to_run_title)

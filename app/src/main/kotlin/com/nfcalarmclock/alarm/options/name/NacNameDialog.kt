@@ -55,7 +55,7 @@ class NacNameDialog
 
 				// Get the name that is in the edit text
 				val editText = dialog!!.findViewById<TextInputEditText>(R.id.name_entry)
-				val name = editText.text.toString()
+				val name = editText.text.toString().trim()
 
 				// Call the listener
 				onNameEnteredListener?.onNameEntered(name)

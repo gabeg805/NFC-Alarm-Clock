@@ -25,6 +25,7 @@ import com.nfcalarmclock.db.NacAlarmDatabase.ClearNfcTagTableMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.DropNfcTagTableMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.RemoveUseTtsColumnMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.UpdateRepeatFrequencyFrom0To1Migration
+import com.nfcalarmclock.db.NacAlarmDatabase.UpdateRepeatFrequencyUnitFrom0To1Migration
 import com.nfcalarmclock.db.NacOldDatabase.Companion.read
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTagDao
@@ -59,7 +60,7 @@ import javax.inject.Singleton
 /**
  * Store alarms in a Room database.
  */
-@Database(version = 39,
+@Database(version = 40,
 	entities = [
 		NacAlarm::class,
 		NacAlarmCreatedStatistic::class,
@@ -106,7 +107,8 @@ import javax.inject.Singleton
 		AutoMigration(from = 35, to = 36),
 		AutoMigration(from = 36, to = 37),
 		AutoMigration(from = 37, to = 38, spec = UpdateRepeatFrequencyFrom0To1Migration::class),
-		AutoMigration(from = 38, to = 39)]
+		AutoMigration(from = 38, to = 39),
+		AutoMigration(from = 39, to = 40, spec = UpdateRepeatFrequencyUnitFrom0To1Migration::class)]
 
 )
 @TypeConverters(NacAlarmTypeConverters::class, NacStatisticTypeConverters::class)
@@ -342,6 +344,21 @@ abstract class NacAlarmDatabase
 		{
 			// Update the table
 			db.execSQL("UPDATE alarm SET repeat_frequency=1 WHERE repeat_frequency=0")
+
+			// Update the shared preferences
+			sharedPreferences?.repeatFrequency = 1
+		}
+	}
+
+	/**
+	 * Update all values of the repeat frequency unit from 0 to 4.
+	 */
+	internal class UpdateRepeatFrequencyUnitFrom0To1Migration : AutoMigrationSpec
+	{
+		override fun onPostMigrate(db: SupportSQLiteDatabase)
+		{
+			// Update the table
+			db.execSQL("UPDATE alarm SET repeat_frequency_units=4 WHERE repeat_frequency_units=0")
 
 			// Update the shared preferences
 			sharedPreferences?.repeatFrequency = 1

@@ -1059,8 +1059,17 @@ class NacMainActivity
 			// Show the dialog
 			NacAlarmOptionsDialog.navigate(navController, alarm)
 				?.observe(this) { a ->
+
+					// Update the alarm
 					updateAlarm(a)
 					card.refreshRepeatOptionViews()
+
+					// Show next alarm when changing repeat options
+					if (navController.currentDestination?.id == R.id.nacRepeatOptionsDialog)
+					{
+						showNextAlarm(card, alarm)
+					}
+
 				}
 
 		}

@@ -392,7 +392,9 @@ class NacWakeupProcess(
 			{
 				println("HELLLO")
 				// Start the wakeup process, everything except for TTS
+				mediaPlayer.shouldShowToasts = false
 				startNoTts()
+				mediaPlayer.shouldShowToasts = true
 			}
 
 			// Recursively call the watchdog

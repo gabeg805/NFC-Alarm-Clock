@@ -35,8 +35,8 @@ android {
 		applicationId = "com.nfcalarmclock"
 		minSdk = 24
 		targetSdk = 35
-		versionCode = 497
-		versionName = "12.6.0-beta020"
+		versionCode = 498
+		versionName = "12.6.0-beta021"
 
 		// Set output filename
 		setProperty("archivesBaseName", "nfc_alarm_clock_v${versionName}")
@@ -165,16 +165,16 @@ dependencies {
 	implementation("com.google.android.material:material:1.13.0")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
 	implementation("androidx.dynamicanimation:dynamicanimation:1.1.0")
-	implementation("androidx.navigation:navigation-fragment-ktx:2.9.3")
-	implementation("androidx.navigation:navigation-ui-ktx:2.9.3")
+	implementation("androidx.navigation:navigation-fragment-ktx:2.9.4")
+	implementation("androidx.navigation:navigation-ui-ktx:2.9.4")
 
 	// Room database (Any later requires API > 34
-	implementation("androidx.room:room-runtime:2.7.2")
-	ksp("androidx.room:room-compiler:2.7.2")
+	implementation("androidx.room:room-runtime:2.8.0")
+	ksp("androidx.room:room-compiler:2.8.0")
 
 	// Room kotlin extensions and coroutines
-	ksp("androidx.room:room-compiler:2.7.2")
-	implementation("androidx.room:room-ktx:2.7.2")
+	ksp("androidx.room:room-compiler:2.8.0")
+	implementation("androidx.room:room-ktx:2.8.0")
 
 	// Dependency injection with Hilt
 	implementation("com.google.dagger:hilt-android:2.57.1")

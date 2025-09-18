@@ -2,6 +2,8 @@
 TODO
 ----
 
+* Should i use LifecycleService instead of Service?
+
 * Remove all print statements and TODO statements that were added, before releasing to production.
 
 * Check that selected directory for music works.

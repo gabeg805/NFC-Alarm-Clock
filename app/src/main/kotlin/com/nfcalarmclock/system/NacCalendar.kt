@@ -174,45 +174,6 @@ object NacCalendar
 		{
 			// Start the alarm the next day
 			alarmCalendar.add(Calendar.DAY_OF_MONTH, 1)
-			//// Check the units of the repeat frequency
-			//when (alarm.repeatFrequencyUnits)
-			//{
-			//	// Minutely or Hourly
-			//	1, 2 ->
-			//	{
-			//		// Start the alarm the next day
-			//		alarmCalendar.add(Calendar.DAY_OF_MONTH, 1)
-			//	}
-
-			//	// Weekly (with no days selected)
-			//	4 ->
-			//	{
-			//		// Start the alarm the next day
-			//		alarmCalendar.add(Calendar.DAY_OF_MONTH, 1)
-			//		// TODO: How does an X weekly alarm without days handle if someone, say, reboots their phone?
-			//		//  Does it reset the X week counter? Maybe need to use date in some way?
-			//		//// Add to the calendar by the repeat frequency value
-			//		//alarmCalendar.add(Calendar.WEEK_OF_YEAR, alarm.repeatFrequency)
-			//	}
-
-			//	// Monthly
-			//	5 ->
-			//	{
-			//		// Start the alarm the next day
-			//		alarmCalendar.add(Calendar.DAY_OF_MONTH, 1)
-			//		//// Add to the calendar by the repeat frequency value
-			//		//alarmCalendar.add(Calendar.MONTH, alarm.repeatFrequency)
-			//	}
-
-			//	// Daily
-			//	else ->
-			//	{
-			//		// TODO: How does this work? Should this be like the other janks
-			//		//  where it is only today or tomorrow and then NacAlarm handles the rest?
-			//		// Add to the calendar by the repeat frequency value
-			//		alarmCalendar.add(Calendar.DAY_OF_MONTH, alarm.repeatFrequency)
-			//	}
-			//}
 		}
 
 		// Return the alarm calendar
@@ -648,7 +609,7 @@ object NacCalendar
 		companion object
 		{
 
-			/**
+			/*
 			 * A set of no days.
 			 */
 			val NONE: EnumSet<Day>

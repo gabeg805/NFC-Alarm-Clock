@@ -668,7 +668,7 @@ class NacAlarm()
 		// Check repeat frequency units
 		when (repeatFrequencyUnits)
 		{
-			// Minutes
+			// Minutes (max: 8 hr)
 			1 ->
 			{
 				// Add the repeat frequency to the calendar
@@ -679,7 +679,7 @@ class NacAlarm()
 				minute = alarmCal.get(Calendar.MINUTE)
 			}
 
-			// Hours
+			// Hours (max: 1 week)
 			2 ->
 			{
 				// Add the repeat frequency to the calendar
@@ -687,9 +687,23 @@ class NacAlarm()
 
 				// Update the alarm hour
 				hour = alarmCal.get(Calendar.HOUR_OF_DAY)
+
+				// Every 25+ hours
+				if (repeatFrequency > 24)
+				{
+					// Remove all the days
+					days.clear()
+
+					// Get the new day of week
+					val calDay = alarmCal.get(Calendar.DAY_OF_WEEK)
+					val newDay = Day.calendarDayToDay(calDay)
+
+					// Add the new day to the days
+					days.add(newDay)
+				}
 			}
 
-			// Days
+			// Days (max: 1 year)
 			3 ->
 			{
 				// Every 1 day
