@@ -359,9 +359,6 @@ abstract class NacAlarmDatabase
 		{
 			// Update the table
 			db.execSQL("UPDATE alarm SET repeat_frequency_units=4 WHERE repeat_frequency_units=0")
-
-			// Update the shared preferences
-			sharedPreferences?.repeatFrequency = 1
 		}
 	}
 
