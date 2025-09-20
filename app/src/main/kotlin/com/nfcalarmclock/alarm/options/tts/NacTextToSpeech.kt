@@ -139,6 +139,11 @@ class NacTextToSpeech(
 	var isInitialized: Boolean = false
 
 	/**
+	 * Whether the TTS resources have been cleaned up or not.
+	 */
+	var isCleanedUp: Boolean = false
+
+	/**
 	 * The utterance listener.
 	 */
 	private val utteranceListener: NacUtteranceListener =
@@ -169,6 +174,18 @@ class NacTextToSpeech(
 
 		// Setup text to speech
 		textToSpeech.setOnUtteranceProgressListener(utteranceListener)
+	}
+
+	/**
+	 * Cleanup any used resources.
+	 */
+	fun cleanup()
+	{
+		// Shutdown the TTS engine
+		textToSpeech.shutdown()
+
+		// Set the cleanup flag
+		isCleanedUp = true
 	}
 
 	/**
@@ -213,6 +230,12 @@ class NacTextToSpeech(
 	 */
 	override fun onInit(status: Int)
 	{
+		// Cleanup has been called before init is finished
+		if (isCleanedUp)
+		{
+			return
+		}
+
 		// Set the initialization status
 		isInitialized = (status == TextToSpeech.SUCCESS)
 
@@ -232,6 +255,12 @@ class NacTextToSpeech(
 	 */
 	fun speak(message: String, attrs: NacAudioAttributes)
 	{
+		// Cleanup has been called before init is finished
+		if (isCleanedUp)
+		{
+			return
+		}
+
 		// TTS object is already initialized
 		if (isInitialized)
 		{

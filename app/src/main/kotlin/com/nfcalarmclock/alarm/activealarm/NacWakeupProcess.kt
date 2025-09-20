@@ -228,7 +228,8 @@ class NacWakeupProcess(
 		}
 
 		// Cleanup the text-to-speech engine
-		textToSpeech?.textToSpeech?.shutdown()
+		println("SHUTDOWN THIS JANK and SPEAK HANDLER")
+		textToSpeech?.cleanup()
 		speakHandler.removeCallbacksAndMessages(null)
 
 		// Cleanup the continue wakeup handler
@@ -393,7 +394,7 @@ class NacWakeupProcess(
 				println("HELLLO")
 				// Start the wakeup process, everything except for TTS
 				mediaPlayer.shouldShowToasts = false
-				startNoTts()
+				playMusic()
 				mediaPlayer.shouldShowToasts = true
 			}
 
@@ -484,7 +485,7 @@ class NacWakeupProcess(
 		if (textToSpeech == null || textToSpeech.isSpeaking() || textToSpeech.hasBuffer()
 			|| !alarm.shouldUseTts)
 		{
-			println("Returning immediately...has buffer? ${textToSpeech?.hasBuffer()}")
+			println("Returning immediately...has buffer? ${textToSpeech?.isCleanedUp} | ${textToSpeech?.hasBuffer()}")
 			return
 		}
 

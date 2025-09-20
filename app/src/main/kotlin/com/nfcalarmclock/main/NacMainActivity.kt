@@ -64,6 +64,7 @@ import com.nfcalarmclock.card.NacCardHolder
 import com.nfcalarmclock.card.NacCardHolder.OnCardAlarmOptionsClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardCollapsedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardDaysChangedListener
+import com.nfcalarmclock.card.NacCardHolder.OnCardDismissEarlyClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardDismissOptionsClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardMediaClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardNameClickedListener
@@ -800,8 +801,9 @@ class NacMainActivity
 					alarm.dismissEarly()
 					updateAlarm(alarm)
 
-					// Clear the notification
+					// Clear any notifications
 					NacDismissEarlyService.stopService(this@NacMainActivity, alarm)
+					NacUpcomingReminderService.stopService(this@NacMainActivity, alarm)
 				}
 				// Null alarm
 				else
@@ -956,6 +958,19 @@ class NacMainActivity
 				NacDismissEarlyService.stopService(this@NacMainActivity, alarm)
 				NacUpcomingReminderService.stopService(this@NacMainActivity, alarm)
 			}
+
+		}
+
+		// Dismiss early
+		card.onCardDismissEarlyClickedListener = OnCardDismissEarlyClickedListener { _, alarm ->
+
+			// Show next alarm and update the alarm
+			showNextAlarm(card, alarm)
+			updateAlarm(alarm)
+
+			// Clear any notifications
+			NacDismissEarlyService.stopService(this@NacMainActivity, alarm)
+			NacUpcomingReminderService.stopService(this@NacMainActivity, alarm)
 
 		}
 
@@ -1933,6 +1948,9 @@ class NacMainActivity
 				alarm.isEnabled = true
 				alarm.shouldSkipNextAlarm = false
 
+				// Clear the dismiss early time
+				alarm.timeOfDismissEarlyAlarm = 0
+
 				// Refresh the schedule date views
 				card.refreshScheduleDateViews()
 
@@ -1950,6 +1968,9 @@ class NacMainActivity
 				alarm.isEnabled = true
 				alarm.shouldRepeat = false
 				alarm.shouldSkipNextAlarm = false
+
+				// Clear the dismiss early time
+				alarm.timeOfDismissEarlyAlarm = 0
 
 				// Clear all the days
 				alarm.setDays(0)
@@ -1971,6 +1992,9 @@ class NacMainActivity
 				// Enable the alarm and reset the skip next alarm flag
 				alarm.isEnabled = true
 				alarm.shouldSkipNextAlarm = false
+
+				// Clear the dismiss early time
+				alarm.timeOfDismissEarlyAlarm = 0
 
 				// Refresh the time views
 				card.refreshTimeViews()

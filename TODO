@@ -2,11 +2,15 @@
 TODO
 ----
 
-* Should i use LifecycleService instead of Service?
-
-* Remove all print statements and TODO statements that were added, before releasing to production.
+* Test date picker when alarm has a date
 
 * Check that selected directory for music works.
+
+  Selecting a folder does not change the media name in the card. Need to fix that
+
+  File not found for Music/Arctic Monkeys/<Song>. Need to make sure doing path correctly
+
+* Remove all print statements and TODO statements that were added, before releasing to production.
 
 * Stream internet radio, like KEXP?
 

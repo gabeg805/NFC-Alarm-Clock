@@ -9,6 +9,8 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.system.NacCalendar.Day
 import com.nfcalarmclock.system.NacCalendar.alarmToCalendar
+import com.nfcalarmclock.system.toCalendarDay
+import com.nfcalarmclock.system.toDay
 import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek.OnWeekChangedListener
@@ -103,8 +105,8 @@ class NacRepeatOptionsDialog
 	{
 		return when (index)
 		{
-			// Minute (max 8 hours)
-			0 -> (15..480)
+			// Minute (max 4 hours)
+			0 -> (15..240)
 
 			// Hour (max 1 week)
 			1 -> (1..168)
@@ -133,7 +135,7 @@ class NacRepeatOptionsDialog
 
 		// Build the alarm calendar instance
 		val alarmCal = alarmToCalendar(alarm)
-		alarmCal[Calendar.DAY_OF_WEEK] = Day.dayToCalendarDay(Day.TODAY)
+		alarmCal[Calendar.DAY_OF_WEEK] = Day.TODAY.toCalendarDay()
 
 		// Alarm will occur in the future
 		return if (alarmCal.after(now))
@@ -149,7 +151,7 @@ class NacRepeatOptionsDialog
 			// Get tomorrow as a day
 			val tomorrow = now.get(Calendar.DAY_OF_WEEK)
 
-			return Day.calendarDayToDay(tomorrow)
+			return tomorrow.toDay()
 		}
 	}
 

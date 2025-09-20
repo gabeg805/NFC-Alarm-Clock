@@ -6,6 +6,15 @@ import android.text.format.DateFormat
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.db.NacNextAlarm
+import com.nfcalarmclock.system.NacCalendar.Day
+import com.nfcalarmclock.system.NacCalendar.Day.Companion.WEEK
+import com.nfcalarmclock.system.NacCalendar.Day.FRIDAY
+import com.nfcalarmclock.system.NacCalendar.Day.MONDAY
+import com.nfcalarmclock.system.NacCalendar.Day.SATURDAY
+import com.nfcalarmclock.system.NacCalendar.Day.SUNDAY
+import com.nfcalarmclock.system.NacCalendar.Day.THURSDAY
+import com.nfcalarmclock.system.NacCalendar.Day.TUESDAY
+import com.nfcalarmclock.system.NacCalendar.Day.WEDNESDAY
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.EnumSet
@@ -15,11 +24,9 @@ import java.util.TimeZone
 /**
  * Convert a set of days to a value.
  *
- * TODO: Add more extension functions.
- *
  * @return The computed value of all enum days added together.
  */
-fun EnumSet<NacCalendar.Day>.daysToValue(): Int
+fun EnumSet<Day>.daysToValue(): Int
 {
 	// Initialize the value
 	var value = 0
@@ -34,6 +41,100 @@ fun EnumSet<NacCalendar.Day>.daysToValue(): Int
 }
 
 /**
+ * Convert from a Day to a Calendar day.
+ *
+ * @return A Calendar day.
+ */
+fun Day.toCalendarDay(): Int
+{
+	return when (this)
+	{
+		SUNDAY    -> Calendar.SUNDAY
+		MONDAY    -> Calendar.MONDAY
+		TUESDAY   -> Calendar.TUESDAY
+		WEDNESDAY -> Calendar.WEDNESDAY
+		THURSDAY  -> Calendar.THURSDAY
+		FRIDAY    -> Calendar.FRIDAY
+		SATURDAY  -> Calendar.SATURDAY
+	}
+}
+
+/**
+ * Convert a repeat frequency unit to a calendar field.
+ */
+fun Int.toCalendarField(): Int
+{
+	return when (this)
+	{
+		1 -> Calendar.MINUTE
+		2 -> Calendar.HOUR_OF_DAY
+		3 -> Calendar.DAY_OF_MONTH
+		4 -> Calendar.WEEK_OF_YEAR
+		5 -> Calendar.MONTH
+		else -> Calendar.WEEK_OF_YEAR
+	}
+}
+
+/**
+ * Convert from a Calendar day to a Day.
+ *
+ * @return A Day.
+ */
+fun Int.toDay(): Day
+{
+	return when (this)
+	{
+		Calendar.SUNDAY    -> SUNDAY
+		Calendar.MONDAY    -> MONDAY
+		Calendar.TUESDAY   -> TUESDAY
+		Calendar.WEDNESDAY -> WEDNESDAY
+		Calendar.THURSDAY  -> THURSDAY
+		Calendar.FRIDAY    -> FRIDAY
+		Calendar.SATURDAY  -> SATURDAY
+		else               -> SUNDAY
+	}
+}
+
+/**
+ * Convert a value to a set of days.
+ *
+ * The value of a set of days. Each day has a unique, 2^n,
+ * value so only one bit is set. Doing a bitwise-and of a
+ * day should compute to 1 if you have the correct day.
+ *
+ * @return A set of enum days.
+ */
+fun Int.toDays(): EnumSet<Day>
+{
+	// Initialize the set
+	val days = Day.NONE
+
+	// Iterate over each day in the week
+	for (d in WEEK)
+	{
+		// Check the value
+		if (d.value and this != 0)
+		{
+			days.add(d)
+		}
+	}
+
+	// Return the set
+	return days
+}
+
+/**
+ * Check if a calendar's time matches the dismiss early time of an alarm.
+ *
+ * @return True if a calendar's time matches the dismiss early time of an alarm, and
+ * False otherwise.
+ */
+fun Calendar.equalsDismissEarlyTime(alarm: NacAlarm): Boolean
+{
+	return (alarm.timeOfDismissEarlyAlarm > 0) && (this.timeInMillis == alarm.timeOfDismissEarlyAlarm)
+}
+
+/**
  * A list of possible days the alarm can run on.
  */
 object NacCalendar
@@ -41,7 +142,6 @@ object NacCalendar
 
 	/**
 	 * Convert the alarm on the given day to a Calendar.
-	 * TODO: Should this be only run weekly? CHECK
 	 * TODO: Did an every 2 week alarm on Sun (time already had past) with Sun as day to run before starting, and it still starting 2 weeks later. Should start 1 week later, then do 2 weeks
 	 *
 	 * @param  alarm  The alarm.
@@ -54,19 +154,41 @@ object NacCalendar
 		// Get the current calendar instance
 		val now = Calendar.getInstance()
 
-		// Build the alarm calendar instance
-		val alarmCalendar = alarmToCalendar(alarm)
-		alarmCalendar[Calendar.DAY_OF_WEEK] = Day.dayToCalendarDay(day)
+		// TODO: Figure out when this is run in relation to setting/unsetting a day. Important to understand flow.
+		// TODO: This is definitely run before an alarm goes off, in which case the conditional below would be false
 
-		// Check if the day has already passed
-		// or repeat alarm on an X number of weeks (whatever the repeat frequency is) but
-		// this day is not included to run early
-		if (alarmCalendar.before(now)
-			|| ((alarm.repeatFrequencyUnits == 4) && (alarm.repeatFrequency != 1) && !alarm.repeatFrequencyDaysToRunBeforeStarting.contains(day)))
+		// Build the alarm calendar instance. Setting the day of week could set the
+		// calendar time to be in the past
+		val alarmCalendar = alarmToCalendar(alarm)
+		alarmCalendar[Calendar.DAY_OF_WEEK] = day.toCalendarDay()
+
+		// Day has already past, so add a week to the next time in the future the day
+		// will occur
+		if (alarmCalendar.before(now))
 		{
-			// Alarm will occur in X weeks
-			alarmCalendar.add(Calendar.WEEK_OF_YEAR, alarm.repeatFrequency)
+			alarmCalendar.add(Calendar.WEEK_OF_YEAR, 1)
 		}
+
+		// Repeat alarm every X weeks (whatever the repeat frequency is) but
+		// this day is not included to run early
+		if ((alarm.repeatFrequencyUnits == 4) && (alarm.repeatFrequency != 1) && !alarm.repeatFrequencyDaysToRunBeforeStarting.contains(day))
+		{
+			println("Hello alarmDayToCalendar() : ${alarmCalendar.before(now)} | ${alarm.repeatFrequencyUnits} | ${alarm.repeatFrequency} | $day")
+			// Alarm will occur in X weeks
+			alarmCalendar.add(alarm.repeatFrequencyUnits.toCalendarField(), alarm.repeatFrequency)
+		}
+
+		//// Check if the day has already passed
+		//// or repeat alarm on an X number of weeks (whatever the repeat frequency is) but
+		//// this day is not included to run early
+		//if (alarmCalendar.before(now)
+		//	|| ((alarm.repeatFrequencyUnits == 4) && (alarm.repeatFrequency != 1) && !alarm.repeatFrequencyDaysToRunBeforeStarting.contains(day)))
+		//{
+		//	println("Hello alarmDayToCalendar() : ${alarmCalendar.before(now)} | ${alarm.repeatFrequencyUnits} | ${alarm.repeatFrequency} | $day")
+		//	// Alarm will occur in X <repeat frequency unit>
+		//	//alarmCalendar.add(alarm.repeatFrequencyUnits.toCalendarField(), alarm.repeatFrequency)
+		//	alarmCalendar.add(Calendar.WEEK_OF_YEAR, alarm.repeatFrequency)
+		//}
 
 		// Return the alarm calendar
 		return alarmCalendar
@@ -80,7 +202,7 @@ object NacCalendar
 	 *
 	 * @return A calendar with the alarm hour, minute, and date, if present.
 	 */
-	fun alarmToCalendar(alarm: NacAlarm, skipDate: Boolean = false): Calendar
+	fun alarmToCalendar(alarm: NacAlarm): Calendar
 	{
 		// Get the current calendar instance
 		val cal = Calendar.getInstance()
@@ -91,8 +213,8 @@ object NacCalendar
 		cal[Calendar.SECOND] = 0
 		cal[Calendar.MILLISECOND] = 0
 
-		// Check if a date was set and should not be skipped
-		if (alarm.date.isNotEmpty() && !skipDate)
+		// Alarm date was set
+		if (alarm.date.isNotEmpty())
 		{
 			// Get the year/month/day
 			val (year, month, day) = alarm.date.split("-")
@@ -108,7 +230,6 @@ object NacCalendar
 
 	/**
 	 * Convert all the days an alarm is scheduled to go off, to Calendars.
-	 * TODO: Check how to use dismiss early alarm time
 	 *
 	 * @param  alarm  The alarm.
 	 *
@@ -122,25 +243,30 @@ object NacCalendar
 		if (alarm.date.isNotEmpty())
 		{
 			val c = alarmToCalendar(alarm)
+
+			// Alarm was dismissed early at the same time matching this calendar
+			if (c.equalsDismissEarlyTime(alarm))
+			{
+				// Add the repeat frequency to this calendar
+				c.add(alarm.repeatFrequencyUnits.toCalendarField(), alarm.repeatFrequency)
+			}
+
 			calendars.add(c)
 		}
 		// Days are selected
 		else if (alarm.days.isNotEmpty())
 		{
-			val timeOfDismissEarlyAlarm = alarm.timeOfDismissEarlyAlarm
-
 			// Iterate over each selected day
 			for (d in alarm.days)
 			{
 				// Get calendar and time of calendar
 				val c = alarmDayToCalendar(alarm, d)
-				val t = c.timeInMillis
 
-				// Time matches the alarm that was dismissed early. Add X weeks to
-				// this calendar, whatever the repeat frequency is
-				if (timeOfDismissEarlyAlarm > 0 && t == timeOfDismissEarlyAlarm)
+				// Alarm was dismissed early at the same time matching this calendar
+				if (c.equalsDismissEarlyTime(alarm))
 				{
-					c.add(Calendar.WEEK_OF_YEAR, alarm.repeatFrequency)
+					// Add the repeat frequency to this calendar
+					c.add(alarm.repeatFrequencyUnits.toCalendarField(), alarm.repeatFrequency)
 				}
 
 				// Add calendar to list of calendars
@@ -169,8 +295,9 @@ object NacCalendar
 		// Build the alarm calendar instance
 		val alarmCalendar = alarmToCalendar(alarm)
 
-		// Check if the alarm calendar occurs in the past. Need to fix that
-		if (alarmCalendar.before(now))
+		// Alarm calendar occurs in the past or was dismissed early at the same time
+		// matching this calendar
+		if (alarmCalendar.before(now) || alarmCalendar.equalsDismissEarlyTime(alarm))
 		{
 			// Start the alarm the next day
 			alarmCalendar.add(Calendar.DAY_OF_MONTH, 1)
@@ -434,22 +561,6 @@ object NacCalendar
 	}
 
 	/**
-	 * Convert a repeat frequency unit to a calendar field.
-	 */
-	fun repeatFrequencyUnitToCalendarField(unit: Int): Int
-	{
-		return when (unit)
-		{
-			1 -> Calendar.MINUTE
-			2 -> Calendar.HOUR_OF_DAY
-			3 -> Calendar.DAY_OF_MONTH
-			4 -> Calendar.WEEK_OF_YEAR
-			5 -> Calendar.MONTH
-			else -> Calendar.WEEK_OF_YEAR
-		}
-	}
-
-	/**
 	 * Get the Calendar day on which the given alarm will run next.
 	 *
 	 * @param  alarm  The alarm who's days to check.
@@ -473,11 +584,8 @@ object NacCalendar
 			if ((calendars.size == 1) && alarm.shouldRepeat)
 			{
 				println("SKIPPIO. Should skip alarm but do not ignore skip and only one calendar in list: ${alarm.repeatFrequency} | ${alarm.repeatFrequencyUnits} | ${alarm.repeatFrequencyDaysToRunBeforeStarting}")
-				// Get the calendar field unit to use to adjust the calendar date
-				val fieldUnit = repeatFrequencyUnitToCalendarField(alarm.repeatFrequencyUnits)
-
 				// Add the repeat frequency to the calendar
-				nextDay.add(fieldUnit, alarm.repeatFrequency)
+				nextDay.add(alarm.repeatFrequencyUnits.toCalendarField(), alarm.repeatFrequency)
 				nextDay
 			}
 			else
@@ -626,7 +734,7 @@ object NacCalendar
 					val dow = today[Calendar.DAY_OF_WEEK]
 
 					// Convert the day of week to a day
-					return Day.calendarDayToDay(dow)
+					return dow.toDay()
 				}
 
 			/**
@@ -656,6 +764,8 @@ object NacCalendar
 
 			/**
 			 * Convert an alarm to a string of days.
+			 *
+			 * TODO: Convert to extension function.
 			 *
 			 * If no days are specified and the alarm is enable.
 			 */
@@ -804,50 +914,9 @@ object NacCalendar
 			}
 
 			/**
-			 * Convert from a Calendar day to a Day.
-			 *
-			 * @param  day  A Calendar day.
-			 *
-			 * @return A Day.
-			 */
-			fun calendarDayToDay(day: Int): Day
-			{
-				return when (day)
-				{
-					Calendar.SUNDAY    -> SUNDAY
-					Calendar.MONDAY    -> MONDAY
-					Calendar.TUESDAY   -> TUESDAY
-					Calendar.WEDNESDAY -> WEDNESDAY
-					Calendar.THURSDAY  -> THURSDAY
-					Calendar.FRIDAY    -> FRIDAY
-					Calendar.SATURDAY  -> SATURDAY
-					else               -> SUNDAY
-				}
-			}
-
-			/**
-			 * Convert from a Day to a Calendar day.
-			 *
-			 * @param  day  A Day.
-			 *
-			 * @return A Calendar day.
-			 */
-			fun dayToCalendarDay(day: Day): Int
-			{
-				return when (day)
-				{
-					SUNDAY    -> Calendar.SUNDAY
-					MONDAY    -> Calendar.MONDAY
-					TUESDAY   -> Calendar.TUESDAY
-					WEDNESDAY -> Calendar.WEDNESDAY
-					THURSDAY  -> Calendar.THURSDAY
-					FRIDAY    -> Calendar.FRIDAY
-					SATURDAY  -> Calendar.SATURDAY
-				}
-			}
-
-			/**
 			 * Convert a set of days to a comma separate string of days.
+			 *
+			 * TODO: Convert to extension function.
 			 *
 			 * @return A string of the days.
 			 *
@@ -993,34 +1062,6 @@ object NacCalendar
 					// Unknown
 					else -> oneTimeAlarmToString(context, alarm)
 				}
-			}
-
-			/**
-			 * Convert a value to a set of days.
-			 *
-			 * @param  value  The value of a set of days. Each day has a unique, 2^n,
-			 * value so only one bit is set. Doing a bitwise-and of a
-			 * day should compute to 1 if you have the correct day.
-			 *
-			 * @return A set of enum days.
-			 */
-			fun valueToDays(value: Int): EnumSet<Day>
-			{
-				// Initialize the set
-				val days = Day.NONE
-
-				// Iterate over each day in the week
-				for (d in WEEK)
-				{
-					// Check the value
-					if (d.value and value != 0)
-					{
-						days.add(d)
-					}
-				}
-
-				// Return the set
-				return days
 			}
 
 		}

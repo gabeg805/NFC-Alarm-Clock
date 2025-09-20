@@ -89,6 +89,14 @@ class NacCardHolder(
 	}
 
 	/**
+	 * Listener for when the dismiss early button is clicked.
+	 */
+	fun interface OnCardDismissEarlyClickedListener
+	{
+		fun onCardDismissEarlyClicked(card: NacCardHolder, alarm: NacAlarm)
+	}
+
+	/**
 	 * Listener for when the dismiss options button is clicked.
 	 */
 	fun interface OnCardDismissOptionsClickedListener
@@ -396,6 +404,11 @@ class NacCardHolder(
 	 * Listener for when the days changed.
 	 */
 	var onCardDaysChangedListener: OnCardDaysChangedListener? = null
+
+	/**
+	 * Listener for when the dismiss early button is clicked.
+	 */
+	var onCardDismissEarlyClickedListener: OnCardDismissEarlyClickedListener? = null
 
 	/**
 	 * Listener for when the dismiss options button is clicked.
@@ -1694,21 +1707,26 @@ class NacCardHolder(
 				// Toggle the day
 				alarm!!.toggleDay(day)
 
-				// Check if no days are selected
+				// No days are selected
 				if (alarm!!.days.isEmpty())
 				{
-					// Change the repeat frequency to be every day
-					alarm!!.repeatFrequency = 1
-					alarm!!.repeatFrequencyUnits = 3
-					alarm!!.repeatFrequencyDaysToRunBeforeStarting = Day.NONE
+					// Repeat frequency is the default value of 1
+					if (alarm!!.repeatFrequency == 1)
+					{
+						// Change to daily
+						alarm!!.repeatFrequencyUnits = 3
+						alarm!!.repeatFrequencyDaysToRunBeforeStarting = Day.NONE
+					}
 				}
+				// Days are selected
 				else
 				{
-					// Check if the repeat frequency is not set to a weekly cadence
-					if (alarm!!.repeatFrequencyUnits != 4)
+					// Repeat frequency is the default value of 1 but not on a weekly
+					// cadence. When days are selected, the repeat frequency should be
+					// weekly, with few exceptions
+					if ((alarm!!.repeatFrequency == 1) && (alarm!!.repeatFrequencyUnits != 4))
 					{
-						// Change the repeat frequency to be weekly
-						alarm!!.repeatFrequency = 1
+						// Change to weekly
 						alarm!!.repeatFrequencyUnits = 4
 						alarm!!.repeatFrequencyDaysToRunBeforeStarting = Day.WEEK
 					}
@@ -1778,11 +1796,10 @@ class NacCardHolder(
 			alarm!!.dismissEarly()
 
 			// Refresh the extra view
-			refreshExtraView()
-			collapseRefresh()
+			refreshTimeViews()
 
 			// Call the listener
-			callOnCardUpdatedListener()
+			onCardDismissEarlyClickedListener?.onCardDismissEarlyClicked(this, alarm!!)
 
 			// Haptic feedback
 			view.performHapticFeedback()
@@ -2072,12 +2089,9 @@ class NacCardHolder(
 				// Reset the skip next alarm flag
 				alarm!!.shouldSkipNextAlarm = false
 
-				// Check if alarm was disabled
-				if (!state)
-				{
-					// Reset the snooze counter
-					alarm!!.snoozeCount = 0
-				}
+				// Reset the snooze counter and dismiss early time
+				alarm!!.snoozeCount = 0
+				alarm!!.timeOfDismissEarlyAlarm = 0
 
 				// Set the alarm enabled state
 				alarm!!.isEnabled = state

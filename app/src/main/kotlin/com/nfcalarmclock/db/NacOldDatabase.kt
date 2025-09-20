@@ -7,15 +7,15 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
+import androidx.core.database.sqlite.transaction
+import androidx.core.net.toUri
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.system.NacCalendar
+import com.nfcalarmclock.system.daysToValue
+import com.nfcalarmclock.system.toDays
 import com.nfcalarmclock.util.media.getMediaTitle
 import com.nfcalarmclock.util.media.getMediaType
-import androidx.core.database.sqlite.transaction
-import androidx.core.net.toUri
-import com.nfcalarmclock.system.daysToValue
 
 /**
  * NFC Alarm Clock database.
@@ -435,7 +435,7 @@ class NacOldDatabase(
 				alarm.isEnabled = cursor.getInt(2) != 0
 				alarm.hour = cursor.getInt(3)
 				alarm.minute = cursor.getInt(4)
-				alarm.days = NacCalendar.Day.valueToDays(cursor.getInt(5))
+				alarm.days = cursor.getInt(5).toDays()
 				alarm.shouldRepeat = cursor.getInt(6) != 0
 				alarm.shouldUseNfc = cursor.getInt(7) != 0
 				alarm.shouldVibrate = cursor.getInt(8) != 0
@@ -453,7 +453,7 @@ class NacOldDatabase(
 				alarm.isEnabled = cursor.getInt(2) != 0
 				alarm.hour = cursor.getInt(3)
 				alarm.minute = cursor.getInt(4)
-				alarm.days = NacCalendar.Day.valueToDays(cursor.getInt(5))
+				alarm.days = cursor.getInt(5).toDays()
 				alarm.shouldRepeat = cursor.getInt(6) != 0
 				alarm.shouldUseNfc = cursor.getInt(7) != 0
 				alarm.shouldVibrate = cursor.getInt(8) != 0
@@ -471,7 +471,7 @@ class NacOldDatabase(
 				alarm.isEnabled = cursor.getInt(2) != 0
 				alarm.hour = cursor.getInt(3)
 				alarm.minute = cursor.getInt(4)
-				alarm.days = NacCalendar.Day.valueToDays(cursor.getInt(5))
+				alarm.days = cursor.getInt(5).toDays()
 				alarm.shouldRepeat = cursor.getInt(6) != 0
 				alarm.shouldUseNfc = cursor.getInt(7) != 0
 				alarm.shouldVibrate = cursor.getInt(8) != 0

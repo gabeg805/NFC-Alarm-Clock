@@ -147,7 +147,7 @@ fun Intent.getSetAlarm(context: Context): NacAlarm?
 		{
 			for (d in extraDays)
 			{
-				days.add(NacCalendar.Day.Companion.calendarDayToDay(d))
+				days.add(d.toDay())
 			}
 		}
 

@@ -1,7 +1,6 @@
 package com.nfcalarmclock.alarm.activealarm
 
 import android.app.ForegroundServiceStartNotAllowedException
-import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -9,6 +8,8 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.PowerManager
 import android.os.PowerManager.WakeLock
+import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
@@ -26,9 +27,7 @@ import com.nfcalarmclock.system.disableActivityAlias
 import com.nfcalarmclock.system.enableActivityAlias
 import com.nfcalarmclock.system.getAlarm
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
@@ -41,18 +40,19 @@ import javax.inject.Inject
 @UnstableApi
 @AndroidEntryPoint
 class NacActiveAlarmService
-	: Service()
+	: LifecycleService()
+	//: Service()
 {
 
 	/**
 	 * Supervisor job for the service.
 	 */
-	private val job = SupervisorJob()
+	//private val job = SupervisorJob()
 
 	/**
 	 * Coroutine scope for the service.
 	 */
-	private val scope = CoroutineScope(Dispatchers.IO + job)
+	//private val scope = CoroutineScope(Dispatchers.IO + job)
 
 	/**
 	 * Alarm repository.
@@ -92,6 +92,12 @@ class NacActiveAlarmService
 	private var wakeupProcess: NacWakeupProcess? = null
 
 	/**
+	 * Delay the wakeup process to ensure that the activity is shown before playing
+	 * audio.
+	 */
+	private var wakeupProcessDelayHandler: Handler? = null
+
+	/**
 	 * Automatically dismiss the alarm in case it does not get dismissed.
 	 */
 	private var autoDismissHandler: Handler? = null
@@ -120,6 +126,7 @@ class NacActiveAlarmService
 		wakeupProcess?.cleanup()
 
 		// Cleanup the auto dismiss and snooze handler
+		wakeupProcessDelayHandler?.removeCallbacksAndMessages(null)
 		autoDismissHandler?.removeCallbacksAndMessages(null)
 		autoSnoozeHandler?.removeCallbacksAndMessages(null)
 		vibrateWatchHandler?.removeCallbacksAndMessages(null)
@@ -169,7 +176,8 @@ class NacActiveAlarmService
 	fun dismiss(usedNfc: Boolean = false, wasMissed: Boolean = false)
 	{
 		// Update the alarm
-		scope.launch {
+		//scope.launch {
+		lifecycleScope.launch {
 
 			// Dismiss the alarm
 			alarm!!.dismiss()
@@ -259,6 +267,7 @@ class NacActiveAlarmService
 	 */
 	override fun onBind(intent: Intent): IBinder?
 	{
+		super.onBind(intent)
 		return null
 	}
 
@@ -275,6 +284,7 @@ class NacActiveAlarmService
 		sharedPreferences = NacSharedPreferences(this)
 		wakeLock = null
 		alarm = null
+		wakeupProcessDelayHandler = Handler(mainLooper)
 		autoDismissHandler = Handler(mainLooper)
 		autoSnoozeHandler = Handler(mainLooper)
 		vibrateWatchHandler = Handler(mainLooper)
@@ -312,7 +322,8 @@ class NacActiveAlarmService
 		// Stop the alarm activity
 		NacActiveAlarmActivity.stopAlarmActivity(this)
 
-		scope.launch {
+		//scope.launch {
+		lifecycleScope.launch {
 
 			// Check if the alarm is not null
 			if (alarm != null)
@@ -336,6 +347,9 @@ class NacActiveAlarmService
 	@UnstableApi
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
 	{
+		// Super
+		super.onStartCommand(intent, flags, startId)
+
 		// Setup the service
 		setupActiveAlarmService(intent)
 
@@ -365,7 +379,8 @@ class NacActiveAlarmService
 				// Show the skip notification
 				showSkipAlarmNotification()
 
-				scope.launch {
+				//scope.launch {
+				lifecycleScope.launch {
 
 					// Skip the alarm
 					alarm!!.skipAlarm()
@@ -411,7 +426,8 @@ class NacActiveAlarmService
 				// Unable to snooze the alarm
 				else
 				{
-					scope.launch {
+					//scope.launch {
+					lifecycleScope.launch {
 						withContext(Dispatchers.Main)
 						{
 							// Show a toast saying the alarm could not be snoozed
@@ -598,7 +614,8 @@ class NacActiveAlarmService
 	@UnstableApi
 	fun snooze()
 	{
-		scope.launch {
+		//scope.launch {
+		lifecycleScope.launch {
 
 			// Snooze the alarm and get the next time to run the alarm again
 			val cal = alarm!!.snooze()
@@ -653,11 +670,13 @@ class NacActiveAlarmService
 		// trying to request audio focus, otherwise any media or TTS will fail
 		wakeupProcess = NacWakeupProcess(this, alarm!!)
 
-		Handler(mainLooper).postDelayed({
+		//Handler(mainLooper).postDelayed({
+		wakeupProcessDelayHandler?.postDelayed({
 			wakeupProcess!!.start()
-		}, 3000)
+		}, 2000)
 
-		scope.launch {
+		//scope.launch {
+		lifecycleScope.launch {
 
 			 // Set the active flag and reset the skip flag
 			alarm!!.isActive = true
@@ -667,7 +686,8 @@ class NacActiveAlarmService
 			alarmRepository.update(alarm!!)
 
 			// Reschedule the alarm
-			NacScheduler.update(this@NacActiveAlarmService, alarm!!)
+			// TODO: Why is this reschedule here?
+			//NacScheduler.update(this@NacActiveAlarmService, alarm!!)
 
 		}
 	}
@@ -701,7 +721,8 @@ class NacActiveAlarmService
 		val currentStartTime = startTime
 		val currentAlarm = alarm!!
 
-		scope.launch {
+		//scope.launch {
+		lifecycleScope.launch {
 
 			// Check if the service has started
 			if (currentStartTime != 0L)

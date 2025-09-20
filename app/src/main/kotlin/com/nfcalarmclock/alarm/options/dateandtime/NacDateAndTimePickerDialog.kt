@@ -230,9 +230,18 @@ class NacDateAndTimePickerDialog
 	 */
 	private fun setupDatePicker(alarm: NacAlarm)
 	{
+		// Save off the alarm's date before clearing it to not affect the
+		// alarmToCalendar() conversion
+		val saveDate = alarm.date
+
+		alarm.date = ""
+
 		// Get the next time the alarm will go off
 		val now = Calendar.getInstance()
-		val alarmCal = NacCalendar.alarmToCalendar(alarm, skipDate = true)
+		val alarmCal = NacCalendar.alarmToCalendar(alarm)
+
+		// Restore the alarm's date
+		alarm.date = saveDate
 
 		// Min date
 		datePicker.minDate = if (alarmCal.before(now))

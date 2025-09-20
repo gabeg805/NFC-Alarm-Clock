@@ -368,8 +368,15 @@ class NacMediaPlayer(
 	 */
 	private fun playMediaItem(item: MediaItem)
 	{
-		// Set the media item
-		exoPlayer.setMediaItem(item)
+		try
+		{
+			// Set the media item
+			exoPlayer.setMediaItem(item)
+		}
+		catch (e: IllegalStateException)
+		{
+			println("NacMediaPlayer : playMediaItem() : ${e.toString()}")
+		}
 
 		// Play the media item
 		play()
@@ -382,8 +389,15 @@ class NacMediaPlayer(
 	 */
 	private fun playMediaItems(items: List<MediaItem>)
 	{
-		// Set the media items
-		exoPlayer.setMediaItems(items)
+		try
+		{
+			// Set the media items
+			exoPlayer.setMediaItems(items)
+		}
+		catch (e: IllegalStateException)
+		{
+			println("NacMediaPlayer : playMediaItems() : ${e.toString()}")
+		}
 
 		// Play the media items
 		play()
