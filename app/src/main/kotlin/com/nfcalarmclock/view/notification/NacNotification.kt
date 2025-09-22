@@ -103,10 +103,6 @@ abstract class NacNotification(
 
 	/**
 	 * Get the number of lines in the body.
-	 *
-	 * TODO: See if this can be 0 instead of 1.
-	 *
-	 * @return Number of lines in the body.
 	 */
 	protected val lineCount: Int
 		get() = body.size
@@ -186,7 +182,6 @@ abstract class NacNotification(
 	 */
 	protected fun getBodyLine(alarm: NacAlarm): String
 	{
-		// TODO: This will give the wrong day if a user misses an alarm at a day boundary.
 		val cal = NacCalendar.alarmToCalendar(alarm)
 		val time = NacCalendar.getFullTime(context, cal)
 
@@ -236,8 +231,7 @@ abstract class NacNotification(
 			if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
 				!= PackageManager.PERMISSION_GRANTED)
 			{
-				// TODO: Consider calling
-				//    ActivityCompat#requestPermissions
+				// TODO: Consider calling ActivityCompat#requestPermissions
 				// here to request the missing permissions, and then overriding
 				//   public void onRequestPermissionsResult(int requestCode, String[] permissions,
 				//                                          int[] grantResults)

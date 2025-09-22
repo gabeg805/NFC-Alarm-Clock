@@ -1,7 +1,6 @@
 package com.nfcalarmclock.alarm.options.tts
 
 import android.content.Context
-import android.media.AudioManager.OnAudioFocusChangeListener
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import com.nfcalarmclock.R
@@ -59,20 +58,8 @@ class NacTextToSpeech(
 	/**
 	 * Utterance listener.
 	 */
-	class NacUtteranceListener(
-
-		/**
-		 * Context.
-		 */
-		private val context: Context,
-
-		/**
-		 * Audio focus change listener.
-		 */
-		private val onAudioFocusChangeListener: OnAudioFocusChangeListener?
-
-		// Constructor
-	) : UtteranceProgressListener()
+	class NacUtteranceListener
+		: UtteranceProgressListener()
 	{
 
 		/**
@@ -87,9 +74,6 @@ class NacTextToSpeech(
 		{
 			// Call done speaking listener
 			onSpeakingListener?.onDoneSpeaking()
-
-			// Abandon audio focus
-			NacAudioManager.abandonFocus(context, onAudioFocusChangeListener)
 		}
 
 		/**
@@ -146,8 +130,7 @@ class NacTextToSpeech(
 	/**
 	 * The utterance listener.
 	 */
-	private val utteranceListener: NacUtteranceListener =
-		NacUtteranceListener(context, null)
+	private val utteranceListener: NacUtteranceListener = NacUtteranceListener()
 
 	/**
 	 * On initialized listener.

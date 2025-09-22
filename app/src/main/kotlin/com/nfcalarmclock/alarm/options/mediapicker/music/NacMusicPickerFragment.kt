@@ -28,6 +28,7 @@ import com.nfcalarmclock.system.file.browser.NacFileBrowser.OnBrowserClickedList
 import com.nfcalarmclock.system.permission.readmediaaudio.NacReadMediaAudioPermission
 import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.system.addMediaInfo
+import com.nfcalarmclock.system.file.basename
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.media.NacMedia
 import com.nfcalarmclock.util.media.copyDocumentToDeviceEncryptedStorageAndCheckMetadata
@@ -300,7 +301,15 @@ class NacMusicPickerFragment
 		// further needs to be done
 		if (uri.isMediaDirectory())
 		{
+			// Show the warning dialog
 			showWarningDirectorySelected()
+
+			// Set the artist, title, and type
+			mediaArtist = ""
+			mediaTitle = mediaPath.basename()
+			mediaType = NacMedia.TYPE_DIRECTORY
+			localMediaPath = ""
+
 			return
 		}
 

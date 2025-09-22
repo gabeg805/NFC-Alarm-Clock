@@ -11,6 +11,8 @@ import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.NacCalendar.Day
 import com.nfcalarmclock.system.NacCalendar.calendarToString
 import com.nfcalarmclock.system.daysToValue
+import com.nfcalarmclock.system.removeToday
+import com.nfcalarmclock.system.toCalendarField
 import com.nfcalarmclock.system.toDay
 import com.nfcalarmclock.system.toDays
 import dagger.Module
@@ -95,18 +97,6 @@ class NacAlarm()
 	 */
 	@ColumnInfo(name = "minute", defaultValue = "0")
 	var minute: Int = 0
-
-	/**
-	 * Hour at which to run the alarm, when it is snoozed.
-	 */
-	@ColumnInfo(name = "snooze_hour", defaultValue = "0")
-	var snoozeHour: Int = 0
-
-	/**
-	 * Minute at which to run the alarm, when it is snoozed
-	 */
-	@ColumnInfo(name = "snooze_minute", defaultValue = "0")
-	var snoozeMinute: Int = 0
 
 	/**
 	 * Days on which to run the alarm.
@@ -427,10 +417,8 @@ class NacAlarm()
 
 	/**
 	 * Whether snoozing is easy or not.
-	 *
-	 * TODO: Can I change a column name?
 	 */
-	@ColumnInfo(name = "should_use_easy_snooze", defaultValue = "0")
+	@ColumnInfo(name = "should_easy_snooze", defaultValue = "0")
 	var shouldEasySnooze: Boolean = false
 
 	/**
@@ -655,6 +643,136 @@ class NacAlarm()
 	}
 
 	/**
+	 * Add the days repeat frequency to the alarm time.
+	 */
+	fun addRepeatFrequencyDaysToTime(alarmCal: Calendar)
+	{
+		// Every 1 day
+		if (repeatFrequency == 1)
+		{
+			return
+		}
+		// Every 2-7 days
+		else if (repeatFrequency <= 7)
+		{
+			// Remove today if it is in the days
+			days.removeToday()
+
+			// Get the new day of week
+			val calDay = alarmCal.get(Calendar.DAY_OF_WEEK)
+			val newDay = calDay.toDay()
+
+			// Add the new day to the days
+			days.add(newDay)
+		}
+		// Every 8+ days
+		else
+		{
+			// Get the new day of week
+			val year = alarmCal.get(Calendar.YEAR)
+			val month = alarmCal.get(Calendar.MONTH)
+			val day = alarmCal.get(Calendar.DAY_OF_MONTH)
+
+			// Use a date to keep track of when the alarm should run
+			date = "$year-${month+1}-$day"
+		}
+	}
+
+	/**
+	 * Add the hours repeat frequency to the alarm time.
+	 */
+	fun addRepeatFrequencyHoursToTime(alarmCal: Calendar)
+	{
+		// Update the alarm hour
+		hour = alarmCal.get(Calendar.HOUR_OF_DAY)
+
+		// Every 25+ hours
+		if (repeatFrequency > 24)
+		{
+			// Remove all the days
+			days.clear()
+
+			// Get the new day of week
+			val calDay = alarmCal.get(Calendar.DAY_OF_WEEK)
+			val newDay = calDay.toDay()
+
+			// Add the new day to the days
+			days.add(newDay)
+		}
+	}
+
+	/**
+	 * Add the minutes repeat frequency to the alarm time.
+	 */
+	fun addRepeatFrequencyMinutesToTime(alarmCal: Calendar)
+	{
+		// Update the alarm hour and minute
+		hour = alarmCal.get(Calendar.HOUR_OF_DAY)
+		minute = alarmCal.get(Calendar.MINUTE)
+	}
+
+	/**
+	 * Add the months repeat frequency to the alarm time.
+	 */
+	fun addRepeatFrequencyMonthsToTime(alarmCal: Calendar)
+	{
+		// Get the new day of week
+		val year = alarmCal.get(Calendar.YEAR)
+		val month = alarmCal.get(Calendar.MONTH)
+		val day = alarmCal.get(Calendar.DAY_OF_MONTH)
+
+		// Set the new date
+		date = "$year-${month+1}-$day"
+	}
+
+	/**
+	 * Add the weeks repeat frequency to the alarm time.
+	 */
+	fun addRepeatFrequencyWeeksToTime()
+	{
+		// Get the next alarm day
+		val nextCal = NacCalendar.getNextAlarmDay(this)!!
+		println("NacAlarm: Next cal : ${calendarToString(nextCal, "EEE MMM dd HH:mm:ss z yyyy")}")
+
+		// Ensure that the days to run before starting does not have any extra
+		// days selected. These would be days that do not match the alarm days.
+		// Remove any of the extra days and do a final compare if the days to run
+		// before starting should be marked as empty or not
+		if (repeatFrequencyDaysToRunBeforeStarting.isNotEmpty())
+		{
+			// Get any overlap between the days to run before starting and the days selected for the alarm
+			val daysToRunOverlap = EnumSet.copyOf(repeatFrequencyDaysToRunBeforeStarting)
+			daysToRunOverlap.retainAll(days)
+			println("Quick check of days : $days | $repeatFrequencyDaysToRunBeforeStarting | $daysToRunOverlap")
+
+			// There is no overlap between the days to run before starting and the days selected for the alarm
+			if (daysToRunOverlap.isEmpty())
+			{
+				println("No days overlap! Clear the days to run before starting")
+				// Clear the days to run as it probably had extra days that were not needed
+				repeatFrequencyDaysToRunBeforeStarting = EnumSet.noneOf(Day::class.java)
+			}
+		}
+
+		// No more days to run before starting the repeat frequency
+		if (repeatFrequencyDaysToRunBeforeStarting.isEmpty())
+		{
+			// Get the new day of week
+			val year = nextCal.get(Calendar.YEAR)
+			val month = nextCal.get(Calendar.MONTH)
+			val day = nextCal.get(Calendar.DAY_OF_MONTH)
+
+			// Set the new date
+			date = "$year-${month+1}-$day"
+
+			// Re-add the days to the days to run before starting. This way,
+			// when the date is run and the next alarm is recalculated, the
+			// repeat frequency is not added to the calendar
+			repeatFrequencyDaysToRunBeforeStarting = days
+		}
+	}
+
+	/**
 	 * Add the repeat frequency to the alarm time, if it should be added.
 	 */
 	fun addRepeatFrequencyToTime()
@@ -668,152 +786,26 @@ class NacAlarm()
 		// Create a calendar from the alarm
 		val alarmCal = NacCalendar.alarmToCalendar(this)
 
+		// Add the repeat frequency to the calendar
+		alarmCal.add(repeatFrequencyUnits.toCalendarField(), repeatFrequency)
+
 		// Check repeat frequency units
 		when (repeatFrequencyUnits)
 		{
 			// Minutes (max: 4 hr)
-			1 ->
-			{
-				// Add the repeat frequency to the calendar
-				alarmCal.add(Calendar.MINUTE, repeatFrequency)
-
-				// Update the alarm hour and minute
-				hour = alarmCal.get(Calendar.HOUR_OF_DAY)
-				minute = alarmCal.get(Calendar.MINUTE)
-			}
+			1 -> addRepeatFrequencyMinutesToTime(alarmCal)
 
 			// Hours (max: 1 week)
-			2 ->
-			{
-				// Add the repeat frequency to the calendar
-				alarmCal.add(Calendar.HOUR_OF_DAY, repeatFrequency)
-
-				// Update the alarm hour
-				hour = alarmCal.get(Calendar.HOUR_OF_DAY)
-
-				// Every 25+ hours
-				if (repeatFrequency > 24)
-				{
-					// Remove all the days
-					days.clear()
-
-					// Get the new day of week
-					val calDay = alarmCal.get(Calendar.DAY_OF_WEEK)
-					val newDay = calDay.toDay()
-
-					// Add the new day to the days
-					days.add(newDay)
-				}
-			}
+			2 -> addRepeatFrequencyHoursToTime(alarmCal)
 
 			// Days (max: 1 year)
-			3 ->
-			{
-				// Every 1 day
-				if (repeatFrequency == 1)
-				{
-					return
-				}
-				// Every 2-7 days
-				else if (repeatFrequency <= 7)
-				{
-					// Get today's day
-					val today = Day.TODAY
-
-					// Remove today if it is in the days
-					if (today in days)
-					{
-						days.remove(today)
-					}
-
-					// Add the repeat frequency to the calendar
-					alarmCal.add(Calendar.DAY_OF_MONTH, repeatFrequency)
-
-					// Get the new day of week
-					val calDay = alarmCal.get(Calendar.DAY_OF_WEEK)
-					val newDay = calDay.toDay()
-
-					// Add the new day to the days
-					days.add(newDay)
-				}
-				// Every 8+ days
-				else
-				{
-					// Add the repeat frequency to the calendar
-					alarmCal.add(Calendar.DAY_OF_MONTH, repeatFrequency)
-
-					// Get the new day of week
-					val year = alarmCal.get(Calendar.YEAR)
-					val month = alarmCal.get(Calendar.MONTH)
-					val day = alarmCal.get(Calendar.DAY_OF_MONTH)
-
-					// Use a date to keep track of when the alarm should run
-					date = "$year-${month+1}-$day"
-				}
-			}
+			3 -> addRepeatFrequencyDaysToTime(alarmCal)
 
 			// Weekly
-			4 ->
-			{
-				// TODO: Need to do the following:
-				//  *1) On dismiss(), remove current day from "repeatFrequencyDaysToRunBeforeStarting"
-				//  *2) Convert this alarm to calendars/maybe just get the next alarm?
-				//  X3) Compare the next alarm with the "alarmCal"
-				//  X4) If they are equal, then do the jank below, if the next alarm is before... Maybe don't need to do this
-				//   5) Use the next alarm and if repeat...DaysToRun... is not empty, then print it? Otherwise, do jank below
-				//
-
-				val nextCal = NacCalendar.getNextAlarmDay(this)!!
-				println("NacAlarm: Next cal : ${calendarToString(nextCal, "EEE MMM dd HH:mm:ss z yyyy")}")
-
-				// Days to run before starting is not empty
-				if (repeatFrequencyDaysToRunBeforeStarting.isNotEmpty())
-				{
-					// Get any overlap between the days to run before starting and the days selected for the alarm
-					val daysToRunOverlap = EnumSet.copyOf(repeatFrequencyDaysToRunBeforeStarting)
-					daysToRunOverlap.retainAll(days)
-					println("Quick check of days : $days | $repeatFrequencyDaysToRunBeforeStarting | $daysToRunOverlap")
-
-					// There is no overlap between the days to run before starting and the days selected for the alarm
-					if (daysToRunOverlap.isEmpty())
-					{
-						println("No days overlap! Clear the days to run before starting")
-						// Clear the days to run as it probably had extra days that were not needed
-						repeatFrequencyDaysToRunBeforeStarting = EnumSet.noneOf(Day::class.java)
-					}
-				}
-
-				// No more days to run before starting the repeat frequency
-				if (repeatFrequencyDaysToRunBeforeStarting.isEmpty())
-				{
-					// Get the new day of week
-					val year = nextCal.get(Calendar.YEAR)
-					val month = nextCal.get(Calendar.MONTH)
-					val day = nextCal.get(Calendar.DAY_OF_MONTH)
-
-					// Set the new date
-					date = "$year-${month+1}-$day"
-				}
-
-				//// Add the repeat frequency to the calendar
-				//alarmCal.add(Calendar.WEEK_OF_YEAR, repeatFrequency)
-			}
+			4 -> addRepeatFrequencyWeeksToTime()
 
 			// Month
-			5 ->
-			{
-				// TODO: This calculation of field unit and repeat frequency might already be done in NacCalendar. Check
-				// Add the repeat frequency to the calendar
-				alarmCal.add(Calendar.MONTH, repeatFrequency)
-
-				// Get the new day of week
-				val year = alarmCal.get(Calendar.YEAR)
-				val month = alarmCal.get(Calendar.MONTH)
-				val day = alarmCal.get(Calendar.DAY_OF_MONTH)
-
-				// Set the new date
-				date = "$year-${month+1}-$day"
-			}
+			5 -> addRepeatFrequencyMonthsToTime(alarmCal)
 		}
 
 	}
@@ -1092,8 +1084,6 @@ class NacAlarm()
 		shouldSkipNextAlarm = false
 		timeActive = 0
 		snoozeCount = 0
-		snoozeHour = -1
-		snoozeMinute = -1
 		timeOfDismissEarlyAlarm = 0
 
 		// Date is set
@@ -1111,14 +1101,8 @@ class NacAlarm()
 			// Repeat frequency starting days needs to be cleaned up
 			if ((repeatFrequencyUnits == 4) && (repeatFrequency > 1) && repeatFrequencyDaysToRunBeforeStarting.isNotEmpty())
 			{
-				// Get today's day
-				val today = Day.TODAY
-
 				// Remove today if it is in the days
-				if (today in repeatFrequencyDaysToRunBeforeStarting)
-				{
-					repeatFrequencyDaysToRunBeforeStarting.remove(today)
-				}
+				repeatFrequencyDaysToRunBeforeStarting.removeToday()
 			}
 
 			// Add the repeat frequency to the alarm time, if it should be added
@@ -1453,25 +1437,15 @@ class NacAlarm()
 		// There is no next alarm
 		if (nextCal == null)
 		{
+			println("No next alarm cal!!!")
 			// Disable the alarm since there is no next time this will run
 			isEnabled = false
 		}
-		// Date is set
-		else if (date.isNotEmpty())
+		// Normal dismiss logic of an alarm
+		else
 		{
-			// Clear the date
-			date = ""
+			dismiss()
 		}
-
-		// Alarm will repeat
-		if (shouldRepeat)
-		{
-			// Add the repeat frequency to the alarm time, if it should be added
-			addRepeatFrequencyToTime()
-		}
-
-		// Clear the skip flag
-		shouldSkipNextAlarm = false
 	}
 
 	/**
@@ -1487,11 +1461,6 @@ class NacAlarm()
 		// Add the snooze duration value to the current time
 		val cal = Calendar.getInstance()
 		cal.add(Calendar.SECOND, snoozeDuration)
-
-		// Set the snooze hour and minute
-		// TODO: Are snooze hour and minute ever used?
-		snoozeHour = cal[Calendar.HOUR_OF_DAY]
-		snoozeMinute = cal[Calendar.MINUTE]
 
 		// Increment the snooze count. The "isSnoozed" variable checks the
 		// snooze count so this basically makes "isSnoozed" true

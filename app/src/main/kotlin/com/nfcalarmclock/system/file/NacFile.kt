@@ -8,6 +8,168 @@ import android.provider.MediaStore
 import java.util.UnknownFormatConversionException
 
 /**
+ * Get the basename of a file path.
+ *
+ * @return The basename of a file path.
+ */
+fun String.basename(): String
+{
+	// Check if the path is empty
+	if (this.isEmpty())
+	{
+		return ""
+	}
+
+	// Split the path on "/"
+	val items = this.split("/".toRegex())
+		.dropLastWhile { it.isEmpty() }
+		.toTypedArray()
+
+	// Get the last item
+	return if (items.isNotEmpty())
+	{
+		items[items.size - 1]
+	}
+	// Unable to determine the basename
+	else
+	{
+		""
+	}
+}
+
+/**
+ * @see .basename
+ */
+fun Uri.basename(): String
+{
+	return this.toString().basename()
+}
+
+/**
+ * Get the dirname of a file path.
+ *
+ * @return The dirname of a file path.
+ */
+fun String.dirname(): String
+{
+	// Check if the path is empty
+	if (this.isEmpty())
+	{
+		return ""
+	}
+
+	// Get the basename
+	val basename = this.basename()
+
+	// Remove the basename from the path
+	return this.substring(0, this.length - basename.length)
+}
+
+/**
+ * Split the path by the forward slash, "/", character.
+ */
+fun String.splitPath(): Array<String>
+{
+	return this.split("/".toRegex())
+		.dropLastWhile { it.isEmpty() }
+		.toTypedArray()
+}
+
+/**
+ * Strip away any trailing '/' characters.
+ */
+fun String.strip(): String
+{
+	// Check if path is empty
+	if (this.isEmpty())
+	{
+		return ""
+	}
+
+	// Check if the last character is a slash
+	if (this.last() == '/')
+	{
+		// Get everything except the last character
+		return this.take(this.length-1)
+	}
+
+	// Return the path
+	return this
+}
+
+/**
+ * Convert a path to a relative path's directory name
+ */
+fun String.toRelativeDirname(): String
+{
+	// Get the directory name of the relative path and strip trailing slash character
+	return this.toRelativePath()
+		.dirname()
+		.strip()
+}
+
+/**
+ * @see .toRelativeDirname
+ */
+fun Uri.toRelativeDirname(): String
+{
+	return this.toString().toRelativeDirname()
+}
+
+/**
+ * Convert a path to a relative path.
+ *
+ * @param pattern A pattern to remove out of the path in place of the default emulated
+ *                and /sdcard path.
+ */
+@SuppressLint("SdCardPath")
+fun String.toRelativePath(pattern: String = ""): String
+{
+	// Path is empty
+	if (this.isEmpty())
+	{
+		return ""
+	}
+
+	// Define fixed paths
+	//val emulated = "/storage/emulated/0"
+	//val sdcard = Environment.getExternalStorageDirectory().path
+	val emulated = Environment.getExternalStorageDirectory().path
+	val sdcard = "/sdcard"
+
+	// Initialize relative path
+	var relativePath: String = this
+
+	// Remove pattern from path
+	if (pattern.isNotEmpty())
+	{
+		relativePath = this.replace(pattern, "").strip()
+	}
+	// Path starts with the emulated path
+	else if (this.startsWith(emulated))
+	{
+		// Remove the emulated path from the path
+		relativePath = this.substring(emulated.length)
+	}
+	// Path starts with the sdcard path
+	else if (this.startsWith(sdcard))
+	{
+		// Remove the sdcard path from the path
+		relativePath = this.substring(sdcard.length)
+	}
+
+	// Check if the first character in the path is a slash
+	if (relativePath.isNotEmpty() && relativePath.first() == '/')
+	{
+		// Remove the slash
+		relativePath = relativePath.substring(1)
+	}
+
+	// Return the path
+	return relativePath
+}
+
+/**
  * Generic file object.
  */
 object NacFile
@@ -17,174 +179,6 @@ object NacFile
 	 * Name for the previous directory.
 	 */
 	const val PREVIOUS_DIRECTORY = ".."
-
-	/**
-	 * Get the basename of a file path.
-	 *
-	 * @return The basename of a file path.
-	 */
-	fun basename(path: String): String
-	{
-		// Check if the path is empty
-		if (path.isEmpty())
-		{
-			return ""
-		}
-
-		// Split the path on "/"
-		val items = path.split("/".toRegex())
-			.dropLastWhile { it.isEmpty() }
-			.toTypedArray()
-
-		// Get the last item
-		return if (items.isNotEmpty())
-		{
-			items[items.size - 1]
-		}
-		// Unable to determine the basename
-		else
-		{
-			""
-		}
-	}
-
-	/**
-	 * @see .basename
-	 */
-	fun basename(uri: Uri): String
-	{
-		val path = uri.toString()
-
-		return basename(path)
-	}
-
-	/**
-	 * Get the dirname of a file path.
-	 *
-	 * @return The dirname of a file path.
-	 */
-	private fun dirname(path: String): String
-	{
-		// Check if the path is empty
-		if (path.isEmpty())
-		{
-			return ""
-		}
-
-		// Get the basename
-		val basename = basename(path)
-
-		// Remove the basename from the path
-		return path.substring(0, path.length - basename.length)
-	}
-
-	/**
-	 * Split the path by the forward slash, "/", character.
-	 */
-	fun splitPath(path: String): Array<String>
-	{
-		return path.split("/".toRegex())
-			.dropLastWhile { it.isEmpty() }
-			.toTypedArray()
-	}
-
-	/**
-	 * Strip away any trailing '/' characters.
-	 */
-	fun strip(path: String): String
-	{
-		// Check if path is empty
-		if (path.isEmpty())
-		{
-			return ""
-		}
-
-		// Check if the last character is a slash
-		if (path.last() == '/')
-		{
-			// Get everything except the last character
-			return path.take(path.length-1)
-		}
-
-		// Return the path
-		return path
-	}
-
-	/**
-	 * Convert a path to a relative path's directory name
-	 *
-	 * @param  path  Path to a file or directory.
-	 */
-	fun toRelativeDirname(path: String?): String
-	{
-		// Get the relative path
-		val relativePath = toRelativePath(path)
-
-		// Get the directory name of the relative path
-		val relativeDirname = dirname(relativePath)
-
-		// Strip trailing slash character
-		return strip(relativeDirname)
-	}
-
-	/**
-	 * @see .toRelativeDirname
-	 */
-	fun toRelativeDirname(uri: Uri): String
-	{
-		// Get the path
-		val path = uri.toString()
-
-		// Convert it to a relative directory name
-		return toRelativeDirname(path)
-	}
-
-	/**
-	 * Convert a path to a relative path.
-	 *
-	 * @param  path  Path to a file or directory.
-	 */
-    @SuppressLint("SdCardPath")
-    fun toRelativePath(path: String?): String
-	{
-		// Check if path is empty
-		if (path.isNullOrEmpty())
-		{
-			return ""
-		}
-
-		// Define fixed paths
-		//val emulated = "/storage/emulated/0"
-		//val sdcard = Environment.getExternalStorageDirectory().path
-		val emulated = Environment.getExternalStorageDirectory().path
-		val sdcard = "/sdcard"
-
-		// Initialize relative path
-		var relativePath: String = path
-
-		// Path starts with the emulated path
-		if (path.startsWith(emulated))
-		{
-			// Remove the emulated path from the path
-			relativePath = path.substring(emulated.length)
-		}
-		// Path starts with the sdcard path
-		else if (path.startsWith(sdcard))
-		{
-			// Remove the sdcard path from the path
-			relativePath = path.substring(sdcard.length)
-		}
-
-		// Check if the first character in the path is a slash
-		if (relativePath.isNotEmpty() && relativePath.first() == '/')
-		{
-			// Remove the slash
-			relativePath = relativePath.substring(1)
-		}
-
-		// Return the path
-		return relativePath
-	}
 
 	/**
 	 * Metadata of a file.
@@ -331,7 +325,7 @@ object NacFile
 			key = ""
 
 			// Iterate over each directory in the path
-			for (d in splitPath(path))
+			for (d in path.splitPath())
 			{
 				// Add the directory and then change directory to it so that
 				// each directory goes one level deeper
@@ -375,7 +369,7 @@ object NacFile
 		fun cd(path: String)
 		{
 			val fromDir = directory
-			val name = basename(path)
+			val name = path.basename()
 
 			// Previous directory
 			if (name == PREVIOUS_DIRECTORY)
@@ -391,10 +385,7 @@ object NacFile
 				val newDir = path.replace(directoryPath, "")
 
 				// Split the path on slash character(s)
-				val splitPath = stripHome(newDir)
-					.split("/".toRegex())
-					.dropLastWhile { it.isEmpty() }
-					.toTypedArray()
+				val splitPath = newDir.toRelativePath(home).splitPath()
 
 				// Set the initial directory to start with
 				var toDir: NacTreeNode<String>? = fromDir
@@ -467,7 +458,7 @@ object NacFile
 		private fun isCurrentPath(path: String): Boolean
 		{
 			// Get the key of the path
-			val pathKey = basename(path)
+			val pathKey = path.basename()
 
 			// Check if path corresponds to the current directory
 			return (pathKey == directory.key || path == home)
@@ -686,34 +677,6 @@ object NacFile
 
 			// Return the sorted listing
 			return directories
-		}
-
-		/**
-		 * Strip the home directory away from a path.
-		 *
-		 * TODO: This method seems like I'm already doing it somewhere else
-		 */
-		@Suppress("MemberVisibilityCanBePrivate")
-		protected fun stripHome(path: String): String
-		{
-			val reducedPath = path.replace(home, "")
-			var strippedPath = strip(reducedPath)
-
-			// Check if the stripped path is empty
-			if (strippedPath.isEmpty())
-			{
-				// Return nothing
-				return ""
-			}
-
-			// Check if the first character is a slah
-			if (strippedPath.first() == '/')
-			{
-				// Get everything after the slash
-				strippedPath = strippedPath.substring(1)
-			}
-
-			return strippedPath
 		}
 
 	}

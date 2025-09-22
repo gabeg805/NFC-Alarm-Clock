@@ -15,6 +15,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.nfcalarmclock.R
 import com.nfcalarmclock.system.file.NacFile
+import com.nfcalarmclock.system.file.basename
+import com.nfcalarmclock.system.file.strip
 import kotlinx.coroutines.launch
 
 /**
@@ -166,10 +168,9 @@ class NacFileBrowser(
 		previousDirectory = if (metadata.name == NacFile.PREVIOUS_DIRECTORY)
 		{
 			val removeDots = metadata.path.replace(NacFile.PREVIOUS_DIRECTORY, "")
-			val stripDots = NacFile.strip(removeDots)
 
 			// Get the name of the directory
-			NacFile.basename(stripDots)
+			removeDots.strip().basename()
 		}
 		else
 		{

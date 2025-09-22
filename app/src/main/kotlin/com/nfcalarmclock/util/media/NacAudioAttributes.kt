@@ -1,6 +1,7 @@
 package com.nfcalarmclock.util.media
 
 import android.content.Context
+import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.os.Build
 import androidx.media3.common.AudioAttributes
@@ -66,6 +67,12 @@ class NacAudioAttributes(
 	 */
 	private val audioManager: AudioManager
 		get() = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+	/**
+	 * Audio focus request object that is used when initially requesting audio focus.
+	 * This is set by the NacAudioManager.
+	 */
+	var audioFocusRequest: AudioFocusRequest? = null
 
 	/**
 	 * Audio stream.

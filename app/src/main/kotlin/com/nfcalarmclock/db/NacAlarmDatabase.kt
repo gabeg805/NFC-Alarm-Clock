@@ -7,6 +7,7 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.DeleteColumn
+import androidx.room.RenameColumn
 import androidx.room.Room.databaseBuilder
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -23,6 +24,7 @@ import com.nfcalarmclock.db.NacAlarmDatabase.ConvertDismissAndSnoozeOptionsFromM
 import com.nfcalarmclock.db.NacAlarmDatabase.FixDismissAndSnoozeOptionsConvertedFromMinutesToSecondsMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.ClearNfcTagTableMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.DropNfcTagTableMigration
+import com.nfcalarmclock.db.NacAlarmDatabase.RemoveSnoozeHourMinuteColumnsAndRenameShouldEasySnoozeColumnMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.RemoveUseTtsColumnMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.UpdateRepeatFrequencyFrom0To1Migration
 import com.nfcalarmclock.db.NacAlarmDatabase.UpdateRepeatFrequencyUnitFrom0To1Migration
@@ -60,7 +62,7 @@ import javax.inject.Singleton
 /**
  * Store alarms in a Room database.
  */
-@Database(version = 40,
+@Database(version = 41,
 	entities = [
 		NacAlarm::class,
 		NacAlarmCreatedStatistic::class,
@@ -108,8 +110,9 @@ import javax.inject.Singleton
 		AutoMigration(from = 36, to = 37),
 		AutoMigration(from = 37, to = 38, spec = UpdateRepeatFrequencyFrom0To1Migration::class),
 		AutoMigration(from = 38, to = 39),
-		AutoMigration(from = 39, to = 40, spec = UpdateRepeatFrequencyUnitFrom0To1Migration::class)]
-
+		AutoMigration(from = 39, to = 40, spec = UpdateRepeatFrequencyUnitFrom0To1Migration::class),
+		AutoMigration(from = 40, to = 41, spec = RemoveSnoozeHourMinuteColumnsAndRenameShouldEasySnoozeColumnMigration::class),
+	]
 )
 @TypeConverters(NacAlarmTypeConverters::class, NacStatisticTypeConverters::class)
 abstract class NacAlarmDatabase
@@ -333,6 +336,15 @@ abstract class NacAlarmDatabase
 	 */
 	@DeleteColumn(tableName = "alarm", columnName = "should_use_tts")
 	internal class RemoveUseTtsColumnMigration : AutoMigrationSpec
+
+	/**
+	 * Remove the snooze hour and minute columns and rename the "should easy snooze"
+	 * column when auto-migrating.
+	 */
+	@RenameColumn(tableName =  "alarm", fromColumnName = "should_use_easy_snooze", toColumnName = "should_easy_snooze")
+	@DeleteColumn(tableName = "alarm", columnName = "snooze_hour")
+	@DeleteColumn(tableName = "alarm", columnName = "snooze_minute")
+	internal class RemoveSnoozeHourMinuteColumnsAndRenameShouldEasySnoozeColumnMigration : AutoMigrationSpec
 
 	/**
 	 * Update all values of the repeat frequency from 0 (the old default value) to 1

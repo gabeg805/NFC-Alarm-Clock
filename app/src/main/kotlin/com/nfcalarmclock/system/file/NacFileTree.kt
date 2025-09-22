@@ -5,7 +5,6 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import com.nfcalarmclock.system.file.NacFile.splitPath
 
 /**
  * File tree of all media on the device.
@@ -44,12 +43,12 @@ class NacFileTree(path: String)
 	private fun getMediaDirectory(rawDirectory: String): String
 	{
 		// Strip out an extra slash at the end if it is there
-		val directory = NacFile.strip(rawDirectory)
+		val directory = rawDirectory.strip()
 
 		// Remove main /storage... or /sdcard parts of the directory
 		return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
 		{
-			NacFile.toRelativeDirname(directory)
+			directory.toRelativeDirname()
 		}
 		// No need to remove that stuff from the directory
 		else
@@ -122,7 +121,7 @@ class NacFileTree(path: String)
 		// Get the query cursor or return if unable to do so
 		val c = getQueryCursor(context, queryColumns) ?: return
 		val origDirectory = directory
-		val origPath = NacFile.toRelativePath(directoryPath)
+		val origPath = directoryPath.toRelativePath()
 
 		// Get the column indices
 		val idIndex = c.getColumnIndex(queryColumns[0])
@@ -151,7 +150,7 @@ class NacFileTree(path: String)
 			}
 
 			// Iterate over each directory in the path
-			for (d in splitPath(mediaDirectory))
+			for (d in mediaDirectory.splitPath())
 			{
 				// Add the directory, and then change directory to the
 				// newly added directory, so that we are now one level
@@ -197,6 +196,7 @@ class NacFileTree(path: String)
 			}
 
 			// Create a file tree from the path
+			println("Create file tree : $filePath")
 			val tree = NacFileTree(filePath)
 
 			// Scan the tree

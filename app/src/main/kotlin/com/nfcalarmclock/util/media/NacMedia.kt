@@ -13,10 +13,10 @@ import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.nfcalarmclock.R
-import com.nfcalarmclock.system.file.NacFile.basename
-import com.nfcalarmclock.system.file.NacFile.strip
-import com.nfcalarmclock.system.file.NacFile.toRelativeDirname
 import com.nfcalarmclock.system.file.NacFileTree.Companion.getFiles
+import com.nfcalarmclock.system.file.basename
+import com.nfcalarmclock.system.file.strip
+import com.nfcalarmclock.system.file.toRelativeDirname
 import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.media.NacMedia.TYPE_DIRECTORY
@@ -407,7 +407,7 @@ fun Uri.getMediaName(context: Context): String
 	if (!this.toString().startsWith("content://"))
 	{
 		// Return the basename of the URI
-		return basename(this)
+		return this.basename()
 	}
 
 	// Get the name from the column
@@ -427,7 +427,7 @@ fun Uri.getMediaRelativePath(context: Context): String
 	if (!this.toString().startsWith("content://"))
 	{
 		// Convert the URI to a relative directory name
-		return toRelativeDirname(this)
+		return this.toRelativeDirname()
 	}
 
 	// Check if can query relative path
@@ -450,10 +450,10 @@ fun Uri.getMediaRelativePath(context: Context): String
 	if (!canQueryRelativePath)
 	{
 		// Conver the path to a directory name
-		path = toRelativeDirname(path)
+		path = path.toRelativeDirname()
 	}
 
-	return strip(path)
+	return path.strip()
 }
 
 /**
@@ -470,7 +470,7 @@ fun Uri.getMediaTitle(
 	if (!this.toString().startsWith("content://"))
 	{
 		// Get the basename of the URI
-		return basename(this)
+		return this.basename()
 	}
 
 	// Get the title from the column
@@ -816,6 +816,7 @@ object NacMedia
 	fun buildMediaItemFromFile(context: Context, uri: Uri): MediaItem
 	{
 		val path = uri.toString()
+		println("Media path : $path | Uri : $uri")
 
 		// Get media information
 		val artist = uri.getMediaArtist(context)

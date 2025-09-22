@@ -144,30 +144,6 @@ class NacActiveAlarmService
 	}
 
 	/**
-	 * Clear any dismiss early notification that may be present for this alarm.
-	 */
-	private fun clearDismissEarlyNotification()
-	{
-		// Get the intent to stop the reminder service
-		val stopIntent = NacDismissEarlyService.getStopIntent(this, alarm)
-
-		// Send the intent to stop the reminder service
-		startService(stopIntent)
-	}
-
-	/**
-	 * Clear any reminder notification that may be present for this alarm.
-	 */
-	private fun clearReminderNotification()
-	{
-		// Get the intent to stop the reminder service
-		val stopIntent = NacUpcomingReminderService.getStopIntent(this, alarm)
-
-		// Send the intent to stop the reminder service
-		startService(stopIntent)
-	}
-
-	/**
 	 * Dismiss the alarm.
 	 *
 	 * This will finish the service.
@@ -218,7 +194,7 @@ class NacActiveAlarmService
 			sharedPreferences.shouldRefreshMainActivity = true
 
 			// Clear the dismiss early notification
-			clearDismissEarlyNotification()
+			NacDismissEarlyService.stopService(this@NacActiveAlarmService, alarm)
 
 			// Restart any other active alarm or stop the service
 			restartOtherActiveAlarmOrStop(R.string.message_alarm_dismiss)
@@ -357,8 +333,11 @@ class NacActiveAlarmService
 		// when NOT skipping this alarm
 		if (intentAction != ACTION_SKIP_SERVICE)
 		{
+			// Show active alarm notification
 			showActiveAlarmNotification()
-			clearReminderNotification()
+
+			// Clear the upcoming reminder notification
+			NacUpcomingReminderService.stopService(this, alarm)
 		}
 
 		// Check the intent action
@@ -673,7 +652,7 @@ class NacActiveAlarmService
 		//Handler(mainLooper).postDelayed({
 		wakeupProcessDelayHandler?.postDelayed({
 			wakeupProcess!!.start()
-		}, 2000)
+		}, 1000)
 
 		//scope.launch {
 		lifecycleScope.launch {

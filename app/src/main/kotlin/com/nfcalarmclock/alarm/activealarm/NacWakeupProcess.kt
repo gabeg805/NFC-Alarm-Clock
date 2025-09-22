@@ -15,6 +15,7 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.util.media.NacAudioAttributes
+import com.nfcalarmclock.util.media.NacAudioManager
 import com.nfcalarmclock.util.media.isMediaDirectory
 
 /**
@@ -166,6 +167,9 @@ class NacWakeupProcess(
 			 */
 			override fun onDoneSpeaking()
 			{
+				// Abandon audio focus
+				NacAudioManager.abandonFocus(context, audioAttributes)
+
 				// Use handler to start wake up process so that the media
 				// player is accessed on the correct thread
 				println("onDoneSpeak()")

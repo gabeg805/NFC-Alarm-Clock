@@ -20,29 +20,23 @@ object NacAudioManager
 	@Suppress("deprecation")
 	fun abandonFocus(
 		context: Context,
-		listener: OnAudioFocusChangeListener?
+		attrs: NacAudioAttributes
 	): Int
 	{
 
 		val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
-		// TODO: This is commented out because you need the original
-		// AudioFocusRequest object that was used when requesting audio focus.
-		// Unfortunately, that is a local variable in the functions below. Could
-		// probably save it to NacAudioAttributes when I create it?
-
-		//if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-		//{
-		//	AudioFocusRequest request = this.getAudioFocusRequest();
-		//	result = am.abandonAudioFocus(request);
-		//}
-		//else
-		//{
-
-		// Abandon audio focus
-		return audioManager.abandonAudioFocus(listener)
-
-		//}
+		// Need to use the AudioFocusRequest object that was used when requesting audio
+		// focus in order to abandon focus.
+		return if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) && (attrs.audioFocusRequest != null))
+		{
+			audioManager.abandonAudioFocusRequest(attrs.audioFocusRequest!!)
+		}
+		// Simpler way to abandon audio focus in older API
+		else
+		{
+			audioManager.abandonAudioFocus(null)
+		}
 	}
 
 	/**
@@ -73,9 +67,11 @@ object NacAudioManager
 				builder = builder.setOnAudioFocusChangeListener(listener)
 			}
 
-			// Request audio focus and get the result
+			// Build the audio request and set it in the audio attributes object
 			val request = builder.build()
+			attrs.audioFocusRequest = request
 
+			// Request audio focus and get the result
 			result = audioManager.requestAudioFocus(request)
 		}
 		else

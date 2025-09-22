@@ -137,14 +137,6 @@ class NacMediaPlayer(
 	}
 
 	/**
-	 * Abandon audio focus.
-	 */
-	private fun abandonAudioFocus()
-	{
-		NacAudioManager.abandonFocus(context, this)
-	}
-
-	/**
 	 * Duck the media player.
 	 */
 	fun duck()
@@ -422,7 +414,7 @@ class NacMediaPlayer(
 	fun release()
 	{
 		// Abandon audio focus
-		abandonAudioFocus()
+		NacAudioManager.abandonFocus(context, audioAttributes)
 
 		// Cleanup the handler
 		cleanupHandler()

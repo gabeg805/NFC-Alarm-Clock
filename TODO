@@ -2,13 +2,23 @@
 TODO
 ----
 
+* When browsing music, clicking on the media button and having the media
+  activity open up for the first time, the music order gets all jumbled. Need
+  to figure out why this is.
+
+* Alarm was not acting like a full screen intent in Android 15. Why is that?
+
+* Alarm time in activity was not updating until turned on screen. May not be an important bug.
+
+* Test multiple alarms that occur at the same time
+
 * Test date picker when alarm has a date
 
 * Check that selected directory for music works.
 
-  Selecting a folder does not change the media name in the card. Need to fix that
+    Selecting a folder does not change the media name in the card. Need to fix that
 
-  File not found for Music/Arctic Monkeys/<Song>. Need to make sure doing path correctly
+    File not found for Music/Arctic Monkeys/<Song>. Need to make sure doing path correctly
 
 * Remove all print statements and TODO statements that were added, before releasing to production.
 

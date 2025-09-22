@@ -161,9 +161,6 @@ class NacDayOfWeek(
 	/**
 	 * Set the days that will be enabled/disabled.
 	 *
-	 * TODO This is doing more animating than necessary.
-	 * Only enable/disable if needs to be done.
-	 *
 	 * @param  days  The button days that will be enabled.
 	 */
 	fun setDays(days: EnumSet<Day>)
@@ -194,8 +191,6 @@ class NacDayOfWeek(
 
 	/**
 	 * Set the day to start week on.
-	 *
-	 * TODO: Add more days
 	 */
 	fun setStartWeekOn(start: Int)
 	{

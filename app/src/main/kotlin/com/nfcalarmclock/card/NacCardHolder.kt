@@ -39,6 +39,8 @@ import com.nfcalarmclock.view.setupRippleColor
 import com.nfcalarmclock.view.setupSwitchColor
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import com.nfcalarmclock.system.toDayString
+import java.util.EnumSet
 
 //import com.google.android.material.timepicker.MaterialTimePicker;
 
@@ -1423,7 +1425,7 @@ class NacCardHolder(
 	private fun setSummaryDaysView()
 	{
 		// Get the string from the alarm
-		val string = Day.alarmToDayString(context, alarm!!, sharedPreferences.startWeekOn)
+		val string = alarm!!.toDayString(context, sharedPreferences.startWeekOn)
 
 		// Check if the alarm string and the string in the view are different
 		if (summaryDaysView.text != string)
@@ -1710,10 +1712,12 @@ class NacCardHolder(
 				// No days are selected
 				if (alarm!!.days.isEmpty())
 				{
-					// Repeat frequency is the default value of 1
-					if (alarm!!.repeatFrequency == 1)
+					// Repeat frequency is every 1 week
+					if ((alarm!!.repeatFrequency == 1) && (alarm!!.repeatFrequencyUnits == 4))
 					{
+						println("Change to daily")
 						// Change to daily
+						alarm!!.repeatFrequency = 1
 						alarm!!.repeatFrequencyUnits = 3
 						alarm!!.repeatFrequencyDaysToRunBeforeStarting = Day.NONE
 					}
@@ -1721,16 +1725,44 @@ class NacCardHolder(
 				// Days are selected
 				else
 				{
-					// Repeat frequency is the default value of 1 but not on a weekly
-					// cadence. When days are selected, the repeat frequency should be
-					// weekly, with few exceptions
-					if ((alarm!!.repeatFrequency == 1) && (alarm!!.repeatFrequencyUnits != 4))
+					// Repeat frequency units
+					when (alarm!!.repeatFrequencyUnits)
 					{
-						// Change to weekly
-						alarm!!.repeatFrequencyUnits = 4
-						alarm!!.repeatFrequencyDaysToRunBeforeStarting = Day.WEEK
+						// Minutes, hours, and days
+						1, 2, 3 ->
+						{
+							// Repeat frequency is the default value of 1 but not on a weekly
+							// cadence. When days are selected, the repeat frequency should be
+							// weekly, with few exceptions
+							// TODO: Set to every 2 hours and then select a day see what happens
+							//if ((alarm!!.repeatFrequency == 1) && (alarm!!.repeatFrequencyUnits != 4))
+							if ((alarm!!.repeatFrequency == 1) && (alarm!!.repeatFrequencyUnits == 3))
+							{
+								println("Change to weekly")
+								// Change to weekly
+								alarm!!.repeatFrequency = 1
+								alarm!!.repeatFrequencyUnits = 4
+								alarm!!.repeatFrequencyDaysToRunBeforeStarting = Day.WEEK
+							}
+							// Custom repeat frequency
+							else
+							{
+								// Ensure only the selected day is the only one active
+								// TODO: Rephrase this
+								if (day in alarm!!.days)
+								{
+									alarm!!.days = EnumSet.of(day)
+									dayOfWeek.setDays(alarm!!.days)
+									println("Only active : $day")
+								}
+							}
+						}
+
+						// Do nothing for weeks/months. These types can have multiple days selected
+						else -> {}
 					}
 				}
+				println("Repeat : ${alarm!!.repeatFrequency} | ${alarm!!.repeatFrequencyUnits}")
 
 				// Clear the date
 				alarm!!.date = ""
