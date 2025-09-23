@@ -203,18 +203,6 @@ class NacActiveAlarmService
 	}
 
 	/**
-	 * Check if there are any other active alarms.
-	 */
-	private suspend fun hasAnyOtherActiveAlarms(): Boolean
-	{
-		// Try and find any active alarms
-		val activeAlarm = alarmRepository.getActiveAlarm()
-
-		// Check if the alarm is not null
-		return (activeAlarm != null)
-	}
-
-	/**
 	 * Check if a new service was started.
 	 *
 	 * @param  intentAlarm An alarm from an intent.
@@ -255,6 +243,7 @@ class NacActiveAlarmService
 	{
 		// Super
 		super.onCreate()
+		println("onCreate() active alarm service")
 
 		// Initialize member varirables
 		sharedPreferences = NacSharedPreferences(this)
@@ -284,6 +273,7 @@ class NacActiveAlarmService
 	{
 		// Super
 		super.onDestroy()
+		println("onDestroy() active alarm service")
 
 		// Disable the activity alias so that tapping an NFC tag will not do anything
 		disableActivityAlias(this)
@@ -325,14 +315,17 @@ class NacActiveAlarmService
 	{
 		// Super
 		super.onStartCommand(intent, flags, startId)
+		println("onStartCommand() active alarm service")
 
 		// Setup the service
 		setupActiveAlarmService(intent)
+		println("INTENT ACTION : $intentAction")
 
 		// Setup the service and disable any reminder notification that may be present
 		// when NOT skipping this alarm
 		if (intentAction != ACTION_SKIP_SERVICE)
 		{
+			println("Show active alarm notification")
 			// Show active alarm notification
 			showActiveAlarmNotification()
 
@@ -425,36 +418,30 @@ class NacActiveAlarmService
 	}
 
 	/**
-	 * Restart any other active alarm.
-	 */
-	private suspend fun restartOtherActiveAlarm()
-	{
-		// Try and find any active alarms
-		val activeAlarm = alarmRepository.getActiveAlarm()
-
-		// Start the alarm service for this alarm
-		startAlarmService(this, activeAlarm)
-
-		// Create the notification
-		val notification = NacActiveAlarmNotification(this, activeAlarm)
-
-		// Show the notification
-		notification.show()
-	}
-
-	/**
 	 * Restart any other active alarm that may be set, or show a toast and stop the
 	 * service.
 	 */
 	private suspend fun restartOtherActiveAlarmOrStop(messageId: Int)
 	{
-		// Check if there are any other active alarms that need to run
-		if (hasAnyOtherActiveAlarms())
+		// Try and find an active alarm, ordered by the one that has been active the
+		// longest
+		val activeAlarm = alarmRepository.getActiveAlarm()
+
+		// Active alarm was found
+		if (activeAlarm != null)
 		{
-			// Restart another active alarm
-			restartOtherActiveAlarm()
+			println("RESTARTING OTHER ACTIVE ALARM")
+			// Start the alarm service for the active alarm
+			startAlarmService(this, activeAlarm)
+
+			// Create the notification
+			println("SHOWING NOTIFICATION OF OTHER ACTIVE ALARM")
+			val notification = NacActiveAlarmNotification(this, activeAlarm)
+
+			// Show the notification
+			notification.show()
 		}
-		// No other active alarms
+		// No other active alarm
 		else
 		{
 			// Show toast that the alarm was snoozed/dismissed and stop the service
@@ -497,6 +484,7 @@ class NacActiveAlarmService
 		// Check if a new service was started
 		if (isNewServiceStarted(intentAlarm, intentAction))
 		{
+			println("New service started : ${intentAlarm?.id} | $intentAction")
 			// Check if the alarms are equal
 			if (intentAlarm!!.equals(alarm))
 			{
@@ -506,6 +494,7 @@ class NacActiveAlarmService
 			}
 			else
 			{
+				println("Update time active of current alarm : ${intentAlarm.id} | $intentAction")
 				// Update the active time of the current alarm
 				updateTimeActiveOfCurrentAlarm()
 			}
@@ -627,6 +616,7 @@ class NacActiveAlarmService
 	{
 		// Cleanup any resources
 		cleanup()
+		println("START ACTIVE ALARM SERVICE : ${alarm?.id}")
 
 		// Get the power manager and timeout for the wakelock
 		val powerManager = getSystemService(POWER_SERVICE) as PowerManager
@@ -662,6 +652,7 @@ class NacActiveAlarmService
 			alarm!!.shouldSkipNextAlarm = false
 
 			// Update the alarm
+			println("Updating alarm repo when setting active alarm : ${alarm!!.id}")
 			alarmRepository.update(alarm!!)
 
 			// Reschedule the alarm
@@ -706,6 +697,7 @@ class NacActiveAlarmService
 			// Check if the service has started
 			if (currentStartTime != 0L)
 			{
+				println("updatingTimeActive...() : $currentStartTime | ${currentAlarm.id}")
 				// Set the time that the alarm was active. Do not set the
 				// alarm as inactive though because then it will not go off
 				// again. It should go off again because the alarm has not

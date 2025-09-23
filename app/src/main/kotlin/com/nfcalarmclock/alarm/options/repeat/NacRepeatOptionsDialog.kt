@@ -173,6 +173,8 @@ class NacRepeatOptionsDialog
 			// Days are empty
 			if (alarm?.days?.isEmpty() == true)
 			{
+				// TODO: Should I be doing this? Think about what feels best as a user in this scenario
+				// TODO: Maybe this should be like every day and just not do anything here?
 				// Get the next alarm day
 				val nextDay = getNextAlarmDay(alarm)
 

@@ -823,9 +823,6 @@ class NacMainActivity
 			return
 		}
 
-		// Set the message for when the next alarm will be run
-		setNextAlarmMessage()
-
 		// Setup UI
 		setupFloatingActionButton()
 		setupInitialDialogToShow()
@@ -1258,30 +1255,12 @@ class NacMainActivity
 	/**
 	 * Set the next alarm message in the text view.
 	 */
-	private fun setNextAlarmMessage(): NacNextAlarm?
+	private fun setNextAlarmMessage(nextAlarm: NacNextAlarm? = null): NacNextAlarm?
 	{
-		// Set the next alarm message from the current list of alarms
-		val nextAlarm = setNextAlarmMessage(alarmCardAdapter.currentList)
-
-		// Check if the next alarm message should be refreshed
-		if (shouldRefreshNextAlarmMessage(nextAlarm))
-		{
-			// Set the message for when the next alarm will be run
-			nextAlarmMessageHandler.postDelayed({ setNextAlarmMessage() },
-				REFRESH_NEXT_ALARM_MESSAGE_PERIOD)
-		}
-
-		// Return the next alarm
-		return nextAlarm
-	}
-
-	/**
-	 * Set the next alarm message in the text view.
-	 */
-	private fun setNextAlarmMessage(alarms: List<NacAlarm>): NacNextAlarm?
-	{
-		// Get the next alarm
-		val nextAlarm = NacCalendar.getNextAlarm(alarms)
+		// Get the next alarm. Use the parameter when it is supplied, otherwise use the
+		// alarm card adapter list
+		val nextAlarm = nextAlarm
+			?: NacCalendar.getNextAlarm(alarmCardAdapter.currentList)
 
 		// Get the next alarm message
 		val message = NacCalendar.Message.getNext(this, nextAlarm?.calendar,
@@ -1289,6 +1268,16 @@ class NacMainActivity
 
 		// Set the message in the text view
 		nextAlarmTextView.text = message
+
+		// Check if the next alarm message should be refreshed
+		if (shouldRefreshNextAlarmMessage(nextAlarm))
+		{
+			// Set the message for when the next alarm will be run
+			nextAlarmMessageHandler.removeCallbacksAndMessages(null)
+			nextAlarmMessageHandler.postDelayed({
+				setNextAlarmMessage(nextAlarm = nextAlarm.takeIf { nextAlarm!!.alarm.isEnabled })
+			}, REFRESH_NEXT_ALARM_MESSAGE_PERIOD)
+		}
 
 		// Return the next alarm
 		return nextAlarm
@@ -1553,12 +1542,13 @@ class NacMainActivity
 
 			}
 
-			// Set the next alarm message
-			setNextAlarmMessage(alarms)
 		}
 
 		// Observe any changes to the alarms in the adapter
 		alarmCardAdapterLiveData.observe(this) { alarms ->
+
+			// Get if the adapter list is currently empty
+			val isAdapterListEmpty = alarmCardAdapter.currentList.isEmpty()
 
 			// If this is the first time the app is running, set the flags accordingly
 			if (sharedPreferences.appFirstRun)
@@ -1569,6 +1559,14 @@ class NacMainActivity
 			// Update the alarm adapter
 			alarmCardAdapter.storeIndicesOfExpandedCards(recyclerView)
 			alarmCardAdapter.submitList(alarms)
+
+			// Refresh the next alarm message when the adapter list was empty. This
+			// always happens when the adapter is first created and populated from
+			// onCreate()
+			if (isAdapterListEmpty)
+			{
+				setNextAlarmMessage()
+			}
 
 			// Scroll down to any newly added alarms
 			if (recentlyAddedAlarmIds.isNotEmpty())
@@ -1673,8 +1671,8 @@ class NacMainActivity
 	 */
 	private fun shouldRefreshNextAlarmMessage(nextAlarm: NacNextAlarm?): Boolean
 	{
-		// Check if there is no next alarm
-		if (nextAlarm == null)
+		// No next alarm
+		if ((nextAlarm == null) || !nextAlarm.alarm.isEnabled)
 		{
 			return false
 		}
@@ -1739,17 +1737,19 @@ class NacMainActivity
 	 */
 	private fun showNextAlarm(card: NacCardHolder, alarm: NacAlarm)
 	{
-		// Set the next alarm message
+		// Set the next alarm message and get the next alarm
 		val nextAlarm = setNextAlarmMessage()
 
-		// Show a snackbar for the next time this alarm will run, if it is enabled
+		// Alarm is enabled
 		if (alarm.isEnabled)
 		{
+			// Show a snackbar for the next time this alarm will run
 			showAlarmSnackbar(alarm)
 		}
-		// Show a snackbar for the next alarm that will run
+		// Alarm is disabled. Find the next alarm and use it
 		else
 		{
+			// Show a snackbar for the next alarm
 			showAlarmSnackbar(nextAlarm = nextAlarm)
 		}
 
@@ -1766,28 +1766,6 @@ class NacMainActivity
 			recentlyUpdatedAlarmIds.add(alarm.id)
 		}
 	}
-
-	//private fun showNfcTagDialog(alarm: NacAlarm)
-	//{
-	//	// Create and set the dialog
-	//	val scanNfcTagDialog = NacScanNfcTagDialog()
-
-	//	// Setup the dialog
-	//	scanNfcTagDialog.onScanNfcTagListener = object: OnScanNfcTagListener {
-
-	//		/**
-	//		 * Called when the user cancels the scan NFC tag dialog.
-	//		 */
-	//		override fun onDone(alarm: NacAlarm)
-	//		{
-	//			// Start NFC. This is here so that if an NFC tag accidentally gets
-	//			// scanned multiple times after this dialog is closed, it will not
-	//			// popup some unwanted NFC Entry intent. Instead, it will keep the
-	//			// focus on this app
-	//			NacNfc.start(this@NacMainActivity)
-	//		}
-
-	//	}
 
 	/**
 	 * Show a snackbar.

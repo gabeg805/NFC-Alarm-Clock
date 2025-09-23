@@ -17,13 +17,11 @@ import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerFragment
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.addMediaInfo
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
+import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.util.media.NacMedia
 import com.nfcalarmclock.util.media.buildLocalMediaPath
-import com.nfcalarmclock.util.media.copyMediaToDeviceEncryptedStorage
-import com.nfcalarmclock.util.media.doesDeviceHaveFreeSpace
 import com.nfcalarmclock.util.media.getMediaArtist
 import com.nfcalarmclock.util.media.getMediaTitle
-import com.nfcalarmclock.system.toBundle
 
 /**
  * Display a dialog that shows a list of alarm ringtones.
@@ -111,17 +109,8 @@ class NacRingtonePickerFragment
 		mediaType = NacMedia.TYPE_RINGTONE
 		localMediaPath = buildLocalMediaPath(deviceContext, mediaArtist, mediaTitle, mediaType)
 
-		// Check if there is enough free space
-		if (doesDeviceHaveFreeSpace(deviceContext))
-		{
-			// Copy the media to the local files/ directory
-			copyMediaToDeviceEncryptedStorage(deviceContext, mediaPath, mediaArtist,
-				mediaTitle, mediaType)
-		}
-		else
-		{
-			println("Not enough space to make a backup!")
-		}
+		// Copy the file to device encrypted storage
+		copyMediaToDeviceEncryptedStorage(deviceContext)
 
 		// Super
 		super.onOkClicked()

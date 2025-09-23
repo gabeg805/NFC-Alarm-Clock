@@ -40,6 +40,9 @@ import com.nfcalarmclock.util.media.isLocalMediaPath
 import com.nfcalarmclock.util.media.isMediaDirectory
 import com.nfcalarmclock.util.media.isMediaFile
 import com.nfcalarmclock.system.toBundle
+import com.nfcalarmclock.util.media.buildLocalMediaPath
+import com.nfcalarmclock.util.media.getMediaArtist
+import com.nfcalarmclock.util.media.getMediaTitle
 import com.nfcalarmclock.view.setupThemeColor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -313,14 +316,32 @@ class NacMusicPickerFragment
 			return
 		}
 
-		// Query the file for metadata
-		val (artist, title) = uri.directQueryMediaMetadata()
+		// Get the activity and the device protected storage context
+		val activity = requireActivity()
+		val deviceContext = getDeviceProtectedStorageContext(activity)
+
+		// Content uri
+		if (uri.scheme == "content")
+		{
+			// Query the content for metadata
+			mediaArtist = uri.getMediaArtist(deviceContext)
+			mediaTitle = uri.getMediaTitle(deviceContext)
+		}
+		// File uri
+		else
+		{
+			// Query the file for metadata
+			val (artist, title) = uri.directQueryMediaMetadata()
+			mediaArtist = artist
+			mediaTitle = title
+		}
 
 		// Set the media information
-		mediaArtist = artist
-		mediaTitle = title
 		mediaType = NacMedia.TYPE_FILE
-		localMediaPath = mediaPath
+		localMediaPath = buildLocalMediaPath(deviceContext, mediaArtist, mediaTitle, mediaType)
+
+		// Copy the file to device encrypted storage
+		copyMediaToDeviceEncryptedStorage(deviceContext)
 
 		// Super
 		super.onOkClicked()

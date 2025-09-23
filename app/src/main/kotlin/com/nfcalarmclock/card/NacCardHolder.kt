@@ -1734,8 +1734,6 @@ class NacCardHolder(
 							// Repeat frequency is the default value of 1 but not on a weekly
 							// cadence. When days are selected, the repeat frequency should be
 							// weekly, with few exceptions
-							// TODO: Set to every 2 hours and then select a day see what happens
-							//if ((alarm!!.repeatFrequency == 1) && (alarm!!.repeatFrequencyUnits != 4))
 							if ((alarm!!.repeatFrequency == 1) && (alarm!!.repeatFrequencyUnits == 3))
 							{
 								println("Change to weekly")
@@ -1747,10 +1745,12 @@ class NacCardHolder(
 							// Custom repeat frequency
 							else
 							{
-								// Ensure only the selected day is the only one active
-								// TODO: Rephrase this
+								// The day was selected, and not deselected
 								if (day in alarm!!.days)
 								{
+									// Deselect any other days that may be selected. Only
+									// allow one day to be selected at a time for
+									// minute/hour/day repeat frequencies
 									alarm!!.days = EnumSet.of(day)
 									dayOfWeek.setDays(alarm!!.days)
 									println("Only active : $day")

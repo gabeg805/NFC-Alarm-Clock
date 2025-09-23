@@ -12,6 +12,7 @@
 		<item>Added &lt;b>dismiss NFC tags&lt;/b> in &lt;b>order&lt;/b> if multiple NFC tags are selected.  Can be dismissed in any, random, or sequential order.</item>
 		<item>Added &lt;b>dismiss early notification&lt;/b>. Optionally show a notification when an alarm can be dismissed early.</item>
 		<item>Added &lt;b>long press&lt;/b> on the repeat, vibrate, NFC, and flashlight buttons to quickly access those options.</item>
+		<item>Fixed issue where playing all the &lt;b>music&lt;/b> in a &lt;b>folder&lt;/b> did not work.</item>
 		<item>Updated to support &lt;b>Android 15&lt;/b>.</item>
 		<item>Updated to support Android\'s &lt;b>Material 3&lt;/b> theme.</item>
 		<item>12.5.4</item>

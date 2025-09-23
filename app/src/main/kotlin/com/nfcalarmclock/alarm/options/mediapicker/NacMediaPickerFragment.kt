@@ -1,6 +1,7 @@
 package com.nfcalarmclock.alarm.options.mediapicker
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -13,9 +14,6 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
-import com.nfcalarmclock.system.scheduler.NacScheduler
-import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.system.addMediaInfo
 import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.system.getMediaArtist
@@ -24,7 +22,12 @@ import com.nfcalarmclock.system.getMediaTitle
 import com.nfcalarmclock.system.getMediaType
 import com.nfcalarmclock.system.getRecursivelyPlayMedia
 import com.nfcalarmclock.system.getShuffleMedia
+import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
+import com.nfcalarmclock.system.scheduler.NacScheduler
+import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.util.media.NacMedia
+import com.nfcalarmclock.util.media.copyMediaToDeviceEncryptedStorage
+import com.nfcalarmclock.util.media.doesDeviceHaveFreeSpace
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -327,6 +330,25 @@ open class NacMediaPickerFragment
 
 		// Play the media
 		mediaPlayer!!.playUri(uri)
+	}
+
+	/**
+	 * Copy the media to device encrypted storage.
+	 */
+	fun copyMediaToDeviceEncryptedStorage(deviceContext: Context)
+	{
+		// Device has enough free space
+		if (doesDeviceHaveFreeSpace(deviceContext))
+		{
+			// Copy the media to the local files/ directory, in device protected storage
+			copyMediaToDeviceEncryptedStorage(deviceContext, mediaPath, mediaArtist,
+				mediaTitle, mediaType)
+		}
+		// Not enough space
+		else
+		{
+			println("Not enough space to make a backup!")
+		}
 	}
 
 	/**

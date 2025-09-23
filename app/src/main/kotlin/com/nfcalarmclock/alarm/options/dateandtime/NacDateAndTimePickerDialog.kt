@@ -243,6 +243,16 @@ class NacDateAndTimePickerDialog
 		// Restore the alarm's date
 		alarm.date = saveDate
 
+		// Starting date
+		if (alarm.date.isNotEmpty())
+		{
+			// Get the year/month/day
+			val (year, month, day) = alarm.date.split("-")
+
+			// Update the starting date
+			datePicker.updateDate(year.toInt(), month.toInt()-1, day.toInt())
+		}
+
 		// Min date
 		datePicker.minDate = if (alarmCal.before(now))
 		{
